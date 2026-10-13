@@ -915,7 +915,8 @@
   "cu": {
    "en": "Ready · the agent's shared key"
   },
-  "hanh_dong": "doi"
+  "hanh_dong": "giu",
+  "ly_do": "ha-tang: «agent» là dịch vụ tác tử, vi ghi «tác tử»"
  },
  {
   "be_mat": "cai-dat",
@@ -924,7 +925,8 @@
   "cu": {
    "en": "Set X (or Y) on the agent project, or turn on that project's OIDC on Vercel. The agent checks again within about Z minutes."
   },
-  "hanh_dong": "doi"
+  "hanh_dong": "giu",
+  "ly_do": "ha-tang: «agent» là dịch vụ tác tử, vi ghi «tác tử»"
  },
  {
   "be_mat": "cai-dat",
@@ -933,7 +935,8 @@
   "cu": {
    "en": "Agent not connected"
   },
-  "hanh_dong": "doi"
+  "hanh_dong": "giu",
+  "ly_do": "ha-tang: «agent» là dịch vụ tác tử, vi ghi «tác tử»"
  },
  {
   "be_mat": "cai-dat",

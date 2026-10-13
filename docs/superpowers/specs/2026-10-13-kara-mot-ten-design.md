@@ -8,7 +8,7 @@ Lượt `tu-vung-tac-tu` đã chuyển phần màn sang K4 (đã gộp) và hàn
 
 ## Hiện trạng (kiểm kê 13/10 trên `onehub` 4abc05e0)
 
-119 chuỗi người dùng thấy còn gọi AI bằng tên khác (danh sách ghim ở `_acceptance/kara-mot-ten/kiem-ke.json`) — «Trợ lý OKR», «Trợ lý AI», «Trợ lý», «máy soạn»,
+116 chuỗi người dùng thấy còn gọi AI bằng tên khác (danh sách ghim ở `_acceptance/kara-mot-ten/kiem-ke.json`) — «Trợ lý OKR», «Trợ lý AI», «Trợ lý», «máy soạn»,
 «máy góp ý», «Máy tóm tắt», «Tác nhân nghiên cứu», «tác nhân» (khi nghĩa là người điền, người tra cứu),
 «Agent», «Assistant», «Composer». Lộ trình ghi «khoảng 30 chỗ»; con số thật lớn hơn vì Tài liệu và
 Cài đặt mới thêm từ 04/10.
@@ -18,7 +18,7 @@ Cài đặt mới thêm từ 04/10.
 | Tab bản ghi, CRM, onboarding, ảnh sản phẩm | 17 | `crm.ts`, `record-sheet.ts`, `companies.ts`, `khung-ung-dung.ts`, `auth.ts`, `components/landing/product-shot/*` |
 | Tóm tắt tuần và nhắc | 8 | `okr-toan-canh.ts`, `nhac-qua-zalo.ts`, `tro-ly-okr.ts`, `apps/agent/agent/lib/tin-nhac.ts` |
 | Soạn OKR | 24 | `okr-soan.ts`, `to-chuc.ts`, `apps/api/src/okr/okr-config.ts` |
-| Cài đặt (trang Kara, sổ chi phí, mô hình) | 28 | `tro-ly-okr.ts`, `settings.ts`, `apps/agent/agent/lib/tin-nhac.ts` |
+| Cài đặt (trang Kara, sổ chi phí, mô hình) | 25 | `tro-ly-okr.ts`, `settings.ts`, `apps/agent/agent/lib/tin-nhac.ts` |
 | Tài liệu | 41 | `tai-lieu.ts`, `packages/validation/src/tai-lieu-nguon.ts`, `tai-lieu-hoi.ts`, `apps/api/src/tai-lieu/tai-lieu-config.ts`, `apps/agent/agent/lib/tai-lieu-config.ts`, `tai-lieu-phien.ts`, `tai-lieu-hoi-phien.ts` |
 | Dùng chung | 1 | `packages/ui/src/lib/messages.ts` `chatMessage.roleAssistant` |
 

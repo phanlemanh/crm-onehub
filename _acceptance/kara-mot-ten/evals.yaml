@@ -41,7 +41,7 @@ evals:
     executor: test
     layer: unit
     cmd: config:executors.test.kmt_cai_dat
-    expected: "exit 0; -t kmt-cai-dat của messages-guard.spec.ts: 28 mục be_mat 'cai-dat' hanh_dong 'doi' của kiem-ke.json, cùng luật E1; số mục khác 28 thì ném 'kmt: kiem-ke cai-dat <n> khac 28'. tro-ly-okr.ts trang.tieuDe vi và en đúng «Kara · OKR»; nhãn nhóm sổ chi phí của tab bản ghi đúng «Kara · hồ sơ» và của OKR đúng «Kara · OKR»; khác thì ném 'kmt: ten pham vi <khoá> <giá trị>'."
+    expected: "exit 0; -t kmt-cai-dat của messages-guard.spec.ts: 25 mục be_mat 'cai-dat' hanh_dong 'doi' của kiem-ke.json, cùng luật E1; số mục khác 25 thì ném 'kmt: kiem-ke cai-dat <n> khac 25'. tro-ly-okr.ts trang.tieuDe vi và en đúng «Kara · OKR»; nhãn nhóm sổ chi phí của tab bản ghi đúng «Kara · hồ sơ» và của OKR đúng «Kara · OKR»; khác thì ném 'kmt: ten pham vi <khoá> <giá trị>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/app/lib/messages/tro-ly-okr.ts, apps/app/lib/messages/settings.ts, apps/app/test/messages-guard.spec.ts, _acceptance/kara-mot-ten/kiem-ke.json]
 
@@ -119,7 +119,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.kmt_kiem_ke
-    expected: "exit 0; rang/kiem-ke.mjs đọc _acceptance/kara-mot-ten/kiem-ke.json: (a) đúng 130 mục — 119 'doi' đếm theo be_mat ban-ghi 17 · tom-tat 8 · soan 24 · cai-dat 28 · tai-lieu 41 · dung-chung 1, 5 'giu', 6 'mien' — lệch thì thoát 1 in '<be_mat>/<hanh_dong> <n> khac <k>'; mục 'giu' và 'mien' phải có ly_do; (b) round-trip với bản thật: với mỗi mục, mỗi giá trị cũ (phần trước chỗ đối số mẫu 'X' nếu có) phải là chuỗi con của git show 4abc05e0:<tệp>, và mục 'doi' phải khớp ít nhất một cụm CAM hay «tác nhân»/«agent», không thì thoát 1 in 'kiem-ke <tệp>#<khoá> khong khop goc'; (c) quét lại mọi kho chữ apps/app ở 4abc05e0 bằng cùng hàm soatMotTen của E7: mỗi khoá trúng phải có mục trong kiem-ke, không thì thoát 1 in 'kiem-ke sot <tệp>#<khoá>'; (d) kiem-ke.json có trong một commit đứng trước mọi commit của nhánh chạm apps/** hay packages/**, và không đổi sau commit đó (git log), không thì thoát 1 in 'kiem-ke viet sau khi sua'. In 'kiem-ke: 130 muc, 119 doi, goc khop'."
+    expected: "exit 0; rang/kiem-ke.mjs đọc _acceptance/kara-mot-ten/kiem-ke.json: (a) đúng 130 mục — 116 'doi' đếm theo be_mat ban-ghi 17 · tom-tat 8 · soan 24 · cai-dat 25 · tai-lieu 41 · dung-chung 1, 8 'giu', 6 'mien' — lệch thì thoát 1 in '<be_mat>/<hanh_dong> <n> khac <k>'; mục 'giu' và 'mien' phải có ly_do; (b) round-trip với bản thật: với mỗi mục, mỗi giá trị cũ (phần trước chỗ đối số mẫu 'X' nếu có) phải là chuỗi con của git show 4abc05e0:<tệp>, và mục 'doi' phải khớp ít nhất một cụm CAM hay «tác nhân»/«agent», không thì thoát 1 in 'kiem-ke <tệp>#<khoá> khong khop goc'; (c) quét lại mọi kho chữ apps/app ở 4abc05e0 bằng cùng hàm soatMotTen của E7: mỗi khoá trúng phải có mục trong kiem-ke, không thì thoát 1 in 'kiem-ke sot <tệp>#<khoá>'; (d) kiem-ke.json có trong một commit đứng trước mọi commit của nhánh chạm apps/** hay packages/**, và không đổi sau commit đó (git log), không thì thoát 1 in 'kiem-ke viet sau khi sua'. In 'kiem-ke: 130 muc, 116 doi, goc khop'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/kara-mot-ten/kiem-ke.json, _acceptance/kara-mot-ten/rang/kiem-ke.mjs]
 
