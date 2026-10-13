@@ -74,6 +74,12 @@ describe("vc-vai-okr", () => {
 				gan,
 			});
 			await taoThu({ nguoiId: a.id, tieuDe: "vc-okr cua a", gan });
+			const tenOkrCua = new Map<string, string>([
+				["(1)", okr.name],
+				["(2)", okr.name],
+				["(3)", okr.name],
+				["(4)", okr.name],
+			]);
 			const duong: [
 				string,
 				() => Promise<{ code: string | null; message: string; status: number }>,
@@ -129,6 +135,7 @@ describe("vc-vai-okr", () => {
 				["(7)", "HUY"],
 			] as const) {
 				const m = await nguoi(`vc-okr-m ${den}`, "member");
+				tenOkrCua.set(den, m.name);
 				const mv = await taoThu({
 					nguoiId: a.id,
 					tieuDe: `vc-okr mo lai ${den}`,
@@ -154,13 +161,17 @@ describe("vc-vai-okr", () => {
 				const truoc = await soDem();
 				const r = await chay();
 				const sau = await soDem();
-				const tenNguoi =
-					ten === "(1)" || ten === "(2)" || ten === "(3)" || ten === "(4)"
-						? "Người OKR VC"
-						: "vc-okr-m";
+				const tenNguoi = tenOkrCua.get(ten) ?? "";
+				const tenKhac = [
+					a.name,
+					b.name,
+					q.name,
+					...[...tenOkrCua.values()].filter((t) => t !== tenNguoi),
+				];
 				if (
 					r.status !== 400 ||
 					!r.message.includes(tenNguoi) ||
+					tenKhac.some((t) => r.message.includes(t)) ||
 					!r.message.includes("chỉ OKR") ||
 					JSON.stringify(truoc) !== JSON.stringify(sau)
 				) {
@@ -192,12 +203,14 @@ describe("vc-vai-okr", () => {
 		async () => {
 			const a = await nguoi("vc-okr2-a", "member");
 			const { dealId } = await thoaThuan(app, a.id);
+			const tenM: string[] = [];
 			for (const [den, nguon] of [
 				["(a1)", "XONG"],
 				["(a2)", "CHO_DANH_GIA"],
 				["(a3)", "HUY"],
 			] as const) {
 				const m = await nguoi(`vc-okr2-m ${den}`, "member");
+				tenM.push(m.name);
 				const rieng = await taoThu({
 					nguoiId: a.id,
 					tieuDe: `vc-okr2 rieng ${den}`,
@@ -216,7 +229,10 @@ describe("vc-vai-okr", () => {
 				);
 				if (
 					r.status !== 400 ||
-					!r.message.includes(`vc-okr2-m ${den}`) ||
+					!r.message.includes(m.name) ||
+					[a.name, ...tenM.filter((t) => t !== m.name)].some((t) =>
+						r.message.includes(t),
+					) ||
 					!r.message.includes("chỉ OKR") ||
 					JSON.stringify(truoc) !== JSON.stringify(await soDem())
 				) {
@@ -250,7 +266,10 @@ describe("vc-vai-okr", () => {
 				);
 				if (
 					r.status !== 400 ||
-					!r.message.includes("vc-okr2-") ||
+					!r.message.includes(ten.name) ||
+					[a.name, lam.name, theo.name]
+						.filter((t) => t !== ten.name)
+						.some((t) => r.message.includes(t)) ||
 					!r.message.includes("chỉ OKR") ||
 					(await db.viecGan.count({ where: { viecId: v.id } })) !== 0 ||
 					JSON.stringify(truoc) !== JSON.stringify(await soDem())
@@ -599,6 +618,83 @@ describe("vc-xem", () => {
 				}
 			}
 			if (daChay !== 70) throw new Error(`vc: ma tran xem thieu o ${daChay}`);
+		},
+		MA_TEST_MS,
+	);
+
+	test(
+		"vc-xem: quyen của viec.get theo vai — đích trạng thái và Xoá khớp bảng viết trước",
+		async () => {
+			const p = {
+				giao: await nguoi("vc-xem-quyen-a", "member"),
+				thucHien: await nguoi("vc-xem-quyen-b", "member"),
+				theoDoi: await nguoi("vc-xem-quyen-w", "member"),
+				khac: await nguoi("vc-xem-quyen-x", "member"),
+				quanTri: await nguoi("vc-xem-quyen-q", "admin"),
+			};
+			const { dealId } = await thoaThuan(app, p.giao.id);
+			const BANG = {
+				CHUA_LAM: {
+					giao: ["DANG_LAM", "CHO_DANH_GIA", "XONG", "HUY"],
+					thucHien: ["DANG_LAM", "CHO_DANH_GIA", "XONG"],
+				},
+				DANG_LAM: {
+					giao: ["CHUA_LAM", "CHO_DANH_GIA", "XONG", "HUY"],
+					thucHien: ["CHUA_LAM", "CHO_DANH_GIA", "XONG"],
+				},
+				CHO_DANH_GIA: {
+					giao: ["DANG_LAM", "XONG", "HUY"],
+					thucHien: [],
+				},
+			} as const;
+			const v = await taoThu({
+				nguoiId: p.giao.id,
+				tieuDe: "vc-xem quyen",
+				nguoiThucHienId: p.thucHien.id,
+				nguoiTheoDoiIds: [p.theoDoi.id],
+				gan: [{ loai: "deal", id: dealId }],
+			});
+			for (const trangThai of [
+				"CHUA_LAM",
+				"DANG_LAM",
+				"CHO_DANH_GIA",
+			] as const) {
+				if (trangThai !== "CHUA_LAM") {
+					await doiThu(v.id, p.giao.id, trangThai);
+				}
+				for (const vai of [
+					"giao",
+					"thucHien",
+					"theoDoi",
+					"khac",
+					"quanTri",
+				] as const) {
+					const r = await goi(
+						app,
+						"viec.get",
+						"query",
+						{ id: v.id },
+						p[vai].id,
+					);
+					const quyen = (
+						r.data as { quyen: { trangThai: string[]; xoa: boolean } }
+					).quyen;
+					const mongTrangThai: readonly string[] =
+						vai === "giao" || vai === "thucHien" ? BANG[trangThai][vai] : [];
+					const mongXoa = vai === "giao" && trangThai === "CHUA_LAM";
+					if (
+						r.status !== 200 ||
+						JSON.stringify(quyen.trangThai) !== JSON.stringify(mongTrangThai)
+					) {
+						throw new Error(
+							`vc: quyen trang thai sai ${vai} ${trangThai} ${JSON.stringify(quyen.trangThai)}`,
+						);
+					}
+					if (quyen.xoa !== mongXoa) {
+						throw new Error(`vc: quyen xoa sai ${vai} ${trangThai}`);
+					}
+				}
+			}
 		},
 		MA_TEST_MS,
 	);
