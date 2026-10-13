@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c9fb654dfeb6afccb9731af72d87953429169449
+verified_commit: 054dd589ef9a5e88a83d2e0460774fc8910490ff
 human_signoff: "Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 3 (13/13 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; ghim lại bằng làn máy repin-20261013T130715Z-53425 sau sửa kiểu). Ngoài-1, 2, 6, 7 ghi Known limits; Ngoài-5 mở hợp đồng mới; Ngoài-3, 4, 8, 9 chấp nhận, không sửa; đồng ý cắt; Treo phê hết"
 ---
 
@@ -243,3 +243,7 @@ sha: 0ffe10f074033319fe0587005ca34b45995b3597 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-13, do gộp onehub 206096fc2 trước lô 16:00Z
 run_id: repin-20261013T153701Z-46325
 sha: c9fb654dfeb6afccb9731af72d87953429169449 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-13, do gộp onehub b1b083823 trước lô 18:00Z
+run_id: repin-20261013T172743Z-24886
+sha: 054dd589ef9a5e88a83d2e0460774fc8910490ff · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
