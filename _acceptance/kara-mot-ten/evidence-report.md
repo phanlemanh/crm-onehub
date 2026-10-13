@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ad559db918c53c1437734b99a7b837cda99a0c3d
+verified_commit: 13204dd159930a2913e1a176dba82bf70efa3ad3
 human_signoff: Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 2 (mọi eval máy đạt, 17/17 gồm E2b và E15 mang từ vòng 1; vòng 1 REJECT đã sửa). E13 (hội đồng câu chữ đề xuất FAIL ở nhãn «Kara · theo bản đang dùng»): Đạt. Ngoài-4 (phép đếm nguồn kẹt dồn sai khi có cả câu cũ lẫn mới) mở hợp đồng mới; Ngoài-2 chấp nhận, không sửa; hai mươi mốt mục còn lại ghi Known limits, gồm Ngoài-23 (ghim lại khung-khong-con-dung-chu sau khi gộp). Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -281,3 +281,7 @@ none — every multi-run eval is uniform
 
 Round 1: E14 failed and two in-contract findings (kmt-giu gọi git show trên sha cố định đỏ ở checkout nông của CI; dem-ket.ts không nhận hàng mồ côi mới) — verdict REJECT. Returned to implementation.
 Round 2: mọi eval máy xanh sau commit ad559db91 (câu Kara · OKR trong câu, kmt-giu với checkout nông, dem-ket nhận chữ mồ côi mới, E14 chụp đúng màn); E13 do panel đề xuất FAIL ở khoá tai-lieu.ts#hoi.nhanTraLoi nên verdict PENDING-JUDGMENT, chờ người ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-13, do K6a trước gộp: gộp onehub 60fc1b02d, răng dem-ket nhận chữ mồ côi mới, sửa YAML E6 bo-ca-mau-quy-4
+run_id: repin-20261013T233009Z-75646
+sha: 13204dd159930a2913e1a176dba82bf70efa3ad3 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
