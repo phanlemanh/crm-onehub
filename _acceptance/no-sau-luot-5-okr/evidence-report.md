@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dd8145f7c3664b97e4319611ab83f3b4d3e0111d
+verified_commit: 481547ec21a1762a3ee5dd2723b990f5496bd1e0
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -211,3 +211,7 @@ Round 2: Thêm E13 cho AC-10, cùng E1–E4/E8/E9/E12 chạy lại và 4 lệnh 
 ### Re-pin lần 1 — 2026-09-26, do gộp onehub 3090b8e9 (#158) sau chữ ký
 run_id: repin-20260926T141050Z-39922
 sha: dd8145f7c3664b97e4319611ab83f3b4d3e0111d · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E8, E9, E10, E11 · AC không có chốt máy: AC-7
+
+### Re-pin lần 2 — 2026-10-13, do bài kiểm chỉnh theo hình mới của khung-man-chung (#388, 481547ec2)
+run_id: repin-20261013T205017Z-88075
+sha: 481547ec21a1762a3ee5dd2723b990f5496bd1e0 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E8, E9, E10, E11 · diff chạm vật đo ngoài làn máy: E8, E10, E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
