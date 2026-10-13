@@ -2,6 +2,7 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
 import { PageLoadingStatus } from "./page-loading-status";
+import { PageShellNote } from "./page-shell-note";
 import { PageTransition } from "./page-transition";
 
 const BE_RONG = {
@@ -104,24 +105,6 @@ function PageShellDescription({
 	return (
 		<p
 			data-slot="page-shell-description"
-			className={cn(
-				"order-1 basis-full text-balance text-muted-foreground text-sm md:order-last",
-				className,
-			)}
-			{...props}
-		/>
-	);
-}
-
-function PageShellNote({
-	className,
-	id,
-	...props
-}: React.ComponentProps<"p"> & { id: string }) {
-	return (
-		<p
-			id={id}
-			data-slot="page-shell-note"
 			className={cn(
 				"order-1 basis-full text-balance text-muted-foreground text-sm md:order-last",
 				className,

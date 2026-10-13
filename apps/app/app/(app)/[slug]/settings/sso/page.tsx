@@ -16,7 +16,7 @@ import { ssoMessages } from "@/lib/messages/settings-sso";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { AddSsoProviderSheet } from "./add-sso-provider-sheet";
+import { AddSsoProviderSheet, DongKhoaSso } from "./add-sso-provider-sheet";
 import { ssoSearchParams } from "./sso-search-params";
 import { SsoTable } from "./sso-table";
 
@@ -38,6 +38,7 @@ export default async function SsoSettingsPage({
 						<span translate="no">{settingsMessages(locale).thanhBen.sso}</span>
 					</PageShellTitle>
 					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
+					<DongKhoaSso />
 				</PageShellHeading>
 
 				<PageShellActions>

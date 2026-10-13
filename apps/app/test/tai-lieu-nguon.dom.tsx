@@ -145,11 +145,6 @@ mock.module("@/components/page-shell", () => ({
 	PageShellActions: ({ children }: { children?: ReactNode }) =>
 		h("div", { "data-hanh-dong-dau": "" }, children),
 	PageShellContent: khoi("div"),
-	PageShellNote: ({
-		children,
-		...props
-	}: { children?: ReactNode } & Record<string, unknown>) =>
-		h("p", { ...props, "data-dong-ly-do": "" }, children),
 }));
 
 const fetchGoc = globalThis.fetch;
@@ -447,7 +442,9 @@ describe("nguon-tat — nút tải khoá khi chưa bật lưu tệp (E5d)", () =
 
 		const n = nut("Tải nguồn lên");
 		ghim(n.disabled, "nut tai van mo khi chua bat");
-		const dong = document.body.querySelector("[data-dau-trang] [data-dong-ly-do]");
+		const dong = document.body.querySelector(
+			"[data-dau-trang] [data-nguon-tat]",
+		);
 		expect(dong?.textContent).toContain(CAU_TAT);
 		expect(dong?.closest("[data-hanh-dong-dau]")).toBeNull();
 		const moTa = (n.getAttribute("aria-describedby") ?? "")

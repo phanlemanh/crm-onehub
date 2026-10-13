@@ -16,7 +16,7 @@ import { toChucMessages } from "@/lib/messages/to-chuc";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { HanhDongToChuc } from "./hanh-dong-dau-trang";
+import { DongChiDoc, HanhDongToChuc } from "./hanh-dong-dau-trang";
 import { ToChuc } from "./to-chuc";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,10 +26,12 @@ export async function generateMetadata(): Promise<Metadata> {
 function DauTrang({
 	tieuDe,
 	moTa,
+	ghiChu,
 	hanhDong,
 }: {
 	tieuDe: string;
 	moTa: string;
+	ghiChu?: React.ReactNode;
 	hanhDong?: React.ReactNode;
 }) {
 	return (
@@ -37,6 +39,7 @@ function DauTrang({
 			<PageShellHeading>
 				<PageShellTitle>{tieuDe}</PageShellTitle>
 				<PageShellDescription>{moTa}</PageShellDescription>
+				{ghiChu}
 			</PageShellHeading>
 			{hanhDong ? <PageShellActions>{hanhDong}</PageShellActions> : null}
 		</PageShellHeader>
@@ -75,7 +78,12 @@ async function CaiDat({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 
 	return (
 		<HydrateClient>
-			<DauTrang tieuDe={tieuDe} moTa={moTa} hanhDong={<HanhDongToChuc />} />
+			<DauTrang
+				tieuDe={tieuDe}
+				moTa={moTa}
+				ghiChu={<DongChiDoc />}
+				hanhDong={<HanhDongToChuc />}
+			/>
 			<PageShellContent>
 				<ToChuc tenGoc={workspace?.name || undefined} />
 			</PageShellContent>

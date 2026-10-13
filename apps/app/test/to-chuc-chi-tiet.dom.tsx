@@ -265,7 +265,7 @@ mock.module("@/lib/trpc/client", () => ({
 const { ToChuc } = await import(
 	"@/app/(app)/[slug]/settings/organization/to-chuc"
 );
-const { HanhDongToChuc } = await import(
+const { DongChiDoc, HanhDongToChuc } = await import(
 	"@/app/(app)/[slug]/settings/organization/hanh-dong-dau-trang"
 );
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
@@ -304,6 +304,7 @@ async function mo(dau = "", choTai = true): Promise<San> {
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>
+							<DongChiDoc />
 							<div data-slot="page-shell-actions">
 								<HanhDongToChuc />
 							</div>

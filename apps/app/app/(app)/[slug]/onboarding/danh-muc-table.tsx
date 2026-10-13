@@ -222,7 +222,7 @@ export function DanhMucTable() {
 					<EmptyDescription>{m.empty.noPlan.body}</EmptyDescription>
 				</EmptyHeader>
 				<EmptyContent>
-					<TaoKeHoach nhanNut={m.empty.noPlan.action} bienThe="default" />
+					<TaoKeHoach nhanNut={m.empty.noPlan.action} bienThe="outline" />
 				</EmptyContent>
 			</Empty>
 		);

@@ -33,6 +33,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { type ComponentProps, Suspense, useId, useState } from "react";
 import { toast } from "sonner";
+import { PageShellNote } from "@/components/page-shell-note";
 import { ssoMessages } from "@/lib/messages/settings-sso";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -56,6 +57,20 @@ function AddButton(props: ComponentProps<typeof Button>) {
 			<Icon icon={Add} data-icon="inline-start" />
 			{t.them.nut}
 		</Button>
+	);
+}
+
+export const ID_KHOA_SSO = "sso-khoa-them";
+
+export function DongKhoaSso() {
+	const t = ssoMessages(useLocale());
+	const trpc = useTRPC();
+	const settings = useQuery(trpc.sso.settings.queryOptions());
+	if (settings.data?.canConfigure !== false) return null;
+	return (
+		<PageShellNote data-ly-do-khoa="" id={ID_KHOA_SSO}>
+			{t.them.khoaLyDo}
+		</PageShellNote>
 	);
 }
 
@@ -113,7 +128,12 @@ function AddSsoProviderForm() {
 	return (
 		<Sheet open={open} onOpenChange={(next) => setOpen(next || null)}>
 			<SheetTrigger asChild>
-				<AddButton disabled={!settings.data?.canConfigure} />
+				<AddButton
+					disabled={!settings.data?.canConfigure}
+					aria-describedby={
+						settings.data?.canConfigure === false ? ID_KHOA_SSO : undefined
+					}
+				/>
 			</SheetTrigger>
 
 			<SheetContent side="right">

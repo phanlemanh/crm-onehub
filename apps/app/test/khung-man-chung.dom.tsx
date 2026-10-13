@@ -16,6 +16,10 @@ const canh = {
 	danhMuc: "loi" as CheDo,
 	bangCot: "loi" as CheDo,
 	chienDich: "treo" as CheDo,
+	danhMucRong: false,
+	khuon: [] as { id: string; name: string }[],
+	quyenToChuc: false,
+	quyenSso: false,
 	goi: {} as Record<string, number>,
 };
 
@@ -118,10 +122,13 @@ mock.module("@/lib/trpc/client", () => ({
 				"onboarding.manDanhMuc",
 				theoCheDo(
 					"onboarding.manDanhMuc",
-					() => canh.danhMuc,
-					() => null,
+					() => (canh.danhMucRong ? "co" : canh.danhMuc),
+					() => ({ trangThai: "ST-danhmuc-empty" }),
 				),
 			),
+			listTemplates: co("onboarding.listTemplates", () => canh.khuon),
+			nguoiNhanViec: co("onboarding.nguoiNhanViec", () => []),
+			createFromTemplate: co("onboarding.createFromTemplate", () => null),
 			bangCot: truyVan(
 				"onboarding.bangCot",
 				theoCheDo(
@@ -132,7 +139,21 @@ mock.module("@/lib/trpc/client", () => ({
 			),
 			listDepartments: co("onboarding.listDepartments", () => []),
 		},
-		users: { list: co("users.list", () => []) },
+		users: {
+			list: co("users.list", () => []),
+			me: co("users.me", () => ({ id: "u", name: "Lan" })),
+		},
+		org: {
+			access: co("org.access", () => ({ canManage: canh.quyenToChuc })),
+			tree: co("org.tree", () => ({ boPhan: [], chuaXep: [] })),
+		},
+		sso: {
+			settings: co("sso.settings", () => ({
+				canConfigure: canh.quyenSso,
+				callbackBase: "https://x.test/api/auth/sso/callback",
+			})),
+			register: co("sso.register", () => null),
+		},
 		campaigns: {
 			byId: truyVan(
 				"campaigns.byId",
@@ -197,6 +218,21 @@ const { messages: uiMessages } = await import("@crm/ui/lib/messages");
 const { campaignMessages } = await import("@/lib/messages/campaigns");
 
 const THU_LAI = uiMessages("vi").karaKhung.thuLai;
+const { DanhMucHanhDong, DongKhoaKeHoach } = await import(
+	"@/app/(app)/[slug]/onboarding/tao-ke-hoach"
+);
+const { DongChiDoc, HanhDongToChuc } = await import(
+	"@/app/(app)/[slug]/settings/organization/hanh-dong-dau-trang"
+);
+const { AddSsoProviderSheet, DongKhoaSso } = await import(
+	"@/app/(app)/[slug]/settings/sso/add-sso-provider-sheet"
+);
+const { onboardingMessages } = await import("@/lib/messages/onboarding");
+const { toChucMessages } = await import("@/lib/messages/to-chuc");
+const { ssoMessages } = await import("@/lib/messages/settings-sso");
+const OB = onboardingMessages("vi");
+const TC = toChucMessages("vi");
+const SSO = ssoMessages("vi");
 const CD = campaignMessages("vi");
 
 const TL = taiLieuMessages("vi");
@@ -542,6 +578,159 @@ describe("chi-tiet", () => {
 		await cho(
 			() => (canh.goi["campaigns.byId"] ?? 0) === truocBam + 1,
 			"goi lai chien dich",
+		);
+	});
+});
+
+function DauTrangThu({
+	ghiChu,
+	hanhDong,
+}: {
+	ghiChu: ReactNode;
+	hanhDong: ReactNode;
+}) {
+	return (
+		<PageShellHeader>
+			<PageShellHeading>
+				<PageShellTitle>Màn</PageShellTitle>
+				<PageShellDescription>Mô tả</PageShellDescription>
+				{ghiChu}
+			</PageShellHeading>
+			<PageShellActions>{hanhDong}</PageShellActions>
+		</PageShellHeader>
+	);
+}
+
+async function kiemKhoa(
+	o: HTMLElement,
+	tenNut: string,
+	khoa: boolean,
+	man: string,
+) {
+	await cho(() => nutTen(o, tenNut) !== null, `nut ${tenNut}`);
+	await cho(
+		() => (nutTen(o, tenNut)?.disabled ?? !khoa) === khoa,
+		`${man} nut ${khoa ? "tat" : "bat"}`,
+	);
+	await cho(
+		() => !khoa || o.querySelector('[data-slot="page-shell-note"]') !== null,
+		`${man} dong ly do`,
+	).catch(() => {});
+	const nut = nutTen(o, tenNut);
+	const dong = o.querySelector('[data-slot="page-shell-note"]');
+	if (!khoa) {
+		expect(
+			`${man}:${dong === null}:${nut?.getAttribute("aria-describedby")}`,
+		).toBe(`${man}:true:null`);
+		return;
+	}
+	phai(dong !== null, `kmc-khoa: ${man} nut tat khong ly do`);
+	phai(
+		dong?.closest('[data-slot="page-shell-header"]') !== null &&
+			dong?.closest('[data-slot="page-shell-actions"]') === null,
+		`kmc-khoa: ${man} dong ly do khong nam duoi tieu de`,
+	);
+	phai(moTaCua(nut) === dong, `kmc-khoa: ${man} nut khong tro ly do`);
+}
+
+describe("khoa", () => {
+	test("onboarding chua co khuon: Kế hoạch mới tat, dong ly do co lien ket Cai dat › Khuon", async () => {
+		canh.khuon = [];
+		const o = ve(
+			<DauTrangThu
+				ghiChu={<DongKhoaKeHoach />}
+				hanhDong={<DanhMucHanhDong />}
+			/>,
+		);
+		await kiemKhoa(o, OB.tao.keHoach.toolbar, true, "onboarding");
+		const lienKet = o.querySelector('[data-slot="page-shell-note"] a');
+		expect(lienKet?.getAttribute("href")).toBe("/ws/settings/onboarding");
+	});
+
+	test("onboarding co mot khuon: nut bat, khong dong ly do", async () => {
+		canh.khuon = [{ id: "k1", name: "Sàn môi giới" }];
+		const o = ve(
+			<DauTrangThu
+				ghiChu={<DongKhoaKeHoach />}
+				hanhDong={<DanhMucHanhDong />}
+			/>,
+		);
+		await kiemKhoa(o, OB.tao.keHoach.toolbar, false, "onboarding");
+	});
+
+	test("onboarding khung trong: chi mot nut to, nut khung trong la outline", async () => {
+		canh.khuon = [{ id: "k1", name: "Sàn môi giới" }];
+		canh.danhMucRong = true;
+		try {
+			const o = ve(
+				<>
+					<DauTrangThu
+						ghiChu={<DongKhoaKeHoach />}
+						hanhDong={<DanhMucHanhDong />}
+					/>
+					<DanhMucTable />
+				</>,
+			);
+			await cho(
+				() => nutTen(o, OB.empty.noPlan.action) !== null,
+				"nut khung trong",
+			);
+			phai(
+				nutTen(o, OB.empty.noPlan.action)?.getAttribute("data-variant") ===
+					"outline",
+				"kmc-khoa: onboarding hai nut to",
+			);
+			expect(o.querySelectorAll('[data-variant="default"]').length).toBe(1);
+		} finally {
+			canh.danhMucRong = false;
+		}
+	});
+
+	for (const [man, quyen] of [
+		["to-chuc", false],
+		["to-chuc", true],
+		["sso", false],
+		["sso", true],
+	] as const) {
+		test(`${man} ${quyen ? "co quyen" : "khong quyen"}`, async () => {
+			canh.quyenToChuc = quyen;
+			canh.quyenSso = quyen;
+			const o =
+				man === "to-chuc"
+					? ve(
+							<DauTrangThu
+								ghiChu={<DongChiDoc />}
+								hanhDong={<HanhDongToChuc />}
+							/>,
+						)
+					: ve(
+							<DauTrangThu
+								ghiChu={<DongKhoaSso />}
+								hanhDong={<AddSsoProviderSheet />}
+							/>,
+						);
+			await kiemKhoa(
+				o,
+				man === "to-chuc" ? TC.themBoPhan : SSO.them.nut,
+				!quyen,
+				man,
+			);
+		});
+	}
+
+	test("chieu do: nut tat ma khong dong ly do thi bai kiem bat", async () => {
+		const o = ve(
+			<DauTrangThu
+				ghiChu={null}
+				hanhDong={
+					<button disabled type="button">
+						Chính
+					</button>
+				}
+			/>,
+		);
+		await expect(kiemKhoa(o, "Chính", true, "gia")).rejects.toThrow(
+			"kmc-khoa: gia nut tat khong ly do",
 		);
 	});
 });

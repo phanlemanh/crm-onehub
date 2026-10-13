@@ -162,15 +162,6 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 
 	return (
 		<>
-			{sua ? null : (
-				<p
-					className="text-muted-foreground text-sm"
-					data-trang-thai="ST-tochuc-chidoc"
-				>
-					{t.chiDoc}
-				</p>
-			)}
-
 			{rong ? (
 				<Empty data-trang-thai="ST-tochuc-trong">
 					<EmptyHeader>

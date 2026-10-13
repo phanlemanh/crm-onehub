@@ -106,6 +106,7 @@ const en = {
 		keHoach: {
 			title: "New plan from a template",
 			toolbar: "New plan",
+			khoaLyDo: "No plan template yet, so a plan can’t be started.",
 			created: "Plan created.",
 			company: "Partner company",
 			template: "Template",
@@ -346,6 +347,7 @@ type OnboardingMessages = {
 		keHoach: Record<
 			| "title"
 			| "toolbar"
+			| "khoaLyDo"
 			| "company"
 			| "template"
 			| "startedAt"
@@ -610,6 +612,7 @@ const vi = {
 		keHoach: {
 			title: "Tạo kế hoạch từ khuôn",
 			toolbar: "Kế hoạch mới",
+			khoaLyDo: "Chưa có khuôn kế hoạch nào nên chưa tạo được kế hoạch.",
 			created: "Đã tạo kế hoạch.",
 			company: "Công ty đối tác",
 			template: "Khuôn",

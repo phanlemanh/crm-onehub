@@ -7,7 +7,7 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { PageShellNote } from "@/components/page-shell";
+import { PageShellNote } from "@/components/page-shell-note";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { duongDanhSach, duongTrangMoi, TAI_LIEU_MAN } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";

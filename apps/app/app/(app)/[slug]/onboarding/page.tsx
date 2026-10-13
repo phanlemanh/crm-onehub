@@ -21,7 +21,7 @@ import {
 	danhMucSearchParams,
 	loadOnboardingSearchParams,
 } from "./onboarding-search-params";
-import { DanhMucHanhDong } from "./tao-ke-hoach";
+import { DanhMucHanhDong, DongKhoaKeHoach } from "./tao-ke-hoach";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -42,6 +42,7 @@ export default async function OnboardingPage({
 				<PageShellHeading>
 					<PageShellTitle>{m.title}</PageShellTitle>
 					<PageShellDescription>{m.description}</PageShellDescription>
+					<DongKhoaKeHoach />
 				</PageShellHeading>
 				<PageShellActions>
 					<DanhMucHanhDong />
