@@ -225,11 +225,11 @@ _Avoid_: assignee, người phụ trách bước
 Vì sao: một kế hoạch có nhiều người được giao nhưng chỉ một người cầm trịch;
 dùng "phụ trách" cho bước là trùng chữ với người sở hữu thoả thuận.
 
-**Chuyển việc 30 ngày**: thao tác của quản trị ở màn Thành viên, chuyển mọi kế hoạch đang chạy mà một
-người cầm trịch, mọi bước chưa xong đang giao cho họ, và mọi việc đang mở họ thực hiện hay giao, sang một
-người khác — một lần, một giao dịch, mỗi dòng đổi để lại một vết. Việc đã Xong hay Huỷ giữ tên người cũ. Hộp
-xem trước và lời từ chối đổi sang vai «chỉ OKR» nêu cùng một con số việc. Chốt 2026-09-22, thêm Việc
-2026-10-13.
+**Chuyển việc 30 ngày**: thao tác của quản trị ở màn Thành viên, chuyển mọi kế hoạch đang chạy mà
+một người cầm trịch, mọi bước chưa xong đang giao cho họ, và mọi việc đang mở họ thực hiện hay giao,
+sang một người khác — một lần, một giao dịch, mỗi dòng đổi để lại một vết. Việc đã Xong hay Huỷ giữ
+tên người cũ. Hộp xem trước và lời từ chối đổi sang vai «chỉ OKR» nêu cùng một con số việc. Chốt
+2026-09-22, thêm Việc 2026-10-13.
 _Avoid_: transfer, bàn giao tài khoản
 Vì sao: thao tác không đụng công ty, cá nhân hay thoả thuận của người đó — gọi
 là "bàn giao tài khoản" thì người dùng tưởng nó chuyển hết.

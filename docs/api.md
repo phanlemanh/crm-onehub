@@ -102,9 +102,10 @@ here, what do we sell.
   hoạch mở người đó cầm trịch, bước chưa xong của kế hoạch mở người đó làm, và việc đang mở
   (Chưa làm, Đang làm, Chờ đánh giá) người đó thực hiện hay giao (`demViecDangGiu`; phần việc
   là `demViecMoCua` của `@crm/db/viec`, cùng hàm hộp «Chuyển việc 30 ngày» dùng): lớn hơn 0
-  thì 409 `WORKSPACE_CONFIG.messages.conViec`, nêu các con số và chỉ sang «Chuyển việc» ở
-  màn Thành viên, vai không đổi; bằng 0 thì xoá mọi lượt theo dõi kế hoạch và việc (mở lẫn đã khép)
-  trong cùng giao dịch, mỗi lượt theo dõi việc để một vết `bo-theo-doi`, và dòng log
+  thì 409 `WORKSPACE_CONFIG.messages.conViec`, nêu các con số và chỉ sang «Chuyển việc 30 ngày» ở
+  màn Thành viên (lời của máy chủ ghi nguyên văn «Chuyển việc ở màn Thành viên trước», như mã), vai
+  không đổi; bằng 0 thì xoá mọi lượt theo dõi kế hoạch và việc (mở lẫn đã khép) trong cùng giao
+  dịch, mỗi lượt theo dõi việc để một vết `bo-theo-doi`, và dòng log
   «Workspace role changed» ghi `theoDoiDaXoa`. Kiểm owner cuối cùng vẫn đứng trước.
 - **Reads and writes go through tRPC**, not `authClient.organization.*`.
 - **Name and website are required at onboarding and cannot be skipped**, in the form
