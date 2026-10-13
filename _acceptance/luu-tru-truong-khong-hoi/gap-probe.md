@@ -1,6 +1,6 @@
 ---
 slug: luu-tru-truong-khong-hoi
-at: 2026-10-13T07:45:00Z
+at: 2026-10-13T07:20:00Z
 verdict: findings
 p0: 0
 p1: 3
