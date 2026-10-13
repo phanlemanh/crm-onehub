@@ -1,6 +1,7 @@
-import { afterAll, beforeAll, describe, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "../src/client";
 import { loiKhoXa } from "../src/kho-cuc-bo";
+import { ngayVN } from "../src/onboarding-nhac";
 import { gieoViecMau, TIEU_DE_MAU } from "../src/viec-gieo";
 import { WORKSPACE_ID } from "../src/workspace";
 
@@ -87,9 +88,7 @@ describe("vc-gieo", () => {
 			if (!ds.some((v) => v.trangThai === tt))
 				throw new Error(`vc: gieo thieu ca ${tt}`);
 		}
-		const dauHomNay = new Date(
-			`${now.toISOString().slice(0, 10)}T00:00:00.000Z`,
-		);
+		const dauHomNay = new Date(`${ngayVN(now)}T00:00:00.000Z`);
 		const quaHan = ds.some(
 			(v) =>
 				v.hanNgay !== null &&
@@ -97,5 +96,25 @@ describe("vc-gieo", () => {
 				["CHUA_LAM", "DANG_LAM", "CHO_DANH_GIA"].includes(v.trangThai),
 		);
 		if (!quaHan) throw new Error("vc: gieo thieu ca qua-han");
+	});
+	test("vc-gieo: hạn việc mẫu tính theo ngày Việt Nam, không theo ngày UTC", async () => {
+		await db.viec.deleteMany({ where: { tieuDe: { in: [...TIEU_DE_MAU] } } });
+		const now = new Date("2026-10-14T20:00:00.000Z");
+		await gieoViecMau(db, {
+			databaseUrl: process.env.TEST_DATABASE_URL ?? "",
+			nguon: "TEST_DATABASE_URL",
+			now,
+		});
+		const han = async (tieuDe: string) =>
+			(await db.viec.findFirstOrThrow({ where: { tieuDe } })).hanNgay;
+		expect(await han("Gọi xác nhận lịch đào tạo tuần đầu")).toEqual(
+			new Date("2026-10-15T00:00:00.000Z"),
+		);
+		expect(await han("Gửi bảng phí mới cho đại lý")).toEqual(
+			new Date("2026-10-14T00:00:00.000Z"),
+		);
+		expect(await han("Soạn thư chào đối tác mới")).toEqual(
+			new Date("2026-10-20T00:00:00.000Z"),
+		);
 	});
 });
