@@ -354,13 +354,15 @@ export function parseVetViec(hang: {
 
 export const nguonViec = z.enum(NGUON_VIEC);
 
+export type HangVetDaDoc = { nguon: NguonViec; vet: VetViec };
+
 export function parseHangVet(hang: {
 	id: string;
 	nguon: string;
 	loai: string;
 	truoc: unknown;
 	sau: unknown;
-}): { nguon: NguonViec; vet: VetViec } {
+}): HangVetDaDoc {
 	const nguon = nguonViec.safeParse(hang.nguon);
 	if (!nguon.success) {
 		throw new Error(VIEC.thongDiep.vetHong(hang.id, `nguon ${hang.nguon}`));
