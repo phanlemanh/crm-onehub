@@ -78,11 +78,11 @@ import {
 
 type Nhom = "giao-cho-toi" | "toi-giao" | "dang-theo-doi";
 
-const VIEC_THEO_NHOM: Record<Nhom, ViecMau[]> = {
+const VIEC_THEO_NHOM = {
 	"giao-cho-toi": VIEC_GIAO_CHO_TOI,
 	"toi-giao": VIEC_TOI_GIAO,
 	"dang-theo-doi": VIEC_DANG_THEO_DOI,
-};
+} satisfies Record<Nhom, ViecMau[]>;
 
 function TrangThai({ viec }: { viec: Pick<ViecMau, "trangThai"> }) {
 	if (viec.trangThai === "huy") {

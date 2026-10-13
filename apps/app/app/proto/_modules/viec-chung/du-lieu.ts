@@ -7,23 +7,20 @@ export type TrangThaiViec =
 	| "xong"
 	| "huy";
 
-export const NHAN_TRANG_THAI: Record<TrangThaiViec, string> = {
+export const NHAN_TRANG_THAI = {
 	"chua-lam": "Chưa làm",
 	"dang-lam": "Đang làm",
 	"cho-danh-gia": "Chờ đánh giá",
 	xong: "Xong",
 	huy: "Đã huỷ",
-};
+} satisfies Record<TrangThaiViec, string>;
 
-export const NGHIA_TRANG_THAI: Record<
-	Exclude<TrangThaiViec, "huy">,
-	NghiaTrangThai
-> = {
+export const NGHIA_TRANG_THAI = {
 	"chua-lam": "nhap",
 	"dang-lam": "dangChay",
 	"cho-danh-gia": "cho",
 	xong: "xong",
-};
+} satisfies Record<Exclude<TrangThaiViec, "huy">, NghiaTrangThai>;
 
 export type ViecMau = {
 	id: string;
