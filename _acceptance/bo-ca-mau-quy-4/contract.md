@@ -5,7 +5,7 @@ slug: bo-ca-mau-quy-4
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, agent-eval]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-13T00:48:04Z
 design_doc: docs/superpowers/specs/2026-10-13-bo-ca-mau-quy-4-design.md
@@ -66,3 +66,19 @@ từ `evidence/do-gop-y-quy-4.md`; AC-7 bảo đảm nó có và đo đúng thư
 ## Notes
 
 - Bộ ca quý 4 là dữ liệu giả nên nằm trong git; ca thật N1 vẫn ở `ca-gop-y/that/`, ngoài git.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-2: Bài kiểm xanh dù tài liệu hướng dẫn có thể ghi sai lệnh sinh bộ ca quý 4. Nếu sau này ai sửa tài liệu lệch đi, người làm theo tài liệu có thể gặp lỗi mà không có cảnh báo trước.
+  - Ngoài-3: Nếu cách lệnh xử lý dấu phân cách '--' bị hỏng về sau, bài kiểm hiện tại vẫn xanh và không báo. Người chạy lệnh sinh bộ ca có thể gặp lỗi đó mà không được cảnh báo trước.
+  - Ngoài-4: Một phần bước tự kiểm của phép đo chưa được ghi trong mô tả bài kiểm. Nếu ai đó lỡ gỡ phần này đi thì không cổng nào báo, nhưng kết quả đo cho người dùng vẫn đúng như hiện tại.
+  - Ngoài-5: Sau này bất kỳ thay đổi nào ở tệp bỏ qua của kho, dù không liên quan, cũng làm hồ sơ này bị coi là cũ và phải ghim lại. Chỉ tốn thêm công cho người duyệt, không làm sai kết quả đo.
+  - Ngoài-6: Nếu lần đo kết thúc với cảnh báo không đáng tin, tệp kết quả lưu trong kho vẫn trông như một kết quả hợp lệ. Người đọc tệp mà không xem mã thoát có thể tin nhầm con số.
+  - Ngoài-7: Nếu lần đo chạy quá lâu và bị cổng nghiệm thu ngắt, kho dữ liệu đo dùng một lần có thể bị bỏ lại mà không dọn. Chỉ để rác trên máy đo, không làm sai kết quả.
+  - Ngoài-8: Nếu gõ cờ chọn thư mục mà quên giá trị, phép đo lặng lẽ đo bộ quý 4 và ghi đè tệp kết quả trong kho thay vì báo lỗi. Người chạy có thể tưởng đã đo bộ khác.
+  - Ngoài-9: Bước tự kiểm trước khi đo chưa thử hai luật cấm cho ca NG và vài mã vấn đề, nên nếu các luật đó hỏng thì bước tự kiểm vẫn báo xanh. Kết quả đo có thể được chấm sai ở những chỗ đó mà không ai biết.
+  - Ngoài-10: Nếu công cụ chạy thử đổi cách ghi kết quả, phần điểm đánh giá sẽ hiện «—» mà không báo lỗi, người đọc có thể tưởng là chưa có điểm chứ không phải đọc hỏng.
+  - Ngoài-11: Nếu danh sách mã bị cấm trong ca NG bị rỗng do sửa cấu hình, phép đo vẫn báo các ca đó đúng mà thực ra không kiểm gì cả.
+  - Ngoài-13: Nếu gõ nhầm thư mục đích khi sinh bộ ca, lệnh có thể xoá các tệp dữ liệu khác trong thư mục đó, kể cả cấu hình của ứng dụng.
+  - Ngoài-16: Nếu công cụ chạy thử đổi định dạng kết quả, điểm đánh giá sẽ lặng lẽ hiện «—»; danh sách mã cấm rỗng cũng khiến luật cấm không kiểm gì mà không báo.
+  - Ngoài-18: Nếu lượt đo chạy quá 90 phút, hệ thống nghiệm thu coi là quá hạn trước khi công cụ kịp báo lỗi cụ thể, nên người xem mất thông báo rõ nguyên nhân.
+  - Ngoài-19: Bài kiểm việc chọn thư mục ca chỉ đọc chữ trong mã chứ không chạy thật, nên có thể xanh dù hành vi đổi, hoặc đỏ dù hành vi vẫn đúng.
+  - Ngoài-20: Bài kiểm chỉ so tên mục tiêu và KR cấp trên, nên nếu bộ sinh chép sai số hay kiểu thì bài kiểm vẫn xanh.

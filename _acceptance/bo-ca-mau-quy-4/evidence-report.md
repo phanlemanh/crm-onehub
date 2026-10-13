@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: faea4c5622510945fe69aacac6481d5725b8e708
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 3 (PASS, 9/9 eval, 7/7 lệnh suite, hội đồng E8 đạt; vòng 1 REJECT và vòng 2 PENDING-JUDGMENT đã sửa). Ngoài-12 và Ngoài-17 (ca kèm cấp trên bị gieo thành mục tiêu cấp bộ phận) mở hợp đồng mới; Ngoài-1, 14, 15, 21 chấp nhận, không sửa; mười lăm mục còn lại ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: bo-ca-mau-quy-4
