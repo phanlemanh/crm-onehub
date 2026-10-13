@@ -135,7 +135,6 @@ function veKhoa(khoa: boolean, dem: Dem): HTMLElement {
 			<div
 				contentEditable
 				suppressContentEditableWarning
-				tabIndex={0}
 				data-cho="contenteditable"
 				{...boDem(dem, "contenteditable")}
 			>
@@ -151,10 +150,15 @@ function ban(o: HTMLElement, cho: Cho, su: SuKien) {
 	act(() => {
 		const tuy = { bubbles: true, cancelable: true };
 		if (su === "keydown")
-			el.dispatchEvent(new window.KeyboardEvent("keydown", { ...tuy, key: "Enter" }));
+			el.dispatchEvent(
+				new window.KeyboardEvent("keydown", { ...tuy, key: "Enter" }),
+			);
 		else if (su === "pointerdown")
 			el.dispatchEvent(
-				new window.PointerEvent("pointerdown", { ...tuy, pointerType: "mouse" }),
+				new window.PointerEvent("pointerdown", {
+					...tuy,
+					pointerType: "mouse",
+				}),
 			);
 		else el.dispatchEvent(new window.MouseEvent(su, { ...tuy, button: 0 }));
 	});

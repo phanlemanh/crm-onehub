@@ -11,6 +11,7 @@ import {
 	AccordionTrigger,
 } from "@crm/ui/components/accordion";
 import { Button } from "@crm/ui/components/button";
+import { KhoaLuuTru } from "@crm/ui/components/dai-luu-tru";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import {
 	EntityLogo,
@@ -77,7 +78,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ContactPlans } from "./contact-plans";
-import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
+import { DaiLuuTruBanGhi, RecordActions } from "./record-actions";
 import {
 	BangDaLuuTru,
 	DealAmount,
@@ -256,7 +257,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 				contact ? (
 					<>
 						{contact.archivedAt ? (
-							<DaiLuuTru
+							<DaiLuuTruBanGhi
 								record={{ kind: "contact", id: contact.id }}
 								archivedAt={contact.archivedAt}
 							/>

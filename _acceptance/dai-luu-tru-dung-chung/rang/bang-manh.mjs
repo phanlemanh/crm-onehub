@@ -18,7 +18,7 @@ function git(...args) {
 
 function noiDung() {
 	if (!CHIEU_DO) return readFileSync(join(GOC, TEP), "utf8");
-	const moc = process.env.MOC ?? git("merge-base", "HEAD", "origin/onehub").trim();
+	const moc = git("merge-base", "HEAD", "origin/onehub").trim();
 	return git("show", `${moc}:${TEP}`);
 }
 
@@ -36,7 +36,8 @@ function kiem(chu) {
 	if (dong.length !== 1) return `can dung 1 dong bang, co ${dong.length}`;
 	const o = dong[0].split("|")[2] ?? "";
 	const thieu = PHAI_CO.filter((t) => !o.includes(t));
-	if (thieu.length > 0) return `dai bao van ghi chua (thieu ${thieu.join(", ")})`;
+	if (thieu.length > 0)
+		return `dai bao van ghi chua (thieu ${thieu.join(", ")})`;
 	if (o.includes("chưa")) return "dai bao van ghi chua";
 	return null;
 }

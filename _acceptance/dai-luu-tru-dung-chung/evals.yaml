@@ -84,7 +84,8 @@ evals:
       - "_acceptance/dai-luu-tru-dung-chung/rang/mot-noi.mjs"
     expected: |
       exit 0 va "dai-luu-tru-dung-chung mot-noi: dat"; quet moi tep .ts/.tsx duoi apps/app tru apps/app/test/**: 0 tep chua
-      "data-dai-luu-tru", "data-khoa-luu-tru" hay the "<fieldset"; dung 3 tep company-sheet.tsx, contact-sheet.tsx,
+      "data-dai-luu-tru", "data-khoa-luu-tru", hay chua "<fieldset" cung voi bo chan capture (onPointerDownCapture,
+      onMouseDownCapture, onClickCapture, onKeyDownCapture) — fieldset thuong cua man khac khong tinh; dung 3 tep company-sheet.tsx, contact-sheet.tsx,
       deal-sheet.tsx nhap KhoaLuuTru tu "@crm/ui/components/dai-luu-tru"; record-actions.tsx nhap DaiLuuTru tu cung cho
       va dung no trong JSX. Doi chung: so tep da quet > 100.
       CHIEU DO ghim: --chieu-do chep record-actions.tsx cua onehub truoc vong vao ban sao tam roi quet ban sao -> do
