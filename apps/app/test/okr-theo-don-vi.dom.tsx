@@ -379,7 +379,7 @@ beforeEach(() => {
 	quanTri = false;
 	theoDon = new Map();
 	dem = {};
-	cayCanChinh = { roots: [], chuaCanChinh: [] };
+	cayCanChinh = { roots: [], chuaCanChinh: [], canh: [] };
 	treo = new Set();
 	hoan = new Map();
 });
@@ -514,6 +514,7 @@ describe("theo-don-vi", () => {
 				nut("o", "muc-tieu", [nut("k", "kr", [nut("p", "muc-tieu", [])])]),
 			],
 			chuaCanChinh: [nut("x", "muc-tieu", [])],
+			canh: [],
 		};
 		const s = await mo("goc", "cay");
 		const dong = [...s.o.querySelectorAll("[data-nut-can-chinh]")];
@@ -668,6 +669,7 @@ describe("nhan-danh-sach", () => {
 				{ ...nut("o", "muc-tieu", []), hienThi: "gioi-han", soNguoiXem: 2 },
 			],
 			chuaCanChinh: [nut("x", "muc-tieu", [])],
+			canh: [],
 		};
 		const c = await mo("goc", "cay");
 		const nhanCay = (id: string) =>

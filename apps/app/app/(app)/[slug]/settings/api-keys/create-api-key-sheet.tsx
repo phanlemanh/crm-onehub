@@ -28,6 +28,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@crm/ui/components/sheet";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
@@ -73,7 +74,7 @@ function NewApiKeyButton(props: ComponentProps<typeof Button>) {
 
 export function CreateApiKeySheet() {
 	return (
-		<Suspense fallback={<NewApiKeyButton disabled />}>
+		<Suspense fallback={<Skeleton className="h-8 w-28 rounded-md" />}>
 			<CreateApiKeyForm />
 		</Suspense>
 	);

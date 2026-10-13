@@ -1,5 +1,6 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { Suspense } from "react";
-import { PageShellLoading } from "@/components/page-shell";
+
 import { getLocale } from "@/lib/locale/server";
 import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { KhungKetNoi } from "./khung-ket-noi";
@@ -24,7 +25,7 @@ export async function OAuthConnectionPage(props: OAuthConnectionPageProps) {
 			tieuDe={ketNoiMessages(locale).ten[props.provider]}
 			laTenRieng
 		>
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="the" />}>
 				<OAuthConnectionPageContent {...props} />
 			</Suspense>
 		</KhungKetNoi>

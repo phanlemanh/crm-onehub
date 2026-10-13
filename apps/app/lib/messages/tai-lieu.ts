@@ -63,6 +63,7 @@ const en = {
 	},
 	loiTai: {
 		tieuDe: "Could not load the pages.",
+		moTa: "The server didn’t respond. Try again in a moment.",
 		thuLai: "Try again",
 	},
 	rongLoc: {
@@ -205,6 +206,8 @@ const en = {
 	soan: {
 		tieuDeMoi: "New page",
 		tieuDeSua: "Edit page",
+		moTaMoi: "Write the page and choose its type, unit and owner.",
+		moTaSua: "Edit the page content and its details.",
 		ten: "Page name",
 		loaiTrang: "Page type",
 		donVi: "Unit (optional)",
@@ -298,6 +301,8 @@ const en = {
 	nguon: {
 		nutTai: "Upload a source",
 		tat: "Source file storage is not turned on — ask an admin to configure it.",
+		khongDocDuoc:
+			"Couldn’t check whether source file storage is on — reload the page to try again.",
 		hop: {
 			tieuDe: "Upload a source",
 			moTa: "The composer reads the file and drafts a proposal for one page. No page changes until its page owner approves.",
@@ -448,6 +453,7 @@ const vi: TaiLieuMessages = {
 	},
 	loiTai: {
 		tieuDe: "Không tải được danh sách trang.",
+		moTa: "Máy chủ không trả lời. Thử lại sau giây lát.",
 		thuLai: "Thử lại",
 	},
 	rongLoc: {
@@ -586,6 +592,8 @@ const vi: TaiLieuMessages = {
 	soan: {
 		tieuDeMoi: "Trang mới",
 		tieuDeSua: "Sửa trang",
+		moTaMoi: "Viết nội dung trang và chọn loại, đơn vị, chủ trang.",
+		moTaSua: "Sửa nội dung và thông tin của trang.",
 		ten: "Tên trang",
 		loaiTrang: "Loại trang",
 		donVi: "Đơn vị (tuỳ chọn)",
@@ -677,6 +685,8 @@ const vi: TaiLieuMessages = {
 	nguon: {
 		nutTai: "Tải nguồn lên",
 		tat: NGUON.thongDiep.tat,
+		khongDocDuoc:
+			"Chưa đọc được trạng thái lưu tệp nguồn — tải lại trang để thử lại.",
 		hop: {
 			tieuDe: "Tải nguồn lên",
 			moTa: "Máy soạn đọc tệp và soạn một bản đề xuất cho một trang. Không trang nào đổi cho tới khi chủ trang duyệt.",

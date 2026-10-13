@@ -21,6 +21,7 @@ export const TAI_LIEU_MAN = {
 	goc: "/tai-lieu",
 	khongDonVi: "khong-don-vi",
 	dangTai: { soDong: 6 },
+	idNguonTat: "tai-lieu-nguon-tat",
 	nguon: {
 		chapNhan: ".docx,.pdf",
 		kieuNoiDung: {

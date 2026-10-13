@@ -51,6 +51,9 @@ const en = {
 		openContacts: "Open Contacts",
 	},
 	detail: {
+		loadErrorTitle: "Couldn’t load this campaign",
+		loadErrorBody:
+			"The server didn’t respond. Try again, or go back to the campaign list.",
 		start: "Start",
 		finish: "Finish",
 		startedAt: "Started",
@@ -142,6 +145,9 @@ const vi = {
 		openContacts: "Mở màn Cá nhân",
 	},
 	detail: {
+		loadErrorTitle: "Không tải được chiến dịch",
+		loadErrorBody:
+			"Máy chủ không trả lời. Thử lại, hoặc quay về danh sách chiến dịch.",
 		start: "Bắt đầu",
 		finish: "Kết thúc",
 		startedAt: "Bắt đầu lúc",

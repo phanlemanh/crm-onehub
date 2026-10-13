@@ -3,16 +3,6 @@
 import Add from "@carbon/icons-react/es/Add";
 import Close from "@carbon/icons-react/es/Close";
 import { FIELD_TYPES, fieldKeyFromLabel } from "@crm/db/fields-shape";
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-} from "@crm/ui/components/alert-dialog";
 import { Button } from "@crm/ui/components/button";
 import { Checkbox } from "@crm/ui/components/checkbox";
 import {
@@ -53,6 +43,7 @@ import {
 	tablePlacement,
 } from "./fields-copy";
 import { type FieldEntity, kindOf } from "./fields-entity";
+import type { TruongLuuTru } from "./use-luu-tru-truong";
 
 type FieldRecord = RouterOutputs["fields"]["list"][number];
 
@@ -144,10 +135,12 @@ export function FieldEditor({
 	entity,
 	field,
 	onDone,
+	onArchive,
 }: {
 	entity: FieldEntity;
 	field: FieldRecord | undefined;
 	onDone: () => void;
+	onArchive: (field: TruongLuuTru) => void;
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -160,7 +153,6 @@ export function FieldEditor({
 	const optionsId = useId();
 
 	const [draft, setDraft] = useState<Draft>(() => draftFrom(field));
-	const [confirming, setConfirming] = useState(false);
 
 	const patch = (next: Partial<Draft>) =>
 		setDraft((current) => ({ ...current, ...next }));
@@ -179,13 +171,6 @@ export function FieldEditor({
 
 	const update = useMutation(
 		trpc.fields.update.mutationOptions({
-			onSuccess: settle,
-			onError: (error) => toast.error(error.message),
-		}),
-	);
-
-	const archive = useMutation(
-		trpc.fields.archive.mutationOptions({
 			onSuccess: settle,
 			onError: (error) => toast.error(error.message),
 		}),
@@ -398,7 +383,13 @@ export function FieldEditor({
 					{field ? copy.save : copy.addField}
 				</Button>
 				{field ? (
-					<Button variant="outline" onClick={() => setConfirming(true)}>
+					<Button
+						variant="outline"
+						onClick={() => {
+							onArchive(field);
+							onDone();
+						}}
+					>
 						{copy.archive}
 					</Button>
 				) : (
@@ -407,30 +398,6 @@ export function FieldEditor({
 					</Button>
 				)}
 			</div>
-
-			{field ? (
-				<AlertDialog open={confirming} onOpenChange={setConfirming}>
-					<AlertDialogContent>
-						<AlertDialogHeader>
-							<AlertDialogTitle>
-								{copy.archiveTitle(field.label)}
-							</AlertDialogTitle>
-							<AlertDialogDescription>
-								{copy.archiveBody}
-							</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel>{copy.cancel}</AlertDialogCancel>
-							<AlertDialogAction
-								variant="destructive"
-								onClick={() => archive.mutate({ id: field.id })}
-							>
-								{copy.archiveField}
-							</AlertDialogAction>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialog>
-			) : null}
 		</>
 	);
 }

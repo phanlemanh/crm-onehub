@@ -6,10 +6,10 @@ import { SimpleTableRow } from "@crm/ui/components/simple-table";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { formatDay } from "@crm/ui/lib/format";
+import { quaHanTheoNgayVN } from "@crm/validation/ngay-vn";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
-import { quaHan } from "@/lib/qua-han";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
 export type BuocCuaToi =
@@ -23,7 +23,7 @@ export function ngayCuaBuoc(dueAt: string): Date {
 }
 
 export function buocQuaHan(buoc: BuocCuaToi, now: Date): boolean {
-	return quaHan(ngayCuaBuoc(buoc.dueAt), null, now);
+	return quaHanTheoNgayVN(buoc.dueAt, now);
 }
 
 export function DongBuoc({

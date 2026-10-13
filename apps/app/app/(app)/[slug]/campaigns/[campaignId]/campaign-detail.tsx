@@ -6,6 +6,7 @@ import { ButtonGroup } from "@crm/ui/components/button-group";
 import { StatGroup } from "@crm/ui/components/dashboard";
 import { DataTable, type DataTableColumn } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { Link } from "@crm/ui/components/link";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -17,11 +18,12 @@ import {
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatCard } from "@crm/ui/components/stat-card";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { formatPercent } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { useMemo } from "react";
+import { type ReactNode, useMemo } from "react";
 import { toast } from "sonner";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
@@ -33,7 +35,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import {
@@ -348,7 +349,13 @@ function MembersTable({
 	);
 }
 
-export function CampaignDetail({ id }: { id: string }) {
+export function CampaignDetail({
+	id,
+	duongDan,
+}: {
+	id: string;
+	duongDan?: ReactNode;
+}) {
 	const m = campaignMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -378,13 +385,34 @@ export function CampaignDetail({ id }: { id: string }) {
 		}),
 	);
 
-	if (!campaign.data) return <PageShellLoading />;
+	if (campaign.isError && !campaign.data)
+		return (
+			<>
+				<PageShellHeader breadcrumb={duongDan} />
+				<VungTaiLoi
+					dangTai={campaign.isFetching}
+					data-trang-thai="ST-chiendich-loi"
+					moTa={m.detail.loadErrorBody}
+					onThuLai={() => campaign.refetch()}
+					tieuDe={m.detail.loadErrorTitle}
+				/>
+			</>
+		);
+	if (!campaign.data) {
+		return (
+			<PageShellHeader breadcrumb={duongDan}>
+				<div className="basis-full">
+					<KhungXuong coTieuDe hinh="tong-quan" />
+				</div>
+			</PageShellHeader>
+		);
+	}
 
 	const row = campaign.data;
 
 	return (
 		<>
-			<PageShellHeader>
+			<PageShellHeader breadcrumb={duongDan}>
 				<PageShellHeading>
 					<PageShellTitle translate="no">{row.name}</PageShellTitle>
 					<PageShellDescription>

@@ -363,7 +363,7 @@ describe("loi-lan-dau", () => {
 		expect(
 			`ST-bangcot-loi=${coLoi(san.o)} khung cho con lai: ${khungCho(san.o)}`,
 		).toBe("ST-bangcot-loi=true khung cho con lai: 0");
-		expect(nut(san.o, m.error.action)).toBeTruthy();
+		expect(nut(san.o, mUi.karaKhung.thuLai)).toBeTruthy();
 		expect(
 			san.o.querySelector(`input[placeholder="${m.search}"]`),
 		).not.toBeNull();
@@ -386,7 +386,7 @@ describe("tai-lai", () => {
 
 		const goiTruoc = daGoiBangCot.length;
 		const ghiTruoc = san.soLanGhiDuongDan();
-		await bam(nut(san.o, m.error.action));
+		await bam(nut(san.o, mUi.karaKhung.thuLai));
 		await cho(san.o, () => cotDangHien(san.o).length > 0);
 
 		expect(`so lan goi them: ${daGoiBangCot.length - goiTruoc}`).toBe(
@@ -415,7 +415,7 @@ describe("loi-sau-du-lieu", () => {
 		await cho(san.o, () => coLoi(san.o));
 
 		expect(`cot con lai: ${cotDangHien(san.o).length}`).toBe("cot con lai: 0");
-		expect(nut(san.o, m.error.action)).toBeTruthy();
+		expect(nut(san.o, mUi.karaKhung.thuLai)).toBeTruthy();
 	});
 });
 
@@ -428,7 +428,7 @@ describe("tai-lai-bo-loc-moi", () => {
 
 		await go(san.o, "Beta");
 		await cho(san.o, () => coLoi(san.o));
-		await bam(nut(san.o, m.error.action));
+		await bam(nut(san.o, mUi.karaKhung.thuLai));
 		await cho(san.o, () => cotDangHien(san.o).length > 0);
 
 		const lanBa = daGoiBangCot[daGoiBangCot.length - 1] as BangCotVao;
