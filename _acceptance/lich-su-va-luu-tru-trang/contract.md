@@ -5,7 +5,7 @@ slug: lich-su-va-luu-tru-trang
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
+status: verified
 design_doc: _acceptance/lich-su-va-luu-tru-trang/design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-13
