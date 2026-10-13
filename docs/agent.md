@@ -395,7 +395,9 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
     người giao đóng được».
   - Việc đã Huỷ: «là việc đã huỷ, không đánh dấu xong được».
 
-  Việc đã Xong trả «đã xong từ trước» (không ghi gì); việc đã bị xoá trả «không còn việc đó».
+  Việc đã Xong trả «đã xong từ trước» (không ghi gì); việc đã bị xoá trả «không còn việc đó». Việc đổi
+  trạng thái giữa lúc kiểm và lúc ghi (`doiTrangThai` ném `LoiViec`) trả «vừa đổi trạng thái nên chưa
+  đóng được», và cả lần nhắn được hoàn lại như mọi mục đổi.
 - **Khuôn mục nhắc OKR là `viecOkr` (Zod, `@crm/db/okr-nhac`), một nguồn.**
   `ViecOkr` suy từ nó; API «Việc của bạn» dùng chính nó; `KHOA_MUC_OKR` khai trường
   mã của từng loại, và nhánh OKR của `mucNhac` cùng `maViec` suy từ bảng đó.

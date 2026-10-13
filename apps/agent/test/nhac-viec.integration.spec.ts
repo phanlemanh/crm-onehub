@@ -19,7 +19,7 @@ import {
 	LOAI_VIEC_NHAC,
 	lenLichNhac,
 } from "../agent/lib/nhac-ke-hoach";
-import { cauTraLoi, xongTheoTinNhac } from "../agent/lib/tra-loi-nhac";
+import { BuocDoi, cauTraLoi, xongTheoTinNhac } from "../agent/lib/tra-loi-nhac";
 import { ZALO } from "../agent/lib/zalo-config";
 import {
 	DAY_MS,
@@ -576,5 +576,59 @@ describe("vc-xong-n", () => {
 			where: { completedAt: { not: null }, assigneeId: f.b.id },
 		});
 		expect(dongBuoc).toBe(0);
+	});
+	test("vc-xong-n: việc đổi trạng thái giữa lúc đọc và lúc ghi — người nhắn vẫn nhận lời trả, cả tin được hoàn lại", async () => {
+		const f = await dungE9();
+		const z = zaloGia();
+		await noiZalo(f.b.id, `Z-${f.b.id}`);
+		await batBot();
+		await lenLichNhac(NOW);
+		const h = await hangCua(f.b.id);
+		await voiToken(() =>
+			chayNhac(h, { zaloFetcher: z.fetcher, appUrl: APP_URL }),
+		);
+		const daGui = parseNhacPayload((await hangCua(f.b.id)).payload).daGui ?? [];
+		const soQuaHan = daGui.findIndex((m) => m.loai === "viec-qua-han") + 1;
+		const soSapHan = daGui.findIndex((m) => m.loai === "viec-sap-han") + 1;
+		await doi(f.sapHan.id, f.x.id, "HUY");
+		const mu = <T extends object>(goc: T, ghi: Record<string, unknown>): T =>
+			new Proxy(goc, {
+				get(t, k) {
+					const v = Reflect.get(t, k);
+					if (typeof k === "string" && k in ghi) return ghi[k];
+					return typeof v === "function" ? v.bind(t) : v;
+				},
+			});
+		const loi = await db
+			.$transaction(async (tx) => {
+				const viecMu = mu(tx.viec, {
+					findMany: async (a: Parameters<typeof tx.viec.findMany>[0]) =>
+						(await tx.viec.findMany(a)).map((r) => ({
+							...r,
+							trangThai: "DANG_LAM" as const,
+						})),
+				});
+				const txMu = mu(tx, { viec: viecMu });
+				return xongTheoTinNhac(txMu, {
+					userId: f.b.id,
+					so: [soQuaHan, soSapHan],
+					now: NOW,
+					lienKet: () => null,
+				});
+			})
+			.then(
+				() => null,
+				(e: unknown) => e,
+			);
+		expect(loi).toBeInstanceOf(BuocDoi);
+		const muc = (loi as BuocDoi).muc;
+		expect(muc).toEqual([{ so: soSapHan, lyDo: "viec-doi-trang-thai" }]);
+		expect(cauTraLoi({ loai: "buoc-doi", muc })).toBe(
+			`${ZALO.loi.buocDoi(soSapHan, "viec-doi-trang-thai")} ${ZALO.loi.chuaDanhDau}`,
+		);
+		const trangThai = async (id: string) =>
+			(await db.viec.findUniqueOrThrow({ where: { id } })).trangThai;
+		expect(await trangThai(f.quaHan.id)).toBe("CHUA_LAM");
+		expect(await trangThai(f.sapHan.id)).toBe("HUY");
 	});
 });

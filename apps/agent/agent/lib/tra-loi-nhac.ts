@@ -7,7 +7,7 @@ import {
 	TRANG_THAI_KHEP,
 	vaiCua,
 } from "@crm/db/viec";
-import { doiTrangThai } from "@crm/db/viec-ghi";
+import { doiTrangThai, LoiViec } from "@crm/db/viec-ghi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
 import { type MucNhac, parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
@@ -22,7 +22,11 @@ import { TIEU_DE } from "./tin-nhac";
 import { gioNhac } from "./zalo-bot-xuong";
 import { ZALO } from "./zalo-config";
 
-type LyDoDoi = "khong-co-buoc" | "ke-hoach-dong" | "khong-co-viec";
+type LyDoDoi =
+	| "khong-co-buoc"
+	| "ke-hoach-dong"
+	| "khong-co-viec"
+	| "viec-doi-trang-thai";
 
 type LyDoViecChan = "cho-danh-gia" | "da-huy";
 
@@ -180,13 +184,22 @@ export async function xongTheoTinNhac(
 			truoc.push(dong);
 			continue;
 		}
-		await doiTrangThai(tx, {
-			viecId: v.id,
-			nguoiId: input.userId,
-			den: TrangThaiViec.XONG,
-			nguon: "zalo",
-			now: input.now,
-		});
+		try {
+			await doiTrangThai(tx, {
+				viecId: v.id,
+				nguoiId: input.userId,
+				den: TrangThaiViec.XONG,
+				nguon: "zalo",
+				now: input.now,
+			});
+		} catch (loi) {
+			if (!(loi instanceof LoiViec)) throw loi;
+			doi.push({
+				so,
+				lyDo: loi.ma === "khong-thay" ? "khong-co-viec" : "viec-doi-trang-thai",
+			});
+			continue;
+		}
 		vua.push(dong);
 	}
 	for (const { so, muc: m } of chon) {

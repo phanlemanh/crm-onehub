@@ -133,13 +133,19 @@ export const ZALO = {
 			`Mục ${so} là «${loai}», không đánh dấu xong được${url ? ` — mở kế hoạch: ${url}` : ""}.`,
 		buocDoi: (
 			so: number,
-			lyDo: "khong-co-buoc" | "ke-hoach-dong" | "khong-co-viec",
+			lyDo:
+				| "khong-co-buoc"
+				| "ke-hoach-dong"
+				| "khong-co-viec"
+				| "viec-doi-trang-thai",
 		) =>
 			lyDo === "khong-co-viec"
 				? `Mục ${so} không còn việc đó.`
-				: lyDo === "khong-co-buoc"
-					? `Mục ${so} không còn bước đó trong kế hoạch.`
-					: `Mục ${so} thuộc kế hoạch đã đóng.`,
+				: lyDo === "viec-doi-trang-thai"
+					? `Mục ${so} vừa đổi trạng thái nên chưa đóng được.`
+					: lyDo === "khong-co-buoc"
+						? `Mục ${so} không còn bước đó trong kế hoạch.`
+						: `Mục ${so} thuộc kế hoạch đã đóng.`,
 		viecKhongCuaBan: (so: string) =>
 			`Mục ${so} là việc của người khác trong tin này, không đánh dấu xong từ đây được.`,
 		viecChoDanhGia: (so: number) =>
