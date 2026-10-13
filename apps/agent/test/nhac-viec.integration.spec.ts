@@ -591,37 +591,36 @@ describe("vc-xong-n", () => {
 		const soQuaHan = daGui.findIndex((m) => m.loai === "viec-qua-han") + 1;
 		const soSapHan = daGui.findIndex((m) => m.loai === "viec-sap-han") + 1;
 		await doi(f.sapHan.id, f.x.id, "HUY");
-		const mu = <T extends object>(goc: T, ghi: Record<string, unknown>): T =>
-			new Proxy(goc, {
-				get(t, k) {
-					const v = Reflect.get(t, k);
-					if (typeof k === "string" && k in ghi) return ghi[k];
-					return typeof v === "function" ? v.bind(t) : v;
-				},
-			});
-		const loi = await db
-			.$transaction(async (tx) => {
-				const viecMu = mu(tx.viec, {
-					findMany: async (a: Parameters<typeof tx.viec.findMany>[0]) =>
-						(await tx.viec.findMany(a)).map((r) => ({
-							...r,
-							trangThai: "DANG_LAM" as const,
-						})),
+		let loi: BuocDoi | null = null;
+		try {
+			await db.$transaction(async (tx) => {
+				const viecMu = new Proxy(tx.viec, {
+					get: (goc, khoa) =>
+						khoa === "findMany"
+							? async (a: Parameters<typeof tx.viec.findMany>[0]) =>
+									(await goc.findMany(a)).map((r) => ({
+										...r,
+										trangThai: "DANG_LAM" as const,
+									}))
+							: Reflect.get(goc, khoa),
 				});
-				const txMu = mu(tx, { viec: viecMu });
+				const txMu = new Proxy(tx, {
+					get: (goc, khoa) =>
+						khoa === "viec" ? viecMu : Reflect.get(goc, khoa),
+				});
 				return xongTheoTinNhac(txMu, {
 					userId: f.b.id,
 					so: [soQuaHan, soSapHan],
 					now: NOW,
 					lienKet: () => null,
 				});
-			})
-			.then(
-				() => null,
-				(e: unknown) => e,
-			);
+			});
+		} catch (e) {
+			if (!(e instanceof BuocDoi)) throw e;
+			loi = e;
+		}
 		expect(loi).toBeInstanceOf(BuocDoi);
-		const muc = (loi as BuocDoi).muc;
+		const muc = loi?.muc ?? [];
 		expect(muc).toEqual([{ so: soSapHan, lyDo: "viec-doi-trang-thai" }]);
 		expect(cauTraLoi({ loai: "buoc-doi", muc })).toBe(
 			`${ZALO.loi.buocDoi(soSapHan, "viec-doi-trang-thai")} ${ZALO.loi.chuaDanhDau}`,
