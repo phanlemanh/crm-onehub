@@ -60,8 +60,10 @@ Mọi tệp sống trong `_acceptance/bo-cau-hoi-mau/`.
      `cham-tung-cau.jsonl` của lượt một và lượt hai, so tập mã với bộ (thiếu hay trùng mã → thoát 2), dựng bảng
      theo tầng và theo kiểu chữ, danh sách câu không đạt (đầu vào của `l5`), chép nguyên các dòng «Tổng» của
      script chấm, ghi băm `bo-mau.json` và băm nội dung `apps/agent/agent/**` lúc đo, ghi cả vào
-     `.acceptance-runs/bo-cau-hoi-mau/<lượt>/`, in lệnh `--ghi <thư mục>`. Script chấm thoát 0 hay 1 (dưới
-     ngưỡng của nó) đều là «đã đo»: thoát 0. Script chấm thoát 2 → thoát 2 «không đo được».
+     `.acceptance-runs/bo-cau-hoi-mau/<lượt>/`, in lệnh `--ghi <thư mục>`. Lượt đủ mã là «đã đo»: thoát 0 dù script chấm thoát 0, 1 (dưới
+     ngưỡng) hay 2 vì có câu lỗi gọi model — câu lỗi nằm ở cột lỗi và danh sách không đạt với nhãn `loi`. Script
+     chấm không để lại thư mục lượt, hay jsonl thiếu hoặc trùng mã → thoát 2 «không đo được». (Sửa ngày
+     2026-10-13 sau hai lượt đo thật đều có 2/96 câu lỗi model — chủ kho chọn lối (a).)
    - `--ghi <thư mục>`: chép `do-bo-mau.md`, `cham-tung-cau.jsonl`, `cham-bo-do-mau.md` vào `evidence/`.
    - Không cờ: chỉ kiểm. `evidence/do-bo-mau.md` và `evidence/cham-tung-cau.jsonl` phải có, mang băm
      `bo-mau.json` hiện tại, tập mã đủ, bảng tính lại từ jsonl khớp từng ô → thoát 0 «khop». Thiếu, lệch băm

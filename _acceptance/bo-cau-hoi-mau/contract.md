@@ -5,10 +5,8 @@ slug: bo-cau-hoi-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: approved
+status: draft
 design_doc: _acceptance/bo-cau-hoi-mau/design.md
-approved_by: Phan Le Manh
-approved_at: 2026-10-13
 ---
 
 # Acceptance Contract: bo-cau-hoi-mau
@@ -30,7 +28,7 @@ Notes · `_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts`, `quyet-do.ts` · `bo-d
 - AC-3: Given tám trang mẫu `_acceptance/tro-ly-doc-kho/bo-do/trang-mau/*.md`, When kiểm trang mong đợi, Then mọi trang trong `mong` và `ganTrang` là một trong tám trang; câu S2 có ít nhất hai nhóm trang; câu S6 và ngoài kho không có `mong`; mỗi câu S7 có `bienTheCua` trỏ một câu S1 hay S3 chữ chuẩn có cùng `mong`; And bản sao trỏ trang không có, S2 một nhóm, hay biến thể khác trang câu gốc bị bác với câu nêu mã câu và luật `trang-mong`.
 - AC-4: Given các câu S1, S2, S3, S7, When kiểm ý trọng yếu, Then mỗi câu có ít nhất một ý, mỗi ý sau chuẩn hoá NFC là chuỗi con nguyên văn của một trang trong `mong` của chính câu đó; câu S7 có cùng ý với câu gốc; câu S6 và ngoài kho không có ý; And bản sao có ý sửa một con số (vd «1,2%» thành «1,5%») hay ý lấy từ trang không thuộc `mong` bị bác với câu nêu mã câu và luật `y-trong-yeu`.
 - AC-5: Given chữ của mọi câu, When kiểm riêng tư, Then không câu nào có số điện thoại, địa chỉ email hay số hợp đồng; And bản sao chèn một trong ba thứ ấy bị bác với câu nêu mã câu, loại và luật `rieng-tu`.
-- AC-6: Given `bo-mau.json` đã qua năm luật và khoá AI Gateway thật, When chạy `bun _acceptance/bo-cau-hoi-mau/rang/do-bo-mau.ts --do`, Then script chấm `cham-bo-do.ts --bo` chạy trên kho đo dùng-một-lần; tập mã lượt một bằng đúng tập câu quy định của bộ (46) và tập mã lượt hai bằng cả bộ (50); lệnh ghi vào `.acceptance-runs/bo-cau-hoi-mau/<lượt>/` bảng theo tầng và theo kiểu chữ, các dòng «Tổng» của script chấm, danh sách mã không đạt, mã thoát của script chấm, băm của `bo-mau.json` và của mã trợ lý lúc đo; And script chấm thoát 0 hay 1 thì lệnh thoát 0, script chấm thoát 2 hay jsonl thiếu hoặc trùng mã thì lệnh thoát 2 «không đo được» kèm mã thiếu hay trùng; And không tệp nào dưới `_acceptance/tro-ly-doc-kho/` đổi. (cross-layer)
+- AC-6: Given `bo-mau.json` đã qua năm luật và khoá AI Gateway thật, When chạy `bun _acceptance/bo-cau-hoi-mau/rang/do-bo-mau.ts --do`, Then script chấm `cham-bo-do.ts --bo` chạy trên kho đo dùng-một-lần; tập mã lượt một bằng đúng tập câu quy định của bộ (46) và tập mã lượt hai bằng cả bộ (50); lệnh ghi vào `.acceptance-runs/bo-cau-hoi-mau/<lượt>/` bảng theo tầng và theo kiểu chữ có cột lỗi, các dòng «Tổng» của script chấm, danh sách mã không đạt (câu lỗi gọi model nằm trong đó với nhãn `loi`), mã thoát của script chấm, băm của `bo-mau.json` và của mã trợ lý lúc đo; And lượt đủ mã là «đã đo», lệnh thoát 0 dù script chấm thoát 0, 1, hay 2 vì có câu lỗi; And script chấm không để lại thư mục lượt, hay jsonl thiếu hoặc trùng mã, thì lệnh thoát 2 «không đo được» kèm lý do hay mã thiếu, trùng; And không tệp nào dưới `_acceptance/tro-ly-doc-kho/` đổi. (cross-layer)
 - AC-7: Given bằng chứng của một lượt `--do` đã chép bằng `--ghi` và commit (`evidence/do-bo-mau.md`, `evidence/cham-tung-cau.jsonl`) trước Cổng Bằng chứng, When chạy lệnh đo không cờ, Then lệnh chỉ kiểm, không gọi model, không ghi tệp: băm trong `do-bo-mau.md` bằng sha256 của `bo-mau.json` ở HEAD, tập mã jsonl đủ, mọi ô bảng tính lại từ jsonl khớp → thoát 0; And thiếu tệp, băm lệch (bộ đổi sau lần đo) hay một ô lệch → thoát 1 với câu nêu tệp, băm hay ô lệch.
 - AC-8: Given `bo-mau.json` và tám trang mẫu, When một người đọc từng câu cạnh trang của nó, Then câu nào có trang thì trang ấy trả lời được đúng câu đó; câu S6 gần trùng thì đúng là trang nó giống không nói điều câu hỏi; câu S7 và câu tin Zalo đọc như người thật gõ; không câu nào hai nghĩa đến mức nhãn có thể khác. (judgment)
 

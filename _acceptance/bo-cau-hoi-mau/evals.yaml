@@ -56,7 +56,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.bcm_kiem_do
     paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**, _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md, _acceptance/bo-cau-hoi-mau/evidence/cham-tung-cau.jsonl]
-    expected: "exit 0; lệnh đo không cờ trên cây đã commit: git ls-files thấy evidence/do-bo-mau.md và evidence/cham-tung-cau.jsonl; stdout có 'khop', dòng 'bam bo-mau: <sha256>' bằng sha256 của bo-mau.json ở HEAD, 'luot 1: 46 ma' và 'luot 2: 50 ma' (tập mã bằng tập rút từ bo-mau.json, không đếm dòng), dòng 'ma thoat cham-bo-do: 0' hoặc ': 1', bảng theo tầng và theo kiểu chữ, danh sách 'khong dat'; không dòng nào gọi model ('thu muc luot' vắng); git status --porcelain trống sau lệnh (không ghi tệp). Đỏ: thiếu tệp, băm lệch, ô lệch → exit 1 (chiều đỏ đo ở E8)."
+    expected: "exit 0; lệnh đo không cờ trên cây đã commit: git ls-files thấy evidence/do-bo-mau.md và evidence/cham-tung-cau.jsonl; stdout có 'khop', dòng 'bam bo-mau: <sha256>' bằng sha256 của bo-mau.json ở HEAD, 'luot 1: 46 ma' và 'luot 2: 50 ma' (tập mã bằng tập rút từ bo-mau.json, không đếm dòng), dòng 'ma thoat cham-bo-do: 0', ': 1' hoặc ': 2' (2 khi lượt có câu lỗi gọi model, các câu đó mang nhãn loi trong danh sách 'khong dat' và cột lỗi), bảng theo tầng và theo kiểu chữ, danh sách 'khong dat'; không dòng nào gọi model ('thu muc luot' vắng); git status --porcelain trống sau lệnh (không ghi tệp). Đỏ: thiếu tệp, băm lệch, ô lệch → exit 1 (chiều đỏ đo ở E8)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -73,7 +73,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.bcm_ma_thoat
     paths: [_acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/rang/quyet-do.ts]
-    expected: "exit 0; bài 'ma-thoat' chạy do-bo-mau.ts --do với BCM_LENH_CHAM trỏ script chấm GIẢ trong thư mục tạm; script giả ghi luot-1/ và luot-2/cham-tung-cau.jsonl bằng dongTungCau thật, in 'thu muc luot: <dir>' như script thật, rồi thoát theo ca. Bảng ca VIẾT TRƯỚC (đủ năm dòng): giả thoát 0 đủ mã → lệnh 0 · giả thoát 1 đủ mã → lệnh 0 và báo cáo ghi 'ma thoat cham-bo-do: 1' · giả thoát 2 → lệnh 2, stdout 'KHONG DO DUOC' · giả thoát 0 nhưng lượt một thiếu m01 và lặp m02 (vẫn 46 dòng) → lệnh 2, stdout ghim 'thieu m01' và 'trung m02' · giả thoát 0, lượt hai thiếu một câu ngoài kho → lệnh 2 ghim mã đó. Ca đủ mã: báo cáo có 'bam bo-mau' bằng sha256 tệp bộ và dòng 'bam tro-ly'. Mọi ca: git status --porcelain -- _acceptance/tro-ly-doc-kho trống."
+    expected: "exit 0; bài 'ma-thoat' chạy do-bo-mau.ts --do với BCM_LENH_CHAM trỏ script chấm GIẢ trong thư mục tạm; script giả ghi luot-1/cham-tung-cau.jsonl bằng dongTungCau thật, in 'thu muc luot: <dir>' như script thật, rồi thoát theo ca. Bảng ca VIẾT TRƯỚC (đủ sáu dòng): giả thoát 0 đủ mã → lệnh 0 · giả thoát 1 đủ mã → lệnh 0 và báo cáo ghi 'ma thoat cham-bo-do: 1' · giả thoát 2 đủ mã, lượt một có m06 kết cục LOI → lệnh 0, báo cáo ghi 'ma thoat cham-bo-do: 2' và 'm06 (luot 1: loi)' · giả thoát 2 không in 'thu muc luot' → lệnh 2, stdout 'KHONG DO DUOC' · giả thoát 0 nhưng lượt một thiếu m01 và lặp m02 (vẫn 46 dòng) → lệnh 2, stdout ghim 'thieu m01' và 'trung m02' · giả thoát 0, lượt hai thiếu m50 → lệnh 2 ghim 'thieu m50'. Ca đủ mã: báo cáo có 'bam bo-mau' bằng sha256 tệp bộ và dòng 'bam tro-ly'. Mọi ca: git status --porcelain -- _acceptance/tro-ly-doc-kho không đổi."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9j
