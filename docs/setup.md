@@ -118,6 +118,45 @@ một ca, khuôn `@crm/validation/okr-ca-gop-y`. Ca thật của N1 — OKR th�
 đặt ở `apps/agent/evals/okr/ca-gop-y/that/`, thư mục bị git bỏ qua; eval đọc cả hai
 bằng `docBoCaGopY(<thư mục>)`, nên đổi mẫu sang thật chỉ là đổi thư mục.
 
+**Bộ ca góp ý quý 4:** khoảng 30 ca rút từ chính OKR của bộ mẫu — mỗi mục tiêu đã công bố
+của quý 4 cấp bộ phận và phòng ban, mỗi mục tiêu OneHub của năm, cộng sáu ca NG mang mục
+tiêu OneHub mà phòng ban căn chỉnh vào. Ca nằm ở `apps/agent/evals/okr/ca-gop-y/quy-4/`, do
+máy sinh; phần viết tay duy nhất là tệp nhãn `apps/api/scripts/okr-mau/nhan-ca-quy-4.json`
+(điều Kara nên và không nên đề xuất cho từng mục tiêu).
+
+```
+bun run okr:ca-quy-4                         # sinh lại vào ca-gop-y/quy-4/
+bun run okr:ca-quy-4 -- --nhan <tệp> --ra <thư mục>
+```
+
+Thoát 0 khi sinh xong; thoát 4 khi nhãn hỏng — thiếu nhãn cho một mục tiêu, nhãn trỏ mục
+tiêu không có hay chưa công bố, nhãn trùng, ca NG cho mục tiêu không căn chỉnh — và khi đó
+không tệp nào bị ghi. Lệnh xoá tệp ca cũ không còn nguồn. Đổi `cong-ty.json` hay tệp nhãn
+mà quên sinh lại thì bài `bcq4-dong-bo` (`apps/api/test/okr-ca-quy-4.spec.ts`) đỏ và gọi tên
+tệp lệch.
+
+**Đo Kara trên một bộ ca:** eval góp ý đọc thư mục ca trong biến `TDX_THU_MUC_CA`; vắng hay
+rỗng thì đọc `mau/`. Lệnh đo dựng sẵn mọi thứ:
+
+```
+bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs                # bộ quý 4
+bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs --thu-muc apps/agent/evals/okr/ca-gop-y/that
+bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs --tu-kiem      # chỉ tự kiểm luật chấm, không gọi mô hình
+```
+
+Lệnh tự kiểm luật chấm, tạo một kho đo dùng-một-lần, nạp bộ mẫu, chạy eval góp ý và eval
+NG bằng mô hình thật (judge có ZDR), chấm từng ca bằng đúng luật chốt mã của ca mẫu 9b, in
+`ma: x/n · judge: y` cạnh ngưỡng ca mẫu (30/30 · 0,95), ghi bảng vào
+`_acceptance/bo-ca-mau-quy-4/evidence/do-gop-y-quy-4.md` rồi xoá kho. Cần khoá mô hình; tiền
+theo khoá local, trần `--tran-usd` (mặc định 2 USD). Mã thoát: 0 đo xong (số ca đạt là
+kết quả, không phải mã thoát), 1 tự kiểm luật chấm lệch, 2 không đo được (thiếu khoá, eve
+sập, ca thiếu bản ghi — thường vì chạm trần tiền), 3 ca đối chứng không bị bắt.
+
+**Ca thật lúc bật góp ý:** đặt tệp cùng khuôn `@crm/validation/okr-ca-gop-y` vào
+`apps/agent/evals/okr/ca-gop-y/that/` rồi đo bằng `--thu-muc` như trên. Thư mục đó bị git
+bỏ qua vì là OKR thật của công ty — đã vào lịch sử git thì khó xoá. Điều kiện bật góp ý đọc
+từ con số của lượt đo đó, đặt cạnh ngưỡng ca mẫu.
+
 ## Google Cloud
 
 - **Enable the Gmail API and the Google Calendar API** on the project.
