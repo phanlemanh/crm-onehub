@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c6c9659e6499f624fba2e2ee5ab31002d3c0567d
+verified_commit: e5f4e115b391a492637a4d4c77f4ec02b5fc1fa9
 human_signoff: Phan Le Manh 2026-10-13
 ---
 
@@ -319,3 +319,7 @@ Round 3: Điều phối 30 ngày khung xương hai cột, bàn đo đo Tài li�
 ### Re-pin lần 1 — 2026-10-13, do gộp onehub 206096fc2 sau verify, làn trước chữ ký
 run_id: repin-20261013T141643Z-16434
 sha: c6c9659e6499f624fba2e2ee5ab31002d3c0567d · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-13, do gộp onehub b7b922b78 trước lô 20:00Z
+run_id: repin-20261013T194305Z-34344
+sha: e5f4e115b391a492637a4d4c77f4ec02b5fc1fa9 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
