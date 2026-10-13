@@ -12,6 +12,7 @@ import {
 	dieuKienViecMoCua,
 	dieuKienXemViec,
 	hanhDong,
+	hanTheoNgayVN,
 	laMoLai,
 	type NguoiVet,
 	type NguonViec,
@@ -656,11 +657,12 @@ export async function chepViecCanLam(
 	const { platformBrokerId } = parseViecCanLamMeta(goc.meta);
 	const tieuDe = tieuDeCu(goc.subject, goc.body);
 	const trangThai = xong ? TrangThaiViec.XONG : TrangThaiViec.CHUA_LAM;
+	const hanNgay = goc.dueAt ? hanTheoNgayVN(goc.dueAt) : null;
 	const viec = await tx.viec.create({
 		data: {
 			tieuDe,
 			moTa: moTaCu(goc.subject, goc.body),
-			hanNgay: goc.dueAt,
+			hanNgay,
 			trangThai,
 			khepLuc: goc.completedAt,
 			nguoiGiaoId: nguoi.id,
@@ -689,7 +691,7 @@ export async function chepViecCanLam(
 			sau: {
 				tieuDe,
 				nguoiThucHien: nguoi,
-				hanNgay: goc.dueAt ? ngayHan(goc.dueAt) : null,
+				hanNgay: hanNgay ? ngayHan(hanNgay) : null,
 				banGhi: ganDung,
 				nguoiTheoDoi: [],
 				chep: { activityGocId: goc.id, trangThai, nguoiTaoGoc },

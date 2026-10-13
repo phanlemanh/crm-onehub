@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { ActivityType, db, TrangThaiViec } from "@crm/db";
-import { dauNgayVN } from "@crm/db/onboarding-nhac";
+import { ngayVN } from "@crm/db/onboarding-nhac";
 import { VIEC } from "@crm/db/viec";
 import { chepViecCanLam, doiTrangThai } from "@crm/db/viec-ghi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
@@ -148,7 +148,7 @@ describe("cvc-ma-lech", () => {
 			"cvc: ma lech giao viec sai gan",
 		);
 		hong(
-			v.hanNgay?.getTime() === dauNgayVN(now).getTime(),
+			v.hanNgay?.toISOString() === `${ngayVN(now)}T00:00:00.000Z`,
 			"cvc: ma lech giao viec sai hanNgay",
 		);
 		hong(

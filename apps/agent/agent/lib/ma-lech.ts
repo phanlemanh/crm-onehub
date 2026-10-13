@@ -1,7 +1,6 @@
 import { ActivityType, db } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
-import { dauNgayVN } from "@crm/db/onboarding-nhac";
-import { TRANG_THAI_MO, VIEC } from "@crm/db/viec";
+import { hanTheoNgayVN, TRANG_THAI_MO, VIEC } from "@crm/db/viec";
 import { LoiViec, taoViec } from "@crm/db/viec-ghi";
 import {
 	LOAI_VIEC_MA_LECH,
@@ -93,7 +92,7 @@ async function giaoViec(
 				nguoiId: keHoach.ownerId,
 				tieuDe: tieuDe(payload.platformBrokerId),
 				moTa: noiDung(payload.platformBrokerId),
-				hanNgay: dauNgayVN(now),
+				hanNgay: hanTheoNgayVN(now),
 				gan: [{ loai: "plan", id: payload.planId }],
 				nguon: "tac-nhan",
 				khoaNguon: khoa,

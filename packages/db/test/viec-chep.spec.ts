@@ -3,7 +3,7 @@ import { ActivitiesService } from "../../../apps/api/src/activities/activities.s
 import { ActivityStampService } from "../../../apps/api/src/crm/activity-stamp.service";
 import { db } from "../src/client";
 import { TrangThaiViec } from "../src/generated/prisma/enums";
-import { parseVetViec } from "../src/viec";
+import { hanTheoNgayVN, parseVetViec } from "../src/viec";
 import { chepTatCa, daoTatCa, demViecCanLam } from "../src/viec-chep";
 import { chepViecCanLam, doiTrangThai, taoViec } from "../src/viec-ghi";
 import {
@@ -157,6 +157,13 @@ describe("cvc-chep-du", () => {
 				dealId: thoaThuan,
 				createdAt: luc,
 			}),
+			"8": await khuonApi({
+				createdById: thuong,
+				subject: "Hạn nửa đêm giờ VN",
+				dueAt: new Date("2026-10-13T17:00:00.000Z"),
+				dealId: thoaThuan,
+				createdAt: luc,
+			}),
 		};
 		const ghiChu = await db.activity.create({
 			data: {
@@ -250,6 +257,14 @@ describe("cvc-chep-du", () => {
 				khoa: null,
 				han: false,
 			},
+			"8": {
+				tieuDe: "Hạn nửa đêm giờ VN",
+				moTa: null,
+				gan: ["deal"],
+				xong: false,
+				khoa: null,
+				han: true,
+			},
 		} as const;
 
 		for (const [ten, id] of Object.entries(ca)) {
@@ -262,8 +277,11 @@ describe("cvc-chep-du", () => {
 			hong(v.tieuDe === k.tieuDe, `cvc: chep sai truong tieuDe ${ten}`);
 			hong(v.moTa === k.moTa, `cvc: chep sai truong moTa ${ten}`);
 			hong(
-				(v.hanNgay?.getTime() ?? null) === (goc.dueAt?.getTime() ?? null) &&
-					(k.han ? v.hanNgay !== null : true),
+				(v.hanNgay?.getTime() ?? null) ===
+					(goc.dueAt ? hanTheoNgayVN(goc.dueAt).getTime() : null) &&
+					(k.han ? v.hanNgay !== null : true) &&
+					(ten !== "8" ||
+						v.hanNgay?.toISOString() === "2026-10-14T00:00:00.000Z"),
 				`cvc: chep sai truong hanNgay ${ten}`,
 			);
 			const trangThai = k.xong ? TrangThaiViec.XONG : TrangThaiViec.CHUA_LAM;

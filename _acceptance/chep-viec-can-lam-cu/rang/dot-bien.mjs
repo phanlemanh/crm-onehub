@@ -15,7 +15,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 13;
+const SO_CAP_KHAI = 16;
 const TRAN_MS = 900_000;
 const DB = (tep, t) =>
 	`bun run test -- "cd packages/db && bun test test/${tep}${t ? ` -t '${t}'` : ""}"`;
@@ -135,6 +135,27 @@ const CAP = [
 		"\t\ttry {\n\t\t\tawait taoViec(tx, {",
 		"\t\tconst hangCu = {\n\t\t\ttype: ActivityType.TASK,\n\t\t\tplanId: payload.planId,\n\t\t\tcreatedById: keHoach.ownerId,\n\t\t};\n\t\tawait tx.activity.create({ data: hangCu });\n\t\ttry {\n\t\t\tawait taoViec(tx, {",
 		[[CVC.quet, "cvc: con duong ghi TASK"]],
+	],
+	[
+		"n chep nguyen dueAt sang hanNgay",
+		GHI,
+		"const hanNgay = goc.dueAt ? hanTheoNgayVN(goc.dueAt) : null;",
+		"const hanNgay = goc.dueAt;",
+		[[CVC.chepDu, "cvc: chep sai truong hanNgay"]],
+	],
+	[
+		"o Tac nhan luu nguyen dueAt",
+		TAC_NHAN,
+		"hanNgay: dueAt ? hanTheoNgayVN(dueAt) : null,",
+		"hanNgay: dueAt,",
+		[[CVC.tacNhan, "cvc: tac nhan giao viec sai hanNgay"]],
+	],
+	[
+		"p ma-lech luu nguyen gio hien tai",
+		MA_LECH,
+		"hanNgay: hanTheoNgayVN(now),",
+		"hanNgay: now,",
+		[[CVC.maLech, "cvc: ma lech giao viec sai hanNgay"]],
 	],
 ];
 

@@ -128,6 +128,7 @@ describe("cvc-tac-nhan", () => {
 			"cvc: ban khai cu khong doc duoc",
 		);
 		const luot = await taoLuot();
+		const hanGui = "2026-10-20T00:00:00+07:00";
 		const han = new Date("2026-10-20T00:00:00.000Z");
 		const truocTask = await db.activity.count({
 			where: { type: ActivityType.TASK },
@@ -137,7 +138,7 @@ describe("cvc-tac-nhan", () => {
 			targetKind: "deal",
 			targetId: dealId,
 			subject: "Gửi báo giá",
-			dueAt: han.toISOString(),
+			dueAt: hanGui,
 		});
 		hong(
 			(await db.activity.count({ where: { type: ActivityType.TASK } })) ===
@@ -184,7 +185,7 @@ describe("cvc-tac-nhan", () => {
 			targetKind: "deal",
 			targetId: dealId,
 			subject: "Gửi báo giá",
-			dueAt: han.toISOString(),
+			dueAt: hanGui,
 		});
 		hong(
 			lai.replayed &&

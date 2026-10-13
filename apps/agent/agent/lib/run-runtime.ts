@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { ActivityType, db, type Prisma } from "@crm/db";
 import type { AgentActionStatus, AgentTriggerType } from "@crm/db/enums";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
-import { VIEC } from "@crm/db/viec";
+import { hanTheoNgayVN, VIEC } from "@crm/db/viec";
 import { taoViec } from "@crm/db/viec-ghi";
 import {
 	AGENT_ACTION_TYPES,
@@ -329,7 +329,7 @@ export async function createRunActivity(
 					nguoiId,
 					tieuDe: (input.subject ?? "").trim().slice(0, VIEC.tieuDeToiDa),
 					moTa: input.body?.trim().slice(0, VIEC.moTaToiDa) || null,
-					hanNgay: dueAt,
+					hanNgay: dueAt ? hanTheoNgayVN(dueAt) : null,
 					gan: [{ loai: input.targetKind, id: input.targetId }],
 					nguon: "tac-nhan",
 					now,

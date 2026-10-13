@@ -5,7 +5,7 @@ slug: chep-viec-can-lam-cu
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-13T23:18:51Z
 design_doc: docs/superpowers/specs/2026-10-13-chep-viec-can-lam-cu-design.md

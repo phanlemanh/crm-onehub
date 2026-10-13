@@ -154,6 +154,17 @@ export const VIEC = {
 	},
 } as const;
 
+const dinhNgayHan = new Intl.DateTimeFormat("en-CA", {
+	timeZone: VIEC.muiGio,
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+});
+
+export function hanTheoNgayVN(d: Date): Date {
+	return new Date(`${dinhNgayHan.format(d)}T00:00:00.000Z`);
+}
+
 export function hanhDong(nguon: TrangThaiViec, den: TrangThaiViec): string {
 	if (den === TrangThaiViec.HUY) return VIEC.lam.huy;
 	if (den === TrangThaiViec.XONG) return VIEC.lam.xong;

@@ -5,8 +5,7 @@ import {
 	KHONG_VAO_LAN_NGHIEN_CUU,
 	TASK_KINDS,
 } from "@crm/db/agent-tasks";
-import { dauNgayVN } from "@crm/db/onboarding-nhac";
-import { VIEC } from "@crm/db/viec";
+import { hanTheoNgayVN, VIEC } from "@crm/db/viec";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	LOAI_VIEC_MA_LECH,
@@ -230,8 +229,8 @@ describe("ma-lech", () => {
 		expect(mot?.nguoiGiaoId).toBe(keHoach.ownerId);
 		expect(mot?.nguoiThucHienId).toBe(keHoach.ownerId);
 		const hanDung = [
-			dauNgayVN(new Date(truoc)).getTime(),
-			dauNgayVN(new Date(sau)).getTime(),
+			hanTheoNgayVN(new Date(truoc)).getTime(),
+			hanTheoNgayVN(new Date(sau)).getTime(),
 		];
 		expect(hanDung).toContain(mot?.hanNgay?.getTime() ?? -1);
 		expect(mot?.tieuDe.includes(ma)).toBe(true);
