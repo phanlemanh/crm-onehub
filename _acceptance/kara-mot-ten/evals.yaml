@@ -150,6 +150,7 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.kmt_chup
+    expected: "Lệnh thoát 0, dòng KET LUAN báo 0 SAI và không dòng KHONG DO DUOC; mọi dòng E14 là DUNG. Ảnh E14-cai-dat-okr-1440/390 cho thấy thẻ cấu hình mang tiêu đề «Kara · OKR» và nút «Bật Kara», không chữ «Trợ lý» nào; ảnh soan-okr, tai-lieu, tab-kara ở 1440 cho thấy đúng màn đó (không phải màn đăng nhập hay onboarding) và mọi chỗ gọi AI là «Kara»."
     steps:
       - "Chạy NGUYÊN VĂN từ gốc kho: bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/kara-mot-ten/rang/chup.mjs\" — tien-de tự dựng phiên đo (kho crm_<cây>_do, API và app của chính cây) và đặt tiền đề khoá nghiên cứu cho đúng lượt"
       - "chup.mjs chạy cảnh cây trước màn đầu; lệch cây hay bàn đo không dựng được → mã 2"
