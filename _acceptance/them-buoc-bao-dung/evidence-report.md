@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4b443dc03d81ea2dce3ca4401ebcc53b1b676564
-human_signoff: Phan Le Manh 2026-10-13
+verified_commit: 2b65a3d5aa9673375c4c14c9f4cf9cc8ad749e11
+human_signoff:
 ---
 
 # Evidence Report: them-buoc-bao-dung
@@ -30,161 +30,162 @@ human_signoff: Phan Le Manh 2026-10-13
 ## Evidence
 
 - eval: E1
-  run_id: minted-them-buoc-bao-dung-E1-r1
+  run_id: mv6h21vv2tfr
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_phong_ban
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: bun run test -- "cd apps/api && bun test test/them-buoc-bao-dung.spec.ts"
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    The suite finished with 2 pass, 1 skip, 0 fail across 3 tests in test/them-buoc-bao-dung.spec.ts (21 expect() calls, 454.00ms).
 
 - eval: E2
-  run_id: minted-them-buoc-bao-dung-E2-r1
+  run_id: mv6h21vv2tfr
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_phong_ban
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: bun run test -- "cd apps/api && bun test test/them-buoc-bao-dung.spec.ts"
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    The suite finished with 2 pass, 1 skip, 0 fail across 3 tests in test/them-buoc-bao-dung.spec.ts (21 expect() calls, 454.00ms).
 
 - eval: E3
-  run_id: minted-them-buoc-bao-dung-E3-r1
+  run_id: minted-them-buoc-bao-dung-E3-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_form_dom
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t phong-ban-loi
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 12 tests across 1 file. [1459.00ms]
 
 - eval: E4
-  run_id: minted-them-buoc-bao-dung-E4-r1
+  run_id: minted-them-buoc-bao-dung-E4-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_form_dom
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t phong-ban-loi
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 12 tests across 1 file. [1459.00ms]
 
 - eval: E5
-  run_id: minted-them-buoc-bao-dung-E5-r1
+  run_id: minted-them-buoc-bao-dung-E5-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_form_dom
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t phong-ban-loi
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 12 tests across 1 file. [1459.00ms]
 
 - eval: E6
-  run_id: minted-them-buoc-bao-dung-E6-r1
+  run_id: minted-them-buoc-bao-dung-E6-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_qua_han_lui
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: cd apps/app && TBD_MUI_GIO=lui TZ=America/Los_Angeles bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-lui
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 4 tests across 1 file. [1037.00ms]
 
 - eval: E7
-  run_id: minted-them-buoc-bao-dung-E7-r1
+  run_id: minted-them-buoc-bao-dung-E7-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_qua_han_tien
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: cd apps/app && TBD_MUI_GIO=tien TZ=Pacific/Kiritimati bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-tien
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 4 tests across 1 file. [774.00ms]
 
 - eval: E8
-  run_id: minted-them-buoc-bao-dung-E8-r1
+  run_id: minted-them-buoc-bao-dung-E8-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbd_hoi_quy
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --moc 3a2783409 && bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx ./test/han-viec.dom.tsx ./test/moi-phia-ke-hoach.dom.tsx ./test/may-nhac.dom.tsx ./test/ke-hoach-sheet.dom.tsx && cd ../.. && bun run check-types
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Chuỗi lệnh chạy hết, không có dòng lỗi (tự-thử, so mốc, suite API điều phối, năm tệp DOM, check-types).
 
 - eval: E9
-  run_id: mv60zc5o3esr
+  run_id: minted-them-buoc-bao-dung-E9-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tbd_khu_hoi
-  verified_at: 2026-10-13T01:50:58Z
-  carried_from_round: 1
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: bun run test -- "cd apps/api && TBD_KHU_HOI=1 TZ=America/Los_Angeles bun test test/them-buoc-bao-dung.spec.ts -t qua-han-khu-hoi && TBD_KHU_HOI=1 TZ=Pacific/Kiritimati bun test test/them-buoc-bao-dung.spec.ts -t qua-han-khu-hoi"
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mv6h22gsn846_test
 
 - eval: E10
-  run_id: minted-them-buoc-bao-dung-E10-r3
+  run_id: tbd-r4-e10-60553
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbd_man
-  verified_at: 2026-10-13T02:31:28Z
-  screenshot: evidence/E10-step1.png
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: ui-check:E10
+  screenshot: evidence/them-buoc-loi-phong-ban-1440.png
   observed: |
-    Đã mở từng ảnh bằng Read.
-    E10-step1 (1440, kế hoạch mở không bước, sau bấm «Thêm bước», đang chặn listDepartments): panel bản ghi bên phải; trạng thái rỗng «Kế hoạch chưa có bước nào»; khung lỗi viền liền «Không tải được danh sách phòng ban» + «Kiểm tra kết nối rồi thử lại.» + nút «Thử lại», nằm trọn trong khung nhìn; không có ô chọn «Phòng ban»; dưới là ô «Việc cần làm», ngày, «Thêm», «Thôi»; không dấu hiệu cuộn ngang. Khớp Expected.
-    E10-step2 (1440, kế hoạch có 1 bước, «Thêm bước ở phòng ban khác»): phần «Phòng ban đo A… · đã xong 0/1» có bước; bên dưới cùng khung lỗi «Không tải được danh sách phòng ban» với nút «Thử lại» trong khung nhìn; không có ô chọn phòng ban. Khớp.
-    E10-step3 (1440, sau gỡ chặn và thử lại): vùng lỗi biến mất; ô chọn «Phòng ban» hiện, danh sách mở ra «Phòng ban đo A…» và «Phòng ban đo B…». Khớp.
-    E10-step4 (390, không bước, lỗi): ngăn kéo dưới; khung lỗi «Không tải được danh sách phòng ban» + nút «Thử lại» nằm trong khung nhìn 390x844, không bị cắt ngang, không tràn ngang. Khớp.
-    E10-step5 (390, có bước, lỗi): dòng bước, nút «Thêm bước», khung lỗi với «Thử lại» trong khung nhìn; chữ tên bước bị rút gọn «Bước …» nhưng không tràn ngang. Khớp.
-    E10-step6 (390, sau thử lại): không còn vùng lỗi; ô chọn «Phòng ban» hiện với danh sách A và B. Khớp.
-    Không frame nào mâu thuẫn Expected; số đo trong log (nutTrongKhung=true, tranNgang=false, oChon=true sau thử lại) khớp ảnh.
+    Đã mở từng frame bằng Read. 1440 / them-buoc-loi-phong-ban: sheet bản ghi 'Đo E6b mv6h2toc 0', tab Bước, trạng thái rỗng 'Kế hoạch chưa có bước nào'; hộp lỗi «Không tải được danh sách phòng ban», câu 'Kiểm tra kết nối rồi thử lại.' và nút 'Thử lại' nằm trong khung nhìn; không có ô chọn Phòng ban; không thấy cuộn ngang. Khớp Expected.
+    1440 / them-buoc-khac-loi-phong-ban: bản ghi 'Đo E6b mv6h2toc 1' có 1 bước sẵn (phòng ban đo A, 'Thêm bước' trong nhóm); bên dưới hộp lỗi + nút 'Thử lại' trong khung nhìn; không ô chọn. 1440 / them-buoc-thu-lai-xong: bản ghi 0 bước, vùng lỗi biến mất, ô chọn 'Phòng ban' hiện và mở danh sách 'Phòng ban đo A / B mv6h2toc'. Khớp.
+    390 / them-buoc-loi-phong-ban: drawer đáy, hộp lỗi «Không tải được danh sách phòng ban» và nút 'Thử lại' hiện trọn trong khung nhìn 390, không tràn ngang, không ô chọn. 390 / them-buoc-khac-loi-phong-ban: bản ghi '... 3' có 1 bước; hộp lỗi + nút 'Thử lại' trong khung nhìn, không tràn ngang. 390 / them-buoc-thu-lai-xong: lỗi hết, ô chọn 'Phòng ban' hiện với danh sách hai phòng ban. Không frame nào mâu thuẫn Expected.
   network_observed: n-a (driver)
+  output: |
+    Sáu frame đã lưu trong evidence/: them-buoc-loi-phong-ban, them-buoc-khac-loi-phong-ban, them-buoc-thu-lai-xong, mỗi tên ở khổ 1440 và 390. Các tệp E10-step1..6.png trong evidence/ là bản cũ, lượt này không ghi đè.
 
 - eval: E11
-  run_id: tbd-r3-e11-5986
+  run_id: minted-them-buoc-bao-dung-E11-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbd_man
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
+  cmd: ui-check:E11
   screenshot: evidence/E11-step1.png
   observed: |
-    E11-step1.png (1440, mới 09:32): trang Tổng quan, thẻ «Việc quá hạn», phụ đề «12 việc quá hạn». Bảng liệt kê 6 dòng với chấm đỏ ở cột «Quá hạn» (Book the technical deep dive 13 ngày trước, Send SOC 2 report 4 ngày trước, Chase procurement 2 ngày trước, và ba dòng «Việc đo E6b mv62f793» 0/2/3, đều 2 ngày trước). Dưới bảng có đường kẻ rồi dòng «và 1 việc quá hạn nữa». Khớp Expected AC-6 (lùi): có dòng «nữa» với N = 1. Dòng bước (mong mang dấu quá hạn) không nằm trong phần danh sách nhìn thấy trong ảnh; thước đã khẳng định dấu error ở dòng bước qua DOM.
-    E11-step2.png (390, mới 09:32): cùng nội dung ở khổ điện thoại, cột «Quá hạn» bị cắt chữ ở mép phải bảng («13 ngày trước» thành «13 ngày trước» cụt); 6 dòng, chấm đỏ, rồi dòng «và 1 việc quá hạn nữa» dưới bảng; dưới là «Hoạt động gần đây của bạn». Khớp Expected. Không thấy mâu thuẫn với Expected.
+    E11-step1.png (1440): Tổng quan OneHub Center. Thẻ «Việc quá hạn» ghi "12 việc quá hạn", bảng cuộn trong thẻ hiện 6 dòng, mỗi dòng có chấm đỏ (tone error). Ngay dưới thẻ là chân thẻ đúng chữ «và 1 việc quá hạn nữa». Khớp AC-6 nhánh lùi. Dòng bước cụ thể không nằm trong 6 dòng nhìn thấy (bảng cuộn), nên dấu error của dòng bước dựa vào assertion DOM của man.mjs chứ không từ ảnh.
+    E11-step2.png (390): cùng nội dung ở khổ điện thoại, 6 dòng, chấm đỏ mỗi dòng, chân thẻ «và 1 việc quá hạn nữa», không tràn ngang đáng kể. Không mâu thuẫn Expected.
   network_observed: n-a (driver)
+  output: |
+    Hai ảnh E11-step1.png (1440) và E11-step2.png (390) trong evidence/, bản sao của qua-han-con-sot-1440.png và qua-han-con-sot-390.png do man.mjs ghi.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_api-r3
+  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_api-r4
   exit_code: 0
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
+  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
   exit_code: 0
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
+  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
   exit_code: 0
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
+  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
   exit_code: 0
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-them-buoc-bao-dung-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-them-buoc-bao-dung-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
 
 - cmd: bun run lint:slop
-  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_lint_slop-r3
+  run_id: minted-them-buoc-bao-dung-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-them-buoc-bao-dung-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-them-buoc-bao-dung-SUITE-bunx_turbo_run_build_force-r4
   exit_code: 0
-  verified_at: 2026-10-13T02:31:28Z
+  verified_at: 2026-10-13T09:21:32Z
 
 ## Known limits
 
@@ -194,9 +195,9 @@ human_signoff: Phan Le Manh 2026-10-13
 
 carried tu round 1 — baseline khong do lai round nay
 
-Baseline khong do: evals.yaml khong doi tu lan baseline cuoi (round 1), nen round nay khong do lai; moi block eval ghi baseline n-a.
+Baseline khong do: toan bo eval round nay (evals.yaml khong doi tu lan baseline cuoi, round 1); moi block ghi baseline n-a.
 
-Eval khong-phan-biet: none. Lenh suite xanh o ca hai phia la regression-guard binh thuong, khong liet ke.
+Eval khong-phan-biet: none.
 
 ## Variance
 
@@ -204,10 +205,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: PASS — 2 finding trong hợp đồng (thước màn E11 không đo dòng «và N việc quá hạn nữa» của AC-6, AC-7); đã sửa ở e175546b7.
-Round 2: PASS — 1 finding trong hợp đồng (thước E11 chưa đo trường hợp dòng «nữa» phải hiện); đã sửa ở ba5bfc10b.
-Round 3: PASS — chỉ chạy lại suite và hai eval ui-check E10, E11 trên be9ad8c15; E1 đến E9 giữ nguyên từ round 1 vì delta không chạm paths của eval.
-
-### Re-pin lần 1 — 2026-10-13, do gộp onehub #381 chạm onboarding-ghi.ts sau chữ ký
-run_id: repin-20261013T070531Z-58499
-sha: 4b443dc03d81ea2dce3ca4401ebcc53b1b676564 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+Round 4: 11 eval va 7 lenh suite deu xanh tren 2b65a3d5aa9673375c4c14c9f4cf9cc8ad749e11; verdict PASS.
+Round 1-3: dau vet tung round nam trong run-log.jsonl cung thu muc; round nay thay toan bo noi dung report.
