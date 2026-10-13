@@ -1,4 +1,7 @@
-import type { LoTrinh, MocLoTrinh } from "@crm/validation/lo-trinh-du-lieu";
+import type {
+	LoTrinhChoXem,
+	MocLoTrinh,
+} from "@crm/validation/lo-trinh-du-lieu";
 import { LO_TRINH } from "./cau-hinh";
 
 const hai = (n: number) => String(n).padStart(2, "0");
@@ -21,7 +24,7 @@ export function mocQuaConViec(moc: MocLoTrinh, homNay: string): boolean {
 	);
 }
 
-export function viecTre(loTrinh: LoTrinh, homNay: string): string[] {
+export function viecTre(loTrinh: LoTrinhChoXem, homNay: string): string[] {
 	const theoMa = new Map(loTrinh.hang.map((h) => [h.ma, h]));
 	const ra: string[] = [];
 	for (const m of loTrinh.moc) {
