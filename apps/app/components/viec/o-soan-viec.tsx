@@ -2,6 +2,7 @@
 
 import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
+import { ComboboxMulti } from "@crm/ui/components/combobox-multi";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { Field, FieldError, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
@@ -13,7 +14,6 @@ import type { TimelineAnchor } from "@/components/crm/timeline/timeline";
 import { viecMessages } from "@/lib/messages/viec";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { ChonNhieuNguoi } from "./chon-nhieu-nguoi";
 
 const TOI = "toi";
 
@@ -122,15 +122,16 @@ export function OSoanViec({
 				</Field>
 				<Field>
 					<FieldLabel>{m.nguoiTheoDoi}</FieldLabel>
-					<ChonNhieuNguoi
+					<ComboboxMulti
 						aria-label={m.nguoiTheoDoi}
 						empty={m.khongAi}
-						onValueChange={setTheoDoi}
+						max={VIEC.theoDoiToiDa}
+						onValuesChange={setTheoDoi}
 						options={ungVienTheoDoi}
 						placeholder={m.khongTheoDoi}
 						searchPlaceholder={m.timNguoi}
-						toiDa={VIEC.theoDoiToiDa}
-						value={theoDoi}
+						translate="no"
+						values={theoDoi}
 					/>
 				</Field>
 			</div>
