@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>140 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>90 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>91 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -66,7 +66,6 @@ flowchart TD
 
 ## Đang làm
 
-- Danh sách liên quan trong ngăn bản ghi không lẫn bản đã lưu trữ, kèm «+n đã lưu trữ» để mở xem (`lien-quan-loc-ban-da-cat`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -116,6 +115,7 @@ flowchart TD
 - Khung OKR trước R1 — khung Mục tiêu và thanh Theo đơn vị hết chín lỗi trình bày, liên kết chéo hỏi lại trước khi bỏ thay đổi (`khung-okr-truoc-r1`)
 - Lượt kiểm chéo đêm xếp sau mọi đơn thợ khi xin khoá, và khi làn chạm trần thì lưu hồ sơ đã đo để đêm sau chạy tiếp phần còn lại (`kiem-cheo-chay-quang-lang`)
 - Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần mỗi đêm cho mọi lần gộp vào onehub từ mốc trước, ngoài mọi lượt ghim lại; đỏ thì gọi tên lần gộp gây đỏ (`kiem-cheo-sau-gop`)
+- Danh sách liên quan trong ngăn bản ghi không lẫn bản đã lưu trữ, kèm «+n đã lưu trữ» để mở xem (`lien-quan-loc-ban-da-cat`)
 - «Trang lộ trình đúng tên OneHub Center và không làm vỡ bản dựng» (`lo-trinh-ten-va-build`)
 - Luật thứ bảy «vong-doi» của scripts/luat-kho — máy bắt mô hình có hai cột cất, thủ tục list lẫn bản đã cất, và xoá vĩnh viễn không kiểm bản đã lưu trữ — và cả bộ luật kho chạy ở CI Acceptance (`luat-kho-vong-doi`)
 - Lý do Kara viết cho dòng căn chỉnh ở Soạn OKR đi theo căn chỉnh vào OKR thật, căn chỉnh cũ từ Soạn được điền lại, và khuôn trả của mục tiêu nói rõ mức tin của từng căn chỉnh (`ly-do-can-chinh-tu-soan`)

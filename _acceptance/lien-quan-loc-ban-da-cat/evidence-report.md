@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: lien-quan-loc-ban-da-cat
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 55dc7eb39c6d2872ddbdb1620baac76d55430ec3
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-13
 ---
 
 # Evidence Report: lien-quan-loc-ban-da-cat
@@ -190,7 +190,7 @@ human_signoff:
     - Ảnh chụp bằng kịch bản đo màn của E15 (qua bun scripts/lan-do/tien-de.mjs --chay), tên kiểu lqc-mo-hover-1440.png, ở tab Thoả thuận của ngăn công ty lúc «+n đã lưu trữ» đang mở và chuột rê hoặc focus bàn phím trên một dòng đã cất; nếu hiện nền sáng lên, con trỏ tay hoặc vòng focus thì điểm 3 đạt.
     - Hoặc ảnh lqc-mo-1440.png / lqc-mo-390.png chụp lại với dấu hiệu bấm được luôn hiện (mũi tên cuối dòng, tên dạng liên kết) thay cho dòng chữ phẳng hiện tại.
     - Hoặc, nếu thiếu cả hai, ghi rõ ở hợp đồng rằng dòng đã cất chỉ bấm được theo ngầm hiểu và người duyệt tự chốt.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-10-13 — Đạt
 
 Đề xuất panel E16 (ba góc nhìn, mỗi góc UNCERTAIN, người quyết ở Cổng 2):
 

@@ -5,7 +5,7 @@ slug: lien-quan-loc-ban-da-cat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-13T02:39:27Z
 design_doc: docs/superpowers/specs/2026-10-13-lien-quan-loc-ban-da-cat-design.md
@@ -66,3 +66,6 @@ quan hệ không lọc `archivedAt`, nên bản đã cất lẫn vào bảng li�
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi: cá nhân, công ty, thoả thuận đi Lưu trữ → Khôi phục → Xoá vĩnh viễn. (2) «Lịch sử» — không đổi. (3) Danh sách mặc định — bảng liên quan trong ngăn nay chỉ hiện bản đang dùng; bản đã cất tìm lại ở «+n đã lưu trữ» cuối bảng, mở ra ngăn có dải báo và «Khôi phục».
 - Đầu REST bridge `/rest` (sinh từ mọi thủ tục tRPC, khoá API đọc được — `docs/api.md` mục «The OpenAPI document is built at runtime») đổi theo vì dùng chung `byId`: mảng cũ thôi có bản đã cất, thêm hai mảng mới. Đã tra `apps/agent` (grep `companies.byId`, `contacts.byId`, `deals.byId`, `/companies/`, `/contacts/`, `/deals/`: 0 người gọi); tích hợp ngoài kho dùng khoá API không tra được từ kho — chủ kho chốt ở Cổng Phạm vi (Hỏi trong sổ quyết định, d-20261013T003730Z-8).
 - Ranh giới: `apps/api/src/{companies,contacts,deals}/**`, `apps/api/src/crm/**`, `apps/app/components/crm/record-sheet/**`, `apps/app/lib/messages/record-sheet.ts`, `docs/api.md`, `docs/vong-doi.md`, tệp kiểm mới, `_acceptance/lien-quan-loc-ban-da-cat/**`, và thêm khoá vào `_acceptance/config.yaml` (luật 7: chỉ thêm dòng).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-2: Tên các bản đã lưu trữ dùng nút riêng, không dùng liên kết bản ghi chung, nên kiểu chữ và phản hồi khi rê chuột có thể hơi khác các liên kết bản ghi ở chỗ khác.
+  - Ngoài-3: Hộp hỏi khi xoá vĩnh viễn công ty chưa có bài kiểm tự động cho trường hợp chỉ còn một người ở lại.
