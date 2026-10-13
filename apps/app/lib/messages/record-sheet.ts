@@ -16,6 +16,10 @@ const en = {
 		whereItStands: "Where it stands",
 		onIt: "On it",
 	},
+	archivedRows: {
+		toggle: (n: string) => `+${n} archived`,
+		on: "Archived on",
+	},
 	company: {
 		fallbackTitle: "Company",
 		domainPlaceholder: "stripe.com",
@@ -214,6 +218,10 @@ const vi = {
 		background: "Quá trình",
 		whereItStands: "Đang tới đâu",
 		onIt: "Người tham gia",
+	},
+	archivedRows: {
+		toggle: (n: string) => `+${n} đã lưu trữ`,
+		on: "Đã lưu trữ ngày",
 	},
 	company: {
 		fallbackTitle: "Công ty",

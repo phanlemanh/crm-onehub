@@ -197,7 +197,7 @@ export function RecordActions({
 	);
 }
 
-const NGAY_LUU_TRU: Intl.DateTimeFormatOptions = {
+export const NGAY_LUU_TRU: Intl.DateTimeFormatOptions = {
 	day: "2-digit",
 	month: "2-digit",
 	year: "numeric",

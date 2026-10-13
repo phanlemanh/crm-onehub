@@ -1,0 +1,10 @@
+{
+  "feature_plain": "Mở ngăn một công ty, một người hay một thoả thuận thì các bảng liên quan chỉ còn bản đang dùng; bản đã lưu trữ gập lại sau một dòng «+n đã lưu trữ» để mở xem khi cần.",
+  "decisions": [
+    {
+      "id": "E16",
+      "q": "Dòng đã lưu trữ trông đủ rõ là bấm vào để mở?",
+      "why": "Ba người chấm đồng ý bốn điểm còn lại; riêng điểm này ảnh tĩnh không cho thấy dấu hiệu bấm được (gạch chân chỉ hiện khi rê chuột). Bấm thì mở đúng ngăn — đã đo ở bước chụp màn và bài kiểm bàn phím."
+    }
+  ]
+}

@@ -27,6 +27,11 @@ import {
 	requireOwner,
 	runBulk,
 } from "../crm/bulk";
+import {
+	caNhanDaLuuTru,
+	tachDaLuuTru,
+	thoaThuanDaLuuTru,
+} from "../crm/da-luu-tru";
 import { blankToNull, toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
@@ -215,6 +220,7 @@ export class CompaniesService {
 						phone: true,
 						title: true,
 						imageUrl: true,
+						archivedAt: true,
 						owner: { select: OWNER_SELECT },
 					},
 				},
@@ -232,6 +238,7 @@ export class CompaniesService {
 						currency: true,
 						baseAmount: true,
 						expectedCloseDate: true,
+						archivedAt: true,
 						owner: { select: OWNER_SELECT },
 					},
 				},
@@ -244,6 +251,7 @@ export class CompaniesService {
 		}
 
 		const {
+			contacts,
 			deals,
 			primaryContact,
 			enrichedAt,
@@ -252,9 +260,16 @@ export class CompaniesService {
 			_count,
 			...rest
 		} = company;
+		const nguoi = tachDaLuuTru(contacts);
+		const thoaThuan = tachDaLuuTru(deals);
 
 		return {
 			...rest,
+			contacts: nguoi.dangDung.map((contact) => ({
+				...contact,
+				archivedAt: undefined,
+			})),
+			archivedContacts: nguoi.daLuuTru.map(caNhanDaLuuTru),
 			fields: await this.fields.valuesFor("COMPANY", id),
 			queued: await this.queue.isQueued({ companyId: id }),
 			createdAt: createdAt.toISOString(),
@@ -268,14 +283,16 @@ export class CompaniesService {
 				(await this.db.onboardingTemplate.count({
 					where: { archivedAt: null },
 				})) > 0,
-			deals: deals.map((deal) => ({
+			deals: thoaThuan.dangDung.map((deal) => ({
 				...deal,
+				archivedAt: undefined,
 				amount: undefined,
 				baseAmount: undefined,
 				amountCents: toCents(deal.amount),
 				baseAmountCents: toCents(deal.baseAmount),
 				expectedCloseDate: deal.expectedCloseDate?.toISOString() ?? null,
 			})),
+			archivedDeals: thoaThuan.daLuuTru.map(thoaThuanDaLuuTru),
 		};
 	}
 

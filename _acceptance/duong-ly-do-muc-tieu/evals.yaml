@@ -1,0 +1,103 @@
+slug: duong-ly-do-muc-tieu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.l2_co_so_lieu
+    expected: "exit 0; apps/app/test/duong-ly-do.dom.tsx -t l2-co-so-lieu dựng ObjectiveSheet thật với tRPC giả trả okr.objective parse bằng objectiveOutput thật (okr.contracts.ts); một căn chỉnh qua KR, lyDo/canCu như AC-1, lyDoTuKara true, mucTin co-so-lieu. Tiêu đề của [data-khu=gop-vao] === m.sheet.khuDuongLyDo và thứ tự DOM [data-khu=vi-sao] → [data-khu=gop-vao] → bảng KR giữ nguyên. So giá trị nguyên thuỷ trong [data-gop-vao=<id>]: textContent của [data-ly-do-cau] === lyDo; textContent của [data-ly-do-can-cu] === dien(m.sheet.canCu, {cau: canCu}); textContent nhãn mức tin === m.sheet.mucTin['co-so-lieu']; số [data-slot=kara-trace] === 1; item-title và item-description bằng đúng chuỗi trước vòng ('<objectiveTitle>' và '<unitName> · qua KR «<KR>»'). Chiều đỏ ghim ở E11 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/lib/messages/okr.ts, apps/app/test/duong-ly-do.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.l2_ba_muc
+    expected: "exit 0; cùng tệp, -t l2-ba-muc: ma trận viết trước ba căn chỉnh (chua-co-ly-do, dat-cuoc, co-so-lieu) của một mục tiêu, đòi số ca chạy === 3. Mỗi dòng: textContent nhãn === m.sheet.mucTin[mucTin]; data-tone của [data-slot=indicator-dot] === toneTheoNghia(nghĩa khai trong ly-do-noi-gop.tsx) và bằng chuỗi viết trước warning/neutral/success. Đối chứng không tính lại: một ca gieo lyDo có chữ nhưng mucTin chua-co-ly-do → nhãn vẫn «Chưa có lý do». Chiều đỏ ghim ở E11 (b): suy mức tin từ lyDo/canCu ở màn → 'muc tin tinh lai o man'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, packages/ui/src/lib/status-tone.ts, apps/app/lib/messages/okr.ts, apps/app/test/duong-ly-do.dom.tsx]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.l2_vang
+    expected: "exit 0; cùng tệp, -t l2-vang: hai ca. chua-co-ly-do: số [data-ly-do-cau] === 0, số [data-ly-do-can-cu] === 0, số [data-slot=kara-trace] trong dòng === 0, có đúng một nhãn mức tin. dat-cuoc (lyDo có, canCu null): [data-ly-do-cau] có chữ, số [data-ly-do-can-cu] === 0. Đối chứng dương cùng khuôn: ca co-so-lieu của E1 có cả hai phần tử. Ca thứ ba alignments rỗng: số [data-khu=gop-vao] === 0 (đối chứng dương: ca E1 có đúng 1). Đòi số ca chạy === 3. Chiều đỏ ghim ở E11 (c): luôn vẽ dòng căn cứ → 'dong can cu rong'; (g) luôn vẽ khung Góp vào → 'khung gop vao rong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/test/duong-ly-do.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.l2_len_muc_tieu
+    expected: "exit 0; cùng tệp, -t l2-len-muc-tieu: căn chỉnh keyResultTitle null, targetKeyResultId null, có lyDo và canCu: item-description === unitName (so đúng bằng, không có 'qua KR'); phần lý do có câu, căn cứ và nhãn «Có số liệu»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/test/duong-ly-do.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.l2_dau_kara
+    expected: "exit 0; cùng tệp, -t l2-dau-kara: ma trận viết trước 2 ca. (1) một căn chỉnh lyDoTuKara false có lyDo → số [data-slot=kara-trace] trong [data-khu=gop-vao] === 0. (2) hai căn chỉnh có lyDo, al-kara (true) và al-nguoi (false) → tổng kara-trace trong khối === 1 và closest('[data-gop-vao]').getAttribute('data-gop-vao') === 'al-kara'. Chiều đỏ ghim ở E11 (d): bỏ điều kiện lyDoTuKara → ca (1) in 'dau kara tren ly do cua nguoi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/test/duong-ly-do.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.l2_chu
+    expected: "exit 0; cùng tệp, -t l2-chu: [data-ly-do-cau] và [data-ly-do-can-cu] > phần tử chứa canCu mang translate='no'; với từng khoá mới (khuDuongLyDo, canCu, mucTin['chua-co-ly-do'], mucTin['dat-cuoc'], mucTin['co-so-lieu']) okrMessages('vi') và okrMessages('en') đều có chuỗi khác rỗng và khác nhau, đòi số khoá kiểm === 5; dựng lại sheet với locale en → nhãn mức tin === bản en. Và apps/app/test/messages-guard.spec.ts xanh (lệnh chạy cả tệp đó)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr.ts, apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/test/duong-ly-do.dom.tsx, apps/app/test/messages-guard.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.l2_giu_ho_so
+    expected: "exit 0; _acceptance/duong-ly-do-muc-tieu/rang/giu-ho-so.mjs: (1) tính diff của vòng (merge-base với origin/onehub, cùng neo của E12); (2) tập tệp mã sản phẩm đổi = tệp đổi trừ _acceptance/**, docs/**, **/test/**, PRODUCT-MAP.md, LO-TRINH.html; duyệt _acceptance/*/contract.md có status signed-off hoặc machine-cleared (bỏ hồ sơ của chính vòng), đọc evals.yaml bằng Bun.YAML, lấy các eval executor test không khai status not-run mà paths có một mục KHÔNG chứa ký tự đại diện trùng đúng một tệp mã sản phẩm đổi; evals.yaml không đọc được mà chuỗi thô có nhắc một tệp mã sản phẩm đổi → exit 1 'evals khong doc duoc: <hồ sơ>'; in tập (hồ sơ#eval) và số phần tử N; (3) chạy từng lệnh đã giải từ config: (lệnh trùng chạy một lần), đòi mã thoát === expected_exit đã khai hoặc 0, đòi số lệnh đã chạy === số lệnh khác nhau của tập; lệnh sai mã → exit 1 'eval da ky do: <hồ sơ>#<eval>'; (4) git diff --quiet <neo> -- ba tệp bài của AC-7; tệp không tồn tại → exit 1 'tep khong ton tai: <tệp>', đổi → exit 1 'tep ho so da ky bi sua: <tệp>'. Đối chứng hai chiều của bộ lọc: một danh sách giả chỉ có objective-sheet.tsx thì tập chứa muc-tieu-va-kr#E8 (đối chứng dương); một danh sách giả chỉ có _acceptance/config.yaml thì N === 0 (tệp ngoài mã sản phẩm bị loại). Chiều đỏ của bài đã ký mà E7 chạy ghim ở E11 (e): đặt phần lý do trong item-description → muc-tieu-va-kr -t sheet-chi-tiet đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/**, apps/app/lib/messages/okr.ts, apps/api/scripts/okr-mau/**, _acceptance/duong-ly-do-muc-tieu/rang/giu-ho-so.mjs]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l2_bo_mau
+    expected: "exit 0; apps/api/test/okr-mau-ly-do.spec.ts -t ly-do-mau (CSDL kiểm thật, nạp bộ mẫu bằng napMau của okr-mau-san): đọc từng căn chỉnh mẫu qua OkrService (đường đọc của okr.objective) — tập mucTin gặp được === {co-so-lieu, dat-cuoc, chua-co-ly-do}; mỗi ca khai lyDo/canCu trong cong-ty.json đọc lại đúng bằng; có ≥1 căn chỉnh lyDoTuKara true. Chiều đỏ của khuôn trên cùng một bản sao ca: canChinh có canCu mà không lyDo → docBoOkrMau ném lỗi mà thông điệp chứa 'canChinh', 'canCu' và 'căn cứ cần đi kèm lý do' (ghim chuỗi); bỏ canCu khỏi bản sao đó → đọc được (đối chứng dương). Chiều đỏ của bên ghi ghim ở E11 (f): nap.ts bỏ lyDo → 'ly do mau khong vao csdl'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/khuon.ts, apps/api/scripts/okr-mau/nap.ts, apps/api/scripts/okr-mau/cong-ty.json, apps/api/test/okr-mau-ly-do.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l2_man_doc_lai
+    expected: "exit 0; cùng tệp api, -t man-doc-lai: đọc _acceptance/duong-ly-do-muc-tieu/rang/ca-man.json (ba mã mục tiêu mẫu và mức tin màn sẽ thấy — cùng tệp rang/man.mjs đọc) rồi lấy từng mục tiêu qua OkrService.objective của người xem trong bộ mẫu; mucTin của căn chỉnh đầu === mức tin khai trong ca-man.json cho cả ba mã. Đây là vế dữ liệu cặp với E10: màn đòi đúng thứ CSDL trả."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/cong-ty.json, apps/api/test/okr-mau-ly-do.spec.ts, _acceptance/duong-ly-do-muc-tieu/rang/ca-man.json]
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.l2_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs / do:man) trên kho đo của cây, bộ mẫu nạp bằng okr:mau; đăng nhập người xem khai trong rang/ca-man.json"
+      - "Ở 1440×1000 và 390×844, mỗi khổ một tiến trình con: với từng mã trong ca-man.json mở /<slug>/okr?record=<id mục tiêu>, chờ [data-khu=gop-vao]; đọc nhãn mức tin của dòng đầu, có/không [data-ly-do-cau], [data-ly-do-can-cu], [data-slot=kara-trace]; đo không tràn ngang trên MỌI tổ tiên có hộp (clientWidth > 0) từ [data-khu=gop-vao] lên tới [data-slot=sheet-content] — phải có ít nhất một hộp và một trong đó là vùng cuộn của sheet, không có thì KHONG DO DUOC — kèm đối chứng đỏ chèn tạm khối rộng 4000px thì phải báo tràn; VÀ trên từng [data-ly-do-cau], [data-ly-do-can-cu]: scrollHeight ≤ clientHeight, scrollWidth ≤ clientWidth, getComputedStyle textOverflow !== 'ellipsis', webkitLineClamp === 'none'; ở 390 câu lý do dài nhất (khai trong ca-man.json) cao ≥ 2 lần line-height; đối chứng đỏ trong trang: thêm tạm line-clamp 1 vào một bản sao phần tử → phép đo phải báo 'cat chu'; chụp ảnh khung nhìn có khối Góp vào trong ảnh"
+    expected: "exit 0; 6 ảnh (3 mức tin × 2 khổ) trong _acceptance/duong-ly-do-muc-tieu/evidence/; mỗi ca in 'dat' với nhãn đọc được === nhãn khai; không tràn ngang; console không lỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/lib/messages/okr.ts, apps/api/scripts/okr-mau/cong-ty.json, _acceptance/duong-ly-do-muc-tieu/rang/man.mjs, _acceptance/duong-ly-do-muc-tieu/rang/ca-man.json]
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.l2_dot_bien
+    expected: "exit 0; _acceptance/duong-ly-do-muc-tieu/rang/dot-bien.mjs: chiều xanh trước (E1–E8 xanh trên cây lành; không thì exit 2 'KHONG DO DUOC'); rồi bảy vết, mỗi vết sửa tạm đúng một tệp trong bản sao làm việc và trả lại trong finally, đòi lệnh của eval đó đỏ VÀ đầu ra chứa thông điệp ghim: (a) bỏ dòng căn cứ → l2-co-so-lieu 'can cu'; (b) suy mức tin từ lyDo/canCu → l2-ba-muc 'muc tin tinh lai o man'; (c) luôn vẽ dòng căn cứ → l2-vang 'dong can cu rong'; (d) bỏ điều kiện lyDoTuKara → l2-dau-kara 'dau kara tren ly do cua nguoi'; (e) đặt phần lý do trong item-description → muc-tieu-va-kr.dom.tsx -t sheet-chi-tiet đỏ với '(fail) sheet-chi-tiet'; (f) nap.ts bỏ lyDo → ly-do-mau 'ly do mau khong vao csdl'; (g) luôn vẽ khung Góp vào khi không có căn chỉnh → l2-vang 'khung gop vao rong'. Sau cùng git diff --quiet trên các tệp đã chạm."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/duong-ly-do-muc-tieu/rang/dot-bien.mjs, apps/app/components/crm/record-sheet/**, apps/api/scripts/okr-mau/**, apps/app/test/duong-ly-do.dom.tsx, apps/api/test/okr-mau-ly-do.spec.ts]
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.l2_ranh_gioi
+    expected: "exit 0; _acceptance/duong-ly-do-muc-tieu/rang/ranh-gioi.mjs tự chọn neo (hồ sơ chưa lên onehub → merge-base với origin/onehub; đã lên → cặp sha của merge đưa nó lên): mỗi tệp đổi khớp danh sách Ranh giới của contract.md (đọc từ tệp, không chép), `_acceptance/duong-ly-do-muc-tieu/**`, `docs/**`, PRODUCT-MAP.md, LO-TRINH.html; với _acceptance/config.yaml diff chỉ có dòng '+'; với apps/app/lib/messages/okr.ts diff chỉ có dòng '+' cộng đúng hai dòng '-' khuGopVao (vi «Góp vào», en «Contributes to»; cham-tep P2-6). Đối chứng hai chiều trên cùng danh sách: một đường giả ngoài ranh giới → 'ngoai ranh gioi: <tệp>'; một dòng '-' giả ở okr.ts → 'sua dong co san: apps/app/lib/messages/okr.ts'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/duong-ly-do-muc-tieu/rang/ranh-gioi.mjs, _acceptance/duong-ly-do-muc-tieu/contract.md, _acceptance/config.yaml]
