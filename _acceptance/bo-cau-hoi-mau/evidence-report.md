@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f2afaf7578cf8de5b4f76ef02601153d5e384cb8
+verified_commit: 2e7a4941db0f6e70eaa3e8e9f51fe08fffccac0b
 human_signoff: Phan Le Manh 2026-10-13 — ký Cổng 2 trên S4 lượt 1 (10/10 eval PASS; E9j Đạt). Ngoài-1, 3, 4, 5, 6 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -197,3 +197,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: mọi eval máy xanh (E1–E8, E10) và bảy lệnh suite xanh; E9j chờ người chốt ở Cổng 2 với đề xuất PASS.
+
+### Re-pin lần 1 — 2026-10-13, do hoá cũ do gộp onehub 85c0e4cc9 sau chữ ký
+run_id: repin-20261013T094656Z-33244
+sha: 2e7a4941db0f6e70eaa3e8e9f51fe08fffccac0b · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9j (E9j không khai paths) · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
