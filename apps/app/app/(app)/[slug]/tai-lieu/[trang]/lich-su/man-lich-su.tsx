@@ -2,12 +2,7 @@
 
 import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
 import { Button } from "@crm/ui/components/button";
-import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyTitle,
-} from "@crm/ui/components/empty";
+import { Empty, EmptyHeader, EmptyTitle } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
 import {
 	Item,

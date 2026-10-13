@@ -46,7 +46,12 @@ export function DanhSach({
 					<TabsTrigger asChild value="trang">
 						<Link
 							aria-current={tab === "trang" ? "page" : undefined}
-							href={toi({ tab: "trang", nhom: "cho", page: 1, archived: false })}
+							href={toi({
+								tab: "trang",
+								nhom: "cho",
+								page: 1,
+								archived: false,
+							})}
 						>
 							{m.tab.trang}
 						</Link>
