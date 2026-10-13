@@ -48,6 +48,7 @@ import {
 } from "./fields-copy";
 import { type FieldEntity, kindOf } from "./fields-entity";
 import { STANDARD_FIELDS } from "./standard-fields";
+import type { TruongLuuTru } from "./use-luu-tru-truong";
 
 type Field = RouterOutputs["fields"]["list"][number];
 
@@ -125,11 +126,13 @@ export function FieldsList({
 	khoa,
 	onEdit,
 	onNew,
+	onArchive,
 }: {
 	entity: FieldEntity;
 	khoa: boolean;
 	onEdit: (key: string) => void;
 	onNew: () => void;
+	onArchive: (field: TruongLuuTru) => void;
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -160,13 +163,6 @@ export function FieldsList({
 				toast.error(error.message);
 			},
 			onSettled: () => cache.fields(kindOf(entity)),
-		}),
-	);
-
-	const archive = useMutation(
-		trpc.fields.archive.mutationOptions({
-			onSuccess: () => cache.fields(kindOf(entity)),
-			onError: (error) => toast.error(error.message),
 		}),
 	);
 
@@ -373,9 +369,7 @@ export function FieldsList({
 														{copy.edit}
 													</DropdownMenuItem>
 													<DropdownMenuSeparator />
-													<DropdownMenuItem
-														onSelect={() => archive.mutate({ id: field.id })}
-													>
+													<DropdownMenuItem onSelect={() => onArchive(field)}>
 														{copy.archive}
 													</DropdownMenuItem>
 												</DropdownMenuContent>

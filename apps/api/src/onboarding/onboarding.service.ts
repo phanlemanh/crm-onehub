@@ -67,6 +67,7 @@ import {
 	CHON_BUOC,
 	keHoachRa,
 	kiemNguoiNhanViec,
+	kiemPhongBanDangDung,
 	OnboardingGhi,
 } from "./onboarding-ghi";
 import { OnboardingTheoDoi } from "./onboarding-theo-doi";
@@ -284,7 +285,10 @@ export class OnboardingService {
 
 	async createTemplate(input: TemplateCreateInput): Promise<TemplateOutput> {
 		const steps = parseOnboardingTemplateSteps(input.steps);
-		await this.kiemBoPhanDangDung(steps);
+		await kiemPhongBanDangDung(
+			this.db,
+			steps.map((buoc) => buoc.departmentId),
+		);
 
 		return khuonRa(
 			await this.db.onboardingTemplate.create({
@@ -300,7 +304,11 @@ export class OnboardingService {
 			input.steps === undefined
 				? hien.steps
 				: parseOnboardingTemplateSteps(input.steps);
-		if (input.steps !== undefined) await this.kiemBoPhanDangDung(steps);
+		if (input.steps !== undefined)
+			await kiemPhongBanDangDung(
+				this.db,
+				steps.map((buoc) => buoc.departmentId),
+			);
 
 		return khuonRa(
 			await this.db.onboardingTemplate.update({
@@ -332,7 +340,10 @@ export class OnboardingService {
 
 	async restoreTemplate(input: TemplateIdInput): Promise<TemplateOutput> {
 		const hien = await this.docKhuon(input.id);
-		await this.kiemBoPhanDangDung(hien.steps);
+		await kiemPhongBanDangDung(
+			this.db,
+			hien.steps.map((buoc) => buoc.departmentId),
+		);
 
 		return khuonRa(
 			await this.db.onboardingTemplate.update({
@@ -697,31 +708,5 @@ export class OnboardingService {
 					new Map(banDo).set(id, [...(banDo.get(id) ?? []), nhac]),
 				new Map<string, KhuonNhac[]>(),
 			);
-	}
-
-	private async kiemBoPhanDangDung(
-		steps: OnboardingTemplateStep[],
-	): Promise<void> {
-		const ids = [...new Set(steps.map((buoc) => buoc.departmentId))];
-		const boPhan = await this.db.department.findMany({
-			where: { id: { in: ids } },
-			select: { id: true, name: true, archivedAt: true },
-		});
-
-		const thieu = ids.filter((id) => !boPhan.some((bp) => bp.id === id));
-		if (thieu.length > 0) {
-			throw new NotFoundException(
-				`Không có phòng ban nào mang mã ${thieu.join(", ")}.`,
-			);
-		}
-
-		const daLuuTru = boPhan
-			.filter((bp) => bp.archivedAt !== null)
-			.map((bp) => bp.name);
-		if (daLuuTru.length > 0) {
-			throw new BadRequestException(
-				ONBOARDING.thongDiep.boPhanDaLuuTru(daLuuTru),
-			);
-		}
 	}
 }

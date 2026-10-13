@@ -366,6 +366,28 @@ DATABASE_URL="…" bunx prisma migrate diff \
   --from-config-datasource --to-schema prisma/schema.prisma --script
 ```
 
+## Kéo tín hiệu về (đầu mỗi lượt gom)
+
+Tín hiệu người dùng gửi trong CRM nằm trong bảng `tinHieu` cho tới khi người chạy lượt gom kéo
+chúng về git. Một lần cho mỗi máy:
+
+1. Trong CRM production, mở Cài đặt › Khoá API bằng tài khoản owner hoặc admin, tạo một khoá.
+2. Ghi vào `.env` ở gốc kho: `CRM_API_URL` (gốc API production) và `CRM_API_KEY` (khoá vừa tạo).
+   API không đọc hai biến này; chỉ lệnh kéo về đọc.
+
+Mỗi lượt gom:
+
+```bash
+bun run tin-hieu:keo-ve
+```
+
+Lệnh ghi `tin-hieu/crm/crm-<số>.json` cho tín hiệu mới, bỏ qua tệp đã có cùng nội dung, và dừng
+(mã 1) nếu một tệp đã có mà khác — không ghi đè. Thiếu biến thì dừng (mã 2), không ghi gì. Dòng
+tổng kết in hai con số của ngưỡng: số tín hiệu 30 ngày theo phòng ban, và số tín hiệu gửi quá 7
+ngày mà chưa có chỗ sau gom (đọc từ `LO-TRINH.html` ở gốc kho). Commit tệp mới cùng bản gom
+(skill `gom-tin-hieu` của bộ kit). Lượt lấy về đánh dấu tín hiệu là «đã lấy về» — từ đó người gửi
+không xoá được nữa.
+
 ## Secrets hygiene
 
 `.gitignore` ignores `.env` and `.env.*` with one negation for `.env.example`, so

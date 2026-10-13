@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form lỗi phòng ban</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 68ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">d-4 · Luồng màn · them-buoc-bao-dung</p>
+    <h1>Form thêm bước khi danh sách phòng ban không tải được</h1>
+    <p class="sub">Chiếu bảng trạng thái của Đặc tả UX: vùng lỗi thay chỗ ô chọn, thử lại xong thì ô chọn trở lại. Nhánh phụ: kế hoạch đã có bước, nút «Thêm bước ở phòng ban khác» vẫn hiện và mở ra cùng vùng lỗi.</p>
+
+    <svg viewBox="0 0 1160 624" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+<text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">D-4 · BẢN GHI KẾ HOẠCH › PHẦN BƯỚC · AC-3 · AC-4 · AC-5</text>
+
+<path d="M232 200 L334 200" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+<path d="M528 200 L630 200" fill="none" stroke="#006B4F" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+<path d="M824 200 L926 200" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+<path d="M232 494 L424 494 Q432 494 432 486 L432 306" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+<rect x="248" y="176" width="72" height="16" rx="2" fill="#fafafa"/>
+<text x="284" y="188" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">THÊM BƯỚC</text>
+<rect x="548" y="176" width="64" height="16" rx="2" fill="#fafafa"/>
+<text x="580" y="188" fill="#006B4F" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">THỬ LẠI</text>
+<rect x="828" y="176" width="96" height="16" rx="2" fill="#fafafa"/>
+<text x="876" y="188" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHỌN, GÕ, THÊM</text>
+<rect x="292" y="470" width="72" height="16" rx="2" fill="#fafafa"/>
+<text x="328" y="482" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">BẤM NÚT</text>
+<rect x="440" y="340" width="88" height="16" rx="2" fill="#fafafa"/>
+<text x="444" y="352" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">CÙNG VÙNG LỖI</text>
+
+<text x="40" y="88" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">điểm vào</text>
+<rect x="40" y="100" width="192" height="204" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="1"/>
+<path d="M40 124 L40 106 Q40 100 46 100 L226 100 Q232 100 232 106 L232 124 Z" fill="#f2f2f2"/>
+<line x1="40" y1="124" x2="232" y2="124" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="50" y="116" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Kế hoạch rỗng</text>
+<rect x="52" y="140" width="120" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+<rect x="52" y="156" width="80" height="6" rx="2" fill="rgba(23,23,23,0.08)"/>
+<rect x="52" y="190" width="80" height="20" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="92" y="204" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Thêm bước</text>
+<rect x="52" y="236" width="168" height="6" rx="2" fill="rgba(23,23,23,0.06)"/>
+<rect x="52" y="252" width="140" height="6" rx="2" fill="rgba(23,23,23,0.06)"/>
+
+<text x="336" y="88" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ST-them-buoc-loi-phong-ban</text>
+<rect x="336" y="100" width="192" height="204" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="1"/>
+<path d="M336 124 L336 106 Q336 100 342 100 L522 100 Q528 100 528 106 L528 124 Z" fill="#f2f2f2"/>
+<line x1="336" y1="124" x2="528" y2="124" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="346" y="116" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Lỗi tải phòng ban</text>
+<rect x="348" y="134" width="48" height="6" rx="2" fill="rgba(23,23,23,0.12)"/>
+<rect x="348" y="144" width="168" height="80" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+<text x="360" y="160" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif">Không tải được danh sách</text>
+<text x="360" y="172" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif">phòng ban</text>
+<text x="360" y="186" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kiểm tra kết nối rồi thử lại.</text>
+<rect x="360" y="192" width="56" height="18" rx="4" fill="#171717"/>
+<text x="388" y="204" fill="#fafafa" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Thử lại</text>
+<rect x="348" y="236" width="168" height="20" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<rect x="460" y="272" width="56" height="20" rx="4" fill="rgba(23,23,23,0.08)"/>
+<text x="488" y="286" fill="#575757" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Thêm</text>
+<text x="452" y="286" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">KHOÁ</text>
+<rect x="336" y="316" width="40" height="16" rx="2" fill="none" stroke="rgba(87,87,87,0.4)" stroke-width="0.8"/>
+<text x="356" y="328" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-3</text>
+
+<text x="632" y="88" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ST-them-buoc-thu-lai-xong</text>
+<rect x="632" y="100" width="192" height="204" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="1"/>
+<path d="M632 124 L632 106 Q632 100 638 100 L818 100 Q824 100 824 106 L824 124 Z" fill="#f2f2f2"/>
+<line x1="632" y1="124" x2="824" y2="124" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="642" y="116" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Thử lại xong</text>
+<rect x="644" y="134" width="48" height="6" rx="2" fill="rgba(23,23,23,0.12)"/>
+<rect x="644" y="144" width="168" height="20" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="652" y="158" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chọn phòng ban</text>
+<path d="M796 152 L800 156 L804 152" fill="none" stroke="#575757" stroke-width="1"/>
+<rect x="644" y="168" width="168" height="60" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<rect x="652" y="176" width="88" height="6" rx="2" fill="rgba(23,23,23,0.16)"/>
+<rect x="648" y="188" width="160" height="16" rx="2" fill="rgba(23,23,23,0.06)"/>
+<rect x="652" y="193" width="72" height="6" rx="2" fill="rgba(23,23,23,0.32)"/>
+<rect x="652" y="212" width="96" height="6" rx="2" fill="rgba(23,23,23,0.16)"/>
+<rect x="644" y="240" width="168" height="20" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<rect x="652" y="247" width="96" height="6" rx="2" fill="rgba(23,23,23,0.3)"/>
+<rect x="756" y="272" width="56" height="20" rx="4" fill="#171717"/>
+<text x="784" y="286" fill="#fafafa" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Thêm</text>
+<rect x="632" y="316" width="40" height="16" rx="2" fill="none" stroke="rgba(87,87,87,0.4)" stroke-width="0.8"/>
+<text x="652" y="328" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-4</text>
+
+<text x="928" y="88" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">điểm ra</text>
+<rect x="928" y="100" width="192" height="204" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="1"/>
+<path d="M928 124 L928 106 Q928 100 934 100 L1114 100 Q1120 100 1120 106 L1120 124 Z" fill="#f2f2f2"/>
+<line x1="928" y1="124" x2="1120" y2="124" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="938" y="116" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Bước đã thêm</text>
+<text x="940" y="148" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif">Phòng ban đã chọn</text>
+<rect x="940" y="164" width="8" height="8" rx="2" fill="none" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<rect x="956" y="165" width="100" height="6" rx="2" fill="rgba(23,23,23,0.12)"/>
+<rect x="936" y="188" width="176" height="24" rx="4" fill="rgba(23,23,23,0.05)" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<rect x="944" y="196" width="8" height="8" rx="2" fill="none" stroke="rgba(23,23,23,0.4)" stroke-width="0.8"/>
+<rect x="960" y="197" width="88" height="6" rx="2" fill="rgba(23,23,23,0.35)"/>
+<text x="1104" y="204" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">MỚI</text>
+<rect x="940" y="236" width="80" height="8" rx="2" fill="rgba(23,23,23,0.08)"/>
+<rect x="940" y="256" width="8" height="8" rx="2" fill="none" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<rect x="956" y="257" width="112" height="6" rx="2" fill="rgba(23,23,23,0.08)"/>
+
+<text x="40" y="380" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ST-them-buoc-khac-loi-phong-ban</text>
+<rect x="40" y="388" width="192" height="136" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="1"/>
+<path d="M40 412 L40 394 Q40 388 46 388 L226 388 Q232 388 232 394 L232 412 Z" fill="#f2f2f2"/>
+<line x1="40" y1="412" x2="232" y2="412" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="50" y="404" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Kế hoạch có bước</text>
+<text x="52" y="432" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif">Phòng ban A</text>
+<rect x="52" y="444" width="8" height="8" rx="2" fill="none" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<rect x="68" y="445" width="100" height="6" rx="2" fill="rgba(23,23,23,0.12)"/>
+<rect x="52" y="460" width="8" height="8" rx="2" fill="none" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<rect x="68" y="461" width="84" height="6" rx="2" fill="rgba(23,23,23,0.12)"/>
+<rect x="52" y="484" width="168" height="20" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="136" y="498" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Thêm bước ở phòng ban khác</text>
+<rect x="40" y="536" width="40" height="16" rx="2" fill="none" stroke="rgba(87,87,87,0.4)" stroke-width="0.8"/>
+<text x="60" y="548" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-5</text>
+<text x="92" y="548" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nút vẫn hiện khi danh sách lỗi</text>
+
+<text x="600" y="444" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">Mọi khung là phần Bước của bản ghi kế hoạch;</text>
+<text x="600" y="464" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">tên trên thanh khung là trạng thái, không phải màn mới.</text>
+
+<line x1="40" y1="576" x2="1120" y2="576" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="40" y="600" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+<rect x="140" y="591" width="20" height="12" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.3)" stroke-width="1"/>
+<text x="168" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một trạng thái của form</text>
+<rect x="296" y="591" width="20" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+<text x="324" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">VungTaiLoi thay chỗ ô chọn</text>
+<line x1="480" y1="597" x2="512" y2="597" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="520" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nhánh phụ</text>
+<rect x="596" y="591" width="24" height="12" rx="2" fill="rgba(23,23,23,0.08)"/>
+<text x="628" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nút khoá</text>
+    </svg>
+
+    <footer>d-4 · them-buoc-bao-dung · Cổng Phạm vi · AC-3, AC-4, AC-5 · 2026-10-13</footer>
+  </div>
+</body>
+</html>

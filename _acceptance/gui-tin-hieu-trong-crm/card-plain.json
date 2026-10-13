@@ -1,0 +1,159 @@
+{
+  "feature_plain": "Ai dùng CRM cũng bấm được «Gửi tín hiệu» ở đầu mọi màn để kể điều mình gặp, rồi mở «Tín hiệu đã gửi» xem tín hiệu đang chờ, đã vào nhóm nào, thành việc nào, đã giao chưa.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ có nút «Gửi tín hiệu» trên thanh đầu trang ở mọi màn, cùng kiểu với các nút cạnh nó, cho mọi vai kể cả vai chỉ OKR; hộp gửi hỏi hai câu «muốn làm gì» và «điều gì xảy ra», tự ghi màn đang đứng."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ cất nguyên văn hai câu trả lời kèm người gửi, phòng ban chính lúc gửi và màn (không kèm phần truy vấn), rồi hiện biên nhận có mã và liên kết tới «Tín hiệu đã gửi»."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ chặn quá 10 tín hiệu một người một ngày giờ Việt Nam và chữ quá dài ở mỗi ô, nói rõ lúc gửi lại được; lỗi nào cũng giữ nguyên chữ đã gõ."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ chỉ cho mỗi người thấy tín hiệu của chính mình; trang có đúng một nút chính «Gửi tín hiệu»; menu người dùng có mục «Tín hiệu đã gửi»."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ có một lệnh cho chủ kho lấy tín hiệu về kho mã, mỗi tín hiệu một tệp mang hai câu trả lời và màn, đúng khuôn của bộ kit, không mang tên hay thư của người gửi."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ khai cửa tín hiệu của kho để bộ kit (từ 2.27) vẽ danh sách tín hiệu vào trang lộ trình, và CRM đọc lại đúng câu trạng thái kit viết."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ hiện mỗi tín hiệu một nhãn ngắn có chấm màu theo nghĩa, cộng câu đầy đủ: câu kit viết khi đã gom, hoặc «chờ đội sản phẩm lấy về», «đã lấy về — chờ gom nhóm»."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ vẫn hiện danh sách với trạng thái lúc gửi kèm một dòng báo khi trang lộ trình thiếu, hỏng hay chưa có danh sách tín hiệu; bản dựng production mang theo trang lộ trình."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ in ở cuối lệnh lấy về: số tín hiệu 30 ngày theo phòng ban, và số tín hiệu gửi quá 7 ngày mà chưa có chỗ sau gom — hai con số của ngưỡng."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-5",
+      "p": "Chặn xoá tín hiệu đội sản phẩm đã lấy về và tín hiệu của người khác; xoá nằm trong menu ⋮ của dòng như các danh sách khác, có hỏi lại."
+    },
+    {
+      "id": "AC-6",
+      "p": "Chặn mọi khoá không phải của quản trị lấy tín hiệu về; lượt lấy về đóng dấu «đã lấy về» trong cùng một lần ghi."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG ghi trùng, ghi đè hay làm mất tín hiệu khi chạy lệnh lấy về nhiều lần; thiếu địa chỉ hay khoá thì dừng, không ghi gì."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không ghi nhóm, ý định hay trạng thái từ CRM — bộ kit gom, chủ kho chọn."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không dùng AI để gom hay phân loại tín hiệu trong CRM."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không đổi khuôn tín hiệu — khuôn thuộc bộ kit."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không để ứng dụng tự ghi vào git — đã chọn lối 1 ở Cổng Đáng."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không báo tin (thư, Zalo) cho người gửi khi trạng thái đổi — để sau."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Không có trợ lý AI hỏi lại người gửi trước khi ghi — để sau, mở khi lượt gom thật cho thấy tín hiệu thiếu rõ."
+    },
+    {
+      "id": "OOS-7",
+      "p": "Không bầu chọn hay xếp ưu tiên theo số tín hiệu."
+    },
+    {
+      "id": "OOS-8",
+      "p": "Không đính ảnh chụp màn hình vào tín hiệu — để sau."
+    },
+    {
+      "id": "OOS-9",
+      "p": "Không có chỗ cho quản trị xem hay gỡ rác trước khi lấy về, và chưa lấy về tự động theo lịch — để sau."
+    },
+    {
+      "id": "OOS-10",
+      "p": "Không sửa tín hiệu sau khi gửi — gửi một tín hiệu mới."
+    },
+    {
+      "id": "OOS-11",
+      "p": "Không đụng ngăn hồ sơ của trang Lộ trình (vòng LT1b) hay bộ đọc của trang đó."
+    }
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đời một tín hiệu được phủ từ gửi, cất, xoá, lấy về, tới trạng thái và đếm (AC-1 nút, AC-2 cất, AC-5 xoá, AC-7 lấy về, AC-10 trạng thái, AC-12 đếm); bước gom là của bộ kit."
+    },
+    {
+      "i": 1,
+      "p": "Người và quyền: người gửi ở mọi vai, quản trị lấy về, người khác và người chưa đăng nhập đều có tiêu chí riêng (AC-1, AC-4, AC-5, AC-6)."
+    },
+    {
+      "i": 2,
+      "p": "Trạng thái đến từ ba nguồn — dữ liệu của CRM, trang lộ trình có danh sách tín hiệu, trang lộ trình thiếu hay hỏng — mỗi nguồn có tiêu chí (AC-9, AC-10, AC-11)."
+    },
+    {
+      "i": 3,
+      "p": "Các ca biên: rỗng, quá trần, máy chủ lỗi, sai vai, chạy lặp, tín hiệu đã xoá (AC-3, AC-6, AC-8, AC-11)."
+    },
+    {
+      "i": 4,
+      "p": "Cắt ngang: danh tính người gửi không vào git, nhật ký không ghi nội dung, hai khổ màn, chữ người gõ không bị dịch (AC-1, AC-7)."
+    },
+    {
+      "i": 5,
+      "p": "Đối chiếu ngành: tiện ích góp ý của Sentry (nút cố định, tự ghi màn) và Canny (người gửi thấy trạng thái); phần cắt nằm ở «để sau» và «không làm»."
+    },
+    {
+      "i": 6,
+      "p": "Bản quét đầy đủ (làm ngay / để sau / không làm) nằm trong hồ sơ."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Thước «quá 7 ngày đã có chỗ» từng chỉ đếm tín hiệu đã vào trang lộ trình, nên chủ kho quên lấy về thì thước vẫn đẹp. Đã sửa: lệnh lấy về đếm mọi tín hiệu của CRM, kèm phép đo có chiều đỏ."
+    },
+    {
+      "i": 1,
+      "p": "Chưa ai đo chỗ nối giữa phản hồi thật của CRM và lệnh lấy về. Đã sửa: hai bên dùng chung một hàm, phép đo chạy hàm đó trên phản hồi thật."
+    },
+    {
+      "i": 2,
+      "p": "Mục «Tín hiệu đã gửi» trong menu người dùng chưa có tiêu chí. Đã thêm vào AC-4, có phép đo trên màn thật ở hai khổ."
+    },
+    {
+      "i": 3,
+      "p": "Chưa ai đo bản dựng production có mang trang lộ trình cho trang mới. Đã thêm phép đo bản dựng. Riêng việc đo câu kit trên màn thật để sau khi crm có kit 2.27."
+    },
+    {
+      "i": 4,
+      "p": "Câu trạng thái của bộ kit mang mã việc và tên hồ sơ kỹ thuật, người phòng ban đọc khó. Phép đo chữ nay chỉ chấm câu của CRM; câu của kit là việc chủ kho quyết ở cổng này."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "E14",
+      "q": "Chữ của CRM đọc được với người phòng ban — chấp nhận câu kit còn mã?",
+      "why": "Ba giám khảo xác nhận mọi chữ CRM viết (nút, hộp, biên nhận, trang, hai câu chờ) sạch chữ nội bộ; họ chỉ chê câu trạng thái do bộ kit viết, thứ anh đã nhận làm giới hạn ở Cổng Phạm vi và máy đã báo phiên điều phối để kit đổi."
+    }
+  ]
+}

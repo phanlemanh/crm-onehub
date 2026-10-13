@@ -1,0 +1,207 @@
+schema_version: 1
+slug: them-buoc-bao-dung
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbd_phong_ban
+    paths:
+      - "apps/api/src/onboarding/onboarding-ghi.ts"
+      - "apps/api/src/onboarding/onboarding.service.ts"
+      - "apps/api/src/to-chuc/to-chuc-config.ts"
+      - "apps/api/src/to-chuc/to-chuc.service.ts"
+      - "apps/api/test/them-buoc-bao-dung.spec.ts"
+    expected: |
+      Lenh tbd_phong_ban chay ca tep them-buoc-bao-dung.spec.ts (khong describe nao phu thuoc mui gio; describe
+      "qua-han-khu-hoi" chi chay khi bien TBD_KHU_HOI=1 nen bo qua o lenh nay).
+      apps/api/test/them-buoc-bao-dung.spec.ts describe "phong-ban-khong-co": mot ma la maLa (chua co trong bang Department),
+      mot ke hoach mo da gieo, mot khuon da gieo voi mot phong ban dang dung. Goi that bon duong voi cung maLa:
+      (r) ToChucService.luuTruXemTruoc({ id: maLa }) — loi tham chieu cua org.*; (a) OnboardingService.addStep;
+      (b) OnboardingService.createTemplate voi mot buoc mang maLa; (c) OnboardingService.updateTemplate cua khuon da gieo
+      voi mot buoc mang maLa. Ma tran viet truoc, 3 duong x 3 khang dinh = 9: voi moi duong d trong (a)(b)(c):
+      getStatus() cua d === getStatus() cua (r) va === 404; message cua d === message cua (r) tung ky tu (quan he, khong
+      so chuoi co mat); so OnboardingStep cua ke hoach va so OnboardingTemplate, steps cua khuon da gieo khong doi.
+      Doi chung duong (cung fixture): (r) tra 404 voi message chua maLa — cot tham chieu khong rong.
+      CHIEU DO: ban sao de addStep nem BadRequestException(TO_CHUC.thongDiep.khongCoBoPhan(...)) nhu truoc vong ->
+      khang dinh status cua (a) do voi thong diep ghim "addStep tra loi khac org.* cho phong ban khong co";
+      ban sao createTemplate tu viet cau rieng -> khang dinh message cua (b) do voi thong diep ghim
+      "tao khuon tra cau khac org.* cho phong ban khong co".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbd_phong_ban
+    paths:
+      - "apps/api/src/onboarding/onboarding-ghi.ts"
+      - "apps/api/src/onboarding/onboarding.service.ts"
+      - "apps/api/src/onboarding/onboarding-config.ts"
+      - "apps/api/test/them-buoc-bao-dung.spec.ts"
+    expected: |
+      them-buoc-bao-dung.spec.ts describe "phong-ban-luu-tru": mot phong ban da gieo roi dat archivedAt, mot phong ban dang
+      dung, mot ke hoach mo. (a) addStep va (b) createTemplate voi phong ban da luu tru: ca hai getStatus() === 400, message
+      cua (a) === message cua (b) tung ky tu va chua ten phong ban; khong ghi buoc hay khuon nao (dem truoc/sau).
+      Doi chung duong cung fixture: (a) va (b) voi phong ban dang dung -> ghi duoc mot buoc va mot khuon; (c) updateTemplate cua khuon da
+      gieo voi buoc mang phong ban da luu tru -> 400, message === message cua (a), steps cua khuon khong doi.
+      CHIEU DO: ban sao bo nhanh luu tru o ham kiem chung -> khang dinh 400 cua (a) do voi thong diep ghim
+      "addStep ghi buoc vao phong ban da luu tru".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tbd_form_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/plan-steps.tsx"
+      - "apps/app/lib/messages/onboarding.ts"
+      - "apps/app/test/them-buoc-bao-dung.dom.tsx"
+    expected: |
+      Lenh tbd_form_dom loc bang -t phong-ban-loi (cac describe qua-han-* bi bo qua o lenh nay); TZ=Asia/Ho_Chi_Minh.
+      apps/app/test/them-buoc-bao-dung.dom.tsx describe "phong-ban-loi": render PlanSteps voi listSteps rong va
+      listDepartments nem loi (TRPCClientError). Bam "Thêm bước". Ma tran: (1) [data-vung-tai-loi] co mat trong form
+      [data-them-buoc]; (2) tieu de "Không tải được danh sách phòng ban"; (3) mo ta "Kiểm tra kết nối rồi thử lại.";
+      (4) co nut thu lai trong vung loi; (5) khong co combobox ten "Phòng ban" trong form; (6) nut "Thêm" disabled.
+      Doi chung duong cung fixture tru listDepartments tra hai phong ban: (1') khong co [data-vung-tai-loi], (5') co
+      combobox "Phòng ban".
+      CHIEU DO: ban sao truyen boPhan.data ?? [] nhu truoc vong -> dong 1 do voi thong diep ghim
+      "loi tai danh sach phong ban thanh o chon trong".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tbd_form_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/plan-steps.tsx"
+      - "apps/app/test/them-buoc-bao-dung.dom.tsx"
+    expected: |
+      them-buoc-bao-dung.dom.tsx describe "phong-ban-loi" ca "thu lai": listDepartments lan 1 nem loi, lan 2 tra phong ban
+      P1, P2. Mo form, bam nut thu lai. Ma tran: (1) so lan goi listDepartments tang tu 1 len 2; (2) vung loi bien mat;
+      (3) o chon liet dung [P1, P2]; (4) chon P2, go ten -> "Thêm" bat; (5) bam "Thêm" -> addStep nhan dung
+      { planId, departmentId: P2, label, dueAt }.
+      CHIEU DO: ban sao nut thu lai khong goi refetch -> dong 1 do voi thong diep ghim "thu lai khong tai lai danh sach phong ban".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tbd_form_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/plan-steps.tsx"
+      - "apps/app/test/them-buoc-bao-dung.dom.tsx"
+    expected: |
+      them-buoc-bao-dung.dom.tsx describe "phong-ban-loi" ca "ke hoach co buoc": listSteps co mot buoc o phong ban A,
+      listDepartments nem loi. Ma tran: (1) nut "Thêm bước ở phòng ban khác" co mat; (2) bam no -> [data-vung-tai-loi]
+      trong form do; (3) mo "Thêm bước" trong nhom A, go ten, bam "Thêm" -> addStep nhan departmentId A (khong vung loi
+      trong form nhom). Doi chung duong cung fixture tru listDepartments tra dung [A]: nut "Thêm bước ở phòng ban khác"
+      KHONG co mat (het phong ban that su).
+      CHIEU DO: ban sao an nut khi danh sach rong ke ca luc loi -> dong 1 do voi thong diep ghim
+      "nut them o phong ban khac bien mat khi danh sach loi".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tbd_qua_han_lui
+    paths:
+      - "apps/app/app/(app)/[slug]/dong-buoc.tsx"
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "packages/validation/src/ngay-vn.ts"
+      - "apps/app/test/them-buoc-bao-dung.dom.tsx"
+    expected: |
+      Lenh chay voi TBD_MUI_GIO=lui TZ=America/Los_Angeles va loc -t qua-han-lui (describe chi chay khi TBD_MUI_GIO=lui, nen suite chung o gio VN bo qua no). them-buoc-bao-dung.dom.tsx describe "qua-han-lui": khang dinh dau tien
+      Intl.DateTimeFormat().resolvedOptions().timeZone === "America/Los_Angeles" (thong diep ghim "lenh khong chay o mui
+      gio lui") — chan thuoc chay sai mui gio ma van xanh. Dong ho ghim 2026-10-12T17:30:00Z (VN 2026-10-13 00:30; LA
+      2026-10-12 10:30). Render DashboardSummary voi du lieu dung khuon dashboard.summary: overdueTasks [], mySteps
+      [buoc hanD dueAt "2026-10-12"], quaHan { viec: 0, buoc: 1 }. Ma tran viet truoc: (1) dong cua buoc hanD mang dau
+      qua han; (2) khong co [data-con-sot] va khong co chuoi "nữa"; (3) mo ta the chua "1". Doi chung duong cung dong ho:
+      them mot viec qua han ngoai danh sach (quaHan.viec 1) -> [data-con-sot="1"].
+      CHIEU DO: ban sao buocQuaHan so theo ngay dia phuong nhu truoc vong -> dong 2 do voi thong diep ghim
+      "buoc qua han theo ngay VN bi dem them vao con sot".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tbd_qua_han_tien
+    paths:
+      - "apps/app/app/(app)/[slug]/dong-buoc.tsx"
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "packages/validation/src/ngay-vn.ts"
+      - "apps/app/test/them-buoc-bao-dung.dom.tsx"
+    expected: |
+      Lenh chay voi TBD_MUI_GIO=tien TZ=Pacific/Kiritimati va loc -t qua-han-tien (describe chi chay khi TBD_MUI_GIO=tien). them-buoc-bao-dung.dom.tsx describe "qua-han-tien": khang dinh dau tien
+      timeZone === "Pacific/Kiritimati" (thong diep ghim "lenh khong chay o mui gio tien"). Dong ho ghim
+      2026-10-12T12:00:00Z (VN 2026-10-12 19:00; Kiritimati 2026-10-13 02:00). Du lieu: overdueTasks [], mySteps [buoc
+      hanD dueAt "2026-10-12"], quaHan { viec: 1, buoc: 0 }. Ma tran viet truoc: (1) dong buoc hanD KHONG mang dau qua han;
+      (2) [data-con-sot="1"]; (3) chuoi "và 1 việc quá hạn nữa" co mat. Doi chung duong cung dong ho: buoc han
+      "2026-10-11" -> dong do mang dau qua han.
+      CHIEU DO: ban sao buocQuaHan so theo ngay dia phuong -> dong 2 do voi thong diep ghim
+      "buoc chua qua han theo ngay VN bi tru khoi con sot".
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tbd_hoi_quy
+    paths:
+      - "_acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs"
+      - "apps/api/test/dieu-phoi-va.spec.ts"
+      - "apps/app/test/dieu-phoi-va.dom.tsx"
+      - "apps/app/test/han-viec.dom.tsx"
+      - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
+      - "apps/app/test/may-nhac.dom.tsx"
+      - "apps/app/test/ke-hoach-sheet.dom.tsx"
+    expected: |
+      rang/khong-xoa-expect.mjs (khuon cua dieu-phoi-va; TEP = sau tep tren; --moc bat buoc; CHO_PHEP dung mot cau
+      expect(khongCo.getStatus()).toBe(400)) --tu-thu roi --moc 3a2783409. Ba kiem tren moi tep so voi moc: (i) moi cau
+      expect( o moc con nguyen (chuan hoa khoang trang ngoai chuoi) tru cau CHO_PHEP; (ii) so lan xuat hien .skip( .todo(
+      .only( khong tang; (iii) khoi describe("bo-phan-hong" cua apps/api/test/dieu-phoi-va.spec.ts giong moc tung dong sau
+      khi thay dong CHO_PHEP bang dong 404. Tu-thu ghim DANH TINH tung ca: hai cau bi sua la dung hai cau da biet (so ca
+      chuoi), cau CHO_PHEP khong tinh sai, them .skip( bi bat, sua mot dong fixture trong khoi bo-phan-hong bi bat. Roi
+      chay that apps/api/test/dieu-phoi-va.spec.ts (qua bun run test), nam tep DOM o TZ=Asia/Ho_Chi_Minh, roi
+      bun run check-types. Exit 0 = ca ba kiem sach, moi tep xanh, kieu xanh.
+      CHIEU DO: tu-thu bo dong CHO_PHEP -> exit 2 voi thong diep ghim "tu-thu: mong 2 sai"; tu-thu khong bat .skip ->
+      exit 2 voi thong diep ghim "tu-thu: khong bat .skip".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbd_khu_hoi
+    paths:
+      - "apps/api/src/dashboard/dashboard.service.ts"
+      - "packages/validation/src/ngay-vn.ts"
+      - "apps/api/test/them-buoc-bao-dung.spec.ts"
+    expected: |
+      Lenh chay hai lan cung tep: TZ=America/Los_Angeles roi TZ=Pacific/Kiritimati, TBD_KHU_HOI=1, loc -t qua-han-khu-hoi.
+      them-buoc-bao-dung.spec.ts describe "qua-han-khu-hoi": khang dinh dau tien mui gio tien trinh khac Asia/Ho_Chi_Minh
+      va bang bien TZ cua lenh (ghim "khu hoi chay o mui gio VN"). Gieo qua Prisma mot nguoi A, mot ke hoach mo, hai
+      OnboardingStep giao A: han = dauNgayVN(dongHo) - 1 ngay va han = dauNgayVN(dongHo) + 1 gio. Hai dong ho ghim viet
+      truoc: 2026-10-12T17:05:00Z (VN 00:05 ngay 13) va 2026-10-12T16:55:00Z (VN 23:55 ngay 12). Moi dong ho: goi that
+      DashboardService.summary cua A, roi dua dung mang mySteps tra ve vao ham quaHanTheoNgayVN(dueAt, dongHo)
+      (@crm/validation/ngay-vn — cung ham buocQuaHan cua dong-buoc.tsx goi). Khang dinh quan he: so buoc ham app coi la qua han ===
+      quaHan.buoc cua cung lan goi (ma tran 2 dong ho x 2 mui gio = 4 khang dinh, moi khang dinh mang ten dong ho va
+      mui gio). Doi chung duong: quaHan.buoc === 1 o ca hai dong ho (cot may chu khong rong).
+      CHIEU DO: ban sao quaHanTheoNgayVN so theo ngay dia phuong (toDay) -> khang dinh o Los_Angeles 00:05 do voi thong diep
+      ghim "app va may chu dem qua han theo hai ngay khac nhau".
+
+  - id: E10
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tbd_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs / mot-luot.sh); đăng nhập theo bộ mẫu; mỗi khổ một tiến trình con"
+      - "Ở 1440 và 390: chặn mọi yêu cầu tRPC có onboarding.listDepartments (trả lỗi cho đúng mục đó, các mục khác của lô đi qua); mở bản ghi một kế hoạch mở không bước, bấm «Thêm bước» (ST-them-buoc-loi-phong-ban); mở bản ghi một kế hoạch có bước, bấm «Thêm bước ở phòng ban khác» (ST-them-buoc-khac-loi-phong-ban); gỡ chặn, bấm thử lại (ST-them-buoc-thu-lai-xong); chụp ảnh khung nhìn mỗi trạng thái"
+    expected: "exit 0; 6 ảnh (3 trạng thái × 2 khổ) trong _acceptance/them-buoc-bao-dung/evidence/; mỗi trạng thái in 'dat': vùng lỗi «Không tải được danh sách phòng ban» nhìn thấy và nút thử lại nằm trong khung nhìn, trang không cuộn ngang (scrollWidth <= clientWidth); sau thử lại ô chọn «Phòng ban» hiện."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/components/crm/record-sheet/plan-steps.tsx", "apps/app/lib/messages/onboarding.ts", "_acceptance/them-buoc-bao-dung/rang/man.mjs"]
+
+  - id: E11
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tbd_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng; gieo cho người đăng nhập qua Prisma trong phiên đo"
+      - "Chọn múi giờ trang theo giờ VN lúc đo: VN trước 18:00 → Pacific/Pago_Pago (ngày địa phương lùi), bước hạn hôm qua giờ VN (quá hạn theo máy chủ); VN từ 17:00 → Pacific/Kiritimati (ngày địa phương tiến), bước hạn hôm nay giờ VN và một việc quá hạn khác. Ở 1440 và 390: page.emulateTimezone rồi mở Tổng quan (ST-qua-han-con-sot): dòng bước mang dấu quá hạn đúng theo ngày VN, dòng «và N việc quá hạn nữa» có hay vắng đúng như AC-6 (lùi) hoặc AC-7 (tiến); chụp ảnh"
+    expected: "exit 0; 2 ảnh trong _acceptance/them-buoc-bao-dung/evidence/; in múi giờ đã chọn và 'dat'; dấu quá hạn của dòng bước và dòng «nữa» khớp ngày VN."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/app/(app)/[slug]/dashboard-summary.tsx", "apps/app/app/(app)/[slug]/dong-buoc.tsx", "packages/validation/src/ngay-vn.ts", "_acceptance/them-buoc-bao-dung/rang/man.mjs"]
