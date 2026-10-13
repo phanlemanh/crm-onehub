@@ -21,7 +21,8 @@
 		"apps/app/lib/lo-trinh/doc-du-lieu.js",
 		"tools/oxlint/anti-slop/**",
 		"lib/**",
-		"scripts/**"
+		"scripts/**",
+		"dieu-phoi/scripts/**"
 	],
 	"rules": {
 		"anti-slop/no-chained-type-assertions": "error",

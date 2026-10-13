@@ -210,6 +210,7 @@ const en = {
 		addStep: "Add a step",
 		addStepOtherDepartment: "Add a step in another department",
 		pickDepartment: "Department",
+		loiPhongBan: "Couldn't load departments",
 		newStepLabel: "What needs doing",
 		newStepDue: "Due",
 		save: "Add",
@@ -448,6 +449,7 @@ type OnboardingMessages = {
 		addStep: string;
 		addStepOtherDepartment: string;
 		pickDepartment: string;
+		loiPhongBan: string;
 		newStepLabel: string;
 		newStepDue: string;
 		save: string;
@@ -715,6 +717,7 @@ const vi = {
 		addStep: "Thêm bước",
 		addStepOtherDepartment: "Thêm bước ở phòng ban khác",
 		pickDepartment: "Phòng ban",
+		loiPhongBan: "Không tải được danh sách phòng ban",
 		newStepLabel: "Việc cần làm",
 		newStepDue: "Hạn",
 		save: "Thêm",

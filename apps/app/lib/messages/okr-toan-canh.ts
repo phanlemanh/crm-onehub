@@ -6,6 +6,8 @@ const vi = {
 		canChinh: "Cây căn chỉnh toàn công ty",
 		chuaCanChinh: "Chưa căn chỉnh vào đâu",
 		cungHien: "cũng hiện ở chỗ góp kia",
+		locTatCa: "Tất cả",
+		locRong: "Không có mục tiêu nào ở mức này trong chu kỳ.",
 	},
 	loc: {
 		phuTrach: "Người phụ trách",
@@ -208,6 +210,8 @@ const en: OkrToanCanhMessages = {
 		canChinh: "Company-wide alignment tree",
 		chuaCanChinh: "Not aligned anywhere",
 		cungHien: "also shown where it contributes",
+		locTatCa: "All",
+		locRong: "No objectives at this level in the cycle.",
 	},
 	loc: {
 		phuTrach: "Owner",
