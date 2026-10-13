@@ -4,6 +4,7 @@ So với merge-base b4e725860. Hồ sơ ở cột phải ghim lại ở đuôi v
 
 | Tệp bài | Hồ sơ đã ký |
 |---|---|
+| _acceptance/kho-nguon-khong-ket/rang/dem-ket.spec.ts | kho-nguon-khong-ket |
 | apps/agent/test/ai-bao-tran.integration.spec.ts | tro-ly-okr-nen |
 | apps/agent/test/tai-lieu-nguon-mo-coi.integration.spec.ts | kho-nguon-khong-ket |
 | apps/agent/test/tro-ly-okr-nhac-tom-tat.integration.spec.ts | tro-ly-okr-tom-tat |
