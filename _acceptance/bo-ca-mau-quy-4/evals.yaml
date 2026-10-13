@@ -14,7 +14,7 @@ evals:
     executor: test
     cmd: config:executors.test.bcq4_ng
     paths: [apps/api/scripts/okr-mau/ca-quy-4.ts, apps/api/scripts/okr-mau/nhan-ca-quy-4.json, apps/api/test/okr-ca-quy-4.spec.ts]
-    expected: "exit 0; với mỗi dòng nhãn bo ng, bài tự giải đích căn chỉnh từ bộ đã parse (canChinh.mucTieu, hoặc mục tiêu chứa KR canChinh.kr) và so toEqual capTren.mucTieu + capTren.krs với mục tiêu OneHub đó; kyVong.khongDuoc chứa chep-kr-cap-tren và noi-ve-nguoi. Ca ca-ng-q4-nhan-su-1 có capTren là n3 (căn chỉnh qua KR n3-k1). CHIỀU ĐỎ: bản sao bộ mẫu đổi canChinh của q4-nhan-su-1 sang KR n1-k1 → capTren sinh ra là n1, bài khẳng định khác n3 ghim «ca-ng-q4-nhan-su-1 capTren»."
+    expected: "exit 0; với mỗi dòng nhãn bo ng, bài tự giải đích căn chỉnh từ bộ đã parse (canChinh.mucTieu, hoặc mục tiêu chứa KR canChinh.kr) và so toEqual capTren.mucTieu + capTren.krs với mục tiêu OneHub đó; kyVong.khongDuoc chứa chep-kr-cap-tren và noi-ve-nguoi. Ca ca-ng-q4-nhan-su-1 có capTren là n3 (căn chỉnh qua KR n3-k1). ĐỐI CHỨNG ÂM: q4-kd-bac-2 căn chỉnh vào n1-k1 nhưng không có dòng nhãn ng → không có ca-ng-q4-kd-bac-2 trong kết quả sinh (khẳng định vắng theo id). CHIỀU ĐỎ: bản sao bộ mẫu đổi canChinh của q4-nhan-su-1 sang KR n1-k1 → capTren sinh ra là n1, bài khẳng định khác n3 ghim «ca-ng-q4-nhan-su-1 capTren»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3

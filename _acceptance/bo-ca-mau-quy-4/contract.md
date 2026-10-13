@@ -5,7 +5,9 @@ slug: bo-ca-mau-quy-4
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, agent-eval]
-status: draft
+status: approved
+veto_state: mo
+veto_opened_at: 2026-10-13T00:48:04Z
 design_doc: docs/superpowers/specs/2026-10-13-bo-ca-mau-quy-4-design.md
 ---
 
@@ -27,8 +29,8 @@ mục N1 · `docs/reports/2026-09-26-tro-ly-okr/12-kien-truc-va-lo-trinh.md` §4
 
 ## Criteria
 
-- AC-1: Given `apps/api/scripts/okr-mau/cong-ty.json` và tệp nhãn `nhan-ca-quy-4.json`, When chạy `bun run okr:ca-quy-4`, Then thư mục `apps/agent/evals/okr/ca-gop-y/quy-4/` có đúng một ca `viet-lai` mã `ca-<ma>` cho mỗi mục tiêu quý 4 cấp bộ phận hay phòng ban đã công bố và mỗi mục tiêu cấp OneHub của năm — không ca nào cho mục tiêu nháp, chờ duyệt hay đã bỏ; And mỗi ca chép đúng chữ và số của mục tiêu nguồn: tên, «vì sao lúc này», kiểu mục tiêu, cấp, tên đơn vị, và từng KR (tên, kiểu, khởi điểm, đích, đơn vị) theo thứ tự.
-- AC-2: Given dòng nhãn `bo: "ng"` cho một mục tiêu phòng ban, When sinh ca, Then có ca `ca-ng-<ma>` mà `capTren` là mục tiêu OneHub nó căn chỉnh vào — trực tiếp, hay qua KR OneHub nó căn chỉnh — với đủ KR của mục tiêu OneHub đó, và `kyVong.khongDuoc` gồm `chep-kr-cap-tren`, `noi-ve-nguoi`.
+- AC-1: Given `apps/api/scripts/okr-mau/cong-ty.json` và tệp nhãn `nhan-ca-quy-4.json`, When chạy `bun run okr:ca-quy-4`, Then thư mục `apps/agent/evals/okr/ca-gop-y/quy-4/` có đúng một ca `viet-lai` mã `ca-<ma>` cho mỗi mục tiêu quý 4 cấp bộ phận hay phòng ban đã công bố và mỗi mục tiêu cấp OneHub của năm — không ca nào cho mục tiêu nháp, chờ duyệt hay đã bỏ; And mỗi ca chép đúng chữ và số của mục tiêu nguồn: tên, «vì sao lúc này», loại mục tiêu, cấp, tên đơn vị, và từng KR (tên, kiểu, khởi điểm, đích, đơn vị) theo thứ tự.
+- AC-2: Given dòng nhãn `bo: "ng"` cho một mục tiêu phòng ban, When sinh ca, Then có ca `ca-ng-<ma>` mà `capTren` là mục tiêu OneHub nó căn chỉnh vào — trực tiếp, hay qua KR OneHub nó căn chỉnh — với đủ KR của mục tiêu OneHub đó, và `kyVong.khongDuoc` gồm `chep-kr-cap-tren`, `noi-ve-nguoi`. And mục tiêu phòng ban không có dòng nhãn `ng` thì không có ca `ca-ng-<ma>`, kể cả khi nó có căn chỉnh.
 - AC-3: Given một bản sao nhãn hỏng — thiếu dòng cho một mục tiêu được chọn; trỏ mã không có hay mục tiêu nháp; hai dòng cùng ca; đòi ca NG cho mục tiêu không căn chỉnh; `kyVong` trái khuôn `caGopY` — When chạy lệnh sinh, Then mỗi ca thoát mã 4 với câu nêu mã mục tiêu và chỗ hỏng, và thư mục đích không đổi tệp nào.
 - AC-4: Given bộ ca đã nằm trong git, When so với kết quả sinh lại từ `cong-ty.json` và nhãn hiện tại, Then từng tệp giống từng byte và không thừa, không thiếu tệp; And sinh vào một thư mục đang có tệp ca cũ không còn nguồn thì tệp đó bị xoá.
 - AC-5: Given bộ ca quý 4, When đọc bằng `docBoCaGopY`, Then có từ 28 tới 34 ca, đủ ba mục tiêu OneHub, hai bộ phận và mười phòng ban mẫu; ít nhất bốn ca NG; ít nhất ba ca `khongGopY`; mọi KR qua `krInput` và `kiemSoTheoKieu`; không mã ca nào trùng bộ `mau/`; And nhãn của từng ca đúng bảng «Nhãn» của design doc.
