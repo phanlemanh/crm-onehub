@@ -1,5 +1,6 @@
 import { type LoaiNhacAi, type ViecAi, viecAiCanNhac } from "./ai-nhac";
 import type { Db } from "./client";
+import { TrangThaiViec } from "./generated/prisma/enums";
 import { type LoaiNhacOkr, type ViecOkr, viecOkrCanNhac } from "./okr-nhac";
 import { type ViecTomTat, viecTomTatCanNhac } from "./okr-tom-tat";
 import {
@@ -8,6 +9,14 @@ import {
 	viecTaiLieuCanNhac,
 } from "./tai-lieu-nhac";
 import { docDuocDoiTac } from "./vai-doi-tac";
+import {
+	banGhiCua,
+	CHON_GAN,
+	LOAI_NHAC_VIEC,
+	type LoaiNhacViec,
+	ngayHan,
+	TRANG_THAI_MO,
+} from "./viec";
 import { WORKSPACE_ID } from "./workspace";
 
 export const LOAI_NHAC = [
@@ -25,6 +34,7 @@ export const THU_TU_NHAC = [
 	"okr-tra-lai",
 	"okr-hoi-y-gop",
 	...LOAI_NHAC,
+	...LOAI_NHAC_VIEC,
 	"okr-kr-im",
 	"okr-duoc-giao",
 	"okr-nhac-ten",
@@ -41,6 +51,7 @@ export const THU_TU_NHAC = [
 	| LoaiNhacTaiLieu
 	| ViecTomTat["loai"]
 	| LoaiNhacAi
+	| LoaiNhacViec
 )[];
 
 type ThieuThuTu = Exclude<ViecNhac["loai"], (typeof THU_TU_NHAC)[number]>;
@@ -61,7 +72,7 @@ const PHUT_MOI_GIO = 60;
 
 const PHUT_MS = 60 * 1000;
 
-const DAY_MS = 24 * PHUT_MOI_GIO * PHUT_MS;
+export const DAY_MS = 24 * PHUT_MOI_GIO * PHUT_MS;
 
 const dinhNgay = new Intl.DateTimeFormat("en-CA", {
 	timeZone: NHAC.muiGio,
@@ -174,12 +185,26 @@ export type ViecKeHoach = {
 	targetDays?: number;
 };
 
+export type NhacViec = {
+	loai: LoaiNhacViec;
+	viecId: string;
+	tieuDe: string;
+	han?: string;
+	soNgay?: number;
+	banGhi: string | null;
+};
+
 export type ViecNhac =
 	| ViecKeHoach
+	| NhacViec
 	| ViecOkr
 	| ViecTaiLieu
 	| ViecTomTat
 	| ViecAi;
+
+export function laNhacViec(v: ViecNhac): v is NhacViec {
+	return (LOAI_NHAC_VIEC as readonly string[]).includes(v.loai);
+}
 
 function docKeHoach(db: Db, userId: string | undefined) {
 	return db.onboardingPlan.findMany({
@@ -309,8 +334,88 @@ function guiCua(k: KeHoach, thanhVien: Set<string>, now: Date): Gui[] {
 	return [...theoBuoc, ...theoKeHoach].filter((g) => thanhVien.has(g.userId));
 }
 
+function docViec(db: Db, userId: string | undefined) {
+	return db.viec.findMany({
+		where: {
+			trangThai: { in: [...TRANG_THAI_MO] },
+			OR: userId
+				? [{ nguoiThucHienId: userId }, { nguoiGiaoId: userId }]
+				: undefined,
+		},
+		select: {
+			id: true,
+			tieuDe: true,
+			trangThai: true,
+			hanNgay: true,
+			nguoiGiaoId: true,
+			nguoiThucHienId: true,
+			gan: { select: CHON_GAN, orderBy: { taoLuc: "asc" }, take: 1 },
+		},
+	});
+}
+
+type ViecDoc = Awaited<ReturnType<typeof docViec>>[number];
+
+type GuiViec = { userId: string; viec: NhacViec };
+
+function guiViec(v: ViecDoc, thanhVien: Set<string>, now: Date): GuiViec[] {
+	const dau = v.gan[0];
+	const chung = {
+		viecId: v.id,
+		tieuDe: v.tieuDe,
+		han: v.hanNgay ? ngayHan(v.hanNgay) : undefined,
+		banGhi: dau ? banGhiCua(dau).ten : null,
+	};
+	const ra: GuiViec[] = [];
+	if (
+		v.trangThai === TrangThaiViec.CHO_DANH_GIA &&
+		v.nguoiGiaoId !== v.nguoiThucHienId
+	) {
+		ra.push({
+			userId: v.nguoiGiaoId,
+			viec: { ...chung, loai: "viec-cho-danh-gia" },
+		});
+	}
+	if (v.hanNgay !== null) {
+		const conLai = soNgayVN(now, v.hanNgay);
+		if (conLai < 0) {
+			ra.push({
+				userId: v.nguoiThucHienId,
+				viec: { ...chung, loai: "viec-qua-han", soNgay: -conLai },
+			});
+		} else if (
+			v.trangThai !== TrangThaiViec.CHO_DANH_GIA &&
+			conLai <= NHAC.sapHanNgay
+		) {
+			ra.push({
+				userId: v.nguoiThucHienId,
+				viec: { ...chung, loai: "viec-sap-han", soNgay: conLai },
+			});
+		}
+	}
+	return ra.filter((g) => thanhVien.has(g.userId));
+}
+
+function gomViec(gui: GuiViec[]): Map<string, NhacViec[]> {
+	const ra = new Map<string, NhacViec[]>();
+	for (const g of gui) {
+		const ds = ra.get(g.userId) ?? [];
+		if (!ds.some((v) => v.loai === g.viec.loai && v.viecId === g.viec.viecId)) {
+			ds.push(g.viec);
+		}
+		ra.set(g.userId, ds);
+	}
+	return ra;
+}
+
 function soSanh(a: ViecNhac, b: ViecNhac): number {
 	const theoLoai = THU_TU_NHAC.indexOf(a.loai) - THU_TU_NHAC.indexOf(b.loai);
+	if (theoLoai === 0 && "viecId" in a && "viecId" in b) {
+		return (
+			(a.han ?? "~").localeCompare(b.han ?? "~") ||
+			a.viecId.localeCompare(b.viecId)
+		);
+	}
 	if (theoLoai !== 0 || !("planId" in a) || !("planId" in b)) return theoLoai;
 	return (
 		(a.han ?? "").localeCompare(b.han ?? "") || a.planId.localeCompare(b.planId)
@@ -342,6 +447,7 @@ function gop(
 	taiLieu: Map<string, ViecTaiLieu[]>,
 	tomTat: Map<string, ViecTomTat[]>,
 	ai: Map<string, ViecAi[]>,
+	viecGiao: Map<string, NhacViec[]>,
 	thanhVien: Set<string>,
 ): Map<string, ViecNhac[]> {
 	const nguoi = [
@@ -351,6 +457,7 @@ function gop(
 			...taiLieu.keys(),
 			...tomTat.keys(),
 			...ai.keys(),
+			...viecGiao.keys(),
 		]),
 	].filter((u) => thanhVien.has(u));
 	return new Map(
@@ -361,6 +468,7 @@ function gop(
 				...(taiLieu.get(userId) ?? []),
 				...(tomTat.get(userId) ?? []),
 				...(ai.get(userId) ?? []),
+				...(viecGiao.get(userId) ?? []),
 			];
 			return [userId, ds.sort(soSanh)];
 		}),
@@ -371,26 +479,28 @@ export async function viecCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecNhac[]>> {
-	const [keHoach, thanhVien, okr, taiLieu, tomTat, ai] = await Promise.all([
-		docKeHoach(db, chon.userId),
-		db.member.findMany({
-			where: {
-				organizationId: WORKSPACE_ID,
-				userId: chon.userId,
-			},
-			select: { userId: true, role: true },
-		}),
-		viecOkrCanNhac(db, chon),
-		viecTaiLieuCanNhac(db, chon),
-		chon.cuaSo === "buoi-sang"
-			? viecTomTatCanNhac(db, {
-					now: chon.now,
+	const [keHoach, thanhVien, okr, taiLieu, tomTat, ai, viecGiao] =
+		await Promise.all([
+			docKeHoach(db, chon.userId),
+			db.member.findMany({
+				where: {
+					organizationId: WORKSPACE_ID,
 					userId: chon.userId,
-					cuaSo: "buoi-sang",
-				})
-			: new Map<string, ViecTomTat[]>(),
-		viecAiCanNhac(db, chon),
-	]);
+				},
+				select: { userId: true, role: true },
+			}),
+			viecOkrCanNhac(db, chon),
+			viecTaiLieuCanNhac(db, chon),
+			chon.cuaSo === "buoi-sang"
+				? viecTomTatCanNhac(db, {
+						now: chon.now,
+						userId: chon.userId,
+						cuaSo: "buoi-sang",
+					})
+				: new Map<string, ViecTomTat[]>(),
+			viecAiCanNhac(db, chon),
+			docViec(db, chon.userId),
+		]);
 	const tap = new Set(thanhVien.map((m) => m.userId));
 	const tapDoiTac = new Set(
 		thanhVien.filter((m) => docDuocDoiTac(m.role)).map((m) => m.userId),
@@ -401,6 +511,7 @@ export async function viecCanNhac(
 		taiLieu,
 		tomTat,
 		ai,
+		gomViec(viecGiao.flatMap((v) => guiViec(v, tapDoiTac, chon.now))),
 		tap,
 	);
 }

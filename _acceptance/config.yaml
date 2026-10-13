@@ -1573,6 +1573,25 @@ executors:
     lqc_chu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-chu"
     lqc_ban_phim: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-ban-phim"
     lqc_cap_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
+    vc_tao: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-tao"'
+    vc_gan: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-gan"'
+    vc_trang_thai: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-trang-thai"'
+    vc_sua: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-sua"'
+    vc_vong_doi: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-vong-doi"'
+    vc_vai_okr: 'bun run test -- "cd apps/api && bun test test/viec-quyen.spec.ts -t vc-vai-okr"'
+    vc_xem: 'bun run test -- "cd apps/api && bun test test/viec-quyen.spec.ts -t vc-xem"'
+    vc_cua_toi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-cua-toi.spec.ts"'
+    vc_chuyen: 'bun run test -- "cd apps/api && bun test test/viec-chuyen.spec.ts"'
+    vc_thuoc: 'bun run test -- "cd apps/api && bun test test/viec-do-nguong.spec.ts"'
+    vc_gieo: 'bun run test -- "cd packages/db && bun test test/viec-gieo.spec.ts"'
+    vc_nhac: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/nhac-viec.integration.spec.ts -t vc-nhac"'
+    vc_nhac_vai_okr: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/nhac-viec.integration.spec.ts -t vc-nhac-vai-okr"'
+    vc_xong_n: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/nhac-viec.integration.spec.ts -t vc-xong-n"'
+    vc_man_cua_toi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-cua-toi.dom.tsx -t vc-man-co-viec"
+    vc_man_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-cua-toi.dom.tsx -t vc-man-trang-thai"
+    vc_man_khung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-khung.dom.tsx"
+    vc_man_o_soan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-o-soan.dom.tsx -t 'vc-o-soan-giao|vc-o-soan-loi'"
+    vc_man_chuyen: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-chuyen-hop.dom.tsx"
   script:
     lqc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lien-quan-loc-ban-da-cat/rang/man.mjs"'
     lqc_san_thiet_ke: 'for t in apps/app/components/crm/record-sheet/record-parts.tsx apps/app/components/crm/record-sheet/company-sheet.tsx apps/app/components/crm/record-sheet/contact-sheet.tsx apps/app/components/crm/record-sheet/deal-sheet.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
@@ -2467,6 +2486,9 @@ executors:
     cgdp_goi_dot: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-dot.mjs
     cgdp_thay_boi: bun _acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs
     cgdp_khong_do_them: bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
+    vc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-chung/rang/man.mjs"'
+    vc_san_thiet_ke: node _acceptance/viec-chung/rang/san-thiet-ke.mjs
+    vc_dot_bien: node _acceptance/viec-chung/rang/dot-bien.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

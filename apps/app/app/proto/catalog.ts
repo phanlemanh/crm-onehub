@@ -1106,6 +1106,41 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-them-nhanh-hoi", nhan: "Thêm nhanh — hỏi lại khi lỡ đóng" },
 		],
 	},
+	{
+		slug: "viec-chung",
+		ten: "Việc chung — Việc của tôi, khung việc, khối Việc trên thẻ Hoạt động",
+		states: [
+			{ id: "ST-viec-cua-toi-co-viec", nhan: "Việc của tôi — có việc" },
+			{ id: "ST-viec-cua-toi-cho-tai", nhan: "Việc của tôi — đang tải" },
+			{ id: "ST-viec-cua-toi-rong", nhan: "Việc của tôi — chưa có việc" },
+			{ id: "ST-viec-cua-toi-loi", nhan: "Việc của tôi — tải hỏng" },
+			{
+				id: "ST-khung-viec-nguoi-thuc-hien",
+				nhan: "Khung việc — người thực hiện",
+			},
+			{
+				id: "ST-khung-viec-nguoi-giao-cho-danh-gia",
+				nhan: "Khung việc — người giao, việc chờ đánh giá",
+			},
+			{ id: "ST-khung-viec-chi-xem", nhan: "Khung việc — người theo dõi" },
+			{ id: "ST-khung-viec-lich-su", nhan: "Khung việc — thẻ Lịch sử" },
+			{ id: "ST-khung-viec-da-khep", nhan: "Khung việc — đã xong" },
+			{ id: "ST-o-soan-viec", nhan: "Ô soạn — giao việc từ thoả thuận" },
+			{ id: "ST-o-soan-viec-loi", nhan: "Ô soạn — giao hỏng" },
+			{
+				id: "ST-khoi-viec-ban-ghi",
+				nhan: "Thẻ Hoạt động — khối Việc ghim đầu thẻ (máy khuyên)",
+			},
+			{
+				id: "ST-khoi-viec-ban-ghi-rong",
+				nhan: "Thẻ Hoạt động — bản ghi chưa có việc",
+			},
+			{
+				id: "ST-khoi-viec-phuong-an-tron",
+				nhan: "Thẻ Hoạt động — lối khác: trộn việc vào dòng sự kiện",
+			},
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

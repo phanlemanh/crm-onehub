@@ -3,6 +3,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 const en = {
 	rail: {
 		overview: "Overview",
+		viec: "My work",
 		chat: "Chat",
 		companies: "Companies",
 		contacts: "Contacts",
@@ -69,6 +70,7 @@ export type KhungUngDungMessages = typeof en;
 const vi = {
 	rail: {
 		overview: "Tổng quan",
+		viec: "Việc của tôi",
 		chat: "Hội thoại",
 		companies: "Công ty",
 		contacts: "Cá nhân",

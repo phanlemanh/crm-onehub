@@ -9,6 +9,7 @@ import {
 } from "@crm/db";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { caNhanCoSo, caNhanTrungSo } from "@crm/db/so-dien-thoai";
+import { ghiGoDoXoa } from "@crm/db/viec-ghi";
 import {
 	docSoDienThoai,
 	hienThiSoDienThoai,
@@ -476,6 +477,8 @@ export class ContactsService {
 
 				await tx.agentTask.deleteMany({ where: { contactId: id } });
 				await tx.agentEvent.deleteMany({ where: { contactId: id } });
+
+				await ghiGoDoXoa(tx, { contactId: id }, new Date());
 
 				const contact = await tx.contact.delete({
 					where: { id },
