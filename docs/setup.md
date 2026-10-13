@@ -114,9 +114,62 @@ production (mục dưới), nên nạp vào đó là nạp vào production. Bả
 khi nó có cơ sở dữ liệu và api riêng.
 
 **Ca góp ý của Trợ lý OKR:** 30 ca mẫu ở `apps/agent/evals/okr/ca-gop-y/mau/`, mỗi tệp
-một ca, khuôn `@crm/validation/okr-ca-gop-y`. Ca thật của N1 — OKR thật đã thay tên —
+một ca, khuôn `@crm/validation/okr-ca-gop-y`. Ca thật — OKR thật đã thay tên người và đối tác —
 đặt ở `apps/agent/evals/okr/ca-gop-y/that/`, thư mục bị git bỏ qua; eval đọc cả hai
 bằng `docBoCaGopY(<thư mục>)`, nên đổi mẫu sang thật chỉ là đổi thư mục.
+
+**Bộ ca góp ý quý 4:** khoảng 30 ca rút từ chính OKR của bộ mẫu — mỗi mục tiêu đã công bố
+của quý 4 cấp bộ phận và phòng ban, mỗi mục tiêu OneHub của năm, cộng sáu ca kèm mục tiêu
+cấp trên — một mục tiêu phòng ban đi cùng mục tiêu OneHub nó căn chỉnh vào, để kiểm Kara không
+chép KR của cấp trên và không nhận xét về người. Ca nằm ở `apps/agent/evals/okr/ca-gop-y/quy-4/`, do
+máy sinh; phần viết tay duy nhất là tệp nhãn `apps/api/scripts/okr-mau/nhan-ca-quy-4.json`
+(điều Kara nên và không nên đề xuất cho từng mục tiêu).
+
+Chạy từ gốc kho (lệnh gốc chuyển tiếp sang `apps/api`; đường dẫn tương đối của `--nhan`,
+`--ra` tính từ `apps/api`):
+
+```
+bun run okr:ca-quy-4                         # sinh lại vào ca-gop-y/quy-4/
+bun run okr:ca-quy-4 -- --nhan <tệp> --ra <thư mục>
+```
+
+Thoát 0 khi sinh xong; thoát 4 khi nhãn hỏng — thiếu nhãn cho một mục tiêu, nhãn trỏ mục
+tiêu không có hay chưa công bố, nhãn trùng, đòi ca kèm cấp trên cho mục tiêu không căn chỉnh — và khi đó
+không tệp nào bị ghi. Lệnh xoá tệp ca cũ không còn nguồn. Đổi `cong-ty.json` hay tệp nhãn
+mà quên sinh lại thì bài `bcq4-dong-bo` (`apps/api/test/okr-ca-quy-4.spec.ts`) đỏ và gọi tên
+tệp lệch.
+
+**Đo Kara trên một bộ ca:** eval góp ý đọc thư mục ca trong biến `TDX_THU_MUC_CA`; vắng hay
+rỗng thì đọc `mau/`. Lệnh đo dựng sẵn mọi thứ:
+
+```
+bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs                # bộ quý 4
+bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs --thu-muc apps/agent/evals/okr/ca-gop-y/that
+bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs --tu-kiem      # chỉ tự kiểm luật chấm, không gọi mô hình
+```
+
+Lệnh tự kiểm cách chấm trên các bản ghi giả cố ý sai, tạo một kho đo dùng-một-lần, nạp bộ
+mẫu, cho Kara góp ý trên từng ca bằng mô hình thật (mô hình chấm câu chữ có ZDR), rồi chấm
+từng ca bằng các luật kiểm bằng mã — việc đóng đúng, không số mới, câu đã tốt thì không viết
+lại, mỗi lỗi đã gán nhãn có dòng góp ý, ca kèm cấp trên không chép KR cấp trên và không nhắc
+tên người. Đây đúng là các luật mà lượt «Góp ý khi bấm» đã dùng để đo bộ `mau/` (30/30, điểm
+câu chữ 0,95). Lệnh in `ma: x/n · judge: y` (số ca qua mọi luật mã · điểm câu chữ trung bình)
+cạnh con số đó, ghi bảng từng ca rồi xoá kho. Với bộ quý 4, bảng ghi vào
+`_acceptance/bo-ca-mau-quy-4/evidence/do-gop-y-quy-4.md`; với bộ khác (`--thu-muc`), bảng ghi
+vào `.acceptance-runs/bo-ca-mau-quy-4/do/ket-qua.md`, thư mục git bỏ qua, để tên đơn vị và nội
+dung OKR thật không vào lịch sử git. Mỗi lượt đo có thêm một ca kiểm chứng cố ý gán sai («Gọi
+50 cuộc» được gán là câu đã tốt): luật «câu đã tốt thì không viết lại» phải đánh trượt ca này
+— Kara có đề xuất viết lại nó — nếu không thì phép đo không đáng tin. Cần khoá mô hình; tiền
+theo khoá local, trần `--tran-usd` (mặc định 2 USD). Mã thoát: 0 đo xong (số ca đạt là
+kết quả, không phải mã thoát), 1 tự kiểm luật chấm lệch, 2 không đo được (thiếu khoá, eve
+sập, ca thiếu bản ghi — thường vì chạm trần tiền — kể cả ca kiểm chứng), 3 ca kiểm chứng không
+bị luật «câu đã tốt» đánh trượt (trượt vì luật khác, như việc chưa đóng, cũng tính là 3).
+
+**Ca thật lúc bật góp ý:** đặt tệp cùng khuôn `@crm/validation/okr-ca-gop-y` vào
+`apps/agent/evals/okr/ca-gop-y/that/` rồi đo bằng `--thu-muc` như trên. Thư mục đó bị git
+bỏ qua vì là OKR thật của công ty — đã vào lịch sử git thì khó xoá; bảng kết quả của lượt
+đo đó cũng nằm ngoài git (xem trên). Điều kiện bật góp ý đọc từ con số của lượt đo đó, đặt cạnh
+con số của bộ `mau/`.
 
 ## Google Cloud
 
