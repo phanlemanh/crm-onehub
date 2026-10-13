@@ -151,13 +151,28 @@ xương cho trang và mục, vòng quay chỉ cho thao tác ngắn), là hệ bi
 | --- | --- |
 | `bang` | contacts, deals, companies, campaigns, onboarding, settings/api-keys, settings/sso, settings/members |
 | `danh-sach` | (agent-builder)/agents, settings/connections, settings/fields, settings/connections/slack/people, settings/giai-doan |
-| `the` | settings, settings/currencies, settings/tracking, settings/onboarding, settings/okr, settings/organization (cả `to-chuc.tsx`), reminders, settings/connections/oauth-connection-page, settings/connections/zalo, settings/connections/intake, settings/connections/slack |
-| `tong-quan` | `page.tsx` (Tổng quan), okr, okr/toan-canh, okr/toan-canh/suc-khoe, okr/theo-don-vi, okr/hoi-y |
-| `chi-tiet` | campaigns/[campaignId] (page và `campaign-detail.tsx`), tai-lieu/[trang], tai-lieu/[trang]/sua, tai-lieu/moi, tai-lieu/de-xuat/[id] |
+| `the` | settings, settings/currencies, settings/tracking, settings/onboarding (`cot={2}`), settings/okr, settings/organization (cả `to-chuc.tsx`), reminders, settings/connections/oauth-connection-page, settings/connections/zalo, settings/connections/intake, settings/connections/slack |
+| `tong-quan` | `page.tsx` (Tổng quan), okr, okr/toan-canh, okr/toan-canh/suc-khoe, okr/theo-don-vi, okr/hoi-y; campaigns/[campaignId] (page và `campaign-detail.tsx`, kèm `coTieuDe`) |
+| `chi-tiet` | tai-lieu/[trang], tai-lieu/[trang]/sua, tai-lieu/moi, tai-lieu/de-xuat/[id] |
 
 Danh sách Tài liệu đổi `DangTaiDanhSach` sang `KhungXuong hinh="bang"` và giữ tiêu đề trong `page.tsx`. Bảng này là
 nguồn của fixture `apps/app/test/fixtures/khung-man-chung-hinh.json`, sinh bằng `rang/sinh-bang-hinh.mjs` từ
 `git grep` ở 3a2783409 (38 tệp), không chép tay.
+
+## Round 2 (sau khi trả lại ở Cổng Bằng chứng, 13/10)
+
+- `KhungXuong` nhận `cot={2}` (chỉ có nghĩa với `the`: hai thẻ cạnh nhau từ `md`, như Điều phối 30 ngày) và
+  `coTieuDe` (thêm hàng tiêu đề giữ chỗ trước thân của bất kỳ hình nào). Chi tiết chiến dịch dùng `tong-quan`
+  kèm `coTieuDe`, vì thân của nó là hàng ô số và bảng thành viên, không phải đoạn chữ.
+- Một màn, một đầu trang: ở bốn màn bản ghi, `PageShellHeader` có breadcrumb của `page.tsx` chỉ nằm trong
+  fallback `Suspense`; khi tải xong, đầu trang của mã khách thay vào. Chiến dịch nhận breadcrumb từ `page.tsx`
+  làm prop để đầu trang tải xong (và đầu trang lúc lỗi) vẫn có «Chiến dịch». Đọc trang và Duyệt đề xuất giữ lối
+  về sẵn có của mình.
+- Chiến dịch chỉ dựng `VungTaiLoi` khi chưa có dữ liệu; làm mới nền lỗi thì giữ nội dung.
+- Bài quét chạy được trên bản tải nông của CI: thiếu commit 3a2783409 thì bỏ riêng phép so với `git grep`, in
+  một dòng, vẫn kiểm từng dòng bảng hình.
+- Bàn đo màn đỏ khi một hộp cần đo vắng thay vì cho qua.
+- Giai đoạn thoả thuận: dòng «không đủ quyền» dùng `PageShellNote`.
 
 ## Đo
 

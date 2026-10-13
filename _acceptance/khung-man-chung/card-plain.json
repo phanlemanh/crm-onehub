@@ -1,11 +1,120 @@
 {
-  "feature_plain": "Mở màn nào cũng thấy ngay tiêu đề và một khung xám cùng hình nội dung thay cho vòng quay; tải lỗi thì mọi màn cùng một khung có nút «Thử lại»; nút chính bị tắt thì có một dòng ngay dưới tiêu đề nói vì sao.",
-  "decisions": [
-    {
-      "id": "E12j",
-      "q": "Khung chờ của chiến dịch và Điều phối 30 ngày lệch hình nội dung — chấp nhận hay sửa?",
-      "why": "Hai trong năm cặp ảnh lệch: chiến dịch có khung đoạn chữ nhưng thân là ô số và bảng (AC-5 buộc khung chi-tiet), Điều phối 30 ngày có khung thẻ xếp dọc nhưng màn thật hai cột. Ba cặp còn lại và bốn ý khác của câu hỏi đều đạt."
-    }
-  ],
-  "analyst_plain": "Mọi eval mới của vòng này chưa từng tồn tại ở bản gốc nên không có lượt so với bản gốc; điều đó bình thường cho một vòng dựng mới."
+ "feature_plain": "Mở màn nào cũng thấy ngay tiêu đề và một khung xám cùng hình nội dung thay cho vòng quay; tải lỗi thì mọi màn cùng một khung có nút «Thử lại»; nút chính bị tắt thì có một dòng ngay dưới tiêu đề nói vì sao. Round 2 sửa năm lỗi round 1 để lộ.",
+ "will_do": [
+  {
+   "id": "AC-2",
+   "p": "Sẽ có năm kiểu khung chờ dùng chung, cộng kiểu hai thẻ cạnh nhau và một hàng tiêu đề giữ chỗ khi cần; trình đọc màn hình đọc «Đang tải…»."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho 38 màn đang quay vòng dùng khung chờ đúng hình nội dung, theo bảng máy sinh từ mã thật — chiến dịch nay là ô số và bảng, Điều phối 30 ngày là hai cột."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ giữ tiêu đề và câu mô tả hiện ngay khi mở màn, kể cả danh sách Tài liệu, Giai đoạn thoả thuận và năm thẻ OKR (hôm nay chỉ thấy vạch xám)."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ cho bốn màn bản ghi một dòng đường dẫn «Chiến dịch»/«Tài liệu» ngay lúc tải; chiến dịch giữ dòng đó cả khi tải xong lẫn khi tải lỗi."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ đổi bốn khung lỗi đang mỗi khung một kiểu (Onboarding, Toàn cảnh OKR, Tài liệu, OKR theo đơn vị) thành cùng một hình có nút «Thử lại»."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ xếp đầu trang trên điện thoại theo thứ tự tiêu đề → mô tả → nút ở mọi màn (hôm nay nút đứng trên câu mô tả)."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ cho Onboarding khi chưa có khuôn kế hoạch: nút «Kế hoạch mới» tắt kèm dòng lý do có liên kết tới Cài đặt › Khuôn, và màn chỉ còn một nút tô."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ cho hai mục của Nhắc buổi sáng tiêu đề mục chuẩn, trình đọc màn hình đọc đúng tên mục."
+  },
+  {
+   "id": "AC-13",
+   "p": "Sẽ thay sáu nút «Thêm…» mờ lúc đang tải (Liên hệ, Thoả thuận, Công ty, Chiến dịch, Khoá API, SSO) bằng một vạch xám cỡ nút."
+  },
+  {
+   "id": "AC-14",
+   "p": "Sẽ có thước đếm số khung lỗi tự dựng còn lại (hôm nay 23), con số lên gói Cổng Bằng chứng."
+  },
+  {
+   "id": "AC-16",
+   "p": "Sẽ cho mỗi màn bản ghi đúng một đầu trang ở mọi lúc — hết cảnh hai dòng dẫn đường chồng nhau ở Đọc trang và Duyệt đề xuất."
+  },
+  {
+   "id": "AC-17",
+   "p": "Sẽ cho bài kiểm của vòng chạy được trên máy kiểm thử của công ty (bản tải mã nông), không chặn gộp oan."
+  },
+  {
+   "id": "AC-18",
+   "p": "Sẽ cho công cụ chụp màn báo đỏ khi không tìm thấy phần tử cần đo, thay vì báo đạt."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ KHÔNG còn màn nào quay một vòng tròn giữa vùng trong lúc tải — thành phần vòng quay cũ bị xoá hẳn."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ KHÔNG để nút chính tắt mà im ở Tổ chức và SSO; dòng «không đủ quyền» ở Giai đoạn thoả thuận cũng cùng một hình."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ KHÔNG để dòng «Chưa bật lưu tệp nguồn» trôi lệch giữa các nút ở Tài liệu: nó dời xuống dưới tiêu đề, và khi không đọc được trạng thái thì cũng nói ra."
+  },
+  {
+   "id": "AC-15",
+   "p": "Sẽ KHÔNG thay trang chiến dịch đang xem bằng khung lỗi khi một lần làm mới ngầm thất bại."
+  },
+  {
+   "id": "OOS-1",
+   "p": "KHÔNG đổi khoảng 30 khung lỗi tự dựng khác (Cài đặt OKR, Tổ chức, Hỏi ý, Cập nhật tuần, khối bản ghi, Tác tử) — thành hàng NM1b ngay sau trong cùng dãy."
+  },
+  {
+   "id": "OOS-2",
+   "p": "KHÔNG đổi vòng quay nhỏ bên trong một mục đã có tiêu đề (bảng chiến dịch, danh sách trường, ngăn bản ghi, dòng thời gian, bảng rỗng đang tải)."
+  },
+  {
+   "id": "OOS-3",
+   "p": "KHÔNG đổi tiêu đề mục tự dựng ở Kết nối, Zalo, Slack và chi tiết chiến dịch."
+  },
+  {
+   "id": "OOS-4",
+   "p": "KHÔNG đụng lọc, kiểu xem (NM2) và màu trạng thái (NM3)."
+  }
+ ],
+ "scope_plain": "Phần để lại có chỗ đi tiếp: khung lỗi còn lại sang NM1b, lọc và màu sang NM2, NM3; năm mục ghi Known limits theo quyết định trả lại.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Đã quét mọi tổ hợp trạng thái màn (đang tải, lỗi tải, nút chính tắt, đã tải xong) × kiểu nội dung (bảng, danh sách, thẻ, tổng quan, chi tiết) × nguồn tiêu đề × khổ 1280/375; bằng chứng «đủ» là danh sách màn lấy từ chính mã ở bản gốc và luật đích của kho, đối chiếu mẫu chờ tải của IBM Carbon; mười bốn tiêu chí AC-1…AC-14 phủ phần lõi, «đã tải xong» được giữ bằng các bộ kiểm sẵn có."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Bản nháp từng để bốn màn bản ghi lúc tải không có chữ nào, và sáu nút «Thêm…» mờ không lý do. Đã sửa: thêm dòng đường dẫn về danh sách cha ở bốn màn đó, và thay nút mờ bằng vạch xám cỡ nút (thêm AC-13)."
+  },
+  {
+   "i": 1,
+   "p": "Máy đã tự chọn nút nào giữ tô ở Onboarding khi trống — đó là việc của anh. Đã đưa thành câu hỏi trên thẻ; anh trả lời qua giám sát là giữ nút tô ở đầu trang."
+  },
+  {
+   "i": 2,
+   "p": "Ảnh màn thật thiếu hai kiểu khung chờ, và không có phép đo màn «không nhảy khi tải xong». Đã thêm ảnh đang tải/tải xong cho sáu màn ở hai khổ, máy so vị trí hàng tiêu đề (lệch ≤ 4 px) và vùng nội dung (≤ 8 px)."
+  },
+  {
+   "i": 3,
+   "p": "Đầu trang ở màn rộng chỉ được kiểm qua tên lớp CSS, không đo vị trí thật. Đã thêm phép đo vị trí tiêu đề, nút, mô tả ở 1280 trên mọi ảnh, có lượt cố tình làm hỏng để chứng thước bắt được."
+  },
+  {
+   "i": 4,
+   "p": "Danh sách 38 màn từng chép tay và lệch số với lộ trình (39 so với 37). Đã cho máy sinh danh sách từ mã bản gốc, và ghi rõ 39 = 37 màn + 2 tệp định nghĩa vòng quay."
+  }
+ ]
 }

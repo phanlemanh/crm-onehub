@@ -12,15 +12,13 @@ evals:
       - "packages/ui/src/**/*.tsx"
       - "apps/app/test/khung-man-chung.spec.ts"
     expected: |
-      Bai quet ma doc cay that tu goc kho (suy goc tu vi tri tep test, khong hardcode). Ca
-      "khong-vong-quay": 0 tep .tsx duoi apps/app va packages/ui/src chua chuoi "PageShellLoading";
-      apps/app/components/page-shell-loading.tsx khong ton tai; moi fallback={...} cua <Suspense>
-      trong apps/app/app/**/page.tsx khong chua "<Spinner". Ma tran viet truoc: dem dung so page.tsx
-      co Suspense (in ra so), moi tep mot khang dinh. CHIEU DO (cung ham quet, chay tren ban sao
-      tam trong .acceptance-runs/khung-man-chung/): chen lai "import { PageShellLoading }" vao ban
-      sao contacts/page.tsx -> do ghim "kmc-quet: con PageShellLoading o contacts/page.tsx"; doi
-      fallback ban sao reminders/page.tsx thanh <Spinner /> -> do ghim
-      "kmc-quet: fallback Spinner o reminders/page.tsx".
+      Bai quet ma doc cay that tu goc kho (suy goc tu vi tri tep test). Ca "khong-vong-quay": 0 tep
+      .tsx duoi apps/app va packages/ui/src chua chuoi "PageShellLoading"; page-shell-loading.tsx khong
+      ton tai; moi fallback cua <Suspense> trong apps/app/app/**/page.tsx khong chua "<Spinner"; quan he:
+      tap page.tsx da quet chua MOI dong page.tsx cua bang hinh (khong chi so trang > 0), in so trang da
+      quet. CHIEU DO (cung ham quet, ban doc co chen loi): chen lai "import { PageShellLoading }" vao
+      contacts/page.tsx -> do ghim "kmc-quet: con PageShellLoading o contacts/page.tsx"; doi fallback
+      reminders/page.tsx thanh <Spinner /> -> do ghim "kmc-quet: fallback Spinner o reminders/page.tsx".
 
   - id: E2
     criterion: AC-2
@@ -32,14 +30,14 @@ evals:
       - "packages/ui/test/khung-xuong.dom.tsx"
     expected: |
       jsdom. Ma tran 5 hinh viet truoc, moi hinh: data-khung-xuong bang ten hinh, aria-busy="true",
-      phan ve aria-hidden="true", dung 1 phan tu role="status" co textContent "Đang tải…", va so
-      [data-slot=skeleton] dung bang: bang 1+1+8 hang (dem theo data-khung-hang), danh-sach 6,
-      the 2 the x 3 hang, tong-quan 4 o + 5 hang, chi-tiet 1 hang tieu de + 3 doan. Them 1 khang
-      dinh: 5 chuoi innerHTML doi mot khac nhau; va moi hinh co 0 phan tu tabbable (querySelectorAll
-      cua a[href], button, input, [tabindex]:not([tabindex="-1"]) tra 0). CHIEU DO: ban gia them
-      tabindex="0" vao mot vach -> do ghim "kmc-xuong: vach nhan tieu diem"; CHIEU DO: dung test voi mot KhungXuong gia tra
-      cung cay cho moi hinh -> do ghim "kmc-xuong: hai hinh trung cay"; ban gia bo role=status ->
-      do ghim "kmc-xuong: thieu dong Đang tải…".
+      phan ve aria-hidden="true", dung 1 phan tu role="status" co textContent "Đang tải…", so
+      [data-khung-hang] dung bang (bang 1+1+8, danh-sach 6, the 2 the x 3 hang, tong-quan 4 o + 5 hang,
+      chi-tiet 1 tieu de + 3 doan), 0 phan tu tabbable; 5 chuoi innerHTML doi mot khac nhau. Them: the
+      voi cot={2} co lop luoi hai cot tu md va van 2 the x 3 hang; moi hinh voi coTieuDe co dung 1
+      [data-khung-hang="tieu-de"] dung truoc phan than (compareDocumentPosition), hinh khong coTieuDe
+      (tru chi-tiet) co 0. CHIEU DO: vach co tabindex -> ghim "kmc-xuong: vach nhan tieu diem"; bo
+      role=status -> ghim "kmc-xuong: thieu dong Đang tải…"; tong-quan coTieuDe thieu hang tieu de ->
+      ghim "kmc-xuong: coTieuDe khong co hang tieu de".
 
   - id: E3
     criterion: AC-3
@@ -95,16 +93,16 @@ evals:
       - "apps/app/test/khung-man-chung.dom.tsx"
       - "apps/app/test/khung-man-chung.spec.ts"
     expected: |
-      Hai lop. Quet ma (kmc_quet ca "breadcrumb-chi-tiet"): 4 page.tsx (campaigns/[campaignId],
-      tai-lieu/[trang], tai-lieu/[trang]/sua, tai-lieu/de-xuat/[id]) dung PageShellHeader co prop
-      breadcrumb ngoai moi Suspense (TypeScript compiler API, dem dung 4). jsdom, tRPC gia theo hop
-      dong that cua truy van: CampaignDetail voi campaign.get dang cho -> [data-khung-xuong=chi-tiet]
-      co [data-khung-hang=tieu-de], khong [data-slot=spinner]; campaign.get tra TRPCError ->
-      [data-vung-tai-loi][data-trang-thai=ST-chiendich-loi], bam "Thử lại" -> refetch gia goi dung 1
-      lan; tra du lieu -> tieu de bang ten chien dich (doi chung duong chay truoc ca loi). CHIEU DO:
-      ban sao campaign-detail.tsx de nhanh loi roi vao khung xuong -> do ghim
-      "kmc-chi-tiet: loi van hien khung xuong"; ban sao campaigns/[campaignId]/page.tsx boc
-      breadcrumb vao Suspense -> do ghim "kmc-quet: breadcrumb campaigns/[campaignId] trong Suspense".
+      Hai lop. Quet ma (ca "breadcrumb-chi-tiet", TypeScript compiler API): o 4 page.tsx, cay luc tai
+      (moi Suspense hien fallback) co PageShellHeader mang breadcrumb; campaigns/[campaignId] dung
+      KhungXuong hinh="tong-quan" co coTieuDe, ba trang tai lieu dung hinh="chi-tiet". jsdom, tRPC gia
+      theo hop dong that: CampaignDetail voi campaigns.byId treo -> khong [data-slot=spinner]; tra loi khi
+      chua co du lieu -> [data-vung-tai-loi][data-trang-thai=ST-chiendich-loi] va dau trang co breadcrumb
+      «Chiến dịch»; bam "Thử lại" -> refetch goi dung 1 lan; co du lieu -> tieu de bang ten chien dich va
+      breadcrumb «Chiến dịch» van dung. CHIEU DO: ban doc campaigns/[campaignId]/page.tsx doi coTieuDe
+      thanh khong co -> ghim "kmc-quet: campaigns/[campaignId]/page.tsx thieu coTieuDe"; CampaignDetail
+      khong nhan breadcrumb -> ghim "kmc-chi-tiet: dau trang chien dich mat breadcrumb".
+
   - id: E6
     criterion: AC-6
     executor: test
@@ -153,13 +151,14 @@ evals:
       - "apps/app/components/onboarding/khung-tao.tsx"
       - "apps/app/test/khung-man-chung.dom.tsx"
     expected: |
-      jsdom, truy van khuon gia theo hop dong that. Hai chieu cung fixture: khuon rong -> nut "Kế
-      hoạch mới" disabled, dong ly do [data-ly-do-khoa] nam trong page-shell-header, co lien ket
-      toi /<ws>/settings/onboarding, aria-describedby cua nut bang id dong do; mot khuon -> nut bat,
-      0 dong ly do. Khung trong ST-danhmuc-empty: nut "Tạo kế hoạch từ khuôn" co data-variant
-      outline, va dem [data-variant=default] trong man = 1. CHIEU DO: ban sao bo dong ly do -> do
-      ghim "kmc-khoa: onboarding nut tat khong ly do"; ban sao giu bienThe default o khung trong ->
-      do ghim "kmc-khoa: onboarding hai nut to".
+      jsdom, truy van khuon gia theo hop dong that. Hai chieu cung fixture, MOI o cho truy van
+      onboarding.listTemplates da tra ve (dem goi > 0 va mot nhip sau) truoc khi khang dinh, de o doi
+      chung khong qua vi truy van chua xong: khuon rong -> nut "Kế hoạch mới" disabled, dong ly do
+      [data-slot=page-shell-note] duoi tieu de, co lien ket toi /ws/settings/onboarding, aria-describedby
+      khop; mot khuon -> nut bat, 0 dong ly do. Khung trong ST-danhmuc-empty: nut "Tạo kế hoạch từ khuôn"
+      data-variant outline, dem [data-variant=default] = 1. CHIEU DO: nut tat khong dong ly do -> ghim
+      "kmc-khoa: gia nut tat khong ly do"; o doi chung voi truy van chua xong -> ghim
+      "kmc-khoa: onboarding chua doc xong khuon".
 
   - id: E9
     criterion: AC-9
@@ -170,10 +169,13 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/sso/**"
       - "apps/app/test/khung-man-chung.dom.tsx"
     expected: |
-      jsdom. Ma tran 4 o viet truoc: To chuc khong quyen sua / co quyen; SSO canConfigure false /
-      true. O khong quyen: nut chinh disabled, dong ly do trong page-shell-header, aria-describedby
-      khop; o co quyen: nut bat, 0 dong ly do. Dem dung 4 o. CHIEU DO: ban sao hanh-dong-dau-trang.tsx
-      bo aria-describedby -> do ghim "kmc-khoa: to-chuc nut khong tro ly do".
+      jsdom. Ma tran 4 o viet truoc: To chuc khong quyen / co quyen; SSO canConfigure false / true; moi
+      o cho truy van quyen tra ve truoc khi khang dinh. O khong quyen: nut chinh disabled, dong ly do
+      trong page-shell-header, aria-describedby khop; o co quyen: nut bat, 0 dong ly do. Dem dung 4 o.
+      Them o Giai doan thoa thuan khong quyen: dong khongQuyen la [data-slot=page-shell-note], va dau
+      trang co dung 1 [data-slot=page-shell-description]. CHIEU DO: ban gia bo aria-describedby -> ghim
+      "kmc-khoa: to-chuc nut khong tro ly do"; Giai doan dung PageShellDescription thu hai -> ghim
+      "kmc-khoa: giai-doan ly do la mo ta thu hai".
 
   - id: E10
     criterion: AC-10
@@ -226,7 +228,7 @@ evals:
       - "packages/ui/src/components/khung-xuong.tsx"
       - "packages/ui/src/components/vung-tai-loi.tsx"
       - "_acceptance/khung-man-chung/rang/chup-man.mjs"
-    expected: "exit 0; chup-man.mjs in 'buoc N: dat' cho 5 buoc va mot dong so do moi anh. Do bang getBoundingClientRect, chu doc bang innerText (khong page.content): moi anh dang tai co innerText khac rong o [data-slot=page-shell-title] hoac breadcrumb, va [data-khung-xuong]; moi cap dang tai/xong lech <= 4 px o y va chieu cao hang tieu de, <= 8 px o y vung noi dung (man chi-tiet so hang breadcrumb va y vung noi dung); 1280: |tam y tieu de - tam y nut dau| <= 8 px va top mo ta >= bottom tieu de; 375 va 767: bottom mo ta <= top nut dau va top nut dau >= bottom tieu de (nut KHONG cung hang tieu de); 768: |tam y tieu de - tam y nut dau| <= 8 px; anh loi co [data-vung-tai-loi] va nut 'Thử lại'. Anh o .acceptance-runs/khung-man-chung/evidence/, vong S4 chep sang _acceptance/khung-man-chung/evidence/. CHIEU DO (--chieu-do tren ban sao): fallback Lien he ve Spinner -> 'buoc 1: lienhe khong thay khung xuong', ma 1; page-shell.tsx bo basis-full cua mo ta -> 'kmc-dau-trang: mo ta chen hang nut o 1280', ma 1."
+    expected: "exit 0; chup-man.mjs in 'buoc N: dat' cho 5 buoc va mot dong so do moi anh. Do bang getBoundingClientRect, chu doc bang innerText (khong page.content): moi anh dang tai co innerText khac rong o [data-slot=page-shell-title] hoac breadcrumb, va [data-khung-xuong]; moi cap dang tai/xong lech <= 4 px o y va chieu cao hang tieu de, <= 8 px o y vung noi dung (man chi-tiet so hang breadcrumb va y vung noi dung); 1280: |tam y tieu de - tam y nut dau| <= 8 px va top mo ta >= bottom tieu de; 375 va 767: bottom mo ta <= top nut dau va top nut dau >= bottom tieu de (nut KHONG cung hang tieu de); 768: |tam y tieu de - tam y nut dau| <= 8 px; anh loi co [data-vung-tai-loi] va nut 'Thử lại'; chi tiet chien dich co dung 1 [data-slot=page-shell-header] luc tai va luc xong (AC-16); hop can do vang -> buoc do (AC-18). Anh o .acceptance-runs/khung-man-chung/evidence/, vong S4 chep sang _acceptance/khung-man-chung/evidence/. CHIEU DO (--chieu-do tren ban sao): fallback Lien he ve Spinner -> 'buoc 1: lienhe khong thay khung xuong', ma 1; page-shell.tsx bo basis-full cua mo ta -> 'kmc-dau-trang: mo ta chen hang nut o 1280', ma 1."
   - id: E12j
     criterion: AC-12
     executor: judgment
@@ -246,7 +248,7 @@ evals:
       - "_acceptance/khung-man-chung/evidence/kmc-onboarding-khoa-375.png"
       - "_acceptance/khung-man-chung/evidence/kmc-tailieu-dautrang-375.png"
       - "docs/superpowers/specs/2026-10-13-khung-man-chung-design.md"
-    question: "Trên các ảnh này: (1) mỗi ảnh đang tải có chữ cho biết đang ở màn nào (tiêu đề, hoặc breadcrumb ở chi tiết chiến dịch) không; (2) với năm cặp đang tải/tải xong (Liên hệ, Cài đặt › Trường, Cài đặt › Điều phối 30 ngày, Toàn cảnh, chiến dịch), khung xương có cùng hình với nội dung khi xong (bảng ra bảng, dòng ra dòng, thẻ ra thẻ, ô số ra ô số, đoạn ra đoạn) không; (3) hai ảnh lỗi có cùng một hình (tiêu đề, một câu, nút Thử lại) không; (4) ảnh Onboarding khoá có dòng lý do ngay dưới tiêu đề và gần nút tắt không; (5) ở hai ảnh 375 (Onboarding khoá, Tài liệu), câu mô tả có đứng trên các nút không? Trả PASS chỉ khi cả năm đều có, đối chiếu bảng trạng thái và mục «Hành vi» của design doc."
+    question: "Trên các ảnh này: (1) mỗi ảnh đang tải có chữ cho biết đang ở màn nào (tiêu đề, hoặc breadcrumb ở chi tiết chiến dịch) không; (2) với năm cặp đang tải/tải xong (Liên hệ, Cài đặt › Trường, Cài đặt › Điều phối 30 ngày, Toàn cảnh, chiến dịch), khung xương có cùng hình với nội dung khi xong (bảng ra bảng, dòng ra dòng, thẻ ra thẻ — kể cả hai cột ra hai cột, ô số ra ô số) không; (3) hai ảnh lỗi có cùng một hình (tiêu đề, một câu, nút Thử lại) không; (4) ảnh Onboarding khoá có dòng lý do ngay dưới tiêu đề và gần nút tắt không; (5) ở hai ảnh 375 (Onboarding khoá, Tài liệu), câu mô tả có đứng trên các nút không? Trả PASS chỉ khi cả năm đều có, đối chiếu bảng trạng thái và mục «Hành vi» của design doc."
 
   - id: E13
     criterion: AC-13
@@ -273,14 +275,13 @@ evals:
       - "apps/app/**/*.tsx"
       - "_acceptance/khung-man-chung/rang/dem-khung-loi.mjs"
     expected: |
-      rang/dem-khung-loi.mjs suy goc kho tu vi tri cua no, duyet moi .tsx duoi apps/app bang
-      TypeScript compiler API (khong regex): dem phan tu JSX Empty/Alert co con Button voi onClick
-      goi "refetch" hoac prop thuLai/onThuLai/onRetry, tru VungTaiLoi. In "khung lỗi tự dựng còn: N"
-      va moi dong "<tep>:<dong>"; thoat 0. Doi chung duong: chay tren cay goc 3a2783409 (git
-      worktree tam trong .acceptance-runs/khung-man-chung/) cho N_goc va danh sach chua ca nam cho
-      cua AC-5/AC-6; tren HEAD, nam cho do vang khoi danh sach va N = N_goc - (so phan tu da doi).
-      CHIEU DO: ban sao tai-lieu/loi-tai.tsx tra lai khung cu -> danh sach co
-      "tai-lieu/loi-tai.tsx" va N tang 1 (bai tu kiem --tu-kiem ghim "kmc-dem: loi-tai.tsx khong duoc dem" neu khong tang).
+      rang/dem-khung-loi.mjs suy goc kho tu vi tri cua no, duyet moi .tsx duoi apps/app bang TypeScript
+      compiler API: dem phan tu JSX Empty/Alert co Button/KaraRetry voi onClick goi refetch hoac prop
+      thuLai/onThuLai/onRetry. In "khung lỗi tự dựng còn: N" va moi dong "<tep>:<dong>"; thoat 0.
+      --tu-kiem doc cay goc 3a2783409 qua git: quan he N_HEAD = N_goc - (so phan tu goc nam trong cac
+      tep da doi) va cac tep da doi con 0 phan tu o HEAD (khong chi "co mat"); pha thu tren ban doc tra
+      lai loi-tai.tsx cu -> N tang dung 1 va danh sach co loi-tai.tsx, khong thi ghim
+      "kmc-dem: loi-tai.tsx khong duoc dem"; lech quan he -> ghim "kmc-dem: N_HEAD khong bang N_goc tru phan da doi".
 
   - id: E12m
     criterion: AC-12
@@ -300,3 +301,59 @@ evals:
       'Thử lại'. Day la chot may de lan ghim lai chung lai AC-12 (E12 ui-check va E12j judgment
       ngoai lan may). CHIEU DO: --chieu-do tren ban sao page-shell.tsx bo basis-full cua mo ta ->
       ghim 'kmc-dau-trang: mo ta chen hang nut o 1280', ma 1.
+
+  - id: E15
+    criterion: AC-15
+    executor: test
+    cmd: config:executors.test.kmc_lam_moi
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/[campaignId]/campaign-detail.tsx"
+      - "apps/app/test/khung-man-chung.dom.tsx"
+    expected: |
+      jsdom. CampaignDetail voi campaigns.byId tra du lieu, cho tieu de bang ten chien dich; doi gia sang
+      tra loi roi goi refetch (invalidate dung khoa truy van); cho truy van ve trang thai loi (isError) ->
+      khang dinh tieu de van la ten chien dich va 0 [data-vung-tai-loi]. Doi chung duong cung tep: loi khi
+      chua co du lieu -> co [data-vung-tai-loi] (nhom chi-tiet). CHIEU DO: ban doc campaign-detail.tsx
+      dat lai «if (campaign.isError)» truoc nhanh co du lieu -> ghim
+      "kmc-lam-moi: lam moi loi thay trang dang xem bang khung loi".
+
+  - id: E16
+    criterion: AC-16
+    executor: test
+    cmd: config:executors.test.kmc_mot_dau_trang
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/[campaignId]/**"
+      - "apps/app/app/(app)/[slug]/tai-lieu/[trang]/**"
+      - "apps/app/app/(app)/[slug]/tai-lieu/de-xuat/**"
+      - "apps/app/test/khung-man-chung.spec.ts"
+    expected: |
+      Quet ma ca "mot-dau-trang": o 4 page.tsx ban ghi, khong PageShellHeader nao ngoai fallback cua
+      Suspense (TypeScript compiler API, dem dung 4 tep); fallback co dung 1 PageShellHeader. Phan nhin
+      thay: E12/E12m dem [data-slot=page-shell-header] = 1 o chi tiet chien dich luc tai va luc xong.
+      CHIEU DO: ban doc tai-lieu/[trang]/page.tsx dat lai PageShellHeader ngoai Suspense -> ghim
+      "kmc-quet: tai-lieu/[trang]/page.tsx co dau trang ngoai fallback".
+
+  - id: E17
+    criterion: AC-17
+    executor: test
+    cmd: config:executors.test.kmc_quet
+    paths:
+      - "apps/app/test/khung-man-chung.spec.ts"
+      - "apps/app/test/fixtures/khung-man-chung-hinh.json"
+    expected: |
+      Ca "checkout-nong": goi ham hinh-theo-man voi bo doc git gia bao thieu commit 3a2783409 -> ket qua
+      khong loi khi ma dung, ham tra them dung mot dong "kmc-quet: checkout nong — bo so voi git grep o
+      3a2783409", va van bat sai hinh cua mot dong bang (doi chung: ban doc contacts/page.tsx sai hinh ->
+      van ghim "kmc-quet: contacts/page.tsx dung hinh the, bang ghi bang"). Voi commit co mat: phep so
+      git grep chay va bang thieu mot tep -> ghim "kmc-quet: bang hinh thieu <tep>".
+
+  - id: E18
+    criterion: AC-18
+    executor: script
+    cmd: config:executors.script.kmc_man_thieu_hop
+    paths:
+      - "_acceptance/khung-man-chung/rang/chup-man.mjs"
+    expected: |
+      chup-man.mjs --chieu-do=3 dung ban sao chap ten slot mo ta (page-shell.tsx: data-slot
+      "page-shell-description" doi ten) roi chay buoc 5; ket qua phai la ma 1 voi thong diep ghim
+      "lienhe 767: thieu hop mo ta" (do dung ghim -> lenh thoat 0); ban do khong duoc cho qua khi hop vang. Doi chung: luot xanh cua E12m dat.
