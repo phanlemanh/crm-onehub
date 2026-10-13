@@ -24,6 +24,8 @@ import { ZALO } from "./zalo-config";
 
 type LyDoDoi = "khong-co-buoc" | "ke-hoach-dong" | "khong-co-viec";
 
+type LyDoViecChan = "cho-danh-gia" | "da-huy";
+
 type MucXong = { so: number; nhan: string; congTy: string | null };
 
 export type KetTraLoi =
@@ -35,6 +37,10 @@ export type KetTraLoi =
 			muc: { so: number; loai: MucNhac["loai"]; url: string | null }[];
 	  }
 	| { loai: "viec-khong-cua-ban"; muc: number[] }
+	| {
+			loai: "viec-khong-dong-duoc";
+			muc: { so: number; lyDo: LyDoViecChan }[];
+	  }
 	| { loai: "buoc-doi"; muc: { so: number; lyDo: LyDoDoi }[] }
 	| { loai: "xong"; vua: MucXong[]; truoc: MucXong[] };
 
@@ -129,6 +135,7 @@ export async function xongTheoTinNhac(
 			? v.nguoiGiaoId === userId
 			: v.nguoiThucHienId === userId;
 	const khongCuaBan: number[] = [];
+	const chan: { so: number; lyDo: LyDoViecChan }[] = [];
 	const doi: { so: number; lyDo: LyDoDoi }[] = [];
 	for (const { so, muc: m } of dsViec) {
 		const v = viecTheoId.get(m.viecId);
@@ -140,17 +147,24 @@ export async function xongTheoTinNhac(
 			khongCuaBan.push(so);
 			continue;
 		}
-		if (
-			!TRANG_THAI_KHEP.includes(v.trangThai) &&
-			quyenDoi(v.trangThai, TrangThaiViec.XONG, vaiCua(v, input.userId)) !==
-				"duoc"
-		) {
-			khongCuaBan.push(so);
+		if (v.trangThai === TrangThaiViec.HUY) {
+			chan.push({ so, lyDo: "da-huy" });
+			continue;
 		}
+		const duoc =
+			quyenDoi(v.trangThai, TrangThaiViec.XONG, vaiCua(v, input.userId)) ===
+			"duoc";
+		if (TRANG_THAI_KHEP.includes(v.trangThai) || duoc) continue;
+		if (v.trangThai === TrangThaiViec.CHO_DANH_GIA) {
+			chan.push({ so, lyDo: "cho-danh-gia" });
+			continue;
+		}
+		khongCuaBan.push(so);
 	}
 	if (khongCuaBan.length > 0) {
 		return { loai: "viec-khong-cua-ban", muc: khongCuaBan };
 	}
+	if (chan.length > 0) return { loai: "viec-khong-dong-duoc", muc: chan };
 	if (doi.length > 0) throw new BuocDoi(doi);
 	const vua: MucXong[] = [];
 	const truoc: MucXong[] = [];
@@ -231,6 +245,16 @@ export function cauTraLoi(ket: KetTraLoi): string {
 		case "viec-khong-cua-ban":
 			return motDong(
 				`${ket.muc.map((so) => ZALO.loi.viecKhongCuaBan(String(so))).join(" ")} ${chuaDanhDau}`,
+			);
+		case "viec-khong-dong-duoc":
+			return motDong(
+				`${ket.muc
+					.map((m) =>
+						m.lyDo === "da-huy"
+							? ZALO.loi.viecDaHuy(m.so)
+							: ZALO.loi.viecChoDanhGia(m.so),
+					)
+					.join(" ")} ${chuaDanhDau}`,
 			);
 		case "buoc-doi":
 			return motDong(

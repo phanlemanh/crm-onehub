@@ -142,6 +142,10 @@ export const ZALO = {
 					: `Mục ${so} thuộc kế hoạch đã đóng.`,
 		viecKhongCuaBan: (so: string) =>
 			`Mục ${so} là việc của người khác trong tin này, không đánh dấu xong từ đây được.`,
+		viecChoDanhGia: (so: number) =>
+			`Mục ${so} đang chờ người giao đánh giá, bây giờ chỉ người giao đóng được.`,
+		viecDaHuy: (so: number) =>
+			`Mục ${so} là việc đã huỷ, không đánh dấu xong được.`,
 		daXong: "Đã đánh dấu xong: ",
 		khongGiMoi: "Không có mục nào mới",
 		mocDaXongTruoc: " — đã xong từ trước: ",

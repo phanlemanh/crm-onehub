@@ -386,10 +386,16 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   không mã hoá được bị bỏ và ghi log, các mục khác và hàng của người khác vẫn được ghi.
 - **«xong n» trên dòng việc** đi qua `doiTrangThai` của `@crm/db/viec-ghi` với `nguon: "zalo"` — cùng
   hàm của màn. Dòng quá hạn, sắp hạn chỉ người thực hiện đóng được; dòng chờ đánh giá chỉ người giao.
-  Người nhắn sai vai của dòng (kể cả người giao cầm tin chuyển tiếp của người thực hiện), hay không có
-  quyền chuyển việc sang Xong ở trạng thái hiện tại, nhận lời «việc của người khác» và không mục nào trong
-  lần nhắn đó được đánh dấu; việc đã Xong hay Huỷ trả «đã xong từ trước»; việc đã bị xoá trả «không còn
-  việc đó».
+  Cả lần nhắn là tất cả hoặc không gì: có một mục bị từ chối thì không mục nào được đánh dấu. Ba lời từ
+  chối; lời đầu thắng hai lời sau, hai lời sau nằm chung một câu trả lời nếu tin có cả hai loại mục:
+  - Người nhắn sai vai của dòng (kể cả người giao cầm tin chuyển tiếp của người thực hiện), hay không có
+    quyền chuyển việc sang Xong ở trạng thái hiện tại mà lý do không phải hai dòng dưới đây: «việc của
+    người khác».
+  - Việc đang Chờ đánh giá mà người nhắn là người thực hiện: «đang chờ người giao đánh giá, bây giờ chỉ
+    người giao đóng được».
+  - Việc đã Huỷ: «là việc đã huỷ, không đánh dấu xong được».
+
+  Việc đã Xong trả «đã xong từ trước» (không ghi gì); việc đã bị xoá trả «không còn việc đó».
 - **Khuôn mục nhắc OKR là `viecOkr` (Zod, `@crm/db/okr-nhac`), một nguồn.**
   `ViecOkr` suy từ nó; API «Việc của bạn» dùng chính nó; `KHOA_MUC_OKR` khai trường
   mã của từng loại, và nhánh OKR của `mucNhac` cùng `maViec` suy từ bảng đó.

@@ -19,7 +19,8 @@ import {
 	LOAI_VIEC_NHAC,
 	lenLichNhac,
 } from "../agent/lib/nhac-ke-hoach";
-import { xongTheoTinNhac } from "../agent/lib/tra-loi-nhac";
+import { cauTraLoi, xongTheoTinNhac } from "../agent/lib/tra-loi-nhac";
+import { ZALO } from "../agent/lib/zalo-config";
 import {
 	DAY_MS,
 	donDep,
@@ -511,5 +512,69 @@ describe("vc-xong-n", () => {
 		}
 		const rBuoc = await tra(f.b.id, await viTri(f.b.id, "buoc-sap-han"));
 		expect(rBuoc.loai).toBe("xong");
+	});
+	test("vc-xong-n: việc đã sang Chờ đánh giá hoặc đã huỷ sau khi tin gửi — trả lời riêng, không ghi gì, cả tin bị giữ", async () => {
+		const f = await dungE9();
+		const z = zaloGia();
+		await noiZalo(f.b.id, `Z-${f.b.id}`);
+		await batBot();
+		await lenLichNhac(NOW);
+		const h = await hangCua(f.b.id);
+		await voiToken(() =>
+			chayNhac(h, { zaloFetcher: z.fetcher, appUrl: APP_URL }),
+		);
+		const daGui = parseNhacPayload((await hangCua(f.b.id)).payload).daGui ?? [];
+		const viTri = (loai: string) => daGui.findIndex((m) => m.loai === loai) + 1;
+		const tra = (so: number[]) =>
+			db.$transaction((tx) =>
+				xongTheoTinNhac(tx, {
+					userId: f.b.id,
+					so,
+					now: NOW,
+					lienKet: () => null,
+				}),
+			);
+		const soQuaHan = viTri("viec-qua-han");
+		const soSapHan = viTri("viec-sap-han");
+		await doi(f.quaHan.id, f.b.id, "CHO_DANH_GIA");
+		await doi(f.sapHan.id, f.x.id, "HUY");
+		const vet = async (id: string) =>
+			db.viecVet.count({ where: { viecId: id } });
+		const vetQuaHan = await vet(f.quaHan.id);
+		const vetSapHan = await vet(f.sapHan.id);
+
+		const cho = await tra([soQuaHan]);
+		expect(cho).toEqual({
+			loai: "viec-khong-dong-duoc",
+			muc: [{ so: soQuaHan, lyDo: "cho-danh-gia" }],
+		});
+		expect(cauTraLoi(cho)).toBe(
+			`${ZALO.loi.viecChoDanhGia(soQuaHan)} ${ZALO.loi.chuaDanhDau}`,
+		);
+		expect(cauTraLoi(cho)).not.toContain("người khác");
+
+		const huy = await tra([soSapHan]);
+		expect(huy).toEqual({
+			loai: "viec-khong-dong-duoc",
+			muc: [{ so: soSapHan, lyDo: "da-huy" }],
+		});
+		expect(cauTraLoi(huy)).toBe(
+			`${ZALO.loi.viecDaHuy(soSapHan)} ${ZALO.loi.chuaDanhDau}`,
+		);
+		expect(cauTraLoi(huy)).not.toContain("từ trước");
+
+		const buoc = viTri("buoc-sap-han");
+		const ca = await tra([soQuaHan, soSapHan, buoc]);
+		expect(ca.loai).toBe("viec-khong-dong-duoc");
+		const trangThai = async (id: string) =>
+			(await db.viec.findUniqueOrThrow({ where: { id } })).trangThai;
+		expect(await trangThai(f.quaHan.id)).toBe("CHO_DANH_GIA");
+		expect(await trangThai(f.sapHan.id)).toBe("HUY");
+		expect(await vet(f.quaHan.id)).toBe(vetQuaHan);
+		expect(await vet(f.sapHan.id)).toBe(vetSapHan);
+		const dongBuoc = await db.onboardingStep.count({
+			where: { completedAt: { not: null }, assigneeId: f.b.id },
+		});
+		expect(dongBuoc).toBe(0);
 	});
 });
