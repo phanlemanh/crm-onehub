@@ -107,6 +107,32 @@ const tranNgang = (t) =>
 		return ra;
 	}, NGAN);
 
+const loiDongGap = (t, nhanGap) =>
+	t.evaluate(
+		(sel, nhan) => {
+			const ngan = document.querySelector(sel)?.getBoundingClientRect();
+			if (!ngan) return ["khong thay ngan"];
+			const mep = Math.min(ngan.right, document.documentElement.clientWidth);
+			const nut = [...document.querySelectorAll("button")].find(
+				(b) => (b.textContent ?? "").trim() === nhan,
+			);
+			const vat = [
+				...(nut ? [nut, ...nut.querySelectorAll("*")] : []),
+				...document.querySelectorAll("[data-da-luu-tru], [data-da-luu-tru] *"),
+			];
+			if (!nut) return ["khong thay nut gap"];
+			return vat
+				.filter((e) => e.getClientRects().length)
+				.filter((e) => e.getBoundingClientRect().right > mep + 0.5)
+				.map(
+					(e) =>
+						`${e.tagName.toLowerCase()} ${(e.textContent ?? "").trim().slice(0, 30)} ${Math.round(e.getBoundingClientRect().right)}>${Math.round(mep)}`,
+				);
+		},
+		NGAN,
+		nhanGap,
+	);
+
 const dongTrongTab = (t) =>
 	t.evaluate(() => {
 		const tab = document.querySelector(
@@ -199,8 +225,13 @@ async function buocMot(chu, rong, hau, loi) {
 	await bamNut(t, nhan);
 	await kiemMo(t, g, loi);
 	if (rong < 500) {
+		const lo = await loiDongGap(t, nhan);
+		if (lo.length) loi.push(`dong gap tran o ${rong}: ${lo.join(", ")}`);
 		const tran = await tranNgang(t);
-		if (tran.length) loi.push(`tran ngang o ${rong}: ${tran.join(", ")}`);
+		if (tran.length)
+			console.log(
+				`  khung co san (gioi han da biet, NM1b): ${tran.join(", ")}`,
+			);
 	}
 	await chup(t, `lqc-mo-${hau}.png`);
 	return { t, g };

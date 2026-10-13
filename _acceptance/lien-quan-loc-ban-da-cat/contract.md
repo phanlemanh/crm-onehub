@@ -5,9 +5,7 @@ slug: lien-quan-loc-ban-da-cat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: approved
-approved_by: Phan Le Manh
-approved_at: 2026-10-13T00:48:06Z
+status: draft
 design_doc: docs/superpowers/specs/2026-10-13-lien-quan-loc-ban-da-cat-design.md
 ---
 
@@ -33,7 +31,7 @@ quan hệ không lọc `archivedAt`, nên bản đã cất lẫn vào bảng li�
 - AC-9: Given một công ty đã lưu trữ có 1 thoả thuận đang dùng, 1 thoả thuận đã cất, 1 cá nhân đang dùng và 1 cá nhân đã cất, và một thoả thuận đã lưu trữ có 1 cá nhân đang dùng và 1 cá nhân đã cất, When chọn «Xoá vĩnh viễn» trong menu ngăn của từng bản, Then hộp hỏi lại của công ty nói 2 thoả thuận mất theo và 2 cá nhân ở lại, và lời báo của thoả thuận dùng chữ số nhiều cho người ở lại («people» ở tiếng Anh) — lời báo xoá vĩnh viễn đếm cả bản đã cất, vì nó nói về thứ mất đi và thứ ở lại chứ không về thứ đang thấy.
 - AC-10: Given giao diện tiếng Việt và tiếng Anh, When đọc nút gập và dòng đã cất, Then tiếng Việt ghi «+n đã lưu trữ» và «Đã lưu trữ ngày …»; tiếng Anh ghi «+n archived» và «Archived on …», không ký tự tiếng Việt có dấu; khoá chữ mới có đủ cặp vi/en.
 - AC-11: Given dòng gập của AC-5, When đi bằng bàn phím, Then nút gập là một `button` có `aria-expanded` đổi theo trạng thái; tên mỗi dòng đã cất là một `button` tới được bằng Tab, Enter mở ngăn như AC-6; tệp giao diện chạm tới qua được bộ quét thiết kế tĩnh của kho.
-- AC-12: Given bản chạy thật của cây này, một công ty có thoả thuận và cá nhân đã lưu trữ, When mở ngăn công ty ở khổ 1440 và 390, bấm «+n đã lưu trữ» rồi bấm tên một thoả thuận đã cất, Then thấy được dòng gập và dòng mờ có ngày cất, ngăn thoả thuận đã cất mở ra với dải báo; lưu trữ một thoả thuận đang dùng từ ngăn của nó rồi quay lại ngăn công ty thì thoả thuận đó đã sang dòng gập; ở 390 không có gì tràn ngang.
+- AC-12: Given bản chạy thật của cây này, một công ty có thoả thuận và cá nhân đã lưu trữ, When mở ngăn công ty ở khổ 1440 và 390, bấm «+n đã lưu trữ» rồi bấm tên một thoả thuận đã cất, Then thấy được dòng gập và dòng mờ có ngày cất, ngăn thoả thuận đã cất mở ra với dải báo; lưu trữ một thoả thuận đang dùng từ ngăn của nó rồi quay lại ngăn công ty thì thoả thuận đó đã sang dòng gập; ở 390 nút gập và các dòng đã cất không lòi ra khỏi mép phải của ngăn.
 - AC-13: Given ảnh chụp của AC-12, When một người không làm lượt này nhìn, Then hiểu ngay danh sách chỉ có bản đang dùng, «+n đã lưu trữ» là chỗ xem bản đã cất (không phải nút lưu trữ), và dòng mờ là bản đã cất có thể mở ra. (judgment)
 
 ## Coverage
@@ -57,8 +55,11 @@ quan hệ không lọc `archivedAt`, nên bản đã cất lẫn vào bảng li�
 - Khôi phục ngay trên dòng gập — khôi phục đi qua dải báo của ngăn bản ghi (chờ chủ kho chốt ở Cổng Phạm vi, Hỏi trong sổ quyết định).
 - Giữ trạng thái mở của dòng gập trên đường dẫn (chờ chủ kho chốt ở Cổng Phạm vi).
 - Dải báo và dòng gập thành mảnh dùng chung ở `packages/ui`.
+- Thanh tab của khung ngăn dùng chung (`apps/app/components/detail-sheet.tsx`) tràn ngang 2px ở khổ 390 trên ngăn công ty — có từ trước, chuyển cho NM1b (chủ kho chọn 13/10, sổ d-20261013T015212Z-13).
 
 ## Notes
+
+- Known limits: ở khổ 390 ngăn công ty cuộn ngang 2px do thanh tab của khung dùng chung — đo ở S3 (yêu cầu P3-2), tràn y hệt khi dòng «+n đã lưu trữ» còn gập; sửa ở NM1b.
 
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi: cá nhân, công ty, thoả thuận đi Lưu trữ → Khôi phục → Xoá vĩnh viễn. (2) «Lịch sử» — không đổi. (3) Danh sách mặc định — bảng liên quan trong ngăn nay chỉ hiện bản đang dùng; bản đã cất tìm lại ở «+n đã lưu trữ» cuối bảng, mở ra ngăn có dải báo và «Khôi phục».
 - Đầu REST bridge `/rest` (sinh từ mọi thủ tục tRPC, khoá API đọc được — `docs/api.md` mục «The OpenAPI document is built at runtime») đổi theo vì dùng chung `byId`: mảng cũ thôi có bản đã cất, thêm hai mảng mới. Đã tra `apps/agent` (grep `companies.byId`, `contacts.byId`, `deals.byId`, `/companies/`, `/contacts/`, `/deals/`: 0 người gọi); tích hợp ngoài kho dùng khoá API không tra được từ kho — chủ kho chốt ở Cổng Phạm vi (Hỏi trong sổ quyết định, d-20261013T003730Z-8).

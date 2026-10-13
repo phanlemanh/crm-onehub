@@ -246,7 +246,9 @@ evals:
       lqc-mo-1440.png; bam ten thoa thuan da cat dau -> URL co deal:<id>, [data-dai-luu-tru] hien; chup
       lqc-ngan-cat-1440.png. Buoc 2 dong ngan thoa thuan, mo thoa thuan dang dung, «Lưu trữ» tu menu ngan, quay lai ngan
       cong ty -> tab Thoa thuan khong con dong dang dung, nut «+3 đã lưu trữ». Buoc 3 (390) lap buoc 1:
-      scrollWidth <= clientWidth cua trang va ngan; chup lqc-gap-390.png, lqc-mo-390.png.
+      nut gap va moi dong [data-da-luu-tru] (ca phan tu con) co getBoundingClientRect().right <= mep phai cua ngan va
+      cua khung nhin; tran cua ca ngan (scrollWidth > clientWidth) chi in mot dong «khung co san» — gioi han da biet
+      chuyen NM1b, khong lam do; chup lqc-gap-390.png, lqc-mo-390.png.
       Ho so da signed-off/machine-cleared thi khong chep anh vao ho so.
       CHIEU DO ghim: --chieu-do mo cong ty khong co ban da cat -> do "man: khong thay dong gap".
     steps:
@@ -278,4 +280,7 @@ evals:
       Nhìn năm ảnh: (1) người đọc có hiểu ngay bảng chỉ có thoả thuận đang dùng không? (2) «+n đã lưu trữ» có đọc như chỗ
       xem bản đã cất, không như một nút cất? (3) các dòng mở ra có trông khác dòng đang dùng (mờ, có ngày cất) và có trông
       bấm được để mở không? (4) chữ có đúng bộ chữ của `docs/vong-doi.md` — «Đã lưu trữ», «Khôi phục» — không có «ẩn»?
-      (5) ở 390 có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu từng điểm kèm ảnh.
+      (5) ở 390 dòng «+n đã lưu trữ» hay các dòng đã cất có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu từng
+      điểm kèm ảnh.
+      Ngoài phạm vi (chủ kho chọn 2026-10-13, giới hạn đã biết, chuyển NM1b): thanh tab đầu ngăn và cột cuối của bảng
+      liên quan bị cắt ở 390 do khung ngăn dùng chung. Đừng chấm trượt vì điều này.
