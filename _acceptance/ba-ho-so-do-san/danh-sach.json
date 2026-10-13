@@ -1272,9 +1272,22 @@
 			"muc": "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx",
 			"ma": "paths-khong-tro-toi-tep",
 			"nguon": "paths",
-			"xu_ly": "khai-not-run",
-			"ly_do": "lenh sol_san_thiet_ke chay design-gate nham thang man-soan.tsx, tep da go khi soan OKR thanh trang rieng — o do sach thiet ke cua mot tep khong con; sua gia tri lenh trong config bi luat 7 cam",
-			"can_cu": "574292047"
+			"xu_ly": "sua-rang",
+			"ly_do": "lenh sol_san_thiet_ke chay design-gate nham man-soan.tsx, tep da go khi soan OKR thanh trang rieng — o do do sach sau moi lan chay (design-gate thoat 1 vi tep vang). Tro lenh sang khoa moi sol_san_thiet_ke_trang do cung loi hua tren cac tep ke nhiem (trang-soan, khung-soan) cung nut-soan, hoi-thoai-soan; paths doi theo. Khai not-run bi luat hai ve 2.12.0 chan vi bao cao da ky co ma thoat cho E12",
+			"can_cu": "574292047",
+			"moi": null,
+			"tep": [
+				"_acceptance/soan-okr-song-lai/evals.yaml"
+			],
+			"dot_bien": [
+				{
+					"ten": "ban-kinh-tu-che",
+					"kieu": "design-gate",
+					"tep": "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx",
+					"chen": "<div className=\"rounded-[7px] bg-[#123456] p-[13px]\" />",
+					"thong_diep": "design-gate bat vi pham trong ban sao trang-soan.tsx"
+				}
+			]
 		},
 		{
 			"ho_so": "the-gop-y-okr",

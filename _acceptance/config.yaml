@@ -2454,6 +2454,7 @@ executors:
     bhds_khai_du: bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs
     bhds_ghim_xanh: bun _acceptance/ba-ho-so-do-san/rang/ghim-xanh.mjs
     bhds_chieu_do: bun _acceptance/ba-ho-so-do-san/rang/chieu-do.mjs
+    sol_san_thiet_ke_trang: for t in "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
