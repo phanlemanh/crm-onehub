@@ -5,7 +5,7 @@ slug: duong-ly-do-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -72,3 +72,9 @@ chân ngành mượn từ quét của L1.
 - Bộ mẫu ghi căn chỉnh bằng `createMany` từ trước (`apps/api/scripts/okr-mau/nap.ts`, đoạn `okrAlignment`); ba trường mới đi cùng hàng đó, không thêm đường ghi thứ hai. Đường ghi qua service cho căn cứ là việc của L4.
 - Phép đo đã ký có `paths` rộng (ký tự đại diện, `_acceptance/config.yaml`) — khoảng một trăm eval — không chạy trong AC-7; chúng là việc của làn ghim lại lúc gộp (lưới trước-gộp của kit).
 - Bộ mẫu là việc chung với dãy P1 (N1 `bo-ca-mau-quy-4`): chỉ thêm trường tuỳ chọn và ca mới, không sửa ca có sẵn.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-1: Ở màn điện thoại, phép kiểm tra «không bị cuộn ngang» đo cả trang chứ không chỉ khung sheet.
+  - Ngoài-4: Bộ dữ liệu mẫu cho phép gieo một chỗ nối ghi «Kara viết» mà lại không có câu lý do nào.
+  - Ngoài-5: Bài thử đột biến có thể báo «bắt được lỗi» dù bài đỏ vì lý do khác với lý do định kiểm.
+  - Ngoài-6: Bài kiểm chưa thử ca chỗ nối chưa có lý do mà lại bị đánh dấu do Kara viết.
+  - Ngoài-7: Phép kiểm «câu lý do không bị cắt chữ» có thể không bắt được trường hợp bị cắt khi câu ngắn.
