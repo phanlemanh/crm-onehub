@@ -310,14 +310,16 @@ export function DetailSheetSection({
 	action,
 	className,
 	children,
+	...data
 }: {
 	title?: ReactNode;
 	action?: ReactNode;
 	className?: string;
 	children: ReactNode;
-}) {
+} & { [thuocTinh: `data-${string}`]: string | undefined }) {
 	return (
 		<section
+			{...data}
 			className={cn(
 				"space-y-2 border-b py-3 last:border-b-0",
 				GUTTER,
