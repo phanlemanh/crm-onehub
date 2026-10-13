@@ -17,6 +17,7 @@ export const KHU_DOI_TAC = [
 	"/onboarding",
 	"/chat",
 	"/agents",
+	"/viec",
 ] as const;
 
 export const DUONG_NGOAI_PHAM_VI = "/ngoai-pham-vi";

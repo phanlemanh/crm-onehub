@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4834db21ae11577f931eb0e5ed449fdac675d702
+verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
 human_signoff: Phan Le Manh 2026-10-09 — ký Cổng 2 trên verdict PASS 5/5 eval (S4 vòng 6, wf_686b6af2-c44). Ngoài-1..5, 7..9 (thẻ vòng 5) và Ngoài-1 (thẻ vòng 6) ghi Known limits; Ngoài-6 (vòng 5) và Ngoài-2 (vòng 6) chấp nhận, không sửa; Ngoài-10..12 (vòng 5) mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -141,3 +141,7 @@ Round 6: PASS — 5 eval (E1-E5) va 7 lenh suite deu dat tren verified_commit 92
 ### Re-pin lần 1 — 2026-10-10, do hoá cũ do kiem-cheo-chay-quang-lang (F26) chạm scripts/kiem-cheo, scripts/dieu-phoi; E2 chuyển superseded_by; ca (j) theo AC-2
 run_id: repin-20261010T074739Z-98603
 sha: 4834db21ae11577f931eb0e5ed449fdac675d702 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E2 · thay bởi hồ sơ đã ký: E2→kiem-cheo-chay-quang-lang#AC-1 · AC không có chốt máy: AC-5 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
+run_id: repin-20261012T222532Z-81286
+sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 3/3 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E2, E5 · thay bởi hồ sơ đã ký: E2→chuyen-goi-dieu-phoi#AC-5, E5→chuyen-goi-dieu-phoi#AC-7 · AC không có chốt máy: AC-5, AC-12, AC-1 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -45,7 +45,10 @@ export function ChuyenViecDialog({
 		}),
 		enabled: mo,
 	});
-	const dsNguoi = useQuery({ ...trpc.users.list.queryOptions(), enabled: mo });
+	const dsNguoi = useQuery({
+		...trpc.onboarding.nguoiNhanViec.queryOptions(),
+		enabled: mo,
+	});
 
 	const dong = () => {
 		setNhan("");
@@ -57,12 +60,15 @@ export function ChuyenViecDialog({
 		trpc.onboarding.transferWork.mutationOptions({
 			onSuccess: async (kq) => {
 				const tenNhan = dsNguoi.data?.find((u) => u.id === nhan)?.name ?? nhan;
+				const loiXong = dien(k.xong, {
+					keHoach: String(kq.keHoach),
+					buoc: String(kq.buoc),
+					ten: tenNhan,
+				});
 				toast.success(
-					dien(k.xong, {
-						keHoach: String(kq.keHoach),
-						buoc: String(kq.buoc),
-						ten: tenNhan,
-					}),
+					kq.viec > 0
+						? `${loiXong} ${dien(k.xongViec, { n: String(kq.viec) })}`
+						: loiXong,
 				);
 				await cache.workTransferred();
 				dong();
@@ -72,7 +78,9 @@ export function ChuyenViecDialog({
 	);
 
 	const so = xemTruoc.data;
-	const coViec = so !== undefined && (so.keHoach > 0 || so.buoc > 0);
+	const coKeHoach = so !== undefined && (so.keHoach > 0 || so.buoc > 0);
+	const coViecChung = so !== undefined && so.viec > 0;
+	const coViec = coKeHoach || coViecChung;
 	const ten = <span translate="no">{nguoi?.name ?? ""}</span>;
 	const luaChon = (dsNguoi.data ?? [])
 		.filter((u) => u.id !== nguoi?.userId)
@@ -93,14 +101,24 @@ export function ChuyenViecDialog({
 							k.loiXemTruoc
 						) : so === undefined ? (
 							<Spinner />
-						) : coViec ? (
-							dienNode(k.coViec, {
-								ten,
-								keHoach: String(so.keHoach),
-								buoc: String(so.buoc),
-							})
 						) : (
-							dienNode(k.khongViec, { ten })
+							<>
+								{coKeHoach
+									? dienNode(k.coViec, {
+											ten,
+											keHoach: String(so.keHoach),
+											buoc: String(so.buoc),
+										})
+									: dienNode(k.khongViec, { ten })}
+								{coViecChung ? (
+									<>
+										{" "}
+										<span data-dong-viec="">
+											{dien(k.soViec, { n: String(so.viec) })}
+										</span>
+									</>
+								) : null}
+							</>
 						)}
 					</DialogDescription>
 					{xemTruoc.isError ? (

@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { after, describe, test } from "node:test";
 import { KIEM_CHEO } from "../cau-hinh.mjs";
-import { canMoc, docMoc, ghiMoc, lanGop, ngayCua, tepDoi } from "../moc.mjs";
+import { docMoc, ghiMoc, lanGop, tepDoi } from "../moc.mjs";
 import { taoKho } from "./kho-gia.mjs";
 
 const kho = taoKho();
@@ -26,33 +26,6 @@ describe("kcs-moc", () => {
 			"apps/app/b.tsx",
 			"packages/ui/c.ts",
 		]);
-	});
-
-	test("(e) canMoc: 19 gio -> khong moc; 21 gio -> ngay cua M1", () => {
-		const now = Date.parse("2026-10-09T02:00:00Z");
-		const ngay = (sha) => ngayCua(git, sha);
-		const lanGopChuaKiem = [M1, M2, M3];
-		assert.equal(
-			canMoc({
-				lucTruoc: new Date(now - 19 * KIEM_CHEO.donVi.gioMs).toISOString(),
-				now,
-				lanGop: lanGopChuaKiem,
-				ngayCua: ngay,
-			}),
-			null,
-			"duoi 20 gio khong duoc mang moc",
-		);
-		assert.equal(
-			canMoc({
-				lucTruoc: new Date(now - 21 * KIEM_CHEO.donVi.gioMs).toISOString(),
-				now,
-				lanGop: lanGopChuaKiem,
-				ngayCua: ngay,
-			}),
-			ngay(M1),
-			"qua 20 gio: moc = ngay cua lan gop cu nhat chua kiem (M1)",
-		);
-		assert.match(ngay(M1), /^\d{4}-\d{2}-\d{2}$/);
 	});
 
 	test("(c) docMoc: vang / hong / sha khong tren first-parent -> loi goi ten ly do", () => {

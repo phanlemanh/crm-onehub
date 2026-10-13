@@ -25,8 +25,8 @@
 		"db:do": "bun run --filter=@crm/db db:do",
 		"do:man": "bun scripts/lan-do/phien-do.mjs",
 		"okr:mau": "bun run --filter=api okr:mau",
+		"okr:ca-quy-4": "bun run --filter=api okr:ca-quy-4",
 		"ui:capture": "node scripts/ui-capture.mjs",
-		"test:dieu-phoi": "node --test \"scripts/dieu-phoi/test/*.test.mjs\"",
 		"kiem-cheo:cai": "node scripts/kiem-cheo/cai.mjs cai",
 		"kiem-cheo:go": "node scripts/kiem-cheo/cai.mjs go",
 		"kiem-cheo:chay": "node scripts/kiem-cheo/dem.mjs"

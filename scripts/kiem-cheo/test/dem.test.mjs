@@ -84,6 +84,26 @@ describe("kcs-dem", () => {
 		kho.don();
 	});
 
+	test("goi dieu-phoi khong giai duoc -> khong-chay-duoc neu lenh cai, khong khoa, moc dung", () => {
+		const kho = taoKho();
+		kho.hoSo("ky", { paths: ["a.txt"] });
+		kho.git("add", "-A");
+		kho.git("commit", "-q", "-m", "ho so");
+		kho.git("push", "-q", "origin", "onehub");
+		const T = kho.sha();
+		kho.gop({ "a.txt": "b" });
+		const rong = mkdtempSync(join(os.tmpdir(), "kcs-goi-rong-"));
+		const r = chay(kho, ["--tu", T], { KIEM_CHEO_GOI_DIEU_PHOI: rong });
+		assert.equal(r.ket?.ket_qua, KIEM_CHEO.ketQua.khongChayDuoc, r.ra);
+		assert.match(r.ket.ly_do, /dieu-phoi/);
+		assert.match(r.ket.ly_do, /claude plugin install dieu-phoi@acceptance-gate-kit/);
+		assert.equal(r.thongBao.length, 1, "phai bao nguoi mot lan");
+		assert.equal(r.moc, null, "moc khong duoc ghi khi goi vang");
+		assert.equal(r.khoa, false);
+		assert.equal(r.cay, false, "khong dung cay khi goi vang");
+		kho.don();
+	});
+
 	test("goi qua duong symlink van chay luot, khong thoat 0 im lang", () => {
 		const kho = taoKho();
 		kho.gop({ "a.txt": "a" });

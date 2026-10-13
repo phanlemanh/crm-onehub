@@ -1,4 +1,6 @@
+import { DEFAULT_WORKSPACE_NAME } from "@crm/auth";
 import { db } from "@crm/db";
+import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
 
 let dem = 0;
 
@@ -17,9 +19,29 @@ function duy(tien: string): string {
 export async function gieoNguoi() {
 	const id = duy("u");
 	daGieo.nguoi.push(id);
-	return db.user.create({
+	const nguoi = await db.user.create({
 		data: { id, name: "Nguoi thu nghiem", email: `${id}@thu.test` },
 	});
+	await db.organization.upsert({
+		where: { id: WORKSPACE_ID },
+		update: {},
+		create: {
+			id: WORKSPACE_ID,
+			name: DEFAULT_WORKSPACE_NAME,
+			slug: workspaceSlug(DEFAULT_WORKSPACE_NAME),
+			createdAt: new Date(),
+		},
+	});
+	await db.member.create({
+		data: {
+			id: `m-${id}`,
+			organizationId: WORKSPACE_ID,
+			userId: id,
+			role: "member",
+			createdAt: new Date(),
+		},
+	});
+	return nguoi;
 }
 
 export async function gieoCongTy() {

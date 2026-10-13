@@ -5,6 +5,8 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.dph_tra_loi
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; tra-loi.test.mjs xanh ở ca 'tệp trả lời hỏng cú pháp: nhịp không ném, cách ly, cấp và thu hồi vẫn chạy' — fixture qua motNhip thật: khoá s4 của P1 do capPhat cấp, yêu cầu gia-han của P1, tệp trả lời là chuỗi '{\"ket_qua\":\"duyet\",}', đơn duong-nen lành của P2, khoá merge do capPhat cấp rồi lùi hạn và nhịp; khẳng định: motNhip không ném, tra-loi/hong/<id>.json tồn tại và tra-loi/<id>.json vắng, đúng một sự kiện tra-loi-hong can_phan với tep '<id>.json', khoa/duong-nen/chu.json ghi P2, sự kiện thu-hoi merge, trang-thai.json mang nhip_cuoi đúng giờ nhịp 12:10 và bang.html in đúng giờ đó (quan hệ, không chỉ tệp có mặt — tệp đã có từ các nhịp trước), han_thue_den của P1 không đổi. Chiều đỏ: đột biến T1 (apGiaHan đọc tệp trả lời bằng docJson thô) và T7 (bỏ bước ghi trang-thai.json) làm ca này đỏ."
     paths: [scripts/dieu-phoi/phat-lich.mjs, scripts/dieu-phoi/hinh-dang.mjs, scripts/dieu-phoi/test/tra-loi.test.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -12,6 +14,8 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.dph_tra_loi
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; tra-loi.test.mjs xanh ở ca 'tệp trả lời sai hình dạng: ma trận năm ô cách ly nêu trường; đúng hình dạng thì áp' — ma trận viết trước năm phần tử (mảng · thiếu ket_qua · ket_qua là số · uoc_phut là chuỗi · khoá lạ ghi_chu), mỗi ô một nhịp thật, khẳng định tệp vào hong/ và ly_do sự kiện khớp '^tra-loi/P1-1\\.json: <trường>'; số ô đã đo bằng số phần tử. Đối chứng dương bằng vòng ghi thật → đọc: chạy motNhip thật để bộ phát lịch tự ghi ba tệp trả lời (gia-han máy duyệt mang tai_nguyen; viec-phu gộp mang voi; cham-tep duyệt), đọc lại cả ba qua kiemTraLoi đều qua, và tập khoá của chúng là tập con của KHOA_TRA_LOI xuất từ hinh-dang.mjs; tệp giám sát ghi có uoc_phut 45 áp gia hạn. Chiều đỏ: đột biến T2 (bỏ kiểm khoá lạ), T3 (bỏ kiểm ket_qua là chuỗi), T6 (bỏ voi khỏi tập khoá cho phép — vế đối chứng viec-phu đỏ)."
     paths: [scripts/dieu-phoi/phat-lich.mjs, scripts/dieu-phoi/hinh-dang.mjs, scripts/dieu-phoi/test/tra-loi.test.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -19,6 +23,8 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.dph_tra_loi
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; tra-loi.test.mjs xanh ở ca 'tệp trả lời hỏng rồi giám sát ghi lại: áp đúng một lần, không báo lặp' — nhịp 1 cách ly; nhịp 2 (chưa ai sửa) khẳng định tra-loi/<id>.json vắng và sự kiện tra-loi-hong vẫn đúng một; rồi ghi tệp trả lời đúng ket_qua duyet uoc_phut 30; ba nhịp nữa: han_thue_den tăng đúng 30 phút một lần, sự kiện tra-loi-hong vẫn đúng một. Chiều đỏ: đột biến T4 (cách ly bằng chép thay vì chuyển) làm vế nhịp 2 đỏ."
     paths: [scripts/dieu-phoi/phat-lich.mjs, scripts/dieu-phoi/test/tra-loi.test.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -26,6 +32,8 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.dph_hook_s4
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-3
     expected: "exit 0; hook-chan-s4.test.mjs xanh ở ca 'dòng lệnh bọc chạy ra cùng kết quả như lệnh gốc: ma trận bảy dạng' — ma trận viết trước bảy phần tử, mỗi ô: lấy dòng lệnh bọc từ thông điệp hook thật (khoá s4 đúng worktree, run_in_background true), chạy nó bằng spawnSync bash -c trong thư mục tạm có repin-lane.mjs giả in argv và biến TZ, X; chạy lệnh gốc bằng bash -c cùng thư mục, cùng env; khẳng định lệnh gốc thoát 0 và stdout chứa dấu mong đợi riêng của ô (argv, TZ, X do repin-lane.mjs giả in), rồi stdout và status của dòng bọc bằng đúng của lệnh gốc; rồi chayHook với chính dòng bọc chạy nền thoát 0. Số ô đo bằng số phần tử. Chiều đỏ: đột biến T5 (trả '=' vào tập ký tự an toàn) làm ô tiền tố biến đỏ với status 127 khác 0."
     paths: [scripts/dieu-phoi/hook-chan-s4.mjs, scripts/dieu-phoi/giu-nhip.mjs, scripts/dieu-phoi/test/hook-chan-s4.test.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -40,6 +48,8 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.dph_tat_ca
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; bun run test:dieu-phoi xanh mọi ca, 'fail 0', gồm tệp mới tra-loi.test.mjs."
     paths: [scripts/dieu-phoi/**]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -47,6 +57,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.dph_dot_bien
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; bộ đột biến của dieu-phoi-hai-tang in 'KET LUAN: 27 dot bien, moi ca ghim deu do' trên cây mới."
     paths: [scripts/dieu-phoi/**]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -54,6 +66,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.dpvb_dot_bien
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; bộ đột biến của dieu-phoi-va-bien in 'KET LUAN: 32 dot bien, moi ca ghim deu do' trên cây mới."
     paths: [scripts/dieu-phoi/**, scripts/gate-shape-node-test.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -61,6 +75,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.dpvb_git_sach
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-4
     expected: "exit 0; răng git-sach của dieu-phoi-va-bien 'KET LUAN: xanh' — pre-push mới (có khối chuyển hook) vẫn không đổi kho nháp khi chạy trong hook, và bỏ bước gỡ biến vẫn bị bắt."
     paths: [.githooks/pre-push, scripts/gate-shape-node-test.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -68,6 +84,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.dpvb_cong
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-4
     expected: "exit 0; răng cong của dieu-phoi-va-bien 'KET LUAN: xanh' — vòng lệnh pre-push mới vẫn chạy test:dieu-phoi và ghi mốc vào log."
     paths: [.githooks/**, package.json, .github/workflows/acceptance.yml]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -75,6 +93,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.dph_ranh_gioi
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; 'XANH: 0 vi pham tren cay that' và 'chieu do bat du 6/6' trên cây mới."
     paths: [scripts/dieu-phoi/**]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -82,12 +102,16 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.dptm_dot_bien
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; bộ đột biến của vòng này (cùng khuôn hai vòng trước) in 'KET LUAN: 7 dot bien, moi ca ghim deu do' cho T1–T7 nêu ở E1–E4; không MOC VANG, không SONG."
     paths: [scripts/dieu-phoi/**, _acceptance/dieu-phoi-truoc-mo-dot/rang/**]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E13
     criterion: AC-7
     executor: judgment
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     inputs: [scripts/dieu-phoi/README.md]
     question: "Đọc mục «Trong đợt» của README như một phiên giám sát chưa thấy mã. (1) Phiên có biết rằng tệp trả lời tra-loi/<id>.json hỏng cú pháp hoặc sai hình dạng sẽ bị chuyển vào tra-loi/hong/ kèm sự kiện tra-loi-hong? (2) Có biết yêu cầu đó khi ấy coi như chưa trả lời? (3) Có biết cách sửa là ghi lại tệp trả lời đúng hình dạng? PASS chỉ khi cả ba có mặt và đúng nghĩa. (Danh sách khoá đúng hay sai không thuộc câu hỏi này — E14 đo bằng máy.)"
     paths: [scripts/dieu-phoi/README.md]
@@ -97,6 +121,8 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.dptm_readme_khoa
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     expected: "exit 0; rang/readme-khoa.mjs rút danh sách khoá của tệp trả lời trong mục «Trong đợt» của scripts/dieu-phoi/README.md (dòng mở đầu 'Khoá hợp lệ của tệp trả lời:') và so bằng TẬP với KHOA_TRA_LOI import từ scripts/dieu-phoi/hinh-dang.mjs; in 'XANH readme-khoa: <n> khoá khớp'. Chiều đỏ trên bản sao README: bỏ một khoá (uoc_phut) → 'BAT thieu uoc_phut'; thêm khoá lạ (ghi_chu) → 'BAT thua ghi_chu'; thiếu → 'SOT' và thoát 1."
     paths: [scripts/dieu-phoi/README.md, scripts/dieu-phoi/hinh-dang.mjs, _acceptance/dieu-phoi-truoc-mo-dot/rang/readme-khoa.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

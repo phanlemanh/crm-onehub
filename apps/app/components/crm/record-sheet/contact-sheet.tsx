@@ -79,7 +79,9 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { ContactPlans } from "./contact-plans";
 import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
 import {
+	BangDaLuuTru,
 	DealAmount,
+	DongDaLuuTru,
 	lyDoLoi,
 	MetaLine,
 	RecordSheetFrame,
@@ -686,11 +688,18 @@ function ContactDeals({ contact }: { contact: Contact }) {
 
 	if (contact.deals.length === 0) {
 		return (
-			<DetailSheetEmpty
-				icon={Partnership}
-				title={m.contact.notOnDealsTitle}
-				description={m.contact.notOnDealsBody(contactName(contact))}
-			/>
+			<>
+				<DetailSheetEmpty
+					icon={Partnership}
+					title={m.contact.notOnDealsTitle}
+					description={m.contact.notOnDealsBody(contactName(contact))}
+				/>
+				<BangDaLuuTru
+					items={contact.archivedDeals}
+					columns={dealColumns(m)}
+					kind="deal"
+				/>
+			</>
 		);
 	}
 
@@ -722,6 +731,11 @@ function ContactDeals({ contact }: { contact: Contact }) {
 					</TableCell>
 				</SimpleTableRow>
 			))}
+			<DongDaLuuTru
+				items={contact.archivedDeals}
+				columns={dealColumns(m).length}
+				kind="deal"
+			/>
 		</SimpleTable>
 	);
 }

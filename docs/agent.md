@@ -367,6 +367,37 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   tự thì ném nêu tên loại, không bỏ im. Khuôn Zalo
   đánh số mọi dòng theo vị trí trong `daGui`, kể cả dòng OKR — `xong` trỏ vào một
   số OKR bị từ chối như dòng «kế hoạch im»/«mốc ngày», không đánh dấu bước nào.
+- **Việc kế hoạch chỉ gom cho người đọc được dữ liệu đối tác.** `viecCanNhac` dựng
+  `tapDoiTac` từ vai của thành viên và chỉ gom bốn loại kế hoạch (`buoc-qua-han`,
+  `buoc-sap-han`, `ke-hoach-im`, `moc-ngay` — mang tên công ty) cho người trong tập đó;
+  mục OKR, Kho tài liệu, Tóm tắt tuần, ngân sách AI vẫn gom cho mọi thành viên. Người vai
+  «chỉ OKR» chỉ có việc kế hoạch thì không có hàng nhắc nào. Lọc ở gói dùng chung nên tin
+  nhắc, thẻ «Việc của bạn» và Tổng quan cùng một luật. Luật là `docDuocDoiTac`:
+  `packages/db` không phụ thuộc được `@crm/validation` (chiều ngược đã có), nên bộ gom
+  dùng một bản sao cùng tên của luật, `@crm/db/vai-doi-tac`; `packages/validation/test/vai-workspace.spec.ts`
+  giữ hai bản khớp cho mọi vai, kể cả vai lạ — cùng nếp với `okr-goi-soan-khop.spec.ts`.
+- **Việc vào nhắc buổi sáng: ba loại, lọc theo vai.** `viecCanNhac` (`@crm/db/onboarding-nhac`) gom
+  thêm `viec-qua-han` (việc đang mở hạn trước hôm nay, gửi người thực hiện), `viec-sap-han` (Chưa làm
+  hay Đang làm, hạn trong `NHAC.sapHanNgay` ngày, gửi người thực hiện), `viec-cho-danh-gia` (gửi người
+  giao khác người thực hiện). Lọc bằng chính `tapDoiTac` của bốn loại kế hoạch, theo người nhận — người
+  vai «chỉ OKR» không có dòng việc nào, dù dữ liệu cũ còn đặt họ trong việc. Dòng tin: tiêu đề · hạn · tên
+  bản ghi gắn đầu tiên; đường mở `<APP_URL>/<slug>/viec?record=viec:<id>`. Mục `mucNhac` của việc là
+  `{loai, viecId}`. Người theo dõi việc không nhận nhắc. `lenLichNhac` mã hoá từng mục riêng: một mục
+  không mã hoá được bị bỏ và ghi log, các mục khác và hàng của người khác vẫn được ghi.
+- **«xong n» trên dòng việc** đi qua `doiTrangThai` của `@crm/db/viec-ghi` với `nguon: "zalo"` — cùng
+  hàm của màn. Dòng quá hạn, sắp hạn chỉ người thực hiện đóng được; dòng chờ đánh giá chỉ người giao.
+  Cả lần nhắn là tất cả hoặc không gì: có một mục bị từ chối thì không mục nào được đánh dấu. Ba lời từ
+  chối; lời đầu thắng hai lời sau, hai lời sau nằm chung một câu trả lời nếu tin có cả hai loại mục:
+  - Người nhắn sai vai của dòng (kể cả người giao cầm tin chuyển tiếp của người thực hiện), hay không có
+    quyền chuyển việc sang Xong ở trạng thái hiện tại mà lý do không phải hai dòng dưới đây: «việc của
+    người khác».
+  - Việc đang Chờ đánh giá mà người nhắn là người thực hiện: «đang chờ người giao đánh giá, bây giờ chỉ
+    người giao đóng được».
+  - Việc đã Huỷ: «là việc đã huỷ, không đánh dấu xong được».
+
+  Việc đã Xong trả «đã xong từ trước» (không ghi gì); việc đã bị xoá trả «không còn việc đó». Việc đổi
+  trạng thái giữa lúc kiểm và lúc ghi (`doiTrangThai` ném `LoiViec`) trả «vừa đổi trạng thái nên chưa
+  đóng được», và cả lần nhắn được hoàn lại như mọi mục đổi.
 - **Khuôn mục nhắc OKR là `viecOkr` (Zod, `@crm/db/okr-nhac`), một nguồn.**
   `ViecOkr` suy từ nó; API «Việc của bạn» dùng chính nó; `KHOA_MUC_OKR` khai trường
   mã của từng loại, và nhánh OKR của `mucNhac` cùng `maViec` suy từ bảng đó.

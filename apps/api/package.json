@@ -15,6 +15,7 @@
 		"dev:grant-needed": "bun scripts/dev-grant-needed.ts",
 		"dev:session": "bun scripts/dev-session.ts",
 		"okr:mau": "bun scripts/okr-mau.ts",
+		"okr:ca-quy-4": "bun scripts/okr-ca-quy-4.ts",
 		"lint": "biome check .",
 		"postinstall": "node scripts/chmod-trpc-binary.mjs",
 		"start": "bun src/main.ts",

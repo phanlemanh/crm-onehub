@@ -6,6 +6,8 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.kcq_lich
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-5
     paths:
       - "scripts/dieu-phoi/lich.mjs"
       - "scripts/dieu-phoi/test/lich.test.mjs"
@@ -52,6 +54,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.kcq_noi_f9
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-9
     paths:
       - "_acceptance/kiem-cheo-sau-gop/evals.yaml"
       - "_acceptance/kiem-cheo-chay-quang-lang/contract.md"

@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-san-pham-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Sản phẩm số"
+	},
+	"mucTieu": {
+		"title": "Đối tác tự theo dõi đơn không cần gọi điện",
+		"whyNow": "Một phần ba cuộc gọi đến là hỏi đơn đang ở đâu.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Ra bản thử ứng dụng theo dõi đơn",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		},
+		{
+			"title": "Cuộc gọi hỏi đơn giảm từ 1.200 xuống 600 mỗi tháng",
+			"kind": "giam-xuong",
+			"startValue": 1000,
+			"targetValue": 600,
+			"unit": "cuộc"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên là nơi đến, mốc bản thử đi kèm giảm cuộc gọi hỏi đơn — câu đã tốt."
+}

@@ -9,6 +9,7 @@ import {
 } from "@crm/db";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { caNhanCoSo, caNhanTrungSo } from "@crm/db/so-dien-thoai";
+import { ghiGoDoXoa } from "@crm/db/viec-ghi";
 import {
 	docSoDienThoai,
 	hienThiSoDienThoai,
@@ -37,6 +38,7 @@ import {
 	requireOwner,
 	runBulk,
 } from "../crm/bulk";
+import { tachDaLuuTru, thoaThuanDaLuuTru } from "../crm/da-luu-tru";
 import { blankToNull, normalizeEmail, toCents } from "../crm/values";
 import { InjectDatabase } from "../database/database.constants";
 import { FieldsService } from "../fields/fields.service";
@@ -257,6 +259,7 @@ export class ContactsService {
 								amount: true,
 								currency: true,
 								expectedCloseDate: true,
+								archivedAt: true,
 								owner: { select: OWNER_SELECT },
 							},
 						},
@@ -276,6 +279,9 @@ export class ContactsService {
 
 		const { deals, createdAt, archivedAt, brief, facts, company, ...rest } =
 			contact;
+		const thoaThuan = tachDaLuuTru(
+			deals.map(({ role, deal }) => ({ ...deal, role })),
+		);
 
 		return {
 			...rest,
@@ -298,13 +304,14 @@ export class ContactsService {
 			})),
 			relationship,
 			isPrimaryContact: company?.primaryContactId === contact.id,
-			deals: deals.map(({ role, deal }) => ({
+			deals: thoaThuan.dangDung.map((deal) => ({
 				...deal,
-				role,
+				archivedAt: undefined,
 				amount: undefined,
 				amountCents: toCents(deal.amount),
 				expectedCloseDate: deal.expectedCloseDate?.toISOString() ?? null,
 			})),
+			archivedDeals: thoaThuan.daLuuTru.map(thoaThuanDaLuuTru),
 		};
 	}
 
@@ -470,6 +477,8 @@ export class ContactsService {
 
 				await tx.agentTask.deleteMany({ where: { contactId: id } });
 				await tx.agentEvent.deleteMany({ where: { contactId: id } });
+
+				await ghiGoDoXoa(tx, { contactId: id }, new Date());
 
 				const contact = await tx.contact.delete({
 					where: { id },
@@ -741,7 +750,7 @@ export class ContactsService {
 				}),
 				companyId
 					? this.db.contact.findMany({
-							where: { companyId, id: { not: contactId } },
+							where: { companyId, id: { not: contactId }, archivedAt: null },
 							orderBy: { lastActivityAt: { sort: "desc", nulls: "last" } },
 							take: 4,
 							select: {

@@ -40,6 +40,7 @@ import { TroLyOkrDeXuatMau } from "./_modules/tro-ly-okr-de-xuat";
 import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
 import { TroLyOkrTomTatMau } from "./_modules/tro-ly-okr-tom-tat";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
+import { ViecChungMau } from "./_modules/viec-chung";
 import { PROTO_CATALOG } from "./catalog";
 
 export type ProtoComponent = (props: { state: string }) => ReactNode;
@@ -89,6 +90,7 @@ const BANG_GHEP = {
 	"cua-vao-va": CuaVaoVaMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 	"khung-ban-ghi-kara": KhungBanGhiKaraMau,
+	"viec-chung": ViecChungMau,
 } satisfies Record<string, ProtoComponent>;
 
 export const PROTO_COMPONENTS = new Map(Object.entries(BANG_GHEP));

@@ -1,6 +1,6 @@
 # Gói đợt r2 — giai đoạn hai của Điều phối – Thợ
 
-Giai đoạn một (đợt `sau-14-10`, 07–11/10) chạy bằng bộ điều phối crm tự viết trong `scripts/dieu-phoi/`. Kết quả và
+Giai đoạn một (đợt `sau-14-10`, 07–11/10) chạy bằng bộ điều phối crm tự viết, nay đã gỡ khỏi kho. Kết quả và
 bài học đã chuyển sang kit thành gói `dieu-phoi` (DP1–DP7). Giai đoạn hai chạy đợt `r2` từ gói của kit trên crm, và
 cũng là lần đo «chạy được mà không sửa lõi».
 
@@ -12,30 +12,31 @@ quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot r2`, không p
 
 1. Kit đã cắt bản mang gói `dieu-phoi`, và crm đã cài đúng tag của bản đó cho cả bốn gói (`acceptance-gate`,
    `feature-loop`, `diagram-design`, `dieu-phoi --scope project`), cùng số phiên bản.
-2. PR chuyển đổi đã gộp: gỡ `scripts/dieu-phoi/`, bốn khối hook trong `.claude/settings.json`, `test:dieu-phoi` ở
-   `package.json`, `pre-push`, `gate-shape.json` và `acceptance.yml`; nối lại `scripts/kiem-cheo/` sang gói kit; khai
-   «thay bởi» cho eval của các hồ sơ đã ký trỏ vào `scripts/dieu-phoi/`; thêm khoá `dieu_phoi.goi_dot:
-   docs/plan/dot-{ten}` vào `_acceptance/config.yaml`.
+2. PR chuyển đổi (hồ sơ `chuyen-goi-dieu-phoi`) đã gộp: gỡ bộ điều phối tự viết, bốn khối hook trong
+   `.claude/settings.json` và bước kiểm của nó ở `package.json`, `pre-push`, `gate-shape.json`, `acceptance.yml`; nối
+   lại `scripts/kiem-cheo/` sang gói kit; khai «thay bởi» cho eval của các hồ sơ đã ký đo bộ cũ; thêm khoá
+   `dieu_phoi.goi_dot: docs/plan/dot-{ten}` vào `_acceptance/config.yaml`.
 3. Không đợt nào đang chạy: `chan-doan --mo r2` chỉ còn thiếu mục `co-dot`.
-4. Ngoài 14/10 và ở quãng lặng (lộ trình kit: đợt thử thứ nhất 26/10).
+4. Ngoài 14/10 và ở quãng lặng. crm đã nhận kit 2.28.0 (13/10); đợt thử thứ nhất mở 14/10.
 
 ## Dãy
 
 | Dãy | Việc | Hàng (theo thứ tự) | Mốc |
 |---|---|---|---|
-| P0 | Việc và Dự án — vá rò quyền | DA0a | 14/10 |
-| P1 | Kara trên dữ liệu mẫu | N1 → C, K6a, K2f | R2 20/11 |
+| P0 | Việc và Dự án — vá rò quyền | DA0b (DA0a đã gộp 12/10, #372) | 16/10 |
+| P1 | Kara trên dữ liệu mẫu | N1 → C, K6a, K2f | R2 31/10 (tạm) |
 | P2 | Lý do căn chỉnh | L2, L3 → L4 | R2 |
 | P3 | Vòng đời bản ghi | V2a → V2e, V2b, V2f | R2 |
 | P4 | Nếp màn chung | NM1 → NM2 → NM3 (sau K6a), NM4, V2c | R2 |
 | P5 | Thoả thuận và onboarding | E6b, E4b, E5 | R2 |
 | P6 | Kho tài liệu | cb → l5, l3b | 04/11, R2 |
-| P7 | Vệ sinh — có hạn mức | F24, F8, F23 | 30/11 |
+| P7 | Vệ sinh — có hạn mức | F24, F8, F23, DA0c, F26 | 14/11 |
 
-Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án sau DA0a.
+Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án DA1–DA8 (máy M5 giữ từ 13/10). F27 đã bác: kit 2.28.0 đóng lỗi đó.
 
-Worktree của dãy để chỗ giữ `/CHUA-CO-WORKTREE/<dãy>` như gói giai đoạn một. Kit chưa có bước để thợ ghi danh worktree
-(đã báo ở bình luận PR kit #301); tới khi có, thợ mở từ chip báo worktree thật cho giám sát điền trước khi nhận dãy.
+Worktree của dãy để chỗ giữ `/CHUA-CO-WORKTREE/<dãy>`. Việc đầu tiên của phiên thợ mở từ chip, trước S1, là
+`node <thư mục đợt>/loi/dieu-phoi.mjs ghi-danh <dãy>` từ worktree của chip (kit 2.28.0, DP8; lời mời chip mang sẵn
+lệnh). Việc nền giữ khoá `s4` — kiểm chéo đêm — ghi nhịp hoặc được miễn, nên cảnh báo «khoa-khong-nhip» là thật.
 
 ## Tên và giao tiếp
 

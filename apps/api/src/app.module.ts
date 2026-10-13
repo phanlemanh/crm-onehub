@@ -43,6 +43,7 @@ import { ToChucModule } from "./to-chuc/to-chuc.module";
 import { TrackingModule } from "./tracking/tracking.module";
 import { TrpcModule } from "./trpc/trpc.module";
 import { UsersModule } from "./users/users.module";
+import { ViecModule } from "./viec/viec.module";
 import { WorkspaceModule } from "./workspace/workspace.module";
 import { ZaloModule } from "./zalo/zalo.module";
 
@@ -77,6 +78,7 @@ import { ZaloModule } from "./zalo/zalo.module";
 		AgentModule,
 		EnrichmentModule,
 		DashboardModule,
+		ViecModule,
 		SearchModule,
 		MailboxModule,
 		GoogleModule,

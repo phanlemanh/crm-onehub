@@ -21,6 +21,7 @@ export const RECORD_KINDS = [
 	"so-kr",
 	"kr",
 	"soan",
+	"viec",
 ] as const;
 
 export type RecordKind = (typeof RECORD_KINDS)[number];

@@ -1,0 +1,257 @@
+schema_version: 1
+slug: chuyen-goi-dieu-phoi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cgdp_kiem_chuyen
+    paths:
+      - ".claude/settings.json"
+      - ".githooks/**"
+      - ".github/**"
+      - "package.json"
+      - "scripts/**"
+      - "docs/plan/dot-r2/**"
+      - "_acceptance/config.yaml"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/chuyen-goi-dieu-phoi/design.md"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/kiem-chuyen.mjs (goc kho suy tu vi tri script). Dong dau in nguon goi («goi dieu-phoi: ...»).
+      Dung ban clone doc lap cua HEAD trong thu muc tam (git clone, khong worktree — kiemChuyen cua goi doc goc kho chung),
+      goi kiemChuyen THAT cua goi da giai tren ban clone, roi xep moi dong <tep>:<so> vao bang phan lop cua design doc
+      (rut bang ma: ho so khac ngoai evals.yaml; dong evals.yaml trong khoi eval khai not-run, doc bang lib/eval-yaml.cjs;
+      dong executor config.yaml khong eval song nao dung; docs/superpowers/**; docs/plan/dot-sau-14-10/**; ho so nay; khoi
+      eval song co id thuoc danh sach mien — danh sach rut tu bang «Danh sach mien» cua design doc, khong chep tay; tu round
+      3 danh sach trong, nen moi khoi song nhac duong cu deu la sai).
+      In «ngoai lop: 0» va so dong moi lop. Tap id khoi song co dong tra ve phai BANG danh sach mien: thieu hay thua -> ma 1
+      «DO mien-lech thua=<id,...> thieu=<id,...>». Them: git ls-files scripts/dieu-phoi rong («scripts/dieu-phoi: 0 tep»); quet moi
+      tep .mjs/.js/.cjs/.ts/.tsx duoc theo doi ngoai _acceptance/ va docs/, giai tung import/require tuong doi theo thu muc
+      cua tep, khong cai nao roi vao scripts/dieu-phoi/ («import vao ban cu: 0»). Doi chung duong: tren ban clone cua
+      MERGE-BASE, kiemChuyen ra > 0 dong ngoai lop va quet import bat 3 import cua scripts/kiem-cheo.
+      Chieu do tren chinh ban clone HEAD, moi ca sua mot cho roi do lai, ma 1 va thong diep ghim: chen lai khoi hook
+      PostToolUse goi scripts/dieu-phoi/hook-nhip.mjs vao .claude/settings.json -> «DO ngoai-lop .claude/settings.json»;
+      bo «status: not-run» cua mot eval da khai thay boi -> «DO ngoai-lop _acceptance/<slug>/evals.yaml»; them
+      import "../dieu-phoi/dot.mjs" vao scripts/kiem-cheo/khoa.mjs -> «DO import scripts/kiem-cheo/khoa.mjs». Ca nao khong
+      do -> ma 1 «thuoc hong: <ca>». Ma 0 khi ban that dat va ca ba ca do bi bat.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cgdp_mo_dun
+    paths:
+      - "scripts/kiem-cheo/goi-dieu-phoi.mjs"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/mo-dun.mjs. Doc danh sach tep .mjs o goc scripts/dieu-phoi/ tai merge-base bang git ls-tree (khong chep tay),
+      trich ra thu muc tam bang git archive; voi moi tep, nap module cu va module cung ten cua goi trong tien trinh con rieng
+      (Object.keys cua namespace), so tap ten. In moi tep «dat <tep>: <n> ten» hoac «thieu <tep>: <ten,...>». Ma 0 khi so tep
+      cu > 0, moi tep cu co tep cung ten trong goi, tap ten thieu bang DUNG {lich.mjs: [PHIEN_XEP_CUOI]}, va README.md,
+      scripts/mau/LUAT.md cua goi co mat va khong rong (README.md, mau/LUAT.md cua bo cu co o merge-base). Merge-base la neo
+      tinh luc do (rang/chung.mjs neoVong: nhanh mo -> merge-base voi origin/onehub; da gop -> cap sha cua commit gop).
+      Chieu do tren ban sao cua goi trong thu muc tam: xoa export dau tien cua bang.mjs -> ma 1 «DO ngoai-le-lech bang.mjs»;
+      them export PHIEN_XEP_CUOI vao lich.mjs -> ma 1 «DO ngoai-le-lech lich.mjs» (ngoai le da khai khong con — cung la
+      sai); xoa tep suc-khoe.mjs -> ma 1 «DO vang suc-khoe.mjs»; xoa README.md cua ban sao goi -> ma 1 «DO vang tai-lieu
+      README.md». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.cgdp_hook
+    paths:
+      - ".claude/settings.json"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/hook.mjs. Doc .claude/settings.json o merge-base (git show) va o HEAD (tren dia). Khoi go = moi hook o
+      merge-base co command nhac scripts/ cua kho; rut bo (su kien, matcher, ten tep) bang cach tach duong trong command —
+      phai ra dung 4 bo, khac 4 -> ma 2 «khong do duoc: <n> bo». HEAD: khong command nao goi scripts/ cua kho, nhan
+      moi cach viet ($CLAUDE_PROJECT_DIR/…, ${CLAUDE_PROJECT_DIR}/…, "$CLAUDE_PROJECT_DIR"/…, duong tuong doi scripts/…;
+      tru ${CLAUDE_PLUGIN_ROOT}) («hook goi kho: 0»), moi khoa ngoai hooks deep-equal merge-base, rieng enabledPlugins duoc them dung
+      dieu-phoi@acceptance-gate-kit: true («khoa khac: giu»). hooks/hooks.json cua goi: voi moi
+      bo co mot hook cung su kien, cung matcher (ca hai vang tinh la cung), command chua
+      ${CLAUDE_PLUGIN_ROOT}/scripts/<ten tep>, va tep do co trong goi — in «phu <su kien> <matcher> <ten tep>».
+      Chieu do tren ban sao trong thu muc tam: hooks.json bo khoi Notification -> ma 1 «DO thieu Notification»; hooks.json
+      doi matcher PostToolUse thanh "Bash" -> ma 1 «DO thieu PostToolUse»; settings HEAD giu khoi PreToolUse cu -> ma 1
+      «DO con hook goi kho»; settings HEAD doi enabledPlugins -> ma 1 «DO khoa khac doi enabledPlugins»;
+      settings HEAD them mot hook goi scripts/x.mjs theo tung cach viet tren -> ma 1 «DO con hook goi kho Stop x.mjs». Ca nao khong do
+      -> ma 1 «thuoc hong: <ca>».
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cgdp_cong
+    paths:
+      - "package.json"
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/cong.mjs. Cho tung ben (merge-base qua git show, HEAD tren dia): ten script cua package.json; task cua vong
+      «for task in ...» cua .githooks/pre-push rut bang cach chay chinh dong do trong bash voi lenh in thay than vong; id
+      checker cua gate-shape.json; lenh run cua moi buoc moi job trong acceptance.yml (Bun.YAML.parse). Moi noi: tap mat =
+      {test:dieu-phoi} (workflow: {bun run test:dieu-phoi}), tap them = rong, va phan con lai deep-equal (package.json bo
+      script do; gate-shape bo checker do; acceptance.yml bo buoc do; pre-push chi khac dong vong). In «dat <noi>» cho bon
+      noi. Moi task cua vong pre-push HEAD co trong scripts cua package.json HEAD («dat task-co-script»).
+      Chieu do tren ban sao trong thu muc tam: acceptance.yml mat them buoc product-map -> ma 1 «DO workflow mat them»;
+      package.json giu test:dieu-phoi -> ma 1 «DO package.json»; vong pre-push them task «lint:moi» khong co script -> ma 1
+      «DO task-khong-script lint:moi»; gate-shape doi note cua checker turbo build -> ma 1 «DO gate-shape doi khac». Ca nao
+      khong do -> ma 1 «thuoc hong: <ca>».
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cgdp_kiem_cheo
+    paths:
+      - "scripts/kiem-cheo/**"
+      - "docs/plan/dot-r2/hang-viec.json"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/kiem-cheo.mjs. (1) Nap scripts/kiem-cheo/goi-dieu-phoi.mjs voi KIEM_CHEO_GOI_DIEU_PHOI = goc goi da giai;
+      timThuMucDot va chamNhip tra ve === ham cua dot.mjs va hook-nhip.mjs nap tu cung duong goi («dat cung-ham»).
+      (2) Thu muc dot gia (phat-lich.pid = pid song cua chinh tien trinh) trong thu muc tam; goi layKhoa THAT cua
+      scripts/kiem-cheo/khoa.mjs voi ham cho chup noi dung xin/kiem-cheo-s4.json roi cap khoa; don chup duoc qua kiemDon
+      cua goi khong nem va khong co khoa moc («dat don-qua-kiemDon», «dat don-khong-moc»).
+      (3) node --test "scripts/kiem-cheo/test/*.test.mjs" voi cung bien -> ma 0, tong ket «fail 0» va so ca > 0.
+      (4) Kho git tam co .acceptance-runs/dieu-phoi-hien-tai tro thu muc dot; hang-viec.json cua dot = hang cua goi dot
+      docs/plan/dot-r2 doc bang docGoi cua goi (26 hang, moi hang co moc), day[].worktree thay bang thu muc con that cua kho
+      tam. Don kiem-cheo ghi TRUOC (layKhoa that, giu luc cua no); roi voi moi day, ghiDon THAT cua goi (ghi.mjs, cwd =
+      worktree cua day, loai s4) sinh don tho — luc moi don tho sau luc cua kiem-cheo. xepHang cua goi tren moi don doc lai
+      tu xin/ -> don kiem-cheo dung cuoi («dat kiem-cheo-cuoi», in so don tho). Doi chung cung fixture: cung don kiem-cheo
+      them moc "2026-10-01" -> dung truoc it nhat mot don tho («dat doi-chung-moc»); moi don tho bo slug -> kiem-cheo dung
+      dau («dat doi-chung-gio» — xac nhan luc cua kiem-cheo som nhat, chi moc giu no o cuoi). Doi chung nao khong dung ->
+      ma 1 «thuoc hong: <doi chung>».
+      Chieu do tren ban sao scripts/kiem-cheo trong thu muc tam: khoa.mjs ghi lai moc vao don -> ma 1 «DO don-co-moc»;
+      goi-dieu-phoi.mjs import tinh dot.mjs tu duong tuyet doi khac goi -> ma 1 «DO khac-ham timThuMucDot». Ca nao khong do
+      -> ma 1 «thuoc hong: <ca>».
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cgdp_goi_vang
+    paths:
+      - "scripts/kiem-cheo/**"
+      - "scripts/resolve-plugin.mjs"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/goi-vang.mjs. Kho gia dung bang scripts/kiem-cheo/test/kho-gia.mjs (origin, mot ho so da ky, moc o commit
+      goc, mot lan gop cham paths cua ho so). Ba lan chay node scripts/kiem-cheo/dem.mjs --goc <kho gia> voi
+      KIEM_CHEO_DUNG_CAY=true, KIEM_CHEO_LAN = lam gia ghi tep dau, KIEM_CHEO_THONG_BAO = lenh ghi tep dau bao:
+      Hai ca goi vang chay tren kho gia co mot dot song (.acceptance-runs/dieu-phoi-hien-tai tro thu muc dot, phat-lich.pid
+      la pid cua mot tien trinh ngu do bo do mo va giet khi xong), de ve «khong ghi don xin» co cho de do:
+      (a) KIEM_CHEO_GOI_DIEU_PHOI = thu muc rong; (b) khong bien, HOME = thu muc rong (resolve-plugin.mjs tim ban cai chi qua
+      os.homedir(), tuc HOME; bo do kiem dieu nay bang cach doc chinh tep do va in «HOME la bien duy nhat»). Ca hai: tep
+      ngay co ket_qua khong-chay-duoc, ly_do chua «dieu-phoi» va «claude plugin install dieu-phoi@acceptance-gate-kit», tep
+      dau bao co, tep dau lan KHONG co, xin/ cua dot rong, moc.json giu nguyen tung byte (sha256 truoc = sau) — in «dat
+      <ca>».
+      (c) khong bien, HOME tam co ban cai: bo cuc rut tu duong cai THAT cua feature-loop tren may nay (resolve-plugin.mjs
+      --plugin feature-loop -> phan duong sau HOME, thay ten goi va phien ban bang cua goi dieu-phoi), chep goi da giai vao
+      do; khong co dot -> ket_qua xanh, tep dau lan co, moc.json sha = dinh origin/onehub («dat da-cai-khong-dot»).
+      (d) chi khi resolve-plugin.mjs --plugin dieu-phoi giai duoc tren HOME that: chay nhu (c) voi HOME that -> ket_qua xanh
+      («dat ban-cai-that»); khong giai duoc thi in «bo (d): goi chua cai — do o luot ghim lai sau cai».
+      Chieu do tren ban sao scripts/kiem-cheo: dem.mjs nuot loi nap goi (catch roi di tiep voi khoa tay) -> ma 1 «DO
+      goi-vang-im»; dem.mjs khi goi vang tu tim dot qua .acceptance-runs/dieu-phoi-hien-tai roi xin khoa (ngat sau 30 giay)
+      -> ma 1 «DO co-don-xin»; bo lenh cai khoi ly_do -> ma 1 «DO thieu-lenh-cai»; dem.mjs truyen cho layKhoa mot timDot nem loi -> (c)
+      phai ma 1 «DO khong-dot». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cgdp_luot_kho
+    paths:
+      - "scripts/kiem-cheo/**"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/luot-kho.mjs. Kho gia (kho-gia.mjs) co origin, mot ho so da ky, moc.json ghi luc 21 gio truoc, mot lan gop
+      cham paths cua ho so. DIEU_PHOI_MAY_DIR = thu muc tam. Mo dot bang CLI cua goi trong kho gia: «mo thu» roi «chay»;
+      cho phat-lich.pid song. Chay node scripts/kiem-cheo/dem.mjs --goc <kho gia> voi KIEM_CHEO_DUNG_CAY=true,
+      KIEM_CHEO_GOI_DIEU_PHOI = goc goi, KIEM_CHEO_LAN = lan gia: lan gia doc <thu muc dot>/khoa/s4/chu.json, ghi ra tep, in
+      dong ket lan xanh dung khuon phan-xu.mjs doc. Sau luot: chu.json chup trong lan co phien kiem-cheo va khong co khoa
+      moc («dat khoa-cua-kiem-cheo»); khoa/s4 vang («dat nha-khoa»); tep ngay ket_qua xanh («dat ket-xanh»); moc.json sha =
+      dinh origin/onehub («dat moc-tien»). Roi «dong»: pid trong phat-lich.pid khong con song sau 10 giay, thu muc khoa
+      may s4 vang («dat dong-sach»); git status cua cay goi lenh khong doi.
+      Chieu do tren ban sao scripts/kiem-cheo: khoa.mjs bo nha khoa (tra la ham rong) -> ma 1 «DO khoa-con-giu»; dem.mjs bo
+      qua dot song (luon khoa tay) -> ma 1 «DO khong-qua-phat-lich». Ca nao khong do -> ma 1 «thuoc hong: <ca>». Moi tien
+      trinh bo phat lich do phep do mo deu duoc dung bang «dong» hoac kill <pid> da ghi, ke ca khi phep do loi.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.cgdp_goi_dot
+    paths:
+      - "_acceptance/config.yaml"
+      - "docs/plan/dot-r2/**"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/goi-dot.mjs. docKhoaGoiDot cua goi tren goc kho -> "docs/plan/dot-{ten}" («dat khoa»). git diff -U0
+      merge-base -- _acceptance/config.yaml khong co dong «-» nao, co dong «+» («dat chi-them»). Ban clone doc lap cua HEAD:
+      node <goi>/scripts/dieu-phoi.mjs chan-doan --mo r2 --json, cwd = ban clone, HOME = thu muc tam rong -> JSON co dung
+      cac muc cua MUC; co-dot thieu; goi-dot du, viec ket thuc bang docs/plan/dot-r2; con lai khong-ap («dat chan-doan»).
+      Chieu do cung ban clone: xoa khoi dieu_phoi trong config.yaml -> goi-dot thieu, ma 1 «DO goi-dot thieu» khi bo do
+      xem ket qua nay la dat; doi goi_dot thanh docs/plan/khong-co-{ten} -> «DO goi-dot thieu». Ca nao khong do -> ma 1
+      «thuoc hong: <ca>».
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cgdp_thay_boi
+    paths:
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/chuyen-goi-dieu-phoi/design.md"
+      - "_acceptance/chuyen-goi-dieu-phoi/contract.md"
+      - "_acceptance/chuyen-goi-dieu-phoi/evals.yaml"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+      - "lib/ac-line.cjs"
+      - "lib/workspace-record.cjs"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/thay-boi.mjs. Bang rut tu design doc (muc «Eval cu thay boi vong nay», cot 1-2), khong chep tay trong script;
+      so dong > 0. Voi moi dong: status not-run va superseded_by = chuyen-goi-dieu-phoi#<AC> (doc bang lib/eval-yaml.cjs, bo
+      nhay va chu thich duoi); AC co trong hop dong (lib/ac-line.cjs parseACBlock); AC co eval song trong evals.yaml nay.
+      Mien kiem = cac ho so trong bang HOP voi moi ho so co evals.yaml doi theo git diff --name-only --diff-filter=M <neo>
+      (tru ho so nay); moi ho so cua bang phai co trong mien rut tu git diff («dat mien git diff phu moi ho so cua bang»). Voi moi tep evals.yaml trong mien: git diff -U0 merge-base chi gom dong «+    status: not-run»/«+    superseded_by: ...» cho
+      eval moi khai va cap «-/+    superseded_by:» cho eval khai tu truoc, tat ca thuoc dong cua bang («dat <slug> chi doi
+      bang»). Kit: quet MOI dong superseded_by cua _acceptance/*/evals.yaml o HEAD (khong chi dong cua bang; in so con tro),
+      goi chungThayBoi cua lib/evidence-core.cjs cho tung con tro -> chap nhan «ok», hoac «ho-so-thay-chua-ky» chi khi dich
+      la ho so nay va contract nay chua signed-off; ket qua khac -> ma 1 «DO con-tro-gay <slug>/<id> <lyDo>». Doi chung
+      duong: tien le ci-ma-tran-ba-o/E5 -> thuoc-7-ngay-loc-pr#AC-4 tra ok.
+      Chieu do tren ban sao trong .acceptance-runs/chuyen-goi-dieu-phoi/thay-thu/: mot eval cua bang mat «status: not-run»
+      -> ma 1 «DO <slug>/<id> status»; superseded_by tro AC-99 -> ma 1 «DO AC-99 khong co»; them mot dong sua expected
+      vao evals.yaml cu -> ma 1 «DO <slug> doi ngoai bang»; sua expected trong evals.yaml cua luat-kho-vong-doi (ho so
+      ngoai bang) tren mot ban clone cua HEAD, mien rut bang chinh buoc git diff tren ban clone do -> ma 1 «DO luat-kho-vong-doi
+      doi ngoai bang»; buoc git diff tra rong -> ma 1 «DO mien-git-diff thieu»; them vao ho so khac mot eval not-run tro
+      dieu-phoi-hai-tang#AC-1 -> ma 1 «DO con-tro-gay». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.cgdp_khong_do_them
+    paths:
+      - ".claude/settings.json"
+      - ".githooks/**"
+      - ".github/**"
+      - "package.json"
+      - "scripts/**"
+      - "_acceptance/config.yaml"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/**"
+    expected: |
+      bun rang/khong-do-them.mjs. Rut tap lenh: moi eval test/script khong khai not-run cua ho so signed-off hoac
+      machine-cleared khac ho so nay, ma paths (lib/evidence-core.cjs evalPathsOf + pathGlobToRe) khop mot tep cua git diff
+      --name-only merge-base..HEAD ngoai _acceptance/, hoac lenh da giai nhac scripts/dieu-phoi/, test:dieu-phoi hay
+      scripts/kiem-cheo/; gop lenh trung. Hai ban clone day du (bun install --frozen-lockfile, bun run db:generate, .env chep
+      tu goc kho) cua HEAD va merge-base, moi ban dat onehub va origin/onehub = chinh sha cua no (trang thai sau gop: thuoc
+      pham vi cua vong cu, vi du do diff merge-base(onehub)..HEAD, do nhu tren onehub sau khi gop); chay tung lenh o ca hai voi KIEM_CHEO_GOI_DIEU_PHOI = goc goi, nhat ky moi lenh ra
+      .acceptance-runs/chuyen-goi-dieu-phoi/khong-do-them/. In moi lenh «xanh», «do san <lenh>: <log>», hay «sai <lenh>: ma
+      <a> tren HEAD, 0 tren merge-base: <log>». Lenh trong danh sach bo khai san in «bo <lenh>: <ly do>»: ld_ba_noi_deu_chay, hld_build_heap,
+      check_types_khong_cache, lint_khong_cache, build_khong_cache, lint_slop, api, nc_rang_qua_cong (suite keys, bun run
+      test tron bo hoac pre-push tron — da chay o moi luot S4), va moi lenh ho pre-push «bash
+      _acceptance/hinh-cua-luoi/rang-hinh.sh …» / «bash _acceptance/luoi-day-do-that/rang-hook.sh …» (chay pre-push that
+      nhieu luot). Thay cho ho pre-push: dong «for task in …; do» cua .githooks/pre-push o HEAD phai bang DUNG dong ma
+      rang-hook.sh (bien TAC_VU) va rang-hinh.sh (mau sed dau tien) ghim («dat dong vong … ghim»); in them dong vong o
+      merge-base lech hay giong. Ma 0 khi khong co dong «sai»; tap lenh rong -> ma 2 «tap rong».
+      Doi chung duong: tap lenh rut ra chua kcs_don_vi va lkv_ci. Chieu do: ban clone HEAD bo them buoc «node
+      scripts/luat-kho/do-cay.mjs --du-luat» khoi acceptance.yml roi chay lai lkv_ci -> phai ra «sai lkv_ci» — khong ra thi
+      ma 1 «thuoc hong: luoi».
