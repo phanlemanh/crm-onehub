@@ -5,7 +5,7 @@ slug: lich-su-va-luu-tru-trang
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: _acceptance/lich-su-va-luu-tru-trang/design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-13
@@ -86,3 +86,12 @@ Quét bằng `morphological-scan` (preset entity-feature), bản đầy đủ �
   lấy mốc UTC thật lúc gộp, sau `20261013092958_kanban_viec`, kiểm `origin/onehub` ngay trước đẩy, chạy `prisma generate`
   và `migrate diff`; `vai-chi-okr.spec.ts` giữ dòng `viec.cuaToi` của DA1b; `config.yaml`, `CONTEXT.md`,
   `proto/catalog.ts`, `proto/registry.ts` chỉ thêm. Lượt này xong trước DA1b/DA2 thì báo giám sát trước khi xin khoá gộp.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Tải nguồn cập nhật lên một trang đã lưu trữ vẫn sinh ra một đề xuất sửa nằm trong Chờ duyệt mà không ai duyệt được; nội dung trang không đổi.
+  - Ngoài-3: Trang đang có đề xuất lưu trữ hay khôi phục chờ duyệt có thể hiện thêm nút «Xem bản chờ» dẫn sang màn duyệt lưu trữ, và đếm dư một bản chờ.
+  - Ngoài-4: Nguồn đang được máy soạn đúng lúc trang được lưu trữ vẫn nộp một đề xuất sửa kẹt mãi trong Chờ duyệt.
+  - Ngoài-5: Phiên bản cũ chỉ khác bản đang dùng ở tên trang thì «Quay lại» báo «chưa có thay đổi»; đổi tên phải sửa trang thường.
+  - Ngoài-6: Bài kiểm «số phiên bản sai bị chặn trước khi chạm cơ sở dữ liệu» không đo được điều đó; chỉ mã lỗi 400 là được kiểm thật.
+  - Ngoài-7: Bài kiểm «lưu trữ lần nữa giữ ngày lưu trữ đầu» gọi hàm phụ chứ không đi đường duyệt thật.
+  - Ngoài-8: Khẳng định «màn duyệt lưu trữ không hiện phần so sánh chữ» đo trên một màn vốn không bao giờ có phần đó.
+  - Ngoài-9: Chốt «số khẳng định bằng số dòng bảng» ở bài kiểm mười chỗ đọc là phép tính trên hằng, bỏ bớt một dòng thì chốt không báo.

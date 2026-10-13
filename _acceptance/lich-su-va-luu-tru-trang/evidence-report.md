@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: lich-su-va-luu-tru-trang
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 1dcff78dd226e55755322a014dee9c2478bf7915
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-14 — ký Cổng 2 trên S4 lượt 1 (17/17 eval máy và 4 ui-check PASS; E13j Đạt). Ngoài-1, 3, 4, 5, 6, 7, 8, 9 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: lich-su-va-luu-tru-trang
@@ -241,7 +241,7 @@ human_signoff:
     - Ảnh 1440 của màn đọc một trang ĐANG DÙNG (chưa lưu trữ) có hiện nút mở hộp «Đề xuất lưu trữ trang», để kiểm nhãn nút đúng «Lưu trữ»/«Đề xuất lưu trúc» theo bộ chữ và không phải «Ẩn»/«Xoá». Hiện chỉ có lslt-hop-luu-tru-1440.png (hộp thoại) và các màn của trang đã lưu trữ.
     - Các khoá chữ thật của màn Lịch sử, lưu trữ và khôi phục (nhóm lichSu và luuTru trong apps/app/lib/messages, hoặc một tệp thông điệp tương đương) được thêm vào danh sách Input. apps/app/lib/messages/tai-lieu.ts bản đã đưa kèm không chứa chữ «lưu trữ», «Khôi phục», «Toàn văn» hay «Lịch sử», nên không đối chiếu được bộ chữ với mã.
     - Mục từ điển trong CONTEXT.md, hoặc một dòng của docs/vong-doi.md, cho các chữ mới đang hiện: nhãn «Lưu trữ» đứng trần cạnh «Đã duyệt» ở lslt-da-xu-ly-1440.png, tên thẻ «Toàn văn» và «So với bản đang dùng» ở lslt-ban-cu-so-sanh-1440.png, tiêu đề cột «Lưu trữ ngày» ở lslt-ds-da-luu-tru-1440.png. Hoặc một ghi chú của chủ kho rằng các nhãn phụ này không cần mục từ điển.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-10-14 — Đạt
 
 ### Lệnh suite (hồi quy)
 
