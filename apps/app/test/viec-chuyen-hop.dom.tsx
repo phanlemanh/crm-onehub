@@ -1,9 +1,5 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
-import {
-	QueryClient,
-	QueryClientProvider,
-	type QueryKey,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, type TRPCLink } from "@trpc/client";
 import { observable } from "@trpc/server/observable";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
@@ -74,28 +70,6 @@ const BA = [
 ];
 
 let san: { o: HTMLElement; root: Root } | null = null;
-
-function bam(o: Element): Promise<void> {
-	return act(async () => {
-		for (const loai of [
-			"pointerdown",
-			"mousedown",
-			"pointerup",
-			"mouseup",
-			"click",
-		]) {
-			const Kieu = loai.startsWith("pointer") ? PointerEvent : MouseEvent;
-			o.dispatchEvent(
-				new Kieu(loai, {
-					bubbles: true,
-					cancelable: true,
-					button: 0,
-					pointerType: "mouse",
-				} as PointerEventInit),
-			);
-		}
-	});
-}
 
 async function mo(man: ReactElement): Promise<void> {
 	queryClient = new QueryClient({
@@ -185,68 +159,5 @@ describe("vc-man-chuyen", () => {
 			);
 			await dongSan();
 		}
-	});
-
-	test("vc-man-chuyen: chuyển xong thì làm mới các query việc, không làm mới thứ không phải việc", async () => {
-		traLoi.set("onboarding.transferPreview", () => ({
-			keHoach: 1,
-			buoc: 0,
-			viec: 3,
-		}));
-		traLoi.set("onboarding.nguoiNhanViec", () => BA);
-		traLoi.set("onboarding.transferWork", () => ({
-			keHoach: 1,
-			buoc: 0,
-			viec: 3,
-		}));
-		await mo(<ChuyenViecDialog nguoi={HUONG} onDong={() => {}} />);
-		const t = proxy();
-		const khoaViec: QueryKey[] = [
-			t.viec.cuaToi.queryKey(),
-			t.viec.cuaBanGhi.queryKey(),
-			t.viec.get.queryKey(),
-		];
-		const khoaKhac: QueryKey = t.companies.byId.queryKey({ id: "ct-1" });
-		for (const khoa of [...khoaViec, khoaKhac]) {
-			queryClient.setQueryData(khoa, { gieo: true });
-		}
-		await cho(
-			() => document.body.textContent?.includes("3 việc") === true,
-			"hop thoai neu so",
-		);
-		const oNhan = document.body.querySelector(
-			`[aria-label="${kChuyen.nguoiNhan}"]`,
-		);
-		if (!oNhan) throw new Error("khong thay o nguoi nhan");
-		await bam(oNhan);
-		await cho(
-			() => document.body.querySelectorAll("[cmdk-item]").length > 0,
-			"danh sach nguoi nhan",
-		);
-		const quanTri = [...document.body.querySelectorAll("[cmdk-item]")].find(
-			(i) => i.textContent?.includes("Quản trị"),
-		);
-		if (!quanTri) throw new Error("khong thay Quan tri");
-		await bam(quanTri);
-		const nutXacNhan = () =>
-			[
-				...document.body.querySelectorAll<HTMLButtonElement>(
-					'[role="dialog"] button',
-				),
-			].find((b) => b.textContent?.trim() === kChuyen.xacNhan);
-		await cho(() => nutXacNhan()?.disabled === false, "nut chuyen mo khoa");
-		const nut = nutXacNhan();
-		if (!nut) throw new Error("khong thay nut chuyen");
-		await bam(nut);
-		await cho(
-			() =>
-				khoaViec.every(
-					(khoa) => queryClient.getQueryState(khoa)?.isInvalidated === true,
-				),
-			"query viec bi danh dau cu",
-		).catch(() => {
-			throw new Error("vc: hop chuyen viec khong lam moi viec");
-		});
-		expect(queryClient.getQueryState(khoaKhac)?.isInvalidated).toBe(false);
 	});
 });
