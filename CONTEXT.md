@@ -1075,6 +1075,36 @@ _Avoid_: bản chính thức, bản mới nhất, published
 Vì sao: «mới nhất» có thể là một bản đề xuất chưa duyệt — đúng lỗ hổng mà màn
 duyệt phải chặn.
 
+**Lịch sử phiên bản**: danh sách mọi phiên bản đã duyệt của một trang tài liệu, mới
+nhất trước, mỗi dòng có người đề xuất, người duyệt, ngày duyệt và dấu «Đang dùng». Ai
+đọc được trang thì xem được lịch sử của nó. Nút trên màn đọc ghi «Lịch sử». Chốt
+2026-10-13 tại Cổng Phạm vi của `lich-su-va-luu-tru-trang`.
+_Avoid_: nhật ký, log, các bản sửa
+Vì sao: «nhật ký» đã là vết sự kiện chỉ ghi thêm của kho; lịch sử chỉ gồm bản đã duyệt.
+
+**Quay lại phiên bản**: tạo một bản đề xuất mới mang đúng tên và nội dung của một
+phiên bản cũ; chủ trang duyệt thì nó thành phiên bản mới, các phiên bản cũ không đổi
+một chữ. Nút ghi «Quay lại phiên bản N». Chốt 2026-10-13 tại Cổng Phạm vi của
+`lich-su-va-luu-tru-trang`.
+_Avoid_: khôi phục phiên bản, revert, hoàn tác
+Vì sao: «Khôi phục» đã là việc đưa một trang đã lưu trữ trở lại; một chữ mang hai
+nghĩa trên cùng màn đọc làm người bấm nhầm việc.
+
+**Đề xuất lưu trữ**: bản đề xuất cất một trang tài liệu khỏi danh sách, tìm kiếm, bộ
+lọc, Sức khoẻ và trợ lý AI, kèm lý do 1–500 ký tự. Chủ trang hoặc quản trị duyệt thì
+trang thành «Đã lưu trữ»; bản đang dùng giữ nguyên, bản đề xuất sửa đang chờ thành
+«Cũ». Chỉ trang đã có bản đang dùng mới đề xuất lưu trữ được. Chốt 2026-10-13 tại Cổng
+Phạm vi của `lich-su-va-luu-tru-trang`.
+_Avoid_: xoá trang, ẩn trang, archive
+Vì sao: trong kho mọi thay đổi đều qua duyệt (chốt 2026-09-26), nên cất trang cũng là
+một đề xuất chứ không phải một nút bấm thẳng.
+
+**Đề xuất khôi phục**: bản đề xuất đưa một trang đã lưu trữ trở lại mọi chỗ nó từng
+hiện, kèm lý do. Nút nằm trên dải «Trang đã lưu trữ ngày …» của màn đọc. Chốt
+2026-10-13 tại Cổng Phạm vi của `lich-su-va-luu-tru-trang`.
+_Avoid_: bỏ lưu trữ, unarchive, mở lại
+Vì sao: «Khôi phục» là chữ chung của `docs/vong-doi.md` cho việc lấy lại thứ đã lưu trữ.
+
 **Chủ trang**: người duy nhất chịu trách nhiệm một trang tài liệu còn đúng, duyệt
 mọi bản đề xuất của trang. Mỗi trang có thêm một người phó, chỉ nhận việc khi chủ
 trang quá hạn hoặc vắng. Chốt 2026-09-27 tại Cổng Phạm vi của `kho-tai-lieu`.
