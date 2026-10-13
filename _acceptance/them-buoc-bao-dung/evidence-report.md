@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: be9ad8c15432cfde0d716d1a05fce5ae43f4c6d0
+verified_commit: 4b443dc03d81ea2dce3ca4401ebcc53b1b676564
 human_signoff: Phan Le Manh 2026-10-13
 ---
 
@@ -207,3 +207,7 @@ none — every multi-run eval is uniform
 Round 1: PASS — 2 finding trong hợp đồng (thước màn E11 không đo dòng «và N việc quá hạn nữa» của AC-6, AC-7); đã sửa ở e175546b7.
 Round 2: PASS — 1 finding trong hợp đồng (thước E11 chưa đo trường hợp dòng «nữa» phải hiện); đã sửa ở ba5bfc10b.
 Round 3: PASS — chỉ chạy lại suite và hai eval ui-check E10, E11 trên be9ad8c15; E1 đến E9 giữ nguyên từ round 1 vì delta không chạm paths của eval.
+
+### Re-pin lần 1 — 2026-10-13, do gộp onehub #381 chạm onboarding-ghi.ts sau chữ ký
+run_id: repin-20261013T070531Z-58499
+sha: 4b443dc03d81ea2dce3ca4401ebcc53b1b676564 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
