@@ -151,7 +151,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.kmt_chup
     steps:
-      - "Chạy NGUYÊN VĂN từ gốc kho: bun run do:man --chay \"bun _acceptance/kara-mot-ten/rang/chup.mjs\" — phiên đo tự dựng kho crm_<cây>_do, API và app của chính cây"
+      - "Chạy NGUYÊN VĂN từ gốc kho: bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/kara-mot-ten/rang/chup.mjs\" — tien-de tự dựng phiên đo (kho crm_<cây>_do, API và app của chính cây) và đặt tiền đề khoá nghiên cứu cho đúng lượt"
       - "chup.mjs chạy cảnh cây trước màn đầu; lệch cây hay bàn đo không dựng được → mã 2"
       - "Cài đặt › OKR ở 1440 và 390, vi: thẻ cấu hình mang tiêu đề «Kara · OKR», nút bật «Bật Kara»; khối sổ chi phí có nhãn nhóm «Kara · OKR», «Kara · hồ sơ» và nhóm «Tác nhân» còn nguyên → ảnh evidence/E14-cai-dat-okr-<rộng>.png"
       - "Ở 1440, vi: Soạn OKR (khung soạn mở), tab Agent của khung bản ghi một công ty mẫu, trang Tài liệu — innerText vùng chính không khớp cụm vi nào của CAM → ảnh evidence/E14-<màn>-1440.png"

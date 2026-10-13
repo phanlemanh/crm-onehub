@@ -1594,7 +1594,7 @@ executors:
   script:
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
-    kmt_chup: bun run do:man --chay "bun _acceptance/kara-mot-ten/rang/chup.mjs"
+    kmt_chup: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-mot-ten/rang/chup.mjs"'
     kmt_kiem_ke: node _acceptance/kara-mot-ten/rang/kiem-ke.mjs
     kmt_bang_chu: node _acceptance/kara-mot-ten/rang/bang-chu.mjs
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'

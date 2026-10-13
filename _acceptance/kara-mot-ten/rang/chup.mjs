@@ -120,7 +120,10 @@ const congTy = await db.company.findFirst({
 });
 const cookie = phien(EMAIL);
 if (!cookie) await khongDo(`khong doc duoc cookie phien cua ${EMAIL}`);
-const slug = await suySlug(cookie);
+const slug =
+	(await suySlug(cookie)) ??
+	(await db.organization.findFirst({ select: { slug: true } }))?.slug ??
+	null;
 if (!slug) await khongDo(`${APP}/ khong chuyen toi trang chinh cua workspace`);
 
 mkdirSync(RA, { recursive: true });
@@ -134,12 +137,20 @@ for (const [rong, cao] of KHO) {
 		{ name: "lang", value: "vi", domain: host, path: "/" },
 	);
 	const p = await mo(ctx, `/${slug}/settings/okr`, rong, cao);
-	await choChu(p, t.troLy.tieuDe);
+	await choChu(p, t.troLy.bat);
 	await p.evaluate(() => document.fonts.ready);
 	const chu = await chuChinh(p);
 	kiem(
 		`E14 ${rong}: cai dat OKR co tieu de «${t.troLy.tieuDe}»`,
 		chu.includes(t.troLy.tieuDe),
+	);
+	kiem(`E14 ${rong}: nut «${t.troLy.bat}»`, chu.includes(t.troLy.bat));
+	const so = [t.so.troLyOkr, t.so.thanh, t.so.nhom["tro-ly-okr"]].filter((x) =>
+		chu.includes(x),
+	);
+	kiem(
+		`E14 ${rong}: so chi phi goi Kara · OKR [${so.join(" | ")}]`,
+		so.length > 0,
 	);
 	kiem(
 		`E14 ${rong}: cai dat OKR khong cum cam [${camTrong(chu).join(", ")}]`,
