@@ -1922,17 +1922,18 @@
       "thu_tu": 445,
       "dung_tren": [
         "TH1",
-        "TB1"
+        "TB1",
+        "LT1c"
       ],
       "ten": "Trạng thái tín hiệu sống",
       "ten_ngan": "Trạng thái sống",
       "ngay": "2026-10-14",
-      "cau_giao": "«Người gửi tín hiệu được báo trong ngày khi tín hiệu của mình đổi chỗ, mở ra thấy câu dễ hiểu, không chờ lần lên production kế»",
+      "cau_giao": "«Người gửi tín hiệu được báo trong ngày khi tín hiệu của mình đổi chỗ, và mở ra thấy câu dễ hiểu»",
       "vai": "Người gửi tín hiệu",
       "tieu_chi": 9,
-      "vi_sao": "Trang Tín hiệu đã gửi đọc tệp lộ trình nằm trong bản đã triển khai, nên trạng thái chỉ đổi sau lần gộp kế, và người gửi không được báo.",
+      "vi_sao": "Người gửi không được báo khi tín hiệu đổi chỗ, phải tự mở trang; trạng thái lại đi theo bản dựng production nên thêm độ trễ dựng và cửa sổ gộp.",
       "bat_khi": "Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Đọc trạng thái từ bản chụp của LT1c (sửa 14/10: phần «nguồn sống» chuyển sang LT1c).",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "S1",
@@ -1967,6 +1968,55 @@
         "U6",
         "U7",
         "U8"
+      ]
+    },
+    {
+      "ma": "LT1c",
+      "slug": "lo-trinh-doc-ban-chup",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 446,
+      "dung_tren": [
+        "LT1"
+      ],
+      "ten": "Lộ trình đọc bản chụp",
+      "ten_ngan": "Bản chụp lộ trình",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Trưởng phòng ban mở trang Lộ trình và thấy đúng lộ trình mới nhất của nhánh chính, kèm giờ lấy, mà trang không phải chờ một bản dựng production»",
+      "vai": "Trưởng phòng ban",
+      "tieu_chi": 8,
+      "vi_sao": "Trang hôm nay đọc tệp đóng gói lúc dựng, nên chỉ đọc được đúng một kho. Với riêng kho CRM, đọc bản chụp chỉ bớt được vài phút dựng và tách trang khỏi cửa sổ gộp; giá trị chính là làm nền cho lộ trình nhiều sản phẩm (LT3).",
+      "bat_khi": "Hai tuần sau khi giao, mọi lần đổi lộ trình trên nhánh chính hiện trên trang trong vòng 10 phút, không lần nào trang đứng ở bản cũ quá một giờ (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Lưu bản chụp ở đâu (bảng dữ liệu hay kho tệp) chốt ở Cổng Phạm vi; thêm bảng dữ liệu nên tạm xếp T3. TH3 đọc trạng thái tín hiệu từ cùng bản chụp này.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "L1"
+      ]
+    },
+    {
+      "ma": "LT3",
+      "slug": "lo-trinh-nhieu-san-pham",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 447,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Lộ trình nhiều sản phẩm",
+      "ten_ngan": "Nhiều sản phẩm",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Chủ kho chọn OneHub Platform hay một sản phẩm khác ngay trên trang Lộ trình của OneHub Center và đọc lộ trình, tiến độ, hồ sơ của sản phẩm đó như của CRM»",
+      "vai": "Chủ kho",
+      "tieu_chi": 10,
+      "vi_sao": "Chủ kho chốt 14/10: OneHub Center là nơi vận hành, đọc lộ trình của mọi kho sản phẩm cùng kiến trúc kit. Khuôn dữ liệu đã chung (kho kit cũng vẽ cùng khuôn); còn thiếu danh bạ sản phẩm, quyền đọc kho, bộ chọn sản phẩm và quyền xem.",
+      "bat_khi": "Kho thứ hai (OneHub Platform hoặc kho kit) hiện đủ trên trang trong ngày cài, và người không có quyền với sản phẩm đó không thấy nó (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Điều kiện: kho sản phẩm cài kit và khai lộ trình. Ứng dụng GitHub chỉ đọc, cài vào từng kho, không dùng khoá cá nhân. Chạm quyền truy cập kho ngoài nên hạng T3. Bản phác kiến trúc: hình «Đích» gửi chủ kho 14/10.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "L2",
+        "L3",
+        "L4",
+        "L5"
       ]
     },
     {
@@ -2466,6 +2516,16 @@
         "U9"
       ],
       "mo_lai_khi": "Chủ kho chọn đổi lớp phủ ở một phiên thiết kế bộ giao diện chung"
+    },
+    {
+      "ma": "TH8",
+      "dot": "vong-tin-hieu-1410",
+      "cau_giao": "«Người dùng gửi tín hiệu cho đúng sản phẩm mình đang dùng, và tín hiệu về đúng kho của sản phẩm đó»",
+      "ly_do": "Chỉ có ích khi đã có kho sản phẩm thứ hai có lộ trình trên OneHub Center; làm trước thì không có sản phẩm nào để chọn.",
+      "phu": [
+        "L6"
+      ],
+      "mo_lai_khi": "Kho thứ hai (OneHub Platform hoặc kho khác) đã cài kit và hiện trên trang Lộ trình (LT3 đã giao)"
     }
   ],
   "da_bac": [

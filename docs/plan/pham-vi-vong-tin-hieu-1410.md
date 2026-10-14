@@ -6,6 +6,9 @@ chốt: thẻ «Mọi tín hiệu» cho quản trị · tín hiệu tự về kh
 thái sống. Luật riêng tư chủ kho chốt cùng lúc: quản trị thấy tên người gửi, hộp gửi báo trước điều đó.
 Máy thực hiện: chủ kho quyết sau.
 
+Nhóm L chủ kho duyệt thêm cùng ngày: OneHub Center là nơi vận hành, đọc lộ trình của mọi kho sản phẩm cùng
+kiến trúc kit (OneHub Platform và các sản phẩm sau).
+
 Nhóm U là các lỗi ghi trong lượt rà 14/10: U1–U5 là tín hiệu crm-1 đến crm-5 đã gửi trên production, U6–U9
 soạn sẵn chưa gửi.
 
@@ -38,5 +41,11 @@ nguon: chủ kho duyệt 14/10 trong phiên LT2 — rà giao diện trên produc
 - `U7` — dòng «Gửi từ màn» và cột «Màn» hiện đường dẫn thô thay vì tên màn
 - `U8` — chữ trạng thái lặp ý, dùng từ nội bộ «gom», mất nút xoá mà không nói vì sao
 - `U9` — lớp phủ sau hộp thoại ở nền tối đen đặc, che hẳn trang phía sau (bộ giao diện chung)
+- `L1` — trang Lộ trình đọc bản chụp lộ trình được lấy lại mỗi khi nhánh chính đổi, không đọc tệp đóng gói trong bản dựng
+- `L2` — danh bạ sản phẩm do quản trị khai: tên, kho GitHub, nhánh production, đường tệp lộ trình
+- `L3` — ứng dụng GitHub chỉ đọc, cài vào từng kho sản phẩm, báo khi nhánh chính đổi
+- `L4` — bộ chọn sản phẩm trên trang Lộ trình và quyền xem theo sản phẩm
+- `L5` — đọc được vài phiên bản khuôn lộ trình, báo rõ sản phẩm nào đang ở khuôn cũ
+- `L6` — tín hiệu nhiều sản phẩm: hộp gửi chọn sản phẩm, lượt kéo về của mỗi kho chỉ lấy tín hiệu của sản phẩm mình
 ```
 <!-- PHAM-VI-MA>>> -->
