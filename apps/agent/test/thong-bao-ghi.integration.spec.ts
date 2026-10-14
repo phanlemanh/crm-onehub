@@ -12,16 +12,21 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { db } from "@crm/db";
-import { THU_TU_NHAC, viecCanNhac } from "@crm/db/onboarding-nhac";
+import { DAY_MS, THU_TU_NHAC, viecCanNhac } from "@crm/db/onboarding-nhac";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
-import { khoaThongBao, parseNoiDungThongBao } from "@crm/validation/thong-bao";
+import {
+	khoaThongBao,
+	parseNoiDungThongBao,
+	THONG_BAO,
+} from "@crm/validation/thong-bao";
 import {
 	chayNhac,
 	duongMo,
 	duongTrongApp,
 	lenLichNhac,
 } from "../agent/lib/nhac-ke-hoach";
+import { donThongBaoDinhKy } from "../agent/lib/thong-bao-don";
 import { ghiThongBao } from "../agent/lib/thong-bao-ghi";
 import { dungTin } from "../agent/lib/tin-nhac";
 import { ZALO } from "../agent/lib/zalo-config";
@@ -458,5 +463,68 @@ describe("htb-kenh", () => {
 			}),
 		);
 		expect(await khoaDaGhi(Z.id)).toEqual(sau1);
+	});
+});
+
+describe("htb-don", () => {
+	test("htb-don: nhip moi phut don dung thong bao qua han giu", async () => {
+		const now = new Date("2026-10-14T03:00:00Z");
+		const A = await gieoNguoi("Don");
+		const GIO_MS = DAY_MS / 24;
+		const tuoi = [
+			(THONG_BAO.giuNgay + 1) * DAY_MS,
+			THONG_BAO.giuNgay * DAY_MS - GIO_MS,
+			(THONG_BAO.giuNgay - 1) * DAY_MS,
+		];
+		const id: string[] = [];
+		for (const [i, t] of tuoi.entries()) {
+			const h = await db.thongBao.create({
+				data: {
+					nguoiNhanId: A.id,
+					nguon: THONG_BAO.nguon.nhacBuoiSang,
+					khoa: `viec-qua-han:don-${i}`,
+					noiDung: { ...MUC_MAU["viec-qua-han"], viecId: `don-${i}` },
+					duongDan: "/viec",
+					taoLuc: new Date(now.getTime() - t),
+					ngayDau: `2026-01-0${i + 1}`,
+					thayNgay: `2026-01-0${i + 1}`,
+				},
+			});
+			id.push(h.id);
+		}
+		const chuaDocTruoc = await db.thongBao.count({
+			where: { nguoiNhanId: A.id, docLuc: null },
+		});
+		const da = await donThongBaoDinhKy(now);
+		const con = (
+			await db.thongBao.findMany({
+				where: { nguoiNhanId: A.id },
+				select: { id: true },
+			})
+		)
+			.map((h) => h.id)
+			.sort();
+		expect(con, "don ca thong bao chua qua han giu").toEqual(
+			id.slice(1).sort(),
+		);
+		expect(da).toBeGreaterThanOrEqual(1);
+		expect(
+			await db.thongBao.count({ where: { nguoiNhanId: A.id, docLuc: null } }),
+		).toBe(chuaDocTruoc - 1);
+	});
+
+	test("htb-don: nhip moi phut goi buoc don", () => {
+		const nguon = readFileSync(
+			join(GOC_KHO, "apps/agent/agent/schedules/dispatch.ts"),
+			"utf8",
+		);
+		const ma = new Bun.Transpiler({ loader: "ts" }).transformSync(nguon);
+		const dau = ma.indexOf("Promise.all([");
+		const cuoi = ma.indexOf("(async", dau);
+		const khoi = dau >= 0 && cuoi > dau ? ma.slice(dau, cuoi) : "";
+		expect(
+			/donThongBaoDinhKy\(\)/.test(khoi),
+			"luot don khong don thong bao",
+		).toBe(true);
 	});
 });
