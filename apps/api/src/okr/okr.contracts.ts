@@ -455,10 +455,18 @@ export const createKrInput = krInput.extend({ objectiveId: ma });
 export const updateKrInput = krInput
 	.partial()
 	.extend({ id: ma, lyDoDoiDich: lyDoDoiDich.optional() });
+const oLyDo = z.string().nullable().optional();
 export const alignmentInput = z.object({
 	objectiveId: ma,
 	targetObjectiveId: ma.nullable(),
 	targetKeyResultId: ma.nullable(),
+	lyDo: oLyDo,
+	canCu: oLyDo,
+});
+export const suaLyDoCanChinhInput = z.object({
+	id: ma,
+	lyDo: oLyDo,
+	canCu: oLyDo,
 });
 export const alignmentTargetsInput = z.object({ objectiveId: ma });
 export const alignmentTargetsOutput = z.object({

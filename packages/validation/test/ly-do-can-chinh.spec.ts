@@ -10,7 +10,10 @@ import {
 type Ca = {
 	ten: string;
 	vao: { lyDo?: string | null; canCu?: string | null };
-	ra: { lyDo: string | null; canCu: string | null } | "loi" | "can-cu-can-ly-do";
+	ra:
+		| { lyDo: string | null; canCu: string | null }
+		| "loi"
+		| "can-cu-can-ly-do";
 };
 
 const CA: Ca[] = [
@@ -20,10 +23,14 @@ const CA: Ca[] = [
 		ra: { lyDo: "Tăng tỷ lệ chốt", canCu: null },
 	},
 	{ ten: "rong", vao: { lyDo: "" }, ra: { lyDo: null, canCu: null } },
-	{ ten: "khoang trang", vao: { lyDo: "   " }, ra: { lyDo: null, canCu: null } },
+	{
+		ten: "khoang trang",
+		vao: { lyDo: "   " },
+		ra: { lyDo: null, canCu: null },
+	},
 	{
 		ten: "nbsp xuong dong tab",
-		vao: { lyDo: " \n\t" },
+		vao: { lyDo: "\u00a0\n\t" },
 		ra: { lyDo: null, canCu: null },
 	},
 	{

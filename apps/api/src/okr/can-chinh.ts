@@ -1,8 +1,15 @@
+import {
+	type LyDoCanChinhNhap,
+	lyDoCanChinhNhap,
+	MA_CAN_CU_CAN_LY_DO,
+} from "@crm/validation/ly-do-can-chinh";
+import { BadRequestException } from "@nestjs/common";
 import type {
 	AlignmentTreeOutput,
 	MucTieuOutput,
 	NutCanChinh,
 } from "./okr.contracts";
+import { OKR } from "./okr-config";
 
 export type LyDoCanChinh = {
 	lyDo: string | null;
@@ -21,6 +28,25 @@ export {
 	type MucTinCanChinh,
 	mucTinCanChinh,
 } from "@crm/validation/ly-do-can-chinh";
+
+export function docLyDoCanChinh(vao: {
+	lyDo?: string | null;
+	canCu?: string | null;
+}): LyDoCanChinhNhap {
+	const kq = lyDoCanChinhNhap.safeParse({
+		lyDo: vao.lyDo ?? null,
+		canCu: vao.canCu ?? null,
+	});
+	if (kq.success) return kq.data;
+	const thieuLyDo = kq.error.issues.some(
+		(i) => i.message === MA_CAN_CU_CAN_LY_DO,
+	);
+	throw new BadRequestException(
+		thieuLyDo
+			? OKR.thongDiep.canChinh.canCuCanLyDo
+			: OKR.thongDiep.canChinh.lyDoQuaDai,
+	);
+}
 
 export function lyDoTuSoan(viSao: string): LyDoCanChinh {
 	const lyDo = viSao.trim();
