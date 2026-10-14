@@ -241,7 +241,7 @@ describe("htb-cua-minh", () => {
 		const t2 = (
 			await trpc("a", "thongBao.danhSach", "query", {
 				chiChuaDoc: false,
-				conTro: t1.conTroSau,
+				cursor: t1.conTroSau,
 			})
 		).data as { dong: unknown[]; conTroSau: string | null };
 		expect(t2.dong.length).toBe(5);

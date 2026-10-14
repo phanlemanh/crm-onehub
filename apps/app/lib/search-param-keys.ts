@@ -39,6 +39,9 @@ export const SEARCH_PARAM = {
 	overview: {
 		scope: "scope",
 	},
+	thongBao: {
+		loc: "loc",
+	},
 	deals: {
 		view: "view",
 	},

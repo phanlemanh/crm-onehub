@@ -1670,7 +1670,7 @@ executors:
     htb_api: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao.spec.ts test/vai-chi-okr.spec.ts"'
     htb_chuong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao.dom.tsx -t chuong
     htb_trang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao.dom.tsx -t trang
-    htb_mat_dich: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao-mat-dich.dom.tsx
+    htb_mat_dich: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao-mat-dich.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t 'klg-khong-con|klg-khong-quyen' && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx -t khong-thay
   script:
     ltk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/luu-tru-truong-khong-hoi/rang/man.mjs"'
     ltk_san_thiet_ke: 'for t in apps/app/components/crm/fields/field-editor.tsx apps/app/components/crm/fields/fields-list.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'

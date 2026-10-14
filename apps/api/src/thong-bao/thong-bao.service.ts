@@ -3,8 +3,8 @@ import { parseNoiDungThongBao, THONG_BAO } from "@crm/validation/thong-bao";
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type {
-	ChuongOutput,
-	DanhSachOutput,
+	ChuongThongBaoOutput,
+	DanhSachThongBaoOutput,
 	DongThongBaoRa,
 } from "./thong-bao.contracts";
 
@@ -42,7 +42,7 @@ export class ThongBaoService {
 
 	constructor(@InjectDatabase() private readonly db: Db) {}
 
-	async chuong(userId: string): Promise<ChuongOutput> {
+	async chuong(userId: string): Promise<ChuongThongBaoOutput> {
 		const [soChuaDoc, hang] = await Promise.all([
 			this.db.thongBao.count({ where: { nguoiNhanId: userId, docLuc: null } }),
 			this.db.thongBao.findMany({
@@ -59,7 +59,7 @@ export class ThongBaoService {
 		userId: string,
 		chiChuaDoc: boolean,
 		conTro: string | undefined,
-	): Promise<DanhSachOutput> {
+	): Promise<DanhSachThongBaoOutput> {
 		const hang = await this.db.thongBao.findMany({
 			where: { nguoiNhanId: userId, ...(chiChuaDoc ? { docLuc: null } : {}) },
 			orderBy: THU_TU,

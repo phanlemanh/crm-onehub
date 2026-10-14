@@ -229,6 +229,7 @@ evals:
       - "apps/agent/agent/lib/thong-bao-ghi.ts"
       - "packages/validation/src/thong-bao.ts"
       - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/lib/thong-bao/**"
       - "apps/agent/test/thong-bao-duong.spec.ts"
       - "apps/app/test/thong-bao-cau.spec.ts"
     expected: |
@@ -247,9 +248,12 @@ evals:
       - "apps/app/components/crm/record-sheet/**"
       - "apps/app/components/viec/**"
       - "apps/app/test/thong-bao-mat-dich.dom.tsx"
+      - "apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx"
+      - "apps/app/test/okr-gioi-han-duyet.dom.tsx"
     expected: |
-      thong-bao-mat-dich.dom.tsx: ma tran viet truoc ba loai dich ma thong bao tro toi bang ?record= (viec, plan, objective) x
-      hai loi may chu (NOT_FOUND, FORBIDDEN) = 6 o. Mo dung duong dan cua thong bao voi mock query tra loi do:
+      Ba loai dich ma thong bao tro toi bang ?record= (viec, plan, objective) x hai loi may chu (NOT_FOUND, FORBIDDEN).
+      Viec: thong-bao-mat-dich.dom.tsx (moi, 2 o). Plan: bo kiem co san khung-loi-ban-ghi-dung-ly-do.dom.tsx ca klg-khong-con,
+      klg-khong-quyen. Objective: bo kiem co san okr-gioi-han-duyet.dom.tsx ca khong-thay. Moi o:
         1 ngan ban ghi mo va hien cau ly do cua tep loi cho loai loi do (khong rong, khong thong diep tho cua may chu)
         2 khong render ranh gioi loi chung cua ung dung (trang-loi-tam)
       CHIEU DO: ban sao nem loi len ranh gioi chung khi NOT_FOUND -> o *-NOT_FOUND do voi thong diep ghim "thong bao dan toi

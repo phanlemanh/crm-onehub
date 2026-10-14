@@ -42,8 +42,10 @@ export type LoaiThongBao = (typeof LOAI_THONG_BAO)[number];
 
 const ma = z.string().min(1);
 
-const keHoach = (
-	loai: "buoc-qua-han" | "buoc-sap-han" | "ke-hoach-im" | "moc-ngay",
+const keHoach = <
+	L extends "buoc-qua-han" | "buoc-sap-han" | "ke-hoach-im" | "moc-ngay",
+>(
+	loai: L,
 ) =>
 	z.object({
 		loai: z.literal(loai),
@@ -59,7 +61,9 @@ const keHoach = (
 		targetDays: z.number().optional(),
 	});
 
-const viec = (loai: "viec-qua-han" | "viec-sap-han" | "viec-cho-danh-gia") =>
+const viec = <L extends "viec-qua-han" | "viec-sap-han" | "viec-cho-danh-gia">(
+	loai: L,
+) =>
 	z.object({
 		loai: z.literal(loai),
 		viecId: ma,
@@ -233,9 +237,9 @@ export function khoaThongBao(nd: NoiDungThongBao, now: Date): string {
 	}
 }
 
-export const moMotInput = z.object({ id: z.string().min(1) });
+export const moThongBaoInput = z.object({ id: z.string().min(1) });
 
-export const danhSachInput = z.object({
+export const danhSachThongBaoInput = z.object({
 	chiChuaDoc: z.boolean(),
-	conTro: z.string().min(1).optional(),
+	cursor: z.string().min(1).optional(),
 });

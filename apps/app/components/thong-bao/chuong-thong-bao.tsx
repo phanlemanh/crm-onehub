@@ -16,13 +16,21 @@ import {
 } from "@crm/ui/components/popover";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
+import { THONG_BAO } from "@crm/validation/thong-bao";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useState } from "react";
+import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import {
 	DanhSachNhomThongBao,
 	type DongThongBao,
 } from "@/components/thong-bao/dong-thong-bao";
 import { thongBaoMessages } from "@/lib/messages/thong-bao";
+import { chiaHomNay } from "@/lib/thong-bao/dong";
+import { useCrmCache } from "@/lib/trpc/cache";
+import { useTRPC } from "@/lib/trpc/client";
+import { useWorkspaceSlug, useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 export type TrangThaiChuong = "cho-tai" | "loi" | "xong";
 
@@ -103,53 +111,105 @@ export function ChuongThongBaoKhung({
 	}
 
 	return (
-		<Popover open={open} onOpenChange={onOpenChange}>
-			<PopoverTrigger asChild>
-				<Button
-					variant="outline"
-					size="sm"
-					aria-label={nhan}
-					data-slot="chuong-thong-bao"
-				>
-					<Notification aria-hidden="true" />
-					{so ? (
-						<span className="tabular-nums" data-slot="so-chua-doc">
-							{so}
-						</span>
-					) : null}
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent
-				align="end"
-				size="panel"
-				onOpenAutoFocus={(e) => {
-					e.preventDefault();
-					(e.currentTarget as HTMLElement | null)?.focus();
-				}}
-			>
-				<div className="flex items-center justify-between gap-2 border-b px-4 py-2">
-					<span className="font-semibold text-popover-foreground text-sm">
-						{m.tieuDe}
-					</span>
+		<>
+			<span role="status" aria-live="polite" className="sr-only">
+				{nhan}
+			</span>
+			<Popover open={open} onOpenChange={onOpenChange}>
+				<PopoverTrigger asChild>
 					<Button
-						variant="ghost"
+						variant="outline"
 						size="sm"
-						disabled={soChuaDoc === 0 || dangDocHet || trangThai !== "xong"}
-						onClick={onDocHet}
+						aria-label={nhan}
+						data-slot="chuong-thong-bao"
 					>
-						{dangDocHet ? m.dangDocHet : m.docHet}
+						<Notification aria-hidden="true" />
+						{so ? (
+							<span className="tabular-nums" data-slot="so-chua-doc">
+								{so}
+							</span>
+						) : null}
 					</Button>
-				</div>
-				{than}
-				<div className="border-t px-4 py-2">
-					<Button variant="ghost" size="sm" asChild>
-						<Link href={hrefTatCa}>{m.xemTatCa}</Link>
-					</Button>
-				</div>
-				<span role="status" aria-live="polite" className="sr-only">
-					{nhan}
-				</span>
-			</PopoverContent>
-		</Popover>
+				</PopoverTrigger>
+				<PopoverContent
+					align="end"
+					size="panel"
+					onOpenAutoFocus={(e) => {
+						e.preventDefault();
+						(e.currentTarget as HTMLElement | null)?.focus();
+					}}
+				>
+					<div className="flex items-center justify-between gap-2 border-b px-4 py-2">
+						<span className="font-semibold text-popover-foreground text-sm">
+							{m.tieuDe}
+						</span>
+						<Button
+							variant="ghost"
+							size="sm"
+							disabled={soChuaDoc === 0 || dangDocHet || trangThai !== "xong"}
+							onClick={onDocHet}
+						>
+							{dangDocHet ? m.dangDocHet : m.docHet}
+						</Button>
+					</div>
+					{than}
+					<div className="border-t px-4 py-2">
+						<Button variant="ghost" size="sm" asChild>
+							<Link href={hrefTatCa}>{m.xemTatCa}</Link>
+						</Button>
+					</div>
+				</PopoverContent>
+			</Popover>
+		</>
+	);
+}
+
+export function ChuongThongBao() {
+	const locale = useLocale();
+	const m = thongBaoMessages(locale).chuong;
+	const trpc = useTRPC();
+	const cache = useCrmCache();
+	const slug = useWorkspaceSlug();
+	const workspaceUrl = useWorkspaceUrl();
+	const [mo, setMo] = useState(false);
+	const chuong = useQuery({
+		...trpc.thongBao.chuong.queryOptions(),
+		refetchInterval: THONG_BAO.hoiLaiMs,
+		refetchOnWindowFocus: true,
+	});
+	const moMot = useMutation(
+		trpc.thongBao.moMot.mutationOptions({
+			onSuccess: () => void cache.thongBao(),
+		}),
+	);
+	const docHet = useMutation(
+		trpc.thongBao.docHet.mutationOptions({
+			onSuccess: () => void cache.thongBao(),
+			onError: () => toast.error(m.docHetLoi),
+		}),
+	);
+	const { homNay, truocDo } = chiaHomNay(chuong.data?.dong ?? [], {
+		locale,
+		slug,
+		now: new Date(),
+	});
+	return (
+		<ChuongThongBaoKhung
+			dangDocHet={docHet.isPending}
+			homNay={homNay}
+			hrefTatCa={workspaceUrl("/thong-bao")}
+			onDocHet={() => docHet.mutate()}
+			onMo={(id) => {
+				moMot.mutate({ id });
+				setMo(false);
+			}}
+			onOpenChange={setMo}
+			onThuLai={() => void chuong.refetch()}
+			open={mo}
+			soChuaDoc={chuong.data?.soChuaDoc ?? 0}
+			tranSo={THONG_BAO.tranSo}
+			trangThai={chuong.isPending ? "cho-tai" : chuong.isError ? "loi" : "xong"}
+			truocDo={truocDo}
+		/>
 	);
 }

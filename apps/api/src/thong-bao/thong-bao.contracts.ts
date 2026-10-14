@@ -10,18 +10,18 @@ export const dongThongBaoRa = z.object({
 });
 export type DongThongBaoRa = z.infer<typeof dongThongBaoRa>;
 
-export const chuongOutput = z.object({
+export const chuongThongBaoOutput = z.object({
 	soChuaDoc: z.number().int(),
 	dong: z.array(dongThongBaoRa),
 });
-export type ChuongOutput = z.infer<typeof chuongOutput>;
+export type ChuongThongBaoOutput = z.infer<typeof chuongThongBaoOutput>;
 
-export const danhSachOutput = z.object({
+export const danhSachThongBaoOutput = z.object({
 	dong: z.array(dongThongBaoRa),
 	conTroSau: z.string().nullable(),
 });
-export type DanhSachOutput = z.infer<typeof danhSachOutput>;
+export type DanhSachThongBaoOutput = z.infer<typeof danhSachThongBaoOutput>;
 
-export const moMotOutput = z.object({ ok: z.literal(true) });
+export const moThongBaoOutput = z.object({ ok: z.literal(true) });
 
-export const docHetOutput = z.object({ soDaDoc: z.number().int() });
+export const docHetThongBaoOutput = z.object({ soDaDoc: z.number().int() });

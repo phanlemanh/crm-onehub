@@ -1,4 +1,7 @@
-import { danhSachInput, moMotInput } from "@crm/validation/thong-bao";
+import {
+	danhSachThongBaoInput,
+	moThongBaoInput,
+} from "@crm/validation/thong-bao";
 import { Inject } from "@nestjs/common";
 import {
 	Ctx,
@@ -13,10 +16,10 @@ import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
-	chuongOutput,
-	danhSachOutput,
-	docHetOutput,
-	moMotOutput,
+	chuongThongBaoOutput,
+	danhSachThongBaoOutput,
+	docHetThongBaoOutput,
+	moThongBaoOutput,
 } from "./thong-bao.contracts";
 import { ThongBaoService } from "./thong-bao.service";
 
@@ -30,7 +33,7 @@ export class ThongBaoRouter {
 	) {}
 
 	@Query({
-		output: chuongOutput,
+		output: chuongThongBaoOutput,
 		meta: restMeta("GET", "/thong-bao/chuong", TAG),
 	})
 	chuong(@Ctx() ctx: AuthedTrpcContext) {
@@ -38,31 +41,31 @@ export class ThongBaoRouter {
 	}
 
 	@Query({
-		input: danhSachInput,
-		output: danhSachOutput,
+		input: danhSachThongBaoInput,
+		output: danhSachThongBaoOutput,
 		meta: restMeta("GET", "/thong-bao", TAG),
 	})
 	danhSach(
 		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof danhSachInput>,
+		@Input() input: z.infer<typeof danhSachThongBaoInput>,
 	) {
-		return this.thongBao.danhSach(ctx.user.id, input.chiChuaDoc, input.conTro);
+		return this.thongBao.danhSach(ctx.user.id, input.chiChuaDoc, input.cursor);
 	}
 
 	@Mutation({
-		input: moMotInput,
-		output: moMotOutput,
+		input: moThongBaoInput,
+		output: moThongBaoOutput,
 		meta: restMeta("POST", "/thong-bao/{id}/mo", TAG),
 	})
 	moMot(
 		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof moMotInput>,
+		@Input() input: z.infer<typeof moThongBaoInput>,
 	) {
 		return this.thongBao.moMot(ctx.user.id, input.id, new Date());
 	}
 
 	@Mutation({
-		output: docHetOutput,
+		output: docHetThongBaoOutput,
 		meta: restMeta("POST", "/thong-bao/doc-het", TAG),
 	})
 	docHet(@Ctx() ctx: AuthedTrpcContext) {
