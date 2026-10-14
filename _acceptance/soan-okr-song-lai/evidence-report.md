@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 09bf83cb97f7770700876bf73ccbd0c17e99d94b
+verified_commit: aeacc862fc3a28e5391c27772a4ad96e16ae3317
 human_signoff: Phan Le Manh 2026-10-04
 ---
 
@@ -218,3 +218,7 @@ none — mọi eval chạy một lượt, không eval nào ngẫu nhiên hay ch�
 ## Iterations
 
 Round 1: 13 eval và 7 lệnh suite đều xanh, verdict PASS; không phải quay lại implementation.
+
+### Re-pin lần 1 — 2026-10-14, do F24 ba-ho-so-do-san: sửa thước chết và răng đỏ sẵn (phạm vi A, làn C 12 hồ sơ)
+run_id: repin-20261014T001054Z-11514
+sha: aeacc862fc3a28e5391c27772a4ad96e16ae3317 · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E11, E13 · diff chạm vật đo ngoài làn máy: E11, E13 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

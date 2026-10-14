@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
+verified_commit: aeacc862fc3a28e5391c27772a4ad96e16ae3317
 human_signoff: Phan Le Manh 2026-10-07
 ---
 
@@ -237,3 +237,7 @@ Round 2: đã sửa phép đo AC-1 và thêm đột biến T7 (bỏ bước ghi 
 ### Re-pin lần 1 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
 run_id: repin-20261012T222532Z-81286
 sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 1/1 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E2, E3, E4, E6, E7, E8, E9, E10, E11, E12, E14 · thay bởi hồ sơ đã ký: E1→chuyen-goi-dieu-phoi#AC-2, E2→chuyen-goi-dieu-phoi#AC-2, E3→chuyen-goi-dieu-phoi#AC-2, E4→chuyen-goi-dieu-phoi#AC-3, E6→chuyen-goi-dieu-phoi#AC-2, E7→chuyen-goi-dieu-phoi#AC-2, E8→chuyen-goi-dieu-phoi#AC-2, E9→chuyen-goi-dieu-phoi#AC-4, E10→chuyen-goi-dieu-phoi#AC-4, E11→chuyen-goi-dieu-phoi#AC-2, E12→chuyen-goi-dieu-phoi#AC-2, E14→chuyen-goi-dieu-phoi#AC-2 · ngoài làn máy: E13 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-4, AC-6, AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-14, do F24 ba-ho-so-do-san: sửa thước chết và răng đỏ sẵn (phạm vi A, làn C 12 hồ sơ)
+run_id: repin-20261014T001054Z-11514
+sha: aeacc862fc3a28e5391c27772a4ad96e16ae3317 · suites: 7 lệnh exit 0 · evals: 1/1 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E2, E3, E4, E6, E7, E8, E9, E10, E11, E12, E14 · thay bởi hồ sơ đã ký: E1→chuyen-goi-dieu-phoi#AC-2, E2→chuyen-goi-dieu-phoi#AC-2, E3→chuyen-goi-dieu-phoi#AC-2, E4→chuyen-goi-dieu-phoi#AC-3, E6→chuyen-goi-dieu-phoi#AC-2, E7→chuyen-goi-dieu-phoi#AC-2, E8→chuyen-goi-dieu-phoi#AC-2, E9→chuyen-goi-dieu-phoi#AC-4, E10→chuyen-goi-dieu-phoi#AC-4, E11→chuyen-goi-dieu-phoi#AC-2, E12→chuyen-goi-dieu-phoi#AC-2, E14→chuyen-goi-dieu-phoi#AC-2 · ngoài làn máy: E13 (E13 không khai paths) · AC không có chốt máy: AC-1, AC-2, AC-3, AC-4, AC-6, AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

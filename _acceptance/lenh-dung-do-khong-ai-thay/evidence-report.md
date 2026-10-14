@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-eval verify, run_id minted at execution
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c5a79ddcddbe2ebbc2be28f802f6d97a859e0925
+verified_commit: aeacc862fc3a28e5391c27772a4ad96e16ae3317
 run_id: s4r3-20260907T074041Z-16302
 human_signoff: Manh Phan 2026-09-07
 ---
@@ -189,3 +189,7 @@ run_id: s4r3-20260907T074041Z-16302
 | `lint-slop` | s4r3-20260907T074041Z-16302-suite-lint-slop | 0 |
 | `build` | s4r3-20260907T074041Z-16302-suite-build | 0 |
 
+
+### Re-pin lần 1 — 2026-10-14, do F24 ba-ho-so-do-san: sửa thước chết và răng đỏ sẵn (phạm vi A, làn C 12 hồ sơ)
+run_id: repin-20261014T001054Z-11514
+sha: aeacc862fc3a28e5391c27772a4ad96e16ae3317 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
