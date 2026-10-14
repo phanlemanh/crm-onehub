@@ -19,6 +19,7 @@ export const CUA_OKR = {
 		than: z.object({ sessionId: doan }),
 	},
 	phien: PHIEN,
+	headerHoi: "x-crm-cuoc-hoi",
 	tienToEve: "/eve/v1",
 	dangDuong: {
 		sucKhoe: ["health"],
@@ -63,6 +64,8 @@ export const CUA_OKR = {
 		chuaCauHinh: "chua-cau-hinh-tro-ly-okr",
 		chuaDangNhap: "chua-dang-nhap",
 		thieuCuoc: "thieu-cuoc-soan",
+		thieuCuocHoi: "thieu-cuoc-hoi",
+		haiCuoc: "hai-loai-cuoc",
 		duongKhongPhucVu: "duong-khong-phuc-vu",
 		cuocKhongThuocBan: "cuoc-khong-thuoc-ban",
 		cuocKhongDang: "cuoc-khong-dang",

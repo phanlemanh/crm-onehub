@@ -14,6 +14,7 @@ import {
 	okrBridgeConfigured,
 } from "@/lib/agent-bridge";
 import { CUA_OKR } from "@/lib/cua-okr-config";
+import { cuaHoi } from "@/lib/cua-okr-hoi";
 import { OKR_SOAN_CUA } from "@/lib/okr-soan-record";
 import { getSession } from "@/lib/session";
 import { getServerTrpcClient } from "@/lib/trpc/server";
@@ -51,6 +52,24 @@ async function handler(
 	}
 	const url = new URL(request.url);
 	dich.search = url.search;
+
+	const maHoi = request.headers.get(CUA_OKR.headerHoi);
+	if (maHoi !== null) {
+		if (request.headers.has(OKR_SOAN_CUA.header))
+			return loi(400, CUA_OKR.loi.haiCuoc);
+		return cuaHoi({
+			request,
+			duong,
+			dich,
+			user: {
+				id: session.user.id,
+				email: session.user.email,
+				name: session.user.name,
+			},
+			role,
+			maHoi,
+		});
+	}
 
 	const ma = CUA_OKR.maCuoc.safeParse(request.headers.get(OKR_SOAN_CUA.header));
 	if (!ma.success) return loi(400, CUA_OKR.loi.thieuCuoc);
