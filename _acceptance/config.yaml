@@ -1623,7 +1623,7 @@ executors:
     tvk_duong_lich: 'bun run test -- "cd apps/api && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-lich"'
     tvk_duong_khac: 'bun run test -- "cd apps/api && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-duong-khac"'
     tvk_tu_choi: 'bun run test -- "cd apps/api && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-tu-choi"'
-    tvk_khoa_thuong: 'bun run test -- "cd apps/api && bun test test/tin-hieu.spec.ts -t gth-keo-ve && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-khoa-thuong && cd ../../packages/auth && bun test test/khoa-api-ghi-thua.spec.ts"'
+    tvk_khoa_thuong: 'bun run test -- "cd apps/api && bun test test/tin-hieu.spec.ts -t gth-keo-ve && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-khoa-thuong && bun test test/khoa-api-ghi-thua.spec.ts"'
     tvk_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"'
     tvk_lenh: bun test scripts/tin-hieu/test/keo-ve-lich.test.ts -t tvk-lenh
     tvk_lich: bun test scripts/tin-hieu/test/lich.test.ts

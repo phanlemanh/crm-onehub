@@ -180,7 +180,7 @@ evals:
       - "packages/auth/src/api-keys.ts"
       - "apps/api/src/tin-hieu/**"
       - "apps/api/test/tin-hieu.spec.ts"
-      - "packages/auth/test/khoa-api-ghi-thua.spec.ts"
+      - "apps/api/test/khoa-api-ghi-thua.spec.ts"
     expected: |
       Ba bo co san, khong sua ca nao: tin-hieu.spec.ts "gth-keo-ve" (LT2: owner/admin keo duoc, member/okr bi tu choi, cung
       byte lan hai), khoa-api-ghi-thua.spec.ts (lastRequest ghi toi da moi phut mot lan, updatedAt khong doi), va
