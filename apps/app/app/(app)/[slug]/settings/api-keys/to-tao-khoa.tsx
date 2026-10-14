@@ -45,19 +45,6 @@ function nhanHan(t: KhoaApiMessages, han: HanKhoa): string {
 	return t.tao.khongHetHan;
 }
 
-export type ToTaoKhoaProps = {
-	t: KhoaApiMessages;
-	laQuanTri: boolean;
-	ten: string;
-	onTen: (ten: string) => void;
-	loai: LoaiKhoa;
-	onLoai: (loai: LoaiKhoa) => void;
-	han: HanKhoa;
-	onHan: (han: HanKhoa) => void;
-	dangTao: boolean;
-	onTao: () => void;
-};
-
 export function ToTaoKhoa({
 	t,
 	laQuanTri,
@@ -69,7 +56,18 @@ export function ToTaoKhoa({
 	onHan,
 	dangTao,
 	onTao,
-}: ToTaoKhoaProps) {
+}: {
+	t: KhoaApiMessages;
+	laQuanTri: boolean;
+	ten: string;
+	onTen: (ten: string) => void;
+	loai: LoaiKhoa;
+	onLoai: (loai: LoaiKhoa) => void;
+	han: HanKhoa;
+	onHan: (han: HanKhoa) => void;
+	dangTao: boolean;
+	onTao: () => void;
+}) {
 	const tenId = useId();
 	const hanId = useId();
 

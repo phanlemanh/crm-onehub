@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-10-14-tin-hieu-tu-ve-kho-design.md` · hợp đồng `_acceptance/tin-hieu-tu-ve-kho/contract.md` (đã duyệt) · bộ đo `_acceptance/tin-hieu-tu-ve-kho/evals.yaml`.
 
+**Cổng duyệt kế hoạch (Gate 1.5):** Manh Phan duyệt 2026-10-14 («Duyệt kế hoạch», trong phiên).
+
 ## Global Constraints
 
 - Không viết chú thích trong mã (AGENTS.md).
