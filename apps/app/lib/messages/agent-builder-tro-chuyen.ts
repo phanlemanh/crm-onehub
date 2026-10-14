@@ -18,6 +18,9 @@ const en = {
 		tinKhongMo: "Message unavailable",
 		vungTin: "Messages",
 		guiHong: "This message could not be sent.",
+		loiGui: {
+			DELIVERY_FAILED: "This message never reached the builder. Send it again.",
+		},
 	},
 	dung: {
 		dangDung: "Building the agent",
@@ -231,6 +234,9 @@ const vi = {
 		tinKhongMo: "Không mở được tin nhắn",
 		vungTin: "Vùng tin nhắn",
 		guiHong: "Tin này gửi không được.",
+		loiGui: {
+			DELIVERY_FAILED: "Tin chưa tới được bộ dựng. Gửi lại để thử tiếp.",
+		},
 	},
 	dung: {
 		dangDung: "Đang dựng tác nhân",

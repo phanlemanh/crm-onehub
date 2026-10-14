@@ -65,6 +65,9 @@ const { troChuyenMessages } = await import(
 );
 const { ketQuaMessages } = await import("@/lib/messages/agent-builder-ket-qua");
 const { NGHIA_TRANG_THAI_TAC_NHAN } = await import("@/lib/trang-thai-tac-nhan");
+const { UserSubmission, builderSubmissions } = await import(
+	"@/components/agent-builder/agent-builder-chat"
+);
 
 const dangMo: Root[] = [];
 
@@ -346,4 +349,47 @@ describe("chu-thoa-thuan", () => {
 			expect(chu).not.toContain(k.thoaThuan.trangThai[status]);
 		}
 	});
+});
+
+describe("gui-hong", () => {
+	const t = troChuyenMessages("vi");
+	const MA_TRAN = [
+		{ ma: "DELIVERY_FAILED", chu: t.man.loiGui.DELIVERY_FAILED },
+		{ ma: "MA_LA", chu: t.man.guiHong },
+	] as const;
+
+	for (const o of MA_TRAN) {
+		test(`gui-hong: ${o.ma} hien chu theo ma, khong in thong diep may chu`, async () => {
+			const [baiNop] = builderSubmissions.parse([
+				{
+					id: `bn-${o.ma}`,
+					createdAt: MOC,
+					clientRequestId: null,
+					commandType: "CHAT",
+					message: {
+						text: "Tạo tác nhân báo cáo",
+						resources: [],
+						attachments: [],
+					},
+					status: "FAILED",
+					errorCode: o.ma,
+					errorMessage: "boom english",
+				},
+			]);
+			if (!baiNop)
+				throw new Error("khuon bai nop cua man khong doc duoc fixture");
+			const khung = await ve(
+				<UserSubmission
+					submission={baiNop}
+					failed
+					errorCode={baiNop.errorCode}
+				/>,
+			);
+			const chu = khung.textContent ?? "";
+			expect(chu, "dong loi in thong diep may chu").not.toContain(
+				"boom english",
+			);
+			expect(chu).toContain(o.chu);
+		});
+	}
 });

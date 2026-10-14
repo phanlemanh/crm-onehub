@@ -78,6 +78,7 @@ import {
 	type TroChuyenMessages,
 	troChuyenMessages,
 } from "@/lib/messages/agent-builder-tro-chuyen";
+import { traBangChu } from "@/lib/tra-bang-chu";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -161,7 +162,7 @@ const builderMessage = z
 
 type BuilderMessage = z.infer<typeof builderMessage>;
 
-const builderSubmissions = z.array(
+export const builderSubmissions = z.array(
 	z.object({
 		id: z.string(),
 		createdAt: z.string(),
@@ -169,6 +170,7 @@ const builderSubmissions = z.array(
 		commandType: z.enum(["CHAT", "CREATE_AGENT"]),
 		message: builderMessage,
 		status: z.string(),
+		errorCode: z.string().nullable().catch(null),
 		errorMessage: z.string().nullable().catch(null),
 	}),
 );
@@ -443,7 +445,7 @@ export function AgentBuilderChat({
 										<UserSubmission
 											submission={item.submission}
 											failed={item.submission.status === "FAILED"}
-											error={item.submission.errorMessage}
+											errorCode={item.submission.errorCode}
 										/>
 									) : (
 										<AssistantMessage
@@ -470,10 +472,11 @@ export function AgentBuilderChat({
 											commandType: item.commandType,
 											message: item.message,
 											status: "PENDING",
+											errorCode: null,
 											errorMessage: null,
 										}}
 										failed={false}
-										error={null}
+										errorCode={null}
 										sending
 									/>
 								</MessageScrollerItem>
@@ -735,7 +738,7 @@ function SharedAgentChat({
 										<UserSubmission
 											submission={item.submission}
 											failed={item.submission.status === "FAILED"}
-											error={item.submission.errorMessage}
+											errorCode={item.submission.errorCode}
 										/>
 									) : (
 										<AssistantMessage
@@ -832,15 +835,15 @@ function ChatHeader({
 	);
 }
 
-function UserSubmission({
+export function UserSubmission({
 	submission,
 	failed,
-	error,
+	errorCode,
 	sending = false,
 }: {
 	submission: BuilderSubmission;
 	failed: boolean;
-	error: string | null;
+	errorCode: string | null;
 	sending?: boolean;
 }) {
 	const locale = useLocale();
@@ -902,7 +905,7 @@ function UserSubmission({
 				) : null}
 				{failed ? (
 					<p className="mt-2 text-destructive text-xs">
-						{error ?? t.man.guiHong}
+						{traBangChu(t.man.loiGui, errorCode ?? "") ?? t.man.guiHong}
 					</p>
 				) : null}
 			</div>

@@ -145,10 +145,10 @@ evals:
       - "apps/app/test/tac-nhan-va.dom.tsx"
     expected: |
       Lenh tnv_loi_dom chay apps/app/test/tac-nhan-va.dom.tsx loc -t gui-hong.
-      describe "gui-hong": render man hoi thoai dung voi du lieu hinh RouterOutputs["conversations"]["builderById"]
-      (kieu suy tu router), bai nop moi nhat FAILED. Ma tran viet truoc: errorCode {DELIVERY_FAILED, "MA_LA"} = 2 ca, moi
-      ca errorMessage "boom english". Khang dinh moi ca: dong loi duoi tin === chu cua bang chu cho ma do (MA_LA -> chu
-      chung guiHong), va textContent cua tin khong chua "boom english".
+      describe "gui-hong": render tin cua nguoi (UserSubmission cua agent-builder-chat.tsx) voi bai nop parse bang
+      chinh khuon builderSubmissions cua man, status FAILED. Ma tran viet truoc: errorCode {DELIVERY_FAILED, "MA_LA"} = 2
+      ca, moi ca errorMessage "boom english". Khang dinh moi ca: dong loi duoi tin === chu cua bang man.loiGui cho ma do
+      (MA_LA -> chu chung man.guiHong), va textContent khong chua "boom english".
       CHIEU DO: ban sao in error ?? chu chung nhu truoc vong -> ca DELIVERY_FAILED do voi thong diep ghim
       "dong loi in thong diep may chu".
 
