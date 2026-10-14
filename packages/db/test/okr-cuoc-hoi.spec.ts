@@ -68,15 +68,30 @@ describe("okr-cuoc-hoi", () => {
 	test("chi-phi-thang: chi okr.hoi-dap cua thang nay", async () => {
 		const nay = new Date("2026-10-14T05:00:00Z");
 		await dongChiPhi("a", nay, "okr.hoi-dap", 1.25);
-		await dongChiPhi("b", new Date("2026-10-01T00:30:00+07:00"), "okr.hoi-dap", 0.5);
-		await dongChiPhi("c", new Date("2026-09-30T12:00:00+07:00"), "okr.hoi-dap", 7);
+		await dongChiPhi(
+			"b",
+			new Date("2026-10-01T00:30:00+07:00"),
+			"okr.hoi-dap",
+			0.5,
+		);
+		await dongChiPhi(
+			"c",
+			new Date("2026-09-30T12:00:00+07:00"),
+			"okr.hoi-dap",
+			7,
+		);
 		await dongChiPhi("d", nay, "okr.soan", 3);
 		expect(await chiPhiThangHoiDap(db, nay)).toBeCloseTo(1.75, 6);
 	});
 
 	test("tinh-nang: purpose okr-hoi la okr.hoi-dap", () => {
 		expect(
-			tinhNangCua({ kenh: "eve", purpose: "okr-hoi", subagent: null, okrViec: null }),
+			tinhNangCua({
+				kenh: "eve",
+				purpose: "okr-hoi",
+				subagent: null,
+				okrViec: null,
+			}),
 		).toBe("okr.hoi-dap");
 	});
 });

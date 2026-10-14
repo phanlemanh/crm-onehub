@@ -1,9 +1,16 @@
-import { afterAll, beforeAll, describe, expect, setSystemTime, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { db } from "@crm/db";
 import { dieuKienXemMucTieu, nguCanhXemOkr } from "@crm/db/okr-hien-thi";
+import type { NguCanhPhien } from "../agent/lib/phien";
 import docOkr from "../agent/tools/doc_okr";
 import timOkr from "../agent/tools/tim_okr";
-import type { NguCanhPhien } from "../agent/lib/phien";
 import { boMau } from "./support/bo-mau";
 import { moXuong } from "./support/gieo";
 
@@ -48,7 +55,11 @@ async function tapThay(userId: string) {
 	if (!nc) throw new Error(`thieu ngu canh xem cua ${userId}`);
 	const hang = await db.okrObjective.findMany({
 		where: {
-			AND: [dieuKienXemMucTieu(nc), { status: "cong-bo" }, { cycleId: CHU_KY_Q4 }],
+			AND: [
+				dieuKienXemMucTieu(nc),
+				{ status: "cong-bo" },
+				{ cycleId: CHU_KY_Q4 },
+			],
 		},
 		select: { id: true, keyResults: { select: { id: true } } },
 	});
@@ -95,7 +106,11 @@ describe("hdo quyen doc", () => {
 			expect(maMt(ds)).toEqual(mong.mucTieu);
 			expect(maKr(ds)).toEqual(mong.kr);
 			const json = JSON.stringify(kq);
-			const lo = [GIOI_HAN, gioiHan.ten, ...gioiHan.kr.flatMap((k) => [k.id, k.title])];
+			const lo = [
+				GIOI_HAN,
+				gioiHan.ten,
+				...gioiHan.kr.flatMap((k) => [k.id, k.title]),
+			];
 			for (const x of lo) expect(json.includes(x)).toBe(n.thay);
 			const theoChu = await tim.execute(
 				{ tu: gioiHan.kr[0]?.title.slice(0, 18) ?? "x" },
@@ -107,9 +122,15 @@ describe("hdo quyen doc", () => {
 
 		test(`doc_okr ${n.ma}: Muc tieu va KR gioi han nhu khong ton tai`, async () => {
 			const uid = idMau("nguoi", n.ma);
-			const bia = await doc.execute({ loai: "objective", id: "khong-co-that" }, phien(uid));
+			const bia = await doc.execute(
+				{ loai: "objective", id: "khong-co-that" },
+				phien(uid),
+			);
 			expect(bia.ok).toBe(false);
-			const mt = await doc.execute({ loai: "objective", id: GIOI_HAN }, phien(uid));
+			const mt = await doc.execute(
+				{ loai: "objective", id: GIOI_HAN },
+				phien(uid),
+			);
 			const kr = await doc.execute(
 				{ loai: "kr", id: gioiHan.kr[0]?.id ?? "" },
 				phien(uid),
@@ -126,7 +147,10 @@ describe("hdo quyen doc", () => {
 
 	test("rong: chu ky khong co OKR tra rong", async () => {
 		const uid = idMau("nguoi", "le-hai-dang");
-		const kq = await tim.execute({ cycleId: idMau("chu-ky", "nam-ke") }, phien(uid));
+		const kq = await tim.execute(
+			{ cycleId: idMau("chu-ky", "nam-ke") },
+			phien(uid),
+		);
 		expect(kq).toMatchObject({ ok: true, rong: true, mucTieu: [] });
 	});
 

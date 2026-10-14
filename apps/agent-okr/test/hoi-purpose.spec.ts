@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
-process.env.DATABASE_URL = "postgresql://khong-ai:khong@127.0.0.1:1/khong_co_kho";
+process.env.DATABASE_URL =
+	"postgresql://khong-ai:khong@127.0.0.1:1/khong_co_kho";
 
 const { TRO_LY_OKR_HOI, TRO_LY_OKR_SOAN } = await import("../agent/lib/config");
 const CONG_CU = {
@@ -21,8 +22,14 @@ const DAU_VAO: Record<Ten, unknown> = {
 };
 
 const PURPOSE = [
-	{ ten: "okr-soan", attrs: { purpose: "okr-soan", cuocSoanId: "cuoc-soan-1", vai: "member" } },
-	{ ten: "okr-hoi", attrs: { purpose: "okr-hoi", cuocHoiId: "cuoc-hoi-1", vai: "member" } },
+	{
+		ten: "okr-soan",
+		attrs: { purpose: "okr-soan", cuocSoanId: "cuoc-soan-1", vai: "member" },
+	},
+	{
+		ten: "okr-hoi",
+		attrs: { purpose: "okr-hoi", cuocHoiId: "cuoc-hoi-1", vai: "member" },
+	},
 	{ ten: "la", attrs: { purpose: "zalo", vai: "member" } },
 ] as const;
 
@@ -49,7 +56,10 @@ const ctx = (attributes: Record<string, string>) => ({
 
 const hangTuChoi = (ten: Ten): unknown =>
 	ten === "nop_ban_nhap"
-		? expect.objectContaining({ ketQua: "tu-choi", lyDo: TRO_LY_OKR_SOAN.tuChoi.saiMucDich })
+		? expect.objectContaining({
+				ketQua: "tu-choi",
+				lyDo: TRO_LY_OKR_SOAN.tuChoi.saiMucDich,
+			})
 		: { ok: false, reason: TRO_LY_OKR_HOI.tuChoi.saiMucDich };
 
 describe("hdo purpose", () => {

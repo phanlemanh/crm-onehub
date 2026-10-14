@@ -201,7 +201,9 @@ export async function timOkr(
 					{ title: { contains: loc.tu, mode: "insensitive" as const } },
 					{
 						keyResults: {
-							some: { title: { contains: loc.tu, mode: "insensitive" as const } },
+							some: {
+								title: { contains: loc.tu, mode: "insensitive" as const },
+							},
 						},
 					},
 				],

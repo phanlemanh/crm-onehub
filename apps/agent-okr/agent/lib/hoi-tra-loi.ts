@@ -67,7 +67,8 @@ export async function nopTraLoi(
 			c.chu,
 			doc.map((d) => d.gia),
 		);
-		if (!so.ok) return { ok: false, reason: LOI.soLech(so.so, so.lop), so: so.so };
+		if (!so.ok)
+			return { ok: false, reason: LOI.soLech(so.so, so.lop), so: so.so };
 		cau.push({
 			chu: c.chu,
 			trich: doc.map((d) => ({ loai: d.gia.loai, id: d.gia.id, ten: d.ten })),

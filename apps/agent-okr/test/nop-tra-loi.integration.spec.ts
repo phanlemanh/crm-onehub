@@ -1,4 +1,11 @@
-import { afterAll, beforeAll, describe, expect, setSystemTime, test } from "bun:test";
+import {
+	afterAll,
+	beforeAll,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { db } from "@crm/db";
 import type { NguCanhPhien } from "../agent/lib/phien";
 import nopTraLoi from "../agent/tools/nop_tra_loi";
@@ -19,7 +26,9 @@ type KetQua = {
 	so?: string;
 	traLoi?: { cau: { chu: string; trich: { id: string; ten: string }[] }[] };
 };
-type CongCu = { execute: (input: unknown, ctx: NguCanhPhien) => Promise<KetQua> };
+type CongCu = {
+	execute: (input: unknown, ctx: NguCanhPhien) => Promise<KetQua>;
+};
 const nop = nopTraLoi as unknown as CongCu;
 
 const phien = (userId: string): NguCanhPhien => ({
@@ -30,14 +39,20 @@ const phien = (userId: string): NguCanhPhien => ({
 				authenticator: "crm-okr-cua",
 				principalId: userId,
 				principalType: "user",
-				attributes: { purpose: "okr-hoi", cuocHoiId: `cuoc-${userId}`, vai: "member" },
+				attributes: {
+					purpose: "okr-hoi",
+					cuocHoiId: `cuoc-${userId}`,
+					vai: "member",
+				},
 			},
 			current: null,
 		},
 	},
 });
 
-const traLoi = (cau: { chu: string; trich: { loai: string; id: string }[] }[]) => ({
+const traLoi = (
+	cau: { chu: string; trich: { loai: string; id: string }[] }[],
+) => ({
 	loai: "tra-loi",
 	cauHoi: "OKR này thế nào?",
 	cau,
@@ -54,12 +69,27 @@ beforeAll(async () => {
 	await napMau(MOC_MAU);
 	setSystemTime(MOC_MAU);
 	const mt = await db.okrObjective.findFirstOrThrow({
-		where: { hienThi: "cong-khai", status: "cong-bo", keyResults: { some: {} } },
-		select: { id: true, title: true, keyResults: { select: { id: true }, take: 1 } },
+		where: {
+			hienThi: "cong-khai",
+			status: "cong-bo",
+			keyResults: { some: {} },
+		},
+		select: {
+			id: true,
+			title: true,
+			keyResults: { select: { id: true }, take: 1 },
+		},
 	});
-	congKhai = { id: mt.id, ten: mt.title, kr: { id: mt.keyResults[0]?.id ?? "", tienDo: "" } };
+	congKhai = {
+		id: mt.id,
+		ten: mt.title,
+		kr: { id: mt.keyResults[0]?.id ?? "", tienDo: "" },
+	};
 	krGioiHan = (
-		await db.okrKeyResult.findFirstOrThrow({ where: { objectiveId: GIOI_HAN }, select: { id: true } })
+		await db.okrKeyResult.findFirstOrThrow({
+			where: { objectiveId: GIOI_HAN },
+			select: { id: true },
+		})
 	).id;
 }, 120_000);
 
@@ -70,9 +100,24 @@ afterAll(async () => {
 
 describe("hdo nop tra loi", () => {
 	const O = [
-		{ ten: "objective-xem-duoc", loai: "objective", id: () => congKhai.id, ok: true },
-		{ ten: "objective-gioi-han", loai: "objective", id: () => GIOI_HAN, ok: false },
-		{ ten: "objective-ma-bia", loai: "objective", id: () => "mt-bia-khong-co", ok: false },
+		{
+			ten: "objective-xem-duoc",
+			loai: "objective",
+			id: () => congKhai.id,
+			ok: true,
+		},
+		{
+			ten: "objective-gioi-han",
+			loai: "objective",
+			id: () => GIOI_HAN,
+			ok: false,
+		},
+		{
+			ten: "objective-ma-bia",
+			loai: "objective",
+			id: () => "mt-bia-khong-co",
+			ok: false,
+		},
 		{ ten: "kr-xem-duoc", loai: "kr", id: () => congKhai.kr.id, ok: true },
 		{ ten: "kr-gioi-han", loai: "kr", id: () => krGioiHan, ok: false },
 		{ ten: "kr-ma-bia", loai: "kr", id: () => "kr-bia-khong-co", ok: false },
@@ -83,8 +128,14 @@ describe("hdo nop tra loi", () => {
 		test(`${o.ten}: ${o.ok ? "nhan" : "tu choi ca cau tra loi, neu dung ma"}`, async () => {
 			const kq = await nop.execute(
 				traLoi([
-					{ chu: "Đây là Mục tiêu đang hỏi.", trich: [{ loai: o.loai, id: o.id() }] },
-					{ chu: "Câu kèm theo hợp lệ.", trich: [{ loai: "objective", id: congKhai.id }] },
+					{
+						chu: "Đây là Mục tiêu đang hỏi.",
+						trich: [{ loai: o.loai, id: o.id() }],
+					},
+					{
+						chu: "Câu kèm theo hợp lệ.",
+						trich: [{ loai: "objective", id: congKhai.id }],
+					},
 				]),
 				phien(THANH_VIEN),
 			);
@@ -122,7 +173,17 @@ describe("hdo nop tra loi", () => {
 	test("so khop tien do thi nhan, ten trich la ten that", async () => {
 		const mt = await db.okrObjective.findUniqueOrThrow({
 			where: { id: congKhai.id },
-			select: { keyResults: { select: { id: true, kind: true, startValue: true, targetValue: true, currentValue: true } } },
+			select: {
+				keyResults: {
+					select: {
+						id: true,
+						kind: true,
+						startValue: true,
+						targetValue: true,
+						currentValue: true,
+					},
+				},
+			},
 		});
 		const k = mt.keyResults[0];
 		if (!k) throw new Error("thieu kr");
@@ -140,7 +201,9 @@ describe("hdo nop tra loi", () => {
 		expect(kq.ok).toBe(true);
 		expect(kq.traLoi?.cau[0]?.trich[0]?.ten.length).toBeGreaterThan(0);
 		const lech = await nop.execute(
-			traLoi([{ chu: `KR này đạt ${p + 37}%.`, trich: [{ loai: "kr", id: k.id }] }]),
+			traLoi([
+				{ chu: `KR này đạt ${p + 37}%.`, trich: [{ loai: "kr", id: k.id }] },
+			]),
 			phien(THANH_VIEN),
 		);
 		expect(lech.ok).toBe(false);
