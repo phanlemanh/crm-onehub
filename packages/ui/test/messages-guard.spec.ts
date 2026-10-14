@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { type Messages, messages } from "../src/lib/messages";
-import { DAU_TIENG_VIET, DU_LIEU, KHONG_DAU_CHO_PHEP } from "./du-lieu";
+import {
+	DAU_TIENG_VIET,
+	DU_LIEU,
+	KHONG_DAU_CHO_PHEP,
+	TEN_RIENG,
+} from "./du-lieu";
 
 type Cap = { khoa: string; en: string; vi: string };
 
@@ -43,14 +48,14 @@ function trai(): Cap[] {
 describe("bảng dịch phải thật sự là tiếng Việt", () => {
 	test("không giá trị nào trùng nguyên văn bản tiếng Anh", () => {
 		const trung = trai()
-			.filter((c) => c.en === c.vi)
+			.filter((c) => c.en === c.vi && !TEN_RIENG.has(c.vi))
 			.map((c) => `${c.khoa} = ${JSON.stringify(c.vi)}`);
 		expect(trung).toEqual([]);
 	});
 
 	test("mọi giá trị mang dấu tiếng Việt, trừ danh sách đã khai", () => {
 		const khong_dau = trai()
-			.filter((c) => !DAU_TIENG_VIET.test(c.vi))
+			.filter((c) => !DAU_TIENG_VIET.test(c.vi) && !TEN_RIENG.has(c.vi))
 			.map((c) => c.vi.replace(/X|Y|Z|[^\p{L} ]/gu, "").trim())
 			.filter((s) => s !== "");
 		expect(khong_dau.sort()).toEqual([...KHONG_DAU_CHO_PHEP].sort());

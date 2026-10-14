@@ -2,6 +2,7 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import Close from "@carbon/icons-react/es/Close";
+import Edit from "@carbon/icons-react/es/Edit";
 import Link from "@carbon/icons-react/es/Link";
 import Notification from "@carbon/icons-react/es/Notification";
 import NotificationFilled from "@carbon/icons-react/es/NotificationFilled";
@@ -723,6 +724,7 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 	const trpc = useTRPC();
 	const [gan, setGan] = useState(false);
 	const [goDi, setGoDi] = useState<NoiGop | null>(null);
+	const [suaDi, setSuaDi] = useState<NoiGop | null>(null);
 	const go = useMutation(
 		trpc.okr.removeAlignment.mutationOptions(
 			useXong(mt.id, m.daGo, () => setGoDi(null)),
@@ -748,7 +750,7 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 		{ id: "donVi", header: m.cotCanChinh.donVi, width: "w-36" },
 		{ id: "mucTieu", header: m.cotCanChinh.mucTieu },
 		{ id: "kr", header: m.cotCanChinh.kr },
-		...(sua ? [{ id: "go", srLabel: m.hoiGo.action, width: "w-12" }] : []),
+		...(sua ? [{ id: "go", srLabel: m.hoiGo.action, width: "w-20" }] : []),
 	];
 
 	return (
@@ -788,15 +790,27 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 									</TableCell>
 									{sua ? (
 										<TableCell className={CELL}>
-											<Button
-												aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
-												size="icon-sm"
-												variant="ghost"
-												disabled={go.isPending}
-												onClick={() => setGoDi(g)}
-											>
-												<Icon icon={Close} />
-											</Button>
+											<div className="flex items-center gap-1">
+												<Button
+													aria-label={dien(m.suaLyDo, { ten: tenNoi(g) })}
+													aria-haspopup="dialog"
+													data-nut="sua-ly-do"
+													size="icon-sm"
+													variant="ghost"
+													onClick={() => setSuaDi(g)}
+												>
+													<Icon icon={Edit} />
+												</Button>
+												<Button
+													aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
+													size="icon-sm"
+													variant="ghost"
+													disabled={go.isPending}
+													onClick={() => setGoDi(g)}
+												>
+													<Icon icon={Close} />
+												</Button>
+											</div>
 										</TableCell>
 									) : null}
 								</SimpleTableRow>
@@ -811,6 +825,20 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 					objectiveId={mt.id}
 					daGop={mt.alignments}
 					dong={() => setGan(false)}
+				/>
+			) : null}
+			{suaDi ? (
+				<HopThoaiCanChinh
+					objectiveId={mt.id}
+					daGop={mt.alignments}
+					dong={() => setSuaDi(null)}
+					cheDo={{
+						loai: "sua",
+						alignmentId: suaDi.alignmentId,
+						tenDich: tenNoi(suaDi),
+						lyDo: suaDi.lyDo,
+						canCu: suaDi.canCu,
+					}}
 				/>
 			) : null}
 			<ConfirmDialog

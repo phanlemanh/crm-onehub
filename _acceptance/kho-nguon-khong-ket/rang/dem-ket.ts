@@ -6,7 +6,8 @@ export const MOC_KET_MS = 30 * PHUT_MS;
 
 export const CAU = {
 	docLoi: "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.",
-	moCoi: "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.",
+	moCoi: "Kara dừng giữa chừng — bấm Soạn lại để thử lần nữa.",
+	moCoiCu: "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.",
 } as const;
 
 type MucKet = "CHO_DOC" | "CHO_SOAN" | "DANG_SOAN";
@@ -45,7 +46,11 @@ export async function demKet(
 		GROUP BY 1
 	`;
 	const tenLoi = (lyDo: string | null): string =>
-		lyDo === CAU.docLoi ? "docLoi" : lyDo === CAU.moCoi ? "moCoi" : (lyDo ?? "");
+		lyDo === CAU.docLoi
+			? "docLoi"
+			: lyDo === CAU.moCoi || lyDo === CAU.moCoiCu
+				? "moCoi"
+				: (lyDo ?? "");
 	return {
 		ket30,
 		nguonKet: ket.map((d) => d.id),
