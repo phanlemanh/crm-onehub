@@ -21,6 +21,7 @@ export const TAI_LIEU_API = {
 	khoaHoi: "tai-lieu-hoi:",
 	gioXacMinh: "12:00:00+07:00",
 	suKienCu: "ban-goc-da-doi",
+	suKienCuLuuTru: "trang-da-luu-tru",
 	thongDiep: {
 		khongCo: "Không tìm thấy trang hay bản đề xuất này.",
 		tenTrong: "Nhập tên trang.",
@@ -48,6 +49,15 @@ export const TAI_LIEU_API = {
 		khongDuocXuLy: "Chỉ chủ trang liên quan hoặc quản trị xử lý được việc này.",
 		khongDuocDatXacMinh:
 			"Chỉ chủ trang hoặc quản trị đặt được hạn xác minh của trang này.",
+		lyDoDeXuatTrong: "Nhập lý do.",
+		lyDoDeXuatDai: (n: number) => `Lý do dài quá ${n} ký tự.`,
+		daLuuTru:
+			"Trang đã lưu trữ. Đề xuất khôi phục trang trước rồi mới đề xuất sửa được.",
+		chuaTungDuyet:
+			"Trang chưa có bản nào được duyệt nên chưa lưu trữ được. Trả lại bản đề xuất nếu không cần trang này.",
+		daCoLuuTruCho: "Trang đã có một đề xuất lưu trữ đang chờ duyệt.",
+		chuaLuuTru: "Trang chưa lưu trữ nên không cần khôi phục.",
+		daCoKhoiPhucCho: "Trang đã có một đề xuất khôi phục đang chờ duyệt.",
 	},
 } as const;
 

@@ -20,12 +20,16 @@ import {
 	taiLieuCreateInput,
 	taiLieuCreateOutput,
 	taiLieuDangDungOutput,
+	taiLieuDeXuatTrangInput,
 	taiLieuGetOutput,
 	taiLieuIdInput,
+	taiLieuLichSuOutput,
 	taiLieuListInput,
 	taiLieuListOutput,
 	taiLieuNhacToiOutput,
 	taiLieuOkOutput,
+	taiLieuPhienBanInput,
+	taiLieuPhienBanOutput,
 	taiLieuProposalOutput,
 	taiLieuProposalsInput,
 	taiLieuProposalsOutput,
@@ -44,6 +48,7 @@ import {
 	taiLieuXuLyChuaTraLoiInput,
 } from "./tai-lieu-hoi.contracts";
 import { TaiLieuHoiService } from "./tai-lieu-hoi.service";
+import { TaiLieuLichSuService } from "./tai-lieu-lich-su.service";
 import { TaiLieuTimService } from "./tai-lieu-tim.service";
 
 const TAG = ["Documents"];
@@ -59,7 +64,69 @@ export class TaiLieuRouter {
 		@Inject(TaiLieuService) private readonly taiLieu: TaiLieuService,
 		@Inject(TaiLieuTimService) private readonly timKiem: TaiLieuTimService,
 		@Inject(TaiLieuHoiService) private readonly hoiKho: TaiLieuHoiService,
+		@Inject(TaiLieuLichSuService)
+		private readonly lichSuTrang: TaiLieuLichSuService,
 	) {}
+
+	@Query({
+		input: taiLieuSlugInput,
+		output: taiLieuLichSuOutput,
+		meta: restMeta("GET", "/tai-lieu/trang/{slug}/lich-su", TAG),
+	})
+	lichSu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuSlugInput>,
+	) {
+		return this.lichSuTrang.lichSu(nguoiGoi(ctx), input.slug);
+	}
+
+	@Query({
+		input: taiLieuPhienBanInput,
+		output: taiLieuPhienBanOutput,
+		meta: restMeta("GET", "/tai-lieu/trang/{slug}/lich-su/{so}", TAG),
+	})
+	phienBan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuPhienBanInput>,
+	) {
+		return this.lichSuTrang.phienBan(nguoiGoi(ctx), input);
+	}
+
+	@Mutation({
+		input: taiLieuPhienBanInput,
+		output: taiLieuProposeOutput,
+		meta: restMeta("POST", "/tai-lieu/trang/{slug}/lich-su/{so}/quay-lai", TAG),
+	})
+	quayLai(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuPhienBanInput>,
+	) {
+		return this.lichSuTrang.quayLai(nguoiGoi(ctx), input);
+	}
+
+	@Mutation({
+		input: taiLieuDeXuatTrangInput,
+		output: taiLieuProposeOutput,
+		meta: restMeta("POST", "/tai-lieu/trang/{slug}/de-xuat-luu-tru", TAG),
+	})
+	deXuatLuuTru(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuDeXuatTrangInput>,
+	) {
+		return this.lichSuTrang.deXuatLuuTru(nguoiGoi(ctx), input);
+	}
+
+	@Mutation({
+		input: taiLieuDeXuatTrangInput,
+		output: taiLieuProposeOutput,
+		meta: restMeta("POST", "/tai-lieu/trang/{slug}/de-xuat-khoi-phuc", TAG),
+	})
+	deXuatKhoiPhuc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuDeXuatTrangInput>,
+	) {
+		return this.lichSuTrang.deXuatKhoiPhuc(nguoiGoi(ctx), input);
+	}
 
 	@Mutation({
 		input: taiLieuDatXacMinhInput,
