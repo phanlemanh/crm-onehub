@@ -41,7 +41,7 @@ const KHOI =
 	/<script type="application\/json" id="lo-trinh-du-lieu">([\s\S]*?)<\/script>/;
 const THU_MUC = path.join(import.meta.dir, "fixtures/lo-trinh");
 const HTML_X2 = readFileSync(path.join(THU_MUC, "x2/LO-TRINH.html"), "utf8");
-const HTML_B1 = readFileSync(path.join(THU_MUC, "LO-TRINH.mau.html"), "utf8");
+const HTML_B1 = readFileSync(path.join(THU_MUC, "b1/LO-TRINH.html"), "utf8");
 const O = [
 	"da_giao",
 	"vi_sao",
