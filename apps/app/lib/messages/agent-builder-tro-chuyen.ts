@@ -124,7 +124,64 @@ const en = {
 		catBot: (hien: string, tong: string) =>
 			`Showing the first ${hien} of ${tong} steps. This run is too long to display in full.`,
 		dangChayDo: "In progress",
+		lichTuDong: "Schedule",
+		macDinh: "Default",
 	},
+	lyDoHong: {
+		ACTION_NOT_PERFORMED:
+			"The agent finished without doing what it was built to do. Open the run to see which step it skipped.",
+		NO_EXECUTOR:
+			"This agent asks for something OneHub Center cannot do yet. It needs rebuilding.",
+		DEPENDENCY_UNAVAILABLE:
+			"A connection this agent needs is missing. Reconnect it, then run again.",
+		NOT_AUTHORISED:
+			"The connection refused this. Its access may have been revoked or narrowed.",
+		PROVIDER_ERROR:
+			"The outside service rejected this. It is usually worth trying again.",
+		NEVER_SETTLED:
+			"The agent stopped without reporting a result. Nothing was left half-done.",
+		TURN_FAILED: "The model failed part-way through this run.",
+		DELIVERY_FAILED: "The run never reached the agent.",
+		DELIVERY_EXHAUSTED:
+			"This never reached the agent after three attempts. Nothing ran.",
+		ACTION_REJECTED:
+			"The agent tried the action and OneHub Center refused it. Nothing was written.",
+		AGENT_UNAVAILABLE:
+			"The agent was paused or archived when this run started.",
+		AGENT_DELETED: "The agent was deleted before this run finished.",
+		CANCELLED_BY_USER: "Someone stopped this run.",
+		RUN_TIMED_OUT:
+			"This run took too long and was stopped so later runs could start.",
+	} as Record<string, string>,
+	lyDoHongChung: "This run failed without saying why.",
+	suKien: {
+		"run.requested": "Run requested",
+		"run.queued": "Run queued",
+		"run.completed": "Run finished",
+		"run.failed": "Run failed",
+		"run.cancelled": "Run stopped",
+		"run.delivery_recovered": "Run handed over again",
+		"session.started": "Session started",
+		"session.waiting": "Waiting",
+		"session.completed": "Session ended",
+		"session.failed": "Session failed",
+		"turn.started": "Started working",
+		"turn.completed": "Finished working",
+		"turn.failed": "Work failed",
+		"turn.cancelled": "Work cancelled",
+		"message.received": "Instructions received",
+		"message.completed": "Reply written",
+		"step.started": "Step started",
+		"step.completed": "Step finished",
+		"step.failed": "Step failed",
+		"actions.requested": "Tools requested",
+		"action.result": "Tool replied",
+		"subagent.called": "Handed to a helper",
+		"subagent.completed": "Helper finished",
+		"input.requested": "Waiting for an answer",
+	} as Record<string, string>,
+	suKienKhac: "Other event",
+	trangThaiKhac: "Unknown",
 	trangThai: {
 		SUCCEEDED: "Succeeded",
 		FAILED: "Failed",
@@ -132,6 +189,7 @@ const en = {
 		QUEUED: "Queued",
 		WAITING_FOR_APPROVAL: "Waiting for approval",
 		CANCELLED: "Cancelled",
+		PLANNED: "Planned",
 		MANUAL: "Manual",
 		SCHEDULE: "Schedule",
 		EVENT: "Event",
@@ -277,7 +335,64 @@ const vi = {
 		catBot: (hien: string, tong: string) =>
 			`Đang hiện ${hien} bước đầu trong ${tong}. Lượt chạy này dài quá nên không hiện hết được.`,
 		dangChayDo: "Đang chạy",
+		lichTuDong: "Lịch tự động",
+		macDinh: "Mặc định",
 	},
+	lyDoHong: {
+		ACTION_NOT_PERFORMED:
+			"Tác nhân xong mà chưa làm việc nó được dựng để làm. Mở lượt chạy để xem nó bỏ bước nào.",
+		NO_EXECUTOR:
+			"Tác nhân này đòi một việc OneHub Center chưa làm được. Cần dựng lại.",
+		DEPENDENCY_UNAVAILABLE:
+			"Thiếu một kết nối tác nhân này cần. Nối lại rồi chạy lại.",
+		NOT_AUTHORISED:
+			"Kết nối từ chối việc này. Quyền của nó có thể đã bị thu hồi hay thu hẹp.",
+		PROVIDER_ERROR:
+			"Dịch vụ bên ngoài từ chối việc này. Thường chạy lại là được.",
+		NEVER_SETTLED:
+			"Tác nhân dừng mà không báo kết quả. Không việc nào bị bỏ dở.",
+		TURN_FAILED: "Model hỏng giữa chừng lượt chạy này.",
+		DELIVERY_FAILED: "Lượt chạy không tới được tác nhân.",
+		DELIVERY_EXHAUSTED:
+			"Ba lần gửi vẫn không tới được tác nhân. Chưa việc nào chạy.",
+		ACTION_REJECTED:
+			"Tác nhân đã thử làm việc này và OneHub Center từ chối. Chưa ghi gì.",
+		AGENT_UNAVAILABLE:
+			"Tác nhân đang tạm dừng hay đã lưu trữ khi lượt này bắt đầu.",
+		AGENT_DELETED: "Tác nhân bị xoá trước khi lượt này xong.",
+		CANCELLED_BY_USER: "Có người đã dừng lượt chạy này.",
+		RUN_TIMED_OUT:
+			"Lượt chạy kéo dài quá lâu nên bị dừng để các lượt sau chạy được.",
+	} as Record<string, string>,
+	lyDoHongChung: "Lượt chạy hỏng mà không nói lý do.",
+	suKien: {
+		"run.requested": "Đã yêu cầu chạy",
+		"run.queued": "Đã xếp lượt",
+		"run.completed": "Lượt chạy xong",
+		"run.failed": "Lượt chạy hỏng",
+		"run.cancelled": "Đã dừng lượt chạy",
+		"run.delivery_recovered": "Đã giao lại lượt chạy",
+		"session.started": "Bắt đầu phiên",
+		"session.waiting": "Đang chờ",
+		"session.completed": "Kết thúc phiên",
+		"session.failed": "Phiên hỏng",
+		"turn.started": "Bắt đầu xử lý",
+		"turn.completed": "Xử lý xong",
+		"turn.failed": "Xử lý hỏng",
+		"turn.cancelled": "Đã huỷ xử lý",
+		"message.received": "Nhận chỉ dẫn",
+		"message.completed": "Viết xong trả lời",
+		"step.started": "Bắt đầu một bước",
+		"step.completed": "Xong một bước",
+		"step.failed": "Một bước hỏng",
+		"actions.requested": "Xin dùng công cụ",
+		"action.result": "Công cụ trả kết quả",
+		"subagent.called": "Giao cho tác nhân phụ",
+		"subagent.completed": "Tác nhân phụ xong việc",
+		"input.requested": "Chờ người trả lời",
+	} as Record<string, string>,
+	suKienKhac: "Sự kiện khác",
+	trangThaiKhac: "Không rõ",
 	trangThai: {
 		SUCCEEDED: "Xong",
 		FAILED: "Hỏng",
@@ -285,6 +400,7 @@ const vi = {
 		QUEUED: "Đang xếp",
 		WAITING_FOR_APPROVAL: "Chờ duyệt",
 		CANCELLED: "Đã dừng",
+		PLANNED: "Chờ chạy",
 		MANUAL: "Chạy tay",
 		SCHEDULE: "Theo lịch",
 		EVENT: "Theo sự kiện",

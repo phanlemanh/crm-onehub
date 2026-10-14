@@ -53,11 +53,12 @@ evals:
       - "apps/app/components/agent-builder/deal-list-result.tsx"
       - "apps/app/test/tac-nhan-va.dom.tsx"
     expected: |
-      describe "chu-thoa-thuan": render DealListResultTable voi mot DealListResult hop schema cua @crm/validation (parse
-      truoc khi render) loc criteria.status = moi gia tri trang thai thoa thuan kho xuat, ba thoa thuan khac trang thai.
-      Khang dinh: chu trang thai cua bo loc va cua tung thoa thuan === chu ma man Thoa thuan dung cho cung gia tri (doc tu
-      bang chu cua man Thoa thuan, khong viet lai); textContent khong chua gia tri tho cua enum.
-      CHIEU DO: ban sao in thang criteria.status -> do voi thong diep ghim "ket qua luot chay in trang thai thoa thuan tho".
+      describe "chu-thoa-thuan": render DealListResultTable voi DealListResult parse bang parseDealListResult cua
+      @crm/validation/deal-list (khong render hinh chua parse). Ma tran viet truoc: criteria.status {open, won, lost} = 3
+      ca, moi ca hai thoa thuan. Khang dinh moi ca: aria-label cua section bang chua chu cua bang thoaThuan.trangThai cho gia tri do
+      (quan he voi bang) va textContent khong khop /\b(open|won|lost)\b/. Doi chung duong: ca "all" khong chen chu
+      trang thai nao.
+      CHIEU DO: ban sao in thang criteria.status -> ca won do voi thong diep ghim "ket qua luot chay in trang thai thoa thuan tho".
 
   - id: E4
     criterion: AC-4

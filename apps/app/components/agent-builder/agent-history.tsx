@@ -156,7 +156,7 @@ export function AgentRuns({
 											className="mt-px size-3.5 shrink-0 text-destructive"
 										/>
 										<span className="min-w-0 wrap-break-word text-destructive text-xs leading-5">
-											{runFailureReason(run.errorCode, run.errorMessage)}
+											{runFailureReason(t, run.errorCode, run.errorMessage)}
 										</span>
 									</span>
 								) : null}
@@ -260,12 +260,9 @@ function ExpandedRun({ run }: { run: RunRow }) {
 				<RunMeta label={t.luot.moc} value={nhanTrangThai(t, run.triggerType)} />
 				<RunMeta
 					label={t.luot.nguoiMo}
-					value={run.initiatedBy?.name ?? "Eve scheduler"}
+					value={run.initiatedBy?.name ?? t.luot.lichTuDong}
 				/>
-				<RunMeta
-					label={t.luot.model}
-					value={run.modelId ?? "Gateway default"}
-				/>
+				<RunMeta label={t.luot.model} value={run.modelId ?? t.luot.macDinh} />
 				<RunMeta label={t.luot.ban} value={String(run.version.number)} last />
 			</div>
 
@@ -280,7 +277,7 @@ function ExpandedRun({ run }: { run: RunRow }) {
 								{formatTime(entry.at, locale)}
 							</span>
 							<span className="min-w-0 flex-1 wrap-break-word text-sm">
-								{eventLabel(entry.event)}
+								{eventLabel(t, entry.event)}
 							</span>
 							<span className="hidden shrink-0 font-mono text-muted-foreground text-xs sm:inline">
 								{t.luot.buoc}
@@ -428,12 +425,7 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 
 function nhanTrangThai(t: TroChuyenMessages, value: string): string {
 	const bang: Record<string, string> = t.trangThai;
-	const co = bang[value];
-	if (String(co) === co) return co;
-	return value
-		.toLowerCase()
-		.replace(/_/g, " ")
-		.replace(/^./, (character) => character.toUpperCase());
+	return bang[value] ?? t.trangThaiKhac;
 }
 
 function formatDate(value: string, locale: Locale): string {
@@ -457,8 +449,8 @@ function duration(
 	return `${Math.max(0, milliseconds / 1000).toFixed(1)}s`;
 }
 
-function eventLabel(event: RunEvent): string {
-	return eventSummary.parse(event.data) ?? event.type.replace(/\./g, " ");
+function eventLabel(t: TroChuyenMessages, event: RunEvent): string {
+	return eventSummary.parse(event.data) ?? t.suKien[event.type] ?? t.suKienKhac;
 }
 
 function changeDetail(event: AuditRow): string | null {

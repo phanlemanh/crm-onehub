@@ -41,6 +41,11 @@ const en = {
 		tinhDen: "As of",
 		khongKhop: "No matching deals",
 		namIm: "stale",
+		trangThai: {
+			open: "open",
+			won: "won",
+			lost: "lost",
+		} as Record<string, string>,
 		soThoaThuan: (so: string) => `${so} deals`,
 		ngayNamIm: (so: string) => `${so}+ days inactive`,
 		conNua: "More results available",
@@ -91,6 +96,11 @@ const vi = {
 		tinhDen: "Tính đến",
 		khongKhop: "Không thoả thuận nào khớp",
 		namIm: "nằm im",
+		trangThai: {
+			open: "đang mở",
+			won: "chốt được",
+			lost: "không thành",
+		} as Record<string, string>,
 		soThoaThuan: (so: string) => `${so} thoả thuận`,
 		ngayNamIm: (so: string) => `nằm im từ ${so} ngày`,
 		conNua: "Còn kết quả nữa",

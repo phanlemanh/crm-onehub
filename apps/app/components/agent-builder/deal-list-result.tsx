@@ -157,7 +157,9 @@ function tableTitle(result: DealListResult, t: KetQuaMessages): string {
 	const count = result.deals.length;
 	if (count === 0) return t.thoaThuan.khongKhop;
 	const status =
-		result.criteria.status === "all" ? "" : ` ${result.criteria.status}`;
+		result.criteria.status === "all"
+			? ""
+			: ` ${t.thoaThuan.trangThai[result.criteria.status] ?? ""}`.trimEnd();
 	const stale =
 		result.criteria.inactiveForDays === null ? "" : ` ${t.thoaThuan.namIm}`;
 	return `${t.thoaThuan.soThoaThuan(String(count))}${stale}${status}`;
