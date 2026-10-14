@@ -616,6 +616,7 @@ export class ContactsService {
 			succeeded: count,
 			skipped: 0,
 			failed: ids.length - count,
+			errored: 0,
 			message: null,
 			changedIds,
 		};
@@ -656,6 +657,7 @@ export class ContactsService {
 			succeeded: count,
 			skipped: 0,
 			failed: ids.length - count,
+			errored: 0,
 			message: null,
 			changedIds,
 		};
