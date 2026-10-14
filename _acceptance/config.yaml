@@ -74,6 +74,12 @@ executors:
     htl_luu_tru_bo_qua: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-luu-tru-bo-qua"
     htl_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-en"
     htl_cap_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
+    hlb_run_bulk: "bun run test -- \"cd apps/api && bun test test/hoan-tac-loat-bao-dung.spec.ts -t hlb-run-bulk\""
+    hlb_may_chu: "bun run test -- \"cd apps/api && bun test test/hoan-tac-loat-bao-dung.spec.ts -t hlb-may-chu\""
+    hlb_luu_tru_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-bao-dung.dom.tsx -t hlb-luu-tru-loi"
+    hlb_hoan_tac_da_ve: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-bao-dung.dom.tsx -t hlb-hoan-tac-da-ve"
+    hlb_thieu_truong: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-bao-dung.dom.tsx -t hlb-thieu-truong"
+    hlb_chu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-bao-dung.dom.tsx -t hlb-chu"
     gtd_qua_gio: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t qua-gio"
     gtd_thoi_luong: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t thoi-luong"
     gtd_do: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t tep-do"
@@ -1729,6 +1735,9 @@ executors:
     ldb_hoi_quy: bash _acceptance/lo-trinh-dong-bo-ho-so/rang/hoi-quy.sh
     ldb_thiet_ke: bash _acceptance/lo-trinh-dong-bo-ho-so/rang/thiet-ke.sh
     htl_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoan-tac-loat-dung-id/rang/man.mjs"'
+    hlb_v2d_nguyen: bun _acceptance/hoan-tac-loat-bao-dung/rang/v2d-nguyen.mjs
+    hlb_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoan-tac-loat-bao-dung/rang/man.mjs"'
+    hlb_tai_lieu: bun _acceptance/hoan-tac-loat-bao-dung/rang/tai-lieu.mjs
     h5_hai_moc: 'bun run test -- "bash _acceptance/zalo-bom-gio/rang/hai-moc.sh"'
     h5_chi_tep_kiem: 'git diff --name-only 91fe8d69f HEAD | grep -v -e "^_acceptance/" -e "^PRODUCT-MAP.md$" -e "^LO-TRINH.html$" | tee /dev/stderr | { read -r a; read -r b; [ "$a" = "apps/agent/test/zalo-qua-webhook.integration.spec.ts" ] && [ -z "$b" ]; }'
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
