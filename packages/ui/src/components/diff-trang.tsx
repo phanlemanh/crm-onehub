@@ -105,11 +105,26 @@ function tachO(doan: DoanDoi[]): DoanDoi[][] {
 	return o;
 }
 
+function soO(k: KhoiDoi): number {
+	return tachO(k.doan).length;
+}
+
+function cungBang(nhom: NhomKhoi, k: KhoiDoi): boolean {
+	if (k.kieu !== "hang-bang") return true;
+	const cuoi = nhom.khoi[nhom.khoi.length - 1];
+	return cuoi === undefined || soO(cuoi) === soO(k);
+}
+
 function gomNhom(khoi: KhoiDoi[]): NhomKhoi[] {
 	const ra: NhomKhoi[] = [];
 	for (const k of khoi) {
 		const cuoi = ra[ra.length - 1];
-		if (cuoi && cuoi.kieu === k.kieu && KIEU_GOP.has(k.kieu)) {
+		if (
+			cuoi &&
+			cuoi.kieu === k.kieu &&
+			KIEU_GOP.has(k.kieu) &&
+			cungBang(cuoi, k)
+		) {
 			cuoi.khoi.push(k);
 			continue;
 		}

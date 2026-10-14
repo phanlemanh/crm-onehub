@@ -278,6 +278,6 @@ describe("tai-lieu-diff", () => {
 		);
 		if (loai.some((l) => l.includes(",")))
 			throw new Error("hang doi so cot bi gop bo va them");
-		expect(loai).toEqual(["bo", "them", "bo", "them"]);
+		expect(loai).toEqual(["bo", "bo", "them", "them"]);
 	});
 });

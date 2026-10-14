@@ -143,19 +143,41 @@ function soTheoTu(truoc: Khoi, sau: Khoi): KhoiDoi {
 	return { kieu: sau.kieu, doan: doanTu(thay) };
 }
 
+const laHangHoacHet = (k: Khoi | undefined) =>
+	k === undefined || k.kieu === "hang-bang";
+
 function ghepCum(bo: Khoi[], them: Khoi[]): KhoiDoi[] {
 	const ra: KhoiDoi[] = [];
+	let boCot: Khoi[] = [];
+	let themCot: Khoi[] = [];
+	const xaCot = () => {
+		ra.push(
+			...boCot.map((k) => mot(k.kieu, "bo", k.chu)),
+			...themCot.map((k) => mot(k.kieu, "them", k.chu)),
+		);
+		boCot = [];
+		themCot = [];
+	};
 	for (let i = 0; i < Math.max(bo.length, them.length); i += 1) {
 		const b = bo[i];
 		const t = them[i];
-		const khacCot = b?.kieu === "hang-bang" && t && !cungSoO(b, t);
-		if (b && t && b.kieu === t.kieu && !khacCot) {
+		const khacCot =
+			b?.kieu === "hang-bang" && t?.kieu === "hang-bang" && !cungSoO(b, t);
+		const trongCot = boCot.length > 0 || themCot.length > 0;
+		if ((khacCot || trongCot) && laHangHoacHet(b) && laHangHoacHet(t)) {
+			if (b) boCot.push(b);
+			if (t) themCot.push(t);
+			continue;
+		}
+		xaCot();
+		if (b && t && b.kieu === t.kieu) {
 			ra.push(soTheoTu(b, t));
 			continue;
 		}
 		if (b) ra.push(mot(b.kieu, "bo", b.chu));
 		if (t) ra.push(mot(t.kieu, "them", t.chu));
 	}
+	xaCot();
 	return ra;
 }
 

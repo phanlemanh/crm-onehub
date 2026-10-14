@@ -301,7 +301,7 @@ describe("token --diff-them, --diff-bo", () => {
 			"| Mục | Tỉ lệ |\n| --- | --- |\n| a | 5% |\n",
 			"| Mục | Tỉ lệ | Ghi chú |\n| --- | --- | --- |\n| a | 5% | x |\n",
 		);
-		expect(goc.querySelectorAll("table").length).toBe(1);
+		expect(goc.querySelectorAll("table").length).toBe(2);
 		const o = [...goc.querySelectorAll("td, th")];
 		expect(o.length).toBeGreaterThan(0);
 		for (const td of o)
