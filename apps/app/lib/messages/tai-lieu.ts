@@ -301,6 +301,8 @@ const en = {
 		suaBanNay: "Edit this draft",
 		khoaDuyet: "Check every number against the source before approving",
 		soVoiBan: "Changes against the page in use",
+		soVoiBanGocMay: "Changes against the original when the machine drafted",
+		banDangDungDaDoi: "The page in use has changed since this draft was made.",
 	},
 	nguon: {
 		nutTai: "Upload a source",
@@ -697,6 +699,8 @@ const vi: TaiLieuMessages = {
 		suaBanNay: "Sửa bản này",
 		khoaDuyet: "Đối chiếu từng con số với nguồn rồi mới duyệt được",
 		soVoiBan: "Thay đổi so với bản đang dùng",
+		soVoiBanGocMay: "So với bản gốc lúc máy soạn",
+		banDangDungDaDoi: "Bản đang dùng đã đổi từ lúc máy soạn bản này.",
 	},
 	nguon: {
 		nutTai: "Tải nguồn lên",
