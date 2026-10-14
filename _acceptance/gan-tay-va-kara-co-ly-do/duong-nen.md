@@ -1,17 +1,14 @@
 ---
 slug: gan-tay-va-kara-co-ly-do
-at: 2026-10-14T00:08:40.649Z
-sha: 60fc1b02dbd9de1abc1a7ece86fa2ec03a31cae1
-nen: do
+at: 2026-10-14T00:25:07.144Z
+sha: 24d148466e1a2b6542dc52768ae5401baf35538a
+nen: xanh
 cong_cu: xanh
-suite: do
+suite: xanh
 luoi: xanh
 engine: xanh
 ---
 
 ## Dòng đỏ
 
-- nen suite: CAY BAN SAU SUITE _acceptance/gan-tay-va-kara-co-ly-do/contract.md
-- nen suite: CAY BAN SAU SUITE _acceptance/gan-tay-va-kara-co-ly-do/decisions.jsonl
-- nen suite: CAY BAN SAU SUITE _acceptance/gan-tay-va-kara-co-ly-do/evals.yaml
-- nen suite: CAY BAN SAU SUITE docs/superpowers/specs/2026-10-14-gan-tay-va-kara-co-ly-do-design.md
+- không có
