@@ -9,6 +9,32 @@
     "chưa mở": "Chưa mở",
     "để sau": "Xếp lại sau"
   },
+  "moc": [
+    {
+      "ten": "Việc chung chạy được — giao việc, kanban, chép việc cần làm cũ, không lộ việc cha",
+      "ngay": "2026-10-15",
+      "loai": "phat-hanh",
+      "khoa": "m-1015",
+      "hang": [
+        "DA1",
+        "DA2",
+        "DA1b",
+        "DA2b"
+      ],
+      "nghia": "Người dùng giao và nhận việc chung, kéo việc trên bảng, thấy việc cần làm cũ đã chép sang Việc, không thấy tiêu đề việc cha ngoài quyền. Chủ kho duyệt mốc 14/10."
+    },
+    {
+      "ten": "Kế hoạch sinh việc + Gantt mức đủ",
+      "ngay": "2026-10-24",
+      "loai": "phat-hanh",
+      "khoa": "m-1024",
+      "hang": [
+        "DA3",
+        "DA4"
+      ],
+      "nghia": "Kế hoạch tạo từ khuôn có sẵn việc; dự án xem trên Gantt có phụ thuộc và mốc. Chủ kho duyệt mốc 14/10; DA3b vào mốc này khi hàng lên onehub."
+    }
+  ],
   "hang": [
     {
       "ma": "DA0",
