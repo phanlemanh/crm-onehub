@@ -230,8 +230,9 @@ evals:
       - "packages/validation/src/thong-bao.ts"
       - "apps/app/lib/messages/thong-bao.ts"
       - "apps/agent/test/thong-bao-duong.spec.ts"
+      - "apps/app/test/thong-bao-cau.spec.ts"
     expected: |
-      thong-bao-duong.spec.ts: ma tran rut tu THU_TU_NHAC (moi loai mot muc mau dung khuon, khong viet tay danh sach loai):
+      thong-bao-duong.spec.ts (duong) va apps/app/test/thong-bao-cau.spec.ts (cau): ma tran rut tu THU_TU_NHAC (moi loai mot muc mau dung khuon, khong viet tay danh sach loai):
         1 voi MOI loai: duongDan cua thong bao == duong cua tin Zalo cung muc sau khi bo "<APP_URL>/<slug>" (so chuoi)
         2 voi MOI loai: ham dung cau cua app tra chuoi khac rong cho ca "vi" va "en", khong chua "undefined"
         3 so loai trong ma tran == THU_TU_NHAC.length (in ra so)
@@ -267,8 +268,8 @@ evals:
       - "apps/agent/test/thong-bao-ghi.integration.spec.ts"
     expected: |
       describe "htb-don", dong ho gia: gieo thong bao taoLuc = now - (THONG_BAO.giuNgay + 1) ngay, now - THONG_BAO.giuNgay ngay
-      + 1 gio, now - (THONG_BAO.giuNgay - 1) ngay. Chay luot don qua DUNG loi vao ma bo phat lich goi (ham cua lich quet
-      dinh ky co san, khong goi ham don tran):
+      + 1 gio, now - (THONG_BAO.giuNgay - 1) ngay. Chay buoc don qua DUNG loi vao ma nhip moi phut (schedules/dispatch.ts) goi
+      (donThongBaoDinhKy, khong goi ham don tran); them o noi lich: dispatch.ts goi donThongBaoDinhKy trong Promise.all dau cua run:
         1 chi hang thu nhat bi xoa (so sanh tap id)
         2 so chua doc qua thongBao.chuong (goi truc tiep service) giam dung so hang bi xoa ma chua doc
       CHIEU DO: ban sao so sanh <= thay vi < -> hang bien do (giuNgay - 1 gio) do voi thong diep ghim "don ca thong bao chua
