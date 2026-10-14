@@ -80,7 +80,7 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.kh_e6_xanh
-    expected: "exit 0; chạy nguyên ba lệnh của hồ sơ dieu-phoi-va đo AC-4, AC-5, AC-6 (dpv_them_buoc_dom, dpv_bo_phan_hong) trên cây lượt này; mã khác 0 thì thoát khác 0 nêu lệnh. Tên ca giữ nguyên: lệnh lọc -t 'ke-hoach-rong|bo-phan-khac|loi-bo-phan' và -t bo-phan-hong phải chạy ≥1 ca mỗi tên (đếm từ đầu ra bun test), không thì thoát 1 với 'kh: ca e6 bi doi ten <ten>'."
+    expected: "exit 0; chạy nguyên ba lệnh của hồ sơ dieu-phoi-va đo AC-4, AC-5, AC-6 (dpv_them_buoc_dom, dpv_bo_phan_hong) trên cây lượt này; mã khác 0 thì thoát khác 0 nêu lệnh. Lệnh rút từ config.yaml, không chép tay. Tên ca giữ nguyên: với mỗi tên ke-hoach-rong, bo-phan-khac, loi-bo-phan, bo-phan-hong, chạy đúng lệnh của config với bộ lọc -t thay bằng riêng tên đó — phải ≥1 pass và 0 fail, không thì thoát 1 với 'kh: ca e6 bi doi ten <ten>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/onboarding/**, apps/app/components/crm/record-sheet/**, apps/app/test/dieu-phoi-va.dom.tsx, apps/api/test/dieu-phoi-va.spec.ts]
 

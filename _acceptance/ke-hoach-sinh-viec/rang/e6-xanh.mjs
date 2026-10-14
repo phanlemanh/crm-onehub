@@ -29,28 +29,43 @@ function lenhCua(khoa) {
 	return gt;
 }
 
-let hong = 0;
-for (const [khoa, ten] of Object.entries(KHOA)) {
-	const cmd = lenhCua(khoa);
+// Bun chỉ in dòng «(pass)» từng ca ở vài kiểu chạy, nên mỗi tên ca được đo bằng chính lệnh của config với
+// bộ lọc -t thay bằng riêng tên đó: phải có ≥1 ca qua và 0 ca hỏng.
+const thayLoc = (cmd, ten) =>
+	cmd.replace(/-t\s+("[^"]*"|'[^']*'|\S+?)(?=["\s]|$)/, `-t ${ten}`);
+
+function chay(cmd) {
 	const r = spawnSync("sh", ["-c", cmd], {
 		cwd: GOC,
 		encoding: "utf8",
 		maxBuffer: 64 * 1024 * 1024,
 		timeout: 900_000,
 	});
-	const ra = `${r.stdout}\n${r.stderr}`;
-	if (r.status !== 0) {
-		console.error(`e6-xanh: lenh ${khoa} thoat ${r.status}`);
+	return { ma: r.status, ra: `${r.stdout}\n${r.stderr}` };
+}
+
+let hong = 0;
+for (const [khoa, ten] of Object.entries(KHOA)) {
+	const cmd = lenhCua(khoa);
+	if (!/-t\s/.test(cmd)) {
+		console.error(`e6-xanh: lenh ${khoa} khong co bo loc -t`);
+		process.exit(2);
+	}
+	const tron = chay(cmd);
+	if (tron.ma !== 0) {
+		console.error(`e6-xanh: lenh ${khoa} thoat ${tron.ma}`);
 		hong += 1;
 	}
 	for (const t of ten) {
-		const qua = ra
-			.split("\n")
-			.filter((d) => d.includes("(pass)") && d.includes(t));
-		if (qua.length === 0) {
-			console.error(`kh: ca e6 bi doi ten ${t}`);
+		const r = chay(thayLoc(cmd, t));
+		const qua = Number(r.ra.match(/(\d+) pass/)?.[1] ?? 0);
+		const hongCa = Number(r.ra.match(/(\d+) fail/)?.[1] ?? 0);
+		if (qua === 0 || hongCa !== 0 || r.ma !== 0) {
+			console.error(
+				`kh: ca e6 bi doi ten ${t} (pass ${qua}, fail ${hongCa}, ma ${r.ma})`,
+			);
 			hong += 1;
-		} else console.log(`${khoa} · ${t}: ${qua.length} ca qua`);
+		} else console.log(`${khoa} · ${t}: ${qua} ca qua`);
 	}
 }
 process.exit(hong === 0 ? 0 : 1);
