@@ -154,6 +154,10 @@ globalThis.fetch = (async (vao: RequestInfo | URL) => {
 }) as typeof fetch;
 
 const { DanhSach } = await import("@/app/(app)/[slug]/tai-lieu/danh-sach");
+const { DongNguonTat, HanhDongTaiLieu } = await import(
+	"@/app/(app)/[slug]/tai-lieu/dau-trang-tai-lieu"
+);
+const { PageShellActions } = await import("@/components/page-shell");
 const { NutTaiNguon } = await import(
 	"@/app/(app)/[slug]/tai-lieu/hop-tai-nguon"
 );
@@ -406,7 +410,22 @@ describe("tai-loi — hộp tải từ chối tệp sai ở máy khách (E3d)", 
 
 describe("nguon-tat — nút tải khoá khi chưa bật lưu tệp (E5d)", () => {
 	async function moDanhSach(): Promise<void> {
-		await mo(<DanhSach loai={null} luaChon={LUA_CHON} page={1} tab="trang" />);
+		await mo(
+			<>
+				<header data-dau-trang="">
+					<DongNguonTat />
+					<PageShellActions>
+						<HanhDongTaiLieu
+							loai={null}
+							luaChon={LUA_CHON}
+							page={1}
+							tab="trang"
+						/>
+					</PageShellActions>
+				</header>
+				<DanhSach loai={null} page={1} tab="trang" />
+			</>,
+		);
 	}
 
 	function lienKetTrangMoi(): HTMLAnchorElement {
@@ -417,14 +436,17 @@ describe("nguon-tat — nút tải khoá khi chưa bật lưu tệp (E5d)", () =
 		return a;
 	}
 
-	test("nguon-tat: chưa bật thì «Tải nguồn lên» khoá, câu giải thích cạnh nút, trang mới vẫn bấm được", async () => {
+	test("nguon-tat: chưa bật thì «Tải nguồn lên» khoá, câu giải thích dưới tiêu đề nút trỏ tới, trang mới vẫn bấm được", async () => {
 		canh.bat = false;
 		await moDanhSach();
 
 		const n = nut("Tải nguồn lên");
 		ghim(n.disabled, "nut tai van mo khi chua bat");
-		const dau = document.body.querySelector("[data-hanh-dong-dau]");
-		expect(dau?.textContent).toContain(CAU_TAT);
+		const dong = document.body.querySelector(
+			"[data-dau-trang] [data-nguon-tat]",
+		);
+		expect(dong?.textContent).toContain(CAU_TAT);
+		expect(dong?.closest("[data-hanh-dong-dau]")).toBeNull();
 		const moTa = (n.getAttribute("aria-describedby") ?? "")
 			.split(/\s+/)
 			.map((id) => document.getElementById(id)?.textContent ?? "")

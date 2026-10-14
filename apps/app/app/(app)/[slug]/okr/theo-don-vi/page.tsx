@@ -1,6 +1,7 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShellContent, PageShellLoading } from "@/components/page-shell";
+import { PageShellContent } from "@/components/page-shell";
 import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
@@ -8,6 +9,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
 import { TheoDonVi } from "./theo-don-vi";
 
@@ -23,11 +25,14 @@ export default function TheoDonViPage({
 	searchParams: SearchParams;
 }) {
 	return (
-		<PageShellContent>
-			<Suspense fallback={<PageShellLoading />}>
-				<NoiDung searchParams={searchParams} />
-			</Suspense>
-		</PageShellContent>
+		<>
+			<DauTrangOkrTrang tab="theo-don-vi" />
+			<PageShellContent>
+				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
+					<NoiDung searchParams={searchParams} />
+				</Suspense>
+			</PageShellContent>
+		</>
 	);
 }
 

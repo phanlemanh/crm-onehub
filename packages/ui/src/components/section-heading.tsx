@@ -1,16 +1,17 @@
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
 
-const CAP = { 3: "h3", 4: "h4" } as const;
+const CAP = { 2: "h2", 3: "h3", 4: "h4" } as const;
 
 function SectionHeading({
 	level = 3,
 	actions,
 	className,
 	children,
+	id,
 	...props
 }: React.ComponentProps<"div"> & {
-	level?: 3 | 4;
+	level?: 2 | 3 | 4;
 	actions?: React.ReactNode;
 }) {
 	const The = CAP[level];
@@ -24,6 +25,7 @@ function SectionHeading({
 			{...props}
 		>
 			<The
+				id={id}
 				data-slot="section-heading-title"
 				className="font-heading text-sm font-medium"
 			>

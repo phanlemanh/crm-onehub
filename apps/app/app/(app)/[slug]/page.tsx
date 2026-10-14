@@ -1,3 +1,4 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { laVaiChiOkr, toWorkspaceRole } from "@crm/validation/vai-workspace";
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -7,7 +8,6 @@ import {
 	PageShellContent,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { tongQuanMessages } from "@/lib/messages/tong-quan";
@@ -63,7 +63,7 @@ export default async function OverviewPage({
 			</PageShellHeader>
 
 			<PageShellContent>
-				<Suspense fallback={<PageShellLoading />}>
+				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
 					<Summary searchParams={searchParams} />
 				</Suspense>
 			</PageShellContent>

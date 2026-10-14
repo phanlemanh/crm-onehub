@@ -5,6 +5,7 @@ import { DatePicker } from "@crm/ui/components/date-picker";
 import { Field, FieldLabel } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
+import { Link as TextLink } from "@crm/ui/components/link";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
@@ -15,15 +16,38 @@ import {
 } from "@crm/ui/components/select";
 import { toDay } from "@crm/ui/lib/format";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { KhungTao } from "@/components/onboarding/khung-tao";
+import { PageShellNote } from "@/components/page-shell-note";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 export type CongTyCoDinh = { id: string; name: string };
+
+export const ID_KHOA_KE_HOACH = "onboarding-khoa-ke-hoach";
+
+export function DongKhoaKeHoach() {
+	const m = onboardingMessages(useLocale());
+	const trpc = useTRPC();
+	const url = useWorkspaceUrl();
+	const dsKhuon = useQuery(trpc.onboarding.listTemplates.queryOptions());
+	if (dsKhuon.data?.length !== 0) return null;
+	return (
+		<PageShellNote data-ly-do-khoa="" id={ID_KHOA_KE_HOACH}>
+			{m.tao.keHoach.khoaLyDo}{" "}
+			<TextLink asChild>
+				<Link href={url("/settings/onboarding")}>
+					{m.empty.noTemplate.action}
+				</Link>
+			</TextLink>
+		</PageShellNote>
+	);
+}
 
 export function DanhMucHanhDong() {
 	const m = onboardingMessages(useLocale());
@@ -82,6 +106,7 @@ export function TaoKeHoach({
 				dauTrang ? <Icon icon={Add} data-icon="inline-start" /> : undefined
 			}
 			khoaNut={dauTrang && dsKhuon.data?.length === 0}
+			moTaKhoa={dauTrang ? ID_KHOA_KE_HOACH : undefined}
 			tieuDe={m.tao.keHoach.title}
 			dangMo={dangMo}
 			doiMo={setDangMo}

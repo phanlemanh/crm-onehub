@@ -1,7 +1,15 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
+import type { Locale } from "@crm/ui/lib/locale";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { Suspense } from "react";
-import { PageShell, PageShellLoading } from "@/components/page-shell";
+import { type ReactNode, Suspense } from "react";
+import {
+	PageShell,
+	PageShellDescription,
+	PageShellHeader,
+	PageShellHeading,
+	PageShellTitle,
+} from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -11,6 +19,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { workspaceUrl } from "@/lib/workspace-url";
 import { nullIfMissing } from "../../../(agent-builder)/missing-record";
+import { DuongDanTaiLieu } from "../../duong-dan-tai-lieu";
 import { ManSoan } from "../../man-soan";
 import { loadSuaSearchParams } from "./sua-search-params";
 
@@ -21,28 +30,56 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: taiLieuMessages(await getLocale()).metadata.sua };
 }
 
-export default function SuaTrangPage({
+export default async function SuaTrangPage({
 	params,
 	searchParams,
 }: {
 	params: Params;
 	searchParams: SearchParams;
 }) {
+	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
 	return (
 		<PageShell>
-			<Suspense fallback={<PageShellLoading />}>
-				<NoiDung params={params} searchParams={searchParams} />
+			<Suspense
+				fallback={
+					<>
+						<DauTrangSua locale={locale} slug={slug} />
+						<KhungXuong hinh="chi-tiet" />
+					</>
+				}
+			>
+				<NoiDung
+					dauTrang={<DauTrangSua locale={locale} slug={slug} />}
+					params={params}
+					searchParams={searchParams}
+				/>
 			</Suspense>
 		</PageShell>
+	);
+}
+
+function DauTrangSua({ slug, locale }: { slug: string; locale: Locale }) {
+	const m = taiLieuMessages(locale).soan;
+	return (
+		<PageShellHeader
+			breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+		>
+			<PageShellHeading>
+				<PageShellTitle>{m.tieuDeSua}</PageShellTitle>
+				<PageShellDescription>{m.moTaSua}</PageShellDescription>
+			</PageShellHeading>
+		</PageShellHeader>
 	);
 }
 
 async function NoiDung({
 	params,
 	searchParams,
+	dauTrang,
 }: {
 	params: Params;
 	searchParams: SearchParams;
+	dauTrang: ReactNode;
 }) {
 	await requireSession();
 
@@ -69,6 +106,7 @@ async function NoiDung({
 		if (!banMay || banMay.slug !== trang.slug) notFound();
 		return (
 			<HydrateClient>
+				{dauTrang}
 				<ManSoan
 					key={banMay.id}
 					vao={{
@@ -87,6 +125,7 @@ async function NoiDung({
 
 	return (
 		<HydrateClient>
+			{dauTrang}
 			<ManSoan
 				key={trang.phienBan?.so ?? 0}
 				vao={{
