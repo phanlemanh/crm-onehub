@@ -112,7 +112,8 @@ evals:
       describe "sgt-cham":
         1 nut thao tac trong Item dien thoai mang data-size == "icon-lg"; doi chieu lop kich thuoc cua bien the do doc tu
           buttonVariants({size:"icon-lg"}) cua packages/ui chua "size-9" (36 px) — khong viet tay "36"
-        2 nut thao tac trong bang (tu md) giu data-size bang nut thao tac dong cua danh sach khuon onboarding (doc tu component)
+        2 nut thao tac trong bang (tu md) giu [variant, size] == ["ghost", "icon-xs"] — dung hang bai LT2 da ky dung (LT2 Ngoai-10:
+          chua co component chung de doc)
         3 ma tran o chu {rong, khoang trang, co chu} x {rong, khoang trang, co chu} = 9 to hop viet truoc: khi Gui disabled vi
           thieu chu -> co dung mot dong [data-ly-do-khoa] voi chu == hop.lyDoKhoa va id cua no nam trong aria-describedby cua
           nut Gui; khi du chu -> khong co dong do va aria-describedby khong tro toi no
@@ -263,7 +264,7 @@ evals:
       - "_acceptance/sua-giao-dien-tin-hieu/rang/do-man.mjs"
     expected: |
       Nguoi do mang vai thanh vien thuong (tien-de tao trong kho do rieng) va 3 tin hieu gui qua thu tuc that (mot o man /okr,
-      mot o /tai-lieu, mot o /settings/members). Ma tran viet truoc 19 o, moi o mot dong DUNG/SAI va mot anh evidence/<o>.png:
+      mot o /tai-lieu, mot o /settings/members). Ma tran viet truoc 17 o, moi o mot dong DUNG/SAI va mot anh evidence/<o>.png:
         bang-<w> voi w thuoc {768, 900, 1100, 1280}: be rong do (getBoundingClientRect) cua o "Điều đã kể" lon nhat trong hang
           dau; scrollWidth == clientWidth cua tai lieu
         trang-<w>-<l> voi w thuoc {375, 768, 1280}, l thuoc {vi, en}: khong cuon ngang; khong phan tu chu nao cua trang co
