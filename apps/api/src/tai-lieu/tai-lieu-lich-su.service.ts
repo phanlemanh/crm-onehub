@@ -30,7 +30,7 @@ const TRANG_KHOA = {
 	ten: true,
 	archivedAt: true,
 	banDangDungId: true,
-	banDangDung: { select: { noiDung: true } },
+	banDangDung: { select: { ten: true, noiDung: true } },
 } as const;
 
 @Injectable()
@@ -137,15 +137,16 @@ export class TaiLieuLichSuService {
 			const dangDung = trang.banDangDung;
 			if (!ban || !dangDung) throw khongCo();
 			const noiDung = kiemNoiDung(ban.noiDung);
-			if (
-				ban.id === trang.banDangDungId ||
-				noiDung === chuanHoa(dangDung.noiDung)
-			)
+			const ten = chuanNfc(ban.ten);
+			const trungBanDangDung =
+				ten === chuanNfc(dangDung.ten) &&
+				noiDung === chuanHoa(dangDung.noiDung);
+			if (ban.id === trang.banDangDungId || trungBanDangDung)
 				throw new ConflictException(T.chuaDoi);
 			return taoDeXuatTaiLieu(tx, {
 				trangId: trang.id,
 				banGocId: trang.banDangDungId,
-				ten: chuanNfc(ban.ten),
+				ten,
 				noiDung,
 				taoBoiId: nguoi.id,
 				suKien: "DE_XUAT",
