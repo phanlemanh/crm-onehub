@@ -173,7 +173,7 @@ function cotBang(theList: TheMau[], rong: boolean): BoardColumn[] {
 	});
 }
 
-function KhungXuong() {
+function XuongBangMau() {
 	return (
 		<div className="flex gap-3 overflow-hidden rounded-lg border bg-card p-3">
 			{THU_TU_COT.map((cot) => (
@@ -233,7 +233,7 @@ function BangViec({ state }: { state: string }) {
 	};
 
 	let than: React.ReactNode;
-	if (state === "ST-bang-viec-cho-tai") than = <KhungXuong />;
+	if (state === "ST-bang-viec-cho-tai") than = <XuongBangMau />;
 	else if (state === "ST-bang-viec-loi")
 		than = (
 			<VungTaiLoi
