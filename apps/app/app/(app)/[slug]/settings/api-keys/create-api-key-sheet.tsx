@@ -6,15 +6,17 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Sheet, SheetTrigger } from "@crm/ui/components/sheet";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { type ComponentProps, Suspense, useState } from "react";
 import { toast } from "sonner";
+import { useTableQuery } from "@/components/data-table/use-table-query";
 import { khoaApiMessages } from "@/lib/messages/settings-khoa-api";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { apiKeysSearchParams } from "./api-keys-search-params";
 import { CreatedApiKeyDialog } from "./created-api-key-dialog";
 import type { LoaiKhoa } from "./loai-khoa";
 import { type HanKhoa, ToTaoKhoa } from "./to-tao-khoa";
@@ -32,18 +34,21 @@ function NewApiKeyButton(props: ComponentProps<typeof Button>) {
 	);
 }
 
-export function CreateApiKeySheet({ laQuanTri }: { laQuanTri: boolean }) {
+export function CreateApiKeySheet() {
 	return (
 		<Suspense fallback={<Skeleton className="h-8 w-28 rounded-md" />}>
-			<CreateApiKeyForm laQuanTri={laQuanTri} />
+			<CreateApiKeyForm />
 		</Suspense>
 	);
 }
 
-function CreateApiKeyForm({ laQuanTri }: { laQuanTri: boolean }) {
+function CreateApiKeyForm() {
 	const t = khoaApiMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const { input } = useTableQuery(apiKeysSearchParams);
+	const danhSach = useQuery(trpc.apiKeys.list.queryOptions(input));
+	const laQuanTri = danhSach.data?.taoDuocKeoTinHieu ?? false;
 
 	const [open, setOpen] = useQueryState(
 		SEARCH_PARAM.dialog.create,
@@ -89,6 +94,7 @@ function CreateApiKeyForm({ laQuanTri }: { laQuanTri: boolean }) {
 						create.mutate({
 							name: ten.trim(),
 							expiresInDays: han === "never" ? null : Number(han),
+							...(laQuanTri ? { loai } : {}),
 						})
 					}
 				/>
