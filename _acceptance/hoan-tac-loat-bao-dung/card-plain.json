@@ -1,0 +1,20 @@
+{
+  "feature_plain": "Khi lưu trữ hay hoàn tác nhiều bản ghi một lúc, thông báo nói đúng chuyện đã xảy ra: lỗi máy chủ không bị gọi là «bị bỏ qua», hoàn tác khi mọi bản đã được khôi phục từ trước không bị báo là «chưa hoàn tác được», và mỗi bản ghi lỗi để lại một dòng nhật ký cho người vận hành.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đếm riêng bản hỏng vì lỗi máy chủ và ghi một dòng nhật ký có mã bản ghi cho mỗi bản lỗi."},
+    {"id": "AC-2", "p": "Sẽ giữ đúng các con số đã ký ở vòng trước khi gọi lưu trữ, khôi phục hàng loạt trên máy chủ thật."},
+    {"id": "AC-3", "p": "Sẽ báo «n bản chưa lưu trữ được vì máy chủ gặp lỗi — thử lại sau» tách khỏi phần «bị bỏ qua»."},
+    {"id": "AC-4", "p": "Sẽ báo «n bản đã được khôi phục từ trước» khi bấm Hoàn tác mà mọi bản đã về."},
+    {"id": "AC-5", "p": "Sẽ chạy lại nguyên các bài đã ký của vòng trước để chứng không lùi."},
+    {"id": "AC-6", "p": "Sẽ có đủ chữ tiếng Việt và tiếng Anh cho hai thông báo mới."},
+    {"id": "AC-7", "p": "Sẽ chứng trên bản chạy thật: hoàn tác ba bản đã về thì báo đúng và ba dòng còn trong bảng."},
+    {"id": "AC-8", "p": "Sẽ có người lạ nhìn ảnh để xác nhận đọc là «đã ở lại danh sách», không phải lỗi."},
+    {"id": "AC-9", "p": "Sẽ ghi vào tài liệu API nghĩa các con số trong kết quả hàng loạt và dòng nhật ký."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG đổi cách app lấy kiểu kết quả hàng loạt (vẫn viết tay, thêm một trường)."},
+    {"id": "OOS-2", "p": "KHÔNG gộp mã lưu trữ, khôi phục của ba loại bản ghi."},
+    {"id": "OOS-3", "p": "KHÔNG đổi luật đếm bản «không còn» đã ký ở vòng trước."},
+    {"id": "OOS-4", "p": "KHÔNG tự thử lại khi máy chủ lỗi."}
+  ]
+}
