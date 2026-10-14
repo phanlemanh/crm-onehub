@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-14T22:50:33Z",
-  "generated_sha": "9cb567b340c8e49ed8443f5520f89fcad83be99e",
+  "generated_at": "2026-10-14T23:29:05Z",
+  "generated_sha": "571b5072062f8aedb63c57cde89e3dd503950dcf",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "ke-hoach-sinh-viec",
-  "round": 2,
+  "round": 3,
   "riskTier": "T3",
   "evals": [
     {
@@ -75,30 +75,6 @@
         "output"
       ],
       "ref": "config:executors.test.kh_man_tao"
-    },
-    {
-      "id": "E3b",
-      "criterion": "AC-3",
-      "cmd": "bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ke-hoach-sinh-viec/rang/man.mjs\"",
-      "expected": "\"Ô tạo kế hoạch mở từ danh mục và từ sheet công ty có một hàng mỗi phòng ban của khuôn, ô chọn người điền sẵn trưởng phòng (hay người cầm trịch); ở 375 không có thanh cuộn ngang, hàng phòng ban xếp dọc; thẻ Bước của kế hoạch vừa tạo hiện người làm ở mỗi bước và chip trạng thái Việc.\"",
-      "executor": "ui-check",
-      "expectedExit": 0,
-      "steps": [
-        "Chay O TIEN CANH tu goc kho, Bash timeout 600000: `BANG_CHUNG=_acceptance/ke-hoach-sinh-viec/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ke-hoach-sinh-viec/rang/man.mjs\"` (chinh lenh kh_man)",
-        "Doc dong cuoi: ma 0 kem 'ke-hoach-sinh-viec man: dat' = dat; ma 2 = khong do duoc; ma 1 = co thong diep 'kh man: ...' goi ten buoc sai",
-        "Mo bon anh kh-o-tao-danh-muc-1280.png, kh-o-tao-cong-ty-1280.png, kh-o-tao-375.png, kh-the-buoc-viec-1280.png trong _acceptance/ke-hoach-sinh-viec/evidence/ va doi chieu bang mat voi Expected"
-      ],
-      "inputs": [
-        "_acceptance/ke-hoach-sinh-viec/evidence/"
-      ],
-      "paths": [
-        "apps/app/app/(app)/[slug]/onboarding/**",
-        "apps/app/components/onboarding/**",
-        "apps/app/components/crm/record-sheet/**",
-        "apps/app/lib/messages/onboarding.ts",
-        "_acceptance/ke-hoach-sinh-viec/rang/man.mjs"
-      ],
-      "ref": "config:executors.script.kh_man"
     },
     {
       "id": "E4",
@@ -287,8 +263,7 @@
         "verdict",
         "rationale",
         "verified_at"
-      ],
-      "inputsHash": "dbd940ccff0944435ae07d275d285cb27f8af83ae79a0c349ee01d6409b127de"
+      ]
     },
     {
       "id": "E15",
@@ -374,20 +349,23 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.30.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\nLệnh dài hơn trần 600 s của công cụ thì KHÔNG bị giết: công cụ **đẩy nó sang\nnền** và nó chạy tiếp. Tệp đầu ra nền trống tới phút chót, vì khung bọc lệnh của\nkit chỉ in khi lệnh xong — đọc trống thành «bị giết» là đúng sự cố crm 07/10/2026\n(hồ sơ `lenh-dai-chay-rieng`: hai lượt BLOCKED giả). Dòng «chuyển sang nền» trong\nkhối dưới là lối LỜI cho mọi lệnh. Lối MÁY: eval khai `long_running: <phút>`\ntrong `evals.yaml` thì lượt chấm feature-loop tự chạy lệnh nền, ghi nhật ký ở\n`.acceptance-runs/<slug>/s4-lenh-dai/` và chờ bằng lệnh nó sinh ra\n(`eval-executors.md`, mục `long_running`).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\nDAU RA DAI: harness co the CAT DAU RA RA TEP (\"Output too large … saved to <tep>\") va chi hien doan DAU — do KHONG phai bi cong cu giet: doc DUOI tep do (tail) de lay dong tong ket va ma thoat; chi khai killedByTool khi tool result bao timeout/killed that.\nCHUYEN SANG NEN KHONG PHAI BI GIET: tool result bao lenh chua xong trong timeout va da duoc CHUYEN SANG NEN (\"moved to the background\", kem ID + tep dau ra) → lenh VAN DANG CHAY: KHONG khai killedByTool, KHONG ket luan tu tep dau ra luc do. Tep dau ra nen TRONG la binh thuong — khung boc lenh chi in duoi dau ra + dong __EXIT=<n> khi lenh XONG. Cho bang lenh Bash co gioi han (moi lan goi ≤ 100 giay, duoi tran mac dinh 120 giay cua cong cu; vd vong lap kiem tep do co dong __EXIT= chua, sleep vai giay, het 100 giay thi thoat) va goi lai toi khi tep co dong __EXIT=<n> → doc ma tu dong do nhu binh thuong. Tong thoi gian cho toi da = so phut eval khai o long_running (vang thi 30 phut), tinh tu luc chay lenh; qua ma chua co dong __EXIT → cannotRun=true + reason \"lenh chay qua <so> phut chua xong — khai long_running: <phut> cho eval trong evals.yaml\" (KHONG killedByTool), va dung tac vu nen neu cong cu cho phep.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n\nLệnh bị đẩy sang nền rồi QUÁ trần chờ (`long_running`, vắng thì 30 phút) cũng\nlà sự cố hạ tầng chứ không phải lệnh hỏng: dòng run-log `\"exit_code\": null`,\n`\"cannot_run\": true` (KHÔNG `killed_by_tool` — công cụ không giết nó), verdict\n`BLOCKED`, reason gọi tên việc cần làm (khai `long_running: <phút>` cho eval).\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub/.claude/worktrees/ke-hoach-sinh-viec/_acceptance/ke-hoach-sinh-viec/contract.md",
-  "invokedAt": "2026-10-14T22:50:33Z",
-  "invokedSha": "9cb567b340c8e49ed8443f5520f89fcad83be99e",
+  "invokedAt": "2026-10-14T23:29:05Z",
+  "invokedSha": "571b5072062f8aedb63c57cde89e3dd503950dcf",
   "vungVat": [
     "_acceptance/config.yaml",
     "_acceptance/ke-hoach-sinh-viec/card-plain.json",
     "_acceptance/ke-hoach-sinh-viec/card.html",
     "_acceptance/ke-hoach-sinh-viec/evals.yaml",
+    "_acceptance/ke-hoach-sinh-viec/evidence-page.html",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-network.txt",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step1.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step2.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step3.png",
+    "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step4.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-375.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-cong-ty-1280.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-danh-muc-1280.png",
+    "_acceptance/ke-hoach-sinh-viec/evidence/kh-the-buoc-viec-1280.png",
     "_acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs",
     "_acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs",
     "_acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs",
@@ -499,14 +477,17 @@
     "_acceptance/ke-hoach-sinh-viec/decisions.jsonl",
     "_acceptance/ke-hoach-sinh-viec/duong-nen.md",
     "_acceptance/ke-hoach-sinh-viec/evals.yaml",
+    "_acceptance/ke-hoach-sinh-viec/evidence-page.html",
     "_acceptance/ke-hoach-sinh-viec/evidence-report.md",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-network.txt",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step1.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step2.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step3.png",
+    "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step4.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-375.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-cong-ty-1280.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-danh-muc-1280.png",
+    "_acceptance/ke-hoach-sinh-viec/evidence/kh-the-buoc-viec-1280.png",
     "_acceptance/ke-hoach-sinh-viec/figures/index.md",
     "_acceptance/ke-hoach-sinh-viec/gap-probe.md",
     "_acceptance/ke-hoach-sinh-viec/morphological-scan.md",
@@ -566,13 +547,16 @@
     "_acceptance/ke-hoach-sinh-viec/card-plain.json",
     "_acceptance/ke-hoach-sinh-viec/card.html",
     "_acceptance/ke-hoach-sinh-viec/evals.yaml",
+    "_acceptance/ke-hoach-sinh-viec/evidence-page.html",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-network.txt",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step1.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step2.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step3.png",
+    "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step4.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-375.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-cong-ty-1280.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-danh-muc-1280.png",
+    "_acceptance/ke-hoach-sinh-viec/evidence/kh-the-buoc-viec-1280.png",
     "_acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs",
     "_acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs",
     "_acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs",
@@ -617,7 +601,6 @@
   "coverageFiles": [
     "_acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs",
     "_acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs",
-    "_acceptance/ke-hoach-sinh-viec/rang/man.mjs",
     "apps/agent/agent/lib/tra-loi-nhac.ts",
     "apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts",
     "apps/api/src/generated/server.ts",
@@ -653,9 +636,58 @@
     "packages/db/src/viec.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "7f613d13ba9bfb5a95cb570a19165e13acd169fd19ad26280f9aef5a4957a1e0",
+  "evalsHash": "790c86c5ac9bc21216fe8b35d50047fb678fc06261799fe3e4a9c6d73e01e667",
   "runBaseline": true,
   "carriedEvals": [
+    {
+      "id": "E1",
+      "runId": "minted-ke-hoach-sinh-viec-E1-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-tao\""
+    },
+    {
+      "id": "E2",
+      "runId": "minted-ke-hoach-sinh-viec-E2-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chon-nguoi\""
+    },
+    {
+      "id": "E3",
+      "runId": "minted-ke-hoach-sinh-viec-E3-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tao-ke-hoach-nguoi.dom.tsx"
+    },
+    {
+      "id": "E4",
+      "runId": "minted-ke-hoach-sinh-viec-E4-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ban-chieu\""
+    },
+    {
+      "id": "E5",
+      "runId": "minted-ke-hoach-sinh-viec-E5-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chan\""
+    },
+    {
+      "id": "E6",
+      "runId": "minted-ke-hoach-sinh-viec-E6-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-go-buoc\""
+    },
+    {
+      "id": "E7",
+      "runId": "minted-ke-hoach-sinh-viec-E7-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-them-buoc\""
+    },
     {
       "id": "E7b",
       "runId": "minted-ke-hoach-sinh-viec-E7b-r1",
@@ -664,14 +696,103 @@
       "cmd": "node _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs"
     },
     {
+      "id": "E8",
+      "runId": "minted-ke-hoach-sinh-viec-E8-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ke-hoach-cu\""
+    },
+    {
       "id": "E8b",
       "runId": "mv8cjoho755z",
       "fromRound": 1,
       "verifiedAt": "2026-10-14T16:50:25Z",
       "cmd": "bun run test -- \"cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.integration.spec.ts -t kh-nhac-buoc\""
+    },
+    {
+      "id": "E13",
+      "runId": "mv8pe8e4992f",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/ke-hoach-sinh-viec-do-nguong.spec.ts\""
+    },
+    {
+      "id": "E15",
+      "runId": "minted-ke-hoach-sinh-viec-E15-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc 3818ad4ec && bun run check-types"
+    },
+    {
+      "id": "E16",
+      "runId": "minted-ke-hoach-sinh-viec-E16-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs"
+    },
+    {
+      "id": "E17",
+      "runId": "minted-ke-hoach-sinh-viec-E17-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-14T22:50:33Z",
+      "cmd": "node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs"
     }
   ],
   "carriedFindings": [
+    {
+      "file": "apps/api/test/ke-hoach-sinh-viec.spec.ts",
+      "title": "Lượt sửa thêm chú thích mới vào ba tệp kiểm, trái luật «Never add code comments»",
+      "severity": "low",
+      "plain": "Vài dòng ghi chú thừa trong các bài kiểm của tính năng trái quy ước của kho. Người dùng không thấy gì khác đi, chỉ lệch nếp viết mã nội bộ.",
+      "proposal": "wont-fix",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "apps/api/test/ke-hoach-sinh-viec.spec.ts",
+      "title": "Spec tự viết kiểu DauVaoTao trong khi đã có schema planCreateFromTemplateInput",
+      "severity": "low",
+      "plain": "Bài kiểm tự khai báo lại hình dạng dữ liệu tạo kế hoạch thay vì dùng bản gốc. Hôm nay không ảnh hưởng người dùng, nhưng sau này nếu dữ liệu đổi thì bài kiểm có thể lệch mà không báo.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "apps/api/test/ke-hoach-sinh-viec.spec.ts",
+      "title": "Hình dạng 4 — đối chứng dương suy biến: ô bo-han của kh-chan chạy trên Việc thường vốn KHÔNG có hạn",
+      "severity": "high",
+      "plain": "Chưa có bài kiểm nào chứng minh việc bỏ hạn trên Việc thường vẫn dùng được như cũ, vì bài kiểm đang thử trên một Việc vốn không có hạn. Nếu sau này chặn lan sang cả Việc thường, người dùng không thể bỏ hạn một Việc thường mà bài kiểm vẫn xanh.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "_acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs",
+      "title": "Hình dạng 2 — fixture viết tay đúng khuôn bên đọc: tu-thu M/D/R chỉ thử docTenTrangThai, không chạm lệnh git sinh ra dữ liệu",
+      "severity": "medium",
+      "plain": "Công cụ kiểm tra việc không ai xoá bài kiểm cũ chưa được thử trên trường hợp tệp bị xoá hoặc đổi tên thật. Hôm nay kết quả vẫn đúng, nhưng nếu công cụ hỏng ở nhánh đó thì sẽ không ai biết.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "_acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs",
+      "title": "Hình dạng 5 — tuyên quét «MỌI tệp kiểm nhánh sửa» nhưng bộ lọc tên tệp bỏ sót helper có expect mà chính vòng này sửa",
+      "severity": "medium",
+      "plain": "Công cụ kiểm tra bài kiểm cũ không bị xoá bỏ sót một tệp phụ trợ. Lần này tệp đó không mất gì nên kết quả vẫn đúng, nhưng lần sau có thể không bắt được.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "apps/app/test/tao-ke-hoach-nguoi.dom.tsx",
+      "title": "Hình dạng 3 — lời hứa là QUAN HỆ «mặc định hiển thị ở ô tạo = người máy chủ tự điền», nhưng mỗi bên chỉ được so với đáp án viết tay riêng",
+      "severity": "medium",
+      "plain": "Trong một số trường hợp hiếm, như phòng ban của bước đã bị lưu trữ, màn hình có thể hiện một người nhận việc nhưng hệ thống lại giao cho người khác. Hiện chưa có bài kiểm nào đối chiếu hai bên với nhau.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
     {
       "file": "apps/api/src/onboarding/onboarding-ghi.ts",
       "title": "Thêm chú thích trong code, trái luật «Never add code comments» của AGENTS.md/CLAUDE.md",
@@ -715,7 +836,7 @@
       "plain": "Có một câu thông báo được thêm nhưng chưa nơi nào hiển thị. Người dùng không thấy và không bị ảnh hưởng.",
       "proposal": "wont-fix",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/src/onboarding/onboarding-ghi.ts",
@@ -742,7 +863,7 @@
       "plain": "Nếu một việc của bước được gắn thêm một kế hoạch khác, người dùng sẽ không gỡ được gắn kết đó và bị báo lỗi dù việc gỡ là vô hại.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/test/ke-hoach-sinh-viec.spec.ts",
@@ -751,7 +872,7 @@
       "plain": "Phép thử chặn người không thuộc tổ chức khá lỏng: nếu chặn này hỏng thì người dùng có thể gặp lỗi hệ thống thay vì lời báo rõ, mà bài thử vẫn xanh.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/test/vai-chi-okr-ke-hoach.spec.ts",
@@ -769,7 +890,7 @@
       "plain": "Phép kiểm «đã chạy đủ các lệnh» không bắt được việc ai đó xoá bớt một dòng khỏi bảng thử, nên độ phủ có thể giảm mà không báo.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "_acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs",
@@ -787,52 +908,58 @@
       "plain": "Một phép thử nói rằng kế hoạch cũ không sinh việc thực ra không chạm đến phần mã mới, nên nó không chứng minh được điều đó.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     }
   ],
   "deltaFiles": [
-    "_acceptance/config.yaml",
+    "_acceptance/ke-hoach-sinh-viec/card-plain.json",
+    "_acceptance/ke-hoach-sinh-viec/card.html",
     "_acceptance/ke-hoach-sinh-viec/evals.yaml",
+    "_acceptance/ke-hoach-sinh-viec/evidence-page.html",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-network.txt",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step1.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step2.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step3.png",
+    "_acceptance/ke-hoach-sinh-viec/evidence/E3b-step4.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-375.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-cong-ty-1280.png",
     "_acceptance/ke-hoach-sinh-viec/evidence/kh-o-tao-danh-muc-1280.png",
-    "_acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs",
-    "_acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs",
-    "_acceptance/ke-hoach-sinh-viec/rang/man.mjs",
-    "_acceptance/ke-hoach-sinh-viec/s4-args.json",
-    "_acceptance/ngay-lich-test-tao-ke-hoach/card-plain.json",
-    "_acceptance/ngay-lich-test-tao-ke-hoach/card.html",
-    "_acceptance/ngay-lich-test-tao-ke-hoach/evals.yaml",
-    "_acceptance/ngay-lich-test-tao-ke-hoach/figures/hoi-1.html",
-    "_acceptance/ngay-lich-test-tao-ke-hoach/figures/hoi-1.png",
-    "_acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs",
-    "apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts",
-    "apps/api/test/ke-hoach-sinh-viec.spec.ts",
-    "apps/api/test/khuon-mat-bo-phan.spec.ts",
-    "apps/api/test/noi-bon-nut.spec.ts",
-    "apps/api/test/okr-san.ts",
-    "apps/api/test/sua-luu-tru.spec.ts",
-    "apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx",
-    "apps/app/test/noi-bon-nut.dom.tsx",
-    "apps/app/test/tao-ke-hoach-nguoi.dom.tsx",
-    "packages/db/src/viec-ghi.ts",
-    "packages/db/src/viec.ts"
+    "_acceptance/ke-hoach-sinh-viec/evidence/kh-the-buoc-viec-1280.png",
+    "_acceptance/ke-hoach-sinh-viec/s4-args.json"
+  ],
+  "carriedPanels": [
+    {
+      "evalId": "E14",
+      "proposal": "PASS",
+      "votes": [
+        {
+          "lens": "domain-correctness",
+          "verdict": "PASS"
+        },
+        {
+          "lens": "operational-feasibility",
+          "verdict": "PASS"
+        },
+        {
+          "lens": "spec-alignment",
+          "verdict": "PASS"
+        }
+      ],
+      "fromRound": 2,
+      "inputsHash": "dbd940ccff0944435ae07d275d285cb27f8af83ae79a0c349ee01d6409b127de"
+    }
   ],
   "thuocChup": {
-    "sha": "9cb567b340c8e49ed8443f5520f89fcad83be99e",
+    "sha": "571b5072062f8aedb63c57cde89e3dd503950dcf",
     "n": 592,
-    "digest": "45d22b7d0874a5405b9f406a3cbc10322118492de1a8b29087c021bba1b74b42",
+    "digest": "1e3f07aaadcd5eb439f05bad38f1630854696e71445d1073bd399ac2872da8ce",
     "tep": {
       ".github/scripts/test/phan-loai.test.mjs": "c31bdfccd3c5d75e92a9935c16e6dbd02fcb305d2ede2b99f81cd569e666648a",
       "_acceptance/bo-cau-hoi-mau/rang/do-bo-mau.test.ts": "4045f221a89dfae9477e72a2bcae44afe88640d1dd6ca614615234f4b42660fb",
       "_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts": "6de051839243101755d1bc549371b590b09371bd655b392b45208b9bad3b61ee",
       "_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.spec.ts": "28af3a1eedc19126a24cea60132b3b2b93faa64e5b67781ffd7d6aa08fecd77d",
       "_acceptance/config.yaml": "d01256fc1fa444c3e8443853cd4f563bab07992a9148c211ccf752bd0b32be74",
-      "_acceptance/ke-hoach-sinh-viec/evals.yaml": "7f613d13ba9bfb5a95cb570a19165e13acd169fd19ad26280f9aef5a4957a1e0",
+      "_acceptance/ke-hoach-sinh-viec/evals.yaml": "790c86c5ac9bc21216fe8b35d50047fb678fc06261799fe3e4a9c6d73e01e667",
       "_acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs": "c2afb2e80f255472ec22c9b3ca1c0d29ae83067257023c2afb90c8f76e74cfad",
       "_acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs": "079651afa78441593c232198c2f38772da9e9e38a8696c16b9b638229021f3e0",
       "_acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs": "aef88647010f009326387923cc6da17dcbd8323ab897f047149aee1038decf74",
@@ -1422,7 +1549,7 @@
     }
   },
   "cayChup": {
-    "sha": "9cb567b340c8e49ed8443f5520f89fcad83be99e",
+    "sha": "571b5072062f8aedb63c57cde89e3dd503950dcf",
     "ban": {},
     "chuaTheoDoi": []
   }
