@@ -1,0 +1,148 @@
+slug: gan-tay-va-kara-co-ly-do
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.l4_luat
+    expected: "exit 0; packages/validation/test/ly-do-can-chinh.spec.ts -t l4-luat: ma trận viết trước bảy ca của lyDoCanChinhNhap (lý do có khoảng trắng hai đầu → đã cắt; '', '   ', '\\u00a0\\n\\t' → null; 501 ký tự lý do → lỗi; căn cứ có chữ + lý do rỗng → lỗi mang mã 'can-cu-can-ly-do' ở path canCu; 501 ký tự căn cứ → lỗi), đòi số ca chạy === 7; đối chứng dương cùng fixture: 500 ký tự mỗi ô → hợp lệ. Ba ca mucTinCanChinh viết trước đòi đúng chua-co-ly-do/dat-cuoc/co-so-lieu. Import mucTinCanChinh từ apps/api/src/okr/can-chinh.ts và từ @crm/validation/ly-do-can-chinh: toBe cùng tham chiếu (in 'ban thu hai cua mucTinCanChinh' nếu khác). Chiều đỏ ghim ở E14 (a): bỏ luật căn cứ cần lý do → 'can cu thieu ly do lot qua'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/ly-do-can-chinh.ts, apps/api/src/okr/can-chinh.ts, packages/validation/test/ly-do-can-chinh.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l4_gan
+    expected: "exit 0; apps/api/test/okr-gan-ly-do.spec.ts -t l4-gan (CSDL kiểm thật): người sửa được P gọi okr.addAlignment qua tRPC rồi (đích khác) qua REST POST /okr/alignments với lý do '  Tăng tỷ lệ chốt  ' và căn cứ viết trước; đọc lại bằng okr.objective của P (parse bằng output thật): mỗi căn chỉnh có lyDo === 'Tăng tỷ lệ chốt', canCu === chuỗi gửi, lyDoTuKara === false, mucTin === 'co-so-lieu' — đếm số căn chỉnh kiểm === 2. Gọi không hai trường → (null, null, false, 'chua-co-ly-do'). Căn cứ thiếu lý do → 400, và đếm okrAlignment của P trước/sau bằng nhau (in 'tao can chinh khi bi tu choi'). Chiều đỏ ghim ở E14 (b): addAlignment bỏ lyDo khi ghi → 'ly do gan tay bi roi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr.service.ts, apps/api/src/okr/okr.contracts.ts, apps/api/src/okr/okr.router.ts, apps/api/test/okr-gan-ly-do.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l4_sua
+    expected: "exit 0; cùng tệp, -t l4-sua: căn chỉnh A gieo bằng nhận đề xuất Kara thật (troLyQuyet nhan) nên (lyDo Kara, null, true); gọi okr.suaLyDoCanChinh qua tRPC với ('Lý do người', 'Căn cứ người'): đọc qua okr.objective → đúng hai chữ, lyDoTuKara false, mucTin co-so-lieu; số dòng okrTrail hanhDong 'sua-ly-do-can-chinh' của P tăng đúng 1 và dòng đó mang cả cũ và mới (so bằng giá trị đã gieo, không chép chuỗi). Rồi qua REST PATCH /okr/alignments/{id} gửi một cặp chữ MỚI khác chữ đang lưu → đọc lại qua okr.objective: chữ mới, lyDoTuKara false, số dòng vết +1 (đối chứng dương cho vế sau); rồi gửi lại y nguyên cặp đó qua REST → số dòng vết không tăng, lyDoTuKara vẫn false; trên căn chỉnh B còn cờ Kara gửi y nguyên chữ Kara → cờ vẫn true (đối chứng cho vế 'không đổi cờ'). Hai ô rỗng → mucTin chua-co-ly-do. Chiều đỏ ghim ở E14 (c): sửa mà không hạ lyDoTuKara → 'co Kara con sau khi nguoi sua'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr.contracts.ts, apps/api/test/okr-gan-ly-do.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.l4_quyen
+    expected: "exit 0; cùng tệp, -t l4-quyen: ma trận viết trước năm ca (người không sửa được P, id không có, P da-bo, P cho-duyet, chu kỳ không ghi được), đòi số ca === 5; mỗi ca gọi suaLyDoCanChinh rồi removeAlignment trên cùng trạng thái (cả hai đều từ chối nên không gì bị xoá) và so mã + thông điệp lỗi bằng nhau, rồi căn chỉnh còn và không đổi lyDo. Đối chứng dương: người sửa được trên trạng thái bình thường → thành công. Và apps/api/test/vai-chi-okr.spec.ts xanh với danh sách có 'suaLyDoCanChinh'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr.service.ts, apps/api/test/okr-gan-ly-do.spec.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l4_can_cu
+    expected: "exit 0; apps/agent/test/nop-de-xuat-can-cu.spec.ts -t l4-can-cu (CSDL kiểm thật, việc okr-de-xuat xếp bằng hàm xếp việc thật): gọi execute của chính công cụ nop_de_xuat (apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts) với lời gọi soạn sẵn gồm một dòng can-chinh có canCu C và một dòng can-chinh không canCu; đọc hàng okrDeXuat, chạy dongTuHang: dòng đầu canCu === C, dòng sau null; một hàng can-chinh noiDung null (dựng như dòng đời trước) → canCu null. dongGopY.safeParse từ chối canCu trên viet-lai và hoi, và canCu 201 ký tự (đối chứng dương: 200 ký tự qua). Phía API, apps/api/test/okr-gan-ly-do.spec.ts -t l4-danh-sach: okr.troLyDanhSach trả dòng can-chinh có canCu === C. Chiều đỏ ghim ở E14 (d): nopDeXuatVao không ghi noiDung → 'can cu Kara bi roi khi nop'; E14 (i): công cụ nop_de_xuat bỏ canCu trước khi gọi nopDeXuatVao → cùng thông điệp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts, packages/validation/src/okr-tro-ly.ts, apps/api/src/okr/okr.contracts.ts, apps/api/src/okr/tro-ly.service.ts, apps/agent/test/nop-de-xuat-can-cu.spec.ts, apps/api/test/okr-gan-ly-do.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l4_nhan
+    expected: "exit 0; apps/api/test/okr-gan-ly-do.spec.ts -t l4-nhan: hai đề xuất can-chinh còn chờ trên P (một có canCu, một không) gieo qua nopDeXuatVao-cùng-hàm-dựng-hàng; nhận cái đầu qua tRPC troLyQuyet nhan, cái sau qua REST POST /okr/assistant/suggestions/{id}/decision; đọc okr.objective: căn chỉnh thứ nhất (lyDo L, canCu C, true, co-so-lieu), thứ hai (lyDo L', null, true, dat-cuoc) — so bằng giá trị đã gieo. Rồi Hoàn tác (removeAlignment theo id tìm như gop-y-kara) → căn chỉnh đó vắng, cái kia còn. Chiều đỏ ghim ở E14 (e): ghiTheoDong không truyền lý do → 'nhan de xuat roi ly do'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/test/okr-gan-ly-do.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l4_sua_de_xuat
+    expected: "exit 0; cùng tệp, -t l4-sua-de-xuat: đề xuất can-chinh (L, C) còn chờ; troLyQuyet cách sua qua tRPC với giaTri L2, canCu C2 → căn chỉnh (L2, C2, false); hàng okrDeXuat trangThai 'sua', giaTriCuoi === L2. Đề xuất thứ hai qua REST POST /okr/assistant/suggestions/{id}/decision cách sua với canCu C3 → đọc lại canCu === C3. Đề xuất thứ ba cách sua gửi '  '+L+'  ' và C y nguyên chữ Kara → căn chỉnh (L, C, true), hàng trangThai 'nhan' (đối chứng: ca L2 ở trên ra false). Cách sua không giaTri → lỗi canGiaTri như dòng viết lại (đối chứng: cùng gọi trên dòng viet-lai cho cùng thông điệp). canCu có mà giaTri rỗng-sau-cắt → lỗi mã can-cu-can-ly-do, đề xuất vẫn 'cho'. Chiều đỏ ghim ở E14 (f): sửa rồi nhận mà vẫn đặt lyDoTuKara true → 'sua roi nhan van dau Kara'; E14 (j): sửa y chữ mà vẫn hạ cờ → 'sua y chu van ha co'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.contracts.ts, apps/api/test/okr-gan-ly-do.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: judgment
+    question: "Trong tệp chỉ dẫn này, mục nói về dòng can-chinh có nói đủ ba điều không: (1) lyDo là câu vì sao mục tiêu này đẩy được đích; (2) canCu chỉ viết khi khối dữ liệu có con số chống lưng, chép đúng số đó, không có thì để trống (null); (3) luật không viết số không có trong dữ liệu áp cả cho canCu? Trả lời từng điều có/không kèm câu trích."
+    inputs: [apps/agent/agent/subagents/tro_ly_okr/instructions.md]
+    evidence_required: [run_id, verdict, rationale]
+    paths: [apps/agent/agent/subagents/tro_ly_okr/instructions.md]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.l4_hop_thoai
+    expected: "exit 0; apps/app/test/gan-ly-do.dom.tsx -t l4-hop-thoai: dựng HopThoaiCanChinh thật với tRPC giả theo cache.ts. Chế độ gắn: ma trận viết trước năm trạng thái gõ (trống → chua-co-ly-do; lý do '   ' → chua-co-ly-do; chỉ lý do → dat-cuoc; lý do + căn cứ ' \n ' → dat-cuoc; cả hai → co-so-lieu) → nhãn [data-muc-tin] === okrMessages('vi').sheet.mucTin[mức] và data-tone === toneTheoNghia(NGHIA_MUC_TIN[mức]), đòi số ca === 5. Căn cứ có chữ + lý do trống → [data-loi-can-cu] có chữ và nút Gắn disabled (đối chứng: thêm lý do → enabled). Bấm Gắn: lời gọi addAlignment nhận lyDo/canCu đã cắt (so với chuỗi gõ có khoảng trắng). Chế độ sửa: ô chọn đích disabled, hai ô có giá trị đang lưu, bấm Lưu → suaLyDoCanChinh nhận đúng id. Chế độ nhận đề xuất: bấm gửi → troLyQuyet {cach:'sua', giaTri, canCu}. TabCanChinh với người không sửa được: số [data-nut=sua-ly-do] === 0 (đối chứng: người sửa được === số căn chỉnh). Chiều đỏ ghim ở E14 (g): mức tin dò theo lyDo.length > 0 không cắt khoảng trắng thay vì mucTinCanChinh → 'muc tin hop thoai sai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-can-chinh.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/test/gan-ly-do.dom.tsx]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.l4_de_xuat
+    expected: "exit 0; cùng tệp, -t l4-de-xuat: dựng DeXuatNeo thật với hai dòng can-chinh (có canCu, không canCu) qua useGopYMucTieu giả theo cache.ts: dòng đầu nhãn [data-muc-tin] === mucTin['co-so-lieu'], data-tone theo NGHIA_MUC_TIN, [data-de-xuat-ly-do] textContent chứa đúng lyDo, [data-de-xuat-can-cu] chứa đúng canCu, cả hai translate='no'; ba nút theo thứ tự với nhãn m.dong.canChinhKemLyDo, m.dong.suaLyDo, m.de.boQua và data-tone primary/secondary/quiet. Dòng sau: số [data-de-xuat-can-cu] === 0, nhãn 'dat-cuoc'. Bấm «Sửa lý do» → [data-hop-thoai-can-chinh] mở với hai ô điền sẵn chữ Kara. Chiều đỏ ghim ở E14 (h): bỏ dòng căn cứ → 'thieu dong can cu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/test/gan-ly-do.dom.tsx]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.l4_chu
+    expected: "exit 0; cùng tệp, -t l4-chu: danh sách khoá mới viết trước của okr.ts (hopThoai) và okr-gop-y.ts (dong): với mỗi khoá bản vi và en khác rỗng và khác nhau, đòi số khoá === độ dài danh sách; nhãn mức tin trong hộp thoại và đề xuất === okrMessages(locale).sheet.mucTin (dựng lại với en). Và apps/app/test/messages-guard.spec.ts xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-gop-y.ts, apps/app/test/gan-ly-do.dom.tsx, apps/app/test/messages-guard.spec.ts]
+
+  - id: E12
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.l4_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng của cây (mot-luot.sh → tien-de.mjs), bộ mẫu nạp bằng okr:mau; đăng nhập người sửa được mục tiêu mẫu khai trong rang/ca-man.json"
+      - "Ở 1440×1000 và 390×844, mỗi khổ một tiến trình con với bộ mẫu nạp lại: mở sheet mục tiêu mẫu, tab KR; đọc đề xuất can-chinh: nhãn mức tin, lý do, căn cứ bằng giá trị trong ca-man.json; chụp; bấm «Căn chỉnh kèm lý do» thật; đọc khu [data-khu=gop-vao]: lý do có mặt, dấu Kara 1, nhãn Có số liệu; chụp; tab Căn chỉnh → «Sửa lý do» trên dòng đó, xoá căn cứ, Lưu; khu gop-vao: nhãn Đặt cược, dấu Kara 0; chụp; đo không cuộn ngang ở cấp trang và trong hộp thoại, có đối chứng đỏ chèn khối rộng"
+    expected: "exit 0; 6 ảnh (3 bước × 2 khổ) trong _acceptance/gan-tay-va-kara-co-ly-do/evidence/; mỗi kiểm in 'DUNG'; console không lỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-can-chinh.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, _acceptance/gan-tay-va-kara-co-ly-do/rang/man.mjs, _acceptance/gan-tay-va-kara-co-ly-do/rang/ca-man.json]
+
+  - id: E13
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l4_man_doc_lai
+    expected: "exit 0; apps/api/test/okr-gan-ly-do.spec.ts -t l4-man-doc-lai: đọc rang/ca-man.json (cùng tệp man.mjs đọc), nạp bộ mẫu, gọi okr.troLyDanhSach của mục tiêu mẫu với người khai: có đúng một dòng can-chinh chờ, lyDo và canCu bằng giá trị khai; nhận nó qua troLyQuyet nhan; okr.objective trả căn chỉnh đó (lyDo, canCu, true, co-so-lieu); suaLyDoCanChinh xoá căn cứ → (lyDo, null, false, dat-cuoc). Vế dữ liệu cặp với E12."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, apps/api/test/okr-gan-ly-do.spec.ts, _acceptance/gan-tay-va-kara-co-ly-do/rang/ca-man.json]
+
+  - id: E14
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.l4_dot_bien
+    expected: "exit 0; _acceptance/gan-tay-va-kara-co-ly-do/rang/dot-bien.mjs: chiều xanh trước (E1–E7, E9, E10 xanh trên cây lành; không thì exit 2 'KHONG DO DUOC'); rồi mười vết, mỗi vết sửa tạm một tệp, trả lại trong finally, đòi lệnh của eval đó đỏ VÀ đầu ra chứa thông điệp ghim riêng: (a) bỏ luật căn cứ cần lý do → l4-luat 'can cu thieu ly do lot qua'; (b) addAlignment bỏ lyDo → l4-gan 'ly do gan tay bi roi'; (c) sửa không hạ lyDoTuKara → l4-sua 'co Kara con sau khi nguoi sua'; (d) nopDeXuatVao không ghi noiDung → l4-can-cu 'can cu Kara bi roi khi nop'; (e) ghiTheoDong không truyền lý do → l4-nhan 'nhan de xuat roi ly do'; (f) sửa rồi nhận đặt cờ Kara → l4-sua-de-xuat 'sua roi nhan van dau Kara'; (g) mức tin hộp thoại theo lyDo.length > 0 không cắt → l4-hop-thoai 'muc tin hop thoai sai'; (h) bỏ dòng căn cứ của đề xuất → l4-de-xuat 'thieu dong can cu'; (i) công cụ nop_de_xuat bỏ canCu → l4-can-cu 'can cu Kara bi roi khi nop'; (j) sửa y chữ Kara mà vẫn hạ cờ → l4-sua-de-xuat 'sua y chu van ha co'. Sau cùng git diff --quiet trên các tệp đã chạm."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/gan-tay-va-kara-co-ly-do/rang/dot-bien.mjs, apps/api/src/okr/okr.service.ts, apps/api/src/okr/tro-ly.service.ts, apps/agent/agent/lib/okr/nop-de-xuat.ts, packages/validation/src/ly-do-can-chinh.ts, "apps/app/app/(app)/[slug]/okr/hop-thoai-can-chinh.tsx", "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx"]
+
+  - id: E15
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l4_mau
+    expected: "exit 0; apps/api/test/okr-gan-ly-do.spec.ts -t l4-mau: sau batDauMau, đếm okrDeXuat loai can-chinh trangThai cho có noiDung.canCu khác null ≥ 1, mỗi hàng có taskId trỏ một AgentTask kind 'okr-de-xuat'; grep tĩnh apps/api/scripts/okr-mau/**: số lời gọi okrDeXuat.create/createMany ngoài hàm dựng hàng dùng chung === 0 (đối chứng dương: nop-de-xuat.ts gọi hàm dựng hàng đó đúng 1 lần). Bài từ chối production sẵn có của okr:mau vẫn xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/api/test/okr-gan-ly-do.spec.ts]
+
+  - id: E16
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.l4_giu_ho_so
+    expected: "exit 0; _acceptance/gan-tay-va-kara-co-ly-do/rang/giu-ho-so.mjs (cùng khuôn với cay-can-chinh-co-ly-do/rang/giu-ho-so.mjs): tập eval test đã ký có paths ghi đích danh tệp mã sản phẩm vòng này sửa, chạy từng lệnh, đòi mã kỳ vọng và số lệnh đã chạy === số lệnh khác nhau; đối chứng hai chiều của bộ lọc; okr-can-chinh.spec.ts và okr-ly-do-can-chinh.spec.ts không đổi so neo (đổi → 'tep ho so da ky bi sua: <tệp>')."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/**, "apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/agent/agent/lib/okr/**, packages/validation/src/**, _acceptance/gan-tay-va-kara-co-ly-do/rang/giu-ho-so.mjs]
+
+  - id: E17
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.l4_ranh_gioi
+    expected: "exit 0; _acceptance/gan-tay-va-kara-co-ly-do/rang/ranh-gioi.mjs: neo merge-base với origin/onehub (đã lên: cặp sha của merge); mỗi tệp đổi khớp Ranh giới đọc từ contract.md, _acceptance/gan-tay-va-kara-co-ly-do/**, docs/**, PRODUCT-MAP.md, LO-TRINH.html; tệp khai «chỉ thêm» chỉ có dòng '+'. Đối chứng hai chiều: đường giả ngoài ranh giới → 'ngoai ranh gioi: <tệp>'; một dòng '-' giả ở okr.ts → 'sua dong co san: <tệp>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/gan-tay-va-kara-co-ly-do/rang/ranh-gioi.mjs, _acceptance/gan-tay-va-kara-co-ly-do/contract.md]
