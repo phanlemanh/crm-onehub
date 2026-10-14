@@ -56,7 +56,7 @@ import type {
 	ViecVetOutput,
 } from "./viec.contracts";
 
-function dichLoi(loi: Error): never {
+export function dichLoi(loi: Error): never {
 	if (!(loi instanceof LoiViec)) throw loi;
 	switch (loi.ma) {
 		case "khong-thay":

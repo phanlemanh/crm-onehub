@@ -4,7 +4,7 @@ import { laKhoCucBo, loiKhoXa } from "./kho-cuc-bo";
 import { DAY_MS, ngayVN } from "./onboarding-nhac";
 import { docDuocDoiTac } from "./vai-doi-tac";
 import type { BanGhiGan } from "./viec";
-import { doiTrangThai, taoViec } from "./viec-ghi";
+import { doiTrangThai, keoViec, taoViec, taoViecCon } from "./viec-ghi";
 import { WORKSPACE_ID } from "./workspace";
 
 type Mau = {
@@ -117,4 +117,92 @@ export async function gieoViecMau(
 		});
 	}
 	return { soViec: MAU.length };
+}
+
+export const TIEU_DE_CHA_MAU = "Triển khai đại lý mẫu tháng 11";
+
+const CON_MAU = [
+	"Ký phụ lục hoa hồng mẫu",
+	"Mở tài khoản đại lý mẫu trên hệ thống",
+	"Đặt lịch đào tạo môi giới mẫu đợt 1",
+] as const;
+
+export async function gieoBangMau(
+	db: Db,
+	chon: { databaseUrl: string; nguon: string; now: Date },
+): Promise<{ chaId: string | null; conIds: string[] }> {
+	if (!laKhoCucBo(chon.databaseUrl) && process.env.ALLOW_REMOTE_DB !== "1") {
+		throw new Error(loiKhoXa("db:seed", chon.databaseUrl, chon.nguon));
+	}
+	if ((await db.viec.count({ where: { tieuDe: TIEU_DE_CHA_MAU } })) > 0) {
+		return { chaId: null, conIds: [] };
+	}
+	const thanhVien = await db.member.findMany({
+		where: { organizationId: WORKSPACE_ID },
+		orderBy: { createdAt: "asc" },
+		select: { userId: true, role: true },
+	});
+	const [giao, lam] = thanhVien
+		.filter((m) => docDuocDoiTac(m.role))
+		.map((m) => m.userId);
+	if (!giao || !lam) return { chaId: null, conIds: [] };
+	const deal = await db.deal.findFirst({
+		where: { archivedAt: null },
+		orderBy: { createdAt: "asc" },
+		select: { id: true },
+	});
+	const gan: BanGhiGan[] = deal ? [{ loai: "deal", id: deal.id }] : [];
+	return db.$transaction(async (tx) => {
+		const cha = await taoViec(tx, {
+			nguoiId: giao,
+			tieuDe: TIEU_DE_CHA_MAU,
+			hanNgay: hanTu(chon.now, 14),
+			nguoiThucHienId: lam,
+			gan,
+			nguon: "api",
+			now: chon.now,
+		});
+		const nguoiCon = [lam, giao, lam];
+		const conIds: string[] = [];
+		for (const [i, tieuDe] of CON_MAU.entries()) {
+			const con = await taoViecCon(tx, {
+				chaId: cha.id,
+				nguoiId: lam,
+				tieuDe,
+				nguoiThucHienId: nguoiCon[i] ?? lam,
+				hanNgay: hanTu(chon.now, 3 + i),
+				now: chon.now,
+			});
+			conIds.push(con.id);
+		}
+		const [mot, hai] = conIds;
+		if (mot) {
+			await doiTrangThai(tx, {
+				viecId: mot,
+				nguoiId: lam,
+				den: TrangThaiViec.XONG,
+				nguon: "api",
+				now: chon.now,
+			});
+		}
+		if (hai) {
+			await keoViec(tx, {
+				viecId: hai,
+				nguoiId: giao,
+				den: TrangThaiViec.DANG_LAM,
+				thuTu: [hai],
+				nguon: "bang-keo",
+				now: chon.now,
+			});
+		}
+		await keoViec(tx, {
+			viecId: cha.id,
+			nguoiId: lam,
+			den: TrangThaiViec.DANG_LAM,
+			thuTu: [],
+			nguon: "bang-menu",
+			now: chon.now,
+		});
+		return { chaId: cha.id, conIds };
+	});
 }

@@ -55,6 +55,8 @@ function moTaVet(m: ViecMessages, vet: DongVet["vet"], locale: Locale): string {
 			return l["chuyen-viec"];
 		case "go-do-ban-ghi-xoa":
 			return dien(l["go-do-ban-ghi-xoa"], { ten: vet.sau.ten });
+		case "them-viec-con":
+			return dien(l["them-viec-con"], { ten: vet.sau.tieuDe });
 	}
 }
 
