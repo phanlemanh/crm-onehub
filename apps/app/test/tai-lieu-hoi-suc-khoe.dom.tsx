@@ -239,13 +239,13 @@ describe("tlk-man-suc-khoe", () => {
 		const dau = dong(khoi(goc, "bao-sai"))[0];
 		await bam(dau ? nutTrong(dau, "Đã xử lý") : null);
 		const hop = document.body.querySelector("[role=dialog]");
-		expect(hop?.textContent).toContain("Trợ lý trả lời sai");
-		expect(hop?.textContent).toContain("Trợ lý trả lời đúng theo trang");
+		expect(hop?.textContent).toContain("Kara trả lời sai");
+		expect(hop?.textContent).toContain("Kara trả lời đúng theo trang");
 		const gui = hop ? nutTrong(hop, "Đóng việc") : undefined;
 		expect(gui?.disabled).toBe(true);
 		expect(canh.xuLyBao).toEqual([]);
 		const sai = [...(hop?.querySelectorAll("label") ?? [])].find(
-			(l) => l.textContent?.trim() === "Trợ lý trả lời sai",
+			(l) => l.textContent?.trim() === "Kara trả lời sai",
 		);
 		const o = sai?.getAttribute("for");
 		await bam(o ? document.getElementById(o) : null);

@@ -167,7 +167,7 @@ export const OKR = {
 			thuLaiHayBo:
 				"Chọn một: thử lại cuộc đang soạn, hoặc bỏ nó để mở cuộc mới.",
 			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,
-			dongCu: "Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn.",
+			dongCu: "Dòng này thuộc bản nháp cũ — Kara đã nộp bản mới hơn.",
 			chaDaBac: (ten: string) =>
 				`Mục tiêu cha «${ten}» đã bị bác — không nhận dòng dưới nó.`,
 			chaBiLoai: (ten: string) =>
@@ -191,7 +191,7 @@ export const OKR = {
 				`Vượt trần ${tran} Mục tiêu mỗi đơn vị.`,
 			duaVaoHaiLan: "Cuộc này đã được đưa vào bộ OKR.",
 			donViThieuId: "Bộ phận cần divisionId, phòng ban cần departmentId.",
-			chuaCoKhoaMoHinh: "Chưa có khoá model cho Trợ lý OKR.",
+			chuaCoKhoaMoHinh: "Chưa có khoá model cho Kara.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",
@@ -381,7 +381,7 @@ export const OKR = {
 			khongCoDeXuat: (id: string) => `Không có đề xuất nào mang mã ${id}.`,
 			cachKhongHop: "Dòng này không nhận cách quyết đó.",
 			canGiaTri: "Sửa rồi nhận cần giá trị mới.",
-			daCu: "Ô này đã đổi từ lúc Trợ lý OKR đề xuất — tải lại danh sách góp ý.",
+			daCu: "Ô này đã đổi từ lúc Kara đề xuất — tải lại danh sách góp ý.",
 			krKhacMucTieu: "KR này không thuộc Mục tiêu đang hỏi.",
 			khongCoTomTat: (id: string) =>
 				`Không có bản tóm tắt tuần nào mang mã ${id}.`,
