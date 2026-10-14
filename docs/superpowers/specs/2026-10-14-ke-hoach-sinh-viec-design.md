@@ -75,7 +75,9 @@ Quyền đổi trạng thái theo đồ thị `DO_THI` của Việc. Nhờ vậy
 
 Bước đã nối không phát `buoc-qua-han`/`buoc-sap-han` nữa: Việc của nó đã phát `viec-qua-han`/`viec-sap-han` cho cùng một người, nên phát cả hai là nhắc trùng. Bước chưa nối (kế hoạch cũ) vẫn nhắc như cũ. `ke-hoach-im` và `moc-ngay` không đổi.
 
-## 7. Gợi ý mở kế hoạch khi deal thắng
+## 7. Gợi ý mở kế hoạch khi deal thắng — TÁCH sang DA3b
+
+> Mục này không thuộc hợp đồng `ke-hoach-sinh-viec`. Hợp đồng nháp 15 tiêu chí rơi nhóm «phải tách» của thẻ Cổng Phạm vi, nên vế gợi ý (ngưỡng (b), Hỏi-3) dời sang hàng DA3b, hồ sơ `goi-y-mo-ke-hoach` (sổ d-20261014T061219Z-15). Thiết kế dưới đây giữ làm đầu vào của vòng đó; riêng việc `createFromTemplate` đóng gợi ý đang chờ sẽ làm ở DA3b.
 
 **Bảng mới `GoiYKeHoach`:**
 - Trường: `id`, `dealId`, `chuyenLuc`, `companyId`, `nguoiNhanId` (người phụ trách deal lúc sinh), `trangThai` (`CHO | DA_MO | BO_QUA`), `sinhLuc`, `xuLyLuc?`, `xuLyBoiId?`, `planId?`.

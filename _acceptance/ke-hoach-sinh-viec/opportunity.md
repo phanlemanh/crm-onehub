@@ -31,6 +31,8 @@ Vì sao: Odoo, Salesforce, Pipedrive đều để kế hoạch mẫu sinh việc
 
 Hàng DA3 của lộ trình không khai `bat_khi`; ngưỡng trên do máy đề xuất. Mốc so hôm nay (đọc mã `origin/onehub` c4b46acd6): bước sinh từ khuôn có 0 người nhận lúc tạo (`onboarding.service.ts:413`, mọi bước `assigneeId = null`), kế hoạch không gắn deal, và chưa có móc nào khi deal thắng (`deals.service.ts:638`). Vế (a) đo người nhận có xử lý việc chứ không đo «việc có người thực hiện», vì mục từ điển «Việc» bắt buộc đúng một người thực hiện nên số đó luôn là 100% và không đỏ được (cùng lý do đã đổi ngưỡng DA1). Vế (b) đòi gợi ý là một bản ghi có trạng thái, để đếm được.
 
+Tách 14/10 (luật cỡ hợp đồng): hồ sơ này đo vế (a). Vế (b) đo ở hồ sơ `goi-y-mo-ke-hoach` (hàng DA3b), cùng ngưỡng đã ký ở đây (sổ d-20261014T061219Z-15).
+
 ## Nguồn quyết định Cổng Đáng
 
 Chủ kho gõ ở phiên thợ DA3 (máy M5) ngày 14/10/2026: «Cổng Đáng ke-hoach-sinh-viec: build · ngưỡng: theo đề xuất máy (a ≥70%, b mọi deal thắng có gợi ý + ≥50% xử lý trong 3 ngày) · đo 14 ngày từ ngày gộp». `decided_at` là giờ phiên thợ ghi lại lời đó.

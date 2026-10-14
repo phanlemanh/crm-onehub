@@ -50,7 +50,7 @@ evals:
     paths: [packages/db/src/viec-ghi.ts, packages/db/src/onboarding-buoc.ts, apps/api/src/onboarding/**, apps/api/src/viec/**, apps/api/test/ke-hoach-sinh-viec.spec.ts]
 
   - id: E5
-    criterion: AC-5
+    criterion: AC-4
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kh_chan
@@ -59,16 +59,16 @@ evals:
     paths: [packages/db/src/viec-ghi.ts, apps/api/src/viec/**, apps/api/test/ke-hoach-sinh-viec.spec.ts]
 
   - id: E6
-    criterion: AC-6
+    criterion: AC-5
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kh_go_buoc
-    expected: "exit 0; -t kh-go-buoc của apps/api/test/ke-hoach-sinh-viec.spec.ts. Kế hoạch ba bước tạo từ khuôn, người cầm trịch gọi onboarding.removeStep trên bước thứ ba: bước còn trong cơ sở dữ liệu thì ném 'kh: go buoc buoc con'; Việc của nó mất hay trangThai khác HUY thì ném 'kh: go buoc viec sai'; không có vết 'doi-trang-thai' sau HUY kèm lý do chứa 'gỡ bước' thì ném 'kh: go buoc thieu vet'; còn bước nào có viecId đó thì ném 'kh: go buoc con tro'; onboarding.manDanhMuc trả cho kế hoạch đó số bước xong/tổng khác 0/2 thì ném 'kh: danh muc dem sai sau go <x/y>'. Đóng kế hoạch (ca tên 'kh-go-buoc dong-ke-hoach', cùng bộ lọc): kế hoạch hai bước dở một bước xong; onboarding.closePlan với huyViecMo true → hai Việc HUY có vết nguồn 'dong-ke-hoach', Việc Xong giữ XONG, bản chiếu ba bước đúng, không thì ném 'kh: dong ke hoach viec sai <buoc>'; lenLichNhac rồi chayNhac sau đó (gọi bộ gom viecCanNhac trực tiếp) không có viec-qua-han cho hai Việc đó, không thì ném 'kh: nhac viec cua ke hoach da dong'; huyViecMo false trên một kế hoạch cùng hình → hai Việc giữ trangThai cũ, không thì ném 'kh: dong ke hoach huy khi khong chon'; reopenPlan → Việc HUY vẫn HUY, không thì ném 'kh: mo lai hoi viec'. Chiều đỏ ở E16 (e), (l)."
+    expected: "exit 0; -t kh-go-buoc của apps/api/test/ke-hoach-sinh-viec.spec.ts. Kế hoạch ba bước tạo từ khuôn, người cầm trịch gọi onboarding.removeStep trên bước thứ ba: bước còn trong cơ sở dữ liệu thì ném 'kh: go buoc buoc con'; Việc của nó mất hay trangThai khác HUY thì ném 'kh: go buoc viec sai'; không có vết 'doi-trang-thai' sau HUY kèm lý do chứa 'gỡ bước' thì ném 'kh: go buoc thieu vet'; còn bước nào có viecId đó thì ném 'kh: go buoc con tro'; onboarding.manDanhMuc trả cho kế hoạch đó số bước xong/tổng khác 0/2 thì ném 'kh: danh muc dem sai sau go <x/y>'. Đóng kế hoạch (ca tên 'kh-go-buoc dong-ke-hoach', cùng bộ lọc): kế hoạch hai bước dở một bước xong; onboarding.closePlan với huyViecMo true → hai Việc HUY có vết nguồn 'dong-ke-hoach', Việc Xong giữ XONG, bản chiếu ba bước đúng, không thì ném 'kh: dong ke hoach viec sai <buoc>'; lenLichNhac rồi chayNhac sau đó (gọi bộ gom viecCanNhac trực tiếp) không có viec-qua-han cho hai Việc đó, không thì ném 'kh: nhac viec cua ke hoach da dong'; huyViecMo false trên một kế hoạch cùng hình → hai Việc giữ trangThai cũ, không thì ném 'kh: dong ke hoach huy khi khong chon'; reopenPlan → Việc HUY vẫn HUY, không thì ném 'kh: mo lai hoi viec'. Chiều đỏ ở E16 (e), (i)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/db/src/viec-ghi.ts, packages/db/src/onboarding-nhac.ts, apps/api/src/onboarding/**, apps/app/components/onboarding/**, apps/api/test/ke-hoach-sinh-viec.spec.ts]
 
   - id: E7
-    criterion: AC-7
+    criterion: AC-6
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kh_them_buoc
@@ -77,7 +77,7 @@ evals:
     paths: [apps/api/src/onboarding/**, packages/db/src/viec-ghi.ts, apps/api/test/ke-hoach-sinh-viec.spec.ts]
 
   - id: E7b
-    criterion: AC-7
+    criterion: AC-6
     executor: script
     cmd: config:executors.script.kh_e6_xanh
     expected: "exit 0; chạy nguyên ba lệnh của hồ sơ dieu-phoi-va đo AC-4, AC-5, AC-6 (dpv_them_buoc_dom, dpv_bo_phan_hong) trên cây lượt này; mã khác 0 thì thoát khác 0 nêu lệnh. Tên ca giữ nguyên: lệnh lọc -t 'ke-hoach-rong|bo-phan-khac|loi-bo-phan' và -t bo-phan-hong phải chạy ≥1 ca mỗi tên (đếm từ đầu ra bun test), không thì thoát 1 với 'kh: ca e6 bi doi ten <ten>'."
@@ -85,7 +85,7 @@ evals:
     paths: [apps/api/src/onboarding/**, apps/app/components/crm/record-sheet/**, apps/app/test/dieu-phoi-va.dom.tsx, apps/api/test/dieu-phoi-va.spec.ts]
 
   - id: E8
-    criterion: AC-8
+    criterion: AC-7
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kh_ke_hoach_cu
@@ -94,7 +94,7 @@ evals:
     paths: [apps/api/src/onboarding/**, packages/db/src/onboarding-buoc.ts, apps/api/test/ke-hoach-sinh-viec.spec.ts]
 
   - id: E8b
-    criterion: AC-8
+    criterion: AC-7
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kh_nhac_buoc
@@ -102,81 +102,30 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/db/src/onboarding-nhac.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts]
 
-  - id: E9
-    criterion: AC-9
-    executor: test
-    layer: backend-effect
-    cmd: config:executors.test.kh_goi_y_sinh
-    expected: "exit 0; -t kh-goi-y-sinh của apps/api/test/goi-y-ke-hoach.spec.ts. Ma trận viết trước 3×3 loại giai đoạn đi × đến (OPEN, WON ở cột khác, LOST × OPEN, WON, LOST; mỗi ô một deal mới của một công ty không kế hoạch mở, đưa tới giai đoạn đi bằng bản ghi trực tiếp rồi setStage sang giai đoạn đến), kỳ vọng sinh chỉ ở OPEN→WON và LOST→WON; số ô đã chạy khác 9 thì ném 'kh: ma tran goi y thieu o <n>'. Bảng đường vào viết trước sáu ca: bulkSetStage thắng, deals.create ở giai đoạn thắng, giai-doan lưu trữ dời deal sang giai đoạn thắng, setStage thắng của công ty E có kế hoạch mở, deal có gợi ý BO_QUA mở lại rồi thắng lại, deal có gợi ý CHO mở lại rồi thắng lại; số ca khác 6 thì ném 'kh: bang goi y thieu ca <n>'. Ô/ca phải sinh: đúng một hàng goiYKeHoach mới trangThai CHO, dealId, companyId, chuyenLuc bằng stageChangedAt của deal, nguoiNhanId bằng ownerId lúc đó, không thì ném 'kh: goi y khong sinh <ca>' hay 'kh: goi y sai truong <ca> <truong>'; ô/ca không sinh: số hàng gợi ý không tăng, không thì ném 'kh: goi y sinh nham <ca>'. Giao dịch: ép sinhGoiYKeHoach ném (biến môi trường thử KH_GOI_Y_NEM=1 chỉ đọc khi NODE_ENV=test) rồi setStage thắng → lệnh hỏng và deal.stage giữ giai đoạn cũ, không thì ném 'kh: goi y ngoai giao dich'. Chiều đỏ ở E16 (g): bản sao gọi luật chỉ ở setStage làm bảng đỏ gọi đúng tên 'bulkSetStage' và 'deals.create'."
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [packages/db/prisma/schema.prisma, packages/db/src/goi-y-ke-hoach.ts, apps/api/src/deals/**, apps/api/src/giai-doan/**, apps/api/test/goi-y-ke-hoach.spec.ts]
-
-  - id: E10
-    criterion: AC-10
-    executor: test
-    layer: backend-effect
-    cmd: config:executors.test.kh_goi_y_xu_ly
-    expected: "exit 0; -t kh-goi-y-xu-ly của apps/api/test/goi-y-ke-hoach.spec.ts. Gợi ý CHO của deal D người nhận R: phiên một thành viên khác X gọi onboarding.xuLyGoiY bo-qua → TRPCError FORBIDDEN, gợi ý vẫn CHO, không thì ném 'kh: xu ly goi y lot <nguoi>'; phiên R gọi → trangThai BO_QUA, xuLyBoiId R, xuLyLuc khác null, không thì ném 'kh: bo qua sai'; phiên quản trị gọi trên một gợi ý CHO khác → thành công (đối chứng dương quyền), không thì ném 'kh: quan tri khong xu ly duoc'. Gợi ý CHO G2 của công ty C2: tạo kế hoạch cho C2 bằng createFromTemplate (phiên bất kỳ) → G2 DA_MO với planId bằng mã kế hoạch mới và xuLyLuc khác null, không thì ném 'kh: tao ke hoach khong dong goi y'; ép tạo kế hoạch hỏng sau bước đóng gợi ý (KH_TAO_NEM_SAU=1, NODE_ENV=test) → G2 vẫn CHO, không thì ném 'kh: dong goi y ngoai giao dich'. Chiều đỏ ở E16 (h)."
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [packages/db/src/goi-y-ke-hoach.ts, apps/api/src/onboarding/**, apps/api/test/goi-y-ke-hoach.spec.ts]
-
-  - id: E11
-    criterion: AC-11
-    executor: test
-    cmd: config:executors.test.kh_man_the
-    expected: "exit 0; apps/app/test/the-goi-y-ke-hoach.dom.tsx, mock tRPC. Ca -t kh-the-hien: onboarding.goiYCuaDeal trả gợi ý CHO, phiên là người nhận → đầu sheet deal có thẻ chữ 'Deal đã thắng — mở kế hoạch 30 ngày?' với hai nút, nằm trên dải lưu trữ dùng chung nếu có, không thì ném 'kh: the goi y khong hien'; bấm 'Mở kế hoạch' → ô tạo kế hoạch mở với công ty của deal điền sẵn và khoá, không thì ném 'kh: mo ke hoach khong dien cong ty'; bấm 'Bỏ qua' → xuLyGoiY gọi một lần với hanhDong 'bo-qua' và thẻ biến mất trước khi mutation trả về, không thì ném 'kh: bo qua khong an the'. Ca -t kh-the-sau-tao: bấm 'Mở kế hoạch', mock createFromTemplate thành công, lần đọc goiYCuaDeal sau đó trả DA_MO → goiYCuaDeal được gọi lại (đếm lần gọi > 1) và thẻ biến mất, không thì ném 'kh: the con sau tao'; đối chứng dương: chưa tạo thì thẻ còn. Chiều đỏ ở E16 (m). Ca -t kh-the-an: goiYCuaDeal trả null, hay trả gợi ý BO_QUA/DA_MO, hay phiên không phải người nhận và không phải quản trị → không có thẻ, không thì ném 'kh: the hien sai <ca>'."
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/app/components/crm/record-sheet/**, apps/app/components/onboarding/**, apps/app/lib/messages/onboarding.ts, apps/app/test/the-goi-y-ke-hoach.dom.tsx]
-
-  - id: E11b
-    criterion: AC-11
-    executor: ui-check
-    layer: ui-observed
-    cmd: config:executors.script.kh_man
-    steps:
-      - "Cung lenh voi E3b (kh_man) — lenh trung chi chay mot lan"
-      - "Mo ba anh kh-the-goi-y-1280.png, kh-the-goi-y-mo-o-tao-1280.png, kh-the-goi-y-375.png trong _acceptance/ke-hoach-sinh-viec/evidence/ va doi chieu bang mat voi Expected"
-    expected: "Sheet một deal đã thắng của người nhận có thẻ gợi ý ở đầu với hai nút; bấm «Mở kế hoạch» mở ô tạo có công ty điền sẵn; ở 375 thẻ không tràn ngang và hai nút không đè chữ."
-    inputs:
-      - _acceptance/ke-hoach-sinh-viec/evidence/
-    paths: [apps/app/components/crm/record-sheet/**, apps/app/components/onboarding/**, _acceptance/ke-hoach-sinh-viec/rang/man.mjs]
-
-  - id: E12
-    criterion: AC-12
-    executor: test
-    layer: backend-effect
-    cmd: config:executors.test.kh_nhac_goi_y
-    expected: "exit 0; -t kh-nhac-goi-y của apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts. R vai member nhận một gợi ý CHO (công ty 'KH Cty Thắng') và một gợi ý BO_QUA; R2 vai okr (cài member.role trực tiếp) nhận một gợi ý CHO của 'KH Cty Ẩn'. lenLichNhac rồi chayNhac sau 08:30 giờ VN với Zalo giả và Slack giả theo hợp đồng gửi tin thật: bộ gom của R có đúng một dòng loai 'goi-y-ke-hoach' mang mã gợi ý CHO, không thì ném 'kh: nhac goi y sai so dong <n>'; tin gửi R chứa 'KH Cty Thắng', không thì ném 'kh: tin goi y thieu ten cong ty'; bộ gom của R2 có dòng goi-y-ke-hoach hay tin gửi R2 chứa 'KH Cty Ẩn' thì ném 'kh: nhac goi y lo cho vai okr'. Một loại nhắc thiếu nhánh ở bộ dựng tin không làm hỏng tin của người khác (đối chứng theo khuôn vc-nhac của viec-chung). Chiều đỏ ở E16 (i)."
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [packages/db/src/onboarding-nhac.ts, packages/db/src/goi-y-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts]
-
   - id: E13
-    criterion: AC-13
+    criterion: AC-8
     executor: test
     cmd: config:executors.test.kh_thuoc
-    expected: "exit 0; apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts gieo kho mẫu qua hàm ghi thật với đáp án viết trước trong spec: Việc nguồn khuon chuyển đúng hạn, đúng ngày hạn 23:00 giờ VN, trễ một ngày, chưa chuyển; một Việc tạo tay (không tính); một Việc khuon tạo ngoài cửa sổ (không tính); một Việc khuon hạn sau --den còn CHUA_LAM (không tính); một Việc khuon HUY do gỡ bước có roiChuaLamLuc (không tính); các lần chuyển sang thắng ghi bằng đường setStage thật (để có dòng STAGE_CHANGE): OPEN→WON có gợi ý, LOST→WON có gợi ý, OPEN→WON chèn trực tiếp không gợi ý, WON→WON cột khác (không tính), một deal BO_QUA rồi thắng lại có gợi ý mới (tính hai lần chuyển, đủ gợi ý); gợi ý xử lý sau 1 ngày, sau 4 ngày, chưa xử lý, và một gợi ý sinh sau --den − 3 ngày (không tính vào tỉ lệ xử lý). Chạy _acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs --tu --den: JSON viecKhuon {tong 4, dungHan 2, tiLe 0.5}, lanThang 5, dealThangThieuGoiY 1, goiY {tong 3, xuLy3Ngay 1, tiLeXuLy3Ngay 0.33} khác đáp án thì ném 'kh: thuoc dem sai <truong>'; mã thoát khác 2 (vì dealThangThieuGoiY > 0) thì ném 'kh: thuoc khong do khi thieu goi y'; xoá deal không gợi ý rồi chạy lại → mã 0, không thì ném 'kh: thuoc do sai chieu xanh'. Thước mở giao dịch READ ONLY (đọc mã nguồn: chuỗi 'READ ONLY' có trong lệnh mở giao dịch), không thì ném 'kh: thuoc khong chi doc'. Chiều đỏ ở E16 (j)."
+    expected: "exit 0; apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts gieo kho mẫu qua hàm ghi thật với đáp án viết trước trong spec: Việc nguồn khuon chuyển đúng hạn, đúng ngày hạn 23:00 giờ VN, trễ một ngày, chưa chuyển; một Việc tạo tay (không tính); một Việc khuon tạo ngoài cửa sổ (không tính); một Việc khuon hạn sau --den còn CHUA_LAM (không tính); một Việc khuon HUY do gỡ bước có roiChuaLamLuc (không tính). Chạy _acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs --tu --den: JSON viecKhuon {tong 4, dungHan 2, tiLe 0.5} khác đáp án thì ném 'kh: thuoc dem sai <truong>'; mã thoát khác 2 (vì tiLe < 0.7) thì ném 'kh: thuoc khong do khi duoi nguong'; thêm hai Việc khuôn đúng hạn rồi chạy lại → tiLe 4/6 vẫn 2, thêm một nữa → 5/7 ≥ 0.7 thoát 0, không thì ném 'kh: thuoc do sai chieu xanh'. Thước mở giao dịch READ ONLY (đọc mã nguồn: chuỗi 'READ ONLY' có trong lệnh mở giao dịch), không thì ném 'kh: thuoc khong chi doc'. Chiều đỏ ở E16 (g), (h)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs, apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts]
 
   - id: E14
-    criterion: AC-14
+    criterion: AC-9
     executor: judgment
     question: >-
       Đọc CONTEXT.md (mục bước 30 ngày, mục Việc, và mục mới «Gợi ý mở kế hoạch»), docs/api.md (mục router
       onboarding) và docs/plan/lo-trinh-viec-du-an.json (hàng DA3 và DA4) như một người mới vào kho. Tài liệu có
       nói rõ năm điều không: (1) bước của kế hoạch tạo sau lượt DA3 là bản chiếu của đúng một Việc — Việc là nguồn
       sự thật cho người làm, hạn, tên, xong; kế hoạch tạo trước vẫn có bước không Việc; (2) ba thao tác bị chặn
-      trên Việc của một bước (Huỷ, xoá, gỡ gắn kế hoạch) và đường đúng là gỡ bước ở kế hoạch; (3) «Gợi ý mở kế
-      hoạch» là gì, sinh khi deal sang giai đoạn thắng mà công ty chưa có kế hoạch mở, ba trạng thái chờ · đã mở ·
-      bỏ qua, ai xử lý; (4) hai thủ tục mới goiYCuaDeal và xuLyGoiY và trường chọn người theo phòng ban của
-      createFromTemplate; (5) hàng DA3 không còn «chưa mở», và chay_khi của DA4 ghi điều kiện ngày bắt đầu đã thoả
+      trên Việc của một bước (Huỷ, xoá, gỡ gắn kế hoạch) và đường đúng là gỡ bước ở kế hoạch; (3) tạo kế hoạch từ khuôn chọn người làm cho từng phòng ban, mặc định trưởng phòng, không có thì người cầm trịch, người vai «chỉ OKR» bị từ chối; (4) trường chọn người theo phòng ban của createFromTemplate và việc đóng kế hoạch hỏi huỷ việc còn mở; (5) hàng DA3 không còn «chưa mở», có hàng DA3b cho gợi ý mở kế hoạch khi deal thắng, và chay_khi của DA4 ghi điều kiện ngày bắt đầu đã thoả
       do chủ kho mở 14/10. Tài liệu không dùng chữ «dự án» cho kế hoạch 30 ngày. Trả PASS khi đủ năm điều, FAIL nêu
       điều thiếu.
     inputs: [CONTEXT.md, docs/api.md, docs/plan/lo-trinh-viec-du-an.json]
     evidence_required: [verdict, rationale, verified_at]
 
   - id: E15
-    criterion: AC-15
+    criterion: AC-10
     executor: script
     cmd: config:executors.script.kh_hoi_quy
     expected: "exit 0; bun _acceptance/dieu-phoi-va/rang/khong-xoa-expect.mjs --tu-thu (tự thử của thước: bản sao xoá một expect làm nó đỏ) rồi --moc <merge-base của nhánh với origin/onehub, lệnh tự tính> — một tệp kiểm đã có trước lượt mất dòng expect thì thoát khác 0 nêu tệp; rồi bun run check-types thoát 0."
@@ -187,9 +136,9 @@ evals:
     criterion: AC-4
     executor: script
     cmd: config:executors.script.kh_dot_bien
-    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly như viec-chung: với mỗi cặp chạy phép đo trên bản sao lành phải xanh, rồi thay một lần chuỗi vật thật và chạy lại phải đỏ với đúng thông điệp ghim — (a) bỏ tạo Việc trong createFromTemplate → E1 'kh: buoc khong tro dung mot viec'; (b) bỏ kiemNguoiNhanViec ở nhánh chọn người theo phòng ban → E2 'kh: chon vai okr khong bi chan'; (c) bỏ lời gọi chieuLenBuoc ở viec.sua → E4 'kh: buoc lech viec sau viec.sua'; (d) bỏ chặn Huỷ trên Việc của bước → E5 'kh: viec cua buoc khong bi chan'; (e) removeStep xoá Việc thay vì Huỷ → E6 'kh: go buoc viec sai'; (f) bỏ lọc bước đã nối ở viecBuoc → E8b 'kh: nhac trung buoc va viec'; (g) gọi sinhGoiYKeHoach chỉ ở setStage → E9 'kh: goi y khong sinh bulkSetStage' và 'kh: goi y khong sinh deals.create'; (h) bỏ kiểm quyền người nhận ở xuLyGoiY → E10 'kh: xu ly goi y lot'; (i) bỏ cổng vai ở nguồn gợi ý của bộ gom → E12 'kh: nhac goi y lo cho vai okr'; (j) đổi so sánh 3 ngày thành 4 ngày ở thước → E13 'kh: thuoc dem sai'; (k) bỏ lọc hạn ≤ --den ở mẫu số (a) → E13 'kh: thuoc dem sai'; (l) closePlan bỏ qua cờ huyViecMo → E6 'kh: dong ke hoach viec sai'; (m) bỏ invalidate goiYCuaDeal sau tạo kế hoạch → E11 'kh: the con sau tao'; (n) luật sinh gợi ý chỉ nhận OPEN→WON → E9 'kh: goi y khong sinh LOST->WON'. Thiếu cặp nào hay bản sao lành đỏ thì thoát khác 0 nêu cặp."
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly như viec-chung: với mỗi cặp chạy phép đo trên bản sao lành phải xanh, rồi thay một lần chuỗi vật thật và chạy lại phải đỏ với đúng thông điệp ghim — (a) bỏ tạo Việc trong createFromTemplate → E1 'kh: buoc khong tro dung mot viec'; (b) bỏ kiemNguoiNhanViec ở nhánh chọn người theo phòng ban → E2 'kh: chon vai okr khong bi chan'; (c) bỏ lời gọi chieuLenBuoc ở viec.sua → E4 'kh: buoc lech viec sau viec.sua'; (d) bỏ chặn Huỷ trên Việc của bước → E5 'kh: viec cua buoc khong bi chan'; (e) removeStep xoá Việc thay vì Huỷ → E6 'kh: go buoc viec sai'; (f) bỏ lọc bước đã nối ở viecBuoc → E8b 'kh: nhac trung buoc va viec'; (g) đổi so sánh «roiChuaLamLuc ≤ cuối ngày hạn giờ VN» thành «< đầu ngày hạn» ở thước → E13 'kh: thuoc dem sai dungHan'; (h) bỏ lọc hạn ≤ --den ở mẫu số (a) → E13 'kh: thuoc dem sai tong'; (i) closePlan bỏ qua cờ huyViecMo → E6 'kh: dong ke hoach viec sai'. Thiếu cặp nào hay bản sao lành đỏ thì thoát khác 0 nêu cặp."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [_acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs, packages/db/src/viec-ghi.ts, packages/db/src/onboarding-buoc.ts, packages/db/src/onboarding-nhac.ts, packages/db/src/goi-y-ke-hoach.ts, apps/api/src/onboarding/**, apps/api/src/deals/**, _acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs]
+    paths: [_acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs, packages/db/src/viec-ghi.ts, packages/db/src/onboarding-buoc.ts, packages/db/src/onboarding-nhac.ts, apps/api/src/onboarding/**, _acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs]
 
   - id: E17
     criterion: AC-3
