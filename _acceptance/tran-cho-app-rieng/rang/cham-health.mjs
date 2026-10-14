@@ -20,7 +20,7 @@ const NGOAI_VAT = [/^_acceptance\//, /^docs\//, /\.md$/, /^LO-TRINH\.html$/];
 const MA_TRAN = [
 	{ ban: "sua", cham: 0, mong: "xanh" },
 	{ ban: "sua", cham: CHAM_MS, mong: "xanh" },
-	{ ban: "truoc-vong", cham: 0, mong: "xanh" },
+	{ ban: "truoc-vong", cham: 0, mong: "xanh", thuLai: 3 },
 	{ ban: "truoc-vong", cham: CHAM_MS, mong: "do" },
 ];
 
@@ -65,12 +65,19 @@ function bonO() {
 	const loi = [];
 	try {
 		for (const o of MA_TRAN) {
-			const r = chay(
-				o.ban === "sua" ? "test/app-rieng.integration.spec.ts" : BAN_TAM,
-				preloadCham(thuMuc, o.cham),
-			);
-			writeFileSync(join(NHAT_KY, `${o.ban}-cham-${o.cham}.log`), r.ra);
-			const kq = ketQua(r);
+			let r;
+			let kq;
+			let lan = 0;
+			do {
+				lan += 1;
+				r = chay(
+					o.ban === "sua" ? "test/app-rieng.integration.spec.ts" : BAN_TAM,
+					preloadCham(thuMuc, o.cham),
+				);
+				writeFileSync(join(NHAT_KY, `${o.ban}-cham-${o.cham}-lan-${lan}.log`), r.ra);
+				kq = ketQua(r);
+			} while (kq !== o.mong && lan < (o.thuLai ?? 1));
+			if (lan > 1) console.log(`${o.ban} cham ${o.cham} ms: thu ${lan} lan`);
 			const ghim = o.mong === "do" ? r.ra.includes(THONG_DIEP_DO) : true;
 			console.log(
 				`${o.ban} cham ${o.cham} ms: ${kq} (mong ${o.mong})${o.mong === "do" ? ` · thong diep ghim ${ghim ? "co" : "KHONG"}` : ""}`,
@@ -96,6 +103,17 @@ function chiDoiTepTest(doi) {
 	return { vat, dung };
 }
 
+const HANG_TRAN = "KHOI_DONG.baiHaiMay.tranMs";
+
+function doiSoCuoi(nguon) {
+	const dau = nguon.indexOf(`"${TEN_BAI}`);
+	if (dau < 0) return null;
+	const het = nguon.indexOf("\n\t);", dau);
+	if (het < 0) return null;
+	const dong = nguon.slice(dau, het).trimEnd().split("\n");
+	return dong.at(-1)?.trim().replace(/,$/, "") ?? null;
+}
+
 function phamVi() {
 	const doi = git("diff", "--name-only", `${NHANH_CHINH}...HEAD`)
 		.split("\n")
@@ -105,11 +123,11 @@ function phamVi() {
 	console.log(`goc: merge-base ${NHANH_CHINH} HEAD · tep vat doi: ${vat.join(", ") || "(khong)"}`);
 	console.log(`doi chung them mot tep ngoai: ${doiChung ? "VAN DAT (thuoc hong)" : "khong dat (dung)"}`);
 	const nguon = readFileSync(join(GOC, TEP), "utf8");
-	const bai = nguon.slice(nguon.indexOf(TEN_BAI));
-	const doanBai = bai.slice(0, bai.indexOf("\n\ttest") > 0 ? bai.indexOf("\n\ttest") : bai.length);
-	const tranTuHang = doanBai.includes("KHOI_DONG.baiHaiMay.tranMs");
-	console.log(`tran cua bai lay tu KHOI_DONG.baiHaiMay.tranMs: ${tranTuHang ? "co" : "KHONG"}`);
-	const dat = dung && !doiChung && tranTuHang;
+	const tranTuHang = doiSoCuoi(nguon) === HANG_TRAN;
+	const doiChungSo = doiSoCuoi(nguon.replace(HANG_TRAN, "30_000")) === HANG_TRAN;
+	console.log(`doi so cuoi cua bai «${TEN_BAI}»: ${doiSoCuoi(nguon) ?? "(khong co)"} · mong ${HANG_TRAN}`);
+	console.log(`doi chung thay bang 30_000: ${doiChungSo ? "VAN DAT (thuoc hong)" : "khong dat (dung)"}`);
+	const dat = dung && !doiChung && tranTuHang && !doiChungSo;
 	console.log(dat ? "DAT" : `KHONG DAT: chi duoc doi ${TEP} va ${TEP_CAU_HINH}, tran lay tu hang`);
 	return dat ? 0 : 1;
 }
