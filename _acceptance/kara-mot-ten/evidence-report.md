@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 13204dd159930a2913e1a176dba82bf70efa3ad3
+verified_commit: a5e30dc320fe6d7d3236e31833b7b703780b6db6
 human_signoff: Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 2 (mọi eval máy đạt, 17/17 gồm E2b và E15 mang từ vòng 1; vòng 1 REJECT đã sửa). E13 (hội đồng câu chữ đề xuất FAIL ở nhãn «Kara · theo bản đang dùng»): Đạt. Ngoài-4 (phép đếm nguồn kẹt dồn sai khi có cả câu cũ lẫn mới) mở hợp đồng mới; Ngoài-2 chấp nhận, không sửa; hai mươi mốt mục còn lại ghi Known limits, gồm Ngoài-23 (ghim lại khung-khong-con-dung-chu sau khi gộp). Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -285,3 +285,7 @@ Round 2: mọi eval máy xanh sau commit ad559db91 (câu Kara · OKR trong câu,
 ### Re-pin lần 1 — 2026-10-13, do K6a trước gộp: gộp onehub 60fc1b02d, răng dem-ket nhận chữ mồ côi mới, sửa YAML E6 bo-ca-mau-quy-4
 run_id: repin-20261013T233009Z-75646
 sha: 13204dd159930a2913e1a176dba82bf70efa3ad3 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-14, do gộp onehub 4b7f07936 (lô 02:00Z: #397, #393, #398) trước khi gộp #389
+run_id: repin-20261014T034928Z-89109
+sha: a5e30dc320fe6d7d3236e31833b7b703780b6db6 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
