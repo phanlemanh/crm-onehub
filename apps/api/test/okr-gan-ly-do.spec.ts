@@ -7,15 +7,12 @@ import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import type { z } from "zod";
 import {
-	DE_XUAT_KARA_MAU,
-	napDeXuatKaraMau,
-} from "../scripts/okr-mau/nap-de-xuat-kara";
-import {
 	type alignmentTargetsOutput,
 	objectiveOutput,
 } from "../src/okr/okr.contracts";
 import { OKR } from "../src/okr/okr-config";
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
+import { DE_XUAT_KARA_MAU, napDeXuatKaraMau } from "./okr-mau-de-xuat-kara";
 import { CHU_KY_Q4, datPhaQuy4 } from "./soan-okr-san";
 import {
 	batDauMau,

@@ -127,9 +127,9 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.l4_mau
-    expected: "exit 0; apps/api/test/okr-gan-ly-do.spec.ts -t l4-mau: sau batDauMau và ghiCauHinh(bat), napDeXuatKaraMau() trả taskId; okrDeXuat loai can-chinh trangThai cho của task đó có ≥ 1 hàng dongTuHang(h).canCu === DE_XUAT_KARA_MAU.canCu; agentTask của taskId có kind 'okr-de-xuat'; quét tĩnh mọi tệp .ts của apps/api/scripts/okr-mau: số tệp có okrDeXuat.create( hay createMany( === 0 (đối chứng dương: nop-de-xuat.ts có đúng 1 okrDeXuat.createMany); DE_XUAT_KARA_MAU khớp rang/ca-man.json (mục tiêu, lý do, căn cứ)."
+    expected: "exit 0; apps/api/test/okr-gan-ly-do.spec.ts -t l4-mau: sau batDauMau và ghiCauHinh(bat), napDeXuatKaraMau() trả taskId; okrDeXuat loai can-chinh trangThai cho của task đó có ≥ 1 hàng dongTuHang(h).canCu === DE_XUAT_KARA_MAU.canCu; agentTask của taskId có kind 'okr-de-xuat'; quét tĩnh mọi tệp .ts của apps/api/scripts/okr-mau và apps/api/test/okr-mau-de-xuat-kara.ts: số tệp có okrDeXuat.create( hay createMany( === 0 (đối chứng dương: nop-de-xuat.ts có đúng 1 okrDeXuat.createMany); DE_XUAT_KARA_MAU khớp rang/ca-man.json (mục tiêu, lý do, căn cứ)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/scripts/okr-mau/**, apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/api/test/okr-gan-ly-do.spec.ts, _acceptance/gan-tay-va-kara-co-ly-do/rang/ca-man.json]
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau-de-xuat-kara.ts, apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/api/test/okr-gan-ly-do.spec.ts, _acceptance/gan-tay-va-kara-co-ly-do/rang/ca-man.json]
 
   - id: E16
     criterion: AC-14

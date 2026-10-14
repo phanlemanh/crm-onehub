@@ -1,10 +1,10 @@
 import { db } from "@crm/db";
 import { VIEC_OKR } from "@crm/db/agent-tasks";
 import { xepViecTroLy } from "@crm/db/okr-tro-ly";
-import { nopDeXuatVao } from "../../../agent/agent/lib/okr/nop-de-xuat";
-import type { NguCanhKenh } from "../../../agent/agent/lib/phien-con";
-import { completeTask, noteSession } from "../../../agent/agent/lib/tasks";
-import { idMau, LoiBoMau, OKR_MAU } from "./cau-hinh";
+import { nopDeXuatVao } from "../../agent/agent/lib/okr/nop-de-xuat";
+import type { NguCanhKenh } from "../../agent/agent/lib/phien-con";
+import { completeTask, noteSession } from "../../agent/agent/lib/tasks";
+import { idMau, LoiBoMau, OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 
 export const DE_XUAT_KARA_MAU = {
 	mucTieu: "q4-cham-soc-2",

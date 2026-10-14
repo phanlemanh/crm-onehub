@@ -392,7 +392,7 @@ for (const tenKho of Object.keys(MAN.kho)) {
 	const quanTri = phienCookie(thuMau(CA.quanTri));
 	await trpc(API, quanTri).lam("okr.setProgram", BAT_KARA);
 	const { napDeXuatKaraMau } = await import(
-		"../../../apps/api/scripts/okr-mau/nap-de-xuat-kara.ts"
+		"../../../apps/api/test/okr-mau-de-xuat-kara.ts"
 	);
 	const taskId = await napDeXuatKaraMau();
 	dong.push(`GHI DE XUAT MAU ${tenKho}: viec ${taskId}`);
