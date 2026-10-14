@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c33fbfebf20cfff6b5c1ae926b55a8a7188de872
+verified_commit: d47eb0f091f9ea8bc0ebca3ff6b9d2ebefeba90d
 human_signoff: Manh Phan 2026-10-14
 ---
 
@@ -314,3 +314,7 @@ none — every multi-run eval is uniform
 
 Round 1: mọi eval máy xanh (không eval nào đỏ); E12 (chữ trên màn) chờ người vì hội đồng đề xuất không đạt ở cả ba lens, nên verdict là PENDING-JUDGMENT. Có mục ngoài hợp đồng cần người quyết, xem review-findings.md.
 Round 2: sau bản sửa chữ phụ ô quá hạn (c33fbfebf), chạy lại E1, E4b, E5, E7, E9, E10b và bảy lệnh suite, tất cả xanh; mười hai eval còn lại mang từ round 1 vì delta không chạm paths của chúng. E12 chấm lại: hai lens PASS, một lens chưa kết luận (ghi nguyên ở mục Judgment), đề xuất PASS.
+
+### Re-pin lần 1 — 2026-10-14, do hoá cũ do gộp onehub c1864a3a2 (DA1b, L4, E5, #412); lần 1 đỏ vì Postgres thử chưa chạy
+run_id: repin-20261014T164904Z-67748
+sha: d47eb0f091f9ea8bc0ebca3ff6b9d2ebefeba90d · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E10b, E12 (E12 không khai paths) · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
