@@ -182,7 +182,7 @@ const vi: TinHieuMessages = {
 		soPhong: "Phòng ban có tín hiệu",
 		khongPhong: "Trong {ngay} ngày qua · chưa có phòng ban: {so}",
 		soChuaCoCho: "Quá {han} ngày chưa có chỗ",
-		trenQuaHan: "Trên {so} tín hiệu gửi quá {han} ngày",
+		trenQuaHan: "Trong số {so} tín hiệu gửi quá {han} ngày",
 		chuaDocCho: "Chưa đọc được trạng thái sau gom",
 		rongTieuDe: "Chưa ai gửi tín hiệu",
 		rongMoTa: "Tín hiệu mọi người gửi sẽ hiện ở đây.",

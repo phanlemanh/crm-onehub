@@ -336,9 +336,16 @@ evals:
       trong hộp gửi có (a) nói bằng chữ người dùng CRM hiểu, không thuật ngữ máy, (b) không thừa chữ — xoá một chữ mà
       người đứng ở màn đó vẫn hiểu đúng thì chữ đó thừa, (c) gọi đúng tên «tín hiệu», «phòng ban», «lấy về» như phần
       chữ LT2 đã có trong cùng tệp? Trả lời từng vế (a)(b)(c), dẫn chữ cụ thể.
+      Chữ chủ kho đã chốt thì không chấm lại nghĩa của nó, chỉ chấm nó được dùng đúng nguyên văn: nhãn ô «quá 7 ngày chưa
+      có chỗ» (mã Q2 của bản phạm vi), câu báo trước «Quản trị CRM thấy tên bạn cùng tín hiệu này» (mã Q3, luật riêng tư
+      ở ghi_chu hàng TH4), tên hai thẻ «Của tôi · Tất cả» và tên trang «Mọi tín hiệu» (tên hàng TH4). Bộ lọc dùng lại các
+      khoá tatCa.cot.phongBan, trang.cot.trangThai, tatCa.cot.nguoiGui, tatCa.chuaCoPhongBan, tatCa.khongConTaiKhoan
+      và nhãn trạng thái nhan.* của cùng tệp.
     inputs:
       - "apps/app/lib/messages/tin-hieu.ts"
       - "CONTEXT.md"
+      - "docs/plan/pham-vi-vong-tin-hieu-1410.md"
+      - "_acceptance/moi-tin-hieu-cho-quan-tri/contract.md"
 
   - id: E13
     criterion: AC-10
