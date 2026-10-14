@@ -2,6 +2,11 @@
 
 import { Combobox } from "@crm/ui/components/combobox";
 import {
+	DataTable,
+	type DataTableColumn,
+	type DataTableTabs,
+} from "@crm/ui/components/data-table";
+import {
 	Empty,
 	EmptyDescription,
 	EmptyHeader,
@@ -16,23 +21,16 @@ import {
 } from "@crm/ui/components/item";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { SectionHeading } from "@crm/ui/components/section-heading";
-import {
-	SimpleTable,
-	SimpleTableCell,
-	type SimpleTableColumn,
-	SimpleTableRow,
-} from "@crm/ui/components/simple-table";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
-import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { ViewSwitch } from "@crm/ui/components/view-switch";
+import type { TableQueryState } from "@crm/ui/lib/table-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useCallback, useRef, useState } from "react";
-import type { MucTieuMau } from "../ban-mau-okr/du-lieu";
+import { useCallback, useMemo, useRef, useState } from "react";
+import type { KrMau, MucTieuMau } from "../ban-mau-okr/du-lieu";
 import {
 	giaTri,
 	LoaiMucTieuNhan,
-	NHAN_TU_TIN,
 	TenNguoi,
 	ThanhTienDo,
 	TinhTrangKr,
@@ -50,25 +48,10 @@ import {
 } from "./du-lieu";
 
 export type CachXem = "danh-sach" | "hop-tuan";
-type Loc = "tat-ca" | "can-ban" | "chua-gop";
 
 const CACH_XEM = [
 	{ value: "danh-sach", label: "Danh sách" },
 	{ value: "hop-tuan", label: "Họp tuần" },
-];
-
-const COT: SimpleTableColumn[] = [
-	{ id: "ten", header: "Mục tiêu và KR" },
-	{ id: "tien-do", header: "Tiến độ", width: "w-56" },
-	{ id: "tinh-trang", header: "Tình trạng", width: "w-36" },
-	{ id: "phu-trach", header: "Phụ trách", width: "w-48" },
-];
-
-const COT_HOP: SimpleTableColumn[] = [
-	{ id: "ten", header: "KR đáng bàn" },
-	{ id: "tien-do", header: "Tiến độ", width: "w-56" },
-	{ id: "tu-tin", header: "Tự tin", width: "w-28" },
-	{ id: "vi-sao", header: "Vì sao lên bàn", width: "w-56" },
 ];
 
 function canBan(mt: MucTieuMau): boolean {
@@ -148,184 +131,199 @@ function DongDonVi({ dv }: { dv: DonViPhang }) {
 	);
 }
 
-function BangDanhSach({ dv, ds }: { dv: DonViPhang; ds: MucTieuMau[] }) {
+const TAB_LOC: DataTableTabs = {
+	id: "loc",
+	allLabel: "Tất cả",
+	options: [
+		{ value: "can-ban", label: "Cần bàn" },
+		{ value: "chua-gop", label: "Chưa góp vào đâu" },
+	],
+};
+
+const KHONG_LAM = () => {};
+
+function useTruyVan(): TableQueryState {
+	const [tab, setTab] = useState("all");
+	return {
+		sort: "",
+		dir: "asc",
+		page: 1,
+		pageSize: 50,
+		tab,
+		tabId: TAB_LOC.id,
+		filters: {},
+		toggleSort: KHONG_LAM,
+		setSort: KHONG_LAM,
+		setDir: KHONG_LAM,
+		setPage: async () => {},
+		setTab,
+		setFilter: KHONG_LAM,
+	};
+}
+
+function TienDoO({
+	nhan,
+	p,
+	giaTriChu,
+}: {
+	nhan: string;
+	p: number;
+	giaTriChu: string;
+}) {
 	return (
-		<>
-			<div className="hidden md:block">
-				<SimpleTable columns={COT} surface="page">
-					{ds.map((mt) => {
-						const p = tienDoMucTieu(mt);
-						return (
-							<Fragment key={mt.id}>
-								<SimpleTableRow data-muc-tieu={mt.id}>
-									<SimpleTableCell>
-										<span className="flex flex-col gap-1">
-											<span className="flex flex-wrap items-center gap-2">
-												<span className="font-medium" translate="no">
-													{mt.ten}
-												</span>
-												<LoaiMucTieuNhan loai={mt.loai} />
-											</span>
-											<span
-												className="text-muted-foreground text-xs"
-												translate="no"
-											>
-												{mt.gopVao.length > 0
-													? `Góp vào ${mt.gopVao
-															.map((g) =>
-																g.kr
-																	? `${g.donVi} › ${g.kr}`
-																	: `${g.donVi} › ${g.mucTieu}`,
-															)
-															.join(" · ")}`
-													: chuaGop(dv, mt)
-														? "Chưa góp vào mục tiêu nào"
-														: "Mục tiêu cấp công ty"}
-											</span>
-										</span>
-									</SimpleTableCell>
-									<SimpleTableCell>
-										<span className="flex items-center gap-2">
-											<ThanhTienDo nhan={mt.ten} phanTram={p} />
-											<span className="w-10 text-right text-xs tabular-nums">
-												{p}%
-											</span>
-										</span>
-									</SimpleTableCell>
-									<SimpleTableCell>
-										<TinhTrangKr loai={mt.loai} phanTram={p} size="sm" />
-									</SimpleTableCell>
-									<SimpleTableCell>
-										<TenNguoi ten={mt.phuTrach.ten} />
-									</SimpleTableCell>
-								</SimpleTableRow>
-								{mt.kr.map((k) => {
-									const pk = tienDo(k);
-									return (
-										<SimpleTableRow data-kr={k.id} key={k.id} sub>
-											<SimpleTableCell>
-												<span translate="no">KR · {k.ten}</span>
-											</SimpleTableCell>
-											<SimpleTableCell>
-												<span className="flex items-center gap-2">
-													<ThanhTienDo
-														kyVong={k.kieu === "moc" ? null : undefined}
-														nhan={k.ten}
-														phanTram={pk}
-													/>
-													<span className="w-24 shrink-0 text-right text-xs tabular-nums">
-														{giaTri(k)}
-													</span>
-												</span>
-											</SimpleTableCell>
-											<SimpleTableCell>
-												<TinhTrangKr
-													laMoc={k.kieu === "moc"}
-													loai={mt.loai}
-													phanTram={pk}
-													size="sm"
-												/>
-											</SimpleTableCell>
-											<SimpleTableCell>
-												<TenNguoi avatar={false} ten={k.phuTrach.ten} />
-											</SimpleTableCell>
-										</SimpleTableRow>
-									);
-								})}
-							</Fragment>
-						);
-					})}
-				</SimpleTable>
-			</div>
-			<div className="flex flex-col gap-2 md:hidden">
-				{ds.map((mt) => {
-					const p = tienDoMucTieu(mt);
-					return (
-						<Item data-muc-tieu={mt.id} key={mt.id} variant="outline">
-							<ItemContent>
-								<ItemTitle translate="no">{mt.ten}</ItemTitle>
-								<ItemDescription>
-									{mt.kr.length} KR · {p}% · phụ trách {mt.phuTrach.ten}
-								</ItemDescription>
-							</ItemContent>
-							<ItemActions>
-								<TinhTrangKr loai={mt.loai} phanTram={p} size="sm" />
-							</ItemActions>
-						</Item>
-					);
-				})}
-			</div>
-		</>
+		<span className="flex items-center gap-2">
+			<ThanhTienDo nhan={nhan} phanTram={p} />
+			<span className="w-24 shrink-0 text-right text-xs tabular-nums">
+				{giaTriChu}
+			</span>
+		</span>
 	);
 }
 
-function BangHopTuan({ ds }: { ds: MucTieuMau[] }) {
-	const dong = ds.flatMap((mt) =>
-		mt.kr
-			.filter(
-				(k) =>
-					k.tuTin === "thap" ||
-					tinhTrang(tienDo(k), mt.loai).tone !== "success" ||
-					k.imNgay > 7,
-			)
-			.map((k) => ({ k, mt })),
-	);
-	if (dong.length === 0) {
-		return (
-			<Empty border="solid">
-				<EmptyHeader>
-					<EmptyTitle>Tuần này không có KR nào đáng bàn</EmptyTitle>
-					<EmptyDescription>
-						Mọi KR đều đúng nhịp, tự tin không tụt, và có cập nhật trong tuần.
-					</EmptyDescription>
-				</EmptyHeader>
-			</Empty>
-		);
+function gopVaoChu(dv: DonViPhang, mt: MucTieuMau): string {
+	if (mt.gopVao.length > 0) {
+		return `Góp vào ${mt.gopVao
+			.map((g) => (g.kr ? `${g.donVi} › ${g.kr}` : `${g.donVi} › ${g.mucTieu}`))
+			.join(" · ")}`;
 	}
-	return (
-		<SimpleTable columns={COT_HOP} surface="page">
-			{dong.map(({ k, mt }) => {
-				const pk = tienDo(k);
-				const viSao = [
-					k.tuTin === "thap" ? "tự tin thấp" : null,
-					tinhTrang(pk, mt.loai).tone !== "success"
-						? tinhTrang(pk, mt.loai).nhan.toLowerCase()
-						: null,
-					k.imNgay > 7 ? `im ${k.imNgay} ngày` : null,
-				]
-					.filter((x) => x !== null)
-					.join(" · ");
-				return (
-					<SimpleTableRow data-kr={k.id} key={k.id}>
-						<SimpleTableCell>
-							<span className="flex flex-col gap-0.5">
-								<span translate="no">{k.ten}</span>
-								<span className="text-muted-foreground text-xs" translate="no">
-									{mt.ten} · {k.phuTrach.ten}
-								</span>
-							</span>
-						</SimpleTableCell>
-						<SimpleTableCell>
-							<span className="flex items-center gap-2">
-								<ThanhTienDo nhan={k.ten} phanTram={pk} />
-								<span className="w-24 shrink-0 text-right text-xs tabular-nums">
-									{giaTri(k)}
-								</span>
-							</span>
-						</SimpleTableCell>
-						<SimpleTableCell>
-							<TuTin coNhan={false} muc={k.tuTin} size="sm" />
-						</SimpleTableCell>
-						<SimpleTableCell>
-							<span className="text-muted-foreground text-xs">
-								{viSao || `tự tin ${NHAN_TU_TIN[k.tuTin].toLowerCase()}`}
-							</span>
-						</SimpleTableCell>
-					</SimpleTableRow>
-				);
-			})}
-		</SimpleTable>
-	);
+	return chuaGop(dv, mt) ? "Chưa góp vào mục tiêu nào" : "Mục tiêu cấp công ty";
+}
+
+function cotMucTieu(dv: DonViPhang): DataTableColumn<MucTieuMau>[] {
+	return [
+		{
+			id: "ten",
+			header: "Mục tiêu",
+			cell: (mt) => (
+				<span className="flex min-w-0 flex-col gap-1" data-muc-tieu={mt.id}>
+					<span className="flex flex-wrap items-center gap-2">
+						<span className="font-medium" translate="no">
+							{mt.ten}
+						</span>
+						<LoaiMucTieuNhan loai={mt.loai} />
+						<span className="text-muted-foreground text-xs tabular-nums">
+							{mt.kr.length} KR
+						</span>
+					</span>
+					<span
+						className="truncate text-muted-foreground text-xs"
+						translate="no"
+					>
+						{gopVaoChu(dv, mt)}
+					</span>
+				</span>
+			),
+		},
+		{
+			id: "tien-do",
+			header: "Tiến độ",
+			width: "w-64",
+			hideBelow: "md",
+			cell: (mt) => {
+				const p = tienDoMucTieu(mt);
+				return <TienDoO giaTriChu={`${p}%`} nhan={mt.ten} p={p} />;
+			},
+		},
+		{
+			id: "tinh-trang",
+			header: "Tình trạng",
+			width: "w-36",
+			cell: (mt) => (
+				<TinhTrangKr loai={mt.loai} phanTram={tienDoMucTieu(mt)} size="sm" />
+			),
+		},
+		{
+			id: "phu-trach",
+			header: "Phụ trách",
+			width: "w-48",
+			hideBelow: "lg",
+			cell: (mt) => <TenNguoi ten={mt.phuTrach.ten} />,
+		},
+	];
+}
+
+function oKr(k: KrMau, cot: string, mt: MucTieuMau) {
+	const p = tienDo(k);
+	switch (cot) {
+		case "ten":
+			return (
+				<span className="pl-4" data-kr={k.id} translate="no">
+					KR · {k.ten}
+				</span>
+			);
+		case "tien-do":
+			return <TienDoO giaTriChu={giaTri(k)} nhan={k.ten} p={p} />;
+		case "tinh-trang":
+			return (
+				<TinhTrangKr
+					laMoc={k.kieu === "moc"}
+					loai={mt.loai}
+					phanTram={p}
+					size="sm"
+				/>
+			);
+		case "phu-trach":
+			return <TenNguoi avatar={false} ten={k.phuTrach.ten} />;
+		default:
+			return null;
+	}
+}
+
+type DongHop = { k: KrMau; mt: MucTieuMau; viSao: string };
+
+const COT_HOP: DataTableColumn<DongHop>[] = [
+	{
+		id: "ten",
+		header: "KR đáng bàn",
+		cell: ({ k, mt }) => (
+			<span className="flex flex-col gap-0.5" data-kr={k.id}>
+				<span translate="no">{k.ten}</span>
+				<span className="text-muted-foreground text-xs" translate="no">
+					{mt.ten} · {k.phuTrach.ten}
+				</span>
+			</span>
+		),
+	},
+	{
+		id: "tien-do",
+		header: "Tiến độ",
+		width: "w-64",
+		hideBelow: "md",
+		cell: ({ k }) => (
+			<TienDoO giaTriChu={giaTri(k)} nhan={k.ten} p={tienDo(k)} />
+		),
+	},
+	{
+		id: "tu-tin",
+		header: "Tự tin",
+		width: "w-28",
+		cell: ({ k }) => <TuTin coNhan={false} muc={k.tuTin} size="sm" />,
+	},
+	{
+		id: "vi-sao",
+		header: "Vì sao lên bàn",
+		width: "w-56",
+		hideBelow: "lg",
+		cell: ({ viSao }) => (
+			<span className="text-muted-foreground text-xs">{viSao}</span>
+		),
+	},
+];
+
+function dongHop(ds: MucTieuMau[]): DongHop[] {
+	const ket: DongHop[] = [];
+	for (const mt of ds) {
+		for (const k of mt.kr) {
+			const tt = tinhTrang(tienDo(k), mt.loai);
+			const ly = [
+				k.tuTin === "thap" ? "tự tin thấp" : null,
+				tt.tone !== "success" ? tt.nhan.toLowerCase() : null,
+				k.imNgay > 7 ? `im ${k.imNgay} ngày` : null,
+			].filter((x) => x !== null);
+			if (ly.length > 0) ket.push({ k, mt, viSao: ly.join(" · ") });
+		}
+	}
+	return ket;
 }
 
 function DonViCon({ dv }: { dv: DonViPhang }) {
@@ -377,9 +375,8 @@ export function TrangDonVi({
 	const router = useRouter();
 	const dv = donVi(donViId);
 	const ds = mucTieuCua(dv.id);
-	const [loc, setLoc] = useState<Loc>("tat-ca");
-	const soCanBan = ds.filter(canBan).length;
-	const soChuaGop = ds.filter((mt) => chuaGop(dv, mt)).length;
+	const query = useTruyVan();
+	const loc = query.tab;
 	const hien = ds.filter((mt) =>
 		loc === "can-ban"
 			? canBan(mt)
@@ -387,81 +384,82 @@ export function TrangDonVi({
 				? chuaGop(dv, mt)
 				: true,
 	);
+	const dem = {
+		loc: {
+			"can-ban": ds.filter(canBan).length,
+			"chua-gop": ds.filter((mt) => chuaGop(dv, mt)).length,
+		},
+	};
+	const cot = useMemo(() => cotMucTieu(dv), [dv]);
+	const hop = dongHop(hien);
+	const chung = {
+		query,
+		search: <ChonDonVi dv={dv} moSan={moChon} />,
+		tabs: TAB_LOC,
+		facetCounts: dem,
+		leadingActions: (
+			<ViewSwitch
+				items={CACH_XEM}
+				label="Cách xem"
+				onValueChange={(v) =>
+					router.replace(
+						duongTrang(
+							v === "hop-tuan" ? "ST-dh-hop-tuan" : "ST-dh-don-vi",
+							dv.id,
+						),
+					)
+				}
+				value={cachXem}
+			/>
+		),
+		meta: <DongDonVi dv={dv} />,
+		empty: (
+			<Empty data-don-vi-trong>
+				<EmptyHeader>
+					<EmptyTitle>
+						{ds.length === 0
+							? `${dv.ten} chưa đặt OKR cho Quý 4 · 2026`
+							: "Không có mục tiêu nào khớp bộ lọc"}
+					</EmptyTitle>
+					<EmptyDescription>
+						{ds.length > 0
+							? "Chọn «Tất cả» để xem lại mọi mục tiêu của đơn vị."
+							: dv.truong
+								? `${dv.truong.ten} là trưởng đơn vị và đặt được mục tiêu bằng nút «Thêm mục tiêu» ở đầu trang.`
+								: "Đơn vị chưa có trưởng nên chưa ai được giao đặt mục tiêu. Gán trưởng ở Cài đặt › Tổ chức, hoặc để đơn vị cấp trên đặt hộ."}
+					</EmptyDescription>
+				</EmptyHeader>
+			</Empty>
+		),
+	};
 
 	return (
 		<>
-			<div
-				className="flex flex-wrap items-center justify-between gap-2"
-				data-hang-cong-cu
-			>
-				<ChonDonVi dv={dv} moSan={moChon} />
-				{ds.length === 0 ? null : (
-					<div className="flex flex-wrap items-center gap-2">
-						<ToggleGroup
-							aria-label="Lọc mục tiêu"
-							onValueChange={(v) => {
-								if (v === "tat-ca" || v === "can-ban" || v === "chua-gop")
-									setLoc(v);
-							}}
-							size="sm"
-							type="single"
-							value={loc}
-							variant="outline"
-						>
-							<ToggleGroupItem value="tat-ca">
-								Tất cả{" "}
-								<span className="text-muted-foreground tabular-nums">
-									{ds.length}
-								</span>
-							</ToggleGroupItem>
-							<ToggleGroupItem value="can-ban">
-								Cần bàn{" "}
-								<span className="text-muted-foreground tabular-nums">
-									{soCanBan}
-								</span>
-							</ToggleGroupItem>
-							<ToggleGroupItem value="chua-gop">
-								Chưa góp vào đâu{" "}
-								<span className="text-muted-foreground tabular-nums">
-									{soChuaGop}
-								</span>
-							</ToggleGroupItem>
-						</ToggleGroup>
-						<ViewSwitch
-							items={CACH_XEM}
-							label="Cách xem"
-							onValueChange={(v) =>
-								router.replace(
-									duongTrang(
-										v === "hop-tuan" ? "ST-dh-hop-tuan" : "ST-dh-don-vi",
-										dv.id,
-									),
-								)
-							}
-							value={cachXem}
-						/>
-					</div>
-				)}
-			</div>
-			<div className="flex flex-col gap-2">
-				{ds.length === 0 ? (
-					<Empty border="solid" data-don-vi-trong>
-						<EmptyHeader>
-							<EmptyTitle>{dv.ten} chưa đặt OKR cho Quý 4 · 2026</EmptyTitle>
-							<EmptyDescription>
-								{dv.truong
-									? `${dv.truong.ten} là trưởng đơn vị và đặt được mục tiêu bằng nút «Thêm mục tiêu» ở đầu trang.`
-									: "Đơn vị chưa có trưởng nên chưa ai được giao đặt mục tiêu. Gán trưởng ở Cài đặt › Tổ chức, hoặc để đơn vị cấp trên đặt hộ."}
-							</EmptyDescription>
-						</EmptyHeader>
-					</Empty>
-				) : cachXem === "hop-tuan" ? (
-					<BangHopTuan ds={hien} />
-				) : (
-					<BangDanhSach ds={hien} dv={dv} />
-				)}
-				<DongDonVi dv={dv} />
-			</div>
+			{cachXem === "hop-tuan" ? (
+				<DataTable
+					{...chung}
+					columns={COT_HOP}
+					getRowId={(d) => d.k.id}
+					layout="content"
+					rows={hop}
+					total={hop.length}
+				/>
+			) : (
+				<DataTable
+					{...chung}
+					columns={cot}
+					expandable={{
+						isExpandable: (mt) => mt.kr.length > 0,
+						getSubRows: (mt) => mt.kr,
+						getSubRowId: (k) => k.id,
+						renderSubCell: (k, c, mt) => oKr(k, c, mt),
+					}}
+					getRowId={(mt) => mt.id}
+					layout="content"
+					rows={hien}
+					total={hien.length}
+				/>
+			)}
 			<DonViCon dv={dv} />
 		</>
 	);
