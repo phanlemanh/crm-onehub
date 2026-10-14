@@ -96,7 +96,7 @@ function ChonDonVi({ dv, moSan }: { dv: DonViPhang; moSan: boolean }) {
 	return (
 		<Combobox
 			aria-label="Đơn vị"
-			className="w-full sm:w-80"
+			className="w-full sm:w-72"
 			data-chon-don-vi
 			empty="Không có đơn vị nào khớp."
 			onValueChange={(id) => router.replace(duongTrang("ST-dh-don-vi", id))}
@@ -123,7 +123,7 @@ function DongDonVi({ dv }: { dv: DonViPhang }) {
 	const t = dv.tt;
 	return (
 		<div
-			className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm"
+			className="flex flex-wrap items-center gap-x-4 gap-y-1 text-muted-foreground text-sm"
 			data-dong-don-vi
 		>
 			{dv.truong ? (
@@ -390,24 +390,13 @@ export function TrangDonVi({
 
 	return (
 		<>
-			<div className="flex flex-col gap-3" data-thanh-don-vi>
+			<div
+				className="flex flex-wrap items-center justify-between gap-2"
+				data-hang-cong-cu
+			>
 				<ChonDonVi dv={dv} moSan={moChon} />
-				<DongDonVi dv={dv} />
-			</div>
-			{ds.length === 0 ? (
-				<Empty border="solid" data-don-vi-trong>
-					<EmptyHeader>
-						<EmptyTitle>{dv.ten} chưa đặt OKR cho Quý 4 · 2026</EmptyTitle>
-						<EmptyDescription>
-							{dv.truong
-								? `${dv.truong.ten} là trưởng đơn vị và đặt được mục tiêu bằng nút «Thêm mục tiêu» ở đầu trang.`
-								: "Đơn vị chưa có trưởng nên chưa ai được giao đặt mục tiêu. Gán trưởng ở Cài đặt › Tổ chức, hoặc để đơn vị cấp trên đặt hộ."}
-						</EmptyDescription>
-					</EmptyHeader>
-				</Empty>
-			) : (
-				<>
-					<div className="flex flex-wrap items-center gap-2" data-hang-cong-cu>
+				{ds.length === 0 ? null : (
+					<div className="flex flex-wrap items-center gap-2">
 						<ToggleGroup
 							aria-label="Lọc mục tiêu"
 							onValueChange={(v) => {
@@ -452,13 +441,27 @@ export function TrangDonVi({
 							value={cachXem}
 						/>
 					</div>
-					{cachXem === "hop-tuan" ? (
-						<BangHopTuan ds={hien} />
-					) : (
-						<BangDanhSach ds={hien} dv={dv} />
-					)}
-				</>
-			)}
+				)}
+			</div>
+			<div className="flex flex-col gap-2">
+				{ds.length === 0 ? (
+					<Empty border="solid" data-don-vi-trong>
+						<EmptyHeader>
+							<EmptyTitle>{dv.ten} chưa đặt OKR cho Quý 4 · 2026</EmptyTitle>
+							<EmptyDescription>
+								{dv.truong
+									? `${dv.truong.ten} là trưởng đơn vị và đặt được mục tiêu bằng nút «Thêm mục tiêu» ở đầu trang.`
+									: "Đơn vị chưa có trưởng nên chưa ai được giao đặt mục tiêu. Gán trưởng ở Cài đặt › Tổ chức, hoặc để đơn vị cấp trên đặt hộ."}
+							</EmptyDescription>
+						</EmptyHeader>
+					</Empty>
+				) : cachXem === "hop-tuan" ? (
+					<BangHopTuan ds={hien} />
+				) : (
+					<BangDanhSach ds={hien} dv={dv} />
+				)}
+				<DongDonVi dv={dv} />
+			</div>
 			<DonViCon dv={dv} />
 		</>
 	);
