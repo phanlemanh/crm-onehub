@@ -6,14 +6,7 @@ import { StatCard } from "@crm/ui/components/stat-card";
 import { TIN_HIEU } from "@crm/validation/tin-hieu";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
-
-export type BaSo = {
-	trongKy: number;
-	soPhong: number;
-	khongPhong: number;
-	quaHan: number;
-	chuaCoCho: number | null;
-};
+import type { BaSo } from "@/lib/tin-hieu/loc-tat-ca";
 
 export function BaSoTinHieu({ so }: { so: BaSo }) {
 	const m = tinHieuMessages(useLocale()).tatCa;

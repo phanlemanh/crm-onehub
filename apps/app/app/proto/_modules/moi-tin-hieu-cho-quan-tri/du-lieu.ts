@@ -1,5 +1,4 @@
-import type { BaSo } from "@/components/tin-hieu/ba-so-tin-hieu";
-import type { DongTatCa } from "@/lib/tin-hieu/loc-tat-ca";
+import type { BaSo, DongTatCa } from "@/lib/tin-hieu/loc-tat-ca";
 
 export const STATE = {
 	cuaToiQuanTri: "ST-cua-toi-quan-tri",

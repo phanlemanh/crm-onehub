@@ -1,5 +1,6 @@
 import type { NghiaTrangThai } from "@crm/ui/lib/status-tone";
 import {
+	coChoSauGom,
 	type DuongTinHieu,
 	docNhomHang,
 	parseDuongTinHieu,
@@ -13,6 +14,7 @@ export type TrangThaiTinHieu = {
 	cau: string;
 	nghia: NghiaTrangThai;
 };
+export type TrangThaiDu = TrangThaiTinHieu & { khoa: string };
 export type CuaToiTom = { ma: string; daKeoVe: boolean };
 export type KetQuaTrangThai = {
 	banVe: BanVe;
@@ -23,49 +25,80 @@ function theoKit(
 	b: DuongTinHieu,
 	nhom: Map<string, string>,
 	m: TinHieuMessages,
-): TrangThaiTinHieu {
+): TrangThaiDu {
 	const nhan = m.nhan;
 	const cau = b.cau_nguoi_gui ?? b.cau;
 	switch (b.cho) {
 		case "chua-gom":
-			return { nhan: nhan.choGom, cau, nghia: "nhap" };
+			return { khoa: "cho-gom", nhan: nhan.choGom, cau, nghia: "nhap" };
 		case "le":
-			return { nhan: nhan.le, cau, nghia: "nhap" };
+			return { khoa: "le", nhan: nhan.le, cau, nghia: "nhap" };
 		case "da-phu":
-			return { nhan: nhan.daCoViec, cau, nghia: "xong" };
+			return { khoa: "da-phu", nhan: nhan.daCoViec, cau, nghia: "xong" };
 		case "nhom-chua-cat":
-			return { nhan: nhan.daVaoNhom, cau, nghia: "nhap" };
+			return {
+				khoa: "nhom-chua-cat",
+				nhan: nhan.daVaoNhom,
+				cau,
+				nghia: "nhap",
+			};
 		case "chan-troi":
-			return { nhan: nhan.deSau, cau, nghia: "nhap" };
+			return { khoa: "chan-troi", nhan: nhan.deSau, cau, nghia: "nhap" };
 		case "hang-chua-ho-so":
 		case "hang-co-ho-so": {
 			const n = b.hang ? nhom.get(b.hang) : undefined;
-			if (n === "da-giao") return { nhan: nhan.daGiao, cau, nghia: "xong" };
+			if (n === "da-giao")
+				return { khoa: "da-giao", nhan: nhan.daGiao, cau, nghia: "xong" };
 			if (n === "dang-lam")
-				return { nhan: nhan.dangLam, cau, nghia: "dangChay" };
+				return {
+					khoa: "dang-lam",
+					nhan: nhan.dangLam,
+					cau,
+					nghia: "dangChay",
+				};
 			if (n === "chua-bat-dau")
-				return { nhan: nhan.chuaBatDau, cau, nghia: "nhap" };
-			return { nhan: nhan.khac, cau, nghia: "nhap" };
+				return {
+					khoa: "chua-bat-dau",
+					nhan: nhan.chuaBatDau,
+					cau,
+					nghia: "nhap",
+				};
+			return { khoa: "hang-khac", nhan: nhan.khac, cau, nghia: "nhap" };
 		}
 	}
 }
 
-function theoCrm(daKeoVe: boolean, m: TinHieuMessages): TrangThaiTinHieu {
+export function theoCrm(daKeoVe: boolean, m: TinHieuMessages): TrangThaiDu {
 	return daKeoVe
-		? { nhan: m.nhan.choGom, cau: m.trangThai.choGom, nghia: "nhap" }
-		: { nhan: m.nhan.choLayVe, cau: m.trangThai.choKeoVe, nghia: "nhap" };
+		? {
+				khoa: "cho-gom",
+				nhan: m.nhan.choGom,
+				cau: m.trangThai.choGom,
+				nghia: "nhap",
+			}
+		: {
+				khoa: "cho-lay-ve",
+				nhan: m.nhan.choLayVe,
+				cau: m.trangThai.choKeoVe,
+				nghia: "nhap",
+			};
 }
 
-export function docTrangThaiTinHieu(
+export type KetQuaTrangThaiDu = {
+	banVe: BanVe;
+	trangThai: Record<string, TrangThaiDu>;
+	coCho: Set<string>;
+};
+
+export function docTrangThaiDu(
 	html: string | null,
-	cuaToi: CuaToiTom[],
+	ds: CuaToiTom[],
 	m: TinHieuMessages,
-): KetQuaTrangThai {
-	const traCrm = (banVe: BanVe): KetQuaTrangThai => ({
+): KetQuaTrangThaiDu {
+	const traCrm = (banVe: BanVe): KetQuaTrangThaiDu => ({
 		banVe,
-		trangThai: Object.fromEntries(
-			cuaToi.map((t) => [t.ma, theoCrm(t.daKeoVe, m)]),
-		),
+		trangThai: Object.fromEntries(ds.map((t) => [t.ma, theoCrm(t.daKeoVe, m)])),
+		coCho: new Set(),
 	});
 	if (html === null) return traCrm("vang");
 	const { duLieu, canhBao } = docDuLieu(html);
@@ -80,14 +113,28 @@ export function docTrangThaiTinHieu(
 	if (kq.kieu === "hong") return traCrm("hong");
 	const theoMa = new Map(kq.banGhi.map((b) => [b.id, b]));
 	const nhom = docNhomHang(duLieu);
-	const ra: KetQuaTrangThai = {
+	return {
 		banVe: "co",
 		trangThai: Object.fromEntries(
-			cuaToi.map((t) => {
+			ds.map((t) => {
 				const b = theoMa.get(t.ma);
 				return [t.ma, b ? theoKit(b, nhom, m) : theoCrm(t.daKeoVe, m)];
 			}),
 		),
+		coCho: coChoSauGom(kq),
 	};
-	return ra;
+}
+
+export function docTrangThaiTinHieu(
+	html: string | null,
+	cuaToi: CuaToiTom[],
+	m: TinHieuMessages,
+): KetQuaTrangThai {
+	const du = docTrangThaiDu(html, cuaToi, m);
+	return {
+		banVe: du.banVe,
+		trangThai: Object.fromEntries(
+			Object.entries(du.trangThai).map(([ma, { khoa: _k, ...tt }]) => [ma, tt]),
+		),
+	};
 }

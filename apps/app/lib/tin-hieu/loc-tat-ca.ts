@@ -1,4 +1,5 @@
 import type { NghiaTrangThai } from "@crm/ui/lib/status-tone";
+import type { TinHieuMessages } from "@/lib/messages/tin-hieu";
 
 export const KHONG_PHONG = "khong-phong";
 export const KHONG_CON = "khong-con";
@@ -14,6 +15,58 @@ export type DongTatCa = {
 	phongBan: { id: string; ten: string } | null;
 	trangThai: { khoa: string; nhan: string; cau: string; nghia: NghiaTrangThai };
 };
+
+export type BaSo = {
+	trongKy: number;
+	soPhong: number;
+	khongPhong: number;
+	quaHan: number;
+	chuaCoCho: number | null;
+};
+
+export type TrangThaiDong = DongTatCa["trangThai"];
+
+export function dongTuHang(
+	rows: {
+		id: string;
+		ma: string;
+		tieuDe: string;
+		muonLam: string;
+		man: string;
+		guiLuc: Date | string;
+		daKeoVe: boolean;
+		nguoiGui: { id: string; ten: string } | null;
+		phongBan: { id: string; ten: string } | null;
+	}[],
+	trangThai: Record<string, TrangThaiDong>,
+	m: TinHieuMessages,
+): DongTatCa[] {
+	return rows.map((r) => ({
+		id: r.id,
+		ma: r.ma,
+		tieuDe: r.tieuDe,
+		muonLam: r.muonLam,
+		man: r.man,
+		guiLuc: new Date(r.guiLuc).toISOString(),
+		nguoiGui: r.nguoiGui,
+		phongBan: r.phongBan,
+		trangThai:
+			trangThai[r.ma] ??
+			(r.daKeoVe
+				? {
+						khoa: "cho-gom",
+						nhan: m.nhan.choGom,
+						cau: m.trangThai.choGom,
+						nghia: "nhap",
+					}
+				: {
+						khoa: "cho-lay-ve",
+						nhan: m.nhan.choLayVe,
+						cau: m.trangThai.choKeoVe,
+						nghia: "nhap",
+					}),
+	}));
+}
 
 export type BoLocTatCa = {
 	phongBan: string[];
