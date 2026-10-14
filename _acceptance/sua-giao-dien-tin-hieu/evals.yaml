@@ -305,7 +305,8 @@ evals:
           cau_nguoi_gui cua kit
         2 ten nhom, ly do, ten viec xuat hien nguyen van trong cau; phan tu hien chung mang translate="no" (bai DOM mot dong)
         3 o en: bo phan chu cua tep loi (cau tru di cac truong du lieu) khong chua ky tu tieng Viet co dau
-      Them 2 o lui: cho la ("cho-moi-chua-biet", ban sao khoi) va ban ghi thieu ten_nhom o cho nhom-chua-cat -> cau == cau_nguoi_gui.
+      Them 2 o lui: ban ghi thieu ten_nhom o cho nhom-chua-cat -> cau == cau_nguoi_gui ?? cau; cho la ("cho-moi-chua-biet", ban sao
+      khoi) -> banVe != "co" va cau == trangThai.choGom (khoan dung cua LT2, bo doc chung gat ca khoi).
       In so o == (so gia tri cho thuong + so cap hang x nhom) x 2 + 2, in rieng cac thanh phan.
       CHIEU DO: ban sao tra cau_nguoi_gui cho moi ma -> o en dau tien do voi thong diep ghim "cau sau gom chi co tieng Viet";
       ban sao bo nhanh lui -> o cho-la do voi thong diep ghim "ma cho la lam vo cau trang thai".
