@@ -45,7 +45,7 @@ lượt sau («câu hỏi chờ hàng đợi còn ít hơn ba phút»). Còn mư
   trên đúng chữ đó, nên neo mục lục và id tiêu đề do `rehypeReader` đặt trùng nhau.
 - **G6.** Một hằng luật liên kết dùng chung trong `packages/ui/src/lib` cho trình đọc, trình soạn và bộ lọc dán: chỉ
   `https://`, `mailto:`, đường trong kho và neo `#`. Trình soạn gặp `http://` → báo «Chỉ nhận liên kết https» và không
-  lưu liên kết; bộ lọc dán giữ chữ, bỏ liên kết `http://`. Không nâng `http` thành `https` (đổi đích người không biết).
+  lưu liên kết; bộ lọc dán giữ chữ, bỏ liên kết `http://` và hiện một dòng «Đã bỏ N liên kết http — chỉ nhận https». Không nâng `http` thành `https` (đổi đích người không biết).
 - **G7.** `lua-chon-trang.ts` trả kèm cờ lỗi; form trang mới và hộp tải nguồn hiện một dòng «Chưa tải được danh sách
   thành viên / đơn vị» kèm «Thử lại» thay cho danh sách rỗng.
 - **G8.** Hộp tìm nhanh: nhóm CRM lỗi → một dòng báo lỗi như nhóm Tài liệu đã có, không rơi vào «không có gì khớp».

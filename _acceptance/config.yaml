@@ -1117,6 +1117,7 @@ executors:
     ssct_chon_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-chon-loi.dom.tsx"
     ssct_tim_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-tim-nhanh-loi.dom.tsx"
     ssct_hoi_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-hoi-en.dom.tsx"
+    ssct_hoi_ma: 'bun run test -- "cd apps/api && bun test test/ssct-hoi-ma.spec.ts -t ssct-hoi-ma"'
     ssct_bang_doi_cot: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-bang-doi-cot.dom.tsx"
     ssct_duyet_may_cu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-duyet-may-cu.dom.tsx"
     ssct_loai_tep: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-loai-tep.dom.tsx"

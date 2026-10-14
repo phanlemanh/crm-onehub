@@ -57,7 +57,7 @@ evals:
     executor: test
     cmd: config:executors.test.ssct_lien_ket
     paths: [packages/ui/src/components/markdown-reader.tsx, packages/ui/src/components/trinh-soan-thanh-cong-cu.tsx, packages/ui/src/lib/dan-tu-van-phong.ts, packages/ui/src/lib/lien-ket-an-toan.ts, packages/ui/test/ssct-lien-ket.dom.tsx]
-    expected: "exit 0; ma trận VIẾT TRƯỚC năm đích {http://a.vn, https://a.vn, mailto:x@a.vn, /ws/tai-lieu/t, javascript:alert(1)} × ba nơi {trình đọc, ô liên kết trình soạn, bộ lọc dán} → bảng nhận/bỏ toEqual nhau ở cả ba nơi (http và javascript bỏ, ba đích còn lại nhận). Trình soạn với http hiện câu «Chỉ nhận liên kết https» (rút từ messages) và không tạo mark link. Bộ lọc dán đoạn HTML có <a href='http://a.vn'>xem</a> → chữ «xem» còn, không có link. CHIỀU ĐỎ: quét mã cấm regex giao thức riêng trong ba tệp (đối chứng dương: chuỗi mẫu '/^(https?:' bị bắt)."
+    expected: "exit 0; ma trận VIẾT TRƯỚC năm đích {http://a.vn, https://a.vn, mailto:x@a.vn, /ws/tai-lieu/t, javascript:alert(1)} × ba nơi {trình đọc, ô liên kết trình soạn, bộ lọc dán} → bảng nhận/bỏ toEqual nhau ở cả ba nơi (http và javascript bỏ, ba đích còn lại nhận). Trình soạn với http hiện câu «Chỉ nhận liên kết https» (rút từ messages) và không tạo mark link. Bộ lọc dán đoạn HTML có hai <a href='http://…'> → chữ còn, không có link, và hiện dòng báo chứa số 2 (chữ rút từ messages); dán đoạn chỉ có https → không có dòng báo (đối chứng). CHIỀU ĐỎ: quét mã cấm regex giao thức riêng trong ba tệp (đối chứng dương: chuỗi mẫu '/^(https?:' bị bắt)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -82,6 +82,15 @@ evals:
     cmd: config:executors.test.ssct_hoi_en
     paths: ["apps/app/app/(app)/[slug]/tai-lieu/hoi-tra-loi.tsx", apps/app/lib/messages/tai-lieu.ts, packages/validation/src/tai-lieu-hoi.ts, apps/app/test/ssct-hoi-en.dom.tsx]
     expected: "exit 0; bài dom màn Hỏi, ma trận VIẾT TRƯỚC ba tình huống {từ chối, lỗi, quá hạn} × hai ngôn ngữ {en, vi}: mỗi ô khẳng định chữ hiện toEqual taiLieuMessages(<ngôn ngữ>) của khoá tương ứng; ô en không chứa ký tự tiếng Việt có dấu (regex /[à-ỹđ]/i). 6 khẳng định = 6 ô. Đối chứng: câu gửi qua Zalo (hàm của tai-lieu-hoi dùng cho Zalo) vẫn bằng tiếng Việt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9b
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ssct_hoi_ma
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-hoi.ts, apps/agent/agent/lib/tai-lieu-hoi*.ts, apps/api/test/ssct-hoi-ma.spec.ts]
+    expected: "exit 0; Postgres _test thật. Ba câu hỏi đưa qua đường ghi thật tới ba trạng thái {TU_CHOI, LOI (lý do loi-model), QUA_HAN}; đọc lại qua thủ tục API mà màn Hỏi gọi → mỗi bản ghi trả trangThai thuộc enum và lyDo là mã thuộc khuôn lý do (parse bằng khuôn của @crm/validation/tai-lieu-hoi), không trường nào chứa câu chữ cố định của TAI_LIEU_HOI (so từng chuỗi). Bài dom E9 dựng dữ liệu từ đúng đầu ra này. CHIỀU ĐỎ: bản sao một hàng có lyDo là câu tiếng Việt → khuôn từ chối, bài ghim tên tình huống."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
@@ -112,8 +121,8 @@ evals:
     criterion: AC-13
     executor: script
     cmd: config:executors.script.ssct_so_bo_mau
-    paths: [_acceptance/sua-sau-chay-that/rang/**, _acceptance/sua-sau-chay-that/evidence/do-bo-mau.md, _acceptance/sua-sau-chay-that/evidence/cham-tung-cau.jsonl, _acceptance/bo-cau-hoi-mau/evidence/cham-tung-cau.jsonl]
-    expected: "exit 0; so-bo-mau.ts không cờ, không gọi model: đọc evidence/cham-tung-cau.jsonl của lượt này (sinh ở S3 bằng do-bo-mau.ts --do với BCM_EVIDENCE trỏ thư mục hồ sơ) và của bo-cau-hoi-mau đã ký, bằng docBaoCao/khuôn của bo-cau-hoi-mau/rang (import, không chép); kiemBangChung của lượt này xanh và băm bo-mau khớp; in mỗi mã câu đạt ở lượt ký mà không đạt ở lượt này (trừ câu kết cục lỗi gọi model, in riêng) — danh sách lùi rỗng thì exit 0. CHIỀU ĐỎ trên bản sao jsonl trong thư mục tạm: đổi kết cục một câu đạt thành sai → exit 1, stdout ghim mã câu đó; đổi thành lỗi model → exit 0, câu in ở mục lỗi model."
+    paths: [_acceptance/sua-sau-chay-that/rang/**, _acceptance/sua-sau-chay-that/evidence/do-bo-mau.md, _acceptance/sua-sau-chay-that/evidence/cham-tung-cau.jsonl, _acceptance/bo-cau-hoi-mau/evidence/cham-tung-cau.jsonl, apps/agent/agent/subagents/tro_ly_kho/**, apps/agent/agent/lib/tai-lieu-*.ts, packages/validation/src/tai-lieu-hoi.ts]
+    expected: "exit 0; so-bo-mau.ts không cờ, không gọi model: đọc evidence/cham-tung-cau.jsonl của lượt này (sinh ở S3 bằng do-bo-mau.ts --do với BCM_EVIDENCE trỏ thư mục hồ sơ) và của bo-cau-hoi-mau đã ký, bằng docBaoCao/khuôn của bo-cau-hoi-mau/rang (import, không chép); kiemBangChung của lượt này xanh, băm bo-mau khớp và băm mã trợ lý ghi trong evidence bằng băm tính trên HEAD (cùng hàm băm của do-bo-mau); in mỗi mã câu đạt ở lượt ký mà không đạt ở lượt này (trừ câu kết cục lỗi gọi model, in riêng) — danh sách lùi rỗng và số câu lỗi model không vượt số của lượt đã ký thì exit 0. CHIỀU ĐỎ trên bản sao trong thư mục tạm: đổi kết cục một câu đạt thành sai → exit 1, stdout ghim mã câu đó; đổi một câu thành lỗi model → exit 0, câu in ở mục lỗi model; đổi ba câu đạt thành lỗi model → exit 1, ghim ba mã; sửa một byte của một tệp trợ lý trong bản sao cây → exit 1, ghim tên tệp."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E14
@@ -126,6 +135,8 @@ evals:
       - "Buoc 1 (1440): man doc P -> «Co 1 ban cho duyet», nut «Xem ban cho» tro de xuat sua noi dung -> anh ssct-doc-cho-1440.png"
       - "Buoc 2 (1440): man doc M -> muc luc hien dung hai tieu de, bam muc luc «A < B» -> cuon toi dung id -> anh ssct-muc-luc-1440.png"
       - "Buoc 3 (1440): man duyet de xuat them cot -> hai bang rieng -> anh ssct-bang-doi-cot-1440.png"
+      - "Buoc 4 (1440): man sua trang -> nhap lien ket http://a.vn -> cau «Chỉ nhận liên kết https», khong tao lien ket -> anh ssct-soan-http-1440.png"
+      - "Buoc 5 (1440): danh sach -> «Tải nguồn lên» -> chon tep .txt -> cau sai loai neu Word va PDF -> anh ssct-tai-sai-loai-1440.png"
     paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", packages/ui/src/components/**, _acceptance/sua-sau-chay-that/rang/**]
-    expected: "exit 0; man.mjs in 'buoc N: dat' cho 3 buoc; chu doc tu DOM bang innerText. CHIEU DO: --chieu-do tren ban sao bo loc loai o [trang]/page.tsx -> 'buoc 1: dem ban cho sai', ma 1."
+    expected: "exit 0; man.mjs in 'buoc N: dat' cho 5 buoc; chu doc tu DOM bang innerText. CHIEU DO: --chieu-do tren ban sao bo loc loai o [trang]/page.tsx -> 'buoc 1: dem ban cho sai', ma 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
