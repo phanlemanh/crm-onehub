@@ -232,7 +232,7 @@ function doiN(ds: DongTungCau[], n: number, ketCuc: "TRA_LOI-sai" | "LOI") {
 
 type ChieuDo = {
 	ten: string;
-	chay: () => { ket: Ket; mong: number; phaiCo: string[] };
+	chay: () => { ket: Ket; mong: number; phaiCo: string[]; dau?: string };
 };
 
 const CHIEU_DO: readonly ChieuDo[] = [
@@ -249,6 +249,7 @@ const CHIEU_DO: readonly ChieuDo[] = [
 				ket: kiem({ evMoi: ev, evKy: SO.daKy, goc: GOC }),
 				mong: 1,
 				phaiCo: ma,
+				dau: "lui luot 1:",
 			};
 		},
 	},
@@ -268,7 +269,12 @@ const CHIEU_DO: readonly ChieuDo[] = [
 			});
 			const ket = kiem({ evMoi: ev, evKy: SO.daKy, goc: GOC });
 			const dongLoi = ket.dong.filter((d) => d.startsWith("loi model"));
-			return { ket: { ...ket, dong: dongLoi }, mong: 0, phaiCo: ma };
+			return {
+				ket: { ...ket, dong: dongLoi },
+				mong: 0,
+				phaiCo: ma,
+				dau: "loi model luot 1:",
+			};
 		},
 	},
 	{
@@ -284,6 +290,7 @@ const CHIEU_DO: readonly ChieuDo[] = [
 				ket: kiem({ evMoi: ev, evKy: SO.daKy, goc: GOC }),
 				mong: 1,
 				phaiCo: ma,
+				dau: "loi model luot 1:",
 			};
 		},
 	},
@@ -300,6 +307,7 @@ const CHIEU_DO: readonly ChieuDo[] = [
 				ket: kiem({ evMoi: ev, evKy: SO.daKy, goc: GOC }),
 				mong: 1,
 				phaiCo: ma,
+				dau: "lui luot 2:",
 			};
 		},
 	},
@@ -316,6 +324,7 @@ const CHIEU_DO: readonly ChieuDo[] = [
 				ket: kiem({ evMoi: ev, evKy: SO.daKy, goc: GOC }),
 				mong: 1,
 				phaiCo: ma,
+				dau: "loi model luot 2:",
 			};
 		},
 	},
@@ -344,8 +353,10 @@ const CHIEU_DO: readonly ChieuDo[] = [
 function chayChieuDo(): boolean {
 	let hong = false;
 	for (const c of CHIEU_DO) {
-		const { ket, mong, phaiCo } = c.chay();
-		const thieu = phaiCo.filter((m) => !ket.dong.some((d) => d.includes(m)));
+		const { ket, mong, phaiCo, dau = "" } = c.chay();
+		const thieu = phaiCo.filter(
+			(m) => !ket.dong.some((d) => d.startsWith(dau) && d.includes(m)),
+		);
 		const dat = ket.ma === mong && thieu.length === 0 && phaiCo.length > 0;
 		console.log(
 			`chieu do ${c.ten}: ${dat ? "dat" : "HONG"} (ma ${ket.ma}, mong ${mong}; ghim ${phaiCo.join(", ")}${thieu.length ? `; thieu ${thieu.join(", ")}` : ""})`,

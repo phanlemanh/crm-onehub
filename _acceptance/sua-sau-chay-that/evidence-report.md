@@ -1,17 +1,19 @@
 ---
 schema_version: 2
 feature_slug: sua-sau-chay-that
-verdict: PASS
+verdict: REJECT
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8e72fbedc5144e2e84ee325dd5f569867b795915
+verified_commit: 166840e3c44d8b72ee24b0634c68efe98648d1d4
 human_signoff:
 ---
 
 # Evidence Report: sua-sau-chay-that
+
+Round 2. Mọi eval có gắn AC đều xanh (E1 đến E12 mang từ round 1, E13 và E14 chạy lại). Verdict là REJECT vì một lệnh suite hồi quy không gắn eval nào bị đỏ: `bun run test -- --filter=api` (chi tiết ở mục «Lệnh suite (hồi quy)» và Iterations).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -40,9 +42,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_nguon
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/ssct-nguon.spec.ts -t ssct-nguon"
-    test-run: dropped crm_mv7u77sp2kvk_test
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E1b
   run_id: mv7u77p5y6e0
@@ -50,9 +52,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_nop_luu_tru
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/ssct-nop-luu-tru.spec.ts"
-    test-run: dropped crm_mv7u77p5y6e0_test
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-sua-sau-chay-that-E2-r1
@@ -60,9 +62,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_doc_cho
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-doc-cho.dom.tsx
-    Ran 6 tests across 1 file. [1023.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-sua-sau-chay-that-E3-r1
@@ -70,9 +72,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_doc_cho
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-doc-cho.dom.tsx
-    Ran 6 tests across 1 file. [1023.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-sua-sau-chay-that-E4-r1
@@ -80,9 +82,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_quay_lai
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/ssct-quay-lai.spec.ts -t ssct-quay-lai"
-    test-run: dropped crm_mv7u75xfmbkh_test
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E5
   run_id: minted-sua-sau-chay-that-E5-r1
@@ -90,9 +92,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_muc_luc
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-muc-luc.dom.tsx
-    Ran 4 tests across 1 file. [841.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
   run_id: minted-sua-sau-chay-that-E6-r1
@@ -100,9 +102,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_lien_ket
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-lien-ket.dom.tsx
-    Ran 5 tests across 1 file. [1312.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E7
   run_id: minted-sua-sau-chay-that-E7-r1
@@ -110,9 +112,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_chon_loi
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-chon-loi.dom.tsx
-    Ran 5 tests across 1 file. [973.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E8
   run_id: minted-sua-sau-chay-that-E8-r1
@@ -120,9 +122,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_tim_nhanh
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-tim-nhanh-loi.dom.tsx
-    Ran 2 tests across 1 file. [930.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9
   run_id: minted-sua-sau-chay-that-E9-r1
@@ -130,9 +132,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_hoi_en
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-hoi-en.dom.tsx
-    Ran 9 tests across 1 file. [1092.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9b
   run_id: minted-sua-sau-chay-that-E9b-r1
@@ -140,9 +142,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_hoi_ma
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/ssct-hoi-ma.spec.ts -t ssct-hoi-ma"
-    test-run: dropped crm_mv7u77uu6l84_test
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E10
   run_id: minted-sua-sau-chay-that-E10-r1
@@ -150,9 +152,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_bang_doi_cot
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-bang-doi-cot.dom.tsx
-    Ran 4 tests across 1 file. [437.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E11
   run_id: minted-sua-sau-chay-that-E11-r1
@@ -160,9 +162,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_duyet_may_cu
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-duyet-may-cu.dom.tsx
-    Ran 2 tests across 1 file. [679.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E12
   run_id: minted-sua-sau-chay-that-E12-r1
@@ -170,72 +172,77 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ssct_loai_tep
   verified_at: 2026-10-14T08:16:51Z
+  carried_from_round: 1
   output: |
-    cmd: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-loai-tep.dom.tsx
-    Ran 4 tests across 1 file. [863.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E13
-  run_id: minted-sua-sau-chay-that-E13-r1
+  run_id: minted-sua-sau-chay-that-E13-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ssct_so_bo_mau
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
   output: |
-    cmd: bun _acceptance/sua-sau-chay-that/rang/so-bo-mau.ts
-    chieu do mot byte tep tro ly doi: dat (ghim apps/agent/agent/subagents/tro_ly_kho/agent.ts)
+    lenh: bun _acceptance/sua-sau-chay-that/rang/so-bo-mau.ts (chay nguyen van, khong co, khong goi model)
+    chieu do mot byte tep tro ly doi: dat (ma 1, mong 1; ghim apps/agent/agent/subagents/tro_ly_kho/agent.ts)
 
 - eval: E14
-  run_id: minted-sua-sau-chay-that-E14-r1
+  run_id: minted-sua-sau-chay-that-E14-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ssct_man
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
   screenshot: evidence/E14-step1.png
   observed: |
-    Đã mở cả năm khung 1440x900. Bước 1 (trang «Quy định hoa hồng đối tác»): hai huy hiệu «Có đề xuất lưu trữ chờ duyệt» và «Có 1 bản chờ duyệt», nút «Xem bản chờ duyệt» cạnh «Đặt hạn xác minh». Bước 2: mục lục bên phải đúng «Lương & thưởng» và «A < B», hai tiêu đề trong nội dung khớp, ký tự & và < không bị thoát sai.
-    Bước 3: hai bảng riêng, bảng trên hai cột (Tầng, Tỉ lệ) gạch ngang là bản cũ, bảng dưới ba cột (Tầng, Tỉ lệ, Hạn) gạch chân xanh là bản mới, kèm Duyệt và Trả lại. Bước 4: ô liên kết «http://a.vn» viền đỏ với dòng «Chỉ nhận liên kết https». Bước 5: vùng thả viền đứt đỏ với dòng «Chỉ nhận Word (.docx) hoặc PDF, tới 20 MB.», nút Tải lên bị mờ. Cả năm khung khớp expected, không khung nào mâu thuẫn.
+    step1 (1440, doc trang Quy dinh hoa hong doi tac): tieu de «Quy định hoa hồng đối tác», cac chip «Có đề xuất lưu trữ chờ duyệt» va «Có 1 bản chờ duyệt», nut «Sửa trang», «Lịch sử», «Đặt hạn xác minh», nut «Xem bản chờ duyệt»; muc «Mức hưởng», noi dung «Đối tác tầng 1 hưởng 2% doanh thu thuần.» — khop Expected (dem 1 ban, khong tinh de xuat luu tru; con tro dung duoc man.mjs khang dinh qua chieu do).
+    step2 (doc trang Chinh sach luong thuong): muc luc «Trên trang này» hien dung hai muc «Lương & thưởng» va «A < B»; than trang co hai tieu de «Lương & thưởng» va «A < B» khop (ky tu < khong bi escape) — khop.
+    step3 (duyet de xuat them cot «Bảng hoa hồng theo tầng»): hai bang rieng, bang tren 2 cot (Tầng, Tỉ lệ) gach do, bang duoi 3 cot (Tầng, Tỉ lệ, Hạn) gach xanh, nut Duyệt / Trả lại — khop.
+    step4 (Sua trang): popup lien ket o nhap «http://a.vn» vien do va dong do «Chỉ nhận liên kết https», noi dung khong chen lien ket — khop.
+    step5 (hop «Tải nguồn lên»): vung tha tep viền đỏ, dong loi do «Chỉ nhận Word (.docx) hoặc PDF, tới 20 MB.», nut Tải lên mo — khop (neu Word va PDF). Khong frame nao mau thuan Expected.
   network_observed: n-a (driver)
   output: |
-    cmd: ui-check:E14 (chạy nguyên văn dòng lệnh đã khai, kèm mot-luot.sh)
-    Năm khung lưu ở evidence/E14-step1.png đến E14-step5.png; mạng thô ở evidence/E14-network.txt.
-    Chiều đỏ --chieu-do trên bản sao bộ lọc loại ghim đúng «bước 1: đếm bản chờ sai»; phép đo ghim đúng.
+    Lenh chay nguyen van: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/sua-sau-chay-that/rang/man.mjs", chay xong, 5 buoc in "dat" va "man sua-sau-chay-that: dat" trong phien do rieng, phien do don sach.
+    Chieu do (--chieu-do tren ban sao): "buoc 1: dem ban cho sai" va "chieu do: DO DUNG GHIM" — dung mong doi.
+    Frames: evidence/E14-step1.png den evidence/E14-step5.png.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_api-r1
-  exit_code: 0
-  verified_at: 2026-10-14T08:16:51Z
+  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_api-r2
+  exit_code: 1
+  verified_at: 2026-10-14T08:38:28Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-sua-sau-chay-that-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-sua-sau-chay-that-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-sua-sau-chay-that-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
 
 - cmd: bun run lint:slop
-  run_id: minted-sua-sau-chay-that-SUITE-bun_run_lint_slop-r1
+  run_id: minted-sua-sau-chay-that-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-sua-sau-chay-that-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-sua-sau-chay-that-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T08:16:51Z
+  verified_at: 2026-10-14T08:38:28Z
+
+Lệnh suite đỏ không gắn eval: `bun run test -- --filter=api`. Cuối log: 1805 pass, 5 skip, 1 hỏng trên 1811 bài kiểm. Bài hỏng duy nhất là `l3-canh > l3-canh moi cho noi co mat trong cay co dung mot canh, gia tri bang okr.objective` (430.91ms). Nguyên nhân của chỗ đỏ này: chưa rõ, log đã lưu chỉ cho tên bài hỏng, chưa có dòng lỗi nguyên văn của nó. Round 1 cùng lệnh này xanh. Đây là lệnh hồi quy bắt buộc nên round này không thể ký PASS khi nó còn đỏ.
 
 ## Known limits
 
@@ -243,29 +250,15 @@ human_signoff:
 
 ## Analyst
 
-none — không có eval nào xanh ở cả hai phía (baseline của mọi eval feature là n-a, lý do ở mục dưới); lệnh suite xanh-cả-hai-phía là regression-guard bình thường, không liệt kê.
+carried tu round 1 — baseline khong do lai round nay. Baseline khong do: evals.yaml khong doi tu lan baseline cuoi (round 1); field baseline cua moi eval ghi n-a.
 
-### Baseline khong do
-
-- bun run test -- "cd apps/api && bun test test/ssct-nguon.spec.ts -t ssct-nguon": bo qua baseline: tep apps/api/test/ssct-nguon.spec.ts co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/agent && bun test test/ssct-nop-luu-tru.spec.ts": bo qua baseline: tep apps/agent/test/ssct-nop-luu-tru.spec.ts co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-doc-cho.dom.tsx: bo qua baseline: tep apps/app/test/ssct-doc-cho.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && bun test test/ssct-quay-lai.spec.ts -t ssct-quay-lai": bo qua baseline: tep apps/api/test/ssct-quay-lai.spec.ts co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-muc-luc.dom.tsx: bo qua baseline: tep packages/ui/test/ssct-muc-luc.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-lien-ket.dom.tsx: bo qua baseline: tep packages/ui/test/ssct-lien-ket.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-chon-loi.dom.tsx: bo qua baseline: tep apps/app/test/ssct-chon-loi.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-tim-nhanh-loi.dom.tsx: bo qua baseline: tep apps/app/test/ssct-tim-nhanh-loi.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-hoi-en.dom.tsx: bo qua baseline: tep apps/app/test/ssct-hoi-en.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && bun test test/ssct-hoi-ma.spec.ts -t ssct-hoi-ma": bo qua baseline: tep apps/api/test/ssct-hoi-ma.spec.ts co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-bang-doi-cot.dom.tsx: bo qua baseline: tep packages/ui/test/ssct-bang-doi-cot.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-duyet-may-cu.dom.tsx: bo qua baseline: tep apps/app/test/ssct-duyet-may-cu.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-loai-tep.dom.tsx: bo qua baseline: tep apps/app/test/ssct-loai-tep.dom.tsx co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/sua-sau-chay-that/rang/so-bo-mau.ts: bo qua baseline: tep _acceptance/sua-sau-chay-that/rang/so-bo-mau.ts co o cay dang kiem nhung chua co o merge-base c4c8ab0abbaf672b9310df40da4e624ae79b6e25 — eval moi, chay tren code cu khong phan biet gi
+Eval không-phân-biệt (xanh cả trên HEAD lẫn baseline): không có.
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lần, không eval nào có phương sai).
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: tất cả 16 eval và 7 lệnh suite đạt; không có eval nào trượt, không trả lại vòng cài đặt.
+Round 1: S4 round 1 xanh; một mục trong hợp đồng về thước E13 (chỉ chặn lùi và đếm lỗi model ở lượt 1, chiều đỏ chỉ đột biến lượt 1). Đã sửa ở 166840e3c: bộ so E13 chặn cả hai lượt của bộ câu mẫu.
+Round 2: không eval nào đỏ (E13 và E14 chạy lại xanh, E1 đến E12 mang từ round 1) nhưng lệnh suite `bun run test -- --filter=api` đỏ ở một bài (`l3-canh`), không gắn eval nào. Verdict REJECT, trả về triển khai để điều tra bài đó (nguyên nhân chưa rõ).
