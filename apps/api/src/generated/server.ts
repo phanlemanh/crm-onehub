@@ -52,7 +52,7 @@ import { ssoSignInOptionsOutput, ssoSettingsOutput, ssoProviderListInput, ssoPro
 import { taiLieuHoiInput, taiLieuHoiOutput, taiLieuHoiKetQuaInput, taiLieuHoiKetQuaOutput, taiLieuBaoSaiInput, taiLieuBaoSaiOutput, taiLieuDatXacMinhInput, taiLieuXuLyChuaTraLoiInput, taiLieuXuLyBaoSaiInput } from "../tai-lieu/tai-lieu-hoi.contracts";
 import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinChoOutput, taiLieuNguonNhanInput, taiLieuNguonNhanOutput, taiLieuNguonListOutput, taiLieuNguonIdInput, taiLieuNguonGetOutput, taiLieuNguonTaiVeOutput, taiLieuNguonOkOutput } from "../tai-lieu/tai-lieu-nguon.contracts";
 import { taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuSlugInput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposeOutput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
-import { guiTinHieuInput, xoaTinHieuInput, keoVeOutput } from "@crm/validation/tin-hieu";
+import { keoVeOutput, guiTinHieuInput, xoaTinHieuInput } from "@crm/validation/tin-hieu";
 import { guiTinHieuOutput, tinHieuCuaToiOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgKhoiPhucOutput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
@@ -1497,6 +1497,11 @@ const appRouter = t.router({
     reject: publicProcedure
       .input(taiLieuRejectInput)
       .output(taiLieuOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  tinHieuLich: t.router({
+    keoVe: publicProcedure
+      .output(keoVeOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   tinHieu: t.router({
