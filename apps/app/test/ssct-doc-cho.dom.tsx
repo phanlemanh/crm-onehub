@@ -11,9 +11,10 @@ import { createRoot, type Root } from "react-dom/client";
 
 let soLanLamMoi = 0;
 
+type ChonDotBien = { onSuccess?: () => void; onError?: () => void };
 const choMai = () => new Promise<never>(() => {});
 const thuTucCho = {
-	mutationOptions: (chon: object) => ({ ...chon, mutationFn: choMai }),
+	mutationOptions: (chon: ChonDotBien) => ({ ...chon, mutationFn: choMai }),
 };
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({

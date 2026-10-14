@@ -9,8 +9,9 @@ import {
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
+type ChonDotBien = { onSuccess?: () => void; onError?: () => void };
 const thuTucCho = {
-	mutationOptions: (tuy: object = {}) => ({
+	mutationOptions: (tuy: ChonDotBien = {}) => ({
 		...tuy,
 		mutationFn: () => new Promise<never>(() => {}),
 	}),

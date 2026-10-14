@@ -9,21 +9,20 @@ import {
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
-const TRA_VE: Record<string, unknown> = {
-	"taiLieuNguon.trangThai": { bat: true },
-};
+type ChonDotBien = { onSuccess?: () => void; onError?: () => void };
+const TRA_VE = new Map([["taiLieuNguon.trangThai", { bat: true }]]);
 
-function nhanh(duong: readonly string[]): unknown {
+function nhanh(duong: readonly string[]): () => void {
 	const ten = duong.join(".");
 	return new Proxy(() => {}, {
 		get(_dich, khoa) {
 			if (khoa === "queryOptions")
 				return () => ({
 					queryKey: [ten],
-					queryFn: async () => TRA_VE[ten] ?? null,
+					queryFn: async () => TRA_VE.get(ten) ?? null,
 				});
 			if (khoa === "mutationOptions")
-				return (chon: object = {}) => ({
+				return (chon: ChonDotBien = {}) => ({
 					...chon,
 					mutationFn: async () => ({}),
 				});

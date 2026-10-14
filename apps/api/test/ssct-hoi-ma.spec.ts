@@ -37,16 +37,16 @@ const ketQuaCoMa = z.discriminatedUnion("trangThai", [
 	z.object({ trangThai: z.literal("LOI"), lyDo: z.enum(LY_DO_LOI) }),
 ]);
 
-const CAU_CO_DINH = new Set(
-	Object.values(TAI_LIEU_HOI).filter((v): v is string => typeof v === "string"),
-);
+const CAU_CO_DINH = [
+	TAI_LIEU_HOI.tuChoi,
+	TAI_LIEU_HOI.hetTran,
+	TAI_LIEU_HOI.chuaTraLoi,
+	TAI_LIEU_HOI.quaHan,
+	TAI_LIEU_HOI.tranNgay,
+	TAI_LIEU_HOI.tranThang,
+] as const;
 
-function chuoiTrong(v: unknown): string[] {
-	if (typeof v === "string") return [v];
-	if (Array.isArray(v)) return v.flatMap(chuoiTrong);
-	if (v && typeof v === "object") return Object.values(v).flatMap(chuoiTrong);
-	return [];
-}
+const cauTrong = (json: string) => CAU_CO_DINH.filter((c) => json.includes(c));
 
 const BANG = tinhHuong.parse(JSON.parse(readFileSync(MAU, "utf8")));
 
@@ -74,7 +74,7 @@ describe("ssct-hoi-ma", () => {
 			);
 			const daDoc = ketQuaCoMa.parse(kq);
 			expect(TRANG_THAI_HOI).toContain(daDoc.trangThai);
-			expect(chuoiTrong(kq).filter((c) => CAU_CO_DINH.has(c))).toEqual([]);
+			expect(cauTrong(JSON.stringify(kq))).toEqual([]);
 			expect(kq).toEqual(dong.ketQua);
 		});
 	}
@@ -86,8 +86,6 @@ describe("ssct-hoi-ma", () => {
 			tinh,
 			hopLe: false,
 		});
-		expect(chuoiTrong(hang).filter((c) => CAU_CO_DINH.has(c))).toEqual([
-			TAI_LIEU_HOI.chuaTraLoi,
-		]);
+		expect(cauTrong(JSON.stringify(hang))).toEqual([TAI_LIEU_HOI.chuaTraLoi]);
 	});
 });

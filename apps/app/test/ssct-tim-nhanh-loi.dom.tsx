@@ -153,12 +153,6 @@ async function go(chu: string): Promise<void> {
 	});
 }
 
-function tieuDeNhom(): string[] {
-	return [...document.body.querySelectorAll("[cmdk-group-heading]")].map(
-		(e) => e.textContent?.trim() ?? "",
-	);
-}
-
 const { khungUngDungMessages } = await import("@/lib/messages/khung-ung-dung");
 const M = khungUngDungMessages("vi").switcher;
 

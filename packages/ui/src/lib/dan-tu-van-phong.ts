@@ -282,7 +282,9 @@ function gonKhoangTrang(goc: Element): void {
 	}
 }
 
-export function locDanDem(html: string): { html: string; boHttp: number } {
+export type KetDan = { html: string; boHttp: number };
+
+export function locDanDem(html: string): KetDan {
 	const dem: DemDan = { boHttp: 0 };
 	const tai = new DOMParser().parseFromString(html, "text/html");
 	const goc = tai.body;

@@ -6,6 +6,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 import {
 	cauLoiHoi,
 	dungTuChoi,
+	LY_DO_LOI,
 	TAI_LIEU_HOI,
 } from "@crm/validation/tai-lieu-hoi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -16,27 +17,47 @@ import {
 	type ReactNode,
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { z } from "zod";
 
-type TinhHuong = "tu-choi" | "loi" | "qua-han";
-type DongMau = { tinhHuong: TinhHuong; ketQua: unknown };
+const khuonMau = z.array(
+	z.object({
+		tinhHuong: z.enum(["tu-choi", "loi", "qua-han"]),
+		ketQua: z.discriminatedUnion("trangThai", [
+			z.object({
+				trangThai: z.literal("TU_CHOI"),
+				ganNhat: z.array(z.never()),
+			}),
+			z.object({ trangThai: z.literal("LOI"), lyDo: z.enum(LY_DO_LOI) }),
+		]),
+	}),
+);
+type DongMau = z.infer<typeof khuonMau>[number];
+type TinhHuong = DongMau["tinhHuong"];
+type KetQuaMau = DongMau["ketQua"];
 
-const MAU: DongMau[] = JSON.parse(
-	readFileSync(
-		join(
-			import.meta.dir,
-			"..",
-			"..",
-			"..",
-			"_acceptance",
-			"sua-sau-chay-that",
-			"rang",
-			"ket-qua-hoi.json",
+const MAU = khuonMau.parse(
+	JSON.parse(
+		readFileSync(
+			join(
+				import.meta.dir,
+				"..",
+				"..",
+				"..",
+				"_acceptance",
+				"sua-sau-chay-that",
+				"rang",
+				"ket-qua-hoi.json",
+			),
+			"utf8",
 		),
-		"utf8",
 	),
 );
 
-const canh = { ketQua: null as unknown };
+type ChonDotBien = { onSuccess?: () => void; onError?: () => void };
+
+type CanhHoi = { ketQua: KetQuaMau | null };
+
+const canh: CanhHoi = { ketQua: null };
 
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
@@ -48,7 +69,7 @@ mock.module("@/lib/trpc/client", () => ({
 				}),
 			},
 			baoSai: {
-				mutationOptions: (chon: object = {}) => ({
+				mutationOptions: (chon: ChonDotBien = {}) => ({
 					...chon,
 					mutationFn: async () => ({ soViec: 0 }),
 				}),
@@ -85,7 +106,7 @@ afterEach(() => {
 	document.body.innerHTML = "";
 });
 
-async function ve(locale: Locale, ketQua: unknown): Promise<HTMLElement> {
+async function ve(locale: Locale, ketQua: KetQuaMau): Promise<HTMLElement> {
 	canh.ketQua = ketQua;
 	khung = document.createElement("div");
 	document.body.appendChild(khung);
