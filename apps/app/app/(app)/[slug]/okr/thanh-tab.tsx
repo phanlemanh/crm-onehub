@@ -16,6 +16,7 @@ import {
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import { okrParsers } from "./okr-search-params";
 import { laTrangSoan } from "./soan/luat-ban-nhap";
 import { DUONG, TAB, type TabOkr, tabTuDuong } from "./tab-okr";
@@ -79,21 +80,17 @@ export function DauTrangOkr({
 	const tab = tabTuDuong(usePathname());
 	if (laTrangSoan(usePathname() ?? "")) return null;
 	return (
-		<div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3">
-			<div className="col-start-1 row-start-1 min-w-0 md:col-span-2">
+		<LuoiDauTrangOkr
+			dau={
 				<PageShellHeader>
 					<PageShellHeading>
 						<PageShellTitle>{m.tieuDe[tab]}</PageShellTitle>
 						<PageShellDescription>{m.moTa[tab]}</PageShellDescription>
 					</PageShellHeading>
 				</PageShellHeader>
-			</div>
-			<div className="col-start-2 row-start-1 flex items-center gap-2 md:row-start-2">
-				{chonChuKy}
-			</div>
-			<div className="col-span-2 row-start-2 min-w-0 md:col-span-1 md:col-start-1">
-				<ThanhTabOkr nhanHoiY={nhanHoiY} tab={tab} />
-			</div>
-		</div>
+			}
+			chonChuKy={chonChuKy}
+			thanhTab={<ThanhTabOkr nhanHoiY={nhanHoiY} tab={tab} />}
+		/>
 	);
 }

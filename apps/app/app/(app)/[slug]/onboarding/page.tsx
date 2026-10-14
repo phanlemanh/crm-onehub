@@ -1,3 +1,4 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
@@ -7,7 +8,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -21,7 +21,7 @@ import {
 	danhMucSearchParams,
 	loadOnboardingSearchParams,
 } from "./onboarding-search-params";
-import { DanhMucHanhDong } from "./tao-ke-hoach";
+import { DanhMucHanhDong, DongKhoaKeHoach } from "./tao-ke-hoach";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -42,6 +42,7 @@ export default async function OnboardingPage({
 				<PageShellHeading>
 					<PageShellTitle>{m.title}</PageShellTitle>
 					<PageShellDescription>{m.description}</PageShellDescription>
+					<DongKhoaKeHoach />
 				</PageShellHeading>
 				<PageShellActions>
 					<DanhMucHanhDong />
@@ -49,7 +50,7 @@ export default async function OnboardingPage({
 			</PageShellHeader>
 
 			<PageShellContent className="min-h-0">
-				<Suspense fallback={<PageShellLoading />}>
+				<Suspense fallback={<KhungXuong hinh="bang" />}>
 					<DanhMuc searchParams={searchParams} />
 				</Suspense>
 			</PageShellContent>

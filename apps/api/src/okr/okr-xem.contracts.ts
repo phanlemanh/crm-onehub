@@ -7,6 +7,7 @@ import {
 } from "@crm/validation/okr-muc-tieu";
 import { LOC_GOP_Y } from "@crm/validation/okr-tham-so";
 import { z } from "zod";
+import { MUC_TIN_CAN_CHINH } from "./can-chinh";
 import { donViChon, mucTieuOutput, type NutCanChinh } from "./okr.contracts";
 import { OKR_XEM } from "./okr-xem.config";
 
@@ -74,9 +75,21 @@ export const nutCayDayDu: z.ZodType<NutCayDayDu> = z.lazy(() =>
 	}),
 );
 
+export const canhCanChinh = z.object({
+	tu: z.string(),
+	den: z.string(),
+	lyDo: z.string().nullable(),
+	canCu: z.string().nullable(),
+	lyDoTuKara: z.boolean(),
+	mucTin: z.enum(MUC_TIN_CAN_CHINH),
+});
+
+export type CanhCanChinh = z.infer<typeof canhCanChinh>;
+
 export const cayCanChinhOutput = z.object({
 	roots: z.array(nutCayDayDu),
 	chuaCanChinh: z.array(nutCayDayDu),
+	canh: z.array(canhCanChinh),
 });
 
 const capHang = z.enum(["goc", "bo-phan", "phong-ban"]);

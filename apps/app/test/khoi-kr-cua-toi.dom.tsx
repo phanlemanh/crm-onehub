@@ -186,7 +186,8 @@ function laLoiXem(o: HTMLElement, cau: string) {
 	expect(o.getAttribute("data-slot")).toBe("empty");
 	expect(o.textContent).toContain(cau);
 	const nut = nutThuLai(o);
-	expect(nut.getAttribute("data-slot")).toBe("button");
+	expect(nut.getAttribute("data-slot")).toBe("kara-retry");
+	expect(o.hasAttribute("data-vung-tai-loi")).toBe(true);
 }
 
 afterEach(() => {
