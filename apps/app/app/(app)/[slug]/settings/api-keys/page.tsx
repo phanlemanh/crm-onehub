@@ -37,7 +37,7 @@ export default async function ApiKeysSettingsPage({
 				</PageShellHeading>
 
 				<PageShellActions>
-					<CreateApiKeySheet />
+					<CreateApiKeySheet laQuanTri={false} />
 				</PageShellActions>
 			</PageShellHeader>
 
