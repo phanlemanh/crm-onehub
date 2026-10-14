@@ -11,7 +11,7 @@ import {
 } from "../src/generated/prisma/enums";
 import type { LoaiGiaiDoan } from "../src/giai-doan";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
-import { gieoViecMau } from "../src/viec-gieo";
+import { gieoBangMau, gieoViecMau } from "../src/viec-gieo";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
 function makeRandom(seed: number): () => number {
@@ -1133,6 +1133,11 @@ async function main() {
 	const domains = await seedTrackedDomains();
 	await seedOnboarded();
 	const viec = await gieoViecMau(db, {
+		databaseUrl: process.env.DATABASE_URL ?? "",
+		nguon: "DATABASE_URL",
+		now: new Date(),
+	});
+	await gieoBangMau(db, {
 		databaseUrl: process.env.DATABASE_URL ?? "",
 		nguon: "DATABASE_URL",
 		now: new Date(),

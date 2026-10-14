@@ -13,6 +13,7 @@ import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
+import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
 import { KhepKyOkrMau } from "./_modules/khep-ky-okr";
@@ -94,6 +95,7 @@ const BANG_GHEP = {
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 	"khung-ban-ghi-kara": KhungBanGhiKaraMau,
 	"gui-tin-hieu-trong-crm": GuiTinHieuMau,
+	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 } satisfies Record<string, ProtoComponent>;
 
