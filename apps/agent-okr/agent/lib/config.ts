@@ -170,7 +170,7 @@ export const TRO_LY_OKR_SOAN = {
 		},
 	},
 	congCu: {
-		song: ["nop_ban_nhap", "tim_okr", "doc_okr"],
+		song: ["nop_ban_nhap", "tim_okr", "doc_okr", "nop_tra_loi"],
 		tat: [
 			"bash",
 			"read_file",
@@ -216,5 +216,14 @@ export const TRO_LY_OKR_HOI = {
 		khongThay:
 			"Không thấy Mục tiêu hay KR này trong những gì người hỏi được xem.",
 		cuocKhongThuocPhien: "Cuộc hỏi không thuộc người đang gọi.",
+	},
+	loiNop: {
+		trichNgoaiQuyen: (ma: string) =>
+			`Trích ${ma} không phải Mục tiêu hay KR người hỏi được xem, hoặc không tồn tại; đọc lại bằng tim_okr hay doc_okr rồi nộp lại cả câu trả lời.`,
+		soLech: (so: string, lop: "truong" | "dem" | "la") =>
+			lop === "dem"
+				? `Số ${so} đếm Mục tiêu hay KR không bằng số thứ câu đó trích; sửa số hoặc trích đủ rồi nộp lại.`
+				: `Số ${so} không khớp tiến độ, khởi điểm, hiện tại, đích hay kỳ vọng của thứ câu đó trích; dùng đúng số đã đọc hoặc bỏ số rồi nộp lại.`,
+		traLoiRong: "Câu trả lời loại tra-loi cần ít nhất một câu.",
 	},
 } as const;
