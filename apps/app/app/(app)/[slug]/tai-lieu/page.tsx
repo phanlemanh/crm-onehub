@@ -83,6 +83,7 @@ async function thamSoTaiLieu(searchParams: SearchParams) {
 		chu: thamSo[SEARCH_PARAM.taiLieu.chu],
 		nhom: thamSo[SEARCH_PARAM.taiLieu.nhom],
 		page: Math.max(1, thamSo[SEARCH_PARAM.list.page]),
+		archived: thamSo[SEARCH_PARAM.list.archived],
 	};
 }
 
@@ -124,7 +125,7 @@ async function HanhDong({ searchParams }: { searchParams: SearchParams }) {
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	await requireSession();
 
-	const { tab, loai, donVi, chu, nhom, page } =
+	const { tab, loai, donVi, chu, nhom, page, archived } =
 		await thamSoTaiLieu(searchParams);
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
@@ -136,6 +137,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 				donViId: donVi ?? undefined,
 				chuTrangId: chu ?? undefined,
 				page,
+				archived,
 			}),
 		),
 		queryClient.prefetchQuery(trpc.taiLieu.proposals.queryOptions()),
@@ -159,6 +161,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	return (
 		<HydrateClient>
 			<DanhSach
+				archived={archived}
 				chu={chu}
 				coHoi={coHoi}
 				donVi={donVi}

@@ -11,6 +11,9 @@ export type DeXuatMoi = {
 	suKien: SuKienDeXuat;
 	nguonId?: string | null;
 	trichDoan?: Prisma.InputJsonValue | null;
+	loai?: "NOI_DUNG" | "LUU_TRU" | "KHOI_PHUC";
+	tuPhienBanSo?: number | null;
+	lyDoDeXuat?: string | null;
 };
 
 function kiemNfc(nhan: string, giaTri: string): void {
@@ -34,6 +37,9 @@ export async function taoDeXuatTaiLieu(
 			taoBoiId: moi.taoBoiId,
 			nguonId: moi.nguonId ?? null,
 			trichDoan: moi.trichDoan ?? Prisma.DbNull,
+			loai: moi.loai ?? "NOI_DUNG",
+			tuPhienBanSo: moi.tuPhienBanSo ?? null,
+			lyDoDeXuat: moi.lyDoDeXuat ?? null,
 		},
 		select: { id: true },
 	});

@@ -21,6 +21,7 @@ import { KhungBanGhiKaraMau } from "./_modules/khung-ban-ghi-kara";
 import { KhungOkrTruocR1Mau } from "./_modules/khung-okr-truoc-r1";
 import { KhungTaoOkrNhuDealMau } from "./_modules/khung-tao-okr-nhu-deal";
 import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
+import { LichSuVaLuuTruTrangMau } from "./_modules/lich-su-va-luu-tru-trang";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
 import { MucTieuVaKrMau } from "./_modules/muc-tieu-va-kr";
@@ -65,6 +66,7 @@ const BANG_GHEP = {
 	"khung-trang-cai-dat": KhungTrangCaiDatMau,
 	"nen-kara": NenKaraMau,
 	"kho-tai-lieu": KhoTaiLieuMau,
+	"lich-su-va-luu-tru-trang": LichSuVaLuuTruTrangMau,
 	"may-soan-de-xuat": KhoTaiLieuMau,
 	"tim-va-dieu-huong-kho": KhoTaiLieuMau,
 	"tro-ly-doc-kho": KhoTaiLieuMau,

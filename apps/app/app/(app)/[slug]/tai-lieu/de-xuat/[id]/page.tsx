@@ -14,6 +14,7 @@ import { nullIfMissing } from "../../../(agent-builder)/missing-record";
 import { DuongDanTaiLieuCho } from "../../duong-dan-tai-lieu";
 import type { BanMay } from "./ban-may";
 import { ManDuyet } from "./man-duyet";
+import { ManDuyetViecTrang } from "./man-duyet-viec-trang";
 
 type Params = Promise<{ slug: string; id: string }>;
 
@@ -55,6 +56,28 @@ async function NoiDung({ params }: { params: Params }) {
 	);
 	if (!dx) notFound();
 
+	if (dx.loai !== "NOI_DUNG")
+		return (
+			<HydrateClient>
+				<ManDuyetViecTrang
+					deXuat={{
+						id: dx.id,
+						slug: dx.slug,
+						ten: dx.ten,
+						loai: dx.loai,
+						lyDoDeXuat: dx.lyDoDeXuat ?? "",
+						taoBoi: dx.taoBoi.name,
+						taoLuc: dx.taoLuc,
+						trangThai: dx.trangThai,
+						lyDo: dx.lyDo,
+						duyetDuoc: dx.duyetDuoc,
+						diffHash: dx.diffHash,
+					}}
+					key={`${dx.id}-${dx.trangThai}`}
+				/>
+			</HydrateClient>
+		);
+
 	const khoi = soSanh(dx.banGoc, dx.noiDung);
 	const chuNguon = dx.chuNguon ?? "";
 	const may: BanMay | undefined = dx.nguon
@@ -88,6 +111,7 @@ async function NoiDung({ params }: { params: Params }) {
 					dai: suKienDoi(khoi),
 					may,
 					chienLuoc: dx.chienLuoc ?? undefined,
+					tuPhienBanSo: dx.tuPhienBanSo,
 				}}
 				key={`${dx.id}-${dx.trangThai}-${dx.cu}`}
 			/>
