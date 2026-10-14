@@ -99,6 +99,7 @@ model User {
   taiLieuBaoSai     TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiNguoiBao")
   taiLieuBaoSaiXuLy TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiXuLyBoi")
   tinHieu           TinHieu[]         @relation("TinHieuNguoiGui")
+  thongBao          ThongBao[]        @relation("ThongBaoNguoiNhan")
   viecGiao          Viec[]            @relation("ViecNguoiGiao")
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
@@ -3033,4 +3034,25 @@ model ViecVet {
   @@index([viecId, luc])
   @@index([loai])
   @@map("viecVet")
+}
+
+model ThongBao {
+  id          String    @id @default(cuid())
+  nguoiNhanId String
+  nguoiNhan   User      @relation("ThongBaoNguoiNhan", fields: [nguoiNhanId], references: [id], onDelete: Cascade)
+  nguon       String
+  khoa        String
+  noiDung     Json
+  duongDan    String
+  taoLuc      DateTime  @default(now())
+  ngayDau     String
+  thayNgay    String
+  docLuc      DateTime?
+  moLuc       DateTime?
+
+  @@unique([nguoiNhanId, khoa, ngayDau])
+  @@index([nguoiNhanId, taoLuc])
+  @@index([nguoiNhanId, docLuc])
+  @@index([taoLuc])
+  @@map("thongBao")
 }

@@ -32,6 +32,11 @@
 4. Thông báo dẫn tới bản ghi đã xoá / hết quyền — ngăn bản ghi nói lý do. → Task 6 (`thong-bao-mat-dich.dom.tsx`).
 5. Khổ 375: ô bật ra không tràn, trang không cuộn ngang. → Task 8 (ô `chuong-375`, `trang-375`).
 
+## Điều chỉnh khi thi công (S3)
+
+- Gói `@crm/db` không phụ thuộc `@crm/validation` (chiều ngược lại đã có), nên đường ghi (`ghiThongBao`, `donThongBaoCu`) và lệnh đối chiếu sống ở tác nhân: `apps/agent/agent/lib/thong-bao-ghi.ts`, `apps/agent/agent/lib/thong-bao-doi-chieu.ts`, CLI `apps/agent/scripts/thong-bao-doi-chieu.ts`; lệnh gốc `"thong-bao:doi-chieu": "bun apps/agent/scripts/thong-bao-doi-chieu.ts"`. `chayNhac` nhận thêm `deps.ghiThongBao` để test tiêm lỗi (ô 6 của E12, ô 3 của E3) thay cho `mock.module`.
+- Migration sinh bằng `prisma migrate diff --from-schema <schema HEAD> --to-schema prisma/schema.prisma --script`, không chạy `migrate dev` trên kho dev chung.
+
 ## Thứ tự và tính độc lập
 
 Mọi task `independent: false` — mỗi task dùng tên/kiểu của task trước (khuôn → bảng → tác nhân → máy chủ → ứng dụng → đối chiếu → đo màn). Thi công tuần tự trong vòng chính.
@@ -87,7 +92,7 @@ git worktree remove --force /private/tmp/claude-501/tb1-goc
 - Modify: `packages/validation/src/nhac-ke-hoach.ts` (`nhacPayload` thêm `mucTinh`, `thongBaoLoi`)
 - Modify: `packages/db/prisma/schema.prisma` (model `ThongBao`, quan hệ `thongBao ThongBao[] @relation("ThongBaoNguoiNhan")` ở `User`)
 - Create: `packages/db/prisma/migrations/<UTC>_thong_bao/migration.sql` (sinh bằng `bun run db:migrate -- --name thong_bao`, chỉ `CREATE TABLE` + index + FK)
-- Create: `packages/db/src/thong-bao-ghi.ts`; Modify: `packages/db/package.json` (`"./thong-bao-ghi": "./src/thong-bao-ghi.ts"`)
+- Create: `apps/agent/agent/lib/thong-bao-ghi.ts`; Modify: `packages/db/package.json` (`"./thong-bao-ghi": "./src/thong-bao-ghi.ts"`)
 - Test: `packages/validation/test/thong-bao.spec.ts`
 
 **Interfaces:**
@@ -179,7 +184,7 @@ model ThongBao {
 
 Rồi `cd packages/db && bun run db:migrate -- --name thong_bao && bun run db:generate`; mở `migration.sql` kiểm chỉ có `CREATE TABLE "thongBao"`, ba `CREATE INDEX`, một `CREATE UNIQUE INDEX`, một FK `ON DELETE CASCADE`.
 
-- [ ] **Step 5: Đường ghi** — `packages/db/src/thong-bao-ghi.ts`:
+- [ ] **Step 5: Đường ghi** — `apps/agent/agent/lib/thong-bao-ghi.ts`:
 
 ```ts
 import { khoaThongBao, THONG_BAO, type NoiDungThongBao } from "@crm/validation/thong-bao";
@@ -225,7 +230,7 @@ export async function donThongBaoCu(db: Db, now: Date): Promise<number> {
 
 - [ ] **Step 6: Xanh** — `cd packages/validation && bun test test/thong-bao.spec.ts` PASS; `bun run check-types` PASS. Phá thử: cho `tai-lieu-cho-duyet` khoá `loai:so` → ô «muc gop sinh thong bao moi khi so doi» đỏ; hoàn lại.
 
-- [ ] **Step 7: Commit** — `git add packages/validation packages/db/prisma packages/db/src/thong-bao-ghi.ts packages/db/package.json && git commit -m "feat(hop-thong-bao-tren-web): bang ThongBao, khuon noi dung, duong ghi"`
+- [ ] **Step 7: Commit** — `git add packages/validation packages/db/prisma apps/agent/agent/lib/thong-bao-ghi.ts packages/db/package.json && git commit -m "feat(hop-thong-bao-tren-web): bang ThongBao, khuon noi dung, duong ghi"`
 
 ### Task 3: Lượt nhắc buổi sáng ghi thông báo trước khi chọn kênh
 
@@ -464,9 +469,9 @@ export class ThongBaoService {
 **independent:** false (cần Task 3) · **phục vụ:** E12
 
 **Files:**
-- Create: `packages/db/src/thong-bao-doi-chieu.ts` (`doiChieu(db, { tu: string; den: string }): Promise<KetQuaDoiChieu>`)
-- Create: `packages/db/scripts/thong-bao-doi-chieu.ts` (CLI: `--tu`, `--den`; đọc `DOI_CHIEU_DATABASE_URL`, KHÔNG đọc `DATABASE_URL`; `BEGIN READ ONLY` … `ROLLBACK` như `xem-truoc-luot-don.ts`; thiếu cờ → mã 2 gọi tên cờ; có mục mất → mã 1)
-- Modify: `package.json` gốc (`"thong-bao:doi-chieu": "bun packages/db/scripts/thong-bao-doi-chieu.ts"`), `packages/db/package.json` (`"./thong-bao-doi-chieu"`)
+- Create: `apps/agent/agent/lib/thong-bao-doi-chieu.ts` (`doiChieu(db, { tu: string; den: string }): Promise<KetQuaDoiChieu>`)
+- Create: `apps/agent/scripts/thong-bao-doi-chieu.ts` (CLI: `--tu`, `--den`; đọc `DOI_CHIEU_DATABASE_URL`, KHÔNG đọc `DATABASE_URL`; `BEGIN READ ONLY` … `ROLLBACK` như `xem-truoc-luot-don.ts`; thiếu cờ → mã 2 gọi tên cờ; có mục mất → mã 1)
+- Modify: `package.json` gốc (`"thong-bao:doi-chieu": "bun apps/agent/scripts/thong-bao-doi-chieu.ts"`), `packages/db/package.json` (`"./thong-bao-doi-chieu"`)
 - Test: `apps/agent/test/thong-bao-doi-chieu.integration.spec.ts`
 
 **Interfaces:**
@@ -476,7 +481,7 @@ Luật đếm: mẫu số là `payload.mucTinh.muc` của mọi hàng `AgentTask
 
 - [ ] **Step 1: Test đỏ** — đúng 7 ô của E12 (gieo ba ngày lượt nhắc THẬT bằng `lenLichNhac` + `chayNhac` với `setSystemTime`; ô 6 tiêm lỗi `ghiThongBao` cho một người không kênh qua `mock.module("@crm/db/thong-bao-ghi", …)` trong một ngày; ô 7 tạo một lượt bằng `lenLichNhac` rồi KHÔNG chạy `chayNhac`).
 - [ ] **Step 2: Đỏ** → **Step 3: Viết** module + CLI → **Step 4: Xanh** `htb_doi_chieu`; phá thử «đếm mẫu số từ bảng ThongBao» và «bỏ qua hàng thiếu mucTinh» → ô 6, ô 7 đỏ ghim; hoàn lại.
-- [ ] **Step 5: Commit** — `git add packages/db/src/thong-bao-doi-chieu.ts packages/db/scripts/thong-bao-doi-chieu.ts packages/db/package.json package.json apps/agent/test/thong-bao-doi-chieu.integration.spec.ts && git commit -m "feat(hop-thong-bao-tren-web): lenh doi chieu muc nhac voi thong bao"`
+- [ ] **Step 5: Commit** — `git add apps/agent/agent/lib/thong-bao-doi-chieu.ts apps/agent/scripts/thong-bao-doi-chieu.ts packages/db/package.json package.json apps/agent/test/thong-bao-doi-chieu.integration.spec.ts && git commit -m "feat(hop-thong-bao-tren-web): lenh doi chieu muc nhac voi thong bao"`
 
 ### Task 8: Phép đo màn thật (ui-check)
 

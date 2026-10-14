@@ -9,7 +9,7 @@ evals:
     cmd: config:executors.test.htb_ghi
     paths:
       - "apps/agent/agent/lib/nhac-ke-hoach.ts"
-      - "packages/db/src/thong-bao-ghi.ts"
+      - "apps/agent/agent/lib/thong-bao-ghi.ts"
       - "packages/validation/src/thong-bao.ts"
       - "packages/db/prisma/schema.prisma"
       - "packages/db/prisma/migrations/**"
@@ -35,7 +35,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.htb_gop
     paths:
-      - "packages/db/src/thong-bao-ghi.ts"
+      - "apps/agent/agent/lib/thong-bao-ghi.ts"
       - "packages/db/prisma/schema.prisma"
       - "apps/agent/test/thong-bao-ghi.integration.spec.ts"
     expected: |
@@ -60,7 +60,7 @@ evals:
     cmd: config:executors.test.htb_kenh
     paths:
       - "apps/agent/agent/lib/nhac-ke-hoach.ts"
-      - "packages/db/src/thong-bao-ghi.ts"
+      - "apps/agent/agent/lib/thong-bao-ghi.ts"
       - "apps/agent/test/thong-bao-ghi.integration.spec.ts"
       - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
       - "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json"
@@ -226,7 +226,7 @@ evals:
     cmd: config:executors.test.htb_duong
     paths:
       - "apps/agent/agent/lib/nhac-ke-hoach.ts"
-      - "packages/db/src/thong-bao-ghi.ts"
+      - "apps/agent/agent/lib/thong-bao-ghi.ts"
       - "packages/validation/src/thong-bao.ts"
       - "apps/app/lib/messages/thong-bao.ts"
       - "apps/agent/test/thong-bao-duong.spec.ts"
@@ -261,7 +261,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.htb_don
     paths:
-      - "packages/db/src/thong-bao-ghi.ts"
+      - "apps/agent/agent/lib/thong-bao-ghi.ts"
       - "apps/agent/agent/**/thong-bao*"
       - "apps/agent/agent/schedules/**"
       - "apps/agent/agent/lib/dispatch*"
@@ -281,8 +281,8 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.htb_doi_chieu
     paths:
-      - "packages/db/src/thong-bao-doi-chieu.ts"
-      - "packages/db/scripts/thong-bao-doi-chieu.ts"
+      - "apps/agent/agent/lib/thong-bao-doi-chieu.ts"
+      - "apps/agent/scripts/thong-bao-doi-chieu.ts"
       - "apps/agent/test/thong-bao-doi-chieu.integration.spec.ts"
     expected: |
       thong-bao-doi-chieu.integration.spec.ts tren kho thu: gieo ba ngay luot nhac THAT (chay lenLichNhac + chayNhac, khong chen tay hang

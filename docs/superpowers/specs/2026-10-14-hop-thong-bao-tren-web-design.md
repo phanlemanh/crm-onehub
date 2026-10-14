@@ -69,7 +69,7 @@ Trong `chayNhac`, ngay sau khi có `viec` (đã `conMaDuoc`) và TRƯỚC `kenhS
 
 1. Ghi `payload.mucTinh = { ngay, khoa: [...] }` vào hàng AgentTask — danh sách mọi mục đã tính, ghi TRƯỚC và độc
    lập với bước 2. Đây là mẫu số của lệnh đối chiếu; lệnh không bao giờ lấy mẫu số từ bảng `ThongBao`.
-2. `ghiThongBao(db, userId, viec, ngayVN)` (`packages/db/src/thong-bao-ghi.ts`): một giao dịch; với mỗi mục, tìm
+2. `ghiThongBao(db, userId, viec, ngayVN)` (`apps/agent/agent/lib/thong-bao-ghi.ts`): một giao dịch; với mỗi mục, tìm
    thông báo cùng `(người, khoa)` có `thayNgay` = ngày nhắc liền trước hay chính hôm nay → cập nhật `thayNgay` và
    `noiDung` theo sáng mới nhất; không có → tạo mới. Chạy lại trong ngày (lượt bị thử lại) không đổi gì. `khoa` của
    mỗi loại chỉ mang mã bản ghi (hay mã kỳ/tuần với mục gộp), không mang số đếm — mục gộp như «n tài liệu chờ duyệt»
