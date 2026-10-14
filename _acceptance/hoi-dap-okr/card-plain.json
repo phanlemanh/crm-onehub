@@ -1,0 +1,40 @@
+{
+  "feature_plain": "Người dùng hỏi Kara về OKR ngay trong khu OKR và nhận câu trả lời chỉ từ những Mục tiêu, KR mình được xem — mỗi câu có trích để bấm mở; người vai «chỉ OKR» cũng hỏi được mà không chạm được dữ liệu đối tác.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ chỉ trả về Mục tiêu và KR người hỏi được xem — Mục tiêu giới hạn và KR của nó với người không có tên thì như không tồn tại."},
+    {"id": "AC-2", "p": "Sẽ để mỗi việc của Kara chỉ chạy đúng loại cuộc của nó — công cụ hỏi đáp không chạy trong cuộc soạn, công cụ soạn không chạy trong cuộc hỏi."},
+    {"id": "AC-3", "p": "Sẽ chặn cả câu trả lời nếu Kara trích tới Mục tiêu hay KR người hỏi không được xem, hoặc tới thứ không tồn tại."},
+    {"id": "AC-4", "p": "Sẽ kiểm mọi con số trong câu trả lời khớp dữ liệu thật trước khi người đọc thấy — số lệch hay số lạ bị chặn."},
+    {"id": "AC-5", "p": "Sẽ không cho ai mở cuộc hỏi của người khác, kể cả người vừa bị gỡ khỏi workspace còn giữ đường dẫn."},
+    {"id": "AC-6", "p": "Sẽ khoá ô gõ và nói khi nào mở lại khi người hỏi hết 40 câu trong ngày hay workspace chạm trần tiền tháng — không tốn thêm đồng nào."},
+    {"id": "AC-7", "p": "Sẽ ghi chi phí hỏi đáp thành một mục riêng trong sổ chi phí AI, tách khỏi chi phí soạn OKR."},
+    {"id": "AC-8", "p": "Sẽ cho người vai «chỉ OKR» hỏi được OKR, còn câu hỏi về đối tác thì ra không một tên đối tác nào — đo trên kho đo, có đối chứng."},
+    {"id": "AC-10", "p": "Sẽ mở cột Kara bên phải khi bấm «Hỏi Kara» ở khu OKR hay tổng quan; bấm trích mở đúng Mục tiêu, KR chồng lên; trên điện thoại cột phủ toàn màn."},
+    {"id": "AC-11", "p": "Sẽ giữ nguyên Soạn OKR đang chạy — mọi bài soạn và bài cách ly cũ vẫn xanh."},
+    {"id": "AC-12", "p": "Sẽ chỉ gửi nội dung OKR tới nhà cung cấp model không lưu dữ liệu, kể cả lúc chấm bộ câu mẫu."},
+    {"id": "AC-13", "p": "Sẽ để mọi chữ mới có cả tiếng Việt và tiếng Anh, AI chỉ mang tên Kara, tên Mục tiêu không bị trình duyệt tự dịch."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Chưa hỏi qua Zalo — khuyến nghị làm ở hàng C2 ngay sau, dùng lại phần đọc và kiểm của hàng này (Hỏi-1)."},
+    {"id": "OOS-2", "p": "Kara không ghi hay sửa OKR khi hỏi đáp — chỉ chỉ chỗ sửa."},
+    {"id": "OOS-3", "p": "Cột Kara OKR không trả lời câu về đối tác, kể cả cho quản trị — chỉ đường sang Kara của CRM."},
+    {"id": "OOS-4", "p": "Chưa đo trên production — đo lúc bật, sau khi gộp."},
+    {"id": "OOS-5", "p": "Bộ câu mẫu chỉ đo quý 4; câu về kỳ đã khép chưa có số đo."},
+    {"id": "OOS-6", "p": "Không thêm ô chỉnh trần trong Cài đặt (Hỏi-2)."}
+  ],
+  "scope_plain": "Những thứ để ngoài lượt này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ năm kiểu người hỏi — quản trị, trưởng đơn vị, thành viên, vai chỉ OKR, người đã bị gỡ — có trong ma trận quyền và bộ câu mẫu (AC-1, AC-5, AC-8, AC-9)."},
+    {"i": 1, "p": "Đủ bảy kiểu câu hỏi — tra một Mục tiêu, liệt kê, «của tôi», diễn biến tuần, câu đối tác, câu xin sửa, câu không trả lời được (AC-1, AC-3, AC-4, AC-9)."},
+    {"i": 2, "p": "Kênh: chỉ web trong lượt này (AC-10); Zalo chờ Hỏi-1; Slack để sau."},
+    {"i": 3, "p": "Tình huống khó: Mục tiêu giới hạn (AC-1), hết lượt hay hết trần (AC-6), Kara hỏng (AC-10), kỳ chưa có OKR (trong bộ câu mẫu)."},
+    {"i": 4, "p": "Chưa tìm thấy sản phẩm OKR nào công khai làm hỏi đáp theo quyền; tạm đối chiếu với Microsoft 365 Copilot (chỉ trả lời từ dữ liệu người dùng được đọc)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ba ngưỡng «đạt» của bộ câu mẫu và cách hiểu vế «ca mẫu N1» là việc anh quyết, máy đã lỡ tự đặt — nay thành Hỏi-4 và Hỏi-5."},
+    {"i": 1, "p": "Phép chấm «đúng ý» trước đây không đi qua model không lưu dữ liệu và không có dữ liệu nền để đối chiếu — đã sửa: chấm trong lệnh đo, bảng có kỳ vọng và số thật."},
+    {"i": 2, "p": "Phép đo quyền trước chỉ quét Mục tiêu, bỏ sót KR của Mục tiêu giới hạn — đã sửa: quét cả KR, xét quyền theo Mục tiêu cha."},
+    {"i": 3, "p": "Chưa nói rõ số nào phải khớp — đã sửa: ba lớp số (số của Mục tiêu/KR, số đếm, năm và quý), số khác bị chặn."},
+    {"i": 4, "p": "Lời hứa hết lượt ở cửa chưa có phép đo đi qua cửa thật — đã sửa: thêm phép đo qua cửa, đếm lời gọi tới Kara bằng 0."}
+  ]
+}

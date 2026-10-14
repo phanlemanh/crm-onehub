@@ -4,7 +4,7 @@ feature: Hỏi đáp OKR theo quyền — người dùng hỏi Kara về OKR tr�
 slug: hoi-dap-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
-surfaces: [api, ui, agent]
+surfaces: [api, ui]
 status: draft
 design_doc: docs/superpowers/specs/2026-10-14-hoi-dap-okr-design.md
 ---

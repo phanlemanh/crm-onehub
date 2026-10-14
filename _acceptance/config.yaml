@@ -1750,6 +1750,7 @@ executors:
     hdo_cua: 'bun run test -- "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr-hoi.spec.ts && cd ../agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/kenh-cua-hoi.spec.ts"'
     hdo_cua_tran: 'bun run test -- "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr-hoi.spec.ts -t hdo-tran"'
     hdo_tran: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/okr-hoi-luot.spec.ts"'
+    hdo_man_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi.dom.tsx -t hdo-man"
     hdo_man_khoa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi.dom.tsx -t hdo-khoa"
     hdo_chi_phi: 'bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/chi-phi-hoi.spec.ts"'
     hdo_soan_giu: 'bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts test/app-rieng.integration.spec.ts test/nop-ban-nhap.integration.spec.ts test/loi-dan-theo-phien.spec.ts && cd ../app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr.spec.ts"'

@@ -108,6 +108,14 @@ evals:
     evidence_required: [screenshot, observed]
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/app/lib/messages/okr-hoi.ts, _acceptance/hoi-dap-okr/rang/man-hoi.mjs]
 
+  - id: E10m
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.hdo_man_dom
+    expected: "exit 0; bài DOM của cột Kara hỏi đáp với luồng sự kiện eve giả theo khuôn sự kiện thật (rút từ một phiên agent-okr ghi lại, không tự dựng khuôn): kết quả nop_tra_loi được nhận hiện mỗi câu một InlineCitation và một AiFeedback; bấm trích gọi đẩy ?record=objective:<id> (hay kr:<id>) lên chồng record; sự kiện lượt hỏng hiện «Kara chưa trả lời được» và nút «Thử lại» (KaraRetry) gửi lại đúng câu; ngăn dưới 768 px dùng khung phủ toàn màn. Đối chứng dương: luồng không lỗi thì không có KaraRetry. Chiều đỏ: bỏ InlineCitation khỏi thẻ câu trả lời thì bài đỏ, thông điệp in số trích thiếu."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/hoi/**", "apps/app/components/crm/record-sheet/**", apps/app/test/okr-hoi.dom.tsx]
+
   - id: E11
     criterion: AC-11
     executor: test
