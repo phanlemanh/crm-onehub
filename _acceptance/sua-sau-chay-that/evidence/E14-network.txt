@@ -1,1 +1,2 @@
-E14: driver la man.mjs (puppeteer qua tien-de.mjs); khong co cong cu doc network/console o tang agent -> n-a (driver). Phien do tu dung va tu don.
+driver: bun man.mjs qua mot-luot.sh/tien-de.mjs (khong co duong doc network/console)
+networkObserved: n-a (driver)

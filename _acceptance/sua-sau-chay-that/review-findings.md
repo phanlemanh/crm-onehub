@@ -1,14 +1,26 @@
-# Review findings: sua-sau-chay-that (round 2)
+# Review findings: sua-sau-chay-that (round 3)
 
 ## Trong hợp đồng
 
-Không có finding.
+Không có.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 3 (chuỗi có mặt thay vì quan hệ): chiều đỏ lượt 2 của E13 chỉ ghim mã câu ở bất kỳ dòng nào, không ghim lượt**
+- **laDatHai chép lại logic «đạt lượt 2» thay vì import nhanCua của bo-cau-hoi-mau, và đã lệch so với bản gốc**
+  Người dùng thấy gì: Phép so kết quả đo bộ câu hỏi mẫu tự tính lại cách xét một câu là đạt thay vì dùng chung cách của bộ câu hỏi mẫu. Hôm nay kết quả vẫn đúng, nhưng nếu sau này hai bên lệch nhau thì phép so có thể xét sai một số câu bị lỗi.
+  file: `_acceptance/sua-sau-chay-that/rang/so-bo-mau.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **banSao leaves a temp copy of the evidence behind on every red-side check**
+  Người dùng thấy gì: Mỗi lần chạy phép so kết quả đo, máy để lại vài thư mục tạm chiếm chỗ trong bộ nhớ tạm. Người dùng không thấy gì khác và kết quả đo không bị ảnh hưởng.
+  file: `_acceptance/sua-sau-chay-that/rang/so-bo-mau.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 3 (chuỗi có mặt thay vì quan hệ): chiều đỏ lượt 2 của E13 chỉ ghim mã câu ở bất kỳ dòng nào, không ghim lượt (r2 · tệp đã đổi)**
   Người dùng thấy gì: Bước đo lại bộ câu hỏi mẫu vẫn chặn được câu đạt bị đổi thành không đạt ở lượt hai, nhưng phép tự kiểm của nó chưa chứng minh được là báo đúng ở lượt hai chứ không phải lượt một. Nếu bộ so sau này nhầm lượt, kết quả đo vẫn có thể vẫn trông đúng. Nên ghi lại như một hạn chế đã biết về độ chặt của phép đo.
   file: `_acceptance/sua-sau-chay-that/rang/so-bo-mau.ts`
   severity: low
@@ -49,9 +61,5 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `_acceptance/sua-sau-chay-that/rang/man.mjs`
   severity: medium
   Đề xuất: known-limits
-
-## Chưa adversarial-verify (refuter chết)
-
-Không có mục.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
