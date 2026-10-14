@@ -5,7 +5,7 @@ slug: hoan-tac-loat-bao-dung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-14T03:12:53Z
 design_doc: docs/superpowers/specs/2026-10-14-hoan-tac-loat-bao-dung-design.md
@@ -52,3 +52,7 @@ Known limits loại hành vi của V2d `hoan-tac-loat-dung-id` (#354): Ngoài-3 
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi: Lưu trữ → Khôi phục → Xoá vĩnh viễn. (2) «Lịch sử» — không đổi. (3) Danh sách mặc định — không đổi; vòng này chỉ đổi lời báo và log.
 - Lỗi thật của máy chủ (Ngoài-3) không dựng được trên bản chạy thật mà không chen mã vào đường ghi; nó được đo ở lớp hàm (AC-1) và lớp DOM (AC-3), không có ảnh.
 - Ranh giới: `apps/api/src/crm/bulk.ts`, `docs/api.md` (một đoạn), `apps/app/components/crm/bulk-actions.tsx`, `apps/app/lib/messages/crm.ts` (chỉ thêm khoá `bulk.chuaLuuTru`, `bulk.daVeTruoc`), `apps/app/test/messages-guard.spec.ts` (thêm GHIM), tệp kiểm mới `apps/api/test/hoan-tac-loat-bao-dung.spec.ts`, `apps/app/test/hoan-tac-loat-bao-dung.dom.tsx`, `_acceptance/hoan-tac-loat-bao-dung/**`, thêm khoá vào `_acceptance/config.yaml`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Xoá vĩnh viễn hàng loạt một lô có cả bản chưa lưu trữ ghi nhật ký lỗi như máy chủ hỏng, dù đó chỉ là thao tác bị từ chối đúng luật; người dùng không thấy khác biệt trên màn hình.
+  - Ngoài-2: Với xoá vĩnh viễn, đổi giai đoạn hay tra cứu lại hàng loạt, một bản bị từ chối vì người dùng chọn sai được tính vào số «lỗi máy chủ» của kết quả; hiện chưa màn nào báo con số đó cho người dùng.
+  - Ngoài-4: Bài kiểm tự động thử cách báo kết quả chung, chưa đi qua riêng từng màn Cá nhân, Công ty, Thoả thuận.
