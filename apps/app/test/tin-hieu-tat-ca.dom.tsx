@@ -463,14 +463,11 @@ describe("ba-so", () => {
 	test("ba-so: chua doc duoc ban ve thi o qua han hien gach, khong in so", async () => {
 		const o = await ve(<BaSoTinHieu so={{ ...SO, chuaCoCho: null }} />);
 		const o3 = o.querySelector("[data-o-so=chua-co-cho]");
-		expect(o3?.textContent).toContain("—");
-		expect(o3?.textContent).toContain(m.tatCa.chuaDocCho);
 		expect(
-			/\d{1,}(?!\s*ngày)/.test(
-				(o3?.textContent ?? "").replace(/\d+\s*ngày/g, ""),
-			),
+			o3?.querySelector(".text-3xl")?.textContent,
 			"o qua han in so 0 gia khi chua doc duoc ban ve",
-		).toBe(false);
+		).toBe("—");
+		expect(o3?.textContent).toContain(m.tatCa.chuaDocCho);
 	});
 });
 
