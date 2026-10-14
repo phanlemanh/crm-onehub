@@ -54,6 +54,8 @@ export const NGUON_VIEC = [
 	"chuyen-viec",
 	"tac-nhan",
 	"chep-cu",
+	"bang-keo",
+	"bang-menu",
 ] as const;
 
 export type NguonViec = (typeof NGUON_VIEC)[number];
@@ -70,6 +72,7 @@ export const LOAI_VET_VIEC = [
 	"bo-theo-doi",
 	"chuyen-viec",
 	"go-do-ban-ghi-xoa",
+	"them-viec-con",
 ] as const;
 
 export const LOAI_BAN_GHI = ["company", "contact", "deal", "plan"] as const;
@@ -127,6 +130,7 @@ export const VIEC = {
 		gan: "gắn hay gỡ bản ghi",
 		theoDoiKhac: "thêm hay bỏ người theo dõi khác",
 		xoa: "xoá việc",
+		themCon: "thêm việc con",
 	},
 	thongDiep: {
 		khongCoViec: (id: string) => `Không có việc nào mang mã ${id}.`,
@@ -151,7 +155,10 @@ export const VIEC = {
 			"Chỉ quản trị chạy được lệnh chép việc cần làm — truyền --nguoi <email của một quản trị>.",
 		khongPhaiBanChep: (id: string) =>
 			`Việc ${id} không phải bản chép từ việc cần làm cũ.`,
+		conKhongCoCon: "Việc con không có việc con.",
+		chiThemConKhiMo: "Chỉ thêm việc con cho việc đang mở.",
 	},
+	bang: { xongGanDayNgay: 7 },
 } as const;
 
 const dinhNgayHan = new Intl.DateTimeFormat("en-CA", {
@@ -215,6 +222,18 @@ export function dichDuoc(
 	vai: VaiTrongViec,
 ): TrangThaiViec[] {
 	return TRANG_THAI_VIEC.filter((den) => quyenDoi(nguon, den, vai) === "duoc");
+}
+
+export function chuyenDuocCua(
+	v: {
+		trangThai: TrangThaiViec;
+		nguoiGiaoId: string;
+		nguoiThucHienId: string;
+		theoDoi: { userId: string }[];
+	},
+	userId: string,
+): TrangThaiViec[] {
+	return dichDuoc(v.trangThai, vaiCua(v, userId));
 }
 
 export function laMoLai(nguon: TrangThaiViec, den: TrangThaiViec): boolean {
@@ -361,6 +380,11 @@ export const vetViec = z.discriminatedUnion("loai", [
 		loai: z.literal("go-do-ban-ghi-xoa"),
 		truoc: banGhiVet,
 		sau: z.object({ ten: z.string() }),
+	}),
+	z.object({
+		loai: z.literal("them-viec-con"),
+		truoc: z.null(),
+		sau: z.object({ conId: z.string(), tieuDe: z.string() }),
 	}),
 ]);
 

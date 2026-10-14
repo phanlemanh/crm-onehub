@@ -70,7 +70,8 @@
 		"./viec": "./src/viec.ts",
 		"./viec-chep": "./src/viec-chep.ts",
 		"./viec-ghi": "./src/viec-ghi.ts",
-		"./viec-gieo": "./src/viec-gieo.ts"
+		"./viec-gieo": "./src/viec-gieo.ts",
+		"./viec-thu-tu": "./src/viec-thu-tu.ts"
 	},
 	"scripts": {
 		"viec:chep-cu": "bun scripts/chep-viec-can-lam.ts",

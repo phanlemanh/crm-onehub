@@ -1119,6 +1119,32 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "kanban-viec",
+		ten: "Kanban việc — bảng bốn cột ở Việc của tôi, việc con trong khung việc",
+		states: [
+			{ id: "ST-bang-viec-co-viec", nhan: "Bảng — có việc, kéo được" },
+			{ id: "ST-bang-viec-menu", nhan: "Bảng — menu «Chuyển sang…» đang mở" },
+			{
+				id: "ST-bang-viec-hoi-dong-cha",
+				nhan: "Bảng — hỏi lại khi đóng việc cha còn con mở",
+			},
+			{ id: "ST-bang-viec-tu-choi", nhan: "Bảng — máy chủ từ chối lần kéo" },
+			{
+				id: "ST-bang-viec-chi-xem",
+				nhan: "Bảng — nhóm Đang theo dõi, không kéo",
+			},
+			{ id: "ST-bang-viec-cho-tai", nhan: "Bảng — đang tải" },
+			{ id: "ST-bang-viec-rong", nhan: "Bảng — chưa có việc" },
+			{ id: "ST-bang-viec-loi", nhan: "Bảng — tải hỏng" },
+			{ id: "ST-khung-viec-con", nhan: "Khung việc cha — mục Việc con" },
+			{
+				id: "ST-khung-viec-con-soan",
+				nhan: "Khung việc cha — đang thêm việc con",
+			},
+			{ id: "ST-khung-viec-la-con", nhan: "Khung việc con — thuộc việc cha" },
+		],
+	},
+	{
 		slug: "gui-tin-hieu-trong-crm",
 		ten: "Gửi tín hiệu — nút trên thanh đầu trang, hộp kể, trang Tín hiệu đã gửi",
 		states: [
@@ -1172,6 +1198,43 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{
 				id: "ST-khoi-viec-phuong-an-tron",
 				nhan: "Thẻ Hoạt động — lối khác: trộn việc vào dòng sự kiện",
+			},
+		],
+	},
+	{
+		slug: "lich-su-va-luu-tru-trang",
+		ten: "Kho tài liệu — lịch sử phiên bản, quay lại bản cũ, lưu trữ trang",
+		states: [
+			{ id: "ST-lich-su-nhieu-ban", nhan: "Lịch sử — ba phiên bản" },
+			{
+				id: "ST-lich-su-mot-ban",
+				nhan: "Lịch sử — trang mới có một phiên bản",
+			},
+			{ id: "ST-ban-cu-so-sanh", nhan: "Phiên bản cũ — so với bản đang dùng" },
+			{ id: "ST-ban-cu-toan-van", nhan: "Phiên bản cũ — toàn văn" },
+			{
+				id: "ST-ban-cu-dang-dung",
+				nhan: "Phiên bản cũ — chọn đúng bản đang dùng",
+			},
+			{ id: "ST-doc-hop-luu-tru", nhan: "Màn đọc — hộp đề xuất lưu trữ" },
+			{
+				id: "ST-doc-cho-luu-tru",
+				nhan: "Màn đọc — đã có đề xuất lưu trữ chờ duyệt",
+			},
+			{ id: "ST-doc-da-luu-tru", nhan: "Màn đọc — trang đã lưu trữ" },
+			{ id: "ST-duyet-luu-tru", nhan: "Màn duyệt — đề xuất lưu trữ trang" },
+			{
+				id: "ST-duyet-quay-lai",
+				nhan: "Màn duyệt — đề xuất quay lại phiên bản 1",
+			},
+			{ id: "ST-ds-da-luu-tru", nhan: "Danh sách — Đã lưu trữ" },
+			{
+				id: "ST-ds-da-luu-tru-rong",
+				nhan: "Danh sách — Đã lưu trữ, chưa có trang nào",
+			},
+			{
+				id: "ST-cho-duyet-da-xu-ly",
+				nhan: "Chờ duyệt — Đã xử lý có cả đề xuất đã duyệt",
 			},
 		],
 	},

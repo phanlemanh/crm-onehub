@@ -544,6 +544,17 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
 - **Chuyển việc 30 ngày** (`onboarding.transferPreview`/`transferWork`) chuyển cả việc đang mở người rời
   thực hiện hay giao, một giao dịch với kế hoạch và bước, mỗi việc một vết `chuyen-viec`; người vừa giao vừa
   thực hiện cùng một việc thì cả hai cột đổi trong một vết.
+- **Bảng và việc con** (hàng DA2, `ViecBangService`). `viec.bang({ nhom })` trả bốn cột Chưa làm · Đang làm
+  · Chờ đánh giá · Xong; cột Xong chỉ việc có `khepLuc` trong `VIEC.bang.xongGanDayNgay` ngày, `tong` đếm đủ;
+  mỗi thẻ mang `chuyenDuoc` (đích người xem được phép, máy chủ tính bằng `chuyenDuocCua` — giao diện không tự
+  suy đồ thị), `con` (`xong`/`tong`, không tính Huỷ), `cha` và `conMo`. `viec.keo({ id, den, thuTu, nguon })`
+  đi qua đúng `doiTrangThai` (cùng thứ tự kiểm 404 → 400 → 403 → vai «chỉ OKR»), với `nguon` là `bang-keo`
+  (kéo bằng chuột, chạm, phím) hay `bang-menu` (menu «Chuyển sang…»); lần bị từ chối không ghi gì. Thứ tự
+  trong cột là của riêng từng người, ở bảng `viecThuTu` (khoá chèn giữa base-62, `@crm/db/viec-thu-tu`);
+  sắp thứ tự không ghi vết và không làm việc thành «có lịch sử». `viec.taoCon({ chaId, … })` (`taoViecCon`):
+  chỉ người giao hay người thực hiện của cha, cha phải đang mở và không phải con (một tầng), con chép gắn của
+  cha, người giao và người thực hiện của cha thành người theo dõi, cha nhận vết `them-viec-con` — nên cha đã
+  có con thì không xoá được. `viec.con({ id })` trả `cha`, các con người xem thấy, `conMo`, `themDuoc`.
 - **Tổng quan**: `viecQuaHan` (việc đang mở hạn trước hôm nay: tôi thực hiện ở «của tôi», tôi thấy ở «mọi
   người»; tối đa `VIEC.tranTongQuan` dòng); `quaHan.viec` cộng thêm số việc cùng điều kiện, đếm đủ.
 - **Việc cần làm cũ (hàng DA1b).** Hàng `activity` loại `TASK` không còn đường ghi: `activities.create` trả 400
