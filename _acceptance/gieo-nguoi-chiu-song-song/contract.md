@@ -5,7 +5,7 @@ slug: gieo-nguoi-chiu-song-song
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: implemented
+status: verified
 approved_by: Mạnh
 approved_at: 2026-10-14T08:41:26Z
 design_doc: docs/superpowers/specs/2026-10-14-gieo-nguoi-chiu-song-song-design.md
