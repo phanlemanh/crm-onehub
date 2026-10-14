@@ -68,6 +68,11 @@ try {
 			laT1: (t) => tepT1(globs, [t]).has(t),
 		});
 
+	const viPham = () =>
+		chay(cay, "bash", "scripts/pre-merge-check.sh", ".", "--base", goc)
+			.ra.split("\n")
+			.filter((d) => d.startsWith("VIOLATION"));
+	const truoc = new Set(viPham());
 	mkdirSync(join(cay, "tin-hieu", "crm"), { recursive: true });
 	writeFileSync(join(cay, TEP_TIN_HIEU), "{}\n");
 	chay(cay, "git", "add", TEP_TIN_HIEU);
@@ -78,18 +83,13 @@ try {
 		pl.nang === false && pl.lyDo === "chi-t1",
 		JSON.stringify(pl),
 	]);
-	const pm = chay(
-		cay,
-		"bash",
-		"scripts/pre-merge-check.sh",
-		".",
-		"--base",
-		goc,
-	);
+	const moi = viPham().filter((d) => !truoc.has(d));
 	dong.push([
-		"2 kiem truoc gop khong doi ho so",
-		pm.ma === 0,
-		`ma ${pm.ma} ${pm.ra.trim().split("\n").slice(-2).join(" | ")}`,
+		"2 commit tep tin hieu khong them vi pham nao cua buoc kiem truoc gop",
+		moi.length === 0,
+		moi.length === 0
+			? `vi pham san co truoc commit: ${truoc.size}, them: 0`
+			: moi.join(" | "),
 	]);
 	const doi = phanLoai([TEP_MA]);
 	dong.push([
@@ -109,12 +109,13 @@ try {
 }
 if (PHA_THU) {
 	const sai1 = dong.find(([t]) => t.startsWith("1"))?.[1] === false;
+	const sai2 = dong.find(([t]) => t.startsWith("2"))?.[1] === false;
 	console.log(
-		sai1
-			? "PHA-THU DUNG: bo glob T1 -> dong 1 SAI (thu muc tin hieu khong con T1)"
-			: "PHA-THU SAI",
+		sai1 && sai2
+			? "PHA-THU DUNG: bo glob T1 -> dong 1 va 2 SAI (thu muc tin hieu khong con T1, buoc kiem truoc gop doi ho so)"
+			: `PHA-THU SAI: dong 1 ${sai1 ? "SAI" : "DUNG"}, dong 2 ${sai2 ? "SAI" : "DUNG"}`,
 	);
-	process.exit(sai1 ? 0 : 1);
+	process.exit(sai1 && sai2 ? 0 : 1);
 }
 for (const [ten, dung, chiTiet] of dong)
 	console.log(`${dung ? "DUNG" : "SAI"} ${ten} — ${chiTiet}`);

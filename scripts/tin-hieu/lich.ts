@@ -18,8 +18,10 @@ export const LICH = {
 			"kho cấm tác vụ mở PR — chủ kho bật «Allow GitHub Actions to create and approve pull requests» ở Settings › Actions › General; nhánh hàng chờ đã đẩy",
 		moPrHong: "mở PR hàng chờ hỏng",
 		chamNgoai: "commit hàng chờ chạm ngoài thư mục nguồn tín hiệu",
+		dayHong: "đẩy nhánh hàng chờ hỏng",
 	},
 	dauHieuCamMoPr: "not permitted to create",
+	boHookTruocDay: { CRM_SKIP_HOOKS: "1" },
 } as const;
 
 type Lenh = { ma: number; ra: string; loi: string };
@@ -43,8 +45,17 @@ function chay(
 }
 
 function git(goc: string, ...thamSo: string[]): Lenh {
+	return gitVoi(goc, {}, ...thamSo);
+}
+
+function gitVoi(
+	goc: string,
+	them: Record<string, string>,
+	...thamSo: string[]
+): Lenh {
 	return chay("git", thamSo, goc, {
 		...process.env,
+		...them,
 		GIT_AUTHOR_NAME: LICH.tacGia.ten,
 		GIT_AUTHOR_EMAIL: LICH.tacGia.thu,
 		GIT_COMMITTER_NAME: LICH.tacGia.ten,
@@ -136,14 +147,21 @@ export async function chayLich(o: {
 		`${hangCho}^{tree}`,
 	).ra.trim();
 	if (cayMoi !== cayCu) {
-		gitPhai(
+		const day = gitVoi(
 			o.goc,
+			LICH.boHookTruocDay,
 			"push",
 			"--quiet",
 			"--force",
 			"origin",
 			`HEAD:refs/heads/${LICH.nhanhHangCho}`,
 		);
+		if (day.ma !== 0) {
+			return {
+				ma: 1,
+				dong: [...dong, `${LICH.thongDiep.dayHong}: ${day.loi.trim()}`],
+			};
+		}
 		dong.push(`đã đẩy ${soTep.length} tệp lên ${LICH.nhanhHangCho}`);
 	} else {
 		dong.push(`${LICH.nhanhHangCho} đã có đúng các tệp này — không đẩy`);

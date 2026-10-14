@@ -1,5 +1,6 @@
 import {
 	API_KEY_HEADER,
+	NOT_A_MEMBER,
 	workspaceRoleOf,
 	xacMinhKhoaKeoTinHieu,
 } from "@crm/auth";
@@ -21,9 +22,18 @@ export class KhoaKeoTinHieuMiddleware implements TRPCMiddleware {
 		const ctx = opts.ctx as BaseTrpcContext;
 		const tho = z.string().safeParse(ctx.req?.headers[API_KEY_HEADER]);
 		const key = tho.success ? tho.data.trim() : "";
-		if (!key) throw new TRPCError({ code: "UNAUTHORIZED" });
-		const khoa = await xacMinhKhoaKeoTinHieu(key).catch(() => null);
-		if (!khoa) throw new TRPCError({ code: "UNAUTHORIZED" });
+		const khoa = key
+			? await xacMinhKhoaKeoTinHieu(key).catch(() => null)
+			: null;
+		if (!khoa) {
+			if (ctx.sessionError)
+				throw new TRPCError({ code: "SERVICE_UNAVAILABLE" });
+			const nguoi = ctx.session?.user;
+			if (nguoi && !(await workspaceRoleOf(nguoi.id))) {
+				throw new TRPCError({ code: "FORBIDDEN", message: NOT_A_MEMBER });
+			}
+			throw new TRPCError({ code: "UNAUTHORIZED" });
+		}
 		const role = await workspaceRoleOf(khoa.userId);
 		if (!laQuanTriWorkspace(role)) throw new TRPCError({ code: "FORBIDDEN" });
 		setRequestUserId(khoa.userId);

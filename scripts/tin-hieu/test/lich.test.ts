@@ -252,6 +252,33 @@ describe("tvk-nhanh", () => {
 	}, 60_000);
 });
 
+describe("tvk-nhanh-hook", () => {
+	test("tvk-nhanh: hook truoc-day that cua kho khong chan luot day", async () => {
+		const kho = dungKho();
+		const hooks = thuMuc("hooks");
+		const hook = path.join(hooks, "pre-push");
+		writeFileSync(
+			hook,
+			readFileSync(
+				path.join(import.meta.dir, "..", "..", "..", ".githooks", "pre-push"),
+				"utf8",
+			),
+		);
+		chmodSync(hook, 0o755);
+		g(kho.goc, "config", "core.hooksPath", hooks);
+		const sv = mayChu();
+		sv.dat([1]);
+		const gh = ghGia();
+		const kq = await chay(kho, sv, gh);
+		sv.dung();
+		expect(
+			kq.ma,
+			`luot lich bi hook truoc day chan: ${kq.dong.join(" | ")}`,
+		).toBe(0);
+		expect(sha(kho, HC), "luot lich bi hook truoc day chan").not.toBeNull();
+	});
+});
+
 describe("tvk-pr", () => {
 	let kho: Kho;
 	let sv: MayChu;

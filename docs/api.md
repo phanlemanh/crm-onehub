@@ -1577,11 +1577,15 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
 - **Đường kéo theo lịch** `tinHieuLich.keoVe` (`POST /rest/tin-hieu/lich/keo-ve`) chỉ nhận khoá
   chỉ-kéo: `KhoaKeoTinHieuMiddleware` xác minh khoá với đúng `configId` và quyền, đọc lại vai chủ
   khoá ở mỗi lượt (owner/admin), rồi gọi cùng `TinHieuService.keoVe`. Router không mang
-  `AuthMiddleware` vì không có phiên; phiên trình duyệt và khoá thường đều nhận 401.
+  `AuthMiddleware` vì không có phiên; không có khoá chỉ-kéo hợp lệ thì middleware theo đúng luật
+  chung: đọc phiên hỏng → 503, người đã bị gỡ khỏi kho → 403 `NOT_A_MEMBER`, còn lại (phiên trình
+  duyệt, khoá thường, không khoá) → 401.
 - **Lịch chạy** `.github/workflows/tin-hieu-keo-ve.yml` chạy 21:00Z và 09:00Z (và chạy tay),
   gọi `bun scripts/tin-hieu/lich.ts`: kéo bằng `CRM_KHOA_KEO_TIN_HIEU`, dựng **nhánh hàng chờ**
   `tin-hieu/keo-ve` = đỉnh `onehub` + một commit chỉ chạm `tin-hieu/crm/**`, đẩy khi cây khác,
-  và giữ đúng một PR «Tín hiệu kéo về» mở. Không bao giờ gộp: PR đi vào `onehub` theo lô. Ghi
+  và giữ đúng một PR «Tín hiệu kéo về» mở. Lệnh đẩy đặt `CRM_SKIP_HOOKS=1`: `bun install` trên
+  máy GitHub bật `.githooks` (script `prepare`), và hook trước-đẩy chạy cả bộ kiểm ~19 phút cần
+  Postgres — một lượt chỉ đẩy tệp tín hiệu T1 nên không chạy nó. Không bao giờ gộp: PR đi vào `onehub` theo lô. Ghi
   đè nhánh không làm rơi tệp vì thủ tục trả mọi tín hiệu còn lại. `tin-hieu/crm/**` nằm trong
   `t1_skip_globs`, nên PR hàng chờ là T1. Lượt hỏng (thiếu bí mật, CRM lỗi, tệp lệch byte, kho
   cấm mở PR) kết thúc đỏ và GitHub gửi thư cho người sửa dòng lịch gần nhất.
