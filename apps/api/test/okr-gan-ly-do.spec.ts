@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
-import { dongTuHang } from "@crm/validation/okr-tro-ly";
+import { type DongGopY, dongTuHang } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import type { z } from "zod";
@@ -389,6 +389,7 @@ async function gieoCanChinh(
 	objectiveId: string,
 	cookie: string,
 	can: { lyDo: string; canCu: string | null }[],
+	them: DongGopY[] = [],
 ): Promise<{ id: string; dich: Dich }[]> {
 	const nhanh = await nhanhTrong(objectiveId, cookie);
 	if (nhanh.length < can.length)
@@ -397,15 +398,17 @@ async function gieoCanChinh(
 	const ids = await gieoDong(
 		objectiveId,
 		null,
-		can.map((c, i) =>
-			dongMau({
-				loai: "can-chinh",
-				objectiveId,
-				...vaoDich(dich[i] as Dich),
-				lyDo: c.lyDo,
-				canCu: c.canCu,
-			}),
-		),
+		can
+			.map((c, i) =>
+				dongMau({
+					loai: "can-chinh",
+					objectiveId,
+					...vaoDich(dich[i] as Dich),
+					lyDo: c.lyDo,
+					canCu: c.canCu,
+				}),
+			)
+			.concat(them),
 	);
 	return ids.map((id, i) => ({ id, dich: dich[i] as Dich }));
 }
@@ -560,14 +563,32 @@ describe("l4-sua-de-xuat", () => {
 	test(
 		"sửa rồi nhận: chữ người, mất dấu Kara; y chữ Kara thì như nhận — tRPC và REST",
 		async () => {
-			const [d1, d2, d3] = (await gieoCanChinh(Q2, cNgoai, [
-				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
-				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
-				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
-			])) as [
+			const { title } = await db.okrObjective.findUniqueOrThrow({
+				where: { id: Q2 },
+				select: { title: true },
+			});
+			const [d1, d2, d3, vietLai] = (await gieoCanChinh(
+				Q2,
+				cNgoai,
+				[
+					{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+					{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+					{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+				],
+				[
+					dongMau({
+						loai: "viet-lai",
+						objectiveId: Q2,
+						truong: "title",
+						truoc: title,
+						sau: `${title} trong quý`,
+					}),
+				],
+			)) as [
 				{ id: string; dich: Dich },
 				{ id: string; dich: Dich },
 				{ id: string; dich: Dich },
+				{ id: string },
 			];
 			const L2 = "Lý do người duyệt viết lại";
 			const C2 = "Căn cứ người duyệt";
@@ -579,10 +600,18 @@ describe("l4-sua-de-xuat", () => {
 			);
 			expect([thieu.status, thieu.loi]).toEqual([400, T.canChinh.canCuCanLyDo]);
 			const thieuGiaTri = await quyet({ deXuatId: d1.id, cach: "sua" }, cNgoai);
-			expect([thieuGiaTri.status, thieuGiaTri.loi]).toEqual([
-				400,
-				T.troLy.canGiaTri,
-			]);
+			const vietLaiThieu = await quyet(
+				{ deXuatId: vietLai.id, cach: "sua" },
+				cNgoai,
+			);
+			expect(vietLaiThieu.status).toBe(400);
+			if (
+				thieuGiaTri.status !== vietLaiThieu.status ||
+				thieuGiaTri.loi !== vietLaiThieu.loi
+			)
+				throw new Error(
+					`sua thieu ly do khong bi tu choi nhu dong viet lai: ${thieuGiaTri.status} ${thieuGiaTri.loi} / ${vietLaiThieu.status} ${vietLaiThieu.loi}`,
+				);
 			tienDongHo();
 			ok(
 				await quyet(

@@ -178,7 +178,8 @@ describe("l4-hop-thoai", () => {
 		);
 		expect((oLyDo() as HTMLTextAreaElement).value).toBe(LY_DO);
 		expect((oCanCu() as HTMLTextAreaElement).value).toBe(CAN_CU);
-		await datGiaTri(oCanCu(), "");
+		await datGiaTri(oLyDo(), `  ${LY_DO}\u00a0 `);
+		await datGiaTri(oCanCu(), " \n ");
 		await bamChuot(
 			nut(h.luu, qs("[data-hop-thoai-can-chinh]") ?? document.body),
 		);
