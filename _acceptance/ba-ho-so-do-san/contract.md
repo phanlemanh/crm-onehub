@@ -5,7 +5,7 @@ slug: ba-ho-so-do-san
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-14T04:04:52Z
 design_doc: docs/superpowers/specs/2026-10-13-ba-ho-so-do-san-design.md
@@ -68,3 +68,26 @@ Quét bằng skill `morphological-scan` (preset test-matrix), 13/10.
 ## Notes
 
 - Hỏi-1, Hỏi-2, Hỏi-3: xem design doc mục «Câu hỏi cho người» và sổ quyết định (Hỏi-3 sinh từ gap-probe P0).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Bảng so sánh trước/sau dùng để hội đồng duyệt có thể ghép số liệu từ hai nguồn khác nhau nếu ai đó sinh nó khi còn sửa dở chưa commit. Bảng hiện nộp vẫn đúng vì sinh trên bản sạch.
+  - Ngoài-2: Nếu bảng trước/sau được sinh khi còn thay đổi chưa commit thì hai phần của cùng một dòng có thể nói hai điều khác nhau, làm hội đồng khó đọc. Bảng đang nộp không bị ảnh hưởng.
+  - Ngoài-3: Kiểm tra rằng việc bỏ bước build khỏi hook đẩy mã bị bắt chỉ dựa vào kết quả đạt hay không, còn câu thông báo đối chiếu thì giống hệt cả khi đạt. Hook đẩy mã vẫn bị bắt khi mất bước build, nhưng đối chiếu thông báo không thêm được độ tin cậy.
+  - Ngoài-4: Ô kiểm thiết kế của màn Soạn OKR chỉ chứng minh được rằng nó báo lỗi khi tệp biến mất, chưa chứng minh nó từng bắt được lỗi thiết kế thật. Nó vẫn đỏ khi tệp bị xoá, nhưng độ tin cậy về chất lượng thiết kế còn thấp.
+  - Ngoài-5: Bảng trước/sau vẫn có thể lấy một phần từ bản đã commit và một phần từ bản đang sửa, nên hội đồng có thể thấy hai khối mâu thuẫn nếu bảng sinh lúc còn sửa dở. Với bảng hiện nộp thì không có vấn đề.
+  - Ngoài-6: Phép kiểm hiện vẫn bắt đúng lỗi quan trọng nhất của kiểm tra trước khi đẩy mã. Nhưng nếu sau này ai đó đổi danh sách phép thử, không có gì buộc phép thử quan trọng ấy phải còn.
+  - Ngoài-7: Nếu hai tệp liên quan bị sửa sau này, kết quả kiểm cũ vẫn được coi là còn hiệu lực dù có thể đã sai. Người dùng có thể tin một kết quả xanh đã cũ.
+  - Ngoài-8: Lý do hạ một phép kiểm dựa vào một dòng tiêu đề không nói rõ thành luật. Người duyệt có thể thấy lý do này chưa đủ thuyết phục và hỏi lại.
+  - Ngoài-9: Thẻ duyệt ghi 28 phép kiểm đỏ còn thực tế là 29. Người ký có thể đọc lệch quy mô phần việc để lại, nhưng không đổi kết quả công việc.
+  - Ngoài-10: Phép thử quan trọng của kiểm tra trước khi đẩy mã chỉ được giữ bằng dữ liệu do chính người viết khai. Nếu họ đổi hoặc bỏ nó, không có gì cảnh báo.
+  - Ngoài-11: Mô tả kỳ vọng của một ô kiểm tra màn soạn OKR vẫn nhắc tệp cũ và một ca lỗi không còn tồn tại. Ô vẫn chạy và vẫn bắt được lỗi mất tệp, nhưng người đọc hồ sơ có thể hiểu sai nó đang kiểm gì.
+  - Ngoài-12: Một số ô kiểm tra màn soạn OKR không còn theo dõi các tệp màn soạn mới. Khi màn đó đổi, bằng chứng cũ có thể không bị coi là hết hạn và vẫn hiện là còn đạt.
+  - Ngoài-13: Nếu một hồ sơ nghiệm thu bị hỏng định dạng, công cụ kiểm tra có thể lặng lẽ bỏ qua hồ sơ đó thay vì báo lỗi. Hiện chưa có hồ sơ nào bị vậy.
+  - Ngoài-14: Hợp đồng đã ký của hai hồ sơ cũ vẫn ghi lời hứa chặt hơn so với những gì bài kiểm tra hiện đo. Người đọc hợp đồng sẽ thấy lời hứa mà thực tế không còn được kiểm.
+  - Ngoài-16: Phép kiểm xem ai có đổi giá trị cấu hình cũ hay không chưa được thử cho thấy nó thật sự bắt được lỗi. Nếu phép kiểm này hỏng, nó vẫn báo xanh.
+  - Ngoài-17: Với một số ô kiểm tra, việc thêm hoặc bớt tệp theo dõi có thể lọt qua mà không bị đối chiếu. Bằng chứng cũ có thể không bị đánh dấu hết hạn đúng lúc.
+  - Ngoài-18: Nếu ai chạy lại công cụ lập danh sách, nó sẽ xoá các khai báo đã nhập tay mà không báo. Lỗi chỉ lộ ra về sau khi một phép kiểm đỏ.
+  - Ngoài-19: Một hồ sơ nghiệm thu đọc không được có thể bị coi như không có gì đỏ, nên phép kiểm xanh sai. Hiện chưa có hồ sơ nào bị vậy.
+  - Ngoài-20: Một phép kiểm chạy trên dữ liệu viết tay giống đầu ra thật chứ không phải đầu ra thật. Lỗi ở khâu sinh dữ liệu thật có thể không bị phát hiện.
+  - Ngoài-21: Phép kiểm chống đổi giá trị cấu hình cũ chưa có thử nghiệm chứng minh nó đỏ khi cần. Nếu nó hỏng, người ta vẫn thấy kết quả xanh.
+  - Ngoài-22: Phép kiểm phát hiện ghim bằng chứng cũ được thử bằng dữ liệu giả, chưa thử trên lịch sử git thật. Một lỗi ở đó có thể tắt phép kiểm mà không ai biết.
+  - Ngoài-23: Hai ô kiểm tra đo một ảnh chụp cố định của mã cũ chứ không đo cây hiện tại, nên chúng không đỏ khi mã hiện tại đổi theo hướng xấu. Điều này đã được ghi rõ trong hồ sơ.
