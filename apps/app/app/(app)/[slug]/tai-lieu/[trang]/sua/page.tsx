@@ -19,7 +19,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { workspaceUrl } from "@/lib/workspace-url";
 import { nullIfMissing } from "../../../(agent-builder)/missing-record";
-import { DuongDanTaiLieu } from "../../duong-dan-tai-lieu";
+import { DuongDanTaiLieuCho } from "../../duong-dan-tai-lieu";
 import { ManSoan } from "../../man-soan";
 import { loadSuaSearchParams } from "./sua-search-params";
 
@@ -37,19 +37,19 @@ export default async function SuaTrangPage({
 	params: Params;
 	searchParams: SearchParams;
 }) {
-	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+	const locale = await getLocale();
 	return (
 		<PageShell>
 			<Suspense
 				fallback={
 					<>
-						<DauTrangSua locale={locale} slug={slug} />
+						<DauTrangSua locale={locale} params={params} />
 						<KhungXuong hinh="chi-tiet" />
 					</>
 				}
 			>
 				<NoiDung
-					dauTrang={<DauTrangSua locale={locale} slug={slug} />}
+					dauTrang={<DauTrangSua locale={locale} params={params} />}
 					params={params}
 					searchParams={searchParams}
 				/>
@@ -58,11 +58,11 @@ export default async function SuaTrangPage({
 	);
 }
 
-function DauTrangSua({ slug, locale }: { slug: string; locale: Locale }) {
+function DauTrangSua({ params, locale }: { params: Params; locale: Locale }) {
 	const m = taiLieuMessages(locale).soan;
 	return (
 		<PageShellHeader
-			breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+			breadcrumb={<DuongDanTaiLieuCho locale={locale} params={params} />}
 		>
 			<PageShellHeading>
 				<PageShellTitle>{m.tieuDeSua}</PageShellTitle>

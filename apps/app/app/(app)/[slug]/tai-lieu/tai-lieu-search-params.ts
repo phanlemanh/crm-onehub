@@ -1,6 +1,7 @@
 import { LOAI_TRANG } from "@crm/validation/tai-lieu";
 import {
 	createLoader,
+	parseAsBoolean,
 	parseAsInteger,
 	parseAsString,
 	parseAsStringLiteral,
@@ -17,6 +18,7 @@ export const taiLieuParsers = {
 	[SEARCH_PARAM.taiLieu.nhom]:
 		parseAsStringLiteral(NHOM_DE_XUAT).withDefault("cho"),
 	[SEARCH_PARAM.list.page]: parseAsInteger.withDefault(1),
+	[SEARCH_PARAM.list.archived]: parseAsBoolean.withDefault(false),
 };
 
 export const loadTaiLieuSearchParams = createLoader(taiLieuParsers);

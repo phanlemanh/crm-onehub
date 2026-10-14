@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import { WORKSPACE_ID } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
@@ -12,25 +11,19 @@ import {
 	dieuKienThay,
 	dieuKienThayDeXuat,
 } from "@crm/db/tai-lieu-quyen";
+import { DIEU_KIEN_DANG_DUNG } from "@crm/db/tai-lieu-tim";
 import {
-	chuanNfc,
-	coChuHaySo,
-	type DangCho,
 	gocSlug,
 	LOAI_TRANG,
 	type LoaiTrang,
-	type SuKienChiTiet,
+	parseLoaiDeXuat,
 	sinhSlug,
-	slugTuDuongDan,
 	TAI_LIEU,
 	type TrangThaiDeXuat,
 } from "@crm/validation/tai-lieu";
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
-import { chuanHoa, rutLienKet } from "@crm/validation/tai-lieu-markdown";
-import {
-	parseTrangThaiNguon,
-	type TrangThaiNguon,
-} from "@crm/validation/tai-lieu-nguon";
+import { chuanHoa } from "@crm/validation/tai-lieu-markdown";
+import { parseTrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 import { soMoi } from "@crm/validation/tai-lieu-so";
 import {
 	danhSachTrichDoan,
@@ -41,15 +34,16 @@ import {
 	ConflictException,
 	ForbiddenException,
 	Injectable,
-	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
+import { archivedFilter } from "../trpc/list-input";
 import {
 	dieuKienThayNguon,
 	duyetDuoc,
 	type NguoiGoi,
 	thayDeXuat,
 } from "./quyen";
+import { ghiSuKien } from "./su-kien";
 import type {
 	TaiLieuApproveInput,
 	TaiLieuCreateInput,
@@ -63,7 +57,18 @@ import type {
 	TaiLieuProposeInput,
 	TaiLieuRejectInput,
 } from "./tai-lieu.contracts";
-import { NGUON_CHO, TAI_LIEU_API } from "./tai-lieu-config";
+import {
+	bam,
+	dangChoCua,
+	khongCo,
+	kiemNoiDung,
+	kiemTen,
+	laCu,
+	lienKetTrang,
+	tuChoiTrangThai,
+} from "./tai-lieu-chung";
+import { TAI_LIEU_API } from "./tai-lieu-config";
+import { duyetKhoiPhuc, duyetLuuTru } from "./tai-lieu-luu-tru";
 
 const T = TAI_LIEU_API.thongDiep;
 
@@ -87,103 +92,40 @@ const NGUOI = { select: { id: true, name: true } } as const;
 const DON_VI = { select: { id: true, name: true } } as const;
 const NGUON_NGAN = { select: { id: true, tenTep: true } } as const;
 
-export function kiemTen(ten: string): string {
-	const sach = chuanNfc(ten).trim();
-	if (sach.length < TAI_LIEU.ten.min) throw new BadRequestException(T.tenTrong);
-	if (sach.length > TAI_LIEU.ten.max)
-		throw new BadRequestException(T.tenDai(TAI_LIEU.ten.max));
-	if (!coChuHaySo(sach)) throw new BadRequestException(T.tenKhongChu);
-	return sach;
-}
-
-export function kiemNoiDung(noiDung: string): string {
-	const sach = chuanHoa(noiDung);
-	if (sach.length > TAI_LIEU.noiDung.max)
-		throw new BadRequestException(T.noiDungDai(TAI_LIEU.noiDung.max));
-	return sach;
-}
-
-function khongCo(): NotFoundException {
-	return new NotFoundException(T.khongCo);
-}
-
-function bam(noiDung: string): string {
-	return createHash("sha256").update(noiDung).digest("hex");
-}
-
 const TRANG_THAI_NHOM = {
 	"tat-ca": { trangThai: { not: "DA_DUYET" } },
 	cho: { trangThai: "CHO_DUYET" },
-	"da-xu-ly": { trangThai: { in: ["TRA_LAI", "CU"] } },
+	"da-xu-ly": { trangThai: { in: ["DA_DUYET", "TRA_LAI", "CU"] } },
 } as const satisfies Record<
 	NonNullable<TaiLieuProposalsInput>["nhom"],
 	Prisma.TaiLieuDeXuatWhereInput
 >;
-
-function laCu(
-	trangThai: string,
-	banGocId: string | null,
-	banDangDungId: string | null,
-): boolean {
-	return (
-		trangThai === "CU" ||
-		(trangThai === "CHO_DUYET" && banGocId !== banDangDungId)
-	);
-}
-
-function lienKetTrang(noiDung: string) {
-	return rutLienKet(noiDung).flatMap((l) => {
-		const denSlug = slugTuDuongDan(l.den);
-		return denSlug ? [{ denSlug, vanBan: l.vanBan }] : [];
-	});
-}
 
 type TrangKhoa = {
 	id: string;
 	slug: string;
 	chuTrangId: string;
 	banDangDungId: string | null;
+	archivedAt: Date | null;
 };
 
 type KetQuaDuyet = { loai: "cu" } | { loai: "xong"; slug: string; so: number };
-
-function tuChoiTrangThai(trangThai: string): ConflictException {
-	return new ConflictException(trangThai === "CU" ? T.cu : T.daXuLy);
-}
-
-export async function ghiSuKien(
-	tx: Tx,
-	trangId: string,
-	aiId: string,
-	chiTiet: SuKienChiTiet,
-): Promise<void> {
-	await tx.taiLieuSuKien.create({
-		data: { trangId, aiId, loai: chiTiet.loai, chiTiet },
-	});
-}
-
-export function dangChoCua(v: {
-	coCho: boolean;
-	coTraLai: boolean;
-	nguonMoi: TrangThaiNguon | null;
-}): DangCho {
-	if (v.coCho) return "duyet";
-	const tuNguon = v.nguonMoi ? NGUON_CHO[v.nguonMoi] : null;
-	if (tuNguon) return tuNguon;
-	return v.coTraLai ? "tra-lai" : "chua-co-ban";
-}
 
 @Injectable()
 export class TaiLieuService {
 	constructor(@InjectDatabase() private readonly db: Db) {}
 
 	private coBanCho(nguoi: NguoiGoi): Prisma.TaiLieuDeXuatWhereInput {
-		return { trangThai: "CHO_DUYET", ...dieuKienThayDeXuat(nguoi) };
+		return {
+			trangThai: "CHO_DUYET",
+			loai: "NOI_DUNG",
+			...dieuKienThayDeXuat(nguoi),
+		};
 	}
 
 	async dangDung(nguoi: NguoiGoi): Promise<TaiLieuDangDungOutput> {
 		const rows = await this.db.taiLieuTrang.findMany({
-			where: { AND: [dieuKienThay(nguoi), { banDangDungId: { not: null } }] },
+			where: { AND: [dieuKienThay(nguoi), DIEU_KIEN_DANG_DUNG] },
 			orderBy: [{ ten: "asc" }, { id: "asc" }],
 			take: TAI_LIEU_API.dangDung.toiDa,
 			select: { slug: true, ten: true },
@@ -198,6 +140,7 @@ export class TaiLieuService {
 		const thay: Prisma.TaiLieuTrangWhereInput = {
 			AND: [
 				dieuKienThay(nguoi),
+				archivedFilter(input.archived),
 				...(input.donViId ? [{ departmentId: input.donViId }] : []),
 				...(input.chuTrangId ? [{ chuTrangId: input.chuTrangId }] : []),
 			],
@@ -206,7 +149,7 @@ export class TaiLieuService {
 			? { AND: [thay, { loai: input.loai }] }
 			: thay;
 		const coTrang = TAI_LIEU.danhSach.coTrang;
-		const [trang, total, nhom] = await Promise.all([
+		const [trang, total, nhom, soDaLuuTru] = await Promise.all([
 			this.db.taiLieuTrang.findMany({
 				where,
 				orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
@@ -217,6 +160,7 @@ export class TaiLieuService {
 					ten: true,
 					loai: true,
 					createdAt: true,
+					archivedAt: true,
 					chuTrang: NGUOI,
 					department: DON_VI,
 					banDangDung: { select: { duyetLuc: true } },
@@ -228,6 +172,9 @@ export class TaiLieuService {
 				by: ["loai"],
 				where: thay,
 				_count: { _all: true },
+			}),
+			this.db.taiLieuTrang.count({
+				where: { AND: [dieuKienThay(nguoi), archivedFilter(true)] },
 			}),
 		]);
 		const facetCounts = Object.fromEntries(
@@ -246,9 +193,11 @@ export class TaiLieuService {
 				donVi: t.department,
 				capNhat: (t.banDangDung?.duyetLuc ?? t.createdAt).toISOString(),
 				coBanCho: t._count.deXuat > 0,
+				luuTruLuc: t.archivedAt?.toISOString() ?? null,
 			})),
 			total,
 			facetCounts,
+			soDaLuuTru,
 		};
 	}
 
@@ -263,6 +212,7 @@ export class TaiLieuService {
 				chuTrang: NGUOI,
 				department: DON_VI,
 				xacMinhDen: true,
+				archivedAt: true,
 				banDangDung: {
 					select: {
 						so: true,
@@ -276,6 +226,16 @@ export class TaiLieuService {
 		});
 		if (!t) throw khongCo();
 		const ban = t.banDangDung;
+		const choTheoLoai = await this.db.taiLieuDeXuat.findMany({
+			where: {
+				trangId: t.id,
+				trangThai: "CHO_DUYET",
+				loai: { in: ["LUU_TRU", "KHOI_PHUC"] },
+			},
+			distinct: ["loai"],
+			select: { loai: true },
+		});
+		const coCho = (loai: string) => choTheoLoai.some((c) => c.loai === loai);
 		return {
 			slug: t.slug,
 			ten: t.ten,
@@ -294,6 +254,9 @@ export class TaiLieuService {
 			quaHanXacMinh:
 				t.xacMinhDen !== null && t.xacMinhDen < dauNgayVN(new Date()),
 			coQuyenXacMinh: duyetDuoc(nguoi, { chuTrangId: t.chuTrang.id }),
+			daLuuTru: t.archivedAt ? { luc: t.archivedAt.toISOString() } : null,
+			coLuuTruCho: coCho("LUU_TRU"),
+			coKhoiPhucCho: coCho("KHOI_PHUC"),
 		};
 	}
 
@@ -445,11 +408,13 @@ export class TaiLieuService {
 				select: {
 					id: true,
 					ten: true,
+					archivedAt: true,
 					banDangDungId: true,
 					banDangDung: { select: { ten: true, noiDung: true } },
 				},
 			});
 			if (!trang) throw khongCo();
+			if (trang.archivedAt) throw new BadRequestException(T.daLuuTru);
 			const ten = tenMoi ?? trang.ten;
 			const goc = trang.banDangDung;
 			if (goc && goc.ten === ten && chuanHoa(goc.noiDung) === noiDung)
@@ -518,6 +483,7 @@ export class TaiLieuService {
 					id: true,
 					ten: true,
 					trangThai: true,
+					loai: true,
 					banGocId: true,
 					createdAt: true,
 					taoBoi: NGUOI,
@@ -535,7 +501,8 @@ export class TaiLieuService {
 				taoBoi: r.taoBoi,
 				luc: r.createdAt.toISOString(),
 				trangThai: r.trangThai as TrangThaiDeXuat,
-				cu: laCu(r.trangThai, r.banGocId, r.trang.banDangDungId),
+				loai: parseLoaiDeXuat(r.loai),
+				cu: laCu(r, r.trang.banDangDungId),
 			})),
 			total,
 			choToiDuyet,
@@ -549,7 +516,10 @@ export class TaiLieuService {
 				id: true,
 				ten: true,
 				trangThai: true,
+				loai: true,
 				lyDo: true,
+				lyDoDeXuat: true,
+				tuPhienBanSo: true,
 				noiDung: true,
 				banGocId: true,
 				taoBoiId: true,
@@ -580,13 +550,16 @@ export class TaiLieuService {
 			slug: dx.trang.slug,
 			ten: dx.ten,
 			trangThai: dx.trangThai as TrangThaiDeXuat,
+			loai: parseLoaiDeXuat(dx.loai),
 			lyDo: dx.lyDo,
+			lyDoDeXuat: dx.lyDoDeXuat,
+			tuPhienBanSo: dx.tuPhienBanSo,
 			taoBoi: dx.taoBoi,
 			taoLuc: dx.createdAt.toISOString(),
 			banGoc,
 			noiDung: dx.noiDung,
 			diffHash: await diffHash(soSanh(banGoc, dx.noiDung)),
-			cu: laCu(dx.trangThai, dx.banGocId, dx.trang.banDangDungId),
+			cu: laCu(dx, dx.trang.banDangDungId),
 			duyetDuoc: duyetDuoc(nguoi, dx.trang),
 			nguon: nguon ? { id: nguon.id, tenTep: nguon.tenTep } : null,
 			trichDoan: nguon ? parseTrichDoan(dx.trichDoan) : [],
@@ -609,7 +582,7 @@ export class TaiLieuService {
 		});
 		if (!dau) throw khongCo();
 		const [trang] = await tx.$queryRaw<TrangKhoa[]>`
-			SELECT id, slug, "chuTrangId", "banDangDungId"
+			SELECT id, slug, "chuTrangId", "banDangDungId", "archivedAt"
 			FROM "taiLieuTrang" WHERE id = ${dau.trangId} FOR UPDATE
 		`;
 		if (!trang) throw khongCo();
@@ -620,10 +593,11 @@ export class TaiLieuService {
 				ten: true,
 				noiDung: true,
 				trangThai: true,
+				loai: true,
 				banGocId: true,
 			},
 		});
-		return { trang, dx };
+		return { trang, dx: { ...dx, loai: parseLoaiDeXuat(dx.loai) } };
 	}
 
 	private async yeuCauDuyet(nguoi: NguoiGoi, deXuatId: string) {
@@ -632,6 +606,7 @@ export class TaiLieuService {
 			select: {
 				noiDung: true,
 				nguonId: true,
+				loai: true,
 				banGoc: { select: { noiDung: true } },
 				trang: { select: { chuTrangId: true, loai: true } },
 			},
@@ -647,6 +622,7 @@ export class TaiLieuService {
 		input: TaiLieuApproveInput,
 	): Promise<{ slug: string; so: number; canhBaoTuCam: string[] }> {
 		const truoc = await this.yeuCauDuyet(nguoi, input.id);
+		if (truoc.loai !== "NOI_DUNG") return this.duyetViecTrang(nguoi, input.id);
 		const chienLuoc =
 			truoc.trang.loai === LOAI_TRANG_CHIEN_LUOC
 				? kiemTrangChienLuoc(truoc.noiDung)
@@ -670,6 +646,7 @@ export class TaiLieuService {
 		const ket = await this.db.$transaction(async (tx): Promise<KetQuaDuyet> => {
 			const { trang, dx } = await this.khoa(tx, input.id);
 			if (dx.trangThai !== "CHO_DUYET") throw tuChoiTrangThai(dx.trangThai);
+			if (trang.archivedAt) throw new BadRequestException(T.daLuuTru);
 			const luc = new Date();
 			if (dx.banGocId !== trang.banDangDungId) {
 				await tx.taiLieuDeXuat.update({
@@ -714,6 +691,7 @@ export class TaiLieuService {
 				where: {
 					trangId: trang.id,
 					trangThai: "CHO_DUYET",
+					loai: "NOI_DUNG",
 					banGocId: dx.banGocId,
 					id: { not: dx.id },
 				},
@@ -755,6 +733,27 @@ export class TaiLieuService {
 			so: ket.so,
 			canhBaoTuCam: chienLuoc?.canhBaoTuCam ?? [],
 		};
+	}
+
+	private async duyetViecTrang(
+		nguoi: NguoiGoi,
+		id: string,
+	): Promise<{ slug: string; so: number; canhBaoTuCam: string[] }> {
+		const ket = await this.db.$transaction(async (tx) => {
+			const { trang, dx } = await this.khoa(tx, id);
+			if (dx.trangThai !== "CHO_DUYET") throw tuChoiTrangThai(dx.trangThai);
+			const viec = { trangId: trang.id, deXuatId: dx.id, nguoiId: nguoi.id };
+			if (dx.loai === "LUU_TRU") await duyetLuuTru(tx, viec);
+			else await duyetKhoiPhuc(tx, viec);
+			const ban = trang.banDangDungId
+				? await tx.taiLieuPhienBan.findUnique({
+						where: { id: trang.banDangDungId },
+						select: { so: true },
+					})
+				: null;
+			return { slug: trang.slug, so: ban?.so ?? 0 };
+		});
+		return { ...ket, canhBaoTuCam: [] };
 	}
 
 	async reject(

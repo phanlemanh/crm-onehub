@@ -24,6 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type TaiLieuMessages, taiLieuMessages } from "@/lib/messages/tai-lieu";
+import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 import {
 	duongDanhSach,
 	duongDeXuat,
@@ -61,6 +62,7 @@ export function ChoDuyet({
 }) {
 	const locale = useLocale();
 	const m = taiLieuMessages(locale);
+	const loaiDeXuat = taiLieuLichSuMessages(locale).luuTru.loaiDeXuat;
 	const trpc = useTRPC();
 	const router = useRouter();
 	const url = useWorkspaceUrl();
@@ -113,6 +115,8 @@ export function ChoDuyet({
 				<ItemGroup data-hang-cho-duyet="">
 					{rows.map((r) => {
 						const nhan = nhanTrangThai(m, r);
+						const viec =
+							r.loai === "LUU_TRU" || r.loai === "KHOI_PHUC" ? r.loai : null;
 						return (
 							<Item asChild key={r.id} variant="outline">
 								<Link data-de-xuat={r.id} href={url(duongDeXuat(r.id))}>
@@ -123,9 +127,18 @@ export function ChoDuyet({
 											{ngayTaiLieu(r.luc, locale)}
 										</ItemDescription>
 									</ItemContent>
-									{nhan ? (
+									{nhan || viec ? (
 										<ItemActions>
-											<Badge variant="outline">{nhan}</Badge>
+											{viec ? (
+												<Badge data-loai-de-xuat={viec} variant="secondary">
+													{loaiDeXuat[viec]}
+												</Badge>
+											) : null}
+											{nhan ? (
+												<Badge data-trang-thai={r.trangThai} variant="outline">
+													{nhan}
+												</Badge>
+											) : null}
 										</ItemActions>
 									) : null}
 								</Link>
