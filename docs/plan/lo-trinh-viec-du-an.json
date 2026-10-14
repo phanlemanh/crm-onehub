@@ -142,11 +142,12 @@
       "dung_tren": [
         "DA1"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "Cổng Phạm vi",
       "ten": "Kế hoạch sinh việc",
       "ten_ngan": "Kế hoạch sinh việc",
       "chay_khi": "DA1 đã gộp",
-      "ghi_chu": "Gom với hàng E6 (điều phối vá) của lộ trình OKR. Luật deal thắng là tất định ở máy chủ; bản bàn giao do AI viết thuộc tác tử."
+      "ghi_chu": "Gom với hàng E6 (điều phối vá) của lộ trình OKR. Luật deal thắng là tất định ở máy chủ; bản bàn giao do AI viết thuộc tác tử.",
+      "buoc_ke": "Cổng Đáng ký 14/10 (Mạnh, build); hồ sơ _acceptance/ke-hoach-sinh-viec chờ Cổng Phạm vi"
     },
     {
       "ma": "DA4",
@@ -161,7 +162,7 @@
       "trang_thai": "chưa mở",
       "ten": "Dự án và Gantt",
       "ten_ngan": "Dự án, Gantt",
-      "chay_khi": "DA2 và DA3 đã gộp; chủ kho mở dòng «không làm: ngày bắt đầu cho bước» của lộ trình 30 ngày (mục từ điển «Dự án» đã mở 07/10)"
+      "chay_khi": "DA2 và DA3 đã gộp (mục từ điển «Dự án» đã mở 07/10); điều kiện ngày bắt đầu đã thoả — chủ kho mở dòng «không làm: ngày bắt đầu cho bước» của lộ trình 30 ngày ngày 14/10"
     },
     {
       "ma": "DA5",
