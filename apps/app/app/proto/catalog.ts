@@ -11,6 +11,22 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "so-do-can-chinh-okr",
+		ten: "Sơ đồ căn chỉnh OKR — mỗi đơn vị một thẻ, kiểu Strategy Map",
+		states: [
+			{ id: "ST-sodo-don-vi", nhan: "Sơ đồ đơn vị — toàn công ty" },
+			{
+				id: "ST-sodo-mo-don-vi",
+				nhan: "Mở thẻ Chăm sóc khách hàng trên sơ đồ",
+			},
+			{ id: "ST-sodo-can-chu-y", nhan: "Lọc «Cần chú ý»" },
+			{ id: "ST-sodo-quanh-muc-tieu", nhan: "Lấy một mục tiêu làm tâm" },
+			{ id: "ST-sodo-bang", nhan: "Cách xem Bảng — cùng dữ liệu" },
+			{ id: "ST-sodo-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-sodo-loi", nhan: "Lỗi tải" },
+		],
+	},
+	{
 		slug: "ngan-ho-so-trong-lo-trinh",
 		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
 		states: [
