@@ -129,7 +129,10 @@ async function khoaKeo(n: Nguoi): Promise<{ id: string; key: string }> {
 
 async function khoaThuong(n: Nguoi): Promise<{ id: string; key: string }> {
 	const { khoa } = await tao(n, undefined);
-	if (!khoa) throw new Error(`khong tao duoc khoa thuong cho ${n}`);
+	if (!khoa)
+		throw new Error(
+			`khoa thuong cu mat phien: khong tao duoc khoa thuong cho ${n}`,
+		);
 	return khoa;
 }
 
