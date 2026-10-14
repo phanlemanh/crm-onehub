@@ -24,7 +24,7 @@ Trước (mốc nền):
     paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E6
     status: not-run
@@ -92,7 +92,7 @@ Trước (mốc nền):
     paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"]
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E24
     status: not-run
@@ -155,13 +155,13 @@ Trước (mốc nền):
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E12
     criterion: AC-7
     executor: script
     cmd: config:executors.script.sol_san_thiet_ke_trang
-    expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, man-soan.tsx, hoi-thoai-soan.tsx: không lỗi P0 nào (low-contrast, gray-on-color, text-overflow, broken-image, body-text-viewport-edge). Chiều đỏ ghim: bản sao nut-soan.tsx chèn một phần tử text-gray-400 trên bg-blue-600 → REJECT, mã 2, hit 'gray-on-color'."
+    expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, trang-soan.tsx, khung-soan.tsx, hoi-thoai-soan.tsx (man-soan.tsx gỡ ở 574292047, thay bởi trang-soan và khung-soan; F24 13/10): không lỗi P0 nào. Giới hạn đo 13/10: design-gate --mode static trên .tsx không chặn được luật P0 nào (tương phản, ảnh hỏng cần chế độ DOM), nên chiều đỏ duy nhất còn lại của ô là tệp đích vắng → mã khác 0; lời hứa chiều đỏ «gray-on-color» cũ không còn."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
 ```
@@ -215,7 +215,7 @@ dat: apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx
 Diff `_acceptance/soan-okr-song-lai/evals.yaml`:
 ```
 diff --git a/_acceptance/soan-okr-song-lai/evals.yaml b/_acceptance/soan-okr-song-lai/evals.yaml
-index 753c69ab0..deacb1e87 100644
+index 753c69ab0..91182a8ea 100644
 --- a/_acceptance/soan-okr-song-lai/evals.yaml
 +++ b/_acceptance/soan-okr-song-lai/evals.yaml
 @@ -23,7 +23,7 @@ evals:
@@ -232,8 +232,9 @@ index 753c69ab0..deacb1e87 100644
      criterion: AC-7
      executor: script
 -    cmd: config:executors.script.sol_san_thiet_ke
+-    expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, man-soan.tsx, hoi-thoai-soan.tsx: không lỗi P0 nào (low-contrast, gray-on-color, text-overflow, broken-image, body-text-viewport-edge). Chiều đỏ ghim: bản sao nut-soan.tsx chèn một phần tử text-gray-400 trên bg-blue-600 → REJECT, mã 2, hit 'gray-on-color'."
 +    cmd: config:executors.script.sol_san_thiet_ke_trang
-     expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, man-soan.tsx, hoi-thoai-soan.tsx: không lỗi P0 nào (low-contrast, gray-on-color, text-overflow, broken-image, body-text-viewport-edge). Chiều đỏ ghim: bản sao nut-soan.tsx chèn một phần tử text-gray-400 trên bg-blue-600 → REJECT, mã 2, hit 'gray-on-color'."
++    expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, trang-soan.tsx, khung-soan.tsx, hoi-thoai-soan.tsx (man-soan.tsx gỡ ở 574292047, thay bởi trang-soan và khung-soan; F24 13/10): không lỗi P0 nào. Giới hạn đo 13/10: design-gate --mode static trên .tsx không chặn được luật P0 nào (tương phản, ảnh hỏng cần chế độ DOM), nên chiều đỏ duy nhất còn lại của ô là tệp đích vắng → mã khác 0; lời hứa chiều đỏ «gray-on-color» cũ không còn."
      evidence_required: [run_id, exit_code, verifier, verified_at, output]
 -    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
 +    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
@@ -250,7 +251,8 @@ index 753c69ab0..deacb1e87 100644
     "kieu": "design-gate",
     "tep": "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx",
     "xoa_tep": true,
-    "thong_diep": "design-gate do khi tep dich vang (ca da lam E12 do sau 574292047)"
+    "thong_diep": "design-gate do khi tep dich vang (ca da lam E12 do sau 574292047)",
+    "thong_diep_may": "ENOENT"
   }
 ]
 ```
@@ -284,7 +286,7 @@ Trước (mốc nền):
     paths: ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E1
     status: not-run
@@ -355,7 +357,7 @@ Trước (mốc nền):
     paths: ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E11
     status: not-run
@@ -443,7 +445,7 @@ Trước (mốc nền):
       Mot lan tu kiem khong bat -> script do, thuoc hong.
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E4
     criterion: AC-4
@@ -477,6 +479,13 @@ Sau (HEAD):
       ci.yml them buoc `run: |` nhieu dong chua `bun test --timeout 15000` -> ".github/workflows/ci.yml co --timeout";
       setup.ts them setDefaultTimeout -> "apps/api/test/setup.ts goi setDefaultTimeout".
       Mot lan tu kiem khong bat -> script do, thuoc hong.
+```
+
+Quyet dinh noi tran nguyen van — tro-ly-okr-nen decisions.jsonl dong 28 (ky 27/09, sau AC-4 cua khoa-con-bat-xa-tran ky 26/09):
+```
+{"id":"d-20260927T112853Z-28","type":"fix","stage":"S4-r1","at":"2026-09-27T11:28:53Z","decision":"Vòng 1 REJECT vì bun run test đỏ (go-la-cat-quyen hết trần 5 giây dưới tải S4) và một phát hiện trong hợp đồng ở AC-1. Sửa: E1 viết lại thành bảng kỳ vọng viết tay 10 ô có nghĩa cộng bảng NGOAI có lý do cho 65 ô, mọi tổ hợp phải nằm trong một bảng; năm bài dò ma trận thủ tục trong go-la-cat-quyen mang trần 60 giây. 22 phát hiện ngoài hợp đồng không sửa ở vòng này, chờ Cổng Bằng chứng.","impact":"Thước AC-1 không còn tự suy kỳ vọng từ chính logic sản phẩm; đổi lại bảng 
+status: signed-off
+approved_at:
 ```
 
 Diff `_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs`:
@@ -638,7 +647,7 @@ Trước (mốc nền):
       them `continue-on-error: true` vao buoc ay -> ma 1 neu dung dieu 5.
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E5
     criterion: AC-5
@@ -783,7 +792,8 @@ index 000000000..49e143113
       "lint:slop test build; do",
       "lint:slop test; do"
     ],
-    "thong_diep": "go build khoi danh sach task cua pre-push thi dieu 3 do"
+    "thong_diep": "go build khoi danh sach task cua pre-push thi dieu 3 do",
+    "thong_diep_may": "danh sach task cua pre-push: check-types lint lint:slop test"
   }
 ]
 ```
@@ -818,7 +828,7 @@ Trước (mốc nền):
       Dong can bo khong tim thay -> ma 2.
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E3
     criterion: AC-3
@@ -894,7 +904,8 @@ index 511f261a2..dba8f6357 100644
       "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
     ],
     "chua": "OK dot bien con-thanh-vien: ma 1",
-    "thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+    "thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim",
+    "thong_diep_may": "OK dot bien con-thanh-vien: ma 1"
   }
 ]
 ```
@@ -930,7 +941,7 @@ Trước (mốc nền):
       khop NHAN "tRPC: khoa con bat cua nguoi ngoai van qua duoc" (E3).
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E6
     criterion: AC-6
@@ -1007,7 +1018,8 @@ index 511f261a2..dba8f6357 100644
       "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
     ],
     "chua": "OK dot bien con-thanh-vien: ma 1",
-    "thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+    "thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim",
+    "thong_diep_may": "OK dot bien con-thanh-vien: ma 1"
   }
 ]
 ```
@@ -1021,7 +1033,7 @@ khoa-con-bat-xa-tran:E6 dot-bien-con-thanh-vien-bi-bat: that dat, dot bien bat �
 
 Lý do: do san lo o luot ghim 13/10: neo dan so 26 file goi getLocale la anh chup cay cua vong cu, nay 54 — thuoc tu het han. Rang quet tren cay xuat ra tai cap sha gop eeb6ea30 cua vong (luat F10: thuoc «vong nay» neo cap sha gop), neo 26 dung o moc do
 
-Căn cứ: `eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1`
+Căn cứ: `_acceptance/thuoc-khong-tu-het-han/contract.md:47`
 
 Trước (mốc nền):
 ```
@@ -1049,7 +1061,7 @@ Trước (mốc nền):
       trong component con duoc Suspense boc) van DAT — mau duong ghim ten.
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E2
     criterion: AC-2
@@ -1075,34 +1087,6 @@ Sau (HEAD):
       trong component con duoc Suspense boc) van DAT — mau duong ghim ten.
 ```
 
-Commit căn cứ: ```
-eeb6ea30e 2026-09-07 Merge remote-tracking branch 'origin/onehub' into onehub
-
- .githooks/gate-shape.json                          |  18 +-
- .githooks/pre-push                                 |   2 +-
- .github/workflows/acceptance.yml                   |  30 ++
- .github/workflows/auto-pr.yml                      |   1 +
- CLAUDE.md                                          |   6 +
- PRODUCT-MAP.md                                     |   5 +-
- _acceptance/auto-pr-thoi-do-o-ban-re/contract.md   | 224 +++++++++++++
- .../auto-pr-thoi-do-o-ban-re/decisions.jsonl       |  19 ++
- _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml    | 192 +++++++++++
- .../auto-pr-thoi-do-o-ban-re/evidence-report.md    | 316 ++++++++++++++++++
- _acceptance/auto-pr-thoi-do-o-ban-re/gap-probe.md  |  44 +++
- .../auto-pr-thoi-do-o-ban-re/review-findings.md    |  81 +++++
- _acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl |  49 +++
- _acceptance/config.yaml                            |  29 ++
- _acceptance/cron-theo-ban-khai/card-plain.json     |   6 +
- _acceptance/cron-theo-ban-khai/card.html           |  46 +++
- _acceptance/cron-theo-ban-khai/contract.md         | 165 ++++++++++
- _acceptance/cron-theo-ban-khai/decisions.jsonl     |   8 +
- _acceptance/cron-theo-ban-khai/evals.yaml          | 153 +++++++++
- _acceptance/cron-theo-ban-khai/evidence-page.html  | 117 +++++++
- _acceptance/cron-theo-ban-khai/evidence-report.md  | 140 ++++++++
- _acceptance/cron-theo-ban-khai/evidence/E1.txt     |   4 +
- _acceptance/cron-theo-ban-khai/evidence/E2.txt     |   3 +
-```
-
 Rang tai cap sha gop (mac dinh) — lenh that cua E2:
 ```
 doc du lieu luot o man, da duoc ranh cua layout che: 15 loi goi / 15 file
@@ -1113,9 +1097,23 @@ exit=0
 
 Rang tren cay HEAD (--goc .) — dan so lay tu chinh rang, roi chay lai voi so do; khong chung duoc cay HEAD:
 ```
-dan so HEAD theo rang: 57
+dan so HEAD theo rang: 59
 MA 2: apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx khong thay ham xuat mac dinh
 exit=2
+```
+
+Luat F10 nguyen van — hop dong thuoc-khong-tu-het-han (status signed-off, approved_at 2026-10-10): AC-3 neo cap sha gop, AC-5 liet dang troi:
+```
+status: signed-off
+approved_at: 2026-10-10
+- AC-3: Given một cây tạm dựng từ `a9e8bc75a` cộng một commit tổng hợp chạm `_acceptance/hoi-crm-qua-zalo/` của hồ sơ đã ký
+  khác, When chạy thước `ha-tran-thang-hoi-zalo/E7` bản cũ (lấy ở `a9e8bc75a`) và bản neo, Then bản cũ thoát 1 với thông điệp
+  ghim của nó, bản neo thoát 0 và in «ok: khong cham ho so da ky» tính trên cặp `9dc1a037c^1..9dc1a037c` (PR #168); bản neo chạy
+  ở hai ref khác nhau cho đầu ra giống hệt; bản sao thêm một tệp dưới `_acceptance/hoi-crm-qua-zalo/` vào tập đổi thì thoát 1
+  gọi tên tệp đó; commit gộp đầu tiên đưa `ha-tran-thang-hoi-zalo` lên `onehub` đúng là `9dc1a037c`.
+  số và danh sách trong tệp: số tệp thước của hồ sơ đã ký nhắc mốc trôi, và số eval `script`/`test` chưa khai `paths`; lệnh quét
+  đếm đúng dạng trôi của từng tệp trong ma trận mẫu viết sẵn (`origin/onehub`, `onehub` trần, `merge-base`, `..HEAD`, `HEAD~N`,
+  `@{u}`, `git ls-files`/`git diff` không ref) và KHÔNG đếm thước neo bằng sha cụ thể.
 ```
 
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs`:
@@ -1174,7 +1172,8 @@ index 722885e02..78077d504 100644
         "</>"
       ]
     ],
-    "thong_diep": "bo ranh Suspense cua root layout tren cay moc gop thi rang do"
+    "thong_diep": "bo ranh Suspense cua root layout tren cay moc gop thi rang do",
+    "thong_diep_may": "DO: doc du lieu luot o vo tinh, khong di qua ranh <Suspense>"
   }
 ]
 ```
@@ -1188,7 +1187,7 @@ lenh-dung-do-khong-ai-thay:E2 bo-suspense-o-layout: that dat, dot bien bat — b
 
 Lý do: do san lo o luot ghim 13/10: rang so diff tu sha ghim toi HEAD nen moi PR sau cham apps/app deu lam no do — thuoc «vong nay» tu het han. Rang so dung cap sha gop eeb6ea30^1..eeb6ea30 (luat F10); o cap do diff chi co layout.tsx
 
-Căn cứ: `eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1`
+Căn cứ: `_acceptance/thuoc-khong-tu-het-han/contract.md:47`
 
 Trước (mốc nền):
 ```
@@ -1208,7 +1207,7 @@ Trước (mốc nền):
       Khong file nao doi -> ma 2: ban va chua co thi phep do khong con nghia.
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E3
     criterion: AC-3
@@ -1226,32 +1225,18 @@ Sau (HEAD):
       Khong file nao doi -> ma 2: ban va chua co thi phep do khong con nghia.
 ```
 
-Commit căn cứ: ```
-eeb6ea30e 2026-09-07 Merge remote-tracking branch 'origin/onehub' into onehub
-
- .githooks/gate-shape.json                          |  18 +-
- .githooks/pre-push                                 |   2 +-
- .github/workflows/acceptance.yml                   |  30 ++
- .github/workflows/auto-pr.yml                      |   1 +
- CLAUDE.md                                          |   6 +
- PRODUCT-MAP.md                                     |   5 +-
- _acceptance/auto-pr-thoi-do-o-ban-re/contract.md   | 224 +++++++++++++
- .../auto-pr-thoi-do-o-ban-re/decisions.jsonl       |  19 ++
- _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml    | 192 +++++++++++
- .../auto-pr-thoi-do-o-ban-re/evidence-report.md    | 316 ++++++++++++++++++
- _acceptance/auto-pr-thoi-do-o-ban-re/gap-probe.md  |  44 +++
- .../auto-pr-thoi-do-o-ban-re/review-findings.md    |  81 +++++
- _acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl |  49 +++
- _acceptance/config.yaml                            |  29 ++
- _acceptance/cron-theo-ban-khai/card-plain.json     |   6 +
- _acceptance/cron-theo-ban-khai/card.html           |  46 +++
- _acceptance/cron-theo-ban-khai/contract.md         | 165 ++++++++++
- _acceptance/cron-theo-ban-khai/decisions.jsonl     |   8 +
- _acceptance/cron-theo-ban-khai/evals.yaml          | 153 +++++++++
- _acceptance/cron-theo-ban-khai/evidence-page.html  | 117 +++++++
- _acceptance/cron-theo-ban-khai/evidence-report.md  | 140 ++++++++
- _acceptance/cron-theo-ban-khai/evidence/E1.txt     |   4 +
- _acceptance/cron-theo-ban-khai/evidence/E2.txt     |   3 +
+Luat F10 nguyen van — hop dong thuoc-khong-tu-het-han (status signed-off, approved_at 2026-10-10): AC-3 neo cap sha gop, AC-5 liet dang troi:
+```
+status: signed-off
+approved_at: 2026-10-10
+- AC-3: Given một cây tạm dựng từ `a9e8bc75a` cộng một commit tổng hợp chạm `_acceptance/hoi-crm-qua-zalo/` của hồ sơ đã ký
+  khác, When chạy thước `ha-tran-thang-hoi-zalo/E7` bản cũ (lấy ở `a9e8bc75a`) và bản neo, Then bản cũ thoát 1 với thông điệp
+  ghim của nó, bản neo thoát 0 và in «ok: khong cham ho so da ky» tính trên cặp `9dc1a037c^1..9dc1a037c` (PR #168); bản neo chạy
+  ở hai ref khác nhau cho đầu ra giống hệt; bản sao thêm một tệp dưới `_acceptance/hoi-crm-qua-zalo/` vào tập đổi thì thoát 1
+  gọi tên tệp đó; commit gộp đầu tiên đưa `ha-tran-thang-hoi-zalo` lên `onehub` đúng là `9dc1a037c`.
+  số và danh sách trong tệp: số tệp thước của hồ sơ đã ký nhắc mốc trôi, và số eval `script`/`test` chưa khai `paths`; lệnh quét
+  đếm đúng dạng trôi của từng tệp trong ma trận mẫu viết sẵn (`origin/onehub`, `onehub` trần, `merge-base`, `..HEAD`, `HEAD~N`,
+  `@{u}`, `git ls-files`/`git diff` không ref) và KHÔNG đếm thước neo bằng sha cụ thể.
 ```
 
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs`:
@@ -1351,7 +1336,8 @@ index 65f2af4d9..e9f03d7e3 100644
       "apps/app"
     ],
     "them": "apps/app/app/page.tsx",
-    "thong_diep": "diff co them mot file ngoai layout.tsx thi rang do"
+    "thong_diep": "diff co them mot file ngoai layout.tsx thi rang do",
+    "thong_diep_may": "file ngoai apps/app/app/layout.tsx da doi"
   }
 ]
 ```
@@ -1363,9 +1349,9 @@ lenh-dung-do-khong-ai-thay:E3 them-mot-man-vao-diff: that dat, dot bien bat — 
 
 ## lenh-dung-do-khong-ai-thay:E8 — sua-rang
 
-Lý do: do san lo o luot ghim 13/10: spawnSync khong khai maxBuffer nen `bun run test` vuot 1 MiB -> ENOBUFS; menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu (nay 20), tu het han — y «vong ay khong doi gi ngoai layout.tsx» da do E3 o cap sha gop. Khai maxBuffer, bo menh de dem canh bao; bon lenh van phai ma 0
+Lý do: do san lo o luot ghim 13/10: spawnSync khong khai maxBuffer nen `bun run test` vuot 1 MiB -> ENOBUFS; menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu (so hien tai xem bang), tu het han — y «vong ay khong doi gi ngoai layout.tsx» da do E3 o cap sha gop. Khai maxBuffer, bo menh de dem canh bao; bon lenh van phai ma 0
 
-Căn cứ: `eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1`
+Căn cứ: `_acceptance/thuoc-khong-tu-het-han/contract.md:47`
 
 Trước (mốc nền):
 ```
@@ -1385,7 +1371,7 @@ Trước (mốc nền):
       Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
 ```
 
-Sau (HEAD):
+Sau (cây đang xét):
 ```
   - id: E8
     criterion: AC-8
@@ -1403,49 +1389,30 @@ Sau (HEAD):
       Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
 ```
 
-Commit căn cứ: ```
-eeb6ea30e 2026-09-07 Merge remote-tracking branch 'origin/onehub' into onehub
-
- .githooks/gate-shape.json                          |  18 +-
- .githooks/pre-push                                 |   2 +-
- .github/workflows/acceptance.yml                   |  30 ++
- .github/workflows/auto-pr.yml                      |   1 +
- CLAUDE.md                                          |   6 +
- PRODUCT-MAP.md                                     |   5 +-
- _acceptance/auto-pr-thoi-do-o-ban-re/contract.md   | 224 +++++++++++++
- .../auto-pr-thoi-do-o-ban-re/decisions.jsonl       |  19 ++
- _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml    | 192 +++++++++++
- .../auto-pr-thoi-do-o-ban-re/evidence-report.md    | 316 ++++++++++++++++++
- _acceptance/auto-pr-thoi-do-o-ban-re/gap-probe.md  |  44 +++
- .../auto-pr-thoi-do-o-ban-re/review-findings.md    |  81 +++++
- _acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl |  49 +++
- _acceptance/config.yaml                            |  29 ++
- _acceptance/cron-theo-ban-khai/card-plain.json     |   6 +
- _acceptance/cron-theo-ban-khai/card.html           |  46 +++
- _acceptance/cron-theo-ban-khai/contract.md         | 165 ++++++++++
- _acceptance/cron-theo-ban-khai/decisions.jsonl     |   8 +
- _acceptance/cron-theo-ban-khai/evals.yaml          | 153 +++++++++
- _acceptance/cron-theo-ban-khai/evidence-page.html  | 117 +++++++
- _acceptance/cron-theo-ban-khai/evidence-report.md  | 140 ++++++++
- _acceptance/cron-theo-ban-khai/evidence/E1.txt     |   4 +
- _acceptance/cron-theo-ban-khai/evidence/E2.txt     |   3 +
-```
-
 Lý do tách theo loại (1 = vật đã gỡ · 2 = tiền đề bị quyết định đã ký sau lật · 3 = lỗi của chính răng):
 
 | Loại | Lý do | Căn cứ |
 |---|---|---|
 | 3 | spawnSync khong khai maxBuffer -> ENOBUFS khi chay bun run test (loi cua chinh rang) | `repin-20261013T052045Z-82824` |
-| 2 | menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu; luat F10 cua kho: thuoc «vong nay» neo cap sha gop, khong neo HEAD; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop. So canh bao hien tai la troi chung cua kho, khong do vong lenh-dung-do gay ra | `_acceptance/thuoc-khong-tu-het-han/contract.md:3` |
+| 2 | menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu; luat F10 cua kho: thuoc «vong nay» neo cap sha gop, khong neo HEAD; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop. So canh bao hien tai la troi chung cua kho, khong do vong lenh-dung-do gay ra | `_acceptance/thuoc-khong-tu-het-han/contract.md:47` |
 
 So canh bao lint cua apps/app o HEAD:
 ```
 Found 29 warnings.
 ```
 
-Luat F10 (thuoc-khong-tu-het-han, dong 3 cua hop dong):
+Luat F10 nguyen van — hop dong thuoc-khong-tu-het-han (status signed-off, approved_at 2026-10-10): AC-3 neo cap sha gop, AC-5 liet dang troi:
 ```
-feature: Thước của hồ sơ đã ký không tự hết hạn — sửa paths chết để lưới trước-gộp bật lại bộ lọc hoá cũ ở 3 hồ sơ có thước còn sống, neo thước «vòng này» của ha-tran-thang-hoi-zalo vào cặp sha gộp, và kiểm kê phần còn lại
+status: signed-off
+approved_at: 2026-10-10
+- AC-3: Given một cây tạm dựng từ `a9e8bc75a` cộng một commit tổng hợp chạm `_acceptance/hoi-crm-qua-zalo/` của hồ sơ đã ký
+  khác, When chạy thước `ha-tran-thang-hoi-zalo/E7` bản cũ (lấy ở `a9e8bc75a`) và bản neo, Then bản cũ thoát 1 với thông điệp
+  ghim của nó, bản neo thoát 0 và in «ok: khong cham ho so da ky» tính trên cặp `9dc1a037c^1..9dc1a037c` (PR #168); bản neo chạy
+  ở hai ref khác nhau cho đầu ra giống hệt; bản sao thêm một tệp dưới `_acceptance/hoi-crm-qua-zalo/` vào tập đổi thì thoát 1
+  gọi tên tệp đó; commit gộp đầu tiên đưa `ha-tran-thang-hoi-zalo` lên `onehub` đúng là `9dc1a037c`.
+  số và danh sách trong tệp: số tệp thước của hồ sơ đã ký nhắc mốc trôi, và số eval `script`/`test` chưa khai `paths`; lệnh quét
+  đếm đúng dạng trôi của từng tệp trong ma trận mẫu viết sẵn (`origin/onehub`, `onehub` trần, `merge-base`, `..HEAD`, `HEAD~N`,
+  `@{u}`, `git ls-files`/`git diff` không ref) và KHÔNG đếm thước neo bằng sha cụ thể.
 ```
 
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs`:
@@ -1539,7 +1506,8 @@ index fd73b2b09..4eb66bf06 100644
     "ham": "danhGia",
     "vao": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 0}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
     "vao_dot": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 1}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
-    "thong_diep": "mot trong bon lenh cu khong ma 0 thi rang do"
+    "thong_diep": "mot trong bon lenh cu khong ma 0 thi rang do",
+    "thong_diep_may": "check-types=1"
   }
 ]
 ```
