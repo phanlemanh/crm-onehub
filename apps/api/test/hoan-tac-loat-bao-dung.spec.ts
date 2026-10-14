@@ -37,10 +37,11 @@ function chot(dung: boolean, thongDiep: string): void {
 	if (!dung) throw new Error(thongDiep);
 }
 
-type GoiLog = [Record<string, unknown>, unknown?];
+type DongLog = { message?: string; recordId?: string };
+type GoiLog = [DongLog | undefined, unknown];
 
 function goiCua(spy: { mock: { calls: unknown[][] } }): GoiLog[] {
-	return spy.mock.calls.map((c) => [c[0] as Record<string, unknown>, c[1]]);
+	return spy.mock.calls.map((c) => [c[0] as DongLog | undefined, c[1]]);
 }
 
 describe("hlb-run-bulk", () => {
