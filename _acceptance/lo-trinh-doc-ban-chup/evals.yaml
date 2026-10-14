@@ -1,0 +1,325 @@
+schema_version: 1
+slug: lo-trinh-doc-ban-chup
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldbc_day
+    paths:
+      - "apps/api/src/lo-trinh/**"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "packages/db/prisma/migrations/**"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "apps/api/test/ban-chup-lo-trinh.spec.ts"
+    expected: |
+      ban-chup-lo-trinh.spec.ts describe "ldbc-day" tren kho thu cua luot. Fixture KHONG viet tay: khoi du lieu rut tu
+      LO-TRINH.html that cua cay bang chinh docDuLieu + phanTichLoTrinh (round-trip tu ben viet that), chu kho tao khoa
+      «Đẩy lộ trình» qua taoKhoaDayLoTrinh. Goi POST /rest/lo-trinh/ban-chup qua cau REST that voi x-api-key:
+        1 tra { ketQua: "nhan" }; doc lai bang Prisma: dung MOT hang BanChupLoTrinh nguon "crm"
+        2 sha, commitLuc == gia tri da gui; layLuc nam trong [truoc goi, sau goi]
+        3 duLieu doc lai deep-equal khoi da gui, KE CA khoa ngoai khuon (tin_hieu) — so bang chinh doi tuong gui
+        4 docBanChupLoTrinh(db, "crm") tra du lieu qua phanTichLoTrinh ok, cung sha
+      CHIEU DO: ban sao luu ban da lot khoa (loTrinhDuLieu.parse) -> dong 3 do voi thong diep ghim
+      "ban chup mat phan trang chua doc (tin_hieu)"; ban sao ghi layLuc = commitLuc -> dong 2 do voi thong diep ghim
+      "gio lay khong phai gio nhan".
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ldbc_lenh
+    paths:
+      - "scripts/ban-chup-lo-trinh/**"
+      - ".github/workflows/ban-chup-lo-trinh.yml"
+    expected: |
+      scripts/ban-chup-lo-trinh/test/day.test.ts describe "day": may chu gia dung khuon tra loi that cua thu tuc
+      (rut tu kieu dau ra cua router, khong viet tay chuoi), chay day.ts tren LO-TRINH.html that cua cay:
+        1 than gui co nguon "crm", sha == GITHUB_SHA dat cho lan chay, commitLuc == git log -1 --format=%cI cua HEAD,
+          header x-api-key == CRM_KHOA_DAY_LO_TRINH, duLieu deep-equal docDuLieu(LO-TRINH.html).duLieu
+        2 may chu tra nhan -> ma 0, stdout co DUNG mot dong "::notice title=ban-chup-lo-trinh::nhan"; ma tran viet truoc 4 ket
+          qua (nhan, trung, cu-hon, chua-cai) -> moi o dung mot dong notice mang dung ten ket qua
+      Doc .github/workflows/ban-chup-lo-trinh.yml bang parser YAML: on.push.branches == [onehub], on.push.paths chua
+      "LO-TRINH.html", co workflow_dispatch, concurrency khong cancel-in-progress, job co if chan kho phanlemanh/crm-onehub,
+      env lay hai bi mat CRM_API_URL va CRM_KHOA_DAY_LO_TRINH.
+      CHIEU DO: ban sao workflow bat cancel-in-progress -> do voi thong diep ghim "huy luot dang chay lam mat thu tu";
+      ban sao gui sha rong -> dong 1 do voi thong diep ghim "ban chup khong mang sha".
+
+  - id: E3
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldbc_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/lo-trinh-doc-ban-chup/evidence dat tuong minh: lenh cua ldbc_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/lo-trinh-doc-ban-chup/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "_acceptance/lo-trinh-doc-ban-chup/rang/do-man.mjs"
+    expected: |
+      Kho do rieng (tien-de), nguoi do la chu. THU TU CO DINH, khong xoa hang bang helper:
+        pha 1 — kho chua co ban chup: chup 4 o ban-dung (1280|375 x vi|en): khong co chuoi danh dau; dong gio lay mang chu
+          "(bản dựng)"/"(build)"
+        pha 2 — du lieu mau vao qua duong ghi that: do-man.mjs tao khoa «Đẩy lộ trình» qua API cua kho do, goi
+          POST /rest/lo-trinh/ban-chup voi khoi rut tu LO-TRINH.html cua cay DA SUA mot cau giao danh dau
+          (chuoi "LT1C-DAU-<run>"), commitLuc = bay gio; tai lai trang moi 10 s cho toi khi chuoi danh dau hien; dong
+          "hien trong mot nhip" DUNG khi thoi gian cho <= LO_TRINH.nhipLamMoiMs (doc tu cau-hinh.ts that) + 15 s
+        pha 3 — chup 4 o ban-chup (1280|375 x vi|en): bang co hang mang chuoi danh dau; dong gio lay KHONG co chu ban dung
+        pha 4 — mot o ban-chup-1280-vi voi nguoi xem vai member (phien thu hai cua kho do): bang van hien, khong co khoi so
+          lieu chu kho (doi chung: o chu cung trang co khoi do)
+        moi o: scrollWidth <= clientWidth cua trang (khong cuon ngang); cau giao co translate="no" hoac lang cua du lieu
+      CHIEU DO: ban sao doc-ban-chup tra null -> pha 2 SAI voi thong diep ghim "trang khong doc ban chup";
+      ban sao cache khong het han -> pha 2 SAI voi thong diep ghim "ban chup khong hien trong mot nhip lam moi".
+
+  - id: E3b
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldbc_do_man
+    steps:
+      - "Cung luot do voi E3 (lenh trung chay mot lan); doc cac dong DUNG/SAI cua cot gio-lay va cuon-ngang"
+      - "Mo tung anh 8 o va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/lo-trinh-doc-ban-chup/evidence/
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "_acceptance/lo-trinh-doc-ban-chup/rang/do-man.mjs"
+    expected: |
+      Cung ma tran 8 o cua E3, trinh duyet do dat emulateTimezone: 6 o Asia/Ho_Chi_Minh, 2 o (ban-chup-1280-vi,
+      ban-dung-375-en) America/New_York — khac mui gio may chu cua phien do. Moi o: dong gio lay nhin thay duoc o dau vung
+      noi dung, gio bang gio cua nguon tinh theo mui gio CUA TRINH DUYET o do (do-man tinh ky vong bang Intl voi timeZone
+      cua o, khong viet tay); o ban-dung co chu nhan ban dung dung ngon ngu cua o (vi/en); o 375 khong cuon
+      ngang va dong gio xuong dong chu khong tran; cau giao khong bi trinh duyet dich (translate="no").
+      CHIEU DO: ban sao bo nhan ban dung -> o ban-dung-1280-vi SAI voi thong diep ghim "roi ve ban dung ma khong noi ra";
+      ban sao dinh dang gio o may chu -> o New_York SAI voi thong diep ghim "gio lay theo mui may chu, khong theo nguoi xem".
+
+  - id: E4
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldbc_khoa
+    paths:
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/src/trpc/middlewares/khoa-day-lo-trinh.middleware.ts"
+      - "apps/api/src/api-keys/**"
+      - "packages/auth/src/**"
+      - "apps/api/test/ban-chup-lo-trinh.spec.ts"
+    expected: |
+      describe "ldbc-khoa". Ma tran viet truoc 7 khoa x 1 duong nhan = 7 o, moi o mot assert ma HTTP + mot assert hang
+      BanChupLoTrinh khong doi (so updatedAt/sha truoc-sau):
+        k1 khoa day cua chu -> 200 nhan; k2 khoa day cua quan tri -> 200 nhan; k3 khoa thuong cua chu -> 401;
+        k4 khoa chi-keo tin hieu -> 401; k5 khoa day da thu hoi -> 401; k6 khoa day cua nguoi da bi go (khoa bi tat khi go) -> 401; k7 khoa day cua nguoi bi ha xuong member -> 403
+      Ma tran duong khac viet truoc: khoa day (k1) goi 3 duong khac — mot thu tuc tRPC (workspace.get), mot cau REST
+      (/rest/tin-hieu/lich/keo-ve), getSession qua header -> khong duong nao 200, khong phien nao mo.
+      Tao khoa: apiKeys.create loai "day-lo-trinh" boi member -> 403, boi admin -> co khoa, configId "day-lo-trinh".
+      CHIEU DO: ban sao dat cau hinh day-lo-trinh truoc mac dinh trong apiKey([...]) -> o "duong khac" do voi thong diep
+      ghim "khoa day mo duoc duong khac"; ban sao bo kiem vai -> k7 do voi thong diep ghim "khoa cua nguoi bi ha vai van day duoc".
+
+  - id: E5
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ldbc_khoa_ui
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/api-keys/**"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/khoa-api-loai.dom.tsx"
+    expected: |
+      khoa-api-loai.dom.tsx describe "day-lo-trinh": mo hop tao khoa voi mock trpc apiKeys.list tra taoDuocDayLoTrinh:
+        1 quan tri: o loai co lua chon «Đẩy lộ trình», chon -> mutation apiKeys.create nhan loai "day-lo-trinh"
+        2 thanh vien: lua chon hien nhung bi khoa, co mot dong noi vi sao (chu rut tu tep loi, khong viet tay)
+      CHIEU DO: ban sao an lua chon voi thanh vien -> dong 2 do voi thong diep ghim "lua chon bien mat thay vi khoa".
+
+  - id: E6
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldbc_hong
+    paths:
+      - "apps/api/src/lo-trinh/**"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "apps/api/test/ban-chup-lo-trinh.spec.ts"
+    expected: |
+      describe "ldbc-hong". Ma tran viet truoc 6 o, moi o: ma 400 (o5: 413), than loi chua duong khoa hong dung chuoi ghim,
+      hang dang luu khong doi:
+        h1 duLieu.khuon = "khac" -> "khuon"; h2 xoa duLieu.lo_trinh -> "lo_trinh"; h3 sha rong -> "sha";
+        h4 commitLuc "hom qua" -> "commitLuc"; h5 than lon hon BAN_CHUP_LO_TRINH.tranThanByte -> 413;
+        h6 mot hang lo trinh thieu ma -> "lo_trinh.0.hang.<i>.ma"
+      Doi chung duong: cung khoi khong pha -> 200 (de chung minh tu choi den tu cho pha, khong tu khoa).
+      CHIEU DO: ban sao nuot loi phan tich thanh duLieu rong -> h2 do voi thong diep ghim "khoi hong van duoc luu".
+
+  - id: E7
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ldbc_lenh
+    paths:
+      - "scripts/ban-chup-lo-trinh/**"
+    expected: |
+      day.test.ts describe "ma-thoat". Ma tran viet truoc 5 o: (a) may chu tra 400 -> ma 1, stderr co duong khoa may chu tra;
+      (b) may chu 500 -> 1; (c) khong ket noi duoc -> 1; (d) LO-TRINH.html khong co khoi -> 1, khong goi mang;
+      (e) may chu tra nhan -> 0.
+      CHIEU DO: ban sao nuot loi fetch -> o (c) do voi thong diep ghim "may chu khong tra loi ma luot van xanh".
+
+  - id: E8
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldbc_thu_tu
+    paths:
+      - "apps/api/src/lo-trinh/**"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "apps/api/test/ban-chup-lo-trinh.spec.ts"
+    expected: |
+      describe "ldbc-thu-tu". Bat dau tu ban chup T1 (sha A). Ma tran viet truoc:
+        1 gui sha B commitLuc < T1 -> { ketQua: "cu-hon" }, hang van sha A
+        2 gui lai sha A cung commitLuc -> { ketQua: "trung" }, layLuc khong doi
+        3 gui sha C commitLuc > T1 -> nhan, hang sha C
+        4 chay dua: Promise.all hai lan gui (D moi hon, E moi hon nua) theo ca hai thu tu -> hang cuoi luon sha E
+        5 chay dua tao hang dau tien (kho trong) hai lan cung luc -> dung mot hang, khong loi P2002 ra ngoai
+      Ma thoat cua day.ts khi may chu tra "cu-hon"/"trung": 0 (day.test.ts describe "thu-tu").
+      CHIEU DO: ban sao ghi de vo dieu kien -> dong 1 do voi thong diep ghim "ban chup cu ghi de ban moi";
+      ban sao doc-roi-ghi khong nguyen tu -> dong 4 do voi thong diep ghim "chay dua de lai ban cu hon".
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ldbc_doc
+    paths:
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/app/(app)/[slug]/lo-trinh/page.tsx"
+      - "apps/app/test/lo-trinh-ban-chup.spec.ts"
+    expected: |
+      apps/app/test/lo-trinh-ban-chup.spec.ts describe "doc". Bo doc ban chup tiem vao (khong cham kho chung). Ma tran
+      viet truoc 4 o: (1) bo doc tra null; (2) bo doc nem loi ket noi; (3) hang co duLieu khong qua khuon; (4) hang hop le
+      nhung cu hon ban dung. Moi o: docDauVaoLoTrinh tra kieu "co-du-lieu" voi nguon.kieu "ban-dung" (tep dong goi that cua
+      cay), khong nem; o (2) va (3) logger nhan dung mot canh bao chua ten ca.
+      CHIEU DO: ban sao de loi o (2) lan ra -> do voi thong diep ghim "kho loi lam vo trang lo trinh".
+
+  - id: E10
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ldbc_lenh
+    paths:
+      - "scripts/ban-chup-lo-trinh/**"
+    expected: |
+      day.test.ts describe "chua-cai": thieu CRM_KHOA_DAY_LO_TRINH, thieu CRM_API_URL, thieu ca hai -> ma 0, stdout co dong
+      bat dau "::notice::", khong goi mang (dem fetch gia = 0).
+      CHIEU DO: ban sao thoat 2 khi thieu khoa -> do voi thong diep ghim "chua cai ma luot do".
+
+  - id: E11
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ldbc_chon
+    paths:
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/next.config.ts"
+      - "apps/app/test/lo-trinh-ban-chup.spec.ts"
+    expected: |
+      describe "chon-nguon": ma tran toan phan viet truoc 2 (sha cung|khac) x 3 (commitLuc truoc|bang|sau dungLuc) x
+      2 (VERCEL_ENV production|preview) = 12 o, moi o mot assert, ky vong:
+        production + sha cung -> ban-chup (ca 3 cot thoi gian); production + sha khac + sau -> ban-chup;
+        production + sha khac + truoc|bang -> ban-dung; preview -> ban-dung (ca 6 o)
+      Them: khong co VERCEL_GIT_COMMIT_SHA (may dev) -> chi so thoi gian. Gio lay tra ve: ban-chup -> layLuc cua ban chup,
+      ban-dung -> dungLuc.
+      next.config.ts dong env.LO_TRINH_DUNG_LUC; turbo.json globalPassThroughEnv co VERCEL_ENV (doc tep that).
+      CHIEU DO: ban sao so ">=" thay ">" -> o (sha khac, bang) do voi thong diep ghim "ca mo ho chon ban chup";
+      ban sao bo nhanh preview -> do voi thong diep ghim "ban Preview doc lo trinh nhanh chinh".
+
+  - id: E12
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ldbc_dong
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/test/lo-trinh-ban-chup.dom.tsx"
+    expected: |
+      apps/app/test/lo-trinh-ban-chup.dom.tsx describe "dong-gio": tien trinh chay TZ=America/New_York (khac mui cua kho
+      va cua production), ma tran 2 nguon x 2 ngon ngu = 4 o: sau hydrat dong gio lay co mat, chua formatNgayGio(layLuc,
+      locale, { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) (rut tu ham that, khong viet chuoi gio tay);
+      render phia may chu (renderToString) KHONG in gio nao; ban-dung co
+      chu rut tu loTrinhMessages(locale) cho nhan ban dung, ban-chup khong co.
+      CHIEU DO: ban sao co dinh timeZone "Asia/Ho_Chi_Minh" -> o vi do voi thong diep ghim "gio lay khong theo mui gio nguoi xem".
+
+  - id: E13
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ldbc_thiet_ke
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/app/(app)/[slug]/settings/api-keys/**"
+    expected: |
+      design-gate.mjs --mode static cho tung tep .tsx da doi duoi components/lo-trinh, trang lo-trinh va settings/api-keys:
+      khong P0.
+      CHIEU DO: ban sao them className doi mau cho dong gio lay -> P0 do.
+
+  - id: E14
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldbc_day
+    paths:
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "apps/api/test/ban-chup-lo-trinh.spec.ts"
+    expected: |
+      Cung describe "ldbc-day" dong 4: helper doc ma trang dung (docBanChupLoTrinh) tra layLuc la Date that tu hang da ghi
+      qua API, ISO dung — gio tren man den tu hang that, khong tu dong ho cua trang.
+      CHIEU DO: nhu E1 dong 2.
+
+  - id: E15
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ldbc_vai
+    paths:
+      - "apps/app/lib/lo-trinh/cho-vai.ts"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/test/lo-trinh-ban-chup.spec.ts"
+    expected: |
+      describe "vai": goi DUNG ham ma page.tsx goi (docDauVaoChoVai(vai, { docBanChup }) — doc nguon, chon nguon, roi loc
+      vai), bo doc ban chup tiem vao tra hang hop le moi hon ban dung, khoi rut tu LO-TRINH.html that (co it nhat mot hang
+      co tom_tat.chu_kho khac null — tu kiem, khong co thi assert do). Ma tran 4 vai x 2 nguon (bo doc tra ban chup | tra
+      null) = 8 o: chi owner giu chu_kho; ba vai con lai moi hang chu_kho null; nguon dung nhu ky vong.
+      Them: goi lien tiep owner roi member trong cung tien trinh -> member van khong co chu_kho (loc nam ngoai vung cache).
+      Kiem tinh: page.tsx goi docDauVaoChoVai, khong goi choVaiXem hay docTrangLoTrinh truc tiep.
+      CHIEU DO: ban sao loc chi o nhanh ban-dung -> o (admin, ban-chup) do voi thong diep ghim "ban chup lo so lieu chu kho";
+      ban sao loc trong vung cache -> o "owner roi member" do voi thong diep ghim "loc vai bi cache theo nguoi xem dau".
+
+  - id: E16
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.gth_vai
+    paths:
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      vai-chi-okr.spec.ts xanh: router moi loTrinhBanChup duoc liet ro trong danh sach thu tuc ghim (khong phai pham vi
+      AuthMiddleware tran); nguoi vai okr khong goi duoc thu tuc day.
+      CHIEU DO: ban sao them router ma khong khai vao danh sach -> do voi thong diep ghim cua spec ve thu tuc chua khai.
+
+  - id: E17
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.ldbc_lenh
+    paths:
+      - "scripts/ban-chup-lo-trinh/**"
+    expected: |
+      scripts/ban-chup-lo-trinh/test/do-tre.test.ts: git log va gh run list gia theo DUNG khuon JSON that cua gh (rut tu mot
+      lan chay gh run list --json that luu lam mau, khong viet tay ten truong). Ma tran viet truoc 4 lan doi:
+        a tre 3 phut -> dat; b tre 12 phut -> co "> 10 phút"; c luot do roi luot xanh sau 70 phut -> co "> 1 giờ";
+        d khong co luot nao -> co "> 1 giờ" va "không có lượt đẩy"
+        e luot xanh nhung chu thich "chua-cai" -> khong tinh la da day: co "không có lượt đẩy"
+        f commit B co luot cancelled, commit C ngay sau co luot xanh "nhan" sau 3 phut -> B duoc phu boi luot cua C, tre
+          tinh theo luot C, khong co; doi chung: C cung khong co luot xanh -> B bi co
+      Chu thich luot doc qua gh api check-runs annotations, khuon gia rut tu mot lan goi that luu lam mau.
+      Dong ket luan: tap {a} -> "đạt"; tap {a,b} -> "không đạt"; moi dong in gio commit, gio xong, do tre.
+      CHIEU DO: ban sao tinh tre tu luc luot bat dau -> o b khong co co, do voi thong diep ghim "do tre bo qua thoi gian chay";
+      ban sao coi moi luot xanh la da day -> o e do voi thong diep ghim "luot chua cai bi tinh la da day";
+      ban sao chi ghep theo headSha -> o f do voi thong diep ghim "luot bi thay cho bi tinh la khong day".
