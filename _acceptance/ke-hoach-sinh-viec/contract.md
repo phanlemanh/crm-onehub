@@ -70,6 +70,6 @@ Plans, Pipedrive [NGÀNH: docs/plan/viec-du-an-nghien-cuu.md mục 3]. Core 1–
 
 - Hỏi-1 (Cổng Phạm vi): bước là bản chiếu của Việc (khuyến nghị) hay Việc thay bước cho kế hoạch mới.
 - Hỏi-2: ngày bắt đầu để DA4 (khuyến nghị) hay đưa vào DA3.
-- Hỏi-4: đóng kế hoạch khi còn việc dở — hộp đóng hỏi, đánh dấu sẵn «Huỷ N việc còn mở» (khuyến nghị) hay để trống.
-- Hỏi-5: bỏ design-pass, duyệt UI trên ảnh S4 (khuyến nghị) hay dựng bản mẫu trước Cổng Phạm vi.
-- Hỏi-3 (nơi hiện gợi ý) dời sang DA3b cùng vế (b).
+- Hỏi-3: đóng kế hoạch khi còn việc dở — hộp đóng hỏi, đánh dấu sẵn «Huỷ N việc còn mở» (khuyến nghị) hay để trống.
+- Hỏi-4: bỏ design-pass, duyệt UI trên ảnh S4 (khuyến nghị) hay dựng bản mẫu trước Cổng Phạm vi.
+- Câu hỏi nơi hiện gợi ý dời sang DA3b cùng vế (b).

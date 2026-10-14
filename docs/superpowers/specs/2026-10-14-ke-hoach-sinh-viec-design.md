@@ -30,7 +30,7 @@ Ngưỡng đã ký (`opportunity.md`):
 - **Sáu nơi đang đọc bước không đổi**: danh mục «Bước x/y» và cột tắc, chỉ số KR «bước đúng hạn» (`okr-chi-so.ts`), nhắc «kế hoạch im», Tổng quan, kiểm xoá phòng ban, chuyển việc. Hồ sơ đã ký của các bên đọc đó không phải đo lại hành vi.
 - **Kế hoạch tạo trước DA3 giữ nguyên.** Bước của chúng không có Việc và chạy y như cũ. Chép bước cũ sang Việc là việc của một hàng khác, cần cổng riêng như DA1b.
 
-**Đóng kế hoạch khi còn bước dở (Hỏi-4).** Lộ trình đã bác việc tự đóng hay xoá việc khi đóng bản ghi cha, và ghi «hỏi người dùng thay vì tự làm» (`da_bac` x4). Vì vậy hộp đóng kế hoạch hỏi người. Máy khuyên đánh dấu sẵn «Huỷ N việc còn mở», vì đóng kế hoạch nghĩa là đợt onboard đã kết thúc. Lối khác là để trống ô: Việc giữ nguyên và vẫn nhắc mỗi sáng cho tới khi người làm tự khép.
+**Đóng kế hoạch khi còn bước dở (Hỏi-3).** Lộ trình đã bác việc tự đóng hay xoá việc khi đóng bản ghi cha, và ghi «hỏi người dùng thay vì tự làm» (`da_bac` x4). Vì vậy hộp đóng kế hoạch hỏi người. Máy khuyên đánh dấu sẵn «Huỷ N việc còn mở», vì đóng kế hoạch nghĩa là đợt onboard đã kết thúc. Lối khác là để trống ô: Việc giữ nguyên và vẫn nhắc mỗi sáng cho tới khi người làm tự khép.
 
 **Lối khác (A) — Việc thay bước cho kế hoạch mới.** Kế hoạch mới không có bước nữa, chỉ có Việc gắn kế hoạch kèm phòng ban. Lối này gỡ hẳn «loại việc thứ hai» cho kế hoạch mới.
 - Giá: viết lại sáu bên đọc bước để đọc gộp cả bước lẫn Việc, và ghim lại các hồ sơ đã ký của chúng: `quan-ly-danh-muc-30-ngay`, `ke-hoach-la-mot-ban-ghi`, `may-nhac-truoc-nguoi`, chỉ số KR…
@@ -64,7 +64,7 @@ Vì sao khuyên B: DA3 là đường găng tới Gantt. B gom «một nguồn s�
 | `removeStep` | chuyển Việc sang Huỷ, gỡ nối, rồi xoá bước — Việc còn lại kèm lịch sử |
 | «xong n» trỏ bước (`datBuocXong`) | `doiTrangThai`, nguồn `zalo`/`slack` |
 | `transferWork` (chuyển việc khi nghỉ) | chuyển Việc bằng `chuyenViecTrongGiaoDich` như DA1, rồi `chieuLenBuoc`; không ghi thẳng `assigneeId` của bước đã nối |
-| `closePlan` khi còn bước dở (Hỏi-4) | hộp đóng hỏi «Huỷ N việc còn mở của kế hoạch?», đánh dấu sẵn: chọn huỷ → các Việc đó sang Huỷ bằng đường hệ thống (nguồn `dong-ke-hoach`, được phép dù Huỷ bị chặn ở người dùng) rồi chiếu; bỏ chọn → Việc giữ nguyên và còn nhắc |
+| `closePlan` khi còn bước dở (Hỏi-3) | hộp đóng hỏi «Huỷ N việc còn mở của kế hoạch?», đánh dấu sẵn: chọn huỷ → các Việc đó sang Huỷ bằng đường hệ thống (nguồn `dong-ke-hoach`, được phép dù Huỷ bị chặn ở người dùng) rồi chiếu; bỏ chọn → Việc giữ nguyên và còn nhắc |
 | `reopenPlan` | không hồi Việc đã Huỷ lúc đóng — người mở lại thì thêm bước mới |
 
 Phía Việc, ba thao tác bị chặn trên Việc đã nối (400 kèm lý do «gỡ bước ở kế hoạch»): chuyển sang Huỷ, xoá Việc, và gỡ gắn kế hoạch. Nếu không chặn, bước sẽ mồ côi hoặc «Bước x/y» kẹt vĩnh viễn.
@@ -77,7 +77,7 @@ Bước đã nối không phát `buoc-qua-han`/`buoc-sap-han` nữa: Việc củ
 
 ## 7. Gợi ý mở kế hoạch khi deal thắng — TÁCH sang DA3b
 
-> Mục này không thuộc hợp đồng `ke-hoach-sinh-viec`. Hợp đồng nháp 15 tiêu chí rơi nhóm «phải tách» của thẻ Cổng Phạm vi, nên vế gợi ý (ngưỡng (b), Hỏi-3) dời sang hàng DA3b, hồ sơ `goi-y-mo-ke-hoach` (sổ d-20261014T061219Z-15). Thiết kế dưới đây giữ làm đầu vào của vòng đó; riêng việc `createFromTemplate` đóng gợi ý đang chờ sẽ làm ở DA3b.
+> Mục này không thuộc hợp đồng `ke-hoach-sinh-viec`. Hợp đồng nháp 15 tiêu chí rơi nhóm «phải tách» của thẻ Cổng Phạm vi, nên vế gợi ý (ngưỡng (b) và câu hỏi nơi hiện gợi ý) dời sang hàng DA3b, hồ sơ `goi-y-mo-ke-hoach` (sổ d-20261014T061219Z-15). Thiết kế dưới đây giữ làm đầu vào của vòng đó; riêng việc `createFromTemplate` đóng gợi ý đang chờ sẽ làm ở DA3b.
 
 **Bảng mới `GoiYKeHoach`:**
 - Trường: `id`, `dealId`, `chuyenLuc`, `companyId`, `nguoiNhanId` (người phụ trách deal lúc sinh), `trangThai` (`CHO | DA_MO | BO_QUA`), `sinhLuc`, `xuLyLuc?`, `xuLyBoiId?`, `planId?`.
@@ -103,7 +103,7 @@ Bước đã nối không phát `buoc-qua-han`/`buoc-sap-han` nữa: Việc củ
 - Tạo kế hoạch cho công ty bằng bất kỳ đường nào cũng chuyển mọi gợi ý `CHO` của công ty đó sang `DA_MO`. Việc này nằm trong cùng giao dịch của `createFromTemplate`.
 - Quyền xử lý: người nhận gợi ý hoặc quản trị; người khác nhận 403.
 
-**Nơi hiện (nháp theo khuyến nghị — Hỏi-3):**
+**Nơi hiện (nháp theo khuyến nghị — câu hỏi của DA3b):**
 - Thẻ ở đầu sheet deal đã thắng, có hai nút.
 - Một dòng `goi-y-ke-hoach` trong nhắc buổi sáng của người nhận, chừng nào gợi ý còn `CHO`.
 
