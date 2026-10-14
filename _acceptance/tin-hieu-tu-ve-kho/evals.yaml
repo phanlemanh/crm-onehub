@@ -170,6 +170,8 @@ evals:
         401: khoa thuong cua owner · khoa chi keo da thu hoi (apiKeys.revoke) · khoa chi keo het han (expiresAt dat lui trong
              CSDL) · chuoi khoa sai cung do dai · khong co dau x-api-key
         403: khoa chi keo hop le, chu khoa doi vai thanh member · thanh okr · chu khoa bi go khoi workspace (xoa hang member)
+      Khong co khoa chi keo hop le thi duong lich theo luat chung (bai go-la-cat-quyen va cua-vao-va cua kho do): phien cua
+      nguoi da bi go -> 403 NOT_A_MEMBER, doc phien hong -> 503.
       Moi o: status dung, va tinHieu chua dau van keoVeLuc null. Vai doc lai moi luot: cung mot khoa goi 200 truoc khi ha vai,
       403 ngay sau khi ha vai (khong cache).
       CHIEU DO: ban sao middleware dung vai cu (owner) thay vai doc lai -> o "doi vai thanh member" do voi thong diep ghim
@@ -237,10 +239,13 @@ evals:
         5 onehub tien them mot commit khac -> nhanh hang cho dung lai tren dinh moi
         6 quan he khong rot: sau moi o, moi tep co tren nhanh hang cho cua luot truoc ma onehub chua co van con tren nhanh
           sau luot nay (assert tren tap tep, ca 5 o)
+        7 (describe "tvk-nhanh-hook") ban lam dat core.hooksPath ve thu muc chua ban chep .githooks/pre-push THAT cua kho
+          -> luot van day duoc nhanh hang cho (hook bo qua qua CRM_SKIP_HOOKS)
       Moi tep day len doc bang ham kiem cua kit (cung ham kiem kenh yeu cau ma rang vong-kit cua LT2 dung) 0 loi.
       CHIEU DO: ban sao commit ca khi khong co tep moi -> o 2 hoac 4 do voi thong diep ghim "luot day khi khong co gi moi";
       ban sao chong commit len nhanh cu -> o 3 do voi thong diep ghim "nhanh hang cho khong dung lai tren nhanh chinh";
-      may chu gia chi tra tin hieu chua dau -> dong 6 do voi thong diep ghim "nhanh hang cho lam roi tep chua gop".
+      may chu gia chi tra tin hieu chua dau -> dong 6 do voi thong diep ghim "nhanh hang cho lam roi tep chua gop";
+      ban sao day khong dat CRM_SKIP_HOOKS -> dong 7 do voi thong diep ghim "luot lich bi hook truoc day chan".
 
   - id: E9
     criterion: AC-9
@@ -305,9 +310,11 @@ evals:
     expected: |
       t1.mjs dung mot kho git tam tu cay hien tai (git worktree tam), them mot commit chi chua tin-hieu/crm/crm-9.json, roi:
         1 chay .github/scripts/phan-loai.mjs tren diff do -> xep T1 (doc dung truong dau ra cua bo phan loai)
-        2 chay scripts/pre-merge-check.sh --base <dinh truoc commit> -> exit 0, khong dong nao doi ho so
+        2 quan he: tap dong VIOLATION cua scripts/pre-merge-check.sh --base <dinh truoc commit> sau commit tep tin hieu khong
+          them dong nao so voi ngay truoc commit (vi pham san co cua ho so khac khong tinh)
         3 doi chung: commit chi chua scripts/tin-hieu/lich.ts -> phan-loai KHONG xep T1
-      In DUNG/SAI tung dong; exit 0 chi khi ca ba DUNG.
+      In DUNG/SAI tung dong; exit 0 chi khi ca ba DUNG. CHIEU DO: --pha-thu bo glob "tin-hieu/crm/**" khoi config cua
+      cay tam -> dong 1 va dong 2 cung SAI.
 
   - id: E11b
     criterion: AC-11
