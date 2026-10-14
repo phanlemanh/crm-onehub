@@ -1633,6 +1633,10 @@ executors:
     tbd_qua_han_lui: 'cd apps/app && TBD_MUI_GIO=lui TZ=America/Los_Angeles bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-lui'
     tbd_qua_han_tien: 'cd apps/app && TBD_MUI_GIO=tien TZ=Pacific/Kiritimati bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-tien'
     tbd_khu_hoi: 'bun run test -- "cd apps/api && TBD_KHU_HOI=1 TZ=America/Los_Angeles bun test test/them-buoc-bao-dung.spec.ts -t qua-han-khu-hoi && TBD_KHU_HOI=1 TZ=Pacific/Kiritimati bun test test/them-buoc-bao-dung.spec.ts -t qua-han-khu-hoi"'
+    tnv_chu_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tac-nhan-va.dom.tsx -t "chu-tac-nhan|chu-luot|chu-thoa-thuan"'
+    tnv_loi_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tac-nhan-va.dom.tsx -t gui-hong'
+    tnv_cau_hoi: 'mkdir -p .acceptance-runs/tac-nhan-va && TNV_HAI_LUOT_RA=$PWD/.acceptance-runs/tac-nhan-va/hai-luot-hoi.json bun apps/agent/test/eve-tran/chay.ts evals/hai-luot-hoi && TNV_HAI_LUOT_RA=$PWD/.acceptance-runs/tac-nhan-va/hai-luot-hoi.json bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tac-nhan-va.integration.spec.ts -t cau-hoi"'
+    tnv_hoi_quy: 'bun _acceptance/tac-nhan-va/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/tac-nhan-va/rang/khong-xoa-expect.mjs --moc 966eeb78e && bun run test -- "cd apps/agent && bun test test/cau-hoi-het-han-muc.integration.spec.ts test/builder-runtime.integration.spec.ts test/stale-tasks.integration.spec.ts" && bun apps/agent/test/eve-tran/chay.ts evals/chay-tiep evals/chan-khuon && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/agent-builder.spec.ts ./test/agent-results.spec.ts ./test/agent-transcript.spec.ts ./test/het-han-muc.dom.tsx && cd ../.. && bun run check-types'
     lqc_byid_cong_ty: 'bun run test -- "cd apps/api && bun test test/lien-quan-loc-ban-da-cat.spec.ts -t lqc-byid-cong-ty"'
     lqc_byid_ca_nhan: 'bun run test -- "cd apps/api && bun test test/lien-quan-loc-ban-da-cat.spec.ts -t lqc-byid-ca-nhan"'
     lqc_byid_thoa_thuan: 'bun run test -- "cd apps/api && bun test test/lien-quan-loc-ban-da-cat.spec.ts -t lqc-byid-thoa-thuan"'
@@ -2591,6 +2595,8 @@ executors:
     kmc_man_thieu_hop: "bun _acceptance/khung-man-chung/rang/chup-man.mjs --chieu-do=3"
     tbd_hoi_quy: 'bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --moc 3a2783409 && bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx ./test/han-viec.dom.tsx ./test/moi-phia-ke-hoach.dom.tsx ./test/may-nhac.dom.tsx ./test/ke-hoach-sheet.dom.tsx && cd ../.. && bun run check-types'
     tbd_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/them-buoc-bao-dung/rang/man.mjs"'
+    tnv_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tac-nhan-va/rang/man.mjs"'
+    tnv_khu_hoi: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tac-nhan-va/rang/khu-hoi.mjs"'
     vc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-chung/rang/man.mjs"'
     vc_san_thiet_ke: node _acceptance/viec-chung/rang/san-thiet-ke.mjs
     vc_dot_bien: node _acceptance/viec-chung/rang/dot-bien.mjs
