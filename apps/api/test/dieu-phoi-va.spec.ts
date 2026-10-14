@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { ActivityType, db } from "@crm/db";
 import { DIRECT_KINDS } from "@crm/db/agent-tasks";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	LOAI_VIEC_MA_LECH,
 	MA_NEN_TANG_KEY,
@@ -166,6 +167,25 @@ describe.skipIf(process.env.DPV_MACH_LIEN !== "1")("mach-lien-ghi", () => {
 				},
 			}),
 		]);
+		await db.organization.upsert({
+			where: { id: WORKSPACE_ID },
+			update: {},
+			create: {
+				id: WORKSPACE_ID,
+				name: "CRM",
+				slug: "crm",
+				createdAt: new Date(),
+			},
+		});
+		await db.member.create({
+			data: {
+				id: maMoi("m-mach"),
+				organizationId: WORKSPACE_ID,
+				userId: nguoi.id,
+				role: "member",
+				createdAt: new Date(0),
+			},
+		});
 		const plan = await db.onboardingPlan.create({
 			data: {
 				id: `${MACH_LIEN}${process.pid}-${Date.now()}`,
@@ -241,7 +261,8 @@ describe("dem-qua-han", () => {
 		const dau = dauNgayVN(now);
 		const truocHan = new Date(dau.getTime() - 2 * DAY_MS);
 		const homNay = new Date(dau.getTime() + 60_000);
-		const [a, b] = await Promise.all([gieoNguoi(), gieoNguoi()]);
+		const a = await gieoNguoi();
+		const b = await gieoNguoi();
 
 		const viecQuaHan = {
 			type: ActivityType.TASK,

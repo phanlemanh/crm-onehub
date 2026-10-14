@@ -103,11 +103,11 @@
       "dung_tren": [
         "DA0a"
       ],
-      "trang_thai": "đang dựng",
+      "trang_thai": "đã lên onehub",
       "pr": [
         386
       ],
-      "buoc_ke": "Đã ký Cổng Bằng chứng 13/10 (Mạnh); PR #386 chờ Điều phối M5 gộp vào onehub",
+      "buoc_ke": "Đã gộp onehub 13/10 (#386, 85c0e4cc9).",
       "ten": "Việc chung",
       "ten_ngan": "Việc chung",
       "bat_khi": "Đề xuất, chốt ở Cổng Đáng: hai tuần dùng thật, ít nhất 80% việc mới có người thực hiện; không việc gắn đối tác nào tới người vai «chỉ OKR»",
@@ -123,11 +123,15 @@
       "dung_tren": [
         "DA1"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Đã gộp onehub 14/10 (#405, 1a1bee409); chủ kho chạy lệnh chép production theo docs/production.md.",
       "ten": "Chép việc cần làm cũ sang Việc",
       "ten_ngan": "Chép việc cũ",
       "chay_khi": "DA1 đã gộp",
-      "ghi_chu": "Chép Activity loại TASK sang Việc, giữ bản gốc để đảo được; đổi run-runtime.ts (create_crm_activity TASK) và ma-lech.ts sang ghi Việc; bỏ «Việc cần làm» khỏi ô soạn và dòng thời gian, cùng activities.complete và activities.myTasks."
+      "ghi_chu": "Chép Activity loại TASK sang Việc, giữ bản gốc để đảo được; đổi run-runtime.ts (create_crm_activity TASK) và ma-lech.ts sang ghi Việc; bỏ «Việc cần làm» khỏi ô soạn và dòng thời gian, cùng activities.complete và activities.myTasks.",
+      "pr": [
+        405
+      ]
     },
     {
       "ma": "DA2",
@@ -138,11 +142,15 @@
       "dung_tren": [
         "DA1"
       ],
-      "trang_thai": "đang dựng",
+      "trang_thai": "đã lên onehub",
       "ten": "Kanban việc",
       "ten_ngan": "Kanban",
       "chay_khi": "DA1 đã gộp; chủ kho mở lại dòng «không làm: kéo thả bảng cột» của lộ trình 30 ngày",
-      "ghi_chu": "Dùng chung thành phần kéo thả với hàng E3 (danh sách kéo thả chung) của lộ trình OKR. Thứ tự bằng khoá chèn giữa."
+      "ghi_chu": "Dùng chung thành phần kéo thả với hàng E3 (danh sách kéo thả chung) của lộ trình OKR. Thứ tự bằng khoá chèn giữa.",
+      "buoc_ke": "Đã gộp onehub 14/10 (#402, aac0975b5).",
+      "pr": [
+        402
+      ]
     },
     {
       "ma": "DA2b",
