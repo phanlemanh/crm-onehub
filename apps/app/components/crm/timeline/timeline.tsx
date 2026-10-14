@@ -1,10 +1,8 @@
 "use client";
 
 import Chat from "@carbon/icons-react/es/Chat";
-import Checkmark from "@carbon/icons-react/es/Checkmark";
 import Email from "@carbon/icons-react/es/Email";
 import Events from "@carbon/icons-react/es/Events";
-import Task from "@carbon/icons-react/es/Task";
 import Time from "@carbon/icons-react/es/Time";
 import { Alert, AlertAction, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
@@ -34,7 +32,6 @@ import { useHydrated } from "@/lib/use-hydrated";
 import { ActivityComposer } from "./activity-composer";
 import { TimelineEntry, type TimelineEntryData } from "./timeline-entry";
 import {
-	historyFilter,
 	TIMELINE_TABS,
 	type TimelineTab,
 	timelineTabParser,
@@ -53,8 +50,6 @@ function tabLabels(m: CrmMessages) {
 		notes: t.notes,
 		email: t.emails,
 		meetings: t.meetings,
-		upcoming: t.upcoming,
-		done: t.done,
 	} satisfies Record<TimelineTab, string>;
 }
 
@@ -65,8 +60,6 @@ function emptyStates(m: CrmMessages) {
 		notes: { title: e.notesTitle, description: e.notesBody },
 		email: { title: e.emailTitle, description: e.emailBody },
 		meetings: { title: e.meetingsTitle, description: e.meetingsBody },
-		upcoming: { title: e.upcomingTitle, description: e.upcomingBody },
-		done: { title: e.doneTitle, description: e.doneBody },
 	} satisfies Record<TimelineTab, { title: string; description: string }>;
 }
 
@@ -75,8 +68,6 @@ const EMPTY_ICONS = {
 	notes: Chat,
 	email: Email,
 	meetings: Events,
-	upcoming: Task,
-	done: Checkmark,
 } satisfies Record<TimelineTab, CarbonIcon>;
 
 const DAY_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -270,24 +261,14 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 
 	const counts = useQuery(trpc.activities.timelineCounts.queryOptions(anchor));
 
-	const pinned = useQuery({
-		...trpc.activities.timeline.queryOptions({
-			...anchor,
-			filter: "upcoming",
-			limit: 10,
-		}),
-		enabled: tab === "all",
-	});
-
 	const history = useInfiniteQuery({
 		...trpc.activities.timeline.infiniteQueryOptions(
-			{ ...anchor, filter: historyFilter(tab) },
+			{ ...anchor, filter: tab },
 			{ getNextPageParam: (page) => page.nextCursor ?? undefined },
 		),
 	});
 
 	const entries = history.data?.pages.flatMap((page) => page.entries) ?? [];
-	const pinnedEntries = tab === "all" ? (pinned.data?.entries ?? []) : [];
 	const chuaCoTrang = history.data === undefined;
 	const loi = useLoiTheoLuot(
 		{
@@ -356,7 +337,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 						dangTai={history.isFetching}
 					/>
 				</div>
-			) : entries.length === 0 && pinnedEntries.length === 0 ? (
+			) : entries.length === 0 ? (
 				<div className="flex min-h-0 flex-1 flex-col">
 					{thongBaoLamMoi ? <div className="px-5">{thongBaoLamMoi}</div> : null}
 					{tab === "all" ? (
@@ -374,14 +355,6 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-4">
 					{thongBaoLamMoi}
 					{tab === "all" ? <KhoiViec anchor={anchor} /> : null}
-					{pinnedEntries.length > 0 ? (
-						<TimelineDay
-							label={m.timeline.outstanding}
-							entries={pinnedEntries}
-							anchor={anchor}
-						/>
-					) : null}
-
 					{byDay(entries, hydrated, locale).map((group) => (
 						<TimelineDay
 							key={group.day}
