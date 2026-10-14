@@ -1,8 +1,15 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { db } from "@crm/db";
+import { dongTuHang } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import type { z } from "zod";
+import {
+	DE_XUAT_KARA_MAU,
+	napDeXuatKaraMau,
+} from "../scripts/okr-mau/nap-de-xuat-kara";
 import {
 	type alignmentTargetsOutput,
 	objectiveOutput,
@@ -20,6 +27,7 @@ import {
 	goi,
 	goiRest,
 	ketThucMau,
+	kr,
 	mt,
 	NAC_CAU_HINH,
 	ok,
@@ -699,6 +707,132 @@ describe("l4-sua", () => {
 				"xoa ly do",
 			);
 			expect((await doc())?.mucTin).toBe("chua-co-ly-do");
+		},
+		CHO_DB,
+	);
+});
+
+const CA_MAN = JSON.parse(
+	readFileSync(
+		join(
+			import.meta.dir,
+			"../../../_acceptance/gan-tay-va-kara-co-ly-do/rang/ca-man.json",
+		),
+		"utf8",
+	),
+) as {
+	nguoiXem: string;
+	mucTieu: string;
+	dichKr: string;
+	lyDo: string;
+	canCu: string;
+};
+
+describe("l4-mau", () => {
+	test(
+		"bộ mẫu có đề xuất căn chỉnh của Kara mang căn cứ, ghi qua công cụ thật, không chèn thẳng bảng",
+		async () => {
+			const taskId = await napDeXuatKaraMau();
+			const hang = await db.okrDeXuat.findMany({
+				where: { loai: "can-chinh", trangThai: "cho", taskId },
+			});
+			const coCanCu = hang.filter(
+				(h) => dongTuHang(h).canCu === DE_XUAT_KARA_MAU.canCu,
+			);
+			expect(coCanCu.length).toBeGreaterThanOrEqual(1);
+			const viec = await db.agentTask.findUniqueOrThrow({
+				where: { id: taskId },
+				select: { kind: true },
+			});
+			expect(viec.kind).toBe("okr-de-xuat");
+			const thuMuc = join(import.meta.dir, "../scripts/okr-mau");
+			const chenThang = readdirSync(thuMuc)
+				.filter((t) => t.endsWith(".ts"))
+				.flatMap((t) =>
+					/okrDeXuat\.create(Many)?\(/.test(
+						readFileSync(join(thuMuc, t), "utf8"),
+					)
+						? [t]
+						: [],
+				);
+			expect(chenThang).toEqual([]);
+			const boGhi = readFileSync(
+				join(import.meta.dir, "../../agent/agent/lib/okr/nop-de-xuat.ts"),
+				"utf8",
+			);
+			expect(boGhi.match(/okrDeXuat\.createMany\(/g)?.length).toBe(1);
+			expect(DE_XUAT_KARA_MAU.mucTieu).toBe(CA_MAN.mucTieu);
+			expect([DE_XUAT_KARA_MAU.lyDo, DE_XUAT_KARA_MAU.canCu]).toEqual([
+				CA_MAN.lyDo,
+				CA_MAN.canCu,
+			]);
+		},
+		CHO_DB,
+	);
+});
+
+describe("l4-man-doc-lai", () => {
+	test(
+		"ca màn: người xem thấy đề xuất mẫu, nhận thì có số liệu với dấu Kara, bỏ căn cứ thì đặt cược",
+		async () => {
+			const mtMan = mt(CA_MAN.mucTieu);
+			const cXem = await phienMau(CA_MAN.nguoiXem);
+			const ds = ok<{
+				dong: {
+					id: string;
+					loai: string;
+					lyDo: string;
+					canCu: string | null;
+				}[];
+			}>(
+				await goi(
+					app,
+					"okr.troLyDanhSach",
+					"query",
+					{ objectiveId: mtMan },
+					cXem,
+				),
+				"troLyDanhSach ca man",
+			);
+			const canChinh = ds.dong.filter((d) => d.loai === "can-chinh");
+			expect(canChinh.length).toBe(1);
+			const d = canChinh[0] as (typeof canChinh)[number];
+			expect([d.lyDo, d.canCu]).toEqual([CA_MAN.lyDo, CA_MAN.canCu]);
+			tienDongHo();
+			ok(await quyet({ deXuatId: d.id, cach: "nhan" }, cXem), "nhan ca man");
+			const dichKr = await db.okrKeyResult.findUniqueOrThrow({
+				where: { id: kr(CA_MAN.dichKr) },
+				select: { id: true },
+			});
+			const g = (await canChinhCua(mtMan, cXem)).find(
+				(x) => x.targetKeyResultId === dichKr.id,
+			);
+			expect([g?.lyDo, g?.canCu, g?.lyDoTuKara, g?.mucTin]).toEqual([
+				CA_MAN.lyDo,
+				CA_MAN.canCu,
+				true,
+				"co-so-lieu",
+			]);
+			tienDongHo();
+			ok(
+				await goi(
+					app,
+					"okr.suaLyDoCanChinh",
+					"mutation",
+					{ id: g?.alignmentId, lyDo: CA_MAN.lyDo, canCu: null },
+					cXem,
+				),
+				"bo can cu",
+			);
+			const sau = (await canChinhCua(mtMan, cXem)).find(
+				(x) => x.alignmentId === g?.alignmentId,
+			);
+			expect([sau?.lyDo, sau?.canCu, sau?.lyDoTuKara, sau?.mucTin]).toEqual([
+				CA_MAN.lyDo,
+				null,
+				false,
+				"dat-cuoc",
+			]);
 		},
 		CHO_DB,
 	);
