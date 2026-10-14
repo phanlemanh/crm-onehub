@@ -57,6 +57,13 @@ của mình từ cùng bản chụp (TH3).
   `.github/workflows/*`, báo trước trên #375), hay CRM tự kéo theo nhịp. Máy sẽ khuyên đường đẩy: không cần khoá
   cá nhân, và LT3 thay người đẩy bằng ứng dụng GitHub.
 
+## Hai lối ở cổng này (ước lượng, chưa đo)
+
+| Lối | Phút máy | Lượt gọi chủ kho | Đổi lại |
+|---|---|---|---|
+| **Làm ngay** (build) | ~4–6 giờ máy cho một vòng T3 (S1 ~1 giờ, S3 ~2 giờ, S4 ~1 giờ mỗi lượt chấm), trong đó ~1–2 giờ giữ khoá máy cho việc nặng | 3 lượt nữa: Cổng Phạm vi · duyệt kế hoạch · Cổng Bằng chứng | LT3 nhỏ lại, chỉ còn danh bạ, ứng dụng GitHub và bộ chọn; riêng CRM được giờ lấy và không phụ thuộc bản dựng |
+| **Hoãn — gộp vào LT3 khi LT3 mở** (park) | 0 bây giờ; LT3 nặng thêm khoảng chừng ấy và chấm một vòng to hơn | 0 bây giờ; LT3 vẫn là T3 nên không thêm cổng, nhưng thêm một PR lộ trình nhỏ để bỏ hàng LT1c và nối LT3 | TH3 đọc trạng thái tín hiệu từ tệp đóng gói (đã kịp trong 1–2 phút) cho tới LT3; vòng LT3 to hơn thì dễ cần thêm lượt chấm |
+
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Hai tuần sau khi giao, mọi lần đổi lộ trình trên nhánh chính hiện trên trang trong vòng 10 phút, không lần nào trang đứng ở bản cũ quá một giờ (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?
