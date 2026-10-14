@@ -1,100 +1,11 @@
 {
  "feature_plain": "Tạo kế hoạch 30 ngày từ khuôn là mỗi bước đã có người làm và thành một Việc thật — hiện ở Việc của tôi, có trạng thái, được nhắc buổi sáng.",
- "will_do": [
+ "decisions": [
   {
-   "id": "AC-1",
-   "p": "Sẽ sinh cho mỗi bước của khuôn một Việc có người làm theo phòng ban (trưởng phòng, hoặc người cầm trịch khi phòng chưa có trưởng), hạn tính từ ngày bắt đầu."
-  },
-  {
-   "id": "AC-2",
-   "p": "Sẽ cho người tạo đổi người làm của từng phòng ban, và từ chối kèm lý do khi chọn người «chỉ OKR» mà không ghi gì."
-  },
-  {
-   "id": "AC-3",
-   "p": "Sẽ hiện trong ô tạo kế hoạch một hàng chọn người cho mỗi phòng ban, đủ trạng thái chờ, lỗi, rỗng, dùng được trên điện thoại."
-  },
-  {
-   "id": "AC-4",
-   "p": "Sẽ giữ bước và Việc của nó luôn khớp (người làm, hạn, tên, xong) dù sửa ở bước, ở Việc hay qua «xong n»; chặn Huỷ, xoá, gỡ khỏi kế hoạch trên Việc của bước."
-  },
-  {
-   "id": "AC-6",
-   "p": "Sẽ sinh Việc cho cả bước thêm tay vào kế hoạch; phần «thêm bước» đã ký trước giữ nguyên."
-  },
-  {
-   "id": "AC-7",
-   "p": "Sẽ để kế hoạch tạo trước lượt này chạy y như cũ, và mỗi việc chỉ được nhắc một lần mỗi sáng."
-  },
-  {
-   "id": "AC-8",
-   "p": "Sẽ có thước đọc số ngưỡng (a) từ dữ liệu thật, chỉ đọc, tính trên việc đã tới hạn."
-  },
-  {
-   "id": "AC-9",
-   "p": "Sẽ cập nhật từ điển, tài liệu API và lộ trình (DA3, DA3b mới, điều kiện ngày bắt đầu của DA4)."
-  },
-  {
-   "id": "AC-10",
-   "p": "Sẽ giữ mọi bộ kiểm cũ xanh, không xoá kiểm tra nào."
+   "id": "E14",
+   "q": "Tài liệu mới có giải thích đủ cách kế hoạch sinh việc không?",
+   "why": "Ba người chấm đều thấy đủ năm điều cần có trong tài liệu và lộ trình."
   }
  ],
- "wont_do": [
-  {
-   "id": "AC-5",
-   "p": "Gỡ bước thì Việc của nó chuyển Huỷ chứ không mất; đóng kế hoạch thì hỏi có huỷ việc còn dở không; mở lại KHÔNG tự hồi việc đã huỷ."
-  },
-  {
-   "id": "OOS-1",
-   "p": "KHÔNG làm gợi ý mở kế hoạch khi deal thắng ở vòng này — tách sang DA3b, mang theo ngưỡng (b) anh đã ký."
-  },
-  {
-   "id": "OOS-2",
-   "p": "KHÔNG thêm ngày bắt đầu cho bước — để DA4 làm cùng Gantt (Hỏi-2)."
-  },
-  {
-   "id": "OOS-3",
-   "p": "KHÔNG chép bước của kế hoạch cũ sang Việc — cần cổng riêng như DA1b."
-  },
-  {
-   "id": "OOS-4",
-   "p": "KHÔNG gắn kế hoạch với deal, không khuôn theo loại deal hay loại đối tác."
-  },
-  {
-   "id": "OOS-5",
-   "p": "KHÔNG làm bản bàn giao do AI viết — thuộc tác tử."
-  },
-  {
-   "id": "OOS-6",
-   "p": "KHÔNG làm việc con, Kanban (DA2), dự án và Gantt (DA4)."
-  }
- ],
- "scope_plain": "Vòng này chỉ làm phần «khuôn sinh việc»; gợi ý khi deal thắng đi vòng DA3b ngay sau.",
- "coverage_plain": [
-  {
-   "i": 0,
-   "p": "Đã quét bốn chiều: vòng đời kế hoạch (tạo, sửa, xong, gỡ, đóng, chuyển việc), nguồn tạo, người và quyền (trưởng phòng, phòng không trưởng, «chỉ OKR»), thời gian (hạn, nhắc, cửa sổ đo); thước so là mọi lệnh ghi bước của kho và mẫu Odoo, Salesforce, Pipedrive."
-  }
- ],
- "gap_probe_plain": [
-  {
-   "i": 0,
-   "p": "Cách đếm gợi ý «một mỗi deal» làm ngưỡng (b) chết khi deal thắng lại — đã sửa thành đếm theo lần chuyển sang thắng, rồi cả phần gợi ý tách sang DA3b."
-  },
-  {
-   "i": 1,
-   "p": "Bảng ca gợi ý thiếu deal kéo từ thua sang thắng — đã thêm ma trận 3×3 vào thiết kế; AC và kiểm tra viết ở DA3b."
-  },
-  {
-   "i": 2,
-   "p": "Thước (a) đếm cả việc chưa tới hạn và việc đã huỷ, đọc ngày 14 sẽ báo chết giả — đã chỉ tính việc đã tới hạn, không huỷ, có ca kiểm và đột biến."
-  },
-  {
-   "i": 3,
-   "p": "Chưa nói đóng kế hoạch và chuyển việc làm gì với Việc của bước — chuyển việc đã vào bảng khớp bước–Việc; đóng kế hoạch thành câu hỏi cho anh (Hỏi-3)."
-  },
-  {
-   "i": 4,
-   "p": "Thẻ gợi ý có thể không tự biến mất sau khi tạo kế hoạch — dời theo phần gợi ý sang DA3b, kèm ca kiểm."
-  }
- ]
+ "decisions_plain": []
 }

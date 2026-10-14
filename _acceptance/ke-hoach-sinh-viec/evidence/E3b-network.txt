@@ -1,2 +1,3 @@
-driver: bun man.mjs (Playwright-like script), khong co read_network_requests
+driver: bun man.mjs (script Playwright, khong co read_network_requests)
+console app (script tu doc): 1 loi tren /companies?record=company:...&tab=plans: hydration mismatch (A tree hydrated but some attributes of the server rendered HTML didn't match)
 networkObserved: n-a (driver)

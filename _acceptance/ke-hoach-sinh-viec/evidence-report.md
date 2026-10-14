@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c2550f4ee8ab1862c89d36dd4cc723efc2cb0909
+verified_commit: 9cb567b340c8e49ed8443f5520f89fcad83be99e
 human_signoff:
 ---
 
@@ -23,104 +23,111 @@ human_signoff:
 | E5 | AC-4 | test | PASS |
 | E6 | AC-5 | test | PASS |
 | E7 | AC-6 | test | PASS |
-| E7b | AC-6 | script | PASS |
+| E7b | AC-6 | script | PASS (carry-forward từ round 1) |
 | E8 | AC-7 | test | PASS |
-| E8b | AC-7 | test | PASS |
+| E8b | AC-7 | test | PASS (carry-forward từ round 1) |
 | E13 | AC-8 | test | PASS |
 | E14 | AC-9 | judgment | PENDING-JUDGMENT (hội đồng đề xuất PASS, chờ người) |
 | E15 | AC-10 | script | PASS |
 | E16 | AC-4 | script | PASS |
 | E17 | AC-3 | script | PASS |
 
-Phán quyết tổng: REJECT. Một eval máy đỏ (E3b, màn tạo kế hoạch chạy thật dừng ở bước 4). Ba lệnh suite hồi quy cũng đỏ và không gắn eval nào, xem mục Analyst.
+Phán quyết tổng: REJECT. Một eval máy đỏ: E3b (màn tạo kế hoạch chạy thật, script kh_man thoát mã 1 vì lỗi console hydration, và hai frame không khớp Expected khi đối chiếu bằng mắt). Bảy lệnh suite hồi quy đều xanh. Lệnh fail không gắn eval: chỉ ui-check:E3b, gắn với E3b.
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-ke-hoach-sinh-viec-E1-r1
+  run_id: minted-ke-hoach-sinh-viec-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_tao
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     -t kh-tao của apps/api/test/ke-hoach-sinh-viec.spec.ts: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjmhty1no_test
+    test-run: dropped crm_mv8pe93wnju6_test
 
 - eval: E2
-  run_id: minted-ke-hoach-sinh-viec-E2-r1
+  run_id: minted-ke-hoach-sinh-viec-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_chon_nguoi
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     -t kh-chon-nguoi: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjmh5x4ed_test
+    test-run: dropped crm_mv8pe7rxuclj_test
 
 - eval: E3
-  run_id: minted-ke-hoach-sinh-viec-E3-r1
+  run_id: minted-ke-hoach-sinh-viec-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_man_tao
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
-    Ran 3 tests across 1 file. [1428.00ms]
+    Ran 3 tests across 1 file. [1.61s]
 
 - eval: E3b
-  run_id: minted-ke-hoach-sinh-viec-E3b-r1
+  run_id: minted-ke-hoach-sinh-viec-E3b-r2
   exit_code: 1
   baseline: n-a
   verifier: config:executors.script.kh_man
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   screenshot: evidence/E3b-step1.png
   observed: |
-    Đã mở từng frame bằng Read. Frame 1 (E3b-step1, 1280px): ô trượt "Tạo kế hoạch từ khuôn" có đúng hai hàng phòng ban, "Kinh doanh k8ckaqk" chọn sẵn "Lê Quang Vinh" (trưởng phòng) và "Kế toán k8ckaqk" chọn sẵn "Phạm Thu Hà" kèm ghi chú "Phòng chưa có trưởng phòng — mặc định người cầm trịch"; khớp Expected cho lối danh mục. Nút Lưu bị avatar nổi che một phần.
-    Frame 2 (E3b-step2): sheet công ty "Công ty An Phát k8ckaqk" ở tab "30 ngày đầu", trạng thái rỗng "Chưa có kế hoạch 30 ngày" với nút "+ Tạo kế hoạch"; ô tạo KHÔNG mở nên không thấy hàng phòng ban của lối sheet công ty, frame chỉ chứng minh được một phần. Frame 3 (E3b-step3, 375px): ô toàn chiều rộng, không thanh cuộn ngang, hai hàng phòng ban xếp dọc, khớp vế 375.
-    Frame thẻ Bước (người làm mỗi bước + chip trạng thái Việc) KHÔNG có: bước 4 của script lỗi PrismaClientValidationError tại tx.viec.create (packages/db/src/viec-ghi.ts:238, hàm taoViec) nên kế hoạch không được tạo. Vế cuối của Expected không đạt.
+    Frame 1 (kh-o-tao-danh-muc-1280.png): Sheet "Tao ke hoach tu khuon" tren man 1280. Cong ty doi tac: "Chon cong ty"; Khuon "Khuon san k8pe8lx"; Nguoi cam trich "Pham Thu Ha"; muc "Nguoi lam buoc cua tung phong ban" co hai hang, moi phong ban mot hang: "Kinh doanh k8pe8lx" -> Le Quang Vinh (truong phong), "Ke toan k8pe8lx" -> Pham Thu Ha kem ghi chu "Phong chua co truong phong - mac dinh nguoi cam trich". Khop Expected (mot hang moi phong ban, dien san truong phong / nguoi cam trich).
+    Frame 2 (kh-o-tao-cong-ty-1280.png): Trang Cong ty voi sheet "Cong ty An Phat k8pe8lx" o tab "30 ngay dau", hien trang rong "Chua co ke hoach 30 ngay" va nut "+ Tao ke hoach" bi cat o mep phai. KHONG thay o tao ke hoach / cac hang phong ban / o chon nguoi trong anh. Mau thuan Expected ("o tao ke hoach mo tu sheet cong ty co mot hang moi phong ban") — du script khai buoc 2 dat bang DOM, bang chung hinh khong cho thay.
+    Frame 3 (kh-o-tao-375.png): Man 375, sheet tao ke hoach xep doc: Cong ty, Khuon, Ngay bat dau, Nguoi cam trich, roi hai hang phong ban xep doc (ten phong tren, o chon nguoi duoi: Le Quang Vinh va Pham Thu Ha, kem ghi chu), nut Luu/Huy o day. Khong thay thanh cuon ngang, noi dung nam gon trong 375. Khop Expected.
+    Frame 4 (kh-the-buoc-viec-1280.png): The ke hoach "Cong ty An Phat k8pe8lx" tab Buoc 2, hai nhom phong ban "Kinh doanh k8pe8lx - da xong 0/1" voi buoc "Ky hop dong" + chip "Chua lam", va "Ke toan k8pe8lx - da xong 0/1" voi "Mo tai khoan" + chip "Chua lam". Chip trang thai Viec co hien. Nguoi lam o moi buoc KHONG thay duoc trong khung (phan phai cua sheet bi cat o 1280), nen ve "hien nguoi lam o moi buoc" khong doi chieu duoc bang mat; mot phan Expected chua duoc chung minh.
+    Tong: lenh ma 1 + loi console hydration + frame 2 mau thuan Expected + frame 4 thieu nguoi lam -> eval FAIL.
   network_observed: n-a (driver)
   output: |
-    Script kh_man thoát mã khác 0 (đề bài đòi dòng "ke-hoach-sinh-viec man: dat"; thực tế dòng cuối là "ke-hoach-sinh-viec man: hong 1").
-    Bước 1, 2, 3 đạt, sinh ba ảnh kh-o-tao-danh-muc-1280, kh-o-tao-cong-ty-1280, kh-o-tao-375. Bước 4 ném PrismaClientValidationError; ảnh kh-the-buoc-viec-1280.png không được sinh.
-    Frame đã lưu: E3b-step1.png, E3b-step2.png, E3b-step3.png, kèm E3b-network.txt (driver không đọc được network). Máy không sửa mã.
+    Lenh kh_man chay o tien canh tu goc kho (timeout 600000), thoat voi ma 1 (khong phai ma 0, khong bi cong cu giet). Dong cuoi: "ke-hoach-sinh-viec man: hong 1". Bon buoc cua script deu in "dat" (buoc 1-4), nhung script them 1 loi console app: tren /companies?record=company:...&tab=plans co console.error "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties" (hydration mismatch) nen tong ket la hong 1.
+    Assertion:
+    - Lenh thoat ma 0 kem "ke-hoach-sinh-viec man: dat": FAIL (ma 1, "man: hong 1", nguyen nhan = loi console hydration o sheet cong ty).
+    - Anh 1 danh-muc 1280: PASS (xem observed).
+    - Anh 2 cong-ty 1280: FAIL doi chieu mat (o tao ke hoach khong hien trong anh du script khai buoc 2 dat).
+    - Anh 3 375: PASS.
+    - Anh 4 the buoc 1280: khong xac nhan duoc "nguoi lam o moi buoc" bang mat (cot nguoi lam nam ngoai vung chup, sheet bi cat o mep phai) -> khong chung minh duoc.
+    Frame da luu (sao tu anh cua script): E3b-step1.png (= kh-o-tao-danh-muc-1280.png), E3b-step2.png (= kh-o-tao-cong-ty-1280.png), E3b-step3.png (= kh-o-tao-375.png), E3b-step4.png (= kh-the-buoc-viec-1280.png), tat ca trong _acceptance/ke-hoach-sinh-viec/evidence/. Network: driver la script bun, khong co read_network_requests; E3b-network.txt da ghi, networkObserved = n-a (driver). Server do script tu quan (phien-do tu don khoa gia va tat).
 
 - eval: E4
-  run_id: minted-ke-hoach-sinh-viec-E4-r1
+  run_id: minted-ke-hoach-sinh-viec-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_ban_chieu
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     -t kh-ban-chieu: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjngou8bo_test
+    test-run: dropped crm_mv8pe8wvqr52_test
 
 - eval: E5
-  run_id: minted-ke-hoach-sinh-viec-E5-r1
+  run_id: minted-ke-hoach-sinh-viec-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_chan
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     -t kh-chan: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjmdscv4h_test
+    test-run: dropped crm_mv8pe94osyq3_test
 
 - eval: E6
-  run_id: minted-ke-hoach-sinh-viec-E6-r1
+  run_id: minted-ke-hoach-sinh-viec-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_go_buoc
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     -t kh-go-buoc: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjnzsrjpg_test
+    test-run: dropped crm_mv8pe8ht7ubr_test
 
 - eval: E7
-  run_id: minted-ke-hoach-sinh-viec-E7-r1
+  run_id: minted-ke-hoach-sinh-viec-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_them_buoc
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     -t kh-them-buoc: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjmo3vvn6_test
+    test-run: dropped crm_mv8pe99atliz_test
 
 - eval: E7b
   run_id: minted-ke-hoach-sinh-viec-E7b-r1
@@ -128,18 +135,19 @@ Phán quyết tổng: REJECT. Một eval máy đỏ (E3b, màn tạo kế hoạc
   baseline: n-a
   verifier: config:executors.script.kh_e6_xanh
   verified_at: 2026-10-14T16:50:25Z
+  carried_from_round: 1
   output: |
-    dpv_bo_phan_hong · bo-phan-hong: 1 ca qua
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E8
-  run_id: minted-ke-hoach-sinh-viec-E8-r1
+  run_id: minted-ke-hoach-sinh-viec-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_ke_hoach_cu
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     -t kh-ke-hoach-cu: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjnncdre1_test
+    test-run: dropped crm_mv8pe8z8vnkq_test
 
 - eval: E8b
   run_id: mv8cjoho755z
@@ -147,92 +155,85 @@ Phán quyết tổng: REJECT. Một eval máy đỏ (E3b, màn tạo kế hoạc
   baseline: n-a
   verifier: config:executors.test.kh_nhac_buoc
   verified_at: 2026-10-14T16:50:25Z
+  carried_from_round: 1
   output: |
-    -t kh-nhac-buoc của apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjoho755z_test
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E13
-  run_id: mv8cjnfqew3l
+  run_id: mv8pe8e4992f
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kh_thuoc
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts: 1 lần chạy, 1 qua
-    test-run: dropped crm_mv8cjnfqew3l_test
+    test-run: dropped crm_mv8pe8e4992f_test
 
 - eval: E15
-  run_id: minted-ke-hoach-sinh-viec-E15-r1
+  run_id: minted-ke-hoach-sinh-viec-E15-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kh_hoi_quy
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
-    khong-xoa-expect --tu-thu rồi --moc c1864a3a2 rồi check-types: cả ba bước qua
+    khong-xoa-expect --tu-thu rồi --moc 3818ad4ec rồi check-types: cả ba bước qua
 
 - eval: E16
-  run_id: minted-ke-hoach-sinh-viec-E16-r1
+  run_id: minted-ke-hoach-sinh-viec-E16-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kh_dot_bien
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     dot-bien: 9/9 cap dat
 
 - eval: E17
-  run_id: minted-ke-hoach-sinh-viec-E17-r1
+  run_id: minted-ke-hoach-sinh-viec-E17-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kh_san_thiet_ke
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
   output: |
     kh san: 3 tep, 0 vi pham
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_api-r1
-  exit_code: 1
-  verified_at: 2026-10-14T16:50:25Z
-  output: |
-    api: 1827 qua, 5 bỏ qua, 7 đỏ, 214 tệp, 1839 ca. Bảy ca đỏ đều hiện tên "(unnamed)".
+  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_api-r2
+  exit_code: 0
+  verified_at: 2026-10-14T22:50:33Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-14T16:50:25Z
-  output: |
-    app: 813 qua, 1 đỏ, 79 tệp, 814 ca.
-    Ca đỏ: khoa chet > moi khoa da khai deu co cho goi, tru ban khai CHUA_NOI
+  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-10-14T22:50:33Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-ke-hoach-sinh-viec-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-ke-hoach-sinh-viec-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
 
 - cmd: bun run lint:slop
-  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_lint_slop-r1
-  exit_code: 1
-  verified_at: 2026-10-14T16:50:25Z
+  run_id: minted-ke-hoach-sinh-viec-SUITE-bun_run_lint_slop-r2
+  exit_code: 0
+  verified_at: 2026-10-14T22:50:33Z
   output: |
-    oxlint: 2 lỗi, 0 cảnh báo, cả hai nằm trong tệp kiểm của chính vòng này.
-    anti-slop(no-conditional-empty-object-spread) tại apps/api/test/ke-hoach-sinh-viec.spec.ts:86
-    anti-slop(no-unknown-parameters) tại apps/app/test/tao-ke-hoach-nguoi.dom.tsx:19 (tham số input kiểu unknown)
+    Finished in 1.4s on 3339 files with 9 rules using 18 threads.
 
 - cmd: bunx turbo run build --force
-  run_id: minted-ke-hoach-sinh-viec-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-ke-hoach-sinh-viec-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T16:50:25Z
+  verified_at: 2026-10-14T22:50:33Z
 
 ## Known limits
 
@@ -244,30 +245,24 @@ none — moi eval feature deu red tren baseline (co phan biet)
 
 Ghi chú: mọi eval máy đều có baseline n-a (xem «Baseline khong do» dưới), nên dòng trên nghĩa là không eval nào được đo là xanh ở cả hai phía, KHÔNG phải mọi eval đã được đo là đỏ ở baseline.
 
-Lệnh fail không gắn eval (REJECT vì chúng chưa được người phân loại; máy không đoán là hồi quy hay đã đỏ sẵn từ trước):
-- bun run test -- --filter=api: 7 ca đỏ không tên, 1827 ca qua.
-- bun run test -- --filter=app --filter=@crm/ui: 1 ca đỏ «khoa chet > moi khoa da khai deu co cho goi, tru ban khai CHUA_NOI».
-- bun run lint:slop: 2 lỗi, cả hai nằm trong tệp kiểm do vòng này thêm (apps/api/test/ke-hoach-sinh-viec.spec.ts:86 và apps/app/test/tao-ke-hoach-nguoi.dom.tsx:19).
-- ui-check:E3b: gắn với E3b, nguyên nhân ở mục Iterations.
+Lệnh fail không gắn eval: không có lệnh suite nào đỏ ở round này. Lệnh fail duy nhất là ui-check:E3b, gắn với E3b (nguyên nhân ở mục Iterations).
 
-Ghi chú về thời điểm: máy không cấp thời điểm riêng cho từng eval, nên `verified_at` ở mọi khối là ngày lập báo cáo, không phải giờ chạy.
+Ghi chú về thời điểm: máy không cấp thời điểm riêng cho từng eval ở round 2, nên `verified_at` của các khối round 2 là ngày lập báo cáo, không phải giờ chạy. Hai khối carry-forward (E7b, E8b) giữ nguyên thời điểm của round 1.
 
 ### Baseline khong do
 
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-tao": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chon-nguoi": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tao-ke-hoach-nguoi.dom.tsx: bo qua baseline: tep apps/app/test/tao-ke-hoach-nguoi.dom.tsx co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ban-chieu": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chan": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-go-buoc": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-them-buoc": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs: bo qua baseline: tep _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ke-hoach-cu": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.integration.spec.ts -t kh-nhac-buoc": bo qua baseline: tep apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && bun test test/ke-hoach-sinh-viec-do-nguong.spec.ts": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc c1864a3a2 && bun run check-types: bo qua baseline: tep _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs: bo qua baseline: tep _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs: bo qua baseline: tep _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs co o cay dang kiem nhung chua co o merge-base c1864a3a2e726d20c65fcd8f91596ae1966cd755 — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-tao": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chon-nguoi": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tao-ke-hoach-nguoi.dom.tsx: bo qua baseline: tep apps/app/test/tao-ke-hoach-nguoi.dom.tsx co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ban-chieu": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chan": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-go-buoc": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-them-buoc": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ke-hoach-cu": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && bun test test/ke-hoach-sinh-viec-do-nguong.spec.ts": bo qua baseline: tep apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc 3818ad4ec && bun run check-types: bo qua baseline: tep _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs: bo qua baseline: tep _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs: bo qua baseline: tep _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs co o cay dang kiem nhung chua co o merge-base 3818ad4ecbaa06034dd83d0fa904a03cdc20aaeb — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
@@ -277,9 +272,9 @@ none — every multi-run eval is uniform
 
 Panel E14 (AC-9) — đề xuất: PASS. Đây là đề xuất của hội đồng, human_override để TRỐNG cho người quyết ở Cổng 2. Ba lens đồng thuận, không có ý kiến bất đồng.
 
-- domain-correctness: PASS — Đủ năm điều. (1) CONTEXT.md mục Bước và api.md nói bước là bản chiếu của đúng một Việc, Việc là nguồn sự thật (người làm, hạn, tên, xong), và kế hoạch tạo trước DA3 không mang Việc. (2) Cả hai tài liệu nêu Huỷ, xoá, gỡ gắn bị chặn (400 `VIEC.thongDiep.goBuocOKeHoach`) và đường đúng là «Bỏ bước»/`removeStep`. (3) và (4) `nguoiTheoPhongBan`, mặc định trưởng phòng rồi người cầm trịch, từ chối vai «chỉ OKR» (`vaiChiOkrPhong`) và `closePlan.huyViecMo` đều có. (5) Hàng DA3 là «đang dựng», có hàng DA3b «Gợi ý mở kế hoạch khi deal thắng», và `chay_khi` của DA4 ghi điều kiện ngày bắt đầu đã thoả, chủ kho mở 14/10. Các tài liệu không dùng «dự án» cho kế hoạch 30 ngày; mục «Dự án» còn nói rõ kế hoạch 30 ngày không phải dự án. Lưu ý: CONTEXT.md chưa có mục riêng «Gợi ý mở kế hoạch» (DA3b còn «chưa mở»), nhưng năm điều cần kiểm không đòi mục đó.
-- operational-feasibility: PASS — Cả năm điều đều có trong các tệp đầu vào. (1) và (3): CONTEXT.md mục Bước nói bước là bản chiếu của Việc, người làm/hạn/tên/xong lấy từ Việc, mặc định trưởng phòng rồi người cầm trịch, vai «chỉ OKR» bị từ chối, và kế hoạch tạo trước DA3 không mang Việc. (2) và (4): docs/api.md dòng 293-309 nêu Huỷ/xoá/gỡ gắn trả 400 `goBuocOKeHoach`, đường đúng là `removeStep`/«Bỏ bước», `nguoiTheoPhongBan` của `createFromTemplate`, và `closePlan` có `huyViecMo`. (5): lo-trinh-viec-du-an.json có DA3 ở trạng thái «đang dựng», có hàng DA3b, và `chay_khi` của DA4 ghi điều kiện ngày bắt đầu đã thoả do chủ kho mở 14/10. Mục kế hoạch 30 ngày không dùng chữ «dự án». Lưu ý ngoài năm điều: CONTEXT.md không có mục riêng tên «Gợi ý mở kế hoạch» (grep không khớp). Ý đó nằm ở hàng DA3b của JSON và không thuộc năm điều cần chấm.
-- spec-alignment: PASS — Cả năm điều đều có trong ba tệp. (1) CONTEXT.md mục Bước và Việc: bước là bản chiếu của đúng một Việc, kế hoạch tạo trước DA3 vẫn có bước không Việc. (2) CONTEXT.md và api.md: Huỷ, xoá và gỡ gắn kế hoạch bị chặn bằng 400 `goBuocOKeHoach`, đường đúng là «Bỏ bước». (3) và (4) api.md: `nguoiTheoPhongBan`, mặc định trưởng phòng rồi người cầm trịch, vai «chỉ OKR» bị từ chối `vaiChiOkrPhong`, `closePlan` có `huyViecMo`. (5) JSON: DA3 đang dựng, có hàng DA3b (chưa mở, bám DA3), `chay_khi` của DA4 ghi điều kiện ngày bắt đầu đã thoả, chủ kho mở 14/10. Chữ «dự án» chỉ dùng để loại trừ kế hoạch 30 ngày. Một điểm cần biết: CONTEXT.md chưa có mục «Gợi ý mở kế hoạch» (grep không thấy). Mục đó không nằm trong năm điều cần kiểm, vì ý (5) chỉ đòi hàng DA3b ở JSON.
+- domain-correctness: PASS — Đủ năm điều trong ba tệp. (1)–(2) nằm ở mục «Bước» của CONTEXT.md và đoạn DA3 của docs/api.md (dòng 293–309, lỗi `VIEC.thongDiep.goBuocOKeHoach`). (3)–(4) nằm ở api.md (`nguoiTheoPhongBan`, `vaiChiOkrPhong`, `closePlan.huyViecMo`). (5) nằm ở lo-trinh-viec-du-an.json: DA3 là «đang dựng», có hàng DA3b, và `chay_khi` của DA4 ghi điều kiện ngày bắt đầu đã thoả, chủ kho mở 14/10. Không chỗ nào dùng «dự án» cho kế hoạch 30 ngày. Lưu ý: CONTEXT.md không có mục riêng «Gợi ý mở kế hoạch», nhưng đó không thuộc năm điều cần kiểm, và ý tương ứng đã nằm ở hàng DA3b.
+- operational-feasibility: PASS — Đủ năm điều. (1) và (2) nằm ở mục «Bước» của CONTEXT.md và api.md dòng 293-309. (3) và (4) nằm ở api.md dòng 293-309 (nguoiTheoPhongBan, vaiChiOkrPhong, huyViecMo). (5) nằm ở JSON: DA3 là «đang dựng», có DA3b «Gợi ý mở kế hoạch khi deal thắng», và DA4 có chay_khi nêu điều kiện ngày bắt đầu đã thoả do chủ kho mở 14/10. Mọi chỗ chữ «dự án» đứng cạnh kế hoạch 30 ngày đều là phủ định hoặc nằm trong mục «Dự án». CONTEXT.md chưa có mục riêng «Gợi ý mở kế hoạch», nhưng đó không thuộc năm điều cần kiểm và khớp với DA3b còn «chưa mở».
+- spec-alignment: PASS — Đủ năm điều có chữ rõ trong ba tệp. (1) và (2) nằm ở mục Bước của CONTEXT.md và api.md dòng 293–309. (3) và (4) nằm ở api.md: `nguoiTheoPhongBan`, mặc định trưởng phòng rồi người cầm trịch, `vaiChiOkrPhong`, `huyViecMo`. (5) nằm ở lo-trinh-viec-du-an.json: DA3 "đang dựng", có hàng DA3b, và `chay_khi` của DA4 ghi điều kiện ngày bắt đầu đã thoả do chủ kho mở 14/10. Các tệp không dùng chữ «dự án» cho kế hoạch 30 ngày. Một điểm lệch nhỏ: CONTEXT.md chưa có mục riêng «Gợi ý mở kế hoạch» như câu hỏi nhắc; mục "Gợi ý" hiện có là mục cũ, nói về nhắc kế hoạch im. Điều này không làm hụt điều nào trong năm điều, vì DA3b đã được nêu ở JSON.
 
 - eval: E14
   judged_by: judge panel (3 lens, fresh context)
@@ -289,4 +284,5 @@ Panel E14 (AC-9) — đề xuất: PASS. Đây là đề xuất của hội đ�
 
 ## Iterations
 
-Round 1: E3b không đạt, nên phán quyết REJECT. Script kh_man đạt ba bước đầu (ô tạo từ danh mục, từ sheet công ty, ở 375) rồi lỗi ở bước 4 với PrismaClientValidationError tại `tx.viec.create` (packages/db/src/viec-ghi.ts:238, hàm taoViec), nên kế hoạch không được dựng, không có thẻ Bước và không sinh ảnh kh-the-buoc-viec-1280.png. Frame 2 cũng chưa chứng minh được lối sheet công ty vì ô tạo chưa mở trong ảnh. Ngoài ra bốn lệnh không gắn eval đỏ (suite api, suite app và @crm/ui, lint:slop, cùng ui-check:E3b) cần người xem. Trả về cho khâu cài đặt.
+Round 1: E3b không đạt. Script kh_man đạt ba bước đầu rồi lỗi ở bước 4 với PrismaClientValidationError tại `tx.viec.create` (packages/db/src/viec-ghi.ts:238, hàm taoViec), nên kế hoạch không được dựng và không có thẻ Bước; ba lệnh suite (api, app và @crm/ui, lint:slop) cũng đỏ. Trả về cho khâu cài đặt.
+Round 2: E3b vẫn không đạt, nhưng nguyên nhân đã đổi. Lỗi tạo Việc ở round 1 đã hết (cả bốn bước của script in «đạt», cả bảy lệnh suite xanh). Còn lại: script thoát mã 1 vì một lỗi console hydration mismatch ở sheet công ty (/companies?record=company:...&tab=plans); đối chiếu mắt thì frame 2 (lối sheet công ty) không có ô tạo kế hoạch, frame 4 (thẻ Bước) không thấy người làm ở mỗi bước vì sheet bị cắt ở mép phải khi 1280. Frame 1 và frame 3 (375) khớp Expected. Trả về cho khâu cài đặt.
