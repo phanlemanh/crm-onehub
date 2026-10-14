@@ -69,6 +69,7 @@ import {
 import type { z } from "zod";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
+import { docLyDoCanChinh, type LyDoCanChinh } from "./can-chinh";
 import {
 	type AiChiTieuOutput,
 	type DongHien,
@@ -141,7 +142,7 @@ function phanTramTran(chi: number, tran: number): number {
 const CACH_CUA_LOAI = {
 	"viet-lai": ["nhan", "sua", "bac"],
 	hoi: ["bac", "bo-qua"],
-	"can-chinh": ["nhan", "bac"],
+	"can-chinh": ["nhan", "sua", "bac"],
 } as const satisfies Record<DongGopY["loai"], readonly string[]>;
 
 const TRANG_THAI_CUA_CACH = {
@@ -167,6 +168,19 @@ function conHieuLuc(mt: MucTieuGoi, dong: DongGopY): boolean {
 	return dong.loai !== "viet-lai" || dong.truoc === giaTriHienTai(mt, dong);
 }
 
+type QuyetCanChinh = { lyDo: LyDoCanChinh; cach: "nhan" | "sua" };
+
+function quyetCanChinh(input: TroLyQuyetInput, dong: DongGopY): QuyetCanChinh {
+	const cuaKara = { lyDo: dong.lyDo, canCu: dong.canCu ?? null };
+	if (input.cach !== "sua")
+		return { lyDo: { ...cuaKara, lyDoTuKara: true }, cach: "nhan" };
+	const chu = docLyDoCanChinh({ lyDo: input.giaTri, canCu: input.canCu });
+	const yNguyen = chu.lyDo === cuaKara.lyDo && chu.canCu === cuaKara.canCu;
+	return yNguyen
+		? { lyDo: { ...chu, lyDoTuKara: true }, cach: "nhan" }
+		: { lyDo: { ...chu, lyDoTuKara: false }, cach: "sua" };
+}
+
 function hopLe<R>(doc: z.ZodSafeParseResult<R>): R {
 	if (doc.success) return doc.data;
 	throw new BadRequestException(
@@ -187,6 +201,7 @@ function noiDungDong(id: string, dong: DongGopY) {
 		targetObjectiveId: dong.targetObjectiveId,
 		targetKeyResultId: dong.targetKeyResultId,
 		lyDo: dong.lyDo,
+		canCu: dong.canCu ?? null,
 	};
 }
 
@@ -537,6 +552,7 @@ export class TroLyOkrService {
 		deXuatId: string,
 		dong: DongGopY,
 		giaTri: string | null,
+		lyDo: LyDoCanChinh | null,
 	) {
 		const ghi = { note: ghiChuVet(deXuatId) };
 		if (dong.loai === "can-chinh") {
@@ -548,7 +564,7 @@ export class TroLyOkrService {
 					targetObjectiveId: dong.targetObjectiveId,
 					targetKeyResultId: dong.targetKeyResultId,
 				},
-				ghi,
+				{ ...ghi, lyDo: lyDo ?? undefined },
 			);
 			return;
 		}
@@ -605,6 +621,13 @@ export class TroLyOkrService {
 					!(CACH_CUA_LOAI[dong.loai] as readonly string[]).includes(input.cach)
 				)
 					throw new BadRequestException(T.troLy.cachKhongHop);
+				if (
+					input.cach === "sua" &&
+					!input.giaTri &&
+					dong.loai === "can-chinh" &&
+					input.canCu?.trim()
+				)
+					throw new BadRequestException(T.canChinh.canCuCanLyDo);
 				if (input.cach === "sua" && !input.giaTri)
 					throw new BadRequestException(T.troLy.canGiaTri);
 				const lyDo = await this.lyDoNac(tx, dong.objectiveId, now);
@@ -613,23 +636,36 @@ export class TroLyOkrService {
 					throw new ConflictException(T.troLy.daQuyet);
 				const ghiOkr = input.cach === "nhan" || input.cach === "sua";
 				if (ghiOkr) await this.assertConHieuLuc(tx, dong);
+				const canChinh =
+					ghiOkr && dong.loai === "can-chinh"
+						? quyetCanChinh(input, dong)
+						: null;
+				const cach = canChinh?.cach ?? input.cach;
 				const giaTri =
-					input.cach === "sua"
-						? (input.giaTri ?? null)
-						: input.cach === "nhan" && dong.loai === "viet-lai"
+					cach === "sua"
+						? (canChinh?.lyDo.lyDo ?? input.giaTri ?? null)
+						: cach === "nhan" && dong.loai === "viet-lai"
 							? dong.sau
 							: null;
 				const { count } = await tx.okrDeXuat.updateMany({
 					where: { id: hang.id, trangThai: "cho" },
 					data: {
-						trangThai: TRANG_THAI_CUA_CACH[input.cach],
+						trangThai: TRANG_THAI_CUA_CACH[cach],
 						giaTriCuoi: giaTri,
 						nguoiQuyet: userId,
 						quyetLuc: now,
 					},
 				});
 				if (count === 0) throw new ConflictException(T.troLy.daQuyet);
-				if (ghiOkr) await this.ghiTheoDong(tx, userId, hang.id, dong, giaTri);
+				if (ghiOkr)
+					await this.ghiTheoDong(
+						tx,
+						userId,
+						hang.id,
+						dong,
+						giaTri,
+						canChinh?.lyDo ?? null,
+					);
 				return { ok: true };
 			})
 			.catch((loi: Error): TroLyQuyetOutput => {
