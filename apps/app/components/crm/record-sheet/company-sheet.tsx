@@ -7,6 +7,7 @@ import StarFilled from "@carbon/icons-react/es/StarFilled";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import type { FieldValueJson } from "@crm/db/fields";
 import { Button } from "@crm/ui/components/button";
+import { KhoaLuuTru } from "@crm/ui/components/dai-luu-tru";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import {
 	EntityLogo,
@@ -70,7 +71,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { CompanyPlans } from "./company-plans";
 import { QuickAddContact, QuickAddDeal } from "./quick-add";
-import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
+import { DaiLuuTruBanGhi, RecordActions } from "./record-actions";
 import {
 	AddRow,
 	BangDaLuuTru,
@@ -313,7 +314,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 				company ? (
 					<>
 						{company.archivedAt ? (
-							<DaiLuuTru
+							<DaiLuuTruBanGhi
 								record={{ kind: "company", id: company.id }}
 								archivedAt={company.archivedAt}
 							/>

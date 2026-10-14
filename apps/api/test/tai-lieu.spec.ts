@@ -257,7 +257,10 @@ const THU_TUC_GHI = [
 	"approve",
 	"create",
 	"datXacMinh",
+	"deXuatKhoiPhuc",
+	"deXuatLuuTru",
 	"propose",
+	"quayLai",
 	"reject",
 	"xuLyBaoSai",
 	"xuLyChuaTraLoi",
@@ -696,6 +699,7 @@ describe("de-xuat-phan-trang", () => {
 	type Trang = { rows: HangDx[]; total: number; choToiDuyet: number };
 	const choId: string[] = [];
 	const xuLyId: string[] = [];
+	const daDuyetId: string[] = [];
 
 	async function trangDeXuat(nhom: "cho" | "da-xu-ly", page: number) {
 		return ok<Trang>(
@@ -708,11 +712,13 @@ describe("de-xuat-phan-trang", () => {
 		await donTaiLieu({});
 		const cho = await taoTrang("Phân trang chờ", "Gốc chờ.\n");
 		await duyet(cho.deXuatId, "chu");
+		daDuyetId.push(cho.deXuatId);
 		for (let i = 0; i < 30; i += 1) {
 			choId.push(await deXuat(cho.slug, `Bản chờ số ${i}.\n`));
 		}
 		const tra = await taoTrang("Phân trang trả lại", "Gốc trả lại.\n");
 		await duyet(tra.deXuatId, "chu");
+		daDuyetId.push(tra.deXuatId);
 		for (let i = 0; i < 6; i += 1) {
 			const id = await deXuat(tra.slug, `Bản trả lại số ${i}.\n`);
 			await traLai(id, "chu");
@@ -720,11 +726,13 @@ describe("de-xuat-phan-trang", () => {
 		}
 		const cu = await taoTrang("Phân trang cũ", "Gốc cũ.\n");
 		await duyet(cu.deXuatId, "chu");
+		daDuyetId.push(cu.deXuatId);
 		const cungGoc: string[] = [];
 		for (let i = 0; i < 5; i += 1) {
 			cungGoc.push(await deXuat(cu.slug, `Bản cùng gốc số ${i}.\n`));
 		}
 		await duyet(cungGoc[0] as string, "chu");
+		daDuyetId.push(cungGoc[0] as string);
 		xuLyId.push(...cungGoc.slice(1));
 	});
 
@@ -748,12 +756,15 @@ describe("de-xuat-phan-trang", () => {
 		ok(await hoi("taiLieu.proposal", { id: cuNhat }, "chu"), "mo ban cu nhat");
 	});
 
-	test("de-xuat-phan-trang: nhom da xu ly co dung 6 ban tra lai va 4 ban cu", async () => {
+	test("de-xuat-phan-trang: nhom da xu ly co dung 4 ban da duyet, 6 ban tra lai va 4 ban cu", async () => {
 		const xuLy = await trangDeXuat("da-xu-ly", 1);
-		expect(xuLy.total).toBe(10);
-		expect(xuLy.rows.map((r) => r.id).sort()).toEqual([...xuLyId].sort());
+		expect(xuLy.total).toBe(14);
+		expect(xuLy.rows.map((r) => r.id).sort()).toEqual(
+			[...xuLyId, ...daDuyetId].sort(),
+		);
 		expect(xuLy.rows.map((r) => r.trangThai).sort()).toEqual([
 			...Array(4).fill("CU"),
+			...Array(4).fill("DA_DUYET"),
 			...Array(6).fill("TRA_LAI"),
 		]);
 	});

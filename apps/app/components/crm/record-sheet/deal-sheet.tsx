@@ -6,6 +6,7 @@ import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import { CURRENCIES, normalizeCurrency } from "@crm/db/currency";
 import type { FieldValueJson } from "@crm/db/fields";
 import { Button } from "@crm/ui/components/button";
+import { KhoaLuuTru } from "@crm/ui/components/dai-luu-tru";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import {
 	EntityLogo,
@@ -67,7 +68,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AttachDealContact } from "./quick-add";
-import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
+import { DaiLuuTruBanGhi, RecordActions } from "./record-actions";
 import {
 	AddRow,
 	BangDaLuuTru,
@@ -249,7 +250,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 				deal ? (
 					<>
 						{deal.archivedAt ? (
-							<DaiLuuTru
+							<DaiLuuTruBanGhi
 								record={{ kind: "deal", id: deal.id }}
 								archivedAt={deal.archivedAt}
 							/>
