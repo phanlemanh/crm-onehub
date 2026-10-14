@@ -62,9 +62,11 @@ evals:
       - "apps/api/src/tin-hieu/tin-hieu.router.ts"
       - "apps/api/test/vai-chi-okr.spec.ts"
     expected: |
-      vai-chi-okr.spec.ts: danh sach thu tuc pham vi chung co "tinHieu.tatCa" (router mang PhamViChungMiddleware);
-      ca vai okr goi tinHieu.tatCa -> FORBIDDEN tu cau kiem vai (khong phai tu middleware pham vi).
-      CHIEU DO: ban sao bo ten thu tuc khoi danh sach -> do voi thong diep ghim cua spec ve thu tuc chua khai pham vi.
+      vai-chi-okr.spec.ts: router "tinHieu" nam trong danh sach router pham vi chung (PhamViChungMiddleware), nen spec tu
+      quet moi thu tuc cua router — gom "tinHieu.tatCa" — va xanh; tu choi vai okr cua tatCa do cau kiem vai o service
+      (E2, E3b do).
+      CHIEU DO: ban sao bo "tinHieu" khoi danh sach router pham vi chung cua spec -> do voi thong diep ghim cua spec ve
+      router chua khai pham vi.
 
   - id: E3
     criterion: AC-3
