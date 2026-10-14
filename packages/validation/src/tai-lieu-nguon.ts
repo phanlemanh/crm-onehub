@@ -32,16 +32,16 @@ export const NGUON = {
 		chuaTai: "Chưa thấy tệp đã tải lên. Tải lại rồi thử lại.",
 		dichChuaDung:
 			"Chỉ cập nhật được trang đã có bản đang dùng. Chọn «Trang mới» cho trang chưa duyệt lần nào.",
-		dangSoan: "Máy đang soạn nguồn này. Chờ xong rồi mới soạn lại được.",
+		dangSoan: "Kara đang soạn nguồn này. Chờ xong rồi mới soạn lại được.",
 		khongCanSoanLai: "Nguồn này không cần soạn lại.",
 		phieuSai: "Không nhận được tệp này. Tải lên lại từ đầu.",
 	},
 	nhanTrangThai: {
-		CHO_DOC: "Máy đang soạn",
-		CHO_SOAN: "Máy đang soạn",
-		DANG_SOAN: "Máy đang soạn",
+		CHO_DOC: "Kara đang soạn",
+		CHO_SOAN: "Kara đang soạn",
+		DANG_SOAN: "Kara đang soạn",
 		DA_SOAN: "Đã soạn",
-		CAN_GO_TAY: "Cần gõ tay — tệp là bản quét, máy không đọc được chữ",
+		CAN_GO_TAY: "Cần gõ tay — tệp là bản quét, Kara không đọc được chữ",
 		LOI: "Chưa soạn được",
 	} satisfies Record<TrangThaiNguon, string>,
 } as const;

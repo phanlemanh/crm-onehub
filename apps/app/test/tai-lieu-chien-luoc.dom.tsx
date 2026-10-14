@@ -128,7 +128,7 @@ afterEach(() => {
 const q = (s: string) => document.body.querySelector(s);
 
 describe("tao-trang", () => {
-	test("ô loại có «Chiến lược»; chọn loại này hiện mô tả «Trợ lý OKR đọc bản đang dùng của loại này»", async () => {
+	test("ô loại có «Chiến lược»; chọn loại này hiện mô tả «Kara đọc bản đang dùng của loại này»", async () => {
 		expect(t.loai["chien-luoc"]).toBe("Chiến lược");
 		await mo(
 			<TruongTrangMoi
@@ -140,7 +140,7 @@ describe("tao-trang", () => {
 			/>,
 		);
 		expect(q("[data-mo-ta-loai]")?.textContent).toBe(
-			"Trợ lý OKR đọc bản đang dùng của loại này",
+			"Kara đọc bản đang dùng của loại này",
 		);
 	});
 	test("loại quy-dinh không có mô tả loại", async () => {
@@ -174,7 +174,7 @@ describe("duyet-chien-luoc", () => {
 		const canhBao = q("[data-canh-bao-tu-cam]");
 		expect(canhBao, "canh bao khong hien").not.toBeNull();
 		expect(canhBao?.textContent).toContain(
-			"Có chữ về thưởng, xếp hạng — Trợ lý OKR không được nhắc tới những thứ này",
+			"Có chữ về thưởng, xếp hạng — Kara không được nhắc tới những thứ này",
 		);
 		expect(q("[data-nut-duyet]")).not.toBeNull();
 		expect(q("[data-qua-tran]")).toBeNull();

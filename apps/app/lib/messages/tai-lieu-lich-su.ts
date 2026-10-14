@@ -47,19 +47,19 @@ const vi = {
 		coLuuTruCho: "Có đề xuất lưu trữ chờ duyệt",
 		dai: {
 			tieuDe: "Trang đã lưu trữ ngày {ngay}",
-			than: "Trang không còn hiện trong danh sách, tìm kiếm và trợ lý AI. Đề xuất khôi phục nếu trang cần dùng lại.",
+			than: "Trang không còn hiện trong danh sách, tìm kiếm và Kara. Đề xuất khôi phục nếu trang cần dùng lại.",
 			deXuatKhoiPhuc: "Đề xuất khôi phục",
 			coKhoiPhucCho: "Có đề xuất khôi phục chờ duyệt",
 		},
 		hop: {
 			LUU_TRU: {
 				tieuDe: "Đề xuất lưu trữ trang",
-				moTa: "Chủ trang duyệt thì trang rời danh sách, tìm kiếm và trợ lý AI. Lịch sử và nội dung vẫn giữ nguyên.",
+				moTa: "Chủ trang duyệt thì trang rời danh sách, tìm kiếm và Kara. Lịch sử và nội dung vẫn giữ nguyên.",
 				daGui: "Đã gửi đề xuất lưu trữ.",
 			},
 			KHOI_PHUC: {
 				tieuDe: "Đề xuất khôi phục trang",
-				moTa: "Chủ trang duyệt thì trang trở lại danh sách, tìm kiếm và trợ lý AI.",
+				moTa: "Chủ trang duyệt thì trang trở lại danh sách, tìm kiếm và Kara.",
 				daGui: "Đã gửi đề xuất khôi phục.",
 			},
 			lyDo: "Lý do",
@@ -150,19 +150,19 @@ const en: TaiLieuLichSuMessages = {
 		coLuuTruCho: "Archive proposal waiting",
 		dai: {
 			tieuDe: "Page archived on {ngay}",
-			than: "This page no longer shows in the list, search or the AI assistant. Propose restoring it if it is needed again.",
+			than: "This page no longer shows in the list, search or Kara. Propose restoring it if it is needed again.",
 			deXuatKhoiPhuc: "Propose restoring",
 			coKhoiPhucCho: "Restore proposal waiting",
 		},
 		hop: {
 			LUU_TRU: {
 				tieuDe: "Propose archiving this page",
-				moTa: "Once the page owner approves, the page leaves the list, search and the AI assistant. History and content stay as they are.",
+				moTa: "Once the page owner approves, the page leaves the list, search and Kara. History and content stay as they are.",
 				daGui: "Archive proposal sent.",
 			},
 			KHOI_PHUC: {
 				tieuDe: "Propose restoring this page",
-				moTa: "Once the page owner approves, the page returns to the list, search and the AI assistant.",
+				moTa: "Once the page owner approves, the page returns to the list, search and Kara.",
 				daGui: "Restore proposal sent.",
 			},
 			lyDo: "Reason",
