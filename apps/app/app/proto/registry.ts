@@ -4,6 +4,7 @@ import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
 import { CuaVaoVaMau } from "./_modules/cua-vao-va";
+import { DieuHuongOkrMau } from "./_modules/dieu-huong-okr";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
 import { DonOkrNhapSai } from "./_modules/don-okr-nhap-sai";
@@ -70,6 +71,7 @@ const BANG_GHEP = {
 	"tim-va-dieu-huong-kho": KhoTaiLieuMau,
 	"tro-ly-doc-kho": KhoTaiLieuMau,
 	"to-chuc-danh-sach-chi-tiet": ToChucDanhSachChiTietMau,
+	"dieu-huong-okr": DieuHuongOkrMau,
 	"so-do-can-chinh-okr": SoDoCanChinhOkrMau,
 	"toan-canh-okr": ToanCanhOkrMau,
 	"ngan-ho-so-trong-lo-trinh": NganHoSoMau,

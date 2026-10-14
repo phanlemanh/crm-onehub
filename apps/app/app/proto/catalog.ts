@@ -11,6 +11,31 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "dieu-huong-okr",
+		ten: "Điều hướng Mục tiêu và trang đơn vị — một tiêu đề, một nút tạo, một hàng công cụ",
+		states: [
+			{
+				id: "ST-dh-don-vi",
+				nhan: "Theo đơn vị — Chăm sóc khách hàng, trưởng đơn vị xem",
+			},
+			{ id: "ST-dh-chon-don-vi", nhan: "Ô chọn đơn vị đang mở" },
+			{ id: "ST-dh-bo-phan", nhan: "Bộ phận Vận hành — có đơn vị trực thuộc" },
+			{
+				id: "ST-dh-hop-tuan",
+				nhan: "Cách xem Họp tuần — hàng công cụ giữ nguyên",
+			},
+			{ id: "ST-dh-chua-dat", nhan: "Kho vận chưa đặt OKR, chưa có trưởng" },
+			{
+				id: "ST-dh-khong-quyen",
+				nhan: "Thành viên xem Kinh doanh — nút tạo khoá có lý do",
+			},
+			{ id: "ST-dh-cua-toi", nhan: "Của tôi — trưởng đơn vị" },
+			{ id: "ST-dh-cua-toi-thanh-vien", nhan: "Của tôi — thành viên" },
+			{ id: "ST-dh-dang-tai", nhan: "Đang tải — tiêu đề giữ nguyên" },
+			{ id: "ST-dh-loi", nhan: "Lỗi tải" },
+		],
+	},
+	{
 		slug: "so-do-can-chinh-okr",
 		ten: "Sơ đồ căn chỉnh OKR — mỗi đơn vị một thẻ, kiểu Strategy Map",
 		states: [
