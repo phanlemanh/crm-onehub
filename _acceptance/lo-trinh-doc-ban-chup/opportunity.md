@@ -3,10 +3,10 @@ schema_version: 1
 slug: lo-trinh-doc-ban-chup
 feature: Trưởng phòng ban mở trang Lộ trình và thấy đúng lộ trình mới nhất của nhánh chính, kèm giờ lấy, mà trang không phải chờ một bản dựng production
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-14T07:56:06Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -18,7 +18,8 @@ lo_trinh_tep: docs/plan/lo-trinh-okr.json
 > 2.28.0 giải nén, crm nhận 2.30 ở lô 12:00Z), nhánh `feat/lo-trinh-doc-ban-chup` cắt từ `origin/onehub`
 > `1997da85b`. Chủ kho duyệt hàng 14/10 (PR #397) và gật mở vòng qua phiên điều phối MacBook Pro. Hàng đứng
 > trên LT1 (trang Lộ trình, đã gộp #329); LT3 (lộ trình nhiều sản phẩm) và TH3 (trạng thái tín hiệu) đứng trên
-> hàng này.
+> hàng này. Cổng Đáng: chủ kho chọn **build** 14/10 (giữ ngưỡng đề xuất, timebox một vòng) sau khi xem cả lối
+> «hoãn — gộp vào LT3» do phiên điều phối đặt cạnh.
 
 ## Vấn đề & ai gặp
 
@@ -66,7 +67,7 @@ của mình từ cùng bản chụp (TH3).
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] đã đạt «Hai tuần sau khi giao, mọi lần đổi lộ trình trên nhánh chính hiện trên trang trong vòng 10 phút, không lần nào trang đứng ở bản cũ quá một giờ (ngưỡng đề xuất — chốt ở Cổng Đáng)» chưa?
-- Kết quả nào là SỐNG: [đề xuất] Hai tuần sau khi giao, mọi lần đổi lộ trình trên nhánh chính hiện trên trang trong vòng 10 phút, không lần nào trang đứng ở bản cũ quá một giờ (ngưỡng đề xuất — chốt ở Cổng Đáng)
-- Kết quả nào là CHẾT: [đề xuất] chưa đạt «Hai tuần sau khi giao, mọi lần đổi lộ trình trên nhánh chính hiện trên trang trong vòng 10 phút, không lần nào trang đứng ở bản cũ quá một giờ (ngưỡng đề xuất — chốt ở Cổng Đáng)» khi hết timebox
-- Timebox: [đề xuất] một vòng, nhắm lô gộp trong ngày 15/10. Ghi chú: ngưỡng trên đã đạt bằng cách làm hôm nay với riêng CRM, nên nó chỉ canh không-thụt-lùi; quyết «có đáng» thật của nền này nằm ở Cổng Giá trị của LT3.
+- Câu hỏi phép đo trả lời: trang Lộ trình có theo kịp lộ trình của nhánh chính bằng bản chụp, nói đúng giờ lấy, và không bao giờ đứng ở bản cũ không?
+- Kết quả nào là SỐNG: hai tuần sau khi giao, mọi lần đổi lộ trình trên nhánh chính hiện trên trang trong vòng 10 phút, và không lần nào trang đứng ở bản cũ quá một giờ.
+- Kết quả nào là CHẾT: trong hai tuần đó có một lần đổi lộ trình không hiện trên trang sau một giờ, hoặc trang hiện bản chụp cũ hơn bản đang chạy production.
+- Timebox: một vòng, nhắm lô gộp 15/10; đo hai tuần sau khi giao. Ngưỡng này đã đạt bằng cách làm hôm nay với riêng CRM nên nó là lưới chống thụt lùi; «có đáng» thật của nền này đo ở Cổng Giá trị của LT3.
