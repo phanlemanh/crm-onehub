@@ -100,7 +100,7 @@ mới dùng.
 | `ConfirmDialog` — hỏi lại trước thao tác không hoàn tác được | có |
 | `archivedFilter`, tham số `archived` trên URL | có |
 | Nút «Đã lưu trữ» trên thanh công cụ bảng | có trong từng bảng, chưa thành mảnh chung — lượt 2 |
-| Dải báo bản ghi đã lưu trữ | chưa — lượt 2 |
+| Dải báo bản ghi đã lưu trữ | có — `DaiLuuTru`, `KhoaLuuTru` (`packages/ui`) |
 | Toast lưu trữ có «Hoàn tác» | khuôn kế hoạch và đơn vị tự làm, chưa thành mảnh chung — lượt 2 |
 | Chặn xoá vĩnh viễn bản chưa lưu trữ, lưu trữ giữ ngày đầu | chưa — lượt 1 |
 
