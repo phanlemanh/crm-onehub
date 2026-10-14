@@ -60,6 +60,19 @@ const CAY_DO = {
 		dauVet: '"flex flex-1 flex-col gap-px text-left"',
 		ghim: /cmt-man: truong vi 360 nhan kieu ra ngoai hang/,
 	},
+	3: {
+		nhan: "ban sao ten truong xuong dong thay vi cat",
+		tenCay: "cmt-chup-truong-chieu-do-3",
+		chiBuoc: "1",
+		tep: TEP_DS,
+		cam: (s) =>
+			s.replace(
+				'<span className="w-full truncate font-medium text-foreground text-xs">',
+				'<span className="w-full whitespace-normal font-medium text-foreground text-xs">',
+			),
+		dauVet: '"w-full whitespace-normal font-medium',
+		ghim: /cmt-man: truong vi 360 ten truong dai khong bi cat/,
+	},
 };
 
 const coChieuDo = process.argv.find(
@@ -142,9 +155,15 @@ const doTruong = (t, tenDai) =>
 			};
 		});
 		const nutDai = [...document.querySelectorAll("button")].find(
-			(b) => b.getClientRects().length > 0 && b.innerText.includes(tenDai.slice(0, 20)),
+			(b) =>
+				b.getClientRects().length > 0 &&
+				[...b.querySelectorAll("span")].some(
+					(x) => x.getClientRects().length > 0 && x.innerText.trim() === tenDai,
+				),
 		);
-		const tenEl = nutDai?.querySelector("span");
+		const tenEl = nutDai
+			? [...nutDai.querySelectorAll("span")].find((x) => x.innerText.trim() === tenDai)
+			: null;
 		const hangDai = nutDai?.parentElement;
 		const nhanDai = hangDai?.querySelector("[data-nhan-kieu]");
 		return {
@@ -174,7 +193,7 @@ function soTruong(kq, ngonNgu, rong) {
 		if (lech > NGUONG.mepPhai) loi.push(`${ma}: mep phai lech ${lech.toFixed(1)} px`);
 	}
 	if (kq.cuonNgang) loi.push(`cmt-man: ${ma} trang cuon ngang`);
-	if (kq.tenDaiCat !== true) loi.push(`${ma}: ten truong dai khong bi cat (${kq.tenDaiCat})`);
+	if (kq.tenDaiCat !== true) loi.push(`cmt-man: ${ma} ten truong dai khong bi cat (${kq.tenDaiCat})`);
 	if (kq.nhanDaiTron !== true) loi.push(`${ma}: nhan kieu hang ten dai khong tron (${kq.nhanDaiTron})`);
 	const dong = kq.o.map((o) => `${o.kieu}:«${o.chu}» ${o.scroll}/${o.client} r${Math.round(o.rong)} p${Math.round(o.phai)}`).join(" · ");
 	console.log(`  do ${ma}: ${dong} · cuonNgang ${kq.cuonNgang} · tenDaiCat ${kq.tenDaiCat}`);
@@ -228,6 +247,15 @@ try {
 						`truong ${ngonNgu} ${rong} du nhan kieu`,
 					);
 					await t.waitForNetworkIdle({ idleTime: 500, timeout: CHO_MS }).catch(() => null);
+					const coHangDai = await t.evaluate((tenDai) => {
+						const span = [...document.querySelectorAll("button span")].find(
+							(x) => x.getClientRects().length > 0 && x.innerText.trim() === tenDai,
+						);
+						span?.closest("button")?.scrollIntoView({ block: "center" });
+						return Boolean(span);
+					}, TEN_DAI);
+					if (!coHangDai) loi.push(`truong ${ngonNgu} ${rong}: khong thay hang ten dai`);
+					await cho(400);
 					loi.push(...soTruong(await doTruong(t, TEN_DAI), ngonNgu, rong));
 					await cho(200);
 					await t.screenshot({ path: join(BANG, `cmt-truong-${ngonNgu}-${rong}.png`), fullPage: false });

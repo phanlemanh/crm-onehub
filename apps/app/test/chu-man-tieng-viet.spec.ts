@@ -1,10 +1,23 @@
 import { describe, expect, test } from "bun:test";
+import { messages } from "@crm/ui/lib/messages";
 import { type DocTep, docTuDia, GOC_KHO, moiTepTsx } from "./lib/quet-jsx";
 
 const BREADCRUMB = "packages/ui/src/components/breadcrumb.tsx";
 const CAI_DAT = "apps/app/components/cai-dat-breadcrumb.tsx";
 const MESSAGES = "packages/ui/src/lib/messages.ts";
 const NHAN_VI = "Vị trí trang";
+const NHAN_EN = "Breadcrumb";
+const NHAN_CUNG = /aria-label\s*=\s*\{?\s*["'`]breadcrumb["'`]\s*\}?/i;
+const CHU_CUNG = [NHAN_VI, `"${NHAN_EN}"`, `'${NHAN_EN}'`, `\`${NHAN_EN}\``];
+const CACH_VIET_CUNG = [
+	'aria-label="breadcrumb"',
+	"aria-label='breadcrumb'",
+	'aria-label={"breadcrumb"}',
+	"aria-label={`breadcrumb`}",
+	'aria-label="Breadcrumb"',
+	'aria-label={"Breadcrumb"}',
+	'aria-label = "BREADCRUMB"',
+] as const;
 
 function tepQuet(): string[] {
 	return [
@@ -18,10 +31,10 @@ export function quetNhanBreadcrumb(doc: DocTep, tep: string[]): string[] {
 	for (const t of tep) {
 		const nguon = doc(t);
 		if (nguon === null) continue;
-		if (nguon.includes('aria-label="breadcrumb"')) {
+		if (NHAN_CUNG.test(nguon)) {
 			loi.push(`cmt-quet: con aria-label breadcrumb cung o ${t}`);
 		}
-		if (nguon.includes(NHAN_VI)) {
+		if (CHU_CUNG.some((c) => nguon.includes(c))) {
 			loi.push(`cmt-quet: chu nhan breadcrumb viet cung o ${t}`);
 		}
 	}
@@ -51,10 +64,26 @@ describe("nhan-breadcrumb", () => {
 		process.stdout.write(`cmt-quet: da quet ${TEP.length} tep\n`);
 	});
 
-	test("chu nhan chi song trong messages.ts, du hai ngon ngu", () => {
-		const m = DOC(MESSAGES) ?? "";
-		expect(m).toContain(`nhan: "${NHAN_VI}"`);
-		expect(m).toContain('nhan: "Breadcrumb"');
+	test("chu nhan chi song trong messages.ts, dung khoa breadcrumb.nhan tung ngon ngu", () => {
+		expect(DOC(MESSAGES)).not.toBeNull();
+		expect([
+			messages("vi").breadcrumb.nhan,
+			messages("en").breadcrumb.nhan,
+		]).toEqual([NHAN_VI, NHAN_EN]);
+	});
+
+	test("ma tran cach viet cung: moi cach deu bi bat", () => {
+		const lot = CACH_VIET_CUNG.filter(
+			(c) =>
+				quetNhanBreadcrumb(
+					docThay(DOC, BREADCRUMB, (s) =>
+						s.replace("aria-label={nhan ?? msg.breadcrumb.nhan}", c),
+					),
+					[BREADCRUMB],
+				).length === 0,
+		);
+		expect(lot).toEqual([]);
+		expect(CACH_VIET_CUNG.length).toBe(7);
 	});
 
 	test("chieu do: tra lai nhan cung tieng Anh", () => {

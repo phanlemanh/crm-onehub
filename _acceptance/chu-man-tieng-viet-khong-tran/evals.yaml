@@ -82,7 +82,7 @@ evals:
       - "packages/ui/src/components/breadcrumb.tsx"
       - "packages/ui/src/lib/messages.ts"
       - "_acceptance/chu-man-tieng-viet-khong-tran/rang/chup-truong.mjs"
-    expected: "exit 0; chup-truong.mjs in 'buoc N: dat' cho 2 buoc va mot dong so do moi anh (moi nhan: chu, scrollWidth, clientWidth). Dem du 11 nhan moi anh x 4 anh (muoi kieu + hang ten dai). Thieu nhan hay thieu hop -> do. Anh o .acceptance-runs/chu-man-tieng-viet-khong-tran/evidence/, vong S4 chep sang _acceptance/chu-man-tieng-viet-khong-tran/evidence/. CHIEU DO (--chieu-do tren ban sao): (1) fields-list.tsx tra lai w-18 va fieldTypeLabel -> ghim 'cmt-man: truong vi 360 nhan kieu tran', ma 1; (2) nut ten bo min-w-0 va truncate -> ghim 'cmt-man: truong vi 360 nhan kieu ra ngoai hang', ma 1."
+    expected: "exit 0; chup-truong.mjs in 'buoc N: dat' cho 2 buoc va mot dong so do moi anh (moi nhan: chu, scrollWidth, clientWidth). Dem du 11 nhan moi anh x 4 anh (muoi kieu + hang ten dai). Thieu nhan hay thieu hop -> do. Anh o .acceptance-runs/chu-man-tieng-viet-khong-tran/evidence/, vong S4 chep sang _acceptance/chu-man-tieng-viet-khong-tran/evidence/. CHIEU DO (--chieu-do tren ban sao): (1) fields-list.tsx tra lai w-18 va fieldTypeLabel -> ghim 'cmt-man: truong vi 360 nhan kieu tran', ma 1; (2) nut ten bo min-w-0 va truncate -> ghim 'cmt-man: truong vi 360 nhan kieu ra ngoai hang', ma 1; (3) ten truong xuong dong (whitespace-normal) thay vi truncate -> ghim 'cmt-man: truong vi 360 ten truong dai khong bi cat', ma 1. Nut ten tim theo chu hien thi dung bang ten dai (khong lay nut keo tha co chu an); hang ten dai duoc cuon vao giua khung truoc khi do va chup, nen anh 360 chua hang do."
 
   - id: E5m
     criterion: AC-5
