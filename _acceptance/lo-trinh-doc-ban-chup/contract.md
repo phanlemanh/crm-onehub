@@ -73,5 +73,8 @@ Source input: hàng LT1c `docs/plan/lo-trinh-okr.json` · `_acceptance/lo-trinh-
 - Tệp chung (đăng crm-onehub#375 trước Cổng Phạm vi): migration `<mốc UTC>_ban_chup_lo_trinh`,
   `.github/workflows/ban-chup-lo-trinh.yml`, `turbo.json` (thêm `VERCEL_ENV`), `apps/app/next.config.ts`,
   `_acceptance/config.yaml` (chỉ thêm khoá executors). Không chạm `scripts/lo-trinh*.mjs` hay tệp chép từ kit.
+- LT1c thêm hai dòng miễn vào bảng chỗ đọc khoá của TH1
+  (`_acceptance/tin-hieu-tu-ve-kho/rang/bang-duong-doc-khoa.json`) và ghim lại hồ sơ TH1 trong PR này; hợp đồng
+  và báo cáo bằng chứng của TH1 không đổi.
 - Sau gộp, chủ kho làm một lần: tạo khoá «Đẩy lộ trình» trong Cài đặt › Khoá API; đặt bí mật kho
   `CRM_KHOA_DAY_LO_TRINH` (`CRM_API_URL` đã có từ TH1). Trước đó trang chạy như hôm nay.

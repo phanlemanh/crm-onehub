@@ -217,7 +217,7 @@ independent: false · phục vụ E4, E5, E16 · **chỉ sau khi TH1 #404 đã g
 - [ ] **Step 3:** Sửa service/contracts API.
 - [ ] **Step 4:** Sửa giao diện + lời; chạy `config:executors.test.ldbc_khoa_ui` → xanh. Phá-thử: ẩn lựa chọn với thành viên → đỏ «lua chon bien mat thay vi khoa»; commit phá-thử, hoàn lại.
 - [ ] **Step 5:** `cd apps/api && bun run trpc:generate` (sinh lại `src/generated/server.ts`), `bun run check-types`.
-- [ ] **Step 6:** Thêm hai dòng `mien` vào bảng đường-đọc-khoá của TH1; chạy `bun _acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs` (sau Task 3, khi middleware đã có) → xanh. Ghi một dòng sổ `fix` (stage S3) nói vì sao chạm hồ sơ TH1.
+- [ ] **Step 6:** (Chỉ sau khi điều phối báo «đã gộp #404 → <sha>».) Thêm hai dòng `mien` vào bảng đường-đọc-khoá của TH1 — CHỈ sửa `_acceptance/tin-hieu-tu-ve-kho/rang/bang-duong-doc-khoa.json`, KHÔNG chạm `contract.md` hay `evidence-report.md` của TH1; chạy `bun _acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs` (sau Task 3, khi middleware đã có) → xanh. Ghi một dòng sổ `fix` (stage S3) nói vì sao chạm hồ sơ TH1.
 - [ ] **Step 7: Commit** — `feat(lo-trinh-doc-ban-chup): loại khoá Đẩy lộ trình`.
 
 Verify: `config:executors.test.ldbc_khoa_ui` · `bun run check-types`.
@@ -483,7 +483,7 @@ independent: false · phục vụ E3, E3b; dọn đường cho S4
 - [ ] **Step 3:** Viết tài liệu.
 - [ ] **Step 4:** Kiểm cả kho qua khoá máy: `bash ~/.claude/projects/-Users-manhphan-dev-crm/khoa-may/chay-nang.sh "LT1c kiểm cả kho" bash -c 'bun run test && bun run check-types && bun run lint && bun run lint:slop && bun run build'` → xanh. Chạy `bun _acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs` → xanh.
 - [ ] **Step 5:** Đặt `status: implemented`; commit — `feat(lo-trinh-doc-ban-chup): đo màn, tài liệu; hợp đồng implemented`.
-- [ ] **Step 6:** Ghim lại hồ sơ TH1 (`tin-hieu-tu-ve-kho`) bị chạm ở Task 2 bước 6 bằng làn ghim lại (`repin-lane.mjs --slug tin-hieu-tu-ve-kho --reason "LT1c thêm hai chỗ miễn vào bảng đường đọc khoá"`) qua khoá máy — trước S5, sau khi S4 xanh, để chỉ ghim một lần trên đỉnh cuối.
+- [ ] **Step 6:** Ghim lại hồ sơ TH1 (`tin-hieu-tu-ve-kho`) bị chạm ở Task 2 bước 6 bằng làn ghim lại tại HEAD (`repin-lane.mjs --root . --slug tin-hieu-tu-ve-kho --reason "LT1c thêm hai chỗ miễn vào bảng đường đọc khoá" --write`) qua khoá máy — trước S5, sau khi S4 xanh, để chỉ ghim một lần trên đỉnh cuối. Trước khi đẩy: `scripts/pre-merge-check.sh . --base origin/onehub` KHÔNG kèm `--slug`, để bắt mọi hồ sơ khác bị kéo vào diff.
 
 Verify: `config:executors.script.ldbc_do_man` · bộ năm lệnh chứng của kho.
 
