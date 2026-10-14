@@ -263,7 +263,7 @@ describe("chu-luot", () => {
 		}
 		expect(SU_KIEN_DA_BIET.length).toBeGreaterThan(0);
 		for (const loai of SU_KIEN_DA_BIET) {
-			expect(chu, `su kien ${loai}`).toContain(t.suKien[loai] ?? "<thieu>");
+			expect(chu, `su kien ${loai}`).toContain(t.suKien[loai]);
 		}
 		expect(chu).toContain(t.suKienKhac);
 		expect(chu).toContain(t.luot.lichTuDong);
@@ -331,7 +331,7 @@ describe("chu-thoa-thuan", () => {
 			const o = await ve(<DealListResultTable result={ketQua(status)} />);
 			const chu = `${o.querySelector("section")?.getAttribute("aria-label") ?? ""} ${o.textContent ?? ""}`;
 			expect(chu, "ket qua luot chay in trang thai thoa thuan tho").toContain(
-				k.thoaThuan.trangThai[status] ?? "<thieu>",
+				k.thoaThuan.trangThai[status],
 			);
 			expect(chu).not.toMatch(/\b(open|won|lost)\b/);
 		});
@@ -343,7 +343,7 @@ describe("chu-thoa-thuan", () => {
 		expect(nhan.length, "vung bang khong co ten").toBeGreaterThan(0);
 		const chu = `${nhan} ${o.textContent ?? ""}`;
 		for (const status of MA_TRAN) {
-			expect(chu).not.toContain(k.thoaThuan.trangThai[status] ?? "<thieu>");
+			expect(chu).not.toContain(k.thoaThuan.trangThai[status]);
 		}
 	});
 });

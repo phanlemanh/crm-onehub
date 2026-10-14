@@ -12,6 +12,7 @@ import { db } from "@crm/db";
 import { type InputRequested, schemas } from "@crm/validation";
 import { builderQuestion } from "@crm/validation/builder-question";
 import type { ChannelEvents, SendFn } from "eve/channels";
+import { z } from "zod";
 import { crmEvents } from "../agent/channels/crm";
 import {
 	builderSessionAttributes,
@@ -27,14 +28,9 @@ type DuLieu = Parameters<NonNullable<ChannelEvents["input.requested"]>>[0];
 const duongRa = process.env.TNV_HAI_LUOT_RA;
 if (!duongRa)
 	throw new Error("thieu TNV_HAI_LUOT_RA — chay qua lenh tnv_cau_hoi");
-const payload = docPayload(JSON.parse(readFileSync(duongRa, "utf8")));
-
-function docPayload(value: unknown): InputRequested[] {
-	if (!Array.isArray(value)) throw new Error("tep payload eve khong phai mang");
-	return value.map((item) =>
-		schemas.agents.inputRequested.parse(item, { path: ["payload"] }),
-	);
-}
+const payload = z
+	.array(schemas.agents.inputRequested)
+	.parse(JSON.parse(readFileSync(duongRa, "utf8")));
 
 const theoLoai = (loai: Loai) =>
 	payload.filter((item) => item.requests[0]?.kind === loai);

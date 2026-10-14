@@ -152,7 +152,7 @@ const en = {
 		CANCELLED_BY_USER: "Someone stopped this run.",
 		RUN_TIMED_OUT:
 			"This run took too long and was stopped so later runs could start.",
-	} as Record<string, string>,
+	},
 	lyDoHongChung: "This run failed without saying why.",
 	suKien: {
 		"run.requested": "Run requested",
@@ -179,7 +179,7 @@ const en = {
 		"subagent.called": "Handed to a helper",
 		"subagent.completed": "Helper finished",
 		"input.requested": "Waiting for an answer",
-	} as Record<string, string>,
+	},
 	suKienKhac: "Other event",
 	trangThaiKhac: "Unknown",
 	trangThai: {
@@ -363,7 +363,7 @@ const vi = {
 		CANCELLED_BY_USER: "Có người đã dừng lượt chạy này.",
 		RUN_TIMED_OUT:
 			"Lượt chạy kéo dài quá lâu nên bị dừng để các lượt sau chạy được.",
-	} as Record<string, string>,
+	},
 	lyDoHongChung: "Lượt chạy hỏng mà không nói lý do.",
 	suKien: {
 		"run.requested": "Đã yêu cầu chạy",
@@ -390,7 +390,7 @@ const vi = {
 		"subagent.called": "Giao cho tác nhân phụ",
 		"subagent.completed": "Tác nhân phụ xong việc",
 		"input.requested": "Chờ người trả lời",
-	} as Record<string, string>,
+	},
 	suKienKhac: "Sự kiện khác",
 	trangThaiKhac: "Không rõ",
 	trangThai: {

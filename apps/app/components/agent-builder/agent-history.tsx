@@ -28,6 +28,7 @@ import {
 	type TroChuyenMessages,
 	troChuyenMessages,
 } from "@/lib/messages/agent-builder-tro-chuyen";
+import { traBangChu } from "@/lib/tra-bang-chu";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
 type Runs = RouterOutputs["agents"]["history"];
@@ -424,8 +425,7 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 }
 
 function nhanTrangThai(t: TroChuyenMessages, value: string): string {
-	const bang: Record<string, string> = t.trangThai;
-	return bang[value] ?? t.trangThaiKhac;
+	return traBangChu(t.trangThai, value) ?? t.trangThaiKhac;
 }
 
 function formatDate(value: string, locale: Locale): string {
@@ -450,7 +450,11 @@ function duration(
 }
 
 function eventLabel(t: TroChuyenMessages, event: RunEvent): string {
-	return eventSummary.parse(event.data) ?? t.suKien[event.type] ?? t.suKienKhac;
+	return (
+		eventSummary.parse(event.data) ??
+		traBangChu(t.suKien, event.type) ??
+		t.suKienKhac
+	);
 }
 
 function changeDetail(event: AuditRow): string | null {

@@ -22,6 +22,7 @@ import {
 	type KetQuaMessages,
 	ketQuaMessages,
 } from "@/lib/messages/agent-builder-ket-qua";
+import { traBangChu } from "@/lib/tra-bang-chu";
 
 function cotBang(t: KetQuaMessages): SimpleTableColumn[] {
 	return [
@@ -159,7 +160,7 @@ function tableTitle(result: DealListResult, t: KetQuaMessages): string {
 	const status =
 		result.criteria.status === "all"
 			? ""
-			: ` ${t.thoaThuan.trangThai[result.criteria.status] ?? ""}`.trimEnd();
+			: ` ${traBangChu(t.thoaThuan.trangThai, result.criteria.status) ?? ""}`.trimEnd();
 	const stale =
 		result.criteria.inactiveForDays === null ? "" : ` ${t.thoaThuan.namIm}`;
 	return `${t.thoaThuan.soThoaThuan(String(count))}${stale}${status}`;

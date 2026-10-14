@@ -12,10 +12,12 @@ export const NGHIA_TRANG_THAI_TAC_NHAN = {
 	DELETED: "nhap",
 } as const satisfies Record<AgentDefinitionStatus, NghiaTrangThai>;
 
+export type TrinhBayTrangThai = { label: string; tone: StatusTone };
+
 export function trangThaiTacNhan(
 	t: TacNhanMessages,
 	status: AgentDefinitionStatus,
-): { label: string; tone: StatusTone } {
+): TrinhBayTrangThai {
 	return {
 		label: t.trangThai[status],
 		tone: toneTheoNghia(NGHIA_TRANG_THAI_TAC_NHAN[status]),
