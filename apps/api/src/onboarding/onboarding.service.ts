@@ -31,9 +31,9 @@ import type {
 	EnrollmentStageInput,
 	EnrollmentUpsertInput,
 	NguoiNhanViecOutput,
+	PlanCloseInput,
 	PlanCreateFromTemplateInput,
 	PlanDetailOutput,
-	PlanCloseInput,
 	PlanIdInput,
 	PlanListInput,
 	PlanListOutput,
@@ -76,7 +76,6 @@ import {
 	OnboardingGhi,
 } from "./onboarding-ghi";
 import { OnboardingTheoDoi } from "./onboarding-theo-doi";
-
 
 const CHON_BO_PHAN = {
 	id: true,
