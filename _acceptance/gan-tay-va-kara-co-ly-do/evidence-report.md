@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 29345daca5f2b9005402a170568add658bd33f49
+verified_commit: afda470f97b0040e0d8d27a9282478ba7e70616d
 human_signoff: "Phan Le Manh 2026-10-14 — ký Cổng Bằng chứng trên vòng chấm 2 (17/17 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Ngoài-1 đến Ngoài-8, Ngoài-10 đến Ngoài-12 ghi Known limits; Ngoài-9 chấp nhận, không sửa; đồng ý cắt; Treo phê hết"
 ---
 
@@ -283,3 +283,7 @@ none — every multi-run eval is uniform
 
 Round 1: mọi eval đạt (E1–E17), không eval nào thất bại; verdict PASS. Hai phát hiện trong hợp đồng về độ chặt của phép đo (AC-9 gửi chữ đã cắt, AC-7 đối chứng dòng viết lại) được vá bằng test ở commit 21a40522d.
 Round 2: chạy lại E2–E7, E9–E11, E13, E15 và bảy lệnh suite trên cây 29345daca5f2b9005402a170568add658bd33f49, tất cả đạt; E1, E12, E14, E16, E17 mang sang từ round 1 vì delta không chạm paths của chúng. Ghi chú: payload round 2 không có mốc giờ chạy, nên verified_at của các eval chạy lại ở round này ghi theo ngày chạy (độ phân giải ngày); mốc giờ chính xác nằm ở run-log.jsonl.
+
+### Re-pin lần 1 — 2026-10-14, do gộp onehub 966eeb78e sau chữ ký
+run_id: repin-20261014T035706Z-38537
+sha: afda470f97b0040e0d8d27a9282478ba7e70616d · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E8, E12 · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
