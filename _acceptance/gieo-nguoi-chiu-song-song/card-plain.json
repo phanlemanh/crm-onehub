@@ -1,24 +1,4 @@
 {
-  "feature_plain": "Bài kiểm của khu Điều phối gieo hai người cùng lúc trên một kho thử mới sẽ thôi đỏ ngẫu nhiên vì lỗi trùng khoá ở bước tạo tổ chức.",
-  "will_do": [
-    {"id": "AC-2", "p": "Sẽ có một phép thử đột biến: tắt cách sửa trong một bản sao thì bài kiểm mới phải đỏ ba lượt liền với đúng câu lỗi trùng khoá — chứng thước thấy được lỗi."}
-  ],
-  "wont_do": [
-    {"id": "AC-1", "p": "Sẽ KHÔNG còn lỗi trùng khoá khi bốn người được gieo cùng lúc trên kho mới — kho có đúng một tổ chức và đủ bốn thành viên."},
-    {"id": "AC-3", "p": "Sẽ KHÔNG đỏ ở ba ca đang gieo song song khi chạy riêng từng ca trên kho mới, kể cả ca từng tái hiện lỗi 3/3."},
-    {"id": "AC-4", "p": "Sẽ KHÔNG đổi chỗ gọi nào và không đụng mã sản phẩm — chỉ hàm gieo trong tệp thử, bài kiểm mới và hồ sơ."},
-    {"id": "OOS-1", "p": "Không đổi cách gọi ở các bài kiểm; việc DA1b đã chuyển một chỗ sang gieo tuần tự là của hồ sơ DA1b."},
-    {"id": "OOS-2", "p": "Không sửa các chỗ gieo tổ chức khác trong bộ thử — chưa chỗ nào gọi song song."},
-    {"id": "OOS-3", "p": "Không đụng mã sản phẩm, kể cả bước tạo tổ chức thật lúc đăng nhập."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Chiều đo: chạy song song phải xanh (AC-1, AC-3 — gieo cùng lúc), tắt cách sửa phải đỏ (AC-2 — thước thấy lỗi), lỗi khác không bị nuốt (AC-5 — chỉ bỏ đúng một ca)."},
-    {"i": 1, "p": "Phạm vi: chỉ hàm gieo (AC-1, AC-5), chỗ gọi giữ nguyên và không mã sản phẩm nào đổi (AC-3, AC-4 — đo bằng danh sách tệp đã đổi)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Sổ ghi cách sửa là «lối duy nhất», nhưng thật ra còn hai lối khác cũng đúng; lý do chọn là hướng chủ vùng đã chốt. Đã sửa: thành câu hỏi cho anh ở thẻ này (Hỏi-1)."},
-    {"i": 1, "p": "Chỉ một trong ba chỗ gọi song song được đo. Đã sửa: thêm hai phép đo chạy riêng hai chỗ còn lại; cả hai vốn xanh cả trước khi sửa, nên chúng chỉ canh không-hồi-quy."},
-    {"i": 2, "p": "Không thước nào chắc bài kiểm mới thật sự đếm một tổ chức và bốn thành viên. Đã sửa: hội đồng chấm đọc thêm bài kiểm và được hỏi đúng hai phép đếm đó."},
-    {"i": 3, "p": "Cuộc đua có tính may rủi, một lượt chạy chưa đủ. Đã sửa: bản đột biến chạy ba lượt, lượt nào cũng phải đỏ đúng câu lỗi."}
-  ]
+  "feature_plain": "Bài kiểm của khu Điều phối gieo nhiều người cùng lúc trên một kho thử mới thôi đỏ ngẫu nhiên vì lỗi trùng khoá ở bước tạo tổ chức.",
+  "analyst_plain": "Ba phép đo chạy lại các chỗ gọi cũ (E3, E6, E7) xanh cả trên bản chưa sửa, nên chúng chỉ canh không-hồi-quy; chỗ chứng cách sửa là bài kiểm mới (E1) và phép đột biến (E2) — bản tắt cách sửa đỏ 3/3 lượt."
 }
