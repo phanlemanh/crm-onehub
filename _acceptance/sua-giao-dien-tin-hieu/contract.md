@@ -5,9 +5,9 @@ slug: sua-giao-dien-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-10-14T08:32:54Z
 design_doc: docs/superpowers/specs/2026-10-14-sua-giao-dien-tin-hieu-design.md
 ---
 
@@ -36,6 +36,7 @@ Source input: `_acceptance/sua-giao-dien-tin-hieu/opportunity.md` (Cổng Đáng
 - AC-9: (judgment) Given người gửi là nhân viên không dùng git, When họ đọc nhãn và câu trạng thái CRM tự viết, câu mô tả hộp, biên nhận và dòng báo, Then không câu nào dùng từ nội bộ (gom, kéo về, kit, khối, bản vẽ, lượt, hồ sơ), câu không lặp lại nhãn đứng cạnh nó, và họ hiểu tín hiệu đang ở đâu; Given tín hiệu đã được đội sản phẩm lấy về, When họ mở menu ⋮ của dòng, Then mục «Xoá» khoá kèm một dòng nói vì sao không xoá được nữa.
 - AC-10: Given hộp gửi và trang «Tín hiệu đã gửi» chạy thật, When người đo mở chúng ở bề ngang 375, 768 và 1280px bằng tiếng Việt và tiếng Anh, Then không trang nào cuộn ngang, không nhãn hay nút nào bị cắt chữ, dòng «Gửi từ màn» mang tên màn, đóng biên nhận không hỏi lại, và mỗi tổ hợp có một ảnh.
 - AC-11: Given vòng này chỉ sửa giao diện, When so mã của vòng với nhánh chính, Then không tệp nào dưới API, khuôn dữ liệu, gói kiểm khuôn hay bộ giao diện chung đổi; và mọi điều khác hồ sơ «Gửi tín hiệu trong CRM» đã ký vẫn đúng — nút trên thanh đầu trang cùng kiểu cụm, nút «Gửi» khoá khi một ô rỗng, mục «Tín hiệu đã gửi» trong menu, biên nhận mang mã và liên kết, danh sách làm mới sau khi gửi, hỏi lại trước khi xoá, đầu trang đúng một nút chính.
+- AC-12: Given tín hiệu đã có chỗ sau gom trong bản vẽ lộ trình (mọi giá trị chỗ mà kit ghi, và mọi nhóm trạng thái của việc), When người gửi xem trang bằng tiếng Việt hay tiếng Anh, Then câu trạng thái viết theo ngôn ngữ đang chọn, dựng từ mã chỗ kit ghi; tên nhóm, lý do và tên việc giữ nguyên chữ người viết và được đánh dấu không dịch; When mã chỗ lạ hoặc thiếu trường cần cho câu, Then trang hiện nguyên câu kit viết, không vỡ.
 
 ## Coverage
 
@@ -64,15 +65,16 @@ Quét bằng `morphological-scan` (preset test-matrix), sổ đầy đủ `_acce
 - Nút ⋮ 44×44 trên điện thoại — cần một cỡ nút mới trong `packages/ui`; vòng này dùng cỡ lớn nhất đang có (36×36).
 - Báo trước quá trần ngay khi mở hộp lần đầu trong ngày (trước lần gửi bị từ chối) — cần API trả số đã gửi.
 - Đổi đường dẫn đã cất thành tên màn, hay đổi tệp kéo về git — dữ liệu giữ nguyên, tên suy lúc hiện.
-- Đổi câu trạng thái kit viết (`cau_nguoi_gui`) — câu của kit; cần đổi thì báo phiên điều phối.
+- Đổi khuôn hay câu trạng thái trong kit — CRM dựng câu song ngữ của riêng mình từ mã chỗ (AC-12), kit không đổi.
 - Trang «Mọi tín hiệu» của quản trị và câu báo trước Q3 — vòng TH4 (#403).
 - Thông báo cho người gửi khi tín hiệu đổi chỗ — S2 của bản phạm vi.
 
 ## Notes
 
 - Dựng trên đỉnh onehub SAU khi TH4 (#403) gộp (cùng ba tệp); phiên điều phối báo sha gộp.
-- Bốn ô đo của hồ sơ LT2 bị thay theo luật kit 2.24 (bảng «Ô đo của LT2 bị thay» trong thiết kế): E1 → AC-8,
-  E3b → AC-2, E5b → AC-9, E13 → AC-10. Ô khai thay chỉ hợp lệ khi hồ sơ này có chữ ký người — Cổng Bằng chứng là
+- Năm ô đo của hồ sơ LT2 bị thay theo luật kit 2.24 (bảng «Ô đo của LT2 bị thay» trong thiết kế): E1 → AC-8,
+  E3b → AC-2, E5b → AC-9, E13 → AC-10, E10 → AC-12.
+- Cổng Phạm vi 14/10: chủ kho duyệt nút ⋮ 36×36 (44×44 đi hàng TH7) và câu trạng thái song ngữ (AC-12). Ô khai thay chỉ hợp lệ khi hồ sơ này có chữ ký người — Cổng Bằng chứng là
   cổng người.
 - Sửa kèm hai Known limits của LT2: Ngoài-2 (câu quá trần tiếng Việt khi chọn tiếng Anh) → AC-2; Ngoài-5 (xoá hỏng
   không lời giải thích) → AC-5.

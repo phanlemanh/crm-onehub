@@ -287,3 +287,25 @@ evals:
       design-gate.mjs --mode static cho MOI tep .tsx duoi apps/app/components/tin-hieu va apps/app/app/(app)/[slug]/tin-hieu (ke ca
       khung-cho.tsx va danh-sach-tin-hieu-trang.tsx ma ban do cua LT2 bo sot — Ngoai-15): khong P0.
       CHIEU DO: ban sao them className doi mau cho mot Button -> P0 do.
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.sgt_cau_sau_gom
+    paths:
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "packages/validation/src/tin-hieu.ts"
+      - "apps/app/test/sua-giao-dien-tin-hieu-cau.spec.ts"
+    expected: |
+      sua-giao-dien-tin-hieu-cau.spec.ts ca "sgt-cau-sau-gom": khoi du lieu mau rut tu bo ve kit that (cung tep mau LO-TRINH.mau.html
+      ma bai LT2 dung, sinh bang bo ve kit — khong viet tay khoi). Ma tran ROI TU HANG SO luc chay: moi gia tri CHO_TIN_HIEU, voi
+      hang-* nhan them moi gia tri nhom trang thai cua hang, x {vi, en}:
+        1 cau == cau dung tu tep loi cua locale cho ma cho do (dien voi ten_nhom / ly_do / ten viec cua ban ghi), KHONG bang
+          cau_nguoi_gui cua kit
+        2 ten nhom, ly do, ten viec xuat hien nguyen van trong cau; phan tu hien chung mang translate="no" (bai DOM mot dong)
+        3 o en: bo phan chu cua tep loi (cau tru di cac truong du lieu) khong chua ky tu tieng Viet co dau
+      Them 2 o lui: cho la ("cho-moi-chua-biet", ban sao khoi) va ban ghi thieu ten_nhom o cho nhom-chua-cat -> cau == cau_nguoi_gui.
+      In so o == (so gia tri cho thuong + so cap hang x nhom) x 2 + 2, in rieng cac thanh phan.
+      CHIEU DO: ban sao tra cau_nguoi_gui cho moi ma -> o en dau tien do voi thong diep ghim "cau sau gom chi co tieng Viet";
+      ban sao bo nhanh lui -> o cho-la do voi thong diep ghim "ma cho la lam vo cau trang thai".

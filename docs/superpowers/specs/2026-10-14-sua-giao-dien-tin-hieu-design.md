@@ -126,7 +126,7 @@ lấy về — không xoá được nữa.» (luật «nút bị khoá thì có 
 
 ## Ô đo của LT2 bị thay
 
-Vòng này cố ý đổi bốn điều mà hồ sơ đã ký `gui-tin-hieu-trong-crm` (LT2) khẳng định. Theo luật «eval bị một hồ sơ đã
+Vòng này cố ý đổi năm điều mà hồ sơ đã ký `gui-tin-hieu-trong-crm` (LT2) khẳng định. Theo luật «eval bị một hồ sơ đã
 ký khác thay» (kit 2.24), các ô đó khai `status: not-run` + `superseded_by` trỏ tiêu chí đo lại nó ở hồ sơ này. Bảng
 nhận việc thay (máy đọc thẻ `<slug cũ>/<id cũ>`):
 
@@ -136,6 +136,7 @@ nhận việc thay (máy đọc thẻ `<slug cũ>/<id cũ>`):
 | gui-tin-hieu-trong-crm/E3b | lỗi 429 hiện dưới ô, câu máy chủ, nút Gửi bấm lại được | sua-giao-dien-tin-hieu#AC-2 |
 | gui-tin-hieu-trong-crm/E5b | dòng đã lấy về không có nút ⋮ | sua-giao-dien-tin-hieu#AC-9 |
 | gui-tin-hieu-trong-crm/E13 | ảnh hộp: «Gửi từ màn» == đường dẫn | sua-giao-dien-tin-hieu#AC-10 |
+| gui-tin-hieu-trong-crm/E10 | câu sau gom == câu kit viết nguyên văn | sua-giao-dien-tin-hieu#AC-12 |
 
 Mọi khẳng định khác của bốn ô đó (nút trên thanh đầu trang cùng kiểu cụm, ma trận chín tổ hợp khoá Gửi, mục menu,
 biên nhận mang mã, làm mới danh sách, hộp hỏi lại trước khi xoá, một nút chính đầu trang…) được đo lại trong bài của
@@ -233,7 +234,7 @@ Soát bản nháp `apps/app/app/proto/_modules/sua-giao-dien-tin-hieu/ban-moi.ts
 - Lệch có chủ ý: chuẩn khuyên nút gửi luôn bấm được rồi báo lỗi; LT2 đã ký «khoá khi một ô rỗng». Vòng này giữ khoá và
   thêm dòng nói vì sao (AC-6) thay vì đổi hành vi đã ký.
 
-## Lối mở chờ Cổng Phạm vi — câu trạng thái sau gom song ngữ
+## Câu trạng thái sau gom song ngữ (chủ kho chọn làm ở Cổng Phạm vi 14/10)
 
 Câu sau gom hiện là câu kit viết (`cau_nguoi_gui`), chỉ có tiếng Việt, nên giao diện tiếng Anh hiện câu Việt. Bản ghi
 kit đã mang mã máy đọc (`cho`, `ten_nhom`, `ly_do`, `hang`, `ho_so`, `trang_thai`). Nếu chủ kho chọn làm (máy khuyên),
