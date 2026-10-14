@@ -3,10 +3,10 @@ schema_version: 1
 slug: viec-cha-khong-lo-tieu-de
 feature: viec.bang và viec.con không lộ tiêu đề việc cha khi người xem không có quyền với việc cha
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build   # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-14T06:52:36Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -33,7 +33,12 @@ Vì sao: Ưu tiên cao — chủ kho chọn «mở hợp đồng mới» cho Ngo
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Sau khi gộp, người dùng thật còn thấy tiêu đề hay số việc con của một việc họ không được xem không?
-- Kết quả nào là SỐNG: [đề xuất] Hết timebox: 0 báo cáo nào về việc thấy tiêu đề việc cha hay số việc con của việc mình không được xem, và ma trận người × trạng thái việc cha của hợp đồng xanh trên onehub.
-- Kết quả nào là CHẾT: [đề xuất] Có ≥1 báo cáo như trên còn tái hiện được trên bản đã gộp.
+- Câu hỏi phép đo trả lời: Sau khi gộp, người dùng thật còn thấy tiêu đề hay số việc con của một việc họ không được xem không?
+- Kết quả nào là SỐNG: Hết timebox: 0 báo cáo nào về việc thấy tiêu đề việc cha hay số việc con của việc mình không được xem, và ma trận người × trạng thái việc cha của hợp đồng xanh trên onehub.
+- Kết quả nào là CHẾT: Có ≥1 báo cáo như trên còn tái hiện được trên bản đã gộp.
 - Timebox: 14 ngày kể từ ngày gộp vào onehub.
+
+## Nguồn quyết định Cổng Đáng
+
+Chủ kho gõ ở phiên thợ DA2b (máy M5) ngày 14/10/2026: «Cổng Đáng viec-cha-khong-lo-tieu-de: build · ngưỡng giữ
+đề xuất». `decided_at` là giờ phiên thợ ghi lại lời đó. Ngưỡng giữ nguyên đề xuất của máy, đã gỡ tiền tố.
