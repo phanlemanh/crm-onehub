@@ -94,21 +94,24 @@ export function locDong(dong: DongTatCa[], loc: BoLocTatCa): DongTatCa[] {
 	return dong.filter((d) => khop(d, loc));
 }
 
-export function demTheoLoc(
+function demMot(
 	dong: DongTatCa[],
 	loc: BoLocTatCa,
-): Record<keyof BoLocTatCa, Record<string, number>> {
-	const dem = { phongBan: {}, trangThaiTinHieu: {}, nguoiGui: {} } as Record<
-		keyof BoLocTatCa,
-		Record<string, number>
-	>;
-	for (const k of Object.keys(dem) as (keyof BoLocTatCa)[]) {
-		for (const d of dong) {
-			if (!khop(d, loc, k)) continue;
-			for (const v of giaTriLoc(d)[k]) dem[k][v] = (dem[k][v] ?? 0) + 1;
-		}
-	}
-	return dem;
+	chieu: keyof BoLocTatCa,
+): Record<string, number> {
+	const dem = new Map<string, number>();
+	for (const d of dong)
+		if (khop(d, loc, chieu))
+			for (const v of giaTriLoc(d)[chieu]) dem.set(v, (dem.get(v) ?? 0) + 1);
+	return Object.fromEntries(dem);
+}
+
+export function demTheoLoc(dong: DongTatCa[], loc: BoLocTatCa) {
+	return {
+		phongBan: demMot(dong, loc, "phongBan"),
+		trangThaiTinHieu: demMot(dong, loc, "trangThaiTinHieu"),
+		nguoiGui: demMot(dong, loc, "nguoiGui"),
+	};
 }
 
 export function tuyChonLoc(dong: DongTatCa[]) {
