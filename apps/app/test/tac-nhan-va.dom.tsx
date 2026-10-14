@@ -65,6 +65,8 @@ const { troChuyenMessages } = await import(
 );
 const { ketQuaMessages } = await import("@/lib/messages/agent-builder-ket-qua");
 const { NGHIA_TRANG_THAI_TAC_NHAN } = await import("@/lib/trang-thai-tac-nhan");
+const { karaBanGhiMessages } = await import("@/lib/messages/kara-ban-ghi");
+const { builderStepLabel } = await import("@/lib/nhan-buoc");
 const { UserSubmission, builderSubmissions } = await import(
 	"@/components/agent-builder/agent-builder-chat"
 );
@@ -420,4 +422,35 @@ describe("gui-hong", () => {
 			expect(chu).toContain(o.chu);
 		});
 	}
+});
+
+describe("chu-luot-buoc", () => {
+	test("chu-luot-buoc: nhan buoc bo dung giu nhan dau vao, duoi ly do (en) va nhan cu ngoai bang", () => {
+		const vi = karaBanGhiMessages("vi");
+		const en = karaBanGhiMessages("en");
+		const coBang = {
+			tool: "list_deals",
+			input: null,
+			label: "Reviewed the deal pipeline — skipped: no access",
+			pending: false,
+		};
+		expect(builderStepLabel(coBang, vi, "vi")).toBe(vi.tab.buoc.list_deals);
+		expect(builderStepLabel(coBang, en, "en")).toBe(
+			`${en.tab.buoc.list_deals} — skipped: no access`,
+		);
+		const ngoaiBang = {
+			tool: "save_agent_draft_khac",
+			input: null,
+			label: "Saved draft",
+			pending: false,
+		};
+		expect(builderStepLabel(ngoaiBang, vi, "vi")).toBe("Saved draft");
+		const dauVao = {
+			tool: "set_chat_title",
+			input: { title: "Báo cáo tuần" },
+			label: "Named this chat",
+			pending: false,
+		};
+		expect(builderStepLabel(dauVao, vi, "vi")).toContain("Báo cáo tuần");
+	});
 });

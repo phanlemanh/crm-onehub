@@ -318,8 +318,33 @@ async function doMan(cookie, slug, agentId, ketQua) {
 						(t) => t.getClientRects().length > 0,
 					),
 					toan: document.body.innerText,
+					hop: muc.map((m) => {
+						m.scrollIntoView({ block: "center" });
+						const r = m.getBoundingClientRect();
+						return ["ten", "cong-ty", "giai-doan", "tien"].flatMap((phan) => {
+							const e = m.querySelector(`[data-phan="${phan}"]`);
+							if (!e) return [`${phan} vang`];
+							const h = e.getBoundingClientRect();
+							const loi = [];
+							if (!(e.textContent ?? "").trim()) loi.push(`${phan} rong`);
+							if (h.left < r.left - 1 || h.right > r.right + 1)
+								loi.push(`${phan} ra ngoai muc`);
+							if (
+								h.left < 0 ||
+								h.right > innerWidth + 1 ||
+								h.top < 0 ||
+								h.bottom > innerHeight + 1
+							)
+								loi.push(`${phan} ra ngoai khung nhin`);
+							if (e.scrollWidth > e.clientWidth + 1) loi.push(`${phan} bi cat`);
+							return loi;
+						});
+					}),
 				};
 			});
+			const hopLoi = (ds2.hop ?? []).flatMap((loi, i) =>
+				loi.length ? [`muc ${i + 1}: ${loi.join(", ")}`] : [],
+			);
 			const buocViet =
 				ds2.toan.includes(nhanBuoc) && !ds2.toan.includes(nhanBuocAnh);
 			const thieuMuc = ketQua.deals.flatMap((d, i) => {
@@ -341,11 +366,14 @@ async function doMan(cookie, slug, agentId, ketQua) {
 			so.kiem(
 				`hoi-thoai-ket-qua-${kho}`,
 				kho < 768
-					? `${ds2.soMuc} muc (mong ${ketQua.deals.length}), du ten/cong ty/giai doan/tien ${duMuc}${duMuc ? "" : ` (${thieuMuc.join("; ")})`}; tran ngang ${ds2.trang}px; nhan buoc «${nhanBuoc}» ${buocViet}`
+					? `${ds2.soMuc} muc (mong ${ketQua.deals.length}), du ten/cong ty/giai doan/tien ${duMuc}; hop tung phan ${hopLoi.length ? hopLoi.join(" | ") : "trong muc va khung, khong cat"}${duMuc ? "" : ` (${thieuMuc.join("; ")})`}; tran ngang ${ds2.trang}px; nhan buoc «${nhanBuoc}» ${buocViet}`
 					: `bang hien ${ds2.coBang}; tran ngang ${ds2.trang}px; nhan buoc «${nhanBuoc}» ${buocViet}`,
 				buocViet &&
 					(kho < 768
-						? ds2.soMuc === ketQua.deals.length && duMuc && ds2.trang <= 0
+						? ds2.soMuc === ketQua.deals.length &&
+							duMuc &&
+							hopLoi.length === 0 &&
+							ds2.trang <= 0
 						: ds2.coBang && ds2.trang <= 0),
 			);
 		} finally {

@@ -163,13 +163,19 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 											onFocus={() => prefetchRecord(record)}
 										>
 											<ItemContent>
-												<ItemTitle translate="no">{deal.name}</ItemTitle>
-												<ItemDescription translate="no">
+												<ItemTitle translate="no" data-phan="ten">
+													{deal.name}
+												</ItemTitle>
+												<ItemDescription translate="no" data-phan="cong-ty">
 													{deal.company.name}
 												</ItemDescription>
 												<span className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-													<Stage stage={deal.stage} stageId={deal.stageId} />
-													<Amount deal={deal} locale={locale} />
+													<span data-phan="giai-doan">
+														<Stage stage={deal.stage} stageId={deal.stageId} />
+													</span>
+													<span data-phan="tien">
+														<Amount deal={deal} locale={locale} />
+													</span>
 												</span>
 											</ItemContent>
 										</button>

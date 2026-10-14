@@ -17,6 +17,8 @@ const VUNG = [
 	"apps/app/test/het-han-muc.dom.tsx",
 ];
 const BO_QUA = /\.(skip|todo|only)\(/g;
+const KHANG_DINH =
+	/expect\(|\bt\.(check|event|notEvent|eventsSatisfy|requireInputRequest)\(/;
 
 function git(...doiSo) {
 	return execFileSync("git", ["-C", GOC, ...doiSo], { encoding: "utf8" });
@@ -31,7 +33,7 @@ function tepO(moc, duong) {
 function dem(nguon) {
 	const bang = new Map();
 	for (const d of nguon.split("\n").map((x) => x.trim()))
-		if (d.includes("expect(")) bang.set(d, (bang.get(d) ?? 0) + 1);
+		if (KHANG_DINH.test(d)) bang.set(d, (bang.get(d) ?? 0) + 1);
 	return bang;
 }
 
@@ -75,11 +77,14 @@ function tuThu() {
 	const xoaTrung = lech(mau, mau.replace("\texpect(2).toBe(2);\n", ""));
 	const boQua = lech(mau, mau.replace("it('a'", "it.skip('a'"));
 	const giuNguyen = lech(mau, mau);
+	const eve = "t.check(a, equals(1));\nt.eventsSatisfy('x', f);\n";
+	const xoaEve = lech(eve, eve.replace("t.check(a, equals(1));\n", ""));
 	return (
 		xoa.mat.length === 1 &&
 		xoaTrung.mat.length === 1 &&
 		boQua.themBoQua === 1 &&
-		giuNguyen.mat.length === 0
+		giuNguyen.mat.length === 0 &&
+		xoaEve.mat.length === 1
 	);
 }
 

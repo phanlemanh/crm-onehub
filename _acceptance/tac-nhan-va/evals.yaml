@@ -70,8 +70,8 @@ evals:
     steps:
       - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs / mot-luot.sh); đăng nhập theo bộ mẫu; mỗi khổ một tiến trình con"
       - "Gieo qua đường ghi thật trong phiên đo: saveBuilderDraft (apps/agent) một tác nhân phạm vi SELECTED xem một công ty tên 60 ký tự, deploy và runNow qua API, kết lượt bằng hàm kết lượt của apps/agent với kết quả bảng thoả thuận năm dòng (hình DealListResult); một hội thoại dựng của người đăng nhập"
-      - "Ở 375 và 1440: mở danh sách tác nhân (ST-ds-tac-nhan-co), màn tác nhân, ngăn lượt chạy có kết quả (ST-luot-chay-ket-qua-dt ở 375, ST-luot-chay-su-kien), hội thoại dựng; mỗi màn đo scrollWidth <= clientWidth của documentElement và của vùng cuộn của ngăn, đo mép phải chip bản ghi [data-chip-ban-ghi] <= mép phải vùng chứa; ở 375 đếm mục của danh sách thoả thuận và đọc innerText mỗi mục [data-thoa-thuan] và khẳng định chứa đúng tên, tên công ty, tên giai đoạn (deal.stage) và chuỗi tiền formatMoney(amount*100, currency, \"vi\") của packages/ui — cùng hàm màn dùng, kiểm từng mục nằm trong khung nhìn khi cuộn tới; chụp ảnh khung nhìn mỗi màn"
-    expected: "exit 0; 8 ảnh (4 màn × 2 khổ) trong _acceptance/tac-nhan-va/evidence/; ở 375 mỗi màn in 'dat' cho không cuộn ngang và chip trong thẻ; danh sách thoả thuận 5 mục, mỗi mục đủ bốn phần có chữ; chạy trên cây trước vòng in 'khong dat' ở ngăn lượt chạy (bảng 56rem)."
+      - "Ở 375 và 1440: mở danh sách tác nhân (ST-ds-tac-nhan-co), màn tác nhân, ngăn lượt chạy có kết quả (ST-luot-chay-ket-qua-dt ở 375, ST-luot-chay-su-kien), hội thoại dựng; mỗi màn đo scrollWidth <= clientWidth của documentElement và của vùng cuộn của ngăn, đo mép phải chip bản ghi [data-chip-ban-ghi] <= mép phải vùng chứa; ở 375 đếm mục của danh sách thoả thuận và đọc innerText mỗi mục [data-thoa-thuan] và khẳng định chứa đúng tên, tên công ty, tên giai đoạn (deal.stage) và chuỗi tiền formatMoney(amount*100, currency, \"vi\") của packages/ui — cùng hàm màn dùng, cuộn tới từng mục rồi đo hộp của bốn phần [data-phan=ten|cong-ty|giai-doan|tien]: có chữ, nằm trong mục, nằm trong khung nhìn, không bị cắt (scrollWidth <= clientWidth + 1); ngăn lượt chạy đo trong khung nhìn, không vùng cuộn tràn ngang và lý do hỏng tiếng Việt hiện; chụp ảnh khung nhìn mỗi màn"
+    expected: "exit 0; 8 ảnh (4 màn × 2 khổ) trong _acceptance/tac-nhan-va/evidence/; ở 375 mỗi màn in 'dat' cho không cuộn ngang và chip trong thẻ; danh sách thoả thuận 5 mục, mỗi mục đủ bốn phần có chữ; chiều đỏ của bảng 56rem nằm ở màn hội thoại (bảng thoả thuận chỉ hiện trong hội thoại dựng): chạy với deal-list-result.tsx của mốc 966eeb78e in 'SAI hoi-thoai-ket-qua-375' (không có mục [data-thoa-thuan])."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
     paths: ["apps/app/components/agent-builder/deal-list-result.tsx", "apps/app/components/agent-builder/agent-capabilities.tsx", "apps/app/components/agent-builder/team-agents-index.tsx", "apps/app/components/agent-builder/agent-history.tsx", "apps/app/components/agent-builder/agent-runs-drawer.tsx", "_acceptance/tac-nhan-va/rang/man.mjs"]
 
@@ -169,9 +169,11 @@ evals:
       Gieo mot hoi thoai dung cua nguoi dang nhap (Prisma, dung hinh cot that, co sessionId). Goi crmEvents["input.requested"]
       cua apps/agent voi payload thu nhat roi thu hai (DATABASE_URL cua phien do). Goi conversations.builderById qua tRPC
       HTTP that cua phien do. Khang dinh quan he: pendingQuestion.requestId === requestId cua payload thu hai, kind
-      khop. Roi o 375 va 1440 mo /chat/<id>: o cau hoi (BuilderQuestionComposer) hien chu cua payload thu hai, o soan
-      thuong khong hien, trang khong cuon ngang; chup anh vao _acceptance/tac-nhan-va/evidence/. In 'dat', exit 0.
-      Chay tren cay truoc vong in 'khong dat' (pendingQuestion mang cau thu nhat) — chieu do.
+      khop. Hai payload co prompt khac nhau («chon mot hoi-thu-1», «... -2»). Roi o 375 va 1440 mo /chat/<id>: dung mot
+      [data-slot=questionnaire-title] va chu cua no === prompt cua payload thu hai va !== prompt cua payload thu nhat; co
+      [data-slot=questionnaire-choice] mang nhan lua chon cua payload thu hai; o soan thuong (aria-label oSoan.nhanOSoan)
+      vang; trang khong cuon ngang; chup anh vao _acceptance/tac-nhan-va/evidence/. In 'dat', exit 0.
+      Chay tren cay truoc vong in 'khong dat' (pendingQuestion null) — chieu do.
 
   - id: E10
     criterion: AC-10
@@ -189,7 +191,7 @@ evals:
       - "apps/app/test/het-han-muc.dom.tsx"
       - "_acceptance/tac-nhan-va/rang/khong-xoa-expect.mjs"
     expected: |
-      rang/khong-xoa-expect.mjs --moc 966eeb78e: voi moi tep va thu muc ca eve-tran liet o tren, moi dong chua "expect("
+      rang/khong-xoa-expect.mjs --moc 966eeb78e: voi moi tep va thu muc ca eve-tran liet o tren, moi dong khang dinh (expect( hay t.check / t.event / t.notEvent / t.eventsSatisfy / t.requireInputRequest cua eve)
       o moc van co mat nguyen van o cay voi so lan xuat hien khong giam (da tap, dong trung xoa bot mot ban cung bi bat); so .skip/.todo/.only khong tang. --tu-thu: mau co dong expect trung; xoa mot dong don, xoa
       mot ban cua dong trung, them .skip deu bi bat, mau nguyen van khong bao loi (thuoc khong mu). Roi chay cac tep (lenh agent qua bun run test, lenh app voi preload setup-dom),
       hai ca eve-tran chay-tiep va chan-khuon, va bun run check-types: thoat 0.

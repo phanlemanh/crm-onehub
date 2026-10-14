@@ -661,7 +661,7 @@ export function AgentToolStep({
 					<Icon icon={Checkmark} className="size-3.5 text-ring" />
 				)}
 				<span className="min-w-0 wrap-break-word">
-					{builderStepLabel(item, kara)}
+					{builderStepLabel(item, kara, locale)}
 				</span>
 			</div>
 			{item.errorText ? (

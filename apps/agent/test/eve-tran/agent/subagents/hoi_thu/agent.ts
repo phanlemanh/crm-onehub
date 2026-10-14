@@ -13,7 +13,7 @@ export default defineAgent({
 							id: `${CAU_HOI_THU.tienToMa}${lastUserMessage?.split("\n").at(-1)}`,
 							name: "ask_question",
 							input: {
-								prompt: CAU_HOI_THU.prompt,
+								prompt: `${CAU_HOI_THU.prompt} ${lastUserMessage?.split("\n").at(-1)}`,
 								options: [CAU_HOI_THU.option],
 							},
 						},

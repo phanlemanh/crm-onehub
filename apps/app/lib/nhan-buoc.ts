@@ -21,10 +21,10 @@ export function stepLabel(
 export function builderStepLabel(
 	item: LabelInput,
 	t: KaraBanGhiMessages,
+	locale: Locale,
 ): string {
-	return (
-		inputLabel(item) ??
-		new Map(Object.entries(t.tab.buoc)).get(item.tool) ??
-		item.label
-	);
+	const theoDauVao = inputLabel(item);
+	if (theoDauVao) return theoDauVao;
+	const coTrongBang = new Map(Object.entries(t.tab.buoc)).has(item.tool);
+	return coTrongBang ? stepLabel(item, t, locale) : item.label;
 }

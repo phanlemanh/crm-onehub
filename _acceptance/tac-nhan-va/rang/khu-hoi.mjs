@@ -6,6 +6,7 @@ import {
 	builderToken,
 	dispatchBuilderSubmission,
 } from "../../../apps/agent/agent/lib/custom-agent-dispatch.ts";
+import { oSoanMessages } from "../../../apps/app/lib/messages/agent-builder-o-soan.ts";
 import { db } from "../../../packages/db/src/index.ts";
 import { schemas } from "../../../packages/validation/src/index.ts";
 import {
@@ -178,35 +179,47 @@ await so.ket(
 					waitUntil: "networkidle0",
 					timeout: CHO_MS,
 				});
-				const nhan = mong.options?.[0]?.label ?? mong.prompt;
-				const thay = await p
-					.waitForFunction(
-						(chu) => document.body.innerText.includes(chu),
-						{ timeout: CHO_MS },
-						mong.prompt,
-					)
-					.then(() => true)
-					.catch(() => false);
-				const tran = await tranNgang(p);
-				const coNhan = await p.evaluate(
-					(chu) =>
-						[
+				const truoc = dau.requests[0];
+				await p
+					.waitForSelector('[data-slot="questionnaire-title"]', {
+						timeout: CHO_MS,
+					})
+					.catch(() => khongDo("man khong hien o cau hoi"));
+				const doc = await p.evaluate(
+					(nhanOSoan) => ({
+						tieuDe: [
+							...document.querySelectorAll('[data-slot="questionnaire-title"]'),
+						].map((e) => e.textContent?.trim() ?? ""),
+						luaChon: [
 							...document.querySelectorAll(
 								'[data-slot="questionnaire-choice"]',
 							),
-						].some((b) =>
-							b.innerText
-								.split("\n")
-								.map((x) => x.trim())
-								.includes(chu),
-						),
-					nhan,
+						].map((e) => e.innerText),
+						oSoanThuong:
+							document.querySelector(`[aria-label="${nhanOSoan}"]`) !== null,
+						trang:
+							document.documentElement.scrollWidth -
+							document.documentElement.clientWidth,
+					}),
+					oSoanMessages("vi").oSoan.nhanOSoan,
+				);
+				const nhan = mong.options?.[0]?.label ?? "";
+				const coLuaChon = doc.luaChon.some((c) =>
+					c
+						.split("\n")
+						.map((x) => x.trim())
+						.includes(nhan),
 				);
 				await chup(p, `man-cau-hoi-${kho}`);
 				so.kiem(
 					`man-cau-hoi-${kho}`,
-					`cau hoi «${mong.prompt}» hien ${thay}, lua chon «${nhan}» ${coNhan}; tran ngang ${tran.trang}px`,
-					thay && coNhan && tran.trang <= 0,
+					`tieu de o cau hoi ${JSON.stringify(doc.tieuDe)} (mong «${mong.prompt}», khong «${truoc.prompt}»); lua chon «${nhan}» ${coLuaChon}; o soan thuong hien ${doc.oSoanThuong}; tran ngang ${doc.trang}px`,
+					doc.tieuDe.length === 1 &&
+						doc.tieuDe[0] === mong.prompt &&
+						doc.tieuDe[0] !== truoc.prompt &&
+						coLuaChon &&
+						!doc.oSoanThuong &&
+						doc.trang <= 0,
 				);
 			} finally {
 				await ctx.close();

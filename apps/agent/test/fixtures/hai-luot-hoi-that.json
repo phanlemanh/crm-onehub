@@ -1,144 +1,144 @@
 [
-  {
-    "requests": [
-      {
-        "action": {
-          "callId": "cau-hoi-hoi-thu-1",
-          "input": {
-            "options": [
-              {
-                "id": "a",
-                "label": "A"
-              }
-            ],
-            "prompt": "chon mot"
-          },
-          "kind": "tool-call",
-          "toolName": "ask_question"
-        },
-        "display": "select",
-        "kind": "question",
-        "prompt": "chon mot",
-        "requestId": "cau-hoi-hoi-thu-1",
-        "options": [
-          {
-            "id": "a",
-            "label": "A"
-          }
-        ]
-      }
-    ],
-    "sequence": 0,
-    "stepIndex": 0,
-    "turnId": "turn_0"
-  },
-  {
-    "requests": [
-      {
-        "action": {
-          "callId": "cau-hoi-hoi-thu-2",
-          "input": {
-            "options": [
-              {
-                "id": "a",
-                "label": "A"
-              }
-            ],
-            "prompt": "chon mot"
-          },
-          "kind": "tool-call",
-          "toolName": "ask_question"
-        },
-        "display": "select",
-        "kind": "question",
-        "prompt": "chon mot",
-        "requestId": "cau-hoi-hoi-thu-2",
-        "options": [
-          {
-            "id": "a",
-            "label": "A"
-          }
-        ]
-      }
-    ],
-    "sequence": 0,
-    "stepIndex": 0,
-    "turnId": "turn_0"
-  },
-  {
-    "requests": [
-      {
-        "action": {
-          "callId": "wrun_01M4WDKXXA7EKFGGDTBE42TRY0:limit:output:500",
-          "input": {
-            "kind": "output",
-            "limit": 100,
-            "usedTokens": 500
-          },
-          "kind": "tool-call",
-          "toolName": "session_limit_continuation"
-        },
-        "allowFreeform": false,
-        "display": "confirmation",
-        "kind": "session-limit",
-        "options": [
-          {
-            "description": "Grant a fresh token budget",
-            "id": "continue",
-            "label": "Approve",
-            "style": "primary"
-          },
-          {
-            "description": "Stop now",
-            "id": "stop",
-            "label": "Stop",
-            "style": "danger"
-          }
-        ],
-        "prompt": "This session has hit the output-token limit (100) per session. This is a guardrail against defective long-running sessions. If session activity looks fine, just approve to keep going.",
-        "requestId": "wrun_01M4WDKXXA7EKFGGDTBE42TRY0:limit:output:500"
-      }
-    ],
-    "sequence": 0,
-    "stepIndex": 1,
-    "turnId": "turn_0"
-  },
-  {
-    "requests": [
-      {
-        "action": {
-          "callId": "wrun_01M4WDKYE0682GES1E0S5YV139:limit:output:500",
-          "input": {
-            "kind": "output",
-            "limit": 100,
-            "usedTokens": 500
-          },
-          "kind": "tool-call",
-          "toolName": "session_limit_continuation"
-        },
-        "allowFreeform": false,
-        "display": "confirmation",
-        "kind": "session-limit",
-        "options": [
-          {
-            "description": "Grant a fresh token budget",
-            "id": "continue",
-            "label": "Approve",
-            "style": "primary"
-          },
-          {
-            "description": "Stop now",
-            "id": "stop",
-            "label": "Stop",
-            "style": "danger"
-          }
-        ],
-        "prompt": "This session has hit the output-token limit (100) per session. This is a guardrail against defective long-running sessions. If session activity looks fine, just approve to keep going.",
-        "requestId": "wrun_01M4WDKYE0682GES1E0S5YV139:limit:output:500"
-      }
-    ],
-    "sequence": 0,
-    "stepIndex": 1,
-    "turnId": "turn_0"
-  }
+	{
+		"requests": [
+			{
+				"action": {
+					"callId": "cau-hoi-hoi-thu-1",
+					"input": {
+						"options": [
+							{
+								"id": "a",
+								"label": "A"
+							}
+						],
+						"prompt": "chon mot hoi-thu-1"
+					},
+					"kind": "tool-call",
+					"toolName": "ask_question"
+				},
+				"display": "select",
+				"kind": "question",
+				"prompt": "chon mot hoi-thu-1",
+				"requestId": "cau-hoi-hoi-thu-1",
+				"options": [
+					{
+						"id": "a",
+						"label": "A"
+					}
+				]
+			}
+		],
+		"sequence": 0,
+		"stepIndex": 0,
+		"turnId": "turn_0"
+	},
+	{
+		"requests": [
+			{
+				"action": {
+					"callId": "cau-hoi-hoi-thu-2",
+					"input": {
+						"options": [
+							{
+								"id": "a",
+								"label": "A"
+							}
+						],
+						"prompt": "chon mot hoi-thu-2"
+					},
+					"kind": "tool-call",
+					"toolName": "ask_question"
+				},
+				"display": "select",
+				"kind": "question",
+				"prompt": "chon mot hoi-thu-2",
+				"requestId": "cau-hoi-hoi-thu-2",
+				"options": [
+					{
+						"id": "a",
+						"label": "A"
+					}
+				]
+			}
+		],
+		"sequence": 0,
+		"stepIndex": 0,
+		"turnId": "turn_0"
+	},
+	{
+		"requests": [
+			{
+				"action": {
+					"callId": "wrun_01M4WJJR298GXV1TV6HMRDP5S1:limit:output:500",
+					"input": {
+						"kind": "output",
+						"limit": 100,
+						"usedTokens": 500
+					},
+					"kind": "tool-call",
+					"toolName": "session_limit_continuation"
+				},
+				"allowFreeform": false,
+				"display": "confirmation",
+				"kind": "session-limit",
+				"options": [
+					{
+						"description": "Grant a fresh token budget",
+						"id": "continue",
+						"label": "Approve",
+						"style": "primary"
+					},
+					{
+						"description": "Stop now",
+						"id": "stop",
+						"label": "Stop",
+						"style": "danger"
+					}
+				],
+				"prompt": "This session has hit the output-token limit (100) per session. This is a guardrail against defective long-running sessions. If session activity looks fine, just approve to keep going.",
+				"requestId": "wrun_01M4WJJR298GXV1TV6HMRDP5S1:limit:output:500"
+			}
+		],
+		"sequence": 0,
+		"stepIndex": 1,
+		"turnId": "turn_0"
+	},
+	{
+		"requests": [
+			{
+				"action": {
+					"callId": "wrun_01M4WJJREFHWDB7770M1J5PEH2:limit:output:500",
+					"input": {
+						"kind": "output",
+						"limit": 100,
+						"usedTokens": 500
+					},
+					"kind": "tool-call",
+					"toolName": "session_limit_continuation"
+				},
+				"allowFreeform": false,
+				"display": "confirmation",
+				"kind": "session-limit",
+				"options": [
+					{
+						"description": "Grant a fresh token budget",
+						"id": "continue",
+						"label": "Approve",
+						"style": "primary"
+					},
+					{
+						"description": "Stop now",
+						"id": "stop",
+						"label": "Stop",
+						"style": "danger"
+					}
+				],
+				"prompt": "This session has hit the output-token limit (100) per session. This is a guardrail against defective long-running sessions. If session activity looks fine, just approve to keep going.",
+				"requestId": "wrun_01M4WJJREFHWDB7770M1J5PEH2:limit:output:500"
+			}
+		],
+		"sequence": 0,
+		"stepIndex": 1,
+		"turnId": "turn_0"
+	}
 ]
