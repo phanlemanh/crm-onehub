@@ -10,7 +10,9 @@ import {
 	LY_DO_TU_CHOI_NOP,
 } from "@crm/validation/okr-cuoc-soan";
 import type { MaLoaiBanNhap } from "@crm/validation/okr-kiem-ban-nhap";
+import { OKR_PHIEN_HOI } from "@crm/validation/okr-phien-hoi";
 import { OKR_PHIEN_SOAN } from "@crm/validation/okr-phien-soan";
+import { OKR_HOI_TRAN } from "@crm/validation/okr-tra-loi";
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -168,7 +170,7 @@ export const TRO_LY_OKR_SOAN = {
 		},
 	},
 	congCu: {
-		song: ["nop_ban_nhap"],
+		song: ["nop_ban_nhap", "tim_okr", "doc_okr"],
 		tat: [
 			"bash",
 			"read_file",
@@ -200,5 +202,19 @@ export const TRO_LY_OKR_SOAN = {
 			"2a-kr",
 		] as const satisfies readonly BuocCat[],
 		lopKhongCat: ["0-5", "1"],
+	},
+} as const;
+
+export const TRO_LY_OKR_HOI = {
+	purpose: OKR_PHIEN_HOI.purpose,
+	tinhNang: OKR_HOI_TRAN.tinhNang satisfies TinhNang,
+	tran: OKR_HOI_TRAN,
+	tenGoc: "OneHub",
+	tranKetQua: { mucTieu: 30, kr: 60, capNhat: 4 },
+	tuChoi: {
+		saiMucDich: "Công cụ này chỉ dùng trong cuộc hỏi OKR.",
+		khongThay:
+			"Không thấy Mục tiêu hay KR này trong những gì người hỏi được xem.",
+		cuocKhongThuocPhien: "Cuộc hỏi không thuộc người đang gọi.",
 	},
 } as const;
