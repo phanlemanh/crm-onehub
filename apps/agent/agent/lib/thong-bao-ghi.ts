@@ -1,12 +1,10 @@
-import { db as dbMacDinh } from "@crm/db";
+import type { Db } from "@crm/db";
 import { DAY_MS, ngayVN, type ViecNhac } from "@crm/db/onboarding-nhac";
 import {
 	khoaThongBao,
 	type NoiDungThongBao,
 	THONG_BAO,
 } from "@crm/validation/thong-bao";
-
-type Db = typeof dbMacDinh;
 
 export async function ghiThongBao(
 	db: Db,

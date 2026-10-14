@@ -23,6 +23,7 @@ import {
 } from "@crm/validation/okr-tham-so";
 import { sendSlackMessage } from "./run-runtime";
 import { slackAccessToken } from "./slack-connection";
+import { ghiThongBao } from "./thong-bao-ghi";
 import { completeTask } from "./tasks";
 import { dungTin, type LienKet, truKrIm } from "./tin-nhac";
 import { guiZalo, zaloToken } from "./zalo-api";
@@ -44,6 +45,7 @@ export type PhuThuocGui = {
 	fetcher?: typeof fetch;
 	zaloFetcher?: typeof fetch;
 	appUrl?: string | null;
+	ghiThongBao?: typeof ghiThongBao;
 };
 
 export function chuDeNhac(userId: string, now: Date): string {
@@ -157,36 +159,37 @@ async function xuongSlug(
 	return { appUrl, slug };
 }
 
-async function duongMo(appUrl: string | null): Promise<LienKet> {
+export function duongTrongApp(v: ViecNhac): string {
+	if (laNhacViec(v)) {
+		return `/viec?record=viec:${v.viecId}`;
+	}
+	if ("planId" in v) return `?record=plan:${v.planId}`;
+	if (laViecAi(v)) return "/settings/okr";
+	if (v.loai === "tai-lieu-cho-duyet") {
+		return `/tai-lieu?${DUONG_CHO_DUYET}`;
+	}
+	if (v.loai === "okr-cap-nhat") {
+		return "/okr/cap-nhat-tuan?tu=nhac";
+	}
+	if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
+		const thamSo = new URLSearchParams({ [THAM_SO_OKR.ky]: v.cycleId });
+		return `/okr/hoi-y?${thamSo}`;
+	}
+	if (v.loai === "okr-tom-tat") {
+		const thamSo = new URLSearchParams({
+			[THAM_SO_OKR.xem]: CACH_XEM_HOP_TUAN,
+			[THAM_SO_OKR.don]: khoaDonOkr({ loai: "pb", id: v.departmentId }),
+			[THAM_SO_OKR.ky]: v.cycleId,
+		});
+		return `/okr/theo-don-vi?${thamSo}`;
+	}
+	return `/okr?record=objective:${v.objectiveId}`;
+}
+
+export async function duongMo(appUrl: string | null): Promise<LienKet> {
 	const ctx = await xuongSlug(appUrl);
 	if (!ctx) return () => null;
-	return (v) => {
-		if (laNhacViec(v)) {
-			return `${ctx.appUrl}/${ctx.slug}/viec?record=viec:${v.viecId}`;
-		}
-		if ("planId" in v)
-			return `${ctx.appUrl}/${ctx.slug}?record=plan:${v.planId}`;
-		if (laViecAi(v)) return `${ctx.appUrl}/${ctx.slug}/settings/okr`;
-		if (v.loai === "tai-lieu-cho-duyet") {
-			return `${ctx.appUrl}/${ctx.slug}/tai-lieu?${DUONG_CHO_DUYET}`;
-		}
-		if (v.loai === "okr-cap-nhat") {
-			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
-		}
-		if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
-			const thamSo = new URLSearchParams({ [THAM_SO_OKR.ky]: v.cycleId });
-			return `${ctx.appUrl}/${ctx.slug}/okr/hoi-y?${thamSo}`;
-		}
-		if (v.loai === "okr-tom-tat") {
-			const thamSo = new URLSearchParams({
-				[THAM_SO_OKR.xem]: CACH_XEM_HOP_TUAN,
-				[THAM_SO_OKR.don]: khoaDonOkr({ loai: "pb", id: v.departmentId }),
-				[THAM_SO_OKR.ky]: v.cycleId,
-			});
-			return `${ctx.appUrl}/${ctx.slug}/okr/theo-don-vi?${thamSo}`;
-		}
-		return `${ctx.appUrl}/${ctx.slug}/okr?record=objective:${v.objectiveId}`;
-	};
+	return (v) => `${ctx.appUrl}/${ctx.slug}${duongTrongApp(v)}`;
 }
 
 export async function lienKetKeHoach(): Promise<
@@ -224,6 +227,30 @@ export async function chayNhac(
 	);
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
+	const now = new Date();
+	const mucTinh = { ngay: ngayVN(now), muc: maCuaAnToan(userId, viec) };
+	await db.agentTask.update({
+		where: { id: task.id },
+		data: { payload: { ...payload, mucTinh } },
+	});
+	let thongBaoLoi: string | undefined;
+	try {
+		await (deps.ghiThongBao ?? ghiThongBao)(
+			db,
+			userId,
+			viec,
+			duongTrongApp,
+			now,
+		);
+	} catch (loi) {
+		thongBaoLoi = loi instanceof Error ? loi.message : String(loi);
+		console.error(`[nhac] ghi thong bao hong nguoi=${userId}: ${thongBaoLoi}`);
+		await db.agentTask.update({
+			where: { id: task.id },
+			data: { payload: { ...payload, mucTinh, thongBaoLoi } },
+		});
+	}
+
 	const token = await zaloToken();
 	const kenh = await kenhSeDungCua(db, userId, { coToken: token !== null });
 	if (kenh.kenh === null) {
@@ -247,6 +274,8 @@ export async function chayNhac(
 		data: {
 			payload: {
 				...payload,
+				mucTinh,
+				...(thongBaoLoi ? { thongBaoLoi } : {}),
 				daGui: daGui.map(maViec),
 				kenh: kenh.kenh,
 				lechKenh: kenh.lech,
