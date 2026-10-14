@@ -28,6 +28,7 @@ import { InjectDatabase } from "../database/database.constants";
 import type {
 	GuiTinHieuOutput,
 	TinHieuCuaToiOutput,
+	TinHieuTatCaOutput,
 } from "./tin-hieu.contracts";
 
 export type NguoiGoiTinHieu = { id: string; role: WorkspaceRole | null };
@@ -93,6 +94,38 @@ export class TinHieuService {
 				...r,
 				ma: idTep(r.so),
 				daKeoVe: keoVeLuc !== null,
+			})),
+		};
+	}
+
+	async tatCa(nguoi: NguoiGoiTinHieu): Promise<TinHieuTatCaOutput> {
+		if (!laQuanTriWorkspace(nguoi.role)) throw new ForbiddenException();
+		const rows = await this.db.tinHieu.findMany({
+			orderBy: { guiLuc: "desc" },
+			select: {
+				id: true,
+				so: true,
+				tieuDe: true,
+				muonLam: true,
+				man: true,
+				guiLuc: true,
+				keoVeLuc: true,
+				nguoiGui: { select: { id: true, name: true } },
+				phongBan: { select: { id: true, name: true } },
+			},
+		});
+		this.logger.log({
+			message: "tin-hieu.tat-ca",
+			userId: nguoi.id,
+			so: rows.length,
+		});
+		return {
+			rows: rows.map(({ keoVeLuc, nguoiGui, phongBan, ...r }) => ({
+				...r,
+				ma: idTep(r.so),
+				daKeoVe: keoVeLuc !== null,
+				nguoiGui: nguoiGui ? { id: nguoiGui.id, ten: nguoiGui.name } : null,
+				phongBan: phongBan ? { id: phongBan.id, ten: phongBan.name } : null,
 			})),
 		};
 	}
