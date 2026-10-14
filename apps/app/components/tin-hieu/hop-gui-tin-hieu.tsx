@@ -126,7 +126,9 @@ export function HopGuiTinHieu({
 					<>
 						<DialogHeader>
 							<DialogTitle>{m.hop.tieuDe}</DialogTitle>
-							<DialogDescription>{m.hop.moTa}</DialogDescription>
+							<DialogDescription>
+								{m.hop.moTa} <span data-bao-truoc="">{m.hop.baoTruoc}</span>
+							</DialogDescription>
 						</DialogHeader>
 						<Field>
 							<FieldLabel htmlFor={idMuonLam}>{m.hop.muonLam}</FieldLabel>

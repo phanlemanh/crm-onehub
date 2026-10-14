@@ -8,6 +8,7 @@ export const TIN_HIEU = {
 	doDaiMan: 200,
 	ngayDem: 30,
 	ngayCoCho: 7,
+	coTrangTatCa: 50,
 	phien: "crm",
 	thuMucNguon: "tin-hieu/crm",
 	loi: {
