@@ -241,6 +241,11 @@ const en = {
 		chuGiai:
 			"Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
 	},
+	lienKet: {
+		chiHttps: "Only https links are accepted",
+		daBoHttp: (so: string) =>
+			`Removed ${so} http links — only https is accepted`,
+	},
 	saveBar: {
 		hienDanhSach: "Show the list",
 		anDanhSach: "Hide the list",
@@ -487,6 +492,10 @@ const vi = {
 		tuan: "Tuần",
 		chuGiai:
 			"Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
+	},
+	lienKet: {
+		chiHttps: "Chỉ nhận liên kết https",
+		daBoHttp: (so: string) => `Đã bỏ ${so} liên kết http — chỉ nhận https`,
 	},
 	saveBar: {
 		hienDanhSach: "Xem danh sách",

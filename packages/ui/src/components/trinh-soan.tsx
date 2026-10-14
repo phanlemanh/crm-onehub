@@ -1,5 +1,7 @@
 "use client";
 
+import { Alert, AlertDescription } from "@crm/ui/components/alert";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import {
 	type NhanNutTrinhSoan,
 	ThanhCongCuTrinhSoan,
@@ -8,13 +10,15 @@ import type {
 	NhanLienKetTrang,
 	TimTrang,
 } from "@crm/ui/components/trinh-soan-lien-ket-trang";
-import { locDan } from "@crm/ui/lib/dan-tu-van-phong";
+import { locDanDem } from "@crm/ui/lib/dan-tu-van-phong";
+import { lienKetAnToan } from "@crm/ui/lib/lien-ket-an-toan";
 import { chuanNfc } from "@crm/validation/tai-lieu";
 import {
 	nap,
 	PHAN_MO_RONG,
 	tuanTuHoa,
 } from "@crm/validation/tai-lieu-markdown";
+import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, type JSONContent, useEditor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
@@ -47,6 +51,14 @@ const LOP_NOI_DUNG = [
 	"[&_.selectedCell]:bg-muted",
 	"[&_.is-editor-empty:first-child]:before:pointer-events-none [&_.is-editor-empty:first-child]:before:float-left [&_.is-editor-empty:first-child]:before:h-0 [&_.is-editor-empty:first-child]:before:text-muted-foreground [&_.is-editor-empty:first-child]:before:content-[attr(data-placeholder)]",
 ].join(" ");
+
+const PHAN_MO_RONG_SOAN = [
+	...PHAN_MO_RONG.filter((phan) => phan.name !== "link"),
+	Link.configure({
+		openOnClick: false,
+		isAllowedUri: (url: string) => lienKetAnToan(url),
+	}),
+];
 
 const DOC_TRONG: JSONContent = { type: "doc", content: [{ type: "paragraph" }] };
 
@@ -90,13 +102,22 @@ export function TrinhSoan(props: TrinhSoanProps) {
 	const { giaTri, onDoi, goiY, nhan, nhanNut } = props;
 	const daPhat = useRef(giaTri);
 	const [dauTien] = useState(() => napVao(giaTri));
+	const [boHttp, setBoHttp] = useState(0);
+	const chuLienKet = useMessages().lienKet;
 	const editor = useEditor({
 		immediatelyRender: false,
-		extensions: [...PHAN_MO_RONG, Placeholder.configure({ placeholder: goiY })],
+		extensions: [
+			...PHAN_MO_RONG_SOAN,
+			Placeholder.configure({ placeholder: goiY }),
+		],
 		content: dauTien,
 		editorProps: {
 			attributes: thuocTinh(props),
-			transformPastedHTML: locDan,
+			transformPastedHTML: (html) => {
+				const ket = locDanDem(html);
+				setBoHttp(ket.boHttp);
+				return ket.html;
+			},
 		},
 		onUpdate: ({ editor: e }) => {
 			const md = chuanNfc(tuanTuHoa(boDuoiRong(e.getJSON())));
@@ -122,6 +143,13 @@ export function TrinhSoan(props: TrinhSoanProps) {
 				nhanNut={nhanNut}
 			/>
 			<EditorContent editor={editor} />
+			{boHttp > 0 ? (
+				<Alert data-bo-http="" variant="warning">
+					<AlertDescription>
+						{chuLienKet.daBoHttp(String(boHttp))}
+					</AlertDescription>
+				</Alert>
+			) : null}
 		</div>
 	);
 }

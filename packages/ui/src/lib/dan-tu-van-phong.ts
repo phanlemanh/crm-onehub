@@ -1,3 +1,5 @@
+import { laLienKetHttp, lienKetAnToan } from "@crm/ui/lib/lien-ket-an-toan";
+
 const BO_HAN = new Set([
 	"style",
 	"script",
@@ -49,8 +51,6 @@ const GIU = new Set([
 ]);
 
 const DANH_SACH = new Set(["UL", "OL"]);
-
-const HREF_AN_TOAN = /^(https?:\/\/|mailto:|\/(?!\/))/i;
 
 const DAM = /(^|;)\s*font-weight\s*:\s*(bold(er)?|[6-9]\d\d)\b/i;
 const THUONG = /(^|;)\s*font-weight\s*:\s*(normal|[1-5]\d\d)\b/i;
@@ -192,8 +192,10 @@ function longDanhSach(goc: Element): void {
 	}
 }
 
-function lamSach(el: Element): void {
-	for (const con of Array.from(el.children)) lamSach(con);
+type DemDan = { boHttp: number };
+
+function lamSach(el: Element, dem: DemDan): void {
+	for (const con of Array.from(el.children)) lamSach(con, dem);
 	if (el.tagName === "BODY") return;
 	const goc = el.tagName.toLowerCase();
 	const ten = DOI_TEN.get(goc) ?? goc;
@@ -207,8 +209,12 @@ function lamSach(el: Element): void {
 		hienTai.removeAttribute(thuocTinh.name);
 	}
 	if (ten !== "a") return;
-	if (href && HREF_AN_TOAN.test(href)) hienTai.setAttribute("href", href);
-	else goBoc(hienTai);
+	if (href && lienKetAnToan(href)) {
+		hienTai.setAttribute("href", href);
+		return;
+	}
+	if (href && laLienKetHttp(href)) dem.boHttp += 1;
+	goBoc(hienTai);
 }
 
 function boDoanRong(goc: Element): void {
@@ -276,7 +282,8 @@ function gonKhoangTrang(goc: Element): void {
 	}
 }
 
-export function locDan(html: string): string {
+export function locDanDem(html: string): { html: string; boHttp: number } {
+	const dem: DemDan = { boHttp: 0 };
 	const tai = new DOMParser().parseFromString(html, "text/html");
 	const goc = tai.body;
 	boRac(tai.documentElement);
@@ -289,10 +296,14 @@ export function locDan(html: string): string {
 	kieuThanhThe(goc);
 	longDanhSach(goc);
 	dauBangLaTieuDe(goc);
-	lamSach(goc);
+	lamSach(goc, dem);
 	boDinhDangTieuDe(goc);
 	boDoanRong(goc);
 	gomChuTran(goc);
 	gonKhoangTrang(goc);
-	return goc.innerHTML;
+	return { html: goc.innerHTML, boHttp: dem.boHttp };
+}
+
+export function locDan(html: string): string {
+	return locDanDem(html).html;
 }

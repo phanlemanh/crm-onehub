@@ -10,8 +10,10 @@ import TextBold from "@carbon/icons-react/es/TextBold";
 import TextItalic from "@carbon/icons-react/es/TextItalic";
 import Undo from "@carbon/icons-react/es/Undo";
 import { Button } from "@crm/ui/components/button";
+import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import {
 	Popover,
 	PopoverContent,
@@ -19,6 +21,7 @@ import {
 } from "@crm/ui/components/popover";
 import { Separator } from "@crm/ui/components/separator";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { lienKetAnToan } from "@crm/ui/lib/lien-ket-an-toan";
 import { TAI_LIEU } from "@crm/validation/tai-lieu";
 import { type Editor, useEditorState } from "@tiptap/react";
 import { type KeyboardEvent, useRef, useState } from "react";
@@ -53,14 +56,15 @@ type TrangThaiNut = Record<NutTrinhSoan, { bat: boolean; khoa: boolean }> & {
 	href: string;
 };
 
-const CO_GIAO_THUC = /^(https?:\/\/|mailto:|\/(?!\/))/i;
+const CO_SCHEME = /^[a-z][a-z\d+.-]*:/i;
 
 const PHIM_CHUYEN = new Set(["ArrowLeft", "ArrowRight", "Home", "End"]);
 
 function chuanHref(chu: string): string {
 	const s = chu.trim();
-	if (s === "") return "";
-	return CO_GIAO_THUC.test(s) ? s : `https://${s}`;
+	if (s === "" || s.startsWith("/") || s.startsWith("#") || CO_SCHEME.test(s))
+		return s;
+	return `https://${s}`;
 }
 
 function docTrangThai(editor: Editor): TrangThaiNut {
@@ -115,9 +119,8 @@ function chay(editor: Editor | null, nut: NutLenh): void {
 	lenh[nut]();
 }
 
-function ganLienKet(editor: Editor | null, chu: string): void {
+function ganLienKet(editor: Editor | null, href: string): void {
 	if (!editor) return;
-	const href = chuanHref(chu);
 	const c = editor.chain().focus().extendMarkRange("link");
 	if (href === "") {
 		c.unsetLink().run();
@@ -154,6 +157,8 @@ export function ThanhCongCuTrinhSoan({
 		}) ?? TRONG;
 	const [dangChon, setDangChon] = useState<NutThanh>("tieuDe2");
 	const [moLienKet, setMoLienKet] = useState(false);
+	const [loiLienKet, setLoiLienKet] = useState(false);
+	const chuLienKet = useMessages().lienKet;
 	const khung = useRef<HTMLDivElement>(null);
 
 	const coLienKetTrang = timTrang !== undefined && nhanLienKetTrang !== undefined;
@@ -271,7 +276,13 @@ export function ThanhCongCuTrinhSoan({
 			<Button size="icon-sm" variant="ghost" {...nutTrang("bang")}>
 				<Icon icon={TableIcon} />
 			</Button>
-			<Popover onOpenChange={setMoLienKet} open={moLienKet}>
+			<Popover
+				onOpenChange={(mo) => {
+					setLoiLienKet(false);
+					setMoLienKet(mo);
+				}}
+				open={moLienKet}
+			>
 				<PopoverTrigger asChild>
 					<Button
 						aria-pressed={trang.lienKet.bat}
@@ -286,10 +297,11 @@ export function ThanhCongCuTrinhSoan({
 					align="start"
 					onCloseAutoFocus={(e) => {
 						e.preventDefault();
-						editor?.commands.focus();
+						if (editor && !editor.isDestroyed) editor.commands.focus();
 					}}
 				>
 					<Input
+						aria-invalid={loiLienKet || undefined}
 						aria-label={nhanNut.lienKet}
 						autoComplete="url"
 						defaultValue={trang.href}
@@ -297,14 +309,22 @@ export function ThanhCongCuTrinhSoan({
 						onKeyDown={(e) => {
 							if (e.key !== "Enter") return;
 							e.preventDefault();
-							const chu = e.currentTarget.value;
+							const href = chuanHref(e.currentTarget.value);
+							if (href !== "" && !lienKetAnToan(href)) {
+								setLoiLienKet(true);
+								return;
+							}
+							setLoiLienKet(false);
 							setMoLienKet(false);
-							ganLienKet(editor, chu);
+							ganLienKet(editor, href);
 						}}
 						placeholder="https://"
 						translate="no"
 						type="url"
 					/>
+					{loiLienKet ? (
+						<FieldError data-loi-lien-ket="">{chuLienKet.chiHttps}</FieldError>
+					) : null}
 				</PopoverContent>
 			</Popover>
 			{coLienKetTrang ? (

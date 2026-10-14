@@ -24,6 +24,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@crm/ui/components/table";
+import { lienKetAnToan } from "@crm/ui/lib/lien-ket-an-toan";
 import { cn } from "@crm/ui/lib/utils";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { gfmFromMarkdown } from "mdast-util-gfm";
@@ -88,11 +89,9 @@ const DEFAULT_CALLOUT_LABELS: ReaderCalloutLabels = {
 	caution: "Caution",
 };
 
-const SAFE_LINK = /^(#|\/(?!\/)|https:\/\/|mailto:)/;
-
 function readerUrl(url: string, key: string): string | null {
 	if (key === "src") return null;
-	return SAFE_LINK.test(url) ? url : null;
+	return lienKetAnToan(url) ? url : null;
 }
 
 export function readerSlug(text: string): string {
