@@ -164,6 +164,7 @@ const vi = {
 		xoaKr: "Xoá",
 		ganThem: "Gắn thêm",
 		goCanChinh: "Gỡ căn chỉnh vào {ten}",
+		suaLyDo: "Sửa lý do căn chỉnh vào {ten}",
 		cotCanChinh: {
 			donVi: "Đơn vị",
 			mucTieu: "Mục tiêu",
@@ -277,6 +278,17 @@ const vi = {
 		moTaCanChinh: "Chỉ hiện mục tiêu và KR cấp trên đã công bố.",
 		gan: "Gắn",
 		daGan: "Đã gắn căn chỉnh",
+		lyDoCanChinh: "Vì sao mục tiêu này đẩy được đích đó",
+		lyDoCanChinhMoTa:
+			"Không bắt buộc. Để trống thì nhánh này là «Chưa có lý do».",
+		canCuCanChinh: "Căn cứ",
+		canCuCanChinhMoTa: "Không bắt buộc. Để trống thì nhánh này là «Đặt cược».",
+		mucTinCanChinh: "Mức tin",
+		loiCanCuCanChinh: "Căn cứ cần đi kèm lý do.",
+		suaLyDoCanChinh: "Sửa lý do căn chỉnh",
+		moTaSuaLyDo: "Đích giữ nguyên; chỉ lý do và căn cứ đổi.",
+		moTaNhanDeXuat: "Lý do và căn cứ Kara soạn — sửa rồi căn chỉnh.",
+		daSuaLyDo: "Đã lưu lý do",
 		dangTai: "Đang tải…",
 	},
 	hanhDong: {
@@ -854,6 +866,7 @@ const en: OkrMessages = {
 		xoaKr: "Delete",
 		ganThem: "Align to more",
 		goCanChinh: "Remove alignment to {ten}",
+		suaLyDo: "Edit the reason for the alignment to {ten}",
 		cotCanChinh: {
 			donVi: "Unit",
 			mucTieu: "Objective",
@@ -968,6 +981,17 @@ const en: OkrMessages = {
 		moTaCanChinh: "Only published objectives and KRs one level up are shown.",
 		gan: "Align",
 		daGan: "Alignment added",
+		lyDoCanChinh: "Why this objective moves that target",
+		lyDoCanChinhMoTa:
+			"Optional. Left empty, this branch shows as «No reason yet».",
+		canCuCanChinh: "Evidence",
+		canCuCanChinhMoTa: "Optional. Left empty, this branch shows as «Bet».",
+		mucTinCanChinh: "Confidence",
+		loiCanCuCanChinh: "Evidence needs a reason with it.",
+		suaLyDoCanChinh: "Edit alignment reason",
+		moTaSuaLyDo: "The target stays; only the reason and evidence change.",
+		moTaNhanDeXuat: "Reason and evidence drafted by Kara — edit, then align.",
+		daSuaLyDo: "Reason saved",
 		dangTai: "Loading…",
 	},
 	hanhDong: {

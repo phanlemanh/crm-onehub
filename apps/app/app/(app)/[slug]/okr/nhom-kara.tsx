@@ -19,20 +19,63 @@ import type {
 	ProposedChangeDecided,
 	ProposedChangeKind,
 } from "@crm/ui/components/proposed-change";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { formatNgayGio } from "@crm/ui/lib/format";
+import { toneTheoNghia } from "@crm/ui/lib/status-tone";
+import { mucTinCanChinh } from "@crm/validation/ly-do-can-chinh";
 import { type ReactNode, useId, useState } from "react";
+import { NGHIA_MUC_TIN } from "@/components/crm/record-sheet/ly-do-noi-gop";
+import { okrMessages } from "@/lib/messages/okr";
 import {
 	type OkrGopYMessages,
 	okrGopYMessages,
 } from "@/lib/messages/okr-gop-y";
 import { dauThangSau, homNayVn, OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import type { CachQuyet, GopYMucTieu, KetDong, LyDoTat } from "./gop-y-kara";
+import { HopThoaiCanChinh } from "./hop-thoai-can-chinh";
 import type { DongHien } from "./the-gop-y-props";
 
 export type LoiDiKr =
 	| { loai: "kr-moi" }
 	| { loai: "sua-kr"; keyResultId: string }
 	| { loai: "sua-muc-tieu" };
+
+function chenChu(mau: string, cau: string): ReactNode[] {
+	return mau.split("{cau}").flatMap((phan, i) =>
+		i === 0
+			? [phan]
+			: [
+					<span key="cau" translate="no">
+						{cau}
+					</span>,
+					phan,
+				],
+	);
+}
+
+function LyDoDeXuat({ d }: { d: DongHien }) {
+	const locale = useLocale();
+	const m = okrGopYMessages(locale);
+	const mucTin = mucTinCanChinh(d.lyDo, d.canCu);
+	return (
+		<>
+			<StatusIndicator
+				data-muc-tin={mucTin}
+				label={okrMessages(locale).sheet.mucTin[mucTin]}
+				size="sm"
+				tone={toneTheoNghia(NGHIA_MUC_TIN[mucTin])}
+			/>{" "}
+			<span className="block" data-de-xuat-ly-do>
+				{chenChu(m.dong.viSao, d.lyDo)}
+			</span>
+			{d.canCu ? (
+				<span className="block" data-de-xuat-can-cu>
+					{chenChu(m.dong.canCu, d.canCu)}
+				</span>
+			) : null}
+		</>
+	);
+}
 
 function tomTatCua(d: DongHien, m: OkrGopYMessages): string {
 	const ma = d.maVanDe;
@@ -97,12 +140,13 @@ export function DeXuatNeo({
 }) {
 	const m = okrGopYMessages(useLocale());
 	const [sua, setSua] = useState<string | null>(null);
+	const [suaLyDo, setSuaLyDo] = useState(false);
 	const k = gopY.ketCua(d.id);
 	const khoa =
 		!gopY.ghiDuoc || (gopY.dangQuyet !== null && gopY.dangQuyet !== d.id);
-	const quyet = (cach: CachQuyet, giaTri?: string) => {
+	const quyet = (cach: CachQuyet, giaTri?: string, canCu?: string | null) => {
 		setSua(null);
-		gopY.quyet(d, cach, giaTri);
+		gopY.quyet(d, cach, giaTri, canCu);
 	};
 	const decided: ProposedChangeDecided | undefined = k
 		? {
@@ -138,12 +182,19 @@ export function DeXuatNeo({
 	} else if (d.loai === "can-chinh") {
 		kind = "compact";
 		value = m.dong.gopVao(d.tenDich ?? "");
+		rationale = <LyDoDeXuat d={d} />;
 		actions = [
 			{
 				id: "can-chinh",
 				label: m.dong.canChinh,
 				tone: "primary",
 				onClick: () => quyet("nhan"),
+			},
+			{
+				id: "sua-ly-do",
+				label: m.dong.suaLyDo,
+				tone: "secondary",
+				onClick: () => setSuaLyDo(true),
 			},
 			boQua,
 		];
@@ -180,30 +231,48 @@ export function DeXuatNeo({
 			boQua,
 		];
 	}
+	const hopThoai =
+		suaLyDo && d.loai === "can-chinh" ? (
+			<HopThoaiCanChinh
+				objectiveId={d.objectiveId}
+				daGop={[]}
+				dong={() => setSuaLyDo(false)}
+				cheDo={{
+					loai: "nhan",
+					tenDich: d.tenDich ?? "",
+					lyDo: d.lyDo,
+					canCu: d.canCu,
+					guiNhan: (lyDo, canCu) => quyet("sua", lyDo, canCu),
+				}}
+			/>
+		) : null;
 	return (
-		<KaraProposal
-			actions={actions.map((a) => ({ ...a, disabled: khoa || a.disabled }))}
-			before={d.loai === "viet-lai" ? (d.truoc ?? "") : undefined}
-			data-gop-y={d.id}
-			data-highlighted={gopY.noi === d.id ? "true" : undefined}
-			data-kara-proposal-kr={d.keyResultId ?? undefined}
-			data-trang-thai={gopY.trangThai(d.id)}
-			decided={decided}
-			editing={
-				sua === null
-					? undefined
-					: { value: sua, onChange: setSua, onCancel: () => setSua(null) }
-			}
-			error={gopY.loiDong[d.id]}
-			highlighted={gopY.noi === d.id}
-			kind={kind}
-			lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
-			media={false}
-			pending={gopY.dangQuyet === d.id}
-			rationale={rationale}
-			tabIndex={-1}
-			value={value}
-		/>
+		<>
+			{hopThoai}
+			<KaraProposal
+				actions={actions.map((a) => ({ ...a, disabled: khoa || a.disabled }))}
+				before={d.loai === "viet-lai" ? (d.truoc ?? "") : undefined}
+				data-gop-y={d.id}
+				data-highlighted={gopY.noi === d.id ? "true" : undefined}
+				data-kara-proposal-kr={d.keyResultId ?? undefined}
+				data-trang-thai={gopY.trangThai(d.id)}
+				decided={decided}
+				editing={
+					sua === null
+						? undefined
+						: { value: sua, onChange: setSua, onCancel: () => setSua(null) }
+				}
+				error={gopY.loiDong[d.id]}
+				highlighted={gopY.noi === d.id}
+				kind={kind}
+				lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
+				media={false}
+				pending={gopY.dangQuyet === d.id}
+				rationale={rationale}
+				tabIndex={-1}
+				value={value}
+			/>
+		</>
 	);
 }
 

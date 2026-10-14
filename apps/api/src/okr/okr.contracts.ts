@@ -147,7 +147,7 @@ const noiDungDong = {
 	targetObjectiveId: z.string().nullable(),
 	targetKeyResultId: z.string().nullable(),
 	lyDo: z.string(),
-	canCu: z.string().nullable(),
+	canCu: z.string().nullable().default(null),
 };
 export const dongHien = z.object({
 	...noiDungDong,
