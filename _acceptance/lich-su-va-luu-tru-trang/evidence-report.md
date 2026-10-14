@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cd1f865eba56dd622ff930b65341c43b594758c0
+verified_commit: 2f53f8fa28f633002b9c72035a1aca35f7481ab4
 human_signoff: Phan Le Manh 2026-10-14 — ký Cổng 2 trên S4 lượt 1 (17/17 eval máy và 4 ui-check PASS; E13j Đạt). Ngoài-1, 3, 4, 5, 6, 7, 8, 9 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -315,3 +315,7 @@ Round 1: mọi eval máy (17 eval) và 7 lệnh suite đều xanh; E13j còn m�
 ### Re-pin lần 1 — 2026-10-14, do gộp onehub 4b7f07936 (#388, #398, #397, V2e) và đổi mốc migration
 run_id: repin-20261014T034137Z-96629
 sha: cd1f865eba56dd622ff930b65341c43b594758c0 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E8u, E10, E11, E12, E13j (E13j không khai paths) · diff chạm vật đo ngoài làn máy: E8u, E10, E11, E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-14, do sau gộp #389 kara-mot-ten (2f53f8fa2): chữ Kara đổi vật mà hai hồ sơ đo
+run_id: repin-20261014T094316Z-30187
+sha: 2f53f8fa28f633002b9c72035a1aca35f7481ab4 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E8u, E10, E11, E12, E13j (E13j không khai paths) · diff chạm vật đo ngoài làn máy: E10, E11, E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

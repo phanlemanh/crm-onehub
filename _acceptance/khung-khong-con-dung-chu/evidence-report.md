@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9e02c0b390fdc3c7b1f502193c9b728594e548e4
+verified_commit: 2f53f8fa28f633002b9c72035a1aca35f7481ab4
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -152,3 +152,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: all evals passed (E1-E7) and all suite commands passed. No return to implementation.
+
+### Re-pin lần 1 — 2026-10-14, do sau gộp #389 kara-mot-ten (2f53f8fa2): chữ Kara đổi vật mà hai hồ sơ đo
+run_id: repin-20261014T094316Z-30187
+sha: 2f53f8fa28f633002b9c72035a1aca35f7481ab4 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E6 · diff chạm vật đo ngoài làn máy: E6 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-5 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
