@@ -2595,8 +2595,8 @@ executors:
     kmc_man_thieu_hop: "bun _acceptance/khung-man-chung/rang/chup-man.mjs --chieu-do=3"
     tbd_hoi_quy: 'bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --moc 3a2783409 && bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx ./test/han-viec.dom.tsx ./test/moi-phia-ke-hoach.dom.tsx ./test/may-nhac.dom.tsx ./test/ke-hoach-sheet.dom.tsx && cd ../.. && bun run check-types'
     tbd_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/them-buoc-bao-dung/rang/man.mjs"'
-    tnv_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tac-nhan-va/rang/man.mjs"'
-    tnv_khu_hoi: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tac-nhan-va/rang/khu-hoi.mjs"'
+    tnv_man: 'bash -c ''export TNV_LUONG_DIR="$PWD/.acceptance-runs/tac-nhan-va/luong"; mkdir -p "$TNV_LUONG_DIR"; TAC_TU_GIA_PORT=3593 bun _acceptance/tac-nhan-va/rang/tac-tu-gia.ts & g=$!; AGENT_URL=http://127.0.0.1:3593 AGENT_BRIDGE_SECRET=bi-mat-do-tnv bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tac-nhan-va/rang/man.mjs"; m=$?; kill $g; exit $m'''
+    tnv_khu_hoi: 'mkdir -p .acceptance-runs/tac-nhan-va && TNV_HAI_LUOT_RA=$PWD/.acceptance-runs/tac-nhan-va/hai-luot-hoi.json bun apps/agent/test/eve-tran/chay.ts hai-luot-hoi && bash -c ''export TNV_LUONG_DIR="$PWD/.acceptance-runs/tac-nhan-va/luong"; mkdir -p "$TNV_LUONG_DIR"; TAC_TU_GIA_PORT=3594 bun _acceptance/tac-nhan-va/rang/tac-tu-gia.ts & g=$!; AGENT_URL=http://127.0.0.1:3594 AGENT_BRIDGE_SECRET=bi-mat-do-tnv bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tac-nhan-va/rang/khu-hoi.mjs"; m=$?; kill $g; exit $m'''
     vc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-chung/rang/man.mjs"'
     vc_san_thiet_ke: node _acceptance/viec-chung/rang/san-thiet-ke.mjs
     vc_dot_bien: node _acceptance/viec-chung/rang/dot-bien.mjs

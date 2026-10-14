@@ -78,6 +78,8 @@ import {
 	type TroChuyenMessages,
 	troChuyenMessages,
 } from "@/lib/messages/agent-builder-tro-chuyen";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
+import { stepLabel } from "@/lib/nhan-buoc";
 import { traBangChu } from "@/lib/tra-bang-chu";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -648,6 +650,8 @@ export function AgentToolStep({
 }: {
 	item: Extract<TranscriptItem, { kind: "did" }>;
 }) {
+	const locale = useLocale();
+	const kara = karaBanGhiMessages(locale);
 	return (
 		<div className="flex min-w-0 flex-col gap-1">
 			<div className="flex min-w-0 items-start gap-2 text-sm">
@@ -658,7 +662,9 @@ export function AgentToolStep({
 				) : (
 					<Icon icon={Checkmark} className="size-3.5 text-ring" />
 				)}
-				<span className="min-w-0 wrap-break-word">{toolLabel(item)}</span>
+				<span className="min-w-0 wrap-break-word">
+					{stepLabel({ tool: item.tool, label: toolLabel(item) }, kara, locale)}
+				</span>
 			</div>
 			{item.errorText ? (
 				<p className="pl-[22px] wrap-break-word text-destructive text-xs leading-5">
