@@ -95,3 +95,7 @@ Quét bằng `morphological-scan` (preset entity-feature), bản đầy đủ �
   - Ngoài-7: Bài kiểm «lưu trữ lần nữa giữ ngày lưu trữ đầu» gọi hàm phụ chứ không đi đường duyệt thật.
   - Ngoài-8: Khẳng định «màn duyệt lưu trữ không hiện phần so sánh chữ» đo trên một màn vốn không bao giờ có phần đó.
   - Ngoài-9: Chốt «số khẳng định bằng số dòng bảng» ở bài kiểm mười chỗ đọc là phép tính trên hằng, bỏ bớt một dòng thì chốt không báo.
+- Đo lại màn sau gộp onehub 4b7f07936 (có #388 và bản sửa #398), trên cây 116f1efbc, 2026-10-14 03:33Z, phiên đo
+  `crm_gifted_poincare_71daab_do`: `man.mjs --phan lich-su` 5/5 đạt, `--phan luu-tru` 8/8 đạt và 0 lỗi console,
+  `--phan da-luu-tru` 5/5 đạt — cùng kết quả lượt S4 đã ký. Nhật ký: `.acceptance-runs/lich-su-va-luu-tru-trang/man-<phần>-sau-398.log`.
+  Thay cho vòng S4 delta của E10, E11, E12, E8u (làn ghim lại không đo ui-check), theo giám sát đợt r2.
