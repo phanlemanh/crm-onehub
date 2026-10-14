@@ -10,7 +10,7 @@ evals:
       - "_acceptance/ba-ho-so-do-san/rang/**"
       - "_acceptance/ba-ho-so-do-san/danh-sach.json"
       - "_acceptance/*/evals.yaml"
-    expected: 'exit 0; in một dòng mỗi hồ sơ trong danh sách «<hồ sơ>: <n> mục sống» và dòng tổng «paths-song: 13 hồ sơ, 0 mục chết». Danh sách hồ sơ đọc từ danh-sach.json, không khai cứng; phân loại bằng phanLoaiMucPaths của bản acceptance-gate do resolve-plugin.mjs trả. Đối chứng hai chiều trên CÙNG cây: lượt tự kiểm chép evals.yaml của một hồ sơ trong danh sách vào thư mục tạm, cấy một mục paths trỏ tệp không có, chạy cùng hàm → phải trả mã paths-khong-tro-toi-tep với thông điệp ghim «<hồ sơ>:<eval>:<mục>»; cấy một thư mục có «/» cuối → dang-khai-la. Lượt tự kiểm không bắt → exit 1 «HONG tu kiem». Vế bộ lọc: với mỗi hồ sơ, gọi staleByPaths([], evals, {cay}) của kit ở HEAD và ở mốc nền (cây git ls-tree + evals.yaml của mốc nền); in «<hồ sơ>: bộ lọc bật» hoặc «<hồ sơ>: bộ lọc tắt — <lý do>»; bộ lọc tắt MỚI → «BO_LOC_TAT_MOI <hồ sơ>: <lý do>», exit 1, khi (a) mốc nền bật mà HEAD tắt, hoặc (b) HEAD tắt vì thiếu paths ở một eval không not-run mà ở mốc nền eval đó CÓ paths; tắt vì thiếu khai đã có từ mốc nền (ngoài phạm vi) hoặc vì hop-paths-rong khi mọi eval của hồ sơ đều not-run (không còn vật để lọc) thì chỉ in, không đỏ. Đối chứng của vế này trên cùng cây: bản sao bỏ paths của một eval máy đang chạy → phải in BO_LOC_TAT_MOI với lý do eval-may-thieu-paths:<eval>. Chạy với --tai 3a2783409 (mốc nền) phải đỏ — các hồ sơ trong danh sách có mục chết ở mốc nền — đó là chiều đỏ trên vật thật.'
+    expected: 'exit 0; in một dòng mỗi hồ sơ trong danh sách «<hồ sơ>: <n> mục sống» và dòng tổng «paths-song: 12 hồ sơ, 0 mục chết». Danh sách hồ sơ đọc từ danh-sach.json, không khai cứng; phân loại bằng phanLoaiMucPaths của bản acceptance-gate do resolve-plugin.mjs trả. Đối chứng hai chiều trên CÙNG cây: lượt tự kiểm chép evals.yaml của một hồ sơ trong danh sách vào thư mục tạm, cấy một mục paths trỏ tệp không có, chạy cùng hàm → phải trả mã paths-khong-tro-toi-tep với thông điệp ghim «<hồ sơ>:<eval>:<mục>»; cấy một thư mục có «/» cuối → dang-khai-la. Lượt tự kiểm không bắt → exit 1 «HONG tu kiem». Vế bộ lọc: với mỗi hồ sơ, gọi staleByPaths([], evals, {cay}) của kit ở HEAD và ở mốc nền (cây git ls-tree + evals.yaml của mốc nền); in «<hồ sơ>: bộ lọc bật» hoặc «<hồ sơ>: bộ lọc tắt — <lý do>»; bộ lọc tắt MỚI → «BO_LOC_TAT_MOI <hồ sơ>: <lý do>», exit 1, khi (a) mốc nền bật mà HEAD tắt, hoặc (b) HEAD tắt vì thiếu paths ở một eval không not-run mà ở mốc nền eval đó CÓ paths; tắt vì thiếu khai đã có từ mốc nền (ngoài phạm vi) hoặc vì hop-paths-rong khi mọi eval của hồ sơ đều not-run (không còn vật để lọc) thì chỉ in, không đỏ. Đối chứng của vế này trên cùng cây: bản sao bỏ paths của một eval máy đang chạy → phải in BO_LOC_TAT_MOI với lý do eval-may-thieu-paths:<eval>. Chạy với --tai 3a2783409 (mốc nền) phải đỏ — các hồ sơ trong danh sách có mục chết ở mốc nền — đó là chiều đỏ trên vật thật.'
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -54,16 +54,6 @@ evals:
     inputs:
       - "_acceptance/ba-ho-so-do-san/danh-sach.json"
       - "_acceptance/ba-ho-so-do-san/bang-truoc-sau.md"
-
-  - id: E6
-    criterion: AC-6
-    executor: script
-    cmd: config:executors.script.dmk_khong_noi_thuoc
-    paths:
-      - "_acceptance/do-man-tren-kho-rieng/**"
-      - "_acceptance/config.yaml"
-    expected: 'exit 0; dòng cuối «khong-noi-thuoc: sach». Phần «không tệp nào dưới _acceptance/do-man-tren-kho-rieng/ đổi từ mốc nền» do E3 đo (luật TU_HET_BI_CHAM, có đối chứng riêng). Chiều đỏ là của chính răng: hai dòng «doi chung» của nó cấy tệp hồ sơ khác và dòng executor bị xoá rồi phải bắt.'
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
     criterion: AC-7

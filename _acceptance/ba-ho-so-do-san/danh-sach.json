@@ -1569,15 +1569,6 @@
 			]
 		},
 		{
-			"ho_so": "do-man-tren-kho-rieng",
-			"eval": "E11",
-			"muc": null,
-			"ma": null,
-			"nguon": "p8-4",
-			"xu_ly": "tu-het",
-			"ly_do": "dmk_khong_noi_thuoc chay 13/10 o moc nen: «khong-noi-thuoc: sach», exit 0"
-		},
-		{
 			"ho_so": "khoa-con-bat-xa-tran",
 			"eval": "E3",
 			"muc": null,
@@ -2140,6 +2131,15 @@
 				],
 				"luot_do": "repin-20261013T145607Z-38505",
 				"yeu_cau": "P7-13"
+			},
+			{
+				"ho_so": "do-man-tren-kho-rieng",
+				"muc_chet": [],
+				"eval_do": [
+					"E11"
+				],
+				"yeu_cau": "P7-15",
+				"ghi_chu": "dmk_khong_noi_thuoc la thuoc theo nhanh: git diff merge-base HEAD origin/onehub — xanh vo nghia tren onehub sach (0 tep doi), do tren moi nhanh cham ho so khac; sua dung la neo cap sha gop cua vong do-man-tren-kho-rieng (luat F10)"
 			}
 		]
 	}
