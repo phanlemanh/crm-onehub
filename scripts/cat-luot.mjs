@@ -142,38 +142,11 @@ export function kiemPhu(pv, data) {
 }
 
 // ── Khoảng cỡ (một nguồn: khối CAT-LUOT-CO của SKILL cắt lượt) ─────────────────
-// Chính sách của chủ kho (10/10): mục tiêu · cho phép tới · tách từ · trần lượt chấm · ngưỡng ít dữ liệu.
-// Bên viết là người sửa khối; bên đọc là hàm dưới — mã không mang số nào của khoảng.
-export const KHOA_CO = ['muc_tieu', 'cho_phep_den', 'tach_tu', 'tran_luot_cham', 'it_du_lieu_duoi'];
-export const TEP_SKILL = path.join(__dirname, '..', 'skills', 'cat-luot', 'SKILL.md');
-const KHOI_CO_RE = /<!-- <<<CAT-LUOT-CO -->\r?\n```[a-z]*\r?\n([\s\S]*?)```\r?\n<!-- CAT-LUOT-CO>>> -->/;
-export function docKhoang(txt) {
-  const m = String(txt ?? '').match(KHOI_CO_RE);
-  if (!m) return { khoang: null, loi: ['SKILL cắt lượt thiếu khối CAT-LUOT-CO (khoảng cỡ)'] };
-  const tho = {};
-  for (const dong of m[1].split(/\r?\n/)) { const k = dong.replace(/\s+#.*$/, '').match(/^\s*([a-z_]+):\s*(\S+)\s*$/); if (k && !(k[1] in tho)) tho[k[1]] = k[2]; }
-  const loi = KHOA_CO.filter(k => !(k in tho)).map(k => `khối CAT-LUOT-CO thiếu khoá ${k}`);
-  if (loi.length) return { khoang: null, loi };
-  const so = v => (/^\d+$/.test(v) ? Number(v) : NaN);
-  const mt = tho.muc_tieu.match(/^(\d+)-(\d+)$/);
-  const khoang = { muc_tieu: mt ? [Number(mt[1]), Number(mt[2])] : null };
-  for (const k of KHOA_CO.slice(1)) khoang[k] = so(tho[k]);
-  if (!khoang.muc_tieu || !(khoang.muc_tieu[0] >= 1)) loi.push(`khoá muc_tieu «${tho.muc_tieu}» phải là <đầu>-<cuối>, hai số nguyên dương`);
-  else if (khoang.muc_tieu[0] > khoang.muc_tieu[1]) loi.push(`khoá muc_tieu «${tho.muc_tieu}» ngược: đầu lớn hơn cuối`);
-  for (const k of KHOA_CO.slice(1)) if (!(khoang[k] >= 1)) loi.push(`khoá ${k} «${tho[k]}» phải là số nguyên dương`);
-  if (!loi.length) {
-    const [, cuoi] = khoang.muc_tieu; const c = khoang.cho_phep_den; const t = khoang.tach_tu;
-    if (c < cuoi) loi.push(`khoá cho_phep_den ${c} nhỏ hơn cuối muc_tieu ${cuoi}`);
-    else if (t !== c + 1) loi.push(`khoá tach_tu ${t} phải bằng cho_phep_den + 1 = ${c + 1} (khoảng ${t > c + 1 ? 'hở' : 'chồng'})`);
-  }
-  return loi.length ? { khoang: null, loi } : { khoang, loi };
-}
-export function napKhoang(tep = TEP_SKILL) {
-  let txt; try { txt = readFileSync(tep, 'utf8'); } catch { throw Object.assign(new Error(`không đọc được SKILL cắt lượt (khối CAT-LUOT-CO): ${tep}`), { ma: 2 }); }
-  const { khoang, loi } = docKhoang(txt);
-  if (!khoang) throw Object.assign(new Error(loi.join('; ')), { ma: 2 });
-  return khoang;
-}
+// Bộ đọc sống ở scripts/co-hop-dong.cjs (hồ sơ vong-mo-thang-bang-feature-loop): thẻ Cổng Phạm vi đọc
+// CHÍNH các hàm này — xuất lại để bên gọi cũ (ca LT-142…) không đổi. Mã không mang số nào của khoảng.
+const CHD = require(path.join(__dirname, 'co-hop-dong.cjs'));
+const { ngayChuKy } = require(path.join(__dirname, 'ho-so-tom-tat.cjs'));
+export const { KHOA_CO, TEP_SKILL, docKhoang, napKhoang } = CHD;
 
 // ── Cờ cỡ và dáng câu giao (hai trường của LƯỢT CẮT: `vai`, `tieu_chi`) ─────────
 // Agent không đọc hai trường này; trang lộ trình cũng không. Thiếu khai chỉ vàng (đường đọc-cũ: lộ
@@ -278,13 +251,15 @@ export function dongHoCo(root, { khoang: k, tu = null, loTrinh = null }) {
     let luot = null;
     if (!DA_GIAO.has(st)) bo.chua_giao += 1;
     else { const u = doc(path.join(acc, slug, 'usage-report.md')); const n = u ? (u.match(LUOT_CHAM_RE) || []).length : 0; if (n) luot = n; else bo.khong_luot_cham += 1; }
-    chot.push({ slug, tc, luot });
+    chot.push({ slug, tc, luot, giu: !!CHD.dongGiu(doc(path.join(acc, slug, 'decisions.jsonl')) || '') });
   }
   const [dau, cuoi] = k.muc_tieu;
   const trong = (x, a, b) => x.tc >= a && (b == null || x.tc <= b);
   const nhom = [['duoi-muc-tieu', 1, dau - 1], ['muc-tieu', dau, cuoi], ['cho-phep', cuoi + 1, k.cho_phep_den], ['phai-tach', k.tach_tu, null]].map(([ten, a, b]) => {
     const g = chot.filter(x => trong(x, a, b)); const giao = g.filter(x => x.luot != null);
-    return { ten, tu: a, den: b, n_chot: g.length, ...thongKeLuot(giao, k), it_du_lieu: giao.length < k.it_du_lieu_duoi };
+    // n_giu: hồ sơ đã chốt của nhóm có dòng sổ «giữ cỡ» (vong-mo-thang-bang-feature-loop) — n_chot − n_giu ở
+    // nhóm phai-tach là số hợp đồng quá cỡ qua Cổng Phạm vi không lý do giữ có tên.
+    return { ten, tu: a, den: b, n_chot: g.length, n_giu: g.filter(x => x.giu).length, ...thongKeLuot(giao, k), it_du_lieu: giao.length < k.it_du_lieu_duoi };
   });
   let trongKhoang;
   if (!chot.length) trongKhoang = { n_chot: 0, chua_do_duoc: true };
@@ -304,7 +279,8 @@ export function dongHoCo(root, { khoang: k, tu = null, loTrinh = null }) {
 
 // ── Nhịp ──────────────────────────────────────────────────────────────────────
 // Số ngày từ lúc chốt phạm vi (approved_at, làn V thì veto_opened_at) tới ngày ký Cổng Bằng chứng
-// (chuỗi YYYY-MM-DD đầu tiên trong human_signoff — khuôn bên ghi của lệnh ký «<tên> <ngày>»).
+// (bộ đọc chung `ngayChuKy` của ho-so-tom-tat.cjs trên human_signoff — năm-tháng-ngày đầu tiên, vắng thì
+// ngày/tháng/năm).
 const ngayDau = s => { const m = String(s ?? '').match(/\d{4}-\d{2}-\d{2}/); return m ? m[0] : null; };
 const doc = p => { try { return readFileSync(p, 'utf8'); } catch { return null; } };
 // Ngày chốt phạm vi — MỘT bộ đọc cho nhịp và đồng hồ cỡ.
@@ -321,7 +297,7 @@ export function nhip(root) {
     tong += 1;
     const hang = chuoi(frontmatterField(c, 'risk_tier'));
     const dau = ngayChot(c);
-    const cuoi = ngayDau(ky);
+    const cuoi = ngayChuKy(ky);
     if (!dau || !cuoi || !(hang in ngay)) { boQua += 1; continue; }
     ngay[hang].push(Math.round((Date.parse(`${cuoi}T00:00:00Z`) - Date.parse(`${dau}T00:00:00Z`)) / 864e5));
   }
