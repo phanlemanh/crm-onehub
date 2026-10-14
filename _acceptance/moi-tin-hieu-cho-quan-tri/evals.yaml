@@ -88,6 +88,22 @@ evals:
       CHIEU DO: ban sao vua bo nhanh khong-quyen o tat-ca/page.tsx vua bo cau kiem vai cua tatCa -> o 4 do voi thong diep
       ghim "HTML mang du lieu tin hieu cho nguoi khong co quyen".
 
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mth_api
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/test/tin-hieu-tat-ca.spec.ts"
+    expected: |
+      tin-hieu-tat-ca.spec.ts describe "mth-khong-quyen": tren kho thu da gieo tin hieu cua ba nguoi, nguoi vai member
+      va vai okr goi tinHieu.tatCa qua tRPC va GET /rest/tin-hieu/tat-ca bang khoa cua chinh ho -> FORBIDDEN / 403, than
+      phan hoi KHONG chua tieu de hay ten nguoi gui nao trong danh sach chuoi gieo (so chuoi > 0); doi chung duong: cung
+      loi goi bang owner -> 200 va than CO chua cac chuoi do. Day la chot may cua ve «trang khong mang du lieu»: server
+      page khong co duong nao lay du lieu thay nguoi xem.
+      CHIEU DO: ban sao bo cau kiem vai cua tatCa -> do voi thong diep ghim "thanh vien doc duoc moi tin hieu".
+
   - id: E4
     criterion: AC-4
     executor: test

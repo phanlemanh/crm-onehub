@@ -1,0 +1,41 @@
+{
+  "feature_plain": "Chủ và quản trị CRM mở thẻ «Tất cả» trên trang Tín hiệu, thấy mọi tín hiệu kèm ai gửi, phòng ban nào, từ màn nào, đang ở đâu, và ba con số ngưỡng sống đọc ngay trên trang thay vì chạy lệnh.",
+  "will_do": [
+    {"id": "AC-3", "p": "Sẽ nói rõ «Chỉ chủ và quản trị CRM xem được mọi tín hiệu» khi người khác mở thẳng đường dẫn Tất cả, kèm nút về — và trang không mang dữ liệu tín hiệu nào của ai."},
+    {"id": "AC-4", "p": "Sẽ hiện mỗi tín hiệu một dòng: mã, điều đã kể, người gửi, phòng ban, màn, giờ gửi, trạng thái — trạng thái đúng như người gửi thấy ở thẻ Của tôi."},
+    {"id": "AC-6", "p": "Sẽ lọc được theo phòng ban, trạng thái, người gửi; bộ lọc nằm trên đường dẫn nên tải lại hay gửi link vẫn giữ."},
+    {"id": "AC-7", "p": "Sẽ có ba ô số đầu thẻ: tín hiệu 30 ngày qua, số phòng ban có tín hiệu, số tín hiệu quá 7 ngày chưa có chỗ — không in số giả khi chưa đọc được bản vẽ lộ trình."},
+    {"id": "AC-8", "p": "Sẽ đếm ba con số bằng đúng cách lệnh kéo về đếm, nên trang và lệnh ra cùng số; hai phòng ban trùng tên được đếm là hai."},
+    {"id": "AC-9", "p": "Sẽ báo trước trong hộp gửi: «Quản trị CRM thấy tên bạn cùng tín hiệu này.»"},
+    {"id": "AC-10", "p": "Sẽ có khung chờ, khung lỗi có Thử lại, trang rỗng, và đọc được trên điện thoại không cuộn ngang."},
+    {"id": "AC-11", "p": "Sẽ mang bản vẽ lộ trình vào bản dựng production của trang mới, để trạng thái và ô «chưa có chỗ» đọc được trên production."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn thanh thẻ «Của tôi · Tất cả» với người không phải chủ hay quản trị — trang của họ y như hôm nay."},
+    {"id": "AC-2", "p": "Chặn ở máy chủ: chỉ chủ và quản trị lấy được danh sách mọi tín hiệu; danh sách không mang thư điện tử ai và không đổi dấu «đã lấy về»."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG vỡ trang khi người gửi đã bị xoá, tín hiệu không có phòng ban, hay bản vẽ lộ trình thiếu — dòng nói rõ thiếu gì."},
+    {"id": "OOS-1", "p": "KHÔNG gỡ hay lưu trữ tín hiệu rác — đó là TH5."},
+    {"id": "OOS-2", "p": "KHÔNG làm kéo về tự chạy theo lịch — đó là TH1."},
+    {"id": "OOS-3", "p": "KHÔNG báo quản trị khi có tín hiệu mới — thuộc đợt hộp thông báo."},
+    {"id": "OOS-4", "p": "KHÔNG sửa các lỗi giao diện đã ghi của thẻ Của tôi — hàng riêng của đợt."},
+    {"id": "OOS-5", "p": "KHÔNG tìm theo chữ, xuất tệp, hay trả lời người gửi trong CRM."},
+    {"id": "OOS-6", "p": "KHÔNG mở cho trưởng phòng xem tín hiệu phòng mình — luật 14/10 chỉ mở cho quản trị."},
+    {"id": "OOS-7", "p": "KHÔNG đưa tên người gửi vào tệp tín hiệu trong git."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Vật trên thẻ Tất cả — danh sách, bộ lọc, ba ô số, thanh thẻ — đều có tiêu chí: AC-1 (thanh thẻ), AC-4 (dòng), AC-6 (lọc), AC-7 và AC-8 (ba số)."},
+    {"i": 1, "p": "Bốn vai và người gọi thẳng máy chủ đều được thử: chủ, quản trị xem được; thành viên, vai chỉ OKR bị chặn ở cả màn lẫn máy chủ (AC-1, AC-2, AC-3); mọi vai thấy câu báo trước (AC-9)."},
+    {"i": 2, "p": "Dòng thiếu dữ liệu — người gửi đã xoá, không phòng ban, bản vẽ thiếu hay hỏng — đều có ca (AC-4, AC-5, AC-7)."},
+    {"i": 3, "p": "Các ca của trang — rỗng, chờ, lỗi, điện thoại, lọc ra rỗng, bản dựng production — đều có ca (AC-6, AC-10, AC-11)."},
+    {"i": 4, "p": "Riêng tư: tên chỉ tới quản trị, tệp git không mang danh tính, chữ người nhập không bị dịch (AC-2, AC-3, AC-4, AC-8); nhật ký máy chủ soi ở review."},
+    {"i": 5, "p": "Đối chiếu ngành: bảng quản trị ý kiến của Canny và hộp ghi nhận của Productboard — phần cắt nằm ở bản quét."},
+    {"i": 6, "p": "Bản quét đầy đủ (làm ngay, để sau, không làm) nằm trong hồ sơ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Thiếu phép thử trang và lệnh kéo về THẬT trả cùng danh sách, cùng phòng ban; thiếu bước đối bản production với cây chạy lệnh — đã thêm ca thử trên máy chủ thật và bước đối chiếu vào đường đo."},
+    {"i": 1, "p": "Phép thử «thành viên không thấy dữ liệu» chỉ kiểm vắng mặt, không có đối chứng và không đỏ được khi phá — đã thêm đối chứng bằng tài khoản chủ và chiều phá đúng."},
+    {"i": 2, "p": "Phép thử lúc chờ/lỗi mâu thuẫn với thiết kế — đã chốt theo nếp trang Của tôi (tiêu đề ngoài vùng chờ, Thử lại tải lại danh sách) và viết lại phép thử."},
+    {"i": 3, "p": "Lựa chọn đếm phòng ban theo tên bị ghi «chỉ một lối» trong khi lối đếm theo mã vẫn sống — đã đổi sang đếm theo mã."},
+    {"i": 4, "p": "Lời hứa tệp git không mang danh tính chưa có phép thử — đã thêm vào AC-8 và một ca quét phản hồi kéo về."}
+  ]
+}
