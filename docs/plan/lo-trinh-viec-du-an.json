@@ -112,11 +112,26 @@
       "dung_tren": [
         "DA1"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đang dựng",
       "ten": "Kanban việc",
       "ten_ngan": "Kanban",
       "chay_khi": "DA1 đã gộp; chủ kho mở lại dòng «không làm: kéo thả bảng cột» của lộ trình 30 ngày",
       "ghi_chu": "Dùng chung thành phần kéo thả với hàng E3 (danh sách kéo thả chung) của lộ trình OKR. Thứ tự bằng khoá chèn giữa."
+    },
+    {
+      "ma": "DA2b",
+      "cau_giao": "«viec.bang và viec.con không lộ tiêu đề việc cha khi người xem không có quyền với việc cha»",
+      "vi_sao": "Ưu tiên cao — chủ kho chọn «mở hợp đồng mới» cho Ngoài-2 ở Cổng Bằng chứng của DA2 (14/10, gốc _acceptance/kanban-viec): người giao gỡ việc cha khỏi thoả thuận thì người làm việc con vẫn thấy tiêu đề của một việc riêng họ không được xem.",
+      "hang": "T2",
+      "slug": "viec-cha-khong-lo-tieu-de",
+      "dung_tren": [
+        "DA2"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Không lộ tiêu đề việc cha",
+      "ten_ngan": "Che việc cha",
+      "chay_khi": "DA2 đã gộp",
+      "ghi_chu": "Đọc cha trong viec.bang và viec.con qua dieuKienXemViec. Cùng họ với Ngoài-3 của DA2 (số việc con đếm cả con người xem không thấy), chủ kho ghi hạn chế — gộp vào lượt này nếu rẻ. Lên T3 nếu phải đổi luật thấy việc ở packages/db."
     },
     {
       "ma": "DA3",
