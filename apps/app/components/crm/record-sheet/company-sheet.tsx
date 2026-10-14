@@ -58,6 +58,7 @@ import {
 import { LocalDay } from "@/components/local-date-time";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
 import { useGiaiDoan } from "@/lib/giai-doan";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import { crmMessages } from "@/lib/messages/crm";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import {
@@ -79,7 +80,6 @@ import {
 	DealAmount,
 	DomainLink,
 	DongDaLuuTru,
-	lyDoLoi,
 	MetaLine,
 	RecordSheetFrame,
 	tenCaNhan,

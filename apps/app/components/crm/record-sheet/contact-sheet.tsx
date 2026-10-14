@@ -68,6 +68,7 @@ import {
 	giaTriTruoc,
 } from "@/lib/contact-facts";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import {
 	type RecordSheetMessages,
 	recordSheetMessages,
@@ -83,7 +84,6 @@ import {
 	BangDaLuuTru,
 	DealAmount,
 	DongDaLuuTru,
-	lyDoLoi,
 	MetaLine,
 	RecordSheetFrame,
 } from "./record-parts";

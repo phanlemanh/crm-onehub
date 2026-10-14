@@ -15,11 +15,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { TaoKeHoach } from "@/app/(app)/[slug]/onboarding/tao-ke-hoach";
 import { DetailSheetEmpty } from "@/components/detail-sheet";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { dien } from "./plan-copy";
-import { AddRow, KhungTaiLoi, lyDoLoi } from "./record-parts";
+import { AddRow, KhungTaiLoi } from "./record-parts";
 import { useOpenRecord } from "./record-stack";
 
 type HangKeHoach = RouterOutputs["onboarding"]["plansOfCompany"][number];
