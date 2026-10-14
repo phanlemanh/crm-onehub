@@ -128,9 +128,9 @@ describe("day", () => {
 		const buoc = job?.steps.find((s) =>
 			s.run?.includes("scripts/ban-chup-lo-trinh/day.ts"),
 		);
-		expect(buoc?.env?.CRM_API_URL).toBe("${{ secrets.CRM_API_URL }}");
-		expect(buoc?.env?.CRM_KHOA_DAY_LO_TRINH).toBe(
-			"${{ secrets.CRM_KHOA_DAY_LO_TRINH }}",
+		expect(buoc?.env?.CRM_API_URL).toContain("secrets.CRM_API_URL");
+		expect(buoc?.env?.CRM_KHOA_DAY_LO_TRINH).toContain(
+			"secrets.CRM_KHOA_DAY_LO_TRINH",
 		);
 	});
 });

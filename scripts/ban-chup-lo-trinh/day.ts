@@ -94,7 +94,7 @@ if (import.meta.main) {
 	const goc = path.resolve(import.meta.dir, "..", "..");
 	const git = (...thamSo: string[]) =>
 		spawnSync("git", thamSo, { cwd: goc, encoding: "utf8" }).stdout.trim();
-	const sha = process.env.GITHUB_SHA ?? git("rev-parse", "HEAD");
+	const sha = git("rev-parse", "HEAD");
 	const ma = await day({
 		goc,
 		env: process.env,
