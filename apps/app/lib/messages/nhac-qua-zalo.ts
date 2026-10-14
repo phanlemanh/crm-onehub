@@ -64,8 +64,8 @@ const en = {
 		luuLoi: "Could not save your choice. Try again.",
 	},
 	troLy: {
-		tieuDe: "OKR assistant",
-		dongTomTat: "The OKR assistant's weekly summary line",
+		tieuDe: "Kara · OKR",
+		dongTomTat: "Kara's weekly summary line",
 		dongTomTatMoTa: "One line a week, when your department has a new summary",
 	},
 	ketNoi: {
@@ -199,8 +199,8 @@ const vi = {
 		luuLoi: "Không lưu được lựa chọn. Thử lại.",
 	},
 	troLy: {
-		tieuDe: "Trợ lý OKR",
-		dongTomTat: "Dòng Tóm tắt tuần của Trợ lý OKR",
+		tieuDe: "Kara · OKR",
+		dongTomTat: "Dòng Tóm tắt tuần của Kara",
 		dongTomTatMoTa: "Mỗi tuần một dòng, khi phòng bạn có tóm tắt mới",
 	},
 	ketNoi: {

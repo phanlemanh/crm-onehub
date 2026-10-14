@@ -38,7 +38,7 @@ const en = {
 		title: "New company",
 		newButton: "New company",
 		description:
-			"Give it a name and a domain. The agent fills in the logo, description, industry, address and socials.",
+			"Give it a name and a domain. Kara fills in the logo, description, industry, address and socials.",
 		name: "Name",
 		namePlaceholder: "Stripe",
 		domain: "Domain",
@@ -100,7 +100,7 @@ const vi = {
 		title: "Công ty mới",
 		newButton: "Công ty mới",
 		description:
-			"Chỉ cần tên và tên miền. Tác nhân sẽ tự điền logo, mô tả, ngành, địa chỉ và mạng xã hội.",
+			"Chỉ cần tên và tên miền. Kara sẽ tự điền logo, mô tả, ngành, địa chỉ và mạng xã hội.",
 		name: "Tên",
 		namePlaceholder: "Đất Xanh",
 		domain: "Tên miền",

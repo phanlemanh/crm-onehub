@@ -31,7 +31,7 @@ const en = {
 	},
 	chung: {
 		tieuDe: "General",
-		moTa: "Who you are, and the model the research agent thinks with.",
+		moTa: "Who you are, and the model Kara thinks with.",
 	},
 	truong: {
 		tieuDe: "Fields",
@@ -52,8 +52,8 @@ const en = {
 		daLuu: "Workspace saved.",
 	},
 	model: {
-		tieuDe: "Research agent",
-		moTa: "The model the agent thinks with, routed through the Vercel AI Gateway.",
+		tieuDe: "Kara · records",
+		moTa: "The model Kara thinks with, routed through the Vercel AI Gateway.",
 		nhan: "Model",
 		tim: "Search models…",
 		khongKhop: "No model matches that.",
@@ -62,10 +62,10 @@ const en = {
 		nguCanhTrieu: (so: string) => `${so}M context`,
 		nguCanhNghin: (so: string) => `${so}K context`,
 		khongVoiToi: (ma: string) =>
-			`Could not reach the AI Gateway to list models. The agent is still running ${ma}.`,
-		daLuu: "The agent will use this model from its next session.",
-		khongDuQuyen: "Only an owner or an admin can change the agent's model.",
-		biGo: "The model you chose is no longer on the AI Gateway — the agent is running the default model. Pick another model.",
+			`Could not reach the AI Gateway to list models. Kara is still running ${ma}.`,
+		daLuu: "Kara will use this model from its next session.",
+		khongDuQuyen: "Only an owner or an admin can change Kara's model.",
+		biGo: "The model you chose is no longer on the AI Gateway — Kara is running the default model. Pick another model.",
 	},
 	luuTru: {
 		tieuDe: "Archived records",
@@ -80,7 +80,7 @@ const en = {
 	},
 	nghienCuu: {
 		tieuDe: "Company research",
-		moTa: "Enter your Context API key so our agents can research every company in OneHub Center.",
+		moTa: "Enter your Context API key so Kara can research every company in OneHub Center.",
 		nhan: "Context API key",
 		goiY: "Paste the key",
 		daCam: "Connected",
@@ -220,7 +220,7 @@ const vi = {
 	},
 	chung: {
 		tieuDe: "Chung",
-		moTa: "OneHub là ai, và tác nhân nghiên cứu nghĩ bằng model nào.",
+		moTa: "OneHub là ai, và Kara nghĩ bằng model nào.",
 	},
 	truong: {
 		tieuDe: "Trường",
@@ -241,8 +241,8 @@ const vi = {
 		daLuu: "Đã lưu.",
 	},
 	model: {
-		tieuDe: "Tác nhân nghiên cứu",
-		moTa: "Model tác nhân dùng để nghĩ, đi qua Vercel AI Gateway.",
+		tieuDe: "Kara · hồ sơ",
+		moTa: "Model Kara dùng để nghĩ, đi qua Vercel AI Gateway.",
 		nhan: "Model",
 		tim: "Tìm model…",
 		khongKhop: "Không model nào khớp.",
@@ -252,10 +252,10 @@ const vi = {
 		nguCanhTrieu: (so: string) => `ngữ cảnh ${so} triệu token`,
 		nguCanhNghin: (so: string) => `ngữ cảnh ${so} nghìn token`,
 		khongVoiToi: (ma: string) =>
-			`Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy ${ma}.`,
-		daLuu: "Tác nhân sẽ dùng model này từ lượt chạy sau.",
+			`Không với tới AI Gateway để lấy danh sách model. Kara vẫn đang chạy ${ma}.`,
+		daLuu: "Kara sẽ dùng model này từ lượt chạy sau.",
 		khongDuQuyen: "Chỉ chủ sở hữu hoặc quản trị mới đổi được model.",
-		biGo: "Model đã chọn không còn trên AI Gateway — tác nhân đang chạy model mặc định. Chọn model khác.",
+		biGo: "Model đã chọn không còn trên AI Gateway — Kara đang chạy model mặc định. Chọn model khác.",
 	},
 	luuTru: {
 		tieuDe: "Bản ghi đã xoá",
@@ -269,7 +269,7 @@ const vi = {
 	},
 	nghienCuu: {
 		tieuDe: "Nghiên cứu công ty",
-		moTa: "Nhập khoá API Context để tác nhân nghiên cứu được mọi công ty trong OneHub Center.",
+		moTa: "Nhập khoá API Context để Kara nghiên cứu được mọi công ty trong OneHub Center.",
 		nhan: "Khoá API Context",
 		goiY: "Dán khoá vào đây",
 		daCam: "Đã cắm",

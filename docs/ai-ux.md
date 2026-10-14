@@ -148,5 +148,6 @@ variant="docked"`, cỡ sheet `kara`.
 | `bo-xuong-kara` | T2 | Sáu khối trong `packages/ui/src/components/kara/` và một nút «Thử lại»; ba điểm cắm cho Soạn OKR trang riêng (co giãn trong thanh kéo, khoá khi Kara đang soạn, nhận theo nhóm); chưa nối màn nào trước 14/10 |
 | `soan-okr-trang-rieng` | T2 | K2 — Soạn OKR thành trang riêng `/okr/soan/<cuộc>`: hội thoại `KaraTranscript` + `KaraComposer` cạnh bản nháp `KaraArtifact` (hai ô co giãn từ 1024 px, hai tab dưới đó); dòng đề xuất inline với Thêm · Sửa · Bỏ qua · Hỏi Kara, nhận cả nhóm, biên nhận có Hoàn tác về lần nộp mới nhất; khoá khi Kara đang soạn; mốc mỗi lần nộp nối hai chiều với dòng đổi; dòng hệ thống báo quyết sẽ gửi kèm. Màn đầu tiên dùng cả sáu khối |
 | `tac-tu-xin-duyet` | T3 | Tab bản ghi: công cụ ghi thành đề xuất |
+| `kara-mot-ten` | T2 | K6a — Đã làm phần chữ: 118 chuỗi gọi AI bằng tên khác (kiểm kê `_acceptance/kara-mot-ten/kiem-ke.json`) thành «Kara» trên tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu và câu Zalo; luật máy `apps/app/test/kara-mot-ten.spec.ts` chặn tên cũ quay lại. Lời mô hình tự xưng tách hàng riêng |
 
 Bản mẫu: `/proto/gop-y-dung-cho`.
