@@ -1160,6 +1160,15 @@ Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sa
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
 được nhận làm, còn tín hiệu chưa hứa gì.
 
+**Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
+của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè
+bản cũ, không giữ lịch sử. Trang Lộ trình đọc bản chụp khi nó mới hơn bản CRM đang chạy, và
+đọc lộ trình đóng sẵn trong bản dựng khi không — người xem thấy chữ «bản dựng» cạnh giờ lấy.
+Đề xuất 2026-10-14 (LT1c `lo-trinh-doc-ban-chup`), chốt tại Cổng Phạm vi.
+_Avoid_: bản sao, cache, snapshot
+Vì sao: «bản sao» gợi một bản người tự chép tay; «cache» là chuyện kỹ thuật của trang, không
+nói bản này đến từ đâu và lấy lúc nào.
+
 **Báo sai**: một người đã hỏi đánh dấu câu trả lời của trợ lý AI là sai, kèm ghi chú
 nếu muốn. Mỗi trang được trích nhận một việc trong danh sách «Bị báo sai» của chủ trang;
 chủ trang đóng việc bằng một kết luận: «Trợ lý trả lời sai» hay «Trợ lý trả lời đúng theo
