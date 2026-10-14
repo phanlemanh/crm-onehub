@@ -5,12 +5,12 @@ slug: ba-ho-so-do-san
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: draft
+status: approved
 veto_state: mo
 veto_opened_at: 2026-10-14T04:04:52Z
 design_doc: docs/superpowers/specs/2026-10-13-ba-ho-so-do-san-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-10-14T04:39:44Z
 ---
 
 # Acceptance Contract: ba-ho-so-do-san

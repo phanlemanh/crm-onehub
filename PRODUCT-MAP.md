@@ -7,11 +7,11 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>18 việc"]
+  GD --> B["Sắp mở vòng<br/>17 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>140 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>102 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -37,7 +37,6 @@ flowchart TD
 
 ## Sắp mở vòng
 
-- Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
 - Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
 - Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360 (`chu-man-tieng-viet-khong-tran`)
 - Căn chỉnh gắn bằng tay và căn chỉnh Kara đề xuất đều mang lý do (`gan-tay-va-kara-co-ly-do`)
@@ -58,6 +57,7 @@ flowchart TD
 
 ## Đang làm
 
+- Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
