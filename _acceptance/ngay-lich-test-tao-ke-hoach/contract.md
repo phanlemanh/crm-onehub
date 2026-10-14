@@ -5,7 +5,7 @@ slug: ngay-lich-test-tao-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: machine-cleared
 approved_by: Phan Le Manh
 approved_at: 2026-10-14T21:53:24Z
 design_doc: docs/superpowers/specs/2026-10-15-ngay-lich-test-tao-ke-hoach-design.md
