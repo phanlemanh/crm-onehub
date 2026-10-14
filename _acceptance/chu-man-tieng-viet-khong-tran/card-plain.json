@@ -1,5 +1,5 @@
 {
- "feature_plain": "Người dùng trình đọc màn hình nghe breadcrumb (dòng chỉ chỗ đang đứng) phía trên mỗi màn đọc bằng tiếng Việt; và ở Cài đặt › Trường trên điện thoại, nhãn kiểu của từng trường hiện trọn chữ thay vì tràn ra ngoài ô.",
+ "feature_plain": "Người dùng trình đọc màn hình nghe breadcrumb (dòng chỉ chỗ đang đứng) đọc «Vị trí trang» ở giao diện tiếng Việt; ở Cài đặt › Trường trên điện thoại, nhãn kiểu của từng trường hiện tên ngắn trọn chữ, mép phải thẳng, tên trường dài bị cắt trước nhãn.",
  "will_do": [
   {
    "id": "AC-1",
