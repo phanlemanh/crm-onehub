@@ -38,6 +38,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { InlineSelectField } from "@/components/crm/inline-field";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import {
 	DetailSheetBody,
 	DetailSheetEmpty,
@@ -45,6 +46,7 @@ import {
 	DetailSheetProperty,
 	DetailSheetSection,
 } from "@/components/detail-sheet";
+import { TrangThaiViecNhan } from "@/components/viec/trang-thai-viec";
 import { crmMessages } from "@/lib/messages/crm";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { quaHan } from "@/lib/qua-han";
@@ -164,6 +166,13 @@ function DongBuoc({
 					{buoc.label}
 				</span>
 				{tre ? <Badge variant="outline">{m.overdue}</Badge> : null}
+				{buoc.viecId !== null && buoc.viecTrangThai !== null ? (
+					<ChipViecCuaBuoc
+						viecId={buoc.viecId}
+						trangThai={buoc.viecTrangThai}
+						nhan={dien(m.moViecCuaBuoc, { nhan: buoc.label })}
+					/>
+				) : null}
 			</span>
 			<Combobox
 				aria-label={dien(m.assignTo, { nhan: buoc.label })}
@@ -535,5 +544,29 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 				</DetailSheetSection>
 			) : null}
 		</DetailSheetBody>
+	);
+}
+
+// Bước tạo sau DA3 mang một Việc: chip trạng thái của Việc, bấm mở khung Việc (design 2026-10-14).
+function ChipViecCuaBuoc({
+	viecId,
+	trangThai,
+	nhan,
+}: {
+	viecId: string;
+	trangThai: Parameters<typeof TrangThaiViecNhan>[0]["trangThai"];
+	nhan: string;
+}) {
+	const open = useOpenRecord();
+	return (
+		<button
+			type="button"
+			className="shrink-0"
+			aria-label={nhan}
+			data-viec-cua-buoc={viecId}
+			onClick={() => open({ kind: "viec", id: viecId })}
+		>
+			<TrangThaiViecNhan trangThai={trangThai} />
+		</button>
 	);
 }

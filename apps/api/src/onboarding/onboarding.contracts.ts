@@ -20,6 +20,7 @@ export const departmentOutput = z.object({
 	position: z.number(),
 	archivedAt: z.date().nullable(),
 	purgeable: z.boolean(),
+	headUserId: z.string().nullable(),
 });
 
 export const departmentListOutput = z.array(departmentOutput);

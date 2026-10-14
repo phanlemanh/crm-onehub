@@ -82,6 +82,7 @@ const CHON_BO_PHAN = {
 	name: true,
 	position: true,
 	archivedAt: true,
+	headUserId: true,
 	_count: { select: { steps: true, primaryOf: true } },
 } as const;
 
@@ -90,6 +91,7 @@ type HangBoPhan = {
 	name: string;
 	position: number;
 	archivedAt: Date | null;
+	headUserId: string | null;
 	_count: { steps: number; primaryOf: number };
 };
 
@@ -105,6 +107,7 @@ function boPhanRa(
 		name: row.name,
 		position: row.position,
 		archivedAt: row.archivedAt,
+		headUserId: row.headUserId,
 		purgeable:
 			row.archivedAt !== null &&
 			lyDoKhongXoaPhongBan({
