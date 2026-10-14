@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 83c2a95ecc9d37bc3233e8b3ca4c5fffc6dc7787
+verified_commit: c2fd454bd341049a7b949ed31ef862d74a3aabaf
 human_signoff: manh 2026-10-14
 ---
 
@@ -276,3 +276,7 @@ none — mọi eval chạy một lần, kết quả đồng nhất.
 Round 1: trả về sửa — thước kéo thả đi qua đường thả thật của Board; ca rỗng đòi đủ bốn cột; dòng Xong cũ so con số và đích tới (commit e979f5449).
 Round 2: bị REJECT vì lần thả trong thước DOM tự ráp sự kiện; sửa bằng cách cho thước đi qua kéo phím thật của dnd-kit (commit b225c47ce).
 Round 3: chạy lại E1, E1b, E4, E4b, E6b, E7b, E9b cùng bảy lệnh suite, tất cả xanh; mười một eval còn lại carry từ round 1; E12 giữ panel round 2. Verdict PENDING-JUDGMENT vì E12 chờ người chốt. Lưu ý: verified_at của khối r3 ghi theo ngày chạy (2026-10-14), máy không cấp dấu giờ.
+
+### Re-pin lần 1 — 2026-10-14, do gộp onehub c4c8ab0ab (l3b #391), dời mốc migration, đổi tên khung xương bản mẫu theo luật NM1
+run_id: repin-20261014T044129Z-34587
+sha: c2fd454bd341049a7b949ed31ef862d74a3aabaf · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 (E12 không khai paths) · AC không có chốt máy: AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
