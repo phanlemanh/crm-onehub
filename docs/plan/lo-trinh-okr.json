@@ -1773,6 +1773,253 @@
       "trang_thai": "chưa mở"
     },
     {
+      "ma": "TH4",
+      "slug": "moi-tin-hieu-cho-quan-tri",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 441,
+      "dung_tren": [
+        "LT2"
+      ],
+      "ten": "Mọi tín hiệu cho quản trị",
+      "ten_ngan": "Mọi tín hiệu",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Quản trị mở thẻ Tất cả của trang Tín hiệu và thấy ai đã gửi, phòng ban nào, từ màn nào, đang ở đâu, cùng ba con số của ngưỡng sống»",
+      "vai": "Quản trị",
+      "tieu_chi": 9,
+      "vi_sao": "Hôm nay mỗi người chỉ thấy tín hiệu của mình; quản trị chỉ có vài dòng tổng kết trong terminal sau lệnh kéo về, không thấy tên ai. Cần thấy để hỏi lại người gửi và để đo ngưỡng sống của LT2 trên màn hình.",
+      "bat_khi": "Ở ngày đo 30 ngày của LT2, chủ kho đọc ba con số trên trang thay vì chạy lệnh; số khớp dòng tổng kết của lệnh kéo về (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Luật riêng tư chủ kho chốt 14/10: quản trị (chủ, quản trị) thấy tên người gửi; hộp gửi báo trước «Quản trị CRM thấy tên bạn cùng tín hiệu này»; người khác vẫn chỉ thấy tín hiệu của mình; tệp tín hiệu trong git vẫn không mang danh tính. Thẻ con «Của tôi · Tất cả» trên cùng trang, cùng quyền với lệnh kéo về.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "Q1",
+        "Q2",
+        "Q3"
+      ]
+    },
+    {
+      "ma": "TH5",
+      "slug": "go-tin-hieu-rac",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 441.5,
+      "dung_tren": [
+        "TH4"
+      ],
+      "ten": "Gỡ tín hiệu rác",
+      "ten_ngan": "Gỡ tín hiệu rác",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Quản trị lưu trữ một tín hiệu rác trước khi đội sản phẩm lấy về, và hoàn tác được nếu lỡ tay»",
+      "vai": "Quản trị",
+      "tieu_chi": 8,
+      "vi_sao": "Tín hiệu rác (thử, trùng, nhầm) vào thẳng lượt gom và làm nhiễu con số ngưỡng sống; hợp đồng LT2 đã để phần này ngoài phạm vi.",
+      "bat_khi": "Lượt kéo về đầu tiên sau khi giao không mang tín hiệu nào đã lưu trữ; mỗi lần gỡ có vết người gỡ (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TH4 theo luật cắt 3: phần xem là quyền, phần gỡ thêm trường dữ liệu (hạng T3). Lưu trữ có Hoàn tác theo docs/vong-doi.md, không xoá hẳn.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "Q4"
+      ]
+    },
+    {
+      "ma": "TH1",
+      "slug": "tin-hieu-tu-ve-kho",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 442,
+      "dung_tren": [
+        "LT2"
+      ],
+      "ten": "Tín hiệu tự về kho",
+      "ten_ngan": "Tự về kho",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Người gửi tín hiệu hôm nay thì sáng mai thấy trang của mình đã đổi sang Đội sản phẩm đã nhận, mà không ai phải chạy lệnh»",
+      "vai": "Người gửi tín hiệu",
+      "tieu_chi": 10,
+      "vi_sao": "Bước kéo về hôm nay là lệnh tay bằng khoá quyền chủ và chưa chạy lần nào: 5 tín hiệu trên production (crm-1 đến crm-5) đang nằm ở «Chờ lấy về», vòng tín hiệu chưa từng khép.",
+      "bat_khi": "Hai tuần liền mỗi ngày có một lượt kéo; không tín hiệu nào nằm ở «Chờ lấy về» quá một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Khoá chỉ được kéo tín hiệu thay khoá quyền chủ (khoá quyền chủ quá rộng để cất trong lịch chạy); chủ kho tạo khoá một lần. Lượt kéo chỉ chạm thư mục tín hiệu nên khai T1 để tự gộp.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "K1",
+        "K2"
+      ]
+    },
+    {
+      "ma": "TB1",
+      "slug": "hop-thong-bao-tren-web",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 443,
+      "ten": "Hộp thông báo trên web",
+      "ten_ngan": "Hộp thông báo",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Người dùng CRM thấy mọi điều CRM muốn báo ở chuông trên đầu trang, biết số chưa đọc và bấm vào là tới đúng chỗ cần làm»",
+      "vai": "Người dùng CRM",
+      "tieu_chi": 10,
+      "vi_sao": "CRM chỉ đẩy thông báo ra Zalo hoặc Slack và không lưu thông báo ở đâu: người chưa nối Zalo không biết có việc, người đã nối thấy thông báo trôi trong chat, và chủ kho không có hàng đợi «việc cần tôi quyết».",
+      "bat_khi": "Một tháng sau khi giao, người chưa nối Zalo hay Slack vẫn nhận mọi thông báo trên web (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Nền chung cho mọi thông báo (TH2, TH3, thẻ cổng một chạm sau này). Thêm bảng dữ liệu nên hạng T3.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "N1",
+        "N2"
+      ]
+    },
+    {
+      "ma": "TB2",
+      "slug": "thong-bao-mot-nguon-nhieu-kenh",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 443.5,
+      "dung_tren": [
+        "TB1"
+      ],
+      "ten": "Một thông báo, nhiều kênh",
+      "ten_ngan": "Nhiều kênh",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Người dùng CRM thấy thông báo nhận qua Zalo cũng nằm trong chuông, và tự chọn loại nào được đẩy qua kênh nào»",
+      "vai": "Người dùng CRM",
+      "tieu_chi": 10,
+      "vi_sao": "Zalo và Slack đang là đường đi riêng của tác nhân; rẽ chúng từ cùng bản ghi thì đã đọc ở một nơi là đủ, và người dùng tự chọn để không bị nhiễu.",
+      "bat_khi": "Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TB1 theo luật cắt 4 (cỡ một vòng). Đổi cài đặt thông báo có thể chạm bảng dữ liệu cài đặt nên để hạng T3; giữ nguyên hồ sơ Zalo đã ký.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "N3",
+        "N4"
+      ]
+    },
+    {
+      "ma": "TH2",
+      "slug": "gom-tin-hieu-tu-chay",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 444,
+      "dung_tren": [
+        "TH1",
+        "TB1"
+      ],
+      "ten": "Gom tín hiệu tự chạy",
+      "ten_ngan": "Gom tự chạy",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Chủ kho nhận trong ngày một đợt gom đề xuất sẵn nhóm và hàng mỗi khi có tín hiệu mới, và chỉ cần sửa hay phủ quyết»",
+      "vai": "Chủ kho",
+      "tieu_chi": 8,
+      "vi_sao": "Gom nhóm và cắt lượt hôm nay cần người mở phiên máy và gõ lệnh; đây là chỗ thứ hai của vòng chưa ai làm.",
+      "bat_khi": "Mỗi tín hiệu kéo về có chỗ trong bản gom trong vòng 2 ngày; chủ kho sửa ít hơn một nhóm trên năm (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Phần chạy theo lịch của skill gom và cắt lượt thuộc kit — sửa ở kho kit qua chip riêng, crm chỉ khai lịch và nhận PR. Quản trị nhận «Có n tín hiệu mới» qua TB1.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "G1",
+        "N5"
+      ]
+    },
+    {
+      "ma": "TH3",
+      "slug": "trang-thai-tin-hieu-song",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 445,
+      "dung_tren": [
+        "TH1",
+        "TB1",
+        "LT1c"
+      ],
+      "ten": "Trạng thái tín hiệu sống",
+      "ten_ngan": "Trạng thái sống",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Người gửi tín hiệu được báo trong ngày khi tín hiệu của mình đổi chỗ, và mở ra thấy câu dễ hiểu»",
+      "vai": "Người gửi tín hiệu",
+      "tieu_chi": 9,
+      "vi_sao": "Người gửi không được báo khi tín hiệu đổi chỗ, phải tự mở trang; trạng thái lại đi theo bản dựng production nên thêm độ trễ dựng và cửa sổ gộp.",
+      "bat_khi": "Một tháng sau khi giao, người gửi nhận thông báo cho mọi lần tín hiệu đổi chỗ trong vòng một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Đọc trạng thái từ bản chụp của LT1c (sửa 14/10: phần «nguồn sống» chuyển sang LT1c).",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "S1",
+        "S2"
+      ]
+    },
+    {
+      "ma": "TH6",
+      "slug": "sua-giao-dien-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 445.5,
+      "dung_tren": [
+        "LT2"
+      ],
+      "ten": "Sửa giao diện tín hiệu",
+      "ten_ngan": "Sửa giao diện",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Người gửi tín hiệu đọc rõ hộp gửi và trang Tín hiệu đã gửi ở mọi khổ màn và mọi ngôn ngữ, thấy lỗi báo đúng chỗ, và đóng biên nhận không bị hỏi lại»",
+      "vai": "Người gửi tín hiệu",
+      "tieu_chi": 10,
+      "vi_sao": "Lượt rà giao diện trên production 14/10 thấy tám lỗi; năm lỗi đã ghi thành tín hiệu crm-1 đến crm-5.",
+      "bat_khi": "Lượt rà lại trên production không còn lỗi nào trong tám lỗi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TH3 theo luật cắt 1 (một câu giao một kết quả). Không đứng trên hàng nào của đợt — máy nào rảnh làm trước được.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "U1",
+        "U2",
+        "U3",
+        "U4",
+        "U5",
+        "U6",
+        "U7",
+        "U8"
+      ]
+    },
+    {
+      "ma": "LT1c",
+      "slug": "lo-trinh-doc-ban-chup",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 446,
+      "dung_tren": [
+        "LT1"
+      ],
+      "ten": "Lộ trình đọc bản chụp",
+      "ten_ngan": "Bản chụp lộ trình",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Trưởng phòng ban mở trang Lộ trình và thấy đúng lộ trình mới nhất của nhánh chính, kèm giờ lấy, mà trang không phải chờ một bản dựng production»",
+      "vai": "Trưởng phòng ban",
+      "tieu_chi": 8,
+      "vi_sao": "Trang hôm nay đọc tệp đóng gói lúc dựng, nên chỉ đọc được đúng một kho. Với riêng kho CRM, đọc bản chụp chỉ bớt được vài phút dựng và tách trang khỏi cửa sổ gộp; giá trị chính là làm nền cho lộ trình nhiều sản phẩm (LT3).",
+      "bat_khi": "Hai tuần sau khi giao, mọi lần đổi lộ trình trên nhánh chính hiện trên trang trong vòng 10 phút, không lần nào trang đứng ở bản cũ quá một giờ (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Lưu bản chụp ở đâu (bảng dữ liệu hay kho tệp) chốt ở Cổng Phạm vi; thêm bảng dữ liệu nên tạm xếp T3. TH3 đọc trạng thái tín hiệu từ cùng bản chụp này.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "L1"
+      ]
+    },
+    {
+      "ma": "LT3",
+      "slug": "lo-trinh-nhieu-san-pham",
+      "hang": "T3",
+      "nhom": "crm-chung",
+      "thu_tu": 447,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Lộ trình nhiều sản phẩm",
+      "ten_ngan": "Nhiều sản phẩm",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Chủ kho chọn OneHub Platform hay một sản phẩm khác ngay trên trang Lộ trình của OneHub Center và đọc lộ trình, tiến độ, hồ sơ của sản phẩm đó như của CRM»",
+      "vai": "Chủ kho",
+      "tieu_chi": 10,
+      "vi_sao": "Chủ kho chốt 14/10: OneHub Center là nơi vận hành, đọc lộ trình của mọi kho sản phẩm cùng kiến trúc kit. Khuôn dữ liệu đã chung (kho kit cũng vẽ cùng khuôn); còn thiếu danh bạ sản phẩm, quyền đọc kho, bộ chọn sản phẩm và quyền xem.",
+      "bat_khi": "Kho thứ hai (OneHub Platform hoặc kho kit) hiện đủ trên trang trong ngày cài, và người không có quyền với sản phẩm đó không thấy nó (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Điều kiện: kho sản phẩm cài kit và khai lộ trình. Ứng dụng GitHub chỉ đọc, cài vào từng kho, không dùng khoá cá nhân. Chạm quyền truy cập kho ngoài nên hạng T3. Bản phác kiến trúc: hình «Đích» gửi chủ kho 14/10. Đề xuất cấu hình (chủ kho hỏi 14/10, chốt ở Cổng Phạm vi): CRM là mục cố định khai trong mã, ở tệp cấu hình của vùng lộ trình — luôn có, không xoá được, rơi về tệp đóng gói khi bản chụp hỏng hay chưa cài ứng dụng GitHub; sản phẩm khác do quản trị khai động trong Cài đặt.",
+      "dot": "vong-tin-hieu-1410",
+      "phu": [
+        "L2",
+        "L3",
+        "L4",
+        "L5"
+      ]
+    },
+    {
       "ma": "F8",
       "slug": "neo-thuoc-het-han",
       "hang": "T2",
@@ -2088,6 +2335,130 @@
       "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
+      "ma": "DH1",
+      "slug": "dieu-huong-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104,
+      "dung_tren": [],
+      "ten": "Điều hướng khu Mục tiêu",
+      "ten_ngan": "Khung Mục tiêu",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Tôi bấm Mục tiêu trên thanh bên thì gặp trang tên Mục tiêu, nút Thêm mục tiêu ở góc phải như Thoả thuận, và đổi thẻ không mất đơn vị đang xem»",
+      "vai": "Mọi người dùng OKR",
+      "vi_sao": "Đo trên production 14/10: tiêu đề đổi theo từng thẻ (5 tên) và khác tên «Mục tiêu» trên thanh bên; nút «Thêm mục tiêu» nằm giữa thân, cách mép phải 360–425px trong khi Thoả thuận, Công ty, Tài liệu là 0px; đổi thẻ chỉ giữ chu kỳ, mất đơn vị và cách xem.",
+      "bat_khi": "Năm người dùng thử tìm nút tạo mục tiêu và quay lại đúng đơn vị sau khi đổi thẻ, mỗi việc dưới 5 giây (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Bản mẫu /proto/dieu-huong-okr (nhánh feat/dieu-huong-okr) đo khớp Thoả thuận, Công ty, Tài liệu ở 9/9 tiêu chí. Câu cho Cổng 1: «Nhập từ bảng tính» và «Soạn cùng Trợ lý» gom vào nút «…» hay để «Soạn cùng Trợ lý» thành nút viền hiện sẵn như Tài liệu. Dòng lý do khoá theo luật «Không đủ quyền» của docs/settings.md, cùng cách trang Tổ chức.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "A1",
+        "A2",
+        "A4",
+        "A5",
+        "A6"
+      ]
+    },
+    {
+      "ma": "DH2",
+      "slug": "trang-don-vi-mot-bang",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.1,
+      "dung_tren": [
+        "DH1"
+      ],
+      "ten": "Trang đơn vị một bảng",
+      "ten_ngan": "Trang đơn vị",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Tôi chọn đơn vị bằng ô tìm kiếm và đọc mục tiêu của nó trong một bảng như Thoả thuận, mở từng mục tiêu ra KR»",
+      "vai": "Trưởng đơn vị và người phụ trách KR",
+      "vi_sao": "Trang «Theo đơn vị» hôm nay chồng sáu lớp điều khiển, có cột cây đơn vị rộng 288px không màn nào khác có, cách xem và chip lọc nằm hai hàng khác nhau, bộ nút đổi theo cách xem. Trên điện thoại cây hiện nguyên 20 dòng lúc tải rồi mới thu thành ô chọn. «Đặt cược» và «Chưa có lý do» không tự giải thích.",
+      "bat_khi": "Năm người dùng thử tìm OKR của một đơn vị bất kỳ dưới 10 giây và ít lần bấm hơn trên màn hôm nay (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Dựng trên DataTable của packages/ui (dòng mở rộng một cấp, trạng thái mở ở ?expand=), không cài data-grid của ReUI theo docs/reui.md. Bản mẫu đo 69px từ hàng thẻ tới bảng, bằng Thoả thuận và Công ty. Câu cho Cổng 1: bấm dòng mở KR thì mở ngăn chi tiết mục tiêu bằng đâu (đề xuất: tên mục tiêu). Cây căn chỉnh rời trang này ở hàng DH4, không ở đây, để không lúc nào mất cách nhìn căn chỉnh toàn công ty.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B6",
+        "B7",
+        "B8"
+      ]
+    },
+    {
+      "ma": "DH3",
+      "slug": "cua-toi-ba-phan",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.2,
+      "dung_tren": [
+        "DH1"
+      ],
+      "ten": "Của tôi ba phần",
+      "ten_ngan": "Của tôi",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Trưởng đơn vị mở Của tôi và thấy ngay KR cần cập nhật tuần này, đơn vị mình dẫn và KR mình phụ trách»",
+      "vai": "Trưởng đơn vị",
+      "vi_sao": "«Của tôi» hôm nay chỉ liệt kê mục tiêu người đó phụ trách; trưởng đơn vị không là người phụ trách mục tiêu nào thì thấy trang trống dù đang dẫn cả đơn vị. Cách làm phổ biến (Perdoo): OKR thuộc đơn vị, trưởng là người dẫn, «Của tôi» là hộp việc.",
+      "bat_khi": "Trưởng đơn vị gửi cập nhật tuần từ «Của tôi» mà không mở thẻ khác, ở ít nhất 80% lượt cập nhật của hai tuần đầu (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Bỏ thẻ «Cập nhật tuần» (A3) ở hàng này vì hành động cập nhật dời vào đây; bỏ trước thì mất lối vào. Mô hình dữ liệu đã đúng hướng (mục tiêu có đơn vị và một người phụ trách, trưởng sửa được đơn vị mình và đơn vị con); chỉ đọc thêm «đơn vị người này dẫn», không đổi quyền.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "C1",
+        "C2",
+        "C3",
+        "A3"
+      ]
+    },
+    {
+      "ma": "DH4",
+      "slug": "so-do-can-chinh-don-vi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.3,
+      "dung_tren": [],
+      "ten": "Sơ đồ căn chỉnh theo đơn vị",
+      "ten_ngan": "Sơ đồ đơn vị",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Lãnh đạo mở Toàn cảnh, chuyển sang Sơ đồ và thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt»",
+      "vai": "Ban lãnh đạo",
+      "vi_sao": "Cây căn chỉnh hôm nay là danh sách thụt lề cao khoảng 4.100px, mọi nhánh mở sẵn; căn chỉnh nhiều–nhiều nên mục tiêu góp hai chỗ phải hiện hai lần; không nhìn ra hình dáng tổng. Tability tách Strategy Map (thẻ theo đơn vị) khỏi Dependencies Map (quanh một mục).",
+      "bat_khi": "Ban lãnh đạo chỉ ra đơn vị chưa nối lên công ty trong 5 giây ở phiên nghiệm thu (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Bản mẫu /proto/so-do-can-chinh-okr (nhánh feat/so-do-can-chinh-okr): FlowMap trong packages/ui rút phần máy của @reui/flow-2, đường nối dài theo điểm uốn dagre. Cần gộp luật «Block có phần máy» (nhánh docs/luat-reui-phan-may) trước khi vòng này cài React Flow. Mã rút từ block Pro không vào PR gửi kho hãng. Sơ đồ phải mang lý do căn chỉnh của L2–L4. B5 (bỏ cây khỏi trang đơn vị) ở hàng này: chỉ bỏ khi sơ đồ thay được.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D6",
+        "B5"
+      ]
+    },
+    {
+      "ma": "DH5",
+      "slug": "so-do-quanh-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.4,
+      "dung_tren": [
+        "DH4"
+      ],
+      "ten": "Sơ đồ quanh một mục tiêu",
+      "ten_ngan": "Quanh mục tiêu",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Từ một mục tiêu, tôi bấm Xem quanh mục tiêu và thấy nó góp vào đâu, ai góp vào nó, mục tiêu góp hai chỗ chỉ hiện một lần»",
+      "vai": "Trưởng đơn vị",
+      "vi_sao": "Câu hỏi «mục tiêu này góp vào đâu» hôm nay chỉ trả lời bằng một dòng chữ «Góp vào n chỗ»; muốn thấy cả đường lên công ty phải lần tay qua cây.",
+      "bat_khi": "Trưởng đơn vị trả lời đúng «mục tiêu này góp vào KR nào của công ty» trong 10 giây ở phiên nghiệm thu (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Đứng trên khung vẽ FlowMap của DH4. Lối vào từ ngăn chi tiết mục tiêu; rê chuột làm nổi đường đi.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "D5"
+      ]
+    },
+    {
       "ma": "E4b",
       "slug": "giai-doan-bo-mac-dinh",
       "nhom": "crm-chung",
@@ -2257,6 +2628,78 @@
       "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
       "trang_thai": "chưa mở",
       "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
+    }
+  ],
+  "chan_troi": [
+    {
+      "ma": "TH7",
+      "dot": "vong-tin-hieu-1410",
+      "cau_giao": "«Mở một hộp thoại ở nền tối mà vẫn thấy mình đang ở màn nào»",
+      "ly_do": "Lớp phủ đen đặc là thiết lập chung của bộ giao diện cho mọi hộp thoại, không riêng tín hiệu; đổi nó là quyết định thiết kế của cả sản phẩm.",
+      "phu": [
+        "U9"
+      ],
+      "mo_lai_khi": "Chủ kho chọn đổi lớp phủ ở một phiên thiết kế bộ giao diện chung"
+    },
+    {
+      "ma": "TH8",
+      "dot": "vong-tin-hieu-1410",
+      "cau_giao": "«Người dùng gửi tín hiệu cho đúng sản phẩm mình đang dùng, và tín hiệu về đúng kho của sản phẩm đó»",
+      "ly_do": "Chỉ có ích khi đã có kho sản phẩm thứ hai có lộ trình trên OneHub Center; làm trước thì không có sản phẩm nào để chọn.",
+      "phu": [
+        "L6"
+      ],
+      "mo_lai_khi": "Kho thứ hai (OneHub Platform hoặc kho khác) đã cài kit và hiện trên trang Lộ trình (LT3 đã giao)"
+    },
+    {
+      "ma": "DH6",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Bấm được mọi thẻ con và nút trên điện thoại mà không bấm trượt»",
+      "ly_do": "Vùng bấm 25–28px đo được ở cả Thoả thuận, Công ty, Tài liệu, Lộ trình và OKR: là thiết lập chung của bộ giao diện, không riêng khu Mục tiêu.",
+      "phu": [
+        "E1"
+      ],
+      "mo_lai_khi": "Chủ kho mở một hàng crm-chung về vùng bấm, hoặc một phiên thiết kế bộ giao diện chung"
+    },
+    {
+      "ma": "DH7",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Mỗi đơn vị trên cây tổ chức có một tên phân biệt được với đơn vị cha»",
+      "ly_do": "Chưa biết các cặp trùng tên trên production là dữ liệu nhập như vậy hay cây đang hiện thừa một cấp; sửa màn trước khi biết là đoán.",
+      "phu": [
+        "E2"
+      ],
+      "mo_lai_khi": "Nhân sự xác nhận các cặp trùng tên là thật hay nhập sai"
+    },
+    {
+      "ma": "DH8",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Mở hết mọi dòng của một bảng trong một lần bấm»",
+      "ly_do": "Chạm bảng chung của mọi danh sách; trang đơn vị có 3–5 mục tiêu và đã có cách xem Họp tuần liệt kê KR phẳng, chưa ai xin.",
+      "phu": [
+        "E3"
+      ],
+      "mo_lai_khi": "Phiên nghiệm thu của DH2 cho thấy người dùng phải bấm từng dòng để đọc KR"
+    },
+    {
+      "ma": "DH9",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Bảng Theo đơn vị ở Toàn cảnh mở theo cấp và cộng số từ đơn vị con lên»",
+      "ly_do": "Sơ đồ ở DH4 trả lời cùng câu hỏi «đơn vị nào đang thế nào»; làm cả hai là trùng.",
+      "phu": [
+        "E4"
+      ],
+      "mo_lai_khi": "Sau khi DH4 giao, ban lãnh đạo vẫn xin bảng cây có số cuộn lên"
+    },
+    {
+      "ma": "DH10",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Nút đổi cách xem nằm cùng một chỗ ở mọi danh sách»",
+      "ly_do": "Đã là câu hỏi Cổng Phạm vi của hàng NM2 (Thoả thuận để bên trái, Công ty để bên phải); chốt riêng ở đây là chốt hai lần.",
+      "phu": [
+        "E5"
+      ],
+      "mo_lai_khi": "NM2 chốt chỗ đặt và khu Mục tiêu cần theo"
     }
   ],
   "da_bac": [
