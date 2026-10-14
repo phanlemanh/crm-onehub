@@ -138,6 +138,59 @@ export const viecVetOutput = z.array(
 
 export const viecTaoOutput = z.object({ id: z.string() });
 
+export const viecBangInput = viecCuaToiInput;
+
+const COT_BANG = ["CHUA_LAM", "DANG_LAM", "CHO_DANH_GIA", "XONG"] as const;
+
+export const theBang = viecDong.extend({
+	chuyenDuoc: z.array(z.enum(TRANG_THAI_VIEC)),
+	con: z.object({ xong: z.number().int(), tong: z.number().int() }).nullable(),
+	cha: z.object({ id: z.string(), tieuDe: z.string() }).nullable(),
+	conMo: z.number().int(),
+});
+
+export const viecBangOutput = z.object({
+	cot: z.array(
+		z.object({
+			trangThai: z.enum(COT_BANG),
+			tong: z.number().int(),
+			viec: z.array(theBang),
+		}),
+	),
+	soHuy: z.number().int(),
+	daHuy: z.array(viecDong),
+});
+
+export const viecKeoInput = z.object({
+	id: ma,
+	den: z.enum(TRANG_THAI_VIEC),
+	thuTu: z.array(ma).max(VIEC.tranKhep * 4),
+	nguon: z.enum(["bang-keo", "bang-menu"]),
+});
+
+export const viecOkOutput = z.object({ ok: z.literal(true) });
+
+export const viecTaoConInput = z.object({
+	chaId: ma,
+	tieuDe: z.string().trim().min(1).max(VIEC.tieuDeToiDa),
+	nguoiThucHienId: ma.optional(),
+	hanNgay: ngayLich.nullable().optional(),
+});
+
+export const viecConOutput = z.object({
+	cha: z.object({ id: z.string(), tieuDe: z.string() }).nullable(),
+	con: z.array(
+		z.object({
+			id: z.string(),
+			tieuDe: z.string(),
+			trangThai: z.enum(TRANG_THAI_VIEC),
+			nguoiThucHien: nguoiRa,
+		}),
+	),
+	conMo: z.number().int(),
+	themDuoc: z.boolean(),
+});
+
 export type ViecCreateInput = z.infer<typeof viecCreateInput>;
 export type ViecBanGhiInput = z.infer<typeof viecBanGhiInput>;
 export type ViecGanInput = z.infer<typeof viecGanInput>;
@@ -151,3 +204,9 @@ export type ViecChiTietOutput = z.infer<typeof viecChiTietOutput>;
 export type ViecCuaBanGhiOutput = z.infer<typeof viecCuaBanGhiOutput>;
 export type ViecCuaToiNhomOutput = z.infer<typeof viecCuaToiNhomOutput>;
 export type ViecVetOutput = z.infer<typeof viecVetOutput>;
+export type ViecBangInput = z.infer<typeof viecBangInput>;
+export type ViecBangOutput = z.infer<typeof viecBangOutput>;
+export type TheBangOutput = z.infer<typeof theBang>;
+export type ViecKeoInput = z.infer<typeof viecKeoInput>;
+export type ViecTaoConInput = z.infer<typeof viecTaoConInput>;
+export type ViecConOutput = z.infer<typeof viecConOutput>;

@@ -87,6 +87,11 @@ async function NoiDung({ params }: { params: Params }) {
 						quaHan: trang.quaHanXacMinh,
 						coQuyen: trang.coQuyenXacMinh,
 					},
+					luuTru: {
+						daLuuTru: trang.daLuuTru,
+						coLuuTruCho: trang.coLuuTruCho,
+						coKhoiPhucCho: trang.coKhoiPhucCho,
+					},
 				}}
 			/>
 		</HydrateClient>

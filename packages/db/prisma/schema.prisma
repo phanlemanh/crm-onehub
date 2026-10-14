@@ -103,6 +103,7 @@ model User {
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
   viecTheoDoi       ViecTheoDoi[]
+  viecThuTu         ViecThuTu[]
   viecVet           ViecVet[]         @relation("ViecVetNguoi")
 
   @@unique([email])
@@ -2334,6 +2335,7 @@ model TaiLieuTrang {
   banDangDungId String?                  @unique
   banDangDung   TaiLieuPhienBan?         @relation("TaiLieuBanDangDung", fields: [banDangDungId], references: [id], onDelete: Restrict)
   timKiem       Unsupported("tsvector")?
+  archivedAt    DateTime?
   taoBoiId      String
   taoBoi        User                     @relation("TaiLieuTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
   createdAt     DateTime                 @default(now())
@@ -2348,6 +2350,7 @@ model TaiLieuTrang {
   @@index([loai])
   @@index([chuTrangId])
   @@index([timKiem], type: Gin)
+  @@index([archivedAt])
   @@map("taiLieuTrang")
 }
 
@@ -2372,25 +2375,28 @@ model TaiLieuPhienBan {
 }
 
 model TaiLieuDeXuat {
-  id        String           @id @default(cuid())
-  trangId   String
-  trang     TaiLieuTrang     @relation(fields: [trangId], references: [id], onDelete: Restrict)
-  banGocId  String?
-  banGoc    TaiLieuPhienBan? @relation("TaiLieuDeXuatBanGoc", fields: [banGocId], references: [id], onDelete: Restrict)
-  ten       String
-  noiDung   String
-  taoBoiId  String
-  taoBoi    User             @relation("TaiLieuDeXuatTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
-  trangThai String           @default("CHO_DUYET")
-  lyDo      String?
-  xuLyBoiId String?
-  xuLyBoi   User?            @relation("TaiLieuDeXuatXuLyBoi", fields: [xuLyBoiId], references: [id], onDelete: SetNull)
-  xuLyLuc   DateTime?
-  createdAt DateTime         @default(now())
-  phienBan  TaiLieuPhienBan? @relation("TaiLieuPhienBanTuDeXuat")
-  nguonId   String?
-  nguon     TaiLieuNguon?    @relation(fields: [nguonId], references: [id], onDelete: Restrict)
-  trichDoan Json?
+  id           String           @id @default(cuid())
+  trangId      String
+  trang        TaiLieuTrang     @relation(fields: [trangId], references: [id], onDelete: Restrict)
+  banGocId     String?
+  banGoc       TaiLieuPhienBan? @relation("TaiLieuDeXuatBanGoc", fields: [banGocId], references: [id], onDelete: Restrict)
+  ten          String
+  noiDung      String
+  taoBoiId     String
+  taoBoi       User             @relation("TaiLieuDeXuatTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  trangThai    String           @default("CHO_DUYET")
+  loai         String           @default("NOI_DUNG")
+  tuPhienBanSo Int?
+  lyDoDeXuat   String?
+  lyDo         String?
+  xuLyBoiId    String?
+  xuLyBoi      User?            @relation("TaiLieuDeXuatXuLyBoi", fields: [xuLyBoiId], references: [id], onDelete: SetNull)
+  xuLyLuc      DateTime?
+  createdAt    DateTime         @default(now())
+  phienBan     TaiLieuPhienBan? @relation("TaiLieuPhienBanTuDeXuat")
+  nguonId      String?
+  nguon        TaiLieuNguon?    @relation(fields: [nguonId], references: [id], onDelete: Restrict)
+  trichDoan    Json?
 
   @@index([trangId, trangThai])
   @@index([nguonId])
@@ -2973,7 +2979,12 @@ model Viec {
   gan             ViecGan[]
   theoDoi         ViecTheoDoi[]
   vet             ViecVet[]
+  chaId           String?
+  cha             Viec?         @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
+  con             Viec[]        @relation("ViecCon")
+  thuTu           ViecThuTu[]
 
+  @@index([chaId])
   @@index([nguoiThucHienId, trangThai, hanNgay])
   @@index([nguoiGiaoId, trangThai])
   @@index([taoLuc])
@@ -3033,4 +3044,18 @@ model ViecVet {
   @@index([viecId, luc])
   @@index([loai])
   @@map("viecVet")
+}
+
+model ViecThuTu {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  viecId String
+  viec   Viec     @relation(fields: [viecId], references: [id], onDelete: Cascade)
+  khoa   String
+  doiLuc DateTime @updatedAt
+
+  @@unique([userId, viecId])
+  @@index([userId])
+  @@map("viecThuTu")
 }
