@@ -2192,6 +2192,26 @@ const GHI_VAO_KY_AN = {
 			);
 		},
 	},
+	suaLyDoCanChinh: {
+		gieo: async (b) => {
+			const cycleId = await b.kyChay();
+			const dich = await gieoMucTieuCongBo(cycleId, [{}]);
+			const nguon = await nhapPhong(cycleId, b.chung, false);
+			const id = idTra(
+				await ganCanChinh(nguon, dich.objectiveId, b.chung),
+				"gan can chinh",
+			);
+			return lenh(
+				() =>
+					goi(
+						"okr.suaLyDoCanChinh",
+						{ id, lyDo: "Lý do trong kỳ ẩn", canCu: null },
+						b.chung.truong.cookie,
+					),
+				() => db.okrAlignment.findUnique({ where: { id } }),
+			);
+		},
+	},
 	previewImport: {
 		gieo: async (b) => {
 			const cycleId = await b.kyChay();

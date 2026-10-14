@@ -28,6 +28,7 @@ import {
 	type TroChuyenMessages,
 	troChuyenMessages,
 } from "@/lib/messages/agent-builder-tro-chuyen";
+import { traBangChu } from "@/lib/tra-bang-chu";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
 type Runs = RouterOutputs["agents"]["history"];
@@ -141,12 +142,16 @@ export function AgentRuns({
 											run.status === "FAILED" && "text-destructive",
 										)}
 									>
-										{nhanTrangThai(t, run.status)}
+										<span data-trang-thai-luot={run.status}>
+											{nhanTrangThai(t, run.status)}
+										</span>
 									</span>
 								</span>
 								<span className="mt-1 block wrap-break-word font-mono text-muted-foreground text-xs leading-5 sm:mt-0">
-									{nhanTrangThai(t, run.triggerType)} ·{" "}
-									{formatDate(run.createdAt, locale)}{" "}
+									<span data-moc={run.triggerType}>
+										{nhanTrangThai(t, run.triggerType)}
+									</span>{" "}
+									· {formatDate(run.createdAt, locale)}{" "}
 									{t.luot.banSo(String(run.version.number))}
 								</span>
 								{run.status === "FAILED" || run.status === "CANCELLED" ? (
@@ -156,7 +161,7 @@ export function AgentRuns({
 											className="mt-px size-3.5 shrink-0 text-destructive"
 										/>
 										<span className="min-w-0 wrap-break-word text-destructive text-xs leading-5">
-											{runFailureReason(run.errorCode, run.errorMessage)}
+											{runFailureReason(t, run.errorCode, run.errorMessage)}
 										</span>
 									</span>
 								) : null}
@@ -259,12 +264,14 @@ function ExpandedRun({ run }: { run: RunRow }) {
 			<div className="grid grid-cols-2 gap-x-4 gap-y-3 border-b bg-background px-4 py-3 sm:min-h-[58px] sm:grid-cols-4 sm:items-center sm:gap-0 sm:px-5 sm:py-2">
 				<RunMeta label={t.luot.moc} value={nhanTrangThai(t, run.triggerType)} />
 				<RunMeta
+					ma="nguoi-mo"
 					label={t.luot.nguoiMo}
-					value={run.initiatedBy?.name ?? "Eve scheduler"}
+					value={run.initiatedBy?.name ?? t.luot.lichTuDong}
 				/>
 				<RunMeta
+					ma="model"
 					label={t.luot.model}
-					value={run.modelId ?? "Gateway default"}
+					value={run.modelId ?? t.luot.macDinh}
 				/>
 				<RunMeta label={t.luot.ban} value={String(run.version.number)} last />
 			</div>
@@ -279,8 +286,11 @@ function ExpandedRun({ run }: { run: RunRow }) {
 							<span className="shrink-0 font-mono text-muted-foreground text-xs sm:w-[78px]">
 								{formatTime(entry.at, locale)}
 							</span>
-							<span className="min-w-0 flex-1 wrap-break-word text-sm">
-								{eventLabel(entry.event)}
+							<span
+								className="min-w-0 flex-1 wrap-break-word text-sm"
+								data-su-kien={entry.event.type}
+							>
+								{eventLabel(t, entry.event)}
 							</span>
 							<span className="hidden shrink-0 font-mono text-muted-foreground text-xs sm:inline">
 								{t.luot.buoc}
@@ -300,7 +310,9 @@ function ExpandedRun({ run }: { run: RunRow }) {
 								</span>
 								<span className="block wrap-break-word text-muted-foreground text-xs">
 									{entry.action.provider} ·{" "}
-									{nhanTrangThai(t, entry.action.status)}
+									<span data-trang-thai-buoc={entry.action.status}>
+										{nhanTrangThai(t, entry.action.status)}
+									</span>
 									{entry.action.targetLabel
 										? ` · ${entry.action.targetLabel}`
 										: ""}
@@ -323,10 +335,12 @@ function ExpandedRun({ run }: { run: RunRow }) {
 }
 
 function RunMeta({
+	ma,
 	label,
 	value,
 	last = false,
 }: {
+	ma?: string;
 	label: string;
 	value: string;
 	last?: boolean;
@@ -339,7 +353,9 @@ function RunMeta({
 			)}
 		>
 			<span className="text-muted-foreground text-xs">{label}</span>
-			<span className="wrap-break-word text-sm sm:truncate">{value}</span>
+			<span className="wrap-break-word text-sm sm:truncate" data-o-luot={ma}>
+				{value}
+			</span>
 		</span>
 	);
 }
@@ -427,13 +443,7 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 }
 
 function nhanTrangThai(t: TroChuyenMessages, value: string): string {
-	const bang: Record<string, string> = t.trangThai;
-	const co = bang[value];
-	if (String(co) === co) return co;
-	return value
-		.toLowerCase()
-		.replace(/_/g, " ")
-		.replace(/^./, (character) => character.toUpperCase());
+	return traBangChu(t.trangThai, value) ?? t.trangThaiKhac;
 }
 
 function formatDate(value: string, locale: Locale): string {
@@ -457,8 +467,13 @@ function duration(
 	return `${Math.max(0, milliseconds / 1000).toFixed(1)}s`;
 }
 
-function eventLabel(event: RunEvent): string {
-	return eventSummary.parse(event.data) ?? event.type.replace(/\./g, " ");
+function eventLabel(t: TroChuyenMessages, event: RunEvent): string {
+	const bang = t.suKien;
+	const loai = event.type as keyof typeof bang;
+	return (
+		eventSummary.parse(event.data) ??
+		(Object.hasOwn(bang, loai) ? bang[loai] : t.suKienKhac)
+	);
 }
 
 function changeDetail(event: AuditRow): string | null {

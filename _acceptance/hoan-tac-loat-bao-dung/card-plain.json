@@ -1,0 +1,5 @@
+{
+  "feature_plain": "Khi lưu trữ hay hoàn tác nhiều bản ghi một lúc, thông báo nói đúng chuyện đã xảy ra: lỗi máy chủ không bị gọi là «bị bỏ qua», hoàn tác khi mọi bản đã được khôi phục từ trước báo «đã được khôi phục từ trước», và mỗi bản ghi lỗi để lại một dòng nhật ký cho người vận hành.",
+  "decisions": [],
+  "analyst_plain": ""
+}

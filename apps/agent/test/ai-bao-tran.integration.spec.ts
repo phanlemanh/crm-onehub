@@ -64,8 +64,8 @@ function dem(tin: Map<string, string[]>, userId: string, chu: string): number {
 	return (tin.get(userId) ?? []).filter((t) => t.includes(chu)).length;
 }
 
-const TAM_MUOI = "Trợ lý OKR đã dùng 80% trần tháng";
-const CHAM_TRAN = "Trợ lý OKR đã chạm trần tháng";
+const TAM_MUOI = "Kara đã dùng 80% trần tháng";
+const CHAM_TRAN = "Kara đã chạm trần tháng";
 const DOI_SOAT = "Đối soát tháng 09/2031 với AI Gateway lệch 12%";
 
 beforeAll(async () => {

@@ -496,10 +496,10 @@ const CA = {
 		const k = khoi();
 		if (!k) throw new Error("khong co khoi");
 		expect(chu(k.querySelector('[data-slot="card-title"]'))).toBe(
-			"Tóm tắt tuần của Trợ lý OKR",
+			"Tóm tắt tuần của Kara",
 		);
 		expect(chu(k.querySelector("[data-dong-nguon]"))).toBe(
-			"Trợ lý OKR tóm tắt từ 5 lần cập nhật · tuần 12/10",
+			"Kara tóm tắt từ 5 lần cập nhật · tuần 12/10",
 		);
 		const cau = [...k.querySelectorAll("li[data-cau]")];
 		expect(cau).toHaveLength(2);

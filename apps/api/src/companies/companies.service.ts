@@ -587,6 +587,7 @@ export class CompaniesService {
 			succeeded: count,
 			skipped: 0,
 			failed: ids.length - count,
+			errored: 0,
 			message: null,
 			changedIds,
 		};

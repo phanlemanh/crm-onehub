@@ -630,7 +630,7 @@ describe("nac", () => {
 				'[data-viec="de-xuat"] [data-nac="an"] [data-slot="field-description"]',
 			),
 		).toBe(
-			"Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới.",
+			"Kara góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới.",
 		);
 		const an = q('[data-pham-vi-an="de-xuat"]');
 		if (!an) throw new Error("khong co o che do an");
@@ -835,7 +835,7 @@ describe("nac", () => {
 		expect(daGoi[0]?.dauVao?.aiDeXuatAnDonVi).toEqual(["onehub"]);
 	});
 
-	test("nac: thành viên không thấy thẻ Trợ lý OKR, thẻ Góp ý và không gọi số đo", async () => {
+	test("nac: thành viên không thấy thẻ Kara · OKR, thẻ Góp ý và không gọi số đo", async () => {
 		coQuyen = false;
 		await mo();
 		await cho(() => daDoc.includes("okr.program"), "doc chuong trinh");
