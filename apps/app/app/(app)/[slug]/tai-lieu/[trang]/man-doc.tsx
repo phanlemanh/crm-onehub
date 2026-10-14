@@ -25,15 +25,23 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
+import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 import {
 	duongDanhSach,
 	duongDeXuat,
+	duongLichSu,
 	duongNguon,
 	duongSuaTrang,
 	ngayTaiLieu,
 } from "@/lib/tai-lieu-man";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { DatXacMinh } from "./dat-xac-minh";
+import {
+	DaiDaLuuTru,
+	HuyHieuLuuTruCho,
+	type LuuTruTrang,
+	MenuTrang,
+} from "./luu-tru-trang";
 import { type NguonCuaTrang, NguonTrang } from "./nguon-trang";
 import { NhacToi } from "./nhac-toi";
 
@@ -72,6 +80,13 @@ export type TrangDoc = {
 	deXuatChoId: string | null;
 	nguon: NguonCuaTrang | null;
 	xacMinh?: XacMinhTrang;
+	luuTru?: LuuTruTrang;
+};
+
+const CHUA_LUU_TRU: LuuTruTrang = {
+	daLuuTru: null,
+	coLuuTruCho: false,
+	coKhoiPhucCho: false,
 };
 
 export type XacMinhTrang = {
@@ -86,6 +101,9 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 	const d = m.doc;
 	const url = useWorkspaceUrl();
 	const mucLuc = useMemo(() => readerHeadings(trang.noiDung), [trang.noiDung]);
+	const nutLichSu = taiLieuLichSuMessages(locale).lichSu.nut;
+	const luuTru = trang.luuTru ?? CHUA_LUU_TRU;
+	const daLuuTru = luuTru.daLuuTru !== null;
 
 	return (
 		<>
@@ -125,19 +143,31 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 						{trang.choLanDau ? (
 							<KhungCho cho={trang.choLanDau} chuTrang={trang.chuTrang} />
 						) : null}
+						<DaiDaLuuTru luuTru={luuTru} slug={trang.slug} />
 						<div className="flex flex-wrap items-center gap-2">
+							<HuyHieuLuuTruCho luuTru={luuTru} />
 							{trang.soBanCho > 0 ? (
 								<Badge data-co-ban-cho="" variant="outline">
 									{dien(d.coBanCho, { so: trang.soBanCho })}
 								</Badge>
 							) : null}
-							{trang.choLanDau ? null : (
+							{trang.choLanDau || daLuuTru ? null : (
 								<Button asChild size="sm" variant="outline">
 									<Link href={url(duongSuaTrang(trang.slug))}>
 										{d.suaTrang}
 									</Link>
 								</Button>
 							)}
+							{trang.phienBan ? (
+								<Button asChild size="sm" variant="outline">
+									<Link data-nut-lich-su="" href={url(duongLichSu(trang.slug))}>
+										{nutLichSu}
+									</Link>
+								</Button>
+							) : null}
+							{trang.phienBan ? (
+								<MenuTrang luuTru={luuTru} slug={trang.slug} />
+							) : null}
 							{trang.choLanDau && CO_VIET_TAY[trang.choLanDau.dangCho] ? (
 								<Button asChild size="sm" variant="outline">
 									<Link href={url(duongSuaTrang(trang.slug))}>{d.vietTay}</Link>

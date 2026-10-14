@@ -46,6 +46,14 @@ export function duongTrang(slug: string): string {
 	return `${TAI_LIEU_MAN.goc}/${encodeURIComponent(slug)}`;
 }
 
+export function duongLichSu(slug: string): string {
+	return `${duongTrang(slug)}/lich-su`;
+}
+
+export function duongPhienBan(slug: string, so: number): string {
+	return `${duongLichSu(slug)}/${so}`;
+}
+
 export function duongSuaTrang(slug: string): string {
 	return `${duongTrang(slug)}/sua`;
 }
