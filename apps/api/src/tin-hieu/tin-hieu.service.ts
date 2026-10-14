@@ -136,6 +136,7 @@ export class TinHieuService {
 				id: idTep(h.so),
 				tep: tepTuBanGhi(h),
 				phongBan: h.phongBan?.name ?? null,
+				phongBanId: h.phongBanId,
 			})),
 		);
 	}
