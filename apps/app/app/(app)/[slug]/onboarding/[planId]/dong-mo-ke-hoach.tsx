@@ -112,7 +112,7 @@ export function DongMoKeHoach({
 				onConfirm={() => {
 					if (dong.isPending) return;
 					dong.mutate(
-						{ id: planId, huyViecMo: soViecMo > 0 && huyViecMo },
+						soViecMo > 0 ? { id: planId, huyViecMo } : { id: planId },
 						{
 							onSuccess: async () => {
 								setHoi(false);

@@ -166,7 +166,7 @@ function DongBuoc({
 					{buoc.label}
 				</span>
 				{tre ? <Badge variant="outline">{m.overdue}</Badge> : null}
-				{buoc.viecId !== null && buoc.viecTrangThai !== null ? (
+				{buoc.viecId && buoc.viecTrangThai ? (
 					<ChipViecCuaBuoc
 						viecId={buoc.viecId}
 						trangThai={buoc.viecTrangThai}

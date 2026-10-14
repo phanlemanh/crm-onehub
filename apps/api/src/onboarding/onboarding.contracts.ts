@@ -20,7 +20,8 @@ export const departmentOutput = z.object({
 	position: z.number(),
 	archivedAt: z.date().nullable(),
 	purgeable: z.boolean(),
-	headUserId: z.string().nullable(),
+	// Trưởng phòng, để ô tạo kế hoạch điền sẵn người làm (DA3); bộ đọc đời trước thiếu khoá → null.
+	headUserId: z.string().nullable().default(null),
 });
 
 export const departmentListOutput = z.array(departmentOutput);
@@ -105,10 +106,12 @@ export const stepOutput = z.object({
 	assignee: z
 		.object({ id: z.string(), name: z.string(), image: z.string().nullable() })
 		.nullable(),
-	viecId: z.string().nullable(),
+	// Bước tạo sau DA3 mang một Việc; vắng (bước cũ, bộ đọc đời trước) đọc là null.
+	viecId: z.string().nullable().default(null),
 	viecTrangThai: z
 		.enum(["CHUA_LAM", "DANG_LAM", "CHO_DANH_GIA", "XONG", "HUY"])
-		.nullable(),
+		.nullable()
+		.default(null),
 });
 
 export const planOutput = z.object({

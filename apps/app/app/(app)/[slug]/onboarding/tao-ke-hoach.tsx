@@ -134,13 +134,7 @@ export function TaoKeHoach({
 			tieuDe={m.tao.keHoach.title}
 			dangMo={dangMo}
 			doiMo={setDangMo}
-			sanSang={
-				congTy !== "" &&
-				khuon !== "" &&
-				!khuonRong &&
-				ngay !== "" &&
-				nguoiCam !== ""
-			}
+			sanSang={congTy !== "" && khuon !== "" && ngay !== "" && nguoiCam !== ""}
 			dangLuu={tao.isPending}
 			loi={loi}
 			nhanLuu={m.tao.save}

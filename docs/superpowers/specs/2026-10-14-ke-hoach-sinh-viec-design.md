@@ -163,7 +163,7 @@ PR DA3 vẫn ghi vào `chay_khi` của DA4 rằng điều kiện ngày bắt đ�
 |---|---|---|---|
 | ST-o-tao-cho-tai | Ô tạo kế hoạch | khung xám ở khối người làm, «Đang tải khuôn…» | chờ / đóng ô |
 | ST-o-tao-loi | Ô tạo kế hoạch | «Không tải được khuôn.» + nút «Thử lại» | Thử lại / đóng ô |
-| ST-o-tao-rong | Ô tạo kế hoạch | «Khuôn này chưa có bước nào.», nút Tạo khoá | chọn khuôn khác |
+| ST-o-tao-rong | Ô tạo kế hoạch | «Khuôn này chưa có bước nào.»; nút Tạo vẫn bấm được (kế hoạch rỗng là ca có sẵn) | chọn khuôn khác, hay tạo rồi thêm bước tay |
 | ST-o-tao-loi-gui | Ô tạo kế hoạch | lời máy chủ dưới nút Tạo (vd «… chỉ OKR …»), lựa chọn giữ nguyên | sửa hàng phòng ban, Tạo lại |
 | ST-the-goi-y-cho | Sheet deal | thẻ «Deal đã thắng — mở kế hoạch 30 ngày?», «Mở kế hoạch» · «Bỏ qua» | mở kế hoạch / bỏ qua |
 | ST-the-goi-y-an | Sheet deal | không có thẻ (đã xử lý, không phải người nhận, chưa thắng) | — |
