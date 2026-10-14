@@ -1,6 +1,6 @@
 ---
 slug: hoi-dap-okr
-at: 2026-10-15T00:00:00Z
+at: 2026-10-14T16:58:00Z
 verdict: findings
 p0: 1
 p1: 4
