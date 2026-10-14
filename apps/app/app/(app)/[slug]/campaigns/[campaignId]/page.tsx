@@ -1,15 +1,14 @@
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { type ReactNode, Suspense } from "react";
-import { CaiDatBreadcrumb } from "@/components/cai-dat-breadcrumb";
 import { PageShell, PageShellHeader } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { campaignMessages } from "@/lib/messages/campaigns";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { workspaceUrl } from "@/lib/workspace-url";
 import { CampaignDetail } from "./campaign-detail";
+import { DuongDanChienDichCho } from "./duong-dan-chien-dich";
 import {
 	loadUncalled,
 	MEMBERS_PARAM,
@@ -25,17 +24,8 @@ export default async function CampaignPage({
 	params,
 	searchParams,
 }: PageProps<"/[slug]/campaigns/[campaignId]">) {
-	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
-	const duongDan = (
-		<CaiDatBreadcrumb
-			cap={[
-				{
-					nhan: campaignMessages(locale).title,
-					href: workspaceUrl(slug, "/campaigns"),
-				},
-			]}
-		/>
-	);
+	const locale = await getLocale();
+	const duongDan = <DuongDanChienDichCho locale={locale} params={params} />;
 	return (
 		<PageShell className="min-h-0">
 			<Suspense
