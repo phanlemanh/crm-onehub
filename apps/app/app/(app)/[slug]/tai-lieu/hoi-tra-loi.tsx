@@ -14,13 +14,10 @@ import { Button } from "@crm/ui/components/button";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
 import type { Locale } from "@crm/ui/lib/locale";
-import {
-	type CauDaKiem,
-	cauLoiHoi,
-	dongQuaHan,
-	type GanNhat,
-	TAI_LIEU_HOI,
-	type TraLoiDaKiem,
+import type {
+	CauDaKiem,
+	GanNhat,
+	TraLoiDaKiem,
 } from "@crm/validation/tai-lieu-hoi";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -79,7 +76,7 @@ export function LuotHoiKho({
 					<TuChoi ganNhat={kq.data.ganNhat} m={m} />
 				) : (
 					<MessageContent>
-						<p>{cauLoiHoi(kq.data.lyDo)}</p>
+						<p data-cau-tro-ly="">{m.hoi.loi[kq.data.lyDo]}</p>
 						<MessageActions>
 							<Button
 								onClick={() => hoiLai(luot.cauHoi)}
@@ -108,7 +105,13 @@ function TraLoi({
 	locale: Locale;
 }) {
 	const ngay = (iso: string) => ngayTaiLieu(iso, locale);
-	const quaHan = dongQuaHan(traLoi, ngay);
+	const quaHan = traLoi.quaHan.map((q) =>
+		dien(m.hoi.quaHanXacMinh, {
+			ten: q.ten,
+			ngay: ngay(q.xacMinhDen),
+			chu: q.chuTrang,
+		}),
+	);
 
 	return (
 		<MessageContent>
@@ -171,7 +174,7 @@ function TuChoi({ ganNhat, m }: { ganNhat: GanNhat; m: TaiLieuMessages }) {
 	const url = useWorkspaceUrl();
 	return (
 		<MessageContent data-tu-choi="">
-			<p>{TAI_LIEU_HOI.tuChoi}</p>
+			<p data-cau-tro-ly="">{m.hoi.tuChoi}</p>
 			{ganNhat.length > 0 ? (
 				<p className="flex flex-wrap gap-x-2 text-sm">
 					<span className="text-muted-foreground">{m.hoi.ganNhat}</span>

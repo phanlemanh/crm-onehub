@@ -1,0 +1,17 @@
+[
+	{
+		"tinhHuong": "tu-choi",
+		"ghi": { "trangThai": "TU_CHOI", "lyDo": "khong-co-trang", "ganNhat": [] },
+		"ketQua": { "trangThai": "TU_CHOI", "ganNhat": [] }
+	},
+	{
+		"tinhHuong": "loi",
+		"ghi": { "trangThai": "LOI", "lyDo": "loi-model" },
+		"ketQua": { "trangThai": "LOI", "lyDo": "loi-model" }
+	},
+	{
+		"tinhHuong": "qua-han",
+		"ghi": { "trangThai": "LOI", "lyDo": "qua-han" },
+		"ketQua": { "trangThai": "LOI", "lyDo": "qua-han" }
+	}
+]

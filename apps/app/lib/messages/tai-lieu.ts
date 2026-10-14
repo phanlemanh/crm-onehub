@@ -386,6 +386,14 @@ const en = {
 		mayChu: "the server did not respond",
 		thuLai: "Try again",
 		loiKetQua: "Couldn't load the answer.",
+		tuChoi: "No approved page answers this question. I won't guess.",
+		loi: {
+			"het-tran": "The AI assistant is paused: this month's limit is used up.",
+			"loi-model": "Couldn't answer right now.",
+			"qua-han": "Couldn't answer right now.",
+		},
+		quaHanXacMinh:
+			"The page «{ten}» passed its verification date on {ngay}; ask the page owner {chu} before acting on it.",
 	},
 	baoSai: {
 		nut: "Report wrong",
@@ -765,6 +773,14 @@ const vi: TaiLieuMessages = {
 		mayChu: "máy chủ không trả lời",
 		thuLai: "Thử lại",
 		loiKetQua: "Không tải được câu trả lời.",
+		tuChoi: "Chưa có trang đã duyệt nào trả lời câu này. Mình không đoán.",
+		loi: {
+			"het-tran": "Trợ lý AI tạm dừng vì hết hạn mức tháng.",
+			"loi-model": "Chưa trả lời được lúc này.",
+			"qua-han": "Chưa trả lời được lúc này.",
+		},
+		quaHanXacMinh:
+			"Trang «{ten}» đã quá hạn xác minh từ {ngay}; hỏi chủ trang {chu} trước khi làm theo.",
 	},
 	baoSai: {
 		nut: "Báo sai",
