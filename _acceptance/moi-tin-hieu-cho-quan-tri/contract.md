@@ -5,7 +5,7 @@ slug: moi-tin-hieu-cho-quan-tri
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-10-14T03:17:17Z
 design_doc: docs/superpowers/specs/2026-10-14-moi-tin-hieu-cho-quan-tri-design.md
