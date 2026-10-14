@@ -45,10 +45,15 @@ cho một helper test.
 - Bài test mới `apps/api/test/gieo-nguoi-song-song.spec.ts`: bốn `gieoNguoi()` cùng lúc trên
   kho chưa có tổ chức → cả bốn xong, đúng một hàng tổ chức, bốn hàng thành viên. Ca bỏ qua
   (`skipIf`) khi kho đã có tổ chức — trong lượt suite đầy đủ — để không xoá dữ liệu của tệp
-  khác; răng đột biến đòi ca thật sự chạy (dòng `(pass)`), không chấp nhận `(skip)`.
+  khác. Trước bốn lượt gieo, bài kiểm làm ấm tám kết nối (`SELECT 1`): không làm ấm thì một
+  lượt chiếm kết nối sẵn có, chạy xong trước, và không có cuộc đua nào (đo 14/10: 0 lỗi trùng
+  bị bắt). Răng đột biến đòi cây lành `1 pass`, không `skip`, và có log lỗi trùng đã bắt —
+  bằng chứng cuộc đua thật sự xảy ra.
 - Răng đột biến `rang/dot-bien.mjs`: trong bản sao cây ở HEAD, đổi `"P2002"` thành
-  `"P0000"` ở nhánh bắt → cùng bài test phải đỏ với câu ghim
-  ``Unique constraint failed on the fields: (`id`) [organization.upsert]``.
+  `"P0000"` ở nhánh bắt → cùng bài test phải đỏ ba lượt liền, lượt nào cũng có
+  `(fail) gieo-nguoi-song-song > gnss-dong-thoi` và `code: "P2002"`. Câu
+  ``Unique constraint failed … [organization.upsert]`` KHÔNG dùng làm ghim: Prisma ghi log
+  `[prisma:error]` cả cho lỗi đã bắt, nên nó hiện ở lượt xanh.
 - Ca tái hiện gốc `dieu-phoi-va.spec.ts -t dem-qua-han` chạy riêng phải xanh.
 - Răng phạm vi `rang/pham-vi.mjs`: diff của vòng không chạm chỗ gọi nào hay mã sản phẩm.
 

@@ -8,7 +8,7 @@ evals:
     paths:
       - "apps/api/test/dieu-phoi-gieo.ts"
       - "apps/api/test/gieo-nguoi-song-song.spec.ts"
-    expected: "exit 0; dong '(pass) gieo-nguoi-song-song > gnss-dong-thoi' co mat, 0 fail — ca chay that tren kho test moi, khong (skip)"
+    expected: "exit 0; '1 pass', '0 fail', khong dong skip — ca gnss-dong-thoi chay that tren kho test moi; co dong log '[organization.upsert]' cua loi trung da bat (cuoc dua co xay ra)"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -20,7 +20,7 @@ evals:
       - "_acceptance/ca-chap-chon-cach-ly/rang/ban-sao.mjs"
       - "apps/api/test/dieu-phoi-gieo.ts"
       - "apps/api/test/gieo-nguoi-song-song.spec.ts"
-    expected: "exit 0; 'dot-bien: 1/1 cap dat' — cay lanh xanh voi dong (pass) cua gnss-dong-thoi, ban sao bo nhanh bat P2002 thi do CA BA luot, luot nao cung mang cau ghim 'Unique constraint failed on the fields: (`id`) [organization.upsert]'; output in so luot do/3"
+    expected: "exit 0; 'dot-bien: 1/1 cap dat' — cay lanh: 1 pass, khong skip, co log loi trung da bat; ban sao bo nhanh bat P2002 thi do CA BA luot, luot nao cung co '(fail) gieo-nguoi-song-song > gnss-dong-thoi' va 'code: \"P2002\"'; output in do-dung-ghim=3/3"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
@@ -30,7 +30,7 @@ evals:
     paths:
       - "apps/api/test/dieu-phoi-gieo.ts"
       - "apps/api/test/dieu-phoi-va.spec.ts"
-    expected: "exit 0; ca dem-qua-han pass, khong co dong 'Unique constraint failed'"
+    expected: "exit 0; ca dem-qua-han pass, 0 fail (log prisma:error cua loi trung da bat khong tinh)"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4
@@ -60,7 +60,7 @@ evals:
     paths:
       - "apps/api/test/dieu-phoi-gieo.ts"
       - "apps/api/test/dieu-phoi.spec.ts"
-    expected: "exit 0; ca xoa-ghi-danh pass, khong co dong 'Unique constraint failed'"
+    expected: "exit 0; ca xoa-ghi-danh pass, 0 fail"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -70,5 +70,5 @@ evals:
     paths:
       - "apps/api/test/dieu-phoi-gieo.ts"
       - "apps/api/test/dieu-phoi-diem-nhan.spec.ts"
-    expected: "exit 0; ca khong-khop-agenttask pass, khong co dong 'Unique constraint failed'"
+    expected: "exit 0; ca khong-khop-agenttask pass, 0 fail"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
