@@ -1,0 +1,3 @@
+driver: puppeteer-core trong man.mjs, khong co duong doc network tu phia verifier.
+console: 390 -> "console khong loi (0)"; 1440 -> "console khong loi (0)" (man.mjs gom msg.type()==error).
+lan 1 (log-e12-lan1.log): kho 1440 het 120s cho sau buoc bam Can chinh kem ly do -> exit 2 KHONG DO DUOC; lan 2 chay lai nguyen van lenh: exit 0.

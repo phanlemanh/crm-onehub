@@ -27,9 +27,14 @@ export type BulkResult = {
 	succeeded: number;
 	skipped: number;
 	failed: number;
+	errored: number;
 	message: string | null;
 	changedIds: string[];
 };
+
+function soLoi(result: BulkResult): number {
+	return Number.isFinite(result.errored) ? result.errored : 0;
+}
 
 export function reportBulk(
 	result: BulkResult,
@@ -66,6 +71,10 @@ export function baoHoanTacLoat({
 	locale: Locale;
 }): void {
 	const m = crmMessages(locale);
+	if (result.succeeded === 0 && result.failed === 0 && result.skipped > 0) {
+		toast.success(m.bulk.daVeTruoc(String(result.skipped)));
+		return;
+	}
 	if (result.succeeded === 0) {
 		toast.error(m.bulk.hoanTacLoi);
 		return;
@@ -91,16 +100,29 @@ export function baoLuuTruLoat({
 	onHoanTac: (changedIds: string[]) => void;
 }): void {
 	const m = crmMessages(locale);
-	const boQua = result.skipped + result.failed;
+	const loi = soLoi(result);
+	const boQua = result.skipped + result.failed - loi;
+	const phanLoi = loi > 0 ? m.bulk.chuaLuuTru(String(loi)) : null;
 	if (result.changedIds.length === 0) {
+		if (phanLoi) {
+			toast.error(
+				[boQua > 0 ? m.bulk.boQua(String(boQua)) : null, phanLoi]
+					.filter(Boolean)
+					.join(" "),
+			);
+			return;
+		}
 		toast.warning(m.bulk.khongDoi(String(boQua)));
 		return;
 	}
 	baoDaLuuTru({
-		thongDiep:
-			boQua > 0
-				? `${done(result.succeeded)} ${m.bulk.boQua(String(boQua))}`
-				: done(result.succeeded),
+		thongDiep: [
+			done(result.succeeded),
+			boQua > 0 ? m.bulk.boQua(String(boQua)) : null,
+			phanLoi,
+		]
+			.filter(Boolean)
+			.join(" "),
 		nhanHoanTac: m.sheet.hoanTac,
 		onHoanTac: () => onHoanTac(result.changedIds),
 	});

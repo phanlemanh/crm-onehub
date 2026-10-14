@@ -31,7 +31,7 @@ const en = {
 	onboarding: {
 		title: "Tell us about your company",
 		description:
-			"Two things, once. The name is what OneHub Center calls you; the website is how the agent learns what you sell.",
+			"Two things, once. The name is what OneHub Center calls you; the website is how Kara learns what you sell.",
 		name: "Company name",
 		slug: "Workspace URL",
 		slugHint: "Your team will use this address to open OneHub Center.",
@@ -62,7 +62,7 @@ const en = {
 	research: {
 		title: "Level up your data in OneHub Center",
 		description:
-			"Power your research agent with Context to research every company added to OneHub Center.",
+			"Power Kara with Context to research every company added to OneHub Center.",
 		label: "Context API key",
 		placeholder: "Paste the key",
 		noKey: "Don't have a Context API key?",
@@ -147,7 +147,7 @@ const vi = {
 	onboarding: {
 		title: "Giới thiệu về công ty bạn",
 		description:
-			"Hai việc, làm một lần. Tên là cách OneHub Center gọi bạn; website là cách tác nhân biết bạn bán gì.",
+			"Hai việc, làm một lần. Tên là cách OneHub Center gọi bạn; website là cách Kara biết bạn bán gì.",
 		name: "Tên công ty",
 		slug: "Địa chỉ workspace",
 		slugHint: "Đội của bạn sẽ dùng địa chỉ này để mở OneHub Center.",
@@ -178,7 +178,7 @@ const vi = {
 	research: {
 		title: "Làm dày dữ liệu trong OneHub Center",
 		description:
-			"Cắm Context cho tác nhân nghiên cứu, để nó tra mọi công ty được thêm vào OneHub Center.",
+			"Cắm Context cho Kara, để Kara tra mọi công ty được thêm vào OneHub Center.",
 		label: "Khoá API Context",
 		placeholder: "Dán khoá vào đây",
 		noKey: "Chưa có khoá API Context?",

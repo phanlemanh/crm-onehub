@@ -252,7 +252,7 @@ describe("tlk-man-hoi", () => {
 			"Hỏi về quy định, chính sách, quy trình hay biểu mẫu của OneHub.",
 		);
 		expect(goc.textContent).toContain(
-			"Trợ lý AI chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
+			"Kara chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
 		);
 		expect(goc.querySelectorAll("[data-goi-y] button")).toHaveLength(3);
 		expect(oNhap(goc).disabled).toBe(false);
@@ -263,7 +263,7 @@ describe("tlk-man-hoi", () => {
 		const cau = await hoiGoiY(goc);
 		expect(canh.goiHoi).toEqual([cau]);
 		expect(goc.textContent).toContain(cau);
-		expect(goc.textContent).toContain("Trợ lý AI đang đọc kho…");
+		expect(goc.textContent).toContain("Kara đang đọc kho…");
 	});
 
 	test("tlk-man-hoi: ST-hoi-tra-loi dung tung y tu traLoi da kiem, trich duoi tung y, bao sai thanh da bao sai", async () => {
@@ -294,7 +294,7 @@ describe("tlk-man-hoi", () => {
 		});
 		expect(y[0]?.textContent).toContain("05/09/2026");
 		expect(goc.querySelector("[data-nhan-tra-loi]")?.textContent).toBe(
-			"Trợ lý AI · theo bản đang dùng",
+			"Kara · theo bản đang dùng",
 		);
 		expect(goc.querySelector("[aria-live=polite]")?.textContent).toContain(
 			TRA_LOI.traLoi.cau[0]?.chu ?? "x",

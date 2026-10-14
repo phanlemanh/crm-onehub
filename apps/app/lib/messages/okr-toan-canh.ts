@@ -99,9 +99,9 @@ const vi = {
 		loi: "Không tính được sức khoẻ chương trình. Toàn cảnh vẫn xem được.",
 	},
 	tomTat: {
-		tieuDe: "Tóm tắt tuần của Trợ lý OKR",
+		tieuDe: "Tóm tắt tuần của Kara",
 		dongNguon: (n: string, ngay: string) =>
-			`Trợ lý OKR tóm tắt từ ${n} lần cập nhật · tuần ${ngay}`,
+			`Kara tóm tắt từ ${n} lần cập nhật · tuần ${ngay}`,
 		dangTai: "Đang tải tóm tắt tuần…",
 		dangSoan: "Kara đang tóm tắt tuần này…",
 		dangSoanMoTa:
@@ -110,7 +110,7 @@ const vi = {
 		taiLai: "Tải lại",
 		chuaCapNhat: "Tuần này chưa có Cập nhật tuần nào",
 		chuaCapNhatMoTa:
-			"Trợ lý OKR tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần Cập nhật tuần.",
+			"Kara tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần Cập nhật tuần.",
 		locHet: "Không có câu nào bạn xem được trong tóm tắt tuần này",
 		locHetMoTa:
 			"Mọi câu đều dựa vào Mục tiêu bạn không xem được. Bảng đáng bàn bên dưới vẫn đủ các KR bạn xem được.",
@@ -304,9 +304,9 @@ const en: OkrToanCanhMessages = {
 		loi: "Couldn't compute program health. The overview still works.",
 	},
 	tomTat: {
-		tieuDe: "OKR assistant's weekly summary",
+		tieuDe: "Kara's weekly summary",
 		dongNguon: (n: string, ngay: string) =>
-			`The OKR assistant summarised ${n} updates · week of ${ngay}`,
+			`Kara summarised ${n} updates · week of ${ngay}`,
 		dangTai: "Loading the weekly summary…",
 		dangSoan: "Kara is summarising this week…",
 		dangSoanMoTa:
@@ -315,7 +315,7 @@ const en: OkrToanCanhMessages = {
 		taiLai: "Reload",
 		chuaCapNhat: "No weekly updates yet this week",
 		chuaCapNhatMoTa:
-			"The OKR assistant summarises the morning after the update day, once the department has at least one weekly update.",
+			"Kara summarises the morning after the update day, once the department has at least one weekly update.",
 		locHet: "There are no sentences you can see in this week's summary",
 		locHetMoTa:
 			"Every sentence rests on objectives you can't see. The table below still has every KR you can see.",

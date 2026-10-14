@@ -110,6 +110,7 @@ describe("assigning an owner to a selection", () => {
 			succeeded: 2,
 			skipped: 0,
 			failed: 0,
+			errored: 0,
 			message: null,
 			changedIds: [first.id, second.id],
 		});
@@ -137,6 +138,7 @@ describe("assigning an owner to a selection", () => {
 			succeeded: 1,
 			skipped: 0,
 			failed: 0,
+			errored: 0,
 			message: null,
 			changedIds: [only.id],
 		});
@@ -185,6 +187,7 @@ describe("purging a selection", () => {
 			succeeded: 2,
 			skipped: 0,
 			failed: 0,
+			errored: 0,
 			message: null,
 			changedIds: [first.id, second.id],
 		});
@@ -230,6 +233,7 @@ describe("purging a selection", () => {
 			succeeded: 1,
 			skipped: 0,
 			failed: 0,
+			errored: 0,
 			message: null,
 			changedIds: [doomed.id],
 		});
@@ -291,6 +295,7 @@ describe("moving a selection of deals to a stage", () => {
 			succeeded: 2,
 			skipped: 0,
 			failed: 0,
+			errored: 0,
 			message: null,
 			changedIds: [first.id, second.id],
 		});
