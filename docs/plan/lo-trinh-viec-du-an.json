@@ -97,7 +97,8 @@
       "dung_tren": [
         "DA1"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đang dựng",
+      "buoc_ke": "Đã ký Cổng Bằng chứng 14/10 (Mạnh); PR chờ Điều phối M5 gộp vào onehub, rồi chủ kho chạy lệnh chép trên production theo docs/production.md",
       "ten": "Chép việc cần làm cũ sang Việc",
       "ten_ngan": "Chép việc cũ",
       "chay_khi": "DA1 đã gộp",
