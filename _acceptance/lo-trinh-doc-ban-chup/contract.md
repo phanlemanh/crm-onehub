@@ -5,10 +5,10 @@ slug: lo-trinh-doc-ban-chup
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, ci]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-14-lo-trinh-doc-ban-chup-design.md
-approved_by:
-approved_at:
+approved_by: Manh Phan
+approved_at: 2026-10-14T08:32:39Z
 ---
 
 # Acceptance Contract: lo-trinh-doc-ban-chup
