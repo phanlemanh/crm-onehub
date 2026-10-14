@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: chu-man-tieng-viet-khong-tran
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c39024d1dd4bc4997b22818a1abd77f89abf114b
+verified_commit: 6c378a8618aaa4889f30804776058cf2f6886091
 human_signoff:
 ---
 
@@ -21,126 +21,115 @@ human_signoff:
 | E4 | AC-4 | test | PASS |
 | E5 | AC-5 | ui-check | PASS |
 | E5m | AC-5 | script | PASS |
-| E5j | AC-5 | judgment | UNCERTAIN |
+| E5j | AC-5 | judgment | PASS |
 
 ## Evidence
 
 - eval: E1
   run_id: minted-chu-man-tieng-viet-khong-tran-E1-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.cmt_breadcrumb
   verified_at: 2026-10-13T23:51:19Z
-  output: |
-    cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/breadcrumb-nhan.dom.tsx
-    Ran 6 tests across 1 file. [581.00ms]
+  carried_from_round: 1
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
-  run_id: minted-chu-man-tieng-viet-khong-tran-E2-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cmt_quet
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
   output: |
-    cd apps/app && bun test ./test/chu-man-tieng-viet.spec.ts
-    Ran 4 tests across 1 file. [348.00ms]
+    Ran 5 tests across 1 file. [276.00ms]
 
 - eval: E3
   run_id: minted-chu-man-tieng-viet-khong-tran-E3-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.cmt_nhan_kieu
   verified_at: 2026-10-13T23:51:19Z
-  output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/chu-man-tieng-viet.dom.tsx -t nhan-kieu
-    Ran 4 tests across 1 file. [960.00ms]
+  carried_from_round: 1
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-chu-man-tieng-viet-khong-tran-E4-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.cmt_o_chon
   verified_at: 2026-10-13T23:51:19Z
-  output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/chu-man-tieng-viet.dom.tsx -t o-chon
-    Ran 3 tests across 1 file. [856.00ms]
-
-- eval: E5m
-  run_id: minted-chu-man-tieng-viet-khong-tran-E5m-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.cmt_man_do
-  verified_at: 2026-10-13T23:51:19Z
-  output: |
-    bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chu-man-tieng-viet-khong-tran/rang/chup-truong.mjs --chi-do"
-    phien-do: xong — mã 0
+  carried_from_round: 1
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E5
-  run_id: minted-chu-man-tieng-viet-khong-tran-E5-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.cmt_man
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
   screenshot: /Users/manh-macmini/dev/crm/.claude/worktrees/blissful-jepsen-65fb89/.acceptance-runs/chu-man-tieng-viet-khong-tran/evidence/cmt-truong-vi-360.png
   observed: |
-    Đã mở từng ảnh bằng Read. (1) cmt-truong-vi-360.png (360x844): trang Cài đặt > Trường, thẻ Cá nhân, danh sách «Trường tự tạo». Mỗi hàng là «Trường mẫu N» kèm nhãn kiểu «Chữ, Chữ dài, Số, Ngày, Ô đánh dấu, Chọn, URL, Email, Số điện thoại» nằm trọn trong ô, mép phải các ô thẳng hàng (riêng ô rộng hơn như «Số điện thoại» vẫn kết thúc cùng mép phải), nút ba chấm bên phải không bị đè, không thấy thanh cuộn ngang. Hàng tên dài nằm dưới vùng chụp 844 px nên không hiện trong ảnh này; số đo tenDaiCat=true. (2) cmt-truong-vi-1280.png: khung 1280, cùng danh sách; mười nhãn kiểu «Chữ… Người» trọn chữ, mép phải thẳng một đường; hàng cuối tên rất dài («Ngày gia hạn hợp đồng khung … đầu m…») bị cắt bằng dấu chấm lửng còn nhãn «Số điện thoại» cùng hàng đủ chữ. Biểu tượng nổi góc phải dưới đè lên nút ba chấm của hàng cuối là phần công cụ dev, không phải lỗi nhãn kiểu. (3) cmt-truong-en-360.png: bản tiếng Anh «Fields», nhãn «Text, Long text, Number, Date, Checkbox, Select, URL, Email, Phone» trọn chữ trong ô, mép phải thẳng, không cuộn ngang. (4) cmt-truong-en-1280.png: mười nhãn «Text … User» trọn chữ, mép phải thẳng; hàng cuối tên dài bị cắt «…đầu mối nhận…» còn nhãn «Phone» đủ chữ. Khớp Expected.
+    Da mo bang Read ca 4 anh. cmt-truong-vi-360.png: trang /settings/fields the "Truong tu tao" o khung 360, 10 hang "Truong mau 1..10" cung nhan kieu tieng Viet (Chữ, Chữ dài, Số, Ngày, Ô đánh dấu, Chọn, URL, Email, Số điện thoại, Người) trong o nen toi, nhan deu tron chu, canh mep phai thang nhau, khong de len nut ba cham; hang thu 11 ten dai bi cat "Ngày gia hạn hợ…" con nhan "Số điện thoại" van tron chu; khong cuon ngang.
+    cmt-truong-en-360.png: giong bo cuc, nhan Text, Long text, Number, Date, Checkbox, Select, URL, Email, Phone, User tron chu, hang ten dai bi cat "Ngày gia hạn hợp đồng…" nhan "Phone" tron.
+    cmt-truong-vi-1280.png: co thanh ben Cai dat, tab Cong ty/Ca nhan/Thoa thuan, 11 hang, nhan kieu tieng Viet tron chu, mep phai cac o thang mot duong sat nut ba cham, ten dai hang cuoi bi cat bang dau "…" con nhan "Số điện thoại" nguyen.
+    cmt-truong-en-1280.png: tuong tu voi tab Companies/Contacts/Deals va nhan tieng Anh (Text...User, Phone) tron chu, ten dai hang cuoi bi cat "…", mep phai thang. Tat ca khop Expected.
   network_observed: n-a (driver)
+  output: |
+    - tenDaiCat true o ca 4 anh (ten dai bi cat, nhan kieu cung hang tron chu): PASS
+    - Buoc 2 nav breadcrumb aria-label: vi ["Vị trí trang"], en ["Breadcrumb"]: PASS
+
+- eval: E5m
+  run_id: minted-chu-man-tieng-viet-khong-tran-E5m-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.cmt_man_do
+  verified_at: 2026-10-14T01:58:35Z
+  output: |
+    phien-do: xong — mã 0
+
+- eval: E5j
+  judged_by: judge panel 3 lens (fresh context) — de xuat PASS
+  verdict: PASS
+  rationale: Ba lens deu cham PASS tren ca bon anh (vi/en x 360/1280); nhan kieu tron chu trong o, mep phai thang, ten dai bi cat con nhan kieu van tron, muoi nhan khop Bang ten ngan va AC-3.
+  votes:
+    - domain-correctness: PASS — Trên cả bốn ảnh, nhãn kiểu của mọi hàng nằm trọn trong ô, không bị cắt và không đè nút «…». Mép phải các ô thẳng một đường (x≈1202 ở 1280, x≈290 ở 360, cả vi và en), nên (1) và (2) đều đạt. Ở 360, tên trường dài bị cắt thành «Ngày gia hạn hợp…» trong khi «Số điện thoại» và «Phone» còn trọn chữ, nên (3) đạt. Mười nhãn khớp từng chữ với «Bảng tên ngắn» và AC-3 (Chữ, Chữ dài, Số, Ngày, Ô đánh dấu, Chọn, Người, URL, Email, Số điện thoại; Text, Long text, Number, Date, Checkbox, Select, User, URL, Email, Phone), không có dấu «—» và đủ nghĩa để nhận ra kiểu, nên (4) đạt.
+    - operational-feasibility: PASS — Cả bốn ảnh đều đạt cả bốn ý. (1) Mọi nhãn kiểu nằm trọn trong ô, kể cả «Số điện thoại» và «Ô đánh dấu» ở 360, và không đè lên nút «⋮». (2) Ở 1280 mép phải mọi ô nhãn kiểu đều ở khoảng x=1202, vi và en. (3) Ở 360 hàng tên dài bị cắt («Ngày gia hạn hợ…», «Ngày gia hạn hợp đồng…») còn nhãn «Số điện thoại» và «Phone» vẫn trọn chữ. (4) Mười nhãn khớp «Bảng tên ngắn» và AC-3 (vi: Chữ, Chữ dài, Số, Ngày, Ô đánh dấu, Chọn, URL, Email, Số điện thoại, Người; en: Text, Long text, Number, Date, Checkbox, Select, URL, Email, Phone, User), không có dấu «—».
+    - spec-alignment: PASS — Trên cả bốn ảnh, mọi nhãn kiểu (kể cả «Số điện thoại», «Ô đánh dấu», «Long text») đều trọn chữ trong ô và không đè nút «⋮». Ở 1280 (vi và en) mép phải các ô thẳng một đường. Ở 360 tên trường 60 ký tự trở lên bị cắt bằng «…» còn nhãn kiểu cùng hàng vẫn trọn chữ. Mười tên ngắn trên ảnh khớp «Bảng tên ngắn» của design doc và bảng AC-3 (Chữ, Chữ dài, Số, Ngày, Ô đánh dấu, Chọn, URL, Email, Số điện thoại, Người; en tương ứng), đủ nghĩa để nhận ra kiểu.
+  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
 
 - cmd: bun run lint:slop
-  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_lint_slop-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-13T23:51:19Z
+  verified_at: 2026-10-14T01:58:35Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-chu-man-tieng-viet-khong-tran-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-13T23:51:19Z
-
-### Phán đoán (judgment)
-
-Đề xuất panel gồm ba judge (fresh context): domain-correctness, operational-feasibility, spec-alignment. Cả ba cùng UNCERTAIN; ý (1), (2), (4) của E5j đạt trên ảnh, riêng ý (3) (tên trường dài bị cắt trong khi nhãn kiểu trọn chữ ở khổ 360) không chứng minh được vì ảnh 360 dừng trước hàng tên dài.
-
-- eval: E5j
-  judged_by: judge-panel (fresh context) — domain-correctness, operational-feasibility, spec-alignment
-  verdict: UNCERTAIN
-  votes:
-    - domain-correctness: UNCERTAIN — Ý (1), (2) và (4) đạt: ở cả bốn ảnh nhãn kiểu trọn chữ và không đè lên nút «⋮» (ở ảnh 360 hàng 9 và ở hàng cuối các ảnh 1280 nút «⋮» chỉ bị nút nổi của công cụ dev che). Ở 1280 mép phải mọi ô đều khoảng x≈1202. Tên ngắn khớp bảng ở design doc và AC-3. Ý (3) không kiểm được: hai ảnh 360 chỉ chụp tới hàng 10, hàng tên dài (từ 60 ký tự) nằm ngoài khung ảnh, và các tên trong ảnh 360 đều ngắn, không bị cắt. Việc tên trường bị cắt trước nhãn kiểu chỉ thấy ở ảnh 1280, không phải ở 360 như câu hỏi nêu.
-    - operational-feasibility: UNCERTAIN — Ý (1), (2), (4) đạt trên ảnh. Ở 1280 nhãn trọn trong ô và mép phải thẳng ở x≈1202 cho cả vi lẫn en. Mười tên ngắn khớp bảng thiết kế và AC-3, kể cả hàng «Số điện thoại» và hàng tên dài. Ý (3) không chứng minh được vì hai ảnh 360 cắt ở hàng 9 và hàng tên dài (từ 60 ký tự) không có trong khung, nên không thấy tên trường bị cắt trước nhãn kiểu ở 360. Ngoài ra ở 360 vi, ô «Số điện thoại» nhìn như lấn sang phải hơn các ô khác, và nút «⋮» của hàng cuối bị biểu tượng nổi che, nên không loại được nghi vấn bằng mắt.
-    - spec-alignment: UNCERTAIN — Ý (1), (2), (4) đạt: ở cả bốn ảnh nhãn kiểu trọn chữ, nằm trong ô, không đè nút «⋮». Ở 1280 mép phải mọi ô đều ở x≈1202, ở 360 đều ở x≈290. Tên ngắn khớp bảng AC-3: Chữ, Chữ dài, Số, Ngày, Ô đánh dấu, Chọn, URL, Email, Số điện thoại, Người; Text, Long text, Number, Date, Checkbox, Select, URL, Email, Phone, User. Ý (3) chưa có bằng chứng: hai ảnh 360 chỉ chụp vùng nhìn thấy, dừng ở «Trường mẫu 9» và hàng 10 bị cắt đáy. Hàng tên dài (≥60 ký tự) của AC-5 chỉ lộ ở 1280, nên chưa thấy ở 360 tên bị cắt trước nhãn kiểu. Ở 360 các tên ngắn đều vừa, kể cả hàng «Số điện thoại» là nhãn rộng nhất.
-  required_evidence:
-    - (domain-correctness) Ảnh Cài đặt › Trường ở khổ 360 bản vi và en, chụp toàn trang (fullPage) hoặc cuộn tới hàng thứ 11 «Ngày gia hạn hợp đồng khung…» (tên từ 60 ký tự, kiểu Số điện thoại / Phone), cho thấy tên có dấu «…» cắt trong khi nhãn «Số điện thoại» / «Phone» trọn chữ. Sinh bằng bàn đo màn của hồ sơ chu-man-tieng-viet-khong-tran (cùng phiên đo đã chụp cmt-truong-vi-360.png và cmt-truong-en-360.png), lưu cạnh các ảnh hiện có ở _acceptance/chu-man-tieng-viet-khong-tran/evidence/.
-    - (operational-feasibility) Ảnh chụp toàn trang hoặc cuộn xuống đủ hàng, ở 360, bản vi và bản en. Ảnh phải có hàng tên dài (từ 60 ký tự, đang là «Ngày gia hạn hợp đồng khung…») với tên bị cắt bằng dấu «…» và nhãn «Số điện thoại» / «Phone» trọn chữ cùng hàng. Lấy từ bàn đo màn của phiên đo (cùng cách sinh ra cmt-truong-vi-360.png và cmt-truong-en-360.png) rồi lưu cạnh các ảnh hiện có ở _acceptance/chu-man-tieng-viet-khong-tran/evidence/.
-    - (operational-feasibility) Ảnh 360 không bị biểu tượng nổi ở góc dưới phải che nút «⋮» của hàng cuối, để thấy nhãn kiểu không đè lên nút bên phải ở mọi hàng. Chụp lại với lớp phủ công cụ dev ẩn, hoặc cuộn sao cho hàng cuối nằm ngoài vùng biểu tượng.
-    - (spec-alignment) Ảnh chụp toàn trang (fullPage) hoặc cuộn tới cuối Cài đặt › Trường ở khổ 360, tiếng Việt, thấy hàng tên dài (≥60 ký tự, kiểu «Số điện thoại») với tên bị cắt bằng dấu «…» và nhãn kiểu cùng hàng trọn chữ, không đè nút «…». Lấy từ bàn đo màn của chu-man-tieng-viet-khong-tran, lưu cạnh _acceptance/chu-man-tieng-viet-khong-tran/evidence/cmt-truong-vi-360.png.
-    - (spec-alignment) Ảnh tương ứng cho tiếng Anh ở 360 (hàng tên dài với nhãn «Phone» trọn chữ), cạnh cmt-truong-en-360.png. Nếu có số đo scrollWidth > clientWidth của nhãn tên dài ở 360 trong log phép đo thì cũng đủ làm đổi verdict.
-  human_override:  # chi nguoi ghi
+  verified_at: 2026-10-14T01:58:35Z
 
 ## Known limits
 
@@ -151,12 +140,7 @@ human_signoff:
 none — moi eval feature deu red tren baseline (co phan biet)
 
 Baseline khong do:
-- cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/breadcrumb-nhan.dom.tsx: bo qua baseline: tep packages/ui/test/breadcrumb-nhan.dom.tsx co o cay dang kiem nhung chua co o merge-base 60fc1b02dbd9de1abc1a7ece86fa2ec03a31cae1 — eval moi, chay tren code cu khong phan biet gi
 - cd apps/app && bun test ./test/chu-man-tieng-viet.spec.ts: bo qua baseline: tep apps/app/test/chu-man-tieng-viet.spec.ts co o cay dang kiem nhung chua co o merge-base 60fc1b02dbd9de1abc1a7ece86fa2ec03a31cae1 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/chu-man-tieng-viet.dom.tsx -t nhan-kieu: bo qua baseline: tep apps/app/test/chu-man-tieng-viet.dom.tsx co o cay dang kiem nhung chua co o merge-base 60fc1b02dbd9de1abc1a7ece86fa2ec03a31cae1 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/chu-man-tieng-viet.dom.tsx -t o-chon: bo qua baseline: tep apps/app/test/chu-man-tieng-viet.dom.tsx co o cay dang kiem nhung chua co o merge-base 60fc1b02dbd9de1abc1a7ece86fa2ec03a31cae1 — eval moi, chay tren code cu khong phan biet gi
-
-Ghi chú: eval E5 (ui-check) cũng mang baseline n-a nhưng kết quả máy không kèm lý do.
 
 ## Variance
 
@@ -164,4 +148,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E1, E2, E3, E4, E5, E5m đạt; E5j UNCERTAIN ở cả ba judge vì ảnh khổ 360 không chứa hàng tên dài nên chưa chứng minh được tên bị cắt trước nhãn kiểu. Verdict PENDING-JUDGMENT, chờ người quyết ở Cổng 2.
+Round 1: PENDING-JUDGMENT — ba loi thuoc trong hop dong (chup-truong.mjs do nham span an cua tay keo nen kiem «ten dai bi cat» luon dat; hai cho cua E2 kiem bang chuoi con thay vi quan he khoa-ngon ngu va chi do hai chuoi). Returned to implementation.
+Round 2: E2, E5, E5m chay lai sau khi sua thuoc, deu dat; E1, E3, E4 giu tu round 1 (delta khong cham paths cua eval); suite xanh; E5j de xuat PASS, cho nguoi quyet o Cong 2.
