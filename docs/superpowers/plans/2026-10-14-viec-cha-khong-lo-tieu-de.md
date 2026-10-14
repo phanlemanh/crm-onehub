@@ -35,3 +35,12 @@ Hợp đồng: `_acceptance/viec-cha-khong-lo-tieu-de/contract.md` (duyệt 14/1
 - Files: `docs/api.md` (đoạn «Bảng và việc con»).
 - Phục vụ: không eval (tài liệu đi kèm). `independent: false`.
 - Verify: đọc lại đoạn văn; không lệnh.
+
+## Nhật ký S3 (14/10)
+
+- Task 1 (`6665faffa`): sáu bài kiểm chạy trên mã DA2 → 0 pass / 6 fail, đúng thông điệp ghim: `vca: cha lo vca-mt-c`,
+  `vca: bang lo cha`, `vca: dem con lo {"xong":1,"tong":3,"conMo":2}`, `vca: bang lech khung vca-kk-a`,
+  `vca: fixture cha chua an`, `vca: quet lo viec.con`.
+- Task 2 + 3 (`baaa868d2`): `viec-cha-an.spec.ts` + `viec-con.spec.ts` + `viec-bang.spec.ts` → 14 pass / 0 fail.
+- Đột biến tay cho vế gắn-lại của E5 (giới hạn đã khai): `chaRa()` luôn trả `null` → `vca-tinh-luc-doc` đỏ
+  `vca: gan lai khong hien cha viec.con`; đã hoàn lại bằng `git checkout`, cây sạch.
