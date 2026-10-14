@@ -5,9 +5,9 @@ slug: gan-tay-va-kara-co-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-14T00:55:22Z
 design_doc: docs/superpowers/specs/2026-10-14-gan-tay-va-kara-co-ly-do-design.md
 ---
 
@@ -70,8 +70,8 @@ Quét bằng `morphological-scan` (preset entity-feature), 14/10. Chân sản ph
 
 ## Out of scope
 
-- Kara soạn nháp lý do và căn cứ ngay trong hộp thoại gắn tay (bản vẽ mục 01 «Kara soạn nháp») — chờ Hỏi-1.
-- Điền lại lý do cho căn chỉnh đã nhận từ đề xuất của Kara trước bản này — cần `migration`; chờ Hỏi-2.
+- Kara soạn nháp lý do và căn cứ ngay trong hộp thoại gắn tay (bản vẽ mục 01 «Kara soạn nháp») — chủ kho chọn tách hàng L4b (Hỏi-1, 14/10).
+- Điền lại lý do cho căn chỉnh đã nhận từ đề xuất của Kara trước bản này — cần `migration`; chủ kho chọn không làm trong L4 (Hỏi-2, 14/10).
 - Màn Soạn OKR: căn cứ và «Sửa rồi nhận» ở dòng căn chỉnh nháp (bản vẽ mục 05).
 - Đổi cách chọn đích, quyền xem, quyền sửa, tiến độ; đổi `migration` hay cột cơ sở dữ liệu.
 
