@@ -203,22 +203,49 @@ try {
 			} catch {
 				loi.push(`bang co ${await soDong(t)} dong, mong 3`);
 			}
-			const trongKhung = await t.evaluate((m) => {
+			const viTri = (m) => {
 				const e = [
 					...document.querySelectorAll(
 						'[data-sonner-toast]:not([data-removed="true"])',
 					),
 				].find((x) => (x.textContent ?? "").includes(m));
-				if (!e) return false;
+				if (!e) return { co: false, trong: false, mo: "khong co toast" };
 				const r = e.getBoundingClientRect();
-				return (
+				const trong =
 					r.top >= 0 &&
 					r.bottom <= window.innerHeight &&
 					r.left >= 0 &&
-					r.right <= window.innerWidth
+					r.right <= window.innerWidth;
+				return {
+					co: true,
+					trong,
+					mo: `top ${Math.round(r.top)} bottom ${Math.round(r.bottom)} left ${Math.round(r.left)} right ${Math.round(r.right)} / ${window.innerWidth}x${window.innerHeight}`,
+				};
+			};
+			try {
+				await t.waitForFunction(
+					(m) => {
+						const e = [
+							...document.querySelectorAll(
+								'[data-sonner-toast]:not([data-removed="true"])',
+							),
+						].find((x) => (x.textContent ?? "").includes(m));
+						if (!e) return false;
+						const r = e.getBoundingClientRect();
+						return (
+							r.top >= 0 &&
+							r.bottom <= window.innerHeight &&
+							r.left >= 0 &&
+							r.right <= window.innerWidth
+						);
+					},
+					{ timeout: 5_000 },
+					VI.bulk.daVeTruoc("3"),
 				);
-			}, VI.bulk.daVeTruoc("3"));
-			if (!trongKhung) loi.push("toast nam ngoai khung nhin");
+			} catch {
+				const v = await t.evaluate(viTri, VI.bulk.daVeTruoc("3"));
+				loi.push(`toast nam ngoai khung nhin (${v.mo})`);
+			}
 			await chup(t, "hlb-da-ve-1440.png");
 
 			const sau = await d.db.contact.findMany({
