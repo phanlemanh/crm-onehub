@@ -13,7 +13,7 @@ import {
 	OKR_AGENT_URL,
 	okrBridgeConfigured,
 } from "@/lib/agent-bridge";
-import { CUA_OKR } from "@/lib/cua-okr-config";
+import { CUA_OKR, CUA_OKR_HOI } from "@/lib/cua-okr-config";
 import { cuaHoi } from "@/lib/cua-okr-hoi";
 import { OKR_SOAN_CUA } from "@/lib/okr-soan-record";
 import { getSession } from "@/lib/session";
@@ -53,10 +53,10 @@ async function handler(
 	const url = new URL(request.url);
 	dich.search = url.search;
 
-	const maHoi = request.headers.get(CUA_OKR.headerHoi);
+	const maHoi = request.headers.get(CUA_OKR_HOI.header);
 	if (maHoi !== null) {
 		if (request.headers.has(OKR_SOAN_CUA.header))
-			return loi(400, CUA_OKR.loi.haiCuoc);
+			return loi(400, CUA_OKR_HOI.loi.haiCuoc);
 		return cuaHoi({
 			request,
 			duong,

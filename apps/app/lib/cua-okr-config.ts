@@ -19,7 +19,6 @@ export const CUA_OKR = {
 		than: z.object({ sessionId: doan }),
 	},
 	phien: PHIEN,
-	headerHoi: "x-crm-cuoc-hoi",
 	tienToEve: "/eve/v1",
 	dangDuong: {
 		sucKhoe: ["health"],
@@ -64,8 +63,6 @@ export const CUA_OKR = {
 		chuaCauHinh: "chua-cau-hinh-tro-ly-okr",
 		chuaDangNhap: "chua-dang-nhap",
 		thieuCuoc: "thieu-cuoc-soan",
-		thieuCuocHoi: "thieu-cuoc-hoi",
-		haiCuoc: "hai-loai-cuoc",
 		duongKhongPhucVu: "duong-khong-phuc-vu",
 		cuocKhongThuocBan: "cuoc-khong-thuoc-ban",
 		cuocKhongDang: "cuoc-khong-dang",
@@ -88,6 +85,11 @@ export const CUA_OKR = {
 		"don-vi-luu-tru": 403,
 		"chua-co-khoa-mo-hinh": 503,
 	} satisfies Record<TuChoiLuot, number>,
+} as const;
+
+export const CUA_OKR_HOI = {
+	header: "x-crm-cuoc-hoi",
+	loi: { thieuCuoc: "thieu-cuoc-hoi", haiCuoc: "hai-loai-cuoc" },
 } as const;
 
 export const MA_LY_DO_HONG = [

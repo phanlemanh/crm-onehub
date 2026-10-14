@@ -2,7 +2,7 @@ import { db } from "@crm/db";
 import { ghiPhienEve, laPlaceholder } from "@crm/db/okr-cuoc-hoi";
 import type { WorkspaceRole } from "@crm/validation/vai-workspace";
 import { mintOkrBridgeToken } from "@/lib/agent-bridge";
-import { CUA_OKR } from "@/lib/cua-okr-config";
+import { CUA_OKR, CUA_OKR_HOI } from "@/lib/cua-okr-config";
 import { getServerTrpcClient } from "@/lib/trpc/server";
 
 type DangDuong = keyof typeof CUA_OKR.dangDuong;
@@ -39,7 +39,7 @@ function docPhienEve(headers: Headers, than: string): string | null {
 
 export async function cuaHoi(v: VaoCuaHoi): Promise<Response> {
 	const ma = CUA_OKR.maCuoc.safeParse(v.maHoi);
-	if (!ma.success) return loi(400, CUA_OKR.loi.thieuCuocHoi);
+	if (!ma.success) return loi(400, CUA_OKR_HOI.loi.thieuCuoc);
 	const cuocHoiId = ma.data;
 	const cuoc = await db.okrCuocHoi.findUnique({
 		where: { id: cuocHoiId },
