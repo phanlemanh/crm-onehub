@@ -59,6 +59,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import {
 	donViDaChon,
+	type LoiTaiLuaChon,
 	type LuaChon,
 	type TrangMoiChon,
 	TruongTrangMoi,
@@ -70,6 +71,7 @@ export type LuaChonTai = {
 	chuTrang: LuaChon[];
 	donVi: LuaChon[];
 	trangDangDung: LuaChon[];
+	loiTai?: LoiTaiLuaChon;
 };
 
 type LoaiDich = DichNguon["loai"];
@@ -368,6 +370,7 @@ function NoiDungHop({
 							chuTrang={luaChon.chuTrang}
 							donVi={luaChon.donVi}
 							giaTri={trangMoi}
+							loiTai={luaChon.loiTai}
 							onDoi={setTrangMoi}
 							toiId={luaChon.toiId}
 						/>
