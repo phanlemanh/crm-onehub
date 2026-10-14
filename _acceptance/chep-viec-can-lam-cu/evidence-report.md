@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a66e48adc74350d882b42bed00b4c51742218549
+verified_commit: bcf5a0ebc2cc692246f699b97bc8819170c6db63
 human_signoff: manh 2026-10-14 — ký Cổng Bằng chứng trên vòng chấm 2 (0 eval trượt, 7/7 lệnh suite, E12 đạt). Ngoài-25 và Ngoài-26 (hạn lệch một ngày) đã sửa trong lần nâng phạm vi nên chấp nhận, không sửa; Ngoài-2, 5, 8, 9, 13, 14, 15, 16, 20, 23, 24, 27, 28 ghi Known limits; mười ba mục còn lại chấp nhận, không sửa. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -257,3 +257,7 @@ sha: e0cc19b2b60e10ec4cb16988205c2f8c04d52658 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-14, do gộp onehub 2f53f8fa2 (#401, #400, #389); nhãn nguồn tac-nhan theo tên Kara
 run_id: repin-20261014T093149Z-39731
 sha: a66e48adc74350d882b42bed00b4c51742218549 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 (E12 không khai paths) · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-14, do gộp onehub d0351bcdf (#395 L4, #408 E5)
+run_id: repin-20261014T104516Z-61894
+sha: bcf5a0ebc2cc692246f699b97bc8819170c6db63 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 (E12 không khai paths) · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
