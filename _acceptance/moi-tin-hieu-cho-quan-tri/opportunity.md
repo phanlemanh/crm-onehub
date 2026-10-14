@@ -3,10 +3,10 @@ schema_version: 1
 slug: moi-tin-hieu-cho-quan-tri
 feature: Quản trị mở thẻ Tất cả của trang Tín hiệu và thấy ai đã gửi, phòng ban nào, từ màn nào, đang ở đâu, cùng ba con số của ngưỡng sống
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-14T02:34:48Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -65,9 +65,9 @@ nói rõ con số gồm cả tín hiệu chưa lấy về. Vế «chưa có ch�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] ở ngày đo 30 ngày của LT2, chủ kho có đọc ba con số ngưỡng sống trên trang thay vì chạy lệnh, và số có khớp dòng tổng kết của lệnh kéo về không?
-- Kết quả nào là SỐNG: [đề xuất] ngày 12/11/2026 (30 ngày sau khi LT2 lên production 13/10), chủ kho đọc ba con số ở thẻ Tất cả mà không chạy lệnh để biết; chạy lệnh kéo về ngay sau đó, ba con số của dòng tổng kết bằng đúng ba con số trên trang.
-- Kết quả nào là CHẾT: [đề xuất] tới 12/11 chủ kho vẫn phải chạy lệnh để biết ba con số, hoặc có một con số trên trang khác dòng tổng kết của lệnh đọc cùng lúc. Lệch → sửa hàm đếm, không phải lặp tính năng.
+- Câu hỏi phép đo trả lời: ở ngày đo 30 ngày của LT2, chủ kho có đọc ba con số ngưỡng sống trên trang thay vì chạy lệnh, và số có khớp dòng tổng kết của lệnh kéo về không?
+- Kết quả nào là SỐNG: ngày 12/11/2026 (30 ngày sau khi LT2 lên production 13/10), chủ kho đọc ba con số ở thẻ Tất cả mà không chạy lệnh để biết; chạy lệnh kéo về ngay sau đó, ba con số của dòng tổng kết bằng đúng ba con số trên trang.
+- Kết quả nào là CHẾT: tới 12/11 chủ kho vẫn phải chạy lệnh để biết ba con số, hoặc có một con số trên trang khác dòng tổng kết của lệnh đọc cùng lúc. Lệch → sửa hàm đếm, không phải lặp tính năng.
 - Timebox: tới ngày đo 30 ngày của LT2, 12/11/2026. Vòng phải lên production trước ngày đó.
 
 ## Kết quả prototype
@@ -84,7 +84,9 @@ Chưa dựng. Vòng chạm màn hình: bản bấm được làm ở nghi thức
 
 ## Cổng 0
 
-Chờ chủ kho.
+- **decision = build** Căn cứ: chủ kho gõ trong phiên 14/10 «Cổng Đáng moi-tin-hieu-cho-quan-tri: build ; ngưỡng: như đề xuất», trên khuyến nghị của máy bên dưới.
+- **disposition = —** Căn cứ: không có bản mẫu dựng trước Cổng Đáng.
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng của mục «Ngưỡng chết / ngưỡng UAT» như máy đề xuất, đã gỡ tiền tố đề xuất.
 
 **Máy khuyến nghị:** `build`, ngưỡng như đề xuất, một vòng khoảng 9 tiêu chí (Q1 · Q2 · Q3), hạng **T2**:
 vòng chỉ đọc dữ liệu đã có, không thêm cột, không chạm đường T3. Gỡ tín hiệu rác (Q4) là TH5, không nằm ở
