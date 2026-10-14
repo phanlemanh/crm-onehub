@@ -11,6 +11,7 @@ import type {
 	MiddlewareResponse,
 	TRPCMiddleware,
 } from "nestjs-trpc";
+import { z } from "zod";
 import { setRequestUserId } from "../../logging/request-context";
 import type { BaseTrpcContext, KhoaTrpcContext } from "../context.types";
 
@@ -18,8 +19,8 @@ import type { BaseTrpcContext, KhoaTrpcContext } from "../context.types";
 export class KhoaKeoTinHieuMiddleware implements TRPCMiddleware {
 	async use(opts: MiddlewareOptions): Promise<MiddlewareResponse> {
 		const ctx = opts.ctx as BaseTrpcContext;
-		const tho = ctx.req?.headers[API_KEY_HEADER];
-		const key = typeof tho === "string" ? tho.trim() : "";
+		const tho = z.string().safeParse(ctx.req?.headers[API_KEY_HEADER]);
+		const key = tho.success ? tho.data.trim() : "";
 		if (!key) throw new TRPCError({ code: "UNAUTHORIZED" });
 		const khoa = await xacMinhKhoaKeoTinHieu(key).catch(() => null);
 		if (!khoa) throw new TRPCError({ code: "UNAUTHORIZED" });

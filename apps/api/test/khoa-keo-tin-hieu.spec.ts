@@ -29,6 +29,8 @@ const VAI = {
 	roi: "admin",
 } satisfies Record<Nguoi, WorkspaceRole>;
 const LOAI = [undefined, "toan-quyen", "keo-tin-hieu"] as const;
+const loiCoMa = z.object({ statusCode: z.number() });
+const coDuongHttp = z.object({ path: z.string() });
 const DUONG_LICH = `${REST_BRIDGE_PATH}/tin-hieu/lich/keo-ve`;
 const CHO_MS = 120_000;
 
@@ -79,7 +81,7 @@ async function trpc(
 	n: Nguoi,
 	thuTuc: string,
 	kieu: "query" | "mutation",
-	vao?: unknown,
+	vao?: Readonly<Record<string, string | number | null | undefined>>,
 ): Promise<Tra> {
 	const r =
 		kieu === "query"
@@ -110,11 +112,12 @@ async function tao(
 	n: Nguoi,
 	loai: (typeof LOAI)[number],
 ): Promise<{ status: number; khoa: z.infer<typeof khoaTao> | null }> {
-	const r = await trpc(n, "apiKeys.create", "mutation", {
-		name: `tvk-${n}-${loai ?? "vang"}`,
-		expiresInDays: null,
-		...(loai === undefined ? {} : { loai }),
-	});
+	const ten = `tvk-${n}-${loai ?? "vang"}`;
+	const vao =
+		loai === undefined
+			? { name: ten, expiresInDays: null }
+			: { name: ten, expiresInDays: null, loai };
+	const r = await trpc(n, "apiKeys.create", "mutation", vao);
 	return {
 		status: r.status,
 		khoa: r.status === 200 ? khoaTao.parse(r.data) : null,
@@ -323,8 +326,8 @@ async function goiDuong(
 			});
 			return { status: phien ? 200 : 204, body: phien };
 		} catch (loi) {
-			const ma = (loi as { statusCode?: number }).statusCode;
-			return { status: typeof ma === "number" ? ma : 500, body: null };
+			const ma = loiCoMa.safeParse(loi);
+			return { status: ma.success ? ma.data.statusCode : 500, body: null };
 		}
 	}
 	const path = dien(goi.path, thay);
@@ -352,13 +355,14 @@ describe("tvk-duong-khac", () => {
 	test("tvk-duong-khac: danh muc duong phu moi duong HTTP cua plugin khoa", () => {
 		const plugin = (auth.options.plugins ?? []).find((p) => p.id === "api-key");
 		const coDuong = Object.values(plugin?.endpoints ?? {})
-			.map((e) => (e as { path?: string }).path)
-			.filter((p): p is string => typeof p === "string")
+			.flatMap((e) => {
+				const d = coDuongHttp.safeParse({ path: Reflect.get(e, "path") });
+				return d.success ? [d.data.path] : [];
+			})
 			.sort();
 		expect(coDuong.length).toBeGreaterThan(0);
 		const trongBang = BANG.duong
-			.map((d) => d.plugin)
-			.filter((p): p is string => typeof p === "string")
+			.flatMap((d) => (d.plugin === undefined ? [] : [d.plugin]))
 			.sort();
 		expect(trongBang, "duong doc khoa chua co o").toEqual(coDuong);
 	});
@@ -376,10 +380,7 @@ describe("tvk-duong-khac", () => {
 			for (const d of BANG.duong) {
 				const r = await goiDuong(d.goi, keo.key, thay);
 				const phienRong =
-					r.body === null ||
-					(typeof r.body === "object" &&
-						r.body !== null &&
-						Object.keys(r.body).length === 0);
+					r.body === null || z.object({}).strict().safeParse(r.body).success;
 				const chan =
 					d.o === 6
 						? r.status === 401 || (r.status === 200 && phienRong)

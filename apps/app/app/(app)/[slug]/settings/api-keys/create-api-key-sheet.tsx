@@ -94,7 +94,7 @@ function CreateApiKeyForm() {
 						create.mutate({
 							name: ten.trim(),
 							expiresInDays: han === "never" ? null : Number(han),
-							...(laQuanTri ? { loai } : {}),
+							loai: laQuanTri ? loai : undefined,
 						})
 					}
 				/>

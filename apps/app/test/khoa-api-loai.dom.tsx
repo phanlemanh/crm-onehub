@@ -26,8 +26,8 @@ function truyVan<T>(ten: string, ra: () => T) {
 	return {
 		queryKey: () => [ten],
 		pathKey: () => [ten],
-		queryOptions: (vao?: unknown) => ({
-			queryKey: [ten, vao],
+		queryOptions: () => ({
+			queryKey: [ten],
 			queryFn: async () => ra(),
 		}),
 	};
