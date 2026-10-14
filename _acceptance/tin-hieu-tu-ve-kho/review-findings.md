@@ -1,93 +1,85 @@
-# Review findings: tin-hieu-tu-ve-kho (round 1)
+# Review findings: tin-hieu-tu-ve-kho (round 2)
 
 ## Trong hợp đồng
 
-- **The scheduled job's git push runs the repo's pre-push hook, so it can never push the queue branch**
-  file: `.github/workflows/tin-hieu-keo-ve.yml:34`
-  severity: high
-  AC: AC-8
-  source: bugs
-  Vì sao thuộc hợp đồng: Nếu đúng, lượt lịch không bao giờ đẩy được nhánh hàng chờ nên AC-8 (đẩy tệp tín hiệu lên nhánh) và theo đó AC-9 thất bại.
-  detail: The workflow runs `bun install --frozen-lockfile`. Bun runs the root package's `prepare` script, which is `git config core.hooksPath .githooks`. I checked this in a scratch repo: `bun install`, with or without `--frozen-lockfile`, prints PREPARE_RAN and sets core.hooksPath to .githooks. After that, `scripts/tin-hieu/lich.ts` calls `git push --force origin HEAD:refs/heads/tin-hieu/keo-ve` through gitPhai with no `--no-verify` and no `CRM_SKIP_HOOKS`. So `.githooks/pre-push` runs `bun run check-types`, `lint`, `lint:slop`, `test` and `build` on the Actions runner. That runner has no Postgres service and no .env, so `test` fails. Even if every task passed, the full suite takes about 19 minutes in CI, longer than the job's `timeout-minutes: 15`. The result is that every run with new signals fails at the push. gitPhai then throws `git push hỏng: pre-push: bun run check-types`, a first stderr line that hides the real cause. The branch is never pushed and the PR is never opened. Meanwhile the server has already stamped `keoVeLuc` on those signals. lich.test.ts does not catch this because its temporary repos never set core.hooksPath. Fix: set `CRM_SKIP_HOOKS: 1` in the step env, or pass `--no-verify` / `-c core.hooksPath=/dev/null` on the push in lich.ts and say why.
+- **Hình dạng 4 (phủ định không có đối chứng phân biệt): ô 6 /api/auth/get-session chấp nhận «200 phiên rỗng» cho khoá chỉ-kéo, mà đối chứng khoá thường cũng chỉ đòi status 200**
+  file: `apps/api/test/khoa-keo-tin-hieu.spec.ts:403`
+  severity: medium
+  AC: AC-4
+  source: measurement
+  detail: Ở dòng 385–386, ô 6 coi là «chặn» khi `r.status === 401 || (r.status === 200 && phienRong)`. Phần đối chứng ở dòng 399–404 chạy ô 6 bằng khoá thường nhưng chỉ kiểm `if (r.status !== 200)` mà không đòi body là phiên không rỗng. Giả sử đường get-session hoàn toàn không đọc x-api-key (plugin không dựng phiên ở đường này): cả hai khoá đều nhận 200 kèm body null, ô 6 của khoá chỉ-kéo vẫn tính «chặn» và đối chứng vẫn xanh. Như vậy phép đo không phân biệt được «khoá chỉ-kéo bị chặn» với «đường này chưa bao giờ mở phiên từ khoá». Ô 13 thì có đối chứng thật (204 so với 200, vì có hay không có phiên), còn ô 6 thì không.
+  lý do vào hợp đồng: AC-4 dịch danh đường `/api/auth/get-session` phải đối xử khoá chỉ-kéo như không có phiên, và «Thước vế CHẾT» lấy đúng ca đo này làm bằng chứng; finding nói ca đo ở ô 6 không phân biệt được «bị chặn» với «đường này chưa bao giờ mở phiên từ khoá».
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Signals-only key middleware turns every verification failure, including a database outage, into 401**
-  Người dùng thấy gì: Khi hệ thống dữ liệu đang sập, lượt kéo tín hiệu báo là khoá bị từ chối thay vì báo hệ thống lỗi. Chủ kho có thể tưởng khoá hỏng và đổi một khoá vẫn đang đúng.
-  file: `apps/api/src/trpc/middlewares/khoa-keo-tin-hieu.middleware.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **New workflow uses GITHUB_TOKEN only, skipping the repo's AUTOMATION_TOKEN fallback**
-  Người dùng thấy gì: PR tín hiệu kéo về do lịch mở sẽ không tự chạy kiểm tra; người gộp phải đóng rồi mở lại PR bằng tay nếu muốn các kiểm tra chạy.
+- **Scheduled pull workflow uses bare GITHUB_TOKEN instead of the repo's AUTOMATION_TOKEN fallback**
+  Người dùng thấy gì: PR tín hiệu mà lịch đêm tự mở sẽ không tự chạy kiểm tra. Người điều phối phải đóng rồi mở lại PR đó thì kiểm tra mới chạy.
   file: `.github/workflows/tin-hieu-keo-ve.yml`
   severity: medium
   Đề xuất: known-limits
 
-- **Create-key sheet hides the 'Key for' field from non-admins instead of locking it with a reason**
-  Người dùng thấy gì: Thành viên thường không thấy lựa chọn loại khoá và cũng không được giải thích vì sao. Họ chỉ không biết có loại khoá riêng này, không mất chức năng nào.
+- **Members no longer see the 'Key for' field at all, against the settings rule that controls are disabled with a reason, not hidden**
+  Người dùng thấy gì: Thành viên thường không thấy lựa chọn loại khoá, thay vì thấy nó bị khoá kèm lý do. Hành vi đúng điều đã duyệt, nhưng luật trang Cài đặt chưa ghi ngoại lệ này nên màn sau có thể lấy làm tiền lệ để ẩn.
   file: `apps/app/app/(app)/[slug]/settings/api-keys/to-tao-khoa.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 5 — tuyên quét LỚP «mọi vai (cả owner)» nhưng chỉ có điểm-case vai okr**
-  Người dùng thấy gì: Bộ kiểm tra chưa chứng minh rằng phiên đăng nhập của chủ không gian gọi được hay không đường kéo theo lịch. Nếu sau này có lỗi chỗ đó, bộ kiểm tra vẫn báo xanh.
-  file: `apps/api/test/vai-chi-okr.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 — assert âm một mình: o6 «không pr merge / --auto» không có đối chứng dương, và chỉ quét nhật ký của một ô**
-  Người dùng thấy gì: Phép kiểm rằng lượt chạy không bao giờ tự gộp PR có thể xanh dù lượt chạy hỏng sớm và chẳng làm gì. Lời cam kết không tự gộp chưa được chứng minh chắc chắn.
-  file: `scripts/tin-hieu/test/lich.test.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 — đối chứng dương của ô 6 (get-session) không thể đỏ**
-  Người dùng thấy gì: Phép thử rằng khoá chỉ-kéo không mở được phiên đăng nhập qua đường đọc phiên có đối chứng giả, nên chưa chứng minh phép thử đó nhìn thấy được một phiên thật.
-  file: `apps/api/test/khoa-keo-tin-hieu.spec.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Hình dạng 2 — danh sách tệp đưa vào bộ phân loại là viết tay, không lấy từ diff của commit**
-  Người dùng thấy gì: Phép thử rằng PR chỉ chứa tệp tín hiệu được xếp loại nhẹ dùng danh sách tệp gõ tay, không lấy từ thay đổi thật. Nếu cách đọc thay đổi thật hỏng, phép thử vẫn không phát hiện.
-  file: `_acceptance/tin-hieu-tu-ve-kho/rang/t1.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Queue branch and PR title break the repo's one-row-one-name rule**
-  Người dùng thấy gì: PR tự động hằng ngày mang mã của tính năng đã giao nên có thể bị nhầm là việc làm tính năng mới. Chỉ gây nhầm khi đọc danh sách PR.
-  file: `scripts/tin-hieu/lich.ts`
+- **Key-type enum lives in a server package, so the client keeps its own copy**
+  Người dùng thấy gì: Danh sách hai loại khoá được viết ở hai nơi và phải giữ khớp bằng tay. Hôm nay hai bản giống nhau nên người dùng không thấy gì; chỉ thành rủi ro khi sau này thêm loại khoá mới.
+  file: `apps/app/app/(app)/[slug]/settings/api-keys/loai-khoa.tsx`
   severity: low
   Đề xuất: wont-fix
 
-- **gh CLI output parsed with JSON.parse and an `as unknown[]` cast**
-  Người dùng thấy gì: Nếu công cụ GitHub trả về dữ liệu lạ, lượt chạy có thể mở thêm một PR thay vì dừng và báo lỗi rõ ràng. Tình huống này hiếm.
-  file: `scripts/tin-hieu/lich.ts`
+- **Scheduled-pull middleware never records role and scope, so the per-call tRPC log line shows role null**
+  Người dùng thấy gì: Trong nhật ký, các lượt kéo theo lịch hiện vai trống nên không thể thống kê các lượt này theo vai. Hoạt động của lịch không bị ảnh hưởng.
+  file: `apps/api/src/trpc/middlewares/khoa-keo-tin-hieu.middleware.ts`
   severity: low
-  Đề xuất: wont-fix
+  Đề xuất: known-limits
 
-- **New hour constant is a raw literal instead of being derived from one base unit**
-  Người dùng thấy gì: Không ảnh hưởng người dùng; chỉ làm mã khó sửa đồng bộ hơn về sau.
+- **New time constant is hand-written in milliseconds instead of derived from one base unit**
+  Người dùng thấy gì: Một hằng số thời gian viết thẳng số thay vì tính từ đơn vị gốc. Người dùng không thấy khác biệt; chỉ làm mã kém đồng nhất.
   file: `scripts/tin-hieu/keo-ve.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 5 — quét «mọi chỗ đọc phiên/khoá» bằng regex tên hàm, bỏ sót lớp `@Session()` của guard Nest**
-  Người dùng thấy gì: Phép kiểm tra mọi chỗ đọc khoá có thể bỏ sót vài chỗ đọc phiên qua cơ chế khác, nên lời khẳng định khoá chỉ-kéo không mở được phiên ở đâu cũng chưa đủ rộng.
-  file: `_acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs`
+- **gh CLI output is cast with `as unknown[]` instead of being parsed at the boundary**
+  Người dùng thấy gì: Nếu công cụ GitHub trả về kết quả có hình dạng bất thường, lượt lịch có thể tưởng chưa có PR và mở thêm một PR thứ hai thay vì dừng đỏ. Trường hợp này hiếm.
+  file: `scripts/tin-hieu/lich.ts`
   severity: low
-  Đề xuất: new-contract
+  Đề xuất: known-limits
 
-- **Hình dạng 4 — assert âm «hộp khoá toàn quyền không dặn» không kiểm hộp đã mở**
-  Người dùng thấy gì: Bài kiểm câu dặn chỉ hiện với khoá chỉ-kéo có thể xanh dù hộp khoá vừa tạo không mở ra. Rủi ro nhỏ vì ca anh em đã kiểm hộp mở.
+- **Signals-only key check turns infrastructure failures into 401 (catch nuốt lỗi)**
+  Người dùng thấy gì: Khi cơ sở dữ liệu tạm hỏng đúng lúc lịch đêm chạy, lượt kéo báo khoá không hợp lệ chứ không báo hệ thống đang lỗi. Chủ kho có thể đổi một khoá vẫn còn dùng được.
+  file: `apps/api/src/trpc/middlewares/khoa-keo-tin-hieu.middleware.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (tuyên quét lớp, chỉ đo một điểm): E4b hứa «phiên của mọi vai, kể cả owner» bị từ chối ở đường lịch, nhưng chỉ đo phiên okr**
+  Người dùng thấy gì: Bài kiểm tra mới chỉ thử đường kéo theo lịch bằng phiên đăng nhập của vai chỉ OKR, chưa thử với chủ không gian, quản trị và thành viên. Chưa có bằng chứng sai, chỉ là chưa được kiểm chứng đủ.
+  file: `apps/api/test/vai-chi-okr.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 + 4: E9 ô 6 hứa «toàn bộ nhật ký gh của cả 6 ô» không có pr merge/--auto, nhưng chỉ đọc nhật ký của một ô riêng, và vòng lặp phủ định không có chặn nhật ký rỗng**
+  Người dùng thấy gì: Bài kiểm tra việc lịch đêm không bao giờ tự gộp PR mới soi một trong sáu tình huống. Chưa thấy lịch gộp PR, nhưng năm tình huống còn lại chưa được bảo chứng.
+  file: `scripts/tin-hieu/test/lich.test.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (đầu vào viết tay đúng khuôn bên đọc): t1.mjs không chạy bộ phân loại trên diff, mà tự ráp lại quyetDinh với danh sách tệp viết tay**
+  Người dùng thấy gì: Phép kiểm việc PR tín hiệu được xếp loại nhẹ chưa đi qua đúng đường mà hệ thống kiểm tra thật dùng. Nếu cách lấy danh sách tệp ở đó hỏng thì phép kiểm này không báo đỏ.
+  file: `_acceptance/tin-hieu-tu-ve-kho/rang/t1.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (phủ định một mình): ca «owner không chạm loại» khẳng định hộp vừa tạo KHÔNG có câu chỉ-kéo mà không khẳng định hộp vừa tạo đã hiện**
+  Người dùng thấy gì: Bài kiểm tra xác nhận hộp khoá vừa tạo của khoá toàn quyền không có câu chỉ-kéo, nhưng chưa xác nhận hộp đó có hiện ra. Nếu hộp không hiện thì bài kiểm tra vẫn xanh.
   file: `apps/app/test/khoa-api-loai.dom.tsx`
   severity: low
-  Đề xuất: wont-fix
+  Đề xuất: known-limits
 
 ## Chưa adversarial-verify (refuter chết)
-
-Không có.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: tin-hieu-tu-ve-kho
-verdict: REJECT
-failed_evals: [E11]
+verdict: PENDING-JUDGMENT
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 905f05d0a1aa5bff7b20b49b3dd874bf7092da89
+verified_commit: 848f986c233f36c8178c2bc6e5e86ad86ce59ce1
 human_signoff:
 ---
 
@@ -28,7 +28,7 @@ human_signoff:
 | E9 | AC-9 | test | PASS |
 | E10 | AC-10 | test | PASS |
 | E10b | AC-10 | script | PASS |
-| E11 | AC-11 | script | FAIL |
+| E11 | AC-11 | script | PASS |
 | E11b | AC-11 | judgment | PASS (de xuat, cho human_override) |
 | E1c | AC-1 | script | PASS |
 | E4b | AC-4 | test | PASS |
@@ -36,214 +36,203 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-tin-hieu-tu-ve-kho-E1-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_man
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    Ran 22 tests across 1 file. [2.61s]
+    Ran 22 tests across 1 file. [2.88s]
 
 - eval: E1b
-  run_id: minted-tin-hieu-tu-ve-kho-E1b-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E1b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvk_do_man
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   screenshot: evidence/E1b-step1.png   # 6 frame: E1b-step1..6.png (1=quan-tri-1280, 2=quan-tri-375, 3=tao-khoa-keo, 4=danh-sach-nhan, 5=thanh-vien-1280, 6=nen-toi-1280)
   observed: |
-    Da mo bang Read ca 6 anh. Owner 1280 thay nhom "Khoá dùng để" voi hai radio, muc "Mọi việc bạn làm được" duoc chon; 375 la mot cot khong cuon ngang; hop khoa vua tao hien cau chi keo duoc tin hieu va dat bi mat CRM_KHOA_KEO_TIN_HIEU; danh sach co nhan "Chỉ kéo tín hiệu" canh ten khoa; thanh vien thuong khong co nhom loai khoa; nen toi doc ro nhan va mo ta (tuong phan thap nhat 7.66). Ghi chu nho: nut "Tạo khoá" o 1280 bi bieu tuong dev overlay che mot phan, day la cong cu dev, khong mau thuan Expected.
+    Da mo tung anh that. Step1 (owner, 1280): to "Khoá API mới" co nhom "Khoá dùng để" voi hai muc "Mọi việc bạn làm được" (radio duoc chon) va "Chỉ kéo tín hiệu về kho" kem mo ta. Step2 (375): mot cot, hai radio xuong dong, khong cuon ngang. Step3: hop khoa vua tao hien khoa va cau "Khoá này chỉ kéo được tín hiệu về kho. Đặt nó vào bí mật CRM_KHOA_KEO_TIN_HIEU của lịch chạy." Step4: bang Khoá API co dong khoa moi mang Badge "Chỉ kéo tín hiệu". Step5 (thanh vien thuong): to chi co Tên va Hết hạn, khong co nhom "Khoá dùng để". Step6 (nen toi): nhan va mo ta doc ro, radio thay duoc, tuong phan thap nhat 7.66. Ghi chu: o goc duoi phai cac anh 1280 co huy hieu dev che mot phan nut "Tạo khoá", la lop phu cua moi truong do, khong phai thanh phan cua to.
   network_observed: n-a (driver)
   output: |
-    KET LUAN: 6 DUNG, 0 SAI.
-    Driver la do-man.mjs, server do do script tu dung va tu don; raw network khong doc duoc nen chi ghi n-a trong evidence/E1b-network.txt.
+    6 DUNG nen-toi-1280: tuong phan thap nhat cua nhan va mo ta 7.66
+    Driver la script puppeteer tu chup, khong co cong cu doc network; E1b-network.txt ghi ro dieu nay.
+    Ban chay moi chi ghi de tao-khoa-keo.png va danh-sach-nhan.png; 4 anh con lai khong doi byte.
 
 - eval: E2
-  run_id: minted-tin-hieu-tu-ve-kho-E2-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_tao_khoa
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    test-run: dropped crm_mv7mkaxkyx7d_test
+    test-run: dropped crm_mv7nn5rzryqp_test
 
 - eval: E3
-  run_id: minted-tin-hieu-tu-ve-kho-E3-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_duong_lich
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    test-run: dropped crm_mv7mkc72eqs0_test
+    test-run: dropped crm_mv7nn6ufujq6_test
 
 - eval: E4
-  run_id: minted-tin-hieu-tu-ve-kho-E4-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_duong_khac
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    test-run: dropped crm_mv7mkb2iu8dj_test
+    test-run: dropped crm_mv7nn7ljv4y2_test
 
 - eval: E4c
-  run_id: minted-tin-hieu-tu-ve-kho-E4c-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E4c-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvk_duong_doc_khoa
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
     KET LUAN: moi cho doc khoa co o
 
 - eval: E5
-  run_id: minted-tin-hieu-tu-ve-kho-E5-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_tu_choi
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    test-run: dropped crm_mv7mkco8oguj_test
+    test-run: dropped crm_mv7nn7kqhbcs_test
 
 - eval: E6
-  run_id: minted-tin-hieu-tu-ve-kho-E6-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_khoa_thuong
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    test-run: dropped crm_mv7mkc4bwsq8_test
+    test-run: dropped crm_mv7nn7m71qak_test
 
 - eval: E7
-  run_id: minted-tin-hieu-tu-ve-kho-E7-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_lenh
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    Ran 8 tests across 1 file. [81.00ms]
+    Ran 8 tests across 1 file. [74.00ms]
 
 - eval: E8
-  run_id: minted-tin-hieu-tu-ve-kho-E8-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_lich
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    Ran 11 tests across 1 file. [8.53s]   (mot lenh chung cho E8, E9, E10)
+    Ran 12 tests across 1 file. [9.59s]
 
 - eval: E9
-  run_id: minted-tin-hieu-tu-ve-kho-E9-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_lich
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    Ran 11 tests across 1 file. [8.53s]   (mot lenh chung cho E8, E9, E10)
+    Ran 12 tests across 1 file. [9.59s]
 
 - eval: E10
-  run_id: minted-tin-hieu-tu-ve-kho-E10-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tvk_lich
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    Ran 11 tests across 1 file. [8.53s]   (mot lenh chung cho E8, E9, E10)
+    Ran 12 tests across 1 file. [9.59s]
 
 - eval: E10b
-  run_id: minted-tin-hieu-tu-ve-kho-E10b-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E10b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvk_tep_lich
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
     KET LUAN: tep lich dung 6 dong
 
 - eval: E11
-  run_id: minted-tin-hieu-tu-ve-kho-E11-r1
-  exit_code: 1
+  run_id: minted-tin-hieu-tu-ve-kho-E11-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvk_t1
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    DUNG 1 PR chi cham thu muc tin hieu duoc xep T1 — {"nang":false,"lyDo":"chi-t1"}
-    SAI 2 kiem truoc gop khong doi ho so — ma 1 pre-merge-check: rules ran=4 declared-off=0 expected=4 | pre-merge-check: 1 violation(s) — merge blocked
-    DUNG 3 doi chung: tep ma khong duoc xep T1 — {"nang":true,"lyDo":"co-tep-nang"}
-    KET LUAN: co dong SAI
-
-- eval: E11b
-  judged_by: judge-subagent (fresh context)
-  verdict: PASS
-  rationale: Ba tep (CONTEXT.md, docs/api.md, .env.example) tra loi du bon y (a)-(d) va khong tep nao noi nguoc tep thiet ke. Day la de xuat cua hoi dong, khong phai chu ky; human_override de trong cho nguoi quyet o Cong 2.
-  votes:
-    - domain-correctness: PASS — Ba tep tra loi du va khop tep thiet ke ca bon y (a)-(d), khong cau nao noi nguoc. Hai cho mong, khong sai: lich chi ghi gio UTC chu khong ghi 04:00/16:00 gio Viet Nam, va ly do khong tu gop chi la «theo lo nhu moi PR», dung nhu tep thiet ke da viet.
-    - operational-feasibility: PASS — Ba tep tra loi duoc ca bon y. (a) CONTEXT.md: khoa chi keo duoc tin hieu, khong dang nhap duoc o dau, khong doc ban ghi, khong tao hay sua khoa, va thoi keo duoc khi chu khoa thoi lam quan tri. (b) docs/api.md: lich 21:00Z va 09:00Z, day len nhanh tin-hieu/keo-ve roi mo PR «Tín hiệu kéo về» vao onehub, khong bao gio gop. (c) .env.example: bien chi do keo-ve.ts va lich.ts doc, lich lay tu Actions secrets. (d) Ba viec cai mot lan (tao khoa, dat hai bi mat CRM_API_URL va CRM_KHOA_KEO_TIN_HIEU, bat quyen tao PR) khop thiet ke; thieu quyen tao PR thi luot van keo va day nhanh roi do o buoc mo PR.
-    - spec-alignment: PASS — Ba tep tra loi du va khop tep thiet ke ca bon y. Khoa khong mo phien o duong nao (tRPC, REST, web, cau tac nhan, duong khoa thu vien); lich 21:00Z va 09:00Z, nhanh tin-hieu/keo-ve, PR «Tín hiệu kéo về» vao onehub, gop theo lo; bien moi truong do keo-ve.ts va lich.ts doc, thang CRM_API_KEY khi co ca hai, API khong doc; ba viec chu kho khop thiet ke. Ly do khong tu gop mong (lối B nam trong muc Khong lam) nhung khong mau thuan.
-  required_evidence:
-    - (judge không nêu bằng-chứng-thiếu)
-  human_override:  # chi nguoi ghi
+    KET LUAN: thu muc tin hieu la T1
 
 - eval: E1c
-  run_id: design-gate-6b3252be51, design-gate-f8916923f4
+  run_id: design-gate-8dd4c3230b, design-gate-af050764cd
   exit_code: 0
   baseline: green
   verifier: config:executors.script.tvk_thiet_ke
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    design-gate --mode static chay tung tep .tsx duoi apps/app/app/(app)/[slug]/settings/api-keys, vong lap ket thuc khong dung som; hai ma design-gate o run_id.
+    design-gate --mode static chay xong tren tung tep .tsx duoi settings/api-keys, khong tep nao bi chan.
 
 - eval: E4b
-  run_id: minted-tin-hieu-tu-ve-kho-E4b-r1
+  run_id: minted-tin-hieu-tu-ve-kho-E4b-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.tvk_vai
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
   output: |
-    test-run: dropped crm_mv7mkofj8g9n_test
+    test-run: dropped crm_mv7nnje16xbj_test
+
+### Judgment
+
+- eval: E11b
+  judged_by: judge panel (fresh context, 3 lens)
+  verdict: PASS
+  rationale: Ba tep (api.md, CONTEXT.md, .env.example) tra loi du bon y (a)-(d) va khop tep thiet ke, khong cau nao noi nguoc. De xuat cua hoi dong la PASS; can nguoi xac nhan o Cong 2.
+  votes:
+    - domain-correctness: PASS — Ba tệp trả lời đủ bốn ý và khớp tệp thiết kế, không chỗ nào nói ngược. (a) api.md và CONTEXT.md nói khoá chỉ gọi được `tinHieuLich.keoVe`, không mở phiên ở tRPC, REST, web, cầu tác nhân hay đường khoá của thư viện, và thôi kéo khi chủ khoá hết làm quản trị. (b) Lịch chạy 21:00Z và 09:00Z, đẩy nhánh `tin-hieu/keo-ve` và giữ một PR «Tín hiệu kéo về»; không gộp vì «PR đi vào `onehub` theo lô như mọi PR» (lý do có nhưng ngắn). (c) `.env.example` nói biến do `keo-ve.ts` và `lich.ts` đọc, không bao giờ do API đọc, workflow lấy từ bí mật kho, và thắng `CRM_API_KEY` khi có cả hai. (d) Ba việc cài một lần khớp từng chữ với phần «Cài một lần» của tệp thiết kế. Thiếu bí mật thì lượt đỏ. Thiếu quyền mở PR thì lượt vẫn kéo và đẩy nhánh nên người gửi vẫn thấy «Chờ gom», rồi đỏ ở bước mở PR.
+    - operational-feasibility: PASS — Ba tệp trả lời đủ và khớp tệp thiết kế cả bốn ý, không câu nào nói ngược. (a) Khoá chỉ-kéo chỉ gọi được đường kéo theo lịch, không mở phiên ở đâu, không đọc bản ghi, không tạo hay sửa khoá, và thôi kéo được khi chủ khoá hết làm quản trị (CONTEXT.md «Khoá chỉ kéo tín hiệu»; api.md mục Tín hiệu). (b) Lịch chạy 21:00Z và 09:00Z, đẩy tệp `tin-hieu/crm/**` lên nhánh `tin-hieu/keo-ve` kèm PR «Tín hiệu kéo về», và không bao giờ gộp vì PR đi vào `onehub` theo lô như mọi PR. (c) `CRM_KHOA_KEO_TIN_HIEU` do `keo-ve.ts` và `lich.ts` đọc, lấy từ bí mật Actions của kho, không bao giờ do API đọc, và thắng `CRM_API_KEY` khi có cả hai (.env.example). (d) Ba việc cài một lần: tạo khoá chỉ-kéo, đặt hai bí mật kho, bật quyền cho Actions mở PR. Thiếu việc cuối thì lượt vẫn kéo và đẩy nhưng đỏ ở bước mở PR; thiếu URL hoặc khoá thì thoát mã 2 và không ghi gì.
+    - spec-alignment: PASS — Cả bốn ý (a)-(d) đều trả lời được từ ba tệp và khớp tệp thiết kế, không có chỗ nói ngược. (a) CONTEXT.md nói khoá «không đăng nhập được ở đâu, không đọc bản ghi, không tạo hay sửa khoá», còn api.md nói nó không mở phiên ở đường nào. (b) api.md nêu lịch 21:00Z và 09:00Z, nhánh `tin-hieu/keo-ve` và «Không bao giờ gộp: PR đi vào `onehub` theo lô». (c) .env.example nói biến được `keo-ve.ts` và `lich.ts` đọc, lấy từ bí mật Actions, và thắng `CRM_API_KEY` khi có cả hai. (d) api.md nêu ba việc cài một lần và hậu quả khi thiếu việc cuối, giống mục «Cài một lần» của tệp thiết kế.
+  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
-Lenh fail khong gan eval: lenh `bun run test -- --filter=api` (khoi ngay duoi day, ma thoat 1) khong gan eval nao. Lenh `node _acceptance/tin-hieu-tu-ve-kho/rang/t1.mjs` cung fail nhung da gan eval E11 (khoi E11 o tren).
-
 - cmd: bun run test -- --filter=api
-  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_api-r1
-  exit_code: 1
-  verified_at: 2026-10-14T04:43:22Z
-  output: |
-    api: 1795 pass, 5 skip, 5 fail; Ran 1805 tests across 207 files. [220.82s]
-    (fail) go-la-cat-quyen > ma-tran-dang-nhap-lai
-    (fail) go-la-cat-quyen > ngoai-le-dung-tap-khai
-    (fail) go-la-cat-quyen > tab-dang-mo
-    (fail) go-la-cat-quyen > khoa-con-bat
-    (fail) ba-lop > quet-het
+  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_api-r2
+  exit_code: 0
+  verified_at: 2026-10-14T05:13:42Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tin-hieu-tu-ve-kho-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T04:43:22Z
+  verified_at: 2026-10-14T05:13:42Z
 
 ## Known limits
 
@@ -251,10 +240,10 @@ Lenh fail khong gan eval: lenh `bun run test -- --filter=api` (khoi ngay duoi da
 
 ## Analyst
 
-Non-discriminating (xanh ca tren nhanh lan baseline, chung minh harness chu khong phai tinh nang; viet lai de assert hanh vi moi hoac xac nhan la regression-guard co chu y):
+Eval không phân biệt (xanh ở cả HEAD lẫn baseline diffBase — chứng minh harness chứ không chứng minh feature; cần viết lại để assert hành vi mới hoặc xác nhận là regression-guard có chủ ý):
 
-- E1c: lenh `for f in "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-...}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done`
-- E4b: lenh `bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"`
+- E1c: `for f in "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-...}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done` — baseline green.
+- E4b: `bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"` — baseline green.
 
 Baseline khong do:
 
@@ -272,8 +261,9 @@ Baseline khong do:
 
 ## Variance
 
-none — every multi-run eval is uniform (moi eval chay mot lan, khong eval nao co runs > 1)
+none — every multi-run eval is uniform (mọi eval chạy một lần, không eval nào có phương sai).
 
 ## Iterations
 
 Round 1: E11 failed — dong 2 cua t1.mjs bao pre-merge-check co 1 violation va chan gop tren commit chi chua tin-hieu/crm/crm-9.json (dong 1 va dong 3 DUNG). Bo suite api cung do 5 ca (go-la-cat-quyen, ba-lop), khong gan eval nao. Returned to implementation.
+Round 2: moi eval may xanh (E11 nay do quan he thay vi dem tuyet doi; hang cho bo hook bang CRM_SKIP_HOOKS; duong lich theo luat tu choi chung) va bay lenh suite xanh. Con cho nguoi: E11b (judgment, de xuat PASS, chua co human_override). Verdict PENDING-JUDGMENT.
