@@ -104,7 +104,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.sol_san_thiet_ke_trang
-    expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, man-soan.tsx, hoi-thoai-soan.tsx: không lỗi P0 nào (low-contrast, gray-on-color, text-overflow, broken-image, body-text-viewport-edge). Chiều đỏ ghim: bản sao nut-soan.tsx chèn một phần tử text-gray-400 trên bg-blue-600 → REJECT, mã 2, hit 'gray-on-color'."
+    expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, trang-soan.tsx, khung-soan.tsx, hoi-thoai-soan.tsx (man-soan.tsx gỡ ở 574292047, thay bởi trang-soan và khung-soan; F24 13/10): không lỗi P0 nào. Giới hạn đo 13/10: design-gate --mode static trên .tsx không chặn được luật P0 nào (tương phản, ảnh hỏng cần chế độ DOM), nên chiều đỏ duy nhất còn lại của ô là tệp đích vắng → mã khác 0; lời hứa chiều đỏ «gray-on-color» cũ không còn."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
 

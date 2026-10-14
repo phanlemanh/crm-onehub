@@ -166,6 +166,52 @@ Sau (HEAD):
     paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
 ```
 
+Commit căn cứ: ```
+574292047 2026-10-07 feat(okr-soan): trang riêng, khung co giãn, lối vào
+
+ apps/app/app/(app)/[slug]/okr/layout.tsx           |   6 +-
+ .../(app)/[slug]/okr/soan/[cuocSoanId]/page.tsx    |  44 +++
+ .../app/(app)/[slug]/okr/soan/chuyen-link-cu.ts    |  16 ++
+ .../app/(app)/[slug]/okr/soan/dung-cuoc-soan.ts    |  23 +-
+ apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx  | 106 +++++++
+ .../app/(app)/[slug]/okr/soan/khung-trang-okr.tsx  |  16 ++
+ .../app/app/(app)/[slug]/okr/soan/luat-ban-nhap.ts |  10 +
+ apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx    | 308 ---------------------
+ apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx    |  33 +--
+ apps/app/app/(app)/[slug]/okr/soan/the-nhap.tsx    |   4 +-
+ apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx  | 237 ++++++++++++++++
+ apps/app/app/(app)/[slug]/okr/thanh-tab.tsx        |   2 +
+ .../(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx   |   2 +
+ apps/app/lib/messages/okr-soan.ts                  | 122 ++++++++
+ apps/app/test/khung-soan-okr.tsx                   |  67 +++--
+ apps/app/test/soan-okr-trang.dom.tsx               | 222 +++++++++++++++
+ 16 files changed, 862 insertions(+), 356 deletions(-)
+```
+
+Commit go man-soan.tsx:
+```
+574292047 2026-10-07 feat(okr-soan): trang riêng, khung co giãn, lối vào
+ apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx  | 106 +++++++
+ apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx    | 308 ---------------------
+ apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx  | 237 ++++++++++++++++
+ apps/app/test/khung-soan-okr.tsx                   |  67 +++--
+```
+
+Tep ke nhiem co o HEAD:
+```
+apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx
+apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx
+ls: apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx: No such file or directory
+```
+
+Lenh moi cua E12 tren tep ke nhiem:
+```
+dat: apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx
+dat: apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx
+dat: apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx
+dat: apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx
+```
+
 Diff `_acceptance/soan-okr-song-lai/evals.yaml`:
 ```
 diff --git a/_acceptance/soan-okr-song-lai/evals.yaml b/_acceptance/soan-okr-song-lai/evals.yaml
@@ -623,6 +669,14 @@ Sau (HEAD):
       them `continue-on-error: true` vao buoc ay -> ma 1 neu dung dieu 5.
 ```
 
+Lý do tách theo loại (1 = vật đã gỡ · 2 = tiền đề bị quyết định đã ký sau lật · 3 = lỗi của chính răng):
+
+| Loại | Lý do | Căn cứ |
+|---|---|---|
+| 2 | dieu 2 so ci.yml tung ky tu voi ban cua hang o sha 3c97e759; tien de «ci.yml cua hang khong doi» bi luat 47 (09/10) lat | `CLAUDE.md:14` |
+| 3 | spawnSync khong khai maxBuffer: dau ra pre-push > 1 MiB lam status null (loi cua chinh rang) | `repin-20261013T052045Z-82824 (E8 cung lop: ENOBUFS)` |
+| 3 | tach dieu 3 thanh ham dung chung buildTrongPrePush de do chieu do — khong doi hanh vi | `_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs:1` |
+
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs`:
 ```
 diff --git a/_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs b/_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs
@@ -783,6 +837,19 @@ Sau (HEAD):
       Dong can bo khong tim thay -> ma 2.
 ```
 
+Commit căn cứ: ```
+b703e8bef 2026-09-27 tro-ly-okr-nen: S4 vòng 1 REJECT — ma trận suy việc viết tay có bảng ngoài, bài dò quyền mang trần 60 giây; hồ sơ vòng 1
+
+ _acceptance/tro-ly-okr-nen/decisions.jsonl    |   1 +
+ _acceptance/tro-ly-okr-nen/evidence-report.md | 429 ++++++++++++++++++++++++++
+ _acceptance/tro-ly-okr-nen/review-findings.md | 146 +++++++++
+ _acceptance/tro-ly-okr-nen/run-log.jsonl      |  56 ++++
+ _acceptance/tro-ly-okr-nen/usage-report.md    |  56 ++++
+ apps/api/test/go-la-cat-quyen.spec.ts         | 219 +++++++------
+ packages/validation/test/ai-chi-phi.spec.ts   | 128 +++++---
+ 7 files changed, 898 insertions(+), 137 deletions(-)
+```
+
 Diff `_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs`:
 ```
 diff --git a/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs b/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs
@@ -881,6 +948,19 @@ Sau (HEAD):
       KHONG nhan no. Thieu ve thu nhat -> do "thong diep lang gieng trong dau ra VANG" (tu kiem
       khong ket luan duoc); ve thu hai khop -> do "KHOP NHAM". Doi chung duong cung dau ra: bo
       khop NHAN "tRPC: khoa con bat cua nguoi ngoai van qua duoc" (E3).
+```
+
+Commit căn cứ: ```
+b703e8bef 2026-09-27 tro-ly-okr-nen: S4 vòng 1 REJECT — ma trận suy việc viết tay có bảng ngoài, bài dò quyền mang trần 60 giây; hồ sơ vòng 1
+
+ _acceptance/tro-ly-okr-nen/decisions.jsonl    |   1 +
+ _acceptance/tro-ly-okr-nen/evidence-report.md | 429 ++++++++++++++++++++++++++
+ _acceptance/tro-ly-okr-nen/review-findings.md | 146 +++++++++
+ _acceptance/tro-ly-okr-nen/run-log.jsonl      |  56 ++++
+ _acceptance/tro-ly-okr-nen/usage-report.md    |  56 ++++
+ apps/api/test/go-la-cat-quyen.spec.ts         | 219 +++++++------
+ packages/validation/test/ai-chi-phi.spec.ts   | 128 +++++---
+ 7 files changed, 898 insertions(+), 137 deletions(-)
 ```
 
 Diff `_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs`:
@@ -995,6 +1075,49 @@ Sau (HEAD):
       trong component con duoc Suspense boc) van DAT — mau duong ghim ten.
 ```
 
+Commit căn cứ: ```
+eeb6ea30e 2026-09-07 Merge remote-tracking branch 'origin/onehub' into onehub
+
+ .githooks/gate-shape.json                          |  18 +-
+ .githooks/pre-push                                 |   2 +-
+ .github/workflows/acceptance.yml                   |  30 ++
+ .github/workflows/auto-pr.yml                      |   1 +
+ CLAUDE.md                                          |   6 +
+ PRODUCT-MAP.md                                     |   5 +-
+ _acceptance/auto-pr-thoi-do-o-ban-re/contract.md   | 224 +++++++++++++
+ .../auto-pr-thoi-do-o-ban-re/decisions.jsonl       |  19 ++
+ _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml    | 192 +++++++++++
+ .../auto-pr-thoi-do-o-ban-re/evidence-report.md    | 316 ++++++++++++++++++
+ _acceptance/auto-pr-thoi-do-o-ban-re/gap-probe.md  |  44 +++
+ .../auto-pr-thoi-do-o-ban-re/review-findings.md    |  81 +++++
+ _acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl |  49 +++
+ _acceptance/config.yaml                            |  29 ++
+ _acceptance/cron-theo-ban-khai/card-plain.json     |   6 +
+ _acceptance/cron-theo-ban-khai/card.html           |  46 +++
+ _acceptance/cron-theo-ban-khai/contract.md         | 165 ++++++++++
+ _acceptance/cron-theo-ban-khai/decisions.jsonl     |   8 +
+ _acceptance/cron-theo-ban-khai/evals.yaml          | 153 +++++++++
+ _acceptance/cron-theo-ban-khai/evidence-page.html  | 117 +++++++
+ _acceptance/cron-theo-ban-khai/evidence-report.md  | 140 ++++++++
+ _acceptance/cron-theo-ban-khai/evidence/E1.txt     |   4 +
+ _acceptance/cron-theo-ban-khai/evidence/E2.txt     |   3 +
+```
+
+Rang tai cap sha gop (mac dinh) — lenh that cua E2:
+```
+doc du lieu luot o man, da duoc ranh cua layout che: 15 loi goi / 15 file
+generateMetadata doc du lieu luot: 22 loi goi / 22 file — KHONG tinh la ho, da do: Next cho metadata dong
+XANH: khong cho nao doc du lieu luot ma khong co mot ranh <Suspense> che — ke ca ranh cua root layout.
+exit=0
+```
+
+Rang tren cay HEAD (--goc .) — dan so lay tu chinh rang, roi chay lai voi so do; khong chung duoc cay HEAD:
+```
+dan so HEAD theo rang: 57
+MA 2: apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx khong thay ham xuat mac dinh
+exit=2
+```
+
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs`:
 ```
 diff --git a/_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs b/_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs
@@ -1101,6 +1224,34 @@ Sau (HEAD):
       khong can suy qua kho chuoi.
       File nao khac -> ma 1, neu ten file.
       Khong file nao doi -> ma 2: ban va chua co thi phep do khong con nghia.
+```
+
+Commit căn cứ: ```
+eeb6ea30e 2026-09-07 Merge remote-tracking branch 'origin/onehub' into onehub
+
+ .githooks/gate-shape.json                          |  18 +-
+ .githooks/pre-push                                 |   2 +-
+ .github/workflows/acceptance.yml                   |  30 ++
+ .github/workflows/auto-pr.yml                      |   1 +
+ CLAUDE.md                                          |   6 +
+ PRODUCT-MAP.md                                     |   5 +-
+ _acceptance/auto-pr-thoi-do-o-ban-re/contract.md   | 224 +++++++++++++
+ .../auto-pr-thoi-do-o-ban-re/decisions.jsonl       |  19 ++
+ _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml    | 192 +++++++++++
+ .../auto-pr-thoi-do-o-ban-re/evidence-report.md    | 316 ++++++++++++++++++
+ _acceptance/auto-pr-thoi-do-o-ban-re/gap-probe.md  |  44 +++
+ .../auto-pr-thoi-do-o-ban-re/review-findings.md    |  81 +++++
+ _acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl |  49 +++
+ _acceptance/config.yaml                            |  29 ++
+ _acceptance/cron-theo-ban-khai/card-plain.json     |   6 +
+ _acceptance/cron-theo-ban-khai/card.html           |  46 +++
+ _acceptance/cron-theo-ban-khai/contract.md         | 165 ++++++++++
+ _acceptance/cron-theo-ban-khai/decisions.jsonl     |   8 +
+ _acceptance/cron-theo-ban-khai/evals.yaml          | 153 +++++++++
+ _acceptance/cron-theo-ban-khai/evidence-page.html  | 117 +++++++
+ _acceptance/cron-theo-ban-khai/evidence-report.md  | 140 ++++++++
+ _acceptance/cron-theo-ban-khai/evidence/E1.txt     |   4 +
+ _acceptance/cron-theo-ban-khai/evidence/E2.txt     |   3 +
 ```
 
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs`:
@@ -1250,6 +1401,51 @@ Sau (HEAD):
       Xanh: ca bon ma 0. (Menh de «apps/app ra dung ba canh bao lint» bo 13/10, F24: so ghim cua
       vong cu tu het han khi kho lon; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop.)
       Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
+```
+
+Commit căn cứ: ```
+eeb6ea30e 2026-09-07 Merge remote-tracking branch 'origin/onehub' into onehub
+
+ .githooks/gate-shape.json                          |  18 +-
+ .githooks/pre-push                                 |   2 +-
+ .github/workflows/acceptance.yml                   |  30 ++
+ .github/workflows/auto-pr.yml                      |   1 +
+ CLAUDE.md                                          |   6 +
+ PRODUCT-MAP.md                                     |   5 +-
+ _acceptance/auto-pr-thoi-do-o-ban-re/contract.md   | 224 +++++++++++++
+ .../auto-pr-thoi-do-o-ban-re/decisions.jsonl       |  19 ++
+ _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml    | 192 +++++++++++
+ .../auto-pr-thoi-do-o-ban-re/evidence-report.md    | 316 ++++++++++++++++++
+ _acceptance/auto-pr-thoi-do-o-ban-re/gap-probe.md  |  44 +++
+ .../auto-pr-thoi-do-o-ban-re/review-findings.md    |  81 +++++
+ _acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl |  49 +++
+ _acceptance/config.yaml                            |  29 ++
+ _acceptance/cron-theo-ban-khai/card-plain.json     |   6 +
+ _acceptance/cron-theo-ban-khai/card.html           |  46 +++
+ _acceptance/cron-theo-ban-khai/contract.md         | 165 ++++++++++
+ _acceptance/cron-theo-ban-khai/decisions.jsonl     |   8 +
+ _acceptance/cron-theo-ban-khai/evals.yaml          | 153 +++++++++
+ _acceptance/cron-theo-ban-khai/evidence-page.html  | 117 +++++++
+ _acceptance/cron-theo-ban-khai/evidence-report.md  | 140 ++++++++
+ _acceptance/cron-theo-ban-khai/evidence/E1.txt     |   4 +
+ _acceptance/cron-theo-ban-khai/evidence/E2.txt     |   3 +
+```
+
+Lý do tách theo loại (1 = vật đã gỡ · 2 = tiền đề bị quyết định đã ký sau lật · 3 = lỗi của chính răng):
+
+| Loại | Lý do | Căn cứ |
+|---|---|---|
+| 3 | spawnSync khong khai maxBuffer -> ENOBUFS khi chay bun run test (loi cua chinh rang) | `repin-20261013T052045Z-82824` |
+| 2 | menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu; luat F10 cua kho: thuoc «vong nay» neo cap sha gop, khong neo HEAD; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop. So canh bao hien tai la troi chung cua kho, khong do vong lenh-dung-do gay ra | `_acceptance/thuoc-khong-tu-het-han/contract.md:3` |
+
+So canh bao lint cua apps/app o HEAD:
+```
+Found 29 warnings.
+```
+
+Luat F10 (thuoc-khong-tu-het-han, dong 3 cua hop dong):
+```
+feature: Thước của hồ sơ đã ký không tự hết hạn — sửa paths chết để lưới trước-gộp bật lại bộ lọc hoá cũ ở 3 hồ sơ có thước còn sống, neo thước «vòng này» của ha-tran-thang-hoi-zalo vào cặp sha gộp, và kiểm kê phần còn lại
 ```
 
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs`:

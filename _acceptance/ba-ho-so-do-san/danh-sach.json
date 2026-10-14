@@ -1232,6 +1232,32 @@
 					"xoa_tep": true,
 					"thong_diep": "design-gate do khi tep dich vang (ca da lam E12 do sau 574292047)"
 				}
+			],
+			"bang_them": [
+				{
+					"tieu_de": "Commit go man-soan.tsx",
+					"lenh": [
+						"bash",
+						"-c",
+						"git show --stat --format=\"%h %ad %s\" --date=short 574292047 | grep -E \"^[0-9a-f]{7,}|man-soan|trang-soan|khung-soan\""
+					]
+				},
+				{
+					"tieu_de": "Tep ke nhiem co o HEAD",
+					"lenh": [
+						"bash",
+						"-c",
+						"git ls-files \"apps/app/app/(app)/[[]slug]/okr/soan/trang-soan.tsx\" \"apps/app/app/(app)/[[]slug]/okr/soan/khung-soan.tsx\"; ls \"apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx\" 2>&1 | head -1"
+					]
+				},
+				{
+					"tieu_de": "Lenh moi cua E12 tren tep ke nhiem",
+					"lenh": [
+						"bash",
+						"-c",
+						"for t in \"apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx\" \"apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx\" \"apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx\" \"apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx\"; do node $(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)/scripts/design-gate.mjs --target \"$t\" --mode static >/dev/null || { echo \"do: $t\"; exit 1; }; echo \"dat: $t\"; done"
+					]
+				}
 			]
 		},
 		{
@@ -1523,6 +1549,23 @@
 					],
 					"thong_diep": "go build khoi danh sach task cua pre-push thi dieu 3 do"
 				}
+			],
+			"ly_do_tach": [
+				{
+					"loai": 2,
+					"ly_do": "dieu 2 so ci.yml tung ky tu voi ban cua hang o sha 3c97e759; tien de «ci.yml cua hang khong doi» bi luat 47 (09/10) lat",
+					"can_cu": "CLAUDE.md:14"
+				},
+				{
+					"loai": 3,
+					"ly_do": "spawnSync khong khai maxBuffer: dau ra pre-push > 1 MiB lam status null (loi cua chinh rang)",
+					"can_cu": "repin-20261013T052045Z-82824 (E8 cung lop: ENOBUFS)"
+				},
+				{
+					"loai": 3,
+					"ly_do": "tach dieu 3 thanh ham dung chung buildTrongPrePush de do chieu do — khong doi hanh vi",
+					"can_cu": "_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs:1"
+				}
 			]
 		},
 		{
@@ -1622,6 +1665,24 @@
 					],
 					"thong_diep": "bo ranh Suspense cua root layout tren cay moc gop thi rang do"
 				}
+			],
+			"bang_them": [
+				{
+					"tieu_de": "Rang tai cap sha gop (mac dinh) — lenh that cua E2",
+					"lenh": [
+						"bash",
+						"-c",
+						"mkdir -p .acceptance-runs/ba-ho-so-do-san; node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs > .acceptance-runs/ba-ho-so-do-san/ld-e2-moc.log 2>&1; c=$?; tail -3 .acceptance-runs/ba-ho-so-do-san/ld-e2-moc.log; echo exit=$c"
+					]
+				},
+				{
+					"tieu_de": "Rang tren cay HEAD (--goc .) — dan so lay tu chinh rang, roi chay lai voi so do; khong chung duoc cay HEAD",
+					"lenh": [
+						"bash",
+						"-c",
+						"mkdir -p .acceptance-runs/ba-ho-so-do-san; node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs --goc . --neo 0 > .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log 2>&1; n=$(grep -o \"dan so [0-9]*\" .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log | grep -o \"[0-9]*$\"); node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs --goc . --neo $n > .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log 2>&1; c=$?; echo \"dan so HEAD theo rang: $n\"; tail -3 .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log; echo exit=$c"
+					]
+				}
 			]
 		},
 		{
@@ -1676,6 +1737,37 @@
 					"vao": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 0}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
 					"vao_dot": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 1}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
 					"thong_diep": "mot trong bon lenh cu khong ma 0 thi rang do"
+				}
+			],
+			"ly_do_tach": [
+				{
+					"loai": 3,
+					"ly_do": "spawnSync khong khai maxBuffer -> ENOBUFS khi chay bun run test (loi cua chinh rang)",
+					"can_cu": "repin-20261013T052045Z-82824"
+				},
+				{
+					"loai": 2,
+					"ly_do": "menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu; luat F10 cua kho: thuoc «vong nay» neo cap sha gop, khong neo HEAD; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop. So canh bao hien tai la troi chung cua kho, khong do vong lenh-dung-do gay ra",
+					"can_cu": "_acceptance/thuoc-khong-tu-het-han/contract.md:3"
+				}
+			],
+			"bang_them": [
+				{
+					"tieu_de": "So canh bao lint cua apps/app o HEAD",
+					"lenh": [
+						"bash",
+						"-c",
+						"cd apps/app && bun run lint 2>&1 | grep -E \"Found [0-9]+ warning\""
+					]
+				},
+				{
+					"tieu_de": "Luat F10 (thuoc-khong-tu-het-han, dong 3 cua hop dong)",
+					"lenh": [
+						"sed",
+						"-n",
+						"3p",
+						"_acceptance/thuoc-khong-tu-het-han/contract.md"
+					]
 				}
 			]
 		}

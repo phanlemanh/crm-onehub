@@ -32,6 +32,22 @@ function vatGo(r) {
 	return ra.join("\n\n");
 }
 
+function chayBang(lenh) {
+	const r = spawnSync(lenh[0], lenh.slice(1), { cwd: GOC, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+	return `${r.stdout}${r.stderr}`.trim().split("\n").slice(-40).join("\n");
+}
+
+function phanThem(r) {
+	const ra = [];
+	if (Array.isArray(r.ly_do_tach) && r.ly_do_tach.length) {
+		ra.push("Lý do tách theo loại (1 = vật đã gỡ · 2 = tiền đề bị quyết định đã ký sau lật · 3 = lỗi của chính răng):", "", "| Loại | Lý do | Căn cứ |", "|---|---|---|");
+		for (const t of r.ly_do_tach) ra.push(`| ${t.loai} | ${String(t.ly_do).replaceAll("|", "/")} | \`${t.can_cu ?? "-"}\` |`);
+		ra.push("");
+	}
+	for (const b of r.bang_them ?? []) ra.push(`${b.tieu_de}:`, rao(chayBang(b.lenh)), "");
+	return ra;
+}
+
 function chieuDo() {
 	const r = spawnSync("bun", [join(GOC, "_acceptance", SLUG, "rang", "chieu-do.mjs")], { cwd: GOC, encoding: "utf8" });
 	return `${r.stdout}${r.stderr}`.trim();
@@ -61,6 +77,8 @@ for (const [k, rows] of nhom) {
 	if (rows.length > 1) phan.push(`Mục paths trong dòng: ${rows.map((x) => `\`${x.muc ?? "-"}\``).join(", ")}`, "");
 	phan.push("Trước (mốc nền):", rao(khoiEval(docTai(MOC_NEN, tep), id)), "", "Sau (HEAD):", rao(khoiEval(docTai("HEAD", tep), id)), "");
 	if (r.xu_ly === "khai-not-run") phan.push(rows.map(vatGo).filter(Boolean).join("\n\n"), "");
+	if (r.xu_ly === "sua-rang" && /^[0-9a-f]{7,40}$/.test(r.can_cu ?? "")) phan.push(vatGo({ ...r, muc: null }), "");
+	phan.push(...phanThem(r));
 	if (r.xu_ly === "sua-rang") {
 		for (const t of r.tep ?? []) phan.push(`Diff \`${t}\`:`, rao(gitThu("diff", MOC_NEN, "HEAD", "--", t) || "(khong doi)"), "");
 		phan.push("Đột biến khai:", rao(JSON.stringify(r.dot_bien ?? [], null, 2)), "");
