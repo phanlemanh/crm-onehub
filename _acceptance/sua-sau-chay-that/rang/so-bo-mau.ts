@@ -31,7 +31,7 @@ const SO = {
 	tepTroLy: "tro-ly-tep.txt",
 	baoCao: BO_MAU.bangChung.baoCao,
 	tungCau: BO_MAU.bangChung.tungCau,
-	luotChan: 1,
+	luot: [1, 2],
 	soLoiBa: 3,
 } as const;
 
@@ -141,21 +141,24 @@ function kiem({ evMoi, evKy, goc }: ChoKiem): Ket {
 		const n = khongMoi.get(k);
 		return n !== undefined && n !== "loi";
 	});
-	const loiCua = (ds: readonly NhanCau[]) =>
-		ds
-			.filter((c) => c.luot === SO.luotChan && c.nhan === "loi")
-			.map((c) => c.id);
-	const loiKy = loiCua(khongKy);
-	const loiMoi = loiCua(khongDat(moi.bang.khongDat));
-	const luiChan = lui.filter((k) => k.startsWith(`${SO.luotChan}:`));
-	const luiKhac = lui.filter((k) => !k.startsWith(`${SO.luotChan}:`));
-	const dong = [
-		`lui luot ${SO.luotChan}: ${luiChan.length ? luiChan.map((k) => k.slice(2)).join(", ") : "(khong co)"}`,
-		`loi model luot ${SO.luotChan}: ${loiMoi.length ? loiMoi.join(", ") : "(khong co)"} — tran ${loiKy.length} theo luot da ky (${loiKy.join(", ") || "khong co"})`,
-		`lui luot khac (khong chan): ${luiKhac.length ? luiKhac.join(", ") : "(khong co)"}`,
-	];
-	const qua = loiMoi.length > loiKy.length;
-	if (luiChan.length > 0 || qua) return { ma: 1, dong };
+	const nhanMoi = khongDat(moi.bang.khongDat);
+	const loiCua = (ds: readonly NhanCau[], luot: number) =>
+		ds.filter((c) => c.luot === luot && c.nhan === "loi").map((c) => c.id);
+	const dong: string[] = [];
+	let chan = false;
+	for (const luot of SO.luot) {
+		const luiLuot = lui
+			.filter((k) => k.startsWith(`${luot}:`))
+			.map((k) => k.slice(2));
+		const loiKy = loiCua(khongKy, luot);
+		const loiMoi = loiCua(nhanMoi, luot);
+		if (luiLuot.length > 0 || loiMoi.length > loiKy.length) chan = true;
+		dong.push(
+			`lui luot ${luot}: ${luiLuot.length ? luiLuot.join(", ") : "(khong co)"}`,
+			`loi model luot ${luot}: ${loiMoi.length ? loiMoi.join(", ") : "(khong co)"} — tran ${loiKy.length} theo luot da ky (${loiKy.join(", ") || "khong co"})`,
+		);
+	}
+	if (chan) return { ma: 1, dong };
 	return { ma: 0, dong: [...dong, "dat: khong cau dat nao thanh khong dat"] };
 }
 
@@ -198,6 +201,21 @@ function banSao(doi: (dong: DongTungCau[]) => DongTungCau[]): string {
 
 const laDatMot = (d: DongTungCau) =>
 	d.luot === 1 && d.nhom === "co-trang" && d.ketCuc === "TRA_LOI-du";
+
+const laDatHai = (d: DongTungCau) =>
+	d.luot === 2 &&
+	d.nhom === "co-trang" &&
+	(d.zalo ? d.zalo.coHang : d.ketCuc === "co-hang");
+
+function doiHai(ds: DongTungCau[], ketCuc: "khong-hang" | "loi") {
+	const chon = ds.find(laDatHai)?.id ?? "";
+	return {
+		dong: ds.map((d) =>
+			d.luot === 2 && d.id === chon ? { ...d, ketCuc, zalo: undefined } : d,
+		),
+		ma: [chon],
+	};
+}
 
 function doiN(ds: DongTungCau[], n: number, ketCuc: "TRA_LOI-sai" | "LOI") {
 	const chon = ds
@@ -259,6 +277,38 @@ const CHIEU_DO: readonly ChieuDo[] = [
 			let ma: string[] = [];
 			const ev = banSao((ds) => {
 				const r = doiN(ds, SO.soLoiBa, "LOI");
+				ma = r.ma;
+				return r.dong;
+			});
+			return {
+				ket: kiem({ evMoi: ev, evKy: SO.daKy, goc: GOC }),
+				mong: 1,
+				phaiCo: ma,
+			};
+		},
+	},
+	{
+		ten: "luot hai mot cau dat thanh khong chuyen",
+		chay: () => {
+			let ma: string[] = [];
+			const ev = banSao((ds) => {
+				const r = doiHai(ds, "khong-hang");
+				ma = r.ma;
+				return r.dong;
+			});
+			return {
+				ket: kiem({ evMoi: ev, evKy: SO.daKy, goc: GOC }),
+				mong: 1,
+				phaiCo: ma,
+			};
+		},
+	},
+	{
+		ten: "luot hai mot cau thanh loi model, qua tran",
+		chay: () => {
+			let ma: string[] = [];
+			const ev = banSao((ds) => {
+				const r = doiHai(ds, "loi");
 				ma = r.ma;
 				return r.dong;
 			});
