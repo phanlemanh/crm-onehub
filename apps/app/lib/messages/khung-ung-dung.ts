@@ -18,7 +18,7 @@ const en = {
 	nav: {
 		primary: "Primary",
 		mobile: "Mobile navigation",
-		mobileChat: "Navigation and agent chats",
+		mobileChat: "Navigation and Kara chats",
 		title: "Navigation",
 		close: "Close navigation",
 		open: "Open navigation",
@@ -53,7 +53,7 @@ const en = {
 		enrichingNow: "Enriching now",
 		emptyTitle: "Nothing right now",
 		emptyBody:
-			"New companies and contacts show up here while your agents look them up.",
+			"New companies and contacts show up here while Kara looks them up.",
 		moreQueued: (n: string) => `${n} more queued`,
 		showAll: "Show all",
 		loadMore: "Load more",
@@ -120,7 +120,7 @@ const vi = {
 		enrichingNow: "Đang tra cứu lúc này",
 		emptyTitle: "Chưa có gì",
 		emptyBody:
-			"Công ty và cá nhân mới hiện ở đây trong lúc tác nhân tra cứu về họ.",
+			"Công ty và cá nhân mới hiện ở đây trong lúc Kara tra cứu về họ.",
 		moreQueued: (n: string) => `Còn ${n} đang xếp hàng`,
 		showAll: "Hiện tất cả",
 		loadMore: "Tải thêm",

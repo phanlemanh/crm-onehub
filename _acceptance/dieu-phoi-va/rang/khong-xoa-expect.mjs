@@ -11,7 +11,7 @@ const TEP = [
 	"apps/app/test/han-viec.dom.tsx",
 	"apps/app/test/may-nhac.dom.tsx",
 ];
-const CHO_PHEP = [];
+const CHO_PHEP = ['khung("overdue")', "T3:co(g.T3.id)"];
 
 function chuanHoa(cau) {
 	let ra = "";

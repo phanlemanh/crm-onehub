@@ -1,6 +1,7 @@
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import type { LyDoLichSu } from "@crm/db/okr-muc-tieu-lich-su";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
+import { LY_DO_CAN_CHINH } from "@crm/validation/ly-do-can-chinh";
 import {
 	LOI_KHUON_CAP_NHAT,
 	type LoiGiaTri,
@@ -167,7 +168,7 @@ export const OKR = {
 			thuLaiHayBo:
 				"Chọn một: thử lại cuộc đang soạn, hoặc bỏ nó để mở cuộc mới.",
 			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,
-			dongCu: "Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn.",
+			dongCu: "Dòng này thuộc bản nháp cũ — Kara đã nộp bản mới hơn.",
 			chaDaBac: (ten: string) =>
 				`Mục tiêu cha «${ten}» đã bị bác — không nhận dòng dưới nó.`,
 			chaBiLoai: (ten: string) =>
@@ -191,7 +192,7 @@ export const OKR = {
 				`Vượt trần ${tran} Mục tiêu mỗi đơn vị.`,
 			duaVaoHaiLan: "Cuộc này đã được đưa vào bộ OKR.",
 			donViThieuId: "Bộ phận cần divisionId, phòng ban cần departmentId.",
-			chuaCoKhoaMoHinh: "Chưa có khoá model cho Trợ lý OKR.",
+			chuaCoKhoaMoHinh: "Chưa có khoá model cho Kara.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",
@@ -381,7 +382,7 @@ export const OKR = {
 			khongCoDeXuat: (id: string) => `Không có đề xuất nào mang mã ${id}.`,
 			cachKhongHop: "Dòng này không nhận cách quyết đó.",
 			canGiaTri: "Sửa rồi nhận cần giá trị mới.",
-			daCu: "Ô này đã đổi từ lúc Trợ lý OKR đề xuất — tải lại danh sách góp ý.",
+			daCu: "Ô này đã đổi từ lúc Kara đề xuất — tải lại danh sách góp ý.",
 			krKhacMucTieu: "KR này không thuộc Mục tiêu đang hỏi.",
 			khongCoTomTat: (id: string) =>
 				`Không có bản tóm tắt tuần nào mang mã ${id}.`,
@@ -431,6 +432,8 @@ export const OKR = {
 			khongCo: (id: string) => `Không có căn chỉnh nào mang mã ${id}.`,
 			gioiHanKhongCanChinh:
 				"Mục tiêu ở mức giới hạn không căn chỉnh được: không góp vào mục tiêu khác, cũng không nhận mục tiêu nào góp vào.",
+			canCuCanLyDo: "Căn cứ cần đi kèm lý do.",
+			lyDoQuaDai: `Lý do và căn cứ tối đa ${LY_DO_CAN_CHINH.lyDoToiDa} ký tự mỗi ô.`,
 		},
 		nhap: {
 			thieuMucTieu: "Thiếu mục tiêu",
