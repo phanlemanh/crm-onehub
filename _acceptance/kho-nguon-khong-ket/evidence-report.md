@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0d382739508bfad5a082f1de511782b618fc63fc
+verified_commit: 248fa9d15618d87d9b0ea6788055fff5b60a9fb4
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng 2 trên verdict PASS 8/8 eval máy (S4 round 1, wf_10611c45-af9). Ngoài-1, Ngoài-2, Ngoài-4 ghi Known limits; Ngoài-3 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê cả bốn quyết định Treo-1…Treo-4.
 ---
 
@@ -182,3 +182,7 @@ sha: 13204dd159930a2913e1a176dba82bf70efa3ad3 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-14, do gộp onehub c4c8ab0ab (#391 l3b) trước khi gộp #389; tai-lieu-lich-su.ts gọi Kara
 run_id: repin-20261014T051016Z-89088
 sha: 0d382739508bfad5a082f1de511782b618fc63fc · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7u · diff chạm vật đo ngoài làn máy: E7u — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-14, do gộp onehub 1997da85b (lô 06:00Z: #402 DA2, V2f, #400 NM4) trước khi gộp #389
+run_id: repin-20261014T075240Z-27982
+sha: 248fa9d15618d87d9b0ea6788055fff5b60a9fb4 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7u · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
