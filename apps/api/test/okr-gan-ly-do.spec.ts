@@ -362,7 +362,7 @@ const Q1 = mt("q4-kd-bac-1");
 const Q2 = mt("q4-kd-nam-2");
 const LY_DO_KARA = "Bán lẻ miền Bắc kéo doanh thu hợp đồng mới của quý.";
 const CAN_CU_KARA = "Bán lẻ miền Bắc đạt 6 tỷ đồng hợp đồng chốt được";
-const daNhan: { a: string; b: string } = { a: "", b: "" };
+const daNhan = { a: "", b: "" };
 
 async function nhanhTrong(
 	objectiveId: string,
@@ -798,10 +798,10 @@ describe("l4-mau", () => {
 				"utf8",
 			);
 			expect(boGhi.match(/okrDeXuat\.createMany\(/g)?.length).toBe(1);
-			expect(DE_XUAT_KARA_MAU.mucTieu).toBe(CA_MAN.mucTieu);
-			expect([DE_XUAT_KARA_MAU.lyDo, DE_XUAT_KARA_MAU.canCu]).toEqual([
-				CA_MAN.lyDo,
-				CA_MAN.canCu,
+			expect(CA_MAN.mucTieu).toBe(DE_XUAT_KARA_MAU.mucTieu);
+			expect([CA_MAN.lyDo, CA_MAN.canCu]).toEqual([
+				DE_XUAT_KARA_MAU.lyDo,
+				DE_XUAT_KARA_MAU.canCu,
 			]);
 		},
 		CHO_DB,

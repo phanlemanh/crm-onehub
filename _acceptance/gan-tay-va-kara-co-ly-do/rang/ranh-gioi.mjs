@@ -15,6 +15,7 @@ const CHI_THEM = [
 	"packages/db/src/okr-vet.ts",
 	"apps/app/test/khung-gop-y.tsx",
 	"packages/validation/package.json",
+	"apps/api/test/okr-sua-an-chu-ky.spec.ts",
 ];
 const DOI_GIA_TRI_DUOC = {
 	"apps/app/lib/messages/okr-gop-y.ts": [

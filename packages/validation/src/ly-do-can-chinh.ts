@@ -13,7 +13,7 @@ export const MUC_TIN_CAN_CHINH = [
 export type MucTinCanChinh = (typeof MUC_TIN_CAN_CHINH)[number];
 
 const coChu = (s: string | null | undefined): s is string =>
-	typeof s === "string" && s.trim() !== "";
+	s != null && s.trim() !== "";
 
 export function mucTinCanChinh(
 	lyDo: string | null,

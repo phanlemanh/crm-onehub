@@ -1,9 +1,9 @@
 import { db } from "@crm/db";
 import { VIEC_OKR } from "@crm/db/agent-tasks";
 import { xepViecTroLy } from "@crm/db/okr-tro-ly";
-import type { DongGopY } from "@crm/validation/okr-tro-ly";
+import { nopDeXuatVao } from "../../../agent/agent/lib/okr/nop-de-xuat";
+import type { NguCanhKenh } from "../../../agent/agent/lib/phien-con";
 import { completeTask, noteSession } from "../../../agent/agent/lib/tasks";
-import nopDeXuat from "../../../agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat";
 import { idMau, LoiBoMau, OKR_MAU } from "./cau-hinh";
 
 export const DE_XUAT_KARA_MAU = {
@@ -14,22 +14,8 @@ export const DE_XUAT_KARA_MAU = {
 	canCu: "Khiếu nại tồn qua đêm giữ dưới 5 vụ",
 } as const;
 
-type KetQuaNop = {
-	ketQua: string;
-	lyDo: string;
-	soDong: number;
-	biLoai: number;
-};
-type CongCuNop = {
-	execute: (
-		input: { dong: DongGopY[] },
-		ctx: ReturnType<typeof nguCanhCon>,
-	) => Promise<KetQuaNop>;
-};
-
-function nguCanhCon(phienGoc: string) {
+function nguCanhCon(phienGoc: string): NguCanhKenh {
 	return {
-		agent: { name: "tro_ly_okr" },
 		channel: {
 			kind: "subagent",
 			continuationToken: `subagent:${phienGoc}:goi-tro-ly`,
@@ -67,7 +53,7 @@ export async function napDeXuatKaraMau(now = new Date()): Promise<string> {
 	});
 	const phienGoc = `${OKR_MAU.tienTo}kara-${xep.taskId}`;
 	await noteSession(xep.taskId, phienGoc);
-	const kq = await (nopDeXuat as unknown as CongCuNop).execute(
+	const kq = await nopDeXuatVao(
 		{
 			dong: [
 				{
