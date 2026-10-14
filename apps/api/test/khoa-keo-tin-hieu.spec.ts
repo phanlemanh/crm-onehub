@@ -31,6 +31,7 @@ const VAI = {
 const LOAI = [undefined, "toan-quyen", "keo-tin-hieu"] as const;
 const loiCoMa = z.object({ statusCode: z.number() });
 const coDuongHttp = z.object({ path: z.string() });
+const coPhien = z.object({ user: z.object({ id: z.string() }) });
 const DUONG_LICH = `${REST_BRIDGE_PATH}/tin-hieu/lich/keo-ve`;
 const CHO_MS = 120_000;
 
@@ -401,6 +402,11 @@ describe("tvk-duong-khac", () => {
 			)) {
 				const r = await goiDuong(d.goi, thuong.key, thay);
 				if (r.status !== 200) doiChung.push(`o ${d.o} ${d.ten}: ${r.status}`);
+				if ([6, 12, 13].includes(d.o)) {
+					const phien = coPhien.safeParse(r.body);
+					if (!phien.success || phien.data.user.id !== uid("owner"))
+						doiChung.push(`o ${d.o} ${d.ten}: khong mo phien cua chu khoa`);
+				}
 			}
 			expect(doiChung, "khoa thuong mat phien").toEqual([]);
 		},
