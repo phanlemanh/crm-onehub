@@ -2653,6 +2653,31 @@ model OkrCuocSoan {
   @@map("okrCuocSoan")
 }
 
+model OkrCuocHoi {
+  id                String   @id @default(cuid())
+  nguoiHoiUserId    String
+  sessionId         String   @unique
+  cacPhien          String[] @default([])
+  streamIndex       Int      @default(0)
+  continuationToken String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([nguoiHoiUserId, createdAt])
+  @@map("okrCuocHoi")
+}
+
+model OkrLuotHoi {
+  id        String   @id @default(cuid())
+  cuocHoiId String
+  userId    String
+  ngay      String
+  createdAt DateTime @default(now())
+
+  @@index([userId, ngay])
+  @@map("okrLuotHoi")
+}
+
 model OkrTomTat {
   id           String   @id @default(cuid())
   taskId       String   @unique
