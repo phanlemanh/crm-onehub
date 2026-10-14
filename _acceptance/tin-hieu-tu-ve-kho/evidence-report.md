@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: tin-hieu-tu-ve-kho
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: ee527ed2b3bfc99e94ffdf50532680af3c9be8b9
-human_signoff:
+human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 3 (17/17 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: tin-hieu-tu-ve-kho
@@ -195,7 +195,7 @@ human_signoff:
     - domain-correctness: PASS (r2)
     - operational-feasibility: PASS (r2)
     - spec-alignment: PASS (r2)
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-14 — Đạt
 
 ### Lệnh suite (hồi quy)
 

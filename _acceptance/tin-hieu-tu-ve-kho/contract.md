@@ -5,7 +5,7 @@ slug: tin-hieu-tu-ve-kho
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api, ci]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-14T03:06:12Z
 design_doc: docs/superpowers/specs/2026-10-14-tin-hieu-tu-ve-kho-design.md
@@ -68,3 +68,16 @@ Source input: `_acceptance/tin-hieu-tu-ve-kho/opportunity.md` (Cổng Đáng `bu
 - Mọi hàng `apikey` hiện có mang `configId = 'default'` (cột `NOT NULL DEFAULT 'default'` từ migration `20260820152910_add_api_keys`); thư viện coi `default` và rỗng là cấu hình mặc định — khoá cũ không cần migration.
 - Thủ tục `tinHieu.keoVe` và đường `POST /rest/tin-hieu/keo-ve` của LT2 giữ nguyên; hồ sơ LT2 không đổi.
 - PR do tác vụ mở bằng `GITHUB_TOKEN` không kích hoạt CI — giới hạn đã biết, ghi ở `docs/api.md`.
+- Known limits — anh chọn ở Cổng Bằng chứng 2026-10-14, từ S4 vòng 2 và 3:
+  - Ngoài-1: Mỗi sáng PR hàng chờ tín hiệu vẫn mở và chạy đúng, nhưng nhánh và tiêu đề của nó mang một cái tên khác với tên của việc này trong lộ trình. Người tra lộ trình có thể không nhận ra PR đó là của việc nào.
+  - Ngoài-2: Hiện khoá chỉ-kéo vẫn bị từ chối ở mọi đường khác đúng như hứa. Nhưng nếu sau này ai đó bớt một đường khỏi danh sách kiểm, bài kiểm vẫn xanh và không ai biết đường đó thôi được kiểm nữa.
+  - Ngoài-3: Đường kéo tín hiệu theo lịch đã được kiểm là từ chối người dùng vai chỉ OKR đang đăng nhập, nhưng chưa được kiểm với chủ hay quản trị đăng nhập bằng trình duyệt. Nếu có lỗi riêng ở trường hợp đó thì bài kiểm hiện tại sẽ không báo.
+  - Ngoài-4: Lịch chạy không tự gộp PR và điều đó đang đúng. Chỉ có điều bài kiểm khẳng định việc này có thể xanh ngay cả khi nó không quan sát được gì, nên lời bảo đảm yếu hơn vẻ ngoài.
+  - Ngoài-5: Thành viên thường và vai chỉ OKR đúng là không thấy lựa chọn loại khoá. Nhưng bài kiểm cho hai vai này không chứng minh tờ tạo khoá đã mở ra, nên nếu tờ đó hỏng riêng cho họ thì bài kiểm vẫn báo xanh.
+  - Ngoài-6: PR tín hiệu mà lịch đêm tự mở sẽ không tự chạy kiểm tra. Người điều phối phải đóng rồi mở lại PR đó thì kiểm tra mới chạy.
+  - Ngoài-7: Thành viên thường không thấy lựa chọn loại khoá, thay vì thấy nó bị khoá kèm lý do. Hành vi đúng điều đã duyệt, nhưng luật trang Cài đặt chưa ghi ngoại lệ này nên màn sau có thể lấy làm tiền lệ để ẩn.
+  - Ngoài-9: Trong nhật ký, các lượt kéo theo lịch hiện vai trống nên không thể thống kê các lượt này theo vai. Hoạt động của lịch không bị ảnh hưởng.
+  - Ngoài-11: Nếu công cụ GitHub trả về kết quả có hình dạng bất thường, lượt lịch có thể tưởng chưa có PR và mở thêm một PR thứ hai thay vì dừng đỏ. Trường hợp này hiếm.
+  - Ngoài-12: Khi cơ sở dữ liệu tạm hỏng đúng lúc lịch đêm chạy, lượt kéo báo khoá không hợp lệ chứ không báo hệ thống đang lỗi. Chủ kho có thể đổi một khoá vẫn còn dùng được.
+  - Ngoài-13: Phép kiểm việc PR tín hiệu được xếp loại nhẹ chưa đi qua đúng đường mà hệ thống kiểm tra thật dùng. Nếu cách lấy danh sách tệp ở đó hỏng thì phép kiểm này không báo đỏ.
+  - Ngoài-14: Bài kiểm tra xác nhận hộp khoá vừa tạo của khoá toàn quyền không có câu chỉ-kéo, nhưng chưa xác nhận hộp đó có hiện ra. Nếu hộp không hiện thì bài kiểm tra vẫn xanh.
