@@ -44,7 +44,11 @@ function cot(m: TinHieuMessages): DataTableColumn<DongTatCa>[] {
 			header: t.cot.ma,
 			width: "w-16",
 			hideBelow: "sm",
-			cell: (d) => <span className="tabular-nums">{d.ma}</span>,
+			cell: (d) => (
+				<span className="tabular-nums" data-tin-hieu-tat-ca={d.ma}>
+					{d.ma}
+				</span>
+			),
 		},
 		{
 			id: "ke",
