@@ -261,6 +261,9 @@ const en = {
 		boQua: (n: string) => `${n} skipped — already archived or no longer there.`,
 		khongDoi: (n: string) =>
 			`Nothing changed — ${n} skipped: already archived or no longer there.`,
+		chuaLuuTru: (n: string) =>
+			`${n} could not be archived — the server hit an error. Try again later.`,
+		daVeTruoc: (n: string) => `${n} were already restored.`,
 		deleteForever: "Delete forever",
 		archive: "Archive",
 		reEnrich: "Re-enrich",
@@ -591,6 +594,9 @@ const vi = {
 			`${n} bản bị bỏ qua — đã lưu trữ từ trước hoặc không còn.`,
 		khongDoi: (n: string) =>
 			`Không có gì thay đổi — ${n} bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.`,
+		chuaLuuTru: (n: string) =>
+			`${n} bản chưa lưu trữ được vì máy chủ gặp lỗi — thử lại sau.`,
+		daVeTruoc: (n: string) => `${n} bản đã được khôi phục từ trước.`,
 		deleteForever: "Xoá vĩnh viễn",
 		archive: "Lưu trữ",
 		reEnrich: "Tra cứu lại",
