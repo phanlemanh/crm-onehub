@@ -2,10 +2,10 @@
 
 import { Button } from "@crm/ui/components/button";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
-import { Skeleton } from "@crm/ui/components/skeleton";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import Link from "next/link";
 import { useState } from "react";
+import { KhungChoTatCa } from "@/app/(app)/[slug]/tin-hieu/tat-ca/khung-cho";
 import {
 	PageShell,
 	PageShellActions,
@@ -41,21 +41,6 @@ import {
 const GOC = "/proto/moi-tin-hieu-cho-quan-tri";
 const HREF_CUA_TOI = `${GOC}?state=${STATE.cuaToiQuanTri}`;
 const HREF_TAT_CA = `${GOC}?state=${STATE.tatCaCo}`;
-
-function KhungChoTatCa() {
-	return (
-		<div className="flex flex-col gap-3" data-tin-hieu-tat-ca-dang-tai="">
-			<div className="grid grid-cols-3 gap-2">
-				<Skeleton className="h-24" />
-				<Skeleton className="h-24" />
-				<Skeleton className="h-24" />
-			</div>
-			<Skeleton className="h-10 w-full" />
-			<Skeleton className="h-10 w-full" />
-			<Skeleton className="h-10 w-full" />
-		</div>
-	);
-}
 
 function Khung({
 	the,
