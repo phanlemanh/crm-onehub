@@ -181,6 +181,12 @@ describe("mth-tat-ca", () => {
 		};
 		for (const vien of ["owner", "admin"] as const) {
 			const rows = await tatCa(vien);
+			const chu = JSON.stringify(rows);
+			for (const n of GUI)
+				expect(
+					chu.includes(thu(n)),
+					"phan hoi mang thu dien tu nguoi gui",
+				).toBe(false);
 			expect(rows.length).toBe(GUI.length);
 			expect(rows.map((r) => r.id)).toEqual(hang.map((h) => h.id));
 			for (const n of GUI) {
@@ -193,12 +199,6 @@ describe("mth-tat-ca", () => {
 				expect(r?.phongBan, `phong ban cua ${n}`).toEqual(kyVongPhong[n]);
 				expect(r?.daKeoVe).toBe(h?.keoVeLuc !== null);
 			}
-			const chu = JSON.stringify(rows);
-			for (const n of GUI)
-				expect(
-					chu.includes(thu(n)),
-					"phan hoi mang thu dien tu nguoi gui",
-				).toBe(false);
 		}
 		const sau = await db.tinHieu.findMany({ orderBy: { guiLuc: "desc" } });
 		expect(
