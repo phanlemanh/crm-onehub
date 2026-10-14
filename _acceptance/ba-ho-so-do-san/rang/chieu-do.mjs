@@ -140,7 +140,12 @@ if (import.meta.main) {
 				lech++;
 				continue;
 			}
-			const batDung = !kq.dotDat && (!db.thong_diep_may || kq.chuDot.includes(db.thong_diep_may));
+			if (!String(db.thong_diep_may ?? "").trim()) {
+				console.log(`HONG THIEU_THONG_DIEP ${k} ${db.ten}`);
+				loi++;
+				continue;
+			}
+			const batDung = !kq.dotDat && kq.chuDot.includes(db.thong_diep_may);
 			if (kq.thatDat && batDung) console.log(`${k} ${db.ten}: that dat, dot bien bat — ${db.thong_diep}`);
 			else {
 				console.log(`HONG ${k} ${db.ten}: that ${kq.thatDat ? "dat" : "KHONG dat"}, dot bien ${kq.dotDat ? "KHONG bi bat" : "bat sai thong diep"}`);

@@ -1230,7 +1230,8 @@
 					"kieu": "design-gate",
 					"tep": "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx",
 					"xoa_tep": true,
-					"thong_diep": "design-gate do khi tep dich vang (ca da lam E12 do sau 574292047)"
+					"thong_diep": "design-gate do khi tep dich vang (ca da lam E12 do sau 574292047)",
+					"thong_diep_may": "ENOENT"
 				}
 			],
 			"bang_them": [
@@ -1521,6 +1522,16 @@
 					"thong_diep": "hang TRAN_KHAC ngoai bang bi bat",
 					"thong_diep_may": "TRAN_KHAC khong nam trong bang tran co ly do"
 				}
+			],
+			"bang_them": [
+				{
+					"tieu_de": "Quyet dinh noi tran nguyen van — tro-ly-okr-nen decisions.jsonl dong 28 (ky 27/09, sau AC-4 cua khoa-con-bat-xa-tran ky 26/09)",
+					"lenh": [
+						"bash",
+						"-c",
+						"sed -n 28p _acceptance/tro-ly-okr-nen/decisions.jsonl | cut -c1-700; grep -E '^(status|approved_at):' _acceptance/khoa-con-bat-xa-tran/contract.md"
+					]
+				}
 			]
 		},
 		{
@@ -1547,7 +1558,8 @@
 						"lint:slop test build; do",
 						"lint:slop test; do"
 					],
-					"thong_diep": "go build khoi danh sach task cua pre-push thi dieu 3 do"
+					"thong_diep": "go build khoi danh sach task cua pre-push thi dieu 3 do",
+					"thong_diep_may": "danh sach task cua pre-push: check-types lint lint:slop test"
 				}
 			],
 			"ly_do_tach": [
@@ -1592,7 +1604,8 @@
 						"bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
 					],
 					"chua": "OK dot bien con-thanh-vien: ma 1",
-					"thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+					"thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim",
+					"thong_diep_may": "OK dot bien con-thanh-vien: ma 1"
 				}
 			]
 		},
@@ -1620,7 +1633,8 @@
 						"bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
 					],
 					"chua": "OK dot bien con-thanh-vien: ma 1",
-					"thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+					"thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim",
+					"thong_diep_may": "OK dot bien con-thanh-vien: ma 1"
 				}
 			]
 		},
@@ -1632,7 +1646,7 @@
 			"nguon": "ghim-13-10",
 			"xu_ly": "sua-rang",
 			"ly_do": "do san lo o luot ghim 13/10: neo dan so 26 file goi getLocale la anh chup cay cua vong cu, nay 54 — thuoc tu het han. Rang quet tren cay xuat ra tai cap sha gop eeb6ea30 cua vong (luat F10: thuoc «vong nay» neo cap sha gop), neo 26 dung o moc do",
-			"can_cu": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+			"can_cu": "_acceptance/thuoc-khong-tu-het-han/contract.md:47",
 			"tep": [
 				"_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs"
 			],
@@ -1654,7 +1668,8 @@
 							"</>"
 						]
 					],
-					"thong_diep": "bo ranh Suspense cua root layout tren cay moc gop thi rang do"
+					"thong_diep": "bo ranh Suspense cua root layout tren cay moc gop thi rang do",
+					"thong_diep_may": "DO: doc du lieu luot o vo tinh, khong di qua ranh <Suspense>"
 				}
 			],
 			"bang_them": [
@@ -1673,6 +1688,14 @@
 						"-c",
 						"mkdir -p .acceptance-runs/ba-ho-so-do-san; node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs --goc . --neo 0 > .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log 2>&1; n=$(grep -o \"dan so [0-9]*\" .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log | grep -o \"[0-9]*$\"); node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs --goc . --neo $n > .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log 2>&1; c=$?; echo \"dan so HEAD theo rang: $n\"; tail -3 .acceptance-runs/ba-ho-so-do-san/ld-e2-head.log; echo exit=$c"
 					]
+				},
+				{
+					"tieu_de": "Luat F10 nguyen van — hop dong thuoc-khong-tu-het-han (status signed-off, approved_at 2026-10-10): AC-3 neo cap sha gop, AC-5 liet dang troi",
+					"lenh": [
+						"bash",
+						"-c",
+						"grep -E '^(status|approved_at):' _acceptance/thuoc-khong-tu-het-han/contract.md; sed -n '45,49p;51,53p' _acceptance/thuoc-khong-tu-het-han/contract.md"
+					]
 				}
 			]
 		},
@@ -1684,7 +1707,7 @@
 			"nguon": "ghim-13-10",
 			"xu_ly": "sua-rang",
 			"ly_do": "do san lo o luot ghim 13/10: rang so diff tu sha ghim toi HEAD nen moi PR sau cham apps/app deu lam no do — thuoc «vong nay» tu het han. Rang so dung cap sha gop eeb6ea30^1..eeb6ea30 (luat F10); o cap do diff chi co layout.tsx",
-			"can_cu": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+			"can_cu": "_acceptance/thuoc-khong-tu-het-han/contract.md:47",
 			"tep": [
 				"_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs"
 			],
@@ -1703,7 +1726,18 @@
 						"apps/app"
 					],
 					"them": "apps/app/app/page.tsx",
-					"thong_diep": "diff co them mot file ngoai layout.tsx thi rang do"
+					"thong_diep": "diff co them mot file ngoai layout.tsx thi rang do",
+					"thong_diep_may": "file ngoai apps/app/app/layout.tsx da doi"
+				}
+			],
+			"bang_them": [
+				{
+					"tieu_de": "Luat F10 nguyen van — hop dong thuoc-khong-tu-het-han (status signed-off, approved_at 2026-10-10): AC-3 neo cap sha gop, AC-5 liet dang troi",
+					"lenh": [
+						"bash",
+						"-c",
+						"grep -E '^(status|approved_at):' _acceptance/thuoc-khong-tu-het-han/contract.md; sed -n '45,49p;51,53p' _acceptance/thuoc-khong-tu-het-han/contract.md"
+					]
 				}
 			]
 		},
@@ -1714,8 +1748,8 @@
 			"ma": null,
 			"nguon": "ghim-13-10",
 			"xu_ly": "sua-rang",
-			"ly_do": "do san lo o luot ghim 13/10: spawnSync khong khai maxBuffer nen `bun run test` vuot 1 MiB -> ENOBUFS; menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu (nay 20), tu het han — y «vong ay khong doi gi ngoai layout.tsx» da do E3 o cap sha gop. Khai maxBuffer, bo menh de dem canh bao; bon lenh van phai ma 0",
-			"can_cu": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+			"ly_do": "do san lo o luot ghim 13/10: spawnSync khong khai maxBuffer nen `bun run test` vuot 1 MiB -> ENOBUFS; menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu (so hien tai xem bang), tu het han — y «vong ay khong doi gi ngoai layout.tsx» da do E3 o cap sha gop. Khai maxBuffer, bo menh de dem canh bao; bon lenh van phai ma 0",
+			"can_cu": "_acceptance/thuoc-khong-tu-het-han/contract.md:47",
 			"tep": [
 				"_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs"
 			],
@@ -1727,7 +1761,8 @@
 					"ham": "danhGia",
 					"vao": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 0}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
 					"vao_dot": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 1}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
-					"thong_diep": "mot trong bon lenh cu khong ma 0 thi rang do"
+					"thong_diep": "mot trong bon lenh cu khong ma 0 thi rang do",
+					"thong_diep_may": "check-types=1"
 				}
 			],
 			"ly_do_tach": [
@@ -1739,7 +1774,7 @@
 				{
 					"loai": 2,
 					"ly_do": "menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu; luat F10 cua kho: thuoc «vong nay» neo cap sha gop, khong neo HEAD; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop. So canh bao hien tai la troi chung cua kho, khong do vong lenh-dung-do gay ra",
-					"can_cu": "_acceptance/thuoc-khong-tu-het-han/contract.md:3"
+					"can_cu": "_acceptance/thuoc-khong-tu-het-han/contract.md:47"
 				}
 			],
 			"bang_them": [
@@ -1752,12 +1787,11 @@
 					]
 				},
 				{
-					"tieu_de": "Luat F10 (thuoc-khong-tu-het-han, dong 3 cua hop dong)",
+					"tieu_de": "Luat F10 nguyen van — hop dong thuoc-khong-tu-het-han (status signed-off, approved_at 2026-10-10): AC-3 neo cap sha gop, AC-5 liet dang troi",
 					"lenh": [
-						"sed",
-						"-n",
-						"3p",
-						"_acceptance/thuoc-khong-tu-het-han/contract.md"
+						"bash",
+						"-c",
+						"grep -E '^(status|approved_at):' _acceptance/thuoc-khong-tu-het-han/contract.md; sed -n '45,49p;51,53p' _acceptance/thuoc-khong-tu-het-han/contract.md"
 					]
 				}
 			]

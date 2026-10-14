@@ -75,7 +75,7 @@ for (const [k, rows] of nhom) {
 	phan.push(`## ${k} — ${r.xu_ly}`, "");
 	phan.push(`Lý do: ${r.ly_do ?? "(trống)"}`, "", `Căn cứ: \`${r.can_cu ?? "-"}\``, "");
 	if (rows.length > 1) phan.push(`Mục paths trong dòng: ${rows.map((x) => `\`${x.muc ?? "-"}\``).join(", ")}`, "");
-	phan.push("Trước (mốc nền):", rao(khoiEval(docTai(MOC_NEN, tep), id)), "", "Sau (HEAD):", rao(khoiEval(docTai("HEAD", tep), id)), "");
+	phan.push("Trước (mốc nền):", rao(khoiEval(docTai(MOC_NEN, tep), id)), "", "Sau (cây đang xét):", rao(khoiEval(docTai(null, tep), id)), "");
 	if (r.xu_ly === "khai-not-run") phan.push(rows.map(vatGo).filter(Boolean).join("\n\n"), "");
 	if (r.xu_ly === "sua-rang" && /^[0-9a-f]{7,40}$/.test(r.can_cu ?? "")) phan.push(vatGo({ ...r, muc: null }), "");
 	phan.push(...phanThem(r));
