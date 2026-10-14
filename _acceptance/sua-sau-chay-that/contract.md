@@ -5,7 +5,9 @@ slug: sua-sau-chay-that
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-14
 design_doc: _acceptance/sua-sau-chay-that/design.md
 ---
 
