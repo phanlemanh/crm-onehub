@@ -1,5 +1,6 @@
 import { dateFormat } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
+import { KIEU_NGUON, NGUON } from "@crm/validation/tai-lieu-nguon";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
 const GIAY_MS = 1000;
@@ -23,11 +24,8 @@ export const TAI_LIEU_MAN = {
 	dangTai: { soDong: 6 },
 	idNguonTat: "tai-lieu-nguon-tat",
 	nguon: {
-		chapNhan: ".docx,.pdf",
-		kieuNoiDung: {
-			docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-			pdf: "application/pdf",
-		},
+		chapNhan: KIEU_NGUON.map((k) => NGUON.duoi[k]).join(","),
+		kieuNoiDung: NGUON.kieuNoiDung,
 		neo: "nguon-",
 		lamMoiMs: 5 * GIAY_MS,
 	},

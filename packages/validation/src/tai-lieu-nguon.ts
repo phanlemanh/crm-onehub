@@ -7,6 +7,17 @@ const PHUT_GIAY = 60;
 export const KIEU_NGUON = ["docx", "pdf"] as const;
 export type KieuNguonTep = (typeof KIEU_NGUON)[number];
 
+const TOI_DA_MB = 20;
+
+const TEN_KIEU = { docx: "Word (.docx)", pdf: "PDF" } satisfies Record<
+	KieuNguonTep,
+	string
+>;
+
+export function danhSachKieuNguon(noi: string): string {
+	return KIEU_NGUON.map((k) => TEN_KIEU[k]).join(noi);
+}
+
 export const TRANG_THAI_NGUON = [
 	"CHO_DOC",
 	"CHO_SOAN",
@@ -18,14 +29,19 @@ export const TRANG_THAI_NGUON = [
 export type TrangThaiNguon = (typeof TRANG_THAI_NGUON)[number];
 
 export const NGUON = {
-	toiDaByte: 20 * MB,
+	toiDaMb: TOI_DA_MB,
+	toiDaByte: TOI_DA_MB * MB,
 	giayTaiVe: 5 * PHUT_GIAY,
 	tenTepToiDa: 255,
 	duoi: { docx: ".docx", pdf: ".pdf" } satisfies Record<KieuNguonTep, string>,
+	kieuNoiDung: {
+		docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		pdf: "application/pdf",
+	} satisfies Record<KieuNguonTep, string>,
 	pathname: /^kho-tai-lieu\/nguon\/[0-9a-f-]{36}$/,
 	thongDiep: {
 		tat: "Chưa bật lưu tệp nguồn — nhờ quản trị cấu hình.",
-		saiLoai: "Chỉ nhận Word (.docx) hoặc PDF, tới 20 MB.",
+		saiLoai: `Chỉ nhận ${danhSachKieuNguon(" hoặc ")}, tới ${TOI_DA_MB} MB.`,
 		rong: "Tệp rỗng.",
 		daCo: "Nguồn này đã có.",
 		khongCo: "Không tìm thấy nguồn này.",

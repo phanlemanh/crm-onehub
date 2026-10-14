@@ -4,7 +4,11 @@ import type {
 	LoaiTrang,
 	TrangThaiDeXuat,
 } from "@crm/validation/tai-lieu";
-import { NGUON, type TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
+import {
+	danhSachKieuNguon,
+	NGUON,
+	type TrangThaiNguon,
+} from "@crm/validation/tai-lieu-nguon";
 
 const loaiMoTaEn = {
 	"chien-luoc": "The OKR assistant reads the version in use of this type",
@@ -330,7 +334,7 @@ const en = {
 				gui: "Sending the file…",
 				nhan: "Checking the file…",
 			},
-			saiLoai: "Only Word (.docx) or PDF, up to 20 MB.",
+			saiLoai: `Only ${danhSachKieuNguon(" or ")}, up to ${NGUON.toiDaMb} MB.`,
 			rong: "The file is empty.",
 			chuaChonTrang: "Choose the page to update.",
 			khongXong: "The upload did not finish, try again.",
