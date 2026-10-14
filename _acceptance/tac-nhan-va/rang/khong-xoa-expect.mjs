@@ -28,12 +28,18 @@ function tepO(moc, duong) {
 		.filter(Boolean);
 }
 
+function dem(nguon) {
+	const bang = new Map();
+	for (const d of nguon.split("\n").map((x) => x.trim()))
+		if (d.includes("expect(")) bang.set(d, (bang.get(d) ?? 0) + 1);
+	return bang;
+}
+
 export function lech(truoc, sau) {
-	const con = new Set(sau.split("\n").map((d) => d.trim()));
-	const mat = truoc
-		.split("\n")
-		.map((d) => d.trim())
-		.filter((d) => d.includes("expect(") && !con.has(d));
+	const con = dem(sau);
+	const mat = [...dem(truoc)].flatMap(([d, n]) =>
+		Array.from({ length: Math.max(0, n - (con.get(d) ?? 0)) }, () => d),
+	);
 	const boQuaTruoc = (truoc.match(BO_QUA) ?? []).length;
 	const boQuaSau = (sau.match(BO_QUA) ?? []).length;
 	return { mat, themBoQua: Math.max(0, boQuaSau - boQuaTruoc) };
@@ -64,10 +70,17 @@ function soMoc(moc) {
 
 function tuThu() {
 	const mau =
-		"it('a', () => {\n\texpect(1).toBe(1);\n\texpect(2).toBe(2);\n});\n";
-	const xoa = lech(mau, mau.replace("\texpect(2).toBe(2);\n", ""));
+		"it('a', () => {\n\texpect(1).toBe(1);\n\texpect(2).toBe(2);\n\texpect(2).toBe(2);\n});\n";
+	const xoa = lech(mau, mau.replace("\texpect(1).toBe(1);\n", ""));
+	const xoaTrung = lech(mau, mau.replace("\texpect(2).toBe(2);\n", ""));
 	const boQua = lech(mau, mau.replace("it('a'", "it.skip('a'"));
-	return xoa.mat.length === 1 && boQua.themBoQua === 1;
+	const giuNguyen = lech(mau, mau);
+	return (
+		xoa.mat.length === 1 &&
+		xoaTrung.mat.length === 1 &&
+		boQua.themBoQua === 1 &&
+		giuNguyen.mat.length === 0
+	);
 }
 
 const doiSo = process.argv.slice(2);

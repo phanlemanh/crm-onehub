@@ -20,6 +20,8 @@ const en = {
 		guiHong: "This message could not be sent.",
 		loiGui: {
 			DELIVERY_FAILED: "This message never reached the builder. Send it again.",
+			DELIVERY_EXHAUSTED:
+				"The builder could not take this message after three tries. Send it again.",
 		},
 	},
 	dung: {
@@ -236,6 +238,8 @@ const vi = {
 		guiHong: "Tin này gửi không được.",
 		loiGui: {
 			DELIVERY_FAILED: "Tin chưa tới được bộ dựng. Gửi lại để thử tiếp.",
+			DELIVERY_EXHAUSTED:
+				"Đã thử gửi ba lần mà bộ dựng vẫn chưa nhận. Gửi lại để thử tiếp.",
 		},
 	},
 	dung: {

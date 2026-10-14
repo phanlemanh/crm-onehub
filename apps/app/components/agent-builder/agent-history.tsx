@@ -142,12 +142,16 @@ export function AgentRuns({
 											run.status === "FAILED" && "text-destructive",
 										)}
 									>
-										{nhanTrangThai(t, run.status)}
+										<span data-trang-thai-luot={run.status}>
+											{nhanTrangThai(t, run.status)}
+										</span>
 									</span>
 								</span>
 								<span className="mt-1 block wrap-break-word font-mono text-muted-foreground text-xs leading-5 sm:mt-0">
-									{nhanTrangThai(t, run.triggerType)} ·{" "}
-									{formatDate(run.createdAt, locale)}{" "}
+									<span data-moc={run.triggerType}>
+										{nhanTrangThai(t, run.triggerType)}
+									</span>{" "}
+									· {formatDate(run.createdAt, locale)}{" "}
 									{t.luot.banSo(String(run.version.number))}
 								</span>
 								{run.status === "FAILED" || run.status === "CANCELLED" ? (
@@ -260,10 +264,15 @@ function ExpandedRun({ run }: { run: RunRow }) {
 			<div className="grid grid-cols-2 gap-x-4 gap-y-3 border-b bg-background px-4 py-3 sm:min-h-[58px] sm:grid-cols-4 sm:items-center sm:gap-0 sm:px-5 sm:py-2">
 				<RunMeta label={t.luot.moc} value={nhanTrangThai(t, run.triggerType)} />
 				<RunMeta
+					ma="nguoi-mo"
 					label={t.luot.nguoiMo}
 					value={run.initiatedBy?.name ?? t.luot.lichTuDong}
 				/>
-				<RunMeta label={t.luot.model} value={run.modelId ?? t.luot.macDinh} />
+				<RunMeta
+					ma="model"
+					label={t.luot.model}
+					value={run.modelId ?? t.luot.macDinh}
+				/>
 				<RunMeta label={t.luot.ban} value={String(run.version.number)} last />
 			</div>
 
@@ -277,7 +286,10 @@ function ExpandedRun({ run }: { run: RunRow }) {
 							<span className="shrink-0 font-mono text-muted-foreground text-xs sm:w-[78px]">
 								{formatTime(entry.at, locale)}
 							</span>
-							<span className="min-w-0 flex-1 wrap-break-word text-sm">
+							<span
+								className="min-w-0 flex-1 wrap-break-word text-sm"
+								data-su-kien={entry.event.type}
+							>
 								{eventLabel(t, entry.event)}
 							</span>
 							<span className="hidden shrink-0 font-mono text-muted-foreground text-xs sm:inline">
@@ -298,7 +310,9 @@ function ExpandedRun({ run }: { run: RunRow }) {
 								</span>
 								<span className="block wrap-break-word text-muted-foreground text-xs">
 									{entry.action.provider} ·{" "}
-									{nhanTrangThai(t, entry.action.status)}
+									<span data-trang-thai-buoc={entry.action.status}>
+										{nhanTrangThai(t, entry.action.status)}
+									</span>
 									{entry.action.targetLabel
 										? ` · ${entry.action.targetLabel}`
 										: ""}
@@ -321,10 +335,12 @@ function ExpandedRun({ run }: { run: RunRow }) {
 }
 
 function RunMeta({
+	ma,
 	label,
 	value,
 	last = false,
 }: {
+	ma?: string;
 	label: string;
 	value: string;
 	last?: boolean;
@@ -337,7 +353,9 @@ function RunMeta({
 			)}
 		>
 			<span className="text-muted-foreground text-xs">{label}</span>
-			<span className="wrap-break-word text-sm sm:truncate">{value}</span>
+			<span className="wrap-break-word text-sm sm:truncate" data-o-luot={ma}>
+				{value}
+			</span>
 		</span>
 	);
 }
@@ -450,10 +468,11 @@ function duration(
 }
 
 function eventLabel(t: TroChuyenMessages, event: RunEvent): string {
+	const bang = t.suKien;
+	const loai = event.type as keyof typeof bang;
 	return (
 		eventSummary.parse(event.data) ??
-		traBangChu(t.suKien, event.type) ??
-		t.suKienKhac
+		(Object.hasOwn(bang, loai) ? bang[loai] : t.suKienKhac)
 	);
 }
 

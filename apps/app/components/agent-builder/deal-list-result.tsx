@@ -15,6 +15,7 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
+import { useKhoMan } from "@crm/ui/hooks/use-kho-man";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { CompanyCell } from "@/components/crm/company-cell";
@@ -61,114 +62,124 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 	const t = ketQuaMessages(locale);
 	const cot = cotBang(t);
 	const title = tableTitle(result, t);
+	const kho = useKhoMan();
 
 	return (
 		<section aria-label={title} className="flex w-full flex-col gap-3">
-			<div className="hidden md:block">
-				<SimpleTable
-					columns={cot}
-					className="min-w-[56rem] table-fixed [&_td:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:first-child]:pl-4 [&_th:last-child]:pr-4"
-					headerHeight="h-11"
-				>
-					{count === 0 ? (
-						<SimpleTableRow>
-							<TableCell
-								colSpan={cot.length}
-								className="h-32 whitespace-normal py-8 text-center align-middle text-muted-foreground"
-							>
-								{t.thoaThuan.khongCo}
-							</TableCell>
-						</SimpleTableRow>
-					) : (
-						result.deals.map((deal) => {
-							const record = { kind: "deal" as const, id: deal.id };
+			{kho === "dien-thoai" ? null : (
+				<div className={kho === "may-tinh" ? undefined : "hidden md:block"}>
+					<SimpleTable
+						columns={cot}
+						className="min-w-[56rem] table-fixed [&_td:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:first-child]:pl-4 [&_th:last-child]:pr-4"
+						headerHeight="h-11"
+					>
+						{count === 0 ? (
+							<SimpleTableRow>
+								<TableCell
+									colSpan={cot.length}
+									className="h-32 whitespace-normal py-8 text-center align-middle text-muted-foreground"
+								>
+									{t.thoaThuan.khongCo}
+								</TableCell>
+							</SimpleTableRow>
+						) : (
+							result.deals.map((deal) => {
+								const record = { kind: "deal" as const, id: deal.id };
 
-							return (
-								<SimpleTableRow
-									key={deal.id}
-									clickable
-									onClick={() => openRecord(record)}
-									onFocus={() => prefetchRecord(record)}
-									onMouseEnter={() => prefetchRecord(record)}
-								>
-									<TableCell className="overflow-hidden px-3 py-3">
-										<span className="block truncate font-medium">
-											{deal.name}
-										</span>
-									</TableCell>
-									<TableCell className="overflow-hidden px-3 py-3">
-										<CompanyCell company={deal.company} />
-									</TableCell>
-									<TableCell className="overflow-hidden px-3 py-3">
-										<Stage stage={deal.stage} stageId={deal.stageId} />
-									</TableCell>
-									<TableCell className="overflow-hidden px-3 py-3 text-right">
-										<Amount deal={deal} locale={locale} />
-									</TableCell>
-									<TableCell className="overflow-hidden px-3 py-3">
-										<OwnerCell owner={deal.owner} />
-									</TableCell>
-									<TableCell className="overflow-hidden px-3 py-3">
-										{deal.expectedCloseDate ? (
-											<span className="text-muted-foreground">
-												<LocalDay date={deal.expectedCloseDate} />
-											</span>
-										) : (
-											<EmptyCellValue />
-										)}
-									</TableCell>
-									<TableCell
-										className="overflow-hidden px-3 py-3 text-right text-muted-foreground tabular-nums"
-										title={
-											deal.neverActive ? t.thoaThuan.chuaCoHoatDong : undefined
-										}
-									>
-										{deal.daysSinceLastActivity}d
-									</TableCell>
-								</SimpleTableRow>
-							);
-						})
-					)}
-				</SimpleTable>
-			</div>
-			<div className="md:hidden" data-thoa-thuan-dt="">
-				{count === 0 ? (
-					<p className="py-8 text-center text-muted-foreground text-sm">
-						{t.thoaThuan.khongCo}
-					</p>
-				) : (
-					<ItemGroup>
-						{result.deals.map((deal) => {
-							const record = { kind: "deal" as const, id: deal.id };
-							return (
-								<Item
-									asChild
-									key={deal.id}
-									variant="outline"
-									data-thoa-thuan={deal.id}
-								>
-									<button
-										type="button"
+								return (
+									<SimpleTableRow
+										key={deal.id}
+										clickable
 										onClick={() => openRecord(record)}
 										onFocus={() => prefetchRecord(record)}
+										onMouseEnter={() => prefetchRecord(record)}
 									>
-										<ItemContent>
-											<ItemTitle translate="no">{deal.name}</ItemTitle>
-											<ItemDescription translate="no">
-												{deal.company.name}
-											</ItemDescription>
-											<span className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-												<Stage stage={deal.stage} stageId={deal.stageId} />
-												<Amount deal={deal} locale={locale} />
+										<TableCell className="overflow-hidden px-3 py-3">
+											<span className="block truncate font-medium">
+												{deal.name}
 											</span>
-										</ItemContent>
-									</button>
-								</Item>
-							);
-						})}
-					</ItemGroup>
-				)}
-			</div>
+										</TableCell>
+										<TableCell className="overflow-hidden px-3 py-3">
+											<CompanyCell company={deal.company} />
+										</TableCell>
+										<TableCell className="overflow-hidden px-3 py-3">
+											<Stage stage={deal.stage} stageId={deal.stageId} />
+										</TableCell>
+										<TableCell className="overflow-hidden px-3 py-3 text-right">
+											<Amount deal={deal} locale={locale} />
+										</TableCell>
+										<TableCell className="overflow-hidden px-3 py-3">
+											<OwnerCell owner={deal.owner} />
+										</TableCell>
+										<TableCell className="overflow-hidden px-3 py-3">
+											{deal.expectedCloseDate ? (
+												<span className="text-muted-foreground">
+													<LocalDay date={deal.expectedCloseDate} />
+												</span>
+											) : (
+												<EmptyCellValue />
+											)}
+										</TableCell>
+										<TableCell
+											className="overflow-hidden px-3 py-3 text-right text-muted-foreground tabular-nums"
+											title={
+												deal.neverActive
+													? t.thoaThuan.chuaCoHoatDong
+													: undefined
+											}
+										>
+											{deal.daysSinceLastActivity}d
+										</TableCell>
+									</SimpleTableRow>
+								);
+							})
+						)}
+					</SimpleTable>
+				</div>
+			)}
+			{kho === "may-tinh" ? null : (
+				<div
+					className={kho === "dien-thoai" ? undefined : "md:hidden"}
+					data-thoa-thuan-dt=""
+				>
+					{count === 0 ? (
+						<p className="py-8 text-center text-muted-foreground text-sm">
+							{t.thoaThuan.khongCo}
+						</p>
+					) : (
+						<ItemGroup>
+							{result.deals.map((deal) => {
+								const record = { kind: "deal" as const, id: deal.id };
+								return (
+									<Item
+										asChild
+										key={deal.id}
+										variant="outline"
+										data-thoa-thuan={deal.id}
+									>
+										<button
+											type="button"
+											onClick={() => openRecord(record)}
+											onFocus={() => prefetchRecord(record)}
+										>
+											<ItemContent>
+												<ItemTitle translate="no">{deal.name}</ItemTitle>
+												<ItemDescription translate="no">
+													{deal.company.name}
+												</ItemDescription>
+												<span className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+													<Stage stage={deal.stage} stageId={deal.stageId} />
+													<Amount deal={deal} locale={locale} />
+												</span>
+											</ItemContent>
+										</button>
+									</Item>
+								);
+							})}
+						</ItemGroup>
+					)}
+				</div>
+			)}
 			<div className="flex flex-wrap items-center justify-between gap-3 text-muted-foreground text-xs">
 				<span>{tableMeta(result, locale, t)}</span>
 				<span>

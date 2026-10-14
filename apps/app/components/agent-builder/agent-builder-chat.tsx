@@ -62,7 +62,6 @@ import {
 	latestCompletedArtifactVersionId,
 	reviewVersionId,
 } from "@/lib/agent-builder-state";
-import { toolLabel } from "@/lib/agent-tool-display";
 import {
 	conversationTimeline,
 	eventStreamSettled,
@@ -79,8 +78,7 @@ import {
 	troChuyenMessages,
 } from "@/lib/messages/agent-builder-tro-chuyen";
 import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
-import { stepLabel } from "@/lib/nhan-buoc";
-import { traBangChu } from "@/lib/tra-bang-chu";
+import { builderStepLabel } from "@/lib/nhan-buoc";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -663,7 +661,7 @@ export function AgentToolStep({
 					<Icon icon={Checkmark} className="size-3.5 text-ring" />
 				)}
 				<span className="min-w-0 wrap-break-word">
-					{stepLabel({ tool: item.tool, label: toolLabel(item) }, kara, locale)}
+					{builderStepLabel(item, kara)}
 				</span>
 			</div>
 			{item.errorText ? (
@@ -911,7 +909,7 @@ export function UserSubmission({
 				) : null}
 				{failed ? (
 					<p className="mt-2 text-destructive text-xs">
-						{traBangChu(t.man.loiGui, errorCode ?? "") ?? t.man.guiHong}
+						{loiGuiCua(t, errorCode)}
 					</p>
 				) : null}
 			</div>
@@ -1583,4 +1581,10 @@ function compactSummary(value: string | undefined, fallback: string): string {
 
 function textOf(value: string | undefined, fallback: string): string {
 	return value?.trim() ? value : fallback;
+}
+
+function loiGuiCua(t: TroChuyenMessages, errorCode: string | null): string {
+	const bang = t.man.loiGui;
+	const ma = (errorCode ?? "") as keyof typeof bang;
+	return Object.hasOwn(bang, ma) ? bang[ma] : t.man.guiHong;
 }

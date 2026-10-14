@@ -13,6 +13,7 @@ import { tacNhanMessages } from "../../../apps/app/lib/messages/agent-builder-ta
 import { troChuyenMessages } from "../../../apps/app/lib/messages/agent-builder-tro-chuyen.ts";
 import { karaBanGhiMessages } from "../../../apps/app/lib/messages/kara-ban-ghi.ts";
 import { db } from "../../../packages/db/src/index.ts";
+import { formatMoney } from "../../../packages/ui/src/lib/format.ts";
 import {
 	APP,
 	CHO_MS,
@@ -321,17 +322,26 @@ async function doMan(cookie, slug, agentId, ketQua) {
 			});
 			const buocViet =
 				ds2.toan.includes(nhanBuoc) && !ds2.toan.includes(nhanBuocAnh);
-			const duMuc = ketQua.deals.every((d, i) => {
+			const thieuMuc = ketQua.deals.flatMap((d, i) => {
 				const chu = ds2.chu[i] ?? "";
-				return (
-					chu.includes(d.name) && chu.includes(d.company.name) && /\d/.test(chu)
-				);
+				const tien =
+					d.amount === null
+						? null
+						: formatMoney(Math.round(d.amount * 100), d.currency, "vi");
+				const thieu = [
+					chu.includes(d.name) ? null : "ten",
+					chu.includes(d.company.name) ? null : "cong ty",
+					chu.includes(d.stage) ? null : `giai doan «${d.stage}»`,
+					tien === null || chu.includes(tien) ? null : `tien «${tien}»`,
+				].filter(Boolean);
+				return thieu.length ? [`${d.name}: thieu ${thieu.join(", ")}`] : [];
 			});
+			const duMuc = thieuMuc.length === 0;
 			await chup(p, `hoi-thoai-ket-qua-${kho}`);
 			so.kiem(
 				`hoi-thoai-ket-qua-${kho}`,
 				kho < 768
-					? `${ds2.soMuc} muc (mong ${ketQua.deals.length}), du ten/cong ty/so ${duMuc}; tran ngang ${ds2.trang}px; nhan buoc «${nhanBuoc}» ${buocViet}`
+					? `${ds2.soMuc} muc (mong ${ketQua.deals.length}), du ten/cong ty/giai doan/tien ${duMuc}${duMuc ? "" : ` (${thieuMuc.join("; ")})`}; tran ngang ${ds2.trang}px; nhan buoc «${nhanBuoc}» ${buocViet}`
 					: `bang hien ${ds2.coBang}; tran ngang ${ds2.trang}px; nhan buoc «${nhanBuoc}» ${buocViet}`,
 				buocViet &&
 					(kho < 768

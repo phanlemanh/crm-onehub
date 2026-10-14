@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import { inputLabel, type LabelInput } from "@/lib/agent-tool-display";
 import type { TranscriptItem } from "@/lib/agent-transcript";
 import type { KaraBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 
@@ -15,4 +16,15 @@ export function stepLabel(
 	return tach === -1 || locale === "vi"
 		? viec
 		: `${viec}${item.label.slice(tach)}`;
+}
+
+export function builderStepLabel(
+	item: LabelInput,
+	t: KaraBanGhiMessages,
+): string {
+	return (
+		inputLabel(item) ??
+		new Map(Object.entries(t.tab.buoc)).get(item.tool) ??
+		item.label
+	);
 }

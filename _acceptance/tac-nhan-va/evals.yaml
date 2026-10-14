@@ -37,13 +37,15 @@ evals:
       AgentTriggerType, su kien run.queued, run.requested, run.completed (khong summary), run.failed, run.cancelled,
       run.delivery_recovered, step.started, step.completed, step.failed, session.started va mot loai la "x.khong-biet";
       initiatedBy null, modelId null. Render ngan luot chay va mo luot do.
-      Khang dinh: (a) voi moi gia tri enum va moi loai su kien da biet, chu hien === chu cua bang chu tieng Viet xuat ra
-      (quan he voi bang); (b) dong su kien la hien "Su kien khac" (chu cua bang); (c) o nguoi mo hien chu
-      "Lich tu dong", o model "Mac dinh" (chu cua bang); (d) toan bo textContent cua ngan khong khop
-      /\b[A-Z]{2,}(_[A-Z]+)*\b/ tru ma loi trong the translate="no", va khong khop /\b(run|step|session) (queued|started|completed|failed|cancelled|requested)\b/.
-      Doi chung duong: fixture co it nhat mot dong moi loai (dem dong > 0 truoc khi khang dinh vang).
-      CHIEU DO: ban sao bo PLANNED khoi bang -> (a) do voi thong diep ghim "buoc PLANNED hien chu tho";
-      ban sao eventLabel tra event.type.replace(/\./g," ") -> (d) do voi thong diep ghim "su kien hien ten may".
+      Moi dong mang moc du lieu cua chinh no (data-trang-thai-luot, data-moc, data-trang-thai-buoc, data-su-kien,
+      data-o-luot). Khang dinh theo dong (quan he voi bang chu, khong doc chu cua o loc <select>): tap gia tri cac dong
+      data-trang-thai-luot === tap AgentRunStatus, data-trang-thai-buoc === tap AgentActionStatus, data-su-kien === tap su
+      kien da gieo; moi dong co textContent === chu cua bang cho dung gia tri cua dong do (loai la -> suKienKhac); o
+      nguoi-mo === luot.lichTuDong, o model === luot.macDinh. Quet lop tren ban sao ngan da go <select>: moi tu dang chu
+      may /\b[A-Z][A-Z0-9]*(_[A-Z0-9]+)*\b/ dai hon 1 ky tu, tru danh sach mien {UTC}, === [] va moi chuoi
+      /\b[a-z]+\.[a-z_]+\b/ === [].
+      CHIEU DO: ban sao bo PLANNED khoi bang -> dong buoc PLANNED do voi thong diep ghim "buoc PLANNED hien chu tho";
+      ban sao eventLabel tra event.type.replace(/\./g," ") -> dong su kien do voi thong diep ghim "su kien hien ten may".
 
   - id: E3
     criterion: AC-3
@@ -68,7 +70,7 @@ evals:
     steps:
       - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs / mot-luot.sh); đăng nhập theo bộ mẫu; mỗi khổ một tiến trình con"
       - "Gieo qua đường ghi thật trong phiên đo: saveBuilderDraft (apps/agent) một tác nhân phạm vi SELECTED xem một công ty tên 60 ký tự, deploy và runNow qua API, kết lượt bằng hàm kết lượt của apps/agent với kết quả bảng thoả thuận năm dòng (hình DealListResult); một hội thoại dựng của người đăng nhập"
-      - "Ở 375 và 1440: mở danh sách tác nhân (ST-ds-tac-nhan-co), màn tác nhân, ngăn lượt chạy có kết quả (ST-luot-chay-ket-qua-dt ở 375, ST-luot-chay-su-kien), hội thoại dựng; mỗi màn đo scrollWidth <= clientWidth của documentElement và của vùng cuộn của ngăn, đo mép phải chip bản ghi [data-chip-ban-ghi] <= mép phải vùng chứa; ở 375 đếm mục của danh sách thoả thuận và đọc tên, công ty, giai đoạn, số tiền mỗi mục [data-thoa-thuan] bằng innerText, kiểm từng mục nằm trong khung nhìn khi cuộn tới; chụp ảnh khung nhìn mỗi màn"
+      - "Ở 375 và 1440: mở danh sách tác nhân (ST-ds-tac-nhan-co), màn tác nhân, ngăn lượt chạy có kết quả (ST-luot-chay-ket-qua-dt ở 375, ST-luot-chay-su-kien), hội thoại dựng; mỗi màn đo scrollWidth <= clientWidth của documentElement và của vùng cuộn của ngăn, đo mép phải chip bản ghi [data-chip-ban-ghi] <= mép phải vùng chứa; ở 375 đếm mục của danh sách thoả thuận và đọc innerText mỗi mục [data-thoa-thuan] và khẳng định chứa đúng tên, tên công ty, tên giai đoạn (deal.stage) và chuỗi tiền formatMoney(amount*100, currency, \"vi\") của packages/ui — cùng hàm màn dùng, kiểm từng mục nằm trong khung nhìn khi cuộn tới; chụp ảnh khung nhìn mỗi màn"
     expected: "exit 0; 8 ảnh (4 màn × 2 khổ) trong _acceptance/tac-nhan-va/evidence/; ở 375 mỗi màn in 'dat' cho không cuộn ngang và chip trong thẻ; danh sách thoả thuận 5 mục, mỗi mục đủ bốn phần có chữ; chạy trên cây trước vòng in 'khong dat' ở ngăn lượt chạy (bảng 56rem)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
     paths: ["apps/app/components/agent-builder/deal-list-result.tsx", "apps/app/components/agent-builder/agent-capabilities.tsx", "apps/app/components/agent-builder/team-agents-index.tsx", "apps/app/components/agent-builder/agent-history.tsx", "apps/app/components/agent-builder/agent-runs-drawer.tsx", "_acceptance/tac-nhan-va/rang/man.mjs"]
@@ -146,7 +148,7 @@ evals:
     expected: |
       Lenh tnv_loi_dom chay apps/app/test/tac-nhan-va.dom.tsx loc -t gui-hong.
       describe "gui-hong": render tin cua nguoi (UserSubmission cua agent-builder-chat.tsx) voi bai nop parse bang
-      chinh khuon builderSubmissions cua man, status FAILED. Ma tran viet truoc: errorCode {DELIVERY_FAILED, "MA_LA"} = 2
+      chinh khuon builderSubmissions cua man, status FAILED. Ma tran viet truoc: errorCode {DELIVERY_FAILED, DELIVERY_EXHAUSTED, "MA_LA"} = 3
       ca, moi ca errorMessage "boom english". Khang dinh moi ca: dong loi duoi tin === chu cua bang man.loiGui cho ma do
       (MA_LA -> chu chung man.guiHong), va textContent khong chua "boom english".
       CHIEU DO: ban sao in error ?? chu chung nhu truoc vong -> ca DELIVERY_FAILED do voi thong diep ghim
@@ -188,6 +190,6 @@ evals:
       - "_acceptance/tac-nhan-va/rang/khong-xoa-expect.mjs"
     expected: |
       rang/khong-xoa-expect.mjs --moc 966eeb78e: voi moi tep va thu muc ca eve-tran liet o tren, moi dong chua "expect("
-      o moc van co mat nguyen van o cay; so .skip/.todo/.only khong tang. --tu-thu: xoa mot expect trong ban sao tam ->
-      script thoat 1 (thuoc khong mu). Roi chay cac tep (lenh agent qua bun run test, lenh app voi preload setup-dom),
+      o moc van co mat nguyen van o cay voi so lan xuat hien khong giam (da tap, dong trung xoa bot mot ban cung bi bat); so .skip/.todo/.only khong tang. --tu-thu: mau co dong expect trung; xoa mot dong don, xoa
+      mot ban cua dong trung, them .skip deu bi bat, mau nguyen van khong bao loi (thuoc khong mu). Roi chay cac tep (lenh agent qua bun run test, lenh app voi preload setup-dom),
       hai ca eve-tran chay-tiep va chan-khuon, va bun run check-types: thoat 0.

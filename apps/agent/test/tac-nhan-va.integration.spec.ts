@@ -8,6 +8,7 @@ import {
 	spyOn,
 } from "bun:test";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { db } from "@crm/db";
 import { type InputRequested, schemas } from "@crm/validation";
 import { builderQuestion } from "@crm/validation/builder-question";
@@ -25,9 +26,9 @@ setDefaultTimeout(30_000);
 type Loai = "question" | "session-limit";
 type DuLieu = Parameters<NonNullable<ChannelEvents["input.requested"]>>[0];
 
-const duongRa = process.env.TNV_HAI_LUOT_RA;
-if (!duongRa)
-	throw new Error("thieu TNV_HAI_LUOT_RA — chay qua lenh tnv_cau_hoi");
+const duongRa =
+	process.env.TNV_HAI_LUOT_RA ??
+	fileURLToPath(new URL("./fixtures/hai-luot-hoi-that.json", import.meta.url));
 const payload = z
 	.array(schemas.agents.inputRequested)
 	.parse(JSON.parse(readFileSync(duongRa, "utf8")));

@@ -231,8 +231,17 @@ describe("chu-luot", () => {
 	const mocKichHoat = Object.keys(
 		AgentTriggerType,
 	) as (keyof typeof AgentTriggerType)[];
+	const trangThaiBuoc = Object.keys(AgentActionStatus);
+	const MIEN = new Set(["UTC"]);
 
-	test("chu-luot: moi trang thai, moc, buoc, su kien la chu tieng Viet", async () => {
+	function theoDong(o: HTMLElement, chon: string, khoa: string) {
+		return [...o.querySelectorAll<HTMLElement>(`[${chon}]`)].map((e) => ({
+			gia: e.getAttribute(chon) ?? khoa,
+			chu: e.textContent?.trim() ?? "",
+		}));
+	}
+
+	test("chu-luot: moi dong trang thai, moc, buoc, su kien bang chu cua bang", async () => {
 		const runs = trangThaiLuot.map((status, i) =>
 			luot(status, mocKichHoat[i % mocKichHoat.length] ?? "MANUAL", i, i === 0),
 		);
@@ -244,47 +253,64 @@ describe("chu-luot", () => {
 				onRetry={() => {}}
 			/>,
 		);
+		const dongLuot = theoDong(o, "data-trang-thai-luot", "");
+		expect(dongLuot.map((d) => d.gia).sort()).toEqual(
+			[...trangThaiLuot].sort(),
+		);
+		for (const d of dongLuot)
+			expect(d.chu, `trang thai luot ${d.gia}`).toBe(
+				t.trangThai[d.gia as keyof typeof t.trangThai],
+			);
+		const dongMoc = theoDong(o, "data-moc", "");
+		expect(dongMoc).toHaveLength(runs.length);
+		for (const d of dongMoc)
+			expect(d.chu, `moc ${d.gia}`).toBe(
+				t.trangThai[d.gia as keyof typeof t.trangThai],
+			);
+
 		const nutLuotDau = [...o.querySelectorAll("button")].find((nut) =>
-			nut.textContent?.includes(t.trangThai[trangThaiLuot[0] ?? "QUEUED"]),
+			nut.querySelector(`[data-trang-thai-luot="${runs[0]?.status}"]`),
 		);
 		expect(nutLuotDau, "khong tim thay luot dau de mo").toBeDefined();
 		await act(async () => nutLuotDau?.click());
-		const chu = o.textContent ?? "";
 
-		for (const status of trangThaiLuot) {
-			expect(chu, `trang thai luot ${status}`).toContain(t.trangThai[status]);
-		}
-		for (const moc of mocKichHoat) {
-			expect(chu, `moc ${moc}`).toContain(t.trangThai[moc]);
-		}
-		const dongBuoc = Object.keys(AgentActionStatus);
-		expect(dongBuoc.length).toBeGreaterThan(0);
-		for (const status of dongBuoc) {
-			expect(chu, "buoc PLANNED hien chu tho").toContain(
-				t.trangThai[status as keyof typeof t.trangThai],
-			);
-		}
-		expect(SU_KIEN_DA_BIET.length).toBeGreaterThan(0);
-		for (const loai of SU_KIEN_DA_BIET) {
-			expect(chu, `su kien ${loai}`).toContain(t.suKien[loai]);
-		}
-		expect(chu).toContain(t.suKienKhac);
-		expect(chu).toContain(t.luot.lichTuDong);
-		expect(chu).toContain(t.luot.macDinh);
-		expect(chu, "su kien hien ten may").not.toMatch(
-			/\b(run|step|session) (queued|started|completed|failed|cancelled|requested)\b/,
+		const dongBuoc = theoDong(o, "data-trang-thai-buoc", "");
+		expect(dongBuoc.map((d) => d.gia).sort()).toEqual(
+			[...trangThaiBuoc].sort(),
 		);
-		const giaTriMay = [
-			...Object.values(AgentRunStatus),
-			...Object.values(AgentActionStatus),
-			...Object.values(AgentTriggerType),
-		];
-		expect(giaTriMay.length).toBeGreaterThan(0);
-		for (const giaTri of new Set(giaTriMay)) {
-			expect(chu, `gia tri may ${giaTri} lot ra man`).not.toMatch(
-				new RegExp(`\\b${giaTri}\\b`),
+		for (const d of dongBuoc)
+			expect(d.chu, "buoc PLANNED hien chu tho").toBe(
+				t.trangThai[d.gia as keyof typeof t.trangThai],
 			);
-		}
+
+		const dongSuKien = theoDong(o, "data-su-kien", "");
+		expect(dongSuKien.map((d) => d.gia).sort()).toEqual(
+			[...SU_KIEN_DA_BIET, SU_KIEN_LA].sort(),
+		);
+		for (const d of dongSuKien)
+			expect(d.chu, "su kien hien ten may").toBe(
+				d.gia === SU_KIEN_LA
+					? t.suKienKhac
+					: t.suKien[d.gia as keyof typeof t.suKien],
+			);
+		expect(
+			o.querySelector('[data-o-luot="nguoi-mo"]')?.textContent?.trim(),
+		).toBe(t.luot.lichTuDong);
+		expect(o.querySelector('[data-o-luot="model"]')?.textContent?.trim()).toBe(
+			t.luot.macDinh,
+		);
+
+		const banSao = o.cloneNode(true) as HTMLElement;
+		for (const chon of banSao.querySelectorAll("select")) chon.remove();
+		const chu = banSao.textContent ?? "";
+		const tenMay = [
+			...(chu.match(/\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*\b/g) ?? []),
+		].filter((tu) => tu.length > 1 && !MIEN.has(tu));
+		expect(tenMay, "chu may viet hoa lot ra man").toEqual([]);
+		expect(
+			chu.match(/\b[a-z]+\.[a-z_]+\b/g) ?? [],
+			"loai su kien tach cham lot ra man",
+		).toEqual([]);
 	});
 });
 
@@ -329,25 +355,26 @@ describe("chu-thoa-thuan", () => {
 	const k = ketQuaMessages("vi");
 	const MA_TRAN = ["open", "won", "lost"] as const;
 
+	async function tenVung(status: string) {
+		const o = await ve(<DealListResultTable result={ketQua(status)} />);
+		return o.querySelector("section")?.getAttribute("aria-label") ?? "";
+	}
+
 	for (const status of MA_TRAN) {
-		test(`chu-thoa-thuan: loc ${status} ghi bang chu tu dien`, async () => {
-			const o = await ve(<DealListResultTable result={ketQua(status)} />);
-			const chu = `${o.querySelector("section")?.getAttribute("aria-label") ?? ""} ${o.textContent ?? ""}`;
-			expect(chu, "ket qua luot chay in trang thai thoa thuan tho").toContain(
+		test(`chu-thoa-thuan: loc ${status} ghi trong ten vung bang chu tu dien`, async () => {
+			const nhan = await tenVung(status);
+			expect(nhan, "ket qua luot chay in trang thai thoa thuan tho").toContain(
 				k.thoaThuan.trangThai[status],
 			);
-			expect(chu).not.toMatch(/\b(open|won|lost)\b/);
+			expect(nhan).not.toMatch(/\b(open|won|lost)\b/);
 		});
 	}
 
-	test("chu-thoa-thuan: loc all khong chen chu trang thai", async () => {
-		const o = await ve(<DealListResultTable result={ketQua("all")} />);
-		const nhan = o.querySelector("section")?.getAttribute("aria-label") ?? "";
+	test("chu-thoa-thuan: loc all khong chen chu trang thai vao ten vung", async () => {
+		const nhan = await tenVung("all");
 		expect(nhan.length, "vung bang khong co ten").toBeGreaterThan(0);
-		const chu = `${nhan} ${o.textContent ?? ""}`;
-		for (const status of MA_TRAN) {
-			expect(chu).not.toContain(k.thoaThuan.trangThai[status]);
-		}
+		for (const status of MA_TRAN)
+			expect(nhan).not.toContain(k.thoaThuan.trangThai[status]);
 	});
 });
 
@@ -355,6 +382,7 @@ describe("gui-hong", () => {
 	const t = troChuyenMessages("vi");
 	const MA_TRAN = [
 		{ ma: "DELIVERY_FAILED", chu: t.man.loiGui.DELIVERY_FAILED },
+		{ ma: "DELIVERY_EXHAUSTED", chu: t.man.loiGui.DELIVERY_EXHAUSTED },
 		{ ma: "MA_LA", chu: t.man.guiHong },
 	] as const;
 
