@@ -138,6 +138,7 @@ const KHONG_DAU = new Set([
 	"moc.themKr",
 	"loai.kr",
 	"tabs.agent",
+	"lichSu.dongDuyet",
 ]);
 
 function mienDau(khoa: string): boolean {

@@ -1,0 +1,7 @@
+{
+  "feature_plain": "Người dùng Kho tài liệu xem được các phiên bản cũ của trang, đưa một bản cũ trở lại bằng một đề xuất qua duyệt, và lưu trữ hay khôi phục trang qua duyệt; trang đã lưu trữ vắng khỏi danh sách, tìm kiếm và trợ lý AI, tìm lại ở nút «Đã lưu trữ».",
+  "decisions": [
+    {"id": "E13j", "q": "Chữ trên các màn lịch sử và lưu trữ có đúng một nghĩa, dễ hiểu không?", "why": "Hai người chấm thấy đạt; người thứ ba chưa chắc vì không có ảnh lúc mở trình đơn «…» trên trang đang dùng."}
+  ],
+  "analyst_plain": ""
+}
