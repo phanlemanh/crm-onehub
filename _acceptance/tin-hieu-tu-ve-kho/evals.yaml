@@ -111,24 +111,28 @@ evals:
       - "apps/api/src/auth/**"
       - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
     expected: |
-      describe "tvk-duong-khac": khoa chi keo hop le cua owner. Ma tran viet truoc 11 duong, moi duong mot assert:
+      describe "tvk-duong-khac": khoa chi keo hop le cua owner. Ma tran viet truoc 13 duong, doc tu
+      _acceptance/tin-hieu-tu-ve-kho/rang/bang-duong-doc-khoa.json (cung tep E4c doc), moi duong mot assert:
         1 GET  /rest/tin-hieu/cua-toi
         2 POST /rest/tin-hieu/keo-ve (thu tuc cua LT2)
-        3 GET  /rest/contacts
+        3 POST /rest/contacts/search (contacts.list qua cau REST)
         4 GET  /rest/api-keys
-        5 GET  /trpc/contacts.list (tRPC goc, khong qua cau REST)
+        5 GET  /api/trpc/contacts.list (tRPC goc)
         6 GET  /api/auth/get-session
-        7 POST /api/auth/api-key/create (body ten bat ky)
+        7 POST /api/auth/api-key/create
         8 GET  /api/auth/api-key/list
-        9 POST /api/auth/api-key/update (doi ten chinh khoa chi keo)
-       10 POST /api/auth/api-key/delete (xoa mot khoa thuong cua owner)
-       11 auth.api.getSession({ headers: x-api-key }) — ham ma apps/app/lib/session.ts (trang web va cau tac nhan /eve) goi
-      Duong 1-5, 7-10: status 401 (hay 403 cua thu vien); duong 6: 200 voi phien null; duong 11: null hoac APIError 401.
+        9 GET  /api/auth/api-key/get
+       10 POST /api/auth/api-key/update (doi ten chinh khoa chi keo)
+       11 POST /api/auth/api-key/delete (xoa mot khoa thuong cua owner)
+       12 GET  /auth/me (controller Nest doc phien)
+       13 auth.api.getSession({ headers: x-api-key }) — ham ma apps/app/lib/session.ts (trang web va cau tac nhan /eve) goi
+      Duong 1-5, 7-12: status 401 hay 403; duong 6: 401 hoac 200 voi phien rong; duong 13: phien rong hoac APIError 401.
       Sau ca ma tran: so hang apikey, ten khoa, so tinHieu co keoVeLuc khong doi.
-      Danh muc 11 duong la dau ra cua E4c (liet ke bang may), khong chon tay: E4c do hai tap bang nhau.
-      Doi chung duong: cung 11 duong voi khoa THUONG cua owner -> 1-5, 8 tra 200, 6 va 11 tra phien cua owner.
-      CHIEU DO: ban sao bat enableSessionForAPIKeys cho cau hinh chi keo -> duong 1 va 7 do voi thong diep ghim
-      "khoa chi keo mo duoc phien"; ban sao dat chung configId mac dinh cho khoa chi keo -> cung thong diep.
+      Ca rieng: tap duong HTTP cua plugin api-key (doc tu auth.options.plugins that) bang tap truong "plugin" cua bang.
+      Doi chung duong: khoa THUONG cua owner -> 1, 2, 3, 5, 6, 8, 12, 13 tra 200 (4 la duong chi nhan phien dang nhap).
+      CHIEU DO: ban sao dat cau hinh chi keo len TRUOC cau hinh mac dinh va bat enableSessionForAPIKeys -> do voi thong diep
+      ghim "khoa chi keo mo duoc phien" (chi bat co ma giu thu tu thi van chan: thu vien doi chieu cau hinh mac dinh truoc —
+      thu tu va configId moi la cho giu an toan).
 
   - id: E4c
     criterion: AC-4
@@ -168,7 +172,8 @@ evals:
         403: khoa chi keo hop le, chu khoa doi vai thanh member · thanh okr · chu khoa bi go khoi workspace (xoa hang member)
       Moi o: status dung, va tinHieu chua dau van keoVeLuc null. Vai doc lai moi luot: cung mot khoa goi 200 truoc khi ha vai,
       403 ngay sau khi ha vai (khong cache).
-      CHIEU DO: ban sao cache vai theo khoa -> o "doi vai thanh member" do voi thong diep ghim "vai chu khoa khong doc lai";
+      CHIEU DO: ban sao middleware dung vai cu (owner) thay vai doc lai -> o "doi vai thanh member" do voi thong diep ghim
+      "vai chu khoa khong doc lai" (bo rieng lan kiem vai o middleware thi dich vu van chan — hai lop);
       ban sao nhan khoa thuong o duong lich -> o dau do voi thong diep ghim "duong lich nhan khoa toan quyen".
 
   - id: E6
