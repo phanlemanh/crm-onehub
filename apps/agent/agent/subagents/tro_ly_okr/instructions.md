@@ -47,7 +47,10 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
     number of your own.
   - `hoi`: a question about one of the five quality problems below, with its code in `maVanDe`.
   - `can-chinh`: only when `phamVi` is `objective`, a Căn chỉnh to one target listed in
-    `dichCanChinh`, by its id.
+    `dichCanChinh`, by its id. `lyDo` says why this Mục tiêu moves that target. `canCu` is the
+    evidence for that claim: write it only when the data block holds a number that backs it, and
+    copy that number exactly as the data block writes it; with no such number, leave `canCu`
+    null. Rule 3 holds for `canCu` too: never a number the data block does not already have.
   - When `phamVi` is `kr`, write lines about that KR only.
 - The five quality problems, each with the sign that gives it away. Put the code in `maVanDe` on
   every `hoi` line and on every `viet-lai` line that fixes it:
