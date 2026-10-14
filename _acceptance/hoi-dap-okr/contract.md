@@ -5,7 +5,9 @@ slug: hoi-dap-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-14T17:55:00Z
 design_doc: docs/superpowers/specs/2026-10-14-hoi-dap-okr-design.md
 ---
 
@@ -20,8 +22,9 @@ buộc vào một cuộc soạn. Lượt này thêm loại phiên `okr-hoi` vào
 `dieuKienXemMucTieu`. Câu trả lời người đọc thấy do mã dựng sau khi kiểm trích dẫn và con số. Lượt này cũng
 thêm bảng `OkrCuocHoi` và cột Kara hỏi đáp trên web.
 
-Bản nháp này soạn theo khuyến nghị của hai câu đang chờ chủ kho: Zalo tách sang hàng C2 (Hỏi-1), và trần là
-hằng số trong config (Hỏi-2).
+Chủ kho chốt ở Cổng Phạm vi 2026-10-14 theo khuyến nghị: Zalo tách sang hàng C2 (Hỏi-1), trần là hằng số trong
+config (Hỏi-2), không dựng bản mẫu trước cổng (Hỏi-3), ba ngưỡng «đạt» của AC-9 (Hỏi-4), vế N1 đọc là câu hỏi
+trên Mục tiêu của N1 (Hỏi-5).
 
 Source input: hàng C `docs/plan/lo-trinh-okr.json` + `_acceptance/hoi-dap-okr/opportunity.md` +
 `docs/agent.md` («App eve thứ hai», «Khi nào thêm mã, tool…», luật dữ liệu 5) + `docs/ai-ux.md` §7, §8, §11 +
@@ -65,7 +68,7 @@ Source input: hàng C `docs/plan/lo-trinh-okr.json` + `_acceptance/hoi-dap-okr/o
   `coverage-scan.md`, mỗi câu khai sẵn trích bắt buộc, tên cấm và loại câu trả lời, When lệnh đo chạy Kara thật
   (ZDR) trên kho đo và chấm mỗi câu bằng luật mã cùng một hội đồng ZDR trong chính lệnh đo, Then 100% câu đạt
   luật quyền, ít nhất 90% câu đạt luật trích và số, và ít nhất 85% câu được hội đồng ZDR chấm «đúng ý câu
-  hỏi» [ba ngưỡng chờ Hỏi-4; cách đọc vế N1 chờ Hỏi-5]. Bảng kết quả mang, cho mỗi câu, kỳ vọng đã khai, ảnh
+  hỏi» (Hỏi-4, Hỏi-5). Bảng kết quả mang, cho mỗi câu, kỳ vọng đã khai, ảnh
   chụp giá trị của Mục tiêu và KR được hỏi, câu trả lời dựng và phiếu của hội đồng.
 - AC-10: Given khu OKR và tổng quan của vai chỉ OKR, When người dùng bấm «Hỏi Kara», gõ câu hỏi và bấm một
   trích, Then cột Kara mở bên phải qua `?record=hoi-okr:<cuộc>` theo khuôn `KaraDock`, câu trả lời hiện mỗi câu
@@ -88,7 +91,7 @@ trạng dữ liệu và hệ thống.
 - Trục A, năm giá trị [thước CE: `VAI_WORKSPACE`, người trong bộ mẫu]: AC-1, AC-5, AC-8, AC-9.
 - Trục B, bảy ý định [thước CE: `dieuKienXemMucTieu`, `CONTEXT.md`]: AC-1, AC-3, AC-4, AC-9. Câu xin ghi
   hay sửa và câu không trả lời được nằm trong bộ câu mẫu của AC-9.
-- Trục C, kênh: web (AC-10). Zalo chờ Hỏi-1, khuyến nghị tách hàng C2. Slack ở Later.
+- Trục C, kênh: web (AC-10). Zalo tách hàng C2 (Hỏi-1). Slack ở Later.
 - Trục D, tình trạng: Mục tiêu giới hạn (AC-1), hết lượt hay trần (AC-6), Kara hỏng (AC-10). Chu kỳ trống nằm
   trong bộ câu mẫu (AC-9). Kỳ đã khép ở Later.
 - [GIẢ ĐỊNH: chưa có chuẩn ngành đúng loại] cho hỏi đáp OKR có lọc quyền. Neo tạm vào Microsoft 365 Copilot
@@ -101,20 +104,20 @@ Ngưỡng của `opportunity.md`: «Eval hỏi đáp trên bộ ca mẫu (M, N1)
 OKR» xanh trên production».
 
 - Eval hỏi đáp trên bộ ca mẫu: lệnh đo của AC-9 trên bộ M. Ca N1 là ca góp ý, không phải câu hỏi; bản nháp đọc
-  vế N1 là bộ câu hỏi dựng trên chính các Mục tiêu quý 4 mà N1 dùng [chờ Hỏi-5]. Ngưỡng «đạt» là ba ngưỡng của
-  AC-9 [chờ Hỏi-4].
+  vế N1 là bộ câu hỏi dựng trên chính các Mục tiêu quý 4 mà N1 dùng (Hỏi-5). Ngưỡng «đạt» là ba ngưỡng của
+  AC-9 (Hỏi-4).
 - «Vai chỉ OKR chỉ hỏi được OKR»: AC-8 đo trên kho đo. Nửa production đo sau gộp, lúc bật, bằng
   `_acceptance/hoi-dap-okr/rang/chi-hoi-okr.sql` — câu SQL này nằm trong vật của lượt. Nó đếm, theo vai, mọi
   `AgentEvent` của phiên `okr-hoi` gọi công cụ ngoài ba công cụ OKR; kỳ vọng là 0.
 
 ## Out of scope
 
-- Zalo — chờ Hỏi-1; khuyến nghị hàng C2 dùng lại công cụ đọc, `nop_tra_loi` và bộ câu mẫu của lượt này.
+- Zalo — hàng C2 (Hỏi-1), dùng lại công cụ đọc, `nop_tra_loi` và bộ câu mẫu của lượt này.
 - Ghi hay sửa OKR qua hỏi đáp: Kara chỉ chỉ chỗ sửa (khung Mục tiêu, Soạn OKR).
 - Trả lời câu đối tác trong cột Kara OKR, kể cả cho owner và thành viên: chỉ đường sang Kara của CRM.
 - Đo trên production: việc sau gộp, lúc bật.
 - Kỳ đã khép, so sánh hai kỳ: bộ câu mẫu chỉ đo quý 4.
-- Ô Cài đặt cho trần (chờ Hỏi-2; khuyến nghị dùng hằng số).
+- Ô Cài đặt cho trần — trần là hằng số (Hỏi-2).
 
 ## Notes
 
