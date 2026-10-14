@@ -170,9 +170,22 @@ _Avoid_: task, nhiệm vụ, đầu việc
 Vì sao: khảo sát 05/10 thấy mọi hãng tách hai loại việc đều phải vá — «việc của
 tôi» nằm hai chỗ, quyền theo hai luật. Một chữ cho một loại việc chung cả CRM.
 
+**Việc con**: một Việc nằm dưới đúng một việc cha, chỉ một tầng — việc con không có việc con. Người giao
+hay người thực hiện của việc cha thêm việc con từ khung việc; lúc tạo, việc con mang theo bản ghi gắn của
+việc cha, và người giao, người thực hiện của việc cha thành người theo dõi việc con (ai đã có vai thì
+thôi). Sau lúc tạo, gắn của cha và con sống riêng. Đóng hay huỷ việc cha không tự đóng việc con; còn con
+đang mở thì máy hỏi lại một lần. Thẻ việc cha ghi «x/y việc con xong», không tính việc con đã Huỷ. Đặt
+2026-10-13 (hàng DA2).
+_Avoid_: subtask, việc phụ, công việc con
+Vì sao: khảo sát DA0 thấy mọi hãng có việc con; một tầng đủ để chia việc to cho nhiều người mà không thành
+cây khó đọc.
+
 **Việc của tôi**: màn liệt kê việc của một người theo ba nhóm — Giao cho tôi (tôi là người thực hiện),
 Tôi giao (tôi giao cho người khác), Đang theo dõi — mặc định chỉ việc đang mở, xếp theo hạn; Xong và Huỷ ở
-hai dòng gập cuối danh sách. Mục thứ hai của thanh trái. Đặt 2026-10-13 (hàng DA1).
+hai dòng gập cuối danh sách. Mục thứ hai của thanh trái. Đặt 2026-10-13 (hàng DA1). Có hai kiểu xem: Danh sách và Bảng — bốn cột Chưa
+làm · Đang làm · Chờ đánh giá · Xong, kéo thẻ giữa các cột hay chọn trong menu «Chuyển sang…»; cột Xong
+chỉ hiện việc xong trong 7 ngày, việc Huỷ ở dòng gập dưới bảng; thứ tự trong cột là của riêng từng người
+(hàng DA2).
 _Avoid_: hộp việc, my tasks
 Vì sao: «Việc của bạn» đã là thẻ của OKR; màn này là của chính người đang đứng ở đó.
 
