@@ -5,9 +5,9 @@ slug: tin-hieu-tu-ve-kho
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api, ci]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-10-14T03:06:12Z
 design_doc: docs/superpowers/specs/2026-10-14-tin-hieu-tu-ve-kho-design.md
 ---
 
