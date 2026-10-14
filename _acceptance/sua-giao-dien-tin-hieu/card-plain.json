@@ -1,0 +1,39 @@
+{
+  "feature_plain": "Sửa tám lỗi người gửi tín hiệu gặp trên production 14/10: bảng bị bóp, lỗi báo sai chỗ, giờ không theo ngôn ngữ, không thấy mã, tiêu điểm nhảy, nút nhỏ, đóng biên nhận bị hỏi lại, đường dẫn thô và chữ trạng thái khó hiểu.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ gộp cột «Màn» và «Gửi lúc» thành một cột «Gửi» để cột «Điều đã kể» luôn rộng nhất bảng ở 768–1280px (bản mẫu đo: 82px → 277px ở khổ hẹp nhất)."},
+    {"id": "AC-2", "p": "Sẽ báo lỗi gửi ở một vùng của cả hộp, không tô đỏ ô nào; quá trần ngày thì nói bằng ngôn ngữ đang chọn và khoá nút Gửi kèm lý do tới hết ngày giờ Việt Nam, chữ đã gõ còn nguyên."},
+    {"id": "AC-3", "p": "Sẽ viết giờ gửi theo ngôn ngữ đang chọn, theo giờ Việt Nam, cùng lề với tên màn."},
+    {"id": "AC-5", "p": "Sẽ đưa tiêu điểm tới dòng kế sau khi xoá (không nhảy về đầu trang), đọc «Đã xoá tín hiệu crm-N» cho trình đọc màn, và nói vì sao khi xoá hỏng."},
+    {"id": "AC-6", "p": "Sẽ nâng nút ⋮ trên điện thoại lên 36×36 và thêm một dòng «Kể đủ hai câu rồi bấm Gửi» khi nút Gửi khoá vì thiếu chữ."},
+    {"id": "AC-7", "p": "Sẽ đóng biên nhận ngay, không hỏi «Bỏ những gì vừa nhập?»; đang soạn có chữ thì vẫn hỏi như trước."},
+    {"id": "AC-8", "p": "Sẽ hiện tên màn (vd «Mục tiêu», «Cài đặt › Thành viên») thay đường dẫn thô ở hộp gửi và danh sách, kể cả cho crm-1..5 cũ; dữ liệu cất vẫn là đường dẫn."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Sẽ KHÔNG giấu mã tín hiệu nữa: mỗi dòng hiện crm-N như trên biên nhận, và hộp xoá nêu nguyên văn điều đã kể."},
+    {"id": "AC-10", "p": "Chặn cuộn ngang và cắt chữ ở hộp và trang, 375/768/1280px × tiếng Việt/tiếng Anh, đo trên bản chạy thật có ảnh."},
+    {"id": "AC-11", "p": "Sẽ KHÔNG đổi máy chủ, dữ liệu hay bộ giao diện chung, và mọi điều khác LT2 đã ký vẫn đúng."},
+    {"id": "OOS-1", "p": "Lớp phủ đen đặc sau hộp thoại ở nền tối (U9) — việc của bộ giao diện chung, hàng TH7."},
+    {"id": "OOS-2", "p": "Nút ⋮ 44×44 — cần thêm cỡ nút ở bộ giao diện chung, ngoài luật tệp chung của đợt."},
+    {"id": "OOS-3", "p": "Báo quá trần ngay khi mở hộp lần đầu trong ngày — cần máy chủ trả số đã gửi."},
+    {"id": "OOS-4", "p": "Đổi đường dẫn đã cất hay tệp kéo về thành tên màn — tên chỉ suy lúc hiện."},
+    {"id": "OOS-5", "p": "Đổi câu trạng thái do kit viết (vẫn là tiếng Việt ở giao diện tiếng Anh)."},
+    {"id": "OOS-6", "p": "Trang «Mọi tín hiệu» của quản trị và câu báo trước — vòng TH4."},
+    {"id": "OOS-7", "p": "Báo tin cho người gửi khi tín hiệu đổi chỗ."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi trạng thái của hộp (trống, có chữ, đang gửi, quá trần, lỗi, biên nhận) và của trang (có dòng, rỗng, hỏi xoá, xoá xong, xoá hỏng, dòng đã lấy về) đều có tiêu chí — AC-2, AC-4, AC-5, AC-6, AC-7, AC-9."},
+    {"i": 1, "p": "Năm khổ màn 375 · 768 · 900 · 1100 · 1280, gồm đúng khoảng 768–1100 nơi lỗi crm-1 xảy ra — AC-1, AC-6, AC-10."},
+    {"i": 2, "p": "Cả tiếng Việt và tiếng Anh, hai ngôn ngữ duy nhất ứng dụng có — AC-2, AC-3, AC-8, AC-10."},
+    {"i": 3, "p": "Bảy loại lỗi phủ đủ U1–U8 của bản phạm vi, đối chiếu chuẩn WCAG 2.2 về báo lỗi, thứ tự tiêu điểm và cỡ nút — AC-1 đến AC-9."},
+    {"i": 4, "p": "Không đổi máy chủ, dữ liệu, bộ giao diện chung; điều đã ký của LT2 còn đúng — AC-11."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Thiếu cách đo ngưỡng sau khi lên production, và máy đã tự hạ nút ⋮ từ 44 xuống 36 mà không hỏi. Đã thêm cách đo (chạy lại phép đo màn trên production + rà bằng mắt, ghi ở phiên nghiệm thu); câu 36 hay 44 đưa lên thẻ cho anh."},
+    {"i": 1, "p": "Phép đo trên bản chạy chỉ xem hộp ở máy tính. Đã thêm hộp ở điện thoại và máy tính bảng, cả hai ngôn ngữ."},
+    {"i": 2, "p": "Lỗi quá trần chỉ giả lập, chưa gửi thật qua máy chủ. Đã thêm một ô gửi quá trần thật bằng tiếng Anh, và chạy thêm ở múi giờ khác; lỗi «vừa lấy về» khi xoá vẫn giả lập vì cần quản trị kéo về đúng lúc."},
+    {"i": 3, "p": "Sửa bài kiểm cũ của LT2 có thể vô tình bớt khẳng định. Đã thêm phép đếm khẳng định trước/sau, và đòi đọc lại cả phần chấm bằng mắt của LT2 khi chốt danh sách ô bị thay."},
+    {"i": 4, "p": "Hai con số khẳng định in ra không khớp ma trận đã khai. Đã sửa cho khớp."}
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để ngoài vòng sửa giao diện này."
+}
