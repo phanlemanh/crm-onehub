@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b83c6ebaa639cf532bb1625171271060907d3546
+verified_commit: 0ba56d609b4b333c7f6b8585dd20e574ce5f6a47
 human_signoff: Phan Le Manh 2026-10-02
 ---
 
@@ -316,3 +316,7 @@ sha: aeacc862fc3a28e5391c27772a4ad96e16ae3317 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-10-14, do ghim ở đỉnh b83c6ebaa trước gộp #406 (làn Y lần 2; lần 1 E15 1 câu lỗi c10)
 run_id: repin-20261014T163745Z-67657
 sha: b83c6ebaa639cf532bb1625171271060907d3546 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths) · diff chạm vật đo ngoài làn máy: E7u — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-14, do ghim ở đỉnh sau gộp onehub 3818ad4ec (#414 sửa ca ngày 15), trước gộp #406 (làn Y)
+run_id: repin-20261014T225002Z-96640
+sha: 0ba56d609b4b333c7f6b8585dd20e574ce5f6a47 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
