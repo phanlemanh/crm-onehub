@@ -750,12 +750,7 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 		{ id: "donVi", header: m.cotCanChinh.donVi, width: "w-36" },
 		{ id: "mucTieu", header: m.cotCanChinh.mucTieu },
 		{ id: "kr", header: m.cotCanChinh.kr },
-		...(sua
-			? [
-					{ id: "suaLyDo", srLabel: m.suaLyDo, width: "w-12" },
-					{ id: "go", srLabel: m.hoiGo.action, width: "w-12" },
-				]
-			: []),
+		...(sua ? [{ id: "go", srLabel: m.hoiGo.action, width: "w-20" }] : []),
 	];
 
 	return (
@@ -795,29 +790,27 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 									</TableCell>
 									{sua ? (
 										<TableCell className={CELL}>
-											<Button
-												aria-label={dien(m.suaLyDo, { ten: tenNoi(g) })}
-												aria-haspopup="dialog"
-												data-nut="sua-ly-do"
-												size="icon-sm"
-												variant="ghost"
-												onClick={() => setSuaDi(g)}
-											>
-												<Icon icon={Edit} />
-											</Button>
-										</TableCell>
-									) : null}
-									{sua ? (
-										<TableCell className={CELL}>
-											<Button
-												aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
-												size="icon-sm"
-												variant="ghost"
-												disabled={go.isPending}
-												onClick={() => setGoDi(g)}
-											>
-												<Icon icon={Close} />
-											</Button>
+											<div className="flex items-center gap-1">
+												<Button
+													aria-label={dien(m.suaLyDo, { ten: tenNoi(g) })}
+													aria-haspopup="dialog"
+													data-nut="sua-ly-do"
+													size="icon-sm"
+													variant="ghost"
+													onClick={() => setSuaDi(g)}
+												>
+													<Icon icon={Edit} />
+												</Button>
+												<Button
+													aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
+													size="icon-sm"
+													variant="ghost"
+													disabled={go.isPending}
+													onClick={() => setGoDi(g)}
+												>
+													<Icon icon={Close} />
+												</Button>
+											</div>
 										</TableCell>
 									) : null}
 								</SimpleTableRow>

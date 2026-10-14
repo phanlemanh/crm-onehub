@@ -77,17 +77,7 @@ Quét bằng `morphological-scan` (preset entity-feature), 14/10. Chân sản ph
 
 ## Notes
 
-- Ranh giới (xin `cham-tep` trước S3): `packages/validation/src/ly-do-can-chinh.ts` (mới),
-  `packages/validation/src/okr-tro-ly.ts`, `packages/validation/package.json` (chỉ thêm đường con),
-  `packages/validation/test/ly-do-can-chinh.spec.ts` (mới); `apps/api/src/okr/can-chinh.ts`, `okr.contracts.ts`,
-  `okr.service.ts`, `okr.router.ts`, `okr-config.ts`, `tro-ly.service.ts`, `apps/api/src/generated/server.ts` (nếu
-  `trpc:generate` đổi); `apps/api/test/okr-gan-ly-do.spec.ts` (mới), `apps/api/test/vai-chi-okr.spec.ts` (chỉ thêm
-  một tên); `apps/api/scripts/okr-mau/**` (chỉ thêm đề xuất mẫu); `apps/agent/agent/lib/okr/nop-de-xuat.ts`,
-  `apps/agent/agent/subagents/tro_ly_okr/instructions.md`, `apps/agent/test/nop-de-xuat-can-cu.spec.ts` (mới);
-  `apps/app/app/(app)/[slug]/okr/hop-thoai-can-chinh.tsx`, `nhom-kara.tsx`, `gop-y-kara.ts`,
-  `apps/app/components/crm/record-sheet/objective-sheet.tsx`, `apps/app/lib/messages/okr.ts` (chỉ thêm),
-  `apps/app/lib/messages/okr-gop-y.ts` (chỉ thêm), `apps/app/test/gan-ly-do.dom.tsx` (mới); `_acceptance/config.yaml`
-  (chỉ thêm); `packages/db/src/okr-vet.ts` (chỉ thêm một hành động vết — S3, sổ quyết định); `apps/app/test/khung-gop-y.tsx` (chỉ thêm `canCu: null` vào dữ liệu giả — S3, sổ quyết định); `packages/validation/src/okr-kiem-de-xuat.ts` (căn cứ qua cùng bộ soát chữ — S3, sổ quyết định); `apps/app/test/gop-y-dung-cho-khung.tsx` (hai chỗ đếm nút của bài đã ký `gy_khoa`, `gy_focus_khung` theo nút «Sửa lý do» — S3, sổ quyết định).
+- Ranh giới (xin `cham-tep` trước S3; bốn tệp sau dấu «S3» thêm ở S3, có dòng sổ quyết định): `packages/validation/src/ly-do-can-chinh.ts` (mới), `packages/validation/src/okr-tro-ly.ts`, `packages/validation/package.json` (chỉ thêm đường con), `packages/validation/test/ly-do-can-chinh.spec.ts` (mới); `apps/api/src/okr/can-chinh.ts`, `apps/api/src/okr/okr.contracts.ts`, `apps/api/src/okr/okr.service.ts`, `apps/api/src/okr/okr.router.ts`, `apps/api/src/okr/okr-config.ts`, `apps/api/src/okr/tro-ly.service.ts`, `apps/api/src/generated/server.ts` (sinh lại bằng `trpc:generate`); `apps/api/test/okr-gan-ly-do.spec.ts` (mới), `apps/api/test/vai-chi-okr.spec.ts` (chỉ thêm một tên); `apps/api/scripts/okr-mau/nap-de-xuat-kara.ts` (mới); `apps/agent/agent/lib/okr/nop-de-xuat.ts`, `apps/agent/agent/subagents/tro_ly_okr/instructions.md`, `apps/agent/test/nop-de-xuat-can-cu.integration.spec.ts` (mới); `apps/app/app/(app)/[slug]/okr/hop-thoai-can-chinh.tsx`, `apps/app/app/(app)/[slug]/okr/nhom-kara.tsx`, `apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`, `apps/app/components/crm/record-sheet/objective-sheet.tsx`, `apps/app/lib/messages/okr.ts` (chỉ thêm), `apps/app/lib/messages/okr-gop-y.ts` (chỉ thêm, trừ giá trị `dong.canChinh` — cham-tep P2-16), `apps/app/test/gan-ly-do.dom.tsx` (mới); `_acceptance/config.yaml` (chỉ thêm); S3: `packages/db/src/okr-vet.ts` (chỉ thêm một hành động vết), `apps/app/test/khung-gop-y.tsx` (chỉ thêm `canCu: null` vào dữ liệu giả), `packages/validation/src/okr-kiem-de-xuat.ts` (căn cứ qua cùng bộ soát chữ), `apps/app/test/gop-y-dung-cho-khung.tsx` (hai chỗ đếm nút của bài đã ký `gy_khoa`, `gy_focus_khung` theo nút «Sửa lý do»).
 - Không `migration`: căn cứ của đề xuất Kara nằm trong cột JSON `OkrDeXuat.noiDung` đã có.
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/agent.md`, `docs/ai-ux.md`, `docs/design.md`.
 - Repo khai `feature_loop.ui_standards_skill: web-design-guidelines` nhưng skill đó không cài trên máy này — artifact UI

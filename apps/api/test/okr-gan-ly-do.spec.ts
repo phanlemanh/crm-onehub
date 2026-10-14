@@ -434,14 +434,46 @@ async function canChinhTheoDich(
 
 let gieoQ1: { id: string; dich: Dich }[] = [];
 
+async function canGieoQ1(): Promise<{ id: string; dich: Dich }[]> {
+	if (gieoQ1.length === 0)
+		gieoQ1 = await gieoCanChinh(Q1, cTruong, [
+			{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+			{ lyDo: `${LY_DO_KARA} Không số.`, canCu: null },
+		]);
+	return gieoQ1;
+}
+
+async function canNhanA(): Promise<string> {
+	if (daNhan.a) return daNhan.a;
+	const [co] = (await canGieoQ1()) as [{ id: string; dich: Dich }];
+	tienDongHo();
+	ok(await quyet({ deXuatId: co.id, cach: "nhan" }, cTruong), "nhan a");
+	daNhan.a = await idCanChinh(Q1, co.dich);
+	return daNhan.a;
+}
+
+async function canNhanB(): Promise<string> {
+	if (daNhan.b) return daNhan.b;
+	const [d] = (await gieoCanChinh(Q2, cNgoai, [
+		{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+	])) as [{ id: string; dich: Dich }];
+	tienDongHo();
+	ok(
+		await quyet(
+			{ deXuatId: d.id, cach: "sua", giaTri: LY_DO_KARA, canCu: CAN_CU_KARA },
+			cNgoai,
+		),
+		"nhan b y chu",
+	);
+	daNhan.b = await idCanChinh(Q2, d.dich);
+	return daNhan.b;
+}
+
 describe("l4-danh-sach", () => {
 	test(
 		"troLyDanhSach trả căn cứ của dòng căn chỉnh Kara",
 		async () => {
-			gieoQ1 = await gieoCanChinh(Q1, cTruong, [
-				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
-				{ lyDo: `${LY_DO_KARA} Không số.`, canCu: null },
-			]);
+			await canGieoQ1();
 			const ds = ok<{ dong: { id: string; canCu: string | null }[] }>(
 				await goi(
 					app,
@@ -471,7 +503,7 @@ describe("l4-nhan", () => {
 	test(
 		"nhận đề xuất ghi lý do, căn cứ, dấu Kara — tRPC và REST; Hoàn tác gỡ đúng căn chỉnh",
 		async () => {
-			const [co, khong] = gieoQ1 as [
+			const [co, khong] = (await canGieoQ1()) as [
 				{ id: string; dich: Dich },
 				{ id: string; dich: Dich },
 			];
@@ -604,13 +636,12 @@ describe("l4-sua-de-xuat", () => {
 	);
 });
 
-describe("l4-sua", () => {
+describe("l4-sua-sau-gan", () => {
 	test(
 		"sửa lý do sau khi gắn: hạ dấu Kara, một dòng vết; y nguyên thì không ghi — tRPC và REST",
 		async () => {
-			const a = daNhan.a;
-			const b = daNhan.b;
-			if (!a || !b) throw new Error("thieu can chinh Kara tu cac bai truoc");
+			const a = await canNhanA();
+			const b = await canNhanB();
 			const soVet = () =>
 				db.okrTrail.count({
 					where: { objectiveId: Q1, action: "sua-ly-do-can-chinh" },
@@ -728,11 +759,17 @@ const CA_MAN = JSON.parse(
 	canCu: string;
 };
 
+let taskMau = "";
+async function canNapMau(): Promise<string> {
+	if (!taskMau) taskMau = await napDeXuatKaraMau();
+	return taskMau;
+}
+
 describe("l4-mau", () => {
 	test(
 		"bộ mẫu có đề xuất căn chỉnh của Kara mang căn cứ, ghi qua công cụ thật, không chèn thẳng bảng",
 		async () => {
-			const taskId = await napDeXuatKaraMau();
+			const taskId = await canNapMau();
 			const hang = await db.okrDeXuat.findMany({
 				where: { loai: "can-chinh", trangThai: "cho", taskId },
 			});
@@ -777,6 +814,7 @@ describe("l4-man-doc-lai", () => {
 		async () => {
 			const mtMan = mt(CA_MAN.mucTieu);
 			const cXem = await phienMau(CA_MAN.nguoiXem);
+			await canNapMau();
 			const ds = ok<{
 				dong: {
 					id: string;
