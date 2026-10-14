@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: chep-viec-can-lam-cu
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 4c962611d8883482786052181954c06eac1f905c
-human_signoff:
+human_signoff: manh 2026-10-14 — ký Cổng Bằng chứng trên vòng chấm 2 (0 eval trượt, 7/7 lệnh suite, E12 đạt). Ngoài-25 và Ngoài-26 (hạn lệch một ngày) đã sửa trong lần nâng phạm vi nên chấp nhận, không sửa; Ngoài-2, 5, 8, 9, 13, 14, 15, 16, 20, 23, 24, 27, 28 ghi Known limits; mười ba mục còn lại chấp nhận, không sửa. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: chep-viec-can-lam-cu
@@ -161,7 +161,7 @@ human_signoff:
     - domain-correctness: PASS — Cả sáu điều đều có trong bốn tệp đầu vào. (1) CONTEXT.md dòng 167-169 và docs/api.md dòng 549-555 nói việc cũ đã chép, bản gốc còn để đảo, việc chưa chép chỉ đọc. (2) và (3) docs/production.md dòng 276-301 có đếm, chạy thử, chạy thật, đếm lại, cờ ALLOW_REMOTE_DB, `--nguoi` là email quản trị, hai vế ngưỡng (`taskTong` không đổi, `--tu` cho `taskTaoSau` bằng 0 sau 14 ngày), đảo kể cả bản đã đổi bằng `--ca-ban-da-doi`. (4) docs/api.md dòng 549-551 nói `activities.create` trả 400 với TASK, `complete` và `myTasks` đã bỏ. (5) docs/agent.md dòng 77-81 và 1085-1091 nói Tác nhân giao Việc cho người khởi chạy, việc mã môi giới lệch giao cho người cầm trịch. (6) docs/production.md dòng 282-285 có thứ tự lên (đợi deployment api xong migration), dòng 298-301 có thứ tự lùi (chạy `--dao` trước, kèm lý do hiện hai lần và giao trùng). Không thấy từ ghép tự đúc nào: «vết», «người cầm trịch», «vai chỉ OKR» đều có trong CONTEXT.md. «mã môi giới lệch» không có mục riêng ở đó, nhưng tài liệu giải nghĩa nó ngay tại chỗ dùng, nên coi là chữ thường chứ không phải thuật ngữ đúc mới.
     - operational-feasibility: PASS — Bốn tài liệu nói đủ sáu điều. (1) CONTEXT.md 167-169 và api.md 549-555 nói việc cũ đã chép, bản gốc còn để đảo, việc chưa chép chỉ đọc. (2) production.md 276-301 nêu đủ đếm, chạy thử, chạy thật, đếm lại, ALLOW_REMOTE_DB=1, `--nguoi` là email quản trị và `--dao` (kể cả `--ca-ban-da-doi`). (3) Hai vế ngưỡng ở production.md 294-295, vế hai dùng `--tu` và `taskTaoSau` bằng 0. (4) api.md 549-551. (5) agent.md 77-81 và 1085-1091. (6) production.md 282-285 (thứ tự lên) và 297-301 (chạy đảo trước khi lùi mã, kèm lý do). Các từ như «người cầm trịch», «vết», «Việc», «quản trị» đều có trong CONTEXT.md; «bản chép» và «đảo» là chữ thường, không phải từ ghép tự đúc.
     - spec-alignment: PASS — Bốn tệp nói đủ sáu điều. (1) CONTEXT.md mục «Việc», dòng 167-169. (2) và (3) docs/production.md dòng 276-301: đếm, chạy thử, chạy thật, đếm lại, ALLOW_REMOTE_DB, `--nguoi` là email quản trị, hai vế ngưỡng, `--dao` và `--ca-ban-da-doi`. (4) docs/api.md dòng 549-555. (5) docs/agent.md dòng 77-81 và 1085-1091. (6) docs/production.md dòng 282-285 và 297-301. Các từ dùng đều là chữ thường hoặc tên định danh/lệnh, không có từ ghép kỹ thuật nào mới đúc.
-  human_override:  # chi nguoi ghi
+  human_override: manh 2026-10-14 — Đạt
 
 - eval: E13
   run_id: minted-chep-viec-can-lam-cu-E13-r2

@@ -5,7 +5,7 @@ slug: chep-viec-can-lam-cu
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-13T23:18:51Z
 design_doc: docs/superpowers/specs/2026-10-13-chep-viec-can-lam-cu-design.md
@@ -75,3 +75,17 @@ martinfowler.com]. Core → AC-1…AC-11; AC-10 là đường đo; AC-12 tài li
   với DA1.
 - Câu chỉ người có (Hỏi-1…Hỏi-6) nằm ở sổ quyết định; hợp đồng này soạn theo khuyến nghị của máy.
 - Nâng phạm vi sau S4 lượt 1 (manh, 2026-10-13): AC-1, AC-7, AC-8 thêm luật hạn theo ngày lịch giờ VN lưu ở nửa đêm UTC — việc cần làm cũ (ô soạn cũ và ma-lech cũ) lưu hạn ở nửa đêm giờ VN, chép nguyên sẽ lệch sớm một ngày.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-2: Luật «không hiện việc cũ đã chép» đang được viết ở nhiều chỗ nên sau này đổi luật dễ sót một màn. Hiện tại các màn đều hiện đúng.
+  - Ngoài-5: Một khai báo kiểu dữ liệu được viết tay bên cạnh khuôn kiểm tra nên hai thứ có thể lệch nhau về sau. Hiện chưa gây sai kết quả nào cho người dùng.
+  - Ngoài-8: Phần chống giao trùng với việc cũ chưa chép sẽ thành thừa sau khi chép việc cũ lên hệ thống thật. Lúc này nó đang giúp không giao trùng việc cho người cầm trịch.
+  - Ngoài-9: Ở khối Việc quá hạn trên Tổng quan, người dùng đọc màn hình có thể nghe nhãn cột «Đã xong» cho một ô chỉ là biểu tượng việc cũ. Người dùng nhìn thấy màn thì không thấy gì lạ.
+  - Ngoài-13: Nếu sau này ai đổi cách tính hạn việc hay khoá giao việc, bằng chứng đã ký cho việc Tác nhân giao và việc ma-lech giao có thể không bị báo cũ và không được chạy lại. Hôm nay hai chỗ này vẫn đúng.
+  - Ngoài-14: Hôm nay người dùng không thấy gì sai. Về sau, nếu cách ghi một Việc đổi, Việc được chép từ việc cũ có thể ghi khác Việc tạo tay và hai loại sẽ lệch nhau.
+  - Ngoài-15: Hiện tại màn hình hiện đúng. Quy tắc ẩn việc cũ đã chép nằm ở nhiều nơi, nên sau này sửa một chỗ mà quên chỗ khác thì việc có thể hiện hai lần hoặc biến mất.
+  - Ngoài-16: Người dùng không bị ảnh hưởng. Chỉ là cách tổ chức mã chưa theo đúng quy ước của kho.
+  - Ngoài-20: Hiện chạy thử và chạy thật đều đúng. Hai nhánh viết riêng nên về sau sửa một nhánh mà quên nhánh kia thì kết quả chạy thử có thể không còn phản ánh chạy thật.
+  - Ngoài-23: Không ảnh hưởng người dùng trực tiếp. Một bộ kiểm của vòng khác bị nới nên có thể bỏ sót việc ai đó xoá nhầm các bước kiểm về sau.
+  - Ngoài-24: Trên Tổng quan, dòng việc cũ quá hạn trông hơi khác dòng Việc, và người dùng đọc màn hình có thể nghe nhãn «Đã xong» sai ở ô đầu dòng.
+  - Ngoài-27: Khi chép việc cũ lên production mà có vài việc chép hỏng, lệnh vẫn báo thành công. Người chạy phải tự đọc danh sách lỗi mới biết còn việc chưa chép.
+  - Ngoài-28: Phép kiểm màn hình khẳng định không còn khối việc ghim nhưng không thể đỏ, nên nếu khối ấy quay lại thì kiểm này không báo. Người dùng có thể lại thấy việc cũ ghim đầu thẻ mà không ai hay.
