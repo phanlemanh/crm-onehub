@@ -5,9 +5,9 @@ các trang OKR khác và lệch khỏi nếp chung của OneHub. Lượt rà đo
 chiếu Thoả thuận, Công ty, Tài liệu, Lộ trình, Strategy Map của Tability và cách Perdoo chia chủ sở
 hữu — người dẫn. Hai bản mẫu dựng trong cùng phiên làm đầu vào Cổng 1:
 
-- `/proto/dieu-huong-okr` — khung khu Mục tiêu, trang đơn vị trên DataTable có dòng mở rộng, Của tôi ba
+- Bản mẫu `/proto/dieu-huong-okr`: khung khu Mục tiêu, trang đơn vị trên DataTable có dòng mở rộng, Của tôi ba
   phần; nhánh `feat/dieu-huong-okr`.
-- `/proto/so-do-can-chinh-okr` — sơ đồ thẻ theo đơn vị và sơ đồ quanh một mục tiêu, khung vẽ FlowMap
+- Bản mẫu `/proto/so-do-can-chinh-okr`: sơ đồ thẻ theo đơn vị và sơ đồ quanh một mục tiêu, khung vẽ FlowMap
   trong `packages/ui`; nhánh `feat/so-do-can-chinh-okr`.
 
 Số đo chính: tiêu đề trang «OKR theo đơn vị» khác tên «Mục tiêu» trên thanh bên; nút tạo nằm giữa thân,
