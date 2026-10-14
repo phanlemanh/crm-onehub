@@ -130,9 +130,13 @@ evals:
       Sau ca ma tran: so hang apikey, ten khoa, so tinHieu co keoVeLuc khong doi.
       Ca rieng: tap duong HTTP cua plugin api-key (doc tu auth.options.plugins that) bang tap truong "plugin" cua bang.
       Doi chung duong: khoa THUONG cua owner -> 1, 2, 3, 5, 6, 8, 12, 13 tra 200 (4 la duong chi nhan phien dang nhap).
+      Voi duong 6, 12, 13 doi chung con doi than tra ve la phien cua chinh chu khoa (user.id == owner) — 200 voi phien rong
+      khong tinh la doi chung dat.
       CHIEU DO: ban sao dat cau hinh chi keo len TRUOC cau hinh mac dinh va bat enableSessionForAPIKeys -> do voi thong diep
       ghim "khoa chi keo mo duoc phien" (chi bat co ma giu thu tu thi van chan: thu vien doi chieu cau hinh mac dinh truoc —
       thu tu va configId moi la cho giu an toan).
+      CHIEU DO doi chung: ban sao tat enableSessionForAPIKeys cua cau hinh MAC DINH -> doi chung do voi thong diep ghim
+      "khoa thuong mat phien" (dong "khong mo phien cua chu khoa" o duong 6, 12, 13).
 
   - id: E4c
     criterion: AC-4
