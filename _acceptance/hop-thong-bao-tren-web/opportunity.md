@@ -3,10 +3,10 @@ schema_version: 1
 slug: hop-thong-bao-tren-web
 feature: Người dùng CRM thấy mọi điều CRM muốn báo ở chuông trên đầu trang, biết số chưa đọc và bấm vào là tới đúng chỗ cần làm
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-14T02:34:36Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -76,10 +76,10 @@ TB2.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] người không nối Zalo hay Slack có nhận đủ điều CRM muốn báo trên web, và người dùng có dùng chuông để tới chỗ cần làm không?
-- Kết quả nào là SỐNG: [đề xuất] trong 30 ngày kể từ ngày lên production: mọi mục nhắc buổi sáng CRM tính cho người không có kênh đều có thông báo tương ứng trong chuông (đối chiếu lượt nhắc với bảng thông báo theo ngày: 0 mục mất); và ít nhất một nửa số người có thông báo đã bấm mở ít nhất một thông báo.
-- Kết quả nào là CHẾT: [đề xuất] có mục nhắc không vào chuông mà không ai biết vì sao; hoặc hết 30 ngày mà dưới một phần tư số người có thông báo từng bấm mở một thông báo. Giữa hai ngưỡng → lặp.
-- Timebox: [đề xuất] 30 ngày kể từ ngày lên production.
+- Câu hỏi phép đo trả lời: người không nối Zalo hay Slack có nhận đủ điều CRM muốn báo trên web, và người dùng có dùng chuông để tới chỗ cần làm không?
+- Kết quả nào là SỐNG: trong 30 ngày kể từ ngày lên production: mọi mục nhắc buổi sáng CRM tính cho người không có kênh đều có thông báo tương ứng trong chuông (đối chiếu lượt nhắc với bảng thông báo theo ngày: 0 mục mất); và ít nhất một nửa số người có thông báo đã bấm mở ít nhất một thông báo.
+- Kết quả nào là CHẾT: có mục nhắc không vào chuông mà không ai biết vì sao; hoặc hết 30 ngày mà dưới một phần tư số người có thông báo từng bấm mở một thông báo. Giữa hai ngưỡng → lặp.
+- Timebox: 30 ngày kể từ ngày lên production.
 
 ## Kết quả prototype
 
@@ -96,10 +96,10 @@ Chưa dựng. Vòng chạm màn hình: bản bấm được làm ở nghi thức
 
 ## Cổng 0
 
-- **decision = …**
+- **decision = build** Căn cứ: chủ kho gõ trong phiên 14/10 «Cổng Đáng hop-thong-bao-tren-web: build ; chuông nhận: lối 1 ; ngưỡng: như đề xuất», trên khuyến nghị của máy bên dưới.
 - **disposition = —** Căn cứ: không có bản mẫu dựng trước Cổng Đáng.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
-- **Chuông nhận gì ở vòng này:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng của mục «Ngưỡng chết / ngưỡng UAT» như máy đề xuất, đã gỡ tiền tố đề xuất.
+- **Chuông nhận gì ở vòng này chốt cùng lúc ký: Lối 1** — ghi từ lượt nhắc buổi sáng cho mọi người bất kể kênh; Zalo và Slack không đổi. Đổi lối là một Cổng Đáng mới.
 
 **Máy khuyến nghị:** `build`, **Lối 1**, một vòng khoảng 10 tiêu chí, hạng T3 (bảng mới — thêm cổng duyệt kế
 hoạch). Vượt 13 tiêu chí thì máy tự tách trang lịch sử thành vòng hai, không hỏi lại. Bảng mới đi kèm
