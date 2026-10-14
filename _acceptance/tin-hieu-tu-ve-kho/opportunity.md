@@ -3,10 +3,10 @@ schema_version: 1
 slug: tin-hieu-tu-ve-kho
 feature: Người gửi tín hiệu hôm nay thì sáng mai thấy trang của mình đã đổi sang Đội sản phẩm đã nhận, mà không ai phải chạy lệnh
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-14T02:35:49Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -92,6 +92,11 @@ nghi thức thiết kế cuối S1, trước Cổng Phạm vi.
 | Lịch chạy | GitHub Actions `schedule` của `crm-onehub` | hạ-tầng | có | |
 
 ## Cổng 0
+
+- **decision = build** Căn cứ: chủ kho gõ trong phiên 14/10 «Cổng Đáng tin-hieu-tu-ve-kho: build ; đường vào nhánh chính: lối A ; ngưỡng: như đề xuất», trên khuyến nghị của máy bên dưới.
+- **disposition = —** Căn cứ: không có bản mẫu dựng trước Cổng Đáng.
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng của mục «Ngưỡng chết / ngưỡng UAT» như máy đề xuất.
+- **Đường vào nhánh chính chốt cùng lúc ký: Lối A** — lịch chạy đẩy tệp lên nhánh hàng chờ `tin-hieu/keo-ve`, một PR đứng mở gộp theo lô; tác vụ không ghi nhánh production. Chữ «tự gộp» của hàng TH1 và mã K2 được thay bằng lối này; máy không tự sửa hàng — đổi chữ hàng là việc của phiên giữ lộ trình. Đổi sang lối B là một Cổng Đáng mới.
 
 **Máy khuyến nghị:** `build`, **Lối A**, ngưỡng như trên. Hạng T3 (khoá API, xác thực). Ước 8–10 tiêu chí.
 
