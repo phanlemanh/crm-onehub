@@ -8,6 +8,8 @@
 
 **Tech Stack:** Prisma (Postgres), NestJS + nestjs-trpc, eve (tác nhân), Next.js + TanStack Query + nuqs, bun test.
 
+**Duyệt kế hoạch (Gate 1.5):** Manh Phan, 2026-10-14T03:27:06Z — «Duyệt kế hoạch» trong phiên.
+
 **Spec:** `docs/superpowers/specs/2026-10-14-hop-thong-bao-tren-web-design.md` · hợp đồng `_acceptance/hop-thong-bao-tren-web/contract.md` · phép đo `_acceptance/hop-thong-bao-tren-web/evals.yaml`
 
 ## Global Constraints
