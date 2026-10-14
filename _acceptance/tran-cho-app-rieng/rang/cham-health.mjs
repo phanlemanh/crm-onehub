@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -14,6 +14,7 @@ const TEN_BAI = "chạy cạnh apps/agent";
 const DUONG_CHAM = "/eve/v1/health";
 const CHAM_MS = 6_000;
 const THONG_DIEP_DO = "timed out after 5000ms";
+const NHAT_KY = join(GOC, ".acceptance-runs/tran-cho-app-rieng/cham-health");
 const NGOAI_VAT = [/^_acceptance\//, /^docs\//, /\.md$/, /^LO-TRINH\.html$/];
 
 const MA_TRAN = [
@@ -33,7 +34,7 @@ function preloadCham(thuMuc, ms) {
 	const tep = join(thuMuc, `cham-${ms}.ts`);
 	writeFileSync(
 		tep,
-		`const goc = globalThis.fetch;\nglobalThis.fetch = (async (vao, tuyChon) => {\n\tif (String(vao instanceof Request ? vao.url : vao).includes(${JSON.stringify(DUONG_CHAM)})) await Bun.sleep(${ms});\n\treturn goc(vao, tuyChon);\n}) as typeof fetch;\n`,
+		`const goc = globalThis.fetch;\nglobalThis.fetch = (async (vao, tuyChon) => {\n\tif (!tuyChon?.signal && String(vao instanceof Request ? vao.url : vao).includes(${JSON.stringify(DUONG_CHAM)})) await Bun.sleep(${ms});\n\treturn goc(vao, tuyChon);\n}) as typeof fetch;\n`,
 	);
 	return tep;
 }
@@ -59,6 +60,7 @@ function ketQua(r) {
 
 function bonO() {
 	const thuMuc = mkdtempSync(join(tmpdir(), "cham-health-"));
+	mkdirSync(NHAT_KY, { recursive: true });
 	writeFileSync(join(APP, BAN_TAM), git("show", `${SHA_TRUOC_VONG}:${TEP}`));
 	const loi = [];
 	try {
@@ -67,6 +69,7 @@ function bonO() {
 				o.ban === "sua" ? "test/app-rieng.integration.spec.ts" : BAN_TAM,
 				preloadCham(thuMuc, o.cham),
 			);
+			writeFileSync(join(NHAT_KY, `${o.ban}-cham-${o.cham}.log`), r.ra);
 			const kq = ketQua(r);
 			const ghim = o.mong === "do" ? r.ra.includes(THONG_DIEP_DO) : true;
 			console.log(
@@ -101,8 +104,13 @@ function phamVi() {
 	const doiChung = chiDoiTepTest([...doi, "apps/agent-okr/agent/lib/tep-ngoai.ts"]).dung;
 	console.log(`goc: merge-base ${NHANH_CHINH} HEAD · tep vat doi: ${vat.join(", ") || "(khong)"}`);
 	console.log(`doi chung them mot tep ngoai: ${doiChung ? "VAN DAT (thuoc hong)" : "khong dat (dung)"}`);
-	const dat = dung && !doiChung;
-	console.log(dat ? "DAT" : `KHONG DAT: chi duoc doi ${TEP} va ${TEP_CAU_HINH}`);
+	const nguon = readFileSync(join(GOC, TEP), "utf8");
+	const bai = nguon.slice(nguon.indexOf(TEN_BAI));
+	const doanBai = bai.slice(0, bai.indexOf("\n\ttest") > 0 ? bai.indexOf("\n\ttest") : bai.length);
+	const tranTuHang = doanBai.includes("KHOI_DONG.baiHaiMay.tranMs");
+	console.log(`tran cua bai lay tu KHOI_DONG.baiHaiMay.tranMs: ${tranTuHang ? "co" : "KHONG"}`);
+	const dat = dung && !doiChung && tranTuHang;
+	console.log(dat ? "DAT" : `KHONG DAT: chi duoc doi ${TEP} va ${TEP_CAU_HINH}, tran lay tu hang`);
 	return dat ? 0 : 1;
 }
 
