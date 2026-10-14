@@ -7,7 +7,7 @@ risk_tier: T3
 surfaces: [api, ui]
 status: approved
 approved_by: Phan Le Manh
-approved_at: 2026-10-14T17:55:00Z
+approved_at: 2026-10-14T21:54:33Z
 design_doc: docs/superpowers/specs/2026-10-14-hoi-dap-okr-design.md
 ---
 
