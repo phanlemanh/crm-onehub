@@ -2010,7 +2010,7 @@
       "tieu_chi": 10,
       "vi_sao": "Chủ kho chốt 14/10: OneHub Center là nơi vận hành, đọc lộ trình của mọi kho sản phẩm cùng kiến trúc kit. Khuôn dữ liệu đã chung (kho kit cũng vẽ cùng khuôn); còn thiếu danh bạ sản phẩm, quyền đọc kho, bộ chọn sản phẩm và quyền xem.",
       "bat_khi": "Kho thứ hai (OneHub Platform hoặc kho kit) hiện đủ trên trang trong ngày cài, và người không có quyền với sản phẩm đó không thấy nó (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Điều kiện: kho sản phẩm cài kit và khai lộ trình. Ứng dụng GitHub chỉ đọc, cài vào từng kho, không dùng khoá cá nhân. Chạm quyền truy cập kho ngoài nên hạng T3. Bản phác kiến trúc: hình «Đích» gửi chủ kho 14/10.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Điều kiện: kho sản phẩm cài kit và khai lộ trình. Ứng dụng GitHub chỉ đọc, cài vào từng kho, không dùng khoá cá nhân. Chạm quyền truy cập kho ngoài nên hạng T3. Bản phác kiến trúc: hình «Đích» gửi chủ kho 14/10. Đề xuất cấu hình (chủ kho hỏi 14/10, chốt ở Cổng Phạm vi): CRM là mục cố định khai trong mã, ở tệp cấu hình của vùng lộ trình — luôn có, không xoá được, rơi về tệp đóng gói khi bản chụp hỏng hay chưa cài ứng dụng GitHub; sản phẩm khác do quản trị khai động trong Cài đặt.",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "L2",
