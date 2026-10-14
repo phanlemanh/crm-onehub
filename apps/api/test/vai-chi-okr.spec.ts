@@ -399,6 +399,7 @@ const THU_TUC_OKR_TRUOC_LUOT = [
 	"removeKeyResult",
 	"setCyclePhase",
 	"setProgram",
+	"suaLyDoCanChinh",
 	"sucKhoe",
 	"thanhVien",
 	"toanCanh",
