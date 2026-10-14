@@ -74,6 +74,12 @@ agent and the API both need it.
 | **Visible** | `brand`, `portrait` | Directly — no `receive`, no model | 60, six at a time |
 | **Research** | everything else | One eve session per row | 12 |
 
+`onboarding-identify` (mã môi giới trên nền tảng chưa cá nhân nào mang, `lib/ma-lech.ts`) chạy
+trực tiếp: giao một Việc cho người cầm trịch kế hoạch — gắn kế hoạch, hạn đầu ngày giờ VN, vết nguồn
+`tac-nhan`, `khoaNguon` là `ma-lech:<mã>`. Không giao trùng khi đã có Việc mở cùng khoá trên kế hoạch đó,
+hoặc việc cần làm cũ cùng mã đang mở mà chưa chép; Việc đã Xong hay Huỷ thì lần sau giao lại. Người cầm
+trịch không nhận được việc (vai «chỉ OKR», đã rời) thì kết quả `nguoi-cam-trich-khong-nhan`, không ghi gì.
+
 Trợ lý OKR thêm năm loại. `okr-kiem-san-sang` (có khoá mô hình không),
 `okr-tom-tat-xep` và `ai-doi-soat` (đối soát sổ chi phí với báo cáo AI Gateway, ngày 2
 mỗi tháng) là việc trực tiếp, không mở phiên. `okr-de-xuat` và `okr-tom-tat-tuan` đi
@@ -1076,6 +1082,13 @@ delegation paths for custom agents.
   `NOTE`, `TASK`, or both. Runtime enforcement never infers a grant from the action's
   prose summary. Every action is ledgered before execution and keyed by eve's call id
   for replay safety.
+- **`TASK` giao một Việc, không ghi việc cần làm (hàng DA1b).** Chữ `TASK` giữ nguyên trong
+  bản khai — bản khai đã lưu của các Tác nhân mang nó, đổi khuôn là chúng không đọc được.
+  `createRunActivity` gọi `taoViec` (`@crm/db/viec-ghi`) trong cùng giao dịch giữ chỗ hành
+  động: người giao và người thực hiện là người khởi chạy lượt (`initiatedById`, vắng thì
+  người tạo Tác nhân), gắn bản ghi đích, hạn là `dueAt`, vết nguồn `tac-nhan`; hành động ghi
+  `externalId` là mã Việc. Người đó mang vai «chỉ OKR» thì hành động thất bại với lời của
+  `kiemNguoiNhanViec`. Công cụ chưa có ô người thực hiện khác.
 - **CRM events are shared domain contracts.** `@crm/db/crm-events` owns the event
   vocabulary, record kind, and builder-facing description used by the API, builder,
   and worker. API writes enqueue a durable `agent-event` task; the agent worker alone

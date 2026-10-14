@@ -12,10 +12,10 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>139 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>109 việc"] --> GG{"Cổng Giá trị"}
+  GB --> DG["Đã giao<br/>140 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>110 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
-  HS["Hồ sơ hỏng<br/>2 việc"]
+  HS["Hồ sơ hỏng<br/>1 việc"]
 ```
 
 > **Bốn cổng người** — mỗi cổng là một câu hỏi chỉ người trả lời được:
@@ -68,6 +68,7 @@ flowchart TD
 - Cây tổ chức hai cấp dưới gốc OneHub — bộ phận chứa phòng ban — có người, có trưởng, dựng và nhập hàng loạt ở Cài đặt › Tổ chức (`cau-truc-to-chuc`)
 - Cây căn chỉnh hiện lý do và mức tin của từng chỗ nối, lọc được các nhánh «Chưa có lý do» và «Đặt cược» (`cay-can-chinh-co-ly-do`)
 - «Thành viên thường không nhờ chat sửa trường của cả đội; model bị gỡ thì chat lùi về mặc định và báo quản trị» (`chat-an-toan-truoc-r1`)
+- Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc (`chep-viec-can-lam-cu`)
 - Chỉ quản trị và chủ đổi được định nghĩa trường của cả đội — thành viên thường vẫn xem được, nhưng mọi đường đổi đều khoá, cả trên màn lẫn khi gọi thẳng máy chủ (`chi-quan-tri-sua-duoc-truong`)
 - Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360 (`chu-man-tieng-viet-khong-tran`)
 - CI của kho chạy test thành ma trận ba ô song song trên ba máy, và ci.yml do OneHub tự giữ thay vì là tệp cấm sửa của hãng (`ci-ma-tran-ba-o`)
@@ -305,6 +306,7 @@ flowchart TD
 - Vùng cuộn của khung trang là khối chứa — phần tử định vị bên trong mọi trang dùng PageShell không kéo dài document, trang dài chỉ có một vùng cuộn và khung ứng dụng không trượt (`vung-cuon-la-khoi-chua`)
 - Màn Kết nối › Zalo in «trả lời lần cuối» theo múi giờ của xưởng (Asia/Ho_Chi_Minh) thay vì giờ UTC của máy chủ (`zalo-gio-theo-mui-gio-xuong`)
 - Khi Zalo nhận đăng ký nhưng gọi thử địa chỉ nhận tin hỏng, màn Kết nối › Zalo hiện đúng bot vừa lưu kèm cảnh báo «Đăng ký lại», và cảnh báo giữ nguyên qua các nhịp kiểm cho tới lần đăng ký lại thành công (`zalo-goi-thu-hong-hien-dung-bot`)
+- Bot Zalo nhận tin qua webhook — tin mã tới là nối ngay, không còn mất giữa hai nhịp cron; cron chỉ kiểm bot sống; hai lệnh tay đăng ký webhook và đọc tin cho bot thử (`zalo-qua-webhook`) — đã giao — máy thông, bằng chứng xanh-sạch
 - Bài kiểm Zalo của apps/agent thôi nhập mã apps/app; hai bài «câu chào» xuyên ứng dụng và hàm nhãn điều hướng dời nguyên văn sang test của apps/app — luật cách ly hai agent xanh trở lại (`zalo-va-cach-ly`) — đã giao — không đo, khai ở Cổng Đáng
 - Webhook Zalo đọc được thân thật {event_name, message} mà production gửi (và vẫn đọc khuôn có vỏ ok/result theo tài liệu), để người nhắn mã cho bot được nối và nhận trả lời; Zalo giả của test dựng khuôn thật (`zalo-webhook-doc-khuon-that`)
 
@@ -315,4 +317,3 @@ flowchart TD
 ## Hồ sơ hỏng
 
 - `ban-mau-okr` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
-- `zalo-qua-webhook` — không đọc được hồ sơ (`evidence-report.md`): status machine-cleared nhưng bằng chứng KHÔNG đạt sáu điều kiện xanh-sạch — hồ sơ tự khai «máy đã thông» mà không có vật
