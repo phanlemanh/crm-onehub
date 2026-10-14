@@ -2710,7 +2710,7 @@ executors:
     kh_san_thiet_ke: node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs
     kh_dot_bien: node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs
     kh_e6_xanh: node _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs
-    kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc aac0975b5 && bun run check-types'
+    kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc 1a1bee409 && bun run check-types'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
