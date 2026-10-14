@@ -984,6 +984,13 @@ Vì sao: «phiên» là chữ kỹ thuật của một lần nối tới trợ l
 vài phiên khi bấm «Thử lại»; «hội thoại» đã là khung hội thoại của trợ lý AI đọc dữ
 liệu đối tác, thứ mà vai «chỉ OKR» không có.
 
+**Cuộc hỏi (OKR)**: một lần một người hỏi Kara về OKR trong cột Kara của khu OKR — mỗi
+câu trả lời chỉ dựa trên những Mục tiêu và KR người hỏi xem được, mỗi câu có trích tới
+Mục tiêu hay KR đó. Cuộc hỏi chỉ đọc, không ghi gì vào OKR, và không có trạng thái kết
+thúc: đóng cột không đổi gì, mở lại thấy cuộc đang dở. Đề xuất 2026-10-15 ở Cổng Phạm vi
+của `hoi-dap-okr`.
+_Avoid_: cuộc soạn (cuộc soạn ghi bản nháp), hỏi ý (lần cả công ty góp ý mục tiêu), phiên
+
 **Bản nháp (OKR)**: bộ Mục tiêu và KR mà Trợ lý OKR đề nghị trong một cuộc soạn,
 hiện thành bảng cạnh lời hỏi. Mỗi dòng là một Đề xuất: người nhận, sửa rồi nhận, hay
 bác từng dòng; dòng đã bác không được đề nghị lại. Bản nháp không có số đích — khởi

@@ -1,0 +1,141 @@
+schema_version: 1
+feature_slug: hoi-dap-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.hdo_quyen_doc
+    expected: "exit 0; bài nạp bộ OKR mẫu M vào kho kiểm của lượt bằng đường ghi thật của okr:mau, rồi chạy execute của tim_okr (bộ lọc rỗng, bộ lọc chu kỳ quý 4, và một từ khoá khớp tên một KR của q4-phap-che-3) và doc_okr (theo mã Mục tiêu và theo mã KR) cho MA TRẬN TOÀN PHẦN năm người hỏi viết sẵn trong bài — admin, trưởng một phòng, một thành viên, thai-minh-chau (vai okr), tran-quoc-bao — số khẳng định bằng số hàng ma trận. Với mỗi hàng: tập mã Mục tiêu và tập mã KR công cụ trả về so BẰNG (toEqual trên mảng đã sắp) với tập rút từ db bằng dieuKienXemMucTieu(await nguCanhXemOkr(db, [userId])) cùng bộ lọc, KR suy theo Mục tiêu cha — quan hệ tập, không chuỗi-có-mặt; người không có tên trong danh sách người xem thì JSON kết quả không chứa mã lẫn tên của q4-phap-che-3 và của MỌI KR thuộc nó (danh sách KR rút từ db lúc chạy); doc_okr với mã Mục tiêu hay mã KR giới hạn trả kết quả không-tìm-thấy y hệt mã bịa. Đối chứng dương: tran-quoc-bao và admin thấy q4-phap-che-3 và các KR của nó. Chiều đỏ trên cùng dựng cảnh: (a) thay bộ lọc của công cụ bằng điều kiện rỗng thì hàng thành viên đỏ, thông điệp in tập thừa; (b) tra quyền KR không qua Mục tiêu cha thì ô từ khoá KR đỏ, thông điệp in mã KR lọt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/tools/tim_okr.ts, apps/agent-okr/agent/tools/doc_okr.ts, apps/agent-okr/agent/lib/hoi-doc.ts, packages/db/src/okr-hien-thi.ts, apps/agent-okr/test/hoi-quyen.integration.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.hdo_purpose
+    expected: "exit 0; ma trận ba purpose (okr-soan, okr-hoi, thiếu hay lạ) × bốn công cụ (tim_okr, doc_okr, nop_tra_loi, nop_ban_nhap) viết sẵn trong bài, số khẳng định bằng 12: ô sai purpose trả object { ok: false, reason } với reason bằng đúng hằng từ chối của config (không ném), và bài đếm truy vấn Prisma qua $extends bằng 0 cho ô đó; ô đúng purpose không mang hằng từ chối. Chiều đỏ: bỏ dòng kiểm purpose ở doc_okr thì ô (okr-soan, doc_okr) đỏ, thông điệp in tên ô."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/tools/**, apps/agent-okr/agent/lib/hoi-doc.ts, apps/agent-okr/agent/lib/config.ts, apps/agent-okr/test/hoi-purpose.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.hdo_nop_quyen
+    expected: "exit 0; trên bộ M, phiên okr-hoi của một thành viên không có tên ở q4-phap-che-3, ma trận viết sẵn loại trích {objective, kr} × {xem được, giới hạn, mã bịa} — số khẳng định bằng 6: ô giới hạn và ô mã bịa bị từ chối cả câu trả lời, lời từ chối chứa đúng mã bị từ chối; ô xem được được nhận (đối chứng dương); một câu hợp lệ đi cùng câu sai cũng không tới người đọc (kết quả không có trường câu dựng). Đối chứng dương thứ hai: phiên của tran-quoc-bao trích q4-phap-che-3 và KR của nó được nhận. Chiều đỏ: tra quyền KR không qua Mục tiêu cha thì ô (kr, giới hạn) được nhận và bài đỏ, thông điệp ghim mã KR."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/tools/nop_tra_loi.ts, apps/agent-okr/agent/lib/hoi-tra-loi.ts, packages/validation/src/okr-tra-loi.ts, apps/agent-okr/test/nop-tra-loi.integration.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.hdo_so_khop
+    expected: "exit 0; bảng ca viết sẵn trong bài cho hàm kiểm số của packages/validation/src/okr-tra-loi.ts, số khẳng định bằng số hàng, phủ ba lớp của AC-4. Lớp trường: mỗi trường (tiến độ, giá trị hiện tại, đích, Mức tự tin) một ca khớp và một ca lệch; ca khớp gồm 42% với tiến độ 0,4249, «42,5» và «42.5» với giá trị 42,5. Lớp đếm: «3 KR» với 3 KR được trích khớp, với 2 KR được trích lệch; «2 Mục tiêu» tương tự. Lớp miễn: «năm 2026», «quý 4» được nhận không cần trích. Số không thuộc lớp nào («80% kế hoạch» khi không trường nào bằng 80) bị từ chối. Mọi ca lệch hay lạ trả lỗi nêu đúng chuỗi số. Đối chứng dương: câu trả lời toàn ca khớp qua nopTraLoi được nhận và câu dựng giữ nguyên chữ kèm trích. Chiều đỏ: cho hàm kiểm số luôn trả khớp thì mọi ca lệch đỏ, thông điệp in số lệch đầu tiên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/okr-tra-loi.ts, packages/validation/test/okr-tra-loi.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdo_cua
+    expected: "exit 0; hai lớp. (a) cửa apps/app/app/eve/agents/okr/...: ma trận viết sẵn — cuộc hỏi của người khác 403 có mã; đường phiên không thuộc cuộc 409 có mã; người không có hàng member 403; vai okr và member với cuộc của mình được chuyển (đối chứng dương); mỗi ca từ chối khẳng định okr.hoiTangLuot không được gọi. (b) kênh agent-okr repTuCuaOkr: thẻ phiên hỏi còn hạn của người đã bị xoá hàng member hay đổi vai ngoài danh sách được vào trả null hoặc ForbiddenError; thẻ cuộc hỏi của người khác ném ForbiddenError với đúng hằng. Chiều đỏ: bỏ so chủ cuộc ở cửa thì ca cuộc người khác thành 200 và bài đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/app/eve/agents/okr/**, apps/app/lib/cua-okr-config.ts, apps/agent-okr/agent/lib/kenh-cua.ts, packages/validation/src/okr-phien-hoi.ts, apps/app/test/cua-okr-hoi.spec.ts, apps/agent-okr/test/kenh-cua-hoi.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.hdo_tran
+    expected: "exit 0; okr.hoiTangLuot trên kho kiểm: người gửi 40 câu trong ngày (giờ Asia/Ho_Chi_Minh, đồng hồ ghim bằng setSystemTime trước khi gieo) đều qua, câu 41 trả TOO_MANY_REQUESTS với het-luot-ngay; sang ngày mới qua lại; AiChiPhi tháng này được ghi bằng CHÍNH hook chi-phi của agent-okr (nhận sự kiện step.completed theo khuôn eve thật của phiên okr-hoi, cùng đường E7) tới khi chạm trần trong config thì câu kế trả het-tran-thang, còn hàng tháng trước không tính. Số trần đọc từ hằng config, không viết lại số trong bài. Chiều đỏ: tăng trần trong bài lên vô cực thì câu 41 qua và bài đỏ, thông điệp in số câu đã qua."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/hoi*.ts, apps/api/src/okr/okr.router.ts, apps/agent-okr/agent/lib/config.ts, apps/api/test/okr-hoi-luot.spec.ts]
+
+  - id: E6c
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdo_cua_tran
+    expected: "exit 0; qua handler thật của cửa apps/app/app/eve/agents/okr/... với fetch tới agent-okr thay bằng bộ đếm lời gọi: đặt số lượt hôm nay của người hỏi về 39 thì câu thứ 40 qua và bộ đếm bằng 1 (đối chứng dương); câu thứ 41 trả 429 với thân mang het-luot-ngay và bộ đếm vẫn bằng 1; trần tháng chạm (hàng AiChiPhi ghi qua hook chi-phi như E6) thì 429 het-tran-thang và bộ đếm không tăng. Chiều đỏ: cửa bắt lỗi TOO_MANY_REQUESTS rồi vẫn chuyển tiếp thì bộ đếm tăng và bài đỏ, thông điệp in số lời gọi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/app/eve/agents/okr/**, apps/app/lib/cua-okr-config.ts, apps/api/src/okr/hoi*.ts, apps/app/test/cua-okr-hoi.spec.ts]
+
+  - id: E6m
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.hdo_man_khoa
+    expected: "exit 0; bài DOM của cột Kara hỏi đáp: phản hồi 429 het-luot-ngay và het-tran-thang từ cửa làm ô gõ disabled và hiện dòng FieldDescription có chữ từ messages (vi) nói khi nào mở lại; phản hồi 200 thì ô gõ bật (đối chứng dương). Chiều đỏ: bỏ nhánh 429 thì ô gõ còn bật và bài đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/hoi/**", apps/app/lib/messages/okr-hoi.ts, apps/app/test/okr-hoi.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.hdo_chi_phi
+    expected: "exit 0; hook chi-phi của agent-okr nhận sự kiện step.completed giả lập (cùng khuôn sự kiện eve thật) của phiên okr-hoi và của phiên okr-soan: AiChiPhi có đúng một hàng mỗi phiên, okr.hoi-dap với taskId là mã cuộc hỏi cho phiên hỏi, okr.soan với cuocSoanId cho phiên soạn; okr.hoi-dap có trong danh mục ai-chi-phi-danh-muc. Chiều đỏ: hook ghi cứng okr.soan thì hàng phiên hỏi sai tinhNang và bài đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/hooks/chi-phi.ts, packages/db/src/ai-chi-phi-danh-muc.ts, apps/agent-okr/test/chi-phi-hoi.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.hdo_chi_hoi_okr
+    expected: "exit 0; chạy trong phiên đo của cây (tien-de) với agent-okr và Kara của CRM thật: thai-minh-chau mở cuộc hỏi qua cửa web (200), hỏi một câu về KR mình phụ trách — câu trả lời nop_tra_loi có ít nhất một trích; hỏi «liệt kê deals của công ty» — quét mọi AgentEvent của phiên: 0 tên trong danh sách tên công ty và deal của kho đo, mọi tool-call thuộc {tim_okr, doc_okr, nop_tra_loi}. Đối chứng dương chạy TRƯỚC: cùng câu qua cửa /eve/v1 của Kara CRM bằng một thành viên thường ra ít nhất một tên đối tác — không có thì thoát 2 (thước mù), không in số 0. Thông điệp in số tên và tên công cụ lạ khi đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/**, apps/app/app/eve/agents/okr/**, _acceptance/hoi-dap-okr/rang/chi-hoi-okr.mjs]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.hdo_bo_cau
+    expected: "exit 0; lệnh đo rang/do-hoi-dap.mjs trong phiên đo của cây chạy mọi câu của bộ câu mẫu (ít nhất 30, đọc từ apps/agent-okr/evals/okr-hoi/ca/) bằng Kara thật qua ZDR, chấm mỗi câu bằng luật mã (quyền; trích và số) và bằng một hội đồng ZDR trong chính lệnh đo (model nhập từ @crm/ai-okr, ba phiếu mỗi câu, phiếu đa số), rồi ghi bảng .acceptance-runs/hoi-dap-okr/do-hoi-dap.md — mỗi câu: người hỏi, ý định, câu hỏi, kỳ vọng đã khai (trích bắt buộc, tên cấm, loại câu trả lời), ảnh chụp giá trị các Mục tiêu và KR được hỏi rút từ kho đo, câu trả lời dựng, đạt luật quyền, đạt trích và số, ba phiếu hội đồng kèm lý do — cùng dòng tổng ba tỷ lệ, và JSON cạnh nó; chép bảng sang _acceptance/hoi-dap-okr/evidence/do-hoi-dap.md CHỈ khi contract chưa signed-off. Thoát 0 chỉ khi đạt cả ba ngưỡng của AC-9 (đọc từ hằng của lệnh đo, khai một chỗ); bộ thiếu một trong năm người hỏi hay bảy ý định thì thoát 2 trước khi gọi model. Chiều đỏ: bài kiểm của chính lệnh đo dựng sẵn một ca hỏng (câu trả lời giả nhắc tên cấm, không gọi model) làm lệnh thoát 1 và gọi tên câu; một ca phiếu hội đồng giả dưới ngưỡng làm thoát 1 và in tỷ lệ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/**, apps/agent-okr/evals/okr-hoi/**, _acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs]
+
+  - id: E9j
+    criterion: AC-9
+    executor: judgment
+    inputs: [_acceptance/hoi-dap-okr/evidence/do-hoi-dap.md, _acceptance/hoi-dap-okr/contract.md]
+    question: "Đọc bảng do-hoi-dap.md. Với từng câu, so câu trả lời dựng với kỳ vọng đã khai và với ảnh chụp giá trị Mục tiêu, KR trong chính dòng đó: phiếu «đúng ý» của hội đồng ZDR có hợp lý không (không lạc đề, không né khi ảnh chụp có dữ liệu, không bịa điều ảnh chụp không có)? Có câu nào hội đồng chấm đúng ý mà dòng của nó cho thấy sai không? Dòng tổng có đạt ba ngưỡng của AC-9 trong contract.md không?"
+    evidence_required: [panel_votes, rationale]
+
+  - id: E10
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.hdo_man
+    expected: "rang/man-hoi.mjs trong phiên đo của cây, khổ 1280 và 375, mỗi khổ một phiên: khu OKR có nút «Hỏi Kara»; bấm mở cột Kara bên phải, URL có record=hoi-okr:; gửi một câu (Kara giả theo khuôn sự kiện thật, không gọi model) hiện câu trả lời có InlineCitation và AiFeedback; bấm trích, URL thêm record=objective: và khung Mục tiêu hiện tên đúng; 375 px cột phủ toàn màn; trạng thái lỗi hiện «Kara chưa trả lời được» và nút «Thử lại»; tổng quan của vai chỉ OKR có nút «Hỏi Kara». Mỗi bước ghi ảnh vào .acceptance-runs/hoi-dap-okr/evidence/ (chép sang _acceptance/hoi-dap-okr/evidence/ chỉ khi contract chưa signed-off) và một mốc dương đọc từ DOM."
+    evidence_required: [screenshot, observed]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/app/lib/messages/okr-hoi.ts, _acceptance/hoi-dap-okr/rang/man-hoi.mjs]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.hdo_soan_giu
+    expected: "exit 0; các bài soạn có sẵn của agent-okr (goi-soan, app-rieng, nop-ban-nhap) và cua-okr.spec.ts xanh không sửa kỳ vọng — tệp bài cũ không đổi so merge-base (git diff --quiet); thêm ca: phiên okr-soan nạp lời dặn soạn và gói bối cảnh, phiên okr-hoi không nạp chữ nào của lời dặn soạn (so một câu mốc của instructions soạn). Chiều đỏ: nạp lời dặn soạn cho mọi phiên thì ca okr-hoi đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/instructions/**, apps/agent-okr/agent/instructions.md, apps/agent-okr/test/**, apps/app/test/cua-okr.spec.ts]
+
+  - id: E11c
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.soan_cach_ly
+    expected: "exit 0; thước cách ly của Soạn OKR (soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs) chạy lại trên cây này và xanh như lúc ký."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/**, apps/app/app/eve/agents/okr/**]
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.hdo_zdr
+    expected: "exit 0; bài ghim: model của agent-okr là xuongModelZdr (một model duy nhất, không defineDynamic đọc AppSetting); mọi lời gọi qua model giả của xưởng mang cờ ZDR trong providerOptions ở phiên okr-hoi; hội đồng chấm nằm trong do-hoi-dap.mjs nhập model từ @crm/ai-okr và lệnh đo không nhập gateway hay provider nào khác (quét import của tệp và mọi tệp nó nhập trong _acceptance/hoi-dap-okr/rang/). Chiều đỏ: thay xưởng bằng model thường trong bản sao thì bài đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/agent.ts, packages/ai-okr/**, _acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs, apps/agent-okr/test/zdr-hoi.spec.ts]
+
+  - id: E13
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.hdo_chu
+    expected: "exit 0; messages-guard và luật một tên kara-mot-ten của apps/app xanh với tệp messages mới; khối vi và en của okr-hoi có cùng tập khoá (so BẰNG); bài DOM khẳng định tên Mục tiêu trong câu trả lời nằm trong phần tử translate=no. Chiều đỏ: thêm một khoá chỉ ở vi thì bài đỏ, thông điệp in khoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/**, apps/app/test/messages-guard.spec.ts, apps/app/test/kara-mot-ten.spec.ts, apps/app/test/okr-hoi.dom.tsx]
