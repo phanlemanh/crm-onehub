@@ -1,48 +1,64 @@
-# Review findings: tac-nhan-va (vòng 2)
+# Review findings: tac-nhan-va (vòng 3)
 
 ## Trong hợp đồng
 
-- **Hình dạng 3 (chỉ khẳng định chuỗi có mặt trong khi lời hứa là một quan hệ): ở E9, khẳng định trên màn không phân biệt được câu hỏi thứ hai với câu thứ nhất**
-  AC: AC-9
-  file: `_acceptance/tac-nhan-va/rang/khu-hoi.mjs:181`
+- **Ở locale vi, nhãn bước trong hội thoại dựng vẫn ra tiếng Anh cứng vì builderStepLabel ưu tiên INPUT_LABELS, và bài kiểm còn khoá chữ tiếng Anh đó**
+  AC: AC-2
+  file: `apps/app/lib/nhan-buoc.ts:26`
   severity: medium
-  source: measurement
-  detail: Dòng màn man-cau-hoi-<khổ> chỉ kiểm document.body.innerText.includes(mong.prompt) (dòng 182–186) và có nút questionnaire-choice mang nhãn mong.options[0].label (dòng 191–204). Hai payload question đều do hoi_thu/agent.ts sinh ra với cùng CAU_HOI_THU.prompt «chon mot» và cùng lựa chọn «A» (fixture hai-luot-hoi-that.json cho thấy chúng chỉ khác nhau ở requestId). Vì thế màn hiện câu thứ nhất hay câu thứ hai thì dòng màn vẫn đạt như nhau, nên không đo được vế AC-9 «màn đọc đúng đầu ra đó». Chỉ dòng may-chu (dòng 167–171) nối với requestId. Ngoài ra, vế mà expected của evals.yaml hứa là «ô soạn thường không hiện» không có khẳng định nào trong script: ô câu hỏi hiện cùng ô soạn thì vẫn đạt.
-
-- **Hình dạng 3 (chỉ khẳng định chuỗi có mặt trong khi lời hứa là một quan hệ): ở E4, «thấy được trong khung nhìn» chỉ được đo bằng innerText chứa chữ**
-  AC: AC-4
-  file: `_acceptance/tac-nhan-va/rang/man.mjs:325`
-  severity: medium
-  source: measurement
-  detail: AC-4 hứa mỗi mục thoả thuận ở 375 «thấy được tên, công ty, giai đoạn và số tiền trong khung nhìn», và expected còn ghi «kiểm từng mục nằm trong khung nhìn khi cuộn tới». Script chỉ lọc mục có getClientRects().length > 0 (dòng 308–310) rồi kiểm chu.includes(d.name / company / stage / tien) trên innerText (dòng 325–338). Script không cuộn tới từng mục, cũng không so getBoundingClientRect của mục hay của từng phần với khung nhìn. innerText vẫn trả đủ chữ khi chữ bị cắt bằng CSS: ItemTitle của packages/ui mang line-clamp-1 (packages/ui/src/components/item.tsx dòng 133). Vì vậy một tên hay một số tiền bị cắt hoặc tràn ra ngoài khung (mà overflow hidden giữ không cho trang cuộn ngang) vẫn đạt.
-
-- **Hình dạng 4 (âm tính một mình, không đối chứng dương): ở E4, «ngăn lượt chạy không tràn» có chiều đỏ được tuyên bố nhưng không thể xảy ra**
-  AC: AC-4
-  file: `_acceptance/tac-nhan-va/rang/man.mjs:125`
-  severity: medium
-  source: measurement
-  detail: evals.yaml E4 khai chiều đỏ là «chạy trên cây trước vòng in 'khong dat' ở ngăn lượt chạy (bảng 56rem)», còn bước gieo hứa kết lượt «với kết quả bảng thoả thuận năm dòng». Thực tế gieoTacNhan kết lượt bằng failRun(runId, "PROVIDER_ERROR", …) (dòng 125), không có kết quả bảng nào. DealListResultTable chỉ được render qua agent-result.tsx → agent-builder-chat.tsx, cả ở mốc 966eeb78e lẫn ở HEAD, không bao giờ trong ngăn lượt chạy. Vì vậy khẳng định ngan-luot-chay (ngan.trang <= 0 && ngan.tran.length === 0, dòng 291–295) là khẳng định âm trên một ngăn không chứa bảng 56rem, và chiều đỏ được tuyên bố không thể đỏ ở dòng này. evidence-report.md dòng 71–72 cũng ghi «khong co bang thoa thuan trong ngan» và «chieu do tren cay truoc vong khong kiem».
+  source: conventions
+  detail: `builderStepLabel` trả `inputLabel(item)` trước rồi mới xét bảng chữ. Mà `inputLabel` dựng chữ từ các chuỗi tiếng Anh viết cứng trong `apps/app/lib/agent-tool-display.ts` («Writing …», «Wrote instructions», «Saved draft · X», «Named this chat · X»), không qua module `messages/*` theo locale. Thêm nữa, công cụ không có trong `t.tab.buoc` thì nhận `item.label` thô ở cả locale vi. Kết quả: các bước `write_agent_file`, `save_agent_draft`, `set_chat_title` của bộ dựng hiện chữ tiếng Anh trên màn tiếng Việt. Điều này trái nếp chữ giao diện nằm trong bảng `messages` theo locale, và trái chính AC-2 («nhãn bước công cụ trong hội thoại dựng là chữ tiếng Việt của bảng bước»). `apps/app/test/tac-nhan-va.dom.tsx:447` còn khẳng định `builderStepLabel(ngoaiBang, vi, "vi")` bằng «Saved draft», và với `set_chat_title` chỉ kiểm `toContain("Báo cáo tuần")`, nên chữ tiếng Anh lọt qua mà bài kiểm vẫn xanh.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **New traBangChu lookup helper is copied inline in two places in the same diff**
-  Người dùng thấy gì: Hai chỗ trong màn tác nhân viết lại cách tra chữ bằng tay thay vì dùng chung một hàm. Người dùng không thấy khác biệt nào, chỉ là mã hơi lặp.
+- **Bộ dựng mới đọc pendingInputRequest bằng schema .catch(null), nên dữ liệu hỏng bị coi như không có câu hỏi đang chờ và câu hỏi cũ hơn được ghi đè lên**
+  Người dùng thấy gì: Nếu dữ liệu câu hỏi đang chờ của một cuộc trò chuyện dựng bị hỏng, hệ thống coi như không có câu nào đang chờ và có thể ghi đè bằng một câu hỏi cũ hơn, không báo lỗi. Trường hợp này hiếm vì nó cần dữ liệu đã hỏng sẵn.
+  file: `apps/agent/agent/lib/builder-input.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Vừa thêm helper traBangChu mà hai chỗ khác trong cùng diff lại tự viết lại logic Object.hasOwn kèm ép kiểu keyof**
+  Người dùng thấy gì: Người dùng không thấy khác biệt nào. Chỉ là mã có hai cách tra bảng chữ giống nhau, gây phiền cho người bảo trì về sau.
   file: `apps/app/components/agent-builder/agent-builder-chat.tsx`
   severity: low
   Đề xuất: wont-fix
 
-- **builderStepLabel bỏ đuôi « — <lý do>» của nhãn bước, mất lý do bỏ qua/từ chối của công cụ trong hội thoại dựng (cả tiếng Anh)**
-  Người dùng thấy gì: Trong hội thoại dựng, khi một công cụ bị bỏ qua hoặc bị từ chối, màn chỉ hiện nhãn chung của bước đó, không còn kèm lý do như trước. Người xem không biết vì sao bước đó không chạy.
-  file: `apps/app/lib/nhan-buoc.ts`
+- **Trạng thái rỗng của danh sách thoả thuận trên điện thoại dựng tay bằng <p> thay vì dùng thành phần Empty có sẵn**
+  Người dùng thấy gì: Khi không có thoả thuận nào, màn điện thoại vẫn hiện dòng thông báo nhưng kiểu dáng hơi khác các màn trống khác trong app.
+  file: `apps/app/components/agent-builder/deal-list-result.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 5: tuyên quét cả LỚP khẳng định nhưng thước chỉ thấy dòng chứa `expect(`, nên khẳng định viết nhiều dòng thành vô hình**
+  Người dùng thấy gì: Công cụ kiểm tra việc không ai lặng lẽ xoá hay sửa bài kiểm cũ có thể bỏ sót một số bài kiểm viết nhiều dòng. Chưa có bài kiểm nào được chỉ ra là đã bị sửa.
+  file: `_acceptance/tac-nhan-va/rang/khong-xoa-expect.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình, không đối chứng dương): thước khong-xoa-expect mù với hai thư mục eve-tran mà nó tuyên canh**
-  Người dùng thấy gì: Phép kiểm xem có ai xoá bớt các bài kiểm sẵn có không thì không nhìn thấy kiểu khẳng định mà các bài kiểm tác nhân giả dùng. Nếu ai đó xoá chúng, phép kiểm vẫn báo ổn.
-  file: `_acceptance/tac-nhan-va/rang/khong-xoa-expect.mjs`
+- **Hình dạng 2: fixture bài nộp viết tay theo khuôn bên đọc, mà khuôn đọc có `.catch(null)`, nên không round-trip qua đầu ra API**
+  Người dùng thấy gì: Bài kiểm câu báo lỗi gửi hỏng dùng dữ liệu tự dựng chứ chưa lấy từ máy chủ thật. Nếu máy chủ quên trả mã lỗi, màn sẽ hiện câu chung thay vì câu theo mã và bài kiểm vẫn không báo.
+  file: `apps/app/test/tac-nhan-va.dom.tsx`
   severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4: khẳng định «ô soạn thường vắng» đứng một mình, không có đối chứng dương**
+  Người dùng thấy gì: Phép đo xác nhận ô soạn tin biến mất khi có câu hỏi chờ chưa được thử ở lúc ô soạn đang hiện. Nếu nhãn ô soạn đổi, phép đo vẫn báo đạt dù ô soạn còn hiện cạnh ô câu hỏi.
+  file: `_acceptance/tac-nhan-va/rang/khu-hoi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 3: E8 hứa dòng lỗi === chữ theo mã, nhưng test chỉ kiểm chuỗi có mặt trong toàn khung**
+  Người dùng thấy gì: Bài kiểm chưa chặt: nếu màn hiện thêm một câu báo lỗi thừa cùng câu đúng thì bài kiểm vẫn qua.
+  file: `apps/app/test/tac-nhan-va.dom.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 5: AC-2 hứa «lý do hỏng theo mã lỗi», nhưng fixture quét lớp không có mã lỗi nào, và màn chỉ đo đúng một điểm**
+  Người dùng thấy gì: Lý do một lượt chạy hỏng mới được kiểm kỹ ở một mã lỗi. Các mã còn lại có thể hiện sai chữ mà bài kiểm chưa phát hiện.
+  file: `apps/app/test/tac-nhan-va.dom.tsx`
+  severity: low
   Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
