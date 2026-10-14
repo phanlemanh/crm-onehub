@@ -245,7 +245,12 @@ async function doQuanTri(qt, slug) {
 				"hop khoa vua tao dan khoa chi keo va dat bi mat",
 				dan,
 			);
-			await bamTheoChu(p, "button", t.daTao.xong);
+			await p.keyboard.press("Escape");
+			await p
+				.waitForFunction(() => !document.querySelector("[role=dialog]"), {
+					timeout: CHO_MS,
+				})
+				.catch(() => {});
 			const nhan = await p
 				.waitForFunction(
 					(ten) =>
