@@ -1,0 +1,116 @@
+{
+ "feature_plain": "Người dùng đọc được màn tác nhân trên điện thoại, thấy trạng thái bằng tiếng Việt, và câu hỏi của bộ dựng ở lượt sau không còn biến mất.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ hiện trạng thái tác nhân bằng chấm màu và chữ «Đang bật», «Tạm dừng», «Đã lưu trữ» ở danh sách."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ hiện mọi trạng thái, mốc kích hoạt và dòng sự kiện của lượt chạy bằng tiếng Việt; sự kiện lạ hiện «Sự kiện khác»."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ hiện trạng thái thoả thuận trong kết quả lượt chạy bằng chữ của màn Thoả thuận."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ hiện câu hỏi bộ dựng hỏi ở lượt sau thay ô soạn, cả câu hỏi làm rõ lẫn câu hết hạn mức."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ ghi dòng lỗi dưới tin gửi hỏng bằng tiếng Việt theo mã lỗi."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ đưa câu hỏi lượt sau từ máy chủ thật tới màn hội thoại ở khổ điện thoại và máy tính."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-4",
+   "p": "Sẽ KHÔNG bắt người đọc kéo ngang ở bốn màn tác nhân trên khổ 375 px; bảng thoả thuận thành danh sách mục."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ KHÔNG ghi đè câu hỏi mới bằng câu cũ cùng lượt hay bằng lần phát lại."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ KHÔNG bỏ một câu hỏi mà không để lại dòng lỗi trong nhật ký."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ KHÔNG làm hỏng hay xoá bài kiểm sẵn có của khu bộ dựng."
+  },
+  {
+   "id": "OOS-1",
+   "p": "KHÔNG làm vòng đời tác nhân (lưu trữ, khôi phục, xoá) — đã đề xuất thành hàng riêng."
+  },
+  {
+   "id": "OOS-2",
+   "p": "KHÔNG làm lưới khép hội thoại dựng quay vòng mãi — đã đề xuất hàng riêng, ngưỡng do người chốt."
+  },
+  {
+   "id": "OOS-3",
+   "p": "KHÔNG đổi khuôn hộp của danh sách tác nhân — việc đó theo dõi ở các hàng nếp màn."
+  },
+  {
+   "id": "OOS-4",
+   "p": "KHÔNG sửa trần ngân sách viết của bộ dựng."
+  }
+ ],
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Bốn màn được xét: danh sách tác nhân, màn tác nhân, ngăn lượt chạy, hội thoại dựng."
+  },
+  {
+   "i": 1,
+   "p": "Ba khổ màn: điện thoại 375 px, máy tính bảng 768 px, máy tính 1440 px."
+  },
+  {
+   "i": 2,
+   "p": "Sáu loại chữ máy cần dịch: trạng thái tác nhân, lượt, bước, sự kiện, ô mặc định, thoả thuận."
+  },
+  {
+   "i": 3,
+   "p": "Năm đường câu hỏi của bộ dựng, gồm hai ca lỗi (lượt sau) và ba ca đối chứng."
+  },
+  {
+   "i": 4,
+   "p": "Mỗi ô quan trọng có một tiêu chí: chữ ở AC-1 đến AC-3, điện thoại ở AC-4, câu hỏi ở AC-5 đến AC-9, không hồi quy ở AC-10."
+  },
+  {
+   "i": 5,
+   "p": "Để sau: khổ 320 px."
+  },
+  {
+   "i": 6,
+   "p": "Không làm: đổi khuôn danh sách, đưa chữ trạng thái về máy chủ, ngưỡng treo do người dùng chỉnh."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Ngưỡng «lặng 15 phút là treo» do máy tự đặt — đã đưa phần lưới treo ra khỏi vòng, ngưỡng để người chốt ở hàng riêng."
+  },
+  {
+   "i": 1,
+   "p": "Ba lựa chọn dẫn căn cứ chỉ liên quan chứ không quyết — đã sửa nguồn căn cứ cả ba."
+  },
+  {
+   "i": 2,
+   "p": "Phép đo câu hỏi lượt sau dùng số tự viết — đã đổi sang câu hỏi sinh từ eve thật và đọc qua máy chủ thật."
+  },
+  {
+   "i": 3,
+   "p": "Chưa chụp màn câu hỏi lượt sau — đã thêm ảnh ở khổ điện thoại và máy tính."
+  },
+  {
+   "i": 4,
+   "p": "Chưa đo sự kiện muộn của lượt bị khép — hết áp dụng vì lưới khép đã ra khỏi vòng."
+  }
+ ],
+ "scope_plain": "Bốn việc dưới đây cố ý để ngoài vòng này:"
+}

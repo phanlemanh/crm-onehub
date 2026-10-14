@@ -5,9 +5,11 @@ slug: tac-nhan-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: draft
+status: approved
 approved_by:
 approved_at:
+veto_state: mo
+veto_opened_at: 2026-10-14T04:06:34Z
 design_doc: docs/superpowers/specs/2026-10-14-tac-nhan-va-design.md
 ---
 
