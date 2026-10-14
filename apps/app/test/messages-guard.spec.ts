@@ -461,6 +461,14 @@ const GHIM = {
 		"Không có gì thay đổi — 1 bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.",
 		"Không có gì thay đổi — 12 bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.",
 	],
+	"crm:bulk.chuaLuuTru": [
+		"1 bản chưa lưu trữ được vì máy chủ gặp lỗi — thử lại sau.",
+		"12 bản chưa lưu trữ được vì máy chủ gặp lỗi — thử lại sau.",
+	],
+	"crm:bulk.daVeTruoc": [
+		"1 bản đã được khôi phục từ trước.",
+		"12 bản đã được khôi phục từ trước.",
+	],
 	"record-sheet:company.manyDeals": [
 		"Cả 1 thoả thuận của công ty",
 		"Cả 12 thoả thuận của công ty",

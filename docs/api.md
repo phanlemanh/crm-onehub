@@ -461,6 +461,15 @@ row is still there, just filtered out of every list.
   `bulkPurge` alike (the batch reports that id as failed and carries on). Archive first
   with `POST /…/{id}/archive`. `apps/api/test/luu-tru-chat.spec.ts` pins both rules for
   deals, contacts and companies.
+- **A batch reports each record, and logs every miss.** `runBulk` (`crm/bulk.ts`)
+  returns `changedIds` (the records this call changed, in request order), `skipped`
+  (already as asked — archived before an archive, active before a restore), `failed`
+  (not changed — an id that no longer exists counts here) and `errored`, the part of
+  `failed` that hit a real server error rather than a missing row. Every caught error
+  writes one log line with `recordId`: `Bulk action failed` with the stack for a real
+  error, `Bulk action skipped a missing record` as a warning for a missing one. The app
+  says «bị bỏ qua» only for `skipped + failed − errored`; `errored` gets its own
+  «chưa lưu trữ được» line, never the server's raw message.
 
 **Pruning**: `ArchiveRetentionController` (`internal/archive/prune`, `CRON_SECRET`-gated,
 `apps/api/vercel.json`) reads `AppSetting.archiveRetentionDays`
