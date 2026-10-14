@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 40191bbab8c544e32cd4d5e6f1c42267651b79fa
+verified_commit: 1851723531929ebb6a3054e4e67500fc4699b620
 human_signoff: Phan Le Manh 2026-10-10 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; vòng 1 REJECT chỉ vì bom giờ H5 ở suite agent). Bảy mục ngoài hợp đồng Ngoài-1 đến Ngoài-7 ghi Known limits (luật 53). Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi (Treo-1 đến Treo-6) được phê toàn bộ.
 ---
 
@@ -185,3 +185,7 @@ sha: 3a168035d7165917e1bd71697c65cf6f5abe1866 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-14, do gộp onehub c4c8ab0ab trước lô 06:00Z
 run_id: repin-20261014T050153Z-33088
 sha: 40191bbab8c544e32cd4d5e6f1c42267651b79fa · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8 · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-14, do gộp onehub aac0975b5 (DA2) trong lô 06:00Z
+run_id: repin-20261014T060705Z-15672
+sha: 1851723531929ebb6a3054e4e67500fc4699b620 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8 · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
