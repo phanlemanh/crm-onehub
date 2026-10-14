@@ -80,6 +80,15 @@ export const planCreateFromTemplateInput = z.object({
 	templateId: z.string().trim().min(1),
 	startedAt: ngayLich,
 	ownerId: z.string().trim().min(1),
+	// Người làm theo phòng ban, chọn lúc tạo; phòng vắng → trưởng phòng, không thì người cầm trịch.
+	nguoiTheoPhongBan: z
+		.array(
+			z.object({
+				departmentId: z.string().trim().min(1),
+				userId: z.string().trim().min(1),
+			}),
+		)
+		.optional(),
 });
 
 export const stepOutput = z.object({
@@ -94,6 +103,10 @@ export const stepOutput = z.object({
 	position: z.number(),
 	assignee: z
 		.object({ id: z.string(), name: z.string(), image: z.string().nullable() })
+		.nullable(),
+	viecId: z.string().nullable(),
+	viecTrangThai: z
+		.enum(["CHUA_LAM", "DANG_LAM", "CHO_DANH_GIA", "XONG", "HUY"])
 		.nullable(),
 });
 
@@ -289,6 +302,12 @@ export const planListOutput = z.object({
 
 export const planIdInput = z.object({ id: z.string().trim().min(1) });
 
+// Đóng kế hoạch: huyViecMo = người chọn «Huỷ N việc còn mở» ở hộp đóng (vắng → giữ Việc như trước).
+export const planCloseInput = z.object({
+	id: z.string().trim().min(1),
+	huyViecMo: z.boolean().optional(),
+});
+
 export const enrollmentStage = z.enum([
 	"accountAt",
 	"courseAt",
@@ -344,6 +363,7 @@ export type PlanListInput = z.infer<typeof planListInput>;
 export type PlanRow = z.infer<typeof planRow>;
 export type PlanListOutput = z.infer<typeof planListOutput>;
 export type PlanIdInput = z.infer<typeof planIdInput>;
+export type PlanCloseInput = z.infer<typeof planCloseInput>;
 export type EnrollmentStage = z.infer<typeof enrollmentStage>;
 export type EnrollmentUpsertInput = z.infer<typeof enrollmentUpsertInput>;
 export type EnrollmentRemoveInput = z.infer<typeof enrollmentRemoveInput>;

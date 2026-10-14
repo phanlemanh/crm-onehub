@@ -1,5 +1,6 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { taoViecChoBuoc } from "@crm/db/buoc-viec";
 import { demOkrTheoDonVi } from "@crm/db/okr-don-vi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
@@ -32,6 +33,7 @@ import type {
 	NguoiNhanViecOutput,
 	PlanCreateFromTemplateInput,
 	PlanDetailOutput,
+	PlanCloseInput,
 	PlanIdInput,
 	PlanListInput,
 	PlanListOutput,
@@ -65,14 +67,16 @@ import {
 import {
 	buocRa,
 	CHON_BUOC,
+	hanTuNgay,
 	keHoachRa,
 	kiemNguoiNhanViec,
+	kiemNguoiTheoPhong,
 	kiemPhongBanDangDung,
+	nguoiMacDinhTheoPhong,
 	OnboardingGhi,
 } from "./onboarding-ghi";
 import { OnboardingTheoDoi } from "./onboarding-theo-doi";
 
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 const CHON_BO_PHAN = {
 	id: true,
@@ -379,6 +383,8 @@ export class OnboardingService {
 
 	async createFromTemplate(
 		input: PlanCreateFromTemplateInput,
+		// Người giao của Việc sinh từ khuôn; gọi không có phiên (gieo, test cũ) thì là người cầm trịch.
+		actingUserId: string = input.ownerId,
 	): Promise<PlanOutput> {
 		if (input.ownerId.trim() === "") {
 			throw new BadRequestException(
@@ -405,15 +411,41 @@ export class OnboardingService {
 				},
 			});
 
-			await tx.onboardingStep.createMany({
-				data: khuon.steps.map((buoc: OnboardingTemplateStep) => ({
+			const buocKhuon: OnboardingTemplateStep[] = khuon.steps;
+			const nguoiPhong = await nguoiMacDinhTheoPhong(
+				tx,
+				buocKhuon.map((b) => b.departmentId),
+				input.ownerId,
+			);
+			for (const chon of input.nguoiTheoPhongBan ?? []) {
+				nguoiPhong.set(
+					chon.departmentId,
+					(await kiemNguoiTheoPhong(tx, chon)).id,
+				);
+			}
+			const now = new Date();
+			for (const buoc of buocKhuon) {
+				const tao = await tx.onboardingStep.create({
+					data: {
+						planId: plan.id,
+						label: buoc.label,
+						departmentId: buoc.departmentId,
+						dueAt: hanTuNgay(input.startedAt, buoc.offsetDays),
+						position: buoc.position,
+					},
+					select: { id: true },
+				});
+				await taoViecChoBuoc(tx, {
+					stepId: tao.id,
 					planId: plan.id,
-					label: buoc.label,
-					departmentId: buoc.departmentId,
-					dueAt: new Date(input.startedAt.getTime() + buoc.offsetDays * DAY_MS),
-					position: buoc.position,
-				})),
-			});
+					tieuDe: buoc.label,
+					hanNgay: hanTuNgay(input.startedAt, buoc.offsetDays),
+					nguoiGiaoId: actingUserId,
+					nguoiThucHienId: nguoiPhong.get(buoc.departmentId) ?? input.ownerId,
+					nguon: "khuon",
+					now,
+				});
+			}
 
 			return keHoachRa(plan);
 		});
@@ -541,8 +573,13 @@ export class OnboardingService {
 		};
 	}
 
-	closePlan(input: PlanIdInput, actingUserId: string): Promise<PlanOutput> {
-		return this.ghi.datDong(input.id, true, actingUserId);
+	closePlan(input: PlanCloseInput, actingUserId: string): Promise<PlanOutput> {
+		return this.ghi.datDong(
+			input.id,
+			true,
+			actingUserId,
+			input.huyViecMo ?? false,
+		);
 	}
 
 	reopenPlan(input: PlanIdInput, actingUserId: string): Promise<PlanOutput> {
