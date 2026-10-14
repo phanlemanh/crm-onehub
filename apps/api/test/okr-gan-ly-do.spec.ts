@@ -13,11 +13,15 @@ import { CHU_KY_Q4, datPhaQuy4 } from "./soan-okr-san";
 import {
 	batDauMau,
 	CHO_DB,
+	dongMau,
 	dungUngDung,
+	ghiCauHinh,
+	gieoDong,
 	goi,
 	goiRest,
 	ketThucMau,
 	mt,
+	NAC_CAU_HINH,
 	ok,
 	phienMau,
 	type TraLoi,
@@ -116,6 +120,7 @@ beforeAll(async () => {
 	cQuanTri = await phienMau(QUAN_TRI);
 	cTruong = await phienMau(TRUONG_KD_BAC);
 	cNgoai = await phienMau(TRUONG_KD_NAM);
+	await ghiCauHinh(app, cQuanTri, NAC_CAU_HINH.bat);
 }, CHO_DB);
 
 afterAll(async () => {
@@ -339,6 +344,364 @@ describe("l4-quyen", () => {
 			await db.okrAlignment.deleteMany({
 				where: { lyDo: { in: ["Lý do gốc", "Lý do mới"] } },
 			});
+		},
+		CHO_DB,
+	);
+});
+
+const Q1 = mt("q4-kd-bac-1");
+const Q2 = mt("q4-kd-nam-2");
+const LY_DO_KARA = "Bán lẻ miền Bắc kéo doanh thu hợp đồng mới của quý.";
+const CAN_CU_KARA = "Bán lẻ miền Bắc đạt 6 tỷ đồng hợp đồng chốt được";
+const daNhan: { a: string; b: string } = { a: "", b: "" };
+
+async function nhanhTrong(
+	objectiveId: string,
+	cookie: string,
+): Promise<Dich[]> {
+	const da = await db.okrAlignment.findMany({
+		where: { objectiveId },
+		select: {
+			targetObjectiveId: true,
+			targetKeyResult: { select: { objectiveId: true } },
+		},
+	});
+	const goc = new Set(
+		da.map((d) => d.targetObjectiveId ?? d.targetKeyResult?.objectiveId),
+	);
+	const theoGoc = new Map<string, Dich>();
+	for (const d of await dichTrong(objectiveId, cookie))
+		if (!goc.has(d.objectiveId) && !theoGoc.has(d.objectiveId))
+			theoGoc.set(d.objectiveId, d);
+	return [...theoGoc.values()];
+}
+
+async function gieoCanChinh(
+	objectiveId: string,
+	cookie: string,
+	can: { lyDo: string; canCu: string | null }[],
+): Promise<{ id: string; dich: Dich }[]> {
+	const nhanh = await nhanhTrong(objectiveId, cookie);
+	if (nhanh.length < can.length)
+		throw new Error(`thieu nhanh de gieo: ${nhanh.length} < ${can.length}`);
+	const dich = nhanh.slice(0, can.length);
+	const ids = await gieoDong(
+		objectiveId,
+		null,
+		can.map((c, i) =>
+			dongMau({
+				loai: "can-chinh",
+				objectiveId,
+				...vaoDich(dich[i] as Dich),
+				lyDo: c.lyDo,
+				canCu: c.canCu,
+			}),
+		),
+	);
+	return ids.map((id, i) => ({ id, dich: dich[i] as Dich }));
+}
+
+const quyet = (vao: Record<string, unknown>, cookie: string) =>
+	goi(app, "okr.troLyQuyet", "mutation", vao, cookie);
+const quyetRest = (
+	deXuatId: string,
+	than: Record<string, unknown>,
+	cookie: string,
+) =>
+	goiRest(
+		app,
+		"POST",
+		"/okr/assistant/suggestions/{deXuatId}/decision",
+		{ deXuatId, ...than },
+		cookie,
+	);
+
+async function canChinhTheoDich(
+	objectiveId: string,
+	d: Dich,
+	cookie: string,
+): Promise<NoiGop | undefined> {
+	const id = await idCanChinh(objectiveId, d);
+	return (await canChinhCua(objectiveId, cookie)).find(
+		(g) => g.alignmentId === id,
+	);
+}
+
+let gieoQ1: { id: string; dich: Dich }[] = [];
+
+describe("l4-danh-sach", () => {
+	test(
+		"troLyDanhSach trả căn cứ của dòng căn chỉnh Kara",
+		async () => {
+			gieoQ1 = await gieoCanChinh(Q1, cTruong, [
+				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+				{ lyDo: `${LY_DO_KARA} Không số.`, canCu: null },
+			]);
+			const ds = ok<{ dong: { id: string; canCu: string | null }[] }>(
+				await goi(
+					app,
+					"okr.troLyDanhSach",
+					"query",
+					{ objectiveId: Q1 },
+					cTruong,
+				),
+				"troLyDanhSach",
+			);
+			const [co, khong] = gieoQ1 as [
+				{ id: string; dich: Dich },
+				{ id: string; dich: Dich },
+			];
+			const dCo = ds.dong.find((d) => d.id === co.id);
+			if (dCo?.canCu !== CAN_CU_KARA)
+				throw new Error(
+					`danh sach roi can cu: ${dCo?.canCu ?? "khong co dong"}`,
+				);
+			expect(ds.dong.find((d) => d.id === khong.id)?.canCu).toBeNull();
+		},
+		CHO_DB,
+	);
+});
+
+describe("l4-nhan", () => {
+	test(
+		"nhận đề xuất ghi lý do, căn cứ, dấu Kara — tRPC và REST; Hoàn tác gỡ đúng căn chỉnh",
+		async () => {
+			const [co, khong] = gieoQ1 as [
+				{ id: string; dich: Dich },
+				{ id: string; dich: Dich },
+			];
+			tienDongHo();
+			expect(
+				ok<{ ok: boolean }>(
+					await quyet({ deXuatId: co.id, cach: "nhan" }, cTruong),
+					"nhan trpc",
+				).ok,
+			).toBe(true);
+			tienDongHo();
+			expect(
+				ok<{ ok: boolean }>(
+					await quyetRest(khong.id, { cach: "nhan" }, cTruong),
+					"nhan rest",
+				).ok,
+			).toBe(true);
+			const g1 = await canChinhTheoDich(Q1, co.dich, cTruong);
+			if (g1?.lyDo !== LY_DO_KARA)
+				throw new Error(`nhan de xuat roi ly do: ${g1?.lyDo ?? "khong co"}`);
+			expect([g1.canCu, g1.lyDoTuKara, g1.mucTin]).toEqual([
+				CAN_CU_KARA,
+				true,
+				"co-so-lieu",
+			]);
+			const g2 = await canChinhTheoDich(Q1, khong.dich, cTruong);
+			expect([g2?.lyDo, g2?.canCu, g2?.lyDoTuKara, g2?.mucTin]).toEqual([
+				`${LY_DO_KARA} Không số.`,
+				null,
+				true,
+				"dat-cuoc",
+			]);
+			daNhan.a = g1.alignmentId;
+			tienDongHo();
+			ok(
+				await goi(
+					app,
+					"okr.removeAlignment",
+					"mutation",
+					{ id: g2?.alignmentId },
+					cTruong,
+				),
+				"hoan tac",
+			);
+			const con = (await canChinhCua(Q1, cTruong)).map((g) => g.alignmentId);
+			expect(con).toContain(g1.alignmentId);
+			expect(con).not.toContain(g2?.alignmentId);
+		},
+		CHO_DB,
+	);
+});
+
+describe("l4-sua-de-xuat", () => {
+	test(
+		"sửa rồi nhận: chữ người, mất dấu Kara; y chữ Kara thì như nhận — tRPC và REST",
+		async () => {
+			const [d1, d2, d3] = (await gieoCanChinh(Q2, cNgoai, [
+				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+				{ lyDo: LY_DO_KARA, canCu: CAN_CU_KARA },
+			])) as [
+				{ id: string; dich: Dich },
+				{ id: string; dich: Dich },
+				{ id: string; dich: Dich },
+			];
+			const L2 = "Lý do người duyệt viết lại";
+			const C2 = "Căn cứ người duyệt";
+			const C3 = "Căn cứ gửi qua REST";
+			tienDongHo();
+			const thieu = await quyet(
+				{ deXuatId: d1.id, cach: "sua", canCu: C2 },
+				cNgoai,
+			);
+			expect([thieu.status, thieu.loi]).toEqual([400, T.canChinh.canCuCanLyDo]);
+			const thieuGiaTri = await quyet({ deXuatId: d1.id, cach: "sua" }, cNgoai);
+			expect([thieuGiaTri.status, thieuGiaTri.loi]).toEqual([
+				400,
+				T.troLy.canGiaTri,
+			]);
+			tienDongHo();
+			ok(
+				await quyet(
+					{ deXuatId: d1.id, cach: "sua", giaTri: L2, canCu: C2 },
+					cNgoai,
+				),
+				"sua trpc",
+			);
+			const g1 = await canChinhTheoDich(Q2, d1.dich, cNgoai);
+			if (g1?.lyDoTuKara !== false)
+				throw new Error("sua roi nhan van dau Kara");
+			expect([g1.lyDo, g1.canCu]).toEqual([L2, C2]);
+			const h1 = await db.okrDeXuat.findUniqueOrThrow({ where: { id: d1.id } });
+			expect([h1.trangThai, h1.giaTriCuoi]).toEqual(["sua", L2]);
+			tienDongHo();
+			ok(
+				await quyetRest(
+					d2.id,
+					{ cach: "sua", giaTri: `${L2} REST`, canCu: C3 },
+					cNgoai,
+				),
+				"sua rest",
+			);
+			const g2 = await canChinhTheoDich(Q2, d2.dich, cNgoai);
+			expect([g2?.lyDo, g2?.canCu, g2?.lyDoTuKara]).toEqual([
+				`${L2} REST`,
+				C3,
+				false,
+			]);
+			tienDongHo();
+			ok(
+				await quyet(
+					{
+						deXuatId: d3.id,
+						cach: "sua",
+						giaTri: `  ${LY_DO_KARA}  `,
+						canCu: CAN_CU_KARA,
+					},
+					cNgoai,
+				),
+				"sua y chu",
+			);
+			const g3 = await canChinhTheoDich(Q2, d3.dich, cNgoai);
+			if (g3?.lyDoTuKara !== true) throw new Error("sua y chu van ha co");
+			expect([g3.lyDo, g3.canCu]).toEqual([LY_DO_KARA, CAN_CU_KARA]);
+			const h3 = await db.okrDeXuat.findUniqueOrThrow({ where: { id: d3.id } });
+			expect(h3.trangThai).toBe("nhan");
+			daNhan.b = g3.alignmentId;
+		},
+		CHO_DB,
+	);
+});
+
+describe("l4-sua", () => {
+	test(
+		"sửa lý do sau khi gắn: hạ dấu Kara, một dòng vết; y nguyên thì không ghi — tRPC và REST",
+		async () => {
+			const a = daNhan.a;
+			const b = daNhan.b;
+			if (!a || !b) throw new Error("thieu can chinh Kara tu cac bai truoc");
+			const soVet = () =>
+				db.okrTrail.count({
+					where: { objectiveId: Q1, action: "sua-ly-do-can-chinh" },
+				});
+			const truoc = await db.okrAlignment.findUniqueOrThrow({
+				where: { id: a },
+			});
+			const v0 = await soVet();
+			tienDongHo();
+			ok(
+				await goi(
+					app,
+					"okr.suaLyDoCanChinh",
+					"mutation",
+					{ id: a, lyDo: "Lý do người", canCu: "Căn cứ người" },
+					cTruong,
+				),
+				"sua trpc",
+			);
+			const doc = async () =>
+				(await canChinhCua(Q1, cTruong)).find((g) => g.alignmentId === a);
+			const s1 = await doc();
+			if (s1?.lyDoTuKara !== false)
+				throw new Error("co Kara con sau khi nguoi sua");
+			expect([s1.lyDo, s1.canCu, s1.mucTin]).toEqual([
+				"Lý do người",
+				"Căn cứ người",
+				"co-so-lieu",
+			]);
+			expect(await soVet()).toBe(v0 + 1);
+			const vet = await db.okrTrail.findFirstOrThrow({
+				where: { objectiveId: Q1, action: "sua-ly-do-can-chinh" },
+				orderBy: { at: "desc" },
+			});
+			expect([vet.before, vet.after]).toEqual([
+				{ alignmentId: a, lyDo: truoc.lyDo, canCu: truoc.canCu },
+				{ alignmentId: a, lyDo: "Lý do người", canCu: "Căn cứ người" },
+			]);
+			tienDongHo();
+			ok(
+				await patchRest(
+					app,
+					`/okr/alignments/${a}`,
+					{ lyDo: "Lý do REST", canCu: "Căn cứ REST" },
+					cTruong,
+				),
+				"sua rest moi",
+			);
+			const s2 = await doc();
+			expect([s2?.lyDo, s2?.canCu, s2?.lyDoTuKara]).toEqual([
+				"Lý do REST",
+				"Căn cứ REST",
+				false,
+			]);
+			expect(await soVet()).toBe(v0 + 2);
+			tienDongHo();
+			ok(
+				await patchRest(
+					app,
+					`/okr/alignments/${a}`,
+					{ lyDo: "Lý do REST", canCu: "Căn cứ REST" },
+					cTruong,
+				),
+				"sua rest y nguyen",
+			);
+			expect(await soVet()).toBe(v0 + 2);
+			const bTruoc = await db.okrAlignment.findUniqueOrThrow({
+				where: { id: b },
+			});
+			tienDongHo();
+			ok(
+				await goi(
+					app,
+					"okr.suaLyDoCanChinh",
+					"mutation",
+					{ id: b, lyDo: bTruoc.lyDo, canCu: bTruoc.canCu },
+					cNgoai,
+				),
+				"b y nguyen",
+			);
+			const bSau = await db.okrAlignment.findUniqueOrThrow({
+				where: { id: b },
+			});
+			expect(bSau.lyDoTuKara).toBe(true);
+			tienDongHo();
+			ok(
+				await goi(
+					app,
+					"okr.suaLyDoCanChinh",
+					"mutation",
+					{ id: a, lyDo: "  ", canCu: null },
+					cTruong,
+				),
+				"xoa ly do",
+			);
+			expect((await doc())?.mucTin).toBe("chua-co-ly-do");
 		},
 		CHO_DB,
 	);

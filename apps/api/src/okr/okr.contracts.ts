@@ -147,6 +147,7 @@ const noiDungDong = {
 	targetObjectiveId: z.string().nullable(),
 	targetKeyResultId: z.string().nullable(),
 	lyDo: z.string(),
+	canCu: z.string().nullable(),
 };
 export const dongHien = z.object({
 	...noiDungDong,
@@ -163,6 +164,7 @@ export const troLyQuyetInput = z.object({
 	deXuatId: ma,
 	cach: z.enum(CACH_QUYET),
 	giaTri: z.string().trim().min(1).max(OKR.ten.viSao).optional(),
+	canCu: z.string().nullable().optional(),
 });
 export const troLyQuyetOutput = z.discriminatedUnion("ok", [
 	z.object({ ok: z.literal(true) }),
