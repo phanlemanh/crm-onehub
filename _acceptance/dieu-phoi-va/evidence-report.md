@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 407e555ab28860190e9d45aa6d9a2056d0ab3925
+verified_commit: e0cc19b2b60e10ec4cb16988205c2f8c04d52658
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -232,3 +232,7 @@ none — mọi eval chạy một lần và đều xanh; không eval nào có pas
 Round 1: REJECT — xem review-findings của vòng đó; đã sửa ở S4 r1 (commit 036e94c82) và trả về triển khai.
 Round 2: REJECT — mọi eval của tính năng qua, nhưng lệnh suite hồi quy `bun run test -- --filter=app --filter=@crm/ui` đỏ ở `apps/app/test/doi-nhan-phong-ban.dom.tsx:265`; đã sửa nhãn dùng «phòng ban» ở S4 r2 (commit 407e555ab) và trả về triển khai.
 Round 3: PASS — mọi eval của tính năng và cả bảy lệnh suite đều qua trên cây 407e555ab.
+
+### Re-pin lần 1 — 2026-10-14, do gộp onehub aac0975b5 (DA2, l3b), dời migration chep_viec_can_lam sang 20261014060147, sửa đua upsert ở dem-qua-han
+run_id: repin-20261014T063030Z-77767
+sha: e0cc19b2b60e10ec4cb16988205c2f8c04d52658 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 · diff chạm vật đo ngoài làn máy: E10, E11 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
