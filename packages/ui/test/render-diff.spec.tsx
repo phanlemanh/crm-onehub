@@ -56,6 +56,7 @@ import { TargetLineChart } from "../src/components/target-line-chart";
 import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
+import { TrinhSoan } from "../src/components/trinh-soan";
 import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
 import { DU_LIEU, TEN_RIENG, TRUNG_TINH } from "./du-lieu";
@@ -199,6 +200,29 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{
+		ten: "TrinhSoan",
+		ve: () => (
+			<TrinhSoan
+				giaTri=""
+				goiY={DU_LIEU.cotHai}
+				nhan={DU_LIEU.tieuDeHopThoai}
+				nhanNut={{
+					tieuDe2: DU_LIEU.cot,
+					tieuDe3: DU_LIEU.cot,
+					dam: DU_LIEU.cot,
+					nghieng: DU_LIEU.cot,
+					danhSachSo: DU_LIEU.cot,
+					danhSachCham: DU_LIEU.cot,
+					bang: DU_LIEU.cot,
+					lienKet: DU_LIEU.cot,
+					hoanTac: DU_LIEU.cot,
+					lamLai: DU_LIEU.cot,
+				}}
+				onDoi={() => {}}
+			/>
+		),
+	},
 	{
 		ten: "CopyValue",
 		ve: () => <CopyValue value="crm_9f2c" label={DU_LIEU.thu} />,

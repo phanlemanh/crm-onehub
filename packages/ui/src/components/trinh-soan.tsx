@@ -140,6 +140,7 @@ export function TrinhSoan(props: TrinhSoanProps) {
 				nhan={nhan}
 				nhanLienKetTrang={props.nhanLienKetTrang}
 				timTrang={props.timTrang}
+				nhanChiHttps={chuLienKet.chiHttps}
 				nhanNut={nhanNut}
 			/>
 			<EditorContent editor={editor} />

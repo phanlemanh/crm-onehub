@@ -13,7 +13,6 @@ import { Button } from "@crm/ui/components/button";
 import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
-import { useMessages } from "@crm/ui/components/locale-provider";
 import {
 	Popover,
 	PopoverContent,
@@ -141,12 +140,14 @@ export function ThanhCongCuTrinhSoan({
 	editor,
 	nhan,
 	nhanNut,
+	nhanChiHttps,
 	timTrang,
 	nhanLienKetTrang,
 }: {
 	editor: Editor | null;
 	nhan: string;
 	nhanNut: NhanNutTrinhSoan;
+	nhanChiHttps: string;
 	timTrang?: TimTrang;
 	nhanLienKetTrang?: NhanLienKetTrang;
 }) {
@@ -158,7 +159,6 @@ export function ThanhCongCuTrinhSoan({
 	const [dangChon, setDangChon] = useState<NutThanh>("tieuDe2");
 	const [moLienKet, setMoLienKet] = useState(false);
 	const [loiLienKet, setLoiLienKet] = useState(false);
-	const chuLienKet = useMessages().lienKet;
 	const khung = useRef<HTMLDivElement>(null);
 
 	const coLienKetTrang = timTrang !== undefined && nhanLienKetTrang !== undefined;
@@ -323,7 +323,7 @@ export function ThanhCongCuTrinhSoan({
 						type="url"
 					/>
 					{loiLienKet ? (
-						<FieldError data-loi-lien-ket="">{chuLienKet.chiHttps}</FieldError>
+						<FieldError data-loi-lien-ket="">{nhanChiHttps}</FieldError>
 					) : null}
 				</PopoverContent>
 			</Popover>
