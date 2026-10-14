@@ -1,0 +1,84 @@
+{
+ "feature_plain": "Người dùng trình đọc màn hình nghe breadcrumb (dòng chỉ chỗ đang đứng) đọc «Vị trí trang» ở giao diện tiếng Việt; ở Cài đặt › Trường trên điện thoại, nhãn kiểu của từng trường hiện tên ngắn trọn chữ, mép phải thẳng, tên trường dài bị cắt trước nhãn.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ cho breadcrumb phía trên màn được trình đọc màn hình gọi là «Vị trí trang» khi giao diện tiếng Việt, «Breadcrumb» khi tiếng Anh."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho nhãn kiểu ở mỗi hàng của danh sách trường hiện tên ngắn («Chọn», «Người», «Số điện thoại»…) ở cả hai ngôn ngữ, vừa ô ở khổ điện thoại."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ giữ nguyên câu mô tả đầy đủ của từng kiểu trong ô chọn kiểu lúc tạo hay sửa trường."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ có ảnh màn thật ở khổ 360 và 1280, cả hai ngôn ngữ, máy đo nhãn kiểu không tràn, thẳng mép phải, tên trường dài bị cắt trước nhãn, và trang không cuộn ngang."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-2",
+   "p": "Sẽ KHÔNG còn chỗ nào viết cứng nhãn trợ năng của breadcrumb — chữ chỉ nằm ở một tệp chữ của bộ giao diện chung."
+  },
+  {
+   "id": "OOS-1",
+   "p": "KHÔNG kiểm kê các nhãn trợ năng tiếng Anh khác của bộ giao diện chung — ngoài câu giao."
+  },
+  {
+   "id": "OOS-2",
+   "p": "KHÔNG đổi câu mô tả dài ở ô chọn kiểu và ở dòng gợi ý trường."
+  },
+  {
+   "id": "OOS-3",
+   "p": "KHÔNG đổi bố cục hàng danh sách trường — chỉ chữ trong ô nhãn kiểu và độ rộng tối thiểu của ô."
+  }
+ ],
+ "scope_plain": "Phần để lại không cần đi tiếp ở hàng nào: hai chỗ còn câu dài vẫn đọc trọn, bố cục giữ nguyên.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Đã đi qua bốn chỗ hiện chữ bị đụng tới: nhãn trợ năng breadcrumb, nhãn kiểu ở hàng danh sách, câu kiểu ở ô chọn, câu kiểu ở dòng gợi ý — lấy từ mọi chỗ gọi trong mã."
+  },
+  {
+   "i": 1,
+   "p": "Đủ hai ngôn ngữ của sản phẩm, tiếng Việt và tiếng Anh."
+  },
+  {
+   "i": 2,
+   "p": "Hai khổ: 360 (khổ đã thấy lỗi) và 1280 (giữ cột thẳng trên máy tính)."
+  },
+  {
+   "i": 3,
+   "p": "Phần lõi: breadcrumb ở hai ngôn ngữ (AC-1, AC-2, AC-5); hàng danh sách trường ở hai ngôn ngữ, hai khổ (AC-3, AC-5); ô chọn kiểu giữ nguyên (AC-4)."
+  },
+  {
+   "i": 4,
+   "p": "Để sau: dòng gợi ý trường (chữ đã tự cắt, không tràn) và các nhãn trợ năng tiếng Anh khác."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Bản nháp tự chọn hai thứ chỉ anh chọn được — bộ tên kiểu ngắn cùng cách cho cột thẳng, và chữ «Vị trí trang». Đã chuyển thành hai câu hỏi trên thẻ này (Hỏi-1, Hỏi-2), kèm khuyến nghị và lối thay."
+  },
+  {
+   "i": 1,
+   "p": "Tiêu chí ảnh đòi «thẳng cột» trong khi thiết kế để ô nở theo chữ, nên người chấm ảnh không biết đo gì. Đã viết lại thành điều đo được: mép phải mọi ô nhãn kiểu thẳng nhau trong 1 px."
+  },
+  {
+   "i": 2,
+   "p": "Máy chỉ đo từng ô không tràn mà không đo chuyện tên trường dài bị cắt trước nhãn, và dữ liệu mẫu không có tên dài. Đã thêm một trường tên dài và bốn phép đo: ô nằm trọn trong hàng, trang không cuộn ngang, tên dài bị cắt, nhãn cùng hàng trọn chữ."
+  },
+  {
+   "i": 3,
+   "p": "Người chấm ảnh được bảo so với bảng tên ngắn mà thiết kế chưa có bảng. Đã thêm bảng 10 kiểu × 2 ngôn ngữ vào thiết kế và đưa hợp đồng vào tài liệu người chấm được đọc."
+  },
+  {
+   "i": 4,
+   "p": "Lời hứa «chữ nhãn chỉ nằm ở một tệp chữ» chưa ai kiểm. Đã thêm phép đếm chữ «Vị trí trang» trong mọi tệp giao diện phải bằng 0, có lượt cố tình viết cứng để chứng thước bắt được."
+  }
+ ]
+}

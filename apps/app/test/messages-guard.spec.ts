@@ -4,6 +4,14 @@ import { join } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
 import { authMessages } from "@/lib/messages/auth";
 import { docDuongGoi, taoSong } from "./duong-goi";
+import {
+	type BeMat,
+	docKiemKe,
+	GOC_KHO,
+	mucKhoChu,
+	soatMotTen,
+	VAT_DOI_DUNG,
+} from "./kara-mot-ten-luat";
 
 const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
@@ -63,6 +71,8 @@ const KHONG_DAU = new Set([
 	"contact.emails",
 	"type.email",
 	"type.url",
+	"typeNgan.email",
+	"typeNgan.url",
 	"create.email",
 	"contactColumns.email",
 	"fields.website",
@@ -138,6 +148,9 @@ const KHONG_DAU = new Set([
 	"moc.themKr",
 	"loai.kr",
 	"tabs.agent",
+	"troLy.tieuDe",
+	"so.troLyOkr",
+	"nhom.tro-ly-okr",
 	"lichSu.dongDuyet",
 ]);
 
@@ -204,10 +217,7 @@ const GHIM_TRO_LY_OKR = {
 		"AI Gateway trả lỗi 1",
 		"AI Gateway trả lỗi 12",
 	],
-	"tro-ly-okr:so.rongMoTa": [
-		"Trần của Trợ lý OKR: 1.",
-		"Trần của Trợ lý OKR: 12.",
-	],
+	"tro-ly-okr:so.rongMoTa": ["Trần của Kara: 1.", "Trần của Kara: 12."],
 	"tro-ly-okr:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
 	"tro-ly-okr:soDo.dongBiLoai": ["(+1 bị loại)", "(+12 bị loại)"],
 	"tro-ly-okr:soDo.hang.hoanTac": [
@@ -294,10 +304,7 @@ const GHIM_OKR_SOAN = {
 		"Đã dùng hết 1 cuộc soạn kỳ này",
 		"Đã dùng hết 12 cuộc soạn kỳ này",
 	],
-	"okr-soan:nut.tamNghi": [
-		"Trợ lý OKR tạm nghỉ tới 1",
-		"Trợ lý OKR tạm nghỉ tới 12",
-	],
+	"okr-soan:nut.tamNghi": ["Kara tạm nghỉ tới 1", "Kara tạm nghỉ tới 12"],
 	"okr-soan:nut.dsCuoc": ["1/A cuộc", "12/A cuộc"],
 	"okr-soan:man.luot": ["lượt 1/A", "lượt 12/A"],
 	"okr-soan:man.tabBanNhap": ["Bản nháp (1)", "Bản nháp (12)"],
@@ -339,8 +346,8 @@ const GHIM_OKR_SOAN = {
 		"12 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
 	],
 	"okr-soan:cuoc.tieuDe": [
-		"Cuộc soạn cùng Trợ lý · 1",
-		"Cuộc soạn cùng Trợ lý · 12",
+		"Cuộc soạn cùng Kara · 1",
+		"Cuộc soạn cùng Kara · 12",
 	],
 	"okr-soan:cuoc.dem": ["1/A cuộc", "12/A cuộc"],
 	"okr-soan:cuoc.nutCuoc": ["1 cuộc A", "12 cuộc A"],
@@ -570,8 +577,8 @@ const GHIM = {
 	],
 	"record-sheet:deal.created": ["Đã tạo 1.", "Đã tạo 12."],
 	"record-sheet:deal.deleteWarning": [
-		"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
-		"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
+		"Lịch sử giai đoạn, ghi chú và hội thoại với Kara đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
+		"Lịch sử giai đoạn, ghi chú và hội thoại với Kara đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
 	],
 	"crm:timeline.composer.log": ["Ghi 1", "Ghi 12"],
 	"crm:timeline.messages": ["1 thư", "12 thư"],
@@ -629,8 +636,8 @@ const GHIM = {
 		"ngữ cảnh 12 nghìn token",
 	],
 	"settings:model.khongVoiToi": [
-		"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 1.",
-		"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 12.",
+		"Không với tới AI Gateway để lấy danh sách model. Kara vẫn đang chạy 1.",
+		"Không với tới AI Gateway để lấy danh sách model. Kara vẫn đang chạy 12.",
 	],
 	"settings:tienTe.daDoi": [
 		"Từ giờ mọi tổng báo cáo bằng 1.",
@@ -1004,8 +1011,8 @@ const GHIM = {
 	],
 	"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
 	"okr-toan-canh:tomTat.dongNguon": [
-		"Trợ lý OKR tóm tắt từ 1 lần cập nhật · tuần A",
-		"Trợ lý OKR tóm tắt từ 12 lần cập nhật · tuần A",
+		"Kara tóm tắt từ 1 lần cập nhật · tuần A",
+		"Kara tóm tắt từ 12 lần cập nhật · tuần A",
 	],
 	"okr-toan-canh:tomTat.nhanTrichDan": ["Cập nhật 1", "Cập nhật 12"],
 	"okr-toan-canh:tomTat.nhanTrichDanThem": ["Cập nhật 1 +A", "Cập nhật 12 +A"],
@@ -1283,4 +1290,100 @@ describe("bo doc duong goi", () => {
 		expect(song("fields.company")).toBe(false);
 		expect(song("standard.add")).toBe(false);
 	});
+});
+
+const conChu = (nguon: string, cu: string): boolean =>
+	new RegExp(
+		`(?<!\\p{L})${cu.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?!\\p{L})`,
+		"u",
+	).test(nguon);
+
+const SO_MUC_BE_MAT = {
+	"ban-ghi": 17,
+	"tom-tat": 8,
+	soan: 24,
+	"cai-dat": 25,
+	"tai-lieu": 43,
+	"dung-chung": 1,
+} as const satisfies Readonly<Record<Exclude<BeMat, "khac">, number>>;
+
+const GHIM_KARA: readonly (readonly [BeMat, string, string, string])[] = [
+	[
+		"cai-dat",
+		"apps/app/lib/messages/tro-ly-okr.ts",
+		"troLy.tieuDe",
+		"Kara · OKR",
+	],
+	[
+		"cai-dat",
+		"apps/app/lib/messages/tro-ly-okr.ts",
+		"so.nhom.tro-ly-okr",
+		"Kara · OKR",
+	],
+	[
+		"cai-dat",
+		"apps/app/lib/messages/tro-ly-okr.ts",
+		"so.nhom.tro-ly-ai",
+		"Kara · hồ sơ",
+	],
+	[
+		"dung-chung",
+		"packages/ui/src/lib/messages.ts",
+		"chatMessage.roleAssistant",
+		"Kara",
+	],
+];
+
+describe("kmt", () => {
+	const kiemKe = docKiemKe();
+	const hienTai = new Map(
+		mucKhoChu().map((m) => [`${m.tep}#${m.khoa}#${m.nn}`, m.giaTri]),
+	);
+
+	for (const [beMat, so] of Object.entries(SO_MUC_BE_MAT) as [
+		Exclude<BeMat, "khac">,
+		number,
+	][]) {
+		it(`kmt-${beMat}: moi muc kiem ke da goi Kara`, () => {
+			const muc = kiemKe.filter(
+				(m) => m.be_mat === beMat && m.hanh_dong === "doi",
+			);
+			expect(`kmt: kiem-ke ${beMat} ${muc.length} khac ${so}`).toBe(
+				`kmt: kiem-ke ${beMat} ${so} khac ${so}`,
+			);
+			const chuaDoi = muc.flatMap((m) =>
+				(["vi", "en"] as const).flatMap((nn) => {
+					const cu = m.cu[nn];
+					if (!cu) return [];
+					const moi = hienTai.get(`${m.tep}#${m.khoa}#${nn}`);
+					if (moi === undefined) {
+						const nguon = readFileSync(join(GOC_KHO, m.tep), "utf8");
+						return conChu(nguon, cu) ? [`kmt: ${m.tep} con ${cu}`] : [];
+					}
+					const loi = soatMotTen(
+						[{ tep: m.tep, khoa: m.khoa, nn, giaTri: moi }],
+						VAT_DOI_DUNG,
+					);
+					return !moi.includes("Kara") || loi.length > 0
+						? [`kmt: ${m.tep}#${m.khoa} ${nn} chua doi: ${moi}`]
+						: [];
+				}),
+			);
+			expect(chuaDoi).toEqual([]);
+			const ghim = GHIM_KARA.filter(([b]) => b === beMat).flatMap(
+				([, tep, khoa, giaTri]) =>
+					(["vi", "en"] as const).flatMap((nn) => {
+						const moi = hienTai.get(`${tep}#${khoa}#${nn}`) ?? "";
+						const dung =
+							khoa === "so.nhom.tro-ly-ai" && nn === "en"
+								? "Kara · records"
+								: giaTri;
+						return moi === dung
+							? []
+							: [`kmt: ten pham vi ${khoa} ${nn} ${moi}`];
+					}),
+			);
+			expect(ghim).toEqual([]);
+		});
+	}
 });

@@ -8,6 +8,7 @@ import { AiFeedback } from "../src/components/ai-feedback";
 import { AsyncButtonContent } from "../src/components/async-action";
 import { AttendeeList } from "../src/components/attendee-list";
 import { Board } from "../src/components/board";
+import { Breadcrumb } from "../src/components/breadcrumb";
 import {
 	Carousel,
 	CarouselContent,
@@ -390,6 +391,7 @@ const CA: Ca[] = [
 	},
 	{ ten: "SortableItem", ve: () => <SortableItem id="1" label="Tên cột" /> },
 	{ ten: "KhungXuong", ve: () => <KhungXuong hinh="bang" /> },
+	{ ten: "Breadcrumb", ve: () => <Breadcrumb /> },
 	{
 		ten: "SkeletonSwap",
 		ve: () => (

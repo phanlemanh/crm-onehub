@@ -147,6 +147,9 @@ const en = {
 	khungXuong: {
 		dangTai: "Loading…",
 	},
+	breadcrumb: {
+		nhan: "Breadcrumb",
+	},
 	reasoning: {
 		thinking: "Thinking…",
 		thoughtBrief: "Thought for a few seconds",
@@ -154,7 +157,7 @@ const en = {
 	},
 	chatMessage: {
 		roleUser: "You",
-		roleAssistant: "Assistant",
+		roleAssistant: "Kara",
 		previousBranch: "Previous branch",
 		nextBranch: "Next branch",
 		branchPage: (current: string, total: string) => `${current} of ${total}`,
@@ -395,6 +398,9 @@ const vi = {
 	khungXuong: {
 		dangTai: "Đang tải…",
 	},
+	breadcrumb: {
+		nhan: "Vị trí trang",
+	},
 	reasoning: {
 		thinking: "Đang suy nghĩ…",
 		thoughtBrief: "Đã nghĩ vài giây",
@@ -402,7 +408,7 @@ const vi = {
 	},
 	chatMessage: {
 		roleUser: "Bạn",
-		roleAssistant: "Trợ lý",
+		roleAssistant: "Kara",
 		previousBranch: "Nhánh trước",
 		nextBranch: "Nhánh sau",
 		branchPage: (current: string, total: string) => `${current} trên ${total}`,
