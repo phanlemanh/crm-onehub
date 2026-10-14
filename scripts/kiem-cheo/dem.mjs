@@ -37,6 +37,15 @@ export function tachCo(argv) {
 
 class VuotTran extends Error {}
 
+function dongLoi(e) {
+	const dau = String(e?.message ?? e).split("\n")[0];
+	const goc = String(e?.stderr ?? "")
+		.split("\n")
+		.map((d) => d.trim())
+		.find(Boolean);
+	return goc ? `${dau} — ${goc}` : dau;
+}
+
 function taoChay({ tranMs }) {
 	const batDau = Date.now();
 	let con = null;
@@ -158,7 +167,7 @@ async function dungCay({ git, goc, cay, sha, chay }) {
 			git("worktree", "prune");
 		}
 	}
-	git("worktree", "add", "--detach", "-q", cay, sha);
+	git("worktree", "add", "--detach", "--force", "-q", cay, sha);
 	const env = join(goc, ".env");
 	if (existsSync(env)) symlinkSync(env, join(cay, ".env"));
 	const lenh = process.env.KIEM_CHEO_DUNG_CAY ?? DUNG_CAY_MAC_DINH;
@@ -167,8 +176,12 @@ async function dungCay({ git, goc, cay, sha, chay }) {
 	if (r.ma !== 0) throw new Error(`dung cay: \`${lenh}\` thoat ${r.ma}`);
 }
 
-async function datCay({ git, cay, sha, chay }) {
-	git("-C", cay, "checkout", "--detach", "-q", sha);
+async function datCay({ git, goc, cay, sha, chay }) {
+	try {
+		git("-C", cay, "checkout", "--detach", "--force", "-q", sha);
+	} catch {
+		return dungCay({ git, goc, cay, sha, chay });
+	}
 	const lenh = process.env.KIEM_CHEO_DUNG_CAY ?? DUNG_CAY_MAC_DINH;
 	const r = await chay(lenh, cay);
 	if (r.vuot) throw new VuotTran();
@@ -238,7 +251,7 @@ export async function luot(argv, { now = Date.now } = {}) {
 	} catch (e) {
 		ket({
 			ket_qua: KQ.loi,
-			ly_do: `loi bat ngo: ${String(e.message).split("\n")[0]}`,
+			ly_do: `loi bat ngo: ${dongLoi(e)}`,
 		});
 		return KIEM_CHEO.ma.loi;
 	}
@@ -260,7 +273,7 @@ async function luotTho({ co, goc, ket, now, goi }) {
 	} catch (e) {
 		ket({
 			ket_qua: KQ.loi,
-			ly_do: `git fetch ${ref} loi: ${String(e.message).split("\n")[0]}`,
+			ly_do: `git fetch ${ref} loi: ${dongLoi(e)}`,
 		});
 		return KIEM_CHEO.ma.loi;
 	}
@@ -354,7 +367,7 @@ async function luotTho({ co, goc, ket, now, goi }) {
 						return { ho_so: e.slug, eval: e.id, loai: KQ.khongChayDuoc, ly_do: "lenh trung trong lan, khong doc duoc lenh" };
 					}
 					const chay = async (sha) => {
-						await datCay({ git, cay, sha, chay: may.chay });
+						await datCay({ git, goc, cay, sha, chay: may.chay });
 						const r = await may.chay(e.lenh, cay);
 						if (r.vuot) throw new VuotTran();
 						return lech(r.ma, kyVong(sha, e.slug, e.id)) ? 1 : 0;
@@ -441,7 +454,7 @@ async function luotTho({ co, goc, ket, now, goi }) {
 				const lyDo =
 					e instanceof VuotTran || may.vuot()
 						? `vuot tran ${KIEM_CHEO.luot.tranPhut} phut`
-						: String(e.message).split("\n")[0];
+						: dongLoi(e);
 				ket({ ...coSo, ...ghiChu, ket_qua: KQ.khongChayDuoc, ho_so, tap_lan: tapLan, do: [], ly_do: lyDo });
 				return KIEM_CHEO.ma.xong;
 			} finally {
