@@ -261,7 +261,8 @@ describe("dem-qua-han", () => {
 		const dau = dauNgayVN(now);
 		const truocHan = new Date(dau.getTime() - 2 * DAY_MS);
 		const homNay = new Date(dau.getTime() + 60_000);
-		const [a, b] = await Promise.all([gieoNguoi(), gieoNguoi()]);
+		const a = await gieoNguoi();
+		const b = await gieoNguoi();
 
 		const viecQuaHan = {
 			type: ActivityType.TASK,
