@@ -69,7 +69,8 @@
 		"./vai-doi-tac": "./src/vai-doi-tac.ts",
 		"./viec": "./src/viec.ts",
 		"./viec-ghi": "./src/viec-ghi.ts",
-		"./viec-gieo": "./src/viec-gieo.ts"
+		"./viec-gieo": "./src/viec-gieo.ts",
+		"./viec-thu-tu": "./src/viec-thu-tu.ts"
 	},
 	"scripts": {
 		"build": "prisma generate",
