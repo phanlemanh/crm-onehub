@@ -78,7 +78,7 @@ const en = {
 	},
 	choDuyet: {
 		rong: "No proposals awaiting your review.",
-		rongDaXuLy: "No proposals sent back or out of date yet.",
+		rongDaXuLy: "No handled proposals yet.",
 		nhom: {
 			nhan: "Proposal group",
 			cho: "Awaiting",
@@ -466,14 +466,14 @@ const vi: TaiLieuMessages = {
 	},
 	choDuyet: {
 		rong: "Không có bản nào chờ bạn duyệt.",
-		rongDaXuLy: "Chưa có bản nào đã trả lại hay đã cũ.",
+		rongDaXuLy: "Chưa có bản nào đã xử lý.",
 		nhom: { nhan: "Nhóm bản đề xuất", cho: "Đang chờ", daXuLy: "Đã xử lý" },
 		veDanhSach: "Về danh sách trang",
 		trangThai: {
 			CHO_DUYET: "Chờ duyệt",
 			DA_DUYET: "Đã duyệt",
 			TRA_LAI: "Đã trả lại",
-			CU: "Đã cũ",
+			CU: "Cũ",
 		},
 	},
 	sucKhoe: {

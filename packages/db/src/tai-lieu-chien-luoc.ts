@@ -1,6 +1,7 @@
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
 import { TRO_LY_OKR_TRAN } from "./okr-tro-ly-danh-muc";
+import { DIEU_KIEN_DANG_DUNG } from "./tai-lieu-tim";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
 
@@ -50,7 +51,7 @@ export async function docTrangChienLuocDangDung(
 	db: DbHoacTx,
 ): Promise<TrangChienLuoc[]> {
 	const rows = await db.taiLieuTrang.findMany({
-		where: { loai: LOAI_TRANG_CHIEN_LUOC, banDangDungId: { not: null } },
+		where: { loai: LOAI_TRANG_CHIEN_LUOC, ...DIEU_KIEN_DANG_DUNG },
 		orderBy: [{ updatedAt: "asc" }, { id: "asc" }],
 		select: {
 			ten: true,

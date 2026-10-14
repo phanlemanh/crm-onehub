@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng đời trang · Sơ đồ trạng thái</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1360px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 52rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1100px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ trạng thái · lich-su-va-luu-tru-trang · P6-5 · P6-8</p>
+    <h1>Vòng đời một trang: lưu trữ và khôi phục đều qua duyệt</h1>
+    <p class="sub">Năm trạng thái của một trang, trái sang phải. Mỗi bước đi tới là một đề xuất rồi chủ trang duyệt; «Trả lại» đưa trang về trạng thái trước. Chỗ rẽ cần chốt nằm ở bước chủ trang duyệt lưu trữ khi trang còn đề xuất sửa của người khác đang chờ. Chữ trong «» là chữ trên màn.</p>
+
+    <svg viewBox="0 0 1344 664" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="208" y1="272" x2="318" y2="272" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="480" y1="272" x2="590" y2="272" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="752" y1="272" x2="862" y2="272" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1024" y1="272" x2="1134" y2="272" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 1216 224 L 1216 144 Q 1216 136 1208 136 L 408 136 Q 400 136 400 144 L 400 222" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 672 320 L 672 360 Q 672 368 664 368 L 408 368 Q 400 368 400 360 L 400 322" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <path d="M 1216 320 L 1216 360 Q 1216 368 1208 368 L 952 368 Q 944 368 944 360 L 944 322" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="808" y1="280" x2="808" y2="404" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+
+      <rect x="216" y="248" width="96" height="16" rx="2" fill="#fafafa"/>
+      <text x="264" y="260" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Duyệt bản đầu</text>
+
+      <rect x="488" y="248" width="96" height="16" rx="2" fill="#fafafa"/>
+      <text x="536" y="260" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Đề xuất lưu trữ</text>
+      <rect x="488" y="284" width="96" height="16" rx="2" fill="#fafafa"/>
+      <text x="536" y="296" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">kèm lý do · <tspan font-family="'Geist Mono', monospace" font-size="9">AC-4</tspan></text>
+
+      <rect x="760" y="232" width="96" height="32" rx="2" fill="#fafafa"/>
+      <text x="808" y="244" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-5</text>
+      <text x="808" y="260" fill="#171717" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Chủ trang duyệt</text>
+
+      <rect x="1028" y="248" width="104" height="16" rx="2" fill="#fafafa"/>
+      <text x="1080" y="260" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Đề xuất khôi phục</text>
+      <rect x="1028" y="284" width="104" height="16" rx="2" fill="#fafafa"/>
+      <text x="1080" y="296" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">kèm lý do · <tspan font-family="'Geist Mono', monospace" font-size="9">AC-6</tspan></text>
+
+      <rect x="704" y="112" width="208" height="16" rx="2" fill="#fafafa"/>
+      <text x="808" y="124" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Chủ trang duyệt khôi phục · <tspan font-family="'Geist Mono', monospace" font-size="9">AC-6</tspan></text>
+
+      <rect x="508" y="344" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="536" y="356" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Trả lại</text>
+      <rect x="1052" y="344" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="1080" y="356" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Trả lại</text>
+
+      <rect x="48" y="224" width="160" height="96" rx="8" fill="#fafafa"/>
+      <rect x="48" y="224" width="160" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="128" y="268" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chưa từng duyệt</text>
+      <text x="128" y="288" fill="#666666" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không có «Lưu trữ»</text>
+
+      <rect x="320" y="224" width="160" height="96" rx="8" fill="#fafafa"/>
+      <rect x="320" y="224" width="160" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="268" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đang dùng</text>
+      <text x="400" y="288" fill="#666666" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">có bản đã duyệt</text>
+
+      <rect x="592" y="224" width="160" height="96" rx="8" fill="#fafafa"/>
+      <rect x="592" y="224" width="160" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="672" y="260" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có đề xuất</text>
+      <text x="672" y="276" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lưu trữ chờ</text>
+      <text x="672" y="296" fill="#666666" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">mục trình đơn khoá</text>
+
+      <rect x="864" y="224" width="160" height="96" rx="8" fill="#fafafa"/>
+      <rect x="864" y="224" width="160" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1.4"/>
+      <text x="944" y="268" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đã lưu trữ</text>
+      <text x="944" y="288" fill="#666666" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đọc được, không «Sửa trang»</text>
+
+      <rect x="1136" y="224" width="160" height="96" rx="8" fill="#fafafa"/>
+      <rect x="1136" y="224" width="160" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1216" y="260" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có đề xuất</text>
+      <text x="1216" y="276" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">khôi phục chờ</text>
+      <text x="1216" y="296" fill="#666666" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">huy hiệu thay nút</text>
+
+      <polygon points="808,264 816,272 808,280 800,272" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+
+      <text x="808" y="424" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lúc duyệt, trang còn đề xuất sửa đang chờ của người khác?</text>
+      <text x="1264" y="424" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">P6-8</text>
+
+      <rect x="352" y="440" width="288" height="136" rx="6" fill="#fafafa"/>
+      <rect x="352" y="440" width="288" height="136" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="368" y="456" width="112" height="16" rx="2" fill="#006B4F"/>
+      <text x="424" y="468" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">A · KHUYẾN NGHỊ</text>
+      <text x="368" y="500" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đánh «Cũ» các đề xuất đó</text>
+      <text x="368" y="520" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mỗi đề xuất một sự kiện «Cũ»</text>
+      <text x="368" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">như khi một bản khác được duyệt trước</text>
+      <text x="368" y="560" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.08em">AC-5 · AC-9</text>
+
+      <rect x="664" y="440" width="288" height="136" rx="6" fill="#fafafa"/>
+      <rect x="664" y="440" width="288" height="136" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="680" y="456" width="24" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="692" y="468" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">B</text>
+      <text x="680" y="500" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chặn duyệt lưu trữ</text>
+      <text x="680" y="520" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tới khi các đề xuất đang chờ</text>
+      <text x="680" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">được xử lý hết</text>
+
+      <rect x="976" y="440" width="288" height="136" rx="6" fill="#fafafa"/>
+      <rect x="976" y="440" width="288" height="136" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="992" y="456" width="24" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1004" y="468" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">C</text>
+      <text x="992" y="500" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Giữ chúng ở trạng thái chờ</text>
+      <text x="992" y="520" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chặn duyệt chúng</text>
+      <text x="992" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">khi trang đã lưu trữ</text>
+
+      <rect x="48" y="408" width="280" height="168" rx="6" fill="#fafafa"/>
+      <rect x="48" y="408" width="280" height="168" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="64" y="436" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Khi trang «Đã lưu trữ»</text>
+      <text x="64" y="460" fill="#575757" font-size="10" font-family="'Geist', sans-serif">vắng ở danh sách, ⌘K, tìm,</text>
+      <text x="64" y="476" fill="#575757" font-size="10" font-family="'Geist', sans-serif">trợ lý AI, Sức khoẻ</text>
+      <text x="64" y="500" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tìm lại ở nút «Đã lưu trữ»</text>
+      <text x="64" y="524" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không có Xoá vĩnh viễn (khuyến nghị)</text>
+      <text x="64" y="560" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.08em">AC-7 · P6-5</text>
+
+      <line x1="48" y1="608" x2="1296" y2="608" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="48" y="636" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="140" y="626" width="24" height="14" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="172" y="636" fill="#575757" font-size="9" font-family="'Geist', sans-serif">trạng thái của trang</text>
+
+      <line x1="280" y1="632" x2="308" y2="632" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="316" y="636" fill="#575757" font-size="9" font-family="'Geist', sans-serif">đi tới</text>
+
+      <line x1="368" y1="632" x2="396" y2="632" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="404" y="636" fill="#575757" font-size="9" font-family="'Geist', sans-serif">«Trả lại» — về trạng thái trước</text>
+
+      <polygon points="576,626 582,632 576,638 570,632" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="592" y="636" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ rẽ đang chờ chốt</text>
+
+      <rect x="716" y="626" width="24" height="14" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="748" y="636" fill="#575757" font-size="9" font-family="'Geist', sans-serif">lối khuyến nghị</text>
+
+      <text x="860" y="636" fill="#575757" font-size="9" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" fill="#171717">AC-n</tspan> tiêu chí trong <tspan font-family="'Geist Mono', monospace" fill="#171717">contract.md</tspan> · <tspan font-family="'Geist Mono', monospace" fill="#171717">P6-n</tspan> câu trong sổ quyết định</text>
+    </svg>
+
+    <footer>vong-doi-trang · lich-su-va-luu-tru-trang · Cổng Phạm vi · AC-4 · AC-5 · AC-6 · AC-7 · 2026-10-13</footer>
+  </div>
+</body>
+</html>

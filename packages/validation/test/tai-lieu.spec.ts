@@ -2,8 +2,10 @@ import { describe, expect, test } from "bun:test";
 import {
 	chuanNfc,
 	coChuHaySo,
+	LOAI_DE_XUAT,
 	LOAI_SU_KIEN,
 	LOAI_TRANG,
+	parseLoaiDeXuat,
 	parseSuKienChiTiet,
 	sinhSlug,
 	slugTuDuongDan,
@@ -97,7 +99,10 @@ describe("tai-lieu", () => {
 			"CU",
 			"MAY_SOAN",
 			"XAC_MINH",
+			"LUU_TRU",
+			"KHOI_PHUC",
 		]);
+		expect(LOAI_DE_XUAT).toEqual(["NOI_DUNG", "LUU_TRU", "KHOI_PHUC"]);
 		expect(TAI_LIEU.ten).toEqual({ min: 1, max: 160 });
 		expect(TAI_LIEU.lyDo).toEqual({ min: 1, max: 500 });
 		expect(TAI_LIEU.noiDung.max).toBe(200_000);
@@ -136,6 +141,26 @@ describe("tai-lieu", () => {
 		);
 		expect(() => parseSuKienChiTiet(null)).toThrow(
 			"sự kiện tài liệu không đọc được",
+		);
+	});
+
+	test("sự kiện lưu trữ và khôi phục mang mã đề xuất", () => {
+		expect(parseSuKienChiTiet({ loai: "LUU_TRU", deXuatId: "dx1" })).toEqual({
+			loai: "LUU_TRU",
+			deXuatId: "dx1",
+		});
+		expect(
+			parseSuKienChiTiet({ loai: "KHOI_PHUC", deXuatId: "dx1" }).loai,
+		).toBe("KHOI_PHUC");
+		expect(() => parseSuKienChiTiet({ loai: "LUU_TRU" })).toThrow(
+			"sự kiện tài liệu không đọc được",
+		);
+	});
+
+	test("loại đề xuất đọc ở biên, loại lạ thì ném", () => {
+		for (const l of LOAI_DE_XUAT) expect(parseLoaiDeXuat(l)).toBe(l);
+		expect(() => parseLoaiDeXuat("XOA")).toThrow(
+			"loại đề xuất tài liệu không đọc được",
 		);
 	});
 });
