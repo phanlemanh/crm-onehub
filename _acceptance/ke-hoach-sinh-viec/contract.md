@@ -5,9 +5,9 @@ slug: ke-hoach-sinh-viec
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: implemented
-approved_by: Mạnh
-approved_at: 2026-10-14T06:52:05Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-14-ke-hoach-sinh-viec-design.md
 ---
 
@@ -30,7 +30,7 @@ Source input: hàng DA3 · `opportunity.md` (ngưỡng đã ký) · `docs/plan/v
 
 - AC-1 (cross-layer): Given khuôn có ba bước ở hai phòng ban — phòng A có trưởng phòng H, phòng B không có trưởng phòng — và người cầm trịch O, When tạo kế hoạch từ khuôn đó qua ô tạo kế hoạch mà không đổi người nào, Then cơ sở dữ liệu có ba bước và ba Việc, mỗi bước trỏ đúng một Việc khác nhau; Việc của phòng A có người thực hiện H, của phòng B có người thực hiện O, người giao là người tạo; hạn của mỗi Việc bằng ngày bắt đầu cộng số ngày lệch của bước, tính theo ngày giờ Việt Nam; mỗi Việc gắn kế hoạch và có đúng một vết «tao» nguồn `khuon`; cột người làm, hạn, tên của mỗi bước bằng đúng của Việc nó trỏ; When gọi REST `POST /onboarding/plans` không có trường chọn người, Then kết quả y như trên.
 - AC-2 (cross-layer): Given khuôn của AC-1 và người U vai `member`, When người tạo đổi người phòng B sang U, Then Việc của phòng B có người thực hiện U; Given trưởng phòng H đã sang vai `okr`, When tạo không đổi người, Then Việc của phòng A có người thực hiện O; When gửi người vai `okr` cho một phòng ban, Then trả 400 với lời có tên người, tên phòng ban và chữ «chỉ OKR», và số kế hoạch, bước, Việc, vết trong cơ sở dữ liệu không đổi.
-- AC-3 (ui-observed): Given bản chạy thật với dữ liệu mẫu, When mở ô tạo kế hoạch ở danh mục 30 ngày và ở sheet công ty, chọn một khuôn có hai phòng ban, ở khổ 1280 và 375, Then thấy một hàng mỗi phòng ban có ô chọn người điền sẵn trưởng phòng (hay người cầm trịch khi phòng không có trưởng), danh sách chọn không có người vai «chỉ OKR»; khi khuôn đang tải, tải hỏng hay khuôn không có bước, ô hiện trạng thái chờ, lỗi có «Thử lại», và rỗng; ở 375 không có thanh cuộn ngang.
+- AC-3: Given ô tạo kế hoạch dựng trong bài kiểm giao diện với dữ liệu giả, When chọn một khuôn có hai phòng ban, Then thấy một hàng mỗi phòng ban có ô chọn người điền sẵn trưởng phòng (hay người cầm trịch khi phòng không có trưởng), danh sách chọn không có người vai «chỉ OKR», và lệnh tạo chỉ gửi phòng người đã đổi; khi khuôn hay danh sách phòng ban đang tải, tải hỏng hay khuôn không có bước, ô hiện trạng thái chờ, lỗi có «Thử lại», và rỗng; các tệp giao diện mới hay sửa qua sàn thiết kế.
 - AC-4: Given một kế hoạch tạo từ khuôn sau lượt này, When chạy từng lệnh trong bảng viết trước của design doc mục 5 — sáu lệnh phía bước (`assignStep`, `setStepDone` đánh và bỏ đánh, `rescheduleStep`, «xong n» trỏ bước, `transferWork` chuyển việc của người làm sang người khác) và bốn lệnh phía Việc (`doiTrangThai` sang Đang làm, Chờ đánh giá, Xong, rồi mở lại; `suaViec` hạn và tiêu đề; `doiNguoiThucHien`) — Then sau MỖI lệnh, đọc lại từ cơ sở dữ liệu, bốn cột người làm · hạn · tên · thời điểm xong của bước bằng đúng bản chiếu của Việc nó trỏ (xong ⟺ Việc ở Xong, thời điểm xong = `khepLuc`); mỗi lệnh để đúng một vết trên Việc; người được giao đóng được bước của mình; chiều đỏ: một bản sao bỏ lời gọi chiếu ở một lệnh làm bảng đỏ gọi đúng tên lệnh đó; Given thêm một Việc thường không trỏ bởi bước nào, When chuyển Việc của bước sang Huỷ, xoá nó hay gỡ gắn kế hoạch, Then mỗi lệnh trả 400 với lời ghim «gỡ bước ở kế hoạch» và Việc, bước không đổi, còn ba lệnh đó trên Việc thường vẫn thành công như trước lượt này (đối chứng dương).
 - AC-5 (cross-layer): Given kế hoạch của AC-1, When người cầm trịch gỡ một bước ở thẻ Bước, Then bước mất, Việc của nó còn ở trạng thái Huỷ với vết «doi-trang-thai» kèm lý do gỡ bước, không còn bước nào trỏ nó, và danh mục hiện «Bước 0/2» thay vì «0/3»; Given một kế hoạch còn hai bước dở và một bước xong, When người cầm trịch đóng kế hoạch, Then hộp đóng hỏi «Huỷ 2 việc còn mở của kế hoạch?» đánh dấu sẵn; khi giữ dấu, hai Việc sang Huỷ với vết nguồn `dong-ke-hoach`, Việc đã Xong giữ nguyên, bản chiếu của ba bước đúng, và nhịp nhắc sau đó không có `viec-qua-han` cho hai Việc đó; khi bỏ dấu, hai Việc giữ nguyên trạng thái; When mở lại kế hoạch, Then Việc đã Huỷ lúc đóng không tự hồi.
 - AC-6 (cross-layer): Given một kế hoạch rỗng và một kế hoạch tạo từ khuôn, When thêm một bước tay có chọn người và một bước tay không chọn người, Then mỗi bước mang một Việc mới — người thực hiện là người được chọn, hay theo luật mặc định của AC-1 khi không chọn; các AC-4, AC-5, AC-6 của hồ sơ `dieu-phoi-va` vẫn xanh nguyên tên bài.
@@ -67,6 +67,7 @@ Plans, Pipedrive [NGÀNH: docs/plan/viec-du-an-nghien-cuu.md mục 3]. Core 1–
 - Gắn kế hoạch với deal để dự án đọc tệp và ghi chú của deal; khuôn theo loại deal; khuôn tự chọn theo loại đối tác.
 - Bản bàn giao do AI viết khi deal thắng — thuộc tác tử (ghi chú hàng DA3).
 - Việc con và Kanban (DA2); dự án và Gantt (DA4).
+- Bằng chứng trên bản chạy thật cho ô tạo kế hoạch và thẻ Bước (eval E3b cũ: mở từ danh mục và từ sheet công ty ở khổ 1280 và 375, không cuộn ngang ở 375, thẻ Bước hiện người làm) — hạn chế đã biết, owner thu phạm vi 15/10 sau hai lượt S4 chưa đạt: ở khổ 1280 sheet công ty tràn mép phải nên ảnh không thấy ô tạo, trang công ty báo lỗi hydration trên console, thẻ Bước bị cắt mất cột người làm. Ảnh lượt 2 của lối danh mục (1280, 375) khớp kỳ vọng nhưng không còn là bằng chứng của hợp đồng; thước `rang/man.mjs` giữ lại, chưa sửa.
 
 ## Notes
 
@@ -75,3 +76,4 @@ Plans, Pipedrive [NGÀNH: docs/plan/viec-du-an-nghien-cuu.md mục 3]. Core 1–
 - Hỏi-3: đóng kế hoạch khi còn việc dở — hộp đóng hỏi, đánh dấu sẵn «Huỷ N việc còn mở» (khuyến nghị) hay để trống.
 - Hỏi-4: bỏ design-pass, duyệt UI trên ảnh S4 (khuyến nghị) hay dựng bản mẫu trước Cổng Phạm vi.
 - Câu hỏi nơi hiện gợi ý dời sang DA3b cùng vế (b).
+- Thu phạm vi 15/10 (dừng-vá sau S4 lượt 2): owner chọn «Hướng a» — vế bản chạy thật của AC-3 ra Out of scope; Hỏi-4 (duyệt UI trên ảnh S4) vì thế không còn ảnh nào được duyệt trong vòng này.

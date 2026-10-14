@@ -26,20 +26,6 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx", apps/app/components/onboarding/**, apps/app/lib/messages/onboarding.ts, apps/app/test/tao-ke-hoach-nguoi.dom.tsx]
 
-  - id: E3b
-    criterion: AC-3
-    executor: ui-check
-    layer: ui-observed
-    cmd: config:executors.script.kh_man
-    steps:
-      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000: `BANG_CHUNG=_acceptance/ke-hoach-sinh-viec/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ke-hoach-sinh-viec/rang/man.mjs\"` (chinh lenh kh_man)"
-      - "Doc dong cuoi: ma 0 kem 'ke-hoach-sinh-viec man: dat' = dat; ma 2 = khong do duoc; ma 1 = co thong diep 'kh man: ...' goi ten buoc sai"
-      - "Mo bon anh kh-o-tao-danh-muc-1280.png, kh-o-tao-cong-ty-1280.png, kh-o-tao-375.png, kh-the-buoc-viec-1280.png trong _acceptance/ke-hoach-sinh-viec/evidence/ va doi chieu bang mat voi Expected"
-    expected: "Ô tạo kế hoạch mở từ danh mục và từ sheet công ty có một hàng mỗi phòng ban của khuôn, ô chọn người điền sẵn trưởng phòng (hay người cầm trịch); ở 375 không có thanh cuộn ngang, hàng phòng ban xếp dọc; thẻ Bước của kế hoạch vừa tạo hiện người làm ở mỗi bước và chip trạng thái Việc."
-    inputs:
-      - _acceptance/ke-hoach-sinh-viec/evidence/
-    paths: ["apps/app/app/(app)/[slug]/onboarding/**", apps/app/components/onboarding/**, apps/app/components/crm/record-sheet/**, apps/app/lib/messages/onboarding.ts, _acceptance/ke-hoach-sinh-viec/rang/man.mjs]
-
   - id: E4
     criterion: AC-4
     executor: test
