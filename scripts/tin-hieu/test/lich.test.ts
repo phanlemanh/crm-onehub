@@ -212,6 +212,7 @@ describe("tvk-nhanh", () => {
 		truoc = truocCua();
 		sv.dat([1, 2, 3]);
 		expect((await chay(kho, sv, gh)).ma).toBe(0);
+		khongRoi(truoc);
 		expect(
 			g(kho.origin, "rev-parse", `${HC}~1`),
 			"nhanh hang cho khong dung lai tren nhanh chinh",
