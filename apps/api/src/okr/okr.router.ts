@@ -131,6 +131,7 @@ import {
 	soanSoDoInput,
 	soanSoDoOutput,
 	soanTangLuotOutput,
+	suaLyDoCanChinhInput,
 	thanhVienOutput,
 	transferOkrOutput,
 	troLyAnInput,
@@ -1168,6 +1169,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof alignmentInput>,
 	) {
 		return this.okr.addAlignment(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: suaLyDoCanChinhInput,
+		output: okOutput,
+		meta: restMeta("PATCH", "/okr/alignments/{id}", TAG),
+	})
+	suaLyDoCanChinh(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaLyDoCanChinhInput>,
+	) {
+		return this.okr.suaLyDoCanChinh(ctx.user.id, input);
 	}
 
 	@Mutation({

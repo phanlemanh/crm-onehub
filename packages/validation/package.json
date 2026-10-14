@@ -8,6 +8,7 @@
 		"./activity-meta": "./src/activity-meta.ts",
 		"./agent-events": "./src/agent-events.ts",
 		"./ai-chi-phi": "./src/ai-chi-phi.ts",
+		"./ly-do-can-chinh": "./src/ly-do-can-chinh.ts",
 		"./agent-manifest": "./src/agent-manifest.ts",
 		"./agent-transcript": "./src/agent-transcript.ts",
 		"./builder-question": "./src/builder-question.ts",
