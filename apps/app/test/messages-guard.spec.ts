@@ -63,6 +63,8 @@ const KHONG_DAU = new Set([
 	"contact.emails",
 	"type.email",
 	"type.url",
+	"typeNgan.email",
+	"typeNgan.url",
 	"create.email",
 	"contactColumns.email",
 	"fields.website",
