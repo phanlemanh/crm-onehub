@@ -95,6 +95,18 @@
       "hang": []
     },
     {
+      "ten": "Vòng tín hiệu khép lần đầu — tín hiệu tự về kho, quản trị thấy mọi tín hiệu, ai cũng có chuông thông báo, hộp gửi tín hiệu sửa xong",
+      "ngay": "2026-10-16",
+      "khoa": "m-1016",
+      "loai": "phat-hanh",
+      "hang": [
+        "TH1",
+        "TH4",
+        "TB1",
+        "TH6"
+      ]
+    },
+    {
       "ten": "Phòng ban công bố OKR quý 4",
       "ngay": "2026-10-21",
       "ai": "Phòng ban",
