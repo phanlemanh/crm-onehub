@@ -91,11 +91,14 @@ evals:
           ca hai, so sanh bang nhau theo thu tu so)
         2 sau luot dau: moi hang co keoVeLuc khac null; hang da dau tu truoc giu nguyen keoVeLuc
         3 dongDauLuc cua luot dau == keoVeLuc cua hai hang vua dau; luot hai: dongDauLuc null, khong keoVeLuc nao doi
+        3b luot hai tra DU 3 id (ca tin hieu da dau o luot dau va tin hieu da dau tu truoc), va vietTep cua tung tep bang
+           byte voi luot dau — quan he nay la thu cho nhanh hang cho ghi de ma khong rot tep
         4 moi tep mang keoVeLuc khop CSDL
         5 dong nhat ky cua luot (bat qua logger gia) chua id khoa va userId chu khoa, KHONG chua chuoi khoa va KHONG chua
           muonLam/daXayRa cua tin hieu nao
       CHIEU DO: ban sao bo dongDauLuc -> dong 3 do voi thong diep ghim "luot khong noi luc dong dau";
-      ban sao ghi khoa vao nhat ky -> dong 5 do voi thong diep ghim "nhat ky mang chuoi khoa".
+      ban sao ghi khoa vao nhat ky -> dong 5 do voi thong diep ghim "nhat ky mang chuoi khoa";
+      ban sao chi tra tin hieu chua dau -> dong 3b do voi thong diep ghim "luot keo ve bo tin hieu da dau".
 
   - id: E4
     criterion: AC-4
@@ -108,19 +111,45 @@ evals:
       - "apps/api/src/auth/**"
       - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
     expected: |
-      describe "tvk-duong-khac": khoa chi keo hop le cua owner. Ma tran viet truoc 7 duong, moi duong mot assert:
+      describe "tvk-duong-khac": khoa chi keo hop le cua owner. Ma tran viet truoc 11 duong, moi duong mot assert:
         1 GET  /rest/tin-hieu/cua-toi
         2 POST /rest/tin-hieu/keo-ve (thu tuc cua LT2)
         3 GET  /rest/contacts
         4 GET  /rest/api-keys
-        5 GET  /api/auth/get-session
-        6 POST /api/auth/api-key/create (body ten bat ky)
-        7 auth.api.getSession({ headers: x-api-key }) — ham trang web va cau tac nhan dung (apps/app/lib/session.ts goi dung ham nay)
-      Duong 1-6: status 401, hay 200 voi phien null cho duong 5; duong 7: tra null hoac nem APIError 401. Sau ca ma tran: so
-      hang apikey, so tinHieu co keoVeLuc khong doi.
-      Doi chung duong: cung 7 duong voi khoa THUONG cua owner -> 1,2,3,4 tra 200, 5 tra phien cua owner, 7 tra phien.
+        5 GET  /trpc/contacts.list (tRPC goc, khong qua cau REST)
+        6 GET  /api/auth/get-session
+        7 POST /api/auth/api-key/create (body ten bat ky)
+        8 GET  /api/auth/api-key/list
+        9 POST /api/auth/api-key/update (doi ten chinh khoa chi keo)
+       10 POST /api/auth/api-key/delete (xoa mot khoa thuong cua owner)
+       11 auth.api.getSession({ headers: x-api-key }) — ham ma apps/app/lib/session.ts (trang web va cau tac nhan /eve) goi
+      Duong 1-5, 7-10: status 401 (hay 403 cua thu vien); duong 6: 200 voi phien null; duong 11: null hoac APIError 401.
+      Sau ca ma tran: so hang apikey, ten khoa, so tinHieu co keoVeLuc khong doi.
+      Danh muc 11 duong la dau ra cua E4c (liet ke bang may), khong chon tay: E4c do hai tap bang nhau.
+      Doi chung duong: cung 11 duong voi khoa THUONG cua owner -> 1-5, 8 tra 200, 6 va 11 tra phien cua owner.
       CHIEU DO: ban sao bat enableSessionForAPIKeys cho cau hinh chi keo -> duong 1 va 7 do voi thong diep ghim
       "khoa chi keo mo duoc phien"; ban sao dat chung configId mac dinh cho khoa chi keo -> cung thong diep.
+
+  - id: E4c
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tvk_duong_doc_khoa
+    paths:
+      - "apps/api/src/**"
+      - "apps/app/**"
+      - "apps/agent/agent/**"
+      - "packages/auth/src/**"
+      - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
+      - "_acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs"
+    expected: |
+      duong-doc-khoa.mjs (goc kho suy tu vi tri tep, khong hardcode) quet ma that cua apps/api/src, apps/app (bo node_modules,
+      .next*, test), apps/agent/agent (bo .eve) va packages/auth/src, liet ke moi cho: goi getSession( / auth.api.getSession,
+      goi verifyApiKey, doc dau API_KEY_HEADER hay chuoi "x-api-key"; va moi duong /api-key/* ma plugin api-key dang ky
+      (doc tu doi tuong endpoints cua plugin that, khong viet tay). Moi cho phai anh xa toi mot o cua ma tran E4 (bang anh xa
+      nam trong rang) hoac mot dong mien co ly do (vd chinh middleware khoa-keo-tin-hieu). In tung cho -> o; exit 0 chi khi
+      khong cho nao thieu o va khong o nao tro cho khong con.
+      CHIEU DO: --pha-thu chep mot tep tam co doc "x-api-key" vao ban sao cua cay -> exit 1 voi thong diep ghim
+      "duong doc khoa chua co o"; xoa mot muc khoi bang anh xa -> cung thong diep.
 
   - id: E5
     criterion: AC-5
@@ -155,8 +184,10 @@ evals:
     expected: |
       Ba bo co san, khong sua ca nao: tin-hieu.spec.ts "gth-keo-ve" (LT2: owner/admin keo duoc, member/okr bi tu choi, cung
       byte lan hai), khoa-api-ghi-thua.spec.ts (lastRequest ghi toi da moi phut mot lan, updatedAt khong doi), va
-      khoa-keo-tin-hieu.spec.ts "tvk-khoa-thuong" (khoa thuong tao TRUOC khi them cau hinh thu hai — chen hang apikey configId
-      "default" bang dung duong tao cua thu vien — goi contacts.list tra 200). Ca ba exit 0.
+      khoa-keo-tin-hieu.spec.ts "tvk-khoa-thuong": khoa thuong tao bang duong tao cua thu vien KHONG truyen configId (dung
+      duong apiKeys.create cua khoa toan quyen hom nay), doc lai hang: configId la gia tri ma cot mac dinh cua migration
+      20260820152910_add_api_keys ghi (khong viet tay "default"); them mot hang thu hai mo phong hang production cu bang
+      cach dat configId ve DEFAULT cua cot (UPDATE ... SET "configId" = DEFAULT); ca hai goi contacts.list tra 200. Ca ba exit 0.
       CHIEU DO: ban sao doi configId cua cau hinh mac dinh -> "tvk-khoa-thuong" do voi thong diep ghim "khoa thuong cu mat phien".
 
   - id: E7
@@ -189,7 +220,9 @@ evals:
       - "scripts/tin-hieu/keo-ve.ts"
       - "scripts/tin-hieu/test/lich.test.ts"
     expected: |
-      lich.test.ts describe "tvk-nhanh": kho git that trong tmpdir (origin tran + ban lam), may chu gia, gh gia qua PATH.
+      lich.test.ts describe "tvk-nhanh": kho git that trong tmpdir (origin tran + ban lam), gh gia qua PATH; may chu gia phat
+      phan hoi bang ham viet that (vietTep + keoVeOutput.parse round-trip) va giu dung luat cua thu tuc: tra MOI tin hieu
+      con lai, ke ca da dau.
       Ma tran viet truoc 5 o:
         1 onehub khong co tep, CRM co 2 tin hieu -> origin/tin-hieu/keo-ve == onehub + 1 commit; diff --name-only chi gom
           tin-hieu/crm/crm-1.json, crm-2.json
@@ -197,9 +230,12 @@ evals:
         3 CRM them crm-3 -> nhanh moi la onehub + 1 commit chua 3 tep (dung lai tren dinh onehub, khong chong commit)
         4 onehub da gop ca 3 tep, CRM khong co gi moi -> khong commit, khong day, nhanh hang cho khong doi
         5 onehub tien them mot commit khac -> nhanh hang cho dung lai tren dinh moi
+        6 quan he khong rot: sau moi o, moi tep co tren nhanh hang cho cua luot truoc ma onehub chua co van con tren nhanh
+          sau luot nay (assert tren tap tep, ca 5 o)
       Moi tep day len doc bang ham kiem cua kit (cung ham kiem kenh yeu cau ma rang vong-kit cua LT2 dung) 0 loi.
       CHIEU DO: ban sao commit ca khi khong co tep moi -> o 2 hoac 4 do voi thong diep ghim "luot day khi khong co gi moi";
-      ban sao chong commit len nhanh cu -> o 3 do voi thong diep ghim "nhanh hang cho khong dung lai tren nhanh chinh".
+      ban sao chong commit len nhanh cu -> o 3 do voi thong diep ghim "nhanh hang cho khong dung lai tren nhanh chinh";
+      may chu gia chi tra tin hieu chua dau -> dong 6 do voi thong diep ghim "nhanh hang cho lam roi tep chua gop".
 
   - id: E9
     criterion: AC-9
@@ -209,15 +245,18 @@ evals:
       - "scripts/tin-hieu/lich.ts"
       - "scripts/tin-hieu/test/lich.test.ts"
     expected: |
-      lich.test.ts describe "tvk-pr": gh gia ghi lai moi lenh. Ma tran viet truoc 4 o:
+      lich.test.ts describe "tvk-pr": gh gia ghi lai moi lenh. Ma tran viet truoc 6 o:
         1 sau khi day, gh pr list tra rong -> dung mot lenh gh pr create --base onehub --head tin-hieu/keo-ve, tieu de
           mang "Tín hiệu kéo về"
         2 gh pr list tra mot PR mo -> khong lenh gh pr create
         3 gh pr create tra loi "GitHub Actions is not permitted to create or approve pull requests" -> ma khac 0, stderr
           gom cau goi ten quyen con thieu (rut tu hang thong diep cua lich.ts), nhanh van da day (sha tren origin)
-        4 toan bo nhat ky gh cua ca 4 o khong co "pr merge" va khong co "--auto"
+        4 origin da co nhanh hang cho trung cay (luot khong day), gh pr list tra rong -> dung mot lenh gh pr create
+        5 PR truoc da dong khong gop (gh pr list --state open tra rong), nhanh khac onehub -> dung mot lenh gh pr create
+        6 toan bo nhat ky gh cua ca 6 o khong co "pr merge" va khong co "--auto"
       CHIEU DO: ban sao bo kiem PR mo -> o 2 do voi thong diep ghim "mo PR thu hai";
-      ban sao nuot loi tao PR -> o 3 do voi thong diep ghim "kho cam mo PR ma luot van xanh".
+      ban sao nuot loi tao PR -> o 3 do voi thong diep ghim "kho cam mo PR ma luot van xanh";
+      ban sao chi kiem PR khi vua day -> o 4 do voi thong diep ghim "nhanh hang cho co tep ma khong PR".
 
   - id: E10
     criterion: AC-10
@@ -241,7 +280,7 @@ evals:
       - "_acceptance/tin-hieu-tu-ve-kho/rang/tep-lich.mjs"
     expected: |
       tep-lich.mjs doc .github/workflows/tin-hieu-keo-ve.yml bang trinh doc YAML that (khong regex) va kiem ma tran 6 dong:
-        1 on.schedule co dung mot cron "0 21 * * *"
+        1 on.schedule co dung hai cron "0 21 * * *" va "0 9 * * *"
         2 on.workflow_dispatch co mat
         3 permissions == { contents: write, pull-requests: write } — dung hai khoa, khong khoa nao khac
         4 concurrency co group, cancel-in-progress false

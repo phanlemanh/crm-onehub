@@ -38,6 +38,10 @@ Khoá còn mang `permissions: { tinHieu: ["keoVe"] }` (trường chỉ ghi đư�
   khoá chỉ-kéo: khoá thường hay phiên trình duyệt bị từ chối. Router không mang `AuthMiddleware` vì không có phiên —
   middleware riêng là cổng của nó, như hai đường nhận dữ liệu trong `docs/api.md` (mục thêm một dòng).
 - Thủ tục `tinHieu.keoVe` của LT2 (khoá thường của quản trị, lượt tay) giữ nguyên.
+- Khoá cũ: mọi hàng `apikey` đang có mang `configId = 'default'` (cột `NOT NULL DEFAULT 'default'`); thư viện coi
+  `default` và rỗng là cấu hình mặc định nên khoá cũ vẫn mở phiên, không migration.
+- Mọi chỗ đọc khoá được liệt kê bằng máy (răng `duong-doc-khoa.mjs`): chỗ nào gọi `getSession`, `verifyApiKey` hay đọc
+  đầu `x-api-key` trong `apps/api`, `apps/app`, `apps/agent` phải có một ô trong ma trận E4; chỗ mới chưa có ô là đỏ.
 - **Tạo khoá**: `apiKeys.create` nhận thêm `loai: "toan-quyen" | "keo-tin-hieu"` (vắng = toàn quyền). Loại
   `keo-tin-hieu` chỉ quản trị tạo được (403 với vai khác); máy chủ tạo khoá bằng lời gọi phía máy chủ (`userId`,
   `configId`, `permissions`) sau khi đã kiểm phiên và vai. `apiKeys.list` trả thêm `loai`. Thu hồi như cũ.
@@ -46,14 +50,16 @@ Khoá còn mang `permissions: { tinHieu: ["keoVe"] }` (trường chỉ ghi đư�
 
 ### K2 — lịch chạy hằng ngày, nhánh hàng chờ (lối A)
 
-- `.github/workflows/tin-hieu-keo-ve.yml`: `schedule` 21:00Z (04:00 giờ Việt Nam) và `workflow_dispatch`; quyền
+- `.github/workflows/tin-hieu-keo-ve.yml`: `schedule` hai lần mỗi ngày, 21:00Z (04:00 giờ Việt Nam, trước giờ làm) và 09:00Z (16:00) — lúc chờ dài nhất khoảng 12 giờ cộng độ trễ lịch, ngưỡng một ngày còn dư — và `workflow_dispatch`; quyền
   `contents: write`, `pull-requests: write`, không quyền nào khác; một lượt một lúc (`concurrency`). Bước: lấy
   `onehub`, cài phụ thuộc, chạy `bun scripts/tin-hieu/lich.ts`.
 - `scripts/tin-hieu/lich.ts` (có test): chạy `chayKeoVe` của LT2 trên cây của đỉnh `onehub` bằng
   `CRM_KHOA_KEO_TIN_HIEU`; lỗi → thoát khác 0, không đụng git. Có tệp mới so với `onehub` → dựng nhánh
   `tin-hieu/keo-ve` = đỉnh `onehub` + một commit chỉ chạm `tin-hieu/crm/**`; so cây với nhánh hàng chờ đang có
   trên origin, khác thì đẩy (ghi đè — nhánh của máy), giống thì thôi. Không có tệp mới → không commit, không đẩy.
-  Sau khi đẩy: chưa có PR mở từ nhánh này → mở PR «Tín hiệu kéo về» vào `onehub`; kho cấm tác vụ mở PR → lượt đỏ
+  Ghi đè không làm rơi tệp vì thủ tục kéo về trả MỌI tín hiệu còn lại mỗi lần, kể cả tín hiệu đã đóng dấu (LT2);
+  E3 và E8 đo đúng quan hệ đó. Cuối mỗi lượt xanh, dù có đẩy hay không: nhánh hàng chờ khác `onehub` mà chưa
+  có PR mở (chưa từng có, hay PR trước đã đóng không gộp) → mở PR «Tín hiệu kéo về» vào `onehub`; kho cấm tác vụ mở PR → lượt đỏ
   với câu gọi tên quyền thiếu. Không bao giờ gộp.
 - `scripts/tin-hieu/keo-ve.ts`: `CRM_KHOA_KEO_TIN_HIEU` có → đường lịch; chỉ `CRM_API_KEY` → đường cũ; thiếu cả
   hai → mã 2 gọi tên hai biến. Dòng tổng kết thêm `đóng dấu lượt này: n · chờ lâu nhất: x giờ`.
