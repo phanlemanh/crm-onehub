@@ -5,7 +5,7 @@ slug: gieo-nguoi-chiu-song-song
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-10-14T08:41:26Z
 design_doc: docs/superpowers/specs/2026-10-14-gieo-nguoi-chiu-song-song-design.md
@@ -45,6 +45,10 @@ sổ quyết định. Không gian một chiều: một hàm, một ca đua, mộ
 - Không đổi mã sản phẩm. `packages/auth/src/organization.ts` có upsert riêng trong giao dịch; không thuộc vòng này.
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Khi máy dựng bản sao cây để đo đột biến gặp sự cố, kết quả có thể bị đọc thành «sửa sai» thay vì «không đo được» và để lại một thư mục tạm.
+  - Ngoài-2: Ca `loc-va-dem` của bài kiểm quản lý danh mục cũng gieo hai người cùng lúc nhưng chưa được chạy riêng trên kho mới; cuộc đua được đo trực tiếp bằng bài kiểm mới.
 
 Mã sửa đã được thử viết trước khi hợp đồng có (lúc tái hiện), rồi cất ra ngoài cây để đường
 nền chạy trên cây chưa đụng; mã vào cây sau Cổng Phạm vi.

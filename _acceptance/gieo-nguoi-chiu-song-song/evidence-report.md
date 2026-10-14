@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 6a296af38bbabac9d07c808c68345d321db7fbb1
-human_signoff:
+human_signoff: Mạnh 2026-10-14 — ký Cổng Bằng chứng trên vòng chấm 1 (PASS 7/7, engine feature-loop 2.30.0 · acceptance-gate 2.30.0). Ngoài-1, Ngoài-2 ghi Known limits; đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: gieo-nguoi-chiu-song-song
