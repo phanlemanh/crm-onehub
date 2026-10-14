@@ -6,7 +6,7 @@ import {
 	dongTuHang,
 } from "@crm/validation/okr-tro-ly";
 import nopDeXuat from "../agent/subagents/tro_ly_okr/tools/nop_de_xuat";
-import { donDep, gieoNguoi, moXuong } from "./support/nhac-gieo";
+import { donDep, gieoNguoi, moXuong, TIEN_TO } from "./support/nhac-gieo";
 import { donOkr, gieoChuKy, gieoMucTieu } from "./support/okr-gieo";
 import { donTroLy, gieoCauHinhAi } from "./support/tro-ly-gieo";
 import {
@@ -82,7 +82,10 @@ beforeAll(async () => {
 	chuKy = await gieoChuKy("dang-chay");
 	phong = (
 		await db.department.create({
-			data: { name: `l4-phong-can-cu-${Date.now()}`, position: 0 },
+			data: {
+				name: `${TIEN_TO}l4-phong-can-cu-${Date.now()}`,
+				position: 0,
+			},
 		})
 	).id;
 	await gieoCauHinhAi(new Date(Date.now() - 60_000), {
