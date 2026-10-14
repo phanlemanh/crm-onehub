@@ -50,6 +50,7 @@
 		"./onboarding-nhac": "./src/onboarding-nhac.ts",
 		"./safe-fetch": "./src/safe-fetch.ts",
 		"./settings": "./src/settings.ts",
+		"./ban-chup-lo-trinh": "./src/ban-chup-lo-trinh.ts",
 		"./slack-inventory": "./src/slack-inventory.ts",
 		"./tai-lieu-chien-luoc": "./src/tai-lieu-chien-luoc.ts",
 		"./tai-lieu-de-xuat": "./src/tai-lieu-de-xuat.ts",
