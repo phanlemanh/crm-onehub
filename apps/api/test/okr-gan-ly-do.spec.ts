@@ -26,6 +26,7 @@ import {
 	phienMau,
 	type TraLoi,
 	tienDongHo,
+	type Vao,
 } from "./tro-ly-okr-san";
 
 const QUAN_TRI = "le-hai-dang";
@@ -48,7 +49,7 @@ type NoiGop = (typeof objectiveOutput)["_output"]["alignments"][number];
 async function patchRest(
 	ungDung: NestExpressApplication,
 	duong: string,
-	than: Record<string, unknown>,
+	than: Vao,
 	cookie: string,
 ): Promise<TraLoi> {
 	const res = await request(ungDung.getHttpServer())
@@ -401,13 +402,9 @@ async function gieoCanChinh(
 	return ids.map((id, i) => ({ id, dich: dich[i] as Dich }));
 }
 
-const quyet = (vao: Record<string, unknown>, cookie: string) =>
+const quyet = (vao: Vao, cookie: string) =>
 	goi(app, "okr.troLyQuyet", "mutation", vao, cookie);
-const quyetRest = (
-	deXuatId: string,
-	than: Record<string, unknown>,
-	cookie: string,
-) =>
+const quyetRest = (deXuatId: string, than: Vao, cookie: string) =>
 	goiRest(
 		app,
 		"POST",
