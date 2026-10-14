@@ -5,7 +5,7 @@ slug: moi-tin-hieu-cho-quan-tri
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-14T03:17:17Z
 design_doc: docs/superpowers/specs/2026-10-14-moi-tin-hieu-cho-quan-tri-design.md
@@ -71,3 +71,12 @@ Source input: `_acceptance/moi-tin-hieu-cho-quan-tri/opportunity.md` (Cổng Đ�
 - Đưa tên người gửi vào tệp git — luật riêng tư 14/10.
 
 ## Notes
+
+- Known limits — anh chọn ở Cổng Bằng chứng 2026-10-14, từ S4 vòng 1 (mang sang vòng 2):
+  - Ngoài-1: Khi quản trị đang xem thẻ Tất cả rồi gửi thêm một tín hiệu từ nút trên đầu trang, bảng có thêm dòng mới nhưng ba ô số giữ số cũ cho tới khi tải lại trang.
+  - Ngoài-4: Nếu phép đo màn thật hỏng giữa chừng khi tạo dữ liệu mẫu, phòng ban, người dùng và tín hiệu mẫu đã tạo ở lại trong kho đo.
+  - Ngoài-5: Sau một lần đo màn, nếu dọn dữ liệu mẫu thất bại thì phép đo vẫn báo kết quả bình thường, không cảnh báo.
+  - Ngoài-6: Bài kiểm ô «Phòng ban có tín hiệu» chưa ghim đúng con số hiển thị — ô hiện sai số có thể lọt.
+  - Ngoài-7: Bài kiểm «ba ô số không đổi theo bộ lọc» chưa bắt được ca ô số đổi theo lọc.
+  - Ngoài-8: Phép đo «không cuộn ngang ở 375» chưa có đối chứng khi bảng thật sự tràn.
+- Chấp nhận, không sửa (Cổng Bằng chứng 2026-10-14): Ngoài-2 (quy tắc trạng thái «chờ lấy về / chờ gom» viết ở hai chỗ), Ngoài-3 (kiểu dòng tín hiệu khai tay thay vì lấy từ kiểu máy chủ).
