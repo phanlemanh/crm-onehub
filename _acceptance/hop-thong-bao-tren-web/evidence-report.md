@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: hop-thong-bao-tren-web
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 73a5dd1a0e21b9d43f3168ae62941e173070182c
-human_signoff:
+human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 2 (17/17 phép kiểm máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E13 Đạt). Ngoài-1 đến 3, 5 đến 15, 17 đến 20 ghi Known limits; Ngoài-4, 16, 21 đến 24 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: hop-thong-bao-tren-web
@@ -210,7 +210,7 @@ Vòng 2. Các eval đụng đường dẫn đã sửa ở S4-r1 chạy lại; c�
   judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment), fresh context
   verdict: PASS
   rationale: Cả ba góc nhìn cùng thấy CONTEXT.md có mục «Thông báo» riêng, khớp tệp thiết kế; mục «Nhắc buổi sáng» không còn câu nói ngược; hai mục phân biệt được chuông trong CRM với tin gom qua Zalo hoặc Slack.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-14 — Đạt
   panel: đề xuất PASS. Phiếu từng góc nhìn:
   - domain-correctness: PASS — (a) CONTEXT.md có mục «Thông báo» riêng: một dòng CRM ghi cho một người, nằm ở chuông và trang Thông báo, ghi cho mọi người kể cả người chưa nối Zalo hay Slack, và khác nhắc ở chỗ nhắc là một tin gom gửi qua kênh ngoài CRM còn thông báo là từng mục lưu trong CRM; khớp tệp thiết kế. (b) Mục «Nhắc buổi sáng» không còn câu «kho không có bảng thông báo» hay câu nào nói ngược, và trỏ sang mục Thông báo. (c) Hai mục dùng chữ thường, người dùng phòng ban phân biệt được cái nhận ở chuông với cái nhận qua Zalo.
   - operational-feasibility: PASS — mục «Thông báo» (dòng 310-314) phân biệt rõ với «Nhắc buổi sáng» (dòng 300-308), khớp tệp thiết kế về chuông, trang thông báo, mọi vai, ghi trước khi chọn kênh, Zalo và Slack không đổi. Mục «Nhắc buổi sáng» không còn câu nói ngược. Người dùng phòng ban đọc hai mục sẽ phân biệt được.

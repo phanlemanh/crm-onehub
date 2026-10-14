@@ -5,7 +5,7 @@ slug: hop-thong-bao-tren-web
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-14T03:18:11Z
 design_doc: docs/superpowers/specs/2026-10-14-hop-thong-bao-tren-web-design.md
@@ -78,3 +78,22 @@ Máy đề xuất, chủ kho chốt ở Cổng Phạm vi (Hỏi-1):
   tiêu chí đo theo hằng số, không theo con số.
 - Hai câu chờ chủ kho ở Cổng Phạm vi: Hỏi-1 (vòng đời — mục trên), Hỏi-2 (mục lặp — AC-2). Câu trả lời khác khuyến nghị
   thì máy sửa AC-2 hay AC-11 rồi trình lại.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Người dùng không thấy khác biệt nào. Chỉ là mấy con số thời gian của chuông thông báo được viết hơi lặp, sau này đổi một mốc phải sửa nhiều chỗ.
+  - Ngoài-2: Nếu sau này ai đó sửa nhầm việc dọn thông báo cũ, một thông báo của mục vẫn đang được nhắc mỗi ngày có thể bị xoá sớm và người dùng sẽ thấy thông báo đã đọc hiện lại như mới. Hiện chưa có bài kiểm nào bắt được lỗi kiểu đó.
+  - Ngoài-3: Lệnh đối chiếu số thông báo của chủ kho chạy trên dữ liệu thật lớn có thể báo lỗi hết giờ nếu ai đó gỡ mất giới hạn thời gian riêng của nó, và không bài kiểm nào cảnh báo trước.
+  - Ngoài-5: Người chạy lệnh đối chiếu thông báo lần đầu chỉ biết cần thêm một địa chỉ cơ sở dữ liệu riêng khi lệnh báo lỗi, vì chưa có dòng hướng dẫn nào trong tệp cấu hình mẫu.
+  - Ngoài-6: Nếu sau này một loại thông báo bị sửa lệch giữa hai nơi, một thông báo sai dạng có thể làm chuông và trang Thông báo của người đó báo lỗi tải cho tới khi thông báo bị dọn sau 90 ngày.
+  - Ngoài-7: Nếu sau này thêm một kết quả nhắc mới hay đổi tên kết quả cũ, báo cáo đối chiếu có thể đếm sai số người có kênh và không có kênh mà không ai hay.
+  - Ngoài-8: Phần đầu của ô thông báo trông và hoạt động đúng, nhưng được dựng riêng thay vì dùng thành phần chung, nên sau này đổi kiểu giao diện phải sửa hai nơi.
+  - Ngoài-9: Khi mở trang Thông báo ở hai thẻ trình duyệt và đọc một thông báo ở thẻ này, bấm «Xem thêm» ở thẻ kia có thể bỏ sót một thông báo chưa đọc, không có lời báo nào.
+  - Ngoài-10: Nếu mạng chập chờn lúc bấm một thông báo, bạn vẫn được đưa tới đúng chỗ nhưng thông báo vẫn chưa đọc và số trên chuông không giảm, không có dòng nào cho biết vì sao.
+  - Ngoài-11: Bài kiểm cho việc không nhân đôi thông báo dùng mục mẫu cố định, nên nếu sau này một loại mục lặp bị sinh thông báo mới mỗi sáng thì bài kiểm có thể vẫn báo xanh.
+  - Ngoài-12: Nếu sau này thêm một loại nhắc mới mà quên viết câu hiển thị cho nó, bài kiểm hiện tại có thể không bắt được và người dùng sẽ thấy thông báo thiếu câu.
+  - Ngoài-13: Phần chính của trang Thông báo (danh sách và bộ lọc) không được máy kiểm tra giao diện quét, nên lỗi kiểu dáng ở đó chỉ lộ ra khi người xem bằng mắt.
+  - Ngoài-14: Bài kiểm cho người chỉ dùng OKR chỉ xác nhận họ không bị từ chối, chưa xác nhận họ thật sự nhận được dữ liệu, nên một lỗi khác vẫn có thể lọt qua.
+  - Ngoài-15: Bài kiểm tình huống gửi Zalo hỏng rồi thử lại có thể báo xanh dù lần thử lại không thật sự chạy, nên việc không nhân đôi thông báo khi thử lại chưa được chứng minh chắc.
+  - Ngoài-17: Việc nhịp chạy mỗi phút có thật sự dọn thông báo quá 90 ngày chỉ được kiểm bằng cách đọc chữ trong mã, chưa được kiểm bằng việc chạy thật.
+  - Ngoài-18: Việc đường dẫn trong thông báo trùng với đường dẫn tin Zalo được kiểm gián tiếp, nên nếu hai bên lệch nhau sau này người dùng có thể bấm thông báo và đến chỗ khác với tin Zalo mà bài kiểm không báo.
+  - Ngoài-19: Chưa có bài kiểm nào giữ cho thông báo mới nhất luôn nằm trên cùng, nên nếu sau này thứ tự bị đảo, người dùng sẽ thấy thông báo cũ lên trước mà không bài kiểm nào báo.
+  - Ngoài-20: Bài kiểm «Xem thêm» chỉ đếm số dòng mỗi trang nên nếu trang sau lặp lại dòng của trang trước thì người dùng thấy thông báo trùng mà bài kiểm vẫn xanh.
