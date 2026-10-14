@@ -3,10 +3,10 @@ schema_version: 1
 slug: sua-giao-dien-tin-hieu
 feature: Người gửi tín hiệu đọc rõ hộp gửi và trang Tín hiệu đã gửi ở mọi khổ màn và mọi ngôn ngữ, thấy lỗi báo đúng chỗ, và đóng biên nhận không bị hỏi lại
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-14T08:00:20Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -56,10 +56,10 @@ SAU khi TH4 gộp; nếu TH4 chưa gộp lúc tới bước viết mã, máy g�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] người gửi tín hiệu trên production còn gặp lỗi nào trong tám lỗi U1–U8 không?
-- Kết quả nào là SỐNG: [đề xuất] lượt rà lại trên production, ở ba khổ 375 · 768–1100 · 1280 và hai ngôn ngữ, không còn lỗi nào trong tám lỗi; năm tín hiệu crm-1..5 được đánh dấu đã giao.
-- Kết quả nào là CHẾT: [đề xuất] còn từ một lỗi trở lên trong tám sau lượt rà → lặp một vòng sửa; còn sau vòng lặp thứ hai → dừng, đưa lỗi còn lại về bản phạm vi kế.
-- Timebox: [đề xuất] lượt rà lại trong 2 ngày kể từ ngày lên production.
+- Câu hỏi phép đo trả lời: người gửi tín hiệu trên production còn gặp lỗi nào trong tám lỗi U1–U8 không?
+- Kết quả nào là SỐNG: lượt rà lại trên production, ở ba khổ 375 · 768–1100 · 1280 và hai ngôn ngữ, không còn lỗi nào trong tám lỗi; năm tín hiệu crm-1..5 được đánh dấu đã giao.
+- Kết quả nào là CHẾT: còn từ một lỗi trở lên trong tám sau lượt rà → lặp một vòng sửa; còn sau vòng lặp thứ hai → dừng, đưa lỗi còn lại về bản phạm vi kế.
+- Timebox: lượt rà lại trong 2 ngày kể từ ngày lên production.
 
 ## Kết quả prototype
 
@@ -74,9 +74,9 @@ Chưa dựng. Vòng chạm màn hình: bản bấm được làm ở nghi thức
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
+- **decision = build** Căn cứ: chủ kho gõ trong phiên 14/10 «Cổng Đáng sua-giao-dien-tin-hieu: build ; ngưỡng: như đề xuất», trên khuyến nghị của máy bên dưới.
 - **disposition = —** Căn cứ: không có bản mẫu dựng trước Cổng Đáng.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng của mục «Ngưỡng chết / ngưỡng UAT» như máy đề xuất, đã gỡ tiền tố đề xuất.
 
 **Máy khuyến nghị:** `build`, một vòng T2 khoảng 10 tiêu chí (tám lỗi, cộng một tiêu chí khổ màn × ngôn ngữ
 và một tiêu chí không đổi dữ liệu đã lưu), ngưỡng như đề xuất. Lỗi đã thấy, có người thật gặp, sửa rẻ và
