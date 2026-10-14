@@ -5,7 +5,7 @@ slug: ke-hoach-sinh-viec
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-14T23:27:41Z
 design_doc: docs/superpowers/specs/2026-10-14-ke-hoach-sinh-viec-design.md
