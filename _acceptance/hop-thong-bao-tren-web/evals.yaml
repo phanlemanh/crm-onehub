@@ -1,0 +1,355 @@
+schema_version: 1
+slug: hop-thong-bao-tren-web
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htb_ghi
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "packages/db/src/thong-bao-ghi.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "packages/db/prisma/migrations/**"
+      - "apps/agent/test/thong-bao-ghi.integration.spec.ts"
+    expected: |
+      thong-bao-ghi.integration.spec.ts describe "htb-ghi" tren kho thu cua luot, dong ho gia 08:30 gio Viet Nam.
+      Gieo bang test/support/nhac-gieo ba nguoi: Z (ZaloLink + bot), S (SlackMemberMatch + tai khoan Slack), K (khong kenh);
+      moi nguoi co dung cac muc da biet (rut tap ma muc ky vong bang viecCanNhac + conMaDuoc tren cung kho, khong viet tay).
+      Chay lenLichNhac roi chayNhac cho tung nguoi (gui Zalo/Slack gia theo dung hop dong deps hien co). Ma tran viet truoc
+      3 nguoi x 4 o = 12 assert:
+        1 tap khoa thong bao cua nguoi == tap ma muc ky vong (khong thua, khong thieu)
+        2 moi thong bao: nguoiNhanId dung nguoi; parseNoiDungThongBao(noiDung) dung loai muc; duongDan khac rong
+        3 payload hang AgentTask cua nguoi co mucTinh.khoa == tap ma muc ky vong (doc lap voi bang ThongBao)
+        4 outcome hang AgentTask: Z, S = "da-gui"; K = "khong-khop" hoac "khong-slack" nhu truoc vong
+      CHIEU DO: ban sao dat buoc ghi thong bao SAU nhanh chon kenh -> o K-1 do voi thong diep ghim
+      "nguoi khong kenh khong co thong bao"; ban sao bo ghi payload -> o *-3 do voi thong diep ghim
+      "luot nhac khong ghi ma muc da tinh"; ban sao ghi mucTinh SAU ghiThongBao va tiem loi ghiThongBao cho K ->
+      o K-3 do voi thong diep ghim "danh sach muc da tinh mat khi ghi thong bao hong".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htb_gop
+    paths:
+      - "packages/db/src/thong-bao-ghi.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/agent/test/thong-bao-ghi.integration.spec.ts"
+    expected: |
+      describe "htb-gop", mot nguoi, mot muc M, dong ho gia qua bon sang lien tiep N1..N4 (gio Viet Nam). Ma tran viet truoc:
+        a N1 co M -> 1 thong bao (ngayDau N1)
+        b N2 co M, thong bao N1 chua doc -> van 1 thong bao; thayNgay == N2
+        c N2' (ca rieng) co M, thong bao N1 da doc -> van 1 thong bao (khong bao lai)
+        d N3 khong co M, N4 co M -> 2 thong bao; cai moi ngayDau N4
+        e chay lai chayNhac hai lan trong N1 (ca rieng) -> van 1 thong bao; hai loi goi dong thoi -> van 1
+        f ma tran rut tu THU_TU_NHAC (moi loai mot muc mau gieo bang duong ghi that, in ra so loai == THU_TU_NHAC.length):
+          hai sang lien tiep, ban ghi khong doi -> van 1 thong bao cho MOI loai
+        g muc gop "tai-lieu-cho-duyet": sang 1 co 3 tai lieu cho, sang 2 gieo them 2 -> van 1 thong bao, noiDung.so == 5;
+          tuong tu "okr-cap-nhat" them mot KR o sang 2 -> van 1 thong bao, noiDung mang KR moi
+      CHIEU DO: ban sao bo dieu kien "lien tuc" (luon tao moi) -> o b do voi thong diep ghim "muc lap sinh thong bao moi
+      moi sang"; ban sao cho khoa mang so dem -> o g do voi thong diep ghim "muc gop sinh thong bao moi khi so doi";
+      ban sao khong cap nhat noiDung khi gop -> o g do voi thong diep ghim "thong bao gop giu so cu"; ban sao chi gop khi chua doc -> o c do voi thong diep ghim "muc da doc bi bao lai";
+      ban sao bo rang buoc duy nhat -> o e (dong thoi) do voi thong diep ghim "chay lai nhan doi thong bao".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.htb_kenh
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "packages/db/src/thong-bao-ghi.ts"
+      - "apps/agent/test/thong-bao-ghi.integration.spec.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+      - "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json"
+    expected: |
+      describe "htb-kenh":
+        1 bo test nhac-qua-zalo.integration.spec.ts va nhac-viec.integration.spec.ts hien co chay xanh khong sua dong assert
+          nao (khoa bang: so dong expect( cua hai tep tai HEAD >= so dong tai 762acca38, in ra ca hai so)
+        2 ma tran rut tu THU_TU_NHAC (in so loai): chu tin Zalo gia va tin Slack gia cho moi loai == ban chup trong
+          apps/agent/test/fixtures/tin-nhac-truoc-tb1.json. Ban chup sinh tu ma o 762acca38 (chua sua nhac-ke-hoach.ts) va
+          duoc commit TRUOC moi commit sua nhac-ke-hoach.ts tren nhanh: test doc `git log --diff-filter=A --format=%H` cua
+          tep chup va `git log --format=%H 762acca38..HEAD -- apps/agent/agent/lib/nhac-ke-hoach.ts`, assert commit them
+          tep chup la to tien cua moi commit sua tep nhac (git merge-base --is-ancestor) — so tung byte
+        3 ghiThongBao nem loi (tiem qua deps) -> tin van gui (deps gui duoc goi dung 1 lan), hang AgentTask co
+          payload.thongBaoLoi khac rong, logger.error duoc goi
+        4 gui Zalo nem loi -> hang AgentTask van mo cho thu lai (nhu truoc vong), thong bao da ghi con nguyen; thu lai -> so
+          thong bao khong doi
+      CHIEU DO: ban sao de loi ghi thong bao noi len -> o 3 do voi thong diep ghim "ghi thong bao hong chan tin Zalo";
+      ban sao doi duong cua loai okr-hoi-y-gop trong ham dung chung -> o 2 do voi thong diep ghim "tin Zalo doi so voi
+      truoc vong".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.htb_chuong
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/components/app-header.tsx"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "apps/app/test/thong-bao.dom.tsx"
+    expected: |
+      thong-bao.dom.tsx describe "chuong": render AppHeader voi mock trpc. Ma tran viet truoc ba vai (owner, member, okr) x
+      bon so chua doc {0, 1, 99, 100} = 12 o:
+        1 nut [data-slot=chuong-thong-bao] co mat o moi vai
+        2 so canh chuong [data-slot=so-chua-doc]: 0 -> khong co phan tu; 1 -> "1"; 99 -> "99"; 100 -> "99+" (nguong rut tu THONG_BAO.tranSo)
+        3 aria-label cua nut chua so chua doc (rut tu tep loi, khong viet tay)
+      Them: mo chuong (bam nut) -> khong goi mutation nao, so khong doi.
+      Ca "hoi-lai" (dong ho gia, QueryClient that voi mock trpc): mock tra so 2 -> so canh chuong "2"; mock doi sang 5, tien
+      dong ho THONG_BAO.hoiLaiMs -> so "5" khong render lai trang; mock doi sang 7, phat visibilitychange (the hien lai) ->
+      so "7"; vung aria-live chua so moi o ca hai lan.
+      CHIEU DO: ban sao danh dau da doc khi mo chuong -> do voi thong diep ghim "mo chuong xoa so chua doc";
+      ban sao hien so khi 0 -> o 0 do voi thong diep ghim "chuong hien so 0"; ban sao bo hoi lai tren truy van so ->
+      ca hoi-lai do voi thong diep ghim "so chua doc khong tu cap nhat".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.htb_chuong
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/lib/thong-bao/**"
+      - "apps/app/test/thong-bao.dom.tsx"
+    expected: |
+      describe "chuong" ca "danh-sach", TZ=Asia/Ho_Chi_Minh, dong ho gia 2026-10-14T01:00Z (08:00 VN):
+        1 mock 25 thong bao, 3 tao luc 2026-10-13T17:30Z (00:30 VN ngay 14) va con lai ngay 13 VN -> nhom "Hôm nay" co dung 3,
+          "Trước đó" co phan con lai; tong dong hien == THONG_BAO.soTrenChuong; moi nhat tren cung
+        2 dong chua doc co [data-slot=status-indicator]; dong da doc khong co
+        3 moi dong la the a voi href == "/<slug>" + duongDan
+        4 chan co lien ket "Xem tất cả" tro /<slug>/thong-bao
+        5 ca rong, ca cho tai (khung xuong), ca loi (cau loi + nut Thu lai goi refetch) — moi ca mot assert, chu rut tu tep loi
+        6 ngon ngu en -> cau dong la ban tieng Anh cua cung loai
+      CHIEU DO: ban sao chia ngay theo UTC -> o 1 do voi thong diep ghim "Hôm nay tinh theo ngay UTC".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htb_api
+    paths:
+      - "apps/api/src/thong-bao/**"
+      - "apps/api/test/thong-bao.spec.ts"
+    expected: |
+      thong-bao.spec.ts describe "htb-mo": gieo 3 thong bao chua doc cho A. Goi thongBao.moMot(id cua thong bao 2):
+        1 hang do co docLuc va moLuc khac null, bang nhau va bang dong ho gia
+        2 hai hang kia khong doi
+        3 thongBao.chuong tra soChuaDoc == 2
+        4 goi lai moMot cung id -> moLuc khong doi (giu lan bam dau)
+      CHIEU DO: ban sao khong dat moLuc -> o 1 do voi thong diep ghim "bam mo khong ghi luc mo".
+
+  - id: E6b
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.htb_chuong
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/test/thong-bao.dom.tsx"
+    expected: |
+      describe "chuong" ca "bam": bam dong chua doc -> mutation moMot goi dung id mot lan, router chuyen toi
+      "/<slug>" + duongDan; Cmd+bam (metaKey) -> mutation van goi, khong chan dieu huong mac dinh cua the a;
+      useCrmCache lam moi so chua doc va danh sach.
+      CHIEU DO: ban sao chi danh dau khi bam thuong -> ca Cmd do voi thong diep ghim "mo the moi khong danh dau da doc".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htb_api
+    paths:
+      - "apps/api/src/thong-bao/**"
+      - "apps/api/test/thong-bao.spec.ts"
+    expected: |
+      describe "htb-doc-het": A co 4 chua doc + 1 da doc; B co 2 chua doc.
+        1 A goi docHet -> 4 hang chua doc cua A co docLuc; moLuc cua ca 5 hang van nhu truoc (null o 4 hang moi doc)
+        2 hai hang cua B khong doi (so sanh tung truong)
+        3 thongBao.chuong cua A tra 0
+        4 A goi docHet lan nua -> khong hang nao doi
+      CHIEU DO: ban sao bo where nguoiNhanId -> o 2 do voi thong diep ghim "danh dau het doi thong bao nguoi khac";
+      ban sao dat moLuc trong docHet -> o 1 do voi thong diep ghim "danh dau het ghi luc mo".
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.htb_chuong
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/test/thong-bao.dom.tsx"
+    expected: |
+      describe "chuong" ca "doc-het": so chua doc 0 -> nut "Đánh dấu tất cả đã đọc" disabled; so 3 -> bam -> mutation docHet
+      goi mot lan, so canh chuong bien mat sau khi mutation thanh cong; mutation loi -> so van 3 va toast.error goi voi cau
+      cua tep loi.
+      CHIEU DO: ban sao xoa so truoc khi mutation xong (lac quan khong hoan) -> ca loi do voi thong diep ghim
+      "loi danh dau het van xoa so".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.htb_trang
+    paths:
+      - "apps/app/app/(app)/[slug]/thong-bao/**"
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/app/test/thong-bao.dom.tsx"
+    expected: |
+      describe "trang": render trang voi mock trpc va nuqs adapter thu.
+        1 PageShellTitle == "Thông báo", co dung mot PageShellDescription
+        2 bam "Chưa đọc" -> URL co tham so loc; tai lai voi tham so do -> danhSach goi voi chiChuaDoc true
+        3 nhom theo ngay gio VN, moi nhat truoc; con trang sau -> nut "Xem thêm" goi fetchNextPage
+        4 loc chua doc rong -> cau "da doc het" + nut ve "Tất cả"; tai hong -> VungTaiLoi co Thu lai
+      CHIEU DO: ban sao giu loc trong useState -> o 2 do voi thong diep ghim "loc khong ghi tren duong dan".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htb_api
+    paths:
+      - "apps/api/src/thong-bao/**"
+      - "apps/api/test/thong-bao.spec.ts"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      describe "htb-cua-minh": A va B moi nguoi 3 thong bao. Ma tran viet truoc 4 thu tuc x 3 nguoi goi (A, B, khong phien):
+        chuong, danhSach -> A chi thay tap id cua A (so sanh voi truy van doc lap), B chi cua B; khong phien -> 401
+        moMot(id cua B) do A goi -> NOT_FOUND, hang cua B khong doi
+        docHet do A goi -> hang cua B khong doi
+      Nguoi vai okr goi du bon thu tuc -> khong bi tu choi; vai-chi-okr.spec.ts xanh voi bon thu tuc trong danh sach ghim.
+      CHIEU DO: ban sao dung AuthMiddleware tran -> vai okr do voi thong diep ghim "vai chi OKR khong mo duoc chuong".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.htb_duong
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "packages/db/src/thong-bao-ghi.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "apps/agent/test/thong-bao-duong.spec.ts"
+    expected: |
+      thong-bao-duong.spec.ts: ma tran rut tu THU_TU_NHAC (moi loai mot muc mau dung khuon, khong viet tay danh sach loai):
+        1 voi MOI loai: duongDan cua thong bao == duong cua tin Zalo cung muc sau khi bo "<APP_URL>/<slug>" (so chuoi)
+        2 voi MOI loai: ham dung cau cua app tra chuoi khac rong cho ca "vi" va "en", khong chua "undefined"
+        3 so loai trong ma tran == THU_TU_NHAC.length (in ra so)
+      CHIEU DO: ban sao them mot loai vao THU_TU_NHAC ma khong co cau -> o 2 do voi thong diep ghim "loai nhac thieu cau thong
+      bao"; ban sao duong thong bao tu ghep rieng cho okr-tra-lai -> o 1 do voi thong diep ghim "duong thong bao lech tin Zalo".
+
+  - id: E10b
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.htb_mat_dich
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/viec/**"
+      - "apps/app/test/thong-bao-mat-dich.dom.tsx"
+    expected: |
+      thong-bao-mat-dich.dom.tsx: ma tran viet truoc ba loai dich ma thong bao tro toi bang ?record= (viec, plan, objective) x
+      hai loi may chu (NOT_FOUND, FORBIDDEN) = 6 o. Mo dung duong dan cua thong bao voi mock query tra loi do:
+        1 ngan ban ghi mo va hien cau ly do cua tep loi cho loai loi do (khong rong, khong thong diep tho cua may chu)
+        2 khong render ranh gioi loi chung cua ung dung (trang-loi-tam)
+      CHIEU DO: ban sao nem loi len ranh gioi chung khi NOT_FOUND -> o *-NOT_FOUND do voi thong diep ghim "thong bao dan toi
+      ban ghi da xoa mo trang loi chung".
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htb_don
+    paths:
+      - "packages/db/src/thong-bao-ghi.ts"
+      - "apps/agent/agent/**/thong-bao*"
+      - "apps/agent/agent/schedules/**"
+      - "apps/agent/agent/lib/dispatch*"
+      - "apps/agent/test/thong-bao-ghi.integration.spec.ts"
+    expected: |
+      describe "htb-don", dong ho gia: gieo thong bao taoLuc = now - (THONG_BAO.giuNgay + 1) ngay, now - THONG_BAO.giuNgay ngay
+      + 1 gio, now - (THONG_BAO.giuNgay - 1) ngay. Chay luot don qua DUNG loi vao ma bo phat lich goi (ham cua lich quet
+      dinh ky co san, khong goi ham don tran):
+        1 chi hang thu nhat bi xoa (so sanh tap id)
+        2 so chua doc qua thongBao.chuong (goi truc tiep service) giam dung so hang bi xoa ma chua doc
+      CHIEU DO: ban sao so sanh <= thay vi < -> hang bien do (giuNgay - 1 gio) do voi thong diep ghim "don ca thong bao chua
+      qua han giu"; ban sao go buoc don thong bao khoi luot quet -> o 1 do voi thong diep ghim "luot don khong don thong bao".
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htb_doi_chieu
+    paths:
+      - "packages/db/src/thong-bao-doi-chieu.ts"
+      - "packages/db/scripts/thong-bao-doi-chieu.ts"
+      - "apps/agent/test/thong-bao-doi-chieu.integration.spec.ts"
+    expected: |
+      thong-bao-doi-chieu.integration.spec.ts tren kho thu: gieo ba ngay luot nhac THAT (chay lenLichNhac + chayNhac, khong chen tay hang
+      AgentTask) cho 4 nguoi (2 co kenh, 2 khong); bam mo 1 thong bao cua 1 nguoi khong kenh. Roi xoa tay dung 1 thong bao.
+        1 dong moi ngay: so nguoi co luot, co/khong kenh, so muc da tinh, so muc co thong bao, so muc mat — moi so == dem doc
+          lap bang Prisma tren cung kho
+        2 dong tong khoang: nguoi co thong bao == 4; da bam mo >= 1 == 1
+        3 dong muc mat goi dung khoa cua thong bao bi xoa; ma thoat 1
+        4 kho sach (khong xoa) -> ma thoat 0, so muc mat moi ngay 0
+        5 lenh tu choi chay khi khong co --tu/--den (ma 2, goi ten co thieu)
+        6 tiem loi ghiThongBao cho mot nguoi khong kenh trong mot ngay -> dong muc mat in du ma muc cua nguoi do, ma thoat 1
+        7 mot hang AgentTask nhac khong co payload.mucTinh (luot chet truoc khi ghi) -> ca luot tinh la mat, in ma hang, ma 1
+      CHIEU DO: ban sao dem muc da tinh tu chinh bang ThongBao (thay vi payload luot) -> o 6 do voi thong diep ghim
+      "doi chieu tu so voi chinh no"; ban sao bo qua hang thieu mucTinh -> o 7 do voi thong diep ghim "luot chet khong
+      tinh vao muc mat".
+
+  - id: E13
+    criterion: AC-13
+    executor: judgment
+    inputs:
+      - CONTEXT.md
+      - docs/superpowers/specs/2026-10-14-hop-thong-bao-tren-web-design.md
+    question: |
+      Doc muc «Thông báo» va muc «Nhắc buổi sáng» trong CONTEXT.md. (a) «Thông báo» co muc rieng noi no la gi, ai nhan, va
+      khac «Nhắc buổi sáng» o dau, khop voi tep thiet ke? (b) Muc «Nhắc buổi sáng» con ly do «kho không có bảng thông báo»
+      hay cau nao noi nguoc voi viec nay da co chuong? (c) Mot nguoi dung phong ban doc hai muc co phan biet duoc cai minh
+      nhan o chuong va cai minh nhan qua Zalo khong? Trich nguyen cau neu vi pham.
+    expected: |
+      PASS khi (a) co muc rieng du ba y va khop tep thiet ke, (b) khong con ly do cu va khong cau nao noi nguoc, (c) phan biet
+      ro. FAIL kem cau trich neu khong.
+
+  - id: E14
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.htb_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/hop-thong-bao-tren-web/evidence dat tuong minh: lenh cua htb_do_man (tien-de.mjs dung kho do rieng, nap thong bao qua duong ghi that cua luot nhac)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/hop-thong-bao-tren-web/evidence/
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/components/app-header.tsx"
+      - "apps/app/app/(app)/[slug]/thong-bao/**"
+      - "apps/app/lib/messages/thong-bao.ts"
+      - "_acceptance/hop-thong-bao-tren-web/rang/do-man.mjs"
+    expected: |
+      Nguoi do mang vai member, KHONG noi Zalo hay Slack; tien-de chay luot nhac that cho ho tren kho do rieng (muc Viec qua
+      han + muc OKR). Ma tran viet truoc 9 o, moi o mot dong DUNG/SAI va mot anh evidence/<canh>.png:
+        chuong-<man>-1280 voi man thuoc {tong-quan, okr, viec}: nut [data-slot=chuong-thong-bao] trong khung nhin, so canh chuong ==
+          so chua doc doc tu API cua chinh phien
+        mo-1280: bam chuong -> o bat ra co nhom "Hôm nay", dong muc Viec mang chu tieu de viec da gieo (du lieu may chu)
+        bam-1280: bam dong Viec -> URL chua record=viec:<id da gieo>; tai lai trang -> so canh chuong giam 1
+        doc-het-1280: mo lai chuong, bam "Đánh dấu tất cả đã đọc", tai lai -> khong con so canh chuong
+        chuong-375: bam chuong -> o bat ra nam tron trong khung nhin 375px, trang khong cuon ngang
+        trang-375: /thong-bao o 375px, loc "Chưa đọc" ghi tren URL, khong cuon ngang
+        trang-1280: /thong-bao nhom theo ngay
+      Anh: chuong co so, o bat ra o hai kho, trang lich su o hai kho.
+
+  - id: E15
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.htb_thiet_ke
+    paths:
+      - "apps/app/components/thong-bao/**"
+      - "apps/app/app/(app)/[slug]/thong-bao/**"
+    expected: |
+      design-gate.mjs --mode static cho tung tep .tsx duoi apps/app/components/thong-bao va trang thong-bao: khong P0.
+      CHIEU DO: ban sao them className doi mau cho mot Button -> P0 do.
