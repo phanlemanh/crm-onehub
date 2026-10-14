@@ -1692,6 +1692,12 @@ executors:
     kv_man_tra_ve: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-tra-ve"
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
+    vca_ma_tran: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-ma-tran"'
+    vca_bang: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-bang"'
+    vca_dem_con: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-dem-con"'
+    vca_khop_khung: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-khop-khung"'
+    vca_tinh_luc_doc: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-tinh-luc-doc"'
+    vca_quet: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-quet"'
   script:
     ltk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/luu-tru-truong-khong-hoi/rang/man.mjs"'
     ltk_san_thiet_ke: 'for t in apps/app/components/crm/fields/field-editor.tsx apps/app/components/crm/fields/fields-list.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
