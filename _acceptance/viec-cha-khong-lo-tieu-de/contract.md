@@ -5,7 +5,7 @@ slug: viec-cha-khong-lo-tieu-de
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: implemented
+status: verified
 approved_by: manh
 approved_at: 2026-10-14T07:01:21Z
 design_doc: docs/superpowers/specs/2026-10-14-viec-cha-khong-lo-tieu-de-design.md
