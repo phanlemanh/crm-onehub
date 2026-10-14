@@ -150,9 +150,17 @@ _Avoid_: onboarding, hồ sơ kế hoạch, dự án
 Vì sao: "onboarding" để nguyên thì màn lẫn tiếng; "hồ sơ" là tên trang riêng đã
 bỏ; "dự án" gợi một thứ có ngân sách và nghiệm thu, kế hoạch này thì không.
 
-**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một phòng ban, có hạn, có thể
-chưa giao cho ai. Được chép từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không
-đổi khuôn. Chốt 2026-09-22.
+**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một phòng ban, có hạn. Được chép
+từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không đổi khuôn. Chốt 2026-09-22. Từ hàng
+DA3 (2026-10-14), bước của kế hoạch tạo từ khuôn hay thêm tay mang đúng một **Việc** và
+là bản chiếu của Việc ấy: người làm, hạn, tên và xong lấy từ Việc — sửa ở bước hay ở
+Việc thì hai bên cùng đổi. Lúc tạo kế hoạch, người tạo chọn người làm cho từng phòng
+ban; mặc định là trưởng phòng, phòng chưa có trưởng phòng (hay trưởng phòng mang vai
+«chỉ OKR») thì là người cầm trịch. Việc của một bước không Huỷ, không xoá, không bỏ khỏi
+kế hoạch được — muốn bỏ thì dùng «Bỏ bước» ở kế hoạch, Việc chuyển Huỷ và còn lịch sử.
+Việc đã Huỷ thì bước không có người làm. Đóng kế hoạch còn việc dở thì hộp đóng hỏi có
+huỷ các việc đó không (đánh dấu sẵn); mở lại kế hoạch không tự hồi việc đã huỷ. Bước của
+kế hoạch tạo trước DA3 không mang Việc, có thể chưa giao cho ai và chạy như cũ.
 _Avoid_: task, việc cần làm, nhiệm vụ
 Vì sao: "việc cần làm" là một loại hoạt động khác đã có trên dòng thời gian —
 hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
@@ -165,7 +173,7 @@ hiện đổi trạng thái theo bảng của `docs/api.md` mục «Việc»; ng
 không đổi. Việc gắn ít nhất một bản ghi đối tác thì ai đọc được dữ liệu đối tác cũng thấy; việc không gắn
 gì là việc riêng, chỉ ba vai người trong cuộc thấy. Lượt này người vai «chỉ OKR» chưa dùng Việc (kể cả
 việc riêng). Thay dần «việc cần làm» trên dòng thời gian (hàng DA1b) và Việc (KR) (lượt V5); bước của kế
-hoạch 30 ngày vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
+hoạch 30 ngày tạo từ hàng DA3 mang một Việc (xem **Bước**), bước của kế hoạch cũ vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
 _Avoid_: task, nhiệm vụ, đầu việc
 Vì sao: khảo sát 05/10 thấy mọi hãng tách hai loại việc đều phải vá — «việc của
 tôi» nằm hai chỗ, quyền theo hai luật. Một chữ cho một loại việc chung cả CRM.

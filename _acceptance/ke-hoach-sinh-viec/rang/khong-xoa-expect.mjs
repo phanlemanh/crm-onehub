@@ -5,7 +5,8 @@ import path from "node:path";
 const GOC = path.resolve(import.meta.dirname, "..", "..", "..");
 // Mọi tệp kiểm ĐÃ CÓ ở mốc mà nhánh sửa (không riêng một danh sách tay): đo lời hứa AC-10 của
 // ke-hoach-sinh-viec trên đúng các tệp vòng này chạm.
-const MAU_TEP_KIEM = /(^|\/)test\/.*\.(spec|integration\.spec|dom)\.tsx?$|\.spec\.tsx?$/;
+const MAU_TEP_KIEM =
+	/(^|\/)test\/.*\.(spec|integration\.spec|dom)\.tsx?$|\.spec\.tsx?$/;
 function tepKiemDaSua(moc) {
 	return git("diff", "--name-only", "--diff-filter=M", moc, "HEAD")
 		.split("\n")
