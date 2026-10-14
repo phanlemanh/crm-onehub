@@ -5,7 +5,7 @@ slug: hop-thong-bao-tren-web
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-10-14T03:18:11Z
 design_doc: docs/superpowers/specs/2026-10-14-hop-thong-bao-tren-web-design.md

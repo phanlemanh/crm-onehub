@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: hop-thong-bao-tren-web
-verdict: REJECT
+verdict: PENDING-JUDGMENT
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b3a49cfd970f61d055c67aea5ef74c5ce31f1c54
+verified_commit: 73a5dd1a0e21b9d43f3168ae62941e173070182c
 human_signoff:
 ---
 
 # Evidence Report: hop-thong-bao-tren-web
 
-Lệnh suite không gắn eval nào bị đỏ: `bun run test -- --filter=api` (mã thoát khác 0). Không eval nào của hợp đồng đỏ; verdict REJECT do lệnh suite này. Một bài kiểm hết thời gian sau 60000ms: `vai-chi-okr > duong-ngoai-router`. Toàn gói api: 1806 qua, 5 bỏ qua, 1 đỏ. Chi tiết ở mục Iterations.
+Vòng 2. Các eval đụng đường dẫn đã sửa ở S4-r1 chạy lại; các eval còn lại mang nguyên từ vòng 1. Mục E13 là judgment: hội đồng đề xuất PASS nhưng người chưa chốt nên verdict tổng là PENDING-JUDGMENT.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,163 +32,157 @@ Lệnh suite không gắn eval nào bị đỏ: `bun run test -- --filter=api` (
 | E10b | AC-10 | test | PASS |
 | E11 | AC-11 | test | PASS |
 | E12 | AC-12 | test | PASS |
-| E13 | AC-13 | judgment | PASS |
+| E13 | AC-13 | judgment | PASS (hội đồng đề xuất, chờ người chốt) |
 | E14 | AC-4 | ui-check | PASS |
 | E15 | AC-5 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: mv7qovoeuqrw
+  run_id: minted-hop-thong-bao-tren-web-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.htb_ghi
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
   output: |
-    test-run: dropped crm_mv7qovoeuqrw_test
+    htb-ghi: ba người (Z, S, K) x bốn ô, chạy lenLichNhac rồi chayNhac
+    test-run: dropped crm_mv7rjm3qcysj_test
 
 - eval: E2
-  run_id: mv7qowl0lyg8
+  run_id: mv7rjlodgyia
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.htb_gop
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
   output: |
-    test-run: dropped crm_mv7qowl0lyg8_test
+    htb-gop: ma trận a đến g, gộp theo mục và theo loại
+    test-run: dropped crm_mv7rjlodgyia_test
 
 - eval: E3
-  run_id: minted-hop-thong-bao-tren-web-E3-r1
+  run_id: minted-hop-thong-bao-tren-web-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.htb_kenh
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
   output: |
-    test-run: dropped crm_mv7qoxjcmiyt_test
+    htb-kenh cùng nhac-qua-zalo.integration.spec.ts và nhac-viec.integration.spec.ts chạy xanh
 
 - eval: E4
-  run_id: minted-hop-thong-bao-tren-web-E4-r1
+  run_id: minted-hop-thong-bao-tren-web-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.htb_chuong
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
   output: |
-    Ran 19 tests across 1 file. [2.61s]
+    Ran 19 tests across 1 file. [2.64s]
 
 - eval: E5
   run_id: minted-hop-thong-bao-tren-web-E5-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_chuong
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    Ran 19 tests across 1 file. [2.61s]
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E6
   run_id: minted-hop-thong-bao-tren-web-E6-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_api
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    test-run: dropped crm_mv7qowv8gx7g_test
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E6b
   run_id: minted-hop-thong-bao-tren-web-E6b-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_chuong
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    Ran 19 tests across 1 file. [2.61s]
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E7
   run_id: minted-hop-thong-bao-tren-web-E7-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_api
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    test-run: dropped crm_mv7qowv8gx7g_test
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E7b
   run_id: minted-hop-thong-bao-tren-web-E7b-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_chuong
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    Ran 19 tests across 1 file. [2.61s]
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E8
   run_id: minted-hop-thong-bao-tren-web-E8-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_trang
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    Ran 6 tests across 1 file. [1442.00ms]
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E9
   run_id: minted-hop-thong-bao-tren-web-E9-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_api
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    test-run: dropped crm_mv7qowv8gx7g_test
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E10
-  run_id: mv7qoxw6ipgz
+  run_id: mv7rjo32y86q
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.htb_duong
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
   output: |
-    Ran 1 test across 1 file. [35.00ms]
+    Ran 1 test across 1 file. [34.00ms]
 
 - eval: E10b
   run_id: minted-hop-thong-bao-tren-web-E10b-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.htb_mat_dich
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    (đuôi đầu ra trống; ba lệnh bun test nối bằng && đều qua)
+    carry-forward từ round 1 — delta không chạm paths của eval
 
 - eval: E11
-  run_id: mv7qox8h92ek
+  run_id: mv7rjm8u1tng
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.htb_don
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
   output: |
-    test-run: dropped crm_mv7qox8h92ek_test
+    htb-don: dọn qua đúng lối vào của nhịp mỗi phút, kể cả ca mục còn nhắc liên tục
+    test-run: dropped crm_mv7rjm8u1tng_test
 
 - eval: E12
-  run_id: mv7qouxz3m9t
+  run_id: mv7rjnwpjqt2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.htb_doi_chieu
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
   output: |
-    test-run: dropped crm_mv7qouxz3m9t_test
-
-- eval: E13
-  judged_by: judge panel (3 góc nhìn, fresh context): domain-correctness, operational-feasibility, spec-alignment
-  verdict: PASS
-  rationale: Cả ba góc nhìn đều thấy CONTEXT.md có mục «Thông báo» riêng, khớp tệp thiết kế; mục «Nhắc buổi sáng» không còn câu cũ nói ngược; hai mục tách rõ nhắc qua Zalo hoặc Slack với thông báo trong chuông.
-  votes:
-    - domain-correctness: PASS — (a) mục «Thông báo» nói thông báo là một dòng CRM ghi cho một người, nằm ở chuông và trang Thông báo, có trạng thái đã đọc; mỗi mục nhắc thành một thông báo cho mọi người kể cả người chưa nối Zalo hay Slack. (b) tìm "bảng thông báo" và "không có bảng" trong CONTEXT.md không ra dòng nào; mục Nhắc buổi sáng chỉ sang chuông. (c) nhắc là một tin gom gửi qua kênh ngoài CRM, thông báo là từng mục lưu trong CRM.
-    - operational-feasibility: PASS — mục riêng «Thông báo» khớp một câu và mục L1–L2 của tệp thiết kế; mục Nhắc buổi sáng không còn câu «kho không có bảng thông báo»; dòng «Vì sao» dẫn sang chuông và Zalo/Slack nên người dùng phòng ban phân biệt được.
-    - spec-alignment: PASS — mục «Thông báo» (dòng 310-317) và «Nhắc buổi sáng» (dòng 300-308) khớp «Một câu», L1, L3 của tệp thiết kế; không còn câu ngược; hai mục tách rõ tin riêng qua Zalo hoặc Slack với dòng trong chuông.
-  human_override:  # chi nguoi ghi
+    thong-bao-doi-chieu.integration.spec.ts: tám ca, kể cả ca đọc bảng ThongBao một lần
+    test-run: dropped crm_mv7rjnwpjqt2_test
 
 - eval: E14
   run_id: minted-hop-thong-bao-tren-web-E14-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.script.htb_do_man
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   screenshot: evidence/E14-step1.png
   observed: |
     chuong-tong-quan-1280: man Chao ban 1280px, o dau trang co chuong voi so "2" canh nut Dang tra cuu / Gui tin hieu; bang "Viec qua han - 2 viec" liet ke hai viec Do man (gui bao gia Hoa Phat, chot lich ky Vinamilk) khop so 2.
@@ -201,52 +195,63 @@ Lệnh suite không gắn eval nào bị đỏ: `bun run test -- --filter=api` (
     trang-375: /thong-bao o 375px, hai chip "Tat ca" / "Chua doc" voi "Chua doc" dang chon, hien trang thai rong "Ban da doc het" (dung vi da doc het truoc do), khong cuon ngang.
     trang-1280: /thong-bao 1280px, tieu de Thong bao, chip Tat ca dang chon, nhom "Hom nay" voi hai dong viec qua han va gio 13:39. Tat ca khop Expected; khong co anh nao mau thuan.
   network_observed: n-a (driver)
+  note: carry-forward từ round 1 — delta không chạm paths của eval; khung ảnh là của lượt gốc
 
 - eval: E15
   run_id: design-gate-6f686b415c, design-gate-3692c341b4
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.script.htb_thiet_ke
   verified_at: 2026-10-14T06:38:52Z
+  carried_from_round: 1
   output: |
-    (đuôi đầu ra chỉ còn dấu đóng khối JSON; kết quả lấy từ mã thoát 0 của cả vòng lặp design-gate tĩnh trên từng tệp)
+    carry-forward từ round 1 — delta không chạm paths của eval
+
+- eval: E13
+  judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment), fresh context
+  verdict: PASS
+  rationale: Cả ba góc nhìn cùng thấy CONTEXT.md có mục «Thông báo» riêng, khớp tệp thiết kế; mục «Nhắc buổi sáng» không còn câu nói ngược; hai mục phân biệt được chuông trong CRM với tin gom qua Zalo hoặc Slack.
+  human_override:  # chi nguoi ghi
+  panel: đề xuất PASS. Phiếu từng góc nhìn:
+  - domain-correctness: PASS — (a) CONTEXT.md có mục «Thông báo» riêng: một dòng CRM ghi cho một người, nằm ở chuông và trang Thông báo, ghi cho mọi người kể cả người chưa nối Zalo hay Slack, và khác nhắc ở chỗ nhắc là một tin gom gửi qua kênh ngoài CRM còn thông báo là từng mục lưu trong CRM; khớp tệp thiết kế. (b) Mục «Nhắc buổi sáng» không còn câu «kho không có bảng thông báo» hay câu nào nói ngược, và trỏ sang mục Thông báo. (c) Hai mục dùng chữ thường, người dùng phòng ban phân biệt được cái nhận ở chuông với cái nhận qua Zalo.
+  - operational-feasibility: PASS — mục «Thông báo» (dòng 310-314) phân biệt rõ với «Nhắc buổi sáng» (dòng 300-308), khớp tệp thiết kế về chuông, trang thông báo, mọi vai, ghi trước khi chọn kênh, Zalo và Slack không đổi. Mục «Nhắc buổi sáng» không còn câu nói ngược. Người dùng phòng ban đọc hai mục sẽ phân biệt được.
+  - spec-alignment: PASS — (a) có mục «Thông báo» riêng, mỗi mục của nhắc buổi sáng thành một thông báo cho mọi người, khớp tệp thiết kế. (b) Không còn câu nói ngược ở mục «Nhắc buổi sáng», mục này còn chỉ sang chuông. (c) Dòng «Vì sao» nói rõ lẫn hai thì người dùng đi tìm tin Zalo trong chuông hay tìm chuông trong Zalo, nên phân biệt được.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_api-r1
-  exit_code: 1
-  verified_at: 2026-10-14T06:38:52Z
+  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_api-r2
+  exit_code: 0
+  verified_at: 2026-10-14T07:02:55Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-hop-thong-bao-tren-web-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-hop-thong-bao-tren-web-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
 
 - cmd: bun run lint:slop
-  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_lint_slop-r1
+  run_id: minted-hop-thong-bao-tren-web-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-hop-thong-bao-tren-web-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-hop-thong-bao-tren-web-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-14T06:38:52Z
+  verified_at: 2026-10-14T07:02:55Z
 
 ## Known limits
 
@@ -254,26 +259,22 @@ Lệnh suite không gắn eval nào bị đỏ: `bun run test -- --filter=api` (
 
 ## Analyst
 
-none — không eval nào xanh trên cả hai phía (HEAD và baseline). Lưu ý: baseline của mọi eval feature là n-a, nên chưa có bằng chứng «red trên baseline»; lý do ở mục dưới.
+none — không eval nào xanh trên cả baseline lẫn HEAD. Baseline không đo được cho các lệnh của vòng này (xem dưới), nên cột baseline là n-a chứ không phải red.
 
-Baseline không đo
-
+Baseline khong do
 - bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-ghi": bo qua baseline: tep apps/agent/test/thong-bao-ghi.integration.spec.ts co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-gop": bo qua baseline: tep apps/agent/test/thong-bao-ghi.integration.spec.ts co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-kenh && TZ=Asia/Ho_Chi_Minh bun test test/nhac-qua-zalo.integration.spec.ts test/nhac-viec.integration.spec.ts": bo qua baseline: tep apps/agent/test/thong-bao-ghi.integration.spec.ts co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
 - cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao.dom.tsx -t chuong: bo qua baseline: tep apps/app/test/thong-bao.dom.tsx co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao.spec.ts test/vai-chi-okr.spec.ts": bo qua baseline: tep apps/api/test/thong-bao.spec.ts co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao.dom.tsx -t trang: bo qua baseline: tep apps/app/test/thong-bao.dom.tsx co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-duong.spec.ts" && cd apps/app && bun test ./test/thong-bao-cau.spec.ts: bo qua baseline: tep apps/agent/test/thong-bao-duong.spec.ts co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thong-bao-mat-dich.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t 'klg-khong-con|klg-khong-quyen' && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx -t khong-thay: bo qua baseline: tep apps/app/test/thong-bao-mat-dich.dom.tsx co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-ghi.integration.spec.ts -t htb-don": bo qua baseline: tep apps/agent/test/thong-bao-ghi.integration.spec.ts co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/thong-bao-doi-chieu.integration.spec.ts": bo qua baseline: tep apps/agent/test/thong-bao-doi-chieu.integration.spec.ts co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
-- for f in apps/app/components/thong-bao/*.tsx "apps/app/app/(app)/[slug]/thong-bao/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done: bo qua baseline: tep apps/app/app/(app)/[slug]/thong-bao/page.tsx co o cay dang kiem nhung chua co o merge-base aac0975b5e8358f51f6a3d3b84a80e1d736bfce2 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — every multi-run eval is uniform (mọi eval chạy một lần, xác định).
 
 ## Iterations
 
-Round 1: không eval nào của hợp đồng đỏ (failed_evals rỗng). Lệnh suite `bun run test -- --filter=api` đỏ và không gắn eval: 1806 bài qua, 5 bỏ qua, 1 đỏ — `vai-chi-okr > duong-ngoai-router` hết thời gian sau 60000ms. Cùng tệp `test/vai-chi-okr.spec.ts` đã qua khi chạy riêng trong lệnh của E6, E7, E9; chưa kết luận được là lỗi mã hay chập chờn do tải, cần chạy lại lượt mới. review-findings.md còn hai mục trong hợp đồng (AC-12, AC-2). Returned to implementation.
+Round 1: lệnh suite `bun run test -- --filter=api` đỏ, tổng vòng REJECT; finder ghi các mục ngoài hợp đồng. Quay lại implementation (S4-r1: đối chiếu đọc một lần trong giao dịch có trần riêng; dọn chừa mục còn nhắc liên tục).
+Round 2: các eval đụng đường dẫn đã sửa (E1, E2, E3, E4, E10, E11, E12) và cả bảy lệnh suite chạy lại, đều xanh; các eval còn lại mang nguyên từ vòng 1. Verdict PENDING-JUDGMENT vì E13 chờ người chốt ở Cổng Bằng chứng.
