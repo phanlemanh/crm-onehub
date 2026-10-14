@@ -73,6 +73,12 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.mth_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/moi-tin-hieu-cho-quan-tri/evidence dat tuong minh: lenh cua mth_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh evidence/E3-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/moi-tin-hieu-cho-quan-tri/evidence/
     paths:
       - "apps/app/app/(app)/[slug]/tin-hieu/**"
       - "apps/app/components/tin-hieu/**"
@@ -283,6 +289,12 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.mth_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/moi-tin-hieu-cho-quan-tri/evidence dat tuong minh: lenh cua mth_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh evidence/E10b-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/moi-tin-hieu-cho-quan-tri/evidence/
     paths:
       - "apps/app/app/(app)/[slug]/tin-hieu/**"
       - "apps/app/components/tin-hieu/**"
