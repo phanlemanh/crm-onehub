@@ -232,3 +232,12 @@ Soát bản nháp `apps/app/app/proto/_modules/sua-giao-dien-tin-hieu/ban-moi.ts
   `role="alert"` nên được đọc ngay khi hiện.
 - Lệch có chủ ý: chuẩn khuyên nút gửi luôn bấm được rồi báo lỗi; LT2 đã ký «khoá khi một ô rỗng». Vòng này giữ khoá và
   thêm dòng nói vì sao (AC-6) thay vì đổi hành vi đã ký.
+
+## Lối mở chờ Cổng Phạm vi — câu trạng thái sau gom song ngữ
+
+Câu sau gom hiện là câu kit viết (`cau_nguoi_gui`), chỉ có tiếng Việt, nên giao diện tiếng Anh hiện câu Việt. Bản ghi
+kit đã mang mã máy đọc (`cho`, `ten_nhom`, `ly_do`, `hang`, `ho_so`, `trang_thai`). Nếu chủ kho chọn làm (máy khuyên),
+vòng thêm **AC-12**: CRM dựng câu từ `cho` + tệp lời vi/en — tên nhóm, lý do và tên việc giữ nguyên chữ người viết
+(`translate="no"`); `cho` lạ hay thiếu trường thì rơi về `cau_nguoi_gui`. Bài đo: ma trận mọi giá trị `CHO_TIN_HIEU` (và
+mọi nhóm trạng thái của hàng) × {vi, en}, khối mẫu rút từ bộ vẽ kit thật như LT2 E9. Ô E10 của LT2 («câu kit nguyên
+văn») khai thay thêm, trỏ AC-12. Không chọn → giữ câu kit, ghi Known limit.
