@@ -1201,6 +1201,43 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "lich-su-va-luu-tru-trang",
+		ten: "Kho tài liệu — lịch sử phiên bản, quay lại bản cũ, lưu trữ trang",
+		states: [
+			{ id: "ST-lich-su-nhieu-ban", nhan: "Lịch sử — ba phiên bản" },
+			{
+				id: "ST-lich-su-mot-ban",
+				nhan: "Lịch sử — trang mới có một phiên bản",
+			},
+			{ id: "ST-ban-cu-so-sanh", nhan: "Phiên bản cũ — so với bản đang dùng" },
+			{ id: "ST-ban-cu-toan-van", nhan: "Phiên bản cũ — toàn văn" },
+			{
+				id: "ST-ban-cu-dang-dung",
+				nhan: "Phiên bản cũ — chọn đúng bản đang dùng",
+			},
+			{ id: "ST-doc-hop-luu-tru", nhan: "Màn đọc — hộp đề xuất lưu trữ" },
+			{
+				id: "ST-doc-cho-luu-tru",
+				nhan: "Màn đọc — đã có đề xuất lưu trữ chờ duyệt",
+			},
+			{ id: "ST-doc-da-luu-tru", nhan: "Màn đọc — trang đã lưu trữ" },
+			{ id: "ST-duyet-luu-tru", nhan: "Màn duyệt — đề xuất lưu trữ trang" },
+			{
+				id: "ST-duyet-quay-lai",
+				nhan: "Màn duyệt — đề xuất quay lại phiên bản 1",
+			},
+			{ id: "ST-ds-da-luu-tru", nhan: "Danh sách — Đã lưu trữ" },
+			{
+				id: "ST-ds-da-luu-tru-rong",
+				nhan: "Danh sách — Đã lưu trữ, chưa có trang nào",
+			},
+			{
+				id: "ST-cho-duyet-da-xu-ly",
+				nhan: "Chờ duyệt — Đã xử lý có cả đề xuất đã duyệt",
+			},
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

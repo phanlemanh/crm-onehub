@@ -3,6 +3,7 @@
 import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
 	Card,
@@ -44,6 +45,7 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
+import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 import { duongSuaTuDeXuat, duongTrang, ngayTaiLieu } from "@/lib/tai-lieu-man";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -64,6 +66,7 @@ export type DeXuatDuyet = {
 	dai: SoDoi[];
 	may?: BanMay;
 	chienLuoc?: { soKyTu: number; tranKyTu: number; canhBaoTuCam: string[] };
+	tuPhienBanSo?: number | null;
 };
 
 type LoiMay = {
@@ -219,6 +222,15 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 					}
 					data-de-xuat={deXuat.id}
 				>
+					{deXuat.tuPhienBanSo ? (
+						<div>
+							<Badge data-quay-lai={deXuat.tuPhienBanSo} variant="secondary">
+								{dien(taiLieuLichSuMessages(locale).luuTru.duyet.quayLai, {
+									so: deXuat.tuPhienBanSo,
+								})}
+							</Badge>
+						</div>
+					) : null}
 					{deXuat.cu ? (
 						<Alert data-de-xuat-cu="" role="note" variant="warning">
 							<Icon icon={WarningAlt} />

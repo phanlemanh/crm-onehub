@@ -1,7 +1,11 @@
 import type { Db } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import { dieuKienThay, dieuKienThayDeXuat } from "@crm/db/tai-lieu-quyen";
-import { type HangTimKho, timTrangDangDung } from "@crm/db/tai-lieu-tim";
+import {
+	DIEU_KIEN_DANG_DUNG,
+	type HangTimKho,
+	timTrangDangDung,
+} from "@crm/db/tai-lieu-tim";
 import { type LoaiTrang, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { cauChuaLienKet, chuThuong } from "@crm/validation/tai-lieu-markdown";
 import { doanTrich, dungTruyVan } from "@crm/validation/tai-lieu-tim";
@@ -79,7 +83,7 @@ export class TaiLieuTimService {
 		const lienKet = await this.db.taiLieuLienKet.findMany({
 			where: {
 				denSlug: slug,
-				tuTrang: { banDangDungId: { not: null }, slug: { not: slug } },
+				tuTrang: { ...DIEU_KIEN_DANG_DUNG, slug: { not: slug } },
 			},
 			distinct: ["tuTrangId"],
 			select: {
@@ -101,7 +105,7 @@ export class TaiLieuTimService {
 	}
 
 	async boLoc(nguoi: NguoiGoi): Promise<TaiLieuBoLocOutput> {
-		const thay = dieuKienThay(nguoi);
+		const thay = { AND: [dieuKienThay(nguoi), { archivedAt: null }] };
 		const [theoDonVi, theoChu] = await Promise.all([
 			this.db.taiLieuTrang.groupBy({
 				by: ["departmentId"],
@@ -147,9 +151,9 @@ export class TaiLieuTimService {
 			this.hoiKho.danhSachChuaTraLoi(nguoi),
 			this.hoiKho.danhSachBaoSai(nguoi),
 		]);
-		const [dangDung, lienKet, cho] = await Promise.all([
+		const [dangDung, daLuuTru, lienKet, cho] = await Promise.all([
 			this.db.taiLieuTrang.findMany({
-				where: { banDangDungId: { not: null } },
+				where: DIEU_KIEN_DANG_DUNG,
 				select: {
 					id: true,
 					slug: true,
@@ -159,8 +163,12 @@ export class TaiLieuTimService {
 					banDangDung: { select: { duyetLuc: true } },
 				},
 			}),
+			this.db.taiLieuTrang.findMany({
+				where: { banDangDungId: { not: null }, archivedAt: { not: null } },
+				select: { slug: true },
+			}),
 			this.db.taiLieuLienKet.findMany({
-				where: { tuTrang: { banDangDungId: { not: null } } },
+				where: { tuTrang: DIEU_KIEN_DANG_DUNG },
 				select: { tuTrangId: true, denSlug: true, vanBan: true },
 				orderBy: { id: "asc" },
 			}),
@@ -177,7 +185,7 @@ export class TaiLieuTimService {
 			select: { id: true, slug: true, ten: true, chuTrang: NGUOI },
 		});
 		const theoId = new Map(dangDung.map((t) => [t.id, t]));
-		const slugDung = new Set(dangDung.map((t) => t.slug));
+		const slugDung = new Set([...dangDung, ...daLuuTru].map((t) => t.slug));
 		const coNguoiDanToi = new Set(
 			lienKet
 				.filter((l) => theoId.get(l.tuTrangId)?.slug !== l.denSlug)
