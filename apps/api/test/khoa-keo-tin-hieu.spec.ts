@@ -256,9 +256,10 @@ describe("tvk-lich", () => {
 					"luot khong noi luc dong dau",
 				).not.toBeUndefined();
 				expect(new Set(vuaDau)).toEqual(new Set([day1.dongDauLuc ?? ""]));
-				expect(day1.tep.map((t) => t.keoVeLuc)).toEqual(
-					hang.map((h) => h.keoVeLuc?.toISOString()),
-				);
+				expect(
+					day1.tep.map((t) => t.keoVeLuc),
+					"luot keo ve bo tin hieu da dau",
+				).toEqual(hang.map((h) => h.keoVeLuc?.toISOString()));
 				const khoaTay = await auth.api.createApiKey({
 					body: { name: "tvk-tay", userId: uid("owner") },
 				});
@@ -463,6 +464,7 @@ describe("tvk-khoa-thuong", () => {
 			const moi = await khoaThuong("member");
 			expect(
 				(await db.apikey.findUniqueOrThrow({ where: { id: moi.id } })).configId,
+				"khoa thuong cu mat phien",
 			).toBe(macDinh ?? "");
 			const cu = await khoaThuong("member");
 			await db.$executeRaw`UPDATE "apikey" SET "configId" = DEFAULT WHERE id = ${cu.id}`;
