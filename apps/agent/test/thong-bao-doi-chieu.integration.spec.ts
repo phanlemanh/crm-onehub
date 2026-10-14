@@ -165,6 +165,23 @@ describe("htb-doi-chieu", () => {
 		expect(r.stdout).toContain("da bam mo it nhat mot 1");
 	});
 
+	test("htb-doi-chieu: 8 — doc bang thong bao mot lan, khong lap theo luot", async () => {
+		let goi = 0;
+		const dem = new Proxy(db, {
+			get(dich, ten, nhan) {
+				if (ten !== "thongBao") return Reflect.get(dich, ten, nhan);
+				return new Proxy(dich.thongBao, {
+					get(bang, khoa, nhanBang) {
+						if (khoa === "findMany") goi += 1;
+						return Reflect.get(bang, khoa, nhanBang);
+					},
+				});
+			},
+		});
+		await doiChieu(dem, { tu: NGAY[0], den: NGAY[2] });
+		expect(goi, "doi chieu doc bang thong bao theo tung luot").toBe(1);
+	});
+
 	test("htb-doi-chieu: 5 — thieu co thi ma 2 goi ten co", () => {
 		const r = lenh("--tu", NGAY[0]);
 		expect(r.status).toBe(2);

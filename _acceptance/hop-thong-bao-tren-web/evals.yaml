@@ -276,6 +276,7 @@ evals:
       (donThongBaoDinhKy, khong goi ham don tran); them o noi lich: dispatch.ts goi donThongBaoDinhKy trong Promise.all dau cua run:
         1 chi hang thu nhat bi xoa (so sanh tap id)
         2 so chua doc qua thongBao.chuong (goi truc tiep service) giam dung so hang bi xoa ma chua doc
+        3 (r2) thong bao taoLuc qua han giu nhung thayNgay == hom nay (muc con nhac lien tuc) -> KHONG bi xoa
       CHIEU DO: ban sao so sanh <= thay vi < -> hang bien do (giuNgay - 1 gio) do voi thong diep ghim "don ca thong bao chua
       qua han giu"; ban sao go buoc don thong bao khoi luot quet -> o 1 do voi thong diep ghim "luot don khong don thong bao".
 
@@ -299,6 +300,8 @@ evals:
         5 lenh tu choi chay khi khong co --tu/--den (ma 2, goi ten co thieu)
         6 tiem loi ghiThongBao cho mot nguoi khong kenh trong mot ngay -> dong muc mat in du ma muc cua nguoi do, ma thoat 1
         7 mot hang AgentTask nhac khong co payload.mucTinh (luot chet truoc khi ghi) -> ca luot tinh la mat, in ma hang, ma 1
+        8 (r2) doiChieu doc bang ThongBao dung mot lan cho ca khoang ba ngay (dem bang Proxy quanh db); lenh CLI chay giao
+          dich chi-doc voi tran THONG_BAO.doiChieu.tranGiaoDichMs
       CHIEU DO: ban sao dem muc da tinh tu chinh bang ThongBao (thay vi payload luot) -> o 6 do voi thong diep ghim
       "doi chieu tu so voi chinh no"; ban sao bo qua hang thieu mucTinh -> o 7 do voi thong diep ghim "luot chet khong
       tinh vao muc mat".

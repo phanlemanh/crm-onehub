@@ -26,10 +26,15 @@ const { coMat, doiChieu, inKetQua } = await import(
 	"../agent/lib/thong-bao-doi-chieu"
 );
 
-const kq = await db.$transaction(async (tx) => {
-	await tx.$executeRaw`SET TRANSACTION READ ONLY`;
-	return doiChieu(tx as typeof db, { tu, den });
-});
+const { THONG_BAO } = await import("@crm/validation/thong-bao");
+
+const kq = await db.$transaction(
+	async (tx) => {
+		await tx.$executeRaw`SET TRANSACTION READ ONLY`;
+		return doiChieu(tx as typeof db, { tu, den });
+	},
+	{ timeout: THONG_BAO.doiChieu.tranGiaoDichMs },
+);
 console.log(`may ${new URL(url).host}`);
 console.log(inKetQua(kq));
 await db.$disconnect();

@@ -85,7 +85,7 @@ Thứ tự thi công bắt buộc: commit đầu tiên của S3 là bản chụp
 Router `thongBao` (module mới `apps/api/src/thong-bao/`): `chuong` (số chưa đọc + 20 thông báo mới nhất), `danhSach`
 (phân trang theo con trỏ, `chiChuaDoc`), `moMot(id)` (đặt `docLuc`, `moLuc`; của người khác → NOT_FOUND),
 `docHet()` (đặt `docLuc` cho mọi chưa đọc của người gọi). Mọi truy vấn lọc `nguoiNhanId = người gọi`. Lịch dọn: hàng
-quá 90 ngày (theo `taoLuc`) xoá bởi bước dọn mới trong nhịp chạy mỗi phút của agent (`schedules/dispatch.ts`, cạnh `kiemBot` đang dọn bảng Zalo) — tác nhân không có lượt dọn định kỳ nào sẵn để nối vào (đo ở S2).
+quá 90 ngày (theo `taoLuc`) mà mục đã thôi nằm liên tục trong danh sách nhắc (`thayNgay` trước hôm qua) xoá bởi bước dọn mới trong nhịp chạy mỗi phút của agent (`schedules/dispatch.ts`, cạnh `kiemBot` đang dọn bảng Zalo) — tác nhân không có lượt dọn định kỳ nào sẵn để nối vào (đo ở S2).
 
 ## Giao diện (app)
 

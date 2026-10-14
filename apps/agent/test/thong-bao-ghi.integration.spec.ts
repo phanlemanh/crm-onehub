@@ -513,6 +513,28 @@ describe("htb-don", () => {
 		).toBe(chuaDocTruoc - 1);
 	});
 
+	test("htb-don: thong bao cu nhung muc con nhac lien tuc thi khong bi don", async () => {
+		const now = new Date("2026-10-14T03:00:00Z");
+		const A = await gieoNguoi("LienTuc");
+		const h = await db.thongBao.create({
+			data: {
+				nguoiNhanId: A.id,
+				nguon: THONG_BAO.nguon.nhacBuoiSang,
+				khoa: "viec-qua-han:lien-tuc",
+				noiDung: { ...MUC_MAU["viec-qua-han"], viecId: "lien-tuc" },
+				duongDan: "/viec",
+				taoLuc: new Date(now.getTime() - (THONG_BAO.giuNgay + 5) * DAY_MS),
+				ngayDau: "2026-07-01",
+				thayNgay: "2026-10-14",
+			},
+		});
+		await donThongBaoDinhKy(now);
+		expect(
+			await db.thongBao.count({ where: { id: h.id } }),
+			"don xoa thong bao cua muc con nhac lien tuc",
+		).toBe(1);
+	});
+
 	test("htb-don: nhip moi phut goi buoc don", () => {
 		const nguon = readFileSync(
 			join(GOC_KHO, "apps/agent/agent/schedules/dispatch.ts"),

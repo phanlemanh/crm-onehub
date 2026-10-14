@@ -64,6 +64,7 @@ export async function donThongBaoCu(db: Db, now: Date): Promise<number> {
 	const { count } = await db.thongBao.deleteMany({
 		where: {
 			taoLuc: { lt: new Date(now.getTime() - THONG_BAO.giuNgay * DAY_MS) },
+			thayNgay: { lt: ngayVN(new Date(now.getTime() - DAY_MS)) },
 		},
 	});
 	return count;

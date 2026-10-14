@@ -30,14 +30,34 @@ export async function doiChieu(
 		where: { kind: LOAI_VIEC_NHAC, subject: { not: null } },
 		select: { id: true, subject: true, payload: true, outcome: true },
 	});
-	const theoNgay = new Map<string, DongNgay>();
-	const nguoiTrongKhoang = new Set<string>();
-	for (const l of luot) {
+	const trongKhoang = luot.flatMap((l) => {
 		const khop = CHU_DE.exec(l.subject ?? "");
 		const userId = khop?.[1];
 		const ngay = khop?.[2];
-		if (!userId || !ngay || ngay < khoang.tu || ngay > khoang.den) continue;
-		nguoiTrongKhoang.add(userId);
+		return userId && ngay && ngay >= khoang.tu && ngay <= khoang.den
+			? [{ ...l, userId, ngay }]
+			: [];
+	});
+	const nguoiTrongKhoang = new Set(trongKhoang.map((l) => l.userId));
+	const thongBao = await db.thongBao.findMany({
+		where: {
+			nguoiNhanId: { in: [...nguoiTrongKhoang] },
+			thayNgay: { gte: khoang.tu },
+			ngayDau: { lte: khoang.den },
+		},
+		select: { nguoiNhanId: true, khoa: true, ngayDau: true, thayNgay: true },
+	});
+	const phu = (userId: string, khoa: string, ngay: string) =>
+		thongBao.some(
+			(h) =>
+				h.nguoiNhanId === userId &&
+				h.khoa === khoa &&
+				h.ngayDau <= ngay &&
+				h.thayNgay >= ngay,
+		);
+	const theoNgay = new Map<string, DongNgay>();
+	for (const l of trongKhoang) {
+		const { userId, ngay } = l;
 		const d = theoNgay.get(ngay) ?? {
 			ngay,
 			nguoiCoLuot: 0,
@@ -58,22 +78,9 @@ export async function doiChieu(
 			d.luotThieuDanhSach.push(l.id);
 			continue;
 		}
-		const co = new Set(
-			(
-				await db.thongBao.findMany({
-					where: {
-						nguoiNhanId: userId,
-						khoa: { in: mucTinh.khoa },
-						thayNgay: { gte: ngay },
-						ngayDau: { lte: ngay },
-					},
-					select: { khoa: true },
-				})
-			).map((h) => h.khoa),
-		);
 		for (const khoa of mucTinh.khoa) {
 			d.mucDaTinh += 1;
-			if (co.has(khoa)) d.mucCoThongBao += 1;
+			if (phu(userId, khoa, ngay)) d.mucCoThongBao += 1;
 			else d.mucMat.push({ userId, khoa });
 		}
 	}
