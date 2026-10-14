@@ -449,7 +449,7 @@ describe("htb-kenh", () => {
 				appUrl: APP_URL,
 			}).then(
 				() => "khong nem",
-				(e: unknown) => (e instanceof Error ? e.message : "nem"),
+				(e: Error) => e.message,
 			),
 		);
 		expect(loi).not.toBe("khong nem");

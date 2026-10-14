@@ -60,13 +60,22 @@ export class ThongBaoService {
 		chiChuaDoc: boolean,
 		conTro: string | undefined,
 	): Promise<DanhSachThongBaoOutput> {
-		const hang = await this.db.thongBao.findMany({
-			where: { nguoiNhanId: userId, ...(chiChuaDoc ? { docLuc: null } : {}) },
+		const where = chiChuaDoc
+			? { nguoiNhanId: userId, docLuc: null }
+			: { nguoiNhanId: userId };
+		const goc = {
+			where,
 			orderBy: THU_TU,
 			take: THONG_BAO.moiTrang + 1,
-			...(conTro ? { cursor: { id: conTro }, skip: 1 } : {}),
 			select: CHON,
-		});
+		};
+		const hang = conTro
+			? await this.db.thongBao.findMany({
+					...goc,
+					cursor: { id: conTro },
+					skip: 1,
+				})
+			: await this.db.thongBao.findMany(goc);
 		const coThem = hang.length > THONG_BAO.moiTrang;
 		const trang = coThem ? hang.slice(0, THONG_BAO.moiTrang) : hang;
 		return {

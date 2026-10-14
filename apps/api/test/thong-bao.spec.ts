@@ -29,12 +29,17 @@ let app: NestExpressApplication;
 const cookie = {} as Record<Nguoi, string>;
 const uid = (n: Nguoi) => `${TIEN_TO}-${n}`;
 type Tra = { status: number; data: unknown };
+type DauVao = {
+	id?: string;
+	chiChuaDoc?: boolean;
+	cursor?: string | null;
+};
 
 async function trpc(
 	n: Nguoi | null,
 	thuTuc: string,
 	kieu: "query" | "mutation",
-	vao?: Readonly<Record<string, unknown>>,
+	vao?: DauVao,
 ): Promise<Tra> {
 	const goi =
 		kieu === "query"

@@ -40,7 +40,7 @@ export const SEARCH_PARAM = {
 		scope: "scope",
 	},
 	thongBao: {
-		loc: "loc",
+		loc: "locThongBao",
 	},
 	deals: {
 		view: "view",

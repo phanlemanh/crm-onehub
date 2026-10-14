@@ -8,8 +8,8 @@ import {
 } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import type { ReactElement, ReactNode } from "react";
-import { act, isValidElement } from "react";
+import type { ReactNode } from "react";
+import { act, Children, isValidElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
 type Vai = "owner" | "member" | "okr";
@@ -486,15 +486,15 @@ describe("chuong", () => {
 	});
 });
 
-function timChu(el: unknown, kieu: string): string[] {
-	if (!isValidElement(el)) return [];
-	const e = el as ReactElement<{ children?: unknown }>;
-	const ten =
-		typeof e.type === "function" ? (e.type as { name?: string }).name : "";
-	const con = e.props.children;
-	const ds = Array.isArray(con) ? con : [con];
-	const ra = ten === kieu ? ds.filter((c) => typeof c === "string") : [];
-	return [...ra, ...ds.flatMap((c) => timChu(c, kieu))];
+function timChu(el: ReactNode, kieu: string): string[] {
+	if (!isValidElement<{ children?: ReactNode }>(el)) return [];
+	const ten = (el.type as { name?: string }).name ?? "";
+	const con = Children.toArray(el.props.children);
+	const ra =
+		ten === kieu
+			? con.flatMap((c) => (isValidElement(c) ? [] : [String(c)]))
+			: [];
+	return [...ra, ...con.flatMap((c) => timChu(c, kieu))];
 }
 
 describe("trang", () => {
@@ -516,14 +516,14 @@ describe("trang", () => {
 		await bam(loc as Element);
 		await cho(50);
 		expect(urls.join("|"), "loc khong ghi tren duong dan").toContain(
-			"loc=chua-doc",
+			"locThongBao=chua-doc",
 		);
 		expect(vaoDs.at(-1)).toEqual({ chiChuaDoc: true });
 	});
 
 	test("trang: tai lai voi loc chua doc thi goi chi chua doc; rong thi da doc het", async () => {
 		trangDs = [[dong(1, new Date().toISOString(), true)]];
-		await ve(<DanhSachThongBaoTrang />, "vi", "?loc=chua-doc");
+		await ve(<DanhSachThongBaoTrang />, "vi", "?locThongBao=chua-doc");
 		expect(vaoDs[0]).toEqual({ chiChuaDoc: true });
 		expect(document.body.textContent).toContain(m.trang.daDocHetTieuDe);
 		await bam(nutChu(m.trang.xemTatCa) as Element);

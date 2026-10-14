@@ -67,10 +67,7 @@ export function dongTuRa(
 	};
 }
 
-export function chiaHomNay(
-	ds: ThongBaoRa[],
-	ctx: BoiCanh,
-): { homNay: DongThongBao[]; truocDo: DongThongBao[] } {
+export function chiaHomNay(ds: ThongBaoRa[], ctx: BoiCanh) {
 	const homNay: DongThongBao[] = [];
 	const truocDo: DongThongBao[] = [];
 	for (const r of ds) {

@@ -279,7 +279,7 @@ export async function chayNhac(
 			payload: {
 				...payload,
 				mucTinh,
-				...(thongBaoLoi ? { thongBaoLoi } : {}),
+				thongBaoLoi,
 				daGui: daGui.map(maViec),
 				kenh: kenh.kenh,
 				lechKenh: kenh.lech,

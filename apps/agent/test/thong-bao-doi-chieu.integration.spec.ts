@@ -63,17 +63,17 @@ async function luotNgay(
 			where: { subject: `user:${n.id}:${ngay}` },
 			select: { id: true },
 		});
-		await chayNhac(hang, {
-			fetcher: s.fetcher,
-			appUrl: APP_URL,
-			...(n.id === hong
+		const deps =
+			n.id === hong
 				? {
+						fetcher: s.fetcher,
+						appUrl: APP_URL,
 						ghiThongBao: async () => {
 							throw new Error("ghi gia hong");
 						},
 					}
-				: {}),
-		});
+				: { fetcher: s.fetcher, appUrl: APP_URL };
+		await chayNhac(hang, deps);
 	}
 }
 

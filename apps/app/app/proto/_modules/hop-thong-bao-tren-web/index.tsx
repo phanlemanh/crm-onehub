@@ -42,7 +42,7 @@ type CanhChuong = {
 	mo: boolean;
 };
 
-const CHUONG: Record<string, CanhChuong> = {
+const CHUONG = {
 	[STATE.ngucanh]: {
 		trangThai: "xong",
 		so: 3,
@@ -92,7 +92,7 @@ const CHUONG: Record<string, CanhChuong> = {
 		truocDo: [],
 		mo: true,
 	},
-};
+} satisfies Record<string, CanhChuong>;
 
 function ChuongMau({ canh }: { canh: CanhChuong }) {
 	const [mo, setMo] = useState(canh.mo);
@@ -180,7 +180,8 @@ function TrangMau({ state }: { state: string }) {
 }
 
 export function HopThongBaoMau({ state }: { state: string }) {
-	const canh = CHUONG[state];
+	const canh =
+		state in CHUONG ? CHUONG[state as keyof typeof CHUONG] : undefined;
 	return (
 		<LocaleProvider locale="vi">
 			{canh ? (

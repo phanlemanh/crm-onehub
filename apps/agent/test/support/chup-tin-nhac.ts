@@ -68,10 +68,6 @@ if (import.meta.main) {
 	const { dungTin } = await import(join(lib, "tin-nhac.ts"));
 	const { duongMo } = await import(join(lib, "nhac-ke-hoach.ts"));
 	const { ZALO } = await import(join(lib, "zalo-config.ts"));
-	if (typeof duongMo !== "function") {
-		console.error("chup-tin-nhac: ma goc chua xuat duongMo");
-		process.exit(2);
-	}
 	await moXuong();
 	const banChup = await chupTin(dungTin, await duongMo(CHUP.appUrl), {
 		tranKyTu: ZALO.tranKyTu,

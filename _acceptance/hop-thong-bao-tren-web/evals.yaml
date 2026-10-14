@@ -336,8 +336,8 @@ evals:
       - "apps/app/lib/messages/thong-bao.ts"
       - "_acceptance/hop-thong-bao-tren-web/rang/do-man.mjs"
     expected: |
-      Nguoi do mang vai member, KHONG noi Zalo hay Slack; tien-de chay luot nhac that cho ho tren kho do rieng (muc Viec qua
-      han + muc OKR). Ma tran viet truoc 9 o, moi o mot dong DUNG/SAI va mot anh evidence/<canh>.png:
+      Nguoi do mang vai member, KHONG noi Zalo hay Slack; tien-de dung kho do rieng; do-man.mjs tao hai Viec qua han giao cho ho
+      bang taoViec (duong ghi that) roi chay lenLichNhac + chayNhac that. Ma tran viet truoc 9 o, moi o mot dong DUNG/SAI va mot anh evidence/<canh>.png:
         chuong-<man>-1280 voi man thuoc {tong-quan, okr, viec}: nut [data-slot=chuong-thong-bao] trong khung nhin, so canh chuong ==
           so chua doc doc tu API cua chinh phien
         mo-1280: bam chuong -> o bat ra co nhom "Hôm nay", dong muc Viec mang chu tieu de viec da gieo (du lieu may chu)
