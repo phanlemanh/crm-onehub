@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { z } from "zod";
 import { docDuLieu } from "../../../apps/app/lib/lo-trinh/doc-du-lieu.js";
 import {
 	BAN_CHUP_LO_TRINH,
@@ -11,11 +12,13 @@ import {
 const GOC = join(import.meta.dir, "..", "..", "..");
 const KHOI = docDuLieu(readFileSync(join(GOC, "LO-TRINH.html"), "utf8"));
 if (KHOI.duLieu === null) throw new Error("LO-TRINH.html khong mang khoi");
-const DU_LIEU: Record<string, unknown> = KHOI.duLieu;
+const khoiJson = z.record(z.string(), z.json());
+const DU_LIEU = khoiJson.parse(KHOI.duLieu);
+type Vao = z.input<typeof banChupVao>;
 
 const sach = () => structuredClone(DU_LIEU);
 
-function vao(doi: Partial<Record<string, unknown>> = {}) {
+function vao(doi: Partial<Vao> = {}): Vao {
 	return {
 		nguon: BAN_CHUP_LO_TRINH.nguonCrm,
 		sha: "a".repeat(40),
@@ -26,7 +29,7 @@ function vao(doi: Partial<Record<string, unknown>> = {}) {
 	};
 }
 
-function duongLoi(gt: unknown): string {
+function duongLoi(gt: Vao): string {
 	const kq = banChupVao.safeParse(gt);
 	if (kq.success) return "(qua)";
 	return (kq.error.issues[0]?.path ?? []).map(String).join(".");
@@ -46,12 +49,17 @@ describe("khuon", () => {
 		khuonKhac.khuon = "khac";
 		const thieuLoTrinh = sach();
 		delete thieuLoTrinh.lo_trinh;
-		const thieuMa = sach();
-		const loTrinh = thieuMa.lo_trinh as { hang: Record<string, unknown>[] }[];
-		const hang0 = loTrinh[0]?.hang[0];
+		const thieuMa = z
+			.looseObject({
+				lo_trinh: z.array(
+					z.looseObject({ hang: z.array(z.record(z.string(), z.json())) }),
+				),
+			})
+			.parse(sach());
+		const hang0 = thieuMa.lo_trinh[0]?.hang[0];
 		if (!hang0) throw new Error("khoi that khong co hang nao");
 		delete hang0.ma;
-		const ca: [string, unknown, string][] = [
+		const ca: [string, Vao, string][] = [
 			["h1 khuon la", vao({ duLieu: khuonKhac }), "duLieu.khuon"],
 			["h2 thieu lo_trinh", vao({ duLieu: thieuLoTrinh }), "duLieu.lo_trinh"],
 			["h3 sha rong", vao({ sha: "" }), "sha"],
