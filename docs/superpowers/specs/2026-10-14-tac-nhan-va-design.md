@@ -69,15 +69,19 @@ liệu — tên, giai đoạn, số tiền, trạng thái mỗi mục. Thẻ nă
 `title`. Bốn màn được đo ở 375 px: danh sách tác nhân, màn tác nhân, ngăn lượt chạy có kết quả bảng thoả thuận,
 hội thoại dựng.
 
-**(3) Câu hỏi của lượt sau luôn thắng câu hỏi của lượt trước.** `supersedes` chỉ so toạ độ khi hai câu cùng
-`turnId`; khác `turnId` thì câu mới thắng — lượt cũ đã khép (`pendingInputRequest` bị xoá ở `session.completed`,
-`turn.failed`, `turn.cancelled`), và móc `builder-delegation` giữ một lần giao việc mỗi lượt nên hai phiên con
-không chạy song song. Phát lại cùng câu hỏi vẫn bị chặn bằng khoá `builder-input:<hội thoại>:<requestId>` như cũ.
-Mọi đường `false` ngoài phát lại ghi một dòng `console.error` có mã hội thoại và lý do, như `logBuilderFailure`.
+**(3) Câu hỏi mới chỉ so với câu đang chờ.** Đo bằng eve thật ngày 14/10 (ca `hai-luot-hoi` của
+`apps/agent/test/eve-tran`): câu hỏi của phiên con thứ hai mang toạ độ **trùng hẳn** câu của phiên con thứ nhất —
+`sequence 0`, `stepIndex 0` (câu hỏi) hay `1` (hết hạn mức), `turnId "turn_0"` — vì phiên con nào cũng đánh lượt từ
+đầu. Toạ độ chỉ có thứ tự trong một phiên con, nên `supersedes` thôi so với câu ghi gần nhất của cả hội thoại và chỉ
+so với câu **đang chờ** (`pendingInputRequest`). Người trả lời câu cũ thì bài nộp được giao và câu đang chờ bị xoá
+(`custom-agent-dispatch.ts`, nhánh `ACCEPTED`), nên câu của phiên con mới luôn được ghi; còn trong cùng một phiên con
+đang chờ, câu toạ độ nhỏ hơn tới muộn vẫn bị bỏ như bài kiểm của hãng (`builder-runtime.integration.spec.ts`, CMP-77)
+đòi. Phát lại cùng câu vẫn bị khoá `builder-input:<hội thoại>:<requestId>` chặn. Mọi đường bỏ khác phát lại ghi một
+dòng `console.error` có mã hội thoại và lý do, như `logBuilderFailure`.
 Toạ độ của hai câu hỏi trong phép đo không viết tay: ứng dụng eve thử (`apps/agent/test/eve-tran`, eve thật với
 `mockModel`) giao việc cho bộ dựng hai lần, mỗi lần bộ dựng hỏi một câu, và ghi hai payload `input.requested` gốc nhận
-được; bài kiểm tích hợp đọc chính hai payload đó. Ca đo chỉ có nghĩa khi hai `turnId` khác nhau và toạ độ câu sau không
-lớn hơn câu trước — bài kiểm khẳng định điều đó trước, để eve đổi cách đánh số thì phép đo đỏ chứ không xanh suông.
+được; bài kiểm tích hợp đọc chính hai payload đó. Ca đo chỉ có nghĩa khi toạ độ câu sau không lớn hơn câu trước — bài kiểm
+khẳng định điều đó trước, để biết payload thật vẫn tái hiện đúng ca lỗi.
 
 **(4) Dòng lỗi dưới bài nộp hỏng nói tiếng Việt.** Chữ chọn theo `errorCode` ở phía khách (`DELIVERY_FAILED`; mã lạ
 rơi về câu chung «Tin này gửi không được.»), không in `errorMessage` của máy chủ — trước nay dòng đó in nguyên thông
@@ -151,12 +155,12 @@ dung đọc được ở 320 CSS px không cần cuộn hai chiều]` cho vế �
 - Trục B — khổ: 375 | 768 | 1440 [thước CE: luật web của chủ kho — 320/375/768/1024/1440]
 - Trục C — loại chữ máy: trạng thái tác nhân | trạng thái lượt | trạng thái bước | loại sự kiện | ô mặc định | trạng
   thái thoả thuận [thước CE: enum `schema.prisma` dòng 294–344, các chữ cứng tìm bằng mã]
-- Trục D — đường câu hỏi bộ dựng: lượt đầu | cùng lượt hỏi lại | lượt sau, toạ độ nhỏ hơn | lượt sau, toạ độ bằng |
-  phát lại cùng câu [thước CE: `builder-input.ts`, `subagent-hitl-proxy.js`]
+- Trục D — đường câu hỏi bộ dựng: lượt đầu | cùng phiên con hỏi tiếp | phiên con mới, toạ độ trùng | phát lại cùng
+  câu [thước CE: `builder-input.ts`, `subagent-hitl-proxy.js`, ca eve `hai-luot-hoi`]
 
 **Core.** A{danh sách}×C{trạng thái tác nhân} · A{ngăn lượt chạy}×C{bước, sự kiện, ô mặc định, thoả thuận} ·
-A{ngăn lượt chạy, màn tác nhân, danh sách, hội thoại}×B{375} · D{lượt sau nhỏ hơn, lượt sau bằng} trên payload eve thật + đối chứng
-D{cùng lượt hỏi lại, phát lại} · D{lượt sau} qua `builderById` thật tới màn.
+A{ngăn lượt chạy, màn tác nhân, danh sách, hội thoại}×B{375} · D{phiên con mới, toạ độ trùng} trên payload eve thật + đối chứng
+D{cùng phiên con hỏi tiếp, phát lại} · D{lượt sau} qua `builderById` thật tới màn.
 
 **Later.** B{320} — ngưỡng Reflow của WCAG; kho đo 375 làm khổ điện thoại nhỏ nhất. B{768, 1440} chỉ chụp làm đối
 chứng, không phải tiêu chí. Hội thoại dựng quay vòng «đang làm» khi không sự kiện kết lượt nào tới — hàng riêng, xem «Ngoài vòng này».

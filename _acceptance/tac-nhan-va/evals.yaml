@@ -90,14 +90,15 @@ evals:
       muc (ca session-limit). Ca eval ghi moi payload input.requested ma kenh goc nhan duoc vao tep JSON o duong bien
       TNV_HAI_LUOT_RA (duoi .acceptance-runs/tac-nhan-va/, khong ghi vao _acceptance/).
       Buoc 2 — apps/agent/test/tac-nhan-va.integration.spec.ts loc -t cau-hoi, doc tep JSON do (khong viet toa do tay).
-      describe "cau-hoi-luot-sau": khang dinh tien de truoc: hai payload cua moi kind co turnId khac nhau va toa do
-      (sequence, stepIndex) cua cau sau khong lon hon cau truoc theo thu tu tu dien (ghim "ca do khong tai hien loi —
-      eve doi cach danh so"). Ma tran viet truoc: kind {question, session-limit} = 2 ca, moi ca mot hoi thoai BUILDER rieng
+      describe "cau-hoi-luot-sau": khang dinh tien de truoc: moi kind dung hai payload, requestId khac nhau, va toa do
+      (sequence, stepIndex, turnId) cua cau sau khong lon hon cau truoc theo thu tu tu dien (ghim "ca do khong tai hien
+      loi — payload eve khong con trung toa do"). Ma tran viet truoc: kind {question, session-limit} = 2 ca, moi ca mot hoi thoai BUILDER rieng
       (gieo qua Prisma, co sessionId). Moi ca goi crmEvents["input.requested"] (duong that cua kenh) voi payload thu
       nhat roi payload thu hai, token builderToken(hoi thoai). Khang dinh: sau payload thu nhat pendingInputRequest mang
-      requestId thu nhat (doi chung duong); sau payload thu hai pendingInputRequest mang requestId va kind cua payload thu
+      requestId thu nhat (doi chung duong); tra loi cau thu nhat qua dispatchBuilderSubmission that (bai nop co
+      inputResponse, send gia theo hop dong SendFn) -> pendingInputRequest null; sau payload thu hai pendingInputRequest mang requestId va kind cua payload thu
       hai, doc qua pendingBuilderQuestionOf cua @crm/validation/builder-question (ham ma conversations.builderById dung).
-      CHIEU DO: ban sao supersedes cu (so toa do bat ke turnId) -> ca hai kind do voi thong diep ghim
+      CHIEU DO: ban sao giu supersedes cu (so toa do tren ca hoi thoai) -> ca hai kind do voi thong diep ghim
       "cau hoi luot sau bi bo vi so toa do hai phien con".
 
   - id: E6
@@ -109,12 +110,13 @@ evals:
       - "apps/agent/agent/lib/builder-input.ts"
       - "apps/agent/test/tac-nhan-va.integration.spec.ts"
     expected: |
-      describe "cau-hoi-doi-chung": hoi thoai da ghi payload thu nhat cua E5 (kind question; toa do (s, k) doc tu payload).
-      (a) goi lai dung payload do: so AgentEvent co id bat dau "builder-input:<hoi thoai>:" khong doi, pendingInputRequest
-      bang tung khoa voi truoc. (b) cung turnId, requestId moi, toa do nho hon (s, k) — dung payload thu nhat chi doi
-      requestId va giam stepIndex hay sequence: khong ghi (dem va so sanh nhu (a)). (c) cung turnId, requestId moi, toa
-      do lon hon: ghi, pendingInputRequest mang requestId moi.
-      CHIEU DO: ban sao supersedes tra true moi luc -> (b) do voi thong diep ghim "cau cu cung luot de len cau moi".
+      describe "cau-hoi-doi-chung": hoi thoai da ghi payload thu nhat cua E5 (kind question), cau do dang cho.
+      (a) goi lai dung payload do qua kenh: pendingInputRequest va so AgentEvent "builder-input:<hoi thoai>:" bang
+      truoc, khong loi goi console.error. (b) cung phien con hoi tiep: payload thu nhat doi requestId, stepIndex + 2 —
+      ghi, pendingInputRequest mang requestId moi, so AgentEvent tang dung 1. (c) cau cu hon cau dang cho: requestId
+      moi, stepIndex + 1 (nho hon cau (b) dang cho) — khong ghi, hoi thoai bang sau (b) tung truong.
+      CHIEU DO: ban sao bo kiem phat lai -> (a) do voi thong diep ghim "phat lai cung cau ghi them mot dong";
+      ban sao bo so voi cau dang cho -> (c) do voi thong diep ghim "cau cu hon de len cau dang cho".
 
   - id: E7
     criterion: AC-7
