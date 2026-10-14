@@ -48,6 +48,16 @@ export async function donDep(): Promise<void> {
 		where: { firstName: { startsWith: TIEN_TO } },
 	});
 	await db.company.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
+	// Từ DA3 (ke-hoach-sinh-viec) kế hoạch tạo từ khuôn sinh Việc; Việc giữ người (Restrict) nên dọn trước người.
+	await db.viec.deleteMany({
+		where: {
+			OR: [
+				{ taoBoiId: { in: daGieo.nguoi } },
+				{ nguoiGiaoId: { in: daGieo.nguoi } },
+				{ nguoiThucHienId: { in: daGieo.nguoi } },
+			],
+		},
+	});
 	await db.member.deleteMany({ where: { userId: { in: daGieo.nguoi } } });
 	await db.user.deleteMany({ where: { id: { in: daGieo.nguoi } } });
 	await db.department.deleteMany({ where: { id: { in: daGieo.boPhan } } });

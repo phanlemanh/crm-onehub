@@ -212,7 +212,9 @@ describe("tao ke hoach tu khuon", () => {
 		});
 		if (step === null) throw new Error("khong co buoc nao duoc chep");
 		expect(step.departmentId).toBe(dep.id);
-		expect(step.assigneeId).toBeNull();
+		// DA3 (ke-hoach-sinh-viec AC-1, Cổng Phạm vi 14/10): bước tạo từ khuôn có sẵn người làm —
+		// phòng không có trưởng phòng thì là người cầm trịch.
+		expect(step.assigneeId).toBe(nguoi.id);
 
 		const loc = await service.listSteps({
 			planId: plan.id,

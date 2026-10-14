@@ -19,6 +19,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { TO_CHUC } from "../to-chuc/to-chuc-config";
+import { dichLoi } from "../viec/viec.service";
 import type {
 	PlanOutput,
 	PlanOwnerInput,
@@ -472,192 +473,207 @@ export class OnboardingGhi {
 		input: StepAssignInput,
 		actingUserId: string,
 	): Promise<StepOutput> {
-		return this.db.$transaction(async (tx) => {
-			const { buoc, plan } = await buocCuaKeHoachMo(tx, input.stepId);
-			if (buoc.assigneeId === input.assigneeId) return buocRa(buoc);
-			if (buoc.viecId !== null && input.assigneeId === null) {
-				throw new BadRequestException(ONBOARDING.thongDiep.buocLuonCoNguoi);
-			}
+		return this.db
+			.$transaction(async (tx) => {
+				const { buoc, plan } = await buocCuaKeHoachMo(tx, input.stepId);
+				if (buoc.assigneeId === input.assigneeId) return buocRa(buoc);
+				if (buoc.viecId !== null && input.assigneeId === null) {
+					throw new BadRequestException(ONBOARDING.thongDiep.buocLuonCoNguoi);
+				}
 
-			const den =
-				input.assigneeId === null
-					? null
-					: await kiemNguoiNhanViec(tx, input.assigneeId);
-			if (buoc.viecId !== null && den !== null) {
-				await ghiTuBuoc(tx, {
-					viecId: buoc.viecId,
-					nguoiId: actingUserId,
-					nguon: "ke-hoach",
-					now: new Date(),
-					lenh: { lenh: "giao", nguoiThucHienId: den.id },
+				const den =
+					input.assigneeId === null
+						? null
+						: await kiemNguoiNhanViec(tx, input.assigneeId);
+				if (buoc.viecId !== null && den !== null) {
+					await ghiTuBuoc(tx, {
+						viecId: buoc.viecId,
+						nguoiId: actingUserId,
+						nguon: "ke-hoach",
+						now: new Date(),
+						lenh: { lenh: "giao", nguoiThucHienId: den.id },
+					});
+				}
+				const sau = await tx.onboardingStep.update({
+					where: { id: buoc.id },
+					data: { assigneeId: den?.id ?? null },
+					select: CHON_BUOC,
 				});
-			}
-			const sau = await tx.onboardingStep.update({
-				where: { id: buoc.id },
-				data: { assigneeId: den?.id ?? null },
-				select: CHON_BUOC,
-			});
-			await ghiVet(
-				tx,
-				plan,
-				vet.buocGiao({
-					stepId: buoc.id,
-					nhan: buoc.label,
-					tu: buoc.assignee?.id ?? null,
-					tuTen: buoc.assignee?.name ?? null,
-					den: den?.id ?? null,
-					denTen: den?.name ?? null,
-				}),
-				actingUserId,
-			);
-			return buocRa(sau);
-		});
+				await ghiVet(
+					tx,
+					plan,
+					vet.buocGiao({
+						stepId: buoc.id,
+						nhan: buoc.label,
+						tu: buoc.assignee?.id ?? null,
+						tuTen: buoc.assignee?.name ?? null,
+						den: den?.id ?? null,
+						denTen: den?.name ?? null,
+					}),
+					actingUserId,
+				);
+				return buocRa(sau);
+			})
+			.catch(dichLoi);
 	}
 
 	setStepDone(input: StepDoneInput, actingUserId: string): Promise<StepOutput> {
-		return this.db.$transaction(async (tx) => {
-			const ket = await datBuocXong(
-				tx,
-				{ ...input, nguoiId: actingUserId, now: new Date(), nguon: "ke-hoach" },
-				VET_MAN,
-			);
-			if (ket.ket === "khong-co-buoc") {
-				throw new NotFoundException(
-					ONBOARDING.thongDiep.khongCoBuoc(input.stepId),
+		return this.db
+			.$transaction(async (tx) => {
+				const ket = await datBuocXong(
+					tx,
+					{
+						...input,
+						nguoiId: actingUserId,
+						now: new Date(),
+						nguon: "ke-hoach",
+					},
+					VET_MAN,
 				);
-			}
-			if (ket.ket === "ke-hoach-dong") {
-				throw new ConflictException(ONBOARDING.thongDiep.keHoachDaDong);
-			}
-			if (!input.done && ket.ket === "da-doi") {
-				const plan = await tx.onboardingPlan.findUniqueOrThrow({
-					where: { id: ket.buoc.planId },
-					select: { id: true, companyId: true },
+				if (ket.ket === "khong-co-buoc") {
+					throw new NotFoundException(
+						ONBOARDING.thongDiep.khongCoBuoc(input.stepId),
+					);
+				}
+				if (ket.ket === "ke-hoach-dong") {
+					throw new ConflictException(ONBOARDING.thongDiep.keHoachDaDong);
+				}
+				if (!input.done && ket.ket === "da-doi") {
+					const plan = await tx.onboardingPlan.findUniqueOrThrow({
+						where: { id: ket.buoc.planId },
+						select: { id: true, companyId: true },
+					});
+					await traBuocKhongNhan(tx, plan, [ket.buoc], actingUserId);
+				}
+				const sau = await tx.onboardingStep.findUniqueOrThrow({
+					where: { id: input.stepId },
+					select: CHON_BUOC,
 				});
-				await traBuocKhongNhan(tx, plan, [ket.buoc], actingUserId);
-			}
-			const sau = await tx.onboardingStep.findUniqueOrThrow({
-				where: { id: input.stepId },
-				select: CHON_BUOC,
-			});
-			return buocRa(sau);
-		});
+				return buocRa(sau);
+			})
+			.catch(dichLoi);
 	}
 
 	rescheduleStep(
 		input: StepRescheduleInput,
 		actingUserId: string,
 	): Promise<StepOutput> {
-		return this.db.$transaction(async (tx) => {
-			const { buoc, plan } = await buocCuaKeHoachMo(tx, input.stepId);
-			if (ngay(buoc.dueAt) === ngay(input.dueAt)) return buocRa(buoc);
+		return this.db
+			.$transaction(async (tx) => {
+				const { buoc, plan } = await buocCuaKeHoachMo(tx, input.stepId);
+				if (ngay(buoc.dueAt) === ngay(input.dueAt)) return buocRa(buoc);
 
-			if (buoc.viecId !== null) {
-				await ghiTuBuoc(tx, {
-					viecId: buoc.viecId,
-					nguoiId: actingUserId,
-					nguon: "ke-hoach",
-					now: new Date(),
-					lenh: { lenh: "han", hanNgay: input.dueAt },
+				if (buoc.viecId !== null) {
+					await ghiTuBuoc(tx, {
+						viecId: buoc.viecId,
+						nguoiId: actingUserId,
+						nguon: "ke-hoach",
+						now: new Date(),
+						lenh: { lenh: "han", hanNgay: input.dueAt },
+					});
+				}
+				const sau = await tx.onboardingStep.update({
+					where: { id: buoc.id },
+					data: { dueAt: input.dueAt },
+					select: CHON_BUOC,
 				});
-			}
-			const sau = await tx.onboardingStep.update({
-				where: { id: buoc.id },
-				data: { dueAt: input.dueAt },
-				select: CHON_BUOC,
-			});
-			await ghiVet(
-				tx,
-				plan,
-				vet.buocDoiHan({
-					stepId: buoc.id,
-					nhan: buoc.label,
-					tu: ngay(buoc.dueAt),
-					den: ngay(input.dueAt),
-				}),
-				actingUserId,
-			);
-			return buocRa(sau);
-		});
+				await ghiVet(
+					tx,
+					plan,
+					vet.buocDoiHan({
+						stepId: buoc.id,
+						nhan: buoc.label,
+						tu: ngay(buoc.dueAt),
+						den: ngay(input.dueAt),
+					}),
+					actingUserId,
+				);
+				return buocRa(sau);
+			})
+			.catch(dichLoi);
 	}
 
 	addStep(input: StepAddInput, actingUserId: string): Promise<StepOutput> {
-		return this.db.$transaction(async (tx) => {
-			const plan = await keHoachMo(tx, input.planId);
-			await kiemPhongBanDangDung(tx, [input.departmentId]);
-			const nguoi = input.assigneeId
-				? await kiemNguoiNhanViec(tx, input.assigneeId)
-				: null;
-			const cuoi = await tx.onboardingStep.findFirst({
-				where: { planId: plan.id },
-				orderBy: { position: "desc" },
-				select: { position: true },
-			});
-			const tao = await tx.onboardingStep.create({
-				data: {
+		return this.db
+			.$transaction(async (tx) => {
+				const plan = await keHoachMo(tx, input.planId);
+				await kiemPhongBanDangDung(tx, [input.departmentId]);
+				const nguoi = input.assigneeId
+					? await kiemNguoiNhanViec(tx, input.assigneeId)
+					: null;
+				const cuoi = await tx.onboardingStep.findFirst({
+					where: { planId: plan.id },
+					orderBy: { position: "desc" },
+					select: { position: true },
+				});
+				const tao = await tx.onboardingStep.create({
+					data: {
+						planId: plan.id,
+						label: input.label,
+						departmentId: input.departmentId,
+						dueAt: input.dueAt,
+						assigneeId: nguoi?.id ?? null,
+						position: (cuoi?.position ?? -1) + 1,
+					},
+					select: { id: true },
+				});
+				const macDinh = await nguoiMacDinhTheoPhong(
+					tx,
+					[input.departmentId],
+					plan.ownerId,
+				);
+				await taoViecChoBuoc(tx, {
+					stepId: tao.id,
 					planId: plan.id,
-					label: input.label,
-					departmentId: input.departmentId,
-					dueAt: input.dueAt,
-					assigneeId: nguoi?.id ?? null,
-					position: (cuoi?.position ?? -1) + 1,
-				},
-				select: { id: true },
-			});
-			const macDinh = await nguoiMacDinhTheoPhong(
-				tx,
-				[input.departmentId],
-				plan.ownerId,
-			);
-			await taoViecChoBuoc(tx, {
-				stepId: tao.id,
-				planId: plan.id,
-				tieuDe: input.label,
-				hanNgay: input.dueAt,
-				nguoiGiaoId: actingUserId,
-				nguoiThucHienId:
-					nguoi?.id ?? macDinh.get(input.departmentId) ?? plan.ownerId,
-				nguon: "web",
-				now: new Date(),
-			});
-			const moi = await tx.onboardingStep.findUniqueOrThrow({
-				where: { id: tao.id },
-				select: CHON_BUOC,
-			});
-			await ghiVet(
-				tx,
-				plan,
-				vet.buocThem({ stepId: moi.id, nhan: moi.label }),
-				actingUserId,
-			);
-			return buocRa(moi);
-		});
+					tieuDe: input.label,
+					hanNgay: input.dueAt,
+					nguoiGiaoId: actingUserId,
+					nguoiThucHienId:
+						nguoi?.id ?? macDinh.get(input.departmentId) ?? plan.ownerId,
+					nguon: "web",
+					now: new Date(),
+				});
+				const moi = await tx.onboardingStep.findUniqueOrThrow({
+					where: { id: tao.id },
+					select: CHON_BUOC,
+				});
+				await ghiVet(
+					tx,
+					plan,
+					vet.buocThem({ stepId: moi.id, nhan: moi.label }),
+					actingUserId,
+				);
+				return buocRa(moi);
+			})
+			.catch(dichLoi);
 	}
 
 	removeStep(
 		input: StepIdInput,
 		actingUserId: string,
 	): Promise<StepRemovedOutput> {
-		return this.db.$transaction(async (tx) => {
-			const { buoc, plan } = await buocCuaKeHoachMo(tx, input.stepId);
-			if (buoc.viecId !== null) {
-				await ghiTuBuoc(tx, {
-					viecId: buoc.viecId,
-					nguoiId: actingUserId,
-					nguon: "ke-hoach",
-					now: new Date(),
-					lenh: { lenh: "huy", lyDo: "gỡ bước" },
-				});
-			}
-			await tx.onboardingStep.delete({ where: { id: buoc.id } });
-			await ghiVet(
-				tx,
-				plan,
-				vet.buocBo({ stepId: buoc.id, nhan: buoc.label }),
-				actingUserId,
-			);
-			return { id: buoc.id };
-		});
+		return this.db
+			.$transaction(async (tx) => {
+				const { buoc, plan } = await buocCuaKeHoachMo(tx, input.stepId);
+				if (buoc.viecId !== null) {
+					await ghiTuBuoc(tx, {
+						viecId: buoc.viecId,
+						nguoiId: actingUserId,
+						nguon: "ke-hoach",
+						now: new Date(),
+						lenh: { lenh: "huy", lyDo: "gỡ bước" },
+					});
+				}
+				await tx.onboardingStep.delete({ where: { id: buoc.id } });
+				await ghiVet(
+					tx,
+					plan,
+					vet.buocBo({ stepId: buoc.id, nhan: buoc.label }),
+					actingUserId,
+				);
+				return { id: buoc.id };
+			})
+			.catch(dichLoi);
 	}
 
 	reorderSteps(input: StepReorderInput): Promise<StepListOutput> {
@@ -723,37 +739,39 @@ export class OnboardingGhi {
 		actingUserId: string,
 		huyViecMo = false,
 	): Promise<PlanOutput> {
-		return this.db.$transaction(async (tx) => {
-			const plan = await tx.onboardingPlan.findUnique({ where: { id } });
-			if (plan === null) {
-				throw new NotFoundException(ONBOARDING.thongDiep.khongCoKeHoach(id));
-			}
-			if ((plan.closedAt !== null) === dong) return keHoachRa(plan);
+		return this.db
+			.$transaction(async (tx) => {
+				const plan = await tx.onboardingPlan.findUnique({ where: { id } });
+				if (plan === null) {
+					throw new NotFoundException(ONBOARDING.thongDiep.khongCoKeHoach(id));
+				}
+				if ((plan.closedAt !== null) === dong) return keHoachRa(plan);
 
-			const sau = await tx.onboardingPlan.update({
-				where: { id },
-				data: { closedAt: dong ? new Date() : null },
-			});
-			await ghiVet(
-				tx,
-				plan,
-				dong ? vet.keHoachDong() : vet.keHoachMoLai(),
-				actingUserId,
-			);
-			if (dong) {
-				if (huyViecMo) await huyViecMoCuaKeHoach(tx, sau.id, actingUserId);
-				return keHoachRa(sau);
-			}
-			const camTrich = await traCamTrich(tx, sau, actingUserId);
-			await traBuocKhongNhan(
-				tx,
-				sau,
-				await buocChuaXong(tx, sau.id),
-				actingUserId,
-			);
-			await goTheoDoiKhongNhan(tx, sau.id);
-			return keHoachRa(camTrich);
-		});
+				const sau = await tx.onboardingPlan.update({
+					where: { id },
+					data: { closedAt: dong ? new Date() : null },
+				});
+				await ghiVet(
+					tx,
+					plan,
+					dong ? vet.keHoachDong() : vet.keHoachMoLai(),
+					actingUserId,
+				);
+				if (dong) {
+					if (huyViecMo) await huyViecMoCuaKeHoach(tx, sau.id, actingUserId);
+					return keHoachRa(sau);
+				}
+				const camTrich = await traCamTrich(tx, sau, actingUserId);
+				await traBuocKhongNhan(
+					tx,
+					sau,
+					await buocChuaXong(tx, sau.id),
+					actingUserId,
+				);
+				await goTheoDoiKhongNhan(tx, sau.id);
+				return keHoachRa(camTrich);
+			})
+			.catch(dichLoi);
 	}
 
 	async transferPreview(

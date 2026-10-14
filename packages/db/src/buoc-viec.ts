@@ -119,6 +119,14 @@ export async function ghiTuBuoc(
 			return;
 		}
 		if (viec.trangThai === den) return;
+		// Mở lại một Việc đã khép (bỏ đánh xong) theo cùng luật «Làm lại» của DA1: người thực hiện phải
+		// còn nhận được việc gắn đối tác — vai chỉ OKR thì từ chối, Việc và bước không đổi.
+		if (
+			TRANG_THAI_KHEP.includes(viec.trangThai) &&
+			!TRANG_THAI_KHEP.includes(den)
+		) {
+			await kiemNguoiNhanViec(tx, viec.nguoiThucHienId);
+		}
 		await tx.viec.update({
 			where: { id: viec.id },
 			data: {

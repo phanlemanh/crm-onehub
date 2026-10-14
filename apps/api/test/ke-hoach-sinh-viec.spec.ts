@@ -113,7 +113,8 @@ async function kiemChieu(stepId: string, lenh: string): Promise<void> {
 	});
 	const v = b.viec;
 	if (v === null) throw new Error(`kh: buoc lech viec sau ${lenh} viec`);
-	if (b.assigneeId !== v.nguoiThucHienId) {
+	const nguoiMong = v.trangThai === "HUY" ? null : v.nguoiThucHienId;
+	if (b.assigneeId !== nguoiMong) {
 		throw new Error(`kh: buoc lech viec sau ${lenh} assignee`);
 	}
 	if (v.hanNgay === null || ngayVN(b.dueAt) !== ngayVN(v.hanNgay)) {
@@ -709,6 +710,47 @@ describe("kh-go-buoc", () => {
 				);
 				if (coHuy) throw new Error("kh: nhac viec cua ke hoach da dong");
 			}
+
+			// Người làm sang vai «chỉ OKR» sau khi Việc của họ đã khép (một Xong, một Huỷ lúc đóng):
+			// mở lại kế hoạch không để bước mở nào trong tay họ, và bỏ đánh xong bị từ chối (luật «Làm lại»).
+			await doiVai(k.h.id, "okr");
+			await goi(
+				app,
+				"onboarding.reopenPlan",
+				"mutation",
+				{ id: planId },
+				k.o.id,
+			);
+			const trongTayOkr = await db.onboardingStep.count({
+				where: { planId, completedAt: null, assigneeId: k.h.id },
+			});
+			if (trongTayOkr !== 0)
+				throw new Error("kh: mo lai buoc trong tay vai okr");
+			const boXong = await goi(
+				app,
+				"onboarding.setStepDone",
+				"mutation",
+				{ stepId: xong.id, done: false },
+				k.o.id,
+			);
+			const viecXong = await db.viec.findUniqueOrThrow({
+				where: { id: xong.viecId ?? "" },
+			});
+			if (
+				boXong.status === 200 ||
+				!boXong.message.includes("chỉ OKR") ||
+				viecXong.trangThai !== "XONG"
+			) {
+				throw new Error("kh: bo xong mo viec cho vai okr");
+			}
+			await doiVai(k.h.id, "member");
+			await goi(
+				app,
+				"onboarding.closePlan",
+				"mutation",
+				{ id: planId },
+				k.o.id,
+			);
 
 			const hai = await taoKeHoach(k);
 			const plan2 = (hai.r.data as { id: string }).id;
