@@ -9,7 +9,7 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../(agent-builder)/missing-record";
-import { DuongDanTaiLieu } from "../duong-dan-tai-lieu";
+import { DuongDanTaiLieuCho } from "../duong-dan-tai-lieu";
 import { ManDoc } from "./man-doc";
 
 type Params = Promise<{ slug: string; trang: string }>;
@@ -19,14 +19,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function TrangTaiLieuPage({ params }: { params: Params }) {
-	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+	const locale = await getLocale();
 	return (
 		<PageShell>
 			<Suspense
 				fallback={
 					<>
 						<PageShellHeader
-							breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+							breadcrumb={
+								<DuongDanTaiLieuCho locale={locale} params={params} />
+							}
 						/>
 						<KhungXuong hinh="chi-tiet" />
 					</>
