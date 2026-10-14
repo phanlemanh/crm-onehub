@@ -5,7 +5,7 @@ slug: tac-nhan-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -67,3 +67,12 @@ Quét hình thái preset test-matrix, đầy đủ ở design doc mục «Độ 
 
 - AC-5 thay đề xuất `new-contract` của mục Ngoài-n «câu hỏi hết hạn mức của phiên con mới bị bỏ» ở
   `bo-dung-khong-ket`; lỗi rộng hơn mục đó nói — chạm cả câu hỏi làm rõ thường.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Dữ liệu câu hỏi đang chờ của một hội thoại dựng đã hỏng thì bị đọc như không có câu nào đang chờ, và một câu cũ hơn có thể ghi đè lên mà không báo lỗi.
+  - Ngoài-3: Màn điện thoại khi kết quả không có thoả thuận nào hiện dòng thông báo khác kiểu các màn trống khác.
+  - Ngoài-4: Thước giữ bài kiểm cũ không thấy khẳng định viết trên nhiều dòng, nên sửa ngầm một khẳng định như thế có thể lọt.
+  - Ngoài-5: Bài kiểm câu báo lỗi gửi hỏng dùng dữ liệu tự dựng; máy chủ thôi trả mã lỗi thì màn hiện câu chung mà bài kiểm vẫn xanh.
+  - Ngoài-6: Phép đo «ô soạn thường biến mất khi có câu hỏi» chưa có ca đối chứng lúc ô soạn đang hiện.
+  - Ngoài-7: Bài kiểm câu báo lỗi gửi hỏng vẫn qua nếu màn hiện thêm một câu lỗi thừa cạnh câu đúng.
+  - Ngoài-8: Lý do lượt chạy hỏng mới được đo kỹ ở một mã lỗi; các mã khác có thể hiện sai chữ mà bài kiểm chưa thấy.
+  - AC-2 (trong hợp đồng): Ba bước của bộ dựng — ghi tệp chỉ dẫn, lưu bản nháp, đặt tên hội thoại — còn hiện nhãn tiếng Anh trên màn tiếng Việt; dịch chúng là hàng riêng.
