@@ -5,8 +5,8 @@
 		"duong": "https://crm.test/onehub/settings/okr"
 	},
 	"ai-tran": {
-		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nNgân sách AI\n1. Trợ lý OKR đã dùng 80% trần tháng (16 US$ / 20 US$) — https://crm.test/onehub/settings/okr\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
-		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Ngân sách AI*\n• Trợ lý OKR đã dùng 80% trần tháng (16 US$ / 20 US$) — <https://crm.test/onehub/settings/okr|mở cài đặt OKR>",
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nNgân sách AI\n1. Kara đã dùng 80% trần tháng (16 US$ / 20 US$) — https://crm.test/onehub/settings/okr\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Ngân sách AI*\n• Kara đã dùng 80% trần tháng (16 US$ / 20 US$) — <https://crm.test/onehub/settings/okr|mở cài đặt OKR>",
 		"duong": "https://crm.test/onehub/settings/okr"
 	},
 	"buoc-qua-han": {
@@ -75,8 +75,8 @@
 		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-7"
 	},
 	"okr-tom-tat": {
-		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nTrợ lý OKR\n1. Tóm tắt tuần Phòng Kinh doanh · 1 KR đáng bàn — https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
-		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Trợ lý OKR*\n• Tóm tắt tuần Phòng Kinh doanh · 1 KR đáng bàn — <https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1|mở>",
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nKara · OKR\n1. Tóm tắt tuần Phòng Kinh doanh · 1 KR đáng bàn — https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Kara · OKR*\n• Tóm tắt tuần Phòng Kinh doanh · 1 KR đáng bàn — <https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1|mở>",
 		"duong": "https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1"
 	},
 	"okr-tra-lai": {

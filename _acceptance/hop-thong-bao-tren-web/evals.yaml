@@ -69,7 +69,9 @@ evals:
         1 bo test nhac-qua-zalo.integration.spec.ts va nhac-viec.integration.spec.ts hien co chay xanh khong sua dong assert
           nao (khoa bang: so dong expect( cua hai tep tai HEAD >= so dong tai 762acca38, in ra ca hai so)
         2 ma tran rut tu THU_TU_NHAC (in so loai): chu tin Zalo gia va tin Slack gia cho moi loai == ban chup trong
-          apps/agent/test/fixtures/tin-nhac-truoc-tb1.json. Ban chup sinh tu ma o 762acca38 (chua sua nhac-ke-hoach.ts) va
+          apps/agent/test/fixtures/tin-nhac-truoc-tb1.json. Ban chup sinh tu ma o 762acca38 (chua sua nhac-ke-hoach.ts), sinh LAI
+          14/10 tu ma onehub c1864a3a2 (nen gop moi, chua co sua cua vong) vi K6a #389 doi chu tin OKR «Tro ly OKR» -> «Kara» —
+          xem so d-20261014T162500Z-47; va
           duoc commit TRUOC moi commit sua nhac-ke-hoach.ts tren nhanh: test doc `git log --diff-filter=A --format=%H` cua
           tep chup va `git log --format=%H 762acca38..HEAD -- apps/agent/agent/lib/nhac-ke-hoach.ts`, assert commit them
           tep chup la to tien cua moi commit sua tep nhac (git merge-base --is-ancestor) — so tung byte
