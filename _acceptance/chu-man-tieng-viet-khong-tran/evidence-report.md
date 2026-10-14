@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6c378a8618aaa4889f30804776058cf2f6886091
-human_signoff:
+verified_commit: 26dc3f00db6c08f801211720b39695751653f20a
+human_signoff: Phan Le Manh 2026-10-14
 ---
 
 # Evidence Report: chu-man-tieng-viet-khong-tran
@@ -150,3 +150,7 @@ none — every multi-run eval is uniform
 
 Round 1: PENDING-JUDGMENT — ba loi thuoc trong hop dong (chup-truong.mjs do nham span an cua tay keo nen kiem «ten dai bi cat» luon dat; hai cho cua E2 kiem bang chuoi con thay vi quan he khoa-ngon ngu va chi do hai chuoi). Returned to implementation.
 Round 2: E2, E5, E5m chay lai sau khi sua thuoc, deu dat; E1, E3, E4 giu tu round 1 (delta khong cham paths cua eval); suite xanh; E5j de xuat PASS, cho nguoi quyet o Cong 2.
+
+### Re-pin lần 1 — 2026-10-14, do làn trước chữ ký trên cây đã gộp onehub 4b7f07936
+run_id: repin-20261014T041033Z-27931
+sha: 26dc3f00db6c08f801211720b39695751653f20a · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E5, E5j (E5j không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

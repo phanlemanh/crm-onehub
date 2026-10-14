@@ -5,7 +5,7 @@ slug: chu-man-tieng-viet-khong-tran
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-13T23:01:51Z
 design_doc: docs/superpowers/specs/2026-10-13-chu-man-tieng-viet-khong-tran-design.md
@@ -54,3 +54,5 @@ Quét tay theo khuôn test-matrix của `morphological-scan` (bài toán nhỏ, 
 ## Notes
 
 - Hồ sơ mở từ hàng NM4 sau khi NM1 (#388) gộp vào `onehub` 481547ec2.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-2: Ô nhãn kiểu ở danh sách trường vẫn chỉnh độ rộng ngay tại chỗ dùng thay vì là kiểu dựng sẵn của bộ giao diện chung; đổi kiểu nhãn sau này phải sửa nhiều chỗ hơn.
