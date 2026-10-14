@@ -128,7 +128,7 @@ const en = {
 		notOnDealsBody: (name: string) =>
 			`${name} is not attached to anything being sold yet. Deals are opened on the company, then people are added to them.`,
 		deleteWarning:
-			"Their notes, agent conversations and everything the agent found go too; emails and meetings stay filed against the company.",
+			"Their notes, Kara conversations and everything Kara found go too; emails and meetings stay filed against the company.",
 		added: (name: string) => `${name} added.`,
 		firstName: "First name",
 		lastName: "Last name",
@@ -194,7 +194,7 @@ const en = {
 		create: "Create deal",
 		remove: "Remove",
 		deleteWarning: (company: string, people: string) =>
-			`Its stage history, notes and agent conversations go too. ${company} and the ${people} on it stay in OneHub Center.`,
+			`Its stage history, notes and Kara conversations go too. ${company} and the ${people} on it stay in OneHub Center.`,
 		person: "person",
 		people: "people",
 		closed: "Closed",
@@ -330,7 +330,7 @@ const vi = {
 		notOnDealsBody: (name: string) =>
 			`${name} chưa gắn với thoả thuận nào. Thoả thuận mở trên công ty trước, rồi mới thêm người vào.`,
 		deleteWarning:
-			"Ghi chú, hội thoại với tác nhân và mọi thứ tác nhân tìm được đều mất theo; email và cuộc họp vẫn gắn với công ty.",
+			"Ghi chú, hội thoại với Kara và mọi thứ Kara tìm được đều mất theo; email và cuộc họp vẫn gắn với công ty.",
 		added: (name: string) => `Đã thêm ${name}.`,
 		firstName: "Tên",
 		lastName: "Họ",
@@ -396,7 +396,7 @@ const vi = {
 		create: "Tạo thoả thuận",
 		remove: "Gỡ",
 		deleteWarning: (company: string, people: string) =>
-			`Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. ${company} và ${people} trong đó vẫn ở lại OneHub Center.`,
+			`Lịch sử giai đoạn, ghi chú và hội thoại với Kara đều mất theo. ${company} và ${people} trong đó vẫn ở lại OneHub Center.`,
 		person: "người",
 		people: "người",
 		closed: "Đã chốt",
