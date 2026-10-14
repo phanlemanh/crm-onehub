@@ -152,6 +152,7 @@ const en = {
 		coBanCho: "{so} proposal awaiting review",
 		suaTrang: "Edit page",
 		xemBanCho: "View the proposal awaiting review",
+		loiBanCho: "Couldn't load the proposals awaiting review.",
 		cho: {
 			duyet: {
 				tieuDe: "This page is not visible to everyone yet.",
@@ -538,6 +539,7 @@ const vi: TaiLieuMessages = {
 		coBanCho: "Có {so} bản chờ duyệt",
 		suaTrang: "Sửa trang",
 		xemBanCho: "Xem bản chờ duyệt",
+		loiBanCho: "Chưa tải được bản chờ duyệt.",
 		cho: {
 			duyet: {
 				tieuDe: "Trang này chưa hiện cho mọi người.",

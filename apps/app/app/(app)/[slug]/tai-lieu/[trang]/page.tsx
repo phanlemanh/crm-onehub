@@ -6,6 +6,7 @@ import { PageShell, PageShellHeader } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { requireSession } from "@/lib/session";
+import { tomTatBanCho } from "@/lib/tai-lieu-cho";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../(agent-builder)/missing-record";
@@ -57,10 +58,7 @@ async function NoiDung({ params }: { params: Params }) {
 	]);
 	if (!trang) notFound();
 
-	const choCuaTrang = (cho?.rows ?? []).filter(
-		(r) => r.slug === trang.slug && r.trangThai === "CHO_DUYET" && !r.cu,
-	);
-	const soBanCho = trang.coBanCho ? Math.max(1, choCuaTrang.length) : 0;
+	const banCho = tomTatBanCho(trang.coBanCho, cho, trang.slug);
 
 	return (
 		<HydrateClient>
@@ -79,8 +77,7 @@ async function NoiDung({ params }: { params: Params }) {
 								nguon: trang.choLanDau.nguon,
 							}
 						: null,
-					soBanCho,
-					deXuatChoId: choCuaTrang[0]?.id ?? null,
+					...banCho,
 					nguon: trang.nguon,
 					xacMinh: {
 						den: trang.xacMinhDen,
