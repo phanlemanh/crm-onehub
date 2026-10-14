@@ -29,7 +29,9 @@ import {
 import { type ViecMessages, viecMessages } from "@/lib/messages/viec";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import { HoiDongCha } from "./hoi-dong-cha";
 import { LichSuViec } from "./lich-su-viec";
+import { MucViecCon } from "./muc-viec-con";
 import {
 	HanViec,
 	type TrangThaiViec,
@@ -79,7 +81,10 @@ export function KhungViec({ viecId }: { viecId: string }) {
 	const { close } = useRecordStack();
 	const { tab, setTab } = useRecordSheetView("chi-tiet");
 	const [hoiXoa, setHoiXoa] = useState(false);
+	const [hoiCha, setHoiCha] = useState<"XONG" | "HUY" | null>(null);
 	const q = useQuery(trpc.viec.get.queryOptions({ id: viecId }));
+	const conQ = useQuery(trpc.viec.con.queryOptions({ id: viecId }));
+	const conMo = conQ.data?.conMo ?? 0;
 	const dsNguoi = useQuery(trpc.onboarding.nguoiNhanViec.queryOptions());
 	const xong = {
 		onSuccess: () => void cache.viec(),
@@ -238,6 +243,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 					</p>
 				</DetailSheetSection>
 			) : null}
+			<MucViecCon viecId={v.id} />
 		</DetailSheetBody>
 	) : null;
 
@@ -252,7 +258,13 @@ export function KhungViec({ viecId }: { viecId: string }) {
 									<Button
 										disabled={doi.isPending}
 										key={den}
-										onClick={() => doi.mutate({ id: v.id, den })}
+										onClick={() => {
+											if ((den === "XONG" || den === "HUY") && conMo > 0) {
+												setHoiCha(den);
+												return;
+											}
+											doi.mutate({ id: v.id, den });
+										}}
 										size="sm"
 										variant={den === "XONG" ? "default" : "outline"}
 									>
@@ -341,6 +353,21 @@ export function KhungViec({ viecId }: { viecId: string }) {
 				thoi={m.xoa.thoi}
 				tieuDe={m.xoa.tieuDe}
 			/>
+			{hoiCha ? (
+				<HoiDongCha
+					conMo={conMo}
+					den={hoiCha}
+					onDongY={() => {
+						if (v) doi.mutate({ id: v.id, den: hoiCha });
+						setHoiCha(null);
+					}}
+					onOpenChange={(mo) => {
+						if (!mo) setHoiCha(null);
+					}}
+					open
+					pending={doi.isPending}
+				/>
+			) : null}
 		</>
 	);
 }
