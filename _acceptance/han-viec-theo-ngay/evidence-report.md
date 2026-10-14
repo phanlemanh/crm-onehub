@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 708249126b044a702ebb1d9ee2ded8001780da9f
+verified_commit: e0cc19b2b60e10ec4cb16988205c2f8c04d52658
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -175,3 +175,7 @@ sha: 34ffea77b4165083c59a91377f8600f5bfbd6356 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-10, do gop onehub 23f52546 cho PR 360 (E6 dieu-phoi-va)
 run_id: repin-20261010T130910Z-37166
 sha: 708249126b044a702ebb1d9ee2ded8001780da9f · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-14, do gộp onehub aac0975b5 (DA2, l3b), dời migration chep_viec_can_lam sang 20261014060147, sửa đua upsert ở dem-qua-han
+run_id: repin-20261014T063030Z-77767
+sha: e0cc19b2b60e10ec4cb16988205c2f8c04d52658 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E4 · thay bởi hồ sơ đã ký: E4→chep-viec-can-lam-cu#AC-6 · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4, AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4c962611d8883482786052181954c06eac1f905c
+verified_commit: e0cc19b2b60e10ec4cb16988205c2f8c04d52658
 human_signoff: manh 2026-10-14 — ký Cổng Bằng chứng trên vòng chấm 2 (0 eval trượt, 7/7 lệnh suite, E12 đạt). Ngoài-25 và Ngoài-26 (hạn lệch một ngày) đã sửa trong lần nâng phạm vi nên chấp nhận, không sửa; Ngoài-2, 5, 8, 9, 13, 14, 15, 16, 20, 23, 24, 27, 28 ghi Known limits; mười ba mục còn lại chấp nhận, không sửa. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -249,3 +249,7 @@ none — every multi-run eval is uniform
 
 Round 1: bộ đo máy đều xanh, verdict PENDING-JUDGMENT vì E12 chờ người chốt; còn vài findings trong hợp đồng ở bộ đo (E4, quet-task) quay về vòng sửa.
 Round 2: chạy lại E1-E4, E5b, E6-E8, E9b, E10, E13, E14 cùng bảy lệnh suite, tất cả xanh; E5, E9, E11 mang từ round 1 vì delta không chạm paths của chúng. E12 vẫn chờ người. Mốc verified_at của các eval chạy lại là ngày soạn; ts máy do vòng lặp chính ghi vào run-log.
+
+### Re-pin lần 1 — 2026-10-14, do gộp onehub aac0975b5 (DA2, l3b), dời migration chep_viec_can_lam sang 20261014060147, sửa đua upsert ở dem-qua-han
+run_id: repin-20261014T063030Z-77767
+sha: e0cc19b2b60e10ec4cb16988205c2f8c04d52658 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 (E12 không khai paths) · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
