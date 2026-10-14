@@ -1582,6 +1582,28 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
 - Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
   phán nào ở API.
 
+## Bản chụp lộ trình: Actions đẩy, CRM giữ bản mới nhất
+
+Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó mới hơn bản đang chạy, và đọc
+`LO-TRINH.html` đóng sẵn trong bản dựng khi không (`apps/app/lib/lo-trinh/chon-nguon.ts`). Bảng
+`BanChupLoTrinh` giữ một hàng mỗi nguồn (hôm nay chỉ `crm`); không lịch sử, bản mới ghi đè.
+
+- **Người đẩy là GitHub Actions** (`.github/workflows/ban-chup-lo-trinh.yml`, kịch bản
+  `scripts/ban-chup-lo-trinh/day.ts`), gọi `POST /rest/lo-trinh/ban-chup` (thủ tục
+  `loTrinhBanChup.day`) với `x-api-key` là khoá loại «Đẩy lộ trình». Đây không phải điểm nhận
+  `/internal/*`: nó là thủ tục tRPC qua cầu REST, chặn bằng khoá máy như đường kéo tín hiệu.
+- **Khoá «Đẩy lộ trình» là cấu hình thứ ba của `apiKey([...])`** (`configId: "day-lo-trinh"`,
+  `enableSessionForAPIKeys: false`), đứng SAU khoá mặc định — cùng luật thứ tự với khoá chỉ-kéo.
+  `KhoaDayLoTrinhMiddleware` đọc lại vai người giữ khoá mỗi lần gọi: chỉ chủ hay quản trị.
+  Chỉ chủ hay quản trị tạo được loại khoá này.
+- **Phân tích ở biên, lưu nguyên khối**: thân đi qua `banChupVao`
+  (`@crm/validation/ban-chup-lo-trinh`), khối dữ liệu phải qua khuôn lộ trình; hàng lưu giữ cả
+  khoá ngoài khuôn của trang (danh sách tín hiệu) để TH3 đọc. Đọc ra thì phân tích lại.
+- **Không bao giờ lùi**: ghi bằng một câu `UPDATE … WHERE commitLuc < $moi`; cùng sha trả
+  `trung`, cũ hơn trả `cu-hon`, không đổi gì. Hai lượt chạy đua tạo hàng đầu bắt `P2002`.
+- Nhật ký ghi mã khoá, sha và kết quả, không ghi nội dung khối. Không `AgentTask`: không có việc
+  phán nào ở API.
+
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may
