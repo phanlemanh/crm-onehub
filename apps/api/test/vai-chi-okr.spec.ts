@@ -262,6 +262,8 @@ const DAU_VAO_HOP_LE = {
 		departmentId: null,
 	},
 	"okr.soanTangLuot": { cuocSoanId: "khong-co" },
+	"okr.hoiMo": {},
+	"okr.hoiTangLuot": { cuocHoiId: "khong-co" },
 	"okr.soanQuyet": { deXuatId: "khong-co", quyet: "nhan" },
 	"okr.soanDuaVao": { cuocSoanId: "khong-co", kr: [] },
 	"okr.luuTruMau": { id: "khong-co" },
@@ -447,6 +449,9 @@ const THU_TUC_OKR_LUOT_TOM_TAT = [
 	"troLyTomTatQuanTri",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_HOI_DAP = ["hoiCuaToi", "hoiMo", "hoiTangLuot"].map(
+	(t) => `okr.${t}`,
+);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,
@@ -1578,6 +1583,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_SOAN,
 				...THU_TUC_OKR_LUOT_TOM_TAT,
 				...THU_TUC_OKR_LUOT_UX_8D,
+				...THU_TUC_OKR_LUOT_HOI_DAP,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
@@ -1935,6 +1941,7 @@ type DongDoc = {
 const cuaKy = (s: SanDoc) => ({ cycleId: s.ky });
 const THU_TU_DOC_OKR = {
 	"okr.access": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.hoiCuaToi": { vao: () => undefined, K: "vang", khac: 200 },
 	"okr.aiChiTieu": {
 		vao: () => undefined,
 		K: "vang",

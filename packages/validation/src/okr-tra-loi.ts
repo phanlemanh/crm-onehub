@@ -90,3 +90,20 @@ export function kiemSoCau(chu: string, trich: GiaTriTrich[]): KetQuaKiemSo {
 	}
 	return { ok: true };
 }
+
+export const LY_DO_LUOT_HOI = ["het-luot-ngay", "het-tran-thang"] as const;
+
+export const hoiMoInput = z.object({});
+export const hoiMoOutput = z.object({ cuocHoiId: z.string() });
+export const hoiTangLuotInput = z.object({ cuocHoiId: ma });
+export const hoiTangLuotOutput = z.discriminatedUnion("ok", [
+	z.object({ ok: z.literal(true) }),
+	z.object({ ok: z.literal(false), lyDo: z.enum(LY_DO_LUOT_HOI) }),
+]);
+export const hoiCuaToiOutput = z.array(
+	z.object({ id: z.string(), createdAt: z.string() }),
+);
+
+export type HoiMoOutput = z.infer<typeof hoiMoOutput>;
+export type HoiTangLuotOutput = z.infer<typeof hoiTangLuotOutput>;
+export type HoiCuaToiOutput = z.infer<typeof hoiCuaToiOutput>;

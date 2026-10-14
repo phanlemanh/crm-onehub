@@ -55,6 +55,13 @@ import {
 	troLyTomTatQuanTriOutput,
 } from "@crm/validation/okr-tom-tat";
 import {
+	hoiCuaToiOutput,
+	hoiMoInput,
+	hoiMoOutput,
+	hoiTangLuotInput,
+	hoiTangLuotOutput,
+} from "@crm/validation/okr-tra-loi";
+import {
 	addCommentInput,
 	commentsInput,
 	followInput,
@@ -74,6 +81,7 @@ import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViOkrMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
+import { HoiService } from "./hoi.service";
 import {
 	addCommentOutput,
 	aiChiTieuOutput,
@@ -232,6 +240,7 @@ export class OkrRouter {
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
 		@Inject(SoanService) private readonly soan: SoanService,
+		@Inject(HoiService) private readonly hoiDap: HoiService,
 		@Inject(OkrHoiYService) private readonly hoiYDv: OkrHoiYService,
 		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
 		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
@@ -479,6 +488,35 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof soanMoVao>,
 	) {
 		return this.soan.mo(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hoiMoInput,
+		output: hoiMoOutput,
+		meta: restMeta("POST", "/okr/hoi/sessions", TAG),
+	})
+	hoiMo(@Ctx() ctx: AuthedTrpcContext) {
+		return this.hoiDap.mo(ctx.user.id);
+	}
+
+	@Mutation({
+		input: hoiTangLuotInput,
+		output: hoiTangLuotOutput,
+		meta: restMeta("POST", "/okr/hoi/sessions/{cuocHoiId}/turn", TAG),
+	})
+	hoiTangLuot(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiTangLuotInput>,
+	) {
+		return this.hoiDap.tangLuot(ctx.user.id, input.cuocHoiId);
+	}
+
+	@Query({
+		output: hoiCuaToiOutput,
+		meta: restMeta("GET", "/okr/hoi/sessions", TAG),
+	})
+	hoiCuaToi(@Ctx() ctx: AuthedTrpcContext) {
+		return this.hoiDap.cuaToi(ctx.user.id);
 	}
 
 	@Query({

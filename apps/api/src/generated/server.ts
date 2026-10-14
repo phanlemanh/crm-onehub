@@ -32,6 +32,7 @@ import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhas
 import { suaChuKyInput, goChuKyInput, hienChuKyInput } from "@crm/validation/okr-chu-ky";
 import { anChuKyInput, moRaInput, dongRaInput, xuatKyInput, chamKrInput, ghiDieuHocDuocInput, moLaiKyInput, mangSangInput } from "@crm/validation/okr-khep";
 import { troLyTomTatInput, troLyTomTatOutput, troLyTomTatPhanHoiInput, troLyTomTatPhanHoiOutput, troLyTomTatQuanTriInput, troLyTomTatQuanTriOutput } from "@crm/validation/okr-tom-tat";
+import { hoiMoInput, hoiMoOutput, hoiTangLuotInput, hoiTangLuotOutput, hoiCuaToiOutput } from "@crm/validation/okr-tra-loi";
 import { soanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import { moHoiYInput, suaHoiYInput, cycleIdInput, hoiYIdInput, gopYInput, suaYInput, yIdInput, dongYInput, niemPhongInput, taoChuDeInput, suaChuDeInput, chuDeIdInput, ganYInput, ketLuanInput } from "@crm/validation/okr-hoi-y";
 import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, hoiYDoPhuOutput, congBoOutput, hieuViSaoOutput } from "../okr/okr-hoi-y.contracts";
@@ -749,6 +750,17 @@ const appRouter = t.router({
       .input(soanMoVao)
       .output(soanMoOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    hoiMo: publicProcedure
+      .input(hoiMoInput)
+      .output(hoiMoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    hoiTangLuot: publicProcedure
+      .input(hoiTangLuotInput)
+      .output(hoiTangLuotOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    hoiCuaToi: publicProcedure
+      .output(hoiCuaToiOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     soanDanhSachCuoc: publicProcedure
       .input(donViSoanVao)
       .output(soanDanhSachCuocOutput)
