@@ -69,6 +69,9 @@ const en = {
 			"chuyen-viec": "through the 30-day handover",
 			"bang-keo": "by dragging on the board",
 			"bang-menu": "from the board menu",
+			khuon: "from the 30-day plan template",
+			"ke-hoach": "from the 30-day plan steps",
+			"dong-ke-hoach": "when the 30-day plan was closed",
 		},
 		loai: {
 			tao: "created the work",
@@ -229,6 +232,9 @@ const vi: ViecMessages = {
 			"chuyen-viec": "qua Chuyển việc 30 ngày",
 			"bang-keo": "kéo trên bảng",
 			"bang-menu": "chọn trên bảng",
+			khuon: "từ khuôn kế hoạch 30 ngày",
+			"ke-hoach": "trên thẻ Bước của kế hoạch 30 ngày",
+			"dong-ke-hoach": "khi đóng kế hoạch 30 ngày",
 		},
 		loai: {
 			tao: "tạo việc",

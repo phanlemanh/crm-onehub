@@ -47,6 +47,8 @@
 		"./okr-vet": "./src/okr-vet.ts",
 		"./okr-xu-huong": "./src/okr-xu-huong.ts",
 		"./onboarding-buoc": "./src/onboarding-buoc.ts",
+		"./buoc-viec": "./src/buoc-viec.ts",
+		"./buoc-viec-chieu": "./src/buoc-viec-chieu.ts",
 		"./onboarding-nhac": "./src/onboarding-nhac.ts",
 		"./safe-fetch": "./src/safe-fetch.ts",
 		"./settings": "./src/settings.ts",
