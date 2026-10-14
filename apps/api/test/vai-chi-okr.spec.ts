@@ -264,6 +264,11 @@ const DAU_VAO_HOP_LE = {
 	"okr.soanTangLuot": { cuocSoanId: "khong-co" },
 	"okr.hoiMo": {},
 	"okr.hoiTangLuot": { cuocHoiId: "khong-co" },
+	"okr.hoiPhanHoi": {
+		cuocHoiId: "khong-co",
+		maTraLoi: "khong-co",
+		huuIch: true,
+	},
 	"okr.soanQuyet": { deXuatId: "khong-co", quyet: "nhan" },
 	"okr.soanDuaVao": { cuocSoanId: "khong-co", kr: [] },
 	"okr.luuTruMau": { id: "khong-co" },
@@ -449,9 +454,12 @@ const THU_TUC_OKR_LUOT_TOM_TAT = [
 	"troLyTomTatQuanTri",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
-const THU_TUC_OKR_LUOT_HOI_DAP = ["hoiCuaToi", "hoiMo", "hoiTangLuot"].map(
-	(t) => `okr.${t}`,
-);
+const THU_TUC_OKR_LUOT_HOI_DAP = [
+	"hoiCuaToi",
+	"hoiMo",
+	"hoiPhanHoi",
+	"hoiTangLuot",
+].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,

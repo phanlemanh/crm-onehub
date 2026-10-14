@@ -107,4 +107,17 @@ describe("hdo tran luot", () => {
 		});
 		expect(chu.every((c) => c.nguoiHoiUserId === B)).toBe(true);
 	});
+
+	test("phan-hoi: ghi mot hang moi cau tra loi, bam lai thi doi; cuoc nguoi khac bi chan", async () => {
+		const { cuocHoiId } = await hoi.mo(A);
+		await hoi.phanHoi(A, { cuocHoiId, maTraLoi: "tra-loi-1", huuIch: true });
+		await hoi.phanHoi(A, { cuocHoiId, maTraLoi: "tra-loi-1", huuIch: false });
+		const hang = await db.okrHoiPhanHoi.findMany({ where: { cuocHoiId } });
+		expect(hang.map((h) => [h.maTraLoi, h.huuIch])).toEqual([
+			["tra-loi-1", false],
+		]);
+		await expect(
+			hoi.phanHoi(B, { cuocHoiId, maTraLoi: "tra-loi-1", huuIch: true }),
+		).rejects.toBeInstanceOf(ForbiddenException);
+	});
 });

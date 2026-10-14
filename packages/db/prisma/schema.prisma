@@ -2678,6 +2678,18 @@ model OkrLuotHoi {
   @@map("okrLuotHoi")
 }
 
+model OkrHoiPhanHoi {
+  id        String   @id @default(cuid())
+  cuocHoiId String
+  maTraLoi  String
+  userId    String
+  huuIch    Boolean
+  luc       DateTime
+
+  @@unique([cuocHoiId, maTraLoi, userId])
+  @@map("okrHoiPhanHoi")
+}
+
 model OkrTomTat {
   id           String   @id @default(cuid())
   taskId       String   @unique

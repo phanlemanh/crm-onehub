@@ -58,6 +58,8 @@ import {
 	hoiCuaToiOutput,
 	hoiMoInput,
 	hoiMoOutput,
+	hoiPhanHoiInput,
+	hoiPhanHoiOutput,
 	hoiTangLuotInput,
 	hoiTangLuotOutput,
 } from "@crm/validation/okr-tra-loi";
@@ -509,6 +511,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof hoiTangLuotInput>,
 	) {
 		return this.hoiDap.tangLuot(ctx.user.id, input.cuocHoiId);
+	}
+
+	@Mutation({
+		input: hoiPhanHoiInput,
+		output: hoiPhanHoiOutput,
+		meta: restMeta("POST", "/okr/hoi/sessions/{cuocHoiId}/feedback", TAG),
+	})
+	hoiPhanHoi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiPhanHoiInput>,
+	) {
+		return this.hoiDap.phanHoi(ctx.user.id, input);
 	}
 
 	@Query({

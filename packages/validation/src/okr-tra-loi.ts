@@ -107,3 +107,11 @@ export const hoiCuaToiOutput = z.array(
 export type HoiMoOutput = z.infer<typeof hoiMoOutput>;
 export type HoiTangLuotOutput = z.infer<typeof hoiTangLuotOutput>;
 export type HoiCuaToiOutput = z.infer<typeof hoiCuaToiOutput>;
+
+export const hoiPhanHoiInput = z.object({
+	cuocHoiId: ma,
+	maTraLoi: ma,
+	huuIch: z.boolean(),
+});
+export const hoiPhanHoiOutput = z.object({ ok: z.literal(true) });
+export type HoiPhanHoiInput = z.infer<typeof hoiPhanHoiInput>;
