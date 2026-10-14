@@ -183,7 +183,7 @@ export function AgentCapabilities({
 				<div className="flex flex-col">
 					{capabilities.actions.map((action) => (
 						<div
-							className="flex h-13 items-center gap-3 border-b last:border-b-0"
+							className="flex min-h-13 items-center gap-3 border-b py-2 last:border-b-0"
 							key={action.type}
 						>
 							<div className="min-w-0 flex-1">
@@ -191,7 +191,7 @@ export function AgentCapabilities({
 									{t.viec.nhan[action.type as keyof typeof t.viec.nhan] ??
 										action.type}
 								</p>
-								<p className="text-muted-foreground text-xs">
+								<p className="wrap-break-word text-muted-foreground text-xs">
 									{action.summary || action.provider}
 								</p>
 							</div>
@@ -230,10 +230,13 @@ export function AgentCapabilities({
 
 					{shownResources.map((resource) => (
 						<span
-							className="flex h-7 items-center gap-1.5 rounded-md border pr-1.5 pl-2.5 text-sm"
+							className="flex h-7 min-w-0 max-w-full items-center gap-1.5 rounded-md border pr-1.5 pl-2.5 text-sm"
 							key={`${resource.kind}:${resource.id}`}
+							data-chip-ban-ghi=""
 						>
-							{resource.label}
+							<span className="truncate" title={resource.label} translate="no">
+								{resource.label}
+							</span>
 							{canManage ? (
 								<button
 									aria-label={t.viec.go(resource.label)}

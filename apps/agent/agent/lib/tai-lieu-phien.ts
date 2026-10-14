@@ -71,7 +71,7 @@ export async function guiMaySoan(
 				},
 			},
 			continuationToken: tokenMaySoan(nguonId),
-			title: "Máy soạn bản đề xuất",
+			title: "Kara soạn bản đề xuất",
 			mode: "task",
 		});
 		await db.taiLieuNguon.updateMany({

@@ -12,7 +12,6 @@ import {
 	CardTitle,
 } from "@crm/ui/components/card";
 import { CardTableEmpty } from "@crm/ui/components/card-table";
-import { Checkbox } from "@crm/ui/components/checkbox";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import {
 	EntityLogo,
@@ -37,6 +36,7 @@ import { DealStageIndicator } from "@/components/crm/deal-stage";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { ActivityIcon } from "@/components/crm/timeline/activity-icon";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import { CELL, DongViecTongQuan } from "@/components/viec/dong-viec-tong-quan";
 import { activityLabel } from "@/lib/activity-presentation";
@@ -130,13 +130,6 @@ export function DashboardSummary() {
 		...trpc.dashboard.summary.queryOptions({ scope }),
 		placeholderData: (previous) => previous,
 	});
-
-	const complete = useMutation(
-		trpc.activities.complete.mutationOptions({
-			onSuccess: () => cache.activity(),
-			onError: (error) => toast.error(error.message),
-		}),
-	);
 
 	const queryClient = useQueryClient();
 	const xongBuoc = useMutation(
@@ -335,14 +328,13 @@ export function DashboardSummary() {
 									) : (
 										<SimpleTableRow key={d.id} data-viec={d.viec.id}>
 											<TableCell className={CELL}>
-												<Checkbox
-													checked={false}
-													disabled={complete.isPending}
-													aria-label={m.tasks.markDone}
-													onCheckedChange={() =>
-														complete.mutate({ id: d.viec.id, completed: true })
-													}
-												/>
+												<span
+													role="img"
+													aria-label={activityLabel("TASK", locale)}
+													className="text-muted-foreground"
+												>
+													<ActivityIcon type="TASK" />
+												</span>
 											</TableCell>
 											<TableCell className={CELL}>
 												<span className="flex min-w-0 flex-col" translate="no">

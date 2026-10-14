@@ -273,6 +273,33 @@ token không với tới. **403 từ MCP không có nghĩa là máy không thấ
 dùng CLI. Muốn MCP thấy, chủ kho cấp quyền lại cho kết nối MCP và chọn đủ bốn dự
 án; máy không tự đổi.
 
+## Chép việc cần làm cũ sang Việc (hàng DA1b)
+
+Việc của chủ kho, chạy MỘT lần ngay sau khi bản gộp DA1b lên production. Lệnh đọc `DATABASE_URL`; trỏ nó vào
+cơ sở dữ liệu production trên máy của chủ kho. Lệnh ghi (`--chay`, `--dao`) từ chối mọi kho không phải máy
+cục bộ khi thiếu `ALLOW_REMOTE_DB=1`; lệnh đếm không ghi gì nên không cần cờ.
+
+**Thứ tự lên.** Đợi deployment của `crm-onehub-api` có `✓ schema matches` (migration
+`chep_viec_can_lam` thêm `viec.activityGocId`, `viec.khoaNguon`) rồi mới chạy lệnh. App hay agent của bản
+mới nhận lượt trước khi migration xong thì lời đọc dòng thời gian và việc mã môi giới lệch lỗi trong vài
+phút đó.
+
+1. Đếm: `bun run viec:chep-cu` — ghi lại `taskTong`, `chuaChep`, `nguoiTaoKhongNhan`.
+2. Chạy thử: `ALLOW_REMOTE_DB=1 bun run viec:chep-cu --chay --thu --nguoi <email của một quản trị>` — chép trọn
+   trong một giao dịch rồi huỷ; `loi` phải rỗng.
+3. Chạy thật: `ALLOW_REMOTE_DB=1 bun run viec:chep-cu --chay --nguoi <email của một quản trị>`. Việc đang mở mà
+   người tạo không còn nhận được việc (vai «chỉ OKR», đã rời) về tay quản trị này; vết ghi người tạo gốc.
+4. Đếm lại, dán hai bản in của bước 1 và 4 vào #375.
+
+**Đọc ngưỡng.** Vế một: `banChep` sau bằng `taskTong` trước, và `taskTong` sau bằng `taskTong` trước (bản gốc
+còn đủ). Vế hai, 14 ngày sau ngày gộp: `bun run viec:chep-cu --tu <ngày gộp, ISO>` — `taskTaoSau` phải là 0.
+
+**Đảo.** Chỉ dữ liệu: `ALLOW_REMOTE_DB=1 bun run viec:chep-cu --dao` xoá mọi bản chép chưa ai đổi; bản đã đổi
+được in ở `giuLai` và chỉ xoá khi thêm `--ca-ban-da-doi`. Việc cũ tự hiện lại, chỉ đọc. Lùi cả mã về trước
+DA1b: chạy `--dao` TRƯỚC — lùi mã khi bản chép còn thì một việc hiện hai lần (hàng gốc có ô tích ở dòng thời
+gian, bản chép ở Việc của tôi và tin nhắc) và việc mã môi giới lệch đời cũ giao trùng. Hai cột mới để lại vô
+hại cho mã cũ.
+
 ## Bẫy đã gặp
 
 - **«Máy này không thấy production» (08/10).** Một phiên giám sát kết luận thế vì

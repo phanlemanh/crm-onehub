@@ -71,6 +71,8 @@ export const NGUON_VIEC = [
 	"zalo",
 	"api",
 	"chuyen-viec",
+	"tac-nhan",
+	"chep-cu",
 	"bang-keo",
 	"bang-menu",
 	"khuon",
@@ -122,8 +124,14 @@ const TEN_LOAI = {
 	plan: "kế hoạch 30 ngày",
 } as const satisfies Record<LoaiBanGhi, string>;
 
+const PHUT_MS = 60_000;
+
 export const VIEC = {
 	tieuDeToiDa: 200,
+	tieuDeViecCanLam: "Việc cần làm",
+	chepThuTranMs: 10 * PHUT_MS,
+	khoaMaLech: (ma: string) => `ma-lech:${ma}`,
+	vaiChepDuoc: ["owner", "admin"] as readonly string[],
 	moTaToiDa: 4000,
 	theoDoiToiDa: 20,
 	tranKhep: 50,
@@ -165,6 +173,10 @@ export const VIEC = {
 		vetHong: (id: string, chiTiet: string) =>
 			`Vết việc ${id} không đọc được: ${chiTiet}`,
 		ganHong: (id: string) => `Hàng gắn ${id} không trỏ tới bản ghi nào.`,
+		chiQuanTriChep:
+			"Chỉ quản trị chạy được lệnh chép việc cần làm — truyền --nguoi <email của một quản trị>.",
+		khongPhaiBanChep: (id: string) =>
+			`Việc ${id} không phải bản chép từ việc cần làm cũ.`,
 		conKhongCoCon: "Việc con không có việc con.",
 		chiThemConKhiMo: "Chỉ thêm việc con cho việc đang mở.",
 		goBuocOKeHoach:
@@ -174,6 +186,17 @@ export const VIEC = {
 	},
 	bang: { xongGanDayNgay: 7 },
 } as const;
+
+const dinhNgayHan = new Intl.DateTimeFormat("en-CA", {
+	timeZone: VIEC.muiGio,
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+});
+
+export function hanTheoNgayVN(d: Date): Date {
+	return new Date(`${dinhNgayHan.format(d)}T00:00:00.000Z`);
+}
 
 export function hanhDong(nguon: TrangThaiViec, den: TrangThaiViec): string {
 	if (den === TrangThaiViec.HUY) return VIEC.lam.huy;
@@ -348,6 +371,13 @@ export const vetViec = z.discriminatedUnion("loai", [
 			hanNgay: z.string().nullable(),
 			banGhi: z.array(banGhiVet),
 			nguoiTheoDoi: z.array(nguoiVet),
+			chep: z
+				.object({
+					activityGocId: z.string(),
+					trangThai: z.enum(TRANG_THAI_VIEC),
+					nguoiTaoGoc: nguoiVet.nullable(),
+				})
+				.optional(),
 		}),
 	}),
 	z.object({
@@ -386,6 +416,19 @@ export const vetViec = z.discriminatedUnion("loai", [
 		sau: z.object({ conId: z.string(), tieuDe: z.string() }),
 	}),
 ]);
+
+const viecCanLamMeta = z
+	.object({ platformBrokerId: z.string().trim().min(1).optional() })
+	.nullable();
+
+export type ViecCanLamMeta = { platformBrokerId: string | null };
+
+export function parseViecCanLamMeta(
+	value: Prisma.JsonValue | null,
+): ViecCanLamMeta {
+	const meta = viecCanLamMeta.parse(value ?? null);
+	return { platformBrokerId: meta?.platformBrokerId ?? null };
+}
 
 export type VetViec = z.infer<typeof vetViec>;
 

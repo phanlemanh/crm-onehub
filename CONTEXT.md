@@ -162,8 +162,8 @@ Việc đã Huỷ thì bước không có người làm. Đóng kế hoạch cò
 huỷ các việc đó không (đánh dấu sẵn); mở lại kế hoạch không tự hồi việc đã huỷ. Bước của
 kế hoạch tạo trước DA3 không mang Việc, có thể chưa giao cho ai và chạy như cũ.
 _Avoid_: task, việc cần làm, nhiệm vụ
-Vì sao: "việc cần làm" là một loại hoạt động khác đã có trên dòng thời gian —
-hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
+Vì sao: "việc cần làm" là loại hoạt động cũ trên dòng thời gian, nay đã chép thành
+Việc — hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
 
 **Việc**: một đầu việc có **người giao**, đúng một **người thực hiện**, không hay nhiều **người theo
 dõi**, có thể có hạn; gắn được vào một hay nhiều bản ghi — thoả thuận, công ty, cá nhân, kế hoạch 30
@@ -172,8 +172,9 @@ Trạng thái là một trong năm: Chưa làm · Đang làm · Chờ đánh gi�
 hiện đổi trạng thái theo bảng của `docs/api.md` mục «Việc»; người theo dõi, thành viên khác, quản trị
 không đổi. Việc gắn ít nhất một bản ghi đối tác thì ai đọc được dữ liệu đối tác cũng thấy; việc không gắn
 gì là việc riêng, chỉ ba vai người trong cuộc thấy. Lượt này người vai «chỉ OKR» chưa dùng Việc (kể cả
-việc riêng). Thay dần «việc cần làm» trên dòng thời gian (hàng DA1b) và Việc (KR) (lượt V5); bước của kế
-hoạch 30 ngày tạo từ hàng DA3 mang một Việc (xem **Bước**), bước của kế hoạch cũ vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
+việc riêng). Việc cần làm cũ trên dòng thời gian đã được chép thành Việc (hàng DA1b): bản gốc còn
+trong bảng hoạt động để đảo, việc chưa chép hiện chỉ đọc, không đường nào tạo việc cần làm mới; Tác
+nhân giao việc bằng Việc. Việc (KR) thay ở lượt V5; bước của kế hoạch 30 ngày tạo từ hàng DA3 mang một Việc (xem **Bước**), bước của kế hoạch cũ vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
 _Avoid_: task, nhiệm vụ, đầu việc
 Vì sao: khảo sát 05/10 thấy mọi hãng tách hai loại việc đều phải vá — «việc của
 tôi» nằm hai chỗ, quyền theo hai luật. Một chữ cho một loại việc chung cả CRM.
@@ -337,7 +338,7 @@ khoản của họ; việc duy nhất xảy ra là CRM biết nhắn nhắc bu�
 **Gợi ý**: câu hướng xử lý đi kèm một nhắc kế hoạch im — «Giao bước X», «Bước X
 quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22.
 _Avoid_: việc cần làm, hành động
-Vì sao: "việc cần làm" đã là một loại hoạt động trên dòng thời gian.
+Vì sao: "việc cần làm" là loại hoạt động cũ trên dòng thời gian, nay đã thành Việc.
 
 **Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
 ngày để theo dõi bốn bậc. Chốt 2026-09-22.

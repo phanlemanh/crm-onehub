@@ -114,6 +114,13 @@ export function fieldTypeLabel(
 	return crmMessages(locale).fields.type[type];
 }
 
+export function fieldTypeNgan(
+	type: keyof ReturnType<typeof crmMessages>["fields"]["typeNgan"],
+	locale: Locale,
+): string {
+	return crmMessages(locale).fields.typeNgan[type];
+}
+
 export function coverageNoun(entity: FieldEntity, locale: Locale): string {
 	const m = crmMessages(locale).standard;
 	if (entity === "COMPANY") return m.companies.toLowerCase();

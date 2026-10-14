@@ -71,6 +71,7 @@ import {
 	type KaraBanGhiMessages,
 	karaBanGhiMessages,
 } from "@/lib/messages/kara-ban-ghi";
+import { stepLabel } from "@/lib/nhan-buoc";
 import { useTRPC } from "@/lib/trpc/client";
 import { useRecordSheetView } from "./record-sheet/record-stack";
 
@@ -390,15 +391,6 @@ function lastQuestion(messages: readonly TranscriptMessage[]): string | null {
 		.filter((item) => item.kind === "said" && item.mine);
 	const last = said.at(-1);
 	return last?.kind === "said" ? last.text : null;
-}
-
-function stepLabel(item: DidItem, t: KaraBanGhiMessages, locale: Locale) {
-	const viec = new Map(Object.entries(t.tab.buoc)).get(item.tool);
-	if (!viec) return locale === "vi" ? t.tab.buocKhac : item.label;
-	const tach = item.label.indexOf(" — ");
-	return tach === -1 || locale === "vi"
-		? viec
-		: `${viec}${item.label.slice(tach)}`;
 }
 
 export function Turns({

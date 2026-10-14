@@ -1,6 +1,6 @@
 import { buocCuaViec, chieuLenBuoc } from "./buoc-viec-chieu";
 import { Prisma } from "./generated/prisma/client";
-import { TrangThaiViec } from "./generated/prisma/enums";
+import { ActivityType, TrangThaiViec } from "./generated/prisma/enums";
 import { docDuocDoiTac } from "./vai-doi-tac";
 import {
 	type BanGhiGan,
@@ -12,10 +12,12 @@ import {
 	dieuKienViecMoCua,
 	dieuKienXemViec,
 	hanhDong,
+	hanTheoNgayVN,
 	laMoLai,
 	type NguoiVet,
 	type NguonViec,
 	ngayHan,
+	parseViecCanLamMeta,
 	quyenDoi,
 	roiChuaLamMoi,
 	TRANG_THAI_KHEP,
@@ -63,6 +65,7 @@ export type TaoViecInput = {
 	nguoiTheoDoiIds?: string[];
 	gan: BanGhiGan[];
 	nguon: NguonViec;
+	khoaNguon?: string | null;
 	now: Date;
 };
 
@@ -241,6 +244,7 @@ export async function taoViec(
 			nguoiThucHienId: nguoiThucHien.id,
 			taoBoiId: input.nguoiId,
 			taoLuc: input.now,
+			khoaNguon: input.khoaNguon ?? null,
 		},
 		select: { id: true },
 	});
@@ -584,6 +588,142 @@ export async function ghiGoDoXoa(
 		);
 	}
 	return hang.length;
+}
+
+const CHON_VIEC_CAN_LAM = {
+	id: true,
+	type: true,
+	subject: true,
+	body: true,
+	dueAt: true,
+	completedAt: true,
+	createdAt: true,
+	companyId: true,
+	contactId: true,
+	dealId: true,
+	planId: true,
+	meta: true,
+	createdBy: { select: { id: true, name: true } },
+	viecChep: { select: { id: true } },
+} as const satisfies Prisma.ActivitySelect;
+
+function tieuDeCu(subject: string | null, body: string | null): string {
+	const tuSubject = subject?.trim();
+	if (tuSubject) return tuSubject.slice(0, VIEC.tieuDeToiDa);
+	const dong = body
+		?.split("\n")
+		.map((d) => d.trim())
+		.find((d) => d.length > 0);
+	return dong ? dong.slice(0, VIEC.tieuDeToiDa) : VIEC.tieuDeViecCanLam;
+}
+
+function moTaCu(subject: string | null, body: string | null): string | null {
+	if (!subject?.trim()) return null;
+	const moTa = body?.trim();
+	return moTa ? moTa.slice(0, VIEC.moTaToiDa) : null;
+}
+
+function ganCu(goc: {
+	companyId: string | null;
+	contactId: string | null;
+	dealId: string | null;
+	planId: string | null;
+}): BanGhiGan[] {
+	const gan: BanGhiGan[] = [];
+	if (goc.dealId) gan.push({ loai: "deal", id: goc.dealId });
+	if (goc.planId) gan.push({ loai: "plan", id: goc.planId });
+	if (goc.contactId) gan.push({ loai: "contact", id: goc.contactId });
+	if (goc.companyId) gan.push({ loai: "company", id: goc.companyId });
+	return gan;
+}
+
+export async function chepViecCanLam(
+	tx: DbGhi,
+	input: { activityId: string; nguoiChay: NguoiVet; now: Date },
+): Promise<{ id: string } | null> {
+	await tx.$queryRaw`SELECT id FROM activity WHERE id = ${input.activityId} FOR UPDATE`;
+	const goc = await tx.activity.findUnique({
+		where: { id: input.activityId },
+		select: CHON_VIEC_CAN_LAM,
+	});
+	if (goc === null || goc.type !== ActivityType.TASK) {
+		throw new LoiViec(
+			"khong-thay",
+			VIEC.thongDiep.khongCoViec(input.activityId),
+		);
+	}
+	if (goc.viecChep !== null) return null;
+	const tacGia = nguoiCua(goc.createdBy);
+	const xong = goc.completedAt !== null;
+	let nguoi = tacGia;
+	let nguoiTaoGoc: NguoiVet | null = null;
+	if (!xong) {
+		try {
+			await kiemNguoiNhanViec(tx, tacGia.id);
+		} catch (loi) {
+			if (!(loi instanceof LoiViec) || loi.ma !== "nguoi-nhan") throw loi;
+			nguoi = input.nguoiChay;
+			nguoiTaoGoc = tacGia;
+		}
+	}
+	const ganDung: BanGhiVet[] = [];
+	for (const b of ganCu(goc)) ganDung.push(await docBanGhi(tx, b));
+	const { platformBrokerId } = parseViecCanLamMeta(goc.meta);
+	const tieuDe = tieuDeCu(goc.subject, goc.body);
+	const trangThai = xong ? TrangThaiViec.XONG : TrangThaiViec.CHUA_LAM;
+	const hanNgay = goc.dueAt ? hanTheoNgayVN(goc.dueAt) : null;
+	const viec = await tx.viec.create({
+		data: {
+			tieuDe,
+			moTa: moTaCu(goc.subject, goc.body),
+			hanNgay,
+			trangThai,
+			khepLuc: goc.completedAt,
+			nguoiGiaoId: nguoi.id,
+			nguoiThucHienId: nguoi.id,
+			taoBoiId: tacGia.id,
+			taoLuc: goc.createdAt,
+			activityGocId: goc.id,
+			khoaNguon: platformBrokerId ? VIEC.khoaMaLech(platformBrokerId) : null,
+		},
+		select: { id: true },
+	});
+	for (const b of ganDung) {
+		await tx.viecGan.create({ data: { viecId: viec.id, ...cotGan(b) } });
+	}
+	await ghiVetViec(
+		tx,
+		{
+			viecId: viec.id,
+			nguoiId: tacGia.id,
+			nguon: "chep-cu",
+			luc: goc.createdAt,
+		},
+		{
+			loai: "tao",
+			truoc: null,
+			sau: {
+				tieuDe,
+				nguoiThucHien: nguoi,
+				hanNgay: hanNgay ? ngayHan(hanNgay) : null,
+				banGhi: ganDung,
+				nguoiTheoDoi: [],
+				chep: { activityGocId: goc.id, trangThai, nguoiTaoGoc },
+			},
+		},
+	);
+	return viec;
+}
+
+export async function xoaBanChep(tx: DbGhi, viecId: string): Promise<void> {
+	const tao = await tx.viecVet.findFirst({
+		where: { viecId, loai: "tao" },
+		select: { nguon: true },
+	});
+	if (tao === null || tao.nguon !== "chep-cu") {
+		throw new LoiViec("khong-thay", VIEC.thongDiep.khongPhaiBanChep(viecId));
+	}
+	await tx.viec.delete({ where: { id: viecId } });
 }
 
 export type KeoViecInput = DauGhi & { den: TrangThaiViec; thuTu: string[] };
