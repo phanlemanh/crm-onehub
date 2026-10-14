@@ -5,7 +5,7 @@ slug: gan-tay-va-kara-co-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-14T00:55:22Z
 design_doc: docs/superpowers/specs/2026-10-14-gan-tay-va-kara-co-ly-do-design.md
@@ -82,3 +82,15 @@ Quét bằng `morphological-scan` (preset entity-feature), 14/10. Chân sản ph
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/agent.md`, `docs/ai-ux.md`, `docs/design.md`.
 - Repo khai `feature_loop.ui_standards_skill: web-design-guidelines` nhưng skill đó không cài trên máy này — artifact UI
   không có đối trọng chuẩn nội ngoài `docs/design.md` và `docs/ai-ux.md`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Khi người dùng sửa đề xuất căn chỉnh của Kara mà để trống lý do, hệ thống vẫn từ chối giống như với dòng viết lại. Bài kiểm chỉ chưa ghim chắc câu báo lỗi nên nếu câu báo lỗi đổi, chưa chắc có gì kêu lên, còn hành vi người dùng thấy không đổi.
+  - Ngoài-2: Hàm nạp đề xuất mẫu của Kara hiện không tự từ chối khi bị gọi ở môi trường thật. Hôm nay chỉ có công cụ đo màn gọi nó và công cụ đó đã có chặn riêng, nên rủi ro chỉ xuất hiện nếu sau này có chỗ khác gọi lại.
+  - Ngoài-3: Trong tab Căn chỉnh, cột chứa hai nút Sửa lý do và Gỡ vẫn được đọc to là «Gỡ» với người dùng trình đọc màn hình, nên họ có thể không biết cột này còn có nút sửa.
+  - Ngoài-4: Hộp thoại căn chỉnh hiện làm đúng. Nhưng nếu sau này đổi luật về lý do hay căn cứ, màn hình có thể xử lý khác với máy chủ mà không ai hay.
+  - Ngoài-5: Khi nhận đề xuất của Kara, ô lý do ghi «Không bắt buộc» nhưng xoá trống thì nút Căn chỉnh bị khoá mà không nói vì sao. Người dùng có thể bối rối không hiểu tại sao không bấm được.
+  - Ngoài-6: Tài liệu mô tả giao diện lập trình không nói rõ giới hạn độ dài của lý do và căn cứ, dù hệ thống vẫn từ chối chữ quá dài khi lưu. Người tích hợp có thể chỉ biết giới hạn sau khi bị báo lỗi.
+  - Ngoài-7: Nếu một công cụ bên ngoài sửa lý do mà không gửi kèm căn cứ, căn cứ đang lưu sẽ bị xoá lặng lẽ và căn chỉnh có thể tụt về «Chưa có lý do». Hộp thoại trên màn hình luôn gửi đủ nên người dùng thường không gặp.
+  - Ngoài-8: Nếu công cụ bên ngoài nhận đề xuất của Kara theo cách sửa mà quên gửi căn cứ, căn chỉnh sẽ mất căn cứ Kara đã viết và bị ghi như do người sửa. Người dùng trên màn hình không gặp vì hộp thoại luôn gửi đủ.
+  - Ngoài-10: Bài kiểm việc Kara không được gắn căn cứ vào đề xuất loại viết lại hay hỏi hiện đạt, nhưng chưa chắc bắt được lỗi nếu sau này luật đó bị gỡ nhầm. Người dùng chưa bị ảnh hưởng.
+  - Ngoài-11: Bước kiểm lại các hồ sơ cũ có một phép đếm luôn đúng, nên nếu bộ lọc bỏ sót một hồ sơ thì phép đếm này không báo. Người dùng cuối không bị ảnh hưởng.
+  - Ngoài-12: Nhãn mức tin bằng tiếng Anh mới được kiểm ở hộp thoại và một mức, chưa kiểm ở phần đề xuất của Kara. Nếu có chỗ hiện nhãn tiếng Việt khi chọn tiếng Anh thì chưa có bài kiểm nào báo.

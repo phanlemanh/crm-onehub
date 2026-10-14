@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 29345daca5f2b9005402a170568add658bd33f49
-human_signoff:
+human_signoff: "Phan Le Manh 2026-10-14 — ký Cổng Bằng chứng trên vòng chấm 2 (17/17 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Ngoài-1 đến Ngoài-8, Ngoài-10 đến Ngoài-12 ghi Known limits; Ngoài-9 chấp nhận, không sửa; đồng ý cắt; Treo phê hết"
 ---
 
 # Evidence Report: gan-tay-va-kara-co-ly-do
@@ -109,7 +109,6 @@ human_signoff:
 
 - eval: E8
   judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment), fresh context
-  run_id: n-a (judgment, không có lệnh máy)
   verdict: PASS
   rationale: Mục can-chinh trong instructions.md nói đủ ba điều, mỗi điều có câu trích nguyên văn. Một, lyDo nêu vì sao mục tiêu đẩy được đích. Hai, canCu chỉ viết khi data block có số chống lưng và chép đúng số đó, không có số thì để null. Ba, luật cấm số lạ áp cho canCu.
   human_override:  # chi nguoi ghi
