@@ -2335,6 +2335,130 @@
       "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
+      "ma": "DH1",
+      "slug": "dieu-huong-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104,
+      "dung_tren": [],
+      "ten": "Điều hướng khu Mục tiêu",
+      "ten_ngan": "Khung Mục tiêu",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Tôi bấm Mục tiêu trên thanh bên thì gặp trang tên Mục tiêu, nút Thêm mục tiêu ở góc phải như Thoả thuận, và đổi thẻ không mất đơn vị đang xem»",
+      "vai": "Mọi người dùng OKR",
+      "vi_sao": "Đo trên production 14/10: tiêu đề đổi theo từng thẻ (5 tên) và khác tên «Mục tiêu» trên thanh bên; nút «Thêm mục tiêu» nằm giữa thân, cách mép phải 360–425px trong khi Thoả thuận, Công ty, Tài liệu là 0px; đổi thẻ chỉ giữ chu kỳ, mất đơn vị và cách xem.",
+      "bat_khi": "Năm người dùng thử tìm nút tạo mục tiêu và quay lại đúng đơn vị sau khi đổi thẻ, mỗi việc dưới 5 giây (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Bản mẫu /proto/dieu-huong-okr (nhánh feat/dieu-huong-okr) đo khớp Thoả thuận, Công ty, Tài liệu ở 9/9 tiêu chí. Câu cho Cổng 1: «Nhập từ bảng tính» và «Soạn cùng Trợ lý» gom vào nút «…» hay để «Soạn cùng Trợ lý» thành nút viền hiện sẵn như Tài liệu. Dòng lý do khoá theo luật «Không đủ quyền» của docs/settings.md, cùng cách trang Tổ chức.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "A1",
+        "A2",
+        "A4",
+        "A5",
+        "A6"
+      ]
+    },
+    {
+      "ma": "DH2",
+      "slug": "trang-don-vi-mot-bang",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.1,
+      "dung_tren": [
+        "DH1"
+      ],
+      "ten": "Trang đơn vị một bảng",
+      "ten_ngan": "Trang đơn vị",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Tôi chọn đơn vị bằng ô tìm kiếm và đọc mục tiêu của nó trong một bảng như Thoả thuận, mở từng mục tiêu ra KR»",
+      "vai": "Trưởng đơn vị và người phụ trách KR",
+      "vi_sao": "Trang «Theo đơn vị» hôm nay chồng sáu lớp điều khiển, có cột cây đơn vị rộng 288px không màn nào khác có, cách xem và chip lọc nằm hai hàng khác nhau, bộ nút đổi theo cách xem. Trên điện thoại cây hiện nguyên 20 dòng lúc tải rồi mới thu thành ô chọn. «Đặt cược» và «Chưa có lý do» không tự giải thích.",
+      "bat_khi": "Năm người dùng thử tìm OKR của một đơn vị bất kỳ dưới 10 giây và ít lần bấm hơn trên màn hôm nay (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Dựng trên DataTable của packages/ui (dòng mở rộng một cấp, trạng thái mở ở ?expand=), không cài data-grid của ReUI theo docs/reui.md. Bản mẫu đo 69px từ hàng thẻ tới bảng, bằng Thoả thuận và Công ty. Câu cho Cổng 1: bấm dòng mở KR thì mở ngăn chi tiết mục tiêu bằng đâu (đề xuất: tên mục tiêu). Cây căn chỉnh rời trang này ở hàng DH4, không ở đây, để không lúc nào mất cách nhìn căn chỉnh toàn công ty.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B6",
+        "B7",
+        "B8"
+      ]
+    },
+    {
+      "ma": "DH3",
+      "slug": "cua-toi-ba-phan",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.2,
+      "dung_tren": [
+        "DH1"
+      ],
+      "ten": "Của tôi ba phần",
+      "ten_ngan": "Của tôi",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Trưởng đơn vị mở Của tôi và thấy ngay KR cần cập nhật tuần này, đơn vị mình dẫn và KR mình phụ trách»",
+      "vai": "Trưởng đơn vị",
+      "vi_sao": "«Của tôi» hôm nay chỉ liệt kê mục tiêu người đó phụ trách; trưởng đơn vị không là người phụ trách mục tiêu nào thì thấy trang trống dù đang dẫn cả đơn vị. Cách làm phổ biến (Perdoo): OKR thuộc đơn vị, trưởng là người dẫn, «Của tôi» là hộp việc.",
+      "bat_khi": "Trưởng đơn vị gửi cập nhật tuần từ «Của tôi» mà không mở thẻ khác, ở ít nhất 80% lượt cập nhật của hai tuần đầu (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Bỏ thẻ «Cập nhật tuần» (A3) ở hàng này vì hành động cập nhật dời vào đây; bỏ trước thì mất lối vào. Mô hình dữ liệu đã đúng hướng (mục tiêu có đơn vị và một người phụ trách, trưởng sửa được đơn vị mình và đơn vị con); chỉ đọc thêm «đơn vị người này dẫn», không đổi quyền.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "C1",
+        "C2",
+        "C3",
+        "A3"
+      ]
+    },
+    {
+      "ma": "DH4",
+      "slug": "so-do-can-chinh-don-vi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.3,
+      "dung_tren": [],
+      "ten": "Sơ đồ căn chỉnh theo đơn vị",
+      "ten_ngan": "Sơ đồ đơn vị",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Lãnh đạo mở Toàn cảnh, chuyển sang Sơ đồ và thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt»",
+      "vai": "Ban lãnh đạo",
+      "vi_sao": "Cây căn chỉnh hôm nay là danh sách thụt lề cao khoảng 4.100px, mọi nhánh mở sẵn; căn chỉnh nhiều–nhiều nên mục tiêu góp hai chỗ phải hiện hai lần; không nhìn ra hình dáng tổng. Tability tách Strategy Map (thẻ theo đơn vị) khỏi Dependencies Map (quanh một mục).",
+      "bat_khi": "Ban lãnh đạo chỉ ra đơn vị chưa nối lên công ty trong 5 giây ở phiên nghiệm thu (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Bản mẫu /proto/so-do-can-chinh-okr (nhánh feat/so-do-can-chinh-okr): FlowMap trong packages/ui rút phần máy của @reui/flow-2, đường nối dài theo điểm uốn dagre. Cần gộp luật «Block có phần máy» (nhánh docs/luat-reui-phan-may) trước khi vòng này cài React Flow. Mã rút từ block Pro không vào PR gửi kho hãng. Sơ đồ phải mang lý do căn chỉnh của L2–L4. B5 (bỏ cây khỏi trang đơn vị) ở hàng này: chỉ bỏ khi sơ đồ thay được.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D6",
+        "B5"
+      ]
+    },
+    {
+      "ma": "DH5",
+      "slug": "so-do-quanh-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.4,
+      "dung_tren": [
+        "DH4"
+      ],
+      "ten": "Sơ đồ quanh một mục tiêu",
+      "ten_ngan": "Quanh mục tiêu",
+      "ngay": "2026-10-14",
+      "cau_giao": "«Từ một mục tiêu, tôi bấm Xem quanh mục tiêu và thấy nó góp vào đâu, ai góp vào nó, mục tiêu góp hai chỗ chỉ hiện một lần»",
+      "vai": "Trưởng đơn vị",
+      "vi_sao": "Câu hỏi «mục tiêu này góp vào đâu» hôm nay chỉ trả lời bằng một dòng chữ «Góp vào n chỗ»; muốn thấy cả đường lên công ty phải lần tay qua cây.",
+      "bat_khi": "Trưởng đơn vị trả lời đúng «mục tiêu này góp vào KR nào của công ty» trong 10 giây ở phiên nghiệm thu (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho yêu cầu 14/10 rà UX/UI khu OKR (đợt «okr-dieu-huong-1410», bản phạm vi docs/plan/pham-vi-okr-dieu-huong-1410.md). Đứng trên khung vẽ FlowMap của DH4. Lối vào từ ngăn chi tiết mục tiêu; rê chuột làm nổi đường đi.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "D5"
+      ]
+    },
+    {
       "ma": "E4b",
       "slug": "giai-doan-bo-mac-dinh",
       "nhom": "crm-chung",
@@ -2526,6 +2650,56 @@
         "L6"
       ],
       "mo_lai_khi": "Kho thứ hai (OneHub Platform hoặc kho khác) đã cài kit và hiện trên trang Lộ trình (LT3 đã giao)"
+    },
+    {
+      "ma": "DH6",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Bấm được mọi thẻ con và nút trên điện thoại mà không bấm trượt»",
+      "ly_do": "Vùng bấm 25–28px đo được ở cả Thoả thuận, Công ty, Tài liệu, Lộ trình và OKR: là thiết lập chung của bộ giao diện, không riêng khu Mục tiêu.",
+      "phu": [
+        "E1"
+      ],
+      "mo_lai_khi": "Chủ kho mở một hàng crm-chung về vùng bấm, hoặc một phiên thiết kế bộ giao diện chung"
+    },
+    {
+      "ma": "DH7",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Mỗi đơn vị trên cây tổ chức có một tên phân biệt được với đơn vị cha»",
+      "ly_do": "Chưa biết các cặp trùng tên trên production là dữ liệu nhập như vậy hay cây đang hiện thừa một cấp; sửa màn trước khi biết là đoán.",
+      "phu": [
+        "E2"
+      ],
+      "mo_lai_khi": "Nhân sự xác nhận các cặp trùng tên là thật hay nhập sai"
+    },
+    {
+      "ma": "DH8",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Mở hết mọi dòng của một bảng trong một lần bấm»",
+      "ly_do": "Chạm bảng chung của mọi danh sách; trang đơn vị có 3–5 mục tiêu và đã có cách xem Họp tuần liệt kê KR phẳng, chưa ai xin.",
+      "phu": [
+        "E3"
+      ],
+      "mo_lai_khi": "Phiên nghiệm thu của DH2 cho thấy người dùng phải bấm từng dòng để đọc KR"
+    },
+    {
+      "ma": "DH9",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Bảng Theo đơn vị ở Toàn cảnh mở theo cấp và cộng số từ đơn vị con lên»",
+      "ly_do": "Sơ đồ ở DH4 trả lời cùng câu hỏi «đơn vị nào đang thế nào»; làm cả hai là trùng.",
+      "phu": [
+        "E4"
+      ],
+      "mo_lai_khi": "Sau khi DH4 giao, ban lãnh đạo vẫn xin bảng cây có số cuộn lên"
+    },
+    {
+      "ma": "DH10",
+      "dot": "okr-dieu-huong-1410",
+      "cau_giao": "«Nút đổi cách xem nằm cùng một chỗ ở mọi danh sách»",
+      "ly_do": "Đã là câu hỏi Cổng Phạm vi của hàng NM2 (Thoả thuận để bên trái, Công ty để bên phải); chốt riêng ở đây là chốt hai lần.",
+      "phu": [
+        "E5"
+      ],
+      "mo_lai_khi": "NM2 chốt chỗ đặt và khu Mục tiêu cần theo"
     }
   ],
   "da_bac": [
