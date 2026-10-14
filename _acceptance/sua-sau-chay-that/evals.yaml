@@ -1,0 +1,131 @@
+schema_version: 1
+feature_slug: sua-sau-chay-that
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ssct_nguon
+    paths: [apps/api/src/tai-lieu/**, apps/api/test/ssct-nguon.spec.ts, apps/api/test/tai-lieu-san.ts]
+    expected: "exit 0; Postgres _test thật, gieo qua đường ghi thật (create, approve, deXuatLuuTru + approve). Ma trận VIẾT TRƯỚC ba dòng gọi đường nhận nguồn cập nhật của API (thủ tục nhận nguồn của taiLieuNguon) với đích: trang A đã lưu trữ → BAD_REQUEST chuỗi daLuuTru · trang B chưa từng duyệt do người khác tạo, gọi bởi thành viên không thấy B → NOT_FOUND cùng mã và câu với taiLieu.get(B) · trang C đang dùng → nhận (đối chứng dương). Mỗi dòng từ chối: đếm hàng taiLieuNguon và taiLieuDeXuat trước/sau bằng nhau. Số ca = 3, đúng bằng số dòng bảng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E1b
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ssct_nop_luu_tru
+    paths: [apps/agent/agent/lib/tai-lieu-nop.ts, apps/agent/test/ssct-nop-luu-tru.spec.ts]
+    expected: "exit 0; Postgres _test thật. Gieo nguồn DANG_SOAN cho trang đang dùng P (đường ghi thật của API), rồi lưu trữ P qua deXuatLuuTru + approve; gọi nopBanDeXuat (hàm thật của tai-lieu-nop.ts) với một bản hợp lệ → nguồn trangThai LOI, lyDo chứa chữ «lưu trữ», số taiLieuDeXuat của P không đổi. CHIỀU ĐỎ cùng fixture: trang Q y hệt nhưng chưa lưu trữ → nopBanDeXuat tạo đúng một đề xuất (thước phân biệt được hai trạng thái trang, không hằng đúng)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ssct_doc_cho
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/[trang]/**", apps/app/lib/tai-lieu-cho.ts, apps/app/test/ssct-doc-cho.dom.tsx]
+    expected: "exit 0; hàm lọc bản chờ của trang (apps/app/lib) trên bảng VIẾT TRƯỚC bốn dòng đề xuất {NOI_DUNG chờ, LUU_TRU chờ, KHOI_PHUC chờ, NOI_DUNG chờ nhưng cu} của cùng trang và một NOI_DUNG chờ của trang khác → toEqual [id NOI_DUNG chờ chưa cũ của đúng trang]; bảng chỉ LUU_TRU chờ → []. Bài dom ManDoc với hai dữ liệu đó: ca đầu «Có 1 bản chờ duyệt» và href nút «Xem bản chờ» là /ws/tai-lieu/de-xuat/<id NOI_DUNG>; ca sau không có huy hiệu số và không có nút. CHIỀU ĐỎ: bản sao bộ lọc bỏ điều kiện loai → ca sau ra một phần tử, bài ghim tên ca."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ssct_doc_cho
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/[trang]/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/ssct-doc-cho.dom.tsx]
+    expected: "exit 0; bài dom ManDoc nhận cờ lỗi tải bản chờ: thấy câu «Chưa tải được bản chờ duyệt» (chữ rút từ taiLieuMessages('vi')) và nút «Thử lại»; không có phần tử data-co-ban-cho nào; bấm «Thử lại» gọi router.refresh đúng một lần (đếm). Đối chứng: cùng trang không có cờ lỗi → không có câu lỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ssct_quay_lai
+    paths: [apps/api/src/tai-lieu/tai-lieu-lich-su.service.ts, apps/api/test/ssct-quay-lai.spec.ts]
+    expected: "exit 0; Postgres _test thật. Trang T: v1 tên «Quy định cũ» nội dung X; v2 tên «Quy định mới» nội dung X (đổi tên qua propose có ten, duyệt thật). quayLai(T,1) → đúng một đề xuất mới NOI_DUNG, ten «Quy định cũ», tuPhienBanSo 1, một sự kiện DE_XUAT. Trang U: v1 và v2 trùng cả tên lẫn nội dung không tạo được — dùng bản đang dùng: quayLai(U, số bản đang dùng) → CONFLICT chuaDoi, đếm hàng trước/sau bằng nhau. CHIỀU ĐỎ: bảng hai ca viết trước, khẳng định mã trả về khác nhau giữa T và U."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ssct_muc_luc
+    paths: [packages/ui/src/components/markdown-reader.tsx, packages/ui/test/ssct-muc-luc.dom.tsx]
+    expected: "exit 0; markdown nguồn sinh bằng bộ tuần tự hoá thật của trình soạn (tuanTuHoa của @crm/validation/tai-lieu-markdown hoặc trình soạn tiptap thật) cho ba tiêu đề «Lương & thưởng», «A < B», «Mục *quan trọng*» — không viết tay chuỗi đã thoát. readerHeadings trả text toEqual ba chữ đó; render MarkdownReader cùng nguồn: tập id các thẻ h2/h3 toEqual tập id mục lục. CHIỀU ĐỎ: bản sao readerHeadings đời cũ (regex trên chữ thô, dựng trong bài) cho text chứa '&amp;' hoặc '\\' và id lệch — bài ghim tên tiêu đề lệch."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ssct_lien_ket
+    paths: [packages/ui/src/components/markdown-reader.tsx, packages/ui/src/components/trinh-soan-thanh-cong-cu.tsx, packages/ui/src/lib/dan-tu-van-phong.ts, packages/ui/src/lib/lien-ket-an-toan.ts, packages/ui/test/ssct-lien-ket.dom.tsx]
+    expected: "exit 0; ma trận VIẾT TRƯỚC năm đích {http://a.vn, https://a.vn, mailto:x@a.vn, /ws/tai-lieu/t, javascript:alert(1)} × ba nơi {trình đọc, ô liên kết trình soạn, bộ lọc dán} → bảng nhận/bỏ toEqual nhau ở cả ba nơi (http và javascript bỏ, ba đích còn lại nhận). Trình soạn với http hiện câu «Chỉ nhận liên kết https» (rút từ messages) và không tạo mark link. Bộ lọc dán đoạn HTML có <a href='http://a.vn'>xem</a> → chữ «xem» còn, không có link. CHIỀU ĐỎ: quét mã cấm regex giao thức riêng trong ba tệp (đối chứng dương: chuỗi mẫu '/^(https?:' bị bắt)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ssct_chon_loi
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/test/ssct-chon-loi.dom.tsx]
+    expected: "exit 0; hàm lua-chon-trang với nguồn thành viên ném lỗi → trả cờ lỗi (không phải mảng rỗng im lặng); bài dom form trang mới và hộp tải nguồn nhận cờ đó → thấy câu «Chưa tải được danh sách thành viên» và nút «Thử lại»; đối chứng: danh sách thật rỗng không lỗi → không có câu lỗi. Hai nơi = hai ca, đúng số dòng bảng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ssct_tim_nhanh
+    paths: [apps/app/components/crm/quick-switcher.tsx, apps/app/test/ssct-tim-nhanh-loi.dom.tsx]
+    expected: "exit 0; bài dom hộp tìm nhanh, truy vấn CRM ném lỗi, truy vấn Tài liệu trả một trang → thấy dòng báo nhóm CRM chưa tìm được (chữ rút từ messages) và trang đó; không có chữ «Không có gì khớp». CHIỀU ĐỎ: cả hai truy vấn thành công và rỗng → có «Không có gì khớp», không có dòng lỗi (thước phân biệt lỗi với rỗng)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.ssct_hoi_en
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/hoi-tra-loi.tsx", apps/app/lib/messages/tai-lieu.ts, packages/validation/src/tai-lieu-hoi.ts, apps/app/test/ssct-hoi-en.dom.tsx]
+    expected: "exit 0; bài dom màn Hỏi, ma trận VIẾT TRƯỚC ba tình huống {từ chối, lỗi, quá hạn} × hai ngôn ngữ {en, vi}: mỗi ô khẳng định chữ hiện toEqual taiLieuMessages(<ngôn ngữ>) của khoá tương ứng; ô en không chứa ký tự tiếng Việt có dấu (regex /[à-ỹđ]/i). 6 khẳng định = 6 ô. Đối chứng: câu gửi qua Zalo (hàm của tai-lieu-hoi dùng cho Zalo) vẫn bằng tiếng Việt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.ssct_bang_doi_cot
+    paths: [packages/validation/src/tai-lieu-diff.ts, packages/ui/src/components/diff-trang.tsx, packages/ui/test/ssct-bang-doi-cot.dom.tsx]
+    expected: "exit 0; hai ca VIẾT TRƯỚC (thêm một cột, bớt một cột) với markdown bảng 3 hàng; soSanh thật rồi render DiffTrang: đúng hai phần tử table; bảng một mọi ô là del, hàng tiêu đề thead là tiêu đề cũ; bảng hai mọi ô là ins, thead là tiêu đề mới; không có hàng tbody nào bằng tiêu đề mới hay cũ. Đối chứng: ca cùng số cột chỉ đổi một ô → vẫn một bảng (hành vi 2bc61eaed giữ nguyên)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.ssct_duyet_may_cu
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/de-xuat/[id]/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/ssct-duyet-may-cu.dom.tsx]
+    expected: "exit 0; bài dom ManDuyet với bản máy soạn (may có coBanGoc) đã đọc xong: cu=true → tiêu đề thẻ so sánh toEqual nhãn «So với bản gốc lúc máy soạn» của messages; cu=false → nhãn soVoiBan cũ (đối chứng). Hai ca."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.ssct_loai_tep
+    paths: [apps/app/lib/tai-lieu-man.ts, packages/validation/src/tai-lieu-nguon.ts, "apps/app/app/(app)/[slug]/tai-lieu/hop-tai-nguon.tsx", apps/app/test/ssct-loai-tep.dom.tsx]
+    expected: "exit 0; thuộc tính accept của ô chọn tệp toEqual chuỗi sinh từ KIEU_NGUON (import, không chép tay); quét mã: tai-lieu-man.ts không còn chuỗi '.docx' hay '.pdf' (đối chứng dương: chuỗi mẫu bị bắt). Bài dom hộp tải chọn tệp .txt → câu báo chứa tên mọi loại trong KIEU_NGUON."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.ssct_so_bo_mau
+    paths: [_acceptance/sua-sau-chay-that/rang/**, _acceptance/sua-sau-chay-that/evidence/do-bo-mau.md, _acceptance/sua-sau-chay-that/evidence/cham-tung-cau.jsonl, _acceptance/bo-cau-hoi-mau/evidence/cham-tung-cau.jsonl]
+    expected: "exit 0; so-bo-mau.ts không cờ, không gọi model: đọc evidence/cham-tung-cau.jsonl của lượt này (sinh ở S3 bằng do-bo-mau.ts --do với BCM_EVIDENCE trỏ thư mục hồ sơ) và của bo-cau-hoi-mau đã ký, bằng docBaoCao/khuôn của bo-cau-hoi-mau/rang (import, không chép); kiemBangChung của lượt này xanh và băm bo-mau khớp; in mỗi mã câu đạt ở lượt ký mà không đạt ở lượt này (trừ câu kết cục lỗi gọi model, in riêng) — danh sách lùi rỗng thì exit 0. CHIỀU ĐỎ trên bản sao jsonl trong thư mục tạm: đổi kết cục một câu đạt thành sai → exit 1, stdout ghim mã câu đó; đổi thành lỗi model → exit 0, câu in ở mục lỗi model."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ssct_man
+    steps:
+      - "Canh cay; phien do rieng (tien-de.mjs qua mot-luot.sh); gieo qua duong ghi that: trang P co mot de xuat sua noi dung va mot de xuat luu tru cung cho; trang M co tieu de «Luong & thuong» va «A < B»; mot de xuat them cot bang; dang nhap dev:session thanh vien"
+      - "Buoc 1 (1440): man doc P -> «Co 1 ban cho duyet», nut «Xem ban cho» tro de xuat sua noi dung -> anh ssct-doc-cho-1440.png"
+      - "Buoc 2 (1440): man doc M -> muc luc hien dung hai tieu de, bam muc luc «A < B» -> cuon toi dung id -> anh ssct-muc-luc-1440.png"
+      - "Buoc 3 (1440): man duyet de xuat them cot -> hai bang rieng -> anh ssct-bang-doi-cot-1440.png"
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", packages/ui/src/components/**, _acceptance/sua-sau-chay-that/rang/**]
+    expected: "exit 0; man.mjs in 'buoc N: dat' cho 3 buoc; chu doc tu DOM bang innerText. CHIEU DO: --chieu-do tren ban sao bo loc loai o [trang]/page.tsx -> 'buoc 1: dem ban cho sai', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]

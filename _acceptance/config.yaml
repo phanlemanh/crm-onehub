@@ -1108,6 +1108,18 @@ executors:
     lslt_dom_lich_su: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-lich-su.dom.tsx"
     lslt_dom_luu_tru: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-luu-tru.dom.tsx"
     lslt_dom_da_xu_ly: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-da-xu-ly.dom.tsx"
+    ssct_nguon: 'bun run test -- "cd apps/api && bun test test/ssct-nguon.spec.ts -t ssct-nguon"'
+    ssct_nop_luu_tru: 'bun run test -- "cd apps/agent && bun test test/ssct-nop-luu-tru.spec.ts"'
+    ssct_doc_cho: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-doc-cho.dom.tsx"
+    ssct_quay_lai: 'bun run test -- "cd apps/api && bun test test/ssct-quay-lai.spec.ts -t ssct-quay-lai"'
+    ssct_muc_luc: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-muc-luc.dom.tsx"
+    ssct_lien_ket: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-lien-ket.dom.tsx"
+    ssct_chon_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-chon-loi.dom.tsx"
+    ssct_tim_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-tim-nhanh-loi.dom.tsx"
+    ssct_hoi_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-hoi-en.dom.tsx"
+    ssct_bang_doi_cot: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ssct-bang-doi-cot.dom.tsx"
+    ssct_duyet_may_cu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-duyet-may-cu.dom.tsx"
+    ssct_loai_tep: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ssct-loai-tep.dom.tsx"
     bom_okr_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okr-that-mau"'
     bom_bo_hong: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t bo-hong-mau"'
     bcq4_sinh: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-sinh"'
@@ -1768,6 +1780,8 @@ executors:
     lslt_man_lich_su: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lich-su-va-luu-tru-trang/rang/man.mjs --phan lich-su"'
     lslt_man_luu_tru: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lich-su-va-luu-tru-trang/rang/man.mjs --phan luu-tru"'
     lslt_man_da_luu_tru: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lich-su-va-luu-tru-trang/rang/man.mjs --phan da-luu-tru"'
+    ssct_so_bo_mau: "bun _acceptance/sua-sau-chay-that/rang/so-bo-mau.ts"
+    ssct_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/sua-sau-chay-that/rang/man.mjs"'
     msd_blob_that: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_logo_gia_khong_dung bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
     knr_bien_cac_nha: "node _acceptance/kho-nguon-khoa-rieng/rang/bien-cac-nha.mjs"
     msd_soan_that: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/soan-that.mjs"'
