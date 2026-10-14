@@ -1637,6 +1637,9 @@ executors:
     ltk_hoan_tac_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-hoan-tac-loi"
     ltk_chu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-chu"
     ltk_cap_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
+    dlt_dai: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/dai-luu-tru.dom.tsx -t dlt-dai"
+    dlt_khoa: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/dai-luu-tru.dom.tsx -t dlt-khoa"
+    dlt_ngan_cho: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dai-luu-tru-dung-chung.dom.tsx -t dlt-ngan-cho"
     tbd_phong_ban: 'bun run test -- "cd apps/api && bun test test/them-buoc-bao-dung.spec.ts"'
     tbd_form_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t phong-ban-loi'
     tbd_qua_han_lui: 'cd apps/app && TBD_MUI_GIO=lui TZ=America/Los_Angeles bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-lui'
@@ -1676,6 +1679,10 @@ executors:
   script:
     ltk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/luu-tru-truong-khong-hoi/rang/man.mjs"'
     ltk_san_thiet_ke: 'for t in apps/app/components/crm/fields/field-editor.tsx apps/app/components/crm/fields/fields-list.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    dlt_mot_noi: bun _acceptance/dai-luu-tru-dung-chung/rang/mot-noi.mjs
+    dlt_bang_manh: bun _acceptance/dai-luu-tru-dung-chung/rang/bang-manh.mjs
+    dlt_v2_nguyen: bun _acceptance/dai-luu-tru-dung-chung/rang/v2-nguyen.mjs
+    dlt_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dai-luu-tru-dung-chung/rang/man.mjs"'
     lqc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lien-quan-loc-ban-da-cat/rang/man.mjs"'
     lqc_san_thiet_ke: 'for t in apps/app/components/crm/record-sheet/record-parts.tsx apps/app/components/crm/record-sheet/company-sheet.tsx apps/app/components/crm/record-sheet/contact-sheet.tsx apps/app/components/crm/record-sheet/deal-sheet.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'
