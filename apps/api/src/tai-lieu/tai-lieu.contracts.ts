@@ -1,6 +1,7 @@
 import {
 	chuanNfc,
 	DANG_CHO,
+	LOAI_DE_XUAT,
 	LOAI_TRANG,
 	TAI_LIEU,
 	TRANG_THAI_DE_XUAT,
@@ -28,8 +29,20 @@ export const lyDoVao = z
 			.max(TAI_LIEU.lyDo.max, T.lyDoDai(TAI_LIEU.lyDo.max)),
 	);
 
+export const lyDoDeXuatVao = z
+	.string()
+	.max(V.lyDoToiDa)
+	.transform((s) => chuanNfc(s).trim())
+	.pipe(
+		z
+			.string()
+			.min(TAI_LIEU.lyDo.min, T.lyDoDeXuatTrong)
+			.max(TAI_LIEU.lyDo.max, T.lyDoDeXuatDai(TAI_LIEU.lyDo.max)),
+	);
+
 export const taiLieuListInput = z.object({
 	loai: z.enum(LOAI_TRANG).optional(),
+	archived: z.boolean().default(false),
 	donViId: ma.optional(),
 	chuTrangId: ma.optional(),
 	page: z.number().int().min(1).default(1),
@@ -63,6 +76,14 @@ export const taiLieuApproveInput = z.object({
 	daDoiChieu: z.number().int().nonnegative().optional(),
 });
 export const taiLieuRejectInput = z.object({ id: ma, lyDo: lyDoVao });
+export const taiLieuPhienBanInput = z.object({
+	slug: ma,
+	so: z.number().int().positive(),
+});
+export const taiLieuDeXuatTrangInput = z.object({
+	slug: ma,
+	lyDo: lyDoDeXuatVao,
+});
 
 const nguoi = z.object({ id: z.string(), name: z.string() });
 const donVi = z.object({ id: z.string(), name: z.string() }).nullable();
@@ -79,10 +100,12 @@ export const taiLieuListOutput = z.object({
 			donVi,
 			capNhat: z.string(),
 			coBanCho: z.boolean(),
+			luuTruLuc: z.string().nullable(),
 		}),
 	),
 	total: z.number().int(),
 	facetCounts: z.record(loaiTrang, z.number().int()),
+	soDaLuuTru: z.number().int(),
 });
 
 export const taiLieuDangDungOutput = z.object({
@@ -116,12 +139,16 @@ export const taiLieuGetOutput = z.object({
 	xacMinhDen: z.string().nullable(),
 	quaHanXacMinh: z.boolean(),
 	coQuyenXacMinh: z.boolean(),
+	daLuuTru: z.object({ luc: z.string() }).nullable(),
+	coLuuTruCho: z.boolean(),
+	coKhoiPhucCho: z.boolean(),
 });
 
 export const taiLieuCreateOutput = z.object({ slug: z.string() });
 export const taiLieuProposeOutput = z.object({ deXuatId: z.string() });
 
 const trangThai = z.enum(TRANG_THAI_DE_XUAT);
+const loaiDeXuat = z.enum(LOAI_DE_XUAT);
 
 export const taiLieuProposalsOutput = z.object({
 	rows: z.array(
@@ -132,6 +159,7 @@ export const taiLieuProposalsOutput = z.object({
 			taoBoi: nguoi,
 			luc: z.string(),
 			trangThai,
+			loai: loaiDeXuat,
 			cu: z.boolean(),
 		}),
 	),
@@ -150,7 +178,10 @@ export const taiLieuProposalOutput = z.object({
 	slug: z.string(),
 	ten: z.string(),
 	trangThai,
+	loai: loaiDeXuat,
 	lyDo: z.string().nullable(),
+	lyDoDeXuat: z.string().nullable(),
+	tuPhienBanSo: z.number().int().nullable(),
 	taoBoi: nguoi,
 	taoLuc: z.string(),
 	banGoc: z.string(),
@@ -171,6 +202,31 @@ export const taiLieuApproveOutput = z.object({
 	canhBaoTuCam: z.array(z.string()),
 });
 export const taiLieuOkOutput = z.object({ ok: z.literal(true) });
+
+export const taiLieuLichSuOutput = z.array(
+	z.object({
+		so: z.number().int(),
+		ten: z.string(),
+		duyetLuc: z.string(),
+		nguoiDuyet: nguoi,
+		nguoiDeXuat: nguoi,
+		dangDung: z.boolean(),
+	}),
+);
+const banNgan = z.object({
+	so: z.number().int(),
+	ten: z.string(),
+	noiDung: z.string(),
+});
+export const taiLieuPhienBanOutput = banNgan.extend({
+	slug: z.string(),
+	tenTrang: z.string(),
+	duyetLuc: z.string(),
+	nguoiDuyet: nguoi,
+	laBanDangDung: z.boolean(),
+	daLuuTru: z.boolean(),
+	dangDung: banNgan,
+});
 
 export const taiLieuTimInput = z.object({
 	q: z.string().max(TAI_LIEU.tim.toiDa * 3),
@@ -247,6 +303,10 @@ export type TaiLieuCreateInput = z.infer<typeof taiLieuCreateInput>;
 export type TaiLieuProposeInput = z.infer<typeof taiLieuProposeInput>;
 export type TaiLieuApproveInput = z.infer<typeof taiLieuApproveInput>;
 export type TaiLieuRejectInput = z.infer<typeof taiLieuRejectInput>;
+export type TaiLieuPhienBanInput = z.infer<typeof taiLieuPhienBanInput>;
+export type TaiLieuDeXuatTrangInput = z.infer<typeof taiLieuDeXuatTrangInput>;
+export type TaiLieuLichSuOutput = z.infer<typeof taiLieuLichSuOutput>;
+export type TaiLieuPhienBanOutput = z.infer<typeof taiLieuPhienBanOutput>;
 export type TaiLieuListOutput = z.infer<typeof taiLieuListOutput>;
 export type TaiLieuDangDungOutput = z.infer<typeof taiLieuDangDungOutput>;
 export type TaiLieuGetOutput = z.infer<typeof taiLieuGetOutput>;

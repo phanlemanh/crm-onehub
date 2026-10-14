@@ -17,6 +17,9 @@ export const TRANG_THAI_DE_XUAT = [
 ] as const;
 export type TrangThaiDeXuat = (typeof TRANG_THAI_DE_XUAT)[number];
 
+export const LOAI_DE_XUAT = ["NOI_DUNG", "LUU_TRU", "KHOI_PHUC"] as const;
+export type LoaiDeXuat = (typeof LOAI_DE_XUAT)[number];
+
 export const DANG_CHO = [
 	"duyet",
 	"may-soan",
@@ -35,6 +38,8 @@ export const LOAI_SU_KIEN = [
 	"CU",
 	"MAY_SOAN",
 	"XAC_MINH",
+	"LUU_TRU",
+	"KHOI_PHUC",
 ] as const;
 export type LoaiSuKien = (typeof LOAI_SU_KIEN)[number];
 
@@ -129,6 +134,8 @@ export const suKienChiTiet = z.discriminatedUnion("loai", [
 		soLanBac: z.number().int().nonnegative(),
 	}),
 	z.object({ loai: z.literal("XAC_MINH"), den: z.iso.date().nullable() }),
+	z.object({ loai: z.literal("LUU_TRU"), deXuatId }),
+	z.object({ loai: z.literal("KHOI_PHUC"), deXuatId }),
 ]);
 
 export type SuKienChiTiet = z.infer<typeof suKienChiTiet>;
@@ -137,5 +144,14 @@ export function parseSuKienChiTiet(v: unknown): SuKienChiTiet {
 	const r = suKienChiTiet.safeParse(v);
 	if (!r.success)
 		throw new Error(`sự kiện tài liệu không đọc được: ${r.error.message}`);
+	return r.data;
+}
+
+const loaiDeXuat = z.enum(LOAI_DE_XUAT);
+
+export function parseLoaiDeXuat(v: unknown): LoaiDeXuat {
+	const r = loaiDeXuat.safeParse(v);
+	if (!r.success)
+		throw new Error(`loại đề xuất tài liệu không đọc được: ${String(v)}`);
 	return r.data;
 }
