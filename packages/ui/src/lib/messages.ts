@@ -147,6 +147,9 @@ const en = {
 	khungXuong: {
 		dangTai: "Loading…",
 	},
+	breadcrumb: {
+		nhan: "Breadcrumb",
+	},
 	reasoning: {
 		thinking: "Thinking…",
 		thoughtBrief: "Thought for a few seconds",
@@ -394,6 +397,9 @@ const vi = {
 	},
 	khungXuong: {
 		dangTai: "Đang tải…",
+	},
+	breadcrumb: {
+		nhan: "Vị trí trang",
 	},
 	reasoning: {
 		thinking: "Đang suy nghĩ…",
