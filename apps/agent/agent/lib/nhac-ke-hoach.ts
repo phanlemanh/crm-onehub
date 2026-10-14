@@ -21,10 +21,11 @@ import {
 	khoaDonOkr,
 	THAM_SO_OKR,
 } from "@crm/validation/okr-tham-so";
+import { khoaThongBao } from "@crm/validation/thong-bao";
 import { sendSlackMessage } from "./run-runtime";
 import { slackAccessToken } from "./slack-connection";
-import { ghiThongBao } from "./thong-bao-ghi";
 import { completeTask } from "./tasks";
+import { ghiThongBao } from "./thong-bao-ghi";
 import { dungTin, type LienKet, truKrIm } from "./tin-nhac";
 import { guiZalo, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
@@ -228,7 +229,10 @@ export async function chayNhac(
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
 	const now = new Date();
-	const mucTinh = { ngay: ngayVN(now), muc: maCuaAnToan(userId, viec) };
+	const mucTinh = {
+		ngay: ngayVN(now),
+		khoa: viec.map((v) => khoaThongBao(v, now)),
+	};
 	await db.agentTask.update({
 		where: { id: task.id },
 		data: { payload: { ...payload, mucTinh } },

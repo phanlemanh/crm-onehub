@@ -202,9 +202,9 @@ describe("htb-ghi", () => {
 			}
 			const payload = parseNhacPayload((await hangCua(nguoi.id)).payload);
 			expect(
-				payload.mucTinh?.muc.length,
+				[...(payload.mucTinh?.khoa ?? [])].sort(),
 				"luot nhac khong ghi ma muc da tinh",
-			).toBe(kyVong.length);
+			).toEqual(kyVong);
 		}
 		expect(ketQua.Z).toBe("da-gui");
 		expect(ketQua.S).toBe("da-gui");
@@ -226,9 +226,9 @@ describe("htb-ghi", () => {
 		tat.mockRestore();
 		const payload = parseNhacPayload((await hangCua(K.id)).payload);
 		expect(
-			payload.mucTinh?.muc.length,
+			[...(payload.mucTinh?.khoa ?? [])].sort(),
 			"danh sach muc da tinh mat khi ghi thong bao hong",
-		).toBe((await khoaKyVong(K.id, goc)).length);
+		).toEqual(await khoaKyVong(K.id, goc));
 		expect(payload.thongBaoLoi).toContain("ghi gia hong");
 	});
 });

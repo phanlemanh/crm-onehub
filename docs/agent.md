@@ -311,7 +311,7 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   Zalo hoặc Slack. Độ ưu tiên là `PRIORITY.nhac`.
 - **Thông báo ghi trước khi chọn kênh** (`lib/thong-bao-ghi.ts`, hồ sơ
   `hop-thong-bao-tren-web`). Ngay sau khi có danh sách mục, `chayNhac` ghi
-  `payload.mucTinh` (`{ ngay, muc }`, mọi mục đã tính) rồi gọi `ghiThongBao`: mỗi mục
+  `payload.mucTinh` (`{ ngay, khoa }`, khoá của mọi mục đã tính) rồi gọi `ghiThongBao`: mỗi mục
   một hàng `ThongBao` cho người đó, kể cả người không có kênh nào. Mục còn nằm liên tục
   trong danh sách (có ở sáng hôm qua hay hôm nay) không sinh hàng mới — hàng cũ cập
   nhật `thayNgay` và `noiDung`; khoá gộp là `khoaThongBao` (`@crm/validation/thong-bao`),

@@ -77,7 +77,7 @@ export const nhacPayload = z
 		kenh: z.enum(["zalo", "slack"]).optional(),
 		lechKenh: z.boolean().optional(),
 		mucTinh: z
-			.object({ ngay: z.string(), muc: z.array(mucNhac) })
+			.object({ ngay: z.string(), khoa: z.array(z.string()) })
 			.strict()
 			.optional(),
 		thongBaoLoi: z.string().optional(),
