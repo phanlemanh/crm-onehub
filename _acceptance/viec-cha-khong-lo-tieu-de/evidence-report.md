@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 16a316276339f917e1b4221f3b4bd5bc78bc3cb5
-human_signoff:
+human_signoff: manh 2026-10-15
 ---
 
 # Evidence Report: viec-cha-khong-lo-tieu-de

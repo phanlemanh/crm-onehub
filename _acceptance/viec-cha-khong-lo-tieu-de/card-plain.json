@@ -1,27 +1,75 @@
 {
   "feature_plain": "Người làm việc con không còn thấy tên của việc cha khi việc cha là việc riêng họ không được xem, và số việc con trên thẻ bảng chỉ đếm những việc người xem thấy được.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ ẩn việc cha trong khung việc con với đúng những người không được xem việc cha — kiểm trên cả năm vai người (người giao, người làm, người theo dõi, người làm việc con, thành viên khác) × hai trạng thái của việc cha."},
-    {"id": "AC-2", "p": "Sẽ bỏ dòng «Thuộc: …» trên thẻ bảng của người làm việc con khi việc cha đã thành việc riêng; người trong cuộc của việc cha vẫn thấy dòng đó."},
-    {"id": "AC-3", "p": "Sẽ chỉ đếm việc con người xem thấy được trong số «x/y việc con xong» trên thẻ cha; việc con đã Huỷ vẫn không tính."},
-    {"id": "AC-4", "p": "Sẽ cho thẻ bảng và khung việc nói cùng một con số việc con; cha chỉ còn con người xem không thấy thì thẻ như việc không có con, và đóng cha không chạm vào con."},
-    {"id": "AC-5", "p": "Sẽ hiện lại tên việc cha ngay khi người xem lấy lại quyền xem (gắn lại thoả thuận), và việc xem không ghi gì vào dữ liệu."},
-    {"id": "AC-6", "p": "Sẽ không để tên hay mã việc cha lọt ra ở bất kỳ màn nào người làm việc con xem được: chi tiết việc, lịch sử, khung việc con, bảng, Việc của tôi, khối Việc của thoả thuận."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ ẩn việc cha trong khung việc con với đúng những người không được xem việc cha — kiểm trên cả năm vai người (người giao, người làm, người theo dõi, người làm việc con, thành viên khác) × hai trạng thái của việc cha."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ bỏ dòng «Thuộc: …» trên thẻ bảng của người làm việc con khi việc cha đã thành việc riêng; người trong cuộc của việc cha vẫn thấy dòng đó."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ chỉ đếm việc con người xem thấy được trong số «x/y việc con xong» trên thẻ cha; việc con đã Huỷ vẫn không tính."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ cho thẻ bảng và khung việc nói cùng một con số việc con; cha chỉ còn con người xem không thấy thì thẻ như việc không có con, và đóng cha không chạm vào con."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ hiện lại tên việc cha ngay khi người xem lấy lại quyền xem (gắn lại thoả thuận), và việc xem không ghi gì vào dữ liệu."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ không để tên hay mã việc cha lọt ra ở bất kỳ màn nào người làm việc con xem được: chi tiết việc, lịch sử, khung việc con, bảng, Việc của tôi, khối Việc của thoả thuận."
+    }
   ],
   "wont_do": [
-    {"id": "OOS-1", "p": "Không đổi luật ai thấy việc nào — đổi luật đó là việc nặng hơn, phải đi đường khác."},
-    {"id": "OOS-2", "p": "Không hiện dòng thay chỗ kiểu «thuộc một việc bạn không xem được» — việc cha không thấy thì ẩn hẳn."},
-    {"id": "OOS-3", "p": "Chưa sửa chiều ngược lại: lịch sử của việc cha vẫn ghi tên việc con lúc tạo, nên người thấy việc cha mà không thấy việc con vẫn đọc được tên việc con."},
-    {"id": "OOS-4", "p": "Không đổi giao diện hay chữ trên màn, kể cả bản mẫu bảng việc."},
-    {"id": "OOS-5", "p": "Không đụng bảy hạn chế đã ghi khác của bảng việc."}
+    {
+      "id": "OOS-1",
+      "p": "Không đổi luật ai thấy việc nào — đổi luật đó là việc nặng hơn, phải đi đường khác."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không hiện dòng thay chỗ kiểu «thuộc một việc bạn không xem được» — việc cha không thấy thì ẩn hẳn."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Chưa sửa chiều ngược lại: lịch sử của việc cha vẫn ghi tên việc con lúc tạo, nên người thấy việc cha mà không thấy việc con vẫn đọc được tên việc con."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi giao diện hay chữ trên màn, kể cả bản mẫu bảng việc."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không đụng bảy hạn chế đã ghi khác của bảng việc."
+    }
   ],
   "coverage_plain": [
-    {"i": 0, "p": "Đã quét năm vai người xem × ba trạng thái của việc cha (gắn thoả thuận · riêng · gắn lại) × bốn chỗ hiện việc cha hoặc số việc con × bốn trạng thái việc con; mỗi ô có tiêu chí AC-1…AC-6 đo bằng đầu ra thật của máy chủ."}
+    {
+      "i": 0,
+      "p": "Đã quét năm vai người xem × ba trạng thái của việc cha (gắn thoả thuận · riêng · gắn lại) × bốn chỗ hiện việc cha hoặc số việc con × bốn trạng thái việc con; mỗi ô có tiêu chí AC-1…AC-6 đo bằng đầu ra thật của máy chủ."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "P0 — Giấu việc con người xem không thấy thì người giao đóng việc cha cũng không được nhắc về việc con đó; đây là đánh đổi riêng tư với lời nhắc, máy đã đưa thành câu hỏi Hỏi-1 cho anh và thêm vế đo «đóng cha không chạm con»."},
-    {"i": 1, "p": "P1 — Thiếu bài kiểm trên màn hình: bác, vì máy chủ không trả mã việc cha cho màn hình, nên màn chỉ vẽ theo đúng thứ được trả; vế lộ mã đã do bài quét toàn bộ đầu ra (AC-6) đo."},
-    {"i": 2, "p": "P1 — Chỉ đo hai chỗ đã biết trong khi tên việc cha có thể lọt qua chỗ khác: đã sửa, thêm AC-6 quét đủ sáu chỗ người làm việc con xem được."},
-    {"i": 3, "p": "P2 — Dữ liệu thử thiếu việc con đã Huỷ nên vế «không tính việc Huỷ» chưa bao giờ chạy: đã sửa, thêm một việc con Huỷ vào dữ liệu thử."}
+    {
+      "i": 0,
+      "p": "P0 — Giấu việc con người xem không thấy thì người giao đóng việc cha cũng không được nhắc về việc con đó; đây là đánh đổi riêng tư với lời nhắc, máy đã đưa thành câu hỏi Hỏi-1 cho anh và thêm vế đo «đóng cha không chạm con»."
+    },
+    {
+      "i": 1,
+      "p": "P1 — Thiếu bài kiểm trên màn hình: bác, vì máy chủ không trả mã việc cha cho màn hình, nên màn chỉ vẽ theo đúng thứ được trả; vế lộ mã đã do bài quét toàn bộ đầu ra (AC-6) đo."
+    },
+    {
+      "i": 2,
+      "p": "P1 — Chỉ đo hai chỗ đã biết trong khi tên việc cha có thể lọt qua chỗ khác: đã sửa, thêm AC-6 quét đủ sáu chỗ người làm việc con xem được."
+    },
+    {
+      "i": 3,
+      "p": "P2 — Dữ liệu thử thiếu việc con đã Huỷ nên vế «không tính việc Huỷ» chưa bao giờ chạy: đã sửa, thêm một việc con Huỷ vào dữ liệu thử."
+    }
   ]
 }
