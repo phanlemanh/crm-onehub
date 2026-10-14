@@ -69,6 +69,29 @@ async function dungKhung() {
 	return { h, o, t, u, okr, A, B, khuon };
 }
 
+type DauVaoTao = {
+	companyId: string;
+	templateId: string;
+	startedAt: string;
+	ownerId: string;
+	nguoiTheoPhongBan?: { departmentId: string; userId: string }[];
+};
+
+function dauVaoTao(
+	k: Khung,
+	companyId: string,
+	nguoiTheoPhongBan?: { departmentId: string; userId: string }[],
+) {
+	const vao: DauVaoTao = {
+		companyId,
+		templateId: k.khuon.id,
+		startedAt: BAT_DAU,
+		ownerId: k.o.id,
+	};
+	if (nguoiTheoPhongBan) vao.nguoiTheoPhongBan = nguoiTheoPhongBan;
+	return vao;
+}
+
 async function taoKeHoach(
 	k: Khung,
 	them: { nguoiTheoPhongBan?: { departmentId: string; userId: string }[] } = {},
@@ -78,15 +101,7 @@ async function taoKeHoach(
 		app,
 		"onboarding.createFromTemplate",
 		"mutation",
-		{
-			companyId: cty.id,
-			templateId: k.khuon.id,
-			startedAt: BAT_DAU,
-			ownerId: k.o.id,
-			...(them.nguoiTheoPhongBan
-				? { nguoiTheoPhongBan: them.nguoiTheoPhongBan }
-				: {}),
-		},
+		dauVaoTao(k, cty.id, them.nguoiTheoPhongBan),
 		k.t.id,
 	);
 	return { r, cty };
@@ -140,6 +155,42 @@ const dem = () =>
 		db.viecVet.count(),
 	]);
 
+async function kiemKeHoachKhuon(planId: string, k: Khung) {
+	const ds = await buocVaViec(planId);
+	if (ds.length !== 3) throw new Error(`kh: tao sai so buoc ${ds.length}`);
+	const ma = ds.map((b) => b.viecId);
+	if (ma.some((m) => m === null) || new Set(ma).size !== 3) {
+		throw new Error("kh: buoc khong tro dung mot viec");
+	}
+	const mong = [
+		{ phong: "A", nguoi: k.h.id, lech: 0 },
+		{ phong: "A", nguoi: k.h.id, lech: 7 },
+		{ phong: "B", nguoi: k.o.id, lech: 3 },
+	];
+	for (const [i, b] of ds.entries()) {
+		const v = b.viec;
+		const m = mong[i];
+		if (!v || !m) throw new Error("kh: buoc khong tro dung mot viec");
+		if (v.nguoiThucHienId !== m.nguoi || v.nguoiGiaoId !== k.t.id) {
+			throw new Error(`kh: nguoi viec sai ${m.phong}`);
+		}
+		if (v.hanNgay === null || ngayVN(v.hanNgay) !== ngayCong(BAT_DAU, m.lech)) {
+			throw new Error(`kh: han viec sai ${b.label}`);
+		}
+		if (v.gan.length !== 1 || v.gan[0]?.planId !== planId) {
+			throw new Error("kh: viec khong gan ke hoach");
+		}
+		const tao = v.vet.filter((x) => x.loai === "tao");
+		if (tao.length !== 1 || tao[0]?.nguon !== "khuon") {
+			throw new Error("kh: vet tao sai");
+		}
+		await kiemChieu(b.id, "tao").catch(() => {
+			throw new Error("kh: buoc lech viec assignee");
+		});
+	}
+	return ds;
+}
+
 describe("kh-tao", () => {
 	test(
 		"tạo từ khuôn: mỗi bước một Việc, người theo phòng, hạn theo ngày VN, vết nguồn khuon",
@@ -148,41 +199,7 @@ describe("kh-tao", () => {
 			const { r } = await taoKeHoach(k);
 			if (r.status !== 200) throw new Error(`kh: tao loi ${r.message}`);
 			const planId = (r.data as { id: string }).id;
-			const ds = await buocVaViec(planId);
-			if (ds.length !== 3) throw new Error(`kh: tao sai so buoc ${ds.length}`);
-			const ma = ds.map((b) => b.viecId);
-			if (ma.some((m) => m === null) || new Set(ma).size !== 3) {
-				throw new Error("kh: buoc khong tro dung mot viec");
-			}
-			const mong = [
-				{ phong: "A", nguoi: k.h.id, lech: 0 },
-				{ phong: "A", nguoi: k.h.id, lech: 7 },
-				{ phong: "B", nguoi: k.o.id, lech: 3 },
-			];
-			for (const [i, b] of ds.entries()) {
-				const v = b.viec;
-				const m = mong[i];
-				if (!v || !m) throw new Error("kh: buoc khong tro dung mot viec");
-				if (v.nguoiThucHienId !== m.nguoi || v.nguoiGiaoId !== k.t.id) {
-					throw new Error(`kh: nguoi viec sai ${m.phong}`);
-				}
-				if (
-					v.hanNgay === null ||
-					ngayVN(v.hanNgay) !== ngayCong(BAT_DAU, m.lech)
-				) {
-					throw new Error(`kh: han viec sai ${b.label}`);
-				}
-				if (v.gan.length !== 1 || v.gan[0]?.planId !== planId) {
-					throw new Error("kh: viec khong gan ke hoach");
-				}
-				const tao = v.vet.filter((x) => x.loai === "tao");
-				if (tao.length !== 1 || tao[0]?.nguon !== "khuon") {
-					throw new Error("kh: vet tao sai");
-				}
-				await kiemChieu(b.id, "tao").catch(() => {
-					throw new Error("kh: buoc lech viec assignee");
-				});
-			}
+			const ds = await kiemKeHoachKhuon(planId, k);
 			expect(ds).toHaveLength(3);
 		},
 		MA_TEST_MS,
@@ -203,15 +220,9 @@ describe("kh-tao", () => {
 					ownerId: k.o.id,
 				});
 			if (res.status >= 300) throw new Error("kh: rest khong sinh viec");
-			const ds = await buocVaViec(res.body.id);
-			if (
-				ds.length !== 3 ||
-				ds.some(
-					(b) => b.viec?.vet.find((x) => x.loai === "tao")?.nguon !== "khuon",
-				)
-			) {
-				throw new Error("kh: rest khong sinh viec");
-			}
+			const ds = await kiemKeHoachKhuon(res.body.id, k).catch((loi: Error) => {
+				throw new Error(`kh: rest khong sinh viec ${loi.message}`);
+			});
 			expect(ds[2]?.viec?.nguoiThucHienId).toBe(k.o.id);
 		},
 		MA_TEST_MS,
@@ -528,7 +539,7 @@ describe("kh-ban-chieu", () => {
 
 describe("kh-chan", () => {
 	test(
-		"Huỷ, xoá, gỡ kế hoạch bị chặn trên Việc của bước; Việc thường vẫn làm được",
+		"Huỷ, xoá, gỡ kế hoạch, bỏ hạn bị chặn trên Việc của bước; Việc thường vẫn làm được",
 		async () => {
 			const LENH = [
 				{
@@ -545,6 +556,11 @@ describe("kh-chan", () => {
 					ten: "go-ke-hoach",
 					chay: (id: string, ai: string, planId: string) =>
 						goi(app, "viec.go", "mutation", { id, planId }, ai),
+				},
+				{
+					ten: "bo-han",
+					chay: (id: string, ai: string, _p: string) =>
+						goi(app, "viec.sua", "mutation", { id, hanNgay: null }, ai),
 				},
 			];
 			let o = 0;
@@ -569,6 +585,7 @@ describe("kh-chan", () => {
 					!sau ||
 					sau.trangThai !== truoc.trangThai ||
 					sau.gan.length !== truoc.gan.length ||
+					sau.hanNgay?.getTime() !== truoc.hanNgay?.getTime() ||
 					buoc?.viecId !== c.viec
 				) {
 					throw new Error(`kh: viec cua buoc khong bi chan ${l.ten}`);
@@ -595,12 +612,30 @@ describe("kh-chan", () => {
 				}
 				o += 1;
 			}
-			if (o !== 6) throw new Error("kh: ma tran chan thieu o");
-			expect(o).toBe(6);
+			if (o !== 8) throw new Error("kh: ma tran chan thieu o");
+			expect(o).toBe(8);
 		},
 		MA_TEST_MS * 2,
 	);
 });
+
+// Lệnh đóng / mở lại phải thật sự chạy (200 và closedAt đổi) — không thì các kiểm phía sau xanh rỗng.
+async function chacChan(
+	lenh: "onboarding.closePlan" | "onboarding.reopenPlan",
+	planId: string,
+	ai: string,
+	dong: boolean,
+) {
+	const r = await goi(app, lenh, "mutation", { id: planId }, ai);
+	const p = await db.onboardingPlan.findUniqueOrThrow({
+		where: { id: planId },
+	});
+	if (r.status !== 200 || (p.closedAt !== null) !== dong) {
+		throw new Error(
+			`kh: ${dong ? "dong" : "mo lai"} ke hoach khong chay ${r.message}`,
+		);
+	}
+}
 
 describe("kh-go-buoc", () => {
 	test(
@@ -714,13 +749,7 @@ describe("kh-go-buoc", () => {
 			// Người làm sang vai «chỉ OKR» sau khi Việc của họ đã khép (một Xong, một Huỷ lúc đóng):
 			// mở lại kế hoạch không để bước mở nào trong tay họ, và bỏ đánh xong bị từ chối (luật «Làm lại»).
 			await doiVai(k.h.id, "okr");
-			await goi(
-				app,
-				"onboarding.reopenPlan",
-				"mutation",
-				{ id: planId },
-				k.o.id,
-			);
+			await chacChan("onboarding.reopenPlan", planId, k.o.id, false);
 			const trongTayOkr = await db.onboardingStep.count({
 				where: { planId, completedAt: null, assigneeId: k.h.id },
 			});
@@ -744,29 +773,17 @@ describe("kh-go-buoc", () => {
 				throw new Error("kh: bo xong mo viec cho vai okr");
 			}
 			await doiVai(k.h.id, "member");
-			await goi(
-				app,
-				"onboarding.closePlan",
-				"mutation",
-				{ id: planId },
-				k.o.id,
-			);
+			await chacChan("onboarding.closePlan", planId, k.o.id, true);
 
 			const hai = await taoKeHoach(k);
 			const plan2 = (hai.r.data as { id: string }).id;
-			await goi(app, "onboarding.closePlan", "mutation", { id: plan2 }, k.o.id);
+			await chacChan("onboarding.closePlan", plan2, k.o.id, true);
 			const giu = await buocVaViec(plan2);
 			if (giu.some((b) => b.viec?.trangThai !== "CHUA_LAM")) {
 				throw new Error("kh: dong ke hoach huy khi khong chon");
 			}
 
-			await goi(
-				app,
-				"onboarding.reopenPlan",
-				"mutation",
-				{ id: planId },
-				k.o.id,
-			);
+			await chacChan("onboarding.reopenPlan", planId, k.o.id, false);
 			const moLai = await buocVaViec(planId);
 			if (moLai.slice(1).some((b) => b.viec?.trangThai !== "HUY")) {
 				throw new Error("kh: mo lai hoi viec");
@@ -782,27 +799,14 @@ describe("kh-them-buoc", () => {
 		"thêm bước tay sinh Việc: người chọn, hay mặc định theo phòng",
 		async () => {
 			const k = await dungKhung();
-			const cty = await gieoCongTy();
-			const rong = await dichVu().createTemplate({
-				name: `rong ${k.A.name}`,
-				partnerType: null,
-				steps: [
-					{ label: "tam", departmentId: k.B.id, position: 0, offsetDays: 0 },
-				],
-			});
-			const r1 = await goi(
-				app,
-				"onboarding.createFromTemplate",
-				"mutation",
-				{
-					companyId: cty.id,
-					templateId: rong.id,
-					startedAt: BAT_DAU,
-					ownerId: k.o.id,
-				},
-				k.t.id,
-			);
-			const planR = (r1.data as { id: string }).id;
+			// Kế hoạch rỗng thật: không bước nào (dựng bằng bản ghi trực tiếp — khuôn luôn có ≥1 bước).
+			const { plan: rong } = await gieoKeHoach({ camTrich: k.o.id, buoc: [] });
+			if (
+				(await db.onboardingStep.count({ where: { planId: rong.id } })) !== 0
+			) {
+				throw new Error("kh: ke hoach rong khong rong");
+			}
+			const planR = rong.id;
 			const { r: r2 } = await taoKeHoach(k);
 			const planK = (r2.data as { id: string }).id;
 			const ca: Array<{

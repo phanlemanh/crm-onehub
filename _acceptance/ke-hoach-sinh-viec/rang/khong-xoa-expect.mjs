@@ -7,10 +7,26 @@ const GOC = path.resolve(import.meta.dirname, "..", "..", "..");
 // ke-hoach-sinh-viec trên đúng các tệp vòng này chạm.
 const MAU_TEP_KIEM =
 	/(^|\/)test\/.*\.(spec|integration\.spec|dom)\.tsx?$|\.spec\.tsx?$/;
-function tepKiemDaSua(moc) {
-	return git("diff", "--name-only", "--diff-filter=M", moc, "HEAD")
+// Tệp kiểm ĐÃ CÓ ở mốc mà nhánh sửa (M), xoá (D) hay đổi tên (R): xoá một tệp kiểm là cách xoá expect
+// triệt để nhất, nên D so với nội dung rỗng và R so tên cũ ở mốc với tên mới ở HEAD.
+function docTenTrangThai(chu) {
+	return chu
 		.split("\n")
-		.filter((t) => t && MAU_TEP_KIEM.test(t));
+		.filter(Boolean)
+		.map((d) => d.split("\t"))
+		.flatMap(([ma, cu, moi]) => {
+			if (!ma || !cu) return [];
+			const loai = ma[0];
+			if (loai === "M" || loai === "D") return [{ loai, cu, moi: loai === "D" ? null : cu }];
+			if (loai === "R" && moi) return [{ loai, cu, moi }];
+			return [];
+		})
+		.filter((t) => MAU_TEP_KIEM.test(t.cu));
+}
+function tepKiemDaSua(moc) {
+	return docTenTrangThai(
+		git("diff", "--name-status", "-M", "--diff-filter=MDR", moc, "HEAD"),
+	);
 }
 // Câu expect được phép mất, mỗi câu kèm lý do có tên. Chỉ một: AC-1 của ke-hoach-sinh-viec (Cổng
 // Phạm vi 14/10) lật lời hứa «bước tạo từ khuôn chưa giao» của dieu-phoi-30-ngay-dau.
@@ -90,8 +106,24 @@ if (process.argv.includes("--tu-thu")) {
 		);
 		process.exit(2);
 	}
+	const ds = docTenTrangThai(
+		"M\tapps/api/test/a.spec.ts\nD\tapps/api/test/b.spec.ts\nR087\tapps/api/test/c.spec.ts\tapps/api/test/d.spec.ts\nM\tapps/api/src/x.ts\n",
+	);
+	const mongDs = JSON.stringify([
+		{ loai: "M", cu: "apps/api/test/a.spec.ts", moi: "apps/api/test/a.spec.ts" },
+		{ loai: "D", cu: "apps/api/test/b.spec.ts", moi: null },
+		{ loai: "R", cu: "apps/api/test/c.spec.ts", moi: "apps/api/test/d.spec.ts" },
+	]);
+	if (JSON.stringify(ds) !== mongDs) {
+		console.error(`tu-thu: doc ten-trang-thai sai ${JSON.stringify(ds)}`);
+		process.exit(2);
+	}
+	if (mat('expect(a).toBe(1);', "").sai.length !== 1) {
+		console.error("tu-thu: tep bi xoa khong bat");
+		process.exit(2);
+	}
 	console.log(
-		"tu-thu 3/3: sua gia tri nhieu dong -> bat; sua khoang trang trong chuoi -> bat; doi khoang trang ngoai chuoi -> khong bat",
+		"tu-thu 5/5: sua gia tri nhieu dong -> bat; sua khoang trang trong chuoi -> bat; doi khoang trang ngoai chuoi -> khong bat; doc M/D/R -> dung; tep bi xoa -> bat",
 	);
 	process.exit(0);
 }
@@ -108,9 +140,10 @@ let tongSai = 0;
 let tongChoPhep = 0;
 let tongTruoc = 0;
 const TEP = tepKiemDaSua(moc);
-for (const tep of TEP) {
-	const truoc = git("show", `${moc}:${tep}`);
-	const sau = readFileSync(path.join(GOC, tep), "utf8");
+for (const { cu, moi } of TEP) {
+	const tep = moi ?? cu;
+	const truoc = git("show", `${moc}:${cu}`);
+	const sau = moi === null ? "" : readFileSync(path.join(GOC, moi), "utf8");
 	tongTruoc += cauExpect(truoc).length;
 	const { sai, choPhep } = mat(truoc, sau);
 	tongChoPhep += choPhep;

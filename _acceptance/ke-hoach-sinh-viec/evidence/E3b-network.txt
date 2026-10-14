@@ -1,0 +1,2 @@
+driver: bun man.mjs (Playwright-like script), khong co read_network_requests
+networkObserved: n-a (driver)

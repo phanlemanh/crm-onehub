@@ -16,7 +16,15 @@ import {
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
-type Lay = (input: unknown) => unknown;
+type GiaTriVao =
+	| string
+	| number
+	| boolean
+	| null
+	| readonly GiaTriVao[]
+	| { readonly [khoa: string]: GiaTriVao };
+type DauVaoTrpc = { readonly [khoa: string]: GiaTriVao } | undefined;
+type Lay = (input: DauVaoTrpc) => unknown;
 const traLoi = new Map<string, Lay>();
 const daGoi: Array<{ duong: string; input: unknown }> = [];
 
@@ -27,7 +35,7 @@ const linkGia: TRPCLink<AppRouter> =
 			daGoi.push({ duong: op.path, input: op.input });
 			const lay = traLoi.get(op.path);
 			Promise.resolve()
-				.then(() => (lay ? lay(op.input) : null))
+				.then(() => (lay ? lay(op.input as DauVaoTrpc) : null))
 				.then(
 					(data) => {
 						nguoiXem.next({ result: { type: "data", data } });
@@ -252,7 +260,7 @@ const hangPhong = () =>
 	}));
 
 describe("kh-man-co-phong", () => {
-	test("kh-man-co-phong: một hàng mỗi phòng, điền sẵn trưởng phòng hay cầm trịch, gửi người đã chọn", async () => {
+	test("kh-man-co-phong: một hàng mỗi phòng, điền sẵn trưởng phòng hay cầm trịch, gửi đúng phòng đã đổi", async () => {
 		datChung();
 		traLoi.set("onboarding.listTemplates", () => [KHUON_HAI_PHONG]);
 		traLoi.set("onboarding.createFromTemplate", () => ({
@@ -319,13 +327,10 @@ describe("kh-man-co-phong", () => {
 		const coUyen = nguoi.some(
 			(n) => n.departmentId === "bp-b" && n.userId === "u-uyen",
 		);
-		const coHa = nguoi.some(
-			(n) => n.departmentId === "bp-a" && n.userId === "u-ha",
-		);
-		if (goi.length !== 1 || !coUyen || !coHa || nguoi.length !== 2) {
+		if (goi.length !== 1 || !coUyen || nguoi.length !== 1) {
 			throw new Error(`kh: o tao goi sai ${JSON.stringify(goi)}`);
 		}
-		expect(nguoi).toHaveLength(2);
+		expect(nguoi).toHaveLength(1);
 	});
 });
 
@@ -379,6 +384,53 @@ describe("kh-man-trang-thai", () => {
 		) {
 			throw new Error("kh: trang thai o tao sai rong");
 		}
+		await dongMan();
+
+		// Danh sách phòng ban đang tải hay lỗi: chưa hiện hàng nào (không đoán trưởng phòng), nút Tạo
+		// khoá; lỗi có «Thử lại» gọi lại danh sách phòng ban.
+		traLoi.set("onboarding.listTemplates", () => [KHUON_HAI_PHONG]);
+		traLoi.set("onboarding.listDepartments", () => new Promise(() => {}));
+		await mo(<TaoKeHoach mo doiMo={() => {}} congTyCoDinh={CONG_TY} />);
+		await cho(
+			() =>
+				queryClient.isFetching({
+					queryKey: [["onboarding", "listTemplates"]],
+				}) === 0,
+			"tai khuon",
+		);
+		await chonTrong(k.template, "Khuôn A");
+		await cho(
+			() => q('[data-trang-thai="cho-tai"]') !== null,
+			"cho tai phong ban",
+		);
+		const luuCho = [...document.body.querySelectorAll("button")].find(
+			(b) => b.textContent?.trim() === m.tao.save,
+		);
+		if (
+			q("[data-phong]") !== null ||
+			(luuCho as HTMLButtonElement | undefined)?.disabled !== true
+		) {
+			throw new Error("kh: trang thai o tao sai cho-phong-ban");
+		}
+		await dongMan();
+		let lanPhong = 0;
+		traLoi.set("onboarding.listDepartments", () => {
+			lanPhong += 1;
+			throw new Error("hong");
+		});
+		await mo(<TaoKeHoach mo doiMo={() => {}} congTyCoDinh={CONG_TY} />);
+		await cho(() => queryClient.isFetching() === 0, "tai xong");
+		await chonTrong(k.template, "Khuôn A");
+		await cho(() => q('[data-trang-thai="loi"]') !== null, "loi phong ban");
+		const thuLaiPhong = [
+			...document.body.querySelectorAll('[data-trang-thai="loi"] button'),
+		].find((b) => b.textContent?.trim() === k.thuLai);
+		if (!thuLaiPhong || q("[data-phong]") !== null) {
+			throw new Error("kh: trang thai o tao sai loi-phong-ban");
+		}
+		const truocPhong = lanPhong;
+		await bam(thuLaiPhong);
+		await cho(() => lanPhong > truocPhong, "thu lai phong ban");
 		expect(lan).toBeGreaterThan(truoc);
 	});
 });

@@ -134,7 +134,14 @@ export function TaoKeHoach({
 			tieuDe={m.tao.keHoach.title}
 			dangMo={dangMo}
 			doiMo={setDangMo}
-			sanSang={congTy !== "" && khuon !== "" && ngay !== "" && nguoiCam !== ""}
+			sanSang={
+				congTy !== "" &&
+				khuon !== "" &&
+				ngay !== "" &&
+				nguoiCam !== "" &&
+				!dsPhong.isPending &&
+				!dsPhong.isError
+			}
 			dangLuu={tao.isPending}
 			loi={loi}
 			nhanLuu={m.tao.save}
@@ -147,10 +154,12 @@ export function TaoKeHoach({
 						templateId: khuon,
 						startedAt: ngay,
 						ownerId: nguoiCam,
-						nguoiTheoPhongBan: phongCuaKhuon.map((departmentId) => ({
-							departmentId,
-							userId: nguoiCuaPhong(departmentId),
-						})),
+						nguoiTheoPhongBan: phongCuaKhuon
+							.filter((departmentId) => chonPhong[departmentId] !== undefined)
+							.map((departmentId) => ({
+								departmentId,
+								userId: nguoiCuaPhong(departmentId),
+							})),
 					},
 					{
 						onSuccess: async (keHoach) => {
@@ -241,10 +250,12 @@ export function TaoKeHoach({
 				</Select>
 			</Field>
 			<KhoiNguoiTheoPhong
-				nhan={m.tao.keHoach}
-				dangTai={dsKhuon.isPending}
-				loiTai={dsKhuon.isError}
-				thuLai={() => dsKhuon.refetch()}
+				dangTai={dsKhuon.isPending || (khuon !== "" && dsPhong.isPending)}
+				loiTai={dsKhuon.isError || (khuon !== "" && dsPhong.isError)}
+				thuLai={() => {
+					if (dsKhuon.isError) dsKhuon.refetch();
+					if (dsPhong.isError) dsPhong.refetch();
+				}}
 				rong={khuonRong}
 				phong={phongCuaKhuon.map((id) => ({
 					id,
@@ -261,17 +272,7 @@ export function TaoKeHoach({
 	);
 }
 
-type NhanKhoi = {
-	nguoiTheoPhong: string;
-	phongChuaCoTruong: string;
-	dangTaiKhuon: string;
-	loiTaiKhuon: string;
-	thuLai: string;
-	khuonRong: string;
-};
-
 function KhoiNguoiTheoPhong({
-	nhan,
 	dangTai,
 	loiTai,
 	thuLai,
@@ -281,7 +282,6 @@ function KhoiNguoiTheoPhong({
 	nguoiCuaPhong,
 	doi,
 }: {
-	nhan: NhanKhoi;
 	dangTai: boolean;
 	loiTai: boolean;
 	thuLai: () => void;
@@ -291,19 +291,20 @@ function KhoiNguoiTheoPhong({
 	nguoiCuaPhong: (phongId: string) => string;
 	doi: (phongId: string, userId: string) => void;
 }) {
+	const m = onboardingMessages(useLocale());
 	if (dangTai) {
 		return (
 			<p className="text-muted-foreground text-sm" data-trang-thai="cho-tai">
-				{nhan.dangTaiKhuon}
+				{m.tao.keHoach.dangTaiKhuon}
 			</p>
 		);
 	}
 	if (loiTai) {
 		return (
 			<div className="flex items-center gap-2" data-trang-thai="loi">
-				<p className="text-destructive text-sm">{nhan.loiTaiKhuon}</p>
+				<p className="text-destructive text-sm">{m.tao.keHoach.loiTaiKhuon}</p>
 				<Button type="button" variant="outline" size="sm" onClick={thuLai}>
-					{nhan.thuLai}
+					{m.tao.keHoach.thuLai}
 				</Button>
 			</div>
 		);
@@ -311,14 +312,14 @@ function KhoiNguoiTheoPhong({
 	if (rong) {
 		return (
 			<p className="text-muted-foreground text-sm" data-trang-thai="rong">
-				{nhan.khuonRong}
+				{m.tao.keHoach.khuonRong}
 			</p>
 		);
 	}
 	if (phong.length === 0) return null;
 	return (
 		<Field data-khoi="nguoi-theo-phong">
-			<FieldLabel>{nhan.nguoiTheoPhong}</FieldLabel>
+			<FieldLabel>{m.tao.keHoach.nguoiTheoPhong}</FieldLabel>
 			<div className="flex flex-col gap-3">
 				{phong.map((p) => (
 					<div
@@ -334,7 +335,9 @@ function KhoiNguoiTheoPhong({
 								value={nguoiCuaPhong(p.id)}
 								onValueChange={(u) => doi(p.id, u)}
 							>
-								<SelectTrigger aria-label={`${nhan.nguoiTheoPhong} — ${p.ten}`}>
+								<SelectTrigger
+									aria-label={`${m.tao.keHoach.nguoiTheoPhong} — ${p.ten}`}
+								>
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
@@ -346,7 +349,9 @@ function KhoiNguoiTheoPhong({
 								</SelectContent>
 							</Select>
 							{p.chuaCoTruong ? (
-								<FieldDescription>{nhan.phongChuaCoTruong}</FieldDescription>
+								<FieldDescription>
+									{m.tao.keHoach.phongChuaCoTruong}
+								</FieldDescription>
 							) : null}
 						</div>
 					</div>

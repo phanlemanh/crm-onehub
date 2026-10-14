@@ -117,7 +117,6 @@ async function taoBuoc(c: Ctx, hanNgay: string) {
 describe("kh-thuoc", () => {
 	test("kh-thuoc: đếm đúng đáp án viết trước, thoát 2 dưới ngưỡng, 0 khi đạt, chỉ đọc", async () => {
 		const src = readFileSync(THUOC, "utf8");
-		if (!src.includes("READ ONLY")) throw new Error("kh: thuoc khong chi doc");
 		if (!src.includes("import.meta.url") || /\/Users\/|\/home\//.test(src)) {
 			throw new Error("kh: thuoc hardcode duong dan");
 		}
@@ -160,6 +159,8 @@ describe("kh-thuoc", () => {
 		});
 
 		const mot = chay([giao.id]);
+		// Chỉ đọc đo trên đầu ra: thước tự báo trạng thái giao dịch Postgres thật (SHOW transaction_read_only).
+		if (mot.json?.chiDoc !== true) throw new Error("kh: thuoc khong chi doc");
 		const vk = mot.json?.viecKhuon;
 		for (const [truong, mong] of [
 			["tong", 4],

@@ -330,6 +330,9 @@ export async function suaViec(tx: DbGhi, input: SuaViecInput): Promise<void> {
 			VIEC.thongDiep.chiGiaoVaThucHien(VIEC.lam.sua),
 		);
 	}
+	if (input.hanNgay === null && (await buocCuaViec(tx, viec.id)) !== null) {
+		throw new LoiViec("khong-hop-le", VIEC.thongDiep.buocLuonCoHan);
+	}
 	const tieuDe = input.tieuDe ?? viec.tieuDe;
 	const moTa = input.moTa === undefined ? viec.moTa : input.moTa;
 	const hanCu = viec.hanNgay ? ngayHan(viec.hanNgay) : null;

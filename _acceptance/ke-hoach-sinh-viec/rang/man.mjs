@@ -233,7 +233,9 @@ try {
 						stepId: s.id,
 						planId: plan.id,
 						tieuDe: nhan,
-						hanNgay: new Date(`${lib.ngayVN()}T00:00:00.000Z`),
+						hanNgay: new Date(
+							`${new Date(Date.now() + 7 * 3600_000).toISOString().slice(0, 10)}T00:00:00.000Z`,
+						),
 						nguoiGiaoId: chu.id,
 						nguoiThucHienId: nguoi,
 						nguon: "khuon",

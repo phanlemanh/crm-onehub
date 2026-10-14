@@ -61,6 +61,9 @@ async function main() {
 	await client.connect();
 	try {
 		await client.query("BEGIN TRANSACTION READ ONLY");
+		const chiDoc =
+			(await client.query("SHOW transaction_read_only")).rows[0]
+				?.transaction_read_only === "on";
 		const r = await client.query(SQL, [tu, den, MUI_GIO, trong]);
 		await client.query("ROLLBACK");
 		const tong = r.rows[0]?.tong ?? 0;
@@ -71,6 +74,7 @@ async function main() {
 			luc: new Date().toISOString(),
 			cuaSo: { tu, den, muiGio: MUI_GIO },
 			nguong: NGUONG,
+			chiDoc,
 			viecKhuon: { tong, dungHan: dung, tiLe },
 			luuY: "mau so: viec nguon khuon tao trong cua so, han <= --den, khong Huy",
 		};

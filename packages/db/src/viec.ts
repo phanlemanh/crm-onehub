@@ -181,6 +181,8 @@ export const VIEC = {
 		chiThemConKhiMo: "Chỉ thêm việc con cho việc đang mở.",
 		goBuocOKeHoach:
 			"Việc này là một bước của kế hoạch 30 ngày — gỡ bước ở kế hoạch thay vì huỷ, xoá hay gỡ khỏi kế hoạch.",
+		buocLuonCoHan:
+			"Việc của bước luôn có hạn — đổi hạn ở bước; muốn bỏ thì gỡ bước ở kế hoạch.",
 		buocLuonCoNguoi:
 			"Việc của bước luôn có người làm — chọn người khác thay vì bỏ giao.",
 	},
