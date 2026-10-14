@@ -203,8 +203,12 @@ try {
 			} catch {
 				loi.push(`bang co ${await soDong(t)} dong, mong 3`);
 			}
-			const trongKhung = await t.evaluate(() => {
-				const e = document.querySelector("[data-sonner-toast]");
+			const trongKhung = await t.evaluate((m) => {
+				const e = [
+					...document.querySelectorAll(
+						'[data-sonner-toast]:not([data-removed="true"])',
+					),
+				].find((x) => (x.textContent ?? "").includes(m));
 				if (!e) return false;
 				const r = e.getBoundingClientRect();
 				return (
@@ -213,7 +217,7 @@ try {
 					r.left >= 0 &&
 					r.right <= window.innerWidth
 				);
-			});
+			}, VI.bulk.daVeTruoc("3"));
 			if (!trongKhung) loi.push("toast nam ngoai khung nhin");
 			await chup(t, "hlb-da-ve-1440.png");
 
