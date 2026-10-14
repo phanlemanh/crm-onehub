@@ -1,19 +1,14 @@
 "use client";
 
-import { Checkbox } from "@crm/ui/components/checkbox";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { cn } from "@crm/ui/lib/utils";
 import { parseStageChangeMeta } from "@crm/validation/giai-doan";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { LocalDateTime, LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
 import { crmMessages } from "@/lib/messages/crm";
 import { quaHan } from "@/lib/qua-han";
-import { useCrmCache } from "@/lib/trpc/cache";
-import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ActivityIcon } from "./activity-icon";
 import { EmailThreadEntry } from "./email-thread-entry";
@@ -55,16 +50,6 @@ export function TimelineEntry({
 }) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
-	const trpc = useTRPC();
-	const cache = useCrmCache();
-
-	const complete = useMutation(
-		trpc.activities.complete.mutationOptions({
-			onSuccess: () => cache.activity(),
-			onError: (error) => toast.error(error.message),
-		}),
-	);
-
 	const isTask = entry.type === "TASK";
 	const completedAt =
 		entry.completedAt === null ? null : new Date(entry.completedAt);
@@ -113,20 +98,9 @@ export function TimelineEntry({
 	return (
 		<li className="flex gap-2.5 py-2">
 			<span className="mt-0.5 shrink-0 text-muted-foreground">
-				{isTask ? (
-					<Checkbox
-						checked={done}
-						disabled={complete.isPending}
-						aria-label={done ? m.timeline.markNotDone : m.timeline.markDone}
-						onCheckedChange={(checked) =>
-							complete.mutate({ id: entry.id, completed: checked === true })
-						}
-					/>
-				) : (
-					<span role="img" aria-label={activityLabel(entry.type, locale)}>
-						<ActivityIcon type={entry.type} />
-					</span>
-				)}
+				<span role="img" aria-label={activityLabel(entry.type, locale)}>
+					<ActivityIcon type={entry.type} />
+				</span>
 			</span>
 
 			<div className="flex min-w-0 flex-1 flex-col gap-1">

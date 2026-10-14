@@ -70,6 +70,7 @@ export class DashboardService {
 			completedAt: null,
 			dueAt: { lt: dauNgayVN(now) },
 			createdById: mine ? actingUserId : undefined,
+			viecChep: { is: null },
 		} satisfies Prisma.ActivityWhereInput;
 		const startOfMonth = monthStart(now, 0);
 		const startOfNextMonth = monthStart(now, 1);
@@ -180,7 +181,10 @@ export class DashboardService {
 				},
 			}),
 			this.db.activity.findMany({
-				where: mine ? { createdById: actingUserId } : {},
+				where: {
+					createdById: mine ? actingUserId : undefined,
+					NOT: { type: ActivityType.TASK, viecChep: { isNot: null } },
+				},
 				orderBy: [{ createdAt: "desc" }],
 				take: 12,
 				select: {

@@ -155,7 +155,7 @@ lại, mỗi lỗi đã gán nhãn có dòng góp ý, ca kèm cấp trên không
 tên người. Đây đúng là các luật mà lượt «Góp ý khi bấm» đã dùng để đo bộ `mau/` (30/30, điểm
 câu chữ 0,95). Lệnh in `ma: x/n · judge: y` (số ca qua mọi luật mã · điểm câu chữ trung bình)
 cạnh con số đó, ghi bảng từng ca rồi xoá kho. Với bộ quý 4, bảng ghi vào
-`_acceptance/bo-ca-mau-quy-4/evidence/do-gop-y-quy-4.md`; với bộ khác (`--thu-muc`), bảng ghi
+`.acceptance-runs/bo-ca-mau-quy-4/do/do-gop-y-quy-4.md` (bản đã ký nằm ở `_acceptance/bo-ca-mau-quy-4/evidence/`); với bộ khác (`--thu-muc`), bảng ghi
 vào `.acceptance-runs/bo-ca-mau-quy-4/do/ket-qua.md`, thư mục git bỏ qua, để tên đơn vị và nội
 dung OKR thật không vào lịch sử git. Mỗi lượt đo có thêm một ca kiểm chứng cố ý gán sai («Gọi
 50 cuộc» được gán là câu đã tốt): luật «câu đã tốt thì không viết lại» phải đánh trượt ca này

@@ -173,6 +173,7 @@ const RONG_DONG = {
 	targetObjectiveId: null,
 	targetKeyResultId: null,
 	tenDich: null,
+	canCu: null,
 } as const;
 
 export const D_TEN: DongHien = {

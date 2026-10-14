@@ -4,9 +4,12 @@ import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Bot from "@carbon/icons-react/es/Bot";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { khungMessages } from "@/lib/messages/agent-builder-khung";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
+import { trangThaiTacNhan } from "@/lib/trang-thai-tac-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -14,7 +17,9 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 type Agents = RouterOutputs["agents"]["list"];
 
 export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
-	const t = khungMessages(useLocale());
+	const locale = useLocale();
+	const t = khungMessages(locale);
+	const tn = tacNhanMessages(locale);
 	const trpc = useTRPC();
 	const workspaceUrl = useWorkspaceUrl();
 	const agents = useQuery({
@@ -45,9 +50,11 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 									>
 										{agent.name}
 									</span>
-									<span className="shrink-0 text-muted-foreground text-xs">
-										{agent.status.toLowerCase()}
-									</span>
+									<StatusIndicator
+										size="sm"
+										className="shrink-0"
+										{...trangThaiTacNhan(tn, agent.status)}
+									/>
 								</span>
 								<span className="mt-1 block wrap-break-word text-muted-foreground text-xs sm:mt-0 sm:truncate">
 									{agent.description ?? t.doi.khongMoTa}
