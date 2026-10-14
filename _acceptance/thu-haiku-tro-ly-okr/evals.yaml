@@ -1,0 +1,79 @@
+slug: thu-haiku-tro-ly-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.thk_mac_dinh
+    expected: "exit 0; -t thk-mac-dinh của apps/agent/test/tro-ly-okr-mo-hinh-thu.integration.spec.ts. Ma trận viết trước 2 nguồn × 4 vai: nguồn {env rỗng, env TRO_LY_OKR_MO_HINH=google/gemini-3.8-flash}, vai {góp ý, tóm tắt, phiên gốc session.started, phiên gốc step.started}; số ô đã chạy khác 8 thì ném 'thk: thieu o <n>'. Mỗi ô: chonMoHinhTroLyOkr(env) — đúng hàm mo-hinh-thu.ts gọi lúc nạp — rồi dựng model của vai trên Gateway giả ghi lại mã model được gọi (khuôn Gateway giả của mo-hinh-khoa.spec.ts). Mã khác google/gemini-3.8-flash thì ném 'thk: mac dinh doi model <nguồn> <vai>'; trần góp ý khác 2000, tóm tắt khác 8000, cửa sổ khác 1048576 thì 'thk: mac dinh doi tran <nguồn> <vai>'; mã ghiModelPhien nhận khác google/gemini-3.8-flash thì 'thk: mac dinh ghi sai model phien <nguồn>'; mục của nguồn tường minh không toEqual mục của env rỗng thì 'thk: gemini tuong minh lech mac dinh'. Chiều đỏ cùng mẫu: bản sao config.ts đặt mục mặc định thành haiku thì 'thk: mac dinh doi model rong góp ý' nổ — chép lệnh phá và đầu ra vào evidence."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/config.ts, apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/lib/okr/mo-hinh-thu.ts, apps/agent/agent/lib/model.ts, apps/agent/agent/subagents/tro_ly_okr/agent.ts, apps/agent/test/tro-ly-okr-mo-hinh-thu.integration.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.thk_haiku
+    expected: "exit 0; -t thk-haiku của cùng spec, cùng 4 vai và Gateway giả của E1 với env {TRO_LY_OKR_MO_HINH: 'anthropic/claude-haiku-5.5', NODE_ENV: 'development'}. Vai nào gọi mã khác anthropic/claude-haiku-5.5 thì ném 'thk: haiku khong toi <vai>'; providerOptions của lời gọi thật (bắt ở Gateway giả, sau lớp bọc) thiếu gateway.zeroDataRetention true hay thẻ onehub:tro-ly-okr thì 'thk: haiku mat zdr <vai>'; có khoá anthropic thì 'thk: haiku co suy nghi rieng <vai>'; maxOutputTokens góp ý khác 4000, tóm tắt khác 8000, cửa sổ khác 1000000 thì 'thk: haiku sai tran <vai>'; ghiModelPhien nhận khác mã haiku thì 'thk: haiku ghi sai model phien'. Ca tiến trình con: bun chạy một tệp mồi trong apps/agent/test/support/ nạp đúng các mô-đun mà subagents/tro_ly_okr/agent.ts nhập (MO_HINH_TRO_LY_OKR, MO_HINH_TOM_TAT, modelChoBuocGoc, modelChoPhienGoc) với env con chỉ đặt TRO_LY_OKR_MO_HINH, in JSON mã model của 4 vai; vai nào khác haiku thì 'thk: tien trinh con khong nhan bien <vai>'. Chiều đỏ cùng mẫu: bản sao mo-hinh.ts dựng MO_HINH_TOM_TAT từ TRO_LY_OKR.model thay vì mục đã chọn thì 'thk: tien trinh con khong nhan bien tóm tắt' nổ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/config.ts, apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/lib/okr/mo-hinh-thu.ts, apps/agent/agent/lib/model.ts, apps/agent/agent/subagents/tro_ly_okr/agent.ts, packages/ai-okr/src/index.ts, apps/agent/test/tro-ly-okr-mo-hinh-thu.integration.spec.ts, "apps/agent/test/support/mo-hinh-thu-*.ts"]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.thk_gia_tri_la
+    expected: "exit 0; -t thk-gia-tri-la của cùng spec. Ba giá trị viết trước: 'zai/glm-5.2-fast', '   ', 'ANTHROPIC/CLAUDE-HAIKU-5.5', NODE_ENV development; số ca khác 3 thì ném 'thk: thieu ca la <n>'. chonMoHinhTroLyOkr phải ném; lỗi thiếu chuỗi TRO_LY_OKR_MO_HINH, thiếu giá trị nhận được, hay thiếu một trong hai mã hợp lệ thì ném 'thk: loi khong goi ten <ca>'; hàm trả về thay vì ném thì 'thk: gia tri la lui lang <ca>'. Đối chứng dương cùng bảng: hai mã hợp lệ không ném và trả đúng mục của mã đó (mã, trần, cửa sổ), không thì 'thk: ma hop le tra sai muc <mã>'. Ca nạp mô-đun: tiến trình con của E2 với giá trị lạ thoát khác 0 và stderr có TRO_LY_OKR_MO_HINH, không thì 'thk: nap module khong chan gia tri la'. Chiều đỏ cùng mẫu: bản sao mo-hinh-thu.ts đổi parse thành safeParse lùi về mặc định thì 'thk: gia tri la lui lang zai/glm-5.2-fast' nổ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/mo-hinh-thu.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/tro-ly-okr-mo-hinh-thu.integration.spec.ts, "apps/agent/test/support/mo-hinh-thu-*.ts"]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.thk_production
+    expected: "exit 0; -t thk-production của cùng spec với NODE_ENV production và hai giá trị: mã haiku, 'zai/glm-5.2-fast'. Mỗi ca chonMoHinhTroLyOkr trả mục toEqual mục mặc định (google/gemini-3.8-flash, trần 2000) và không ném; trả mục khác thì ném 'thk: production doc bien <ca>', ném lỗi thì 'thk: production nem loi <ca>'. Chiều đỏ cùng mẫu: bản sao mo-hinh-thu.ts bỏ điều kiện NODE_ENV thì 'thk: production doc bien anthropic/claude-haiku-5.5' nổ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/mo-hinh-thu.ts, apps/agent/test/tro-ly-okr-mo-hinh-thu.integration.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.thk_kho_do
+    expected: "exit 0; packages/db/test/measure-db-model.spec.ts trên TEST_DATABASE_URL, khuôn của describe 'tao' trong measure-database.spec.ts. Đọc AppSetting của kho nguồn trước. createMeasureDatabase({base, tree: 'thk-<ngẫu nhiên>'}) — đúng hàm db:do --tao gọi — rồi readAgentModel trên kho mới: id khác MEASURE_DATABASE.agentModel.id, cửa sổ khác MEASURE_DATABASE.agentModel.contextWindowTokens, hay isDefault true thì ném 'thk: kho do khong mang model'; MEASURE_DATABASE.agentModel.id bằng DEFAULT_AGENT_MODEL.id thì 'thk: model do van la glm fast'. AppSetting kho nguồn sau khác trước thì 'thk: kho nguon bi ghi'. Đường ghi: scripts/gieo-model-do.ts gọi writeAgentModel nhập từ src/settings và không chứa 'INSERT' hay 'UPDATE', không thì 'thk: gieo khong qua writeAgentModel'. Vân tay: sourceFingerprint trên cùng nguồn với hai mã model đo khác nhau cho hai giá trị khác nhau, không thì 'thk: van tay khong theo model do'. Dọn bằng dropMeasureDatabase. Chiều đỏ cùng mẫu: bản sao buildTemplate bỏ bước gieo thì 'thk: kho do khong mang model' nổ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/scripts/gieo-model-do.ts, packages/db/src/settings.ts, packages/db/test/measure-db-model.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.thk_doc_so
+    expected: "exit 0; _acceptance/thu-haiku-tro-ly-okr/rang/doc-so.test.ts đọc năm mẫu thật ở rang/mau/ — bốn đầu ra nguyên văn của do-tre.mjs và eval-gop-y.mjs ngày 14/10 và một đầu ra nguyên văn của eve eval (e22-haiku-eve.log), chép không sửa, tức đầu ra của bên viết thật. docE24(e24-haiku.log): soHong khác 11 hay soLuot khác 20 thì ném 'thk: e24 haiku doc sai'; docE24(e24-gemini.log): soHong khác 0, p50 khác 13360, p90 khác 30990 thì 'thk: e24 gemini doc sai'; docE22(e22-haiku.log): dung khác 20, tong khác 30, gopYThua khác [gy-10, gy-12, gy-13], judge khác 0.95, chiUsd khác 0.158889 thì 'thk: e22 haiku doc sai'; docE22(e22-gemini-mat-kho.log) không phải {khongDo} thì 'thk: mat kho thanh so'. docKetQuaEval(e22-haiku-eve.log, id): với mỗi id có dòng kết quả trong tệp, trạng thái trùng ký hiệu đầu dòng theo bảng của eve (✓ passed, ✗ failed, ○ scored, – skipped; skipped ra khongDo; qua chỉ khi passed — bảng id→ký hiệu rút bằng grep ghi trong spec, không gõ tay, mẫu phải có ≥ 2 trạng thái), id không có dòng ra khongDo, không thì 'thk: doc eve eval sai <id>'. NGUONG: toEqual {e24Hong: 0, e22Dung: 28, gopYThua: 0, judge: 0.9, tacNhanQua: 3} — chép từ mục SỐNG của opportunity.md — không thì 'thk: nguong lech o co hoi'. Biên, mỗi vế hai phía trên một bộ số đạt mọi vế khác: e24Hong 0 đạt/1 trượt, e22Dung 28 đạt/27 trượt, gopYThua 0 đạt/1 trượt, judge 0.90 đạt/0.89 trượt, tacNhanQua 3 đạt/2 trượt; ô nào lệch thì 'thk: bien sai <vế> <số>'. ketLuan(số Haiku của mẫu) phải 'khong-dat' với đủ ba vế e24, e22, gop-y-thua, không thì 'thk: ket luan haiku sai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/thu-haiku-tro-ly-okr/rang/doc-so.*", "_acceptance/thu-haiku-tro-ly-okr/rang/mau/**", _acceptance/thu-haiku-tro-ly-okr/opportunity.md]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.thk_so_mo_hinh
+    expected: "exit 0; chạy SAU khi việc sửa thước E22/E24 của tro-ly-okr-de-xuat gộp vào onehub, máy rảnh, không song song với eval model nào khác. so-mo-hinh.mjs đọc /v1/credits (≤ 0 → mã 2 'KHONG DO DUOC: so du'), rồi lần lượt: E24 (do-tre.mjs --lan 20) và E22 (eval-gop-y.mjs) với TRO_LY_OKR_MO_HINH=google/gemini-3.8-flash rồi =anthropic/claude-haiku-5.5; ba lượt eve eval agent-builder mỗi model trên kho đo riêng của cây, ô model ghi bằng writeAgentModel; số đọc bằng CHÍNH doc-so.mjs. Kiểm nhánh: mã model của các sự kiện model.phien-chon trong kho đo của nhánh Trợ lý OKR, và readAgentModel của kho đo ở nhánh Tác nhân, phải trùng model của nhánh, không thì mã 2 'KHONG DO DUOC: nhanh <m> chay <x>'. In bảng hai model (E24 hỏng/20, p50, p90, số lượt theo từng outcome; E22 đúng/30, góp ý thừa, judge, USD; bộ dựng qua/3) và một dòng kết luận mỗi vai theo NGUONG. Mọi nhánh đo được → mã 0, Haiku đạt hay trượt đều là kết quả; nhánh nào ra khongDo → mã 2 nêu nhánh và đường nhật ký. Nhật ký mỗi nhánh ở .acceptance-runs/thu-haiku-tro-ly-okr/so-mo-hinh/<run>/. Không model GLM nào trong danh sách nhánh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/thu-haiku-tro-ly-okr/rang/so-mo-hinh.mjs", "_acceptance/thu-haiku-tro-ly-okr/rang/doc-so.mjs", apps/agent/agent/lib/okr/mo-hinh-thu.ts, apps/agent/agent/lib/okr/config.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: judgment
+    question: >-
+      Đọc bốn tệp. Đáp án đúng: (1) TRO_LY_OKR_MO_HINH chỉ dùng cho phép đo, không để chạy production;
+      (2) nó nhận đúng hai mã google/gemini-3.8-flash và anthropic/claude-haiku-5.5; (3) khi NODE_ENV là
+      production biến bị bỏ qua và Trợ lý OKR chạy google/gemini-3.8-flash; (4) giá trị ngoài hai mã làm agent
+      không khởi động, lỗi gọi tên biến; (5) kho đo mang sẵn google/gemini-3.8-flash cho agent chính và Tác
+      nhân, không còn GLM 5.2 Fast vì chủ kho không dùng GLM Fast và kho đo phải chạy model của production,
+      đổi ở MEASURE_DATABASE trong packages/db/src/measure-database.ts. Với mỗi ý: Đạt khi bốn tệp có một câu
+      nói đúng ý ấy (nêu tên tệp); Không đạt khi không tệp nào nói, hoặc có tệp nói khác đáp án (sai mã, sai
+      chỗ đổi).
+    inputs: [.env.example, docs/environment.md, docs/agent.md, docs/setup.md]
+    evidence_required: [run_id, verifier, verified_at, output]
