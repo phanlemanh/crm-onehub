@@ -108,6 +108,7 @@ evals:
     criterion: AC-12
     executor: script
     cmd: config:executors.script.dh5_giu_ho_so
+    status: not-run
     expected: "exit 0; rang/giu-ho-so.mjs: rút danh sách hồ sơ signed-off/machine-cleared từ _acceptance/*/contract.md, với mỗi eval test/script không khai status: not-run mà paths giao với git diff --name-only <điểm gộp DH4 gần nhất>..HEAD (bỏ _acceptance/**), chạy đúng lệnh config của eval và so mã kỳ vọng; in 'DUNG <hồ sơ>/<E>' mỗi eval; git diff <điểm gộp DH4> -- apps/api/src/okr/can-chinh.ts packages/ui/src/components/flow-map.tsx packages/ui/src/lib/flow-layout.ts rỗng (in 'sua tep cam: <tệp>'). Đối chứng dương ghim trong tệp: bộ lọc với danh sách tệp [objective-sheet.tsx] chọn được muc-tieu-va-kr#E8; với [_acceptance/config.yaml] chọn 0 eval."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/so-do-quanh-muc-tieu/rang/giu-ho-so.mjs, _acceptance/so-do-quanh-muc-tieu/contract.md]
