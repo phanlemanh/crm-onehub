@@ -101,6 +101,7 @@ export type DataTableExpandable<TRow, TSub> = {
 	getSubRowId: (sub: TSub, row: TRow) => string;
 	renderSubCell: (sub: TSub, columnId: string, row: TRow) => ReactNode;
 	onSubRowClick?: (sub: TSub, row: TRow) => void;
+	rowLabel?: (row: TRow) => string;
 };
 
 export type DataTableSelection<TRow> = {
@@ -900,12 +901,14 @@ export function DataTable<TRow, TSub = unknown>({
 									{anyExpandable && (
 										<TableCell className="w-10 px-3 py-3 text-center text-muted-foreground">
 											{canExpand && (
-												<ChevronRight
-													size={12}
-													className={cn(
-														"inline-block transition-transform",
-														isOpen && "rotate-90",
-													)}
+												<ExpandRowButton
+													label={
+														expandable?.rowLabel?.(row) ??
+														msg.table.rowFallback
+													}
+													open={isOpen}
+													rowId={id}
+													onToggle={handleClick}
 												/>
 											)}
 										</TableCell>
@@ -989,5 +992,43 @@ export function DataTable<TRow, TSub = unknown>({
 				meta={meta}
 			/>
 		</div>
+	);
+}
+
+function ExpandRowButton({
+	label,
+	open,
+	rowId,
+	onToggle,
+}: {
+	label: string;
+	open: boolean;
+	rowId: string;
+	onToggle: () => void;
+}) {
+	const msg = useMessages();
+	return (
+		<Button
+			type="button"
+			size="icon-sm"
+			variant="ghost"
+			aria-expanded={open}
+			aria-label={
+				open ? msg.table.collapseRow(label) : msg.table.expandRow(label)
+			}
+			data-mo-dong={rowId}
+			onClick={(event) => {
+				event.stopPropagation();
+				onToggle();
+			}}
+		>
+			<ChevronRight
+				size={12}
+				className={cn(
+					"inline-block transition-transform motion-reduce:transition-none",
+					open && "rotate-90",
+				)}
+			/>
+		</Button>
 	);
 }
