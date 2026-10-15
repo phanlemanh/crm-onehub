@@ -73,6 +73,22 @@ Lối đã loại: cách A (gắn nội dung ngăn sau `document.readyState === 
 «hydrate xong» chính thức nên vẫn có thể chập chờn, và ngăn hiện chậm khi tải cứng. Cách C (tự viết
 `HydrationBoundary` nạp đè khoá pending trong render) — đổi hành vi của thư viện, chủ kho đã chọn B.
 
+### Cơ chế thứ hai: hộp thoại khoá nền đánh `aria-hidden` lên khối chưa hydrate (đo 15/10 ở S3)
+
+Đo bước 0 (bản sao chưa sửa, 10 lần mỗi ô) và đo ở HEAD sau cách B: D3/D4 từ 5/10 về 0/10, nhưng D2 vẫn 1/10 với
+thông báo «attributes didn't match» — diff đầy đủ chỉ ra `data-aria-hidden="true" aria-hidden="true"` trên khối đầu
+trang OKR (`LuoiDauTrangOkr`). Ngăn bản ghi là hộp thoại khoá nền (Radix Dialog gọi `hideOthers`): nó mở ngay khi ranh
+giới của nó hydrate và đánh `aria-hidden` lên phần trang, kể cả khối còn đang stream; khối đó hydrate sau thì thấy thuộc
+tính lạ. Đây cũng là lớp lỗi DH2 thấy ở `/deals?record=deal:` (nhật ký cắt 200 ký tự nên điều tra 15/10 đoán sang khoá
+truy vấn). Cách B không chạm cơ chế này.
+
+Chữa: `RecordSheetHost` chỉ mở hộp thoại khi `useSauKhiTaiXong()` (`record-sheet/sau-khi-tai-xong.ts`) trả `true` —
+sau sự kiện `load` của trang và một lần `requestIdleCallback` (trần chờ `choRanhToiDaMs`; trình duyệt không có
+`requestIdleCallback` thì một macrotask). Lúc trình duyệt rảnh, bộ lập lịch của React không còn việc hydrate nào xếp
+hàng. Chỉ lần tải cứng đầu bị trễ; mở bằng bấm sau đó mở ngay. Cách B giữ nguyên: khi ngăn mở, dữ liệu dùng chung đã sẵn
+nên ngăn không nháy trạng thái chờ. Hằng số ở `NGAN_BAN_GHI.moSau` trong `lib/ngan-ban-ghi-nap-san.ts`. Bản sao chiều
+đỏ (AC-2) trả cả `layout.tsx` lẫn `record-sheet-host.tsx` về merge-base.
+
 ## Mục 2 — 403 khi quản trị mở cuộc soạn của người khác
 
 `usePhienCuoc` (`okr/soan/dung-cuoc-soan.ts:99-110`) chạy `loadThread` tới `/eve/agents/okr` khi

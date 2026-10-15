@@ -24,10 +24,11 @@ evals:
     executor: script
     layer: ui
     cmd: config:executors.script.vs_chieu_do_hydrat
-    paths: ["apps/app/app/(app)/[slug]/layout.tsx", "apps/app/lib/ngan-ban-ghi-nap-san.ts", "_acceptance/ve-sinh-do-san-onehub/rang/**"]
+    paths: ["apps/app/app/(app)/[slug]/layout.tsx", "apps/app/components/crm/record-sheet/record-sheet-host.tsx", "apps/app/components/crm/record-sheet/sau-khi-tai-xong.ts", "apps/app/lib/ngan-ban-ghi-nap-san.ts", "_acceptance/ve-sinh-do-san-onehub/rang/**"]
     expected: |
       rang/chieu-do.mjs --ca hydrat dung git worktree add --detach tam o HEAD, symlink node_modules va .env ve cay
-      that, tra apps/app/app/(app)/[slug]/layout.tsx ve ban merge-base(HEAD, origin/onehub), chay
+      that, tra apps/app/app/(app)/[slug]/layout.tsx va apps/app/components/crm/record-sheet/record-sheet-host.tsx ve ban
+      merge-base(HEAD, origin/onehub), chay
       hydrat-record.mjs --mong-do trong ban sao (phien do rieng cua ban sao, 10 lan mo moi o). Moi o in mot dong
       "O <o>: <k>/10 loi hydrat — tai hien | tai hien yeu | khong tai hien" (>=3 | 1-2 | 0). Dat khi >= 1 o "tai
       hien": in "CHIEU DO DAT: <k> loi hydrat tren ban sao khong nap san; o tai hien: <ds>" va ma 0. Khong o nao

@@ -37,8 +37,9 @@ Ma trận hydration (AC-1, AC-2, AC-5) — bốn ô, mỗi ô ở 1440 và 390, 
   (40 lần mở), Then không lần nào có lỗi hydration (`pageerror` hay `console.error` khớp `/hydrat/i`); ngăn mở đúng
   bản ghi (tiêu đề ngăn là tên thoả thuận seed, hoặc khung soạn của cuộc đó); trang dưới ngăn có dữ liệu (bảng thoả
   thuận có dòng, hoặc Theo đơn vị có mục tiêu); lần mở có lỗi in NGUYÊN VĂN thông báo React, không cắt.
-- AC-2: Given bản sao cây ở đỉnh nhánh trong một worktree tạm, với `apps/app/app/(app)/[slug]/layout.tsx` trả về bản
-  merge-base (ngăn bản ghi không nạp sẵn), When chạy cùng răng của AC-1 trên bản sao (10 lần mở mỗi ô), Then răng
+- AC-2: Given bản sao cây ở đỉnh nhánh trong một worktree tạm, với `apps/app/app/(app)/[slug]/layout.tsx` và
+  `apps/app/components/crm/record-sheet/record-sheet-host.tsx` trả về bản merge-base (ngăn bản ghi không nạp sẵn, mở
+  ngay khi hydrate), When chạy cùng răng của AC-1 trên bản sao (10 lần mở mỗi ô), Then răng
   in số lỗi hydration của TỪNG ô D1–D4 kèm nhãn «tái hiện» (≥3/10), «tái hiện yếu» (1–2/10) hoặc «không tái hiện»
   (0/10); đạt khi ≥1 ô «tái hiện»; báo cáo bằng chứng chỉ tính AC-1 là bằng chứng sửa cho ô «tái hiện», ô khác ghi
   rõ nhãn của nó; cây làm việc không đổi byte nào (porcelain `-uall` cộng `hash-object` mọi tệp đang sửa hay chưa

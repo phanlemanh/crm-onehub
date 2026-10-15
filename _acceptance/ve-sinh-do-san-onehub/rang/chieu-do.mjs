@@ -15,7 +15,10 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const LAYOUT = "apps/app/app/(app)/[slug]/layout.tsx";
+const TRA_VE_GOC = [
+	"apps/app/app/(app)/[slug]/layout.tsx",
+	"apps/app/components/crm/record-sheet/record-sheet-host.tsx",
+];
 const DUOI_LOG = 20;
 
 function git(goc, ...thamSo) {
@@ -46,7 +49,8 @@ const CA = {
 		caiDayDu: true,
 		ap: (sao) => {
 			const mb = git(GOC, "merge-base", "HEAD", "origin/onehub").trim();
-			writeFileSync(join(sao, LAYOUT), git(GOC, "show", `${mb}:${LAYOUT}`));
+			for (const tep of TRA_VE_GOC)
+				writeFileSync(join(sao, tep), git(GOC, "show", `${mb}:${tep}`));
 		},
 		lenh: [
 			"bun",
