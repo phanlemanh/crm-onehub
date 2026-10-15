@@ -8,6 +8,7 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { dieuKienXemMucTieu, nguCanhXemOkr } from "@crm/db/okr-hien-thi";
+import type { docOkr as docOkrTheoQuyen, LocTim } from "../agent/lib/hoi-doc";
 import type { NguCanhPhien } from "../agent/lib/phien";
 import docOkr from "../agent/tools/doc_okr";
 import timOkr from "../agent/tools/tim_okr";
@@ -29,11 +30,13 @@ const NGUOI = [
 const CONG_CU = ["tim_okr", "doc_okr"] as const;
 
 type KetQua = { ok: boolean; mucTieu?: unknown; reason?: string };
-type CongCu = {
-	execute: (input: unknown, ctx: NguCanhPhien) => Promise<KetQua>;
+type CongCu<DauVao> = {
+	execute: (input: DauVao, ctx: NguCanhPhien) => Promise<KetQua>;
 };
-const tim = timOkr as unknown as CongCu;
-const doc = docOkr as unknown as CongCu;
+const tim = timOkr as unknown as CongCu<LocTim>;
+const doc = docOkr as unknown as CongCu<
+	Parameters<typeof docOkrTheoQuyen>[1]
+>;
 
 const phien = (userId: string, purpose = "okr-hoi"): NguCanhPhien => ({
 	session: {
@@ -73,7 +76,9 @@ type MtRa = { id: string; kr: { id: string }[] };
 const maMt = (ds: MtRa[]) => ds.map((m) => m.id).sort();
 const maKr = (ds: MtRa[]) => ds.flatMap((m) => m.kr.map((k) => k.id)).sort();
 
-let gioiHan: { ten: string; kr: { id: string; title: string }[] };
+type MucTieuGioiHan = { ten: string; kr: { id: string; title: string }[] };
+
+let gioiHan: MucTieuGioiHan;
 let soKhangDinh = 0;
 
 beforeAll(async () => {

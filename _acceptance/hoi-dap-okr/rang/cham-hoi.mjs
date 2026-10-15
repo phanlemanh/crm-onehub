@@ -66,8 +66,8 @@ export function docPhieu(chu) {
 	if (!khop) return null;
 	try {
 		const p = JSON.parse(khop[0]);
-		if (typeof p.dungY !== "boolean") return null;
-		return { dungY: p.dungY, lyDo: typeof p.lyDo === "string" ? p.lyDo : "" };
+		if (p.dungY !== true && p.dungY !== false) return null;
+		return { dungY: p.dungY, lyDo: p.lyDo instanceof Object ? "" : `${p.lyDo ?? ""}` };
 	} catch {
 		return null;
 	}

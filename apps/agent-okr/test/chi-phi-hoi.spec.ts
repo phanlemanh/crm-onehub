@@ -5,7 +5,10 @@ import chiPhi from "../agent/hooks/chi-phi";
 
 const T = `cphoi${(process.env.TEST_RUN_ID ?? "x").slice(0, 8)}`;
 
-type XuLy = (event: unknown, ctx: unknown) => Promise<void>;
+type XuLy = (
+	event: ReturnType<typeof buoc>,
+	nguCanh: ReturnType<typeof ctx>,
+) => Promise<void>;
 const xuLy = (chiPhi as unknown as { events: { "step.completed": XuLy } })
 	.events["step.completed"];
 

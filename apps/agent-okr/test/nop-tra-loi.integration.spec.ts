@@ -7,6 +7,7 @@ import {
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
+import type { NopTraLoiInput } from "@crm/validation/okr-tra-loi";
 import type { NguCanhPhien } from "../agent/lib/phien";
 import nopTraLoi from "../agent/tools/nop_tra_loi";
 import { boMau } from "./support/bo-mau";
@@ -27,7 +28,7 @@ type KetQua = {
 	traLoi?: { cau: { chu: string; trich: { id: string; ten: string }[] }[] };
 };
 type CongCu = {
-	execute: (input: unknown, ctx: NguCanhPhien) => Promise<KetQua>;
+	execute: (input: NopTraLoiInput, ctx: NguCanhPhien) => Promise<KetQua>;
 };
 const nop = nopTraLoi as unknown as CongCu;
 
@@ -50,15 +51,19 @@ const phien = (userId: string): NguCanhPhien => ({
 	},
 });
 
-const traLoi = (
-	cau: { chu: string; trich: { loai: string; id: string }[] }[],
-) => ({
+const traLoi = (cau: NonNullable<NopTraLoiInput["cau"]>): NopTraLoiInput => ({
 	loai: "tra-loi",
 	cauHoi: "OKR này thế nào?",
 	cau,
 });
 
-let congKhai: { id: string; ten: string; kr: { id: string; tienDo: string } };
+type MucTieuCongKhai = {
+	id: string;
+	ten: string;
+	kr: { id: string; tienDo: string };
+};
+
+let congKhai: MucTieuCongKhai;
 let krGioiHan: string;
 
 beforeAll(async () => {

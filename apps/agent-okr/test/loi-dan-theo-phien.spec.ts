@@ -5,15 +5,29 @@ import loiDanHoi from "../agent/instructions/dan-hoi";
 import loiDanSoan from "../agent/instructions/dan-soan";
 import { LOI_DAN_SOAN } from "../agent/lib/loi-dan-soan";
 
+type NguCanhBatDau = {
+	session: {
+		id: string;
+		auth: {
+			initiator: {
+				principalId: string;
+				attributes: Record<string, string>;
+			};
+			current: null;
+		};
+	};
+};
+
 type ChayPhien = (
 	event: { type: "session.started" },
-	ctx: unknown,
+	ctx: NguCanhBatDau,
 ) => Promise<{ markdown?: string } | null> | { markdown?: string } | null;
 
-const chay = (mod: unknown, purpose: string) => {
-	const ham = (mod as { events: { "session.started": ChayPhien } }).events[
-		"session.started"
-	];
+type LoiDanDong = typeof loiDanHoi;
+
+const chay = (mod: LoiDanDong, purpose: string) => {
+	const ham = (mod as unknown as { events: { "session.started": ChayPhien } })
+		.events["session.started"];
 	return ham(
 		{ type: "session.started" },
 		{

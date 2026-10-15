@@ -8,10 +8,9 @@ const GOC = join(import.meta.dir, "..", "..", "..");
 const RANG = join(GOC, "_acceptance", "hoi-dap-okr", "rang");
 const CAM = [/@ai-sdk\//, /createGateway/, /\bgateway\(/, /from "@crm\/ai"/];
 
-export function lenhDoGoiModel(chu: string): {
-	goiModel: boolean;
-	loi: string[];
-} {
+export type KetQuaSoatModel = { goiModel: boolean; loi: string[] };
+
+export function lenhDoGoiModel(chu: string): KetQuaSoatModel {
 	const goiModel = /\bgenerateText\b|\bstreamText\b|\bgenerateObject\b/.test(
 		chu,
 	);

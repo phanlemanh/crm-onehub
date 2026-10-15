@@ -12,6 +12,9 @@ import { okrHoiMessages } from "@/lib/messages/okr-hoi";
 const m = okrHoiMessages("vi");
 const CAU_HOI = "KR nào của tôi đang trượt?";
 
+type GiaTriChu = string | ((...doiSo: string[]) => string);
+type NhanhChu = { readonly [khoa: string]: GiaTriChu | NhanhChu };
+
 const tin = (id: string, role: "user" | "assistant", parts: unknown[]) =>
 	({ id, role, parts }) as unknown as EveMessage;
 
@@ -163,11 +166,11 @@ describe("okr hoi dap", () => {
 	});
 
 	test("hdo-chu: khoa vi bang khoa en", () => {
-		const khoa = (o: object, tien = ""): string[] =>
+		const khoa = (o: NhanhChu, tien = ""): string[] =>
 			Object.entries(o).flatMap(([k, v]) =>
-				v && typeof v === "object" && !Array.isArray(v)
-					? khoa(v, `${tien}${k}.`)
-					: [`${tien}${k}`],
+				v instanceof Function || !(v instanceof Object)
+					? [`${tien}${k}`]
+					: khoa(v, `${tien}${k}.`),
 			);
 		expect(khoa(okrHoiMessages("vi")).sort()).toEqual(
 			khoa(okrHoiMessages("en")).sort(),
