@@ -5,10 +5,13 @@ import { act, type ReactElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
 type HoiMo = { cuocHoiId: string };
+type VaoHoiMo = { cauDau?: string };
+type TraLoiGia = { cho: Promise<HoiMo> | null };
+type TuyChonHoiMo = { onSuccess?: (kq: HoiMo) => void };
 
-const goiHoiMo: unknown[] = [];
+const goiHoiMo: VaoHoiMo[] = [];
 const urlDoi: string[] = [];
-const traLoi: { cho: Promise<HoiMo> | null } = { cho: null };
+const traLoi: TraLoiGia = { cho: null };
 
 mock.module("@/components/page-transition", () => ({
 	PageTransition: ({ children }: { children: ReactNode }) => children,
@@ -30,9 +33,9 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
 			hoiMo: {
-				mutationOptions: (tuy: Record<string, unknown>) => ({
+				mutationOptions: (tuy: TuyChonHoiMo) => ({
 					...tuy,
-					mutationFn: async (vao: unknown) => {
+					mutationFn: async (vao: VaoHoiMo) => {
 						goiHoiMo.push(vao);
 						return traLoi.cho ?? { cuocHoiId: "hoi-1" };
 					},
