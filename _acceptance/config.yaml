@@ -1775,6 +1775,7 @@ executors:
     tlk_so_du: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-so-du'
     tlk_hong_het: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-hong-het'
     tlk_kho_theo_cay: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-kho-theo-cay'
+    eqh_phan_loai: 'bun test ./_acceptance/e24-qua-han-khong-phai-ha-tang/rang/kiem.test.ts -t eqh-phan-loai'
     hdo_quyen_doc: 'bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/hoi-quyen.integration.spec.ts"'
     hdo_purpose: 'cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/hoi-purpose.spec.ts'
     hdo_nop_quyen: 'bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/nop-tra-loi.integration.spec.ts"'
@@ -2768,6 +2769,7 @@ executors:
     nltk_pham_vi: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs --pham-vi
     tlk_khoa_sai: bun _acceptance/thuoc-tro-ly-okr-khong-lot/rang/khoa-sai.mjs
     tlk_so_du_am: bun _acceptance/thuoc-tro-ly-okr-khong-lot/rang/khoa-sai.mjs --so-du-am
+    eqh_qua_han: bun _acceptance/e24-qua-han-khong-phai-ha-tang/rang/qua-han.mjs
     tca_pham_vi: bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs --pham-vi
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
