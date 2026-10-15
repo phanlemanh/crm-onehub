@@ -5,7 +5,7 @@ slug: so-do-can-chinh-don-vi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
+status: approved
 approved_by: manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-so-do-can-chinh-don-vi-design.md
@@ -42,7 +42,6 @@ dùng chung trả nghĩa trượt.
 - AC-11: Given chữ trên sơ đồ, Then chữ khung đến từ `apps/app/lib/messages/okr-toan-canh.ts` (chữ của khung vẽ dùng chung từ `packages/ui/src/lib/messages.ts`) và có đủ `vi`, `en` khác nhau; tên đơn vị, tên người, tên mục tiêu và câu lý do mang `translate="no"`; thẻ là phần tử bấm được bằng phím có vòng tiêu điểm `focus-visible`; ba nút thu nhỏ · phóng to · vừa khung có `aria-label`; khi `prefers-reduced-motion` thì không lia, không phóng có hiệu ứng.
 - AC-12 (cross-layer): Given bộ OKR mẫu đã nạp, When mở Toàn cảnh › Theo đơn vị › Sơ đồ ở 1440 và 390 px, Then ở 1440 có đúng các đơn vị mà tệp dữ liệu mẫu khai «chưa nối lên» mang nhãn ấy và không có đường đi lên; bật «Cần chú ý» thì đúng tập đơn vị tệp mẫu khai cần chú ý còn rõ; bấm một thẻ có mục tiêu góp thì thẻ nở ra với câu lý do đã gieo; ở 390 hiện danh sách thay khung vẽ; trang không cuộn ngang; có ảnh khung nhìn từng trạng thái.
 - AC-13: Given trang đơn vị, Then `ViewSwitch` không còn mục «Cây căn chỉnh»; đường dẫn cũ `?xemOkr=cay` mở Toàn cảnh › Sơ đồ với thẻ của đơn vị đang chọn mở sẵn (đơn vị công ty → không mở thẻ nào).
-- AC-14: Given các hồ sơ đã ký có eval `test`/`script` không khai `status: not-run` mà `paths` ghi đích danh một tệp mã vòng này sửa, When chạy lại đúng lệnh của từng eval, Then mọi lệnh thoát đúng mã kỳ vọng, trừ đúng các eval đã nghỉ có tên ở `## Notes` kèm con trỏ thay thế; And `apps/api/src/okr/can-chinh.ts` không đổi.
 - AC-15: Given diff của vòng so với `onehub`, Then chỉ các tệp khai ở `## Notes` (mục Ranh giới), `_acceptance/so-do-can-chinh-don-vi/**`, `docs/**`, `bun.lock`, `PRODUCT-MAP.md`, `LO-TRINH.html` đổi; các tệp chỉ-thêm chỉ có dòng THÊM; `packages/ui/package.json` chỉ thêm đúng các phụ thuộc chủ kho chọn ở Cổng Phạm vi.
 
 ## Coverage
@@ -60,7 +59,7 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
 - **Trục D — người xem:** thấy mọi mục tiêu | thiếu mục tiêu giới hạn.
   - Thước CE: lọc quyền của `mucTieuCuaCay` [SUY-TỪ-REPO: apps/api/src/okr/okr.service.ts].
 - **Cross-cutting:** khổ 1440 | 390; `vi` | `en`; `translate="no"`; phím và tiêu điểm; `prefers-reduced-motion`.
-- **Ô Core:** đầu ra đơn vị và đường (AC-1) · năm cờ (AC-2) · quyền (AC-3) · cách xem (AC-4) · thẻ và đường (AC-5) · lọc (AC-6) · mở thẻ và lý do (AC-7) · thu gọn (AC-8) · hẹp (AC-9) · tải, lỗi, rỗng (AC-10) · chữ, phím (AC-11) · màn thật (AC-12) · B5 (AC-13) · giữ hồ sơ đã ký (AC-14) · ranh giới (AC-15).
+- **Ô Core:** đầu ra đơn vị và đường (AC-1) · năm cờ (AC-2) · quyền (AC-3) · cách xem (AC-4) · thẻ và đường (AC-5) · lọc (AC-6) · mở thẻ và lý do (AC-7) · thu gọn (AC-8) · hẹp (AC-9) · tải, lỗi, rỗng (AC-10) · chữ, phím (AC-11) · màn thật (AC-12) · B5 (AC-13) · ranh giới (AC-15).
 - **Đối chiếu ngành:** [NGÀNH: Tability Strategy Map — thẻ theo đơn vị, đường theo căn chỉnh, tách khỏi Dependencies Map]; [NGÀNH: Perdoo — chủ sở hữu mục tiêu theo đơn vị].
 - **Later:** lia/phóng ghi lên đường dẫn; xuất ảnh sơ đồ; lọc theo từng cờ riêng; sơ đồ quanh một mục (DH5).
 - **Never:** kéo-thả để sửa căn chỉnh trên sơ đồ — vòng chỉ đọc; sơ đồ thay Bảng làm mặc định trước phiên nghiệm thu.
@@ -104,9 +103,21 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
   `_acceptance/cay-can-chinh-co-ly-do/evals.yaml` và `_acceptance/ux-lai-thu-8c-okr/evals.yaml` (chỉ thêm khai nghỉ).
   S3 phát sinh: `apps/api/src/generated/server.ts` (sinh lại bằng `trpc:generate`, chỉ thêm thủ tục `soDoDonVi`),
   `apps/app/test/messages-guard.spec.ts` (chỉ thêm năm dòng ghim chữ dạng hàm của khối `soDo`).
+  S4-r1 phát sinh: `apps/api/test/vai-chi-okr.spec.ts` (chỉ thêm khai thủ tục đọc `okr.soDoDonVi` cho vai «chỉ OKR» và
+  bảng che mục tiêu ẩn), `packages/ui/test/render-diff.spec.tsx` (chỉ thêm ca `FlowMap`),
+  `apps/app/lib/trpc/cache.ts` (chỉ thêm `okr.soDoDonVi` vào danh sách làm mới `cache.okr`).
 - AC-13 (B5) HOÃN — chủ kho tách ở Gate 1.5 ngày 15/10 («tách B5 thành hàng riêng sau phiên nghiệm thu L3»; sổ
   `d-20261015T035759Z-17`): E13 khai `status: not-run`, các tệp «Nếu làm B5» ở Ranh giới không đổi, không eval nào
   của hồ sơ khác bị nghỉ. Hướng làm: `docs/plan/2026-10-15-hat-giong-b5-bo-cay-sau-nghiem-thu-l3.md`.
+- Known limits (thu phạm vi ở Cổng Bằng chứng lượt 2, 15/10, chủ kho chọn lối 1):
+  - AC-14 cũ «chạy lại mọi eval đã ký mà `paths` chạm tệp vòng này sửa, mọi lệnh thoát đúng mã» ra khỏi hợp đồng, ship
+    không có bằng chứng máy riêng của vòng. Răng E14 hai lượt chưa đạt: lượt 1 không phân biệt bài đỏ sẵn, lượt 2 quá
+    trần 30′ (khoảng 95 eval vì vòng chạm tệp chung) và phép so nền cho qua mọi bài nền đỏ (fail-open). Thay vào: các
+    suite `api`, `app`, `agent`, lint, lint:slop của kho xanh ở S4 lượt 2; `can-chinh.ts` không đổi vẫn do E16 (ranh
+    giới) và răng `l3_giu_ho_so` của hồ sơ L3 giữ. `bo-xuong-kara#E10` đỏ sẵn trên onehub 02ed3aec0, Mac Studio giữ.
+- Giới hạn đo của AC-14 (S4-r1): có eval đã ký đỏ sẵn trên `onehub` trước vòng này — đo 15/10 trên `02ed3aec0`:
+  `bo-xuong-kara#E10` (vân tay `confirmation.tsx`, hai thành phần mồ côi `artifact.tsx`, `task.tsx`). Răng E14 chạy lại
+  bài đỏ trên bản nền và in `DO SAN` cho bài đỏ cả hai phía; chỉ «đỏ trên vật, xanh trên nền» mới làm E14 đỏ.
 - Rủi ro gộp (crm #375, Mac Studio 02:41Z): #410 (Kho tài liệu) sửa `packages/ui/package.json` và
   `packages/ui/src/lib/messages.ts`; NM2 `loc-va-kieu-xem-chung` sửa `packages/ui` toggle-group (prop `count`) và có thể thêm
   khối vào `packages/ui/src/lib/messages.ts`; C `hoi-dap-okr` sửa `apps/app/lib/messages/okr-hoi.ts` (kề, không trùng

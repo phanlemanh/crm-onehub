@@ -264,6 +264,26 @@ function FlowMapInner<N extends Node>({
 }: FlowMapProps<N>) {
 	const [hoverId, setHoverId] = useState<string | null>(null);
 	const [thoiGian] = useState(thoiGianChuyenDong);
+	const msg = useMessages().soDo;
+	const nhanTroNang = useMemo(
+		() => ({
+			"node.a11yDescription.default": msg.moTaNut,
+			"node.a11yDescription.keyboardDisabled": msg.moTaNut,
+			"node.a11yDescription.ariaLiveMessage": ({
+				direction,
+				x,
+				y,
+			}: {
+				direction: string;
+				x: number;
+				y: number;
+			}) => msg.nutDaDich(direction, String(x), String(y)),
+			"edge.a11yDescription.default": msg.moTaDay,
+			"minimap.ariaLabel": msg.banDoNho,
+			"handle.ariaLabel": msg.diemNoi,
+		}),
+		[msg],
+	);
 	const { fitView } = useReactFlow();
 	const { nodes: placed, bends } = useMemo(
 		() => layoutTopDown(nodes, edges),
@@ -281,9 +301,10 @@ function FlowMapInner<N extends Node>({
 				...n,
 				draggable: false,
 				connectable: false,
+				domAttributes: { "aria-roledescription": msg.vaiNut },
 				style: lit ? { ...n.style, opacity: lit.has(n.id) ? 1 : 0.35 } : n.style,
 			})),
-		[placed, lit],
+		[placed, lit, msg.vaiNut],
 	);
 	const shownEdges = useMemo(
 		() =>
@@ -294,6 +315,8 @@ function FlowMapInner<N extends Node>({
 					...e,
 					type: "flow-map" as const,
 					focusable: false,
+					ariaLabel: e.data?.label ? `${msg.day} · ${e.data.label}` : msg.day,
+					domAttributes: { "aria-roledescription": msg.vaiDay },
 					data: {
 						kind: e.data?.kind ?? "lien",
 						label: e.data?.label,
@@ -302,7 +325,7 @@ function FlowMapInner<N extends Node>({
 					},
 				};
 			}),
-		[edges, lit, bends],
+		[edges, lit, bends, msg.day, msg.vaiDay],
 	);
 
 	return (
@@ -316,6 +339,7 @@ function FlowMapInner<N extends Node>({
 			data-flow-map
 		>
 			<ReactFlow
+				ariaLabelConfig={nhanTroNang}
 				edgeTypes={EDGE_TYPES}
 				edges={shownEdges}
 				fitView

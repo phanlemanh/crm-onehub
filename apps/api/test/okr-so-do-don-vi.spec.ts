@@ -332,8 +332,34 @@ describe("dh4-quyen", () => {
 			for (const c of n.children as (typeof n)[]) di(c);
 		};
 		for (const r of [...cay.roots, ...cay.chuaCanChinh]) di(r);
-		const idSoDo = new Set(hep.nut.flatMap((n) => n.mucTieu.map((m) => m.id)));
-		for (const id of idSoDo) expect(idCay.has(id)).toBe(true);
+		const idSoDo = [
+			...new Set(hep.nut.flatMap((n) => n.mucTieu.map((m) => m.id))),
+		].sort();
+		const congBoKy = (ids: Set<string>) =>
+			[...ids].filter((id) => id.startsWith(mtSoDo("sd-"))).sort();
+		expect(congBoKy(new Set(idSoDo))).toEqual(congBoKy(idCay));
+
+		const tenH = (await mucTieu(mtSoDo("sd-h"), CHU_SO_DO)).title;
+		const chu = await soDo(CHU_SO_DO);
+		if (JSON.stringify(chu).includes(tenH))
+			throw new Error("lo muc tieu gioi han chua can chinh");
+		const traChu = await goi(
+			app,
+			"okr.cayCanChinh",
+			"query",
+			{ cycleId: CHU_KY_Q4 },
+			await cookie(CHU_SO_DO),
+		);
+		const cayChu = cayCanChinhOutput.parse(ok(traChu, "cay chu"));
+		const idCayChu = new Set<string>();
+		const diChu = (n: { loai: string; id: string; children: unknown[] }) => {
+			if (n.loai === "muc-tieu") idCayChu.add(n.id);
+			for (const c of n.children as (typeof n)[]) diChu(c);
+		};
+		for (const r of [...cayChu.roots, ...cayChu.chuaCanChinh]) diChu(r);
+		expect(
+			congBoKy(new Set(chu.nut.flatMap((n) => n.mucTieu.map((m) => m.id)))),
+		).toEqual(congBoKy(idCayChu));
 
 		const day = await soDo(QUAN_TRI);
 		expect(JSON.stringify(day).includes(ten)).toBe(true);
