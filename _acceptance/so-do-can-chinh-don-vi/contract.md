@@ -101,6 +101,9 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
   `packages/ui/src/lib/messages.ts`; NM2 `loc-va-kieu-xem-chung` sửa `packages/ui` toggle-group (prop `count`) và có thể thêm
   khối vào `packages/ui/src/lib/messages.ts`; C `hoi-dap-okr` sửa `apps/app/lib/messages/okr-hoi.ts` (kề, không trùng
   tệp). Chỉ là khối kề nhau — ai gộp sau gỡ; `bun.lock` thì bên sau chạy lại `bun install`, không gỡ tay.
+- Nền hạ tầng 15/10 (`duong-nen.md`, sha `31dd7afd6`): công cụ · suite · lưới xanh; chân engine đỏ vì 8 tệp kit chép
+  trong kho (vendored) lệch bản kit đang chạy — lỗi đã biết của kho, PR #413 (nhận kit 2.30) gỡ; nhãn: *không đọc được ở
+  đây*, không phải lỗi của vòng.
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/design.md`, `docs/reui.md`, `docs/ai-ux.md`.
 - Hạng T3 do mốc m-1021dh tính DH4 là T3 (thêm React Flow + dagre, chạm `packages/ui`); hạng máy suy theo
   `t3_paths` là T2.
