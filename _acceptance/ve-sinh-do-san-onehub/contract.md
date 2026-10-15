@@ -5,10 +5,10 @@ slug: ve-sinh-do-san-onehub
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web, tooling]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-16-ve-sinh-do-san-onehub-design.md
-approved_by:
-approved_at:
+approved_by: manh
+approved_at: 2026-10-15T23:04:27Z
 ---
 
 # Acceptance Contract: ve-sinh-do-san-onehub
