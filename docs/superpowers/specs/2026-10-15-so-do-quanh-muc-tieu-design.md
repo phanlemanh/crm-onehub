@@ -31,6 +31,7 @@ phải lần tay qua cây căn chỉnh của cả kỳ.
   KR khác của P không vẽ.
 - **Phía dưới — một bậc.** Mọi KR của tâm (cạnh tâm→k), và mọi mục tiêu C có căn chỉnh tới tâm (cạnh tâm→C) hoặc tới
   một KR k của tâm (cạnh k→C). Không đi xuống bậc hai. C đã nằm phía trên (vòng lặp) thì bỏ cạnh xuống đó.
+- **Đích nằm ngoài tập đọc được.** Căn chỉnh của một mục tiêu trên đường mang id đích; đích không có trong tập `mucTieuCuaCay` của người xem (mục tiêu giới hạn) thì bỏ hẳn — không nút, không cạnh, không tên — dù đích nằm phía trên hay phía dưới.
 - **Góp lên công ty.** Đầu ra mang sẵn danh sách `gopLenCongTy`: mọi KR phía trên thuộc mục tiêu cấp `onehub` mà
   một cạnh góp đi xuống từ nó, và mọi mục tiêu cấp `onehub` phía trên nhận cạnh góp thẳng (không qua KR — ghi
   `kr: null`). Tâm là mục tiêu cấp `onehub` → `laCongTy: true`, danh sách rỗng. Danh sách này là câu trả lời trực
@@ -44,7 +45,7 @@ phải lần tay qua cây căn chỉnh của cả kỳ.
   bằng chứng DH4. Trang chi tiết đứng ngoài thanh thẻ năm mục của khu Mục tiêu, như trang soạn.
 - `page.tsx` dựng `PageShell` với tiêu đề «Sơ đồ quanh mục tiêu» và một câu mô tả; thân là thành phần khách.
 - Thân, từ trên xuống: dòng «Đang xem quanh: <tên mục tiêu>» · dòng góp lên công ty («Góp lên công ty qua KR «…»
-  của mục tiêu «…»», nhiều chỗ thì liệt kê; «Đây là mục tiêu cấp công ty»; «Chưa có đường lên công ty») · một câu
+  của mục tiêu «…»», nhiều chỗ thì liệt kê; «Đây là mục tiêu cấp công ty»; «Không thấy đường lên công ty trong phạm vi bạn xem được.» — câu đúng cả khi chưa gắn căn chỉnh lẫn khi đường lên đi qua mục tiêu người xem không thấy, và không lộ mục tiêu ẩn) · một câu
   chú thích («Phía trên: những gì mục tiêu này góp vào. Phía dưới: KR của nó và những mục tiêu góp vào nó. Rê chuột
   lên một thẻ để làm nổi đường đi.») · khung vẽ cao 600px, `focusId` = `centerId` = tâm.
 - Thẻ mục tiêu: tên, đơn vị, tiến độ; mục tiêu cấp công ty mang nhãn «Công ty». Thẻ KR nhỏ hơn: tên, tiến độ; KR của
@@ -76,8 +77,8 @@ Khối chữ mới ở `apps/app/lib/messages/okr-quanh.ts` (vi + en), không th
 
 - Suôn sẻ: ngăn chi tiết mục tiêu → bấm «Xem quanh mục tiêu» → trang sơ đồ, tâm ở giữa, dòng «Góp lên công ty qua KR
   «…»» trên khung (điểm ra: bấm một thẻ mở ngăn chi tiết của nó; nút «Xem quanh mục tiêu» trong ngăn đó đổi tâm).
-- Biên: tâm là mục tiêu công ty (không có gì phía trên); tâm chưa góp vào đâu và không ai góp vào (chỉ tâm + KR);
-  đường lên bị cắt vì người xem không thấy một mục tiêu phía trên (đường dừng ở đó, không nhắc gì tới mục tiêu ẩn).
+- Biên: tâm ở kỳ quý góp lên KR công ty ở kỳ năm (`mucTieuCuaCay` gộp kỳ cha); tâm là mục tiêu công ty (không có gì phía trên); tâm chưa góp vào đâu và không ai góp vào (chỉ tâm + KR);
+  đường lên bị cắt vì người xem không thấy một mục tiêu phía trên (đường dừng ở đó, không nhắc gì tới mục tiêu ẩn; dòng góp lên công ty dùng cùng câu với ca chưa gắn).
 - Lỗi & quay lại: truy vấn hỏng → `VungTaiLoi` có nút thử lại; mục tiêu không tồn tại hoặc không được xem → câu «Không
   tìm thấy mục tiêu này, hoặc bạn không có quyền xem.» kèm liên kết về Toàn cảnh; quay lại bằng nút lùi của trình
   duyệt.
@@ -97,7 +98,7 @@ Khối chữ mới ở `apps/app/lib/messages/okr-quanh.ts` (vi + en), không th
 | ST-quanh-mac-dinh | Sơ đồ quanh mục tiêu | Tâm giữa khung, phía trên tới KR công ty, phía dưới KR + mục tiêu góp vào; dòng «Góp lên công ty qua KR «…»» | Rê chuột theo đường, bấm thẻ |
 | ST-quanh-ro-chuot | Sơ đồ quanh mục tiêu | Thẻ và cạnh ngoài đường đi qua thẻ đang rê mờ đi | Đọc đường |
 | ST-quanh-cong-ty | Sơ đồ quanh mục tiêu | Tâm là mục tiêu công ty; dòng «Đây là mục tiêu cấp công ty» | Xem ai góp vào |
-| ST-quanh-chua-len | Sơ đồ quanh mục tiêu | Dòng «Chưa có đường lên công ty» | Mở ngăn, gắn căn chỉnh ở tab Căn chỉnh |
+| ST-quanh-chua-len | Sơ đồ quanh mục tiêu | Dòng «Không thấy đường lên công ty trong phạm vi bạn xem được.» | Mở ngăn xem tab Căn chỉnh |
 | ST-quanh-dang-tai | Sơ đồ quanh mục tiêu | Khung xương cùng hình, chữ cho trình đọc «Đang tải sơ đồ…» | Chờ |
 | ST-quanh-loi | Sơ đồ quanh mục tiêu | `VungTaiLoi` «Không tải được sơ đồ» + nút thử lại | Thử lại |
 | ST-quanh-khong-thay | Sơ đồ quanh mục tiêu | «Không tìm thấy mục tiêu này, hoặc bạn không có quyền xem.» + liên kết về Toàn cảnh | Về Toàn cảnh |
