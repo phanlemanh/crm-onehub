@@ -39,6 +39,7 @@ const CHU = "Ưu tiên giữ khách";
 const RANG = dirname(fileURLToPath(import.meta.url));
 const EVIDENCE = join(RANG, "..", "evidence");
 const LIEN_KET = 'a[href$="/tai-lieu"]';
+const LOI_CO_SAN = /Hydration failed[\s\S]*ST-donvi-dangtai/;
 const LY_DO_CAT = "Bàn đo K2f cần kho chưa có trang chiến lược đang dùng.";
 const DON_VI = {
 	cycleId: KY,
@@ -104,6 +105,7 @@ async function boChan(p) {
 }
 
 async function anh(t, ten) {
+	await tre(MAN.cho.yenMs);
 	const thuMuc = doDo ? the.ra : EVIDENCE;
 	mkdirSync(thuMuc, { recursive: true });
 	const tep = join(thuMuc, `${ten}.png`);
@@ -404,11 +406,6 @@ async function phanMan() {
 			const va = doDo === "khong-chan" ? await boChan(t.p) : null;
 			const cuoc = await moCuocQuanTri();
 			await moHoacDung(t, String(kho), cuoc.id);
-			const loiTai = t.loi.splice(0);
-			if (loiTai.length > 0)
-				ghi(
-					`   ${kho}: ${loiTai.length} loi console luc tai trang, truoc moi thao tac cua vong (khong tinh): ${loiTai.map((x) => x.split("\n")[0]).join(" | ")}`,
-				);
 			await buocA(t, kho, cuoc.id);
 			if (va) {
 				ghi(
@@ -422,10 +419,13 @@ async function phanMan() {
 			}
 			await buocB(t, kho, cuoc.id);
 			if (kho === 1280) await buocC(t, cuoc.id);
-			if (t.loi.length > 0)
-				saiThem(
-					`kcl ${kho}: console loi sau khi mo khung ${t.loi.join(" | ")}`,
+			const coSan = t.loi.filter((x) => LOI_CO_SAN.test(x));
+			const moi = t.loi.filter((x) => !LOI_CO_SAN.test(x));
+			if (coSan.length > 0)
+				ghi(
+					`   ${kho}: ${coSan.length} loi hydration co san cua Theo don vi (ST-donvi-dangtai, viec phu P1-19) — khong tinh`,
 				);
+			if (moi.length > 0) saiThem(`kcl ${kho}: console loi ${moi.join(" | ")}`);
 		} finally {
 			await t.dong();
 		}
