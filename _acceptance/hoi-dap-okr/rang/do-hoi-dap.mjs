@@ -230,14 +230,29 @@ async function trongPhien() {
 }
 
 async function main() {
-	const { docBoCaHoi, thieuPhu } = await import(
+	const { docBoCaHoi, thieuPhu, NGUOI_HOI, Y_DINH } = await import(
 		join(GOC, "apps/agent-okr/evals/okr-hoi/ca.ts")
 	);
-	const thieu = thieuPhu(docBoCaHoi(BO));
+	const bo = docBoCaHoi(BO);
+	const thieu = thieuPhu(bo);
+	if (process.argv.includes("--kiem-phu")) {
+		console.log(["nguoi hoi", ...Y_DINH].join("\t"));
+		for (const n of NGUOI_HOI)
+			console.log(
+				[
+					n,
+					...Y_DINH.map(
+						(y) => bo.filter((c) => c.nguoiHoi === n && c.yDinh === y).length,
+					),
+				].join("\t"),
+			);
+		console.log(`${bo.length} cau · thieu: ${thieu.join(", ") || "-"}`);
+	}
 	if (thieu.length > 0) {
 		console.log(`KHONG DO DUOC: bo cau thieu ${thieu.join(", ")}`);
 		return PHIEN_HOI.ma.khongDo;
 	}
+	if (process.argv.includes("--kiem-phu")) return PHIEN_HOI.ma.dat;
 	if (!coKhoaMoHinhSoan()) {
 		console.log(`KHONG DO DUOC: ${cauThieuKhoaSoan()}`);
 		return PHIEN_HOI.ma.khongDo;
