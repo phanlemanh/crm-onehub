@@ -70,7 +70,7 @@ export type KetQuaKiemSo =
 
 const SO = /\d+(?:[.,]\d+)*/g;
 const DEM = /^\s*(Mục tiêu|KR)(?![\p{L}\p{N}])/iu;
-const MIEN = /(năm|quý)\s*$/iu;
+const MIEN = /(?:năm|quý|(?<![\p{L}\p{N}])Q)\s*(?:\d{1,2}\s*[/-]\s*)?$/iu;
 
 export function docSo(chuoi: string): number | null {
 	const s = chuoi.trim();

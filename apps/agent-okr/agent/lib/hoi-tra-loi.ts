@@ -42,7 +42,9 @@ export async function nopTraLoi(
 ): Promise<KetQuaTraLoi> {
 	const cau: CauTraLoiDung["cau"] = [];
 	const daDoc = new Map<string, MucTieuDay | null>();
-	for (const c of input.cau ?? []) {
+	for (const [i, c] of (input.cau ?? []).entries()) {
+		if (input.loai === "tra-loi" && c.trich.length === 0)
+			return { ok: false, reason: LOI.cauKhongTrich(i + 1) };
 		const doc: TrichDoc[] = [];
 		for (const t of c.trich) {
 			const khoa = `${t.loai}:${t.id}`;

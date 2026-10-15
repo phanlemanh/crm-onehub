@@ -214,4 +214,28 @@ describe("hdo nop tra loi", () => {
 		expect(lech.ok).toBe(false);
 		expect(lech.so).toBe(String(p + 37));
 	});
+
+	test("cau tra-loi khong trich gi bi tu choi, khong-biet thi khong can trich", async () => {
+		const kq = await nop.execute(
+			traLoi([
+				{
+					chu: "Mục tiêu này đang đúng nhịp.",
+					trich: [{ loai: "objective", id: congKhai.id }],
+				},
+				{ chu: "Phòng pháp chế đang làm rất tốt.", trich: [] },
+			]),
+			phien(THANH_VIEN),
+		);
+		expect(kq.ok).toBe(false);
+		expect(kq.reason).toContain("Câu 2");
+		const khongBiet = await nop.execute(
+			{
+				loai: "khong-biet",
+				cauHoi: "OKR này thế nào?",
+				cau: [{ chu: "Kara không thấy Mục tiêu nào trả lời được.", trich: [] }],
+			},
+			phien(THANH_VIEN),
+		);
+		expect(khongBiet.ok).toBe(true);
+	});
 });

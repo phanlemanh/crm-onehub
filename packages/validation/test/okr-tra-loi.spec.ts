@@ -101,6 +101,25 @@ const CA: Array<{
 		trich: [kr("k1", [42])],
 		ok: true,
 	},
+	{
+		ten: "so-trong-ten-van-ngoai-lop",
+		chu: "Mục tiêu «Doanh thu hợp đồng mới đạt 48 tỷ đồng» đang ở 35%.",
+		trich: [mt("m1", [35])],
+		ok: false,
+		so: "48",
+	},
+	{
+		ten: "quy-gach-nam",
+		chu: "Trong quý 4/2026, KR này đạt 42%.",
+		trich: [kr("k1", [42])],
+		ok: true,
+	},
+	{
+		ten: "q-gach-nam",
+		chu: "Ở Q4/2026, KR này đạt 42%.",
+		trich: [kr("k1", [42])],
+		ok: true,
+	},
 ];
 
 describe("okr-tra-loi kiem so", () => {
@@ -113,7 +132,7 @@ describe("okr-tra-loi kiem so", () => {
 	}
 
 	test("so-ca-bang-so-hang", () => {
-		expect(CA.length).toBe(13);
+		expect(CA.length).toBe(16);
 	});
 
 	test("doc-so", () => {

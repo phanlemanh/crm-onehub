@@ -225,5 +225,7 @@ export const TRO_LY_OKR_HOI = {
 				? `Số ${so} đếm Mục tiêu hay KR không bằng số thứ câu đó trích; sửa số hoặc trích đủ rồi nộp lại.`
 				: `Số ${so} không khớp tiến độ, khởi điểm, hiện tại, đích hay kỳ vọng của thứ câu đó trích; dùng đúng số đã đọc hoặc bỏ số rồi nộp lại.`,
 		traLoiRong: "Câu trả lời loại tra-loi cần ít nhất một câu.",
+		cauKhongTrich: (thu: number) =>
+			`Câu ${thu} không trích Mục tiêu hay KR nào; mỗi câu của loại tra-loi trích thứ nó nói tới, hoặc bỏ câu đó rồi nộp lại.`,
 	},
 } as const;
