@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: aa9effbe4148367c1e924ea3e36384f69d648532
+verified_commit: a7702a31d39cdd1eb25f777695f82c860f8e3df1
 human_signoff:
 ---
 
@@ -173,3 +173,7 @@ Round 3: E3, E4, E5, E6, E8, E9 chay lai xanh; E1, E2, E7 mang tu round 2 vi del
 ### Re-pin lần 1 — 2026-10-15, do gộp onehub aa9effbe4 sau S4 r3, không chạm paths eval
 run_id: repin-20261015T175301Z-16668
 sha: aa9effbe4148367c1e924ea3e36384f69d648532 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-15, do gộp onehub a7702a31d (131 tệp, không chạm paths eval)
+run_id: repin-20261015T213624Z-24437
+sha: a7702a31d39cdd1eb25f777695f82c860f8e3df1 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
