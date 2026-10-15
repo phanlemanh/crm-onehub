@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d47eb0f091f9ea8bc0ebca3ff6b9d2ebefeba90d
+verified_commit: 04f34a630e1aa0cd1fd2e5523bc6973ed6523f57
 human_signoff: Manh Phan 2026-10-14
 ---
 
@@ -318,3 +318,7 @@ Round 2: sau bản sửa chữ phụ ô quá hạn (c33fbfebf), chạy lại E1,
 ### Re-pin lần 1 — 2026-10-14, do hoá cũ do gộp onehub c1864a3a2 (DA1b, L4, E5, #412); lần 1 đỏ vì Postgres thử chưa chạy
 run_id: repin-20261014T164904Z-67748
 sha: d47eb0f091f9ea8bc0ebca3ff6b9d2ebefeba90d · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E10b, E12 (E12 không khai paths) · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-15, do gộp onehub 3818ad4ec (#414 sửa test ngày 15)
+run_id: repin-20261015T001351Z-13999
+sha: 04f34a630e1aa0cd1fd2e5523bc6973ed6523f57 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E10b, E12 (E12 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
