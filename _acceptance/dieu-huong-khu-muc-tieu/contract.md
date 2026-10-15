@@ -5,7 +5,7 @@ slug: dieu-huong-khu-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-15T03:19:51Z
 design_doc: docs/superpowers/specs/2026-10-15-dieu-huong-khu-muc-tieu-design.md
