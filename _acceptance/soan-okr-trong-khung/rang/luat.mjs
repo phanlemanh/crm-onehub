@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -23,13 +24,22 @@ const git = (...thamSo) =>
 	execFileSync("git", thamSo, { cwd: goc, encoding: "utf8", maxBuffer: 64e6 });
 const doc = (duong) => readFileSync(join(goc, duong), "utf8");
 
-function nenGoc() {
-	for (const ref of ["origin/onehub", "onehub"]) {
+// F8 neo: diff cua vong (muc 1, muc 3, ranh gioi) rut tu cap gop PR #344 da dua vong len
+// onehub (B = d089cb8da^1, D = d089cb8da), khong tu merge-base(HEAD, onehub) — sau khi gop,
+// merge-base chua san vong nay (muc 3 do sai) va diff la tep cua vong khac (ranh gioi do sai).
+const CAP = Object.freeze({
+	goc: "d0ccad9845c112caec8d02e8a393d8c4eec616f6",
+	dinh: "d089cb8da201cd652ad77e1cb4cf43eb07e2edc5",
+});
+
+function kiemCap(cap) {
+	for (const sha of [cap.goc, cap.dinh])
 		try {
-			return git("merge-base", "HEAD", ref).trim();
-		} catch {}
-	}
-	throw new Error("khong tim duoc merge-base voi onehub");
+			git("cat-file", "-e", `${sha}^{commit}`);
+		} catch {
+			console.log(`KHONG DO DUOC: khong giai duoc cap gop ${sha}`);
+			process.exit(2);
+		}
 }
 
 function globSangRe(mau) {
@@ -135,21 +145,23 @@ function dongThemTuDiff(diff) {
 	return ra;
 }
 
-function docVatThat() {
-	const nen = nenGoc();
+function docVatThat(cap = CAP) {
+	kiemCap(cap);
+	// F8 neo: ba lan doc diff deu tren cap gop B..D.
+	const cap2 = `${cap.goc}..${cap.dinh}`;
 	const diff = git(
 		"diff",
 		"-U0",
-		nen,
+		cap2,
 		"--",
 		...KHU_KHONG_SO.map((k) => `:(literal)${k}`),
 	);
-	const tepDiff = git("diff", "--name-only", nen).split("\n").filter(Boolean);
+	const tepDiff = git("diff", "--name-only", cap2).split("\n").filter(Boolean);
 	const tepMoi = git(
 		"diff",
 		"--name-only",
 		"--diff-filter=A",
-		nen,
+		cap2,
 		"--",
 		"packages/ui/src/components/kara/",
 	)
@@ -195,19 +207,42 @@ function kiem(v) {
 	];
 }
 
-function suaTam(tep, doi, lam) {
-	const duong = join(goc, tep);
-	if (git("status", "--porcelain", "--", `:(literal)${tep}`).trim() !== "") {
-		console.log(`tu-thu tu choi: ${tep} dang co thay doi chua commit`);
-		process.exit(2);
-	}
-	const cu = readFileSync(duong, "utf8");
+// F8 neo: tu-thu khong sua cay lam viec — tep trong diff thi dung mot commit tam (cay D voi
+// mot tep doi, cha B) bang chi muc tam; tep doc truc tiep (docs/ai-ux.md) thi doi trong bo nho.
+function capBanSao(tep, doi) {
+	const chiMuc = join(tmpdir(), `sk-luat-${process.pid}-${Date.now()}`);
+	const env = { ...process.env, GIT_INDEX_FILE: chiMuc };
+	const chay = (thamSo, them = {}) =>
+		execFileSync("git", thamSo, { cwd: goc, encoding: "utf8", env, ...them }).trim();
 	try {
-		writeFileSync(duong, doi(cu));
-		return lam();
+		chay(["read-tree", CAP.dinh]);
+		const blob = chay(["hash-object", "-w", "--stdin"], {
+			input: doi(git("show", `${CAP.dinh}:${tep}`)),
+		});
+		chay(["update-index", "--cacheinfo", `100644,${blob},${tep}`]);
+		const cay = chay(["write-tree"]);
+		const dinh = chay(["commit-tree", cay, "-p", CAP.goc, "-m", "tu-thu luat.mjs"], {
+			env: {
+				...env,
+				GIT_AUTHOR_NAME: "tu-thu",
+				GIT_AUTHOR_EMAIL: "tu-thu@lan-do",
+				GIT_COMMITTER_NAME: "tu-thu",
+				GIT_COMMITTER_EMAIL: "tu-thu@lan-do",
+			},
+		});
+		return { goc: CAP.goc, dinh };
 	} finally {
-		writeFileSync(duong, cu);
+		rmSync(chiMuc, { force: true });
 	}
+}
+
+function suaTam(tep, doi, lam) {
+	if (tep === "docs/ai-ux.md") {
+		const v = docVatThat();
+		v.aiUx = doi(v.aiUx);
+		return lam(v);
+	}
+	return lam(docVatThat(capBanSao(tep, doi)));
 }
 
 if (tuThu) {
@@ -239,7 +274,8 @@ if (tuThu) {
 	];
 	let sai = 0;
 	for (const c of ca) {
-		const loi = suaTam(c.tep, c.doi, () => kiem(docVatThat()).filter(Boolean));
+		// F8 neo: suaTam dung vat tren ban sao (commit tam / bo nho), khong ghi cay lam viec.
+		const loi = suaTam(c.tep, c.doi, (v) => kiem(v).filter(Boolean));
 		const dat = loi.some((l) => l.startsWith(c.cho));
 		console.log(
 			`tu-thu ${c.ten}: ${dat ? "do dung" : "KHONG DO"} — ${loi.join(" | ")}`,
