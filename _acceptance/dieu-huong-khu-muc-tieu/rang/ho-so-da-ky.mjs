@@ -38,7 +38,9 @@ const sua = git("diff", "--name-only", base, "--", "apps/app/test")
 	.filter((f) => f && existsSync(join(GOC, f)));
 const laKiem = (f) => /\.(dom\.tsx|spec\.ts|spec\.tsx)$/.test(f);
 const tap = new Set(sua.filter(laKiem).map((f) => basename(f)));
-const troGiup = sua.filter((f) => !laKiem(f)).map((f) => basename(f).replace(/\.tsx?$/, ""));
+const troGiup = sua
+	.filter((f) => !laKiem(f))
+	.map((f) => basename(f).replace(/\.tsx?$/, ""));
 for (const f of readdirSync(join(GOC, "apps/app/test"))) {
 	if (!laKiem(f)) continue;
 	const chu = readFileSync(join(GOC, "apps/app/test", f), "utf8");
@@ -46,7 +48,9 @@ for (const f of readdirSync(join(GOC, "apps/app/test"))) {
 }
 if (tap.size === 0) khongDo("bo chon rong — khong tep kiem nao bi sua");
 
-const cauHinh = Bun.YAML.parse(readFileSync(join(GOC, "_acceptance/config.yaml"), "utf8"));
+const cauHinh = Bun.YAML.parse(
+	readFileSync(join(GOC, "_acceptance/config.yaml"), "utf8"),
+);
 const giaiRef = (cmd) => {
 	if (typeof cmd !== "string" || !cmd.startsWith("config:")) return cmd;
 	let o = cauHinh;
@@ -64,8 +68,13 @@ for (const slug of readdirSync(join(GOC, "_acceptance"))) {
 	if (tt !== "signed-off" && tt !== "machine-cleared") continue;
 	const chuEv = readFileSync(ev, "utf8");
 	const { byId: kyVong } = expectedExits(chuEv);
-	for (const e of parseEvals(chuEv, ["executor", "cmd", "status"], stripComment)) {
-		if (!["test", "script"].includes(e.executor) || e.status === "not-run") continue;
+	for (const e of parseEvals(
+		chuEv,
+		["executor", "cmd", "status"],
+		stripComment,
+	)) {
+		if (!["test", "script"].includes(e.executor) || e.status === "not-run")
+			continue;
 		const lenh = giaiRef(e.cmd.replace(/^["']|["']$/g, ""));
 		if (!lenh) continue;
 		const cham = [...tap].filter((t) => lenh.includes(t));
@@ -76,9 +85,12 @@ for (const slug of readdirSync(join(GOC, "_acceptance"))) {
 		viec.set(lenh, v);
 	}
 }
-if (viec.size === 0) khongDo(`bo chon rong — khong eval da ky nao chay ${[...tap].join(", ")}`);
+if (viec.size === 0)
+	khongDo(`bo chon rong — khong eval da ky nao chay ${[...tap].join(", ")}`);
 console.log(`tep kiem bi cham: ${[...tap].join(", ")}`);
-console.log(`lenh: ${viec.size} · eval: ${[...viec.values()].reduce((t, v) => t + v.ai.length, 0)}`);
+console.log(
+	`lenh: ${viec.size} · eval: ${[...viec.values()].reduce((t, v) => t + v.ai.length, 0)}`,
+);
 
 function chay(lenh) {
 	const r = spawnSync("bash", ["-c", lenh], {
@@ -99,29 +111,47 @@ for (const v of viec.values()) {
 		so += 1;
 		const dung = ma === a.mong;
 		if (!dung) sai += 1;
-		console.log(`${dung ? "HO-SO" : "SAI AC-9:"} ${a.slug} ${a.id}: ma ${ma} (ky vong ${a.mong})`);
+		console.log(
+			`${dung ? "HO-SO" : "SAI AC-9:"} ${a.slug} ${a.id}: ma ${ma} (ky vong ${a.mong})`,
+		);
 	}
 }
-console.log(sai === 0 ? `DUNG AC-9: ${so}/${so} lenh dat ma ky vong` : `SAI AC-9: ${sai}/${so} lenh lech ma ky vong`);
+console.log(
+	sai === 0
+		? `DUNG AC-9: ${so}/${so} lenh dat ma ky vong`
+		: `SAI AC-9: ${sai}/${so} lenh lech ma ky vong`,
+);
 
-const ungVien = [...viec.values()].find((v) => v.cham.some((t) => t.endsWith(".dom.tsx")));
+const ungVien = [...viec.values()].find((v) =>
+	v.cham.some((t) => t.endsWith(".dom.tsx")),
+);
 let doDung = false;
 if (!ungVien) khongDo("chieu do: khong lenh nao cham mot tep .dom.tsx de tiem");
 else {
-	const tep = join(GOC, "apps/app/test", ungVien.cham.find((t) => t.endsWith(".dom.tsx")));
+	const tep = join(
+		GOC,
+		"apps/app/test",
+		ungVien.cham.find((t) => t.endsWith(".dom.tsx")),
+	);
 	const goc = readFileSync(tep, "utf8");
 	try {
 		writeFileSync(tep, `${goc}\nthrow new Error("dhk-pha-ho-so");\n`);
 		const ma = chay(ungVien.lenh);
 		doDung = ungVien.ai.every((a) => ma !== a.mong);
 		for (const a of ungVien.ai)
-			console.log(`${ma !== a.mong ? "SAI AC-9 (pha thu, dung ky vong):" : "LOT pha thu:"} ${a.slug} ${a.id}: ma ${ma} (ky vong ${a.mong})`);
+			console.log(
+				`${ma !== a.mong ? "SAI AC-9 (pha thu, dung ky vong):" : "LOT pha thu:"} ${a.slug} ${a.id}: ma ${ma} (ky vong ${a.mong})`,
+			);
 	} finally {
 		writeFileSync(tep, goc);
 	}
 	if (readFileSync(tep, "utf8") !== goc) khongDo(`hoan nguyen ${tep} that bai`);
 }
-console.log(doDung ? "DUNG AC-9 chieu do: tiem loi vao tep kiem lam lenh lech ma" : "SAI AC-9 chieu do: tiem loi ma lenh van dat");
+console.log(
+	doDung
+		? "DUNG AC-9 chieu do: tiem loi vao tep kiem lam lenh lech ma"
+		: "SAI AC-9 chieu do: tiem loi ma lenh van dat",
+);
 const ket = sai === 0 && doDung;
 console.log(ket ? "KET LUAN: dat" : "KET LUAN: sai");
 process.exit(ket ? 0 : 1);

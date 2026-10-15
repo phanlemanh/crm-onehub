@@ -47,7 +47,8 @@ evals:
       (1440, 390) = 12 o, dang nhap quan tri, chu ky mau o pha lap ke hoach. Moi o mot dong
       "NUT <the> <kho>: phai <px> (Thoa thuan <px>) · dinh nut <px> < dinh thanh the <px> · tran ngang <px>".
       DUNG khi: 1440 |phai - phai Thoa thuan| <= 1; dinh nut < dinh [role=tablist]; 390 nut chinh nam sau
-      h1 va truoc dong mo ta theo thu tu hinh hoc (top), nhu /deals cung kho; scrollWidth <= innerWidth.
+      h1 va dung CUNG thu tu hinh hoc (top) voi tieu de, mo ta nhu /deals cung kho (do tren /deals cung
+      luot, khong ghi cung thu tu); scrollWidth <= innerWidth.
       Them 1 dong: "THAN theo-don-vi: 0 nut tao/nhap/soan trong main ngoai [data-slot=page-shell-header]".
       Them luot dang nhap thanh vien khong dan don vi nao, o /okr, 2 kho: dong "KHOA <kho>: nut chinh disabled,
       aria-describedby tro page-shell-note" va anh khoa-ly-do-<kho>.png.
@@ -258,7 +259,7 @@ evals:
     cmd: config:executors.script.dhk_san_thiet_ke
     paths:
       - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/luoi-dau-trang.tsx"
       - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
     expected: "exit 0 — design-gate --mode static đạt sàn P0 trên các tệp đầu trang khu; chiều đỏ là của design-gate (thước kit), không dựng lại ở đây."
 
