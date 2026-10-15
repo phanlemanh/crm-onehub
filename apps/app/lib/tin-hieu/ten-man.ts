@@ -2,6 +2,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 import { GOC_CAI_DAT, MUC_CAI_DAT, nhanCaiDat } from "@/lib/cai-dat-dieu-huong";
 import { MUC_RAIL, nhanRail } from "@/lib/khung-dieu-huong";
 import { nhacQuaZaloMessages } from "@/lib/messages/nhac-qua-zalo";
+import { thongBaoMessages } from "@/lib/messages/thong-bao";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 
 const NOI_TEN_CAI_DAT = " › ";
@@ -41,5 +42,6 @@ export function tenMan(duongVao: string, locale: Locale): string {
 	if (thuoc(duong, GOC_CAI_DAT)) return tenCaiDat(duong, locale);
 	if (thuoc(duong, "/reminders")) return nhacQuaZaloMessages(locale).tieuDe;
 	if (thuoc(duong, "/tin-hieu")) return tinHieuMessages(locale).menu;
+	if (thuoc(duong, "/thong-bao")) return thongBaoMessages(locale).trang.tieuDe;
 	return tenRail(duong, locale) ?? duongVao;
 }
