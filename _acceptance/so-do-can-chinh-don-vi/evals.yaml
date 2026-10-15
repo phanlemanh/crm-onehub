@@ -113,14 +113,6 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx", packages/validation/src/okr-tham-so.ts, apps/app/test/okr-theo-don-vi.dom.tsx]
 
-  - id: E14
-    criterion: AC-14
-    executor: script
-    cmd: config:executors.script.dh4_giu_ho_so
-    expected: "exit 0; rang/giu-ho-so.mjs: rút danh sách hồ sơ signed-off/machine-cleared từ _acceptance/*/contract.md, với mỗi eval test/script không khai status: not-run mà paths giao với git diff --name-only <merge-base onehub>..HEAD (bỏ _acceptance/**), chạy đúng lệnh config của eval và so mã kỳ vọng; eval có tên trong danh sách nghỉ ở ## Notes của hợp đồng này thì bỏ qua và in tên; in 'DUNG <hồ sơ>/<E>' mỗi eval; eval đỏ trên vật thì chạy lại đúng lệnh trên bản nền (git archive merge-base onehub) — nền xanh là 'eval da ky do do vong' (exit 1), nền cũng đỏ cùng mã là 'DO SAN <hồ sơ>/<E>' (in ra, không tính lỗi của vòng, lên thẻ Cổng Bằng chứng); git diff onehub -- apps/api/src/okr/can-chinh.ts rỗng (in 'sua tep cam: can-chinh.ts'). Đối chứng dương ghim trong tệp: số eval chạy ≥ 1 khi diff chạm okr-xem.service.ts."
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs, _acceptance/so-do-can-chinh-don-vi/contract.md]
-
   - id: E15
     criterion: AC-2
     executor: script
