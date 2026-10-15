@@ -1753,6 +1753,7 @@ executors:
     dh4_du_lieu: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-du-lieu"'
     dh4_chu_y: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-chu-y"'
     dh4_quyen: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-quyen"'
+    dh4_ly_do: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-ly-do"'
     dh4_cach_xem: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-cach-xem
     dh4_the: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-the
     dh4_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-loc

@@ -20,17 +20,21 @@ nào.
    chưa xếp vào bộ phận nằm dưới công ty). Thẻ mang: tên, trưởng đơn vị (hoặc «Chưa có trưởng»),
    số mục tiêu · số KR · tiến độ trung bình, ba chấm đếm KR theo tình trạng (đúng nhịp · chậm nhịp ·
    trượt), và một dòng cảnh báo khi đơn vị cần chú ý.
-3. **Đường nối là căn chỉnh thật, không phải sơ đồ tổ chức.**
+3. **Đường nối là căn chỉnh thật, không phải sơ đồ tổ chức.** Một mục tiêu «góp ra ngoài» khi nó
+   căn chỉnh tới mục tiêu hay KR của một đơn vị khác; căn chỉnh trong cùng đơn vị là góp nội bộ.
    - *Nét liền* từ thẻ cha xuống thẻ con khi đơn vị con có ít nhất một mục tiêu góp vào mục tiêu
      hay KR của đơn vị cha.
-   - *Nét đứt* từ thẻ ông xuống thẻ cháu khi một mục tiêu của phòng ban góp thẳng vào mục tiêu hay
-     KR của công ty, bỏ qua bộ phận.
-   - Đơn vị không có mục tiêu nào góp lên **không có đường nào đi lên**; thẻ vẫn nằm dưới cha (dagre
+   - *Nét đứt* khi mục tiêu góp vào một đơn vị khác không phải cha — bỏ cấp (phòng ban góp thẳng
+     lên công ty) hay chéo nhánh (phòng ban của A góp vào bộ phận B).
+   - Góp nội bộ không vẽ đường. Đơn vị có mục tiêu mà không mục tiêu nào góp ra ngoài là **«chưa nối
+     lên»: không có đường nào đi lên**; thẻ vẫn nằm dưới cha (dagre
      xếp bằng một cạnh ẩn) và mang nhãn «Chưa nối lên». Đây là tín hiệu ngưỡng 5 giây đo: nhìn chỗ
      không có dây.
    - Đường mang nhãn số mục tiêu khi nhiều hơn một («3 mục tiêu»).
-4. **«Cần chú ý»** (D3) — đơn vị khác công ty thoả ít nhất một trong bốn: chưa có trưởng · chưa đặt
-   OKR (0 mục tiêu công bố) · có mục tiêu chưa góp vào đâu · có KR trượt. «Trượt» dùng đúng hàm
+4. **«Cần chú ý»** (D3) — đơn vị khác công ty thoả ít nhất một trong năm: chưa có trưởng · chưa đặt
+   OKR (0 mục tiêu công bố) · chưa nối lên · có mục tiêu không căn chỉnh nào · có KR trượt. «Chưa nối
+   lên» là ca cấp đơn vị của cờ D3 «mục tiêu chưa góp vào đâu» — đơn vị chỉ góp nội bộ không được
+   lọt khỏi lọc. Thẻ cần chú ý có một dòng gọi tên các cờ đang bật («Có KR trượt»…). «Trượt» dùng đúng hàm
    `tinhTrang` dùng chung (`packages/validation/src/okr-muc-tieu.ts`) — chỉ mục tiêu cam kết trượt
    được; không định nghĩa thứ hai. Chip lọc `ToggleGroup` «Mọi đơn vị N · Cần chú ý K», giá trị trên
    đường dẫn (`locSoDo`). Bật lọc thì thẻ không cần chú ý mờ đi và không bấm được; không đơn vị
@@ -42,7 +46,9 @@ nào.
    (bỏ hiệu ứng khi `prefers-reduced-motion`). Thẻ đang mở ghi lên đường dẫn (`moDonVi`), mở lại
    đúng thẻ khi tải lại. Bấm lần nữa hay Esc thì đóng.
 6. **Thu gọn theo cấp** (D4). Hơn 12 đơn vị (`SO_DO.thuGonKhiHon`) thì mặc định phòng ban gộp vào
-   thẻ bộ phận: thẻ bộ phận ghi «+n phòng ban», và «k cần chú ý bên trong» khi có. Bấm nút trên thẻ
+   thẻ bộ phận — trừ nhánh có phòng ban chưa nối lên, nhánh ấy mở sẵn ngay ở màn mặc định để ngưỡng
+   5 giây đo được trước khi bật lọc; `moDonVi` trỏ vào phòng ban đang gộp cũng mở nhánh của nó.
+   Thẻ bộ phận gộp: thẻ bộ phận ghi «+n phòng ban», và «k cần chú ý bên trong» khi có. Bấm nút trên thẻ
    để mở nhánh, nhánh mở ghi lên đường dẫn (`moNhanh`). Bật «Cần chú ý» thì mọi nhánh có đơn vị cần
    chú ý tự mở — thu gọn không được giấu đơn vị mà ngưỡng đo.
 7. **Dưới `md`** khung vẽ thay bằng danh sách `Item variant="outline"` thụt lề theo cấp, cùng dữ
