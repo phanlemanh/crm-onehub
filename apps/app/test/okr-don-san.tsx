@@ -373,7 +373,13 @@ const { SimpleTable } = await import("@crm/ui/components/simple-table");
 export const { okrMessages } = await import("@/lib/messages/okr");
 export { SimpleTable };
 
-export type San = { o: HTMLElement; root: Root; url: () => URLSearchParams };
+export type San = {
+	o: HTMLElement;
+	root: Root;
+	url: () => URLSearchParams;
+	/** Bộ đệm truy vấn của màn — bài cần ép một lần tải lại nền gọi `invalidateQueries` trên nó. */
+	client: QueryClient;
+};
 let dangMo: San[] = [];
 
 export async function dung(
@@ -407,7 +413,7 @@ export async function dung(
 			</NuqsTestingAdapter>,
 		);
 	});
-	const san = { o, root, url: () => url };
+	const san = { o, root, url: () => url, client };
 	dangMo.push(san);
 	return san;
 }

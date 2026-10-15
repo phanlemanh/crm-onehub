@@ -1780,6 +1780,8 @@ executors:
     ctbp_bon_the: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-bon-the
     ctbp_tai_loi: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-loi
     ctbp_do_nguong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-do-nguong
+    ctbp_loi_mo: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-mo
+    ctbp_tai_lai_nen: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-lai-nen
   script:
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs

@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+import userEvent from "@testing-library/user-event";
 import { act, createElement } from "react";
 import {
 	type CapNhatTuanOutput,
@@ -793,6 +794,195 @@ describe("ctbp-tai-loi", () => {
 				await cho(() => lan > truoc, "goi lai dung truy van");
 				expect(lan - truoc).toBe(1);
 			});
+});
+
+/* ---------- ctbp-loi-mo (E19) ---------- */
+
+const nutPhan1 = (ten: string) =>
+	phan("can-cap-nhat")?.querySelector<HTMLButtonElement>(
+		`[data-nut="${ten}"]`,
+	) ?? null;
+const bangMo = () => co("can-cap-nhat", '[data-o="gia-tri"]');
+
+describe("ctbp-loi-mo", () => {
+	const MA_TRAN: [string, CapNhatTuanOutput, string, string | null, string][] =
+		[
+			["nut cap nhat", BA_THIEU, "", "cap-nhat-tai-cho", "cua-toi"],
+			["nut sua lan gui", DU_HET, "", "sua-lan-gui", "cua-toi"],
+			["tu nhac", BA_THIEU, "?tu=nhac", null, "nhac"],
+			["tu viec-cua-toi", BA_THIEU, "?tu=viec-cua-toi", null, "viec-cua-toi"],
+		];
+	for (const [ten, tuanDl, thamSo, nut, entry] of MA_TRAN)
+		test(`ctbp-loi-mo: ${ten}`, async () => {
+			datCoBan({ tuan: tuanDl });
+			kho.loiGhi.set("okr.moCapNhat", "500");
+			const san = await dung(<CuaToi />, thamSo);
+			await cho(daTaiPhan1, "phan 1 tai xong");
+			if (nut !== null) {
+				const n = nutPhan1(nut);
+				if (!n) throw new Error(`khong thay nut ${nut}`);
+				await bamChuot(n);
+			}
+			await cho(() => moPhien().length === 1, "goi moCapNhat lan dau");
+			await nhip(4);
+			const m = okrMessages("vi").baPhan;
+			const canhBao = phan("can-cap-nhat")?.querySelector('[role="alert"]');
+			if (!canhBao?.textContent?.includes(m.loiMo) || !nutPhan1("thu-lai-mo"))
+				throw new Error("ctbp-loi-mo: mo phien loi khong bao");
+			if (thamSo !== "" && san.url().get("tu") === null)
+				throw new Error("ctbp-loi-mo: tu roi duong dan sau loi mo phien");
+			expect(bangMo()).toBe(false);
+
+			kho.loiGhi.delete("okr.moCapNhat");
+			const thuLai = nutPhan1("thu-lai-mo");
+			if (!thuLai) throw new Error("mat nut thu lai");
+			await bamChuot(thuLai);
+			await cho(() => moPhien().length === 2, "goi moCapNhat lan hai");
+			const lai = moPhien()[1]?.dauVao?.entry;
+			if (lai !== entry)
+				throw new Error(
+					`ctbp-loi-mo: thu lai entry «${String(lai)}», mong «${entry}»`,
+				);
+			await cho(bangMo, "bang mo sau thu lai");
+			await nhip(2);
+			const p1 = phan("can-cap-nhat");
+			const focusO =
+				document.activeElement !== null &&
+				(p1?.contains(document.activeElement) ?? false) &&
+				document.activeElement.closest('[data-o="gia-tri"]') !== null;
+			expect({
+				canhBao: (p1?.querySelector('[role="alert"]') ?? null) !== null,
+				tu: san.url().get("tu"),
+				focusO,
+			}).toEqual({ canhBao: false, tu: null, focusO: true });
+		});
+
+	test("ctbp-loi-mo: tai lai trang sau loi mo van thu tu loi vao", async () => {
+		datCoBan({ tuan: BA_THIEU });
+		kho.loiGhi.set("okr.moCapNhat", "500");
+		const san = await dung(<CuaToi />, "?tu=nhac");
+		await cho(() => moPhien().length === 1, "goi moCapNhat lan dau");
+		await nhip(4);
+		kho.loiGhi.delete("okr.moCapNhat");
+		const lai = san.url().toString();
+		if (!lai.includes("tu=nhac"))
+			throw new Error("ctbp-loi-mo: tu roi duong dan sau loi mo phien");
+		await dung(<CuaToi />, lai);
+		await cho(() => moPhien().length === 2, "trang moi goi lai moCapNhat");
+		expect(moPhien()[1]?.dauVao?.entry).toBe("nhac");
+	});
+});
+
+/* ---------- ctbp-tai-lai-nen (E20) ---------- */
+
+describe("ctbp-tai-lai-nen", () => {
+	const KHOA = ["okr.capNhatTuan", null];
+	/** Lần tải đầu xanh; từ khi gọi `hong()` mọi lần tải lại của `okr.capNhatTuan` trả lỗi. */
+	function datHong() {
+		let loi = false;
+		kho.doc.set("okr.capNhatTuan", () => {
+			if (loi) throw new Error("500");
+			return BA_THIEU;
+		});
+		return () => {
+			loi = true;
+		};
+	}
+	async function taiLaiLoi(san: Awaited<ReturnType<typeof dung>>) {
+		await act(async () => {
+			await san.client.invalidateQueries({ queryKey: KHOA });
+		});
+		await nhip(4);
+		// đối chứng: lần tải lại thật sự đã chạy và lỗi — không thì ô xanh rỗng
+		expect(san.client.getQueryState(KHOA)?.status).toBe("error");
+	}
+	const loiPhan = () =>
+		co("can-cap-nhat", '[data-trang-thai="ST-ctbp-loi-phan"]');
+
+	test("ctbp-tai-lai-nen: bang dang dien giu nguyen", async () => {
+		datCoBan({ tuan: BA_THIEU });
+		const hong = datHong();
+		const san = await dung(<CuaToi />);
+		await cho(daTaiPhan1, "phan 1 tai xong");
+		const nut = nutPhan1("cap-nhat-tai-cho");
+		if (!nut) throw new Error("khong thay nut cap nhat");
+		await bamChuot(nut);
+		await cho(bangMo, "bang mo");
+		const o = phan("can-cap-nhat")?.querySelector<HTMLInputElement>(
+			'[data-o="gia-tri"] input',
+		);
+		if (!o) throw new Error("khong thay o so dau");
+		const u = userEvent.setup({ document, pointerEventsCheck: 0, delay: null });
+		await act(async () => {
+			await u.clear(o);
+			await u.type(o, "42");
+		});
+		hong();
+		await taiLaiLoi(san);
+		const conO = phan("can-cap-nhat")?.querySelector<HTMLInputElement>(
+			'[data-o="gia-tri"] input',
+		);
+		if (!conO || loiPhan())
+			throw new Error(
+				"ctbp-tai-lai-nen: bang dang dien bien mat khi tai lai loi",
+			);
+		expect(conO.value).toBe("42");
+	});
+
+	test("ctbp-tai-lai-nen: dong da gui giu nguyen", async () => {
+		datCoBan({ tuan: BA_THIEU });
+		const hong = datHong();
+		const san = await dung(<CuaToi />);
+		await cho(daTaiPhan1, "phan 1 tai xong");
+		const nut = nutPhan1("cap-nhat-tai-cho");
+		if (!nut) throw new Error("khong thay nut cap nhat");
+		await bamChuot(nut);
+		await cho(bangMo, "bang mo");
+		const p1 = phan("can-cap-nhat");
+		if (!p1) throw new Error("mat phan 1");
+		await chonCaoMoiDong(p1);
+		const gui = p1.querySelector<HTMLButtonElement>('[data-nut="gui"]');
+		if (!gui) throw new Error("khong thay nut gui");
+		await act(async () => gui.click());
+		const daGui = () =>
+			co("can-cap-nhat", '[data-trang-thai="ST-capnhat-dagui"]');
+		await cho(daGui, "da gui");
+		hong();
+		await taiLaiLoi(san);
+		if (!daGui() || loiPhan())
+			throw new Error(
+				"ctbp-tai-lai-nen: bang dang dien bien mat khi tai lai loi",
+			);
+	});
+
+	test("ctbp-tai-lai-nen: danh sach KR thieu giu nguyen", async () => {
+		datCoBan({ tuan: BA_THIEU });
+		const hong = datHong();
+		const san = await dung(<CuaToi />);
+		await cho(daTaiPhan1, "phan 1 tai xong");
+		hong();
+		await taiLaiLoi(san);
+		if (loiPhan())
+			throw new Error(
+				"ctbp-tai-lai-nen: bang dang dien bien mat khi tai lai loi",
+			);
+		expect({
+			dong: phan("can-cap-nhat")?.querySelectorAll("[data-kr]").length,
+			nut: nutPhan1("cap-nhat-tai-cho")?.textContent?.includes(
+				okrMessages("vi").baPhan.capNhatN(3),
+			),
+		}).toEqual({ dong: 3, nut: true });
+	});
+
+	test("ctbp-tai-lai-nen: lan tai dau loi van bao loi phan (AC-9)", async () => {
+		datCoBan({ tuan: BA_THIEU });
+		kho.doc.set("okr.capNhatTuan", () => {
+			throw new Error("500");
+		});
+		await dung(<CuaToi />);
+		await cho(loiPhan, "loi phan 1");
+		expect(nutPhan1("thu-lai-phan")).not.toBeNull();
+	});
 });
 
 /* ---------- ctbp-bon-the (E10) ---------- */

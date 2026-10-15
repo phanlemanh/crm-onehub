@@ -123,7 +123,13 @@ const NHOM = {
 		dotBien: [
 			{
 				ten: "giu-tu",
-				thay: [[`${OKR}/phan-can-cap-nhat.tsx`, "		void datTu(null);\n", ""]],
+				thay: [
+					[
+						`${OKR}/phan-can-cap-nhat.tsx`,
+						"				if (tu !== null) void datTu(null);\n",
+						"",
+					],
+				],
 				ghim: "ctbp-loi-vao-tu: tu con tren duong dan sau khi mo",
 			},
 		],
@@ -215,6 +221,60 @@ const NHOM = {
 					],
 				],
 				ghim: "ctbp-tai-loi: okr.capNhatTuan loi lam an phan don-vi-dan",
+			},
+		],
+	},
+	"ctbp-loi-mo": {
+		lenh: LENH.dom,
+		dotBien: [
+			{
+				ten: "bo-bao-loi",
+				thay: [
+					[
+						`${OKR}/phan-can-cap-nhat.tsx`,
+						"moPhien.isError && bien ? (",
+						"false && bien ? (",
+					],
+				],
+				ghim: "ctbp-loi-mo: mo phien loi khong bao",
+			},
+			{
+				ten: "go-tu-som",
+				thay: [
+					[
+						`${OKR}/phan-can-cap-nhat.tsx`,
+						"		moPhien.mutate({ entry: tu });\n	}, [coKr, tu, moPhien]);",
+						"		moPhien.mutate({ entry: tu });\n		void datTu(null);\n	}, [coKr, tu, moPhien, datTu]);",
+					],
+				],
+				ghim: "ctbp-loi-mo: tu roi duong dan sau loi mo phien",
+			},
+			{
+				ten: "thu-lai-cua-toi",
+				thay: [
+					[
+						`${OKR}/phan-can-cap-nhat.tsx`,
+						"moPhien.mutate(bien)",
+						'moPhien.mutate({ entry: "cua-toi" })',
+					],
+				],
+				ghim: "ctbp-loi-mo: thu lai entry «cua-toi», mong «nhac»",
+			},
+		],
+	},
+	"ctbp-tai-lai-nen": {
+		lenh: LENH.dom,
+		dotBien: [
+			{
+				ten: "go-bang",
+				thay: [
+					[
+						`${OKR}/phan-can-cap-nhat.tsx`,
+						"	if (!ds.data)\n		return (",
+						"	if (ds.isError || !ds.data)\n		return (",
+					],
+				],
+				ghim: "ctbp-tai-lai-nen: bang dang dien bien mat khi tai lai loi",
 			},
 		],
 	},

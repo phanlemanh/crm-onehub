@@ -53,7 +53,7 @@ const CHIEU_DO = {
 		tenCay: "ctbp-chieu-do-tu",
 		chiBuoc: "E18",
 		tep: `${OKR}/phan-can-cap-nhat.tsx`,
-		cam: (s) => s.replace("		void datTu(null);\n", ""),
+		cam: (s) => s.replace("				if (tu !== null) void datTu(null);\n", ""),
 		dauVet: "		moPhien.mutate({ entry: tu });\n	}",
 		ghim: /SAI AC-3: tai lai sau nhac \+1, mong \+0/,
 	},
