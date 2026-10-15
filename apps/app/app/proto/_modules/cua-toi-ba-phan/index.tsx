@@ -289,15 +289,15 @@ function KhoiViec() {
 	);
 }
 
-const TEN_DON_VI = {
-	cskh: "Chăm sóc khách hàng",
-	taichinh: "Tài chính",
-	ketoan: "Kế toán",
-} as Record<string, string>;
+const TEN_DON_VI = new Map([
+	["cskh", "Chăm sóc khách hàng"],
+	["taichinh", "Tài chính"],
+	["ketoan", "Kế toán"],
+]);
 
 function TheDonVi({ id }: { id: string }) {
 	const t = tomTat(id);
-	const ten = TEN_DON_VI[id] ?? id;
+	const ten = TEN_DON_VI.get(id) ?? id;
 	return (
 		<Card data-don-vi-dan={id}>
 			<CardHeader>

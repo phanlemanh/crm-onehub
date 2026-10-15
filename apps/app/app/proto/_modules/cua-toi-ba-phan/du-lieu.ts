@@ -75,7 +75,10 @@ export type TomTat = {
 export function tomTat(id: string): TomTat {
 	const ds = MUC_TIEU_CUA_DON_VI.get(id) ?? [];
 	const krs = ds.flatMap((mt) => mt.kr.map((kr) => ({ kr, loai: mt.loai })));
-	const dem: Record<ToneDem, number> = { success: 0, warning: 0, error: 0 };
+	const dem = { success: 0, warning: 0, error: 0 } satisfies Record<
+		ToneDem,
+		number
+	>;
 	for (const { kr, loai } of krs) {
 		const tone = tinhTrang(tienDo(kr), loai).tone;
 		if (tone === "success" || tone === "warning" || tone === "error")
