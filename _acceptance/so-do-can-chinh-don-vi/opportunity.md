@@ -3,13 +3,13 @@ schema_version: 1
 slug: so-do-can-chinh-don-vi
 feature: Lãnh đạo mở Toàn cảnh, chuyển sang Sơ đồ và thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-15T02:26:39Z     # ISO UTC
 prototype:
   base_commit: 60fc1b02dbd9de1abc1a7ece86fa2ec03a31cae1    # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
-  disposition:     # keep | archive
+  disposition: archive    # keep | archive
 lo_trinh_ma: DH4
 lo_trinh_tep: docs/plan/lo-trinh-okr.json
 ---
@@ -66,10 +66,10 @@ này chỉ đọc qua nó, không sửa. B5 (bỏ cách xem Cây) chạm mười
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] trên Toàn cảnh › Sơ đồ với dữ liệu thật, Ban lãnh đạo có chỉ ra được đơn vị chưa nối lên công ty và đơn vị đang trượt trong 5 giây không?
-- Kết quả nào là SỐNG: [đề xuất] ít nhất 2/3 người dự phiên nghiệm thu chỉ đúng một đơn vị chưa nối lên công ty trong ≤ 5 giây kể từ lúc màn Sơ đồ hiện, và chỉ đúng một đơn vị đang trượt sau khi bật «Cần chú ý».
-- Kết quả nào là CHẾT: [đề xuất] dưới 2/3 người dự chỉ đúng trong 5 giây, hoặc có người chỉ sai đơn vị (chọn một đơn vị đã nối là «chưa nối»).
-- Timebox: [đề xuất] phiên nghiệm thu trong 14 ngày sau khi lên production, chậm nhất 2026-11-04; dựng theo mốc m-1021dh, ước ~10 giờ máy, hoàn tất dự kiến 2026-10-21.
+- Câu hỏi phép đo trả lời: trên Toàn cảnh › Sơ đồ với dữ liệu thật, Ban lãnh đạo có chỉ ra được đơn vị chưa nối lên công ty và đơn vị đang trượt trong 5 giây không?
+- Kết quả nào là SỐNG: ít nhất 2/3 người dự phiên nghiệm thu chỉ đúng một đơn vị chưa nối lên công ty trong ≤ 5 giây kể từ lúc màn Sơ đồ hiện, và chỉ đúng một đơn vị đang trượt sau khi bật «Cần chú ý».
+- Kết quả nào là CHẾT: dưới 2/3 người dự chỉ đúng trong 5 giây, hoặc có người chỉ sai đơn vị (chọn một đơn vị đã nối là «chưa nối»).
+- Timebox: phiên nghiệm thu trong 14 ngày sau khi lên production, chậm nhất 2026-11-04; dựng theo mốc m-1021dh, ước ~10 giờ máy, hoàn tất dự kiến 2026-10-21.
 
 ## Kết quả prototype
 
@@ -90,9 +90,9 @@ nên không gộp, không rebase — chỉ đọc bằng `git show`.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
-- **disposition = …** Căn cứ: …
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **decision = build.** Căn cứ: hàng DH4 thuộc mốc m-1021dh mà chủ kho mở 15/10 (crm #375); DH5 dựng trên khung vẽ của vòng này. manh chọn «build» 2026-10-15.
+- **disposition = archive.** Căn cứ: nhánh bản mẫu tụt khoảng 455 commit so với `onehub`, không gộp, không rebase; vòng chỉ đọc nó bằng `git show` rồi dựng lại trên nhánh cắt từ `onehub`. Bản mẫu giữ nguyên ở nhánh của nó làm tham chiếu.
+- **Ngưỡng UAT chốt cùng lúc ký:** SỐNG ít nhất 2/3 người dự phiên nghiệm thu chỉ đúng một đơn vị chưa nối lên công ty trong ≤ 5 giây kể từ lúc màn Sơ đồ hiện, và chỉ đúng một đơn vị đang trượt sau khi bật «Cần chú ý»; CHẾT dưới 2/3 người dự chỉ đúng trong 5 giây, hoặc có người chỉ sai đơn vị; phiên nghiệm thu trong 14 ngày sau khi lên production, chậm nhất 2026-11-04 — chốt tại Cổng Đáng 2026-10-15, manh («build · archive · ngưỡng giữ như đề xuất»).
 
 ## Thước đo thành công → ứng viên criterion
 
