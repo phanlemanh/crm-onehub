@@ -117,10 +117,7 @@ export function KhungDangTaiDonVi({ hang }: { hang?: ReactNode }) {
 				<XuongHangCongCu />
 			)}
 			<div className="flex flex-col gap-1 overflow-hidden rounded-lg border bg-card">
-				<Skeleton
-					className="h-11 w-full"
-					data-khung-hang="dau-bang"
-				/>
+				<Skeleton className="h-11 w-full" data-khung-hang="dau-bang" />
 				{DONG_KHUNG.map((k) => (
 					<div
 						className="flex items-center gap-4 px-4 py-3"
