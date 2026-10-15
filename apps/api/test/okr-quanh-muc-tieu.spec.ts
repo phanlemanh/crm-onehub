@@ -156,6 +156,12 @@ function khongLapNut(q: QuanhMucTieuOutput) {
 
 describe("dh5-len", () => {
 	test("đường lên tới KR công ty theo ma trận bốn tâm và ca kỳ cha", async () => {
+		const pq = await quanh(PQ, QUAN_TRI);
+		const gopPq = pq.gopLenCongTy.map((g) => [g.kr?.id ?? null, g.mucTieu.id]);
+		if (!gopPq.some(([k, m]) => k === NYK1 && m === NY))
+			throw new Error("mat duong len ky cha");
+		expect(gopPq).toEqual([[NYK1, NY]]);
+
 		let soTam = 0;
 
 		const p1 = await quanh(P1, QUAN_TRI);
@@ -199,12 +205,6 @@ describe("dh5-len", () => {
 		expect(phiaTren(kg).size).toBe(0);
 		expect(kg.gopLenCongTy).toEqual([]);
 		expect(soTam).toBe(4);
-
-		const pq = await quanh(PQ, QUAN_TRI);
-		const gopPq = pq.gopLenCongTy.map((g) => [g.kr?.id ?? null, g.mucTieu.id]);
-		if (!gopPq.some(([k, m]) => k === NYK1 && m === NY))
-			throw new Error("mat duong len ky cha");
-		expect(gopPq).toEqual([[NYK1, NY]]);
 	});
 });
 

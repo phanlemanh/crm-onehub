@@ -221,8 +221,10 @@ describe("dh5-so-do", () => {
 			const t = the(n.id);
 			if (!t) throw new Error(`thieu the: ${n.id}`);
 			const coNhan = t.querySelector("[data-cong-ty]") !== null;
-			if (n.congTy && !coNhan) throw new Error(`thieu nhan cong ty: ${n.id}`);
-			if (!n.congTy && coNhan) throw new Error(`nhan cong ty thua: ${n.id}`);
+			const laCongTy =
+				MTS.find((m) => m.id === n.mucTieuId)?.level === "onehub";
+			if (laCongTy && !coNhan) throw new Error(`thieu nhan cong ty: ${n.id}`);
+			if (!laCongTy && coNhan) throw new Error(`nhan cong ty thua: ${n.id}`);
 			soAssert += 1;
 		}
 		expect(soAssert).toBe(hienTai.nut.length);
@@ -245,11 +247,16 @@ describe("dh5-so-do", () => {
 			if (!dong) throw new Error("thieu dong gop len cong ty");
 			if (dong.textContent?.includes("n1-k2"))
 				throw new Error("kr cong ty thua: n1-k2");
-			expect(tapDong()).toEqual(
-				new Set(
+			const mong = [
+				...new Set(
 					hienTai.gopLenCongTy.map((g) => `${g.kr?.id ?? ""}|${g.mucTieu.id}`),
 				),
-			);
+			].sort();
+			const thay = [...tapDong()].sort();
+			if (JSON.stringify(thay) !== JSON.stringify(mong))
+				throw new Error(
+					`dong gop len lech: thay ${thay.join(",")} mong ${mong.join(",")}`,
+				);
 			for (const g of hienTai.gopLenCongTy)
 				if (g.kr && !dong.textContent?.includes(g.kr.tieuDe))
 					throw new Error(`thieu ten kr: ${g.kr.id}`);
