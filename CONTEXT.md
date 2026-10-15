@@ -1170,9 +1170,11 @@ tới tệp gốc.
 **Tín hiệu**: một điều người dùng gặp trong OneHub — chỗ hỏng, chỗ thiếu, một ý muốn có —
 kể bằng nút «Gửi tín hiệu» ở đầu mọi màn. CRM chỉ nhận và cất tín hiệu; đội sản phẩm lấy
 tín hiệu về, gom thành nhóm và chọn nhóm nào thành việc. Người gửi xem tín hiệu của mình
-đang ở đâu ở trang «Tín hiệu đã gửi»: chờ lấy về, chờ gom, vào nhóm nào, thành việc nào,
-đã giao chưa. Chỉ người gửi xoá được tín hiệu, và chỉ khi đội sản phẩm chưa lấy về. Chốt
-2026-10-12 tại Cổng Đáng của `gui-tin-hieu-trong-crm`.
+đang ở đâu ở trang «Tín hiệu đã gửi»: đã nhận, đang xem xét, vào nhóm nào, thành việc nào,
+đã giao chưa. Câu trạng thái sau khi đội sản phẩm xếp nhóm do CRM dựng theo ngôn ngữ người
+xem từ mã chỗ bộ kit ghi; tên nhóm, lý do và tên việc giữ nguyên chữ người viết. Chỉ người
+gửi xoá được tín hiệu, và chỉ khi đội sản phẩm chưa lấy về. Chốt 2026-10-12 tại Cổng Đáng
+của `gui-tin-hieu-trong-crm`; chữ trạng thái đổi 2026-10-14 ở `sua-giao-dien-tin-hieu`.
 _Avoid_: góp ý, phản hồi, feedback, báo lỗi, yêu cầu
 Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sai» là đánh dấu một câu trả
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
