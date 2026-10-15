@@ -60,7 +60,7 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
 - **Trục D — người xem:** thấy mọi mục tiêu | thiếu mục tiêu giới hạn.
   - Thước CE: lọc quyền của `mucTieuCuaCay` [SUY-TỪ-REPO: apps/api/src/okr/okr.service.ts].
 - **Cross-cutting:** khổ 1440 | 390; `vi` | `en`; `translate="no"`; phím và tiêu điểm; `prefers-reduced-motion`.
-- **Ô Core:** đầu ra đơn vị và đường (AC-1) · bốn cờ (AC-2) · quyền (AC-3) · cách xem (AC-4) · thẻ và đường (AC-5) · lọc (AC-6) · mở thẻ và lý do (AC-7) · thu gọn (AC-8) · hẹp (AC-9) · tải, lỗi, rỗng (AC-10) · chữ, phím (AC-11) · màn thật (AC-12) · B5 (AC-13) · giữ hồ sơ đã ký (AC-14) · ranh giới (AC-15).
+- **Ô Core:** đầu ra đơn vị và đường (AC-1) · năm cờ (AC-2) · quyền (AC-3) · cách xem (AC-4) · thẻ và đường (AC-5) · lọc (AC-6) · mở thẻ và lý do (AC-7) · thu gọn (AC-8) · hẹp (AC-9) · tải, lỗi, rỗng (AC-10) · chữ, phím (AC-11) · màn thật (AC-12) · B5 (AC-13) · giữ hồ sơ đã ký (AC-14) · ranh giới (AC-15).
 - **Đối chiếu ngành:** [NGÀNH: Tability Strategy Map — thẻ theo đơn vị, đường theo căn chỉnh, tách khỏi Dependencies Map]; [NGÀNH: Perdoo — chủ sở hữu mục tiêu theo đơn vị].
 - **Later:** lia/phóng ghi lên đường dẫn; xuất ảnh sơ đồ; lọc theo từng cờ riêng; sơ đồ quanh một mục (DH5).
 - **Never:** kéo-thả để sửa căn chỉnh trên sơ đồ — vòng chỉ đọc; sơ đồ thay Bảng làm mặc định trước phiên nghiệm thu.
@@ -97,8 +97,10 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
   `apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx`, `packages/validation/src/okr-tham-so.ts`,
   `apps/app/test/okr-theo-don-vi.dom.tsx`, `apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx` (xoá),
   `apps/app/test/cay-can-chinh-ly-do.dom.tsx` (xoá).
-- Chồng đã biết: PR #410 (Kho tài liệu, đang mở) cũng sửa `packages/ui/package.json` và
-  `packages/ui/src/lib/messages.ts` — ai gộp sau gỡ xung đột.
+- Rủi ro gộp (crm #375, Mac Studio 02:41Z): #410 (Kho tài liệu) sửa `packages/ui/package.json` và
+  `packages/ui/src/lib/messages.ts`; NM2 `loc-va-kieu-xem-chung` sửa `packages/ui` toggle-group (prop `count`) và có thể thêm
+  khối vào `packages/ui/src/lib/messages.ts`; C `hoi-dap-okr` sửa `apps/app/lib/messages/okr-hoi.ts` (kề, không trùng
+  tệp). Chỉ là khối kề nhau — ai gộp sau gỡ; `bun.lock` thì bên sau chạy lại `bun install`, không gỡ tay.
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/design.md`, `docs/reui.md`, `docs/ai-ux.md`.
 - Hạng T3 do mốc m-1021dh tính DH4 là T3 (thêm React Flow + dagre, chạm `packages/ui`); hạng máy suy theo
   `t3_paths` là T2.
