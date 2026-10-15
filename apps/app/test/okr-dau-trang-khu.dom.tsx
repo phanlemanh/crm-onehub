@@ -61,7 +61,6 @@ const { TRO_LY_OKR_TRAN } = await import("@crm/validation/okr-tro-ly");
 
 const TRANG = {
 	"cua-toi": await import("@/app/(app)/[slug]/okr/page"),
-	"cap-nhat-tuan": await import("@/app/(app)/[slug]/okr/cap-nhat-tuan/page"),
 	"theo-don-vi": await import("@/app/(app)/[slug]/okr/theo-don-vi/page"),
 	"toan-canh": await import("@/app/(app)/[slug]/okr/toan-canh/page"),
 	"hoi-y": await import("@/app/(app)/[slug]/okr/hoi-y/page"),
@@ -73,7 +72,6 @@ const TRANG_SUC_KHOE = await import(
 type TabOkr = (typeof TAB)[number];
 const DUONG_TAB = {
 	"cua-toi": "/ws/okr",
-	"cap-nhat-tuan": "/ws/okr/cap-nhat-tuan",
 	"theo-don-vi": "/ws/okr/theo-don-vi",
 	"toan-canh": "/ws/okr/toan-canh",
 	"hoi-y": "/ws/okr/hoi-y",
@@ -528,12 +526,11 @@ describe("dhk-don-dich", () => {
 // ---------- dhk-tieu-de (E1) ----------
 
 describe("dhk-tieu-de", () => {
-	test("dhk-tieu-de: h1 = nhãn thanh bên ở 6 trang × 2 ngôn ngữ × 2 pha; mô tả khác nhau; tiêu đề trình duyệt", async () => {
+	test("dhk-tieu-de: h1 = nhãn thanh bên ở 5 trang × 2 ngôn ngữ × 2 pha; mô tả khác nhau; tiêu đề trình duyệt", async () => {
 		const s = soSai();
 		let soO = 0;
 		const TRANG_DO: (TabOkr | "suc-khoe")[] = [
 			"cua-toi",
-			"cap-nhat-tuan",
 			"theo-don-vi",
 			"toan-canh",
 			"suc-khoe",
@@ -565,8 +562,8 @@ describe("dhk-tieu-de", () => {
 			}
 			soO += 1;
 			s.kiem(
-				new Set(moTa.values()).size === 5,
-				`dhk-tieu-de: ${locale} chi co ${new Set(moTa.values()).size}/5 cau mo ta khac nhau`,
+				new Set(moTa.values()).size === 4,
+				`dhk-tieu-de: ${locale} chi co ${new Set(moTa.values()).size}/4 cau mo ta khac nhau`,
 			);
 			localeMayChu = locale;
 			const m = okrMessages(locale);
@@ -966,17 +963,11 @@ describe("dhk-giu-don", () => {
 			}
 			await don();
 		}
-		// Vòng đi-về: Theo đơn vị → bốn thẻ khác lần lượt → Theo đơn vị.
+		// Vòng đi-về: Theo đơn vị → ba thẻ khác lần lượt → Theo đơn vị (bốn thẻ từ cua-toi-ba-phan A3).
 		soO += 1;
 		let tham = "?kyOkr=q4&donOkr=pb:P2";
 		let dangO: TabOkr = "theo-don-vi";
-		for (const t of [
-			"cua-toi",
-			"cap-nhat-tuan",
-			"toan-canh",
-			"hoi-y",
-			"theo-don-vi",
-		] as const) {
+		for (const t of ["cua-toi", "toan-canh", "hoi-y", "theo-don-vi"] as const) {
 			await dauTrang(dangO, {}, tham);
 			const a = qa("[role=tab]").find(
 				(x) =>
