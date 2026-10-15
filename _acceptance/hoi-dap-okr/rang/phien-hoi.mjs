@@ -202,14 +202,14 @@ export async function hoiMotCau({ app, api, cookie, cauHoi }) {
 	};
 }
 
-export async function tapXemCua(userId, chuKyId) {
+export async function tapXemCua(userId) {
 	const { db } = await import(join(GOC, "packages/db/src/index.ts"));
 	const { dieuKienXemMucTieu, nguCanhXemOkr } = await import(
 		join(GOC, "packages/db/src/okr-hien-thi.ts")
 	);
 	const nc = (await nguCanhXemOkr(db, [userId])).get(userId);
 	const tatCa = await db.okrObjective.findMany({
-		where: { cycleId: chuKyId, status: "cong-bo" },
+		where: { status: "cong-bo" },
 		select: {
 			id: true,
 			title: true,
@@ -220,7 +220,7 @@ export async function tapXemCua(userId, chuKyId) {
 		? new Set(
 				(
 					await db.okrObjective.findMany({
-						where: { AND: [dieuKienXemMucTieu(nc), { cycleId: chuKyId }] },
+						where: { AND: [dieuKienXemMucTieu(nc), { status: "cong-bo" }] },
 						select: { id: true },
 					})
 				).map((r) => r.id),

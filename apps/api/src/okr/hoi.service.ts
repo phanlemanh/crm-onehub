@@ -50,10 +50,7 @@ export class HoiService {
 		return { ok: true };
 	}
 
-	async phien(
-		userId: string,
-		input: HoiPhienInput,
-	): Promise<HoiPhienOutput> {
+	async phien(userId: string, input: HoiPhienInput): Promise<HoiPhienOutput> {
 		const cuoc = await cuocHoiCua(this.db, input.cuocHoiId);
 		if (!cuoc || cuoc.nguoiHoiUserId !== userId)
 			throw new NotFoundException(OKR.thongDiep.hoi.khongCoCuoc);

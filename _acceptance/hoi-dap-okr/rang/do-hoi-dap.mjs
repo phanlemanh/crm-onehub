@@ -123,7 +123,7 @@ async function chamMot(ca, moi) {
 	});
 	if (!kq.mo.nhan)
 		throw new KhongDo(`${ca.ma}: cua tra ${kq.mo.ma} ${kq.mo.chu}`);
-	const { maThay, tenCam } = await tapXemCua(nguoi.id, moi.chuKy);
+	const { maThay, tenCam } = await tapXemCua(nguoi.id);
 	const diem = chamCau({
 		ca,
 		traLoi: kq.traLoi,
