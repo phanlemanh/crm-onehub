@@ -1177,6 +1177,33 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tin-hieu-tu-ve-kho",
+		ten: "Khoá chỉ kéo tín hiệu — tờ tạo khoá, hộp khoá vừa tạo, nhãn trên danh sách",
+		states: [
+			{
+				id: "ST-tao-khoa-quan-tri",
+				nhan: "Tờ tạo khoá — quản trị, mặc định toàn quyền",
+			},
+			{
+				id: "ST-tao-khoa-chon-keo",
+				nhan: "Tờ tạo khoá — đã chọn «Chỉ kéo tín hiệu»",
+			},
+			{
+				id: "ST-tao-khoa-thanh-vien",
+				nhan: "Tờ tạo khoá — thành viên, không có mục loại",
+			},
+			{ id: "ST-tao-khoa-dang-tao", nhan: "Tờ tạo khoá — đang tạo" },
+			{
+				id: "ST-khoa-moi-keo-tin-hieu",
+				nhan: "Hộp khoá vừa tạo — khoá chỉ kéo",
+			},
+			{
+				id: "ST-danh-sach-co-khoa-keo",
+				nhan: "Danh sách — có nhãn «Chỉ kéo tín hiệu»",
+			},
+		],
+	},
+	{
 		slug: "viec-chung",
 		ten: "Việc chung — Việc của tôi, khung việc, khối Việc trên thẻ Hoạt động",
 		states: [

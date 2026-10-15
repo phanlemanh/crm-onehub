@@ -69,11 +69,13 @@
 		"./test/*": "./test/*.ts",
 		"./vai-doi-tac": "./src/vai-doi-tac.ts",
 		"./viec": "./src/viec.ts",
+		"./viec-chep": "./src/viec-chep.ts",
 		"./viec-ghi": "./src/viec-ghi.ts",
 		"./viec-gieo": "./src/viec-gieo.ts",
 		"./viec-thu-tu": "./src/viec-thu-tu.ts"
 	},
 	"scripts": {
+		"viec:chep-cu": "bun scripts/chep-viec-can-lam.ts",
 		"build": "prisma generate",
 		"check-types": "tsc --noEmit",
 		"db:deploy": "prisma migrate deploy",

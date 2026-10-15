@@ -7,11 +7,11 @@ import type {
 import { NGUON, type TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 
 const loaiMoTaEn = {
-	"chien-luoc": "The OKR assistant reads the version in use of this type",
+	"chien-luoc": "Kara reads the version in use of this type",
 } satisfies Partial<Record<LoaiTrang, string>>;
 
 const loaiMoTaVi = {
-	"chien-luoc": "Trợ lý OKR đọc bản đang dùng của loại này",
+	"chien-luoc": "Kara đọc bản đang dùng của loại này",
 } satisfies Partial<Record<LoaiTrang, string>>;
 
 const en = {
@@ -107,7 +107,7 @@ const en = {
 		toi: "links to «{chu}»",
 		soTrang: "mentioned by {so} pages",
 		duyet: "approved {ngay}",
-		chuaTraLoi: "Questions the AI assistant couldn't answer",
+		chuaTraLoi: "Questions Kara couldn't answer",
 		baoSai: "Reported as wrong",
 		rongViec: "Nothing to handle.",
 		ganNhat: "closest page:",
@@ -119,10 +119,10 @@ const en = {
 		mayChu: "the server did not respond",
 		ketLuan: {
 			tieuDe: "Close this report",
-			moTa: "Did the assistant answer wrong, or did it follow the page?",
+			moTa: "Did Kara answer wrong, or did it follow the page?",
 			nhan: "Conclusion",
-			sai: "The assistant answered wrong",
-			dung: "The assistant answered right per the page",
+			sai: "Kara answered wrong",
+			dung: "Kara answered right per the page",
 			gui: "Close the report",
 			huy: "Cancel",
 		},
@@ -132,7 +132,7 @@ const en = {
 			den: "Verified until {ngay}",
 			quaHan: "Verification overdue",
 			datHan: "Set verification date",
-			moTa: "After this date the AI assistant warns readers to check with the page owner.",
+			moTa: "After this date Kara warns readers to check with the page owner.",
 			ngay: "Verified until",
 			luu: "Save",
 			goHan: "Remove date",
@@ -158,15 +158,15 @@ const en = {
 				than: "Waiting for {ten} to review.",
 			},
 			"may-soan": {
-				tieuDe: "The composer is drafting the first version.",
+				tieuDe: "Kara is drafting the first version.",
 				than: "Once drafted, it will wait for {ten} to review.",
 			},
 			"go-tay": {
 				tieuDe: "Needs typing by hand.",
-				than: "The source is a scan the composer can't read. Type the content to send it to {ten} for review.",
+				than: "The source is a scan Kara can't read. Type the content to send it to {ten} for review.",
 			},
 			loi: {
-				tieuDe: "The composer couldn't draft this page.",
+				tieuDe: "Kara couldn't draft this page.",
 				than: "Redraft it from the Sources tab, or write it by hand and send it to {ten} for review.",
 			},
 			"tra-lai": {
@@ -274,7 +274,7 @@ const en = {
 		mayChu: "the server did not answer.",
 		veTrang: "Go to the page",
 		chienLuoc: {
-			canhBao: "Mentions {tu} — the OKR assistant must not bring these up",
+			canhBao: "Mentions {tu} — Kara must not bring these up",
 			quaTran:
 				"A strategy page is at most {tran} characters ({so} now) — shorten it and resubmit.",
 		},
@@ -305,7 +305,7 @@ const en = {
 			"Couldn’t check whether source file storage is on — reload the page to try again.",
 		hop: {
 			tieuDe: "Upload a source",
-			moTa: "The composer reads the file and drafts a proposal for one page. No page changes until its page owner approves.",
+			moTa: "Kara reads the file and drafts a proposal for one page. No page changes until its page owner approves.",
 			keoTha: "Drag a file here",
 			keoThaMoTa: "Word (.docx) or PDF, up to 20 MB",
 			keoThaNut: "Choose file",
@@ -342,12 +342,12 @@ const en = {
 				taiLuc: "Uploaded",
 			},
 			trangThai: {
-				CHO_DOC: "Composer is drafting",
-				CHO_SOAN: "Composer is drafting",
-				DANG_SOAN: "Composer is drafting",
+				CHO_DOC: "Kara is drafting",
+				CHO_SOAN: "Kara is drafting",
+				DANG_SOAN: "Kara is drafting",
 				DA_SOAN: "Drafted",
 				CAN_GO_TAY:
-					"Needs typing by hand — the file is a scan, the composer cannot read its text",
+					"Needs typing by hand — the file is a scan, Kara cannot read its text",
 				LOI: "Could not draft",
 			} satisfies Record<TrangThaiNguon, string>,
 			soanLai: "Draft again",
@@ -355,24 +355,22 @@ const en = {
 			xemDeXuat: "View the proposal",
 			loiSoanLai: "Not sent: {loi}",
 			rongTieuDe: "No sources yet",
-			rongThan:
-				"Upload a Word or PDF file and the composer drafts a proposal from it.",
+			rongThan: "Upload a Word or PDF file and Kara drafts a proposal from it.",
 			loiTai: "Could not load the sources.",
 		},
 	},
 	hoi: {
 		nhan: "Ask the documents",
 		moDau: "Ask about OneHub's rules, policies, processes or forms.",
-		gioiThieu:
-			"The AI assistant answers only from the version in use of approved pages.",
-		nhanTraLoi: "AI assistant · from the version in use",
+		gioiThieu: "Kara answers only from the version in use of approved pages.",
+		nhanTraLoi: "Kara · from the version in use",
 		goiY: [
 			"Do staff on probation earn commission?",
 			"How do I request annual leave?",
 			"Where is the cash advance form?",
 		],
 		oNhap: "Ask a question about the documents…",
-		dangDoc: "The AI assistant is reading the documents…",
+		dangDoc: "Kara is reading the documents…",
 		phienBan: "Version {so}",
 		duyet: "approved {ngay}",
 		ganNhat: "Closest pages",
@@ -505,10 +503,10 @@ const vi: TaiLieuMessages = {
 		mayChu: "máy chủ không trả lời",
 		ketLuan: {
 			tieuDe: "Đóng việc báo sai",
-			moTa: "Trợ lý trả lời sai, hay trả lời đúng theo trang?",
+			moTa: "Kara trả lời sai, hay trả lời đúng theo trang?",
 			nhan: "Kết luận",
-			sai: "Trợ lý trả lời sai",
-			dung: "Trợ lý trả lời đúng theo trang",
+			sai: "Kara trả lời sai",
+			dung: "Kara trả lời đúng theo trang",
 			gui: "Đóng việc",
 			huy: "Huỷ",
 		},
@@ -518,7 +516,7 @@ const vi: TaiLieuMessages = {
 			den: "Xác minh đến {ngay}",
 			quaHan: "Quá hạn xác minh",
 			datHan: "Đặt hạn xác minh",
-			moTa: "Qua ngày này, trợ lý AI nhắc người đọc hỏi lại chủ trang.",
+			moTa: "Qua ngày này, Kara nhắc người đọc hỏi lại chủ trang.",
 			ngay: "Xác minh đến",
 			luu: "Lưu",
 			goHan: "Gỡ hạn",
@@ -544,15 +542,15 @@ const vi: TaiLieuMessages = {
 				than: "Đang chờ {ten} duyệt.",
 			},
 			"may-soan": {
-				tieuDe: "Máy đang soạn bản đầu.",
+				tieuDe: "Kara đang soạn bản đầu.",
 				than: "Bản soạn xong sẽ chờ {ten} duyệt.",
 			},
 			"go-tay": {
 				tieuDe: "Cần gõ tay.",
-				than: "Nguồn là bản quét, máy không đọc được chữ. Gõ nội dung để gửi {ten} duyệt.",
+				than: "Nguồn là bản quét, Kara không đọc được chữ. Gõ nội dung để gửi {ten} duyệt.",
 			},
 			loi: {
-				tieuDe: "Máy chưa soạn được.",
+				tieuDe: "Kara chưa soạn được trang này.",
 				than: "Soạn lại ở tab Nguồn, hoặc viết tay để gửi {ten} duyệt.",
 			},
 			"tra-lai": {
@@ -658,26 +656,26 @@ const vi: TaiLieuMessages = {
 		mayChu: "máy chủ không trả lời.",
 		veTrang: "Về trang",
 		chienLuoc: {
-			canhBao: "Có chữ về {tu} — Trợ lý OKR không được nhắc tới những thứ này",
+			canhBao: "Có chữ về {tu} — Kara không được nhắc tới những thứ này",
 			quaTran:
 				"Trang chiến lược tối đa {tran} ký tự (đang {so}) — rút ngắn rồi gửi lại bản đề xuất.",
 		},
 	},
 	duyetMay: {
 		buoc1: "Bước 1 · Nguồn nói gì",
-		buoc2: "Bước 2 · Đối chiếu với bản máy soạn",
+		buoc2: "Bước 2 · Đối chiếu với bản Kara soạn",
 		tepNguon: "Tệp nguồn: {ten}",
-		moTaBuoc1: "Đoạn máy trích được tô nền.",
-		daDoc: "Đã đọc nguồn, xem bản máy soạn",
+		moTaBuoc1: "Đoạn Kara trích được tô nền.",
+		daDoc: "Đã đọc nguồn, xem bản Kara soạn",
 		bangSo: "Con số và ngày",
 		cotSo: "Con số",
 		cotTrich: "Đoạn nguồn",
 		cotDoiChieu: "Đối chiếu",
 		daDoiChieu: "Đã đối chiếu",
 		khongCoTrich: "Không đoạn trích nào có số này",
-		khongSoMoi: "Bản máy soạn không thêm con số hay ngày nào mới.",
+		khongSoMoi: "Bản Kara soạn không thêm con số hay ngày nào mới.",
 		nguon: "Nguồn",
-		banMay: "Bản máy soạn",
+		banMay: "Bản Kara soạn",
 		suaBanNay: "Sửa bản này",
 		khoaDuyet: "Đối chiếu từng con số với nguồn rồi mới duyệt được",
 		soVoiBan: "Thay đổi so với bản đang dùng",
@@ -689,7 +687,7 @@ const vi: TaiLieuMessages = {
 			"Chưa đọc được trạng thái lưu tệp nguồn — tải lại trang để thử lại.",
 		hop: {
 			tieuDe: "Tải nguồn lên",
-			moTa: "Máy soạn đọc tệp và soạn một bản đề xuất cho một trang. Không trang nào đổi cho tới khi chủ trang duyệt.",
+			moTa: "Kara đọc tệp và soạn một bản đề xuất cho một trang. Không trang nào đổi cho tới khi chủ trang duyệt.",
 			keoTha: "Kéo tệp vào đây",
 			keoThaMoTa: "Word (.docx) hoặc PDF, tới 20 MB",
 			keoThaNut: "Chọn tệp",
@@ -731,23 +729,22 @@ const vi: TaiLieuMessages = {
 			xemDeXuat: "Xem bản đề xuất",
 			loiSoanLai: "Chưa gửi được: {loi}",
 			rongTieuDe: "Chưa có nguồn nào",
-			rongThan:
-				"Tải một tệp Word hay PDF lên, máy soạn sẽ soạn bản đề xuất từ nó.",
+			rongThan: "Tải một tệp Word hay PDF lên, Kara sẽ soạn bản đề xuất từ nó.",
 			loiTai: "Không tải được danh sách nguồn.",
 		},
 	},
 	hoi: {
 		nhan: "Hỏi kho tài liệu",
 		moDau: "Hỏi về quy định, chính sách, quy trình hay biểu mẫu của OneHub.",
-		gioiThieu: "Trợ lý AI chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
-		nhanTraLoi: "Trợ lý AI · theo bản đang dùng",
+		gioiThieu: "Kara chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
+		nhanTraLoi: "Kara · theo bản đang dùng",
 		goiY: [
 			"Thử việc có được hưởng hoa hồng không?",
 			"Xin nghỉ phép năm thế nào?",
 			"Mẫu đề nghị tạm ứng ở đâu?",
 		],
 		oNhap: "Hỏi một câu về kho tài liệu…",
-		dangDoc: "Trợ lý AI đang đọc kho…",
+		dangDoc: "Kara đang đọc kho…",
 		phienBan: "Phiên bản {so}",
 		duyet: "duyệt {ngay}",
 		ganNhat: "Trang gần nhất",
