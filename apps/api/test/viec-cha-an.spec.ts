@@ -65,7 +65,6 @@ async function demHang() {
 	return JSON.stringify({ viec, gan, theoDoi, vet });
 }
 
-/** P gắn D (giao a, làm b, theo dõi w); b thêm con K cho c; x không vai. */
 async function dungChaCon(nhan: string) {
 	const a = await nguoi(`${nhan}-a`, "member");
 	const b = await nguoi(`${nhan}-b`, "member");
@@ -161,7 +160,6 @@ describe("vca-bang", () => {
 	);
 });
 
-/** P2 riêng (giao a, làm b); b thêm K1 (Xong), K2, K3 cho c; a bỏ theo dõi K3. */
 async function dungDemCon(nhan: string) {
 	const a = await nguoi(`${nhan}-a`, "member");
 	const b = await nguoi(`${nhan}-b`, "member");
