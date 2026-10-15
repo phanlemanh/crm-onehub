@@ -1,28 +1,4 @@
 {
-  "feature_plain": "Ở màn Tài liệu, đổi bộ lọc rồi bấm lùi thì về bộ lọc trước, và mỗi lần lọc thanh lọc đứng yên, không chớp thành khung chờ.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ để mỗi lần đổi loại, đơn vị, chủ trang, lưu trữ, nhóm đề xuất, bỏ lọc hay sang trang ở Tài liệu có một bước lùi riêng trong trình duyệt."},
-    {"id": "AC-2", "p": "Sẽ giữ thanh lọc, phân trang và tiêu điểm đứng yên trong lúc chờ danh sách mới; danh sách cũ mờ đi tại chỗ cho tới khi danh sách mới về."},
-    {"id": "AC-3", "p": "Sẽ giữ nguyên khung chờ ở lần mở đầu tiên và khung lỗi có nút thử lại như hôm nay."},
-    {"id": "AC-5", "p": "Sẽ hiện khung lỗi có nút thử lại khi đổi bộ lọc mà danh sách không tải được, không treo danh sách cũ."},
-    {"id": "AC-4", "p": "Sẽ đo trên bản chạy thật: lọc hai lần rồi bấm lùi hai lần về đúng từng bước, và lúc mạng chậm thanh lọc không biến mất."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "Không đổi nút lùi ở các bảng khác (Thoả thuận, Liên hệ, Công ty, Onboarding)."},
-    {"id": "OOS-2", "p": "Không đụng các giới hạn đã ghi của vòng lọc và kiểu xem chung."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Hai màn: Tài liệu › Trang và › Chờ duyệt."},
-    {"i": 1, "p": "Bảy thao tác lọc và sang trang, đúng như vòng trước đã đo."},
-    {"i": 2, "p": "Ba trạng thái tải: lần đầu, đổi lọc khi đã có dữ liệu, và lỗi."},
-    {"i": 3, "p": "Phần làm ngay: lịch sử cho mọi thao tác, giữ thanh lọc khi chờ, lần đầu và lỗi, đổi lọc mà lỗi, bấm lùi thật (AC-1 tới AC-5)."},
-    {"i": 4, "p": "Để sau: nút lùi khi lọc ở các bảng khác."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Chuyện giữ danh sách cũ hay thay bằng khung chờ trong lúc lọc là lựa chọn của anh, không phải máy — đã thành câu hỏi Hỏi-2."},
-    {"i": 1, "p": "Lời hứa «danh sách cũ mờ đi» chưa có phép đo nào nhìn thấy được — đã thêm vế và đo độ mờ trên màn thật."},
-    {"i": 2, "p": "Chưa có tiêu chí cho lúc đổi lọc mà tải lỗi — đã thêm AC-5 và phép đo hai màn."},
-    {"i": 3, "p": "Bàn đo lúc mạng chậm có thể không chặn được lượt tải nào mà vẫn báo đạt — đã thêm đếm lượt bị chặn và một chiều đỏ."},
-    {"i": 4, "p": "Kho đo chưa có đơn vị để bấm — bàn đo sẽ tự gieo hai đơn vị."}
-  ]
+  "feature_plain": "Ở màn Tài liệu, mỗi lần đổi bộ lọc hay sang trang để lại một bước lùi riêng, và trong lúc chờ danh sách mới thì thanh lọc đứng yên, danh sách cũ mờ đi tại chỗ.",
+  "scope_plain": "Hai việc giữ ngoài phạm vi, như đã duyệt ở Cổng Phạm vi:"
 }
