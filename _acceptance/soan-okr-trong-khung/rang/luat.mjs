@@ -179,8 +179,7 @@ function docVatThat(cap = CAP) {
 	const tepSoan = git("ls-files", "--", `:(literal)${SOAN}/`)
 		.split("\n")
 		.filter((t) => /\.tsx?$/.test(t));
-	if (tepSoan.length === 0)
-		throw new Error("khong doc duoc tep nao trong khu soan");
+	if (tepSoan.length === 0) throw new Error("khong doc duoc tep nao trong khu soan");
 	const nguonSoan = tepSoan.map((t) => ({ tep: t, chu: doc(t) }));
 	return {
 		dongThem: dongThemTuDiff(diff),
