@@ -141,6 +141,7 @@ export function PhanKrPhuTrach({
 				danhDauCuaToi
 				diemCam={DIEM_CAM_GOP_Y}
 				ds={thamGia}
+				moKhi={thamGia.some((mt) => mt.soGopYCho > 0)}
 				moNhuBangChinh
 				hienDonVi
 				ma="tham-gia"

@@ -9,7 +9,7 @@ import {
 } from "@crm/ui/components/collapsible";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useEffect, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { BangMucTieu } from "./bang-muc-tieu";
 import type { MucTieu } from "./kieu";
@@ -30,6 +30,7 @@ export function NhomMucTieuGap({
 	danhDauCuaToi,
 	diemCam,
 	moNhuBangChinh = false,
+	moKhi = false,
 }: {
 	nhan: string;
 	ma: keyof typeof DAU_NHOM;
@@ -39,10 +40,16 @@ export function NhomMucTieuGap({
 	diemCam?: ComponentProps<typeof BangMucTieu>["diemCam"];
 	/** Mở KR như bảng chính (thu/mở theo đường dẫn) thay vì gập hết. */
 	moNhuBangChinh?: boolean;
+	/** Tự mở (một lần) khi điều kiện đúng — kể cả khi nó đúng sau lúc trang đã dựng. */
+	moKhi?: boolean;
 }) {
+	const [mo, setMo] = useState(moKhi);
+	useEffect(() => {
+		if (moKhi) setMo(true);
+	}, [moKhi]);
 	if (ds.length === 0) return null;
 	return (
-		<Collapsible {...DAU_NHOM[ma]}>
+		<Collapsible {...DAU_NHOM[ma]} onOpenChange={setMo} open={mo}>
 			<CollapsibleTrigger asChild>
 				<Button className="group" size="sm" variant="ghost">
 					<Icon

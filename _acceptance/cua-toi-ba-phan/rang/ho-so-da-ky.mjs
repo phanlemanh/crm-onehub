@@ -205,25 +205,96 @@ await Promise.all(
 );
 for (const v of dsViec.filter((x) => x.tuanTu))
 	maCua.set(v.lenh, await chayNen(v.lenh, GOC));
+/** Dựng worktree tạm ở `rev` (node_modules và .env trỏ cây thật); trả đường dẫn và hàm dọn. */
+function dungSao(rev, tienTo) {
+	const tam = mkdtempSync(join(tmpdir(), tienTo));
+	const sao = join(tam, "crm");
+	for (let lan = 1; ; lan += 1) {
+		try {
+			git(GOC, "worktree", "add", "--detach", "--quiet", sao, rev);
+			break;
+		} catch (e) {
+			if (lan >= 6) throw e;
+			Atomics.wait(
+				new Int32Array(new SharedArrayBuffer(4)),
+				0,
+				0,
+				500 * lan + Math.floor(Math.random() * 500),
+			);
+		}
+	}
+	for (const nm of git(
+		GOC,
+		"ls-files",
+		"-o",
+		"--directory",
+		"--exclude-standard",
+		"-i",
+	)
+		.split("\n")
+		.filter(
+			(d) =>
+				/(^|\/)node_modules\/$/.test(d) &&
+				!d.slice(0, -1).includes("node_modules/"),
+		)) {
+		const dich = join(sao, nm.slice(0, -1));
+		if (!existsSync(dich)) symlinkSync(join(GOC, nm.slice(0, -1)), dich);
+	}
+	if (existsSync(join(GOC, ".env")))
+		symlinkSync(join(GOC, ".env"), join(sao, ".env"));
+	const don = () => {
+		try {
+			git(GOC, "worktree", "remove", "--force", sao);
+		} catch {}
+		rmSync(tam, { recursive: true, force: true });
+		try {
+			git(GOC, "worktree", "prune");
+		} catch {}
+	};
+	return { sao, tam, don };
+}
+
+// Lệnh lệch mã: chạy lại trên CÂY GỐC (mốc so sánh). Gốc cũng lệch đúng mã đó → đỏ sẵn,
+// không phải do lượt này — «không đọc được ở đây» (vd bộ đo đọc lịch sử git của onehub).
+const lech = dsViec.filter((v) =>
+	v.ai.some((a) => maCua.get(v.lenh) !== a.mong),
+);
+const maGoc = new Map();
+if (lech.length > 0) {
+	const goc = dungSao(base, "ctbp-goc-");
+	try {
+		for (const v of lech) maGoc.set(v.lenh, await chayNen(v.lenh, goc.sao));
+	} finally {
+		goc.don();
+	}
+}
+let doSan = 0;
 for (const v of dsViec) {
 	const ma = maCua.get(v.lenh);
 	for (const a of v.ai) {
 		so += 1;
 		const dung = ma === a.mong;
-		if (!dung) sai += 1;
+		const san = !dung && maGoc.get(v.lenh) === ma;
+		if (san) doSan += 1;
+		else if (!dung) sai += 1;
 		console.log(
-			`${dung ? "HO-SO" : "SAI AC-11:"} ${a.slug}#${a.id}: ${ma} (mong ${a.mong})`,
+			`${dung ? "HO-SO" : san ? "DO SAN (khong doc duoc o day, goc cung " + ma + "):" : "SAI AC-11:"} ${a.slug}#${a.id}: ${ma} (mong ${a.mong})`,
 		);
 	}
 }
 console.log(
 	sai === 0
-		? `DUNG AC-11: ${so}/${so} eval ho so da ky`
+		? `DUNG AC-11: ${so - doSan}/${so - doSan} eval ho so da ky${doSan ? ` · ${doSan} do san tren goc` : ""}`
 		: `SAI AC-11: ${sai}/${so} eval lech ma ky vong`,
 );
 
-const ungVien = [...viec.values()].find((v) =>
-	v.cham.some((t) => t.endsWith(".dom.tsx")),
+// Ứng viên chiều đỏ: lệnh chạy THẲNG một tệp .dom.tsx (không phải bộ đo rang/ đọc tĩnh)
+// và đạt mã kỳ vọng trên cây thật.
+const ungVien = dsViec.find(
+	(v) =>
+		!v.tuanTu &&
+		v.ai.every((a) => maCua.get(v.lenh) === a.mong) &&
+		v.cham.some((t) => t.endsWith(".dom.tsx") && v.lenh.includes(t)),
 );
 if (!ungVien) khongDo("chieu do: khong lenh nao cham mot tep .dom.tsx de tiem");
 const tepTiem = ungVien.cham.find((t) => t.endsWith(".dom.tsx"));
