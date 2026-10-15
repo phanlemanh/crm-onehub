@@ -1,9 +1,17 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
-import { ClientError } from "eve/client";
+import { ketQuaNopTraLoi } from "@crm/validation/okr-tra-loi";
+import {
+	ClientError,
+	defaultMessageReducer,
+	type EveAgentReducerEvent,
+} from "eve/client";
 import type { EveMessage } from "eve/react";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { z } from "zod";
 import {
 	KhungHoi,
 	type KhungHoiProps,
@@ -12,59 +20,70 @@ import { lyDoKhoaTu } from "@/app/(app)/[slug]/okr/hoi/loi-hoi";
 import { okrHoiMessages } from "@/lib/messages/okr-hoi";
 
 const m = okrHoiMessages("vi");
-const CAU_HOI = "KR nào của tôi đang trượt?";
-
 type GiaTriChu = string | readonly string[] | ((...doiSo: string[]) => string);
 type NhanhChu = { readonly [khoa: string]: GiaTriChu | NhanhChu };
 
-const tin = (id: string, role: "user" | "assistant", parts: unknown[]) =>
-	({ id, role, parts }) as unknown as EveMessage;
+const ghiLai = z
+	.object({
+		cauHoi: z.string().min(1),
+		suKien: z.array(z.object({ type: z.string() }).passthrough()).min(1),
+	})
+	.parse(
+		JSON.parse(
+			readFileSync(
+				join(import.meta.dir, "fixtures/okr-hoi-luong.json"),
+				"utf8",
+			),
+		),
+	);
+const SU_KIEN = ghiLai.suKien as unknown as EveAgentReducerEvent[];
+const CAU_HOI = ghiLai.cauHoi;
 
-const NOP = {
-	type: "dynamic-tool",
-	toolName: "nop_tra_loi",
-	toolCallId: "call-nop-1",
-	state: "output-available",
-	input: { loai: "tra-loi", cauHoi: CAU_HOI, cau: [] },
-	output: {
-		ok: true,
-		traLoi: {
-			loai: "tra-loi",
-			cau: [
-				{
-					chu: "KR này đạt 42%, đang chậm nhịp.",
-					trich: [{ loai: "kr", id: "kr-doanh-thu", ten: "Doanh thu quý 4" }],
-				},
-				{
-					chu: "Mục tiêu chứa nó đang đúng nhịp.",
-					trich: [
-						{ loai: "objective", id: "mt-kd", ten: "Tăng trưởng Kinh doanh" },
-					],
-				},
-			],
-		},
-	},
+const laNop = (e: { type: string; data?: unknown }) =>
+	JSON.stringify(e.data ?? null).includes('"toolName":"nop_tra_loi"');
+
+const dungTin = (suKien: EveAgentReducerEvent[]): readonly EveMessage[] => {
+	const r = defaultMessageReducer();
+	let trangThai = r.initial();
+	for (const e of suKien) trangThai = r.reduce(trangThai, e);
+	return trangThai.messages;
 };
 
-const LUOT_TRA_LOI = [
-	tin("u1", "user", [{ type: "text", text: CAU_HOI }]),
-	tin("a1", "assistant", [
-		{ type: "text", text: "CHU-TU-DO-CUA-MODEL" },
-		{
-			type: "dynamic-tool",
-			toolName: "tim_okr",
-			toolCallId: "call-tim",
-			state: "output-available",
-			output: {},
-		},
-		NOP,
-	]),
-];
+const NHAN = z.object({
+	type: z.literal("action.result"),
+	data: z.object({
+		result: z.object({
+			toolName: z.literal("nop_tra_loi"),
+			output: ketQuaNopTraLoi,
+		}),
+	}),
+});
+const traLoiNhan = SU_KIEN.flatMap((e) => {
+	const r = NHAN.safeParse(e);
+	return r.success && r.data.data.result.output.ok
+		? [r.data.data.result.output.traLoi]
+		: [];
+}).at(-1);
+if (!traLoiNhan) throw new Error("ban ghi khong co cau tra loi duoc nhan");
+const TRICH = traLoiNhan.cau.flatMap((c) => c.trich);
+const CHU_TU_DO = SU_KIEN.flatMap((e) => {
+	const r = z
+		.object({
+			type: z.literal("message.completed"),
+			data: z.object({ message: z.string() }),
+		})
+		.safeParse(e);
+	return r.success ? r.data.data.message.split("\n") : [];
+})
+	.map((d) => d.trim())
+	.filter(
+		(d) =>
+			d.length > 40 &&
+			!traLoiNhan.cau.some((c) => c.chu.includes(d) || d.includes(c.chu)),
+	);
 
-const LUOT_KHONG_NOP = [
-	tin("u1", "user", [{ type: "text", text: CAU_HOI }]),
-	tin("a1", "assistant", [{ type: "text", text: "CHU-TU-DO-CUA-MODEL" }]),
-];
+const LUOT_TRA_LOI = dungTin(SU_KIEN);
+const LUOT_KHONG_NOP = dungTin(SU_KIEN.filter((e) => !laNop(e)));
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -109,38 +128,35 @@ function dung(them: Partial<KhungHoiProps> = {}) {
 }
 
 describe("okr hoi dap", () => {
-	test("hdo-man: moi cau mot trich, mot phan hoi; chu tu do cua model khong hien", async () => {
+	test("hdo-man: moi trich mot nhan, mot phan hoi; chu tu do cua model khong hien", async () => {
 		const { props, goi } = dung();
 		const k = await mo(<KhungHoi {...props} />);
 		const nhan = [...k.querySelectorAll("[data-nhan-trich]")] as HTMLElement[];
-		expect(nhan.length).toBe(2);
+		expect(TRICH.length).toBeGreaterThan(0);
+		expect(nhan.map((n) => n.textContent)).toEqual(TRICH.map((t) => t.ten));
 		expect(k.querySelectorAll('[data-slot="ai-feedback"]').length).toBe(1);
-		expect(k.textContent).not.toContain("CHU-TU-DO-CUA-MODEL");
+		expect(CHU_TU_DO.length).toBeGreaterThan(0);
+		expect(CHU_TU_DO.filter((d) => k.textContent?.includes(d))).toEqual([]);
 		expect(k.textContent).toContain(CAU_HOI);
-		expect(nhan[0]?.textContent).toBe("Doanh thu quý 4");
-		for (const [i, mong] of [
-			[0, { kind: "kr", id: "kr-doanh-thu" }],
-			[1, { kind: "objective", id: "mt-kd" }],
-		] as const) {
+		for (const [i, t] of TRICH.entries()) {
 			await act(async () => nhan[i]?.click());
 			const mo = [...document.body.querySelectorAll("[data-trich-okr]")].at(
 				-1,
 			) as HTMLElement | undefined;
 			expect(mo).toBeDefined();
 			await act(async () => mo?.click());
-			expect(goi.moTrich.at(-1)).toEqual(mong);
+			expect(goi.moTrich.at(-1)).toEqual({ kind: t.loai, id: t.id });
 		}
-		expect(goi.moTrich.length).toBe(2);
+		expect(goi.moTrich.length).toBe(TRICH.length);
 	});
 
 	test("hdo-chu: moi ten Muc tieu va KR trich deu nam trong phan tu translate=no", async () => {
 		const { props } = dung();
 		const k = await mo(<KhungHoi {...props} />);
 		const nhan = [...k.querySelectorAll("[data-nhan-trich]")] as HTMLElement[];
-		expect(nhan.map((n) => n.getAttribute("data-nhan-trich")).sort()).toEqual([
-			"kr",
-			"objective",
-		]);
+		expect(nhan.map((n) => n.getAttribute("data-nhan-trich"))).toEqual(
+			TRICH.map((t) => t.loai),
+		);
 		const thieu = nhan
 			.filter((n) => n.closest('[translate="no"]') === null)
 			.map((n) => n.textContent);
