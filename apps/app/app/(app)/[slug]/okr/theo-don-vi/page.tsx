@@ -25,7 +25,7 @@ export default function TheoDonViPage({
 }) {
 	return (
 		<>
-			<DauTrangOkrTrang tab="theo-don-vi" />
+			<DauTrangOkrTrang searchParams={searchParams} tab="theo-don-vi" />
 			<PageShellContent>
 				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
 					<NoiDung searchParams={searchParams} />

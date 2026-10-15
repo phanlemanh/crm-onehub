@@ -259,6 +259,9 @@ mock.module("@/lib/trpc/client", () => ({
 			soanMo: {
 				mutationOptions: () => ({ mutationFn: async () => null }),
 			},
+			hoiMo: {
+				mutationOptions: () => ({ mutationFn: async () => null }),
+			},
 		},
 	}),
 }));

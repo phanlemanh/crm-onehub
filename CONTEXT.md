@@ -304,8 +304,18 @@ ngày, việc quá hạn và việc sắp hạn người đó thực hiện, vi�
 giá; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
 thêm Việc 2026-10-13.
 _Avoid_: thông báo, notification
-Vì sao: kho không có bảng thông báo; gọi là thông báo thì người dùng đi tìm
-chuông trong app.
+Vì sao: thông báo là từng mục nằm trong chuông của CRM (mục **Thông báo**); nhắc
+buổi sáng là một tin gom gửi ra Zalo hay Slack — gọi lẫn thì người dùng đi tìm
+tin Zalo trong chuông, hay tìm chuông trong Zalo.
+
+**Thông báo**: một dòng CRM ghi cho một người về một điều cần họ để ý, nằm ở chuông
+trên đầu trang và ở trang Thông báo; có đã đọc hay chưa, và bấm vào là tới chỗ cần
+làm. Mỗi mục của nhắc buổi sáng thành một thông báo cho mọi người — kể cả người chưa
+nối Zalo hay Slack. Khác **Nhắc buổi sáng**: nhắc là một tin gom gửi qua một kênh
+ngoài CRM; thông báo là từng mục, lưu lại trong CRM. Chốt 2026-10-14 (TB1).
+_Avoid_: notification, tin báo
+Vì sao: chữ «nhắc» đã là tên của tin gom gửi ra Zalo hay Slack — một dòng trong chuông không gọi là nhắc; chuông cần một chữ
+riêng để người dùng biết dòng nào nằm trong CRM.
 
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
 sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
@@ -983,6 +993,13 @@ _Avoid_: phiên, hội thoại, session, chat, workshop
 Vì sao: «phiên» là chữ kỹ thuật của một lần nối tới trợ lý — một cuộc có thể đi qua
 vài phiên khi bấm «Thử lại»; «hội thoại» đã là khung hội thoại của trợ lý AI đọc dữ
 liệu đối tác, thứ mà vai «chỉ OKR» không có.
+
+**Cuộc hỏi (OKR)**: một lần một người hỏi Kara về OKR trong cột Kara của khu OKR — mỗi
+câu trả lời chỉ dựa trên những Mục tiêu và KR người hỏi xem được, mỗi câu có trích tới
+Mục tiêu hay KR đó. Cuộc hỏi chỉ đọc, không ghi gì vào OKR, và không có trạng thái kết
+thúc: đóng cột không đổi gì, mở lại thấy cuộc đang dở. Đề xuất 2026-10-15 ở Cổng Phạm vi
+của `hoi-dap-okr`.
+_Avoid_: cuộc soạn (cuộc soạn ghi bản nháp), hỏi ý (lần cả công ty góp ý mục tiêu), phiên
 
 **Bản nháp (OKR)**: bộ Mục tiêu và KR mà Trợ lý OKR đề nghị trong một cuộc soạn,
 hiện thành bảng cạnh lời hỏi. Mỗi dòng là một Đề xuất: người nhận, sửa rồi nhận, hay

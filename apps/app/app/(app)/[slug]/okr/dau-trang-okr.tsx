@@ -3,18 +3,34 @@ import { Suspense } from "react";
 import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { ChonChuKy } from "./chon-chu-ky";
 import { DaiKy } from "./dai-ky";
 import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
+import { donDich } from "./don-dich";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
-import { kyMacDinhHoiY } from "./okr-search-params";
+import {
+	giaiKy,
+	kyMacDinhHoiY,
+	loadOkrSearchParams,
+	locOkr,
+} from "./okr-search-params";
 import type { TabOkr } from "./tab-okr";
 import { tieuDeKhu } from "./tieu-de-khu";
 
-export async function DauTrangOkrTrang({ tab }: { tab: TabOkr }) {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export async function DauTrangOkrTrang({
+	tab,
+	searchParams,
+}: {
+	tab: TabOkr;
+	/** Theo đơn vị truyền vào để đầu trang nạp sẵn đúng truy vấn quyền của trang. */
+	searchParams?: SearchParams;
+}) {
 	const locale = await getLocale();
 	const m = okrMessages(locale);
 	return (
@@ -23,7 +39,7 @@ export async function DauTrangOkrTrang({ tab }: { tab: TabOkr }) {
 				<DauTrangOkrCho moTa={m.moTa[tab]} tieuDe={tieuDeKhu(locale)} />
 			}
 		>
-			<DauTrangCoDuLieu />
+			<DauTrangCoDuLieu searchParams={searchParams} tab={tab} />
 		</Suspense>
 	);
 }
@@ -33,8 +49,8 @@ function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 		<LuoiDauTrangOkr
 			hanhDong={
 				<>
-					<Skeleton className="h-7 w-24 rounded-md" />
-					<Skeleton className="h-7 w-56 rounded-md" data-hang-cho="" />
+					<Skeleton className="h-7 w-24" />
+					<Skeleton className="h-7 w-56" data-hang-cho="" />
 				</>
 			}
 			moTa={moTa}
@@ -44,7 +60,13 @@ function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	);
 }
 
-async function DauTrangCoDuLieu() {
+async function DauTrangCoDuLieu({
+	tab,
+	searchParams,
+}: {
+	tab: TabOkr;
+	searchParams?: SearchParams;
+}) {
 	await requireSession();
 
 	const trpc = getServerTrpc();
@@ -60,6 +82,22 @@ async function DauTrangCoDuLieu() {
 		await queryClient.prefetchQuery(
 			trpc.okr.hoiYNhan.queryOptions({ cycleId: kyHoiY }),
 		);
+	// Hàng hành động hỏi okr.danhSach của đơn vị đích. Ở Theo đơn vị trang cũng nạp
+	// sẵn đúng khoá đó, nhưng đầu trang đứng trước trong cây nên nếu nó không có sẵn
+	// dữ liệu thì trình duyệt gọi lại một lần (no-sau-luot-5-okr E10). Các thẻ khác
+	// để truy vấn chạy ở trình duyệt sau khung xương (AC-8 đo đúng lúc chờ ấy).
+	if (tab === "theo-don-vi" && searchParams && cycles) {
+		const thamSo = await loadOkrSearchParams(searchParams);
+		const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);
+		if (cycleId)
+			await queryClient.prefetchQuery(
+				trpc.okr.danhSach.queryOptions({
+					cycleId,
+					unit: donDich(tab, thamSo[SEARCH_PARAM.okr.don], undefined).don,
+					loc: locOkr(thamSo),
+				}),
+			);
+	}
 
 	return (
 		<HydrateClient>

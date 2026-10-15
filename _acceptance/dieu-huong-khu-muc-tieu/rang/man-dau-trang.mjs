@@ -38,10 +38,10 @@ const CHIEU_DO = {
 		tep: `${OKR}/hanh-dong-khu.tsx`,
 		cam: (s) =>
 			s.replace(
-				'<Skeleton className="h-7 w-56 rounded-md" data-hang-cho="" />',
-				'<Skeleton className="h-8 w-56 rounded-md" data-hang-cho="" />',
+				'<Skeleton className="h-7 w-56" data-hang-cho="" />',
+				'<Skeleton className="h-8 w-56" data-hang-cho="" />',
 			),
-		dauVet: '<Skeleton className="h-8 w-56 rounded-md" data-hang-cho="" />',
+		dauVet: '<Skeleton className="h-8 w-56" data-hang-cho="" />',
 		ghim: /SAI AC-8: dau trang nhay \d+: dinh thanh the \d+px luc cho -> \d+px sau khi tai/,
 	},
 	"nut-giua-than": {

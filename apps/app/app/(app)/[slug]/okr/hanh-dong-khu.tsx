@@ -24,6 +24,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "./chon-chu-ky";
 import { type DonDich, donDich, giaiDon } from "./don-dich";
+import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import {
 	type DonChonOkr,
 	khoaDon,
@@ -236,7 +237,7 @@ function MenuThem({
 	);
 }
 
-/** Hàng hành động đầu trang khu: ô chu kỳ · «…» · nút soạn · «Thêm mục tiêu». */
+/** Hàng hành động đầu trang khu: «Hỏi Kara» · ô chu kỳ · «…» · nút soạn · «Thêm mục tiêu». */
 export function HanhDongKhu({
 	q,
 	tab,
@@ -250,16 +251,25 @@ export function HanhDongKhu({
 }) {
 	const m = okrMessages(useLocale());
 	const toi = useDuongTheoDonVi(q.kieu === "xong" ? q.cycleId : "");
-	if (q.kieu === "an") return chonChuKy;
+	const hoiKara = <NutHoiKara />;
+	if (q.kieu === "an")
+		return (
+			<>
+				{hoiKara}
+				{chonChuKy}
+			</>
+		);
 	if (q.kieu === "cho")
 		return (
 			<>
+				{hoiKara}
 				{chonChuKy}
-				<Skeleton className="h-7 w-56 rounded-md" data-hang-cho="" />
+				<Skeleton className="h-7 w-56" data-hang-cho="" />
 			</>
 		);
 	return (
 		<>
+			{hoiKara}
 			{chonChuKy}
 			<MenuThem
 				duong={toi(q.dich.don, SEARCH_PARAM.okr.nhap)}
