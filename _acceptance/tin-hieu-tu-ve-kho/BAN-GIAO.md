@@ -1,0 +1,3 @@
+# Bàn giao — tin-hieu-tu-ve-kho (14/10, đổi tài khoản)
+
+Bước kế: hồ sơ đã ký Cổng 2 (PR phanlemanh/crm-onehub#404, đã ready); nhánh vừa gộp onehub aac0975b5 (c0a7a8e02, chưa đẩy) nên bằng chứng hoá cũ — chạy một vé khoá máy: `bash ~/.claude/projects/-Users-manhphan-dev-crm/khoa-may/chay-nang.sh "TH1 ghim lại + đẩy" caffeinate -dims bash <scratchpad>/ghim-day.sh` (nội dung: repin-lane.mjs --slug tin-hieu-tu-ve-kho --write dưới kit v2.28.0 giải nén + CLAUDE_PLUGIN_ROOT, commit run-log/evidence-report, `bun run check-types`, đẩy với CRM_SKIP_HOOKS=1 vì làn vừa chạy cả bộ kiểm), rồi báo #375 «vào lô» cho điều phối — vòng không tự gộp; tiếp tục bằng `/feature-loop:feature-loop tin-hieu-tu-ve-kho`.

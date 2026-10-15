@@ -18,7 +18,6 @@ evals:
     cmd: config:executors.test.tdx_man_nut
     expected: "exit 0; bài DOM của hộp thoại Mục tiêu và hộp thoại KR (HopThoaiMucTieu, HopThoaiKr) với tRPC giả trả troLySanSang theo từng lý do của LY_DO_KHONG_SAN_SANG và {bat:true}: nút 'Nhờ Trợ lý OKR góp ý' có mặt khi bat; vắng khi tat, viec-tat, don-vi-chua-bat, chua-co-khoa-mo-hinh, chua-noi-tac-tu, het-tran-gateway, và khi chế độ ẩn; có nhưng disabled kèm câu có tên khi het-tran-thang, het-tran-ngay. Bảng kỳ vọng rút lúc chạy từ LY_DO_KHONG_SAN_SANG (không chép tay); thêm một lý do mới mà không thêm dòng là bài đỏ 'thieu dong ly do: <ma>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/trpc/cache.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx, apps/app/test/okr-sheet.dom.tsx]
 
   - id: E3
     status: not-run
@@ -28,7 +27,6 @@ evals:
     cmd: config:executors.test.tdx_man_trang_thai
     expected: "exit 0; bài DOM cột góp ý: một ca cho MỖI dòng của bảng trạng thái hộp Mục tiêu và hộp KR trong design doc (id ST-muctieu-* và ST-kr-* rút lúc chạy từ bảng UX-STATE-TABLE của design doc, đường suy từ vị trí bài), mỗi ca khẳng định chữ và điều khiển của dòng đó; form có sửa chưa lưu → nút disabled và mô tả 'Lưu thay đổi trước khi nhờ góp ý'; đồng hồ giả: hỏi lại mỗi 1500 ms, sau 30 000 ms chuyển sang lỗi có 'Thử lại', đóng cột thì số lần gọi troLyDanhSach ngừng tăng. Ca Hoàn tác: sau Nhận, bấm Hoàn tác trên toast → tRPC giả nhận đúng một updateObjective với title bằng truoc (không bằng sau). Chiều đỏ: bảng trạng thái có một id mà bài không có ca → 'trang thai chua do: <id>'; bản sao đổi trần chờ thành 60 000 ms → ca quá-hạn đỏ với thông điệp in số lần hỏi; bản sao Hoàn tác gửi sau → 'hoan tac gui sau'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", packages/ui/src/components/suggestion.tsx, docs/superpowers/specs/2026-09-28-tro-ly-okr-de-xuat-design.md, apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/trpc/cache.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
 
   - id: E4
     criterion: AC-2
@@ -49,7 +47,7 @@ evals:
       - "Mọi ảnh ở 1440 và 390; đo scrollWidth ≤ clientWidth mỗi ảnh"
     expected: "exit 0; mỗi bước có ảnh trong .acceptance-runs/tro-ly-okr-de-xuat/man/ và một dòng kết quả; ô tên sau Nhận bằng giá trị đọc lại qua okr.objective; hàng OkrTrail mới có note tro-ly-okr:<id>; không bước nào tràn ngang. Chiều đỏ ghim trong script: trước khi bấm Nhận, bản đọc lại tên đã lưu phải KHÁC câu mới (nếu bằng nhau thì bước Nhận không chứng gì, mã 3 'nhan khong doi gi')."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/**", packages/ui/src/components/suggestion.tsx, apps/api/src/okr/tro-ly.service.ts, _acceptance/tro-ly-okr-de-xuat/rang/man-gop-y.mjs]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/tro-ly.service.ts, _acceptance/tro-ly-okr-de-xuat/rang/man-gop-y.mjs]
 
   - id: E5
     criterion: AC-3
@@ -285,4 +283,3 @@ evals:
     cmd: config:executors.script.tdx_san_thiet_ke
     expected: "exit 0; design-gate.mjs --mode static trên từng tệp màn mới hay sửa của lượt (cot-gop-y.tsx, hop-thoai-muc-tieu.tsx, hop-thoai-kr.tsx, the-tro-ly-okr.tsx, the-gop-y-so-do.tsx, suggestion.tsx — danh sách khai trong lệnh); năm lỗi nền P0 bằng 0."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx", packages/ui/src/components/suggestion.tsx]

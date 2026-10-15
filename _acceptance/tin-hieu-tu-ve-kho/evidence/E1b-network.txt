@@ -1,0 +1,1 @@
+driver: script do-man.mjs (puppeteer, own browser); no browser-tool network reader used. run 12:35 exit 0, 6 DUNG 0 SAI. app http://localhost:4875 api http://localhost:4813 (kho do rieng)

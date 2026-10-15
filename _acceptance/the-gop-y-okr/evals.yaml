@@ -1,6 +1,7 @@
 slug: the-gop-y-okr
 evals:
   - id: E1
+    status: not-run
     criterion: AC-1
     executor: ui-check
     layer: ui-observed
@@ -13,7 +14,6 @@ evals:
       - "1440 px: mở lại hộp Sửa KR, cột mở với thẻ của KR (hoặc nhờ góp ý) → đo như trên; ảnh E1-1440-kr"
     expected: "exit 0; rang/man-the-gop-y.mjs trong phiên đo riêng mở hộp Sửa mục tiêu rồi hộp Sửa KR, mỗi hộp có đề xuất, ở 1440 px, đo bằng getBoundingClientRect trong trình duyệt thật cho từng hộp: hộp mang data-size=assist, cột góp ý ≥ 360 px, khối câu mới của thẻ viết lại ≥ 320 px, cột form ≥ bề ngang cột form khi không có cột (đo cùng lượt, cùng hộp trước khi bấm góp ý), document.documentElement.scrollWidth == innerWidth. In từng số. Chiều đỏ ghim trong script: cùng phép đo chạy trên một bản dựng cố ý đặt cột 292 px (tham số --kiem-do-do) phải in 'cau moi hep: <px> < 320' và mã 1; hộp KR để cỡ wide phải in 'cau moi hep (kr)' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
 
   - id: E2
     criterion: AC-2
@@ -21,7 +21,7 @@ evals:
     cmd: config:executors.test.tgy_the_ba_tang
     expected: "exit 0; bài DOM của ProposedChange dựng thẻ viết lại chờ bằng chính props mà cot-gop-y.tsx truyền (rút từ một dòng DongGopY mẫu qua hàm chuyển của cột, không viết tay props): thứ tự DOM là nhãn loại + tên ô → <del> câu cũ → <ins> câu mới → lý do → hàng nút; hàng nút là anh em sau khối lý do, không nằm trong cùng hàng flex với chữ; đếm button[data-variant=default] trong thẻ đúng bằng 1 và mang tên «Nhận»; «Sửa» data-variant=outline; «Bác» data-variant=ghost và là nút cuối hàng. Chiều đỏ ghim: một bản thẻ đặt Sửa sang default phải làm bài đỏ với thông điệp 'nut chinh: 2 != 1'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "packages/ui/test/proposed-change.dom.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx"]
+    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "packages/ui/test/proposed-change.dom.tsx"]
 
   - id: E3
     status: not-run
@@ -31,7 +31,6 @@ evals:
     cmd: config:executors.test.tgy_cot_sua_roi_nhan
     expected: "exit 0; bài DOM của cột góp ý (the-gop-y-okr.dom.tsx) với HopThoaiMucTieu thật và tRPC giả ghi lời gọi: Sửa → gõ chữ → «Nhận bản đã sửa» gọi okr.troLyQuyet đúng một lần; payload parse bằng schema input thật của thủ tục, import từ apps/api/src/okr/okr.contracts.ts (troLyQuyetInput) — không so với object viết tay, và mang deXuatId của thẻ, quyết định sửa, giá trị bằng chữ đã gõ; «Huỷ» và Esc trong ô sửa không gọi thủ tục nào, thẻ về chờ, hộp vẫn mở (dialog có trong DOM); trong chế độ sửa đếm button[data-variant=default] đúng bằng 1 và tên là «Nhận bản đã sửa». Chiều đỏ ghim: bỏ nhận diện ô sửa đề xuất (data-slot proposed-change-edit) khỏi laEscTuOSuaDeXuat trong bản sao phải làm bài đỏ 'esc dong hop' — Radix nghe Esc ở pha bắt sự kiện trên document, nên chặn nổi bọt trong ô sửa không giữ được hộp."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E4
     status: not-run
@@ -41,7 +40,6 @@ evals:
     cmd: config:executors.test.tgy_cot_mo_kr
     expected: "exit 0; bài DOM dựng objective sheet thật (ObjectiveSheet) với một Mục tiêu có hai KR và hai câu hỏi — một gắn keyResultId của KR thứ hai, một không gắn: bấm «Mở KR này» ở câu hỏi gắn KR làm hộp Sửa mục tiêu rời DOM và hộp Sửa KR của đúng KR thứ hai có trong DOM (ô tên KR mang đúng tên KR đó); câu hỏi không gắn KR không có nút tên «Mở KR này» và có «Bỏ qua». Chiều đỏ ghim: truyền keyResultId của KR thứ nhất phải làm bài đỏ 'mo sai kr'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E5
     status: not-run
@@ -51,7 +49,6 @@ evals:
     cmd: config:executors.test.tgy_cot_can_chinh
     expected: "exit 0; thẻ căn chỉnh chờ có đúng một button[data-variant=default] tên «Căn chỉnh», «Bác» data-variant=ghost là nút cuối hàng; bấm «Căn chỉnh» gọi okr.troLyQuyet đúng một lần với payload parse bằng schema input thật của thủ tục, import từ apps/api/src/okr/okr.contracts.ts (troLyQuyetInput) — không so với object viết tay, quyết định nhận, và thẻ thu gọn thành một dòng mang chữ «Đã nhận» giống thẻ viết lại đã quyết (cùng data-slot). Chiều đỏ ghim: đổi thẻ căn chỉnh sang biến thể viết lại phải làm bài đỏ 'can chinh khong co nut Can chinh'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E6
     status: not-run
@@ -61,7 +58,6 @@ evals:
     cmd: config:executors.test.tgy_cot_chi_o
     expected: "exit 0; ma trận toàn phần viết trước trong bài: mỗi trường viết lại {title, whyNow, kr.title} × {rê chuột, focus} → đúng ô form tương ứng mang data-duoc-chi=true, các ô khác không; rời thẻ (mouseleave/blur) → không ô nào mang; thẻ câu hỏi và căn chỉnh → không ô nào mang. Số khẳng định = số phần tử ma trận (in ra). Chiều đỏ ghim: ánh xạ whyNow sang ô tên phải làm bài đỏ 'chi sai o: whyNow'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E7
     status: not-run
@@ -71,7 +67,6 @@ evals:
     cmd: config:executors.test.tgy_cot_phim
     expected: "exit 0; ba thẻ chờ, focus thẻ đầu: J → focus thẻ hai, J → thẻ ba, K → thẻ hai; Enter trên thẻ viết lại đang focus gọi okr.troLyQuyet đúng một lần cho đúng deXuatId, payload parse bằng schema input thật của thủ tục, import từ apps/api/src/okr/okr.contracts.ts (troLyQuyetInput) — không so với object viết tay; E mở ô sửa của thẻ đó; với focus ở ô tên của form, J/K/Enter/E không gọi thủ tục nào và không mở ô sửa nào (khẳng định 0 lời gọi và 0 textarea sửa). Chiều đỏ ghim: gắn trình nghe phím lên document thay vì cột phải làm bài đỏ 'phim ngoai cot'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "packages/ui/src/components/proposed-change.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E8
     status: not-run
@@ -81,7 +76,6 @@ evals:
     cmd: config:executors.test.tgy_cot_khong_dong
     expected: "exit 0; với HopThoaiMucTieu thật (Dialog của packages/ui, không giả), ma trận viết trước: mỗi trạng thái thẻ {chờ, đang sửa, đang gửi, đã quyết, lỗi} × mỗi đích bấm {mọi button trong cột, chữ câu mới, khoảng trống giữa hai nút, tiêu đề cột} → sau chuỗi pointerdown/pointerup/click thật (user-event), dialog vẫn có trong DOM và onOpenChange(false) không được gọi; riêng nút «Sửa» được bấm khi dòng đang chuyển sang sửa (DOM của nút rời cây giữa pointerdown và click). In số ca. Đối chứng dương: bấm lớp phủ ngoài hộp khi không có sửa chưa lưu thì hộp đóng. Chiều đỏ ghim theo hành vi, không theo tên nhánh mã: bản sao làm hộp đóng khi bấm Sửa phải làm bài đỏ 'hop dong khi bam Sua'. Bước đầu chạy ca «bấm Sửa» trên cột của merge-base; nếu jsdom không tái hiện được lỗi thì bài in 'jsdom khong tai hien' và lớp chốt là E13 trong Chromium (sau mỗi cú bấm trong cột còn đúng một role=dialog)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E9
     status: not-run
@@ -91,7 +85,6 @@ evals:
     cmd: config:executors.test.tgy_cot_trang_thai
     expected: "exit 0; bài rút danh sách id ST-thegopy-* lúc chạy từ bảng UX-STATE-TABLE của design doc (đường suy từ vị trí bài, không hardcode ROOT); mỗi id có đúng một ca dựng trạng thái đó và khẳng định chữ và điều khiển của dòng bảng (tên nút, số button[data-variant=default] đúng con số của dòng — thẻ câu hỏi 0, chữ lý do khoá, lỗi dưới thẻ, chữ «Đã nhận»/«Đã bác»); riêng ST-thegopy-hep và phần bề ngang của ST-thegopy-kr là bố cục, bài khai giao cho E1 và E11 (in 'giao E1/E11: <id>'), không dựng ca jsdom; id khác trong bảng mà bài không có ca → bài đỏ 'thieu ca: <id>'; ca không có id trong bảng → đỏ 'ca la: <id>'. Chiều đỏ ghim: thêm một dòng ST-thegopy-gia vào bản sao design doc phải làm bài đỏ 'thieu ca: ST-thegopy-gia'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["docs/superpowers/specs/2026-09-29-the-gop-y-okr-design.md", "packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/components/crm/facts.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E10
     status: not-run
@@ -104,6 +97,7 @@ evals:
     paths: ["apps/app/components/crm/facts.tsx", "packages/ui/src/components/proposed-change.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E11
+    status: not-run
     criterion: AC-11
     executor: ui-check
     layer: ui-observed
@@ -115,7 +109,6 @@ evals:
       - "Mọi khổ: scrollWidth so innerWidth; ảnh E11-<khổ>-muc-tieu và E11-<khổ>-kr"
     expected: "exit 0; cùng script E1 ở khung 390 px, cho hộp Sửa mục tiêu và hộp Sửa KR: khối cột góp ý nằm dưới khối form (top cột ≥ bottom form), mỗi thẻ rộng bằng cột trừ lề, scrollWidth == innerWidth ở mọi bước; ở 1440 px và 1024 px cột và form cùng hàng (top chênh < 8 px); ca biên ngay dưới mốc: ở 1023 px cột KHÔNG cùng hàng với form (top cột ≥ bottom form). Ảnh evidence/E11-*.png từng bước. Chiều đỏ ghim: phép đo tràn ngang chạy trên trang có một phần tử cố ý rộng 500 px (--kiem-do-do) phải in 'tran ngang' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["packages/ui/src/components/dialog.tsx", "packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
 
   - id: E12
     criterion: AC-12
@@ -152,7 +145,7 @@ evals:
       PASS khi mỗi thẻ cần quyết có đúng một nút chính nhận ra được ngay, thẻ câu hỏi không tranh nút chính với thẻ cần quyết, và câu mới ở 1440 px không bị bẻ quá
       hai dòng với câu dài ≤ 90 ký tự; FAIL nêu thẻ và ảnh vi phạm; UNCERTAIN khi thiếu ảnh.
     evidence_required: [run_id, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx"]
+    paths: ["packages/ui/src/components/proposed-change.tsx"]
 
   - id: E15
     status: not-run
@@ -162,7 +155,6 @@ evals:
     cmd: config:executors.script.tgy_san_thiet_ke
     expected: "exit 0; design-gate.mjs --mode static trên từng tệp màn mới hay sửa của lượt (proposed-change.tsx, ai-elements/confirmation.tsx, cot-gop-y.tsx, hop-thoai-muc-tieu.tsx, hop-thoai-kr.tsx, facts.tsx — danh sách khai trong lệnh); năm lỗi nền P0 bằng 0."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/components/crm/facts.tsx"]
   - id: E16
     status: not-run
     superseded_by: gop-y-dung-cho#AC-12
@@ -172,4 +164,3 @@ evals:
     cmd: config:executors.test.tgy_co_hop
     expected: "exit 0; bài DOM co-hop dựng HopThoaiMucTieu và HopThoaiKr, mỗi hộp có đề xuất chờ: khi cột góp ý đóng, DialogContent mang data-size khác assist; khi cột mở, DialogContent của CẢ HAI hộp mang data-size=assist và cột góp ý nằm trong hộp. Chiều đỏ ghim: bản sao để HopThoaiKr giữ cỡ wide khi cột mở phải làm bài đỏ 'co hop kr'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/dialog.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
