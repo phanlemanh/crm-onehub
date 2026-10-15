@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5504b466fc62d4c3106572bcdf3329144ca1d42a
+verified_commit: 7fdc5352eac3207e47d2a3e2bcd335aba7e1889b
 human_signoff: Manh Phan 2026-10-15 — ký Cổng Bằng chứng trên verdict PASS vòng 2 (16/16 eval; E8, E11b, E11c, E13 mang từ vòng 1; vòng 1 REJECT vì hai lỗi thước đã sửa). Ngoài-6 mở hợp đồng mới; mười lăm mục còn lại ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -266,3 +266,7 @@ sha: 77d049f1e7d296557f4ddb32d245cf856b53a279 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-15, do gộp onehub 48993d6ab (#418); LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
 run_id: repin-20261015T165046Z-11263
 sha: 5504b466fc62d4c3106572bcdf3329144ca1d42a · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths), E12 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-15, do gộp onehub d086bf8cf (#425, #420); LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
+run_id: repin-20261015T212821Z-93201
+sha: 7fdc5352eac3207e47d2a3e2bcd335aba7e1889b · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths), E12 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
