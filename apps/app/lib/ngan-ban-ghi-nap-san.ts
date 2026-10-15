@@ -46,3 +46,7 @@ export function chiKhoaNapSan(khoa: readonly KhoaNapSan[], trpc: Trpc) {
 	return (query: Query) =>
 		query.state.status === "success" && bam.has(query.queryHash);
 }
+
+export const NGAN_BAN_GHI = {
+	moSau: { choRanhMs: 0, choRanhToiDaMs: 2000 },
+} as const;

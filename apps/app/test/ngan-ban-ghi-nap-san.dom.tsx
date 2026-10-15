@@ -15,11 +15,13 @@ import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { NapSanKhiMoNgan } from "@/components/crm/record-sheet/nap-san-khi-mo-ngan";
+import { useSauKhiTaiXong } from "@/components/crm/record-sheet/sau-khi-tai-xong";
 import {
 	chiKhoaNapSan,
 	KHOA_NAP_SAN,
 	type KhoaNapSan,
 	khoaNapSan,
+	NGAN_BAN_GHI,
 } from "@/lib/ngan-ban-ghi-nap-san";
 
 const MA_TRAN: readonly KhoaNapSan[] = [
@@ -228,5 +230,36 @@ describe("ngan-ban-ghi-nap-san", () => {
 				khiRong.map((k) => `nap san khi ngan rong: ${k}`).join("\n"),
 			);
 		expect(coMat("deal:x")).toEqual([...MA_TRAN]);
+	});
+
+	test("ngan chi mo sau khi trang tai xong va trinh duyet ranh", async () => {
+		const ghi: boolean[] = [];
+		function Mo() {
+			ghi.push(useSauKhiTaiXong());
+			return null;
+		}
+		const doi = (ms: number) =>
+			act(async () => {
+				await new Promise((xong) => setTimeout(xong, ms));
+			});
+		Object.defineProperty(document, "readyState", {
+			value: "loading",
+			configurable: true,
+		});
+		try {
+			const r = moRoot();
+			act(() => r.render(<Mo />));
+			await doi(NGAN_BAN_GHI.moSau.choRanhMs + 30);
+			if (ghi.at(-1) !== false)
+				throw new Error("ngan mo truoc khi trang tai xong");
+			await act(async () => {
+				window.dispatchEvent(new Event("load"));
+			});
+			await doi(NGAN_BAN_GHI.moSau.choRanhMs + 30);
+			expect(ghi[0]).toBe(false);
+			expect(ghi.at(-1)).toBe(true);
+		} finally {
+			Reflect.deleteProperty(document, "readyState");
+		}
 	});
 });
