@@ -5,7 +5,7 @@ slug: e24-qua-han-khong-phai-ha-tang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-e24-qua-han-khong-phai-ha-tang-design.md
@@ -50,3 +50,6 @@ nghị. Bản sửa × bản trước vòng → AC-1. `[CE chưa kiểm chứng]
 
 - `do-tre.mjs` nằm trong `paths` của `tro-ly-okr-de-xuat` (E24 gọi model thật, khoảng 35 phút, khoảng 1 USD) và
   `thuoc-tro-ly-okr-khong-lot` (E2, E3) — PR ghim lại cả hai.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Phép chạy thật E3 không phân biệt được ca một lượt quá hạn cộng một lượt hỏng vì lỗi khác với ca chỉ hỏng vì lỗi khác; kết quả cho người dùng vẫn đúng (vẫn «không đo được»), ma trận E2 giữ điều đó.
+  - Ngoài-2: Cùng gốc với Ngoài-1: vế «không có dòng luot qua» của E3 luôn đạt, vì đường chặn sớm không bao giờ in dòng đó.

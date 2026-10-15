@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: d49983959997e414e1dd8e5d9f116a923cb54b5a
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 round 1, wf_4c435e5f-327). Ngoài-1, 2 ghi Known limits; đồng ý phần cắt/hoãn.
 ---
 
 # Evidence Report: e24-qua-han-khong-phai-ha-tang
