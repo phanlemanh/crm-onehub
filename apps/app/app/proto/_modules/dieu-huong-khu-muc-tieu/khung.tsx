@@ -53,6 +53,7 @@ import {
 } from "@/components/page-shell";
 import { PageShellNote } from "@/components/page-shell-note";
 import { CHU_KY_KHAC, KY } from "../ban-mau-okr/du-lieu";
+import { TAB_MAU, type TabOkr } from "./du-lieu";
 
 type MucRail = { key: string; nhan: string; icon: CarbonIcon };
 
@@ -71,29 +72,6 @@ const RAIL: MucRail[] = [
 	{ key: "settings", nhan: "Cài đặt", icon: Settings },
 ];
 
-export type TabOkr =
-	| "cua-toi"
-	| "cap-nhat-tuan"
-	| "theo-don-vi"
-	| "toan-canh"
-	| "hoi-y";
-
-const TAB: { value: TabOkr; nhan: string; state: string }[] = [
-	{ value: "cua-toi", nhan: "Của tôi", state: "ST-dhk-cua-toi" },
-	{
-		value: "cap-nhat-tuan",
-		nhan: "Cập nhật tuần",
-		state: "ST-dhk-cap-nhat-tuan",
-	},
-	{ value: "theo-don-vi", nhan: "Theo đơn vị", state: "ST-dhk-don-vi" },
-	{ value: "toan-canh", nhan: "Toàn cảnh", state: "ST-dhk-toan-canh" },
-	{ value: "hoi-y", nhan: "Hỏi ý", state: "ST-dhk-hoi-y" },
-];
-
-export const NHAN_TAB = Object.fromEntries(
-	TAB.map((t) => [t.value, t.nhan]),
-) as Record<TabOkr, string>;
-
 const MO_TA = {
 	"cua-toi": "Việc OKR của bạn tuần này, KR bạn phụ trách và đơn vị bạn dẫn.",
 	"cap-nhat-tuan": "Cập nhật tiến độ tuần này cho các KR bạn phụ trách.",
@@ -106,8 +84,6 @@ const MO_TA = {
 const ID_KHONG_THEM = "okr-khong-them-duoc";
 export const DUONG = "/proto/dieu-huong-khu-muc-tieu";
 
-export type CachSoan = "nut-vien" | "gom-vao-menu";
-
 export type DauTrang = {
 	tab: TabOkr;
 	donVi: string | null;
@@ -116,7 +92,6 @@ export type DauTrang = {
 	lyDo: string | null;
 	phaLapKeHoach: boolean;
 	soanKhoa: string | null;
-	cachSoan: CachSoan;
 	menuMo?: boolean;
 	nguoi: string;
 };
@@ -226,7 +201,6 @@ function NutSoan({ d }: { d: DauTrang }) {
 }
 
 function HanhDong({ d }: { d: DauTrang }) {
-	const gom = d.cachSoan === "gom-vao-menu";
 	return (
 		<PageShellActions>
 			<ChonChuKy />
@@ -247,21 +221,9 @@ function HanhDong({ d }: { d: DauTrang }) {
 					>
 						Nhập từ bảng tính
 					</DropdownMenuItem>
-					{gom && d.phaLapKeHoach ? (
-						<DropdownMenuItem disabled={!d.duoc || d.soanKhoa !== null}>
-							<span className="flex flex-col">
-								Soạn OKR cùng Kara
-								{d.duoc && d.soanKhoa ? (
-									<span className="text-muted-foreground text-xs">
-										{d.soanKhoa}
-									</span>
-								) : null}
-							</span>
-						</DropdownMenuItem>
-					) : null}
 				</DropdownMenuContent>
 			</DropdownMenu>
-			{!gom && d.phaLapKeHoach ? <NutSoan d={d} /> : null}
+			{d.phaLapKeHoach ? <NutSoan d={d} /> : null}
 			<Button
 				aria-describedby={d.duoc ? undefined : ID_KHONG_THEM}
 				data-nut="them-muc-tieu"
@@ -297,7 +259,7 @@ export function TrangMucTieu({
 				</PageShellHeader>
 				<Tabs value={d.tab}>
 					<TabsList aria-label="Khu mục tiêu" variant="line">
-						{TAB.map((t) => (
+						{TAB_MAU.map((t) => (
 							<TabsTrigger asChild key={t.value} value={t.value}>
 								<Link
 									aria-current={t.value === d.tab ? "page" : undefined}

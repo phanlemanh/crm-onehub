@@ -10,14 +10,8 @@ import {
 } from "@crm/ui/components/breadcrumb";
 import { Card, CardContent } from "@crm/ui/components/card";
 import Link from "next/link";
-import {
-	type CachSoan,
-	type DauTrang,
-	duongTrang,
-	NHAN_TAB,
-	type TabOkr,
-	TrangMucTieu,
-} from "./khung";
+import { NHAN_TAB, type TabOkr } from "./du-lieu";
+import { type DauTrang, duongTrang, TrangMucTieu } from "./khung";
 
 const KHONG_SUA =
 	"Bạn xem được Kinh doanh vùng 1 nhưng không thêm mục tiêu được: chỉ trưởng đơn vị này, trưởng đơn vị cấp trên và quản trị làm được.";
@@ -25,7 +19,7 @@ const KHONG_DAN =
 	"Bạn chưa dẫn đơn vị nào nên chưa thêm được mục tiêu: mục tiêu thuộc về đơn vị và do trưởng đơn vị đặt.";
 const SOAN_HET_LUOT = "Đơn vị đã dùng hết lượt soạn của chu kỳ này.";
 
-type Man = Omit<DauTrang, "cachSoan"> & { cachSoan?: CachSoan };
+type Man = DauTrang;
 
 const thao = (tab: TabOkr): Man => ({
 	tab,
@@ -62,11 +56,6 @@ const MAN = {
 		duoc: false,
 		lyDo: KHONG_DAN,
 		nguoi: "Bùi Thu Nga",
-	},
-	"ST-dhk-hoi-1-gom": {
-		...thao("theo-don-vi"),
-		cachSoan: "gom-vao-menu",
-		menuMo: true,
 	},
 } satisfies Record<string, Man>;
 
@@ -116,7 +105,7 @@ function GiuCho({ cau }: { cau: string }) {
 export function DieuHuongKhuMucTieuMau({ state }: { state: string }) {
 	const man: Man =
 		state in MAN ? MAN[state as keyof typeof MAN] : MAN["ST-dhk-don-vi"];
-	const d: DauTrang = { ...man, cachSoan: man.cachSoan ?? "nut-vien" };
+	const d: DauTrang = man;
 	return (
 		<TrangMucTieu d={d} key={state}>
 			<Than d={d} state={state} />

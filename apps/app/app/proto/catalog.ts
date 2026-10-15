@@ -16,7 +16,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		states: [
 			{
 				id: "ST-dhk-don-vi",
-				nhan: "Theo đơn vị — Hỏi-1 lối máy khuyên: soạn là nút viền",
+				nhan: "Theo đơn vị — trưởng đơn vị",
 			},
 			{ id: "ST-dhk-cua-toi", nhan: "Của tôi — trưởng một đơn vị" },
 			{ id: "ST-dhk-cap-nhat-tuan", nhan: "Cập nhật tuần" },
@@ -27,10 +27,6 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-dhk-soan", nhan: "Nút soạn khoá — hết lượt" },
 			{ id: "ST-dhk-khong-quyen", nhan: "Xem đơn vị không sửa được" },
 			{ id: "ST-dhk-khong-dan", nhan: "Không dẫn đơn vị nào" },
-			{
-				id: "ST-dhk-hoi-1-gom",
-				nhan: "Hỏi-1 lối kia: gom Nhập và Soạn vào «…» — một hàng ở 375 px",
-			},
 		],
 	},
 	{

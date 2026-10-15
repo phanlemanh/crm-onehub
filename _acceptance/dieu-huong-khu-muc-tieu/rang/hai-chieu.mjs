@@ -119,15 +119,31 @@ const DOT_BIEN = {
 
 const nhom = process.argv[2];
 if (!nhom || !(nhom in DOT_BIEN)) {
-	console.log(`KHONG DO DUOC: nhom «${nhom ?? ""}» khong co trong bang — ${Object.keys(DOT_BIEN).join(", ")}`);
+	console.log(
+		`KHONG DO DUOC: nhom «${nhom ?? ""}» khong co trong bang — ${Object.keys(DOT_BIEN).join(", ")}`,
+	);
 	process.exit(2);
 }
 
 function chayNhom() {
 	const r = spawnSync(
 		"bun",
-		["test", "--timeout", "60000", "--preload", "../../packages/ui/test/setup-dom.ts", "./test/okr-dau-trang-khu.dom.tsx", "-t", nhom],
-		{ cwd: APP, encoding: "utf8", env: { ...process.env, TZ: "Asia/Ho_Chi_Minh" }, maxBuffer: 64 * 1024 * 1024 },
+		[
+			"test",
+			"--timeout",
+			"60000",
+			"--preload",
+			"../../packages/ui/test/setup-dom.ts",
+			"./test/okr-dau-trang-khu.dom.tsx",
+			"-t",
+			nhom,
+		],
+		{
+			cwd: APP,
+			encoding: "utf8",
+			env: { ...process.env, TZ: "Asia/Ho_Chi_Minh" },
+			maxBuffer: 64 * 1024 * 1024,
+		},
 	);
 	const chu = `${r.stdout}${r.stderr}`;
 	const soPass = Number(/(\d+) pass/.exec(chu)?.[1] ?? 0);
@@ -143,13 +159,15 @@ function hoanNguyen() {
 for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"])
 	process.on(tin, () => {
 		hoanNguyen();
-		process.exit(128 + ({ SIGINT: 2, SIGTERM: 15, SIGHUP: 1 })[tin]);
+		process.exit(128 + { SIGINT: 2, SIGTERM: 15, SIGHUP: 1 }[tin]);
 	});
 
 const lanh = chayNhom();
 if (lanh.ma !== 0 || lanh.soPass === 0) {
 	console.log(lanh.chu.split("\n").slice(-40).join("\n"));
-	console.log(`SAI ${nhom}: doi chung duong do tren vat lanh (ma ${lanh.ma}, ${lanh.soPass} pass)`);
+	console.log(
+		`SAI ${nhom}: doi chung duong do tren vat lanh (ma ${lanh.ma}, ${lanh.soPass} pass)`,
+	);
 	process.exit(1);
 }
 console.log(`DUNG ${nhom} doi chung: vat lanh xanh (${lanh.soPass} pass)`);
@@ -160,7 +178,9 @@ for (const db of DOT_BIEN[nhom]) {
 	const goc = readFileSync(tep, "utf8");
 	const soLan = goc.split(db.cu).length - 1;
 	if (soLan !== 1) {
-		console.log(`KHONG DO DUOC: dot bien ${db.ten} — doan can thay xuat hien ${soLan} lan trong ${db.tep}`);
+		console.log(
+			`KHONG DO DUOC: dot bien ${db.ten} — doan can thay xuat hien ${soLan} lan trong ${db.tep}`,
+		);
 		process.exit(2);
 	}
 	daSua.set(tep, goc);
@@ -168,11 +188,20 @@ for (const db of DOT_BIEN[nhom]) {
 		writeFileSync(tep, goc.replace(db.cu, db.moi));
 		const r = chayNhom();
 		const coGhim = r.chu.includes(db.ghim);
-		if (r.ma !== 0 && coGhim) console.log(`DUNG ${nhom} chieu do ${db.ten}: ma ${r.ma}, «${db.ghim}»`);
+		if (r.ma !== 0 && coGhim)
+			console.log(`DUNG ${nhom} chieu do ${db.ten}: ma ${r.ma}, «${db.ghim}»`);
 		else {
 			sai += 1;
-			console.log(r.chu.split("\n").filter((l) => l.includes("dhk-")).slice(0, 20).join("\n"));
-			console.log(`SAI ${nhom} chieu do ${db.ten}: ma ${r.ma}, ${coGhim ? "co" : "THIEU"} thong diep «${db.ghim}»`);
+			console.log(
+				r.chu
+					.split("\n")
+					.filter((l) => l.includes("dhk-"))
+					.slice(0, 20)
+					.join("\n"),
+			);
+			console.log(
+				`SAI ${nhom} chieu do ${db.ten}: ma ${r.ma}, ${coGhim ? "co" : "THIEU"} thong diep «${db.ghim}»`,
+			);
 		}
 	} finally {
 		hoanNguyen();
@@ -182,5 +211,9 @@ for (const db of DOT_BIEN[nhom]) {
 		process.exit(2);
 	}
 }
-console.log(sai === 0 ? `KET LUAN ${nhom}: hai chieu dung (${DOT_BIEN[nhom].length} dot bien)` : `KET LUAN ${nhom}: ${sai} chieu do sai`);
+console.log(
+	sai === 0
+		? `KET LUAN ${nhom}: hai chieu dung (${DOT_BIEN[nhom].length} dot bien)`
+		: `KET LUAN ${nhom}: ${sai} chieu do sai`,
+);
 process.exit(sai === 0 ? 0 : 1);
