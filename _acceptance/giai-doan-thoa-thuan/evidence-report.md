@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dbba844ab1d2125a287e65f8802e7719f786aed0
+verified_commit: f5c54fb240b5a3acf0f89d8d2a965a55e598e62f
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -329,3 +329,7 @@ sha: 304ed4e018160d950e90175ed467be9fbd6a757f · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 15 — 2026-10-15, do khong-re-theo-ten-thanh-luat-kho: E17 quet tap tep theo doi tren cau hinh bo ignorePatterns (S4 r1)
 run_id: repin-20261015T183248Z-35446
 sha: dbba844ab1d2125a287e65f8802e7719f786aed0 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 16 — 2026-10-15, do khong-re-theo-ten-thanh-luat-kho: ghim lai sau gop onehub (schema.prisma, vai-chi-okr, messages doi)
+run_id: repin-20261015T215124Z-75326
+sha: f5c54fb240b5a3acf0f89d8d2a965a55e598e62f · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
