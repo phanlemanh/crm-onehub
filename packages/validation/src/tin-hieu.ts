@@ -102,22 +102,31 @@ export const keoVeOutput = z.object({
 			tep: tepTinHieu,
 			phongBan: z.string().nullable(),
 			phongBanId: z.string().nullable().optional(),
+			keoVeLuc: z.string().datetime().optional(),
 		}),
 	),
+	dongDauLuc: z.string().datetime().nullable().optional(),
 });
 export type KeoVeOutput = z.infer<typeof keoVeOutput>;
 
-export function bocPhanHoiKeoVe(tep: KeoVeOutput["tep"]): KeoVeOutput {
-	return { tep };
+export function bocPhanHoiKeoVe(
+	tep: KeoVeOutput["tep"],
+	dongDauLuc?: string | null,
+): KeoVeOutput {
+	return dongDauLuc === undefined ? { tep } : { tep, dongDauLuc };
 }
 
-export function docPhanHoiKeoVe(body: unknown): KeoVeOutput["tep"] {
+export function docPhanHoiKeoVeDayDu(body: unknown): KeoVeOutput {
 	const kq = keoVeOutput.safeParse(body);
 	if (!kq.success)
 		throw new Error(
 			`lệnh kéo về lệch vỏ phản hồi REST: ${kq.error.issues[0]?.message ?? "sai vỏ"}`,
 		);
-	return kq.data.tep;
+	return kq.data;
+}
+
+export function docPhanHoiKeoVe(body: unknown): KeoVeOutput["tep"] {
+	return docPhanHoiKeoVeDayDu(body).tep;
 }
 
 export const CHO_TIN_HIEU = [
