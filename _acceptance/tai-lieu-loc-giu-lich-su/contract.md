@@ -5,7 +5,7 @@ slug: tai-lieu-loc-giu-lich-su
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-15T07:35:05Z
 design_doc: docs/superpowers/specs/2026-10-15-tai-lieu-loc-giu-lich-su-design.md
