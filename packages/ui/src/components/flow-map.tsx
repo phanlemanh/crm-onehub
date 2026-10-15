@@ -277,7 +277,7 @@ function FlowMapInner<N extends Node>({
 				direction: string;
 				x: number;
 				y: number;
-			}) => msg.nutDaDich(direction, x, y),
+			}) => msg.nutDaDich(direction, String(x), String(y)),
 			"edge.a11yDescription.default": msg.moTaDay,
 			"minimap.ariaLabel": msg.banDoNho,
 			"handle.ariaLabel": msg.diemNoi,

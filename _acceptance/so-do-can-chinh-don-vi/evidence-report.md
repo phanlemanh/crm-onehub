@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: so-do-can-chinh-don-vi
-verdict: REJECT
-failed_evals: [E14, E12]
-reason:
+verdict: BLOCKED
+failed_evals: []
+reason: "E14 — bun _acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs: lệnh chạy quá 30 phút chưa xong (khai long_running: 30 cho eval trong evals.yaml; không có khai báo long_running nào đọc được trong task nên áp mặc định 30 phút). Lệnh bị chuyển sang nền sau 600 s (ID b7bciou7q, tệp đầu ra /private/tmp/claude-503/-Users-manhphan-dev-acceptance-gate-kit--claude-worktrees-elated-chatterjee-d25a07/b42f145f-aad1-4ae1-a999-6479a43cb300/tasks/b7bciou7q.output). Tiến trình giu-ho-so.mjs (PID 67298, cwd là worktree crm-onehub so-do-can-chinh-don-vi) vẫn sống sau 30:13 phút, đang đợi tiến trình con bun run test -> turbo run test --concurrency=1 (PID 80027/80046), chưa trả về dòng mã thoát. Không có dòng mã thoát nên KHÔNG có mã thoát thật; giá trị -1 chỉ là giá trị giữ chỗ, không phải mã thoát. Không kill tiến trình (không có công cụ dừng nền riêng, không đoán PASS hay FAIL). Cách gỡ: chạy lại E14 với timeout công cụ dài hơn."
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bd32cb3c85bcf0f6aa808ee523f25b1de71be474
+verified_commit: 822eb75530b7fef5ada097b46362e6fabae03c4d
 human_signoff:
 ---
 
@@ -26,8 +26,8 @@ human_signoff:
 | E9 | AC-9 | test | PASS |
 | E10 | AC-10 | test | PASS |
 | E11 | AC-11 | test | PASS |
-| E12 | AC-12 | ui-check | FAIL |
-| E14 | AC-14 | script | FAIL |
+| E12 | AC-12 | ui-check | PASS |
+| E14 | AC-14 | script | BLOCKED |
 | E15 | AC-2 | script | PASS |
 | E16 | AC-15 | script | PASS |
 | E17 | AC-7 | test | PASS |
@@ -37,208 +37,196 @@ không chạy theo hồ sơ: E13
 ## Evidence
 
 - eval: E1
-  run_id: minted-so-do-can-chinh-don-vi-E1-r1
+  run_id: minted-so-do-can-chinh-don-vi-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_du_lieu
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    test-run: dropped crm_mv92jl85hi6d_test
+    test-run: dropped crm_mv953aqgyvwt_test
 
 - eval: E2
-  run_id: minted-so-do-can-chinh-don-vi-E2-r1
+  run_id: minted-so-do-can-chinh-don-vi-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_chu_y
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    test-run: dropped crm_mv92jlyvomx2_test
+    test-run: dropped crm_mv953a65no09_test
 
 - eval: E3
-  run_id: minted-so-do-can-chinh-don-vi-E3-r1
+  run_id: minted-so-do-can-chinh-don-vi-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_quyen
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    test-run: dropped crm_mv92jlsidge5_test
+    test-run: dropped crm_mv953attwhsy_test
 
 - eval: E4
-  run_id: minted-so-do-can-chinh-don-vi-E4-r1
+  run_id: minted-so-do-can-chinh-don-vi-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_cach_xem
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 1 test across 1 file. [1452.00ms]
+    Ran 1 test across 1 file. [1.57s]
 
 - eval: E5
-  run_id: minted-so-do-can-chinh-don-vi-E5-r1
+  run_id: minted-so-do-can-chinh-don-vi-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_the
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 1 test across 1 file. [714.00ms]
+    Ran 1 test across 1 file. [953.00ms]
 
 - eval: E6
-  run_id: minted-so-do-can-chinh-don-vi-E6-r1
+  run_id: minted-so-do-can-chinh-don-vi-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_loc
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 1 test across 1 file. [1135.00ms]
+    Ran 1 test across 1 file. [1201.00ms]
 
 - eval: E7
-  run_id: minted-so-do-can-chinh-don-vi-E7-r1
+  run_id: minted-so-do-can-chinh-don-vi-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_mo_the
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 1 test across 1 file. [1160.00ms]
+    Ran 1 test across 1 file. [1209.00ms]
 
 - eval: E8
-  run_id: minted-so-do-can-chinh-don-vi-E8-r1
+  run_id: minted-so-do-can-chinh-don-vi-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_thu_gon
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 1 test across 1 file. [494.00ms]
+    Ran 1 test across 1 file. [754.00ms]
 
 - eval: E9
-  run_id: minted-so-do-can-chinh-don-vi-E9-r1
+  run_id: minted-so-do-can-chinh-don-vi-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_hep
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 1 test across 1 file. [745.00ms]
+    Ran 1 test across 1 file. [1006.00ms]
 
 - eval: E10
-  run_id: minted-so-do-can-chinh-don-vi-E10-r1
+  run_id: minted-so-do-can-chinh-don-vi-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_trang_thai
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 1 test across 1 file. [1345.00ms]
+    Ran 1 test across 1 file. [1391.00ms]
 
 - eval: E11
-  run_id: minted-so-do-can-chinh-don-vi-E11-r1
+  run_id: minted-so-do-can-chinh-don-vi-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_chu
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    Ran 152 tests across 1 file. [1342.00ms]
+    Ran 152 tests across 1 file. [1048.00ms]
 
 - eval: E12
-  run_id: minted-so-do-can-chinh-don-vi-E12-r1
-  exit_code: 1
+  run_id: minted-so-do-can-chinh-don-vi-E12-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dh4_man
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   screenshot: evidence/so-do-1440.png
   observed: |
-    so-do-1440.png: trang Toàn cảnh OKR tối màu, tab Sơ đồ đang chọn, chip "Mọi đơn vị 23" đang sáng, chú giải nét liền/nét đứt/Chưa nối lên. Khung vẽ có cây thẻ: OneHub ở gốc, hàng dưới Khối Kinh doanh, Khối Vận hành, Khối Hỗ trợ, Sơ đồ·Khối A, Sơ đồ·Khối B, Sơ đồ·X; hàng thấp hơn Sơ đồ·B3, Sơ đồ·B2, Sơ đồ·B1. Có đường liền (nhánh ngang từ gốc xuống) và đường đứt (cong sang B1). Thẻ Sơ đồ·Khối B và Sơ đồ·B2 mang dòng chữ "Chưa nối lên" và không có đường nào chạm đỉnh thẻ — khớp mong đợi về mặt hình ảnh, nhưng phép đếm dây bằng selector của script ra 0 nên kiểm đối chứng SAI.
-    chu-y-1440.png: chip "Cần chú ý 6" sáng (hiện 6), các thẻ khác mờ; còn rõ nét Khối Hỗ trợ, Sơ đồ·Khối A, Pháp chế, Sơ đồ·A1... đúng tập cần chú ý, có đường liền/đứt mới.
-    the-mo-1440.png: thẻ "Sơ đồ·A3" (Đỗ Minh Khoa) mở rộng viền xanh, tiêu đề "Sơ đồ · A3 góp cả khối A lần công ty", hai mục góp hiện câu lý do đã gieo kèm nhãn Có số liệu / Đặt cược.
-    danh-sach-390.png: viewport 390 hẹp, hiện danh sách thẻ xếp dọc (OneHub, Khối Kinh doanh thụt lề), không có khung vẽ sơ đồ, không thấy cuộn ngang, ô chọn "Sơ đồ" dạng dropdown. Không thấy lỗi hiển thị trong 4 ảnh.
+    Da mo tung file bang Read. so-do-1440.png: man Toan canh OKR 1440 o che do «So do», chip «Moi don vi 23» dang chon; khung ve co OneHub o goc, cac the Khoi Kinh doanh/Van hanh/Ho tro/So do - Khoi A, Khoi B, X o hang giua, duong lien ve tu OneHub xuong cac khoi, mot duong net dut cong sang So do - B1 (5 day tong); the «So do - Khoi B» va «So do - B2» mang nhan «Chua noi len» va khong co duong nao dan vao chung — khop Expected. chu-y-1440.png: chip «Can chu y 5» dang chon; cac the can chu y (So do - Khoi B, Khoi Ho tro, So do - B3, B2, A1) hien ro, cac the khac (OneHub, So do - X, Khoi A, Khoi Van hanh, B1, A2, A3) bi mo di — khop. the-mo-1440.png: the «So do - A3» (Do Minh Khoa) dang mo, vien xanh, hien cau ly do da gieo «A3 giu ti le giao dung han cua khoi A nen gop thang vao muc tieu khoi» (nhan «Co so lieu») va cau thu hai «A3 mo tuyen moi co the day doanh thu nam nhung chua co so do rieng» (nhan «Dat cuoc») — khop. danh-sach-390.png: viewport 390 rong, khong co khung ve; hien danh sach long nhau (OneHub > Khoi Kinh doanh ...) voi chip «Moi don vi 23 / Can chu y 5», khong thay cuon ngang — khop. Khong frame nao mau thuan Expected.
   network_observed: n-a (driver)
   output: |
-    Script tự dựng phiên đo riêng (app :4421, api :4608), nạp okr:mau + ca-so-do (11 mục tiêu, 7 phòng ban), tự dọn. Kết luận của script: 16 DUNG, 1 SAI.
-    SAI so-do 1440: đối chứng đường — khung vẽ có 0 dây (selector [data-testid^="rf__edge-"] đếm được 0 dù ảnh vẽ rõ nhiều đường)
-    Hai kiểm "0 đường kết thúc ở thẻ chưa nối" dùng cùng selector đang đếm ra 0, nên hai kiểm DUNG đó hiện chưa có sức chứng minh (assertion rỗng).
-    Đủ 4 ảnh trong evidence/: so-do-1440.png, chu-y-1440.png, the-mo-1440.png, danh-sach-390.png; log: E12-output.txt.
-    Expected đòi mỗi kiểm in DUNG nhưng có 1 SAI nên eval FAIL. Cần sửa selector đếm đường (hoặc đo trên SVG thật) trong rang/man.mjs.
+    - Console khong loi: 1440 (0 loi), 390 (0 loi).
+    - Du 4 anh (4).
+    Frames da luu (mtime 13:10-13:11 hom nay, ghi de ban cu): evidence/so-do-1440.png, chu-y-1440.png, the-mo-1440.png, danh-sach-390.png. Output day du o evidence/E12-output.txt (ban chay cu co 1 SAI '0 day' da bi thay bang lan chay nay: 12 muc tieu thay vi 11, 5 day). Capture di qua puppeteer cua chinh man.mjs. Driver khong co duong doc network nen khong tao E12-network.txt.
 
 - eval: E14
-  run_id: minted-so-do-can-chinh-don-vi-E14-r1
-  exit_code: 1
+  run_id: minted-so-do-can-chinh-don-vi-E14-r2
+  status: BLOCKED
   baseline: n-a
   verifier: config:executors.script.dh4_giu_ho_so
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    DUNG va-tro-ly-okr-sau-thu/E7
-    da chay 92/92 lenh khac nhau
-    eval da ky do: bo-xuong-kara#E10 (ma 1, ky 0)
-    eval da ky do: gioi-han-tep-dom#E4 (ma 1, ky 0)
-    eval da ky do: khoa-api-ghi-thua#E8 (ma 1, ky 0)
-    eval da ky do: nen-chat-ai-elements#E14 (ma 1, ky 0)
-    eval da ky do: moi-bai-kiem-dom-deu-chay#E2 (ma 1, ky 0)
-    eval da ky do: moi-bai-kiem-dom-deu-chay#E3 (ma 1, ky 0)
-    eval da ky do: moi-bai-kiem-dom-deu-chay#E4 (ma 1, ky 0)
-    eval da ky do: moi-bai-kiem-dom-deu-chay#E7 (ma 1, ky 0)
-    eval da ky do: toan-canh-okr#E26 (ma 1, ky 0)
+    Lệnh được chuyển sang nền sau 600 s (ID b7bciou7q). Tệp đầu ra lúc 13:40:23 rỗng 0 byte, chưa có dòng mã thoát.
+    Tiến trình giu-ho-so.mjs (PID 67298) vẫn chạy, elapsed 30:13; tiến trình con bun run test (PID 80027) và turbo run test (PID 80046) đang chạy.
+    Không có mã thoát thật, không phán PASS hay FAIL.
 
 - eval: E15
-  run_id: minted-so-do-can-chinh-don-vi-E15-r1
+  run_id: minted-so-do-can-chinh-don-vi-E15-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dh4_dot_bien
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
     dot-bien: 7/7 vet bi bat
 
 - eval: E16
-  run_id: minted-so-do-can-chinh-don-vi-E16-r1
+  run_id: minted-so-do-can-chinh-don-vi-E16-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dh4_ranh_gioi
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
     DUNG ranh gioi
 
 - eval: E17
-  run_id: minted-so-do-can-chinh-don-vi-E17-r1
+  run_id: minted-so-do-can-chinh-don-vi-E17-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dh4_ly_do
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
   output: |
-    test-run: dropped crm_mv92js2782ig_test
+    test-run: dropped crm_mv953hjpmku1_test
 
 ### Lệnh suite (hồi quy)
 
-Lệnh fail không gắn eval: `bun run test -- --filter=api` (3 bài đỏ: sang-kien-an "thu tuc okr vai chi OKR voi toi duoc"; hien-thi-an "THU_TU_DOC_OKR khop dung tap thu tuc doc"; hien-thi-an "ba duong x ba nguoi") và `bun run test -- --filter=app --filter=@crm/ui` (1 bài đỏ ở @crm/ui: "AC-5 — chấm bản vẽ, không chấm mã > mọi component đọc bảng dịch đều có mặt trong danh sách ca"). Hai lệnh còn lại gắn eval cùng bị đỏ là `bun _acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs` (E14) và `ui-check:E12` (E12), đã ghi ở khối eval trên.
-
 - cmd: bun run test -- --filter=api
-  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_api-r1
-  exit_code: 1
-  verified_at: 2026-10-15T04:58:21Z
+  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_api-r2
+  exit_code: 0
+  verified_at: 2026-10-15T06:09:44Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-15T04:58:21Z
+  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-10-15T06:09:44Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-so-do-can-chinh-don-vi-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-so-do-can-chinh-don-vi-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
 
 - cmd: bun run lint:slop
-  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_lint_slop-r1
+  run_id: minted-so-do-can-chinh-don-vi-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-15T04:58:21Z
+  verified_at: 2026-10-15T06:09:44Z
+
+Lệnh fail không gắn eval nào (evals: [] — không thuộc failed_evals):
 
 - cmd: bunx turbo run build --force
-  run_id: minted-so-do-can-chinh-don-vi-SUITE-bunx_turbo_run_build_force-r1
-  exit_code: 0
-  verified_at: 2026-10-15T04:58:21Z
+  run_id: minted-so-do-can-chinh-don-vi-SUITE-bunx_turbo_run_build_force-r2
+  exit_code: 1
+  verified_at: 2026-10-15T06:09:44Z
+  ghi chú: build app đỏ ở bước kiểm kiểu TypeScript, lỗi TS2352 tại apps/app/test/kara-mot-ten-luat.ts dòng 159 cột 10 (ép kiểu bảng chuỗi giao diện có khoá soDo, hàm nutDaDich nhận (huong: string, x: number, y: number) không khớp chữ ký (...doiSo: string[])). Task app#build thất bại; 3 trên 5 task thành công, không dùng cache.
 
 ## Known limits
 
@@ -246,9 +234,9 @@ Lệnh fail không gắn eval: `bun run test -- --filter=api` (3 bài đỏ: san
 
 ## Analyst
 
-none — không eval nào xanh ở cả hai phía. Baseline không đo được cho mọi eval feature (field baseline đều là n-a, lý do ở mục dưới), nên chưa có eval nào được xác nhận đỏ trên code cũ.
+none — danh sách eval không-phân-biệt rỗng. Lưu ý: baseline không đo được cho mọi eval mới (xem mục dưới) nên chưa eval nào được chứng minh đỏ trên nền.
 
-### Baseline khong do
+Baseline khong do:
 
 - bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-du-lieu": bo qua baseline: tep apps/api/test/okr-so-do-don-vi.spec.ts co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-chu-y": bo qua baseline: tep apps/api/test/okr-so-do-don-vi.spec.ts co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
@@ -268,8 +256,9 @@ none — không eval nào xanh ở cả hai phía. Baseline không đo được 
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval chạy một lần (deterministic), không eval nào có pass_rate lẫn.
 
 ## Iterations
 
-Round 1: E14, E12 failed — E14: chạy lại 9 eval của các hồ sơ đã ký (bo-xuong-kara, gioi-han-tep-dom, khoa-api-ghi-thua, nen-chat-ai-elements, moi-bai-kiem-dom-deu-chay x4, toan-canh-okr) trả mã khác kỳ vọng; E12: kiểm đối chứng đường SAI vì selector rf__edge-* đếm 0 dây; thêm 3 bài đỏ ở suite api và 1 bài đỏ ở suite @crm/ui. Returned to implementation.
+Round 1: REJECT — E12, E14 và hai lệnh suite (api; app + @crm/ui) đỏ; riêng E12 ở vòng này có một số liệu sai ("0 day") đã được thay bằng lần chạy mới (12 mục tiêu, 5 dây). Returned to implementation.
+Round 2: BLOCKED — E1–E11, E12, E15, E16, E17 xanh; E14 chưa kết thúc sau 30 phút (chạy bộ test của các hồ sơ đã ký trên nền, đang đợi tiến trình con turbo), chưa có mã thoát thật; lệnh suite build đỏ ở lỗi kiểu TS2352 trong apps/app/test/kara-mot-ten-luat.ts (không gắn eval nào). Cần chạy lại E14 với timeout công cụ dài hơn.

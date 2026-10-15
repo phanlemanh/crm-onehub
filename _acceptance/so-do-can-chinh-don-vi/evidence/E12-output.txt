@@ -1,11 +1,10 @@
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-  building crm_so_do_can_chinh_don_vi__mau_do: migrate deploy + seed (once per source fingerprint)
-phien-do: kho crm_so_do_can_chinh_don_vi_do · app http://localhost:4421 · api http://localhost:4608
+phien-do: kho crm_so_do_can_chinh_don_vi_do · app http://localhost:4358 · api http://localhost:4758
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 GHI NAP okr:mau --moc 2026-10-15: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-10-15T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ, 2 trang tài liệu.
-GHI NAP nap ca so do: 11 muc tieu, 7 phong ban
+GHI NAP nap ca so do: 12 muc tieu, 7 phong ban
 DUNG danh-sach 390: khong dung khung ve
 DUNG danh-sach 390: khong cuon ngang (false)
 DUNG danh-sach 390: doi chung do — chen khoi rong thi bao tran
@@ -15,20 +14,20 @@ DUNG so-do 1440 bp:mau-okr-bp-sd-b: the co mat, nhan «Chưa nối lên»
 DUNG so-do 1440 bp:mau-okr-bp-sd-b: 0 day di len
 DUNG so-do 1440 pb:mau-okr-pb-sd-b2: the co mat, nhan «Chưa nối lên»
 DUNG so-do 1440 pb:mau-okr-pb-sd-b2: 0 day di len
-SAI so-do 1440: doi chung duong — khung ve co 0 day
+DUNG so-do 1440: doi chung duong — khung ve co 5 day
 ANH _acceptance/so-do-can-chinh-don-vi/evidence/so-do-1440.png
 DUNG chu-y 1440 pb:mau-okr-pb-sd-a1: ro
 DUNG chu-y 1440 bp:mau-okr-bp-sd-b: ro
 DUNG chu-y 1440 pb:mau-okr-pb-sd-b2: ro
 DUNG chu-y 1440 pb:mau-okr-pb-sd-b3: ro
-DUNG chu-y 1440: doi chung — co the mo (10)
+DUNG chu-y 1440: doi chung — co the mo (8)
 ANH _acceptance/so-do-can-chinh-don-vi/evidence/chu-y-1440.png
 DUNG the-mo 1440 sd-a3: cau ly do da gieo hien
 ANH _acceptance/so-do-can-chinh-don-vi/evidence/the-mo-1440.png
 DUNG 1440: console khong loi (0)
 DUNG du 4 anh (4)
-KET LUAN: 16 DUNG, 1 SAI — ma thoat 1
+KET LUAN: 17 DUNG, 0 SAI — ma thoat 0
 -- tiền đề làn đo: đã dọn contextDevApiKey
 -- tiền đề làn đo: đã dọn ảnh đại diện
-phien-do: xong — mã 1
-__EXIT=1
+phien-do: xong — mã 0
+__EXIT=0

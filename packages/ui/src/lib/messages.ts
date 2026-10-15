@@ -262,7 +262,7 @@ const en = {
 		moTaDay: "An alignment line between two cards.",
 		banDoNho: "Overview map",
 		diemNoi: "Connection point",
-		nutDaDich: (huong: string, x: number, y: number) =>
+		nutDaDich: (huong: string, x: string, y: string) =>
 			`Card moved ${huong}. New position ${x}, ${y}`,
 	},
 };
@@ -528,7 +528,7 @@ const vi = {
 		moTaDay: "Dây căn chỉnh giữa hai thẻ.",
 		banDoNho: "Bản đồ thu nhỏ",
 		diemNoi: "Điểm nối",
-		nutDaDich: (huong: string, x: number, y: number) =>
+		nutDaDich: (huong: string, x: string, y: string) =>
 			`Đã dời thẻ về ${huong}. Vị trí mới ${x}, ${y}`,
 	},
 } satisfies Messages;
