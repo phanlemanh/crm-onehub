@@ -1,26 +1,8 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import {
-	CAP_LMCV,
-	CAP_SOT,
-	chay,
-	duoi,
-	GOC,
-	giaiLenh,
-	RANG_SUA,
-} from "./chung.mjs";
+import { CAP_LMCV, chay, duoi, GOC, giaiLenh, RANG_SUA } from "./chung.mjs";
 
 const DONG_NEO = [
-	{
-		khoa: "executors.script.sot_san_thiet_ke",
-		nhan: "E23",
-		mau: `dai so sanh: ${CAP_SOT.goc}...${CAP_SOT.dinh}`,
-	},
-	{
-		khoa: "executors.script.sot_migration_chi_them",
-		nhan: "E25",
-		mau: `goc so sanh: ${CAP_SOT.goc}..${CAP_SOT.dinh}`,
-	},
 	{
 		khoa: "executors.script.lmcv_khong_hoi_quy",
 		nhan: "E5",
@@ -40,7 +22,7 @@ export function soiTroi(chu) {
 
 const hong = [];
 
-if (coNeo("dai so sanh: origin/onehub...HEAD (--no-renames)", DONG_NEO[0].mau))
+if (coNeo("cap gop origin/onehub..HEAD · tep ma doi:", DONG_NEO[0].mau))
 	hong.push("HONG TU KIEM neo: dau ra gia mang origin/onehub van qua");
 else console.log("OK tu kiem neo");
 if (

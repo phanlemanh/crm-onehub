@@ -6,6 +6,7 @@ import {
 	commitGia,
 	GOC,
 	gitThu,
+	MOC_NEN,
 	LMCV,
 	SLUG,
 	SOT,
@@ -30,7 +31,6 @@ const TEP_KHAC = new Set([
 	"LO-TRINH.html",
 ]);
 const EVAL_DUOC_DOI = new Map([
-	[`_acceptance/${SOT}/evals.yaml`, new Set(["E23", "E25"])],
 	[`_acceptance/${LMCV}/evals.yaml`, new Set(["E5", "E3"])],
 ]);
 const CAM = "_acceptance/cap-nhat-tuan-okr/";
@@ -131,11 +131,47 @@ function soCommit(goc, c) {
 			"--",
 			"_acceptance/config.yaml",
 		).split("\n"))
-			if (dong.startsWith("-") && !dong.startsWith("---"))
+			if (
+				dong.startsWith("-") &&
+				!dong.startsWith("---") &&
+				KHOA_NEN.has(khoaCua(dong.slice(1)))
+			)
 				loi.push(
 					`CONFIG DOI GIA TRI ${dong.slice(1).trim().split(":")[0]} (${c.slice(0, 9)})`,
 				);
 	return { tep, loi };
+}
+
+const khoaCua = (dong) => dong.trim().split(":")[0];
+const KHOA_NEN = new Set(
+	(gitThu("show", `${MOC_NEN}:_acceptance/config.yaml`) ?? "")
+		.split("\n")
+		.filter((d) => /^\s+[\w-]+:/.test(d))
+		.map(khoaCua),
+);
+
+export function hoanLaiConDoi(goc, commits) {
+	const loi = [];
+	const g = (...a) => spawnSync("git", ["-C", goc, ...a], { encoding: "utf8" });
+	const lan = new Map();
+	for (const c of commits)
+		for (const t of (g("diff", "--name-only", `${c}^`, c).stdout ?? "")
+			.split("\n")
+			.filter(
+				(t) =>
+					t.startsWith(`_acceptance/${SOT}/`) && !t.endsWith("/run-log.jsonl"),
+			))
+			lan.set(t, { dau: lan.get(t)?.dau ?? c, cuoi: c });
+	for (const [t, { dau, cuoi }] of lan) {
+		const truoc = g("show", `${dau}^:${t}`);
+		const sau = g("show", `${cuoi}:${t}`);
+		if (
+			(truoc.status === 0 ? truoc.stdout : null) !==
+			(sau.status === 0 ? sau.stdout : null)
+		)
+			loi.push(`HOAN LAI CON DOI ${t}`);
+	}
+	return loi;
 }
 
 export function phamVi(goc) {
@@ -161,6 +197,7 @@ export function phamVi(goc) {
 		for (const t of kq.tep) tep.add(t);
 		loi.push(...kq.loi);
 	}
+	loi.push(...hoanLaiConDoi(goc, commits));
 	return { commits, tep: [...tep].sort(), loi };
 }
 

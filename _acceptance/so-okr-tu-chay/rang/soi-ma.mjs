@@ -1,7 +1,6 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import {
 	existsSync,
-	mkdirSync,
 	mkdtempSync,
 	readdirSync,
 	readFileSync,
@@ -18,11 +17,7 @@ const ts = createRequire(import.meta.url)("typescript");
 
 const TEP_NAY = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP_NAY), "..", "..", "..");
-const CAP = Object.freeze({
-	goc: "e86b5677ed8ff42c5754bf30b40f87f4a37507aa",
-	dinh: "f2acca7f1ae619abdadbb09e3db29be65841ce87",
-});
-let CAY_DO = GOC;
+const MOC = "origin/onehub";
 const LOAI_TRU = new Set([
 	"node_modules",
 	".next",
@@ -85,12 +80,7 @@ const doiSo = (ten) => {
 	return i === -1 ? null : (process.argv[i + 1] ?? "");
 };
 
-const tuongDoi = (p) =>
-	p.startsWith(CAY_DO)
-		? p.slice(CAY_DO.length + 1)
-		: p.startsWith(GOC)
-			? p.slice(GOC.length + 1)
-			: p;
+const tuongDoi = (p) => (p.startsWith(GOC) ? p.slice(GOC.length + 1) : p);
 
 const git = (...d) =>
 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
@@ -308,11 +298,13 @@ function dauHieuVeTay(chu, ten) {
 	);
 }
 
+let GOC_SO = null;
 function dongThem(t, duong) {
+	GOC_SO ??= git("merge-base", "HEAD", MOC);
 	const thu = mkdtempSync(join(tmpdir(), "soi-dong-them-"));
 	try {
 		const cu = join(thu, "cu");
-		const r0 = spawnSync("git", ["-C", GOC, "show", `${CAP.goc}:${t}`], {
+		const r0 = spawnSync("git", ["-C", GOC, "show", `${GOC_SO}:${t}`], {
 			encoding: "utf8",
 			maxBuffer: 64 * 1024 * 1024,
 		});
@@ -396,12 +388,12 @@ function goiKit() {
 
 function copyValue() {
 	const hong = [];
-	if (!existsSync(join(CAY_DO, COPY_UI)))
+	if (!existsSync(join(GOC, COPY_UI)))
 		hong.push(`CopyValue không nằm ở ${COPY_UI}`);
-	if (existsSync(join(CAY_DO, COPY_CU)))
+	if (existsSync(join(GOC, COPY_CU)))
 		hong.push(`CopyValue cũ còn ở ${COPY_CU}`);
 	let dung = 0;
-	for (const duong of diCay(join(CAY_DO, "apps/app"), /\.(ts|tsx)$/, [])) {
+	for (const duong of diCay(join(GOC, "apps/app"), /\.(ts|tsx)$/, [])) {
 		const chu = readFileSync(duong, "utf8");
 		if (!/copy-value|CopyValue/.test(chu)) continue;
 		const sf = cay(duong, chu);
@@ -433,18 +425,18 @@ function tepDiff(loc) {
 		"--name-only",
 		"--no-renames",
 		`--diff-filter=${loc}`,
-		`${CAP.goc}...${CAP.dinh}`,
+		`${MOC}...HEAD`,
 	)
 		.split("\n")
 		.filter(Boolean);
 }
 
 async function caThietKe(thay = new Map()) {
-	const dai = `${CAP.goc}...${CAP.dinh} (--no-renames)`;
-	const duongCua = (t) => thay.get(t) ?? join(CAY_DO, t);
+	const dai = `${MOC}...HEAD (--no-renames)`;
+	const duongCua = (t) => thay.get(t) ?? join(GOC, t);
 	const tenCua = (t) => thay.get(t) ?? t;
 	const moi = new Set(tepDiff("A"));
-	const doi = tepDiff("AM").filter((t) => existsSync(join(CAY_DO, t)));
+	const doi = tepDiff("AM").filter((t) => existsSync(join(GOC, t)));
 	const khongThu = (t) =>
 		!t.split("/").some((p) => THU_MUC_THU.has(p)) && !LA_THU.test(t);
 	const app = doi.filter((t) => VUNG_APP.test(t) && khongThu(t)).sort();
@@ -454,7 +446,7 @@ async function caThietKe(thay = new Map()) {
 	const tepMoi = tepMa.filter((t) => moi.has(t));
 	const them = new Map(tepMa.map((t) => [t, dongThem(t, duongCua(t))]));
 	for (const t of app) if (!them.has(t)) them.set(t, dongThem(t, duongCua(t)));
-	const { OKR_SO } = await import(join(CAY_DO, TEP_CAU_HINH_SO));
+	const { OKR_SO } = await import(join(GOC, TEP_CAU_HINH_SO));
 	const tran = [
 		{ nhan: "trần trang", giaTri: OKR_SO.banGhi.coTrang },
 		{ nhan: "khoảng thử lại", giaTri: OKR_SO.sheets.thuLaiMs },
@@ -490,7 +482,7 @@ async function caThietKe(thay = new Map()) {
 				"--mode",
 				"static",
 			],
-			{ cwd: CAY_DO, encoding: "utf8" },
+			{ cwd: GOC, encoding: "utf8" },
 		);
 		const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
 		const p0 = Number(ra.match(/"p0_count":\s*(\d+)/)?.[1] ?? Number.NaN);
@@ -516,7 +508,7 @@ async function caThietKe(thay = new Map()) {
 	let soApi = 0;
 	const doiApi = new Set(doi.filter((t) => t.startsWith("apps/api/src/")));
 	for (const duong of diCay(
-		join(CAY_DO, "apps/api/src"),
+		join(GOC, "apps/api/src"),
 		/\.(ts|tsx|js|mjs)$/,
 		[],
 	)) {
@@ -538,7 +530,7 @@ async function caThietKe(thay = new Map()) {
 		`tep apps/api/src soi googleapis.com: ${soApi} (okr: ca tep; ngoai okr: dong diff them)`,
 	);
 	for (const t of TEP_BIEN) {
-		const chu = readFileSync(join(CAY_DO, t), "utf8");
+		const chu = readFileSync(join(GOC, t), "utf8");
 		for (const b of BIEN_SHEETS)
 			if (!chu.includes(b)) hong.push(`thiếu biến ${b} trong ${t}`);
 	}
@@ -560,41 +552,6 @@ if (ca !== "chi-them" && ca !== "thiet-ke") {
 	process.exit(2);
 }
 const chieuDo = process.argv.includes("--chieu-do");
-
-function dungCayDinh() {
-	for (const sha of [CAP.goc, CAP.dinh]) {
-		const r = spawnSync("git", [
-			"-C",
-			GOC,
-			"cat-file",
-			"-e",
-			`${sha}^{commit}`,
-		]);
-		if (r.status !== 0) {
-			console.log(`KHONG DO DUOC: khong giai duoc cap gop ${sha}`);
-			process.exit(2);
-		}
-	}
-	const cha = join(GOC, ".acceptance-runs", "so-okr-tu-chay");
-	mkdirSync(cha, { recursive: true });
-	const thu = mkdtempSync(join(cha, "cay-dinh-"));
-	const a = spawnSync("git", ["-C", GOC, "archive", CAP.dinh], {
-		maxBuffer: 1024 * 1024 * 1024,
-	});
-	const x = spawnSync("tar", ["-x", "-C", thu], {
-		input: a.stdout,
-		maxBuffer: 1024 * 1024 * 1024,
-	});
-	if (a.status !== 0 || x.status !== 0) {
-		rmSync(thu, { recursive: true, force: true });
-		console.log(`KHONG DO DUOC: khong dung duoc cay o ${CAP.dinh}`);
-		process.exit(2);
-	}
-	process.on("exit", () => rmSync(thu, { recursive: true, force: true }));
-	CAY_DO = thu;
-}
-
-if (ca === "thiet-ke") dungCayDinh();
 
 if (ca === "chi-them" && !chieuDo) {
 	const { hong, tao } = caChiThem();
@@ -658,7 +615,7 @@ if (ca === "thiet-ke" && !chieuDo) {
 if (ca === "thiet-ke" && chieuDo) {
 	const nguon = tepDiff("M").find(
 		(t) =>
-			VUNG_APP.test(t) && existsSync(join(CAY_DO, t)) && !t.includes("/test/"),
+			VUNG_APP.test(t) && existsSync(join(GOC, t)) && !t.includes("/test/"),
 	);
 	if (!nguon) {
 		console.log(
@@ -668,7 +625,7 @@ if (ca === "thiet-ke" && chieuDo) {
 	}
 	const thuMuc = mkdtempSync(join(tmpdir(), "soi-thiet-ke-"));
 	const tep = join(thuMuc, basename(nguon));
-	const goc = readFileSync(join(CAY_DO, nguon), "utf8");
+	const goc = readFileSync(join(GOC, nguon), "utf8");
 	const banSao = `${goc}\n// x\nexport function KhoiGia() {\n\treturn <div className="divide-y" />;\n}\n`;
 	writeFileSync(tep, banSao);
 	const dong = dongCuaChu(banSao, "\n// x\n") + 1;

@@ -18,10 +18,6 @@ export const GOC = join(
 );
 export const SLUG = "neo-thuoc-het-han";
 export const MOC_NEN = "aba7f6418c0e68bb7c8aa988727e75d644767ae4";
-export const CAP_SOT = Object.freeze({
-	goc: "e86b5677ed8ff42c5754bf30b40f87f4a37507aa",
-	dinh: "f2acca7f1ae619abdadbb09e3db29be65841ce87",
-});
 export const CAP_LMCV = Object.freeze({
 	goc: "b79513410ffef268b6a45655972f5847cdbd0bda",
 	dinh: "100847e8a747d474b79bc10adb82a94e06313f82",
@@ -29,11 +25,7 @@ export const CAP_LMCV = Object.freeze({
 export const SOT = "so-okr-tu-chay";
 export const LMCV = "lam-moi-chuyen-viec-qua-loi-chung";
 export const HO_SO = [LMCV];
-export const RANG_SUA = [
-	`_acceptance/${SOT}/rang/soi-ma.mjs`,
-	`_acceptance/${SOT}/rang/migration-chi-them.mjs`,
-	`_acceptance/${LMCV}/rang/khong-hoi-quy.mjs`,
-];
+export const RANG_SUA = [`_acceptance/${LMCV}/rang/khong-hoi-quy.mjs`];
 const BO_DEM = 256 * 1024 * 1024;
 
 export function dung(ma, cau) {

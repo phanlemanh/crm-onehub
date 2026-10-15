@@ -2,38 +2,17 @@ schema_version: 1
 slug: neo-thuoc-het-han
 evals:
   - id: E1
-    criterion: AC-1
+    criterion: AC-3
     executor: script
     cmd: config:executors.script.nth_chay_o_dinh
-    paths: [_acceptance/so-okr-tu-chay/rang/soi-ma.mjs, _acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs, _acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/khong-hoi-quy.mjs, _acceptance/neo-thuoc-het-han/rang/**]
+    paths: [_acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/khong-hoi-quy.mjs, _acceptance/neo-thuoc-het-han/rang/**]
     expected: |
-      rang/chay-o-dinh.mjs chay tuan tu ba lenh giai tu _acceptance/config.yaml o goc kho:
-      sot_san_thiet_ke, sot_migration_chi_them, lmcv_khong_hoi_quy. Moi lenh ma 0, khong thi in
-      "HONG <lenh> ma <n>" kem 20 dong cuoi va thoat 1. Dau ra E23 chua dong "dai so sanh:" neu dung
-      sha day du cua f2acca7f1^1 va f2acca7f1 (thieu -> "HONG NEO E23"). Dau ra E25 chua dong
-      "goc so sanh:" neu cap f2acca7f1^1..f2acca7f1 (thieu -> "HONG NEO E25"). Dau ra E5 chua cap
-      100847e8a^1..100847e8a (thieu -> "HONG NEO E5"). Doc tinh ba tep rang: khong con chuoi
-      "origin/onehub" hay goi "merge-base" (con -> "HONG TROI <tep>"); khong-hoi-quy.mjs khong con
-      "Bun.YAML" (con -> "HONG BO DOC"). Tu kiem truoc: ham kiem dong neo bat mot dau ra gia mang
-      origin/onehub ("OK tu kiem neo").
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-
-  - id: E2
-    criterion: AC-2
-    executor: script
-    cmd: config:executors.script.nth_hai_ref
-    paths: [_acceptance/so-okr-tu-chay/rang/soi-ma.mjs, _acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs, _acceptance/neo-thuoc-het-han/rang/**]
-    expected: |
-      rang/hai-ref.mjs dung cay tam trong .acceptance-runs/neo-thuoc-het-han/ (git worktree --detach
-      HEAD) roi commit gia: chen dau hieu ve tay "divide-y" vao chinh mot tep .tsx thuoc tap doi cua cap
-      f2acca7f1^1...f2acca7f1 (chon tep dau tien theo thu tu ten), sua SQL cua mot migration thuoc cap
-      thanh "DROP TABLE", va them thu muc migration packages/db/prisma/migrations/29991231000000_gia/
-      voi mot cau DROP TABLE. Chay lenh E23 va E25 o goc kho va o cay tam; so tung dong dau ra sau khi bo
-      duong cay; khac -> "HONG LECH <lenh>: <dong>" ma 1. DOI CHUNG DUONG 1: ban sao soi-ma.mjs va
-      migration-chi-them.mjs trong cay tam doi moc ve origin/onehub...HEAD (chuoi cu) phai cho dau ra
-      KHAC giua hai cay hoac ma khac 0. DOI CHUNG DUONG 2: ban sao soi-ma.mjs doc noi dung bang
-      readFileSync o cay lam viec thay cho git show o dinh phai cho dau ra KHAC giua hai cay. Doi chung
-      khong khac -> "HONG DOI CHUNG <so>" ma 1. Don cay tam trong finally.
+      rang/chay-o-dinh.mjs chay lenh lmcv_khong_hoi_quy giai tu _acceptance/config.yaml o goc kho: ma 0,
+      khong thi in "HONG <lenh> ma <n>" kem 20 dong cuoi va thoat 1. Dau ra chua cap
+      100847e8a^1..100847e8a sha day du (thieu -> "HONG NEO E5"). Doc tinh khong-hoi-quy.mjs: khong con
+      chuoi "origin/onehub" hay goi "merge-base" (con -> "HONG TROI <tep>"), khong con "Bun.YAML" (con ->
+      "HONG BO DOC"). Tu kiem truoc: ham kiem dong neo bat mot dau ra gia mang origin/onehub ("OK tu kiem
+      neo"); bo soi tinh bat chuoi gia ("OK tu kiem troi").
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
@@ -52,20 +31,17 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.nth_chieu_do
-    paths: [_acceptance/so-okr-tu-chay/rang/**, _acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/**, apps/app/test/lam-moi-chuyen-viec.dom.tsx, "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx", _acceptance/neo-thuoc-het-han/rang/**]
+    paths: [_acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/**, apps/app/test/lam-moi-chuyen-viec.dom.tsx, "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx", _acceptance/neo-thuoc-het-han/rang/**]
     expected: |
       rang/chieu-do.mjs, bang dot bien khai truoc trong script (moi dong: ten, tep, phep thay, lenh,
-      thong diep ghim): (1) soi-ma.mjs tra moc ve origin/onehub -> lenh E23 ma khac 0 voi "KHONG DO
-      DUOC: diff khong co tep giao dien"; (2) migration-chi-them.mjs tra moc ve origin/onehub -> E25
-      ma khac 0 voi "khong co migration moi nao"; (3) khong-hoi-quy.mjs doc bang Bun.YAML -> E5 ma khac 0
-      voi "khong doc duoc"; (4) chuyen-viec-dialog.tsx chen invalidateQueries() khong doi so vao nhanh loi
-      -> test lmcv_loi_khong_lam_moi ma khac 0 voi "khong lam moi khi loi". Moi dot bien chay trong cay
-      tam duoi .acceptance-runs/neo-thuoc-het-han/ (git worktree --detach HEAD), khong cham cay goc.
-      Dot bien khong bi bat dung thong diep -> "HONG LOT <ten>" ma 1; bang thieu truong thong diep ->
-      "HONG THIEU <ten>" ma 1; phep thay khong khop chuoi nao trong tep -> "HONG KHONG AP <ten>" ma 1.
-      (5) ref-thieu: khong-hoi-quy.mjs doi sha cap gop thanh 0000000000000000000000000000000000000001 ->
-      ma dung 2, stdout co "KHONG DO DUOC", stderr khong co dong bat dau bang "    at " (khong ->
-      "HONG LOT ref-thieu"). In "chieu-do: 5/5 bi bat".
+      thong diep ghim): (1) bun-yaml: khong-hoi-quy.mjs doc bang Bun.YAML -> E5 ma khac 0 voi "khong doc
+      duoc"; (2) lam-moi-khong-khoa: chuyen-viec-dialog.tsx chen invalidateQueries() khong doi so vao
+      nhanh loi -> test lmcv_loi_khong_lam_moi ma khac 0 voi "khong lam moi khi loi"; (3) ref-thieu:
+      khong-hoi-quy.mjs doi sha cap gop thanh 0000000000000000000000000000000000000001 -> ma dung 2,
+      stdout co "KHONG DO DUOC", stderr khong co dong bat dau bang "    at ". Moi dot bien chay trong cay
+      tam duoi .acceptance-runs/neo-thuoc-het-han/ (git worktree --detach HEAD), khong cham cay goc. Dot
+      bien khong bi bat dung thong diep -> "HONG LOT <ten>" ma 1; bang thieu truong -> "HONG THIEU <ten>"
+      ma 1; phep thay khong khop -> "HONG KHONG AP <ten>" ma 1. In "chieu-do: 3/3 bi bat".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
@@ -74,19 +50,18 @@ evals:
     cmd: config:executors.script.nth_pham_vi
     paths: [_acceptance/neo-thuoc-het-han/rang/**]
     expected: |
-      rang/pham-vi.mjs: commit cua vong = git log --no-merges --grep="(neo-thuoc-het-han)" --all-match
-      tren lich su HEAD (sau gop: cung tap commit). Moi phep so lay TUNG commit cua vong voi cha cua no
-      (git diff C^ C), khong so moc nen voi HEAD. Hop tep cac commit do so voi danh sach dong trong script
-      (tep P7-24, tep _acceptance/neo-thuoc-het-han/**, docs/superpowers/**/*neo-thuoc-het-han*,
+      rang/pham-vi.mjs: commit cua vong = git log --no-merges -F --grep="(neo-thuoc-het-han)" tren lich su
+      HEAD. Moi phep so lay TUNG commit cua vong voi cha cua no (git diff C^ C). Hop tep so voi danh sach
+      dong trong script (tep P7-24, _acceptance/neo-thuoc-het-han/**, docs/superpowers/**/*neo-thuoc-het-han*,
       _acceptance/config.yaml, PRODUCT-MAP.md, LO-TRINH.html): tep ngoai -> "NGOAI DANH SACH <tep>" ma 1.
-      evals.yaml cua so-okr-tu-chay va lam-moi-chuyen-viec-qua-loi-chung, doc bang bo doc kit o C^ va C cua
-      tung commit cham no: eval doi ngoai {E23,E25,E5,E3} hoac truong doi ngoai expected -> "DOI NGOAI
-      <ho so>:<eval>:<truong>" ma 1; them/xoa eval -> ma 1. config.yaml o C^ va C: khoa co o C^ doi gia tri
-      -> "CONFIG DOI GIA TRI <khoa>" ma 1. Commit cua vong cham _acceptance/cap-nhat-tuan-okr/ -> ma 1. Tu
-      kiem: bo so tep bat mot tep gia ngoai danh sach ("OK tu kiem ngoai danh sach"). Doi chung bat bien:
-      chay lai o cay tam = HEAD + mot commit khong thuoc vong (khong mang slug) sua mot tep duoi
-      _acceptance/cap-nhat-tuan-okr/ va doi gia tri mot khoa config.yaml -> dau ra giong het (khac ->
-      "HONG LECH pham-vi").
+      evals.yaml cua lam-moi-chuyen-viec-qua-loi-chung so TOAN KHOI van ban tung eval tru truong expected o
+      C^ va C: eval doi ngoai {E5,E3} hoac doi ngoai expected -> "DOI NGOAI <ho so>:<eval>:<truong>" ma 1;
+      them/xoa eval -> ma 1. config.yaml: dong bi xoa cua mot khoa co san o moc nen aba7f6418 ->
+      "CONFIG DOI GIA TRI <khoa>" ma 1 (khoa vong tu them roi go khong tinh). Commit cham
+      _acceptance/cap-nhat-tuan-okr/ -> ma 1. Tep duoi _acceptance/so-okr-tu-chay/ o HEAD khac ban o moc nen
+      -> "HOAN LAI CON DOI <tep>" ma 1 («F8: b1»). Tu kiem: tep gia ngoai danh sach bi bat; them expected_exit
+      bi bat. Doi chung bat bien: cay tam = HEAD + mot commit khong mang slug sua tep cap-nhat-tuan-okr va doi
+      gia tri mot khoa config -> dau ra giong het (khac -> "HONG LECH pham-vi").
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
@@ -95,7 +70,7 @@ evals:
     cmd: config:executors.script.nth_ghim_xanh
     paths: [_acceptance/lam-moi-chuyen-viec-qua-loi-chung/**, _acceptance/neo-thuoc-het-han/rang/**]
     expected: |
-      rang/ghim-xanh.mjs, voi ho so lam-moi-chuyen-viec-qua-loi-chung (so-okr-tu-chay chuyen sang F28, chu kho chon «F8: b»): dong cuoi
+      rang/ghim-xanh.mjs, voi ho so lam-moi-chuyen-viec-qua-loi-chung (so-okr-tu-chay sang F28, «F8: b», «F8: b1»): dong cuoi
       kind repin|repin-do cua run-log.jsonl phai la repin (repin-do -> "GHIM DO <ho so>" ma 1); suites_exit
       toan 0 va moi evals_exit dat ky vong (0 hoac expected_exit da khai); sha == verified_commit cua
       evidence-report.md (lech -> "GHIM LECH"); commit cuoi sua tep ngoai run-log/evidence-report cua ho so

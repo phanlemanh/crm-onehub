@@ -26,17 +26,6 @@ xanh ở mốc nền — không chạm. Luật neo: `_acceptance/thuoc-khong-tu-
 
 ## Criteria
 
-- AC-1: Given cây ở đỉnh nhánh vòng này, When chạy lệnh của `so-okr-tu-chay/E23`
-  (`config:executors.script.sot_san_thiet_ke`), Then thoát 0; dòng «dai so sanh» nêu cặp
-  `f2acca7f1^1...f2acca7f1` (sha đầy đủ); tệp được soi là tệp đổi trong cặp đó, nội dung đọc ở `f2acca7f1`; và
-  chạy cùng lệnh trên một cây tạm dựng từ đỉnh cộng một commit giả chèn một dấu hiệu vẽ tay mà răng bắt được vào
-  chính một tệp `.tsx` thuộc cặp cho đầu ra giống hệt từng dòng (trừ dòng in đường cây); bản sao răng đọc nội dung
-  ở cây làm việc thì đầu ra hai cây khác nhau.
-- AC-2: Given cây ở đỉnh nhánh, When chạy lệnh của `so-okr-tu-chay/E25`
-  (`config:executors.script.sot_migration_chi_them`), Then thoát 0; dòng «goc so sanh» nêu cặp
-  `f2acca7f1^1..f2acca7f1`; danh sách migration mới là các thư mục có ở `f2acca7f1` mà không có ở gốc; và trên cây
-  tạm cộng một thư mục migration giả mới và sửa SQL của một migration thuộc cặp thành câu không chỉ-thêm, đầu ra
-  giống hệt cây đỉnh.
 - AC-3: Given cây ở đỉnh nhánh, When chạy lệnh của `lam-moi-chuyen-viec-qua-loi-chung/E5`
   (`config:executors.script.lmcv_khong_hoi_quy`), Then thoát 0; script đọc mọi `evals.yaml` bằng bộ đọc
   `lib/eval-yaml` của kit (bốn tệp `Bun.YAML` từ chối đọc được); dòng mốc nêu cặp `100847e8a^1..100847e8a`; script
@@ -45,14 +34,14 @@ xanh ở mốc nền — không chạm. Luật neo: `_acceptance/thuoc-khong-tu-
   không có `queryKey` xảy ra, Then bộ ghi vẫn đếm nó; ca «loi-khong-lam-moi» của E3 vẫn xanh trên dialog hiện tại;
   và trên bản sao dialog chèn `invalidateQueries()` không đối số vào nhánh lỗi, ca đó đỏ với thông điệp ghim
   «khong lam moi khi loi».
-- AC-5: Given bản sao từng răng đã sửa, When trả răng về chỗ hỏng cũ (E23, E25 về `origin/onehub`; E5 về
-  `Bun.YAML`), Then mỗi bản sao thoát khác 0 với đúng thông điệp cũ đã ghim ở bảng mốc nền của thiết kế; mỗi đột
+- AC-5: Given bản sao răng đã sửa, When trả răng về chỗ hỏng cũ (E5 về `Bun.YAML`), Then bản sao thoát khác 0 với đúng thông điệp cũ đã ghim ở bảng mốc nền của thiết kế; mỗi đột
   biến khai trước trong răng chiều đỏ, thiếu đột biến nào thì răng in «HONG THIEU» và thoát 1; và bản sao E5 với sha
   cặp gộp đổi thành một sha không có thoát đúng 2, in «KHONG DO DUOC», stderr không có dòng `at ` của stack trace.
 - AC-6: Given các commit của vòng này (commit không phải gộp, mang slug trong tiêu đề), When so từng commit với cha
   của nó, Then hợp các tệp đổi nằm trong danh sách: tệp đã xin ở yêu cầu P7-24, tệp của chính hồ sơ này,
   `docs/superpowers/**/*neo-thuoc-het-han*`, `_acceptance/config.yaml`, `PRODUCT-MAP.md`, `LO-TRINH.html`; trong
-  `evals.yaml` của hai hồ sơ chỉ eval E23, E25, E5, E3 đổi và chỉ đổi trường `expected`; ở `_acceptance/config.yaml`
+  `evals.yaml` của lam-moi chỉ eval E5, E3 đổi và chỉ đổi trường `expected`; mọi tệp dưới
+  `_acceptance/so-okr-tu-chay/` ở đỉnh giống hệt bản ở mốc nền (hoàn lại, «F8: b1»); ở `_acceptance/config.yaml`
   chỉ thêm khoá, không đổi giá trị khoá có sẵn; không commit nào của vòng chạm `_acceptance/cap-nhat-tuan-okr/`;
   và kết quả không đổi khi cây có thêm một commit không thuộc vòng sửa các tệp đó.
 - AC-7: Given hồ sơ `lam-moi-chuyen-viec-qua-loi-chung`, When đọc dòng ghim mới nhất trong
@@ -65,9 +54,10 @@ xanh ở mốc nền — không chạm. Luật neo: `_acceptance/thuoc-khong-tu-
   Thước CE: ghi chú của hàng F8 trong `docs/plan/lo-trinh-okr.json` [SUY-TỪ-REPO: docs/plan/lo-trinh-okr.json].
 - Trục B — kiểu hỏng: neo trôi theo nhánh · bộ đọc YAML khác kit · bộ ghi lọc mất lời gọi · đã xanh (không sửa).
   Thước CE: kết quả chạy từng lệnh ở mốc nền `aba7f6418` (bảng ở thiết kế).
-- Trục C — chiều đo: xanh ở đỉnh · bất biến theo ref · đỏ khi trả về chỗ hỏng · phạm vi · ghim.
+- Trục C — chiều đo: xanh ở đỉnh · đỏ khi trả về chỗ hỏng · phạm vi · ghim.
   Thước CE: khuôn đo của `thuoc-khong-tu-het-han` AC-3 [SUY-TỪ-REPO: _acceptance/thuoc-khong-tu-het-han/contract.md].
-- Core: A1–A4 × B1–B3 (AC-1…AC-4), C3 (AC-5), C4 (AC-6), C5 (AC-7, chỉ lam-moi). Never: A5 (E7 đã xanh — đo, không sửa).
+- Core: A3–A4 × B1–B3 (AC-3, AC-4), C3 (AC-5), C4 (AC-6), C5 (AC-7, chỉ lam-moi). Later: A1–A2 (so-okr E23/E25, sang F28
+  cùng bản vá `vao-f28-so-okr-tu-chay.patch`). Never: A5 (E7 đã xanh — đo, không sửa).
 
 ## Đường đo
 
@@ -83,7 +73,10 @@ sau-gộp. Vòng ship thẳng sau ghim.
 - Ghim lại `so-okr-tu-chay` — chuyển sang F28 (chủ kho chọn «F8: b», 15/10). Lượt ghim 15/10 đỏ ở ba eval ngoài hàng F8:
   E8 `soi-ma --ca chi-them` quét rác gitignore `apps/*/.eve/dev-runtime/snapshots/**`; E12/E14 `man-so-tu-chay`
   trôi theo màn KR đổi sau PR #162 (169 khẳng định, 15 hỏng). Nhật ký: `.acceptance-runs/so-okr-tu-chay/repin-*/`.
-  Phần neo E23/E25 của vòng vẫn giữ.
+- Neo E23/E25 của `so-okr-tu-chay` vào cặp gộp `f2acca7f1` — chủ kho chọn «F8: b1» (15/10): PR chạm
+  `_acceptance/so-okr-tu-chay/` thì lưới trước gộp đòi ghim hồ sơ đó (đang đỏ E8, E12, E14), nên bốn tệp của nó hoàn
+  lại nguyên bản onehub. Bản vá đã làm và đã đo xanh (S4 r3, 5e50f1918) lưu ở
+  `_acceptance/neo-thuoc-het-han/vao-f28-so-okr-tu-chay.patch` cho F28 áp lại.
 
 ## Notes
 

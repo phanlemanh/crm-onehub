@@ -1,39 +1,11 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import {
-	apThay,
-	chay,
-	duoi,
-	giaiLenh,
-	LMCV,
-	SOT,
-	voiCayTam,
-} from "./chung.mjs";
+import { apThay, chay, duoi, giaiLenh, LMCV, voiCayTam } from "./chung.mjs";
 
 const DIALOG =
 	"apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx";
 
 export const DOT_BIEN = [
-	{
-		ten: "soi-ma-troi",
-		tep: `_acceptance/${SOT}/rang/soi-ma.mjs`,
-		thay: [["`${CAP.goc}...${CAP.dinh}`,", "`origin/onehub...HEAD`,"]],
-		khoa: "executors.script.sot_san_thiet_ke",
-		ghim: "KHONG DO DUOC: diff khong co tep giao dien",
-	},
-	{
-		ten: "migration-troi",
-		tep: `_acceptance/${SOT}/rang/migration-chi-them.mjs`,
-		thay: [
-			[
-				"const TRUOC = CAP.goc;",
-				'const TRUOC = git("merge-base", "HEAD", "origin/onehub");',
-			],
-			["const DINH = CAP.dinh;", 'const DINH = "HEAD";'],
-		],
-		khoa: "executors.script.sot_migration_chi_them",
-		ghim: "khong co migration moi nao",
-	},
 	{
 		ten: "bun-yaml",
 		tep: `_acceptance/${LMCV}/rang/khong-hoi-quy.mjs`,

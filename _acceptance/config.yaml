@@ -2722,7 +2722,6 @@ executors:
     bhds_ghim_xanh: bun _acceptance/ba-ho-so-do-san/rang/ghim-xanh.mjs
     bhds_chieu_do: bun _acceptance/ba-ho-so-do-san/rang/chieu-do.mjs
     nth_chay_o_dinh: bun _acceptance/neo-thuoc-het-han/rang/chay-o-dinh.mjs
-    nth_hai_ref: bun _acceptance/neo-thuoc-het-han/rang/hai-ref.mjs
     nth_chieu_do: bun _acceptance/neo-thuoc-het-han/rang/chieu-do.mjs
     nth_pham_vi: bun _acceptance/neo-thuoc-het-han/rang/pham-vi.mjs
     nth_ghim_xanh: bun _acceptance/neo-thuoc-het-han/rang/ghim-xanh.mjs
