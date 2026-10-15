@@ -515,7 +515,7 @@ export function HopThoaiKr({
 									) : khoaHien ? (
 										<FieldDescription id={`${ma}-hien-mo-ta`}>
 											{h.hienTaiDoiO}{" "}
-											<Link href={url("/okr/cap-nhat-tuan")}>
+											<Link href={url("/okr")}>
 												{h.capNhatTuan}
 											</Link>
 										</FieldDescription>

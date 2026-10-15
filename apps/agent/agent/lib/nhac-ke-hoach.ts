@@ -171,7 +171,7 @@ async function duongMo(appUrl: string | null): Promise<LienKet> {
 			return `${ctx.appUrl}/${ctx.slug}/tai-lieu?${DUONG_CHO_DUYET}`;
 		}
 		if (v.loai === "okr-cap-nhat") {
-			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
+			return `${ctx.appUrl}/${ctx.slug}/okr?tu=nhac`;
 		}
 		if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
 			const thamSo = new URLSearchParams({ [THAM_SO_OKR.ky]: v.cycleId });

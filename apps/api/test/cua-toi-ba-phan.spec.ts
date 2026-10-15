@@ -64,10 +64,7 @@ async function taoKr(
 
 describe("ctbp-phien-cua-toi", () => {
 	test("ctbp-phien-cua-toi: moi loi vao ghi dung entry, loi vao la bi tu choi, luot cua-toi gui xong co submittedAt va checkIn", async () => {
-		ok(
-			await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }),
-			"cau hinh",
-		);
+		ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
 		const quy = await kyDangChay("ctbp");
 		const m = await nguoiMoi("ctbp-m");
 		const cookieM = await phienCua(m);

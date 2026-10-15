@@ -171,7 +171,7 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 		const thamSo = new URLSearchParams({ [SEARCH_PARAM.okr.tu]: LOI_VAO_THE });
 		return (
 			<Button asChild size="sm">
-				<Link href={`${url("/okr/cap-nhat-tuan")}?${thamSo}`}>
+				<Link href={`${url("/okr")}?${thamSo}`}>
 					{m.capNhatTuan}
 					<Icon icon={ArrowRight} data-icon="inline-end" />
 				</Link>
