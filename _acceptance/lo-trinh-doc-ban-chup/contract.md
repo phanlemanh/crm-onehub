@@ -5,7 +5,7 @@ slug: lo-trinh-doc-ban-chup
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, ci]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-14-lo-trinh-doc-ban-chup-design.md
 approved_by: Manh Phan
 approved_at: 2026-10-14T08:32:39Z
@@ -78,3 +78,10 @@ Source input: hàng LT1c `docs/plan/lo-trinh-okr.json` · `_acceptance/lo-trinh-
   và báo cáo bằng chứng của TH1 không đổi.
 - Sau gộp, chủ kho làm một lần: tạo khoá «Đẩy lộ trình» trong Cài đặt › Khoá API; đặt bí mật kho
   `CRM_KHOA_DAY_LO_TRINH` (`CRM_API_URL` đã có từ TH1). Trước đó trang chạy như hôm nay.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Ảnh minh hoạ dòng «Cập nhật lúc» trong hồ sơ đến từ hai lần chạy đo nên giờ trên ảnh lệch một phút so với nhật ký đi kèm.
+  - Ngoài-2: Hồ sơ chỉ giữ nhật ký của một trong hai lần chạy đo màn, nên kết quả bằng chữ của lần còn lại không kiểm lại được.
+  - Ngoài-3: Bài kiểm vai của ngăn hồ sơ (LT1b) bắt bản sao «kèm vai» vì có thuộc tính lạ chứ không vì lộ số liệu chủ kho, nên nó chứng minh yếu hơn vẻ ngoài.
+  - Ngoài-6: Khi trang rơi về bản dựng, phép đo màn chưa chứng minh giờ hiện ra đúng là giờ của bản dựng, chỉ chứng minh mọi múi giờ cùng một mốc.
+  - Ngoài-7: Lệnh đo độ trễ được thử trên ghi chú lượt dựng tay theo khuôn bên đọc, chưa có mẫu ghi chú thật do lượt Actions để lại.
+  - Ngoài-10: Lệnh đo độ trễ đọc phản hồi của GitHub mà không kiểm khuôn; dữ liệu sai dạng cho lỗi khó hiểu thay vì câu giải thích.
