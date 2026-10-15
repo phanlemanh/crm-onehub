@@ -72,7 +72,9 @@ else {
 }
 
 const theApp = [...TAB].sort().join(",");
-const theMau = TAB_MAU.map((t) => t.value).sort().join(",");
+const theMau = TAB_MAU.map((t) => t.value)
+	.sort()
+	.join(",");
 if (theApp === theMau)
 	console.log(`DUNG AC-12: ban mau dung ${TAB.length} the cua app`);
 else {

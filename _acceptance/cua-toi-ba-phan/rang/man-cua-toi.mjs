@@ -32,7 +32,10 @@ const CHIEU_DO = {
 		cam: (s) =>
 			s
 				.replace("			<PhanCanCapNhat />\n", "")
-				.replace("			<TheoKy />\n", "			<TheoKy />\n			<PhanCanCapNhat />\n"),
+				.replace(
+					"			<TheoKy />\n",
+					"			<TheoKy />\n			<PhanCanCapNhat />\n",
+				),
 		dauVet: "			<TheoKy />\n			<PhanCanCapNhat />",
 		ghim: /SAI AC-13: truong 1440 — thu tu don-vi-dan, kr-phu-trach, can-cap-nhat/,
 	},
@@ -232,8 +235,9 @@ try {
 					await d.doi(
 						t,
 						() =>
-							document.querySelector('[data-phan="can-cap-nhat"] [data-nut=gui]') !==
-							null,
+							document.querySelector(
+								'[data-phan="can-cap-nhat"] [data-nut=gui]',
+							) !== null,
 					);
 				}
 				await choMs(500);
@@ -263,7 +267,10 @@ try {
 				});
 				await t.close();
 			}
-		dong(soDung === 6, `${soDung === 6 ? "DUNG" : ""} AC-13: ${soDung}/6 o`.trim());
+		dong(
+			soDung === 6,
+			`${soDung === 6 ? "DUNG" : ""} AC-13: ${soDung}/6 o`.trim(),
+		);
 	}
 
 	if (chay("E16")) {
@@ -284,7 +291,11 @@ try {
 			const the = document.querySelector(`[data-don-vi-dan="${k}"]`);
 			const so = the?.querySelector("[data-so-kr]");
 			const doc = (ten) =>
-				Number(the?.querySelector(`[data-so-${ten}]`)?.getAttribute(`data-so-${ten}`) ?? 0);
+				Number(
+					the
+						?.querySelector(`[data-so-${ten}]`)
+						?.getAttribute(`data-so-${ten}`) ?? 0,
+				);
 			return {
 				mucTieu: Number(so?.getAttribute("data-so-muc-tieu") ?? 0),
 				kr: Number(so?.getAttribute("data-so-kr") ?? 0),
@@ -293,7 +304,8 @@ try {
 				chamNhip: doc("cham-nhip"),
 				truot: doc("truot"),
 				href:
-					the?.querySelector("[data-nut=mo-don-vi]")?.getAttribute("href") ?? "",
+					the?.querySelector("[data-nut=mo-don-vi]")?.getAttribute("href") ??
+					"",
 			};
 		}, khoa);
 		await t.close();
@@ -302,21 +314,32 @@ try {
 			1440,
 			`/okr/theo-don-vi?${new URLSearchParams({ donOkr: khoa, kyOkr: KY })}`,
 		);
-		await d.doi(tDv, () => document.querySelector("[data-hang-muc-tieu]") !== null);
+		await d.doi(
+			tDv,
+			() => document.querySelector("[data-hang-muc-tieu]") !== null,
+		);
 		await choMs(800);
 		const theoDonVi = await tDv.evaluate(() => {
 			const hang = [...document.querySelectorAll("[data-hang-muc-tieu]")];
 			const kr = [...document.querySelectorAll("[data-kr]")];
 			const nhip = kr.map(
-				(r) => r.querySelector("[data-tinh-trang]")?.getAttribute("data-tinh-trang") ?? "",
+				(r) =>
+					r
+						.querySelector("[data-tinh-trang]")
+						?.getAttribute("data-tinh-trang") ?? "",
 			);
 			const tien = kr
 				.map((r) =>
-					Number(r.querySelector("[role=progressbar]")?.getAttribute("aria-valuenow")),
+					Number(
+						r
+							.querySelector("[role=progressbar]")
+							?.getAttribute("aria-valuenow"),
+					),
 				)
 				.filter((n) => Number.isFinite(n));
 			return {
-				mucTieu: new Set(hang.map((h) => h.getAttribute("data-hang-muc-tieu"))).size,
+				mucTieu: new Set(hang.map((h) => h.getAttribute("data-hang-muc-tieu")))
+					.size,
 				kr: kr.length,
 				tienDo: tien.length
 					? Math.round(tien.reduce((a, b) => a + b, 0) / tien.length)
@@ -329,7 +352,9 @@ try {
 		await tDv.close();
 		const sau = (o) =>
 			[o.mucTieu, o.kr, o.tienDo, o.dungNhip, o.chamNhip, o.truot].join(" ");
-		console.log(`SO ${khoa}: Cua toi ${sau(cuaToi)} · Theo don vi ${sau(theoDonVi)}`);
+		console.log(
+			`SO ${khoa}: Cua toi ${sau(cuaToi)} · Theo don vi ${sau(theoDonVi)}`,
+		);
 		dong(
 			cuaToi.kr === theoDonVi.kr,
 			`${cuaToi.kr === theoDonVi.kr ? "" : "AC-5: "}so KR ${cuaToi.kr} / ${theoDonVi.kr}`.trim(),
@@ -344,7 +369,10 @@ try {
 		const hrefDung = cuaToi.href.endsWith(
 			`/okr/theo-don-vi?${new URLSearchParams({ donOkr: khoa, kyOkr: KY })}`,
 		);
-		dong(hrefDung, `${hrefDung ? "" : "AC-5: "}nut mo don vi ${cuaToi.href}`.trim());
+		dong(
+			hrefDung,
+			`${hrefDung ? "" : "AC-5: "}nut mo don vi ${cuaToi.href}`.trim(),
+		);
 		if (cuaToi.kr === theoDonVi.kr && khop && hrefDung)
 			console.log("DUNG AC-5 may chu");
 	}
@@ -360,45 +388,80 @@ try {
 		const moVaDem = async (duong, choBang) => {
 			const truoc = (await demPhien()).length;
 			const t = await d.moTrang(TR, 1440, duong);
-			await d.doi(t, () => document.querySelector('[data-phan="can-cap-nhat"]') !== null);
+			await d.doi(
+				t,
+				() => document.querySelector('[data-phan="can-cap-nhat"]') !== null,
+			);
 			if (choBang)
 				await d.doi(
 					t,
 					() =>
-						document.querySelector('[data-phan="can-cap-nhat"] [data-nut=gui]') !==
-						null,
+						document.querySelector(
+							'[data-phan="can-cap-nhat"] [data-nut=gui]',
+						) !== null,
 				);
 			await choMs(1500);
 			const ds = await demPhien();
-			const url = await t.evaluate(() => window.location.pathname + window.location.search);
+			const url = await t.evaluate(
+				() => window.location.pathname + window.location.search,
+			);
 			return { t, them: ds.length - truoc, moi: ds.slice(truoc), url };
 		};
 		let so = 0;
 		const o1 = await moVaDem(`/okr?tu=nhac&kyOkr=${KY}`, true);
-		const dung1 = o1.them === 1 && o1.moi[0]?.entry === "nhac" && !o1.url.includes("tu=");
-		so += dong(dung1, `${dung1 ? "" : "AC-3: "}o nhac: +${o1.them} ${o1.moi.map((p) => p.entry).join(",")} · ${o1.url}`.trim()) ? 1 : 0;
+		const dung1 =
+			o1.them === 1 && o1.moi[0]?.entry === "nhac" && !o1.url.includes("tu=");
+		so += dong(
+			dung1,
+			`${dung1 ? "" : "AC-3: "}o nhac: +${o1.them} ${o1.moi.map((p) => p.entry).join(",")} · ${o1.url}`.trim(),
+		)
+			? 1
+			: 0;
 		const lai = await (async () => {
 			const truoc = (await demPhien()).length;
 			await o1.t.reload();
-			await d.doi(o1.t, () => document.querySelector('[data-phan="can-cap-nhat"]') !== null);
+			await d.doi(
+				o1.t,
+				() => document.querySelector('[data-phan="can-cap-nhat"]') !== null,
+			);
 			await choMs(1500);
 			return (await demPhien()).length - truoc;
 		})();
-		so += dong(lai === 0, `${lai === 0 ? "" : "AC-3: "}tai lai sau nhac +${lai}, mong +0`.trim()) ? 1 : 0;
+		so += dong(
+			lai === 0,
+			`${lai === 0 ? "" : "AC-3: "}tai lai sau nhac +${lai}, mong +0`.trim(),
+		)
+			? 1
+			: 0;
 		await o1.t.close();
 		const o2 = await moVaDem(`/okr?tu=viec-cua-toi&kyOkr=${KY}`, true);
 		const dung2 = o2.them === 1 && o2.moi[0]?.entry === "viec-cua-toi";
-		so += dong(dung2, `${dung2 ? "" : "AC-3: "}o viec-cua-toi: +${o2.them}`.trim()) ? 1 : 0;
+		so += dong(
+			dung2,
+			`${dung2 ? "" : "AC-3: "}o viec-cua-toi: +${o2.them}`.trim(),
+		)
+			? 1
+			: 0;
 		await o2.t.close();
 		const o3 = await moVaDem(`/okr?tu=la&kyOkr=${KY}`, false);
-		so += dong(o3.them === 0, `${o3.them === 0 ? "" : "AC-3: "}o tu la: +${o3.them}`.trim()) ? 1 : 0;
+		so += dong(
+			o3.them === 0,
+			`${o3.them === 0 ? "" : "AC-3: "}o tu la: +${o3.them}`.trim(),
+		)
+			? 1
+			: 0;
 		await o3.t.close();
 		const o4 = await moVaDem(`/okr/cap-nhat-tuan?tu=nhac&kyOkr=${KY}`, true);
 		const dung4 =
 			o4.them === 1 &&
 			o4.moi[0]?.entry === "nhac" &&
 			o4.url.endsWith(`/okr?kyOkr=${encodeURIComponent(KY)}`);
-		so += dong(dung4, `${dung4 ? "" : "AC-3: "}o duong cu: +${o4.them} · ${o4.url}`.trim()) ? 1 : 0;
+		so += dong(
+			dung4,
+			`${dung4 ? "" : "AC-3: "}o duong cu: +${o4.them} · ${o4.url}`.trim(),
+		)
+			? 1
+			: 0;
 		const tuTin = await o4.t.evaluate(() => {
 			const nut = document.querySelector(
 				'[data-phan="can-cap-nhat"] [data-kr] [data-o="tu-tin"] button',
@@ -422,5 +485,7 @@ try {
 	await d.khongDoDuoc(e);
 }
 
-console.log(sai.length === 0 ? "KET LUAN: dat" : `KET LUAN: ${sai.length} dong SAI`);
+console.log(
+	sai.length === 0 ? "KET LUAN: dat" : `KET LUAN: ${sai.length} dong SAI`,
+);
 process.exit(sai.length === 0 ? 0 : 1);

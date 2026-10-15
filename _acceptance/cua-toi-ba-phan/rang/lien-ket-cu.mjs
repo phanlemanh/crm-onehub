@@ -43,25 +43,40 @@ function khongDo(cau) {
 function lienKetCu(goc) {
 	const r = spawnSync(
 		"grep",
-		["-rn", "--include=*.ts", "--include=*.tsx", "/okr/cap-nhat-tuan", "apps/app", "apps/agent"],
+		[
+			"-rn",
+			"--include=*.ts",
+			"--include=*.tsx",
+			"/okr/cap-nhat-tuan",
+			"apps/app",
+			"apps/agent",
+		],
 		{ cwd: goc, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
 	);
 	if (r.status !== 0 && r.status !== 1) khongDo(`grep thoat ${r.status}`);
-	return r.stdout
-		.split("\n")
-		.filter(Boolean)
-		.filter((d) => !d.includes("/node_modules/"))
-		// thư mục ẩn là bản sinh tự động (.next, .eve) mà git bỏ qua — không phải mã nguồn
-		.filter((d) => !/(^|\/)\.[^/]+\//.test(d.split(":")[0]))
-		.filter((d) => !BO_QUA.some((b) => d.startsWith(`${b}:`)))
-		.filter((d) => !d.split(":")[0].includes("/test/"))
-		// đường mô-đun (`.../okr/cap-nhat-tuan/cap-nhat-tuan`) là import, không phải liên kết
-		.filter((d) => /\/okr\/cap-nhat-tuan(?![\/\w-])/.test(d));
+	return (
+		r.stdout
+			.split("\n")
+			.filter(Boolean)
+			.filter((d) => !d.includes("/node_modules/"))
+			// thư mục ẩn là bản sinh tự động (.next, .eve) mà git bỏ qua — không phải mã nguồn
+			.filter((d) => !/(^|\/)\.[^/]+\//.test(d.split(":")[0]))
+			.filter((d) => !BO_QUA.some((b) => d.startsWith(`${b}:`)))
+			.filter((d) => !d.split(":")[0].includes("/test/"))
+			// đường mô-đun (`.../okr/cap-nhat-tuan/cap-nhat-tuan`) là import, không phải liên kết
+			.filter((d) => /\/okr\/cap-nhat-tuan(?![/\w-])/.test(d))
+	);
 }
 
 function banSao() {
 	const tam = mkdtempSync(join(tmpdir(), "ctbp-lien-ket-"));
-	for (const d of ["apps/app/app", "apps/app/lib", "apps/app/test", "apps/agent/agent", "apps/agent/test"]) {
+	for (const d of [
+		"apps/app/app",
+		"apps/app/lib",
+		"apps/app/test",
+		"apps/agent/agent",
+		"apps/agent/test",
+	]) {
 		mkdirSync(join(tam, dirname(d)), { recursive: true });
 		cpSync(join(GOC, d), join(tam, d), { recursive: true });
 	}
@@ -88,7 +103,10 @@ try {
 // chiều im
 const im = banSao();
 try {
-	writeFileSync(join(im, "docs/ghi-chu.md"), "Đường cũ /okr/cap-nhat-tuan?tu=nhac\n");
+	writeFileSync(
+		join(im, "docs/ghi-chu.md"),
+		"Đường cũ /okr/cap-nhat-tuan?tu=nhac\n",
+	);
 	const tep = join(im, VIEC);
 	writeFileSync(
 		tep,
@@ -97,7 +115,9 @@ try {
 	const ra = lienKetCu(im);
 	if (ra.length > 0) {
 		console.log(ra.join("\n"));
-		console.log("SAI chieu im: chi them import va docs ma phep do bao lien ket cu");
+		console.log(
+			"SAI chieu im: chi them import va docs ma phep do bao lien ket cu",
+		);
 		process.exit(1);
 	}
 	console.log("DUNG chieu im: import va docs khong tinh");
@@ -107,7 +127,8 @@ try {
 
 // cây thật
 const that = lienKetCu(GOC);
-for (const d of that) console.log(`SAI AC-4: ${d.split(":").slice(0, 2).join(":")}`);
+for (const d of that)
+	console.log(`SAI AC-4: ${d.split(":").slice(0, 2).join(":")}`);
 
 const tinNhac = spawnSync(
 	"bash",
@@ -122,7 +143,9 @@ const khangDinh = readFileSync(
 	"utf8",
 ).includes("`${APP_URL}/${s}/okr?tu=nhac`");
 if (tinNhac.status !== 0 || !khangDinh) {
-	console.log(`${tinNhac.stdout}${tinNhac.stderr}`.split("\n").slice(-20).join("\n"));
+	console.log(
+		`${tinNhac.stdout}${tinNhac.stderr}`.split("\n").slice(-20).join("\n"),
+	);
 	console.log(
 		`SAI AC-4: ca nhac-cap-nhat ma ${tinNhac.status}, khang dinh /okr?tu=nhac ${khangDinh ? "co" : "THIEU"}`,
 	);

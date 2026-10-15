@@ -137,14 +137,20 @@ const NHOM = {
 					[
 						`${OKR}/phan-don-vi-dan.tsx`,
 						"	return [\n		...theo(headOf.divisions, bpCay)",
-						"	return [\n		...headOf.departments.map((id) => ({ loai: \"pb\" as const, id })),\n		...theo(headOf.divisions, bpCay)",
+						'	return [\n		...headOf.departments.map((id) => ({ loai: "pb" as const, id })),\n		...theo(headOf.divisions, bpCay)',
 					],
 				],
 				ghim: "ctbp-don-vi-dan: the 1 la phong ban, mong bo phan",
 			},
 			{
 				ten: "dem-tron",
-				thay: [[`${OKR}/phan-don-vi-dan.tsx`, "soKr: kr.length,", "soKr: ds.length,"]],
+				thay: [
+					[
+						`${OKR}/phan-don-vi-dan.tsx`,
+						"soKr: kr.length,",
+						"soKr: ds.length,",
+					],
+				],
 				ghim: "ctbp-don-vi-dan: so KR 3, mong 5",
 			},
 		],
@@ -168,7 +174,7 @@ const NHOM = {
 					[
 						`${OKR}/cua-toi.tsx`,
 						"							{m.cuaToiRong.action}\n						</Link>\n					</Button>",
-						'							{m.cuaToiRong.action}\n						</Link>\n					</Button>\n					<Button>Tạo OKR cá nhân</Button>',
+						"							{m.cuaToiRong.action}\n						</Link>\n					</Button>\n					<Button>Tạo OKR cá nhân</Button>",
 					],
 				],
 				ghim: "ctbp-khong-dan: than Cua toi co loi moi tao «Tạo OKR cá nhân»",
@@ -339,7 +345,22 @@ for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"])
 		process.exit(128 + { SIGINT: 2, SIGTERM: 15, SIGHUP: 1 }[tin]);
 	});
 try {
-	git(GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD");
+	// Lượt chấm chạy nhiều bộ đo song song trên cùng kho — `git worktree add` có thể
+	// giành khoá của nhau; thử lại có giãn cách thay vì báo «không đo được».
+	for (let lan = 1; ; lan += 1) {
+		try {
+			git(GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD");
+			break;
+		} catch (e) {
+			if (lan >= 6) throw e;
+			Atomics.wait(
+				new Int32Array(new SharedArrayBuffer(4)),
+				0,
+				0,
+				500 * lan + Math.floor(Math.random() * 500),
+			);
+		}
+	}
 	const va = git(GOC, "diff", "HEAD", "--binary");
 	if (va.trim()) {
 		const tepVa = join(tam, "chua-commit.patch");

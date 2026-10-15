@@ -148,7 +148,22 @@ const tam = mkdtempSync(join(tmpdir(), "ctbp-ho-so-"));
 const sao = join(tam, "crm");
 let doDung = false;
 try {
-	git(GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD");
+	// Lượt chấm chạy nhiều bộ đo song song trên cùng kho — `git worktree add` có thể
+	// giành khoá của nhau; thử lại có giãn cách thay vì báo «không đo được».
+	for (let lan = 1; ; lan += 1) {
+		try {
+			git(GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD");
+			break;
+		} catch (e) {
+			if (lan >= 6) throw e;
+			Atomics.wait(
+				new Int32Array(new SharedArrayBuffer(4)),
+				0,
+				0,
+				500 * lan + Math.floor(Math.random() * 500),
+			);
+		}
+	}
 	const va = git(GOC, "diff", "HEAD", "--binary");
 	if (va) {
 		writeFileSync(join(tam, "va.patch"), `${va}\n`);
