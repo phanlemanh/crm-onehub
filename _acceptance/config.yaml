@@ -1788,6 +1788,16 @@ executors:
     kv_man_tra_ve: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-tra-ve"
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
+    sgt_bang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-bang
+    sgt_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-loi && TZ=UTC bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-loi-ngay
+    sgt_ma: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-ma
+    sgt_tieu_diem: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-tieu-diem
+    sgt_cham: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-cham
+    sgt_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-dong
+    sgt_chu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-chu
+    sgt_gio: cd apps/app && TZ=UTC bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-gio && TZ=America/Los_Angeles bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-gio
+    sgt_ten_man: cd apps/app && bun test ./test/ten-man.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-ten-man
+    sgt_cau_sau_gom: cd apps/app && bun test ./test/sua-giao-dien-tin-hieu-cau.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-cau-sau-gom
     vca_ma_tran: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-ma-tran"'
     vca_bang: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-bang"'
     vca_dem_con: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-dem-con"'
@@ -2792,6 +2802,9 @@ executors:
     kv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kanban-viec/rang/man.mjs"'
     kv_san_thiet_ke: node _acceptance/kanban-viec/rang/san-thiet-ke.mjs
     kv_dot_bien: node _acceptance/kanban-viec/rang/dot-bien.mjs
+    sgt_ranh_gioi: node _acceptance/sua-giao-dien-tin-hieu/rang/ranh-gioi.mjs
+    sgt_do_man: APP_URL=${APP_URL:-http://localhost:3372} API_URL=${API_URL:-http://localhost:3373} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/sua-giao-dien-tin-hieu/rang/do-man.mjs"
+    sgt_thiet_ke: for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done
     hdo_chi_hoi_okr: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/chi-hoi-okr.mjs"'
     hdo_bo_cau: 'bun test _acceptance/hoi-dap-okr/rang/do-hoi-dap.test.ts && bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs"'
     hdo_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/man-hoi.mjs"'
