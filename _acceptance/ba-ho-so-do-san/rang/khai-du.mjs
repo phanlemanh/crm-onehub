@@ -1,0 +1,252 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { docDanhSach, docTai, git, gitThu, GOC, hong, kit, MOC_NEN, SLUG } from "./chung.mjs";
+
+const TEP_GHIM = ["run-log.jsonl", "evidence-report.md"];
+const TRUONG_SO = ["status", "cmd", "expected", "paths"];
+
+const bang = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+function phang(o, tien = "", ra = new Map()) {
+	if (o instanceof Object && !Array.isArray(o)) {
+		for (const [k, v] of Object.entries(o)) phang(v, tien ? `${tien}.${k}` : k, ra);
+	} else ra.set(tien, o);
+	return ra;
+}
+
+const TRUONG_DOC = ["criterion", "executor", "status", "cmd", "expected", "question", "superseded_by", "expected_exit", "layer"];
+
+function evalsTheoId(text) {
+	if (text === null) return new Map();
+	const { core, Y } = kit();
+	const ra = new Map();
+	for (const e of Y.parseEvals(text, TRUONG_DOC)) {
+		const o = { id: e.id };
+		for (const k of TRUONG_DOC) if (e[k] !== undefined && e[k] !== null && e[k] !== "") o[k] = e[k];
+		const ps = core.evalPathsOf(text, e.id);
+		if (ps && ps.length) o.paths = ps;
+		ra.set(e.id, o);
+	}
+	return ra;
+}
+
+export function canCuSong(cc) {
+	const chuoi = String(cc ?? "").trim();
+	if (!chuoi) return false;
+	const m = /^(.+):(\d+)$/.exec(chuoi);
+	if (m && existsSync(join(GOC, m[1]))) {
+		const so = readFileSync(join(GOC, m[1]), "utf8").split("\n").length;
+		return Number(m[2]) >= 1 && Number(m[2]) <= so;
+	}
+	return /^[0-9a-f]{7,40}$/.test(chuoi) && gitThu("cat-file", "-e", `${chuoi}^{commit}`) !== null;
+}
+
+function pathsMoiKy(cu, rows) {
+	let ds = [...(cu ?? [])];
+	for (const r of rows) {
+		const i = ds.indexOf(r.muc);
+		if (i < 0) return null;
+		if (r.moi === null || r.moi === undefined) ds.splice(i, 1);
+		else ds[i] = r.moi;
+	}
+	return ds;
+}
+
+export function kiemKhai({ tepDoi, evalsCap, danhSach, configCu, configMoi, kiemCanCu }) {
+	const loi = [];
+	const theoHoSo = new Map();
+	for (const r of danhSach.dong) {
+		if (!theoHoSo.has(r.ho_so)) theoHoSo.set(r.ho_so, []);
+		theoHoSo.get(r.ho_so).push(r);
+	}
+	const tepKhai = new Set(danhSach.dong.filter((r) => r.xu_ly === "sua-rang").flatMap((r) => r.tep ?? []));
+	let soEval = 0;
+	for (const tep of tepDoi) {
+		const m = /^_acceptance\/([^/]+)\/(.+)$/.exec(tep);
+		if (!m) {
+			if (!tepKhai.has(tep)) loi.push(`TEP_KHONG_KHAI ${tep}`);
+			continue;
+		}
+		const [, slug, ten] = m;
+		const rows = theoHoSo.get(slug);
+		if (!rows) {
+			loi.push(`NGOAI_DANH_SACH ${tep}`);
+			continue;
+		}
+		if (rows.every((r) => r.xu_ly === "tu-het")) {
+			loi.push(`TU_HET_BI_CHAM ${tep}`);
+			continue;
+		}
+		if (TEP_GHIM.includes(ten)) continue;
+		if (ten !== "evals.yaml") {
+			if (!tepKhai.has(tep)) loi.push(`TEP_KHONG_KHAI ${tep}`);
+			continue;
+		}
+		const { cu, moi } = evalsCap.get(slug) ?? { cu: new Map(), moi: new Map() };
+		for (const id of new Set([...cu.keys(), ...moi.keys()])) {
+			const a = cu.get(id);
+			const b = moi.get(id);
+			const khoa = `${slug}:${id}`;
+			if (!a || !b) {
+				loi.push(`KHONG_KHAI ${khoa} (eval them hoac bot)`);
+				continue;
+			}
+			const khacKhac = Object.keys({ ...a, ...b }).filter((k) => !TRUONG_SO.includes(k) && !bang(a[k], b[k]));
+			const doi = TRUONG_SO.filter((k) => !bang(a[k], b[k]));
+			if (!doi.length && !khacKhac.length) continue;
+			soEval++;
+			const r = rows.filter((x) => x.eval === id);
+			const co = (xl) => r.some((x) => x.xu_ly === xl);
+			if (khacKhac.length) loi.push(`KHONG_KHAI ${khoa} (doi ${khacKhac.join(",")})`);
+			if (doi.includes("status") && !(b.status === "not-run" && co("khai-not-run"))) loi.push(`KHONG_KHAI ${khoa} (doi status)`);
+			if ((doi.includes("cmd") || doi.includes("expected")) && !co("sua-rang")) loi.push(`KHONG_KHAI ${khoa} (doi cmd/expected)`);
+			if (doi.includes("paths")) {
+				if (!r.length) loi.push(`KHONG_KHAI ${khoa} (doi paths)`);
+				else if (r.every((x) => x.xu_ly === "tro-duong-moi")) {
+					const kyVong = pathsMoiKy(a.paths, r);
+					if (!kyVong || !bang(kyVong, b.paths ?? [])) loi.push(`KHONG_KHAI ${khoa} (paths doi khac dong tro-duong-moi)`);
+				}
+			}
+			if (co("bo-paths") && (b.status !== "not-run" || b.paths !== undefined)) loi.push(`BO_PATHS_O_DANG_CHAY ${khoa}`);
+		}
+	}
+	for (const r of danhSach.dong) {
+		if (!["khai-not-run", "sua-rang"].includes(r.xu_ly)) continue;
+		const k = `${r.ho_so}:${r.eval}:${r.muc ?? "-"}`;
+		if (!String(r.ly_do ?? "").trim()) loi.push(`CAN_CU_HONG ${k} (thieu ly_do)`);
+		else if (!kiemCanCu(r.can_cu)) loi.push(`CAN_CU_HONG ${k} (${r.can_cu})`);
+	}
+	const cu = phang(configCu);
+	const moi = phang(configMoi);
+	for (const [k, v] of cu) if (!moi.has(k) || !bang(moi.get(k), v)) loi.push(`CONFIG_DOI_GIA_TRI ${k}`);
+	return { loi, soEval };
+}
+
+function tuKiem(dauVao) {
+	const ra = [];
+	const bat = (ten, sua, can) => {
+		const v = sua(structuredClone({ ...dauVao, kiemCanCu: undefined }));
+		v.kiemCanCu = dauVao.kiemCanCu;
+		const { loi } = kiemKhai(v);
+		ra.push(loi.some((l) => l.startsWith(can)) ? `OK tu kiem ${ten}: bat "${can}"` : `HONG tu kiem ${ten}: khong bat "${can}"`);
+	};
+	const dangChay = [...dauVao.evalsCap].flatMap(([slug, { moi }]) =>
+		[...moi.values()].filter((e) => e.status !== "not-run" && Array.isArray(e.paths) && e.paths.length).map((e) => ({ slug, e })),
+	)[0];
+	if (!dangChay) return ["HONG tu kiem: khong co eval dang chay de cay"];
+	const { slug, e } = dangChay;
+	const tepE = `_acceptance/${slug}/evals.yaml`;
+	bat(
+		"not-run khong dong",
+		(v) => {
+			v.tepDoi = [...new Set([...v.tepDoi, tepE])];
+			v.evalsCap.get(slug).moi.set(e.id, { ...e, status: "not-run" });
+			v.danhSach.dong = v.danhSach.dong.filter((r) => !(r.ho_so === slug && r.eval === e.id));
+			return v;
+		},
+		`KHONG_KHAI ${slug}:${e.id}`,
+	);
+	bat(
+		"can_cu sha bia",
+		(v) => {
+			v.danhSach.dong.push({ ho_so: slug, eval: "E0", muc: null, xu_ly: "khai-not-run", ly_do: "bia", can_cu: "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef" });
+			return v;
+		},
+		"CAN_CU_HONG",
+	);
+	bat(
+		"bo-paths o dang chay",
+		(v) => {
+			v.tepDoi = [...new Set([...v.tepDoi, tepE])];
+			const { paths, ...khongPaths } = e;
+			v.evalsCap.get(slug).moi.set(e.id, khongPaths);
+			v.danhSach.dong.push({ ho_so: slug, eval: e.id, muc: paths[0], xu_ly: "bo-paths" });
+			return v;
+		},
+		`BO_PATHS_O_DANG_CHAY ${slug}:${e.id}`,
+	);
+	const khoaCu = [...phang(dauVao.configCu).keys()].find((k) => k.startsWith("executors.script."));
+	bat(
+		"doi gia tri khoa config cu",
+		(v) => {
+			const p = khoaCu.split(".");
+			let o = v.configMoi;
+			for (const x of p.slice(0, -1)) o = o[x];
+			o[p.at(-1)] = "echo bi-doi";
+			return v;
+		},
+		`CONFIG_DOI_GIA_TRI ${khoaCu}`,
+	);
+	const tuHet = dauVao.danhSach.dong.find((r) => r.xu_ly === "tu-het");
+	if (tuHet)
+		bat(
+			"cham ho so tu-het",
+			(v) => {
+				v.tepDoi = [...v.tepDoi, `_acceptance/${tuHet.ho_so}/run-log.jsonl`];
+				return v;
+			},
+			`TU_HET_BI_CHAM _acceptance/${tuHet.ho_so}/run-log.jsonl`,
+		);
+	bat(
+		"tep rang khong khai",
+		(v) => {
+			v.tepDoi = [...v.tepDoi, `_acceptance/${slug}/rang/bia.mjs`];
+			return v;
+		},
+		`TEP_KHONG_KHAI _acceptance/${slug}/rang/bia.mjs`,
+	);
+	return ra;
+}
+
+export function commitVong() {
+	return git("log", "--no-merges", "--format=%H", `--grep=(${SLUG})`, `${MOC_NEN}..HEAD`)
+		.split("\n")
+		.filter(Boolean)
+		.reverse();
+}
+
+function tepCua(sha) {
+	return git("show", "--name-only", "--format=", sha).split("\n").filter(Boolean);
+}
+
+if (import.meta.main) {
+	const danhSach = docDanhSach();
+	const cvong = commitVong();
+	if (!cvong.length) hong(2, `MA 2: khong co commit nao cua vong (${SLUG}) tu moc nen`);
+	const dauCuoi = new Map();
+	const configCap = [];
+	for (const sha of cvong)
+		for (const t of tepCua(sha)) {
+			if (t === "_acceptance/config.yaml") configCap.push(sha);
+			if (!dauCuoi.has(t)) dauCuoi.set(t, { dau: sha, cuoi: sha });
+			else dauCuoi.get(t).cuoi = sha;
+		}
+	const hoanLai = new Set((danhSach.hoan_lai?.ho_so ?? []).map((h) => h.ho_so));
+	const loiHoanLai = [];
+	const laHoanLai = (t) => hoanLai.has(/^_acceptance\/([^/]+)\//.exec(t)?.[1]);
+	for (const [t, { dau, cuoi }] of dauCuoi)
+		if (laHoanLai(t) && docTai(`${dau}^`, t) !== docTai(cuoi, t)) loiHoanLai.push(`HOAN_LAI_CON_DOI ${t}`);
+	const tepDoi = [...dauCuoi.keys()].filter((t) => !t.startsWith(`_acceptance/${SLUG}/`) && t !== "_acceptance/config.yaml" && !t.startsWith("docs/") && !laHoanLai(t));
+	const evalsCap = new Map();
+	for (const t of tepDoi) {
+		const m = /^_acceptance\/([^/]+)\/evals\.yaml$/.exec(t);
+		if (!m) continue;
+		const { dau, cuoi } = dauCuoi.get(t);
+		evalsCap.set(m[1], { cu: evalsTheoId(docTai(`${dau}^`, t)), moi: evalsTheoId(docTai(cuoi, t)) });
+	}
+	const configMoi = Bun.YAML.parse(docTai(null, "_acceptance/config.yaml") ?? "");
+	const loiConfig = [];
+	for (const sha of configCap) {
+		const cu = phang(Bun.YAML.parse(docTai(`${sha}^`, "_acceptance/config.yaml") ?? ""));
+		const moi = phang(Bun.YAML.parse(docTai(sha, "_acceptance/config.yaml") ?? ""));
+		for (const [k, v] of cu) if (!moi.has(k) || !bang(moi.get(k), v)) loiConfig.push(`CONFIG_DOI_GIA_TRI ${k} (${sha.slice(0, 9)})`);
+	}
+	const dauVao = { tepDoi, evalsCap, danhSach, configCu: {}, configMoi: {}, kiemCanCu: canCuSong };
+	const { loi: loiKhai, soEval } = kiemKhai(dauVao);
+	const loi = [...loiKhai, ...loiConfig, ...loiHoanLai];
+	const tk = tuKiem({ ...dauVao, configCu: configMoi, configMoi: structuredClone(configMoi) });
+	for (const l of loi) console.log(`HONG ${l}`);
+	for (const t of tk) console.log(t);
+	console.log(`khai-du: ${cvong.length} commit cua vong, ${hoanLai.size} ho so hoan lai nguyen, ${tepDoi.length} tep doi ngoai ho so nay, ${soEval} eval doi, ${loi.length ? `${loi.length} loi` : "moi thay doi co dong danh sach"}`);
+	process.exit(loi.length || tk.some((t) => t.startsWith("HONG")) ? 1 : 0);
+}

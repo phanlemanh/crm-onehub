@@ -1,0 +1,22 @@
+{
+  "feature_plain": "Bài kiểm tạo kế hoạch 30 ngày thôi đỏ vào ngày 15 mỗi tháng, để CI của mọi PR không bị chặn trọn ngày 15/10.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho bài kiểm tạo kế hoạch chạy xanh ở ngày 14, 15, 16, kể cả lúc vừa qua nửa đêm và sát nửa đêm ngày 15 giờ Việt Nam."},
+    {"id": "AC-2", "p": "Sẽ chứng bản cũ đỏ đúng ở ngày 15 với đúng thông điệp lỗi đã thấy, và xanh ở ngày 14, để biết thước bắt được lỗi thật."},
+    {"id": "AC-3", "p": "Sẽ chỉ đổi đúng một tệp bài kiểm; mã mà người dùng chạy không đổi."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG đi tìm các bài kiểm khác có thể phụ thuộc ngày lịch; làm riêng nếu giám sát giao."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG sửa hồ sơ đã ký của việc đã đưa bài kiểm này vào."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ hai chiều có thể làm bài đỏ: ngày trong tháng (14, 15, 16) và giờ quanh nửa đêm ngày 15 giờ Việt Nam, chỗ ngày quốc tế lệch ngày Việt Nam — đo ở AC-1 và AC-2."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ba mốc giờ trưa không chạm khung nửa đêm, đúng khung đã làm bài đỏ lần đầu. Đã sửa: thêm hai mốc 00:30 và 23:30 ngày 15 giờ Việt Nam."},
+    {"i": 1, "p": "Bản cũ chép tạm vào thư mục bài kiểm có thể bị lượt kiểm khác nhặt nhầm, hoặc nằm lại nếu tiến trình chết. Đã sửa: đặt tên ngoài mẫu tệp kiểm, và thước kiểm thư mục còn sạch sau lượt chạy."},
+    {"i": 2, "p": "Thước phạm vi so với một mốc cố định nên sẽ đỏ giả khi nhánh chính dời. Đã sửa: so với điểm tách khỏi nhánh chính lúc đo, và thêm một ca chứng thước bắt được tệp thừa."},
+    {"i": 3, "p": "Sổ ghi cách sửa như thể là lối duy nhất, trong khi còn lối ghim đồng hồ trong riêng bài này. Đã sửa: đưa thành câu hỏi cho người (Hỏi-1)."},
+    {"i": 4, "p": "Lượt «xanh» chưa đòi bài thật sự chạy. Đã sửa: mỗi lượt phải có đúng một bài chạy, khác đi là lượt lạ."}
+  ]
+}

@@ -398,15 +398,22 @@ export function useGopYMucTieu({
 		setLoiDong((cu) => ({ ...cu, [id]: cauLoiDong(cause, mGopY) }));
 	const xoaLoi = (id: string) => setLoiDong(({ [id]: _bo, ...cu }) => cu);
 
-	const quyet = (d: DongHien, cach: CachQuyet, giaTri?: string) => {
+	const quyet = (
+		d: DongHien,
+		cach: CachQuyet,
+		giaTri?: string,
+		canCu?: string | null,
+	) => {
 		if (dangQuyet !== null || !ghiDuoc) return;
 		const thuTuNay = tatCa.map((x) => x.id);
 		const truocLienKet =
-			d.loai === "can-chinh" && cach === "nhan" ? lienKetHienCo() : null;
+			d.loai === "can-chinh" && (cach === "nhan" || cach === "sua")
+				? lienKetHienCo()
+				: null;
 		setDangQuyet(d.id);
 		xoaLoi(d.id);
 		void quyetDong
-			.mutateAsync({ deXuatId: d.id, cach, giaTri })
+			.mutateAsync({ deXuatId: d.id, cach, giaTri, canCu })
 			.then(
 				async (kq) => {
 					if (!kq.ok) {

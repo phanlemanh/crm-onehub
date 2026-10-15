@@ -95,7 +95,10 @@ const vi = {
 		bac: "Bác",
 		nhanBanSua: "Nhận bản đã sửa",
 		huySua: "Huỷ",
-		canChinh: "Căn chỉnh",
+		canChinh: "Căn chỉnh kèm lý do",
+		suaLyDo: "Sửa lý do",
+		viSao: "Vì sao: {cau}",
+		canCu: "Căn cứ: {cau}",
 		moKr: "Mở KR này",
 		gopVao: (ten: string) => `Góp vào «${ten}»`,
 		ket: {
@@ -242,7 +245,10 @@ const en: OkrGopYMessages = {
 		bac: "Reject",
 		nhanBanSua: "Accept edited",
 		huySua: "Cancel",
-		canChinh: "Align",
+		canChinh: "Align with reason",
+		suaLyDo: "Edit reason",
+		viSao: "Why: {cau}",
+		canCu: "Evidence: {cau}",
 		moKr: "Open this KR",
 		gopVao: (ten: string) => `Contributes to “${ten}”`,
 		ket: {

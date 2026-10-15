@@ -74,6 +74,12 @@ agent and the API both need it.
 | **Visible** | `brand`, `portrait` | Directly — no `receive`, no model | 60, six at a time |
 | **Research** | everything else | One eve session per row | 12 |
 
+`onboarding-identify` (mã môi giới trên nền tảng chưa cá nhân nào mang, `lib/ma-lech.ts`) chạy
+trực tiếp: giao một Việc cho người cầm trịch kế hoạch — gắn kế hoạch, hạn đầu ngày giờ VN, vết nguồn
+`tac-nhan`, `khoaNguon` là `ma-lech:<mã>`. Không giao trùng khi đã có Việc mở cùng khoá trên kế hoạch đó,
+hoặc việc cần làm cũ cùng mã đang mở mà chưa chép; Việc đã Xong hay Huỷ thì lần sau giao lại. Người cầm
+trịch không nhận được việc (vai «chỉ OKR», đã rời) thì kết quả `nguoi-cam-trich-khong-nhan`, không ghi gì.
+
 Trợ lý OKR thêm năm loại. `okr-kiem-san-sang` (có khoá mô hình không),
 `okr-tom-tat-xep` và `ai-doi-soat` (đối soát sổ chi phí với báo cáo AI Gateway, ngày 2
 mỗi tháng) là việc trực tiếp, không mở phiên. `okr-de-xuat` và `okr-tom-tat-tuan` đi
@@ -309,6 +315,16 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
 - **Làn trực tiếp, không mô hình.** `chayNhac` tính lại `viecCanNhac` cho đúng người
   đó, dựng tin bằng `lib/tin-nhac.ts` (cắt ở `NHAC.tran`), rồi gửi một tin riêng qua
   Zalo hoặc Slack. Độ ưu tiên là `PRIORITY.nhac`.
+- **Thông báo ghi trước khi chọn kênh** (`lib/thong-bao-ghi.ts`, hồ sơ
+  `hop-thong-bao-tren-web`). Ngay sau khi có danh sách mục, `chayNhac` ghi
+  `payload.mucTinh` (`{ ngay, khoa }`, khoá của mọi mục đã tính) rồi gọi `ghiThongBao`: mỗi mục
+  một hàng `ThongBao` cho người đó, kể cả người không có kênh nào. Mục còn nằm liên tục
+  trong danh sách (có ở sáng hôm qua hay hôm nay) không sinh hàng mới — hàng cũ cập
+  nhật `thayNgay` và `noiDung`; khoá gộp là `khoaThongBao` (`@crm/validation/thong-bao`),
+  không mang số đếm. Ghi hỏng thì `payload.thongBaoLoi` và nhật ký nhận lỗi, tin Zalo
+  hay Slack vẫn gửi. Đường dẫn lưu là `duongTrongApp(v)` — đúng phần sau `/<slug>`
+  của đường trong tin Zalo. `payload.mucTinh` là mẫu số của lệnh
+  `bun run thong-bao:doi-chieu`; lệnh không bao giờ lấy mẫu số từ bảng `ThongBao`.
 - **Kênh do `kenhSeDungCua` chọn** (`@crm/db/kenh-thong-bao`), không do `chayNhac`.
   Hàm đọc ưu tiên của người (`NotificationPreference`, thiếu hàng là `AUTO`),
   `ZaloLink`, `appSetting.zaloBotName` và khớp Slack, rồi gọi hàm thuần `chonKenh`.
@@ -975,6 +991,7 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 | Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — tool sống `nop_de_xuat` (9a), `nop_tom_tat` (9c), mọi tool dựng sẵn tắt, sandbox chặn mạng; không có `skill` nào (`load_skill` tắt) — phương pháp OKR nằm trong lời dặn tĩnh `instructions.md`; 9b, 9c thêm mã kiểm số ở `packages/validation` | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
 | Máy soạn bản đề xuất của Kho tài liệu (lượt 2) | Mã đọc chữ trong việc trực tiếp; `subagent` `may_soan` chỉ có một tool sống `nop_ban_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm số và trích đoạn ở `packages/validation` | 1, 2, 6, 7 — không duyệt, không ghi bản đang dùng |
 | Trợ lý AI đọc kho (lượt 4 của Kho tài liệu) | `subagent` `tro_ly_kho` với ba tool sống `search_pages`, `read_page`, `nop_tra_loi`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm trích dẫn và số ở `packages/validation` dựng câu người đọc thấy | 1, 2, 6, 7 — chỉ đọc bản đang dùng, câu trả lời người đọc thấy là của mã |
+| Hỏi đáp OKR theo quyền (hàng C) | Loại phiên `okr-hoi` trong chính `apps/agent-okr`, không phải `subagent` mới; ba tool sống `tim_okr`, `doc_okr`, `nop_tra_loi` tự kiểm purpose và lọc theo `nguCanhXemOkr` + `dieuKienXemMucTieu`; mã kiểm trích và số ở `packages/validation/src/okr-tra-loi.ts` dựng câu người đọc thấy | 1, 3, 4, 6 — ranh giới trùng Soạn OKR: dữ liệu OKR, ZDR, bốn vai |
 | Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
 | Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
 
@@ -1076,6 +1093,13 @@ delegation paths for custom agents.
   `NOTE`, `TASK`, or both. Runtime enforcement never infers a grant from the action's
   prose summary. Every action is ledgered before execution and keyed by eve's call id
   for replay safety.
+- **`TASK` giao một Việc, không ghi việc cần làm (hàng DA1b).** Chữ `TASK` giữ nguyên trong
+  bản khai — bản khai đã lưu của các Tác nhân mang nó, đổi khuôn là chúng không đọc được.
+  `createRunActivity` gọi `taoViec` (`@crm/db/viec-ghi`) trong cùng giao dịch giữ chỗ hành
+  động: người giao và người thực hiện là người khởi chạy lượt (`initiatedById`, vắng thì
+  người tạo Tác nhân), gắn bản ghi đích, hạn là `dueAt`, vết nguồn `tac-nhan`; hành động ghi
+  `externalId` là mã Việc. Người đó mang vai «chỉ OKR» thì hành động thất bại với lời của
+  `kiemNguoiNhanViec`. Công cụ chưa có ô người thực hiện khác.
 - **CRM events are shared domain contracts.** `@crm/db/crm-events` owns the event
   vocabulary, record kind, and builder-facing description used by the API, builder,
   and worker. API writes enqueue a durable `agent-event` task; the agent worker alone
@@ -1714,6 +1738,28 @@ cách ly duy nhất tin được là **không có gì để rò**:
   `PORT`, rồi 2100 — `eve start` tự mặc định 3000.
 - Không nhập gì từ `apps/agent`; chỉ `@crm/db`, `@crm/validation`, `@crm/ai-okr`,
   `@crm/env`, `eve` (`rang/tai-lieu.mjs` của `soan-okr-cung-tro-ly` grep điều này).
+
+### Loại phiên hỏi đáp (`okr-hoi`)
+
+Cùng app, cùng model ZDR, cùng kênh; hỏi đáp thêm vào chứ không tách app (hàng C `hoi-dap-okr`):
+
+- Cuộc hỏi là một hàng `OkrCuocHoi` (chủ cuộc, mã phiên eve, `cacPhien`, placeholder `cho-eve:` như cuộc soạn).
+  Thủ tục `okr.hoiMo`, `okr.hoiTangLuot`, `okr.hoiCuaToi`, `okr.hoiPhanHoi`; lượt đếm ở `OkrLuotHoi` theo người
+  và ngày giờ Việt Nam; trần `OKR_HOI_TRAN` (`packages/validation/src/okr-tra-loi.ts`): 40 câu mỗi người mỗi ngày,
+  10 USD mỗi tháng cho workspace, sổ chi phí `okr.hoi-dap`.
+- Cửa `/eve/agents/okr` nhận header `x-crm-cuoc-hoi` (loại trừ với `x-crm-cuoc-soan`); nhánh hỏi ở
+  `apps/app/lib/cua-okr-hoi.ts`: cuộc phải của người gọi, hết lượt là 429 và không chuyển tiếp; thẻ mang
+  `purpose: "okr-hoi"`, `cuocHoiId`.
+- Lời dặn theo phiên: `instructions/dan-soan.ts` chỉ nạp cho `okr-soan` (nội dung ở `lib/loi-dan-soan.ts`, không
+  còn `instructions.md` tĩnh vì eve nạp tệp đó cho mọi phiên), `instructions/dan-hoi.ts` chỉ cho `okr-hoi`.
+- Ba tool hỏi đáp là tool tĩnh, không `defineDynamic`; tool sai purpose trả `{ ok: false, reason }`.
+  `nop_tra_loi` từ chối cả câu trả lời khi một trích nằm ngoài quyền (KR xét theo Mục tiêu cha) hay một số không
+  thuộc ba lớp: trường của thứ được trích, số đếm thứ được trích, năm và quý.
+- Màn: cột Kara `?record=hoi-okr:<cuộc>` (`app/(app)/[slug]/okr/hoi/`); câu trả lời người đọc thấy chỉ là kết quả
+  `nop_tra_loi` được nhận, chữ tự do của model không hiện.
+- Đo: `_acceptance/hoi-dap-okr/rang/` — `chi-hoi-okr.mjs` (vai chỉ OKR hỏi được OKR, 0 tên đối tác),
+  `do-hoi-dap.mjs` (bộ câu `apps/agent-okr/evals/okr-hoi/ca/`), `man-hoi.mjs`; `chi-hoi-okr.sql` đếm trên
+  production lúc bật.
 
 Thước cách ly `rang/cach-ly-chi-okr.mjs` đo cả ba lớp: cửa cũ từ chối vai `okr`
 (403), cửa mới mở (200), phiên OKR trả lời cùng câu «liệt kê deals của công ty» với

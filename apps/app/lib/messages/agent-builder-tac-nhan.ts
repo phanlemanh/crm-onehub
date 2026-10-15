@@ -124,6 +124,14 @@ const en = {
 		lichSu: "History",
 		lichSuMoTa: "Every run and every change, newest first.",
 	},
+	trangThai: {
+		LIVE: "Live",
+		PAUSED: "Paused",
+		ARCHIVED: "Archived",
+		DRAFT: "Draft",
+		DEPLOYING: "Deploying",
+		DELETED: "Deleted",
+	},
 };
 
 export type TacNhanMessages = typeof en;
@@ -251,6 +259,14 @@ const vi = {
 		},
 		lichSu: "Lịch sử",
 		lichSuMoTa: "Mọi lượt chạy và mọi thay đổi, mới nhất trước.",
+	},
+	trangThai: {
+		LIVE: "Đang bật",
+		PAUSED: "Tạm dừng",
+		ARCHIVED: "Đã lưu trữ",
+		DRAFT: "Nháp",
+		DEPLOYING: "Đang triển khai",
+		DELETED: "Đã xoá",
 	},
 } satisfies TacNhanMessages;
 

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lý do căn chỉnh: trước và sau</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page: #fafafa;
+    --card: #ffffff;
+    --ink: #171717;
+    --muted: #575757;
+    --rule: rgba(23,23,23,0.12);
+    --rule-strong: rgba(23,23,23,0.22);
+    --primary: #006B4F;
+    --primary-tint: rgba(0,107,79,0.08);
+    --warn: #8a5a00;
+    --warn-tint: rgba(138,90,0,0.08);
+    --sans: 'Geist', system-ui, sans-serif;
+    --serif: 'Lora', serif;
+    --mono: 'Geist Mono', ui-monospace, monospace;
+  }
+  body { font-family: var(--sans); background: var(--page); color: var(--ink); padding: 48px 16px 64px; font-size: 14px; line-height: 1.45; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 3vw, 34px); line-height: 1.2; margin-bottom: 8px; }
+  .lead { color: var(--muted); max-width: 720px; margin-bottom: 40px; }
+
+  section { margin-bottom: 56px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+  .sec-no { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  h2 { font-size: 18px; font-weight: 600; }
+  .where { color: var(--muted); margin-bottom: 16px; font-size: 13px; }
+  .where code { font-family: var(--mono); font-size: 12px; }
+
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .pair > div, .tr > div, .summary > div { min-width: 0; }
+  .where, .where code { overflow-wrap: anywhere; }
+  @media (max-width: 820px) { .pair { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) {
+    .tree .tr { grid-template-columns: 1fr 72px; gap: 12px; padding: 8px 12px; }
+    .tree .ind1 { padding-left: 24px; }
+    .tree .ind2 { padding-left: 36px; }
+    .tree .filter { flex-wrap: wrap; padding: 0 12px 8px; }
+  }
+  .col-label { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; color: var(--muted); }
+  .col-label.sau { color: var(--primary); }
+  .verdict { margin-top: 10px; font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--muted); }
+  .verdict.sau { color: var(--primary); }
+
+  .surface { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; }
+  .dialog { padding: 20px; }
+  .dialog h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .desc { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+  .label { font-size: 13px; font-weight: 500; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .help { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .input { border: 1px solid var(--rule-strong); border-radius: 5px; padding: 8px 10px; font-size: 13px; background: #fff; }
+  .input.select { display: flex; justify-content: space-between; }
+  .input.select::after { content: "⌄"; color: var(--muted); }
+  .textarea { min-height: 64px; }
+  .field { margin-bottom: 14px; }
+  .footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  .btn { border-radius: 5px; padding: 7px 14px; font-size: 13px; font-weight: 500; border: 1px solid var(--rule-strong); background: #fff; font-family: var(--sans); }
+  .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn.sm { padding: 4px 10px; font-size: 12px; }
+
+  .seg { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 5px; overflow: hidden; }
+  .seg span { padding: 6px 12px; font-size: 12px; }
+  .seg span + span { border-left: 1px solid var(--rule-strong); }
+  .seg .on { background: var(--ink); color: #fff; }
+
+  .ai { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--primary); font-weight: 500; }
+  .ai::before { content: "✦"; }
+  .ai-box { border: 1px dashed rgba(0,107,79,0.45); background: var(--primary-tint); }
+
+  .chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--rule-strong); border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .chip.co-so { border-color: rgba(0,107,79,0.5); color: var(--primary); }
+  .chip.thieu { border-color: rgba(138,90,0,0.45); color: var(--warn); background: var(--warn-tint); }
+
+  .sheet { padding: 0; overflow: hidden; }
+  .sheet-head { padding: 16px 20px 0; }
+  .sheet-title { font-size: 16px; font-weight: 600; }
+  .sheet-meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .tabs { display: flex; gap: 18px; padding: 12px 20px 0; border-bottom: 1px solid var(--rule); font-size: 13px; }
+  .tabs span { padding-bottom: 8px; color: var(--muted); }
+  .tabs .on { color: var(--ink); border-bottom: 2px solid var(--ink); font-weight: 500; }
+  .sheet-body { padding: 16px 20px 20px; }
+  .sec-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .item { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; }
+  .item-t { font-weight: 500; }
+  .item-d { color: var(--muted); font-size: 12px; }
+  .block + .block { margin-top: 18px; }
+
+  .path { position: relative; padding-left: 18px; }
+  .path::before { content: ""; position: absolute; left: 5px; top: 10px; bottom: 10px; width: 1px; background: var(--rule-strong); }
+  .node { position: relative; margin-bottom: 4px; }
+  .node::before { content: ""; position: absolute; left: -17px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: #fff; border: 1px solid var(--muted); }
+  .node.me::before { background: var(--ink); border-color: var(--ink); }
+  .node-t { font-weight: 500; }
+  .node-d { color: var(--muted); font-size: 12px; }
+  .edge { margin: 6px 0 12px; padding: 8px 10px; border-left: 2px solid var(--primary); background: var(--primary-tint); border-radius: 0 6px 6px 0; font-size: 13px; }
+  .edge .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+  .edge .k { color: var(--muted); font-size: 12px; }
+
+  .kara { padding: 14px 16px; }
+  .kara-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .kara-v { font-weight: 500; }
+  .kara-r { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .kara-a { display: flex; gap: 8px; margin-top: 12px; }
+
+  .tree { padding: 12px 0; }
+  .tr { display: grid; grid-template-columns: 1fr 140px; gap: 16px; padding: 8px 16px; align-items: start; }
+  .tr + .tr { border-top: 1px solid var(--rule); }
+  .ind1 { padding-left: 32px; }
+  .ind2 { padding-left: 56px; }
+  .tr-t { font-weight: 500; }
+  .tr-t.kr { font-weight: 400; color: var(--muted); }
+  .tr-m { color: var(--muted); font-size: 12px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 2px; }
+  .tr-why { font-size: 12px; margin-top: 4px; padding-left: 8px; border-left: 2px solid var(--primary); }
+  .tr-why.miss { border-left-color: var(--warn); color: var(--warn); }
+  .bar { height: 6px; border-radius: 3px; background: rgba(23,23,23,0.08); overflow: hidden; margin-top: 6px; }
+  .bar i { display: block; height: 100%; background: var(--primary); }
+  .pct { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: right; }
+  .filter { display: flex; gap: 8px; padding: 0 16px 8px; border-bottom: 1px solid var(--rule); }
+
+  .summary { border-top: 1px solid var(--rule); padding-top: 24px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+  @media (max-width: 820px) { .summary { grid-template-columns: 1fr; } }
+  .summary h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .summary ul { padding-left: 18px; color: var(--ink); }
+  .summary li { margin-bottom: 6px; }
+  .note { margin-top: 32px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">OneHub Center · OKR · Kara</p>
+  <h1>Lý do căn chỉnh: hiện nay và sau thay đổi</h1>
+  <p class="lead">Bốn chỗ người dùng gặp quan hệ «góp vào» giữa mục tiêu của mình và cấp trên. Cột trái vẽ theo mã hiện có trên nhánh <code>onehub</code>; cột phải là đề xuất. Số liệu là ví dụ.</p>
+
+  <!-- 1. Hộp thoại gắn căn chỉnh -->
+  <section>
+    <div class="sec-head"><span class="sec-no">01</span><h2>Lúc gắn căn chỉnh</h2></div>
+    <p class="where">Sheet mục tiêu → tab Căn chỉnh → «Gắn thêm» · <code>hop-thoai-can-chinh.tsx</code></p>
+    <div class="pair">
+      <div>
+        <p class="col-label">Hiện nay</p>
+        <div class="surface dialog">
+          <h3>Gắn căn chỉnh</h3>
+          <p class="desc">Chỉ hiện mục tiêu và KR cấp trên đã công bố.</p>
+          <div class="field">
+            <div class="label">Góp vào</div>
+            <div class="input select">KR · Doanh thu Q4 đạt 120 tỷ</div>
+          </div>
+          <div class="footer"><span class="btn">Huỷ</span><span class="btn primary">Gắn</span></div>
+        </div>
+        <p class="verdict">Chỉ chọn đích. Lưu xong chỉ còn một đường nối, không ai biết vì sao nối.</p>
+      </div>
+      <div>
+        <p class="col-label sau">Sau thay đổi</p>
+        <div class="surface dialog">
+          <h3>Gắn căn chỉnh</h3>
+          <p class="desc">Chỉ hiện mục tiêu và KR cấp trên đã công bố.</p>
+          <div class="field">
+            <div class="label">Góp vào</div>
+            <div class="input select">KR · Doanh thu Q4 đạt 120 tỷ</div>
+          </div>
+          <div class="field">
+            <div class="label">Vì sao mục tiêu này đẩy được KR đó <span class="ai">Kara soạn nháp</span></div>
+            <div class="input textarea ai-box">Tăng tỷ lệ chốt của mảng X từ 18% lên 25% sẽ thêm khoảng 9 tỷ vào doanh thu Q4.</div>
+          </div>
+          <div class="field">
+            <div class="label">Căn cứ</div>
+            <div class="input textarea ai-box">Mảng X chiếm 30% doanh thu Q3; 6/10 deal thua dừng ở bước báo giá.</div>
+            <p class="help">Không bắt buộc. Để trống thì nhánh này hiện là «đặt cược».</p>
+          </div>
+          <div class="field">
+            <div class="label">Mức tin</div>
+            <div class="seg"><span class="on">Có số liệu</span><span>Đặt cược</span></div>
+          </div>
+          <div class="footer"><span class="btn">Huỷ</span><span class="btn primary">Gắn</span></div>
+        </div>
+        <p class="verdict sau">Kara điền sẵn từ số liệu kỳ trước. Người dùng sửa một câu rồi bấm Gắn, không phải viết từ đầu.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Kara đề xuất căn chỉnh -->
+  <section>
+    <div class="sec-head"><span class="sec-no">02</span><h2>Khi Kara đề xuất căn chỉnh</h2></div>
+    <p class="where">Nhóm góp ý của Kara trên mục tiêu · <code>nhom-kara.tsx</code> (loại <code>can-chinh</code>)</p>
+    <div class="pair">
+      <div>
+        <p class="col-label">Hiện nay</p>
+        <div class="surface kara">
+          <div class="kara-h"><span class="ai">Kara</span></div>
+          <div class="kara-v">Góp vào «Doanh thu Q4 đạt 120 tỷ»</div>
+          <div class="kara-a"><span class="btn primary sm">Căn chỉnh</span><span class="btn sm">Bỏ qua</span></div>
+        </div>
+        <p class="verdict">Các góp ý khác của Kara đều kèm lý do, riêng đề xuất căn chỉnh thì không có (dạng thẻ thu gọn).</p>
+      </div>
+      <div>
+        <p class="col-label sau">Sau thay đổi</p>
+        <div class="surface kara">
+          <div class="kara-h"><span class="ai">Kara</span><span class="chip co-so">Có số liệu</span></div>
+          <div class="kara-v">Góp vào «Doanh thu Q4 đạt 120 tỷ»</div>
+          <div class="kara-r">Vì sao: tăng tỷ lệ chốt 18% → 25% thêm khoảng 9 tỷ.<br>Căn cứ: mảng X chiếm 30% doanh thu Q3.</div>
+          <div class="kara-a"><span class="btn primary sm">Căn chỉnh kèm lý do</span><span class="btn sm">Sửa lý do</span><span class="btn sm">Bỏ qua</span></div>
+        </div>
+        <p class="verdict sau">Nhận đề xuất là nhận luôn lý do. Người dùng duyệt một câu có căn cứ, không duyệt một đường nối trống.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Sheet mục tiêu -->
+  <section>
+    <div class="sec-head"><span class="sec-no">03</span><h2>Khi mở một mục tiêu</h2></div>
+    <p class="where">Sheet mục tiêu → tab KR, phần đầu · <code>objective-sheet.tsx</code> (<code>KhuViSao</code>, <code>KhuGopVao</code>)</p>
+    <div class="pair">
+      <div>
+        <p class="col-label">Hiện nay</p>
+        <div class="surface sheet">
+          <div class="sheet-head">
+            <div class="sheet-title">Mảng X tăng tốc chốt deal trong Q4</div>
+            <div class="sheet-meta">Phòng Kinh doanh · Quý 4 · 3 KR</div>
+          </div>
+          <div class="tabs"><span class="on">KR 3</span><span>Căn chỉnh 1</span><span>Vết</span><span>Trao đổi</span></div>
+          <div class="sheet-body">
+            <div class="block">
+              <div class="sec-title">Vì sao lúc này</div>
+              <div>Quý 3 mảng X hụt 12% so với kế hoạch.</div>
+            </div>
+            <div class="block">
+              <div class="sec-title">Góp vào</div>
+              <div class="item">
+                <div class="item-t">Tăng trưởng doanh thu bền vững</div>
+                <div class="item-d">OneHub · qua KR «Doanh thu Q4 đạt 120 tỷ»</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="verdict">Thấy góp vào đâu, nhưng không thấy vì sao góp được và góp bao nhiêu.</p>
+      </div>
+      <div>
+        <p class="col-label sau">Sau thay đổi</p>
+        <div class="surface sheet">
+          <div class="sheet-head">
+            <div class="sheet-title">Mảng X tăng tốc chốt deal trong Q4</div>
+            <div class="sheet-meta">Phòng Kinh doanh · Quý 4 · 3 KR</div>
+          </div>
+          <div class="tabs"><span class="on">KR 3</span><span>Căn chỉnh 1</span><span>Vết</span><span>Trao đổi</span></div>
+          <div class="sheet-body">
+            <div class="sec-title">Đường lý do</div>
+            <div class="path">
+              <div class="node"><div class="node-t">Tăng trưởng doanh thu bền vững</div><div class="node-d">OneHub · mục tiêu năm</div></div>
+              <div class="node"><div class="node-t">Doanh thu Q4 đạt 120 tỷ</div><div class="node-d">KR của OneHub · 90 → 120 tỷ</div></div>
+              <div class="edge">
+                Tăng tỷ lệ chốt 18% → 25% thêm khoảng 9 tỷ vào doanh thu Q4.
+                <div class="row"><span class="k">Căn cứ: mảng X chiếm 30% doanh thu Q3</span><span class="chip co-so">Có số liệu</span></div>
+              </div>
+              <div class="node me"><div class="node-t">Mục tiêu này</div><div class="node-d">Vì sao lúc này: Quý 3 mảng X hụt 12% so với kế hoạch.</div></div>
+            </div>
+          </div>
+        </div>
+        <p class="verdict sau">Một đường từ OneHub xuống mục tiêu, lý do nằm ngay trên chỗ nối. «Vì sao lúc này» chuyển vào đúng vị trí của nó trên đường.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Cây căn chỉnh -->
+  <section>
+    <div class="sec-head"><span class="sec-no">04</span><h2>Khi lãnh đạo xem toàn cảnh</h2></div>
+    <p class="where">OKR → Theo đơn vị → Cây căn chỉnh · <code>cay-can-chinh.tsx</code></p>
+    <div class="pair">
+      <div>
+        <p class="col-label">Hiện nay</p>
+        <div class="surface tree">
+          <div class="tr"><div><div class="tr-t">Tăng trưởng doanh thu bền vững</div><div class="tr-m">OneHub</div></div><div><div class="pct">62%</div><div class="bar"><i style="width:62%"></i></div></div></div>
+          <div class="tr ind1"><div><div class="tr-t kr">KR · Doanh thu Q4 đạt 120 tỷ</div></div><div><div class="pct">40%</div><div class="bar"><i style="width:40%"></i></div></div></div>
+          <div class="tr ind2"><div><div class="tr-t">Mảng X tăng tốc chốt deal</div><div class="tr-m">Phòng Kinh doanh</div></div><div><div class="pct">35%</div><div class="bar"><i style="width:35%"></i></div></div></div>
+          <div class="tr ind2"><div><div class="tr-t">Mở 20 khách doanh nghiệp mới</div><div class="tr-m">Phòng Phát triển thị trường</div></div><div><div class="pct">20%</div><div class="bar"><i style="width:20%"></i></div></div></div>
+          <div class="tr ind2"><div><div class="tr-t">Chuẩn hoá quy trình hợp đồng</div><div class="tr-m">Phòng Pháp chế <span class="chip">góp vào 2 chỗ</span></div></div><div><div class="pct">70%</div><div class="bar"><i style="width:70%"></i></div></div></div>
+        </div>
+        <p class="verdict">Thấy ai góp vào KR nào và tiến độ ra sao. Không phân biệt được nhánh có căn cứ với nhánh gắn cho có.</p>
+      </div>
+      <div>
+        <p class="col-label sau">Sau thay đổi</p>
+        <div class="surface tree">
+          <div class="filter"><span class="chip">Tất cả</span><span class="chip thieu">Chưa có lý do · 1</span><span class="chip">Đặt cược · 1</span></div>
+          <div class="tr"><div><div class="tr-t">Tăng trưởng doanh thu bền vững</div><div class="tr-m">OneHub</div></div><div><div class="pct">62%</div><div class="bar"><i style="width:62%"></i></div></div></div>
+          <div class="tr ind1"><div><div class="tr-t kr">KR · Doanh thu Q4 đạt 120 tỷ</div></div><div><div class="pct">40%</div><div class="bar"><i style="width:40%"></i></div></div></div>
+          <div class="tr ind2"><div><div class="tr-t">Mảng X tăng tốc chốt deal</div><div class="tr-m">Phòng Kinh doanh <span class="chip co-so">Có số liệu</span></div><div class="tr-why">+ khoảng 9 tỷ nhờ tỷ lệ chốt 18% → 25%</div></div><div><div class="pct">35%</div><div class="bar"><i style="width:35%"></i></div></div></div>
+          <div class="tr ind2"><div><div class="tr-t">Mở 20 khách doanh nghiệp mới</div><div class="tr-m">Phòng Phát triển thị trường <span class="chip">Đặt cược</span></div><div class="tr-why">Mỗi khách mới trung bình 0,8 tỷ / quý</div></div><div><div class="pct">20%</div><div class="bar"><i style="width:20%"></i></div></div></div>
+          <div class="tr ind2"><div><div class="tr-t">Chuẩn hoá quy trình hợp đồng</div><div class="tr-m">Phòng Pháp chế <span class="chip">góp vào 2 chỗ</span></div><div class="tr-why miss">Chưa có lý do vì sao góp vào doanh thu</div></div><div><div class="pct">70%</div><div class="bar"><i style="width:70%"></i></div></div></div>
+        </div>
+        <p class="verdict sau">Mỗi nhánh có một dòng lý do. Lọc nhanh nhánh «chưa có lý do» và «đặt cược», tức là chỗ cần hỏi lại trong buổi review.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Soạn OKR -->
+  <section>
+    <div class="sec-head"><span class="sec-no">05</span><h2>Khi soạn OKR cùng Kara</h2></div>
+    <p class="where">OKR → Soạn → bản nháp, dòng căn chỉnh · <code>soan/the-nhap.tsx</code> (<code>DongCanChinhNhap</code>) · lúc đưa vào: <code>soan-dua-vao.ts</code></p>
+    <div class="pair">
+      <div>
+        <p class="col-label">Hiện nay</p>
+        <div class="surface kara">
+          <div class="kara-h"><span class="ai">Kara · Căn chỉnh</span></div>
+          <div class="kara-v">Góp vào «Doanh thu Q4 đạt 120 tỷ»</div>
+          <div class="kara-r">Mảng X chiếm phần lớn doanh thu còn hụt của quý, nên tăng tỷ lệ chốt ở đây kéo KR này nhiều nhất.</div>
+          <div class="kara-a"><span class="btn primary sm">Thêm căn chỉnh</span><span class="btn sm">Bỏ qua</span></div>
+        </div>
+        <div class="surface dialog" style="margin-top:12px;padding:12px 16px">
+          <div class="item-d">Sau khi «Đưa vào OKR», trên sheet mục tiêu:</div>
+          <div class="item" style="margin:8px 0 0">
+            <div class="item-t">Tăng trưởng doanh thu bền vững</div>
+            <div class="item-d">OneHub · qua KR «Doanh thu Q4 đạt 120 tỷ»</div>
+          </div>
+        </div>
+        <p class="verdict">Kara đã viết lý do ở bản nháp, nhưng khi đưa vào chỉ có hai id được ghi sang căn chỉnh thật. Lý do ở lại trong bảng đề xuất, không ai thấy nữa. Dòng này cũng không có nút Sửa.</p>
+      </div>
+      <div>
+        <p class="col-label sau">Sau thay đổi</p>
+        <div class="surface kara">
+          <div class="kara-h"><span class="ai">Kara · Căn chỉnh</span><span class="chip co-so">Có số liệu</span></div>
+          <div class="kara-v">Góp vào «Doanh thu Q4 đạt 120 tỷ»</div>
+          <div class="kara-r">Vì sao: tăng tỷ lệ chốt 18% → 25% thêm khoảng 9 tỷ.<br>Căn cứ: mảng X chiếm 30% doanh thu Q3 · nguồn: báo cáo doanh thu Q3</div>
+          <div class="kara-a"><span class="btn primary sm">Thêm căn chỉnh</span><span class="btn sm">Sửa rồi nhận</span><span class="btn sm">Bỏ qua</span></div>
+        </div>
+        <div class="surface dialog" style="margin-top:12px;padding:12px 16px">
+          <div class="item-d">Sau khi «Đưa vào OKR», trên sheet mục tiêu:</div>
+          <div class="edge" style="margin:8px 0 0">
+            Tăng tỷ lệ chốt 18% → 25% thêm khoảng 9 tỷ vào doanh thu Q4.
+            <div class="row"><span class="k">Căn cứ: mảng X chiếm 30% doanh thu Q3</span><span class="chip co-so">Có số liệu</span></div>
+          </div>
+        </div>
+        <p class="verdict sau">Lý do Kara viết đi theo căn chỉnh vào OKR thật, hiện đúng chỗ ở mục 03 và 04. Căn cứ lấy từ cùng nguồn số Kara đã dùng cho KR; không có nguồn thì nhãn tự là «Đặt cược».</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="summary">
+    <div>
+      <h3>Người dùng nhận được gì</h3>
+      <ul>
+        <li><b>Nhân viên</b> mở mục tiêu của mình là thấy một đường lên tới mục tiêu OneHub, kèm câu «vì sao» ở từng chỗ nối.</li>
+        <li><b>Trưởng phòng</b> gắn căn chỉnh không tốn thêm công: Kara soạn nháp lý do và căn cứ từ số liệu kỳ trước, họ chỉ sửa và duyệt.</li>
+        <li><b>Lãnh đạo</b> nhìn cây là thấy nhánh nào có số liệu, nhánh nào là đặt cược, nhánh nào gắn mà chưa có lý do.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Không đổi</h3>
+      <ul>
+        <li>Cách chọn đích, quyền xem và quyền sửa giữ nguyên như hiện nay.</li>
+        <li>Lý do không bắt buộc: căn chỉnh cũ vẫn chạy, chỉ hiện là «chưa có lý do».</li>
+        <li>Tiến độ vẫn tính như cũ; lý do là chữ để đọc, không phải công thức.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="note">Bản vẽ minh hoạ để thống nhất ý, chưa phải proto bấm được. Bản bấm được sẽ dựng ở bước design-pass của feature-loop, bằng thành phần thật của packages/ui.</p>
+</div>
+</body>
+</html>

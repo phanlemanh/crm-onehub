@@ -99,19 +99,26 @@ const ALIAS_CHO_PHEP = [
 	"taiLieu",
 	"taiLieuNguon",
 	"tinHieu",
+	"thongBao",
 ] as const;
 const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
+const KHONG_NHAN_PHIEN = [
+	"tinHieuLich.keoVe",
+	"POST /rest/tin-hieu/lich/keo-ve",
+] as const;
+const laKhongNhanPhien = (ten: string) =>
+	(KHONG_NHAN_PHIEN as readonly string[]).includes(ten);
 const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
 const SAN_MUTATION_CHUNG = 15;
 const SAN_DUONG_NGOAI = 20;
-const SO_MUTATION_KHONG_DAU_VAO = 14;
+const SO_MUTATION_KHONG_DAU_VAO = 16;
 const CHO_MA_TRAN_MS = 60_000;
 const THU_TUC_MAU = [
 	{ ten: "contacts.list", input: {} },
 	{ ten: "companies.list", input: {} },
 	{ ten: "deals.list", input: {} },
-	{ ten: "activities.myTasks", input: {} },
+	{ ten: "viec.cuaToi", input: { nhom: "giao-cho-toi" } },
 	{ ten: "search.quick", input: { q: "a" } },
 	{ ten: "campaigns.list", input: undefined },
 ] as const;
@@ -128,6 +135,8 @@ const DAU_VAO_HOP_LE = {
 	"tinHieu.gui": { muonLam: "thu", daXayRa: "thu", man: "/" },
 	"tinHieu.xoa": { id: "khong-co" },
 	"tinHieu.keoVe": {},
+	"thongBao.moMot": { id: "khong-co" },
+	"thongBao.docHet": {},
 	"settings.setAgentModel": { modelId: null },
 	"settings.setResearchKey": { apiKey: "ctx_thu_khong_that_du_dai_1234567890" },
 	"settings.setArchiveRetention": { days: 30 },
@@ -262,6 +271,13 @@ const DAU_VAO_HOP_LE = {
 		departmentId: null,
 	},
 	"okr.soanTangLuot": { cuocSoanId: "khong-co" },
+	"okr.hoiMo": {},
+	"okr.hoiTangLuot": { cuocHoiId: "khong-co" },
+	"okr.hoiPhanHoi": {
+		cuocHoiId: "khong-co",
+		maTraLoi: "khong-co",
+		huuIch: true,
+	},
 	"okr.soanQuyet": { deXuatId: "khong-co", quyet: "nhan" },
 	"okr.soanDuaVao": { cuocSoanId: "khong-co", kr: [] },
 	"okr.luuTruMau": { id: "khong-co" },
@@ -399,6 +415,7 @@ const THU_TUC_OKR_TRUOC_LUOT = [
 	"removeKeyResult",
 	"setCyclePhase",
 	"setProgram",
+	"suaLyDoCanChinh",
 	"sucKhoe",
 	"thanhVien",
 	"toanCanh",
@@ -446,6 +463,12 @@ const THU_TUC_OKR_LUOT_TOM_TAT = [
 	"troLyTomTatQuanTri",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_HOI_DAP = [
+	"hoiMo",
+	"hoiPhanHoi",
+	"hoiPhien",
+	"hoiTangLuot",
+].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,
@@ -493,6 +516,8 @@ const TU_PHUC_VU = [
 	"zalo.guiThu",
 	"tinHieu.gui",
 	"tinHieu.xoa",
+	"thongBao.moMot",
+	"thongBao.docHet",
 ];
 const KHAI_2XX = [
 	"GET /",
@@ -662,10 +687,12 @@ describe("vai-chi-okr", () => {
 			const hang = await maTranTrpc(app, { cookie });
 			expect(hang.length).toBe(tatCa.length);
 			const khongChan = hang
-				.filter((h) => !biChanPhamVi(h))
+				.filter((h) => !biChanPhamVi(h) && !laKhongNhanPhien(h.ten))
 				.map((h) => h.ten)
 				.sort();
 			expect(khongChan, "tap cho phep lech tap khai").toEqual(choPhep());
+			for (const h of hang.filter((x) => laKhongNhanPhien(x.ten)))
+				expect(h.status, "duong lich nhan phien dang nhap").toBe(401);
 			for (const h of hang.filter((x) =>
 				/^(contacts|companies|deals|campaigns|onboarding)\./.test(x.ten),
 			)) {
@@ -699,11 +726,13 @@ describe("vai-chi-okr", () => {
 			const hang = await maTranTrpc(app, dau);
 			expect(
 				hang
-					.filter((h) => !biChanPhamVi(h))
+					.filter((h) => !biChanPhamVi(h) && !laKhongNhanPhien(h.ten))
 					.map((h) => h.ten)
 					.sort(),
 				"tap cho phep qua khoa lech tap khai",
 			).toEqual(choPhep());
+			for (const h of hang.filter((x) => laKhongNhanPhien(x.ten)))
+				expect(h.status, "duong lich nhan phien dang nhap").toBe(401);
 			const rest = await maTranRest(app, dau);
 			expect(rest.length).toBeGreaterThanOrEqual(SAN_DUONG_REST);
 			expect(
@@ -712,11 +741,13 @@ describe("vai-chi-okr", () => {
 			).toEqual([]);
 			expect(
 				rest
-					.filter((h) => !biChanPhamVi(h))
+					.filter((h) => !biChanPhamVi(h) && !laKhongNhanPhien(h.ten))
 					.map((h) => h.ten)
 					.sort(),
 				"tap cho phep qua REST lech tap khai",
 			).toEqual(choPhepRest());
+			for (const h of rest.filter((x) => laKhongNhanPhien(x.ten)))
+				expect(h.status, "duong lich nhan phien dang nhap").toBe(401);
 			await vaiVanLa(dau, "okr");
 		},
 		CHO_MA_TRAN_MS,
@@ -946,6 +977,7 @@ describe("vai-chi-okr", () => {
 						"workspace",
 						"org",
 						"tinHieu",
+						"thongBao",
 					].includes(t.ten.split(".")[0] ?? ""),
 			);
 			expect(mutation.length).toBeGreaterThanOrEqual(SAN_MUTATION_CHUNG);
@@ -1577,6 +1609,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_SOAN,
 				...THU_TUC_OKR_LUOT_TOM_TAT,
 				...THU_TUC_OKR_LUOT_UX_8D,
+				...THU_TUC_OKR_LUOT_HOI_DAP,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
@@ -1919,13 +1952,14 @@ type SanDoc = SanAn & {
 	chuG: string;
 	hoiY: string;
 	cuocSoan: string;
+	cuocHoi: string;
 };
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
 	K: CotK;
 	dau?: ChuoiAn;
 	khac: 200 | 404;
-	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId";
+	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId" | "cuocHoiId";
 	pha?: "da-dong";
 	chiQuanTri?: string;
 	chiQuanTriTheoMa?: true;
@@ -1934,6 +1968,12 @@ type DongDoc = {
 const cuaKy = (s: SanDoc) => ({ cycleId: s.ky });
 const THU_TU_DOC_OKR = {
 	"okr.access": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.hoiPhien": {
+		vao: (s) => ({ cuocHoiId: s.cuocHoi }),
+		K: "vang",
+		khac: 404,
+		ma: "cuocHoiId",
+	},
 	"okr.aiChiTieu": {
 		vao: () => undefined,
 		K: "vang",
@@ -2596,12 +2636,19 @@ describe("hien-thi-an", () => {
 					nac: "bat",
 				},
 			});
+			const cuocHoi = await db.okrCuocHoi.create({
+				data: {
+					nguoiHoiUserId: nguoi.k.id,
+					sessionId: `an-hoi-${suffix}`,
+				},
+			});
 			const san = {
 				...gieo,
 				nguoiK: nguoi.k.id,
 				chuG: nguoi.truong.id,
 				hoiY: hoiY.id,
 				cuocSoan: cuocSoan.id,
+				cuocHoi: cuocHoi.id,
 			};
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {
@@ -2666,6 +2713,7 @@ describe("hien-thi-an", () => {
 				setSystemTime();
 				await db.okrHoiY.deleteMany({ where: { id: san.hoiY } });
 				await db.okrCuocSoan.deleteMany({ where: { id: san.cuocSoan } });
+				await db.okrCuocHoi.deleteMany({ where: { id: san.cuocHoi } });
 				await donMucTieuAn(san, tatCaNguoi);
 			}
 		},

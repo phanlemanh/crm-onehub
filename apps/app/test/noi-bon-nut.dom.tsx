@@ -761,7 +761,8 @@ async function chonNgay(ngay: string): Promise<void> {
 
 function ngayGiuaThangNay(): string {
 	const bayGio = new Date();
-	return `${bayGio.getFullYear()}-${String(bayGio.getMonth() + 1).padStart(2, "0")}-15`;
+	const ngay = bayGio.getDate() === 15 ? 16 : 15;
+	return `${bayGio.getFullYear()}-${String(bayGio.getMonth() + 1).padStart(2, "0")}-${ngay}`;
 }
 
 describe("tao-ke-hoach", () => {

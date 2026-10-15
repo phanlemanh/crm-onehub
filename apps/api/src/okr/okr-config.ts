@@ -1,6 +1,7 @@
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import type { LyDoLichSu } from "@crm/db/okr-muc-tieu-lich-su";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
+import { LY_DO_CAN_CHINH } from "@crm/validation/ly-do-can-chinh";
 import {
 	LOI_KHUON_CAP_NHAT,
 	type LoiGiaTri,
@@ -154,6 +155,10 @@ export const OKR = {
 			krHong: (thu: number, ten: string, cau: string) =>
 				`KR thứ ${thu} «${ten}»: ${cau}`,
 			mucTieuHong: (cau: string) => `Mục tiêu từ mẫu: ${cau}`,
+		},
+		hoi: {
+			khongCoCuoc:
+				"Không thấy cuộc hỏi này — có thể nó không còn, hoặc nó không phải của bạn.",
 		},
 		soan: {
 			khongCoCuoc:
@@ -431,6 +436,8 @@ export const OKR = {
 			khongCo: (id: string) => `Không có căn chỉnh nào mang mã ${id}.`,
 			gioiHanKhongCanChinh:
 				"Mục tiêu ở mức giới hạn không căn chỉnh được: không góp vào mục tiêu khác, cũng không nhận mục tiêu nào góp vào.",
+			canCuCanLyDo: "Căn cứ cần đi kèm lý do.",
+			lyDoQuaDai: `Lý do và căn cứ tối đa ${LY_DO_CAN_CHINH.lyDoToiDa} ký tự mỗi ô.`,
 		},
 		nhap: {
 			thieuMucTieu: "Thiếu mục tiêu",
