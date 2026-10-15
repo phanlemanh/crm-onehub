@@ -7,7 +7,6 @@ import {
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
-import { ghiChiPhi } from "@crm/db/ai-chi-phi";
 import { ghiPhienEve } from "@crm/db/okr-cuoc-hoi";
 import { OKR_HOI_TRAN } from "@crm/validation/okr-tra-loi";
 import { ForbiddenException, NotFoundException } from "@nestjs/common";
@@ -25,23 +24,68 @@ async function don() {
 		where: { nguoiHoiUserId: { startsWith: T } },
 	});
 	await db.aiChiPhi.deleteMany({ where: { tinhNang: OKR_HOI_TRAN.tinhNang } });
+	await db.aiChiPhi.deleteMany({ where: { id: { startsWith: T } } });
 }
 
+type NguCanhChiPhi = {
+	session: {
+		id: string;
+		auth: {
+			initiator: {
+				principalId: string;
+				principalType: "user";
+				attributes: Record<string, string>;
+			};
+			current: null;
+		};
+	};
+	channel: { kind: "eve" };
+};
+type BuocChiPhi = {
+	type: "step.completed";
+	data: {
+		usage: { inputTokens: number; outputTokens: number; costUsd: number };
+	};
+	meta: { id: string; at: string };
+};
+const DUONG_HOOK = "../../agent-okr/agent/hooks/chi-phi.ts";
+const hookChiPhi = (await import(DUONG_HOOK)).default as {
+	events: {
+		"step.completed": (e: BuocChiPhi, c: NguCanhChiPhi) => Promise<void>;
+	};
+};
+
 async function ghiBuoc(id: string, at: Date, usd: number) {
-	await ghiChiPhi(db, {
-		id: `${T}-${id}`,
-		at,
-		sessionId: `${T}-phien`,
-		phienCha: null,
-		kenh: "eve",
-		tinhNang: OKR_HOI_TRAN.tinhNang,
-		taskId: null,
-		modelId: null,
-		inputTokens: null,
-		cacheReadTokens: null,
-		outputTokens: null,
-		costUsd: usd,
+	await hookChiPhi.events["step.completed"](
+		{
+			type: "step.completed",
+			data: { usage: { inputTokens: 1000, outputTokens: 100, costUsd: usd } },
+			meta: { id: `${T}-${id}`, at: at.toISOString() },
+		},
+		{
+			session: {
+				id: `${T}-phien`,
+				auth: {
+					initiator: {
+						principalId: B,
+						principalType: "user",
+						attributes: {
+							purpose: "okr-hoi",
+							cuocHoiId: `${T}-cuoc`,
+							vai: "member",
+						},
+					},
+					current: null,
+				},
+			},
+			channel: { kind: "eve" },
+		},
+	);
+	const hang = await db.aiChiPhi.findUniqueOrThrow({
+		where: { id: `${T}-${id}` },
+		select: { tinhNang: true, at: true },
 	});
+	expect(hang).toEqual({ tinhNang: OKR_HOI_TRAN.tinhNang, at });
 }
 
 beforeAll(async () => {
