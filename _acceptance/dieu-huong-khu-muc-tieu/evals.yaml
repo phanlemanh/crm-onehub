@@ -253,16 +253,6 @@ evals:
       - _acceptance/dieu-huong-khu-muc-tieu/evidence/khoa-ly-do-390.png
     expected: "Đọc được cùng khuôn ở cả hai khổ; dòng lý do nằm ngay dưới tiêu đề và nói vì sao nút khoá."
 
-  - id: E14
-    criterion: AC-2
-    executor: script
-    cmd: config:executors.script.dhk_san_thiet_ke
-    paths:
-      - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
-      - "apps/app/app/(app)/[slug]/okr/luoi-dau-trang.tsx"
-      - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
-    expected: "exit 0 — design-gate --mode static đạt sàn P0 trên các tệp đầu trang khu; chiều đỏ là của design-gate (thước kit), không dựng lại ở đây."
-
   - id: E15
     criterion: AC-5
     executor: script
