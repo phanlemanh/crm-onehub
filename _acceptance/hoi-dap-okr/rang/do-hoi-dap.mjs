@@ -1,3 +1,4 @@
+import { db } from "../../../packages/db/src/index.ts";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
@@ -41,7 +42,6 @@ const { generateText } = await import(yeuCauOkr.resolve("ai"));
 const idCua = (loai, ma) => idMau(loai === "kr" ? "kr" : "mt", ma);
 
 async function anhChup(ca, traLoi) {
-	const { db } = await import(join(GOC, "packages/db/src/index.ts"));
 	const ids = [
 		...ca.kyVong.trichBatBuoc.map((t) => idCua(t.loai, t.ma)),
 		...(traLoi?.cau ?? []).flatMap((c) => c.trich.map((t) => t.id)),
@@ -109,7 +109,6 @@ async function phieuHoiDong(ca, traLoi, anh) {
 }
 
 async function chamMot(ca, moi) {
-	const { db } = await import(join(GOC, "packages/db/src/index.ts"));
 	const nguoi = await db.user.findUniqueOrThrow({
 		where: { email: thuMau(ca.nguoiHoi) },
 		select: { id: true },
@@ -262,7 +261,7 @@ async function main() {
 		return await trongPhien();
 	} catch (e) {
 		console.log(
-			`KHONG DO DUOC: ${e instanceof KhongDo ? e.message : (e?.stack ?? e)}`,
+			`KHONG DO DUOC: ${e instanceof KhongDo ? e.message : `${e?.name} ${JSON.stringify(e?.message)} ${e?.code ?? ""} cause=${String(e?.cause ?? "")}\n${e?.stack ?? e}`}`,
 		);
 		return PHIEN_HOI.ma.khongDo;
 	}

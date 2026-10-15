@@ -147,6 +147,13 @@ describe("okr hoi dap", () => {
 		expect(k.querySelectorAll("[data-nhan-trich]").length).toBe(0);
 	});
 
+	test("hdo-man: dau cot ghi Kara mot lan", async () => {
+		const { props } = dung();
+		const k = await mo(<KhungHoi {...props} />);
+		const dau = k.querySelector("[data-khung='hoi-okr']")?.firstElementChild;
+		expect(dau?.textContent?.match(/Kara/g)?.length).toBe(1);
+	});
+
 	test("hdo-man: dang chay thi khong bao loi, hien dang doc", async () => {
 		const { props } = dung({ messages: LUOT_KHONG_NOP, dangChay: true });
 		const k = await mo(<KhungHoi {...props} />);

@@ -141,7 +141,7 @@ export function KhungHoi(props: KhungHoiProps) {
 			data-khung="hoi-okr"
 		>
 			<KaraDockHeader>
-				<KaraMark scope={<span>{m.khung.tieuDe}</span>} />
+				<KaraMark scope={<span>{m.khung.pham}</span>} />
 			</KaraDockHeader>
 			<KaraDockBody scroll={false}>
 				<KaraTranscript

@@ -11,6 +11,7 @@ const vi = {
 	},
 	khung: {
 		tieuDe: "Kara · Hỏi OKR",
+		pham: "Hỏi OKR",
 	},
 	trong: {
 		tieuDe: "Hỏi Kara về OKR bạn xem được",
@@ -62,6 +63,7 @@ const en: OkrHoiMessages = {
 	},
 	khung: {
 		tieuDe: "Kara · Ask about OKR",
+		pham: "Ask about OKR",
 	},
 	trong: {
 		tieuDe: "Ask Kara about the OKR you can see",

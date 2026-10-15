@@ -34,9 +34,7 @@ type CongCu<DauVao> = {
 	execute: (input: DauVao, ctx: NguCanhPhien) => Promise<KetQua>;
 };
 const tim = timOkr as unknown as CongCu<LocTim>;
-const doc = docOkr as unknown as CongCu<
-	Parameters<typeof docOkrTheoQuyen>[1]
->;
+const doc = docOkr as unknown as CongCu<Parameters<typeof docOkrTheoQuyen>[1]>;
 
 const phien = (userId: string, purpose = "okr-hoi"): NguCanhPhien => ({
 	session: {

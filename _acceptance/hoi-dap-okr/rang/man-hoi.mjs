@@ -21,6 +21,7 @@ const KHO = { rong: 1280, hep: 375 };
 const CHO_TRA_LOI_MS = 180_000;
 const NGUOI = { thanhVien: "ngo-van-toan", vaiOkr: "thai-minh-chau" };
 const CAU = "Mục tiêu giữ đà tăng trưởng bán lẻ miền Bắc đang thế nào?";
+const CHU_QUAY_LAI = "Quay lại";
 const CAU_HAI = "KR nào trong Mục tiêu đó đang chậm nhất?";
 const SEL = {
 	nut: '[data-nut="hoi-kara"]',
@@ -30,7 +31,8 @@ const SEL = {
 	moTrich: "[data-trich-okr]",
 	phanHoi: '[data-slot="ai-feedback"]',
 	thuLai: '[data-slot="kara-retry"]',
-	ngan: "[data-slot='sheet-content']",
+	ngan: "[data-slot='sheet-content'], [data-slot='drawer-content']",
+	nutKhung: "[data-slot='sheet-content'] button, [data-slot='drawer-content'] button",
 };
 
 process.env.BANG_CHUNG ??= join(RA_HOI, "evidence");
@@ -134,7 +136,7 @@ async function trongPhien() {
 
 		await buoc("3b", async () => {
 			const t = d.trangCuoi();
-			await t.goBack();
+			await d.bamChu(t, SEL.nutKhung, CHU_QUAY_LAI);
 			await d.doi(t, (s) => window.__tim(s).length > 0, SEL.khung);
 			await t.waitForFunction(
 				(s) => window.__tim(s).length > 0,

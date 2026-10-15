@@ -30,10 +30,7 @@ const CONG_CU = {
 			c,
 		),
 	nop_ban_nhap: (c: NguCanhPhien) =>
-		(nopBanNhap as unknown as GoiCongCu<BanNhap>).execute(
-			{ mucTieu: [] },
-			c,
-		),
+		(nopBanNhap as unknown as GoiCongCu<BanNhap>).execute({ mucTieu: [] }, c),
 } as const;
 
 type Ten = keyof typeof CONG_CU;
