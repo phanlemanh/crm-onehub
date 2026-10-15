@@ -1,7 +1,9 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { NOT_A_MEMBER } from "@crm/auth";
 import { db } from "@crm/db";
-import { taoCuocHoi } from "@crm/db/okr-cuoc-hoi";
+import { ghiPhienEve, taoCuocHoi } from "@crm/db/okr-cuoc-hoi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { OKR_HOI_TRAN } from "@crm/validation/okr-tra-loi";
 import { verifyJwtHmac } from "eve/channels/auth";
 
 const suffix = `${process.env.TEST_RUN_ID ?? "cua-hoi"}-hoi`;
@@ -14,12 +16,44 @@ const NGOAI = `${suffix}-ngoai`;
 const BI_MAT = "bi-mat-cua-okr-hoi-du-dai-32-ky-tu";
 const AGENT_GIA = "http://127.0.0.1:65531";
 
-type KetLuot =
-	| { ok: true }
-	| { ok: false; lyDo: "het-luot-ngay" | "het-tran-thang" };
+type DichVuHoi = {
+	tangLuot: (
+		userId: string,
+		cuocHoiId: string,
+	) => Promise<{ ok: true } | { ok: false; lyDo: string }>;
+};
+type BuocChiPhi = {
+	type: "step.completed";
+	data: {
+		usage: { inputTokens: number; outputTokens: number; costUsd: number };
+	};
+	meta: { id: string; at: string };
+};
+type NguCanhChiPhi = {
+	session: {
+		id: string;
+		auth: {
+			initiator: {
+				principalId: string;
+				principalType: "user";
+				attributes: Record<string, string>;
+			};
+			current: null;
+		};
+	};
+	channel: { kind: "eve" };
+};
+type XuLyChiPhi = (e: BuocChiPhi, c: NguCanhChiPhi) => Promise<void>;
+
+const DUONG_DICH_VU = "../../api/src/okr/hoi.service.ts";
+const DUONG_HOOK = "../../agent-okr/agent/hooks/chi-phi.ts";
+const { HoiService } = await import(DUONG_DICH_VU);
+const hoi: DichVuHoi = new HoiService(db);
+const hookChiPhi = (await import(DUONG_HOOK)).default as {
+	events: { "step.completed": XuLyChiPhi };
+};
 
 let phien: { user: { id: string; email: string; name: string } } | null = null;
-let ketLuot: KetLuot = { ok: true };
 const daChuyen: { url: string; headers: Headers }[] = [];
 const daTangLuot: string[] = [];
 
@@ -41,7 +75,7 @@ mock.module("@/lib/trpc/server", () => ({
 			hoiTangLuot: {
 				mutate: async (vao: { cuocHoiId: string }) => {
 					daTangLuot.push(vao.cuocHoiId);
-					return ketLuot;
+					return hoi.tangLuot(phien?.user.id ?? "", vao.cuocHoiId);
 				},
 			},
 		},
@@ -112,11 +146,30 @@ beforeAll(async () => {
 	await db.user.create({
 		data: { id: NGOAI, name: NGOAI, email: `${NGOAI}@thu.test` },
 	});
+	cuoc.ngoai = (await taoCuocHoi(db, NGOAI)).id;
 });
+
+const loiCua = async (ra: Response) =>
+	((await ra.json()) as { error: string }).error;
+
+async function tuChoiKhongDemKhongChuyen(
+	ra: Promise<Response>,
+	status: number,
+	ma: string,
+) {
+	const truocLuot = daTangLuot.length;
+	const truoc = daChuyen.length;
+	const kq = await ra;
+	expect({ status: kq.status, ma: await loiCua(kq) }).toEqual({ status, ma });
+	expect(daTangLuot.length).toBe(truocLuot);
+	expect(daChuyen.length).toBe(truoc);
+}
 
 afterAll(async () => {
 	globalThis.fetch = fetchThat;
 	const ids = [...Object.values(NGUOI), NGOAI];
+	await db.aiChiPhi.deleteMany({ where: { id: { startsWith: suffix } } });
+	await db.okrLuotHoi.deleteMany({ where: { userId: { in: ids } } });
 	await db.okrCuocHoi.deleteMany({ where: { nguoiHoiUserId: { in: ids } } });
 	await db.member.deleteMany({ where: { userId: { in: ids } } });
 	await db.user.deleteMany({ where: { id: { in: ids } } });
@@ -128,7 +181,6 @@ describe("hdo cua hoi", () => {
 		async (vai) => {
 			const id = NGUOI[vai];
 			vao(id);
-			ketLuot = { ok: true };
 			const truoc = daChuyen.length;
 			const ra = await goi(["session"], hdrHoi(cuoc[vai] ?? ""));
 			expect(ra.status).toBe(202);
@@ -153,32 +205,47 @@ describe("hdo cua hoi", () => {
 		},
 	);
 
-	test("cuoc hoi cua nguoi khac: 403, khong dem luot, khong chuyen", async () => {
+	test("cuoc hoi cua nguoi khac: 403 cuoc-khong-thuoc-ban, khong dem luot, khong chuyen", async () => {
 		vao(NGUOI.okr);
-		const truocLuot = daTangLuot.length;
-		const truoc = daChuyen.length;
-		const ra = await goi(["session"], hdrHoi(cuoc.khac ?? ""));
-		expect(ra.status).toBe(403);
-		expect(((await ra.json()) as { error: string }).error).toBe(
+		await tuChoiKhongDemKhongChuyen(
+			goi(["session"], hdrHoi(cuoc.khac ?? "")),
+			403,
 			"cuoc-khong-thuoc-ban",
 		);
-		expect(daTangLuot.length).toBe(truocLuot);
-		expect(daChuyen.length).toBe(truoc);
 	});
 
-	test("duong phien la: 403", async () => {
+	test("duong phien la: 403 phien-khong-thuoc-cuoc, khong dem luot, khong chuyen", async () => {
 		vao(NGUOI.member);
-		const ra = await goi(
-			["session", "phien-la-khong-co"],
-			hdrHoi(cuoc.member ?? ""),
+		await tuChoiKhongDemKhongChuyen(
+			goi(["session", "phien-la-khong-co"], hdrHoi(cuoc.member ?? "")),
+			403,
+			"phien-khong-thuoc-cuoc",
 		);
-		expect(ra.status).toBe(403);
 	});
 
-	test("nguoi khong co hang member: 403", async () => {
+	test("phien cu da bi thay trong cuoc: 409 phien-da-thay, khong dem luot, khong chuyen", async () => {
+		vao(NGUOI.member);
+		const cu = `${suffix}-eve-cu`;
+		await ghiPhienEve(db, cuoc.member ?? "", cu);
+		const sau = await db.okrCuocHoi.findUniqueOrThrow({
+			where: { id: cuoc.member ?? "" },
+		});
+		expect(sau.sessionId).not.toBe(cu);
+		expect(sau.cacPhien).toContain(cu);
+		await tuChoiKhongDemKhongChuyen(
+			goi(["session", cu], hdrHoi(cuoc.member ?? "")),
+			409,
+			"phien-da-thay",
+		);
+	});
+
+	test("nguoi khong co hang member hoi tren cuoc cua chinh minh: 403 NOT_A_MEMBER, khong dem luot, khong chuyen", async () => {
 		vao(NGOAI);
-		const ra = await goi(["session"], hdrHoi(cuoc.member ?? ""));
-		expect(ra.status).toBe(403);
+		await tuChoiKhongDemKhongChuyen(
+			goi(["session"], hdrHoi(cuoc.ngoai ?? "")),
+			403,
+			NOT_A_MEMBER,
+		);
 	});
 
 	test("hai header cuoc cung luc: 400", async () => {
@@ -190,21 +257,83 @@ describe("hdo cua hoi", () => {
 		expect(ra.status).toBe(400);
 	});
 
-	test("hdo-tran: het luot ngay va het tran thang tra 429, khong chuyen", async () => {
+	test("hdo-tran: luot 39 thi cau 40 qua, cau 41 tra 429 het-luot-ngay; tran thang cham qua hook chi-phi thi 429 het-tran-thang", async () => {
 		vao(NGUOI.khac);
-		ketLuot = { ok: true };
 		const dau = daChuyen.length;
 		expect((await goi(["session"], hdrHoi(cuoc.khac ?? ""))).status).toBe(202);
-		expect(daChuyen.length).toBe(dau + 1);
 		const phienEve = (
 			await db.okrCuocHoi.findUniqueOrThrow({ where: { id: cuoc.khac ?? "" } })
 		).sessionId;
-		for (const lyDo of ["het-luot-ngay", "het-tran-thang"] as const) {
-			ketLuot = { ok: false, lyDo };
-			const ra = await goi(["session", phienEve], hdrHoi(cuoc.khac ?? ""));
-			expect(ra.status).toBe(429);
-			expect(((await ra.json()) as { error: string }).error).toBe(lyDo);
-			expect(daChuyen.length).toBe(dau + 1);
-		}
+		const demLuot = () =>
+			db.okrLuotHoi.count({ where: { userId: NGUOI.khac } });
+		while ((await demLuot()) < OKR_HOI_TRAN.cauMoiNgay - 1)
+			expect((await hoi.tangLuot(NGUOI.khac, cuoc.khac ?? "")).ok).toBe(true);
+		expect(await demLuot()).toBe(OKR_HOI_TRAN.cauMoiNgay - 1);
+		const cau40 = await goi(["session", phienEve], hdrHoi(cuoc.khac ?? ""));
+		expect(cau40.status).toBe(202);
+		expect(daChuyen.length).toBe(dau + 2);
+		expect(await demLuot()).toBe(OKR_HOI_TRAN.cauMoiNgay);
+		const cau41 = await goi(["session", phienEve], hdrHoi(cuoc.khac ?? ""));
+		expect({ status: cau41.status, ma: await loiCua(cau41) }).toEqual({
+			status: 429,
+			ma: "het-luot-ngay",
+		});
+		expect(daChuyen.length).toBe(dau + 2);
+		expect(await demLuot()).toBe(OKR_HOI_TRAN.cauMoiNgay);
+
+		vao(NGUOI.member);
+		await hookChiPhi.events["step.completed"](
+			{
+				type: "step.completed",
+				data: {
+					usage: {
+						inputTokens: 1000,
+						outputTokens: 100,
+						costUsd: OKR_HOI_TRAN.usdMoiThang,
+					},
+				},
+				meta: { id: `${suffix}-buoc-tran`, at: new Date().toISOString() },
+			},
+			{
+				session: {
+					id: `${suffix}-phien-tran`,
+					auth: {
+						initiator: {
+							principalId: NGUOI.member,
+							principalType: "user",
+							attributes: {
+								purpose: "okr-hoi",
+								cuocHoiId: cuoc.member ?? "",
+								vai: "member",
+							},
+						},
+						current: null,
+					},
+				},
+				channel: { kind: "eve" },
+			},
+		);
+		const hang = await db.aiChiPhi.findMany({
+			where: { id: { startsWith: suffix } },
+			select: { tinhNang: true },
+		});
+		expect(hang).toEqual([{ tinhNang: OKR_HOI_TRAN.tinhNang }]);
+		const truoc = daChuyen.length;
+		const thang = await goi(
+			[
+				"session",
+				(
+					await db.okrCuocHoi.findUniqueOrThrow({
+						where: { id: cuoc.member ?? "" },
+					})
+				).sessionId,
+			],
+			hdrHoi(cuoc.member ?? ""),
+		);
+		expect({ status: thang.status, ma: await loiCua(thang) }).toEqual({
+			status: 429,
+			ma: "het-tran-thang",
+		});
+		expect(daChuyen.length).toBe(truoc);
 	});
 });

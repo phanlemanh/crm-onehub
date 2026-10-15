@@ -112,9 +112,16 @@ describe("do-hoi-dap cham", () => {
 			lyDo: [],
 		}));
 		const tong = tongHop(ds);
+		const tyLe = (((n - sai) / n) * 100).toFixed(1);
 		expect(tong.ma).toBe(1);
-		expect(tong.dong).toContain("dung y");
-		expect(tongHop(ds.map((d) => ({ ...d, dungY: true }))).ma).toBe(0);
+		expect(tong.dong.split("\n")).toContain(
+			`dung y ${tyLe}% < ${NGUONG.dungY * 100}%`,
+		);
+		const dat = tongHop(ds.map((d) => ({ ...d, dungY: true })));
+		expect(dat.ma).toBe(0);
+		expect(dat.dong.split("\n")).toEqual([
+			`quyen 100.0% · trich va so 100.0% · dung y 100.0% tren ${n} cau`,
+		]);
 	});
 
 	test("doc phieu hoi dong", () => {

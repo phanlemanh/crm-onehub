@@ -115,7 +115,6 @@ describe("okr hoi dap", () => {
 		expect(k.querySelectorAll('[data-slot="ai-feedback"]').length).toBe(1);
 		expect(k.textContent).not.toContain("CHU-TU-DO-CUA-MODEL");
 		expect(k.textContent).toContain(CAU_HOI);
-		expect(nhan[0]?.getAttribute("translate")).toBe("no");
 		expect(nhan[0]?.textContent).toBe("Doanh thu quý 4");
 		for (const [i, mong] of [
 			[0, { kind: "kr", id: "kr-doanh-thu" }],
@@ -130,6 +129,30 @@ describe("okr hoi dap", () => {
 			expect(goi.moTrich.at(-1)).toEqual(mong);
 		}
 		expect(goi.moTrich.length).toBe(2);
+	});
+
+	test("hdo-chu: moi ten Muc tieu va KR trich deu nam trong phan tu translate=no", async () => {
+		const { props } = dung();
+		const k = await mo(<KhungHoi {...props} />);
+		const nhan = [...k.querySelectorAll("[data-nhan-trich]")] as HTMLElement[];
+		expect(nhan.map((n) => n.getAttribute("data-nhan-trich")).sort()).toEqual(
+			["kr", "objective"],
+		);
+		const thieu = nhan
+			.filter((n) => n.closest('[translate="no"]') === null)
+			.map((n) => n.textContent);
+		expect(thieu).toEqual([]);
+		for (const n of nhan) {
+			await act(async () => n.click());
+			const the = [...document.body.querySelectorAll("[data-trich-okr]")].at(
+				-1,
+			) as HTMLElement | undefined;
+			const ten = n.textContent ?? "";
+			const chua = [...(the?.closest("[role]")?.querySelectorAll("*") ?? [])]
+				.filter((e) => e.textContent === ten && e.children.length === 0)
+				.filter((e) => e.closest('[translate="no"]') === null);
+			expect(chua.map((e) => e.textContent)).toEqual([]);
+		}
 	});
 
 	test("hdo-man-khong-nop: luot xong ma khong co cau tra loi duoc nhan thi bao loi va thu lai dung cau", async () => {
