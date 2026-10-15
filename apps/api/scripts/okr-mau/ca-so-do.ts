@@ -131,6 +131,16 @@ const MUC_TIEU: MucTieuCa[] = [
 		gop: [{ mucTieu: "sd-a-1" }],
 	},
 	{
+		ma: "sd-h",
+		cap: "phong-ban",
+		donVi: "sd-a1",
+		kieu: "cam-ket",
+		ten: "Sơ đồ · Mục tiêu giới hạn chưa căn chỉnh của A1",
+		gioiHan: true,
+		krs: [xong("sd-h-k1")],
+		gop: [],
+	},
+	{
 		ma: "sd-a2-1",
 		cap: "phong-ban",
 		donVi: "sd-a2",
@@ -400,6 +410,7 @@ export function dauVaoThuan(): DauVaoSoDo {
 		tenGoc: "OneHub",
 		truongGoc: null,
 		cycleId: KY.quy,
+		gioiHan: new Set(),
 		mts: [
 			mucTieuThuan({
 				id: mtSoDo("n1"),

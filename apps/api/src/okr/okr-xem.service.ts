@@ -469,13 +469,14 @@ export class OkrXemService {
 
 	async docDauVaoSoDo(userId: string, cycleId: string): Promise<DauVaoSoDo> {
 		const q = await this.quyenOkr.quyen(userId);
-		const { mts } = await this.okr.mucTieuCuaCay(userId, cycleId);
+		const { mts, gioiHan } = await this.okr.mucTieuCuaCay(userId, cycleId);
 		return {
 			cay: cayGon(q),
 			tenGoc: OKR.tenGoc,
 			truongGoc: null,
 			cycleId,
 			mts,
+			gioiHan,
 		};
 	}
 

@@ -11,6 +11,7 @@ export type DauVaoSoDo = {
 	truongGoc: NguoiGon | null;
 	cycleId: string;
 	mts: MucTieuOutput[];
+	gioiHan: ReadonlySet<string>;
 };
 
 type DonVi = {
@@ -81,11 +82,14 @@ export function gopSoDoDonVi(vao: DauVaoSoDo): SoDoDonViOutput {
 		if (k) khoaMucTieu.set(m.id, k);
 		tenMucTieu.set(m.id, m.title);
 	}
+	const coDichThay = (m: MucTieuOutput) =>
+		m.alignments.some((a) => khoaMucTieu.has(a.targetObjectiveId));
 	const tinh = vao.mts.filter(
 		(m) =>
 			m.cycleId === vao.cycleId &&
 			m.status === "cong-bo" &&
-			khoaMucTieu.has(m.id),
+			khoaMucTieu.has(m.id) &&
+			(!vao.gioiHan.has(m.id) || coDichThay(m)),
 	);
 	const cuaDonVi = new Map<string, MucTieuOutput[]>();
 	for (const m of tinh) {

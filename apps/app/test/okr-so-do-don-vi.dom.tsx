@@ -263,6 +263,7 @@ function toChuc(
 		truongGoc: null,
 		cycleId: mts[0]?.cycleId ?? "",
 		mts,
+		gioiHan: new Set(),
 	};
 }
 

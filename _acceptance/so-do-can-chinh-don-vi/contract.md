@@ -104,9 +104,15 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
   `_acceptance/cay-can-chinh-co-ly-do/evals.yaml` và `_acceptance/ux-lai-thu-8c-okr/evals.yaml` (chỉ thêm khai nghỉ).
   S3 phát sinh: `apps/api/src/generated/server.ts` (sinh lại bằng `trpc:generate`, chỉ thêm thủ tục `soDoDonVi`),
   `apps/app/test/messages-guard.spec.ts` (chỉ thêm năm dòng ghim chữ dạng hàm của khối `soDo`).
+  S4-r1 phát sinh: `apps/api/test/vai-chi-okr.spec.ts` (chỉ thêm khai thủ tục đọc `okr.soDoDonVi` cho vai «chỉ OKR» và
+  bảng che mục tiêu ẩn), `packages/ui/test/render-diff.spec.tsx` (chỉ thêm ca `FlowMap`),
+  `apps/app/lib/trpc/cache.ts` (chỉ thêm `okr.soDoDonVi` vào danh sách làm mới `cache.okr`).
 - AC-13 (B5) HOÃN — chủ kho tách ở Gate 1.5 ngày 15/10 («tách B5 thành hàng riêng sau phiên nghiệm thu L3»; sổ
   `d-20261015T035759Z-17`): E13 khai `status: not-run`, các tệp «Nếu làm B5» ở Ranh giới không đổi, không eval nào
   của hồ sơ khác bị nghỉ. Hướng làm: `docs/plan/2026-10-15-hat-giong-b5-bo-cay-sau-nghiem-thu-l3.md`.
+- Giới hạn đo của AC-14 (S4-r1): có eval đã ký đỏ sẵn trên `onehub` trước vòng này — đo 15/10 trên `02ed3aec0`:
+  `bo-xuong-kara#E10` (vân tay `confirmation.tsx`, hai thành phần mồ côi `artifact.tsx`, `task.tsx`). Răng E14 chạy lại
+  bài đỏ trên bản nền và in `DO SAN` cho bài đỏ cả hai phía; chỉ «đỏ trên vật, xanh trên nền» mới làm E14 đỏ.
 - Rủi ro gộp (crm #375, Mac Studio 02:41Z): #410 (Kho tài liệu) sửa `packages/ui/package.json` và
   `packages/ui/src/lib/messages.ts`; NM2 `loc-va-kieu-xem-chung` sửa `packages/ui` toggle-group (prop `count`) và có thể thêm
   khối vào `packages/ui/src/lib/messages.ts`; C `hoi-dap-okr` sửa `apps/app/lib/messages/okr-hoi.ts` (kề, không trùng

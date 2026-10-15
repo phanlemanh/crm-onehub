@@ -132,15 +132,17 @@ async function doKho(tenKho) {
 		if (tenKho === "1440") {
 			await p.goto(duong, { waitUntil: "load" });
 			await p.waitForSelector("[data-flow-map] [data-so-do-the]");
+			await p.waitForSelector("[data-flow-map] .react-flow__edge[data-id]");
+			await p.waitForNetworkIdle({ idleTime: 500 }).catch(() => {});
 			await p.evaluate(() => document.fonts.ready);
 			const chuaNoi = await p.evaluate(
 				(ds) =>
 					ds.map((k) => {
 						const the = document.querySelector(`[data-so-do-the="${k}"]`);
 						const day = [
-							...document.querySelectorAll('[data-testid^="rf__edge-"]'),
+							...document.querySelectorAll(".react-flow__edge[data-id]"),
 						].filter((e) =>
-							(e.getAttribute("data-testid") ?? "").endsWith(`->${k}`),
+							(e.getAttribute("data-id") ?? "").endsWith(`->${k}`),
 						).length;
 						return {
 							k,
@@ -159,7 +161,7 @@ async function doKho(tenKho) {
 				kiem(`so-do 1440 ${c.k}: ${c.day} day di len`, c.day === 0);
 			}
 			const tongDay = await p.evaluate(
-				() => document.querySelectorAll('[data-testid^="rf__edge-"]').length,
+				() => document.querySelectorAll(".react-flow__edge[data-id]").length,
 			);
 			kiem(
 				`so-do 1440: doi chung duong — khung ve co ${tongDay} day`,

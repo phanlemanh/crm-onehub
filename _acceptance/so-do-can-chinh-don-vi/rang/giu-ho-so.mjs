@@ -1,5 +1,14 @@
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdirSync,
+	mkdtempSync,
+	readdirSync,
+	readFileSync,
+	rmSync,
+	symlinkSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
@@ -175,20 +184,68 @@ for (const e of tap) {
 	const lenh = giaiLenh(e.cmd);
 	theoLenh.set(lenh, [...(theoLenh.get(lenh) ?? []), e]);
 }
+function banNen(sha) {
+	const tam = mkdtempSync(join(tmpdir(), "dh4-giu-nen-"));
+	execFileSync("bash", [
+		"-c",
+		`git -C "${GOC}" archive ${sha} | tar -x -C "${tam}"`,
+	]);
+	const nm = execFileSync(
+		"bash",
+		[
+			"-c",
+			`cd "${GOC}" && ls -d node_modules apps/*/node_modules packages/*/node_modules 2>/dev/null`,
+		],
+		{ encoding: "utf8" },
+	)
+		.split("\n")
+		.filter(Boolean);
+	for (const d of nm) {
+		mkdirSync(dirname(join(tam, d)), { recursive: true });
+		symlinkSync(join(GOC, d), join(tam, d));
+	}
+	if (existsSync(join(GOC, ".env")))
+		symlinkSync(join(GOC, ".env"), join(tam, ".env"));
+	return tam;
+}
+
 let daChay = 0;
-const doLoi = [];
+const doTrenVat = [];
 for (const [lenh, ds] of theoLenh) {
 	const r = spawnSync("bash", ["-c", lenh], { cwd: GOC, stdio: "inherit" });
 	daChay += 1;
 	for (const e of ds) {
-		if (r.status !== e.ky)
-			doLoi.push(
-				`eval da ky do: ${e.hoSo}#${e.id} (ma ${r.status}, ky ${e.ky})`,
-			);
+		if (r.status !== e.ky) doTrenVat.push({ e, lenh, ma: r.status });
 		else console.log(`DUNG ${e.hoSo}/${e.id}`);
 	}
 }
 console.log(`da chay ${daChay}/${theoLenh.size} lenh khac nhau`);
+const doLoi = [];
+if (doTrenVat.length > 0) {
+	const nen = banNen(n.tu);
+	try {
+		const daChayNen = new Map();
+		for (const { e, lenh, ma } of doTrenVat) {
+			if (!daChayNen.has(lenh))
+				daChayNen.set(
+					lenh,
+					spawnSync("bash", ["-c", lenh], { cwd: nen, stdio: "inherit" })
+						.status,
+				);
+			const maNen = daChayNen.get(lenh);
+			if (maNen === e.ky)
+				doLoi.push(
+					`eval da ky do do vong: ${e.hoSo}#${e.id} (ma ${ma}, ky ${e.ky}, nen ${n.tu.slice(0, 9)} xanh)`,
+				);
+			else
+				console.log(
+					`DO SAN ${e.hoSo}/${e.id} (ma ${ma}; tren nen ${n.tu.slice(0, 9)} cung ma ${maNen}, ky ${e.ky})`,
+				);
+		}
+	} finally {
+		rmSync(nen, { recursive: true, force: true });
+	}
+}
 for (const l of doLoi) console.error(l);
 if (daChay !== theoLenh.size || doLoi.length > 0) process.exit(1);
 console.log("giu ho so dat");

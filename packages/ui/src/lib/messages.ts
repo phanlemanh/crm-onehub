@@ -255,6 +255,15 @@ const en = {
 		phongTo: "Zoom in",
 		vuaKhung: "Fit to view",
 		mucPhong: (phanTram: string) => `Zoom ${phanTram}%`,
+		vaiNut: "card",
+		vaiDay: "connection",
+		day: "Alignment line",
+		moTaNut: "Press Enter or Space to open this card.",
+		moTaDay: "An alignment line between two cards.",
+		banDoNho: "Overview map",
+		diemNoi: "Connection point",
+		nutDaDich: (huong: string, x: number, y: number) =>
+			`Card moved ${huong}. New position ${x}, ${y}`,
 	},
 };
 
@@ -512,6 +521,15 @@ const vi = {
 		phongTo: "Phóng to",
 		vuaKhung: "Vừa khung",
 		mucPhong: (phanTram: string) => `Đang phóng ${phanTram}%`,
+		vaiNut: "thẻ",
+		vaiDay: "dây nối",
+		day: "Dây căn chỉnh",
+		moTaNut: "Nhấn Enter hoặc phím cách để mở thẻ này.",
+		moTaDay: "Dây căn chỉnh giữa hai thẻ.",
+		banDoNho: "Bản đồ thu nhỏ",
+		diemNoi: "Điểm nối",
+		nutDaDich: (huong: string, x: number, y: number) =>
+			`Đã dời thẻ về ${huong}. Vị trí mới ${x}, ${y}`,
 	},
 } satisfies Messages;
 
