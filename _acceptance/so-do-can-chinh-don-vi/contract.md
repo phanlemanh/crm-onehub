@@ -5,9 +5,9 @@ slug: so-do-can-chinh-don-vi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: manh
+approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-so-do-can-chinh-don-vi-design.md
 ---
 
