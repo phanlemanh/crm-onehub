@@ -5,7 +5,7 @@ slug: cua-toi-ba-phan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-15T05:06:36Z
 design_doc: docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md
