@@ -6,7 +6,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
 type Vai = "owner" | "admin" | "member" | "okr";
-type Loai = "toan-quyen" | "keo-tin-hieu";
+type Loai = "toan-quyen" | "keo-tin-hieu" | "day-lo-trinh";
 type TaoVao = { name: string; expiresInDays: number | null; loai?: Loai };
 
 let vai: Vai = "owner";
@@ -216,10 +216,14 @@ describe("tvk-man", () => {
 					}
 					expect(nhom()?.textContent).toContain(t.tao.loai);
 					const radio = nutRadio();
-					expect(radio.length).toBe(2);
+					expect(radio.length).toBe(3);
 					expect(radio[0]?.getAttribute("aria-checked")).toBe("true");
 					expect(radio[0]?.getAttribute("value")).toBe("toan-quyen");
-					for (const mo of [t.tao.loaiToanQuyenMoTa, t.tao.loaiKeoTinHieuMoTa])
+					for (const mo of [
+						t.tao.loaiToanQuyenMoTa,
+						t.tao.loaiKeoTinHieuMoTa,
+						t.tao.loaiDayLoTrinhMoTa,
+					])
 						expect(nhom()?.textContent).toContain(mo);
 				});
 			}
@@ -299,6 +303,74 @@ describe("tvk-man", () => {
 			expect(nhan.length, "danh sach khong noi khoa chi keo").toBe(1);
 			expect(nhan[0]?.textContent).toBe(t.bang.loaiKeoTinHieu);
 			expect(nhan[0]?.closest("tr")?.textContent).toContain("Lich keo");
+		});
+	}
+});
+
+describe("day-lo-trinh", () => {
+	for (const locale of ["vi", "en"] as const) {
+		const t = khoaApiMessages(locale);
+
+		for (const v of ["owner", "admin"] as const)
+			test(`day-lo-trinh: ${locale} ${v} chon Day lo trinh thi loai di toi may chu, hop dan dat bi mat`, async () => {
+				vai = v;
+				datKho(1280);
+				await ve(<CreateApiKeySheet />, locale, true);
+				const ten = document.querySelector<HTMLInputElement>(
+					"form input[required]",
+				);
+				if (!ten) throw new Error("khong thay o ten");
+				await go(ten, "Day lo trinh");
+				const day = nutRadio().find(
+					(r) => r.getAttribute("value") === "day-lo-trinh",
+				);
+				if (!day) throw new Error("khong thay muc Day lo trinh");
+				expect(nhom()?.textContent).toContain(t.tao.loaiDayLoTrinh);
+				await bam(day);
+				const nutTao = [
+					...document.querySelectorAll<HTMLButtonElement>(
+						"button[type=submit]",
+					),
+				].find((b) => b.textContent === t.tao.taoKhoa);
+				if (!nutTao) throw new Error("khong thay nut tao");
+				await gui(nutTao);
+				expect(daTao.at(-1)?.loai, "loai khoa khong di toi may chu").toBe(
+					"day-lo-trinh",
+				);
+				expect(document.body.textContent).toContain(t.daTao.dayLoTrinh);
+				expect(document.body.textContent).not.toContain(t.daTao.keoTinHieu);
+			});
+
+		for (const v of ["member", "okr"] as const)
+			test(`day-lo-trinh: ${locale} ${v} khong thay o loai khoa`, async () => {
+				vai = v;
+				datKho(1280);
+				await ve(<CreateApiKeySheet />, locale, true);
+				expect(
+					nutRadio().some((r) => r.getAttribute("value") === "day-lo-trinh"),
+					"vai khong phai quan tri thay loai Day lo trinh",
+				).toBe(false);
+			});
+
+		test(`day-lo-trinh: ${locale} danh sach ghi nhan khoa Day lo trinh dung dong`, async () => {
+			vai = "owner";
+			datKho(1280);
+			hang = [
+				{
+					id: "k3",
+					name: "Day lo trinh",
+					start: "crm_cc",
+					enabled: true,
+					createdAt: "2026-10-14T00:00:00.000Z",
+					lastRequest: null,
+					expiresAt: null,
+					loai: "day-lo-trinh",
+				},
+			];
+			await ve(<ApiKeysTable />, locale, false);
+			const nhan = [...document.querySelectorAll("[data-slot=nhan-loai-khoa]")];
+			expect(nhan.length).toBe(1);
+			expect(nhan[0]?.textContent).toBe(t.bang.loaiDayLoTrinh);
 		});
 	}
 });

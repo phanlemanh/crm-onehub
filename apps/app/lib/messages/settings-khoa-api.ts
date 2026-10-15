@@ -20,6 +20,7 @@ const en = {
 		tim: "Search by name…",
 		trong: "No API keys yet.",
 		loaiKeoTinHieu: "Signals only",
+		loaiDayLoTrinh: "Roadmap push only",
 	},
 	thuHoi: {
 		nhan: "Revoke",
@@ -51,10 +52,15 @@ const en = {
 		loaiKeoTinHieu: "Only pulling signals into the repo",
 		loaiKeoTinHieuMoTa:
 			"For the daily schedule. It can pull signals and nothing else — it cannot sign in, read records or create keys.",
+		loaiDayLoTrinh: "Only pushing the roadmap to the Roadmap page",
+		loaiDayLoTrinhMoTa:
+			"For GitHub, each time the roadmap changes on the main branch. It can send the roadmap and nothing else — it cannot sign in, read records or create keys.",
 	},
 	daTao: {
 		keoTinHieu:
 			"This key can only pull signals into the repo. Put it in the schedule's secret CRM_KHOA_KEO_TIN_HIEU.",
+		dayLoTrinh:
+			"This key can only push the roadmap. Put it in the repository secret CRM_KHOA_DAY_LO_TRINH.",
 		daTao: "created",
 		khoaNay: "API key",
 		moTa: "Copy it now. Nobody, including us, can show it to you again.",
@@ -85,6 +91,7 @@ const vi = {
 		tim: "Tìm theo tên…",
 		trong: "Chưa có khoá API nào.",
 		loaiKeoTinHieu: "Chỉ kéo tín hiệu",
+		loaiDayLoTrinh: "Chỉ đẩy lộ trình",
 	},
 	thuHoi: {
 		nhan: "Thu hồi",
@@ -116,10 +123,15 @@ const vi = {
 		loaiKeoTinHieu: "Chỉ kéo tín hiệu về kho",
 		loaiKeoTinHieuMoTa:
 			"Cho lịch chạy hằng ngày. Khoá chỉ kéo được tín hiệu — không đăng nhập, không đọc bản ghi, không tạo khoá.",
+		loaiDayLoTrinh: "Chỉ đẩy lộ trình lên trang Lộ trình",
+		loaiDayLoTrinhMoTa:
+			"Cho GitHub, mỗi lần lộ trình trên nhánh chính đổi. Khoá chỉ gửi được lộ trình — không đăng nhập, không đọc bản ghi, không tạo khoá.",
 	},
 	daTao: {
 		keoTinHieu:
 			"Khoá này chỉ kéo được tín hiệu về kho. Đặt nó vào bí mật CRM_KHOA_KEO_TIN_HIEU của lịch chạy.",
+		dayLoTrinh:
+			"Khoá này chỉ đẩy được lộ trình. Đặt nó vào bí mật CRM_KHOA_DAY_LO_TRINH của kho trên GitHub.",
 		daTao: "vừa được tạo",
 		khoaNay: "Khoá API",
 		moTa: "Chép nó ngay bây giờ. Không ai, kể cả chúng tôi, hiện lại nó cho bạn được nữa.",
