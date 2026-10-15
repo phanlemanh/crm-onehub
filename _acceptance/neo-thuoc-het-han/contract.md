@@ -55,8 +55,8 @@ xanh ở mốc nền — không chạm. Luật neo: `_acceptance/thuoc-khong-tu-
   `evals.yaml` của hai hồ sơ chỉ eval E23, E25, E5, E3 đổi và chỉ đổi trường `expected`; ở `_acceptance/config.yaml`
   chỉ thêm khoá, không đổi giá trị khoá có sẵn; không commit nào của vòng chạm `_acceptance/cap-nhat-tuan-okr/`;
   và kết quả không đổi khi cây có thêm một commit không thuộc vòng sửa các tệp đó.
-- AC-7: Given hai hồ sơ `so-okr-tu-chay` và `lam-moi-chuyen-viec-qua-loi-chung`, When đọc dòng ghim mới nhất trong
-  `run-log.jsonl` của từng hồ sơ, Then đó là dòng `repin` mọi suite và eval đạt kỳ vọng, `sha` bằng
+- AC-7: Given hồ sơ `lam-moi-chuyen-viec-qua-loi-chung`, When đọc dòng ghim mới nhất trong
+  `run-log.jsonl` của hồ sơ, Then đó là dòng `repin` mọi suite và eval đạt kỳ vọng, `sha` bằng
   `verified_commit` của báo cáo, không cũ hơn commit cuối sửa tệp của hồ sơ đó, và `recheck-evidence` của kit xanh.
 
 ## Coverage
@@ -67,7 +67,7 @@ xanh ở mốc nền — không chạm. Luật neo: `_acceptance/thuoc-khong-tu-
   Thước CE: kết quả chạy từng lệnh ở mốc nền `aba7f6418` (bảng ở thiết kế).
 - Trục C — chiều đo: xanh ở đỉnh · bất biến theo ref · đỏ khi trả về chỗ hỏng · phạm vi · ghim.
   Thước CE: khuôn đo của `thuoc-khong-tu-het-han` AC-3 [SUY-TỪ-REPO: _acceptance/thuoc-khong-tu-het-han/contract.md].
-- Core: A1–A4 × B1–B3 (AC-1…AC-4), C3 (AC-5), C4 (AC-6), C5 (AC-7). Never: A5 (E7 đã xanh — đo, không sửa).
+- Core: A1–A4 × B1–B3 (AC-1…AC-4), C3 (AC-5), C4 (AC-6), C5 (AC-7, chỉ lam-moi). Never: A5 (E7 đã xanh — đo, không sửa).
 
 ## Đường đo
 
@@ -80,6 +80,10 @@ sau-gộp. Vòng ship thẳng sau ghim.
 - Quét toàn kho tìm thước trôi khác ngoài bốn eval hàng F8 nêu.
 - Đổi bộ đọc YAML của kit hay của Bun; sửa bốn `evals.yaml` mà `Bun.YAML` từ chối.
 - Ca `app-rieng` của agent-okr đỏ sẵn ở đường nền (r2·P0, hồ sơ `tran-cho-app-rieng`).
+- Ghim lại `so-okr-tu-chay` — chuyển sang F28 (chủ kho chọn «F8: b», 15/10). Lượt ghim 15/10 đỏ ở ba eval ngoài hàng F8:
+  E8 `soi-ma --ca chi-them` quét rác gitignore `apps/*/.eve/dev-runtime/snapshots/**`; E12/E14 `man-so-tu-chay`
+  trôi theo màn KR đổi sau PR #162 (169 khẳng định, 15 hỏng). Nhật ký: `.acceptance-runs/so-okr-tu-chay/repin-*/`.
+  Phần neo E23/E25 của vòng vẫn giữ.
 
 ## Notes
 

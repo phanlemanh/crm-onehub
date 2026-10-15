@@ -93,9 +93,9 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.nth_ghim_xanh
-    paths: [_acceptance/so-okr-tu-chay/**, _acceptance/lam-moi-chuyen-viec-qua-loi-chung/**, _acceptance/neo-thuoc-het-han/rang/**]
+    paths: [_acceptance/lam-moi-chuyen-viec-qua-loi-chung/**, _acceptance/neo-thuoc-het-han/rang/**]
     expected: |
-      rang/ghim-xanh.mjs, voi hai ho so so-okr-tu-chay va lam-moi-chuyen-viec-qua-loi-chung: dong cuoi
+      rang/ghim-xanh.mjs, voi ho so lam-moi-chuyen-viec-qua-loi-chung (so-okr-tu-chay chuyen sang F28, chu kho chon «F8: b»): dong cuoi
       kind repin|repin-do cua run-log.jsonl phai la repin (repin-do -> "GHIM DO <ho so>" ma 1); suites_exit
       toan 0 va moi evals_exit dat ky vong (0 hoac expected_exit da khai); sha == verified_commit cua
       evidence-report.md (lech -> "GHIM LECH"); commit cuoi sua tep ngoai run-log/evidence-report cua ho so

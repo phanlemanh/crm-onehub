@@ -28,7 +28,7 @@ export const CAP_LMCV = Object.freeze({
 });
 export const SOT = "so-okr-tu-chay";
 export const LMCV = "lam-moi-chuyen-viec-qua-loi-chung";
-export const HO_SO = [SOT, LMCV];
+export const HO_SO = [LMCV];
 export const RANG_SUA = [
 	`_acceptance/${SOT}/rang/soi-ma.mjs`,
 	`_acceptance/${SOT}/rang/migration-chi-them.mjs`,
