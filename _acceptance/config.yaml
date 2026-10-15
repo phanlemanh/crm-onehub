@@ -1662,6 +1662,10 @@ executors:
     lkx_kieu_xem: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-va-kieu-xem.dom.tsx -t kieu-xem"
     lkx_tai_lieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-va-kieu-xem.dom.tsx -t tai-lieu"
     lkx_duong_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-va-kieu-xem.dom.tsx -t duong-dan"
+    tlg_lich_su: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-loc-giu-lich-su.dom.tsx -t lich-su"
+    tlg_giu_loc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-loc-giu-lich-su.dom.tsx -t giu-loc"
+    tlg_lan_dau: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-loc-giu-lich-su.dom.tsx -t lan-dau"
+    tlg_doi_loc_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-loc-giu-lich-su.dom.tsx -t doi-loc-loi"
     gth_gui: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu.spec.ts -t gth-gui"'
     gth_tran: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu.spec.ts -t gth-tran"'
     gth_cua_toi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu.spec.ts -t gth-cua-toi"'
@@ -2793,6 +2797,8 @@ executors:
     cmt_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chu-man-tieng-viet-khong-tran/rang/chup-truong.mjs --chi-do"'
     lkx_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/loc-va-kieu-xem-chung/rang/chup-loc.mjs"'
     lkx_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/loc-va-kieu-xem-chung/rang/chup-loc.mjs --chi-do"'
+    tlg_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tai-lieu-loc-giu-lich-su/rang/do-lich-su.mjs"'
+    tlg_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tai-lieu-loc-giu-lich-su/rang/do-lich-su.mjs --chi-do"'
     tbd_hoi_quy: 'bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/them-buoc-bao-dung/rang/khong-xoa-expect.mjs --moc 3a2783409 && bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx ./test/han-viec.dom.tsx ./test/moi-phia-ke-hoach.dom.tsx ./test/may-nhac.dom.tsx ./test/ke-hoach-sheet.dom.tsx && cd ../.. && bun run check-types'
     tbd_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/them-buoc-bao-dung/rang/man.mjs"'
     tnv_man: 'bash -c ''export TNV_LUONG_DIR="$PWD/.acceptance-runs/tac-nhan-va/luong"; mkdir -p "$TNV_LUONG_DIR"; TAC_TU_GIA_PORT=3593 bun _acceptance/tac-nhan-va/rang/tac-tu-gia.ts & g=$!; AGENT_URL=http://127.0.0.1:3593 AGENT_BRIDGE_SECRET=bi-mat-do-tnv bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tac-nhan-va/rang/man.mjs"; m=$?; kill $g; exit $m'''
