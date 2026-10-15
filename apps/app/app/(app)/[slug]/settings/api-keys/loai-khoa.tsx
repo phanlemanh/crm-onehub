@@ -13,7 +13,11 @@ import { RadioGroup, RadioGroupItem } from "@crm/ui/components/radio-group";
 import { useId } from "react";
 import type { KhoaApiMessages } from "@/lib/messages/settings-khoa-api";
 
-export const LOAI_KHOA = ["toan-quyen", "keo-tin-hieu"] as const;
+export const LOAI_KHOA = [
+	"toan-quyen",
+	"keo-tin-hieu",
+	"day-lo-trinh",
+] as const;
 
 export type LoaiKhoa = (typeof LOAI_KHOA)[number];
 
@@ -43,6 +47,11 @@ export function LoaiKhoaField({
 			value: "keo-tin-hieu",
 			nhan: t.tao.loaiKeoTinHieu,
 			moTa: t.tao.loaiKeoTinHieuMoTa,
+		},
+		{
+			value: "day-lo-trinh",
+			nhan: t.tao.loaiDayLoTrinh,
+			moTa: t.tao.loaiDayLoTrinhMoTa,
 		},
 	] as const;
 
@@ -77,10 +86,10 @@ export function NhanLoaiKhoa({
 	t: KhoaApiMessages;
 	loai: LoaiKhoa;
 }) {
-	if (loai !== "keo-tin-hieu") return null;
+	if (loai === "toan-quyen") return null;
 	return (
 		<Badge variant="secondary" data-slot="nhan-loai-khoa">
-			{t.bang.loaiKeoTinHieu}
+			{loai === "keo-tin-hieu" ? t.bang.loaiKeoTinHieu : t.bang.loaiDayLoTrinh}
 		</Badge>
 	);
 }

@@ -3123,3 +3123,12 @@ model ViecThuTu {
   @@index([userId])
   @@map("viecThuTu")
 }
+
+model BanChupLoTrinh {
+  nguon     String   @id
+  sha       String
+  commitLuc DateTime
+  layLuc    DateTime
+  duLieu    Json
+  canhBao   String[]
+}
