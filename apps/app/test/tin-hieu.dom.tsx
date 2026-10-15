@@ -44,7 +44,13 @@ function truyVan<T>(ten: string, ra: () => T) {
 
 function ghi<TVao, TRa>(ten: string, chay: (v: TVao) => TRa) {
 	return {
-		mutationOptions: (o: Record<string, unknown> = {}) => ({
+		mutationOptions: (
+			o: {
+				onSuccess?: (d: TRa) => void;
+				onError?: (e: Error) => void;
+				onSettled?: () => void;
+			} = {},
+		) => ({
 			...o,
 			mutationKey: [ten],
 			mutationFn: async (v: TVao) => chay(v),

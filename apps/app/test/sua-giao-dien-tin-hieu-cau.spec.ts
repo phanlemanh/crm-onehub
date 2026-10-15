@@ -63,11 +63,7 @@ function tenViec(ma: string | null): string {
 	throw new Error(`không có hàng ${ma}`);
 }
 
-function cauMong(
-	b: BanGhi,
-	nhom: string | null,
-	locale: "vi" | "en",
-): { cau: string; duLieu: string[] } {
+function cauMong(b: BanGhi, nhom: string | null, locale: "vi" | "en") {
 	const m = tinHieuMessages(locale);
 	const c = m.cauSauGom;
 	switch (b.cho) {

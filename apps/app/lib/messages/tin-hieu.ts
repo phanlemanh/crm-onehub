@@ -32,7 +32,6 @@ const en = {
 		cot: {
 			dieuDaKe: "What you told us",
 			gui: "Sent",
-			man: "Screen",
 			guiLuc: "Sent",
 			trangThai: "Status",
 			thaoTac: "Actions",
@@ -146,7 +145,6 @@ const vi: TinHieuMessages = {
 		cot: {
 			dieuDaKe: "Điều đã kể",
 			gui: "Gửi",
-			man: "Màn",
 			guiLuc: "Gửi lúc",
 			trangThai: "Trạng thái",
 			thaoTac: "Thao tác",

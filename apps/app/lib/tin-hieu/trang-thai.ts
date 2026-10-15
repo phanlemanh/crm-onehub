@@ -18,8 +18,9 @@ const tenViecKhoi = z.object({
 	),
 });
 
-function docTenViec(duLieu: unknown): Map<string, string> {
-	const kq = tenViecKhoi.safeParse(duLieu);
+function docTenViec(
+	kq: ReturnType<typeof tenViecKhoi.safeParse>,
+): Map<string, string> {
 	if (!kq.success) return new Map();
 	return new Map(
 		kq.data.lo_trinh.flatMap((lo) =>
@@ -216,7 +217,7 @@ export function docTrangThaiDu(
 	if (kq.kieu === "hong") return traCrm("hong");
 	const theoMa = new Map(kq.banGhi.map((b) => [b.id, b]));
 	const nhom = docNhomHang(duLieu);
-	const tenViec = docTenViec(duLieu);
+	const tenViec = docTenViec(tenViecKhoi.safeParse(duLieu));
 	return {
 		banVe: "co",
 		trangThai: Object.fromEntries(

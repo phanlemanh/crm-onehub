@@ -37,34 +37,46 @@ type HopMauVao = {
 	loi: "qua-tran" | "may-chu" | null;
 };
 
-const HOP: Record<string, HopMauVao> = {
-	[STATE.hopTrong]: { locale: "vi", chu: false, giaiDoan: "soan", loi: null },
-	[STATE.hopDangGo]: { locale: "vi", chu: true, giaiDoan: "soan", loi: null },
-	[STATE.hopQuaTran]: {
-		locale: "vi",
-		chu: true,
-		giaiDoan: "soan",
-		loi: "qua-tran",
-	},
-	[STATE.hopQuaTranEn]: {
-		locale: "en",
-		chu: true,
-		giaiDoan: "soan",
-		loi: "qua-tran",
-	},
-	[STATE.hopLoi]: {
-		locale: "vi",
-		chu: true,
-		giaiDoan: "soan",
-		loi: "may-chu",
-	},
-	[STATE.hopDaGui]: {
-		locale: "vi",
-		chu: false,
-		giaiDoan: "da-gui",
-		loi: null,
-	},
-};
+const HOP = new Map<string, HopMauVao>([
+	[STATE.hopTrong, { locale: "vi", chu: false, giaiDoan: "soan", loi: null }],
+	[STATE.hopDangGo, { locale: "vi", chu: true, giaiDoan: "soan", loi: null }],
+	[
+		STATE.hopQuaTran,
+		{
+			locale: "vi",
+			chu: true,
+			giaiDoan: "soan",
+			loi: "qua-tran",
+		},
+	],
+	[
+		STATE.hopQuaTranEn,
+		{
+			locale: "en",
+			chu: true,
+			giaiDoan: "soan",
+			loi: "qua-tran",
+		},
+	],
+	[
+		STATE.hopLoi,
+		{
+			locale: "vi",
+			chu: true,
+			giaiDoan: "soan",
+			loi: "may-chu",
+		},
+	],
+	[
+		STATE.hopDaGui,
+		{
+			locale: "vi",
+			chu: false,
+			giaiDoan: "da-gui",
+			loi: null,
+		},
+	],
+]);
 
 function HopMau({
 	vao,
@@ -161,7 +173,7 @@ function TrangMau({ state, locale }: { state: string; locale: Locale }) {
 }
 
 export function SuaGiaoDienTinHieuMau({ state }: { state: string }) {
-	const hop = HOP[state];
+	const hop = HOP.get(state);
 	const locale: Locale = hop?.locale ?? (state === STATE.dsEn ? "en" : "vi");
 	return (
 		<LocaleProvider locale={locale}>

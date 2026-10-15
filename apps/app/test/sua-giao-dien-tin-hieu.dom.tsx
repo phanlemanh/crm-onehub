@@ -66,7 +66,13 @@ function truyVan<T>(ten: string, ra: () => Promise<T> | T) {
 
 function ghi<TVao, TRa>(ten: string, chay: (v: TVao) => TRa) {
 	return {
-		mutationOptions: (o: Record<string, unknown> = {}) => ({
+		mutationOptions: (
+			o: {
+				onSuccess?: (d: TRa) => void;
+				onError?: (e: Error) => void;
+				onSettled?: () => void;
+			} = {},
+		) => ({
 			...o,
 			mutationKey: [ten],
 			mutationFn: async (v: TVao) => chay(v),
@@ -719,26 +725,35 @@ describe("sgt-ten-man", () => {
 describe("sgt-chu", () => {
 	const CAM = {
 		vi: ["gom", "kéo về", "kit", "khối", "bản vẽ", "lượt", "hồ sơ"],
-		en: ["grouped", "grouping", "pull", "pick-up", "kit", "block", "snapshot", "run"],
+		en: [
+			"grouped",
+			"grouping",
+			"pull",
+			"pick-up",
+			"kit",
+			"block",
+			"snapshot",
+			"run",
+		],
 	} as const;
 
-	function laChuoi(o: unknown, ra: string[] = []): string[] {
-		if (typeof o === "string") ra.push(o);
-		else if (o && typeof o === "object")
-			for (const v of Object.values(o)) laChuoi(v, ra);
-		return ra;
+	type Khoi = ReturnType<typeof tinHieuMessages>[
+		| "hop"
+		| "trang"
+		| "nhan"
+		| "trangThai"];
+
+	function laChuoi(khoi: Khoi[]): string[] {
+		return [...JSON.stringify(khoi).matchAll(/:"((?:[^"\\]|\\.)*)"/g)].map(
+			(k) => String(JSON.parse(`"${k[1]}"`)),
+		);
 	}
 
 	test("sgt-chu: chu nguoi gui khong dung tu noi bo, cau khong lap nhan", () => {
 		const loi: string[] = [];
 		for (const locale of ["vi", "en"] as const) {
 			const m = tinHieuMessages(locale);
-			const chuoi = laChuoi({
-				hop: m.hop,
-				trang: m.trang,
-				nhan: m.nhan,
-				trangThai: m.trangThai,
-			});
+			const chuoi = laChuoi([m.hop, m.trang, m.nhan, m.trangThai]);
 			expect(chuoi.length).toBeGreaterThan(0);
 			for (const c of chuoi)
 				for (const tu of CAM[locale])

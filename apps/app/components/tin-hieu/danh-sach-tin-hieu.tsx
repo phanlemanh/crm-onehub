@@ -81,10 +81,10 @@ const KHUON_GIO: Intl.DateTimeFormatOptions = {
 	minute: "2-digit",
 };
 
-const GIO: Record<Locale, Intl.DateTimeFormat> = {
+const GIO = {
 	vi: new Intl.DateTimeFormat("vi-VN", KHUON_GIO),
 	en: new Intl.DateTimeFormat("en-GB", KHUON_GIO),
-};
+} satisfies Record<Locale, Intl.DateTimeFormat>;
 
 export function TrangThai({
 	trangThai,
