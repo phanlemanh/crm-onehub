@@ -156,6 +156,10 @@ export const OKR = {
 				`KR thứ ${thu} «${ten}»: ${cau}`,
 			mucTieuHong: (cau: string) => `Mục tiêu từ mẫu: ${cau}`,
 		},
+		hoi: {
+			khongCoCuoc:
+				"Không thấy cuộc hỏi này — có thể nó không còn, hoặc nó không phải của bạn.",
+		},
 		soan: {
 			khongCoCuoc:
 				"Không thấy cuộc soạn này — có thể nó không còn, hoặc bạn không được xem.",

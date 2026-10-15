@@ -4,7 +4,7 @@ Hàng **LT1c** của `docs/plan/lo-trinh-okr.json` (đợt `vong-tin-hieu-1410`,
 
 | Người dùng thấy gì khác | Đụng đâu | Tiêu chí |
 |---|---|---|
-| CRM giữ một bản lộ trình mỗi sản phẩm; bản cũ hơn không ghi đè bản mới | bảng `BanChupLoTrinh`, migration `20261014084104_ban_chup_lo_trinh` | AC-1, AC-4 |
+| CRM giữ một bản lộ trình mỗi sản phẩm; bản cũ hơn không ghi đè bản mới | bảng `BanChupLoTrinh`, migration `20261015105529_ban_chup_lo_trinh` | AC-1, AC-4 |
 | Chủ hoặc quản trị tạo khoá «Chỉ đẩy lộ trình» | `packages/auth` (cấu hình khoá thứ ba), Cài đặt › Khoá API | AC-2 |
 | CRM nhận bản lộ trình qua khoá đó, từ chối bản hỏng và nói đúng chỗ hỏng | `POST /rest/lo-trinh/ban-chup` | AC-1, AC-2, AC-3 |
 | Trang đọc bản lấy về khi mới hơn bản đang chạy; Preview luôn đọc bản của chính nó | `apps/app/lib/lo-trinh/*` | AC-5, AC-6, AC-8 |

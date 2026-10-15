@@ -1,0 +1,51 @@
+{
+  "feature_plain": "Khi Trợ lý OKR chậm quá 3 phút ở mọi lượt, phép đo độ trễ báo «không đạt» như một lần trễ thật, thay vì báo «không đo được» như lỗi hạ tầng.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ báo «không đạt» kèm một dòng nói bao nhiêu lượt quá hạn, khi mọi lượt hỏng đều vì chờ quá 3 phút — lượt quá hạn tính như 30 giây vào số trễ."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Chặn sớm và báo «không đo được» kèm dòng lỗi model như hiện nay, khi có lượt hỏng vì model hay vì trợ lý nộp hỏng."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Sẽ KHÔNG đổi hạn chờ 3 phút, cách tính 30 giây, ngưỡng trễ hay số đo trên màn."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Sẽ KHÔNG bắt một lượt quá hạn lẻ thành trượt khi số trễ chung vẫn dưới ngưỡng."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Sẽ KHÔNG sửa lời mô tả kỳ vọng trong hồ sơ đã ký của Trợ lý OKR."
+    }
+  ],
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Phủ năm kiểu hỏng của 20 lượt: không hỏng, hỏng một phần, hỏng hết không quá hạn, hỏng hết lẫn quá hạn với lỗi khác, quá hạn hết — so cả bản sửa với bản hiện tại (AC-1, AC-2)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Sổ ghi máy tự quyết ca lẫn — có lượt quá hạn mà các lượt khác hỏng vì model — trong khi câu anh chọn chỉ nói ca mọi lượt quá hạn. Đã sửa: thành câu hỏi Hỏi-1 cho anh, soạn theo khuyến nghị."
+    },
+    {
+      "i": 1,
+      "p": "Chưa có phép đo giữ lời hứa «lượt quá hạn tính 30 giây và dòng quá hạn không tự làm trượt». Đã sửa: phép đo chạy thật đòi đúng số 30 000 và chỉ các dòng ngưỡng mới là dòng trượt."
+    },
+    {
+      "i": 2,
+      "p": "Lời hứa «hỏng vì model vẫn báo không đo được kèm dòng lỗi» chưa được chạy thật trong hồ sơ này. Đã sửa: thêm một phép chạy thật với khoá sai, không tốn tiền."
+    },
+    {
+      "i": 3,
+      "p": "Bản đối chứng cũ có thể ghép tệp của hai thời điểm. Đã sửa: chép cả hai tệp của cùng một mốc và in dấu từng tệp."
+    }
+  ]
+}

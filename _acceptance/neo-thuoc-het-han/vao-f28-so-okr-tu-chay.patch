@@ -1,0 +1,315 @@
+diff --git a/_acceptance/so-okr-tu-chay/evals.yaml b/_acceptance/so-okr-tu-chay/evals.yaml
+index 637198619..31ff28347 100644
+--- a/_acceptance/so-okr-tu-chay/evals.yaml
++++ b/_acceptance/so-okr-tu-chay/evals.yaml
+@@ -226,7 +226,7 @@ evals:
+     executor: script
+     cmd: config:executors.script.sot_san_thiet_ke
+     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/**", apps/app/components/crm/record-sheet/**, packages/ui/src/components/**, apps/api/src/**, apps/agent/agent/**, _acceptance/so-okr-tu-chay/rang/soi-ma.mjs]
+-    expected: "exit 0; soi-ma.mjs --ca thiet-ke lấy git diff --name-only origin/onehub...HEAD và chỉ tính các dòng lượt này thêm (khu apps/api/src/okr soi cả tệp); vi phạm có sẵn trên origin/onehub từ trước được in ra nhưng không tính; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay; copy-value.tsx nằm ở packages/ui/src/components, settings/copy-value.tsx không còn, mọi chỗ nhập trỏ @crm/ui; tệp mới không chú thích mã (quét // và /* ngoài chuỗi), không Record<string, unknown>, không useEffect( trần; apps/api/src không chứa 'googleapis.com'; hằng số OKR_SO là nơi duy nhất chứa trần trang và khoảng thử lại (không số 50 hay 30 * 60_000 trần ở tệp okr mới); GOOGLE_SHEETS_EMAIL và GOOGLE_SHEETS_KHOA có trong .env.example và env.validation.ts. In danh sách tệp đã soi. CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x` và `<div className=\"divide-y\">` → đỏ in hai vi phạm có tên."
++    expected: "exit 0; soi-ma.mjs --ca thiet-ke lấy git diff --name-only f2acca7f1^1...f2acca7f1 (cặp gộp PR #162, sha cố định) và đọc nội dung mọi tệp ở f2acca7f1 (git archive), không đọc cây làm việc; chỉ tính các dòng cặp gộp thêm (khu apps/api/src/okr soi cả tệp); vi phạm có sẵn ở f2acca7f1^1 từ trước được in ra nhưng không tính; sha cặp gộp không giải được → KHONG DO DUOC mã 2; mỗi .tsx apps/app qua design-gate.mjs --mode static không P0 và không dấu hiệu vẽ tay; copy-value.tsx nằm ở packages/ui/src/components, settings/copy-value.tsx không còn, mọi chỗ nhập trỏ @crm/ui; tệp mới không chú thích mã (quét // và /* ngoài chuỗi), không Record<string, unknown>, không useEffect( trần; apps/api/src không chứa 'googleapis.com'; hằng số OKR_SO là nơi duy nhất chứa trần trang và khoảng thử lại (không số 50 hay 30 * 60_000 trần ở tệp okr mới); GOOGLE_SHEETS_EMAIL và GOOGLE_SHEETS_KHOA có trong .env.example và env.validation.ts. In danh sách tệp đã soi. CHIỀU ĐỎ: --chieu-do chép một tệp vào tmpdir, chèn chú thích `// x` và `<div className=\"divide-y\">` → đỏ in hai vi phạm có tên."
+     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+ 
+   - id: E24
+@@ -250,5 +250,5 @@ evals:
+     layer: backend-effect
+     cmd: config:executors.script.sot_migration_chi_them
+     paths: [packages/db/prisma/migrations/**, packages/db/prisma/schema.prisma, _acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs]
+-    expected: "exit 0; script (khuôn dat-okr-trong-crm/rang/migration-chi-them.mjs) đọc mọi thư mục migration mới so với origin/onehub; mỗi câu SQL thuộc tập viết trước: CREATE TABLE, CREATE (UNIQUE) INDEX trên bảng MỚI kể cả WHERE một phần, ALTER TABLE <bảng mới> ADD CONSTRAINT … FOREIGN KEY; cấm UPDATE/DELETE/DROP/ALTER COLUMN/RENAME/ADD COLUMN trên bảng có sẵn; số câu > 0 in ra. schema.prisma: các model Okr* liền nhau và là các model cuối, OkrNguonKr và OkrSoChup nằm trong dãy đó. Trên cơ sở dữ liệu tạm: gieo KR, cập nhật tuần, cây tổ chức, thoả thuận bằng lược đồ trước, chạy migration mới, đọc lại số dòng và mọi okrKeyResult.source = 'tay'. CHIỀU ĐỎ: 3 tệp giả trong tmpdir (ADD COLUMN trên okrKeyResult; DROP INDEX; model OkrSoChup đặt giữa tệp) → exit 1 thông điệp ghim từng loại. Thêm: khoá ngoại okrSoChup.keyResultId có ON DELETE RESTRICT (đọc SQL migration); tệp giả thứ tư mang ON DELETE CASCADE → exit 1 «bản chụp bị xoá lan». Đối chứng dương trên cùng bộ tệp giả: một tệp chỉ có CREATE TABLE, CREATE UNIQUE INDEX … WHERE trên bảng mới và ADD CONSTRAINT … ON DELETE RESTRICT → exit 0, thước không bắn."
++    expected: "exit 0; script (khuôn dat-okr-trong-crm/rang/migration-chi-them.mjs) đọc mọi thư mục migration có ở f2acca7f1 mà không có ở f2acca7f1^1 (cặp gộp PR #162, sha cố định), SQL và schema.prisma đọc ở f2acca7f1; mỗi câu SQL thuộc tập viết trước: CREATE TABLE, CREATE (UNIQUE) INDEX trên bảng MỚI kể cả WHERE một phần, ALTER TABLE <bảng mới> ADD CONSTRAINT … FOREIGN KEY; cấm UPDATE/DELETE/DROP/ALTER COLUMN/RENAME/ADD COLUMN trên bảng có sẵn; số câu > 0 in ra. schema.prisma: các model Okr* liền nhau và là các model cuối, OkrNguonKr và OkrSoChup nằm trong dãy đó. Trên cơ sở dữ liệu tạm: gieo KR, cập nhật tuần, cây tổ chức, thoả thuận bằng lược đồ trước, chạy migration mới, đọc lại số dòng và mọi okrKeyResult.source = 'tay'. CHIỀU ĐỎ: 3 tệp giả trong tmpdir (ADD COLUMN trên okrKeyResult; DROP INDEX; model OkrSoChup đặt giữa tệp) → exit 1 thông điệp ghim từng loại. Thêm: khoá ngoại okrSoChup.keyResultId có ON DELETE RESTRICT (đọc SQL migration); tệp giả thứ tư mang ON DELETE CASCADE → exit 1 «bản chụp bị xoá lan». Đối chứng dương trên cùng bộ tệp giả: một tệp chỉ có CREATE TABLE, CREATE UNIQUE INDEX … WHERE trên bảng mới và ADD CONSTRAINT … ON DELETE RESTRICT → exit 0, thước không bắn."
+     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+diff --git a/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs b/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs
+index b973a9a99..ad5c40497 100644
+--- a/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs
++++ b/_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs
+@@ -1,6 +1,5 @@
+ import { execFileSync, spawnSync } from "node:child_process";
+ import {
+-	existsSync,
+ 	mkdirSync,
+ 	mkdtempSync,
+ 	readdirSync,
+@@ -17,7 +16,10 @@ const TEP = fileURLToPath(import.meta.url);
+ const GOC = join(dirname(TEP), "..", "..", "..");
+ const THU_MUC = "packages/db/prisma/migrations";
+ const TEP_SCHEMA = "packages/db/prisma/schema.prisma";
+-const MOC = "origin/onehub";
++const CAP = Object.freeze({
++	goc: "e86b5677ed8ff42c5754bf30b40f87f4a37507aa",
++	dinh: "f2acca7f1ae619abdadbb09e3db29be65841ce87",
++});
+ const MODEL_MOI = ["OkrNguonKr", "OkrSoChup"];
+ const CHI_MUC_MAY = "okrSoChup_may_mot_ngay";
+ const GHIM = Object.freeze({
+@@ -31,7 +33,18 @@ const GHIM = Object.freeze({
+ const git = (...d) =>
+ 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
+ 
+-const TRUOC = git("merge-base", "HEAD", MOC);
++for (const sha of [CAP.goc, CAP.dinh]) {
++	if (
++		spawnSync("git", ["-C", GOC, "cat-file", "-e", `${sha}^{commit}`])
++			.status !== 0
++	) {
++		console.log(`KHONG DO DUOC: khong giai duoc cap gop ${sha}`);
++		process.exit(2);
++	}
++}
++const TRUOC = CAP.goc;
++const DINH = CAP.dinh;
++const SCHEMA_DINH = git("show", `${DINH}:${TEP_SCHEMA}`);
+ const lietKeTruoc = () =>
+ 	git("ls-tree", "--name-only", `${TRUOC}:${THU_MUC}`)
+ 		.split("\n")
+@@ -79,7 +92,8 @@ function viPham(c) {
+ 	if (/^ALTER TABLE "[^"]+" ADD CONSTRAINT "[^"]+" FOREIGN KEY/.test(hoa))
+ 		return null;
+ 	if (/ADD COLUMN/.test(hoa)) return `ADD COLUMN (${bang})`;
+-	if (/^ALTER TABLE/.test(hoa)) return `ALTER TABLE khac ADD CONSTRAINT FOREIGN KEY (${bang})`;
++	if (/^ALTER TABLE/.test(hoa))
++		return `ALTER TABLE khac ADD CONSTRAINT FOREIGN KEY (${bang})`;
+ 	if (/^CREATE TABLE/.test(hoa))
+ 		return cuBang ? `CREATE TABLE trung bang co san (${bang})` : null;
+ 	if (/^CREATE (UNIQUE )?INDEX/.test(hoa))
+@@ -342,7 +356,7 @@ function schemaXenGiua(schema) {
+ }
+ 
+ function chieuDo() {
+-	const schema = readFileSync(join(GOC, TEP_SCHEMA), "utf8");
++	const schema = SCHEMA_DINH;
+ 	const tam = mkdtempSync(join(tmpdir(), "so-okr-mig-"));
+ 	const bo = [
+ 		{
+@@ -444,24 +458,34 @@ if (process.argv[2] === "--gia") {
+ 	process.exit(hong.length === 0 ? 0 : 1);
+ }
+ 
+-const moi = readdirSync(join(GOC, THU_MUC), { withFileTypes: true })
+-	.filter((d) => d.isDirectory() && !cu.has(d.name))
+-	.map((d) => d.name)
+-	.filter((t) => existsSync(join(GOC, THU_MUC, t, "migration.sql")))
++const moi = git("ls-tree", "--name-only", `${DINH}:${THU_MUC}`)
++	.split("\n")
++	.filter((t) => t !== "" && t !== "migration_lock.toml" && !cu.has(t))
++	.filter(
++		(t) =>
++			spawnSync("git", [
++				"-C",
++				GOC,
++				"cat-file",
++				"-e",
++				`${DINH}:${THU_MUC}/${t}/migration.sql`,
++			]).status === 0,
++	)
+ 	.sort();
+-const docSql = (t) =>
+-	readFileSync(join(GOC, THU_MUC, t, "migration.sql"), "utf8");
++const docSql = (t) => git("show", `${DINH}:${THU_MUC}/${t}/migration.sql`);
+ const { hong, dem } = soatTinh({
+ 	moi,
+ 	docSql,
+-	schema: readFileSync(join(GOC, TEP_SCHEMA), "utf8"),
++	schema: SCHEMA_DINH,
+ });
+ 
+ console.log(
+-	`goc so sanh: ${MOC} (${TRUOC.slice(0, 8)}) · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem}`,
++	`goc so sanh: ${TRUOC}..${DINH} · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem}`,
+ );
+ if (moi.length === 0 || dem === 0) {
+-	console.log(`KHONG DO DUOC: khong co migration moi nao so voi ${MOC}`);
++	console.log(
++		`KHONG DO DUOC: khong co migration moi nao trong cap ${TRUOC}..${DINH}`,
++	);
+ 	process.exit(2);
+ }
+ hong.push(...(await chayTrenDuLieu(moi, docSql)));
+diff --git a/_acceptance/so-okr-tu-chay/rang/soi-ma.mjs b/_acceptance/so-okr-tu-chay/rang/soi-ma.mjs
+index 141f49adc..3a1322e56 100644
+--- a/_acceptance/so-okr-tu-chay/rang/soi-ma.mjs
++++ b/_acceptance/so-okr-tu-chay/rang/soi-ma.mjs
+@@ -1,6 +1,7 @@
+ import { execFileSync, spawnSync } from "node:child_process";
+ import {
+ 	existsSync,
++	mkdirSync,
+ 	mkdtempSync,
+ 	readdirSync,
+ 	readFileSync,
+@@ -17,7 +18,11 @@ const ts = createRequire(import.meta.url)("typescript");
+ 
+ const TEP_NAY = fileURLToPath(import.meta.url);
+ const GOC = join(dirname(TEP_NAY), "..", "..", "..");
+-const MOC = "origin/onehub";
++const CAP = Object.freeze({
++	goc: "e86b5677ed8ff42c5754bf30b40f87f4a37507aa",
++	dinh: "f2acca7f1ae619abdadbb09e3db29be65841ce87",
++});
++let CAY_DO = GOC;
+ const LOAI_TRU = new Set([
+ 	"node_modules",
+ 	".next",
+@@ -80,7 +85,12 @@ const doiSo = (ten) => {
+ 	return i === -1 ? null : (process.argv[i + 1] ?? "");
+ };
+ 
+-const tuongDoi = (p) => (p.startsWith(GOC) ? p.slice(GOC.length + 1) : p);
++const tuongDoi = (p) =>
++	p.startsWith(CAY_DO)
++		? p.slice(CAY_DO.length + 1)
++		: p.startsWith(GOC)
++			? p.slice(GOC.length + 1)
++			: p;
+ 
+ const git = (...d) =>
+ 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
+@@ -298,13 +308,11 @@ function dauHieuVeTay(chu, ten) {
+ 	);
+ }
+ 
+-let GOC_SO = null;
+ function dongThem(t, duong) {
+-	GOC_SO ??= git("merge-base", "HEAD", MOC);
+ 	const thu = mkdtempSync(join(tmpdir(), "soi-dong-them-"));
+ 	try {
+ 		const cu = join(thu, "cu");
+-		const r0 = spawnSync("git", ["-C", GOC, "show", `${GOC_SO}:${t}`], {
++		const r0 = spawnSync("git", ["-C", GOC, "show", `${CAP.goc}:${t}`], {
+ 			encoding: "utf8",
+ 			maxBuffer: 64 * 1024 * 1024,
+ 		});
+@@ -388,12 +396,12 @@ function goiKit() {
+ 
+ function copyValue() {
+ 	const hong = [];
+-	if (!existsSync(join(GOC, COPY_UI)))
++	if (!existsSync(join(CAY_DO, COPY_UI)))
+ 		hong.push(`CopyValue không nằm ở ${COPY_UI}`);
+-	if (existsSync(join(GOC, COPY_CU)))
++	if (existsSync(join(CAY_DO, COPY_CU)))
+ 		hong.push(`CopyValue cũ còn ở ${COPY_CU}`);
+ 	let dung = 0;
+-	for (const duong of diCay(join(GOC, "apps/app"), /\.(ts|tsx)$/, [])) {
++	for (const duong of diCay(join(CAY_DO, "apps/app"), /\.(ts|tsx)$/, [])) {
+ 		const chu = readFileSync(duong, "utf8");
+ 		if (!/copy-value|CopyValue/.test(chu)) continue;
+ 		const sf = cay(duong, chu);
+@@ -425,18 +433,18 @@ function tepDiff(loc) {
+ 		"--name-only",
+ 		"--no-renames",
+ 		`--diff-filter=${loc}`,
+-		`${MOC}...HEAD`,
++		`${CAP.goc}...${CAP.dinh}`,
+ 	)
+ 		.split("\n")
+ 		.filter(Boolean);
+ }
+ 
+ async function caThietKe(thay = new Map()) {
+-	const dai = `${MOC}...HEAD (--no-renames)`;
+-	const duongCua = (t) => thay.get(t) ?? join(GOC, t);
++	const dai = `${CAP.goc}...${CAP.dinh} (--no-renames)`;
++	const duongCua = (t) => thay.get(t) ?? join(CAY_DO, t);
+ 	const tenCua = (t) => thay.get(t) ?? t;
+ 	const moi = new Set(tepDiff("A"));
+-	const doi = tepDiff("AM").filter((t) => existsSync(join(GOC, t)));
++	const doi = tepDiff("AM").filter((t) => existsSync(join(CAY_DO, t)));
+ 	const khongThu = (t) =>
+ 		!t.split("/").some((p) => THU_MUC_THU.has(p)) && !LA_THU.test(t);
+ 	const app = doi.filter((t) => VUNG_APP.test(t) && khongThu(t)).sort();
+@@ -446,7 +454,7 @@ async function caThietKe(thay = new Map()) {
+ 	const tepMoi = tepMa.filter((t) => moi.has(t));
+ 	const them = new Map(tepMa.map((t) => [t, dongThem(t, duongCua(t))]));
+ 	for (const t of app) if (!them.has(t)) them.set(t, dongThem(t, duongCua(t)));
+-	const { OKR_SO } = await import(join(GOC, TEP_CAU_HINH_SO));
++	const { OKR_SO } = await import(join(CAY_DO, TEP_CAU_HINH_SO));
+ 	const tran = [
+ 		{ nhan: "trần trang", giaTri: OKR_SO.banGhi.coTrang },
+ 		{ nhan: "khoảng thử lại", giaTri: OKR_SO.sheets.thuLaiMs },
+@@ -482,7 +490,7 @@ async function caThietKe(thay = new Map()) {
+ 				"--mode",
+ 				"static",
+ 			],
+-			{ cwd: GOC, encoding: "utf8" },
++			{ cwd: CAY_DO, encoding: "utf8" },
+ 		);
+ 		const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+ 		const p0 = Number(ra.match(/"p0_count":\s*(\d+)/)?.[1] ?? Number.NaN);
+@@ -508,7 +516,7 @@ async function caThietKe(thay = new Map()) {
+ 	let soApi = 0;
+ 	const doiApi = new Set(doi.filter((t) => t.startsWith("apps/api/src/")));
+ 	for (const duong of diCay(
+-		join(GOC, "apps/api/src"),
++		join(CAY_DO, "apps/api/src"),
+ 		/\.(ts|tsx|js|mjs)$/,
+ 		[],
+ 	)) {
+@@ -530,7 +538,7 @@ async function caThietKe(thay = new Map()) {
+ 		`tep apps/api/src soi googleapis.com: ${soApi} (okr: ca tep; ngoai okr: dong diff them)`,
+ 	);
+ 	for (const t of TEP_BIEN) {
+-		const chu = readFileSync(join(GOC, t), "utf8");
++		const chu = readFileSync(join(CAY_DO, t), "utf8");
+ 		for (const b of BIEN_SHEETS)
+ 			if (!chu.includes(b)) hong.push(`thiếu biến ${b} trong ${t}`);
+ 	}
+@@ -553,6 +561,41 @@ if (ca !== "chi-them" && ca !== "thiet-ke") {
+ }
+ const chieuDo = process.argv.includes("--chieu-do");
+ 
++function dungCayDinh() {
++	for (const sha of [CAP.goc, CAP.dinh]) {
++		const r = spawnSync("git", [
++			"-C",
++			GOC,
++			"cat-file",
++			"-e",
++			`${sha}^{commit}`,
++		]);
++		if (r.status !== 0) {
++			console.log(`KHONG DO DUOC: khong giai duoc cap gop ${sha}`);
++			process.exit(2);
++		}
++	}
++	const cha = join(GOC, ".acceptance-runs", "so-okr-tu-chay");
++	mkdirSync(cha, { recursive: true });
++	const thu = mkdtempSync(join(cha, "cay-dinh-"));
++	const a = spawnSync("git", ["-C", GOC, "archive", CAP.dinh], {
++		maxBuffer: 1024 * 1024 * 1024,
++	});
++	const x = spawnSync("tar", ["-x", "-C", thu], {
++		input: a.stdout,
++		maxBuffer: 1024 * 1024 * 1024,
++	});
++	if (a.status !== 0 || x.status !== 0) {
++		rmSync(thu, { recursive: true, force: true });
++		console.log(`KHONG DO DUOC: khong dung duoc cay o ${CAP.dinh}`);
++		process.exit(2);
++	}
++	process.on("exit", () => rmSync(thu, { recursive: true, force: true }));
++	CAY_DO = thu;
++}
++
++if (ca === "thiet-ke") dungCayDinh();
++
+ if (ca === "chi-them" && !chieuDo) {
+ 	const { hong, tao } = caChiThem();
+ 	if (tao.length === 0) {
+@@ -615,7 +658,7 @@ if (ca === "thiet-ke" && !chieuDo) {
+ if (ca === "thiet-ke" && chieuDo) {
+ 	const nguon = tepDiff("M").find(
+ 		(t) =>
+-			VUNG_APP.test(t) && existsSync(join(GOC, t)) && !t.includes("/test/"),
++			VUNG_APP.test(t) && existsSync(join(CAY_DO, t)) && !t.includes("/test/"),
+ 	);
+ 	if (!nguon) {
+ 		console.log(
+@@ -625,7 +668,7 @@ if (ca === "thiet-ke" && chieuDo) {
+ 	}
+ 	const thuMuc = mkdtempSync(join(tmpdir(), "soi-thiet-ke-"));
+ 	const tep = join(thuMuc, basename(nguon));
+-	const goc = readFileSync(join(GOC, nguon), "utf8");
++	const goc = readFileSync(join(CAY_DO, nguon), "utf8");
+ 	const banSao = `${goc}\n// x\nexport function KhoiGia() {\n\treturn <div className="divide-y" />;\n}\n`;
+ 	writeFileSync(tep, banSao);
+ 	const dong = dongCuaChu(banSao, "\n// x\n") + 1;

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed6482e739e62d41b694480403479c943f8394ae
+verified_commit: 29fef6b0bcaf4f2e32577787260b3a26724a706d
 human_signoff: Manh Phan 2026-10-15
 ---
 
@@ -284,3 +284,11 @@ Round 3: PASS — bảy lệnh suite xanh trên commit b6ae48e01, 18 eval mang s
 ### Re-pin lần 1 — 2026-10-15, do LT1c gộp onehub b57509860; LT1c sửa bảng chỗ đọc khoá của TH1 và phá-thử vai của LT1b
 run_id: repin-20261015T080002Z-93833
 sha: ed6482e739e62d41b694480403479c943f8394ae · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E3b · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-15, do gộp onehub d9eb83536 (#416) sau chữ ký Cổng Bằng chứng
+run_id: repin-20261015T102257Z-30568
+sha: 1cebbed3d3794b70c685ed2bb15f154e2c301e2d · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E3b · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-15, do gộp onehub 8f819cf6a (#419 #422 #407 #421 #409 #423), gọi lượt gộp #420
+run_id: repin-20261015T153900Z-77059
+sha: 29fef6b0bcaf4f2e32577787260b3a26724a706d · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E3b · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
