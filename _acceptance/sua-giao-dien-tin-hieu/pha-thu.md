@@ -18,3 +18,11 @@ E9: DO · thong diep ghim CO «chu trang thai dung tu noi bo: gom»
 E9b: DO · thong diep ghim CO «dong da lay ve»
 E14: DO · thong diep ghim CO «cau sau gom chi co tieng Viet»
 ```
+
+## Bổ sung sau S4 vòng 1 (15/10)
+
+```
+E14b: DO · thong diep ghim CO «cau mang ten nhom khong danh dau khong dich»
+E6c: DO · thong diep ghim CO «nut gui du chu van tro toi dong ly do»
+E14: DO · thong diep ghim CO «cau sau gom chi co tieng Viet»
+```
