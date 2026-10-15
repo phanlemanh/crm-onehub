@@ -277,8 +277,12 @@ try {
 		});
 	}
 	const boPhan = await d.hoi(quanTri.cookie, "onboarding.listDepartments");
-	const pb = boPhan.find((b) => !b.archivedAt);
-	if (!pb) throw new Error("tien de: chua co phong ban de gieo khuon onboarding");
+	const pb =
+		boPhan.find((b) => !b.archivedAt) ??
+		(await d.lam(quanTri.cookie, "org.createDepartment", {
+			name: "Phòng mẫu lkx",
+			divisionId: (await d.lam(quanTri.cookie, "org.createDivision", { name: "Khối mẫu lkx" })).id,
+		}));
 	const khuon = await d.lam(quanTri.cookie, "onboarding.createTemplate", {
 		name: "Khuôn mẫu lkx",
 		partnerType: null,
