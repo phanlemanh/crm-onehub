@@ -1294,6 +1294,40 @@ describe("dvb-dong-mo", () => {
 		expect(nutMo(s.o, "M1")?.getAttribute("aria-expanded")).toBe("false");
 	});
 
+	test("kho hep: tien do cua dong muc tieu va dong KR nam duoi ten (md:hidden), cot Tien do va Tinh trang an duoi md", async () => {
+		datDon("pb:P1", ba());
+		const s = await moTrang("pb:P1", { expand: "M1,M2" });
+		await choBang(s);
+		// muc-tieu-va-kr AC-10: o 375 tien do cua muc tieu va KR nam duoi ten, khong thanh cot rieng.
+		const duoiTen = (o: Element | null) =>
+			[...(o?.querySelectorAll("[data-o-tien-do]") ?? [])].filter(
+				(x) => x.closest(".md\\:hidden") !== null,
+			).length;
+		for (const id of ["M1", "M2"]) {
+			const mt = s.o.querySelector(`[data-hang-muc-tieu="${id}"]`);
+			phai(
+				duoiTen(mt) === 1,
+				`dvb-dong-mo: dong muc tieu ${id} khong co tien do duoi ten o kho hep`,
+			);
+		}
+		for (const kr of ["M1-k1", "M1-k2", "M2-k1"]) {
+			const o = s.o.querySelector(`[data-kr="${kr}"]`);
+			phai(
+				duoiTen(o) === 1,
+				`dvb-dong-mo: dong KR ${kr} khong co tien do duoi ten o kho hep`,
+			);
+		}
+		const lopCot = (chu: string) =>
+			[...s.o.querySelectorAll("thead th")].find((x) =>
+				x.textContent?.includes(chu),
+			)?.className ?? "";
+		for (const chu of [b.cot.tienDo, b.cot.tinhTrang])
+			phai(
+				lopCot(chu).includes("hidden md:table-cell"),
+				`dvb-dong-mo: cot «${chu}» khong an duoi md`,
+			);
+	});
+
 	test("cot cua dong cha: ten, loai, trang thai, so KR, góp vào, Tien do, Tinh trang, Phu trach", async () => {
 		datDon("pb:P1", ba());
 		const s = await moTrang("pb:P1");

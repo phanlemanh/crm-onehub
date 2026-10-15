@@ -16,6 +16,7 @@ import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { giaTri } from "../bang-kr";
 import { ChipGopY } from "../chip-gop-y";
 import { type KetQua, type MucTieu, nhanKr } from "../kieu";
 import {
@@ -30,6 +31,7 @@ import {
 	NhanTinhTrang,
 	NhanTrangThai,
 	ThanhTienDo,
+	TienDoGon,
 	TienDoMucTieuGon,
 } from "../tien-do-kr";
 import {
@@ -221,6 +223,8 @@ function useCot(): DataTableColumn<MucTieu>[] {
 			header: b.cot.tinhTrang,
 			sortable: true,
 			width: "w-36",
+			// Dưới md tình trạng đã nằm trong bản gọn dưới tên — cột riêng chỉ ép hẹp ô tên.
+			hideBelow: "md",
 			cell: (mt) =>
 				laDaBo(mt) ? null : (
 					<PaceIndicator pace={tinhTrangMucTieu(mt)} size="sm" />
@@ -240,23 +244,46 @@ function useCot(): DataTableColumn<MucTieu>[] {
 	];
 }
 
+/**
+ * Ô tên của dòng KR. Dưới md (cột Tiến độ và Tình trạng ẩn) bản gọn của tiến độ
+ * nằm dưới tên — như hàng KR của khối mục tiêu cũ (muc-tieu-va-kr AC-10).
+ */
+function TenKr({ kr, mt }: { kr: KetQua; mt: MucTieu }) {
+	const locale = useLocale();
+	const laMoc = kr.kind === "moc";
+	return (
+		<span className="flex min-w-0 gap-3 whitespace-normal ps-4" data-kr={kr.id}>
+			<span className="w-8 shrink-0 pt-px text-muted-foreground text-xs tabular-nums">
+				{nhanKr(mt.keyResults.indexOf(kr) + 1)}
+			</span>
+			<span className="flex min-w-0 flex-1 flex-col gap-1">
+				<span className="wrap-anywhere" translate="no">
+					{kr.title}
+				</span>
+				<span className="w-full pt-1 md:hidden">
+					<TienDoGon
+						dong={
+							laMoc
+								? giaTri(kr, kr.progress >= 100 ? 1 : 0, locale)
+								: `${giaTri(kr, kr.currentValue, locale)} / ${giaTri(kr, kr.targetValue, locale)}`
+						}
+						expected={mt.expected}
+						kind={mt.kind}
+						laMoc={laMoc}
+						progress={kr.progress}
+						ten={kr.title}
+					/>
+				</span>
+			</span>
+		</span>
+	);
+}
+
 function oKr(kr: KetQua, cot: string, mt: MucTieu): ReactNode {
 	const laMoc = kr.kind === "moc";
 	switch (cot) {
 		case "ten":
-			return (
-				<span
-					className="flex min-w-0 gap-3 whitespace-normal ps-4"
-					data-kr={kr.id}
-				>
-					<span className="w-8 shrink-0 pt-px text-muted-foreground text-xs tabular-nums">
-						{nhanKr(mt.keyResults.indexOf(kr) + 1)}
-					</span>
-					<span className="wrap-anywhere" translate="no">
-						{kr.title}
-					</span>
-				</span>
-			);
+			return <TenKr kr={kr} mt={mt} />;
 		case "tien-do":
 			return (
 				<TienDo
