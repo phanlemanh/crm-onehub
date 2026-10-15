@@ -15,6 +15,7 @@ const TAC_NHAN = {
 	cuaSo: {
 		"zai/glm-5.2-fast": 1_000_000,
 		"google/gemini-3.8-flash": 1_000_000,
+		"zai/glm-5.3-flash": 1_000_000,
 	},
 	trangThai: { "✓": "passed", "✗": "failed", "○": "scored", "–": "skipped" },
 	ra: join(GOC, ".acceptance-runs", "re-mo-hinh-mac-dinh", "tac-nhan"),
