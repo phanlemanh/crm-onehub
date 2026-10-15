@@ -20,9 +20,11 @@ evals:
       ban + 1 phong ban chua xep + 1 nguoi). (a) 0 phan tu [data-nut-cay], 0 [role=tree]; dung 1 o chon
       [data-chon-don-vi] trong vung o tim kiem cua DataTable. (b) Ma tran viet truoc cac lua chon: cong ty,
       B1, B2, P1, P2, P3, P4, X1 (chua xep) = 8 o, moi o mot assert nhan + goi y («cả công ty» / «Thuộc B1» /
-      «Thuộc B1 › …») + so muc tieu rut tu okr.countByUnit gia lap (khong viet tay so). (c) Ma tran tim: 4 chuoi
-      ("kinh" khong dau cho «Kinh doanh», ten cha "B1" -> P1,P2, "zzz" -> rong + cau «Không có đơn vị nào khớp.»,
-      "" -> 8) moi chuoi mot assert tap ket qua. (d) Chon P2 -> URL donOkr=pb:P2 va doi so okr.danhSach ke tiep
+      «Thuộc B1 › …») + so muc tieu rut tu okr.countByUnit gia lap (khong viet tay so). (c) Ma tran tim: 6 chuoi tren
+      ten fixture CO DAU sinh bang ham («Phòng Kế toán», «Dịch vụ khách hàng», «Kinh doanh»): "phong ke toan" ->
+      {Phòng Kế toán}, "dich" -> {Dịch vụ khách hàng}, "KINH" -> {Kinh doanh}, ten cha khong dau cua B1 -> con cua
+      B1, "zzz" -> rong + cau «Không có đơn vị nào khớp.», "" -> 8; moi chuoi mot assert tap ket qua. Pha-thu hai
+      (DVB_PHA=bo-go-dau: ban sao bo buoc gap dau) -> "dvb-chon-don-vi: \"phong ke toan\" ra rong, mong {Phòng Kế toán}". (d) Chon P2 -> URL donOkr=pb:P2 va doi so okr.danhSach ke tiep
       = {loai:"pb", id:"P2"} (doc tu bo goi truy van gia lap). (e) URL donOkr=nguoi:U1 -> o chon hien ten U1.
       DOI CHUNG DUONG: o chon nam trong [data-slot=data-table] (hoac khung hang cong cu) cua trang that.
       CHIEU DO (DVB_PHA=cay-cu: ban sao dung lai CayDonVi) -> "dvb-chon-don-vi: con 20 nut cay
@@ -101,7 +103,9 @@ evals:
       Cung phien do (EVAL=E5), 1440. Script doc kho do qua Prisma tap ten muc tieu cong-bo cua chu ky dang
       chon cho 2 don vi P_a, P_b cua bo OKR mau. Tren trang: mo o chon, go mot phan ten P_b khong dau, chon ->
       dong "CHON: URL donOkr=pb:<id P_b> · bang <k> dong · kho do <k'> muc tieu"; DUNG khi tap ten dong bang =
-      tap ten trong kho cho P_b va khac tap cua P_a. Dong cham "DUNG AC-1: bang khop kho do cho P_b".
+      tap ten trong kho cho P_b va khac tap cua P_a. Them hai dong so, moi
+      dong so voi Prisma dem muc tieu status cong-bo cua chu ky cho don vi do (dang nhap quan tri): "SO CHON <P_a|P_b>:
+      o chon <n> · kho do <n'>"; DUNG khi bang nhau. Dong cham "DUNG AC-1: bang khop kho do cho P_b · so khop".
       CHIEU DO (DVB_PHA=chon-khong-doi: ban sao bo qua onValueChange) -> "SAI AC-1: URL khong doi sau khi
       chon", ma 1.
 
@@ -180,10 +184,12 @@ evals:
     expected: |
       Ten ca "dvb-chan-bang". Ma tran viet truoc: loai don vi (goc, bo phan co truong, bo phan chua truong,
       phong ban, phong ban chua xep, nguoi) = 6 o. Moi o: chan bang [data-dong-don-vi] co truong hoac co canh
-      bao «Chưa có trưởng», «N mục tiêu · M KR» (N, M dem tu fixture), «Thuộc …» (khong co o goc); khoi
+      bao «Chưa có trưởng», «N mục tiêu · M KR» (N, M dem tu cac dong cua okr.danhSach gia lap, rut bang ham dem
+      cua bai), «Thuộc …» (khong co o goc); khoi
       [data-don-vi-con] co dung tap con truc tiep rut tu cay fixture (goc -> bo phan + chua xep; bo phan -> phong
-      ban; phong ban, nguoi -> khong khoi); moi o con la lien ket href co donOkr=<con> va kyOkr hien tai, chu
-      «Chưa đặt OKR» khi dem 0. CHIEU DO (DVB_PHA=con-sai-cap: ban sao liet ca chau) -> "dvb-chan-bang: goc:
+      ban; phong ban, nguoi -> khong khoi); moi o con la lien ket href co donOkr=<con> va kyOkr hien tai, so muc
+      tieu = gia tri okr.countByUnit gia lap cua dung khoa <con> (khoa rut bang khoaDonOkr, khong viet tay), chu
+      «Chưa đặt OKR» khi dem 0. So that tu may chu: E5. CHIEU DO (DVB_PHA=con-sai-cap: ban sao liet ca chau) -> "dvb-chan-bang: goc:
       con co P1, mong chi bo phan va chua xep".
 
   - id: E11
@@ -214,9 +220,14 @@ evals:
       rang/ho-so-da-ky.mjs rut LUC CHAY danh sach eval may cua moi ho so signed-off/machine-cleared co cmd
       tro mot khoa config chay tep kiem bi luot nay sua (tap tep = git diff --name-only <merge-base voi nhanh
       cua DH1 hoac onehub> -- apps/app/test, tru tep moi cua luot), chay tung lenh (trung lenh chay mot lan),
-      in "HO-SO <slug> <E>: ma <n> (ky vong <m>)" moi dong va dong cham "DUNG AC-10: k/k lenh dat ma ky vong".
+      in "HO-SO <slug> <E>: ma <n> (ky vong <m>)" moi dong. Them ve quan he, tinh tu merge-base tren apps/app/test:
+      "XOA <tep>: <n> dong it/test/expect bi xoa khong chua dau cu" (dau cu: data-nut-cay, data-hang-nut,
+      data-don-vi, thuMucTieu, CayDonVi, BangMucTieu) va "SKIP <tep>: <n> .skip/.todo/.only them moi"; DUNG khi moi so
+      = 0. Dong cham "DUNG AC-10: k/k lenh dat ma ky vong · 0 dong kiem bi xoa ngoai dau cu · 0 skip".
       Tap rong -> ma 2 "bo chon rong". CHIEU DO (DVB_PHA=ho-so: ban sao mot tep kiem bi sua them
-      expect(false)) -> "SAI AC-10: <slug> <E>: ma 1 (ky vong 0)", ma 1.
+      expect(false)) -> "SAI AC-10: <slug> <E>: ma 1 (ky vong 0)", ma 1. Pha-thu hai (DVB_PHA=xoa-ca: ban sao
+      xoa mot ca it() khong chua dau cu) -> "SAI AC-10: <tep> xoa <n> dong kiem ngoai dau cu", ma 1; DOI CHUNG DUONG:
+      vat lanh in 0 o ca hai dem.
 
   - id: E13
     criterion: AC-11
@@ -267,7 +278,10 @@ evals:
       xemOkr=cham, khong xemOkr, ky + don + xemOkr + phuTrach + expand) x 5 the = 25 lien ket, moi lien ket mot
       assert: tap tham so == giao cua {kyOkr, donOkr, xemOkr} voi tham so dang co. Vong di-ve: URL
       theo-don-vi?kyOkr=K&donOkr=pb:P2&xemOkr=hop-tuan, bam 4 the khac roi Theo don vi -> trang dung cach xem
-      hop-tuan, don P2. Chu ky ngoai pha cham + xemOkr=cham -> danh-sach. CHIEU DO (DVB_PHA=bo-xem: ban sao toi()
+      hop-tuan, don P2. Chu ky ngoai pha cham + xemOkr=cham -> danh-sach. Them: doc
+      _acceptance/dieu-huong-khu-muc-tieu/contract.md (duong suy tu vi tri tep kiem) phai co dong Notes chua
+      "trang-don-vi-mot-bang" va "AC-13"; pha-thu (DVB_PHA=bo-notes-dh1: ban sao hop dong khong dong do) ->
+      "dvb-giu-xem: hop dong DH1 thieu dong Notes tro AC-13". CHIEU DO (DVB_PHA=bo-xem: ban sao toi()
       chi giu ky va don) -> "dvb-giu-xem: lien ket cua-toi thieu xemOkr=hop-tuan".
 
   - id: E16
@@ -291,3 +305,19 @@ evals:
       muc-tieu-va-kr/contract.md co dong Notes tro "trang-don-vi-mot-bang" AC-3. Dong cham "DUNG AC-14: 5/5".
       CHIEU DO (DVB_PHA=ghim-cu: ban sao run-log mot ho so voi dong repin tren sha truoc trang moi) -> "SAI
       AC-14: <slug> ghim tren <sha> chua co trang moi", ma 1.
+
+  - id: E17
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dvb_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
+    expected: |
+      Cung phien do (EVAL=E17), 1440, dang nhap quan tri. Script doc kho do qua Prisma so muc tieu status cong-bo
+      cua chu ky dang chon cho tung don vi. Mo trang bo phan B cua bo OKR mau: moi o trong [data-don-vi-con] mot dong
+      "SO CON <con>: o <n> · kho do <n'>"; bam o dau tien -> trang cua con do: "SO CHAN <con>: chan bang <k> muc
+      tieu · bang <k'> dong". DUNG khi n = n' cho moi con va k = k'. Dong cham "DUNG AC-7: <m>/<m> o con khop kho do ·
+      chan bang khop bang". CHIEU DO (DVB_PHA=khoa-dem-sai: ban sao doc dem theo id tran thay khoa pb:<id>) -> "SAI
+      AC-7: o <con> hien Chưa đặt OKR, kho do <n>", ma 1.

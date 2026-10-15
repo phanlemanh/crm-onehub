@@ -19,7 +19,8 @@ Trang đơn vị dựng trên `DataTable` của `packages/ui`, như Thoả thu�
 - **Ô chọn đơn vị** (`Combobox` có tìm kiếm) đứng ở chỗ ô tìm kiếm của bảng — thay cột cây. Lựa chọn: công ty, mọi
   bộ phận, mọi phòng ban (kể cả phòng ban chưa xếp); khi đường dẫn mang một người (`donOkr=nguoi:<id>`) thì người
   đó là một lựa chọn như hôm nay. Mỗi lựa chọn có gợi ý «Thuộc A › B» (công ty: «cả công ty») và số mục tiêu của chu
-  kỳ (`okr.countByUnit` hiện có); tìm được theo tên đơn vị cha. Chọn → `donOkr` trên đường dẫn đổi.
+  kỳ (`okr.countByUnit` hiện có — đếm mục tiêu đã công bố mà người xem thấy, như cây hôm nay); tìm được không dấu
+  (gấp dấu cả chuỗi gõ lẫn tên) và theo tên đơn vị cha. Chọn → `donOkr` trên đường dẫn đổi.
 - **Cách xem** (`ViewSwitch`: Danh sách · Cây căn chỉnh · Họp tuần · Chấm điểm khi chu kỳ ở pha chấm) đứng ngay cạnh
   ô chọn, TRONG ô tìm kiếm của bảng — không ở `leadingActions`. Lý do: `DataTable` giấu mọi thứ ngoài ô tìm kiếm sau
   nút «Lọc» trên điện thoại, nên cách xem ở `leadingActions` sẽ biến mất ở Danh sách mà hiện ở ba cách xem kia —
@@ -32,7 +33,7 @@ Trang đơn vị dựng trên `DataTable` của `packages/ui`, như Thoả thu�
   trạng, Phụ trách. Dòng mở ra KR một cấp (`expandable` của `DataTable`), dòng KR dùng cùng cột; trạng thái mở ghi
   `?expand=` trên đường dẫn (do `DataTable` giữ); mặc định thu. Mục tiêu không KR không có mũi tên. Bấm **tên mục
   tiêu** mở ngăn chi tiết như hôm nay (nháp theo khuyến nghị Hỏi-2); bấm phần còn lại của dòng mở/thu KR; bấm dòng
-  KR mở ngăn chi tiết của KR như hôm nay.
+  KR mở ngăn chi tiết của KR như hôm nay. Mặc định thu theo câu giao đã ký ở Cổng Đáng («mở từng mục tiêu ra KR»).
 - **Ô lọc nhanh** tính trên hàng máy chủ đã trả (không đổi thủ tục): «Cần bàn» = mục tiêu có ít nhất một KR chậm nhịp
   hoặc trượt (đúng phép đếm «N KR chậm» đang hiện dưới tên mục tiêu — nháp theo khuyến nghị Hỏi-1); «Chưa góp vào
   đâu» = mục tiêu không ở cấp công ty và không góp vào mục tiêu hay KR nào. Giá trị ghi đường dẫn.
@@ -40,7 +41,8 @@ Trang đơn vị dựng trên `DataTable` của `packages/ui`, như Thoả thu�
   dẫn; mặc định giữ thứ tự máy chủ trả. KR đi theo mục tiêu của nó.
 - **Chân bảng** (`meta`): trưởng đơn vị (hoặc «Chưa có trưởng»), «N mục tiêu · M KR», «Thuộc A › B». Đơn vị người: phòng
   ban chính và quản lý như hôm nay.
-- **Đơn vị trực thuộc** ở cuối trang: mỗi đơn vị con một ô liên kết — tên, «N mục tiêu · M KR» hoặc «Chưa đặt OKR», cờ
+- **Đơn vị trực thuộc** ở cuối trang: mỗi đơn vị con một ô liên kết — tên, «N mục tiêu» theo `okr.countByUnit` (thủ tục
+  không trả số KR, lượt không đổi API) hoặc «Chưa đặt OKR», cờ
   «Chưa có trưởng»; bấm → trang của đơn vị đó (giữ `kyOkr`). Công ty → các bộ phận và phòng ban chưa xếp; bộ phận →
   phòng ban; phòng ban, người → không có khối.
 - **Giữ nguyên:** nhóm «Đã bỏ» dưới bảng, khối KR của một người, ngăn tạo và hộp nhập (DH1 mở từ đầu trang), các trạng
