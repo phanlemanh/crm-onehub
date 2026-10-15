@@ -40,16 +40,6 @@ import { fileURLToPath } from "node:url";
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const HO_SO = "_acceptance/trang-don-vi-mot-bang";
 const TRINH_DUYET = process.argv.includes("--trinh-duyet");
-/** `--chap-lanh-do=E4,…`: eval trình duyệt đã biết đỏ trên vật lành (lỗi ngoài lượt) —
- * in «LANH DO (da biet)», vẫn chạy đột biến để soi thông điệp ghim, không tính đỏ. */
-const CHAP_LANH_DO = new Set(
-	(
-		process.argv.find((a) => a.startsWith("--chap-lanh-do="))?.split("=")[1] ??
-		""
-	)
-		.split(",")
-		.filter(Boolean),
-);
 
 const DOT_BIEN = {
 	"dvb-chon-don-vi": [
@@ -409,15 +399,9 @@ const bamTruoc = new Map(
 );
 
 // Đối chứng dương: mỗi lệnh khác nhau của nhóm trên vật lành phải thoát 0.
-const lenhLanh = [...new Map(chay.map((d) => [LENH[nhom](d), d])).entries()];
-for (const [lenh, db] of lenhLanh) {
+const lenhLanh = [...new Set(chay.map((d) => LENH[nhom](d)))];
+for (const lenh of lenhLanh) {
 	const lanh = chayLenh(GOC, lenh);
-	if (lanh.ma !== 0 && db.evalId && CHAP_LANH_DO.has(db.evalId)) {
-		console.log(
-			`LANH DO (da biet) ${nhom} ${db.evalId}: ma ${lanh.ma} — dot bien van chay de soi thong diep ghim`,
-		);
-		continue;
-	}
 	if (lanh.ma !== 0) {
 		console.log(lanh.chu.split("\n").slice(-30).join("\n"));
 		console.log(
