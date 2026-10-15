@@ -78,7 +78,8 @@
 		"./tai-lieu-tim": "./src/tai-lieu-tim.ts",
 		"./lo-trinh-du-lieu": "./src/lo-trinh-du-lieu.ts",
 		"./ban-chup-lo-trinh": "./src/ban-chup-lo-trinh.ts",
-		"./tin-hieu": "./src/tin-hieu.ts"
+		"./tin-hieu": "./src/tin-hieu.ts",
+		"./thong-bao": "./src/thong-bao.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",

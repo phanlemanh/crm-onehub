@@ -13,6 +13,7 @@ import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
+import { HopThongBaoMau } from "./_modules/hop-thong-bao-tren-web";
 import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
@@ -99,6 +100,7 @@ const BANG_GHEP = {
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 	"khung-ban-ghi-kara": KhungBanGhiKaraMau,
 	"gui-tin-hieu-trong-crm": GuiTinHieuMau,
+	"hop-thong-bao-tren-web": HopThongBaoMau,
 	"moi-tin-hieu-cho-quan-tri": MoiTinHieuChoQuanTriMau,
 	"tin-hieu-tu-ve-kho": TinHieuTuVeKhoMau,
 	"kanban-viec": KanbanViecMau,
