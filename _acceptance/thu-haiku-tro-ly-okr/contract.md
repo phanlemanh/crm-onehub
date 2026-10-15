@@ -5,7 +5,7 @@ slug: thu-haiku-tro-ly-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, docs]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-14-thu-haiku-tro-ly-okr-design.md
