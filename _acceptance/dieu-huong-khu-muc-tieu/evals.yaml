@@ -113,10 +113,7 @@ evals:
       kho do qua Prisma: dong "DUNG AC-3: muc tieu «DHK thu tao» thuoc phong-ban P1, ky <K>" (level
       phong-ban, departmentId = P1, cycleId = chu ky dang chon) va anh tao-tu-cua-toi.png; don theo id o
       cuoi ke ca khi do. Luot di-ve: cung truong P1 mo Theo don vi P2 (khong sua duoc), sang Cua toi -> nut
-      chinh bat, bam -> ngan tao cua P1 ("DUNG AC-3 di-ve: nut bat, dich phong-ban P1"). Luot khong quyen tren
-      may chu that: thanh vien khong dan ai o /okr -> nut chinh, muc Nhap disabled, aria-describedby tro dong
-      «Bạn chưa dẫn đơn vị nào…»; truong P1 o Theo don vi P2 -> dong «Bạn xem được <tên P2>…» ("DUNG AC-5 may
-      chu: 2/2 ca khoa dung cau"). CHIEU DO (DHK_PHA=dich-goc: ban sao giai don vi dich luon tra goc) -> truong P1
+      chinh bat, bam -> ngan tao cua P1 ("DUNG AC-3 di-ve: nut bat, dich phong-ban P1"). CHIEU DO (DHK_PHA=dich-goc: ban sao giai don vi dich luon tra goc) -> truong P1
       khong tao duoc o goc nen ngan khong mo: "SAI AC-3: ngan tao khong mo sau khi bam o Cua toi", ma 1.
 
   - id: E6
@@ -264,3 +261,35 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
       - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
     expected: "exit 0 — design-gate --mode static đạt sàn P0 trên các tệp đầu trang khu; chiều đỏ là của design-gate (thước kit), không dựng lại ở đây."
+
+  - id: E15
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dhk_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
+    expected: |
+      Cung phien do cua E2 (EVAL=E15), may chu that, quyen do okr-access.service.ts tinh. Hai ca viet truoc:
+      (a) thanh vien khong dan ai o /okr -> nut chinh va muc Nhap disabled, aria-describedby tro dong
+      «Bạn chưa dẫn đơn vị nào…» (rut tu okrMessages); (b) truong P1 o Theo don vi P2 -> cau «Bạn xem được
+      <tên P2 doc tu kho do>…». Them: goi thang thu tuc tao muc tieu bang phien cua thanh vien (a) cho don vi
+      dich cua no -> may chu tu choi (khong du quyen) — dau trang khoa dung cai may chu chan. Dong "DUNG AC-5 may
+      chu: 2/2 ca khoa dung cau + tu choi khop". DOI CHUNG DUONG: truong P1 o /okr -> nut bat. CHIEU DO
+      (DHK_PHA=an-nut) -> "SAI AC-5: (a) nut them-muc-tieu vang", ma 1.
+
+  - id: E16
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dhk_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
+    expected: |
+      Cung phien do cua E2 (EVAL=E16). Truong P1 o /okr (Cua toi) mo «…» -> «Nhập từ bảng tính» -> trang sang
+      Theo don vi P1, hop nhap mo; dan hai dong mau, bam xem truoc -> script bat yeu cau okr.previewImport tren
+      mang trinh duyet va doc don vi trong than yeu cau = phong-ban P1 ("DUNG AC-4: xem truoc nhap gui don vi
+      phong-ban P1"); khong luu (khong ghi kho). CHIEU DO (DHK_PHA=nhap-sai-don) -> "SAI AC-4: xem truoc nhap gui
+      goc, mong phong-ban P1", ma 1.
