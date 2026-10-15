@@ -2,6 +2,7 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
+import { viecChuKy } from "@crm/validation/okr-chu-ky";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act, lazy, Suspense } from "react";
@@ -32,6 +33,29 @@ const TEP_SO_DO = join(
 );
 
 const QUY = "mau-okr-chu-ky-quy4";
+const CHU_KY = {
+	id: QUY,
+	kind: "quy",
+	name: "Quý 4/2026",
+	parentId: null,
+	startsOn: "2026-10-01",
+	endsOn: "2026-12-31",
+	phase: "dang-chay",
+	breakStartsOn: null,
+	breakEndsOn: null,
+	updateWeekday: 1,
+	cuaSoRa: null,
+	anLuc: null,
+	anLyDo: null,
+	quyConHien: 0,
+	viec: viecChuKy({
+		phase: "dang-chay",
+		kind: "quy",
+		trong: false,
+		daAn: false,
+		quyConHien: 0,
+	}),
+};
 const soDoThuan = (): SoDoDonViOutput =>
 	soDoDonViOutput.parse(gopSoDoDonVi(dauVaoThuan()));
 
@@ -51,7 +75,10 @@ const thuTuc = <T,>(duong: string, doc: () => T) => ({
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
-			cycles: thuTuc("okr.cycles", () => ({ cycles: [], currentId: QUY })),
+			cycles: thuTuc("okr.cycles", () => ({
+				cycles: [CHU_KY],
+				currentId: QUY,
+			})),
 			access: thuTuc("okr.access", () => ({
 				canManageProgram: false,
 				headOf: { divisions: [], departments: [] },
@@ -240,7 +267,7 @@ function nhapTinh(tep: string): string[] {
 	const ma = readFileSync(tep, "utf8");
 	const ra: string[] = [];
 	const re =
-		/^\s*(?:import|export)\s(?!type\s)[^;]*?from\s+["']([^"']+)["']/gms;
+		/^\s*(?:import|export)\s(?!type\s)[^;]*?from\s+["']([^"']+)["']/gm;
 	for (const m of ma.matchAll(re)) if (m[1]) ra.push(m[1]);
 	return ra;
 }
@@ -331,11 +358,14 @@ describe("dh4-cach-xem", () => {
 		});
 		tcDuLieu = tc;
 		await dung(<ToanCanh />);
-		const nhom = document.body.querySelector("[data-cach-xem-toan-canh]");
-		const muc = [...(nhom?.querySelectorAll("[data-value]") ?? [])].map((e) =>
-			e.getAttribute("data-value"),
+		const nhom = document.body.querySelector(
+			'[data-cach-xem-toan-canh] [data-view-switch="nut"]',
 		);
-		expect(muc).toEqual(["bang", "so-do"]);
+		const muc = [...(nhom?.querySelectorAll('[role="radio"]') ?? [])].map(
+			(e) => e.textContent,
+		);
+		expect(muc).toEqual([vi.bang, vi.soDo]);
+		expect(nhom?.querySelector('[data-state="on"]')?.textContent).toBe(vi.bang);
 		expect(document.body.querySelector("[data-so-do]")).toBeNull();
 		for (const ts of ["xemToanCanh=so-do", "xemToanCanh=la"]) {
 			for (const r of dangMo) act(() => r.unmount());
@@ -370,7 +400,7 @@ describe("dh4-cach-xem", () => {
 		);
 		const duong = cham(join(appTam, "x/toan-canh.tsx"), appTam, uiTam);
 		if (duong === null) throw new Error("doi chung do khong do");
-		const thongDiep = `flow-map nap tinh: ${duong.map((d) => d.split("/").pop()).join(" -> ")}`;
+		const thongDiep = `flow-map nap tinh: ${duong.map((d) => (d.startsWith("/") ? d.split("/").pop() : d)).join(" -> ")}`;
 		expect(thongDiep).toBe(
 			"flow-map nap tinh: toan-canh.tsx -> the-don-vi.tsx -> flow-map.tsx -> @xyflow/react",
 		);

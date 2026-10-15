@@ -984,6 +984,17 @@ const GHIM = {
 		"đã cập nhật 12/A KR",
 	],
 	"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
+	"okr-toan-canh:soDo.soMucTieu": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
+	"okr-toan-canh:soDo.tienDo": ["1% tiến độ", "12% tiến độ"],
+	"okr-toan-canh:soDo.phongBanGop": ["+1 phòng ban", "+12 phòng ban"],
+	"okr-toan-canh:soDo.chuYBenTrong": [
+		"1 cần chú ý bên trong",
+		"12 cần chú ý bên trong",
+	],
+	"okr-toan-canh:soDo.soDangLoc": [
+		"1 trên A đơn vị cần chú ý",
+		"12 trên A đơn vị cần chú ý",
+	],
 	"okr-toan-canh:hopTuan.tut": ["Tụt từ 1 xuống A", "Tụt từ 12 xuống A"],
 	"okr-toan-canh:hopTuan.im": ["Im 1 ngày", "Im 12 ngày"],
 	"okr-toan-canh:hopTuan.conLai": [
