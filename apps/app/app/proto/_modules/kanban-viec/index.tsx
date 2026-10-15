@@ -292,17 +292,14 @@ function BangViec({ state }: { state: string }) {
 								value={nhom}
 								onValueChange={(v) => v && datNhom(v as Nhom)}
 							>
-								<ToggleGroupItem value="giao-cho-toi">
+								<ToggleGroupItem count={6} value="giao-cho-toi">
 									{CHU.nhomGiaoChoToi}
-									<span className="text-muted-foreground tabular-nums">6</span>
 								</ToggleGroupItem>
-								<ToggleGroupItem value="toi-giao">
+								<ToggleGroupItem count={3} value="toi-giao">
 									{CHU.nhomToiGiao}
-									<span className="text-muted-foreground tabular-nums">3</span>
 								</ToggleGroupItem>
-								<ToggleGroupItem value="dang-theo-doi">
+								<ToggleGroupItem count={2} value="dang-theo-doi">
 									{CHU.nhomTheoDoi}
-									<span className="text-muted-foreground tabular-nums">2</span>
 								</ToggleGroupItem>
 							</ToggleGroup>
 						</div>

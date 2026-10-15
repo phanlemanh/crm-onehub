@@ -22,7 +22,6 @@ import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { TAI_LIEU } from "@crm/validation/tai-lieu";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { type TaiLieuMessages, taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 import {
@@ -35,7 +34,7 @@ import {
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { DangTaiDanhSach } from "./dang-tai";
-import type { ToiLoc } from "./danh-sach-loc";
+import { useLocTaiLieu } from "./danh-sach-loc";
 import { LoiTai } from "./loi-tai";
 
 function nhanTrangThai(
@@ -51,20 +50,12 @@ function laNhom(v: string): v is NhomDeXuat {
 	return NHOM_DE_XUAT.some((n) => n === v);
 }
 
-export function ChoDuyet({
-	nhom,
-	page,
-	toi,
-}: {
-	nhom: NhomDeXuat;
-	page: number;
-	toi: ToiLoc;
-}) {
+export function ChoDuyet() {
 	const locale = useLocale();
 	const m = taiLieuMessages(locale);
 	const loaiDeXuat = taiLieuLichSuMessages(locale).luuTru.loaiDeXuat;
 	const trpc = useTRPC();
-	const router = useRouter();
+	const [{ nhom, page }, doi] = useLocTaiLieu();
 	const url = useWorkspaceUrl();
 	const cho = useQuery(trpc.taiLieu.proposals.queryOptions({ nhom, page }));
 	const coTrang = TAI_LIEU.danhSach.coTrang;
@@ -73,7 +64,7 @@ export function ChoDuyet({
 		<ToggleGroup
 			aria-label={m.choDuyet.nhom.nhan}
 			onValueChange={(v) => {
-				if (laNhom(v)) router.push(toi({ nhom: v, page: 1 }));
+				if (laNhom(v)) doi({ nhom: v, page: 1 });
 			}}
 			size="sm"
 			type="single"
@@ -150,7 +141,7 @@ export function ChoDuyet({
 			{total > coTrang ? (
 				<TablePagination
 					loading={cho.isFetching}
-					onPageChange={(p) => router.push(toi({ page: p }))}
+					onPageChange={(p) => doi({ page: p })}
 					page={page}
 					pageSize={coTrang}
 					total={total}

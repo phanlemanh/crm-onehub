@@ -3,6 +3,7 @@ import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { TAI_LIEU_HOI } from "@crm/validation/tai-lieu-hoi";
 import { WORKSPACE_ROLES } from "@crm/validation/vai-workspace";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
@@ -196,9 +197,11 @@ async function mo(con: ReactNode): Promise<HTMLElement> {
 	});
 	await act(async () => {
 		root?.render(
-			<QueryClientProvider client={qc}>
-				<LocaleProvider locale="vi">{con}</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter hasMemory>
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale="vi">{con}</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	await cho();
@@ -404,9 +407,7 @@ describe("tlk-man-hoi", () => {
 
 	test("tlk-man-hoi: vai okr khong co tab Hoi, vai khac co", async () => {
 		const tab = async (vai: string | null) => {
-			const goc = await mo(
-				<DanhSach coHoi={coHoiCuaVai(vai)} loai={null} page={1} tab="trang" />,
-			);
+			const goc = await mo(<DanhSach coHoi={coHoiCuaVai(vai)} />);
 			const ten = [...goc.querySelectorAll("[role=tablist] a")].map((a) =>
 				a.textContent?.trim(),
 			);
