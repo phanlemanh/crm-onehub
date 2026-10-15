@@ -1186,6 +1186,33 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "moi-tin-hieu-cho-quan-tri",
+		ten: "Mọi tín hiệu cho quản trị — thẻ Tất cả, ba ô số, lọc, câu báo trước trong hộp gửi",
+		states: [
+			{ id: "ST-tat-ca-co", nhan: "Tất cả — ba ô số và bảng đủ cột" },
+			{
+				id: "ST-tat-ca-thieu",
+				nhan: "Tất cả — người gửi đã xoá, chưa có phòng ban",
+			},
+			{
+				id: "ST-tat-ca-khong-ban-ve",
+				nhan: "Tất cả — chưa đọc được trạng thái sau gom",
+			},
+			{ id: "ST-tat-ca-rong", nhan: "Tất cả — chưa ai gửi tín hiệu" },
+			{ id: "ST-tat-ca-dang-tai", nhan: "Tất cả — đang tải" },
+			{ id: "ST-tat-ca-loi", nhan: "Tất cả — tải lỗi, có Thử lại" },
+			{
+				id: "ST-tat-ca-khong-quyen",
+				nhan: "Tất cả — thành viên mở thẳng đường dẫn",
+			},
+			{ id: "ST-cua-toi-quan-tri", nhan: "Của tôi — quản trị thấy thanh thẻ" },
+			{
+				id: "ST-hop-bao-truoc",
+				nhan: "Hộp gửi — câu báo trước quản trị thấy tên",
+			},
+		],
+	},
+	{
 		slug: "tin-hieu-tu-ve-kho",
 		ten: "Khoá chỉ kéo tín hiệu — tờ tạo khoá, hộp khoá vừa tạo, nhãn trên danh sách",
 		states: [

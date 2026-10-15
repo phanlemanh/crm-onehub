@@ -53,7 +53,7 @@ import { taiLieuHoiInput, taiLieuHoiOutput, taiLieuHoiKetQuaInput, taiLieuHoiKet
 import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinChoOutput, taiLieuNguonNhanInput, taiLieuNguonNhanOutput, taiLieuNguonListOutput, taiLieuNguonIdInput, taiLieuNguonGetOutput, taiLieuNguonTaiVeOutput, taiLieuNguonOkOutput } from "../tai-lieu/tai-lieu-nguon.contracts";
 import { taiLieuSlugInput, taiLieuLichSuOutput, taiLieuPhienBanInput, taiLieuPhienBanOutput, taiLieuProposeOutput, taiLieuDeXuatTrangInput, taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
 import { keoVeOutput, guiTinHieuInput, xoaTinHieuInput } from "@crm/validation/tin-hieu";
-import { guiTinHieuOutput, tinHieuCuaToiOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
+import { guiTinHieuOutput, tinHieuCuaToiOutput, tinHieuTatCaOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgKhoiPhucOutput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
 import { viecBangInput, viecBangOutput, viecKeoInput, viecOkOutput, viecTaoConInput, viecTaoOutput, viecIdInput, viecConOutput, viecCuaToiInput, viecCuaToiNhomOutput, viecChiTietOutput, viecVetOutput, viecBanGhiInput, viecCuaBanGhiOutput, viecCreateInput, viecDoiTrangThaiInput, viecSuaInput, viecDoiNguoiInput, viecGanInput, viecTheoDoiInput } from "../viec/viec.contracts";
@@ -1527,6 +1527,9 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     cuaToi: publicProcedure
       .output(tinHieuCuaToiOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    tatCa: publicProcedure
+      .output(tinHieuTatCaOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     xoa: publicProcedure
       .input(xoaTinHieuInput)

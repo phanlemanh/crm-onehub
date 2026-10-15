@@ -8,6 +8,7 @@ export const TIN_HIEU = {
 	doDaiMan: 200,
 	ngayDem: 30,
 	ngayCoCho: 7,
+	coTrangTatCa: 50,
 	phien: "crm",
 	thuMucNguon: "tin-hieu/crm",
 	loi: {
@@ -100,6 +101,7 @@ export const keoVeOutput = z.object({
 			id: z.string(),
 			tep: tepTinHieu,
 			phongBan: z.string().nullable(),
+			phongBanId: z.string().nullable().optional(),
 			keoVeLuc: z.string().datetime().optional(),
 		}),
 	),
@@ -172,6 +174,88 @@ export function parseDuongTinHieu(raw: unknown): KetQuaDuong {
 		};
 	}
 	return { kieu: "co", banGhi: kq.data };
+}
+
+const MS_NGAY = 86_400_000;
+
+export type DongDem = {
+	id: string;
+	luc: string;
+	phongBan: { khoa: string; ten: string } | null;
+};
+
+export type NguongSong = {
+	trongKy: number;
+	soPhong: number;
+	theoPhong: [string, number][];
+	khongPhong: number;
+	quaHan: number;
+	chuaCoCho: number;
+};
+
+export function demNguongSong(
+	ds: DongDem[],
+	now: Date,
+	coCho: ReadonlySet<string>,
+): NguongSong {
+	const tuoi = (luc: string) => (now.getTime() - Date.parse(luc)) / MS_NGAY;
+	const trong = ds.filter((d) => tuoi(d.luc) <= TIN_HIEU.ngayDem);
+	const theoKhoa = new Map<string, { ten: string; so: number }>();
+	let khongPhong = 0;
+	for (const d of trong) {
+		if (d.phongBan === null) {
+			khongPhong += 1;
+			continue;
+		}
+		const cu = theoKhoa.get(d.phongBan.khoa);
+		theoKhoa.set(d.phongBan.khoa, {
+			ten: d.phongBan.ten,
+			so: (cu?.so ?? 0) + 1,
+		});
+	}
+	const qua = ds.filter((d) => tuoi(d.luc) > TIN_HIEU.ngayCoCho);
+	return {
+		trongKy: trong.length,
+		soPhong: theoKhoa.size,
+		theoPhong: [...theoKhoa.values()]
+			.sort((a, b) => a.ten.localeCompare(b.ten, "vi") || b.so - a.so)
+			.map((x): [string, number] => [x.ten, x.so]),
+		khongPhong,
+		quaHan: qua.length,
+		chuaCoCho: qua.filter((d) => !coCho.has(d.id)).length,
+	};
+}
+
+export function coChoSauGom(kq: KetQuaDuong): Set<string> {
+	if (kq.kieu !== "co") return new Set();
+	return new Set(
+		kq.banGhi.filter((b) => b.cho !== "chua-gom").map((b) => b.id),
+	);
+}
+
+export function dongDemTuKeoVe(tep: KeoVeOutput["tep"]): DongDem[] {
+	return tep.map((t) => ({
+		id: t.id,
+		luc: t.tep.luc,
+		phongBan:
+			t.phongBan === null
+				? null
+				: { khoa: t.phongBanId ?? t.phongBan, ten: t.phongBan },
+	}));
+}
+
+export function dongDemTuTatCa(
+	rows: {
+		ma: string;
+		guiLuc: Date | string;
+		phongBan: { id: string; ten: string } | null;
+	}[],
+): DongDem[] {
+	return rows.map((r) => ({
+		id: r.ma,
+		luc: new Date(r.guiLuc).toISOString(),
+		phongBan: r.phongBan ? { khoa: r.phongBan.id, ten: r.phongBan.ten } : null,
+	}));
 }
 
 const nhomHangKhoi = z.object({

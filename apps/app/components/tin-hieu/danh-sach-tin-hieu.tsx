@@ -67,20 +67,30 @@ const GIO = new Intl.DateTimeFormat("vi-VN", {
 	minute: "2-digit",
 });
 
-function TrangThai({ dong }: { dong: DongTinHieu }) {
+export function TrangThai({
+	trangThai,
+	gon = false,
+}: {
+	trangThai: { nhan: string; cau: string; nghia: NghiaTrangThai };
+	gon?: boolean;
+}) {
 	return (
 		<div className="flex min-w-0 flex-col gap-0.5">
 			<StatusIndicator
-				data-nghia={dong.trangThai.nghia}
-				label={dong.trangThai.nhan}
+				data-nghia={trangThai.nghia}
+				label={trangThai.nhan}
 				size="sm"
-				tone={toneTheoNghia(dong.trangThai.nghia)}
+				tone={toneTheoNghia(trangThai.nghia)}
 			/>
 			<SimpleTableNote
-				className="whitespace-normal break-words"
+				className={
+					gon
+						? "hidden whitespace-normal break-words md:block"
+						: "whitespace-normal break-words"
+				}
 				data-cau-trang-thai=""
 			>
-				{dong.trangThai.cau}
+				{trangThai.cau}
 			</SimpleTableNote>
 		</div>
 	);
@@ -179,7 +189,7 @@ export function DanhSachTinHieu({
 								{GIO.format(new Date(d.guiLuc))}
 							</SimpleTableCell>
 							<SimpleTableCell className="whitespace-normal">
-								<TrangThai dong={d} />
+								<TrangThai trangThai={d.trangThai} />
 							</SimpleTableCell>
 							<SimpleTableCell align="right">{thaoTac(d)}</SimpleTableCell>
 						</SimpleTableRow>
@@ -200,7 +210,7 @@ export function DanhSachTinHieu({
 								<span translate="no">{d.man}</span> ·{" "}
 								{GIO.format(new Date(d.guiLuc))}
 							</ItemDescription>
-							<TrangThai dong={d} />
+							<TrangThai trangThai={d.trangThai} />
 						</ItemContent>
 						<ItemActions>{thaoTac(d)}</ItemActions>
 					</Item>
