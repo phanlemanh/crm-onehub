@@ -112,7 +112,7 @@ const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
 const SAN_MUTATION_CHUNG = 15;
 const SAN_DUONG_NGOAI = 20;
-const SO_MUTATION_KHONG_DAU_VAO = 15;
+const SO_MUTATION_KHONG_DAU_VAO = 16;
 const CHO_MA_TRAN_MS = 60_000;
 const THU_TUC_MAU = [
 	{ ten: "contacts.list", input: {} },
