@@ -20,6 +20,15 @@ export const RA = join(GOC, ".acceptance-runs/tro-ly-okr-de-xuat");
 export const AGENT = join(GOC, "apps/agent");
 const API_DIR = join(GOC, "apps/api");
 export const pg = createRequire(join(GOC, "packages/db/package.json"))("pg");
+const { z } = createRequire(join(GOC, "packages/validation/package.json"))(
+	"zod",
+);
+const creditsGateway = z.object({
+	balance: z
+		.string()
+		.regex(/^-?\d+(\.\d+)?$/)
+		.transform(Number),
+});
 
 const GIAY_MS = 1000;
 const PHUT_MS = 60 * GIAY_MS;
@@ -114,8 +123,8 @@ export async function soDuGateway(env = process.env, layFetch = fetch) {
 			signal: AbortSignal.timeout(PHIEN_TRO_LY.soDu.hoiMs),
 		});
 		if (!r.ok) return { khongDoc: `HTTP ${r.status}` };
-		const so = Number((await r.json())?.balance);
-		return Number.isFinite(so) ? { soDu: so } : { khongDoc: "balance khong phai so" };
+		const doc = creditsGateway.safeParse(await r.json());
+		return doc.success ? { soDu: doc.data.balance } : { khongDoc: "balance khong phai so" };
 	} catch (loi) {
 		return { khongDoc: loi?.message ?? String(loi) };
 	}

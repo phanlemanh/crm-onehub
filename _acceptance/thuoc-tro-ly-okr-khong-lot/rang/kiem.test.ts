@@ -29,12 +29,15 @@ function hong(dieuKien: boolean, thongDiep: string) {
 	if (dieuKien) throw new Error(thongDiep);
 }
 
-function fetchVoiThan(than: string, status = 200) {
-	return (async () =>
-		new Response(than, { status })) as unknown as typeof fetch;
+function fetchGia(goi: () => Promise<Response>): typeof fetch {
+	return Object.assign(goi, { preconnect: fetch.preconnect });
 }
 
-function thanVoiSoDu(so: string) {
+function fetchVoiThan(than: string, status = 200) {
+	return fetchGia(async () => new Response(than, { status }));
+}
+
+function thanVoiSoDu(so: string | boolean | null) {
 	return JSON.stringify({ ...JSON.parse(CREDITS_THAT), balance: so });
 }
 
@@ -79,6 +82,11 @@ describe("tlk-so-du", () => {
 		for (const [than, status, ly] of [
 			["", 401, "HTTP 401"],
 			[thanVoiSoDu("khong-phai-so"), 200, "balance khong phai so"],
+			[thanVoiSoDu(null), 200, "balance khong phai so"],
+			[thanVoiSoDu(""), 200, "balance khong phai so"],
+			[thanVoiSoDu(" "), 200, "balance khong phai so"],
+			[thanVoiSoDu(true), 200, "balance khong phai so"],
+			[JSON.stringify({ total_used: "1" }), 200, "balance khong phai so"],
 		] as const) {
 			const { ket, dong } = await voiCanhBao(() =>
 				chanSoDu(ENV, fetchVoiThan(than, status)),
@@ -90,10 +98,10 @@ describe("tlk-so-du", () => {
 			);
 		}
 		let goi = 0;
-		const dem = (async () => {
+		const dem = fetchGia(async () => {
 			goi += 1;
 			return new Response(CREDITS_THAT);
-		}) as unknown as typeof fetch;
+		});
 		const ket = await soDuGateway({}, dem);
 		hong(!("khongDoc" in ket) || goi !== 0, "tlk: thieu khoa van goi mang");
 	});
