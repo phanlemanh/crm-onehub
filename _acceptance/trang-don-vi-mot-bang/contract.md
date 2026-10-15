@@ -38,7 +38,7 @@ Source input: hàng DH2 `docs/plan/lo-trinh-okr.json`; `docs/plan/pham-vi-okr-di
 - AC-11: Given `/proto/trang-don-vi-mot-bang` khi bật `PROTO_ROUTE=1`, When mở từng state, Then có đúng một state cho mỗi dòng của bảng trạng thái trong thiết kế, mỗi state cho một cây DOM khác nhau; phép đo sổ bản mẫu xanh.
 - AC-12: Given ảnh trang đơn vị ở Danh sách (thu và mở KR), Họp tuần, ô chọn đơn vị đang mở và Thoả thuận ở 1440 px và 390 px do E2 chụp, When một người không làm lượt này đặt cạnh nhau, Then họ đọc được trang đơn vị dùng cùng một khuôn bảng với Thoả thuận — ô chọn ở chỗ ô tìm kiếm, một hàng công cụ, bảng, chân bảng — và tìm được KR của một mục tiêu mà không cần đọc chữ hướng dẫn. (judgment)
 - AC-13: Given đang xem Theo đơn vị của đơn vị X ở cách xem V (Cây căn chỉnh, Họp tuần hoặc Chấm điểm) và chu kỳ K, When đi qua một thẻ khác của khu bằng thanh thẻ rồi quay lại Theo đơn vị, Then trang mở lại đúng X, K và cách xem V; liên kết của thanh thẻ mang `xemOkr` cùng `kyOkr`, `donOkr` khi đường dẫn đang có nó (bổ sung khoá thứ ba vào lời hứa «đổi thẻ giữ đơn vị và chu kỳ» của DH1, không mang khoá nào khác); cách xem không hợp với chu kỳ (Chấm điểm ngoài pha chấm) rơi về Danh sách như hôm nay; hợp đồng `dieu-huong-khu-muc-tieu` có một dòng Notes trỏ AC này ở hồ sơ này, vì lời hứa AC-6 của nó («không mang khoá nào khác») được nới thêm `xemOkr`.
-- AC-14: Given năm hồ sơ đã ký có kịch bản đo trình duyệt dựa trên trang đơn vị cũ — `dat-okr-trong-crm`, `khung-okr-truoc-r1`, `muc-tieu-va-kr`, `okr-to-chuc-va`, `toan-canh-okr` (bấm `[data-nut-cay]`, chờ `[data-hang-nut]`, đọc `thuMucTieu`, đi phím trên cây «Đơn vị») — When lượt sửa phép đo của chúng rồi chạy làn ghim lại tại một commit đã có trang mới, Then cả năm ghim xanh; mỗi chỗ sửa trong `rang/` của chúng chỉ đổi cách tới trạng thái (chọn đơn vị bằng `donOkr` hoặc ô chọn, thu/mở bằng `expand`) và không bỏ điều khẳng định nào khác; lời hứa đã ký nào trái trang mới (trang đơn vị mở sẵn mọi mục tiêu và nhớ dòng thu bằng `thuMucTieu` — AC-3 của `muc-tieu-va-kr`) có một dòng Notes trong hợp đồng của hồ sơ đó trỏ AC thay nó ở hồ sơ này.
+- AC-14: Given các hồ sơ đã ký có kịch bản đo trình duyệt dựa trên trang đơn vị trước DH1 và DH2 — `dat-okr-trong-crm`, `khung-okr-truoc-r1`, `muc-tieu-va-kr`, `okr-to-chuc-va`, `toan-canh-okr`, `okr-soat-anh-luot-3`, `soan-okr-trong-khung` (bấm `[data-nut-cay]`, chờ `[data-hang-nut]` hay `[data-nhom-soan]` trong thân, đọc `thuMucTieu`, đi phím trên cây «Đơn vị») cùng `dieu-huong-khu-muc-tieu` (bài `dhk-giu-don`, AC-13) — When lượt sửa phép đo của chúng (cả phần selector DH1 để lại, Điều phối M5 chia 15/10) rồi chạy MỘT lượt làn ghim lại tại một commit đã có trang mới, Then cả tám ghim xanh; mỗi chỗ sửa trong `rang/` của chúng chỉ đổi cách tới trạng thái (chọn đơn vị bằng `donOkr` hoặc ô chọn, thu/mở bằng `expand`) và không bỏ điều khẳng định nào khác; lời hứa đã ký nào trái trang mới (trang đơn vị mở sẵn mọi mục tiêu và nhớ dòng thu bằng `thuMucTieu` — AC-3 của `muc-tieu-va-kr`) có một dòng Notes trong hợp đồng của hồ sơ đó trỏ AC thay nó ở hồ sơ này.
 
 ## Coverage
 
@@ -74,7 +74,9 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
   nhanh của lượt này là `tabs` của `DataTable` — số do `DataTable` vẽ từ `facetCounts`, không có `ToggleGroupItem`
   nào tự vẽ số — nên không chạm thước đó; `ViewSwitch` dùng như hiện có. NM2 gộp trước thì lượt gộp `onehub` vào
   nhánh rồi chạy lại E7, E8.
-- `khung-okr-truoc-r1/rang/bon-vai.mjs` bị cả DH1 (gỡ nút khỏi `[data-hang-nut]`) lẫn DH2 (bỏ `[data-hang-nut]`)
-  chạm: chỉ một bên sửa — Điều phối M5 đang hỏi DH1; DH1 sửa trước thì AC-14 của lượt này dựng trên bản đó.
-- Sau khi DH1 gộp, bài `dhk-giu-don` của DH1 đổi trong PR này (AC-13) nên hồ sơ `dieu-huong-khu-muc-tieu` cũng vào
-  cùng lượt ghim lại với năm hồ sơ của AC-14 — sáu hồ sơ một lượt, ước 50–90 phút máy (Điều phối M5 đồng ý 15/10).
+- `khung-okr-truoc-r1/rang/bon-vai.mjs` bị cả DH1 lẫn DH2 chạm: DH1 KHÔNG sửa, DH2 giữ toàn bộ phần sửa (Điều phối M5, 15/10).
+- Lượt ghim lại của AC-14 gồm tám hồ sơ: năm hồ sơ DH2 tự phát hiện, hai hồ sơ DH1 khai giới hạn ở Gate 2 của nó
+  (`okr-soat-anh-luot-3`, `soan-okr-trong-khung` — selector `[data-hang-nut]`/`[data-nhom-soan]` sau khi DH1 dời nút lên
+  đầu trang) và `dieu-huong-khu-muc-tieu` (bài `dhk-giu-don` đổi theo AC-13). Ước 70–120 phút máy. Ràng buộc của Điều
+  phối M5: PR DH2 gộp trong vòng 1 ngày sau DH1; trễ hơn thì M5 mở vá riêng cho phần selector của DH1 và AC-14 thu
+  về phần của DH2.
