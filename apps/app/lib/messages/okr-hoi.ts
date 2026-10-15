@@ -79,7 +79,8 @@ const en: OkrHoiMessages = {
 	nap: {
 		dangMo: "Opening the conversation…",
 		loiTieuDe: "Could not reopen the conversation",
-		loiMoTa: "Kara could not read back the questions asked in this conversation.",
+		loiMoTa:
+			"Kara could not read back the questions asked in this conversation.",
 	},
 	khongThay: {
 		tieuDe: "Kara found no answer",

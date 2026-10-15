@@ -12,10 +12,7 @@ import { okrHoiMessages } from "@/lib/messages/okr-hoi";
 const m = okrHoiMessages("vi");
 const CAU_HOI = "KR nào của tôi đang trượt?";
 
-type GiaTriChu =
-	| string
-	| readonly string[]
-	| ((...doiSo: string[]) => string);
+type GiaTriChu = string | readonly string[] | ((...doiSo: string[]) => string);
 type NhanhChu = { readonly [khoa: string]: GiaTriChu | NhanhChu };
 
 const tin = (id: string, role: "user" | "assistant", parts: unknown[]) =>

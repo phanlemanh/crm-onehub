@@ -39,12 +39,7 @@ export function CotHoiKara({ cuocHoiId }: { cuocHoiId: string }) {
 		refetchInterval: (q) =>
 			q.state.data?.status === "working" ? HOI_UI.hoiLuongMs : false,
 		queryFn: ({ signal }) =>
-			loadThread(
-				maPhien ?? "",
-				dauCuoc(cuocHoiId),
-				signal,
-				OKR_SOAN_CUA.host,
-			),
+			loadThread(maPhien ?? "", dauCuoc(cuocHoiId), signal, OKR_SOAN_CUA.host),
 	});
 
 	if (phien.isError || thread.data?.status === "offline")
