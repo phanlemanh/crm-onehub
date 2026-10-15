@@ -3,13 +3,13 @@ schema_version: 1
 slug: so-do-quanh-muc-tieu
 feature: Từ một mục tiêu, tôi bấm Xem quanh mục tiêu và thấy nó góp vào đâu, ai góp vào nó, mục tiêu góp hai chỗ chỉ hiện một lần
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-15T05:04:18Z     # ISO UTC
 prototype:
-  base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
-  disposition:     # keep | archive
+  base_commit: 60fc1b02dbd9de1abc1a7ece86fa2ec03a31cae1    # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
+  disposition: archive    # keep | archive
 lo_trinh_ma: DH5
 lo_trinh_tep: docs/plan/lo-trinh-okr.json
 ---
@@ -76,10 +76,10 @@ trước.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] từ ngăn chi tiết một mục tiêu cấp phòng ban có đường lên công ty, trưởng đơn vị có nói đúng mục tiêu ấy góp vào KR nào của công ty trong 10 giây không?
-- Kết quả nào là SỐNG: [đề xuất] ít nhất 2/3 người dự phiên nghiệm thu (trưởng đơn vị) nói đúng KR công ty mà mục tiêu góp vào trong ≤ 10 giây kể từ lúc bấm «Xem quanh mục tiêu».
-- Kết quả nào là CHẾT: [đề xuất] dưới 2/3 người dự nói đúng trong 10 giây, hoặc có người nói sai KR (chọn một KR công ty mà mục tiêu không góp vào).
-- Timebox: [đề xuất] phiên nghiệm thu chung với DH4, trong 14 ngày sau khi lên production, chậm nhất 2026-11-04; dựng theo mốc m-1021dh, ước ~7 giờ máy, hoàn tất dự kiến 2026-10-21.
+- Câu hỏi phép đo trả lời: từ ngăn chi tiết một mục tiêu cấp phòng ban có đường lên công ty, trưởng đơn vị có nói đúng mục tiêu ấy góp vào KR nào của công ty trong 10 giây không?
+- Kết quả nào là SỐNG: ít nhất 2/3 người dự phiên nghiệm thu (trưởng đơn vị) nói đúng KR công ty mà mục tiêu góp vào trong ≤ 10 giây kể từ lúc bấm «Xem quanh mục tiêu».
+- Kết quả nào là CHẾT: dưới 2/3 người dự nói đúng trong 10 giây, hoặc có người nói sai KR (chọn một KR công ty mà mục tiêu không góp vào).
+- Timebox: phiên nghiệm thu chung với DH4, trong 14 ngày sau khi lên production, chậm nhất 2026-11-04; dựng theo mốc m-1021dh, ước ~7 giờ máy, hoàn tất dự kiến 2026-10-21.
 
 ## Kết quả prototype
 
@@ -100,6 +100,10 @@ tụt khoảng 408 commit so với `onehub` nên không gộp — chỉ đọc b
 | Trạng thái «quanh mục tiêu» của bản mẫu | `apps/app/app/proto/_modules/so-do-can-chinh-okr/` ở nhánh bản mẫu | ngôn-ngữ-thiết-kế/hình-thái đã có trong kho | có, dựng lại trên nhánh DH4 | Người ký Cổng Đáng |
 
 ## Cổng 0
+
+- **decision = build.** Căn cứ: hàng DH5 thuộc mốc m-1021dh mà chủ kho mở 15/10 (crm #375); dựng trên khung vẽ `FlowMap` của DH4. manh chọn «build» 2026-10-15.
+- **disposition = archive.** Căn cứ: nhánh bản mẫu tụt khoảng 408 commit so với `onehub`, không gộp, không rebase; vòng chỉ đọc nó bằng `git show` rồi dựng lại trên nhánh cắt từ nhánh DH4. Bản mẫu giữ nguyên ở nhánh của nó làm tham chiếu.
+- **Ngưỡng UAT chốt cùng lúc ký:** SỐNG ít nhất 2/3 người dự phiên nghiệm thu (trưởng đơn vị) nói đúng KR công ty mà mục tiêu góp vào trong ≤ 10 giây kể từ lúc bấm «Xem quanh mục tiêu»; CHẾT dưới 2/3 người dự nói đúng trong 10 giây, hoặc có người nói sai KR; phiên nghiệm thu chung với DH4, trong 14 ngày sau khi lên production, chậm nhất 2026-11-04 — chốt tại Cổng Đáng 2026-10-15, manh («build»; disposition và ngưỡng theo đúng dòng máy điền sẵn «___ · archive · ngưỡng giữ như đề xuất — manh»).
 
 ## Thước đo thành công → ứng viên criterion
 
