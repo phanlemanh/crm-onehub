@@ -17,10 +17,7 @@ import {
 import { AppModule } from "./app.module";
 import { LISTING_INGEST } from "./listings/listings-config";
 import { ContextLogger } from "./logging/context-logger";
-import {
-	REST_BRIDGE_BODY_LIMIT_BYTES,
-	REST_BRIDGE_PATH,
-} from "./trpc/openapi";
+import { REST_BRIDGE_BODY_LIMIT_BYTES, REST_BRIDGE_PATH } from "./trpc/openapi";
 import { createBaseTrpcContext } from "./trpc/trpc.context";
 
 export async function createApp(): Promise<NestExpressApplication> {

@@ -38,11 +38,7 @@ let cookie = "";
 let khoa = "";
 
 const sha = (c: string) => c.repeat(40);
-const banChup = (
-	s: string,
-	luc: string,
-	them: Record<string, string> = {},
-) =>
+const banChup = (s: string, luc: string, them: Record<string, string> = {}) =>
 	JSON.stringify({
 		nguon: NGUON,
 		sha: s,
@@ -182,7 +178,9 @@ describe("ttr-khuon-413", () => {
 				key: khoa,
 			});
 			const b = await gui(DUONG_KHAC, dem(150_000));
-			expect([a.status, b.status]).toEqual([413, 413]);
+			expect([a.status, b.status], "hai duong tra loi 413 khac khuon").toEqual([
+				413, 413,
+			]);
 			expect(
 				Object.keys(a.body).sort(),
 				"hai duong tra loi 413 khac khuon",
