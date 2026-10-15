@@ -1,0 +1,107 @@
+{
+	"ai-doi-soat-lech": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nĐối soát AI\n1. Đối soát tháng 10/2026 với AI Gateway lệch 25% (sổ 12 US$, Gateway 15 US$) — https://crm.test/onehub/settings/okr\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Đối soát AI*\n• Đối soát tháng 10/2026 với AI Gateway lệch 25% (sổ 12 US$, Gateway 15 US$) — <https://crm.test/onehub/settings/okr|mở cài đặt OKR>",
+		"duong": "https://crm.test/onehub/settings/okr"
+	},
+	"ai-tran": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nNgân sách AI\n1. Kara đã dùng 80% trần tháng (16 US$ / 20 US$) — https://crm.test/onehub/settings/okr\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Ngân sách AI*\n• Kara đã dùng 80% trần tháng (16 US$ / 20 US$) — <https://crm.test/onehub/settings/okr|mở cài đặt OKR>",
+		"duong": "https://crm.test/onehub/settings/okr"
+	},
+	"buoc-qua-han": {
+		"zalo": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\nQuá hạn\n1. Vinamilk · Gọi chị Hà xác nhận lịch ký, hạn 12/10 — https://crm.test/onehub?record=plan:kh-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\n*Quá hạn*\n• Vinamilk · Gọi chị Hà xác nhận lịch ký, hạn 12/10 — <https://crm.test/onehub?record=plan:kh-mau-1|mở kế hoạch>",
+		"duong": "https://crm.test/onehub?record=plan:kh-mau-1"
+	},
+	"buoc-sap-han": {
+		"zalo": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\nSắp hạn\n1. Vinamilk · Chốt giá trước thứ Sáu, hạn 16/10 — https://crm.test/onehub?record=plan:kh-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\n*Sắp hạn*\n• Vinamilk · Chốt giá trước thứ Sáu, hạn 16/10 — <https://crm.test/onehub?record=plan:kh-mau-1|mở kế hoạch>",
+		"duong": "https://crm.test/onehub?record=plan:kh-mau-1"
+	},
+	"ke-hoach-im": {
+		"zalo": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\nKế hoạch im\n1. Hoà Phát · im 8 ngày · Hỏi lại tiến độ với người cầm trịch — https://crm.test/onehub?record=plan:kh-mau-2\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\n*Kế hoạch im*\n• Hoà Phát · im 8 ngày · Hỏi lại tiến độ với người cầm trịch — <https://crm.test/onehub?record=plan:kh-mau-2|mở kế hoạch>",
+		"duong": "https://crm.test/onehub?record=plan:kh-mau-2"
+	},
+	"moc-ngay": {
+		"zalo": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\nMốc ngày\n1. FPT · ngày thứ 14 · Kiểm tiến độ mốc 14 ngày — https://crm.test/onehub?record=plan:kh-mau-3\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\n*Mốc ngày*\n• FPT · ngày thứ 14 · Kiểm tiến độ mốc 14 ngày — <https://crm.test/onehub?record=plan:kh-mau-3|mở kế hoạch>",
+		"duong": "https://crm.test/onehub?record=plan:kh-mau-3"
+	},
+	"okr-cap-nhat": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nCập nhật tuần\n1. 2 KR chờ cập nhật tuần này — https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Cập nhật tuần*\n• 2 KR chờ cập nhật tuần này — <https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac|mở cập nhật tuần>",
+		"duong": "https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac"
+	},
+	"okr-cho-duyet": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nChờ bạn duyệt\n1. Lan gửi duyệt mục tiêu «Mở rộng miền Trung» — https://crm.test/onehub/okr?record=objective:ob-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Chờ bạn duyệt*\n• Lan gửi duyệt mục tiêu «Mở rộng miền Trung» — <https://crm.test/onehub/okr?record=objective:ob-mau-1|mở mục tiêu>",
+		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-1"
+	},
+	"okr-duoc-giao": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nĐược giao\n1. Bạn phụ trách KR «Tăng tỷ lệ chốt lên 30%» — https://crm.test/onehub/okr?record=objective:ob-mau-4\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Được giao*\n• Bạn phụ trách KR «Tăng tỷ lệ chốt lên 30%» — <https://crm.test/onehub/okr?record=objective:ob-mau-4|mở mục tiêu>",
+		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-4"
+	},
+	"okr-ghi-nhan": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nGhi nhận\n1. Minh ghi nhận bạn ở «Giữ chân khách hàng lớn» — https://crm.test/onehub/okr?record=objective:ob-mau-6\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Ghi nhận*\n• Minh ghi nhận bạn ở «Giữ chân khách hàng lớn» — <https://crm.test/onehub/okr?record=objective:ob-mau-6|mở mục tiêu>",
+		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-6"
+	},
+	"okr-hoi-y-cong-bo": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nHỏi ý đã công bố\n1. Mục tiêu Ý tưởng OKR quý 1 đã công bố — xem ý của bạn đi đâu — https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Hỏi ý đã công bố*\n• Mục tiêu Ý tưởng OKR quý 1 đã công bố — xem ý của bạn đi đâu — <https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1|mở hỏi ý>",
+		"duong": "https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1"
+	},
+	"okr-hoi-y-gop": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nHỏi ý mục tiêu\n1. Công ty đang hỏi ý cho mục tiêu Ý tưởng OKR quý 1 — hạn 17:00 20/10 — https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Hỏi ý mục tiêu*\n• Công ty đang hỏi ý cho mục tiêu Ý tưởng OKR quý 1 — hạn 17:00 20/10 — <https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1|mở hỏi ý>",
+		"duong": "https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1"
+	},
+	"okr-kr-im": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nKR im\n1. KR «Giảm 20% thời gian phản hồi khách» im 14 ngày — https://crm.test/onehub/okr?record=objective:ob-mau-3\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*KR im*\n• KR «Giảm 20% thời gian phản hồi khách» im 14 ngày — <https://crm.test/onehub/okr?record=objective:ob-mau-3|mở mục tiêu>",
+		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-3"
+	},
+	"okr-nhac-ten": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nNhắc tên\n1. Lan nhắc tên bạn ở «Mở rộng miền Trung» — https://crm.test/onehub/okr?record=objective:ob-mau-5\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Nhắc tên*\n• Lan nhắc tên bạn ở «Mở rộng miền Trung» — <https://crm.test/onehub/okr?record=objective:ob-mau-5|mở mục tiêu>",
+		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-5"
+	},
+	"okr-theo-doi": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nĐang theo dõi\n1. «Ra mắt sản phẩm mới» có 2 cập nhật, 3 bình luận mới — https://crm.test/onehub/okr?record=objective:ob-mau-7\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Đang theo dõi*\n• «Ra mắt sản phẩm mới» có 2 cập nhật, 3 bình luận mới — <https://crm.test/onehub/okr?record=objective:ob-mau-7|mở mục tiêu>",
+		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-7"
+	},
+	"okr-tom-tat": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nKara · OKR\n1. Tóm tắt tuần Phòng Kinh doanh · 1 KR đáng bàn — https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Kara · OKR*\n• Tóm tắt tuần Phòng Kinh doanh · 1 KR đáng bàn — <https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1|mở>",
+		"duong": "https://crm.test/onehub/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3Apb-mau-1&kyOkr=ky-mau-1"
+	},
+	"okr-tra-lai": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nBị trả lại\n1. Minh trả lại mục tiêu «Tăng doanh thu kênh đối tác Q4»: thiếu KR đo được — https://crm.test/onehub/okr?record=objective:ob-mau-2\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Bị trả lại*\n• Minh trả lại mục tiêu «Tăng doanh thu kênh đối tác Q4»: thiếu KR đo được — <https://crm.test/onehub/okr?record=objective:ob-mau-2|mở mục tiêu>",
+		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-2"
+	},
+	"tai-lieu-cho-duyet": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nKho tài liệu\n1. 3 bản đề xuất chờ bạn duyệt — https://crm.test/onehub/tai-lieu?tabTaiLieu=cho-duyet\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Kho tài liệu*\n• 3 bản đề xuất chờ bạn duyệt — <https://crm.test/onehub/tai-lieu?tabTaiLieu=cho-duyet|mở tab Chờ duyệt>",
+		"duong": "https://crm.test/onehub/tai-lieu?tabTaiLieu=cho-duyet"
+	},
+	"viec-cho-danh-gia": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nViệc chờ bạn đánh giá\n1. Tổng hợp phản hồi khách hàng — https://crm.test/onehub/viec?record=viec:vc-mau-3\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Việc chờ bạn đánh giá*\n• Tổng hợp phản hồi khách hàng — <https://crm.test/onehub/viec?record=viec:vc-mau-3|mở việc>",
+		"duong": "https://crm.test/onehub/viec?record=viec:vc-mau-3"
+	},
+	"viec-qua-han": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nViệc quá hạn\n1. Gửi báo giá cho Hoà Phát · hạn 12/10 · Hoà Phát — https://crm.test/onehub/viec?record=viec:vc-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Việc quá hạn*\n• Gửi báo giá cho Hoà Phát · hạn 12/10 · Hoà Phát — <https://crm.test/onehub/viec?record=viec:vc-mau-1|mở việc>",
+		"duong": "https://crm.test/onehub/viec?record=viec:vc-mau-1"
+	},
+	"viec-sap-han": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nViệc sắp hạn\n1. Chuẩn bị hồ sơ thầu Long An · hạn 16/10 — https://crm.test/onehub/viec?record=viec:vc-mau-2\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Việc sắp hạn*\n• Chuẩn bị hồ sơ thầu Long An · hạn 16/10 — <https://crm.test/onehub/viec?record=viec:vc-mau-2|mở việc>",
+		"duong": "https://crm.test/onehub/viec?record=viec:vc-mau-2"
+	}
+}

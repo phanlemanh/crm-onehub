@@ -1,6 +1,10 @@
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
+	theCuaPhienHoi,
+	thuocTinhPhienHoi,
+} from "@crm/validation/okr-phien-hoi";
+import {
 	theCuaPhienSoan,
 	thuocTinhPhienSoan,
 } from "@crm/validation/okr-phien-soan";
@@ -12,7 +16,7 @@ import {
 	withAuthChallenges,
 } from "eve/channels/auth";
 import { z } from "zod";
-import { TRO_LY_OKR_SOAN } from "./config";
+import { TRO_LY_OKR_HOI, TRO_LY_OKR_SOAN } from "./config";
 
 export const BRIDGE_ISSUER_OKR = TRO_LY_OKR_SOAN.issuer;
 export const BRIDGE_AUDIENCE_OKR = TRO_LY_OKR_SOAN.audience;
@@ -51,7 +55,8 @@ export function repTuCuaOkr(
 			const userId = kq.sessionAuth.subject;
 			if (!userId) return null;
 			const thuoc = theCuaPhienSoan.safeParse(kq.sessionAuth.attributes ?? {});
-			if (!thuoc.success) return null;
+			const hoi = theCuaPhienHoi.safeParse(kq.sessionAuth.attributes ?? {});
+			if (!thuoc.success && !hoi.success) return null;
 			const member = await client.member.findUnique({
 				where: {
 					organizationId_userId: { organizationId: WORKSPACE_ID, userId },
@@ -60,6 +65,24 @@ export function repTuCuaOkr(
 			});
 			const vai = vaiDuocVao.safeParse(member?.role);
 			if (!vai.success) return null;
+			if (hoi.success) {
+				const cuocHoi = await client.okrCuocHoi.findUnique({
+					where: { id: hoi.data.cuocHoiId },
+					select: { nguoiHoiUserId: true },
+				});
+				if (!cuocHoi || cuocHoi.nguoiHoiUserId !== userId) {
+					throw new ForbiddenError({
+						message: TRO_LY_OKR_HOI.tuChoi.cuocKhongThuocPhien,
+					});
+				}
+				return {
+					authenticator: "crm-okr-cua",
+					principalId: userId,
+					principalType: "user",
+					attributes: thuocTinhPhienHoi.parse({ ...hoi.data, vai: vai.data }),
+				};
+			}
+			if (!thuoc.success) return null;
 			const cuoc = await client.okrCuocSoan.findUnique({
 				where: { id: thuoc.data.cuocSoanId },
 				select: { nguoiMoUserId: true, trangThai: true },
