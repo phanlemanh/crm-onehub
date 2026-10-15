@@ -11,9 +11,14 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
-import { choVaiXem } from "@/lib/lo-trinh/cho-vai";
+import { banDungHienTai } from "@/lib/lo-trinh/chon-nguon";
+import { docBanChupCrm } from "@/lib/lo-trinh/doc-ban-chup";
 import { docTepLoTrinh } from "@/lib/lo-trinh/doc-tep";
-import { type DauVaoLoTrinh, docTrangLoTrinh } from "@/lib/lo-trinh/doc-trang";
+import {
+	type DauVaoLoTrinh,
+	docDauVaoChoVai,
+	docTrangLoTrinh,
+} from "@/lib/lo-trinh/doc-trang";
 import { getLocale } from "@/lib/locale/server";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { requireSession } from "@/lib/session";
@@ -22,15 +27,25 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: loTrinhMessages(await getLocale()).trang.tieuDe };
 }
 
-async function docDauVao(): Promise<DauVaoLoTrinh> {
+async function docBanDung(): Promise<DauVaoLoTrinh> {
 	"use cache";
 	return docTrangLoTrinh(docTepLoTrinh());
+}
+
+function ghiCanhBao(o: { ca: "loi" | "hong"; lyDo: string }) {
+	console.warn("lo-trinh: roi ve ban dung", o);
 }
 
 async function NoiDung() {
 	const session = await requireSession();
 	const vai = await workspaceRoleOf(session.user.id);
-	return <NoiDungLoTrinh dauVao={choVaiXem(await docDauVao(), vai)} />;
+	const dauVao = await docDauVaoChoVai(vai, {
+		docBanChup: docBanChupCrm,
+		docBanDung,
+		banDung: banDungHienTai(),
+		ghiCanhBao,
+	});
+	return <NoiDungLoTrinh dauVao={dauVao} />;
 }
 
 export default async function LoTrinhPage() {

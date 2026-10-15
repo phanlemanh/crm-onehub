@@ -1,20 +1,24 @@
 "use client";
 
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { lamSachMan } from "@crm/validation/tin-hieu";
+import { homNayVN } from "@crm/validation/ngay-vn";
+import { lamSachMan, TIN_HIEU } from "@crm/validation/tin-hieu";
 import { useMutation } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useState } from "react";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
+import { tenMan } from "@/lib/tin-hieu/ten-man";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceSlug, useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { type GiaiDoanGui, HopGuiTinHieu } from "./hop-gui-tin-hieu";
 
-const MA_LOI_MAY_CHU = 500;
+const MA_QUA_TRAN = 429;
 
 export function NutGuiTinHieu({ nut }: { nut: ReactNode }) {
-	const m = tinHieuMessages(useLocale());
+	const locale = useLocale();
+	const m = tinHieuMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const slug = useWorkspaceSlug();
@@ -24,8 +28,13 @@ export function NutGuiTinHieu({ nut }: { nut: ReactNode }) {
 	const [muonLam, setMuonLam] = useState("");
 	const [daXayRa, setDaXayRa] = useState("");
 	const [ma, setMa] = useState<string | null>(null);
+	const [khoaNgay, setKhoaNgay] = useState<string | null>(null);
 	const gui = useMutation(
 		trpc.tinHieu.gui.mutationOptions({
+			onError: (loi) => {
+				if (loi.data?.httpStatus === MA_QUA_TRAN)
+					setKhoaNgay(homNayVN(new Date()));
+			},
 			onSuccess: (kq) => {
 				setMa(kq.ma);
 				setMuonLam("");
@@ -42,12 +51,12 @@ export function NutGuiTinHieu({ nut }: { nut: ReactNode }) {
 		: ma
 			? "da-gui"
 			: "soan";
-	const maLoi = gui.error?.data?.httpStatus;
-	const loi = gui.error
-		? maLoi !== undefined && maLoi < MA_LOI_MAY_CHU
-			? gui.error.message
-			: m.hop.chuaGui
-		: null;
+	const quaTran = khoaNgay !== null && khoaNgay === homNayVN(new Date());
+	const loi = quaTran
+		? dien(m.hop.quaTran, { tran: String(TIN_HIEU.tranMoiNgay) })
+		: gui.error
+			? m.hop.chuaGui
+			: null;
 
 	return (
 		<HopGuiTinHieu
@@ -56,12 +65,12 @@ export function NutGuiTinHieu({ nut }: { nut: ReactNode }) {
 			hrefDaGui={url("/tin-hieu")}
 			loi={loi}
 			ma={ma}
-			man={man}
+			man={tenMan(man, locale)}
 			muonLam={muonLam}
 			nut={nut}
 			onDaXayRaChange={setDaXayRa}
 			onGui={() => {
-				if (gui.isPending) return;
+				if (gui.isPending || quaTran) return;
 				gui.mutate({ muonLam, daXayRa, man });
 			}}
 			onMuonLamChange={setMuonLam}
@@ -73,6 +82,7 @@ export function NutGuiTinHieu({ nut }: { nut: ReactNode }) {
 				}
 			}}
 			open={mo}
+			quaTran={quaTran}
 		/>
 	);
 }

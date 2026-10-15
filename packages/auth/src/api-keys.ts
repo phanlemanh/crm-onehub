@@ -19,12 +19,29 @@ export const KHOA_KEO_TIN_HIEU = {
 	quyen: { tinHieu: ["keoVe"] },
 } as const;
 
-export const LOAI_KHOA_API = ["toan-quyen", "keo-tin-hieu"] as const;
+export const KHOA_DAY_LO_TRINH = {
+	configId: "day-lo-trinh",
+	quyen: { loTrinh: ["day"] },
+} as const;
+
+export const LOAI_KHOA_API = [
+	"toan-quyen",
+	"keo-tin-hieu",
+	"day-lo-trinh",
+] as const;
 
 export type LoaiKhoaApi = (typeof LOAI_KHOA_API)[number];
 
 export function loaiKhoaTuConfig(configId: string | null): LoaiKhoaApi {
-	return configId === KHOA_KEO_TIN_HIEU.configId
-		? "keo-tin-hieu"
-		: "toan-quyen";
+	if (configId === KHOA_KEO_TIN_HIEU.configId) return "keo-tin-hieu";
+	if (configId === KHOA_DAY_LO_TRINH.configId) return "day-lo-trinh";
+	return "toan-quyen";
+}
+
+export function configKhoaMay(configId: string | null): string | undefined {
+	if (configId === KHOA_KEO_TIN_HIEU.configId)
+		return KHOA_KEO_TIN_HIEU.configId;
+	if (configId === KHOA_DAY_LO_TRINH.configId)
+		return KHOA_DAY_LO_TRINH.configId;
+	return undefined;
 }

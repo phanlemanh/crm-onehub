@@ -105,6 +105,8 @@ const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
 const KHONG_NHAN_PHIEN = [
 	"tinHieuLich.keoVe",
 	"POST /rest/tin-hieu/lich/keo-ve",
+	"loTrinhBanChup.day",
+	"POST /rest/lo-trinh/ban-chup",
 ] as const;
 const laKhongNhanPhien = (ten: string) =>
 	(KHONG_NHAN_PHIEN as readonly string[]).includes(ten);
