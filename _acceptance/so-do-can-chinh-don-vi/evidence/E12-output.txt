@@ -1,5 +1,6 @@
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: kho crm_so_do_can_chinh_don_vi_do · app http://localhost:4358 · api http://localhost:4758
+  building crm_so_do_can_chinh_don_vi__mau_do: migrate deploy + seed (once per source fingerprint)
+phien-do: kho crm_so_do_can_chinh_don_vi_do · app http://localhost:4660 · api http://localhost:4824
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng

@@ -102,3 +102,58 @@ wall: 1948s
 - **claude-opus-5-5**: 3 agent · 58 calls · out 4,723 · in 116 · cache_read 3,536,437 · cache_create 251,116
 - **claude-haiku-5-5**: 22 agent · 61 calls · out 12,558 · in 122 · cache_read 1,399,493 · cache_create 746,073
 
+### S4 round 3 — wf_69385f40-258 (32 agent, 62,960 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 4 | 17,398 | 8 | 210,457 | 99 |
+| review:measurement | claude-opus-5-5 | 21 | 9,800 | 42 | 1,941,859 | 266 |
+| triage | claude-sonnet-5-5 | 2 | 5,651 | 4 | 38,946 | 33 |
+| ui:E12 | claude-sonnet-5-5 | 9 | 4,348 | 18 | 819,647 | 93 |
+| refute:okr-so-do-don-vi.spec.ts | claude-sonnet-5-5 | 9 | 2,879 | 18 | 293,650 | 54 |
+| review:bugs | claude-opus-5-5 | 30 | 1,870 | 60 | 2,407,974 | 201 |
+| refute:okr-so-do-don-vi.spec.ts | claude-sonnet-5-5 | 8 | 1,768 | 16 | 266,959 | 40 |
+| refute:ca-so-do.ts | claude-sonnet-5-5 | 10 | 1,758 | 20 | 366,988 | 43 |
+| refute:okr-so-do-don-vi.dom.tsx | claude-sonnet-5-5 | 4 | 1,703 | 8 | 104,859 | 25 |
+| refute:toan-canh.tsx | claude-sonnet-5-5 | 11 | 1,533 | 22 | 435,029 | 51 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,513 | 4 | 33,349 | 309 |
+| refute:so-do-don-vi.ts | claude-sonnet-5-5 | 9 | 1,465 | 18 | 326,052 | 43 |
+| review:conventions | claude-opus-5-5 | 11 | 1,391 | 22 | 547,864 | 59 |
+| refute:man.mjs | claude-sonnet-5-5 | 8 | 1,369 | 16 | 258,358 | 38 |
+| refute:okr-so-do-don-vi.dom.tsx | claude-sonnet-5-5 | 8 | 1,249 | 16 | 257,981 | 30 |
+| refute:okr-so-do-don-vi.dom.tsx | claude-sonnet-5-5 | 6 | 1,114 | 12 | 179,701 | 24 |
+| refute:okr-so-do-don-vi.dom.tsx | claude-sonnet-5-5 | 5 | 1,009 | 10 | 142,249 | 20 |
+| refute:ranh-gioi.mjs | claude-sonnet-5-5 | 4 | 755 | 8 | 102,413 | 16 |
+| refute:okr-so-do-don-vi.dom.tsx | claude-sonnet-5-5 | 7 | 565 | 14 | 212,714 | 26 |
+| refute:okr-so-do-don-vi.dom.tsx | claude-sonnet-5-5 | 3 | 529 | 6 | 66,352 | 12 |
+| machine:node _acceptance/so-do-can-chinh-don-vi/ | claude-haiku-5-5 | 2 | 434 | 4 | 33,385 | 7 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 422 | 4 | 33,365 | 292 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 320 | 4 | 33,448 | 8 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 304 | 4 | 33,374 | 286 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 300 | 4 | 33,404 | 63 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 297 | 4 | 30,480 | 283 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 287 | 4 | 33,464 | 8 |
+| baseline:diffBase | claude-sonnet-5-5 | 2 | 235 | 4 | 33,866 | 23 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 202 | 4 | 33,347 | 31 |
+| refute:okr-so-do-don-vi.dom.tsx | claude-sonnet-5-5 | 4 | 175 | 8 | 101,671 | 19 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 171 | 4 | 33,343 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 146 | 4 | 29,274 | 6 |
+
+
+wall: 1487s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 235 | 33,866 | 23 | 07:50:41 | 07:51:04 |
+| machine | 10 | 4,250 | 330,959 | 1285 | 07:50:41 | 08:12:06 |
+| ui | 1 | 4,348 | 819,647 | 93 | 07:50:41 | 07:52:15 |
+| review | 3 | 13,061 | 4,897,697 | 267 | 07:50:41 | 07:55:08 |
+| triage | 1 | 5,651 | 38,946 | 33 | 08:12:08 | 08:12:41 |
+| refute | 14 | 17,871 | 3,114,976 | 56 | 08:12:43 | 08:13:39 |
+| capture | 1 | 146 | 29,274 | 6 | 08:13:42 | 08:13:47 |
+| synthesize | 1 | 17,398 | 210,457 | 99 | 08:13:50 | 08:15:28 |
+
+- **claude-sonnet-5-5**: 19 agent · 115 calls · out 45,649 · in 230 · cache_read 4,247,166 · cache_create 894,223
+- **claude-opus-5-5**: 3 agent · 62 calls · out 13,061 · in 124 · cache_read 4,897,697 · cache_create 317,561
+- **claude-haiku-5-5**: 10 agent · 20 calls · out 4,250 · in 40 · cache_read 330,959 · cache_create 323,082
+
