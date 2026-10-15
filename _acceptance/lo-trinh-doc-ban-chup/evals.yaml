@@ -70,7 +70,7 @@ evals:
         pha 2 — du lieu mau vao qua duong ghi that: do-man.mjs tao khoa «Đẩy lộ trình» qua API cua kho do, goi
           POST /rest/lo-trinh/ban-chup voi khoi rut tu LO-TRINH.html cua cay DA SUA mot cau giao danh dau
           (chuoi "LT1C-DAU-<run>"), commitLuc = bay gio; tai lai trang moi 10 s cho toi khi chuoi danh dau hien; dong
-          "hien trong mot nhip" DUNG khi thoi gian cho <= LO_TRINH.nhipLamMoiMs (doc tu cau-hinh.ts that) + 15 s
+          "hien trong mot nhip" DUNG khi thoi gian cho <= LO_TRINH.nhipLamMoiMs (doc tu cau-hinh.ts that) + 30 s (buoc tai lai 10 s + tai trang)
         pha 3 — chup 4 o ban-chup (1280|375 x vi|en): bang co hang mang chuoi danh dau; dong gio lay KHONG co chu ban dung
         pha 4 — mot o ban-chup-1280-vi voi nguoi xem vai member (phien thu hai cua kho do): bang van hien, khong co khoi so
           lieu chu kho (doi chung: o chu cung trang co khoi do)
