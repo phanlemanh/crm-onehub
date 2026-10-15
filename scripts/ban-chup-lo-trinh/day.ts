@@ -48,7 +48,18 @@ function tomTatLoi(than: string): string {
 const ghiChu = (ketQua: string) =>
 	`::notice title=${TIEU_DE_GHI_CHU}::${ketQua}`;
 
+const ngoaiNhanh = (env: DauVaoDay["env"]) =>
+	env.GITHUB_ACTIONS === "true" && env.GITHUB_REF !== BAN_CHUP_LO_TRINH.refDay;
+
 export async function day(o: DauVaoDay): Promise<0 | 1> {
+	if (ngoaiNhanh(o.env)) {
+		const ref = o.env.GITHUB_REF?.trim() || "thiếu GITHUB_REF";
+		o.in(`::error title=${TIEU_DE_GHI_CHU}::ngoai-onehub`);
+		o.loi(
+			`Lượt này chạy từ ${ref}; chỉ ${BAN_CHUP_LO_TRINH.refDay} được đẩy bản chụp lộ trình lên CRM. Không gọi CRM.`,
+		);
+		return 1;
+	}
 	const urlApi = o.env.CRM_API_URL?.trim();
 	const khoa = o.env.CRM_KHOA_DAY_LO_TRINH?.trim();
 	if (!urlApi || !khoa) {
