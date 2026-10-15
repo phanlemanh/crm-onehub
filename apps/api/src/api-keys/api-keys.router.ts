@@ -13,6 +13,7 @@ import type { AuthedTrpcContext, BaseTrpcContext } from "../trpc/context.types";
 import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { SessionOnlyMiddleware } from "../trpc/middlewares/session-only.middleware";
 import { restMeta } from "../trpc/openapi";
+import { docPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import {
 	apiKeyListInput,
 	apiKeyListOutput,
@@ -43,7 +44,7 @@ export class ApiKeysRouter {
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof apiKeyListInput>,
 	) {
-		return this.apiKeys.list(ctx.user.id, input);
+		return this.apiKeys.list(ctx.user.id, docPhamViYeuCau(ctx).role, input);
 	}
 
 	@Mutation({
@@ -55,7 +56,12 @@ export class ApiKeysRouter {
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof createApiKeyInput>,
 	) {
-		return this.apiKeys.create(ctx.user.id, headersOf(ctx), input);
+		return this.apiKeys.create(
+			ctx.user.id,
+			docPhamViYeuCau(ctx).role,
+			headersOf(ctx),
+			input,
+		);
 	}
 
 	@Mutation({

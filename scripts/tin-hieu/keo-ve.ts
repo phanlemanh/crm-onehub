@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { docDuLieu } from "../../apps/app/lib/lo-trinh/doc-du-lieu.js";
 import {
-	docPhanHoiKeoVe,
+	docPhanHoiKeoVeDayDu,
 	type KeoVeOutput,
 	parseDuongTinHieu,
 	TIN_HIEU,
@@ -10,6 +10,11 @@ import {
 } from "../../packages/validation/src/tin-hieu.ts";
 
 const MS_NGAY = 86_400_000;
+const MS_GIO = 3_600_000;
+export const DUONG_KEO_VE = {
+	lich: "/rest/tin-hieu/lich/keo-ve",
+	tay: "/rest/tin-hieu/keo-ve",
+} as const;
 const GOC = path.resolve(import.meta.dir, "..", "..");
 
 export type KetQuaKeoVe = {
@@ -31,13 +36,25 @@ function coChoSauGom(root: string): Set<string> {
 	);
 }
 
+function dongDau(phanHoi: KeoVeOutput): string {
+	const luc = phanHoi.dongDauLuc;
+	if (!luc) return "đóng dấu lượt này: 0";
+	const vua = phanHoi.tep.filter((t) => t.keoVeLuc === luc);
+	const cho = Math.max(
+		0,
+		...vua.map((t) => Date.parse(luc) - Date.parse(t.tep.luc)),
+	);
+	return `đóng dấu lượt này: ${vua.length} · chờ lâu nhất: ${Math.floor(cho / MS_GIO)} giờ`;
+}
+
 function tongKet(
-	ds: KeoVeOutput["tep"],
+	phanHoi: KeoVeOutput,
 	moi: number,
 	daCo: number,
 	now: Date,
 	coCho: Set<string>,
 ): string[] {
+	const ds = phanHoi.tep;
 	const tuoi = (luc: string) => (now.getTime() - Date.parse(luc)) / MS_NGAY;
 	const trong = ds.filter((t) => tuoi(t.tep.luc) <= TIN_HIEU.ngayDem);
 	const theoPhong = new Map<string, number>();
@@ -56,6 +73,7 @@ function tongKet(
 			.map(([ten, so]) => `  ${ten}: ${so}`),
 		`  chưa có phòng ban: ${khongPhong}`,
 		`gửi quá ${TIN_HIEU.ngayCoCho} ngày: ${qua.length} · chưa có chỗ sau gom: ${chuaCo.length}`,
+		dongDau(phanHoi),
 	];
 }
 
@@ -63,19 +81,39 @@ export async function chayKeoVe(o: {
 	root: string;
 	url: string | undefined;
 	key: string | undefined;
+	khoaLich?: string | undefined;
 	now: Date;
 }): Promise<KetQuaKeoVe> {
 	const rong = { moi: 0, daCo: 0, tongKet: [] };
 	if (!o.url) return { ma: 2, ...rong, loi: "thiếu biến CRM_API_URL" };
-	if (!o.key) return { ma: 2, ...rong, loi: "thiếu biến CRM_API_KEY" };
-	const res = await fetch(`${o.url.replace(/\/$/, "")}/rest/tin-hieu/keo-ve`, {
-		method: "POST",
-		headers: { "x-api-key": o.key, "content-type": "application/json" },
-		body: "{}",
-	});
+	const lich = o.khoaLich?.trim() ?? "";
+	const tay = o.key?.trim() ?? "";
+	const key = lich || tay;
+	if (!key)
+		return {
+			ma: 2,
+			...rong,
+			loi: "thiếu biến CRM_KHOA_KEO_TIN_HIEU hoặc CRM_API_KEY",
+		};
+	const duong = lich ? DUONG_KEO_VE.lich : DUONG_KEO_VE.tay;
+	let res: Response;
+	try {
+		res = await fetch(`${o.url.replace(/\/$/, "")}${duong}`, {
+			method: "POST",
+			headers: { "x-api-key": key, "content-type": "application/json" },
+			body: "{}",
+		});
+	} catch (loi) {
+		return {
+			ma: 2,
+			...rong,
+			loi: `không tới được CRM ở ${o.url}: ${loi instanceof Error ? loi.message : "lỗi mạng"}`,
+		};
+	}
 	if (!res.ok)
 		return { ma: 2, ...rong, loi: `CRM trả ${res.status} cho lượt kéo về` };
-	const ds = docPhanHoiKeoVe(await res.json());
+	const phanHoi = docPhanHoiKeoVeDayDu(await res.json());
+	const ds = phanHoi.tep;
 	const thuMuc = path.join(o.root, TIN_HIEU.thuMucNguon);
 	const ghi: { tep: string; chu: string }[] = [];
 	let daCo = 0;
@@ -97,7 +135,7 @@ export async function chayKeoVe(o: {
 		ma: 0,
 		moi: ghi.length,
 		daCo,
-		tongKet: tongKet(ds, ghi.length, daCo, o.now, coChoSauGom(o.root)),
+		tongKet: tongKet(phanHoi, ghi.length, daCo, o.now, coChoSauGom(o.root)),
 	};
 }
 
@@ -106,6 +144,7 @@ if (import.meta.main) {
 		root: GOC,
 		url: process.env.CRM_API_URL,
 		key: process.env.CRM_API_KEY,
+		khoaLich: process.env.CRM_KHOA_KEO_TIN_HIEU,
 		now: new Date(),
 	});
 	if (kq.loi) console.error(kq.loi);

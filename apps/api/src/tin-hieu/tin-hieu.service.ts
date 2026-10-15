@@ -115,16 +115,18 @@ export class TinHieuService {
 
 	async keoVe(nguoi: NguoiGoiTinHieu): Promise<KeoVeOutput> {
 		if (!laQuanTriWorkspace(nguoi.role)) throw new ForbiddenException();
-		const hang = await this.db.$transaction(async (tx) => {
+		const luc = new Date();
+		const { hang, soDau } = await this.db.$transaction(async (tx) => {
 			await tx.$executeRaw`LOCK TABLE "tinHieu" IN SHARE ROW EXCLUSIVE MODE`;
-			await tx.tinHieu.updateMany({
+			const dau = await tx.tinHieu.updateMany({
 				where: { keoVeLuc: null },
-				data: { keoVeLuc: new Date() },
+				data: { keoVeLuc: luc },
 			});
-			return tx.tinHieu.findMany({
+			const rows = await tx.tinHieu.findMany({
 				orderBy: { so: "asc" },
 				include: { phongBan: { select: { name: true } } },
 			});
+			return { hang: rows, soDau: dau.count };
 		});
 		this.logger.log({
 			message: "tin-hieu.keo-ve",
@@ -136,7 +138,9 @@ export class TinHieuService {
 				id: idTep(h.so),
 				tep: tepTuBanGhi(h),
 				phongBan: h.phongBan?.name ?? null,
+				keoVeLuc: (h.keoVeLuc ?? luc).toISOString(),
 			})),
+			soDau > 0 ? luc.toISOString() : null,
 		);
 	}
 }
