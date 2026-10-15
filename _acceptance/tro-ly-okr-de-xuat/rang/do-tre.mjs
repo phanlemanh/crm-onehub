@@ -36,7 +36,8 @@ const E24 = {
 	nac: "bat",
 	lechChoPhepMs: 1,
 	lenh: "bun _acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs",
-	dauLoiTacTu: /MODEL_CALL_FAILED|insufficient_funds|budget exceeded|quota_for_entity_exceeded/,
+	dauLoiTacTu:
+		/MODEL_CALL_FAILED|insufficient_funds|budget exceeded|quota_for_entity_exceeded/,
 	sql: join(GOC, "_acceptance/tro-ly-okr-de-xuat/rang/do-tre.sql"),
 };
 
@@ -108,7 +109,7 @@ function nguoiGoi(api) {
 
 async function chayLuot(url, qt, mt, i) {
 	const kq = await qt.lam("okr.troLyDeXuat", { objectiveId: mt.id });
-	if (!kq.bat) return { i, mt, taskId: null, lyDo: kq.lyDo };
+	if (!kq.bat) return { i, mt, taskId: null, lyDo: kq.lyDo, quaHan: false };
 	if (kq.dungLai)
 		throw new Error(`luot ${i + 1} dung lai viec cu ${kq.taskId}`);
 	const xong = await choXong(url, kq.taskId);
@@ -117,6 +118,7 @@ async function chayLuot(url, qt, mt, i) {
 		mt,
 		taskId: kq.taskId,
 		lyDo: xong ? null : `qua ${E24.choMoiLuotMs / GIAY_MS} s chua dong`,
+		quaHan: !xong,
 	};
 }
 
@@ -219,6 +221,11 @@ async function trongPhien() {
 		console.log(
 			`p50 ${p50} ms (nguong ${E24.nguong.p50Ms}) · p90 ${p90} ms (nguong ${E24.nguong.p90Ms}) · ${soHong} luot hong tinh ${E24.hongMs}`,
 		);
+		const soQuaHan = so.filter((l) => l.quaHan).length;
+		if (soQuaHan > 0)
+			console.log(
+				`${soQuaHan}/${so.length} luot qua ${E24.choMoiLuotMs / GIAY_MS} s chua dong — tinh la do tre`,
+			);
 
 		const loi = [];
 		if (soHong === 0) {
@@ -244,7 +251,7 @@ async function trongPhien() {
 }
 
 export function laHongHet(so) {
-	return so.length > 0 && so.every((l) => l.hong);
+	return so.length > 0 && so.every((l) => l.hong) && !so.every((l) => l.quaHan);
 }
 
 export function hongHet(so, tepNhatKy, doc = (t) => readFileSync(t, "utf8")) {
