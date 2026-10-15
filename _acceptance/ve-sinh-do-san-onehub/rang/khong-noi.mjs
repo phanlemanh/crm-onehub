@@ -57,6 +57,8 @@ function hunkCua(diff) {
 
 function coKhai(hunk, docTep) {
 	if (hunk.them.some((d) => NHAN.some((n) => d.includes(n)))) return true;
+	if (hunk.tep.endsWith(".json"))
+		return NHAN.some((n) => docTep(hunk.tep).includes(n));
 	const dong = docTep(hunk.tep).split("\n");
 	const tu = Math.max(0, hunk.dong - 1 - TAM_NHIN);
 	const den = hunk.dong - 1 + hunk.them.length + TAM_NHIN;

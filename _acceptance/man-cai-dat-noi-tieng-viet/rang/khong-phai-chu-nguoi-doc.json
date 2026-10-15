@@ -1,6 +1,7 @@
 {
 	"lat": "man-cai-dat-noi-tieng-viet",
 	"ghi_chu": "Chan moi-chuoi sinh dan so bang cach lay MOI chuoi trong lat roi TRU theo luat co ten. HAI danh sach TACH BIET, va tach la co ly do: mot thuoc tinh JSX ten `name` la ky thuat, nhung mot KHOA object ten `name` thuong la nhan hien len man ({ name: \"Ninety days after close\" }). Dung chung mot danh sach cho ca hai chinh la cho lop loi nay chui qua.",
+	"ghi_chu_hinh": "ve-sinh-do-san-onehub cach-toi: hinh (prop cua KhungXuong, kieu HinhKhungXuong liet ke bang, danh-sach, the, tong-quan, chi-tiet) la ma, khong phai chu nguoi doc — khai trong thuoc_jsx_ky_thuat tu 665d85b34 dung hinh=\"the\" o settings/page.tsx va settings/currencies/page.tsx; chu kho chot Hoi-1 = a ngay 16/10.",
 	"ham_ky_thuat": [
 		"cn",
 		"clsx",
