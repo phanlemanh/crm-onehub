@@ -1,0 +1,23 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_pensive_chandrasekhar_a95f11_do · app http://localhost:4599 · api http://localhost:4455
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts ada@trycomp.ai
+$ bun scripts/dev-session.ts "ldbc-mv8zyt8f@thu.test"
+DUNG ban-dung-1280-vi: «Cập nhật lúc 10:45 15/10/2026 (bản dựng)» co nhan ban dung, khong chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG ban-dung-1280-en: «Updated 10/15/2026, 10:45 (build)» co nhan ban dung, khong chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG ban-dung-375-vi: «Cập nhật lúc 10:45 15/10/2026 (bản dựng)» co nhan ban dung, khong chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG ban-dung-375-en: «Updated 10/14/2026, 23:45 (build)» co nhan ban dung, khong chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG hien-trong-mot-nhip: ban chup hien sau 70 giay (tran 90)
+DUNG ban-chup-1280-vi: «Cập nhật lúc 23:45 14/10/2026» == «Cập nhật lúc 23:45 14/10/2026» (America/New_York), co chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG ban-chup-1280-en: «Updated 10/15/2026, 10:45» == «Updated 10/15/2026, 10:45» (Asia/Ho_Chi_Minh), co chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG ban-chup-375-vi: «Cập nhật lúc 10:45 15/10/2026» == «Cập nhật lúc 10:45 15/10/2026» (Asia/Ho_Chi_Minh), co chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG ban-chup-375-en: «Updated 10/15/2026, 10:45» == «Updated 10/15/2026, 10:45» (Asia/Ho_Chi_Minh), co chuoi danh dau (true), khong cuon ngang (true), cau giao khong dich (true)
+DUNG vai-member: so lieu chu kho trong trang: chu true, thanh vien false
+ANH _acceptance/lo-trinh-doc-ban-chup/evidence
+KET LUAN: 10 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0
