@@ -10,15 +10,15 @@ export function useSauKhiTaiXong(): boolean {
 		let huy = () => {};
 		const ranh = () => {
 			const xongNgay = () => datXong(true);
-			if ("requestIdleCallback" in window) {
+			if (window.requestIdleCallback) {
 				const id = window.requestIdleCallback(xongNgay, {
 					timeout: NGAN_BAN_GHI.moSau.choRanhToiDaMs,
 				});
 				huy = () => window.cancelIdleCallback(id);
 				return;
 			}
-			const id = window.setTimeout(xongNgay, NGAN_BAN_GHI.moSau.choRanhMs);
-			huy = () => window.clearTimeout(id);
+			const id = setTimeout(xongNgay, NGAN_BAN_GHI.moSau.choRanhMs);
+			huy = () => clearTimeout(id);
 		};
 		if (document.readyState === "complete") ranh();
 		else window.addEventListener("load", ranh, { once: true });
