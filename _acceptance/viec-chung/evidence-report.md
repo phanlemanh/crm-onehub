@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bc07055a94e7cbddc8269b9f184eb11e935a02c1
+verified_commit: c47118823bf5ccd96e39634b0e603b449147bb96
 human_signoff: Mạnh 2026-10-13 — ký Cổng 2 trên S4 lượt 2 (23/23 eval máy PASS, 4 mang từ lượt 1; E15 Đạt). Ngoài-3, 4, 5, 7, 11, 14 ghi Known limits; 13 mục còn lại chấp nhận, không sửa (11 mục lượt 1 đã sửa); đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -322,3 +322,11 @@ none — mọi eval chạy một lần (deterministic), không eval nào có pas
 
 Round 1: toàn bộ eval máy xanh; E15 còn UNCERTAIN chờ người, verdict PENDING-JUDGMENT.
 Round 2: lượt sửa sau S4 lượt 1. E1-E10, E12, E13, E13b, E16 chạy lại và xanh cùng bảy lệnh suite; E11, E11b, E14, E14b mang từ round 1 vì delta không chạm paths của chúng. E15 vẫn chờ người (lens spec-alignment chưa quyết về từ ghép trong lời chú). Mốc giờ verified_at của round 2 ghi tròn theo ngày chạy 2026-10-13; giờ chính xác nằm ở run-log.jsonl.
+
+### Re-pin lần 1 — 2026-10-15, do #418 gộp onehub fbc6c9375; sửa chỗ cấy đột biến (a) của viec-chung
+run_id: repin-20261015T130914Z-83813
+sha: effdc8c5ccef6244c2c7b694b31e69ff1c0cb62c · suites: 7 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · ngoài làn máy: E13, E15 (E15 không khai paths) · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-15, do #418 gộp onehub 8f819cf6a (#421, #409, #423)
+run_id: repin-20261015T145641Z-84074
+sha: c47118823bf5ccd96e39634b0e603b449147bb96 · suites: 7 lệnh exit 0 · evals: 21/21 eval máy đạt kỳ vọng · ngoài làn máy: E13, E15 (E15 không khai paths) · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

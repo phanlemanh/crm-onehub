@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b7953b160ebc2ca129ad7384e3e0aeddb39007b0
+verified_commit: e2b54fab6e1ebd325824649586c4ef57b4ff457f
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -114,3 +114,11 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1, E2, E3, E4, E5 tất cả xanh ngay lần verify đầu — không lỗi nào, không quay lại implementation.
+
+### Re-pin lần 1 — 2026-10-15, do neo-thuoc-het-han: E5 dùng bộ đọc evals của kit và neo cặp gộp PR #145, bộ ghi invalidateQueries đủ (Ngoài-3)
+run_id: repin-20261015T061648Z-91798
+sha: 297534c01dc1122cfc1a32a18f940c87907e179c · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-15, do neo-thuoc-het-han: ghim ở đỉnh sau gộp onehub d9eb83536 (cache.ts đổi)
+run_id: repin-20261015T090245Z-78462
+sha: e2b54fab6e1ebd325824649586c4ef57b4ff457f · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
