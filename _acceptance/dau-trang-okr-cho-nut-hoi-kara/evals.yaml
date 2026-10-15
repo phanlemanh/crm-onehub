@@ -31,7 +31,9 @@ evals:
       apps/app/test/dau-trang-okr-cho.dom.tsx, describe "dto-cho": dựng khung chờ đầu trang OKR (DauTrangOkrCho)
       thật. Ma trận viết trước {vi, en} = 2 ô, ca «đếm ô dto-cho» đòi đúng 2. Mỗi ô: có đúng một
       [data-nut=hoi-kara]; chữ của nút bằng okrHoiMessages(<ngôn ngữ>).nut.hoi; nút không disabled; nút và ô xương
-      chọn kỳ cùng cha, nút đứng trước. Ghim «dto-cho <ngôn ngữ>: co nut hoi kara», «… dung truoc o ky».
+      chọn kỳ cùng cha, nút đứng trước; outerHTML của [data-nut=hoi-kara] trong khung chờ bằng hệt outerHTML của
+      <NutHoiKara /> dựng riêng trong cùng bộ dựng (cùng chữ, cùng dấu Kara như khi xong). Ghim «dto-cho <ngôn ngữ>:
+      co nut hoi kara», «… dung truoc o ky», «… nut giong luc xong».
       CHIỀU ĐỎ: đột biến của E6 (bỏ nút khỏi khung chờ) làm đỏ «dto-cho vi: co nut hoi kara».
 
   - id: E3
@@ -43,22 +45,31 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
       - "apps/app/test/dau-trang-okr-cho.dom.tsx"
     expected: |
-      Cùng tệp, describe "dto-bam": bấm nút «Hỏi Kara» của khung chờ → thủ tục okr.hoiMo giả được gọi đúng 1 lần với
-      đầu vào {} và ngăn xếp bản ghi ghi record=hoi-okr:<id trả về>. Đối chứng dương trong cùng ca: trước khi bấm số
-      lần gọi là 0. Ghim «dto-bam: goi hoiMo 1 lan», «dto-bam: mo cot hoi».
+      Cùng tệp, describe "dto-bam". Ma trận viết trước 2 ô, ca «đếm ô dto-bam» đòi đúng 2:
+        dung-yen: bấm nút «Hỏi Kara» của khung chờ → okr.hoiMo giả được gọi đúng 1 lần với đầu vào {}, rồi địa chỉ
+          ghi record=hoi-okr:<id trả về>; trước khi bấm số lần gọi là 0 (đối chứng dương trong ca).
+        go-giua-chung: bấm ở khung chờ, giữ lời trả của okr.hoiMo, gỡ khung chờ và dựng một <NutHoiKara /> mới (như
+          đầu trang đã tải xong), rồi mới thả lời trả → hoiMo được gọi tổng cộng đúng 1 lần và địa chỉ vẫn ghi
+          record=hoi-okr:<id>.
+      Ghim «dto-bam <ô>: goi hoiMo 1 lan», «dto-bam <ô>: mo cot hoi».
 
   - id: E4
     criterion: AC-4
-    executor: test
-    cmd: config:executors.test.dto_hoi_quy
+    executor: script
+    cmd: config:executors.script.dto_hoi_quy
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/khung-man-chung.dom.tsx"
       - "apps/app/test/khung-man-chung.spec.ts"
+      - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/**"
     expected: |
-      git diff --quiet $(git merge-base HEAD origin/onehub) trên apps/app/test/khung-man-chung.dom.tsx và
-      apps/app/test/khung-man-chung.spec.ts (không sửa kỳ vọng), rồi chạy trọn hai tệp → thoát 0.
-      CHIỀU ĐỎ: sửa một kỳ vọng của hai tệp → git diff --quiet thoát 1 trước khi chạy.
+      node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs: lấy các commit của vòng này bằng
+      git log --no-merges --grep=dau-trang-okr-cho-nut-hoi-kara (không dùng merge-base hay origin/onehub, để thước
+      không rỗng sau khi gộp), so từng commit với cha, đòi không commit nào chạm nut-hoi-kara.tsx,
+      khung-man-chung.dom.tsx, khung-man-chung.spec.ts; in «khong-sua: <n> commit cua vong, 0 cham» (n ≥ 1, không
+      thấy commit nào → «KHONG DO DUOC» thoát 2); rồi chạy trọn khung-man-chung.spec.ts và khung-man-chung.dom.tsx →
+      thoát 0. CHIỀU ĐỎ: --kiem-do-do (tự thêm một commit tạm chạm nut-hoi-kara.tsx trên bản sao) phải in
+      «khong-sua: cham nut-hoi-kara.tsx» và thoát 1.
 
   - id: E5
     criterion: AC-5

@@ -5,7 +5,9 @@ slug: dau-trang-okr-cho-nut-hoi-kara
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
+veto_state: mo
+veto_opened_at: 2026-10-15T23:12:01Z
 design_doc: docs/superpowers/specs/2026-10-16-dau-trang-okr-cho-nut-hoi-kara-design.md
 ---
 
@@ -25,8 +27,8 @@ giám sát đợt r2, 15/10).
 
 - AC-1: Given màn OKR › Toàn cảnh ở khổ 375 và 1280 trên máy chủ thật của cây, When truy vấn chính của màn bị giữ (đang tải) rồi được thả (xong), Then hàng tiêu đề lúc đang tải và lúc xong lệch không quá 4 px ở y và ở chiều cao, vùng nội dung lệch không quá 8 px ở y — đúng ngưỡng E12 của `khung-man-chung` — và mọi bước còn lại của phép đo đó vẫn đạt.
 - AC-2: Given đầu trang OKR đang chờ dữ liệu, ở tiếng Việt và tiếng Anh, When người nhìn cụm bên phải của đầu trang, Then nút «Hỏi Kara» thật (cùng chữ, cùng dấu Kara như khi xong) đã đứng trước ô chọn kỳ trong cùng cụm, không bị khoá.
-- AC-3: Given đầu trang OKR đang chờ dữ liệu, When người bấm «Hỏi Kara», Then một cuộc hỏi được mở đúng một lần như khi đầu trang đã tải xong.
-- AC-4: Given các màn đã có phép đo khung chờ (Liên hệ, Cài đặt, Chiến dịch, Tài liệu, Onboarding) và màn hỏi đáp OKR, When chạy lại bộ kiểm hiện có của `khung-man-chung` và của nút hỏi đáp, Then chúng chạy không sửa một dòng và đều xanh.
+- AC-3: Given đầu trang OKR đang chờ dữ liệu, When người bấm «Hỏi Kara» — kể cả khi dữ liệu đầu trang tới và khung chờ được thay bằng đầu trang thật trước khi lời mở cuộc hỏi trả về — Then một cuộc hỏi được mở đúng một lần và cột hỏi mở ra, như khi đầu trang đã tải xong.
+- AC-4: Given các màn đã có phép đo khung chờ (Liên hệ, Cài đặt, Chiến dịch, Tài liệu, Onboarding), When chạy lại bộ kiểm hiện có của `khung-man-chung`, Then chúng chạy không sửa một dòng và đều xanh; và không commit nào của vòng này (commit không phải gộp, mang slug trong tiêu đề) chạm nút hỏi đáp `nut-hoi-kara.tsx` hay hai tệp kiểm của `khung-man-chung`.
 - AC-5: Given máy chủ thật của cây, ở khổ 375 và 1280, When chụp Toàn cảnh lúc đang tải và lúc xong, Then hai ảnh cho thấy cùng một hàng tiêu đề (cùng số dòng chữ tiêu đề), nút «Hỏi Kara» có mặt ở cả hai ảnh ở cùng chỗ.
 
 ## Coverage
