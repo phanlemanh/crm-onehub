@@ -1,0 +1,47 @@
+{
+  "feature_plain": "Từ ngăn chi tiết một mục tiêu, trưởng đơn vị bấm «Xem quanh mục tiêu» và thấy ngay mục tiêu ấy góp lên KR nào của công ty, cùng KR của nó và những mục tiêu đang góp vào nó.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ vẽ đủ đường đi lên từ mục tiêu tới KR và mục tiêu công ty — kể cả khi KR công ty ở kỳ năm còn mục tiêu ở kỳ quý; mục tiêu góp hai chỗ chỉ hiện một thẻ, KR công ty không nằm trên đường thì không vẽ."},
+    {"id": "AC-2", "p": "Sẽ vẽ phía dưới đúng một bậc: KR của mục tiêu và các mục tiêu góp thẳng vào nó hay vào KR của nó; dữ liệu góp vòng tròn vẫn mở được, không treo."},
+    {"id": "AC-4", "p": "Sẽ thêm nút «Xem quanh mục tiêu» vào ngăn chi tiết mục tiêu, là liên kết thật (mở được ở thẻ trình duyệt mới); phần «Đường lý do» và tab «Căn chỉnh» giữ nguyên."},
+    {"id": "AC-5", "p": "Sẽ in ngay trên sơ đồ một dòng nói thẳng mục tiêu góp lên KR công ty nào — đúng tập ấy, không thừa KR nào — và gắn nhãn «Công ty» cho thẻ cấp công ty; mục tiêu đang xem nổi ở giữa."},
+    {"id": "AC-7", "p": "Sẽ mở ngăn chi tiết của đúng mục tiêu hay KR khi bấm thẻ hoặc nhấn Enter/Space."},
+    {"id": "AC-9", "p": "Sẽ hiện khung chờ khi đang tải, ô báo lỗi có nút thử lại khi hỏng, và câu «Không tìm thấy mục tiêu này, hoặc bạn không có quyền xem.» kèm đường về Toàn cảnh."},
+    {"id": "AC-10", "p": "Sẽ có đủ chữ tiếng Việt và tiếng Anh, tên riêng không bị trình duyệt dịch, thẻ dùng được bằng bàn phím, và màn qua sàn thiết kế tĩnh của kho."},
+    {"id": "AC-11", "p": "Sẽ kiểm trên màn thật với bộ dữ liệu mẫu ở khổ máy tính và điện thoại, có ảnh từng trạng thái: từ ngăn sang sơ đồ, góp hai chỗ, rê chuột, danh sách trên điện thoại."},
+    {"id": "AC-12", "p": "Sẽ chạy lại mọi phép kiểm của các hồ sơ đã ký chạm cùng tệp và giữ chúng xanh; khung vẽ dùng chung của DH4 và phần dựng cây căn chỉnh không bị sửa."},
+    {"id": "AC-13", "p": "Sẽ chỉ sửa đúng các tệp đã khai và đăng ở crm #375."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Chặn lộ mục tiêu người xem không được thấy — không tên, không thẻ, không đường nối, dù nó nằm trên hay dưới; mục tiêu mình không xem được thì trang báo không tìm thấy."},
+    {"id": "AC-6", "p": "Sẽ KHÔNG để mọi thẻ sáng như nhau khi rê chuột — thẻ ngoài đường đi qua thẻ đang rê mờ đi, rời chuột thì về đường quanh mục tiêu đang xem."},
+    {"id": "AC-8", "p": "Sẽ KHÔNG dựng khung vẽ trên điện thoại — thay bằng danh sách bốn nhóm (Góp vào, Mục tiêu này, KR của nó, Góp vào nó), dòng góp lên công ty vẫn ở trên."},
+    {"id": "OOS-1", "p": "Không làm sơ đồ theo đơn vị của Toàn cảnh (DH4) và không sửa khung vẽ dùng chung."},
+    {"id": "OOS-2", "p": "Không hiện lý do căn chỉnh trên đường nối, không đi xuống quá một bậc."},
+    {"id": "OOS-3", "p": "Không sửa căn chỉnh từ sơ đồ; không đổi «Đường lý do» hay tab «Căn chỉnh» của ngăn."},
+    {"id": "OOS-4", "p": "Không đổi phần dựng cây căn chỉnh và dữ liệu ngăn chi tiết đang trả."}
+  ],
+  "scope_plain": "Vòng chỉ đọc dữ liệu: không ghi gì mới, sơ đồ sai thì ẩn nút là xong.",
+  "coverage_plain": [
+    {"i": 0, "p": "Trục A — mục tiêu đang xem đứng đâu trên chuỗi góp: qua KR lên công ty, góp thẳng công ty, góp hai chỗ, chính nó là công ty, không góp đâu, đường lên bị cắt vì mục tiêu ẩn, góp sang kỳ năm (AC-1, AC-3)."},
+    {"i": 1, "p": "Đủ khi khớp cách kho lưu căn chỉnh (tới mục tiêu hoặc KR), bốn cấp mục tiêu và cách kho gộp kỳ cha."},
+    {"i": 2, "p": "Trục B — phía dưới: không ai góp, góp vào chính nó, góp vào KR của nó, góp bậc hai, mục tiêu ẩn góp vào, góp vòng tròn (AC-2, AC-3)."},
+    {"i": 3, "p": "Đủ khi khớp câu giao «ai góp vào nó»."},
+    {"i": 4, "p": "Trục C — trạng thái màn: mặc định, rê chuột, là công ty, chưa có đường lên, đang tải, lỗi, không tìm thấy, điện thoại, nút trong ngăn (AC-4 tới AC-9)."},
+    {"i": 5, "p": "Đủ khi khớp nếp chờ tải, lỗi tải và danh sách của kho, cùng trạng thái «quanh mục tiêu» của bản mẫu 14/10."},
+    {"i": 6, "p": "Trục D — người xem: thấy hết, thiếu mục tiêu giới hạn, không thấy chính mục tiêu đang mở (AC-3, AC-9)."},
+    {"i": 7, "p": "Đủ khi dùng đúng bộ lọc quyền mà cây căn chỉnh đang dùng."},
+    {"i": 8, "p": "Áp mọi ô: khổ máy tính và điện thoại, hai ngôn ngữ, tên riêng không dịch, bàn phím, sàn thiết kế tĩnh."},
+    {"i": 9, "p": "Mười ba ô làm ngay khớp mười ba tiêu chí AC-1 tới AC-13."},
+    {"i": 10, "p": "Đối chiếu ngành: Tability tách sơ đồ quanh một mục khỏi sơ đồ theo đơn vị — DH4 làm vế sau, vòng này vế trước."},
+    {"i": 11, "p": "Để sau: lý do trên đường nối, đi xuống nhiều bậc, lối vào từ sơ đồ đơn vị, lọc theo kỳ."},
+    {"i": 12, "p": "Không bao giờ: sửa căn chỉnh từ sơ đồ, hay nhắc «có mục tiêu ẩn» ở chỗ đường bị cắt."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép kiểm quyền chỉ thử mục tiêu ẩn nằm phía dưới; nếu mục tiêu ẩn nằm phía trên, tên nó có thể lộ mà phép kiểm vẫn xanh — đã thêm ca mục tiêu ẩn phía trên và một bản phá thử phải đỏ."},
+    {"i": 1, "p": "Máy tự bỏ bước dựng bản mẫu bấm được với lý do không còn đúng (khung vẽ đã có trên nhánh) — đã chuyển thành câu hỏi Hỏi-2 cho anh."},
+    {"i": 2, "p": "Phép kiểm dòng «góp lên công ty» chỉ xem có chứa tên KR, không xem có thừa KR — dòng in thêm KR sai thì người dự đọc sai; đã đổi sang so đúng tập và thêm bản phá thử."},
+    {"i": 3, "p": "Chưa có ca KR công ty ở kỳ năm mà mục tiêu ở kỳ quý — đúng ca phiên nghiệm thu sẽ gặp; đã thêm vào tiêu chí và phép kiểm."},
+    {"i": 4, "p": "Câu «Chưa có đường lên công ty» sai khi đường lên chỉ bị cắt vì người xem không thấy mục tiêu ở giữa — đã đổi thành «Không thấy đường lên công ty trong phạm vi bạn xem được.»"}
+  ]
+}
