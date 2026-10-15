@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dbe02024a6bfa2872ff5473f2f29815684fdaa51
+verified_commit: 29fef6b0bcaf4f2e32577787260b3a26724a706d
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -205,3 +205,7 @@ sha: 1cebbed3d3794b70c685ed2bb15f154e2c301e2d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-15, do #407 gộp onehub eb5ab4269 (vá đua act TanStack, mẫu b1); khung-man-chung không ghim — E12m đỏ do #419
 run_id: repin-20261015T120029Z-49021
 sha: dbe02024a6bfa2872ff5473f2f29815684fdaa51 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · giới hạn đã khai không còn: E7 (khai 2) · ngoài làn máy: E9, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-15, do gộp onehub 8f819cf6a (#419 #422 #407 #421 #409 #423), gọi lượt gộp #420
+run_id: repin-20261015T153900Z-77059
+sha: 29fef6b0bcaf4f2e32577787260b3a26724a706d · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · giới hạn đã khai không còn: E7 (khai 2) · ngoài làn máy: E9, E10 (E10 không khai paths) · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
