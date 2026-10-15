@@ -457,6 +457,7 @@ const THU_TUC_OKR_LUOT_TOM_TAT = [
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_SO_DO = ["soDoDonVi"].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_QUANH = ["quanhMucTieu"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,
@@ -1598,6 +1599,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_TOM_TAT,
 				...THU_TUC_OKR_LUOT_UX_8D,
 				...THU_TUC_OKR_LUOT_SO_DO,
+				...THU_TUC_OKR_LUOT_QUANH,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
@@ -2002,6 +2004,13 @@ const THU_TU_DOC_OKR = {
 	},
 	"okr.cayCanChinh": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.soDoDonVi": { vao: cuaKy, K: "vang", khac: 200 },
+	"okr.quanhMucTieu": {
+		vao: (s) => ({ objectiveId: s.g }),
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 404,
+		ma: "objectiveId",
+	},
 	"okr.chiSo": { vao: () => undefined, K: "vang", khac: 200 },
 	"okr.comments": {
 		vao: (s) => ({ objectiveId: s.g }),

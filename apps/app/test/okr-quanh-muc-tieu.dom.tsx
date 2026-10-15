@@ -1,6 +1,12 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { act, isValidElement, type ReactElement, type ReactNode } from "react";
+import {
+	act,
+	type ComponentProps,
+	isValidElement,
+	type ReactElement,
+	type ReactNode,
+} from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { mucTieuThuan } from "../../api/scripts/okr-mau/ca-so-do";
 import {
@@ -70,7 +76,8 @@ let loi: Error | null = null;
 let choMai = false;
 let goiLai = 0;
 const moBanGhi: { kind: string; id: string }[] = [];
-let propsKhung: { centerId?: string | null; focusId?: string | null } = {};
+type KhungDaGoi = { centerId?: string | null; focusId?: string | null };
+let propsKhung: KhungDaGoi = {};
 
 class LoiTrpc extends Error {
 	data: { code: string };
@@ -114,7 +121,7 @@ mock.module("next/link", () => ({
 		href,
 		children,
 		...rest
-	}: { href: string; children: ReactNode } & Record<string, unknown>) => (
+	}: { href: string; children: ReactNode } & ComponentProps<"a">) => (
 		<a href={href} {...rest}>
 			{children}
 		</a>
@@ -457,22 +464,23 @@ describe("dh5-trang-thai", () => {
 
 describe("dh5-chu", () => {
 	test("đủ vi và en khác nhau; tên không dịch; thẻ bấm được bằng phím có vòng tiêu điểm", async () => {
-		const khoa = (o: object, tien = ""): string[] =>
-			Object.entries(o).flatMap(([k, v]) =>
-				v && typeof v === "object" ? khoa(v, `${tien}${k}.`) : [`${tien}${k}`],
-			);
 		const en = okrQuanhMessages("en");
-		expect(khoa(en)).toEqual(khoa(vi));
-		const lay = (o: object, k: string) =>
-			k
-				.split(".")
-				.reduce<unknown>((x, p) => (x as Record<string, unknown>)[p], o);
-		for (const k of khoa(vi)) {
-			const a = lay(vi, k);
-			const b = lay(en, k);
-			if (typeof a === "function") continue;
-			if (a === b && k !== "kr") throw new Error(`chu en trung vi: ${k}`);
-		}
+		type Chu = ReturnType<typeof okrQuanhMessages>;
+		const phang = (m: Chu): [string, string][] => [
+			...Object.entries(m)
+				.filter(([k]) => k !== "nhom" && k !== "tienDo")
+				.map(([k, v]): [string, string] => [k, String(v)]),
+			...Object.entries(m.nhom).map(([k, v]): [string, string] => [
+				`nhom.${k}`,
+				v,
+			]),
+			["tienDo", m.tienDo(12)],
+		];
+		const pVi = phang(vi);
+		const pEn = new Map(phang(en));
+		expect(pVi.map(([k]) => k).sort()).toEqual([...pEn.keys()].sort());
+		for (const [k, v] of pVi)
+			if (pEn.get(k) === v) throw new Error(`chu en trung vi: ${k}`);
 
 		hienTai = quanh("sd-a1-1");
 		await dung("sd-a1-1");

@@ -1,0 +1,4 @@
+E12 network/console (driver: puppeteer-core trong rang/man.mjs, khong co read_network_requests)
+DUNG 390: console khong loi (0)
+DUNG 1440: console khong loi (0)
+request that bai: driver khong doc duoc network -> n-a (driver)
