@@ -2,39 +2,43 @@
 schema_version: 2
 feature_slug: hoi-dap-okr
 verdict: REJECT
-failed_evals: ["E6c"]
+failed_evals: [E9]
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4a4ab448d8a014ce9054341c7d6f07ae2022ee55
+verified_commit: 6da3d58d4f31fdfac95f82b9e982e2a52d00f8bf
 human_signoff:
 ---
 
 # Evidence Report: hoi-dap-okr
 
-Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mục Iterations.
+Round 3. Một eval trượt: E9 (bộ câu mẫu AC-9), mục đúng ý đạt 74.3% so với ngưỡng 85%. Các eval khác chạy lại ở round này đều đạt; E1, E4, E6m, E7, E10, E10m, E13 mang từ round trước vì delta không chạm paths của chúng.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
-| E1 | AC-1 | test | PASS |
+| E1 | AC-1 | test | PASS (carried từ round 2) |
 | E2 | AC-2 | test | PASS |
 | E3 | AC-3 | test | PASS |
-| E4 | AC-4 | test | PASS |
+| E4 | AC-4 | test | PASS (carried từ round 2) |
 | E5 | AC-5 | test | PASS |
 | E6 | AC-6 | test | PASS |
-| E6c | AC-6 | test | REJECT |
-| E6m | AC-6 | test | PASS |
-| E7 | AC-7 | test | PASS |
+| E6c | AC-6 | test | PASS |
+| E6m | AC-6 | test | PASS (carried từ round 2) |
+| E7 | AC-7 | test | PASS (carried từ round 1) |
 | E8 | AC-8 | script | PASS |
-| E9 | AC-9 | script | PASS |
+| E9 | AC-9 | script | FAIL |
 | E9j | AC-9 | judgment | UNCERTAIN |
-| E10 | AC-10 | ui-check | PASS |
-| E10m | AC-10 | test | PASS |
+| E10 | AC-10 | ui-check | PASS (carried từ round 2) |
+| E10m | AC-10 | test | PASS (carried từ round 2) |
 | E11 | AC-11 | test | PASS |
 | E11c | AC-11 | script | PASS |
 | E12 | AC-12 | test | PASS |
-| E13 | AC-13 | test | PASS |
+| E13 | AC-13 | test | PASS (carried từ round 2) |
+
+Lệnh fail không gắn eval: không có. Lệnh fail duy nhất (`bun test _acceptance/hoi-dap-okr/rang/do-hoi-dap.test.ts && bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs"`) gắn với E9.
+
+Ghi chú về giờ: payload round 3 không mang giờ chạy từng lệnh nên `verified_at` của các khối round 3 ghi theo ngày (2026-10-15). Giờ máy tính nằm ở dòng round 3 của run-log.jsonl.
 
 ## Evidence
 
@@ -44,27 +48,27 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.hdo_quyen_doc
   verified_at: 2026-10-15T03:30:53Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mv8zew0vt790_test
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E2
-  run_id: minted-hoi-dap-okr-E2-r1
+  run_id: minted-hoi-dap-okr-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdo_purpose
-  verified_at: 2026-10-15T01:53:37Z
-  carried_from_round: 1
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 13 tests across 1 file. [198.00ms]
 
 - eval: E3
-  run_id: mv8zevgf9sek
+  run_id: mv917pfgbl32
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdo_nop_quyen
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    test-run: dropped crm_mv8zevgf9sek_test
+    test-run: dropped crm_mv917pfgbl32_test
 
 - eval: E4
   run_id: minted-hoi-dap-okr-E4-r2
@@ -72,42 +76,36 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.hdo_so_khop
   verified_at: 2026-10-15T03:30:53Z
+  carried_from_round: 2
   output: |
-    Ran 28 tests across 1 file. [30.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E5
-  run_id: mv8zew1r2ytp
+  run_id: minted-hoi-dap-okr-E5-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdo_cua
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    test-run: dropped crm_mv8zew1r2ytp_test
+    test-run: dropped crm_mv917rr5gbii_test
 
 - eval: E6
-  run_id: minted-hoi-dap-okr-E6-r2
+  run_id: mv917qwsd0js
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdo_tran
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    test-run: dropped crm_mv8zev1uyg1m_test
+    test-run: dropped crm_mv917qwsd0js_test
 
 - eval: E6c
-  run_id: mv8zewmyvukn
-  exit_code: 1
+  run_id: mv917qw1k247
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdo_cua_tran
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    TEST_RUN_ID=mv8zewmyvukn runs against crm_mv8zewmyvukn_test
-    test/cua-okr-hoi.spec.ts:333
-    expect({ status: thang.status, ma: await loiCua(thang) }).toEqual(...)
-    Expected: { ma: "het-tran-thang", status: 429 }
-    Received: { ma: "duong-khong-phuc-vu", status: 404 }
-    (fail) hdo cua hoi > hdo-tran: luot 39 thi cau 40 qua, cau 41 tra 429 het-luot-ngay; tran thang cham qua hook chi-phi thi 429 het-tran-thang [603.27ms]
-    0 pass, 7 filtered out, 1 fail, 48 expect() calls
-    error: script "test" exited with code 1
+    test-run: dropped crm_mv917qw1k247_test
 
 - eval: E6m
   run_id: minted-hoi-dap-okr-E6m-r2
@@ -115,8 +113,9 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.hdo_man_khoa
   verified_at: 2026-10-15T03:30:53Z
+  carried_from_round: 2
   output: |
-    Ran 1 test across 1 file. [663.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E7
   run_id: mv8vxt3ldx05
@@ -129,40 +128,34 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E8
-  run_id: minted-hoi-dap-okr-E8-r2
+  run_id: minted-hoi-dap-okr-E8-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hdo_chi_hoi_okr
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
     phien-do: xong — mã 0
 
 - eval: E9
-  run_id: minted-hoi-dap-okr-E9-r2
-  exit_code: 0
+  run_id: minted-hoi-dap-okr-E9-r3
+  exit_code: 1
   baseline: n-a
   verifier: config:executors.script.hdo_bo_cau
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    phien-do: xong — mã 0
-
-- eval: E9j
-  judged_by: judge panel (3 lens, fresh context) — đề xuất, người quyết ở Cổng 2
-  verdict: UNCERTAIN
-  rationale: Dòng tổng đạt cả ba ngưỡng của AC-9 (35 câu, quyền 100%, trích và số 97,1%, đúng ý 88,6%), nhưng phiếu «đúng ý» của hội đồng có chỗ không đứng vững (d-cua-toi bị chấm «đúng» dù thiếu trích KR đã khai) và biên chỉ còn một câu trên ngưỡng 85%.
-  panel_votes:
-    - domain-correctness: UNCERTAIN — Dòng tổng đạt ba ngưỡng AC-9: 35 câu, 5 người hỏi × 7 ý định, quyền 100%, trích và số 97,1% (34/35), đúng ý 88,6% (31/35, khớp 4 câu bị cả ba phiếu «sai»). Nhưng d-cua-toi bị chấm «đúng» 2–1 dù mã báo thiếu trích tai-chinh-1-k2, và câu trả lời nói về Mục tiêu tai-chinh-2 «chậm nhịp» thay vì KR đã khai. Biên chỉ còn đúng một câu: nếu thêm một câu nữa bị lật thì đúng ý xuống 82,9%, dưới 85%. Các câu cua-toi (b, c, e) và hai câu ngoai-okr (a, c) có thể bị lật, nhưng ảnh chụp trong dòng không đủ để khẳng định.
-    - operational-feasibility: UNCERTAIN — Dòng tổng khớp với bảng và đạt ba ngưỡng (quyền 35/35, trích và số 34/35 = 97,1%, đúng ý 31/35 = 88,6%), và hội đồng không chấm cho qua: 4 câu ngoài phạm vi và xin sửa có mảng câu rỗng đều bị 3/3 phiếu «sai». Nhưng d-cua-toi hội đồng chấm «đúng» 2/3 trong khi dòng cho thấy sai: kỳ vọng là q4-tai-chinh-1-k2, câu trả lời không trích KR đó mà nói về Mục tiêu tai-chinh-2 «chậm nhịp», và cột Trích và số ghi TRƯỢT. Nếu sửa riêng câu này thì còn 30/35 = 85,7%, vẫn đạt. Ngưỡng thủng nếu c-cua-toi cũng sai: câu trả lời nói «bạn có 3 KR» trong khi kỳ vọng chỉ khai q4-kd-bac-1-k3, lúc đó còn 29/35 = 82,9%. Ảnh chụp trong các dòng cua-toi không có trường người phụ trách nên không phân xử được.
-    - spec-alignment: UNCERTAIN — Dòng tổng đạt cả ba ngưỡng của AC-9: 35 câu, 5 người hỏi × 7 ý định, quyền 100%, trích và số 97,1% (34/35), đúng ý 88,6% (31/35). Nhưng phiếu «đúng ý» có chỗ sai và chỗ không kiểm được từ chính các dòng. Câu d-cua-toi bị hội đồng chấm «đúng» (2 trên 3 phiếu) dù dòng ghi «thieu trich» KR kỳ vọng q4-tai-chinh-1-k2, và câu trả lời nói về Mục tiêu tai-chinh-2 chứ không về KR của người hỏi. Biên chỉ còn 2 câu: lật d-cua-toi vẫn đạt 30/35 = 85,7%, lật thêm một câu nữa thì còn 29/35 = 82,9% và trượt.
-  required_evidence:
-    - d-cua-toi (thai-minh-chau): đã xác nhận phiếu sai. Chấm lại câu này với đáp án đã khai (KR tai-chinh-1-k2, tiến độ 100%, giữ dưới 5). Nó phải thành «sai», làm đúng ý còn 30/35 = 85,7%. Nguồn: cột Phiếu hội đồng và Lý do «thieu trich» của dòng d-cua-toi trong do-hoi-dap.md.
-    - Ảnh chụp người phụ trách (owner) của từng Mục tiêu và KR cho các dòng cua-toi (b, c, d, e) trong cột «Dữ liệu thật» của do-hoi-dap.md. Dòng hiện chỉ có tên, tiến độ, giá trị, không có chủ. Thiếu nó thì không kiểm được «bạn đang làm chủ 2 Mục tiêu» (b-cua-toi) hay «bạn có 3 KR» (c-cua-toi, khi kỳ vọng chỉ khai k3). Phiếu của a-cua-toi còn nói «dữ liệu không có thông tin người phụ trách», mâu thuẫn với các dòng còn lại. Nếu c-cua-toi bị lật thì đúng ý còn 29/35 = 82,9% và không đạt ngưỡng.
-    - Lời dặn chấm của hội đồng ZDR cho ý định ngoai-okr, lấy từ lệnh đo sinh ra do-hoi-dap.md hoặc phần cấu hình chấm của nó. Cần để biết «có chỉ đường» có bắt buộc không. Trong a-ngoai-okr và c-ngoai-okr, câu trả lời dựng chỉ từ chối, không trỏ sang Kara của CRM như mục Out of scope của contract. Phiếu vẫn ghi «chỉ đường đúng». Nếu luật bắt buộc chỉ đường thì hai câu này phải bị lật và không đạt ngưỡng.
-    - Trường người phụ trách (chủ KR) của ba KR q4-kd-bac-1-k1, k2, k3 trong bộ OKR mẫu M, lấy từ _acceptance/bo-okr-mau hoặc kết quả `bun run okr:mau`. Nếu ngo-van-toan chỉ là chủ k3 thì c-cua-toi sai, đúng ý còn 29/35 = 82,9%. Nếu ông là chủ cả ba thì c-cua-toi đúng và khi chỉ sửa d-cua-toi vẫn còn 85,7%.
-    - Trường người phụ trách của các Mục tiêu và KR trong dòng b-cua-toi (nguyen-thi-lan với q4-kd-bac-1 và q4-kd-bac-2) và d-cua-toi (thai-minh-chau với q4-tai-chinh-1-k2), cùng nguồn như mục trên. Cần để xác nhận câu «bạn đang làm chủ 2 Mục tiêu» của b-cua-toi không bịa điều ảnh chụp không có, và d-cua-toi sai về đối tượng.
-    - Phiếu từng thành viên hội đồng cho d-cua-toi, kèm lời nhắc chấm có kỳ vọng trichBatBuoc = q4-tai-chinh-1-k2. Hội đồng cần cho thấy đã so câu trả lời với KR này (100%, đúng nhịp), không chỉ với Mục tiêu tai-chinh-2. Lấy từ nhật ký hoặc đầu ra thô của lệnh đo (cột «Phiếu hội đồng» hiện chỉ có phần lý do rút gọn).
-    - Văn bản nhắc chấm của hội đồng ZDR về tiêu chí «chỉ đường» cho loại ngoai-pham-vi. Contract.md (Out of scope) đòi «chỉ đường sang Kara của CRM», nhưng a-ngoai-okr, c-ngoai-okr, e-ngoai-okr chỉ nói «chỉ hỗ trợ OKR» mà vẫn được chấm đúng, trong khi 4 câu trả lời rỗng bị chấm sai vì «thiếu chỉ đường». Nếu lời nói phạm vi không tính là chỉ đường thì 3 câu này lật, đúng ý còn 28/35 = 80% và trượt ngưỡng 85%. Lấy từ tệp nhắc chấm hoặc script lệnh đo trong kho, hoặc ghi chú của chủ kho.
-  human_override:  # chi nguoi ghi
+    e-liet-ke: quyen dat · trich TRUOT · dung y TRUOT — thieu trich: mau-okr-mt-q4-phap-che-3
+    a-cua-toi: quyen dat · trich dat · dung y TRUOT
+    c-cua-toi: quyen dat · trich dat · dung y TRUOT
+    d-cua-toi: quyen dat · trich TRUOT · dung y TRUOT — thieu trich: mau-okr-kr-q4-tai-chinh-1-k2
+    a-dien-bien: quyen dat · trich dat · dung y TRUOT
+    c-dien-bien: quyen dat · trich dat · dung y TRUOT
+    b-khong-tra-loi: quyen dat · trich dat · dung y TRUOT
+    c-khong-tra-loi: quyen dat · trich dat · dung y TRUOT
+    e-khong-tra-loi: quyen dat · trich dat · dung y TRUOT
+    chep bang sang evidence/do-hoi-dap.md
+    quyen 100.0% · trich va so 94.3% · dung y 74.3% tren 35 cau
+    dung y 74.3% < 85%
+    KHONG DAT
 
 - eval: E10
   run_id: minted-hoi-dap-okr-E10-r2
@@ -170,12 +163,19 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.hdo_man
   verified_at: 2026-10-15T03:30:53Z
+  carried_from_round: 2
   screenshot: /Users/manh-macmini/dev/crm/.claude/worktrees/nice-payne-f3b589/.acceptance-runs/hoi-dap-okr/evidence/E10-step1.png
   observed: |
-    1) hdo-01-cot-trong (1280): trang 'OKR cua toi' toi mau, cot 'Kara · Hoi OKR' dang truot vao tu ben phai (chup giua luc truot, noi dung bi cat o mep phai), man trong co tieu de 'Hoi Kara ve OKR ban...' va goi y cau hoi 'KR nao cua toi dang truot?', o nhap 'Hoi ve Muc tieu, KR hay tien do...'; nut Hoi Kara bi cot che nen khong thay trong anh, moc duong URL record=hoi-okr va khung hoi-okr doc tu DOM (log buoc 1 dat). 2) hdo-02-tra-loi: cot Kara rong tu x~480, cau hoi 'Muc tieu giu da tang truong ban le mien Bac dang the nao?', cau tra loi 4 doan, moi doan kem chip trich (Giu da tang truong ban le mien Bac, Hop dong ban le chot duoc dat 6 ty dong, So cuoc hen gap doi tac moi dat 60, Ty le bao gia thanh hop dong) va hai nut 'Huu ich' / 'Khong huu ich' (AiFeedback). 3) hdo-03-mo-trich: khung ban ghi chong len ben phai co tieu de 'Ty le bao gia thanh hop dong', 'Ngo Van Toan phu trach', tab 'Viec va sang kien', mot viec, nut 'Them viec', 'Gan...'; ten khop chip da bam (la KR, khong phai Muc tieu — contract cho phep kr:). 4) hdo-03b: bam Quay lai thi cot Kara hien lai cau tra loi cu va cau 'KR nao trong Muc tieu do dang cham nhat?' voi tra loi moi co chip trich va Huu ich/Khong huu ich, khong co Thu lai. 5) hdo-04-375: man 375 rong, cot Kara phu toan man (co thanh keo drawer o tren), tieu de 'Kara · Hoi OKR', trang thai trong, goi y cau hoi, o nhap, khong cuon ngang. 6) hdo-05-tong-quan-chi-okr (1280): trang 'Chao ban' cua vai chi OKR, goc tren phai co nut 'Kara Hoi Kara'; khoi Viec OKR va OKR cua ban hien KR 'Giu so ngay chot so thang duoi 5'. 7) hdo-06-loi-thu-lai: cau hoi cua nguoi dung, ben duoi khung loi 'Kara chua tra loi duoc' kem nut 'Thu lai'. Tat ca khop Expected (InlineCitation, AiFeedback, 375 phu toan man, Kara chua tra loi duoc + Thu lai, nut Hoi Kara o tong quan).
+    1) hdo-01-cot-trong (1280): trang 'OKR cua toi' toi mau, cot 'Kara · Hoi OKR' dang truot vao tu ben phai (chup giua luc truot, noi dung bi cat o mep phai), man trong co tieu de 'Hoi Kara ve OKR ban...' va goi y cau hoi 'KR nao cua toi dang truot?', o nhap 'Hoi ve Muc tieu, KR hay tien do...'; nut Hoi Kara bi cot che nen khong thay trong anh, moc duong URL record=hoi-okr va khung hoi-okr doc tu DOM (log buoc 1 dat).
+    2) hdo-02-tra-loi: cot Kara rong tu x~480, cau hoi 'Muc tieu giu da tang truong ban le mien Bac dang the nao?', cau tra loi 4 doan, moi doan kem chip trich (Giu da tang truong ban le mien Bac, Hop dong ban le chot duoc dat 6 ty dong, So cuoc hen gap doi tac moi dat 60, Ty le bao gia thanh hop dong) va hai nut 'Huu ich' / 'Khong huu ich' (AiFeedback).
+    3) hdo-03-mo-trich: khung ban ghi chong len ben phai co tieu de 'Ty le bao gia thanh hop dong', 'Ngo Van Toan phu trach', tab 'Viec va sang kien', mot viec, nut 'Them viec', 'Gan...'; ten khop chip da bam (la KR, khong phai Muc tieu — contract cho phep kr:).
+    4) hdo-03b: bam Quay lai thi cot Kara hien lai cau tra loi cu va cau 'KR nao trong Muc tieu do dang cham nhat?' voi tra loi moi co chip trich va Huu ich/Khong huu ich, khong co Thu lai.
+    5) hdo-04-375: man 375 rong, cot Kara phu toan man (co thanh keo drawer o tren), tieu de 'Kara · Hoi OKR', trang thai trong, goi y cau hoi, o nhap, khong cuon ngang.
+    6) hdo-05-tong-quan-chi-okr (1280): trang 'Chao ban' cua vai chi OKR, goc tren phai co nut 'Kara Hoi Kara'; khoi Viec OKR va OKR cua ban hien KR 'Giu so ngay chot so thang duoi 5'.
+    7) hdo-06-loi-thu-lai: cau hoi cua nguoi dung, ben duoi khung loi 'Kara chua tra loi duoc' kem nut 'Thu lai'.
+    Tat ca khop Expected (InlineCitation, AiFeedback, 375 phu toan man, Kara chua tra loi duoc + Thu lai, nut Hoi Kara o tong quan).
   network_observed: n-a (driver)
-  output: |
-    Lenh chay nguyen van (tien-de.mjs --chay man-hoi.mjs), log: .acceptance-runs/hoi-dap-okr/log-e10.log. Phien do tu dung kho crm_nice_payne_f3b589_do, app :4593, api :4624, agent-okr :54250; da don xong. Assertion buoc 1 den 6 dat; dong cuoi 'DAT', khong co dong 'loi console app'. Frame sinh lai o lan chay nay: hdo-01-cot-trong.png, hdo-02-tra-loi.png, hdo-03-mo-trich.png, hdo-03b-quay-lai-hoi-tiep.png, hdo-04-375.png, hdo-05-tong-quan-chi-okr.png, hdo-06-loi-thu-lai.png trong .acceptance-runs/hoi-dap-okr/evidence/. Luu y: script tu chep hdo-* sang _acceptance/hoi-dap-okr/evidence qua chepSangEvidence nen git status thay 3 anh hdo-* da doi (chua signed-off nen duoc phep). Step 3 bam trich cuoi nen mo khung KR 'Ty le bao gia thanh hop dong'; contract AC-10 cho phep record=objective: hay record=kr:.
+  # carry-forward tu round 2 — delta khong cham paths cua eval; khung cua luot goc (cung run_id)
 
 - eval: E10m
   run_id: minted-hoi-dap-okr-E10m-r2
@@ -183,35 +183,36 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.hdo_man_dom
   verified_at: 2026-10-15T03:30:53Z
+  carried_from_round: 2
   output: |
-    Ran 4 tests across 1 file. [749.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E11
-  run_id: mv8zevlgub2v
+  run_id: minted-hoi-dap-okr-E11-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdo_soan_giu
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    test-run: dropped crm_mv8zevlgub2v_test
+    test-run: dropped crm_mv917r8z4u8b_test
 
 - eval: E11c
-  run_id: minted-hoi-dap-okr-E11c-r2
+  run_id: minted-hoi-dap-okr-E11c-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.soan_cach_ly
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
     phien-do: xong — mã 0
 
 - eval: E12
-  run_id: minted-hoi-dap-okr-E12-r2
+  run_id: minted-hoi-dap-okr-E12-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdo_zdr
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
   output: |
-    Ran 4 tests across 1 file. [76.00ms]
+    Ran 4 tests across 1 file. [83.00ms]
 
 - eval: E13
   run_id: minted-hoi-dap-okr-E13-r2
@@ -219,45 +220,63 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.hdo_chu
   verified_at: 2026-10-15T03:30:53Z
+  carried_from_round: 2
   output: |
-    Ran 2 tests across 1 file. [717.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
+
+### Judgment
+
+- eval: E9j
+  judged_by: judge-panel (domain-correctness, operational-feasibility, spec-alignment), đề xuất
+  verdict: UNCERTAIN
+  votes:
+    - domain-correctness: UNCERTAIN — Dòng tổng đạt cả ba ngưỡng của AC-9 theo con số bảng ghi (quyền 35/35, trích và số 34/35 = 97,1%, đúng ý 32/35 = 91,4%). Bộ gồm 35 câu, đủ 5 người hỏi và 7 ý định. Phần lớn phiếu hợp lý: c-cua-toi và d-cua-toi bị chấm sai đúng, không câu nào bịa hay né khi ảnh chụp có dữ liệu. Nhưng 6 hàng khong-biet đều có `cau: []`, mà lời nhắc chấm viết «Câu trả lời không có câu nào là KHÔNG đúng ý». Hội đồng áp lời đó không nhất quán: b-khong-tra-loi bị 2/3 phiếu sai, còn a-cua-toi, a-, d-, e-khong-tra-loi qua với 2 đúng 1 sai và c-khong-tra-loi qua 3/3. Áp nghiêm lời nhắc thì đúng ý còn khoảng 77%, dưới 85%. Áp theo kỳ vọng khong-biet đã khai thì tổng vẫn đạt. Dòng chỉ cho thấy `cau: []`, không cho thấy người đọc thấy gì.
+    - operational-feasibility: UNCERTAIN — Dòng tổng (quyền 100%, trích và số 97,1%, đúng ý 91,4% trên 35 câu, đủ năm người hỏi và bảy ý định) đạt ba ngưỡng AC-9, và tôi tính lại 3 câu trượt (c-cua-toi, d-cua-toi, b-khong-tra-loi) thì khớp. Các câu có dữ liệu (tra-mot, liet-ke, dien-bien, ngoai-okr, xin-sua) đều khớp ảnh chụp và phiếu hợp lý; hai câu c-cua-toi và d-cua-toi bị chấm trượt đúng. Nhưng 6 câu «khong-biet» có «câu trả lời dựng» rỗng (`cau: []`): a-cua-toi, a, b, c, d, e-khong-tra-loi. Lời nhắc chấm nói «Câu trả lời không có câu nào là KHÔNG đúng ý». Hội đồng vẫn chấm đúng ý 5/6 câu, riêng b-khong-tra-loi bị trượt vì chính lý do rỗng đó (1 đúng, 2 sai). Chấm theo đúng chữ lời nhắc thì đúng ý còn khoảng 27/35 = 77% (dưới 85%). Cho các câu rỗng là đúng thì b-khong-tra-loi cũng phải đạt, lên 33/35 = 94,3%. Hai tệp được phép đọc không cho biết người đọc thấy chữ gì ở các câu này.
+    - spec-alignment: PASS — Dòng tổng khớp đếm tay trên 35 dòng và đạt cả ba ngưỡng AC-9: quyền 100% (35/35), trích và số 97,1% (34/35, chỉ d-cua-toi trượt), đúng ý 91,4% (32/35 theo đa số, 3 dòng sai là c-cua-toi, d-cua-toi, b-khong-tra-loi). Đối chiếu từng dòng với ảnh chụp thì các phiếu «đúng» không lạc đề, không né khi ảnh chụp có dữ liệu, không bịa; hai dòng bị chấm sai theo nội dung cũng đúng. Một điểm cần lưu ý: lời nhắc chấm có câu «không có câu nào là KHÔNG đúng ý» nhưng các dòng khong-biet có cau rỗng; hội đồng áp không đều (b-khong-tra-loi bị trượt 2/3, các dòng khong-biet khác có một phiếu sai nhưng vẫn qua). Tôi đọc cau rỗng là hợp lệ với loại khong-biet, và lệch này chỉ làm tỉ lệ thấp đi.
+  rationale: Hai trong ba lens chưa quyết được vì 6 hàng khong-biet có câu dựng rỗng và lời nhắc chấm nói câu rỗng là không đúng ý; hội đồng áp không nhất quán. Lưu ý của máy khi ghép báo cáo vòng 3, chưa đối chiếu được với bảng nguồn của panel: các tỷ lệ trong phiếu (trích và số 97,1%, đúng ý 91,4%) không khớp dòng tổng của lần chạy E9 vòng này (trích và số 94,3%, đúng ý 74,3%), nên phiếu có thể đã đọc một bảng khác. Lần chạy E9 vòng này đã trượt ngưỡng đúng ý, nên mục này không đổi được kết luận của E9.
+  required_evidence:
+    - Văn bản người đọc thật sự thấy cho loai=khong-biet với cau=[] (câu mã dựng sau nop_tra_loi). Lấy từ mã dựng câu hoặc config của agent-okr, hoặc ảnh chụp cột Kara cho một câu khong-biet. Nếu người đọc thấy một lời «không có dữ liệu» rõ ràng và lời nhắc chấm được sửa để miễn loại khong-biet khỏi luật «không có câu nào», kết luận của lens domain-correctness thành PASS.
+    - Bảng do-hoi-dap.md chạy lại sau khi sửa loiNhacCham cho thống nhất với kỳ vọng khong-biet. Lệnh đo AC-9 qua tien-de.mjs --chay, rồi đọc cột Phiếu hội đồng của 6 hàng a-cua-toi và a/b/c/d/e-khong-tra-loi. Nếu 6 hàng đó nhất quán và tổng đúng ý còn ít nhất 85%, kết luận thành PASS.
+    - Hoặc quyết định của chủ kho trong contract.md hay opportunity.md rằng câu rỗng khong-biet là câu trả lời đúng ý hợp lệ. Có quyết định thì lời nhắc 3 phiếu phải sửa theo trước khi nhận kết quả.
+    - Ảnh chụp của a-cua-toi (admin le-hai-dang) chỉ có tên Mục tiêu và KR, thiếu `nguoiPhuTrach` và `laCuaNguoiHoi`. Cần bổ sung hai trường này vào ảnh chụp của các dòng khong-biet, hoặc xuất `doc_okr` của le-hai-dang cho thấy anh ấy không phụ trách KR nào.
+  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-hoi-dap-okr-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-hoi-dap-okr-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-hoi-dap-okr-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
 
 - cmd: bun run lint:slop
-  run_id: minted-hoi-dap-okr-SUITE-bun_run_lint_slop-r2
+  run_id: minted-hoi-dap-okr-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-hoi-dap-okr-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-hoi-dap-okr-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-15T03:30:53Z
+  verified_at: 2026-10-15T04:21:18Z
 
 ## Known limits
 
@@ -265,17 +284,16 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay. Field baseline cua tung block ghi n-a (evals.yaml khong doi tu lan baseline cuoi).
+carried tu round 1 — baseline khong do lai round nay. Baseline cua moi eval la n-a (round nay khong do).
 
-Eval khong-phan-biet (xanh ca tren HEAD lan baseline): khong co.
-
-Lenh fail khong gan eval: khong co. Lenh fail duy nhat (bun run test -- "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr-hoi.spec.ts -t hdo-tran") gan voi E6c, da liet ke o tren.
+Eval khong-phan-biet (green tren ca HEAD lan baseline): none. Lệnh suite xanh ca hai phia la regression-guard binh thuong, khong liet ke.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — every multi-run eval is uniform (moi eval round nay chay mot lan, khong co pass_rate hon hop).
 
 ## Iterations
 
-Round 1: E10 failed — eve build giẫm eve dev khi chạy bằng chứng (theo commit a10190e1f); ui-check được chạy sau làn máy ở round 2 (4a4ab448d). Returned to implementation.
-Round 2: E6c failed — bài hdo-tran trong apps/app/test/cua-okr-hoi.spec.ts:333 mong 429 het-tran-thang nhưng cửa trả 404 duong-khong-phuc-vu (câu 41 và đối chứng 40 cần đọc kỹ ở log mv8zewmyvukn). Returned to implementation. Các eval khác xanh, E2 và E7 mang từ round 1, E9j chờ người quyết ở Cổng 2. Ghi chú: verified_at của các eval round 2 ghi theo ngày 2026-10-15, không có giờ chính xác từ máy; giờ thật nằm ở dòng run-log.jsonl.
+Round 1: E1, E7 dat (mang tiep ve sau); chi tiet cac eval khac cua round nay xem run-log.jsonl.
+Round 2: E6c REJECT; E4, E6m, E10, E10m, E13 dat, E1 mang tiep — tra ve cho phan trien khai.
+Round 3: E9 trượt — chấm đúng ý 74.3% trên 35 câu so với ngưỡng 85% (9 câu trượt đúng ý: e-liet-ke, a-cua-toi, c-cua-toi, d-cua-toi, a-dien-bien, c-dien-bien, b-khong-tra-loi, c-khong-tra-loi, e-khong-tra-loi); trích và số 94.3% (2 câu thiếu trích: e-liet-ke, d-cua-toi); quyền 100%. Các eval khác đạt. Trả về cho phần triển khai.
