@@ -170,6 +170,11 @@ export function KhungHangCongCu({ children }: { children: ReactNode }): JSX.Elem
 
 **Files:** `rang/` của `dat-okr-trong-crm`, `khung-okr-truoc-r1` (cả `bon-vai.mjs`, `man-khung.mjs`), `muc-tieu-va-kr`, `okr-to-chuc-va` (cả `chup-proto.mjs`), `toan-canh-okr`, `okr-soat-anh-luot-3/do-man.mjs`, `soan-okr-trong-khung/man-dua-vao.mjs`, `dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs` (neo đột biến `data-hang-nut` của `theo-don-vi.tsx` → neo mới); Notes trong `muc-tieu-va-kr/contract.md`. Create `rang/ghim-nam.mjs`.
 - Luật sửa: chỉ đổi cách tới trạng thái (chọn đơn vị bằng `donOkr` trên URL hoặc ô chọn; thu/mở bằng `expand`; nút ở `[data-hang-hanh-dong]` đầu trang thay `[data-hang-nut]`), không bỏ điều khẳng định khác.
+- Lưu ý Điều phối M5 (15/10): `dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs` (DH1) vẫn tiêm `throw` TẠI CHỖ trong cây
+  (mục ngoài hợp đồng ở Gate 2 của DH1) → khi ghim lại, eval của DH1 chạy TUẦN TỰ, không song song với eval khác trên
+  cùng cây (`repin_parallel_suites` chỉ song song suite; kiểm làn không chạy eval song song, nếu có thì ghim DH1 một
+  lượt riêng). Ưu tiên sửa thước đó sang tiêm trong worktree tạm (khuôn `hai-chieu.mjs`) trong PR này — sửa thì ghi
+  một dòng sổ `fix` và báo M5.
 - [ ] Sửa → XIN LƯỢT `ghim-lai` ở Điều phối M5 → `nice -n 10 node <feature-loop 2.30.0>/scripts/repin-lane.mjs --root . --slug <8 slug> --reason "DH2 trang đơn vị một bảng — phép đo trang mới" --write` (nền) → nhả lượt → `rang/ghim-nam.mjs` «DUNG AC-14: 8/8» → commit.
 
 ### Task 11: Đóng S3
