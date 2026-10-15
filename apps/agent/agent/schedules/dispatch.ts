@@ -17,6 +17,7 @@ import {
 	dongNguonMoCoi,
 	nguonChoSoan,
 } from "../lib/tai-lieu-phien";
+import { donThongBaoDinhKy } from "../lib/thong-bao-don";
 import { kiemBot } from "../lib/zalo-bot";
 import { dongHoiQuaHan } from "../lib/zalo-hoi";
 
@@ -30,6 +31,7 @@ export default defineSchedule({
 				lenLichDoiSoat(),
 				chupSoOkr(),
 				kiemBot(),
+				donThongBaoDinhKy(),
 				dongHoiQuaHan(),
 				dongMaySoanQuaHan(),
 				dongNguonMoCoi(),

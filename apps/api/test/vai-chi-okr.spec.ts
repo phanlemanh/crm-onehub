@@ -99,6 +99,7 @@ const ALIAS_CHO_PHEP = [
 	"taiLieu",
 	"taiLieuNguon",
 	"tinHieu",
+	"thongBao",
 ] as const;
 const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
 const KHONG_NHAN_PHIEN = [
@@ -111,7 +112,7 @@ const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
 const SAN_MUTATION_CHUNG = 15;
 const SAN_DUONG_NGOAI = 20;
-const SO_MUTATION_KHONG_DAU_VAO = 15;
+const SO_MUTATION_KHONG_DAU_VAO = 16;
 const CHO_MA_TRAN_MS = 60_000;
 const THU_TUC_MAU = [
 	{ ten: "contacts.list", input: {} },
@@ -134,6 +135,8 @@ const DAU_VAO_HOP_LE = {
 	"tinHieu.gui": { muonLam: "thu", daXayRa: "thu", man: "/" },
 	"tinHieu.xoa": { id: "khong-co" },
 	"tinHieu.keoVe": {},
+	"thongBao.moMot": { id: "khong-co" },
+	"thongBao.docHet": {},
 	"settings.setAgentModel": { modelId: null },
 	"settings.setResearchKey": { apiKey: "ctx_thu_khong_that_du_dai_1234567890" },
 	"settings.setArchiveRetention": { days: 30 },
@@ -500,6 +503,8 @@ const TU_PHUC_VU = [
 	"zalo.guiThu",
 	"tinHieu.gui",
 	"tinHieu.xoa",
+	"thongBao.moMot",
+	"thongBao.docHet",
 ];
 const KHAI_2XX = [
 	"GET /",
@@ -959,6 +964,7 @@ describe("vai-chi-okr", () => {
 						"workspace",
 						"org",
 						"tinHieu",
+						"thongBao",
 					].includes(t.ten.split(".")[0] ?? ""),
 			);
 			expect(mutation.length).toBeGreaterThanOrEqual(SAN_MUTATION_CHUNG);
