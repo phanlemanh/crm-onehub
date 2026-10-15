@@ -11,6 +11,16 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "lo-trinh-doc-ban-chup",
+		ten: "Lộ trình đọc bản chụp — dòng giờ lấy",
+		states: [
+			{ id: "ST-lo-trinh-ban-chup", nhan: "Đọc bản chụp" },
+			{ id: "ST-lo-trinh-ban-dung", nhan: "Rơi về bản dựng" },
+			{ id: "ST-lo-trinh-ban-chup-en", nhan: "Đọc bản chụp — tiếng Anh" },
+			{ id: "ST-lo-trinh-ban-dung-en", nhan: "Rơi về bản dựng — tiếng Anh" },
+		],
+	},
+	{
 		slug: "ngan-ho-so-trong-lo-trinh",
 		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
 		states: [

@@ -1,4 +1,5 @@
 import { API_KEY_HEADER, apiUrl, SESSION_COOKIE_NAME } from "@crm/auth";
+import { BAN_CHUP_LO_TRINH } from "@crm/validation/ban-chup-lo-trinh";
 import { PayloadTooLargeException, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
@@ -129,6 +130,7 @@ export async function createApp(): Promise<NestExpressApplication> {
 	restBridge = createOpenApiExpressMiddleware({
 		router: appRouter,
 		createContext: ({ req }) => createBaseTrpcContext(req),
+		maxBodySize: BAN_CHUP_LO_TRINH.tranThanByte,
 	});
 
 	return app;

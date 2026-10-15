@@ -1180,6 +1180,15 @@ Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sa
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
 được nhận làm, còn tín hiệu chưa hứa gì.
 
+**Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
+của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè
+bản cũ, không giữ lịch sử. Trang Lộ trình đọc bản chụp khi nó mới hơn bản CRM đang chạy, và
+đọc lộ trình đóng sẵn trong bản dựng khi không — người xem thấy chữ «bản dựng» cạnh giờ lấy.
+Đề xuất 2026-10-14 (LT1c `lo-trinh-doc-ban-chup`), chốt tại Cổng Phạm vi.
+_Avoid_: bản sao, cache, snapshot
+Vì sao: «bản sao» gợi một bản người tự chép tay; «cache» là chuyện kỹ thuật của trang, không
+nói bản này đến từ đâu và lấy lúc nào.
+
 **Khoá chỉ kéo tín hiệu**: một khoá API chỉ làm được đúng một việc — kéo tín hiệu về kho
 cho lịch chạy hằng ngày. Khoá không đăng nhập được ở đâu, không đọc bản ghi, không tạo hay
 sửa khoá; chủ sở hữu hoặc quản trị tạo nó ở Cài đặt → Khoá API, mục «Khoá dùng để». Chủ khoá
@@ -1188,6 +1197,14 @@ thôi làm quản trị thì khoá thôi kéo được. Chốt 2026-10-14 tại 
 _Avoid_: khoá máy, khoá dịch vụ, token kéo về
 Vì sao: «khoá máy» và «khoá dịch vụ» không nói khoá được làm gì; tên phải nói đúng việc duy
 nhất khoá làm được.
+
+**Khoá chỉ đẩy lộ trình**: một khoá API chỉ làm được đúng một việc — gửi bản lộ trình mới của
+nhánh chính sang CRM, cho GitHub dùng mỗi lần lộ trình đổi. Khoá không đăng nhập được ở đâu,
+không đọc bản ghi, không tạo hay sửa khoá; chủ sở hữu hoặc quản trị tạo nó ở Cài đặt → Khoá
+API, mục «Khoá dùng để». Chủ khoá thôi làm quản trị thì khoá thôi đẩy được. Đề xuất 2026-10-15
+(LT1c `lo-trinh-doc-ban-chup`).
+_Avoid_: khoá máy, khoá GitHub, token đẩy
+Vì sao: cùng lý do với khoá chỉ kéo tín hiệu — tên nói đúng việc duy nhất khoá làm được.
 
 **Nhánh hàng chờ**: nhánh `tin-hieu/keo-ve` mà lịch chạy kéo tín hiệu dựng lại mỗi lượt —
 nhánh chính cộng một commit chứa mọi tệp tín hiệu chưa gộp — kèm một PR «Tín hiệu kéo về»
