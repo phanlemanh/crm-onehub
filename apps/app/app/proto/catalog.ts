@@ -16,7 +16,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		states: [
 			{
 				id: "ST-dhk-don-vi",
-				nhan: "Theo đơn vị — Hỏi-1 lối máy khuyên: soạn là nút viền",
+				nhan: "Theo đơn vị — trưởng đơn vị",
 			},
 			{ id: "ST-dhk-cua-toi", nhan: "Của tôi — trưởng một đơn vị" },
 			{ id: "ST-dhk-cap-nhat-tuan", nhan: "Cập nhật tuần" },
@@ -27,10 +27,6 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-dhk-soan", nhan: "Nút soạn khoá — hết lượt" },
 			{ id: "ST-dhk-khong-quyen", nhan: "Xem đơn vị không sửa được" },
 			{ id: "ST-dhk-khong-dan", nhan: "Không dẫn đơn vị nào" },
-			{
-				id: "ST-dhk-hoi-1-gom",
-				nhan: "Hỏi-1 lối kia: gom Nhập và Soạn vào «…» — một hàng ở 375 px",
-			},
 		],
 	},
 	{
@@ -1187,6 +1183,33 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 			{ id: "ST-ds-xac-nhan-xoa", nhan: "Trang — hỏi lại trước khi xoá" },
 			{ id: "ST-ds-loi", nhan: "Trang — tải lỗi, có Thử lại" },
+		],
+	},
+	{
+		slug: "moi-tin-hieu-cho-quan-tri",
+		ten: "Mọi tín hiệu cho quản trị — thẻ Tất cả, ba ô số, lọc, câu báo trước trong hộp gửi",
+		states: [
+			{ id: "ST-tat-ca-co", nhan: "Tất cả — ba ô số và bảng đủ cột" },
+			{
+				id: "ST-tat-ca-thieu",
+				nhan: "Tất cả — người gửi đã xoá, chưa có phòng ban",
+			},
+			{
+				id: "ST-tat-ca-khong-ban-ve",
+				nhan: "Tất cả — chưa đọc được trạng thái sau gom",
+			},
+			{ id: "ST-tat-ca-rong", nhan: "Tất cả — chưa ai gửi tín hiệu" },
+			{ id: "ST-tat-ca-dang-tai", nhan: "Tất cả — đang tải" },
+			{ id: "ST-tat-ca-loi", nhan: "Tất cả — tải lỗi, có Thử lại" },
+			{
+				id: "ST-tat-ca-khong-quyen",
+				nhan: "Tất cả — thành viên mở thẳng đường dẫn",
+			},
+			{ id: "ST-cua-toi-quan-tri", nhan: "Của tôi — quản trị thấy thanh thẻ" },
+			{
+				id: "ST-hop-bao-truoc",
+				nhan: "Hộp gửi — câu báo trước quản trị thấy tên",
+			},
 		],
 	},
 	{

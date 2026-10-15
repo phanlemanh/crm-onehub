@@ -2,14 +2,16 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { docDuLieu } from "../../apps/app/lib/lo-trinh/doc-du-lieu.js";
 import {
+	coChoSauGom,
+	demNguongSong,
 	docPhanHoiKeoVeDayDu,
+	dongDemTuKeoVe,
 	type KeoVeOutput,
 	parseDuongTinHieu,
 	TIN_HIEU,
 	vietTep,
 } from "../../packages/validation/src/tin-hieu.ts";
 
-const MS_NGAY = 86_400_000;
 const MS_GIO = 3_600_000;
 export const DUONG_KEO_VE = {
 	lich: "/rest/tin-hieu/lich/keo-ve",
@@ -25,15 +27,11 @@ export type KetQuaKeoVe = {
 	loi?: string;
 };
 
-function coChoSauGom(root: string): Set<string> {
+function choTuBanVe(root: string): Set<string> {
 	const tep = path.join(root, "LO-TRINH.html");
 	if (!existsSync(tep)) return new Set();
 	const { duLieu } = docDuLieu(readFileSync(tep, "utf8"));
-	const kq = parseDuongTinHieu(duLieu?.tin_hieu);
-	if (kq.kieu !== "co") return new Set();
-	return new Set(
-		kq.banGhi.filter((b) => b.cho !== "chua-gom").map((b) => b.id),
-	);
+	return coChoSauGom(parseDuongTinHieu(duLieu?.tin_hieu));
 }
 
 function dongDau(phanHoi: KeoVeOutput): string {
@@ -54,25 +52,13 @@ function tongKet(
 	now: Date,
 	coCho: Set<string>,
 ): string[] {
-	const ds = phanHoi.tep;
-	const tuoi = (luc: string) => (now.getTime() - Date.parse(luc)) / MS_NGAY;
-	const trong = ds.filter((t) => tuoi(t.tep.luc) <= TIN_HIEU.ngayDem);
-	const theoPhong = new Map<string, number>();
-	let khongPhong = 0;
-	for (const t of trong) {
-		if (t.phongBan === null) khongPhong += 1;
-		else theoPhong.set(t.phongBan, (theoPhong.get(t.phongBan) ?? 0) + 1);
-	}
-	const qua = ds.filter((t) => tuoi(t.tep.luc) > TIN_HIEU.ngayCoCho);
-	const chuaCo = qua.filter((t) => !coCho.has(t.id));
+	const so = demNguongSong(dongDemTuKeoVe(phanHoi.tep), now, coCho);
 	return [
 		`mới ${moi} · đã có ${daCo}`,
-		`trong ${TIN_HIEU.ngayDem} ngày: ${trong.length} tín hiệu từ ${theoPhong.size} phòng ban`,
-		...[...theoPhong.entries()]
-			.sort(([a], [b]) => a.localeCompare(b, "vi"))
-			.map(([ten, so]) => `  ${ten}: ${so}`),
-		`  chưa có phòng ban: ${khongPhong}`,
-		`gửi quá ${TIN_HIEU.ngayCoCho} ngày: ${qua.length} · chưa có chỗ sau gom: ${chuaCo.length}`,
+		`trong ${TIN_HIEU.ngayDem} ngày: ${so.trongKy} tín hiệu từ ${so.soPhong} phòng ban`,
+		...so.theoPhong.map(([ten, n]) => `  ${ten}: ${n}`),
+		`  chưa có phòng ban: ${so.khongPhong}`,
+		`gửi quá ${TIN_HIEU.ngayCoCho} ngày: ${so.quaHan} · chưa có chỗ sau gom: ${so.chuaCoCho}`,
 		dongDau(phanHoi),
 	];
 }
@@ -135,7 +121,7 @@ export async function chayKeoVe(o: {
 		ma: 0,
 		moi: ghi.length,
 		daCo,
-		tongKet: tongKet(phanHoi, ghi.length, daCo, o.now, coChoSauGom(o.root)),
+		tongKet: tongKet(phanHoi, ghi.length, daCo, o.now, choTuBanVe(o.root)),
 	};
 }
 

@@ -27,6 +27,7 @@ import { danhSachOutput } from "../../api/src/okr/okr-xem.contracts";
 import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 import { CUOC, cho, dat, datLai, nhip } from "./khung-soan-okr";
 
+const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { TheoDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
 );
@@ -410,7 +411,13 @@ async function moDonVi({
 		if (loi) throw new Error("mang loi");
 		return sanSang ?? SS(BAT);
 	});
-	const san = await dung(<TheoDonVi cauNoiOkr={cauNoi} />);
+	// DH1 (dieu-huong-khu-muc-tieu): nhóm soạn ở hàng hành động đầu trang khu.
+	const san = await dung(
+		<>
+			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />
+			<TheoDonVi />
+		</>,
+	);
 	await cho(() => q("[data-hang-nut]") !== null, "thanh don vi");
 	await nhip(10);
 	return san;
@@ -426,7 +433,7 @@ const chuNgoaiPopover = () => {
 };
 
 describe("nut-soan", () => {
-	test("tám dạng: nhóm soạn là con cuối của thanh, ≤ 2 nút, không chữ phụ trên thẻ", async () => {
+	test("tám dạng: nhóm soạn đứng ngay trước nút chính ở hàng hành động đầu trang, ≤ 2 nút, không chữ phụ trên thẻ", async () => {
 		const tam: {
 			ten: string;
 			dung: () => Promise<San>;
@@ -456,12 +463,12 @@ describe("nut-soan", () => {
 		expect(tam.length).toBe(8);
 		for (const d of tam) {
 			await d.dung();
-			const hang = q("[data-hang-nut]");
+			const hang = q("[data-hang-hanh-dong]");
 			const nhom = q("[data-nhom-soan]");
 			expect(nhom, `thieu nhom soan: ${d.ten}`).not.toBeNull();
 			expect(
-				hang?.lastElementChild,
-				`nhom soan khong cuoi thanh: ${d.ten}`,
+				hang?.lastElementChild?.previousElementSibling,
+				`nhom soan khong dung truoc nut chinh: ${d.ten}`,
 			).toBe(nhom);
 			expect(
 				qa("button", nhom as HTMLElement).length,
@@ -677,7 +684,7 @@ describe("chip", () => {
 		});
 		const man = [
 			{ ten: "cua-toi", dung: () => dung(<CuaToi />) },
-			{ ten: "theo-don-vi", dung: () => dung(<TheoDonVi cauNoiOkr={false} />) },
+			{ ten: "theo-don-vi", dung: () => dung(<TheoDonVi />) },
 		];
 		let soCa = 0;
 		for (const mn of man)

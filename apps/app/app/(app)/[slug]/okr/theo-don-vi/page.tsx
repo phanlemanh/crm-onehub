@@ -2,21 +2,20 @@ import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
-import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
-import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
+import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { TheoDonVi } from "./theo-don-vi";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata(): Promise<Metadata> {
-	return { title: okrMessages(await getLocale()).tieuDe["theo-don-vi"] };
+	return { title: tieuDeTrinhDuyet(await getLocale(), "theo-don-vi") };
 }
 
 export default function TheoDonViPage({
@@ -70,7 +69,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 
 	return (
 		<HydrateClient>
-			<TheoDonVi cauNoiOkr={okrBridgeConfigured()} />
+			<TheoDonVi />
 		</HydrateClient>
 	);
 }

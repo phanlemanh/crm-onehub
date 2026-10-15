@@ -294,6 +294,7 @@ const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
+const { khungUngDungMessages } = await import("@/lib/messages/khung-ung-dung");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { okrGioiHanMessages } = await import("@/lib/messages/okr-gioi-han");
 
@@ -484,7 +485,9 @@ describe("theo-don-vi", () => {
 		});
 	});
 
-	test("theo-don-vi-truong-thay-nut: canEdit thi co hai nut, khong thi khong nut nao", async () => {
+	// DH1 (dieu-huong-khu-muc-tieu): «Thêm mục tiêu» và «Nhập từ bảng tính» rời thân
+	// trang lên đầu trang khu — khoá kèm lý do đo ở okr-dau-trang-khu.dom.tsx (dhk-*).
+	test("theo-don-vi-truong-thay-nut: than trang khong con nut them hay nhap o ca hai vai", async () => {
 		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
 			objectives: [mucTieu("a", 1)],
 			canEdit: true,
@@ -505,7 +508,7 @@ describe("theo-don-vi", () => {
 				nutCo(thanhVien.o, m.themMucTieu),
 				nutCo(thanhVien.o, m.nhapBangTinh),
 			],
-		}).toEqual({ truong: [true, true], thanhVien: [false, false] });
+		}).toEqual({ truong: [false, false], thanhVien: [false, false] });
 	});
 
 	test("theo-don-vi-cay: cay can chinh thut le theo cap, nhom chua can chinh la hang tieu de", async () => {
@@ -579,23 +582,25 @@ describe("theo-don-vi-bien", () => {
 			wrap: true,
 			trongDau: false,
 			cardAction: 0,
-			nut: 7,
+			nut: 5,
 			tinhTrang: "Chưa có kỳ vọng",
 		});
 	});
 });
 
 describe("thanh-tab", () => {
-	test("thanh-tab: tab dang chon theo duong, nam lien ket giu kyOkr, tieu de theo tab", async () => {
+	test("thanh-tab: tab dang chon theo duong, nam lien ket giu kyOkr va donOkr, tieu de khu", async () => {
 		const o = document.createElement("div");
 		document.body.appendChild(o);
 		const root = createRoot(o);
 		await act(async () => {
 			root.render(
 				<NuqsTestingAdapter searchParams="?kyOkr=q3&donOkr=pb:pb-1">
-					<LocaleProvider locale="vi">
-						<DauTrangOkr chonChuKy={null} />
-					</LocaleProvider>
+					<QueryClientProvider client={new QueryClient()}>
+						<LocaleProvider locale="vi">
+							<DauTrangOkr chonChuKy={null} />
+						</LocaleProvider>
+					</QueryClientProvider>
 				</NuqsTestingAdapter>,
 			);
 		});
@@ -606,13 +611,13 @@ describe("thanh-tab", () => {
 			lienKet: tab.map((t) => t.getAttribute("href")),
 			dangChon: tab.map((t) => t.getAttribute("aria-selected")),
 		}).toEqual({
-			tieuDe: m.tieuDe["theo-don-vi"],
+			tieuDe: khungUngDungMessages("vi").rail.okr,
 			lienKet: [
-				"/ws/okr?kyOkr=q3",
-				"/ws/okr/cap-nhat-tuan?kyOkr=q3",
-				"/ws/okr/theo-don-vi?kyOkr=q3",
-				"/ws/okr/toan-canh?kyOkr=q3",
-				"/ws/okr/hoi-y?kyOkr=q3",
+				"/ws/okr?kyOkr=q3&donOkr=pb%3Apb-1",
+				"/ws/okr/cap-nhat-tuan?kyOkr=q3&donOkr=pb%3Apb-1",
+				"/ws/okr/theo-don-vi?kyOkr=q3&donOkr=pb%3Apb-1",
+				"/ws/okr/toan-canh?kyOkr=q3&donOkr=pb%3Apb-1",
+				"/ws/okr/hoi-y?kyOkr=q3&donOkr=pb%3Apb-1",
 			],
 			dangChon: ["false", "false", "true", "false", "false"],
 		});

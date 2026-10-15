@@ -80,6 +80,7 @@ export const SEARCH_PARAM = {
 		tabSoan: "tabSoan",
 		locSoan: "locSoan",
 		mucTinCay: "mucTinCay",
+		nhap: "nhapOkr",
 	},
 	loTrinh: {
 		vongDoi: "vongDoi",

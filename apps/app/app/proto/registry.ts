@@ -26,6 +26,7 @@ import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { LichSuVaLuuTruTrangMau } from "./_modules/lich-su-va-luu-tru-trang";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
+import { MoiTinHieuChoQuanTriMau } from "./_modules/moi-tin-hieu-cho-quan-tri";
 import { MucTieuVaKrMau } from "./_modules/muc-tieu-va-kr";
 import { NenKaraMau } from "./_modules/nen-kara";
 import { NganHoSoMau } from "./_modules/ngan-ho-so-trong-lo-trinh";
@@ -98,6 +99,7 @@ const BANG_GHEP = {
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 	"khung-ban-ghi-kara": KhungBanGhiKaraMau,
 	"gui-tin-hieu-trong-crm": GuiTinHieuMau,
+	"moi-tin-hieu-cho-quan-tri": MoiTinHieuChoQuanTriMau,
 	"tin-hieu-tu-ve-kho": TinHieuTuVeKhoMau,
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,

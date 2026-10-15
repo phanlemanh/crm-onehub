@@ -1,11 +1,6 @@
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Suspense } from "react";
-import {
-	PageShellDescription,
-	PageShellHeader,
-	PageShellHeading,
-	PageShellTitle,
-} from "@/components/page-shell";
+import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
 import { requireSession } from "@/lib/session";
@@ -17,12 +12,16 @@ import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import { kyMacDinhHoiY } from "./okr-search-params";
 import type { TabOkr } from "./tab-okr";
+import { tieuDeKhu } from "./tieu-de-khu";
 
 export async function DauTrangOkrTrang({ tab }: { tab: TabOkr }) {
-	const m = okrMessages(await getLocale());
+	const locale = await getLocale();
+	const m = okrMessages(locale);
 	return (
 		<Suspense
-			fallback={<DauTrangOkrCho moTa={m.moTa[tab]} tieuDe={m.tieuDe[tab]} />}
+			fallback={
+				<DauTrangOkrCho moTa={m.moTa[tab]} tieuDe={tieuDeKhu(locale)} />
+			}
 		>
 			<DauTrangCoDuLieu />
 		</Suspense>
@@ -32,16 +31,15 @@ export async function DauTrangOkrTrang({ tab }: { tab: TabOkr }) {
 function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	return (
 		<LuoiDauTrangOkr
-			dau={
-				<PageShellHeader>
-					<PageShellHeading>
-						<PageShellTitle>{tieuDe}</PageShellTitle>
-						<PageShellDescription>{moTa}</PageShellDescription>
-					</PageShellHeading>
-				</PageShellHeader>
+			hanhDong={
+				<>
+					<Skeleton className="h-8 w-24 rounded-md" />
+					<Skeleton className="h-8 w-56 rounded-md" data-hang-cho="" />
+				</>
 			}
-			chonChuKy={<Skeleton className="h-8 w-24 rounded-md" />}
+			moTa={moTa}
 			thanhTab={<Skeleton className="h-9 w-full max-w-xl" />}
+			tieuDe={tieuDe}
 		/>
 	);
 }
@@ -65,7 +63,10 @@ async function DauTrangCoDuLieu() {
 
 	return (
 		<HydrateClient>
-			<DauTrangOkrHoiY chonChuKy={<ChonChuKy />} />
+			<DauTrangOkrHoiY
+				cauNoi={okrBridgeConfigured()}
+				chonChuKy={<ChonChuKy />}
+			/>
 			<DaiKy />
 		</HydrateClient>
 	);

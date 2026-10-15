@@ -119,9 +119,9 @@ function NhomSoan({
 	);
 }
 
-function NutKhoa({ m }: { m: OkrSoanMessages }) {
+function NutKhoa({ m, moTaBoi }: { m: OkrSoanMessages; moTaBoi?: string }) {
 	return (
-		<Button disabled size="sm" variant="outline">
+		<Button aria-describedby={moTaBoi} disabled size="sm" variant="outline">
 			{m.nut.soan}
 		</Button>
 	);
@@ -134,6 +134,7 @@ export function NutSoan({
 	quanTri,
 	canEdit,
 	cauNoi,
+	khoaVi,
 }: {
 	don: DonChonOkr;
 	cycleId: string;
@@ -141,6 +142,8 @@ export function NutSoan({
 	quanTri: boolean;
 	canEdit: boolean;
 	cauNoi: boolean;
+	/** id dòng lý do ở đầu trang: có thì người không đủ quyền thấy nút khoá thay vì không thấy gì. */
+	khoaVi?: string;
 }) {
 	const locale = useLocale();
 	const m = okrSoanMessages(locale);
@@ -152,7 +155,8 @@ export function NutSoan({
 		parseAsString,
 	);
 	const donVi = donViSoanCua(don, cycleId);
-	const hienDuoc = donVi !== null && phaKy === PHA_SOAN && (canEdit || quanTri);
+	const dungPha = donVi !== null && phaKy === PHA_SOAN;
+	const hienDuoc = dungPha && (canEdit || quanTri);
 	const sanSang = useQuery({
 		...trpc.okr.soanSanSang.queryOptions(
 			hienDuoc && cauNoi && donVi ? donVi : skipToken,
@@ -169,6 +173,14 @@ export function NutSoan({
 			onError: (loi) => toast.error(loi.message || m.nut.loiMo),
 		}),
 	);
+	if (dungPha && !hienDuoc && khoaVi)
+		return (
+			<NhomSoan
+				m={m}
+				hinh="nut-khong-quyen"
+				nut={<NutKhoa m={m} moTaBoi={khoaVi} />}
+			/>
+		);
 	if (!hienDuoc || !donVi) return null;
 
 	const ds =

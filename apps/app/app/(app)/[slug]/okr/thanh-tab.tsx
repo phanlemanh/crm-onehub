@@ -7,19 +7,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
-import {
-	PageShellDescription,
-	PageShellHeader,
-	PageShellHeading,
-	PageShellTitle,
-} from "@/components/page-shell";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { DongLyDoKhu, HanhDongKhu, useQuyenKhu } from "./hanh-dong-khu";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
-import { okrParsers } from "./okr-search-params";
+import { khoaDon, okrParsers } from "./okr-search-params";
 import { laTrangSoan } from "./soan/luat-ban-nhap";
 import { DUONG, TAB, type TabOkr, tabTuDuong } from "./tab-okr";
+import { tieuDeKhu } from "./tieu-de-khu";
 
 export type NhanHoiY = "moi" | number | null;
 
@@ -38,11 +34,13 @@ export function ThanhTabOkr({
 	const url = useWorkspaceUrl();
 	const [thamSo] = useQueryStates(okrParsers);
 	const ky = thamSo[SEARCH_PARAM.okr.ky];
+	const don = thamSo[SEARCH_PARAM.okr.don];
+	const giu = new URLSearchParams();
+	if (ky) giu.set(SEARCH_PARAM.okr.ky, ky);
+	if (don) giu.set(SEARCH_PARAM.okr.don, khoaDon(don));
 	const toi = (t: TabOkr) => {
 		const goc = url(DUONG[t]);
-		return ky
-			? `${goc}?${new URLSearchParams({ [SEARCH_PARAM.okr.ky]: ky })}`
-			: goc;
+		return giu.size > 0 ? `${goc}?${giu}` : goc;
 	};
 	const huyHieu = nhanHoiY === "moi" ? m.nhanHoiYMoi : nhanHoiY;
 	return (
@@ -72,25 +70,27 @@ export function ThanhTabOkr({
 export function DauTrangOkr({
 	chonChuKy,
 	nhanHoiY = null,
+	cauNoi = false,
 }: {
 	chonChuKy: ReactNode;
 	nhanHoiY?: NhanHoiY;
+	cauNoi?: boolean;
 }) {
-	const m = okrMessages(useLocale());
-	const tab = tabTuDuong(usePathname());
-	if (laTrangSoan(usePathname() ?? "")) return null;
+	const locale = useLocale();
+	const m = okrMessages(locale);
+	const duong = usePathname();
+	const tab = tabTuDuong(duong);
+	const q = useQuyenKhu(tab);
+	if (laTrangSoan(duong ?? "")) return null;
 	return (
 		<LuoiDauTrangOkr
-			dau={
-				<PageShellHeader>
-					<PageShellHeading>
-						<PageShellTitle>{m.tieuDe[tab]}</PageShellTitle>
-						<PageShellDescription>{m.moTa[tab]}</PageShellDescription>
-					</PageShellHeading>
-				</PageShellHeader>
+			ghiChu={<DongLyDoKhu q={q} />}
+			hanhDong={
+				<HanhDongKhu cauNoi={cauNoi} chonChuKy={chonChuKy} q={q} tab={tab} />
 			}
-			chonChuKy={chonChuKy}
+			moTa={m.moTa[tab]}
 			thanhTab={<ThanhTabOkr nhanHoiY={nhanHoiY} tab={tab} />}
+			tieuDe={tieuDeKhu(locale)}
 		/>
 	);
 }
