@@ -1529,14 +1529,12 @@ async function buocE20() {
 				document.querySelector("[data-nut='them-cach']"),
 			dealSan.name,
 		);
-		await d.evaluate(() =>
-			// AC-14 cach-toi: muc menu «Nhap tu bang tinh» chi dat nhapOkr=true tren duong dan.
-			history.pushState(
-				history.state,
-				"",
-				`${location.pathname}${location.search}&nhapOkr=true`,
-			),
-		);
+		await d.evaluate(() => {
+			// AC-14 cach-toi: muc menu «Nhap tu bang tinh» chi dat nhapOkr=true tren duong dan; di bang router cua app (dieu huong mem) nhu nuqs dat.
+			const toi = `${location.pathname}${location.search}&nhapOkr=true`;
+			if (window.next?.router?.push) window.next.router.push(toi, { scroll: false });
+			else history.pushState(history.state, "", toi);
+		});
 		if (await hienSel(d, "[data-buoc-nhap='1']")) await danLo(d, LO);
 		kiem(
 			`E20 ${ten}: sheet Thoa thuan dong mat khi mo hop nhap`,

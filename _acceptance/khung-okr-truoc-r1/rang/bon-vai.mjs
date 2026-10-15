@@ -86,6 +86,7 @@ if (!CO_DO)
 				coHang: Boolean(hang),
 				coNhom: Boolean(nhom),
 				khoa: nhom?.querySelector("button")?.disabled ?? null,
+				hinh: nhom ? (nhom.getAttribute("data-nut-soan") ?? nhom.querySelector("[data-nut-soan]")?.getAttribute("data-nut-soan") ?? null) : null,
 				coCau: document.body.innerText.includes(cau),
 			};
 		}, ms.nut.chuaCauHinh);
@@ -93,7 +94,8 @@ if (!CO_DO)
 			await ctx.close();
 			continue;
 		}
-		const dung = vai === "quan-tri" ? d.coNhom && d.khoa === true : !d.coNhom && !d.coCau;
+		// AC-14 loi-hua-moi: dieu-huong-khu-muc-tieu AC-5 — nguoi khong du quyen (pha lap ke hoach) thay nut soan KHOA kem ly do (nut-khong-quyen), khong thay nut bam duoc hay cau «chua cau hinh».
+		const dung = vai === "quan-tri" ? d.coNhom && d.khoa === true : (!d.coNhom || (d.khoa === true && d.hinh === "nut-khong-quyen")) && !d.coCau;
 		const thongDiep = vai === "quan-tri" ? `quan tri thieu nut khoa` : `nguoi thuong thay nut: ${vai}`;
 		if (kiem(dung, thongDiep)) console.log(`vai soan ok ${vai}`);
 		await chup(p, `E18-${vai}`);
