@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 495c6129b8326ecc84fe4dff71590ceabefe2877
+verified_commit: e15d03a5dd900d0e424a72541d21eb4fa277913c
 human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 2 (17/17 phép kiểm máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E13 Đạt). Ngoài-1 đến 3, 5 đến 15, 17 đến 20 ghi Known limits; Ngoài-4, 16, 21 đến 24 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -282,3 +282,7 @@ Round 2: các eval đụng đường dẫn đã sửa (E1, E2, E3, E4, E10, E11,
 ### Re-pin lần 1 — 2026-10-15, do gộp onehub 3818ad4ec; lần 3 đỏ vì quá tải máy (test timeout 5–10 phút, máy ảo Docker chạy thêm cụm supabase của dự án khác)
 run_id: repin-20261015T014709Z-10822
 sha: 495c6129b8326ecc84fe4dff71590ceabefe2877 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13 (E13 không khai paths), E14 · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-15, do sửa số mutation không đầu vào 15→16 sau gộp onehub 02ed3aec0
+run_id: repin-20261015T044753Z-42994
+sha: e15d03a5dd900d0e424a72541d21eb4fa277913c · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13 (E13 không khai paths), E14 · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
