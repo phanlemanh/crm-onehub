@@ -5,7 +5,7 @@ slug: loc-va-kieu-xem-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-15T03:27:14Z
 design_doc: docs/superpowers/specs/2026-10-14-loc-va-kieu-xem-chung-design.md
@@ -87,3 +87,11 @@ ghi thẳng ở đây).
 ## Notes
 
 - Hồ sơ mở từ hàng NM2 sau khi NM4 (#400) gộp vào `onehub` 1997da85b.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Ảnh kiểm tra màn Onboarding chỉ chụp kiểu Bảng cột; kiểu Bảng mặc định không có ảnh ở điện thoại và máy tính.
+  - Ngoài-2: Hàng ở danh sách trang tài liệu mở trang qua liên kết đầu tiên trong hàng; thêm liên kết khác vào hàng sau này có thể làm hàng mở nhầm chỗ.
+  - Ngoài-5: Phép kiểm «bấm chip ở Tài liệu không tải lại trang» của bàn đo không bao giờ báo lỗi được.
+  - Ngoài-6: Bài kiểm chỉ thử đường dẫn của một trong bốn thẻ trang con ở Tài liệu.
+  - Ngoài-7: Bài kiểm chỉ xác nhận ba trong bảy thao tác lọc ở Tài liệu cho đúng giá trị khi mở lại bằng đường dẫn.
+  - Ngoài-8: Trên điện thoại, bài kiểm chỉ xác nhận ô chọn kiểu xem có hiện, chưa kiểm chọn một giá trị thì đường dẫn đổi đúng.
+  - Ngoài-9: Bài kiểm «đổi bộ lọc về trang 1» chưa chứng minh màn đang ở trang 2 trước khi bấm.
