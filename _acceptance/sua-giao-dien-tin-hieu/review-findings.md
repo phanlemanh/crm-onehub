@@ -105,3 +105,11 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+
+## Ghi chú sau chữ ký — bảng khai thay sót một ô
+
+- **Bảng khai thay sót LT2 E9 vì quét theo lệnh đỏ của bài DOM, không theo mọi lệnh có `paths` chạm vùng sửa.** E9 dùng
+  chung lệnh `gth_vong_kit` với E7 và đo câu trạng thái qua răng `vong-kit.mjs`, không qua bài DOM; lượt rà S3 chạy lệnh
+  app-level mà bỏ lệnh script này. Lần sau: quét MỌI eval máy của hồ sơ bị chạm (kể cả lệnh dùng chung) trước khi chốt
+  bảng thay. Chủ kho đồng ý khai thay thêm E9 ngày 15/10.
+  file: `_acceptance/gui-tin-hieu-trong-crm/rang/vong-kit.mjs`

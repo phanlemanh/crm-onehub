@@ -142,6 +142,7 @@ nhận việc thay (máy đọc thẻ `<slug cũ>/<id cũ>`):
 | gui-tin-hieu-trong-crm/E5b | dòng đã lấy về không có nút ⋮ | sua-giao-dien-tin-hieu#AC-9 |
 | gui-tin-hieu-trong-crm/E13 | ảnh hộp: «Gửi từ màn» == đường dẫn | sua-giao-dien-tin-hieu#AC-10 |
 | gui-tin-hieu-trong-crm/E10 | câu sau gom == câu kit viết nguyên văn | sua-giao-dien-tin-hieu#AC-12 |
+| gui-tin-hieu-trong-crm/E9 | bộ đọc CRM ra đúng câu kit nguyên văn (răng vong-kit, dòng «ve») | sua-giao-dien-tin-hieu#AC-12 |
 
 Mọi khẳng định khác của bốn ô đó (nút trên thanh đầu trang cùng kiểu cụm, ma trận chín tổ hợp khoá Gửi, mục menu,
 biên nhận mang mã, làm mới danh sách, hộp hỏi lại trước khi xoá, một nút chính đầu trang…) được đo lại trong bài của

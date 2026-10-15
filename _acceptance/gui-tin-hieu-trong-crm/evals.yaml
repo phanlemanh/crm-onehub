@@ -229,6 +229,8 @@ evals:
       CHIEU DO: ban sao ghi de tep da co -> dong 4 do voi thong diep ghim "lenh keo ve ghi de tep da co".
 
   - id: E9
+    status: not-run
+    superseded_by: sua-giao-dien-tin-hieu#AC-12
     criterion: AC-9
     executor: script
     cmd: config:executors.script.gth_vong_kit
