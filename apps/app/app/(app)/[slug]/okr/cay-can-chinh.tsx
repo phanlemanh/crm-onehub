@@ -230,14 +230,13 @@ export function CayCanChinh({
 						variant="outline"
 					>
 						{LOC_MUC_TIN_CAY.map((muc) => (
-							<ToggleGroupItem data-loc-muc-tin={muc} key={muc} value={muc}>
+							<ToggleGroupItem
+								count={soCanh(muc)}
+								data-loc-muc-tin={muc}
+								key={muc}
+								value={muc}
+							>
 								<span data-nhan-loc>{nhanLoc(muc)}</span>
-								<span
-									className="text-muted-foreground tabular-nums"
-									data-so-loc
-								>
-									{soCanh(muc)}
-								</span>
 							</ToggleGroupItem>
 						))}
 					</ToggleGroup>

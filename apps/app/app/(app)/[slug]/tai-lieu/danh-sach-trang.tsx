@@ -198,18 +198,17 @@ export function DanhSachTrang({
 						value={loai ?? TAT_CA}
 						variant="outline"
 					>
-						<ToggleGroupItem value={TAT_CA}>
+						<ToggleGroupItem count={tatCa} value={TAT_CA}>
 							{m.loc.tatCa}
-							<span className="text-muted-foreground tabular-nums">
-								{tatCa}
-							</span>
 						</ToggleGroupItem>
 						{LOAI_TRANG.map((l) => (
-							<ToggleGroupItem data-loai={l} key={l} value={l}>
+							<ToggleGroupItem
+								count={facetCounts[l]}
+								data-loai={l}
+								key={l}
+								value={l}
+							>
 								{m.loai[l]}
-								<span className="text-muted-foreground tabular-nums">
-									{facetCounts[l]}
-								</span>
 							</ToggleGroupItem>
 						))}
 					</ToggleGroup>

@@ -66,9 +66,8 @@ export function TrangThaiToggle({
 			}}
 		>
 			{ONBOARDING_TRANG_THAI.map((tt) => (
-				<ToggleGroupItem key={tt} value={tt}>
+				<ToggleGroupItem count={counts?.[tt] ?? 0} key={tt} value={tt}>
 					{tt === "dang-chay" ? m.facets.running : m.facets.closed}
-					<span className="tabular-nums opacity-60">{counts?.[tt] ?? 0}</span>
 				</ToggleGroupItem>
 			))}
 		</ToggleGroup>
