@@ -393,16 +393,9 @@ try {
 					() => document.querySelector('[data-slot="toggle-group-item"]') !== null,
 					`${c.man} co chip`,
 				);
+				const truoc = await t.evaluate(() => location.href);
 				await bamChip(t, c.nhan, c.chu);
-				await choDieu(
-					t,
-					(chu) =>
-						[...document.querySelectorAll('[data-slot="toggle-group-item"][data-state="on"]')].some((e) =>
-							e.textContent.includes(chu),
-						),
-					`${c.man} chip ${c.chu} bat`,
-					c.chu,
-				);
+				await choDieu(t, (truoc) => location.href !== truoc, `${c.man} duong dan doi sau khi bam ${c.chu}`, truoc);
 				await cho(500);
 				const href = await t.evaluate(() => location.href);
 				await t.close();
