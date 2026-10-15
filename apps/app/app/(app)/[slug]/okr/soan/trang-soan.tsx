@@ -1,11 +1,15 @@
 "use client";
 
-import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
+import {
+	useChanLienKetTrongHop,
+	useKhaiThayDoi,
+} from "@crm/ui/components/giu-thay-doi";
 import { KaraState } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
 import { useRecordStack } from "@/components/crm/record-sheet/record-stack";
 import { DetailSheetHeader } from "@/components/detail-sheet";
 import type { Thread } from "@/lib/agent-session";
@@ -69,6 +73,13 @@ function GiuKhiSoan({
 		window.addEventListener("beforeunload", hoi);
 		return () => window.removeEventListener("beforeunload", hoi);
 	}, [khai, dangSoan]);
+	return null;
+}
+
+function ChanLienKetKhung() {
+	const router = useRouter();
+	const di = useCallback((href: string) => router.push(href), [router]);
+	useChanLienKetTrongHop(di);
 	return null;
 }
 
@@ -209,6 +220,7 @@ export function CuocSoanTrongKhung({
 	const dangMo = danhSach.isPending;
 	return (
 		<>
+			<ChanLienKetKhung />
 			<DauKhungSoan cuoc={du?.cuoc ?? null} m={m} />
 			<div
 				className="flex min-h-0 flex-1 flex-col"
