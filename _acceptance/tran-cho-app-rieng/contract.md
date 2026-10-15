@@ -5,7 +5,7 @@ slug: tran-cho-app-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: machine-cleared
 approved_by: Phan Le Manh
 approved_at: 2026-10-14T23:30:45Z
 design_doc: docs/superpowers/specs/2026-10-15-tran-cho-app-rieng-design.md
