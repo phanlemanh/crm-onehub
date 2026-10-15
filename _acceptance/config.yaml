@@ -1761,15 +1761,15 @@ executors:
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
     # trang-don-vi-mot-bang (DH2): mỗi khoá một nhóm của okr-trang-don-vi.dom.tsx
-    dvb_dong_mo_ui: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-mo-rong.spec.tsx"
-    dvb_chon_don_vi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chon-don-vi"
-    dvb_dong_mo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-dong-mo"
-    dvb_hang_cong_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-hang-cong-cu"
-    dvb_loc_nhanh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-loc-nhanh"
-    dvb_sap_xep: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-sap-xep"
-    dvb_chan_bang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chan-bang"
-    dvb_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-trang-thai"
-    dvb_giu_xem: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-giu-xem"
+    dvb_dong_mo_ui: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-mo-rong.spec.tsx && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo-ui"
+    dvb_chon_don_vi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chon-don-vi && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chon-don-vi"
+    dvb_dong_mo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-dong-mo && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo"
+    dvb_hang_cong_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-hang-cong-cu && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-hang-cong-cu"
+    dvb_loc_nhanh: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-loc-nhanh && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-loc-nhanh"
+    dvb_sap_xep: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-sap-xep && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-sap-xep"
+    dvb_chan_bang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chan-bang && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chan-bang"
+    dvb_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-trang-thai && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-trang-thai"
+    dvb_giu_xem: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-giu-xem && cd \"$(git rev-parse --show-toplevel)\" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-giu-xem"
     # dieu-huong-khu-muc-tieu (DH1): mỗi khoá chạy một nhóm dhk-* hai chiều (đối chứng dương + đột biến ghim thông điệp).
     dhk_tieu_de: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-tieu-de
     dhk_hanh_dong: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-hanh-dong
@@ -2753,8 +2753,8 @@ executors:
     nltk_pham_vi: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs --pham-vi
     # trang-don-vi-mot-bang (DH2)
     dvb_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"'
-    dvb_ho_so_da_ky: 'bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs'
-    dvb_proto: 'bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts'
+    dvb_ho_so_da_ky: 'bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ho-so-da-ky'
+    dvb_proto: 'bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-proto'
     dvb_ghim_nam: 'bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs'
     # dieu-huong-khu-muc-tieu (DH1)
     dhk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"'

@@ -17,6 +17,7 @@
  * một lần, tuần tự.
  *
  * `--liet-ke`: chỉ in tập tệp, lệnh và hai dòng đếm, không chạy lệnh nào.
+ * `DVB_LOC_TEP=<tệp>`: chỉ chạy các lệnh chạm tệp đó (lượt hai chiều).
  * Mã thoát: 0 đúng · 1 sai · 2 không đo được (tập rỗng, git hỏng).
  */
 import { execFileSync, spawnSync } from "node:child_process";
@@ -40,7 +41,8 @@ const DAU_CU = [
 	"CayDonVi",
 	"BangMucTieu",
 ];
-const DONG_KIEM = /(^|[^\w.])(it|test)(\.\w+)?\s*\(|(^|[^\w.])expect(\.\w+)?\s*\(/;
+const DONG_KIEM =
+	/(^|[^\w.])(it|test)(\.\w+)?\s*\(|(^|[^\w.])expect(\.\w+)?\s*\(/;
 const BO_QUA = /\.(skip|todo|only)\s*\(/;
 
 function khongDo(cau) {
@@ -159,6 +161,14 @@ for (const slug of readdirSync(join(GOC, "_acceptance"))) {
 }
 if (viec.size === 0)
 	khongDo(`bo chon rong — khong eval da ky nao chay ${[...tap].join(", ")}`);
+// Lượt hai chiều (rang/hai-chieu.mjs) chỉ chạy các lệnh chạm một tệp: hai vế
+// XOA/SKIP vẫn đếm trên mọi tệp, chỉ bộ lệnh được thu hẹp.
+const LOC_TEP = process.env.DVB_LOC_TEP;
+if (LOC_TEP) {
+	for (const [k, v] of viec) if (!v.cham.includes(LOC_TEP)) viec.delete(k);
+	console.log(`loc theo DVB_LOC_TEP=${LOC_TEP}: con ${viec.size} lenh`);
+	if (viec.size === 0) khongDo(`DVB_LOC_TEP=${LOC_TEP} khong cham lenh nao`);
+}
 console.log(`tep kiem bi cham: ${[...tap].join(", ")}`);
 console.log(
 	`lenh: ${viec.size} · eval: ${[...viec.values()].reduce((t, v) => t + v.ai.length, 0)}`,
