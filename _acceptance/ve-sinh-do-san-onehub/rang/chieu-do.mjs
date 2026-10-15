@@ -53,9 +53,8 @@ const CA = {
 				writeFileSync(join(sao, tep), git(GOC, "show", `${mb}:${tep}`));
 		},
 		lenh: [
-			"bun",
-			"scripts/lan-do/tien-de.mjs",
-			"--chay",
+			"bash",
+			"_acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh",
 			"bun _acceptance/ve-sinh-do-san-onehub/rang/hydrat-record.mjs --mong-do",
 		],
 		dat: (r) => r.status === 0 && /MONG DO: k=[1-9]/.test(r.out),
