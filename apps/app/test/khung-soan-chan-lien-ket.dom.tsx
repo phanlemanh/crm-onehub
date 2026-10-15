@@ -34,9 +34,11 @@ const SO = "42";
 beforeEach(datLai);
 afterEach(don);
 
-async function moKhung(
-	{ daDuaVao = false }: { daDuaVao?: boolean } = {},
-): Promise<void> {
+async function moKhung({
+	daDuaVao = false,
+}: {
+	daDuaVao?: boolean;
+} = {}): Promise<void> {
 	dat("okr.access", () => ({
 		canManageProgram: true,
 		headOf: { divisions: [], departments: [] },
@@ -49,8 +51,7 @@ async function moKhung(
 	await mo(<RecordSheetHost cauNoiOkr />, "record=soan:cuoc-1");
 	await nhip(10);
 	await cho(
-		() =>
-			q("[data-trang-soan]:not([data-trang-soan='dang-mo'])") !== null,
+		() => q("[data-trang-soan]:not([data-trang-soan='dang-mo'])") !== null,
 		"khung soan mo xong",
 	);
 }
