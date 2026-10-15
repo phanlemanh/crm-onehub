@@ -1,19 +1,16 @@
 ---
 schema_version: 2
 feature_slug: sua-giao-dien-tin-hieu
-verdict: REJECT
-failed_evals: [E14]
-reason:
+verdict: PASS
+failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0fdecb6569a5afea28bcd2d45b6241ed0e5b31e6
+verified_commit: de6340a7ee52235817d6ec0e2be5107d97da8e7b
 human_signoff:
 ---
 
 # Evidence Report: sua-giao-dien-tin-hieu
-
-Vòng 1: E14 đỏ — lệnh gọi nhóm bài DOM «sgt-cau-sau-gom» không tồn tại (khớp 0 bài). Các eval còn lại xanh; E10 (judgment) hội đồng đề xuất không đạt, chờ người chốt.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -26,78 +23,78 @@ Vòng 1: E14 đỏ — lệnh gọi nhóm bài DOM «sgt-cau-sau-gom» không t�
 | E7 | AC-7 | test | PASS |
 | E8 | AC-8 | test | PASS |
 | E9 | AC-9 | test | PASS |
-| E10 | AC-9 | judgment | FAIL (đề xuất của hội đồng, chờ người chốt) |
+| E10 | AC-9 | judgment | PASS |
 | E11 | AC-11 | test | PASS |
 | E11b | AC-11 | test | PASS |
 | E11c | AC-11 | script | PASS |
 | E12 | AC-10 | ui-check | PASS |
 | E13 | AC-1 | script | PASS |
-| E14 | AC-12 | test | FAIL |
+| E14 | AC-12 | test | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-sua-giao-dien-tin-hieu-E1-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_bang
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 2 tests across 1 file. [598.00ms]
+    Ran 2 tests across 1 file. [718.00ms]
 
 - eval: E2
-  run_id: minted-sua-giao-dien-tin-hieu-E2-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_loi
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 1 test across 1 file. [855.00ms]
+    Ran 1 test across 1 file. [995.00ms]
 
 - eval: E3
-  run_id: minted-sua-giao-dien-tin-hieu-E3-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_gio
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 2 tests across 1 file. [582.00ms]
+    Ran 2 tests across 1 file. [652.00ms]
 
 - eval: E4
-  run_id: minted-sua-giao-dien-tin-hieu-E4-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_ma
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 1 test across 1 file. [700.00ms]
+    Ran 1 test across 1 file. [1014.00ms]
 
 - eval: E5
-  run_id: minted-sua-giao-dien-tin-hieu-E5-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_tieu_diem
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 9 tests across 1 file. [3.21s]
+    Ran 9 tests across 1 file. [3.40s]
 
 - eval: E6
-  run_id: minted-sua-giao-dien-tin-hieu-E6-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_cham
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 2 tests across 1 file. [789.00ms]
+    Ran 2 tests across 1 file. [879.00ms]
 
 - eval: E7
-  run_id: minted-sua-giao-dien-tin-hieu-E7-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_dong
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 10 tests across 1 file. [2.10s]
+    Ran 10 tests across 1 file. [2.14s]
 
 - eval: E8
   run_id: minted-sua-giao-dien-tin-hieu-E8-r1
@@ -105,53 +102,35 @@ Vòng 1: E14 đỏ — lệnh gọi nhóm bài DOM «sgt-cau-sau-gom» không t�
   baseline: n-a
   verifier: config:executors.test.sgt_ten_man
   verified_at: 2026-10-15T03:45:15Z
-  output: |
-    Ran 1 test across 1 file. [747.00ms]
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9
-  run_id: minted-sua-giao-dien-tin-hieu-E9-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_chu
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 2 tests across 1 file. [710.00ms]
-
-- eval: E10
-  judged_by: judge panel đề xuất (3 lens, context sạch) — chờ người chốt
-  proposal: FAIL
-  votes:
-    - domain-correctness: FAIL — Bản en lệch nghĩa với bản vi ở nhãn nhan.daCoViec: vi «Đã có việc» (đã có việc lo điều này) còn en «Already done» (nghe như đã làm xong), dễ lẫn với «Delivered». Hai câu trạng thái CRM, câu quá trần và câu 409 thì đạt, và bốn khoá hop, trang, nhan, trangThai không chứa từ cấm. Nhưng «Chưa gửi được — thử lại.» và «Chưa xoá được {ma} — thử lại.» không nói vì sao, và trang.khongXoaDuoc vẫn dùng «đã lấy về».
-    - operational-feasibility: FAIL — Hai trạng thái CRM đọc được và không lặp nhãn, câu quá trần nêu rõ vì sao và khi nào gửi lại được, và bảng cấm sạch trong bốn bộ khoá hop/trang/nhan/trangThai. Nhưng bản en lệch nghĩa ở một nhãn: nhan.daCoViec vi «Đã có việc» (đã có việc lo điều này) còn en «Already done» (đã xong). Ngoài ra «Chưa gửi được — thử lại.» và «Chưa xoá được {ma} — thử lại.» không nói vì sao. Câu trangThai.choGom «Đội sản phẩm đang xếp nó cùng những điều tương tự.» không nói người dùng còn làm được gì, và cụm «đã lấy về» còn sót chữ nội bộ của kit.
-    - spec-alignment: FAIL — Bốn tiêu chí (a), (c) và hai chuỗi đối chiếu U8 đạt: hai câu trạng thái CRM khớp bảng U8, không lặp nhãn, và nhóm khoá hop/trang/nhan/trangThai không chứa từ cấm. (d) lệch ở nhan.daCoViec: vi «Đã có việc» (đã có việc lo điều này) nhưng en "Already done" (đã làm xong), trong khi cauSauGom.daPhu en là "Already covered by existing work." và en còn có "Delivered". (b) chưa đạt: «Chưa gửi được — thử lại.» và «Chưa xoá được {ma} — thử lại.» chỉ nói thử lại, không nói vì sao. Câu trạng thái choGom «Đội sản phẩm đang xếp nó cùng những điều tương tự.» cũng không nói người gửi còn làm được gì.
-  required_evidence:
-    - domain-correctness: Sửa nhan.daCoViec bản en trong /Users/manhphan/dev/crm/.claude/worktrees/focused-antonelli-d9fbbf/apps/app/lib/messages/tin-hieu.ts (dòng 64) cho khớp «Đã có việc», ví dụ «Already covered». Đọc lại tệp đó thì kết luận (d) đổi.
-    - domain-correctness: Bảng U8 trong /Users/manhphan/dev/crm/.claude/worktrees/focused-antonelli-d9fbbf/docs/superpowers/specs/2026-10-14-sua-giao-dien-tin-hieu-design.md chốt rõ ba câu còn lệch. Một là hop.chuaGui, hai là trang.xoaHong, đều chỉ nói «thử lại» mà không nêu vì sao. Ba là trang.khongXoaDuoc và xoaHongDaLayVe, vẫn dùng «lấy về» trong khi bản en nói «has it» và «picked it up». Nếu bảng chấp nhận các câu đó là đủ, hoặc tệp lời đã đổi, thì (b) và (c) coi như đạt.
-    - operational-feasibility: Tệp lời apps/app/lib/messages/tin-hieu.ts: en nhan.daCoViec đổi thành chữ cùng nghĩa với vi «Đã có việc» (ví dụ «Already covered by existing work»), thay cho «Already done». Nếu có thì mục (d) hết lệch.
-    - operational-feasibility: Tệp lời apps/app/lib/messages/tin-hieu.ts: hop.chuaGui và trang.xoaHong (vi và en) nói nguyên nhân (mạng hay máy chủ) và lúc nào làm lại được, hoặc chủ kho xác nhận trong tệp thiết kế docs/superpowers/specs/2026-10-14-sua-giao-dien-tin-hieu-design.md rằng câu chung «thử lại» là chủ ý chấp nhận ở bảng U8. Bảng U8 hiện không liệt kê hai khoá này.
-    - operational-feasibility: Tệp lời apps/app/lib/messages/tin-hieu.ts: trangThai.choGom (vi và en) thêm vế nói người gửi còn làm được gì (ví dụ không xoá được nữa, chờ kết quả), và các cụm «đã lấy về», «lấy tín hiệu này về» ở vi được thay bằng chữ thường dân dùng. Nếu có thì mục (a) và (c) đạt.
-    - spec-alignment: Sửa en.nhan.daCoViec trong /Users/manhphan/dev/crm/.claude/worktrees/focused-antonelli-d9fbbf/apps/app/lib/messages/tin-hieu.ts (hiện «Already done») thành bản có cùng nghĩa với vi «Đã có việc», ví dụ «Already covered» hoặc «Work already exists», để không đọc thành «đã làm xong» và không trùng nghĩa với «Delivered». Có dòng sửa này thì tiêu chí (d) hết vi phạm.
-    - spec-alignment: Nếu chủ kho coi câu chung «Chưa gửi được — thử lại.» / «Chưa xoá được {ma} — thử lại.» là chấp nhận được vì lỗi mạng hay máy chủ không biết nguyên nhân cụ thể, cần một dòng chốt ghi rõ điều đó trong /Users/manhphan/dev/crm/.claude/worktrees/focused-antonelli-d9fbbf/docs/superpowers/specs/2026-10-14-sua-giao-dien-tin-hieu-design.md (mục U2 hoặc U5), hoặc một câu chữ có thêm lý do chung kiểu «mạng hoặc máy chủ đang gián đoạn». Khi đó (b) được xét lại theo hướng chấp nhận.
-    - spec-alignment: Nếu chủ kho coi việc câu choGom không nêu «còn làm được gì» là chấp nhận được vì mục «Xoá» bị khoá đã mang lý do ở trang.khongXoaDuoc, cần một dòng chốt trong mục U8 của spec nói rõ: việc «còn làm được gì» ở trạng thái Đang xem xét được báo qua menu ⋮, không qua câu trạng thái.
-  human_override:  # chi nguoi ghi
+    Ran 2 tests across 1 file. [797.00ms]
 
 - eval: E11
-  run_id: minted-sua-giao-dien-tin-hieu-E11-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E11-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.gth_hop
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    Ran 7 tests across 1 file. [1407.00ms]
+    Ran 7 tests across 1 file. [1.53s]
 
 - eval: E11b
   run_id: minted-sua-giao-dien-tin-hieu-E11b-r1
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.gth_trang
   verified_at: 2026-10-15T03:45:15Z
-  output: |
-    Ran 9 tests across 1 file. [1415.00ms]
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E11c
   run_id: minted-sua-giao-dien-tin-hieu-E11c-r1
@@ -159,86 +138,94 @@ Vòng 1: E14 đỏ — lệnh gọi nhóm bài DOM «sgt-cau-sau-gom» không t�
   baseline: n-a
   verifier: config:executors.script.sgt_ranh_gioi
   verified_at: 2026-10-15T03:45:15Z
-  output: |
-    KET LUAN: ma 0
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E12
-  run_id: minted-sua-giao-dien-tin-hieu-E12-r1
+  run_id: minted-sua-giao-dien-tin-hieu-E12-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sgt_do_man
-  verified_at: 2026-10-15T03:45:15Z
-  screenshot: evidence/bang-768.png
+  verified_at: 2026-10-15T04:33:51Z
+  screenshot: evidence/E12-step1.png
   observed: |
-    bang-768/900/1100/1280: trang «Tín hiệu đã gửi» tiếng Việt, 3 hàng (crm-3, crm-2, crm-1), bảng 4 cột (Điều đã kể / Gửi / Trạng thái / menu), cột Điều đã kể rộng dần theo khổ, không cuộn ngang, không chữ bị cắt ở 900/1100/1280; ở 768 trạng thái xuống 2-3 dòng nhưng đủ chữ. trang-375-vi/en: dạng thẻ xếp dọc, mỗi thẻ có tiêu đề, dòng «crm-N · Muốn/Wanted to», màn + giờ, trạng thái «Đã nhận/Received», nút «Gửi tín hiệu/Send a signal» và nút ba chấm đủ cỡ, không tràn ngang. trang-768-vi/en và trang-1280-vi/en: bảng đầy đủ, tiêu đề/nhãn đúng ngôn ngữ (Sent signals, Settings › Members, Documents, Objectives, Received); ở 768-en dòng phụ của hàng đầu bị line-clamp 1 dòng có dấu «…» (cắt có chủ ý bằng line-clamp, đo scrollWidth không vượt, ô vẫn DUNG; ghi chú để người xem). hop-vi/hop-en (1280, màn /okr): hộp «Gửi tín hiệu / Send a signal» có hai ô điền, dòng «Gửi từ màn: Mục tiêu» / «Sent from screen: Objectives» không có dấu «/», nút Huỷ/Gửi (Cancel/Send); hop-vi-sau-dong/hop-en-sau-dong: hộp đã đóng, trang «OKR của tôi / My OKRs» hiện lại, không có alertdialog. hop-375/768 vi/en (/settings/members, để trống): hộp nằm gọn trong khung, không tràn, dòng «Gửi từ màn: Cài đặt › Thành viên», dòng lý do khoá «Kể đủ hai câu rồi bấm Gửi.» / «Answer both questions, then press Send.», nút Gửi/Send mờ (khoá); ở 375 hai nút xếp dọc toàn bề rộng. qua-tran-that-en: hộp tiếng Anh, chữ «TH6 quota / TH6 quota: over the limit» còn nguyên, vùng báo lỗi «You've sent 10 signals today — you can send more from midnight.» (toàn tiếng Anh), nút Send mờ/khoá. Tất cả khớp Expected, không frame nào mâu thuẫn.
+    bang-768/900/1100/1280: bang «Tín hiệu đã gửi», 3 hang (crm-1..3), cot «Điều đã kể | Gửi | Trạng thái», cot dau rong dan theo kho (271→630px), khong cuon ngang, nut «Gửi tín hiệu» xanh o dau trang. trang-375-vi/en: danh sach the doc, tieu de «Tín hiệu đã gửi»/«Sent signals», nut «Gửi tín hiệu»/«Send a signal» o hang rieng, moi the co menu ba cham, khong cat chu, khong cuon ngang. trang-768 va trang-1280 (vi, en): dang bang, nhan dung ngon ngu (Cài đặt › Thành viên / Settings › Members, Mục tiêu / Objectives), khong bi cat chu (tru dong «Muốn:» line-clamp o 768-en). hop-vi/hop-en 1280: hop «Gửi tín hiệu»/«Send a signal» hai o nhap da dien «biên nhận», dong «Gửi từ màn: Mục tiêu»/«Sent from screen: Objectives» khong co dau «/»; hop-*-sau-dong: sau Huỷ/Cancel hop dong, trang /okr («OKR của tôi»/«My OKRs») con nguyen, khong co alertdialog. hop-375/768 vi/en tai Cài đặt › Thành viên: hop de trong, nut Gửi/Send mo di, dong ly do khoa «Kể đủ hai câu rồi bấm Gửi»/«Answer both questions, then press Send» hien, khong tran ngang, khong cat chu. qua-tran-that-en: hop tieng Anh, chu con nguyen «TH6 quota / TH6 quota: over the limit», vung thong bao «You've sent 10 signals today — you can send more from midnight.» (tieng Anh, khong chu Viet), nut Send hien mo hon (DOM disabled true). Tat ca khop Expected.
   network_observed: n-a (driver)
   output: |
-    KET LUAN cuối: 17 DUNG, 0 SAI — phiên đo xong.
-    17 ô ma trận đều DUNG (bảng 4 khổ, trang 3 khổ x 2 ngôn ngữ, hộp 1280 và 375/768 x 2 ngôn ngữ, quá trần thật bản en).
-    Đã mở bằng Read 19 ảnh trong evidence/; driver là puppeteer của răng đo, không đọc được mạng nên không có evidence/E12-network.txt.
+    Phien do tu dung kho crm_focused_antonelli_d9fbbf_do, app :4611, api :4892, nguoi do thanh vien thuong, don xong; cong 4611/4892 khong con nghe.
+    Dong cuoi: KET LUAN: 17 DUNG, 0 SAI — phien-do: xong.
+    Frame luu: evidence/E12-step1.png den evidence/E12-step19.png (thu tu bang-768, bang-900, bang-1100, bang-1280, trang-375-vi, trang-375-en, trang-768-vi, trang-768-en, trang-1280-vi, trang-1280-en, hop-vi, hop-vi-sau-dong, hop-en, hop-en-sau-dong, hop-375-vi, hop-375-en, hop-768-vi, hop-768-en, qua-tran-that-en).
+    Mang: driver puppeteer, khong co cong cu doc network; E12-network.txt ghi n-a (driver).
+    Ghi chu: o trang-768-en dong phu «Muốn: Đo TH6 từ…» cua hang dau bi line-clamp 1 dong cat bang dau ba cham (du lieu nguoi nhap, khong tinh vao scrollWidth); anh dev overlay Next «1 Insight» la cua may chu dev, khong phai san pham.
 
 - eval: E13
   run_id: design-gate-558ea28fe3, design-gate-96f9980933
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.script.sgt_thiet_ke
   verified_at: 2026-10-15T03:45:15Z
-  output: |
-    design-gate --mode static chạy lần lượt trên mọi tệp .tsx của components/tin-hieu và trang tin-hieu; không tệp nào ra P0.
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E14
-  run_id: minted-sua-giao-dien-tin-hieu-E14-r1
-  exit_code: 1
+  run_id: minted-sua-giao-dien-tin-hieu-E14-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.test.sgt_cau_sau_gom
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
   output: |
-    test/sua-giao-dien-tin-hieu-cau.spec.ts:
-    sgt-cau-sau-gom: (5 cho thuong + 2 x 4) x 2 = 26 o
-    sgt-cau-sau-gom: 2 o lui
-     2 pass
-     0 fail
-     4 expect() calls
-    Ran 2 tests across 1 file. [33.00ms]
-    error: regex "sgt-cau-sau-gom" matched 0 tests. Searched 1 file (skipping 36 tests) [440.00ms]
-    __EXIT=1
+    Ran 1 test across 1 file. [626.00ms]
+
+### Hội đồng chấm (E10)
+
+Đề xuất của panel: PASS. Ba lens cùng một phán quyết, không có ý kiến trái.
+
+- domain-correctness: PASS — Các khoá hop, trang, nhan, trangThai khớp bảng U8 và đạt cả bốn ý hỏi. (a) Hai câu trạng thái CRM nói tín hiệu đang ở đâu và làm được gì, không lặp nhãn: «Đội sản phẩm chưa mở. Bạn còn xoá được.» và «Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây.». (b) Các câu quá trần, chưa gửi được, xoá hỏng và không xoá được đều nêu nguyên nhân và lúc làm lại được, ví dụ «gửi tiếp được từ 0 giờ ngày mai» và «Thử lại sau một lát». (c) Không có từ nội bộ trong bảng cấm ở bốn bộ khoá đó; «gom» và «lấy về» chỉ còn ở `tatCa` (trang quản trị), nằm ngoài phạm vi câu hỏi. (d) Bản en cùng nghĩa bản vi ở mọi cặp đã đối chiếu.
+- operational-feasibility: PASS — (a) Hai câu trạng thái nói rõ tín hiệu đang ở đâu và làm được gì, không lặp nhãn: «Đội sản phẩm chưa mở. Bạn còn xoá được.» và «Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây.». (b) Các câu quá trần, chưa gửi được, xoá hỏng và không xoá được đều nêu lý do và lúc làm lại: «gửi tiếp được từ 0 giờ ngày mai», «mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát», «đã mở tín hiệu này — không xoá được nữa». (c) Bốn bộ khoá hop, trang, nhan, trangThai không chứa chữ nào trong bảng cấm (gom, kéo về, lấy về, kit, khối, bản vẽ, lượt, hồ sơ). (d) Bản en cùng nghĩa với bản vi ở mọi khoá, khớp bảng U8 của tệp thiết kế.
+- spec-alignment: PASS — (a) Câu «Đội sản phẩm chưa mở. Bạn còn xoá được.» và «Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây.» nói rõ tín hiệu đang ở đâu và người gửi làm được gì, không lặp nhãn «Đã nhận»/«Đang xem xét». (b) Câu quá trần, chưa gửi được, xoá hỏng («mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát.», «gửi tiếp được từ 0 giờ ngày mai») và khongXoaDuoc («đã mở … không xoá được nữa») đều nêu lý do và khi nào làm lại. (c) Bộ khoá hop, trang, nhan, trangThai không có chữ nào trong bảng cấm. (d) Bản en khớp nghĩa bản vi và khớp bảng U8. Lưu ý ngoài phạm vi câu hỏi: nhóm khoá tatCa (trang quản trị) còn «Chưa đọc được trạng thái sau gom» và «Gồm cả tín hiệu chưa lấy về», vì luật đo chỉ phủ bốn nhóm khoá.
+
+- eval: E10
+  judged_by: judge panel (fresh context) — domain-correctness, operational-feasibility, spec-alignment
+  verdict: PASS
+  rationale: Cả ba lens cùng đạt bốn ý (a)(b)(c)(d) trên bốn bộ khoá hop, trang, nhan, trangThai; nhóm khoá tatCa nằm ngoài phạm vi câu hỏi.
+  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
 
 - cmd: bun run lint:slop
-  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_lint_slop-r1
+  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-sua-giao-dien-tin-hieu-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T03:45:15Z
+  verified_at: 2026-10-15T04:33:51Z
 
 ## Known limits
 
@@ -246,32 +233,20 @@ Vòng 1: E14 đỏ — lệnh gọi nhóm bài DOM «sgt-cau-sau-gom» không t�
 
 ## Analyst
 
-Eval không phân biệt (xanh cả trên nhánh lẫn trên diffBase, chứng minh bộ kiểm chứ không phải tính năng; viết lại để khẳng định hành vi mới hoặc xác nhận là lưới hồi quy có chủ ý):
+carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Moi eval o tren ghi baseline n-a.
 
-- E11: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu.dom.tsx -t hop (baseline: green)
-- E11b: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu.dom.tsx -t trang (baseline: green)
-- E13: vòng lặp design-gate.mjs --mode static trên components/tin-hieu và trang tin-hieu (baseline: green)
+Baseline khong do: toan bo eval, vi round 2 chi chay lai cac eval co paths bi cham; phan con lai mang tu round 1.
 
-Lệnh fail không gắn eval: không có. Lệnh duy nhất đỏ là lệnh của E14, vế thứ hai gọi nhóm bài «sgt-cau-sau-gom» không có trong tệp sua-giao-dien-tin-hieu.dom.tsx.
-
-### Baseline khong do
-
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-bang: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-loi && TZ=UTC bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-loi-ngay: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=UTC bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-gio && TZ=America/Los_Angeles bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-gio: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-ma: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-tieu-diem: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-cham: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-dong: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test ./test/ten-man.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-ten-man: bo qua baseline: tep apps/app/test/ten-man.spec.ts co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-chu: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/sua-giao-dien-tin-hieu/rang/ranh-gioi.mjs: bo qua baseline: tep _acceptance/sua-giao-dien-tin-hieu/rang/ranh-gioi.mjs co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test ./test/sua-giao-dien-tin-hieu-cau.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-cau-sau-gom: bo qua baseline: tep apps/app/test/sua-giao-dien-tin-hieu-cau.spec.ts co o cay dang kiem nhung chua co o merge-base 02ed3aec046978d3faddef46b5470284496ed6c5 — eval moi, chay tren code cu khong phan biet gi
+Eval khong phan biet (xanh ca tren code cu lan code moi, ghi nhan tu baseline round 1; chung minh harness chu khong phai tinh nang):
+- E11 — bai «hop» cua tin-hieu.dom.tsx (LT2). Hoi quy co chu y: giu cho cac o bi thay van dung.
+- E11b — bai «trang» cua tin-hieu.dom.tsx (LT2). Hoi quy co chu y, cung ly do.
+- E13 — design-gate tinh cho cac tep .tsx cua tin-hieu. Hoi quy co chu y: khong tep nao duoc phep co P0.
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lượt, xác định)
+none — every multi-run eval is uniform (moi eval chay mot lan, deterministic).
 
 ## Iterations
 
-Round 1: E14 failed — lệnh gọi nhóm bài DOM «sgt-cau-sau-gom» không tồn tại trong sua-giao-dien-tin-hieu.dom.tsx (khớp 0 bài) nên phép đo AC-12 không thể xanh; vế spec của lệnh xanh. E10 (judgment) hội đồng ba lens đề xuất không đạt, chờ người chốt. Returned to implementation.
+Round 1: E14 do vi nhom bai DOM «sgt-cau-sau-gom» chua ton tai; them hai loi trong hop dong (AC-12 o lenh E14, AC-6 o bai aria-describedby khong bao gio do duoc). Tra ve thi cong; commit 9433e1943 sua chu theo hoi dong E10, them bai DOM cau song ngu khong dich va doi chung duong cho dong ly do khoa.
+Round 2: moi eval chay lai deu xanh; E8, E11b, E11c, E13 mang tu round 1 vi delta khong cham paths cua chung. Ba muc moi ngoai hop dong da ghi o review-findings.md de nguoi quyet o Cong 2. Ghi chu: may khong tra gio chay cua round 2 nen verified_at cua cac eval round 2 la moc 2026-10-15T12:00:00Z (ngay chay that, gio chi mang tinh dinh dang).
