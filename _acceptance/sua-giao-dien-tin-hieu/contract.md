@@ -5,7 +5,7 @@ slug: sua-giao-dien-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-10-14T08:32:54Z
 design_doc: docs/superpowers/specs/2026-10-14-sua-giao-dien-tin-hieu-design.md
