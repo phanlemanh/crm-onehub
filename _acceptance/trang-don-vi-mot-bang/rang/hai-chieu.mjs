@@ -13,7 +13,8 @@
  *    lệnh ở đó → phải thoát ≠ 0 VÀ đầu ra khớp mẫu thông điệp ghim (CHIEU DO).
  *    Cây thật không bao giờ bị ghi: băm mọi tệp bị đột biến trước và sau phải bằng.
  * Đột biến trình duyệt (`trinhDuyet`, nhóm dvb-man — mỗi lượt dựng một phiên đo qua
- * scripts/lan-do/tien-de.mjs) chỉ chạy khi có `--trinh-duyet`; vắng cờ → «BO QUA
+ * scripts/lan-do/tien-de.mjs; worktree tạm cài node_modules riêng vì Turbopack
+ * không nhận liên kết ra ngoài gốc) chỉ chạy khi có `--trinh-duyet`; vắng cờ → «BO QUA
  * (trinh duyet)». Đột biến `chuaCo` (vật đo chưa có) → «CHUA CO», không tính đỏ.
  * Đoạn cần thay vắng (không đúng một lần) → mã 2 «KHONG DO DUOC».
  * Mã thoát: 0 hai chiều đúng · 1 có chiều sai · 2 không đo được.
@@ -39,6 +40,16 @@ import { fileURLToPath } from "node:url";
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const HO_SO = "_acceptance/trang-don-vi-mot-bang";
 const TRINH_DUYET = process.argv.includes("--trinh-duyet");
+/** `--chap-lanh-do=E4,…`: eval trình duyệt đã biết đỏ trên vật lành (lỗi ngoài lượt) —
+ * in «LANH DO (da biet)», vẫn chạy đột biến để soi thông điệp ghim, không tính đỏ. */
+const CHAP_LANH_DO = new Set(
+	(
+		process.argv.find((a) => a.startsWith("--chap-lanh-do="))?.split("=")[1] ??
+		""
+	)
+		.split(",")
+		.filter(Boolean),
+);
 
 const DOT_BIEN = {
 	"dvb-chon-don-vi": [
@@ -398,9 +409,15 @@ const bamTruoc = new Map(
 );
 
 // Đối chứng dương: mỗi lệnh khác nhau của nhóm trên vật lành phải thoát 0.
-const lenhLanh = [...new Set(chay.map((d) => LENH[nhom](d)))];
-for (const lenh of lenhLanh) {
+const lenhLanh = [...new Map(chay.map((d) => [LENH[nhom](d), d])).entries()];
+for (const [lenh, db] of lenhLanh) {
 	const lanh = chayLenh(GOC, lenh);
+	if (lanh.ma !== 0 && db.evalId && CHAP_LANH_DO.has(db.evalId)) {
+		console.log(
+			`LANH DO (da biet) ${nhom} ${db.evalId}: ma ${lanh.ma} — dot bien van chay de soi thong diep ghim`,
+		);
+		continue;
+	}
 	if (lanh.ma !== 0) {
 		console.log(lanh.chu.split("\n").slice(-30).join("\n"));
 		console.log(
@@ -454,6 +471,40 @@ function noiNodeModules(sao) {
 	}
 	if (!existsSync(join(sao, "apps/app/node_modules")))
 		throw new Error("worktree tam thieu apps/app/node_modules");
+	// Bài DOM đọc mã sinh (Prisma client …, bị gitignore) của cây thật — chỉ đọc.
+	for (const d of git(
+		GOC,
+		"ls-files",
+		"-o",
+		"--directory",
+		"--exclude-standard",
+		"-i",
+	)
+		.split("\n")
+		.filter((d) => d === ".env" || /(^|\/)src\/generated\/$/.test(d))
+		.map((d) => d.replace(/\/$/, ""))) {
+		if (!existsSync(join(sao, d))) symlinkSync(join(GOC, d), join(sao, d));
+	}
+}
+
+/**
+ * node_modules thật cho phiên đo trình duyệt: Turbopack từ chối node_modules là
+ * liên kết ra ngoài gốc dự án («points out of the filesystem root»), nên worktree
+ * tạm cài riêng từ bộ đệm của bun (khoá cứng, vài giây); .env trỏ về cây thật,
+ * Prisma client do postinstall sinh trong chính worktree tạm.
+ */
+function caiNodeModules(sao) {
+	if (existsSync(join(GOC, ".env")) && !existsSync(join(sao, ".env")))
+		symlinkSync(join(GOC, ".env"), join(sao, ".env"));
+	const r = spawnSync("bun", ["install", "--frozen-lockfile"], {
+		cwd: sao,
+		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
+	});
+	if (r.status !== 0)
+		throw new Error(
+			`bun install trong worktree tam thoat ${r.status}: ${`${r.stdout}${r.stderr}`.trim().split("\n").slice(-3).join(" | ")}`,
+		);
 }
 
 const tam = mkdtempSync(join(tmpdir(), "dvb-hai-chieu-"));
@@ -482,7 +533,8 @@ try {
 		writeFileSync(tepVa, va);
 		git(sao, "apply", "--whitespace=nowarn", tepVa);
 	}
-	noiNodeModules(sao);
+	if (chay.some((d) => d.trinhDuyet)) caiNodeModules(sao);
+	else noiNodeModules(sao);
 	for (const db of chay) {
 		const goc = new Map();
 		for (const t of db.thay) {
