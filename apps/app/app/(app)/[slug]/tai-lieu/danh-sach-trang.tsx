@@ -29,6 +29,7 @@ import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
 import { Toggle } from "@crm/ui/components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { VungDangTai } from "@crm/ui/components/vung-dang-tai";
 import { LOAI_TRANG, type LoaiTrang, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -137,15 +138,16 @@ export function DanhSachTrang() {
 	const trpc = useTRPC();
 	const url = useWorkspaceUrl();
 	const [{ loai, donVi, chu, page, archived }, doi] = useLocTaiLieu();
-	const ds = useQuery(
-		trpc.taiLieu.list.queryOptions({
+	const ds = useQuery({
+		...trpc.taiLieu.list.queryOptions({
 			loai: loai ?? undefined,
 			donViId: donVi ?? undefined,
 			chuTrangId: chu ?? undefined,
 			page,
 			archived,
 		}),
-	);
+		placeholderData: (truoc) => truoc,
+	});
 
 	if (ds.isError && !ds.data)
 		return <LoiTai m={m} thuLai={() => ds.refetch()} />;
@@ -155,7 +157,8 @@ export function DanhSachTrang() {
 	const tatCa = LOAI_TRANG.reduce((n, l) => n + facetCounts[l], 0);
 	const coLoc = loai !== null || donVi !== null || chu !== null;
 
-	const khongCoGi = tatCa === 0 && (ds.data.soDaLuuTru ?? 0) === 0;
+	const khongCoGi =
+		!ds.isPlaceholderData && tatCa === 0 && (ds.data.soDaLuuTru ?? 0) === 0;
 	if (khongCoGi && donVi === null && chu === null && !archived)
 		return <KhoRong m={m} url={url(duongTrangMoi())} />;
 	const ngayCot = (t: { capNhat: string; luuTruLuc: string | null }) =>
@@ -215,133 +218,135 @@ export function DanhSachTrang() {
 					</Button>
 				) : null}
 			</div>
-			{rows.length === 0 && archived && !coLoc ? (
-				<Empty data-da-luu-tru-rong="">
-					<EmptyHeader>
-						<EmptyMedia variant="icon">
-							<Icon icon={Archive} />
-						</EmptyMedia>
-						<EmptyTitle>{lt.rong.tieuDe}</EmptyTitle>
-						<EmptyDescription>{lt.rong.than}</EmptyDescription>
-					</EmptyHeader>
-				</Empty>
-			) : rows.length === 0 ? (
-				<Empty data-loc-rong="">
-					<EmptyHeader>
-						<EmptyTitle>{m.rongLoc.tieuDe}</EmptyTitle>
-						<EmptyDescription>{m.rongLoc.than}</EmptyDescription>
-					</EmptyHeader>
-					<EmptyContent>
-						<Button
-							onClick={() => doi({ ...BO_LOC_TRONG, archived })}
-							variant="outline"
-						>
-							{m.rongLoc.nut}
-						</Button>
-					</EmptyContent>
-				</Empty>
-			) : (
-				<>
-					<div className="hidden md:block" data-bang-trang="">
-						<SimpleTable
-							columns={[
-								{ id: "ten", header: m.cot.trang },
-								{ id: "loai", header: m.cot.loai },
-								{ id: "chu", header: m.cot.chuTrang },
-								{ id: "don-vi", header: m.cot.donVi },
-								{
-									id: "cap-nhat",
-									header: archived ? lt.cot : m.cot.capNhat,
-									align: "right",
-								},
-							]}
-							surface="page"
-						>
-							{rows.map((t) => (
-								<SimpleTableRow
-									clickable
-									data-trang={t.slug}
-									key={t.slug}
-									onClick={(e) => e.currentTarget.querySelector("a")?.click()}
-								>
-									<TableCell>
-										<span className="flex flex-wrap items-center gap-2">
-											<Link
-												className="font-medium"
-												href={url(duongTrang(t.slug))}
-												onClick={(e) => e.stopPropagation()}
-												translate="no"
-											>
-												{t.ten}
-											</Link>
+			<VungDangTai dangTai={ds.isPlaceholderData}>
+				{rows.length === 0 && archived && !coLoc ? (
+					<Empty data-da-luu-tru-rong="">
+						<EmptyHeader>
+							<EmptyMedia variant="icon">
+								<Icon icon={Archive} />
+							</EmptyMedia>
+							<EmptyTitle>{lt.rong.tieuDe}</EmptyTitle>
+							<EmptyDescription>{lt.rong.than}</EmptyDescription>
+						</EmptyHeader>
+					</Empty>
+				) : rows.length === 0 ? (
+					<Empty data-loc-rong="">
+						<EmptyHeader>
+							<EmptyTitle>{m.rongLoc.tieuDe}</EmptyTitle>
+							<EmptyDescription>{m.rongLoc.than}</EmptyDescription>
+						</EmptyHeader>
+						<EmptyContent>
+							<Button
+								onClick={() => doi({ ...BO_LOC_TRONG, archived })}
+								variant="outline"
+							>
+								{m.rongLoc.nut}
+							</Button>
+						</EmptyContent>
+					</Empty>
+				) : (
+					<>
+						<div className="hidden md:block" data-bang-trang="">
+							<SimpleTable
+								columns={[
+									{ id: "ten", header: m.cot.trang },
+									{ id: "loai", header: m.cot.loai },
+									{ id: "chu", header: m.cot.chuTrang },
+									{ id: "don-vi", header: m.cot.donVi },
+									{
+										id: "cap-nhat",
+										header: archived ? lt.cot : m.cot.capNhat,
+										align: "right",
+									},
+								]}
+								surface="page"
+							>
+								{rows.map((t) => (
+									<SimpleTableRow
+										clickable
+										data-trang={t.slug}
+										key={t.slug}
+										onClick={(e) => e.currentTarget.querySelector("a")?.click()}
+									>
+										<TableCell>
+											<span className="flex flex-wrap items-center gap-2">
+												<Link
+													className="font-medium"
+													href={url(duongTrang(t.slug))}
+													onClick={(e) => e.stopPropagation()}
+													translate="no"
+												>
+													{t.ten}
+												</Link>
+												{t.coBanCho ? (
+													<Badge variant="outline">{m.coBanCho}</Badge>
+												) : null}
+											</span>
+										</TableCell>
+										<TableCell>{m.loai[t.loai]}</TableCell>
+										<TableCell translate="no">{t.chuTrang.name}</TableCell>
+										<TableCell translate="no">
+											{t.donVi?.name ?? <EmptyCellValue />}
+										</TableCell>
+										<TableCell className="text-right text-muted-foreground tabular-nums">
+											{ngayCot(t)}
+										</TableCell>
+									</SimpleTableRow>
+								))}
+							</SimpleTable>
+						</div>
+						<div className="md:hidden" data-the-trang="">
+							<ItemGroup>
+								{rows.map((t) => (
+									<Item asChild key={t.slug} variant="outline">
+										<Link data-trang={t.slug} href={url(duongTrang(t.slug))}>
+											<ItemContent>
+												<ItemTitle translate="no">{t.ten}</ItemTitle>
+												<ItemDescription>
+													{m.loai[t.loai]} ·{" "}
+													<span translate="no">{t.chuTrang.name}</span> ·{" "}
+													{ngayCot(t)}
+												</ItemDescription>
+											</ItemContent>
 											{t.coBanCho ? (
-												<Badge variant="outline">{m.coBanCho}</Badge>
+												<ItemActions>
+													<Badge variant="outline">{m.coBanCho}</Badge>
+												</ItemActions>
 											) : null}
-										</span>
-									</TableCell>
-									<TableCell>{m.loai[t.loai]}</TableCell>
-									<TableCell translate="no">{t.chuTrang.name}</TableCell>
-									<TableCell translate="no">
-										{t.donVi?.name ?? <EmptyCellValue />}
-									</TableCell>
-									<TableCell className="text-right text-muted-foreground tabular-nums">
-										{ngayCot(t)}
-									</TableCell>
-								</SimpleTableRow>
-							))}
-						</SimpleTable>
-					</div>
-					<div className="md:hidden" data-the-trang="">
-						<ItemGroup>
-							{rows.map((t) => (
-								<Item asChild key={t.slug} variant="outline">
-									<Link data-trang={t.slug} href={url(duongTrang(t.slug))}>
-										<ItemContent>
-											<ItemTitle translate="no">{t.ten}</ItemTitle>
-											<ItemDescription>
-												{m.loai[t.loai]} ·{" "}
-												<span translate="no">{t.chuTrang.name}</span> ·{" "}
-												{ngayCot(t)}
-											</ItemDescription>
-										</ItemContent>
-										{t.coBanCho ? (
-											<ItemActions>
-												<Badge variant="outline">{m.coBanCho}</Badge>
-											</ItemActions>
-										) : null}
-									</Link>
-								</Item>
-							))}
-						</ItemGroup>
-					</div>
-					{soTrang > 1 ? (
-						<nav
-							aria-label={m.phanTrang.nhan}
-							className="flex items-center justify-end gap-2"
-						>
-							<span className="text-muted-foreground text-xs tabular-nums">
-								{page}/{soTrang}
-							</span>
-							<Button
-								disabled={page <= 1}
-								onClick={() => doi({ page: page - 1 })}
-								size="sm"
-								variant="outline"
-							>
-								{m.phanTrang.truoc}
-							</Button>
-							<Button
-								disabled={page >= soTrang}
-								onClick={() => doi({ page: page + 1 })}
-								size="sm"
-								variant="outline"
-							>
-								{m.phanTrang.sau}
-							</Button>
-						</nav>
-					) : null}
-				</>
-			)}
+										</Link>
+									</Item>
+								))}
+							</ItemGroup>
+						</div>
+					</>
+				)}
+			</VungDangTai>
+			{rows.length > 0 && soTrang > 1 ? (
+				<nav
+					aria-label={m.phanTrang.nhan}
+					className="flex items-center justify-end gap-2"
+				>
+					<span className="text-muted-foreground text-xs tabular-nums">
+						{page}/{soTrang}
+					</span>
+					<Button
+						disabled={page <= 1}
+						onClick={() => doi({ page: page - 1 })}
+						size="sm"
+						variant="outline"
+					>
+						{m.phanTrang.truoc}
+					</Button>
+					<Button
+						disabled={page >= soTrang}
+						onClick={() => doi({ page: page + 1 })}
+						size="sm"
+						variant="outline"
+					>
+						{m.phanTrang.sau}
+					</Button>
+				</nav>
+			) : null}
 		</div>
 	);
 }
