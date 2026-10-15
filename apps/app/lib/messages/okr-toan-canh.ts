@@ -330,7 +330,7 @@ const en: OkrToanCanhMessages = {
 		ghiChu: "Note",
 		xemDienBien: "See KR history",
 		phanHoiNhom: "Was this week's summary useful",
-		daGhi: "Noted — admins see these counts under Overview › Programme health.",
+		daGhi: "Noted — admins see these counts under Overview › Program health.",
 		phanHoiLoi: "Couldn't send your feedback. Try again.",
 	},
 	quanTri: {
