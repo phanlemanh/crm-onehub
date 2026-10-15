@@ -54,10 +54,21 @@ export function neo() {
 		return { tu: git("merge-base", cha1, cha2).trim(), den: cha2 };
 	}
 	const moc = [git("merge-base", "HEAD", NHANH_CHINH).trim()];
-	const coNhanh = spawnSync("git", ["-C", GOC, "rev-parse", "--verify", "-q", NHANH_DUNG_TREN]).status === 0;
+	const coNhanh =
+		spawnSync("git", [
+			"-C",
+			GOC,
+			"rev-parse",
+			"--verify",
+			"-q",
+			NHANH_DUNG_TREN,
+		]).status === 0;
 	if (coNhanh) moc.push(git("merge-base", "HEAD", NHANH_DUNG_TREN).trim());
 	const moiNhat = moc.reduce((a, b) =>
-		spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", a, b]).status === 0 ? b : a,
+		spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", a, b])
+			.status === 0
+			? b
+			: a,
 	);
 	return { tu: moiNhat, den: "HEAD" };
 }
