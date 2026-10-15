@@ -5,7 +5,7 @@ slug: sua-giao-dien-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-14T08:32:54Z
 design_doc: docs/superpowers/specs/2026-10-14-sua-giao-dien-tin-hieu-design.md
@@ -78,3 +78,21 @@ Quét bằng `morphological-scan` (preset test-matrix), sổ đầy đủ `_acce
   cổng người.
 - Sửa kèm hai Known limits của LT2: Ngoài-2 (câu quá trần tiếng Việt khi chọn tiếng Anh) → AC-2; Ngoài-5 (xoá hỏng
   không lời giải thích) → AC-5.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Nếu tín hiệu đã bị xoá ở một tab khác hoặc phiên đăng nhập đã hết hạn, người dùng vẫn thấy câu «mạng hoặc máy chủ đang gián đoạn, thử lại» dù nguyên nhân khác, và thử lại sẽ không giúp được gì. Chỉ xảy ra ở các ca hiếm này; ca đội sản phẩm đã lấy về và ca mất mạng vẫn báo đúng.
+  - Ngoài-2: Khi tín hiệu đã bị xoá ở nơi khác, người dùng được báo sai là mạng gián đoạn trong khi dòng đó thực ra đã biến mất khỏi danh sách. Tương tự với người đã hết phiên đăng nhập khi bấm Gửi. Chỉ là câu báo chưa đúng nguyên nhân ở các ca hiếm, không làm mất dữ liệu.
+  - Ngoài-3: Việc đánh dấu «không dịch» cho tên nhóm, lý do và tên việc hiện chưa được bài kiểm tự động kiểm bằng dữ liệu thật. Nếu sau này có thay đổi làm mất dấu đó, trình trình duyệt có thể tự dịch tên người dùng đặt mà không bài kiểm nào báo.
+  - Ngoài-4: Nếu dữ liệu lộ trình bị hỏng, trang vẫn hiện câu gốc của đội sản phẩm thay vì câu song ngữ, và không ai được báo vì sao. Người gửi chỉ thấy câu trạng thái bằng một thứ tiếng.
+  - Ngoài-5: Sau khi bản này được gộp, phép kiểm không đụng tới phần dùng chung có thể báo xanh mà không kiểm tra gì. Người dùng không thấy ngay, nhưng một thay đổi lỡ chạm vào phần dùng chung sau này có thể lọt qua.
+  - Ngoài-7: Bấm «Bỏ» khi được hỏi có muốn bỏ những gì vừa nhập, rồi mở lại hộp, người gửi vẫn thấy chữ cũ còn nguyên dù câu hỏi đã báo là sẽ mất.
+  - Ngoài-8: Nếu sau này liên kết giữa nút Gửi và dòng báo lỗi bị mất, bài kiểm hiện tại có thể không phát hiện. Hiện người dùng chưa gặp lỗi nào.
+  - Ngoài-9: Các bài kiểm câu báo «đã quá số lần gửi hôm nay» và «đội sản phẩm đã lấy về» dùng lỗi giả tự dựng, nên chưa chứng minh đường lỗi thật từ máy chủ hiện đúng câu. Lỗi thật có thể vẫn hiện sai mà bài kiểm không thấy.
+  - Ngoài-10: Bản ghi phá-thử cho thấy bài kiểm dòng đã được đội sản phẩm lấy về bắt được lỗi, nhưng bằng chứng yếu hơn vẻ ngoài. Người dùng không bị ảnh hưởng trực tiếp.
+  - Ngoài-11: Phép quét từ nội bộ chưa kiểm các câu trạng thái mới trên trang Tín hiệu đã gửi. Hiện chưa có câu nào dùng từ khó hiểu, nhưng sau này có thể lọt.
+  - Ngoài-12: Một bài kiểm cũ của tính năng gửi tín hiệu đã bị nới lỏng mà phép kiểm ranh giới không báo. Người dùng chưa thấy khác biệt, nhưng một lỗi cũ có thể lọt lại khó phát hiện hơn.
+  - Ngoài-13: Bài kiểm câu trạng thái chỉ chắc rằng câu khác câu gốc, chứ không chắc đúng nội dung. Một câu sai ngôn ngữ hay sai tên nhóm có thể qua bài này.
+  - Ngoài-14: Nếu có người thêm một màn vào danh sách miễn, màn đó sẽ hiện đường dẫn thô thay vì tên màn mà bài kiểm vẫn xanh. Hiện mọi màn đều có tên.
+  - Ngoài-15: Bài kiểm nhanh chỉ đọc nhãn cỡ nút, nên nếu ai đó thu nhỏ nút ⋮ trên điện thoại thì bài này không thấy. Phép đo trên màn thật vẫn bắt được.
+  - Ngoài-16: Hộp hỏi lại trước khi xoá chỉ được kiểm là không lẫn nội dung của một dòng khác trong ba dòng. Khả năng hộp lẫn tiêu đề dòng kia là rất thấp.
+- Mở hợp đồng mới — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-6: Người dùng bàn phím hoặc trình đọc màn hình bấm «Giữ lại» hay gặp lỗi khi xoá sẽ mất chỗ đang đứng và phải dò lại từ đầu trang.

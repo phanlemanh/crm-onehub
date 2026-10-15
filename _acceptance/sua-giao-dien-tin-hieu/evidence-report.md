@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: de6340a7ee52235817d6ec0e2be5107d97da8e7b
-human_signoff:
+human_signoff: Manh Phan 2026-10-15 — ký Cổng Bằng chứng trên verdict PASS vòng 2 (16/16 eval; E8, E11b, E11c, E13 mang từ vòng 1; vòng 1 REJECT vì hai lỗi thước đã sửa). Ngoài-6 mở hợp đồng mới; mười lăm mục còn lại ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: sua-giao-dien-tin-hieu
