@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f23333725a61c6266c7e6e34dbdaa48bb96dda72
+verified_commit: 04d6be05e07e3c6e618435acb8e125a8aac6e45b
 human_signoff: Phan Le Manh 2026-10-15 — ký Cổng 2 trên S4 lượt 4 (mọi eval máy ĐẠT; E9j Đạt; lượt 4 vượt trần 3 lượt theo quyết định chủ kho). Ngoài-1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20 ghi Known limits (Ngoài-7: sửa bài zdr-hoi bằng khoá giả trước khi gộp); Ngoài-4, 5, 6, 14, 15 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -274,3 +274,7 @@ Round 1: E1, E7 dat (mang tiep ve sau); chi tiet cac eval khac cua round nay xem
 Round 2: E6c REJECT; E4, E6m, E10, E10m, E13 dat, E1 mang tiep — tra ve cho phan trien khai.
 Round 3: E9 trượt — chấm đúng ý 74.3% trên 35 câu so với ngưỡng 85% (9 câu trượt đúng ý: e-liet-ke, a-cua-toi, c-cua-toi, d-cua-toi, a-dien-bien, c-dien-bien, b-khong-tra-loi, c-khong-tra-loi, e-khong-tra-loi); trích và số 94.3% (2 câu thiếu trích: e-liet-ke, d-cua-toi); quyền 100%. Các eval khác đạt. Trả về cho phần triển khai.
 Round 4 (vượt trần lượt theo quyết định chủ kho): mọi eval máy đạt; E9 đạt cả ba ngưỡng (quyền 100%, trích và số 97,1%, đúng ý 100% trên 35 câu theo panel E9j). Còn E9j chờ người chốt ở Cổng 2 nên verdict là PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-10-15, do ghim cuối trước gộp: sửa bài zdr-hoi (Ngoài-7), gộp onehub
+run_id: repin-20261015T064834Z-19880
+sha: 04d6be05e07e3c6e618435acb8e125a8aac6e45b · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E9j (E9j không khai paths), E10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
