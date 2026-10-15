@@ -353,11 +353,11 @@ describe("sgt-loi", () => {
 					ca.ten === "429"
 						? dien(m.hop.quaTran, { tran: String(TIN_HIEU.tranMoiNgay) })
 						: m.hop.chuaGui;
-				expect(v.textContent?.trim()).toBe(mong);
 				expect(
 					document.body.textContent,
 					"loi qua tran hien cau may chu",
 				).not.toContain(THONG_DIEP_MAY_CHU);
+				expect(v.textContent?.trim()).toBe(mong);
 				soKhangDinh += 1;
 				expect(oMuonLam()?.value).toBe("cập nhật KR");
 				expect(oDaXayRa()?.value).toBe("không thấy số tuần trước");
