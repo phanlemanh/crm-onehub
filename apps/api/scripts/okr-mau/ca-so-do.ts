@@ -1,4 +1,7 @@
 import { type Db, Prisma } from "@crm/db";
+import { mucTinCanChinh } from "@crm/validation/ly-do-can-chinh";
+import { type MucTieuOutput, mucTieuOutput } from "../../src/okr/okr.contracts";
+import type { DauVaoSoDo } from "../../src/okr/so-do-don-vi";
 import { idMau } from "./cau-hinh";
 
 const KY = {
@@ -276,4 +279,163 @@ export async function napCaSoDo(db: Db, { luc }: { luc: Date }): Promise<void> {
 			),
 		});
 	});
+}
+
+export const KY_VONG_THUAN = 46;
+
+type KrThuan = { id: string; kind: "tang-toi" | "moc"; progress: number };
+type GopThuan = {
+	dichMucTieu: string;
+	dichKr?: string;
+	lyDo?: string;
+	canCu?: string;
+	lyDoTuKara?: boolean;
+};
+
+export function mucTieuThuan(p: {
+	id: string;
+	cycleId?: string;
+	level: "onehub" | "bo-phan" | "phong-ban";
+	unitId: string | null;
+	kind?: "cam-ket" | "tham-vong";
+	title?: string;
+	expected?: number | null;
+	krs?: KrThuan[];
+	gop?: GopThuan[];
+}): MucTieuOutput {
+	const chu = {
+		id: nguoi(CHU_SO_DO),
+		name: "Chủ sơ đồ",
+		email: "so-do@vi-du.test",
+	};
+	const krs = p.krs ?? [];
+	return mucTieuOutput.parse({
+		id: p.id,
+		cycleId: p.cycleId ?? KY.quy,
+		level: p.level,
+		unitId: p.unitId,
+		unitName: p.unitId ?? "OneHub",
+		title: p.title ?? p.id,
+		kind: p.kind ?? "cam-ket",
+		status: "cong-bo",
+		owner: chu,
+		participants: [],
+		whyNow: "",
+		publishedAt: null,
+		droppedAt: null,
+		progress:
+			krs.length === 0
+				? 0
+				: krs.reduce((t, k) => t + k.progress, 0) / krs.length,
+		expected: p.expected === undefined ? KY_VONG_THUAN : p.expected,
+		keyResults: krs.map((k) => ({
+			id: k.id,
+			objectiveId: p.id,
+			title: `${p.title ?? p.id} · ${k.id}`,
+			kind: k.kind,
+			owner: chu,
+			startValue: 0,
+			targetValue: k.kind === "moc" ? 1 : 100,
+			currentValue: k.progress,
+			unit: "",
+			dueOn: null,
+			weight: 1,
+			source: "tay",
+			doCanh: false,
+			soMay: null,
+			nguonMay: null,
+			startLocked: false,
+			progress: k.progress,
+			laCuaToi: false,
+			hienTaiQuaCapNhat: false,
+		})),
+		alignments: (p.gop ?? []).map((g, i) => ({
+			alignmentId: `${p.id}-gop-${i}`,
+			targetObjectiveId: g.dichMucTieu,
+			targetKeyResultId: g.dichKr ?? null,
+			unitName: "",
+			objectiveTitle: g.dichMucTieu,
+			keyResultTitle: g.dichKr ?? null,
+			lyDo: g.lyDo ?? null,
+			canCu: g.canCu ?? null,
+			lyDoTuKara: g.lyDoTuKara ?? false,
+			mucTin: mucTinCanChinh(g.lyDo ?? null, g.canCu ?? null),
+		})),
+		canEdit: false,
+		following: false,
+		followerCount: 0,
+		theoDoi: false,
+		hienThi: "cong-khai",
+		soNguoiXem: 0,
+		soGopYCho: 0,
+	});
+}
+
+const KR_CONG_TY = ["n1-k1", "n1-k2", "n1-k3"];
+
+export function dauVaoThuan(): DauVaoSoDo {
+	const krCua = new Map(
+		MUC_TIEU.flatMap((m) => m.krs.map((k) => [k.ma, m.ma] as const)),
+	);
+	const mucTieuCuaKr = (kr: string) =>
+		KR_CONG_TY.includes(kr) ? "n1" : (krCua.get(kr) ?? kr);
+	const nguoiTen = (ma: string | null) =>
+		ma ? { id: nguoi(ma), name: ma } : null;
+	return {
+		cay: {
+			divisions: BO_PHAN.map((b) => ({
+				id: bp(b.ma),
+				name: b.ten,
+				head: nguoiTen(b.truong),
+				departments: PHONG_BAN.filter((p) => p.boPhan === b.ma).map((p) => ({
+					id: pb(p.ma),
+					name: p.ten,
+					head: nguoiTen(p.truong),
+				})),
+			})),
+			chuaXep: PHONG_BAN.filter((p) => p.boPhan === null).map((p) => ({
+				id: pb(p.ma),
+				name: p.ten,
+				head: nguoiTen(p.truong),
+			})),
+		},
+		tenGoc: "OneHub",
+		truongGoc: null,
+		cycleId: KY.quy,
+		mts: [
+			mucTieuThuan({
+				id: mtSoDo("n1"),
+				cycleId: KY.nam,
+				level: "onehub",
+				unitId: null,
+				title: "Mục tiêu năm của công ty",
+				krs: KR_CONG_TY.map((k) => ({
+					id: krSoDo(k),
+					kind: "tang-toi",
+					progress: 50,
+				})),
+			}),
+			...MUC_TIEU.filter((m) => !m.gioiHan).map((m) =>
+				mucTieuThuan({
+					id: mtSoDo(m.ma),
+					level: m.cap,
+					unitId: m.cap === "bo-phan" ? bp(m.donVi) : pb(m.donVi),
+					kind: m.kieu,
+					title: m.ten,
+					krs: m.krs.map((k) => ({
+						id: krSoDo(k.ma),
+						kind: k.kieu,
+						progress: k.hienTai,
+					})),
+					gop: m.gop.map((g) => ({
+						dichMucTieu: mtSoDo(g.mucTieu ?? mucTieuCuaKr(g.kr ?? "")),
+						dichKr: g.kr ? krSoDo(g.kr) : undefined,
+						lyDo: g.lyDo,
+						canCu: g.canCu,
+						lyDoTuKara: g.lyDoTuKara,
+					})),
+				}),
+			),
+		],
+	};
 }
