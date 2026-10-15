@@ -271,6 +271,13 @@ describe("dh4-chu-y", () => {
 			.get(OkrXemService)
 			.docDauVaoSoDo(nguoi(QUAN_TRI), CHU_KY_Q4);
 		const s = gopSoDoDonVi(vao);
+		const x = vao.mts.find((m) => m.id === mtSoDo("sd-x-1"));
+		const k1 = x?.keyResults.find((k) => k.kind !== "moc");
+		if (!x || !k1) throw new Error("thieu muc tieu X");
+		const neuCamKet = tinhTrang(k1.progress, x.expected, "cam-ket");
+		expect(neuCamKet).toBe("truot");
+		if (nutCua(s, KHOA_CA.X).co.includes("kr-truot"))
+			throw new Error("tinh truot ngoai cam ket");
 		const maTran: [string, Co[]][] = [
 			["goc", []],
 			[KHOA_CA.A, []],
@@ -294,14 +301,6 @@ describe("dh4-chu-y", () => {
 			expect(n.canChuY).toBe(khoa !== "goc" && co.length > 0);
 		}
 		expect(soAssert).toBe(35);
-
-		const x = vao.mts.find((m) => m.id === mtSoDo("sd-x-1"));
-		const k1 = x?.keyResults.find((k) => k.kind !== "moc");
-		if (!x || !k1) throw new Error("thieu muc tieu X");
-		const neuCamKet = tinhTrang(k1.progress, x.expected, "cam-ket");
-		expect(neuCamKet).toBe("truot");
-		if (nutCua(s, KHOA_CA.X).co.includes("kr-truot"))
-			throw new Error("tinh truot ngoai cam ket");
 	});
 });
 

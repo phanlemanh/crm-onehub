@@ -195,6 +195,7 @@ export function TheDonVi({
 								mt.gop.map((g) => (
 									<div
 										className="flex min-w-0 flex-col gap-1 rounded-md bg-muted/40 p-2"
+										data-dich={g.dich}
 										data-dong-gop
 										key={g.dich}
 									>

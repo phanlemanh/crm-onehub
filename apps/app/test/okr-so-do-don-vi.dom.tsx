@@ -266,8 +266,7 @@ function toChuc(
 function nhapTinh(tep: string): string[] {
 	const ma = readFileSync(tep, "utf8");
 	const ra: string[] = [];
-	const re =
-		/^\s*(?:import|export)\s(?!type\s)[^;]*?from\s+["']([^"']+)["']/gm;
+	const re = /^\s*(?:import|export)\s(?!type\s)[^;]*?from\s+["']([^"']+)["']/gm;
 	for (const m of ma.matchAll(re)) if (m[1]) ra.push(m[1]);
 	return ra;
 }
@@ -413,14 +412,14 @@ describe("dh4-the", () => {
 		const ve = SoDo.dungSoDo(s, TT0);
 		const hien = ve.day.filter((d) => d.data?.kind !== "an");
 		expect(ve.nut.length).toBe(s.nut.length);
+		for (const n of s.nut.filter((x) => x.co.includes("chua-noi"))) {
+			if (hien.some((d) => d.target === n.khoa))
+				throw new Error("duong ve cho don vi chua noi");
+		}
 		for (const d of hien) {
 			const goc = s.duong.find((x) => x.tu === d.source && x.den === d.target);
 			if (!goc) throw new Error(`day la: ${d.source}->${d.target}`);
 			expect(d.data?.kind).toBe(goc.loai);
-		}
-		for (const n of s.nut.filter((x) => x.co.includes("chua-noi"))) {
-			if (hien.some((d) => d.target === n.khoa))
-				throw new Error("duong ve cho don vi chua noi");
 		}
 		const tenDai = "Đ".repeat(120);
 		const nutDai = { ...nutCua(s, KHOA_CA.B2), ten: tenDai };
@@ -526,17 +525,13 @@ describe("dh4-mo-the", () => {
 		const the = theCua(KHOA_CA.A3);
 		const dong = [...(the?.querySelectorAll("[data-dong-gop]") ?? [])];
 		expect(dong.length).toBe(2);
-		const lyDo = dong
-			.map((d) => d.querySelector("[data-ly-do-cau]")?.textContent ?? null)
-			.sort();
-		expect(lyDo).toEqual([LY_DO_SO_DO.coSoLieu, LY_DO_SO_DO.datCuoc].sort());
 		const goc = hienTai.nut
 			.flatMap((n) => n.mucTieu)
 			.find((x) => x.id === mtSoDo("sd-a3-1"));
 		for (const d of dong) {
-			const cau = d.querySelector("[data-ly-do-cau]")?.textContent;
-			const g = goc?.gop.find((x) => x.lyDo === cau);
-			if (!g) throw new Error("ly do sai cho noi");
+			const cau = d.querySelector("[data-ly-do-cau]")?.textContent ?? null;
+			const g = goc?.gop.find((x) => x.dich === d.getAttribute("data-dich"));
+			if (!g || g.lyDo !== cau) throw new Error("ly do sai cho noi");
 			const nhan = d.querySelector("[data-muc-tin]");
 			expect(nhan?.textContent).toBe(m.mucTin[g.mucTin]);
 			expect(d.querySelector("[data-tone]")?.getAttribute("data-tone")).toBe(
@@ -547,6 +542,10 @@ describe("dh4-mo-the", () => {
 			);
 			expect(d.textContent).toContain(g.tenDich);
 		}
+		const lyDo = dong
+			.map((d) => d.querySelector("[data-ly-do-cau]")?.textContent ?? null)
+			.sort();
+		expect(lyDo).toEqual([LY_DO_SO_DO.coSoLieu, LY_DO_SO_DO.datCuoc].sort());
 		expect(
 			readFileSync(
 				join(GOC_APP, "app/(app)/[slug]/okr/toan-canh/the-don-vi.tsx"),
