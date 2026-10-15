@@ -3,10 +3,10 @@ schema_version: 1
 slug: ve-sinh-do-san-onehub
 feature: Các hồ sơ đã ký đang đỏ sẵn trên onehub xanh lại, để PR nào chạm chúng cũng ghim lại được
 owner: phanlemanh@gmail.com
-stage: decided               # discovery | decided | archived
-decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: manh
-decided_at: 2026-10-15T21:21:57Z     # ISO UTC
+stage: discovery             # discovery | decided | archived
+decision:               # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by:
+decided_at:                    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -29,8 +29,8 @@ Chủ kho chọn trong phiên DH2 (sổ `trang-don-vi-mot-bang`, dòng `d-202610
 «Đường B: tách vòng «vệ sinh đỏ sẵn onehub» riêng (hydration record= + 403, moi-chuoi bắt nhầm, neo F8 và
 giai-doan đã làm) gộp trước; PR DH2 chỉ còn trang đơn vị và phép đo hồ sơ của trang, rồi ghim lại trên bản
 đã vệ sinh.» Trước đó chủ kho đã duyệt nhận hydration + 403 theo cách B (~5 giờ máy) và Mac Studio đóng hàng
-`ngan-soan-hydrat-theo-don-vi`, giao sang (#375 14:31Z). Ô này ghi lại quyết định đó; chủ kho phủ quyết thì
-đổi `decision`.
+`ngan-soan-hydrat-theo-don-vi`, giao sang (#375 14:31Z). Câu đó là quyết TÁCH vòng; chữ ký Cổng Đáng của chính vòng
+này vẫn là của chủ kho, gõ tại phiên thợ — ô để trống `decision` tới lúc đó.
 
 ## Ngưỡng chết / ngưỡng UAT
 
