@@ -22,3 +22,13 @@ export type KhoaKeoTinHieu = {
 export type KhoaTrpcContext = BaseTrpcContext & {
 	khoaKeoTinHieu: KhoaKeoTinHieu;
 };
+
+export type KhoaDayLoTrinh = {
+	apiKeyId: string;
+	userId: string;
+	role: WorkspaceRole | null;
+};
+
+export type KhoaDayLoTrinhContext = BaseTrpcContext & {
+	khoaDayLoTrinh: KhoaDayLoTrinh;
+};

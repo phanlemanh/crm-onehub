@@ -1,6 +1,10 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
+	gioLay: {
+		capNhat: (luc: string) => `Updated ${luc}`,
+		banDung: "(build)",
+	},
 	trang: {
 		tieuDe: "Roadmap",
 		moTa: "What the product team is building for OneHub Center, where each piece stands and which milestone it is due for. This page is read-only — to change the plan, tell the product team.",
@@ -135,6 +139,10 @@ const en = {
 export type LoTrinhMessages = typeof en;
 
 const vi: LoTrinhMessages = {
+	gioLay: {
+		capNhat: (luc: string) => `Cập nhật lúc ${luc}`,
+		banDung: "(bản dựng)",
+	},
 	trang: {
 		tieuDe: "Lộ trình",
 		moTa: "Việc đội sản phẩm đang làm cho OneHub Center, đang ở đâu và hẹn mốc nào. Trang chỉ để xem — muốn đổi kế hoạch, hãy báo đội sản phẩm.",

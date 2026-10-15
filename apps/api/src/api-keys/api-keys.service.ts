@@ -1,8 +1,9 @@
 import {
 	auth,
+	configKhoaMay,
 	DAY_SECONDS,
-	KHOA_KEO_TIN_HIEU,
 	loaiKhoaTuConfig,
+	taoKhoaDayLoTrinh,
 	taoKhoaKeoTinHieu,
 	type WorkspaceRole,
 } from "@crm/auth";
@@ -114,24 +115,26 @@ export class ApiKeysService {
 	): Promise<CreatedApiKey> {
 		const expiresIn =
 			input.expiresInDays === null ? null : input.expiresInDays * DAY_SECONDS;
-		const keoTinHieu = input.loai === "keo-tin-hieu";
-		if (keoTinHieu && !laQuanTriWorkspace(role)) {
+		const loai = input.loai ?? "toan-quyen";
+		if (loai !== "toan-quyen" && !laQuanTriWorkspace(role)) {
 			throw new ForbiddenException();
 		}
-		const created = await this.call(() =>
-			keoTinHieu
-				? taoKhoaKeoTinHieu({ userId, name: input.name, expiresIn })
-				: auth.api.createApiKey({
-						headers,
-						body: { name: input.name, expiresIn },
-					}),
-		);
+		const created = await this.call(() => {
+			if (loai === "keo-tin-hieu")
+				return taoKhoaKeoTinHieu({ userId, name: input.name, expiresIn });
+			if (loai === "day-lo-trinh")
+				return taoKhoaDayLoTrinh({ userId, name: input.name, expiresIn });
+			return auth.api.createApiKey({
+				headers,
+				body: { name: input.name, expiresIn },
+			});
+		});
 
 		this.logger.log({
 			message: "API key created",
 			userId,
 			apiKeyId: created.id,
-			loai: keoTinHieu ? "keo-tin-hieu" : "toan-quyen",
+			loai,
 		});
 
 		return {
@@ -142,7 +145,7 @@ export class ApiKeysService {
 			createdAt: created.createdAt.toISOString(),
 			lastRequest: created.lastRequest?.toISOString() ?? null,
 			expiresAt: created.expiresAt?.toISOString() ?? null,
-			loai: keoTinHieu ? "keo-tin-hieu" : "toan-quyen",
+			loai,
 			key: created.key,
 		};
 	}
@@ -156,10 +159,7 @@ export class ApiKeysService {
 			where: { id: input.id, referenceId: userId },
 			select: { configId: true },
 		});
-		const configId =
-			row?.configId === KHOA_KEO_TIN_HIEU.configId
-				? KHOA_KEO_TIN_HIEU.configId
-				: undefined;
+		const configId = configKhoaMay(row?.configId ?? null);
 		await this.call(() =>
 			auth.api.deleteApiKey({
 				headers,

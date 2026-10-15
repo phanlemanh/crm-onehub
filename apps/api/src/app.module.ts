@@ -25,6 +25,7 @@ import { GiaiDoanModule } from "./giai-doan/giai-doan.module";
 import { GoogleModule } from "./google/google.module";
 import { HealthModule } from "./health/health.module";
 import { ListingsModule } from "./listings/listings.module";
+import { LoTrinhModule } from "./lo-trinh/lo-trinh.module";
 import { LoggingModule } from "./logging/logging.module";
 import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
@@ -103,6 +104,7 @@ import { ZaloModule } from "./zalo/zalo.module";
 		OkrModule,
 		TaiLieuModule,
 		TinHieuModule,
+		LoTrinhModule,
 		ThongBaoModule,
 	],
 })
