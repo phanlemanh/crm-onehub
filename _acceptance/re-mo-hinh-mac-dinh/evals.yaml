@@ -1,0 +1,52 @@
+schema_version: 1
+feature_slug: re-mo-hinh-mac-dinh
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rmh_mac_dinh
+    paths: [packages/db/src/settings.ts, apps/agent/agent/lib/model.ts, apps/agent/test/rmh-mac-dinh.integration.spec.ts]
+    expected: "exit 0; Postgres _test thật. Bảng hai ca VIẾT TRƯỚC trên cùng fixture: (a) xoá hàng appSetting → readAgentModel trả {id: google/gemini-3.8-flash, contextWindowTokens: 1000000, isDefault: true} và hàm chọn model của lượt (model.ts, đường thật agent_runner dùng) trả id google/gemini-3.8-flash; (b) writeAgentModel(openai/gpt-x) → lượt dùng openai/gpt-x, isDefault false. Chiều đỏ: ca (b) là đối chứng — nếu mặc định đè lựa chọn thì (b) đỏ ghim tên ca; id mong đợi của (a) đọc từ evidence/gateway-gemini-3-8-flash-2026-10-15.json, không chép tay."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E1b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.rmh_mac_dinh
+    paths: [packages/db/src/settings.ts, apps/agent/agent/lib/model.ts, apps/agent/test/rmh-mac-dinh.integration.spec.ts]
+    expected: "exit 0; cùng tệp với E1, ca (b): workspace đã chọn openai/gpt-x thì lượt dùng openai/gpt-x, isDefault false; đối chứng là ca (a) cùng fixture."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.rmh_tai_lieu
+    paths: [apps/agent/agent/lib/tai-lieu-config.ts, apps/agent/agent/lib/tai-lieu-model.ts, apps/agent/test/rmh-tai-lieu.spec.ts]
+    expected: "exit 0; ma trận VIẾT TRƯỚC hai việc {soan, hoi}: modelTaiLieu(việc) với nhà cung cấp giả ghi lại mã model được gọi → toEqual google/gemini-3.8-flash; chạy transformParams của model đã bọc trên tham số rỗng → providerOptions.gateway.zeroDataRetention === true. 2 việc × 2 khẳng định = 4. Chiều đỏ: cùng nhà cung cấp giả, bọc model KHÔNG có middleware ZDR → zeroDataRetention vắng, bài ghim tên việc."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.rmh_tai_lieu
+    paths: [apps/agent/agent/lib/tai-lieu-config.ts, apps/agent/agent/lib/tai-lieu-nop.ts, apps/agent/test/rmh-tai-lieu.spec.ts, _acceptance/re-mo-hinh-mac-dinh/evidence/gateway-gemini-3-8-flash-2026-10-15.json]
+    expected: "exit 0; giá mong đợi đọc từ ảnh chụp danh mục Gateway (pricing.input, pricing.output nhân một triệu) — không chép tay; chiPhiUsd(google/gemini-3.8-flash, 1000000, 2000000) bằng input×1e6 + output×2e6 = 8.25; chiPhiUsd(zai/glm-5.2-fast, …) vẫn theo giá GLM; chiPhiUsd(model-la/khong-co, …) === null. Chiều đỏ: bảng giá đổi chỗ vào/ra cho Gemini thì phép so với ảnh chụp lệch và bài ghim tên model."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.rmh_judge
+    paths: [apps/agent/agent/lib/okr/config.ts, apps/agent-okr/agent/lib/config.ts, apps/agent/test/rmh-judge.spec.ts]
+    expected: "exit 0; nhập hai cấu hình trợ lý OKR thật (apps/agent okr/config.ts và apps/agent-okr lib/config.ts): model chấm của mỗi nơi toEqual zai/glm-5.2-fast, và khác DEFAULT_AGENT_MODEL.id (đối chứng: chứng phép so phân biệt được hai model)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.rmh_so_nguong
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, _acceptance/re-mo-hinh-mac-dinh/evidence/do-bo-mau.md, _acceptance/re-mo-hinh-mac-dinh/evidence/cham-tung-cau.jsonl, _acceptance/re-mo-hinh-mac-dinh/evidence/tro-ly-tep.txt, _acceptance/bo-cau-hoi-mau/evidence/cham-tung-cau.jsonl, apps/agent/agent/subagents/tro_ly_kho/**, apps/agent/agent/lib/tai-lieu-*.ts, packages/db/src/settings.ts]
+    expected: "exit 0; so-nguong.ts không cờ, không gọi model: đọc evidence/do-bo-mau.md + cham-tung-cau.jsonl của hồ sơ (sinh ở S3 bằng do-bo-mau.ts --do với BCM_EVIDENCE trỏ thư mục hồ sơ), kiểm bằng kiemBangChung của bo-cau-hoi-mau (import), chấm bằng chamTungCau + CHAM_BO_DO.nguong của tro-ly-doc-kho (import) → in bốn chỉ số cạnh ngưỡng; câu lỗi model lượt một không nhiều hơn lượt đã ký của bo-cau-hoi-mau; băm từng tệp mã trợ lý ghi trong evidence khớp cây đang xét. Exit 0 khi mọi chỉ số đạt theo kết luận bộ chấm và hai điều trên. CHIỀU ĐỎ trên bản sao trong thư mục tạm: đổi đủ câu đạt thành sai để đúng trang tụt dưới 80% → exit 1 ghim «dungTrang»; ba câu đạt thành lỗi model → exit 1 ghim ba mã; sửa một byte một tệp trợ lý trong bản sao cây → exit 1 ghim tên tệp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

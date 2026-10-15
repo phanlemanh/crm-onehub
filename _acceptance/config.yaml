@@ -1786,6 +1786,9 @@ executors:
     hdo_zdr: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/zdr-hoi.spec.ts
     hdo_chu: "cd apps/app && bun test ./test/messages-guard.spec.ts ./test/kara-mot-ten.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi.dom.tsx -t hdo-chu"
     tca_cham_health: 'bun run test -- "bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs"'
+    rmh_mac_dinh: 'bun run test -- "cd apps/agent && bun test test/rmh-mac-dinh.integration.spec.ts"'
+    rmh_tai_lieu: 'bun run test -- "cd apps/agent && bun test test/rmh-tai-lieu.spec.ts"'
+    rmh_judge: 'bun run test -- "cd apps/agent && bun test test/rmh-judge.spec.ts"'
   script:
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
@@ -2764,6 +2767,7 @@ executors:
     nltk_ba_ngay: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs
     nltk_pham_vi: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs --pham-vi
     tca_pham_vi: bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs --pham-vi
+    rmh_so_nguong: "bun _acceptance/re-mo-hinh-mac-dinh/rang/so-nguong.ts"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
