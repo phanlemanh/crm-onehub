@@ -1,0 +1,156 @@
+schema_version: 1
+slug: khung-soan-chan-lien-ket
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kcl_soan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "packages/ui/src/components/sheet.tsx"
+      - "apps/app/test/khung-soan-chan-lien-ket.dom.tsx"
+    expected: |
+      apps/app/test/khung-soan-chan-lien-ket.dom.tsx, describe "kcl-soan": khung soạn thật dưới RecordSheetHost với bộ giả
+      khung-soan-okr.tsx (quyền quản trị, thieuBoiCanh=true để có «Tới Kho tài liệu» = /ws/tai-lieu), Kara đang soạn
+      (datAgent streaming). Ma trận viết trước 2 ô {o-lai-nut, o-lai-esc}, ca "đếm ô kcl-soan" đòi đúng 2. Mỗi ô: bấm liên
+      kết bằng MouseEvent click button 0 → click bị defaultPrevented; hộp [role=alertdialog] chứa m.trang.hoiDong.tieuDe và
+      .than, có nút .nut và .thoi; diTrang rỗng; chọn ở lại (nút .thoi / Esc) → hộp null, [data-slot=sheet-content] còn,
+      record vẫn soan:cuoc-1, diTrang rỗng. Thông điệp ghim «kcl-soan <ô>: <điều>», vd "kcl-soan o-lai-nut: co hop hoi".
+      CHIỀU ĐỎ: trên cây chưa vá cả hai ô đỏ ở «co hop hoi»; đột biến a của E8 làm đỏ đúng thông điệp đó.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.kcl_go_do
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "apps/app/test/khung-soan-chan-lien-ket.dom.tsx"
+    expected: |
+      Cùng tệp, describe "kcl-go-do": Kara rảnh. Ma trận viết trước {go-chu, go-so} × {o-lai-nut, o-lai-esc} = 4 ô, đếm đúng 4.
+      go-chu gõ «Ưu tiên giữ khách» vào ô soạn (không gửi); go-so gõ «42» vào ô số đầu tiên của bản nháp BAN_NHAP. Bấm
+      «Tới Kho tài liệu» → hộp chứa uiMessages("vi").dialog.boThayDoi.tieuDe, nút .bo và .tiepTuc; chọn ở lại → hộp null,
+      khung còn, record còn, diTrang rỗng, ô đã gõ có value đúng chuỗi đã gõ. Ghim «kcl-go-do <ô>: <điều>».
+      CHIỀU ĐỎ: trên cây chưa vá bốn ô đỏ ở «co hop hoi»; đối chứng dương là ô khong-gi-do của E4 (cùng khung, chưa gõ → không hộp).
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.kcl_roi
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "packages/ui/src/components/confirm-dialog.tsx"
+      - "apps/app/test/khung-soan-chan-lien-ket.dom.tsx"
+      - "packages/ui/test/giu-thay-doi-lien-ket.dom.tsx"
+    expected: |
+      Hai describe, viết trước:
+      (1) apps/app/test/khung-soan-chan-lien-ket.dom.tsx "kcl-roi": {dang-soan, go-chu, go-so} × rời = 3 ô, đếm đúng 3.
+          Bấm liên kết, chọn nút rời (m.trang.hoiDong.nut / boThayDoi.bo) → diTrang bằng đúng [{kieu:"push",
+          duong:"/ws/tai-lieu"}], hộp null, daDung = 0 (lượt Kara không bị dừng).
+      (2) packages/ui/test/giu-thay-doi-lien-ket.dom.tsx "kcl-hop": Sheet thật của packages/ui có một Input và
+          <a href="/dich">, con gọi useKhaiThayDoi(đã gõ) và useChanLienKetTrongHop(gia); 5 ô, đếm đúng 5:
+          h1 có dở → hộp hiện, click defaultPrevented, gia 0 · h2 ở lại bằng nút → Sheet mở, Input nguyên, gia 0 ·
+          h3 ở lại bằng Esc → như h2 · h4 rời → gia đúng 1 lần với "/dich", hộp đóng · h5 sau h4 vẫn dở, bấm lại → hộp hiện
+          lại, gia vẫn 1.
+      Ghim «kcl-roi <ô>: <điều>», «kcl-hop <ô>: <điều>». CHIỀU ĐỎ: đột biến b của E8 (nút rời gọi dongThat thay vì tiep)
+      làm h4 đỏ "kcl-hop h4: dieu huong 1 lan".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.kcl_khong_do
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "apps/app/test/khung-soan-chan-lien-ket.dom.tsx"
+      - "packages/ui/test/giu-thay-doi-lien-ket.dom.tsx"
+    expected: |
+      (1) apps/app "kcl-khong-do": Kara rảnh, ô trống, không số gõ; 2 ô viết trước, đếm đúng 2: bấm «Tới Kho tài liệu»;
+          bấm «Xem theo đơn vị» ([data-nut=xem-theo-don-vi], sau khi đưa vào bằng soanDuaVao giả) → không hộp, click KHÔNG
+          defaultPrevented (Next tự đi), diTrang rỗng.
+      (2) packages/ui "kcl-hop-sach": 2 ô, đếm đúng 2: d1 không dở, chuột trái → không hộp, không defaultPrevented;
+          d3 useChanLienKetTrongHop gọi ngoài mọi hộp → dựng không lỗi, bấm không chặn.
+      Ghim «kcl-khong-do <ô>: khong hop». CHIỀU ĐỎ: đột biến d của E8 (bật chặn không xét coThayDoi) làm d1 đỏ
+      "kcl-hop-sach d1: khong hop".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.kcl_khong_chan
+    paths:
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "packages/ui/test/giu-thay-doi-lien-ket.dom.tsx"
+    expected: |
+      packages/ui/test/giu-thay-doi-lien-ket.dom.tsx, describe "kcl-khong-chan": cùng Sheet của kcl-hop, ĐÃ gõ dở. Ma trận
+      viết trước 9 ô, đếm đúng 9: n1 metaKey · n2 ctrlKey · n3 shiftKey · n4 altKey · n5 button=1 · n6 target=_blank ·
+      n7 href https://example.com/x · n8 có thuộc tính download · n9 href bằng location.pathname+location.search →
+      không hộp, click không defaultPrevented, gia 0 lần. Đối chứng dương: h1 của kcl-hop (cùng Sheet, chuột trái thường →
+      bị chặn) — không có h1 xanh thì 9 ô này không chứng gì. Ghim «kcl-khong-chan <ô>: khong chan».
+      CHIỀU ĐỎ: đột biến c của E8 (hrefNoiBo bỏ kiểm metaKey) làm n1 đỏ "kcl-khong-chan n1: khong chan".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.kcl_hoi_quy
+    paths:
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "packages/ui/src/components/dialog.tsx"
+      - "packages/ui/src/components/sheet.tsx"
+      - "packages/ui/src/components/drawer.tsx"
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "apps/app/app/(app)/[slug]/tai-lieu/man-soan.tsx"
+      - "packages/ui/test/giu-thay-doi-lien-ket.dom.tsx"
+    expected: |
+      git diff --quiet $(git merge-base HEAD origin/onehub) trên packages/ui/test/giu-thay-doi.dom.tsx,
+      packages/ui/test/giu-thay-doi-loi-hoi.dom.tsx, apps/app/test/soan-okr-trong-khung.dom.tsx,
+      apps/app/test/ngan-ban-ghi-giu.dom.tsx, apps/app/test/tai-lieu-soan.dom.tsx (không sửa kỳ vọng), rồi chạy trọn năm tệp
+      và describe "kcl-ngoai" của giu-thay-doi-lien-ket.dom.tsx (1 ô: Sheet đã gõ dở mà con KHÔNG gọi
+      useChanLienKetTrongHop → bấm liên kết không hộp, không defaultPrevented) → thoát 0.
+      CHIỀU ĐỎ: bản sao sửa một kỳ vọng của năm tệp → git diff --quiet thoát 1 trước khi chạy; kcl-ngoai đỏ nếu Sheet tự bật
+      chặn cho mọi hộp ("kcl-ngoai: khong hop").
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kcl_man
+    steps:
+      - "Chạy Ở TIỀN CẢNH, Bash timeout 600000: lệnh kcl_man (tien-de.mjs dựng phiên đo riêng của cây; rang/man.mjs dùng bàn đo của K2e — agent-okr bằng mô hình giả, đăng nhập dev:session quản trị le-hai-dang của bộ mẫu, mở cuộc soạn mới của phòng kd-bac; kho đo không có trang chiến lược nên khung có «Tới Kho tài liệu»; không thấy liên kết → khongDo, không chấm đạt)"
+      - "Mỗi khổ 1280×900 và 375×812, phiên trình duyệt riêng: (a) gửi LENH.chamNop1, chờ Kara đang soạn, bấm «Tới Kho tài liệu» → hộp chứa m.trang.hoiDong.tieuDe, URL còn record=soan:<id>; bấm «Ở lại» → hộp đóng, khung còn; bấm lại, bấm «Đóng» → pathname /<slug>/tai-lieu, không còn record; ảnh kcl-dang-soan-<khổ>.png lúc hộp hiện"
+      - "(b) mở lại cuộc, chờ Kara rảnh, gõ «Ưu tiên giữ khách» vào ô soạn, bấm liên kết → hộp chứa mui.dialog.boThayDoi.tieuDe; bấm «Tiếp tục sửa» → ô soạn có đúng chuỗi đã gõ, URL còn record; ảnh kcl-go-do-<khổ>.png"
+      - "(c) 1280: gửi LENH.chamNop1, Tab tới «Tới Kho tài liệu» (document.activeElement là liên kết đó), nhấn Enter → hộp soạn hiện, URL không đổi"
+      - "Mở các ảnh và đối chiếu bằng mắt: hộp nằm trên khung, chữ đọc trọn, không tràn ở 375"
+    expected: "exit 0; man.mjs in 'kcl <khổ> <bước>: dat' cho 5 bước (a và b ở hai khổ, c ở 1280), console không lỗi. Chiều đỏ: --kiem-do-do khong-chan (chặn yêu cầu JS, thay lời gọi useChanLienKetTrongHop trong mã đã dựng bằng hàm rỗng) phải in 'kcl 1280 a: lien ket di luon' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "packages/ui/src/components/sheet.tsx"
+      - "_acceptance/khung-soan-chan-lien-ket/rang/**"
+
+  - id: E8
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kcl_dot_bien
+    paths:
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx"
+      - "apps/app/test/khung-soan-chan-lien-ket.dom.tsx"
+      - "packages/ui/test/giu-thay-doi-lien-ket.dom.tsx"
+      - "_acceptance/khung-soan-chan-lien-ket/rang/**"
+    expected: |
+      node _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs dựng bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly).
+      Đối chứng dương trước: lệnh của E1–E5 trên bản sao CHƯA đổi phải thoát 0; đỏ ở đó → thoát 2 «ban sao do san».
+      Rồi bốn cặp viết trước, mỗi cặp đổi đúng MỘT chỗ bằng thayMotLan (mốc không có → thoát 2, không tính là cắn), chạy
+      lệnh tương ứng, đòi thoát khác 0 VÀ đầu ra chứa thông điệp ghim:
+        a bỏ lời gọi useChanLienKetTrongHop trong trang-soan.tsx → "kcl-soan o-lai-nut: co hop hoi"
+        b nút rời của hộp gọi dongThat thay vì tiep → "kcl-hop h4: dieu huong 1 lan"
+        c hrefNoiBo bỏ kiểm metaKey → "kcl-khong-chan n1: khong chan"
+        d useChanLienKetTrongHop bật không xét coThayDoi → "kcl-hop-sach d1: khong hop"
+      In «cặp <x>: cắn» từng cặp và «kcl dot-bien: 4/4 cắn»; thiếu một cặp → thoát 1 gọi tên cặp.
