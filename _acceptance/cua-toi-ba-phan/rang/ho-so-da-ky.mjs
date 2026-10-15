@@ -15,7 +15,7 @@
  * mỗi lệnh phải lệch mã kỳ vọng. Cây thật không bị ghi.
  * Mã thoát: 0 hai chiều đúng · 1 sai · 2 không đo được (tập rỗng, đọc hỏng).
  */
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 import {
 	existsSync,
 	mkdtempSync,
@@ -47,8 +47,32 @@ const git = (cwd, ...a) =>
 		encoding: "utf8",
 		maxBuffer: 256 * 1024 * 1024,
 	}).trim();
-const base =
-	process.env.CTBP_BASE ?? git(GOC, "merge-base", "HEAD", "origin/onehub");
+/**
+ * Mốc so sánh: mốc mới nhất giữa `onehub` và nhánh DH1 mà DH3 dựng lên — khi DH1 chưa
+ * gộp, tệp kiểm DH1 sửa đã được chính hồ sơ DH1 chấm và ký, không phải việc của lượt này.
+ * DH1 gộp rồi thì hai mốc trùng nhau.
+ */
+function mocSoSanh() {
+	if (process.env.CTBP_BASE) return process.env.CTBP_BASE;
+	const ung = ["origin/onehub", "feat/dieu-huong-khu-muc-tieu"].flatMap((r) => {
+		try {
+			return [git(GOC, "merge-base", "HEAD", r)];
+		} catch {
+			return [];
+		}
+	});
+	if (ung.length === 0) khongDo("khong tinh duoc moc so sanh");
+	return ung.reduce((moi, x) => {
+		try {
+			git(GOC, "merge-base", "--is-ancestor", moi, x);
+			return x;
+		} catch {
+			return moi;
+		}
+	});
+}
+const base = mocSoSanh();
+console.log(`moc so sanh: ${base.slice(0, 9)}`);
 const sua = git(GOC, "diff", "--name-only", base, "--", ...THU_MUC)
 	.split("\n")
 	.filter((f) => f && existsSync(join(GOC, f)));
@@ -120,10 +144,38 @@ function chay(lenh, cwd) {
 	return r.status ?? 2;
 }
 
+/** Chạy một lệnh không chặn — để bốn lệnh chạy cùng lúc. */
+function chayNen(lenh, cwd) {
+	return new Promise((xong) => {
+		const p = spawn("bash", ["-c", lenh], {
+			cwd,
+			env: { ...process.env, TZ: "Asia/Ho_Chi_Minh" },
+			stdio: "ignore",
+		});
+		const het = setTimeout(() => p.kill("SIGTERM"), 15 * 60 * 1000);
+		p.on("close", (ma) => {
+			clearTimeout(het);
+			xong(ma ?? 2);
+		});
+	});
+}
+const SONG_SONG = 4;
+
 let sai = 0;
 let so = 0;
-for (const v of viec.values()) {
-	const ma = chay(v.lenh, GOC);
+const dsViec = [...viec.values()];
+const maCua = new Map();
+let ke = 0;
+await Promise.all(
+	Array.from({ length: SONG_SONG }, async () => {
+		while (ke < dsViec.length) {
+			const v = dsViec[ke++];
+			maCua.set(v.lenh, await chayNen(v.lenh, GOC));
+		}
+	}),
+);
+for (const v of dsViec) {
+	const ma = maCua.get(v.lenh);
 	for (const a of v.ai) {
 		so += 1;
 		const dung = ma === a.mong;
