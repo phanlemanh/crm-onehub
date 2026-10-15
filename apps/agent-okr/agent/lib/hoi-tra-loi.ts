@@ -1,26 +1,18 @@
 import {
 	type CauTraLoiDung,
-	cauTraLoiDung,
 	type GiaTriTrich,
+	type KetQuaNopTraLoi,
+	ketQuaNopTraLoi,
 	kiemSoCau,
 	type NopTraLoiInput,
 	type TrichOkr,
 } from "@crm/validation/okr-tra-loi";
-import { z } from "zod";
 import { TRO_LY_OKR_HOI } from "./config";
 import { docOkr, type MucTieuDay } from "./hoi-doc";
 
-export const ketQuaTraLoi = z.union([
-	z.object({ ok: z.literal(true), traLoi: cauTraLoiDung }),
-	z.object({
-		ok: z.literal(false),
-		reason: z.string(),
-		ma: z.string().optional(),
-		so: z.string().optional(),
-	}),
-]);
+export const ketQuaTraLoi = ketQuaNopTraLoi;
 
-export type KetQuaTraLoi = z.infer<typeof ketQuaTraLoi>;
+export type KetQuaTraLoi = KetQuaNopTraLoi;
 
 const LOI = TRO_LY_OKR_HOI.loiNop;
 

@@ -46,6 +46,18 @@ export const cauTraLoiDung = z.object({
 
 export type CauTraLoiDung = z.infer<typeof cauTraLoiDung>;
 
+export const ketQuaNopTraLoi = z.union([
+	z.object({ ok: z.literal(true), traLoi: cauTraLoiDung }),
+	z.object({
+		ok: z.literal(false),
+		reason: z.string(),
+		ma: z.string().optional(),
+		so: z.string().optional(),
+	}),
+]);
+
+export type KetQuaNopTraLoi = z.infer<typeof ketQuaNopTraLoi>;
+
 export type GiaTriTrich = {
 	loai: (typeof LOAI_TRICH)[number];
 	id: string;
