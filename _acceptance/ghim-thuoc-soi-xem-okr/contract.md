@@ -5,7 +5,7 @@ slug: ghim-thuoc-soi-xem-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-15T23:26:38Z
 design_doc: docs/superpowers/specs/2026-10-16-ghim-thuoc-soi-xem-okr-design.md
