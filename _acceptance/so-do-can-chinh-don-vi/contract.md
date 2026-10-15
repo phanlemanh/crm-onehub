@@ -97,6 +97,11 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
   `apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx`, `packages/validation/src/okr-tham-so.ts`,
   `apps/app/test/okr-theo-don-vi.dom.tsx`, `apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx` (xoá),
   `apps/app/test/cay-can-chinh-ly-do.dom.tsx` (xoá).
+  S2 chốt thêm (kế hoạch `docs/superpowers/plans/2026-10-15-so-do-can-chinh-don-vi.md`):
+  `apps/api/scripts/okr-mau/ca-so-do.ts` (mới — bộ gieo ca sơ đồ, thay «tệp dữ liệu mẫu» ở trên; `cong-ty.json` không
+  đổi), `apps/app/app/(app)/[slug]/okr/toan-canh/so-do-config.ts` (mới),
+  `apps/app/app/(app)/[slug]/okr/theo-don-vi/dich-cay.ts` (mới), `bun.lock`,
+  `_acceptance/cay-can-chinh-co-ly-do/evals.yaml` và `_acceptance/ux-lai-thu-8c-okr/evals.yaml` (chỉ thêm khai nghỉ).
 - Rủi ro gộp (crm #375, Mac Studio 02:41Z): #410 (Kho tài liệu) sửa `packages/ui/package.json` và
   `packages/ui/src/lib/messages.ts`; NM2 `loc-va-kieu-xem-chung` sửa `packages/ui` toggle-group (prop `count`) và có thể thêm
   khối vào `packages/ui/src/lib/messages.ts`; C `hoi-dap-okr` sửa `apps/app/lib/messages/okr-hoi.ts` (kề, không trùng
