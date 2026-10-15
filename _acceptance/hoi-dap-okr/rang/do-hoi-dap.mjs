@@ -3,7 +3,6 @@ import { docOkr, timOkr } from "../../../apps/agent-okr/agent/lib/hoi-doc.ts";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { TRO_LY_OKR_SOAN } from "../../../apps/agent-okr/agent/lib/config.ts";
 import {
 	batAgentOkr,
 	cauThieuKhoaSoan,
@@ -19,6 +18,7 @@ import {
 	thuMau,
 } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
 import { chamCau, docPhieu, NGUONG, tongHop } from "./cham-hoi.mjs";
+import { taoModelPhieu } from "./model-phieu.mjs";
 import {
 	chepSangEvidence,
 	chuCuaPhien,
@@ -35,10 +35,8 @@ const LENH =
 const BO = join(GOC, "apps/agent-okr/evals/okr-hoi/ca/bo-quy-4.json");
 const SONG_SONG = 5;
 const SO_PHIEU = 3;
-const TRAN_RA_PHIEU = 12_000;
 
 const yeuCauOkr = createRequire(join(GOC, "apps/agent-okr/package.json"));
-const { xuongModelZdr } = await import(yeuCauOkr.resolve("@crm/ai-okr"));
 const { generateText } = await import(yeuCauOkr.resolve("ai"));
 
 const idCua = (loai, ma) => idMau(loai === "kr" ? "kr" : "mt", ma);
@@ -78,12 +76,7 @@ async function anhChup(ca, traLoi, userId) {
 }
 
 async function phieuHoiDong(ca, traLoi, anh) {
-	const model = xuongModelZdr({
-		modelId: TRO_LY_OKR_SOAN.judge.model,
-		tags: TRO_LY_OKR_SOAN.tags,
-		tranRaMoiLoiGoi: TRAN_RA_PHIEU,
-		khoa: process.env[TRO_LY_OKR_SOAN.khoa.rieng],
-	});
+	const model = taoModelPhieu();
 	const prompt = [
 		'Bạn chấm một câu trả lời của trợ lý OKR. Chỉ trả về đúng một dòng JSON {"dungY": true|false, "lyDo": "<một câu>"}.',
 		"«Đúng ý» nghĩa là: trả lời đúng điều được hỏi, không lạc đề, không né khi dữ liệu có, không bịa điều dữ liệu không có. Câu xin sửa OKR hay hỏi ngoài OKR được trả lời bằng lời từ chối có chỉ đường là đúng ý.",
