@@ -3,10 +3,10 @@ schema_version: 1
 slug: cua-toi-ba-phan
 feature: Trưởng đơn vị mở Của tôi và thấy ngay KR cần cập nhật tuần này, đơn vị mình dẫn và KR mình phụ trách
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build        # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-15T03:58:04Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -46,3 +46,10 @@ nhất 80% lượt cập nhật của hai tuần đầu». Máy giữ nguyên co
 Chiều đỏ của phép đo: hôm nay KHÔNG có phiên nào mở trong «Của tôi» (lối «việc của tôi» dẫn sang trang «Cập nhật
 tuần»), nên số nền là 0 % theo cấu tạo; ngưỡng đỏ được nếu trưởng đơn vị vẫn cập nhật từng KR qua ngăn chi tiết ở
 Theo đơn vị (lối `sheet`) thay vì ở «Của tôi».
+
+## Nguồn quyết định Cổng Đáng
+
+Chủ kho gõ ở phiên thợ DH3 (máy M5) ngày 15/10/2026: «Build» — trả lời lời mời Cổng Đáng có dòng điền sẵn
+«ngưỡng: theo đề xuất máy (≥80 % lượt đã gửi của trưởng đơn vị mở và gửi trong Của tôi, sàn 10 lượt) · đo 14 ngày
+từ ngày lên production»; chủ kho không sửa ô nào nên ngưỡng giữ đúng bản đề xuất ở trên. `decided_at` là giờ phiên
+thợ ghi lại lời đó.
