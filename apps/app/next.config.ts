@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
 
 	env: {
 		NEXT_PUBLIC_API_URL: apiUrl,
+		LO_TRINH_DUNG_LUC: new Date().toISOString(),
 	},
 
 	transpilePackages: ["@crm/auth", "@crm/db", "@crm/telemetry", "@crm/ui"],

@@ -1,6 +1,16 @@
-import { auth, DAY_SECONDS } from "@crm/auth";
-import type { Db, Prisma } from "@crm/db";
 import {
+	auth,
+	configKhoaMay,
+	DAY_SECONDS,
+	loaiKhoaTuConfig,
+	taoKhoaDayLoTrinh,
+	taoKhoaKeoTinHieu,
+	type WorkspaceRole,
+} from "@crm/auth";
+import type { Db, Prisma } from "@crm/db";
+import { laQuanTriWorkspace } from "@crm/validation/vai-workspace";
+import {
+	ForbiddenException,
 	HttpException,
 	Injectable,
 	InternalServerErrorException,
@@ -30,6 +40,7 @@ const KEY_SELECT = {
 	createdAt: true,
 	lastRequest: true,
 	expiresAt: true,
+	configId: true,
 } satisfies Prisma.ApikeySelect;
 
 type KeyRow = Prisma.ApikeyGetPayload<{ select: typeof KEY_SELECT }>;
@@ -59,6 +70,7 @@ function toSummary(row: KeyRow): ApiKeySummary {
 		createdAt: row.createdAt.toISOString(),
 		lastRequest: row.lastRequest?.toISOString() ?? null,
 		expiresAt: row.expiresAt?.toISOString() ?? null,
+		loai: loaiKhoaTuConfig(row.configId),
 	};
 }
 
@@ -70,8 +82,9 @@ export class ApiKeysService {
 
 	async list(
 		userId: string,
+		role: WorkspaceRole | null,
 		input: ApiKeyListInput,
-	): Promise<ListResult<ApiKeySummary>> {
+	): Promise<ListResult<ApiKeySummary> & { taoDuocKeoTinHieu: boolean }> {
 		const where = this.searchWhere(userId, input.q);
 		const { skip, take } = paginate(input);
 
@@ -86,31 +99,42 @@ export class ApiKeysService {
 			this.db.apikey.count({ where }),
 		]);
 
-		return { rows: rows.map(toSummary), total, facetCounts: {} };
+		return {
+			rows: rows.map(toSummary),
+			total,
+			facetCounts: {},
+			taoDuocKeoTinHieu: laQuanTriWorkspace(role),
+		};
 	}
 
 	async create(
 		userId: string,
+		role: WorkspaceRole | null,
 		headers: Headers,
 		input: CreateApiKeyInput,
 	): Promise<CreatedApiKey> {
-		const created = await this.call(() =>
-			auth.api.createApiKey({
+		const expiresIn =
+			input.expiresInDays === null ? null : input.expiresInDays * DAY_SECONDS;
+		const loai = input.loai ?? "toan-quyen";
+		if (loai !== "toan-quyen" && !laQuanTriWorkspace(role)) {
+			throw new ForbiddenException();
+		}
+		const created = await this.call(() => {
+			if (loai === "keo-tin-hieu")
+				return taoKhoaKeoTinHieu({ userId, name: input.name, expiresIn });
+			if (loai === "day-lo-trinh")
+				return taoKhoaDayLoTrinh({ userId, name: input.name, expiresIn });
+			return auth.api.createApiKey({
 				headers,
-				body: {
-					name: input.name,
-					expiresIn:
-						input.expiresInDays === null
-							? null
-							: input.expiresInDays * DAY_SECONDS,
-				},
-			}),
-		);
+				body: { name: input.name, expiresIn },
+			});
+		});
 
 		this.logger.log({
 			message: "API key created",
 			userId,
 			apiKeyId: created.id,
+			loai,
 		});
 
 		return {
@@ -121,6 +145,7 @@ export class ApiKeysService {
 			createdAt: created.createdAt.toISOString(),
 			lastRequest: created.lastRequest?.toISOString() ?? null,
 			expiresAt: created.expiresAt?.toISOString() ?? null,
+			loai,
 			key: created.key,
 		};
 	}
@@ -130,8 +155,16 @@ export class ApiKeysService {
 		headers: Headers,
 		input: RevokeApiKeyInput,
 	): Promise<{ id: string }> {
+		const row = await this.db.apikey.findFirst({
+			where: { id: input.id, referenceId: userId },
+			select: { configId: true },
+		});
+		const configId = configKhoaMay(row?.configId ?? null);
 		await this.call(() =>
-			auth.api.deleteApiKey({ headers, body: { keyId: input.id } }),
+			auth.api.deleteApiKey({
+				headers,
+				body: { keyId: input.id, configId },
+			}),
 		);
 
 		this.logger.log({

@@ -25,6 +25,7 @@ import { GiaiDoanModule } from "./giai-doan/giai-doan.module";
 import { GoogleModule } from "./google/google.module";
 import { HealthModule } from "./health/health.module";
 import { ListingsModule } from "./listings/listings.module";
+import { LoTrinhModule } from "./lo-trinh/lo-trinh.module";
 import { LoggingModule } from "./logging/logging.module";
 import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
@@ -39,6 +40,7 @@ import { SsoModule } from "./sso/sso.module";
 import { SyncModule } from "./sync/sync.module";
 import { TaiLieuModule } from "./tai-lieu/tai-lieu.module";
 import { TelemetryModule } from "./telemetry/telemetry.module";
+import { ThongBaoModule } from "./thong-bao/thong-bao.module";
 import { TinHieuModule } from "./tin-hieu/tin-hieu.module";
 import { ToChucModule } from "./to-chuc/to-chuc.module";
 import { TrackingModule } from "./tracking/tracking.module";
@@ -102,6 +104,8 @@ import { ZaloModule } from "./zalo/zalo.module";
 		OkrModule,
 		TaiLieuModule,
 		TinHieuModule,
+		LoTrinhModule,
+		ThongBaoModule,
 	],
 })
 export class AppModule {}

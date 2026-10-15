@@ -1,0 +1,11 @@
+{
+  "feature_plain": "Mỗi đêm và mỗi chiều, một lịch chạy tự kéo tín hiệu mới về bằng một khoá chỉ làm được đúng việc đó, nên sáng hôm sau người gửi thấy «Chờ gom» mà không ai chạy lệnh; tệp tín hiệu nằm ở một PR đứng mở, gộp theo lô như mọi PR.",
+  "decisions": [
+    {
+      "id": "E11b",
+      "q": "Tài liệu đủ để người vận hành mới tự cài và theo dõi lịch kéo tín hiệu chưa?",
+      "why": "Hội đồng ba người chấm đều đạt: ba tệp trả lời đủ khoá làm được gì, lịch chạy ra sao, biến nào dùng ở đâu, và ba việc anh cài một lần."
+    }
+  ],
+  "analyst_plain": ""
+}

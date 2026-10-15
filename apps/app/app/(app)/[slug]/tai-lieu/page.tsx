@@ -102,7 +102,7 @@ async function DongNguon() {
 
 async function HanhDong({ searchParams }: { searchParams: SearchParams }) {
 	const session = await requireSession();
-	const loc = await thamSoTaiLieu(searchParams);
+	await searchParams;
 	const queryClient = getServerQueryClient();
 	const [trangThai, chonNguoi] = await Promise.all([
 		queryClient
@@ -117,7 +117,7 @@ async function HanhDong({ searchParams }: { searchParams: SearchParams }) {
 	};
 	return (
 		<HydrateClient>
-			<HanhDongTaiLieu {...loc} luaChon={luaChon} />
+			<HanhDongTaiLieu luaChon={luaChon} />
 		</HydrateClient>
 	);
 }
@@ -160,16 +160,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 
 	return (
 		<HydrateClient>
-			<DanhSach
-				archived={archived}
-				chu={chu}
-				coHoi={coHoi}
-				donVi={donVi}
-				loai={loai}
-				nhom={nhom}
-				page={page}
-				tab={tab}
-			/>
+			<DanhSach coHoi={coHoi} />
 		</HydrateClient>
 	);
 }

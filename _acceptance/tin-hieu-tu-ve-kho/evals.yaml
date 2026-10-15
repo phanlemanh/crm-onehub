@@ -1,0 +1,362 @@
+schema_version: 1
+slug: tin-hieu-tu-ve-kho
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tvk_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/api-keys/**"
+      - "apps/app/lib/messages/settings-khoa-api.ts"
+      - "apps/app/test/khoa-api-loai.dom.tsx"
+    expected: |
+      khoa-api-loai.dom.tsx describe "tvk-man": render to tao khoa + danh sach voi mock trpc. Ma tran viet truoc 4 vai
+      (owner, admin, member, okr) x 2 kho (desktop, mobile) = 8 o:
+        1 owner/admin: to tao co nhom radio "Khoá dùng để" dung hai muc, muc mac dinh duoc chon la "toan-quyen", moi muc co
+          mot FieldDescription; member/okr: khong co nhom radio nao trong to (dem = 0)
+        2 owner chon "keo-tin-hieu" roi bam Tao: mutation apiKeys.create nhan dung { name, expiresInDays, loai:"keo-tin-hieu" };
+          owner khong cham radio: mutation nhan loai vang hoac "toan-quyen"
+        3 hop khoa vua tao voi loai "keo-tin-hieu" co cau rut tu tep loi (t.taoXong.keoTinHieu), khong viet tay; loai toan
+          quyen thi khong co cau do
+        4 danh sach: dong co loai "keo-tin-hieu" mang Badge chu = t.bang.loaiKeoTinHieu; dong toan quyen khong co Badge do
+      Moi chu doc tu tep loi vi va en (hai ngon ngu), khong viet tay.
+      CHIEU DO: ban sao hien radio cho moi vai -> o member/okr do voi thong diep ghim "vai khong phai quan tri thay loai khoa";
+      ban sao bo loai khoi mutation -> dong 2 do voi thong diep ghim "loai khoa khong di toi may chu";
+      ban sao bo Badge -> dong 4 do voi thong diep ghim "danh sach khong noi khoa chi keo".
+
+  - id: E1b
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tvk_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/tin-hieu-tu-ve-kho/evidence dat tuong minh: lenh cua tvk_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/tin-hieu-tu-ve-kho/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/api-keys/**"
+      - "apps/app/lib/messages/settings-khoa-api.ts"
+      - "apps/api/src/api-keys/**"
+      - "_acceptance/tin-hieu-tu-ve-kho/rang/do-man.mjs"
+    expected: |
+      Tren app va api that cua cay (kho do rieng), ma tran viet truoc 6 o, moi o mot anh va mot dong DUNG/SAI:
+        1 owner, 1280: to tao khoa mo, nhom "Khoá dùng để" hien hai muc, muc dau duoc chon
+        2 owner, 375: cung to, mot cot, khong cuon ngang
+        3 owner tao khoa "Chỉ kéo tín hiệu về kho": hop khoa vua tao hien khoa va cau "chi keo duoc tin hieu"
+        4 danh sach sau khi dong hop: dong khoa moi mang nhan "Chỉ kéo tín hiệu"; doc lai qua apiKeys.list loai == keo-tin-hieu
+        5 thanh vien thuong, 1280: to tao khoa khong co nhom "Khoá dùng để"
+        6 nen toi, owner, 1280: to tao khoa doc duoc, nhan radio va mo ta khong mat tuong phan
+      Ket luan ma 0 chi khi ca 6 dong DUNG.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tvk_tao_khoa
+    paths:
+      - "apps/api/src/api-keys/**"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
+    expected: |
+      khoa-keo-tin-hieu.spec.ts describe "tvk-tao" tren kho thu cua luot, goi apiKeys.create qua tRPC bang phien cookie that.
+      Ma tran viet truoc 4 vai x 3 loai (vang, "toan-quyen", "keo-tin-hieu") = 12 o, moi o mot assert doc lai bang Prisma:
+        owner/admin x keo-tin-hieu: dung mot hang apikey moi, configId == KHOA_KEO_TIN_HIEU.configId, permissions parse
+          ra dung KHOA_KEO_TIN_HIEU.quyen; apiKeys.list tra loai "keo-tin-hieu" cho hang do
+        member/okr x keo-tin-hieu: 403, so hang apikey khong doi
+        moi vai x vang/toan-quyen: hang moi configId "default", permissions null; apiKeys.list tra loai "toan-quyen"
+      Hai hang so sanh doc tu KHOA_KEO_TIN_HIEU cua @crm/auth, khong viet tay chuoi.
+      CHIEU DO: ban sao bo kiem vai -> o member x keo-tin-hieu do voi thong diep ghim "vai thuong tao duoc khoa chi keo";
+      ban sao tao khoa chi keo khong mang permissions -> o owner do voi thong diep ghim "khoa chi keo thieu quyen keo tin hieu".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tvk_duong_lich
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/src/trpc/middlewares/khoa-keo-tin-hieu.middleware.ts"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/validation/src/tin-hieu.ts"
+      - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
+    expected: |
+      describe "tvk-lich": gieo 3 tin hieu (hai chua dau, mot da dau tu truoc), tao khoa chi keo cho owner va cho admin qua
+      apiKeys.create. Voi MOI khoa: POST /rest/tin-hieu/lich/keo-ve voi x-api-key:
+        1 status 200; tep doc bang docPhanHoiKeoVe; danh sach id == danh sach cua tinHieu.keoVe cua LT2 tren cung du lieu (goi
+          ca hai, so sanh bang nhau theo thu tu so)
+        2 sau luot dau: moi hang co keoVeLuc khac null; hang da dau tu truoc giu nguyen keoVeLuc
+        3 dongDauLuc cua luot dau == keoVeLuc cua hai hang vua dau; luot hai: dongDauLuc null, khong keoVeLuc nao doi
+        3b luot hai tra DU 3 id (ca tin hieu da dau o luot dau va tin hieu da dau tu truoc), va vietTep cua tung tep bang
+           byte voi luot dau — quan he nay la thu cho nhanh hang cho ghi de ma khong rot tep
+        4 moi tep mang keoVeLuc khop CSDL
+        5 dong nhat ky cua luot (bat qua logger gia) chua id khoa va userId chu khoa, KHONG chua chuoi khoa va KHONG chua
+          muonLam/daXayRa cua tin hieu nao
+      CHIEU DO: ban sao bo dongDauLuc -> dong 3 do voi thong diep ghim "luot khong noi luc dong dau";
+      ban sao ghi khoa vao nhat ky -> dong 5 do voi thong diep ghim "nhat ky mang chuoi khoa";
+      ban sao chi tra tin hieu chua dau -> dong 3b do voi thong diep ghim "luot keo ve bo tin hieu da dau".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tvk_duong_khac
+    paths:
+      - "packages/auth/src/**"
+      - "apps/api/src/trpc/**"
+      - "apps/api/src/auth/**"
+      - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
+    expected: |
+      describe "tvk-duong-khac": khoa chi keo hop le cua owner. Ma tran viet truoc 13 duong, doc tu
+      _acceptance/tin-hieu-tu-ve-kho/rang/bang-duong-doc-khoa.json (cung tep E4c doc), moi duong mot assert:
+        1 GET  /rest/tin-hieu/cua-toi
+        2 POST /rest/tin-hieu/keo-ve (thu tuc cua LT2)
+        3 POST /rest/contacts/search (contacts.list qua cau REST)
+        4 GET  /rest/api-keys
+        5 GET  /api/trpc/contacts.list (tRPC goc)
+        6 GET  /api/auth/get-session
+        7 POST /api/auth/api-key/create
+        8 GET  /api/auth/api-key/list
+        9 GET  /api/auth/api-key/get
+       10 POST /api/auth/api-key/update (doi ten chinh khoa chi keo)
+       11 POST /api/auth/api-key/delete (xoa mot khoa thuong cua owner)
+       12 GET  /auth/me (controller Nest doc phien)
+       13 auth.api.getSession({ headers: x-api-key }) — ham ma apps/app/lib/session.ts (trang web va cau tac nhan /eve) goi
+      Duong 1-5, 7-12: status 401 hay 403; duong 6: 401 hoac 200 voi phien rong; duong 13: phien rong hoac APIError 401.
+      Sau ca ma tran: so hang apikey, ten khoa, so tinHieu co keoVeLuc khong doi.
+      Ca rieng: tap duong HTTP cua plugin api-key (doc tu auth.options.plugins that) bang tap truong "plugin" cua bang.
+      Doi chung duong: khoa THUONG cua owner -> 1, 2, 3, 5, 6, 8, 12, 13 tra 200 (4 la duong chi nhan phien dang nhap).
+      Voi duong 6, 12, 13 doi chung con doi than tra ve la phien cua chinh chu khoa (user.id == owner) — 200 voi phien rong
+      khong tinh la doi chung dat.
+      CHIEU DO: ban sao dat cau hinh chi keo len TRUOC cau hinh mac dinh va bat enableSessionForAPIKeys -> do voi thong diep
+      ghim "khoa chi keo mo duoc phien" (chi bat co ma giu thu tu thi van chan: thu vien doi chieu cau hinh mac dinh truoc —
+      thu tu va configId moi la cho giu an toan).
+      CHIEU DO doi chung: ban sao tat enableSessionForAPIKeys cua cau hinh MAC DINH -> doi chung do voi thong diep ghim
+      "khoa thuong mat phien" (dong "khong mo phien cua chu khoa" o duong 6, 12, 13).
+
+  - id: E4c
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tvk_duong_doc_khoa
+    paths:
+      - "apps/api/src/**"
+      - "apps/app/**"
+      - "apps/agent/agent/**"
+      - "packages/auth/src/**"
+      - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
+      - "_acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs"
+    expected: |
+      duong-doc-khoa.mjs (goc kho suy tu vi tri tep, khong hardcode) quet ma that cua apps/api/src, apps/app (bo node_modules,
+      .next*, test), apps/agent/agent (bo .eve) va packages/auth/src, liet ke moi cho: goi getSession( / auth.api.getSession,
+      goi verifyApiKey, doc dau API_KEY_HEADER hay chuoi "x-api-key"; va moi duong /api-key/* ma plugin api-key dang ky
+      (doc tu doi tuong endpoints cua plugin that, khong viet tay). Moi cho phai anh xa toi mot o cua ma tran E4 (bang anh xa
+      nam trong rang) hoac mot dong mien co ly do (vd chinh middleware khoa-keo-tin-hieu). In tung cho -> o; exit 0 chi khi
+      khong cho nao thieu o va khong o nao tro cho khong con.
+      CHIEU DO: --pha-thu chep mot tep tam co doc "x-api-key" vao ban sao cua cay -> exit 1 voi thong diep ghim
+      "duong doc khoa chua co o"; xoa mot muc khoi bang anh xa -> cung thong diep.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tvk_tu_choi
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/src/trpc/middlewares/khoa-keo-tin-hieu.middleware.ts"
+      - "packages/auth/src/**"
+      - "apps/api/test/khoa-keo-tin-hieu.spec.ts"
+    expected: |
+      describe "tvk-tu-choi": POST /rest/tin-hieu/lich/keo-ve, gieo mot tin hieu chua dau. Ma tran viet truoc 8 o:
+        401: khoa thuong cua owner · khoa chi keo da thu hoi (apiKeys.revoke) · khoa chi keo het han (expiresAt dat lui trong
+             CSDL) · chuoi khoa sai cung do dai · khong co dau x-api-key
+        403: khoa chi keo hop le, chu khoa doi vai thanh member · thanh okr · chu khoa bi go khoi workspace (xoa hang member)
+      Khong co khoa chi keo hop le thi duong lich theo luat chung (bai go-la-cat-quyen va cua-vao-va cua kho do): phien cua
+      nguoi da bi go -> 403 NOT_A_MEMBER, doc phien hong -> 503.
+      Moi o: status dung, va tinHieu chua dau van keoVeLuc null. Vai doc lai moi luot: cung mot khoa goi 200 truoc khi ha vai,
+      403 ngay sau khi ha vai (khong cache).
+      CHIEU DO: ban sao middleware dung vai cu (owner) thay vai doc lai -> o "doi vai thanh member" do voi thong diep ghim
+      "vai chu khoa khong doc lai" (bo rieng lan kiem vai o middleware thi dich vu van chan — hai lop);
+      ban sao nhan khoa thuong o duong lich -> o dau do voi thong diep ghim "duong lich nhan khoa toan quyen".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tvk_khoa_thuong
+    paths:
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/api-keys.ts"
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/test/tin-hieu.spec.ts"
+      - "apps/api/test/khoa-api-ghi-thua.spec.ts"
+    expected: |
+      Ba bo co san, khong sua ca nao: tin-hieu.spec.ts "gth-keo-ve" (LT2: owner/admin keo duoc, member/okr bi tu choi, cung
+      byte lan hai), khoa-api-ghi-thua.spec.ts (lastRequest ghi toi da moi phut mot lan, updatedAt khong doi), va
+      khoa-keo-tin-hieu.spec.ts "tvk-khoa-thuong": khoa thuong tao bang duong tao cua thu vien KHONG truyen configId (dung
+      duong apiKeys.create cua khoa toan quyen hom nay), doc lai hang: configId la gia tri ma cot mac dinh cua migration
+      20260820152910_add_api_keys ghi (khong viet tay "default"); them mot hang thu hai mo phong hang production cu bang
+      cach dat configId ve DEFAULT cua cot (UPDATE ... SET "configId" = DEFAULT); ca hai goi contacts.list tra 200. Ca ba exit 0.
+      CHIEU DO: ban sao doi configId cua cau hinh mac dinh -> "tvk-khoa-thuong" do voi thong diep ghim "khoa thuong cu mat phien".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tvk_lenh
+    paths:
+      - "scripts/tin-hieu/keo-ve.ts"
+      - "scripts/tin-hieu/test/keo-ve-lich.test.ts"
+      - "packages/validation/src/tin-hieu.ts"
+    expected: |
+      keo-ve-lich.test.ts describe "tvk-lenh" voi may chu gia ghi lai duong va dau nhan duoc. Ma tran viet truoc 4 o env:
+        chi CRM_KHOA_KEO_TIN_HIEU -> duong /rest/tin-hieu/lich/keo-ve, dau x-api-key == khoa do
+        chi CRM_API_KEY -> duong /rest/tin-hieu/keo-ve
+        ca hai -> duong lich
+        khong co -> ma 2, loi chua ca "CRM_KHOA_KEO_TIN_HIEU" va "CRM_API_KEY", thu muc nguon khong co tep nao
+      Moi o: toan bo stdout + stderr KHONG chua chuoi khoa.
+      Dong tong ket: phan hoi gia co dongDauLuc va hai tep vua dau gui luc dongDauLuc - 30 gio va - 2 gio, mot tep dau tu truoc
+      gui - 100 gio -> dong "đóng dấu lượt này: 2 · chờ lâu nhất: 30 giờ"; dongDauLuc null -> "đóng dấu lượt này: 0".
+      Phan hoi gia sinh bang ham viet that cua may chu (round-trip qua keoVeOutput.parse), khong viet tay khuon.
+      CHIEU DO: ban sao tinh cho lau nhat tren moi tep -> o tong ket do voi thong diep ghim "cho lau nhat tinh ca tin hieu da dau truoc";
+      ban sao in khoa khi loi -> o khong co... do voi thong diep ghim "dau ra mang chuoi khoa".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tvk_lich
+    paths:
+      - "scripts/tin-hieu/lich.ts"
+      - "scripts/tin-hieu/keo-ve.ts"
+      - "scripts/tin-hieu/test/lich.test.ts"
+    expected: |
+      lich.test.ts describe "tvk-nhanh": kho git that trong tmpdir (origin tran + ban lam), gh gia qua PATH; may chu gia phat
+      phan hoi bang ham viet that (vietTep + keoVeOutput.parse round-trip) va giu dung luat cua thu tuc: tra MOI tin hieu
+      con lai, ke ca da dau.
+      Ma tran viet truoc 5 o:
+        1 onehub khong co tep, CRM co 2 tin hieu -> origin/tin-hieu/keo-ve == onehub + 1 commit; diff --name-only chi gom
+          tin-hieu/crm/crm-1.json, crm-2.json
+        2 chay lai y het -> sha origin/tin-hieu/keo-ve khong doi (khong day)
+        3 CRM them crm-3 -> nhanh moi la onehub + 1 commit chua 3 tep (dung lai tren dinh onehub, khong chong commit)
+        4 onehub da gop ca 3 tep, CRM khong co gi moi -> khong commit, khong day, nhanh hang cho khong doi
+        5 onehub tien them mot commit khac -> nhanh hang cho dung lai tren dinh moi
+        6 quan he khong rot: sau moi o, moi tep co tren nhanh hang cho cua luot truoc ma onehub chua co van con tren nhanh
+          sau luot nay (assert tren tap tep, ca 5 o)
+        7 (describe "tvk-nhanh-hook") ban lam dat core.hooksPath ve thu muc chua ban chep .githooks/pre-push THAT cua kho
+          -> luot van day duoc nhanh hang cho (hook bo qua qua CRM_SKIP_HOOKS)
+      Moi tep day len doc bang ham kiem cua kit (cung ham kiem kenh yeu cau ma rang vong-kit cua LT2 dung) 0 loi.
+      CHIEU DO: ban sao commit ca khi khong co tep moi -> o 2 hoac 4 do voi thong diep ghim "luot day khi khong co gi moi";
+      ban sao chong commit len nhanh cu -> o 3 do voi thong diep ghim "nhanh hang cho khong dung lai tren nhanh chinh";
+      may chu gia chi tra tin hieu chua dau -> dong 6 do voi thong diep ghim "nhanh hang cho lam roi tep chua gop";
+      ban sao day khong dat CRM_SKIP_HOOKS -> dong 7 do voi thong diep ghim "luot lich bi hook truoc day chan".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tvk_lich
+    paths:
+      - "scripts/tin-hieu/lich.ts"
+      - "scripts/tin-hieu/test/lich.test.ts"
+    expected: |
+      lich.test.ts describe "tvk-pr": gh gia ghi lai moi lenh. Ma tran viet truoc 6 o:
+        1 sau khi day, gh pr list tra rong -> dung mot lenh gh pr create --base onehub --head tin-hieu/keo-ve, tieu de
+          mang "Tín hiệu kéo về"
+        2 gh pr list tra mot PR mo -> khong lenh gh pr create
+        3 gh pr create tra loi "GitHub Actions is not permitted to create or approve pull requests" -> ma khac 0, stderr
+          gom cau goi ten quyen con thieu (rut tu hang thong diep cua lich.ts), nhanh van da day (sha tren origin)
+        4 origin da co nhanh hang cho trung cay (luot khong day), gh pr list tra rong -> dung mot lenh gh pr create
+        5 PR truoc da dong khong gop (gh pr list --state open tra rong), nhanh khac onehub -> dung mot lenh gh pr create
+        6 toan bo nhat ky gh cua ca 6 o khong co "pr merge" va khong co "--auto"
+      CHIEU DO: ban sao bo kiem PR mo -> o 2 do voi thong diep ghim "mo PR thu hai";
+      ban sao nuot loi tao PR -> o 3 do voi thong diep ghim "kho cam mo PR ma luot van xanh";
+      ban sao chi kiem PR khi vua day -> o 4 do voi thong diep ghim "nhanh hang cho co tep ma khong PR".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.tvk_lich
+    paths:
+      - "scripts/tin-hieu/lich.ts"
+      - "scripts/tin-hieu/test/lich.test.ts"
+    expected: |
+      lich.test.ts describe "tvk-hong": ma tran viet truoc 4 o — thieu CRM_KHOA_KEO_TIN_HIEU · may chu gia tra 500 · may chu
+      khong nghe (cong dong) · tep crm-1.json da co tren onehub khac byte. Moi o: ma khac 0; stderr goi ten nguyen nhan (ten
+      bien / ma 500 / khong toi duoc / ten tep); git log cua origin/tin-hieu/keo-ve khong doi; gh gia khong nhan lenh nao.
+      CHIEU DO: ban sao van day khi lenh keo ve loi -> o "500" do voi thong diep ghim "luot hong van day nhanh".
+
+  - id: E10b
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.tvk_tep_lich
+    paths:
+      - ".github/workflows/tin-hieu-keo-ve.yml"
+      - "_acceptance/tin-hieu-tu-ve-kho/rang/tep-lich.mjs"
+    expected: |
+      tep-lich.mjs doc .github/workflows/tin-hieu-keo-ve.yml bang trinh doc YAML that (khong regex) va kiem ma tran 6 dong:
+        1 on.schedule co dung hai cron "0 21 * * *" va "0 9 * * *"
+        2 on.workflow_dispatch co mat
+        3 permissions == { contents: write, pull-requests: write } — dung hai khoa, khong khoa nao khac
+        4 concurrency co group, cancel-in-progress false
+        5 buoc chay goi "bun scripts/tin-hieu/lich.ts"; bi mat CRM_KHOA_KEO_TIN_HIEU va CRM_API_URL lay tu secrets
+        6 khong buoc nao chua "gh pr merge", "--auto" hay "git push origin onehub"
+      Moi dong in DUNG/SAI; exit 0 chi khi 6 dong DUNG. Tu kiem tren ban sao: --pha-thu chep tep vao tmpdir, them
+      "gh pr merge" vao mot buoc, chay lai -> exit 1 voi dong 6 SAI (thong diep ghim "tep lich co buoc gop").
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tvk_t1
+    paths:
+      - "_acceptance/config.yaml"
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/tin-hieu-tu-ve-kho/rang/t1.mjs"
+    expected: |
+      t1.mjs dung mot kho git tam tu cay hien tai (git worktree tam), them mot commit chi chua tin-hieu/crm/crm-9.json, roi:
+        1 chay .github/scripts/phan-loai.mjs tren diff do -> xep T1 (doc dung truong dau ra cua bo phan loai)
+        2 quan he: tap dong VIOLATION cua scripts/pre-merge-check.sh --base <dinh truoc commit> sau commit tep tin hieu khong
+          them dong nao so voi ngay truoc commit (vi pham san co cua ho so khac khong tinh)
+        3 doi chung: commit chi chua scripts/tin-hieu/lich.ts -> phan-loai KHONG xep T1
+      In DUNG/SAI tung dong; exit 0 chi khi ca ba DUNG. CHIEU DO: --pha-thu bo glob "tin-hieu/crm/**" khoi config cua
+      cay tam -> dong 1 va dong 2 cung SAI.
+
+  - id: E11b
+    criterion: AC-11
+    executor: judgment
+    inputs:
+      - docs/api.md
+      - CONTEXT.md
+      - .env.example
+      - docs/superpowers/specs/2026-10-14-tin-hieu-tu-ve-kho-design.md
+    question: |
+      Doc muc "Tín hiệu" cua docs/api.md, cac muc moi cua CONTEXT.md va khoi bien tin hieu cua .env.example. Mot nguoi van
+      hanh moi doc ba tep nay co tra loi dung duoc: (a) khoa chi keo tin hieu lam duoc gi va KHONG lam duoc gi, (b) lich chay
+      keo ve chay luc nao, day tep di dau va vi sao khong tu gop, (c) bien CRM_KHOA_KEO_TIN_HIEU dung o dau, (d) ba viec cai
+      mot lan cua chu kho la gi va thieu viec nao thi thay gi — doi chieu voi tep thiet ke? Trich cau tra loi tung y; y nao
+      khong co hay noi nguoc tep thiet ke thi trich cho noi nguoc.
+    expected: |
+      PASS khi ca bon y (a)-(d) co cau tra loi trong ba tep va khong cau nao noi nguoc tep thiet ke.
+
+  - id: E1c
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tvk_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/api-keys/**"
+    expected: |
+      design-gate.mjs --mode static cho tung tep .tsx duoi apps/app/app/(app)/[slug]/settings/api-keys: khong P0.
+      CHIEU DO: ban sao them className doi mau cho Badge loai khoa -> P0 do.
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tvk_vai
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/src/trpc/middlewares/**"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      vai-chi-okr.spec.ts chay tron, exit 0: thu tuc tinHieuLich.keoVe nam trong danh sach ghim voi ky vong rieng — phien
+      cua moi vai (ca owner) goi no deu bi tu choi vi duong nay chi nhan khoa chi keo; khong thu tuc cu nao doi ky vong.
+      CHIEU DO: ban sao gan PhamViChungMiddleware cho router lich -> ca "tinHieuLich.keoVe" do voi thong diep ghim
+      "duong lich nhan phien dang nhap".

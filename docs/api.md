@@ -336,6 +336,10 @@ them from becoming a second, undisciplined API:
   `AgentTask` row and lets the agent decide — the same rule as
   "Intelligence never lives in the API" above.
 
+The scheduled signals pull (`POST /rest/tin-hieu/lich/keo-ve`, section «Tín hiệu» below) is a
+third machine caller but not an ingest endpoint: it stays on tRPC, sends no data in, and is
+guarded by its own key middleware instead of a shared secret.
+
 Adding a third one is a decision, not a pattern to copy freely: it needs its own
 secret, its own schema, and a row in the table above.
 
@@ -556,14 +560,15 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
 - **Bảng và việc con** (hàng DA2, `ViecBangService`). `viec.bang({ nhom })` trả bốn cột Chưa làm · Đang làm
   · Chờ đánh giá · Xong; cột Xong chỉ việc có `khepLuc` trong `VIEC.bang.xongGanDayNgay` ngày, `tong` đếm đủ;
   mỗi thẻ mang `chuyenDuoc` (đích người xem được phép, máy chủ tính bằng `chuyenDuocCua` — giao diện không tự
-  suy đồ thị), `con` (`xong`/`tong`, không tính Huỷ), `cha` và `conMo`. `viec.keo({ id, den, thuTu, nguon })`
+  suy đồ thị), `con` (`xong`/`tong`, không tính Huỷ), `cha` và `conMo`; `con` và `conMo` chỉ đếm việc con người
+  xem thấy, và `cha` là `null` khi người xem không thấy việc cha (hàng DA2b — cùng luật 404, không có dòng thay chỗ). `viec.keo({ id, den, thuTu, nguon })`
   đi qua đúng `doiTrangThai` (cùng thứ tự kiểm 404 → 400 → 403 → vai «chỉ OKR»), với `nguon` là `bang-keo`
   (kéo bằng chuột, chạm, phím) hay `bang-menu` (menu «Chuyển sang…»); lần bị từ chối không ghi gì. Thứ tự
   trong cột là của riêng từng người, ở bảng `viecThuTu` (khoá chèn giữa base-62, `@crm/db/viec-thu-tu`);
   sắp thứ tự không ghi vết và không làm việc thành «có lịch sử». `viec.taoCon({ chaId, … })` (`taoViecCon`):
   chỉ người giao hay người thực hiện của cha, cha phải đang mở và không phải con (một tầng), con chép gắn của
   cha, người giao và người thực hiện của cha thành người theo dõi, cha nhận vết `them-viec-con` — nên cha đã
-  có con thì không xoá được. `viec.con({ id })` trả `cha`, các con người xem thấy, `conMo`, `themDuoc`.
+  có con thì không xoá được. `viec.con({ id })` trả `cha` (`null` khi người xem không thấy cha), các con người xem thấy, `conMo`, `themDuoc`.
 - **Tổng quan**: `viecQuaHan` (việc đang mở hạn trước hôm nay: tôi thực hiện ở «của tôi», tôi thấy ở «mọi
   người»; tối đa `VIEC.tranTongQuan` dòng); `quaHan.viec` cộng thêm số việc cùng điều kiện, đếm đủ.
 - **Việc cần làm cũ (hàng DA1b).** Hàng `activity` loại `TASK` không còn đường ghi: `activities.create` trả 400
@@ -1583,13 +1588,78 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
 - `tinHieu.xoa` chỉ xoá tín hiệu của chính người gọi, và chỉ khi chưa được lấy về (`keoVeLuc` rỗng).
   Xoá xin khoá bảng `ROW EXCLUSIVE` trước rồi mới đọc — cùng thứ tự khoá với lượt lấy về, nên hai
   việc chạy đua không khoá chéo nhau.
-- `tinHieu.keoVe` chỉ owner/admin. Máy chủ kho gọi `POST /rest/tin-hieu/keo-ve` với `x-api-key`
-  (khoá của chủ kho) đầu mỗi lượt gom. Thủ tục khoá bảng `SHARE ROW EXCLUSIVE`, đóng dấu tín hiệu
-  chưa dấu, trả mọi tín hiệu theo số. Cầu REST trả thẳng đầu ra `{tep: [...]}`, không bọc vỏ tRPC;
-  lệnh kéo về đọc bằng `docPhanHoiKeoVe`.
-- Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban chỉ đi kèm trong phản hồi để
-  lệnh kéo về đếm cho ngưỡng.
+- `tinHieu.keoVe` chỉ owner/admin, cho lượt kéo tay bằng khoá thường của quản trị
+  (`POST /rest/tin-hieu/keo-ve`). Thủ tục khoá bảng `SHARE ROW EXCLUSIVE`, đóng dấu tín hiệu chưa
+  dấu, trả MỌI tín hiệu còn lại theo số — kể cả tín hiệu đã đóng dấu ở lượt trước — kèm
+  `dongDauLuc` (lúc đóng dấu của lượt, `null` khi không đóng dấu gì) và `keoVeLuc` của từng tín
+  hiệu. Hai trường là tuỳ chọn trong `keoVeOutput`. Cầu REST trả thẳng đầu ra `{tep: [...]}`,
+  không bọc vỏ tRPC; lệnh kéo về đọc bằng `docPhanHoiKeoVeDayDu`.
+- **Khoá chỉ kéo tín hiệu** là cấu hình khoá thứ hai của `@better-auth/api-key`
+  (`KHOA_KEO_TIN_HIEU`: `configId: "keo-tin-hieu"`, `enableSessionForAPIKeys: false`, quyền
+  `{ tinHieu: ["keoVe"] }`). Thư viện đối chiếu mọi khoá trong `x-api-key` với cấu hình mặc
+  định đứng TRƯỚC trong mảng, nên khoá chỉ-kéo không mở phiên ở bất kỳ đường nào — tRPC, cầu
+  REST, trang web, cầu tác nhân, đường khoá của thư viện. **Giữ cấu hình mặc định đứng đầu
+  mảng**: đó là chỗ giữ an toàn, không phải cờ `enableSessionForAPIKeys`.
+  `_acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs` liệt kê bằng máy mọi chỗ đọc khoá;
+  chỗ mới phải có một ô đo trong `bang-duong-doc-khoa.json`.
+- `apiKeys.create` nhận `loai: "keo-tin-hieu"` chỉ từ owner/admin (403 với vai khác); máy chủ tạo
+  khoá bằng lời gọi phía máy chủ vì `permissions` là trường chỉ máy chủ ghi được. `apiKeys.list`
+  trả `loai` và `taoDuocKeoTinHieu`. Thu hồi khoá chỉ-kéo truyền đúng `configId`.
+- **Đường kéo theo lịch** `tinHieuLich.keoVe` (`POST /rest/tin-hieu/lich/keo-ve`) chỉ nhận khoá
+  chỉ-kéo: `KhoaKeoTinHieuMiddleware` xác minh khoá với đúng `configId` và quyền, đọc lại vai chủ
+  khoá ở mỗi lượt (owner/admin), rồi gọi cùng `TinHieuService.keoVe`. Router không mang
+  `AuthMiddleware` vì không có phiên; không có khoá chỉ-kéo hợp lệ thì middleware theo đúng luật
+  chung: đọc phiên hỏng → 503, người đã bị gỡ khỏi kho → 403 `NOT_A_MEMBER`, còn lại (phiên trình
+  duyệt, khoá thường, không khoá) → 401.
+- **Lịch chạy** `.github/workflows/tin-hieu-keo-ve.yml` chạy 21:00Z và 09:00Z (và chạy tay),
+  gọi `bun scripts/tin-hieu/lich.ts`: kéo bằng `CRM_KHOA_KEO_TIN_HIEU`, dựng **nhánh hàng chờ**
+  `tin-hieu/keo-ve` = đỉnh `onehub` + một commit chỉ chạm `tin-hieu/crm/**`, đẩy khi cây khác,
+  và giữ đúng một PR «Tín hiệu kéo về» mở. Lệnh đẩy đặt `CRM_SKIP_HOOKS=1`: `bun install` trên
+  máy GitHub bật `.githooks` (script `prepare`), và hook trước-đẩy chạy cả bộ kiểm ~19 phút cần
+  Postgres — một lượt chỉ đẩy tệp tín hiệu T1 nên không chạy nó. Không bao giờ gộp: PR đi vào `onehub` theo lô. Ghi
+  đè nhánh không làm rơi tệp vì thủ tục trả mọi tín hiệu còn lại. `tin-hieu/crm/**` nằm trong
+  `t1_skip_globs`, nên PR hàng chờ là T1. Lượt hỏng (thiếu bí mật, CRM lỗi, tệp lệch byte, kho
+  cấm mở PR) kết thúc đỏ và GitHub gửi thư cho người sửa dòng lịch gần nhất.
+- **Giới hạn đã biết:** PR do tác vụ mở bằng `GITHUB_TOKEN` không kích hoạt CI; điều phối đóng
+  rồi mở lại PR để chạy bước nhẹ trước khi đưa vào lô.
+- **Ba việc cài một lần của chủ kho** (ngoài kho): tạo khoá chỉ-kéo trên production; đặt hai bí
+  mật kho `CRM_API_URL`, `CRM_KHOA_KEO_TIN_HIEU`; bật «Allow GitHub Actions to create and approve
+  pull requests» (Settings › Actions › General). Thiếu việc cuối thì lượt vẫn kéo và đẩy nhánh —
+  người gửi vẫn thấy «Chờ gom» — rồi đỏ ở bước mở PR với câu gọi tên quyền đó.
+- Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban (tên và `phongBanId`) chỉ đi
+  kèm trong phản hồi để lệnh kéo về đếm cho ngưỡng.
+- `tinHieu.tatCa` chỉ owner/admin (cùng câu kiểm với `keoVe`), chỉ đọc — không đóng dấu. Trả mọi tín
+  hiệu, mới nhất trước, kèm người gửi (mã, tên — không thư) và phòng ban lúc gửi; REST
+  `GET /rest/tin-hieu/tat-ca`. Thẻ «Tất cả» của trang Tín hiệu đọc nó.
+- Ba con số ngưỡng sống (tín hiệu 30 ngày, số phòng ban, quá 7 ngày chưa có chỗ) đếm bằng một hàm
+  `demNguongSong` cho cả lệnh kéo về lẫn trang; phòng ban đếm theo mã, không theo tên.
+- **Ngoại lệ có tên của luật «Filter, sort and paginate in Prisma»:** `tatCa` không nhận `listInput`;
+  thẻ «Tất cả» lọc và chia trang ở trình duyệt. Lý do: trạng thái để lọc sống ở bản vẽ `LO-TRINH.html`
+  của bản dựng chứ không ở cơ sở dữ liệu, và ba con số cần mọi dòng. Chủ kho chọn ở Cổng Phạm vi
+  14/10 (`_acceptance/moi-tin-hieu-cho-quan-tri/`). Mở lại khi số tín hiệu vượt vài trăm.
 - Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
+  phán nào ở API.
+
+## Bản chụp lộ trình: Actions đẩy, CRM giữ bản mới nhất
+
+Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó mới hơn bản đang chạy, và đọc
+`LO-TRINH.html` đóng sẵn trong bản dựng khi không (`apps/app/lib/lo-trinh/chon-nguon.ts`). Bảng
+`BanChupLoTrinh` giữ một hàng mỗi nguồn (hôm nay chỉ `crm`); không lịch sử, bản mới ghi đè.
+
+- **Người đẩy là GitHub Actions** (`.github/workflows/ban-chup-lo-trinh.yml`, kịch bản
+  `scripts/ban-chup-lo-trinh/day.ts`), gọi `POST /rest/lo-trinh/ban-chup` (thủ tục
+  `loTrinhBanChup.day`) với `x-api-key` là khoá loại «Đẩy lộ trình». Đây không phải điểm nhận
+  `/internal/*`: nó là thủ tục tRPC qua cầu REST, chặn bằng khoá máy như đường kéo tín hiệu.
+- **Khoá «Đẩy lộ trình» là cấu hình thứ ba của `apiKey([...])`** (`configId: "day-lo-trinh"`,
+  `enableSessionForAPIKeys: false`), đứng SAU khoá mặc định — cùng luật thứ tự với khoá chỉ-kéo.
+  `KhoaDayLoTrinhMiddleware` đọc lại vai người giữ khoá mỗi lần gọi: chỉ chủ hay quản trị.
+  Chỉ chủ hay quản trị tạo được loại khoá này.
+- **Phân tích ở biên, lưu nguyên khối**: thân đi qua `banChupVao`
+  (`@crm/validation/ban-chup-lo-trinh`), khối dữ liệu phải qua khuôn lộ trình; hàng lưu giữ cả
+  khoá ngoài khuôn của trang (danh sách tín hiệu) để TH3 đọc. Đọc ra thì phân tích lại.
+- **Không bao giờ lùi**: ghi bằng một câu `UPDATE … WHERE commitLuc < $moi`; cùng sha trả
+  `trung`, cũ hơn trả `cu-hon`, không đổi gì. Hai lượt chạy đua tạo hàng đầu bắt `P2002`.
+- Nhật ký ghi mã khoá, sha và kết quả, không ghi nội dung khối. Không `AgentTask`: không có việc
   phán nào ở API.
 
 ## Money
