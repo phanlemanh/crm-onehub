@@ -13,7 +13,7 @@ const KHO = { hep: 360, rong: 1280 };
 const CHO_MS = 30_000;
 const MAN = [
 	{ ten: "thoa-thuan", duong: "/deals", soDem: 3, coKieuXem: true, coGap: true },
-	{ ten: "onboarding", duong: "/onboarding", soDem: 2, coKieuXem: true, coGap: true },
+	{ ten: "onboarding", duong: "/onboarding?cachXem=bang-cot", soDem: 2, coKieuXem: true, coGap: true },
 	{ ten: "tai-lieu", duong: "/tai-lieu", soDem: 6, coKieuXem: false, coGap: false },
 ];
 const NHOM_LOC = {

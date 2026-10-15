@@ -148,6 +148,7 @@ flowchart LR
 - Khổ 1280: `ViewSwitch` là nhóm nút outline sm; chip trạng thái cùng hàng với ô tìm.
 - Số đếm: màu chữ phụ (`text-muted-foreground`), độ mờ 1, chữ số đều (`tabular-nums`), ở mọi chip của ba màn.
 - Đổi bộ lọc đưa trang về 1; đổi kiểu xem không đổi bộ lọc.
+- «Chia cột theo» của Onboarding chỉ hiện ở kiểu xem Bảng cột; ở kiểu Bảng không có điều khiển này.
 - Bấm lọc ở Tài liệu: danh sách đổi ngay trên trang (truy vấn mới), không tải lại trang.
 
 ### 5. Xuất xứ component
