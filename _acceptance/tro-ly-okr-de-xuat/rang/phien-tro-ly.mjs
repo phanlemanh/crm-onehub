@@ -7,6 +7,7 @@ import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { TRO_LY_OKR } from "../../../apps/agent/agent/lib/okr/config.ts";
+import { currentTree } from "../../../packages/db/src/measure-database.ts";
 import { PHIEN_DO } from "../../../scripts/lan-do/cau-hinh.mjs";
 
 export const GOC = join(
@@ -19,6 +20,15 @@ export const RA = join(GOC, ".acceptance-runs/tro-ly-okr-de-xuat");
 export const AGENT = join(GOC, "apps/agent");
 const API_DIR = join(GOC, "apps/api");
 export const pg = createRequire(join(GOC, "packages/db/package.json"))("pg");
+const { z } = createRequire(join(GOC, "packages/validation/package.json"))(
+	"zod",
+);
+const creditsGateway = z.object({
+	balance: z
+		.string()
+		.regex(/^-?\d+(\.\d+)?$/)
+		.transform(Number),
+});
 
 const GIAY_MS = 1000;
 const PHUT_MS = 60 * GIAY_MS;
@@ -42,6 +52,14 @@ export const PHIEN_TRO_LY = {
 	},
 	thongDiep: {
 		thieuKhoa: "thieu khoa mo hinh",
+		soDuCan: (so) =>
+			`so du AI Gateway ${so} USD — nap tin dung truoc khi do (moi loi goi model se tra 402)`,
+		soDuKhongDoc: (ly) => `khong doc duoc so du AI Gateway (${ly}) — van do`,
+	},
+	soDu: {
+		url: "https://ai-gateway.vercel.sh/v1/credits",
+		bienUrl: "TDX_URL_SO_DU",
+		hoiMs: 10 * GIAY_MS,
 	},
 	maNgat: { SIGINT: 130, SIGTERM: 143, SIGHUP: 129 },
 };
@@ -89,8 +107,40 @@ export function laKhoDo(url = process.env.DATABASE_URL ?? "") {
 	}
 }
 
+export function tenKhoTheoCay(ten, cay = currentTree(GOC)) {
+	return `${cay}-${ten}`;
+}
+
+export async function soDuGateway(env = process.env, layFetch = fetch) {
+	const khoa = Object.values(TRO_LY_OKR.khoa)
+		.map((k) => env[k]?.trim())
+		.find(Boolean);
+	if (!khoa) return { khongDoc: "thieu khoa" };
+	try {
+		const url = env[PHIEN_TRO_LY.soDu.bienUrl]?.trim() || PHIEN_TRO_LY.soDu.url;
+		const r = await layFetch(url, {
+			headers: { authorization: `Bearer ${khoa}` },
+			signal: AbortSignal.timeout(PHIEN_TRO_LY.soDu.hoiMs),
+		});
+		if (!r.ok) return { khongDoc: `HTTP ${r.status}` };
+		const doc = creditsGateway.safeParse(await r.json());
+		return doc.success ? { soDu: doc.data.balance } : { khongDoc: "balance khong phai so" };
+	} catch (loi) {
+		return { khongDoc: loi?.message ?? String(loi) };
+	}
+}
+
+export async function chanSoDu(env = process.env, layFetch = fetch) {
+	const doc = await soDuGateway(env, layFetch);
+	if ("khongDoc" in doc) {
+		console.error(PHIEN_TRO_LY.thongDiep.soDuKhongDoc(doc.khongDoc));
+		return null;
+	}
+	return doc.soDu <= 0 ? PHIEN_TRO_LY.thongDiep.soDuCan(doc.soDu) : null;
+}
+
 export function taoKho(ten) {
-	const r = spawnSync("bun", ["run", "db:do", "--tao", "--ten", ten], {
+	const r = spawnSync("bun", ["run", "db:do", "--tao", "--ten", tenKhoTheoCay(ten)], {
 		cwd: GOC,
 		encoding: "utf8",
 	});
@@ -108,7 +158,7 @@ export function taoKho(ten) {
 }
 
 export function xoaKho(ten) {
-	const r = spawnSync("bun", ["run", "db:do", "--xoa", "--ten", ten], {
+	const r = spawnSync("bun", ["run", "db:do", "--xoa", "--ten", tenKhoTheoCay(ten)], {
 		cwd: GOC,
 		encoding: "utf8",
 	});

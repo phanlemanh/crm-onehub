@@ -12,6 +12,7 @@ export type GiuNguCanh = {
 	hoiLai: () => void;
 	boQuaLanToi: () => void;
 	dong: () => void;
+	hoiRoi: (tiep: () => void) => void;
 	khai: (id: string, coChu: boolean, loiHoi?: LoiHoi) => void;
 };
 
@@ -92,6 +93,7 @@ export function useGiuGoc({
 	const boQua = React.useRef(false);
 	const oCuoi = React.useRef<HTMLElement | null>(null);
 	const dangBo = React.useRef(false);
+	const tiepRoi = React.useRef<(() => void) | null>(null);
 	if (mo !== moTruoc) {
 		datMoTruoc(mo);
 		if (mo) {
@@ -99,6 +101,10 @@ export function useGiuGoc({
 			datKhaiCon({});
 		} else datHoi(false);
 	}
+	const doiHoi = React.useCallback((v: boolean) => {
+		if (!v) tiepRoi.current = null;
+		datHoi(v);
+	}, []);
 	if (coThayDoi !== khaiTruoc) {
 		datKhaiTruoc(coThayDoi);
 		if (khaiTruoc === true && coThayDoi === false) datTuNhan(false);
@@ -128,6 +134,7 @@ export function useGiuGoc({
 				return;
 			}
 			if (ban && !boQua.current) {
+				tiepRoi.current = null;
 				datHoi(true);
 				return;
 			}
@@ -147,13 +154,20 @@ export function useGiuGoc({
 			nhoO: (t, noi) => {
 				if (laOGo(t) && !thuocHopKhac(t, noi)) oCuoi.current = t;
 			},
-			hoiLai: () => datHoi(true),
+			hoiLai: () => {
+				tiepRoi.current = null;
+				datHoi(true);
+			},
 			boQuaLanToi: () => {
 				boQua.current = true;
 			},
 			dong: () => {
 				boQua.current = false;
 				dongThat();
+			},
+			hoiRoi: (tiep) => {
+				tiepRoi.current = tiep;
+				datHoi(true);
 			},
 			khai: (id, coChu, loiHoi) =>
 				datKhaiCon((cu) =>
@@ -171,12 +185,15 @@ export function useGiuGoc({
 			nut={loiHoi.nut}
 			thoi={loiHoi.thoi}
 			open={hoi}
-			onOpenChange={datHoi}
+			onOpenChange={doiHoi}
 			pending={false}
 			onConfirm={() => {
 				dangBo.current = true;
+				const tiep = tiepRoi.current;
+				tiepRoi.current = null;
 				datHoi(false);
-				dongThat();
+				if (tiep) tiep();
+				else dongThat();
 			}}
 			onCloseAutoFocus={(e) => {
 				if (dangBo.current) {
@@ -240,4 +257,16 @@ export function useChanLienKet(
 		document.addEventListener("click", nghe, true);
 		return () => document.removeEventListener("click", nghe, true);
 	}, [bat, chan]);
+}
+
+export function useChanLienKetTrongHop(
+	dieuHuong: (href: string) => void,
+): void {
+	const g = React.useContext(GiuContext);
+	const hoiRoi = g?.hoiRoi;
+	const chan = React.useCallback(
+		(href: string) => hoiRoi?.(() => dieuHuong(href)),
+		[hoiRoi, dieuHuong],
+	);
+	useChanLienKet(g?.coThayDoi === true, chan);
 }

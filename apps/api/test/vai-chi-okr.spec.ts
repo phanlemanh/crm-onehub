@@ -105,6 +105,8 @@ const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
 const KHONG_NHAN_PHIEN = [
 	"tinHieuLich.keoVe",
 	"POST /rest/tin-hieu/lich/keo-ve",
+	"loTrinhBanChup.day",
+	"POST /rest/lo-trinh/ban-chup",
 ] as const;
 const laKhongNhanPhien = (ten: string) =>
 	(KHONG_NHAN_PHIEN as readonly string[]).includes(ten);
@@ -271,6 +273,13 @@ const DAU_VAO_HOP_LE = {
 		departmentId: null,
 	},
 	"okr.soanTangLuot": { cuocSoanId: "khong-co" },
+	"okr.hoiMo": {},
+	"okr.hoiTangLuot": { cuocHoiId: "khong-co" },
+	"okr.hoiPhanHoi": {
+		cuocHoiId: "khong-co",
+		maTraLoi: "khong-co",
+		huuIch: true,
+	},
 	"okr.soanQuyet": { deXuatId: "khong-co", quyet: "nhan" },
 	"okr.soanDuaVao": { cuocSoanId: "khong-co", kr: [] },
 	"okr.luuTruMau": { id: "khong-co" },
@@ -457,6 +466,12 @@ const THU_TUC_OKR_LUOT_TOM_TAT = [
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_SO_DO = ["soDoDonVi"].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_HOI_DAP = [
+	"hoiMo",
+	"hoiPhanHoi",
+	"hoiPhien",
+	"hoiTangLuot",
+].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const THU_TUC_SUA_AN_CHU_KY = {
 	"okr.suaChuKy": suaChuKyInput,
@@ -1598,6 +1613,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_TOM_TAT,
 				...THU_TUC_OKR_LUOT_UX_8D,
 				...THU_TUC_OKR_LUOT_SO_DO,
+				...THU_TUC_OKR_LUOT_HOI_DAP,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
 				...Object.keys(THU_TUC_DON_OKR),
@@ -1940,13 +1956,14 @@ type SanDoc = SanAn & {
 	chuG: string;
 	hoiY: string;
 	cuocSoan: string;
+	cuocHoi: string;
 };
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
 	K: CotK;
 	dau?: ChuoiAn;
 	khac: 200 | 404;
-	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId";
+	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId" | "cuocHoiId";
 	pha?: "da-dong";
 	chiQuanTri?: string;
 	chiQuanTriTheoMa?: true;
@@ -1955,6 +1972,12 @@ type DongDoc = {
 const cuaKy = (s: SanDoc) => ({ cycleId: s.ky });
 const THU_TU_DOC_OKR = {
 	"okr.access": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.hoiPhien": {
+		vao: (s) => ({ cuocHoiId: s.cuocHoi }),
+		K: "vang",
+		khac: 404,
+		ma: "cuocHoiId",
+	},
 	"okr.aiChiTieu": {
 		vao: () => undefined,
 		K: "vang",
@@ -2618,12 +2641,19 @@ describe("hien-thi-an", () => {
 					nac: "bat",
 				},
 			});
+			const cuocHoi = await db.okrCuocHoi.create({
+				data: {
+					nguoiHoiUserId: nguoi.k.id,
+					sessionId: `an-hoi-${suffix}`,
+				},
+			});
 			const san = {
 				...gieo,
 				nguoiK: nguoi.k.id,
 				chuG: nguoi.truong.id,
 				hoiY: hoiY.id,
 				cuocSoan: cuocSoan.id,
+				cuocHoi: cuocHoi.id,
 			};
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {
@@ -2688,6 +2718,7 @@ describe("hien-thi-an", () => {
 				setSystemTime();
 				await db.okrHoiY.deleteMany({ where: { id: san.hoiY } });
 				await db.okrCuocSoan.deleteMany({ where: { id: san.cuocSoan } });
+				await db.okrCuocHoi.deleteMany({ where: { id: san.cuocHoi } });
 				await donMucTieuAn(san, tatCaNguoi);
 			}
 		},

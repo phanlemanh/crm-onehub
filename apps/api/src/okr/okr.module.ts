@@ -3,6 +3,7 @@ import { AgentModule } from "../agent/agent.module";
 import { ToChucModule } from "../to-chuc/to-chuc.module";
 import { TrpcModule } from "../trpc/trpc.module";
 import { DONG_HO_HOI_Y, MOC_SAU_KHOA_CHU_KY } from "./dong-ho";
+import { HoiService } from "./hoi.service";
 import { OkrRouter } from "./okr.router";
 import { OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
@@ -35,6 +36,7 @@ import { TroLyOkrService } from "./tro-ly.service";
 		OkrCanhKrService,
 		OkrMauService,
 		SoanService,
+		HoiService,
 		OkrHoiYService,
 		{ provide: DONG_HO_HOI_Y, useValue: () => new Date() },
 		OkrChuKyService,

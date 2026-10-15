@@ -79,13 +79,13 @@ export function ViecCuaToi() {
 				variant="outline"
 			>
 				{NHOM_VIEC.map((n) => (
-					<ToggleGroupItem data-nhom={n} key={n} value={n}>
+					<ToggleGroupItem
+						count={du ? du.demNhom[n] : undefined}
+						data-nhom={n}
+						key={n}
+						value={n}
+					>
 						{m.nhom[n]}
-						{du ? (
-							<span className="text-muted-foreground tabular-nums" data-dem="">
-								{du.demNhom[n]}
-							</span>
-						) : null}
 					</ToggleGroupItem>
 				))}
 			</ToggleGroup>

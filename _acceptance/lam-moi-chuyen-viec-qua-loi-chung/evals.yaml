@@ -63,7 +63,8 @@ evals:
     expected: |
       Ca "loi-khong-lam-moi": transferWork nem Error("Nguoi nhan khong con trong khong gian").
       Sau khi bam «Chuyển»: cho toi khi [role=alert] trong hop chua dung cau loi; so loi goi
-      invalidateQueries = 0 (thong diep ghim "khong lam moi khi loi"); lenh dong hop chua goi;
+      invalidateQueries = 0 (thong diep ghim "khong lam moi khi loi"); bo ghi ghi MOI loi goi
+      invalidateQueries, loi goi khong queryKey ghi thanh ["(khong khoa)"] (Ngoai-3, F8); lenh dong hop chua goi;
       [role=dialog] van con. DOI CHUNG DUONG CUNG CA, CUNG FIXTURE, CUNG BO GHI: link gia doi sang
       tra thanh cong, bam «Chuyển» lan hai -> dung 3 loi goi invalidateQueries ghi tren cung bo ghi
       (thong diep ghim "bo ghi con song: lan hai thanh cong phai co 3 loi goi") va hop dong.
@@ -109,11 +110,12 @@ evals:
     expected: |
       rang/khong-hoi-quy.mjs (goc kho suy tu vi tri script, khong hardcode):
         1. TEP_VONG = ba tep ma cua vong nay (dialog, cache.ts, lam-moi-chuyen-viec.dom.tsx), hang
-           trong script. B = merge-base(HEAD, origin/onehub). Neu ca ba tep o B va HEAD giong het
-           (git diff --quiet B HEAD -- TEP_VONG; vd sau khi vong da len onehub) -> in "vong nay
-           khong con khac biet so voi <B8>", ma 0, khong chay gi. Nguoc lai: D_that = git diff
-           --name-only B..HEAD bo _acceptance/** va glob risk_tiers.t1_skip_globs; tep ma nao cua
-           D_that ngoai TEP_VONG -> ma 1 "tep ngoai vong: <tep>" (danh sach TEP_VONG khong duoc sot).
+           trong script. Moc co dinh: cap gop PR #145, B = 100847e8a^1, D = 100847e8a (sha day du
+           trong script); sha khong giai duoc -> "KHONG DO DUOC" ma 2. D_that = git diff --name-only
+           B..D bo _acceptance/** va glob risk_tiers.t1_skip_globs; tep ma nao cua D_that ngoai
+           TEP_VONG -> ma 1 "tep ngoai vong: <tep>" (danh sach TEP_VONG khong duoc sot). evals.yaml
+           va config.yaml doc bang bo doc cua kit (lib/eval-yaml, evidence-core resolveConfigKey/
+           resolveConfigList/evalPathsOf/isRepinMachineEval), cung bo doc luot ghim dung.
         2. Ham rut(D): moi eval test/script (khong status not-run) cua ho so signed-off/
            machine-cleared khac ho so nay co mot glob trong paths CUA CHINH EVAL khop mot tep cua D
            (** xuyen thu muc, * mot cap, ky tu khac nghia den — cung ngu nghia globToRe cua kit);
@@ -124,8 +126,10 @@ evals:
            — thieu -> ma 1 "bo rut tap hong".
         4. Tap = rut(TEP_VONG). LOAI QUET LONG: lenh tro toi mot tep _acceptance/*/rang/*.mjs co chu
            "worktree" hoac "repin-lane" (mot luot quet dung cay goc khac hoac chay lan ghim) -> in "LOAI quet long: <lenh> (<eval>)", khong
-           chay; in so ho so da quet (> 0), so eval, so lenh chay, so lenh loai.
-        5. Chay tuan tu tung lenh o HEAD tu goc kho; lenh do chay lai mot lan o HEAD (xanh -> in
+           chay; in so ho so da quet (> 0), so eval, so lenh chay, so lenh loai. HEAD da chua D (vong
+           da len onehub) -> in "vong da len onehub o <D8> — ve chay lai lenh cua ho so khac do luot
+           kiem cheo dem kiem-cheo-sau-gop tra loi", ma 0 (tien le thuoc-khong-tu-het-han AC-6).
+        5. HEAD chua chua D: chay tuan tu tung lenh o HEAD tu goc kho; lenh do chay lai mot lan o HEAD (xanh -> in
            "chap chon", khong tinh); lenh con do chay tren worktree tam o B
            (.acceptance-runs/lam-moi-chuyen-viec-qua-loi-chung/goc: .env symlink, bun install,
            bun run db:generate; go trong finally). Xanh o B -> ma 1 "vong nay lam do them N lenh:

@@ -34,6 +34,8 @@
 		"./okr-theo-kara": "./src/okr-theo-kara.ts",
 		"./okr-cuoc-soan": "./src/okr-cuoc-soan.ts",
 		"./okr-phien-soan": "./src/okr-phien-soan.ts",
+		"./okr-phien-hoi": "./src/okr-phien-hoi.ts",
+		"./okr-tra-loi": "./src/okr-tra-loi.ts",
 		"./to-chuc": "./src/to-chuc.ts",
 		"./to-chuc-luu-tru": "./src/to-chuc-luu-tru.ts",
 		"./phien-tac-tu": "./src/phien-tac-tu.ts",
@@ -77,6 +79,7 @@
 		"./tai-lieu-nguon": "./src/tai-lieu-nguon.ts",
 		"./tai-lieu-tim": "./src/tai-lieu-tim.ts",
 		"./lo-trinh-du-lieu": "./src/lo-trinh-du-lieu.ts",
+		"./ban-chup-lo-trinh": "./src/ban-chup-lo-trinh.ts",
 		"./tin-hieu": "./src/tin-hieu.ts",
 		"./thong-bao": "./src/thong-bao.ts"
 	},

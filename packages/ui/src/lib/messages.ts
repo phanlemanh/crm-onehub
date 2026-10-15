@@ -3,6 +3,7 @@ import { DEFAULT_LOCALE, type Locale } from "./locale";
 const en = {
 	table: {
 		clearFilters: "Clear",
+		status: "Status",
 		clearSelection: "Clear selection",
 		selected: (count: string) => `${count} selected`,
 		filters: "Filters",
@@ -272,6 +273,7 @@ export type Messages = typeof en;
 const vi = {
 	table: {
 		clearFilters: "Bỏ chọn",
+		status: "Trạng thái",
 		clearSelection: "Bỏ chọn",
 		selected: (count: string) => `Đã chọn ${count} dòng`,
 		filters: "Lọc",

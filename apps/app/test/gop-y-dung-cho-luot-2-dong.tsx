@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { act } from "react";
 import { mineOutput } from "../../api/src/okr/okr.contracts";
+import { HAN_BAI_DOM } from "./han-bai-dom";
 import {
 	bamChuot,
 	CuaToi,
@@ -72,51 +73,57 @@ describe("k3-loi-dong", () => {
 		}
 	}
 
-	test("k3-loi-dong 4 hanh dong x 4 loai loi: cau san pham duoi gop y, khong ma tho", async () => {
-		let soO = 0;
-		for (const hd of HANH_DONG)
-			for (const loi of LOI) {
-				kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 1 }));
-				kho.troLy = () => dsTroLy([D_KR1]);
-				if (hd === "hoan-tac")
-					kho.ghiRieng.set("okr.updateKeyResult", async () => {
-						throw loi.nem();
-					});
-				else if (loi.loai === "chua-san-sang")
-					kho.ghiRieng.set("okr.troLyQuyet", async () => ({
-						ok: false,
-						lyDo: "het-tran-ngay",
-					}));
-				else
-					kho.ghiRieng.set("okr.troLyQuyet", async () => {
-						throw loi.nem();
-					});
-				await dungSheet();
-				await cho(() => deXuat(D_KR1.id) !== null, `${hd}/${loi.loai} gop y`);
-				await lam(hd);
-				await cho(
-					() =>
-						qs("[data-slot=field-error]", deXuat(D_KR1.id) ?? document.body) !==
-						null,
-					`${hd}/${loi.loai} cau loi`,
-				);
-				await nhip(4);
-				const chu =
-					qs("[data-slot=field-error]", deXuat(D_KR1.id) ?? document.body)
-						?.textContent ?? "";
-				const lo = CAM.find((c) => chu.includes(c));
-				if (lo) throw new Error(`lo cau tho: ${lo} (${hd}/${loi.loai})`);
-				kiemCa(
-					{ chu },
-					{ chu: m.loiDong[loi.loai] },
-					() => `${hd}/${loi.loai} cau sai`,
-				);
-				soO += 1;
-				await thaoHet();
-				kho.ghiRieng.clear();
-			}
-		expect(soO).toBe(16);
-	});
+	test(
+		"k3-loi-dong 4 hanh dong x 4 loai loi: cau san pham duoi gop y, khong ma tho",
+		async () => {
+			let soO = 0;
+			for (const hd of HANH_DONG)
+				for (const loi of LOI) {
+					kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 1 }));
+					kho.troLy = () => dsTroLy([D_KR1]);
+					if (hd === "hoan-tac")
+						kho.ghiRieng.set("okr.updateKeyResult", async () => {
+							throw loi.nem();
+						});
+					else if (loi.loai === "chua-san-sang")
+						kho.ghiRieng.set("okr.troLyQuyet", async () => ({
+							ok: false,
+							lyDo: "het-tran-ngay",
+						}));
+					else
+						kho.ghiRieng.set("okr.troLyQuyet", async () => {
+							throw loi.nem();
+						});
+					await dungSheet();
+					await cho(() => deXuat(D_KR1.id) !== null, `${hd}/${loi.loai} gop y`);
+					await lam(hd);
+					await cho(
+						() =>
+							qs(
+								"[data-slot=field-error]",
+								deXuat(D_KR1.id) ?? document.body,
+							) !== null,
+						`${hd}/${loi.loai} cau loi`,
+					);
+					await nhip(4);
+					const chu =
+						qs("[data-slot=field-error]", deXuat(D_KR1.id) ?? document.body)
+							?.textContent ?? "";
+					const lo = CAM.find((c) => chu.includes(c));
+					if (lo) throw new Error(`lo cau tho: ${lo} (${hd}/${loi.loai})`);
+					kiemCa(
+						{ chu },
+						{ chu: m.loiDong[loi.loai] },
+						() => `${hd}/${loi.loai} cau sai`,
+					);
+					soO += 1;
+					await thaoHet();
+					kho.ghiRieng.clear();
+				}
+			expect(soO).toBe(16);
+		},
+		HAN_BAI_DOM.maTranMs,
+	);
 });
 
 describe("k3-hai-hoan", () => {
