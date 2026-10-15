@@ -47,10 +47,8 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import {
-	StatusIndicator,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { useQuery } from "@tanstack/react-query";
 import { type ReactNode, useId, useState } from "react";
 import {
@@ -69,23 +67,33 @@ function ngayNgan(ngay: string): string {
 	return `${ngay.slice(8, 10)}/${ngay.slice(5, 7)}`;
 }
 
-type HienTrangThai = { nhan: NhanTrangThai; tone: StatusTone };
+export const NGHIA_TOM_TAT = {
+	daHien: "xong",
+	quaKiemAn: "cho",
+	giuLai: "cho",
+	khongLamDuoc: "hong",
+	dangSoan: "dangChay",
+	chuaCapNhat: "nhap",
+} as const satisfies Record<NhanTrangThai, NghiaTrangThai>;
 
-function trangThaiCua(d: DongQuanTri): HienTrangThai {
+function nhanCua(d: DongQuanTri): NhanTrangThai {
 	switch (d.trangThai) {
 		case "hien":
-			return d.nac === "bat"
-				? { nhan: "daHien", tone: "success" }
-				: { nhan: "quaKiemAn", tone: "info" };
+			return d.nac === "bat" ? "daHien" : "quaKiemAn";
 		case "can-xem":
-			return { nhan: "giuLai", tone: "warning" };
+			return "giuLai";
 		case "khong-lam-duoc":
-			return { nhan: "khongLamDuoc", tone: "error" };
+			return "khongLamDuoc";
 		case "dang-soan":
-			return { nhan: "dangSoan", tone: "neutral" };
+			return "dangSoan";
 		case "chua-cap-nhat":
-			return { nhan: "chuaCapNhat", tone: "neutral" };
+			return "chuaCapNhat";
 	}
+}
+
+function trangThaiCua(d: DongQuanTri) {
+	const nhan = nhanCua(d);
+	return { nhan, tone: toneTheoNghia(NGHIA_TOM_TAT[nhan]) };
 }
 
 function Nac({ nac }: { nac: DongQuanTri["nac"] }) {

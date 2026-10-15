@@ -11,7 +11,12 @@ export const MAU_TRANG_THAI = new Set([
 
 const THANH_PHAN_CHAM = /\b(StatusIndicator|IndicatorDot|StatusTone)\b/;
 
-const KHOA_KHONG_PHAI_TRANG_THAI = new Set(["tone", "variant", "kind", "color"]);
+const KHOA_KHONG_PHAI_TRANG_THAI = new Set([
+	"tone",
+	"variant",
+	"kind",
+	"color",
+]);
 
 export type ViPham = { tep: string; dong: number; chu: string };
 
@@ -23,7 +28,9 @@ function boNgoac(nut: ts.Node): ts.Node {
 			ts.isSatisfiesExpression(p) ||
 			ts.isParenthesizedExpression(p) ||
 			ts.isConditionalExpression(p) ||
-			ts.isBinaryExpression(p))
+			(ts.isBinaryExpression(p) &&
+				(p.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken ||
+					p.operatorToken.kind === ts.SyntaxKind.BarBarToken)))
 	)
 		p = p.parent;
 	return p;
