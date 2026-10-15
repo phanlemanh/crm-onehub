@@ -72,7 +72,9 @@ export function ChanBang({
 			{dem ? (
 				<span className="tabular-nums">{m.demDonVi(dem.mucTieu, dem.kr)}</span>
 			) : null}
-			{duong ? <span translate="no">{m.donViBang.thuoc(duong)}</span> : null}
+			{duong ? (
+				<span translate="no">{`${m.donViBang.thuoc} ${duong}`}</span>
+			) : null}
 		</span>
 	);
 }

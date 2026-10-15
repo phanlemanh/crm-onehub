@@ -55,7 +55,7 @@ export function DonViCon({
 											? null
 											: n === 0
 												? b.chuaDatOkr
-												: b.demMucTieuCon(n)}
+												: m.demMucTieu(n)}
 									</ItemDescription>
 								</ItemContent>
 								{c.coTruong ? null : (

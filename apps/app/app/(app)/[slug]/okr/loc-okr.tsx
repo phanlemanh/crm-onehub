@@ -156,19 +156,13 @@ export function useMatLocOkr(
 	];
 }
 
-export function KhongKhop({
-	boLoc,
-	tong,
-}: {
-	boLoc: () => void;
-	tong: number;
-}) {
+export function KhongKhop({ boLoc }: { boLoc: () => void }) {
 	const b = okrMessages(useLocale()).donViBang;
 	return (
 		<Empty data-trang-thai="ST-donvi-loc-khongkhop">
 			<EmptyHeader>
 				<EmptyTitle>{b.khongKhopLoc}</EmptyTitle>
-				<EmptyDescription>{b.khongKhopLocMoTa(tong)}</EmptyDescription>
+				<EmptyDescription>{b.khongKhopLocMoTa}</EmptyDescription>
 			</EmptyHeader>
 			<EmptyContent>
 				<Button onClick={boLoc} size="sm" variant="outline">

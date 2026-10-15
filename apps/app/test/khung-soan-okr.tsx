@@ -729,7 +729,7 @@ export async function moKhung(
 		`?${tham}`,
 	);
 	await cho(
-		() => document.querySelector("[data-hang-nut]") !== null,
+		() => document.querySelector("[data-chon-don-vi]") !== null,
 		"khung don vi",
 	);
 	await nhip(10);

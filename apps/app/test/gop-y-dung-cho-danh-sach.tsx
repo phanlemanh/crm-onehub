@@ -2,7 +2,6 @@ import { describe, expect, test } from "bun:test";
 import { act } from "react";
 import { danhSachInput } from "../../api/src/okr/okr-xem.contracts";
 import {
-	BangMucTieu,
 	bamChuot,
 	bamPhim,
 	cho,
@@ -23,6 +22,7 @@ import {
 	nhip,
 	qs,
 	qsa,
+	soHangMt,
 	TheoDonVi,
 	thaoHet,
 	ui,
@@ -45,12 +45,12 @@ describe("chip", () => {
 			expect(qsa('[data-chip-gop-y="mt-b"]').length, `${man.ten}: chip B`).toBe(
 				0,
 			);
-			const hangB = khoiMt("mt-b")?.querySelectorAll("tr").length ?? -1;
+			const hangB = soHangMt("mt-b");
 			await thaoHet();
-			await dung(<BangMucTieu danhDauCuaToi={false} ds={[MT_B()]} hienDonVi />);
+			await man.dung([MT_B()]);
 			await cho(() => khoiMt("mt-b") !== null, "bang doi chung");
 			expect(hangB, `${man.ten}: so hang B`).toBe(
-				khoiMt("mt-b")?.querySelectorAll("tr").length ?? -2,
+				khoiMt("mt-b") === null ? -2 : soHangMt("mt-b"),
 			);
 			await thaoHet();
 			soCa += 2;
@@ -156,6 +156,38 @@ async function moMatGopY(): Promise<HTMLElement> {
 	return chon;
 }
 
+/* Bỏ lọc trên bảng đơn vị (DH2): mục «Bỏ chọn» trong mặt «Góp ý của Kara» của
+   menu Lọc — cùng cách mọi DataTable bỏ một mặt lọc. */
+async function moBoChonGopY(): Promise<HTMLElement> {
+	const moLoc = qsa('[aria-haspopup="menu"]').find((o) =>
+		o.textContent?.trim().startsWith(ui.table.filters),
+	);
+	if (!moLoc) throw new Error("khong thay nut mo menu Loc");
+	await bamChuot(moLoc);
+	await cho(
+		() =>
+			qsa('[role="menuitem"]').some((o) => o.textContent?.includes(m.loc.mat)),
+		"mat gop y trong menu",
+	);
+	const mat = qsa('[role="menuitem"]').find((o) =>
+		o.textContent?.includes(m.loc.mat),
+	);
+	if (!mat) throw new Error("khong thay mat Gop y cua Kara");
+	await bamPhim(mat, "{ArrowRight}");
+	await cho(
+		() =>
+			qsa('[role="menuitem"]').some(
+				(o) => o.textContent?.trim() === ui.table.clearFilters,
+			),
+		"muc Bo chon cua mat gop y",
+	);
+	const bo = qsa('[role="menuitem"]').find(
+		(o) => o.textContent?.trim() === ui.table.clearFilters,
+	);
+	if (!bo) throw new Error("khong co muc Bo chon");
+	return bo;
+}
+
 describe("loc-url", () => {
 	test("chon mat gop y ghi URL, gui loc len API, bo loc xoa khoa", async () => {
 		kho.danhSach = danhSachTheoLoc();
@@ -179,8 +211,7 @@ describe("loc-url", () => {
 			);
 		});
 		await nhip(3);
-		const boLoc = qs('[data-nut="bo-loc"]');
-		if (!boLoc) throw new Error("khong co nut Bo loc");
+		const boLoc = await moBoChonGopY();
 		await bamChuot(boLoc);
 		await cho(() => san.url().get("gopYOkr") === null, "bo loc roi url");
 		console.log("so ca loc-url chon/bo: 2");

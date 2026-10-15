@@ -79,7 +79,7 @@ function XuongPhaiHang() {
 
 /* Khung xương của hàng công cụ: cùng khung, cùng cỡ ô chọn và chỗ của cách
    xem, nên đỉnh ô chọn không nhảy khi dữ liệu về. */
-export function KhungXuongHangCongCu() {
+export function XuongHangCongCu() {
 	return (
 		<div className={LOP_HANG_CONG_CU} data-khung-hang="thanh-cong-cu">
 			<div className={LOP_KHOI} data-hang-cong-cu-don-vi-khung>
@@ -98,7 +98,7 @@ const DONG_KHUNG = ["mot", "hai", "ba", "bon", "nam"] as const;
  * các dòng bảng bằng khung xương — không vòng quay toàn trang, không cây.
  */
 export function KhungDangTaiDonVi({ hang }: { hang?: ReactNode }) {
-	const b = okrMessages(useLocale()).donViBang;
+	const m = okrMessages(useLocale());
 	return (
 		<div
 			aria-busy="true"
@@ -106,7 +106,7 @@ export function KhungDangTaiDonVi({ hang }: { hang?: ReactNode }) {
 			data-trang-thai="ST-donvi-dangtai"
 		>
 			<span className="sr-only" role="status">
-				{b.dangTai}
+				{m.dangTai}
 			</span>
 			{hang ? (
 				<KhungHangCongCu>
@@ -114,7 +114,7 @@ export function KhungDangTaiDonVi({ hang }: { hang?: ReactNode }) {
 					<XuongPhaiHang />
 				</KhungHangCongCu>
 			) : (
-				<KhungXuongHangCongCu />
+				<XuongHangCongCu />
 			)}
 			<div className="flex flex-col gap-1 overflow-hidden rounded-lg border bg-card">
 				<Skeleton

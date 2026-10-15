@@ -370,6 +370,7 @@ const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
 
 const m = okrMessages("vi");
 const b = m.donViBang;
+const thuoc = (duong: string) => `${b.thuoc} ${duong}`;
 const mtc = okrToanCanhMessages("vi");
 
 type San = { o: HTMLElement; root: Root; url: () => URLSearchParams };
@@ -736,7 +737,7 @@ describe("dvb-chon-don-vi", () => {
 		const thuocCua = (k: string) => {
 			if (k === "goc") return b.caCongTy;
 			const bp = bpCua.get(k.split(":")[1] ?? "");
-			return b.thuoc(k.startsWith("pb:") && bp ? bp.name : "OneHub");
+			return thuoc(k.startsWith("pb:") && bp ? bp.name : "OneHub");
 		};
 		const mong = khoaCuaCay(cay).map((k) => ({
 			ten: tenCua.get(k) ?? "?",
@@ -1044,6 +1045,7 @@ describe("dvb-chon-don-vi", () => {
 			(p2 as HTMLElement).click();
 		});
 		await cho(() => donCuoi().includes('"P2"'), "danhSach hoi P2");
+		await cho(() => s.url().get("donOkr") === "pb:P2", "url donOkr=pb:P2");
 		expect({
 			url: s.url().get("donOkr"),
 			don: goiDanhSach.at(-1)?.unit,
@@ -1205,6 +1207,10 @@ describe("dvb-dong-mo", () => {
 					soCot === soCotKr,
 					`dvb-dong-mo: ${id}: dong KR ${soCotKr} cot, cha ${soCot}`,
 				);
+				await cho(
+					() => s.url().getAll("expand").join(",").includes(id),
+					`url expand ${id}`,
+				);
 				expect(s.url().getAll("expand").join(",")).toContain(id);
 			});
 		}
@@ -1230,6 +1236,7 @@ describe("dvb-dong-mo", () => {
 		const ten = s.o.querySelector<HTMLElement>('[data-mo-muc-tieu="M1"]');
 		if (!ten) throw new Error("dvb-dong-mo: khong co nut ten M1");
 		await act(async () => ten.click());
+		await cho(() => s.url().get("record") !== null, "url record");
 		expect({
 			record: s.url().get("record"),
 			expand: s.url().get("expand"),
@@ -1241,6 +1248,10 @@ describe("dvb-dong-mo", () => {
 		const dongKr = s.o.querySelector('[data-kr="M1-k1"]')?.closest("tr");
 		if (!dongKr) throw new Error("dvb-dong-mo: khong co dong KR M1-k1");
 		await act(async () => (dongKr as HTMLElement).click());
+		await cho(
+			() => s.url().get("record")?.includes("kr:") === true,
+			"url record kr",
+		);
 		expect(s.url().get("record")?.split(",").at(-1)).toBe("kr:M1-k1");
 	});
 
@@ -1387,6 +1398,7 @@ describe("dvb-loc-nhanh", () => {
 			...document.querySelectorAll<HTMLElement>('[role="menuitemradio"]'),
 		].find((x) => x.textContent?.startsWith(b.locNhanh["can-ban"]));
 		await act(async () => canBanMuc?.click());
+		await cho(() => s.url().get("locNhanhOkr") !== null, "url locNhanhOkr");
 		expect(s.url().get("locNhanhOkr")).toBe("can-ban");
 		await cho(
 			() => idDong(s.o).join(",") === mong(ds, "can-ban").join(","),
@@ -1407,6 +1419,7 @@ describe("dvb-loc-nhanh", () => {
 		if (!bo) throw new Error("dvb-loc-nhanh: khong co nut bo loc");
 		await act(async () => bo.click());
 		await cho(() => idDong(s2.o).join(",") === "yen", "bo loc ve Tat ca");
+		await cho(() => s2.url().get("locNhanhOkr") === null, "url bo locNhanhOkr");
 		expect(s2.url().get("locNhanhOkr")).toBeNull();
 	});
 
@@ -1506,6 +1519,7 @@ describe("dvb-sap-xep", () => {
 		if (!dauTinhTrang)
 			throw new Error("dvb-sap-xep: cot Tình trạng khong sap duoc");
 		await act(async () => (dauTinhTrang as HTMLElement).click());
+		await cho(() => s2.url().get("sapOkr") !== null, "url sapOkr");
 		expect(s2.url().get("sapOkr")).toBe("tinh-trang");
 		const mongTang = sapThamChieu(ds, "tinh-trang", "asc");
 		const tt = (id: string | undefined) => {
@@ -1521,6 +1535,7 @@ describe("dvb-sap-xep", () => {
 			`dvb-sap-xep: tinh-trang tang: mong ${tt(mongTang[0])} dau, nhan ${tt(idDong(s2.o)[0] ?? undefined)}`,
 		);
 		await act(async () => (dauTinhTrang as HTMLElement).click());
+		await cho(() => s2.url().get("chieuOkr") !== null, "url chieuOkr");
 		expect(s2.url().get("chieuOkr")).toBe("desc");
 	});
 });
@@ -1564,12 +1579,12 @@ describe("dvb-chan-bang", () => {
 				);
 				const duong = pbCha ? `OneHub › ${pbCha.name}` : "OneHub";
 				phai(
-					chu.includes(b.thuoc(duong)),
-					`dvb-chan-bang: ${don}: chan bang thieu ${b.thuoc(duong)}`,
+					chu.includes(thuoc(duong)),
+					`dvb-chan-bang: ${don}: chan bang thieu ${thuoc(duong)}`,
 				);
 			} else {
 				phai(
-					!chu.includes(b.thuoc("")) && !chu.includes(m.chuaCoTruong),
+					!chu.includes(`${b.thuoc} `) && !chu.includes(m.chuaCoTruong),
 					`dvb-chan-bang: ${don}: chan bang co Thuộc/Chưa có trưởng`,
 				);
 			}
@@ -1622,7 +1637,7 @@ describe("dvb-chan-bang", () => {
 				phai(
 					href.get("kyOkr") === QUY.id &&
 						chuO.includes(x.ten) &&
-						chuO.includes(n === 0 ? b.chuaDatOkr : b.demMucTieuCon(n)) &&
+						chuO.includes(n === 0 ? b.chuaDatOkr : m.demMucTieu(n)) &&
 						chuO.includes(m.chuaCoTruong) === (x.truong === null),
 					`dvb-chan-bang: ${don}: o con ${x.k} «${chuO}» href ${href}`,
 				);
@@ -1683,6 +1698,7 @@ describe("dvb-trang-thai", () => {
 			(x) => x.textContent === m.khongThay.action,
 		);
 		await act(async () => ve?.click());
+		await cho(() => s.url().get("donOkr") === null, "url bo donOkr");
 		expect(s.url().get("donOkr")).toBeNull();
 	});
 

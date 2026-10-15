@@ -1012,6 +1012,7 @@ function ExpandRowButton({
 			type="button"
 			size="icon-sm"
 			variant="ghost"
+			className="group"
 			aria-expanded={open}
 			aria-label={
 				open ? msg.table.collapseRow(label) : msg.table.expandRow(label)
@@ -1024,10 +1025,7 @@ function ExpandRowButton({
 		>
 			<ChevronRight
 				size={12}
-				className={cn(
-					"inline-block transition-transform motion-reduce:transition-none",
-					open && "rotate-90",
-				)}
+				className="inline-block transition-transform group-aria-expanded:rotate-90 motion-reduce:transition-none"
 			/>
 		</Button>
 	);

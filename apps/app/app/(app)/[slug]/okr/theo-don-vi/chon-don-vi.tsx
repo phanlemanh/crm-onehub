@@ -45,7 +45,11 @@ export function ChonDonVi({
 				tenGoc,
 				dem,
 				nguoi ? { id: nguoi.id, ten: nguoi.name } : null,
-				{ caCongTy: b.caCongTy, thuoc: b.thuoc, demMucTieu: m.demMucTieu },
+				{
+					caCongTy: b.caCongTy,
+					thuoc: (duong) => `${b.thuoc} ${duong}`,
+					demMucTieu: m.demMucTieu,
+				},
 			),
 		[cay, tenGoc, dem, nguoi, b, m.demMucTieu],
 	);
@@ -56,6 +60,7 @@ export function ChonDonVi({
 			aria-label={b.chonDonVi}
 			className="w-full sm:w-72"
 			data-chon-don-vi
+			data-don-chon={khoa}
 			empty={b.khongKhopDonVi}
 			onSearchChange={datTim}
 			onValueChange={(v) => {

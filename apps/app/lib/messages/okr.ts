@@ -129,15 +129,15 @@ const vi = {
 		timDonVi: "Tìm đơn vị…",
 		khongKhopDonVi: "Không có đơn vị nào khớp.",
 		caCongTy: "cả công ty",
-		thuoc: (duong: string) => `Thuộc ${duong}`,
+		thuoc: "Thuộc",
 		locNhanh: {
 			tatCa: "Tất cả",
 			"can-ban": "Cần bàn",
 			"chua-gop": "Chưa góp vào đâu",
 		},
 		khongKhopLoc: "Không có mục tiêu nào khớp",
-		khongKhopLocMoTa: (n: number) =>
-			`0 trên ${n} mục tiêu khớp ô lọc nhanh và bộ lọc.`,
+		khongKhopLocMoTa:
+			"Đổi ô lọc nhanh hoặc bỏ bớt bộ lọc để thấy lại mục tiêu của đơn vị.",
 		boLoc: "Bỏ lọc",
 		cot: {
 			mucTieu: "Mục tiêu",
@@ -145,11 +145,8 @@ const vi = {
 			tinhTrang: "Tình trạng",
 			phuTrach: "Phụ trách",
 		},
-		chuaGopVaoDau: "chưa góp vào đâu",
 		donViTrucThuoc: "Đơn vị trực thuộc",
 		chuaDatOkr: "Chưa đặt OKR",
-		demMucTieuCon: (n: number) => `${n} mục tiêu`,
-		dangTai: "Đang tải OKR của đơn vị…",
 	},
 	cuaToiRong: {
 		title: "Bạn chưa phụ trách mục tiêu hay KR nào",
@@ -859,15 +856,15 @@ const en: OkrMessages = {
 		timDonVi: "Find a unit…",
 		khongKhopDonVi: "No unit matches.",
 		caCongTy: "whole company",
-		thuoc: (duong: string) => `In ${duong}`,
+		thuoc: "In",
 		locNhanh: {
 			tatCa: "All",
 			"can-ban": "Needs discussion",
 			"chua-gop": "Not aligned",
 		},
 		khongKhopLoc: "No objective matches",
-		khongKhopLocMoTa: (n: number) =>
-			`0 of ${n} objectives match the quick filter and filters.`,
+		khongKhopLocMoTa:
+			"Change the quick filter or clear a filter to see this unit's objectives again.",
 		boLoc: "Clear filter",
 		cot: {
 			mucTieu: "Objective",
@@ -875,11 +872,8 @@ const en: OkrMessages = {
 			tinhTrang: "Status",
 			phuTrach: "Owner",
 		},
-		chuaGopVaoDau: "not aligned",
 		donViTrucThuoc: "Units below",
 		chuaDatOkr: "No OKRs set",
-		demMucTieuCon: (n: number) => `${n} objective${n === 1 ? "" : "s"}`,
-		dangTai: "Loading the unit's OKRs…",
 	},
 	cuaToiRong: {
 		title: "You don't own any objectives or KRs",

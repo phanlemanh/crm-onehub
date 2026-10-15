@@ -115,6 +115,7 @@ function TenMucTieu({ mt }: { mt: MucTieu }) {
 			className="flex min-w-0 flex-col gap-1 whitespace-normal"
 			data-da-bo={laDaBo(mt) ? "" : undefined}
 			data-hang-muc-tieu={mt.id}
+			data-muc-tieu={mt.id}
 		>
 			<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
 				<button
@@ -129,7 +130,10 @@ function TenMucTieu({ mt }: { mt: MucTieu }) {
 				>
 					{mt.title}
 				</button>
-				<span className="inline-flex flex-wrap items-center gap-2">
+				<span
+					className="inline-flex flex-wrap items-center gap-2"
+					data-nhom-nhan
+				>
 					{laDaBo(mt) ? null : (
 						<Badge variant="outline">{m.loai[mt.kind]}</Badge>
 					)}
@@ -333,7 +337,7 @@ export function BangDonVi({
 				expandable={moRong}
 				facetCounts={{ [TAB_LOC_NHANH]: demLocNhanh(rows) }}
 				facets={facets}
-				filteredEmpty={<KhongKhop boLoc={boLoc} tong={rows.length} />}
+				filteredEmpty={<KhongKhop boLoc={boLoc} />}
 				getRowId={(mt) => mt.id}
 				layout="content"
 				meta={chanBang}

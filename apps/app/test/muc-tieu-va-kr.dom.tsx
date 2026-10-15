@@ -376,6 +376,8 @@ const { dien } = await import("@/components/crm/record-sheet/plan-copy");
 const { Card, CardHeader, CardTitle } = await import("@crm/ui/components/card");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
+const { messages: uiMessages } = await import("@crm/ui/lib/messages");
+const uiVi = uiMessages("vi");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { okrKhepMessages } = await import("@/lib/messages/okr-khep");
 const { okrSoMessages } = await import("@/lib/messages/okr-so");
@@ -507,12 +509,42 @@ const hangMt = (id: string) =>
 	);
 const hangKr = (id: string) =>
 	document.body.querySelector<HTMLTableRowElement>(`[data-kr="${id}"]`);
-const nutMo = (id: string) => hangMt(id)?.querySelector("button") ?? null;
+// Trang đơn vị một bảng (DH2): mục tiêu là một dòng của bảng chung (dấu nằm ở ô
+// tên, không ở `tr`), KR là các dòng con ngay dưới; Của tôi giữ khối riêng.
+const dongCua = (id: string) => hangMt(id)?.closest("tr") ?? hangMt(id);
+const nutMo = (id: string) =>
+	dongCua(id)?.querySelector<HTMLButtonElement>("button[aria-expanded]") ??
+	hangMt(id)?.querySelector("button") ??
+	null;
+const dauHang = (tr: Element, ten: string) =>
+	tr.getAttribute(ten) ?? tr.querySelector(`[${ten}]`)?.getAttribute(ten);
 const khoaHang = (tr: Element) =>
-	tr.getAttribute("data-hang-muc-tieu") ??
-	tr.getAttribute("data-kr") ??
-	tr.getAttribute("data-chua-co-kr") ??
+	dauHang(tr, "data-hang-muc-tieu") ??
+	dauHang(tr, "data-kr") ??
+	dauHang(tr, "data-chua-co-kr") ??
 	"khac";
+/** Các hàng của một mục tiêu: `tbody tr` của khối riêng (Của tôi), hoặc dòng
+ * của nó trong bảng đơn vị cùng các dòng KR ngay dưới (Theo đơn vị). */
+function hangCuaMt(id: string): Element[] {
+	const k = khoi(id);
+	const dong = k?.closest("tr");
+	if (!dong) return k ? hangTbody(k) : [];
+	const ra: Element[] = [dong];
+	let ke = dong.nextElementSibling;
+	while (ke?.querySelector("[data-kr]")) {
+		ra.push(ke);
+		ke = ke.nextElementSibling;
+	}
+	return ra;
+}
+/** Id mục tiêu đang thu theo `expand` của bảng đơn vị. */
+const dangThu = (url: URLSearchParams, ds: { id: string }[]) => {
+	const mo = new Set((url.get("expand") ?? "").split(",").filter(Boolean));
+	return ds
+		.filter((x) => !mo.has(x.id))
+		.map((x) => x.id)
+		.join(",");
+};
 const hangTbody = (goc: Element) => [...goc.querySelectorAll("tbody tr")];
 const nhanKr = (tr: Element) =>
 	[...tr.querySelectorAll("span")]
@@ -759,21 +791,25 @@ describe("theo-don-vi", () => {
 			["mt3", "mt3-kr1", "mt3-kr2", "mt3-kr3"],
 		];
 		expect.assertions(MA_TRAN.length);
-		await dungTheoDonVi([
-			mucTieu("mt1", krCua("mt1", 2)),
-			mucTieu("mt2", krCua("mt2", 1)),
-			mucTieu("mt3", krCua("mt3", 3)),
-		]);
+		// DH2: mặc định thu — mở cả ba dòng qua `expand` để đọc KR.
+		await dungTheoDonVi(
+			[
+				mucTieu("mt1", krCua("mt1", 2)),
+				mucTieu("mt2", krCua("mt2", 1)),
+				mucTieu("mt3", krCua("mt3", 3)),
+			],
+			"?expand=mt1,mt2,mt3",
+		);
 		const cacKhoi = [...document.body.querySelectorAll("[data-muc-tieu]")];
 		MA_TRAN.forEach((mongDoi, i) => {
 			const id = mongDoi[0] ?? "";
 			const k = cacKhoi[i];
-			const bang = k?.querySelector("table") ?? null;
-			const hang = bang ? hangTbody(bang) : [];
+			const bang = k?.closest("table") ?? null;
+			const hang = hangCuaMt(id);
 			soCa(
 				{
 					khoi: k?.getAttribute("data-muc-tieu") ?? null,
-					bang: k?.querySelectorAll("table").length ?? 0,
+					bang: document.body.querySelectorAll("table").length,
 					thuTu: hang.map(khoaHang),
 					nhan: hang.slice(1).map(nhanKr),
 					theadSrOnly:
@@ -786,8 +822,8 @@ describe("theo-don-vi", () => {
 					bang: 1,
 					thuTu: mongDoi,
 					nhan: mongDoi.slice(1).map((_, j) => `KR${j + 1}`),
-					theadSrOnly: true,
-					th: 4,
+					theadSrOnly: false,
+					th: 5,
 				},
 				(truong) =>
 					truong === "thuTu" || truong === "nhan"
@@ -1887,28 +1923,37 @@ const dungMan = (
 const CA_TRANG_THAI = {
 	"ST-mtkr-co-du-lieu": () =>
 		haiMan(async (man) => {
-			await dungMan(man, HAI_MT());
+			await dungMan(man, HAI_MT(), man === "theo-don-vi" ? "?expand=mt-a" : "");
 			const k = khoi("mt-a");
-			const bang = k?.querySelector("table") ?? null;
+			const bang = k?.closest("table") ?? k?.querySelector("table") ?? null;
 			soCa(
 				{
 					hangDau: bang ? khoaHang(hangTbody(bang)[0] ?? bang) : null,
 					moSan: nutMo("mt-a")?.getAttribute("aria-expanded") ?? null,
-					nhan: [...(k?.querySelectorAll("[data-kr]") ?? [])].map(nhanKr),
+					nhan: hangCuaMt("mt-a").slice(1).map(nhanKr),
 					theadAn:
 						bang?.querySelector("thead")?.classList.contains("sr-only") ??
 						false,
 				},
-				{ hangDau: "mt-a", moSan: "true", nhan: ["KR1", "KR2"], theadAn: true },
+				{
+					hangDau: "mt-a",
+					moSan: "true",
+					nhan: ["KR1", "KR2"],
+					theadAn: man === "cua-toi",
+				},
 				(truong) => `ST-mtkr-co-du-lieu sai o ${man}: ${truong}`,
 			);
 		}),
 	"ST-mtkr-da-thu": () =>
 		haiMan(async (man) => {
-			const san = await dungMan(man, HAI_MT(), "?thuMucTieu=mt-a");
+			const san = await dungMan(
+				man,
+				HAI_MT(),
+				man === "theo-don-vi" ? "?expand=mt-b" : "?thuMucTieu=mt-a",
+			);
 			soCa(
 				{
-					hang: hangTbody(khoi("mt-a") ?? document.body).map(khoaHang),
+					hang: hangCuaMt("mt-a").map(khoaHang),
 					ariaExpanded: nutMo("mt-a")?.getAttribute("aria-expanded") ?? null,
 					nhanNut: nutMo("mt-a")?.getAttribute("aria-label") ?? null,
 					muiTenTheoNut:
@@ -1918,12 +1963,19 @@ const CA_TRANG_THAI = {
 							?.classList.contains("group-aria-expanded:rotate-90") ??
 							false),
 					doiChungMo: nutMo("mt-b")?.getAttribute("aria-expanded") ?? null,
-					url: san.url().get("thuMucTieu"),
+					url:
+						man === "theo-don-vi"
+							? dangThu(san.url(), HAI_MT())
+							: san.url().get("thuMucTieu"),
 				},
 				{
 					hang: ["mt-a"],
 					ariaExpanded: "false",
-					nhanNut: m.khoiMucTieu.moRa("Mục tiêu mt-a"),
+					// DH2: nhãn nút mở của dòng bảng đơn vị do DataTable ghép từ tên mục tiêu.
+					nhanNut:
+						man === "cua-toi"
+							? m.khoiMucTieu.moRa("Mục tiêu mt-a")
+							: uiVi.table.expandRow("Mục tiêu mt-a"),
 					muiTenTheoNut: true,
 					doiChungMo: "true",
 					url: "mt-a",
@@ -1936,7 +1988,7 @@ const CA_TRANG_THAI = {
 			await dungMan(man, [mucTieu("mt-rong", [])]);
 			soCa(
 				{
-					hang: hangTbody(khoi("mt-rong") ?? document.body).map(khoaHang),
+					hang: hangCuaMt("mt-rong").map(khoaHang),
 					chu:
 						khoi("mt-rong")?.querySelector("[data-chua-co-kr]")?.textContent ??
 						null,
@@ -1945,11 +1997,14 @@ const CA_TRANG_THAI = {
 							m.khoiMucTieu.chuaCoKrDeTinh,
 						) ?? false,
 				},
-				{
-					hang: ["mt-rong", "mt-rong"],
-					chu: "Mục tiêu này chưa có KR.",
-					oTienDo: true,
-				},
+				// DH2: mục tiêu không KR là một dòng không nút mở, không dòng «chưa có KR».
+				man === "cua-toi"
+					? {
+							hang: ["mt-rong", "mt-rong"],
+							chu: "Mục tiêu này chưa có KR.",
+							oTienDo: true,
+						}
+					: { hang: ["mt-rong"], chu: null, oTienDo: true },
 				(truong) => `ST-mtkr-chua-co-kr sai o ${man}: ${truong}`,
 			);
 		}),

@@ -239,7 +239,8 @@ export function TheoDonVi() {
 				<XemCay cycleId={currentId} tenGoc={tenGoc} tenKy={tenKy} />
 			</KhungCachXem>
 		);
-	} else if (byUnit.data === undefined && byUnit.isPending) {
+	} else if (byUnit.isPending || byUnit.isPlaceholderData) {
+		/* Đổi đơn vị: khung xương, không giữ dòng của đơn vị trước (khung-xuong). */
 		than = <KhungDangTaiDonVi hang={hang} />;
 	} else if (byUnit.isError) {
 		than = (
