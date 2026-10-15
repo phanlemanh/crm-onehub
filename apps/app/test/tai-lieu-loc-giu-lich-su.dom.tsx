@@ -12,13 +12,27 @@ const canh = {
 	treo: false,
 	loi: false,
 	rong: false,
+	khongLuuTru: false,
 	luotLoi: false,
 	cho: [] as (() => void)[],
 	capNhat: [] as { qs: string; history: string }[],
 };
 
 const TONG = 60;
-const DEM = { "quy-dinh": 2, "chinh-sach": 2, "quy-trinh": 2, "bieu-mau": 0 };
+const DEM = {
+	"quy-dinh": 2,
+	"chinh-sach": 2,
+	"quy-trinh": 2,
+	"bieu-mau": 0,
+	"chien-luoc": 0,
+};
+const DEM_RONG = {
+	"quy-dinh": 0,
+	"chinh-sach": 0,
+	"quy-trinh": 0,
+	"bieu-mau": 0,
+	"chien-luoc": 0,
+};
 
 async function luot(): Promise<void> {
 	if (canh.treo) await new Promise<void>((r) => canh.cho.push(r));
@@ -29,13 +43,19 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		taiLieu: {
 			list: {
-				queryOptions: (vao: { page: number }) => ({
+				queryOptions: (vao: {
+					page: number;
+					archived: boolean;
+					donViId?: string;
+				}) => ({
 					queryKey: ["taiLieu.list", vao],
 					queryFn: async () => {
 						canh.goi.list += 1;
 						const n = canh.goi.list;
 						await luot();
-						const rong = canh.rong && n > 1;
+						const rong =
+							(canh.rong && n > 1) ||
+							(canh.khongLuuTru && (vao.archived || vao.donViId !== undefined));
 						return {
 							rows: rong
 								? []
@@ -52,8 +72,8 @@ mock.module("@/lib/trpc/client", () => ({
 										},
 									],
 							total: rong ? 0 : TONG,
-							facetCounts: DEM,
-							soDaLuuTru: 1,
+							facetCounts: rong && canh.khongLuuTru ? DEM_RONG : DEM,
+							soDaLuuTru: canh.khongLuuTru ? 0 : 1,
 						};
 					},
 				}),
@@ -144,6 +164,7 @@ function datLai(): void {
 	canh.treo = false;
 	canh.loi = false;
 	canh.rong = false;
+	canh.khongLuuTru = false;
 	canh.luotLoi = false;
 	for (const r of canh.cho) r();
 	canh.cho = [];
@@ -485,6 +506,58 @@ describe("giu-loc", () => {
 			g.querySelector("[data-loc-rong]") !== null,
 			"tlg-giu-loc: loc ra rong khong hien rong khi ve",
 		);
+	});
+
+	test("giu-loc: kho khong co trang luu tru, tat da luu tru khi cho van giu thanh loc", async () => {
+		canh.khongLuuTru = true;
+		const g = await mo("trang", "?archived=true");
+		ghim(
+			g.querySelector("[data-bo-loc]") !== null,
+			"tlg-giu-loc: luu tru rong khong co thanh loc truoc khi bam",
+		);
+		canh.treo = true;
+		const go = demGo(
+			g,
+			(n) => n.matches("[data-bo-loc]") || !!n.querySelector("[data-bo-loc]"),
+		);
+		const nut = await bam(g.querySelector("[data-nut-da-luu-tru]"));
+		ghim(
+			g.querySelector("[data-kho-rong]") === null,
+			"tlg-giu-loc: tat luu tru khi cho hien kho trong",
+		);
+		ghim(go.so() === 0, "tlg-giu-loc: tat luu tru khi cho go thanh loc");
+		ghim(
+			document.activeElement === nut,
+			"tlg-giu-loc: tat luu tru khi cho mat tieu diem",
+		);
+		await tha();
+		ghim(
+			g.textContent?.includes(TEN.trang(2)) ?? false,
+			"tlg-giu-loc: tat luu tru khong co hang moi",
+		);
+		go.dung();
+	});
+
+	test("giu-loc: bo loc don vi ra rong khi cho van giu thanh loc", async () => {
+		canh.khongLuuTru = true;
+		const g = await mo("trang", "?donVi=dv1");
+		canh.treo = true;
+		const go = demGo(
+			g,
+			(n) => n.matches("[data-bo-loc]") || !!n.querySelector("[data-bo-loc]"),
+		);
+		await bam(g.querySelector("[data-bo-loc-xoa]"));
+		ghim(
+			g.querySelector("[data-kho-rong]") === null,
+			"tlg-giu-loc: bo loc khi cho hien kho trong",
+		);
+		ghim(go.so() === 0, "tlg-giu-loc: bo loc khi cho go thanh loc");
+		await tha();
+		ghim(
+			g.textContent?.includes(TEN.trang(2)) ?? false,
+			"tlg-giu-loc: bo loc khong co hang moi",
+		);
+		go.dung();
 	});
 });
 

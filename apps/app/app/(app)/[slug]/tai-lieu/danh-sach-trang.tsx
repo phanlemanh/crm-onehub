@@ -157,7 +157,8 @@ export function DanhSachTrang() {
 	const tatCa = LOAI_TRANG.reduce((n, l) => n + facetCounts[l], 0);
 	const coLoc = loai !== null || donVi !== null || chu !== null;
 
-	const khongCoGi = tatCa === 0 && (ds.data.soDaLuuTru ?? 0) === 0;
+	const khongCoGi =
+		!ds.isPlaceholderData && tatCa === 0 && (ds.data.soDaLuuTru ?? 0) === 0;
 	if (khongCoGi && donVi === null && chu === null && !archived)
 		return <KhoRong m={m} url={url(duongTrangMoi())} />;
 	const ngayCot = (t: { capNhat: string; luuTruLuc: string | null }) =>
