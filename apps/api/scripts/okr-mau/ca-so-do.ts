@@ -439,3 +439,16 @@ export function dauVaoThuan(): DauVaoSoDo {
 		],
 	};
 }
+
+if (import.meta.main && process.argv.includes("--nap")) {
+	const { db } = await import("@crm/db");
+	const i = process.argv.indexOf("--luc");
+	const luc = new Date(
+		i > 0 ? (process.argv[i + 1] ?? "") : "2026-10-01T02:00:00Z",
+	);
+	await napCaSoDo(db, { luc });
+	console.log(
+		`nap ca so do: ${MUC_TIEU.length} muc tieu, ${PHONG_BAN.length} phong ban`,
+	);
+	process.exit(0);
+}
