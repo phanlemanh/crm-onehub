@@ -1,40 +1,4 @@
 {
   "feature_plain": "Chỉ nhánh chính đổi được lộ trình hiện trên trang Lộ trình, và máy chủ thôi nhận yêu cầu cỡ 2 MB ở mọi đường — chỉ đường nhận bản chụp lộ trình được nhận cỡ đó.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ nhận và lưu bản chụp lộ trình thật (lớn hơn 100 KB) khi GitHub Actions đẩy lên bằng khoá «Đẩy lộ trình»."},
-    {"id": "AC-3", "p": "Sẽ từ chối (413) mọi yêu cầu lớn hơn 100 KB gửi tới các đường REST khác, ngay cả khi người gửi chưa đăng nhập; yêu cầu từ 100 KB trở xuống vẫn tới bước kiểm quyền như trước."},
-    {"id": "AC-5", "p": "Sẽ trả lỗi «quá cỡ» cùng một dạng ở đường bản chụp và ở đường khác, để kịch bản đẩy đọc lỗi như hôm nay."},
-    {"id": "AC-6", "p": "Sẽ chặn lượt đẩy chạy trong GitHub Actions mà không từ nhánh onehub (nhánh khác, thẻ, hay thiếu thông tin nhánh): lượt đỏ, nói rõ nhánh đã chạy, không gọi CRM."},
-    {"id": "AC-7", "p": "Sẽ đẩy như hôm nay khi lượt chạy từ onehub — tự chạy khi gộp hay bấm tay — và khi chạy ngoài Actions."},
-    {"id": "AC-8", "p": "Sẽ giữ nhánh kích hoạt của workflow trùng đúng nhánh được phép đẩy, khai ở một chỗ."},
-    {"id": "AC-9", "p": "Sẽ khai hai trần thân và đường bản chụp mỗi thứ một chỗ; cầu 2 MB chỉ dành cho đúng đường bản chụp, không theo tiền tố."},
-    {"id": "AC-10", "p": "Sẽ ghi hai luật mới vào tài liệu API, mục «Bản chụp lộ trình»."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Sẽ KHÔNG từ chối bản chụp 1,5 MB ở đường bản chụp; chặn bản chụp lớn hơn 2 MB như trước."},
-    {"id": "AC-4", "p": "Sẽ KHÔNG nới trần cho người đã đăng nhập: yêu cầu 150 KB tới đường khác vẫn bị từ chối."},
-    {"id": "OOS-1", "p": "KHÔNG đổi việc đường bản chụp đọc yêu cầu tới 2 MB trước khi kiểm khoá — chỉ một đường, đúng cỡ khối lộ trình."},
-    {"id": "OOS-2", "p": "KHÔNG dời khoá đẩy sang môi trường GitHub chỉ cho onehub ở vòng này; nhánh lấy onehub giữa lúc LT1c gộp và lúc việc này gộp vẫn đẩy được khi bấm chạy tay."},
-    {"id": "OOS-3", "p": "KHÔNG đổi màu lượt trả «cũ hơn» — sau khi chặn nhánh, ca này chỉ còn do hai lượt onehub nối nhau."},
-    {"id": "OOS-4", "p": "KHÔNG chặn người chạy kịch bản đẩy trên máy mình bằng khoá thật."},
-    {"id": "OOS-5", "p": "KHÔNG đổi trần của các đường nhận nội bộ (đã có trần riêng) và của tRPC thường."}
-  ],
-  "scope_plain": "Năm thứ cố ý để ngoài vòng này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Phủ hai loại đường: đường nhận bản chụp và một đường REST khác nhận dữ liệu — đối chiếu chuẩn OWASP API4 (tiêu thụ tài nguyên không giới hạn)."},
-    {"i": 1, "p": "Phủ ba bậc cỡ yêu cầu: dưới 100 KB, giữa 100 KB và 2 MB, trên 2 MB — đúng hai ngưỡng của thư viện và của bản chụp."},
-    {"i": 2, "p": "Phủ ba kiểu người gửi: chưa đăng nhập, có phiên, có khoá đẩy — trần không đổi theo người gửi (AC-3, AC-4)."},
-    {"i": 3, "p": "Bảng 8 ô viết trước: 3 ô đường bản chụp, 5 ô đường khác kể cả đúng bằng trần và trần + 1 byte; lỗi «quá cỡ» so chéo hai đường (AC-5)."},
-    {"i": 4, "p": "Phủ hai nơi chạy kịch bản đẩy: trong GitHub Actions và trên máy người."},
-    {"i": 5, "p": "Phủ bốn kiểu nhánh: onehub, nhánh khác, thẻ, thiếu thông tin nhánh."},
-    {"i": 6, "p": "Bảng 5 ô viết trước: Actions + onehub thì đẩy (AC-7); Actions + ba kiểu còn lại thì chặn (AC-6); ngoài Actions như cũ (AC-7)."},
-    {"i": 7, "p": "Gạch hai ô không xảy ra: workflow không chạy theo PR, và thư viện không đọc yêu cầu không phải JSON."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Thước «bản chụp đang hiện đến từ onehub» từng đọc nhật ký Actions thay vì bản chụp CRM đang giữ, nên sót bản chụp cũ và lượt chạy tay — đã đổi sang đọc thẳng bản chụp trên production lúc gộp và lúc hết 14 ngày."},
-    {"i": 1, "p": "Bước chặn nằm trong kịch bản của chính nhánh được chạy, nên nhánh lấy onehub giữa hai lần gộp (LT1c rồi việc này) không có chặn — đã ghi rõ vào phạm vi, đề nghị điều phối gộp việc này sát sau LT1c, và đưa câu môi trường GitHub lên cổng này."},
-    {"i": 2, "p": "Bẫy bài kiểm xanh ở máy mà đỏ trên CI chỉ được dặn bằng chữ — đã thêm một phép đo chạy cả bộ bài kịch bản đẩy dưới môi trường giống CI."},
-    {"i": 3, "p": "Ô «không quá cỡ» chỉ đòi «khác 413», và thiếu ô đúng bằng trần — đã đòi kết quả cụ thể (nhận, hoặc 401) và thêm ô bằng trần, trần + 1 byte."},
-    {"i": 4, "p": "Lời hứa «khai một chỗ» chỉ có người chấm đọc năm tệp — đã thêm một phép đo quét cả kho tìm đường bản chụp gõ tay ngoài tệp cấu hình."}
-  ]
+  "analyst_plain": "Một phép đo (chạy cả bộ bài kịch bản đẩy dưới môi trường giống CI) xanh cả trước lẫn sau vòng này — nó là lưới chống bài kiểm đỏ trên CI mà xanh ở máy, không đo hành vi mới; khi phá-thử, bỏ dòng đặt môi trường tường minh thì nó đỏ."
 }
