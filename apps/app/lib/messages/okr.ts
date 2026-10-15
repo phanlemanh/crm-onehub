@@ -121,7 +121,7 @@ const vi = {
 	},
 	khongThay: {
 		title: "Không thấy đơn vị này",
-		body: "Đơn vị có thể đã được lưu trữ. Chọn một đơn vị khác trong cây.",
+		body: "Đơn vị có thể đã được lưu trữ. Chọn một đơn vị khác ở ô Đơn vị.",
 		action: "Về toàn công ty",
 	},
 	donViBang: {
@@ -851,7 +851,7 @@ const en: OkrMessages = {
 	},
 	khongThay: {
 		title: "Unit not found",
-		body: "It may have been archived. Pick another unit from the tree.",
+		body: "It may have been archived. Pick another unit in the Unit box.",
 		action: "Back to the whole company",
 	},
 	donViBang: {

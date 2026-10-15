@@ -43,7 +43,8 @@ export function demLocNhanh(ds: MucTieu[]) {
 	} satisfies Record<LocNhanh, number>;
 }
 
-export const COT_SAP = ["tien-do", "tinh-trang"] as const;
+/** «detail» là mục «Dòng có chi tiết lên trước» DataTable tự thêm khi có dòng mở rộng. */
+export const COT_SAP = ["tien-do", "tinh-trang", "detail"] as const;
 export type CotSap = (typeof COT_SAP)[number];
 export const CHIEU_SAP = ["asc", "desc"] as const;
 export type ChieuSap = (typeof CHIEU_SAP)[number];
@@ -65,6 +66,7 @@ export function tinhTrangMucTieu(mt: MucTieu): TinhTrang {
 const KHOA_SAP = {
 	"tien-do": (mt: MucTieu) => mt.progress,
 	"tinh-trang": (mt: MucTieu) => BAC_TINH_TRANG[tinhTrangMucTieu(mt)],
+	detail: (mt: MucTieu) => (mt.keyResults.length > 0 ? 0 : 1),
 } satisfies Record<CotSap, (mt: MucTieu) => number>;
 
 /** Sắp ổn định: mục tiêu cùng khoá giữ thứ tự máy chủ trả, ở cả hai chiều. */

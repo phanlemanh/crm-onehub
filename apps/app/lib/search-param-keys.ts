@@ -81,6 +81,9 @@ export const SEARCH_PARAM = {
 		locSoan: "locSoan",
 		mucTinCay: "mucTinCay",
 		nhap: "nhapOkr",
+		locNhanh: "locNhanhOkr",
+		sap: "sapOkr",
+		chieu: "chieuOkr",
 	},
 	loTrinh: {
 		vongDoi: "vongDoi",

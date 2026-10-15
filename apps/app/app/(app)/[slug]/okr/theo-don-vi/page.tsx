@@ -1,4 +1,3 @@
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
@@ -10,6 +9,7 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
+import { KhungDangTaiDonVi } from "./hang-cong-cu";
 import { TheoDonVi } from "./theo-don-vi";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -27,7 +27,7 @@ export default function TheoDonViPage({
 		<>
 			<DauTrangOkrTrang tab="theo-don-vi" />
 			<PageShellContent>
-				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
+				<Suspense fallback={<KhungDangTaiDonVi />}>
 					<NoiDung searchParams={searchParams} />
 				</Suspense>
 			</PageShellContent>

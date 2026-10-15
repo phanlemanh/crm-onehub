@@ -1,10 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
-import {
-	type DataTableFacet,
-	DataTableFacetMenu,
-} from "@crm/ui/components/data-table";
+import type { DataTableFacet } from "@crm/ui/components/data-table";
 import {
 	Empty,
 	EmptyContent,
@@ -46,7 +43,7 @@ const MAT_LOC: readonly MatLocOkr[] = [
 	"gopY",
 ];
 
-const laMat = (id: string): id is MatLocOkr =>
+export const laMatLoc = (id: string): id is MatLocOkr =>
 	MAT_LOC.some((mat) => mat === id);
 
 export const coLoc = (loc: LocOkrGiaTri) =>
@@ -95,19 +92,12 @@ export function luaChonPhuTrach(
 	];
 }
 
-export function LocOkr({
-	dem,
-	loc,
-	tenNguoi,
-	doiLoc,
-	boLoc,
-}: {
-	dem: DemMatLoc | undefined;
-	loc: LocOkrGiaTri;
-	tenNguoi: ReadonlyMap<string, string>;
-	doiLoc: (thay: Partial<LocOkrGiaTri>) => void;
-	boLoc: () => void;
-}) {
+/** Năm mặt lọc máy chủ của OKR, dạng `facets` của DataTable. */
+export function useMatLocOkr(
+	dem: DemMatLoc | undefined,
+	loc: LocOkrGiaTri,
+	tenNguoi: ReadonlyMap<string, string>,
+): DataTableFacet[] {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
@@ -120,7 +110,7 @@ export function LocOkr({
 	} satisfies Record<MucTuTin, string>;
 	const soCua = (ds: { value: string; count: number }[], v: string) =>
 		ds.find((d) => d.value === v)?.count ?? 0;
-	const facets: DataTableFacet[] = [
+	return [
 		{
 			id: "phuTrach",
 			label: mt.loc.phuTrach,
@@ -164,42 +154,25 @@ export function LocOkr({
 			})),
 		},
 	];
-
-	return (
-		<div className="flex flex-wrap items-center gap-2" data-loc-okr>
-			<DataTableFacetMenu
-				facets={facets}
-				filters={{
-					phuTrach: loc.phuTrach,
-					loai: loc.loai,
-					trangThai: loc.trangThai,
-					tuTin: loc.tuTin,
-					gopY: loc.gopY,
-				}}
-				onFilterChange={(id, values) => {
-					if (laMat(id)) doiLoc(chuanLoc(id, values));
-				}}
-			/>
-			{coLoc(loc) ? (
-				<Button data-nut="bo-loc" onClick={boLoc} size="sm" variant="ghost">
-					{mt.loc.boLoc}
-				</Button>
-			) : null}
-		</div>
-	);
 }
 
-export function KhongKhop({ boLoc }: { boLoc: () => void }) {
-	const mt = okrToanCanhMessages(useLocale());
+export function KhongKhop({
+	boLoc,
+	tong,
+}: {
+	boLoc: () => void;
+	tong: number;
+}) {
+	const b = okrMessages(useLocale()).donViBang;
 	return (
 		<Empty data-trang-thai="ST-donvi-loc-khongkhop">
 			<EmptyHeader>
-				<EmptyTitle>{mt.loc.khongKhop}</EmptyTitle>
-				<EmptyDescription>{mt.loc.khongKhopMoTa}</EmptyDescription>
+				<EmptyTitle>{b.khongKhopLoc}</EmptyTitle>
+				<EmptyDescription>{b.khongKhopLocMoTa(tong)}</EmptyDescription>
 			</EmptyHeader>
 			<EmptyContent>
 				<Button onClick={boLoc} size="sm" variant="outline">
-					{mt.loc.boLoc}
+					{b.boLoc}
 				</Button>
 			</EmptyContent>
 		</Empty>

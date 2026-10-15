@@ -61,6 +61,22 @@ export function KhungHangCongCu({ children }: { children: ReactNode }) {
 	return <div className={LOP_HANG_CONG_CU}>{children}</div>;
 }
 
+/* Phần phải của hàng công cụ lúc tải: chỗ của ô lọc nhanh, «Lọc», «Sắp xếp»,
+   «Cột» — và nút «Lọc» gộp trên điện thoại — cùng cỡ với DataTable. */
+function XuongPhaiHang() {
+	return (
+		<>
+			<Skeleton className="hidden h-7 w-44 sm:block" />
+			<div className="hidden gap-2 sm:flex lg:ml-auto">
+				<Skeleton className="h-7 w-16" />
+				<Skeleton className="h-7 w-24" />
+				<Skeleton className="h-7 w-20" />
+			</div>
+			<Skeleton className="h-7 w-full sm:hidden" />
+		</>
+	);
+}
+
 /* Khung xương của hàng công cụ: cùng khung, cùng cỡ ô chọn và chỗ của cách
    xem, nên đỉnh ô chọn không nhảy khi dữ liệu về. */
 export function KhungXuongHangCongCu() {
@@ -70,13 +86,56 @@ export function KhungXuongHangCongCu() {
 				<Skeleton className="h-7 w-full sm:w-72" />
 				<Skeleton className="h-7 w-32 md:w-92" />
 			</div>
-			<Skeleton className="hidden h-7 w-44 sm:block" />
-			<div className="hidden gap-2 sm:flex lg:ml-auto">
-				<Skeleton className="h-7 w-16" />
-				<Skeleton className="h-7 w-24" />
-				<Skeleton className="h-7 w-20" />
+			<XuongPhaiHang />
+		</div>
+	);
+}
+
+const DONG_KHUNG = ["mot", "hai", "ba", "bon", "nam"] as const;
+
+/**
+ * Lúc tải: hàng công cụ (thật khi đã có cây tổ chức, khung xương khi chưa) và
+ * các dòng bảng bằng khung xương — không vòng quay toàn trang, không cây.
+ */
+export function KhungDangTaiDonVi({ hang }: { hang?: ReactNode }) {
+	const b = okrMessages(useLocale()).donViBang;
+	return (
+		<div
+			aria-busy="true"
+			className="flex flex-col gap-3"
+			data-trang-thai="ST-donvi-dangtai"
+		>
+			<span className="sr-only" role="status">
+				{b.dangTai}
+			</span>
+			{hang ? (
+				<KhungHangCongCu>
+					{hang}
+					<XuongPhaiHang />
+				</KhungHangCongCu>
+			) : (
+				<KhungXuongHangCongCu />
+			)}
+			<div className="flex flex-col gap-1 overflow-hidden rounded-lg border bg-card">
+				<Skeleton
+					className="h-11 w-full rounded-none"
+					data-khung-hang="dau-bang"
+				/>
+				{DONG_KHUNG.map((k) => (
+					<div
+						className="flex items-center gap-4 px-4 py-3"
+						data-khung-hang="hang"
+						key={k}
+					>
+						<div className="flex min-w-0 flex-1 flex-col gap-2">
+							<Skeleton className="h-4 w-2/3" />
+							<Skeleton className="h-3 w-1/2" />
+						</div>
+						<Skeleton className="hidden h-3 w-56 md:block" />
+						<Skeleton className="h-4 w-24" />
+					</div>
+				))}
 			</div>
-			<Skeleton className="h-7 w-full sm:hidden" />
 		</div>
 	);
 }
