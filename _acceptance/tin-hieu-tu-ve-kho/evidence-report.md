@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 29fef6b0bcaf4f2e32577787260b3a26724a706d
+verified_commit: 7a3e69c5eb5cdc78520c655e147a921a3b92169f
 human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 3 (17/17 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -284,3 +284,7 @@ sha: 1cebbed3d3794b70c685ed2bb15f154e2c301e2d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-15, do gộp onehub 8f819cf6a (#419 #422 #407 #421 #409 #423), gọi lượt gộp #420
 run_id: repin-20261015T153900Z-77059
 sha: 29fef6b0bcaf4f2e32577787260b3a26724a706d · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-15, do gộp onehub 48993d6ab (#418) sau lần ghim 29fef6b0b
+run_id: repin-20261015T162628Z-72000
+sha: 7a3e69c5eb5cdc78520c655e147a921a3b92169f · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
