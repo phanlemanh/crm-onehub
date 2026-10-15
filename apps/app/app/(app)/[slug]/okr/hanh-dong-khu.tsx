@@ -255,7 +255,7 @@ export function HanhDongKhu({
 		return (
 			<>
 				{chonChuKy}
-				<Skeleton className="h-8 w-56 rounded-md" data-hang-cho="" />
+				<Skeleton className="h-7 w-56 rounded-md" data-hang-cho="" />
 			</>
 		);
 	return (
