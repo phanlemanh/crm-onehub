@@ -775,14 +775,14 @@ describe("dhk-khoa-ly-do", () => {
 				tab: "theo-don-vi" as const,
 				xem: TV,
 				tham: "?donOkr=pb:P9",
-				cau: m.khoaTao.khongSua("Kho vận"),
+				cau: m.khoaTao.khongSua.replace("{ten}", "Kho vận"),
 			},
 			{
 				ten: "don vi minh dan",
 				tab: "cua-toi" as const,
 				xem: TP2,
 				tham: "",
-				cau: m.khoaTao.khongSua("Kinh doanh vùng 1"),
+				cau: m.khoaTao.khongSua.replace("{ten}", "Kinh doanh vùng 1"),
 			},
 			{
 				ten: "khong dan ai",

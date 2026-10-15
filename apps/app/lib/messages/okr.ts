@@ -14,8 +14,8 @@ const vi = {
 	},
 	nhanHoiYMoi: "Mới",
 	khoaTao: {
-		khongSua: (ten: string) =>
-			`Bạn xem được ${ten} nhưng không thêm mục tiêu được: chỉ trưởng đơn vị này, trưởng đơn vị cấp trên và quản trị làm được.`,
+		khongSua:
+			"Bạn xem được {ten} nhưng không thêm mục tiêu được: chỉ trưởng đơn vị này, trưởng đơn vị cấp trên và quản trị làm được.",
 		chuaDan:
 			"Bạn chưa dẫn đơn vị nào nên chưa thêm được mục tiêu: mục tiêu thuộc về đơn vị và do trưởng đơn vị đặt.",
 		loiQuyen: "Chưa tải được quyền của bạn — tải lại trang để thử lại.",
@@ -713,8 +713,8 @@ const en: OkrMessages = {
 	},
 	nhanHoiYMoi: "New",
 	khoaTao: {
-		khongSua: (ten: string) =>
-			`You can view ${ten} but cannot add objectives to it: only this unit's head, a parent unit's head and admins can.`,
+		khongSua:
+			"You can view {ten} but cannot add objectives to it: only this unit's head, a parent unit's head and admins can.",
 		chuaDan:
 			"You don't lead a unit yet, so you can't add objectives: objectives belong to a unit and its head sets them.",
 		loiQuyen: "Couldn't load your permissions — reload the page to try again.",

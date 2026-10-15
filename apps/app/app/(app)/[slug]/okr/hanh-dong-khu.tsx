@@ -96,7 +96,7 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 		? null
 		: dich.nguon === "goc"
 			? m.khoaTao.chuaDan
-			: m.khoaTao.khongSua(ten);
+			: m.khoaTao.khongSua.replace("{ten}", ten);
 	return {
 		kieu: "xong",
 		dich,
