@@ -560,14 +560,15 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
 - **Bảng và việc con** (hàng DA2, `ViecBangService`). `viec.bang({ nhom })` trả bốn cột Chưa làm · Đang làm
   · Chờ đánh giá · Xong; cột Xong chỉ việc có `khepLuc` trong `VIEC.bang.xongGanDayNgay` ngày, `tong` đếm đủ;
   mỗi thẻ mang `chuyenDuoc` (đích người xem được phép, máy chủ tính bằng `chuyenDuocCua` — giao diện không tự
-  suy đồ thị), `con` (`xong`/`tong`, không tính Huỷ), `cha` và `conMo`. `viec.keo({ id, den, thuTu, nguon })`
+  suy đồ thị), `con` (`xong`/`tong`, không tính Huỷ), `cha` và `conMo`; `con` và `conMo` chỉ đếm việc con người
+  xem thấy, và `cha` là `null` khi người xem không thấy việc cha (hàng DA2b — cùng luật 404, không có dòng thay chỗ). `viec.keo({ id, den, thuTu, nguon })`
   đi qua đúng `doiTrangThai` (cùng thứ tự kiểm 404 → 400 → 403 → vai «chỉ OKR»), với `nguon` là `bang-keo`
   (kéo bằng chuột, chạm, phím) hay `bang-menu` (menu «Chuyển sang…»); lần bị từ chối không ghi gì. Thứ tự
   trong cột là của riêng từng người, ở bảng `viecThuTu` (khoá chèn giữa base-62, `@crm/db/viec-thu-tu`);
   sắp thứ tự không ghi vết và không làm việc thành «có lịch sử». `viec.taoCon({ chaId, … })` (`taoViecCon`):
   chỉ người giao hay người thực hiện của cha, cha phải đang mở và không phải con (một tầng), con chép gắn của
   cha, người giao và người thực hiện của cha thành người theo dõi, cha nhận vết `them-viec-con` — nên cha đã
-  có con thì không xoá được. `viec.con({ id })` trả `cha`, các con người xem thấy, `conMo`, `themDuoc`.
+  có con thì không xoá được. `viec.con({ id })` trả `cha` (`null` khi người xem không thấy cha), các con người xem thấy, `conMo`, `themDuoc`.
 - **Tổng quan**: `viecQuaHan` (việc đang mở hạn trước hôm nay: tôi thực hiện ở «của tôi», tôi thấy ở «mọi
   người»; tối đa `VIEC.tranTongQuan` dòng); `quaHan.viec` cộng thêm số việc cùng điều kiện, đếm đủ.
 - **Việc cần làm cũ (hàng DA1b).** Hàng `activity` loại `TASK` không còn đường ghi: `activities.create` trả 400
@@ -1641,6 +1642,28 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
   của bản dựng chứ không ở cơ sở dữ liệu, và ba con số cần mọi dòng. Chủ kho chọn ở Cổng Phạm vi
   14/10 (`_acceptance/moi-tin-hieu-cho-quan-tri/`). Mở lại khi số tín hiệu vượt vài trăm.
 - Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
+  phán nào ở API.
+
+## Bản chụp lộ trình: Actions đẩy, CRM giữ bản mới nhất
+
+Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó mới hơn bản đang chạy, và đọc
+`LO-TRINH.html` đóng sẵn trong bản dựng khi không (`apps/app/lib/lo-trinh/chon-nguon.ts`). Bảng
+`BanChupLoTrinh` giữ một hàng mỗi nguồn (hôm nay chỉ `crm`); không lịch sử, bản mới ghi đè.
+
+- **Người đẩy là GitHub Actions** (`.github/workflows/ban-chup-lo-trinh.yml`, kịch bản
+  `scripts/ban-chup-lo-trinh/day.ts`), gọi `POST /rest/lo-trinh/ban-chup` (thủ tục
+  `loTrinhBanChup.day`) với `x-api-key` là khoá loại «Đẩy lộ trình». Đây không phải điểm nhận
+  `/internal/*`: nó là thủ tục tRPC qua cầu REST, chặn bằng khoá máy như đường kéo tín hiệu.
+- **Khoá «Đẩy lộ trình» là cấu hình thứ ba của `apiKey([...])`** (`configId: "day-lo-trinh"`,
+  `enableSessionForAPIKeys: false`), đứng SAU khoá mặc định — cùng luật thứ tự với khoá chỉ-kéo.
+  `KhoaDayLoTrinhMiddleware` đọc lại vai người giữ khoá mỗi lần gọi: chỉ chủ hay quản trị.
+  Chỉ chủ hay quản trị tạo được loại khoá này.
+- **Phân tích ở biên, lưu nguyên khối**: thân đi qua `banChupVao`
+  (`@crm/validation/ban-chup-lo-trinh`), khối dữ liệu phải qua khuôn lộ trình; hàng lưu giữ cả
+  khoá ngoài khuôn của trang (danh sách tín hiệu) để TH3 đọc. Đọc ra thì phân tích lại.
+- **Không bao giờ lùi**: ghi bằng một câu `UPDATE … WHERE commitLuc < $moi`; cùng sha trả
+  `trung`, cũ hơn trả `cu-hon`, không đổi gì. Hai lượt chạy đua tạo hàng đầu bắt `P2002`.
+- Nhật ký ghi mã khoá, sha và kết quả, không ghi nội dung khối. Không `AgentTask`: không có việc
   phán nào ở API.
 
 ## Money

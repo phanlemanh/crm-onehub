@@ -67,9 +67,10 @@ function ToggleGroupItem({
 	variant = "default",
 	size = "default",
 	asChild,
+	count,
 	...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
-	VariantProps<typeof toggleVariants>) {
+	VariantProps<typeof toggleVariants> & { count?: number }) {
 	const context = React.useContext(ToggleGroupContext);
 
 	return (
@@ -95,6 +96,14 @@ function ToggleGroupItem({
 				<>
 					<ToggleMark variant={context.variant || variant} />
 					{children}
+					{count === undefined ? null : (
+						<span
+							data-slot="toggle-group-item-count"
+							className="text-muted-foreground tabular-nums"
+						>
+							{count}
+						</span>
+					)}
 				</>
 			)}
 		</ToggleGroupPrimitive.Item>
