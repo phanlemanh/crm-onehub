@@ -88,6 +88,8 @@ phẩm: `schema.prisma` (`OkrAlignment`), `okr-muc-tieu.ts` (`CAP_MUC_TIEU`), `o
   `apps/app/components/crm/record-sheet/objective-sheet.tsx` (chỉ thêm),
   `apps/app/lib/messages/okr-quanh.ts` (mới), `apps/app/test/okr-quanh-muc-tieu.dom.tsx` (mới),
   `apps/app/test/messages-guard.spec.ts` (chỉ thêm), `_acceptance/config.yaml` (chỉ thêm).
+  S3 chốt thêm: `apps/app/test/okr-quanh-loi-vao.dom.tsx` (mới — bài lối vào dùng bộ dựng ngăn chi tiết
+  `khung-gop-y-dung-cho.tsx`, mỗi tệp bun chỉ một mock tRPC), `docs/superpowers/plans/2026-10-15-so-do-quanh-muc-tieu.md`.
 - Bộ gieo: dùng nguyên ca sơ đồ của DH4 (`apps/api/scripts/okr-mau/ca-so-do.ts`) — `sd-a1-1` góp qua `sd-a-1` lên KR
   `n1-k1` của mục tiêu công ty `n1`; `sd-a3-1` góp cả `sd-a-1` lẫn thẳng `n1`; `sd-g` giới hạn góp vào `sd-a-1`. Không
   sửa tệp gieo.
