@@ -269,3 +269,25 @@ evals:
       theo-don-vi?kyOkr=K&donOkr=pb:P2&xemOkr=hop-tuan, bam 4 the khac roi Theo don vi -> trang dung cach xem
       hop-tuan, don P2. Chu ky ngoai pha cham + xemOkr=cham -> danh-sach. CHIEU DO (DVB_PHA=bo-xem: ban sao toi()
       chi giu ky va don) -> "dvb-giu-xem: lien ket cua-toi thieu xemOkr=hop-tuan".
+
+  - id: E16
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.dvb_ghim_nam
+    paths:
+      - "_acceptance/dat-okr-trong-crm/**"
+      - "_acceptance/khung-okr-truoc-r1/**"
+      - "_acceptance/muc-tieu-va-kr/**"
+      - "_acceptance/okr-to-chuc-va/**"
+      - "_acceptance/toan-canh-okr/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs"
+    expected: |
+      rang/ghim-nam.mjs rut LUC CHAY tap ho so signed-off co tep trong rang/ khop dau cu (git grep tren cay
+      tai merge-base: data-nut-cay tren trang theo-don-vi, data-hang-nut, thuMucTieu, cay aria-label «Đơn vị»)
+      va so voi tap 5 ho so khai trong AC-14 (lech -> ma 2 goi ten). Moi ho so: dong repin cuoi trong
+      run-log.jsonl co suites_exit va evals_exit toan 0, va sha cua no chua commit dau tien cua luot doi
+      theo-don-vi.tsx (git merge-base --is-ancestor) -> "GHIM <slug>: <sha> xanh"; diff rang/ cua ho so tu
+      merge-base khong xoa dong expect/kiem nao ngoai dong chua dau cu (dem dong xoa khong khop dau cu = 0);
+      muc-tieu-va-kr/contract.md co dong Notes tro "trang-don-vi-mot-bang" AC-3. Dong cham "DUNG AC-14: 5/5".
+      CHIEU DO (DVB_PHA=ghim-cu: ban sao run-log mot ho so voi dong repin tren sha truoc trang moi) -> "SAI
+      AC-14: <slug> ghim tren <sha> chua co trang moi", ma 1.

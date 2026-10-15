@@ -38,6 +38,7 @@ Source input: hàng DH2 `docs/plan/lo-trinh-okr.json`; `docs/plan/pham-vi-okr-di
 - AC-11: Given `/proto/trang-don-vi-mot-bang` khi bật `PROTO_ROUTE=1`, When mở từng state, Then có đúng một state cho mỗi dòng của bảng trạng thái trong thiết kế, mỗi state cho một cây DOM khác nhau; phép đo sổ bản mẫu xanh.
 - AC-12: Given ảnh trang đơn vị ở Danh sách (thu và mở KR), Họp tuần, ô chọn đơn vị đang mở và Thoả thuận ở 1440 px và 390 px do E2 chụp, When một người không làm lượt này đặt cạnh nhau, Then họ đọc được trang đơn vị dùng cùng một khuôn bảng với Thoả thuận — ô chọn ở chỗ ô tìm kiếm, một hàng công cụ, bảng, chân bảng — và tìm được KR của một mục tiêu mà không cần đọc chữ hướng dẫn. (judgment)
 - AC-13: Given đang xem Theo đơn vị của đơn vị X ở cách xem V (Cây căn chỉnh, Họp tuần hoặc Chấm điểm) và chu kỳ K, When đi qua một thẻ khác của khu bằng thanh thẻ rồi quay lại Theo đơn vị, Then trang mở lại đúng X, K và cách xem V; liên kết của thanh thẻ mang `xemOkr` cùng `kyOkr`, `donOkr` khi đường dẫn đang có nó (bổ sung khoá thứ ba vào lời hứa «đổi thẻ giữ đơn vị và chu kỳ» của DH1, không mang khoá nào khác); cách xem không hợp với chu kỳ (Chấm điểm ngoài pha chấm) rơi về Danh sách như hôm nay.
+- AC-14: Given năm hồ sơ đã ký có kịch bản đo trình duyệt dựa trên trang đơn vị cũ — `dat-okr-trong-crm`, `khung-okr-truoc-r1`, `muc-tieu-va-kr`, `okr-to-chuc-va`, `toan-canh-okr` (bấm `[data-nut-cay]`, chờ `[data-hang-nut]`, đọc `thuMucTieu`, đi phím trên cây «Đơn vị») — When lượt sửa phép đo của chúng rồi chạy làn ghim lại tại một commit đã có trang mới, Then cả năm ghim xanh; mỗi chỗ sửa trong `rang/` của chúng chỉ đổi cách tới trạng thái (chọn đơn vị bằng `donOkr` hoặc ô chọn, thu/mở bằng `expand`) và không bỏ điều khẳng định nào khác; lời hứa đã ký nào trái trang mới (trang đơn vị mở sẵn mọi mục tiêu và nhớ dòng thu bằng `thuMucTieu` — AC-3 của `muc-tieu-va-kr`) có một dòng Notes trong hợp đồng của hồ sơ đó trỏ AC thay nó ở hồ sơ này.
 
 ## Coverage
 
@@ -48,7 +49,8 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
 - **Trục C — cách xem:** Danh sách · Cây căn chỉnh · Họp tuần · Chấm điểm  [thước CE: `CACH_XEM_OKR`, `PHA_CO_CHAM` — SUY-TỪ-REPO]
 - **Trục D — dữ liệu:** có mục tiêu · rỗng · lọc không khớp · đang tải · lỗi · mục tiêu không KR · chưa có trưởng · có mục tiêu đã bỏ  [thước CE: `trang-thai-okr.tsx` — SUY-TỪ-REPO]
 - **Lớp cắt ngang:** 1440 · 390 · vi · en  [thước CE: số đo production 14/10]
-- Định nghĩa «Cần bàn» và chỗ bấm mở ngăn chi tiết là câu hỏi cho người ở Cổng Phạm vi (sổ quyết định, dòng `chi-nguoi`).
+- Định nghĩa «Cần bàn», chỗ bấm mở ngăn chi tiết, và cách xử năm hồ sơ đã ký đo trên trang cũ là câu hỏi cho người ở Cổng Phạm vi (sổ quyết định, dòng `chi-nguoi`).
+- **Trục E — hồ sơ đã ký đo trên trang này:** năm hồ sơ có kịch bản trình duyệt (AC-14) · các tệp kiểm DOM (AC-10)  [thước CE: `git grep` dấu cũ `data-nut-cay`, `data-hang-nut`, `thuMucTieu` trong `_acceptance/*/rang/` và `apps/app/test/` — SUY-TỪ-REPO]
 
 ## Đường đo
 

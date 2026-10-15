@@ -2731,6 +2731,7 @@ executors:
     dvb_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"'
     dvb_ho_so_da_ky: 'bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs'
     dvb_proto: 'bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts'
+    dvb_ghim_nam: 'bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
