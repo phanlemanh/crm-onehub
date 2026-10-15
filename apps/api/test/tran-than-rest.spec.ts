@@ -135,8 +135,8 @@ describe("ttr-ban-chup", () => {
 describe("ttr-duong-khac", () => {
 	const maTran = [
 		[90_000, 401],
-		[TRAN_CHUNG, 401],
-		[TRAN_CHUNG + 1, 413],
+		[100_000, 401],
+		[100_001, 413],
 		[150_000, 413],
 		[TRAN_BAN_CHUP + 1, 413],
 	] as const;
@@ -144,6 +144,7 @@ describe("ttr-duong-khac", () => {
 	test(
 		"ttr-duong-khac: 5 o chua dang nhap",
 		async () => {
+			expect(TRAN_CHUNG, "tran chung khong phai 100 000 byte").toBe(100_000);
 			const truoc = await db.division.count();
 			const sai: string[] = [];
 			for (const [co, kyVong] of maTran) {
