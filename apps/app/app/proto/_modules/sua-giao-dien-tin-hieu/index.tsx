@@ -1,6 +1,7 @@
 "use client";
 
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
+import type { Locale } from "@crm/ui/lib/locale";
 import { TIN_HIEU } from "@crm/validation/tin-hieu";
 import { useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
@@ -13,171 +14,146 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { DanhSachTinHieu } from "@/components/tin-hieu/danh-sach-tin-hieu";
 import {
-	DanhSachTinHieu,
-	type DongTinHieu,
-} from "@/components/tin-hieu/danh-sach-tin-hieu";
-import {
+	type GiaiDoanGui,
 	HopGuiTinHieu,
 	NutGuiTao,
 } from "@/components/tin-hieu/hop-gui-tin-hieu";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
-import { DanhSachMoi, HopMoi } from "./ban-moi";
+import { tenMan } from "@/lib/tin-hieu/ten-man";
 import {
-	CHU,
 	DA_XAY_RA_MAU,
-	DONG_MAU,
+	dongMau,
+	MAN_MAU,
 	MUON_LAM_MAU,
-	type NgonNgu,
 	STATE,
-	TEN_MAN_MAU,
 } from "./du-lieu";
 
-const HOP_STATE: Record<
-	string,
-	{
-		nn: NgonNgu;
-		chu: boolean;
-		giaiDoan: "soan" | "da-gui";
-		loi: "qua-tran" | "may-chu" | null;
-	}
-> = {
-	[STATE.hopTrong]: { nn: "vi", chu: false, giaiDoan: "soan", loi: null },
-	[STATE.hopDangGo]: { nn: "vi", chu: true, giaiDoan: "soan", loi: null },
+type HopMauVao = {
+	locale: Locale;
+	chu: boolean;
+	giaiDoan: GiaiDoanGui;
+	loi: "qua-tran" | "may-chu" | null;
+};
+
+const HOP: Record<string, HopMauVao> = {
+	[STATE.hopTrong]: { locale: "vi", chu: false, giaiDoan: "soan", loi: null },
+	[STATE.hopDangGo]: { locale: "vi", chu: true, giaiDoan: "soan", loi: null },
 	[STATE.hopQuaTran]: {
-		nn: "vi",
+		locale: "vi",
 		chu: true,
 		giaiDoan: "soan",
 		loi: "qua-tran",
 	},
 	[STATE.hopQuaTranEn]: {
-		nn: "en",
+		locale: "en",
 		chu: true,
 		giaiDoan: "soan",
 		loi: "qua-tran",
 	},
-	[STATE.hopLoi]: { nn: "vi", chu: true, giaiDoan: "soan", loi: "may-chu" },
-	[STATE.hopDaGui]: { nn: "vi", chu: false, giaiDoan: "da-gui", loi: null },
+	[STATE.hopLoi]: {
+		locale: "vi",
+		chu: true,
+		giaiDoan: "soan",
+		loi: "may-chu",
+	},
+	[STATE.hopDaGui]: {
+		locale: "vi",
+		chu: false,
+		giaiDoan: "da-gui",
+		loi: null,
+	},
 };
 
-const DONG_TRUOC: DongTinHieu[] = [
-	{
-		id: "t41",
-		ma: "crm-41",
-		tieuDe: "Mở cập nhật KR không thấy số tuần trước",
-		muonLam: "Cập nhật số tuần này cho KR của tôi",
-		man: "/okr/cm9x2k4lq0001/kr/cm9x2k4lq0007",
-		guiLuc: "2026-10-16T02:14:00Z",
-		coTheXoa: true,
-		trangThai: {
-			nhan: "Chờ lấy về",
-			cau: "Đã nhận — chờ đội sản phẩm lấy về",
-			nghia: "nhap",
-		},
-	},
-	{
-		id: "t38",
-		ma: "crm-38",
-		tieuDe: "Tài liệu quy trình tuyển dụng tìm không ra khi gõ «tuyển»",
-		muonLam: "Tìm quy trình tuyển dụng để gửi cho ứng viên",
-		man: "/tai-lieu/quy-trinh-tuyen-dung",
-		guiLuc: "2026-10-15T08:40:00Z",
-		coTheXoa: false,
-		trangThai: {
-			nhan: "Chờ gom",
-			cau: "Đội sản phẩm đã lấy về — chờ gom nhóm",
-			nghia: "nhap",
-		},
-	},
-];
-
-function TruocBang() {
-	const m = tinHieuMessages("vi").trang;
-	return (
-		<PageShell>
-			<PageShellHeader>
-				<PageShellHeading>
-					<PageShellTitle>{m.tieuDe}</PageShellTitle>
-					<PageShellDescription>
-						Trước khi sửa — đúng như production 14/10.
-					</PageShellDescription>
-				</PageShellHeading>
-			</PageShellHeader>
-			<PageShellContent>
-				<DanhSachTinHieu
-					banVeDocDuoc
-					dangXoa={null}
-					dong={DONG_TRUOC}
-					nutGui={null}
-					onXoa={() => {}}
-				/>
-			</PageShellContent>
-		</PageShell>
-	);
-}
-
-function TruocHopQuaTran() {
-	const m = tinHieuMessages("vi");
-	const [mo, setMo] = useState(true);
+function HopMau({
+	vao,
+	moBanDau,
+	nut,
+}: {
+	vao: HopMauVao;
+	moBanDau: boolean;
+	nut: React.ReactNode;
+}) {
+	const m = tinHieuMessages(vao.locale);
+	const [mo, setMo] = useState(moBanDau);
+	const [muonLam, setMuonLam] = useState(vao.chu ? MUON_LAM_MAU : "");
+	const [daXayRa, setDaXayRa] = useState(vao.chu ? DA_XAY_RA_MAU : "");
+	const [giaiDoan, setGiaiDoan] = useState<GiaiDoanGui>(vao.giaiDoan);
+	const loi =
+		vao.loi === "qua-tran"
+			? dien(m.hop.quaTran, { tran: String(TIN_HIEU.tranMoiNgay) })
+			: vao.loi === "may-chu"
+				? m.hop.chuaGui
+				: null;
 	return (
 		<HopGuiTinHieu
-			daXayRa={DA_XAY_RA_MAU}
-			giaiDoan="soan"
-			hrefDaGui="#"
-			loi={dien(m.hop.quaTran, { tran: String(TIN_HIEU.tranMoiNgay) })}
-			ma={null}
-			man="/okr/cm9x2k4lq0001/kr/cm9x2k4lq0007"
-			muonLam={MUON_LAM_MAU}
-			nut={<NutGuiTao variant="default" />}
-			onDaXayRaChange={() => {}}
-			onGui={() => {}}
-			onMuonLamChange={() => {}}
-			onOpenChange={setMo}
+			daXayRa={daXayRa}
+			giaiDoan={giaiDoan}
+			hrefDaGui="/proto/sua-giao-dien-tin-hieu?state=ST-ds-co"
+			loi={loi}
+			ma="crm-42"
+			man={tenMan(MAN_MAU, vao.locale)}
+			muonLam={muonLam}
+			nut={nut}
+			onDaXayRaChange={setDaXayRa}
+			onGui={() => {
+				setMuonLam("");
+				setDaXayRa("");
+				setGiaiDoan("da-gui");
+			}}
+			onMuonLamChange={setMuonLam}
+			onOpenChange={(o) => {
+				setMo(o);
+				if (!o) setGiaiDoan("soan");
+			}}
 			open={mo}
+			quaTran={vao.loi === "qua-tran"}
 		/>
 	);
 }
 
-function TrangMoi({ state }: { state: string }) {
-	const nn: NgonNgu = state === STATE.dsEn ? "en" : "vi";
-	const chu = CHU[nn];
-	const nutGui = (
-		<HopMoi
-			chu={chu}
-			chuBanDau={{ muonLam: "", daXayRa: "" }}
-			giaiDoanBanDau="soan"
-			loi={null}
+function TrangMau({ state, locale }: { state: string; locale: Locale }) {
+	const m = tinHieuMessages(locale);
+	const nutGui = (variant: "default" | "outline") => (
+		<HopMau
 			moBanDau={false}
-			tenMan={TEN_MAN_MAU[nn]}
+			nut={<NutGuiTao variant={variant} />}
+			vao={{ locale, chu: false, giaiDoan: "soan", loi: null }}
 		/>
 	);
+	const tatCa = dongMau(m);
 	const dong =
 		state === STATE.dsRong
 			? []
 			: state === STATE.dsDaXoa
-				? DONG_MAU.filter((d) => d.id !== "t41")
-				: DONG_MAU;
+				? tatCa.filter((d) => d.id !== "t41")
+				: tatCa;
 	return (
 		<PageShell>
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>{chu.tieuDe}</PageShellTitle>
-					<PageShellDescription>{chu.moTa}</PageShellDescription>
+					<PageShellTitle>{m.trang.tieuDe}</PageShellTitle>
+					<PageShellDescription>{m.trang.moTa}</PageShellDescription>
 				</PageShellHeading>
 				{state === STATE.dsRong ? null : (
-					<PageShellActions>{nutGui}</PageShellActions>
+					<PageShellActions>{nutGui("default")}</PageShellActions>
 				)}
 			</PageShellHeader>
 			<PageShellContent>
-				<DanhSachMoi
-					baoLoi={state === STATE.dsXoaHong ? chu.xoaHongDaLayVe : undefined}
-					chu={chu}
-					daXoa={state === STATE.dsDaXoa ? "crm-41" : undefined}
+				<DanhSachTinHieu
+					banVeDocDuoc
+					daXoa={state === STATE.dsDaXoa ? "crm-41" : null}
+					dangXoa={null}
 					dong={dong}
 					hoiXoaBanDau={state === STATE.dsXacNhanXoa ? "t41" : undefined}
-					menuMoBanDau={state === STATE.dsXoaKhoa ? "t38" : undefined}
-					nn={nn}
-					nutGui={nutGui}
+					nutGui={nutGui("outline")}
+					onXoa={() => {}}
+					xoaHong={
+						state === STATE.dsXoaHong
+							? dien(m.trang.xoaHongDaLayVe, { ma: "crm-41" })
+							: null
+					}
 				/>
 			</PageShellContent>
 		</PageShell>
@@ -185,29 +161,19 @@ function TrangMoi({ state }: { state: string }) {
 }
 
 export function SuaGiaoDienTinHieuMau({ state }: { state: string }) {
-	const hop = HOP_STATE[state];
+	const hop = HOP[state];
+	const locale: Locale = hop?.locale ?? (state === STATE.dsEn ? "en" : "vi");
 	return (
-		<LocaleProvider locale={hop?.nn ?? (state === STATE.dsEn ? "en" : "vi")}>
-			{state === STATE.truocBang ? (
-				<TruocBang />
-			) : state === STATE.truocHopQuaTran ? (
-				<TruocHopQuaTran />
-			) : hop ? (
-				<HopMoi
-					chu={CHU[hop.nn]}
-					chuBanDau={
-						hop.chu
-							? { muonLam: MUON_LAM_MAU, daXayRa: DA_XAY_RA_MAU }
-							: { muonLam: "", daXayRa: "" }
-					}
-					giaiDoanBanDau={hop.giaiDoan}
+		<LocaleProvider locale={locale}>
+			{hop ? (
+				<HopMau
 					key={state}
-					loi={hop.loi}
 					moBanDau
-					tenMan={TEN_MAN_MAU[hop.nn]}
+					nut={<NutGuiTao variant="default" />}
+					vao={hop}
 				/>
 			) : (
-				<TrangMoi key={state} state={state} />
+				<TrangMau key={state} locale={locale} state={state} />
 			)}
 		</LocaleProvider>
 	);

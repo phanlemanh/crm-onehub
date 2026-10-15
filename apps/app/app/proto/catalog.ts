@@ -1170,11 +1170,6 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		slug: "sua-giao-dien-tin-hieu",
 		ten: "Sửa giao diện tín hiệu — tám lỗi U1–U8 của hộp gửi và trang Tín hiệu đã gửi",
 		states: [
-			{ id: "ST-truoc-bang", nhan: "Trước — bảng như production 14/10" },
-			{
-				id: "ST-truoc-hop-qua-tran",
-				nhan: "Trước — hộp quá trần như production",
-			},
 			{ id: "ST-ds-co", nhan: "Trang — đủ trạng thái, cột Gửi gộp" },
 			{ id: "ST-ds-en", nhan: "Trang — tiếng Anh" },
 			{ id: "ST-ds-xac-nhan-xoa", nhan: "Trang — hỏi lại nêu điều đã kể" },
