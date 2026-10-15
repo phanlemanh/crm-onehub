@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db, Prisma } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
-import { idMau } from "../scripts/okr-mau/cau-hinh";
 import {
 	CHU_SO_DO,
 	mtSoDo,
@@ -9,6 +8,7 @@ import {
 	NGUOI_XEM_HEP,
 	napCaSoDo,
 } from "../scripts/okr-mau/ca-so-do";
+import { idMau } from "../scripts/okr-mau/cau-hinh";
 import { mucTieuOutput } from "../src/okr/okr.contracts";
 import {
 	cayCanChinhOutput,
@@ -173,9 +173,9 @@ describe("dh5-len", () => {
 				...[...phiaDuoi(p1)].map((k) => `${P1}->${k} cua`),
 			]),
 		);
-		expect(p1.gopLenCongTy.map((g) => [g.kr?.id ?? null, g.mucTieu.id])).toEqual(
-			[[N1K1, N1]],
-		);
+		expect(
+			p1.gopLenCongTy.map((g) => [g.kr?.id ?? null, g.mucTieu.id]),
+		).toEqual([[N1K1, N1]]);
 
 		const p3 = await quanh(P3, QUAN_TRI);
 		soTam += 1;
@@ -257,7 +257,8 @@ describe("dh5-xuong", () => {
 	test("phía dưới đúng một bậc, vòng góp không lặp nút", async () => {
 		const q = gopQuanhMucTieu(thuan(), "t");
 		if (!q) throw new Error("tam khong co");
-		if (q.nut.some((n) => n.id === "d")) throw new Error("xuong qua mot bac: D");
+		if (q.nut.some((n) => n.id === "d"))
+			throw new Error("xuong qua mot bac: D");
 		expect(phiaDuoi(q)).toEqual(new Set(["t-k1", "t-k2", "c1", "c2"]));
 		expect(canhCua(q)).toEqual(
 			new Set(["t->t-k1 cua", "t->t-k2 cua", "t->c1 gop", "t-k2->c2 gop"]),
@@ -265,7 +266,8 @@ describe("dh5-xuong", () => {
 
 		const bd = performance.now();
 		const v = gopQuanhMucTieu(thuan(), "x");
-		if (!v || performance.now() - bd > 1000) throw new Error("vong gop lap nut");
+		if (!v || performance.now() - bd > 1000)
+			throw new Error("vong gop lap nut");
 		try {
 			khongLapNut(v);
 		} catch {
@@ -323,10 +325,13 @@ describe("dh5-quyen", () => {
 			if (n.loai === "muc-tieu" && !idCay.has(n.id))
 				throw new Error(`ngoai tap cay: ${n.id}`);
 
-		const xQt = await quanh(X, QUAN_TRI);
-		if (!xQt.nut.some((n) => n.id === GT))
-			throw new Error("doi chung duong: quan tri khong thay GT");
-		expect(xQt.gopLenCongTy.some((g) => g.kr?.id === N1K1)).toBe(true);
+		const soNoi = await db.okrAlignment.count({
+			where: { objectiveId: X, targetObjectiveId: GT },
+		});
+		if (soNoi !== 1) throw new Error("doi chung duong: thieu can chinh X->GT");
+		const gtQt = await quanh(GT, QUAN_TRI);
+		if (!phiaTren(gtQt).has(N1K1))
+			throw new Error("doi chung duong: GT khong gop len n1-k1");
 		const xHep = await quanh(X, NGUOI_XEM_HEP);
 		if (JSON.stringify(xHep).includes(TEN_GT))
 			throw new Error("lo muc tieu gioi han phia tren");
@@ -345,8 +350,8 @@ describe("dh5-quyen", () => {
 				{ objectiveId: id },
 				await cookie(NGUOI_XEM_HEP),
 			);
-			if (!JSON.stringify(tra).includes("NOT_FOUND"))
-				throw new Error(`${nhan} khong tra NOT_FOUND`);
+			if (tra.status !== 404)
+				throw new Error(`${nhan} khong tra NOT_FOUND: HTTP ${tra.status}`);
 		}
 	});
 });
