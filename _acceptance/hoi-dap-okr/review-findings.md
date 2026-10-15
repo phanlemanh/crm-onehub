@@ -1,32 +1,44 @@
-# Review findings: hoi-dap-okr (round 3)
+# Review findings: hoi-dap-okr (round 4)
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC ở round này.
+Không có finding nào map được vào AC.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **loiDanHoi widens the parsed role to string | null and re-implements laVaiChiOkr**
+- **Thước E9: tiêu chí mới cho khong-biet bắt judge so với «dữ liệu người hỏi xem được», nhưng ảnh chụp khongTrich chỉ có quý hiện tại và không có cờ của-người-hỏi**
+  Người dùng thấy gì: Với vài câu Kara trả lời «không biết» (ví dụ «KR nào do tôi phụ trách?»), phép chấm nội bộ không có đủ dữ liệu để biết Kara trả lời đúng hay sai. Tỷ lệ 94,3% đúng ý có thể lệch một chút, nhưng người dùng không thấy khác biệt nào ở sản phẩm.
+  file: `_acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (khẳng định phủ định đứng một mình): luật chấm mới «khong-biet không kèm câu là đúng ý khi dữ liệu không trả lời được» được chấm trên ảnh chụp đã bỏ đúng trường cần để bác bỏ nó**
+  Người dùng thấy gì: Khi Kara trả lời «tôi không biết», phép chấm nội bộ gần như luôn cho là đúng, kể cả khi dữ liệu thật có câu trả lời. Nếu Kara bỏ sót một câu trả lời có thật ở nhóm này, phép đo hiện chưa chắc phát hiện được.
+  file: `_acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **loiDanHoi widens the parsed role to string | null and re-implements laVaiChiOkr (r3 · tệp đã đổi)**
   Người dùng thấy gì: Khi hệ thống không xác định được vai của người hỏi, Kara OKR có thể gợi ý họ sang Kara của CRM để hỏi về đối tác, dù đó là người chỉ dùng OKR. Gợi ý này không để lộ dữ liệu đối tác, vì Kara của CRM vẫn tự kiểm quyền.
   file: `apps/agent-okr/agent/lib/loi-dan-hoi.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Bước «ngày mới» của bài trần lượt vẫn chạy ở tháng 10/2026, nằm ngoài phần tháng đã tách riêng cho bài api**
+- **Bước «ngày mới» của bài trần lượt vẫn chạy ở tháng 10/2026, nằm ngoài phần tháng đã tách riêng cho bài api (r3)**
   Người dùng thấy gì: Một bài kiểm tự động có thể báo đỏ nhầm nếu lần chạy trước bị ngắt giữa chừng và để lại dữ liệu thừa trong kho test dùng chung. Người dùng không thấy ảnh hưởng gì, và chạy lại cho sạch kho thì hết.
   file: `apps/api/test/okr-hoi-luot.spec.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **The test hand-writes a looser DichVuHoi type instead of using the HoiTangLuotOutput already exported by @crm/validation (r2 · tệp đã đổi)**
+- **The test hand-writes a looser DichVuHoi type instead of using the HoiTangLuotOutput already exported by @crm/validation (r2)**
   Người dùng thấy gì: Một bài kiểm tự khai kiểu dữ liệu lỏng hơn kiểu thật, nên nếu sau này đổi mã lý do hết lượt thì bài kiểm không báo. Người dùng không thấy gì khác đi.
   file: `apps/app/test/cua-okr-hoi.spec.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **The hook context types (BuocChiPhi, NguCanhChiPhi) are copied into two tests and loaded by a variable path, so tsc does not check them against eve's defineHook (r2 · tệp đã đổi)**
+- **The hook context types (BuocChiPhi, NguCanhChiPhi) are copied into two tests and loaded by a variable path, so tsc does not check them against eve's defineHook (r2)**
   Người dùng thấy gì: Hai bài kiểm chép chung một khai báo kiểu cho phần ghi chi phí, nên khi thư viện đổi thì chúng có thể lệch âm thầm. Chức năng ghi chi phí cho người dùng không bị ảnh hưởng.
   file: `apps/api/test/okr-hoi-luot.spec.ts`
   severity: low
@@ -38,7 +50,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: high
   Đề xuất: known-limits
 
-- **cua-okr-hoi.spec nay dùng HoiService thật trên trần chi phí tháng chung cả kho; chạy song song với okr-hoi-luot.spec của api trong cùng một CSDL thì hai bên giẫm nhau (r2 · tệp đã đổi)**
+- **cua-okr-hoi.spec nay dùng HoiService thật trên trần chi phí tháng chung cả kho; chạy song song với okr-hoi-luot.spec của api trong cùng một CSDL thì hai bên giẫm nhau (r2)**
   Người dùng thấy gì: Khi chạy toàn bộ bài kiểm cùng lúc trên một máy, hai nhóm bài kiểm về giới hạn chi phí có thể làm hỏng kết quả của nhau và báo đỏ ngẫu nhiên. Tính năng cho người dùng không bị ảnh hưởng.
   file: `apps/app/test/cua-okr-hoi.spec.ts`
   severity: medium
@@ -56,7 +68,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **tim_okr đọc chu kỳ không theo id mà thiếu KY_CON_HIEN: chu kỳ đã ẩn vẫn có thể thành «quý hiện tại» mặc định (r1)**
+- **tim_okr đọc chu kỳ không theo id mà thiếu KY_CON_HIEN: chu kỳ đã ẩn vẫn có thể thành «quý hiện tại» mặc định (r1 · tệp đã đổi)**
   Người dùng thấy gì: Khi một quý đã bị ẩn trên màn OKR, Kara vẫn có thể lấy quý đó làm quý hiện tại và trả lời theo một quý khác với quý người dùng đang thấy.
   file: `apps/agent-okr/agent/lib/hoi-doc.ts`
   severity: medium
@@ -80,7 +92,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **locTim chép tay danh sách tình trạng thay vì dùng TINH_TRANG có sẵn (r1)**
+- **locTim chép tay danh sách tình trạng thay vì dùng TINH_TRANG có sẵn (r1 · tệp đã đổi)**
   Người dùng thấy gì: Hiện chưa ảnh hưởng người dùng; nếu sau này thêm một tình trạng OKR mới thì bộ lọc của Kara có thể không nhận ra nó.
   file: `apps/agent-okr/agent/lib/hoi-doc.ts`
   severity: low
@@ -98,7 +110,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Phiên okr-hoi thừa trần 60.000 token đầu vào mỗi phiên của Soạn, nhưng cột hỏi không hiển thị lời xin duyệt thêm ngân sách (r1 · tệp đã đổi)**
+- **Phiên okr-hoi thừa trần 60.000 token đầu vào mỗi phiên của Soạn, nhưng cột hỏi không hiển thị lời xin duyệt thêm ngân sách (r1)**
   Người dùng thấy gì: Trong một cuộc hỏi dài nhiều câu, Kara có thể dừng lại chờ một lời xin duyệt mà người dùng không thấy, rồi chỉ hiện «Kara chưa trả lời được» và cuộc hỏi kẹt.
   file: `apps/agent-okr/agent/lib/config.ts`
   severity: medium
