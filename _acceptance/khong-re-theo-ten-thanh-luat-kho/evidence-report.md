@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 9a9471523d6347c00bdf7b40b56a3e8c86e44b2e
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-16
 ---
 
 # Evidence Report: khong-re-theo-ten-thanh-luat-kho

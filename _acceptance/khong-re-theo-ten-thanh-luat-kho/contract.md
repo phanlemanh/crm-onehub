@@ -5,7 +5,7 @@ slug: khong-re-theo-ten-thanh-luat-kho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-15-khong-re-theo-ten-thanh-luat-kho-design.md
 approved_by:
 approved_at:
@@ -89,3 +89,14 @@ sau-gộp. Vòng ship thẳng sau ghim.
 - Chặn chỉ thị tắt luật và cấu hình lồng ngay ở mỗi PR: `lint:slop` tôn trọng chỉ thị `oxlint-disable` và cấu hình
   lồng. E17 soát chúng ở lượt chấm lại hồ sơ, và luật kho «không viết chú thích» (`AGENTS.md`) đã cấm chỉ thị trong
   mã sản phẩm.
+
+## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Một PR thêm tệp `.eslintignore` vẫn qua được `lint:slop` ở chính PR đó; thư mục bị bỏ qua chỉ bị bắt khi hồ sơ giai-doan-thoa-thuan được chấm lại.
+  - Ngoài-2: E17 chỉ chặn khi số tệp quét dưới 50, không so từng tệp với danh sách đã liệt kê; công cụ lặng lẽ bỏ sót tệp hay tệp mang đuôi hiếm thì vẫn báo đạt.
+  - Ngoài-3: Răng ghim-xanh báo đạt dù dòng ghim thiếu kết quả của E17.
+  - Ngoài-4: Khi công cụ kiểm tra không chạy được, E17 báo «có vi phạm» (mã 1) thay vì «không đo được» (mã 2).
+  - Ngoài-5: Phép kiểm «E17 dùng đúng luật chung» chỉ đọc chữ trong mã; đổi cách làm mà giữ nguyên chữ thì không bị bắt.
+  - Ngoài-6: Bộ thử ma trận chỉ phủ một phần tổ hợp thư mục × từ cấm (tên GIAI_DOAN_GOC thử ở một thư mục, chỗ miễn chỉ thử với id cũ).
+  - Ngoài-7: Răng ghim-xanh coi dòng ghim thiếu E17 hay thiếu cả bảng kết quả là đạt.
