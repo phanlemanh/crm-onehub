@@ -113,6 +113,10 @@ mock.module("next/link", () => ({
 		),
 }));
 
+mock.module("@/components/page-transition", () => ({
+	PageTransition: ({ children }: { children: ReactNode }) => <>{children}</>,
+}));
+
 const { DealsTable } = await import("@/app/(app)/[slug]/deals/deals-table");
 const { DanhMucTable } = await import(
 	"@/app/(app)/[slug]/onboarding/danh-muc-table"
@@ -124,6 +128,17 @@ const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { dealMessages } = await import("@/lib/messages/deals");
 const { onboardingMessages } = await import("@/lib/messages/onboarding");
+const { DanhSach } = await import("@/app/(app)/[slug]/tai-lieu/danh-sach");
+const { DanhSachTrang } = await import(
+	"@/app/(app)/[slug]/tai-lieu/danh-sach-trang"
+);
+const { ChoDuyet } = await import("@/app/(app)/[slug]/tai-lieu/cho-duyet");
+const { loadTaiLieuSearchParams } = await import(
+	"@/app/(app)/[slug]/tai-lieu/tai-lieu-search-params"
+);
+const { LOAI_TRANG } = await import("@crm/validation/tai-lieu");
+const { readFileSync } = await import("node:fs");
+const { join } = await import("node:path");
 
 const md = dealMessages("vi");
 const mo = onboardingMessages("vi");
@@ -194,6 +209,66 @@ function datChung(): void {
 		),
 	);
 	dat("onboarding.bangCot", () => ({ cachChia: "buoc", tranThe: 30, cot: [] }));
+	dat("taiLieu.list", (v) => {
+		const loai = truong(v, "loai") ?? "tat-ca";
+		const trang = truong(v, "page") ?? 1;
+		const luuTru = truong(v, "archived") === true ? " luu tru" : "";
+		const donVi = truong(v, "donViId") ?? "";
+		const chu = truong(v, "chuTrangId") ?? "";
+		return {
+			rows: [
+				{
+					slug: `t-${loai}-${trang}`,
+					ten: `Trang ${loai} ${trang}${luuTru} ${donVi} ${chu}`.trim(),
+					loai: "quy-dinh",
+					chuTrang: { id: "u1", name: "Hà" },
+					donVi: { id: "dv1", name: "Phòng Kinh doanh" },
+					capNhat: "2026-09-20T00:00:00.000Z",
+					luuTruLuc: null,
+					coBanCho: false,
+				},
+			],
+			total: 30,
+			facetCounts: Object.fromEntries(LOAI_TRANG.map((l, i) => [l, 9 - i])),
+			soDaLuuTru: 1,
+		};
+	});
+	dat("taiLieu.boLoc", () => ({
+		donVi: [{ id: "dv1", ten: "Phòng Kinh doanh", so: 3 }],
+		chuTrang: [{ id: "u1", ten: "Hà", so: 4 }],
+	}));
+	dat("taiLieu.proposals", (v) => {
+		const nhom = truong(v, "nhom");
+		return {
+			choToiDuyet: 0,
+			total: nhom === undefined ? 0 : 1,
+			rows:
+				nhom === undefined
+					? []
+					: [
+							{
+								id: `dx-${nhom}`,
+								ten: `De xuat ${nhom}`,
+								taoBoi: { name: "Hà" },
+								luc: "2026-09-20T00:00:00.000Z",
+								trangThai: "CHO_DUYET",
+								cu: false,
+								loai: "SUA",
+							},
+						],
+		};
+	});
+}
+
+function truong(v: DauVao, khoa: string): Json | undefined {
+	if (
+		v === null ||
+		v === undefined ||
+		Array.isArray(v) ||
+		!(v instanceof Object)
+	)
+		return undefined;
+	return v[khoa];
 }
 
 let root: Root | null = null;
@@ -467,5 +542,269 @@ describe("kieu-xem", () => {
 		expect(() =>
 			kiemViewSwitch(goc, { ten: "thoa-thuan view", nhan: md.view.label }),
 		).toThrow("lkx-kieu-xem: thoa-thuan view khong dung ViewSwitch");
+	});
+});
+
+const GOC_TAI_LIEU = join(import.meta.dir, "../app/(app)/[slug]/tai-lieu");
+
+function docTep(ten: string): string {
+	return readFileSync(join(GOC_TAI_LIEU, ten), "utf8");
+}
+
+function goiTruyVanCuoi(duong: string): DauVao {
+	return daGoi.filter((g) => g.duong === duong).at(-1)?.dauVao;
+}
+
+function tenHangDau(goc: ParentNode): string {
+	const hang = goc.querySelector("[data-trang]");
+	return (hang?.textContent ?? "").trim();
+}
+
+async function chonCombobox(khoa: string, nhan: string): Promise<void> {
+	await bam(document.body.querySelector(`[${khoa}]`));
+	const muc = [...document.body.querySelectorAll("[cmdk-item]")].find(
+		(e) => e.textContent?.includes(nhan) ?? false,
+	);
+	await bam(muc);
+}
+
+type QuanSat = {
+	ten: string;
+	soPush: number;
+	truocCoTrang2: boolean;
+	sau: URLSearchParams;
+	mongKhoa: [string, string | null];
+	doiLoc: boolean;
+	goiMoi: boolean;
+	hangDoi: boolean;
+};
+
+function kiemHanhDong(q: QuanSat): void {
+	if (q.soPush > 0)
+		throw new Error(`lkx-tai-lieu: ${q.ten} di qua router.push`);
+	if (!q.goiMoi || !q.hangDoi)
+		throw new Error(`lkx-tai-lieu: ${q.ten} khong doi danh sach tren trang`);
+	const [khoa, gia] = q.mongKhoa;
+	if (q.sau.get(khoa) !== gia)
+		throw new Error(
+			`lkx-tai-lieu: ${q.ten} ghi ${khoa}=${q.sau.get(khoa)} thay vi ${gia}`,
+		);
+	if (q.doiLoc) {
+		if (!q.truocCoTrang2)
+			throw new Error(`lkx-tai-lieu: ${q.ten} doi chung khong o trang 2`);
+		if (q.sau.has("page"))
+			throw new Error(`lkx-tai-lieu: ${q.ten} khong ve trang 1`);
+	}
+}
+
+type HanhDong = {
+	ten: string;
+	man: () => ReactElement;
+	duong: string;
+	truyVan: string;
+	lam: (goc: HTMLElement) => Promise<void>;
+	mongKhoa: [string, string | null];
+	doiLoc: boolean;
+	ganGia: (v: DauVao) => boolean;
+	docHang: (goc: HTMLElement) => string;
+};
+
+const LOAI_HAI = LOAI_TRANG[1] ?? "chinh-sach";
+
+const HANH_DONG: HanhDong[] = [
+	{
+		ten: "chon loai",
+		man: () => <DanhSachTrang />,
+		duong: "?page=2",
+		truyVan: "taiLieu.list",
+		lam: async (goc) => bam(goc.querySelector(`[data-loai="${LOAI_HAI}"]`)),
+		mongKhoa: ["loai", LOAI_HAI],
+		doiLoc: true,
+		ganGia: (v) => truong(v, "loai") === LOAI_HAI,
+		docHang: tenHangDau,
+	},
+	{
+		ten: "chon don vi",
+		man: () => <DanhSachTrang />,
+		duong: "?page=2",
+		truyVan: "taiLieu.list",
+		lam: async () => chonCombobox("data-loc-don-vi", "Phòng Kinh doanh"),
+		mongKhoa: ["donVi", "dv1"],
+		doiLoc: true,
+		ganGia: (v) => truong(v, "donViId") === "dv1",
+		docHang: tenHangDau,
+	},
+	{
+		ten: "chon chu trang",
+		man: () => <DanhSachTrang />,
+		duong: "?page=2",
+		truyVan: "taiLieu.list",
+		lam: async () => chonCombobox("data-loc-chu", "Hà"),
+		mongKhoa: ["chuTrang", "u1"],
+		doiLoc: true,
+		ganGia: (v) => truong(v, "chuTrangId") === "u1",
+		docHang: tenHangDau,
+	},
+	{
+		ten: "bat luu tru",
+		man: () => <DanhSachTrang />,
+		duong: "?page=2",
+		truyVan: "taiLieu.list",
+		lam: async (goc) => bam(goc.querySelector("[data-nut-da-luu-tru]")),
+		mongKhoa: ["archived", "true"],
+		doiLoc: true,
+		ganGia: (v) => truong(v, "archived") === true,
+		docHang: tenHangDau,
+	},
+	{
+		ten: "xoa loc",
+		man: () => <DanhSachTrang />,
+		duong: `?loai=quy-dinh&page=2`,
+		truyVan: "taiLieu.list",
+		lam: async (goc) => bam(goc.querySelector("[data-bo-loc-xoa]")),
+		mongKhoa: ["loai", null],
+		doiLoc: true,
+		ganGia: (v) => truong(v, "loai") === undefined && truong(v, "page") === 1,
+		docHang: tenHangDau,
+	},
+	{
+		ten: "sang trang 2",
+		man: () => <DanhSachTrang />,
+		duong: "",
+		truyVan: "taiLieu.list",
+		lam: async (goc) =>
+			bam(
+				[...goc.querySelectorAll("button")].find(
+					(b) => b.textContent === "Tiếp",
+				),
+			),
+		mongKhoa: ["page", "2"],
+		doiLoc: false,
+		ganGia: (v) => truong(v, "page") === 2,
+		docHang: tenHangDau,
+	},
+	{
+		ten: "doi nhom de xuat",
+		man: () => <ChoDuyet />,
+		duong: "?tabTaiLieu=cho-duyet&page=2",
+		truyVan: "taiLieu.proposals",
+		lam: async (goc) => bam(goc.querySelector('[data-nhom="da-xu-ly"]')),
+		mongKhoa: ["nhomDeXuat", "da-xu-ly"],
+		doiLoc: true,
+		ganGia: (v) => truong(v, "nhom") === "da-xu-ly",
+		docHang: (goc) =>
+			(goc.querySelector("[data-de-xuat]")?.textContent ?? "").trim(),
+	},
+];
+
+async function quanSat(hd: HanhDong): Promise<QuanSat> {
+	const goc = await dung(hd.man(), hd.duong);
+	expect(daGoiTruyVan(hd.truyVan)).toBeGreaterThan(0);
+	const truocCoTrang2 = urlCuoi().get("page") === "2";
+	const hangTruoc = hd.docHang(goc);
+	const soGoiTruoc = daGoiTruyVan(hd.truyVan);
+	soLanPush = 0;
+	await hd.lam(goc);
+	const sau = urlCuoi();
+	const moi = daGoi
+		.filter((g) => g.duong === hd.truyVan)
+		.slice(soGoiTruoc)
+		.some((g) => hd.ganGia(g.dauVao));
+	return {
+		ten: hd.ten,
+		soPush: soLanPush,
+		truocCoTrang2,
+		sau,
+		mongKhoa: hd.mongKhoa,
+		doiLoc: hd.doiLoc,
+		goiMoi: moi,
+		hangDoi: hd.docHang(goc) !== hangTruoc && hd.docHang(goc) !== "",
+	};
+}
+
+describe("tai-lieu", () => {
+	test("ma tran 7 hanh dong: ghi duong dan qua nuqs, ve trang 1, danh sach doi tren trang", async () => {
+		let dem = 0;
+		for (const hd of HANH_DONG) {
+			const q = await quanSat(hd);
+			kiemHanhDong(q);
+			if (hd.ten === "xoa loc") expect(q.sau.has("loai")).toBe(false);
+			const may = await loadTaiLieuSearchParams(q.sau);
+			if (hd.mongKhoa[0] === "loai" && hd.ten !== "xoa loc")
+				expect(may.loai).toBe(LOAI_HAI);
+			if (hd.mongKhoa[0] === "page") expect(may.page).toBe(2);
+			if (hd.mongKhoa[0] === "nhomDeXuat")
+				expect(may.nhomDeXuat).toBe("da-xu-ly");
+			dem += 1;
+			act(() => root?.unmount());
+			khung?.remove();
+			root = null;
+		}
+		expect(dem).toBe(7);
+	});
+
+	test("bam hang mo trang qua lien ket cua hang", async () => {
+		const goc = await dung(<DanhSachTrang />, "");
+		const hang = goc.querySelector("[data-trang]");
+		const lienKet = hang?.querySelector("a");
+		let daBam = 0;
+		lienKet?.addEventListener("click", () => {
+			daBam += 1;
+		});
+		await act(async () => {
+			hang?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+		});
+		expect(daBam).toBe(1);
+		expect(lienKet?.getAttribute("href")).toBe("/ws/tai-lieu/t-tat-ca-1");
+	});
+
+	test("the trang con dung duong dan tu cung bo parser, xoa bo loc", async () => {
+		const goc = await dung(<DanhSach />, "?loai=quy-dinh&donVi=dv1&page=3");
+		const choDuyet = goc.querySelector("[data-tab-cho-duyet]");
+		const href = choDuyet?.getAttribute("href") ?? "";
+		const may = await loadTaiLieuSearchParams(
+			new URLSearchParams(href.split("?")[1] ?? ""),
+		);
+		expect(may.tabTaiLieu).toBe("cho-duyet");
+		expect([may.loai, may.donVi, may.page]).toEqual([null, null, 1]);
+	});
+
+	test("quet tep: khong router.push o loc, khong URLSearchParams tu ghep", () => {
+		expect(docTep("danh-sach-trang.tsx")).not.toContain("router.push");
+		expect(docTep("cho-duyet.tsx")).not.toContain("router.push");
+		expect(docTep("danh-sach-loc.ts")).not.toContain("URLSearchParams");
+		expect(docTep("danh-sach-loc.ts")).toContain(
+			"createSerializer(taiLieuParsers)",
+		);
+	});
+
+	test("chieu do: ban gia di qua router.push thi bai bat", () => {
+		expect(() =>
+			kiemHanhDong({
+				ten: "chon loai",
+				soPush: 1,
+				truocCoTrang2: true,
+				sau: new URLSearchParams(),
+				mongKhoa: ["loai", LOAI_HAI],
+				doiLoc: true,
+				goiMoi: true,
+				hangDoi: true,
+			}),
+		).toThrow("lkx-tai-lieu: chon loai di qua router.push");
+	});
+
+	test("chieu do: ghi duong dan ma danh sach doc prop may chu thi bai bat", () => {
+		expect(() =>
+			kiemHanhDong({
+				ten: "chon loai",
+				soPush: 0,
+				truocCoTrang2: true,
+				sau: new URLSearchParams(`loai=${LOAI_HAI}`),
+				mongKhoa: ["loai", LOAI_HAI],
+				doiLoc: true,
+				goiMoi: false,
+				hangDoi: false,
+			}),
+		).toThrow("lkx-tai-lieu: chon loai khong doi danh sach tren trang");
 	});
 });

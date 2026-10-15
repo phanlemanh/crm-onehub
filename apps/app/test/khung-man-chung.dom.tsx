@@ -388,10 +388,7 @@ function DauTrangTaiLieu() {
 			</PageShellHeading>
 			<PageShellActions>
 				<HanhDongTaiLieu
-					loai={null}
 					luaChon={{ toiId: "u", chuTrang: [], donVi: [], trangDangDung: [] }}
-					page={1}
-					tab="trang"
 				/>
 			</PageShellActions>
 		</PageShellHeader>

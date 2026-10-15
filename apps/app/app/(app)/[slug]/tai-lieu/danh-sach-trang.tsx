@@ -32,14 +32,13 @@ import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { LOAI_TRANG, type LoaiTrang, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { type TaiLieuMessages, taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 import { duongTrang, duongTrangMoi, ngayTaiLieu } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { DangTaiDanhSach } from "./dang-tai";
-import { BO_LOC_TRONG, type ToiLoc } from "./danh-sach-loc";
+import { BO_LOC_TRONG, type DoiLoc, useLocTaiLieu } from "./danh-sach-loc";
 import { LoiTai } from "./loi-tai";
 
 const TAT_CA = "tat-ca";
@@ -70,15 +69,14 @@ function KhoRong({ m, url }: { m: TaiLieuMessages; url: string }) {
 function BoLoc({
 	donVi,
 	chu,
-	toi,
+	doi,
 }: {
 	donVi: string | null;
 	chu: string | null;
-	toi: ToiLoc;
+	doi: DoiLoc;
 }) {
 	const m = taiLieuMessages(useLocale()).loc;
 	const trpc = useTRPC();
-	const router = useRouter();
 	const bo = useQuery(trpc.taiLieu.boLoc.queryOptions());
 
 	if (bo.isError && !bo.data) {
@@ -108,9 +106,7 @@ function BoLoc({
 				aria-label={m.donVi}
 				data-loc-don-vi=""
 				empty={m.khongCo}
-				onValueChange={(v) =>
-					router.push(toi({ donVi: v === TAT_CA ? null : v, page: 1 }))
-				}
+				onValueChange={(v) => doi({ donVi: v === TAT_CA ? null : v, page: 1 })}
 				options={chon(bo.data?.donVi ?? [], m.tatCaDonVi)}
 				placeholder={m.tatCaDonVi}
 				searchPlaceholder={m.timDonVi}
@@ -122,9 +118,7 @@ function BoLoc({
 				aria-label={m.chu}
 				data-loc-chu=""
 				empty={m.khongCo}
-				onValueChange={(v) =>
-					router.push(toi({ chu: v === TAT_CA ? null : v, page: 1 }))
-				}
+				onValueChange={(v) => doi({ chu: v === TAT_CA ? null : v, page: 1 })}
 				options={chon(bo.data?.chuTrang ?? [], m.tatCaChu)}
 				placeholder={m.tatCaChu}
 				searchPlaceholder={m.timChu}
@@ -136,27 +130,13 @@ function BoLoc({
 	);
 }
 
-export function DanhSachTrang({
-	loai,
-	donVi,
-	chu,
-	page,
-	archived = false,
-	toi,
-}: {
-	loai: LoaiTrang | null;
-	donVi: string | null;
-	chu: string | null;
-	page: number;
-	archived?: boolean;
-	toi: ToiLoc;
-}) {
+export function DanhSachTrang() {
 	const locale = useLocale();
 	const m = taiLieuMessages(locale);
 	const lt = taiLieuLichSuMessages(locale).luuTru.danhSach;
 	const trpc = useTRPC();
-	const router = useRouter();
 	const url = useWorkspaceUrl();
+	const [{ loai, donVi, chu, page, archived }, doi] = useLocTaiLieu();
 	const ds = useQuery(
 		trpc.taiLieu.list.queryOptions({
 			loai: loai ?? undefined,
@@ -191,7 +171,7 @@ export function DanhSachTrang({
 						aria-label={m.loc.nhan}
 						onValueChange={(v) => {
 							if (v === "") return;
-							router.push(toi({ loai: laLoai(v) ? v : null, page: 1 }));
+							doi({ loai: laLoai(v) ? v : null, page: 1 });
 						}}
 						size="sm"
 						type="single"
@@ -213,12 +193,10 @@ export function DanhSachTrang({
 						))}
 					</ToggleGroup>
 				</div>
-				<BoLoc chu={chu} donVi={donVi} toi={toi} />
+				<BoLoc chu={chu} doi={doi} donVi={donVi} />
 				<Toggle
 					data-nut-da-luu-tru=""
-					onPressedChange={(bat) =>
-						router.push(toi({ archived: bat, loai: null, page: 1 }))
-					}
+					onPressedChange={(bat) => doi({ archived: bat, loai: null, page: 1 })}
 					pressed={archived}
 					size="sm"
 					variant="outline"
@@ -227,10 +205,13 @@ export function DanhSachTrang({
 					{lt.nut}
 				</Toggle>
 				{coLoc ? (
-					<Button asChild size="sm" variant="ghost">
-						<Link data-bo-loc-xoa="" href={toi({ ...BO_LOC_TRONG, archived })}>
-							{m.loc.boLoc}
-						</Link>
+					<Button
+						data-bo-loc-xoa=""
+						onClick={() => doi({ ...BO_LOC_TRONG, archived })}
+						size="sm"
+						variant="ghost"
+					>
+						{m.loc.boLoc}
 					</Button>
 				) : null}
 			</div>
@@ -251,10 +232,11 @@ export function DanhSachTrang({
 						<EmptyDescription>{m.rongLoc.than}</EmptyDescription>
 					</EmptyHeader>
 					<EmptyContent>
-						<Button asChild variant="outline">
-							<Link href={toi({ ...BO_LOC_TRONG, archived })}>
-								{m.rongLoc.nut}
-							</Link>
+						<Button
+							onClick={() => doi({ ...BO_LOC_TRONG, archived })}
+							variant="outline"
+						>
+							{m.rongLoc.nut}
 						</Button>
 					</EmptyContent>
 				</Empty>
@@ -280,7 +262,7 @@ export function DanhSachTrang({
 									clickable
 									data-trang={t.slug}
 									key={t.slug}
-									onClick={() => router.push(url(duongTrang(t.slug)))}
+									onClick={(e) => e.currentTarget.querySelector("a")?.click()}
 								>
 									<TableCell>
 										<span className="flex flex-wrap items-center gap-2">
@@ -342,7 +324,7 @@ export function DanhSachTrang({
 							</span>
 							<Button
 								disabled={page <= 1}
-								onClick={() => router.push(toi({ page: page - 1 }))}
+								onClick={() => doi({ page: page - 1 })}
 								size="sm"
 								variant="outline"
 							>
@@ -350,7 +332,7 @@ export function DanhSachTrang({
 							</Button>
 							<Button
 								disabled={page >= soTrang}
-								onClick={() => router.push(toi({ page: page + 1 }))}
+								onClick={() => doi({ page: page + 1 })}
 								size="sm"
 								variant="outline"
 							>
