@@ -11,8 +11,10 @@ are in `docs/setup.md`.
 
 ## Model
 
-Default `zai/glm-5.2-fast`; `DEFAULT_AGENT_MODEL` in `@crm/db/settings` because the
-agent and the API both need it.
+Default `google/gemini-3.8-flash` (was `zai/glm-5.2-fast` until 15/10); `DEFAULT_AGENT_MODEL` in
+`@crm/db/settings` because the agent and the API both need it. The document library's drafter and
+reader (`TAI_LIEU_AGENT.soan` / `.hoi`) use the same model with zero data retention; the OKR
+assistant's judge stays on `zai/glm-5.2-fast`.
 
 - **A row (`AppSetting`), not an env var**, via `defineDynamic` on `session.started`.
   Open conversations keep their model — prompt caches are per model.

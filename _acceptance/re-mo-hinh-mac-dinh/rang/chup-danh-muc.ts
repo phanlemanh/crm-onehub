@@ -24,7 +24,9 @@ const khuonMuc = z.object({
 	context_window: z.number(),
 	pricing: z.object({ input: z.string(), output: z.string() }),
 });
-const khuonDanhMuc = z.object({ data: z.array(z.object({ id: z.string() }).passthrough()) });
+const khuonDanhMuc = z.object({
+	data: z.array(z.object({ id: z.string() }).passthrough()),
+});
 
 const res = await fetch(CHUP.url);
 if (!res.ok) {
@@ -50,4 +52,6 @@ const ghi = {
 	},
 };
 writeFileSync(CHUP.tep, `${JSON.stringify(ghi, null, "\t")}\n`);
-console.log(`da ghi ${join("evidence", "gateway-gemini-3-8-flash-2026-10-15.json")}`);
+console.log(
+	`da ghi ${join("evidence", "gateway-gemini-3-8-flash-2026-10-15.json")}`,
+);

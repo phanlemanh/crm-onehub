@@ -9,7 +9,7 @@ export const TAI_LIEU_AGENT = {
 		toiDaKyTu: 120_000,
 	},
 	soan: {
-		maModel: "zai/glm-5.2-fast",
+		maModel: "google/gemini-3.8-flash",
 		tranBuoc: 6,
 		thoiGianMs: 4 * MINUTE_MS,
 		slugQuyTacViet: "quy-tac-viet",
@@ -22,7 +22,7 @@ export const TAI_LIEU_AGENT = {
 		},
 	},
 	hoi: {
-		maModel: "zai/glm-5.2-fast",
+		maModel: "google/gemini-3.8-flash",
 		bienKhoaRieng: "KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
 		gateway: { zeroDataRetention: true },
 		soKetQua: 8,
@@ -44,6 +44,7 @@ export const TAI_LIEU_AGENT = {
 	},
 	bangGia: {
 		"zai/glm-5.2-fast": { vaoMoiTrieu: 2.8, raMoiTrieu: 8.8 },
+		"google/gemini-3.8-flash": { vaoMoiTrieu: 0.75, raMoiTrieu: 3.75 },
 	} satisfies Record<string, { vaoMoiTrieu: number; raMoiTrieu: number }>,
 	lyDo: {
 		banQuet: (trang: number, tong: number) =>
