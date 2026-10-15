@@ -144,9 +144,9 @@
  "decisions": [
   {
    "id": "E17",
-   "q": "Màn đầu chỉ thấy phần cập nhật và nút — vậy là đạt?",
-   "why": "Ba người chấm đòi thấy đủ ba phần khi chưa cuộn; ở 1440 px phần «KR bạn phụ trách» nằm dưới màn đầu, khối việc (Hỏi-1 anh chọn) đứng giữa."
+   "q": "Phần đầu và nút ở màn đầu, KR phụ trách dưới nếp gập: đạt chưa?",
+   "why": "Ở 1440 px không cuộn, người đọc thấy «Cần cập nhật tuần này» kèm nút, rồi khối việc, rồi thẻ đơn vị bị cắt ở mép dưới; phần «KR bạn phụ trách» nằm dưới nếp gập. Thành viên không dẫn đơn vị nào không thấy lời mời tạo mục tiêu. Ba người chấm: một đạt, một chưa đạt, một chưa đủ bằng chứng."
   }
  ],
- "analyst_plain": ""
+ "analyst_plain": "Mọi eval của lượt này đều đỏ trên bản trước khi sửa, nên chúng phân biệt được sửa với chưa sửa."
 }
