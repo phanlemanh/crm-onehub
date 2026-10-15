@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>140 việc"]
+  GB --> DG["Đã giao<br/>141 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>110 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -252,6 +252,7 @@ flowchart TD
 - Nền chat AI Elements — dọn 19 component mồ côi, dựng lớp chuyển kiểu eve→AI SDK, chuẩn hoá phần còn lại, đặt răng chống tái phát (`nen-chat-ai-elements`)
 - Thước lái-ra-màn thôi đỏ khi kho chỉ thêm tệp nguồn — bỏ neo số tệp cố định, thay bằng quan hệ «mọi tệp git theo dõi đều được bộ duyệt thấy»; giữ neo chuỗi mặc định và neo bảng cũ (`neo-dan-so-khong-cung`)
 - Ngày gieo của test «bước của tôi» tính theo ngày giờ VN như sản phẩm, ghim bằng hai mốc giờ (`ngay-gieo-theo-gio-vn`)
+- Bài kiểm tao-ke-hoach không chọn trùng ngày hôm nay (`ngay-lich-test-tao-ke-hoach`) — đã giao — máy thông, bằng chứng xanh-sạch
 - Ca «người dùng huỷ thì không hoàn lượt» của cửa soạn OKR không lắc theo tốc độ máy: huỷ đúng lúc đang chờ Trợ lý OKR, fetch giả từ chối signal đã huỷ như fetch thật (`nguoi-huy-khong-lac`)
 - Vùng kéo-thả tệp nguồn (NguonKeoTha) dựng lại trên móc ReUI use-file-upload theo bố cục c-file-upload-3, thay bản vẽ tay bậc 5 (`nguon-keo-tha-reui`)
 - Nhắc buổi sáng qua Zalo — mỗi người nối Zalo bằng mã 6 số gửi cho bot, tự chọn nhận nhắc qua Tự động · Zalo · Slack trên trang «Thông báo của bạn»; trang kết nối Zalo cho thấy bot sống và ai đã nối (`nhac-qua-zalo`)
