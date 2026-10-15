@@ -1,0 +1,74 @@
+schema_version: 1
+slug: tai-lieu-loc-giu-lich-su
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tlg_lich_su
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/tai-lieu-search-params.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-loc.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-trang.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/cho-duyet.tsx"
+      - "apps/app/test/tai-lieu-loc-giu-lich-su.dom.tsx"
+    expected: |
+      jsdom, NuqsTestingAdapter ghi lai moi lan cap nhat (queryString + options.history). Ma tran viet truoc 7 hanh
+      dong: chon loai, chon don vi, chon chu trang, bat luu tru, bo loc, sang trang 2, doi nhom de xuat. Moi hanh dong:
+      co dung mot lan cap nhat duong dan moi va lan do mang options.history === "push". Dem dung 7 o. Quan he voi parser:
+      moi khoa loc cua taiLieuParsers (loai, donVi, chuTrang, archived, page, nhomDeXuat) co history "push" khi doc qua
+      createSerializer/useQueryStates. CHIEU DO (cung ham kiem, ghi gia history "replace"): ghim
+      "tlg-lich-su: chon loai ghi de muc lich su".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tlg_giu_loc
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-trang.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/cho-duyet.tsx"
+      - "apps/app/test/tai-lieu-loc-giu-lich-su.dom.tsx"
+    expected: |
+      jsdom, truy van taiLieu.list va taiLieu.proposals gia: lan dau tra ngay, lan sau treo toi khi bai tha. Ma tran viet
+      truoc 4 o: Trang x (chon loai, sang trang 2), Cho duyet x (doi nhom, sang trang 2). Moi o: MutationObserver tren
+      goc dem so lan khoi [data-bo-loc] (Trang) hay nhom ToggleGroup nhom de xuat (Cho duyet) va thanh phan trang bi go
+      khoi DOM — phai bang 0 trong luc treo; document.activeElement la phan tu vua bam; vung danh sach co
+      aria-busy="true" va con ten hang cu; tha truy van -> ten hang moi, aria-busy khong con "true". Dem dung 4 o. Doi
+      chung duong: truoc khi bam, aria-busy khong la "true" va ten hang cu co mat. CHIEU DO (ban gia tra khung xuong khi
+      !data): ghim "tlg-giu-loc: trang chon loai go thanh loc".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tlg_lan_dau
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-trang.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/cho-duyet.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/dang-tai.tsx"
+      - "apps/app/test/tai-lieu-loc-giu-lich-su.dom.tsx"
+    expected: |
+      jsdom. Ma tran 2 man x 2 trang thai = 4 o: lan dau truy van treo -> co khung xuong cua DangTaiDanhSach va khong co
+      [data-bo-loc]; truy van loi -> co khung loi voi nut "Thử lại", bam thu lai goi truy van lan nua. Dem dung 4 o.
+      CHIEU DO (ban gia luon ve danh sach rong khi !data): ghim "tlg-lan-dau: trang lan dau khong co khung xuong".
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tlg_man
+    steps:
+      - "Phien do rieng (tien-de.mjs) qua bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh; dang nhap dev:session quan tri; gieo ba trang tai lieu khac loai qua taoTrangDangDung (taiLieu.create + approve)"
+      - "Buoc 1 (1280): mo /tai-lieu, bam chip Chinh sach, chon don vi, doc location.href va chip dang bat; page.goBack() -> doc lai, phai bang trang thai sau buoc chon loai; page.goBack() lan nua -> bang trang thai ban dau; location.pathname van ket thuc bang /tai-lieu"
+      - "Buoc 2 (1280): chan va tri hoan duong /api/trpc/taiLieu.list 3 giay (page.setRequestInterception); MutationObserver dem so lan [data-bo-loc] bi go; bam chip loai khac; trong luc cho doc document.activeElement la chip vua bam va aria-busy cua vung danh sach; cho truy van ve; so lan go = 0; chup tlg-cho-loc-1280.png luc dang cho"
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "_acceptance/tai-lieu-loc-giu-lich-su/rang/do-lich-su.mjs"
+    expected: "exit 0; do-lich-su.mjs in 'buoc N: dat' cho 2 buoc va mot dong so do moi buoc (duong dan va chip moi lan lui; so lan go, phan tu giu tieu diem, aria-busy). Anh o .acceptance-runs/tai-lieu-loc-giu-lich-su/evidence/. CHIEU DO (--chieu-do tren ban sao): (1) taiLieuParsers bo history push -> ghim 'tlg-man: lui lan 1 roi tai lieu', ma 1; (2) danh-sach-trang bo placeholderData -> ghim 'tlg-man: thanh loc bi go khi cho', ma 1."
+
+  - id: E4m
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tlg_man_do
+    paths:
+      - "_acceptance/tai-lieu-loc-giu-lich-su/rang/do-lich-su.mjs"
+    expected: "exit 0; do-lich-su.mjs --chi-do chay hai chieu do cua E4 tren ban sao rieng, moi chieu ra dung thong diep ghim va ma 1, roi in 'tlg-man-do: 2/2 chieu do ra dung ghim'. Thieu mot chieu hay mot chieu ra ma 0 -> do."
