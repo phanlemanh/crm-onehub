@@ -82,8 +82,8 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
     expected: |
-      Cung phien do (EVAL=E4). Kho 390, CDP Network.emulateNetworkConditions (latency 800ms) va chan tra
-      loi okr.danhSach toi khi chup xong khung dang tai. Lay mau DOM moi 50ms tu domcontentloaded toi khi co
+      Cung phien do (EVAL=E4). Kho 390, CDP Network.emulateNetworkConditions (latency 800ms); okr.danhSach
+      nap phia may chu (page.tsx) nen pha dang tai la luc cho dung phia may chu va cho JS — lay mau tu luc tao tai lieu. Lay mau DOM moi 50ms tu domcontentloaded toi khi co
       [data-hang-muc-tieu] dau tien: dong "MAU 390: <k> mau · cay toi da <c> · o chon toi da <o> · dinh o chon
       lech <px> · vong quay toan trang <v>". DUNG khi c = 0 ([data-nut-cay] va [role=tree]), o <= 1, lech
       <= 1, v = 0, va co [data-slot=skeleton] trong mau dang tai. Anh dang-tai-390.png.
