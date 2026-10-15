@@ -1,6 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import {
-	existsSync,
 	mkdirSync,
 	mkdtempSync,
 	readdirSync,
@@ -17,7 +16,10 @@ const TEP = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP), "..", "..", "..");
 const THU_MUC = "packages/db/prisma/migrations";
 const TEP_SCHEMA = "packages/db/prisma/schema.prisma";
-const MOC = "origin/onehub";
+const CAP = Object.freeze({
+	goc: "e86b5677ed8ff42c5754bf30b40f87f4a37507aa",
+	dinh: "f2acca7f1ae619abdadbb09e3db29be65841ce87",
+});
 const MODEL_MOI = ["OkrNguonKr", "OkrSoChup"];
 const CHI_MUC_MAY = "okrSoChup_may_mot_ngay";
 const GHIM = Object.freeze({
@@ -31,7 +33,18 @@ const GHIM = Object.freeze({
 const git = (...d) =>
 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
 
-const TRUOC = git("merge-base", "HEAD", MOC);
+for (const sha of [CAP.goc, CAP.dinh]) {
+	if (
+		spawnSync("git", ["-C", GOC, "cat-file", "-e", `${sha}^{commit}`])
+			.status !== 0
+	) {
+		console.log(`KHONG DO DUOC: khong giai duoc cap gop ${sha}`);
+		process.exit(2);
+	}
+}
+const TRUOC = CAP.goc;
+const DINH = CAP.dinh;
+const SCHEMA_DINH = git("show", `${DINH}:${TEP_SCHEMA}`);
 const lietKeTruoc = () =>
 	git("ls-tree", "--name-only", `${TRUOC}:${THU_MUC}`)
 		.split("\n")
@@ -79,7 +92,8 @@ function viPham(c) {
 	if (/^ALTER TABLE "[^"]+" ADD CONSTRAINT "[^"]+" FOREIGN KEY/.test(hoa))
 		return null;
 	if (/ADD COLUMN/.test(hoa)) return `ADD COLUMN (${bang})`;
-	if (/^ALTER TABLE/.test(hoa)) return `ALTER TABLE khac ADD CONSTRAINT FOREIGN KEY (${bang})`;
+	if (/^ALTER TABLE/.test(hoa))
+		return `ALTER TABLE khac ADD CONSTRAINT FOREIGN KEY (${bang})`;
 	if (/^CREATE TABLE/.test(hoa))
 		return cuBang ? `CREATE TABLE trung bang co san (${bang})` : null;
 	if (/^CREATE (UNIQUE )?INDEX/.test(hoa))
@@ -342,7 +356,7 @@ function schemaXenGiua(schema) {
 }
 
 function chieuDo() {
-	const schema = readFileSync(join(GOC, TEP_SCHEMA), "utf8");
+	const schema = SCHEMA_DINH;
 	const tam = mkdtempSync(join(tmpdir(), "so-okr-mig-"));
 	const bo = [
 		{
@@ -444,24 +458,34 @@ if (process.argv[2] === "--gia") {
 	process.exit(hong.length === 0 ? 0 : 1);
 }
 
-const moi = readdirSync(join(GOC, THU_MUC), { withFileTypes: true })
-	.filter((d) => d.isDirectory() && !cu.has(d.name))
-	.map((d) => d.name)
-	.filter((t) => existsSync(join(GOC, THU_MUC, t, "migration.sql")))
+const moi = git("ls-tree", "--name-only", `${DINH}:${THU_MUC}`)
+	.split("\n")
+	.filter((t) => t !== "" && t !== "migration_lock.toml" && !cu.has(t))
+	.filter(
+		(t) =>
+			spawnSync("git", [
+				"-C",
+				GOC,
+				"cat-file",
+				"-e",
+				`${DINH}:${THU_MUC}/${t}/migration.sql`,
+			]).status === 0,
+	)
 	.sort();
-const docSql = (t) =>
-	readFileSync(join(GOC, THU_MUC, t, "migration.sql"), "utf8");
+const docSql = (t) => git("show", `${DINH}:${THU_MUC}/${t}/migration.sql`);
 const { hong, dem } = soatTinh({
 	moi,
 	docSql,
-	schema: readFileSync(join(GOC, TEP_SCHEMA), "utf8"),
+	schema: SCHEMA_DINH,
 });
 
 console.log(
-	`goc so sanh: ${MOC} (${TRUOC.slice(0, 8)}) · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem}`,
+	`goc so sanh: ${TRUOC}..${DINH} · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem}`,
 );
 if (moi.length === 0 || dem === 0) {
-	console.log(`KHONG DO DUOC: khong co migration moi nao so voi ${MOC}`);
+	console.log(
+		`KHONG DO DUOC: khong co migration moi nao trong cap ${TRUOC}..${DINH}`,
+	);
 	process.exit(2);
 }
 hong.push(...(await chayTrenDuLieu(moi, docSql)));
