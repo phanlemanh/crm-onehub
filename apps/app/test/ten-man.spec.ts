@@ -66,14 +66,12 @@ describe("sgt-ten-man", () => {
 	});
 
 	test("sgt-ten-man: doan con, truy van va duong la", () => {
+		const thanhVien = MUC_CAI_DAT.find((m) => m.href === "/settings/members");
+		if (!thanhVien) throw new Error("NHOM_CAI_DAT khong con muc thanh vien");
 		for (const locale of NGON_NGU) {
 			expect(tenMan("/okr/abc/kr?x=1", locale)).toBe(tenMan("/okr", locale));
 			expect(tenMan("/settings/members", locale)).toContain(
-				nhanCaiDat(
-					MUC_CAI_DAT.find((m) => m.href === "/settings/members") ??
-						MUC_CAI_DAT[0],
-					locale,
-				),
+				nhanCaiDat(thanhVien, locale),
 			);
 			expect(tenMan("/khong-co-man", locale)).toBe("/khong-co-man");
 		}

@@ -746,7 +746,7 @@ describe("sgt-chu", () => {
 			for (const [nhan, cau] of [
 				[m.nhan.choLayVe, m.trangThai.choKeoVe],
 				[m.nhan.choGom, m.trangThai.choGom],
-			])
+			] as const)
 				if (cau.toLowerCase().includes(nhan.toLowerCase()))
 					loi.push(`cau lap nhan: «${nhan}» trong «${cau}»`);
 			console.log(`sgt-chu: ${locale} duyet ${chuoi.length} chuoi`);
