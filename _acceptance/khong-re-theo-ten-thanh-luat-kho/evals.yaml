@@ -45,8 +45,8 @@ evals:
     paths: [_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs, tools/oxlint/onehub/**, .oxlintrc.json, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
     expected: |
       rang/e17-qua-luat.mjs: (1) chay lenh gdtt_khong_re_theo_ten o goc kho: ma 0, dong "so tep da quet: <n>" voi
-      n >= 50 (khong -> "HONG E17 <ma>"); (2) doc tinh khong-re-theo-ten.mjs: khong chua "GIAI_DOAN_GOC", "RegExp",
-      "matchAll" (con -> "HONG BAN SAO <chuoi>"), co ten hai luat onehub (thieu -> "HONG KHONG DOC LUAT"); (3) cay tam
+      n >= 50 (khong -> "HONG E17 <ma>"); (2) doc tinh khong-re-theo-ten.mjs: khong chua "giai-doan.ts" (khong import danh sach),
+      "RegExp", "matchAll" (con -> "HONG BAN SAO <chuoi>"), co ten hai luat onehub (thieu -> "HONG KHONG DOC LUAT"); (3) cay tam
       chen 'if (stage === "CLOSED_WON") {}' vao cuoi apps/api/src/dashboard/dashboard.service.ts: lenh E17 thoat 1 va
       co dong khop ^HONG apps/api/src/dashboard/dashboard.service.ts:\d+: CLOSED_WON$ (khong -> "HONG LOT CHEN").
       In "e17-qua-luat: dat".

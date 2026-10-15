@@ -25,7 +25,7 @@ if (dinh.ma !== 0 || soTep < 50)
 else console.log(`E17 o dinh: ma 0, so tep da quet ${soTep}`);
 
 const banRang = readFileSync(join(GOC, RANG_E17), "utf8");
-for (const chuoi of ["GIAI_DOAN_GOC", "RegExp", "matchAll"])
+for (const chuoi of ["giai-doan.ts", "RegExp", "matchAll"])
 	if (banRang.includes(chuoi)) hong.push(`HONG BAN SAO ${chuoi}`);
 if (!LUAT.every((l) => banRang.includes(l))) hong.push("HONG KHONG DOC LUAT");
 
