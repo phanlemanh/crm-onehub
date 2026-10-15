@@ -27,6 +27,7 @@ import { ghiHieuChinh, HIEU_CHINH as HIEU_CHINH_BANG } from "./hieu-chinh.mjs";
 import {
 	AGENT,
 	cauThieuKhoa,
+	chanSoDu,
 	coKhoaMoHinh,
 	duongPath,
 	GOC,
@@ -776,6 +777,10 @@ async function main() {
 	if (chiCa && !caDon())
 		return khongDo(`${E22.thamSoCa} ${chiCa}: khong co ca nay trong bo mau`);
 	if (!chiDungKho && !coKhoaMoHinh()) return khongDo(cauThieuKhoa());
+	if (!chiDungKho) {
+		const chan = await chanSoDu();
+		if (chan) return khongDo(chan);
+	}
 	mkdirSync(THU_MUC_LUOT, { recursive: true });
 	let url;
 	try {
