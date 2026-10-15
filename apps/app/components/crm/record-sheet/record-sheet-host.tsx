@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CotHoiKara } from "@/app/(app)/[slug]/okr/hoi/cot-hoi-kara";
 import { FieldsSheetHost } from "@/components/crm/fields/fields-sheet";
 import { CloseReasonDialog } from "@/components/crm/stage-change";
 import { DetailSheet } from "@/components/detail-sheet";
@@ -31,7 +32,11 @@ export function RecordSheetHost({
 		<>
 			<DetailSheet
 				open={stack.length > 0}
-				size={shown?.kind === "soan" ? "kara" : undefined}
+				size={
+					shown?.kind === "soan" || shown?.kind === "hoi-okr"
+						? "kara"
+						: undefined
+				}
 				onOpenChange={(next) => {
 					if (!next) closeAll();
 				}}
@@ -70,6 +75,10 @@ export function RecordSheetHost({
 						cuocSoanId={shown.id}
 						cauNoi={cauNoiOkr}
 					/>
+				) : null}
+
+				{shown?.kind === "hoi-okr" ? (
+					<CotHoiKara key={recordKey(shown)} cuocHoiId={shown.id} />
 				) : null}
 
 				{shown?.kind === "viec" ? (
