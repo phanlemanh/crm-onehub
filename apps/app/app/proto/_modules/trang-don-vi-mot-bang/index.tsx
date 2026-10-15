@@ -812,7 +812,6 @@ function NoiDung({ state }: { state: string }) {
 				lyDo: null,
 				phaLapKeHoach: true,
 				soanKhoa: null,
-				cachSoan: "nut-vien",
 				nguoi: "Võ Phương Thảo",
 			}}
 			key={`${state}-${don.ma}`}
