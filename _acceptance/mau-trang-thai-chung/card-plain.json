@@ -1,0 +1,31 @@
+{
+  "feature_plain": "Một trạng thái mang một màu ở mọi màn: xong là xanh lá, chờ là vàng, hỏng là đỏ, nháp và đã kết thúc là xám, đang chạy là xanh dương — ở OKR, Kara, lịch họp, Tài liệu, Thoả thuận, làm giàu và Cài đặt OKR.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ thêm nghĩa «đã kết thúc» (xám) vào bảng màu chung, và luật thiết kế liệt đúng sáu nghĩa khớp bảng."},
+    {"id": "AC-2", "p": "Sẽ có bài quét đỏ ngay khi có chỗ nào tự khai bảng màu trạng thái riêng, ở cả bốn kiểu viết."},
+    {"id": "AC-3", "p": "Sẽ cho mọi trạng thái của 13 khu mang đúng nghĩa ở bảng ánh xạ, và không khu nào tự viết tên màu."},
+    {"id": "AC-4", "p": "Sẽ kiểm trên trang dựng thật rằng chấm của độ tự tin, nhịp OKR, bước Kara, người dự họp và nguồn Tài liệu mang đúng màu."},
+    {"id": "AC-6", "p": "Sẽ mở Cài đặt OKR trên bản chạy thật và thấy chu kỳ đang chạy màu xanh dương, chu kỳ lập kế hoạch và đã đóng màu xám."}
+  ],
+  "wont_do": [
+    {"id": "AC-5", "p": "Chặn câu cũ «năm khu còn tự khai» khỏi luật thiết kế; luật nói bài quét giữ một bảng."},
+    {"id": "OOS-1", "p": "Sẽ KHÔNG đổi các bản mẫu thiết kế dưới /proto."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG đổi màu chọn theo một điều kiện ngay tại chỗ ở các màn khác (như nhắc buổi sáng, họp tuần) — theo Hỏi-4."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG đổi màu nhãn chữ có viền (Badge) của trạng thái — theo Hỏi-4."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ đủ 13 khu đang tự khai màu, đếm bằng lệnh quét trên bản onehub hiện tại."},
+    {"i": 1, "p": "Phủ sáu nghĩa: năm nghĩa của luật thiết kế cộng «đã kết thúc» (Hỏi-2)."},
+    {"i": 2, "p": "Đo ở bốn lớp: bảng nghĩa của từng khu, chấm trên trang dựng thật, màn chạy thật, và luật trong mã lẫn trong tài liệu."},
+    {"i": 3, "p": "Lõi: mọi trạng thái của 13 khu (AC-3), năm thành phần vẽ chấm (AC-4), bài quét bốn kiểu viết (AC-2), ba pha chu kỳ trên màn thật (AC-6)."},
+    {"i": 4, "p": "Trạng thái chỉ sống vài giây (hàng đợi, đang soạn) chỉ kiểm trên trang dựng thật, không chụp màn chạy thật."},
+    {"i": 5, "p": "Để sau: màu chọn tại chỗ và nhãn Badge (Hỏi-4)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Câu hỏi về bảng ánh xạ chỉ đưa ba nhóm, ba chỗ đổi màu khác máy tự chọn — đã liệt đủ mọi dòng đổi màu vào Hỏi-3, và «chờ» của làm giàu nay cùng nghĩa «đang chạy» như Tài liệu."},
+    {"i": 1, "p": "Lý do bỏ chụp màn thật không đúng với pha chu kỳ OKR — đã thêm bàn đo màn thật ở Cài đặt OKR."},
+    {"i": 2, "p": "Cắt nhãn Badge và màu chọn tại chỗ khỏi phạm vi mà không hỏi — nay là Hỏi-4 cho anh quyết."},
+    {"i": 3, "p": "Chưa có gì bắt được một khu khai đúng nghĩa nhưng vẫn vẽ màu bằng chữ — nay luật cấm chữ màu trong 13 tệp khu."},
+    {"i": 4, "p": "Bài quét chỉ bắt hai kiểu viết bảng màu — nay quét cấu trúc mã, bắt cả bốn kiểu."}
+  ]
+}
