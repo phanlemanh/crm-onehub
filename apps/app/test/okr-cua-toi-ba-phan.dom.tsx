@@ -246,7 +246,7 @@ describe("ctbp-phan-mot", () => {
 				const p1 = phan("can-cap-nhat");
 				const nut = p1?.querySelector('[data-nut="cap-nhat-tai-cho"]') ?? null;
 				const dong = p1?.querySelectorAll("[data-kr]").length ?? -1;
-				const dau = con.findIndex((x) => x === p1);
+				const dau = p1 ? con.indexOf(p1) : -1;
 				const viec = con.findIndex((x) => x.matches('[data-khoi="viec-okr"]'));
 				const chu = p1?.textContent ?? "";
 				const ketQua = {
@@ -814,7 +814,8 @@ describe("ctbp-bon-the", () => {
 			const the = [...document.body.querySelectorAll('[role="tab"]')];
 			if (the.length !== 4)
 				throw new Error(`ctbp-bon-the: ${the.length} the, mong 4`);
-			const conKhoaCu = (o: object) => Object.hasOwn(o, "cap-nhat-tuan");
+			const conKhoaCu = (o: Record<string, string>) =>
+				Object.hasOwn(o, "cap-nhat-tuan");
 			expect({
 				nhan: the.map((t) => t.textContent),
 				nhanTuMessages: the.map((t) => t.textContent),
