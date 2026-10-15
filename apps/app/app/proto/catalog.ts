@@ -1275,6 +1275,33 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "hop-thong-bao-tren-web",
+		ten: "Hộp thông báo — chuông trên đầu trang và trang Thông báo",
+		states: [
+			{
+				id: "ST-ngu-canh",
+				nhan: "Đầu trang — chuông có số cạnh nút «Gửi tín hiệu»",
+			},
+			{
+				id: "ST-chuong-co-chua-doc",
+				nhan: "Chuông mở — Hôm nay / Trước đó, có chưa đọc",
+			},
+			{ id: "ST-chuong-99", nhan: "Chuông — hơn 99 chưa đọc" },
+			{ id: "ST-chuong-het-chua-doc", nhan: "Chuông mở — đã đọc hết" },
+			{ id: "ST-chuong-rong", nhan: "Chuông mở — chưa có thông báo" },
+			{ id: "ST-chuong-cho-tai", nhan: "Chuông mở — đang tải" },
+			{ id: "ST-chuong-loi", nhan: "Chuông mở — tải hỏng" },
+			{ id: "ST-trang-co", nhan: "Trang Thông báo — nhóm theo ngày" },
+			{
+				id: "ST-trang-loc-chua-doc-rong",
+				nhan: "Trang — lọc Chưa đọc, đã đọc hết",
+			},
+			{ id: "ST-trang-rong", nhan: "Trang — chưa có thông báo" },
+			{ id: "ST-trang-cho-tai", nhan: "Trang — đang tải" },
+			{ id: "ST-trang-loi", nhan: "Trang — tải hỏng" },
+		],
+	},
+	{
 		slug: "lich-su-va-luu-tru-trang",
 		ten: "Kho tài liệu — lịch sử phiên bản, quay lại bản cũ, lưu trữ trang",
 		states: [
