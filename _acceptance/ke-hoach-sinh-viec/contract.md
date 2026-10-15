@@ -5,7 +5,7 @@ slug: ke-hoach-sinh-viec
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: implemented
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-14T23:27:41Z
 design_doc: docs/superpowers/specs/2026-10-14-ke-hoach-sinh-viec-design.md
@@ -77,3 +77,20 @@ Plans, Pipedrive [NGÀNH: docs/plan/viec-du-an-nghien-cuu.md mục 3]. Core 1–
 - Hỏi-4: bỏ design-pass, duyệt UI trên ảnh S4 (khuyến nghị) hay dựng bản mẫu trước Cổng Phạm vi.
 - Câu hỏi nơi hiện gợi ý dời sang DA3b cùng vế (b).
 - Thu phạm vi 15/10 (dừng-vá sau S4 lượt 2): owner chọn «Hướng a» — vế bản chạy thật của AC-3 ra Out of scope; Hỏi-4 (duyệt UI trên ảnh S4) vì thế không còn ảnh nào được duyệt trong vòng này.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-5: Bài kiểm tự khai báo lại hình dạng dữ liệu tạo kế hoạch thay vì dùng bản gốc.
+  - Ngoài-6: Chưa có bài kiểm nào chứng minh việc bỏ hạn trên Việc thường vẫn dùng được như cũ, vì bài kiểm đang thử trên một Việc vốn không có hạn.
+  - Ngoài-7: Công cụ kiểm tra việc không ai xoá bài kiểm cũ chưa được thử trên trường hợp tệp bị xoá hoặc đổi tên thật.
+  - Ngoài-8: Công cụ kiểm tra bài kiểm cũ không bị xoá bỏ sót một tệp phụ trợ.
+  - Ngoài-9: Trong một số trường hợp hiếm, như phòng ban của bước đã bị lưu trữ, màn hình có thể hiện một người nhận việc nhưng hệ thống lại giao cho người khác.
+  - Ngoài-10: Mã mới có nhiều dòng ghi chú trái quy ước của đội.
+  - Ngoài-11: Danh sách trạng thái công việc bị chép tay thêm một bản.
+  - Ngoài-12: Định nghĩa «việc còn mở» được viết ở ba nơi.
+  - Ngoài-15: Luật «ai được nhận việc» bị viết lặp thêm một bản.
+  - Ngoài-16: Khi chuyển việc hay từ chối đổi vai, một việc có thể được đếm thành «N bước, N việc», nên con số hiển thị lớn hơn thực tế.
+  - Ngoài-17: Nếu một việc của bước được gắn thêm một kế hoạch khác, người dùng sẽ không gỡ được gắn kết đó và bị báo lỗi dù việc gỡ là vô hại.
+  - Ngoài-18: Phép thử chặn người không thuộc tổ chức khá lỏng: nếu chặn này hỏng thì người dùng có thể gặp lỗi hệ thống thay vì lời báo rõ, mà bài thử vẫn xanh.
+  - Ngoài-19: Hai bộ thử cũ về vai chỉ OKR giờ chỉ thử kế hoạch kiểu cũ, nên việc giao hay chuyển việc cho người chỉ OKR trên kế hoạch mới có thể không được kiểm.
+  - Ngoài-20: Phép kiểm «đã chạy đủ các lệnh» không bắt được việc ai đó xoá bớt một dòng khỏi bảng thử, nên độ phủ có thể giảm mà không báo.
+  - Ngoài-21: Phép kiểm giao diện chỉ quét ba màn đã biết, nên màn mới thêm trong tương lai có thể lọt khỏi kiểm tra mà không ai hay.
+  - Ngoài-22: Một phép thử nói rằng kế hoạch cũ không sinh việc thực ra không chạm đến phần mã mới, nên nó không chứng minh được điều đó.
