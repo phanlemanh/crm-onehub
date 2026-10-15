@@ -17,7 +17,7 @@ export function chonMoHinhTroLyOkr(
 	const doc = maHopLe.safeParse(giaTri);
 	if (!doc.success)
 		throw new Error(
-			`${bien}="${giaTri}" is not a Trợ lý OKR model. Allowed: ${danhSach.map((m) => m.ma).join(", ")}.`,
+			`${bien}="${giaTri}" is not an allowed model. Allowed: ${danhSach.map((m) => m.ma).join(", ")}.`,
 		);
 	return doc.data === HAIKU.ma ? HAIKU : MAC_DINH;
 }
