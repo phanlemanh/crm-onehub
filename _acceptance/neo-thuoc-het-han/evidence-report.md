@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: neo-thuoc-het-han
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d5fb9f19b737f680f0d5de315d8fe31523273df0
+verified_commit: 46ff8d593227ed1ed24e87e602f75e4a1680fae1
 human_signoff:
 ---
 
 # Evidence Report: neo-thuoc-het-han
 
-Round 1. Sáu eval của hợp đồng (E1 đến E6) đều đạt. Verdict là REJECT vì một lệnh suite không gắn eval nào (`bun run test -- --filter=agent-okr ...`) trả mã khác 0. Chi tiết ở khối suite và mục Iterations.
+Round 2. Sáu eval của hợp đồng (E1 đến E6) đều đạt; E3 mang từ round 1 vì delta không chạm paths của nó. Bảy lệnh suite không gắn eval đều xanh ở round này, kể cả lệnh `agent-okr` đã đỏ ở round 1.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -27,47 +27,48 @@ Round 1. Sáu eval của hợp đồng (E1 đến E6) đều đạt. Verdict là
 ## Evidence
 
 - eval: E1
-  run_id: minted-neo-thuoc-het-han-E1-r1
+  run_id: minted-neo-thuoc-het-han-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.nth_chay_o_dinh
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
   output: |
     chay-o-dinh: dat
 
 - eval: E2
-  run_id: minted-neo-thuoc-het-han-E2-r1
+  run_id: minted-neo-thuoc-het-han-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.nth_hai_ref
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
   output: |
     hai-ref: dat
 
 - eval: E3
   run_id: minted-neo-thuoc-het-han-E3-r1
   exit_code: 0
-  baseline: green
+  carried_from_round: 1
+  baseline: n-a
   verifier: config:executors.test.lmcv_loi_khong_lam_moi
   verified_at: 2026-10-15T06:22:43Z
   output: |
-    Ran 1 test across 1 file. [686.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E4
-  run_id: minted-neo-thuoc-het-han-E4-r1
+  run_id: minted-neo-thuoc-het-han-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.nth_chieu_do
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
   output: |
     chieu-do: 5/5 bi bat
 
 - eval: E5
-  run_id: minted-neo-thuoc-het-han-E5-r1
+  run_id: minted-neo-thuoc-het-han-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.nth_pham_vi
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
   output: |
     pham-vi: dat
 
@@ -76,48 +77,46 @@ Round 1. Sáu eval của hợp đồng (E1 đến E6) đều đạt. Verdict là
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.nth_ghim_xanh
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
   output: |
     ghim-xanh: dat
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:22:43Z
-
-Lệnh suite dưới đây KHÔNG gắn eval nào và trả mã 1. Trích nguyên văn từ log: `(fail) app-rieng > chạy cạnh apps/agent: hai tiến trình, hai cổng, /eve/v1/health cả hai xanh [5002.06ms]` kèm `^ this test timed out after 5000ms.`; và ở `apps/agent-okr/test/app-rieng.integration.spec.ts:91` có `error: Unable to connect. Is the computer able to access the url?` với `path: "http://127.0.0.1:53564/health"`, `code: "ConnectionRefused"`. Tổng kết gói: `152 pass`, `1 fail`, `1 error`, `Ran 153 tests across 17 files`; turbo báo `Failed: agent-okr#test`. Liên hệ giữa lỗi này và thay đổi của tính năng: chưa rõ (log không nêu).
+  verified_at: 2026-10-15T08:20:58Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
-  exit_code: 1
-  verified_at: 2026-10-15T06:22:43Z
+  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  exit_code: 0
+  verified_at: 2026-10-15T08:20:58Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-neo-thuoc-het-han-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-neo-thuoc-het-han-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
 
 - cmd: bun run lint:slop
-  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_lint_slop-r1
+  run_id: minted-neo-thuoc-het-han-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-neo-thuoc-het-han-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-neo-thuoc-het-han-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:22:43Z
+  verified_at: 2026-10-15T08:20:58Z
 
 ## Known limits
 
@@ -125,16 +124,11 @@ Lệnh suite dưới đây KHÔNG gắn eval nào và trả mã 1. Trích nguyê
 
 ## Analyst
 
-Eval không phân biệt (xanh ở cả HEAD lẫn baseline): E3 (`lam-moi-chuyen-viec.dom.tsx -t loi-khong-lam-moi`). Nó chứng minh harness và là regression-guard có chủ ý cho hồ sơ lam-moi-chuyen-viec-qua-loi-chung; nếu muốn nó đo hành vi mới thì phải viết lại để assert thứ chỉ vòng này thêm.
+carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Field baseline cua tung eval o tren la n-a.
 
-Lệnh fail không gắn eval: `bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation` (xem khối suite ở trên). Đây là lý do duy nhất của verdict REJECT.
+Eval không phân biệt (xanh ở cả HEAD lẫn baseline): E3, lệnh `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-chuyen-viec.dom.tsx -t loi-khong-lam-moi`. Nó chứng minh harness và là regression-guard có chủ ý cho hồ sơ lam-moi-chuyen-viec-qua-loi-chung; muốn nó đo hành vi mới thì phải viết lại để assert thứ chỉ vòng này thêm.
 
-Baseline khong do
-- bun _acceptance/neo-thuoc-het-han/rang/chay-o-dinh.mjs: bo qua baseline: tep _acceptance/neo-thuoc-het-han/rang/chay-o-dinh.mjs co o cay dang kiem nhung chua co o merge-base aba7f6418c0e68bb7c8aa988727e75d644767ae4 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/neo-thuoc-het-han/rang/hai-ref.mjs: bo qua baseline: tep _acceptance/neo-thuoc-het-han/rang/hai-ref.mjs co o cay dang kiem nhung chua co o merge-base aba7f6418c0e68bb7c8aa988727e75d644767ae4 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/neo-thuoc-het-han/rang/chieu-do.mjs: bo qua baseline: tep _acceptance/neo-thuoc-het-han/rang/chieu-do.mjs co o cay dang kiem nhung chua co o merge-base aba7f6418c0e68bb7c8aa988727e75d644767ae4 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/neo-thuoc-het-han/rang/pham-vi.mjs: bo qua baseline: tep _acceptance/neo-thuoc-het-han/rang/pham-vi.mjs co o cay dang kiem nhung chua co o merge-base aba7f6418c0e68bb7c8aa988727e75d644767ae4 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/neo-thuoc-het-han/rang/ghim-xanh.mjs: bo qua baseline: tep _acceptance/neo-thuoc-het-han/rang/ghim-xanh.mjs co o cay dang kiem nhung chua co o merge-base aba7f6418c0e68bb7c8aa988727e75d644767ae4 — eval moi, chay tren code cu khong phan biet gi
+Không có lệnh nào ngoài eval bị đỏ ở round này.
 
 ## Variance
 
@@ -142,4 +136,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: không eval nào đỏ (E1 đến E6 đạt); lệnh suite `bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation` đỏ ở `app-rieng > chạy cạnh apps/agent` (quá 5000ms, ConnectionRefused), nên verdict là REJECT. Trả về giai đoạn cài đặt để điều tra lỗi suite.
+Round 1: không eval nào đỏ (E1 đến E6 đạt); lệnh suite `bun run test -- --filter=agent-okr ...` đỏ ở `app-rieng > chạy cạnh apps/agent` (quá 5000ms, ConnectionRefused), nên verdict là REJECT. Trả về giai đoạn cài đặt.
+Round 2: E1, E2, E4, E5, E6 chạy lại và đạt, E3 mang từ round 1; cả bảy lệnh suite xanh, kể cả lệnh `agent-okr`. Verdict PASS.
