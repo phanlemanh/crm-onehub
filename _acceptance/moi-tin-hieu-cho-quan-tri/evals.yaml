@@ -1,0 +1,360 @@
+schema_version: 1
+slug: moi-tin-hieu-cho-quan-tri
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.mth_the_con
+    paths:
+      - "apps/app/components/tin-hieu/thanh-the-tin-hieu.tsx"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-tat-ca.dom.tsx"
+    expected: |
+      tin-hieu-tat-ca.dom.tsx describe "the-con": ma tran viet truoc bon vai (owner, admin, member, okr) x hai the dang mo
+      (cua-toi, tat-ca) = 8 o; render ThanhTheTinHieu qua dung ham chon co ma trang server dung (laQuanTriWorkspace(vai)):
+        owner/admin: co [role=tablist] voi dung hai tab, chu rut tu tep loi (m.the.cuaToi, m.the.tatCa), href lan luot
+          "/acme/tin-hieu" va "/acme/tin-hieu/tat-ca", dung mot tab mang aria-current="page" va do la the dang mo,
+          TabsList mang data-variant="line"
+        member/okr: KHONG co [role=tablist] (ham chon tra null)
+      CHIEU DO: ban sao bo dieu kien vai -> o member do voi thong diep ghim "thanh the hien voi nguoi khong phai quan tri";
+      ban sao dat aria-current cho ca hai -> do voi thong diep ghim "hai the cung la trang hien tai".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mth_api
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "packages/validation/src/tin-hieu.ts"
+      - "apps/api/test/tin-hieu-tat-ca.spec.ts"
+    expected: |
+      tin-hieu-tat-ca.spec.ts describe "mth-tat-ca" tren kho thu cua luot. Du lieu gieo qua tinHieu.gui that (khong chen
+      bang): nguoi A (owner, phong ban "Kinh doanh"), B (member, "Nhan su"), C (member, khong OrgPlacement), D (member,
+      sau khi gui thi xoa tai khoan bang Prisma user.delete -> nguoiGuiId SetNull); mot luot keoVe giua chung de co ca
+      da va chua keo ve. Ma tran viet truoc bon vai goi tatCa (owner, admin, member, okr):
+        owner, admin: 1 rows.length == so tin hieu da gieo; 2 thu tu guiLuc giam dan; 3 moi dong: ma == idTep(so),
+          nguoiGui khop {id, ten} cua nguoi gui (D: null), phongBan khop {id, ten} (C: null), daKeoVe khop keoVeLuc;
+          4 JSON.stringify(ket qua) KHONG chua email cua A, B, C, D; 5 keoVeLuc cua moi hang doc lai bang Prisma
+          truoc == sau
+        member, okr: TRPCError FORBIDDEN, khong dong nao
+      REST: GET /rest/tin-hieu/tat-ca voi khoa API owner -> 200 cung tap ma; khoa member -> 403.
+      Ca "mth-khop-that" (cung kho da gieo, them hai phong ban TRUNG TEN "Kinh doanh" o hai khoi, moi phong mot nguoi
+      gui): goi tatCa (owner) va REST POST /rest/tin-hieu/keo-ve (khoa owner) -> 6 tap ma bang nhau; voi moi ma,
+      phongBanId cua keoVe == phongBan.id cua tatCa; dongDemTuKeoVe(keoVe.tep) va dongDemTuTatCa(tatCa.rows) qua
+      demNguongSong cung now va cung coCho rong -> ba so trongKy, soPhong, chuaCoCho bang nhau va soPhong dem hai phong
+      trung ten la HAI; 7 JSON.stringify(phan hoi keoVe) khong chua ten hay email nguoi gui nao (chuoi rut tu du lieu
+      gieo, so chuoi > 0) — doi chung duong: JSON tatCa cua owner CO chua ten nguoi gui (cung danh sach chuoi).
+      CHIEU DO: ban sao cho keoVe bo phongBanId -> o 6 do voi thong diep ghim "keo ve va danh sach dem phong ban khac nhau";
+      ban sao them ten nguoi gui vao tep keo ve -> o 7 do voi thong diep ghim "tep keo ve mang danh tinh nguoi gui";
+       ban sao bo cau kiem vai -> o member do voi thong diep ghim "thanh vien doc duoc moi tin hieu";
+      ban sao select ca email -> o 4 do voi thong diep ghim "phan hoi mang thu dien tu nguoi gui";
+      ban sao goi updateMany keoVeLuc -> o 5 do voi thong diep ghim "danh sach moi tin hieu dong dau keo ve".
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gth_vai
+    paths:
+      - "apps/api/src/tin-hieu/tin-hieu.router.ts"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      vai-chi-okr.spec.ts: router "tinHieu" nam trong danh sach router pham vi chung (PhamViChungMiddleware), nen spec tu
+      quet moi thu tuc cua router — gom "tinHieu.tatCa" — va xanh; tu choi vai okr cua tatCa do cau kiem vai o service
+      (E2, E3b do).
+      CHIEU DO: ban sao bo "tinHieu" khoi danh sach router pham vi chung cua spec -> do voi thong diep ghim cua spec ve
+      router chua khai pham vi.
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mth_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/moi-tin-hieu-cho-quan-tri/evidence dat tuong minh: lenh cua mth_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh evidence/E3-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/moi-tin-hieu-cho-quan-tri/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "_acceptance/moi-tin-hieu-cho-quan-tri/rang/**"
+    expected: |
+      do-man.mjs ca "khong-quyen" tren ban chay voi du lieu mau (rang/sinh-mau.mjs gieo qua tinHieu.gui cua ba nguoi):
+      dang nhap nguoi vai member, mo /<slug>/tin-hieu/tat-ca o 1280:
+        1 PageShellTitle co chu m.tatCa.tieuDe; 2 than co chu m.tatCa.khongQuyen va nut toi /<slug>/tin-hieu;
+        3 khong co [role=tablist]; 4 HTML tai ve (fetch cung cookie member) KHONG chua tieu de hay ten nguoi gui cua bat ky
+          tin hieu mau nao cua nguoi khac (danh sach chuoi rut tu tep mau sinh-mau, khong viet tay, so chuoi > 0 ghim);
+        5 DOI CHUNG DUONG: cung fetch do bang cookie owner -> HTML CO chua it nhat mot tieu de va mot ten nguoi gui mau
+          (chung minh fetch, cookie va danh sach chuoi deu song); trang member khong phai trang dang nhap (co PageShellTitle).
+      Anh: evidence/E3-khong-quyen-1280.png.
+      CHIEU DO: ban sao vua bo nhanh khong-quyen o tat-ca/page.tsx vua bo cau kiem vai cua tatCa -> o 4 do voi thong diep
+      ghim "HTML mang du lieu tin hieu cho nguoi khong co quyen".
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mth_api
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/test/tin-hieu-tat-ca.spec.ts"
+    expected: |
+      tin-hieu-tat-ca.spec.ts describe "mth-khong-quyen": tren kho thu da gieo tin hieu cua ba nguoi, nguoi vai member
+      va vai okr goi tinHieu.tatCa qua tRPC va GET /rest/tin-hieu/tat-ca bang khoa cua chinh ho -> FORBIDDEN / 403, than
+      phan hoi KHONG chua tieu de hay ten nguoi gui nao trong danh sach chuoi gieo (so chuoi > 0); doi chung duong: cung
+      loi goi bang owner -> 200 va than CO chua cac chuoi do. Day la chot may cua ve «trang khong mang du lieu»: server
+      page khong co duong nao lay du lieu thay nguoi xem.
+      CHIEU DO: ban sao bo cau kiem vai cua tatCa -> do voi thong diep ghim "thanh vien doc duoc moi tin hieu".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.mth_ghep
+    paths:
+      - "apps/app/lib/tin-hieu/**"
+      - "packages/validation/src/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-tat-ca.spec.ts"
+      - "apps/app/test/fixtures/tin-hieu/**"
+    expected: |
+      tin-hieu-tat-ca.spec.ts describe "ghep": ham ghep cua trang (lib/tin-hieu/tat-ca.ts) nhan dung kieu dong cua
+      tinHieu.tatCa + ban ve LO-TRINH.mau.html (fixture LT2, sinh tu bo ve that cua kit). Voi MOI ma trong fixture
+      nguon.json: trangThai cua dong Tat ca == trangThai docTrangThaiTinHieu tra cho cung ma o the Cua toi (cung nhan,
+      cung cau, cung nghia) — so tren toan bo ma, so assert = so ma; khoa trang thai thuoc tap khai (CHO_TIN_HIEU, nhom
+      trang thai hang, cho-lay-ve, cho-gom).
+      CHIEU DO: ban sao de ham ghep tu suy nhan tu daKeoVe ma bo qua ban ve -> do voi thong diep ghim "trang thai the Tat ca lech the Cua toi".
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.mth_dong
+    paths:
+      - "apps/app/components/tin-hieu/bang-tat-ca.tsx"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-tat-ca.dom.tsx"
+    expected: |
+      tin-hieu-tat-ca.dom.tsx describe "dong": render BangTatCa voi ba dong mau; moi dong co: ma, tieu de, "Muốn: …",
+      ten nguoi gui, ten phong ban, man, gio gui dinh dang Asia/Ho_Chi_Minh (giờ mau 02:14Z -> 09:14), StatusIndicator
+      mang data-nghia dung va cau trang thai; tieu de, ten nguoi, ten phong ban, man nam trong phan tu translate="no"
+      (dem: moi dong 4 phan tu).
+      CHIEU DO: ban sao bo translate="no" o ten nguoi -> do voi thong diep ghim "du lieu nguoi nhap bi trinh duyet dich".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.mth_thieu
+    paths:
+      - "apps/app/components/tin-hieu/bang-tat-ca.tsx"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-tat-ca.dom.tsx"
+    expected: |
+      tin-hieu-tat-ca.dom.tsx describe "thieu": ma tran viet truoc nam ca ban ve (co, vang = null, khong mang khoi,
+      khoi hong, ban ghi sai khuon) x mot bo dong gom nguoiGui null va phongBan null:
+        moi ca: bang hien du so dong; dong nguoiGui null co chu m.tatCa.khongConTaiKhoan; dong phongBan null co chu
+        m.tatCa.chuaCoPhongBan; bon ca khong doc duoc: moi dong co nhan choLayVe/choGom theo daKeoVe va trang co dong
+        m.trang.banVeChuaDoc; ca co: khong co dong bao do.
+      CHIEU DO: ban sao de ten nguoi gui null roi vao chuoi rong -> do voi thong diep ghim "dong mat nguoi gui khong noi gi".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.mth_loc
+    paths:
+      - "apps/app/components/tin-hieu/bang-tat-ca.tsx"
+      - "apps/app/components/tin-hieu/tham-so-tat-ca.ts"
+      - "apps/app/test/tin-hieu-tat-ca.dom.tsx"
+    expected: |
+      tin-hieu-tat-ca.dom.tsx describe "loc" voi bo chuyen nuqs cho test (url khoi dau dat duoc): sau dong mau 3 phong
+      ban (gom mot dong khong phong ban) x 3 trang thai x 3 nguoi. Ma tran viet truoc:
+        a url khong loc -> 9 dong (pageSize lon hon); b phongBan=[pb1] -> chi dong pb1; c phongBan=[pb1,pb2] -> hop;
+        d phongBan=[pb1]&trangThaiTinHieu=[cho-lay-ve] -> giao; e nguoiGui=[khong-con] -> dong nguoi da xoa;
+        f loc ra rong -> DataTable hien khoi loc rong cua bang (chu bang lay tu tep loi cua packages/ui) va nut bo loc,
+          bam -> 9 dong;
+        g dem tren tung gia tri facet (facetCounts) == so dong khop gia tri do trong bo dong (tinh trong test tu du lieu);
+        h dang o trang 2 roi doi loc -> page == 1;
+        i ba o so (BaSoTinHieu) cung mot gia tri o ca a..f.
+      CHIEU DO: ban sao bo loc trang thai -> o d do voi thong diep ghim "loc trang thai khong cat dong";
+      ban sao giu page khi doi loc -> o h do voi thong diep ghim "doi loc khong ve trang dau";
+      ban sao tinh ba so tren dong da loc -> o i do voi thong diep ghim "ba o so doi theo loc".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.mth_ba_so
+    paths:
+      - "apps/app/components/tin-hieu/ba-so-tin-hieu.tsx"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "packages/validation/src/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-tat-ca.dom.tsx"
+    expected: |
+      tin-hieu-tat-ca.dom.tsx describe "ba-so": render BaSoTinHieu voi mot NguongSong mau va co banVeDocDuoc true/false:
+        1 dung ba StatCard trong mot StatGroup; nhan chua so TIN_HIEU.ngayDem va TIN_HIEU.ngayCoCho (doc hang, khong
+          viet tay 30 va 7); gia tri bang trongKy, soPhong, chuaCoCho; mo ta o 1 co m.tatCa.gomChuaLayVe, o 2 co
+          khongPhong, o 3 co quaHan
+        2 banVeDocDuoc false: o 3 hien "—" va m.tatCa.chuaDocCho, KHONG co chu so cua chuaCoCho
+      CHIEU DO: ban sao in 0 khi ban ve hong -> o 2 do voi thong diep ghim "o qua han in so 0 gia khi chua doc duoc ban ve".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.mth_dem
+    paths:
+      - "packages/validation/src/tin-hieu.ts"
+      - "packages/validation/test/tin-hieu-nguong-song.spec.ts"
+    expected: |
+      tin-hieu-nguong-song.spec.ts: ma tran viet truoc cho demNguongSong voi now co dinh, moi o mot assert:
+        tuoi dung 30 ngay (vao trongKy), 30 ngay + 1 ms (ra), dung 7 ngay (khong qua han), 7 ngay + 1 ms (qua han);
+        phongBan null -> khongPhong, khong vao soPhong; hai dong cung khoa -> soPhong dem 1; hai dong khac khoa cung ten
+        -> soPhong dem 2; dongDemTuKeoVe: co phongBanId -> khoa = id, vang -> khoa = ten (tep doi LT2);
+        qua han va co trong coCho -> khong vao chuaCoCho; qua han ngoai coCho -> vao; tap coCho rong -> chuaCoCho == quaHan;
+        coChoSauGom: ban ghi cho "chua-gom" khong vao tap, sau gia tri cho con lai vao tap (quet du CHO_TIN_HIEU, so assert = 7);
+        kieu "khong-co" va "hong" -> tap rong.
+      CHIEU DO: ban sao doi <= thanh < o bien 30 ngay -> do voi thong diep ghim "bien 30 ngay lech dong tong ket";
+      ban sao dem soPhong gom null -> do voi thong diep ghim "tin hieu khong phong ban bi dem la mot phong ban".
+
+  - id: E8b
+    criterion: AC-8
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.mth_khop
+    paths:
+      - "packages/validation/src/tin-hieu.ts"
+      - "scripts/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+    expected: |
+      scripts/tin-hieu/test/nguong-song-khop.test.ts — ca hai chieu tren CUNG bo tin hieu: mot mang dong dung kieu
+      tinHieu.tatCa (rut tu hang mau qua tepTuBanGhi/idTep, khong viet tay khuon) duoc phat qua may chu gia DUNG vo REST
+      keoVe (bocPhanHoiKeoVe) cho chayKeoVe chay that trong kho tam co LO-TRINH.mau.html, va dua thang vao ham ghep cua
+      trang voi cung ban ve va cung now. Doc ba so tu dong tong ket lenh in ra (regex tren hai dong "trong 30 ngày: N
+      tín hiệu từ M phòng ban" va "chưa có chỗ sau gom: K") -> bang dung ba so ham ghep tra (trongKy, soPhong,
+      chuaCoCho). Chay voi ba bo: co dong khong phong ban, co dong qua 7 ngay da co cho, hai phong ban trung ten. Bo thu tu: khong
+      ban ve -> lenh in K == so qua han, ham ghep tra chuaCoCho null (trang hien «—», AC-7) — chenh lech da khai, khong so bang.
+      Kem: cmd gth_lenh_keo_ve (keo-ve.test.ts cua LT2, ca "tong-ket") van xanh khong sua tep test.
+      CHIEU DO: ban sao de lenh bo qua phongBanId (dem theo ten), voi bo hai phong ban trung ten -> do voi thong
+      diep ghim "trang va lenh keo ve dem khac nhau".
+
+  - id: E8c
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.gth_lenh_keo_ve
+    paths:
+      - "scripts/tin-hieu/**"
+      - "packages/validation/src/tin-hieu.ts"
+    expected: |
+      keo-ve.test.ts cua LT2 (gom ca "tong-ket") xanh nguyen, tep test khong doi byte so voi onehub (git diff rong tren
+      scripts/tin-hieu/test/keo-ve.test.ts): dong tong ket giu tung chu.
+      CHIEU DO: ban sao doi chu "chưa có chỗ sau gom" -> ca tong-ket do voi thong diep ghim cua LT2.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.mth_hop
+    paths:
+      - "apps/app/components/tin-hieu/hop-gui-tin-hieu.tsx"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-tat-ca.dom.tsx"
+    expected: |
+      tin-hieu-tat-ca.dom.tsx describe "hop-bao-truoc": render HopGuiTinHieu mo, giai doan "soan", voi ba vai (owner,
+      member, okr): DialogDescription chua nguyen van m.hop.baoTruoc va chuoi do bang
+      "Quản trị CRM thấy tên bạn cùng tín hiệu này." (ghim nguyen van cau chu kho chot); giai doan "da-gui" khong can.
+      Kem: gth_hop cua LT2 van xanh (cmd rieng o suite).
+      CHIEU DO: ban sao bo cau bao truoc -> do voi thong diep ghim "hop gui khong bao truoc quan tri thay ten".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.mth_trang_thai_man
+    paths:
+      - "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/**"
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/test/tin-hieu-tat-ca.dom.tsx"
+    expected: |
+      tin-hieu-tat-ca.dom.tsx describe "trang-thai-man": ma tran viet truoc bon trang thai cua the khach
+      (dang tai, loi, rong, co):
+        render KhungChoTatCa (fallback Suspense cua tat-ca/page.tsx) va the khach TatCaTrang voi trpc gia (useQuery
+        tatCa o bon trang thai, nhu describe "trang" cua LT2):
+        dang tai: co [data-tin-hieu-tat-ca-dang-tai] gom khung xuong ba o va >=3 dong; loi: VungTaiLoi voi
+        m.tatCa.taiLoiTieuDe, bam "Thử lại" goi refetch cua query tatCa dung 1 lan; rong: ba o so 0 va Empty
+        m.tatCa.rongTieuDe; co: bang co dong.
+      CHIEU DO: ban sao tra null luc dang tai -> do voi thong diep ghim "the Tat ca trang luc dang tai".
+
+  - id: E10b
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mth_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/moi-tin-hieu-cho-quan-tri/evidence dat tuong minh: lenh cua mth_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh evidence/E10b-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/moi-tin-hieu-cho-quan-tri/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "_acceptance/moi-tin-hieu-cho-quan-tri/rang/**"
+    expected: |
+      do-man.mjs tren ban chay (phien do rieng, du lieu mau qua tinHieu.gui that cua ba nguoi o hai phong ban + mot
+      nguoi khong phong ban), quan tri (owner), hai kho 1280 va 375:
+        1 /<slug>/tin-hieu: [role=tablist] co hai tab, tab "Của tôi" aria-current=page; bam "Tất cả" (chuot that) ->
+          url ket thuc /tin-hieu/tat-ca, tab "Tất cả" aria-current=page
+        2 ba o so hien, gia tri ba o == ba so tinh tu tep mau cung now (rut tu sinh-mau, khong viet tay)
+        3 bang co dung so dong mau; moi dong co ten nguoi gui mau
+        4 chon loc phong ban mot gia tri -> url co tham so loc, bang chi con dong cua phong ban do; tai lai -> giu loc
+        5 375: document.scrollingElement.scrollWidth <= clientWidth + 1; dong dau doc duoc ten nguoi gui va nhan trang thai
+        6 thanh vien: /<slug>/tin-hieu khong co [role=tablist]
+      Anh: evidence/E10b-<buoc>-<kho>.png cho moi buoc 1..6.
+      CHIEU DO: ban sao bo hideBelow o cot man -> o 5 do voi thong diep ghim "the Tat ca cuon ngang o 375".
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.mth_ban_dung
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "_acceptance/moi-tin-hieu-cho-quan-tri/rang/ban-dung.mjs"
+    expected: |
+      rang/ban-dung.mjs: next build that (thu muc ban dung rieng), doc .nft.json cua trang /[slug]/tin-hieu/tat-ca
+      (duong suy tu .next, khong viet tay ROOT) -> danh sach tep co LO-TRINH.html o goc kho; doi chung duong cu
+      /[slug]/tin-hieu cung co.
+      CHIEU DO: ban sao bo khoa mang tep cua duong tat-ca khoi next.config -> do voi thong diep ghim "duong tat-ca khong mang LO-TRINH.html".
+
+  - id: E12
+    criterion: AC-4
+    executor: judgment
+    question: |
+      Đọc tệp chữ của trang Tín hiệu (bản tiếng Việt). Các chữ mới của thẻ «Tất cả», ba ô số, bộ lọc và câu báo trước
+      trong hộp gửi có (a) nói bằng chữ người dùng CRM hiểu, không thuật ngữ máy, (b) không thừa chữ — xoá một chữ mà
+      người đứng ở màn đó vẫn hiểu đúng thì chữ đó thừa, (c) gọi đúng tên «tín hiệu», «phòng ban», «lấy về» như phần
+      chữ LT2 đã có trong cùng tệp? Trả lời từng vế (a)(b)(c), dẫn chữ cụ thể.
+      Chữ chủ kho đã chốt thì không chấm lại nghĩa của nó, chỉ chấm nó được dùng đúng nguyên văn: nhãn ô «quá 7 ngày chưa
+      có chỗ» (mã Q2 của bản phạm vi), câu báo trước «Quản trị CRM thấy tên bạn cùng tín hiệu này» (mã Q3, luật riêng tư
+      ở ghi_chu hàng TH4), tên hai thẻ «Của tôi · Tất cả» và tên trang «Mọi tín hiệu» (tên hàng TH4). Bộ lọc dùng lại các
+      khoá tatCa.cot.phongBan, trang.cot.trangThai, tatCa.cot.nguoiGui, tatCa.chuaCoPhongBan, tatCa.khongConTaiKhoan
+      và nhãn trạng thái nhan.* của cùng tệp.
+    inputs:
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "CONTEXT.md"
+      - "docs/plan/pham-vi-vong-tin-hieu-1410.md"
+      - "_acceptance/moi-tin-hieu-cho-quan-tri/contract.md"
+
+  - id: E13
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.mth_thiet_ke
+    paths:
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+    expected: |
+      design-gate --mode static tren moi tep moi/sua cua vong (thanh-the-tin-hieu.tsx, ba-so-tin-hieu.tsx,
+      bang-tat-ca.tsx, tat-ca/page.tsx, tat-ca/*.tsx, page.tsx) -> 0 P0.
+      CHIEU DO: ban sao them <table> tu ve vao bang-tat-ca.tsx -> P0 voi thong diep cua design-gate.

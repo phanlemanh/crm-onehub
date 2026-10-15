@@ -22,17 +22,27 @@ function clientNhapCauNoi(nguon: string): boolean {
 
 describe("cau-noi-server", () => {
 	test("trang server tinh co va truyen xuong NutSoan, TrangSoan", () => {
-		const page = doc("app/(app)/[slug]/okr/theo-don-vi/page.tsx");
-		expect(page, "trang khong tinh co cau noi").toMatch(
+		// Từ DH1 (dieu-huong-khu-muc-tieu) nút soạn ở đầu trang khu: cờ đi
+		// dau-trang-okr (server) → DauTrangOkrHoiY → DauTrangOkr → HanhDongKhu → NutSoan.
+		const dau = doc("app/(app)/[slug]/okr/dau-trang-okr.tsx");
+		expect(dau, "trang khong tinh co cau noi").toMatch(
 			/import \{[^}]*\bokrBridgeConfigured\b[^}]*\} from "@\/lib\/agent-bridge"/,
 		);
-		expect(page, "trang khong tinh co cau noi").toMatch(
-			/<TheoDonVi cauNoiOkr=\{okrBridgeConfigured\(\)\} \/>/,
+		expect(dau, "trang khong tinh co cau noi").toMatch(
+			/<DauTrangOkrHoiY[\s\S]*?cauNoi=\{okrBridgeConfigured\(\)\}/,
 		);
 		expect(
-			doc("app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"),
-			"theo don vi khong truyen co",
-		).toMatch(/<NutSoan[\s\S]*?cauNoi=\{cauNoiOkr\}/);
+			doc("app/(app)/[slug]/okr/dau-trang-hoi-y.tsx"),
+			"dau trang khong truyen co",
+		).toMatch(/<DauTrangOkr[\s\S]*?cauNoi=\{cauNoi\}/);
+		expect(
+			doc("app/(app)/[slug]/okr/thanh-tab.tsx"),
+			"dau trang khong truyen co",
+		).toMatch(/<HanhDongKhu[\s\S]*?cauNoi=\{cauNoi\}/);
+		expect(
+			doc("app/(app)/[slug]/okr/hanh-dong-khu.tsx"),
+			"hang hanh dong khong truyen co",
+		).toMatch(/<NutSoan[\s\S]*?cauNoi=\{cauNoi\}/);
 		const layout = doc("app/(app)/[slug]/layout.tsx");
 		expect(layout, "man soan khong nhan co cau noi").toMatch(
 			/import \{[^}]*\bokrBridgeConfigured\b[^}]*\} from "@\/lib\/agent-bridge"/,

@@ -5,7 +5,7 @@ slug: dieu-huong-khu-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-15T03:19:51Z
 design_doc: docs/superpowers/specs/2026-10-15-dieu-huong-khu-muc-tieu-design.md
@@ -69,3 +69,20 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
 - Đổi thủ tục API, luật quyền, ngăn tạo mục tiêu, hộp nhập, luồng soạn cùng Kara, thanh bên.
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Phép kiểm tự thử của vòng này có thể báo nhầm lỗi do môi trường thử chứ không do tính năng. Tính năng điều hướng khu Mục tiêu người dùng thấy không bị ảnh hưởng.
+  - Ngoài-3: Khi chạy thử kiểm tra hồ sơ đã ký, một dòng lỗi cố ý có thể làm các bài kiểm chạy song song đỏ oan, hoặc bị kẹt lại nếu tiến trình bị giết giữa chừng. Việc này chỉ gây nhiễu cho người chấm, người dùng cuối không bị ảnh hưởng.
+  - Ngoài-4: Phép kiểm tự thử của vòng này chưa chứng minh được bản sao thử là sạch trước khi cố ý làm hỏng, nên một số kết luận đỏ có thể không đáng tin hoàn toàn. Tính năng người dùng thấy không đổi.
+  - Ngoài-5: Phép kiểm tự thử cho hồ sơ đã ký có thể coi một lệnh chết vì lý do khác là đã bắt đúng lỗi cố ý. Chỉ giảm độ tin của bằng chứng, người dùng cuối không bị ảnh hưởng.
+  - Ngoài-6: Không ảnh hưởng gì tới người dùng cuối. Đây chỉ là chú thích thừa trong mã, trái quy ước của kho, và có thể dọn sau.
+  - Ngoài-7: Người dùng bật dịch tự động của trình duyệt có thể thấy tên bộ phận hoặc phòng ban trong dòng «bạn không thêm mục tiêu được» bị dịch sai. Các chỗ khác trong khu Mục tiêu đã giữ nguyên tên.
+  - Ngoài-8: Hiện người dùng không thấy lỗi nào. Nếu sau này thêm một trang có tên trùng tên thẻ, tiêu đề tab trình duyệt có thể hiện sai mà không ai được báo.
+  - Ngoài-9: Người dùng không thấy khác biệt. Trong mã còn một nút «Thêm mục tiêu» cũ không còn chạy thật, và một bài kiểm vẫn đo bản cũ đó thay vì bản đang dùng.
+  - Ngoài-10: Phép thử «máy chủ từ chối thành viên tạo mục tiêu» luôn báo xanh dù máy chủ có chặn thật hay không. Do đó chưa có bằng chứng thật rằng thành viên không đủ quyền bị chặn ở phía máy chủ.
+  - Ngoài-11: Phép thử xác nhận máy chủ từ chối người không đủ quyền xanh cả khi lời gọi sai khuôn, nên chưa chứng minh được người không đủ quyền thật sự bị chặn khi tạo mục tiêu.
+  - Ngoài-12: Phép thử kiểm hộp nhập bảng tính có gửi đúng đơn vị còn lỏng, nên một lỗi làm xem trước nhập gửi nhầm đơn vị có thể lọt qua mà không bị báo.
+  - Ngoài-13: Bài kiểm chỉ xác nhận đường dẫn đúng, chưa xác nhận ngăn thêm mục tiêu mở ra cho đúng đơn vị. Một lỗi ở bước mở ngăn có thể không bị phát hiện.
+  - Ngoài-14: Bài kiểm tiêu đề lúc đang tải không chạm khung chờ thật của trang. Nếu ai đổi tiêu đề ở khung chờ đó, người dùng có thể thấy tiêu đề nhảy khi tải mà bài kiểm vẫn xanh.
+  - Ngoài-15: Phép thử «hồ sơ đã ký phát hiện được lỗi» có thể báo đỏ vì lý do khác lỗi đã cố ý tiêm, nên màu đỏ đó chưa chắc chứng minh đúng điều nó khẳng định.
+  - Ngoài-16: Bài kiểm xác nhận thân trang Theo đơn vị không còn nút tạo, nhưng không chắc trang đã dựng xong, nên một lần dựng hỏng cũng vẫn báo xanh.
