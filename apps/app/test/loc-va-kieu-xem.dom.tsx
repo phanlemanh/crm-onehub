@@ -8,8 +8,8 @@ import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import {
 	act,
 	createElement as h,
-	type MouseEvent as ReactMouseEvent,
 	type ReactElement,
+	type MouseEvent as ReactMouseEvent,
 	type ReactNode,
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
