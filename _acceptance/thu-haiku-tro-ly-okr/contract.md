@@ -5,7 +5,7 @@ slug: thu-haiku-tro-ly-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, docs]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-14-thu-haiku-tro-ly-okr-design.md
@@ -64,3 +64,15 @@ trên kho dev → Out of scope. Thước của Coverage là chính danh sách ô
 ## Notes
 
 - AC-7 chạy ở S4 sau khi việc (a) gộp; trước đó kho `crm_tdx_e22_do` còn dùng chung giữa các cây.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Model, cửa sổ ngữ cảnh và trần đầu ra của Trợ lý OKR khai ở hai chỗ; bản ở đầu cấu hình không còn tới lúc chạy.
+  - Ngoài-2: Kho đo chép mã model và cửa sổ ngữ cảnh của Trợ lý OKR thành chữ cố định, không gì giữ nó khớp cấu hình tác nhân.
+  - Ngoài-3: Bộ đọc số E24 bỏ sót lượt hỏng có dấu «)» trong lý do, nên có thể đếm thiếu lượt hỏng.
+  - Ngoài-4: E6 lấy bảng ký hiệu kết quả eve từ chính mô-đun đang bị đo.
+  - Ngoài-5: Mã model mong đợi của E1–E4 đọc từ cấu hình, không viết trước.
+  - Ngoài-6: E2 đọc tên model của lớp bọc, không đọc mã model thật gửi tới Gateway.
+  - Ngoài-7: E1 và E2 đọc tuỳ chọn và mã model đã khai, không bắt ở lời gọi thật.
+  - Ngoài-8: E1 chỉ đo nguồn biến môi trường rỗng, thiếu ca chọn Gemini tường minh.
+  - Ngoài-10: E5 chỉ kiểm model kho đo khác GLM, không ghim đúng Gemini.
+  - Ngoài-11: E5 chứng việc ghi ô model bằng cách tìm chữ trong mã nguồn.
+  - Ngoài-12: Nhánh Tác nhân của E7 kiểm model bằng cách đọc lại ô vừa tự ghi, không đọc model eve thật sự chạy.
