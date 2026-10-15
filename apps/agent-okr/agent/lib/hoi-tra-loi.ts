@@ -1,6 +1,8 @@
 import {
 	type CauTraLoiDung,
 	type GiaTriTrich,
+	giaTriTrichKr,
+	giaTriTrichMucTieu,
 	type KetQuaNopTraLoi,
 	ketQuaNopTraLoi,
 	kiemSoCau,
@@ -20,19 +22,11 @@ type TrichDoc = { gia: GiaTriTrich; ten: string };
 
 function giaTriCua(t: TrichOkr, mt: MucTieuDay): TrichDoc | null {
 	if (t.loai === "objective") {
-		const truong = [mt.tienDo, ...(mt.kyVong === null ? [] : [mt.kyVong])];
-		return { gia: { loai: "objective", id: mt.id, truong }, ten: mt.ten };
+		return { gia: giaTriTrichMucTieu(mt.id, mt), ten: mt.ten };
 	}
 	const k = mt.kr.find((x) => x.id === t.id);
 	if (!k) return null;
-	return {
-		gia: {
-			loai: "kr",
-			id: k.id,
-			truong: [k.tienDo, k.khoiDiem, k.hienTai, k.dich],
-		},
-		ten: k.ten,
-	};
+	return { gia: giaTriTrichKr(k.id, k), ten: k.ten };
 }
 
 export async function nopTraLoi(

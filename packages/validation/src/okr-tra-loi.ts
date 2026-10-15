@@ -64,6 +64,29 @@ export type GiaTriTrich = {
 	truong: number[];
 };
 
+export type GiaTriKrDoc = {
+	tienDo: number;
+	khoiDiem: number;
+	hienTai: number;
+	dich: number;
+};
+export type GiaTriMucTieuDoc = { tienDo: number; kyVong: number | null };
+
+export function giaTriTrichKr(id: string, k: GiaTriKrDoc): GiaTriTrich {
+	return { loai: "kr", id, truong: [k.tienDo, k.khoiDiem, k.hienTai, k.dich] };
+}
+
+export function giaTriTrichMucTieu(
+	id: string,
+	m: GiaTriMucTieuDoc,
+): GiaTriTrich {
+	return {
+		loai: "objective",
+		id,
+		truong: [m.tienDo, ...(m.kyVong === null ? [] : [m.kyVong])],
+	};
+}
+
 export type KetQuaKiemSo =
 	| { ok: true }
 	| { ok: false; so: string; lop: "truong" | "dem" | "la" };

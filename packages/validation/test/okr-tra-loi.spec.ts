@@ -1,124 +1,186 @@
 import { describe, expect, test } from "bun:test";
-import { docSo, type GiaTriTrich, kiemSoCau } from "../src/okr-tra-loi";
+import {
+	docSo,
+	type GiaTriTrich,
+	giaTriTrichKr,
+	giaTriTrichMucTieu,
+	kiemSoCau,
+} from "../src/okr-tra-loi";
 
-const kr = (id: string, truong: number[]): GiaTriTrich => ({
-	loai: "kr",
-	id,
-	truong,
-});
-const mt = (id: string, truong: number[]): GiaTriTrich => ({
-	loai: "objective",
-	id,
-	truong,
-});
+const KR = { tienDo: 37.4, khoiDiem: 12, hienTai: 25.5, dich: 60 };
+const MT = { tienDo: 48, kyVong: 55 };
+const LECH = 91;
+const kr1 = giaTriTrichKr("k1", KR);
+const kr2 = giaTriTrichKr("k2", KR);
+const mt1 = giaTriTrichMucTieu("o1", MT);
+const mt2 = giaTriTrichMucTieu("o2", MT);
+const chuSo = (n: number) => String(Math.round(n * 10) / 10).replace(".", ",");
 
-const CA: Array<{
+const MA_TRAN = [
+	"kr.tienDo:khop",
+	"kr.tienDo:lech",
+	"kr.khoiDiem:khop",
+	"kr.khoiDiem:lech",
+	"kr.hienTai:khop",
+	"kr.hienTai:lech",
+	"kr.dich:khop",
+	"kr.dich:lech",
+	"kr.tuTin:lech",
+	"mt.tienDo:khop",
+	"mt.tienDo:lech",
+	"mt.kyVong:khop",
+	"mt.kyVong:lech",
+	"dem.kr:khop",
+	"dem.kr:lech",
+	"dem.mt:khop",
+	"dem.mt:lech",
+	"mien.nam:khop",
+	"mien.quy:khop",
+	"mien.quyGachNam:khop",
+	"mien.qGachNam:khop",
+] as const;
+
+type Ca = {
+	o: (typeof MA_TRAN)[number] | null;
 	ten: string;
 	chu: string;
 	trich: GiaTriTrich[];
 	ok: boolean;
 	so?: string;
-}> = [
+};
+
+const caTruong = (
+	loai: "kr" | "mt",
+	ten: string,
+	gia: number,
+	trich: GiaTriTrich,
+): Ca[] => [
 	{
-		ten: "truong-tien-do-khop",
-		chu: "KR này đạt 42%.",
-		trich: [kr("k1", [42.49, 10, 20])],
+		o: `${loai}.${ten}:khop` as Ca["o"],
+		ten: `${loai}-${ten}-khop`,
+		chu: `Giá trị ${ten} là ${chuSo(gia)}.`,
+		trich: [trich],
 		ok: true,
 	},
 	{
-		ten: "truong-tien-do-lech",
-		chu: "KR này đạt 55%.",
-		trich: [kr("k1", [42.49, 10, 20])],
+		o: `${loai}.${ten}:lech` as Ca["o"],
+		ten: `${loai}-${ten}-lech`,
+		chu: `Giá trị ${ten} là ${LECH}.`,
+		trich: [trich],
 		ok: false,
-		so: "55",
+		so: String(LECH),
 	},
+];
+
+const CA: Ca[] = [
+	...(["tienDo", "khoiDiem", "hienTai", "dich"] as const).flatMap((t) =>
+		caTruong("kr", t, KR[t], kr1),
+	),
+	...(["tienDo", "kyVong"] as const).flatMap((t) =>
+		caTruong("mt", t, MT[t], mt1),
+	),
 	{
-		ten: "truong-hien-tai-phay",
-		chu: "Hiện là 42,5 hợp đồng.",
-		trich: [kr("k1", [10, 42.5, 60])],
-		ok: true,
-	},
-	{
-		ten: "truong-hien-tai-cham",
-		chu: "Hiện là 42.5 hợp đồng.",
-		trich: [kr("k1", [10, 42.5, 60])],
-		ok: true,
-	},
-	{
-		ten: "truong-dich-lech",
-		chu: "Đích là 70.",
-		trich: [kr("k1", [10, 42.5, 60])],
-		ok: false,
-		so: "70",
-	},
-	{
-		ten: "truong-tu-tin-khop",
+		o: "kr.tuTin:lech",
+		ten: "kr-tu-tin-la-chu-khong-co-so",
 		chu: "Mức tự tin 3.",
-		trich: [kr("k1", [10, 3])],
-		ok: true,
-	},
-	{
-		ten: "nghin",
-		chu: "Đã chốt 14.000.000 đồng.",
-		trich: [kr("k1", [14000000])],
-		ok: true,
-	},
-	{
-		ten: "dem-kr-khop",
-		chu: "Có 2 KR đang chậm.",
-		trich: [kr("k1", [1]), kr("k2", [1])],
-		ok: true,
-	},
-	{
-		ten: "dem-kr-lech",
-		chu: "Có 3 KR đang chậm.",
-		trich: [kr("k1", [1]), kr("k2", [1])],
+		trich: [kr1],
 		ok: false,
 		so: "3",
 	},
 	{
-		ten: "dem-muc-tieu-khop",
-		chu: "Phòng có 1 Mục tiêu.",
-		trich: [mt("o1", [50])],
+		o: "dem.kr:khop",
+		ten: "dem-kr-khop",
+		chu: "Có 2 KR đang chậm.",
+		trich: [kr1, kr2],
 		ok: true,
 	},
 	{
-		ten: "mien-nam-quy",
-		chu: "Trong quý 4 năm 2026 chưa có Mục tiêu nào trượt.",
+		o: "dem.kr:lech",
+		ten: "dem-kr-lech",
+		chu: "Có 3 KR đang chậm.",
+		trich: [kr1, kr2],
+		ok: false,
+		so: "3",
+	},
+	{
+		o: "dem.mt:khop",
+		ten: "dem-muc-tieu-khop",
+		chu: "Phòng có 2 Mục tiêu.",
+		trich: [mt1, mt2],
+		ok: true,
+	},
+	{
+		o: "dem.mt:lech",
+		ten: "dem-muc-tieu-lech",
+		chu: "Phòng có 1 Mục tiêu.",
+		trich: [mt1, mt2],
+		ok: false,
+		so: "1",
+	},
+	{
+		o: "mien.nam:khop",
+		ten: "mien-nam",
+		chu: "Năm 2026 chưa có Mục tiêu nào trượt.",
 		trich: [],
 		ok: true,
 	},
 	{
-		ten: "so-la",
+		o: "mien.quy:khop",
+		ten: "mien-quy",
+		chu: "Trong quý 4 chưa có Mục tiêu nào trượt.",
+		trich: [],
+		ok: true,
+	},
+	{
+		o: "mien.quyGachNam:khop",
+		ten: "quy-gach-nam",
+		chu: "Trong quý 4/2026, KR này đạt 37%.",
+		trich: [kr1],
+		ok: true,
+	},
+	{
+		o: "mien.qGachNam:khop",
+		ten: "q-gach-nam",
+		chu: "Ở Q4/2026, KR này đạt 37%.",
+		trich: [kr1],
+		ok: true,
+	},
+	{
+		o: null,
+		ten: "hien-tai-dau-cham",
+		chu: `Hiện là ${String(KR.hienTai)} hợp đồng.`,
+		trich: [kr1],
+		ok: true,
+	},
+	{
+		o: null,
+		ten: "nghin",
+		chu: "Đã chốt 14.000.000 đồng.",
+		trich: [giaTriTrichKr("k3", { ...KR, hienTai: 14000000 })],
+		ok: true,
+	},
+	{
+		o: null,
+		ten: "so-la-khong-trich",
 		chu: "Đạt 80% kế hoạch.",
-		trich: [kr("k1", [42, 10, 20])],
+		trich: [],
 		ok: false,
 		so: "80",
 	},
 	{
+		o: null,
 		ten: "khong-so",
 		chu: "KR này đang đúng nhịp.",
-		trich: [kr("k1", [42])],
+		trich: [kr1],
 		ok: true,
 	},
 	{
+		o: null,
 		ten: "so-trong-ten-van-ngoai-lop",
-		chu: "Mục tiêu «Doanh thu hợp đồng mới đạt 48 tỷ đồng» đang ở 35%.",
-		trich: [mt("m1", [35])],
+		chu: "Mục tiêu «Doanh thu hợp đồng mới đạt 48 tỷ đồng» đang ở 55%.",
+		trich: [giaTriTrichMucTieu("o3", { tienDo: 20, kyVong: 55 })],
 		ok: false,
 		so: "48",
-	},
-	{
-		ten: "quy-gach-nam",
-		chu: "Trong quý 4/2026, KR này đạt 42%.",
-		trich: [kr("k1", [42])],
-		ok: true,
-	},
-	{
-		ten: "q-gach-nam",
-		chu: "Ở Q4/2026, KR này đạt 42%.",
-		trich: [kr("k1", [42])],
-		ok: true,
 	},
 ];
 
@@ -131,8 +193,9 @@ describe("okr-tra-loi kiem so", () => {
 		});
 	}
 
-	test("so-ca-bang-so-hang", () => {
-		expect(CA.length).toBe(16);
+	test("ma-tran-du-o: moi o da khai co dung mot ca", () => {
+		const o = CA.flatMap((c) => (c.o ? [c.o] : []));
+		expect([...o].sort()).toEqual([...MA_TRAN].sort());
 	});
 
 	test("doc-so", () => {
