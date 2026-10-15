@@ -1,7 +1,18 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { tinhTrang } from "@crm/validation/okr-muc-tieu";
-import { skipToken } from "@tanstack/react-query";
-import { type ComponentProps, createElement as h, type ReactNode } from "react";
+import {
+	QueryClient,
+	QueryClientProvider,
+	skipToken,
+} from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
+import {
+	act,
+	type ComponentProps,
+	createElement as h,
+	type ReactNode,
+} from "react";
+import { createRoot, type Root } from "react-dom/client";
 import type { DonChonOkr } from "@/app/(app)/[slug]/okr/okr-search-params";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import type {
@@ -321,6 +332,144 @@ const {
 	tinhTrangMucTieu,
 } = await import("@/app/(app)/[slug]/okr/theo-don-vi/bang-don-vi");
 const { khoaDon } = await import("@/app/(app)/[slug]/okr/okr-search-params");
+const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
+const { TooltipProvider } = await import("@crm/ui/components/tooltip");
+const { DataTable } = await import("@crm/ui/components/data-table");
+const { okrMessages } = await import("@/lib/messages/okr");
+const { ChonDonVi } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/chon-don-vi"
+);
+const { HangCongCuDonVi, KhungHangCongCu, LOP_HANG_CONG_CU } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu"
+);
+
+const m = okrMessages("vi");
+const b = m.donViBang;
+
+type San = { o: HTMLElement; root: Root; url: () => URLSearchParams };
+let dangMo: San[] = [];
+
+afterEach(async () => {
+	for (const san of dangMo) {
+		await act(async () => san.root.unmount());
+		san.o.remove();
+	}
+	dangMo = [];
+	document.body.innerHTML = "";
+});
+
+async function ve(
+	cay: ReactNode,
+	thamSo = new URLSearchParams(),
+	locale: "vi" | "en" = "vi",
+): Promise<San> {
+	const o = document.createElement("div");
+	document.body.appendChild(o);
+	const root = createRoot(o);
+	let cuoi = new URLSearchParams(thamSo);
+	const client = new QueryClient({
+		defaultOptions: {
+			queries: { retry: false, staleTime: Number.POSITIVE_INFINITY },
+		},
+	});
+	await act(async () => {
+		root.render(
+			<NuqsTestingAdapter
+				hasMemory
+				onUrlUpdate={(e) => {
+					cuoi = new URLSearchParams(e.searchParams);
+				}}
+				searchParams={`?${thamSo}`}
+			>
+				<QueryClientProvider client={client}>
+					<LocaleProvider locale={locale}>
+						<TooltipProvider>{cay}</TooltipProvider>
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
+		);
+	});
+	const san = { o, root, url: () => cuoi };
+	dangMo.push(san);
+	return san;
+}
+
+async function cho(xong: () => boolean, moTa: string): Promise<void> {
+	for (let vong = 0; vong < 80; vong += 1) {
+		if (xong()) return;
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 0));
+		});
+	}
+	throw new Error(
+		`khong toi: ${moTa} — ${document.body.textContent?.slice(0, 400)}`,
+	);
+}
+
+async function bamCon(el: Element) {
+	await act(async () => {
+		for (const loai of ["pointerdown", "mousedown", "pointerup", "click"]) {
+			el.dispatchEvent(
+				new window.PointerEvent(loai, {
+					bubbles: true,
+					cancelable: true,
+					button: 0,
+					pointerType: "mouse",
+				}),
+			);
+		}
+	});
+}
+
+async function moOChon(o: ParentNode) {
+	const nut = o.querySelector("[data-chon-don-vi]");
+	if (!nut) throw new Error("dvb-chon-don-vi: khong co [data-chon-don-vi]");
+	await bamCon(nut);
+	await cho(
+		() => document.querySelector("[cmdk-input]") !== null,
+		"o chon don vi mo",
+	);
+}
+
+async function goTim(chuoi: string) {
+	const o = document.querySelector<HTMLInputElement>("[cmdk-input]");
+	if (!o) throw new Error("dvb-chon-don-vi: o chon chua mo");
+	await act(async () => {
+		const dat = Object.getOwnPropertyDescriptor(
+			window.HTMLInputElement.prototype,
+			"value",
+		)?.set;
+		dat?.call(o, chuoi);
+		o.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+}
+
+type LuaChonHien = { ten: string; goiY: string };
+
+function luaChonDangHien(): LuaChonHien[] {
+	return [...document.querySelectorAll('[role="option"]')].map((x) => {
+		const [ten, goiY] = [...x.querySelectorAll("span")];
+		return { ten: ten?.textContent ?? "", goiY: goiY?.textContent ?? "" };
+	});
+}
+
+/** Khoá mọi đơn vị của cây fixture, theo thứ tự ô chọn. */
+function khoaCuaCay(cay: TreeOutput): string[] {
+	return [
+		"goc",
+		...cay.divisions.flatMap((bp) => [
+			`bp:${bp.id}`,
+			...bp.departments.map((pb) => `pb:${pb.id}`),
+		]),
+		...cay.chuaXep.map((pb) => `pb:${pb.id}`),
+	];
+}
+
+/** countByUnit giả lập sinh từ cây (0, 1, 2 lần lượt) — không viết tay số. */
+function demGiaLap(cay: TreeOutput): Record<string, number> {
+	return Object.fromEntries(khoaCuaCay(cay).map((k, i) => [k, i % 3]));
+}
+
 beforeEach(() => {
 	cycles = { cycles: [QUY], currentId: QUY.id };
 	quanTri = false;
@@ -519,6 +668,124 @@ describe("dvb-chon-don-vi", () => {
 		}
 		expect(tim("").length).toBe(8);
 	});
+
+	test("o chon: ma tran 8 lua chon — nhan, goi y Thuộc, so muc tieu tu countByUnit", async () => {
+		const cay = cayMau();
+		const so = demGiaLap(cay);
+		const s = await ve(
+			<ChonDonVi
+				cay={cay}
+				chonDon={() => {}}
+				dem={so}
+				don={{ loai: "goc" }}
+				tenGoc="OneHub"
+			/>,
+		);
+		await moOChon(s.o);
+		const bpCua = new Map(
+			cay.divisions.flatMap((bp) => bp.departments.map((pb) => [pb.id, bp])),
+		);
+		const tenCua = new Map([
+			["goc", "OneHub"],
+			...cay.divisions.map((x) => [`bp:${x.id}`, x.name] as const),
+			...[...cay.divisions.flatMap((x) => x.departments), ...cay.chuaXep].map(
+				(x) => [`pb:${x.id}`, x.name] as const,
+			),
+		]);
+		const thuocCua = (k: string) => {
+			if (k === "goc") return b.caCongTy;
+			const bp = bpCua.get(k.split(":")[1] ?? "");
+			return b.thuoc(k.startsWith("pb:") && bp ? bp.name : "OneHub");
+		};
+		const mong = khoaCuaCay(cay).map((k) => ({
+			ten: tenCua.get(k) ?? "?",
+			goiY: `${thuocCua(k)} · ${m.demMucTieu(so[k] ?? 0)}`,
+		}));
+		const nhan = luaChonDangHien();
+		phai(nhan.length === 8, `dvb-chon-don-vi: ${nhan.length} lua chon, mong 8`);
+		for (const [i, x] of mong.entries()) {
+			phai(
+				nhan[i]?.ten === x.ten && nhan[i]?.goiY === x.goiY,
+				`dvb-chon-don-vi: lua chon ${i} «${nhan[i]?.ten} / ${nhan[i]?.goiY}», mong «${x.ten} / ${x.goiY}»`,
+			);
+		}
+	});
+
+	test("o chon: ma tran 6 chuoi tim tren ten co dau", async () => {
+		const cay = cayMau();
+		const s = await ve(
+			<ChonDonVi
+				cay={cay}
+				chonDon={() => {}}
+				dem={demGiaLap(cay)}
+				don={{ loai: "goc" }}
+				tenGoc="OneHub"
+			/>,
+		);
+		await moOChon(s.o);
+		const MA_TRAN = [
+			["phong ke toan", [CAY.P1.name]],
+			["dich", [CAY.P2.name]],
+			["KINH", [CAY.P3.name]],
+			[gapDau(CAY.B1.name), [CAY.B1.name, CAY.P1.name, CAY.P2.name]],
+			["zzz", []],
+		] as const;
+		for (const [q, mong] of MA_TRAN) {
+			await goTim(q);
+			const nhan = luaChonDangHien().map((x) => x.ten);
+			phai(
+				nhan.join("|") === mong.join("|"),
+				`dvb-chon-don-vi: "${q}" ra ${nhan.length === 0 ? "rong" : `{${nhan.join(", ")}}`}, mong {${mong.join(", ")}}`,
+			);
+			if (mong.length === 0)
+				phai(
+					document.body.textContent?.includes(b.khongKhopDonVi) === true,
+					`dvb-chon-don-vi: "${q}" khong hien «${b.khongKhopDonVi}»`,
+				);
+		}
+		await goTim("");
+		expect(luaChonDangHien().length).toBe(8);
+	});
+
+	test("o chon: chon P2 goi chonDon {pb, P2}; don nguoi:U1 hien ten U1", async () => {
+		const cay = cayMau();
+		const chon: string[] = [];
+		const s = await ve(
+			<ChonDonVi
+				cay={cay}
+				chonDon={(d) => chon.push(khoaDon(d))}
+				dem={undefined}
+				don={{ loai: "goc" }}
+				tenGoc="OneHub"
+			/>,
+		);
+		await moOChon(s.o);
+		const p2 = [...document.querySelectorAll('[role="option"]')].find((x) =>
+			x.textContent?.startsWith(CAY.P2.name),
+		);
+		if (!p2) throw new Error("dvb-chon-don-vi: khong thay lua chon P2");
+		await act(async () => {
+			(p2 as HTMLElement).click();
+		});
+		phai(
+			chon.join(",") === "pb:P2",
+			`dvb-chon-don-vi: chon P2 goi ${chon.join(",") || "khong gi"}, mong pb:P2`,
+		);
+		const s2 = await ve(
+			<ChonDonVi
+				cay={cay}
+				chonDon={() => {}}
+				dem={undefined}
+				don={{ loai: "nguoi", id: LAN.id }}
+				tenGoc="OneHub"
+			/>,
+		);
+		const nut = s2.o.querySelector("[data-chon-don-vi]");
+		phai(
+			nut?.textContent?.includes(LAN.name) === true,
+			`dvb-chon-don-vi: don nguoi:U1 hien «${nut?.textContent}», mong ${LAN.name}`,
+		);
+	});
 });
 
 const MO_TA_CON = new Map([
@@ -556,3 +823,95 @@ function donVaoChon(k: string): DonChonOkr {
 	if (loai === "bp" || loai === "pb" || loai === "nguoi") return { loai, id };
 	return { loai: "goc" };
 }
+
+describe("dvb-hang-cong-cu", () => {
+	const TRUY_VAN = {
+		sort: "",
+		dir: "asc" as const,
+		page: 1,
+		pageSize: 50,
+		tab: "all",
+		filters: {},
+		toggleSort: () => {},
+		setSort: () => {},
+		setDir: () => {},
+		setPage: async () => {},
+		setTab: () => {},
+		setFilter: () => {},
+	};
+	const hang = (xem: "danh-sach" | "hop-tuan", coCham: boolean) => (
+		<HangCongCuDonVi
+			chon={
+				<ChonDonVi
+					cay={cayMau()}
+					chonDon={() => {}}
+					dem={undefined}
+					don={{ loai: "goc" }}
+					tenGoc="OneHub"
+				/>
+			}
+			coCham={coCham}
+			doiXem={() => {}}
+			xem={xem}
+		/>
+	);
+
+	test("khung cua cach xem khac cung lop voi hang cong cu cua DataTable; o chon dung truoc cach xem", async () => {
+		const bang = await ve(
+			<DataTable
+				columns={[{ id: "ten", header: "Tên", cell: () => null }]}
+				getRowId={() => "x"}
+				layout="content"
+				query={TRUY_VAN}
+				rows={[]}
+				search={hang("danh-sach", false)}
+				total={0}
+			/>,
+		);
+		const khac = await ve(
+			<KhungHangCongCu>{hang("hop-tuan", true)}</KhungHangCongCu>,
+		);
+		for (const [xem, san] of [
+			["danh-sach", bang],
+			["hop-tuan", khac],
+		] as const) {
+			const khoi = san.o.querySelectorAll("[data-hang-cong-cu-don-vi]");
+			phai(
+				khoi.length === 1,
+				`dvb-hang-cong-cu: ${xem}: ${khoi.length} hang cong cu, mong 1`,
+			);
+			const chon = khoi[0]?.querySelector("[data-chon-don-vi]");
+			const cachXem = khoi[0]?.querySelector("[data-view-switch]");
+			phai(
+				cachXem !== null && cachXem !== undefined,
+				`dvb-hang-cong-cu: ${xem}: [data-view-switch] khong nam trong [data-hang-cong-cu-don-vi]`,
+			);
+			phai(
+				chon !== null &&
+					chon !== undefined &&
+					cachXem !== null &&
+					cachXem !== undefined &&
+					(chon.compareDocumentPosition(cachXem) &
+						Node.DOCUMENT_POSITION_FOLLOWING) !==
+						0,
+				`dvb-hang-cong-cu: ${xem}: o chon khong dung truoc cach xem`,
+			);
+		}
+		const lopBang =
+			bang.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement
+				?.className ?? "";
+		const lopKhac =
+			khac.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement
+				?.className ?? "";
+		phai(
+			lopKhac === lopBang && lopBang === LOP_HANG_CONG_CU,
+			`dvb-hang-cong-cu: khung «${lopKhac}» khac hang cong cu DataTable «${lopBang}»`,
+		);
+		expect(
+			khac.o.querySelectorAll('[data-view-switch="nut"] button').length,
+		).toBe(4);
+		expect(
+			bang.o.querySelectorAll('[data-view-switch="nut"] button').length,
+		).toBe(3);
+	});
+});
