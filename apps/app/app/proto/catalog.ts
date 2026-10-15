@@ -1167,6 +1167,60 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "moi-tin-hieu-cho-quan-tri",
+		ten: "Mọi tín hiệu cho quản trị — thẻ Tất cả, ba ô số, lọc, câu báo trước trong hộp gửi",
+		states: [
+			{ id: "ST-tat-ca-co", nhan: "Tất cả — ba ô số và bảng đủ cột" },
+			{
+				id: "ST-tat-ca-thieu",
+				nhan: "Tất cả — người gửi đã xoá, chưa có phòng ban",
+			},
+			{
+				id: "ST-tat-ca-khong-ban-ve",
+				nhan: "Tất cả — chưa đọc được trạng thái sau gom",
+			},
+			{ id: "ST-tat-ca-rong", nhan: "Tất cả — chưa ai gửi tín hiệu" },
+			{ id: "ST-tat-ca-dang-tai", nhan: "Tất cả — đang tải" },
+			{ id: "ST-tat-ca-loi", nhan: "Tất cả — tải lỗi, có Thử lại" },
+			{
+				id: "ST-tat-ca-khong-quyen",
+				nhan: "Tất cả — thành viên mở thẳng đường dẫn",
+			},
+			{ id: "ST-cua-toi-quan-tri", nhan: "Của tôi — quản trị thấy thanh thẻ" },
+			{
+				id: "ST-hop-bao-truoc",
+				nhan: "Hộp gửi — câu báo trước quản trị thấy tên",
+			},
+		],
+	},
+	{
+		slug: "tin-hieu-tu-ve-kho",
+		ten: "Khoá chỉ kéo tín hiệu — tờ tạo khoá, hộp khoá vừa tạo, nhãn trên danh sách",
+		states: [
+			{
+				id: "ST-tao-khoa-quan-tri",
+				nhan: "Tờ tạo khoá — quản trị, mặc định toàn quyền",
+			},
+			{
+				id: "ST-tao-khoa-chon-keo",
+				nhan: "Tờ tạo khoá — đã chọn «Chỉ kéo tín hiệu»",
+			},
+			{
+				id: "ST-tao-khoa-thanh-vien",
+				nhan: "Tờ tạo khoá — thành viên, không có mục loại",
+			},
+			{ id: "ST-tao-khoa-dang-tao", nhan: "Tờ tạo khoá — đang tạo" },
+			{
+				id: "ST-khoa-moi-keo-tin-hieu",
+				nhan: "Hộp khoá vừa tạo — khoá chỉ kéo",
+			},
+			{
+				id: "ST-danh-sach-co-khoa-keo",
+				nhan: "Danh sách — có nhãn «Chỉ kéo tín hiệu»",
+			},
+		],
+	},
+	{
 		slug: "viec-chung",
 		ten: "Việc chung — Việc của tôi, khung việc, khối Việc trên thẻ Hoạt động",
 		states: [
@@ -1199,6 +1253,33 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-khoi-viec-phuong-an-tron",
 				nhan: "Thẻ Hoạt động — lối khác: trộn việc vào dòng sự kiện",
 			},
+		],
+	},
+	{
+		slug: "hop-thong-bao-tren-web",
+		ten: "Hộp thông báo — chuông trên đầu trang và trang Thông báo",
+		states: [
+			{
+				id: "ST-ngu-canh",
+				nhan: "Đầu trang — chuông có số cạnh nút «Gửi tín hiệu»",
+			},
+			{
+				id: "ST-chuong-co-chua-doc",
+				nhan: "Chuông mở — Hôm nay / Trước đó, có chưa đọc",
+			},
+			{ id: "ST-chuong-99", nhan: "Chuông — hơn 99 chưa đọc" },
+			{ id: "ST-chuong-het-chua-doc", nhan: "Chuông mở — đã đọc hết" },
+			{ id: "ST-chuong-rong", nhan: "Chuông mở — chưa có thông báo" },
+			{ id: "ST-chuong-cho-tai", nhan: "Chuông mở — đang tải" },
+			{ id: "ST-chuong-loi", nhan: "Chuông mở — tải hỏng" },
+			{ id: "ST-trang-co", nhan: "Trang Thông báo — nhóm theo ngày" },
+			{
+				id: "ST-trang-loc-chua-doc-rong",
+				nhan: "Trang — lọc Chưa đọc, đã đọc hết",
+			},
+			{ id: "ST-trang-rong", nhan: "Trang — chưa có thông báo" },
+			{ id: "ST-trang-cho-tai", nhan: "Trang — đang tải" },
+			{ id: "ST-trang-loi", nhan: "Trang — tải hỏng" },
 		],
 	},
 	{

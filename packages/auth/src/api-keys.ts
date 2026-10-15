@@ -13,3 +13,18 @@ const MINUTE_MS = 60 * 1000;
 export const API_KEY_USAGE = {
 	lastRequestIntervalMs: MINUTE_MS,
 } as const;
+
+export const KHOA_KEO_TIN_HIEU = {
+	configId: "keo-tin-hieu",
+	quyen: { tinHieu: ["keoVe"] },
+} as const;
+
+export const LOAI_KHOA_API = ["toan-quyen", "keo-tin-hieu"] as const;
+
+export type LoaiKhoaApi = (typeof LOAI_KHOA_API)[number];
+
+export function loaiKhoaTuConfig(configId: string | null): LoaiKhoaApi {
+	return configId === KHOA_KEO_TIN_HIEU.configId
+		? "keo-tin-hieu"
+		: "toan-quyen";
+}

@@ -53,9 +53,6 @@ evals:
     cmd: config:executors.test.kcs_lich
     status: not-run
     superseded_by: chuyen-goi-dieu-phoi#AC-5
-    paths:
-      - "scripts/dieu-phoi/lich.mjs"
-      - "scripts/dieu-phoi/test/lich.test.mjs"
     expected: |
       node --test scripts/dieu-phoi/test/lich.test.mjs thoat 0, gom ca moi: hai don s4 cung luc — don kiem-cheo co
       moc 2026-10-07 (slug khong co trong hang-viec) va don cua hang chua co moc, don kiem-cheo luc muon hon ->

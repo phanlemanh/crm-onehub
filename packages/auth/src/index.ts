@@ -13,8 +13,13 @@ export {
 	API_KEY_PREFIX,
 	API_KEY_USAGE,
 	DAY_SECONDS,
+	KHOA_KEO_TIN_HIEU,
+	LOAI_KHOA_API,
+	type LoaiKhoaApi,
+	loaiKhoaTuConfig,
 } from "./api-keys";
 export {
+	API_KEY_KEO_TIN_HIEU_OPTIONS,
 	API_KEY_PLUGIN_OPTIONS,
 	type Auth,
 	auth,
@@ -41,6 +46,10 @@ export {
 	type TrangThaiDaDoc,
 	type TrangThaiLoiMoi,
 } from "./invitation-status";
+export {
+	taoKhoaKeoTinHieu,
+	xacMinhKhoaKeoTinHieu,
+} from "./khoa-keo-tin-hieu";
 export {
 	canChangeRole,
 	canIssuePasswordLink,
