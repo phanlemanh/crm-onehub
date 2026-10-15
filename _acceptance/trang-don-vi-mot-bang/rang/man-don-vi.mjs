@@ -18,7 +18,16 @@ import { fileURLToPath } from "node:url";
 const TEP_NAY = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP_NAY), "..", "..", "..");
 const HO_SO = "trang-don-vi-mot-bang";
-process.env.BANG_CHUNG ??= join(GOC, "_acceptance", HO_SO, "evidence");
+// Hồ sơ đã thông cổng thì ảnh ra .acceptance-runs/: làn ghim lại dừng khi lệnh đo chạm cây hồ sơ đã ký
+// (bài học DH1 9b770cdfd).
+const daThongCong = ["signed-off", "machine-cleared"].includes(
+	/^status:\s*(\S+)/m.exec(
+		readFileSync(join(GOC, "_acceptance", HO_SO, "contract.md"), "utf8"),
+	)?.[1] ?? "",
+);
+process.env.BANG_CHUNG ??= daThongCong
+	? join(GOC, ".acceptance-runs", HO_SO, "evidence")
+	: join(GOC, "_acceptance", HO_SO, "evidence");
 const BANG_CHUNG = process.env.BANG_CHUNG;
 
 if (!process.env.PHIEN_DO || !process.env.API_URL) {
