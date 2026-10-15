@@ -40,7 +40,7 @@ import { toast } from "sonner";
 import { CELL, type ChuKy } from "@/app/(app)/[slug]/okr/kieu";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
-import { type GoiYChuKy, homNayVn } from "@/lib/okr-chu-ky-nhan";
+import { type GoiYChuKy, ngayVnTuIso } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { HoiGoChuKy, HoiHienLaiChuKy } from "./hoi-chu-ky";
@@ -157,7 +157,7 @@ export function BangChuKy({
 											data-dong-an={ky.id}
 										>
 											{c.chuKy.dongAn(
-												formatDay(homNayVn(new Date(ky.anLuc)), locale),
+												formatDay(ngayVnTuIso(ky.anLuc), locale),
 												c.pha[ky.phase],
 											)}
 											{ky.anLyDo ? (
