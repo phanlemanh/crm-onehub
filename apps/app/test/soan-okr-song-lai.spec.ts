@@ -22,8 +22,6 @@ function clientNhapCauNoi(nguon: string): boolean {
 
 describe("cau-noi-server", () => {
 	test("trang server tinh co va truyen xuong NutSoan, TrangSoan", () => {
-		// Từ DH1 (dieu-huong-khu-muc-tieu) nút soạn ở đầu trang khu: cờ đi
-		// dau-trang-okr (server) → DauTrangOkrHoiY → DauTrangOkr → HanhDongKhu → NutSoan.
 		const dau = doc("app/(app)/[slug]/okr/dau-trang-okr.tsx");
 		expect(dau, "trang khong tinh co cau noi").toMatch(
 			/import \{[^}]*\bokrBridgeConfigured\b[^}]*\} from "@\/lib\/agent-bridge"/,

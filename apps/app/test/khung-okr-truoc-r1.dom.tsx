@@ -416,7 +416,6 @@ async function moDonVi({
 		if (loi) throw new Error("mang loi");
 		return sanSang ?? SS(BAT);
 	});
-	// DH1 (dieu-huong-khu-muc-tieu): nhóm soạn ở hàng hành động đầu trang khu.
 	const san = await dung(
 		<>
 			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />

@@ -1,6 +1,3 @@
-// Đầu trang khu Mục tiêu (hồ sơ dieu-huong-khu-muc-tieu, DH1). Mỗi nhóm `dhk-*` là
-// một eval; khi lỗi, mỗi nhóm GOM mọi ô sai rồi ném MỘT lỗi liệt kê hết — thông
-// điệp ghim của chiều đỏ (rang/hai-chieu.mjs) tìm trong danh sách đó.
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -80,8 +77,6 @@ const DUONG_SUC_KHOE = "/ws/okr/toan-canh/suc-khoe";
 
 const GOC_KHO = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-// ---------- dữ liệu mẫu: rút qua schema đầu ra THẬT của máy chủ ----------
-
 const nguoi = (id: string, name: string) => ({
 	id,
 	name,
@@ -159,8 +154,6 @@ const kyMau = (id: string, kind: "quy" | "nam", pha: Pha) => ({
 	viec: { suaMoiO: false, suaTen: false, go: false, an: false, hienLai: false },
 });
 
-// Hai chu kỳ: q4 đang chạy (mặc định của Theo đơn vị) và n27 lập kế hoạch
-// (mặc định của Hỏi ý) — bộ hai mặc định khác nhau.
 const haiChuKy = () =>
 	cyclesOutput.parse({
 		cycles: [
@@ -293,8 +286,6 @@ function datNen({
 	dat("okr.hoiYNhan", () => null);
 }
 
-// ---------- dựng ----------
-
 type San = { o: HTMLElement; root: Root; url: () => URLSearchParams };
 let dangMo: San[] = [];
 
@@ -411,11 +402,7 @@ function soSai() {
 const khoaDonChu = (d: { loai: string; id?: string }) =>
 	d.loai === "goc" ? "goc" : `${d.loai}:${d.id}`;
 
-// ---------- dhk-don-dich (E4) ----------
-
 describe("dhk-don-dich", () => {
-	// Ma trận viết trước: 6 nguồn đường dẫn × 5 người xem = 30 ô, kỳ vọng ghi tay
-	// theo thứ tự đã chốt ở Cổng Phạm vi: đơn vị mình dẫn → donOkr → cấp công ty.
 	const NGUON: {
 		ten: string;
 		don: { loai: "bp" | "pb" | "nguoi" | "goc"; id?: string } | null;
@@ -451,7 +438,6 @@ describe("dhk-don-dich", () => {
 				);
 			});
 		}
-		// Ở Theo đơn vị luôn là đơn vị đang chọn, kể cả với người dẫn đơn vị khác.
 		soO += 2;
 		s.kiem(
 			khoaDonChu(
@@ -483,8 +469,6 @@ describe("dhk-don-dich", () => {
 		expect(u.searchParams.get("new")).toBe("true");
 		await don();
 
-		// Hỏi ý mặc định chu kỳ lập kế hoạch, Theo đơn vị mặc định chu kỳ đang chạy:
-		// liên kết phải mang đúng chu kỳ mà quyền vừa được hỏi.
 		for (const [tab, mong] of [
 			["hoi-y", "n27"],
 			["cua-toi", null],
@@ -522,8 +506,6 @@ describe("dhk-don-dich", () => {
 		expect(san.url().get("donOkr")).toBe("pb:P2");
 	});
 });
-
-// ---------- dhk-tieu-de (E1) ----------
 
 describe("dhk-tieu-de", () => {
 	test("dhk-tieu-de: h1 = nhãn thanh bên ở 5 trang × 2 ngôn ngữ × 2 pha; mô tả khác nhau; tiêu đề trình duyệt", async () => {
@@ -587,10 +569,7 @@ describe("dhk-tieu-de", () => {
 	});
 });
 
-// ---------- dhk-hanh-dong (E3) ----------
-
 function coNutHoiKara(): boolean {
-	// Nút «Hỏi Kara» (hàng hoi-dap-okr) có được dựng trong khu Mục tiêu không — rút từ cây, không viết tay.
 	const r = spawnSync(
 		"git",
 		["grep", "-q", "<NutHoiKara", "--", ":(literal)app/(app)/[slug]/okr"],
@@ -662,15 +641,12 @@ describe("dhk-hanh-dong", () => {
 	});
 });
 
-// ---------- dhk-menu-soan (E6) ----------
-
 const ms = okrSoanMessages("vi");
 
 describe("dhk-menu-soan", () => {
 	test("dhk-menu-soan: «…» chỉ có Nhập; mở hộp nhập cho đơn vị đích; nút soạn và đối số truy vấn theo đơn vị đích", async () => {
 		const s = soSai();
 		let soO = 0;
-		// (a) Theo đơn vị: chọn mục → khoá nhapOkr, hộp nhập mở trong thân.
 		const san = await dauTrang(
 			"theo-don-vi",
 			{ xem: TP2 },
@@ -699,7 +675,6 @@ describe("dhk-menu-soan", () => {
 		await cho(() => q("[role=dialog]") !== null, "hop nhap");
 		await don();
 
-		// (a') Của tôi: mục Nhập là liên kết sang Theo đơn vị của đơn vị đích.
 		await dauTrang("cua-toi", { xem: TP2 }, "?kyOkr=q4&donOkr=pb:P9");
 		await cho(
 			() => nutThem() !== null && !nutThem()?.hasAttribute("disabled"),
@@ -723,7 +698,6 @@ describe("dhk-menu-soan", () => {
 				(u.searchParams.get("donOkr") ?? "goc") === mongNhap,
 			`dhk-menu-soan: hop nhap mo cho ${u.searchParams.get("donOkr") ?? "goc"}, mong ${mongNhap}`,
 		);
-		// (d) đối số truy vấn đầu trang = đơn vị đích do donDich tính.
 		const ds = goiCua("okr.danhSach").at(-1)?.dauVao as
 			| { unit?: { loai: string; id?: string } }
 			| undefined;
@@ -734,7 +708,6 @@ describe("dhk-menu-soan", () => {
 		);
 		await don();
 
-		// (b) nút soạn ở đầu trang mở cuộc soạn cho đơn vị đích; soanSanSang hỏi đúng đích.
 		await dauTrang(
 			"cua-toi",
 			{ xem: TP2, pha: "lap-ke-hoach" },
@@ -756,7 +729,6 @@ describe("dhk-menu-soan", () => {
 		);
 		await don();
 
-		// (c) năm dạng khoá của nút soạn — chữ ở popover «i» rút từ messages thật.
 		const DANG: { ten: string; nen: Nen; chu: string | null }[] = [
 			{
 				ten: "chua-cau-hinh",
@@ -824,8 +796,6 @@ describe("dhk-menu-soan", () => {
 		s.xong("dhk-menu-soan", soO);
 	});
 });
-
-// ---------- dhk-khoa-ly-do (E7) ----------
 
 describe("dhk-khoa-ly-do", () => {
 	test("dhk-khoa-ly-do: 12 ô — khoá kèm đúng một dòng lý do, không ẩn; có quyền thì không dòng nào", async () => {
@@ -910,7 +880,6 @@ describe("dhk-khoa-ly-do", () => {
 				}
 			}
 		}
-		// Đường dẫn có khoá tạo mà không đủ quyền → ngăn không mở, khoá rời URL.
 		soO += 1;
 		const san = await dauTrang(
 			"theo-don-vi",
@@ -927,8 +896,6 @@ describe("dhk-khoa-ly-do", () => {
 		s.xong("dhk-khoa-ly-do", soO);
 	});
 });
-
-// ---------- dhk-giu-don (E8) ----------
 
 describe("dhk-giu-don", () => {
 	test("dhk-giu-don: 25 liên kết thẻ mang đúng kyOkr và donOkr đang có; vòng đi-về giữ đơn vị", async () => {
@@ -968,7 +935,6 @@ describe("dhk-giu-don", () => {
 			}
 			await don();
 		}
-		// Vòng đi-về: Theo đơn vị → ba thẻ khác lần lượt → Theo đơn vị (bốn thẻ từ cua-toi-ba-phan A3).
 		soO += 1;
 		let tham = "?kyOkr=q4&donOkr=pb:P2";
 		let dangO: TabOkr = "theo-don-vi";
@@ -992,8 +958,6 @@ describe("dhk-giu-don", () => {
 	});
 });
 
-// ---------- dhk-suc-khoe (E9) ----------
-
 describe("dhk-suc-khoe", () => {
 	test("dhk-suc-khoe: tiêu đề khu, thẻ Toàn cảnh, đường dẫn A › B khớp, về giữ ky + đơn vị; en một cách viết", async () => {
 		const s = soSai();
@@ -1003,8 +967,6 @@ describe("dhk-suc-khoe", () => {
 		let soO = 0;
 		for (const locale of ["vi", "en"] as const) {
 			soO += 1;
-			// Người không quản trị: thân trang dừng ở «không quyền», không kéo thêm
-			// truy vấn nào — ca này chỉ đo đầu trang và đường dẫn A › B.
 			datNen({ xem: TV });
 			await dung(
 				<>
@@ -1069,8 +1031,6 @@ describe("dhk-suc-khoe", () => {
 		s.xong("dhk-suc-khoe", soO);
 	});
 });
-
-// ---------- dhk-dang-tai (E10) ----------
 
 describe("dhk-dang-tai", () => {
 	test("dhk-dang-tai: đang tải giữ tiêu đề + khung xương hàng nút; lỗi quyền thì nút khoá kèm câu tải lại", async () => {

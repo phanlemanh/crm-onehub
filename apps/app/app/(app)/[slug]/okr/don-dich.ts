@@ -8,13 +8,6 @@ export type NguonDich = "chon" | "dan" | "url" | "goc";
 
 export type DonDich = { don: DonChonOkr; nguon: NguonDich };
 
-/**
- * Đơn vị mà ba hành động ở đầu trang khu (thêm, nhập, soạn) nhắm tới. Ở Theo
- * đơn vị là đơn vị đang chọn. Ở thẻ khác: đơn vị đầu tiên người xem dẫn (bộ
- * phận trước phòng ban, theo thứ tự cây máy chủ trả) — để trưởng đơn vị vừa xem
- * một đơn vị khác vẫn tạo được cho đơn vị mình ngay ở Của tôi —, không thì đơn
- * vị trên đường dẫn, không thì cấp công ty. Chốt ở Cổng Phạm vi 15/10 (Hỏi-2).
- */
 export function donDich(
 	tab: TabOkr,
 	donUrl: DonChonOkr | null,

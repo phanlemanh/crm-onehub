@@ -488,8 +488,6 @@ describe("theo-don-vi", () => {
 		});
 	});
 
-	// DH1 (dieu-huong-khu-muc-tieu): «Thêm mục tiêu» và «Nhập từ bảng tính» rời thân
-	// trang lên đầu trang khu — khoá kèm lý do đo ở okr-dau-trang-khu.dom.tsx (dhk-*).
 	test("theo-don-vi-truong-thay-nut: than trang khong con nut them hay nhap o ca hai vai", async () => {
 		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
 			objectives: [mucTieu("a", 1)],

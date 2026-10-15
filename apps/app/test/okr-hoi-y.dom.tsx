@@ -476,10 +476,7 @@ mock.module("@/lib/trpc/client", () => ({
 			hoiYDoPhu: thuTuc("hoiYDoPhu", () => DO_PHU),
 			viecCuaToi: thuTuc("viecCuaToi", () => ({ viec: [], lienQuanOkr: true })),
 			objective: thuTuc("objective", () => null),
-			// Đầu trang khu (DH1) hỏi quyền tạo của đơn vị đích — bài huy hiệu không
-			// đo nó, nên truy vấn treo và hàng hành động đứng ở khung xương.
 			danhSach: thuTuc("danhSach", () => new Promise(() => {})),
-			// Nút «Hỏi Kara» đứng đầu hàng hành động (hoi-dap-okr); bài này không bấm nó.
 			hoiMo: { mutationOptions: () => ({ mutationFn: async () => null }) },
 			...Object.fromEntries(DOT_BIEN.map((t) => [t, thuTuc(t, () => null)])),
 		},
