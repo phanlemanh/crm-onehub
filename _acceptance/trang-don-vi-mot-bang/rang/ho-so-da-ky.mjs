@@ -11,7 +11,10 @@
  * Gốc so (rút LÚC CHẠY): `DVB_BASE` nếu có; không thì merge-base với nhánh DH1
  * (`feat/dieu-huong-khu-muc-tieu`) khi nhánh đó chưa vào origin/onehub; không thì
  * merge-base với origin/onehub. Tập tệp = `git diff --name-only <gốc> -- apps/app/test`
- * trừ tệp mới của lượt, cộng mọi tệp kiểm nhập một tệp trợ giúp bị sửa. Tập eval:
+ * trừ tệp mới của lượt, cộng mọi tệp kiểm nhập một tệp trợ giúp bị sửa. Hai vế đếm
+ * (dòng kiểm bị xoá, skip thêm) chỉ tính trên commit riêng của lượt — `git rev-list
+ * --no-merges HEAD ^origin/onehub ^feat/dieu-huong-khu-muc-tieu` — cộng thay đổi chưa
+ * commit; thiếu một trong hai ref → mã 2. Tập eval:
  * hồ sơ `signed-off`/`machine-cleared`, executor test/script, không `status:
  * not-run`, lệnh `config:` giải ra chuỗi nhắc một tệp trong tập. Lệnh trùng chạy
  * một lần, tuần tự.
@@ -83,21 +86,62 @@ const moi = git("diff", "--name-only", base, "--", "apps/app/test")
 	.filter((f) => f && !coOGoc(f));
 if (moi.length > 0) console.log(`tep moi cua luot (bo): ${moi.join(", ")}`);
 
-// Hai vế quan hệ: dòng kiểm bị xoá ngoài dấu cũ, `.skip/.todo/.only` thêm mới.
+// Hai vế quan hệ: dòng kiểm bị xoá ngoài dấu cũ, `.skip/.todo/.only` thêm mới — chỉ
+// tính trên commit RIÊNG của lượt (rev-list --no-merges HEAD ^onehub ^DH1) cộng thay đổi
+// chưa commit (lượt hai chiều tiêm đột biến chưa commit trong worktree tạm). Gốc so ở
+// trên ôm cả commit onehub và DH1 mà nhánh đã gộp — chúng không phải lượt này.
+const NHANH_GOC = "origin/onehub";
+for (const r of [NHANH_GOC, NHANH_DH1])
+	if (!coRef(r)) khongDo(`thieu ref ${r} de rut commit rieng cua luot`);
+const rieng = git(
+	"rev-list",
+	"--no-merges",
+	"HEAD",
+	`^${NHANH_GOC}`,
+	`^${NHANH_DH1}`,
+)
+	.split("\n")
+	.filter(Boolean);
+console.log(`commit rieng cua luot: ${rieng.length}`);
+
+function dongDoi(diff) {
+	const ra = [];
+	let tep = "";
+	for (const d of diff.split("\n")) {
+		if (d.startsWith("+++ ")) tep = d.slice(4).replace(/^b\//, "");
+		else if (d.startsWith("--- ")) continue;
+		else if (d.startsWith("-") || d.startsWith("+")) ra.push({ tep, d });
+	}
+	return ra;
+}
+const laXoaKiem = (d) =>
+	d.startsWith("-") &&
+	DONG_KIEM.test(d.slice(1)) &&
+	!DAU_CU.some((dau) => d.includes(dau));
+const laSkipMoi = (d) => d.startsWith("+") && BO_QUA.test(d.slice(1));
+
+const xoaTheoTep = new Map();
+const skipTheoTep = new Map();
+const ghiVao = (bang, tep, muc) =>
+	bang.set(tep, [...(bang.get(tep) ?? []), muc]);
+for (const [nguon, diff] of [
+	...rieng.map((c) => [
+		c.slice(0, 9),
+		git("diff", "-U0", `${c}^`, c, "--", "apps/app/test"),
+	]),
+	["chua-commit", git("diff", "-U0", "HEAD", "--", "apps/app/test")],
+])
+	for (const { tep, d } of dongDoi(diff)) {
+		if (!coOGoc(tep)) continue;
+		if (laXoaKiem(d)) ghiVao(xoaTheoTep, tep, { nguon, d });
+		if (laSkipMoi(d)) ghiVao(skipTheoTep, tep, { nguon, d });
+	}
+
 let tongXoa = 0;
 let tongSkip = 0;
 for (const f of sua) {
-	const dong = git("diff", "-U0", base, "--", f).split("\n");
-	const xoa = dong.filter(
-		(d) =>
-			d.startsWith("-") &&
-			!d.startsWith("---") &&
-			DONG_KIEM.test(d.slice(1)) &&
-			!DAU_CU.some((dau) => d.includes(dau)),
-	);
-	const skip = dong.filter(
-		(d) => d.startsWith("+") && !d.startsWith("+++") && BO_QUA.test(d.slice(1)),
-	);
+	const xoa = xoaTheoTep.get(f) ?? [];
+	const skip = skipTheoTep.get(f) ?? [];
 	tongXoa += xoa.length;
 	tongSkip += skip.length;
 	console.log(
@@ -105,9 +149,53 @@ for (const f of sua) {
 	);
 	if (xoa.length > 0)
 		console.log(`SAI AC-10: ${f} xoa ${xoa.length} dong kiem ngoai dau cu`);
-	for (const d of xoa) console.log(`  - ${d.slice(1).trim().slice(0, 160)}`);
+	for (const x of xoa)
+		console.log(`  - [${x.nguon}] ${x.d.slice(1).trim().slice(0, 160)}`);
 	console.log(`SKIP ${f}: ${skip.length} .skip/.todo/.only them moi`);
 }
+
+// Đối chiếu: dòng kiểm bị xoá theo diff từ gốc so (cách đếm cũ) mà không thuộc commit
+// riêng của lượt — in commit đã xoá chúng để thấy chúng đến từ nhánh đã gộp.
+const cuaLuot = new Set(
+	[...xoaTheoTep.values()].flat().map((x) => x.d.slice(1).trim()),
+);
+const xoaTaiCommit = new Map();
+function commitXoa(tep, dong) {
+	if (!xoaTaiCommit.has(tep)) {
+		const bang = new Map();
+		for (const c of git(
+			"log",
+			"--no-merges",
+			"--format=%H",
+			`${base}..HEAD`,
+			"--",
+			tep,
+		)
+			.split("\n")
+			.filter(Boolean)) {
+			const ten = git("log", "-1", "--format=%h %s", c);
+			for (const x of dongDoi(git("diff", "-U0", `${c}^`, c, "--", tep)))
+				if (x.d.startsWith("-") && !bang.has(x.d.slice(1).trim()))
+					bang.set(x.d.slice(1).trim(), ten);
+		}
+		xoaTaiCommit.set(tep, bang);
+	}
+	return xoaTaiCommit.get(tep).get(dong) ?? "khong ro";
+}
+let ngoaiLuot = 0;
+for (const { tep, d } of dongDoi(
+	git("diff", "-U0", base, "--", "apps/app/test"),
+)) {
+	if (!coOGoc(tep) || !laXoaKiem(d) || cuaLuot.has(d.slice(1).trim())) continue;
+	ngoaiLuot += 1;
+	const dong = d.slice(1).trim();
+	console.log(
+		`NGOAI-LUOT ${tep}: ${dong.slice(0, 100)} <- ${commitXoa(tep, dong).slice(0, 120)}`,
+	);
+}
+console.log(
+	`NGOAI-LUOT: ${ngoaiLuot} dong kiem bi xoa theo diff goc so khong thuoc commit rieng cua luot (khong tinh)`,
+);
 
 const laKiem = (f) => /\.(dom\.tsx|spec\.ts|spec\.tsx)$/.test(f);
 const tap = new Set(sua.filter(laKiem).map((f) => basename(f)));

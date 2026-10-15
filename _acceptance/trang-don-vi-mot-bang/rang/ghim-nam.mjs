@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * E16 (AC-14): chín hồ sơ đã ký đo trên trang đơn vị cũ được sửa phép đo rồi ghim
+ * E16 (AC-14): mười hồ sơ đã ký đo trên trang đơn vị cũ được sửa phép đo rồi ghim
  * lại xanh tại một commit đã có trang mới.
  *
  *   bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs
@@ -9,20 +9,23 @@
  *    hoặc `DVB_BASE`): hồ sơ `signed-off` có tệp `rang/` mang dấu cũ, hoặc có eval
  *    mà lệnh `config:` (đọc ở gốc so) chạy một tệp như thế; cộng
  *    `dieu-huong-khu-muc-tieu` (bài `dhk-giu-don`, AC-13). `data-nut-cay` chỉ tính
- *    khi tệp nói tới `theo-don-vi` (cây cài đặt tổ chức vẫn mang dấu này). Lệch tập
- *    chín hồ sơ khai trong AC-14 → mã 2, gọi tên.
+ *    khi tệp nói tới `theo-don-vi` (cây cài đặt tổ chức vẫn mang dấu này); hợp với
+ *    hồ sơ có `rang/` hoặc `evals.yaml` đổi trong commit RIÊNG của lượt (`git rev-list
+ *    --no-merges HEAD ^origin/onehub ^feat/dieu-huong-khu-muc-tieu`, thiếu ref → mã 2).
+ *    Lệch tập mười hồ sơ khai trong AC-14 → mã 2, gọi tên.
  * 2. Mỗi hồ sơ: dòng `repin` CUỐI của run-log.jsonl có `suites_exit` và
  *    `evals_exit` toàn 0, và `sha` của nó chứa commit đầu tiên của lượt đổi
  *    theo-don-vi.tsx tính từ gốc lượt (`git merge-base --is-ancestor`).
- * 3. Mỗi hồ sơ: diff `rang/` từ gốc lượt không xoá dòng nào ngoài dòng mang dấu
- *    cũ — trừ khối diff khai tại chỗ bằng một dòng thêm `// AC-14 cach-toi: …` hoặc
- *    `// AC-14 loi-hua-moi: …`. Dòng chỉ có dấu ngoặc không tính.
- *    Gốc lượt = merge-base với nhánh DH1 (`feat/dieu-huong-khu-muc-tieu`) khi nhánh
- *    đó chưa vào onehub (hồ sơ DH1 ký và tự sửa trên nhánh của nó — không phải lượt
- *    này), không thì gốc so. Cùng luật với rang/ho-so-da-ky.mjs.
+ * 3. Mỗi hồ sơ: diff `rang/` của từng commit riêng của lượt (cùng rev-list ở 1) cộng
+ *    thay đổi chưa commit không xoá dòng nào ngoài dòng mang dấu cũ — trừ khối diff
+ *    khai tại chỗ bằng một dòng thêm `// AC-14 cach-toi: …`, `// AC-14 loi-hua-moi: …`
+ *    hoặc `// F8 neo: …` (thước neo cặp gộp). Dòng chỉ có dấu ngoặc và dòng
+ *    `import … from "…"` một dòng không tính (không mang khẳng định).
+ *    Gốc lượt (cho mốc trang mới) = merge-base với nhánh DH1 khi nhánh đó chưa vào
+ *    onehub, không thì gốc so.
  * 4. Notes của muc-tieu-va-kr/contract.md trỏ trang-don-vi-mot-bang AC-3.
  *
- * Mã thoát: 0 đúng («DUNG AC-14: 8/8») · 1 sai («SAI AC-14: …») · 2 không đo được.
+ * Mã thoát: 0 đúng («DUNG AC-14: 10/10») · 1 sai («SAI AC-14: …») · 2 không đo được.
  */
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -34,7 +37,8 @@ const { parseEvals, stripComment } = await import(
 	join(GOC, "lib/eval-yaml.cjs")
 );
 
-/** Chín hồ sơ AC-14 khai (no-sau-luot-5-okr thêm 15/10: thanh lọc [data-loc-okr] cũ). */
+/** Mười hồ sơ AC-14 khai (no-sau-luot-5-okr thêm 15/10: thanh lọc [data-loc-okr] cũ;
+ * khung-trang-cai-dat: cau-truc.mjs + evals.yaml đổi trong lượt, okr-soat-anh-luot-3 E11). */
 const KHAI = [
 	"dat-okr-trong-crm",
 	"khung-okr-truoc-r1",
@@ -45,6 +49,7 @@ const KHAI = [
 	"soan-okr-trong-khung",
 	"dieu-huong-khu-muc-tieu",
 	"no-sau-luot-5-okr",
+	"khung-trang-cai-dat",
 ];
 const CONG_THEM = "dieu-huong-khu-muc-tieu";
 const TRANG = "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx";
@@ -53,8 +58,10 @@ const DAU_CU =
 	/data-nut-cay|data-hang-nut|data-nhom-soan|data-loc-okr|thuMucTieu|data-don-vi(?![\w-])|cayDonVi|CHU\.donVi|aria-label=['"]?(Cây )?Đơn vị/;
 const DAU_GREP =
 	"data-nut-cay|data-hang-nut|data-nhom-soan|data-loc-okr|thuMucTieu|data-don-vi|cayDonVi|CHU\\.donVi|Đơn vị";
-const KHAI_TAI_CHO = /\/\/ AC-14 (cach-toi|loi-hua-moi): \S/;
+const KHAI_TAI_CHO = /\/\/ (AC-14 (cach-toi|loi-hua-moi)|F8 neo): \S/;
 const CHI_NGOAC = /^[\s()[\]{};,]*$/;
+/** Dòng nhập module không mang khẳng định nào. */
+const DONG_NHAP = /^\s*import\s.+\sfrom\s+["'][^"']+["'];?\s*$/;
 
 function khongDo(cau) {
 	console.log(`KHONG DO DUOC: ${cau}`);
@@ -97,6 +104,20 @@ const gocLuot =
 		? git("merge-base", "HEAD", NHANH_DH1)
 		: base);
 console.log(`goc so: ${base} · goc luot: ${gocLuot}`);
+for (const r of [nhanh, NHANH_DH1])
+	if (!r || !coRef(r))
+		khongDo(`thieu ref ${r ?? "onehub"} de rut commit rieng cua luot`);
+const rieng = git(
+	"rev-list",
+	"--no-merges",
+	"HEAD",
+	`^${nhanh}`,
+	`^${NHANH_DH1}`,
+)
+	.split("\n")
+	.filter(Boolean);
+console.log(`commit rieng cua luot: ${rieng.length}`);
+const TU_HO_SO = "trang-don-vi-mot-bang";
 
 // 1. Tập hồ sơ rút lúc chạy trên cây tại gốc so.
 const ungVien = spawnSync(
@@ -152,6 +173,26 @@ for (const slug of slugGoc) {
 	if (tep.size > 0) rut.set(slug, [...tep]);
 }
 rut.set(CONG_THEM, rut.get(CONG_THEM) ?? ["bai dhk-giu-don (AC-13)"]);
+// Hồ sơ đã ký mà lượt này đổi rang/ hoặc evals.yaml trong commit riêng.
+for (const c of rieng)
+	for (const f of git(
+		"diff-tree",
+		"--no-commit-id",
+		"--name-only",
+		"-r",
+		c,
+	).split("\n")) {
+		const m = /^_acceptance\/([^/]+)\/(rang\/.+|evals\.yaml)$/.exec(f);
+		if (!m || m[1] === TU_HO_SO) continue;
+		const hd = join(GOC, "_acceptance", m[1], "contract.md");
+		if (
+			!existsSync(hd) ||
+			!/^status:\s*signed-off\s*$/m.test(readFileSync(hd, "utf8"))
+		)
+			continue;
+		const ds = rut.get(m[1]) ?? [];
+		if (!ds.includes(f)) rut.set(m[1], [...ds, f]);
+	}
 for (const [slug, tep] of rut) console.log(`HO-SO ${slug}: ${tep.join(", ")}`);
 const thua = [...rut.keys()].filter((s) => !KHAI.includes(s));
 const thieu = KHAI.filter((s) => !rut.has(s));
@@ -217,18 +258,25 @@ for (const slug of KHAI) {
 
 // 3. Dòng xoá trong rang/ ngoài dấu cũ phải khai tại chỗ.
 for (const slug of KHAI) {
-	const diff = git("diff", gocLuot, "--", `_acceptance/${slug}/rang`);
+	const duong = `_acceptance/${slug}/rang`;
+	const cacDiff = [
+		...rieng.map((c) => git("diff", `${c}^`, c, "--", duong)),
+		git("diff", "HEAD", "--", duong),
+	];
 	let ngoai = 0;
 	const khongKhai = [];
 	const khaiTaiCho = [];
-	for (const khoi of diff.split(/\n(?=@@ )/).slice(1)) {
+	for (const khoi of cacDiff.flatMap((diff) =>
+		diff.split(/\n(?=@@ )/).filter((k) => k.startsWith("@@ ")),
+	)) {
 		const dong = khoi.split("\n");
 		const xoa = dong.filter(
 			(d) =>
 				d.startsWith("-") &&
 				!d.startsWith("---") &&
 				!DAU_CU.test(d) &&
-				!CHI_NGOAC.test(d.slice(1)),
+				!CHI_NGOAC.test(d.slice(1)) &&
+				!DONG_NHAP.test(d.slice(1)),
 		);
 		if (xoa.length === 0) continue;
 		ngoai += xoa.length;
