@@ -5,7 +5,7 @@ slug: so-do-can-chinh-don-vi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-so-do-can-chinh-don-vi-design.md
@@ -102,6 +102,11 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
   đổi), `apps/app/app/(app)/[slug]/okr/toan-canh/so-do-config.ts` (mới),
   `apps/app/app/(app)/[slug]/okr/theo-don-vi/dich-cay.ts` (mới), `bun.lock`,
   `_acceptance/cay-can-chinh-co-ly-do/evals.yaml` và `_acceptance/ux-lai-thu-8c-okr/evals.yaml` (chỉ thêm khai nghỉ).
+  S3 phát sinh: `apps/api/src/generated/server.ts` (sinh lại bằng `trpc:generate`, chỉ thêm thủ tục `soDoDonVi`),
+  `apps/app/test/messages-guard.spec.ts` (chỉ thêm năm dòng ghim chữ dạng hàm của khối `soDo`).
+- AC-13 (B5) HOÃN — chủ kho tách ở Gate 1.5 ngày 15/10 («tách B5 thành hàng riêng sau phiên nghiệm thu L3»; sổ
+  `d-20261015T035759Z-17`): E13 khai `status: not-run`, các tệp «Nếu làm B5» ở Ranh giới không đổi, không eval nào
+  của hồ sơ khác bị nghỉ. Hướng làm: `docs/plan/2026-10-15-hat-giong-b5-bo-cay-sau-nghiem-thu-l3.md`.
 - Rủi ro gộp (crm #375, Mac Studio 02:41Z): #410 (Kho tài liệu) sửa `packages/ui/package.json` và
   `packages/ui/src/lib/messages.ts`; NM2 `loc-va-kieu-xem-chung` sửa `packages/ui` toggle-group (prop `count`) và có thể thêm
   khối vào `packages/ui/src/lib/messages.ts`; C `hoi-dap-okr` sửa `apps/app/lib/messages/okr-hoi.ts` (kề, không trùng

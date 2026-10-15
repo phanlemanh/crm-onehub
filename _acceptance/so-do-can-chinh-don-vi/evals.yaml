@@ -108,6 +108,7 @@ evals:
     criterion: AC-13
     executor: test
     cmd: config:executors.test.dh4_b5
+    status: not-run
     expected: "exit 0; apps/app/test/okr-theo-don-vi.dom.tsx -t dh4-b5: ViewSwitch của trang đơn vị không có mục giá trị cay (đếm mục === số phần tử CACH_XEM_OKR, và cay ∉ CACH_XEM_OKR); hàm giải đường cũ nhận {xemOkr: cay, donOkr: pb:A1} trả đích /<slug>/okr/toan-canh?xemToanCanh=so-do&moDonVi=pb:A1, nhận donOkr goc trả đích không có moDonVi. Đối chứng dương: xemOkr=danh-sach không chuyển."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx", packages/validation/src/okr-tham-so.ts, apps/app/test/okr-theo-don-vi.dom.tsx]

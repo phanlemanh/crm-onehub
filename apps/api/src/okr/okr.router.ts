@@ -209,6 +209,7 @@ import {
 	khoiCuaToiInput,
 	khoiCuaToiOutput,
 	moHopTuanOutput,
+	soDoDonViOutput,
 	sucKhoeOutput,
 	toanCanhOutput,
 } from "./okr-xem.contracts";
@@ -1265,6 +1266,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.cayCanChinh(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: cycleOnlyInput,
+		output: soDoDonViOutput,
+		meta: restMeta("GET", "/okr/unit-map", TAG),
+	})
+	soDoDonVi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleOnlyInput>,
+	) {
+		return this.xem.soDoDonVi(ctx.user.id, input.cycleId);
 	}
 
 	@Query({

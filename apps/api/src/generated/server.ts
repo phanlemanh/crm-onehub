@@ -37,7 +37,7 @@ import { moHoiYInput, suaHoiYInput, cycleIdInput, hoiYIdInput, gopYInput, suaYIn
 import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, hoiYDoPhuOutput, congBoOutput, hieuViSaoOutput } from "../okr/okr-hoi-y.contracts";
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { datHienThiInput, traLaiInput, chuyenDonViInput, moCoiInput } from "@crm/validation/okr-hien-thi";
-import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
+import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
 import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput, goGhiNhanInput } from "../okr/okr-canh-kr.contracts";
@@ -53,7 +53,7 @@ import { taiLieuHoiInput, taiLieuHoiOutput, taiLieuHoiKetQuaInput, taiLieuHoiKet
 import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinChoOutput, taiLieuNguonNhanInput, taiLieuNguonNhanOutput, taiLieuNguonListOutput, taiLieuNguonIdInput, taiLieuNguonGetOutput, taiLieuNguonTaiVeOutput, taiLieuNguonOkOutput } from "../tai-lieu/tai-lieu-nguon.contracts";
 import { taiLieuSlugInput, taiLieuLichSuOutput, taiLieuPhienBanInput, taiLieuPhienBanOutput, taiLieuProposeOutput, taiLieuDeXuatTrangInput, taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
 import { keoVeOutput, guiTinHieuInput, xoaTinHieuInput } from "@crm/validation/tin-hieu";
-import { guiTinHieuOutput, tinHieuCuaToiOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
+import { guiTinHieuOutput, tinHieuCuaToiOutput, tinHieuTatCaOutput, xoaTinHieuOutput } from "../tin-hieu/tin-hieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgKhoiPhucOutput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
 import { viecBangInput, viecBangOutput, viecKeoInput, viecOkOutput, viecTaoConInput, viecTaoOutput, viecIdInput, viecConOutput, viecCuaToiInput, viecCuaToiNhomOutput, viecChiTietOutput, viecVetOutput, viecBanGhiInput, viecCuaBanGhiOutput, viecCreateInput, viecDoiTrangThaiInput, viecSuaInput, viecDoiNguoiInput, viecGanInput, viecTheoDoiInput } from "../viec/viec.contracts";
@@ -1012,6 +1012,10 @@ const appRouter = t.router({
       .input(cycleOnlyInput)
       .output(cayCanChinhOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    soDoDonVi: publicProcedure
+      .input(cycleOnlyInput)
+      .output(soDoDonViOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     hopTuan: publicProcedure
       .input(hopTuanInput)
       .output(hopTuanOutput)
@@ -1527,6 +1531,9 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     cuaToi: publicProcedure
       .output(tinHieuCuaToiOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    tatCa: publicProcedure
+      .output(tinHieuTatCaOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     xoa: publicProcedure
       .input(xoaTinHieuInput)

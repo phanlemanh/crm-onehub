@@ -249,6 +249,13 @@ const en = {
 		anDanhSach: "Hide the list",
 		cuonThem: "Scroll the list to see the rest",
 	},
+	soDo: {
+		dieuKhien: "Map controls",
+		thuNho: "Zoom out",
+		phongTo: "Zoom in",
+		vuaKhung: "Fit to view",
+		mucPhong: (phanTram: string) => `Zoom ${phanTram}%`,
+	},
 };
 
 export type Messages = typeof en;
@@ -498,6 +505,13 @@ const vi = {
 		hienDanhSach: "Xem danh sách",
 		anDanhSach: "Ẩn danh sách",
 		cuonThem: "Cuộn danh sách để xem phần còn lại",
+	},
+	soDo: {
+		dieuKhien: "Điều khiển sơ đồ",
+		thuNho: "Thu nhỏ",
+		phongTo: "Phóng to",
+		vuaKhung: "Vừa khung",
+		mucPhong: (phanTram: string) => `Đang phóng ${phanTram}%`,
 	},
 } satisfies Messages;
 

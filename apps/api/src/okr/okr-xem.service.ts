@@ -57,9 +57,11 @@ import type {
 	KhoiCuaToiOutput,
 	LocDanhSach,
 	NutCayDayDu,
+	SoDoDonViOutput,
 	SucKhoeOutput,
 	ToanCanhOutput,
 } from "./okr-xem.contracts";
+import { type DauVaoSoDo, gopSoDoDonVi } from "./so-do-don-vi";
 import {
 	type CayGon,
 	cong,
@@ -463,6 +465,22 @@ export class OkrXemService {
 			);
 		}
 		return gopSucKhoe(cayGon(q), rieng, OKR.tenGoc);
+	}
+
+	async docDauVaoSoDo(userId: string, cycleId: string): Promise<DauVaoSoDo> {
+		const q = await this.quyenOkr.quyen(userId);
+		const { mts } = await this.okr.mucTieuCuaCay(userId, cycleId);
+		return {
+			cay: cayGon(q),
+			tenGoc: OKR.tenGoc,
+			truongGoc: null,
+			cycleId,
+			mts,
+		};
+	}
+
+	async soDoDonVi(userId: string, cycleId: string): Promise<SoDoDonViOutput> {
+		return gopSoDoDonVi(await this.docDauVaoSoDo(userId, cycleId));
 	}
 
 	async cayCanChinh(
