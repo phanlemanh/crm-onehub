@@ -33,12 +33,12 @@ export function khoaNapSan(chiOkr: boolean): KhoaNapSan[] {
 	return [...NAP_SAN_THEO_VAI[chiOkr ? "chiOkr" : "dayDu"]];
 }
 
-export function napSan(
+export async function napSan(
 	khoa: readonly KhoaNapSan[],
 	trpc: Trpc,
 	client: QueryClient,
-): Promise<void[]> {
-	return Promise.all(khoa.map((k) => KHOA_NAP_SAN[k].nap(trpc, client)));
+): Promise<void> {
+	await Promise.all(khoa.map((k) => KHOA_NAP_SAN[k].nap(trpc, client)));
 }
 
 export function chiKhoaNapSan(khoa: readonly KhoaNapSan[], trpc: Trpc) {

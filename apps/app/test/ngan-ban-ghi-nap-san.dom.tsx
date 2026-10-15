@@ -39,6 +39,8 @@ const DU_LIEU = {
 	"giaiDoan.list": { canManage: true, tran: 0, stages: [] },
 } as const;
 
+type DuLieu = (typeof DU_LIEU)[KhoaNapSan];
+
 const trpc = createTRPCOptionsProxy<AppRouter>({
 	client: createTRPCClient<AppRouter>({
 		links: [httpLink({ url: "http://khong-goi.test/api/trpc" })],
@@ -85,9 +87,9 @@ function Doc({
 	ghi,
 }: {
 	khoa: KhoaNapSan;
-	ghi?: (data: unknown) => void;
+	ghi?: (data: DuLieu | undefined) => void;
 }) {
-	const { data } = useQuery({
+	const { data } = useQuery<DuLieu>({
 		queryKey: KHOA_NAP_SAN[khoa].khoa(trpc),
 		queryFn: khongBaoGioXong,
 	});
@@ -124,7 +126,7 @@ function lanDauCuaTrang(
 	khoa: KhoaNapSan,
 	trangThai: DehydratedState,
 	nganNapSan: boolean,
-): unknown {
+): DuLieu | undefined {
 	const client = trinhDuyet();
 	const r = moRoot();
 	const ngan = nganNapSan ? (
@@ -141,7 +143,7 @@ function lanDauCuaTrang(
 			</Khung>,
 		),
 	);
-	const doc: unknown[] = [];
+	const doc: (DuLieu | undefined)[] = [];
 	act(() =>
 		r.render(
 			<Khung client={client} record="deal:x">
