@@ -50,7 +50,7 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
 - **Trục D — dữ liệu:** có mục tiêu · rỗng · lọc không khớp · đang tải · lỗi · mục tiêu không KR · chưa có trưởng · có mục tiêu đã bỏ  [thước CE: `trang-thai-okr.tsx` — SUY-TỪ-REPO]
 - **Lớp cắt ngang:** 1440 · 390 · vi · en  [thước CE: số đo production 14/10]
 - Định nghĩa «Cần bàn», chỗ bấm mở ngăn chi tiết, và cách xử năm hồ sơ đã ký đo trên trang cũ là câu hỏi cho người ở Cổng Phạm vi (sổ quyết định, dòng `chi-nguoi`).
-- **Trục E — hồ sơ đã ký đo trên trang này:** năm hồ sơ có kịch bản trình duyệt (AC-14) · các tệp kiểm DOM (AC-10)  [thước CE: `git grep` dấu cũ `data-nut-cay`, `data-hang-nut`, `thuMucTieu` trong `_acceptance/*/rang/` và `apps/app/test/` — SUY-TỪ-REPO]
+- **Trục E — hồ sơ đã ký đo trên trang này:** tám hồ sơ có kịch bản trình duyệt hoặc bài kiểm dựa trên trang cũ (AC-14) · các tệp kiểm DOM (AC-10)  [thước CE: `git grep` dấu cũ `data-nut-cay`, `data-hang-nut`, `thuMucTieu` trong `_acceptance/*/rang/` và `apps/app/test/` — SUY-TỪ-REPO]
 
 ## Đường đo
 
