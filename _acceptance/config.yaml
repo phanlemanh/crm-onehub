@@ -2712,7 +2712,7 @@ executors:
     kv_san_thiet_ke: node _acceptance/kanban-viec/rang/san-thiet-ke.mjs
     kv_dot_bien: node _acceptance/kanban-viec/rang/dot-bien.mjs
     hdo_chi_hoi_okr: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/chi-hoi-okr.mjs"'
-    hdo_bo_cau: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs"'
+    hdo_bo_cau: 'bun test _acceptance/hoi-dap-okr/rang/do-hoi-dap.test.ts && bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs"'
     hdo_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/man-hoi.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
