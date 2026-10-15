@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6309e0f627f588cc39a29293638eb719a4747568
+verified_commit: b9acad6b77fde52541221e857cd2eb01d839e45f
 human_signoff: Phan Le Manh 2026-10-14
 ---
 
@@ -148,3 +148,7 @@ none — every multi-run eval is uniform (moi eval may chay mot lan, determinist
 Round 1: E6 failed — rang khong-noi-thuoc bao «SAI khong tep nao cua ho so khac hay canh-cay.mjs bi cham (72 tep doi)» va dong cuoi «khong-noi-thuoc: 1 SAI»; cac eval may khac (E1, E2, E3, E4, E7, E8) va 7 lenh suite deu dat; E5 la judgment cho nguoi quyet o Cong 2. Returned to implementation.
 Round 2: moi eval may (E1, E2, E3, E4, E7, E8) va 7 lenh suite deu dat; REJECT vi phan loai pham vi giu lai bon phat hien trong hop dong: AC-8 (chieu-do khong do loi hua «dung thong diep ghim», 7/9 dot bien khong ghim thong_diep_may) va AC-5 (bang-truoc-sau.md khong sinh lai, khoi «Sau (HEAD)» cua soan-okr-song-lai:E12 in expected cu). Returned to implementation.
 Round 3: moi eval may (E1, E2, E3, E4, E7, E8) va 7 lenh suite deu dat tren commit 6309e0f62; panel E5 de xuat PASS (hai phieu PASS, mot phieu con nghi ngo ghi day du o tren); phan loai pham vi khong con phat hien trong hop dong, nam phat hien ngoai hop dong (low/medium) cho nguoi quyet o Cong 2.
+
+### Re-pin lần 1 — 2026-10-15, do ghim ở đỉnh sau gộp onehub 3818ad4ec, ngay trước gộp #406 (làn X lần 2, 11 hồ sơ)
+run_id: repin-20261014T231434Z-99400
+sha: b9acad6b77fde52541221e857cd2eb01d839e45f · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E5 (E5 không khai paths) · AC không có chốt máy: AC-5 · chập chờn (đỏ lần đầu, đạt khi chạy lại): lenh-dung-do-khong-ai-thay E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

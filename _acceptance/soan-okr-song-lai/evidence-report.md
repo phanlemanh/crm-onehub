@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2d20545607b5d6104c5baadb3bffcb2b91ad6a65
+verified_commit: b9acad6b77fde52541221e857cd2eb01d839e45f
 human_signoff: Phan Le Manh 2026-10-04
 ---
 
@@ -226,3 +226,7 @@ sha: aeacc862fc3a28e5391c27772a4ad96e16ae3317 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-14, do F24 ba-ho-so-do-san: expected E12 bỏ lời hứa cũ (S4 r1)
 run_id: repin-20261014T042621Z-95949
 sha: 2d20545607b5d6104c5baadb3bffcb2b91ad6a65 · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E11, E13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-15, do ghim ở đỉnh sau gộp onehub 3818ad4ec, ngay trước gộp #406 (làn X lần 2, 11 hồ sơ)
+run_id: repin-20261014T231434Z-99400
+sha: b9acad6b77fde52541221e857cd2eb01d839e45f · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E11, E13 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · chập chờn (đỏ lần đầu, đạt khi chạy lại): lenh-dung-do-khong-ai-thay E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
