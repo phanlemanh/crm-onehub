@@ -23,7 +23,11 @@ evals:
       [data-nut=cap-nhat-tai-cho] co nhan rut tu messages that m.cuaToi.capNhatN(N) va N === so dong; o "du" thi
       khong co nut, co chu m.cuaToi.daDu(tuan) va nut [data-nut=sua-lan-gui]; o "rong" thi chu m.cuaToi.khongKr,
       khong nut. Them 1 assert: khoi viec trong Cua toi khong co viec loai okr-cap-nhat du API tra viec do.
+      Them 1 o chu ky: o chu ky dau trang la K cu (kyOkr=K), chu ky dang chay K': okr.capNhatTuan duoc goi KHONG
+      kem kyOkr cua o chu ky va phan 1 hien KR cua K' (fixture rieng cho K').
       DOI CHUNG DUONG: o 3 thieu vi co 3 dong, nut «Cập nhật 3 KR».
+      CHIEU DO (CTBP_PHA=theo-o-chu-ky: ban sao loc phan 1 theo kyOkr cua o chu ky) -> "ctbp-phan-mot: phan 1 theo
+      chu ky K cu, mong chu ky dang chay".
       CHIEU DO (CTBP_PHA=dem-ca-da-gui: ban sao bo loc updatedThisWeek trong phan 1) -> do voi thong diep ghim
       "ctbp-phan-mot: phan 1 co 3 dong, mong 1 (o 1 thieu 2 du)".
       CHIEU DO (CTBP_PHA=viec-cap-nhat-con: ban sao bo an viec okr-cap-nhat trong Cua toi) -> "ctbp-phan-mot:
@@ -108,14 +112,17 @@ evals:
       - "apps/agent/agent/**"
       - "apps/agent/test/okr-nhac.integration.spec.ts"
     expected: |
-      Script _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs: (1) git grep -n "okr/cap-nhat-tuan" tren cay dang xet,
-      loai tru tep trang chuyen huong, test chuyen huong va _acceptance/ -> 0 dong; in tung dong neu co. (2) chay
-      ca agent "nhac-cap-nhat" cua okr-nhac.integration.spec.ts (khoa executors.test.cnt_nhac_cap_nhat) -> thoat 0,
-      va ca do khang dinh dong «KR chờ cập nhật» chua "/okr?tu=nhac".
+      Script _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs: (1) tim LIEN KET toi duong cu trong apps/app va
+      apps/agent (khong tinh docs/, _acceptance/, tep trang chuyen huong va test chuyen huong): chuoi duong dan
+      "/okr/cap-nhat-tuan" dung trong href, url(...), template URL hoac Link — KHONG tinh dong import (from ".../okr/
+      cap-nhat-tuan/...") vi bang cap nhat cu duoc dung lai tu cho cu -> 0 dong; in tung dong neu co. (2) chay ca agent
+      "nhac-cap-nhat" cua okr-nhac.integration.spec.ts (khoa executors.test.cnt_nhac_cap_nhat) -> thoat 0, va ca do
+      khang dinh dong «KR chờ cập nhật» chua "/okr?tu=nhac".
       DONG KET LUAN "DUNG AC-4: 0 lien ket cu + tin nhac /okr?tu=nhac" ma 0; sai -> "SAI AC-4: <tep>:<dong>" ma 1.
-      DOI CHUNG DUONG / CHIEU DO: script tu chay (1) tren mot ban sao tam co them mot dong `href={url("/okr/cap-nhat-tuan")}`
-      trong viec-cua-toi.tsx -> phai in "SAI AC-4: apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx" truoc khi chay
-      tren cay that; ban sao khong do duoc -> ma 2.
+      Hai chieu tren ban sao tam, chay TRUOC cay that: CHIEU DO — them mot dong `href={url("/okr/cap-nhat-tuan")}`
+      trong viec-cua-toi.tsx -> phai in "SAI AC-4: apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx"; CHIEU IM — chi
+      them mot dong nhac "/okr/cap-nhat-tuan" trong docs/ va mot import ".../okr/cap-nhat-tuan/cap-nhat-tuan" trong
+      apps/app -> phai in "DUNG AC-4". Ban sao khong dung duoc -> ma 2.
 
   - id: E7
     criterion: AC-5
@@ -220,7 +227,9 @@ evals:
       ban), 1 thanh vien M; phien trong cua so: T1 cua-toi gui x4, T1 nhac gui x2, T1 sheet gui x2, T2 viec-cua-toi
       gui x1, T2 cua-toi chua gui x3, M cua-toi gui x5; phien ngoai cua so: T1 sheet gui x4. Dap an viet truoc: n = 9,
       k = 7, p = 77.8 % (lam tron 1 so), "khong du mau" (n < 10). Lan 2 gieo them T2 cua-toi gui x1: n = 10, k = 8,
-      80.0 %, het co "khong du mau". Assert chuoi in dung dap an + so dong moi bang truoc/sau lenh bang nhau (chi doc).
+      80.0 %, het co "khong du mau". Them: gieo sua 1 phong ban trong cua so (updatedAt trong cua so) -> dong
+      "1 don vi sua trong cua so"; khong sua -> "0 don vi sua trong cua so". Assert chuoi in dung dap an + so dong moi
+      bang truoc/sau lenh bang nhau (chi doc).
       DOI CHUNG DUONG: lan 2.
       CHIEU DO (ban sao dem ca thanh vien) -> "ctbp-do-nguong: n 14, mong 9".
       CHIEU DO (ban sao dem ca phien chua gui) -> "ctbp-do-nguong: n 12, mong 9".
@@ -299,9 +308,7 @@ evals:
       Cung luot man-cua-toi.mjs voi E15, tren may chu that: truong bo phan mo Cua toi chu ky K, doc so cua the don vi
       ([data-so=muc-tieu|kr|tien-do|dung-nhip|cham-nhip|truot]); roi mo /okr/theo-don-vi?donOkr=<id>&kyOkr=K va doc
       cung sau so tu bang/ chan bang cua trang do; dong "SO <don vi>: Cua toi <6 so> · Theo don vi <6 so>" — DUNG khi
-      bang nhau tung so. Them: luot mo /okr?tu=nhac va /okr/cap-nhat-tuan?tu=nhac&kyOkr=K roi gui 1 KR: dem dong
-      okrCheckInSession moi cua nguoi do qua lenh doc DB cua script -> 2 dong, entry deu "nhac", submittedAt 1 dong;
-      duong dan sau chuyen huong la /<slug>/okr?…kyOkr=K. Dong "DUNG AC-5+AC-3 may chu".
+      bang nhau tung so. Dong "DUNG AC-5 may chu".
       CHIEU DO: dung CTBP_PHA=dem-tron cua E7 tren may chu that -> "SAI AC-5: so KR 3 / 5".
 
   - id: E17
@@ -320,3 +327,22 @@ evals:
       o man dau (anh 1440, khong cuon) viec can cap nhat tuan nay va nut de lam no, roi don vi minh dan, roi KR minh
       phu trach, dung thu tu do khong? O anh thanh vien, co cho nao moi ho tao muc tieu hay OKR ca nhan khong?
       Tra PASS chi khi ca hai deu dung; neu khong, neu anh nao va vung nao lam ho doc sai.
+
+  - id: E18
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ctbp_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "packages/validation/src/okr-cap-nhat.ts"
+      - "_acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"
+    expected: |
+      Cung luot man-cua-toi.mjs, may chu that, truong bo phan co KR thieu so. Ma tran viet truoc 5 o, moi o dem dong
+      okrCheckInSession MOI cua nguoi do qua lenh doc DB cua script (truoc/sau): /okr?tu=nhac -> +1, entry "nhac" ·
+      /okr?tu=viec-cua-toi -> +1, entry "viec-cua-toi" · /okr?tu=la -> +0 · tai lai trang sau o nhac (duong dan da go
+      tu) -> +0 · /okr/cap-nhat-tuan?tu=nhac&kyOkr=K -> +1, entry "nhac", duong dan sau chuyen huong la
+      /<slug>/okr?kyOkr=K (tu da go sau khi mo). Gui 1 KR o o nhac -> dong do co submittedAt.
+      Dong "DUNG AC-3 may chu: 5/5 o".
+      CHIEU DO (CTBP_PHA=giu-tu cua E4 tren may chu that) -> "SAI AC-3: tai lai sau nhac +1, mong +0".

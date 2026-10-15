@@ -6,10 +6,10 @@ material: real-components
 context: static-frame
 context_scenes: []
 reaction: nac-1 (anh-gui-kem-the-cong-pham-vi)
-options: http://localhost:3433/proto/cua-toi-ba-phan?state=ST-ctbp-can-cap-nhat · http://localhost:3433/proto/cua-toi-ba-phan?state=ST-ctbp-hoi-1-viec-tren
+options: http://localhost:3433/proto/cua-toi-ba-phan?state=ST-ctbp-can-cap-nhat · http://localhost:3433/proto/cua-toi-ba-phan?state=ST-ctbp-hoi-1-viec-tren · http://localhost:3433/proto/cua-toi-ba-phan?state=ST-ctbp-hoi-2-bang-muc-tieu
 divergence: opened
 ds_skill: repo-tokens
-states: [ST-ctbp-can-cap-nhat, ST-ctbp-dang-cap-nhat, ST-ctbp-da-gui, ST-ctbp-da-du, ST-ctbp-khong-kr, ST-ctbp-dan-mot, ST-ctbp-dan-hai, ST-ctbp-don-vi-rong, ST-ctbp-khong-dan, ST-ctbp-dang-cap-nhat-390, ST-ctbp-hoi-1-viec-tren]
+states: [ST-ctbp-can-cap-nhat, ST-ctbp-dang-cap-nhat, ST-ctbp-da-gui, ST-ctbp-da-du, ST-ctbp-khong-kr, ST-ctbp-dan-mot, ST-ctbp-dan-hai, ST-ctbp-don-vi-rong, ST-ctbp-khong-dan, ST-ctbp-dang-cap-nhat-390, ST-ctbp-hoi-1-viec-tren, ST-ctbp-hoi-2-bang-muc-tieu]
 breakpoints: [mobile-375, desktop-1280]
 themes: [dark]
 patched: 3
@@ -51,6 +51,8 @@ việc trên cùng); 375 px 689/812 (khuyên) · 1016/812 (Hỏi-1 — nút rơi
 | ST-ctbp-dang-cap-nhat-390 | mobile-375 | dark | evidence/design-pass/ST-ctbp-dang-cap-nhat-390--mobile-375.png |
 | ST-ctbp-hoi-1-viec-tren | desktop-1280 | dark | evidence/design-pass/ST-ctbp-hoi-1-viec-tren--desktop-1280.png |
 | ST-ctbp-hoi-1-viec-tren | mobile-375 | dark | evidence/design-pass/ST-ctbp-hoi-1-viec-tren--mobile-375.png |
+| ST-ctbp-hoi-2-bang-muc-tieu | desktop-1280 | dark | evidence/design-pass/ST-ctbp-hoi-2-bang-muc-tieu--desktop-1280.png |
+| ST-ctbp-hoi-2-bang-muc-tieu | mobile-375 | dark | evidence/design-pass/ST-ctbp-hoi-2-bang-muc-tieu--mobile-375.png |
 
 ## Bước phân kỳ — câu Hỏi-1
 
@@ -61,6 +63,17 @@ Trục: chỗ đứng của khối việc OKR khác (được giao, nhắc tên,
 - **Khối việc trên cùng** (state ST-ctbp-hoi-1-viec-tren, như app hôm nay) — động cơ: việc mới tới (được giao, chờ
   duyệt) thấy trước, giữ chỗ quen; đánh đổi: ở 375 px nút «Cập nhật 3 KR» rơi xuống dưới màn đầu (đáy 1016 px so
   với màn 812 px) khi có hai việc.
+
+## Bước phân kỳ — câu Hỏi-2 (mở sau phản biện context sạch, finding P0)
+
+Trục: phần 3 chỉ có bảng KR hay giữ thêm bảng mục tiêu.
+
+- **Nhóm thu gọn** (máy khuyên, state ST-ctbp-can-cap-nhat) — động cơ: trang ngắn, trưởng đơn vị không thấy mục tiêu
+  đơn vị hai lần (phần 2 và bảng); đánh đổi: thành viên quen dùng Của tôi làm bảng mục tiêu phải mở nhóm «Mục tiêu bạn
+  tham gia» với mục tiêu không có KR của mình.
+- **Giữ bảng mục tiêu dưới bảng KR** (state ST-ctbp-hoi-2-bang-muc-tieu) — động cơ: không ai mất chỗ quen, mọi mục
+  tiêu của mình hiện một bảng; đánh đổi: trang dài thêm một bảng (1280 px: 1865 px so với 1683 px), mục tiêu có KR
+  của mình hiện hai lần (dòng KR và dòng mục tiêu).
 
 ## Cảnh ngữ-cảnh
 

@@ -141,6 +141,7 @@ const MAN = {
 	"ST-ctbp-don-vi-rong": khoa,
 	"ST-ctbp-khong-dan": nga,
 	"ST-ctbp-hoi-1-viec-tren": thao,
+	"ST-ctbp-hoi-2-bang-muc-tieu": thao,
 } satisfies Record<string, Man>;
 
 const COT_KR: SimpleTableColumn[] = [
@@ -368,7 +369,48 @@ function NhomThu({ ten, so }: { ten: string; so: number }) {
 	);
 }
 
-function PhanKrPhuTrach({ m }: { m: Man }) {
+const COT_MT: SimpleTableColumn[] = [
+	{ id: "ten", header: "Mục tiêu" },
+	{
+		id: "tien-do",
+		header: "Tiến độ",
+		width: "w-56",
+		className: "hidden sm:table-cell",
+	},
+	{ id: "kr", header: "KR", width: "w-20" },
+];
+
+function BangMucTieu({ ds }: { ds: MucTieuMau[] }) {
+	return (
+		<SimpleTable columns={COT_MT} surface="page">
+			{ds.map((mt) => {
+				const p = Math.round(
+					mt.kr.reduce((t, k) => t + tienDo(k), 0) / Math.max(1, mt.kr.length),
+				);
+				return (
+					<SimpleTableRow data-muc-tieu={mt.id} key={mt.id}>
+						<SimpleTableCell>
+							<span className="flex flex-col gap-0.5">
+								<span translate="no">{mt.ten}</span>
+								<span className="text-muted-foreground text-xs" translate="no">
+									{mt.donVi}
+								</span>
+							</span>
+						</SimpleTableCell>
+						<SimpleTableCell className="hidden sm:table-cell">
+							<ThanhTienDo nhan={mt.ten} phanTram={p} />
+						</SimpleTableCell>
+						<SimpleTableCell className="tabular-nums">
+							{mt.kr.length}
+						</SimpleTableCell>
+					</SimpleTableRow>
+				);
+			})}
+		</SimpleTable>
+	);
+}
+
+function PhanKrPhuTrach({ m, giuBang }: { m: Man; giuBang?: boolean }) {
 	return (
 		<section className="flex flex-col gap-3" data-phan="kr-phu-trach">
 			<SectionHeading level={2}>KR bạn phụ trách</SectionHeading>
@@ -392,8 +434,25 @@ function PhanKrPhuTrach({ m }: { m: Man }) {
 					<BangKr ds={m.cua} />
 				</>
 			)}
+			{giuBang ? (
+				<>
+					<SectionHeading level={3}>Mục tiêu của bạn</SectionHeading>
+					<BangMucTieu
+						ds={[
+							...new Map(
+								[...m.cua.map((x) => x.mucTieu), ...m.thamGia].map((mt) => [
+									mt.id,
+									mt,
+								]),
+							).values(),
+						]}
+					/>
+				</>
+			) : null}
 			<div className="flex flex-col gap-1">
-				<NhomThu so={m.thamGia.length} ten="Mục tiêu bạn tham gia" />
+				{giuBang ? null : (
+					<NhomThu so={m.thamGia.length} ten="Mục tiêu bạn tham gia" />
+				)}
 				<NhomThu so={2} ten="Đang theo dõi" />
 				<NhomThu so={1} ten="Đã bỏ" />
 			</div>
@@ -411,7 +470,10 @@ export function CuaToiBaPhanMau({ state }: { state: string }) {
 				<PhanCanCapNhat m={m} />
 				{state === "ST-ctbp-hoi-1-viec-tren" ? null : <KhoiViec />}
 				<PhanDonViDan dan={m.dan} />
-				<PhanKrPhuTrach m={m} />
+				<PhanKrPhuTrach
+					giuBang={state === "ST-ctbp-hoi-2-bang-muc-tieu"}
+					m={m}
+				/>
 			</div>
 		</TrangMucTieu>
 	);

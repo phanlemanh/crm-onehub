@@ -28,6 +28,10 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-ctbp-hoi-1-viec-tren",
 				nhan: "Hỏi-1 · Khối việc trên cùng (máy KHÔNG khuyên — khuyên: Phần 1 đứng đầu)",
 			},
+			{
+				id: "ST-ctbp-hoi-2-bang-muc-tieu",
+				nhan: "Hỏi-2 · Giữ bảng mục tiêu dưới bảng KR (máy KHÔNG khuyên — khuyên: nhóm thu gọn)",
+			},
 		],
 	},
 	{
