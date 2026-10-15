@@ -5,7 +5,7 @@ slug: chat-duong-day-ban-chup
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ci]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-chat-duong-day-ban-chup-design.md
@@ -67,6 +67,11 @@ Quét bằng morphological-scan, preset test-matrix — hai phần độc lập,
 
 ## Notes
 
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Bài kiểm trần thân đếm cả bảng phòng ban dùng chung, nên có thể đỏ nhầm khi chạy cùng bài của gói khác; chức năng vẫn đúng.
+  - Ngoài-2: Kịch bản đẩy bản chụp lấy phần đầu địa chỉ `/rest` từ mã của máy chủ thay vì từ nơi dùng chung.
+  - Ngoài-3: Gọi tay đường bản chụp có dấu gạch cuối hay viết hoa khác bị báo quá lớn dù bản chụp không lớn; kịch bản đẩy chính thức không gặp.
+  - Ngoài-4: Câu kiểm «không tạo bản ghi» trong bài trần thân không thể đỏ; việc từ chối do mã 401/413 chứng.
 - Khoảng hở giữa hai lần gộp: từ lúc LT1c gộp tới lúc LT1d gộp, mọi nhánh lấy onehub trong khoảng đó mang workflow chạy tay được mà chưa có bước chặn. Máy đề nghị điều phối xếp LT1d gộp sát sau LT1c; danh sách nhánh trong khoảng hở đọc bằng `git branch -r --contains <commit gộp LT1c> --no-contains <commit gộp LT1d>`.
 
 - Dựng sau khi LT1c (`feat/lo-trinh-doc-ban-chup`) gộp onehub — mọi tệp sửa đều do LT1c thêm.
