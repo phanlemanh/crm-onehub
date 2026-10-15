@@ -2776,6 +2776,7 @@ executors:
     dh5_ranh_gioi: bun _acceptance/so-do-quanh-muc-tieu/rang/ranh-gioi.mjs
     dh5_dot_bien: bun _acceptance/so-do-quanh-muc-tieu/rang/dot-bien.mjs
     dh5_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/so-do-quanh-muc-tieu/rang/man.mjs"'
+    dh5_soi_xem: bun _acceptance/so-do-quanh-muc-tieu/rang/soi-xem.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

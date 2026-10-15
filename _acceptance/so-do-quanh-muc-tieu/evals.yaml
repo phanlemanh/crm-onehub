@@ -128,3 +128,11 @@ evals:
     expected: "exit 0; rang/dot-bien.mjs: dựng bản sao cây bằng git archive HEAD (trọn thư mục apps packages), chạy bài lành trên bản sao (đối chứng dương phải xanh, không thì exit 1 'ban lanh do'), rồi tám đột biến, mỗi đột biến một bản sao và đúng một bài phải đỏ với thông điệp ghim: (a) bỏ khử trùng nút mục tiêu → dh5-len 'nut lap: <id>'; (b) thêm mọi KR của mục tiêu phía trên → dh5-len 'kr ngoai duong: n1-k2'; (c) đi xuống đệ quy → dh5-xuong 'xuong qua mot bac: D'; (d) đọc mục tiêu không qua mucTieuCuaCay (findMany thẳng) → dh5-quyen 'lo ten muc tieu gioi han'; (e) bỏ nhãn công ty ở KR → dh5-so-do 'thieu nhan cong ty: n1-k1'; (f) phá cả hai lớp: bỏ bộ lọc boGioiHan ở căn chỉnh của okr.service.ts và dựng nút từ căn chỉnh khi đích ngoài tập mts → dh5-quyen 'lo muc tieu gioi han phia tren'; (g) dòng góp lên công ty rút từ các nút cấp công ty thay vì gopLenCongTy → dh5-so-do 'dong gop len lech'; (h) chỉ đọc mục tiêu của kỳ tâm, không gộp kỳ cha → dh5-len 'mat duong len ky cha'. In 'DO DUNG (x)' cho từng đột biến; đột biến nào xanh hay đỏ sai thông điệp → exit 1 gọi tên."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/so-do-quanh-muc-tieu/rang/dot-bien.mjs, apps/api/src/okr/quanh-muc-tieu.ts, "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/api/test/okr-quanh-muc-tieu.spec.ts, apps/app/test/okr-quanh-muc-tieu.dom.tsx]
+
+  - id: E16
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.dh5_soi_xem
+    expected: "exit 0; rang/soi-xem.mjs chạy soi-ma.mjs --ca xem của hồ sơ đã ký gioi-han-duyet-cay-okr (bộ soi mọi lời đọc okrObjective thiếu dieuKienXemMucTieu): đối chứng dương — dòng đếm «okrObjective: N» có N > 0, không thì exit 2 'doi chung duong'; không dòng HONG nào nhắc quanhMucTieu, có thì exit 1 'quanhMucTieu thieu dieu kien xem'. Các dòng HONG khác của kho (8 dòng có sẵn ở bản nền 62f1db904, ngoài vòng) chỉ in số, không làm đỏ. CHIỀU ĐỎ đã đo 15/10 trên 496cdb478 (trước sửa): exit 1 với đúng thông điệp ghim."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-xem.service.ts, _acceptance/so-do-quanh-muc-tieu/rang/soi-xem.mjs]
