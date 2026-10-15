@@ -59,6 +59,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.thk_so_mo_hinh
+    long_running: 100
     expected: "exit 0; chạy SAU khi việc sửa thước E22/E24 của tro-ly-okr-de-xuat gộp vào onehub, máy rảnh, không song song với eval model nào khác. so-mo-hinh.mjs đọc /v1/credits (≤ 0 → mã 2 'KHONG DO DUOC: so du'), rồi lần lượt: E24 (do-tre.mjs --lan 20) và E22 (eval-gop-y.mjs) với TRO_LY_OKR_MO_HINH=google/gemini-3.8-flash rồi =anthropic/claude-haiku-5.5; ba lượt eve eval agent-builder mỗi model trên kho đo riêng của cây, ô model ghi bằng writeAgentModel; số đọc bằng CHÍNH doc-so.mjs. Kiểm nhánh: mã model của các sự kiện model.phien-chon trong kho đo của nhánh Trợ lý OKR, và readAgentModel của kho đo ở nhánh Tác nhân, phải trùng model của nhánh, không thì mã 2 'KHONG DO DUOC: nhanh <m> chay <x>'. In bảng hai model (E24 hỏng/20, p50, p90, số lượt theo từng outcome; E22 đúng/30, góp ý thừa, judge, USD; bộ dựng qua/3) và một dòng kết luận mỗi vai theo NGUONG. Mọi nhánh đo được → mã 0, Haiku đạt hay trượt đều là kết quả; nhánh nào ra khongDo → mã 2 nêu nhánh và đường nhật ký. Nhật ký mỗi nhánh ở .acceptance-runs/thu-haiku-tro-ly-okr/so-mo-hinh/<run>/. Không model GLM nào trong danh sách nhánh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["_acceptance/thu-haiku-tro-ly-okr/rang/so-mo-hinh.mjs", "_acceptance/thu-haiku-tro-ly-okr/rang/doc-so.mjs", apps/agent/agent/lib/okr/mo-hinh-thu.ts, apps/agent/agent/lib/okr/config.ts]
