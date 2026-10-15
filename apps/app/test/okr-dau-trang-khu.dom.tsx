@@ -373,7 +373,11 @@ async function dauTrang(
 	return dung(
 		<>
 			<DauTrangOkr cauNoi={nen.cauNoi ?? true} chonChuKy={CHON_GIA} />
-			{kemThan ? <TheoDonVi /> : null}
+			{kemThan ? (
+				<div data-than-don-vi="">
+					<TheoDonVi />
+				</div>
+			) : null}
 		</>,
 		{ locale, thamSo, duong },
 	);
@@ -639,8 +643,11 @@ describe("dhk-hanh-dong", () => {
 						"dhk-hanh-dong: co NutHoiKara nhung khong nam trong page-shell-actions",
 					);
 				if (t === "theo-don-vi") {
-					await cho(() => q("[data-hang-nut]") !== null, "hang nut than");
-					const than = q("[data-hang-nut]");
+					await cho(
+						() => q("[data-than-don-vi] [data-chon-don-vi]") !== null,
+						"than theo don vi dung xong",
+					);
+					const than = q("[data-than-don-vi]");
 					for (const [chon, ten] of [
 						["[data-nut=them-muc-tieu]", "them-muc-tieu"],
 						["[data-nut=nhap-bang-tinh]", "nhap-bang-tinh"],
@@ -942,7 +949,7 @@ describe("dhk-giu-don", () => {
 		for (const tham of DUONG_DAN) {
 			const vao = new URLSearchParams(tham);
 			const mong = new URLSearchParams();
-			for (const k of ["kyOkr", "donOkr"]) {
+			for (const k of ["kyOkr", "donOkr", "xemOkr"]) {
 				const v = vao.get(k);
 				if (v) mong.set(k, v);
 			}

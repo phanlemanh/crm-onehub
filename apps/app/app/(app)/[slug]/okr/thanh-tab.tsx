@@ -35,9 +35,12 @@ export function ThanhTabOkr({
 	const [thamSo] = useQueryStates(okrParsers);
 	const ky = thamSo[SEARCH_PARAM.okr.ky];
 	const don = thamSo[SEARCH_PARAM.okr.don];
+	const xem = thamSo[SEARCH_PARAM.okr.xem];
 	const giu = new URLSearchParams();
 	if (ky) giu.set(SEARCH_PARAM.okr.ky, ky);
 	if (don) giu.set(SEARCH_PARAM.okr.don, khoaDon(don));
+	// Cách xem đi theo để quay lại Theo đơn vị đúng chỗ (trang-don-vi-mot-bang AC-13).
+	if (xem) giu.set(SEARCH_PARAM.okr.xem, xem);
 	const toi = (t: TabOkr) => {
 		const goc = url(DUONG[t]);
 		return giu.size > 0 ? `${goc}?${giu}` : goc;

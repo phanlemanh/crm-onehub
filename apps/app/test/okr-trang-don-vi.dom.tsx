@@ -1,4 +1,7 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { tinhTrang } from "@crm/validation/okr-muc-tieu";
 import {
 	QueryClient,
@@ -317,6 +320,9 @@ mock.module("@/lib/trpc/client", () => ({
 		okr: okrGia,
 	}),
 }));
+mock.module("@/components/page-transition", () => ({
+	PageTransition: ({ children }: { children: ReactNode }) => children,
+}));
 mock.module("next/navigation", () => ({
 	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
 	useParams: () => ({ slug: "ws" }),
@@ -359,6 +365,8 @@ const { TheoDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
 );
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
+const { ThanhTabOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
+const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
 
 const m = okrMessages("vi");
 const b = m.donViBang;
@@ -1751,5 +1759,125 @@ describe("dvb-trang-thai", () => {
 			(khung?.querySelectorAll("[data-khung-hang=hang] [data-slot=skeleton]")
 				.length ?? 0) > 0,
 		).toBe(true);
+	});
+});
+
+/* ——— Đổi thẻ giữ cách xem (AC-13, E15) ——— */
+
+const HOP_DONG_DH1 = join(
+	dirname(fileURLToPath(import.meta.url)),
+	"../../../_acceptance/dieu-huong-khu-muc-tieu/contract.md",
+);
+
+async function lienKetThe(tham: string, tab: (typeof TAB)[number]) {
+	const s = await ve(<ThanhTabOkr tab={tab} />, new URLSearchParams(tham));
+	const ra = new Map(
+		[...s.o.querySelectorAll("[role=tab]")].map((a) => {
+			const u = new URL(a.getAttribute("href") ?? "/", "http://x");
+			return [u.pathname, u.search] as const;
+		}),
+	);
+	await act(async () => s.root.unmount());
+	s.o.remove();
+	dangMo = dangMo.filter((x) => x !== s);
+	return ra;
+}
+
+const DUONG_THE = {
+	"cua-toi": "/ws/okr",
+	"cap-nhat-tuan": "/ws/okr/cap-nhat-tuan",
+	"theo-don-vi": "/ws/okr/theo-don-vi",
+	"toan-canh": "/ws/okr/toan-canh",
+	"hoi-y": "/ws/okr/hoi-y",
+} satisfies Record<(typeof TAB)[number], string>;
+
+describe("dvb-giu-xem", () => {
+	test("25 lien ket the: tap tham so = giao {kyOkr, donOkr, xemOkr} voi duong dan dang dung", async () => {
+		const DUONG_DAN = [
+			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan",
+			"?kyOkr=q4&xemOkr=cay",
+			"?xemOkr=cham",
+			"?kyOkr=q4&donOkr=pb:P2",
+			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan&phuTrachOkr=U2&expand=M1",
+		];
+		const GIU = ["kyOkr", "donOkr", "xemOkr"];
+		let so = 0;
+		for (const tham of DUONG_DAN) {
+			const vao = new URLSearchParams(tham);
+			const ra = await lienKetThe(tham, "theo-don-vi");
+			for (const t of TAB) {
+				so += 1;
+				const nhan = new URLSearchParams(ra.get(DUONG_THE[t]) ?? "");
+				for (const k of GIU) {
+					const v = vao.get(k);
+					phai(
+						nhan.get(k) === v,
+						`dvb-giu-xem: lien ket ${t} ${v ? `thieu ${k}=${v}` : `thua ${k}`}`,
+					);
+				}
+				const thua = [...nhan.keys()].filter((k) => !GIU.includes(k));
+				phai(
+					thua.length === 0,
+					`dvb-giu-xem: lien ket ${t} thua ${thua.join(",")}`,
+				);
+			}
+		}
+		expect(so).toBe(25);
+	});
+
+	test("vong di-ve qua 4 the khac roi Theo don vi: dung cach xem hop-tuan, don P2", async () => {
+		let tham = `?kyOkr=${QUY.id}&donOkr=pb:P2&xemOkr=hop-tuan`;
+		let dangO: (typeof TAB)[number] = "theo-don-vi";
+		for (const t of [
+			"cua-toi",
+			"cap-nhat-tuan",
+			"toan-canh",
+			"hoi-y",
+			"theo-don-vi",
+		] as const) {
+			const ra = await lienKetThe(tham, dangO);
+			tham = ra.get(DUONG_THE[t]) ?? "";
+			dangO = t;
+		}
+		const cuoi = new URLSearchParams(tham);
+		phai(
+			cuoi.get("xemOkr") === "hop-tuan",
+			`dvb-giu-xem: di-ve ve Theo don vi voi «${tham}», mat xemOkr=hop-tuan`,
+		);
+		const s = await ve(<TheoDonVi />, cuoi);
+		await cho(() => s.o.querySelector("[data-chon-don-vi]") !== null, "trang");
+		expect({
+			xem: s.o.querySelector('[data-view-switch="nut"] [data-state="on"]')
+				?.textContent,
+			don: s.o.querySelector("[data-chon-don-vi]")?.textContent,
+		}).toEqual({ xem: mtc.hopTuan.cachXem, don: CAY.P2.name });
+	});
+
+	test("chu ky ngoai pha cham + xemOkr=cham -> Danh sach", async () => {
+		datDon("pb:P2", [mucTieu("M1", 1)]);
+		const s = await ve(
+			<TheoDonVi />,
+			new URLSearchParams(`?kyOkr=${QUY.id}&donOkr=pb:P2&xemOkr=cham`),
+		);
+		await choBang(s);
+		expect({
+			bang: s.o.querySelector("table") !== null,
+			xem: s.o.querySelector('[data-view-switch="nut"] [data-state="on"]')
+				?.textContent,
+		}).toEqual({ bang: true, xem: m.danhSach });
+	});
+
+	test("hop dong DH1 co dong Notes tro trang-don-vi-mot-bang AC-13", () => {
+		const hd = readFileSync(HOP_DONG_DH1, "utf8");
+		const notes = hd.slice(hd.indexOf("## Notes"));
+		phai(
+			hd.includes("## Notes") &&
+				notes
+					.split("\n")
+					.some(
+						(d) => d.includes("trang-don-vi-mot-bang") && d.includes("AC-13"),
+					),
+			"dvb-giu-xem: hop dong DH1 thieu dong Notes tro AC-13",
+		);
 	});
 });
