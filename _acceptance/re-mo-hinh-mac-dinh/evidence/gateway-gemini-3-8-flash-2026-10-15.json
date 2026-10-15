@@ -1,0 +1,13 @@
+{
+	"nguon": "https://ai-gateway.vercel.sh/v1/models",
+	"fetched_at": "2026-10-15T12:14:31.700Z",
+	"sha256": "7f0195fb7bd1d58127dda6e1b56ae57e573560517106039ac59e4a304163f90c",
+	"entry": {
+		"id": "google/gemini-3.8-flash",
+		"context_window": 1000000,
+		"pricing": {
+			"input": "0.00000075",
+			"output": "0.00000375"
+		}
+	}
+}
