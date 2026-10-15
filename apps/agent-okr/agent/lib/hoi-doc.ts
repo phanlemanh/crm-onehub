@@ -1,6 +1,11 @@
 import { db, type Prisma } from "@crm/db";
 import { dieuKienXemMucTieu, nguCanhXemOkr } from "@crm/db/okr-hien-thi";
-import { kyVongTheoNgay, tienDoMucTieu } from "@crm/db/okr-tien-do";
+import { ngayVN } from "@crm/db/onboarding-nhac";
+import {
+	chonChuKyHienTai,
+	kyVongTheoNgay,
+	tienDoMucTieu,
+} from "@crm/db/okr-tien-do";
 import { MUC_TU_TIN } from "@crm/db/okr-tro-ly-danh-muc";
 import { kieuKr, tienDoKr } from "@crm/validation/okr-kr";
 import {
@@ -40,6 +45,7 @@ export type MucTieuNgan = {
 	donVi: string;
 	loai: (typeof LOAI_MUC_TIEU)[number];
 	chuKy: string;
+	chuKyId: string;
 	tienDo: number;
 	kyVong: number | null;
 	tinhTrang: TinhTrang;
@@ -168,6 +174,7 @@ function dungMucTieu(
 		donVi: tenDonVi(r),
 		loai: loaiMt,
 		chuKy: r.cycle.name,
+		chuKyId: r.cycleId,
 		tienDo,
 		kyVong,
 		tinhTrang: tinhTrang(tienDo, kyVong, loaiMt),
@@ -188,13 +195,63 @@ async function dieuKienNguoi(userId: string) {
 	return nc ? dieuKienXemMucTieu(nc) : null;
 }
 
+export type ChuKyThay = { id: string; ten: string; hienTai: boolean };
+
+export type KetQuaTim = {
+	ok: true;
+	rong: boolean;
+	conThem: boolean;
+	chuKy: ChuKyThay[];
+	mucTieu: MucTieuNgan[];
+};
+
+const ngay = (d: Date) => d.toISOString().slice(0, 10);
+
+async function chuKyThay(
+	quyen: Prisma.OkrObjectiveWhereInput,
+	homNay: Date,
+): Promise<ChuKyThay[]> {
+	const ds = await db.okrCycle.findMany({
+		where: { objectives: { some: { AND: [quyen, { status: "cong-bo" }] } } },
+		orderBy: [{ endsOn: "desc" }, { startsOn: "desc" }],
+		select: {
+			id: true,
+			name: true,
+			kind: true,
+			phase: true,
+			startsOn: true,
+			endsOn: true,
+		},
+	});
+	const hienTai = chonChuKyHienTai(
+		ds.map((c) => ({
+			id: c.id,
+			kind: c.kind,
+			phase: c.phase,
+			startsOn: ngay(c.startsOn),
+			endsOn: ngay(c.endsOn),
+		})),
+		ngayVN(homNay),
+	);
+	return ds.map((c) => ({
+		id: c.id,
+		ten: c.name,
+		hienTai: c.id === hienTai?.id,
+	}));
+}
+
 export async function timOkr(
 	userId: string,
 	loc: LocTim,
 	homNay = new Date(),
-): Promise<{ ok: true; rong: boolean; mucTieu: MucTieuNgan[] }> {
+): Promise<KetQuaTim> {
 	const quyen = await dieuKienNguoi(userId);
-	if (!quyen) return { ok: true, rong: true, mucTieu: [] };
+	if (!quyen)
+		return { ok: true, rong: true, conThem: false, chuKy: [], mucTieu: [] };
+	const chuKy = await chuKyThay(quyen, homNay);
+	const ky =
+		loc.cycleId ?? chuKy.find((c) => c.hienTai)?.id ?? chuKy[0]?.id ?? null;
+	if (!ky) return { ok: true, rong: true, conThem: false, chuKy, mucTieu: [] };
 	const chu = loc.tu
 		? {
 				OR: [
@@ -220,24 +277,26 @@ export async function timOkr(
 		: {};
 	const hang = await db.okrObjective.findMany({
 		where: {
-			AND: [
-				quyen,
-				{ status: "cong-bo" },
-				loc.cycleId ? { cycleId: loc.cycleId } : {},
-				chu,
-				cuaToi,
-			],
+			AND: [quyen, { status: "cong-bo" }, { cycleId: ky }, chu, cuaToi],
 		},
 		orderBy: [{ position: "asc" }, { createdAt: "asc" }],
-		take: TRO_LY_OKR_HOI.tranKetQua.mucTieu,
+		take: TRO_LY_OKR_HOI.tranKetQua.quet,
 		select: chonMucTieu,
 	});
 	const trongSo = await coTrongSo();
-	const mucTieu = hang
+	const khop = hang
 		.map((r) => dungMucTieu(r, trongSo, homNay))
-		.filter((m) => !loc.tinhTrang || m.tinhTrang === loc.tinhTrang)
-		.map(({ capNhat: _bo, ...m }) => m);
-	return { ok: true, rong: mucTieu.length === 0, mucTieu };
+		.filter((m) => !loc.tinhTrang || m.tinhTrang === loc.tinhTrang);
+	const tran = TRO_LY_OKR_HOI.tranKetQua.mucTieu;
+	const mucTieu = khop.slice(0, tran).map(({ capNhat: _bo, ...m }) => m);
+	return {
+		ok: true,
+		rong: mucTieu.length === 0,
+		conThem:
+			khop.length > tran || hang.length === TRO_LY_OKR_HOI.tranKetQua.quet,
+		chuKy,
+		mucTieu,
+	};
 }
 
 export async function docOkr(
