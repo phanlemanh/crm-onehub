@@ -10,14 +10,14 @@ import { LyDoNoiGop } from "@/components/crm/record-sheet/ly-do-noi-gop";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 
-export type CoChuY =
+type CoChuY =
 	| "chua-truong"
 	| "chua-okr"
 	| "chua-noi"
 	| "muc-tieu-chua-gop"
 	| "kr-truot";
 
-export type DongGopThe = {
+type DongGopThe = {
 	dich: string;
 	tenDich: string;
 	donViDich: string;

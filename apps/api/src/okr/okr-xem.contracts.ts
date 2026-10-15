@@ -244,7 +244,7 @@ export const khoiCuaToiOutput = z.object({
 
 export type CayCanChinhOutput = z.infer<typeof cayCanChinhOutput>;
 
-export const CO_CHU_Y = [
+const CO_CHU_Y = [
 	"chua-truong",
 	"chua-okr",
 	"chua-noi",
@@ -252,7 +252,7 @@ export const CO_CHU_Y = [
 	"kr-truot",
 ] as const;
 
-export const dongGopSoDo = z.object({
+const dongGopSoDo = z.object({
 	dich: z.string(),
 	tenDich: z.string(),
 	donViDich: z.string(),
@@ -261,13 +261,13 @@ export const dongGopSoDo = z.object({
 	lyDoTuKara: z.boolean(),
 });
 
-export const mucTieuSoDo = z.object({
+const mucTieuSoDo = z.object({
 	id: z.string(),
 	ten: z.string(),
 	gop: z.array(dongGopSoDo),
 });
 
-export const nutSoDo = z.object({
+const nutSoDo = z.object({
 	khoa: z.string(),
 	ten: z.string(),
 	cap: z.enum(["goc", "bo-phan", "phong-ban"]),
@@ -287,7 +287,7 @@ export const nutSoDo = z.object({
 	mucTieu: z.array(mucTieuSoDo),
 });
 
-export const duongSoDo = z.object({
+const duongSoDo = z.object({
 	tu: z.string(),
 	den: z.string(),
 	loai: z.enum(["lien", "dut"]),

@@ -17,6 +17,7 @@ import {
 import {
 	type SoDoDonViOutput,
 	soDoDonViOutput,
+	type ToanCanhOutput,
 	toanCanhOutput,
 } from "../../api/src/okr/okr-xem.contracts";
 import { type DauVaoSoDo, gopSoDoDonVi } from "../../api/src/okr/so-do-don-vi";
@@ -63,7 +64,7 @@ let hienTai: SoDoDonViOutput = soDoThuan();
 let loiSoDo = false;
 let choMai = false;
 let goiLai = 0;
-let tcDuLieu: unknown = null;
+let tcDuLieu: ToanCanhOutput | null = null;
 const moBanGhi: { kind: string; id: string }[] = [];
 
 const thuTuc = <T,>(duong: string, doc: () => T) => ({
@@ -108,9 +109,11 @@ mock.module("next/navigation", () => ({
 }));
 
 mock.module("next/dynamic", () => ({
-	default: (nap: () => Promise<{ default: React.ComponentType<object> }>) => {
+	default: (
+		nap: () => Promise<{ default: React.ComponentType<{ cycleId: string }> }>,
+	) => {
 		const Luoi = lazy(nap);
-		return (p: object) => (
+		return (p: { cycleId: string }) => (
 			<Suspense fallback={null}>
 				<Luoi {...p} />
 			</Suspense>
@@ -710,24 +713,22 @@ describe("dh4-trang-thai", () => {
 describe("dh4-chu", () => {
 	test("chữ đủ vi/en khác nhau; dữ liệu người không dịch; phím và tiêu điểm; giảm chuyển động", async () => {
 		const en = okrToanCanhMessages("en").soDo;
-		const khoa = (o: object) => Object.keys(o).sort();
-		expect(khoa(vi)).toEqual(khoa(en));
-		for (const k of khoa(vi) as (keyof typeof vi)[]) {
-			const a = vi[k];
-			const b = en[k];
-			const sa =
-				typeof a === "function"
-					? (a as (...x: number[]) => string)(1, 2)
-					: JSON.stringify(a);
-			const sb =
-				typeof b === "function"
-					? (b as (...x: number[]) => string)(1, 2)
-					: JSON.stringify(b);
-			expect({ k, khac: sa !== sb }).toEqual({ k, khac: true });
+		const khoaVi = Object.keys(vi).sort();
+		expect(khoaVi).toEqual(Object.keys(en).sort());
+		type GiaTriSoDo = (typeof vi)[keyof typeof vi];
+		const hienRa = (v: GiaTriSoDo) =>
+			v instanceof Function
+				? String((v as (a: number, b: number) => string)(1, 2))
+				: JSON.stringify(v);
+		for (const k of Object.keys(vi) as (keyof typeof vi)[]) {
+			expect({ k, khac: hienRa(vi[k]) !== hienRa(en[k]) }).toEqual({
+				k,
+				khac: true,
+			});
 		}
 		const uiVi = uiMessages("vi").soDo;
 		const uiEn = uiMessages("en").soDo;
-		expect(khoa(uiVi)).toEqual(khoa(uiEn));
+		expect(Object.keys(uiVi).sort()).toEqual(Object.keys(uiEn).sort());
 		expect(uiVi.thuNho).not.toBe(uiEn.thuNho);
 
 		window.innerWidth = 390;

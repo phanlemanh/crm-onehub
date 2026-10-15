@@ -13,7 +13,7 @@ const nguoi = (ma: string) => idMau("nguoi", ma);
 const bp = (ma: string) => idMau("bp", ma);
 const pb = (ma: string) => idMau("pb", ma);
 export const mtSoDo = (ma: string) => idMau("mt", ma);
-export const krSoDo = (ma: string) => idMau("kr", ma);
+const krSoDo = (ma: string) => idMau("kr", ma);
 
 export const CHU_SO_DO = "vo-duc-anh";
 export const NGUOI_XEM_HEP = "bui-quang-huy";
@@ -206,8 +206,6 @@ const MUC_TIEU: MucTieuCa[] = [
 	},
 ];
 
-export const MUC_TIEU_SO_DO: readonly string[] = MUC_TIEU.map((m) => m.ma);
-
 const dec = (n: number) => new Prisma.Decimal(n);
 
 export async function napCaSoDo(db: Db, { luc }: { luc: Date }): Promise<void> {
@@ -281,7 +279,7 @@ export async function napCaSoDo(db: Db, { luc }: { luc: Date }): Promise<void> {
 	});
 }
 
-export const KY_VONG_THUAN = 46;
+const KY_VONG_THUAN = 46;
 
 type KrThuan = { id: string; kind: "tang-toi" | "moc"; progress: number };
 type GopThuan = {

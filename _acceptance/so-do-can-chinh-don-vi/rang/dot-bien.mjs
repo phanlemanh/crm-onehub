@@ -11,6 +11,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { z } from "../../../packages/validation/node_modules/zod/index.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "..", "..", "..");
@@ -34,9 +35,9 @@ const config = Bun.YAML.parse(
 	readFileSync(join(GOC, "_acceptance/config.yaml"), "utf8"),
 );
 const lenhCua = (khoa) => {
-	const v = config.executors.test[khoa];
-	if (typeof v !== "string") throw new Error(`khong co executors.test.${khoa}`);
-	return v;
+	const r = z.string().safeParse(config.executors.test[khoa]);
+	if (!r.success) throw new Error(`khong co executors.test.${khoa}`);
+	return r.data;
 };
 
 const thay = (a, b) => (s) => {

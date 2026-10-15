@@ -94,11 +94,13 @@ export function layoutTopDown<N extends Node, E extends Edge>(
 	};
 }
 
+export type FlowBend = { path: string; mid: FlowPoint };
+
 export function bendPath(
 	from: FlowPoint,
 	bends: FlowPoint[],
 	to: FlowPoint,
-): { path: string; mid: FlowPoint } {
+): FlowBend {
 	const points = [from, ...bends, to];
 	let path = `M ${from.x} ${from.y}`;
 	for (let i = 1; i < points.length - 1; i += 1) {
@@ -133,8 +135,8 @@ export function pathAround(edges: Edge[], focusId: string): Set<string> {
 }
 
 export function thoiGianChuyenDong(): number {
-	const giam =
-		typeof window !== "undefined" &&
-		window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
-	return giam ? 0 : FLOW_LAYOUT.motion.ms;
+	const giam = globalThis.window?.matchMedia?.(
+		"(prefers-reduced-motion: reduce)",
+	);
+	return giam?.matches === true ? 0 : FLOW_LAYOUT.motion.ms;
 }

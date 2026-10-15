@@ -22,7 +22,7 @@ import { type LocSoDo, soDoParsers } from "../okr-search-params";
 import { SO_DO } from "./so-do-config";
 import { type GopNhanh, type NutThe, TheDonVi } from "./the-don-vi";
 
-export type NutSoDoKhach = NutThe & {
+type NutSoDoKhach = NutThe & {
 	cap: "goc" | "bo-phan" | "phong-ban";
 	cha: string | null;
 	chuaGop: number;
@@ -33,7 +33,7 @@ export type SoDoKhach = {
 	duong: { tu: string; den: string; loai: "lien" | "dut"; soMucTieu: number }[];
 };
 
-export type DuLieuNut = {
+type DuLieuNut = {
 	nut: NutSoDoKhach;
 	dangMo: boolean;
 	chim: boolean;

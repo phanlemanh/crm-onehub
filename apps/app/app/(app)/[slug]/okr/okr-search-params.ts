@@ -84,9 +84,9 @@ export const parseAsMucTinCay =
 
 export const loadOkrSearchParams = createLoader(okrParsers);
 
-export const CACH_XEM_TOAN_CANH = ["bang", "so-do"] as const;
+const CACH_XEM_TOAN_CANH = ["bang", "so-do"] as const;
 
-export const LOC_SO_DO = ["moi", "chu-y"] as const;
+const LOC_SO_DO = ["moi", "chu-y"] as const;
 
 export type LocSoDo = (typeof LOC_SO_DO)[number];
 
