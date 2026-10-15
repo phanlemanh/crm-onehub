@@ -612,6 +612,7 @@ describe("sgt-cham", () => {
 		await moHop("vi");
 		const gia = { rong: "", trang: "   \n ", chu: "có chữ" } as const;
 		let so = 0;
+		let idLyDo = "";
 		for (const [ta, a] of Object.entries(gia))
 			for (const [tb, b] of Object.entries(gia)) {
 				await go(oMuonLam(), a);
@@ -620,9 +621,17 @@ describe("sgt-cham", () => {
 				const lyDo = hop()?.querySelectorAll("[data-ly-do-khoa]") ?? [];
 				const gui = nutTrongHop(m.hop.gui);
 				const moTa = gui?.getAttribute("aria-describedby") ?? "";
+				if (!du && lyDo[0]) idLyDo = (lyDo[0] as HTMLElement).id;
 				if (du) {
 					expect(lyDo.length).toBe(0);
-					expect(moTa).not.toContain("ly-do");
+					expect(idLyDo.length, "chua bat duoc id dong ly do").toBeGreaterThan(
+						0,
+					);
+					expect(
+						moTa.split(" ").includes(idLyDo),
+						"nut gui du chu van tro toi dong ly do",
+					).toBe(false);
+					expect(gui?.disabled).toBe(false);
 				} else {
 					expect(lyDo.length, "nut gui khoa khong noi vi sao").toBe(1);
 					const d = lyDo[0] as HTMLElement;
@@ -724,12 +733,13 @@ describe("sgt-ten-man", () => {
 
 describe("sgt-chu", () => {
 	const CAM = {
-		vi: ["gom", "kéo về", "kit", "khối", "bản vẽ", "lượt", "hồ sơ"],
+		vi: ["gom", "kéo về", "lấy về", "kit", "khối", "bản vẽ", "lượt", "hồ sơ"],
 		en: [
 			"grouped",
 			"grouping",
 			"pull",
 			"pick-up",
+			"picked up",
 			"kit",
 			"block",
 			"snapshot",
@@ -789,5 +799,47 @@ describe("sgt-chu", () => {
 		);
 		await bam(muc);
 		expect(coHoiLai()).toBe(false);
+	});
+});
+
+describe("sgt-cau-sau-gom", () => {
+	test("sgt-cau-sau-gom: cau mang chu nguoi viet duoc danh dau khong dich, cau CRM thi khong", async () => {
+		const m = tinHieuMessages("en");
+		const tenNhom = "Trưởng phòng thấy số tuần trước";
+		const cauKit = dien(m.cauSauGom.nhomChuaCat, { tenNhom });
+		hangCuaToi = [hang("t-1", 1, true), hang("t-2", 2, false)];
+		const o = await ve(
+			<DanhSachTinHieuTrang
+				banVeDocDuoc
+				trangThai={{
+					"crm-1": {
+						nhan: m.nhan.daVaoNhom,
+						cau: cauKit,
+						nghia: "nhap",
+						khongDich: true,
+					},
+				}}
+			/>,
+			"en",
+		);
+		let so = 0;
+		for (const chon of ["tr", "div"]) {
+			const cau1 = o.querySelector(
+				`${chon}[data-tin-hieu='crm-1'] [data-cau-trang-thai]`,
+			);
+			expect(cau1?.textContent).toBe(cauKit);
+			expect(cau1?.textContent).toContain(tenNhom);
+			expect(
+				cau1?.getAttribute("translate"),
+				"cau mang ten nhom khong danh dau khong dich",
+			).toBe("no");
+			const cau2 = o.querySelector(
+				`${chon}[data-tin-hieu='crm-2'] [data-cau-trang-thai]`,
+			);
+			expect(cau2?.textContent).toBe(m.trangThai.choKeoVe);
+			expect(cau2?.hasAttribute("translate")).toBe(false);
+			so += 5;
+		}
+		console.log(`sgt-cau-sau-gom: ${so} khang dinh DOM`);
 	});
 });

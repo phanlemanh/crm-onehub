@@ -102,7 +102,7 @@ API, tệp kéo về git vẫn mang đường dẫn cho đội sản phẩm). T�
 
 ### U8 — chữ trạng thái lặp ý, dùng từ nội bộ «gom», mất nút xoá không nói vì sao
 
-Chữ CRM tự viết (nhãn và câu trạng thái lúc gửi, mô tả hộp, biên nhận, dòng báo). Câu sau gom vẫn là câu kit viết
+Chữ CRM tự viết (nhãn và câu trạng thái lúc gửi, mô tả hộp, biên nhận, dòng báo). Câu lỗi nói nguyên nhân chung (mạng hoặc máy chủ) và khi nào làm lại; «đã nhận / đã mở» thay cho «lấy về» (bổ sung S4 vòng 1 theo hội đồng E10). Ở trạng thái «Đang xem xét», việc «còn làm được gì» là theo dõi tiến độ; mục Xoá khoá mang lý do riêng trong menu ⋮. Câu sau gom vẫn là câu kit viết
 nguyên văn (`cau_nguoi_gui`), không đổi.
 
 | Khoá | Bây giờ (vi) | Sau (vi) | Sau (en) |
@@ -110,13 +110,18 @@ nguyên văn (`cau_nguoi_gui`), không đổi.
 | `nhan.choLayVe` | Chờ lấy về | Đã nhận | Received |
 | `trangThai.choKeoVe` | Đã nhận — chờ đội sản phẩm lấy về | Đội sản phẩm chưa mở. Bạn còn xoá được. | Not opened by the product team yet. You can still delete it. |
 | `nhan.choGom` | Chờ gom | Đang xem xét | Under review |
-| `trangThai.choGom` | Đội sản phẩm đã lấy về — chờ gom nhóm | Đội sản phẩm đang xếp nó cùng những điều tương tự. | The product team is sorting it with similar signals. |
+| `trangThai.choGom` | Đội sản phẩm đã lấy về — chờ gom nhóm | Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây. | The product team is sorting it with similar signals. Follow its progress here. |
 | `trang.banVeChuaDoc` | Trạng thái sau gom chưa đọc được — đang hiện trạng thái lúc gửi. | Chưa đọc được tiến độ mới nhất — đang hiện trạng thái lúc gửi. | Can't read the latest progress — showing the status at sending time. |
 | `hop.moTa` | … Đội sản phẩm gom tín hiệu thành việc, … | … Đội sản phẩm xếp những tín hiệu giống nhau thành việc, và bạn theo dõi được tín hiệu của mình. | … The product team turns similar signals into work, and you can follow yours. |
 | `hop.daGuiMoTa` | Tín hiệu chờ đội sản phẩm lấy về để gom thành việc. Theo dõi ở «Tín hiệu đã gửi». | Đội sản phẩm sẽ xem nó cùng những điều tương tự. Theo dõi ở «Tín hiệu đã gửi». | The product team will review it with similar signals. Follow it under Sent signals. |
+| `nhan.daCoViec` (en) | Already done | (vi giữ «Đã có việc») | Already covered |
+| `hop.chuaGui` | Chưa gửi được — thử lại. | Chưa gửi được — mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát. | Not sent — the network or server was interrupted. Try again in a moment. |
+| `trang.xoaHong` (mới) | — | Chưa xoá được {ma} — mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát. | Couldn't delete {ma} — the network or server was interrupted. Try again in a moment. |
+| `trang.xoaHongDaLayVe` (mới) | — | Chưa xoá được {ma} — đội sản phẩm vừa mở tín hiệu này. | Couldn't delete {ma} — the product team just opened this signal. |
+| `trang.khongXoaDuoc` (mới) | — | Đội sản phẩm đã mở tín hiệu này — không xoá được nữa. | The product team has opened this signal — it can't be deleted anymore. |
 
 Luật đo (máy): mọi câu và nhãn CRM tự viết cho người gửi — bộ khoá `hop`, `trang`, `nhan`, `trangThai` — không chứa
-từ nội bộ trong bảng cấm (`gom`, `kéo về`, `kit`, `khối`, `bản vẽ`, `lượt`, `hồ sơ`); ở mỗi trạng thái CRM, câu không
+từ nội bộ trong bảng cấm (`gom`, `kéo về`, `lấy về`, `kit`, `khối`, `bản vẽ`, `lượt`, `hồ sơ`); ở mỗi trạng thái CRM, câu không
 lặp lại nhãn của nó. Phần đọc-hiểu (một nhân viên không dùng git có hiểu không) là việc của hội đồng.
 
 **Mất nút xoá:** dòng đã lấy về vẫn có nút ⋮; trong menu, mục «Xoá» bị khoá kèm một dòng giải thích «Đội sản phẩm đã

@@ -21,7 +21,8 @@ const en = {
 		daGuiMoTa:
 			"The product team will review it with similar signals. Follow it under Sent signals.",
 		xemDaGui: "View sent signals",
-		chuaGui: "Not sent — try again.",
+		chuaGui:
+			"Not sent — the network or server was interrupted. Try again in a moment.",
 		quaTran:
 			"You've sent {tran} signals today — you can send more from midnight.",
 		baoTruoc: "CRM admins see your name with this signal.",
@@ -51,17 +52,19 @@ const en = {
 			"The product team hasn't opened this signal yet. Deleting it removes it for good.",
 		xoaNut: "Delete signal",
 		thoi: "Keep",
-		khongXoaDuoc: "The product team has it — it can't be deleted anymore.",
+		khongXoaDuoc:
+			"The product team has opened this signal — it can't be deleted anymore.",
 		daXoa: "Signal {ma} deleted.",
-		xoaHong: "Couldn't delete {ma} — try again.",
+		xoaHong:
+			"Couldn't delete {ma} — the network or server was interrupted. Try again in a moment.",
 		xoaHongDaLayVe:
-			"Couldn't delete {ma} — the product team just picked it up.",
+			"Couldn't delete {ma} — the product team just opened this signal.",
 	},
 	nhan: {
 		choLayVe: "Received",
 		choGom: "Under review",
 		le: "Not turned into work",
-		daCoViec: "Already done",
+		daCoViec: "Already covered",
 		daVaoNhom: "In a group",
 		deSau: "Later",
 		chuaBatDau: "Not started",
@@ -71,7 +74,8 @@ const en = {
 	},
 	trangThai: {
 		choKeoVe: "Not opened by the product team yet. You can still delete it.",
-		choGom: "The product team is sorting it with similar signals.",
+		choGom:
+			"The product team is sorting it with similar signals. Follow its progress here.",
 	},
 	cauSauGom: {
 		chuaGom: "The product team hasn't sorted it into a group yet.",
@@ -134,7 +138,8 @@ const vi: TinHieuMessages = {
 		daGuiMoTa:
 			"Đội sản phẩm sẽ xem nó cùng những điều tương tự. Theo dõi ở «Tín hiệu đã gửi».",
 		xemDaGui: "Xem tín hiệu đã gửi",
-		chuaGui: "Chưa gửi được — thử lại.",
+		chuaGui:
+			"Chưa gửi được — mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát.",
 		quaTran:
 			"Hôm nay bạn đã gửi {tran} tín hiệu — gửi tiếp được từ 0 giờ ngày mai.",
 		baoTruoc: "Quản trị CRM thấy tên bạn cùng tín hiệu này.",
@@ -163,11 +168,11 @@ const vi: TinHieuMessages = {
 		xoaThan: "Đội sản phẩm chưa mở tín hiệu này. Xoá là mất hẳn.",
 		xoaNut: "Xoá tín hiệu",
 		thoi: "Giữ lại",
-		khongXoaDuoc: "Đội sản phẩm đã lấy về — không xoá được nữa.",
+		khongXoaDuoc: "Đội sản phẩm đã mở tín hiệu này — không xoá được nữa.",
 		daXoa: "Đã xoá tín hiệu {ma}.",
-		xoaHong: "Chưa xoá được {ma} — thử lại.",
-		xoaHongDaLayVe:
-			"Chưa xoá được {ma} — đội sản phẩm vừa lấy tín hiệu này về.",
+		xoaHong:
+			"Chưa xoá được {ma} — mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát.",
+		xoaHongDaLayVe: "Chưa xoá được {ma} — đội sản phẩm vừa mở tín hiệu này.",
 	},
 	nhan: {
 		choLayVe: "Đã nhận",
@@ -183,7 +188,8 @@ const vi: TinHieuMessages = {
 	},
 	trangThai: {
 		choKeoVe: "Đội sản phẩm chưa mở. Bạn còn xoá được.",
-		choGom: "Đội sản phẩm đang xếp nó cùng những điều tương tự.",
+		choGom:
+			"Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây.",
 	},
 	cauSauGom: {
 		chuaGom: "Đội sản phẩm chưa xếp nó vào nhóm nào.",
