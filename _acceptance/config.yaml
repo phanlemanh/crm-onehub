@@ -1664,7 +1664,26 @@ executors:
     gth_khoan_dung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu.dom.tsx -t khoan-dung
     gth_trang_thai: cd apps/app && bun test ./test/tin-hieu-trang-thai.spec.ts
     gth_khuon: cd packages/validation && bun test test/tin-hieu.spec.ts
+    tvk_man: cd apps/app && bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khoa-api-loai.dom.tsx -t tvk-man
+    tvk_tao_khoa: 'bun run test -- "cd apps/api && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-tao"'
+    tvk_duong_lich: 'bun run test -- "cd apps/api && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-lich"'
+    tvk_duong_khac: 'bun run test -- "cd apps/api && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-duong-khac"'
+    tvk_tu_choi: 'bun run test -- "cd apps/api && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-tu-choi"'
+    tvk_khoa_thuong: 'bun run test -- "cd apps/api && bun test test/tin-hieu.spec.ts -t gth-keo-ve && bun test test/khoa-keo-tin-hieu.spec.ts -t tvk-khoa-thuong && bun test test/khoa-api-ghi-thua.spec.ts"'
+    tvk_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"'
+    tvk_lenh: bun test scripts/tin-hieu/test/keo-ve-lich.test.ts -t tvk-lenh
+    tvk_lich: bun test scripts/tin-hieu/test/lich.test.ts
     gth_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"'
+    mth_api: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-tat-ca.spec.ts"'
+    mth_dem: cd packages/validation && bun test test/tin-hieu-nguong-song.spec.ts
+    mth_ghep: cd apps/app && bun test ./test/tin-hieu-tat-ca.spec.ts
+    mth_the_con: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t the-con
+    mth_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t dong
+    mth_thieu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t thieu
+    mth_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t loc
+    mth_ba_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t ba-so
+    mth_hop: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t hop-bao-truoc
+    mth_trang_thai_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t trang-thai-man
     ltk_menu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-menu"
     ltk_trinh_sua: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-trinh-sua"
     ltk_hoan_tac: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-hoan-tac"
@@ -2675,8 +2694,17 @@ executors:
     gth_lenh_keo_ve: bun test scripts/tin-hieu/test/keo-ve.test.ts
     gth_vong_kit: bun _acceptance/gui-tin-hieu-trong-crm/rang/vong-kit.mjs
     gth_ban_dung: node _acceptance/gui-tin-hieu-trong-crm/rang/ban-dung.mjs
+    tvk_tep_lich: bun _acceptance/tin-hieu-tu-ve-kho/rang/tep-lich.mjs
+    tvk_t1: node _acceptance/tin-hieu-tu-ve-kho/rang/t1.mjs
+    tvk_duong_doc_khoa: bun _acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs
+    tvk_thiet_ke: 'for f in "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     gth_thiet_ke: 'for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     gth_do_man: 'APP_URL=${APP_URL:-http://localhost:3370} API_URL=${API_URL:-http://localhost:3371} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/gui-tin-hieu-trong-crm/rang/do-man.mjs"'
+    mth_khop: bun test scripts/tin-hieu/test/nguong-song-khop.test.ts
+    mth_ban_dung: node _acceptance/moi-tin-hieu-cho-quan-tri/rang/ban-dung.mjs
+    mth_thiet_ke: 'for f in apps/app/components/tin-hieu/thanh-the-tin-hieu.tsx apps/app/components/tin-hieu/ba-so-tin-hieu.tsx apps/app/components/tin-hieu/bang-tat-ca.tsx "apps/app/app/(app)/[slug]/tin-hieu/page.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/page.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/khung-cho.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
+    mth_do_man: 'APP_URL=${APP_URL:-http://localhost:3390} API_URL=${API_URL:-http://localhost:3391} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/moi-tin-hieu-cho-quan-tri/rang/do-man.mjs"'
+    tvk_do_man: 'APP_URL=${APP_URL:-http://localhost:3372} API_URL=${API_URL:-http://localhost:3373} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tin-hieu-tu-ve-kho/rang/do-man.mjs"'
     cgdp_kiem_chuyen: bun _acceptance/chuyen-goi-dieu-phoi/rang/kiem-chuyen.mjs
     cgdp_mo_dun: bun _acceptance/chuyen-goi-dieu-phoi/rang/mo-dun.mjs
     cgdp_hook: bun _acceptance/chuyen-goi-dieu-phoi/rang/hook.mjs
@@ -2687,6 +2715,12 @@ executors:
     cgdp_goi_dot: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-dot.mjs
     cgdp_thay_boi: bun _acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs
     cgdp_khong_do_them: bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
+    bhds_paths_song: bun _acceptance/ba-ho-so-do-san/rang/paths-song.mjs
+    bhds_danh_sach: bun _acceptance/ba-ho-so-do-san/rang/danh-sach.mjs
+    bhds_khai_du: bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs
+    bhds_ghim_xanh: bun _acceptance/ba-ho-so-do-san/rang/ghim-xanh.mjs
+    bhds_chieu_do: bun _acceptance/ba-ho-so-do-san/rang/chieu-do.mjs
+    sol_san_thiet_ke_trang: for t in "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
     kmc_man: 'KHO_TAI_LIEU_BLOB_TOKEN= bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-man-chung/rang/chup-man.mjs"'
     kmc_man_do: 'KHO_TAI_LIEU_BLOB_TOKEN= bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-man-chung/rang/chup-man.mjs --chi-do"'
     kmc_dem_loi: "node _acceptance/khung-man-chung/rang/dem-khung-loi.mjs && node _acceptance/khung-man-chung/rang/dem-khung-loi.mjs --tu-kiem"
@@ -2777,6 +2811,7 @@ risk_tiers:
     # hồ sơ. Khai T1 ngày 01/10 (chủ kho duyệt) khi nới trần job từ 20 lên 30 phút
     # — PR #216 đã bị cổng chặn hai ngày vì đúng lớp «đổi cấu hình, không hồ sơ».
     - ".github/workflows/ci.yml"
+    - "tin-hieu/crm/**"   # tệp tín hiệu lịch chạy kéo về (TH1) — PR hàng chờ chỉ chạm thư mục này
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"

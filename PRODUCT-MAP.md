@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>12 việc"]
+  GD --> B["Sắp mở vòng<br/>11 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>141 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>111 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>114 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -37,7 +37,6 @@ flowchart TD
 
 ## Sắp mở vòng
 
-- Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
 - Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
 - Tôi hỏi về OKR trên web hoặc Zalo và nhận câu trả lời theo quyền của tôi (`hoi-dap-okr`)
@@ -57,6 +56,7 @@ flowchart TD
 ## Đã giao — chờ phiên nghiệm thu
 
 - «Test của agent không nhập mã của app; danh sách thoả thuận Kara trả có một schema dùng chung» (`agent-test-khong-nhap-app`)
+- Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
 - Bàn gieo góp ý dùng chung chạy lại được sau khi công cụ nộp của Trợ lý OKR tự đóng việc, để ba bàn đo màn OKR đo được lại (`ban-gieo-gop-y-sau-nop`)
 - Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Bộ 50 câu hỏi mẫu viết theo tám trang mẫu của kho đo — câu trả lời được, câu phải nói không biết, câu gõ như tin Zalo — kèm lệnh kiểm bộ và lệnh đo trợ lý kho trên bộ bằng script chấm sẵn có (`bo-cau-hoi-mau`)
@@ -128,6 +128,7 @@ flowchart TD
 - «Menu con của bộ lọc mở được trên điện thoại — không còn nằm ngoài màn ở khổ 375» (`menu-con-loc-dien-thoai`)
 - Mở lại một kế hoạch đã đóng hay bỏ «xong» một bước không trả việc về người đã sang vai «chỉ OKR» (`mo-lai-khong-tra-viec-chi-okr`)
 - Kế hoạch hiện ra ở mọi chỗ người đã đứng — tab 30 ngày đầu ở sheet Công ty, mục 30 ngày đầu ở sheet Cá nhân, bước giao cho tôi trong thẻ Tasks, lọc và chia cột theo người được giao, chuyển việc 30 ngày khi một người nghỉ (`moi-phia-deu-thay-ke-hoach`)
+- «Quản trị mở thẻ Tất cả của trang Tín hiệu và thấy ai đã gửi, phòng ban nào, từ màn nào, đang ở đâu, cùng ba con số của ngưỡng sống» (`moi-tin-hieu-cho-quan-tri`)
 - Nền giao diện của Kara trong packages/ui — dấu tia sáng, nhãn Kara có ô «vì sao», ProposedChange hai độ dày (inline không viền, card), dòng biên nhận có Hoàn tác, phản hồi chung — để mọi màn AI sau đó dựng trên một bộ (`nen-kara`)
 - «Tôi bấm một việc đã giao trong trang Lộ trình và đọc trong một phút: vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì, ai quyết» (`ngan-ho-so-trong-lo-trinh`)
 - «Ngoại lệ telemetry của bảy mã giai đoạn gốc được khai trong tài liệu và có thước canh» (`ngoai-le-telemetry-giai-doan`)
@@ -150,6 +151,7 @@ flowchart TD
 - Thước «một chỗ khai» của K2b quét thật khu soạn: ba gốc quét khai một chỗ trong chung.mjs, đọc thư mục thật, gốc nào rỗng thì đỏ gọi tên (`thuoc-mot-cho-khai-quet-man`)
 - Đội tiếp thị chạy trọn một chiến dịch tuyển đối tác trong CRM — phân khúc, làm giàu, nhắm, tiếp cận, đo (`tiep-thi-tuyen-doi-tac`)
 - Tìm và điều hướng kho tài liệu — ⌘K có dấu hay không dấu, trang nhắc tới trang này kèm câu, lọc theo đơn vị, loại, chủ, tab Sức khoẻ, dòng «N bản chờ bạn duyệt» trong nhắc sáng (`tim-va-dieu-huong-kho`)
+- «Người gửi tín hiệu hôm nay thì sáng mai thấy trang của mình đã đổi sang Đội sản phẩm đã nhận, mà không ai phải chạy lệnh» (`tin-hieu-tu-ve-kho`)
 - Toàn cảnh OKR và họp tuần — danh sách theo đơn vị có lọc ở máy chủ, cây căn chỉnh toàn công ty đi bằng bàn phím, bảng họp tuần xếp theo thứ đáng bàn, toàn cảnh cho lãnh đạo có heatmap, phần «OKR của bạn» trên Tổng quan và trang OKR của một người, màn sức khoẻ chương trình cho quản trị; các biến thể packages/ui từ bản mẫu (`toan-canh-okr`)
 - «Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi» (`trang-lo-trinh-trong-crm`)
 - Trợ lý AI đọc Kho tài liệu — hỏi bằng lời thường trong CRM (tab «Hỏi») hay qua bot Zalo, trả lời có trích trang, phiên bản, đoạn nguyên văn do máy chủ kiểm; câu từ chối cố định; cảnh báo quá hạn xác minh và ô đặt hạn; báo sai thành việc cho chủ trang; nhật ký hỏi và hàng câu chưa trả lời được (`tro-ly-doc-kho`)

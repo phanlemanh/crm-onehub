@@ -525,7 +525,12 @@ export function useCrmCache(): CrmCache {
 				options,
 			),
 
-		tinHieu: (options) => run([trpc.tinHieu.cuaToi.queryKey()], [], options),
+		tinHieu: (options) =>
+			run(
+				[trpc.tinHieu.cuaToi.queryKey(), trpc.tinHieu.tatCa.queryKey()],
+				[],
+				options,
+			),
 		thongBao: (options) =>
 			run(
 				[trpc.thongBao.chuong.queryKey()],
