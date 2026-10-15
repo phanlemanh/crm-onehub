@@ -123,3 +123,42 @@ wall: 1149s
 - **claude-sonnet-5-5**: 3 agent · 9 calls · out 8,085 · in 18 · cache_read 334,303 · cache_create 168,489
 - **claude-haiku-5-5**: 12 agent · 24 calls · out 17,752 · in 48 · cache_read 507,035 · cache_create 500,973
 
+### S4 round 4 — wf_372ec24c-9d3 (18 agent, 63,894 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:bugs | claude-opus-5-5 | 19 | 17,718 | 38 | 1,442,493 | 225 |
+| review:measurement | claude-opus-5-5 | 9 | 10,071 | 18 | 564,243 | 148 |
+| synthesize:report | claude-sonnet-5-5 | 6 | 8,470 | 12 | 328,966 | 70 |
+| review:conventions | claude-opus-5-5 | 10 | 7,968 | 20 | 588,224 | 93 |
+| triage | claude-sonnet-5-5 | 2 | 4,032 | 4 | 44,100 | 32 |
+| baseline:diffBase | claude-sonnet-5-5 | 2 | 3,876 | 4 | 43,062 | 26 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,895 | 4 | 42,239 | 12 |
+| machine:bun _acceptance/neo-thuoc-het-han/rang/p | claude-haiku-5-5 | 2 | 1,764 | 4 | 42,273 | 16 |
+| machine:bun _acceptance/neo-thuoc-het-han/rang/c | claude-haiku-5-5 | 2 | 1,457 | 4 | 42,273 | 16 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 1,004 | 4 | 42,294 | 97 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 922 | 4 | 42,264 | 259 |
+| machine:bun _acceptance/neo-thuoc-het-han/rang/c | claude-haiku-5-5 | 2 | 860 | 4 | 42,276 | 9 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 819 | 4 | 2,869 | 321 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 771 | 4 | 39,370 | 260 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 771 | 4 | 42,237 | 176 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 747 | 4 | 42,233 | 9 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 502 | 4 | 38,161 | 9 |
+| machine:bun _acceptance/neo-thuoc-het-han/rang/g | claude-haiku-5-5 | 2 | 247 | 4 | 42,275 | 7 |
+
+
+wall: 1245s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 3,876 | 43,062 | 26 | 11:02:08 | 11:02:34 |
+| machine | 11 | 11,257 | 422,603 | 1134 | 11:02:08 | 11:21:02 |
+| review | 3 | 35,757 | 2,594,960 | 227 | 11:02:08 | 11:05:54 |
+| triage | 1 | 4,032 | 44,100 | 32 | 11:21:02 | 11:21:33 |
+| capture | 1 | 502 | 38,161 | 9 | 11:21:33 | 11:21:43 |
+| synthesize | 1 | 8,470 | 328,966 | 70 | 11:21:43 | 11:22:53 |
+
+- **claude-opus-5-5**: 3 agent · 38 calls · out 35,757 · in 76 · cache_read 2,594,960 · cache_create 271,729
+- **claude-sonnet-5-5**: 4 agent · 12 calls · out 16,880 · in 24 · cache_read 454,289 · cache_create 218,496
+- **claude-haiku-5-5**: 11 agent · 22 calls · out 11,257 · in 44 · cache_read 422,603 · cache_create 500,258
+

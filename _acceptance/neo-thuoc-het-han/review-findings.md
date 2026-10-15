@@ -1,26 +1,68 @@
-# Review findings: neo-thuoc-het-han (round 3)
+# Review findings: neo-thuoc-het-han (round 4)
 
 ## Trong hợp đồng
 
-Không có phát hiện nào trong hợp đồng ở round này.
+Không có phát hiện nào.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Đối chứng dương của hai-ref coi mọi khác biệt là đạt, kể cả khi lượt «trước» là KHONG DO DUOC (mã 2) hoặc một lượt bị sập**
+- **pham-vi: phép «HOAN LAI CON DOI» không so HEAD với mốc nền như expected E5 đã khai, và bỏ qua run-log.jsonl**
+  Người dùng thấy gì: Phép kiểm «hồ sơ cũ đã được trả về nguyên bản» hiện chỉ nhìn các tệp mà vòng này có chạm vào. Nếu sau này có người sửa lén hồ sơ đó bằng đường khác thì phép kiểm có thể không thấy, dù hôm nay hồ sơ vẫn sạch.
+  file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **pham-vi: không giải được MOC_NEN thì KHOA_NEN rỗng và kiểm «CONFIG DOI GIA TRI» tự tắt, không ra mã 2**
+  Người dùng thấy gì: Nếu máy chạy kiểm tra thiếu lịch sử git, phép kiểm «không đổi giá trị cấu hình có sẵn» sẽ tự tắt mà vẫn báo đạt. Với cách chạy hiện nay điều này chưa xảy ra.
+  file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **pham-vi không bắt việc xoá hay sửa một mục danh sách của khoá config đã có ở mốc nền**
+  Người dùng thấy gì: Phép kiểm cấu hình chỉ bắt được việc đổi giá trị đơn lẻ, chưa bắt được việc xoá hay sửa một mục trong danh sách cấu hình. Một thay đổi như vậy trong tương lai có thể lọt qua mà không ai được báo.
+  file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **pham-vi bỏ qua mã lỗi của git, phép soát tự tắt mà vẫn báo «dat»**
+  Người dùng thấy gì: Nếu lệnh git trong phép kiểm phạm vi bị lỗi giữa chừng, phép kiểm có thể lặng lẽ bỏ qua một số commit mà vẫn báo đạt. Chỉ xảy ra khi môi trường chạy kiểm tra có sự cố.
+  file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): lời hứa «bốn tệp Bun.YAML từ chối nay đọc được» của AC-3 chỉ được đo bằng việc chữ «Bun.YAML» vắng mặt trong mã nguồn**
+  Người dùng thấy gì: Việc bốn hồ sơ khó đọc nay đọc được mới được kiểm gián tiếp, bằng cách xem mã cũ đã bị bỏ chưa, chứ chưa có phép thử trực tiếp cho thấy bốn hồ sơ đó thật sự được đọc ra. Nếu bộ đọc lặng lẽ trả về rỗng thì phép kiểm vẫn xanh.
+  file: `_acceptance/neo-thuoc-het-han/rang/chay-o-dinh.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): ba bộ bắt CONFIG DOI GIA TRI, CHAM cap-nhat-tuan-okr và HOAN LAI CON DOI của AC-6 không có đối chứng dương**
+  Người dùng thấy gì: Ba phép kiểm phạm vi chưa được thử bằng một ca cố ý vi phạm để chứng minh chúng báo đỏ đúng lúc. Hiện chúng chỉ được thấy là im lặng trên lịch sử thật, nên nếu chúng hỏng ngầm thì khó phát hiện.
+  file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (tuyên quét lớp nhưng chỉ có một phần): AC-6 hứa «mọi tệp dưới _acceptance/so-okr-tu-chay/ ở đỉnh giống hệt mốc nền», nhưng hoanLaiConDoi chỉ so tệp do commit của vòng chạm và loại hẳn run-log.jsonl**
+  Người dùng thấy gì: Phép kiểm «hồ sơ cũ về đúng nguyên bản» không quét hết mọi tệp trong hồ sơ, và bỏ qua hẳn tệp nhật ký. Hôm nay hồ sơ vẫn sạch, nhưng một thay đổi lọt vào tệp nhật ký sẽ không bị phát hiện.
+  file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Đối chứng dương của hai-ref coi mọi khác biệt là đạt, kể cả khi lượt «trước» là KHONG DO DUOC (mã 2) hoặc một lượt bị sập (r3 · tệp đã đổi)**
   Người dùng thấy gì: Phép thử kiểm tra «thước còn đo đúng sau khi có commit mới» có thể báo đạt ngay cả khi lượt đo trước đó không đo được gì. Vì vậy một lần báo đạt chưa chắc chứng minh thước thật sự bắt được thay đổi, nhưng không làm hỏng kết quả nào mà hồ sơ đã hứa.
   file: `_acceptance/neo-thuoc-het-han/rang/hai-ref.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (đối chứng dương không ghim thông điệp): DOI CHUNG DUONG chỉ đòi «trước và sau commit giả khác nhau», không đòi dấu commit giả hiện ra trong đầu ra**
+- **Hình dạng 4 (đối chứng dương không ghim thông điệp): DOI CHUNG DUONG chỉ đòi «trước và sau commit giả khác nhau», không đòi dấu commit giả hiện ra trong đầu ra (r3 · tệp đã đổi)**
   Người dùng thấy gì: Phép thử đối chứng chỉ kiểm tra rằng kết quả đổi đi khi thêm commit giả, chứ không kiểm tra rằng kết quả đổi đúng vì dấu của commit giả. Có thể có lần báo đạt mà thước thật ra đổi vì lý do khác, nên độ tin của phép thử này yếu hơn vẻ ngoài.
   file: `_acceptance/neo-thuoc-het-han/rang/hai-ref.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): bất biến của pham-vi đúng sẵn theo cách dựng, còn luật «không đổi giá trị khoá config» và «không chạm cap-nhat-tuan-okr» không có đối chứng dương (r2)**
+- **Hình dạng 4 (âm tính một mình): bất biến của pham-vi đúng sẵn theo cách dựng, còn luật «không đổi giá trị khoá config» và «không chạm cap-nhat-tuan-okr» không có đối chứng dương (r2 · tệp đã đổi)**
   Người dùng thấy gì: Bộ kiểm phạm vi hiện xanh nhưng chưa có ca thử chứng minh nó thật sự bắt được một commit đổi giá trị cấu hình có sẵn hay đụng vào hồ sơ cập nhật tuần OKR. Nếu ai đó vi phạm hai luật này, có thể không có gì báo đỏ.
   file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
   severity: low
@@ -32,7 +74,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): AC-3 «bốn tệp Bun.YAML từ chối nay đọc được» chỉ được đo bằng grep mã nguồn và mã thoát 0 (r2)**
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): AC-3 «bốn tệp Bun.YAML từ chối nay đọc được» chỉ được đo bằng grep mã nguồn và mã thoát 0 (r2 · tệp đã đổi)**
   Người dùng thấy gì: Việc bốn tệp mô tả kiểm thử nay đọc được chỉ được xác nhận gián tiếp, qua việc lệnh chạy xong không lỗi. Nếu bộ đọc mới đọc ra rỗng thì bước kiểm vẫn có thể báo xanh.
   file: `_acceptance/neo-thuoc-het-han/rang/chay-o-dinh.mjs`
   severity: low
@@ -44,7 +86,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **The fixed merge-pair sha for PR #162 is declared twice in one dossier, and the check that resolves it is copied three times (r1)**
+- **The fixed merge-pair sha for PR #162 is declared twice in one dossier, and the check that resolves it is copied three times (r1 · tệp đã đổi)**
   Người dùng thấy gì: Mốc gộp cố định được ghi ở nhiều chỗ, nên sau này đổi mốc mà quên một chỗ thì phép kiểm sẽ lệch nhau. Hiện tại chưa gây sai kết quả.
   file: `_acceptance/so-okr-tu-chay/rang/soi-ma.mjs`
   severity: low
@@ -68,13 +110,13 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo nhãn in ra thay vì phạm vi thật được dùng): E1 kiểm dòng «dai so sanh» của E23, mà dòng này là hằng độc lập với tepDiff (r1)**
+- **Hình dạng 1 (đo nhãn in ra thay vì phạm vi thật được dùng): E1 kiểm dòng «dai so sanh» của E23, mà dòng này là hằng độc lập với tepDiff (r1 · tệp đã đổi)**
   Người dùng thấy gì: Phép kiểm chỉ đọc dòng nhãn in ra chứ không kiểm tệp thật được soi, nên nếu script trôi phạm vi mà vẫn in nhãn đúng thì phép kiểm không phát hiện.
   file: `_acceptance/neo-thuoc-het-han/rang/chay-o-dinh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (khẳng định âm một mình, không đối chứng dương): các bộ bắt DOI NGOAI, CONFIG DOI GIA TRI, CHAM của pham-vi không lần nào được cho bắn thử (r1)**
+- **Hình dạng 4 (khẳng định âm một mình, không đối chứng dương): các bộ bắt DOI NGOAI, CONFIG DOI GIA TRI, CHAM của pham-vi không lần nào được cho bắn thử (r1 · tệp đã đổi)**
   Người dùng thấy gì: Phép kiểm phạm vi chưa từng được thử bằng một vi phạm cố ý, nên nếu nó hỏng im lặng thì vẫn báo xanh và không ai biết.
   file: `_acceptance/neo-thuoc-het-han/rang/pham-vi.mjs`
   severity: medium
