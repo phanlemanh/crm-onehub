@@ -24,6 +24,8 @@ CA = [
     ("E8", NUT, "gui.mutate({ muonLam, daXayRa, man });", "gui.mutate({ muonLam, daXayRa, man: tenMan(man, locale) });", DOM + "sgt-ten-man", "gia tri gui len doi khoi duong dan"),
     ("E9", MSG, 'choGom: "Đang xem xét",', 'choGom: "Chờ gom",', DOM + "'sgt-chu: chu'", "chu trang thai dung tu noi bo: gom"),
     ("E9b", DS, "disabled={!d.coTheXoa}", "disabled={false}", DOM + "'sgt-chu: dong'", "dong da lay ve"),
+    ("E14b", DS, 'translate={trangThai.khongDich ? "no" : undefined}', "translate={undefined}", DOM + "sgt-cau-sau-gom", "cau mang ten nhom khong danh dau khong dich"),
+    ("E6c", HOP, "const khoaVi = khoaTran ? idLoi : coChu ? null : idLyDo;", "const khoaVi = khoaTran ? idLoi : idLyDo;", DOM + "'sgt-cham: ma tran'", "nut gui du chu van tro toi dong ly do"),
     ("E14", TT, "const cau = cauSauGom(b, nhanCuaHang(b, nhom, m), tenViec, m);", "const cau = b.cau_nguoi_gui ?? b.cau;", "bun test ./test/sua-giao-dien-tin-hieu-cau.spec.ts", "cau sau gom chi co tieng Viet"),
 ]
 
