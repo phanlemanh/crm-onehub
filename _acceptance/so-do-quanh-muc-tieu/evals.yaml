@@ -1,0 +1,129 @@
+slug: so-do-quanh-muc-tieu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dh5_len
+    expected: "exit 0; apps/api/test/okr-quanh-muc-tieu.spec.ts -t dh5-len (CSDL kiểm thật): beforeAll nạp bộ mẫu và ca sơ đồ của DH4 bằng napCaSoDo (writer thật, không viết tay); quản trị gọi okr.quanhMucTieu qua tRPC, đầu ra parse bằng quanhMucTieuOutput thật. Ma trận viết trước bốn tâm (số assert tâm === 4): sd-a1-1 → tập nút phía trên toEqual {sd-a-1, n1-k1, n1}, tập cạnh toEqual {n1->n1-k1 cua, n1-k1->sd-a-1 gop, sd-a-1->sd-a1-1 gop}, gopLenCongTy toEqual [{kr: n1-k1, mucTieu: n1}]; sd-a3-1 → mỗi id trong {sd-a-1, n1-k1, n1} đúng một nút (đếm theo id, in 'nut lap: <id>' nếu > 1), có cạnh n1->sd-a3-1 gop, gopLenCongTy chứa đủ n1-k1 và {kr: null, mucTieu: n1}; n1 → laCongTy true, không nút phía trên; sd-b-1 → phía trên rỗng, gopLenCongTy rỗng. KR n1-k2 không là nút ở tâm sd-a1-1 (in 'kr ngoai duong: n1-k2'). Id rút từ mtSoDo/hằng của bộ gieo, không chép chuỗi. Đối chứng dương: tâm sd-a1-1 có ≥ 3 nút phía trên. Chiều đỏ ghim ở E15 (a), (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/quanh-muc-tieu.ts, apps/api/src/okr/okr-xem.service.ts, apps/api/src/okr/okr-xem.contracts.ts, apps/api/src/okr/okr.router.ts, apps/api/test/okr-quanh-muc-tieu.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dh5_xuong
+    expected: "exit 0; cùng tệp, -t dh5-xuong: gopQuanhMucTieu trên mts dựng bằng mucTieuThuan (bộ dựng thuần của ca-so-do.ts, cùng hằng với bộ gieo — không viết tay MucTieuOutput) gồm tâm T có KR k1, k2; C1 góp vào T, C2 góp vào k2, D góp vào C1; thêm cặp X góp vào Y, Y góp vào X. Tâm T: tập nút phía dưới toEqual {k1, k2, C1, C2}, tập cạnh xuống toEqual {T->k1 cua, T->k2 cua, T->C1 gop, k2->C2 gop}, D không là nút (in 'xuong qua mot bac: D'). Tâm X: hàm trả trong ≤ 1 giây và mỗi id đúng một nút (in 'vong gop lap nut'). Kèm một ca CSDL: quản trị gọi okr.quanhMucTieu với tâm sd-a-1 → phía dưới chứa sd-a-1-k1, sd-a1-1, sd-a3-1. Chiều đỏ ghim ở E15 (c)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/quanh-muc-tieu.ts, apps/api/test/okr-quanh-muc-tieu.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dh5_quyen
+    expected: "exit 0; cùng tệp, -t dh5-quyen (CSDL kiểm thật): người xem NGUOI_XEM_HEP (hằng của bộ gieo) không thấy sd-g; gọi okr.quanhMucTieu tâm sd-a-1: JSON.stringify(đầu ra) không chứa tên sd-g (rút từ bộ gieo; in 'lo ten muc tieu gioi han'), không nút nào có id sd-g, không cạnh nào chạm sd-g; tập id mục tiêu của đầu ra ⊆ tập id mà okr.cayCanChinh trả cho cùng người xem cùng kỳ (rút từ writer thật; in 'ngoai tap cay: <id>'); gọi với tâm sd-g → lỗi tRPC NOT_FOUND; id không tồn tại → NOT_FOUND. Đối chứng dương: quản trị gọi tâm sd-a-1 thì đầu ra có sd-g. Chiều đỏ ghim ở E15 (d)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/quanh-muc-tieu.ts, apps/api/src/okr/okr-xem.service.ts, apps/api/test/okr-quanh-muc-tieu.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dh5_loi_vao
+    expected: "exit 0; apps/app/test/okr-quanh-muc-tieu.dom.tsx -t dh5-loi-vao: dựng ObjectiveSheet với trpc giả trả mucTieuOutput parse bằng schema thật; hàng hành động có đúng một phần tử a có chữ msg.nutXemQuanh và href === '/<slug>/okr/quanh-muc-tieu/<id>' (slug và id của bài); [data-khu=gop-vao] vẫn hiện đủ dòng góp như trước (đếm === số alignments). Đối chứng đỏ ghim: mục tiêu không đọc được (NOT_FOUND) thì không có nút."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/lib/messages/okr-quanh.ts, apps/app/test/okr-quanh-muc-tieu.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dh5_so_do
+    expected: "exit 0; cùng tệp, -t dh5-so-do: đầu ra sinh qua gopQuanhMucTieu trên mts của mucTieuThuan rồi parse bằng quanhMucTieuOutput thật (không viết tay); số thẻ [data-slot=flow-map-card] === số nút; thẻ tâm có data-active; thẻ cấp công ty (mục tiêu onehub và KR của nó) mang chữ msg.congTy, thẻ khác không (ma trận viết trước, mỗi thẻ một assert); prop centerId đưa vào FlowMap === tamId; dòng [data-gop-len-cong-ty] có ba biến thể: tâm sd-a1-1 → chứa tên KR n1-k1 và tên n1; tâm n1 → msg.laCongTy; tâm sd-b-1 → msg.chuaLenCongTy. Chiều đỏ ghim ở E15 (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dh5_ro_chuot
+    expected: "exit 0; cùng tệp, -t dh5-ro-chuot: ở trạng thái đầu, mọi thẻ trên đường quanh tâm không mang data-dim; rê chuột (mouseenter thật trên nút React Flow) lên thẻ KR n1-k2 của một bộ dữ liệu có nhánh ngoài đường: thẻ ngoài pathAround(edges, n1-k2) mang data-dim, thẻ trên đường không (tập so bằng pathAround rút từ flow-layout thật, không chép); mouseleave thì về trạng thái đầu. Đối chứng dương: số thẻ data-dim khi rê > 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dh5_bam
+    expected: "exit 0; cùng tệp, -t dh5-bam: bấm thẻ mục tiêu sd-a-1 → openRecord giả nhận đúng {kind: 'objective', id: sd-a-1}; bấm thẻ KR n1-k1 → {kind: 'kr', id: n1-k1}; Enter và Space trên thẻ có tiêu điểm cũng gọi đúng một lần mỗi phím (ma trận 2 loại thẻ × 3 cách bấm = 6 assert)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.dh5_hep
+    expected: "exit 0; cùng tệp, -t dh5-hep: matchMedia giả dưới md → không có [data-flow-map]; [data-quanh-danh-sach] có các nhóm theo đúng thứ tự [gop-vao, tam, kr, gop-vao-no] (nhóm rỗng vắng — ca sd-b-1 không có nhóm gop-vao); số dòng mỗi nhóm === số nút cùng phía của đầu ra; nhóm gop-vao xếp công ty trước; dòng [data-gop-len-cong-ty] có mặt; bấm một dòng gọi openRecord đúng kind và id."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.dh5_trang_thai
+    expected: "exit 0; cùng tệp, -t dh5-trang-thai: ma trận ba trạng thái truy vấn giả — đang chạy: aria-busy, chữ sr-only === msg.dangTai (kết thúc bằng …), không [data-flow-map]; lỗi thường: VungTaiLoi với tiêu đề msg.loiTieuDe, bấm thử lại gọi refetch đúng một lần; lỗi NOT_FOUND: chữ msg.khongThay và một liên kết tới /<slug>/okr/toan-canh, không VungTaiLoi. Page dựng tiêu đề msg.tieuDe ở cả ba."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/[objectiveId]/page.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.dh5_chu
+    expected: "exit 0; cùng tệp, -t dh5-chu: mọi khoá của okr-quanh.ts có ở cả vi và en và hai bản khác nhau (đếm khoá vi === khoá en); tên mục tiêu, KR, đơn vị trong thẻ và danh sách nằm trong phần tử translate=no; thẻ là phần tử có tabIndex 0 và class chứa focus-visible. Kèm messages-guard.spec.ts thoát 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr-quanh.ts, "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx, apps/app/test/messages-guard.spec.ts]
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.dh5_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static trên từng tệp: quanh-muc-tieu/[objectiveId]/page.tsx, quanh-muc-tieu/quanh-muc-tieu.tsx, quanh-muc-tieu/the-quanh.tsx, components/crm/record-sheet/objective-sheet.tsx; mỗi tệp thoát 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/[objectiveId]/page.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx]
+
+  - id: E12
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dh5_man
+    steps:
+      - "Cảnh trước màn đầu: phiên đo riêng (mot-luot.sh), bộ mẫu nạp bằng okr:mau kèm ca sơ đồ của DH4; tâm, KR công ty kỳ vọng và mục tiêu góp hai chỗ rút từ hằng của writer bộ gieo (mtSoDo, ca-so-do.ts) — không rút từ okr.quanhMucTieu; người xem khai trong rang/ca-man.json"
+      - "Ở 1440×1000: mở ngăn chi tiết của sd-a1-1 (?record=objective:<id>), bấm nút «Xem quanh mục tiêu» thật; trang sơ đồ hiện; dòng góp lên công ty chứa tên KR n1-k1; thẻ KR ấy mang nhãn «Công ty»; chụp ảnh. Mở trang của sd-a3-1: mục tiêu n1 đúng một thẻ; chụp ảnh. Rê chuột lên một thẻ ngoài đường quanh tâm: có thẻ mờ; chụp ảnh"
+      - "Ở 390×844: mở trang của sd-a1-1; không có khung vẽ, danh sách hiện; chụp ảnh; đo không cuộn ngang ở cấp trang (scrollingElement) có đối chứng đỏ chèn khối rộng vào body của bản sao"
+    expected: "exit 0; 4 ảnh (ngăn → sơ đồ, góp hai chỗ, rê chuột ở 1440; danh sách ở 390) trong _acceptance/so-do-quanh-muc-tieu/evidence/; mỗi kiểm in 'DUNG'; console không lỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/[objectiveId]/page.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/api/src/okr/quanh-muc-tieu.ts, _acceptance/so-do-quanh-muc-tieu/rang/man.mjs, _acceptance/so-do-quanh-muc-tieu/rang/ca-man.json]
+
+  - id: E13
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.dh5_giu_ho_so
+    expected: "exit 0; rang/giu-ho-so.mjs: rút danh sách hồ sơ signed-off/machine-cleared từ _acceptance/*/contract.md, với mỗi eval test/script không khai status: not-run mà paths giao với git diff --name-only <điểm gộp DH4 gần nhất>..HEAD (bỏ _acceptance/**), chạy đúng lệnh config của eval và so mã kỳ vọng; in 'DUNG <hồ sơ>/<E>' mỗi eval; git diff <điểm gộp DH4> -- apps/api/src/okr/can-chinh.ts packages/ui/src/components/flow-map.tsx packages/ui/src/lib/flow-layout.ts rỗng (in 'sua tep cam: <tệp>'). Đối chứng dương ghim trong tệp: bộ lọc với danh sách tệp [objective-sheet.tsx] chọn được muc-tieu-va-kr#E8; với [_acceptance/config.yaml] chọn 0 eval."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/so-do-quanh-muc-tieu/rang/giu-ho-so.mjs, _acceptance/so-do-quanh-muc-tieu/contract.md]
+
+  - id: E14
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.dh5_ranh_gioi
+    expected: "exit 0; rang/ranh-gioi.mjs: danh sách tệp được phép rút từ mục Ranh giới trong ## Notes của contract.md (không chép); git diff --name-only <điểm gộp DH4 gần nhất>..HEAD chỉ gồm tệp trong danh sách hoặc khớp _acceptance/so-do-quanh-muc-tieu/**, docs/**, PRODUCT-MAP.md, LO-TRINH.html (in 'tep ngoai ranh gioi: <tệp>'); tệp đánh (chỉ thêm) không có dòng xoá (in 'xoa dong o tep chi-them: <tệp>'). Đối chứng dương ghim trong tệp: bản diff giả có tệp lạ → đỏ đúng thông điệp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/so-do-quanh-muc-tieu/rang/ranh-gioi.mjs, _acceptance/so-do-quanh-muc-tieu/contract.md]
+
+  - id: E15
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.dh5_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs: dựng bản sao cây bằng git archive HEAD (trọn thư mục apps packages), chạy bài lành trên bản sao (đối chứng dương phải xanh, không thì exit 1 'ban lanh do'), rồi năm đột biến, mỗi đột biến một bản sao và đúng một bài phải đỏ với thông điệp ghim: (a) bỏ tập đã thăm khi đi lên → dh5-len 'nut lap: <id>'; (b) thêm mọi KR của mục tiêu phía trên → dh5-len 'kr ngoai duong: n1-k2'; (c) đi xuống đệ quy → dh5-xuong 'xuong qua mot bac: D'; (d) đọc mục tiêu không qua mucTieuCuaCay (findMany thẳng) → dh5-quyen 'lo ten muc tieu gioi han'; (e) bỏ nhãn công ty ở KR → dh5-so-do 'thieu nhan cong ty: n1-k1'. In 'DO DUNG (x)' cho từng đột biến; đột biến nào xanh hay đỏ sai thông điệp → exit 1 gọi tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/so-do-quanh-muc-tieu/rang/dot-bien.mjs, apps/api/src/okr/quanh-muc-tieu.ts, "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/api/test/okr-quanh-muc-tieu.spec.ts, apps/app/test/okr-quanh-muc-tieu.dom.tsx]
