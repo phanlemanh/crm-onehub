@@ -1,32 +1,3 @@
 {
-  "feature_plain": "Ở Thoả thuận, Onboarding và Tài liệu, ô lọc và nút đổi kiểu xem trông và chạy như nhau, và đường dẫn gửi cho đồng nghiệp mở ra đúng bộ lọc.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho ô lọc một chỗ duy nhất để hiện số đếm: chữ phụ màu xám, không mờ nhoè, số 0 vẫn hiện."},
-    {"id": "AC-3", "p": "Sẽ đổi ô lọc trạng thái của Thoả thuận từ menu thả thành ba chip Tất cả · Đang mở · Đã chốt có số đếm, giống Onboarding; bấm chip thì về trang 1."},
-    {"id": "AC-4", "p": "Sẽ dùng một nút đổi kiểu xem chung ở Thoả thuận và Onboarding (kể cả «Chia cột theo»): nhóm nút trên máy tính, ô chọn trên điện thoại; khoá khi Thoả thuận đang xem lưu trữ."},
-    {"id": "AC-5", "p": "Sẽ cho Tài liệu ghi bộ lọc lên đường dẫn theo cùng một cách với các danh sách khác; bấm lọc thì danh sách đổi ngay, không tải lại trang."},
-    {"id": "AC-6", "p": "Sẽ để đường dẫn có bộ lọc, kể cả đường dẫn đã gửi trước hôm nay, mở ra đúng bộ lọc và đúng kiểu xem ở cả ba màn."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Sẽ KHÔNG còn màn nào tự vẽ số đếm trong chip lọc — trừ Lộ trình, đã khai riêng."},
-    {"id": "OOS-1", "p": "Không quyết ở vòng này chuyện bảng trên điện thoại cuộn ngang hay thành thẻ dọc (Hỏi-2)."},
-    {"id": "OOS-2", "p": "Không đụng màn Lộ trình — vùng của máy khác, màn đó đã đúng dáng."},
-    {"id": "OOS-3", "p": "Không đổi thanh thẻ gạch chân của OKR và Tài liệu — đó là trang con, không phải ô lọc."},
-    {"id": "OOS-4", "p": "Không đổi tên tham số trên đường dẫn, để đường dẫn cũ vẫn mở được."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Đã quét bảy màn có chip lọc hay nút đổi kiểu xem, lấy từ mã đang chạy."},
-    {"i": 1, "p": "Đã soát năm loại điều khiển theo đúng mục «Chip lọc và chuyển kiểu xem» của luật giao diện."},
-    {"i": 2, "p": "Hai cách người dùng tới một trạng thái: bấm trên màn, và mở đường dẫn được gửi tới."},
-    {"i": 3, "p": "Hai khổ: điện thoại 360 và máy tính 1280, vì nút đổi kiểu xem đổi dáng ở giữa."},
-    {"i": 4, "p": "Phần làm ngay: số đếm ở mọi chip, chip trạng thái Thoả thuận, nút kiểu xem hai màn, lọc Tài liệu, mở đường dẫn ba màn, chụp hai khổ (AC-1 tới AC-7)."},
-    {"i": 5, "p": "Để sau: bảng trên điện thoại (Hỏi-2), Lộ trình, lọc trạng thái ở bảng cột Thoả thuận (bảng cột chia theo giai đoạn)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Không phép đo nào bắt được chuyện bấm lọc ở Tài liệu mà danh sách đứng yên — đã thêm vế vào AC-5 và hai phép đo bấm trên cùng trang."},
-    {"i": 1, "p": "Tên tham số đường dẫn của Tài liệu ghi lệch giữa thiết kế và hợp đồng — đã chốt theo mã đang chạy và thêm phép đo đường dẫn chép tay kiểu cũ."},
-    {"i": 2, "p": "Phép đo «về trang 1» và «mở bảng cột» không phân biệt được với mặc định — đã cho chúng bắt đầu từ trang 2 và từ bảng cột."},
-    {"i": 3, "p": "Ảnh điện thoại của Thoả thuận không mở khối lọc gập, và câu hỏi cho hội đồng bắt cả vùng cuộn đã chấp nhận — đã thêm bước mở và nêu tên hai vùng cuộn."},
-    {"i": 4, "p": "«Chia cột theo» của Onboarding được giữ nguyên mà không có căn cứ — đã đổi sang nút kiểu xem chung, theo luật giao diện kể «theo đơn vị» là một kiểu xem."}
-  ]
+  "feature_plain": "Ở Thoả thuận, Onboarding và Tài liệu, chip lọc và nút đổi kiểu xem trông và chạy như nhau, số đếm là chữ phụ không mờ, và đường dẫn gửi cho đồng nghiệp mở ra đúng bộ lọc."
 }
