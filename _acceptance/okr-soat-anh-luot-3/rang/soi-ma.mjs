@@ -17,7 +17,7 @@ const DAY = dirname(fileURLToPath(import.meta.url));
 const GOC_THAT = join(DAY, "..", "..", "..");
 const GOC = process.env.GOC_KHO ?? GOC_THAT;
 const ts = createRequire(import.meta.url)("typescript");
-// F8 neo: tap tep va dong doi cua vong nay rut tu cap gop PR #146 da dua vong len onehub
+// F8 neo (ve-sinh-do-san-onehub): tap tep va dong doi cua vong nay rut tu cap gop PR #146 da dua vong len onehub
 // (B = 679432a0f^1, D = 679432a0f), khong tu merge-base(HEAD, onehub) — sau khi vong gop,
 // merge-base chua san vong nay nen diff rong (lop-dem-tep 0 = 0, do sai tren moi nhanh).
 const CAP = Object.freeze({
@@ -185,7 +185,7 @@ function tepDiff() {
 	const git = (...doi) =>
 		execFileSync("git", ["-C", GOC_THAT, ...doi], { encoding: "utf8" }).trim();
 	kiemCap();
-	// F8 neo: tep cua vong = diff cap gop B..D, ton tai o D.
+	// F8 neo (ve-sinh-do-san-onehub): tep cua vong = diff cap gop B..D, ton tai o D.
 	return git("diff", "--name-only", `${CAP.goc}..${CAP.dinh}`)
 		.split("\n")
 		.filter(Boolean)
@@ -199,7 +199,7 @@ function hangTrongTep(tep) {
 	if (HANG.has(tep)) return HANG.get(tep);
 	const bang = new Map();
 	HANG.set(tep, bang);
-	// F8 neo: hang doc o cung ban voi tep dang soi (D khi neo).
+	// F8 neo (ve-sinh-do-san-onehub): hang doc o cung ban voi tep dang soi (D khi neo).
 	const chu = docChu(tep);
 	if (chu === null) return bang;
 	const sf = ts.createSourceFile(
@@ -231,7 +231,7 @@ function duongNhap(tep, nguon) {
 			: null;
 	if (goc === null) return null;
 	for (const duoi of [".ts", ".tsx", "/index.ts"])
-		// F8 neo: tep nhap tim o cung ban voi tep dang soi (D khi neo).
+		// F8 neo (ve-sinh-do-san-onehub): tep nhap tim o cung ban voi tep dang soi (D khi neo).
 		if (docChu(goc + duoi) !== null) return goc + duoi;
 	return null;
 }
@@ -278,7 +278,7 @@ function dongDoi(tep) {
 	if (process.env.OSA_TEP) return null;
 	const git = (...doi) =>
 		execFileSync("git", ["-C", GOC_THAT, ...doi], { encoding: "utf8" });
-	// F8 neo: dong doi cua vong = diff -U0 cap gop B..D (so dong theo ban D).
+	// F8 neo (ve-sinh-do-san-onehub): dong doi cua vong = diff -U0 cap gop B..D (so dong theo ban D).
 	const dong = new Set();
 	for (const d of git("diff", "-U0", `${CAP.goc}..${CAP.dinh}`, "--", tep).split("\n")) {
 		const m = d.match(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/);
@@ -350,7 +350,7 @@ function caThanhPhan() {
 	const tep = tepDiff();
 	let soTep = 0;
 	for (const t of tep) {
-		// F8 neo: soi ban D cua tep (cung ban voi dong doi cua cap gop).
+		// F8 neo (ve-sinh-do-san-onehub): soi ban D cua tep (cung ban voi dong doi cua cap gop).
 		const chu = docChu(t);
 		if (chu === null) khongDo(`khong doc duoc ${t} o ${CAP.dinh}`);
 		const sf = ts.createSourceFile(t, chu, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);

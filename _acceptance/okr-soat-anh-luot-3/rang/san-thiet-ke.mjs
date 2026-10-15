@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const DAY = dirname(fileURLToPath(import.meta.url));
 const GOC = join(DAY, "..", "..", "..");
-// F8 neo: tap tep cua vong rut tu cap gop PR #146 da dua vong len onehub (B = 679432a0f^1,
+// F8 neo (ve-sinh-do-san-onehub): tap tep cua vong rut tu cap gop PR #146 da dua vong len onehub (B = 679432a0f^1,
 // D = 679432a0f), khong tu merge-base(HEAD, onehub) — sau khi gop, merge-base chua san vong
 // nay nen tap rong (ma 2) hoac la tep cua vong khac.
 const CAP = Object.freeze({
@@ -78,13 +78,13 @@ if (process.argv.includes("--pha")) {
 for (const sha of [CAP.goc, CAP.dinh])
 	if (spawnSync("git", ["-C", GOC, "cat-file", "-e", `${sha}^{commit}`]).status !== 0)
 		khongDo(`khong giai duoc cap gop ${sha}`);
-// F8 neo: tep cua vong = diff cap gop B..D; design-gate soi ban hien tai cua tung tep.
+// F8 neo (ve-sinh-do-san-onehub): tep cua vong = diff cap gop B..D; design-gate soi ban hien tai cua tung tep.
 const tep = git("diff", "--name-only", `${CAP.goc}..${CAP.dinh}`)
 	.split("\n")
 	.filter(Boolean)
 	.filter((t) => VUNG.test(t))
 	.filter((t) => existsSync(join(GOC, t)));
-// F8 neo: cau in goi ten cap gop thay cho merge-base.
+// F8 neo (ve-sinh-do-san-onehub): cau in goi ten cap gop thay cho merge-base.
 if (tep.length === 0) khongDo(`khong tep giao dien nao trong diff cap gop ${CAP.goc.slice(0, 8)}..${CAP.dinh.slice(0, 8)}`);
 console.log(`tap tep: ${tep.length} (diff cap gop ${CAP.goc.slice(0, 8)}..${CAP.dinh.slice(0, 8)})`);
 

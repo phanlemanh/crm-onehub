@@ -24,7 +24,7 @@ const git = (...thamSo) =>
 	execFileSync("git", thamSo, { cwd: goc, encoding: "utf8", maxBuffer: 64e6 });
 const doc = (duong) => readFileSync(join(goc, duong), "utf8");
 
-// F8 neo: diff cua vong (muc 1, muc 3, ranh gioi) rut tu cap gop PR #344 da dua vong len
+// F8 neo (ve-sinh-do-san-onehub): diff cua vong (muc 1, muc 3, ranh gioi) rut tu cap gop PR #344 da dua vong len
 // onehub (B = d089cb8da^1, D = d089cb8da), khong tu merge-base(HEAD, onehub) — sau khi gop,
 // merge-base chua san vong nay (muc 3 do sai) va diff la tep cua vong khac (ranh gioi do sai).
 const CAP = Object.freeze({
@@ -147,7 +147,7 @@ function dongThemTuDiff(diff) {
 
 function docVatThat(cap = CAP) {
 	kiemCap(cap);
-	// F8 neo: ba lan doc diff deu tren cap gop B..D.
+	// F8 neo (ve-sinh-do-san-onehub): ba lan doc diff deu tren cap gop B..D.
 	const cap2 = `${cap.goc}..${cap.dinh}`;
 	const diff = git(
 		"diff",
@@ -207,7 +207,7 @@ function kiem(v) {
 	];
 }
 
-// F8 neo: tu-thu khong sua cay lam viec — tep trong diff thi dung mot commit tam (cay D voi
+// F8 neo (ve-sinh-do-san-onehub): tu-thu khong sua cay lam viec — tep trong diff thi dung mot commit tam (cay D voi
 // mot tep doi, cha B) bang chi muc tam; tep doc truc tiep (docs/ai-ux.md) thi doi trong bo nho.
 function capBanSao(tep, doi) {
 	const chiMuc = join(tmpdir(), `sk-luat-${process.pid}-${Date.now()}`);
@@ -274,7 +274,7 @@ if (tuThu) {
 	];
 	let sai = 0;
 	for (const c of ca) {
-		// F8 neo: suaTam dung vat tren ban sao (commit tam / bo nho), khong ghi cay lam viec.
+		// F8 neo (ve-sinh-do-san-onehub): suaTam dung vat tren ban sao (commit tam / bo nho), khong ghi cay lam viec.
 		const loi = suaTam(c.tep, c.doi, (v) => kiem(v).filter(Boolean));
 		const dat = loi.some((l) => l.startsWith(c.cho));
 		console.log(
