@@ -3,14 +3,14 @@
 bam bo-mau: 0b3f3f96ddddb749f0a1d78b43f4cdbe88af8648e6fae42722c9fb66b0e02ac2
 bam tro-ly: b288d7ceb59c7a91e688b2b034db7cb21838dced7c777d0ecc6a5b051a105178
 ma thoat cham-bo-do: 2
-thu muc luot cham-bo-do: .acceptance-runs/tro-ly-doc-kho/cham-bo-do/2026-10-15T12-40-35-466Z-9616
+thu muc luot cham-bo-do: .acceptance-runs/tro-ly-doc-kho/cham-bo-do/2026-10-15T21-48-33-084Z-25121
 luot 1: 46 ma
 luot 2: 50 ma
 
 ## Tổng của script chấm
 
-- KHONG DO DUOC: 4 cau loi (m23, m28, m32, m43)
-- demHoiKho cua cua so chay: traLoi 74, tuChoi 17, loi 1, tiLe 81.3%
+- KHONG DO DUOC: 3 cau loi (m22, m23, m43)
+- demHoiKho cua cua so chay: traLoi 75, tuChoi 17, loi 0, tiLe 81.5%
 
 ## Bảng
 
@@ -20,7 +20,7 @@ luot 2: 50 ma
 | --- | --- | --- | --- | --- |
 | S1 | 15 | 15 | 100.0% | 0 |
 | S2 | 5 | 5 | 100.0% | 0 |
-| S3 | 7 | 8 | 87.5% | 0 |
+| S3 | 8 | 8 | 100.0% | 0 |
 | S6-gan | 4 | 4 | 100.0% | 0 |
 | S6-ngoai | 4 | 4 | 100.0% | 0 |
 | S7 | 10 | 10 | 100.0% | 0 |
@@ -29,7 +29,7 @@ luot 2: 50 ma
 
 | ô | đạt | đếm | tỉ lệ | lỗi |
 | --- | --- | --- | --- | --- |
-| chuan | 35 | 36 | 97.2% | 0 |
+| chuan | 36 | 36 | 100.0% | 0 |
 | khong-dau | 2 | 2 | 100.0% | 0 |
 | sai-chinh-ta | 2 | 2 | 100.0% | 0 |
 | tin-zalo | 2 | 2 | 100.0% | 0 |
@@ -43,17 +43,15 @@ luot 2: 50 ma
 | S1 | 15 | 15 | 100.0% | 0 |
 | S2 | 5 | 5 | 100.0% | 0 |
 | S3 | 6 | 6 | 100.0% | 2 |
-| S6-gan | 3 | 3 | 100.0% | 1 |
+| S6-gan | 4 | 4 | 100.0% | 0 |
 | S6-ngoai | 4 | 4 | 100.0% | 0 |
 | S7 | 9 | 9 | 100.0% | 1 |
 | ngoai-kho | 4 | 4 | 100.0% | 0 |
 
 ### Không đạt
 
-- m23 (luot 1: sai)
+- m22 (luot 2: loi)
 - m23 (luot 2: loi)
-- m28 (luot 2: loi)
-- m32 (luot 2: loi)
 - m43 (luot 2: loi)
 
 <!-- bang-do -->
@@ -71,7 +69,7 @@ luot 2: 50 ma
       "loi": 0
     },
     "S3": {
-      "k": 7,
+      "k": 8,
       "n": 8,
       "loi": 0
     },
@@ -93,7 +91,7 @@ luot 2: 50 ma
   },
   "kieuChu": {
     "chuan": {
-      "k": 35,
+      "k": 36,
       "n": 36,
       "loi": 0
     },
@@ -140,9 +138,9 @@ luot 2: 50 ma
       "loi": 2
     },
     "S6-gan": {
-      "k": 3,
-      "n": 3,
-      "loi": 1
+      "k": 4,
+      "n": 4,
+      "loi": 0
     },
     "S6-ngoai": {
       "k": 4,
@@ -161,10 +159,8 @@ luot 2: 50 ma
     }
   },
   "khongDat": [
-    "m23 (luot 1: sai)",
+    "m22 (luot 2: loi)",
     "m23 (luot 2: loi)",
-    "m28 (luot 2: loi)",
-    "m32 (luot 2: loi)",
     "m43 (luot 2: loi)"
   ]
 }
