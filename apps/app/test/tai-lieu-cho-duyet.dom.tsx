@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
@@ -71,7 +72,6 @@ mock.module("next/link", () => ({
 }));
 
 const { ChoDuyet } = await import("@/app/(app)/[slug]/tai-lieu/cho-duyet");
-const { thamSo } = await import("@/app/(app)/[slug]/tai-lieu/danh-sach-loc");
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -93,23 +93,22 @@ async function mo(page: number): Promise<HTMLElement> {
 	document.body.appendChild(khung);
 	root = createRoot(khung);
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-	const toi = (sua: { page?: number }) =>
-		`/ws/tai-lieu${thamSo({
-			tab: "cho-duyet",
-			loai: null,
-			donVi: null,
-			chu: null,
-			nhom: "cho",
-			page,
-			...sua,
-		})}`;
+	const duong = `?tabTaiLieu=cho-duyet${page > 1 ? `&page=${page}` : ""}`;
 	await act(async () => {
 		root?.render(
-			<QueryClientProvider client={qc}>
-				<LocaleProvider locale="vi">
-					<ChoDuyet nhom="cho" page={page} toi={toi} />
-				</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter
+				hasMemory
+				onUrlUpdate={(e) => {
+					canh.den.push(`/ws/tai-lieu${e.queryString}`);
+				}}
+				searchParams={duong}
+			>
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale="vi">
+						<ChoDuyet />
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	for (let i = 0; i < 6; i += 1) {

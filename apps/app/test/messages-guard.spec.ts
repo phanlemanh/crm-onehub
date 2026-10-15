@@ -401,6 +401,7 @@ const GHIM_LO_TRINH = {
 		"1 việc · A/B đã giao trong phạm vi lọc",
 		"12 việc · A/B đã giao trong phạm vi lọc",
 	],
+	"lo-trinh:gioLay.capNhat": ["Cập nhật lúc 1", "Cập nhật lúc 12"],
 	"lo-trinh:metaTre": [" · 1 trễ mốc", " · 12 trễ mốc"],
 	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
 	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
