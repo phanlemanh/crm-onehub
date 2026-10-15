@@ -153,9 +153,45 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "removeAlignment",
+		ham: "congSuaCanChinh",
 		bang: "okrAlignment",
-		lyDo: "ghi: đọc căn chỉnh theo mã rồi assertSuaMucTieu trên nguồn; đích giới hạn không có căn chỉnh",
+		lyDo: "ghi: hàm cổng chung của removeAlignment và suaLyDoCanChinh — đọc căn chỉnh theo mã rồi assertSuaMucTieu trên nguồn ngay sau; đích giới hạn không có căn chỉnh",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "suaLyDoCanChinh",
+		bang: "okrAlignment",
+		lyDo: "ghi: đọc lại căn chỉnh cùng mã trong giao dịch sau congSuaCanChinh (đã qua assertSuaMucTieu trên nguồn)",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "xoaMucTieu",
+		bang: "tho:okrKeyResult",
+		lyDo: "ghi: khoá hàng KR của mục tiêu FOR UPDATE sau assertSuaMucTieu (đã qua điều kiện xem)",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "xoaMucTieu",
+		bang: "okrObjective",
+		lyDo: "ghi: đọc tiêu đề và KR của chính mục tiêu vừa qua assertSuaMucTieu (đã qua điều kiện xem)",
+	},
+	{
+		tep: "packages/db/src/okr-muc-tieu-lich-su.ts",
+		ham: "lichSuMucTieu",
+		bang: "okrObjective",
+		lyDo: "thư viện, chỉ gọi sau cổng xem: xoaMucTieu gọi sau assertSuaMucTieu, objective gọi với mục tiêu đã đọc bằng điều kiện xem; trả có/không và lý do, không trả tên",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "mine",
+		bang: "okrObjective",
+		lyDo: "chỉ lấy mã mục tiêu theo vai của chính người gọi (vaiCuaToi); chiaCuaToi chỉ lọc danh sách đã đọc bằng dieuKienXemMucTieu, nên đầu ra không rộng hơn điều kiện xem",
+	},
+	{
+		tep: "apps/api/src/okr/tro-ly.service.ts",
+		ham: "coKrSuaDuoc",
+		bang: "okrKeyResult",
+		lyDo: "gọi duy nhất sau assertXemMucTieu; đếm KR của chính người gọi trong mục tiêu ấy, chỉ ra có/không",
 	},
 	{
 		tep: "apps/api/src/okr/khep.ts",
