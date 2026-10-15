@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b6ae48e01a18fb2225725b4e13194faa59017ff3
+verified_commit: ed6482e739e62d41b694480403479c943f8394ae
 human_signoff:
 ---
 
@@ -280,3 +280,7 @@ none — every multi-run eval is uniform
 Round 1: REJECT — suite app đỏ vì múi giờ của test, sáu phép đo chỉ kiểm chuỗi hoặc tự so với chính nó. Returned to implementation (commit 88a0c87ca: đo quan hệ thay chuỗi, đối chứng dương, múi giờ test tự đặt).
 Round 2: cả 18 eval xanh, nhưng suite app còn đỏ ở ngan-ho-so-vai.dom.tsx, tệp mà vòng 1 chưa bao giờ chạy tới. Returned to implementation (commit b6ae48e01: phá-thử vai của LT1b theo lời gọi mới của trang).
 Round 3: PASS — bảy lệnh suite xanh trên commit b6ae48e01, 18 eval mang sang từ vòng 2 vì delta không chạm paths của chúng.
+
+### Re-pin lần 1 — 2026-10-15, do LT1c gộp onehub b57509860; LT1c sửa bảng chỗ đọc khoá của TH1 và phá-thử vai của LT1b
+run_id: repin-20261015T080002Z-93833
+sha: ed6482e739e62d41b694480403479c943f8394ae · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E3b · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
