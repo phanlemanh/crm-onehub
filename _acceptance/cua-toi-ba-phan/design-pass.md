@@ -72,7 +72,7 @@ Trục: phần 3 chỉ có bảng KR hay giữ thêm bảng mục tiêu.
   đơn vị hai lần (phần 2 và bảng); đánh đổi: thành viên quen dùng Của tôi làm bảng mục tiêu phải mở nhóm «Mục tiêu bạn
   tham gia» với mục tiêu không có KR của mình.
 - **Giữ bảng mục tiêu dưới bảng KR** (state ST-ctbp-hoi-2-bang-muc-tieu) — động cơ: không ai mất chỗ quen, mọi mục
-  tiêu của mình hiện một bảng; đánh đổi: trang dài thêm một bảng (1280 px: 1865 px so với 1683 px), mục tiêu có KR
+  tiêu của mình hiện một bảng; đánh đổi: trang dài thêm một bảng, mục tiêu có KR
   của mình hiện hai lần (dòng KR và dòng mục tiêu).
 
 ## Cảnh ngữ-cảnh
