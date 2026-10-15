@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed6482e739e62d41b694480403479c943f8394ae
+verified_commit: 1cebbed3d3794b70c685ed2bb15f154e2c301e2d
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -197,3 +197,7 @@ sha: 091faf0a721059133f9d9c62255e092716e89908 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-15, do LT1c gộp onehub b57509860; LT1c sửa bảng chỗ đọc khoá của TH1 và phá-thử vai của LT1b
 run_id: repin-20261015T080002Z-93833
 sha: ed6482e739e62d41b694480403479c943f8394ae · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · giới hạn đã khai không còn: E7 (khai 2) · ngoài làn máy: E9, E10 (E10 không khai paths) · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-15, do gộp onehub d9eb83536 (#416) sau chữ ký Cổng Bằng chứng
+run_id: repin-20261015T102257Z-30568
+sha: 1cebbed3d3794b70c685ed2bb15f154e2c301e2d · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · giới hạn đã khai không còn: E7 (khai 2) · ngoài làn máy: E9, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
