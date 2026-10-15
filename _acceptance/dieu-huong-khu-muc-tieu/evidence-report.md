@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4ec18b3a7ff8c2439209d62d26886d2339e77a52
+verified_commit: 9b770cdfd17edbd6680a2e8b141f23ac8f7cbf1e
 human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_0412087d-785, engine feature-loop 2.30.0). Ngoài-1, 3–16 ghi Known limits; Ngoài-2, 17, 18 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -230,3 +230,7 @@ none — mọi eval chạy một lần, xác định (runs 1), không có pass_r
 
 Round 1: E6, E7 và lệnh lint:slop đỏ; verdict REJECT. Theo ghi chú quyết định của vòng, nguyên nhân E6/E7 là đột biến tiêm tại chỗ lọt vào lượt vật-lành khi các lệnh chạy song song; kèm một phát hiện trong hợp đồng ở AC-3 (hanh-dong-khu.tsx). Returned to implementation.
 Round 2: chuyển đột biến sang worktree tạm; mọi eval xanh (E12 carry-forward từ round 1, delta không chạm paths của nó); không còn phát hiện trong hợp đồng. Lưu ý: mốc verified_at của round 2 là mốc làm tròn do bước capture không trả thời điểm từng lệnh; run_id khớp bản đồ đã ghi vào run-log.
+
+### Re-pin lần 1 — 2026-10-15, do sửa AC-8 khung xương + thước dhk_man nuốt SAI (DH2 15/10)
+run_id: repin-20261015T073627Z-12344
+sha: 9b770cdfd17edbd6680a2e8b141f23ac8f7cbf1e · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
