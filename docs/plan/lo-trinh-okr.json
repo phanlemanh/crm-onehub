@@ -1992,6 +1992,25 @@
       ]
     },
     {
+      "ma": "TH6b",
+      "slug": "tieu-diem-sau-hop-xoa-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 445.6,
+      "dung_tren": [
+        "TH6"
+      ],
+      "ten": "Tiêu điểm sau hộp xoá tín hiệu",
+      "ten_ngan": "Tiêu điểm sau xoá",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Người dùng bàn phím hay trình đọc màn bấm «Giữ lại» hoặc gặp lỗi khi xoá tín hiệu vẫn đứng đúng dòng mình vừa thao tác, không phải dò lại từ đầu trang»",
+      "vai": "Người gửi tín hiệu",
+      "vi_sao": "Gốc: _acceptance/sua-giao-dien-tin-hieu/ — Ngoài-6 ở Cổng Bằng chứng TH6 15/10, chủ kho chọn «mở hợp đồng mới».",
+      "bat_khi": "Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Mở từ thẻ Cổng Bằng chứng TH6 (chủ kho 15/10). Chưa gắn mốc.",
+      "dot": "vong-tin-hieu-1410"
+    },
+    {
       "ma": "LT1c",
       "slug": "lo-trinh-doc-ban-chup",
       "hang": "T3",
