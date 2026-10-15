@@ -1674,6 +1674,16 @@ executors:
     tvk_lenh: bun test scripts/tin-hieu/test/keo-ve-lich.test.ts -t tvk-lenh
     tvk_lich: bun test scripts/tin-hieu/test/lich.test.ts
     gth_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"'
+    mth_api: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-tat-ca.spec.ts"'
+    mth_dem: cd packages/validation && bun test test/tin-hieu-nguong-song.spec.ts
+    mth_ghep: cd apps/app && bun test ./test/tin-hieu-tat-ca.spec.ts
+    mth_the_con: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t the-con
+    mth_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t dong
+    mth_thieu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t thieu
+    mth_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t loc
+    mth_ba_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t ba-so
+    mth_hop: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t hop-bao-truoc
+    mth_trang_thai_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-tat-ca.dom.tsx -t trang-thai-man
     ltk_menu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-menu"
     ltk_trinh_sua: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-trinh-sua"
     ltk_hoan_tac: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/luu-tru-truong-khong-hoi.dom.tsx -t ltk-hoan-tac"
@@ -2693,6 +2703,10 @@ executors:
     tvk_thiet_ke: 'for f in "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     gth_thiet_ke: 'for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     gth_do_man: 'APP_URL=${APP_URL:-http://localhost:3370} API_URL=${API_URL:-http://localhost:3371} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/gui-tin-hieu-trong-crm/rang/do-man.mjs"'
+    mth_khop: bun test scripts/tin-hieu/test/nguong-song-khop.test.ts
+    mth_ban_dung: node _acceptance/moi-tin-hieu-cho-quan-tri/rang/ban-dung.mjs
+    mth_thiet_ke: 'for f in apps/app/components/tin-hieu/thanh-the-tin-hieu.tsx apps/app/components/tin-hieu/ba-so-tin-hieu.tsx apps/app/components/tin-hieu/bang-tat-ca.tsx "apps/app/app/(app)/[slug]/tin-hieu/page.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/page.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/khung-cho.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
+    mth_do_man: 'APP_URL=${APP_URL:-http://localhost:3390} API_URL=${API_URL:-http://localhost:3391} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/moi-tin-hieu-cho-quan-tri/rang/do-man.mjs"'
     tvk_do_man: 'APP_URL=${APP_URL:-http://localhost:3372} API_URL=${API_URL:-http://localhost:3373} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tin-hieu-tu-ve-kho/rang/do-man.mjs"'
     cgdp_kiem_chuyen: bun _acceptance/chuyen-goi-dieu-phoi/rang/kiem-chuyen.mjs
     cgdp_mo_dun: bun _acceptance/chuyen-goi-dieu-phoi/rang/mo-dun.mjs

@@ -23,6 +23,7 @@ const en = {
 		chuaGui: "Not sent — try again.",
 		quaTran:
 			"You've sent {tran} signals today — you can send more from midnight.",
+		baoTruoc: "CRM admins see your name with this signal.",
 	},
 	trang: {
 		tieuDe: "Sent signals",
@@ -67,6 +68,33 @@ const en = {
 		choGom: "Picked up by the product team — waiting to be grouped",
 	},
 	menu: "Sent signals",
+	the: {
+		nhan: "Signals",
+		cuaToi: "Mine",
+		tatCa: "All",
+	},
+	tatCa: {
+		tieuDe: "All signals",
+		moTa: "Signals everyone has sent: who sent them, from where, and where they are now. Only CRM owners and admins see this page.",
+		cot: { ma: "Code", nguoiGui: "Sent by", phongBan: "Department" },
+		khongConTaiKhoan: "Account removed",
+		chuaCoPhongBan: "No department",
+		soTrongKy: "Signals in the last {ngay} days",
+		gomChuaLayVe: "Includes signals not picked up yet",
+		soPhong: "Departments with signals",
+		khongPhong: "Last {ngay} days · no department: {so}",
+		soChuaCoCho: "Over {han} days without a place",
+		trenQuaHan: "Of {so} signals sent over {han} days ago",
+		chuaDocCho: "Status after grouping can't be read",
+		rongTieuDe: "No one has sent a signal yet",
+		rongMoTa: "Signals from everyone will show up here.",
+		meta: "{so} signals",
+		taiLoiTieuDe: "Couldn't load all signals",
+		taiLoiMoTa: "The list didn't load. Try again in a moment.",
+		khongQuyen: "Only CRM owners and admins can see all signals.",
+		khongQuyenMoTa: "Signals you sent are still under Sent signals.",
+		ve: "Go to sent signals",
+	},
 };
 
 export type TinHieuMessages = typeof en;
@@ -94,6 +122,7 @@ const vi: TinHieuMessages = {
 		chuaGui: "Chưa gửi được — thử lại.",
 		quaTran:
 			"Hôm nay bạn đã gửi {tran} tín hiệu — gửi tiếp được từ 0 giờ ngày mai.",
+		baoTruoc: "Quản trị CRM thấy tên bạn cùng tín hiệu này.",
 	},
 	trang: {
 		tieuDe: "Tín hiệu đã gửi",
@@ -137,6 +166,33 @@ const vi: TinHieuMessages = {
 		choGom: "Đội sản phẩm đã lấy về — chờ gom nhóm",
 	},
 	menu: "Tín hiệu đã gửi",
+	the: {
+		nhan: "Tín hiệu",
+		cuaToi: "Của tôi",
+		tatCa: "Tất cả",
+	},
+	tatCa: {
+		tieuDe: "Mọi tín hiệu",
+		moTa: "Tín hiệu mọi người đã gửi: ai gửi, từ đâu và đang ở đâu. Chỉ chủ và quản trị CRM thấy trang này.",
+		cot: { ma: "Mã", nguoiGui: "Người gửi", phongBan: "Phòng ban" },
+		khongConTaiKhoan: "Không còn tài khoản",
+		chuaCoPhongBan: "Chưa có phòng ban",
+		soTrongKy: "Tín hiệu {ngay} ngày qua",
+		gomChuaLayVe: "Gồm cả tín hiệu chưa lấy về",
+		soPhong: "Phòng ban có tín hiệu",
+		khongPhong: "Trong {ngay} ngày qua · chưa có phòng ban: {so}",
+		soChuaCoCho: "Quá {han} ngày chưa có chỗ",
+		trenQuaHan: "Trong số {so} tín hiệu gửi quá {han} ngày",
+		chuaDocCho: "Chưa đọc được trạng thái sau gom",
+		rongTieuDe: "Chưa ai gửi tín hiệu",
+		rongMoTa: "Tín hiệu mọi người gửi sẽ hiện ở đây.",
+		meta: "{so} tín hiệu",
+		taiLoiTieuDe: "Chưa tải được mọi tín hiệu",
+		taiLoiMoTa: "Danh sách chưa tải xong. Thử lại sau một lát.",
+		khongQuyen: "Chỉ chủ và quản trị CRM xem được mọi tín hiệu.",
+		khongQuyenMoTa: "Tín hiệu bạn đã gửi vẫn ở «Tín hiệu đã gửi».",
+		ve: "Về tín hiệu đã gửi",
+	},
 };
 
 export function tinHieuMessages(locale: Locale): TinHieuMessages {
