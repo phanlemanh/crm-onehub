@@ -97,15 +97,14 @@ evals:
       - "apps/api/test/go-la-cat-quyen.spec.ts"
       - "apps/api/test/setup.ts"
       - "apps/api/package.json"
-      - "apps/api/bunfig.toml"
-      - "bunfig.toml"
       - ".github/workflows/ci.yml"
       - ".github/workflows/acceptance.yml"
       - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"
       - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
     expected: |
       Doc tep (vang = khong cau hinh, in ra la vang). Ma tran viet truoc:
-      - tep spec: dung 18 loi goi test( (quet ngoac can bang); moi loi goi dung hai doi so
+      - tep spec: dung 18 loi goi test( (quet ngoac can bang); moi loi goi dung hai doi so, hoac ba doi so khi doi so thu ba la mot hang co ten nam trong
+        bang TRAN_CO_LY_DO cua rang/tran-co-ly-do.mjs VA khai `const <TEN> = <so>;` trong tep spec (F24 P7-6, chu kho chon 13/10)
         — 18 khang dinh, thong diep ghim ten ca;
       - tep spec + moi tep preload rut tu `--preload` cua script test (hien: apps/api/test/setup.ts):
         khong goi setDefaultTimeout; khong co --preload nao -> do (khong soat duoc);
@@ -115,6 +114,8 @@ evals:
         ci.yml phai co >= 1 dong chay test (doi chung: bo soat nhin thay lenh CI); in so dong da doc.
       Tu kiem hai chieu, moi nhanh mot lan, tren cung ham soat, dot bien dung MOT tep:
       spec them `, 15_000` vao khoa-con-bat -> "test khoa-con-bat co tran rieng";
+      spec doi tran hang thanh `60_000` -> "tran 60_000 khong nam trong bang tran co ly do";
+      spec doi tran thanh hang ngoai bang `TRAN_KHAC` -> "tran TRAN_KHAC khong nam trong bang tran co ly do";
       script test them `--timeout 15000` -> "apps/api/package.json script test co --timeout";
       bunfig them `[test] timeout = 15000` -> "apps/api/bunfig.toml co khoa timeout";
       ci.yml them buoc `run: |` nhieu dong chua `bun test --timeout 15000` -> ".github/workflows/ci.yml co --timeout";

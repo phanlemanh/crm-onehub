@@ -1168,6 +1168,21 @@ Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sa
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
 được nhận làm, còn tín hiệu chưa hứa gì.
 
+**Khoá chỉ kéo tín hiệu**: một khoá API chỉ làm được đúng một việc — kéo tín hiệu về kho
+cho lịch chạy hằng ngày. Khoá không đăng nhập được ở đâu, không đọc bản ghi, không tạo hay
+sửa khoá; chủ sở hữu hoặc quản trị tạo nó ở Cài đặt → Khoá API, mục «Khoá dùng để». Chủ khoá
+thôi làm quản trị thì khoá thôi kéo được. Chốt 2026-10-14 tại Cổng Phạm vi của
+`tin-hieu-tu-ve-kho`.
+_Avoid_: khoá máy, khoá dịch vụ, token kéo về
+Vì sao: «khoá máy» và «khoá dịch vụ» không nói khoá được làm gì; tên phải nói đúng việc duy
+nhất khoá làm được.
+
+**Nhánh hàng chờ**: nhánh `tin-hieu/keo-ve` mà lịch chạy kéo tín hiệu dựng lại mỗi lượt —
+nhánh chính cộng một commit chứa mọi tệp tín hiệu chưa gộp — kèm một PR «Tín hiệu kéo về»
+đứng mở. Lịch chạy không gộp; PR đi vào nhánh chính theo lô như mọi PR. Chốt 2026-10-14
+tại Cổng Đáng của `tin-hieu-tu-ve-kho` (lối A).
+_Avoid_: nhánh tạm, nhánh bot
+
 **Báo sai**: một người đã hỏi đánh dấu câu trả lời của trợ lý AI là sai, kèm ghi chú
 nếu muốn. Mỗi trang được trích nhận một việc trong danh sách «Bị báo sai» của chủ trang;
 chủ trang đóng việc bằng một kết luận: «Trợ lý trả lời sai» hay «Trợ lý trả lời đúng theo

@@ -30,6 +30,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { apiKeysSearchParams } from "./api-keys-search-params";
+import { NhanLoaiKhoa } from "./loai-khoa";
 
 type ApiKeyRow = RouterOutputs["apiKeys"]["list"]["rows"][number];
 
@@ -50,8 +51,11 @@ function columns(
 			hideable: false,
 			width: "w-[28%]",
 			cell: (row) => (
-				<span className="truncate font-medium" translate="no">
-					{row.name ?? t.bang.chuaDatTen}
+				<span className="flex min-w-0 items-center gap-2">
+					<span className="truncate font-medium" translate="no">
+						{row.name ?? t.bang.chuaDatTen}
+					</span>
+					<NhanLoaiKhoa t={t} loai={row.loai} />
 				</span>
 			),
 		},

@@ -25,6 +25,7 @@ import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { LichSuVaLuuTruTrangMau } from "./_modules/lich-su-va-luu-tru-trang";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
+import { MoiTinHieuChoQuanTriMau } from "./_modules/moi-tin-hieu-cho-quan-tri";
 import { MucTieuVaKrMau } from "./_modules/muc-tieu-va-kr";
 import { NenKaraMau } from "./_modules/nen-kara";
 import { NganHoSoMau } from "./_modules/ngan-ho-so-trong-lo-trinh";
@@ -36,6 +37,7 @@ import { SoanOkrTrangRiengMau } from "./_modules/soan-okr-trang-rieng";
 import { SoanOkrTrongKhungMau } from "./_modules/soan-okr-trong-khung";
 import { SuaAnChuKyOkrMau } from "./_modules/sua-an-chu-ky-okr";
 import { ThanhVienVaoDungMau } from "./_modules/thanh-vien-vao-dung";
+import { TinHieuTuVeKhoMau } from "./_modules/tin-hieu-tu-ve-kho";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
 import { TrangLoTrinhMau } from "./_modules/trang-lo-trinh-trong-crm";
@@ -95,6 +97,8 @@ const BANG_GHEP = {
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 	"khung-ban-ghi-kara": KhungBanGhiKaraMau,
 	"gui-tin-hieu-trong-crm": GuiTinHieuMau,
+	"moi-tin-hieu-cho-quan-tri": MoiTinHieuChoQuanTriMau,
+	"tin-hieu-tu-ve-kho": TinHieuTuVeKhoMau,
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 } satisfies Record<string, ProtoComponent>;
