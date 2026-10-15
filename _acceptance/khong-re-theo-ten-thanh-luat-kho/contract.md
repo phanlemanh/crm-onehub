@@ -44,7 +44,8 @@ thu `paths` về đúng các tệp định nghĩa luật.
   không còn danh sách từ hay biểu thức riêng; thoát 0 ở đỉnh và in số tệp đã quét (dưới 50 thì «KHONG DO DUOC», mã
   2); luật bị tắt cục bộ — bỏ một thư mục khỏi cấu hình, một mục `overrides` tắt luật ngoài chỗ miễn đã khai, một tệp
   cấu hình oxlint lồng, một chỉ thị `oxlint-disable`/`eslint-disable` trong bảy thư mục — thì E17 không xanh mà in
-  «KHONG DO DUOC» mã 2 gọi tên chỗ tắt; trên bản sao chèn `stage === "CLOSED_WON"` hay một export `GIAI_DOAN_GOC` vào
+  «KHONG DO DUOC» mã 2 gọi tên chỗ tắt; E17 quét đúng tập tệp đang theo dõi của phép kiểm cũ trừ chỗ miễn đã ký, nên
+  một mục `ignorePatterns` hay `.eslintignore` không che được tệp nào khỏi E17; trên bản sao chèn `stage === "CLOSED_WON"` hay một export `GIAI_DOAN_GOC` vào
   `apps/api/src/dashboard/dashboard.service.ts` thì thoát 1 với dòng `HONG <tệp>:<dòng>: <từ>`.
 - AC-5: Given `evals.yaml` của `giai-doan-thoa-thuan` sau vòng, When bộ chọn của lượt kiểm chéo đêm (`tapCham`) và bộ
   lọc hoá cũ theo `paths` của lưới trước-gộp nhận một diff chỉ chạm tệp sản phẩm nằm ngoài `paths` của mọi eval khác

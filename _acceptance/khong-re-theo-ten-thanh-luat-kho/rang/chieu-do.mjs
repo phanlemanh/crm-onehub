@@ -81,6 +81,25 @@ export const DOT_BIEN = [
 		],
 		maDung: 2,
 	},
+	{
+		ten: "ignore-thu-muc-con",
+		tep: ".oxlintrc.json",
+		thay: [
+			[
+				'"ignorePatterns": [\n',
+				'"ignorePatterns": [\n\t\t"apps/api/src/dashboard/**",\n',
+			],
+		],
+		phu: [
+			[
+				"apps/api/src/dashboard/dashboard.service.ts",
+				[["import ", 'export const krtt = "CLOSED_WON";\nimport ']],
+			],
+		],
+		lenh: giaiLenh("executors.script.gdtt_khong_re_theo_ten"),
+		ghim: ["HONG apps/api/src/dashboard/dashboard.service.ts:1: CLOSED_WON"],
+		maDung: 1,
+	},
 ];
 
 const TRUONG = ["ten", "tep", "thay", "lenh", "ghim", "maDung"];
@@ -111,7 +130,17 @@ for (const d of hop)
 			return;
 		}
 		writeFileSync(tep, ban);
-		commitGia(cay, `dot bien ${d.ten}`, [d.tep]);
+		const tepDoi = [d.tep];
+		for (const [tepPhu, thayPhu] of d.phu ?? []) {
+			const banPhu = apThay(readFileSync(join(cay, tepPhu), "utf8"), thayPhu);
+			if (banPhu === null) {
+				hong.push(`HONG KHONG AP ${d.ten}: phep thay khong khop ${tepPhu}`);
+				return;
+			}
+			writeFileSync(join(cay, tepPhu), banPhu);
+			tepDoi.push(tepPhu);
+		}
+		commitGia(cay, `dot bien ${d.ten}`, tepDoi);
 		const kq = chay(d.lenh, cay);
 		if (batDung(d, kq)) {
 			bat++;

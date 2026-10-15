@@ -32,7 +32,9 @@ cả kho, không phải của một vòng: nó thuộc về lệnh kiểm chạy
    `ignorePatterns`); `packages/telemetry/src/allowlist.ts` tắt riêng `khong-dung-giai-doan-goc`.
 4. **E17 đọc luật kho.** Giữ khoá `gdtt_khong_re_theo_ten` và tệp `rang/khong-re-theo-ten.mjs` (luật đợt 7:
    `config.yaml` chỉ thêm khoá). Script chạy `oxlint --format=json` với cấu hình kho trên bảy thư mục, giữ chẩn đoán
-   của luật, in `HONG <tệp>:<dòng>: <từ>` như cũ, số tệp đã quét lấy từ `number_of_files`. Trước đó script hỏi
+   của luật, in `HONG <tệp>:<dòng>: <từ>` như cũ, số tệp đã quét lấy từ `number_of_files`. Tập tệp quét là
+   `git ls-files` của bảy thư mục trừ chỗ miễn đã ký, chép sang cây tạm cùng `.oxlintrc.json` bỏ riêng
+   `ignorePatterns` (S4 vòng 1: một glob ở đó che được thư mục con khỏi cả hai luật). Trước đó script hỏi
    oxlint trên một cây tạm chép `.oxlintrc.json`, mỗi thư mục một tệp mồi: luật nào không bắt ở thư mục nào thì
    «KHONG DO DUOC», mã 2. Rồi soát đường tắt: mục `overrides` tắt luật ngoài chỗ miễn đã khai, tệp cấu hình lồng,
    chỉ thị `oxlint-disable`/`eslint-disable` trong bảy thư mục — có thì mã 2. Tắt luật không được biến thành xanh.
@@ -57,7 +59,7 @@ cả kho, không phải của một vòng: nó thuộc về lệnh kiểm chạy
 | E1, E2 `ma-tran-luat` | AC-1, AC-2 | cây tạm: gieo bảng ca viết trước; tập (tệp, từ) hai luật báo bằng đúng tập đỏ |
 | E3 `lint:slop` | AC-3 | `bun run lint:slop` xanh ở đỉnh |
 | E4 `e17-qua-luat` | AC-4 | E17 xanh ở đỉnh, số tệp ≥ 50; script không còn danh sách hay biểu thức riêng; bản sao chèn `CLOSED_WON` hay export `GIAI_DOAN_GOC` đỏ đúng dòng |
-| E5 `chieu-do` | AC-4 | năm đột biến: luật rỗng danh sách · bỏ một thư mục khỏi `overrides` · bật luật tên cho `allowlist.ts` · override tắt thư mục con · chỉ thị tắt trong tệp |
+| E5 `chieu-do` | AC-4 | sáu đột biến: luật rỗng danh sách · bỏ một thư mục khỏi `overrides` · bật luật tên cho `allowlist.ts` · override tắt thư mục con · chỉ thị tắt trong tệp · `ignorePatterns` che thư mục con |
 | E6 `chon-ho-so` | AC-5 | `tapCham` và bộ lọc hoá cũ của kit trên diff giả, đối chứng với `evals.yaml` ở mốc nền |
 | E7 `ghim-xanh` | AC-6 | dòng ghim mới nhất của `giai-doan-thoa-thuan` |
 | E8 `pham-vi` | AC-7 | từng commit của vòng so với cha |

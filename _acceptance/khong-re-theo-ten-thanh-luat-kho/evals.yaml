@@ -70,7 +70,9 @@ evals:
       "KHONG DO DUOC" va "apps/api/src/dashboard/**"; (5) chi-thi-tat: chen oxlint-disable-next-line kem CLOSED_WON vao
       dashboard.service.ts -> gdtt_khong_re_theo_ten ma 2 voi "KHONG DO DUOC" va "chi thi tat apps/api/src/dashboard/
       dashboard.service.ts". Dot bien khong bi bat dung -> "HONG LOT <ten>" ma 1; phep thay khong khop -> "HONG KHONG AP
-      <ten>" ma 1. In "chieu-do: 5/5 bi bat".
+      <ten>" ma 1; (6) ignore-thu-muc-con: them "apps/api/src/dashboard/**" vao ignorePatterns va chen CLOSED_WON vao dong 1
+      cua dashboard.service.ts -> gdtt_khong_re_theo_ten ma 1 voi "HONG apps/api/src/dashboard/dashboard.service.ts:1:
+      CLOSED_WON". In "chieu-do: 6/6 bi bat".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6

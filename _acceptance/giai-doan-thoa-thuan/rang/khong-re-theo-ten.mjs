@@ -28,6 +28,13 @@ const THU_MUC = [
 	"packages/db/src",
 	"packages/telemetry/src",
 ];
+const TRU = [
+	"packages/db/src/generated/",
+	"apps/api/src/generated/",
+	"apps/app/app/proto/",
+	"packages/db/src/giai-doan.ts",
+];
+const DUOI = [".ts", ".tsx", ".mjs", ".js"];
 const MIEN = new Map([
 	[
 		"onehub/khong-re-theo-ten-giai-doan",
@@ -49,8 +56,8 @@ function dung(ma, cau) {
 	process.exit(ma);
 }
 
-function oxlint(cwd) {
-	const r = spawnSync(OXLINT, ["--format=json", ...THU_MUC], {
+function oxlint(cwd, dich = THU_MUC, them = []) {
+	const r = spawnSync(OXLINT, ["--format=json", ...them, ...dich], {
 		cwd,
 		encoding: "utf8",
 		maxBuffer: 256 * 1024 * 1024,
@@ -132,7 +139,32 @@ function kiemDuongTat() {
 
 kiemDuongTat();
 kiemMoi();
-const ketQua = oxlint(GOC);
+const tepTheoDoi = git("ls-files", "--", ...THU_MUC)
+	.ra.split("\n")
+	.filter((t) => DUOI.some((d) => t.endsWith(d)))
+	.filter((t) => !TRU.some((m) => t.startsWith(m)));
+
+function quetKhongBoQua() {
+	const cay = mkdtempSync(join(tmpdir(), "krtt-quet-"));
+	try {
+		const cauHinh = JSON.parse(
+			readFileSync(join(GOC, ".oxlintrc.json"), "utf8"),
+		);
+		const { ignorePatterns: _bo, ...conLai } = cauHinh;
+		writeFileSync(join(cay, ".oxlintrc.json"), JSON.stringify(conLai));
+		for (const t of ["tools", "node_modules"])
+			symlinkSync(join(GOC, t), join(cay, t));
+		for (const t of tepTheoDoi) {
+			mkdirSync(dirname(join(cay, t)), { recursive: true });
+			copyFileSync(join(GOC, t), join(cay, t));
+		}
+		return oxlint(cay, tepTheoDoi);
+	} finally {
+		rmSync(cay, { recursive: true, force: true });
+	}
+}
+
+const ketQua = quetKhongBoQua();
 console.log(`so tep da quet: ${ketQua.number_of_files}`);
 if (ketQua.number_of_files < SAN_QUET)
 	dung(
