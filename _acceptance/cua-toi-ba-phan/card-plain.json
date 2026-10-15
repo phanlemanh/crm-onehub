@@ -1,0 +1,136 @@
+{
+  "feature_plain": "Trưởng đơn vị mở «Của tôi» là thấy ngay KR cần cập nhật tuần này và gửi luôn tại chỗ, rồi tới đơn vị mình dẫn và KR mình phụ trách; thẻ «Cập nhật tuần» bỏ đi, liên kết cũ vẫn mở đúng chỗ.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ đặt «Cần cập nhật tuần này» lên đầu Của tôi: đúng các KR còn thiếu số tuần này, nút «Cập nhật N KR», hoặc báo đã đủ, hoặc báo không phụ trách KR nào; phần này luôn theo chu kỳ đang chạy."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ mở bảng cập nhật ngay trong Của tôi khi bấm nút, gửi xong vẫn ở lại trang; chỉ khi bấm mới tính là một lượt cập nhật, xem trang không tính."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ mở sẵn bảng cập nhật khi người vào từ tin nhắc Zalo, chuông hoặc khối việc ở Tổng quan, và ghi đúng là họ vào từ đâu; tải lại trang không tính thêm lượt."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ đưa mọi liên kết cũ tới trang «Cập nhật tuần» (kể cả tin Zalo đã gửi) về Của tôi, giữ nguyên chu kỳ và đơn vị; tin nhắc mới trỏ thẳng Của tôi."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ hiện một thẻ cho mỗi đơn vị người xem dẫn: số mục tiêu, số KR, tiến độ trung bình, số KR đúng nhịp / chậm / trượt — khớp từng số với trang Theo đơn vị — và nút mở trang đơn vị."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ liệt kê mọi KR người xem phụ trách ở mọi đơn vị; mục tiêu họ có mặt mà không có KR của mình vẫn ở lại Của tôi, không mục tiêu nào biến mất."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ còn bốn thẻ: Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý (cả tiếng Anh), đổi thẻ vẫn giữ chu kỳ và đơn vị như DH1 đã hứa."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ cho mỗi phần tải và báo lỗi riêng: một phần lỗi thì hai phần kia vẫn đọc được; gửi lỗi giữ nguyên số đã nhập."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ có một lệnh chỉ đọc để đo ngưỡng Cổng Đáng (tỉ lệ lượt cập nhật của trưởng đơn vị gửi ngay trong Của tôi, sàn 10 lượt), kiểm bằng dữ liệu gieo có đáp án biết trước."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ sửa các bài kiểm cũ chỉ để khẳng định hành vi mới, và giữ đúng kết quả các eval máy của những hồ sơ đã ký đang dùng chúng."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ có bản bấm được /proto/cua-toi-ba-phan với một trạng thái cho mỗi dòng của bảng trạng thái trong thiết kế."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-7",
+      "p": "Sẽ KHÔNG mời người không dẫn đơn vị nào tạo mục tiêu hay OKR cá nhân ở bất kỳ đâu trong Của tôi; nút «Thêm mục tiêu» khoá kèm một dòng lý do."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không dựng lại trang đơn vị (bảng, ô chọn đơn vị, cách xem) — việc của DH2."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không làm sơ đồ căn chỉnh — việc của DH4, DH5."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không đổi đầu trang khu, nút «Thêm mục tiêu» hay dòng lý do khoá — DH1 đã làm, lượt này chỉ dùng lại."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi quyền, cách gửi cập nhật, ngăn chi tiết một KR, hay luật nhắc Zalo (giờ, nhịp, ai nhận) — chỉ đổi đường dẫn trong tin nhắc."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không làm các việc chung toàn app: vùng bấm 44px, đơn vị trùng tên, nút «Mở tất cả», chỗ đặt cách xem."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Không theo dõi người dùng bấm qua thẻ nào trên trình duyệt; «không mở thẻ khác» được đo là «mở và gửi ngay trong Của tôi»."
+    }
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để ngoài lượt này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Mọi phần của trang đều có tiêu chí: cần cập nhật (AC-1, AC-2), khối việc, đơn vị bạn dẫn (AC-5), KR bạn phụ trách và các nhóm thu gọn (AC-6), thanh thẻ (AC-8), đường dẫn cũ (AC-4)."
+    },
+    {
+      "i": 1,
+      "p": "Mọi kiểu người xem đều được thử: trưởng bộ phận, trưởng phòng ban, người dẫn hai đơn vị (AC-5), thành viên không dẫn ai (AC-7), quản trị không dẫn đơn vị."
+    },
+    {
+      "i": 2,
+      "p": "Mọi tình trạng KR tuần này: còn thiếu, thiếu một phần, đủ, không có KR, đang xem chu kỳ cũ (AC-1)."
+    },
+    {
+      "i": 3,
+      "p": "Mọi đường vào một lượt cập nhật: nút trong Của tôi (AC-2), tin nhắc và khối việc (AC-3), liên kết cũ (AC-4); lối ngăn chi tiết KR giữ nguyên làm đối chứng của phép đo."
+    },
+    {
+      "i": 4,
+      "p": "Lúc đang tải, khi một phần lỗi, khi gửi lỗi, khi đơn vị chưa có mục tiêu (AC-9, AC-5)."
+    },
+    {
+      "i": 5,
+      "p": "Đo ở hai khổ màn hình 1440 và 390, tiếng Việt và tiếng Anh."
+    },
+    {
+      "i": 6,
+      "p": "Phần «Cần cập nhật» luôn theo chu kỳ đang chạy, như trang cũ; hai phần còn lại theo chu kỳ đang chọn (AC-1)."
+    },
+    {
+      "i": 7,
+      "p": "Hai câu chỉ anh quyết được nằm ở khối «Việc của anh» bên dưới: thứ tự khối việc, và có giữ bảng mục tiêu hay không."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Máy đã tự quyết bỏ bảng mục tiêu ở phần 3 trong khi đó là đánh đổi chỉ anh biết — thành viên thường đang dùng Của tôi như bảng mục tiêu. Đã chuyển thành câu Hỏi-2 cho anh."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo «không còn liên kết cũ» sẽ báo sai vì đếm cả tài liệu và đường import của bảng cập nhật dùng lại. Đã thu đúng vào liên kết thật và thêm một ca phải im."
+    },
+    {
+      "i": 2,
+      "p": "Lời hứa ghi đúng nguồn vào khi đến từ tin nhắc chỉ được đo trên giao diện giả. Đã thêm một phép đo trên máy chủ thật, năm ô, đếm từng lượt."
+    },
+    {
+      "i": 3,
+      "p": "Chưa tiêu chí nào nói phần «Cần cập nhật» bỏ qua ô chu kỳ. Đã thêm vào tiêu chí 1, thêm ô đo chu kỳ cũ và ghi sổ quyết định."
+    },
+    {
+      "i": 4,
+      "p": "Phép đo ngưỡng xét «trưởng đơn vị» theo cây tổ chức lúc chạy lệnh, không theo lúc người đó gửi. Đã khai giới hạn và cho lệnh in số đơn vị bị sửa trong cửa sổ đo."
+    }
+  ]
+}

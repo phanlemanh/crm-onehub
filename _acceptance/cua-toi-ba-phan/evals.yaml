@@ -3,8 +3,10 @@ slug: cua-toi-ba-phan
 
 # Tệp kiểm DOM mới: apps/app/test/okr-cua-toi-ba-phan.dom.tsx — mỗi eval DOM chạy đúng một nhóm theo tên
 # (`-t ctbp-...`) qua bộ chạy hai chiều `_acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs <nhom>` (khuôn của DH1:
-# đối chứng dương trên vật lành, rồi mỗi đột biến thay đúng một đoạn trong tệp vật tại chỗ, chạy lại nhóm, phải đỏ
-# với thông điệp ghim, hoàn nguyên và kiểm băm). Khoá `executors.*.ctbp_*` thêm vào `_acceptance/config.yaml` ở S3
+# đối chứng dương trên vật lành, rồi mỗi đột biến thay đúng một đoạn trong một WORKTREE TẠM (git worktree add
+# --detach HEAD vào thư mục tạm, kèm node_modules liên kết), chạy lại nhóm ở đó, phải đỏ với thông điệp ghim; cây
+# đang xét KHÔNG bao giờ bị sửa — S4 chạy lệnh song song, nên đột biến tại chỗ lọt vào lượt vật-lành của eval khác
+# (DH1 round 1, 15/10). Đoạn cần thay không có trong tệp → mã 2 «KHONG DO DUOC»). Khoá `executors.*.ctbp_*` thêm vào `_acceptance/config.yaml` ở S3
 # cùng commit dựng bộ chạy. Dữ liệu DOM do hàm dựng fixture rút từ khuôn `capNhatTuanOutput` / `mineOutput` /
 # `danhSachOutput` của chính `okr.contracts.ts` (parse qua zod trước khi đưa vào trang), không viết tay khuôn đọc.
 evals:
