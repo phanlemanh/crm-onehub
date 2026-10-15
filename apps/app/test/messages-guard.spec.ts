@@ -865,6 +865,10 @@ const GHIM = {
 	"agent-builder-hoi-thoai-thao-tac:xoa.xoaMot": ["Xoá 1", "Xoá 12"],
 	"agent-builder-hoi-thoai-thao-tac:xoa.xoaHoi": ["Xoá 1?", "Xoá 12?"],
 	"okr:demMucTieu": ["1 mục tiêu", "12 mục tiêu"],
+	"okr:khoaTao.khongSua": [
+		"Bạn xem được 1 nhưng không thêm mục tiêu được: chỉ trưởng đơn vị này, trưởng đơn vị cấp trên và quản trị làm được.",
+		"Bạn xem được 12 nhưng không thêm mục tiêu được: chỉ trưởng đơn vị này, trưởng đơn vị cấp trên và quản trị làm được.",
+	],
 	"okr:demDonVi": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
 	"okr:gopVao": ["góp vào 1 chỗ", "góp vào 12 chỗ"],
 	"okr:sheet.tienDoTuSo": [
