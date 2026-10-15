@@ -597,9 +597,14 @@ describe("dhk-tieu-de", () => {
 // ---------- dhk-hanh-dong (E3) ----------
 
 function coNutHoiKara(): boolean {
-	const r = spawnSync("git", ["grep", "-q", "NutHoiKara", "--", "app"], {
-		cwd: GOC_KHO,
-	});
+	// Nút «Hỏi Kara» (hàng hoi-dap-okr) có được dựng trong khu Mục tiêu không — rút từ cây, không viết tay.
+	const r = spawnSync(
+		"git",
+		["grep", "-q", "<NutHoiKara", "--", ":(literal)app/(app)/[slug]/okr"],
+		{
+			cwd: GOC_KHO,
+		},
+	);
 	return r.status === 0;
 }
 
@@ -636,10 +641,10 @@ describe("dhk-hanh-dong", () => {
 						Boolean(q("[data-nhom-soan]", h ?? document)),
 					`dhk-hanh-dong: ${t} ${pha} nhom soan ${q("[data-nhom-soan]", h ?? document) ? "co" : "vang"}`,
 				);
-				const kara = q("[data-nut-hoi-kara]");
+				const kara = qa("[data-nut=hoi-kara]");
 				if (hoiKara)
 					s.kiem(
-						Boolean(kara && h?.contains(kara)),
+						kara.length > 0 && kara.every((k) => h?.contains(k) === true),
 						"dhk-hanh-dong: co NutHoiKara nhung khong nam trong page-shell-actions",
 					);
 				if (t === "theo-don-vi") {
