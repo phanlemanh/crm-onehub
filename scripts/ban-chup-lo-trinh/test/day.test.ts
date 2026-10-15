@@ -149,7 +149,11 @@ describe("ma-thoat", () => {
 			async () => {
 				const may = mayChu(() =>
 					Response.json(
-						{ message: "duLieu.lo_trinh: Required" },
+						{
+							message: "Input validation failed",
+							code: "BAD_REQUEST",
+							issues: [{ path: ["duLieu", "lo_trinh"], message: "Required" }],
+						},
 						{ status: 400 },
 					),
 				);

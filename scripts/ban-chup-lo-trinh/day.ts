@@ -27,6 +27,23 @@ export type DauVaoDay = {
 	loi: (dong: string) => void;
 };
 
+function tomTatLoi(than: string): string {
+	try {
+		const loi: {
+			message?: string;
+			issues?: { path?: (string | number)[]; message?: string }[];
+		} = JSON.parse(than);
+		const cho = (loi.issues ?? []).map(
+			(i) => `${(i.path ?? []).join(".")}: ${i.message ?? ""}`,
+		);
+		return cho.length > 0
+			? cho.join(" · ")
+			: (loi.message ?? than.slice(0, 2000));
+	} catch {
+		return than.slice(0, 2000);
+	}
+}
+
 const ghiChu = (ketQua: string) =>
 	`::notice title=${TIEU_DE_GHI_CHU}::${ketQua}`;
 
@@ -77,7 +94,7 @@ export async function day(o: DauVaoDay): Promise<0 | 1> {
 	}
 	const than = await traLoi.text();
 	if (!traLoi.ok) {
-		o.loi(`CRM từ chối (${traLoi.status}): ${than.slice(0, 2000)}`);
+		o.loi(`CRM từ chối (${traLoi.status}): ${tomTatLoi(than)}`);
 		return 1;
 	}
 	const ra = banChupRa.safeParse(JSON.parse(than));
