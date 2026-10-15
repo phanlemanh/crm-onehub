@@ -38,9 +38,7 @@ export function NhomMucTieuGap({
 	hienDonVi: boolean;
 	danhDauCuaToi: boolean;
 	diemCam?: ComponentProps<typeof BangMucTieu>["diemCam"];
-	/** Mở KR như bảng chính (thu/mở theo đường dẫn) thay vì gập hết. */
 	moNhuBangChinh?: boolean;
-	/** Tự mở (một lần) khi điều kiện đúng — kể cả khi nó đúng sau lúc trang đã dựng. */
 	moKhi?: boolean;
 }) {
 	const [mo, setMo] = useState(moKhi);

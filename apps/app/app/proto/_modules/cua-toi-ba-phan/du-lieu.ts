@@ -54,7 +54,6 @@ function phang(d: DonViMau): DonViMau[] {
 
 const DON_VI = phang(CAY_DON_VI);
 
-/** Đơn vị người này dẫn, theo thứ tự cây: bộ phận trước phòng ban. */
 export function donViDan(nguoi: NguoiMau): DonViMau[] {
 	const dan = DON_VI.filter(
 		(d) => d.truong?.id === nguoi.id && d.cap !== "goc",

@@ -30,8 +30,6 @@ const { DongLyDoKhu, HanhDongKhu, useQuyenKhu } = await import(
 	"@/app/(app)/[slug]/okr/hanh-dong-khu"
 );
 
-/* ---------- fixture: mọi khuôn đi qua zod của chính máy chủ ---------- */
-
 type KrCapNhat = CapNhatTuanOutput["items"][number];
 
 function krTuan(id: string, daGui: boolean): KrCapNhat {
@@ -177,7 +175,6 @@ function krTien(
 	return { ...kr(id, objectiveId), progress, laCuaToi };
 }
 
-/** Ba mục tiêu, năm KR với tiến độ 45·30 | 10·50 | 20 trên kỳ vọng 47, cam kết. */
 const BA_MUC_TIEU: MucTieuOutput[] = [
 	mucTieu("o1", {
 		keyResults: [krTien("o1a", "o1", 45), krTien("o1b", "o1", 30)],
@@ -187,8 +184,6 @@ const BA_MUC_TIEU: MucTieuOutput[] = [
 	}),
 	mucTieu("o3", { keyResults: [krTien("o3a", "o3", 20)] }),
 ];
-
-/* ---------- dựng màn ---------- */
 
 function datCoBan(o: {
 	tuan?: CapNhatTuanOutput;
@@ -215,14 +210,11 @@ function datCoBan(o: {
 
 const phan = (ten: string) =>
 	document.body.querySelector<HTMLElement>(`[data-phan="${ten}"]`);
-/** Phần `ten` có mặt VÀ chứa `sel` — phần vắng thì sai, không bao giờ «undefined !== null». */
 const co = (ten: string, sel: string) =>
 	(phan(ten)?.querySelector(sel) ?? null) !== null;
 const moPhien = () => kho.daGhi.filter((g) => g.duong === "okr.moCapNhat");
 const daTaiPhan1 = () =>
 	phan("can-cap-nhat") !== null && !co("can-cap-nhat", "[data-khung-xuong]");
-
-/* ---------- ctbp-phan-mot (E1) ---------- */
 
 describe("ctbp-phan-mot", () => {
 	const MA_TRAN: [string, CapNhatTuanOutput, number][] = [
@@ -300,8 +292,6 @@ describe("ctbp-phan-mot", () => {
 		}).toEqual({ soLanGoi: true, vaoKhongMangKy: true, dong: 3 });
 	});
 });
-
-/* ---------- ctbp-cap-nhat-tai-cho (E2) ---------- */
 
 async function chonCaoMoiDong(goc: HTMLElement): Promise<void> {
 	const m = okrMessages("vi").capNhat;
@@ -385,8 +375,6 @@ describe("ctbp-cap-nhat-tai-cho", () => {
 	});
 });
 
-/* ---------- ctbp-loi-vao-tu (E4) ---------- */
-
 describe("ctbp-loi-vao-tu", () => {
 	const MA_TRAN: [string, string, string | null][] = [
 		["nhac", "?tu=nhac", "nhac"],
@@ -435,8 +423,6 @@ describe("ctbp-loi-vao-tu", () => {
 			expect(moPhien().length).toBe(1);
 		});
 });
-
-/* ---------- ctbp-don-vi-dan (E7) ---------- */
 
 const SO_O_BA_MUC_TIEU = {
 	soMucTieu: 3,
@@ -536,8 +522,6 @@ describe("ctbp-don-vi-dan", () => {
 			});
 });
 
-/* ---------- ctbp-kr-phu-trach (E8) ---------- */
-
 describe("ctbp-kr-phu-trach", () => {
 	test("ctbp-kr-phu-trach: KR cua toi o phan 3, muc tieu khong KR cua toi o nhom tham gia, khong muc tieu nao roi Cua toi", async () => {
 		datCoBan({});
@@ -619,8 +603,6 @@ describe("ctbp-kr-phu-trach", () => {
 		});
 	});
 });
-
-/* ---------- ctbp-khong-dan (E9) ---------- */
 
 function DauKhuThu() {
 	const q = useQuyenKhu("cua-toi");
@@ -710,8 +692,6 @@ describe("ctbp-khong-dan", () => {
 	});
 });
 
-/* ---------- ctbp-tai-loi (E11) ---------- */
-
 const treo = () => new Promise<never>(() => {});
 
 describe("ctbp-tai-loi", () => {
@@ -721,7 +701,6 @@ describe("ctbp-tai-loi", () => {
 		"okr.danhSach": "don-vi-dan",
 		"okr.mine": "kr-phu-trach",
 	} as const;
-	/** Phần 3 giữ hai trạng thái tải/lỗi đã ký của Của tôi (hồ sơ muc-tieu-va-kr). */
 	const KHUNG = {
 		"okr.capNhatTuan": "[data-khung-xuong]",
 		"okr.danhSach": "[data-khung-xuong]",
@@ -747,8 +726,6 @@ describe("ctbp-tai-loi", () => {
 				const cu = kho.doc.get(tv);
 				const goc = tv === "okr.mine" ? () => kho.mine : (cu ?? (() => null));
 				let lan = 0;
-				// Lỗi giữ nguyên tới khi người bấm «Thử lại» — một truy vấn dùng chung bị gọi
-				// lại khi một phần khác gắn vào không được tự lành lỗi.
 				let hong = true;
 				kho.doc.set(tv, (vao: DauVao) => {
 					lan += 1;
@@ -795,8 +772,6 @@ describe("ctbp-tai-loi", () => {
 				expect(lan - truoc).toBe(1);
 			});
 });
-
-/* ---------- ctbp-loi-mo (E19) ---------- */
 
 const nutPhan1 = (ten: string) =>
 	phan("can-cap-nhat")?.querySelector<HTMLButtonElement>(
@@ -873,11 +848,8 @@ describe("ctbp-loi-mo", () => {
 	});
 });
 
-/* ---------- ctbp-tai-lai-nen (E20) ---------- */
-
 describe("ctbp-tai-lai-nen", () => {
 	const KHOA = ["okr.capNhatTuan", null];
-	/** Lần tải đầu xanh; từ khi gọi `hong()` mọi lần tải lại của `okr.capNhatTuan` trả lỗi. */
 	function datHong() {
 		let loi = false;
 		kho.doc.set("okr.capNhatTuan", () => {
@@ -893,7 +865,6 @@ describe("ctbp-tai-lai-nen", () => {
 			await san.client.invalidateQueries({ queryKey: KHOA });
 		});
 		await nhip(4);
-		// đối chứng: lần tải lại thật sự đã chạy và lỗi — không thì ô xanh rỗng
 		expect(san.client.getQueryState(KHOA)?.status).toBe("error");
 	}
 	const loiPhan = () =>
@@ -985,10 +956,6 @@ describe("ctbp-tai-lai-nen", () => {
 	});
 });
 
-/* ---------- ctbp-bon-the (E10) ---------- */
-
-// Thanh thẻ nằm cạnh đầu trang khu trong cùng tệp; khung trang cần ViewTransition mà
-// bản React của bộ kiểm không có — giả khung như bài okr-thanh-tab.dom.tsx.
 const khoiThe =
 	(the: string) =>
 	({ children }: { children?: React.ReactNode }) =>

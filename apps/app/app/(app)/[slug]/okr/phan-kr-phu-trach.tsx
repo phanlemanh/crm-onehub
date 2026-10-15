@@ -24,10 +24,6 @@ export type PhanBa = {
 	thamGia: MucTieu[];
 };
 
-/**
- * Chia mục tiêu của `okr.mine` cho phần 3: KR người xem phụ trách (cờ `laCuaToi` máy chủ
- * tính), và mục tiêu họ có mặt mà không phụ trách KR nào — để không mục tiêu nào rời Của tôi.
- */
 export function chiaPhanBa(ds: readonly MucTieu[]): PhanBa {
 	const kr = ds.flatMap((mucTieu) =>
 		mucTieu.keyResults
@@ -45,7 +41,6 @@ export function PhanKrPhuTrach({
 }: {
 	ds: readonly MucTieu[];
 	tenKy: string;
-	/** Hai nhóm «Đang theo dõi», «Đã bỏ» đứng ngay sau nhóm tham gia, trong phần này. */
 	nhomSau?: React.ReactNode;
 }) {
 	const locale = useLocale();

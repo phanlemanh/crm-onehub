@@ -27,10 +27,6 @@ import { PhanKrPhuTrach } from "./phan-kr-phu-trach";
 import { ChuaChuKy, DangTai, Loi } from "./trang-thai-okr";
 import { ViecOkrCuaToi } from "./viec-cua-toi";
 
-/**
- * Của tôi là hộp việc ba phần, đọc từ trên xuống: KR cần cập nhật tuần này (gửi ngay tại
- * chỗ), đơn vị người xem dẫn, KR người xem phụ trách. Mỗi phần tự tải và tự báo lỗi.
- */
 export function CuaToi() {
 	return (
 		<div className="flex flex-col gap-8">

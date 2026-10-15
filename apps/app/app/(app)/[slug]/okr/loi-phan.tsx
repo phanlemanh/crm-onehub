@@ -6,7 +6,6 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { okrMessages } from "@/lib/messages/okr";
 
-/** Lỗi tải của MỘT phần trong Của tôi — hai phần còn lại vẫn hiện dữ liệu của chúng. */
 export function LoiPhan({ thuLai }: { thuLai: () => void }) {
 	const m = okrMessages(useLocale()).baPhan;
 	return (

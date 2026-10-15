@@ -253,7 +253,6 @@ export function ViecOkrCuaToi({
 	noi: NoiHienViec;
 	khiHien: KhiHienViec;
 	anKhiLoi: boolean;
-	/** Ở Của tôi, việc «Cập nhật tuần» đã là phần đầu trang nên không lặp lại ở đây. */
 	anCapNhat?: boolean;
 }) {
 	const m = okrMessages(useLocale()).viecCuaToi;

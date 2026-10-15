@@ -26,7 +26,6 @@ import { LoiPhan } from "./loi-phan";
 import type { DonChonOkr } from "./okr-search-params";
 import { nhipCua } from "./tien-do-kr";
 
-/** Thẻ đơn vị đọc trọn bộ OKR của đơn vị — không bộ lọc nào của trang Theo đơn vị. */
 const LOC_TRONG = {
 	phuTrach: [],
 	loai: [],
@@ -44,7 +43,6 @@ export type SoDonVi = {
 	truot: number;
 };
 
-/** Sáu con số của một thẻ đơn vị, tính bằng đúng phép tính nhịp KR của trang Theo đơn vị. */
 export function demNhip(ds: readonly MucTieu[]): SoDonVi {
 	const kr = ds.flatMap((mt) =>
 		mt.keyResults.map((k) => ({
@@ -66,7 +64,6 @@ export function demNhip(ds: readonly MucTieu[]): SoDonVi {
 	};
 }
 
-/** Đơn vị người xem dẫn: bộ phận trước phòng ban, mỗi nhóm theo thứ tự cây tổ chức. */
 export function thuTuDan(
 	headOf: { divisions: string[]; departments: string[] },
 	cay: CayDuLieu | undefined,

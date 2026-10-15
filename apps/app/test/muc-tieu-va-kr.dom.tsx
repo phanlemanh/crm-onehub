@@ -1871,7 +1871,6 @@ async function thaoSan(san: San): Promise<void> {
 	document.body.innerHTML = "";
 }
 
-/** Bảng mục tiêu chỉ còn ở Theo đơn vị — Của tôi thành ba phần (hồ sơ cua-toi-ba-phan, AC-6). */
 async function motMan(
 	lam: (man: "theo-don-vi") => Promise<void>,
 ): Promise<void> {

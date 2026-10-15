@@ -213,9 +213,7 @@ export const kho = {
 	traGhi: new Map<string, KetGhi>(),
 	daGhi: [] as { duong: string; dauVao: DauVao }[],
 	toast: [] as { loai: string; chu: string }[],
-	/** Ghi đè đầu ra một thủ tục đọc theo đầu vào (vắng → bảng mặc định bên dưới). */
 	doc: new Map<string, (vao: DauVao) => object | null>(),
-	/** Ghi đè kết quả một thủ tục ghi (vắng → `traGhi` / mặc định). */
 	ghi: new Map<string, (vao: DauVao) => KetGhi>(),
 	daDoc: [] as { duong: string; dauVao: DauVao }[],
 	lamMoi: 0,
@@ -377,7 +375,6 @@ export type San = {
 	o: HTMLElement;
 	root: Root;
 	url: () => URLSearchParams;
-	/** Bộ đệm truy vấn của màn — bài cần ép một lần tải lại nền gọi `invalidateQueries` trên nó. */
 	client: QueryClient;
 };
 let dangMo: San[] = [];

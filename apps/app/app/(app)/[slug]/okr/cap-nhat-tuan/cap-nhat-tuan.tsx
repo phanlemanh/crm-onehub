@@ -296,11 +296,6 @@ function Rong() {
 	);
 }
 
-/**
- * Bảng gửi cập nhật tuần. Trang cũ dựng nó trọn trang; Của tôi dựng nó tại chỗ
- * (`taiCho`: không có nút «Về Của tôi» vì người đã ở đó), có thể mở thẳng ở chế độ sửa
- * lần gửi tuần này (`suaNgay`) và đặt con trỏ vào ô số đầu tiên (`focusDau`).
- */
 export function BangCapNhat({
 	duLieu,
 	sessionId,

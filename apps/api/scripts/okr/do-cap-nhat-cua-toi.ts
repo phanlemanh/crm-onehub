@@ -1,15 +1,3 @@
-/**
- * Lệnh đo ngưỡng Cổng Đáng của hồ sơ `cua-toi-ba-phan` — CHỈ ĐỌC.
- *
- *   bun apps/api/scripts/okr/do-cap-nhat-cua-toi.ts --tu 2026-10-21 --den 2026-11-04
- *
- * Đếm phiên cập nhật tuần ĐÃ GỬI trong `[tu, den)` của người đang dẫn ít nhất một đơn vị
- * (trưởng bộ phận hoặc phòng ban chưa lưu trữ, theo cây lúc chạy lệnh). «Mở ở Của tôi» là
- * mọi lối vào trừ `sheet` (ngăn chi tiết một KR) — sau lượt DH3, mọi lối khác đều mở bảng
- * ngay trong Của tôi. In tỉ lệ, cờ «không đủ mẫu» khi dưới 10 phiên, và số đơn vị có dấu
- * sửa trong cửa sổ (chặn trên của số đơn vị có thể đã đổi trưởng — giới hạn đã khai ở
- * «Đường đo» của hợp đồng).
- */
 import { type Db, db } from "@crm/db";
 
 export const SAN_MAU = 10;

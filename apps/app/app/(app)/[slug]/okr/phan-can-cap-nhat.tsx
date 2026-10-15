@@ -29,7 +29,6 @@ import {
 } from "./cap-nhat-tuan/cap-nhat-tuan";
 import { LoiPhan } from "./loi-phan";
 
-/** Lối vào từ ngoài Của tôi mở sẵn bảng cập nhật; lối khác (hoặc vắng) không mở phiên. */
 const LOI_MO_SAN = ["nhac", "viec-cua-toi"] as const satisfies LoiVao[];
 
 function moSan(tu: LoiVao | null): tu is (typeof LOI_MO_SAN)[number] {
@@ -52,7 +51,6 @@ export function PhanCanCapNhat() {
 		trpc.okr.moCapNhat.mutationOptions({
 			onSuccess: (kq) => {
 				setPhien(kq.sessionId);
-				// `tu` chỉ rời đường dẫn khi bảng đã mở: mở lỗi thì tải lại trang vẫn thử từ lối đó
 				if (tu !== null) void datTu(null);
 			},
 		}),
@@ -76,7 +74,6 @@ export function PhanCanCapNhat() {
 				<Skeleton className="h-24 w-full" data-khung-xuong="" />
 			</VoPhan>
 		);
-	// tải lại nền lỗi mà đã có dữ liệu thì giữ dữ liệu (bảng đang điền, dòng đã gửi); chỉ lần tải đầu lỗi mới báo
 	if (!ds.data)
 		return (
 			<VoPhan tieuDe={m.phan1}>
@@ -182,7 +179,6 @@ export function PhanCanCapNhat() {
 	);
 }
 
-/** Mở bảng cập nhật lỗi: báo và cho thử lại với đúng lối vào ban đầu. */
 function LoiMoPhien({ thuLai }: { thuLai: () => void }) {
 	const m = okrMessages(useLocale()).baPhan;
 	return (
