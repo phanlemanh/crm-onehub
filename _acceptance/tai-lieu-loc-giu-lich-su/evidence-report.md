@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 390b2a417711f8f7ce3386a3bf1e81b2df5e86f2
-human_signoff:
+verified_commit: 8874241055eb4d72ba5aacd83e9d470caf028d85
+human_signoff: Phan Le Manh 2026-10-16
 ---
 
 # Evidence Report: tai-lieu-loc-giu-lich-su
@@ -139,3 +139,7 @@ none — every multi-run eval is uniform
 
 Round 1: eval máy đạt, một lỗi trong hợp đồng (AC-2): dữ liệu cũ giữ bằng placeholderData lọt vào nhánh KhoRong nên thanh lọc bị gỡ và màn kho trống chớp lên. Returned to implementation (sửa ở ed96d83f8).
 Round 2: E1, E2, E3, E5 chạy lại và đạt; E4 chạy lại qua mot-luot.sh, khung chụp xác nhận thanh lọc giữ nguyên và hàng cũ mờ khi chờ; E4m carry-forward từ round 1; bảy lệnh suite đạt. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-15, do làn trước chữ ký Cổng Bằng chứng; cây đã gộp onehub b7f3f1620
+run_id: repin-20261015T221108Z-97059
+sha: 8874241055eb4d72ba5aacd83e9d470caf028d85 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

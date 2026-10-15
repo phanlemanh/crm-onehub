@@ -5,7 +5,7 @@ slug: tai-lieu-loc-giu-lich-su
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-15T07:35:05Z
 design_doc: docs/superpowers/specs/2026-10-15-tai-lieu-loc-giu-lich-su-design.md
@@ -71,3 +71,6 @@ Quét theo khuôn test-matrix của `morphological-scan` (bài toán nhỏ, hai 
 ## Notes
 
 - Nhánh chồng lên `feat/loc-va-kieu-xem-chung` (#418); gộp sau #418.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Lọc theo đơn vị hay chủ trang trong lúc chờ chưa có bài kiểm tự động riêng xác nhận thanh lọc đứng yên và báo đang tải.
+  - Ngoài-2: Sang trang ở Chờ duyệt chưa có bài kiểm tự động xác nhận mỗi lần sang trang để lại một bước lùi riêng.
