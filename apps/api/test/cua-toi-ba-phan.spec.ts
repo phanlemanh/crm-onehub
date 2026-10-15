@@ -73,6 +73,9 @@ describe("ctbp-phien-cua-toi", () => {
 		const k2 = await taoKr(mt, m, "quan");
 		ok(await goi("okr.publishObjective", { id: mt }, "quan"), "cong bo");
 
+		const moCuaToi = await goi("okr.moCapNhat", { entry: "cua-toi" }, cookieM);
+		if (moCuaToi.status !== 200)
+			throw new Error("ctbp-phien-cua-toi: moCapNhat tu choi entry «cua-toi»");
 		const moTheo: Json[] = [];
 		for (const entry of LOI_VAO) {
 			const { sessionId } = ok<{ sessionId: string }>(

@@ -59,7 +59,12 @@ const MA_TRAN: [string, Vao, string][] = [
 describe("ctbp-chuyen-huong", () => {
 	test("ctbp-chuyen-huong: duong cu /okr/cap-nhat-tuan ve Cua toi, giu moi tham so va thu tu, 6 o", async () => {
 		const ket: [string, string][] = [];
-		for (const [ten, vao] of MA_TRAN) ket.push([ten, await dichDen("ws", vao)]);
+		for (const [ten, vao, mong] of MA_TRAN) {
+			const dich = await dichDen("ws", vao);
+			if (dich !== mong)
+				throw new Error(`ctbp-chuyen-huong: dich «${dich}», mong «${mong}»`);
+			ket.push([ten, dich]);
+		}
 		expect(ket).toEqual(MA_TRAN.map(([ten, , dich]) => [ten, dich]));
 		for (const [, vao, dich] of MA_TRAN) expect(kyVong("ws", vao)).toBe(dich);
 	});

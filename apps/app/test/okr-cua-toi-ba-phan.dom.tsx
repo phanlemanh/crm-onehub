@@ -263,6 +263,14 @@ describe("ctbp-phan-mot", () => {
 							.querySelector('[data-khoi="viec-okr"]')
 							?.textContent?.includes("KR a, KR b") ?? false,
 				};
+				if (du === MOT_THIEU && dong !== 1)
+					throw new Error(
+						`ctbp-phan-mot: phan 1 co ${dong} dong, mong 1 (o 1 thieu 2 du)`,
+					);
+				if (ketQua.viecCapNhatConTrongCuaToi)
+					throw new Error(
+						"ctbp-phan-mot: khoi viec trong Cua toi con viec okr-cap-nhat",
+					);
 				expect(ketQua).toEqual({
 					dauTien: 0,
 					viecSau: true,
@@ -273,10 +281,6 @@ describe("ctbp-phan-mot", () => {
 					khongKr: du === KHONG_KR,
 					viecCapNhatConTrongCuaToi: false,
 				});
-				if (du === MOT_THIEU && dong !== 1)
-					throw new Error(
-						`ctbp-phan-mot: phan 1 co ${dong} dong, mong 1 (o 1 thieu 2 du)`,
-					);
 			});
 
 	test("ctbp-phan-mot: o chu ky cu — phan 1 van theo chu ky dang chay", async () => {
@@ -284,6 +288,10 @@ describe("ctbp-phan-mot", () => {
 		await dung(<CuaToi />, "?kyOkr=q3");
 		await cho(daTaiPhan1, "phan 1 tai xong");
 		const goiTuan = kho.daDoc.filter((d) => d.duong === "okr.capNhatTuan");
+		if (!goiTuan.every((d) => d.dauVao === undefined))
+			throw new Error(
+				"ctbp-phan-mot: phan 1 theo chu ky K cu, mong chu ky dang chay",
+			);
 		expect({
 			soLanGoi: goiTuan.length > 0,
 			vaoKhongMangKy: goiTuan.every((d) => d.dauVao === undefined),
@@ -311,6 +319,10 @@ describe("ctbp-cap-nhat-tai-cho", () => {
 		await cho(daTaiPhan1, "phan 1 tai xong");
 		await nhip(2);
 		const truocBam = moPhien().length;
+		if (truocBam !== 0)
+			throw new Error(
+				`ctbp-cap-nhat-tai-cho: moCapNhat goi ${truocBam} lan khi chua bam, mong 0`,
+			);
 
 		const nut = phan("can-cap-nhat")?.querySelector<HTMLButtonElement>(
 			'[data-nut="cap-nhat-tai-cho"]',
@@ -322,10 +334,6 @@ describe("ctbp-cap-nhat-tai-cho", () => {
 			"bang cap nhat mo trong phan 1",
 		);
 		const p1 = phan("can-cap-nhat");
-		if (truocBam !== 0)
-			throw new Error(
-				`ctbp-cap-nhat-tai-cho: moCapNhat goi ${truocBam} lan khi chua bam, mong 0`,
-			);
 		const entry = moPhien()[0]?.dauVao?.entry;
 		if (entry !== "cua-toi")
 			throw new Error(
@@ -738,10 +746,13 @@ describe("ctbp-tai-loi", () => {
 				const cu = kho.doc.get(tv);
 				const goc = tv === "okr.mine" ? () => kho.mine : (cu ?? (() => null));
 				let lan = 0;
+				// Lỗi giữ nguyên tới khi người bấm «Thử lại» — một truy vấn dùng chung bị gọi
+				// lại khi một phần khác gắn vào không được tự lành lỗi.
+				let hong = true;
 				kho.doc.set(tv, (vao: DauVao) => {
 					lan += 1;
 					if (kieu === "dang-tai") return treo() as never;
-					if (lan === 1) throw new Error("hong");
+					if (hong) throw new Error("hong");
 					return goc(vao);
 				});
 				await dung(<CuaToi />, "?kyOkr=q4");
@@ -753,14 +764,16 @@ describe("ctbp-tai-loi", () => {
 						: p === "don-vi-dan"
 							? co(p, "[data-so-kr]")
 							: (phan(p)?.querySelectorAll("[data-kr]").length ?? 0) > 0;
-				await cho(() => khac.every(coDuLieu), "hai phan kia co du lieu");
 				if (kieu === "dang-tai") {
+					await cho(() => khac.every(coDuLieu), "hai phan kia co du lieu");
 					expect(co(ten, KHUNG[tv])).toBe(true);
 					return;
 				}
 				await cho(() => co(ten, LOI[tv]), `loi rieng phan ${ten}`);
+				await nhip(4);
 				const loiKhac = khac.filter(
 					(p) =>
+						phan(p) === null ||
 						co(p, '[data-trang-thai="ST-ctbp-loi-phan"]') ||
 						co(p, "[data-trang-thai='ST-donvi-loi']"),
 				);
@@ -768,12 +781,14 @@ describe("ctbp-tai-loi", () => {
 					throw new Error(
 						`ctbp-tai-loi: ${tv} loi lam an phan ${loiKhac.join(", ")}`,
 					);
+				await cho(() => khac.every(coDuLieu), "hai phan kia co du lieu");
 				const nut =
 					phan(ten)?.querySelector<HTMLButtonElement>(
 						'[data-nut="thu-lai-phan"]',
 					) ?? phan(ten)?.querySelector<HTMLButtonElement>(`${LOI[tv]} button`);
 				if (!nut) throw new Error("khong thay nut thu lai");
 				const truoc = lan;
+				hong = false;
 				await bamChuot(nut);
 				await cho(() => lan > truoc, "goi lai dung truy van");
 				expect(lan - truoc).toBe(1);
