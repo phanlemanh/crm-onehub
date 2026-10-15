@@ -17,6 +17,8 @@
   "mien": [
     { "cho": "apps/api/src/trpc/middlewares/khoa-keo-tin-hieu.middleware.ts", "ly_do": "cổng của chính đường kéo theo lịch — đo ở E3, E5" },
     { "cho": "packages/auth/src/khoa-keo-tin-hieu.ts", "ly_do": "hàm xác minh khoá chỉ-kéo mà cổng trên gọi" },
+    { "cho": "apps/api/src/trpc/middlewares/khoa-day-lo-trinh.middleware.ts", "ly_do": "cổng của đường đẩy bản chụp lộ trình (LT1c) — đo ở E4 của lo-trinh-doc-ban-chup" },
+    { "cho": "packages/auth/src/khoa-day-lo-trinh.ts", "ly_do": "hàm xác minh khoá chỉ-đẩy lộ trình mà cổng trên gọi (LT1c)" },
     { "cho": "packages/auth/src/api-keys.ts", "ly_do": "hằng tên đầu khoá, không đọc yêu cầu" },
     { "cho": "packages/auth/src/index.ts", "ly_do": "chỉ xuất lại" },
     { "cho": "apps/api/src/create-app.ts", "ly_do": "khai tên đầu khoá cho tài liệu OpenAPI, không đọc yêu cầu" },
