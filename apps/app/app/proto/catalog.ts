@@ -28,10 +28,6 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-dvb-cay", nhan: "Cây căn chỉnh" },
 			{ id: "ST-dvb-dang-tai", nhan: "Đang tải" },
 			{ id: "ST-dvb-loi", nhan: "Lỗi tải" },
-			{
-				id: "ST-dvb-hoi-2-nut-chi-tiet",
-				nhan: "Hỏi-2 lối khác: nút «Chi tiết»",
-			},
 		],
 	},
 	{

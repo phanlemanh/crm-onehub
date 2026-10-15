@@ -85,16 +85,10 @@ type Canh = {
 	tab?: string;
 	moKr?: string[];
 	kieu?: "dang-tai" | "loi";
-	hoi2?: boolean;
-	ghim?: string;
 };
 
 const CANH = {
-	"ST-dvb-danh-sach": {
-		don: "pb:cskh",
-		xem: "danh-sach",
-		ghim: "Hỏi-2 · máy khuyên: bấm tên mục tiêu mở ngăn chi tiết, bấm dòng mở KR",
-	},
+	"ST-dvb-danh-sach": { don: "pb:cskh", xem: "danh-sach" },
 	"ST-dvb-mo-kr": { don: "pb:cskh", xem: "danh-sach", moKr: ["c1"] },
 	"ST-dvb-chon-don-vi": { don: "pb:cskh", xem: "danh-sach", moChon: true },
 	"ST-dvb-can-ban": { don: "pb:cskh", xem: "danh-sach", tab: "can-ban" },
@@ -108,12 +102,6 @@ const CANH = {
 	"ST-dvb-cay": { don: "pb:cskh", xem: "cay" },
 	"ST-dvb-dang-tai": { don: "pb:cskh", xem: "danh-sach", kieu: "dang-tai" },
 	"ST-dvb-loi": { don: "pb:cskh", xem: "danh-sach", kieu: "loi" },
-	"ST-dvb-hoi-2-nut-chi-tiet": {
-		don: "pb:cskh",
-		xem: "danh-sach",
-		hoi2: true,
-		ghim: "Hỏi-2 · lối khác: nút «Chi tiết» riêng cuối dòng",
-	},
 } satisfies Record<string, Canh>;
 
 /* ——— Đơn đang xem: một đơn vị của cây, hoặc một người ——— */
@@ -255,10 +243,9 @@ type ChiTiet = { loai: "Mục tiêu" | "KR"; ten: string; kr: KrMau[] };
 
 function cotMucTieu(
 	don: Don,
-	hoi2: boolean,
 	mo: (c: ChiTiet) => void,
 ): DataTableColumn<MucTieuMau>[] {
-	const cot: DataTableColumn<MucTieuMau>[] = [
+	return [
 		{
 			id: "ten",
 			header: "Mục tiêu",
@@ -271,24 +258,18 @@ function cotMucTieu(
 						data-muc-tieu={mt.id}
 					>
 						<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-							{hoi2 ? (
-								<span className="font-medium" translate="no">
-									{mt.ten}
-								</span>
-							) : (
-								<button
-									className="min-w-0 cursor-pointer text-left font-medium underline-offset-4 hover:underline"
-									data-ten-muc-tieu
-									onClick={(e) => {
-										e.stopPropagation();
-										mo({ loai: "Mục tiêu", ten: mt.ten, kr: mt.kr });
-									}}
-									translate="no"
-									type="button"
-								>
-									{mt.ten}
-								</button>
-							)}
+							<button
+								className="min-w-0 cursor-pointer text-left font-medium underline-offset-4 hover:underline"
+								data-ten-muc-tieu
+								onClick={(e) => {
+									e.stopPropagation();
+									mo({ loai: "Mục tiêu", ten: mt.ten, kr: mt.kr });
+								}}
+								translate="no"
+								type="button"
+							>
+								{mt.ten}
+							</button>
 							<LoaiMucTieuNhan loai={mt.loai} />
 							{NHAP.has(mt.id) ? (
 								<StatusIndicator label="Nháp" size="sm" tone="neutral" />
@@ -338,31 +319,6 @@ function cotMucTieu(
 			width: "w-48",
 			hideBelow: "lg",
 			cell: (mt) => <TenNguoi ten={mt.phuTrach.ten} />,
-		},
-	];
-	if (!hoi2) return cot;
-	return [
-		...cot,
-		{
-			id: "chi-tiet",
-			header: <span className="sr-only">Chi tiết</span>,
-			label: "Chi tiết",
-			hideable: false,
-			width: "w-24",
-			align: "right",
-			cell: (mt) => (
-				<Button
-					data-nut-chi-tiet
-					onClick={(e) => {
-						e.stopPropagation();
-						mo({ loai: "Mục tiêu", ten: mt.ten, kr: mt.kr });
-					}}
-					size="sm"
-					variant="ghost"
-				>
-					Chi tiết
-				</Button>
-			),
 		},
 	];
 }
@@ -594,8 +550,7 @@ function DanhSach({ don, canh }: { don: Don; canh: Canh }) {
 	const query = useTruyVan(canh.tab ?? "all");
 	const [chiTiet, setChiTiet] = useState<ChiTiet | null>(null);
 	const ds = don.mucTieu;
-	const hoi2 = canh.hoi2 === true;
-	const cot = useMemo(() => cotMucTieu(don, hoi2, setChiTiet), [don, hoi2]);
+	const cot = useMemo(() => cotMucTieu(don, setChiTiet), [don]);
 
 	const loai = query.filters.loai ?? [];
 	const phuTrach = query.filters["phu-trach"] ?? [];
@@ -785,11 +740,6 @@ function ThanTrang({
 			{don.nguoi ? <KhoiKrNguoi ng={don.nguoi} /> : null}
 			<NhomDaBo id={don.id} />
 			{don.dv ? <DonViCon dv={don.dv} /> : null}
-			{canh.ghim ? (
-				<p className="text-muted-foreground text-xs" data-ghim-hoi>
-					{canh.ghim}
-				</p>
-			) : null}
 		</div>
 	);
 }
