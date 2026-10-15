@@ -5,9 +5,9 @@ slug: cua-toi-ba-phan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
-approved_by: manh
-approved_at: 2026-10-15T05:06:36Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md
 ---
 
@@ -38,8 +38,9 @@ Source input: hàng DH3 `docs/plan/lo-trinh-okr.json`; `docs/plan/pham-vi-okr-di
 - AC-9: Given Của tôi khi dữ liệu đang tải hoặc một truy vấn lỗi, When trang dựng, Then lúc tải mỗi phần là khung xương ở đúng chỗ của nó; truy vấn của phần nào lỗi thì chỉ phần đó hiện «Chưa tải được phần này» kèm «Thử lại», hai phần kia vẫn hiện dữ liệu; gửi cập nhật lỗi giữ nguyên số đã nhập và nút thành «Gửi lại».
 - AC-10: Given cơ sở dữ liệu thử có phiên cập nhật tuần gieo sẵn với đáp án biết trước (trưởng đơn vị và thành viên; lối `cua-toi`, `nhac`, `viec-cua-toi`, `sheet`; đã gửi và chưa gửi; trong và ngoài cửa sổ), When chạy lệnh đo `apps/api/scripts/okr/do-cap-nhat-cua-toi.ts --tu <ngày> --den <ngày>`, Then lệnh chỉ đọc và in đúng «k/n phiên đã gửi của trưởng đơn vị mở ở Của tôi (p %)» với mọi lối trừ `sheet` là «ở Của tôi», chỉ đếm phiên đã gửi của người đang dẫn ≥1 đơn vị, in «không đủ mẫu» khi n < 10, và in số đơn vị có dấu sửa trong cửa sổ (giới hạn vai dẫn ở «Đường đo»). (cross-layer)
 - AC-11: Given các bài kiểm từng khẳng định hành vi cũ (năm thẻ; đường `/okr/cap-nhat-tuan?tu=nhac` trong tin nhắc; nút việc dẫn sang trang cập nhật; Của tôi là bảng mục tiêu; tham số `tu` mặc định `tab`), When chạy sau lượt, Then mọi bài xanh và mỗi chỗ sửa trong bài chỉ đổi điều khẳng định sang lời hứa mới của AC-1 đến AC-8; các eval máy của hồ sơ đã ký chạy những tệp kiểm đó thoát đúng mã kỳ vọng như lúc ký — kể cả bộ kiểm đầu trang khu của DH1 (ma trận thẻ, vòng đổi thẻ đi-về) và phép đo bản mẫu của DH1, vốn so danh sách thẻ của bản mẫu `/proto/dieu-huong-khu-muc-tieu` với danh sách thẻ thật: bản mẫu DH1 bỏ thẻ «Cập nhật tuần» cùng lượt.
-- AC-12: Given `/proto/cua-toi-ba-phan` khi bật `PROTO_ROUTE=1`, When mở từng state, Then có một state cho mỗi dòng của bảng trạng thái trong thiết kế (trừ ST-ctbp-dang-tai, ST-ctbp-loi-phan — đo trên app thật ở AC-9), khu dùng bốn thẻ, phép đo sổ bản mẫu xanh.
+- AC-12: Given `/proto/cua-toi-ba-phan` khi bật `PROTO_ROUTE=1`, When mở từng state, Then có một state cho mỗi dòng của bảng trạng thái trong thiết kế (trừ ST-ctbp-dang-tai, ST-ctbp-loi-phan, ST-ctbp-loi-mo — đo trên app thật ở AC-9, AC-14), khu dùng bốn thẻ, phép đo sổ bản mẫu xanh.
 - AC-13: Given ảnh Của tôi ở 1440 px và 390 px của trưởng đơn vị có KR thiếu số, của trưởng đơn vị đang mở bảng cập nhật và của thành viên không dẫn đơn vị nào, do E-ui chụp, When một người không làm lượt này xem, Then họ đọc được ngay ở màn đầu (1440 px, không cuộn) việc cần cập nhật tuần này và nút để làm nó, rồi đơn vị mình dẫn, rồi KR mình phụ trách, theo đúng thứ tự đó; ở thành viên không dẫn ai họ không thấy lời mời tạo mục tiêu nào. (judgment)
+- AC-14: Given phần 1 của Của tôi, When mở bảng cập nhật thất bại — bấm «Cập nhật N KR», bấm «Sửa lần gửi tuần này», hoặc vào bằng `/okr?tu=nhac` / `/okr?tu=viec-cua-toi` — hoặc khi lần tải lại nền của `okr.capNhatTuan` lỗi lúc phần 1 đã có dữ liệu, Then: mở lỗi thì phần 1 hiện «Không mở được lượt cập nhật.» kèm nút «Thử lại», bảng chưa mở, và «Thử lại» thử mở bảng lần nữa với đúng lối vào ban đầu (`cua-toi`, `nhac` hoặc `viec-cua-toi`); vào bằng `tu` thì `tu` chỉ rời đường dẫn khi bảng đã mở được, nên mở lỗi rồi tải lại trang vẫn thử mở bảng từ lối đó; tải lại nền lỗi không gỡ bảng đang điền (số đã nhập còn nguyên) hay dòng «đã gửi» vừa hiện, phần 1 giữ dữ liệu đã có — «Chưa tải được phần này» chỉ hiện khi lần tải đầu lỗi (AC-9).
 
 ## Coverage
 
@@ -49,9 +50,10 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
 - **Trục B — người xem:** trưởng bộ phận · trưởng phòng ban · dẫn hai đơn vị · thành viên không dẫn ai · quản trị không dẫn đơn vị · vai «chỉ OKR»  [thước CE: `okr-access.service.ts` `headOf`]
 - **Trục C — trạng thái KR tuần này:** còn thiếu · thiếu một phần · đủ · không phụ trách KR nào · chu kỳ đang chọn không phải chu kỳ đang chạy  [thước CE: `okr-cap-nhat.service.ts` `capNhatTuan`]
 - **Trục D — lối vào phiên:** nút trong Của tôi · `?tu=nhac` · `?tu=viec-cua-toi` · đường cũ · ngăn KR (`sheet`) · tải trang không bấm  [thước CE: `LOI_VAO` + AC-2, AC-3, AC-4]
-- **Trục E — trạng thái dữ liệu:** đang tải · lỗi một phần · gửi lỗi · đơn vị chưa có mục tiêu  [thước CE: `docs/design.md` «Chờ tải và lỗi tải»]
+- **Trục E — trạng thái dữ liệu:** đang tải · lỗi một phần · gửi lỗi · mở bảng lỗi · tải lại nền lỗi khi đang điền · đơn vị chưa có mục tiêu  [thước CE: `docs/design.md` «Chờ tải và lỗi tải»; hai ô giữa thêm ở Cổng Bằng chứng 15/10 — Ngoài-3, 6, 7]
 - **Trục F — khổ và ngôn ngữ:** 1440 · 390 · vi · en  [thước CE: số đo production 14/10 ở 1440 và 390]
 - Phần 1 theo chu kỳ đang chạy, không theo ô chu kỳ — như trang cũ (AC-1, sổ quyết định); phần 2, 3 theo ô chu kỳ.
+- Tiêu chí AC-14 thêm ở Cổng Bằng chứng vòng 1 theo lối «nâng phạm vi sửa ngay» chủ kho chọn (sổ quyết định, dòng `revisit` gate2); trang cũ `/okr/cap-nhat-tuan` từng có đường lỗi mở phiên kèm «Thử lại» mà phần 1 làm rơi.
 - Hai câu hỏi cho người ở Cổng Phạm vi (sổ quyết định, dòng `chi-nguoi`): thứ tự khối việc so với phần 1; phần 3 là bảng KR (mục tiêu không có KR của mình vào nhóm thu gọn) hay giữ cả bảng mục tiêu dưới bảng KR.
 
 ## Đường đo

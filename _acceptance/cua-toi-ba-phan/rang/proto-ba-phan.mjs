@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * E14 (AC-12): bản mẫu /proto/cua-toi-ba-phan có đúng một state cho mỗi
- * dòng ST-ctbp-* của bảng trạng thái trong thiết kế (trừ hai dòng đo trên app thật),
+ * dòng ST-ctbp-* của bảng trạng thái trong thiết kế (trừ ba dòng đo trên app thật),
  * dùng bốn thẻ của app (trừ state phương án câu hỏi ST-ctbp-hoi-*), và sổ bản mẫu xanh.
  *
  * Hai chiều trong cùng một lượt: (1) trên thiết kế thật → không thiếu, không thừa;
@@ -19,7 +19,11 @@ const THIET_KE = join(
 	GOC,
 	"docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md",
 );
-const DO_TREN_APP = new Set(["ST-ctbp-dang-tai", "ST-ctbp-loi-phan"]);
+const DO_TREN_APP = new Set([
+	"ST-ctbp-dang-tai",
+	"ST-ctbp-loi-phan",
+	"ST-ctbp-loi-mo",
+]);
 
 function khongDo(cau) {
 	console.log(`KHONG DO DUOC: ${cau}`);

@@ -104,6 +104,7 @@ trang của DH1.
 | ST-ctbp-don-vi-rong | Của tôi | thẻ «Chưa có mục tiêu nào ở Q4 2026» + «Mở trang đơn vị» | mở trang đơn vị để đặt |
 | ST-ctbp-khong-dan | Của tôi | không phần 2; đầu trang: «Thêm mục tiêu» khoá + dòng «Bạn chưa dẫn đơn vị nào…» | cập nhật KR của mình |
 | ST-ctbp-loi-phan | Của tôi | một phần lỗi: «Chưa tải được phần này» + «Thử lại», hai phần kia vẫn đủ | thử lại |
+| ST-ctbp-loi-mo | Của tôi | phần 1 «Không mở được lượt cập nhật.» + «Thử lại», bảng chưa mở, `tu` còn trên đường dẫn | thử lại |
 | ST-ctbp-dang-cap-nhat-390 | Của tôi 390 px | bảng cập nhật một cột, thanh gửi dính đáy, không tràn ngang | điền, gửi |
 <!-- UX-STATE-TABLE>>> -->
 
@@ -112,6 +113,9 @@ trang của DH1.
 - Phần 1 theo chu kỳ đang chạy (như trang cũ), không theo ô chu kỳ; phần 2, 3 theo ô chu kỳ của đầu trang.
 - `?tu=nhac` / `?tu=viec-cua-toi` mở bảng và cuộn tới phần 1, focus ô số đầu tiên; mở xong `tu` rời đường dẫn để tải
   lại trang không mở thêm phiên.
+- Mở bảng lỗi (nút hay `tu`): phần 1 báo «Không mở được lượt cập nhật.» kèm «Thử lại» mở lại đúng lối vào ban đầu;
+  `tu` chỉ rời đường dẫn sau khi mở được. Tải lại nền lỗi khi phần 1 đã có dữ liệu thì giữ nguyên bảng đang điền,
+  dòng «đã gửi» hay danh sách — «Chưa tải được phần này» chỉ cho lần tải đầu (thêm ở Cổng Bằng chứng 15/10).
 - Bảng cập nhật: giới hạn ghi chú 200 ký tự, kiểu số theo kiểu KR, nguồn máy khoá ô — giữ nguyên hành vi bảng cũ.
 - 390 px: ba phần một cột; thẻ đơn vị xếp dọc; bảng KR phần 3 ẩn cột tự tin như `KhoiKrCuaToi`.
 

@@ -350,3 +350,44 @@ evals:
       /<slug>/okr?kyOkr=K (tu da go sau khi mo). Gui 1 KR o o nhac -> dong do co submittedAt.
       Dong "DUNG AC-3 may chu: 5/5 o".
       CHIEU DO (CTBP_PHA=giu-tu cua E4 tren may chu that) -> "SAI AC-3: tai lai sau nhac +1, mong +0".
+
+  - id: E19
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.ctbp_loi_mo
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-loi-mo". Ma tran viet truoc: 4 loi mo (bam [data-nut=cap-nhat-tai-cho] · bam [data-nut=sua-lan-gui]
+      o fixture «du» · /okr?tu=nhac · /okr?tu=viec-cua-toi), moi o okr.moCapNhat tra loi 500 o lan goi dau va thanh
+      cong o lan hai. Sau loi: phan 1 co [role=alert] chua chu rut tu messages that m.baPhan.loiMo («Không mở được lượt
+      cập nhật.») va nut [data-nut=thu-lai-mo]; chua co bang cap nhat; o tu: tham so tu VAN tren duong dan. Bam Thu lai
+      -> moCapNhat goi lan hai voi dung entry cua o (cua-toi / cua-toi / nhac / viec-cua-toi); thanh cong -> bang mo, o so
+      dau nhan focus, [role=alert] bien mat, o tu: tu roi duong dan. Them 1 o: moCapNhat loi o lan dau cua o tu, dung lai
+      trang moi voi cung duong dan -> moCapNhat duoc goi lai voi entry cua tu (lan tai lai van mo tu loi vao do).
+      DOI CHUNG DUONG: o /okr?tu=nhac loi roi thu lai xanh.
+      CHIEU DO (CTBP_PHA=bo-bao-loi: ban sao bo khoi bao loi mo) -> "ctbp-loi-mo: mo phien loi khong bao".
+      CHIEU DO (CTBP_PHA=go-tu-som: ban sao go tu ngay sau khi goi moCapNhat, chua biet ket qua) -> "ctbp-loi-mo: tu
+      roi duong dan sau loi mo phien".
+      CHIEU DO (CTBP_PHA=thu-lai-cua-toi: ban sao Thu lai luon goi entry cua-toi) -> "ctbp-loi-mo: thu lai entry
+      «cua-toi», mong «nhac»".
+
+  - id: E20
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.ctbp_tai_lai_nen
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-tai-lai-nen". Ma tran viet truoc 3 o, moi o lan tai dau cua okr.capNhatTuan thanh cong roi lan tai
+      lai nen (invalidate truy van) tra loi 500: (1) bang cap nhat dang mo, da go so vao o dau -> sau loi bang van con,
+      o dau giu dung so da go, phan 1 KHONG co [data-trang-thai=ST-ctbp-loi-phan]; (2) gui xong (lan tai lai sau gui
+      loi) -> dong «đã gửi» cua bang van hien, khong co ST-ctbp-loi-phan; (3) danh sach KR thieu dang hien, tai lai loi
+      -> van dung so dong va nut «Cập nhật N KR». Doi chung AC-9 khong doi: lan tai DAU loi -> phan 1 co
+      ST-ctbp-loi-phan va nut «Thử lại».
+      DOI CHUNG DUONG: o (1) xanh.
+      CHIEU DO (CTBP_PHA=go-bang: ban sao tra lai dieu kien loi cu «ds.isError || !ds.data») -> "ctbp-tai-lai-nen: bang
+      dang dien bien mat khi tai lai loi".
