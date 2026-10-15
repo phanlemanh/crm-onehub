@@ -1,0 +1,90 @@
+☰eve  v0.29.4
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (33%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (34%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (33%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (68%)
+  - eve-authored-asset-import (29%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[DEV] server listening at http://127.0.0.1:57380/
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] ▸ session wrun_01M4YNJNCQTJXJ70N68GPY842K on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[eve:harness.tool-loop] AI Gateway authentication failed: AI Gateway rejected the provided API key. {
+  errorId: '2dfd865a-1690-4ccc-ae56-525369ad4513',
+  hint: 'Update or unset `AI_GATEWAY_API_KEY` (check your shell profile if you did not set it for this project) — manage keys at https://vercel.com/dashboard/ai/api-keys. Unsetting it falls back to OIDC via `eve link`.',
+  sessionId: 'wrun_01M4YNJNCQTJXJ70N68GPY842K',
+  turnId: 'turn_0'
+}
+[agent] ⨯ step 0 MODEL_CALL_FAILED: AI Gateway rejected the provided API key.
+[agent] ⨯ turn MODEL_CALL_FAILED: AI Gateway rejected the provided API key.
+[agent] ⨯ session MODEL_CALL_FAILED: AI Gateway rejected the provided API key.
+[agent] ▸ session wrun_01M4YNJQ5GEJSCSSGZWM8F87D2 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[eve:harness.tool-loop] AI Gateway authentication failed: AI Gateway rejected the provided API key. {
+  errorId: '51fc27bd-b05b-4176-9673-c4f45abec324',
+  hint: 'Update or unset `AI_GATEWAY_API_KEY` (check your shell profile if you did not set it for this project) — manage keys at https://vercel.com/dashboard/ai/api-keys. Unsetting it falls back to OIDC via `eve link`.',
+  sessionId: 'wrun_01M4YNJQ5GEJSCSSGZWM8F87D2',
+  turnId: 'turn_0'
+}
+[agent] ⨯ step 0 MODEL_CALL_FAILED: AI Gateway rejected the provided API key.
+[agent] ⨯ turn MODEL_CALL_FAILED: AI Gateway rejected the provided API key.
+[agent] ⨯ session MODEL_CALL_FAILED: AI Gateway rejected the provided API key.
