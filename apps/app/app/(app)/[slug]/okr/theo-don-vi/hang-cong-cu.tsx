@@ -118,7 +118,7 @@ export function KhungDangTaiDonVi({ hang }: { hang?: ReactNode }) {
 			)}
 			<div className="flex flex-col gap-1 overflow-hidden rounded-lg border bg-card">
 				<Skeleton
-					className="h-11 w-full rounded-none"
+					className="h-11 w-full"
 					data-khung-hang="dau-bang"
 				/>
 				{DONG_KHUNG.map((k) => (
