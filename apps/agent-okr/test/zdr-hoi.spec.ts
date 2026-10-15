@@ -7,6 +7,8 @@ import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 
 const GOC = join(import.meta.dir, "..", "..", "..");
 const RANG = join(GOC, "_acceptance", "hoi-dap-okr", "rang");
+const KHOA_GATEWAY = "AI_GATEWAY_API_KEY";
+const KHOA_GIA = "khoa-gia-chi-trong-bai-zdr";
 const CAM = [/@ai-sdk\//, /createGateway/, /\bgateway\(/, /from "@crm\/ai"/];
 
 export type KetQuaSoatModel = { goiModel: boolean; loi: string[] };
@@ -41,6 +43,8 @@ const LOI_GOI = {
 async function batYeuCau(model: GoiModel): Promise<YeuCauBat[]> {
 	const bat: YeuCauBat[] = [];
 	const cu = globalThis.fetch;
+	const khoaCu = process.env[KHOA_GATEWAY];
+	process.env[KHOA_GATEWAY] = khoaCu || KHOA_GIA;
 	globalThis.fetch = (async (u: RequestInfo | URL, i?: RequestInit) => {
 		bat.push({ url: String(u), than: String(i?.body ?? "") });
 		return Response.json({ error: "bi-chan-trong-bai" }, { status: 400 });
@@ -50,6 +54,8 @@ async function batYeuCau(model: GoiModel): Promise<YeuCauBat[]> {
 			await goi.call(model, LOI_GOI).catch(() => undefined);
 	} finally {
 		globalThis.fetch = cu;
+		if (khoaCu === undefined) delete process.env[KHOA_GATEWAY];
+		else process.env[KHOA_GATEWAY] = khoaCu;
 	}
 	return bat;
 }
