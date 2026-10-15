@@ -1,7 +1,7 @@
 ---
 schema_version: 1
 slug: chat-duong-day-ban-chup
-feature: Máy chủ chỉ nhận thân yêu cầu lớn ở đúng đường nhận bản chụp lộ trình, và một lượt chạy tay từ nhánh chưa gộp không đổi được lộ trình trên trang
+feature: Chỉ onehub đẩy được bản chụp lộ trình lên CRM; đường REST khác giữ trần thân 100 KB
 owner: phanlemanh@gmail.com
 stage: discovery              # discovery | decided | archived
 decision:         # build | iterate | park | kill — người ký Cổng 0 điền
@@ -18,7 +18,9 @@ lo_trinh_tep: docs/plan/lo-trinh-okr.json
 
 Mở từ hàng LT1d của «OKR» (`docs/plan/lo-trinh-okr.json`).
 
-Máy chủ chỉ nhận thân yêu cầu lớn ở đúng đường nhận bản chụp lộ trình, và một lượt chạy tay từ nhánh chưa gộp không đổi được lộ trình trên trang
+Chỉ onehub đẩy được bản chụp lộ trình lên CRM; đường REST khác giữ trần thân 100 KB
+
+Câu giao trên hàng (bản của điều phối): «Máy chủ chỉ nhận thân yêu cầu lớn ở đúng đường nhận bản chụp lộ trình, và một lượt chạy tay từ nhánh chưa gộp không đổi được lộ trình trên trang».
 
 Vì sao: Gốc: _acceptance/lo-trinh-doc-ban-chup/ — Ngoài-8 (trần thân 2 MB áp cho mọi đường REST, kể cả người chưa đăng nhập) và Ngoài-11 (chạy tay từ nhánh chưa gộp làm trang hiện lộ trình chưa duyệt) ở Cổng Bằng chứng LT1c 15/10; chủ kho chọn «mở hợp đồng mới», mở luôn.
 
