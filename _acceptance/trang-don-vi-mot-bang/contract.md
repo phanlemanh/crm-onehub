@@ -5,7 +5,9 @@ slug: trang-don-vi-mot-bang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
+approved_by: manh
+approved_at: 2026-10-15T05:05:18Z
 design_doc: docs/superpowers/specs/2026-10-15-trang-don-vi-mot-bang-design.md
 ---
 
