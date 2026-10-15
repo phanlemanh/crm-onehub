@@ -2746,6 +2746,10 @@ executors:
     bhds_khai_du: bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs
     bhds_ghim_xanh: bun _acceptance/ba-ho-so-do-san/rang/ghim-xanh.mjs
     bhds_chieu_do: bun _acceptance/ba-ho-so-do-san/rang/chieu-do.mjs
+    nth_chay_o_dinh: bun _acceptance/neo-thuoc-het-han/rang/chay-o-dinh.mjs
+    nth_chieu_do: bun _acceptance/neo-thuoc-het-han/rang/chieu-do.mjs
+    nth_pham_vi: bun _acceptance/neo-thuoc-het-han/rang/pham-vi.mjs
+    nth_ghim_xanh: bun _acceptance/neo-thuoc-het-han/rang/ghim-xanh.mjs
     sol_san_thiet_ke_trang: for t in "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx" "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
     kmc_man: 'KHO_TAI_LIEU_BLOB_TOKEN= bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-man-chung/rang/chup-man.mjs"'
     kmc_man_do: 'KHO_TAI_LIEU_BLOB_TOKEN= bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-man-chung/rang/chup-man.mjs --chi-do"'

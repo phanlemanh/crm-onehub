@@ -63,7 +63,7 @@ function dungQueryClient(): QueryClient {
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 	const goc = qc.invalidateQueries.bind(qc);
 	qc.invalidateQueries = ((bo?: InvalidateQueryFilters) => {
-		if (bo?.queryKey) daLamMoi.push(bo.queryKey);
+		daLamMoi.push(bo?.queryKey ?? ["(khong khoa)"]);
 		return goc(bo);
 	}) as QueryClient["invalidateQueries"];
 	return qc;
