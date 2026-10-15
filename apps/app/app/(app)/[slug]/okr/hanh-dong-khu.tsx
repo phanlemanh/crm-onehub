@@ -118,12 +118,15 @@ export function DongLyDoKhu({ q }: { q: QuyenKhu }) {
 	);
 }
 
-function useDuongTheoDonVi() {
+function useDuongTheoDonVi(cycleId: string) {
 	const url = useWorkspaceUrl();
+	const trpc = useTRPC();
 	const [thamSo] = useQueryStates(okrParsers);
+	const kyChay = useQuery(trpc.okr.cycles.queryOptions()).data?.currentId;
 	return (don: DonChonOkr, khoa: string) => {
 		const q = new URLSearchParams();
-		const ky = thamSo[SEARCH_PARAM.okr.ky];
+		const ky =
+			cycleId && cycleId !== kyChay ? cycleId : thamSo[SEARCH_PARAM.okr.ky];
 		if (ky) q.set(SEARCH_PARAM.okr.ky, ky);
 		if (don.loai !== "goc") q.set(SEARCH_PARAM.okr.don, khoaDon(don));
 		q.set(khoa, "true");
@@ -246,7 +249,7 @@ export function HanhDongKhu({
 	cauNoi: boolean;
 }) {
 	const m = okrMessages(useLocale());
-	const toi = useDuongTheoDonVi();
+	const toi = useDuongTheoDonVi(q.kieu === "xong" ? q.cycleId : "");
 	if (q.kieu === "an") return chonChuKy;
 	if (q.kieu === "cho")
 		return (
