@@ -490,8 +490,14 @@ export class OkrXemService {
 		userId: string,
 		objectiveId: string,
 	): Promise<QuanhMucTieuOutput> {
-		const mt = await this.db.okrObjective.findUnique({
-			where: { id: objectiveId },
+		const q = await this.quyenOkr.quyen(userId);
+		const mt = await this.db.okrObjective.findFirst({
+			where: {
+				AND: [
+					{ id: objectiveId },
+					dieuKienXemMucTieu(this.quyenOkr.nguCanhXem(q, userId)),
+				],
+			},
 			select: { cycleId: true },
 		});
 		if (!mt) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
