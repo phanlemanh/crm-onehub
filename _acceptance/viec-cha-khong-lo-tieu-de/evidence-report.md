@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 16a316276339f917e1b4221f3b4bd5bc78bc3cb5
+verified_commit: e6f43c9354e705567b62fb9e9e42e4988a7cce39
 human_signoff: manh 2026-10-15
 ---
 
@@ -139,3 +139,7 @@ none — every multi-run eval is uniform (cả sáu eval chạy một lần, xá
 ## Iterations
 
 Round 1: E1–E6 và bảy lệnh suite đều xanh ở lượt đầu — không có eval đỏ, không trả về cài đặt.
+
+### Re-pin lần 1 — 2026-10-15, do hoá cũ do gỡ hai chú thích trong tệp test (luật khong-chu-thich) sau chữ ký
+run_id: repin-20261015T114914Z-49181
+sha: e6f43c9354e705567b62fb9e9e42e4988a7cce39 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
