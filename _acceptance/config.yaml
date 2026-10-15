@@ -1782,6 +1782,12 @@ executors:
     sgt_gio: cd apps/app && TZ=UTC bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-gio && TZ=America/Los_Angeles bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-gio
     sgt_ten_man: cd apps/app && bun test ./test/ten-man.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-ten-man
     sgt_cau_sau_gom: cd apps/app && bun test ./test/sua-giao-dien-tin-hieu-cau.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sua-giao-dien-tin-hieu.dom.tsx -t sgt-cau-sau-gom
+    vca_ma_tran: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-ma-tran"'
+    vca_bang: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-bang"'
+    vca_dem_con: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-dem-con"'
+    vca_khop_khung: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-khop-khung"'
+    vca_tinh_luc_doc: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-tinh-luc-doc"'
+    vca_quet: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-quet"'
     tlk_so_du: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-so-du'
     tlk_hong_het: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-hong-het'
     tlk_kho_theo_cay: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-kho-theo-cay'
