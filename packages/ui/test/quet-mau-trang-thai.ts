@@ -99,6 +99,47 @@ export function tepCanQuet(goc: string): string[] {
 		);
 }
 
+export function docBangNghia(
+	nguon: string,
+	tep: string,
+	ten: string,
+): Record<string, string> | null {
+	const sf = ts.createSourceFile(
+		tep,
+		nguon,
+		ts.ScriptTarget.Latest,
+		true,
+		tep.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+	);
+	let ra: Record<string, string> | null = null;
+	const di = (nut: ts.Node): void => {
+		if (
+			ts.isVariableDeclaration(nut) &&
+			ts.isIdentifier(nut.name) &&
+			nut.name.text === ten &&
+			nut.initializer
+		) {
+			let gt: ts.Node = nut.initializer;
+			while (ts.isAsExpression(gt) || ts.isSatisfiesExpression(gt))
+				gt = gt.expression;
+			if (ts.isObjectLiteralExpression(gt)) {
+				ra = {};
+				for (const pt of gt.properties) {
+					if (
+						ts.isPropertyAssignment(pt) &&
+						(ts.isStringLiteral(pt.initializer) ||
+							ts.isNoSubstitutionTemplateLiteral(pt.initializer))
+					)
+						ra[tenKhoa(pt)] = pt.initializer.text;
+				}
+			}
+		}
+		ts.forEachChild(nut, di);
+	};
+	di(sf);
+	return ra;
+}
+
 export function quetMau(
 	nguon: string,
 	tep: string,

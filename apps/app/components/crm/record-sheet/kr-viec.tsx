@@ -299,7 +299,7 @@ function MoTaViec({ v, m }: { v: DongViec; m: OkrCanhKrMessages }) {
 					{v.quaHan ? (
 						<StatusIndicator
 							size="sm"
-							tone="error"
+							tone={toneTheoNghia("hong")}
 							label={`${han} · ${m.viec.quaHan}`}
 							data-qua-han
 						/>

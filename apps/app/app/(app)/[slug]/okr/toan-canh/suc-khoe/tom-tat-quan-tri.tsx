@@ -323,7 +323,7 @@ function NganMotBan({
 															data-nhan-ma-bo={c.maBo}
 															label={m.maBo[c.maBo]}
 															size="sm"
-															tone="warning"
+															tone={toneTheoNghia("cho")}
 														/>
 														<DongNguon nguon={c.nguon} />
 													</ItemContent>

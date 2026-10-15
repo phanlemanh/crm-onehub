@@ -192,7 +192,7 @@ export function BangChuKy({
 								{daAn(ky) ? (
 									<StatusIndicator
 										size="sm"
-										tone="neutral"
+										tone={toneTheoNghia("ketThuc")}
 										label={c.chuKy.daAn}
 									/>
 								) : (

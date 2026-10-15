@@ -98,7 +98,7 @@ export function EnrichmentQueue() {
 			<PopoverTrigger asChild>
 				<Button variant="outline" size="sm">
 					<IndicatorDot
-						tone={total > 0 ? "primary" : "neutral"}
+						tone={toneTheoNghia(total > 0 ? "dangChay" : "nhap")}
 						aria-hidden="true"
 					/>
 					{total > 0 ? m.enrichingCount(String(total)) : m.enriching}
