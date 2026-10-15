@@ -4,6 +4,8 @@ import { ContextLogger } from "../logging/context-logger";
 import { formatTrpcError } from "./error-formatter";
 import { AuthMiddleware } from "./middlewares/auth.middleware";
 import { DomainErrorMiddleware } from "./middlewares/domain-error.middleware";
+import { KhoaDayLoTrinhMiddleware } from "./middlewares/khoa-day-lo-trinh.middleware";
+import { KhoaKeoTinHieuMiddleware } from "./middlewares/khoa-keo-tin-hieu.middleware";
 import { LoggingMiddleware } from "./middlewares/logging.middleware";
 import {
 	PhamViChungMiddleware,
@@ -39,6 +41,8 @@ import { TrpcErrorHandler } from "./trpc-error.handler";
 		PhamViChungMiddleware,
 		SessionOnlyMiddleware,
 		SignedInMiddleware,
+		KhoaKeoTinHieuMiddleware,
+		KhoaDayLoTrinhMiddleware,
 	],
 	exports: [
 		AuthMiddleware,
@@ -48,6 +52,8 @@ import { TrpcErrorHandler } from "./trpc-error.handler";
 		PhamViChungMiddleware,
 		SessionOnlyMiddleware,
 		SignedInMiddleware,
+		KhoaKeoTinHieuMiddleware,
+		KhoaDayLoTrinhMiddleware,
 	],
 })
 export class TrpcModule {}

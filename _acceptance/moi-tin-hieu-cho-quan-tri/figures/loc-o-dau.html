@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lọc ở đâu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&subset=vietnamese&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #fafafa; color: #171717; padding: 3rem 2rem; display: flex; justify-content: center; }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow { font-family: 'Geist Mono', monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #575757; margin-bottom: 1rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình quyết định · Mọi tín hiệu cho quản trị</p>
+
+    <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#171717" font-size="24" font-family="'Lora', serif">Lọc danh sách mọi tín hiệu ở đâu?</text>
+      <text x="40" y="64" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Hai cách đưa tín hiệu tới thẻ «Tất cả». Cả hai cho người xem cùng một màn; khác nhau ở chỗ việc lọc chạy ở đâu.</text>
+
+      <!-- Lane frames -->
+      <rect x="40" y="96" width="1120" height="168" rx="8" fill="rgba(0,107,79,0.04)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="40" y="288" width="1120" height="208" rx="8" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+
+      <!-- Arrows: lane A -->
+      <line x1="432" y1="164" x2="464" y2="164" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="664" y1="164" x2="696" y2="164" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="896" y1="164" x2="928" y2="164" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- Arrows: lane B -->
+      <line x1="432" y1="356" x2="464" y2="356" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="664" y1="356" x2="696" y2="356" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M564 392 V412 Q564 420 572 420 H1020 Q1028 420 1028 412 V392" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="740" y="428" width="120" height="18" rx="2" fill="#fafafa"/>
+      <text x="800" y="441" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">gọi riêng cho ba số</text>
+
+      <!-- Lane A label -->
+      <text x="56" y="132" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.16em">MÁY KHUYÊN</text>
+      <text x="56" y="156" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Lọc ở trình duyệt</text>
+      <text x="56" y="176" fill="#575757" font-size="10" font-family="'Geist', sans-serif">như trang Lộ trình</text>
+
+      <!-- Lane A boxes -->
+      <rect x="232" y="128" width="200" height="72" rx="6" fill="#fafafa"/>
+      <rect x="232" y="128" width="200" height="72" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="332" y="160" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cơ sở dữ liệu</text>
+      <text x="332" y="178" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">mọi tín hiệu đã gửi</text>
+
+      <rect x="464" y="128" width="200" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="564" y="160" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Máy chủ trả hết</text>
+      <text x="564" y="178" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">mọi tín hiệu, một lần</text>
+
+      <rect x="696" y="128" width="200" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="796" y="152" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang tính sẵn</text>
+      <text x="796" y="170" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trạng thái từ bản vẽ lộ trình</text>
+      <text x="796" y="186" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">và ba ô số</text>
+
+      <rect x="928" y="128" width="200" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1028" y="152" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trình duyệt lọc</text>
+      <text x="1028" y="170" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">phòng ban · trạng thái · người gửi</text>
+      <text x="1028" y="186" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chia trang, 50 dòng một trang</text>
+
+      <text x="232" y="240" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', serif">Vài chục tín hiệu mỗi tháng nên gửi hết vẫn nhẹ. Mở lại khi số tín hiệu vượt vài trăm.</text>
+
+      <!-- Lane B label -->
+      <text x="56" y="324" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.16em">LỐI KHÁC</text>
+      <text x="56" y="348" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Lọc ở máy chủ</text>
+      <text x="56" y="368" fill="#575757" font-size="10" font-family="'Geist', sans-serif">theo luật chung của API</text>
+
+      <!-- Lane B boxes -->
+      <rect x="232" y="320" width="200" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="332" y="344" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang đổi trạng thái</text>
+      <text x="332" y="362" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đang lọc thành danh sách mã</text>
+      <text x="332" y="378" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">vì trạng thái nằm ở bản vẽ lộ trình</text>
+
+      <rect x="464" y="320" width="200" height="72" rx="6" fill="#fafafa"/>
+      <rect x="464" y="320" width="200" height="72" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="564" y="344" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cơ sở dữ liệu lọc</text>
+      <text x="564" y="362" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">phòng ban · người gửi · mã</text>
+      <text x="564" y="378" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">rồi chia trang</text>
+
+      <rect x="696" y="320" width="200" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="796" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trình duyệt hiện một trang</text>
+      <text x="796" y="370" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đổi lọc là gọi lại máy chủ</text>
+
+      <rect x="928" y="320" width="200" height="72" rx="6" fill="#fafafa"/>
+      <rect x="928" y="320" width="200" height="72" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="1028" y="344" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thêm thủ tục đếm riêng</text>
+      <text x="1028" y="362" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ba ô số cần mọi dòng,</text>
+      <text x="1028" y="378" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không chỉ trang đang xem</text>
+
+      <text x="232" y="476" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', serif">Đúng luật chung của API. Ước thêm nửa vòng công.</text>
+
+      <!-- Legend -->
+      <line x1="40" y1="532" x2="1160" y2="532" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="552" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="564" width="24" height="16" rx="2" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="72" y="576" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Nơi lọc trên dữ liệu gốc</text>
+      <rect x="232" y="564" width="24" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="264" y="576" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Một bước</text>
+      <rect x="352" y="564" width="24" height="16" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="384" y="576" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Phần phải dựng thêm</text>
+      <rect x="536" y="564" width="24" height="16" rx="2" fill="rgba(0,107,79,0.04)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="568" y="576" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Lối máy khuyên</text>
+      <text x="1160" y="576" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">TIÊU CHÍ AC-6 · AC-7</text>
+    </svg>
+  </div>
+</body>
+</html>

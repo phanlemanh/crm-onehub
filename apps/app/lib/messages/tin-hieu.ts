@@ -4,13 +4,14 @@ const en = {
 	nut: "Send a signal",
 	hop: {
 		tieuDe: "Send a signal",
-		moTa: "Tell the product team what you were trying to do and what got in the way. They group signals into work, and you can follow yours.",
+		moTa: "Tell the product team what you were trying to do and what got in the way. The product team turns similar signals into work, and you can follow yours.",
 		muonLam: "What were you trying to do?",
 		goiYMuonLam: "e.g. Update this week's number for my KR…",
 		daXayRa: "What happened, or what's missing?",
 		goiYDaXayRa:
 			"e.g. The update screen doesn't show last week's number, so I have to open another tab…",
 		man: "Sent from screen: {man}",
+		lyDoKhoa: "Answer both questions, then press Send.",
 		conLai: "{so} characters left",
 		gui: "Send",
 		dangGui: "Sending…",
@@ -18,18 +19,20 @@ const en = {
 		dong: "Close",
 		daGuiTieuDe: "Signal {ma} received",
 		daGuiMoTa:
-			"It waits for the next pick-up into the product backlog. Follow it under Sent signals.",
+			"The product team will review it with similar signals. Follow it under Sent signals.",
 		xemDaGui: "View sent signals",
-		chuaGui: "Not sent — try again.",
+		chuaGui:
+			"Not sent — the network or server was interrupted. Try again in a moment.",
 		quaTran:
 			"You've sent {tran} signals today — you can send more from midnight.",
+		baoTruoc: "CRM admins see your name with this signal.",
 	},
 	trang: {
 		tieuDe: "Sent signals",
 		moTa: "What you told the product team, and where each signal is now.",
 		cot: {
 			dieuDaKe: "What you told us",
-			man: "Screen",
+			gui: "Sent",
 			guiLuc: "Sent",
 			trangThai: "Status",
 			thaoTac: "Actions",
@@ -38,7 +41,7 @@ const en = {
 		rongMoTa:
 			"Press Send a signal at the top of any screen to tell the product team what you ran into.",
 		banVeChuaDoc:
-			"Status after grouping can't be read right now — showing the status at sending time.",
+			"Can't read the latest progress — showing the status at sending time.",
 		taiLoiTieuDe: "Couldn't load your signals",
 		taiLoiMoTa: "The list didn't load. Try again in a moment.",
 		muonLam: "Wanted to: {muonLam}",
@@ -46,15 +49,22 @@ const en = {
 		xoa: "Delete",
 		xoaTieuDe: "Delete signal {ma}?",
 		xoaThan:
-			"This signal hasn't been picked up yet. Deleting it removes it for good.",
+			"The product team hasn't opened this signal yet. Deleting it removes it for good.",
 		xoaNut: "Delete signal",
 		thoi: "Keep",
+		khongXoaDuoc:
+			"The product team has opened this signal — it can't be deleted anymore.",
+		daXoa: "Signal {ma} deleted.",
+		xoaHong:
+			"Couldn't delete {ma} — the network or server was interrupted. Try again in a moment.",
+		xoaHongDaLayVe:
+			"Couldn't delete {ma} — the product team just opened this signal.",
 	},
 	nhan: {
-		choLayVe: "Waiting to be picked up",
-		choGom: "Waiting to be grouped",
+		choLayVe: "Received",
+		choGom: "Under review",
 		le: "Not turned into work",
-		daCoViec: "Already done",
+		daCoViec: "Already covered",
 		daVaoNhom: "In a group",
 		deSau: "Later",
 		chuaBatDau: "Not started",
@@ -63,10 +73,46 @@ const en = {
 		khac: "Other",
 	},
 	trangThai: {
-		choKeoVe: "Received — waiting for the product team to pick it up",
-		choGom: "Picked up by the product team — waiting to be grouped",
+		choKeoVe: "Not opened by the product team yet. You can still delete it.",
+		choGom:
+			"The product team is sorting it with similar signals. Follow its progress here.",
+	},
+	cauSauGom: {
+		chuaGom: "The product team hasn't sorted it into a group yet.",
+		le: "Kept aside, not turned into work: {lyDo}.",
+		daPhu: "Already covered by existing work.",
+		nhomChuaCat: "In the group «{tenNhom}», not turned into work yet.",
+		chanTroi: "The group «{tenNhom}» is planned for later: {lyDo}.",
+		hang: "Became the work item «{tenViec}» — {trangThai}.",
 	},
 	menu: "Sent signals",
+	the: {
+		nhan: "Signals",
+		cuaToi: "Mine",
+		tatCa: "All",
+	},
+	tatCa: {
+		tieuDe: "All signals",
+		moTa: "Signals everyone has sent: who sent them, from where, and where they are now. Only CRM owners and admins see this page.",
+		cot: { ma: "Code", nguoiGui: "Sent by", phongBan: "Department" },
+		khongConTaiKhoan: "Account removed",
+		chuaCoPhongBan: "No department",
+		soTrongKy: "Signals in the last {ngay} days",
+		gomChuaLayVe: "Includes signals not picked up yet",
+		soPhong: "Departments with signals",
+		khongPhong: "Last {ngay} days · no department: {so}",
+		soChuaCoCho: "Over {han} days without a place",
+		trenQuaHan: "Of {so} signals sent over {han} days ago",
+		chuaDocCho: "Status after grouping can't be read",
+		rongTieuDe: "No one has sent a signal yet",
+		rongMoTa: "Signals from everyone will show up here.",
+		meta: "{so} signals",
+		taiLoiTieuDe: "Couldn't load all signals",
+		taiLoiMoTa: "The list didn't load. Try again in a moment.",
+		khongQuyen: "Only CRM owners and admins can see all signals.",
+		khongQuyenMoTa: "Signals you sent are still under Sent signals.",
+		ve: "Go to sent signals",
+	},
 };
 
 export type TinHieuMessages = typeof en;
@@ -75,13 +121,14 @@ const vi: TinHieuMessages = {
 	nut: "Gửi tín hiệu",
 	hop: {
 		tieuDe: "Gửi tín hiệu",
-		moTa: "Kể với đội sản phẩm bạn đang muốn làm gì và điều gì cản bạn. Đội sản phẩm gom tín hiệu thành việc, và bạn theo dõi được tín hiệu của mình.",
+		moTa: "Kể với đội sản phẩm bạn đang muốn làm gì và điều gì cản bạn. Đội sản phẩm xếp những tín hiệu giống nhau thành việc, và bạn theo dõi được tín hiệu của mình.",
 		muonLam: "Bạn đang muốn làm gì?",
 		goiYMuonLam: "Ví dụ: Cập nhật số tuần này cho KR của tôi…",
 		daXayRa: "Điều gì xảy ra, hoặc còn thiếu gì?",
 		goiYDaXayRa:
 			"Ví dụ: Màn cập nhật không hiện số tuần trước, phải mở tab khác để xem…",
 		man: "Gửi từ màn: {man}",
+		lyDoKhoa: "Kể đủ hai câu rồi bấm Gửi.",
 		conLai: "Còn {so} ký tự",
 		gui: "Gửi",
 		dangGui: "Đang gửi…",
@@ -89,18 +136,20 @@ const vi: TinHieuMessages = {
 		dong: "Đóng",
 		daGuiTieuDe: "Đã nhận tín hiệu {ma}",
 		daGuiMoTa:
-			"Tín hiệu chờ đội sản phẩm lấy về để gom thành việc. Theo dõi ở «Tín hiệu đã gửi».",
+			"Đội sản phẩm sẽ xem nó cùng những điều tương tự. Theo dõi ở «Tín hiệu đã gửi».",
 		xemDaGui: "Xem tín hiệu đã gửi",
-		chuaGui: "Chưa gửi được — thử lại.",
+		chuaGui:
+			"Chưa gửi được — mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát.",
 		quaTran:
 			"Hôm nay bạn đã gửi {tran} tín hiệu — gửi tiếp được từ 0 giờ ngày mai.",
+		baoTruoc: "Quản trị CRM thấy tên bạn cùng tín hiệu này.",
 	},
 	trang: {
 		tieuDe: "Tín hiệu đã gửi",
 		moTa: "Những điều bạn đã kể với đội sản phẩm, và từng tín hiệu đang ở đâu.",
 		cot: {
 			dieuDaKe: "Điều đã kể",
-			man: "Màn",
+			gui: "Gửi",
 			guiLuc: "Gửi lúc",
 			trangThai: "Trạng thái",
 			thaoTac: "Thao tác",
@@ -109,20 +158,25 @@ const vi: TinHieuMessages = {
 		rongMoTa:
 			"Bấm «Gửi tín hiệu» ở đầu bất kỳ màn nào để kể với đội sản phẩm điều bạn gặp.",
 		banVeChuaDoc:
-			"Trạng thái sau gom chưa đọc được — đang hiện trạng thái lúc gửi.",
+			"Chưa đọc được tiến độ mới nhất — đang hiện trạng thái lúc gửi.",
 		taiLoiTieuDe: "Chưa tải được tín hiệu của bạn",
 		taiLoiMoTa: "Danh sách chưa tải xong. Thử lại sau một lát.",
 		muonLam: "Muốn: {muonLam}",
 		thaoTac: "Thao tác với tín hiệu {ma}",
 		xoa: "Xoá",
 		xoaTieuDe: "Xoá tín hiệu {ma}?",
-		xoaThan: "Đội sản phẩm chưa lấy tín hiệu này về. Xoá là mất hẳn.",
+		xoaThan: "Đội sản phẩm chưa mở tín hiệu này. Xoá là mất hẳn.",
 		xoaNut: "Xoá tín hiệu",
 		thoi: "Giữ lại",
+		khongXoaDuoc: "Đội sản phẩm đã mở tín hiệu này — không xoá được nữa.",
+		daXoa: "Đã xoá tín hiệu {ma}.",
+		xoaHong:
+			"Chưa xoá được {ma} — mạng hoặc máy chủ đang gián đoạn. Thử lại sau một lát.",
+		xoaHongDaLayVe: "Chưa xoá được {ma} — đội sản phẩm vừa mở tín hiệu này.",
 	},
 	nhan: {
-		choLayVe: "Chờ lấy về",
-		choGom: "Chờ gom",
+		choLayVe: "Đã nhận",
+		choGom: "Đang xem xét",
 		le: "Không thành việc",
 		daCoViec: "Đã có việc",
 		daVaoNhom: "Đã vào nhóm",
@@ -133,10 +187,46 @@ const vi: TinHieuMessages = {
 		khac: "Khác",
 	},
 	trangThai: {
-		choKeoVe: "Đã nhận — chờ đội sản phẩm lấy về",
-		choGom: "Đội sản phẩm đã lấy về — chờ gom nhóm",
+		choKeoVe: "Đội sản phẩm chưa mở. Bạn còn xoá được.",
+		choGom:
+			"Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây.",
+	},
+	cauSauGom: {
+		chuaGom: "Đội sản phẩm chưa xếp nó vào nhóm nào.",
+		le: "Đội sản phẩm để riêng, không thành việc: {lyDo}.",
+		daPhu: "Đã có việc lo điều này.",
+		nhomChuaCat: "Đã vào nhóm «{tenNhom}», nhóm chưa thành việc.",
+		chanTroi: "Nhóm «{tenNhom}» để sau: {lyDo}.",
+		hang: "Thành việc «{tenViec}» — {trangThai}.",
 	},
 	menu: "Tín hiệu đã gửi",
+	the: {
+		nhan: "Tín hiệu",
+		cuaToi: "Của tôi",
+		tatCa: "Tất cả",
+	},
+	tatCa: {
+		tieuDe: "Mọi tín hiệu",
+		moTa: "Tín hiệu mọi người đã gửi: ai gửi, từ đâu và đang ở đâu. Chỉ chủ và quản trị CRM thấy trang này.",
+		cot: { ma: "Mã", nguoiGui: "Người gửi", phongBan: "Phòng ban" },
+		khongConTaiKhoan: "Không còn tài khoản",
+		chuaCoPhongBan: "Chưa có phòng ban",
+		soTrongKy: "Tín hiệu {ngay} ngày qua",
+		gomChuaLayVe: "Gồm cả tín hiệu chưa lấy về",
+		soPhong: "Phòng ban có tín hiệu",
+		khongPhong: "Trong {ngay} ngày qua · chưa có phòng ban: {so}",
+		soChuaCoCho: "Quá {han} ngày chưa có chỗ",
+		trenQuaHan: "Trong số {so} tín hiệu gửi quá {han} ngày",
+		chuaDocCho: "Chưa đọc được trạng thái sau gom",
+		rongTieuDe: "Chưa ai gửi tín hiệu",
+		rongMoTa: "Tín hiệu mọi người gửi sẽ hiện ở đây.",
+		meta: "{so} tín hiệu",
+		taiLoiTieuDe: "Chưa tải được mọi tín hiệu",
+		taiLoiMoTa: "Danh sách chưa tải xong. Thử lại sau một lát.",
+		khongQuyen: "Chỉ chủ và quản trị CRM xem được mọi tín hiệu.",
+		khongQuyenMoTa: "Tín hiệu bạn đã gửi vẫn ở «Tín hiệu đã gửi».",
+		ve: "Về tín hiệu đã gửi",
+	},
 };
 
 export function tinHieuMessages(locale: Locale): TinHieuMessages {

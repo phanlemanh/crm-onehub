@@ -10,7 +10,7 @@ import {
 } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
@@ -253,25 +253,16 @@ export function DealsTable() {
 	);
 
 	const viewToggle = (
-		<ToggleGroup
-			type="single"
-			variant="outline"
-			size="sm"
-			spacing={0}
-			value={board ? "board" : "table"}
-			aria-label={m.view.label}
+		<ViewSwitch
 			disabled={input.archived}
+			items={DEALS_VIEWS.map((v) => ({ value: v, label: m.view[v] }))}
+			label={m.view.label}
+			value={board ? "board" : "table"}
 			onValueChange={(next) => {
 				const chosen = DEALS_VIEWS.find((v) => v === next);
 				if (chosen) void setView({ view: chosen });
 			}}
-		>
-			{DEALS_VIEWS.map((v) => (
-				<ToggleGroupItem key={v} value={v}>
-					{m.view[v]}
-				</ToggleGroupItem>
-			))}
-		</ToggleGroup>
+		/>
 	);
 
 	const archivedButton = (
@@ -321,6 +312,7 @@ export function DealsTable() {
 			facets={facets}
 			tabs={{
 				id: "status",
+				label: m.tabs.label,
 				allLabel: m.tabs.all,
 				options: [
 					{ value: "open", label: m.tabs.open },

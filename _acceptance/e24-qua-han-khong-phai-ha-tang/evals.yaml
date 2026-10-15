@@ -1,0 +1,28 @@
+slug: e24-qua-han-khong-phai-ha-tang
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.eqh_qua_han
+    expected: "exit 0; rang/qua-han.mjs (gốc kho suy từ vị trí script) chép do-tre.mjs CÙNG phien-tro-ly.mjs của cây vào .acceptance-runs/eqh-sua/x/ và của 1be143a82 (git show) vào .acceptance-runs/eqh-truoc/x/ — cùng độ sâu với rang/ nên đường nhập tương đối giữ nguyên — in băm git của từng tệp đã chép, vá CÙNG một chỗ ở hai bản do-tre (choMoiLuotMs: 3 * PHUT_MS → 1; dòng lệnh tự gọi lại trỏ về chính bản sao), rồi chạy THẬT mỗi bản --lan 2 với AI_GATEWAY_API_KEY sai và OKR_AI_GATEWAY_API_KEY rỗng (không tốn tiền). Bản sửa: mã 1, có 'KHONG DAT', có dòng khớp '2/2 luot qua .* s chua dong — tinh la do tre', có 'p50 30000 ms' và 'p90 30000 ms', mọi dòng bắt đầu 'SAI ' đều chứa 'p50' hoặc 'p90', không có 'khong phai do tre'. Bản trước vòng: mã 2, có 'khong phai do tre'. Chỗ vá không áp được thì 'SAI khong va duoc <bản>' và mã 1; lệch kỳ vọng thì 'SAI <bản> ma <n>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs", "_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs", "_acceptance/e24-qua-han-khong-phai-ha-tang/rang/qua-han.mjs"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.eqh_phan_loai
+    expected: "exit 0; rang/kiem.test.ts -t eqh-phan-loai: laHongHet trên ma trận viết trước 20 lượt {20 hỏng không quá hạn: chặn; 10 quá hạn + 10 hỏng: chặn; 1 quá hạn + 19 hỏng: chặn; 20 quá hạn: không; 19 hỏng + 1 lành: không; 0 lượt: không}, lệch thì 'eqh: phan loai sai o <ô>'. Chiều đỏ cùng ma trận: laHongHet của 1be143a82 (rút từ git show, chạy trong tiến trình con) phải lệch đúng ô '20 qua han' và không ô nào khác, không thì 'eqh: ma tran khong phan biet ban truoc vong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs", "_acceptance/e24-qua-han-khong-phai-ha-tang/rang/kiem.test.ts"]
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.eqh_khong_qua_han
+    expected: "exit 0; rang/qua-han.mjs --khong-qua-han chạy THẬT do-tre.mjs của cây (không vá, hạn chờ 180 s) --lan 2 với AI_GATEWAY_API_KEY sai và OKR_AI_GATEWAY_API_KEY rỗng: mọi lượt hỏng vì model từ chối khoá, không lượt nào quá hạn; phải thoát 2 với 'KHONG DO DUOC: 2/2 luot hong', 'khong phai do tre' và dòng lỗi model 'AI Gateway rejected the provided API key', không có dòng 'luot qua'. Lệch thì 'SAI khong-qua-han ma <n>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs", "_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs", "_acceptance/e24-qua-han-khong-phai-ha-tang/rang/qua-han.mjs"]
