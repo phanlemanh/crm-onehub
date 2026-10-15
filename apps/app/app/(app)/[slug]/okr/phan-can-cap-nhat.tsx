@@ -1,6 +1,7 @@
 "use client";
 
 import Edit from "@carbon/icons-react/es/Edit";
+import Renew from "@carbon/icons-react/es/Renew";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -49,7 +50,11 @@ export function PhanCanCapNhat() {
 	const daMoTuNgoai = useRef(false);
 	const moPhien = useMutation(
 		trpc.okr.moCapNhat.mutationOptions({
-			onSuccess: (kq) => setPhien(kq.sessionId),
+			onSuccess: (kq) => {
+				setPhien(kq.sessionId);
+				// `tu` chỉ rời đường dẫn khi bảng đã mở: mở lỗi thì tải lại trang vẫn thử từ lối đó
+				if (tu !== null) void datTu(null);
+			},
 		}),
 	);
 	const coKr = (ds.data?.items.length ?? 0) > 0;
@@ -58,8 +63,7 @@ export function PhanCanCapNhat() {
 		if (!coKr || !moSan(tu) || daMoTuNgoai.current) return;
 		daMoTuNgoai.current = true;
 		moPhien.mutate({ entry: tu });
-		void datTu(null);
-	}, [coKr, tu, moPhien, datTu]);
+	}, [coKr, tu, moPhien]);
 
 	const mo = (laSua: boolean) => {
 		setSua(laSua);
@@ -72,7 +76,8 @@ export function PhanCanCapNhat() {
 				<Skeleton className="h-24 w-full" data-khung-xuong="" />
 			</VoPhan>
 		);
-	if (ds.isError || !ds.data)
+	// tải lại nền lỗi mà đã có dữ liệu thì giữ dữ liệu (bảng đang điền, dòng đã gửi); chỉ lần tải đầu lỗi mới báo
+	if (!ds.data)
 		return (
 			<VoPhan tieuDe={m.phan1}>
 				<LoiPhan thuLai={() => void ds.refetch()} />
@@ -82,6 +87,11 @@ export function PhanCanCapNhat() {
 	const duLieu = ds.data;
 	const thieu = duLieu.items.filter((kr) => !kr.updatedThisWeek);
 	const tuan = ngayThang(duLieu.weekStart);
+	const bien = moPhien.variables;
+	const loiMo =
+		moPhien.isError && bien ? (
+			<LoiMoPhien thuLai={() => moPhien.mutate(bien)} />
+		) : null;
 
 	if (phien !== null)
 		return (
@@ -119,6 +129,7 @@ export function PhanCanCapNhat() {
 				}
 				tieuDe={m.phan1}
 			>
+				{loiMo}
 				<p className="text-muted-foreground text-sm">{m.daDu(tuan)}</p>
 			</VoPhan>
 		);
@@ -142,6 +153,7 @@ export function PhanCanCapNhat() {
 			}
 			tieuDe={m.phan1}
 		>
+			{loiMo}
 			<p className="text-muted-foreground text-sm">
 				{m.conThieu(
 					thieu.length,
@@ -167,6 +179,29 @@ export function PhanCanCapNhat() {
 				))}
 			</SimpleTable>
 		</VoPhan>
+	);
+}
+
+/** Mở bảng cập nhật lỗi: báo và cho thử lại với đúng lối vào ban đầu. */
+function LoiMoPhien({ thuLai }: { thuLai: () => void }) {
+	const m = okrMessages(useLocale()).baPhan;
+	return (
+		<div
+			className="flex flex-wrap items-center gap-3 text-sm"
+			data-trang-thai="ST-ctbp-loi-mo"
+			role="alert"
+		>
+			<span className="text-destructive">{m.loiMo}</span>
+			<Button
+				data-nut="thu-lai-mo"
+				onClick={thuLai}
+				size="sm"
+				variant="outline"
+			>
+				<Icon data-icon="inline-start" icon={Renew} />
+				{m.thuLai}
+			</Button>
+		</div>
 	);
 }
 
