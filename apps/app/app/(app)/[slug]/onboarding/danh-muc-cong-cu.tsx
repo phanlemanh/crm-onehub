@@ -58,7 +58,6 @@ export function TrangThaiToggle({
 			type="single"
 			variant="outline"
 			size="sm"
-			spacing={0}
 			value={value}
 			aria-label={m.facets.status}
 			onValueChange={(next) => {
