@@ -38,8 +38,10 @@ const SO = {
 	baoCao: BO_MAU.bangChung.baoCao,
 	tungCau: BO_MAU.bangChung.tungCau,
 	maModel: "google/gemini-3.8-flash",
-	luotLoi: 1,
+	cacLuot: [1, 2],
 	soLoiBa: 3,
+	vuotTran: "VUOT TRAN LOI MODEL",
+	khongDat: "KHONG DAT",
 } as const;
 
 type Ket = { ma: number; dong: string[] };
@@ -150,19 +152,33 @@ function kiem({ ev, goc }: ChoKiem): Ket {
 		CHAM_BO_DO.nguong,
 		kiemSai,
 	);
-	const loiKy = loiLuot(
-		docTungCau(doc(join(SO.daKy, SO.tungCau)) ?? ""),
-		SO.luotLoi,
-	);
-	const loiMoi = loiLuot(dong, SO.luotLoi);
+	const dongKy = docTungCau(doc(join(SO.daKy, SO.tungCau)) ?? "");
+	const loiKy = SO.cacLuot.flatMap((l) => loiLuot(dongKy, l));
+	const loiMoi = SO.cacLuot.flatMap((l) => loiLuot(dong, l));
+	const hong = kl.dong
+		.map((d) => d.match(/^(\w+): .* (xam|khong-dat)$/)?.[1])
+		.filter((c): c is string => c !== undefined)
+		.map((c) => `${SO.khongDat}: ${c}`);
+	const vuot =
+		loiMoi.length > loiKy.length
+			? [
+					`${SO.vuotTran}: ${loiMoi.length} > ${loiKy.length} (${loiMoi.join(", ")})`,
+				]
+			: [];
 	const ra = [
 		"bon chi so canh nguong cu (cau loi model tach rieng):",
 		...kl.dong.map((d) => `  ${d}`),
-		`loi model luot ${SO.luotLoi}: ${loiMoi.join(", ") || "(khong co)"} — tran ${loiKy.length} theo luot da ky (${loiKy.join(", ") || "khong co"})`,
+		...SO.cacLuot.map(
+			(l) =>
+				`loi model luot ${l}: ${loiLuot(dong, l).join(", ") || "(khong co)"} — luot da ky: ${loiLuot(dongKy, l).join(", ") || "(khong co)"}`,
+		),
+		`tong loi model hai luot: ${loiMoi.length} — tran ${loiKy.length} theo luot da ky`,
 		"bang tang x kieu chu (chi de doc, khong chan):",
 		phanBang(moi.bang),
+		...hong,
+		...vuot,
 	];
-	const dat = kl.ma === 0 && loiMoi.length <= loiKy.length;
+	const dat = kl.ma === 0 && hong.length === 0 && vuot.length === 0;
 	return dat
 		? {
 				ma: 0,
@@ -226,6 +242,27 @@ function banSao(
 const laDatMot = (d: DongTungCau) =>
 	d.luot === 1 && d.nhom === "co-trang" && d.ketCuc === "TRA_LOI-du";
 
+const laDatHai = (d: DongTungCau) => d.luot === 2 && d.ketCuc === "co-hang";
+
+function doiHai(ds: DongTungCau[], n: number) {
+	const chon = ds
+		.filter(laDatHai)
+		.slice(0, n)
+		.map((d) => d.id);
+	return {
+		dong: ds.map((d) =>
+			d.luot === 2 && chon.includes(d.id)
+				? {
+						...d,
+						ketCuc: "loi" as const,
+						zalo: { ketQua: "loi", loi: null, coHang: d.zalo?.coHang ?? true },
+					}
+				: d,
+		),
+		ma: chon,
+	};
+}
+
 function doiN(ds: DongTungCau[], n: number, ketCuc: "TRA_LOI-sai" | "LOI") {
 	const chon = ds
 		.filter(laDatMot)
@@ -262,7 +299,11 @@ const CHIEU_DO: readonly ChieuDo[] = [
 			).length;
 			const n = Math.floor(mau * (1 - CHAM_BO_DO.nguong.dungTrang)) + 1;
 			const ev = banSao((ds) => doiN(ds, n, "TRA_LOI-sai").dong);
-			return { ket: kiem({ ev, goc: GOC }), mong: 1, phaiCo: ["dungTrang"] };
+			return {
+				ket: kiem({ ev, goc: GOC }),
+				mong: 1,
+				phaiCo: [`${SO.khongDat}: dungTrang`],
+			};
 		},
 	},
 	{
@@ -274,7 +315,27 @@ const CHIEU_DO: readonly ChieuDo[] = [
 				ma = r.ma;
 				return r.dong;
 			});
-			return { ket: kiem({ ev, goc: GOC }), mong: 1, phaiCo: ma };
+			return {
+				ket: kiem({ ev, goc: GOC }),
+				mong: 1,
+				phaiCo: [`${SO.vuotTran}: `, ...ma],
+			};
+		},
+	},
+	{
+		ten: "mot cau luot hai thanh loi model, tong qua tran",
+		chay: () => {
+			let ma: string[] = [];
+			const ev = banSao((ds) => {
+				const r = doiHai(ds, 1);
+				ma = r.ma;
+				return r.dong;
+			});
+			return {
+				ket: kiem({ ev, goc: GOC }),
+				mong: 1,
+				phaiCo: [`${SO.vuotTran}: `, ...ma],
+			};
 		},
 	},
 	{
