@@ -22,19 +22,21 @@ design doc.
 
 ## Criteria
 
-- AC-1: Given mọi lượt E24 đều hỏng và ít nhất một lượt hỏng vì chờ quá hạn chưa đóng, When `do-tre.mjs` đọc xong số, Then nó
-  KHÔNG chặn sớm: lượt quá hạn tính `hongMs` vào p50/p90, đầu ra có dòng «<k>/<n> luot qua <s> s chua dong — tinh la do tre», và
-  lệnh thoát 1 «KHONG DAT», không thoát 2, không có câu «khong phai do tre». Chạy thật `--lan 2` với hạn chờ ép 1 ms trên bản sao
-  và khoá Gateway sai: bản sửa thoát 1 «KHONG DAT»; bản trước vòng (`1be143a82`) cùng chỗ vá thoát 2 «khong phai do tre».
-- AC-2: Given mọi lượt E24 hỏng mà không lượt nào quá hạn (tác tử nộp hỏng, hay không mở được lượt), When `do-tre.mjs` đọc xong
-  số, Then hành vi giữ nguyên như AC-2 của `thuoc-tro-ly-okr-khong-lot`: chặn sớm, mã 2, câu «khong phai do tre»; và không lượt
-  nào chặn khi chưa hỏng hết — ma trận viết trước {hỏng hết không quá hạn: chặn; quá hạn hết, 10 quá hạn + 10 hỏng, 1 quá hạn +
-  19 hỏng, 19/20 hỏng, 0 lượt: không chặn}.
+- AC-1: Given mọi lượt E24 đều hỏng và MỌI lượt hỏng đều vì chờ quá hạn chưa đóng, When `do-tre.mjs` đọc xong số, Then nó
+  KHÔNG chặn sớm: lượt quá hạn tính `hongMs` (30 000 ms) vào p50/p90, đầu ra có dòng «<k>/<n> luot qua <s> s chua dong — tinh la
+  do tre», các dòng `SAI` chỉ là các dòng ngưỡng p50/p90, và lệnh thoát 1 «KHONG DAT», không thoát 2, không có câu «khong phai
+  do tre». Chạy thật `--lan 2` với hạn chờ ép 1 ms trên bản sao và khoá Gateway sai: bản sửa thoát 1 «KHONG DAT» với p50 và p90
+  bằng 30 000; bản trước vòng (`1be143a82`) cùng chỗ vá thoát 2 «khong phai do tre».
+- AC-2: Given mọi lượt E24 hỏng và có ít nhất một lượt hỏng KHÔNG vì quá hạn (tác tử nộp hỏng, lỗi model, không mở được lượt),
+  When `do-tre.mjs` đọc xong số, Then hành vi giữ nguyên như AC-2 của `thuoc-tro-ly-okr-khong-lot`: chặn sớm, mã 2, câu «khong
+  phai do tre» kèm dòng lỗi model nguyên văn — chạy thật `--lan 2` với hạn chờ 180 s và khoá Gateway sai; và ma trận viết trước
+  {20 hỏng không quá hạn, 10 quá hạn + 10 hỏng, 1 quá hạn + 19 hỏng: chặn; 20 quá hạn, 19 hỏng + 1 lành, 0 lượt: không chặn}.
 
 ## Coverage
 
-Quét tay một trục — kiểu hỏng của 20 lượt: {không hỏng · hỏng một phần · hỏng hết không quá hạn · hỏng hết có quá hạn · quá hạn
-hết} → AC-1 (hai ô có quá hạn), AC-2 (các ô còn lại). Bản sửa × bản trước vòng → AC-1. `[CE chưa kiểm chứng]`
+Quét tay một trục — kiểu hỏng của 20 lượt: {không hỏng · hỏng một phần · hỏng hết không quá hạn · hỏng hết trộn quá hạn với lỗi
+khác · quá hạn hết} → AC-1 (quá hạn hết), AC-2 (các ô còn lại). Ca trộn là Hỏi-1 (`d-20261015T120940Z-6`), soạn theo khuyến
+nghị. Bản sửa × bản trước vòng → AC-1. `[CE chưa kiểm chứng]`
 
 ## Out of scope
 
