@@ -36,7 +36,7 @@ function chonBang(userId: string) {
 		...CHON_VIEC,
 		chaId: true,
 		cha: { select: { id: true, tieuDe: true } },
-		con: { select: { trangThai: true } },
+		con: { where: dieuKienXemViec(userId), select: { trangThai: true } },
 		thuTu: { where: { userId }, select: { khoa: true } },
 	} as const satisfies Prisma.ViecSelect;
 }
@@ -55,7 +55,34 @@ function sapCot(ds: HangBang[]): HangBang[] {
 	return [...chuaKhoa, ...coKhoa];
 }
 
-function theRa(h: HangBang, userId: string, now: Date): TheBangOutput {
+type ChaRa = { id: string; tieuDe: string } | null;
+
+async function chaThay(
+	db: Db,
+	userId: string,
+	ds: { cha: ChaRa }[],
+): Promise<Set<string>> {
+	const ma = [
+		...new Set(ds.flatMap((h) => (h.cha === null ? [] : [h.cha.id]))),
+	];
+	if (ma.length === 0) return new Set();
+	const thay = await db.viec.findMany({
+		where: { AND: [{ id: { in: ma } }, dieuKienXemViec(userId)] },
+		select: { id: true },
+	});
+	return new Set(thay.map((h) => h.id));
+}
+
+function chaRa(cha: ChaRa, thay: Set<string>): ChaRa {
+	return cha !== null && thay.has(cha.id) ? cha : null;
+}
+
+function theRa(
+	h: HangBang,
+	userId: string,
+	now: Date,
+	thay: Set<string>,
+): TheBangOutput {
 	const conDem = h.con.filter((c) => c.trangThai !== TrangThaiViec.HUY);
 	return {
 		...viecRa(h, now),
@@ -68,7 +95,7 @@ function theRa(h: HangBang, userId: string, now: Date): TheBangOutput {
 							.length,
 						tong: conDem.length,
 					},
-		cha: h.cha,
+		cha: chaRa(h.cha, thay),
 		conMo: h.con.filter((c) => TRANG_THAI_MO.includes(c.trangThai)).length,
 	};
 }
@@ -106,13 +133,14 @@ export class ViecBangService {
 			}),
 		]);
 		const tatCa = [...mo, ...xong];
+		const thay = await chaThay(this.db, userId, tatCa);
 		return {
 			cot: COT_BANG.map((trangThai) => {
 				const trongCot = sapCot(tatCa.filter((h) => h.trangThai === trangThai));
 				return {
 					trangThai,
 					tong: trangThai === TrangThaiViec.XONG ? tongXong : trongCot.length,
-					viec: trongCot.map((h) => theRa(h, userId, now)),
+					viec: trongCot.map((h) => theRa(h, userId, now, thay)),
 				};
 			}),
 			soHuy,
@@ -173,8 +201,9 @@ export class ViecBangService {
 		});
 		if (h === null) throw new NotFoundException(VIEC.thongDiep.khongCoViec(id));
 		const vai = vaiCua(h, userId);
+		const thay = await chaThay(this.db, userId, [h]);
 		return {
-			cha: h.cha,
+			cha: chaRa(h.cha, thay),
 			con: h.con,
 			conMo: h.con.filter((c) => TRANG_THAI_MO.includes(c.trangThai)).length,
 			themDuoc:

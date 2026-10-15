@@ -95,6 +95,27 @@
       "hang": []
     },
     {
+      "ten": "Vòng tín hiệu khép lần đầu — tín hiệu tự về kho, quản trị thấy mọi tín hiệu, ai cũng có chuông thông báo, hộp gửi tín hiệu sửa xong",
+      "ngay": "2026-10-16",
+      "khoa": "m-1016",
+      "loai": "phat-hanh",
+      "hang": [
+        "TH1",
+        "TH4",
+        "TB1",
+        "TH6"
+      ]
+    },
+    {
+      "ten": "Lộ trình nhiều sản phẩm — bước 1: trang đọc bản chụp",
+      "ngay": "2026-10-16",
+      "khoa": "m-1016b",
+      "loai": "phat-hanh",
+      "hang": [
+        "LT1c"
+      ]
+    },
+    {
       "ten": "Phòng ban công bố OKR quý 4",
       "ngay": "2026-10-21",
       "ai": "Phòng ban",
@@ -1971,6 +1992,25 @@
       ]
     },
     {
+      "ma": "TH6b",
+      "slug": "tieu-diem-sau-hop-xoa-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 445.6,
+      "dung_tren": [
+        "TH6"
+      ],
+      "ten": "Tiêu điểm sau hộp xoá tín hiệu",
+      "ten_ngan": "Tiêu điểm sau xoá",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Người dùng bàn phím hay trình đọc màn bấm «Giữ lại» hoặc gặp lỗi khi xoá tín hiệu vẫn đứng đúng dòng mình vừa thao tác, không phải dò lại từ đầu trang»",
+      "vai": "Người gửi tín hiệu",
+      "vi_sao": "Gốc: _acceptance/sua-giao-dien-tin-hieu/ — Ngoài-6 ở Cổng Bằng chứng TH6 15/10, chủ kho chọn «mở hợp đồng mới».",
+      "bat_khi": "Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Mở từ thẻ Cổng Bằng chứng TH6 (chủ kho 15/10). Chưa gắn mốc.",
+      "dot": "vong-tin-hieu-1410"
+    },
+    {
       "ma": "LT1c",
       "slug": "lo-trinh-doc-ban-chup",
       "hang": "T3",
@@ -1992,6 +2032,25 @@
       "phu": [
         "L1"
       ]
+    },
+    {
+      "ma": "LT1d",
+      "slug": "chat-duong-day-ban-chup",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 446.2,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Chặt đường đẩy bản chụp",
+      "ten_ngan": "Chặt đường đẩy",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Máy chủ chỉ nhận thân yêu cầu lớn ở đúng đường nhận bản chụp lộ trình, và một lượt chạy tay từ nhánh chưa gộp không đổi được lộ trình trên trang»",
+      "vai": "Chủ kho",
+      "vi_sao": "Gốc: _acceptance/lo-trinh-doc-ban-chup/ — Ngoài-8 (trần thân 2 MB áp cho mọi đường REST, kể cả người chưa đăng nhập) và Ngoài-11 (chạy tay từ nhánh chưa gộp làm trang hiện lộ trình chưa duyệt) ở Cổng Bằng chứng LT1c 15/10; chủ kho chọn «mở hợp đồng mới», mở luôn.",
+      "bat_khi": "Không đường REST nào ngoài đường nhận bản chụp nhận thân quá 100 KB; lượt chạy tay từ nhánh khác nhánh chính bị từ chối có lý do (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Mở từ thẻ Cổng Bằng chứng LT1c (chủ kho 15/10). Dựng sau khi LT1c gộp onehub. Chưa gắn mốc.",
+      "dot": "vong-tin-hieu-1410"
     },
     {
       "ma": "LT3",
