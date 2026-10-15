@@ -30,6 +30,7 @@ export type KrNgan = {
 	dich: number;
 	donVi: string;
 	tuTin: (typeof MUC_TU_TIN)[number] | null;
+	cuaBan: boolean;
 };
 
 export type CapNhatTuan = {
@@ -49,6 +50,7 @@ export type MucTieuNgan = {
 	tienDo: number;
 	kyVong: number | null;
 	tinhTrang: TinhTrang;
+	cuaBan: boolean;
 	kr: KrNgan[];
 };
 
@@ -85,6 +87,8 @@ const chonMucTieu = {
 	level: true,
 	cycleId: true,
 	publishedAt: true,
+	ownerUserId: true,
+	personUserId: true,
 	division: { select: { name: true } },
 	department: { select: { name: true } },
 	person: { select: { name: true } },
@@ -138,6 +142,7 @@ function dungMucTieu(
 	r: HangMucTieu,
 	trongSo: boolean,
 	homNay: Date,
+	userId: string,
 ): MucTieuDay {
 	const kr = r.keyResults.map((k) => {
 		const kieu = kieuKr.parse(k.kind);
@@ -155,6 +160,7 @@ function dungMucTieu(
 			dich,
 			donVi: k.unit,
 			tuTin: moi ? tuTin.parse(moi.confidence) : null,
+			cuaBan: k.ownerUserId === userId,
 			trongSo: k.weight.toNumber(),
 		};
 	});
@@ -178,6 +184,7 @@ function dungMucTieu(
 		tienDo,
 		kyVong,
 		tinhTrang: tinhTrang(tienDo, kyVong, loaiMt),
+		cuaBan: r.ownerUserId === userId || r.personUserId === userId,
 		kr: kr.map(({ trongSo: _bo, ...k }) => k),
 		capNhat: r.keyResults.flatMap((k) =>
 			k.checkIns.map((c) => ({
@@ -285,7 +292,7 @@ export async function timOkr(
 	});
 	const trongSo = await coTrongSo();
 	const khop = hang
-		.map((r) => dungMucTieu(r, trongSo, homNay))
+		.map((r) => dungMucTieu(r, trongSo, homNay, userId))
 		.filter((m) => !loc.tinhTrang || m.tinhTrang === loc.tinhTrang);
 	const tran = TRO_LY_OKR_HOI.tranKetQua.mucTieu;
 	const mucTieu = khop.slice(0, tran).map(({ capNhat: _bo, ...m }) => m);
@@ -318,5 +325,8 @@ export async function docOkr(
 		select: chonMucTieu,
 	});
 	if (!hang) return { ok: false, reason: TU_CHOI.khongThay };
-	return { ok: true, mucTieu: dungMucTieu(hang, await coTrongSo(), homNay) };
+	return {
+		ok: true,
+		mucTieu: dungMucTieu(hang, await coTrongSo(), homNay, userId),
+	};
 }
