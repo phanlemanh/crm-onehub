@@ -18,7 +18,14 @@ import { fileURLToPath } from "node:url";
 const TEP_NAY = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP_NAY), "..", "..", "..");
 const HO_SO = "dieu-huong-khu-muc-tieu";
-process.env.BANG_CHUNG ??= join(GOC, "_acceptance", HO_SO, "evidence");
+const daThongCong = ["signed-off", "machine-cleared"].includes(
+	/^status:\s*(\S+)/m.exec(
+		readFileSync(join(GOC, "_acceptance", HO_SO, "contract.md"), "utf8"),
+	)?.[1] ?? "",
+);
+process.env.BANG_CHUNG ??= daThongCong
+	? join(GOC, ".acceptance-runs", HO_SO, "evidence")
+	: join(GOC, "_acceptance", HO_SO, "evidence");
 const BANG_CHUNG = process.env.BANG_CHUNG;
 const lib = await import("../../kho-tai-lieu/rang/man-lib.mjs");
 
@@ -124,6 +131,10 @@ const { chiaCookie } = await import(
 );
 const { okrMessages } = await import(join(GOC, "apps/app/lib/messages/okr.ts"));
 const M = okrMessages("vi");
+const { okrSoanMessages } = await import(
+	join(GOC, "apps/app/lib/messages/okr-soan.ts")
+);
+const MS = okrSoanMessages("vi");
 const MAU = JSON.parse(
 	readFileSync(join(GOC, "apps/api/scripts/okr-mau/cong-ty.json"), "utf8"),
 );
@@ -412,6 +423,59 @@ try {
 			);
 			await t.close();
 		}
+	}
+
+	if (CHON.has("SOAN")) {
+		console.log(
+			"== SOAN (AC-4, loi hua khung-okr-truoc-r1): quan tri, chua noi Kara",
+		);
+		if (process.env.OKR_AGENT_BRIDGE_SECRET) {
+			console.log(
+				"KHONG DO DUOC: SOAN can phien do TAT cau noi Kara — chay voi OKR_AGENT_BRIDGE_SECRET= (rong)",
+			);
+			process.exit(2);
+		}
+		const t = await d.moTrang(QT, 1440, `/okr/theo-don-vi?kyOkr=${kyLap}`);
+		await d.doi(
+			t,
+			() => document.querySelector("[data-nut=them-muc-tieu]") !== null,
+		);
+		await choMs(800);
+		const n = await t.evaluate(() => {
+			const hang = document.querySelector("[data-hang-hanh-dong]");
+			const nhom = hang?.querySelector("[data-nhom-soan]") ?? null;
+			return {
+				coNhom: Boolean(nhom),
+				khoa: nhom?.querySelector("button")?.disabled ?? null,
+				coI: Boolean(nhom?.querySelector("[data-nut=thong-tin-soan]")),
+				trongThan: Boolean(
+					document.querySelector("[data-hang-nut] [data-nhom-soan]"),
+				),
+			};
+		});
+		let chuI = "";
+		if (n.coI) {
+			await d.bamSel(t, "[data-hang-hanh-dong] [data-nut=thong-tin-soan]");
+			chuI = await t.evaluate(
+				() =>
+					document.querySelector("[data-thong-tin-soan]")?.textContent ?? "",
+			);
+		}
+		await t.screenshot({
+			path: join(BANG_CHUNG, "soan-chua-cau-hinh-1440.png"),
+		});
+		const dung =
+			n.coNhom &&
+			n.khoa === true &&
+			chuI.includes(MS.nut.chuaCauHinh) &&
+			!n.trongThan;
+		dong(
+			dung,
+			dung
+				? "DUNG SOAN: quan tri thay nhom soan khoa o hang hanh dong dau trang, «i» noi chua cau hinh"
+				: `AC-4: quan tri chua noi Kara — nhom soan ${n.coNhom ? "co" : "VANG"} o dau trang, khoa ${n.khoa}, «i» «${chuI.slice(0, 60)}», con trong than ${n.trongThan}`,
+		);
+		await t.close();
 	}
 
 	if (chay("E5")) {
