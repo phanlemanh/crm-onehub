@@ -297,15 +297,16 @@ evals:
       - "_acceptance/okr-soat-anh-luot-3/**"
       - "_acceptance/soan-okr-trong-khung/**"
       - "_acceptance/dieu-huong-khu-muc-tieu/**"
+      - "_acceptance/no-sau-luot-5-okr/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs"
     expected: |
       rang/ghim-nam.mjs rut LUC CHAY tap ho so signed-off co tep trong rang/ khop dau cu (git grep tren cay
-      tai merge-base voi onehub: data-nut-cay tren trang theo-don-vi, data-hang-nut, data-nhom-soan, thuMucTieu, cay
-      aria-label «Đơn vị») cong dieu-huong-khu-muc-tieu, va so voi tap 8 ho so khai trong AC-14 (lech -> ma 2 goi ten). Moi ho so: dong repin cuoi trong
+      tai merge-base voi onehub: data-nut-cay tren trang theo-don-vi, data-hang-nut, data-nhom-soan, thuMucTieu, data-loc-okr,
+      cay aria-label «Đơn vị») cong dieu-huong-khu-muc-tieu, va so voi tap 9 ho so khai trong AC-14 (lech -> ma 2 goi ten). Moi ho so: dong repin cuoi trong
       run-log.jsonl co suites_exit va evals_exit toan 0, va sha cua no chua commit dau tien cua luot doi
       theo-don-vi.tsx (git merge-base --is-ancestor) -> "GHIM <slug>: <sha> xanh"; diff rang/ cua ho so tu
       merge-base khong xoa dong expect/kiem nao ngoai dong chua dau cu (dem dong xoa khong khop dau cu = 0);
-      muc-tieu-va-kr/contract.md co dong Notes tro "trang-don-vi-mot-bang" AC-3. Dong cham "DUNG AC-14: 8/8".
+      muc-tieu-va-kr/contract.md co dong Notes tro "trang-don-vi-mot-bang" AC-3. Dong cham "DUNG AC-14: 9/9".
       CHIEU DO (DVB_PHA=ghim-cu: ban sao run-log mot ho so voi dong repin tren sha truoc trang moi) -> "SAI
       AC-14: <slug> ghim tren <sha> chua co trang moi", ma 1.
 
