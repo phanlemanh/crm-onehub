@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
+import { ClientError } from "eve/client";
 import type { EveMessage } from "eve/react";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -7,6 +8,7 @@ import {
 	KhungHoi,
 	type KhungHoiProps,
 } from "@/app/(app)/[slug]/okr/hoi/khung-hoi";
+import { lyDoKhoaTu } from "@/app/(app)/[slug]/okr/hoi/loi-hoi";
 import { okrHoiMessages } from "@/lib/messages/okr-hoi";
 
 const m = okrHoiMessages("vi");
@@ -135,9 +137,10 @@ describe("okr hoi dap", () => {
 		const { props } = dung();
 		const k = await mo(<KhungHoi {...props} />);
 		const nhan = [...k.querySelectorAll("[data-nhan-trich]")] as HTMLElement[];
-		expect(nhan.map((n) => n.getAttribute("data-nhan-trich")).sort()).toEqual(
-			["kr", "objective"],
-		);
+		expect(nhan.map((n) => n.getAttribute("data-nhan-trich")).sort()).toEqual([
+			"kr",
+			"objective",
+		]);
 		const thieu = nhan
 			.filter((n) => n.closest('[translate="no"]') === null)
 			.map((n) => n.textContent);
@@ -182,8 +185,16 @@ describe("okr hoi dap", () => {
 	});
 
 	test("hdo-khoa: 429 khoa o go va noi khi nao mo lai; 200 thi o go bat", async () => {
+		const loiCua = async (status: number, error: string) => {
+			const ra = Response.json({ error }, { status });
+			return new ClientError(ra.status, await ra.text(), ra.headers);
+		};
+		expect(lyDoKhoaTu(await loiCua(500, "het-luot-ngay"))).toBeNull();
+		expect(lyDoKhoaTu(undefined)).toBeNull();
 		for (const lyDo of ["het-luot-ngay", "het-tran-thang"] as const) {
-			const { props } = dung({ lyDoKhoa: lyDo });
+			const { props } = dung({
+				lyDoKhoa: lyDoKhoaTu(await loiCua(429, lyDo)),
+			});
 			const k = await mo(<KhungHoi {...props} />);
 			expect(k.querySelector("textarea")?.disabled).toBe(true);
 			expect(k.textContent).toContain(m.khoa[lyDo]);
