@@ -81,6 +81,25 @@ function laViPham(nut: ts.Node, chat: boolean): boolean {
 	return false;
 }
 
+const SO_SANH = new Set([
+	ts.SyntaxKind.EqualsEqualsEqualsToken,
+	ts.SyntaxKind.ExclamationEqualsEqualsToken,
+	ts.SyntaxKind.EqualsEqualsToken,
+	ts.SyntaxKind.ExclamationEqualsToken,
+]);
+
+function laViPhamChat(nut: ts.Node): boolean {
+	const cha = nut.parent;
+	if (ts.isBinaryExpression(cha) && SO_SANH.has(cha.operatorToken.kind))
+		return false;
+	if (ts.isCaseClause(cha) && cha.expression === nut) return false;
+	const goc = boNgoac(nut);
+	if (ts.isJsxAttribute(goc)) return goc.name.getText() === "tone";
+	if (ts.isJsxExpression(goc) && ts.isJsxAttribute(goc.parent))
+		return goc.parent.name.getText() === "tone";
+	return true;
+}
+
 export function tepCanQuet(goc: string): string[] {
 	const ra = Bun.spawnSync(["git", "ls-files", "apps/app", "packages/ui/src"], {
 		cwd: goc,
@@ -145,7 +164,7 @@ export function quetMau(
 	tep: string,
 	{ chat }: { chat: boolean },
 ): ViPham[] {
-	if (!THANH_PHAN_CHAM.test(nguon)) return [];
+	if (!chat && !THANH_PHAN_CHAM.test(nguon)) return [];
 	const sf = ts.createSourceFile(
 		tep,
 		nguon,
@@ -159,7 +178,7 @@ export function quetMau(
 			(ts.isStringLiteral(nut) || ts.isNoSubstitutionTemplateLiteral(nut)) &&
 			MAU_TRANG_THAI.has(nut.text) &&
 			!ts.isLiteralTypeNode(nut.parent) &&
-			laViPham(nut, chat)
+			(chat ? laViPhamChat(nut) : laViPham(nut, false))
 		) {
 			const { line } = sf.getLineAndCharacterOfPosition(nut.getStart());
 			ra.push({ tep, dong: line + 1, chu: nut.text });

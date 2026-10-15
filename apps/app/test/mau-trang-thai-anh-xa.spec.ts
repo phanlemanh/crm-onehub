@@ -210,6 +210,45 @@ describe("mtc-anh-xa", () => {
 		expect(dem).toBe(TONG_O);
 	});
 
+	test("doi chung duong luat chat: nam dang truyen mau, ke ca tep khong nhac ten cham", () => {
+		const DANG = [
+			{ ten: "bien", ma: `const MAU = "success";\nexport const x = MAU;` },
+			{ ten: "doi so ham", ma: `export const x = chon(d, "success", "error");` },
+			{ ten: "hang mang", ma: `export const ROWS = [{ id: "a", tone: "success" }];` },
+			{ ten: "phep va", ma: `export const x = d && "success";` },
+			{
+				ten: "tep khong nhac ten cham",
+				ma: `import { toneTheoNghia } from "x";\nexport const t = toneTheoNghia("xong") ?? "neutral";`,
+			},
+		] as const;
+		let dem = 0;
+		for (const d of DANG) {
+			const vp = quetMau(d.ma, `mau-${dem}.ts`, { chat: true });
+			if (vp.length < 1)
+				throw new Error(`mtc-anh-xa: luat chat bo sot dang ${d.ten}`);
+			dem += 1;
+		}
+		expect(dem).toBe(5);
+		const hopLe = quetMau(
+			`const a = b.state === "error";\nswitch (s) {\n\tcase "error":\n\t\tbreak;\n}`,
+			"hop-le.ts",
+			{ chat: true },
+		);
+		expect(hopLe.length).toBe(0);
+	});
+
+	test("moi tep khu that su duoc quet: cay mot chuoi mau thi bi bat", () => {
+		let dem = 0;
+		for (const t of TEP_KHU) {
+			const nguon = `${readFileSync(join(GOC, t), "utf8")}\nexport const __doiChung = "success";\n`;
+			const vp = quetMau(nguon, t, { chat: true });
+			if (vp.length < 1)
+				throw new Error(`mtc-anh-xa: ${t} khong duoc quet`);
+			dem += 1;
+		}
+		expect(dem).toBe(13);
+	});
+
 	test("13 tep khu khong truyen mau bang chuoi", () => {
 		expect(TEP_KHU.length).toBe(13);
 		for (const t of TEP_KHU) {
