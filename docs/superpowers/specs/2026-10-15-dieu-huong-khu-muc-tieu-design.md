@@ -23,7 +23,9 @@ Một đầu trang dùng chung cho cả khu, dựng như đầu trang Thoả thu
   mục tiêu». Đây là nháp theo khuyến nghị của câu Hỏi-1 ở Cổng Phạm vi; lối kia (gom cả «Nhập» lẫn «Soạn» vào
   «…», đúng chữ A2 và bản mẫu) đổi được trước khi code. Nhãn giữ «Soạn OKR cùng Kara» (nháp theo khuyến nghị câu
   Hỏi-3 — lối kia: «Soạn cùng Trợ lý» như chữ phạm vi). Ba nút tạo/nhập/soạn rời khỏi hàng nút trong thân trang
-  Theo đơn vị.
+  Theo đơn vị. Hàng này **giữ chỗ cho nút «Hỏi Kara»** (`NutHoiKara`) của hàng `hoi-dap-okr` (Mac Studio, dự kiến
+  gộp 16/10, đặt nút ở `dau-trang-okr.tsx`): bên gộp sau dời nút đó vào hàng hành động chung; DH1 gộp `onehub` vào
+  nhánh trước S4 nếu C đã lên.
 - **Đơn vị đích** của ba hành động: ở Theo đơn vị là đơn vị đang chọn; ở các thẻ khác là đơn vị đầu tiên người
   xem dẫn (bộ phận trước phòng ban, theo thứ tự cây), không thì `donOkr` trên đường dẫn, không thì cấp công ty
   (nháp theo khuyến nghị câu Hỏi-2 — lối kia: đơn vị đang xem trước). Bấm «Thêm mục tiêu» ở thẻ khác Theo đơn vị → mở Theo đơn vị của đơn vị đích với ngăn tạo đã mở (dùng

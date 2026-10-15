@@ -69,6 +69,9 @@ evals:
       Ten ca "dhk-hanh-dong". Moi trang trong 5 the: [data-slot=page-shell-actions] chua theo thu tu o chu
       ky, nut «…», (pha lap-ke-hoach) nhom soan, nut chinh [data-nut=them-muc-tieu]; than trang Theo don vi
       ([data-hang-nut]) khong con [data-nut=them-muc-tieu], [data-nut=nhap-bang-tinh], [data-nhom-soan].
+      Nut «Hỏi Kara» cua hang hoi-dap-okr: neu cay co thanh phan NutHoiKara (rut luc chay bang git grep, khong
+      viet tay) thi no nam trong [data-slot=page-shell-actions] va so phan tu ky vong cong them 1; cay khong co
+      thi khong doi so.
       Ma tran 5 the x 2 pha chu ky (lap-ke-hoach, dang-chay) = 10 o, so phan tu trong hang hanh dong = 4 / 3.
       CHIEU DO (DHK_PHA=nut-giua-than) -> "dhk-hanh-dong: theo-don-vi con nut them-muc-tieu trong than".
 
