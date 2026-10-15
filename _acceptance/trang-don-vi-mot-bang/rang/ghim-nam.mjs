@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * E16 (AC-14): tám hồ sơ đã ký đo trên trang đơn vị cũ được sửa phép đo rồi ghim
+ * E16 (AC-14): chín hồ sơ đã ký đo trên trang đơn vị cũ được sửa phép đo rồi ghim
  * lại xanh tại một commit đã có trang mới.
  *
  *   bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs
@@ -10,7 +10,7 @@
  *    mà lệnh `config:` (đọc ở gốc so) chạy một tệp như thế; cộng
  *    `dieu-huong-khu-muc-tieu` (bài `dhk-giu-don`, AC-13). `data-nut-cay` chỉ tính
  *    khi tệp nói tới `theo-don-vi` (cây cài đặt tổ chức vẫn mang dấu này). Lệch tập
- *    tám hồ sơ khai trong AC-14 → mã 2, gọi tên.
+ *    chín hồ sơ khai trong AC-14 → mã 2, gọi tên.
  * 2. Mỗi hồ sơ: dòng `repin` CUỐI của run-log.jsonl có `suites_exit` và
  *    `evals_exit` toàn 0, và `sha` của nó chứa commit đầu tiên của lượt đổi
  *    theo-don-vi.tsx tính từ gốc lượt (`git merge-base --is-ancestor`).
@@ -34,7 +34,7 @@ const { parseEvals, stripComment } = await import(
 	join(GOC, "lib/eval-yaml.cjs")
 );
 
-/** Tám hồ sơ AC-14 khai. */
+/** Chín hồ sơ AC-14 khai (no-sau-luot-5-okr thêm 15/10: thanh lọc [data-loc-okr] cũ). */
 const KHAI = [
 	"dat-okr-trong-crm",
 	"khung-okr-truoc-r1",
@@ -44,14 +44,15 @@ const KHAI = [
 	"okr-soat-anh-luot-3",
 	"soan-okr-trong-khung",
 	"dieu-huong-khu-muc-tieu",
+	"no-sau-luot-5-okr",
 ];
 const CONG_THEM = "dieu-huong-khu-muc-tieu";
 const TRANG = "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx";
-/** Dấu của trang đơn vị cũ (cây, thẻ đơn vị, hàng nút, nhóm soạn trong thân, khoá thu). */
+/** Dấu của trang đơn vị cũ (cây, thẻ đơn vị, hàng nút, nhóm soạn trong thân, thanh lọc, khoá thu). */
 const DAU_CU =
-	/data-nut-cay|data-hang-nut|data-nhom-soan|thuMucTieu|data-don-vi(?![\w-])|cayDonVi|CHU\.donVi|aria-label=['"]?(Cây )?Đơn vị/;
+	/data-nut-cay|data-hang-nut|data-nhom-soan|data-loc-okr|thuMucTieu|data-don-vi(?![\w-])|cayDonVi|CHU\.donVi|aria-label=['"]?(Cây )?Đơn vị/;
 const DAU_GREP =
-	"data-nut-cay|data-hang-nut|data-nhom-soan|thuMucTieu|data-don-vi|cayDonVi|CHU\\.donVi|Đơn vị";
+	"data-nut-cay|data-hang-nut|data-nhom-soan|data-loc-okr|thuMucTieu|data-don-vi|cayDonVi|CHU\\.donVi|Đơn vị";
 const KHAI_TAI_CHO = /\/\/ AC-14 (cach-toi|loi-hua-moi): \S/;
 const CHI_NGOAC = /^[\s()[\]{};,]*$/;
 
