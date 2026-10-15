@@ -137,6 +137,7 @@ const { loadTaiLieuSearchParams } = await import(
 	"@/app/(app)/[slug]/tai-lieu/tai-lieu-search-params"
 );
 const { LOAI_TRANG } = await import("@crm/validation/tai-lieu");
+const { taiLieuMessages } = await import("@/lib/messages/tai-lieu");
 const { readFileSync } = await import("node:fs");
 const { join } = await import("node:path");
 
@@ -555,6 +556,12 @@ function goiTruyVanCuoi(duong: string): DauVao {
 	return daGoi.filter((g) => g.duong === duong).at(-1)?.dauVao;
 }
 
+function goiCoKhoa(duong: string, khoa: string): DauVao {
+	return daGoi
+		.filter((g) => g.duong === duong && truong(g.dauVao, khoa) !== undefined)
+		.at(-1)?.dauVao;
+}
+
 function tenHangDau(goc: ParentNode): string {
 	const hang = goc.querySelector("[data-trang]");
 	return (hang?.textContent ?? "").trim();
@@ -806,5 +813,226 @@ describe("tai-lieu", () => {
 				hangDoi: false,
 			}),
 		).toThrow("lkx-tai-lieu: chon loai khong doi danh sach tren trang");
+	});
+});
+
+const mt = taiLieuMessages("vi");
+
+function chipBat(goc: ParentNode, nhan: string): string | null {
+	const on = goc.querySelector(
+		`[data-slot="toggle-group"][aria-label="${nhan}"] [data-slot="toggle-group-item"][data-state="on"]`,
+	);
+	return on ? nhanChip(on) : null;
+}
+
+function nutBat(goc: ParentNode, nhan: string): string | null {
+	const on = goc.querySelector(
+		`[data-view-switch="nut"][aria-label="${nhan}"] button[data-state="on"]`,
+	);
+	return on ? nhanChip(on) : null;
+}
+
+type TrangThai = Record<string, Json | undefined>;
+
+type ODuongDan = {
+	ten: string;
+	man: () => ReactElement;
+	duong: string;
+	doc: (goc: HTMLElement) => TrangThai;
+	mong: TrangThai;
+	doi: (goc: HTMLElement) => Promise<void>;
+};
+
+function chipTheoChu(
+	goc: ParentNode,
+	nhan: string,
+	chu: string,
+): Element | undefined {
+	return [
+		...goc.querySelectorAll(
+			`[data-slot="toggle-group"][aria-label="${nhan}"] [data-slot="toggle-group-item"]`,
+		),
+	].find((c) => nhanChip(c) === chu);
+}
+
+const O_DUONG_DAN: ODuongDan[] = [
+	{
+		ten: "thoa thuan bang",
+		man: () => <DealsTable />,
+		duong: "?status=closed&page=2",
+		doc: (goc) => ({
+			chip: chipBat(goc, md.tabs.label),
+			kieu: nutBat(goc, md.view.label),
+			status: truong(goiTruyVanCuoi("deals.list"), "status"),
+			page: truong(goiTruyVanCuoi("deals.list"), "page"),
+		}),
+		mong: {
+			chip: md.tabs.closed,
+			kieu: md.view.table,
+			status: "closed",
+			page: 2,
+		},
+		doi: async (goc) => bam(chipTheoChu(goc, md.tabs.label, md.tabs.open)),
+	},
+	{
+		ten: "thoa thuan bang cot",
+		man: () => <DealsTable />,
+		duong: "?view=board",
+		doc: (goc) => ({
+			kieu: nutBat(goc, md.view.label),
+			coBang: goc.querySelector("table") !== null,
+		}),
+		mong: { kieu: md.view.board, coBang: false },
+		doi: async (goc) =>
+			bam(
+				[
+					...goc.querySelectorAll(
+						`[data-view-switch="nut"][aria-label="${md.view.label}"] button`,
+					),
+				][0],
+			),
+	},
+	{
+		ten: "onboarding",
+		man: () => <DanhMucTable />,
+		duong: "?trangThai=da-dong&cachXem=bang-cot&cachChia=bo-phan",
+		doc: (goc) => ({
+			chip: chipBat(goc, mo.facets.status),
+			kieu: nutBat(goc, mo.view.label),
+			chia: nutBat(goc, mo.chia.label),
+			status: truong(goiTruyVanCuoi("onboarding.manDanhMuc"), "status"),
+			cachChia: truong(goiTruyVanCuoi("onboarding.bangCot"), "cachChia"),
+		}),
+		mong: {
+			chip: mo.facets.closed,
+			kieu: mo.view["bang-cot"],
+			chia: mo.chia["bo-phan"],
+			status: "da-dong",
+			cachChia: "bo-phan",
+		},
+		doi: async (goc) =>
+			bam(chipTheoChu(goc, mo.facets.status, mo.facets.running)),
+	},
+	{
+		ten: "tai lieu",
+		man: () => <DanhSachTrang />,
+		duong: `?loai=${LOAI_HAI}&donVi=dv1&chuTrang=u1&archived=true&page=2`,
+		doc: (goc) => ({
+			chip: chipBat(goc, mt.loc.nhan),
+			luuTru:
+				goc
+					.querySelector("[data-nut-da-luu-tru]")
+					?.getAttribute("aria-pressed") ?? null,
+			donVi: (goc.querySelector("[data-loc-don-vi]")?.textContent ?? "").trim(),
+			chu: (goc.querySelector("[data-loc-chu]")?.textContent ?? "").trim(),
+			loai: truong(goiTruyVanCuoi("taiLieu.list"), "loai"),
+			donViId: truong(goiTruyVanCuoi("taiLieu.list"), "donViId"),
+			chuTrangId: truong(goiTruyVanCuoi("taiLieu.list"), "chuTrangId"),
+			archived: truong(goiTruyVanCuoi("taiLieu.list"), "archived"),
+			page: truong(goiTruyVanCuoi("taiLieu.list"), "page"),
+		}),
+		mong: {
+			chip: mt.loai[LOAI_HAI],
+			luuTru: "true",
+			donVi: "Phòng Kinh doanh",
+			chu: "Hà",
+			loai: LOAI_HAI,
+			donViId: "dv1",
+			chuTrangId: "u1",
+			archived: true,
+			page: 2,
+		},
+		doi: async (goc) => bam(chipTheoChu(goc, mt.loc.nhan, mt.loc.tatCa)),
+	},
+	{
+		ten: "cho duyet",
+		man: () => <DanhSach />,
+		duong: "?tabTaiLieu=cho-duyet&nhomDeXuat=da-xu-ly&page=2",
+		doc: (goc) => ({
+			nhom: chipBat(goc, mt.choDuyet.nhom.nhan),
+			nhomVao: truong(goiCoKhoa("taiLieu.proposals", "nhom"), "nhom"),
+			page: truong(goiCoKhoa("taiLieu.proposals", "nhom"), "page"),
+		}),
+		mong: {
+			nhom: mt.choDuyet.nhom.daXuLy,
+			nhomVao: "da-xu-ly",
+			page: 2,
+		},
+		doi: async (goc) =>
+			bam(chipTheoChu(goc, mt.choDuyet.nhom.nhan, mt.choDuyet.nhom.cho)),
+	},
+];
+
+function kiemDuongDan(o: Pick<ODuongDan, "ten" | "mong">, thay: TrangThai) {
+	for (const [khoa, gia] of Object.entries(o.mong)) {
+		if (thay[khoa] === gia) continue;
+		if (o.ten === "thoa thuan bang cot" && khoa === "kieu")
+			throw new Error("lkx-duong-dan: thoa thuan mo duong dan mat bang cot");
+		if (o.ten === "tai lieu" && (khoa === "chip" || khoa === "loai"))
+			throw new Error("lkx-duong-dan: tai lieu mo duong dan mat loai");
+		throw new Error(
+			`lkx-duong-dan: ${o.ten} ${khoa}=${String(thay[khoa])} thay vi ${String(gia)}`,
+		);
+	}
+}
+
+async function goLai(o: ODuongDan, duong: string): Promise<HTMLElement> {
+	act(() => root?.unmount());
+	khung?.remove();
+	root = null;
+	daGoi = [];
+	return dung(o.man(), duong);
+}
+
+describe("duong-dan", () => {
+	test("ma tran 5 o: dung man chi tu duong dan, roi khu hoi sau mot lan doi", async () => {
+		let dem = 0;
+		for (const o of O_DUONG_DAN) {
+			const goc = await dung(o.man(), o.duong);
+			kiemDuongDan(o, o.doc(goc));
+			await o.doi(goc);
+			const sauBam = o.doc(goc);
+			const duongMoi = duongDan.at(-1) ?? "";
+			expect(`${o.ten} ${duongMoi}`).not.toBe(`${o.ten} ${o.duong.slice(1)}`);
+			const lai = await goLai(o, duongMoi === "" ? "" : `?${duongMoi}`);
+			expect({ ten: o.ten, ...o.doc(lai) }).toEqual({ ten: o.ten, ...sauBam });
+			dem += 1;
+			act(() => root?.unmount());
+			khung?.remove();
+			root = null;
+			daGoi = [];
+		}
+		expect(dem).toBe(5);
+	});
+
+	test("gia tri la tren duong dan ve mac dinh, khong loi", async () => {
+		const tl = await dung(<DanhSachTrang />, "?loai=xyz&page=abc");
+		expect(chipBat(tl, mt.loc.nhan)).toBe(mt.loc.tatCa);
+		expect(truong(goiTruyVanCuoi("taiLieu.list"), "loai")).toBeUndefined();
+		expect(truong(goiTruyVanCuoi("taiLieu.list"), "page")).toBe(1);
+		act(() => root?.unmount());
+		khung?.remove();
+		root = null;
+		const ob = await dung(<DanhMucTable />, "?trangThai=abc&cachXem=xyz");
+		expect(chipBat(ob, mo.facets.status)).toBe(mo.facets.running);
+		expect(nutBat(ob, mo.view.label)).toBe(mo.view.bang);
+	});
+
+	test("chieu do: thoa thuan doc view tu mac dinh thi bai bat", () => {
+		expect(() =>
+			kiemDuongDan(
+				{ ten: "thoa thuan bang cot", mong: { kieu: md.view.board } },
+				{ kieu: md.view.table },
+			),
+		).toThrow("lkx-duong-dan: thoa thuan mo duong dan mat bang cot");
+	});
+
+	test("chieu do: tai lieu doc loai tu state khoi tao null thi bai bat", () => {
+		expect(() =>
+			kiemDuongDan(
+				{ ten: "tai lieu", mong: { chip: mt.loai[LOAI_HAI] } },
+				{ chip: mt.loc.tatCa },
+			),
+		).toThrow("lkx-duong-dan: tai lieu mo duong dan mat loai");
 	});
 });
