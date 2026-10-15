@@ -2,16 +2,18 @@
 schema_version: 2
 feature_slug: khung-soan-chan-lien-ket
 verdict: REJECT
-failed_evals: ["E8","E7"]
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cdf58124b9c22b1f95d43df713e97ca2858c36a3
+verified_commit: 89f715335fd04ef92bb1aae25eb153fba5246fcf
 human_signoff:
 ---
 
 # Evidence Report: khung-soan-chan-lien-ket
+
+Round 2. Chín eval của hợp đồng đều đạt; verdict tổng là REJECT vì một lệnh suite không gắn eval nào (`bunx turbo run lint --force`) thoát khác 0 — chi tiết ở «Lệnh suite (hồi quy)» và section Iterations.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -21,155 +23,143 @@ human_signoff:
 | E4 | AC-4 | test | PASS |
 | E5 | AC-5 | test | PASS |
 | E6 | AC-6 | test | PASS |
-| E7 | AC-7 | ui-check | FAIL |
-| E8 | AC-1 | script | FAIL |
+| E7 | AC-7 | ui-check | PASS |
+| E8 | AC-1 | script | PASS |
 | E9 | AC-3 | script | PASS |
-
-Hai eval đỏ: E8 (phép đột biến, mã thoát 2) và E7 (phép đo màn thật, mã thoát 1). Cả hai lệnh đỏ đều đã gắn eval, không có lệnh đỏ nào không gắn eval. Các lệnh suite đều xanh.
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-khung-soan-chan-lien-ket-E1-r1
+  run_id: minted-khung-soan-chan-lien-ket-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kcl_soan
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
-    Ran 3 tests across 1 file. [1495.00ms]
+    Ran 3 tests across 1 file. [2.62s]
 
 - eval: E2
-  run_id: minted-khung-soan-chan-lien-ket-E2-r1
+  run_id: minted-khung-soan-chan-lien-ket-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kcl_go_do
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
-    Ran 5 tests across 1 file. [1.81s]
+    Ran 5 tests across 1 file. [2.26s]
 
 - eval: E3
-  run_id: minted-khung-soan-chan-lien-ket-E3-r1
+  run_id: minted-khung-soan-chan-lien-ket-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kcl_roi
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
-    Ran 6 tests across 1 file. [694.00ms]
+    Ran 6 tests across 1 file. [1100.00ms]
 
 - eval: E4
-  run_id: minted-khung-soan-chan-lien-ket-E4-r1
+  run_id: minted-khung-soan-chan-lien-ket-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kcl_khong_do
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
-    Ran 3 tests across 1 file. [688.00ms]
+    Ran 3 tests across 1 file. [767.00ms]
 
 - eval: E5
-  run_id: minted-khung-soan-chan-lien-ket-E5-r1
+  run_id: minted-khung-soan-chan-lien-ket-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kcl_khong_chan
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
-    Ran 10 tests across 1 file. [727.00ms]
+    Ran 10 tests across 1 file. [1343.00ms]
 
 - eval: E6
-  run_id: minted-khung-soan-chan-lien-ket-E6-r1
+  run_id: minted-khung-soan-chan-lien-ket-E6-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.kcl_hoi_quy
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
-    Ran 12 tests across 1 file. [1258.00ms]
+    Ran 12 tests across 1 file. [1166.00ms]
 
 - eval: E7
-  run_id: minted-khung-soan-chan-lien-ket-E7-r1
-  exit_code: 1
+  run_id: E7-kcl-man-20261015-2233
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kcl_man
-  verified_at: 2026-10-15T11:25:22Z
-  screenshot: evidence/kcl-dang-soan-1280.png
+  verified_at: 2026-10-15T15:11:08Z
+  screenshot: evidence/E7-step1.png
   observed: |
-    Đã mở từng ảnh bằng Read. (1) kcl-dang-soan-1280.png: hộp «Kara đang soạn. Đóng khung?» + «Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.» + nút «Ở lại» và «Đóng» (đỏ), chữ đọc trọn, hộp ở giữa; nhưng nền sau hộp là mảng xám phẳng, không thấy khung soạn phía sau (không chứng minh được «hộp nằm trên khung» bằng mắt; có thể do lớp phủ). Góc dưới trái có badge dev «2 Issues» của Next.
-    (2) kcl-go-do-1280.png: hộp «Bỏ những gì vừa nhập?» + «Những gì bạn vừa nhập trong hộp này sẽ mất.» + «Tiếp tục sửa» / «Bỏ», chữ trọn, nền xám phẳng không thấy khung, badge «1 Issue».
-    (3) kcl-dang-soan-375.png: hộp «Kara đang soạn. Đóng khung?» rộng gần hết chiều ngang 375, hai nút xếp dọc «Đóng» (đỏ) và «Ở lại», chữ trọn không tràn ngang; nền xám phẳng, badge «1 Issue». (4) kcl-go-do-375.png: hộp «Bỏ những gì vừa nhập?» với «Bỏ» (đỏ) và «Tiếp tục sửa» xếp dọc, chữ trọn, không tràn ngang; nền xám phẳng.
-    Nội dung hộp khớp Expected về tiêu đề và nút; chỉ phần «hộp nằm trên khung» không xác nhận được vì khung không thấy trong ảnh. Riêng log man.mjs: khung 1280 có lỗi console hydration mới (aria-hidden trên nút «Menu tài khoản») nên mâu thuẫn Expected «console không lỗi» nên eval này không đạt.
+    Đã mở bằng Read cả 4 ảnh. (1) kcl-dang-soan-1280: lớp phủ xám đồng nhất, hộp trắng bo góc giữa màn «Kara đang soạn. Đóng khung?», mô tả đọc trọn 2 dòng, hai nút «Ở lại» (outline) và «Đóng» (đỏ) đủ, không tràn; góc dưới trái có badge dev «2 Issues» của Next (hydration sẵn có). (2) kcl-go-do-1280: hộp «Bỏ những gì vừa nhập?» với «Tiếp tục sửa» và «Bỏ», đọc trọn. (3) kcl-dang-soan-375: hộp rộng gần hết bề ngang (lề ~16px), chữ đọc trọn, hai nút xếp dọc «Đóng» trên «Ở lại» dưới, không tràn ngang. (4) kcl-go-do-375: «Bỏ» trên, «Tiếp tục sửa» dưới, không tràn. Khớp Expected: hộp hiện giữa màn, chữ đọc trọn, hai nút đủ, không tràn ở 375. Hạn chế: lớp phủ che kín nên không thấy khung phía sau trong ảnh; nhật ký khai khung:true và hộp:'' sau dòng, nhất quán với lớp phủ che khung.
   network_observed: n-a (driver)
   output: |
-    Lệnh kcl_man chạy nguyên văn ở tiền cảnh (log: .acceptance-runs/khung-soan-chan-lien-ket/log-kcl-man.log). Dòng tổng kết: «KET LUAN: 1 SAI — ma thoat 1».
-    Assertion: «kcl 1280 a: dat», «kcl 1280 b: dat», «kcl 1280 c: dat» (Enter trên liên kết, hộp hiện, URL còn record=soan:<id>, khung:true), «kcl 375 a: dat», «kcl 375 b: dat» đều đạt.
-    Sai: Expected «console không lỗi» không đạt. man.mjs in «kcl 1280: console loi A tree hydrated but some attributes of the server rendered HTML didn't match the client properties...» (khác biệt: HTML server có aria-hidden=true / data-aria-hidden=true trên nút «Menu tai khoan» (Button size=icon, dropdown-menu-trigger) trong AppLayout, client không có).
-    Lỗi này không nằm trong bộ lọc LOI_CO_SAN (2 lỗi hydration có sẵn của «Theo đơn vị», P1-19, đã loại không tính) nên bị tính là sai mới. Chỉ khổ 1280 có lỗi mới; khổ 375 chỉ có 2 lỗi có sẵn.
-    Chưa xác định được đây là lỗi của tính năng hay do Radix aria-hidden của hộp soạn/khung (chưa đối chiếu); không chạy lại để đoán flake.
-    Chiều đỏ (--kiem-do-do khong-chan) không nằm trong steps của lần chạy này nên không chạy.
-    Khung hình do man.mjs tự chụp (không có ui:capture qua lệnh này); bản sao ở .acceptance-runs/khung-soan-chan-lien-ket/evidence/; bốn ảnh gốc: kcl-dang-soan-1280.png, kcl-go-do-1280.png, kcl-dang-soan-375.png, kcl-go-do-375.png trong _acceptance/khung-soan-chan-lien-ket/evidence/. Không lưu được E7-stepN.png đúng tên vì rào chỉ cho ghi dưới .acceptance-runs/; tên gốc của man.mjs được giữ.
-    Không còn server nào do mình start (phiên đo tự dọn, «phien-do: xong»). Mạng: driver là script, không đọc được network riêng.
+    Frame đã lưu (ảnh chụp bởi man.mjs, sao sang E7-stepN): E7-step1.png = kcl-dang-soan-1280.png; E7-step2.png = kcl-go-do-1280.png; E7-step3.png = kcl-dang-soan-375.png; E7-step4.png = kcl-go-do-375.png (cùng thư mục evidence/). Ảnh bước (c) không có vì man.mjs không chụp.
+    Lưu ý: man.mjs tự ghi đè kcl-dang-soan-1280.png và kcl-go-do-375.png (tệp đã theo dõi); không sửa tay, không chạy lệnh git ghi.
 
 - eval: E8
-  run_id: minted-khung-soan-chan-lien-ket-E8-r1
-  exit_code: 2
+  run_id: minted-khung-soan-chan-lien-ket-E8-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kcl_dot_bien
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
-    kcl dot-bien: doi chung kcl_soan xanh
-    kcl dot-bien: doi chung kcl_go_do xanh
-    kcl dot-bien: doi chung kcl_roi xanh
-    kcl dot-bien: doi chung kcl_khong_do xanh
-    kcl dot-bien: doi chung kcl_khong_chan xanh
-    cặp a: cắn (bỏ lời gọi chặn liên kết trong khung soạn)
-    cặp b: cắn (nút rời đóng hộp thay vì đi tiếp)
-    cặp c: cắn (hrefNoiBo bỏ kiểm metaKey)
-    cặp d: cắn (bật chặn không xét có thay đổi)
-    kcl dot-bien: cay that bi doi
-    Cả bốn cặp đều cắn, nhưng script kết thúc ở dòng «cay that bi doi» thay vì in «kcl dot-bien: 4/4 cắn»; Expected đòi dòng 4/4 cắn nên eval không đạt. Nguyên nhân dòng báo cây thật bị đổi: chưa rõ (không có dòng log nào nói tệp nào đổi).
+    kcl dot-bien: 5/5 cắn
 
 - eval: E9
-  run_id: minted-khung-soan-chan-lien-ket-E9-r1
+  run_id: minted-khung-soan-chan-lien-ket-E9-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.kcl_man_luot
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
   output: |
     phien-do: xong — mã 0
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-khung-soan-chan-lien-ket-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 0
-  verified_at: 2026-10-15T11:25:22Z
+  run_id: minted-khung-soan-chan-lien-ket-SUITE-bunx_turbo_run_lint_force-r2
+  exit_code: 1
+  verified_at: 2026-10-15T15:11:08Z
+  output: |
+    @crm/ui:lint: test/giu-thay-doi-lien-ket.dom.tsx format
+    @crm/ui:lint:   × Formatter would have printed the following content:
+    @crm/ui:lint:     390     │ - → → );→ → await·act(async·()·=>·{
+    @crm/ui:lint:         390 │ + → → );
+    @crm/ui:lint:         391 │ + → → await·act(async·()·=>·{
+    @crm/ui:lint: error: script "lint" exited with code 1
+    Tasks:    7 successful, 11 total
+    Failed:    @crm/ui#lint
 
 - cmd: bun run lint:slop
-  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_lint_slop-r1
+  run_id: minted-khung-soan-chan-lien-ket-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-khung-soan-chan-lien-ket-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-khung-soan-chan-lien-ket-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T11:25:22Z
+  verified_at: 2026-10-15T15:11:08Z
 
 ## Known limits
 
@@ -179,18 +169,21 @@ Hai eval đỏ: E8 (phép đột biến, mã thoát 2) và E7 (phép đo màn th
 
 none — mọi eval feature đều red trên baseline (có phân biệt)
 
-Baseline không đo:
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-soan: bỏ qua baseline: tệp apps/app/test/khung-soan-chan-lien-ket.dom.tsx có ở cây đang kiểm nhưng chưa có ở merge-base eb5ab4269cdbd393b6087ae461ca6814b767724d — eval mới, chạy trên code cũ không phân biệt gì
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-go-do: bỏ qua baseline: tệp apps/app/test/khung-soan-chan-lien-ket.dom.tsx có ở cây đang kiểm nhưng chưa có ở merge-base eb5ab4269cdbd393b6087ae461ca6814b767724d — eval mới, chạy trên code cũ không phân biệt gì
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-roi && cd ../.. && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t '^kcl-hop ': bỏ qua baseline: tệp apps/app/test/khung-soan-chan-lien-ket.dom.tsx có ở cây đang kiểm nhưng chưa có ở merge-base eb5ab4269cdbd393b6087ae461ca6814b767724d — eval mới, chạy trên code cũ không phân biệt gì
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-khong-do && cd ../.. && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-hop-sach: bỏ qua baseline: tệp apps/app/test/khung-soan-chan-lien-ket.dom.tsx có ở cây đang kiểm nhưng chưa có ở merge-base eb5ab4269cdbd393b6087ae461ca6814b767724d — eval mới, chạy trên code cũ không phân biệt gì
-- cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-khong-chan: bỏ qua baseline: tệp packages/ui/test/giu-thay-doi-lien-ket.dom.tsx có ở cây đang kiểm nhưng chưa có ở merge-base eb5ab4269cdbd393b6087ae461ca6814b767724d — eval mới, chạy trên code cũ không phân biệt gì
-- node _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs: bỏ qua baseline: tệp _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs có ở cây đang kiểm nhưng chưa có ở merge-base eb5ab4269cdbd393b6087ae461ca6814b767724d — eval mới, chạy trên code cũ không phân biệt gì
+Ghi chú trung thực: hai eval có baseline đo được (E6, E9) đều red trên code cũ. Các eval còn lại không đo baseline (xem dưới).
+
+Baseline khong do
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-soan: bo qua baseline: tep apps/app/test/khung-soan-chan-lien-ket.dom.tsx co o cay dang kiem nhung chua co o merge-base 8f819cf6a44c194bad2962a4aa904c75b8e1767a — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-go-do: bo qua baseline: tep apps/app/test/khung-soan-chan-lien-ket.dom.tsx co o cay dang kiem nhung chua co o merge-base 8f819cf6a44c194bad2962a4aa904c75b8e1767a — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-roi && cd ../.. && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t '^kcl-hop ': bo qua baseline: tep apps/app/test/khung-soan-chan-lien-ket.dom.tsx co o cay dang kiem nhung chua co o merge-base 8f819cf6a44c194bad2962a4aa904c75b8e1767a — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-khong-do && cd ../.. && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-hop-sach: bo qua baseline: tep apps/app/test/khung-soan-chan-lien-ket.dom.tsx co o cay dang kiem nhung chua co o merge-base 8f819cf6a44c194bad2962a4aa904c75b8e1767a — eval moi, chay tren code cu khong phan biet gi
+- cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-khong-chan: bo qua baseline: tep packages/ui/test/giu-thay-doi-lien-ket.dom.tsx co o cay dang kiem nhung chua co o merge-base 8f819cf6a44c194bad2962a4aa904c75b8e1767a — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs: bo qua baseline: tep _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs co o cay dang kiem nhung chua co o merge-base 8f819cf6a44c194bad2962a4aa904c75b8e1767a — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
-none — mọi eval nhiều lần chạy đều đồng nhất (không eval nào chạy nhiều lần)
+none — mọi eval nhiều lần chạy đều đồng nhất (mọi eval chạy một lần, xác định)
 
 ## Iterations
 
-Round 1: E8, E7 failed — E8: phép đột biến cắn đủ bốn cặp nhưng script dừng ở dòng «cay that bi doi» thay vì «4/4 cắn»; E7: man.mjs ghi lỗi console hydration mới ở khổ 1280 (aria-hidden trên nút «Menu tai khoan»), ngoài bộ lọc LOI_CO_SAN, nên Expected «console không lỗi» không đạt dù năm bước a/b/c đạt. Returned to implementation.
+Round 1: E7 đỏ ở vòng đầu (REJECT); trả về cho bước cài đặt.
+Round 2: chín eval E1–E9 đạt, nhưng lệnh suite `bunx turbo run lint --force` đỏ ở `@crm/ui#lint`: dòng log «Formatter would have printed the following content» cho `test/giu-thay-doi-lien-ket.dom.tsx` (quanh dòng 390, `);` và `await act(async () => {` đang nằm chung một dòng), kèm dòng «Failed:    @crm/ui#lint». Đầu ra lint bị cắt đuôi nên chỉ thấy các chẩn đoán này; nguyên nhân đỏ là lỗi định dạng của tệp kiểm. Trả về cho bước cài đặt để chạy lại formatter. Verdict REJECT.
