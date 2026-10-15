@@ -129,13 +129,17 @@ evals:
     cmd: config:executors.test.ldbc_khoa_ui
     paths:
       - "apps/app/app/(app)/[slug]/settings/api-keys/**"
-      - "apps/app/lib/messages/**"
+      - "apps/app/lib/messages/settings-khoa-api.ts"
       - "apps/app/test/khoa-api-loai.dom.tsx"
     expected: |
-      khoa-api-loai.dom.tsx describe "day-lo-trinh": mo hop tao khoa voi mock trpc apiKeys.list tra taoDuocDayLoTrinh:
-        1 quan tri: o loai co lua chon «Đẩy lộ trình», chon -> mutation apiKeys.create nhan loai "day-lo-trinh"
-        2 thanh vien: lua chon hien nhung bi khoa, co mot dong noi vi sao (chu rut tu tep loi, khong viet tay)
-      CHIEU DO: ban sao an lua chon voi thanh vien -> dong 2 do voi thong diep ghim "lua chon bien mat thay vi khoa".
+      khoa-api-loai.dom.tsx describe "day-lo-trinh" (vi, en), mock trpc apiKeys theo khuon TH1:
+        1 chu va quan tri: o loai co lua chon «Đẩy lộ trình» (chu rut tu tep loi), chon -> mutation apiKeys.create nhan
+          loai "day-lo-trinh"; hop vua tao hien cau dan dat bi mat CRM_KHOA_DAY_LO_TRINH, khong hien cau cua khoa chi-keo
+        2 thanh vien va chi OKR: khong co lua chon «Đẩy lộ trình» (giu nep da ky cua TH1: o loai khoa chi hien voi quan
+          tri; may chu tu choi 403 o E4)
+        3 danh sach: dong khoa loai day-lo-trinh mang nhan «Chỉ đẩy lộ trình»
+      Ca tvk-man cua TH1 nang tu 2 len 3 lua chon.
+      CHIEU DO: ban sao bo lua chon «Đẩy lộ trình» -> dong 1 do voi thong diep ghim "khong thay muc Day lo trinh".
 
   - id: E6
     criterion: AC-3

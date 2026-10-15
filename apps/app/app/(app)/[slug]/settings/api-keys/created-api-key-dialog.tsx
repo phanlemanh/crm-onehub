@@ -65,6 +65,12 @@ export function CreatedApiKeyDialog({
 					</Alert>
 				) : null}
 
+				{apiKey?.loai === "day-lo-trinh" ? (
+					<Alert data-slot="khoa-day-lo-trinh">
+						<AlertDescription>{t.daTao.dayLoTrinh}</AlertDescription>
+					</Alert>
+				) : null}
+
 				<DialogFooter>
 					<DialogClose asChild dongNgay>
 						<Button>{t.daTao.xong}</Button>

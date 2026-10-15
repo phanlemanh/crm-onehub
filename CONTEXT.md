@@ -1179,6 +1179,14 @@ _Avoid_: khoá máy, khoá dịch vụ, token kéo về
 Vì sao: «khoá máy» và «khoá dịch vụ» không nói khoá được làm gì; tên phải nói đúng việc duy
 nhất khoá làm được.
 
+**Khoá chỉ đẩy lộ trình**: một khoá API chỉ làm được đúng một việc — gửi bản lộ trình mới của
+nhánh chính sang CRM, cho GitHub dùng mỗi lần lộ trình đổi. Khoá không đăng nhập được ở đâu,
+không đọc bản ghi, không tạo hay sửa khoá; chủ sở hữu hoặc quản trị tạo nó ở Cài đặt → Khoá
+API, mục «Khoá dùng để». Chủ khoá thôi làm quản trị thì khoá thôi đẩy được. Đề xuất 2026-10-15
+(LT1c `lo-trinh-doc-ban-chup`).
+_Avoid_: khoá máy, khoá GitHub, token đẩy
+Vì sao: cùng lý do với khoá chỉ kéo tín hiệu — tên nói đúng việc duy nhất khoá làm được.
+
 **Nhánh hàng chờ**: nhánh `tin-hieu/keo-ve` mà lịch chạy kéo tín hiệu dựng lại mỗi lượt —
 nhánh chính cộng một commit chứa mọi tệp tín hiệu chưa gộp — kèm một PR «Tín hiệu kéo về»
 đứng mở. Lịch chạy không gộp; PR đi vào nhánh chính theo lô như mọi PR. Chốt 2026-10-14
