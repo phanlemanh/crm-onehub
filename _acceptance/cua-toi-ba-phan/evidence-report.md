@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: cua-toi-ba-phan
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 82bfe4c848a7179b524b3f51007a19ab45243916
-human_signoff:
+human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_6a944dda-fd4, engine feature-loop 2.30.0). E17 Đạt; Ngoài-1, 3, 5, 10–17, 19, 20 ghi Known limits; Ngoài-2, 4, 6, 7, 8, 18 chấp nhận, không sửa (4, 7, 8 đã sửa qua AC-14); Ngoài-9 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: cua-toi-ba-phan
@@ -263,7 +263,7 @@ Panel đề xuất cho E17 (AC-13, judgment): proposal UNCERTAIN. Ba judge khôn
     - (operational-feasibility) Ảnh bổ sung cua-toi-truong-1440-cuon.png cho thấy phần 3 và thứ tự dưới nếp gập. Ảnh này chỉ chứng minh thứ tự khi cuộn, không thay được yêu cầu «màn đầu, không cuộn».
     - (spec-alignment) Ảnh chụp toàn trang (fullPage) Của tôi của trưởng đơn vị ở 1440 px, trạng thái ST-ctbp-can-cap-nhat, cùng hồ sơ với cua-toi-truong-1440.png, lưu vào _acceptance/cua-toi-ba-phan/evidence/. Ảnh phải cho thấy phần 3 «KR bạn phụ trách» nằm sau thẻ «Đơn vị bạn dẫn», để xác nhận thứ tự 1, 2, 3.
     - (spec-alignment) Chốt trong contract/câu hỏi E17: nếu «màn đầu không cuộn» bắt buộc chứa cả ba phần thì cần ảnh 1440 không cuộn có thẻ «Đơn vị bạn dẫn» đủ nội dung và phần 3 hiện ra. Nếu chỉ yêu cầu thứ tự đọc từ trên xuống thì ghi rõ vào câu hỏi E17 để judge xét theo ảnh fullPage ở mục trên.
-  human_override:  # chi nguoi ghi
+  human_override: manh 2026-10-15 — Đạt: phần cập nhật và nút ở màn đầu là đủ, phần KR phụ trách dưới nếp gập chấp nhận được.
 
 ## Known limits
 

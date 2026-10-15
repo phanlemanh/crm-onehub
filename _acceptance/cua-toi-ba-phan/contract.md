@@ -5,7 +5,7 @@ slug: cua-toi-ba-phan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-15T07:32:55Z
 design_doc: docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md
@@ -85,3 +85,17 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
   trang đo, «5 mô tả khác nhau» và vòng đi-về đổi thẻ. Bản mẫu DH1 (`du-lieu.ts` TAB_MAU, catalog
   `ST-dhk-cap-nhat-tuan`, bảng trạng thái thiết kế DH1) và `rang/proto-khu.mjs` so với `tab-okr.ts`. Sửa các chỗ này
   CHỈ sau khi DH1 gộp; chạm hồ sơ đã ký của DH1 thì đi qua AC-11.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Mã phần «Cần cập nhật tuần này» còn ba dòng chú thích trái quy ước «không viết chú thích» của kho; người dùng không thấy khác biệt.
+  - Ngoài-3: Khi một phần của Của tôi không tải được, khung báo lỗi trông hơi khác kiểu báo lỗi ở phần dưới cùng màn, nhưng vẫn có câu báo và nút thử lại.
+  - Ngoài-5: Nếu sau này đổi tên một lối vào cập nhật tuần, con số tỉ lệ dùng để quyết định có giữ tính năng hay không có thể sai lặng lẽ.
+  - Ngoài-10: Bài kiểm tra tự động có thể báo xanh dù link trong tin nhắc Zalo bị đổi sai, nên một lỗi như vậy có thể lọt qua mà không ai biết.
+  - Ngoài-11: Lời hứa «tin nhắc dẫn đúng về Của tôi» chưa có bài kiểm tra tự động thật sự chạm tới, nên nếu link bị đổi sai thì hệ thống vẫn báo ổn.
+  - Ngoài-12: Bài kiểm tra bảo vệ các hồ sơ cũ có thể báo «đã chứng minh đỏ» dù thật ra chỉ do môi trường thử hỏng, nên độ tin cậy của nó thấp hơn vẻ ngoài.
+  - Ngoài-13: Bài kiểm tra các hồ sơ cũ có thể bỏ sót một bài mà không báo, nên số bài thật sự được chạy có thể ít hơn người đọc tưởng.
+  - Ngoài-14: Nếu ai đó vô tình xoá một lối vào cập nhật tuần, bài kiểm tra tự động vẫn có thể xanh và không cảnh báo.
+  - Ngoài-15: Việc giữ nguyên số đã nhập và hiện nút «Gửi lại» khi gửi cập nhật bị lỗi chưa có bài kiểm tra tự động, nên nếu hỏng thì không ai biết trước.
+  - Ngoài-16: Bài kiểm tra chưa phân biệt được việc thẻ đơn vị lấy theo chu kỳ bạn chọn hay chu kỳ đang chạy, nên một lỗi chọn nhầm chu kỳ có thể lọt qua.
+  - Ngoài-17: Bài kiểm tra «không mục tiêu nào rời khỏi Của tôi» có một phần viết sẵn đáp án, nên chưa chắc bắt được lỗi làm mất mục tiêu khỏi màn.
+  - Ngoài-19: Bài kiểm tra xác nhận lệnh đo không sửa dữ liệu chỉ đếm số dòng, nên nếu lệnh lỡ sửa nội dung một dòng thì vẫn không bị phát hiện.
+  - Ngoài-20: Bài kiểm tra chỉ xác nhận hệ thống có gọi lệnh làm mới sau khi gửi, chưa chứng minh danh sách «Cần cập nhật» thật sự cập nhật lại trên màn.
