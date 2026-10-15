@@ -41,6 +41,8 @@ const thuTucTreo = {
 		queryKey: ["treo", Math.random()],
 		queryFn: () => new Promise(() => {}),
 	}),
+	// Nút «Hỏi Kara» ở đầu hàng hành động dựng useMutation(okr.hoiMo); bài không bấm nó.
+	mutationOptions: () => ({ mutationFn: async () => null }),
 };
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () =>
