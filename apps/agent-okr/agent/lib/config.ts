@@ -217,6 +217,12 @@ export const TRO_LY_OKR_HOI = {
 			"Không thấy Mục tiêu hay KR này trong những gì người hỏi được xem.",
 		cuocKhongThuocPhien: "Cuộc hỏi không thuộc người đang gọi.",
 	},
+	chiDuong: {
+		coCrm:
+			"then point them to Kara in the CRM — the Kara panel on the Thoả thuận, Liên hệ and Công ty pages — which answers about partners, deals and contacts",
+		chiOkr:
+			"then say their workspace role covers OKR only, so partners, deals and contacts are not available to them in OneHub",
+	},
 	loiNop: {
 		trichNgoaiQuyen: (ma: string) =>
 			`Trích ${ma} không phải Mục tiêu hay KR người hỏi được xem, hoặc không tồn tại; đọc lại bằng tim_okr hay doc_okr rồi nộp lại cả câu trả lời.`,
@@ -225,6 +231,8 @@ export const TRO_LY_OKR_HOI = {
 				? `Số ${so} đếm Mục tiêu hay KR không bằng số thứ câu đó trích; sửa số hoặc trích đủ rồi nộp lại.`
 				: `Số ${so} không khớp tiến độ, khởi điểm, hiện tại, đích hay kỳ vọng của thứ câu đó trích; dùng đúng số đã đọc hoặc bỏ số rồi nộp lại.`,
 		traLoiRong: "Câu trả lời loại tra-loi cần ít nhất một câu.",
+		ngoaiPhamViRong:
+			"Câu trả lời loại ngoai-pham-vi cần ít nhất một câu nói vì sao Kara ở đây không làm việc đó và chỉ đường; nộp lại cả câu trả lời.",
 		cauKhongTrich: (thu: number) =>
 			`Câu ${thu} không trích Mục tiêu hay KR nào; mỗi câu của loại tra-loi trích thứ nó nói tới, hoặc bỏ câu đó rồi nộp lại.`,
 	},

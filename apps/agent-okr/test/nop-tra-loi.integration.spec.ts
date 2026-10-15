@@ -8,6 +8,7 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import type { NopTraLoiInput } from "@crm/validation/okr-tra-loi";
+import { TRO_LY_OKR_HOI } from "../agent/lib/config";
 import type { NguCanhPhien } from "../agent/lib/phien";
 import nopTraLoi from "../agent/tools/nop_tra_loi";
 import { boMau } from "./support/bo-mau";
@@ -237,5 +238,25 @@ describe("hdo nop tra loi", () => {
 			phien(THANH_VIEN),
 		);
 		expect(khongBiet.ok).toBe(true);
+	});
+
+	test("ngoai-pham-vi khong cau nao bi tu choi vi nguoi doc se khong thay loi chi duong", async () => {
+		const rong = await nop.execute(
+			{ loai: "ngoai-pham-vi", cauHoi: "Liệt kê deals của công ty", cau: [] },
+			phien(THANH_VIEN),
+		);
+		expect(rong.ok).toBe(false);
+		expect(rong.reason).toBe(TRO_LY_OKR_HOI.loiNop.ngoaiPhamViRong);
+		const coCau = await nop.execute(
+			{
+				loai: "ngoai-pham-vi",
+				cauHoi: "Liệt kê deals của công ty",
+				cau: [
+					{ chu: "Kara ở đây chỉ đọc OKR; hãy hỏi Kara của CRM.", trich: [] },
+				],
+			},
+			phien(THANH_VIEN),
+		);
+		expect(coCau.ok).toBe(true);
 	});
 });

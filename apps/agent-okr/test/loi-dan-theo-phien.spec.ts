@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import loiDanHoi from "../agent/instructions/dan-hoi";
 import loiDanSoan from "../agent/instructions/dan-soan";
+import { TRO_LY_OKR_HOI } from "../agent/lib/config";
 import { LOI_DAN_SOAN } from "../agent/lib/loi-dan-soan";
 
 type NguCanhBatDau = {
@@ -25,7 +26,7 @@ type ChayPhien = (
 
 type LoiDanDong = typeof loiDanHoi;
 
-const chay = (mod: LoiDanDong, purpose: string) => {
+const chay = (mod: LoiDanDong, purpose: string, vai = "member") => {
 	const ham = (mod as unknown as { events: { "session.started": ChayPhien } })
 		.events["session.started"];
 	return ham(
@@ -38,8 +39,8 @@ const chay = (mod: LoiDanDong, purpose: string) => {
 						principalId: "nguoi-1",
 						attributes:
 							purpose === "okr-soan"
-								? { purpose, cuocSoanId: "cuoc-1", vai: "member" }
-								: { purpose, cuocHoiId: "cuoc-1", vai: "member" },
+								? { purpose, cuocSoanId: "cuoc-1", vai }
+								: { purpose, cuocHoiId: "cuoc-1", vai },
 					},
 					current: null,
 				},
@@ -69,5 +70,16 @@ describe("hdo loi dan theo phien", () => {
 		expect(hoi).toContain("nop_tra_loi");
 		expect(hoi).not.toContain(MOC_SOAN);
 		expect(hoi).not.toContain("nop_ban_nhap");
+	});
+
+	test("okr-hoi: vai vao duoc CRM thi chi duong sang Kara cua CRM; vai chi OKR thi khong", async () => {
+		for (const vai of ["owner", "admin", "member"]) {
+			const hoi = (await chay(loiDanHoi, "okr-hoi", vai))?.markdown ?? "";
+			expect(hoi, vai).toContain(TRO_LY_OKR_HOI.chiDuong.coCrm);
+			expect(hoi, vai).not.toContain(TRO_LY_OKR_HOI.chiDuong.chiOkr);
+		}
+		const okr = (await chay(loiDanHoi, "okr-hoi", "okr"))?.markdown ?? "";
+		expect(okr).toContain(TRO_LY_OKR_HOI.chiDuong.chiOkr);
+		expect(okr).not.toContain(TRO_LY_OKR_HOI.chiDuong.coCrm);
 	});
 });

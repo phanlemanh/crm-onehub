@@ -19,6 +19,7 @@ import {
 } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
 import { chamCau, docPhieu, NGUONG, tongHop } from "./cham-hoi.mjs";
 import { taoModelPhieu } from "./model-phieu.mjs";
+import { VAI_CHI_OKR } from "../../../packages/validation/src/vai-workspace.ts";
 import {
 	chepSangEvidence,
 	chuCuaPhien,
@@ -62,7 +63,36 @@ async function anhChup(ca, traLoi, userId) {
 		const kq = await docOkr(userId, { loai: "objective", id });
 		if (kq.ok) doc.push(kq.mucTieu);
 	}
-	if (doc.length > 0) return { mucTieuNguoiHoiDocDuoc: doc };
+	const chu = await db.okrObjective.findMany({
+		where: { id: { in: doc.map((m) => m.id) } },
+		select: {
+			id: true,
+			ownerUserId: true,
+			owner: { select: { name: true } },
+			personUserId: true,
+			person: { select: { name: true } },
+			keyResults: {
+				select: { id: true, ownerUserId: true, owner: { select: { name: true } } },
+			},
+		},
+	});
+	const chuCua = new Map(chu.map((c) => [c.id, c]));
+	const coChu = doc.map((m) => {
+		const c = chuCua.get(m.id);
+		const krChu = new Map((c?.keyResults ?? []).map((k) => [k.id, k]));
+		return {
+			...m,
+			nguoiPhuTrach: c?.owner.name ?? null,
+			nguoiThucHien: c?.person?.name ?? null,
+			laCuaNguoiHoi: c?.ownerUserId === userId || c?.personUserId === userId,
+			kr: m.kr.map((k) => ({
+				...k,
+				nguoiPhuTrach: krChu.get(k.id)?.owner.name ?? null,
+				laCuaNguoiHoi: krChu.get(k.id)?.ownerUserId === userId,
+			})),
+		};
+	});
+	if (coChu.length > 0) return { mucTieuNguoiHoiDocDuoc: coChu };
 	const tim = await timOkr(userId, {});
 	return {
 		khongTrich: true,
@@ -75,16 +105,37 @@ async function anhChup(ca, traLoi, userId) {
 	};
 }
 
-async function phieuHoiDong(ca, traLoi, anh) {
-	const model = taoModelPhieu();
-	const prompt = [
+const SO_DONG_TIEU_CHI = 5;
+const TIEU_CHI = (vai) =>
+	loiNhacCham(
+		{ cauHoi: "", kyVong: { loai: "", trichBatBuoc: [] } },
+		null,
+		{},
+		vai,
+	)
+		.split("\n")
+		.slice(0, SO_DONG_TIEU_CHI);
+
+export function loiNhacCham(ca, traLoi, anh, vai) {
+	const coCrm = vai !== VAI_CHI_OKR;
+	return [
 		'Bạn chấm một câu trả lời của trợ lý OKR. Chỉ trả về đúng một dòng JSON {"dungY": true|false, "lyDo": "<một câu>"}.',
-		"«Đúng ý» nghĩa là: trả lời đúng điều được hỏi, không lạc đề, không né khi dữ liệu có, không bịa điều dữ liệu không có. Câu xin sửa OKR hay hỏi ngoài OKR được trả lời bằng lời từ chối có chỉ đường là đúng ý.",
+		"«Đúng ý» nghĩa là: trả lời đúng điều được hỏi, không lạc đề, không né khi dữ liệu có, không bịa điều dữ liệu không có.",
+		"Câu trả lời phải nói về đúng Mục tiêu hay KR mà câu hỏi nhắm tới. Nếu đề bài khai «trích bắt buộc», câu trả lời không nói về các mục đó (dù nói đúng về mục khác) là KHÔNG đúng ý.",
+		`Câu xin tạo, sửa hay xoá OKR: đúng ý khi từ chối và nói làm ở đâu (khung Mục tiêu, hoặc Soạn OKR cho trưởng đơn vị). Câu hỏi ngoài OKR (đối tác, thoả thuận, liên hệ): ${coCrm ? "đúng ý chỉ khi nói Kara ở đây chỉ đọc OKR VÀ chỉ đường sang Kara của CRM; chỉ nói «chỉ hỗ trợ OKR» mà không chỉ đường là KHÔNG đúng ý" : "người hỏi có vai chỉ OKR, nên đúng ý khi nói Kara ở đây chỉ đọc OKR và vai của họ không có dữ liệu đó; không được chỉ sang CRM"}. Câu trả lời không có câu nào là KHÔNG đúng ý.`,
+		"Câu nói «của bạn», «bạn phụ trách» chỉ đúng khi dữ liệu ghi laCuaNguoiHoi = true cho đúng các mục đó.",
 		`Câu hỏi: ${ca.cauHoi}`,
+		`Vai của người hỏi trong workspace: ${vai ?? "không rõ"}`,
 		`Loại câu trả lời kỳ vọng: ${ca.kyVong.loai}`,
+		`Trích bắt buộc đã khai: ${ca.kyVong.trichBatBuoc.length ? ca.kyVong.trichBatBuoc.map((t) => idCua(t.loai, t.ma)).join(", ") : "không có"}`,
 		`Dữ liệu thật mà trợ lý đọc được qua công cụ, theo quyền của người hỏi (tienDo, kyVong là phần trăm; tinhTrang là tình trạng; loai là cam-ket hay tham-vong; capNhat là cập nhật tuần với giaTri và tuTin): ${JSON.stringify(anh)}`,
 		`Câu trả lời: ${JSON.stringify(traLoi)}`,
 	].join("\n");
+}
+
+async function phieuHoiDong(ca, traLoi, anh, vai) {
+	const model = taoModelPhieu();
+	const prompt = loiNhacCham(ca, traLoi, anh, vai);
 	const phieu = [];
 	for (let i = 0; i < SO_PHIEU; i++) {
 		try {
@@ -126,7 +177,14 @@ async function chamMot(ca, moi) {
 		idCua,
 	});
 	const anh = await anhChup(ca, kq.traLoi, nguoi.id);
-	const phieu = await phieuHoiDong(ca, kq.traLoi, anh);
+	const vai =
+		(
+			await db.member.findFirst({
+				where: { userId: nguoi.id },
+				select: { role: true },
+			})
+		)?.role ?? null;
+	const phieu = await phieuHoiDong(ca, kq.traLoi, anh, vai);
 	const dungY = phieu.filter((p) => p.dungY).length * 2 > phieu.length;
 	return {
 		ma: ca.ma,
@@ -135,6 +193,7 @@ async function chamMot(ca, moi) {
 		dungY,
 		phieu,
 		anh,
+		vai,
 		traLoi: kq.traLoi,
 		congCu: kq.congCu,
 	};
@@ -146,6 +205,7 @@ function bang(ket, tong) {
 		[
 			k.ma,
 			k.ca.nguoiHoi,
+			k.vai ?? "",
 			k.ca.yDinh,
 			o(k.ca.cauHoi),
 			o(JSON.stringify(k.ca.kyVong)),
@@ -166,8 +226,18 @@ function bang(ket, tong) {
 		"",
 		`**Tổng:** ${tong.dong.split("\n")[0]}`,
 		"",
-		"| Mã | Người hỏi | Ý định | Câu hỏi | Kỳ vọng | Dữ liệu thật | Câu trả lời dựng | Quyền | Trích và số | Phiếu hội đồng | Lý do |",
-		"|---|---|---|---|---|---|---|---|---|---|---|",
+		"## Lời nhắc chấm đúng ý (phần chung, chép từ loiNhacCham)",
+		"",
+		"Vai vào được CRM:",
+		"",
+		...TIEU_CHI("member").map((d) => `> ${d}`),
+		"",
+		"Vai chỉ OKR:",
+		"",
+		...TIEU_CHI(VAI_CHI_OKR).map((d) => `> ${d}`),
+		"",
+		"| Mã | Người hỏi | Vai | Ý định | Câu hỏi | Kỳ vọng | Dữ liệu thật | Câu trả lời dựng | Quyền | Trích và số | Phiếu hội đồng | Lý do |",
+		"|---|---|---|---|---|---|---|---|---|---|---|---|",
 		...dong.map((d) => `| ${d} |`),
 		"",
 	].join("\n");

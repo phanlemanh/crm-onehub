@@ -318,18 +318,9 @@ describe("hdo cua hoi", () => {
 			select: { tinhNang: true },
 		});
 		expect(hang).toEqual([{ tinhNang: OKR_HOI_TRAN.tinhNang }]);
+		const cuocTran = (await taoCuocHoi(db, NGUOI.member)).id;
 		const truoc = daChuyen.length;
-		const thang = await goi(
-			[
-				"session",
-				(
-					await db.okrCuocHoi.findUniqueOrThrow({
-						where: { id: cuoc.member ?? "" },
-					})
-				).sessionId,
-			],
-			hdrHoi(cuoc.member ?? ""),
-		);
+		const thang = await goi(["session"], hdrHoi(cuocTran));
 		expect({ status: thang.status, ma: await loiCua(thang) }).toEqual({
 			status: 429,
 			ma: "het-tran-thang",

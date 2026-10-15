@@ -64,5 +64,7 @@ export async function nopTraLoi(
 	}
 	if (input.loai === "tra-loi" && cau.length === 0)
 		return { ok: false, reason: LOI.traLoiRong };
+	if (input.loai === "ngoai-pham-vi" && cau.length === 0)
+		return { ok: false, reason: LOI.ngoaiPhamViRong };
 	return { ok: true, traLoi: { loai: input.loai, cau } };
 }

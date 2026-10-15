@@ -15,7 +15,7 @@ import { HoiService } from "../src/okr/hoi.service";
 const T = `hluot${(process.env.TEST_RUN_ID ?? "x").slice(0, 8)}`;
 const A = `${T}-a`;
 const B = `${T}-b`;
-const MOC = new Date("2026-10-14T09:00:00+07:00");
+const MOC = new Date("2031-02-12T09:00:00+07:00");
 const hoi = new HoiService(db);
 
 async function don() {
@@ -23,7 +23,6 @@ async function don() {
 	await db.okrCuocHoi.deleteMany({
 		where: { nguoiHoiUserId: { startsWith: T } },
 	});
-	await db.aiChiPhi.deleteMany({ where: { tinhNang: OKR_HOI_TRAN.tinhNang } });
 	await db.aiChiPhi.deleteMany({ where: { id: { startsWith: T } } });
 }
 
@@ -126,12 +125,9 @@ describe("hdo tran luot", () => {
 
 	test("cham tran thang thi het-tran-thang; thang truoc khong tinh", async () => {
 		setSystemTime(MOC);
-		await db.aiChiPhi.deleteMany({
-			where: { tinhNang: OKR_HOI_TRAN.tinhNang },
-		});
 		await ghiBuoc(
 			"thang-truoc",
-			new Date("2026-09-30T12:00:00+07:00"),
+			new Date("2031-01-31T12:00:00+07:00"),
 			OKR_HOI_TRAN.usdMoiThang * 3,
 		);
 		const { cuocHoiId } = await hoi.mo(B);
