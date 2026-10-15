@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: a7702a31d39cdd1eb25f777695f82c860f8e3df1
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-16 — ký Cổng 2 trên S4 lượt 3 (9/9 eval đạt, 7/7 suite xanh), ghim lại ở đầu nhánh sau gộp onehub; đồng ý phần cắt/hoãn; phê hết các quyết định Treo (Treo-1…Treo-7).
 ---
 
 # Evidence Report: khung-soan-chan-lien-ket
