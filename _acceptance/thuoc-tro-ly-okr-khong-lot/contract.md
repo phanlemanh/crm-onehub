@@ -5,7 +5,7 @@ slug: thuoc-tro-ly-okr-khong-lot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-thuoc-tro-ly-okr-khong-lot-design.md
@@ -41,3 +41,7 @@ tên kho × {cây A, cây B, tên cũ} → AC-3. `[CE chưa kiểm chứng]`
 
 - Ghim lại hồ sơ `tro-ly-okr-de-xuat` trong cùng PR (cham-tep P0-6); làn ghim gọi model thật ở E22, E24.
 - `bo-ca-mau-quy-4` cũng dùng `taoKho` — kho của nó cũng theo cây sau vòng này.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Khi phép đo độ trễ không đọc được nhật ký của trợ lý, câu «không đo được» vẫn ghi «không có dòng lỗi model», nên người xem có thể tưởng nhật ký sạch; kết luận «không đo được» vẫn đúng.
+  - Ngoài-2: Thẻ Cổng Phạm vi viết «mỗi máy» có kho đo riêng; thật ra kho đo tách theo từng bản làm việc (worktree), và hai bản cùng tên trên hai máy khác nhau vẫn chung một tên kho.
+  - Ngoài-3: Cùng giới hạn với Ngoài-1, do một tác tử soát khác tìm ra: «nhật ký sạch» và «chưa đọc được nhật ký» in ra cùng một câu.
