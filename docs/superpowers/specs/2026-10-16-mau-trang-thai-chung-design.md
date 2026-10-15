@@ -43,6 +43,7 @@ nghĩa nào trong bảng; mỗi khu tự chọn `neutral` hoặc `warning`.
    Bản mẫu `/proto` và màu chọn tại chỗ trong JSX (`tone={tre ? "error" : "neutral"}`) nằm ngoài bài canh.
 4. **Phạm vi 13 khu** (Hỏi-1). Lối khác: năm khu như ghi chú hàng, tám khu còn lại vào danh sách miễn của bài canh.
 5. `docs/design.md` thôi câu «Năm khu cũ còn tự khai…» và nói bài canh giữ luật «một bảng».
+6. **Nhãn `Badge` và màu chọn tại chỗ** (Hỏi-4): khuyên để ngoài vòng này, ghi thành hàng sau. Nhãn `Badge` là chữ có viền, không phải chấm, và chưa có bảng biến thể theo nghĩa; màu chọn tại chỗ là một điều kiện, không phải bảng trạng thái. Lối khác: đưa cả hai vào vòng này — vòng thêm một bảng nghĩa → biến thể `Badge` và sửa chừng ba mươi chỗ JSX.
 
 ### Bảng ánh xạ từng trạng thái (Hỏi-3)
 
@@ -67,16 +68,19 @@ Cột «Đổi màu» là thứ người dùng sẽ thấy khác. Dòng **đậm
 | #10 | chưa chạy · đang chạy · đã đóng | nháp · đang chạy · đã kết thúc | neutral · success → info · neutral | có (đang chạy) |
 | #10 | **đã lưu trữ · đã xoá** | **đã kết thúc** | warning → neutral | có |
 | #11 | đang chạy · **trong hàng đợi** · lỗi | đang chạy · **đang chạy** · hỏng | primary → info · neutral → info · error | có |
-| #12 | **chờ** · đang chạy · xong · lỗi · bỏ qua · **trong hàng đợi** | **nháp** · đang chạy · xong · hỏng · đã kết thúc · **đang chạy** | neutral · info · success · error · neutral · neutral → info | có (hàng đợi) |
+| #12 | **chờ** · đang chạy · xong · lỗi · bỏ qua · **trong hàng đợi** | **đang chạy** · đang chạy · xong · hỏng · đã kết thúc · **đang chạy** | neutral → info · info · success · error · neutral · neutral → info | có (chờ, hàng đợi) |
 | #13 | đang mở · thắng · thua | đang chạy · xong · hỏng | như cũ | không |
 
-Ba nhóm còn tranh cãi:
+Mọi dòng đổi màu và mọi dòng in đậm (Hỏi-3 hỏi chung cả bảng, mỗi dòng một khuyến nghị):
 
-- **Việc máy đang xếp hàng** (#5 chờ đọc/chờ soạn, #11 và #12 trong hàng đợi): khuyên «đang chạy» — máy đang lo,
-  người không phải làm gì; «chờ» (vàng) đọc thành «người phải làm gì đó».
-- **Độ tự tin thấp** (#1, #6): khuyên giữ «hỏng» (đỏ) — đổi sang «chờ» thì vừa và thấp cùng một màu.
-- **Liên kết trỏ việc đã lưu trữ hay đã xoá** (#10), **«qua bộ kiểm, chỉ quản trị thấy»** (#8), **«lập kế hoạch»** (#9):
-  khuyên như bảng — kết thúc, chờ, nháp.
+| Dòng | Khuyến nghị | Lối khác — giá |
+| --- | --- | --- |
+| Việc máy đang xếp hàng hay chờ máy làm (#5 chờ đọc, chờ soạn; #11 trong hàng đợi; #12 chờ, trong hàng đợi) | đang chạy (xanh dương) — máy đang lo, người không phải làm gì | chờ (vàng) — người đọc thành «phải làm gì đó» |
+| Đang soạn (#5, #7, #8), đang chạy (#9, #10, #11) | đang chạy (xanh dương) — đúng chữ của bảng | giữ màu từng khu — cùng nghĩa bốn màu, đúng điều câu giao muốn bỏ |
+| Độ tự tin thấp (#1, #6) | hỏng (đỏ) — giữ màu hôm nay | chờ (vàng) — vừa và thấp cùng một màu |
+| Liên kết trỏ việc đã lưu trữ, đã xoá (#10) | đã kết thúc (xám) | chờ (vàng) — nhắc người gỡ liên kết, nhưng không có nút gỡ ở đó |
+| Qua bộ kiểm, chỉ quản trị thấy (#8) | chờ (vàng) — chờ quản trị cho hiện | đang chạy (xanh dương, như hôm nay) — đọc như máy còn đang làm |
+| Lập kế hoạch (#9) | nháp (xám) — chu kỳ chưa bắt đầu | đang chạy (xanh dương, như hôm nay) — lẫn với pha đang chạy |
 
 Phương án loại: (a) đổi bảng nghĩa theo màu đang dùng của từng khu — trái câu giao «cùng nghĩa cùng màu»; (b) thêm
 nghĩa «đang xếp hàng» riêng — thêm một màu thứ sáu mà người dùng phải học, trong khi với họ hàng đợi và đang chạy là
@@ -124,17 +128,22 @@ Khuôn IA: không đổi — vòng chỉ đổi giá trị màu, không đổi c
 
 ## Đo
 
-- Bài quét mã nguồn (bài canh): không tệp nào ngoài `status-tone.ts` khai bảng trạng thái → `StatusTone`; chiều đỏ
-  cấy một bảng vào bản sao.
+- Bài quét mã nguồn (bài canh) bằng cây cú pháp TypeScript: trong tệp dùng `StatusIndicator`/`IndicatorDot`, một chuỗi
+  màu (`success`, `warning`, `error`, `neutral`, `info`, `primary`) chỉ được đứng ở thuộc tính JSX `tone` (màu chọn tại
+  chỗ, ngoài phạm vi) — đứng ở giá trị đối tượng, `return`, `case`, `Map` là vi phạm. Trong 13 tệp khu thì không chuỗi
+  màu nào được phép, kể cả ở thuộc tính JSX. Đối chứng dương cho từng dạng; chiều đỏ cấy một bảng vào bản sao.
 - Bài bảng ánh xạ: mỗi khu xuất bảng nghĩa của mình; ma trận viết trước theo bảng trên (mọi trạng thái của 13 khu)
   so `toneTheoNghia(nghia)` với màu kỳ vọng; đếm đủ số ô.
 - Bài DOM: dựng bốn thành phần dùng chung (`OkrConfidence`/`OkrPace`, `KaraSteps`, `AttendeeList`) và màn Tài liệu ›
   Nguồn với mỗi trạng thái, đọc `data-tone` thật trên DOM.
 - Bài bảng thiết kế: `status-tone.spec.ts` có sẵn — bảng nghĩa và `docs/design.md` cùng sáu dòng.
+- Bàn đo màn thật (phiên đo riêng): Cài đặt OKR › chu kỳ với ba chu kỳ ở ba pha (lập kế hoạch, đang chạy, đã đóng)
+  dựng qua service; đọc `data-tone` của chấm từng pha ở 1280 và chụp. Trạng thái chóng qua (hàng đợi, đang soạn) chỉ đo
+  bằng bài DOM — tác nhân tạo chúng và chúng không đứng yên đủ lâu để chụp.
 
 ## Ngoài phạm vi
 
 - Bản mẫu dưới `/proto` — vật thiết kế, không lên màn thật.
-- Màu chọn tại chỗ trong JSX theo một điều kiện (`dong-buoc.tsx`, `hop-tuan.tsx`, `cham-diem.tsx`…) — không phải
-  bảng trạng thái; đưa về nghĩa là một hàng sau nếu cần.
-- Biến thể `Badge` của nhãn trạng thái (`BIEN_THE_TRANG_THAI` ở `tien-do-kr.tsx`) — nhãn chữ, không phải chấm.
+- Màu chọn tại chỗ trong JSX theo một điều kiện (`dong-buoc.tsx`, `hop-tuan.tsx`, `cham-diem.tsx`…), ngoài 13 tệp khu
+  — theo Hỏi-4.
+- Biến thể `Badge` của nhãn trạng thái (`BIEN_THE_TRANG_THAI` ở `tien-do-kr.tsx`) — theo Hỏi-4.

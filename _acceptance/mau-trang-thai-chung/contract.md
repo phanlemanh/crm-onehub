@@ -25,14 +25,20 @@ Source input: hàng NM3 (`cau_giao`, `ghi_chu`) · `opportunity.md` · `docs/des
   chạy, đã kết thúc — và «đã kết thúc» mang `neutral`; And mục «Màu trạng thái» của `docs/design.md` có đúng sáu dòng
   khớp từng nghĩa và màu.
 - AC-2: Given mã nguồn `apps/app` và `packages/ui/src` (trừ bản mẫu `/proto`, bài kiểm, `status-tone.ts` và
-  `status-indicator.tsx`), When quét mọi tệp `.ts` và `.tsx`, Then không tệp nào khai một bảng hay hàm ánh xạ trạng thái
-  sang `StatusTone` (`Record<…, StatusTone>`, thuộc tính `tone: "<màu>"` trong một bảng); When một tệp như vậy được
-  thêm, Then bài quét đỏ và gọi tên tệp.
+  `status-indicator.tsx`), When quét cây cú pháp mọi tệp `.ts`/`.tsx` có dùng `StatusIndicator` hay `IndicatorDot`, Then
+  không chuỗi màu trạng thái nào (`success`, `warning`, `error`, `neutral`, `info`, `primary`) đứng ở giá trị đối tượng,
+  `return`, nhánh `case` hay `Map` — dạng bảng hay hàm ánh xạ trạng thái sang màu; When một tệp như vậy được thêm, ở bất
+  kỳ dạng nào trong bốn dạng, Then bài quét đỏ và gọi tên tệp.
 - AC-3: Given 13 khu ở bảng «Hiện trạng» của design doc, When đọc bảng nghĩa mà mỗi khu khai, Then mọi trạng thái của
-  khu mang đúng nghĩa ở bảng ánh xạ của design doc, và màu hiển thị bằng `toneTheoNghia(nghĩa)`.
+  khu mang đúng nghĩa ở bảng ánh xạ của design doc, và màu hiển thị bằng `toneTheoNghia(nghĩa)`; And trong 13 tệp khu
+  không chỗ nào truyền màu trạng thái bằng chuỗi, kể cả ở thuộc tính JSX `tone`.
 - AC-4: Given các thành phần vẽ chấm trạng thái — độ tự tin và nhịp OKR, các bước của Kara, danh sách người dự họp,
   bảng nguồn của Tài liệu — When dựng mỗi thành phần với từng trạng thái của nó, Then chấm trên trang mang `data-tone`
   bằng màu của nghĩa ở bảng ánh xạ.
+- AC-6: Given bản dựng thật của cây chạy trong phiên đo, có ba chu kỳ OKR ở ba pha — lập kế hoạch, đang chạy, đã đóng —
+  dựng qua service, When mở Cài đặt OKR › chu kỳ ở 1280, Then chấm của mỗi pha mang `data-tone` bằng màu của nghĩa ở
+  bảng ánh xạ (nháp → `neutral`, đang chạy → `info`, đã kết thúc → `neutral`), và người xem thấy pha đang chạy màu xanh
+  dương như mọi «đang chạy» khác.
 - AC-5: Given mục «Màu trạng thái» của `docs/design.md`, When đọc mục, Then không còn câu «Năm khu cũ còn tự khai» và có
   câu nói bài quét ở AC-2 giữ luật một bảng.
 
@@ -44,16 +50,19 @@ Quét theo khuôn test-matrix của `morphological-scan`.
   f46c0bbda, trừ `/proto` và bài kiểm]
 - Trục nghĩa: xong | chờ | hỏng | nháp | đang chạy | đã kết thúc [thước CE: mục «Màu trạng thái» của `docs/design.md`
   cộng nghĩa mới của Hỏi-2]
-- Trục lớp đo: bảng nghĩa của khu (AC-3) | chấm trên DOM (AC-4) | luật một bảng trên mã nguồn (AC-2) | luật trên tài
-  liệu (AC-1, AC-5)
-- Core: mọi trạng thái × 13 khu (AC-3); năm thành phần vẽ chấm × mọi trạng thái của nó (AC-4); quét mã nguồn (AC-2).
+- Trục lớp đo: bảng nghĩa của khu (AC-3) | chấm trên DOM (AC-4) | màn thật (AC-6) | luật một bảng trên mã nguồn
+  (AC-2) | luật trên tài liệu (AC-1, AC-5)
+- Core: mọi trạng thái × 13 khu (AC-3); năm thành phần vẽ chấm × mọi trạng thái của nó (AC-4); quét mã nguồn bốn
+  dạng (AC-2); ba pha chu kỳ trên màn thật (AC-6).
+- Trạng thái chóng qua (hàng đợi, đang soạn) chỉ đo ở DOM — tác nhân tạo chúng và chúng không đứng yên để chụp.
 - Later: màu chọn tại chỗ trong JSX theo điều kiện; biến thể `Badge` của nhãn trạng thái.
 
 ## Out of scope
 
 - Bản mẫu dưới `/proto` — vật thiết kế, không lên màn thật.
-- Màu chọn tại chỗ trong JSX theo một điều kiện (`dong-buoc.tsx`, `hop-tuan.tsx`, `cham-diem.tsx`…).
-- Biến thể `Badge` của nhãn trạng thái (`BIEN_THE_TRANG_THAI` ở `tien-do-kr.tsx`).
+- Màu chọn tại chỗ trong JSX theo một điều kiện, ngoài 13 tệp khu (`dong-buoc.tsx`, `hop-tuan.tsx`, `cham-diem.tsx`…)
+  — theo Hỏi-4.
+- Biến thể `Badge` của nhãn trạng thái (`BIEN_THE_TRANG_THAI` ở `tien-do-kr.tsx`) — theo Hỏi-4.
 
 ## Đường đo
 
