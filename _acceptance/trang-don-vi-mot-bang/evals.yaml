@@ -87,7 +87,7 @@ evals:
       [data-hang-muc-tieu] dau tien: dong "MAU 390: <k> mau · cay toi da <c> · o chon toi da <o> · dinh o chon
       lech <px> · vong quay toan trang <v>". DUNG khi c = 0 ([data-nut-cay] va [role=tree]), o <= 1, lech
       <= 1, v = 0, va co [data-slot=skeleton] trong mau dang tai. Anh dang-tai-390.png.
-      CHIEU DO (DVB_PHA=cay-cu: ban sao dung lai CayDonVi voi useKhoHep) -> "SAI AC-8: cay toi da 20 dong
+      CHIEU DO (DVB_PHA=cay-cu: ban sao dung lai CayDonVi voi useKhoHep) -> "SAI AC-8: cay toi da <n> dong
       luc dang tai", ma 1.
 
   - id: E5
