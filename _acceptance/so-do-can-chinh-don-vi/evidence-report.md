@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 423e01a156af9e487014cbac8c3a14db783236f9
-human_signoff:
+human_signoff: manh 2026-10-15
 ---
 
 # Evidence Report: so-do-can-chinh-don-vi

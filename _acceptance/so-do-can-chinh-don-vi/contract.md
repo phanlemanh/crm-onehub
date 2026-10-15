@@ -5,7 +5,7 @@ slug: so-do-can-chinh-don-vi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-so-do-can-chinh-don-vi-design.md
@@ -128,3 +128,22 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 15/10. 
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/design.md`, `docs/reui.md`, `docs/ai-ux.md`.
 - Hạng T3 do mốc m-1021dh tính DH4 là T3 (thêm React Flow + dagre, chạm `packages/ui`); hạng máy suy theo
   `t3_paths` là T2.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Thẻ bằng chứng còn một đoạn nói kiểm tra chạy lại các bài đã ký vẫn đang hoạt động, trong khi ngay phía trên đã ghi là kiểm tra này bị gỡ.
+  - Ngoài-2: Một kiểm tra phụ chạy lại các bài đã ký bỏ sót những trang có đường dẫn dạng thư mục động, nhưng kiểm tra này đã được gỡ khỏi bộ nghiệm thu của lần ship này.
+  - Ngoài-3: Bước kiểm tra xem vòng này có làm hỏng các hồ sơ đã ký trước đó có thể bỏ sót một lỗi thật: nó coi mọi trường hợp bản gốc cũng lỗi là «lỗi sẵn có», kể cả khi bản gốc lỗi vì lý do khác.
+  - Ngoài-4: Bước kiểm tra hồ sơ cũ có thể nhầm một lỗi thật thành «đã lỗi từ trước» chỉ vì bản đối chiếu cũng chạy lỗi vì lý do không liên quan.
+  - Ngoài-5: Phép so sánh với «bản trước khi sửa» thực ra vẫn dùng một phần mã mới, nên có thể che đi việc vòng này làm hỏng một tính năng cũ ở các màn dùng chung.
+  - Ngoài-6: Người dùng trình đọc màn hình có thể nghe «nhấn Enter để mở thẻ» ở một điểm dừng mà bấm Enter chỉ chọn thẻ chứ không mở ra.
+  - Ngoài-7: Phép kiểm tra hồ sơ cũ có thể báo «lỗi sẵn có» cả khi bản đối chiếu hỏng vì lý do khác, mà không có bước xác nhận bản đối chiếu chạy được.
+  - Ngoài-9: Quản trị viên chuyển từ Bảng sang Sơ đồ có thể thấy số mục tiêu và tiến độ của một đơn vị khác với con số ở Bảng, và hai người xem khác quyền có thể thấy hai con số khác nhau.
+  - Ngoài-10: Tiến độ trung bình của một đơn vị có thể lệch vài điểm phần trăm giữa Bảng và Sơ đồ do làm tròn khác nhau, và sau này sửa một chỗ dễ quên chỗ kia.
+  - Ngoài-11: Người dùng thấy thẻ đơn vị bình thường, nhưng giao diện được dựng lệch quy ước chung nên sau này chỉnh kiểu thẻ phải sửa ở hai nơi và có một thành phần thừa không ai dùng.
+  - Ngoài-15: Khi một mục tiêu nối tới đơn vị đã bị đổi hoặc gỡ khỏi cây, thẻ có thể không hiện đường đi lên mà cũng không có nhãn «Chưa nối lên», và dòng trong thẻ mở ra có thể ghi «Chưa góp vào đâu» trong khi số đếm nói khác.
+  - Ngoài-16: Một bài kiểm tra đối chiếu mức tin và lý do giữa sơ đồ và cây căn chỉnh có thể báo xanh dù sơ đồ dư thêm một dòng góp; người dùng chưa thấy lỗi nhưng độ tin của bài kiểm giảm.
+  - Ngoài-17: Bài kiểm tra chưa bắt được trường hợp sơ đồ bỏ sót một mục tiêu mà người xem lẽ ra thấy, nên nếu có lỗi kiểu đó, người dùng sẽ thấy thiếu mục tiêu mà không ai báo trước.
+  - Ngoài-18: Bài kiểm tra có thể báo xanh dù sơ đồ không vẽ đường nối nào, nên nếu đường nối biến mất sau này thì không có bài nào kêu.
+  - Ngoài-19: Bài kiểm tra bộ lọc «Cần chú ý» có thể vẫn xanh nếu bộ lọc xoá hẳn các thẻ thay vì làm mờ, nên lỗi kiểu này có thể lọt tới người dùng.
+  - Ngoài-20: Bài kiểm tra chưa chắc chắn rằng Bảng vẫn hiện ra khi đường dẫn mang giá trị lạ, nên nếu trang trống trong ca đó thì không bài nào báo.
+  - Ngoài-21: Bài kiểm tra chưa chứng minh ba nút thu phóng có nhãn đọc được và chuyển động đã tắt thật khi người dùng chọn giảm chuyển động; nếu hỏng, người dùng đọc màn hình hoặc nhạy chuyển động sẽ gặp trước.
+  - Ngoài-23: Các bài kiểm tra giao diện dùng dữ liệu dựng tay chứ không phải dữ liệu thật từ máy chủ, nên nếu hình dạng dữ liệu thật đổi, sơ đồ có thể sai trên màn mà bài kiểm vẫn xanh.
