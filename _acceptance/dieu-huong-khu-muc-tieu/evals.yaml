@@ -71,7 +71,11 @@ evals:
       ([data-hang-nut]) khong con [data-nut=them-muc-tieu], [data-nut=nhap-bang-tinh], [data-nhom-soan].
       Nut «Hỏi Kara» cua hang hoi-dap-okr: neu cay co thanh phan NutHoiKara (rut luc chay bang git grep, khong
       viet tay) thi no nam trong [data-slot=page-shell-actions] va so phan tu ky vong cong them 1; cay khong co
-      thi khong doi so.
+      thi khong doi so. Hai nhanh deu phai tung DO (Dieu phoi M5 15/10 — nhanh tu re theo git grep ma chua
+      tung do la nhanh xanh rong): pha-thu (DHK_PHA=hoi-kara-ngoai-hang: ban sao co them mot NutHoiKara gia, dat
+      trong than trang thay vi hang hanh dong) -> "dhk-hanh-dong: co NutHoiKara nhung khong nam trong
+      page-shell-actions"; pha-thu (DHK_PHA=thua-cho-hoi-kara: ban sao KHONG co NutHoiKara ma hang hanh dong co
+      them mot nut gia o cho cua no) -> "dhk-hanh-dong: theo-don-vi lap-ke-hoach co 5 phan tu, mong 4".
       Ma tran 5 the x 2 pha chu ky (lap-ke-hoach, dang-chay) = 10 o, so phan tu trong hang hanh dong = 4 / 3.
       CHIEU DO (DHK_PHA=nut-giua-than) -> "dhk-hanh-dong: theo-don-vi con nut them-muc-tieu trong than".
 

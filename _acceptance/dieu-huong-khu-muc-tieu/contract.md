@@ -49,7 +49,7 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
 - **Trục E — trạng thái dữ liệu:** đang tải · lỗi quyền · có quyền · không quyền · chu kỳ ngoài pha lập kế hoạch  [thước CE: `docs/design.md` «Chờ tải và lỗi tải»]
 - **Trục F — khổ và ngôn ngữ:** 1440 · 390 · vi · en  [thước CE: số đo production 14/10 ở 1440 và 390]
 - [GIẢ ĐỊNH] Giữ năm thẻ, kể cả «Cập nhật tuần» — bỏ nó là A3 của DH3.
-- Nhãn nút soạn và thứ tự nguồn đơn vị đích là câu hỏi cho người ở Cổng Phạm vi (sổ quyết định, dòng `chi-nguoi`).
+- Thứ tự nguồn đơn vị đích và chỗ đứng của nút soạn là câu hỏi cho người ở Cổng Phạm vi (sổ quyết định, dòng `chi-nguoi`); nhãn «Soạn OKR cùng Kara» theo luật một tên AI của kho (`docs/ai-ux.md` §1).
 
 ## Đường đo
 

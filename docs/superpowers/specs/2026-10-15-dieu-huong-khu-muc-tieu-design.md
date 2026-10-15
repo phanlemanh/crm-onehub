@@ -21,8 +21,8 @@ Một đầu trang dùng chung cho cả khu, dựng như đầu trang Thoả thu
 - **Hàng hành động** trong `PageShellActions`, ở góc phải: ô chu kỳ · nút «…» (menu một mục «Nhập từ bảng
   tính») · nút viền «Soạn OKR cùng Kara» (chỉ hiện khi chu kỳ ở pha lập kế hoạch, như hôm nay) · nút chính «Thêm
   mục tiêu». Đây là nháp theo khuyến nghị của câu Hỏi-1 ở Cổng Phạm vi; lối kia (gom cả «Nhập» lẫn «Soạn» vào
-  «…», đúng chữ A2 và bản mẫu) đổi được trước khi code. Nhãn giữ «Soạn OKR cùng Kara» (nháp theo khuyến nghị câu
-  Hỏi-3 — lối kia: «Soạn cùng Trợ lý» như chữ phạm vi). Ba nút tạo/nhập/soạn rời khỏi hàng nút trong thân trang
+  «…», đúng chữ A2 và bản mẫu) đổi được trước khi code. Nhãn giữ «Soạn OKR cùng Kara» theo luật một tên AI của
+  kho (`docs/ai-ux.md` §1) — chữ «Soạn cùng Trợ lý» của phạm vi A2 làm đỏ luật đó. Ba nút tạo/nhập/soạn rời khỏi hàng nút trong thân trang
   Theo đơn vị. Hàng này **giữ chỗ cho nút «Hỏi Kara»** (`NutHoiKara`) của hàng `hoi-dap-okr` (Mac Studio, dự kiến
   gộp 16/10, đặt nút ở `dau-trang-okr.tsx`): bên gộp sau dời nút đó vào hàng hành động chung; DH1 gộp `onehub` vào
   nhánh trước S4 nếu C đã lên.

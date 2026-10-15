@@ -4,9 +4,9 @@
 |---|---|---|
 | Hỏi-1 — lối soạn cùng Kara: nút viền hay gom vào «…» | 2 nhánh rẽ | ảnh bản mẫu: `evidence/design-pass/ST-dhk-don-vi--*.png` cạnh `ST-dhk-hoi-1-gom--*.png` (vật thật, không vẽ lại) |
 | Hỏi-2 — «Thêm mục tiêu» ở thẻ khác Theo đơn vị nhắm đơn vị nào trước | 3 bước nối tiếp + 2 nhánh rẽ | `hoi-2-don-dich.html` / `.png` |
-| Hỏi-3 — nhãn «Soạn OKR cùng Kara» hay «Soạn cùng Trợ lý» | dưới ngưỡng: một nhãn chữ, 0 bước | — |
+| (cũ Hỏi-3) nhãn «Kara» | không còn là điểm quyết: luật một tên AI của kho quyết | — |
 | [GIẢ ĐỊNH] giữ năm thẻ (A3 ở DH3) | dưới ngưỡng: 0 nhánh | — |
-| Gap-probe: 2 P0 đẩy người quyết | đã thành Hỏi-2, Hỏi-3 | — |
+| Gap-probe: 2 P0 đẩy người quyết | một thành Hỏi-2, một do luật kho quyết | — |
 
 ## Đề bài hình hoi-2-don-dich
 
