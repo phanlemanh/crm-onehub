@@ -547,7 +547,6 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 	);
 }
 
-// Bước tạo sau DA3 mang một Việc: chip trạng thái của Việc, bấm mở khung Việc (design 2026-10-14).
 function ChipViecCuaBuoc({
 	viecId,
 	trangThai,

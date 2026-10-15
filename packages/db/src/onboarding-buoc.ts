@@ -31,7 +31,6 @@ export type DatBuocXongInput = {
 	done: boolean;
 	nguoiId: string;
 	now: Date;
-	// Kênh ghi vào vết của Việc khi bước mang Việc (bước tạo sau DA3); bước cũ không dùng.
 	nguon?: NguonViec;
 };
 

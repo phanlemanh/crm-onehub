@@ -120,10 +120,6 @@ async function dungKeHoach(input: {
 		})),
 	});
 	const congTy = await gieoCongTy();
-	// Từ DA3 (ke-hoach-sinh-viec) kế hoạch tạo từ khuôn sinh Việc, và người còn Việc mở không đổi vai
-	// sang «chỉ OKR» được (409 của DA1). Lời hứa của hồ sơ này đo đường bước KHÔNG mang Việc (kế hoạch
-	// tạo trước DA3) nên dựng kế hoạch theo khuôn bằng bản ghi trực tiếp; đường mang Việc do
-	// ke-hoach-sinh-viec đo (kh-go-buoc dong-ke-hoach).
 	const batDau = new Date("2026-10-12T00:00:00.000Z");
 	const plan = await db.onboardingPlan.create({
 		data: {

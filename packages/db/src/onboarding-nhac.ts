@@ -322,8 +322,6 @@ function viecKeHoach(k: KeHoach, buoc: Buoc[], now: Date): ViecKeHoach[] {
 function guiCua(k: KeHoach, thanhVien: Set<string>, now: Date): Gui[] {
 	const buoc = [...k.steps].sort((a, b) => a.position - b.position);
 	const theoBuoc = buoc.flatMap((s) => {
-		// Bước mang Việc (tạo sau DA3) nhắc qua viec-qua-han/viec-sap-han của chính Việc ấy — nhắc
-		// thêm buoc-* là nhắc trùng cùng một người cùng một việc.
 		if (s.completedAt !== null || s.assigneeId === null || s.viecId !== null) {
 			return [];
 		}

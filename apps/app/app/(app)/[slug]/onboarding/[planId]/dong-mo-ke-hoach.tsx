@@ -22,7 +22,6 @@ export function DongMoKeHoach({
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 	const [hoi, setHoi] = useState(false);
-	// Đóng kế hoạch còn việc dở thì hỏi có huỷ không, đánh dấu sẵn (Hỏi-3, chủ kho duyệt 14/10).
 	const [huyViecMo, setHuyViecMo] = useState(true);
 	const maHuy = useId();
 	const dsBuoc = useQuery({

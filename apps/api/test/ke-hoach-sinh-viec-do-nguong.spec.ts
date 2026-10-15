@@ -1,6 +1,3 @@
-// Hồ sơ _acceptance/ke-hoach-sinh-viec — E13: thước ngưỡng (a) đếm đúng đáp án viết trước trên kho
-// mẫu gieo qua đường ghi thật (taoViecChoBuoc, doiTrangThai, ghiTuBuoc), thoát 2 dưới ngưỡng 0,7 và
-// thoát 0 khi đạt, chạy trong giao dịch chỉ đọc.
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
@@ -159,7 +156,6 @@ describe("kh-thuoc", () => {
 		});
 
 		const mot = chay([giao.id]);
-		// Chỉ đọc đo trên đầu ra: thước tự báo trạng thái giao dịch Postgres thật (SHOW transaction_read_only).
 		if (mot.json?.chiDoc !== true) throw new Error("kh: thuoc khong chi doc");
 		const vk = mot.json?.viecKhuon;
 		for (const [truong, mong] of [

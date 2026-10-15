@@ -147,8 +147,6 @@ async function docViecGhi(
 	return viec;
 }
 
-// Ba thao tác làm bước mồ côi hay kẹt «Bước x/y» (Huỷ, xoá, gỡ khỏi kế hoạch) bị chặn trên Việc
-// của một bước; đường đúng là gỡ bước ở kế hoạch (design 2026-10-14 mục 5).
 async function chanViecCuaBuoc(tx: DbGhi, viecId: string): Promise<void> {
 	if ((await buocCuaViec(tx, viecId)) !== null) {
 		throw new LoiViec("khong-hop-le", VIEC.thongDiep.goBuocOKeHoach);

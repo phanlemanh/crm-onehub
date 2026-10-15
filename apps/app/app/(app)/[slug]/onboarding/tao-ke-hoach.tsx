@@ -102,7 +102,6 @@ export function TaoKeHoach({
 	});
 	const nguoiCam = nguoi || toi.data?.id || "";
 
-	// Một hàng mỗi phòng ban có trong khuôn, theo thứ tự xuất hiện của bước (design 2026-10-14 mục 3).
 	const khuonChon = dsKhuon.data?.find((k) => k.id === khuon);
 	const phongCuaKhuon = useMemo(() => {
 		const buoc = [...(khuonChon?.steps ?? [])].sort(

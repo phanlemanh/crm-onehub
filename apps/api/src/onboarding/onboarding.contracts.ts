@@ -20,7 +20,6 @@ export const departmentOutput = z.object({
 	position: z.number(),
 	archivedAt: z.date().nullable(),
 	purgeable: z.boolean(),
-	// Trưởng phòng, để ô tạo kế hoạch điền sẵn người làm (DA3); bộ đọc đời trước thiếu khoá → null.
 	headUserId: z.string().nullable().default(null),
 });
 
@@ -82,7 +81,6 @@ export const planCreateFromTemplateInput = z.object({
 	templateId: z.string().trim().min(1),
 	startedAt: ngayLich,
 	ownerId: z.string().trim().min(1),
-	// Người làm theo phòng ban, chọn lúc tạo; phòng vắng → trưởng phòng, không thì người cầm trịch.
 	nguoiTheoPhongBan: z
 		.array(
 			z.object({
@@ -106,7 +104,6 @@ export const stepOutput = z.object({
 	assignee: z
 		.object({ id: z.string(), name: z.string(), image: z.string().nullable() })
 		.nullable(),
-	// Bước tạo sau DA3 mang một Việc; vắng (bước cũ, bộ đọc đời trước) đọc là null.
 	viecId: z.string().nullable().default(null),
 	viecTrangThai: z
 		.enum(["CHUA_LAM", "DANG_LAM", "CHO_DANH_GIA", "XONG", "HUY"])
@@ -306,7 +303,6 @@ export const planListOutput = z.object({
 
 export const planIdInput = z.object({ id: z.string().trim().min(1) });
 
-// Đóng kế hoạch: huyViecMo = người chọn «Huỷ N việc còn mở» ở hộp đóng (vắng → giữ Việc như trước).
 export const planCloseInput = z.object({
 	id: z.string().trim().min(1),
 	huyViecMo: z.boolean().optional(),

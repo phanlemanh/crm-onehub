@@ -75,15 +75,12 @@ export function buocRa({ department, viec, ...buoc }: HangBuoc): StepOutput {
 	};
 }
 
-// Ngày lịch VN của một mốc, ở dạng hạn của Việc (nửa đêm UTC của ngày đó) — cùng nếp han-viec-theo-ngay.
 export function hanTuNgay(moc: Date, congNgay = 0): Date {
 	return new Date(
 		Date.parse(`${ngayVN(moc)}T00:00:00Z`) + congNgay * 24 * 60 * 60 * 1000,
 	);
 }
 
-// Người làm mặc định của một phòng ban khi tạo bước: trưởng phòng nếu đọc được dữ liệu đối tác,
-// không thì người cầm trịch (design 2026-10-14 mục 3).
 export async function nguoiMacDinhTheoPhong(
 	tx: Tx,
 	departmentIds: readonly string[],
@@ -172,8 +169,6 @@ export async function kiemNguoiNhanViec(
 	return { id: nguoi.id, name: nguoi.name };
 }
 
-// Người do NGƯỜI chọn cho một phòng ban lúc tạo kế hoạch: phải là thành viên đọc được dữ liệu đối
-// tác; lời từ chối nêu tên người và tên phòng.
 export async function kiemNguoiTheoPhong(
 	tx: Tx,
 	chon: { departmentId: string; userId: string },
@@ -287,7 +282,6 @@ async function traBuocKhongNhan(
 	buoc: BuocGiu[],
 	actingUserId: string,
 ): Promise<void> {
-	// Bước mang Việc luôn có người làm; Việc tự lo người nhận bằng lời từ chối của nó.
 	const coViec = new Set(
 		(
 			await tx.onboardingStep.findMany({
@@ -328,8 +322,6 @@ async function traBuocKhongNhan(
 	}
 }
 
-// Đóng kế hoạch mà người chọn «Huỷ N việc còn mở»: Việc còn mở của các bước chưa xong sang Huỷ
-// bằng đường hệ thống (nguồn dong-ke-hoach), được phép dù Huỷ bị chặn ở người dùng.
 export async function huyViecMoCuaKeHoach(
 	tx: Tx,
 	planId: string,

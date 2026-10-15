@@ -66,7 +66,6 @@ afterAll(async () => {
 	});
 	await db.company.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
 	await db.member.deleteMany({ where: { userId: { in: daGieo.nguoi } } });
-	// Từ DA3 (ke-hoach-sinh-viec) kế hoạch tạo từ khuôn sinh Việc; Việc giữ người (Restrict) nên dọn trước người.
 	await db.viec.deleteMany({
 		where: {
 			OR: [

@@ -1,6 +1,3 @@
-// Hồ sơ _acceptance/ke-hoach-sinh-viec — E3: ô tạo kế hoạch có một hàng chọn người cho mỗi phòng ban
-// của khuôn (điền sẵn trưởng phòng, hay người cầm trịch), đủ trạng thái chờ / lỗi / rỗng, và giữ lựa
-// chọn khi máy chủ từ chối. Khung mock tRPC theo nguoi-nhan-viec.dom.tsx.
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, type TRPCLink } from "@trpc/client";
@@ -379,15 +376,12 @@ describe("kh-man-trang-thai", () => {
 		);
 		if (
 			q('[data-trang-thai="rong"]')?.textContent !== k.khuonRong ||
-			// Kế hoạch rỗng là ca kho hỗ trợ (dieu-phoi-va AC-4) nên nút Tạo vẫn bấm được.
 			(luu as HTMLButtonElement | undefined)?.disabled !== false
 		) {
 			throw new Error("kh: trang thai o tao sai rong");
 		}
 		await dongMan();
 
-		// Danh sách phòng ban đang tải hay lỗi: chưa hiện hàng nào (không đoán trưởng phòng), nút Tạo
-		// khoá; lỗi có «Thử lại» gọi lại danh sách phòng ban.
 		traLoi.set("onboarding.listTemplates", () => [KHUON_HAI_PHONG]);
 		traLoi.set("onboarding.listDepartments", () => new Promise(() => {}));
 		await mo(<TaoKeHoach mo doiMo={() => {}} congTyCoDinh={CONG_TY} />);

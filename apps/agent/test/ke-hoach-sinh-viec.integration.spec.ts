@@ -1,5 +1,3 @@
-// Hồ sơ _acceptance/ke-hoach-sinh-viec — E8b: bước mang Việc (tạo sau DA3) nhắc qua Việc của nó,
-// không nhắc thêm buoc-*; bước cũ (không Việc) vẫn nhắc buoc-* như trước.
 import {
 	afterAll,
 	afterEach,

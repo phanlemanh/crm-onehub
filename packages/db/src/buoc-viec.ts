@@ -1,7 +1,3 @@
-// Bước của kế hoạch 30 ngày tạo sau DA3 mang đúng một Việc (design 2026-10-14-ke-hoach-sinh-viec).
-// Lệnh trên thẻ Bước (giao, đánh xong, đổi hạn, gỡ) đi qua đây: ghi vào Việc bằng quyền của kế hoạch
-// — thành viên nào làm được trên kế hoạch thì làm được, như trước DA3 — rồi chiếu lại lên bước.
-// Lệnh trên khung Việc vẫn đi qua viec-ghi.ts với quyền vai của Việc.
 import { buocCuaViec, chieuLenBuoc } from "./buoc-viec-chieu";
 import { TrangThaiViec } from "./generated/prisma/enums";
 import {
@@ -119,8 +115,6 @@ export async function ghiTuBuoc(
 			return;
 		}
 		if (viec.trangThai === den) return;
-		// Mở lại một Việc đã khép (bỏ đánh xong) theo cùng luật «Làm lại» của DA1: người thực hiện phải
-		// còn nhận được việc gắn đối tác — vai chỉ OKR thì từ chối, Việc và bước không đổi.
 		if (
 			TRANG_THAI_KHEP.includes(viec.trangThai) &&
 			!TRANG_THAI_KHEP.includes(den)

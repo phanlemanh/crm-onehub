@@ -28,8 +28,6 @@ export const DICH_ROI_CHUA_LAM: readonly TrangThaiViec[] = [
 	TrangThaiViec.XONG,
 ];
 
-// Một luật cho mọi đường đổi trạng thái (khung Việc, thẻ Bước, «xong n»): thời điểm rời «Chưa làm»
-// chỉ ghi một lần, khi chính người thực hiện chuyển việc sang Đang làm, Chờ đánh giá hay Xong.
 export function roiChuaLamMoi(
 	v: {
 		roiChuaLamLuc: Date | null;

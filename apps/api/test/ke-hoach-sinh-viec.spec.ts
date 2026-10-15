@@ -1,6 +1,3 @@
-// Hồ sơ _acceptance/ke-hoach-sinh-viec — E1, E2, E4–E8: kế hoạch tạo từ khuôn sinh Việc theo phòng
-// ban, bước là bản chiếu của Việc, ba thao tác bị chặn, gỡ bước, đóng kế hoạch, thêm bước tay, kế
-// hoạch cũ chạy như cũ. Mọi fixture dựng qua đường ghi thật (tRPC có phiên, hoặc dịch vụ thật).
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { datBuocXong } from "@crm/db/onboarding-buoc";
@@ -44,7 +41,6 @@ afterAll(async () => {
 
 type Khung = Awaited<ReturnType<typeof dungKhung>>;
 
-// Khuôn ba bước ở hai phòng: A có trưởng phòng H (lệch 0 và 7 ngày), B không có trưởng phòng (lệch 3).
 async function dungKhung() {
 	const h = await gieoThanhVien("KH Hà");
 	const o = await gieoThanhVien("KH Ổn");
@@ -311,7 +307,6 @@ const XONG_N = {
 	coCongTy: vetCoCongTy,
 };
 
-// Bảng viết trước, chép từ bảng mục 5 của design doc 2026-10-14 (mười lệnh) + ô bỏ giao.
 const BANG: Array<{
 	lenh: string;
 	chay: (c: Ctx) => Promise<{ status: number; message: string }>;
@@ -619,7 +614,6 @@ describe("kh-chan", () => {
 	);
 });
 
-// Lệnh đóng / mở lại phải thật sự chạy (200 và closedAt đổi) — không thì các kiểm phía sau xanh rỗng.
 async function chacChan(
 	lenh: "onboarding.closePlan" | "onboarding.reopenPlan",
 	planId: string,
@@ -746,8 +740,6 @@ describe("kh-go-buoc", () => {
 				if (coHuy) throw new Error("kh: nhac viec cua ke hoach da dong");
 			}
 
-			// Người làm sang vai «chỉ OKR» sau khi Việc của họ đã khép (một Xong, một Huỷ lúc đóng):
-			// mở lại kế hoạch không để bước mở nào trong tay họ, và bỏ đánh xong bị từ chối (luật «Làm lại»).
 			await doiVai(k.h.id, "okr");
 			await chacChan("onboarding.reopenPlan", planId, k.o.id, false);
 			const trongTayOkr = await db.onboardingStep.count({
@@ -799,7 +791,6 @@ describe("kh-them-buoc", () => {
 		"thêm bước tay sinh Việc: người chọn, hay mặc định theo phòng",
 		async () => {
 			const k = await dungKhung();
-			// Kế hoạch rỗng thật: không bước nào (dựng bằng bản ghi trực tiếp — khuôn luôn có ≥1 bước).
 			const { plan: rong } = await gieoKeHoach({ camTrich: k.o.id, buoc: [] });
 			if (
 				(await db.onboardingStep.count({ where: { planId: rong.id } })) !== 0

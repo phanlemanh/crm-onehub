@@ -54,8 +54,6 @@ async function dung() {
 	const quanTri = await gieoThanhVien("Quản Trị VLR", "admin");
 	const { khuon, bp } = await gieoKhuon();
 	const congTy = await gieoCongTy();
-	// Từ DA3 (ke-hoach-sinh-viec) bước tạo từ khuôn có sẵn người làm; ca giao bước của hồ sơ này cần
-	// một bước chưa giao, nên dựng kế hoạch theo khuôn bằng bản ghi trực tiếp (bước không mang Việc).
 	const plan = await db.onboardingPlan.create({
 		data: {
 			companyId: congTy.id,

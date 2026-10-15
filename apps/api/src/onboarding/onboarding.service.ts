@@ -385,7 +385,6 @@ export class OnboardingService {
 
 	async createFromTemplate(
 		input: PlanCreateFromTemplateInput,
-		// Người giao của Việc sinh từ khuôn; gọi không có phiên (gieo, test cũ) thì là người cầm trịch.
 		actingUserId: string = input.ownerId,
 	): Promise<PlanOutput> {
 		if (input.ownerId.trim() === "") {
