@@ -112,13 +112,13 @@ export const hoiTangLuotOutput = z.discriminatedUnion("ok", [
 	z.object({ ok: z.literal(true) }),
 	z.object({ ok: z.literal(false), lyDo: z.enum(LY_DO_LUOT_HOI) }),
 ]);
-export const hoiCuaToiOutput = z.array(
-	z.object({ id: z.string(), createdAt: z.string() }),
-);
+export const hoiPhienInput = z.object({ cuocHoiId: ma });
+export const hoiPhienOutput = z.object({ phien: z.string().nullable() });
 
 export type HoiMoOutput = z.infer<typeof hoiMoOutput>;
 export type HoiTangLuotOutput = z.infer<typeof hoiTangLuotOutput>;
-export type HoiCuaToiOutput = z.infer<typeof hoiCuaToiOutput>;
+export type HoiPhienInput = z.infer<typeof hoiPhienInput>;
+export type HoiPhienOutput = z.infer<typeof hoiPhienOutput>;
 
 export const hoiPhanHoiInput = z.object({
 	cuocHoiId: ma,

@@ -8,8 +8,9 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { ghiChiPhi } from "@crm/db/ai-chi-phi";
+import { ghiPhienEve } from "@crm/db/okr-cuoc-hoi";
 import { OKR_HOI_TRAN } from "@crm/validation/okr-tra-loi";
-import { ForbiddenException } from "@nestjs/common";
+import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import { HoiService } from "../src/okr/hoi.service";
 
 const T = `hluot${(process.env.TEST_RUN_ID ?? "x").slice(0, 8)}`;
@@ -98,14 +99,16 @@ describe("hdo tran luot", () => {
 		});
 	});
 
-	test("cuaToi tra cuoc gan nhat cua chinh nguoi hoi", async () => {
-		const ds = await hoi.cuaToi(B);
-		expect(ds.length).toBeGreaterThan(0);
-		const chu = await db.okrCuocHoi.findMany({
-			where: { id: { in: ds.map((d) => d.id) } },
-			select: { nguoiHoiUserId: true },
+	test("phien: cuoc moi chua co phien; sau khi eve gan phien thi tra phien do; cuoc nguoi khac bi chan", async () => {
+		const { cuocHoiId } = await hoi.mo(A);
+		expect(await hoi.phien(A, { cuocHoiId })).toEqual({ phien: null });
+		await ghiPhienEve(db, cuocHoiId, `${T}-eve-1`);
+		expect(await hoi.phien(A, { cuocHoiId })).toEqual({
+			phien: `${T}-eve-1`,
 		});
-		expect(chu.every((c) => c.nguoiHoiUserId === B)).toBe(true);
+		expect(hoi.phien(B, { cuocHoiId })).rejects.toBeInstanceOf(
+			NotFoundException,
+		);
 	});
 
 	test("phan-hoi: ghi mot hang moi cau tra loi, bam lai thi doi; cuoc nguoi khac bi chan", async () => {

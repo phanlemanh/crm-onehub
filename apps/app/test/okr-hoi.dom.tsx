@@ -12,7 +12,10 @@ import { okrHoiMessages } from "@/lib/messages/okr-hoi";
 const m = okrHoiMessages("vi");
 const CAU_HOI = "KR nào của tôi đang trượt?";
 
-type GiaTriChu = string | ((...doiSo: string[]) => string);
+type GiaTriChu =
+	| string
+	| readonly string[]
+	| ((...doiSo: string[]) => string);
 type NhanhChu = { readonly [khoa: string]: GiaTriChu | NhanhChu };
 
 const tin = (id: string, role: "user" | "assistant", parts: unknown[]) =>
@@ -168,7 +171,7 @@ describe("okr hoi dap", () => {
 	test("hdo-chu: khoa vi bang khoa en", () => {
 		const khoa = (o: NhanhChu, tien = ""): string[] =>
 			Object.entries(o).flatMap(([k, v]) =>
-				v instanceof Function || !(v instanceof Object)
+				v instanceof Function || v instanceof Array || !(v instanceof Object)
 					? [`${tien}${k}`]
 					: khoa(v, `${tien}${k}.`),
 			);

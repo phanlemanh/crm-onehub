@@ -2,23 +2,27 @@ import type { Db } from "@crm/db";
 import {
 	chiPhiThangHoiDap,
 	cuocHoiCua,
-	cuocHoiGanNhat,
 	demLuotNgay,
 	ghiLuot,
+	laPlaceholder,
 	taoCuocHoi,
 } from "@crm/db/okr-cuoc-hoi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
-	type HoiCuaToiOutput,
 	type HoiMoOutput,
 	type HoiPhanHoiInput,
+	type HoiPhienInput,
+	type HoiPhienOutput,
 	type HoiTangLuotOutput,
 	OKR_HOI_TRAN,
 } from "@crm/validation/okr-tra-loi";
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import {
+	ForbiddenException,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
-
-const SO_CUOC_GAN_NHAT = 20;
+import { OKR } from "./okr-config";
 
 @Injectable()
 export class HoiService {
@@ -46,9 +50,14 @@ export class HoiService {
 		return { ok: true };
 	}
 
-	async cuaToi(userId: string): Promise<HoiCuaToiOutput> {
-		const ds = await cuocHoiGanNhat(this.db, userId, SO_CUOC_GAN_NHAT);
-		return ds.map((d) => ({ id: d.id, createdAt: d.createdAt.toISOString() }));
+	async phien(
+		userId: string,
+		input: HoiPhienInput,
+	): Promise<HoiPhienOutput> {
+		const cuoc = await cuocHoiCua(this.db, input.cuocHoiId);
+		if (!cuoc || cuoc.nguoiHoiUserId !== userId)
+			throw new NotFoundException(OKR.thongDiep.hoi.khongCoCuoc);
+		return { phien: laPlaceholder(cuoc.sessionId) ? null : cuoc.sessionId };
 	}
 
 	async phanHoi(

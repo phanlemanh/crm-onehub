@@ -21,6 +21,7 @@ const KHO = { rong: 1280, hep: 375 };
 const CHO_TRA_LOI_MS = 180_000;
 const NGUOI = { thanhVien: "ngo-van-toan", vaiOkr: "thai-minh-chau" };
 const CAU = "Mục tiêu giữ đà tăng trưởng bán lẻ miền Bắc đang thế nào?";
+const CAU_HAI = "KR nào trong Mục tiêu đó đang chậm nhất?";
 const SEL = {
 	nut: '[data-nut="hoi-kara"]',
 	khung: '[data-khung="hoi-okr"]',
@@ -129,6 +130,39 @@ async function trongPhien() {
 			);
 			await d.chup(t, "hdo-03-mo-trich.png");
 			console.log("buoc 3: dat — bam trich mo khung Muc tieu hay KR chong len");
+		});
+
+		await buoc("3b", async () => {
+			const t = d.trangCuoi();
+			await t.goBack();
+			await d.doi(t, (s) => window.__tim(s).length > 0, SEL.khung);
+			await t.waitForFunction(
+				(s) => window.__tim(s).length > 0,
+				{ timeout: CHO_TRA_LOI_MS },
+				SEL.phanHoi,
+			);
+			const truoc = await t.evaluate(
+				(s) => window.__tim(s).length,
+				SEL.phanHoi,
+			);
+			await d.bamSel(t, SEL.oGo);
+			await t.keyboard.type(CAU_HAI);
+			await t.keyboard.press("Enter");
+			await t.waitForFunction(
+				([s, n]) => window.__tim(s).length > n,
+				{ timeout: CHO_TRA_LOI_MS },
+				[SEL.phanHoi, truoc],
+			);
+			const thuLai = await t.evaluate(
+				(s) => window.__tim(s).length,
+				SEL.thuLai,
+			);
+			if (thuLai > 0)
+				throw new Error(`hdo man: quay lai roi hoi tiep hien ${thuLai} Thu lai`);
+			await d.chup(t, "hdo-03b-quay-lai-hoi-tiep.png");
+			console.log(
+				`buoc 3b: dat — quay lai thay ${truoc} cau tra loi cu, hoi tiep nhan cau moi`,
+			);
 		});
 
 		await buoc(4, async () => {

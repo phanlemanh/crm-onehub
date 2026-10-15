@@ -23,6 +23,11 @@ const vi = {
 		],
 	},
 	dangDoc: "Kara đang đọc OKR…",
+	nap: {
+		dangMo: "Đang mở cuộc hỏi…",
+		loiTieuDe: "Chưa mở lại được cuộc hỏi",
+		loiMoTa: "Kara chưa đọc lại được những câu đã hỏi trong cuộc này.",
+	},
 	khongThay: {
 		tieuDe: "Kara không thấy câu trả lời",
 		moTa: "Không Mục tiêu hay KR nào bạn được xem trả lời được câu này.",
@@ -69,6 +74,11 @@ const en: OkrHoiMessages = {
 		],
 	},
 	dangDoc: "Kara is reading the OKR…",
+	nap: {
+		dangMo: "Opening the conversation…",
+		loiTieuDe: "Could not reopen the conversation",
+		loiMoTa: "Kara could not read back the questions asked in this conversation.",
+	},
 	khongThay: {
 		tieuDe: "Kara found no answer",
 		moTa: "None of the Objectives or KRs you may see answers this question.",

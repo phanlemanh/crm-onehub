@@ -90,15 +90,4 @@ export async function chiPhiThangHoiDap(
 	return tong._sum.costUsd?.toNumber() ?? 0;
 }
 
-export async function cuocHoiGanNhat(
-	db: DbHoacTx,
-	userId: string,
-	soLuong: number,
-): Promise<{ id: string; createdAt: Date }[]> {
-	return db.okrCuocHoi.findMany({
-		where: { nguoiHoiUserId: userId },
-		orderBy: { createdAt: "desc" },
-		take: soLuong,
-		select: { id: true, createdAt: true },
-	});
-}
+

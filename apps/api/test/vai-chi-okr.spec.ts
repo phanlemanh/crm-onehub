@@ -455,9 +455,9 @@ const THU_TUC_OKR_LUOT_TOM_TAT = [
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_DAP = [
-	"hoiCuaToi",
 	"hoiMo",
 	"hoiPhanHoi",
+	"hoiPhien",
 	"hoiTangLuot",
 ].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
@@ -1934,13 +1934,14 @@ type SanDoc = SanAn & {
 	chuG: string;
 	hoiY: string;
 	cuocSoan: string;
+	cuocHoi: string;
 };
 type DongDoc = {
 	vao: (s: SanDoc, k: string) => DauVaoHopLe | undefined;
 	K: CotK;
 	dau?: ChuoiAn;
 	khac: 200 | 404;
-	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId";
+	ma?: "id" | "objectiveId" | "keyResultId" | "cuocSoanId" | "cuocHoiId";
 	pha?: "da-dong";
 	chiQuanTri?: string;
 	chiQuanTriTheoMa?: true;
@@ -1949,7 +1950,12 @@ type DongDoc = {
 const cuaKy = (s: SanDoc) => ({ cycleId: s.ky });
 const THU_TU_DOC_OKR = {
 	"okr.access": { vao: () => undefined, K: "vang", khac: 200 },
-	"okr.hoiCuaToi": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.hoiPhien": {
+		vao: (s) => ({ cuocHoiId: s.cuocHoi }),
+		K: "vang",
+		khac: 404,
+		ma: "cuocHoiId",
+	},
 	"okr.aiChiTieu": {
 		vao: () => undefined,
 		K: "vang",
@@ -2612,12 +2618,19 @@ describe("hien-thi-an", () => {
 					nac: "bat",
 				},
 			});
+			const cuocHoi = await db.okrCuocHoi.create({
+				data: {
+					nguoiHoiUserId: nguoi.k.id,
+					sessionId: `an-hoi-${suffix}`,
+				},
+			});
 			const san = {
 				...gieo,
 				nguoiK: nguoi.k.id,
 				chuG: nguoi.truong.id,
 				hoiY: hoiY.id,
 				cuocSoan: cuocSoan.id,
+				cuocHoi: cuocHoi.id,
 			};
 			const tatCaNguoi = [...Object.values(nguoi).map((n) => n.id), m.id, o.id];
 			try {
@@ -2682,6 +2695,7 @@ describe("hien-thi-an", () => {
 				setSystemTime();
 				await db.okrHoiY.deleteMany({ where: { id: san.hoiY } });
 				await db.okrCuocSoan.deleteMany({ where: { id: san.cuocSoan } });
+				await db.okrCuocHoi.deleteMany({ where: { id: san.cuocHoi } });
 				await donMucTieuAn(san, tatCaNguoi);
 			}
 		},

@@ -55,11 +55,12 @@ import {
 	troLyTomTatQuanTriOutput,
 } from "@crm/validation/okr-tom-tat";
 import {
-	hoiCuaToiOutput,
 	hoiMoInput,
 	hoiMoOutput,
 	hoiPhanHoiInput,
 	hoiPhanHoiOutput,
+	hoiPhienInput,
+	hoiPhienOutput,
 	hoiTangLuotInput,
 	hoiTangLuotOutput,
 } from "@crm/validation/okr-tra-loi";
@@ -526,11 +527,15 @@ export class OkrRouter {
 	}
 
 	@Query({
-		output: hoiCuaToiOutput,
-		meta: restMeta("GET", "/okr/hoi/sessions", TAG),
+		input: hoiPhienInput,
+		output: hoiPhienOutput,
+		meta: restMeta("POST", "/okr/hoi/session", TAG),
 	})
-	hoiCuaToi(@Ctx() ctx: AuthedTrpcContext) {
-		return this.hoiDap.cuaToi(ctx.user.id);
+	hoiPhien(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiPhienInput>,
+	) {
+		return this.hoiDap.phien(ctx.user.id, input);
 	}
 
 	@Query({
