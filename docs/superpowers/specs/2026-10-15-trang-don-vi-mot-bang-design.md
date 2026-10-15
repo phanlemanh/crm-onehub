@@ -45,7 +45,9 @@ Trang đơn vị dựng trên `DataTable` của `packages/ui`, như Thoả thu�
   không trả số KR, lượt không đổi API) hoặc «Chưa đặt OKR», cờ
   «Chưa có trưởng»; bấm → trang của đơn vị đó (giữ `kyOkr`). Công ty → các bộ phận và phòng ban chưa xếp; bộ phận →
   phòng ban; phòng ban, người → không có khối.
-- **Giữ nguyên:** nhóm «Đã bỏ» dưới bảng, khối KR của một người, ngăn tạo và hộp nhập (DH1 mở từ đầu trang), các trạng
+- **Nút mở dòng (Hỏi-4):** `DataTable` hôm nay mở dòng bằng bấm cả hàng, không nút, không `aria-expanded`, không
+  bàn phím; nháp sửa ô mũi tên trong `packages/ui` thành nút thật (một chỗ, có bài kiểm ở `packages/ui`).
+- **Giữ nguyên:** nhóm «Đã bỏ» dưới bảng, khối KR của một người (dời xuống dưới bảng để hàng công cụ đứng yên), ngăn tạo và hộp nhập (DH1 mở từ đầu trang), các trạng
   thái trống/lỗi/không thấy đơn vị/chưa có chu kỳ, cách xem Cây căn chỉnh và hai chip của nó (DH4 gỡ cả cách xem).
 - **Đổi thẻ giữ cách xem:** liên kết thanh thẻ của DH1 mang thêm `xemOkr` khi đường dẫn đang có nó — thiết kế DH1
   (đã ký Cổng Phạm vi 15/10) ghi «Cách xem (`xemOkr`) KHÔNG đi theo — đó là B4 của DH2». Một dòng trong `toi()` của
@@ -114,7 +116,7 @@ Trang đơn vị dựng trên `DataTable` của `packages/ui`, như Thoả thu�
 
 | Component | Nấc | Vì sao (1 dòng) |
 |---|---|---|
-| `DataTable` (tabs, facets, expandable, meta) | dùng | bảng của Thoả thuận, cấm hệ bảng thứ hai |
+| `DataTable` (tabs, facets, expandable, meta) | dùng + mở rộng | bảng của Thoả thuận; ô mũi tên của dòng mở rộng thành nút có `aria-expanded` (Hỏi-4) |
 | `Combobox` | dùng | ô chọn có tìm kiếm như ô đơn vị ở Tài liệu |
 | `ViewSwitch` | dùng | nút trên máy tính, ô chọn trên điện thoại (`docs/design.md`) |
 | `Item` | dùng | ô đơn vị trực thuộc như bản mẫu |

@@ -1751,6 +1751,7 @@ executors:
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
     # trang-don-vi-mot-bang (DH2): mỗi khoá một nhóm của okr-trang-don-vi.dom.tsx
+    dvb_dong_mo_ui: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-mo-rong.spec.tsx"
     dvb_chon_don_vi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chon-don-vi"
     dvb_dong_mo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-dong-mo"
     dvb_hang_cong_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-hang-cong-cu"

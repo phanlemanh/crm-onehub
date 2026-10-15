@@ -122,7 +122,8 @@ evals:
       mo: (nut mui ten, o trong cua dong) x (M1, M2) = 4 o, moi o assert dong KR cua dung muc tieu hien ngay
       duoi, cung so cot voi dong cha, va URL expand chua id. (c) Dung lai trang voi URL expand=M2 -> M2 mo,
       M1 thu. (d) Bam ten M1 -> useOpenRecord nhan {kind:"objective", id:"M1"} va URL expand khong doi. (e)
-      Bam dong KR -> {kind:"kr", id:<kr>}. (f) Cot cua dong cha: ten, loai, trang thai, so KR, «góp vào» (rut
+      Bam dong KR -> {kind:"kr", id:<kr>}. (g) Ban phim: nut mo cua M1 la button co aria-expanded va aria-label chua ten M1;
+      focus roi Enter -> mo, Space -> thu. (f) Cot cua dong cha: ten, loai, trang thai, so KR, «góp vào» (rut
       chu tu okrMessages), Tien do, Tinh trang, Phu trach. CHIEU DO (DVB_PHA=mo-san: ban sao dat mo mac dinh
       moi dong) -> "dvb-dong-mo: mac dinh 3 dong KR, mong 0".
 
@@ -324,3 +325,19 @@ evals:
       tieu · bang <k'> dong". DUNG khi n = n' cho moi con va k = k'. Dong cham "DUNG AC-7: <m>/<m> o con khop kho do ·
       chan bang khop bang". CHIEU DO (DVB_PHA=khoa-dem-sai: ban sao doc dem theo id tran thay khoa pb:<id>) -> "SAI
       AC-7: o <con> hien Chưa đặt OKR, kho do <n>", ma 1.
+
+  - id: E18
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dvb_dong_mo_ui
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-mo-rong.spec.tsx"
+    expected: |
+      Tep moi packages/ui/test/data-table-mo-rong.spec.tsx (DataTable voi expandable, 3 dong: 2 mo duoc, 1 khong).
+      Ma tran viet truoc: 3 dong x (co nut / khong nut) + 2 dong mo duoc x (Enter, Space, bam nut, bam o trong cua
+      dong) = 11 assert: dong mo duoc co dung 1 phan tu button[aria-expanded] trong o mui ten, aria-label chua nhan
+      dong (tu prop moi cua expandable hoac chu mac dinh trong messages cua packages/ui); dong khong mo duoc co 0
+      button; moi cach mo doi aria-expanded false->true va hien dong con; bam nut khong goi onRowClick. DOI CHUNG
+      DUONG: bang khong expandable khong co cot mui ten. CHIEU DO (DVB_PHA=mui-ten-tran: ban sao tra lai ChevronRight
+      tran trong o) -> "data-table-mo-rong: dong r1 khong co button[aria-expanded] trong o mui ten".
