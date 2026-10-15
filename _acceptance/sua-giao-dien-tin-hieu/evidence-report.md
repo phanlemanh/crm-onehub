@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: de6340a7ee52235817d6ec0e2be5107d97da8e7b
+verified_commit: 631a6fbe7eb702a22c5529161d5d1bb9704077bf
 human_signoff: Manh Phan 2026-10-15 — ký Cổng Bằng chứng trên verdict PASS vòng 2 (16/16 eval; E8, E11b, E11c, E13 mang từ vòng 1; vòng 1 REJECT vì hai lỗi thước đã sửa). Ngoài-6 mở hợp đồng mới; mười lăm mục còn lại ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -250,3 +250,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, deterministic).
 
 Round 1: E14 do vi nhom bai DOM «sgt-cau-sau-gom» chua ton tai; them hai loi trong hop dong (AC-12 o lenh E14, AC-6 o bai aria-describedby khong bao gio do duoc). Tra ve thi cong; commit 9433e1943 sua chu theo hoi dong E10, them bai DOM cau song ngu khong dich va doi chung duong cho dong ly do khoa.
 Round 2: moi eval chay lai deu xanh; E8, E11b, E11c, E13 mang tu round 1 vi delta khong cham paths cua chung. Ba muc moi ngoai hop dong da ghi o review-findings.md de nguoi quyet o Cong 2. Ghi chu: may khong tra gio chay cua round 2 nen verified_at cua cac eval round 2 la moc 2026-10-15T12:00:00Z (ngay chay that, gio chi mang tinh dinh dang).
+
+### Re-pin lần 1 — 2026-10-15, do gộp onehub d9eb83536 (#416) + tên màn Thông báo; LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
+run_id: repin-20261015T103158Z-73108
+sha: 631a6fbe7eb702a22c5529161d5d1bb9704077bf · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths), E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
