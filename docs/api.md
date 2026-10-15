@@ -1625,8 +1625,17 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
   mật kho `CRM_API_URL`, `CRM_KHOA_KEO_TIN_HIEU`; bật «Allow GitHub Actions to create and approve
   pull requests» (Settings › Actions › General). Thiếu việc cuối thì lượt vẫn kéo và đẩy nhánh —
   người gửi vẫn thấy «Chờ gom» — rồi đỏ ở bước mở PR với câu gọi tên quyền đó.
-- Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban chỉ đi kèm trong phản hồi để
-  lệnh kéo về đếm cho ngưỡng.
+- Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban (tên và `phongBanId`) chỉ đi
+  kèm trong phản hồi để lệnh kéo về đếm cho ngưỡng.
+- `tinHieu.tatCa` chỉ owner/admin (cùng câu kiểm với `keoVe`), chỉ đọc — không đóng dấu. Trả mọi tín
+  hiệu, mới nhất trước, kèm người gửi (mã, tên — không thư) và phòng ban lúc gửi; REST
+  `GET /rest/tin-hieu/tat-ca`. Thẻ «Tất cả» của trang Tín hiệu đọc nó.
+- Ba con số ngưỡng sống (tín hiệu 30 ngày, số phòng ban, quá 7 ngày chưa có chỗ) đếm bằng một hàm
+  `demNguongSong` cho cả lệnh kéo về lẫn trang; phòng ban đếm theo mã, không theo tên.
+- **Ngoại lệ có tên của luật «Filter, sort and paginate in Prisma»:** `tatCa` không nhận `listInput`;
+  thẻ «Tất cả» lọc và chia trang ở trình duyệt. Lý do: trạng thái để lọc sống ở bản vẽ `LO-TRINH.html`
+  của bản dựng chứ không ở cơ sở dữ liệu, và ba con số cần mọi dòng. Chủ kho chọn ở Cổng Phạm vi
+  14/10 (`_acceptance/moi-tin-hieu-cho-quan-tri/`). Mở lại khi số tín hiệu vượt vài trăm.
 - Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
   phán nào ở API.
 
