@@ -51,6 +51,8 @@ function lienKetCu(goc) {
 		.split("\n")
 		.filter(Boolean)
 		.filter((d) => !d.includes("/node_modules/"))
+		// thư mục ẩn là bản sinh tự động (.next, .eve) mà git bỏ qua — không phải mã nguồn
+		.filter((d) => !/(^|\/)\.[^/]+\//.test(d.split(":")[0]))
 		.filter((d) => !BO_QUA.some((b) => d.startsWith(`${b}:`)))
 		.filter((d) => !d.split(":")[0].includes("/test/"))
 		// đường mô-đun (`.../okr/cap-nhat-tuan/cap-nhat-tuan`) là import, không phải liên kết

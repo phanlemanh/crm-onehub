@@ -1769,6 +1769,17 @@ executors:
     dhk_giu_don: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-giu-don
     dhk_suc_khoe: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-suc-khoe
     dhk_dang_tai: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-dang-tai
+    ctbp_phan_mot: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phan-mot
+    ctbp_cap_nhat_tai_cho: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-cap-nhat-tai-cho
+    ctbp_phien_cua_toi: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phien-cua-toi
+    ctbp_loi_vao_tu: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-vao-tu
+    ctbp_chuyen_huong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-chuyen-huong
+    ctbp_don_vi_dan: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-don-vi-dan
+    ctbp_kr_phu_trach: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-kr-phu-trach
+    ctbp_khong_dan: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-khong-dan
+    ctbp_bon_the: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-bon-the
+    ctbp_tai_loi: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-loi
+    ctbp_do_nguong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-do-nguong
   script:
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
@@ -2745,6 +2756,10 @@ executors:
     dhk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"'
     dhk_ho_so_da_ky: bun _acceptance/dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs
     dhk_proto: bun _acceptance/dieu-huong-khu-muc-tieu/rang/proto-khu.mjs
+    ctbp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"'
+    ctbp_lien_ket_cu: bun _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs
+    ctbp_ho_so_da_ky: bun _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs
+    ctbp_proto: bun _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
