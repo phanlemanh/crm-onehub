@@ -26,7 +26,7 @@ function danhSachMan(v) {
 	const pb = idMau("pb", v.pb);
 	return [
 		{ ma: "cua-toi", duong: `/${slug}/okr?kyOkr=${KY4}`, cho: "[data-trang-thai]" },
-		{ ma: "theo-don-vi", duong: `/${slug}/okr/theo-don-vi?kyOkr=${KY4}&donOkr=pb:${pb}`, cho: "[data-hang-nut]" },
+		{ ma: "theo-don-vi", duong: `/${slug}/okr/theo-don-vi?kyOkr=${KY4}&donOkr=pb:${pb}`, cho: "[data-hang-cong-cu-don-vi]" },
 		{ ma: "khung", duong: `/${slug}/okr?kyOkr=${KY4}&record=objective:${idMau("mt", v.mt)}`, cho: "[data-okr-sheet] [role=tab], [data-khung-loi], [data-khung-khong-thay]" },
 	];
 }
@@ -67,11 +67,11 @@ if (!CO_DO)
 	for (const [vai, v] of Object.entries(BD.vai)) {
 		const { ctx, p } = await moTrang(cookie[vai], BD.kho[1440]);
 		await p.goto(`${APP}/${slug}/okr/theo-don-vi?kyOkr=${KYKE}&donOkr=pb:${idMau("pb", v.pb)}`, { waitUntil: "domcontentloaded" });
-		await p.waitForSelector("[data-hang-nut], [data-trang-thai]", { timeout: BD.cho.phanTu }).catch(() => null);
+		await p.waitForSelector("[data-hang-hanh-dong], [data-trang-thai]", { timeout: BD.cho.phanTu }).catch(() => null);
 		await yen(p);
 		if (DO_VAI && vai === "truong-phong")
 			await p.evaluate(() => {
-				const h = document.querySelector("[data-hang-nut]");
+				const h = document.querySelector("[data-hang-hanh-dong]");
 				if (!h) return;
 				const s = document.createElement("span");
 				s.setAttribute("data-nhom-soan", "");
@@ -80,7 +80,7 @@ if (!CO_DO)
 			});
 		const d = await p.evaluate((cau) => {
 			const hien = (e) => e.getBoundingClientRect().height > 0;
-			const hang = [...document.querySelectorAll("[data-hang-nut]")].find(hien);
+			const hang = [...document.querySelectorAll("[data-hang-hanh-dong]")].find(hien);
 			const nhom = hang?.querySelector("[data-nhom-soan]") ?? null;
 			return {
 				coHang: Boolean(hang),

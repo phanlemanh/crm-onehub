@@ -375,6 +375,8 @@ async function buocNhap() {
 		CAO,
 		`/okr/theo-don-vi?donOkr=goc&kyOkr=${OKR.quy}`,
 	);
+	// «Nhập từ bảng tính» nằm trong menu «…» ở đầu trang khu (DH1): mở menu trước khi tìm.
+	if (await hien(t, "[data-nut='them-cach']")) await t.click("[data-nut='them-cach']");
 	const coNut = await hien(t, "[data-nut='nhap-bang-tinh']");
 	if (!coNut) {
 		for (const ma of MA_TRAN.filter((m) => m.startsWith("nhap-")))
