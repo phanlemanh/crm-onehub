@@ -104,6 +104,11 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.hdo_man
+    steps:
+      - "Chạy ở thư mục gốc kho, nguyên văn: bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/hoi-dap-okr/rang/man-hoi.mjs\" > .acceptance-runs/hoi-dap-okr/log-e10.log 2>&1; echo exit=$? — phiên đo tự dựng kho riêng, API, app và agent-okr của cây này, gọi Kara thật (ZDR), chạy vài phút."
+      - "Đọc log: mỗi bước in 'buoc <n>: dat — …' hoặc 'buoc <n>: HONG — …'; dòng cuối 'DAT' với exit=0 là đạt; exit=1 là có bước hỏng (nêu bước); exit=2 là không đo được (nêu lý do)."
+      - "Mở các ảnh hdo-01-cot-trong.png, hdo-02-tra-loi.png, hdo-03-mo-trich.png, hdo-03b-quay-lai-hoi-tiep.png, hdo-04-375.png, hdo-05-tong-quan-chi-okr.png, hdo-06-loi-thu-lai.png trong .acceptance-runs/hoi-dap-okr/evidence/ và đối chiếu bằng mắt với Expected."
+    inputs: [.acceptance-runs/hoi-dap-okr/evidence/]
     expected: "rang/man-hoi.mjs trong phiên đo của cây, khổ 1280 và 375, mỗi khổ một phiên: khu OKR có nút «Hỏi Kara»; bấm mở cột Kara bên phải, URL có record=hoi-okr:; gửi một câu (Kara giả theo khuôn sự kiện thật, không gọi model) hiện câu trả lời có InlineCitation và AiFeedback; bấm trích, URL thêm record=objective: và khung Mục tiêu hiện tên đúng; 375 px cột phủ toàn màn; trạng thái lỗi hiện «Kara chưa trả lời được» và nút «Thử lại»; tổng quan của vai chỉ OKR có nút «Hỏi Kara». Mỗi bước ghi ảnh vào .acceptance-runs/hoi-dap-okr/evidence/ (chép sang _acceptance/hoi-dap-okr/evidence/ chỉ khi contract chưa signed-off) và một mốc dương đọc từ DOM."
     evidence_required: [screenshot, observed]
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/app/lib/messages/okr-hoi.ts, _acceptance/hoi-dap-okr/rang/man-hoi.mjs]
