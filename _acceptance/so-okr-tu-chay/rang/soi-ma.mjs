@@ -578,11 +578,9 @@ function dungCayDinh() {
 	const cha = join(GOC, ".acceptance-runs", "so-okr-tu-chay");
 	mkdirSync(cha, { recursive: true });
 	const thu = mkdtempSync(join(cha, "cay-dinh-"));
-	const a = spawnSync(
-		"git",
-		["-C", GOC, "archive", CAP.dinh, "apps", "packages", ".env.example"],
-		{ maxBuffer: 1024 * 1024 * 1024 },
-	);
+	const a = spawnSync("git", ["-C", GOC, "archive", CAP.dinh], {
+		maxBuffer: 1024 * 1024 * 1024,
+	});
 	const x = spawnSync("tar", ["-x", "-C", thu], {
 		input: a.stdout,
 		maxBuffer: 1024 * 1024 * 1024,
