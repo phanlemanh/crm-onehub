@@ -1452,6 +1452,26 @@ bộ kiểm, cùng sổ chi phí và trần tháng — chỉ khác ở chỗ hi�
 không bao giờ tới bảng họp tuần hay tin nhắc; chỉ quản trị chương trình đọc nó ở
 Sức khoẻ chương trình (`okr.troLyTomTatQuanTri`).
 
+## Chỗ rẽ: Trợ lý OKR — model khi đo so
+
+Trợ lý OKR chạy `google/gemini-3.8-flash` (`TRO_LY_OKR.model`). Biến
+`TRO_LY_OKR_MO_HINH` chỉ dùng cho phép đo so model, không để chạy production: nó nhận
+đúng hai mã trong `TRO_LY_OKR.moHinhThu.danhSach` — `google/gemini-3.8-flash` (trần ra
+2 000 token mỗi lời gọi) và `anthropic/claude-haiku-5.5` (4 000 token) — và đổi model của
+cả bốn vai: góp ý, tóm tắt tuần, phiên gốc `okr` và bước gốc. `chonMoHinhTroLyOkr` ở
+`apps/agent/agent/lib/okr/mo-hinh-thu.ts` đọc nó một lần lúc nạp mô-đun:
+
+- `NODE_ENV=production` → biến bị bỏ qua, Trợ lý OKR chạy `google/gemini-3.8-flash`.
+- Vắng hay rỗng → `google/gemini-3.8-flash`.
+- Giá trị ngoài hai mã (kể cả chữ hoa, khoảng trắng, `zai/glm-5.2-fast`) → nạp mô-đun
+  ném lỗi gọi tên `TRO_LY_OKR_MO_HINH`, giá trị nhận được và hai mã hợp lệ, nên agent
+  không khởi động.
+
+Kho đo (`bun run db:do --tao`) mang sẵn `google/gemini-3.8-flash` ở ô model của Cài đặt
+cho agent chính và Tác nhân, không còn rơi về GLM 5.2 Fast: chủ kho không dùng GLM
+Fast, và kho đo phải chạy model của production. Đổi ở `MEASURE_DATABASE.agentModel`
+trong `packages/db/src/measure-database.ts`.
+
 ## Chỗ rẽ: Trợ lý OKR — đường tới model và khoá riêng
 
 Đường tới model của Trợ lý OKR có một nơi biết: `nguonKhoaMoHinh` ở
