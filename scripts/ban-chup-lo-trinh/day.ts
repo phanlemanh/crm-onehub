@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { REST_BRIDGE_PATH } from "../../apps/api/src/trpc/openapi.ts";
 import { docDuLieu } from "../../apps/app/lib/lo-trinh/doc-du-lieu.js";
 import {
 	BAN_CHUP_LO_TRINH,
@@ -8,7 +9,7 @@ import {
 	banChupVao,
 } from "../../packages/validation/src/ban-chup-lo-trinh.ts";
 
-export const DUONG_DAY = "/rest/lo-trinh/ban-chup";
+export const DUONG_DAY = `${REST_BRIDGE_PATH}${BAN_CHUP_LO_TRINH.duongRest}`;
 export const TIEU_DE_GHI_CHU = "ban-chup-lo-trinh";
 const TEP = "LO-TRINH.html";
 
