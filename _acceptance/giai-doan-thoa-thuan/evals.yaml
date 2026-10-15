@@ -307,7 +307,7 @@ evals:
     cmd: config:executors.script.gdtt_khong_re_theo_ten
     paths:
       - "tools/oxlint/onehub/**"
-      - ".oxlintrc.json"
+      - "**/*oxlintrc*"
       - "packages/db/src/giai-doan.ts"
       - "_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs"
     expected: |
@@ -319,9 +319,13 @@ evals:
       GIAI_DOAN_GOC bang import trong luat, khong viet tay. Script chay oxlint --format=json voi cau hinh kho tren
       bay thu muc, giu chan doan cua hai luat, in "HONG <tep>:<dong>: <tu>". Truoc do tu kiem: cay tam chep
       .oxlintrc.json, moi thu muc mot tep moi nhac CLOSED_WON va GIAI_DOAN_GOC -> ca hai luat phai bat o du bay thu
-      muc, thieu -> "KHONG DO DUOC" ma 2. In so tep da quet (ghim duoi can 50, duoi -> ma 2).
+      muc, thieu -> "KHONG DO DUOC" ma 2. Soat duong tat: muc overrides tat mot trong hai luat ngoai cho mien da khai,
+      tep cau hinh oxlint long (khac .oxlintrc.json goc), chi thi (oxlint|eslint)-disable trong bay thu muc -> "KHONG DO
+      DUOC" ma 2 goi ten cho tat. In so tep da quet (ghim duoi can 50, duoi -> ma 2).
       CHIEU DO (da chay 2026-10-15): ban sao chen 'stage === "CLOSED_WON"' vao dashboard.service.ts -> ma 1 voi dong
-      "HONG apps/api/src/dashboard/dashboard.service.ts:<dong>: CLOSED_WON"; bo apps/app/lib khoi overrides -> ma 2.
+      "HONG apps/api/src/dashboard/dashboard.service.ts:<dong>: CLOSED_WON"; chen export GIAI_DOAN_GOC -> ma 1 voi dong
+      "...: GIAI_DOAN_GOC"; bo apps/app/lib khoi overrides, them override tat apps/api/src/dashboard/**, chen chi thi
+      oxlint-disable-next-line -> ma 2.
       paths chi con tep dinh nghia luat (doi 2026-10-15, F23 khong-re-theo-ten-thanh-luat-kho): ma san pham do lint:slop
       giu, ho so chi cham lai khi chinh luat doi.
 

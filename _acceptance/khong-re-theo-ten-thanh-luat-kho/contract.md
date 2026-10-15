@@ -29,23 +29,26 @@ thu `paths` về đúng các tệp định nghĩa luật.
 - AC-1: Given cấu hình `.oxlintrc.json` của kho, When `bun run lint:slop` chạy trên cây có một tệp trong bảy thư mục
   `apps/api/src`, `apps/agent/agent`, `apps/app/app`, `apps/app/components`, `apps/app/lib`, `packages/db/src`,
   `packages/telemetry/src` nhắc một id giai đoạn cũ hay tên `GIAI_DOAN_GOC`, Then lệnh thoát khác 0 với một chẩn
-  đoán của luật `onehub(khong-re-theo-ten-giai-doan)` gọi tên tệp đó và từ bị nhắc; danh sách từ cấm rút từ
-  `GIAI_DOAN_GOC` bằng import, không viết tay.
+  đoán gọi tên tệp đó và từ bị nhắc — luật `onehub(khong-re-theo-ten-giai-doan)` cho bảy id, luật
+  `onehub(khong-dung-giai-doan-goc)` cho tên `GIAI_DOAN_GOC`; danh sách id rút từ `GIAI_DOAN_GOC` bằng import, không
+  viết tay.
 - AC-2: Given các chỗ miễn của phép kiểm cũ — `packages/db/src/giai-doan.ts`, `apps/app/app/proto/**`, thư mục
   `generated`, và riêng tên `GIAI_DOAN_GOC` trong `packages/telemetry/src/allowlist.ts` — When các tệp đó nhắc từ
   cấm, Then luật không báo chúng; một id cũ (khác `GIAI_DOAN_GOC`) trong `allowlist.ts` vẫn bị báo; tệp ngoài bảy
   thư mục (ví dụ `apps/agent-okr`) không bị luật xét.
 - AC-3: Given cây ở đỉnh nhánh, When chạy `bun run lint:slop`, Then thoát 0 — luật mới không làm đỏ mã đang có.
 - AC-4: Given E17 của `giai-doan-thoa-thuan` (`config:executors.script.gdtt_khong_re_theo_ten`), When chạy, Then nó
-  lấy kết luận từ chính luật kho (oxlint với cấu hình kho trên bảy thư mục, chỉ giữ chẩn đoán của luật), script
+  lấy kết luận từ chính luật kho (oxlint với cấu hình kho trên bảy thư mục, chỉ giữ chẩn đoán của hai luật), script
   không còn danh sách từ hay biểu thức riêng; thoát 0 ở đỉnh và in số tệp đã quét (dưới 50 thì «KHONG DO DUOC», mã
-  2); luật bị tắt cho một thư mục trong cấu hình thì E17 không xanh mà in «KHONG DO DUOC» mã 2; trên bản sao chèn
-  `stage === "CLOSED_WON"` vào `apps/api/src/dashboard/dashboard.service.ts` thì thoát 1 với dòng
-  `HONG apps/api/src/dashboard/dashboard.service.ts:<dòng>: CLOSED_WON`.
+  2); luật bị tắt cục bộ — bỏ một thư mục khỏi cấu hình, một mục `overrides` tắt luật ngoài chỗ miễn đã khai, một tệp
+  cấu hình oxlint lồng, một chỉ thị `oxlint-disable`/`eslint-disable` trong bảy thư mục — thì E17 không xanh mà in
+  «KHONG DO DUOC» mã 2 gọi tên chỗ tắt; trên bản sao chèn `stage === "CLOSED_WON"` hay một export `GIAI_DOAN_GOC` vào
+  `apps/api/src/dashboard/dashboard.service.ts` thì thoát 1 với dòng `HONG <tệp>:<dòng>: <từ>`.
 - AC-5: Given `evals.yaml` của `giai-doan-thoa-thuan` sau vòng, When bộ chọn của lượt kiểm chéo đêm (`tapCham`) và bộ
   lọc hoá cũ theo `paths` của lưới trước-gộp nhận một diff chỉ chạm tệp sản phẩm nằm ngoài `paths` của mọi eval khác
   của hồ sơ, Then hồ sơ không bị chọn, trong khi bản `evals.yaml` ở mốc nền với cùng diff thì bị chọn; diff chạm tệp
-  luật, `.oxlintrc.json` hay `packages/db/src/giai-doan.ts` vẫn chọn hồ sơ.
+  luật, `.oxlintrc.json` hay `packages/db/src/giai-doan.ts` vẫn chọn hồ sơ; tệp mồi của phép đo nằm ngoài `paths`
+  của mọi eval khác của hồ sơ (không thì «KHONG DO DUOC»).
 - AC-6: Given hồ sơ `giai-doan-thoa-thuan`, When đọc dòng ghim mới nhất trong `run-log.jsonl` của nó, Then đó là dòng
   `repin` mọi suite và eval đạt kỳ vọng (E17 = 0), `sha` bằng `verified_commit` của báo cáo, không cũ hơn commit
   cuối sửa tệp của hồ sơ, và `recheck-evidence` của kit xanh.
@@ -80,3 +83,6 @@ sau-gộp. Vòng ship thẳng sau ghim.
 - Thu `paths` của eval khác (E2–E19 trừ E17) hay của hồ sơ khác.
 - Đưa luật vào plugin `anti-slop` của hãng (`tools/oxlint/anti-slop`).
 - Đổi `ci.yml`, `pre-push` hay lệnh `lint:slop`.
+- Chặn chỉ thị tắt luật và cấu hình lồng ngay ở mỗi PR: `lint:slop` tôn trọng chỉ thị `oxlint-disable` và cấu hình
+  lồng. E17 soát chúng ở lượt chấm lại hồ sơ, và luật kho «không viết chú thích» (`AGENTS.md`) đã cấm chỉ thị trong
+  mã sản phẩm.

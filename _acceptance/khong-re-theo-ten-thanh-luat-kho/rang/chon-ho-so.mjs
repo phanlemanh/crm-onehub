@@ -45,6 +45,15 @@ function voiGocNen(viec) {
 }
 
 const hong = [];
+const { parseEvals } = nap(join(kit().goc, "lib", "eval-yaml.cjs"));
+const khuonKhac = parseEvals(evalsDinh, [])
+	.filter((e) => e.id !== "E17")
+	.flatMap((e) => core.evalPathsOf(evalsDinh, e.id) ?? [])
+	.map(core.pathGlobToRe);
+for (const tep of NGOAI)
+	if (khuonKhac.some((k) => k.test(tep)))
+		dung(2, `KHONG DO DUOC: tep moi ${tep} nam trong paths cua eval khac`);
+console.log(`tep moi ngoai paths moi eval khac: ${NGOAI.join(", ")}`);
 for (const tep of NGOAI) {
 	if (boLoc(evalsDinh, tep)) hong.push(`HONG CON CHON loc-paths ${tep}`);
 	if (tapChamChon(tep)) hong.push(`HONG CON CHON tap-cham ${tep}`);

@@ -3,6 +3,7 @@ import {
 	copyFileSync,
 	mkdirSync,
 	mkdtempSync,
+	readFileSync,
 	rmSync,
 	symlinkSync,
 	writeFileSync,
@@ -27,6 +28,20 @@ const THU_MUC = [
 	"packages/db/src",
 	"packages/telemetry/src",
 ];
+const MIEN = new Map([
+	[
+		"onehub/khong-re-theo-ten-giai-doan",
+		new Set(["packages/db/src/giai-doan.ts", "apps/app/app/proto/**"]),
+	],
+	[
+		"onehub/khong-dung-giai-doan-goc",
+		new Set([
+			"packages/db/src/giai-doan.ts",
+			"apps/app/app/proto/**",
+			"packages/telemetry/src/allowlist.ts",
+		]),
+	],
+]);
 const MOI = 'export const moi = ["CLOSED_WON", "GIAI_DOAN_GOC"];\n';
 
 function dung(ma, cau) {
@@ -80,6 +95,42 @@ function kiemMoi() {
 	}
 }
 
+function git(...a) {
+	const r = spawnSync("git", ["-C", GOC, ...a], { encoding: "utf8" });
+	return { ma: r.status, ra: (r.stdout ?? "").trim() };
+}
+
+const laLoi = (muc) => (Array.isArray(muc) ? muc[0] : muc) === "error";
+
+function kiemDuongTat() {
+	const tat = [];
+	const cauHinh = JSON.parse(readFileSync(join(GOC, ".oxlintrc.json"), "utf8"));
+	for (const o of cauHinh.overrides ?? [])
+		for (const [luat, mien] of MIEN) {
+			const muc = o.rules?.[luat];
+			if (muc === undefined || laLoi(muc)) continue;
+			for (const f of o.files ?? [])
+				if (!mien.has(f)) tat.push(`overrides tat ${luat} o ${f}`);
+		}
+	const long = git("ls-files", "--", "*oxlintrc*")
+		.ra.split("\n")
+		.filter((t) => t && t !== ".oxlintrc.json");
+	for (const t of long) tat.push(`cau hinh long ${t}`);
+	const chiThi = git(
+		"grep",
+		"-n",
+		"-E",
+		"(oxlint|eslint)-disable",
+		"--",
+		...THU_MUC,
+	);
+	if (chiThi.ma === 0)
+		for (const d of chiThi.ra.split("\n")) tat.push(`chi thi tat ${d}`);
+	if (tat.length > 0)
+		dung(2, `KHONG DO DUOC: luat kho bi tat cuc bo — ${tat.join("; ")}`);
+}
+
+kiemDuongTat();
 kiemMoi();
 const ketQua = oxlint(GOC);
 console.log(`so tep da quet: ${ketQua.number_of_files}`);

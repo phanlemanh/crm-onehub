@@ -48,7 +48,9 @@ evals:
       n >= 50 (khong -> "HONG E17 <ma>"); (2) doc tinh khong-re-theo-ten.mjs: khong chua "giai-doan.ts" (khong import danh sach),
       "RegExp", "matchAll" (con -> "HONG BAN SAO <chuoi>"), co ten hai luat onehub (thieu -> "HONG KHONG DOC LUAT"); (3) cay tam
       chen 'if (stage === "CLOSED_WON") {}' vao cuoi apps/api/src/dashboard/dashboard.service.ts: lenh E17 thoat 1 va
-      co dong khop ^HONG apps/api/src/dashboard/dashboard.service.ts:\d+: CLOSED_WON$ (khong -> "HONG LOT CHEN").
+      co dong HONG apps/api/src/dashboard/dashboard.service.ts:<dong>: CLOSED_WON (khong -> "HONG LOT CHEN CLOSED_WON"); cay tam
+      chen 'export { GIAI_DOAN_GOC } from "@crm/db/giai-doan"' vao cung tep -> ma 1 va dong "...: GIAI_DOAN_GOC" (khong ->
+      "HONG LOT CHEN GIAI_DOAN_GOC").
       In "e17-qua-luat: dat".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -59,11 +61,16 @@ evals:
     paths: [tools/oxlint/onehub/**, .oxlintrc.json, _acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
     expected: |
       rang/chieu-do.mjs, bang dot bien khai truoc (ten, tep, phep thay, lenh, ma ky vong, thong diep ghim), moi dot bien
-      trong cay tam rieng, ap roi commit gia trong cay tam (rang con dung cay tam cua chinh no tu HEAD): (1) luat-rong: danh sach tu cua luat thanh rong -> ma-tran-luat ma 1 voi "HONG THIEU";
+      trong cay tam rieng, ap roi commit gia trong cay tam (rang con dung cay tam cua chinh no tu HEAD): (1) luat-rong: danh sach id cua luat thanh mot tu khong co -> ma-tran-luat ma 1 voi "HONG THIEU
+      apps/api/src/__krtt__/a.ts:DEMO_BOOKED";
       (2) tat-thu-muc: bo "apps/app/lib/**" khoi overrides bat luat trong .oxlintrc.json -> gdtt_khong_re_theo_ten
-      ma 2 voi "KHONG DO DUOC" va "apps/app/lib"; (3) bo-mien-allowlist: bat luat GIAI_DOAN_GOC cho allowlist.ts ->
-      ma-tran-luat ma 1 voi "HONG THUA packages/telemetry/src/allowlist.ts". Dot bien khong bi bat dung -> "HONG LOT
-      <ten>" ma 1; phep thay khong khop -> "HONG KHONG AP <ten>" ma 1. In "chieu-do: 3/3 bi bat".
+      ma 2 voi "KHONG DO DUOC" va "apps/app/lib"; (3) bo-mien-allowlist: bat luat khong-dung-giai-doan-goc cho allowlist.ts ->
+      ma-tran-luat ma 1 voi "HONG THUA packages/telemetry/src/allowlist.ts:GIAI_DOAN_GOC"; (4) override-thu-muc-con:
+      them override tat khong-re-theo-ten-giai-doan cho apps/api/src/dashboard/** -> gdtt_khong_re_theo_ten ma 2 voi
+      "KHONG DO DUOC" va "apps/api/src/dashboard/**"; (5) chi-thi-tat: chen oxlint-disable-next-line kem CLOSED_WON vao
+      dashboard.service.ts -> gdtt_khong_re_theo_ten ma 2 voi "KHONG DO DUOC" va "chi thi tat apps/api/src/dashboard/
+      dashboard.service.ts". Dot bien khong bi bat dung -> "HONG LOT <ten>" ma 1; phep thay khong khop -> "HONG KHONG AP
+      <ten>" ma 1. In "chieu-do: 5/5 bi bat".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
@@ -75,7 +82,8 @@ evals:
       rang/chon-ho-so.mjs: bang diff gia viet truoc. Doc evals.yaml cua giai-doan-thoa-thuan o dinh va o moc nen (git show
       <moc nen>:...). Voi diff chi cham apps/app/lib/__f23__.ts va apps/api/src/__f23__/x.ts: tapCham (scripts/kiem-cheo/
       tap-cham.mjs) va bo loc paths cua kit (lib/evidence-core.cjs) KHONG chon ho so o dinh (chon -> "HONG CON CHON <tep>"),
-      trong khi o moc nen thi chon (khong -> "HONG DOI CHUNG"); diff cham tools/oxlint/onehub/rules/<luat>.ts,
+      trong khi o moc nen thi chon (khong -> "HONG DOI CHUNG"); tep moi nam trong paths cua eval khac (E1-E19 tru E17) ->
+      "KHONG DO DUOC" ma 2; diff cham tools/oxlint/onehub/rules/<luat>.ts,
       .oxlintrc.json, packages/db/src/giai-doan.ts -> o dinh van chon (khong -> "HONG BO SOT <tep>"). In "chon-ho-so: dat".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

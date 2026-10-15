@@ -52,6 +52,35 @@ export const DOT_BIEN = [
 		ghim: ["HONG THUA packages/telemetry/src/allowlist.ts:GIAI_DOAN_GOC"],
 		maDung: 1,
 	},
+	{
+		ten: "override-thu-muc-con",
+		tep: ".oxlintrc.json",
+		thay: [
+			[
+				'\t\t{\n\t\t\t"files": [\n\t\t\t\t"packages/telemetry/src/allowlist.ts"',
+				'\t\t{\n\t\t\t"files": ["apps/api/src/dashboard/**"],\n\t\t\t"rules": { "onehub/khong-re-theo-ten-giai-doan": "off" }\n\t\t},\n\t\t{\n\t\t\t"files": [\n\t\t\t\t"packages/telemetry/src/allowlist.ts"',
+			],
+		],
+		lenh: giaiLenh("executors.script.gdtt_khong_re_theo_ten"),
+		ghim: ["KHONG DO DUOC", "apps/api/src/dashboard/**"],
+		maDung: 2,
+	},
+	{
+		ten: "chi-thi-tat",
+		tep: "apps/api/src/dashboard/dashboard.service.ts",
+		thay: [
+			[
+				"import ",
+				'// oxlint-disable-next-line onehub/khong-re-theo-ten-giai-doan\nexport const krtt = "CLOSED_WON";\nimport ',
+			],
+		],
+		lenh: giaiLenh("executors.script.gdtt_khong_re_theo_ten"),
+		ghim: [
+			"KHONG DO DUOC",
+			"chi thi tat apps/api/src/dashboard/dashboard.service.ts",
+		],
+		maDung: 2,
+	},
 ];
 
 const TRUONG = ["ten", "tep", "thay", "lenh", "ghim", "maDung"];
