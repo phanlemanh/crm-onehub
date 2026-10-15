@@ -35,8 +35,10 @@ việc đó); ở trang Tổng quan việc ấy vẫn hiện, nút dẫn về `/
 **Lối vào từ ngoài.** `/okr?tu=nhac` (nhắc Zalo, chuông) và `/okr?tu=viec-cua-toi` (khối việc ở Tổng quan) mở thẳng
 bảng cập nhật trong phần 1, phiên ghi đúng lối vào đó. `/okr` không có `tu` không mở phiên nào. Đường cũ
 `/okr/cap-nhat-tuan` (tin Zalo đã gửi vẫn mang nó) chuyển hướng phía máy chủ về `/okr`, giữ nguyên mọi tham số.
+Trang chuyển hướng sống lâu dài, không có hạn gỡ (tin Zalo đã gửi không sửa được).
 Liên kết nhắc mới sinh (`apps/agent/agent/lib/nhac-ke-hoach.ts`) và hai liên kết trong app (`viec-cua-toi.tsx`,
-`hop-thoai-kr.tsx`) trỏ thẳng `/okr`.
+`hop-thoai-kr.tsx`) trỏ thẳng `/okr`. Giữ nguyên vì không phải liên kết: `hop-thoai-cap-nhat-kr.tsx` (đường import
+của bảng cập nhật và tên hành động vết `cap-nhat-tuan`), bản mẫu `ban-mau-okr` (import thành phần mẫu).
 
 **A3.** Thanh thẻ còn bốn thẻ: Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý (`okr/tab-okr.ts`). Mô tả thẻ Của tôi đổi
 thành «Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách.». Nhãn vết `cap-nhat-tuan` (sổ hoạt động)
