@@ -80,3 +80,6 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
   đầu trang) và `dieu-huong-khu-muc-tieu` (bài `dhk-giu-don` đổi theo AC-13). Ước 70–120 phút máy. Ràng buộc của Điều
   phối M5: PR DH2 gộp trong vòng 1 ngày sau DH1; trễ hơn thì M5 mở vá riêng cho phần selector của DH1 và AC-14 thu
   về phần của DH2.
+- Hỏi-4 và NM2: NM2 sửa `data-table.tsx` (+49/−46) chỉ trong khoảng dòng 40–620 (import, `DataTableFacet`, toggle, khối
+  bộ lọc, nút Bộ lọc), không đụng dòng mở rộng hay ô mũi tên (Mac Studio, #375 03:56Z) — không chồng logic, chỉ có thể
+  lệch số dòng khi gộp; bên gộp sau giữ cả hai.
