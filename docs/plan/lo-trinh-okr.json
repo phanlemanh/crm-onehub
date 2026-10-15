@@ -2015,6 +2015,25 @@
       ]
     },
     {
+      "ma": "LT1d",
+      "slug": "chat-duong-day-ban-chup",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 446.2,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Chặt đường đẩy bản chụp",
+      "ten_ngan": "Chặt đường đẩy",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Máy chủ chỉ nhận thân yêu cầu lớn ở đúng đường nhận bản chụp lộ trình, và một lượt chạy tay từ nhánh chưa gộp không đổi được lộ trình trên trang»",
+      "vai": "Chủ kho",
+      "vi_sao": "Gốc: _acceptance/lo-trinh-doc-ban-chup/ — Ngoài-8 (trần thân 2 MB áp cho mọi đường REST, kể cả người chưa đăng nhập) và Ngoài-11 (chạy tay từ nhánh chưa gộp làm trang hiện lộ trình chưa duyệt) ở Cổng Bằng chứng LT1c 15/10; chủ kho chọn «mở hợp đồng mới», mở luôn.",
+      "bat_khi": "Không đường REST nào ngoài đường nhận bản chụp nhận thân quá 100 KB; lượt chạy tay từ nhánh khác nhánh chính bị từ chối có lý do (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Mở từ thẻ Cổng Bằng chứng LT1c (chủ kho 15/10). Dựng sau khi LT1c gộp onehub. Chưa gắn mốc.",
+      "dot": "vong-tin-hieu-1410"
+    },
+    {
       "ma": "LT3",
       "slug": "lo-trinh-nhieu-san-pham",
       "hang": "T3",

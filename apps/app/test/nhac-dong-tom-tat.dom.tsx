@@ -202,12 +202,12 @@ const CA = {
 			'[data-trang-thai="ST-nhac-dong-tomtat"]',
 		);
 		const tieuDe = khoi?.querySelector('[data-slot="card-title"]');
-		expect(chu(tieuDe)).toBe("Trợ lý OKR");
+		expect(chu(tieuDe)).toBe("Kara · OKR");
 		expect(khoi?.getAttribute("aria-labelledby")).toBe(tieuDe?.id ?? "");
 		const field = khoi?.querySelector('[data-slot="field"]');
 		expect(field?.getAttribute("data-orientation")).toBe("horizontal");
 		const nhan = field?.querySelector('[data-slot="field-label"]');
-		expect(chu(nhan)).toBe("Dòng Tóm tắt tuần của Trợ lý OKR");
+		expect(chu(nhan)).toBe("Dòng Tóm tắt tuần của Kara");
 		expect(nhan?.getAttribute("for")).toBe(congTac()?.id ?? "");
 		expect(chu(field?.querySelector('[data-slot="field-description"]'))).toBe(
 			"Mỗi tuần một dòng, khi phòng bạn có tóm tắt mới",

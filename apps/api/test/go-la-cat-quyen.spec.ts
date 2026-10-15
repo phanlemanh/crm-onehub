@@ -58,7 +58,7 @@ const THU_TUC_MAU = [
 	{ ten: "contacts.list", input: {} },
 	{ ten: "companies.list", input: {} },
 	{ ten: "deals.list", input: {} },
-	{ ten: "activities.myTasks", input: {} },
+	{ ten: "viec.cuaToi", input: { nhom: "giao-cho-toi" } },
 	{ ten: "search.quick", input: { q: "a" } },
 	{ ten: "campaigns.list", input: undefined },
 ] as const;

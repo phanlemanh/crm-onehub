@@ -13,6 +13,7 @@ import {
 	API_KEY_HEADER,
 	API_KEY_PREFIX,
 	API_KEY_USAGE,
+	KHOA_KEO_TIN_HIEU,
 } from "./api-keys";
 import { canhKhoaApiPlugin } from "./canh-khoa-api";
 import { chayNen } from "./chay-nen";
@@ -82,6 +83,7 @@ if (env.microsoft) {
 }
 
 export const API_KEY_PLUGIN_OPTIONS: ApiKeyConfigurationOptions = {
+	configId: "default",
 	apiKeyHeaders: API_KEY_HEADER,
 	defaultPrefix: API_KEY_PREFIX,
 	enableSessionForAPIKeys: true,
@@ -94,6 +96,12 @@ export const API_KEY_PLUGIN_OPTIONS: ApiKeyConfigurationOptions = {
 		maxExpiresIn: API_KEY_EXPIRATION.maxDays,
 		minExpiresIn: API_KEY_EXPIRATION.minDays,
 	},
+};
+
+export const API_KEY_KEO_TIN_HIEU_OPTIONS: ApiKeyConfigurationOptions = {
+	...API_KEY_PLUGIN_OPTIONS,
+	configId: KHOA_KEO_TIN_HIEU.configId,
+	enableSessionForAPIKeys: false,
 };
 
 export const auth = betterAuth({
@@ -281,7 +289,7 @@ export const auth = betterAuth({
 			organizationProvisioning: { disabled: true },
 		}),
 
-		apiKey(API_KEY_PLUGIN_OPTIONS),
+		apiKey([API_KEY_PLUGIN_OPTIONS, API_KEY_KEO_TIN_HIEU_OPTIONS]),
 		canhKhoaApiPlugin(),
 	],
 
