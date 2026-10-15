@@ -130,7 +130,7 @@ type Don = {
 
 function giaiDon(ma: string): Don | null {
 	if (ma.startsWith("nguoi:")) {
-		const ng = NGUOI_DON[ma.slice("nguoi:".length)];
+		const ng = NGUOI_DON.get(ma.slice("nguoi:".length));
 		if (!ng) return null;
 		return {
 			ma,
@@ -495,7 +495,7 @@ function DonViCon({ dv }: { dv: DonViPhang }) {
 }
 
 function NhomDaBo({ id }: { id: string }) {
-	const ds = DA_BO[id] ?? [];
+	const ds = DA_BO.get(id) ?? [];
 	if (ds.length === 0) return null;
 	return (
 		<section className="flex flex-col gap-3" data-nhom-da-bo>

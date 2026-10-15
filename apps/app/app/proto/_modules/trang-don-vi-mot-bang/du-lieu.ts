@@ -53,9 +53,9 @@ const MT_CSKH_4: MucTieuMau = {
 
 export const NHAP = new Set(["c4"]);
 
-export const DA_BO: Record<string, string[]> = {
-	cskh: ["Khảo sát hài lòng đối tác hằng tháng"],
-};
+export const DA_BO = new Map([
+	["cskh", ["Khảo sát hài lòng đối tác hằng tháng"]],
+]);
 
 const MUC_TIEU = new Map<string, MucTieuMau[]>(MUC_TIEU_CUA_DON_VI);
 MUC_TIEU.set("cskh", [
@@ -147,13 +147,16 @@ export type NguoiPhang = {
 	quanLy: string;
 };
 
-export const NGUOI_DON: Record<string, NguoiPhang> = {
-	thao: {
-		nguoi: NGUOI.thao,
-		phongBan: "Chăm sóc khách hàng",
-		quanLy: NGUOI.son.ten,
-	},
-};
+export const NGUOI_DON = new Map<string, NguoiPhang>([
+	[
+		"thao",
+		{
+			nguoi: NGUOI.thao,
+			phongBan: "Chăm sóc khách hàng",
+			quanLy: NGUOI.son.ten,
+		},
+	],
+]);
 
 export function mucTieuCua(id: string): MucTieuMau[] {
 	return MUC_TIEU.get(id) ?? [];

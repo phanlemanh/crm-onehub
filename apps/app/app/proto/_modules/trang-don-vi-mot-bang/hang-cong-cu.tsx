@@ -59,7 +59,7 @@ function luaChon(maNguoi: string | null): LuaChon[] {
 			tim: boDau([d.ten, ...d.duong].join(" ")),
 		};
 	});
-	const ng = maNguoi ? NGUOI_DON[maNguoi.replace("nguoi:", "")] : undefined;
+	const ng = maNguoi ? NGUOI_DON.get(maNguoi.replace("nguoi:", "")) : undefined;
 	if (!ng || !maNguoi) return donVi;
 	return [
 		{
