@@ -3,10 +3,10 @@ schema_version: 1
 slug: chat-duong-day-ban-chup
 feature: Chỉ onehub đẩy được bản chụp lộ trình lên CRM; đường REST khác giữ trần thân 100 KB
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-15T08:57:13Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -26,10 +26,11 @@ Vì sao: Gốc: _acceptance/lo-trinh-doc-ban-chup/ — Ngoài-8 (trần thân 2 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] sau khi lên production, lộ trình trên trang có luôn là lộ trình của nhánh chính, và có đường nhận dữ liệu nào ngoài đường bản chụp còn nhận yêu cầu lớn không?
-- Kết quả nào là SỐNG: [đề xuất] trong 14 ngày đầu: mọi bản chụp CRM đang giữ mang mã commit nằm trên onehub; không lượt «Bản chụp lộ trình» nào chạy từ nhánh khác mà đẩy được; một yêu cầu thử 150 KB không khoá tới một đường REST khác của production nhận 413.
-- Kết quả nào là CHẾT: [đề xuất] có một bản chụp mang commit không nằm trên onehub, hoặc một đường REST khác nhận yêu cầu quá 100 KB.
-- Timebox: [đề xuất] 14 ngày kể từ ngày gộp vào onehub; đọc số bằng một lệnh so mã commit của bản chụp với onehub và nhật ký Actions của workflow.
+- Câu hỏi phép đo trả lời: sau khi lên production, lộ trình trên trang có luôn là lộ trình của nhánh chính, và có đường nhận dữ liệu nào ngoài đường bản chụp còn nhận yêu cầu lớn không?
+- Kết quả nào là SỐNG: trong 14 ngày đầu: mọi bản chụp CRM đang giữ mang mã commit nằm trên onehub; không lượt «Bản chụp lộ trình» nào chạy từ nhánh khác mà đẩy được; một yêu cầu thử 150 KB không khoá tới một đường REST khác của production nhận 413.
+- Kết quả nào là CHẾT: có một bản chụp mang commit không nằm trên onehub, hoặc một đường REST khác nhận yêu cầu quá 100 KB.
+- Timebox: 14 ngày kể từ ngày gộp vào onehub; đọc số bằng một lệnh so mã commit của bản chụp với onehub và nhật ký Actions của workflow.
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng trên như máy đề xuất (Manh Phan, Cổng Đáng 15/10: «build, ngưỡng như đề xuất»).
 
 **Máy khuyến nghị:** `build`, ngưỡng như trên. Hạng T2 (không chạm khoá API, xác thực hay CSDL). Ước 6–7 tiêu chí. Dựng sau khi LT1c gộp onehub.
 
