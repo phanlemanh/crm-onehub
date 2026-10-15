@@ -5,7 +5,7 @@ slug: neo-thuoc-het-han
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-15-neo-thuoc-het-han-design.md
 approved_by:
 approved_at:
@@ -81,3 +81,23 @@ sau-gộp. Vòng ship thẳng sau ghim.
 ## Notes
 
 - Yêu cầu chạm tệp hồ sơ đã ký: P7-24.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Phép kiểm «hồ sơ cũ đã được trả về nguyên bản» hiện chỉ nhìn các tệp mà vòng này có chạm vào. Nếu sau này có người sửa lén hồ sơ đó bằng đường khác thì phép kiểm có thể không thấy, dù hôm nay hồ sơ vẫn sạch.
+  - Ngoài-2: Nếu máy chạy kiểm tra thiếu lịch sử git, phép kiểm «không đổi giá trị cấu hình có sẵn» sẽ tự tắt mà vẫn báo đạt. Với cách chạy hiện nay điều này chưa xảy ra.
+  - Ngoài-3: Phép kiểm cấu hình chỉ bắt được việc đổi giá trị đơn lẻ, chưa bắt được việc xoá hay sửa một mục trong danh sách cấu hình. Một thay đổi như vậy trong tương lai có thể lọt qua mà không ai được báo.
+  - Ngoài-4: Nếu lệnh git trong phép kiểm phạm vi bị lỗi giữa chừng, phép kiểm có thể lặng lẽ bỏ qua một số commit mà vẫn báo đạt. Chỉ xảy ra khi môi trường chạy kiểm tra có sự cố.
+  - Ngoài-5: Việc bốn hồ sơ khó đọc nay đọc được mới được kiểm gián tiếp, bằng cách xem mã cũ đã bị bỏ chưa, chứ chưa có phép thử trực tiếp cho thấy bốn hồ sơ đó thật sự được đọc ra. Nếu bộ đọc lặng lẽ trả về rỗng thì phép kiểm vẫn xanh.
+  - Ngoài-6: Ba phép kiểm phạm vi chưa được thử bằng một ca cố ý vi phạm để chứng minh chúng báo đỏ đúng lúc. Hiện chúng chỉ được thấy là im lặng trên lịch sử thật, nên nếu chúng hỏng ngầm thì khó phát hiện.
+  - Ngoài-7: Phép kiểm «hồ sơ cũ về đúng nguyên bản» không quét hết mọi tệp trong hồ sơ, và bỏ qua hẳn tệp nhật ký. Hôm nay hồ sơ vẫn sạch, nhưng một thay đổi lọt vào tệp nhật ký sẽ không bị phát hiện.
+  - Ngoài-8: Phép thử kiểm tra «thước còn đo đúng sau khi có commit mới» có thể báo đạt ngay cả khi lượt đo trước đó không đo được gì. Vì vậy một lần báo đạt chưa chắc chứng minh thước thật sự bắt được thay đổi, nhưng không làm hỏng kết quả nào mà hồ sơ đã hứa.
+  - Ngoài-9: Phép thử đối chứng chỉ kiểm tra rằng kết quả đổi đi khi thêm commit giả, chứ không kiểm tra rằng kết quả đổi đúng vì dấu của commit giả. Có thể có lần báo đạt mà thước thật ra đổi vì lý do khác, nên độ tin của phép thử này yếu hơn vẻ ngoài.
+  - Ngoài-10: Bộ kiểm phạm vi hiện xanh nhưng chưa có ca thử chứng minh nó thật sự bắt được một commit đổi giá trị cấu hình có sẵn hay đụng vào hồ sơ cập nhật tuần OKR. Nếu ai đó vi phạm hai luật này, có thể không có gì báo đỏ.
+  - Ngoài-11: Bước kiểm dòng ghim lại chỉ xét những eval mà dòng ghim tự liệt kê. Nếu một dòng ghim bỏ sót vài eval thì vẫn được coi là xanh, nên «mọi eval đều đạt» chưa được bảo đảm đầy đủ.
+  - Ngoài-12: Việc bốn tệp mô tả kiểm thử nay đọc được chỉ được xác nhận gián tiếp, qua việc lệnh chạy xong không lỗi. Nếu bộ đọc mới đọc ra rỗng thì bước kiểm vẫn có thể báo xanh.
+  - Ngoài-13: Nếu một lượt ghim lại bị ngắt giữa chừng, bước kiểm tra có thể bỏ qua dòng hỏng và tin vào lượt ghim xanh cũ hơn, khiến hồ sơ trông đã đạt dù lượt mới nhất chưa đạt.
+  - Ngoài-14: Mốc gộp cố định được ghi ở nhiều chỗ, nên sau này đổi mốc mà quên một chỗ thì phép kiểm sẽ lệch nhau. Hiện tại chưa gây sai kết quả.
+  - Ngoài-15: Một phép thử đối chứng đo hơi khác điều nó tự mô tả, nhưng vẫn cho kết quả đúng nên không ảnh hưởng người dùng.
+  - Ngoài-16: Khi phép kiểm gặp lỗi, thư mục làm việc tạm có thể bị bỏ lại và tích dần trên máy; không ảnh hưởng kết quả nghiệm thu.
+  - Ngoài-17: Phép thử đối chứng chứng minh được ít hơn vẻ ngoài: nó có thể xanh ngay cả khi bản sao hỏng vì lý do khác, nên độ tin cậy của phép kiểm thước neo thấp hơn kỳ vọng.
+  - Ngoài-18: Phép kiểm chỉ đọc dòng nhãn in ra chứ không kiểm tệp thật được soi, nên nếu script trôi phạm vi mà vẫn in nhãn đúng thì phép kiểm không phát hiện.
+  - Ngoài-19: Phép kiểm phạm vi chưa từng được thử bằng một vi phạm cố ý, nên nếu nó hỏng im lặng thì vẫn báo xanh và không ai biết.

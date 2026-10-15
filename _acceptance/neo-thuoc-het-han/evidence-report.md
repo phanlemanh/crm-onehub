@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 1e6e28d4e37f54d8b41dfddd90baa556db01d63d
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-15
 ---
 
 # Evidence Report: neo-thuoc-het-han
