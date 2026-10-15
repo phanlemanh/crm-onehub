@@ -6,7 +6,7 @@ import {
 	setSystemTime,
 	test,
 } from "bun:test";
-import { db } from "@crm/db";
+import { db, type Prisma } from "@crm/db";
 import { dieuKienXemMucTieu, nguCanhXemOkr } from "@crm/db/okr-hien-thi";
 import type { docOkr as docOkrTheoQuyen, LocTim } from "../agent/lib/hoi-doc";
 import type { NguCanhPhien } from "../agent/lib/phien";
@@ -27,7 +27,35 @@ const NGUOI = [
 	{ ma: "thai-minh-chau", thay: false },
 	{ ma: "tran-quoc-bao", thay: true },
 ] as const;
-const CONG_CU = ["tim_okr", "doc_okr"] as const;
+const O_LOC = [
+	{
+		ten: "rong",
+		loc: (_tu: string): LocTim => ({}),
+		them: (_tu: string): Prisma.OkrObjectiveWhereInput => ({}),
+		coGioiHanKhiThay: true,
+	},
+	{
+		ten: "chu-ky-q4",
+		loc: (_tu: string): LocTim => ({ cycleId: CHU_KY_Q4 }),
+		them: (_tu: string): Prisma.OkrObjectiveWhereInput => ({}),
+		coGioiHanKhiThay: true,
+	},
+	{
+		ten: "tu-khoa-kr",
+		loc: (tu: string): LocTim => ({ tu }),
+		them: (tu: string): Prisma.OkrObjectiveWhereInput => ({
+			OR: [
+				{ title: { contains: tu, mode: "insensitive" } },
+				{
+					keyResults: {
+						some: { title: { contains: tu, mode: "insensitive" } },
+					},
+				},
+			],
+		}),
+		coGioiHanKhiThay: true,
+	},
+] as const;
 
 type KetQua = { ok: boolean; mucTieu?: unknown; reason?: string };
 type CongCu<DauVao> = {
@@ -51,7 +79,10 @@ const phien = (userId: string, purpose = "okr-hoi"): NguCanhPhien => ({
 	},
 });
 
-async function tapThay(userId: string) {
+async function tapThay(
+	userId: string,
+	them: Prisma.OkrObjectiveWhereInput = {},
+) {
 	const nc = (await nguCanhXemOkr(db, [userId])).get(userId);
 	if (!nc) throw new Error(`thieu ngu canh xem cua ${userId}`);
 	const hang = await db.okrObjective.findMany({
@@ -60,6 +91,7 @@ async function tapThay(userId: string) {
 				dieuKienXemMucTieu(nc),
 				{ status: "cong-bo" },
 				{ cycleId: CHU_KY_Q4 },
+				them,
 			],
 		},
 		select: { id: true, keyResults: { select: { id: true } } },
@@ -100,28 +132,36 @@ afterAll(async () => {
 
 describe("hdo quyen doc", () => {
 	for (const n of NGUOI) {
-		test(`tim_okr ${n.ma}: tap Muc tieu va KR bang dieuKienXemMucTieu`, async () => {
-			const uid = idMau("nguoi", n.ma);
-			const mong = await tapThay(uid);
-			expect(mong.mucTieu.includes(GIOI_HAN)).toBe(n.thay);
-			const kq = await tim.execute({ cycleId: CHU_KY_Q4 }, phien(uid));
-			const ds = (kq as { mucTieu: MtRa[] }).mucTieu;
-			expect(maMt(ds)).toEqual(mong.mucTieu);
-			expect(maKr(ds)).toEqual(mong.kr);
-			const json = JSON.stringify(kq);
-			const lo = [
-				GIOI_HAN,
-				gioiHan.ten,
-				...gioiHan.kr.flatMap((k) => [k.id, k.title]),
-			];
-			for (const x of lo) expect(json.includes(x)).toBe(n.thay);
-			const theoChu = await tim.execute(
-				{ tu: gioiHan.kr[0]?.title.slice(0, 18) ?? "x" },
-				phien(uid),
-			);
-			expect(JSON.stringify(theoChu).includes(GIOI_HAN)).toBe(n.thay);
-			soKhangDinh++;
-		});
+		for (const o of O_LOC) {
+			test(`tim_okr ${n.ma} · loc ${o.ten}: tap Muc tieu va KR bang dieuKienXemMucTieu`, async () => {
+				const uid = idMau("nguoi", n.ma);
+				const tu = gioiHan.kr[0]?.title.slice(0, 18) ?? "x";
+				const loc = o.loc(tu);
+				const mong = await tapThay(uid, o.them(tu));
+				const kq = await tim.execute(loc, phien(uid));
+				const ds = (kq as { mucTieu: MtRa[] }).mucTieu;
+				const lech = (ra: string[], can: string[]) => ({
+					lot: ra.filter((x) => !can.includes(x)),
+					thieu: can.filter((x) => !ra.includes(x)),
+				});
+				expect({
+					mucTieu: lech(maMt(ds), mong.mucTieu),
+					kr: lech(maKr(ds), mong.kr),
+				}).toEqual({
+					mucTieu: { lot: [], thieu: [] },
+					kr: { lot: [], thieu: [] },
+				});
+				const coGioiHan =
+					mong.mucTieu.includes(GIOI_HAN) ||
+					gioiHan.kr.some((k) => mong.kr.includes(k.id));
+				if (!n.thay) expect(coGioiHan).toBe(false);
+				if (o.coGioiHanKhiThay && n.thay) expect(coGioiHan).toBe(true);
+				const json = JSON.stringify(kq);
+				const ten = [gioiHan.ten, ...gioiHan.kr.map((k) => k.title)];
+				if (!n.thay) expect(ten.filter((x) => json.includes(x))).toEqual([]);
+				soKhangDinh++;
+			});
+		}
 
 		test(`doc_okr ${n.ma}: Muc tieu va KR gioi han nhu khong ton tai`, async () => {
 			const uid = idMau("nguoi", n.ma);
@@ -158,6 +198,6 @@ describe("hdo quyen doc", () => {
 	});
 
 	test("so khang dinh bang so o ma tran", () => {
-		expect(soKhangDinh).toBe(NGUOI.length * CONG_CU.length);
+		expect(soKhangDinh).toBe(NGUOI.length * (O_LOC.length + 1));
 	});
 });
