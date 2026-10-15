@@ -67,20 +67,23 @@ const toiKho = () => lienKet(`[data-slot=sheet-content] a[href="${KHO}"]`);
 const xemTheoDonVi = () => lienKet('[data-nut="xem-theo-don-vi"]');
 
 async function bamLienKet(a: HTMLAnchorElement): Promise<{ chan: boolean }> {
-	let toiCuoi = false;
+	let toiCuoi: boolean | null = null;
 	const cuoi = (e: Event) => {
-		toiCuoi = !e.defaultPrevented;
+		toiCuoi = e.defaultPrevented;
 		e.preventDefault();
 	};
 	window.addEventListener("click", cuoi);
+	const su = new MouseEvent("click", {
+		bubbles: true,
+		cancelable: true,
+		button: 0,
+	});
 	await act(async () => {
-		a.dispatchEvent(
-			new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }),
-		);
+		a.dispatchEvent(su);
 	});
 	window.removeEventListener("click", cuoi);
 	await nhip(5);
-	return { chan: !toiCuoi };
+	return { chan: toiCuoi ?? su.defaultPrevented };
 }
 
 const hop = () => q("[role=alertdialog]");

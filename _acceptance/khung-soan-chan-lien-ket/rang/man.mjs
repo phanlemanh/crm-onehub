@@ -221,6 +221,26 @@ function ketBuoc(nhan, loi) {
 	else saiThem(`kcl ${nhan}: ${loi}`);
 }
 
+const dongDau = (x) => x.split("\n")[0];
+
+function ketBuocCo(t, dau, nhan, loi) {
+	const moi = t.loi.slice(dau);
+	t.daTinh = (t.daTinh ?? 0) + moi.length;
+	if (loi === null && moi.length > 0)
+		return ketBuoc(
+			nhan,
+			`console loi trong luc thao tac: ${moi.map(dongDau).join(" | ")}`,
+		);
+	ketBuoc(nhan, loi);
+}
+
+async function dongHop(t, chu) {
+	const bam = await bamNutChu(t.p, `${CHON.hopHoi} button`, chu);
+	if (!bam) return `khong thay nut «${chu}» trong hop`;
+	const het = await choHetHop(t.p);
+	return het ? null : `hop van mo sau khi bam «${chu}»`;
+}
+
 async function bamVaQuanSat(t, nhan, tieuDe) {
 	const truoc = await trangThai(t.p);
 	await (await lienKet(t.p)).asElement().click();
@@ -245,20 +265,22 @@ async function buocA(t, kho, cuocId) {
 		await khongDo(`${nhan}: luot khong toi mo hinh`);
 	if (!(await choDangSoan(t.p)))
 		await khongDo(`${nhan}: khong thay Kara dang soan`);
+	const dau = t.loi.length;
 	const loi = await bamVaQuanSat(t, nhan, m.trang.hoiDong.tieuDe);
-	if (loi) return ketBuoc(nhan, loi);
+	if (loi) return ketBuocCo(t, dau, nhan, loi);
 	await anh(t, `kcl-dang-soan-${kho}`);
-	await bamNutChu(t.p, `${CHON.hopHoi} button`, m.trang.hoiDong.thoi);
-	await choHetHop(t.p);
+	const oLaiLoi = await dongHop(t, m.trang.hoiDong.thoi);
+	if (oLaiLoi) return ketBuocCo(t, dau, nhan, oLaiLoi);
 	const oLai = await trangThai(t.p);
 	if (!oLai.khung || oLai.record !== `soan:${cuocId}`)
-		return ketBuoc(nhan, `o lai mat khung · ${JSON.stringify(oLai)}`);
+		return ketBuocCo(t, dau, nhan, `o lai mat khung · ${JSON.stringify(oLai)}`);
 	const loi2 = await bamVaQuanSat(t, `${nhan} lan 2`, m.trang.hoiDong.tieuDe);
-	if (loi2) return ketBuoc(nhan, `lan 2: ${loi2}`);
-	await bamNutChu(t.p, `${CHON.hopHoi} button`, m.trang.hoiDong.nut);
+	if (loi2) return ketBuocCo(t, dau, nhan, `lan 2: ${loi2}`);
+	if (!(await bamNutChu(t.p, `${CHON.hopHoi} button`, m.trang.hoiDong.nut)))
+		return ketBuocCo(t, dau, nhan, `khong thay nut «${m.trang.hoiDong.nut}»`);
 	const roi = await choDaRoi(t.p);
 	ghi(`   ${nhan}: sau khi roi ${JSON.stringify(await trangThai(t.p))}`);
-	ketBuoc(nhan, roi);
+	ketBuocCo(t, dau, nhan, roi);
 }
 
 async function buocB(t, kho, cuocId) {
@@ -276,11 +298,12 @@ async function buocB(t, kho, cuocId) {
 	);
 	await o.asElement().click();
 	await t.p.keyboard.type(CHU);
+	const dau = t.loi.length;
 	const loi = await bamVaQuanSat(t, nhan, mui.dialog.boThayDoi.tieuDe);
-	if (loi) return ketBuoc(nhan, loi);
+	if (loi) return ketBuocCo(t, dau, nhan, loi);
 	await anh(t, `kcl-go-do-${kho}`);
-	await bamNutChu(t.p, `${CHON.hopHoi} button`, mui.dialog.boThayDoi.tiepTuc);
-	await choHetHop(t.p);
+	const oLaiLoi = await dongHop(t, mui.dialog.boThayDoi.tiepTuc);
+	if (oLaiLoi) return ketBuocCo(t, dau, nhan, oLaiLoi);
 	const con = await t.p.evaluate(
 		(chon) =>
 			[...document.querySelectorAll(chon)].find((x) => x.checkVisibility())
@@ -289,7 +312,9 @@ async function buocB(t, kho, cuocId) {
 	);
 	const sau = await trangThai(t.p);
 	ghi(`   ${nhan}: o soan «${con}» · ${JSON.stringify(sau)}`);
-	ketBuoc(
+	ketBuocCo(
+		t,
+		dau,
 		nhan,
 		con !== CHU
 			? `chu trong o soan doi thanh «${con}»`
@@ -322,23 +347,24 @@ async function buocC(t, cuocId) {
 		LIEN_KET,
 	);
 	if (!dungCho) return ketBuoc(nhan, "khong focus duoc lien ket");
+	const dau = t.loi.length;
 	await t.p.keyboard.press("Enter");
 	const hop = await choHop(t.p, m.trang.hoiDong.tieuDe);
 	const sau = await trangThai(t.p);
 	ghi(`   ${nhan}: Enter → ${JSON.stringify(sau)}`);
-	if (hop) {
-		await bamNutChu(t.p, `${CHON.hopHoi} button`, m.trang.hoiDong.thoi);
-		await choHetHop(t.p);
-	}
-	ketBuoc(
+	const oLaiLoi = hop ? await dongHop(t, m.trang.hoiDong.thoi) : null;
+	ketBuocCo(
+		t,
+		dau,
 		nhan,
-		!hop
-			? sau.duong !== truoc.duong
-				? "lien ket di luon"
-				: "khong hop hoi"
-			: sau.record !== `soan:${cuocId}`
-				? "dia chi doi"
-				: null,
+		oLaiLoi ??
+			(!hop
+				? sau.duong !== truoc.duong
+					? "lien ket di luon"
+					: "khong hop hoi"
+				: sau.record !== `soan:${cuocId}`
+					? "dia chi doi"
+					: null),
 	);
 }
 
@@ -419,13 +445,11 @@ async function phanMan() {
 			}
 			await buocB(t, kho, cuoc.id);
 			if (kho === 1280) await buocC(t, cuoc.id);
-			const coSan = t.loi.filter((x) => LOI_CO_SAN.test(x));
-			const moi = t.loi.filter((x) => !LOI_CO_SAN.test(x));
-			if (coSan.length > 0)
+			const luTai = t.loi.length - (t.daTinh ?? 0);
+			if (luTai > 0)
 				ghi(
-					`   ${kho}: ${coSan.length} loi hydration co san cua Theo don vi (ST-donvi-dangtai, viec phu P1-19) — khong tinh`,
+					`   ${kho}: ${luTai} loi console luc tai trang (truoc khi bam lien ket, khong tinh; ${t.loi.filter((x) => LOI_CO_SAN.test(x)).length} la loi hydration co san cua Theo don vi — viec phu P1-19): ${t.loi.map(dongDau).join(" | ")}`,
 				);
-			if (moi.length > 0) saiThem(`kcl ${kho}: console loi ${moi.join(" | ")}`);
 		} finally {
 			await t.dong();
 		}

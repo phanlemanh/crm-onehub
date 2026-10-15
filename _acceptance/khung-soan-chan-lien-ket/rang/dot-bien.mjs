@@ -9,7 +9,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 4;
+const SO_CAP_KHAI = 5;
 const TRAN_LENH_MS = 300_000;
 const MA_KHONG_DO = 2;
 const KHOA_LANH = [
@@ -38,7 +38,12 @@ const CAP = [
 		ten: "b",
 		mo: "nút rời đóng hộp thay vì đi tiếp",
 		pha: (d) =>
-			thayMotLan(d, GIU, "if (tiep) tiep();\n\t\t\t\telse dongThat();", "dongThat();"),
+			thayMotLan(
+				d,
+				GIU,
+				"if (tiep) tiep();\n\t\t\t\telse dongThat();",
+				"dongThat();",
+			),
 		lenh: `${UI} -t '^kcl-hop '`,
 		ghim: "kcl-hop h4: dieu huong 1 lan",
 	},
@@ -63,6 +68,19 @@ const CAP = [
 		lenh: `${UI} -t kcl-hop-sach`,
 		ghim: "kcl-hop-sach d1: khong hop",
 	},
+	{
+		ten: "e",
+		mo: "bộ chặn chỉ dừng lan truyền, không chặn mặc định",
+		pha: (d) =>
+			thayMotLan(
+				d,
+				GIU,
+				"\t\t\te.preventDefault();\n\t\t\te.stopPropagation();",
+				"\t\t\te.stopPropagation();",
+			),
+		lenh: `${UI} -t '^kcl-hop '`,
+		ghim: "kcl-hop h1: chan false",
+	},
 ];
 
 function lenhCuaConfig() {
@@ -84,7 +102,7 @@ function chay(dich, lenh) {
 }
 
 function trangThaiCay() {
-	return spawnSync("git", ["status", "--porcelain"], {
+	return spawnSync("git", ["status", "--porcelain", "--", TRANG_SOAN, GIU], {
 		cwd: GOC,
 		encoding: "utf8",
 	}).stdout;

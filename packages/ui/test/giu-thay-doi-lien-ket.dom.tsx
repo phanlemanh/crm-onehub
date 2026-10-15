@@ -142,25 +142,24 @@ async function bamLienKet(
 	a: HTMLAnchorElement = lienKet(),
 ): Promise<KetBam> {
 	await cho();
-	let toiCuoi = false;
+	let toiCuoi: boolean | null = null;
 	const cuoi = (e: Event) => {
-		toiCuoi = !e.defaultPrevented;
+		toiCuoi = e.defaultPrevented;
 		e.preventDefault();
 	};
 	window.addEventListener("click", cuoi);
+	const su = new MouseEvent("click", {
+		bubbles: true,
+		cancelable: true,
+		button: 0,
+		...thuocTinh,
+	});
 	await act(async () => {
-		a.dispatchEvent(
-			new MouseEvent("click", {
-				bubbles: true,
-				cancelable: true,
-				button: 0,
-				...thuocTinh,
-			}),
-		);
+		a.dispatchEvent(su);
 	});
 	window.removeEventListener("click", cuoi);
 	await cho();
-	return { chan: !toiCuoi };
+	return { chan: toiCuoi ?? su.defaultPrevented };
 }
 
 function hop(): Element | null {
@@ -353,6 +352,7 @@ describe("kcl-khong-chan", () => {
 			dung(<VoSheet />);
 			await go("Hợp đồng");
 			const a = lienKet();
+			const goc = a.cloneNode() as HTMLAnchorElement;
 			ca.sua?.(a);
 			const ket = await bamLienKet(ca.bam ?? {}, a);
 			const ten = ca.o.split(" ")[0];
@@ -363,6 +363,12 @@ describe("kcl-khong-chan", () => {
 				`kcl-khong-chan ${ten}: khong hop true`,
 			);
 			expect(daDi).toEqual([]);
+			for (const ten of ["target", "download", "href"]) a.removeAttribute(ten);
+			for (const { name, value } of goc.attributes) a.setAttribute(name, value);
+			const doiChung = await bamLienKet({}, a);
+			expect(`kcl-khong-chan ${ten}: doi chung chan ${doiChung.chan}`).toBe(
+				`kcl-khong-chan ${ten}: doi chung chan true`,
+			);
 		});
 	}
 
@@ -381,6 +387,16 @@ describe("kcl-ngoai", () => {
 		);
 		expect(`kcl-ngoai: khong chan ${!ket.chan}`).toBe(
 			"kcl-ngoai: khong chan true",
+		);		await act(async () => {
+			document
+				.querySelector("[data-slot='sheet-content']")
+				?.dispatchEvent(
+					new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+				);
+		});
+		await cho();
+		expect(`kcl-ngoai: doi chung khung dang do ${laHopBo()}`).toBe(
+			"kcl-ngoai: doi chung khung dang do true",
 		);
 	});
 });
