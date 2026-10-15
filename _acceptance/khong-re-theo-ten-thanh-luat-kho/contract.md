@@ -5,10 +5,12 @@ slug: khong-re-theo-ten-thanh-luat-kho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-15-khong-re-theo-ten-thanh-luat-kho-design.md
 approved_by:
 approved_at:
+veto_state: mo
+veto_opened_at: 2026-10-15T14:57:22Z
 ---
 
 # Acceptance Contract: khong-re-theo-ten-thanh-luat-kho
