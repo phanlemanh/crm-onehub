@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
+import { CuaToiBaPhanMau } from "./_modules/cua-toi-ba-phan";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
 import { CuaVaoVaMau } from "./_modules/cua-vao-va";
 import { DieuHuongKhuMucTieuMau } from "./_modules/dieu-huong-khu-muc-tieu";
@@ -53,6 +54,7 @@ export type ProtoComponent = (props: { state: string }) => ReactNode;
 
 const BANG_GHEP = {
 	"giai-doan-thoa-thuan": GiaiDoanThoaThuanProto,
+	"cua-toi-ba-phan": CuaToiBaPhanMau,
 	"dieu-huong-khu-muc-tieu": DieuHuongKhuMucTieuMau,
 	"ban-mau-okr": BanMauOkrMau,
 	"canh-kr-okr": CanhKrOkrMau,
