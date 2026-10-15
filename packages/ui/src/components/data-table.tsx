@@ -41,6 +41,10 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { TablePagination } from "@crm/ui/components/table-pagination";
 import {
+	ToggleGroup,
+	ToggleGroupItem,
+} from "@crm/ui/components/toggle-group";
+import {
 	Table,
 	TableBody,
 	TableCell,
@@ -91,6 +95,7 @@ export type DataTableFacet = {
 
 export type DataTableTabs = {
 	id: string;
+	label?: string;
 	allLabel?: string;
 	options: { value: string; label: string }[];
 };
@@ -246,7 +251,10 @@ function toggle(selected: string[], value: string, checked: boolean): string[] {
 function FacetCount({ count }: { count: number | undefined }) {
 	if (count === undefined) return null;
 	return (
-		<span data-slot="facet-count" className="tabular-nums opacity-60">
+		<span
+			data-slot="facet-count"
+			className="text-muted-foreground tabular-nums"
+		>
 			{count}
 		</span>
 	);
@@ -458,13 +466,6 @@ export function DataTable<TRow, TSub = unknown>({
 	const sortableColumns = columns.filter((column) => column.sortable);
 
 	const tabCounts = tabs ? facetCounts?.[tabs.id] : undefined;
-	const activeTabOption =
-		query.tab === "all"
-			? undefined
-			: tabs?.options.find((option) => option.value === query.tab);
-	const activeTabLabel = activeTabOption
-		? activeTabOption.label
-		: (tabs?.allLabel ?? "All");
 
 	const deferredRows = useDeferredValue(rows);
 	const anyExpandable =
@@ -546,7 +547,7 @@ export function DataTable<TRow, TSub = unknown>({
 							<Filter />
 							{msg.table.filters}
 							{activeFilterCount > 0 && (
-								<span className="tabular-nums opacity-60">
+								<span className="text-muted-foreground tabular-nums">
 									({activeFilterCount})
 								</span>
 							)}
@@ -570,44 +571,46 @@ export function DataTable<TRow, TSub = unknown>({
 					)}
 				>
 					{tabs && (
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									type="button"
-									variant="outline"
-									size="sm"
-									className="w-full justify-between sm:w-auto sm:min-w-44"
+						<div className="max-w-full overflow-x-auto">
+							<ToggleGroup
+								aria-label={tabs.label ?? msg.table.status}
+								size="sm"
+								type="single"
+								value={query.tab}
+								variant="outline"
+								onValueChange={(value) => {
+									if (value) query.setTab(value);
+								}}
+							>
+								<ToggleGroupItem
+									count={
+										tabCounts === undefined
+											? undefined
+											: tabs.options.reduce(
+													(tong, option) =>
+														tong + (tabCounts[option.value] ?? 0),
+													0,
+												)
+									}
+									value="all"
 								>
-									<span className="truncate">{activeTabLabel}</span>
-									<ChevronDown className="shrink-0 opacity-60" />
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent align="start" className="min-w-52">
-								<DropdownMenuRadioGroup
-									value={query.tab}
-									onValueChange={(value) => query.setTab(value)}
-								>
-									<DropdownMenuRadioItem value="all">
-										<span className="flex-1">{tabs.allLabel ?? "All"}</span>
-									</DropdownMenuRadioItem>
-									{tabs.options.map((option) => (
-										<DropdownMenuRadioItem
-											key={option.value}
-											value={option.value}
-										>
-											<span className="flex-1">{option.label}</span>
-											<FacetCount
-												count={
-													tabCounts === undefined
-														? undefined
-														: (tabCounts[option.value] ?? 0)
-												}
-											/>
-										</DropdownMenuRadioItem>
-									))}
-								</DropdownMenuRadioGroup>
-							</DropdownMenuContent>
-						</DropdownMenu>
+									{tabs.allLabel ?? "All"}
+								</ToggleGroupItem>
+								{tabs.options.map((option) => (
+									<ToggleGroupItem
+										count={
+											tabCounts === undefined
+												? undefined
+												: (tabCounts[option.value] ?? 0)
+										}
+										key={option.value}
+										value={option.value}
+									>
+										{option.label}
+									</ToggleGroupItem>
+								))}
+							</ToggleGroup>
+						</div>
 					)}
 
 					{leadingActions}
