@@ -2772,6 +2772,7 @@ executors:
     tca_pham_vi: bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs --pham-vi
     kcl_dot_bien: node _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs
     kcl_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs"'
+    kcl_man_luot: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan luot"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

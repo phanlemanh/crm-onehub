@@ -154,3 +154,22 @@ evals:
         c hrefNoiBo bỏ kiểm metaKey → "kcl-khong-chan n1: khong chan"
         d useChanLienKetTrongHop bật không xét coThayDoi → "kcl-hop-sach d1: khong hop"
       In «cặp <x>: cắn» từng cặp và «kcl dot-bien: 4/4 cắn»; thiếu một cặp → thoát 1 gọi tên cặp.
+
+  - id: E9
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kcl_man_luot
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/soan/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "packages/ui/src/components/giu-thay-doi.tsx"
+      - "_acceptance/khung-soan-chan-lien-ket/rang/**"
+    expected: |
+      bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan luot": phiên đo
+      riêng, mô hình giả của K2e, 1280. Ghi docCuoc(id) trước (nop, lanNop), gửi LENH.chamNop1, chờ Kara đang soạn, bấm
+      «Tới Kho tài liệu», bấm «Đóng» → trang đã ở /<slug>/tai-lieu (khung gỡ khỏi cây thật). Rồi đọc kho bằng docCuoc(id)
+      mỗi MAN.cho.nhipMs tới MAN.cho.luotMs: đòi nop tăng đúng 1 và lanNop khác giá trị trước (lượt chạy tới hết, bản nháp
+      NOP_1 được nộp) → in "kcl luot: luot chay het · nop <truoc>→<sau>" và thoát 0; hết hạn → "kcl luot: luot bi dung" và
+      thoát 1. CHIỀU ĐỎ: --kiem-do-do dung-luot (ngay sau khi rời, script tự gọi lệnh dừng phiên của cuộc qua đúng đường
+      nút dừng của app) phải in "kcl luot: luot bi dung" và mã 1 — chứng phép đọc kho bắt được lượt bị dừng.

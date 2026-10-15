@@ -24,7 +24,7 @@ của `docs/plan/lo-trinh-okr.json`; Ngoài-9 ở Cổng Bằng chứng của K2
 
 - AC-1: Given khung soạn đang mở và Kara đang soạn một lượt, When người bấm một liên kết nội bộ trong khung, Then trang không rời: địa chỉ không đổi, không lệnh chuyển trang nào được gọi, và hộp hỏi hiện đúng lời hỏi khi đóng khung lúc Kara soạn (tiêu đề, thân, nút rời, nút ở lại của `trang.hoiDong`).
 - AC-2: Given Kara không soạn và người đã gõ dở trong khung — chữ trong ô soạn chưa gửi, hoặc số trong bản nháp chưa lưu — When bấm một liên kết nội bộ trong khung, Then hộp hỏi «bỏ những gì vừa nhập» chung của bộ giữ thay đổi hiện; When người chọn ở lại (nút ở lại hoặc Esc), Then hộp đóng, khung còn mở, địa chỉ không đổi, chữ hay số đã gõ còn nguyên từng ký tự.
-- AC-3: Given hộp hỏi đang hiện sau khi bấm một liên kết (Kara soạn hoặc gõ dở), When người chọn rời, Then trang chuyển tới đúng địa chỉ của liên kết đó, đúng một lần, dạng thêm vào lịch sử; hộp không hiện lại; lượt Kara đang chạy không bị gọi dừng; và trên trang mới khung soạn đã đóng.
+- AC-3: (cross-layer) Given hộp hỏi đang hiện sau khi bấm một liên kết (Kara soạn hoặc gõ dở), When người chọn rời, Then trang chuyển tới đúng địa chỉ của liên kết đó, đúng một lần, dạng thêm vào lịch sử; hộp không hiện lại; lượt Kara đang chạy không bị gọi dừng và chạy tới hết (bản nháp của lượt được nộp ở máy chủ); và trên trang mới khung soạn đã đóng.
 - AC-4: Given khung soạn không có gì dở (Kara rảnh, ô soạn trống, không số gõ dở), When người bấm một liên kết trong khung — «Tới Kho tài liệu» hoặc «Xem theo đơn vị» — Then trang chuyển ngay tới địa chỉ đó, không hộp hỏi nào hiện.
 - AC-5: Given khung có thứ dở, When người bấm liên kết theo cách trình duyệt tự mở chỗ khác — giữ Cmd, Ctrl, Shift hay Alt; chuột giữa; liên kết mở thẻ mới; liên kết sang miền khác; liên kết tải xuống — hoặc liên kết trỏ đúng địa chỉ đang đứng, Then không hộp hỏi nào hiện và trình duyệt được để xử như thường (bấm không bị chặn).
 - AC-6: Given một hộp hay khung khác dùng bộ giữ thay đổi mà không bật chặn liên kết (mọi `Dialog`, `Sheet`, `Drawer` khác, khung Mục tiêu đang gõ trao đổi), When người bấm liên kết hay đóng hộp như trước, Then hành vi y như trước vòng này: bộ kiểm hiện có của bộ giữ thay đổi và của khung soạn chạy không sửa một dòng và đều xanh; và một `Sheet` có khai thay đổi mà không gọi phần chặn thì bấm liên kết không hỏi.
@@ -54,3 +54,6 @@ của `docs/plan/lo-trinh-okr.json`; Ngoài-9 ở Cổng Bằng chứng của K2
   Đóng khung?» · «Đóng» / «Ở lại») vì rời trang cũng đóng khung và lượt vẫn chạy; lối khác là thêm lời riêng «rời
   khung» — thêm hai dòng chữ mỗi thứ tiếng và một lời khai mới. Câu trả lời khác khuyến nghị thì máy sửa AC-1 rồi
   trình lại.
+- Hỏi-2 (nút Quay lại sau khi rời): máy khuyên chuyển thẳng tới liên kết, nên Quay lại mở lại trang có khung soạn —
+  như trang soạn cũ trước K2e; lối khác là chờ đóng khung xong rồi mới đi, Quay lại về trang không có khung (thêm một
+  mục lịch sử, sửa AC-3).
