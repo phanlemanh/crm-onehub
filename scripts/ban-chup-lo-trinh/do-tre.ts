@@ -80,6 +80,30 @@ export function docGhiChuTuGh(json: string): string | null {
 	return null;
 }
 
+export function docJobsTuGh(json: string): number[] {
+	const ra: { jobs?: object[] } = JSON.parse(json);
+	return (ra.jobs ?? []).flatMap((j) =>
+		"databaseId" in j && typeof j.databaseId === "number" ? [j.databaseId] : [],
+	);
+}
+
+export function ganKetQuaLuot(
+	luot: Luot[],
+	gh: {
+		jobsCua: (runId: number) => string;
+		chuThichCua: (jobId: number) => string;
+		commitLucCua: (sha: string) => string;
+	},
+): Luot[] {
+	return luot.map((l) => {
+		const ketQua =
+			docJobsTuGh(gh.jobsCua(l.databaseId))
+				.map((jobId) => docGhiChuTuGh(gh.chuThichCua(jobId)))
+				.find((k) => k !== null) ?? null;
+		return { ...l, headCommitLuc: gh.commitLucCua(l.headSha), ketQua };
+	});
+}
+
 export function tinhDoTre(o: {
 	doi: { sha: string; commitLuc: string }[];
 	luot: Luot[];
@@ -161,45 +185,41 @@ if (import.meta.main) {
 			return { sha, commitLuc };
 		})
 		.reverse();
-	const luot = docLuotTuGh(
-		chay(
-			"gh",
-			[
-				"run",
-				"list",
-				"--repo",
-				KHO,
-				"--workflow",
-				WORKFLOW,
-				"--limit",
-				"500",
-				"--json",
-				"databaseId,headSha,status,conclusion,createdAt,updatedAt",
-			],
-			goc,
-		),
-	).map((l) => {
-		const jobs: { jobs: { databaseId: number }[] } = JSON.parse(
+	const luot = ganKetQuaLuot(
+		docLuotTuGh(
 			chay(
 				"gh",
-				["run", "view", String(l.databaseId), "--repo", KHO, "--json", "jobs"],
+				[
+					"run",
+					"list",
+					"--repo",
+					KHO,
+					"--workflow",
+					WORKFLOW,
+					"--limit",
+					"500",
+					"--json",
+					"databaseId,headSha,status,conclusion,createdAt,updatedAt",
+				],
 				goc,
 			),
-		);
-		const ketQua =
-			jobs.jobs
-				.map((j) =>
-					docGhiChuTuGh(
-						chay(
-							"gh",
-							["api", `repos/${KHO}/check-runs/${j.databaseId}/annotations`],
-							goc,
-						),
-					),
-				)
-				.find((k) => k !== null) ?? null;
-		return { ...l, headCommitLuc: commitLucCua(l.headSha), ketQua };
-	});
+		),
+		{
+			jobsCua: (id) =>
+				chay(
+					"gh",
+					["run", "view", String(id), "--repo", KHO, "--json", "jobs"],
+					goc,
+				),
+			chuThichCua: (jobId) =>
+				chay(
+					"gh",
+					["api", `repos/${KHO}/check-runs/${jobId}/annotations`],
+					goc,
+				),
+			commitLucCua,
+		},
+	);
 	const kq = tinhDoTre({ doi, luot, nhipMs: LO_TRINH.nhipLamMoiMs });
 	for (const d of kq.dong)
 		console.log(

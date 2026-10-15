@@ -227,28 +227,54 @@ describe("ldbc-khoa", () => {
 	);
 
 	test(
-		"ldbc-khoa: khoa Day khong mo duoc duong nao khac",
+		"ldbc-khoa: khoa Day khong mo duoc duong nao khac; khoa dung loai thi mo duoc",
 		async () => {
-			const khoa = await khoaDay("owner");
+			const day = await khoaDay("owner");
+			const thuong = (await taoKhoa("owner")).khoa;
+			const keo = (await taoKhoa("owner", "keo-tin-hieu")).khoa;
+			if (!thuong || !keo) throw new Error("khong tao duoc khoa doi chung");
+			const goi = {
+				"tRPC workspace.get": (key: string) =>
+					request(app.getHttpServer())
+						.get("/api/trpc/workspace.get")
+						.set(API_KEY_HEADER, key),
+				"REST tin-hieu/lich/keo-ve": (key: string) =>
+					request(app.getHttpServer())
+						.post(`${REST_BRIDGE_PATH}/tin-hieu/lich/keo-ve`)
+						.set(API_KEY_HEADER, key)
+						.set("content-type", "application/json")
+						.send("{}"),
+				"REST contacts/search": (key: string) =>
+					request(app.getHttpServer())
+						.post(`${REST_BRIDGE_PATH}/contacts/search`)
+						.set(API_KEY_HEADER, key)
+						.set("content-type", "application/json")
+						.send("{}"),
+			} as const;
+			const doiChung = {
+				"tRPC workspace.get": thuong.key,
+				"REST tin-hieu/lich/keo-ve": keo.key,
+				"REST contacts/search": thuong.key,
+			} as const;
 			const sai: string[] = [];
-			const trpcGoc = await request(app.getHttpServer())
-				.get("/api/trpc/workspace.get")
-				.set(API_KEY_HEADER, khoa.key);
-			if (trpcGoc.status === 200) sai.push("tRPC workspace.get 200");
-			const keoVe = await request(app.getHttpServer())
-				.post(`${REST_BRIDGE_PATH}/tin-hieu/lich/keo-ve`)
-				.set(API_KEY_HEADER, khoa.key)
-				.set("content-type", "application/json")
-				.send("{}");
-			if (keoVe.status === 200) sai.push("REST tin-hieu/lich/keo-ve 200");
-			const dsKhoa = await request(app.getHttpServer())
-				.get(`${REST_BRIDGE_PATH}/api-keys`)
-				.set(API_KEY_HEADER, khoa.key);
-			if (dsKhoa.status === 200) sai.push("REST api-keys 200");
-			const phien = await auth.api
-				.getSession({ headers: new Headers({ [API_KEY_HEADER]: khoa.key }) })
-				.catch(() => null);
-			if (phien) sai.push("getSession mo phien");
+			for (const [ten, chay] of Object.entries(goi)) {
+				const duong = await chay(doiChung[ten as keyof typeof doiChung]);
+				if (duong.status !== 200)
+					sai.push(`doi chung ${ten}: khoa dung loai tra ${duong.status}`);
+				const khoaDayGoi = await chay(day.key);
+				if (khoaDayGoi.status !== 401)
+					sai.push(`${ten}: khoa Day tra ${khoaDayGoi.status}, khong phai 401`);
+			}
+			const phienThuong = await auth.api.getSession({
+				headers: new Headers({ [API_KEY_HEADER]: thuong.key }),
+			});
+			if (!phienThuong)
+				sai.push("doi chung getSession: khoa thuong khong mo phien");
+			const phienDay = await auth.api
+				.getSession({ headers: new Headers({ [API_KEY_HEADER]: day.key }) })
+				.then((p) => (p ? "mo phien" : "khong phien"))
+				.catch((loi: Error) => `nem ${loi.name}`);
+			if (phienDay === "mo phien") sai.push("getSession: khoa Day mo phien");
 			expect(sai, "khoa day mo duoc duong khac").toEqual([]);
 		},
 		CHO_MS,
@@ -302,13 +328,13 @@ describe("ldbc-hong", () => {
 					"h1 khuon la",
 					JSON.stringify(than({ commitLuc: moi, duLieu: khuonKhac })),
 					400,
-					"khuon",
+					"duLieu.khuon",
 				],
 				[
 					"h2 thieu lo_trinh",
 					JSON.stringify(than({ commitLuc: moi, duLieu: thieuLoTrinh })),
 					400,
-					"lo_trinh",
+					"duLieu.lo_trinh",
 				],
 				[
 					"h3 sha rong",
@@ -337,7 +363,7 @@ describe("ldbc-hong", () => {
 						than({ commitLuc: moi, duLieu: khoiJson.parse(thieuMa) }),
 					),
 					400,
-					"ma",
+					"duLieu.lo_trinh.0.hang.0.ma",
 				],
 			];
 			const sai: string[] = [];
@@ -349,7 +375,7 @@ describe("ldbc-hong", () => {
 				const duongLoi = loi.success
 					? loi.data.issues.map((i) => i.path.join("."))
 					: [];
-				if (duong && !duongLoi.some((d) => d.split(".").includes(duong)))
+				if (duong && !duongLoi.includes(duong))
 					sai.push(
 						`${ten}: loi khong goi ten ${duong}: ${duongLoi.join(", ")}`,
 					);

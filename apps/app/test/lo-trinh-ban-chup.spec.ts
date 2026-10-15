@@ -2,7 +2,11 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { WorkspaceRole } from "@crm/validation/vai-workspace";
-import { type BanDung, chonNguon } from "@/lib/lo-trinh/chon-nguon";
+import {
+	type BanDung,
+	banDungHienTai,
+	chonNguon,
+} from "@/lib/lo-trinh/chon-nguon";
 import { docDuLieu } from "@/lib/lo-trinh/doc-du-lieu.js";
 import { docTepLoTrinh } from "@/lib/lo-trinh/doc-tep";
 import {
@@ -103,19 +107,52 @@ describe("chon-nguon", () => {
 		expect(chonNguon(null, banDung()).layLuc).toBe(DUNG_LUC);
 	});
 
-	test("next.config dong gio dung va turbo cho VERCEL_ENV di qua", () => {
-		const cauHinh = readFileSync(
-			path.join(GOC, "apps", "app", "next.config.ts"),
-			"utf8",
+	test("banDungHienTai doc dung ba bien moi truong", () => {
+		const cu = {
+			sha: process.env.VERCEL_GIT_COMMIT_SHA,
+			luc: process.env.LO_TRINH_DUNG_LUC,
+			env: process.env.VERCEL_ENV,
+		};
+		try {
+			process.env.VERCEL_GIT_COMMIT_SHA = SHA_DUNG;
+			process.env.LO_TRINH_DUNG_LUC = DUNG_LUC;
+			process.env.VERCEL_ENV = "preview";
+			expect(banDungHienTai()).toEqual({
+				sha: SHA_DUNG,
+				dungLuc: DUNG_LUC,
+				moiTruong: "preview",
+			});
+			delete process.env.VERCEL_GIT_COMMIT_SHA;
+			delete process.env.VERCEL_ENV;
+			expect(banDungHienTai().sha).toBeNull();
+			expect(banDungHienTai().moiTruong).toBeNull();
+		} finally {
+			for (const [k, v] of [
+				["VERCEL_GIT_COMMIT_SHA", cu.sha],
+				["LO_TRINH_DUNG_LUC", cu.luc],
+				["VERCEL_ENV", cu.env],
+			] as const) {
+				if (v === undefined) delete process.env[k];
+				else process.env[k] = v;
+			}
+		}
+	});
+
+	test("next.config dong gio bat dau dung vao env cua ban dung", async () => {
+		const truoc = Date.now();
+		const { default: cauHinh } = await import(
+			`${path.join(GOC, "apps", "app", "next.config.ts")}?t=${truoc}`
 		);
-		expect(cauHinh).toMatch(
-			/LO_TRINH_DUNG_LUC:\s*new Date\(\)\.toISOString\(\)/,
-		);
+		const luc = Date.parse(String(cauHinh.env?.LO_TRINH_DUNG_LUC));
+		expect(
+			Number.isFinite(luc) && luc >= truoc - 1000 && luc <= Date.now() + 1000,
+			"next.config khong dong gio bat dau dung",
+		).toBe(true);
 		const turbo: { globalPassThroughEnv: string[] } = JSON.parse(
 			readFileSync(path.join(GOC, "turbo.json"), "utf8"),
 		);
-		expect(turbo.globalPassThroughEnv).toContain("VERCEL_ENV");
-		expect(turbo.globalPassThroughEnv).toContain("VERCEL_GIT_COMMIT_SHA");
+		for (const bien of ["VERCEL_ENV", "VERCEL_GIT_COMMIT_SHA"])
+			expect(turbo.globalPassThroughEnv).toContain(bien);
 	});
 });
 

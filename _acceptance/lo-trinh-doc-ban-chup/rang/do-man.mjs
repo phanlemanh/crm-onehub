@@ -227,22 +227,39 @@ const docTrang = (p) =>
 		DAU,
 	);
 
+function lucTuDongVn(chu) {
+	const m = /(\d{2}):(\d{2}) (\d{2})\/(\d{2})\/(\d{4})/.exec(chu);
+	if (!m) return null;
+	const [, gio, phut, ngay, thang, nam] = m.map(Number);
+	return Date.UTC(nam, thang - 1, ngay, gio - 7, phut);
+}
+
 async function oBanDung(cookie, slug) {
+	const doc = [];
 	for (const [kho, lang, mui] of O) {
-		const m = loTrinhMessages(lang);
 		const { ctx, p } = await trang(cookie, kho, lang, mui);
 		try {
 			await mo(p, `${APP}/${slug}/lo-trinh`);
-			const t = await docTrang(p);
-			kiem(
-				`ban-dung-${kho}-${lang}`,
-				`«${t.gio}» co nhan ban dung, khong chuoi danh dau (${!t.coDau}), khong cuon ngang (${t.cuon}), cau giao khong dich (${t.khongDich})`,
-				t.gio.includes(m.gioLay.banDung) && !t.coDau && t.cuon && t.khongDich,
-			);
+			doc.push({ kho, lang, mui, t: await docTrang(p) });
 			await p.screenshot({ path: join(RA, `ban-dung-${kho}-${lang}.png`) });
 		} finally {
 			await ctx.close();
 		}
+	}
+	const neo = doc.find((d) => d.lang === "vi" && d.mui === VN);
+	const luc = neo ? lucTuDongVn(neo.t.gio) : null;
+	const hopLy =
+		luc !== null && luc <= Date.now() && luc > Date.now() - 6 * 3_600_000;
+	for (const { kho, lang, mui, t } of doc) {
+		const m = loTrinhMessages(lang);
+		const kyVong = hopLy
+			? `${m.gioLay.capNhat(formatNgayGio(new Date(luc).toISOString(), lang, { timeZone: mui, phan: "ngay-gio" }))} ${m.gioLay.banDung}`
+			: "(khong suy duoc gio dung tu o Viet Nam)";
+		kiem(
+			`ban-dung-${kho}-${lang}`,
+			`«${t.gio}» == «${kyVong}» (${mui}), khong chuoi danh dau (${!t.coDau}), khong cuon ngang (${t.cuon}), cau giao khong dich (${t.khongDich})`,
+			t.gio.trim() === kyVong && !t.coDau && t.cuon && t.khongDich,
+		);
 	}
 }
 

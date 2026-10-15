@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { formatNgayGio } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
@@ -20,11 +20,21 @@ function cay(locale: Locale, kieu: (typeof NGUON)[number]) {
 	);
 }
 
+const MUI_DO = "America/New_York";
+const MUI_CU = process.env.TZ;
+
 describe("dong-gio", () => {
+	beforeAll(() => {
+		process.env.TZ = MUI_DO;
+	});
+
+	afterAll(() => {
+		if (MUI_CU === undefined) delete process.env.TZ;
+		else process.env.TZ = MUI_CU;
+	});
+
 	test("tien trinh chay o mui gio khac Viet Nam", () => {
-		expect(Intl.DateTimeFormat().resolvedOptions().timeZone).toBe(
-			"America/New_York",
-		);
+		expect(Intl.DateTimeFormat().resolvedOptions().timeZone).toBe(MUI_DO);
 	});
 
 	for (const kieu of NGUON)

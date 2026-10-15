@@ -226,3 +226,50 @@ describe("chua-cai", () => {
 			expect(may.goi.length).toBe(0);
 		});
 });
+
+describe("chay-that", () => {
+	test("khoi chinh cua day.ts gui sha va gio commit cua HEAD that", async () => {
+		const nhan: unknown[] = [];
+		const mayThat = Bun.serve({
+			port: 0,
+			fetch: async (req) => {
+				nhan.push(await req.json());
+				return Response.json(banChupRa.parse({ ketQua: "nhan" }));
+			},
+		});
+		try {
+			const tien = Bun.spawn(["bun", "scripts/ban-chup-lo-trinh/day.ts"], {
+				cwd: GOC,
+				env: {
+					...process.env,
+					CRM_API_URL: `http://127.0.0.1:${mayThat.port}`,
+					CRM_KHOA_DAY_LO_TRINH: KHOA,
+				},
+				stdout: "pipe",
+				stderr: "pipe",
+			});
+			const ma = await tien.exited;
+			const ra = await new Response(tien.stdout).text();
+			expect(ma, await new Response(tien.stderr).text()).toBe(0);
+			expect(ra).toContain(`::notice title=${TIEU_DE_GHI_CHU}::nhan`);
+			expect(nhan.length).toBe(1);
+			const than = banChupVao.parse(nhan[0]);
+			const head = spawnSync(
+				"git",
+				["show", "-s", "--format=%H%n%cI", "HEAD"],
+				{
+					cwd: GOC,
+					encoding: "utf8",
+				},
+			)
+				.stdout.trim()
+				.split("\n");
+			expect(than.sha, "ban chup khong mang sha cua HEAD").toBe(head[0] ?? "");
+			expect(than.commitLuc, "gio commit khong phai cua HEAD").toBe(
+				head[1] ?? "",
+			);
+		} finally {
+			mayThat.stop(true);
+		}
+	});
+});

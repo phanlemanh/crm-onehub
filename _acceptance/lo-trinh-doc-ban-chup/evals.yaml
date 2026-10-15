@@ -40,6 +40,8 @@ evals:
           header x-api-key == CRM_KHOA_DAY_LO_TRINH, duLieu deep-equal docDuLieu(LO-TRINH.html).duLieu
         2 may chu tra nhan -> ma 0, stdout co DUNG mot dong "::notice title=ban-chup-lo-trinh::nhan"; ma tran viet truoc 4 ket
           qua (nhan, trung, cu-hon, chua-cai) -> moi o dung mot dong notice mang dung ten ket qua
+      describe "chay-that": chay khoi chinh cua day.ts thanh tien trinh rieng, may chu gia Bun.serve; than nhan duoc mang
+      sha == git show -s --format=%H HEAD va commitLuc == %cI cua HEAD (do quan he voi HEAD, khong tiem gia tri).
       Doc .github/workflows/ban-chup-lo-trinh.yml bang parser YAML: on.push.branches == [onehub], on.push.paths chua
       "LO-TRINH.html", co workflow_dispatch, concurrency khong cancel-in-progress, job co if chan kho phanlemanh/crm-onehub,
       env lay hai bi mat CRM_API_URL va CRM_KHOA_DAY_LO_TRINH.
@@ -93,7 +95,8 @@ evals:
       - "apps/app/lib/messages/lo-trinh.ts"
       - "_acceptance/lo-trinh-doc-ban-chup/rang/do-man.mjs"
     expected: |
-      Cung ma tran 8 o cua E3, trinh duyet do dat emulateTimezone: 6 o Asia/Ho_Chi_Minh, 2 o (ban-chup-1280-vi,
+      Cung ma tran 8 o cua E3. O ban-dung: lay moc gio tu o vi mui Viet Nam, moi o ban-dung (ke ca New_York) phai hien
+      dung moc do theo mui cua o. Trinh duyet do dat emulateTimezone: 6 o Asia/Ho_Chi_Minh, 2 o (ban-chup-1280-vi,
       ban-dung-375-en) America/New_York — khac mui gio may chu cua phien do. Moi o: dong gio lay nhin thay duoc o dau vung
       noi dung, gio bang gio cua nguon tinh theo mui gio CUA TRINH DUYET o do (do-man tinh ky vong bang Intl voi timeZone
       cua o, khong viet tay); o ban-dung co chu nhan ban dung dung ngon ngu cua o (vi/en); o 375 khong cuon
@@ -117,8 +120,9 @@ evals:
       BanChupLoTrinh khong doi (so updatedAt/sha truoc-sau):
         k1 khoa day cua chu -> 200 nhan; k2 khoa day cua quan tri -> 200 nhan; k3 khoa thuong cua chu -> 401;
         k4 khoa chi-keo tin hieu -> 401; k5 khoa day da thu hoi -> 401; k6 khoa day cua nguoi da bi go (khoa bi tat khi go) -> 401; k7 khoa day cua nguoi bi ha xuong member -> 403
-      Ma tran duong khac viet truoc: khoa day (k1) goi 3 duong khac — mot thu tuc tRPC (workspace.get), mot cau REST
-      (/rest/tin-hieu/lich/keo-ve), getSession qua header -> khong duong nao 200, khong phien nao mo.
+      Ma tran duong khac viet truoc: 3 duong (tRPC workspace.get, REST /rest/tin-hieu/lich/keo-ve, REST /rest/contacts/search)
+      x 2 khoa: khoa dung loai (thuong, chi-keo, thuong) -> 200 (doi chung duong), khoa day -> dung 401; getSession: khoa
+      thuong mo phien (doi chung), khoa day khong mo.
       Tao khoa: apiKeys.create loai "day-lo-trinh" boi member -> 403, boi admin -> co khoa, configId "day-lo-trinh".
       CHIEU DO: ban sao dat cau hinh day-lo-trinh truoc mac dinh trong apiKey([...]) -> o "duong khac" do voi thong diep
       ghim "khoa day mo duoc duong khac"; ban sao bo kiem vai -> k7 do voi thong diep ghim "khoa cua nguoi bi ha vai van day duoc".
@@ -153,9 +157,10 @@ evals:
     expected: |
       describe "ldbc-hong". Ma tran viet truoc 6 o, moi o: ma 400 (o5: 413), than loi chua duong khoa hong dung chuoi ghim,
       hang dang luu khong doi:
-        h1 duLieu.khuon = "khac" -> "khuon"; h2 xoa duLieu.lo_trinh -> "lo_trinh"; h3 sha rong -> "sha";
+        (so NGUYEN duong khoa trong issues cua than loi)
+        h1 duLieu.khuon = "khac" -> "duLieu.khuon"; h2 xoa duLieu.lo_trinh -> "duLieu.lo_trinh"; h3 sha rong -> "sha";
         h4 commitLuc "hom qua" -> "commitLuc"; h5 than lon hon BAN_CHUP_LO_TRINH.tranThanByte -> 413;
-        h6 mot hang lo trinh thieu ma -> "lo_trinh.0.hang.<i>.ma"
+        h6 hang dau thieu ma -> "duLieu.lo_trinh.0.hang.0.ma"
       Doi chung duong: cung khoi khong pha -> 200 (de chung minh tu choi den tu cho pha, khong tu khoa).
       CHIEU DO: ban sao nuot loi phan tich thanh duLieu rong -> h2 do voi thong diep ghim "khoi hong van duoc luu".
 
@@ -232,7 +237,8 @@ evals:
         production + sha khac + truoc|bang -> ban-dung; preview -> ban-dung (ca 6 o)
       Them: khong co VERCEL_GIT_COMMIT_SHA (may dev) -> chi so thoi gian. Gio lay tra ve: ban-chup -> layLuc cua ban chup,
       ban-dung -> dungLuc.
-      next.config.ts dong env.LO_TRINH_DUNG_LUC; turbo.json globalPassThroughEnv co VERCEL_ENV (doc tep that).
+      banDungHienTai() voi ba bien moi truong dat san tra dung {sha, dungLuc, moiTruong}; vang bien thi null.
+      Nap next.config.ts that: env.LO_TRINH_DUNG_LUC la ISO trong khoang luc nap; turbo.json globalPassThroughEnv co VERCEL_ENV.
       CHIEU DO: ban sao so ">=" thay ">" -> o (sha khac, bang) do voi thong diep ghim "ca mo ho chon ban chup";
       ban sao bo nhanh preview -> do voi thong diep ghim "ban Preview doc lo trinh nhanh chinh".
 
@@ -245,7 +251,8 @@ evals:
       - "apps/app/lib/messages/lo-trinh.ts"
       - "apps/app/test/lo-trinh-ban-chup.dom.tsx"
     expected: |
-      apps/app/test/lo-trinh-ban-chup.dom.tsx describe "dong-gio": tien trinh chay TZ=America/New_York (khac mui cua kho
+      apps/app/test/lo-trinh-ban-chup.dom.tsx describe "dong-gio": test tu dat process.env.TZ=America/New_York trong
+      beforeAll va tra lai trong afterAll (chay dung ca trong suite khong dat TZ) (khac mui cua kho
       va cua production), ma tran 2 nguon x 2 ngon ngu = 4 o: sau hydrat dong gio lay co mat, chua formatNgayGio(layLuc,
       locale, { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }) (rut tu ham that, khong viet chuoi gio tay);
       render phia may chu (renderToString) KHONG in gio nao; ban-dung co
@@ -322,7 +329,8 @@ evals:
         e luot xanh nhung chu thich "chua-cai" -> khong tinh la da day: co "không có lượt đẩy"
         f commit B co luot cancelled, commit C ngay sau co luot xanh "nhan" sau 3 phut -> B duoc phu boi luot cua C, tre
           tinh theo luot C, khong co; doi chung: C cung khong co luot xanh -> B bi co
-      Chu thich luot doc qua gh api check-runs annotations, khuon gia rut tu mot lan goi that luu lam mau.
+      Moi luot di qua DUNG duong ghep cua lenh (docLuotTuGh -> ganKetQuaLuot: jobs tu gh run view, ghi chu tu annotations,
+      gio commit theo headSha) tren ba mau JSON that (gh-run-list, gh-run-view-jobs, gh-annotations) da sua gia tri.
       Dong ket luan: tap {a} -> "đạt"; tap {a,b} -> "không đạt"; moi dong in gio commit, gio xong, do tre.
       CHIEU DO: ban sao tinh tre tu luc luot bat dau -> o b khong co co, do voi thong diep ghim "do tre bo qua thoi gian chay";
       ban sao coi moi luot xanh la da day -> o e do voi thong diep ghim "luot chua cai bi tinh la da day";

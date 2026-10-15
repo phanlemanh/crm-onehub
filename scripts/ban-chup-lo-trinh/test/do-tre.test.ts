@@ -4,7 +4,9 @@ import path from "node:path";
 import {
 	CO,
 	docGhiChuTuGh,
+	docJobsTuGh,
 	docLuotTuGh,
+	ganKetQuaLuot,
 	type Luot,
 	tinhDoTre,
 } from "../do-tre.ts";
@@ -22,6 +24,8 @@ const SHA = {
 	c: "c".repeat(40),
 } as const;
 
+let soLuot = 0;
+
 function luotMau(o: {
 	sha: string;
 	headCommitLuc: number;
@@ -29,19 +33,43 @@ function luotMau(o: {
 	xongSau: number;
 	ketQua: string | null;
 }): Luot {
-	const [goc] = docLuotTuGh(mau("gh-run-list.json"));
-	if (!goc) throw new Error("mau gh-run-list.json rong");
-	return {
-		...goc,
-		headSha: o.sha,
-		conclusion: o.conclusion,
-		updatedAt: iso(o.headCommitLuc + o.xongSau),
-		headCommitLuc: iso(o.headCommitLuc),
-		ketQua: o.ketQua,
-	};
+	soLuot += 1;
+	const [run] = JSON.parse(mau("gh-run-list.json"));
+	const jobs = JSON.parse(mau("gh-run-view-jobs.json"));
+	const [chuThich] = JSON.parse(mau("gh-annotations.json"));
+	const runJson = JSON.stringify([
+		{
+			...run,
+			databaseId: soLuot,
+			headSha: o.sha,
+			conclusion: o.conclusion,
+			updatedAt: iso(o.headCommitLuc + o.xongSau),
+		},
+	]);
+	const [luot] = ganKetQuaLuot(docLuotTuGh(runJson), {
+		jobsCua: () => JSON.stringify(jobs),
+		chuThichCua: (jobId) =>
+			jobId === jobs.jobs[0].databaseId && o.ketQua !== null
+				? JSON.stringify([
+						{
+							...chuThich,
+							annotation_level: "notice",
+							title: "ban-chup-lo-trinh",
+							message: o.ketQua,
+						},
+					])
+				: JSON.stringify([chuThich]),
+		commitLucCua: (sha) => (sha === o.sha ? iso(o.headCommitLuc) : ""),
+	});
+	if (!luot) throw new Error("mau gh-run-list.json rong");
+	return luot;
 }
 
 describe("khuon-gh", () => {
+	test("doc job tu mau that cua gh run view --json jobs", () => {
+		expect(docJobsTuGh(mau("gh-run-view-jobs.json")).length).toBeGreaterThan(0);
+	});
+
 	test("doc luot va ghi chu tu dung khuon JSON that cua gh", () => {
 		const [luot] = docLuotTuGh(mau("gh-run-list.json"));
 		expect(luot?.headSha).toMatch(/^[0-9a-f]{40}$/);
