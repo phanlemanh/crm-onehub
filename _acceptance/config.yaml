@@ -1771,7 +1771,15 @@ executors:
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
     tca_cham_health: 'bun run test -- "bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs"'
+    ttr_ban_chup: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-ban-chup"'
+    ttr_duong_khac: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-duong-khac"'
+    ttr_khuon_413: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-khuon-413"'
+    dcn_tu_choi: bun test scripts/ban-chup-lo-trinh/test/day.test.ts -t dcn-tu-choi
+    dcn_onehub: bun test scripts/ban-chup-lo-trinh/test/day.test.ts -t dcn-onehub
+    dcn_workflow: bun test scripts/ban-chup-lo-trinh/test/day.test.ts -t dcn-workflow
+    dcn_env_ci: GITHUB_ACTIONS=true GITHUB_REF=refs/pull/1/merge bun test scripts/ban-chup-lo-trinh/test
   script:
+    dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
     kmt_chup: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-mot-ten/rang/chup.mjs"'
