@@ -26,11 +26,44 @@ lên `feat/loc-va-kieu-xem-chung`.
    (`loai`, `donVi`, `chuTrang`, `archived`, `page`, `nhomDeXuat`), nên mỗi lần đổi có một mục lịch sử như trước NM2,
    và bấm lùi về đúng bộ lọc trước. Lối khác: theo nếp `DataTable` — chỉ `page` ghi lịch sử, đổi bộ lọc thì ghi đè; khi
    đó bấm lùi sau khi đổi bộ lọc vẫn rời màn như hôm nay, đúng điều Ngoài-3 phàn nàn.
-2. **Giữ thanh lọc trong lúc chờ.** `taiLieu.list` và `taiLieu.proposals` (nhánh có nhóm) thêm
+2. **Giữ thanh lọc trong lúc chờ (Hỏi-2).** `taiLieu.list` và `taiLieu.proposals` (nhánh có nhóm) thêm
    `placeholderData: (previous) => previous`, như mọi bảng của kho. Khung xương chỉ còn ở lần tải đầu (chưa có dữ liệu
-   nào). Trong lúc chờ, vùng danh sách mang `aria-busy="true"`, để trình đọc màn hình biết đang tải; thanh lọc, phân
-   trang và tiêu điểm đứng yên.
+   nào). Trong lúc chờ, vùng danh sách cũ mờ đi (`data-dang-tai`, như vùng bảng cột của Onboarding với
+   `isPlaceholderData`) và mang `aria-busy="true"`; thanh lọc, phân trang và tiêu điểm đứng yên. Lối khác: thanh lọc
+   đứng yên nhưng vùng danh sách thay bằng khung xương trong lúc chờ — không treo danh sách của bộ lọc cũ dưới chip mới,
+   đổi lại vùng danh sách vẫn chớp.
+   Đổi lọc mà truy vấn lỗi: hiện khung lỗi có nút thử lại như lần đầu, không treo danh sách cũ.
 3. Không đổi khoá đường dẫn, không đổi parser nào khác, không đổi màn ngoài Tài liệu.
+
+Hỏi-1 — bấm lùi sau khi lọc (Tài liệu):
+
+```mermaid
+flowchart LR
+  subgraph A["Lối A — mọi bộ lọc ghi lịch sử (khuyến nghị)"]
+    direction LR
+    A0["Tài liệu"] --> A1["chọn Chính sách"] --> A2["chọn đơn vị"]
+    A2 -. lùi .-> A1 -. lùi .-> A0
+  end
+  subgraph B["Lối B — như các bảng khác: chỉ sang trang ghi lịch sử"]
+    direction LR
+    B0["Tài liệu"] --> B1["chọn Chính sách + đơn vị (cùng một mục)"]
+    B1 -. lùi .-> BX["rời Tài liệu"]
+  end
+```
+
+Hỏi-2 — trong lúc chờ danh sách mới:
+
+```mermaid
+flowchart LR
+  subgraph A["Lối A — giữ danh sách cũ, mờ đi (khuyến nghị)"]
+    direction TB
+    A1["[chip][ô chọn][lưu trữ] đứng yên, tiêu điểm còn"] --- A2["danh sách cũ mờ, aria-busy"]
+  end
+  subgraph B["Lối B — khung xương trong vùng danh sách"]
+    direction TB
+    B1["[chip][ô chọn][lưu trữ] đứng yên, tiêu điểm còn"] --- B2["khung xương thay danh sách"]
+  end
+```
 
 Phương án loại: (a) `startTransition` quanh lần ghi nuqs — vẫn để `useQuery` đổi khoá ngay, khung xương vẫn hiện; (b)
 đưa thanh lọc ra ngoài nhánh chờ tải — thanh lọc không chớp nhưng danh sách vẫn chớp thành khung xương ở mọi lần lọc.
@@ -61,7 +94,8 @@ Phương án loại: (a) `startTransition` quanh lần ghi nuqs — vẫn để 
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
 | ST-tl-tai-dau | Tài liệu › Trang, › Chờ duyệt | Khung xương (chưa có dữ liệu nào) | Chờ |
-| ST-tl-doi-loc | Tài liệu › Trang, › Chờ duyệt | Thanh lọc và phân trang như cũ, danh sách cũ với `aria-busy="true"` | Chờ hoặc bấm tiếp |
+| ST-tl-doi-loc | Tài liệu › Trang, › Chờ duyệt | Thanh lọc và phân trang như cũ, danh sách cũ mờ đi với `aria-busy="true"` | Chờ hoặc bấm tiếp |
+| ST-tl-doi-loc-loi | Tài liệu › Trang, › Chờ duyệt | Khung lỗi có nút thử lại | Thử lại |
 | ST-tl-lui | Tài liệu › Trang | Bộ lọc và danh sách của lần đổi trước | Bấm lùi tiếp hay lọc lại |
 <!-- UX-STATE-TABLE>>> -->
 

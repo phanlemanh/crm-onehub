@@ -27,14 +27,20 @@ Ngoài-4) · design doc của NM2 mục «Đặc tả UX › Luồng» (nút lù
   tại.
 - AC-2: Given danh sách Tài liệu › Trang (hay Chờ duyệt) đã có dữ liệu, When người dùng đổi một bộ lọc hay sang trang
   và truy vấn mới chưa về, Then khối lọc (chip loại, ô chọn đơn vị và chủ trang, nút lưu trữ, nút bỏ lọc) và phân trang
-  không bị gỡ khỏi trang lần nào, phần tử vừa bấm vẫn giữ tiêu điểm, và danh sách cũ còn hiện với `aria-busy="true"`;
-  When truy vấn về, Then danh sách mới thay danh sách cũ và `aria-busy` bỏ.
+  không bị gỡ khỏi trang lần nào, phần tử vừa bấm vẫn giữ tiêu điểm, và danh sách cũ còn hiện với `aria-busy="true"` và
+  một tín hiệu chờ người nhìn thấy được (vùng danh sách mờ đi, `data-dang-tai`); When truy vấn về, Then danh sách mới
+  thay danh sách cũ, `aria-busy` bỏ và vùng danh sách hết mờ.
 - AC-3: Given lần đầu mở Tài liệu › Trang hay › Chờ duyệt khi chưa có dữ liệu nào, When truy vấn đang chờ, Then vẫn hiện
   khung xương như hôm nay; When truy vấn lỗi, Then vẫn hiện khung lỗi có nút thử lại như hôm nay.
-- AC-4: Given bản dựng thật của cây chạy trong phiên đo, có ít nhất ba trang tài liệu khác loại, When người dùng đổi
+- AC-5: Given danh sách Tài liệu › Trang (hay Chờ duyệt) đã có dữ liệu, When người dùng đổi một bộ lọc và truy vấn
+  mới lỗi, Then hiện khung lỗi có nút thử lại như lần đầu (không treo danh sách cũ, không khung xương), `aria-busy` không
+  còn "true", và bấm thử lại gọi truy vấn lần nữa.
+- AC-4: Given bản dựng thật của cây chạy trong phiên đo, có ít nhất ba trang tài liệu khác loại và hai đơn vị mỗi đơn
+  vị có trang, When người dùng đổi
   loại, rồi đổi đơn vị, rồi bấm lùi của trình duyệt hai lần, Then sau lần lùi thứ nhất đường dẫn và chip về đúng trạng
   thái sau lần đổi loại, sau lần lùi thứ hai về trạng thái ban đầu, và trang vẫn ở Tài liệu; And khi truy vấn danh sách
-  bị trì hoãn, khối lọc không biến mất lần nào và tiêu điểm còn trên chip vừa bấm.
+  bị trì hoãn (bàn đo chặn được ít nhất một lượt gọi), khối lọc không biến mất lần nào, tiêu điểm còn trên chip vừa
+  bấm, và vùng danh sách mờ đi trong lúc chờ rồi hết mờ khi xong.
 
 ## Coverage
 
@@ -46,8 +52,8 @@ Quét theo khuôn test-matrix của `morphological-scan` (bài toán nhỏ, hai 
   của E5 NM2]
 - Trục trạng thái truy vấn: lần đầu chưa có dữ liệu | đổi lọc khi đã có dữ liệu | lỗi [thước CE: ba nhánh `!data`,
   `isError`, có dữ liệu của hai màn]
-- Core: thao tác × lịch sử (AC-1); đổi lọc khi đã có dữ liệu × hai màn (AC-2); lần đầu và lỗi × hai màn (AC-3); lùi
-  thật trên trình duyệt (AC-4).
+- Core: thao tác × lịch sử (AC-1); đổi lọc khi đã có dữ liệu × hai màn (AC-2); lần đầu và lỗi × hai màn (AC-3); đổi
+  lọc mà lỗi × hai màn (AC-5); lùi thật trên trình duyệt (AC-4).
 - Later: lịch sử khi đổi bộ lọc ở các màn `DataTable` khác.
 
 ## Out of scope
