@@ -8,7 +8,7 @@ Hợp đồng: `_acceptance/ghim-thuoc-soi-xem-okr/contract.md` (duyệt 2026-10
 | Mỗi dòng miễn được chứng hai chiều | `_acceptance/ghim-thuoc-soi-xem-okr/rang/guong.mjs`, `mien-hai-chieu.mjs` | AC-2 (dòng miễn hẹp) |
 | CI chạy phép kiểm trên mọi PR | `.github/workflows/acceptance.yml` | AC-4 (hình bước CI) |
 | Dòng lệnh CI đỏ khi thước đỏ | `rang/buoc-ci.mjs --chay` | AC-5 (hành vi lệnh) |
-| Thước cũ của tệp CI không đỏ thêm | `rang/khong-do-them.mjs` | AC-6 (không làm hỏng thước khác) |
+| Thước xanh của tệp CI vẫn xanh | `lkv_ci`, `cgdp_cong`, `kcb_khong_noi_tran` | AC-6 (không làm hỏng thước khác) |
 | Tài liệu API nói CI chạy phép kiểm | `docs/api.md` | AC-7 (tài liệu) |
 
 ## Task 1 — bảy dòng miễn (independent: false)

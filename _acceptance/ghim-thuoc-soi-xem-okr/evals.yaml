@@ -71,15 +71,6 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [".github/workflows/acceptance.yml"]
 
-  - id: E6d
-    criterion: AC-6
-    executor: script
-    layer: backend-effect
-    cmd: config:executors.script.gtsx_khong_do_them
-    expected: "exit 0; rang/khong-do-them.mjs dựng worktree tách rời tại git merge-base HEAD origin/onehub dưới .acceptance-runs/ghim-thuoc-soi-xem-okr/nen-<run>/ (node_modules liên kết tới cây), chạy năm lệnh config gpct_hinh_acceptance, gpct_luong, dpvb_cong, gpa_hinh, gpa_khong_mat_lenh trong worktree nền và trong cây nhánh, chuẩn hoá đầu ra (bỏ sha 7–40 hex, giờ ISO, số giây, đường tuyệt đối tới gốc), rồi so tập dòng: đạt khi nhánh không có dòng nào nền không có. In 'moi <lệnh>: <dòng>' cho mỗi dòng mới và mã 1. Đối chứng dương trên CÙNG worktree nền: bỏ bước 'bun run build' khỏi job build của acceptance.yml trong worktree nền rồi chạy lại năm lệnh — ít nhất một lệnh phải sinh dòng mới so với nền nguyên, in 'bat doi-chung'; không thì 'LOT doi-chung' và mã 1. Dọn worktree khi xong. Không dựng được worktree → 'KHONG DO DUOC: <lý do>' và mã 2."
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [".github/workflows/**", "_acceptance/giam-phut-ci-nhap-t1/rang/**", "_acceptance/giam-phut-acceptance/rang/**", "_acceptance/dieu-phoi-va-bien/rang/**", "_acceptance/ghim-thuoc-soi-xem-okr/rang/**"]
-
   - id: E7
     criterion: AC-7
     executor: script

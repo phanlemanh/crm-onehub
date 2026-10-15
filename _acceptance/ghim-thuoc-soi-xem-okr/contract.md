@@ -7,7 +7,7 @@ risk_tier: T2
 surfaces: []
 status: approved
 approved_by: Phan Le Manh
-approved_at: 2026-10-15T22:22:57Z
+approved_at: 2026-10-15T23:26:38Z
 design_doc: docs/superpowers/specs/2026-10-16-ghim-thuoc-soi-xem-okr-design.md
 ---
 
@@ -47,8 +47,7 @@ Source input: `_acceptance/ghim-thuoc-soi-xem-okr/opportunity.md` · bảng phâ
   → thoát 0 và in «XANH»; gương bỏ dòng miễn `coKrSuaDuoc` → thoát khác 0 và in «DO» — đúng mã mà GitHub Actions dùng để
   đánh đỏ bước.
 - AC-6: Given các thước của hồ sơ đã ký đang đọc chữ `acceptance.yml` và xanh trên nền vòng này (danh sách viết trước ở
-  `evals.yaml`, E6a–E6c: `lkv_ci`, `cgdp_cong`, `kcb_khong_noi_tran`), When chạy lại chúng trên cây của nhánh, Then mỗi thước thoát 0; và năm thước đã đỏ sẵn trên nền (`gpct_hinh_acceptance`, `gpct_luong`, `dpvb_cong`,
-  `gpa_hinh`, `gpa_khong_mat_lenh`) không sinh dòng lỗi nào trên nhánh mà nền không có (E6d).
+  `evals.yaml`, E6a–E6c: `lkv_ci`, `cgdp_cong`, `kcb_khong_noi_tran`), When chạy lại chúng trên cây của nhánh, Then mỗi thước thoát 0.
 - AC-7: Given `docs/api.md`, When đọc đoạn nói `soi-ma.mjs --ca xem` đỏ khi thiếu điều kiện, Then đoạn ấy nói job
   «acceptance gate» của `.github/workflows/acceptance.yml` chạy thước trên mọi pull request và mọi push lên `onehub`.
 
@@ -87,6 +86,10 @@ Quét tay ba trục.
 - Sửa `rang/soi-ma.mjs` kéo `gioi-han-duyet-cay-okr` vào diff — PR ghim lại hồ sơ đó ở tip nhánh.
 - Khoá miễn là `tệp#hàm#bảng`: lời đọc thứ hai trên cùng bảng trong cùng hàm đã miễn sẽ lọt — giới hạn có từ trước, không đổi
   ở vòng này.
+- Known limits — chọn ở Cổng Phạm vi 2026-10-15 (mở lại): `gpct_luong` (`giam-phut-ci-nhap-t1`) và `gpa_hinh`
+  (`giam-phut-acceptance`) ghim trọn hình `acceptance.yml`, nên bất kỳ bước nào thêm vào tệp cũng đổi đầu ra của chúng;
+  trên nhánh, mọi dòng lệch so với nền đều là hệ quả của bước «OKR read rule» («thừa lệnh `soi-ma.mjs --ca xem`», số bước
+  của job `luat-kho`) — bằng chứng `evidence/lech-thuoc-do-san.md`. Ghim lại hình của hai hồ sơ đó là một hợp đồng riêng.
 - Năm thước của hồ sơ đã ký đọc `acceptance.yml` đã đỏ trên nền `d086bf8cf` trước vòng này (đo S1 16/10): `gpct_hinh_acceptance`, `gpct_luong` (`giam-phut-ci-nhap-t1`), `dpvb_cong` (`dieu-phoi-va-bien`, sập khi chạy), `gpa_hinh`, `gpa_khong_mat_lenh` (`giam-phut-acceptance`). Không nằm trong AC-6; báo giám sát.
 - Bước chạy trên lượt `pull_request` (merge ref lúc chạy). Kho gộp theo lô với `--match-head-commit` và không chạy lại khi
   base dời, nên hai PR mỗi PR xanh riêng vẫn có thể làm onehub đỏ — lượt push lên onehub bắt điều đó; Đường đo tách ca này
