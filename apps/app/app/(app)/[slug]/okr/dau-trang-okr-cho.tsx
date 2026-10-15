@@ -28,7 +28,7 @@ export function DauTrangOkrCho({
 			chonChuKy={
 				<>
 					<NutHoiKara />
-					<Skeleton className="h-8 w-24 rounded-md" />
+					<Skeleton className="h-8 w-28 rounded-md" />
 				</>
 			}
 			thanhTab={<Skeleton className="h-9 w-full max-w-xl" />}
