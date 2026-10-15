@@ -30,6 +30,7 @@
 		"./okr-chi-so-danh-muc": "./src/okr-chi-so-danh-muc.ts",
 		"./okr-chu-ky-hien": "./src/okr-chu-ky-hien.ts",
 		"./okr-cuoc-soan": "./src/okr-cuoc-soan.ts",
+		"./okr-cuoc-hoi": "./src/okr-cuoc-hoi.ts",
 		"./okr-de-xuat": "./src/okr-de-xuat.ts",
 		"./okr-don-vi": "./src/okr-don-vi.ts",
 		"./okr-duyet": "./src/okr-duyet.ts",

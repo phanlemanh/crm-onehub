@@ -2509,6 +2509,12 @@ const MIEN_GHI = {
 	goChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài go-chu-ky",
 	anChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài an-hien",
 	hienChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài an-hien",
+	hoiMo:
+		"chỉ tạo một cuộc hỏi OkrCuocHoi của chính người gọi — không nhận id chu kỳ, mục tiêu hay KR",
+	hoiTangLuot:
+		"chỉ đếm lượt hỏi OkrLuotHoi của chính người gọi trên cuộc hỏi của họ — không nhận id chu kỳ, mục tiêu hay KR",
+	hoiPhanHoi:
+		"chỉ ghi một hàng OkrHoiPhanHoi của chính người gọi — không phải bản ghi OKR, không đổi Mục tiêu, KR hay Cập nhật nào",
 } satisfies { [ten: string]: string };
 
 async function datDuyetCongBo(bat: boolean): Promise<void> {
