@@ -720,7 +720,6 @@ export async function moKhung(
 	}));
 	const tham = new URLSearchParams(thamSo);
 	if (don !== "goc") tham.set("donOkr", don);
-	// Nút soạn ở đầu trang khu từ DH1 (dieu-huong-khu-muc-tieu) — dựng cả đầu trang lẫn thân.
 	await mo(
 		<>
 			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />

@@ -50,11 +50,6 @@ export type QuyenKhu =
 			canEdit: boolean;
 	  };
 
-/**
- * Quyền của ba hành động đầu trang trên đơn vị đích. Quyền lấy từ `canCreate`
- * máy chủ trả cho đúng đơn vị đích (`nhapDuoc` — máy chủ dùng cùng phép kiểm cho
- * tạo và nhập); cùng khoá truy vấn với trang Theo đơn vị nên ở đó không tải thêm.
- */
 export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	const m = okrMessages(useLocale());
 	const trpc = useTRPC();
@@ -237,7 +232,6 @@ function MenuThem({
 	);
 }
 
-/** Hàng hành động đầu trang khu: «Hỏi Kara» · ô chu kỳ · «…» · nút soạn · «Thêm mục tiêu». */
 export function HanhDongKhu({
 	q,
 	tab,

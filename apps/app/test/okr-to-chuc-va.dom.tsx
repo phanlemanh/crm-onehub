@@ -470,8 +470,6 @@ describe("nut-them", () => {
 		},
 	] as const;
 
-	// DH1 (dieu-huong-khu-muc-tieu): nút ở đầu trang khu; người không đủ quyền thấy
-	// nút KHOÁ kèm lý do thay vì không thấy gì (luật «Không đủ quyền», docs/settings.md).
 	test("nut-them: quan tri khong la truong va truong phong bam duoc Them muc tieu; thanh vien thay nut khoa", async () => {
 		expect.assertions(VAI.length * 3 + 1);
 		for (const vai of VAI) {

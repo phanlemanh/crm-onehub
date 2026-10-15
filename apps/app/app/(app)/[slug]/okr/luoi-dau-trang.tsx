@@ -7,10 +7,6 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 
-/**
- * Đầu trang của cả khu Mục tiêu, cùng khuôn với Thoả thuận: tên khu ở trái, hàng
- * hành động ở phải, dòng lý do (khi có) dưới tiêu đề, thanh thẻ ngay dưới.
- */
 export function LuoiDauTrangOkr({
 	tieuDe,
 	moTa,

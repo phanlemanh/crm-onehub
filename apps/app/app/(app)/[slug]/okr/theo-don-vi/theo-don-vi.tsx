@@ -44,7 +44,6 @@ import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 
 const PHA_CO_CHAM: readonly PhaChuKy[] = ["cham-diem", "da-dong"];
 
-/** Hộp «Nhập từ bảng tính» mở bằng khoá đường dẫn, để nút «…» ở đầu trang mọi thẻ dùng chung một hộp. */
 function HopNhapTheoUrl({
 	cycleId,
 	unit,
