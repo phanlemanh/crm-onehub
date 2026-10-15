@@ -51,7 +51,18 @@ Vật liệu nền: bản mẫu `/proto/so-do-can-chinh-okr` ở nhánh `feat/so
 |---|---|---|---|---|
 | 1 | Một thẻ đơn vị không có đường nối lên là tín hiệu đủ rõ để lãnh đạo chỉ ra «chưa nối» trong vài giây | Lãnh đạo vẫn phải đọc từng thẻ, sơ đồ chỉ đẹp hơn cây | Lái-thử người-lạ trên bản mẫu `/proto/so-do-can-chinh-okr`, trạng thái «Cần chú ý» | Chưa thử |
 | 2 | Dữ liệu căn chỉnh thật đủ đầy để sơ đồ có nghĩa (đơn vị có trưởng, mục tiêu có góp lên) | Sơ đồ toàn thẻ đỏ, «Cần chú ý» thành mọi thứ | Đếm trên production: số đơn vị, số đơn vị chưa có trưởng, số mục tiêu chưa góp vào đâu | Chưa thử |
-| 3 | Sơ đồ mang được lý do căn chỉnh của L2–L4 nên bỏ được cây ở trang đơn vị (B5) | Bỏ cây làm mất chỗ duy nhất đọc lý do | Rà ở S1: lý do hiện ở đâu trên cây, sơ đồ đặt nó vào đâu | Chưa thử |
+| 3 | Sơ đồ mang được lý do căn chỉnh của L2–L4 nên bỏ được cây ở trang đơn vị (B5) | Bỏ cây làm mất chỗ duy nhất đọc lý do và chip lọc «Chưa có lý do» vừa ship ở L3 (12/10) | Rà ở S1: cây đọc lý do từ `canhCuaCay` (`apps/api/src/okr/okr-xem.service.ts:126`), sơ đồ đọc cùng nguồn đó | Đã rà một phần 15/10: nguồn đọc dùng chung được |
+
+**Hiện trạng đã rà 15/10 (đọc mã ở `38300b3c8`):** tổ chức cố định hai cấp — công ty › bộ phận
+(`Division`) › phòng ban (`Department`), mỗi đơn vị có `headUserId`; không có bảng cây tổng quát,
+nên «thu gọn theo cấp» (D4) là thu gọn phòng ban dưới bộ phận. Toàn cảnh
+(`apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx`) chưa có cách xem nào; hàng của nó
+(`hangToanCanh`) chưa mang trưởng đơn vị, căn chỉnh hay số KR trượt — vòng phải thêm phần đọc
+đó. Căn chỉnh nhiều–nhiều ở `OkrAlignment` (kèm `lyDo`, `canCu`, `lyDoTuKara`); «trượt» chỉ có ở
+mục tiêu loại cam kết (`tinhTrang`, `packages/validation/src/okr-muc-tieu.ts:44`). Hồ sơ đã ký
+`cay-can-chinh-co-ly-do` có rào `rang/giu-ho-so.mjs` cấm sửa `apps/api/src/okr/can-chinh.ts`: vòng
+này chỉ đọc qua nó, không sửa. B5 (bỏ cách xem Cây) chạm mười một hồ sơ đã ký có eval trỏ
+`theo-don-vi.tsx` — giá đó trình ở Cổng Phạm vi.
 
 ## Ngưỡng chết / ngưỡng UAT
 
