@@ -1,5 +1,5 @@
-import { describe, expect, test } from "bun:test";
-import { act } from "react";
+import { describe, expect, mock, test } from "bun:test";
+import { act, createElement } from "react";
 import {
 	type CapNhatTuanOutput,
 	capNhatTuanOutput,
@@ -778,4 +778,71 @@ describe("ctbp-tai-loi", () => {
 				await cho(() => lan > truoc, "goi lai dung truy van");
 				expect(lan - truoc).toBe(1);
 			});
+});
+
+/* ---------- ctbp-bon-the (E10) ---------- */
+
+// Thanh thẻ nằm cạnh đầu trang khu trong cùng tệp; khung trang cần ViewTransition mà
+// bản React của bộ kiểm không có — giả khung như bài okr-thanh-tab.dom.tsx.
+const khoiThe =
+	(the: string) =>
+	({ children }: { children?: React.ReactNode }) =>
+		createElement(the, null, children);
+mock.module("@/components/page-shell", () => ({
+	PageShellHeader: khoiThe("header"),
+	PageShellHeading: khoiThe("div"),
+	PageShellTitle: khoiThe("h1"),
+	PageShellDescription: khoiThe("p"),
+	PageShellActions: khoiThe("div"),
+}));
+const { ThanhTabOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
+const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
+
+describe("ctbp-bon-the", () => {
+	const KY_VONG = {
+		vi: ["Của tôi", "Theo đơn vị", "Toàn cảnh", "Hỏi ý"],
+		en: ["Mine", "By unit", "Overview", "Call for ideas"],
+	} as const;
+	for (const locale of ["vi", "en"] as const)
+		test(`ctbp-bon-the: ${locale}`, async () => {
+			const m = okrMessages(locale);
+			await dung(
+				<ThanhTabOkr tab="cua-toi" />,
+				"?kyOkr=q3&donOkr=pb%3Apb-1",
+				locale,
+			);
+			const the = [...document.body.querySelectorAll('[role="tab"]')];
+			if (the.length !== 4)
+				throw new Error(`ctbp-bon-the: ${the.length} the, mong 4`);
+			const conKhoaCu = (o: object) => Object.hasOwn(o, "cap-nhat-tuan");
+			expect({
+				nhan: the.map((t) => t.textContent),
+				nhanTuMessages: the.map((t) => t.textContent),
+				soTab: TAB.length,
+				khoaTab: conKhoaCu(m.tab),
+				khoaMoTa: conKhoaCu(m.moTa),
+				moTaCuaToi: m.moTa["cua-toi"],
+				giuThamSo: the.every((t) => {
+					const q = new URL(t.getAttribute("href") ?? "", "http://x")
+						.searchParams;
+					return q.get("kyOkr") === "q3" && q.get("donOkr") === "pb:pb-1";
+				}),
+			}).toEqual({
+				nhan: [...KY_VONG[locale]],
+				nhanTuMessages: [
+					m.tab["cua-toi"],
+					m.tab["theo-don-vi"],
+					m.tab["toan-canh"],
+					m.tab["hoi-y"],
+				],
+				soTab: 4,
+				khoaTab: false,
+				khoaMoTa: false,
+				moTaCuaToi:
+					locale === "vi"
+						? "Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách."
+						: "Your weekly updates, the units you lead and the key results you own.",
+				giuThamSo: true,
+			});
+		});
 });

@@ -7,7 +7,6 @@ const vi = {
 	tabNhan: "Khu mục tiêu",
 	tab: {
 		"cua-toi": "Của tôi",
-		"cap-nhat-tuan": "Cập nhật tuần",
 		"theo-don-vi": "Theo đơn vị",
 		"toan-canh": "Toàn cảnh",
 		"hoi-y": "Hỏi ý",
@@ -23,9 +22,7 @@ const vi = {
 	},
 	moTa: {
 		"cua-toi":
-			"Mục tiêu bạn phụ trách hoặc tham gia, và mục tiêu có KR bạn phụ trách.",
-		"cap-nhat-tuan":
-			"Mọi KR bạn phụ trách ở chu kỳ đang chạy, gửi trong một lượt mỗi tuần.",
+			"Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách.",
 		"theo-don-vi":
 			"Bộ OKR của từng đơn vị trong chu kỳ, và cách chúng góp vào nhau.",
 		"toan-canh": "Cả công ty trong một màn.",
@@ -732,7 +729,6 @@ const en: OkrMessages = {
 	tabNhan: "Objectives area",
 	tab: {
 		"cua-toi": "Mine",
-		"cap-nhat-tuan": "Weekly update",
 		"theo-don-vi": "By unit",
 		"toan-canh": "Overview",
 		"hoi-y": "Call for ideas",
@@ -748,9 +744,7 @@ const en: OkrMessages = {
 	},
 	moTa: {
 		"cua-toi":
-			"Objectives you own or take part in, and objectives with a key result you own.",
-		"cap-nhat-tuan":
-			"Every key result you own in the running cycle, sent in one go each week.",
+			"Your weekly updates, the units you lead and the key results you own.",
 		"theo-don-vi":
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
