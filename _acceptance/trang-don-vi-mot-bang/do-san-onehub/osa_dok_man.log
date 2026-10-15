@@ -1,0 +1,71 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+  building crm_wt_onehub__mau_do: migrate deploy + seed (once per source fingerprint)
+phien-do: kho crm_wt_onehub_do · app http://localhost:4187 · api http://localhost:4849
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts "ad9ki9pm@thu.test"
+$ bun scripts/dev-session.ts "td9ki9pm@thu.test"
+$ bun scripts/dev-session.ts "hd9ki9pm@thu.test"
+$ bun scripts/dev-session.ts "md9ki9pm@thu.test"
+man-okr: 41 anh o /private/tmp/claude-503/-Users-manhphan-dev-acceptance-gate-kit--claude-worktrees-sad-villani-97627b/4a4f3d01-fd65-41b7-af95-cb3c1b07086d/scratchpad/wt-onehub/.acceptance-runs/dat-okr-trong-crm/evidence
+  anh E11-step9.png
+  anh E11-step9-thanh-vien.png
+  anh E11-step1.png
+  anh E11-step2.png
+  anh E11-step3.png
+  anh E11-step4.png
+  anh E11-step5.png
+  anh E11-step6.png
+  anh E11-step7.png
+  anh E11-step8-loi.png
+  anh E11-step8.png
+  anh E11-step10.png
+  anh E11-step11.png
+  anh E11-step12.png
+  anh E11-step13.png
+  anh E12-step1.png
+  anh E12-step2.png
+  anh E12-step3.png
+  anh E12-step4.png
+  anh E12-step5.png
+  anh E12-step6.png
+  anh E12-step7.png
+  anh E12-step8.png
+  anh E12-step9.png
+  anh E12-step10.png
+  anh E12-step11.png
+  anh E20-step1.png
+  anh E20-step2.png
+  anh E20-step3.png
+  anh E20-step4.png
+  anh E20-step5.png
+  anh E20-step6.png
+  anh E20-step7.png
+  anh E15-step1.png
+  anh E15-step2.png
+  anh E15-step3.png
+  anh E15-step4.png
+  anh E15-step5.png
+  anh E15-step6.png
+  anh E15-step7.png
+  anh E15-step8.png
+man-okr: 197 khang dinh, 5 hong
+  HONG: E12 /deals?record=deal:seed-deal-wise-1: loi hydrat A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client bran
+  HONG: E12 /deals?record=deal:seed-deal-wise-1: loi hydrat A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client bran
+  HONG: E12 /deals?record=deal:seed-deal-wise-1: loi hydrat A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client bran
+  HONG: E12 /okr/theo-don-vi?donOkr=pb:cmv9kiii20001mk8ghf074qe9&record=deal:seed-deal-wise-1: loi hydrat A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client bran
+  HONG: E12 /okr/theo-don-vi?donOkr=pb:cmv9kiii20001mk8ghf074qe9&record=deal:seed-deal-wise-1: loi hydrat A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client bran
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1
