@@ -5,7 +5,7 @@ slug: neo-thuoc-het-han
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-15-neo-thuoc-het-han-design.md
 approved_by:
 approved_at:
