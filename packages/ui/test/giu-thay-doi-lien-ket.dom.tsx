@@ -22,7 +22,8 @@ let root: Root | null = null;
 let khung: HTMLElement | null = null;
 const daDi: string[] = [];
 const daDong: boolean[] = [];
-const dieuKhien: { datMo: ((v: boolean) => void) | null } = { datMo: null };
+type DieuKhien = { datMo: ((v: boolean) => void) | null };
+const dieuKhien: DieuKhien = { datMo: null };
 
 afterEach(() => {
 	act(() => root?.unmount());

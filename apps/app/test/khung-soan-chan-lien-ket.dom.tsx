@@ -46,7 +46,7 @@ async function moKhung({
 	datDanhSach({
 		thieuBoiCanh: true,
 		dong: BAN_NHAP,
-		...(daDuaVao ? { cuoc: { ...CUOC, trangThai: "da-dua-vao" } } : {}),
+		cuoc: daDuaVao ? { ...CUOC, trangThai: "da-dua-vao" } : CUOC,
 	});
 	await mo(<RecordSheetHost cauNoiOkr />, "record=soan:cuoc-1");
 	await nhip(10);
