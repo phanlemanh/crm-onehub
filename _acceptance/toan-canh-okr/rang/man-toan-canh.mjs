@@ -1989,7 +1989,8 @@ async function buocSucKhoe() {
 		`E21 buoc 2: URL la trang suc khoe (thay ${new URL(a.url()).pathname})`,
 		new URL(a.url()).pathname.endsWith("/suc-khoe"),
 	);
-	const vun = await chuSel(a, "nav[aria-label='breadcrumb']");
+	// AC-14 cach-toi: nhãn trợ năng của breadcrumb đổi theo ngôn ngữ (3b35afcd0, 14/10) — đọc dấu ổn định data-slot
+	const vun = await chuSel(a, "nav[data-slot='breadcrumb']");
 	kiem(
 		`E21 buoc 2: breadcrumb Toan canh › Suc khoe chuong trinh (thay ${vun})`,
 		vun.indexOf(CHU.toanCanhTab) === 0 &&

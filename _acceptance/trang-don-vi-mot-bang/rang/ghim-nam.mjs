@@ -199,7 +199,8 @@ for (const slug of KHAI) {
 	const suites = Array.isArray(cuoi.suites_exit) ? cuoi.suites_exit : [];
 	const evals = Object.entries(cuoi.evals_exit ?? {});
 	const xanh = suites.every((m) => m === 0) && evals.every(([, m]) => m === 0);
-	const coTrang = typeof cuoi.sha === "string" && laToTien(moc, cuoi.sha);
+	const coTrang =
+		/^[0-9a-f]{40}$/.test(String(cuoi.sha ?? "")) && laToTien(moc, cuoi.sha);
 	if (!coTrang) {
 		sai.push(`${slug} ghim tren ${cuoi.sha} chua co trang moi`);
 		console.log(`SAI AC-14: ${slug} ghim tren ${cuoi.sha} chua co trang moi`);
