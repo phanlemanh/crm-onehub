@@ -5,7 +5,7 @@ slug: hoi-dap-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-14T21:54:33Z
 design_doc: docs/superpowers/specs/2026-10-14-hoi-dap-okr-design.md
@@ -125,3 +125,19 @@ OKR» xanh trên production».
   (luật đợt 14 không áp).
 - `migration` chỉ thêm bảng `OkrCuocHoi`, lấy mốc UTC thật lúc tạo; kiểm `origin/onehub` ngay trước gộp.
 - Tệp dùng chung (`apps/app/lib/messages/*.ts`, `_acceptance/config.yaml`, `CONTEXT.md`) chỉ thêm dòng.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Với vài câu Kara trả lời «không biết», phép chấm nội bộ không đủ dữ liệu để biết đúng hay sai, nên tỷ lệ đúng ý có thể lệch một chút.
+  - Ngoài-2: Khi Kara trả lời «tôi không biết», phép chấm nội bộ gần như luôn cho là đúng, kể cả khi dữ liệu thật có câu trả lời.
+  - Ngoài-3: Khi không xác định được vai người hỏi, Kara OKR có thể gợi ý sang Kara của CRM dù người đó chỉ dùng OKR; không lộ dữ liệu đối tác.
+  - Ngoài-7: Hai bài kiểm kênh bảo mật dữ liệu đỏ trên máy kiểm tự động không có khoá AI Gateway; sửa bài bằng khoá giả trước khi gộp.
+  - Ngoài-8: Chạy toàn bộ bài kiểm cùng lúc trên một máy, hai nhóm bài về trần chi phí có thể làm hỏng kết quả của nhau.
+  - Ngoài-9: Bài kiểm tên trích không bị tự dịch có thể xanh dù thẻ trích không mở ra.
+  - Ngoài-10: Bài kiểm canh lệnh đo gọi model qua kênh bảo mật có thể bỏ sót một lần sửa sau này gọi model theo đường khác.
+  - Ngoài-11: Một quý đã ẩn trên màn OKR vẫn có thể thành quý hiện tại mà Kara trả lời theo.
+  - Ngoài-12: Khi trợ lý lỗi hoặc chậm, câu hỏi thất bại vẫn bị trừ vào 40 câu mỗi ngày; hai tab cùng lúc có thể bị trừ hai lần.
+  - Ngoài-13: Màn chi phí có thể hiện hai con số khác nhau dưới cùng nhãn «Trợ lý OKR», một có tính tiền hỏi đáp, một không.
+  - Ngoài-16: Khi Kara chập chờn, mỗi lần bấm «Thử lại» mất một câu trong 40 câu mỗi ngày dù không nhận được câu trả lời.
+  - Ngoài-17: Mở lại cuộc hỏi cũ sau hơn 30 phút thì ô gõ vẫn mở nhưng câu gửi đi không được trả lời, và vẫn bị trừ lượt.
+  - Ngoài-18: Trong cuộc hỏi dài, Kara có thể chờ một lời xin duyệt người dùng không thấy, rồi hiện «Kara chưa trả lời được» và cuộc hỏi kẹt.
+  - Ngoài-19: Lưu đánh giá câu trả lời bị lỗi thì người dùng vẫn thấy lời cảm ơn, nhưng đội không nhận được phản hồi.
+  - Ngoài-20: Gửi câu đầu tiên từ hai tab cùng lúc có thể khiến một tab bị trừ lượt oan và báo lỗi ở các câu sau.

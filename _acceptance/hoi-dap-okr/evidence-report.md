@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: hoi-dap-okr
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: f23333725a61c6266c7e6e34dbdaa48bb96dda72
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-15 — ký Cổng 2 trên S4 lượt 4 (mọi eval máy ĐẠT; E9j Đạt; lượt 4 vượt trần 3 lượt theo quyết định chủ kho). Ngoài-1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20 ghi Known limits (Ngoài-7: sửa bài zdr-hoi bằng khoá giả trước khi gộp); Ngoài-4, 5, 6, 14, 15 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: hoi-dap-okr
@@ -142,7 +142,7 @@ Round 4. Mọi eval máy đạt (7 eval chạy lại ở round này, 10 eval man
   verdict: PASS
   rationale: |
     Đề xuất của panel là PASS (ba phiếu PASS, không có phiếu bất đồng). Đây chỉ là đề xuất; người quyết ở Cổng 2. Từng phiếu nằm ở mục «Judge panel E9j» bên dưới.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-10-15 — Đạt
 
 - eval: E10
   run_id: minted-hoi-dap-okr-E10-r2
