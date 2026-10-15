@@ -1,0 +1,46 @@
+slug: thuoc-tro-ly-okr-khong-lot
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tlk_so_du
+    expected: "exit 0; rang/kiem.test.ts -t tlk-so-du trên phản hồi THẬT của GET /v1/credits (rang/mau/credits-that.json, chép nguyên văn ngày 15/10): soDuGateway đọc ra đúng số balance của tệp, không thì 'tlk: khong doc duoc phan hoi that'; ma trận viết trước 4 số dư thay vào chính phản hồi thật {-0.00986931 chặn, 0 chặn, 0.01 qua, 49.99 qua}; ô chặn phải có 'so du AI Gateway <số> USD', ô qua ra null; HTTP 401 và balance không phải số → null với đúng câu cảnh báo 'khong doc duoc so du AI Gateway (<lý do>) — van do'; thiếu khoá → khongDoc và fetch không được gọi. Chiều đỏ cùng mẫu: bản sao chanSoDu đổi '<= 0' thành '< 0' thì 'tlk: so du 0 khong bi chan'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs", "_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts", "_acceptance/thuoc-tro-ly-okr-khong-lot/rang/mau/**"]
+
+  - id: E1b
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tlk_so_du_am
+    expected: "exit 0; rang/khoa-sai.mjs --so-du-am dựng máy chủ cục bộ trả đúng khuôn của credits-that.json với balance -0.0099, rồi chạy THẬT do-tre.mjs --lan 2 và eval-gop-y.mjs (Bun.spawn bất đồng bộ) với TDX_URL_SO_DU trỏ máy đó: mỗi lệnh phải thoát 2, đầu ra có 'KHONG DO DUOC: so du AI Gateway -0.0099 USD', không có dấu dựng phiên đo hay kho ('phien do co tac tu', 'phien-do: kho', 'okr:mau --moc', 'kho tdx-e22'), và máy chủ nhận ≥ 1 lần hỏi số dư. Lệch thì 'SAI so du am <lệnh>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs", "_acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs", "_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs", "_acceptance/thuoc-tro-ly-okr-khong-lot/rang/khoa-sai.mjs"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tlk_hong_het
+    expected: "exit 0; rang/kiem.test.ts -t tlk-hong-het: laHongHet trên ma trận viết trước {20/20 hỏng chặn, 19/20, 1/20, 0/20, 0 lượt: không chặn}, lệch thì 'tlk: hong het sai o <ô>'; hongHet trên ba lượt hỏng (2 hong:turn-failed, 1 quá hạn) và nhật ký tác tử THẬT của lượt khoá sai (rang/mau/tac-tu-khoa-sai.log, chép nguyên văn) phải bắt đầu '3/3 luot hong', có 'hong:turn-failed 2' và 'qua 180 s chua dong 1', và có dòng 'AI Gateway rejected the provided API key'; nhật ký không có dòng lỗi model thì phải nói 'khong co dong loi model', không bịa."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs", "_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts", "_acceptance/thuoc-tro-ly-okr-khong-lot/rang/mau/**"]
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tlk_khoa_sai
+    expected: "exit 0; rang/khoa-sai.mjs chạy E24 thật (--lan 2) với AI_GATEWAY_API_KEY sai và OKR_AI_GATEWAY_API_KEY rỗng (không tốn tiền): bản sửa phải thoát 2 với 'KHONG DO DUOC: 2/2 luot hong' VÀ dòng lỗi model 'AI Gateway rejected the provided API key' trong đầu ra; bản trước vòng (git show 38300b3c8, chép ra tmpdir, đường nhập và dòng lệnh tự gọi lại trỏ về chính bản chép) phải thoát 1 với 'KHONG DAT'. Lệch thì 'SAI <bản> ma <n>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs", "_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs", "_acceptance/thuoc-tro-ly-okr-khong-lot/rang/khoa-sai.mjs"]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tlk_kho_theo_cay
+    expected: "exit 0; rang/kiem.test.ts -t tlk-kho-theo-cay gọi taoKho('tdx-e22') THẬT trong tiến trình con với PHIEN_DO_TEN_CAY lần lượt cay-a, cay-b, và một bun giả đứng đầu PATH in lại đối số --ten mà taoKho truyền cho db:do: bản sửa ra hai kho (measureDatabaseName) khác nhau và khác measureDatabaseName('tdx-e22'), không thì 'tlk: hai cay chung mot kho' hay 'tlk: van dung kho chung cu'; bản trước vòng (git show 38300b3c8, chép vào .acceptance-runs/tlk-kho/x/ để đường nhập tương đối giữ nguyên) ra cùng một kho chung ở cả hai cây, không thì 'tlk: thuoc khong phan biet ban truoc vong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs", "_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts"]
