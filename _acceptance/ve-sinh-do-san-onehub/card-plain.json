@@ -1,0 +1,45 @@
+{
+  "feature_plain": "Người mở thẳng một đường dẫn có ngăn bản ghi (thoả thuận, cuộc soạn) không còn thấy trang dựng lại hay lỗi 403, và bảy hồ sơ đã ký đang đỏ trên bản chung xanh lại để mọi PR chạm chúng ghim lại được.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ mở thẳng bốn đường có ngăn bản ghi (Thoả thuận; Theo đơn vị với thoả thuận; Theo đơn vị với cuộc soạn, nhìn bằng quản trị và bằng người mở) ở khổ máy tính và điện thoại, mỗi khổ 5 lần, mà không lần nào React báo lệch dựng trang; ngăn mở đúng bản ghi và trang dưới có dữ liệu."},
+    {"id": "AC-2", "p": "Sẽ chứng lỗi có thật trước khi sửa: trên một bản sao chưa sửa, cùng phép đo phải bắt được lỗi ở ít nhất một đường, và in từng đường bắt được mấy lần trên mười."},
+    {"id": "AC-3", "p": "Sẽ nạp sẵn ở máy chủ đúng các dữ liệu mà ngăn và trang cùng dùng (quyền OKR, danh sách người, giai đoạn thoả thuận), để trang đọc được dữ liệu ngay lần dựng đầu; vai chỉ-OKR chỉ nạp quyền OKR."},
+    {"id": "AC-4", "p": "Sẽ chỉ tải luồng hội thoại của cuộc soạn khi người xem chính là người mở cuộc; quản trị xem cuộc của người khác vẫn thấy khung như hôm nay, chỉ là không gọi luồng."},
+    {"id": "AC-6", "p": "Sẽ sửa phép quét chữ tiếng Anh của trang Cài đặt cho đúng định nghĩa: mã hình khung chờ («the») không phải chữ người đọc, nhưng chữ tiếng Anh thật chèn vào vẫn bị bắt — cách khai chờ Hỏi-1."},
+    {"id": "AC-7", "p": "Sẽ cho ba thước đã ký của hồ sơ soát ảnh OKR lượt 3 và khung trang Cài đặt xanh lại bằng cách neo vào đúng cặp gộp của vòng gốc, không nới thước."},
+    {"id": "AC-8", "p": "Sẽ cho thước luật của hồ sơ soạn OKR trong khung xanh lại, cũng neo vào cặp gộp của vòng gốc."},
+    {"id": "AC-9", "p": "Sẽ cho hai thước trình duyệt đã ký (Toàn cảnh OKR, Đặt OKR trong CRM) chạy xanh trên bản đã vệ sinh."},
+    {"id": "AC-10", "p": "Sẽ để mọi chỗ sửa trên thước đã ký mang một dòng khai có tên vòng này, và không thước đã ký nào được khai «không chạy» hay hạ ngưỡng."},
+    {"id": "AC-11", "p": "Sẽ ghim lại bảy hồ sơ đã ký bị chạm trong một lượt, tất cả xanh, và lưới trước khi gộp không còn vi phạm nào ngoài chính hồ sơ này."},
+    {"id": "AC-12", "p": "Sẽ không làm hỏng trang nào không mở ngăn: tám trang tải thẳng không có ngăn bản ghi vẫn không lỗi dựng trang, vì dữ liệu nạp sẵn chỉ đổ vào khi ngăn có bản ghi."}
+  ],
+  "wont_do": [
+    {"id": "AC-5", "p": "Sẽ KHÔNG để trình duyệt của quản trị gọi luồng của cuộc người khác (hết 403); người mở cuộc vẫn gọi luồng bình thường, và đường chặn ở máy chủ giữ nguyên."},
+    {"id": "OOS-1", "p": "Không sửa lỗi dựng trang ở các loại ngăn khác (mục tiêu, KR, việc…) hay trang khác ngoài bốn đường đã đo — chưa có trong danh sách đỏ."},
+    {"id": "OOS-2", "p": "Không mở quyền cho quản trị đọc luồng hội thoại của cuộc người khác — đó là đổi bảo mật."},
+    {"id": "OOS-3", "p": "Không đụng các đỏ sẵn khác trên bản chung mà Mac Studio đang giữ, hay các hồ sơ OKR khác đỏ từ trước."},
+    {"id": "OOS-4", "p": "Không dịch chữ tiếng Anh còn sót ở bốn nhóm màn khác — đó là việc dịch, không phải sửa thước."},
+    {"id": "OOS-5", "p": "Không làm phần trang đơn vị của DH2."}
+  ],
+  "scope_plain": "Vòng chỉ vệ sinh bốn mục đỏ sẵn đã đo; mọi thứ khác để vòng riêng.",
+  "coverage_plain": [
+    {"i": 0, "p": "Không chạy phép quét độ phủ tự động — phạm vi là danh sách đỏ đã đo sẵn trên bản chung."},
+    {"i": 1, "p": "Riêng lỗi dựng trang thì kê tay các trục dưới đây."},
+    {"i": 2, "p": "Bảng: trục · giá trị · đường đo phủ."},
+    {"i": 3, "p": "Trang: Thoả thuận (đường 1) và Theo đơn vị (đường 2–4)."},
+    {"i": 4, "p": "Loại ngăn: thoả thuận (đường 1–2) và cuộc soạn (đường 3–4)."},
+    {"i": 5, "p": "Khổ máy tính và điện thoại: mọi đường."},
+    {"i": 6, "p": "Người xem: quản trị (đường 1–3), người mở cuộc (đường 4), vai chỉ-OKR (AC-3 — chỉ kiểm danh sách nạp, không mở trình duyệt)."},
+    {"i": 7, "p": "Thứ tự dữ liệu về: ngăn trước trang được giả lập trong bài kiểm (AC-3); mười lần mở mỗi đường để bắt cả hai thứ tự (AC-1)."},
+    {"i": 8, "p": "Có hay không ngăn bản ghi: có (AC-1) và không — đo hồi quy trên tám trang (AC-12)."},
+    {"i": 9, "p": "Bỏ ngỏ: các loại ngăn khác trên mọi trang, và ngăn thoả thuận/cuộc soạn trên trang ngoài bốn đường."},
+    {"i": 10, "p": "Các ô bỏ ngỏ nằm ngoài phạm vi."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Cách khai mã hình khung chờ để thước không bắt nhầm là chuyện nới thước đã ký — máy ghi là tự quyết là sai; đã chuyển thành câu Hỏi-1 cho anh."},
+    {"i": 1, "p": "Bằng chứng «lỗi có trước khi sửa» chỉ đòi một lỗi trên cả ma trận, có thể đạt do may; đã sửa: đếm theo từng đường, chỉ tính là bằng chứng ở đường tái hiện ≥3/10. Phần so khoá thật bị bác vì ba khoá đều không có tham số."},
+    {"i": 2, "p": "Nạp sẵn trên mọi trang có thể gây lỗi dựng trang ngược chiều ở trang đang xanh; đã sửa thiết kế: chỉ đổ dữ liệu khi ngăn có bản ghi, thêm AC-12 đo tám trang không có ngăn."},
+    {"i": 3, "p": "Phép kiểm «không ghi bẩn cây làm việc» chỉ so danh sách trạng thái; đã sửa: so cả nội dung từng tệp đang sửa hay chưa theo dõi, có tự kiểm."},
+    {"i": 4, "p": "Bỏ người-chấm-nhìn mà hứa có ảnh bù nhưng chưa đòi ảnh; đã sửa: phép đo phải chụp đủ 8 ảnh (4 đường × 2 khổ)."}
+  ]
+}
