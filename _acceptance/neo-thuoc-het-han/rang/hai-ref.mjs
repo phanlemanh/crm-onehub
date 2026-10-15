@@ -83,6 +83,38 @@ const hong = voiCayTam("hai-ref", (cay) => {
 			2,
 			"KHONG DO DUOC: cap gop khong co tep .tsx hay migration de dung commit gia",
 		);
+	const doiChung = [
+		{
+			so: 1,
+			tep: RANG_SOI,
+			thay: [["`${CAP.goc}...${CAP.dinh}`,", "`origin/onehub...HEAD`,"]],
+			lenh: (p) => `bun ${p} --ca thiet-ke`,
+		},
+		{
+			so: 1,
+			tep: RANG_MIG,
+			thay: [["const DINH = CAP.dinh;", 'const DINH = "HEAD";']],
+			lenh: (p) => `node ${p}`,
+		},
+		{
+			so: 2,
+			tep: RANG_SOI,
+			thay: [['if (ca === "thiet-ke") dungCayDinh();', ""]],
+			lenh: (p) => `bun ${p} --ca thiet-ke`,
+		},
+	];
+	const banSao = [];
+	doiChung.forEach((d, i) => {
+		const ban = apThay(readFileSync(join(cay, d.tep), "utf8"), d.thay);
+		if (ban === null) {
+			loi.push(`HONG DOI CHUNG ${d.so}: phep thay khong ap vao ${d.tep}`);
+			return;
+		}
+		const tep = d.tep.replace(".mjs", `-doi-chung-${i}.mjs`);
+		writeFileSync(join(cay, tep), ban);
+		banSao.push({ ...d, lenhSao: d.lenh(tep), truoc: chay(d.lenh(tep), cay) });
+	});
+
 	appendFileSync(join(cay, tsx), CHEN_TSX);
 	appendFileSync(join(cay, migCap), '\nDROP TABLE "okrKeyResult";\n');
 	mkdirSync(join(cay, MIG, "29991231000000_gia"), { recursive: true });
@@ -90,7 +122,11 @@ const hong = voiCayTam("hai-ref", (cay) => {
 		join(cay, MIG, "29991231000000_gia", "migration.sql"),
 		'DROP TABLE "okrKeyResult";\n',
 	);
-	commitGia(cay, "gia: commit ngoai vong cho hai-ref");
+	commitGia(cay, "gia: commit ngoai vong cho hai-ref", [
+		tsx,
+		migCap,
+		`${MIG}/29991231000000_gia/migration.sql`,
+	]);
 	console.log(
 		`commit gia: chen divide-y vao ${tsx}, DROP TABLE vao ${migCap}, them ${MIG}/29991231000000_gia`,
 	);
@@ -111,46 +147,19 @@ const hong = voiCayTam("hai-ref", (cay) => {
 			);
 	}
 
-	const doiChung = [
-		{
-			so: 1,
-			tep: RANG_SOI,
-			thay: [["`${CAP.goc}...${CAP.dinh}`,", "`origin/onehub...HEAD`,"]],
-			lenh: `bun ${RANG_SOI.replace(".mjs", "-doi-chung.mjs")} --ca thiet-ke`,
-			goc: goc23,
-		},
-		{
-			so: 1,
-			tep: RANG_MIG,
-			thay: [["const DINH = CAP.dinh;", 'const DINH = "HEAD";']],
-			lenh: `node ${RANG_MIG.replace(".mjs", "-doi-chung.mjs")}`,
-			goc: goc25,
-		},
-		{
-			so: 2,
-			tep: RANG_SOI,
-			thay: [['if (ca === "thiet-ke") dungCayDinh();', ""]],
-			lenh: `bun ${RANG_SOI.replace(".mjs", "-doi-chung.mjs")} --ca thiet-ke`,
-			goc: goc23,
-		},
-	];
-	for (const d of doiChung) {
-		const ban = apThay(readFileSync(join(cay, d.tep), "utf8"), d.thay);
-		if (ban === null) {
-			loi.push(`HONG DOI CHUNG ${d.so}: phep thay khong ap vao ${d.tep}`);
-			continue;
-		}
-		writeFileSync(join(cay, d.tep.replace(".mjs", "-doi-chung.mjs")), ban);
-		const kq = chay(d.lenh, cay);
+	for (const d of banSao) {
+		const sau = chay(d.lenhSao, cay);
 		const khac =
-			kq.ma !== d.goc.ma ||
-			soDong(sach(d.goc.ra, cay), sach(kq.ra, cay)) !== null;
+			sau.ma !== d.truoc.ma ||
+			soDong(sach(d.truoc.ra, cay), sach(sau.ra, cay)) !== null;
 		if (!khac)
 			loi.push(
-				`HONG DOI CHUNG ${d.so}: ban sao ${d.tep} cho dau ra giong het goc`,
+				`HONG DOI CHUNG ${d.so}: cung ban sao ${d.tep} cho dau ra giong het truoc va sau commit gia`,
 			);
 		else
-			console.log(`DOI CHUNG DUONG ${d.so} ${d.tep}: khac goc (ma ${kq.ma})`);
+			console.log(
+				`DOI CHUNG DUONG ${d.so} ${d.tep}: cung ban sao, truoc va sau commit gia khac nhau (ma ${d.truoc.ma} → ${sau.ma})`,
+			);
 	}
 	return loi;
 });

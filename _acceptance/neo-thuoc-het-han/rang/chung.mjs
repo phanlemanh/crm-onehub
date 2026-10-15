@@ -139,8 +139,13 @@ export function voiCayTam(ten, viec) {
 	}
 }
 
-export function commitGia(cay, cau) {
-	spawnSync("git", ["-C", cay, "add", "-A"]);
+export function commitGia(cay, cau, danhSach = null) {
+	spawnSync("git", [
+		"-C",
+		cay,
+		"add",
+		...(danhSach ? ["--", ...danhSach] : ["-A"]),
+	]);
 	const r = spawnSync(
 		"git",
 		[
