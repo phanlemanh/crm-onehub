@@ -68,6 +68,11 @@ mock.module("@/lib/trpc/client", () => ({
 				scheduledTotal: 0,
 			})),
 		},
+		thongBao: {
+			chuong: truyVan("thongBao.chuong", () => ({ soChuaDoc: 0, dong: [] })),
+			moMot: ghi("thongBao.moMot", () => ({ ok: true })),
+			docHet: ghi("thongBao.docHet", () => ({ soDaDoc: 0 })),
+		},
 		tinHieu: {
 			gui: ghi("tinHieu.gui", (v: GuiVao) => {
 				if (loiGui) throw new LoiTrpc(loiGui);
