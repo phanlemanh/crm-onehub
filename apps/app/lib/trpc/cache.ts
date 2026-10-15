@@ -82,7 +82,6 @@ export function useCrmCache(): CrmCache {
 	const activityKeys = () => [
 		trpc.activities.timeline.pathKey(),
 		trpc.activities.timelineCounts.queryKey(),
-		trpc.activities.myTasks.queryKey(),
 	];
 
 	const listKeys = () => [
@@ -525,7 +524,12 @@ export function useCrmCache(): CrmCache {
 				options,
 			),
 
-		tinHieu: (options) => run([trpc.tinHieu.cuaToi.queryKey()], [], options),
+		tinHieu: (options) =>
+			run(
+				[trpc.tinHieu.cuaToi.queryKey(), trpc.tinHieu.tatCa.queryKey()],
+				[],
+				options,
+			),
 
 		everything: () => queryClient.invalidateQueries(),
 	};

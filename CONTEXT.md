@@ -154,8 +154,8 @@ bỏ; "dự án" gợi một thứ có ngân sách và nghiệm thu, kế hoạc
 chưa giao cho ai. Được chép từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không
 đổi khuôn. Chốt 2026-09-22.
 _Avoid_: task, việc cần làm, nhiệm vụ
-Vì sao: "việc cần làm" là một loại hoạt động khác đã có trên dòng thời gian —
-hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
+Vì sao: "việc cần làm" là loại hoạt động cũ trên dòng thời gian, nay đã chép thành
+Việc — hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
 
 **Việc**: một đầu việc có **người giao**, đúng một **người thực hiện**, không hay nhiều **người theo
 dõi**, có thể có hạn; gắn được vào một hay nhiều bản ghi — thoả thuận, công ty, cá nhân, kế hoạch 30
@@ -164,8 +164,9 @@ Trạng thái là một trong năm: Chưa làm · Đang làm · Chờ đánh gi�
 hiện đổi trạng thái theo bảng của `docs/api.md` mục «Việc»; người theo dõi, thành viên khác, quản trị
 không đổi. Việc gắn ít nhất một bản ghi đối tác thì ai đọc được dữ liệu đối tác cũng thấy; việc không gắn
 gì là việc riêng, chỉ ba vai người trong cuộc thấy. Lượt này người vai «chỉ OKR» chưa dùng Việc (kể cả
-việc riêng). Thay dần «việc cần làm» trên dòng thời gian (hàng DA1b) và Việc (KR) (lượt V5); bước của kế
-hoạch 30 ngày vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
+việc riêng). Việc cần làm cũ trên dòng thời gian đã được chép thành Việc (hàng DA1b): bản gốc còn
+trong bảng hoạt động để đảo, việc chưa chép hiện chỉ đọc, không đường nào tạo việc cần làm mới; Tác
+nhân giao việc bằng Việc. Việc (KR) thay ở lượt V5; bước của kế hoạch 30 ngày vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
 _Avoid_: task, nhiệm vụ, đầu việc
 Vì sao: khảo sát 05/10 thấy mọi hãng tách hai loại việc đều phải vá — «việc của
 tôi» nằm hai chỗ, quyền theo hai luật. Một chữ cho một loại việc chung cả CRM.
@@ -329,7 +330,7 @@ khoản của họ; việc duy nhất xảy ra là CRM biết nhắn nhắc bu�
 **Gợi ý**: câu hướng xử lý đi kèm một nhắc kế hoạch im — «Giao bước X», «Bước X
 quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22.
 _Avoid_: việc cần làm, hành động
-Vì sao: "việc cần làm" đã là một loại hoạt động trên dòng thời gian.
+Vì sao: "việc cần làm" là loại hoạt động cũ trên dòng thời gian, nay đã thành Việc.
 
 **Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
 ngày để theo dõi bốn bậc. Chốt 2026-09-22.
@@ -1161,6 +1162,21 @@ _Avoid_: góp ý, phản hồi, feedback, báo lỗi, yêu cầu
 Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sai» là đánh dấu một câu trả
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
 được nhận làm, còn tín hiệu chưa hứa gì.
+
+**Khoá chỉ kéo tín hiệu**: một khoá API chỉ làm được đúng một việc — kéo tín hiệu về kho
+cho lịch chạy hằng ngày. Khoá không đăng nhập được ở đâu, không đọc bản ghi, không tạo hay
+sửa khoá; chủ sở hữu hoặc quản trị tạo nó ở Cài đặt → Khoá API, mục «Khoá dùng để». Chủ khoá
+thôi làm quản trị thì khoá thôi kéo được. Chốt 2026-10-14 tại Cổng Phạm vi của
+`tin-hieu-tu-ve-kho`.
+_Avoid_: khoá máy, khoá dịch vụ, token kéo về
+Vì sao: «khoá máy» và «khoá dịch vụ» không nói khoá được làm gì; tên phải nói đúng việc duy
+nhất khoá làm được.
+
+**Nhánh hàng chờ**: nhánh `tin-hieu/keo-ve` mà lịch chạy kéo tín hiệu dựng lại mỗi lượt —
+nhánh chính cộng một commit chứa mọi tệp tín hiệu chưa gộp — kèm một PR «Tín hiệu kéo về»
+đứng mở. Lịch chạy không gộp; PR đi vào nhánh chính theo lô như mọi PR. Chốt 2026-10-14
+tại Cổng Đáng của `tin-hieu-tu-ve-kho` (lối A).
+_Avoid_: nhánh tạm, nhánh bot
 
 **Báo sai**: một người đã hỏi đánh dấu câu trả lời của trợ lý AI là sai, kèm ghi chú
 nếu muốn. Mỗi trang được trích nhận một việc trong danh sách «Bị báo sai» của chủ trang;

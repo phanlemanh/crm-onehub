@@ -77,6 +77,7 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
 import {
+	docLyDoCanChinh,
 	dungCayCanChinh,
 	LY_DO_TRONG,
 	type LyDoCanChinh,
@@ -138,6 +139,13 @@ type AlignmentInput = {
 	objectiveId: string;
 	targetObjectiveId: string | null;
 	targetKeyResultId: string | null;
+	lyDo?: string | null;
+	canCu?: string | null;
+};
+type SuaLyDoCanChinhInput = {
+	id: string;
+	lyDo?: string | null;
+	canCu?: string | null;
 };
 type LuotAn = {
 	objectiveId: string;
@@ -1404,8 +1412,11 @@ export class OkrService {
 	}
 
 	async addAlignment(userId: string, input: AlignmentInput) {
+		const chu = docLyDoCanChinh(input);
+		const lyDo: LyDoCanChinh | undefined =
+			chu.lyDo === null ? undefined : { ...chu, lyDoTuKara: false };
 		return this.db.$transaction((tx) =>
-			this.addAlignmentTrong(tx, userId, input),
+			this.addAlignmentTrong(tx, userId, input, { lyDo }),
 		);
 	}
 
@@ -1499,16 +1510,53 @@ export class OkrService {
 		return { id: g.id, canhBao: null };
 	}
 
-	async removeAlignment(userId: string, id: string) {
+	private async congSuaCanChinh(userId: string, id: string) {
 		const g = await this.db.okrAlignment.findUnique({ where: { id } });
 		if (!g) throw new NotFoundException(T.canChinh.khongCo(id));
 		const nguon = await this.quyenOkr.assertSuaMucTieu(userId, g.objectiveId);
-		return this.db.$transaction(async (tx) => {
+		const trongGiaoDich = async (tx: Tx) => {
 			await this.assertKyGhiDuoc(tx, nguon.cycleId);
 			const trangThai = await this.trangThai(tx, nguon.id);
 			if (trangThai === "da-bo") throw new BadRequestException(T.daBo);
 			if (trangThai === "cho-duyet")
 				throw new BadRequestException(T.dangChoDuyet);
+		};
+		return { g, nguon, trongGiaoDich };
+	}
+
+	async suaLyDoCanChinh(userId: string, input: SuaLyDoCanChinhInput) {
+		const chu = docLyDoCanChinh(input);
+		const { g, nguon, trongGiaoDich } = await this.congSuaCanChinh(
+			userId,
+			input.id,
+		);
+		return this.db.$transaction(async (tx) => {
+			await trongGiaoDich(tx);
+			const cu = await tx.okrAlignment.findUnique({ where: { id: g.id } });
+			if (!cu) throw new NotFoundException(T.canChinh.khongCo(input.id));
+			if (cu.lyDo === chu.lyDo && cu.canCu === chu.canCu)
+				return { id: cu.id, canhBao: null };
+			await tx.okrAlignment.update({
+				where: { id: cu.id },
+				data: { ...chu, lyDoTuKara: false },
+			});
+			await this.vet(
+				tx,
+				userId,
+				"sua-ly-do-can-chinh",
+				{ objectiveId: nguon.id },
+				{ alignmentId: cu.id, lyDo: cu.lyDo, canCu: cu.canCu },
+				{ alignmentId: cu.id, lyDo: chu.lyDo, canCu: chu.canCu },
+				null,
+			);
+			return { id: cu.id, canhBao: null };
+		});
+	}
+
+	async removeAlignment(userId: string, id: string) {
+		const { g, nguon, trongGiaoDich } = await this.congSuaCanChinh(userId, id);
+		return this.db.$transaction(async (tx) => {
+			await trongGiaoDich(tx);
 			const xoa = await tx.okrAlignment.deleteMany({ where: { id: g.id } });
 			if (xoa.count === 0) throw new NotFoundException(T.canChinh.khongCo(id));
 			await this.vet(

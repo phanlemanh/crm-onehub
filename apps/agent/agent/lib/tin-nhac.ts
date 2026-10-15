@@ -36,7 +36,7 @@ export const TIEU_DE = {
 	"okr-theo-doi": "Đang theo dõi",
 	"okr-hoi-y-gop": "Hỏi ý mục tiêu",
 	"okr-hoi-y-cong-bo": "Hỏi ý đã công bố",
-	"okr-tom-tat": "Trợ lý OKR",
+	"okr-tom-tat": "Kara · OKR",
 	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
 	"ai-doi-soat-lech": "Đối soát AI",
@@ -144,8 +144,8 @@ export function noiDungAi(v: ViecAi): string {
 	if (v.loai === "ai-tran") {
 		const so = `${dinhUsd(v.chiUsd)} / ${dinhUsd(v.tranUsd)}`;
 		return v.muc === 100
-			? `Trợ lý OKR đã chạm trần tháng (${so}) — tạm nghỉ tới ${thangSauDau(v.thang)}`
-			: `Trợ lý OKR đã dùng 80% trần tháng (${so})`;
+			? `Kara đã chạm trần tháng (${so}) — tạm nghỉ tới ${thangSauDau(v.thang)}`
+			: `Kara đã dùng 80% trần tháng (${so})`;
 	}
 	return `Đối soát tháng ${thangNam(v.thang)} với AI Gateway lệch ${String(v.lechPhanTram).replace(".", ",")}% (sổ ${dinhUsd(v.soSoUsd)}, Gateway ${dinhUsd(v.soGatewayUsd)})`;
 }

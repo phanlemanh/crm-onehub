@@ -31,7 +31,7 @@ evals:
       - "Ngăn rộng không gọi model: bật góp ý cho phòng qua okr.setProgram, bấm «Nhờ Trợ lý OKR góp ý» ở ngăn Sửa mục tiêu và Sửa KR — cột mở ngay ở trạng thái đang soạn, đủ để đo bố cục; đo ở 1440, 1024, 1023, 390; ảnh E3-<khổ>-cot-muc-tieu, E3-<khổ>-cot-kr"
     expected: "exit 0; rang/man-khung.mjs đo bằng getBoundingClientRect trong Chromium thật cho năm ngăn (tạo deal, tạo Mục tiêu, sửa Mục tiêu, thêm KR, sửa KR) ở 1440 và 390: right == innerWidth, top == 0, height == innerHeight, bề ngang từng ngăn OKR chênh ngăn deal ≤ 1 px, top của tiêu đề chênh ≤ 1 px, trong ngăn có đúng một phần tử cuộn dọc được (overflow-y auto và scrollHeight > clientHeight khi nội dung dài, hoặc là thân ngăn) và nó không chứa chân, bottom của chân == bottom của ngăn; không tràn ngang đo TRÊN CHÍNH NGĂN (ngăn fixed và trang khoá cuộn nên scrollWidth của trang không đỏ được): sheet-content và sheet-body có scrollWidth ≤ clientWidth, mọi con hiển thị có right ≤ right của ngăn + 1; với hai ngăn rộng: data-size=assist, 1440 và 1024 cột cùng hàng form (top chênh < 8 px), 1023 và 390 cột dưới form, cùng phép đo tràn trong ngăn. In từng số. Ảnh evidence/E3-*.png. Chiều đỏ ghim: cùng phép đo trên một ngăn giả hẹp hơn 20 px (--kiem-do-do) phải in 'lech be ngang: <px>' và mã 1; chèn một phần tử rộng 600 px vào thân ngăn ở 390 px (--kiem-do-do tran) phải in 'tran ngang: <ngăn>' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "_acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"]
+    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", "_acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"]
 
   - id: E4
     criterion: AC-4
@@ -55,6 +55,7 @@ evals:
     paths: ["packages/ui/src/components/sheet.tsx", "apps/app/**/*sheet*.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"]
 
   - id: E6
+    status: not-run
     criterion: AC-5
     executor: ui-check
     layer: ui-observed
@@ -65,7 +66,6 @@ evals:
       - "1440, 1024, 1023, 390: ngăn Sửa mục tiêu rồi ngăn Sửa KR với cột mở"
     expected: "exit 0; the-gop-y-okr/rang/man-the-gop-y.mjs trên vỏ ngăn, cùng ngưỡng như lúc hồ sơ đó ký: ngăn mang data-size=assist khi cột mở, cột ≥ 360 px, câu mới ≥ 320 px, cột form ≥ form khi không có cột; 1440 và 1024 cột cùng hàng form (top chênh < 8 px); 1023 và 390 cột dưới form; scrollWidth == innerWidth mọi bước; sau mỗi cú bấm trong cột còn đúng một ngăn OKR ([data-hop-thoai-*]). Ảnh ở _acceptance/khung-tao-okr-nhu-deal/evidence/gop-y/. Thiếu khoá model → mã 2. Chiều đỏ ghim của script đó giữ nguyên (cột 292 px → 'cau moi hep' mã 1)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
 
   - id: E7
     status: not-run
@@ -75,7 +75,6 @@ evals:
     cmd: config:executors.test.kto_co_ngan
     expected: "exit 0; bài DOM (-t co-ngan) dựng HopThoaiMucTieu và HopThoaiKr thật, mỗi ngăn có đề xuất chờ: cột đóng → sheet-content mang data-size bằng data-size của ngăn tạo deal; cột mở → cả hai mang data-size=assist, thân ngăn (data-slot=sheet-body) mang data-split=true và chứa cả form lẫn [data-cot-gop-y]; đóng cột → về cỡ thường. Chiều đỏ ghim: bản sao để HopThoaiKr giữ cỡ thường khi cột mở phải làm bài đỏ 'co ngan kr'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/khung-tao-okr.dom.tsx"]
 
   - id: E8
     criterion: AC-6
@@ -93,7 +92,6 @@ evals:
     cmd: config:executors.test.tgy_cot_khong_dong
     expected: "exit 0; bài khong-dong của the-gop-y-okr chạy trên ngăn: mọi trạng thái thẻ × mọi đích bấm trong cột → ngăn OKR vẫn trong DOM và onOpenChange(false) không gọi; đối chứng dương bấm lớp phủ ngăn (sheet-overlay) khi không có sửa thì đóng; chiều đỏ của bài giữ nguyên."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E10
     status: not-run
@@ -103,7 +101,6 @@ evals:
     cmd: config:executors.test.tgy_cot_sua_roi_nhan
     expected: "exit 0; bài sua-roi-nhan của the-gop-y-okr chạy trên ngăn: Esc trong ô sửa đề xuất không gọi thủ tục nào, thẻ về chờ và ngăn còn mở; chiều đỏ của bài giữ nguyên (bỏ nhận diện ô sửa khỏi laEscTuOSuaDeXuat → 'esc dong hop')."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E11
     status: not-run
@@ -113,7 +110,6 @@ evals:
     cmd: config:executors.test.kto_mo_kr_url
     expected: "exit 0; bài DOM (-t mo-kr-url) dựng ObjectiveSheet thật với bộ chuyển nuqs, URL ban đầu hopOkr=muc-tieu, một Mục tiêu hai KR và một câu hỏi gắn KR thứ hai: bấm «Mở KR này» → một lần ghi URL hopOkr=kr:<id KR thứ hai>; ngăn Sửa mục tiêu rời DOM; ngăn Sửa KR có data-hop-thoai-kr=<id KR thứ hai> và ô tên mang đúng tên KR đó. Chiều đỏ ghim: câu hỏi gắn id KR thứ nhất phải làm bài đỏ 'mo sai kr'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/test/khung-tao-okr.dom.tsx"]
 
   - id: E12
     status: not-run
@@ -123,7 +119,6 @@ evals:
     cmd: config:executors.test.kto_bai_cu
     expected: "exit 0; các bài DOM sẵn có dựng hai hộp OKR chạy xanh trên ngăn: tro-ly-okr-gop-y.dom.tsx, the-gop-y-okr.dom.tsx, okr-sheet.dom.tsx, okr-canh-kr.dom.tsx; mỗi thay đổi trong các tệp đó so với merge-base chỉ đổi bộ chọn vỏ (dialog-* sang sheet-*, đếm hộp sang đếm ngăn OKR) — không kỳ vọng hành vi nào bị bỏ hay nới (người chấm đọc diff của bốn tệp)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "packages/ui/src/components/sheet.tsx", "apps/app/test/tro-ly-okr-gop-y.dom.tsx", "apps/app/test/the-gop-y-okr.dom.tsx", "apps/app/test/okr-sheet.dom.tsx", "apps/app/test/okr-canh-kr.dom.tsx"]
 
   - id: E13
     criterion: AC-8
@@ -237,6 +232,7 @@ evals:
     paths: ["packages/ui/src/components/sheet.tsx", "packages/ui/src/components/dialog.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"]
 
   - id: E24
+    status: not-run
     criterion: AC-14
     executor: ui-check
     layer: ui-observed
@@ -247,4 +243,3 @@ evals:
       - "Khi có thẻ (dòng góp ý đã có trong kho đo) đo lại; ảnh E24-<khổ>-<ngăn>.png"
     expected: "exit 0; rang/man-khung.mjs --chi dau-cot đo bằng getBoundingClientRect: left của chữ tiêu đề cột − left của dòng mô tả ngay dưới và của phần tử đầu (khung đang soạn hoặc thẻ) ≤ 1 px; right của dấu X đóng cột − right của phần tử đầu ≤ 1 px; font-size và font-weight tính toán của tiêu đề cột bằng của tiêu đề ngăn (sheet-title); font-size của dòng mô tả ≤ font-size tiêu đề cột; ở 1440 |tâm dọc hàng tiêu đề cột − tâm dọc nút đầu của form| ≤ 2 px; khoảng cách giữa hộp dấu X đóng cột và hộp dấu X đóng ngăn ≥ 8 px. In từng số, mỗi ngăn, mỗi khổ. Chiều đỏ ghim: trang giả có tiêu đề cột thụt 11 px (--kiem-do-do dau-cot) phải in 'dau cot lech trai: 11' và mã 1; trang giả tiêu đề cột 12 px cạnh tiêu đề ngăn 14 px phải in 'dau cot khac co chu' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/khung-tao-okr-nhu-deal/rang/man-khung.mjs"]

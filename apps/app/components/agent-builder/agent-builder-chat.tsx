@@ -62,7 +62,6 @@ import {
 	latestCompletedArtifactVersionId,
 	reviewVersionId,
 } from "@/lib/agent-builder-state";
-import { toolLabel } from "@/lib/agent-tool-display";
 import {
 	conversationTimeline,
 	eventStreamSettled,
@@ -78,6 +77,8 @@ import {
 	type TroChuyenMessages,
 	troChuyenMessages,
 } from "@/lib/messages/agent-builder-tro-chuyen";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
+import { builderStepLabel } from "@/lib/nhan-buoc";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -161,7 +162,7 @@ const builderMessage = z
 
 type BuilderMessage = z.infer<typeof builderMessage>;
 
-const builderSubmissions = z.array(
+export const builderSubmissions = z.array(
 	z.object({
 		id: z.string(),
 		createdAt: z.string(),
@@ -169,6 +170,7 @@ const builderSubmissions = z.array(
 		commandType: z.enum(["CHAT", "CREATE_AGENT"]),
 		message: builderMessage,
 		status: z.string(),
+		errorCode: z.string().nullable().catch(null),
 		errorMessage: z.string().nullable().catch(null),
 	}),
 );
@@ -443,7 +445,7 @@ export function AgentBuilderChat({
 										<UserSubmission
 											submission={item.submission}
 											failed={item.submission.status === "FAILED"}
-											error={item.submission.errorMessage}
+											errorCode={item.submission.errorCode}
 										/>
 									) : (
 										<AssistantMessage
@@ -470,10 +472,11 @@ export function AgentBuilderChat({
 											commandType: item.commandType,
 											message: item.message,
 											status: "PENDING",
+											errorCode: null,
 											errorMessage: null,
 										}}
 										failed={false}
-										error={null}
+										errorCode={null}
 										sending
 									/>
 								</MessageScrollerItem>
@@ -645,6 +648,8 @@ export function AgentToolStep({
 }: {
 	item: Extract<TranscriptItem, { kind: "did" }>;
 }) {
+	const locale = useLocale();
+	const kara = karaBanGhiMessages(locale);
 	return (
 		<div className="flex min-w-0 flex-col gap-1">
 			<div className="flex min-w-0 items-start gap-2 text-sm">
@@ -655,7 +660,9 @@ export function AgentToolStep({
 				) : (
 					<Icon icon={Checkmark} className="size-3.5 text-ring" />
 				)}
-				<span className="min-w-0 wrap-break-word">{toolLabel(item)}</span>
+				<span className="min-w-0 wrap-break-word">
+					{builderStepLabel(item, kara, locale)}
+				</span>
 			</div>
 			{item.errorText ? (
 				<p className="pl-[22px] wrap-break-word text-destructive text-xs leading-5">
@@ -735,7 +742,7 @@ function SharedAgentChat({
 										<UserSubmission
 											submission={item.submission}
 											failed={item.submission.status === "FAILED"}
-											error={item.submission.errorMessage}
+											errorCode={item.submission.errorCode}
 										/>
 									) : (
 										<AssistantMessage
@@ -832,15 +839,15 @@ function ChatHeader({
 	);
 }
 
-function UserSubmission({
+export function UserSubmission({
 	submission,
 	failed,
-	error,
+	errorCode,
 	sending = false,
 }: {
 	submission: BuilderSubmission;
 	failed: boolean;
-	error: string | null;
+	errorCode: string | null;
 	sending?: boolean;
 }) {
 	const locale = useLocale();
@@ -902,7 +909,7 @@ function UserSubmission({
 				) : null}
 				{failed ? (
 					<p className="mt-2 text-destructive text-xs">
-						{error ?? t.man.guiHong}
+						{loiGuiCua(t, errorCode)}
 					</p>
 				) : null}
 			</div>
@@ -1574,4 +1581,10 @@ function compactSummary(value: string | undefined, fallback: string): string {
 
 function textOf(value: string | undefined, fallback: string): string {
 	return value?.trim() ? value : fallback;
+}
+
+function loiGuiCua(t: TroChuyenMessages, errorCode: string | null): string {
+	const bang = t.man.loiGui;
+	const ma = (errorCode ?? "") as keyof typeof bang;
+	return Object.hasOwn(bang, ma) ? bang[ma] : t.man.guiHong;
 }

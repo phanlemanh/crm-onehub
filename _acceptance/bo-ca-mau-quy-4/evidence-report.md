@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: faea4c5622510945fe69aacac6481d5725b8e708
+verified_commit: 13204dd159930a2913e1a176dba82bf70efa3ad3
 human_signoff: Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 3 (PASS, 9/9 eval, 7/7 lệnh suite, hội đồng E8 đạt; vòng 1 REJECT và vòng 2 PENDING-JUDGMENT đã sửa). Ngoài-12 và Ngoài-17 (ca kèm cấp trên bị gieo thành mục tiêu cấp bộ phận) mở hợp đồng mới; Ngoài-1, 14, 15, 21 chấp nhận, không sửa; mười lăm mục còn lại ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -183,3 +183,7 @@ none — every multi-run eval is uniform
 Round 1: E7 failed — rang do va ca doi chung chua dung: ca doi chung thieu ban ghi van tinh la «bat duoc» (finding AC-7 muc cao). Returned to implementation.
 Round 2: all machine evals passed, verdict PENDING-JUDGMENT — finding AC-8 muc trung binh: ma 3 cua rang do lech tai lieu va hop dong E7. Returned to implementation (faea4c562 sua nghia ma 3 trong tai lieu va E7).
 Round 3: E1-E4 va E7 chay lai tren faea4c562, E5-E6 carry-forward tu round 1, E9 carry-forward tu round 2, bay lenh suite xanh, E8 hoi dong de xuat PASS — verdict PASS.
+
+### Re-pin lần 1 — 2026-10-13, do K6a trước gộp: gộp onehub 60fc1b02d, răng dem-ket nhận chữ mồ côi mới, sửa YAML E6 bo-ca-mau-quy-4
+run_id: repin-20261013T233009Z-75646
+sha: 13204dd159930a2913e1a176dba82bf70efa3ad3 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

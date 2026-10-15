@@ -1,0 +1,197 @@
+schema_version: 1
+slug: tac-nhan-va
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tnv_chu_dom
+    paths:
+      - "apps/app/components/agent-builder/team-agents-index.tsx"
+      - "apps/app/lib/messages/agent-builder-tac-nhan.ts"
+      - "apps/app/test/tac-nhan-va.dom.tsx"
+    expected: |
+      Lenh tnv_chu_dom chay apps/app/test/tac-nhan-va.dom.tsx loc -t chu-tac-nhan|chu-luot|chu-thoa-thuan.
+      describe "chu-tac-nhan": render TeamAgentsIndex voi initialAgents la ba tac nhan LIVE, PAUSED, ARCHIVED (hinh dung
+      RouterOutputs["agents"]["list"], ten khac nhau). Ma tran viet truoc, 3 dong x 3 khang dinh = 9: moi dong co mot
+      phan tu StatusIndicator (data-slot cua packages/ui) ma data-tone === toneTheoNghia(nghia) voi nghia doc tu bang chu
+      xuat ra cua agent-builder-tac-nhan.ts (quan he voi bang, khong ghim tone viet tay); chu canh cham === chu cua bang
+      cho dung gia tri do; textContent cua dong khong khop /\b(live|paused|archived)\b/i.
+      Doi chung duong: bang chu co dung 5 khoa bang Object.values cua enum AgentDefinitionStatus trong @crm/db/enums
+      (hay ban sao enum ma kho xuat cho trinh duyet) — them gia tri enum ma quen bang thi do.
+      CHIEU DO: ban sao in agent.status.toLowerCase() nhu truoc vong -> khang dinh dong LIVE do voi thong diep ghim
+      "danh sach tac nhan in trang thai tho".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tnv_chu_dom
+    paths:
+      - "apps/app/components/agent-builder/agent-history.tsx"
+      - "apps/app/components/agent-builder/agent-runs-drawer.tsx"
+      - "apps/app/lib/messages/agent-builder-tro-chuyen.ts"
+      - "apps/app/test/tac-nhan-va.dom.tsx"
+    expected: |
+      describe "chu-luot": mot lich su luot chay dung hinh RouterOutputs cua agents.activity / agents.run (khong viet hinh
+      tay ngoai kieu suy tu router) gom: moi gia tri AgentRunStatus, moi gia tri AgentActionStatus (ca PLANNED), moi
+      AgentTriggerType, su kien run.queued, run.requested, run.completed (khong summary), run.failed, run.cancelled,
+      run.delivery_recovered, step.started, step.completed, step.failed, session.started va mot loai la "x.khong-biet";
+      initiatedBy null, modelId null. Render ngan luot chay va mo luot do.
+      Moi dong mang moc du lieu cua chinh no (data-trang-thai-luot, data-moc, data-trang-thai-buoc, data-su-kien,
+      data-o-luot). Khang dinh theo dong (quan he voi bang chu, khong doc chu cua o loc <select>): tap gia tri cac dong
+      data-trang-thai-luot === tap AgentRunStatus, data-trang-thai-buoc === tap AgentActionStatus, data-su-kien === tap su
+      kien da gieo; moi dong co textContent === chu cua bang cho dung gia tri cua dong do (loai la -> suKienKhac); o
+      nguoi-mo === luot.lichTuDong, o model === luot.macDinh. Quet lop tren ban sao ngan da go <select>: moi tu dang chu
+      may /\b[A-Z][A-Z0-9]*(_[A-Z0-9]+)*\b/ dai hon 1 ky tu, tru danh sach mien {UTC}, === [] va moi chuoi
+      /\b[a-z]+\.[a-z_]+\b/ === [].
+      CHIEU DO: ban sao bo PLANNED khoi bang -> dong buoc PLANNED do voi thong diep ghim "buoc PLANNED hien chu tho";
+      ban sao eventLabel tra event.type.replace(/\./g," ") -> dong su kien do voi thong diep ghim "su kien hien ten may".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tnv_chu_dom
+    paths:
+      - "apps/app/components/agent-builder/deal-list-result.tsx"
+      - "apps/app/test/tac-nhan-va.dom.tsx"
+    expected: |
+      describe "chu-thoa-thuan": render DealListResultTable voi DealListResult parse bang parseDealListResult cua
+      @crm/validation/deal-list (khong render hinh chua parse). Ma tran viet truoc: criteria.status {open, won, lost} = 3
+      ca, moi ca hai thoa thuan. Khang dinh moi ca: aria-label cua section bang chua chu cua bang thoaThuan.trangThai cho gia tri do
+      (quan he voi bang) va textContent khong khop /\b(open|won|lost)\b/. Doi chung duong: ca "all" khong chen chu
+      trang thai nao.
+      CHIEU DO: ban sao in thang criteria.status -> ca won do voi thong diep ghim "ket qua luot chay in trang thai thoa thuan tho".
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tnv_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs / mot-luot.sh); đăng nhập theo bộ mẫu; mỗi khổ một tiến trình con"
+      - "Gieo qua đường ghi thật trong phiên đo: saveBuilderDraft (apps/agent) một tác nhân phạm vi SELECTED xem một công ty tên 60 ký tự, deploy và runNow qua API, kết lượt bằng hàm kết lượt của apps/agent với kết quả bảng thoả thuận năm dòng (hình DealListResult); một hội thoại dựng của người đăng nhập"
+      - "Ở 375 và 1440: mở danh sách tác nhân (ST-ds-tac-nhan-co), màn tác nhân, ngăn lượt chạy có kết quả (ST-luot-chay-ket-qua-dt ở 375, ST-luot-chay-su-kien), hội thoại dựng; mỗi màn đo scrollWidth <= clientWidth của documentElement và của vùng cuộn của ngăn, đo mép phải chip bản ghi [data-chip-ban-ghi] <= mép phải vùng chứa; ở 375 đếm mục của danh sách thoả thuận và đọc innerText mỗi mục [data-thoa-thuan] và khẳng định chứa đúng tên, tên công ty, tên giai đoạn (deal.stage) và chuỗi tiền formatMoney(amount*100, currency, \"vi\") của packages/ui — cùng hàm màn dùng, cuộn tới từng mục rồi đo hộp của bốn phần [data-phan=ten|cong-ty|giai-doan|tien]: có chữ, nằm trong mục, nằm trong khung nhìn, không bị cắt (scrollWidth <= clientWidth + 1); ngăn lượt chạy đo trong khung nhìn, không vùng cuộn tràn ngang và lý do hỏng tiếng Việt hiện; chụp ảnh khung nhìn mỗi màn"
+    expected: "exit 0; 8 ảnh (4 màn × 2 khổ) trong _acceptance/tac-nhan-va/evidence/; ở 375 mỗi màn in 'dat' cho không cuộn ngang và chip trong thẻ; danh sách thoả thuận 5 mục, mỗi mục đủ bốn phần có chữ; chiều đỏ của bảng 56rem nằm ở màn hội thoại (bảng thoả thuận chỉ hiện trong hội thoại dựng): chạy với deal-list-result.tsx của mốc 966eeb78e in 'SAI hoi-thoai-ket-qua-375' (không có mục [data-thoa-thuan])."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/components/agent-builder/deal-list-result.tsx", "apps/app/components/agent-builder/agent-capabilities.tsx", "apps/app/components/agent-builder/team-agents-index.tsx", "apps/app/components/agent-builder/agent-history.tsx", "apps/app/components/agent-builder/agent-runs-drawer.tsx", "_acceptance/tac-nhan-va/rang/man.mjs"]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnv_cau_hoi
+    paths:
+      - "apps/agent/agent/lib/builder-input.ts"
+      - "apps/agent/agent/channels/crm.ts"
+      - "apps/agent/test/eve-tran/evals/hai-luot-hoi"
+      - "apps/agent/test/eve-tran/agent/kich-ban.ts"
+      - "apps/agent/test/tac-nhan-va.integration.spec.ts"
+    expected: |
+      Lenh tnv_cau_hoi chay hai buoc, buoc sau chi chay khi buoc truoc thoat 0.
+      Buoc 1 — ung dung eve thu (bun apps/agent/test/eve-tran/chay.ts, eve that voi mockModel), ca hai-luot-hoi: hai luot
+      goc, moi luot giao viec cho agent_builder mot lan va bo dung goi ask_question (ca question) roi mot luot het han
+      muc (ca session-limit). Ca eval ghi moi payload input.requested ma kenh goc nhan duoc vao tep JSON o duong bien
+      TNV_HAI_LUOT_RA (duoi .acceptance-runs/tac-nhan-va/, khong ghi vao _acceptance/).
+      Buoc 2 — apps/agent/test/tac-nhan-va.integration.spec.ts loc -t cau-hoi, doc tep JSON do (khong viet toa do tay).
+      describe "cau-hoi-luot-sau": khang dinh tien de truoc: moi kind dung hai payload, requestId khac nhau, va toa do
+      (sequence, stepIndex, turnId) cua cau sau khong lon hon cau truoc theo thu tu tu dien (ghim "ca do khong tai hien
+      loi — payload eve khong con trung toa do"). Ma tran viet truoc: kind {question, session-limit} = 2 ca, moi ca mot hoi thoai BUILDER rieng
+      (gieo qua Prisma, co sessionId). Moi ca goi crmEvents["input.requested"] (duong that cua kenh) voi payload thu
+      nhat roi payload thu hai, token builderToken(hoi thoai). Khang dinh: sau payload thu nhat pendingInputRequest mang
+      requestId thu nhat (doi chung duong); tra loi cau thu nhat qua dispatchBuilderSubmission that (bai nop co
+      inputResponse, send gia theo hop dong SendFn) -> pendingInputRequest null; sau payload thu hai pendingInputRequest mang requestId va kind cua payload thu
+      hai, doc qua pendingBuilderQuestionOf cua @crm/validation/builder-question (ham ma conversations.builderById dung).
+      CHIEU DO: ban sao giu supersedes cu (so toa do tren ca hoi thoai) -> ca hai kind do voi thong diep ghim
+      "cau hoi luot sau bi bo vi so toa do hai phien con".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnv_cau_hoi
+    paths:
+      - "apps/agent/agent/lib/builder-input.ts"
+      - "apps/agent/test/tac-nhan-va.integration.spec.ts"
+    expected: |
+      describe "cau-hoi-doi-chung": hoi thoai da ghi payload thu nhat cua E5 (kind question), cau do dang cho.
+      (a) goi lai dung payload do qua kenh: pendingInputRequest va so AgentEvent "builder-input:<hoi thoai>:" bang
+      truoc, khong loi goi console.error. (b) cung phien con hoi tiep: payload thu nhat doi requestId, stepIndex + 2 —
+      ghi, pendingInputRequest mang requestId moi, so AgentEvent tang dung 1. (c) cau cu hon cau dang cho: requestId
+      moi, stepIndex + 1 (nho hon cau (b) dang cho) — khong ghi, hoi thoai bang sau (b) tung truong.
+      CHIEU DO: ban sao bo kiem phat lai -> (a) do voi thong diep ghim "phat lai cung cau ghi them mot dong";
+      ban sao bo so voi cau dang cho -> (c) do voi thong diep ghim "cau cu hon de len cau dang cho".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tnv_cau_hoi
+    paths:
+      - "apps/agent/agent/lib/builder-input.ts"
+      - "apps/agent/agent/channels/crm.ts"
+      - "apps/agent/test/tac-nhan-va.integration.spec.ts"
+    expected: |
+      describe "cau-hoi-bo-co-log": spyOn(console, "error") quanh tung lan goi crmEvents["input.requested"] voi payload
+      thu nhat cua E5. (a) token builder tro toi mot AgentConversation kind RECORD; (b) hoi thoai BUILDER sessionId null;
+      (c) phat lai cua E6(a). Khang dinh: (a), (b) moi lan dung mot loi goi console.error, chuoi chua ma hoi thoai va mot
+      ly do khac rong; khong ghi AgentEvent nao; (c) khong loi goi console.error nao.
+      CHIEU DO: ban sao bo dong log -> (a) do voi thong diep ghim "cau hoi bi bo ma khong de lai dau vet".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tnv_loi_dom
+    paths:
+      - "apps/app/components/agent-builder/agent-builder-chat.tsx"
+      - "apps/app/lib/messages/agent-builder-tro-chuyen.ts"
+      - "apps/app/test/tac-nhan-va.dom.tsx"
+    expected: |
+      Lenh tnv_loi_dom chay apps/app/test/tac-nhan-va.dom.tsx loc -t gui-hong.
+      describe "gui-hong": render tin cua nguoi (UserSubmission cua agent-builder-chat.tsx) voi bai nop parse bang
+      chinh khuon builderSubmissions cua man, status FAILED. Ma tran viet truoc: errorCode {DELIVERY_FAILED, DELIVERY_EXHAUSTED, "MA_LA"} = 3
+      ca, moi ca errorMessage "boom english". Khang dinh moi ca: dong loi duoi tin === chu cua bang man.loiGui cho ma do
+      (MA_LA -> chu chung man.guiHong), va textContent khong chua "boom english".
+      CHIEU DO: ban sao in error ?? chu chung nhu truoc vong -> ca DELIVERY_FAILED do voi thong diep ghim
+      "dong loi in thong diep may chu".
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    layer: cross-layer
+    cmd: config:executors.script.tnv_khu_hoi
+    paths:
+      - "apps/agent/agent/lib/builder-input.ts"
+      - "apps/api/src/conversations/conversations.service.ts"
+      - "apps/app/components/agent-builder/agent-builder-chat.tsx"
+      - "_acceptance/tac-nhan-va/rang/khu-hoi.mjs"
+    expected: |
+      Script chay trong phien do rieng (mot-luot.sh), doc tep payload cua E5 (chay ca hai-luot-hoi neu tep chua co).
+      Gieo mot hoi thoai dung cua nguoi dang nhap (Prisma, dung hinh cot that, co sessionId). Goi crmEvents["input.requested"]
+      cua apps/agent voi payload thu nhat roi thu hai (DATABASE_URL cua phien do). Goi conversations.builderById qua tRPC
+      HTTP that cua phien do. Khang dinh quan he: pendingQuestion.requestId === requestId cua payload thu hai, kind
+      khop. Hai payload co prompt khac nhau («chon mot hoi-thu-1», «... -2»). Roi o 375 va 1440 mo /chat/<id>: dung mot
+      [data-slot=questionnaire-title] va chu cua no === prompt cua payload thu hai va !== prompt cua payload thu nhat; co
+      [data-slot=questionnaire-choice] mang nhan lua chon cua payload thu hai; o soan thuong (aria-label oSoan.nhanOSoan)
+      vang; trang khong cuon ngang; chup anh vao _acceptance/tac-nhan-va/evidence/. In 'dat', exit 0.
+      Chay tren cay truoc vong in 'khong dat' (pendingQuestion null) — chieu do.
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.tnv_hoi_quy
+    paths:
+      - "apps/agent/test/cau-hoi-het-han-muc.integration.spec.ts"
+      - "apps/agent/test/builder-runtime.integration.spec.ts"
+      - "apps/agent/test/stale-tasks.integration.spec.ts"
+      - "apps/agent/test/eve-tran/evals/chay-tiep"
+      - "apps/agent/test/eve-tran/evals/chan-khuon"
+      - "apps/app/test/agent-builder.spec.ts"
+      - "apps/app/test/agent-results.spec.ts"
+      - "apps/app/test/agent-transcript.spec.ts"
+      - "apps/app/test/het-han-muc.dom.tsx"
+      - "_acceptance/tac-nhan-va/rang/khong-xoa-expect.mjs"
+    expected: |
+      rang/khong-xoa-expect.mjs --moc 966eeb78e: voi moi tep va thu muc ca eve-tran liet o tren, moi dong khang dinh (expect( hay t.check / t.event / t.notEvent / t.eventsSatisfy / t.requireInputRequest cua eve)
+      o moc van co mat nguyen van o cay voi so lan xuat hien khong giam (da tap, dong trung xoa bot mot ban cung bi bat); so .skip/.todo/.only khong tang. --tu-thu: mau co dong expect trung; xoa mot dong don, xoa
+      mot ban cua dong trung, them .skip deu bi bat, mau nguyen van khong bao loi (thuoc khong mu). Roi chay cac tep (lenh agent qua bun run test, lenh app voi preload setup-dom),
+      hai ca eve-tran chay-tiep va chan-khuon, va bun run check-types: thoat 0.

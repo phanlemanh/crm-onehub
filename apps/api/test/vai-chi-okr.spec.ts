@@ -101,17 +101,23 @@ const ALIAS_CHO_PHEP = [
 	"tinHieu",
 ] as const;
 const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
+const KHONG_NHAN_PHIEN = [
+	"tinHieuLich.keoVe",
+	"POST /rest/tin-hieu/lich/keo-ve",
+] as const;
+const laKhongNhanPhien = (ten: string) =>
+	(KHONG_NHAN_PHIEN as readonly string[]).includes(ten);
 const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
 const SAN_MUTATION_CHUNG = 15;
 const SAN_DUONG_NGOAI = 20;
-const SO_MUTATION_KHONG_DAU_VAO = 14;
+const SO_MUTATION_KHONG_DAU_VAO = 15;
 const CHO_MA_TRAN_MS = 60_000;
 const THU_TUC_MAU = [
 	{ ten: "contacts.list", input: {} },
 	{ ten: "companies.list", input: {} },
 	{ ten: "deals.list", input: {} },
-	{ ten: "activities.myTasks", input: {} },
+	{ ten: "viec.cuaToi", input: { nhom: "giao-cho-toi" } },
 	{ ten: "search.quick", input: { q: "a" } },
 	{ ten: "campaigns.list", input: undefined },
 ] as const;
@@ -399,6 +405,7 @@ const THU_TUC_OKR_TRUOC_LUOT = [
 	"removeKeyResult",
 	"setCyclePhase",
 	"setProgram",
+	"suaLyDoCanChinh",
 	"sucKhoe",
 	"thanhVien",
 	"toanCanh",
@@ -662,10 +669,12 @@ describe("vai-chi-okr", () => {
 			const hang = await maTranTrpc(app, { cookie });
 			expect(hang.length).toBe(tatCa.length);
 			const khongChan = hang
-				.filter((h) => !biChanPhamVi(h))
+				.filter((h) => !biChanPhamVi(h) && !laKhongNhanPhien(h.ten))
 				.map((h) => h.ten)
 				.sort();
 			expect(khongChan, "tap cho phep lech tap khai").toEqual(choPhep());
+			for (const h of hang.filter((x) => laKhongNhanPhien(x.ten)))
+				expect(h.status, "duong lich nhan phien dang nhap").toBe(401);
 			for (const h of hang.filter((x) =>
 				/^(contacts|companies|deals|campaigns|onboarding)\./.test(x.ten),
 			)) {
@@ -699,11 +708,13 @@ describe("vai-chi-okr", () => {
 			const hang = await maTranTrpc(app, dau);
 			expect(
 				hang
-					.filter((h) => !biChanPhamVi(h))
+					.filter((h) => !biChanPhamVi(h) && !laKhongNhanPhien(h.ten))
 					.map((h) => h.ten)
 					.sort(),
 				"tap cho phep qua khoa lech tap khai",
 			).toEqual(choPhep());
+			for (const h of hang.filter((x) => laKhongNhanPhien(x.ten)))
+				expect(h.status, "duong lich nhan phien dang nhap").toBe(401);
 			const rest = await maTranRest(app, dau);
 			expect(rest.length).toBeGreaterThanOrEqual(SAN_DUONG_REST);
 			expect(
@@ -712,11 +723,13 @@ describe("vai-chi-okr", () => {
 			).toEqual([]);
 			expect(
 				rest
-					.filter((h) => !biChanPhamVi(h))
+					.filter((h) => !biChanPhamVi(h) && !laKhongNhanPhien(h.ten))
 					.map((h) => h.ten)
 					.sort(),
 				"tap cho phep qua REST lech tap khai",
 			).toEqual(choPhepRest());
+			for (const h of rest.filter((x) => laKhongNhanPhien(x.ten)))
+				expect(h.status, "duong lich nhan phien dang nhap").toBe(401);
 			await vaiVanLa(dau, "okr");
 		},
 		CHO_MA_TRAN_MS,

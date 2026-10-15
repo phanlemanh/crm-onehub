@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
+verified_commit: aeacc862fc3a28e5391c27772a4ad96e16ae3317
 human_signoff: "Phan Le Manh 2026-10-10 — ký lại Cổng 2 trên verdict PASS 4/4 eval + 7 suite (S4 vòng 3, wf_cf3b810e-33c, sau bản sửa P4-67); Ngoài 1–6, 8–10 ghi Known limits, Ngoài 7 chấp nhận không sửa; đồng ý cắt; Treo phê hết"
 ---
 
@@ -130,3 +130,7 @@ Round 3: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay db99fd8bb sau ban s
 ### Re-pin lần 1 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
 run_id: repin-20261012T222532Z-81286
 sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 2/2 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E4 · thay bởi hồ sơ đã ký: E1→chuyen-goi-dieu-phoi#AC-5, E4→chuyen-goi-dieu-phoi#AC-9 · AC không có chốt máy: AC-1, AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-14, do F24 ba-ho-so-do-san: sửa thước chết và răng đỏ sẵn (phạm vi A, làn C 12 hồ sơ)
+run_id: repin-20261014T001054Z-11514
+sha: aeacc862fc3a28e5391c27772a4ad96e16ae3317 · suites: 7 lệnh exit 0 · evals: 2/2 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E4 · thay bởi hồ sơ đã ký: E1→chuyen-goi-dieu-phoi#AC-5, E4→chuyen-goi-dieu-phoi#AC-9 · AC không có chốt máy: AC-1, AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
