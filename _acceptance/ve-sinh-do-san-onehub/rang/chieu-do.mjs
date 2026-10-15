@@ -259,6 +259,8 @@ for (const ten of chon) {
 			maxBuffer: 256 * 1024 * 1024,
 		});
 		const kq = { status: r.status, out: `${r.stdout ?? ""}${r.stderr ?? ""}` };
+		for (const d of kq.out.split("\n"))
+			if (/^(O D\d|HONG |MONG DO)/.test(d)) console.log(`  ${d}`);
 		if (ca.dat(kq))
 			console.log(ca.baoDat ? ca.baoDat(kq) : `CHIEU DO DAT: ${ten}`);
 		else {
