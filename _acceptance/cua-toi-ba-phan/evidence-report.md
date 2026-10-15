@@ -3,11 +3,10 @@ schema_version: 2
 feature_slug: cua-toi-ba-phan
 verdict: PENDING-JUDGMENT
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3658c05cc037415f2a95ec05e76824bdc2a52de6
+verified_commit: 82bfe4c848a7179b524b3f51007a19ab45243916
 human_signoff:
 ---
 
@@ -33,224 +32,238 @@ human_signoff:
 | E16 | AC-5 | script | PASS |
 | E17 | AC-13 | judgment | UNCERTAIN |
 | E18 | AC-3 | script | PASS |
+| E19 | AC-14 | test | PASS |
+| E20 | AC-14 | test | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-cua-toi-ba-phan-E1-r1
+  run_id: minted-cua-toi-ba-phan-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_phan_mot
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-phan-mot: hai chieu dung (3 dot bien, worktree tam)
 
 - eval: E2
-  run_id: minted-cua-toi-ba-phan-E2-r1
+  run_id: minted-cua-toi-ba-phan-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_cap_nhat_tai_cho
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-cap-nhat-tai-cho: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E3
-  run_id: minted-cua-toi-ba-phan-E3-r1
+  run_id: minted-cua-toi-ba-phan-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_phien_cua_toi
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-phien-cua-toi: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E4
-  run_id: minted-cua-toi-ba-phan-E4-r1
+  run_id: minted-cua-toi-ba-phan-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_loi_vao_tu
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-loi-vao-tu: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E5
   run_id: minted-cua-toi-ba-phan-E5-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.ctbp_chuyen_huong
   verified_at: 2026-10-15T06:59:04Z
-  output: |
-    KET LUAN ctbp-chuyen-huong: hai chieu dung (1 dot bien, worktree tam)
+  carried_from_round: 1
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-cua-toi-ba-phan-E6-r1
+  run_id: minted-cua-toi-ba-phan-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctbp_lien_ket_cu
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     DUNG AC-4: 0 lien ket cu + tin nhac /okr?tu=nhac
 
 - eval: E7
-  run_id: minted-cua-toi-ba-phan-E7-r1
+  run_id: minted-cua-toi-ba-phan-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_don_vi_dan
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-don-vi-dan: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E8
-  run_id: minted-cua-toi-ba-phan-E8-r1
+  run_id: minted-cua-toi-ba-phan-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_kr_phu_trach
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-kr-phu-trach: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E9
-  run_id: minted-cua-toi-ba-phan-E9-r1
+  run_id: minted-cua-toi-ba-phan-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_khong_dan
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-khong-dan: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E10
-  run_id: minted-cua-toi-ba-phan-E10-r1
+  run_id: minted-cua-toi-ba-phan-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_bon_the
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-bon-the: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E11
-  run_id: minted-cua-toi-ba-phan-E11-r1
+  run_id: minted-cua-toi-ba-phan-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctbp_tai_loi
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN ctbp-tai-loi: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E12
   run_id: minted-cua-toi-ba-phan-E12-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.ctbp_do_nguong
   verified_at: 2026-10-15T06:59:04Z
-  output: |
-    KET LUAN ctbp-do-nguong: hai chieu dung (2 dot bien, worktree tam)
+  carried_from_round: 1
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E13
-  run_id: minted-cua-toi-ba-phan-E13-r1
+  run_id: minted-cua-toi-ba-phan-E13-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctbp_ho_so_da_ky
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN: dat
 
 - eval: E14
-  run_id: minted-cua-toi-ba-phan-E14-r1
+  run_id: minted-cua-toi-ba-phan-E14-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctbp_proto
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     KET LUAN: dat
 
 - eval: E15
-  run_id: minted-cua-toi-ba-phan-E15-r1
+  run_id: minted-cua-toi-ba-phan-E15-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctbp_man
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   screenshot: evidence/E15-step1.png
   observed: |
-    Da mo tung anh bang Read. (1) truong-1440: tieu de "Muc tieu", tab "Cua toi" dang chon; thu tu tren xuong: "Can cap nhat tuan nay" (3 KR thieu so, nut xanh "Cap nhat 3 KR", bang 3 KR), "Viec can lam" (cho duyet), "Don vi ban dan" (Khoi Kinh doanh, nut "Mo trang don vi"); phan KR phu trach nam duoi (ngoai khung nhin). Nut "Cap nhat 3 KR" nam y~234, trong khung 900px; khong thanh cuon ngang. Khop expected. (2) truong-390: cung thu tu doc, phan 1 voi nut "Cap nhat 3 KR" + bang 3 KR, roi Viec can lam, roi Don vi ban dan; khong tran ngang (noi dung vua 390px). Khop. (3) truong-dang-cap-nhat-1440: bang cap nhat tai cho dang mo ngay phan 1: the KR dau (gia tri 23,3 ty dong, muc tu tin Cao/Vua/Thap, ghi chu), the KR thu hai, thanh gui dinh day khung nhin voi "Da chon muc tu tin 0/3 KR..." va nut "Gui 0 cap nhat"; nut "Cap nhat 3 KR" da bien mat (khong co trong khung nhin = khong), khop. (4) truong-dang-cap-nhat-390: bang mo ngay phan 1, the KR dau day du, thanh gui dinh day man hinh voi nut "Gui 0 cap nhat"; khong tran ngang. Khop. (5) thanh-vien-1440 (Vo Duc Anh): chi co "Can cap nhat tuan nay" ("Ban da cap nhat du cho tuan 12/10", nut "Sua lan gui tuan nay" la nut sua, khong phai nut moi tao) roi "KR ban phu trach" (bang 2 KR); khong co phan "Don vi ban dan"; dong ghi chu "Ban chua dan don vi nao nen chua them duoc muc tieu". Nut "Them muc tieu" bi lam mo (disabled). Khop (thu tu can-cap-nhat, kr-phu-trach). (6) thanh-vien-390: cung hai phan theo thu tu do, khong phan don vi, bang 2 KR vua man hinh; khong tran ngang. Khop. Khong co mau thuan voi Expected; ca 6 o khop dong script in.
+    Da mo bang Read ca 6 anh cua-toi-*.png (15:18, moi, do lan chay nay sinh). (1) cua-toi-truong-1440: trang Muc tieu, tab "Cua toi"; tu tren xuong: "Can cap nhat tuan nay" (nut "Cap nhat 3 KR", bang 3 KR chua co so tuan 12/10 han 18/10) -> "Viec can lam" (the "Cho ban duyet: Mo dai ly cap hai o Can Tho") -> "Don vi ban dan" (Khoi Kinh doanh, 11 muc tieu 23 KR) ; nut Cap nhat 3 KR nam gon trong khung 900px, khong tran ngang. Dung thu tu can-cap-nhat, (viec), don-vi-dan; phan kr-phu-trach nam duoi (ngoai khung nhin, script do thu tu DOM dung). (2) cua-toi-truong-390: cung thu tu, nut "Cap nhat 3 KR" trong khung nhin, bang KR co cuon ngang NOI BO trong khung bang (khong tran trang), khong co thanh cuon ngang cua trang. (3) cua-toi-truong-dang-cap-nhat-1440: bang cap nhat tai cho mo (3 KR: Gia tri/Muc tu tin Cao-Vua-Thap/Ghi chu, o gia tri KR dau dang focus), thanh gui dinh day khung nhin "Da chon muc tu tin 0/3 KR... Gui 0 cap nhat"; nut cap nhat-tai-cho khong trong khung nhin theo cuon, khong tran ngang. (4) cua-toi-truong-dang-cap-nhat-390: bang mo 1 cot, o gia tri/muc tu tin/ghi chu xep doc, thanh gui "Gui 0 cap nhat" dinh day, khong tran ngang. (5) cua-toi-thanh-vien-1440: thanh vien (VD) khong dan don vi: header co dong "Ban chua dan don vi nao nen chua them duoc muc tieu", nut "Them muc tieu" bi lam mo (disabled); phan "Can cap nhat tuan nay" ("Ban da cap nhat du cho tuan 12/10", nut "Sua lan gui tuan nay" la nut co san) roi "KR ban phu trach" (2 KR) ; khong co phan Don vi ban dan -> thu tu can-cap-nhat, kr-phu-trach dung. (6) cua-toi-thanh-vien-390: nhu tren o kho hep, bang KR cuon noi bo, khong tran ngang trang. Khong thay anh nao mau thuan Expected.
   network_observed: n-a (driver)
-  output: |
-    Frames da luu (ban sao E15-stepN): step1=cua-toi-truong-1440.png, step2=cua-toi-truong-390.png, step3=cua-toi-truong-dang-cap-nhat-1440.png, step4=cua-toi-truong-dang-cap-nhat-390.png, step5=cua-toi-thanh-vien-1440.png, step6=cua-toi-thanh-vien-390.png, trong _acceptance/cua-toi-ba-phan/evidence/.
-    Chua chay chieu do (CTBP_PHA=phan-mot-cuoi) va doi chung duong rieng vi steps chi yeu cau chay lenh duong chinh; o truong 1440 chinh la o doi chung duong va ra dung.
-    Network: driver la script (khong co read_network_requests) -> n-a (driver); khong ghi E15-network.txt.
 
 - eval: E16
-  run_id: minted-cua-toi-ba-phan-E16-r1
+  run_id: minted-cua-toi-ba-phan-E16-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.ctbp_man
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     phien-do: xong — mã 0
 
 - eval: E18
-  run_id: minted-cua-toi-ba-phan-E18-r1
+  run_id: minted-cua-toi-ba-phan-E18-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.ctbp_man
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
   output: |
     phien-do: xong — mã 0
 
-### Judgment (hội đồng đề xuất, người quyết ở Cổng 2)
+- eval: E19
+  run_id: minted-cua-toi-ba-phan-E19-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.ctbp_loi_mo
+  verified_at: 2026-10-15T07:49:04Z
+  output: |
+    KET LUAN ctbp-loi-mo: hai chieu dung (3 dot bien, worktree tam)
 
-Panel đề xuất cho E17: FAIL (3/3 lens). Đây chỉ là đề xuất; máy không tự phán, `human_override` để TRỐNG cho người điền.
-
-- eval: E17
-  judged_by: judge panel (3 lens, fresh context) — đề xuất, không ràng buộc
-  verdict: UNCERTAIN
-  rationale: Hội đồng 3/3 đề xuất FAIL ở vế thứ tự việc → đơn vị → KR (ảnh truong-1440 không có phần «KR bạn phụ trách» trong màn đầu, khối «Việc cần làm» chen giữa); vế thành viên không có nút/liên kết mời tạo mục tiêu thì đúng. Máy để người quyết.
-  votes:
-    - domain-correctness: FAIL — Vế thứ hai đúng: ảnh thành viên (1440 và 390) không có nút hay liên kết nào mời tạo mục tiêu, chỉ có «Thêm mục tiêu» bị khoá kèm lý do. Vế thứ nhất sai: ảnh truong-1440 chỉ có phần 1 («Cần cập nhật tuần này» + nút «Cập nhật 3 KR»), rồi khối «Việc cần làm» (Chờ bạn duyệt) chen vào, rồi mới tới «Đơn vị bạn dẫn» ở y≈740, thẻ bị cắt mép dưới. Phần 3 «KR bạn phụ trách» không xuất hiện ở màn đầu, nên người mới không đọc được KR mình phụ trách ngay ở màn đầu. Thứ tự việc → đơn vị → KR chỉ suy ra được từ dòng mô tả dưới tiêu đề, không phải từ nội dung màn.
-    - operational-feasibility: FAIL — Vế thành viên đúng: ảnh cua-toi-thanh-vien-1440 và 390 không có nút hay liên kết mời tạo mục tiêu ở thân trang. Nút «Thêm mục tiêu» trên đầu trang bị mờ và có dòng giải thích «Bạn chưa dẫn đơn vị nào…». Vế thứ tự thì sai ở ảnh cua-toi-truong-1440 (không cuộn): người đọc thấy «Cần cập nhật tuần này» kèm nút «Cập nhật 3 KR», rồi khối «Việc cần làm» chen giữa, rồi mới tới «Đơn vị bạn dẫn» là thẻ Khối Kinh doanh bị cắt ở đáy ảnh. Phần «KR bạn phụ trách» hoàn toàn không có trong màn đầu, nên không thể đọc được theo thứ tự việc → đơn vị → KR.
-    - spec-alignment: FAIL — Ảnh cua-toi-truong-1440.png (không cuộn) chỉ cho đọc phần 1 và nút «Cập nhật 3 KR», rồi khối «Việc cần làm» chen vào, rồi thẻ «Khối Kinh doanh» bị cắt ở mép dưới. Phần «KR bạn phụ trách» không hiện ở màn đầu, nên không đọc được đủ thứ tự việc cập nhật, đơn vị dẫn, KR phụ trách. Ở ảnh thành viên (cua-toi-thanh-vien-1440.png / 390.png) không có nút hay liên kết nào mời tạo mục tiêu hay OKR cá nhân trong thân trang. «Thêm mục tiêu» trên đầu trang bị làm mờ kèm dòng «Bạn chưa dẫn đơn vị nào…», nên vế này đúng; FAIL là do vế thứ nhất.
-  required_evidence:
-    - Ảnh truong-1440 (cua-toi-truong-1440.png): vùng dưới y≈740, nơi tiêu đề «KR bạn phụ trách» và bảng KR của phần 3 phải nằm trong 900 px đầu. Hiện ảnh dừng ở thẻ «Khối Kinh doanh» và không có phần 3. Chụp lại màn đầu 1440 không cuộn có đủ phần 3, hoặc rút gọn khối «Việc cần làm» giữa phần 1 và phần 2.
-    - Mục «Hướng làm» của docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md, dòng 32: ghi rõ «Việc cần làm» (ViecOkrCuaToi) xen giữa phần 1 và phần 2 là chủ ý, và AC-13 chỉ đòi thấy ba phần ở màn đầu theo thứ tự nào. Có chữ này thì người chấm biết khối xen kẽ không làm sai thứ tự.
-    - Ảnh cua-toi-truong-390.png cuộn tới phần 3, nếu AC-13 chỉ đòi thứ tự đọc trên toàn trang chứ không đòi thấy cả ba phần trong một màn. Ảnh hiện có cũng dừng trước phần 3 ở 390 px.
-    - Ảnh chụp trưởng đơn vị ở 1440×900 không cuộn cho thấy tiêu đề phần «KR bạn phụ trách» hiện trong khung nhìn đầu, đứng sau «Đơn vị bạn dẫn» (thu gọn khối «Việc cần làm» hoặc rút chiều cao thẻ đơn vị rồi chụp lại); hoặc một dòng trong «Hướng làm» / «Đặc tả UX» của thiết kế nói thẳng ngưỡng chấp nhận của AC-13 chỉ là «phần 1 + nút nằm trong màn đầu», khi đó câu hỏi E17 phải sửa theo rồi chấm lại.
-    - Lý do khối «Việc cần làm» (ViecOkrCuaToi) đứng giữa phần 1 và phần 2 trong thiết kế: nếu khối này được thu gọn hoặc dời xuống dưới phần 3, màn đầu 1440 sẽ chứa đủ ba phần theo thứ tự.
-  human_override:  # chi nguoi ghi
+- eval: E20
+  run_id: minted-cua-toi-ba-phan-E20-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.ctbp_tai_lai_nen
+  verified_at: 2026-10-15T07:49:04Z
+  output: |
+    KET LUAN ctbp-tai-lai-nen: hai chieu dung (1 dot bien, worktree tam)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cua-toi-ba-phan-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-cua-toi-ba-phan-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
 
 - cmd: bun run lint:slop
-  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_lint_slop-r1
+  run_id: minted-cua-toi-ba-phan-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cua-toi-ba-phan-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-cua-toi-ba-phan-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T06:59:04Z
+  verified_at: 2026-10-15T07:49:04Z
+
+### Judgment
+
+Panel đề xuất cho E17 (AC-13, judgment): proposal UNCERTAIN. Ba judge không đồng thuận, mọi bất đồng giữ nguyên bên dưới.
+
+- eval: E17
+  judged_by: judge-subagent (fresh context)
+  verdict: UNCERTAIN
+  rationale: Vế thành viên đạt (ảnh 1440 và 390 không có nút hay liên kết mời tạo mục tiêu trong thân trang; nút «Thêm mục tiêu» bị mờ kèm lý do). Vế trưởng đơn vị chưa chứng minh được: ở ảnh 1440 không cuộn, phần «KR bạn phụ trách» không hiện, nên thứ tự đơn vị rồi KR và việc đọc đủ ba phần ở màn đầu không kiểm được.
+  votes:
+    - domain-correctness: PASS — Ở ảnh trưởng đơn vị 1440 (không cuộn), từ trên xuống là «Cần cập nhật tuần này» với nút «Cập nhật 3 KR», rồi khối «Việc cần làm», rồi «Đơn vị bạn dẫn» (thẻ Khối Kinh doanh còn thấy được). Phần KR phụ trách nằm dưới nếp gập, nhưng dòng mô tả dưới tiêu đề («Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách») nêu đúng thứ tự đó. Khối «Việc cần làm» chen giữa đúng như mục «Hướng làm» quy định (đứng ngay dưới phần 1). Ở ảnh thành viên (1440 và 390) không có phần «Đơn vị bạn dẫn». Thân trang không có nút hay liên kết mời tạo mục tiêu hoặc OKR cá nhân. Nút «Thêm mục tiêu» trên đầu trang bị làm mờ kèm câu giải thích vì sao chưa thêm được, nên đó là câu từ chối chứ không phải lời mời.
+    - operational-feasibility: FAIL — Nửa sau đúng: ảnh thành viên (1440 và 390) không có nút hay liên kết nào mời tạo mục tiêu. Nút «Thêm mục tiêu» bị mờ kèm lý do, phần 2 không hiện. Nửa đầu sai: ở cua-toi-truong-1440.png (không cuộn), người đọc thấy «Cần cập nhật tuần này» với nút «Cập nhật 3 KR», rồi «Việc cần làm» (khối chờ duyệt) chen giữa, rồi «Đơn vị bạn dẫn» bị cắt ở mép dưới. Phần «KR bạn phụ trách» không có mặt ở màn đầu, nên thứ tự đơn vị → KR không đọc được ngay.
+    - spec-alignment: UNCERTAIN — Vế thành viên đạt: ảnh 1440 và 390 không có nút hay liên kết nào mời tạo mục tiêu trong thân trang, nút «Thêm mục tiêu» ở đầu trang bị khoá kèm dòng giải thích. Vế trưởng đơn vị chưa chứng minh được: ảnh 1440 không cuộn thấy «Cần cập nhật tuần này» với nút «Cập nhật 3 KR», rồi khối «Việc cần làm» (spec cho đứng ngay dưới phần 1), rồi «Đơn vị bạn dẫn» bị cắt ở mép dưới. Phần «KR bạn phụ trách» không hiện ở ảnh trưởng nào (1440, 390, đang cập nhật), nên không kiểm được thứ tự phần 2 rồi phần 3, và không kiểm được việc đọc đủ cả ba ở màn đầu.
+  required_evidence:
+    - (operational-feasibility) Ảnh cua-toi-truong-1440.png (hoặc bản chụp lại sau sửa bố cục) không cuộn, có thấy tiêu đề hoặc hàng đầu của «KR bạn phụ trách» sau «Đơn vị bạn dẫn». Chụp lại bằng ego-browser ở 1440x900 với tài khoản trưởng đơn vị, hoặc thu gọn khối «Việc cần làm» và thẻ đơn vị để phần 3 lọt vào khung nhìn.
+    - (operational-feasibility) Hoặc mục «Hướng làm» của thiết kế (docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md) và câu hỏi AC-13 sửa lại: chỉ đòi đọc ngay phần 1 và phần 2 ở màn đầu, phần 3 chấp nhận nằm dưới nếp gập. Khi đó cần Cổng Đáng ký lại tiêu chí.
+    - (operational-feasibility) Ảnh bổ sung cua-toi-truong-1440-cuon.png cho thấy phần 3 và thứ tự dưới nếp gập. Ảnh này chỉ chứng minh thứ tự khi cuộn, không thay được yêu cầu «màn đầu, không cuộn».
+    - (spec-alignment) Ảnh chụp toàn trang (fullPage) Của tôi của trưởng đơn vị ở 1440 px, trạng thái ST-ctbp-can-cap-nhat, cùng hồ sơ với cua-toi-truong-1440.png, lưu vào _acceptance/cua-toi-ba-phan/evidence/. Ảnh phải cho thấy phần 3 «KR bạn phụ trách» nằm sau thẻ «Đơn vị bạn dẫn», để xác nhận thứ tự 1, 2, 3.
+    - (spec-alignment) Chốt trong contract/câu hỏi E17: nếu «màn đầu không cuộn» bắt buộc chứa cả ba phần thì cần ảnh 1440 không cuộn có thẻ «Đơn vị bạn dẫn» đủ nội dung và phần 3 hiện ra. Nếu chỉ yêu cầu thứ tự đọc từ trên xuống thì ghi rõ vào câu hỏi E17 để judge xét theo ảnh fullPage ở mục trên.
+  human_override:  # chi nguoi ghi
 
 ## Known limits
 
@@ -260,21 +273,22 @@ Panel đề xuất cho E17: FAIL (3/3 lens). Đây chỉ là đề xuất; máy 
 
 none — moi eval feature deu red tren baseline (co phan biet)
 
-Baseline khong do
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phan-mot: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-cap-nhat-tai-cho: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phien-cua-toi: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-vao-tu: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-chuyen-huong: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-don-vi-dan: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-kr-phu-trach: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-khong-dan: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-bon-the: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-loi: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-do-nguong: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs co o cay dang kiem nhung chua co o merge-base a88e5b427e954fe1405bf52b140c9eab394decf8 — eval moi, chay tren code cu khong phan biet gi
+### Baseline khong do
+
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phan-mot: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-cap-nhat-tai-cho: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phien-cua-toi: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-vao-tu: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-don-vi-dan: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-kr-phu-trach: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-khong-dan: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-bon-the: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-loi: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-mo: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-lai-nen: bo qua baseline: tep _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs co o cay dang kiem nhung chua co o merge-base a35c2eb4540877139e0dabc7227f431767a60c45 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
@@ -282,4 +296,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: 17 eval may xanh; E17 (judgment, AC-13) hoi dong de xuat chua dat o ba lens nen cho nguoi quyet o Cong 2 — PENDING-JUDGMENT.
+Round 1: E5, E12 PASS (run_id hậu tố -r1) và được mang sang round 2 vì delta không chạm paths của chúng; chi tiết các eval còn lại của round 1 xem run-log.jsonl.
+Round 2: 17 eval máy và ui-check chạy lại đều PASS (E1–E4, E6–E11, E13–E16, E18–E20), 7 lệnh suite xanh; E17 (judgment, AC-13) UNCERTAIN chờ người ở Cổng 2, nên verdict PENDING-JUDGMENT.
