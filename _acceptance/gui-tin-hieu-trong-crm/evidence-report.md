@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4079a62873b87d170de0d09f09d880a5ce1bd1e9
+verified_commit: 7fdc5352eac3207e47d2a3e2bcd335aba7e1889b
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -337,3 +337,23 @@ sha: b2f235174fce86854aae1f97c1ebf2d9757ffa0d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-13, do gộp onehub 0d22687b8 (lô 16:00Z sau #382, #392)
 run_id: repin-20261013T163745Z-89679
 sha: 4079a62873b87d170de0d09f09d880a5ce1bd1e9 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-15, do gộp onehub d9eb83536 (#416) + tên màn Thông báo; LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
+run_id: repin-20261015T103158Z-73108
+sha: 631a6fbe7eb702a22c5529161d5d1bb9704077bf · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E3b, E5b, E9, E10 · thay bởi hồ sơ đã ký: E1→sua-giao-dien-tin-hieu#AC-8, E3b→sua-giao-dien-tin-hieu#AC-2, E5b→sua-giao-dien-tin-hieu#AC-9, E9→sua-giao-dien-tin-hieu#AC-12, E10→sua-giao-dien-tin-hieu#AC-12 · ngoài làn máy: E13, E14 (E14 không khai paths) · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-15, do gộp onehub eb5ab4269 (#419); LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
+run_id: repin-20261015T105314Z-67655
+sha: 22513c6d005ba1f872d2892d5bb3d38eae60be37 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E3b, E5b, E9, E10 · thay bởi hồ sơ đã ký: E1→sua-giao-dien-tin-hieu#AC-8, E3b→sua-giao-dien-tin-hieu#AC-2, E5b→sua-giao-dien-tin-hieu#AC-9, E9→sua-giao-dien-tin-hieu#AC-12, E10→sua-giao-dien-tin-hieu#AC-12 · ngoài làn máy: E13, E14 (E14 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-15, do gộp onehub ebd67d888 (#407, #409, #421, #422); LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
+run_id: repin-20261015T160321Z-51172
+sha: 77d049f1e7d296557f4ddb32d245cf856b53a279 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E3b, E5b, E9, E10 · thay bởi hồ sơ đã ký: E1→sua-giao-dien-tin-hieu#AC-8, E3b→sua-giao-dien-tin-hieu#AC-2, E5b→sua-giao-dien-tin-hieu#AC-9, E9→sua-giao-dien-tin-hieu#AC-12, E10→sua-giao-dien-tin-hieu#AC-12 · ngoài làn máy: E13, E14 (E14 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-15, do gộp onehub 48993d6ab (#418); LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
+run_id: repin-20261015T165046Z-11263
+sha: 5504b466fc62d4c3106572bcdf3329144ca1d42a · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E3b, E5b, E9, E10 · thay bởi hồ sơ đã ký: E1→sua-giao-dien-tin-hieu#AC-8, E3b→sua-giao-dien-tin-hieu#AC-2, E5b→sua-giao-dien-tin-hieu#AC-9, E9→sua-giao-dien-tin-hieu#AC-12, E10→sua-giao-dien-tin-hieu#AC-12 · ngoài làn máy: E13, E14 (E14 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-15, do gộp onehub d086bf8cf (#425, #420); LT2 sáu ô E1/E3b/E5b/E9/E10/E13 khai thay bởi hồ sơ đã ký sua-giao-dien-tin-hieu
+run_id: repin-20261015T212821Z-93201
+sha: 7fdc5352eac3207e47d2a3e2bcd335aba7e1889b · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E3b, E5b, E9, E10 · thay bởi hồ sơ đã ký: E1→sua-giao-dien-tin-hieu#AC-8, E3b→sua-giao-dien-tin-hieu#AC-2, E5b→sua-giao-dien-tin-hieu#AC-9, E9→sua-giao-dien-tin-hieu#AC-12, E10→sua-giao-dien-tin-hieu#AC-12 · ngoài làn máy: E13, E14 (E14 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
