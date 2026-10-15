@@ -3,10 +3,10 @@ schema_version: 1
 slug: trang-don-vi-mot-bang
 feature: Tôi chọn đơn vị bằng ô tìm kiếm và đọc mục tiêu của nó trong một bảng như Thoả thuận, mở từng mục tiêu ra KR
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build        # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-15T03:24:36Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -45,3 +45,9 @@ lúc tải — nên thời gian ở cả hai khổ là thước đúng.
 Số đo nền (production 14/10, khổ 1440 và 390 — `docs/plan/pham-vi-okr-dieu-huong-1410.md`): trang chồng sáu lớp
 điều khiển; cột cây đơn vị rộng 288px không màn nào khác có; cách xem và chip lọc nằm hai hàng; bộ nút đổi theo cách
 xem; trên điện thoại cây hiện nguyên 20 dòng lúc tải rồi mới thu thành ô chọn.
+
+## Nguồn quyết định Cổng Đáng
+
+Chủ kho gõ ở phiên thợ DH2 (máy M5) ngày 15/10/2026: «Cổng Đáng trang-don-vi-mot-bang: build · ngưỡng: theo đề xuất
+máy (5/5 người chưa xem bản mới, tới bảng mục tiêu và mở KR của một phòng ban dưới 10 giây, không hỏi, ở 1440 và 390;
+bỏ vế ít lần bấm hơn) · đo trong 7 ngày từ ngày gộp». `decided_at` là giờ phiên thợ ghi lại lời đó.
