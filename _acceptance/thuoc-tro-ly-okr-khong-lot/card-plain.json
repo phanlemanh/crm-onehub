@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Hai phép đo của Trợ lý OKR thôi báo đạt khi chưa đo được gì, và hai máy chạy đo cùng lúc thôi xoá dữ liệu đo của nhau.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ dừng phép đo ngay từ đầu, kèm lý do rõ, khi tín dụng AI Gateway đã hết, thay vì chạy để mọi lượt hỏng."},
+    {"id": "AC-2", "p": "Sẽ báo «không đo được» kèm dòng lỗi thật của model khi mọi lượt đo độ trễ đều hỏng, thay vì báo như một lượt chậm đã biết."},
+    {"id": "AC-3", "p": "Sẽ cho mỗi máy làm việc một kho đo riêng cho phép đo chất lượng góp ý, để hai máy chạy cùng lúc không xoá dữ liệu của nhau."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG đổi số đo độ trễ mà quản trị thấy trên màn số đo trong việc này — đó là Hỏi-1."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG sửa lời mô tả kỳ vọng trong hồ sơ đã ký của Trợ lý OKR; mã thoát mới vẫn mang nghĩa «không đo được», không phải đạt."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ mọi trạng thái tín dụng (hết, bằng 0, còn, không đọc được, thiếu khoá), mọi tỉ lệ lượt hỏng từ không tới hết, và tên kho đo ở hai máy khác nhau so với tên chung cũ — đo ở AC-1, AC-2, AC-3."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Sổ ghi máy tự quyết hai việc lẽ ra của người: đổi luôn kho đo của một phép đo khác, và cách xử lý khi không đọc được tín dụng. Đã sửa: cả hai thành câu hỏi cho anh (Hỏi-3, Hỏi-4)."},
+    {"i": 1, "p": "Phép kiểm tín dụng mới chỉ được thử ở mức hàm, chưa thử ở mức lệnh đo thật. Đã sửa: chạy thật hai lệnh đo với một máy giả báo tín dụng âm, cả hai dừng ngay và không dựng phiên đo nào."},
+    {"i": 2, "p": "Dữ liệu tín dụng dùng để thử là tự dựng. Đã sửa: dùng đúng phản hồi thật của AI Gateway chép lại."},
+    {"i": 3, "p": "Chưa thử các trường hợp hỏng một phần. Đã sửa: thử từ không lượt hỏng tới hỏng 19/20; chỉ hỏng hết mới bị dừng."},
+    {"i": 4, "p": "Phép thử kho riêng chỉ dò chữ trong mã. Đã sửa: gọi thật hàm tạo kho ở hai máy giả lập và so tên kho thật."},
+    {"i": 5, "p": "Phép đo khoá sai chưa đòi dòng lỗi model trong kết quả. Đã sửa: đòi đúng dòng đó."}
+  ]
+}
