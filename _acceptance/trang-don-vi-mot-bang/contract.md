@@ -68,3 +68,13 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
 - Đổi thủ tục API (`okr.danhSach`, `okr.countByUnit`), luật quyền, ngăn chi tiết, `DataTable` hay bất kỳ thứ gì trong `packages/ui`.
 
 ## Notes
+
+- NM2 `loc-va-kieu-xem-chung` (Mac Studio, đã ký Cổng Phạm vi, gộp dự kiến 16/10) chỉ THÊM prop vào `ToggleGroupItem`
+  (`count`) và `ViewSwitch` (khoá được), và có thước «không `ToggleGroupItem` nào trong apps/app tự vẽ số đếm». Ô lọc
+  nhanh của lượt này là `tabs` của `DataTable` — số do `DataTable` vẽ từ `facetCounts`, không có `ToggleGroupItem`
+  nào tự vẽ số — nên không chạm thước đó; `ViewSwitch` dùng như hiện có. NM2 gộp trước thì lượt gộp `onehub` vào
+  nhánh rồi chạy lại E7, E8.
+- `khung-okr-truoc-r1/rang/bon-vai.mjs` bị cả DH1 (gỡ nút khỏi `[data-hang-nut]`) lẫn DH2 (bỏ `[data-hang-nut]`)
+  chạm: chỉ một bên sửa — Điều phối M5 đang hỏi DH1; DH1 sửa trước thì AC-14 của lượt này dựng trên bản đó.
+- Sau khi DH1 gộp, bài `dhk-giu-don` của DH1 đổi trong PR này (AC-13) nên hồ sơ `dieu-huong-khu-muc-tieu` cũng vào
+  cùng lượt ghim lại với năm hồ sơ của AC-14 — sáu hồ sơ một lượt, ước 50–90 phút máy (Điều phối M5 đồng ý 15/10).
