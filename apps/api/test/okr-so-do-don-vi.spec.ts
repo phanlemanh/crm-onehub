@@ -26,12 +26,12 @@ import {
 	dungUngDung,
 	goi,
 	ketThucMau,
-	MOC_MAU,
 	nguoi,
 	ok,
 	phienMau,
 } from "./tro-ly-okr-san";
 
+const CONG_BO = new Date("2026-10-01T02:00:00Z");
 const QUAN_TRI = congTy().nguoi.find((n) => n.vai === "admin")?.ma ?? "";
 const CO = [
 	"chua-truong",
@@ -48,7 +48,7 @@ const phien = new Map<string, string>();
 beforeAll(async () => {
 	app = await dungUngDung();
 	await batDauMau();
-	await napCaSoDo(db, { luc: MOC_MAU });
+	await napCaSoDo(db, { luc: CONG_BO });
 }, CHO_DB);
 
 afterAll(async () => {
@@ -75,7 +75,13 @@ async function soDo(ma: string): Promise<SoDoDonViOutput> {
 }
 
 async function mucTieu(id: string, ma: string) {
-	const tra = await goi(app, "okr.objective", "query", { id }, await cookie(ma));
+	const tra = await goi(
+		app,
+		"okr.objective",
+		"query",
+		{ id },
+		await cookie(ma),
+	);
 	return mucTieuOutput.parse(ok(tra, `muc tieu ${id}`));
 }
 
@@ -100,15 +106,96 @@ describe("dh4-du-lieu", () => {
 			chuaGop: number;
 			co: Co[];
 		}[] = [
-			{ khoa: KHOA_CA.A, cha: "goc", truong: "pham-thu-trang", mucTieu: ["sd-a-1", "sd-a-2"], soKr: 2, tinhTrang: { dungNhip: 2, chamNhip: 0, truot: 0 }, chuaGop: 0, co: [] },
-			{ khoa: KHOA_CA.A1, cha: KHOA_CA.A, truong: "tran-quoc-bao", mucTieu: ["sd-a1-1", "sd-g"], soKr: 3, tinhTrang: { dungNhip: 2, chamNhip: 0, truot: 1 }, chuaGop: 0, co: ["kr-truot"] },
-			{ khoa: KHOA_CA.A2, cha: KHOA_CA.A, truong: "nguyen-thi-lan", mucTieu: ["sd-a2-1"], soKr: 1, tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 }, chuaGop: 0, co: [] },
-			{ khoa: KHOA_CA.A3, cha: KHOA_CA.A, truong: "do-minh-khoa", mucTieu: ["sd-a3-1"], soKr: 1, tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 }, chuaGop: 0, co: [] },
-			{ khoa: KHOA_CA.B, cha: "goc", truong: "dang-ngoc-mai", mucTieu: ["sd-b-1"], soKr: 1, tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 }, chuaGop: 1, co: ["chua-noi", "muc-tieu-chua-gop"] },
-			{ khoa: KHOA_CA.B1, cha: KHOA_CA.B, truong: "pham-thu-trang", mucTieu: ["sd-b1-1"], soKr: 1, tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 }, chuaGop: 0, co: [] },
-			{ khoa: KHOA_CA.B2, cha: KHOA_CA.B, truong: null, mucTieu: ["sd-b2-1", "sd-b2-2"], soKr: 2, tinhTrang: { dungNhip: 2, chamNhip: 0, truot: 0 }, chuaGop: 1, co: ["chua-truong", "chua-noi", "muc-tieu-chua-gop"] },
-			{ khoa: KHOA_CA.B3, cha: KHOA_CA.B, truong: "nguyen-thi-lan", mucTieu: [], soKr: 0, tinhTrang: { dungNhip: 0, chamNhip: 0, truot: 0 }, chuaGop: 0, co: ["chua-okr"] },
-			{ khoa: KHOA_CA.X, cha: "goc", truong: "dang-ngoc-mai", mucTieu: ["sd-x-1"], soKr: 2, tinhTrang: { dungNhip: 0, chamNhip: 1, truot: 0 }, chuaGop: 0, co: [] },
+			{
+				khoa: KHOA_CA.A,
+				cha: "goc",
+				truong: "pham-thu-trang",
+				mucTieu: ["sd-a-1", "sd-a-2"],
+				soKr: 2,
+				tinhTrang: { dungNhip: 2, chamNhip: 0, truot: 0 },
+				chuaGop: 0,
+				co: [],
+			},
+			{
+				khoa: KHOA_CA.A1,
+				cha: KHOA_CA.A,
+				truong: "tran-quoc-bao",
+				mucTieu: ["sd-a1-1", "sd-g"],
+				soKr: 3,
+				tinhTrang: { dungNhip: 2, chamNhip: 0, truot: 1 },
+				chuaGop: 0,
+				co: ["kr-truot"],
+			},
+			{
+				khoa: KHOA_CA.A2,
+				cha: KHOA_CA.A,
+				truong: "nguyen-thi-lan",
+				mucTieu: ["sd-a2-1"],
+				soKr: 1,
+				tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 },
+				chuaGop: 0,
+				co: [],
+			},
+			{
+				khoa: KHOA_CA.A3,
+				cha: KHOA_CA.A,
+				truong: "do-minh-khoa",
+				mucTieu: ["sd-a3-1"],
+				soKr: 1,
+				tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 },
+				chuaGop: 0,
+				co: [],
+			},
+			{
+				khoa: KHOA_CA.B,
+				cha: "goc",
+				truong: "dang-ngoc-mai",
+				mucTieu: ["sd-b-1"],
+				soKr: 1,
+				tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 },
+				chuaGop: 1,
+				co: ["chua-noi", "muc-tieu-chua-gop"],
+			},
+			{
+				khoa: KHOA_CA.B1,
+				cha: KHOA_CA.B,
+				truong: "pham-thu-trang",
+				mucTieu: ["sd-b1-1"],
+				soKr: 1,
+				tinhTrang: { dungNhip: 1, chamNhip: 0, truot: 0 },
+				chuaGop: 0,
+				co: [],
+			},
+			{
+				khoa: KHOA_CA.B2,
+				cha: KHOA_CA.B,
+				truong: null,
+				mucTieu: ["sd-b2-1", "sd-b2-2"],
+				soKr: 2,
+				tinhTrang: { dungNhip: 2, chamNhip: 0, truot: 0 },
+				chuaGop: 1,
+				co: ["chua-truong", "chua-noi", "muc-tieu-chua-gop"],
+			},
+			{
+				khoa: KHOA_CA.B3,
+				cha: KHOA_CA.B,
+				truong: "nguyen-thi-lan",
+				mucTieu: [],
+				soKr: 0,
+				tinhTrang: { dungNhip: 0, chamNhip: 0, truot: 0 },
+				chuaGop: 0,
+				co: ["chua-okr"],
+			},
+			{
+				khoa: KHOA_CA.X,
+				cha: "goc",
+				truong: "dang-ngoc-mai",
+				mucTieu: ["sd-x-1"],
+				soKr: 2,
+				tinhTrang: { dungNhip: 0, chamNhip: 1, truot: 0 },
+				chuaGop: 0,
+				co: [],
+			},
 		];
 		let soAssert = 0;
 		for (const h of maTran) {
@@ -117,7 +204,9 @@ describe("dh4-du-lieu", () => {
 				h.mucTieu.length === 0
 					? null
 					: (
-							await Promise.all(h.mucTieu.map((m) => mucTieu(mtSoDo(m), QUAN_TRI)))
+							await Promise.all(
+								h.mucTieu.map((m) => mucTieu(mtSoDo(m), QUAN_TRI)),
+							)
 						).reduce((t, m) => t + m.progress, 0) / h.mucTieu.length;
 			expect({
 				khoa: n.khoa,
@@ -171,7 +260,8 @@ describe("dh4-du-lieu", () => {
 		}
 		expect(day).toEqual(mong);
 		const loai = new Set(day.map((d) => d.split(" ")[1]));
-		if (!loai.has("lien") || !loai.has("dut")) throw new Error("thieu loai duong");
+		if (!loai.has("lien") || !loai.has("dut"))
+			throw new Error("thieu loai duong");
 	});
 });
 
@@ -264,7 +354,9 @@ describe("dh4-ly-do", () => {
 		const cay = cayCanChinhOutput.parse(ok(tra, "cay ly do"));
 		const dong = new Map(
 			s.nut.flatMap((n) =>
-				n.mucTieu.flatMap((m) => m.gop.map((g) => [`${m.id}->${g.dich}`, g] as const)),
+				n.mucTieu.flatMap((m) =>
+					m.gop.map((g) => [`${m.id}->${g.dich}`, g] as const),
+				),
 			),
 		);
 		const idSoDo = new Set(s.nut.flatMap((n) => n.mucTieu.map((m) => m.id)));
@@ -273,7 +365,8 @@ describe("dh4-ly-do", () => {
 		for (const c of canh) {
 			const g = dong.get(`${c.tu}->${c.den}`);
 			if (!g) throw new Error(`thieu dong gop: ${c.tu}->${c.den}`);
-			if (g.lyDo !== c.lyDo) throw new Error(`ly do sai cho noi: ${c.tu}->${c.den}`);
+			if (g.lyDo !== c.lyDo)
+				throw new Error(`ly do sai cho noi: ${c.tu}->${c.den}`);
 			expect({ mucTin: g.mucTin, lyDoTuKara: g.lyDoTuKara }).toEqual({
 				mucTin: c.mucTin,
 				lyDoTuKara: c.lyDoTuKara,
@@ -287,6 +380,8 @@ describe("dh4-ly-do", () => {
 		expect(new Set(hai.map(([, g]) => g.lyDo))).toEqual(
 			new Set([LY_DO_SO_DO.coSoLieu, LY_DO_SO_DO.datCuoc]),
 		);
-		expect(canh.filter((c) => c.mucTin !== "chua-co-ly-do").length).toBeGreaterThanOrEqual(1);
+		expect(
+			canh.filter((c) => c.mucTin !== "chua-co-ly-do").length,
+		).toBeGreaterThanOrEqual(1);
 	});
 });

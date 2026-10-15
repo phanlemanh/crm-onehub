@@ -36,9 +36,11 @@ export const DON_VI_CAN_CHU_Y: readonly string[] = [
 ];
 
 export const LY_DO_SO_DO = {
-	coSoLieu: "A3 giữ tỉ lệ giao đúng hẹn của khối A nên góp thẳng vào mục tiêu khối.",
+	coSoLieu:
+		"A3 giữ tỉ lệ giao đúng hẹn của khối A nên góp thẳng vào mục tiêu khối.",
 	canCu: "Tỉ lệ giao đúng hẹn quý 3 của A3 đạt 96%.",
-	datCuoc: "A3 mở tuyến mới có thể đẩy doanh thu năm nhưng chưa có số đo riêng.",
+	datCuoc:
+		"A3 mở tuyến mới có thể đẩy doanh thu năm nhưng chưa có số đo riêng.",
 } as const;
 
 type BoPhanCa = { ma: string; ten: string; truong: string };
@@ -224,6 +226,11 @@ export async function napCaSoDo(db: Db, { luc }: { luc: Date }): Promise<void> {
 				divisionId: p.boPhan ? bp(p.boPhan) : null,
 				headUserId: p.truong ? nguoi(p.truong) : null,
 			})),
+		});
+		await tx.orgSecondaryDepartment.createMany({
+			data: PHONG_BAN.flatMap((p) =>
+				p.truong ? [{ userId: nguoi(p.truong), departmentId: pb(p.ma) }] : [],
+			),
 		});
 		await tx.okrObjective.createMany({
 			data: MUC_TIEU.map((m, i) => ({
