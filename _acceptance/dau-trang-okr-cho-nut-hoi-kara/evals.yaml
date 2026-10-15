@@ -1,0 +1,93 @@
+schema_version: 1
+slug: dau-trang-okr-cho-nut-hoi-kara
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kmc_man_do
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
+      - "apps/app/app/(app)/[slug]/okr/luoi-dau-trang.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
+      - "_acceptance/khung-man-chung/rang/chup-man.mjs"
+    expected: |
+      Chính phép đo E12m của hồ sơ đã ký khung-man-chung (chup-man.mjs --chi-do, phiên đo riêng của cây): thoát 0,
+      in 'buoc N: dat' cho 5 bước và dòng «do toancanh 375: …» với lệch hàng tiêu đề ≤ 4 px (y và chiều cao),
+      vùng nội dung ≤ 8 px. Ngưỡng là hằng NGUONG của chup-man.mjs, không chép số.
+      CHIỀU ĐỎ: trên cây chưa vá (origin/onehub 6fa8ce417) cùng lệnh in «toancanh 375: hang tieu de lech …» và
+      mã 1 — chạy ở bước RED của S3, ghi dòng đỏ vào sổ.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dto_cho
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
+      - "apps/app/test/dau-trang-okr-cho.dom.tsx"
+    expected: |
+      apps/app/test/dau-trang-okr-cho.dom.tsx, describe "dto-cho": dựng khung chờ đầu trang OKR (DauTrangOkrCho)
+      thật. Ma trận viết trước {vi, en} = 2 ô, ca «đếm ô dto-cho» đòi đúng 2. Mỗi ô: có đúng một
+      [data-nut=hoi-kara]; chữ của nút bằng okrHoiMessages(<ngôn ngữ>).nut.hoi; nút không disabled; nút và ô xương
+      chọn kỳ cùng cha, nút đứng trước. Ghim «dto-cho <ngôn ngữ>: co nut hoi kara», «… dung truoc o ky».
+      CHIỀU ĐỎ: đột biến của E6 (bỏ nút khỏi khung chờ) làm đỏ «dto-cho vi: co nut hoi kara».
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dto_bam
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
+      - "apps/app/test/dau-trang-okr-cho.dom.tsx"
+    expected: |
+      Cùng tệp, describe "dto-bam": bấm nút «Hỏi Kara» của khung chờ → thủ tục okr.hoiMo giả được gọi đúng 1 lần với
+      đầu vào {} và ngăn xếp bản ghi ghi record=hoi-okr:<id trả về>. Đối chứng dương trong cùng ca: trước khi bấm số
+      lần gọi là 0. Ghim «dto-bam: goi hoiMo 1 lan», «dto-bam: mo cot hoi».
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dto_hoi_quy
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/khung-man-chung.dom.tsx"
+      - "apps/app/test/khung-man-chung.spec.ts"
+    expected: |
+      git diff --quiet $(git merge-base HEAD origin/onehub) trên apps/app/test/khung-man-chung.dom.tsx và
+      apps/app/test/khung-man-chung.spec.ts (không sửa kỳ vọng), rồi chạy trọn hai tệp → thoát 0.
+      CHIỀU ĐỎ: sửa một kỳ vọng của hai tệp → git diff --quiet thoát 1 trước khi chạy.
+
+  - id: E5
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kmc_man
+    steps:
+      - "Chạy Ở TIỀN CẢNH, Bash timeout 600000: lệnh kmc_man (chup-man.mjs của khung-man-chung, phiên đo riêng của cây)"
+      - "Đọc dòng «do toancanh 375: …» và «do toancanh 1280: …» và 'buoc 1: dat'"
+      - "Mở bốn ảnh kmc-toancanh-dangtai-375.png, kmc-toancanh-xong-375.png, kmc-toancanh-dangtai-1280.png, kmc-toancanh-xong-1280.png (ở .acceptance-runs/khung-man-chung/evidence/) và đối chiếu bằng mắt: tiêu đề cùng số dòng ở hai ảnh của mỗi khổ, nút «Hỏi Kara» có ở cả hai ảnh ở cùng chỗ"
+    expected: "exit 0; 'buoc 1: dat' cho 5 bước; hai cặp ảnh Toàn cảnh khớp như steps."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
+      - "apps/app/app/(app)/[slug]/okr/luoi-dau-trang.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
+
+  - id: E6
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.dto_dot_bien
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
+      - "apps/app/test/dau-trang-okr-cho.dom.tsx"
+      - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/**"
+    expected: |
+      node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/dot-bien.mjs dựng bản sao cây (ban-sao.mjs của
+      ca-chap-chon-cach-ly). Đối chứng dương: lệnh dto_cho trên bản sao chưa đổi thoát 0, không thì thoát 2. Một
+      cặp: bỏ <NutHoiKara /> khỏi dau-trang-okr-cho.tsx bằng thayMotLan → lệnh dto_cho thoát khác 0 VÀ đầu ra chứa
+      «dto-cho vi: co nut hoi kara». In «cặp a: cắn» và «dto dot-bien: 1/1 cắn»; bộ canh cây thật chỉ xét tệp bị
+      đột biến.
