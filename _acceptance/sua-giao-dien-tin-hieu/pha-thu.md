@@ -26,3 +26,13 @@ E14b: DO · thong diep ghim CO «cau mang ten nhom khong danh dau khong dich»
 E6c: DO · thong diep ghim CO «nut gui du chu van tro toi dong ly do»
 E14: DO · thong diep ghim CO «cau sau gom chi co tieng Viet»
 ```
+
+## Phá-thử răng LT2 sau khi khai thay E9 (15/10)
+
+Bản sao bộ dựng câu trả chuỗi rỗng (`apps/app/lib/tin-hieu/trang-thai.ts`) → `bun _acceptance/gui-tin-hieu-trong-crm/rang/vong-kit.mjs`:
+
+```
+SAI ve: bo doc CRM ra cau cho moi ma, khong loi — bo doc CRM tra rong cho ma: crm-501,crm-502,crm-503
+KET LUAN: 1 dong SAI
+```
+Hoàn nguyên → `KET LUAN: moi dong DUNG`.
