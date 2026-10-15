@@ -95,12 +95,35 @@
       "hang": []
     },
     {
+      "ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
+      "ngay": "2026-10-20",
+      "loai": "phat-hanh",
+      "khoa": "m-1020dh",
+      "hang": [
+        "DH1",
+        "DH2",
+        "DH3"
+      ],
+      "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~20 giờ máy · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410."
+    },
+    {
       "ten": "Phòng ban công bố OKR quý 4",
       "ngay": "2026-10-21",
       "ai": "Phòng ban",
       "khoa": "m-1021",
       "loai": "ngoai",
       "hang": []
+    },
+    {
+      "ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
+      "ngay": "2026-10-21",
+      "loai": "phat-hanh",
+      "khoa": "m-1021dh",
+      "hang": [
+        "DH4",
+        "DH5"
+      ],
+      "nghia": "Lãnh đạo mở Toàn cảnh › Sơ đồ thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt; trưởng đơn vị xem quanh một mục tiêu nó góp vào đâu. Ước theo giờ máy: bắt đầu ~15/10 · ~18 giờ máy (DH4 tính T3: thêm React Flow + dagre, chạm packages/ui, gộp ×1,3) · % hạn mức tuần chưa ước · hoàn tất dự kiến 21/10 · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10."
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
