@@ -89,5 +89,3 @@ export async function chiPhiThangHoiDap(
 	});
 	return tong._sum.costUsd?.toNumber() ?? 0;
 }
-
-

@@ -12,6 +12,7 @@ import { CUA_OKR_HOI } from "@/lib/cua-okr-config";
 import { okrHoiMessages } from "@/lib/messages/okr-hoi";
 import { OKR_SOAN_CUA } from "@/lib/okr-soan-record";
 import { useTRPC } from "@/lib/trpc/client";
+import { HOI_UI } from "./cau-hinh";
 import { KhungHoi } from "./khung-hoi";
 import { lyDoKhoaTu } from "./loi-hoi";
 
@@ -20,6 +21,7 @@ const dauCuoc = (cuocHoiId: string) => ({ [CUA_OKR_HOI.header]: cuocHoiId });
 export function CotHoiKara({ cuocHoiId }: { cuocHoiId: string }) {
 	const m = okrHoiMessages(useLocale());
 	const trpc = useTRPC();
+	const [daPhanHoi, setDaPhanHoi] = useState<Record<string, boolean>>({});
 	const phien = useQuery({
 		...trpc.okr.hoiPhien.queryOptions({ cuocHoiId }),
 		staleTime: Number.POSITIVE_INFINITY,
@@ -34,6 +36,8 @@ export function CotHoiKara({ cuocHoiId }: { cuocHoiId: string }) {
 		staleTime: Number.POSITIVE_INFINITY,
 		gcTime: 0,
 		refetchOnWindowFocus: false,
+		refetchInterval: (q) =>
+			q.state.data?.status === "working" ? HOI_UI.hoiLuongMs : false,
 		queryFn: ({ signal }) =>
 			loadThread(
 				maPhien ?? "",
@@ -54,11 +58,17 @@ export function CotHoiKara({ cuocHoiId }: { cuocHoiId: string }) {
 		);
 	if (phien.isPending || (maPhien !== null && thread.isPending))
 		return <KaraState kind="working" label={m.nap.dangMo} delayMs={0} />;
+	const dangDoc = thread.data?.status === "working";
 	return (
 		<CuocHoiDang
-			key={maPhien ?? "moi"}
+			key={`${maPhien ?? "moi"}#${dangDoc ? "chay" : "yen"}`}
 			cuocHoiId={cuocHoiId}
 			thread={thread.data}
+			dangDoc={dangDoc}
+			daPhanHoi={daPhanHoi}
+			datPhanHoi={(maTraLoi, huuIch) =>
+				setDaPhanHoi((cu) => ({ ...cu, [maTraLoi]: huuIch }))
+			}
 		/>
 	);
 }
@@ -66,13 +76,18 @@ export function CotHoiKara({ cuocHoiId }: { cuocHoiId: string }) {
 function CuocHoiDang({
 	cuocHoiId,
 	thread,
+	dangDoc,
+	daPhanHoi,
+	datPhanHoi,
 }: {
 	cuocHoiId: string;
 	thread: Thread | undefined;
+	dangDoc: boolean;
+	daPhanHoi: Record<string, boolean>;
+	datPhanHoi: (maTraLoi: string, huuIch: boolean) => void;
 }) {
 	const trpc = useTRPC();
 	const { open } = useRecordStack();
-	const [daPhanHoi, setDaPhanHoi] = useState<Record<string, boolean>>({});
 	const luuPhanHoi = useMutation(trpc.okr.hoiPhanHoi.mutationOptions());
 	const agent = useEveAgent({
 		host: OKR_SOAN_CUA.host,
@@ -81,7 +96,8 @@ function CuocHoiDang({
 			? { initialSession: thread.session, initialEvents: eventsOf(thread) }
 			: { initialEvents: eventsOf(thread) }),
 	});
-	const dangChay = agent.status === "submitted" || agent.status === "streaming";
+	const dangChay =
+		dangDoc || agent.status === "submitted" || agent.status === "streaming";
 	const loi = agent.status === "error" ? agent.error : undefined;
 	const lyDoKhoa = lyDoKhoaTu(loi);
 
@@ -102,7 +118,7 @@ function CuocHoiDang({
 			onThuLai={gui}
 			onMoTrich={(t) => open({ kind: t.kind, id: t.id })}
 			onPhanHoi={(maTraLoi, huuIch) => {
-				setDaPhanHoi((cu) => ({ ...cu, [maTraLoi]: huuIch }));
+				datPhanHoi(maTraLoi, huuIch);
 				luuPhanHoi.mutate({ cuocHoiId, maTraLoi, huuIch });
 			}}
 		/>

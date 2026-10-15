@@ -32,6 +32,7 @@ const SEL = {
 	phanHoi: '[data-slot="ai-feedback"]',
 	thuLai: '[data-slot="kara-retry"]',
 	ngan: "[data-slot='sheet-content'], [data-slot='drawer-content']",
+	nutGo: '[data-khung="hoi-okr"] [data-slot="kara-composer"] button',
 	nutKhung: "[data-slot='sheet-content'] button, [data-slot='drawer-content'] button",
 };
 
@@ -146,6 +147,14 @@ async function trongPhien() {
 			const truoc = await t.evaluate(
 				(s) => window.__tim(s).length,
 				SEL.phanHoi,
+			);
+			await t.waitForFunction(
+				(s) => {
+					const nut = [...document.querySelectorAll(s)];
+					return nut.length > 0 && nut.every((n) => !n.disabled);
+				},
+				{ timeout: CHO_TRA_LOI_MS },
+				SEL.nutGo,
 			);
 			await d.bamSel(t, SEL.oGo);
 			await t.keyboard.type(CAU_HAI);

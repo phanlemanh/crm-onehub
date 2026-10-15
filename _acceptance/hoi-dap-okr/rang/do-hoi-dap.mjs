@@ -1,4 +1,5 @@
 import { db } from "../../../packages/db/src/index.ts";
+import { docOkr, timOkr } from "../../../apps/agent-okr/agent/lib/hoi-doc.ts";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
@@ -34,6 +35,7 @@ const LENH =
 const BO = join(GOC, "apps/agent-okr/evals/okr-hoi/ca/bo-quy-4.json");
 const SONG_SONG = 5;
 const SO_PHIEU = 3;
+const TRAN_RA_PHIEU = 12_000;
 
 const yeuCauOkr = createRequire(join(GOC, "apps/agent-okr/package.json"));
 const { xuongModelZdr } = await import(yeuCauOkr.resolve("@crm/ai-okr"));
@@ -41,49 +43,45 @@ const { generateText } = await import(yeuCauOkr.resolve("ai"));
 
 const idCua = (loai, ma) => idMau(loai === "kr" ? "kr" : "mt", ma);
 
-async function anhChup(ca, traLoi) {
+async function anhChup(ca, traLoi, userId) {
 	const ids = [
 		...ca.kyVong.trichBatBuoc.map((t) => idCua(t.loai, t.ma)),
 		...(traLoi?.cau ?? []).flatMap((c) => c.trich.map((t) => t.id)),
 	];
-	const mt = await db.okrObjective.findMany({
-		where: {
-			OR: [{ id: { in: ids } }, { keyResults: { some: { id: { in: ids } } } }],
-		},
-		select: {
-			id: true,
-			title: true,
-			keyResults: {
-				select: {
-					id: true,
-					title: true,
-					startValue: true,
-					currentValue: true,
-					targetValue: true,
-					unit: true,
-				},
-			},
-		},
+	const cha = await db.okrKeyResult.findMany({
+		where: { id: { in: ids } },
+		select: { id: true, objectiveId: true },
 	});
-	return mt.map((m) => ({
-		id: m.id,
-		ten: m.title,
-		kr: m.keyResults.map((k) => ({
-			id: k.id,
-			ten: k.title,
-			khoi: k.startValue.toNumber(),
-			hien: k.currentValue.toNumber(),
-			dich: k.targetValue.toNumber(),
-			donVi: k.unit,
+	const laKr = new Set(cha.map((k) => k.id));
+	const mucTieu = [
+		...new Set([
+			...ids.filter((id) => !laKr.has(id)),
+			...cha.map((k) => k.objectiveId),
+		]),
+	];
+	const doc = [];
+	for (const id of mucTieu) {
+		const kq = await docOkr(userId, { loai: "objective", id });
+		if (kq.ok) doc.push(kq.mucTieu);
+	}
+	if (doc.length > 0) return { mucTieuNguoiHoiDocDuoc: doc };
+	const tim = await timOkr(userId, {});
+	return {
+		khongTrich: true,
+		quyHienTai: tim.mucTieu.map((m) => ({
+			ten: m.ten,
+			donVi: m.donVi,
+			tinhTrang: m.tinhTrang,
+			kr: m.kr.map((k) => k.ten),
 		})),
-	}));
+	};
 }
 
 async function phieuHoiDong(ca, traLoi, anh) {
 	const model = xuongModelZdr({
 		modelId: TRO_LY_OKR_SOAN.judge.model,
 		tags: TRO_LY_OKR_SOAN.tags,
-		tranRaMoiLoiGoi: TRO_LY_OKR_SOAN.judge.tranRaMoiLoiGoi,
+		tranRaMoiLoiGoi: TRAN_RA_PHIEU,
 		khoa: process.env[TRO_LY_OKR_SOAN.khoa.rieng],
 	});
 	const prompt = [
@@ -91,7 +89,7 @@ async function phieuHoiDong(ca, traLoi, anh) {
 		"«Đúng ý» nghĩa là: trả lời đúng điều được hỏi, không lạc đề, không né khi dữ liệu có, không bịa điều dữ liệu không có. Câu xin sửa OKR hay hỏi ngoài OKR được trả lời bằng lời từ chối có chỉ đường là đúng ý.",
 		`Câu hỏi: ${ca.cauHoi}`,
 		`Loại câu trả lời kỳ vọng: ${ca.kyVong.loai}`,
-		`Dữ liệu thật của các Mục tiêu và KR liên quan: ${JSON.stringify(anh)}`,
+		`Dữ liệu thật mà trợ lý đọc được qua công cụ, theo quyền của người hỏi (tienDo, kyVong là phần trăm; tinhTrang là tình trạng; loai là cam-ket hay tham-vong; capNhat là cập nhật tuần với giaTri và tuTin): ${JSON.stringify(anh)}`,
 		`Câu trả lời: ${JSON.stringify(traLoi)}`,
 	].join("\n");
 	const phieu = [];
@@ -99,7 +97,10 @@ async function phieuHoiDong(ca, traLoi, anh) {
 		try {
 			const kq = await generateText({ model, prompt });
 			phieu.push(
-				docPhieu(kq.text) ?? { dungY: false, lyDo: "phieu khong doc duoc" },
+				docPhieu(kq.text) ?? {
+					dungY: false,
+					lyDo: `phieu khong doc duoc (${kq.finishReason}): ${kq.text.slice(0, 120)}`,
+				},
 			);
 		} catch (e) {
 			phieu.push({ dungY: false, lyDo: `loi goi judge: ${e?.message ?? e}` });
@@ -131,7 +132,7 @@ async function chamMot(ca, moi) {
 		maThay,
 		idCua,
 	});
-	const anh = await anhChup(ca, kq.traLoi);
+	const anh = await anhChup(ca, kq.traLoi, nguoi.id);
 	const phieu = await phieuHoiDong(ca, kq.traLoi, anh);
 	const dungY = phieu.filter((p) => p.dungY).length * 2 > phieu.length;
 	return {
