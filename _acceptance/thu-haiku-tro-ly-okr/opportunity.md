@@ -3,10 +3,10 @@ schema_version: 1
 slug: thu-haiku-tro-ly-okr
 feature: Thử Haiku 5.5 cho Trợ lý OKR, và kho đo thôi chạy GLM 5.2 Fast
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by:
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Phan Le Manh
+decided_at: 2026-10-15T05:02:19Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -42,10 +42,10 @@ với Gemini» chưa được chứng là đã hết.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Trên cùng một cây, chạy liền nhau, Haiku 5.5 có thay được Gemini 3.8 Flash cho Trợ lý OKR, và hai model nào chạy được bộ dựng Tác nhân, để mặc định không còn GLM 5.2 Fast?
-- Kết quả nào là SỐNG: [đề xuất] Trợ lý OKR — Haiku đạt cả ba: E24 0/20 lượt hỏng; E22 ≥ 28/30 ca đúng và 0 ca góp ý thừa; judge ≥ 0,9. Tác nhân — mỗi model đạt 3/3 lượt `agent-builder.eval.ts`.
-- Kết quả nào là CHẾT: [đề xuất] Haiku trượt dù một trong ba vế của Trợ lý OKR thì giữ Gemini 3.8 Flash và đóng phần thử Haiku; một model trượt bộ dựng Tác nhân thì model đó không làm mặc định cho Tác nhân.
-- Timebox: [đề xuất] Một lượt so, chạy sau khi việc sửa thước E22/E24 của hồ sơ `tro-ly-okr-de-xuat` gộp vào onehub; không chạy lại để «gỡ» một kết quả xấu.
+- Câu hỏi phép đo trả lời: Trên cùng một cây, chạy liền nhau, Haiku 5.5 có thay được Gemini 3.8 Flash cho Trợ lý OKR, và hai model nào chạy được bộ dựng Tác nhân, để mặc định không còn GLM 5.2 Fast?
+- Kết quả nào là SỐNG: Trợ lý OKR — Haiku đạt cả ba: E24 0/20 lượt hỏng; E22 ≥ 28/30 ca đúng và 0 ca góp ý thừa; judge ≥ 0,9. Tác nhân — mỗi model đạt 3/3 lượt `agent-builder.eval.ts`.
+- Kết quả nào là CHẾT: Haiku trượt dù một trong ba vế của Trợ lý OKR thì giữ Gemini 3.8 Flash và đóng phần thử Haiku; một model trượt bộ dựng Tác nhân thì model đó không làm mặc định cho Tác nhân.
+- Timebox: Một lượt so, chạy sau khi việc sửa thước E22/E24 của hồ sơ `tro-ly-okr-de-xuat` gộp vào onehub; không chạy lại để «gỡ» một kết quả xấu.
 
 ## Kết quả prototype
 
