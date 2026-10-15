@@ -3,7 +3,7 @@ import { mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
-import { dien } from "../../../apps/app/components/crm/record-sheet/plan-copy.ts";
+import { dien } from "../../../apps/app/components/crm/record-sheet/plan-copy.tsx";
 import { tinHieuMessages } from "../../../apps/app/lib/messages/tin-hieu.ts";
 import { tenMan } from "../../../apps/app/lib/tin-hieu/ten-man.ts";
 import { db } from "../../../packages/db/src/index.ts";
