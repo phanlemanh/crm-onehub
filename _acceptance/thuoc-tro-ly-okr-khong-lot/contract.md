@@ -5,7 +5,7 @@ slug: thuoc-tro-ly-okr-khong-lot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-thuoc-tro-ly-okr-khong-lot-design.md
