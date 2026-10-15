@@ -67,7 +67,7 @@ export const okrParsers = {
 	[SEARCH_PARAM.okr.tuTin]: parseAsArrayOf(
 		parseAsStringLiteral(MUC_TU_TIN),
 	).withDefault([]),
-	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO).withDefault("tab"),
+	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO),
 	[SEARCH_PARAM.okr.gopY]: parseAsArrayOf(
 		parseAsStringLiteral(LOC_GOP_Y),
 	).withDefault([]),
