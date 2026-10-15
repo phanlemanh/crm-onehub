@@ -3,6 +3,8 @@ slug: gui-tin-hieu-trong-crm
 
 evals:
   - id: E1
+    status: not-run
+    superseded_by: sua-giao-dien-tin-hieu#AC-8
     criterion: AC-1
     executor: test
     cmd: config:executors.test.gth_hop
@@ -86,6 +88,8 @@ evals:
       ban sao bo khoa theo nguoi -> dong 4 do voi thong diep ghim "hai loi goi cung vuot tran".
 
   - id: E3b
+    status: not-run
+    superseded_by: sua-giao-dien-tin-hieu#AC-2
     criterion: AC-3
     executor: test
     cmd: config:executors.test.gth_hop
@@ -146,6 +150,8 @@ evals:
       CHIEU DO: ban sao kiem keoVeLuc ngoai giao dich -> o 4 do voi thong diep ghim "tin hieu vua keo ve van bi xoa".
 
   - id: E5b
+    status: not-run
+    superseded_by: sua-giao-dien-tin-hieu#AC-9
     criterion: AC-5
     executor: test
     cmd: config:executors.test.gth_trang
@@ -243,6 +249,8 @@ evals:
       ban sao bo doc CRM bo qua cau -> dong 2 do voi thong diep ghim "cau trang thai lech cau kit".
 
   - id: E10
+    status: not-run
+    superseded_by: sua-giao-dien-tin-hieu#AC-12
     criterion: AC-10
     executor: test
     cmd: config:executors.test.gth_trang_thai
@@ -306,6 +314,8 @@ evals:
       ban sao lay mau so tu khoi thay vi tu may chu -> dong 3 do voi thong diep ghim "tin hieu chua keo ve lot khoi mau so".
 
   - id: E13
+    status: not-run
+    superseded_by: sua-giao-dien-tin-hieu#AC-10
     criterion: AC-1
     executor: ui-check
     layer: ui-observed
