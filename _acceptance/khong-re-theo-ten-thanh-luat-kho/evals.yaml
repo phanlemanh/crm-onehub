@@ -1,0 +1,110 @@
+schema_version: 1
+slug: khong-re-theo-ten-thanh-luat-kho
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.krtt_ma_tran_luat
+    paths: [tools/oxlint/onehub/**, .oxlintrc.json, package.json, packages/db/src/giai-doan.ts, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
+    expected: |
+      rang/ma-tran-luat.mjs, cay tam (git worktree --detach HEAD duoi .acceptance-runs/khong-re-theo-ten-thanh-luat-kho/).
+      Doi chung duong: lenh lint_slop giai tu _acceptance/config.yaml thoat 0 tren cay tam truoc khi gieo (khong ->
+      "HONG NEN <ma>"). Gieo bang ca viet truoc trong script (moi dong: tep, noi dung, tap tu ky vong): moi thu muc
+      trong bay thu muc mot tep nhac mot id cu khac nhau (du bay id), mot tep import GIAI_DOAN_GOC, mot tep nhac id
+      trong chuoi chu thich /* */; cho mien: apps/app/app/proto, apps/api/src/generated, packages/db/src/generated,
+      apps/agent-okr/src, ten dai hon (CLOSED_WONDER); allowlist.ts them mot dong nhac CLOSED_WON. Sau gieo: lint_slop
+      thoat khac 0 va dau ra co ten luat (khong -> "HONG LINT XANH"); oxlint --format=json cung cau hinh: tap
+      (tep, tu) cua hai luat onehub BANG DUNG tap ky vong — thieu -> "HONG THIEU <tep>:<tu>", thua -> "HONG THUA
+      <tep>:<tu>", ma 1; dong GIAI_DOAN_GOC co san cua allowlist.ts khong bi bao. Danh sach tu ky vong rut tu
+      GIAI_DOAN_GOC bang import. In "ma-tran-luat: <n>/<n> o dung".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.krtt_ma_tran_luat
+    paths: [tools/oxlint/onehub/**, .oxlintrc.json, package.json, packages/db/src/giai-doan.ts, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
+    expected: |
+      Cung lenh E1 (ma-tran-luat): cac o mien trong bang (proto, generated, agent-okr, ten dai hon, GIAI_DOAN_GOC co san trong
+      allowlist.ts) khong co trong tap luat bao; CLOSED_WON them vao allowlist.ts co trong tap. Thoat 0.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.lint_slop
+    paths: [tools/oxlint/onehub/**, .oxlintrc.json, package.json]
+    expected: |
+      bun run lint:slop thoat 0 o dinh nhanh.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.krtt_e17_qua_luat
+    paths: [_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs, tools/oxlint/onehub/**, .oxlintrc.json, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
+    expected: |
+      rang/e17-qua-luat.mjs: (1) chay lenh gdtt_khong_re_theo_ten o goc kho: ma 0, dong "so tep da quet: <n>" voi
+      n >= 50 (khong -> "HONG E17 <ma>"); (2) doc tinh khong-re-theo-ten.mjs: khong chua "GIAI_DOAN_GOC", "RegExp",
+      "matchAll" (con -> "HONG BAN SAO <chuoi>"), co ten hai luat onehub (thieu -> "HONG KHONG DOC LUAT"); (3) cay tam
+      chen 'if (stage === "CLOSED_WON") {}' vao cuoi apps/api/src/dashboard/dashboard.service.ts: lenh E17 thoat 1 va
+      co dong khop ^HONG apps/api/src/dashboard/dashboard.service.ts:\d+: CLOSED_WON$ (khong -> "HONG LOT CHEN").
+      In "e17-qua-luat: dat".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.krtt_chieu_do
+    paths: [tools/oxlint/onehub/**, .oxlintrc.json, _acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
+    expected: |
+      rang/chieu-do.mjs, bang dot bien khai truoc (ten, tep, phep thay, lenh, ma ky vong, thong diep ghim), moi dot bien
+      trong cay tam rieng, ap roi commit gia trong cay tam (rang con dung cay tam cua chinh no tu HEAD): (1) luat-rong: danh sach tu cua luat thanh rong -> ma-tran-luat ma 1 voi "HONG THIEU";
+      (2) tat-thu-muc: bo "apps/app/lib/**" khoi overrides bat luat trong .oxlintrc.json -> gdtt_khong_re_theo_ten
+      ma 2 voi "KHONG DO DUOC" va "apps/app/lib"; (3) bo-mien-allowlist: bat luat GIAI_DOAN_GOC cho allowlist.ts ->
+      ma-tran-luat ma 1 voi "HONG THUA packages/telemetry/src/allowlist.ts". Dot bien khong bi bat dung -> "HONG LOT
+      <ten>" ma 1; phep thay khong khop -> "HONG KHONG AP <ten>" ma 1. In "chieu-do: 3/3 bi bat".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.krtt_chon_ho_so
+    paths: [_acceptance/giai-doan-thoa-thuan/evals.yaml, scripts/kiem-cheo/tap-cham.mjs, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
+    expected: |
+      rang/chon-ho-so.mjs: bang diff gia viet truoc. Doc evals.yaml cua giai-doan-thoa-thuan o dinh va o moc nen (git show
+      <moc nen>:...). Voi diff chi cham apps/app/lib/__f23__.ts va apps/api/src/__f23__/x.ts: tapCham (scripts/kiem-cheo/
+      tap-cham.mjs) va bo loc paths cua kit (lib/evidence-core.cjs) KHONG chon ho so o dinh (chon -> "HONG CON CHON <tep>"),
+      trong khi o moc nen thi chon (khong -> "HONG DOI CHUNG"); diff cham tools/oxlint/onehub/rules/<luat>.ts,
+      .oxlintrc.json, packages/db/src/giai-doan.ts -> o dinh van chon (khong -> "HONG BO SOT <tep>"). In "chon-ho-so: dat".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.krtt_ghim_xanh
+    paths: [_acceptance/giai-doan-thoa-thuan/**, _acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
+    expected: |
+      rang/ghim-xanh.mjs, ho so giai-doan-thoa-thuan: dong cuoi kind repin|repin-do cua run-log.jsonl la repin
+      (repin-do -> "GHIM DO" ma 1); suites_exit toan 0, moi evals_exit dat ky vong va E17 = 0; sha == verified_commit cua
+      evidence-report.md (lech -> "GHIM LECH"); commit cuoi sua tep ngoai run-log/evidence-report cua ho so la to tien cua
+      sha (khong -> "GHIM CU"); recheck-evidence.cjs cua kit ma 0. Chua co dong repin mang reason chua
+      "khong-re-theo-ten-thanh-luat-kho" -> "CHUA GHIM" ma 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.krtt_pham_vi
+    paths: [_acceptance/khong-re-theo-ten-thanh-luat-kho/rang/**]
+    expected: |
+      rang/pham-vi.mjs: commit cua vong = git log --no-merges -F --grep="(khong-re-theo-ten-thanh-luat-kho)". Moi commit
+      so voi cha (git diff C^ C). Hop tep so voi danh sach dong trong script (tools/oxlint/onehub/**, .oxlintrc.json,
+      _acceptance/giai-doan-thoa-thuan/{rang/khong-re-theo-ten.mjs,evals.yaml,run-log.jsonl,evidence-report.md},
+      _acceptance/khong-re-theo-ten-thanh-luat-kho/**, docs/superpowers/**/*khong-re-theo-ten-thanh-luat-kho*,
+      _acceptance/config.yaml, PRODUCT-MAP.md, LO-TRINH.html): tep ngoai -> "NGOAI DANH SACH <tep>" ma 1. evals.yaml cua
+      giai-doan-thoa-thuan so toan khoi tung eval: eval khac E17 doi, hay E17 doi ngoai paths/expected -> "DOI NGOAI
+      <eval>:<truong>" ma 1. config.yaml: dong bi xoa cua khoa co san o moc nen -> "CONFIG DOI GIA TRI <khoa>" ma 1. Tu
+      kiem: tep gia ngoai danh sach bi bat. Doi chung bat bien: cay tam + mot commit khong mang slug sua tep ngoai
+      danh sach -> dau ra giong het.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

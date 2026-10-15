@@ -306,21 +306,24 @@ evals:
     executor: script
     cmd: config:executors.script.gdtt_khong_re_theo_ten
     paths:
-      - "apps/api/src/**"
-      - "apps/agent/agent/**"
-      - "apps/app/app/**"
-      - "apps/app/components/**"
-      - "apps/app/lib/**"
-      - "packages/db/src/**"
+      - "tools/oxlint/onehub/**"
+      - ".oxlintrc.json"
+      - "packages/db/src/giai-doan.ts"
       - "_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs"
     expected: |
-      exit 0. Quet git ls-files trong cac thu muc tren (tru packages/db/src/generated/**, packages/db/src/
-      giai-doan.ts noi khai GIAI_DOAN_GOC, apps/app/app/proto/** la ban mau du lieu gia, va packages/db/prisma/seed.ts
-      nam ngoai): 0 lan xuat hien cua
-      7 id cu (danh sach rut tu GIAI_DOAN_GOC bang import, khong viet tay) va cua ten GIAI_DOAN_GOC. In so
-      tep da quet (> 0, ghim duoi can 50 de chan quet rong).
-      CHIEU DO (da chay 2026-09-29): ban sao chen 'stage === "CLOSED_WON"' vao dashboard.service.ts -> do voi thong diep ghim
-      "apps/api/src/dashboard/dashboard.service.ts: CLOSED_WON".
+      exit 0. Bat bien do luat kho giu o moi PR: hai luat onehub(khong-re-theo-ten-giai-doan) va
+      onehub(khong-dung-giai-doan-goc) trong bun run lint:slop (CI, pre-push) quet bay thu muc apps/api/src,
+      apps/agent/agent, apps/app/app, apps/app/components, apps/app/lib, packages/db/src, packages/telemetry/src
+      (tru packages/db/src/giai-doan.ts noi khai GIAI_DOAN_GOC, apps/app/app/proto/** ban mau du lieu gia, thu muc
+      generated; ten GIAI_DOAN_GOC duoc phep trong packages/telemetry/src/allowlist.ts); danh sach 7 id cu rut tu
+      GIAI_DOAN_GOC bang import trong luat, khong viet tay. Script chay oxlint --format=json voi cau hinh kho tren
+      bay thu muc, giu chan doan cua hai luat, in "HONG <tep>:<dong>: <tu>". Truoc do tu kiem: cay tam chep
+      .oxlintrc.json, moi thu muc mot tep moi nhac CLOSED_WON va GIAI_DOAN_GOC -> ca hai luat phai bat o du bay thu
+      muc, thieu -> "KHONG DO DUOC" ma 2. In so tep da quet (ghim duoi can 50, duoi -> ma 2).
+      CHIEU DO (da chay 2026-10-15): ban sao chen 'stage === "CLOSED_WON"' vao dashboard.service.ts -> ma 1 voi dong
+      "HONG apps/api/src/dashboard/dashboard.service.ts:<dong>: CLOSED_WON"; bo apps/app/lib khoi overrides -> ma 2.
+      paths chi con tep dinh nghia luat (doi 2026-10-15, F23 khong-re-theo-ten-thanh-luat-kho): ma san pham do lint:slop
+      giu, ho so chi cham lai khi chinh luat doi.
 
   - id: E18
     criterion: AC-14
