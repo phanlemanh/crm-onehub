@@ -18,12 +18,12 @@ xuất trên», ghi ở `opportunity.md`). Hiện trạng và việc làm ở `d
 
 ## Criteria
 
-- AC-1: Given workspace chưa chọn model ở Cài đặt → Chung, When một lượt tác tử dựng hay chạy bắt đầu, Then model của lượt là `google/gemini-3.8-flash` với cửa sổ 1.000.000 token, và cài đặt đọc ra đúng model đó kèm cờ «mặc định».
+- AC-1: Given workspace chưa chọn model ở Cài đặt → Chung, When một lượt tác tử dựng hay chạy bắt đầu, Then model của lượt là `google/gemini-3.8-flash` với cửa sổ 1.000.000 token, và cài đặt đọc ra đúng model đó kèm cờ «mặc định»; And workspace đã chọn một model không còn trong danh mục Gateway thì lượt lùi về `google/gemini-3.8-flash`.
 - AC-2: Given workspace đã chọn một model khác ở Cài đặt → Chung, When lượt tác tử bắt đầu, Then lượt dùng đúng model đã chọn, không bị đổi sang Gemini.
-- AC-3: Given máy soạn đề xuất và trợ lý đọc kho của Kho tài liệu, When mỗi bên gọi model qua Gateway, Then model là `google/gemini-3.8-flash` và mỗi lời gọi mang `zeroDataRetention: true`.
-- AC-4: Given sổ chi phí của máy soạn, When một phiên soạn trên Gemini 3.8 Flash ghi token vào và ra, Then chi phí tính theo giá của danh mục Gateway ngày 15/10 (0,75 USD mỗi triệu token vào, 3,75 USD mỗi triệu token ra); And model không có trong bảng giá vẫn ghi chi phí rỗng như cũ.
+- AC-3: Given máy soạn đề xuất và trợ lý đọc kho của Kho tài liệu, When mỗi bên dựng model cho một lượt theo đúng định nghĩa subagent của mình, Then model là `google/gemini-3.8-flash` và tham số mỗi lời gọi mang `zeroDataRetention: true`.
+- AC-4: Given sổ chi phí của máy soạn, When một phiên soạn trên Gemini 3.8 Flash ghi token vào và ra, Then chi phí tính theo giá chủ kho đã duyệt (0,75 USD mỗi triệu token vào, 3,75 USD mỗi triệu token ra), khớp ảnh chụp danh mục Gateway ngày 15/10; And GLM 5.2 Fast vẫn tính theo giá GLM; And model không có trong bảng giá vẫn ghi chi phí rỗng như cũ.
 - AC-5: Given trợ lý OKR, When hệ thống chọn model chấm, Then model chấm vẫn là `zai/glm-5.2-fast` ở cả hai nơi khai.
-- AC-6: Given bộ 50 câu hỏi mẫu và ngưỡng cũ của bộ chấm, When đo lại trợ lý kho trên Gemini 3.8 Flash ở cây của lượt này, Then bốn chỉ số (đúng trang, từ chối đúng, chuyển quy định, chuyển nhầm) đặt cạnh ngưỡng cũ và đều đạt theo kết luận của bộ chấm; câu lỗi gọi model không nhiều hơn lượt đã ký của `bo-cau-hoi-mau`; bằng chứng neo vào mã trợ lý của cây đang xét.
+- AC-6: Given bộ 50 câu hỏi mẫu và ngưỡng cũ của bộ chấm, When đo lại trợ lý kho trên Gemini 3.8 Flash ở cây của lượt này, Then bốn chỉ số (đúng trang, từ chối đúng, chuyển quy định, chuyển nhầm) đặt cạnh ngưỡng cũ và đều đạt theo kết luận của bộ chấm; câu lỗi gọi model không nhiều hơn lượt đã ký của `bo-cau-hoi-mau`; bằng chứng neo vào mã trợ lý của cây đang xét, mà cấu hình của cây ấy chọn `google/gemini-3.8-flash` cho trợ lý kho.
 
 ## Coverage
 
@@ -41,5 +41,7 @@ AC-3, AC-4; (3) → AC-5; (4) → AC-6.
 ## Notes
 
 - AC-6 gọi model thật qua AI Gateway một lượt (khoảng 96 lượt hỏi, ước $1–2 trên giá Gemini).
+- Lượt đo của bộ chấm không ghi mã model mà Gateway trả về; AC-6 neo vào cấu hình model của cây được đo (giới hạn đã
+  biết, xem dòng sổ revisit).
 - Nếu một chỉ số tụt dưới ngưỡng cũ: bằng chứng đặt số cạnh ngưỡng, chủ kho quyết giữ Gemini hay quay lại GLM ở Cổng
   Bằng chứng (ô cơ hội: «CHẾT»).
