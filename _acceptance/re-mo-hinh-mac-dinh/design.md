@@ -42,3 +42,23 @@ Danh mục Gateway (`https://ai-gateway.vercel.sh/v1/models`, đọc 15/10): `go
 
 Bỏ — không đổi màn nào (dòng sổ «bỏ đặc-tả-UX»). Màn Cài đặt → Chung tự hiện tên model mặc định mới vì đọc
 `readAgentModel`.
+
+## Hai điểm quyết định
+
+Hỏi-1 — thước của lượt đo lại bộ mẫu (chủ kho chọn nhánh khuyến nghị):
+
+```mermaid
+flowchart LR
+  D[Đo lại 50 câu trên Gemini] --> T{Chấm theo gì?}
+  T -->|Khuyến nghị — đã chọn| A[Tổng bốn chỉ số theo ngưỡng cũ<br/>bảng tầng × kiểu chữ chỉ để đọc]
+  T -->|Lối khác| B[Chặn từng ô tầng × kiểu chữ<br/>một câu dao động đủ đánh CHẾT]
+```
+
+Hỏi-2 — workspace đã lưu `zai/glm-5.2-fast` ở Cài đặt (chủ kho chọn nhánh khuyến nghị):
+
+```mermaid
+flowchart LR
+  W[Workspace có hàng Cài đặt lưu GLM] --> Q{Sau khi đổi mặc định?}
+  Q -->|Khuyến nghị — đã chọn| G[Giữ GLM<br/>muốn Gemini thì chọn «Mặc định»]
+  Q -->|Lối khác| C[Coi là chưa chọn<br/>ghi đè dữ liệu production — khó đảo]
+```
