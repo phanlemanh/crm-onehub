@@ -55,6 +55,7 @@ export type CrmCache = {
 	apiKeys(options?: Options): Promise<void>;
 	tracking(options?: Options): Promise<void>;
 	tinHieu(options?: Options): Promise<void>;
+	thongBao(options?: Options): Promise<void>;
 	everything(): Promise<void>;
 };
 
@@ -528,6 +529,12 @@ export function useCrmCache(): CrmCache {
 			run(
 				[trpc.tinHieu.cuaToi.queryKey(), trpc.tinHieu.tatCa.queryKey()],
 				[],
+				options,
+			),
+		thongBao: (options) =>
+			run(
+				[trpc.thongBao.chuong.queryKey()],
+				[trpc.thongBao.danhSach.pathKey()],
 				options,
 			),
 
