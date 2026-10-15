@@ -476,9 +476,14 @@ mock.module("@/lib/trpc/client", () => ({
 			hoiYDoPhu: thuTuc("hoiYDoPhu", () => DO_PHU),
 			viecCuaToi: thuTuc("viecCuaToi", () => ({ viec: [], lienQuanOkr: true })),
 			objective: thuTuc("objective", () => null),
+			// Đầu trang khu (DH1) hỏi quyền tạo của đơn vị đích — bài huy hiệu không
+			// đo nó, nên truy vấn treo và hàng hành động đứng ở khung xương.
+			danhSach: thuTuc("danhSach", () => new Promise(() => {})),
 			...Object.fromEntries(DOT_BIEN.map((t) => [t, thuTuc(t, () => null)])),
 		},
+		org: { tree: thuTuc("tree", () => null) },
 		workspace: {
+			get: thuTuc("workspace", () => ({ name: "OneHub" })),
 			members: thuTuc("members", () => ({
 				rows: QUAN_TRI_MAU,
 				total: QUAN_TRI_MAU.length,

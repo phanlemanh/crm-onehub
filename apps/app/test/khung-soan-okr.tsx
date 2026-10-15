@@ -716,10 +716,18 @@ export async function moKhung(
 		total: 0,
 		facetCounts: { phuTrach: [], loai: [], trangThai: [] },
 		canEdit,
+		canCreate: canEdit,
 	}));
 	const tham = new URLSearchParams(thamSo);
 	if (don !== "goc") tham.set("donOkr", don);
-	await mo(<TheoDonVi cauNoiOkr={cauNoi} />, `?${tham}`);
+	// Nút soạn ở đầu trang khu từ DH1 (dieu-huong-khu-muc-tieu) — dựng cả đầu trang lẫn thân.
+	await mo(
+		<>
+			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />
+			<TheoDonVi />
+		</>,
+		`?${tham}`,
+	);
 	await cho(
 		() => document.querySelector("[data-hang-nut]") !== null,
 		"khung don vi",
