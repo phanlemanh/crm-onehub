@@ -131,7 +131,7 @@ const vi = {
 		khongKr: "Bạn không phụ trách KR nào ở chu kỳ đang chạy.",
 		loiPhan: "Chưa tải được phần này.",
 		thuLai: "Thử lại",
-		cotKr: "KR",
+		cotKr: "Tên KR",
 		cotHienTai: "Hiện tại",
 		cotTienDo: "Tiến độ",
 		cotTinhTrang: "Tình trạng",

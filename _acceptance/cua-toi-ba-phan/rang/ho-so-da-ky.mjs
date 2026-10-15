@@ -268,6 +268,16 @@ if (lech.length > 0) {
 		goc.don();
 	}
 }
+/**
+ * Eval «gắn lượt»: lệnh chỉ khẳng định một tệp KHÔNG đổi so với nhánh chính
+ * (`git diff --quiet $(git merge-base HEAD origin/onehub) -- <tệp>`) — nó đo lượt của
+ * chính hồ sơ đó, không đo hành vi; trên nhánh chính luôn xanh, trên mọi nhánh sửa tệp
+ * ấy luôn đỏ. Ghi riêng, không tính — dòng sổ của lượt nêu rõ để người quyết ở Cổng 2.
+ */
+const ganLuot = (lenh) =>
+	/^git diff --quiet \$\(git merge-base HEAD origin\/onehub\) -- \S+/.test(
+		lenh,
+	);
 let doSan = 0;
 for (const v of dsViec) {
 	const ma = maCua.get(v.lenh);
@@ -275,8 +285,15 @@ for (const v of dsViec) {
 		so += 1;
 		const dung = ma === a.mong;
 		const san = !dung && maGoc.get(v.lenh) === ma;
-		if (san) doSan += 1;
+		const gan = !dung && !san && ganLuot(v.lenh);
+		if (san || gan) doSan += 1;
 		else if (!dung) sai += 1;
+		if (gan) {
+			console.log(
+				`GAN LUOT (chi so diff tep voi onehub, khong do hanh vi): ${a.slug}#${a.id}: ${ma} (mong ${a.mong})`,
+			);
+			continue;
+		}
 		console.log(
 			`${dung ? "HO-SO" : san ? "DO SAN (khong doc duoc o day, goc cung " + ma + "):" : "SAI AC-11:"} ${a.slug}#${a.id}: ${ma} (mong ${a.mong})`,
 		);
@@ -284,7 +301,7 @@ for (const v of dsViec) {
 }
 console.log(
 	sai === 0
-		? `DUNG AC-11: ${so - doSan}/${so - doSan} eval ho so da ky${doSan ? ` · ${doSan} do san tren goc` : ""}`
+		? `DUNG AC-11: ${so - doSan}/${so - doSan} eval ho so da ky${doSan ? ` · ${doSan} do san tren goc hoac gan luot` : ""}`
 		: `SAI AC-11: ${sai}/${so} eval lech ma ky vong`,
 );
 

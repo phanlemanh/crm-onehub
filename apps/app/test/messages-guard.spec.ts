@@ -52,7 +52,6 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 
 const KHONG_DAU = new Set([
 	"dong.soKr",
-	"baPhan.cotKr",
 	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
 	"tenMienNoiBo.goiY",
