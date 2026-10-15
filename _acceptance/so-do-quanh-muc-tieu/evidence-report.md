@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e18a944dd2d155e2407c0c84e46f8a63fa93f19b
-human_signoff:
+human_signoff: manh 2026-10-15
 ---
 
 # Evidence Report: so-do-quanh-muc-tieu

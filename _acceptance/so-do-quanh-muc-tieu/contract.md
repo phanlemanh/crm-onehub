@@ -5,7 +5,7 @@ slug: so-do-quanh-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-so-do-quanh-muc-tieu-design.md
@@ -102,3 +102,18 @@ phẩm: `schema.prisma` (`OkrAlignment`), `okr-muc-tieu.ts` (`CAP_MUC_TIEU`), `o
   `onehub`.
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/design.md`, `docs/reui.md`.
 - Hạng T2 (máy suy theo `t3_paths`, khớp hạng của hàng DH5).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-15:
+  - Ngoài-1: Phép kiểm E16 xác nhận sơ đồ không đọc lộ mục tiêu giới hạn còn có thể xanh mà chưa soi đúng chỗ đọc của sơ đồ; bảo đảm chống lộ dựa chính vào bài quyền (E3) và ma trận vai.
+  - Ngoài-2: Trong lúc trang Sơ đồ quanh mục tiêu tải, có thể hiện thêm một khung tiêu đề giả dưới tiêu đề thật và trình đọc màn hình gặp nhiều vùng nội dung chính.
+  - Ngoài-3: Khi dữ liệu sơ đồ về, hiệu ứng chuyển trang có thể chạy chồng một lần vì khung chờ là khung cấp trang.
+  - Ngoài-6: Trang Sơ đồ quanh mục tiêu có lề dư và hai vùng cuộn lồng nhau; dữ liệu và thao tác vẫn đúng.
+  - Ngoài-9: Phép giữ hồ sơ đã ký (E13, không chạy ở vòng này) cho qua một eval đã ký đỏ nếu bản nền cũng đỏ vì lý do khác.
+  - Ngoài-10: Phép giữ hồ sơ đã ký bỏ qua các hồ sơ chỉ trỏ tới tệp bài kiểm (như bộ kiểm chữ) mà không báo.
+  - Ngoài-11: Bộ phá thử có thể nhận nhầm một lần đỏ khác lý do là đúng, vì thông điệp ghim còn khớp được trong khung mã nguồn bun in lại.
+  - Ngoài-12: Bài kiểm nhãn «Công ty» đếm assert theo chính đầu ra nên con số «một assert mỗi thẻ» không tự chứng điều gì.
+  - Ngoài-13: Bài dòng góp lên công ty đo mục góp thẳng qua thuộc tính máy, chưa đo chữ người dùng thấy.
+  - Ngoài-14: Bài danh sách trên điện thoại ở ca không góp vào đâu chỉ kiểm nhóm vắng, chưa kiểm danh sách đã dựng.
+  - Ngoài-15: Bài góp vòng tròn chỉ kiểm không lặp thẻ, chưa có đối chứng rằng vòng thật sự được duyệt.
+  - Ngoài-16: Bài rê chuột ở trạng thái đầu (tâm là mục tiêu công ty) không có thẻ nào ngoài đường, nên vế «ngoài đường mờ» chỉ được đo sau khi rê.
+  - Ngoài-17: Bài chữ kiểm thuộc tính không-dịch trên phần tử tên, chưa kiểm tên và đơn vị nằm bên trong phần tử đó.
+  - Ngoài-18: Phép đo màn thật đọc dòng góp lên công ty qua thuộc tính máy, chưa đọc chữ hiển thị.
