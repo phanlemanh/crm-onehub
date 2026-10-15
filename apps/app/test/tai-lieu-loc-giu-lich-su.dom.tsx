@@ -29,7 +29,7 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		taiLieu: {
 			list: {
-				queryOptions: (vao: Record<string, unknown>) => ({
+				queryOptions: (vao: { page: number }) => ({
 					queryKey: ["taiLieu.list", vao],
 					queryFn: async () => {
 						canh.goi.list += 1;
@@ -68,7 +68,7 @@ mock.module("@/lib/trpc/client", () => ({
 				}),
 			},
 			proposals: {
-				queryOptions: (vao: Record<string, unknown>) => ({
+				queryOptions: (vao: { nhom: string; page: number }) => ({
 					queryKey: ["taiLieu.proposals", vao],
 					queryFn: async () => {
 						canh.goi.proposals += 1;
