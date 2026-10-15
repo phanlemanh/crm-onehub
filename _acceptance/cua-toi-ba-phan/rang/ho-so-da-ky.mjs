@@ -77,6 +77,17 @@ const sua = git(GOC, "diff", "--name-only", base, "--", ...THU_MUC)
 	.split("\n")
 	.filter((f) => f && existsSync(join(GOC, f)));
 const laKiem = (f) => /\.(dom\.tsx|spec\.ts|spec\.tsx)$/.test(f);
+/** Tệp bản mẫu lượt này sửa — để bắt bộ đo bản mẫu của hồ sơ khác đọc thẳng chúng. */
+const vatSua = git(
+	GOC,
+	"diff",
+	"--name-only",
+	base,
+	"--",
+	"apps/app/app/proto/_modules",
+)
+	.split("\n")
+	.filter(Boolean);
 const tap = new Set(sua.filter(laKiem).map((f) => basename(f)));
 const troGiup = sua
 	.filter((f) => f.startsWith("apps/app/test/") && !laKiem(f))
@@ -118,10 +129,27 @@ for (const slug of readdirSync(join(GOC, "_acceptance"))) {
 			continue;
 		const lenh = giaiRef(String(e.cmd ?? "").replace(/^["']|["']$/g, ""));
 		if (!lenh) continue;
-		const cham = [...tap].filter((t) => lenh.includes(t));
+		let cham = [...tap].filter((t) => lenh.includes(t));
+		// Lệnh gọi một bộ đo `_acceptance/<hồ sơ>/rang/*.mjs` không nhắc tên tệp kiểm trong
+		// chuỗi lệnh — đọc chính script: nhắc một tệp kiểm bị sửa hoặc một tệp vật bị sửa thì
+		// tính. Các lệnh này chạy TUẦN TỰ sau đợt song song (có bộ đo tiêm tại chỗ — DH1 r1).
+		let tuanTu = false;
+		if (cham.length === 0) {
+			const rang = /_acceptance\/[\w-]+\/rang\/[\w.-]+\.mjs/.exec(lenh)?.[0];
+			if (rang && existsSync(join(GOC, rang))) {
+				const chu = readFileSync(join(GOC, rang), "utf8");
+				// bộ đo tự chạy lại eval hồ sơ khác (đọc evals.yaml) bỏ — lượt này đã chạy chúng
+				if (chu.includes("evals.yaml")) continue;
+				cham = [
+					...[...tap].filter((t) => chu.includes(t)),
+					...vatSua.filter((f) => chu.includes(f)),
+				];
+				tuanTu = cham.length > 0;
+			}
+		}
 		if (cham.length === 0) continue;
 		const mong = kyVong.get(e.id) ?? 0;
-		const v = viec.get(lenh) ?? { lenh, cham, ai: [] };
+		const v = viec.get(lenh) ?? { lenh, cham, ai: [], tuanTu };
 		v.ai.push({ slug, id: e.id, mong });
 		viec.set(lenh, v);
 	}
@@ -164,16 +192,19 @@ const SONG_SONG = 4;
 let sai = 0;
 let so = 0;
 const dsViec = [...viec.values()];
+const songSong = dsViec.filter((v) => !v.tuanTu);
 const maCua = new Map();
 let ke = 0;
 await Promise.all(
 	Array.from({ length: SONG_SONG }, async () => {
-		while (ke < dsViec.length) {
-			const v = dsViec[ke++];
+		while (ke < songSong.length) {
+			const v = songSong[ke++];
 			maCua.set(v.lenh, await chayNen(v.lenh, GOC));
 		}
 	}),
 );
+for (const v of dsViec.filter((x) => x.tuanTu))
+	maCua.set(v.lenh, await chayNen(v.lenh, GOC));
 for (const v of dsViec) {
 	const ma = maCua.get(v.lenh);
 	for (const a of v.ai) {
