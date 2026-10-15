@@ -129,7 +129,7 @@ async function taoKhoa(cookie) {
 		body: JSON.stringify({ name: `do ${DAU}`, expiresInDays: 1, loai: "day-lo-trinh" }),
 	});
 	const than = await res.json().catch(() => null);
-	if (!res.ok || typeof than?.key !== "string")
+	if (!res.ok || !than?.key)
 		khongDo(`tao khoa Day lo trinh tra ${res.status}: ${JSON.stringify(than)}`);
 	tao.khoa = than.id ?? null;
 	return than.key;
