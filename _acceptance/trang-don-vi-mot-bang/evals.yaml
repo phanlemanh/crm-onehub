@@ -256,11 +256,15 @@ evals:
       - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-mo-kr-390.png
       - _acceptance/trang-don-vi-mot-bang/evidence/deals-390.png
       - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-hop-tuan-1440.png
+      - _acceptance/trang-don-vi-mot-bang/contract.md
+      - docs/superpowers/specs/2026-10-15-trang-don-vi-mot-bang-design.md
     question: |
       Đặt các ảnh cạnh nhau. Trang đơn vị (ảnh don-vi-*) có dùng cùng một khuôn bảng với Thoả thuận (ảnh
       deals-*) không: ô chọn ở chỗ ô tìm kiếm, một hàng công cụ, bảng, chân bảng? Ở ảnh don-vi-mo-kr, người
       chưa từng thấy trang có nhận ra KR là dòng con của mục tiêu nào mà không cần chữ hướng dẫn không? Ở ảnh
-      don-vi-hop-tuan, hàng công cụ có giống Danh sách không? Trả lời từng ý kèm vị trí trong ảnh.
+      don-vi-hop-tuan, ô chọn đơn vị và cách xem có đứng cùng chỗ như Danh sách không (theo AC-4/AC-12 trong contract.md và
+      bảng trạng thái ST-dvb-hop-tuan của thiết kế: ở cách xem không phải bảng, hàng công cụ CHỈ gồm ô chọn + cách xem — ô lọc
+      nhanh, «Lọc», «Sắp xếp», «Cột» là của bảng Danh sách)? Trả lời từng ý kèm vị trí trong ảnh.
     expected: |
       PASS khi cả ba ý có: khuôn bảng giống Thoả thuận ở cả 1440 và 390; dòng KR thụt dưới đúng mục tiêu, cùng
       cột; hàng công cụ Họp tuần giống Danh sách. Một ý không → FAIL kèm ảnh và vị trí.
@@ -298,15 +302,16 @@ evals:
       - "_acceptance/soan-okr-trong-khung/**"
       - "_acceptance/dieu-huong-khu-muc-tieu/**"
       - "_acceptance/no-sau-luot-5-okr/**"
+      - "_acceptance/khung-trang-cai-dat/**"
       - "_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs"
     expected: |
       rang/ghim-nam.mjs rut LUC CHAY tap ho so signed-off co tep trong rang/ khop dau cu (git grep tren cay
       tai merge-base voi onehub: data-nut-cay tren trang theo-don-vi, data-hang-nut, data-nhom-soan, thuMucTieu, data-loc-okr,
-      cay aria-label «Đơn vị») cong dieu-huong-khu-muc-tieu, va so voi tap 9 ho so khai trong AC-14 (lech -> ma 2 goi ten). Moi ho so: dong repin cuoi trong
+      cay aria-label «Đơn vị») cong dieu-huong-khu-muc-tieu, va HOP voi ho so co rang/ hoac evals.yaml doi trong commit rieng cua DH2, so voi tap 10 ho so khai trong AC-14 (lech -> ma 2 goi ten). Moi ho so: dong repin cuoi trong
       run-log.jsonl co suites_exit va evals_exit toan 0, va sha cua no chua commit dau tien cua luot doi
       theo-don-vi.tsx (git merge-base --is-ancestor) -> "GHIM <slug>: <sha> xanh"; diff rang/ cua ho so tu
       merge-base khong xoa dong expect/kiem nao ngoai dong chua dau cu (dem dong xoa khong khop dau cu = 0);
-      muc-tieu-va-kr/contract.md co dong Notes tro "trang-don-vi-mot-bang" AC-3. Dong cham "DUNG AC-14: 9/9".
+      muc-tieu-va-kr/contract.md co dong Notes tro "trang-don-vi-mot-bang" AC-3. Dong cham "DUNG AC-14: 10/10".
       CHIEU DO (DVB_PHA=ghim-cu: ban sao run-log mot ho so voi dong repin tren sha truoc trang moi) -> "SAI
       AC-14: <slug> ghim tren <sha> chua co trang moi", ma 1.
 
