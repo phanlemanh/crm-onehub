@@ -1,9 +1,10 @@
 import { mkdirSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { tre } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
+import { tre, trpc } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
 import { LENH } from "../../soan-okr-trong-khung/rang/kich-ban.mjs";
 import {
+	API,
 	bamNutChu,
 	CHON,
 	chuanBi,
@@ -14,16 +15,18 @@ import {
 	ghi,
 	guiTin,
 	KHUNG,
+	KY,
 	ket,
 	khongDo,
 	m,
 	MAN,
 	mo,
-	moCuocMoi,
 	moPhien,
 	moTrang,
 	mui,
+	PHONG,
 	saiThem,
+	sql,
 	the,
 	trang,
 } from "../../soan-okr-trong-khung/rang/man-chung.mjs";
@@ -36,6 +39,13 @@ const CHU = "Ưu tiên giữ khách";
 const RANG = dirname(fileURLToPath(import.meta.url));
 const EVIDENCE = join(RANG, "..", "evidence");
 const LIEN_KET = 'a[href$="/tai-lieu"]';
+const LY_DO_CAT = "Bàn đo K2f cần kho chưa có trang chiến lược đang dùng.";
+const DON_VI = {
+	cycleId: KY,
+	level: "phong-ban",
+	divisionId: null,
+	departmentId: PHONG,
+};
 
 const PHAN = {
 	man: ["khong-chan"],
@@ -172,7 +182,8 @@ async function choHetHop(p) {
 async function choDangSoan(p) {
 	return choThay(
 		p,
-		(khung, chon) => document.querySelectorAll(`:is(${khung}) ${chon}`).length > 0,
+		(khung, chon) =>
+			document.querySelectorAll(`:is(${khung}) ${chon}`).length > 0,
 		"Kara dang soan",
 		MAN.cho.manMs,
 		KHUNG,
@@ -181,7 +192,7 @@ async function choDangSoan(p) {
 }
 
 async function choDaRoi(p) {
-	return choThay(
+	const toi = await choThay(
 		p,
 		() =>
 			location.pathname.endsWith("/tai-lieu") &&
@@ -189,6 +200,18 @@ async function choDaRoi(p) {
 		"da toi Kho tai lieu",
 		DI_MS,
 	);
+	if (!toi) return "chon roi ma khong toi Kho tai lieu";
+	const tat = await choThay(
+		p,
+		(khung) =>
+			![...document.querySelectorAll(`:is(${khung}) [data-trang-soan]`)].some(
+				(o) => o.checkVisibility(),
+			),
+		"khung soan tat",
+		DI_MS,
+		KHUNG,
+	);
+	return tat ? null : "da toi Kho tai lieu nhung khung soan van hien";
 }
 
 function ketBuoc(nhan, loi) {
@@ -218,7 +241,8 @@ async function buocA(t, kho, cuocId) {
 	const nhan = `${kho} a`;
 	if (!(await guiTin(t, LENH.chamNop1, { choXong: false })))
 		await khongDo(`${nhan}: luot khong toi mo hinh`);
-	if (!(await choDangSoan(t.p))) await khongDo(`${nhan}: khong thay Kara dang soan`);
+	if (!(await choDangSoan(t.p)))
+		await khongDo(`${nhan}: khong thay Kara dang soan`);
 	const loi = await bamVaQuanSat(t, nhan, m.trang.hoiDong.tieuDe);
 	if (loi) return ketBuoc(nhan, loi);
 	await anh(t, `kcl-dang-soan-${kho}`);
@@ -232,12 +256,13 @@ async function buocA(t, kho, cuocId) {
 	await bamNutChu(t.p, `${CHON.hopHoi} button`, m.trang.hoiDong.nut);
 	const roi = await choDaRoi(t.p);
 	ghi(`   ${nhan}: sau khi roi ${JSON.stringify(await trangThai(t.p))}`);
-	ketBuoc(nhan, roi ? null : "chon roi ma khong toi Kho tai lieu");
+	ketBuoc(nhan, roi);
 }
 
 async function buocB(t, kho, cuocId) {
 	const nhan = `${kho} b`;
-	if (!(await moTrang(t, cuocId))) await khongDo(`${nhan}: khong mo lai duoc khung`);
+	if (!(await moTrang(t, cuocId)))
+		await khongDo(`${nhan}: khong mo lai duoc khung`);
 	if (!(await choYen(t.p))) await khongDo(`${nhan}: Kara khong ranh`);
 	const o = await t.p.waitForFunction(
 		(chon) =>
@@ -276,7 +301,9 @@ async function buocC(t, cuocId) {
 	const nhan = "1280 c";
 	if (!(await choYen(t.p))) await khongDo(`${nhan}: Kara khong ranh`);
 	await t.p.evaluate((chon) => {
-		const o = [...document.querySelectorAll(chon)].find((x) => x.checkVisibility());
+		const o = [...document.querySelectorAll(chon)].find((x) =>
+			x.checkVisibility(),
+		);
 		if (o) {
 			o.value = "";
 			o.dispatchEvent(new Event("input", { bubbles: true }));
@@ -284,7 +311,8 @@ async function buocC(t, cuocId) {
 	}, CHON.oSoan);
 	if (!(await guiTin(t, LENH.chamNop1, { choXong: false })))
 		await khongDo(`${nhan}: luot khong toi mo hinh`);
-	if (!(await choDangSoan(t.p))) await khongDo(`${nhan}: khong thay Kara dang soan`);
+	if (!(await choDangSoan(t.p)))
+		await khongDo(`${nhan}: khong thay Kara dang soan`);
 	const truoc = await trangThai(t.p);
 	await (await lienKet(t.p)).asElement().focus();
 	const dungCho = await t.p.evaluate(
@@ -312,23 +340,92 @@ async function buocC(t, cuocId) {
 	);
 }
 
+async function catTrangChienLuoc() {
+	const dong = await sql(
+		`SELECT slug FROM "taiLieuTrang" WHERE loai = 'chien-luoc' AND "banDangDungId" IS NOT NULL AND "archivedAt" IS NULL`,
+	);
+	const qt = trpc(API, the.qt);
+	for (const { slug } of dong) {
+		const { deXuatId } = await qt.lam("taiLieu.deXuatLuuTru", {
+			slug,
+			lyDo: LY_DO_CAT,
+		});
+		const ct = await qt.hoi("taiLieu.proposal", { id: deXuatId });
+		await qt.lam("taiLieu.approve", { id: deXuatId, diffHash: ct.diffHash });
+	}
+	const [{ con }] = await sql(
+		`SELECT count(*)::int AS con FROM "taiLieuTrang" WHERE loai = 'chien-luoc' AND "banDangDungId" IS NOT NULL AND "archivedAt" IS NULL`,
+	);
+	ghi(
+		`   cat trang chien luoc: ${dong.length} trang qua de xuat luu tru · con dang dung ${con}`,
+	);
+	if (con !== 0)
+		await khongDo(`con ${con} trang chien luoc dang dung sau khi cat`);
+}
+
+async function moCuocQuanTri() {
+	await sql(
+		`UPDATE "okrCuocSoan" SET "soLuot" = 0 WHERE "cycleId" = $1 AND "departmentId" = $2 AND "trangThai" <> 'dang'`,
+		[KY, PHONG],
+	);
+	const qt = trpc(API, the.qt);
+	const dau = await qt.lam("okr.soanMo", DON_VI);
+	if (dau.ok) return dau.cuoc;
+	if (!dau.cuocDang)
+		await khongDo(`okr.soanMo (quan tri) tu choi: ${dau.lyDo}`);
+	const kq = await qt.lam("okr.soanMo", {
+		...DON_VI,
+		boCuocDangId: dau.cuocDang.id,
+	});
+	if (!kq.ok)
+		await khongDo(`okr.soanMo (quan tri, bo cuoc cu) tu choi: ${kq.lyDo}`);
+	return kq.cuoc;
+}
+
+async function moHoacDung(t, nhan, cuocId) {
+	if (await mo(t, cuocId)) return;
+	const chu = await t.p.evaluate(
+		(khung) =>
+			[...document.querySelectorAll(khung)]
+				.find((k) => k.checkVisibility())
+				?.innerText?.slice(0, 400) ?? "khong co khung",
+		KHUNG,
+	);
+	ghi(
+		`   ${nhan}: ${JSON.stringify(await trangThai(t.p))} · khung «${chu.replace(/\s+/g, " ")}»`,
+	);
+	await khongDo(`${nhan}: khong mo duoc cuoc`);
+}
+
 async function phanMan() {
 	for (const kho of [1280, 375]) {
 		const t = await trang(MAN.kho[kho], "light", the.qt);
 		try {
 			const va = doDo === "khong-chan" ? await boChan(t.p) : null;
-			const cuoc = await moCuocMoi();
-			if (!(await mo(t, cuoc.id))) await khongDo(`${kho}: khong mo duoc cuoc`);
+			const cuoc = await moCuocQuanTri();
+			await moHoacDung(t, String(kho), cuoc.id);
+			const loiTai = t.loi.splice(0);
+			if (loiTai.length > 0)
+				ghi(
+					`   ${kho}: ${loiTai.length} loi console luc tai trang, truoc moi thao tac cua vong (khong tinh): ${loiTai.map((x) => x.split("\n")[0]).join(" | ")}`,
+				);
 			await buocA(t, kho, cuoc.id);
 			if (va) {
-				ghi(`   (chieu do khong-chan: tat chan lien ket trong ${va.so} cho cua ma da dung)`);
+				ghi(
+					`   (chieu do khong-chan: tat chan lien ket trong ${va.so} cho cua ma da dung)`,
+				);
 				if (va.so === 0)
-					await khongDo("chieu do khong-chan: khong tim thay loi goi chan trong ma da dung");
+					await khongDo(
+						"chieu do khong-chan: khong tim thay loi goi chan trong ma da dung",
+					);
 				return;
 			}
 			await buocB(t, kho, cuoc.id);
 			if (kho === 1280) await buocC(t, cuoc.id);
-			if (t.loi.length > 0) saiThem(`kcl ${kho}: console loi ${t.loi.join(" | ")}`);
+			if (t.loi.length > 0)
+				saiThem(
+					`kcl ${kho}: console loi sau khi mo khung ${t.loi.join(" | ")}`,
+				);
 		} finally {
 			await t.dong();
 		}
@@ -342,7 +439,10 @@ async function huyLuot(p, phien, cuocId) {
 				`/eve/agents/okr/eve/v1/session/${encodeURIComponent(phien)}/cancel`,
 				{
 					method: "POST",
-					headers: { "x-crm-cuoc-soan": cuocId, "content-type": "application/json" },
+					headers: {
+						"x-crm-cuoc-soan": cuocId,
+						"content-type": "application/json",
+					},
 					body: "{}",
 				},
 			);
@@ -357,16 +457,18 @@ async function huyLuot(p, phien, cuocId) {
 async function phanLuot() {
 	const t = await trang(MAN.kho[1280], "light", the.qt);
 	try {
-		const cuoc = await moCuocMoi();
-		if (!(await mo(t, cuoc.id))) await khongDo("luot: khong mo duoc cuoc");
+		const cuoc = await moCuocQuanTri();
+		await moHoacDung(t, "luot", cuoc.id);
 		const truoc = await docCuoc(cuoc.id);
 		if (!(await guiTin(t, LENH.chamNop1, { choXong: false })))
 			await khongDo("luot: luot khong toi mo hinh");
-		if (!(await choDangSoan(t.p))) await khongDo("luot: khong thay Kara dang soan");
+		if (!(await choDangSoan(t.p)))
+			await khongDo("luot: khong thay Kara dang soan");
 		const loi = await bamVaQuanSat(t, "luot", m.trang.hoiDong.tieuDe);
 		if (loi) await khongDo(`luot: ${loi}`);
 		await bamNutChu(t.p, `${CHON.hopHoi} button`, m.trang.hoiDong.nut);
-		if (!(await choDaRoi(t.p))) await khongDo("luot: chon roi ma khong toi Kho tai lieu");
+		const roi = await choDaRoi(t.p);
+		if (roi) await khongDo(`luot: ${roi}`);
 		if (doDo === "dung-luot")
 			await huyLuot(t.p, (await docCuoc(cuoc.id)).phien, cuoc.id);
 		const han = Date.now() + MAN.cho.luotMs;
@@ -389,6 +491,7 @@ async function phanLuot() {
 await moPhien(lenh);
 try {
 	await chuanBi(`kcl-${phan}`);
+	await catTrangChienLuoc();
 	ghi(`PHAN ${phan}${doDo ? ` · chieu do ${doDo}` : ""}`);
 	if (phan === "man") await phanMan();
 	else await phanLuot();

@@ -219,6 +219,9 @@ describe("kcl-roi", () => {
 			expect(`${nhan}: hop dong ${hop() === null}`).toBe(
 				`${nhan}: hop dong true`,
 			);
+			expect(`${nhan}: mot lan ghi dia chi ${JSON.stringify(urlDoi)}`).toBe(
+				`${nhan}: mot lan ghi dia chi []`,
+			);
 			expect(`${nhan}: khong dung luot ${daDung}`).toBe(
 				`${nhan}: khong dung luot 0`,
 			);
