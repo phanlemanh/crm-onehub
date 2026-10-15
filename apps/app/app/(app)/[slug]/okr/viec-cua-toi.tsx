@@ -248,10 +248,13 @@ export function ViecOkrCuaToi({
 	noi,
 	khiHien,
 	anKhiLoi,
+	anCapNhat = false,
 }: {
 	noi: NoiHienViec;
 	khiHien: KhiHienViec;
 	anKhiLoi: boolean;
+	/** Ở Của tôi, việc «Cập nhật tuần» đã là phần đầu trang nên không lặp lại ở đây. */
+	anCapNhat?: boolean;
 }) {
 	const m = okrMessages(useLocale()).viecCuaToi;
 	const trpc = useTRPC();
@@ -300,7 +303,10 @@ export function ViecOkrCuaToi({
 		);
 	}
 
-	const { viec, lienQuanOkr } = duLieu;
+	const { lienQuanOkr } = duLieu;
+	const viec = anCapNhat
+		? duLieu.viec.filter((v) => v.loai !== "okr-cap-nhat")
+		: duLieu.viec;
 	const hien =
 		khiHien === "luon" ||
 		(khiHien === "khi-lien-quan" ? lienQuanOkr : viec.length > 0);

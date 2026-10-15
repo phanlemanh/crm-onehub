@@ -195,8 +195,15 @@ type Json =
 	| null
 	| readonly Json[]
 	| { readonly [khoa: string]: Json | undefined };
-type DauVao = { readonly [khoa: string]: Json | undefined } | undefined;
-type KetGhi = { id: string; canhBao: string | null; canGuiDuyet?: boolean };
+export type DauVao = { readonly [khoa: string]: Json | undefined } | undefined;
+type KetGhi = {
+	id: string;
+	canhBao: string | null;
+	canGuiDuyet?: boolean;
+	sessionId?: string;
+	written?: number;
+	seconds?: number;
+};
 
 export const kho = {
 	mine: mineOutput.parse({ dangTheoDoi: [], objectives: [], daBo: [] }),
@@ -206,9 +213,18 @@ export const kho = {
 	traGhi: new Map<string, KetGhi>(),
 	daGhi: [] as { duong: string; dauVao: DauVao }[],
 	toast: [] as { loai: string; chu: string }[],
+	/** Ghi đè đầu ra một thủ tục đọc theo đầu vào (vắng → bảng mặc định bên dưới). */
+	doc: new Map<string, (vao: DauVao) => object | null>(),
+	/** Ghi đè kết quả một thủ tục ghi (vắng → `traGhi` / mặc định). */
+	ghi: new Map<string, (vao: DauVao) => KetGhi>(),
+	daDoc: [] as { duong: string; dauVao: DauVao }[],
+	lamMoi: 0,
 };
 
-function docThuTuc(duong: string): object | null {
+function docThuTuc(duong: string, vao?: DauVao): object | null {
+	kho.daDoc.push({ duong, dauVao: vao });
+	const de = kho.doc.get(duong);
+	if (de) return de(vao);
 	switch (duong) {
 		case "okr.cycles":
 			return KY_CO;
@@ -216,6 +232,8 @@ function docThuTuc(duong: string): object | null {
 			return QUYEN;
 		case "okr.viecCuaToi":
 			return VIEC_RONG;
+		case "okr.capNhatTuan":
+			return { items: [], weekStart: "2026-10-12", dueWeekday: 5 };
 		case "okr.mine":
 			return kho.mine;
 		case "okr.countByUnit":
@@ -273,7 +291,7 @@ function thuTuc(duong: string) {
 				? { queryKey: [duong, "skip"], queryFn: skipToken }
 				: {
 						queryKey: [duong, vao ?? null],
-						queryFn: async () => docThuTuc(duong),
+						queryFn: async () => docThuTuc(duong, vao),
 					},
 		mutationOptions: (chon?: ChonGhi) => ({
 			...chon,
@@ -282,6 +300,8 @@ function thuTuc(duong: string) {
 				kho.daGhi.push({ duong, dauVao: vao });
 				const loi = kho.loiGhi.get(duong);
 				if (loi !== undefined) throw new Error(loi);
+				const de = kho.ghi.get(duong);
+				if (de) return de(vao);
 				return kho.traGhi.get(duong) ?? { id: "ok", canhBao: null };
 			},
 		}),
@@ -305,7 +325,11 @@ mock.module("@/lib/trpc/client", () => ({
 	}),
 }));
 mock.module("@/lib/trpc/cache", () => ({
-	useCrmCache: () => ({ okr: async () => {} }),
+	useCrmCache: () => ({
+		okr: async () => {
+			kho.lamMoi += 1;
+		},
+	}),
 }));
 mock.module("next/navigation", () => ({
 	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
@@ -424,6 +448,10 @@ beforeEach(() => {
 	kho.traGhi = new Map();
 	kho.daGhi = [];
 	kho.toast = [];
+	kho.doc = new Map();
+	kho.ghi = new Map();
+	kho.daDoc = [];
+	kho.lamMoi = 0;
 	duongTrang = "/ws/okr";
 });
 

@@ -9,6 +9,7 @@ import {
 } from "@crm/ui/components/collapsible";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import type { ComponentProps } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { BangMucTieu } from "./bang-muc-tieu";
 import type { MucTieu } from "./kieu";
@@ -18,6 +19,7 @@ const KHONG_MO: ReadonlySet<string> = new Set();
 const DAU_NHOM = {
 	"da-bo": { "data-nhom-da-bo": "" },
 	"dang-theo-doi": { "data-nhom-dang-theo-doi": "" },
+	"tham-gia": { "data-nhom": "tham-gia" },
 } as const;
 
 export function NhomMucTieuGap({
@@ -26,12 +28,17 @@ export function NhomMucTieuGap({
 	ds,
 	hienDonVi,
 	danhDauCuaToi,
+	diemCam,
+	moNhuBangChinh = false,
 }: {
 	nhan: string;
 	ma: keyof typeof DAU_NHOM;
 	ds: MucTieu[];
 	hienDonVi: boolean;
 	danhDauCuaToi: boolean;
+	diemCam?: ComponentProps<typeof BangMucTieu>["diemCam"];
+	/** Mở KR như bảng chính (thu/mở theo đường dẫn) thay vì gập hết. */
+	moNhuBangChinh?: boolean;
 }) {
 	if (ds.length === 0) return null;
 	return (
@@ -49,7 +56,8 @@ export function NhomMucTieuGap({
 			<CollapsibleContent className="pt-3">
 				<BangMucTieu
 					danhDauCuaToi={danhDauCuaToi}
-					dangMo={KHONG_MO}
+					dangMo={moNhuBangChinh ? undefined : KHONG_MO}
+					diemCam={diemCam}
 					ds={ds}
 					hienDonVi={hienDonVi}
 				/>
