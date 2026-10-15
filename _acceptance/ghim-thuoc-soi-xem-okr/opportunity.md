@@ -16,6 +16,8 @@ prototype:
 
 Chủ kho gõ ở phiên giám sát đợt r2 lúc 2026-10-15T21:30:04Z: «Cổng Đáng ghim-thuoc-soi-xem-okr: build»; giám sát chuyển hàng cho dãy P0 (nhật ký `LUAT.md` của đợt, 21:30:26Z).
 
+Trước đó, ở phiên Phân loại (giám sát chuyển lời 15/10), chủ kho nói nguyên văn: «Bỏ hàng T3 sua-quyen-xem-okr-sot. Mở hàng ghim-thuoc-soi-xem-okr gồm (a) thêm 7 dòng MIEN_XEM và ghim lại, cộng (b) chạy ghd_soi_xem ở CI cho PR chạm mã OKR. Báo Điều phối r2 xếp hàng.»
+
 - Thước E23 của hồ sơ `gioi-han-duyet-cay-okr` (`bun _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem`) đỏ trên onehub với 8 lỗi. Phân loại từng lỗi (phiên chẩn 15/10, `onehub 8f819cf6a`): 7 lời đọc mới đều nằm sau cổng xem — **lộ thật 0, chưa rõ 0** — và 1 dòng miễn thừa vì `removeAlignment` đã dời lời đọc vào hàm chung `congSuaCanChinh`. Bốn PR gốc: #290, #300, #342, #395 (07–14/10).
 - Nguyên nhân: E23 chỉ chạy khi ghim lại hồ sơ, không chạy ở CI theo PR. Luật chữ «ai gộp sau chạy lại `soi-ma --ca xem`» ở Notes của hợp đồng đã để lọt bốn PR liên tiếp.
 - Người gặp: người viết mã OKR (thước đỏ sẵn nên lời đọc lộ thật mới sẽ lẫn vào tám dòng cũ), và người dùng có mục tiêu giới hạn nếu một lời đọc lộ thật lọt qua lúc thước đã đỏ sẵn.
@@ -25,4 +27,4 @@ Chủ kho gõ ở phiên giám sát đợt r2 lúc 2026-10-15T21:30:04Z: «Cổn
 - Câu hỏi phép đo trả lời: sau khi giao, một PR thêm lời đọc bảng OKR không có điều kiện xem và không có dòng miễn có còn gộp được không.
 - SỐNG: `soi-ma --ca xem` xanh trên onehub ngay sau gộp; CI của PR đỏ khi thước đỏ; trong 14 ngày sau gộp, 0 lần thước đỏ trên onehub mà CI của PR gốc xanh.
 - CHẾT: có một PR gộp vào onehub làm thước đỏ mà CI của PR đó không đỏ.
-- Timebox: nửa ngày công; đọc số 14 ngày sau gộp.
+- Timebox: nửa ngày công; gộp trước 18/10 (Notes của hợp đồng `gioi-han-duyet-cay-okr` đóng băng từ 19/10); đọc số 14 ngày sau gộp.
