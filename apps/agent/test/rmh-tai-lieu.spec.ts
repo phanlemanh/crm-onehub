@@ -18,7 +18,7 @@ function batFetch() {
 		daGui.push({
 			url: String(url),
 			headers: Object.fromEntries(new Headers(init?.headers).entries()),
-			than: typeof init?.body === "string" ? init.body : "",
+			than: init?.body ? String(init.body) : "",
 		});
 		return new Response(
 			JSON.stringify({ error: { message: "chan trong bai" } }),
@@ -85,9 +85,13 @@ const DUONG: readonly Duong[] = [
 	{ ten: "tro_ly_kho", agent: troLyKho },
 ];
 
+type LoiGoi = { prompt: (typeof LOI_NHAN_GOC)[] };
+type SuKienBuoc = { type: "step.started" };
+type NguCanhBuoc = Record<string, never>;
+
 type ModelLuot = {
 	modelId: string;
-	doGenerate: (vao: unknown) => Promise<unknown>;
+	doGenerate: (vao: LoiGoi) => Promise<unknown>;
 };
 
 const LOI_NHAN_GOC = { role: "user", content: [{ type: "text", text: "thu" }] };
@@ -109,7 +113,7 @@ async function guiQua(model: ModelLuot) {
 
 async function modelCuaSubagent(d: Duong): Promise<ModelLuot> {
 	const dong = d.agent.model as unknown as {
-		events: Record<string, (e: unknown, ctx: unknown) => unknown>;
+		events: Record<string, (e: SuKienBuoc, ctx: NguCanhBuoc) => unknown>;
 	};
 	const chon = (await dong.events["step.started"]?.(
 		{ type: "step.started" },
