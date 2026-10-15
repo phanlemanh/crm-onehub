@@ -193,7 +193,7 @@ evals:
       Ten ca "ctbp-bon-the". vi va en: [role=tab] hoac lien ket thanh the co dung 4 phan tu, nhan theo thu tu ===
       [m.tab["cua-toi"], m.tab["theo-don-vi"], m.tab["toan-canh"], m.tab["hoi-y"]] va bang chuoi ky vong viet
       truoc (vi: Của tôi, Theo đơn vị, Toàn cảnh, Hỏi ý; en: Mine, By unit, Overview, Call for ideas); TAB.length ===
-      4; okrMessages(locale) khong con khoa "cap-nhat-tuan" trong tab, tieuDe, moTa (khoa vet giu nguyen); moTa
+      4; okrMessages(locale) khong con khoa "cap-nhat-tuan" trong tab, moTa va tieuDeTrinhDuyet (okr/tieu-de-khu.ts) khong co ten the «Cập nhật tuần» (khoa vet giu nguyen); moTa
       ["cua-toi"] vi === «Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách.»; moi lien ket the mang
       kyOkr va donOkr hien co.
       DOI CHUNG DUONG: vi xanh.
@@ -250,7 +250,9 @@ evals:
       so signed-off/machine-cleared co cmd (giai qua config) chay mot trong cac tep do, chay tung eval do va so ma
       thoat voi expected_exit (vang = 0). In mot dong moi eval "<ho so>#<E>: <ma> (mong <ma>)". Dong ket luan "DUNG
       AC-11: <k>/<k> eval ho so da ky" ma 0; co lech -> "SAI AC-11: <ho so>#<E>" ma 1; danh sach rong ma luot co sua
-      tep kiem -> ma 2 (phep do mu).
+      tep kiem -> ma 2 (phep do mu). Danh sach eval bat buoc co mat (rut luc chay, khong viet tay ten): moi eval cua
+      ho so dieu-huong-khu-muc-tieu chay test/okr-dau-trang-khu.dom.tsx hoac rang/proto-khu.mjs (ban mau DH1 bo the
+      «Cập nhật tuần» cung luot) — ho so do chua ky thi chay van chay va in "(chua ky)".
       DOI CHUNG DUONG / CHIEU DO: script tu chay tren ban sao co mot assertion cu (5 the) dat lai trong
       okr-thanh-tab.dom.tsx -> phai in "SAI AC-11" truoc khi chay tren cay that.
 
