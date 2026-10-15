@@ -431,11 +431,37 @@ try {
 			await d.chup(tC, `don-vi-chon-${kho}.png`);
 			await tC.close();
 		}
-		const tH = await d.moTrang(QT, 1440, duongDon(DON_DS, "&xemOkr=hop-tuan"));
-		await choDung(tH);
-		await choMs(500);
-		await d.chup(tH, "don-vi-hop-tuan-1440.png");
-		await tH.close();
+		// Ảnh Họp tuần cho E14 chụp ở pha GỐC của chu kỳ (không pha chấm, không
+		// biểu ngữ cam); E3 ghi Họp tuần pha chấm dưới tên khác.
+		const phaE2 = (
+			await d.db.okrCycle.findUnique({
+				where: { id: KY },
+				select: { phase: true },
+			})
+		)?.phase;
+		if (phaE2 === "cham-diem" || phaE2 === "da-dong") {
+			console.log(
+				`KHONG DO DUOC: chu ky ${KY} dang o pha ${phaE2} — anh Hop tuan cua E14 can pha thuong`,
+			);
+			process.exit(2);
+		}
+		for (const kho of [1440, 390]) {
+			const tH = await d.moTrang(QT, kho, duongDon(DON_DS, "&xemOkr=hop-tuan"));
+			await choDung(tH);
+			await choMs(500);
+			// Mở nhóm «Còn lại n KR» (nếu có) để ảnh có dòng dữ liệu, không chỉ trạng thái trống.
+			const moConLai = await tH.evaluate(() => {
+				const n = [...document.querySelectorAll("main button")].find((b) =>
+					/^Còn lại \d+ KR/.test((b.textContent ?? "").trim()),
+				);
+				n?.click();
+				return Boolean(n);
+			});
+			if (moConLai) await choMs(500);
+			await d.chup(tH, `don-vi-hop-tuan-${kho}.png`);
+			await tH.close();
+		}
+		console.log(`  anh Hop tuan chup o pha ${phaE2}`);
 
 		const can = [
 			"don-vi-danh-sach-1440.png",
@@ -447,6 +473,7 @@ try {
 			"deals-1440.png",
 			"deals-390.png",
 			"don-vi-hop-tuan-1440.png",
+			"don-vi-hop-tuan-390.png",
 		];
 		const thieu = can.filter((f) => !existsSync(join(BANG_CHUNG, f)));
 		if (thieu.length > 0) {
@@ -478,6 +505,8 @@ try {
 				`-- kho do: pha chu ky ${KY} ${phaCu} -> cham-diem (se tra lai)`,
 			);
 		}
+		// Họp tuần pha chấm có biểu ngữ cam — không đè ảnh pha thường của E2 (E14).
+		const tenAnhE3 = (xem) => (xem === "hop-tuan" ? "hop-tuan-cham" : xem);
 		let dat = 0;
 		for (const kho of [1440, 390]) {
 			let goc = null;
@@ -510,13 +539,14 @@ try {
 					dung,
 					`${dung ? "" : "AC-4: "}VI TRI ${xem} ${kho}: o chon (${v.o?.top},${v.o?.left}) · cach xem (${v.x?.top},${v.x?.left}) · nut than ${nut} · lech ${lo === Number.POSITIVE_INFINITY ? "?" : lo}/${lx === Number.POSITIVE_INFINITY ? "?" : lx}px · dang xem «${v.dangXem}» · don «${v.ten}»`,
 				);
-				if (xem !== "danh-sach") await d.chup(t, `don-vi-${xem}-${kho}.png`);
+				if (xem !== "danh-sach")
+					await d.chup(t, `don-vi-${tenAnhE3(xem)}-${kho}.png`);
 				await t.close();
 			}
 		}
 		await traPha();
 		const thieu = ["hop-tuan", "cham", "cay"]
-			.flatMap((x) => [1440, 390].map((k) => `don-vi-${x}-${k}.png`))
+			.flatMap((x) => [1440, 390].map((k) => `don-vi-${tenAnhE3(x)}-${k}.png`))
 			.filter((f) => !existsSync(join(BANG_CHUNG, f)));
 		if (thieu.length > 0) {
 			console.log(`KHONG DO DUOC: thieu anh ${thieu.join(", ")}`);
@@ -527,20 +557,27 @@ try {
 
 	if (chay("E4")) {
 		console.log("== E4 (AC-8): 390 mang cham — khung dang tai khong nhay");
-		const duong = duongDon(DON_DS);
-		const t = await d.moTrang(QT, 390, duong);
-		await choBang(t);
-		await t.evaluateOnNewDocument(() => {
+		/* Bộ lấy mẫu trong trang, mỗi 50ms. `idDich` vắng: «có bảng» = có dòng mục
+		   tiêu bất kỳ; có: chỉ dòng của các id đó (điều hướng mềm sang đơn vị đích). */
+		const lapMau = (idDich) => {
 			window.__mau = [];
+			const dich = idDich ? new Set(idDich) : null;
 			const hien = (e) =>
 				e.getClientRects().length > 0 &&
 				e.closest("[hidden]") === null &&
 				getComputedStyle(e).visibility !== "hidden";
 			const tat = (s) => [...document.querySelectorAll(s)].filter(hien);
+			const doc = (s, canh) => {
+				const n = tat(s)[0];
+				return n ? Math.round(n.getBoundingClientRect()[canh]) : null;
+			};
 			const lay = () => {
 				const oThat = tat("[data-chon-don-vi]");
 				const oKhung = tat("[data-hang-cong-cu-don-vi-khung]");
 				const dau = oThat[0] ?? oKhung[0]?.firstElementChild ?? null;
+				const hang = tat("[data-hang-muc-tieu]").filter(
+					(e) => !dich || dich.has(e.getAttribute("data-hang-muc-tieu")),
+				);
 				window.__mau.push({
 					luc: Math.round(performance.now()),
 					cay: tat("[data-nut-cay]").length + tat("[role=tree]").length,
@@ -550,17 +587,11 @@ try {
 					quay: tat(
 						"[data-slot=page-shell-content] [data-slot=spinner], [data-slot=page-shell-content] .animate-spin",
 					).length,
-					hang: tat("[data-hang-muc-tieu]").length > 0,
-					nd: (() => {
-						const n = tat("[data-slot=page-shell-content]")[0];
-						return n ? Math.round(n.getBoundingClientRect().top) : null;
-					})(),
-					tl: (() => {
-						const n = tat("[role=tablist]")[0];
-						return n ? Math.round(n.getBoundingClientRect().bottom) : null;
-					})(),
+					hang: hang.length > 0,
+					nd: doc("[data-slot=page-shell-content]", "top"),
+					tl: doc("[role=tablist]", "bottom"),
 					loai: oThat[0] ? "that" : oKhung[0] ? "khung" : "-",
-					dau: ["page-shell-heading", "page-shell-actions", "page-shell-header"]
+					dau: ["page-shell-actions", "page-shell-header"]
 						.map((k) => {
 							const n = tat(`[data-slot=${k}]`)[0];
 							if (!n) return `${k} -`;
@@ -575,7 +606,91 @@ try {
 				lay();
 				if (window.__mau.at(-1)?.hang) clearInterval(id);
 			}, 50);
-		});
+		};
+		const trangThaiMau = (t) =>
+			t
+				.evaluate(() => {
+					const m = window.__mau ?? [];
+					const cuoi = m.at(-1);
+					return {
+						noiDung: Boolean(cuoi && cuoi.nd !== null),
+						xuong: Boolean(cuoi && cuoi.xuong > 0 && !cuoi.hang),
+						hang: m.some((x) => x.hang),
+					};
+				})
+				.catch(() => ({ noiDung: false, xuong: false, hang: false }));
+		const dinhDaDung = (t) =>
+			t.evaluate(() => {
+				const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(
+					(e) => e.offsetParent !== null,
+				);
+				return o ? Math.round(o.getBoundingClientRect().top) : null;
+			});
+		/* Chặn đúng yêu cầu tRPC okr.danhSach của trình duyệt cho tới khi thả. */
+		const datChan = async (t) => {
+			await t.setRequestInterception(true);
+			const c = { tha: false, giu: [], so: 0 };
+			t.on("request", (r) => {
+				if (r.isInterceptResolutionHandled()) return;
+				if (!c.tha && /\/api\/trpc\/[^?]*okr\.danhSach/.test(r.url())) {
+					c.so += 1;
+					c.giu.push(r);
+					return;
+				}
+				r.continue().catch(() => null);
+			});
+			c.thaRa = () => {
+				c.tha = true;
+				for (const r of c.giu.splice(0)) r.continue().catch(() => null);
+			};
+			return c;
+		};
+		/* Chấm một chuỗi mẫu; `canXuong` false = ca không có pha tải phía trình duyệt. */
+		const cham = (mau, dinhCuoi, nhan, canXuong) => {
+			const iHang = mau.findIndex((x) => x.hang);
+			const tai = mau.slice(0, iHang + 1);
+			const dangTai = mau.slice(0, iHang).filter((x) => x.xuong > 0);
+			const c = Math.max(0, ...tai.map((x) => x.cay));
+			const o = Math.max(0, ...tai.map((x) => x.o));
+			const v = Math.max(0, ...tai.map((x) => x.quay));
+			const dinh = tai.filter((x) => x.dinh !== null).map((x) => x.dinh);
+			const lech =
+				dinh.length > 0
+					? Math.max(...dinh.map((x) => Math.abs(x - dinhCuoi)))
+					: null;
+			let truocDo = "";
+			for (const x of tai) {
+				const k = `${x.loai} dinh ${x.dinh} · noi dung ${x.nd} · day the ${x.tl} · xuong ${x.xuong > 0 ? "co" : "khong"} · bang ${x.hang ? "co" : "khong"} · ${x.dau}`;
+				if (k !== truocDo) console.log(`  ${x.luc}ms: ${k}`);
+				truocDo = k;
+			}
+			dong(
+				true,
+				`${nhan}: ${tai.length} mau · cay toi da ${c} · o chon toi da ${o} · dinh o chon lech ${lech ?? "?"}px · vong quay toan trang ${v} · khung xuong ${dangTai.length} mau`,
+			);
+			const ten = nhan === "MAU 390" ? "" : "(mem) ";
+			if (c > 0) dong(false, `AC-8: ${ten}cay toi da ${c} dong luc dang tai`);
+			if (o > 1) dong(false, `AC-8: ${ten}${o} o chon cung luc luc dang tai`);
+			if (lech === null || lech > 1)
+				dong(
+					false,
+					`AC-8: ${ten}dinh o chon lech ${lech ?? "?"}px giua dang tai va da dung`,
+				);
+			if (v > 0)
+				dong(false, `AC-8: ${ten}vong quay toan trang ${v} luc dang tai`);
+			if (canXuong && dangTai.length === 0)
+				dong(
+					false,
+					`AC-8: ${ten}khong co [data-slot=skeleton] trong mau dang tai`,
+				);
+			return { c, o, v, lech, xuong: dangTai.length };
+		};
+
+		/* (1) Tải cứng với độ trễ 800ms. */
+		const duong = duongDon(DON_DS);
+		const t = await d.moTrang(QT, 390, duong);
+		await choBang(t);
+		await t.evaluateOnNewDocument(lapMau, null);
 		const cdp = await t.createCDPSession();
 		await cdp.send("Network.enable");
 		await cdp.send("Network.emulateNetworkConditions", {
@@ -584,52 +699,34 @@ try {
 			downloadThroughput: -1,
 			uploadThroughput: -1,
 		});
-		await t.setRequestInterception(true);
-		let tha = false;
-		const giu = [];
-		let soChan = 0;
-		t.on("request", (r) => {
-			if (r.isInterceptResolutionHandled()) return;
-			if (!tha && r.url().includes("okr.danhSach")) {
-				soChan += 1;
-				giu.push(r);
-				return;
-			}
-			r.continue().catch(() => null);
-		});
-		const thaRa = () => {
-			tha = true;
-			for (const r of giu.splice(0)) r.continue().catch(() => null);
-		};
+		const chanCung = await datChan(t);
 		const di = t
 			.goto(`${d.APP}/${d.slug()}${duong}`, {
 				waitUntil: "load",
 				timeout: 180_000,
 			})
 			.catch((e) => e);
-		let daChup = false;
+		let anhCung = null;
 		const han = Date.now() + 120_000;
 		while (Date.now() < han) {
-			const tt = await t
-				.evaluate(() => {
-					const m = window.__mau ?? [];
-					const cuoi = m.at(-1);
-					return {
-						xuong: Boolean(cuoi && cuoi.xuong > 0 && !cuoi.hang),
-						hang: m.some((x) => x.hang),
-					};
-				})
-				.catch(() => ({ xuong: false, hang: false }));
-			if (tt.xuong && !daChup) {
+			const tt = await trangThaiMau(t);
+			const chupGi =
+				tt.xuong && anhCung !== "khung xuong"
+					? "khung xuong"
+					: tt.noiDung && anhCung === null
+						? tt.hang
+							? "khung dau tien (da co bang)"
+							: "khung dau tien"
+						: null;
+			if (chupGi) {
 				await t.screenshot({ path: join(BANG_CHUNG, "dang-tai-390.png") });
-				daChup = true;
-				console.log("  anh dang-tai-390.png (luc dang tai)");
-				thaRa();
+				anhCung = chupGi;
+				if (tt.xuong) chanCung.thaRa();
 			}
 			if (tt.hang) break;
 			await choMs(25);
 		}
-		thaRa();
+		chanCung.thaRa();
 		const ketDi = await di;
 		if (ketDi instanceof Error) throw ketDi;
 		await t
@@ -637,12 +734,7 @@ try {
 			.catch(() => null);
 		await choMs(1500);
 		const mau = await t.evaluate(() => window.__mau ?? []);
-		const dinhCuoi = await t.evaluate(() => {
-			const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(
-				(e) => e.offsetParent !== null,
-			);
-			return o ? Math.round(o.getBoundingClientRect().top) : null;
-		});
+		const dinhCuoi = await dinhDaDung(t);
 		await cdp
 			.send("Network.emulateNetworkConditions", {
 				offline: false,
@@ -651,6 +743,7 @@ try {
 				uploadThroughput: -1,
 			})
 			.catch(() => null);
+		await t.close();
 		const iHang = mau.findIndex((x) => x.hang);
 		if (iHang < 0 || dinhCuoi === null) {
 			console.log(
@@ -658,55 +751,105 @@ try {
 			);
 			process.exit(2);
 		}
-		const tai = mau.slice(0, iHang + 1);
-		const dangTai = mau.slice(0, iHang).filter((x) => x.xuong > 0);
-		const c = Math.max(...tai.map((x) => x.cay));
-		const o = Math.max(...tai.map((x) => x.o));
-		const v = Math.max(...tai.map((x) => x.quay));
-		const dinh = tai.filter((x) => x.dinh !== null).map((x) => x.dinh);
-		const lech =
-			dinh.length > 0
-				? Math.max(...dinh.map((x) => Math.abs(x - dinhCuoi)))
-				: null;
-		const coXuong = dangTai.length > 0;
-		const tu = tai.find((x) => x.dinh !== null || x.xuong > 0)?.luc ?? 0;
-		console.log(
-			`  ${soChan} yeu cau okr.danhSach tu trinh duyet bi giu · khung dang tai ${dangTai.length} mau (${dangTai.length > 0 ? `${dangTai.at(-1).luc - tu}ms` : "0ms"}) · dinh o chon da dung ${dinhCuoi}`,
-		);
-		let truocDo = "";
-		for (const x of tai) {
-			const k = `${x.loai} dinh ${x.dinh} · noi dung ${x.nd} · day the ${x.tl} · xuong ${x.xuong > 0 ? "co" : "khong"} · ${x.dau}`;
-			if (k !== truocDo) console.log(`  ${x.luc}ms: ${k}`);
-			truocDo = k;
+		if (!anhCung || !existsSync(join(BANG_CHUNG, "dang-tai-390.png"))) {
+			console.log("KHONG DO DUOC: khong chup duoc anh dang-tai-390.png");
+			process.exit(2);
 		}
-		dong(
-			true,
-			`MAU 390: ${tai.length} mau · cay toi da ${c} · o chon toi da ${o} · dinh o chon lech ${lech ?? "?"}px · vong quay toan trang ${v}`,
+		const dauTien = mau.find((x) => x.nd !== null);
+		const khongPhaTai = Boolean(dauTien?.hang);
+		console.log(
+			`  tai cung: ${chanCung.so} yeu cau okr.danhSach tu trinh duyet bi giu · dinh o chon da dung ${dinhCuoi} · anh dang-tai-390.png = ${anhCung}`,
 		);
-		if (c > 0) dong(false, `AC-8: cay toi da ${c} dong luc dang tai`);
-		if (o > 1) dong(false, `AC-8: ${o} o chon cung luc luc dang tai`);
-		if (lech === null || lech > 1)
-			dong(
-				false,
-				`AC-8: dinh o chon lech ${lech ?? "?"}px giua dang tai va da dung`,
-			);
-		if (v > 0) dong(false, `AC-8: vong quay toan trang ${v} luc dang tai`);
-		if (!coXuong)
-			dong(false, "AC-8: khong co [data-slot=skeleton] trong mau dang tai");
-		if (!daChup || !existsSync(join(BANG_CHUNG, "dang-tai-390.png"))) {
+		if (khongPhaTai)
 			console.log(
-				"KHONG DO DUOC: khong chup duoc anh dang-tai-390.png luc dang tai",
+				"KHONG PHA TAI: khung dau tien da co bang (trang dung o may chu) — dieu kien khung xuong khong ap dung cho tai cung",
+			);
+		const cung = cham(mau, dinhCuoi, "MAU 390", !khongPhaTai);
+
+		/* (2) Điều hướng MỀM: từ đơn vị A chọn đơn vị B trong ô chọn, okr.danhSach
+		   của trình duyệt bị giữ tới khi đã thấy (hoặc hết chờ) khung đang tải. */
+		const P_MEM = MAU.phongBan.find((p) => p.ma === "kd-bac");
+		const idMem = idMau("pb", P_MEM.ma);
+		const idDich = (
+			await d.db.okrObjective.findMany({
+				where: {
+					cycleId: KY,
+					level: "phong-ban",
+					departmentId: idMem,
+					status: { not: "da-bo" },
+				},
+				select: { id: true },
+			})
+		).map((x) => x.id);
+		if (idDich.length === 0) {
+			console.log(`KHONG DO DUOC: ${P_MEM.ten} khong co muc tieu trong kho do`);
+			process.exit(2);
+		}
+		const t2 = await d.moTrang(QT, 390, duong);
+		await choBang(t2);
+		const chanMem = await datChan(t2);
+		await moOChon(t2, "mien bac");
+		await t2.evaluate(lapMau, idDich);
+		const chonB = await t2.evaluateHandle(
+			(ten) =>
+				[...document.querySelectorAll("[cmdk-item]")].find(
+					(e) =>
+						(e.querySelector(":scope > span")?.textContent ?? "").trim() ===
+						ten,
+				) ?? null,
+			P_MEM.ten,
+		);
+		if (!(await chonB.evaluate((e) => e !== null))) {
+			console.log(
+				`KHONG DO DUOC: o chon khong co lua chon «${P_MEM.ten}» sau khi go «mien bac»`,
 			);
 			process.exit(2);
 		}
+		await chonB.click();
+		let anhMem = false;
+		const hanMem = Date.now() + 15_000;
+		while (Date.now() < hanMem) {
+			const tt = await trangThaiMau(t2);
+			if (tt.xuong && !anhMem) {
+				await t2.screenshot({
+					path: join(BANG_CHUNG, "dang-tai-mem-390.png"),
+				});
+				anhMem = true;
+				break;
+			}
+			if (tt.hang) break;
+			await choMs(25);
+		}
+		const soMem = chanMem.so;
+		chanMem.thaRa();
+		await d
+			.doi(t2, () => (window.__mau ?? []).some((x) => x.hang))
+			.catch(() => null);
+		await t2
+			.waitForNetworkIdle({ idleTime: 500, timeout: 30_000 })
+			.catch(() => null);
+		await choMs(800);
+		const mauMem = await t2.evaluate(() => window.__mau ?? []);
+		const dinhMem = await dinhDaDung(t2);
+		const donMem = new URL(t2.url()).searchParams.get("donOkr");
+		await t2.close();
+		if (soMem === 0 || !mauMem.some((x) => x.hang) || dinhMem === null) {
+			console.log(
+				`KHONG DO DUOC: dieu huong mem — ${soMem === 0 ? "trinh duyet khong goi okr.danhSach sau khi chon" : !mauMem.some((x) => x.hang) ? "khong thay dong cua don vi dich" : "khong thay o chon sau khi dung"} (donOkr=${donMem})`,
+			);
+			process.exit(2);
+		}
+		console.log(
+			`  mem: ${soMem} yeu cau okr.danhSach bi giu · donOkr=${donMem} · dinh o chon da dung ${dinhMem} · anh dang-tai-mem-390.png ${anhMem ? "luc dang tai" : "KHONG chup duoc"}`,
+		);
+		const mem = cham(mauMem, dinhMem, "MAU MEM 390", true);
 		const sl = sai.filter((s) => s.startsWith("AC-8")).length;
 		dong(
 			sl === 0,
 			sl === 0
-				? `DUNG AC-8: 0 cay · ${o} o chon · lech ${lech}px · 0 vong quay · khung xuong ${dangTai.length} mau`
+				? `DUNG AC-8: tai cung ${khongPhaTai ? "khong pha tai" : `khung xuong ${cung.xuong} mau`} · 0 cay · ${Math.max(cung.o, mem.o)} o chon · lech ${cung.lech}/${mem.lech}px · 0 vong quay · mem khung xuong ${mem.xuong} mau`
 				: sai.find((s) => s.startsWith("AC-8")),
 		);
-		await t.close();
 	}
 
 	if (chay("E5")) {
