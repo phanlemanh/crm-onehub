@@ -131,9 +131,25 @@ function chayMoi(giaTri: string | undefined) {
 	};
 }
 
-function docMoi(out: string): Record<string, string | null> {
+function docMoi(out: string): Record<string, string | number | null> {
 	const dong = out.trim().split("\n").at(-1) ?? "{}";
-	return JSON.parse(dong) as Record<string, string | null>;
+	return JSON.parse(dong) as Record<string, string | number | null>;
+}
+
+function kiemNapMoi(
+	ket: Record<string, string | number | null>,
+	muc: MucMoHinh,
+	nhan: string,
+) {
+	hong(
+		ket.tranGopY !== muc.tranRaMoiLoiGoi,
+		`thk: ${nhan} tran gop y khi nap ${ket.tranGopY}, mong ${muc.tranRaMoiLoiGoi}`,
+	);
+	for (const vai of ["cuaSoGopY", "cuaSoTomTat"] as const)
+		hong(
+			ket[vai] !== muc.cuaSoNguCanh,
+			`thk: ${nhan} ${vai} khi nap ${ket[vai]}, mong ${muc.cuaSoNguCanh}`,
+		);
 }
 
 describe("thk-mac-dinh", () => {
@@ -183,6 +199,7 @@ describe("thk-mac-dinh", () => {
 		);
 		for (const vai of VAI)
 			hong(ket[vai] !== GEMINI.ma, `thk: mac dinh doi model rong ${vai}`);
+		kiemNapMoi(ket, GEMINI, "mac dinh");
 	});
 });
 
@@ -229,6 +246,7 @@ describe("thk-haiku", () => {
 		for (const vai of VAI)
 			hong(ket[vai] !== HAIKU.ma, `thk: tien trinh con khong nhan bien ${vai}`);
 		hong(ket.ghiModelPhien !== HAIKU.ma, "thk: haiku ghi sai model phien");
+		kiemNapMoi(ket, HAIKU, "haiku");
 	});
 });
 

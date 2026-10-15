@@ -78,17 +78,18 @@ async function modelDaChay(url) {
 }
 
 function canhModel(url) {
-	const thay = { ma: [], loi: null };
+	const thay = { ma: [], loi: null, soLan: 0 };
 	let dung = false;
 	const vong = (async () => {
-		while (!dung && thay.ma.length === 0) {
+		while (!dung) {
 			try {
-				thay.ma = await modelDaChay(url);
-				thay.loi = null;
+				const ma = await modelDaChay(url);
+				thay.ma = [...new Set([...thay.ma, ...ma])];
+				thay.soLan++;
 			} catch (loi) {
 				thay.loi = loi?.message ?? String(loi);
 			}
-			if (thay.ma.length === 0)
+			if (!dung)
 				await new Promise((xong) => setTimeout(xong, SO_MO_HINH.canhMs));
 		}
 	})();
