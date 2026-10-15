@@ -190,7 +190,7 @@ Expected: FAIL — không tìm thấy `so-do-don-vi.tsx`.
 
 ---
 
-### Task 4: B5 — bỏ cách xem Cây khỏi trang đơn vị
+### Task 4: B5 — bỏ cách xem Cây khỏi trang đơn vị — HOÃN (Gate 1.5, 15/10: tách thành hàng riêng sau phiên nghiệm thu L3; hạt giống `docs/plan/2026-10-15-hat-giong-b5-bo-cay-sau-nghiem-thu-l3.md`; E13 khai not-run — không thực thi task này)
 
 **independent: false** (cần Task 3: đích chuyển hướng là Sơ đồ) · phục vụ E13, E14
 
@@ -249,6 +249,6 @@ Expected: FAIL — không tìm thấy `so-do-don-vi.tsx`.
 | 1 | Khung vẽ `FlowMap` | E4, E11, E12 | — | `bun add` |
 | 2 | Truy vấn `soDoDonVi` + bộ gieo | E1, E2, E3, E17 | — | — |
 | 3 | Cách xem Sơ đồ | E4–E11 | 1, 2 | — |
-| 4 | B5 | E13, E14 | 3 | — |
+| 4 | ~~B5~~ hoãn (Gate 1.5) | — | — | — |
 | 5 | Răng | E12, E14–E16 | 1–4 | — |
 | 6 | Đóng S3 | — | 1–5 | S4 |
