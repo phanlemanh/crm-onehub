@@ -206,6 +206,7 @@ describe("mtc-dom", () => {
 				<AttendeeList
 					attendees={[
 						{
+							id: "nd-1",
 							email: "ha@vi.du",
 							name: "Hà",
 							responseStatus: phanHoi,

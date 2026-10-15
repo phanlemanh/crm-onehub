@@ -78,10 +78,7 @@ const KHU = [
 	},
 ] as const;
 
-const MA_TRAN: Record<
-	(typeof KHU)[number]["ten"],
-	Record<string, [string, string]>
-> = {
+const MA_TRAN = {
 	"okr-status tu tin": {
 		cao: ["xong", "success"],
 		vua: ["cho", "warning"],
@@ -166,7 +163,10 @@ const MA_TRAN: Record<
 		WON: ["xong", "success"],
 		LOST: ["hong", "error"],
 	},
-};
+} as const satisfies Record<
+	(typeof KHU)[number]["ten"],
+	Record<string, readonly [string, string]>
+>;
 
 const TONG_O = 58;
 
