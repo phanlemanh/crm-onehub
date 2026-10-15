@@ -279,7 +279,7 @@ function FacetSubmenu({
 			<DropdownMenuSubTrigger>
 				<span className="flex-1">{facet.label}</span>
 				{selected.length > 0 && (
-					<span className="tabular-nums opacity-60">({selected.length})</span>
+					<span className="text-muted-foreground tabular-nums">({selected.length})</span>
 				)}
 			</DropdownMenuSubTrigger>
 			<DropdownMenuSubContent className="max-h-72 min-w-52 overflow-hidden">
@@ -397,7 +397,7 @@ export function DataTableFacetMenu({
 					<Filter data-icon="inline-start" />
 					{msg.table.filters}
 					{activeCount > 0 && (
-						<span className="tabular-nums opacity-60">({activeCount})</span>
+						<span className="text-muted-foreground tabular-nums">({activeCount})</span>
 					)}
 				</Button>
 			</DropdownMenuTrigger>
@@ -678,7 +678,7 @@ export function DataTable<TRow, TSub = unknown>({
 									>
 										<Column data-icon="inline-start" />
 										{msg.table.columns}
-										<span className="tabular-nums opacity-60">
+										<span className="text-muted-foreground tabular-nums">
 											({visibleColumns.length})
 										</span>
 									</Button>

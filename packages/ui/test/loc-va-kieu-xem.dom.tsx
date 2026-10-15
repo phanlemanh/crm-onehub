@@ -284,6 +284,19 @@ describe("lkx-dem", () => {
 		];
 		expect(facet.length).toBeGreaterThan(0);
 		for (const f of facet) kiemChuPhu(f, "facet");
+		const soNgoac = [...document.body.querySelectorAll("span")].filter((s) =>
+			/^\(\d+\)$/.test((s.textContent ?? "").trim()),
+		);
+		const nhanSo = soNgoac.map((s) =>
+			(s.closest("button,[role=menuitem]")?.textContent ?? "").replace(
+				/\(\d+\)/,
+				"",
+			),
+		);
+		expect(nhanSo.filter((n) => n.includes("Lọc")).length).toBeGreaterThan(1);
+		expect(nhanSo.some((n) => n.includes("Người phụ trách"))).toBe(true);
+		expect(nhanSo.some((n) => n.includes("Cột"))).toBe(true);
+		for (const s of soNgoac) kiemChuPhu(s, `so (n) ${s.textContent}`);
 	});
 
 	test("ViewSwitch disabled khoa ca nut lan o chon", async () => {
