@@ -31,6 +31,12 @@ Không quét không gian: phạm vi là bốn mục chủ kho đã duyệt ở C
 liệt kê; xem entry `descope` «bỏ coverage-scan» trong `decisions.jsonl`. Đối chiếu đủ: mục (1) → AC-1, AC-2; (2) →
 AC-3, AC-4; (3) → AC-5; (4) → AC-6.
 
+## Đường đo
+
+- Bốn chỉ số của bộ chấm trên 50 câu mẫu (đúng trang, từ chối đúng, chuyển quy định, chuyển nhầm) cạnh ngưỡng cũ ·
+  số từ `evidence/do-bo-mau.md` của hồ sơ, chấm lại bằng `rang/so-nguong.ts` · AC-6 bảo đảm.
+- Câu lỗi gọi model lượt một so với lượt đã ký của `bo-cau-hoi-mau` · cùng nguồn · AC-6 bảo đảm.
+
 ## Out of scope
 
 - Model chấm `MO_HINH_JUDGE` của trợ lý OKR.

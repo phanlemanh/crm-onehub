@@ -1,0 +1,75 @@
+{
+ "feature_plain": "Tác tử, máy soạn đề xuất và trợ lý đọc kho chạy mặc định trên Gemini 3.8 Flash thay cho GLM 5.2 Fast, vẫn không lưu dữ liệu ở nhà cung cấp, sổ chi phí tính đúng giá mới, model chấm của trợ lý OKR giữ nguyên; bộ 50 câu mẫu được đo lại cạnh ngưỡng cũ.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ chạy Gemini 3.8 Flash cho mọi workspace chưa chọn model ở Cài đặt, và cho workspace đã chọn một model không còn trên Gateway."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ giữ nguyên model mà workspace đã tự chọn ở Cài đặt."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho máy soạn đề xuất và trợ lý đọc kho dùng Gemini 3.8 Flash, mỗi lời gọi đều đòi nhà cung cấp không lưu dữ liệu."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ tính chi phí máy soạn theo giá Gemini anh đã duyệt (0,75 và 3,75 USD mỗi triệu token), giá GLM vẫn đúng cho ai còn dùng GLM."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ giữ model chấm của trợ lý OKR là GLM 5.2 Fast."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ đo lại bộ 50 câu mẫu trên Gemini, đặt bốn chỉ số cạnh ngưỡng cũ và đạt cả bốn, câu lỗi model không nhiều hơn lượt đã ký."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "OOS-1",
+   "p": "Không đổi model chấm của trợ lý OKR."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Không đụng trợ lý OKR — nó đã chạy Gemini 3.8 Flash từ trước."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Không ghi đè model mà workspace đã chọn ở Cài đặt."
+  },
+  {
+   "id": "OOS-4",
+   "p": "Không sửa tài liệu kế hoạch hay bằng chứng cũ còn nhắc GLM."
+  }
+ ],
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Không quét thêm: bốn mục anh đã duyệt ở Cổng Đáng đều có tiêu chí — đổi mặc định (AC-1, AC-2), máy soạn và trợ lý kho (AC-3, AC-4), giữ model chấm (AC-5), đo lại bộ mẫu (AC-6)."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Đo lại bộ mẫu chấm tổng hay chấm từng ô tầng × kiểu chữ — đã thành Hỏi-1, anh trả lời theo khuyến nghị: chấm tổng, in bảng ô để đọc."
+  },
+  {
+   "i": 1,
+   "p": "Workspace đã lưu GLM có chuyển sang Gemini không — đã thành Hỏi-2, anh trả lời theo khuyến nghị: giữ lựa chọn đã lưu."
+  },
+  {
+   "i": 2,
+   "p": "Lượt đo không ghi model nào đã trả lời; phép đo nay kiểm cấu hình của cây được đo chọn Gemini, phần còn lại ghi là giới hạn đã biết."
+  },
+  {
+   "i": 3,
+   "p": "Phép đo «không lưu dữ liệu» nay đi qua chính máy soạn và trợ lý kho, không chỉ qua hàm bọc."
+  },
+  {
+   "i": 4,
+   "p": "Ca model đã chọn dùng mã có thật trên Gateway; thêm ca lùi về Gemini; ảnh chụp giá do máy tải về có giờ và dấu băm, so với giá anh duyệt."
+  }
+ ]
+}
