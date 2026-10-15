@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+// F8 neo (ve-sinh-do-san-onehub): rmSync va tmpdir cho chi muc git tam cua --tu-thu.
 import { readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -161,6 +162,7 @@ function docVatThat(cap = CAP) {
 		"diff",
 		"--name-only",
 		"--diff-filter=A",
+		// F8 neo (ve-sinh-do-san-onehub): tep moi cua muc 3 doc tren cap gop, khong tren merge-base.
 		cap2,
 		"--",
 		"packages/ui/src/components/kara/",
@@ -177,7 +179,8 @@ function docVatThat(cap = CAP) {
 	const tepSoan = git("ls-files", "--", `:(literal)${SOAN}/`)
 		.split("\n")
 		.filter((t) => /\.tsx?$/.test(t));
-	if (tepSoan.length === 0) throw new Error("khong doc duoc tep nao trong khu soan");
+	if (tepSoan.length === 0)
+		throw new Error("khong doc duoc tep nao trong khu soan");
 	const nguonSoan = tepSoan.map((t) => ({ tep: t, chu: doc(t) }));
 	return {
 		dongThem: dongThemTuDiff(diff),
@@ -213,7 +216,12 @@ function capBanSao(tep, doi) {
 	const chiMuc = join(tmpdir(), `sk-luat-${process.pid}-${Date.now()}`);
 	const env = { ...process.env, GIT_INDEX_FILE: chiMuc };
 	const chay = (thamSo, them = {}) =>
-		execFileSync("git", thamSo, { cwd: goc, encoding: "utf8", env, ...them }).trim();
+		execFileSync("git", thamSo, {
+			cwd: goc,
+			encoding: "utf8",
+			env,
+			...them,
+		}).trim();
 	try {
 		chay(["read-tree", CAP.dinh]);
 		const blob = chay(["hash-object", "-w", "--stdin"], {
@@ -221,17 +229,21 @@ function capBanSao(tep, doi) {
 		});
 		chay(["update-index", "--cacheinfo", `100644,${blob},${tep}`]);
 		const cay = chay(["write-tree"]);
-		const dinh = chay(["commit-tree", cay, "-p", CAP.goc, "-m", "tu-thu luat.mjs"], {
-			env: {
-				...env,
-				GIT_AUTHOR_NAME: "tu-thu",
-				GIT_AUTHOR_EMAIL: "tu-thu@lan-do",
-				GIT_COMMITTER_NAME: "tu-thu",
-				GIT_COMMITTER_EMAIL: "tu-thu@lan-do",
+		const dinh = chay(
+			["commit-tree", cay, "-p", CAP.goc, "-m", "tu-thu luat.mjs"],
+			{
+				env: {
+					...env,
+					GIT_AUTHOR_NAME: "tu-thu",
+					GIT_AUTHOR_EMAIL: "tu-thu@lan-do",
+					GIT_COMMITTER_NAME: "tu-thu",
+					GIT_COMMITTER_EMAIL: "tu-thu@lan-do",
+				},
 			},
-		});
+		);
 		return { goc: CAP.goc, dinh };
 	} finally {
+		// F8 neo (ve-sinh-do-san-onehub): chi muc tam bo sau moi lan tu-thu, cay lam viec khong doi.
 		rmSync(chiMuc, { force: true });
 	}
 }
@@ -242,6 +254,7 @@ function suaTam(tep, doi, lam) {
 		v.aiUx = doi(v.aiUx);
 		return lam(v);
 	}
+	// F8 neo (ve-sinh-do-san-onehub): ban sao la commit tam cay D cha B, doc nhu cap gop that.
 	return lam(docVatThat(capBanSao(tep, doi)));
 }
 

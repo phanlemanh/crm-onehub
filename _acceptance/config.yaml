@@ -2793,10 +2793,10 @@ executors:
     eqh_khong_qua_han: bun _acceptance/e24-qua-han-khong-phai-ha-tang/rang/qua-han.mjs --khong-qua-han
     tca_pham_vi: bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs --pham-vi
     vs_hydrat_record: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ve-sinh-do-san-onehub/rang/hydrat-record.mjs"'
-    vs_chieu_do_hydrat: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca hydrat"
-    vs_chieu_do_nap_san: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca nap-san"
-    vs_chieu_do_403: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca 403"
-    vs_chieu_do_moi_chuoi: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca moi-chuoi-khai --ca moi-chuoi-that"
+    vs_chieu_do_hydrat: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca hydrat"
+    vs_chieu_do_nap_san: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca nap-san"
+    vs_chieu_do_403: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca 403"
+    vs_chieu_do_moi_chuoi: "node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --tu-thu-cay && node _acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs --ca moi-chuoi-khai --ca moi-chuoi-that"
     vs_khong_noi: "node _acceptance/ve-sinh-do-san-onehub/rang/khong-noi.mjs --tu-thu && node _acceptance/ve-sinh-do-san-onehub/rang/khong-noi.mjs"
     vs_ghim_xanh: "node _acceptance/ve-sinh-do-san-onehub/rang/ghim-xanh.mjs --tu-thu && node _acceptance/ve-sinh-do-san-onehub/rang/ghim-xanh.mjs"
   design:
