@@ -22,12 +22,11 @@ evals:
       B1, B2, P1, P2, P3, P4, X1 (chua xep) = 8 o, moi o mot assert nhan + goi y («cả công ty» / «Thuộc B1» /
       «Thuộc B1 › …») + so muc tieu rut tu okr.countByUnit gia lap (khong viet tay so). (c) Ma tran tim: 6 chuoi tren
       ten fixture CO DAU sinh bang ham («Phòng Kế toán», «Dịch vụ khách hàng», «Kinh doanh»): "phong ke toan" ->
-      {Phòng Kế toán}, "dich" -> {Dịch vụ khách hàng}, "KINH" -> {Kinh doanh}, ten cha khong dau cua B1 -> con cua
-      B1, "zzz" -> rong + cau «Không có đơn vị nào khớp.», "" -> 8; moi chuoi mot assert tap ket qua. Pha-thu hai
+      {Phòng Kế toán}, "dich" -> {Dịch vụ khách hàng}, "KINH" -> {Kinh doanh}, ten cha khong dau cua B1 -> {B1 va con cua B1} (B1 tu khop ten cua no), "zzz" -> rong + cau «Không có đơn vị nào khớp.», "" -> 8; moi chuoi mot assert tap ket qua. Pha-thu hai
       (DVB_PHA=bo-go-dau: ban sao bo buoc gap dau) -> "dvb-chon-don-vi: \"phong ke toan\" ra rong, mong {Phòng Kế toán}". (d) Chon P2 -> URL donOkr=pb:P2 va doi so okr.danhSach ke tiep
       = {loai:"pb", id:"P2"} (doc tu bo goi truy van gia lap). (e) URL donOkr=nguoi:U1 -> o chon hien ten U1.
       DOI CHUNG DUONG: o chon nam trong [data-slot=data-table] (hoac khung hang cong cu) cua trang that.
-      CHIEU DO (DVB_PHA=cay-cu: ban sao dung lai CayDonVi) -> "dvb-chon-don-vi: con 20 nut cay
+      CHIEU DO (DVB_PHA=cay-cu: ban sao dung lai CayDonVi) -> "dvb-chon-don-vi: con <n> nut cay
       [data-nut-cay], mong 0".
 
   - id: E2
