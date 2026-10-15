@@ -435,6 +435,12 @@ export function datLai(): void {
 	luongGia = null;
 	daPhanLoai.length = 0;
 	danhSach = { cuoc: CUOC, dong: [], thieuBoiCanh: false, lyDo: null };
+	dat("users.me", () => ({
+		id: CUOC.nguoiMo.id,
+		name: CUOC.nguoiMo.name,
+		email: "hai@onehub.vn",
+		image: null,
+	}));
 	dat("okr.soanDanhSach", () => danhSach);
 	dat("okr.soanQuyet", () => ({ ok: true }));
 	dat("okr.soanDuaVao", () => ({
