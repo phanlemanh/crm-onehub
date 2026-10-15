@@ -87,7 +87,7 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.dh5_san_thiet_ke
-    expected: "exit 0; design-gate.mjs --mode static trên từng tệp: quanh-muc-tieu/[objectiveId]/page.tsx, quanh-muc-tieu/quanh-muc-tieu.tsx, quanh-muc-tieu/the-quanh.tsx, components/crm/record-sheet/objective-sheet.tsx; mỗi tệp thoát 0."
+    expected: "exit 0; design-gate.mjs --mode static trên từng tệp: quanh-muc-tieu/[objectiveId]/page.tsx, quanh-muc-tieu/quanh-muc-tieu.tsx, quanh-muc-tieu/the-quanh.tsx, components/crm/record-sheet/objective-sheet.tsx; mỗi tệp thoát 0. GIỚI HẠN ĐÃ KHAI (đo 15/10): bộ dò static của kit 2.30 trả verdict KHONG-DO-DUOC cho tệp .tsx (chỉ đọc HTML đã dựng) — mã 0 ở đây KHÔNG phải đạt; nhãn: không đọc được ở đây. Vế nhìn-thấy của sàn thiết kế do E12 (ui-check trên màn thật) gánh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/[objectiveId]/page.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx]
 
