@@ -40,6 +40,7 @@ import { ThanhVienVaoDungMau } from "./_modules/thanh-vien-vao-dung";
 import { TinHieuTuVeKhoMau } from "./_modules/tin-hieu-tu-ve-kho";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
+import { TrangDonViMotBangMau } from "./_modules/trang-don-vi-mot-bang";
 import { TrangLoTrinhMau } from "./_modules/trang-lo-trinh-trong-crm";
 import { TroLyOkrDeXuatMau } from "./_modules/tro-ly-okr-de-xuat";
 import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
@@ -53,6 +54,7 @@ export type ProtoComponent = (props: { state: string }) => ReactNode;
 const BANG_GHEP = {
 	"giai-doan-thoa-thuan": GiaiDoanThoaThuanProto,
 	"dieu-huong-khu-muc-tieu": DieuHuongKhuMucTieuMau,
+	"trang-don-vi-mot-bang": TrangDonViMotBangMau,
 	"ban-mau-okr": BanMauOkrMau,
 	"canh-kr-okr": CanhKrOkrMau,
 	"cau-truc-to-chuc": CauTrucToChucMau,
