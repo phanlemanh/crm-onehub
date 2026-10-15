@@ -39,8 +39,8 @@ import {
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
 import { krTheoKara } from "@crm/validation/okr-theo-kara";
-import NextLink from "next/link";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import NextLink from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
 import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";

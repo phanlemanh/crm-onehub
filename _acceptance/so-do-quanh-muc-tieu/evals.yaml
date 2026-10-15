@@ -47,7 +47,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.dh5_ro_chuot
-    expected: "exit 0; cùng tệp, -t dh5-ro-chuot: ở trạng thái đầu, mọi thẻ trên đường quanh tâm không mang data-dim; rê chuột (mouseenter thật trên nút React Flow) lên thẻ KR n1-k2 của một bộ dữ liệu có nhánh ngoài đường: thẻ ngoài pathAround(edges, n1-k2) mang data-dim, thẻ trên đường không (tập so bằng pathAround rút từ flow-layout thật, không chép); mouseleave thì về trạng thái đầu. Đối chứng dương: số thẻ data-dim khi rê > 0."
+    expected: "exit 0; cùng tệp, -t dh5-ro-chuot: tâm n1; ở trạng thái đầu, khung nút (.react-flow__node) ngoài pathAround(edges, n1) có độ mờ 0.35, trên đường thì không; rê chuột (mouseover/mouseenter thật trên nút React Flow) lên thẻ KR n1-k2: khung nút ngoài pathAround(edges, n1-k2) có độ mờ 0.35, trên đường thì không (tập so bằng pathAround rút từ flow-layout thật, không chép); mouseleave thì về trạng thái đầu. Đối chứng dương: số thẻ data-dim khi rê > 0."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/quanh-muc-tieu.tsx", apps/app/test/okr-quanh-muc-tieu.dom.tsx]
 

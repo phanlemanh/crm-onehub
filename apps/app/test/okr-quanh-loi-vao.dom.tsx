@@ -77,7 +77,8 @@ describe("dh5-loi-vao", () => {
 			`?record=objective:${MT_ID}`,
 		);
 		await cho(
-			() => (document.body.textContent ?? "").includes("Không tìm thấy mục tiêu"),
+			() =>
+				(document.body.textContent ?? "").includes("Không tìm thấy mục tiêu"),
 			"sheet bao khong thay",
 		);
 		if (nutQuanh().length !== 0)
