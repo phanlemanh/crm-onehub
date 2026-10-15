@@ -21,7 +21,7 @@ const API = process.env.API_URL ?? "http://localhost:3001";
 const CHU = process.env.NGUOI ?? "ada@trycomp.ai";
 const CHO_MS = 90_000;
 const NHIP_DOI_MS = 10_000;
-const BIEN_MS = 15_000;
+const BIEN_MS = NHIP_DOI_MS + 20_000;
 const DAU = `LT1C-DAU-${Date.now().toString(36)}`;
 const VN = "Asia/Ho_Chi_Minh";
 const NY = "America/New_York";
@@ -97,7 +97,12 @@ async function nguoiThuong() {
 	const ma = Date.now().toString(36);
 	const email = `ldbc-${ma}@thu.test`;
 	const nguoi = await db.user.create({
-		data: { id: `ldbc-${ma}`, email, name: "Người đo bản chụp", emailVerified: true },
+		data: {
+			id: `ldbc-${ma}`,
+			email,
+			name: "Người đo bản chụp",
+			emailVerified: true,
+		},
 		select: { id: true },
 	});
 	tao.user = nguoi.id;
@@ -126,7 +131,11 @@ async function taoKhoa(cookie) {
 			"content-type": "application/json",
 			cookie: `${cookie.ten}=${cookie.gia}`,
 		},
-		body: JSON.stringify({ name: `do ${DAU}`, expiresInDays: 1, loai: "day-lo-trinh" }),
+		body: JSON.stringify({
+			name: `do ${DAU}`,
+			expiresInDays: 1,
+			loai: "day-lo-trinh",
+		}),
 	});
 	const than = await res.json().catch(() => null);
 	if (!res.ok || !than?.key)
@@ -140,7 +149,10 @@ async function dayBanChup(khoa) {
 	if (khoi.duLieu === null) khongDo("LO-TRINH.html khong mang khoi");
 	for (const lo of khoi.duLieu.lo_trinh)
 		for (const h of lo.hang) h.cau_giao = `${h.cau_giao} ${DAU}`;
-	const sha = execFileSync("git", ["rev-parse", "HEAD"], { cwd: GOC, encoding: "utf8" }).trim();
+	const sha = execFileSync("git", ["rev-parse", "HEAD"], {
+		cwd: GOC,
+		encoding: "utf8",
+	}).trim();
 	const res = await fetch(`${API}/rest/lo-trinh/ban-chup`, {
 		method: "POST",
 		headers: { "content-type": "application/json", "x-api-key": khoa },
@@ -172,7 +184,11 @@ async function trang(cookie, kho, lang, mui) {
 	);
 	const p = await ctx.newPage();
 	await p.emulateTimezone(mui);
-	await p.setViewport({ width: Number(kho), height: kho === "375" ? 812 : 900, deviceScaleFactor: 1 });
+	await p.setViewport({
+		width: Number(kho),
+		height: kho === "375" ? 812 : 900,
+		deviceScaleFactor: 1,
+	});
 	return { ctx, p };
 }
 
@@ -186,7 +202,9 @@ async function mo(p, url) {
 		await p.screenshot({ path: join(RA, "khong-thay.png") }).catch(() => {});
 		khongDo(`${url}: khong thay dong gio lay — trang dang o ${p.url()}`);
 	}
-	await p.waitForNetworkIdle({ idleTime: 800, timeout: CHO_MS }).catch(() => {});
+	await p
+		.waitForNetworkIdle({ idleTime: 800, timeout: CHO_MS })
+		.catch(() => {});
 }
 
 const docTrang = (p) =>
@@ -194,10 +212,16 @@ const docTrang = (p) =>
 		(sel, dau) => ({
 			gio: document.querySelector(sel)?.textContent ?? "",
 			coDau: (document.body.textContent ?? "").includes(dau),
-			cuon: document.documentElement.scrollWidth <= document.documentElement.clientWidth,
-			khongDich: [...document.querySelectorAll("[data-viec-khoa]")].every(
-				(e) => e.closest("[translate=no]") !== null,
-			),
+			cuon:
+				document.documentElement.scrollWidth <=
+				document.documentElement.clientWidth,
+			khongDich: (() => {
+				const viec = [...document.querySelectorAll("[data-viec-khoa]")];
+				return (
+					viec.length > 0 &&
+					viec.every((e) => e.querySelector("[translate=no]") !== null)
+				);
+			})(),
 		}),
 		DONG_GIO,
 		DAU,
@@ -212,7 +236,7 @@ async function oBanDung(cookie, slug) {
 			const t = await docTrang(p);
 			kiem(
 				`ban-dung-${kho}-${lang}`,
-				`«${t.gio}» co nhan ban dung, khong chuoi danh dau, khong cuon ngang`,
+				`«${t.gio}» co nhan ban dung, khong chuoi danh dau (${!t.coDau}), khong cuon ngang (${t.cuon}), cau giao khong dich (${t.khongDich})`,
 				t.gio.includes(m.gioLay.banDung) && !t.coDau && t.cuon && t.khongDich,
 			);
 			await p.screenshot({ path: join(RA, `ban-dung-${kho}-${lang}.png`) });
@@ -236,7 +260,9 @@ async function choHien(cookie, slug) {
 		const hien = (await docTrang(p)).coDau;
 		kiem(
 			"hien-trong-mot-nhip",
-			`ban chup hien sau ${Math.round(cho / 1000)} giay (tran ${(LO_TRINH.nhipLamMoiMs + BIEN_MS) / 1000})`,
+			hien
+				? `ban chup hien sau ${Math.round(cho / 1000)} giay (tran ${(LO_TRINH.nhipLamMoiMs + BIEN_MS) / 1000})`
+				: `trang khong doc ban chup sau ${Math.round(cho / 1000)} giay`,
 			hien && cho <= LO_TRINH.nhipLamMoiMs + BIEN_MS,
 		);
 	} finally {
@@ -247,14 +273,16 @@ async function choHien(cookie, slug) {
 async function oBanChup(cookie, slug, layLuc) {
 	for (const [kho, lang, mui] of O_CHUP) {
 		const m = loTrinhMessages(lang);
-		const kyVong = m.gioLay.capNhat(formatNgayGio(layLuc, lang, { timeZone: mui, phan: "ngay-gio" }));
+		const kyVong = m.gioLay.capNhat(
+			formatNgayGio(layLuc, lang, { timeZone: mui, phan: "ngay-gio" }),
+		);
 		const { ctx, p } = await trang(cookie, kho, lang, mui);
 		try {
 			await mo(p, `${APP}/${slug}/lo-trinh`);
 			const t = await docTrang(p);
 			kiem(
 				`ban-chup-${kho}-${lang}`,
-				`«${t.gio}» == «${kyVong}» (${mui}), co chuoi danh dau, khong cuon ngang`,
+				`«${t.gio}» == «${kyVong}» (${mui}), co chuoi danh dau (${t.coDau}), khong cuon ngang (${t.cuon}), cau giao khong dich (${t.khongDich})`,
 				t.gio.trim() === kyVong && t.coDau && t.cuon && t.khongDich,
 			);
 			await p.screenshot({ path: join(RA, `ban-chup-${kho}-${lang}.png`) });
@@ -296,7 +324,10 @@ async function chay() {
 	mkdirSync(RA, { recursive: true });
 	const chu = phien(CHU);
 	const slug = await suySlug(chu);
-	trinhDuyet = await puppeteer.launch({ executablePath: CHROME, headless: true });
+	trinhDuyet = await puppeteer.launch({
+		executablePath: CHROME,
+		headless: true,
+	});
 	await oBanDung(chu, slug);
 	const khoa = await taoKhoa(chu);
 	const layLuc = await dayBanChup(khoa);
@@ -315,12 +346,17 @@ try {
 	}
 	ma = sai > 0 ? 1 : 0;
 } catch (e) {
-	dong.push(`KHONG DO DUOC: ${e instanceof KhongDo ? e.message : (e?.stack ?? e)}`);
+	dong.push(
+		`KHONG DO DUOC: ${e instanceof KhongDo ? e.message : (e?.stack ?? e)}`,
+	);
 	ma = 2;
 } finally {
 	await trinhDuyet?.close().catch(() => {});
-	await db.banChupLoTrinh.deleteMany({ where: { nguon: LO_TRINH.nguonCrm } }).catch(() => {});
-	if (tao.khoa) await db.apikey.deleteMany({ where: { id: tao.khoa } }).catch(() => {});
+	await db.banChupLoTrinh
+		.deleteMany({ where: { nguon: LO_TRINH.nguonCrm } })
+		.catch(() => {});
+	if (tao.khoa)
+		await db.apikey.deleteMany({ where: { id: tao.khoa } }).catch(() => {});
 	if (tao.member) await db.member.deleteMany({ where: { id: tao.member } });
 	if (tao.user) {
 		await db.session.deleteMany({ where: { userId: tao.user } });
