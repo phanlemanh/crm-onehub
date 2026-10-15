@@ -315,6 +315,16 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
 - **Làn trực tiếp, không mô hình.** `chayNhac` tính lại `viecCanNhac` cho đúng người
   đó, dựng tin bằng `lib/tin-nhac.ts` (cắt ở `NHAC.tran`), rồi gửi một tin riêng qua
   Zalo hoặc Slack. Độ ưu tiên là `PRIORITY.nhac`.
+- **Thông báo ghi trước khi chọn kênh** (`lib/thong-bao-ghi.ts`, hồ sơ
+  `hop-thong-bao-tren-web`). Ngay sau khi có danh sách mục, `chayNhac` ghi
+  `payload.mucTinh` (`{ ngay, khoa }`, khoá của mọi mục đã tính) rồi gọi `ghiThongBao`: mỗi mục
+  một hàng `ThongBao` cho người đó, kể cả người không có kênh nào. Mục còn nằm liên tục
+  trong danh sách (có ở sáng hôm qua hay hôm nay) không sinh hàng mới — hàng cũ cập
+  nhật `thayNgay` và `noiDung`; khoá gộp là `khoaThongBao` (`@crm/validation/thong-bao`),
+  không mang số đếm. Ghi hỏng thì `payload.thongBaoLoi` và nhật ký nhận lỗi, tin Zalo
+  hay Slack vẫn gửi. Đường dẫn lưu là `duongTrongApp(v)` — đúng phần sau `/<slug>`
+  của đường trong tin Zalo. `payload.mucTinh` là mẫu số của lệnh
+  `bun run thong-bao:doi-chieu`; lệnh không bao giờ lấy mẫu số từ bảng `ThongBao`.
 - **Kênh do `kenhSeDungCua` chọn** (`@crm/db/kenh-thong-bao`), không do `chayNhac`.
   Hàm đọc ưu tiên của người (`NotificationPreference`, thiếu hàng là `AUTO`),
   `ZaloLink`, `appSetting.zaloBotName` và khớp Slack, rồi gọi hàm thuần `chonKenh`.

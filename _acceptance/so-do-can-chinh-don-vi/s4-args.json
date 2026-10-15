@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-15T06:09:44Z",
-  "generated_sha": "822eb75530b7fef5ada097b46362e6fabae03c4d",
+  "generated_at": "2026-10-15T07:50:36Z",
+  "generated_sha": "423e01a156af9e487014cbac8c3a14db783236f9",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "so-do-can-chinh-don-vi",
-  "round": 2,
+  "round": 3,
   "riskTier": "T3",
   "evals": [
     {
@@ -277,26 +277,6 @@
       "ref": "config:executors.script.dh4_man"
     },
     {
-      "id": "E14",
-      "criterion": "AC-14",
-      "cmd": "bun _acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
-      "expected": "\"exit 0; rang/giu-ho-so.mjs: rút danh sách hồ sơ signed-off/machine-cleared từ _acceptance/*/contract.md, với mỗi eval test/script không khai status: not-run mà paths giao với git diff --name-only <merge-base onehub>..HEAD (bỏ _acceptance/**), chạy đúng lệnh config của eval và so mã kỳ vọng; eval có tên trong danh sách nghỉ ở ## Notes của hợp đồng này thì bỏ qua và in tên; in 'DUNG <hồ sơ>/<E>' mỗi eval; eval đỏ trên vật thì chạy lại đúng lệnh trên bản nền (git archive merge-base onehub) — nền xanh là 'eval da ky do do vong' (exit 1), nền cũng đỏ cùng mã là 'DO SAN <hồ sơ>/<E>' (in ra, không tính lỗi của vòng, lên thẻ Cổng Bằng chứng); git diff onehub -- apps/api/src/okr/can-chinh.ts rỗng (in 'sua tep cam: can-chinh.ts'). Đối chứng dương ghim trong tệp: số eval chạy ≥ 1 khi diff chạm okr-xem.service.ts.\"",
-      "executor": "script",
-      "expectedExit": 0,
-      "paths": [
-        "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
-        "_acceptance/so-do-can-chinh-don-vi/contract.md"
-      ],
-      "evidence_required": [
-        "run_id",
-        "exit_code",
-        "verifier",
-        "verified_at",
-        "output"
-      ],
-      "ref": "config:executors.script.dh4_giu_ho_so"
-    },
-    {
       "id": "E15",
       "criterion": "AC-2",
       "cmd": "bun _acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs",
@@ -373,20 +353,21 @@
     "bun run lint:slop",
     "bunx turbo run build --force"
   ],
-  "diffBase": "02ed3aec046978d3faddef46b5470284496ed6c5",
+  "diffBase": "b57509860b3522f7e13c6741194d8ca93b0708f1",
   "repoRoot": "/Users/manhphan/dev/crm-onehub/.claude/worktrees/so-do-can-chinh-don-vi",
   "personasPath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.30.0/skills/acceptance/references/judge-personas.md",
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.30.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\nLệnh dài hơn trần 600 s của công cụ thì KHÔNG bị giết: công cụ **đẩy nó sang\nnền** và nó chạy tiếp. Tệp đầu ra nền trống tới phút chót, vì khung bọc lệnh của\nkit chỉ in khi lệnh xong — đọc trống thành «bị giết» là đúng sự cố crm 07/10/2026\n(hồ sơ `lenh-dai-chay-rieng`: hai lượt BLOCKED giả). Dòng «chuyển sang nền» trong\nkhối dưới là lối LỜI cho mọi lệnh. Lối MÁY: eval khai `long_running: <phút>`\ntrong `evals.yaml` thì lượt chấm feature-loop tự chạy lệnh nền, ghi nhật ký ở\n`.acceptance-runs/<slug>/s4-lenh-dai/` và chờ bằng lệnh nó sinh ra\n(`eval-executors.md`, mục `long_running`).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\nDAU RA DAI: harness co the CAT DAU RA RA TEP (\"Output too large … saved to <tep>\") va chi hien doan DAU — do KHONG phai bi cong cu giet: doc DUOI tep do (tail) de lay dong tong ket va ma thoat; chi khai killedByTool khi tool result bao timeout/killed that.\nCHUYEN SANG NEN KHONG PHAI BI GIET: tool result bao lenh chua xong trong timeout va da duoc CHUYEN SANG NEN (\"moved to the background\", kem ID + tep dau ra) → lenh VAN DANG CHAY: KHONG khai killedByTool, KHONG ket luan tu tep dau ra luc do. Tep dau ra nen TRONG la binh thuong — khung boc lenh chi in duoi dau ra + dong __EXIT=<n> khi lenh XONG. Cho bang lenh Bash co gioi han (moi lan goi ≤ 100 giay, duoi tran mac dinh 120 giay cua cong cu; vd vong lap kiem tep do co dong __EXIT= chua, sleep vai giay, het 100 giay thi thoat) va goi lai toi khi tep co dong __EXIT=<n> → doc ma tu dong do nhu binh thuong. Tong thoi gian cho toi da = so phut eval khai o long_running (vang thi 30 phut), tinh tu luc chay lenh; qua ma chua co dong __EXIT → cannotRun=true + reason \"lenh chay qua <so> phut chua xong — khai long_running: <phut> cho eval trong evals.yaml\" (KHONG killedByTool), va dung tac vu nen neu cong cu cho phep.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n\nLệnh bị đẩy sang nền rồi QUÁ trần chờ (`long_running`, vắng thì 30 phút) cũng\nlà sự cố hạ tầng chứ không phải lệnh hỏng: dòng run-log `\"exit_code\": null`,\n`\"cannot_run\": true` (KHÔNG `killed_by_tool` — công cụ không giết nó), verdict\n`BLOCKED`, reason gọi tên việc cần làm (khai `long_running: <phút>` cho eval).\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub/.claude/worktrees/so-do-can-chinh-don-vi/_acceptance/so-do-can-chinh-don-vi/contract.md",
-  "invokedAt": "2026-10-15T06:09:44Z",
-  "invokedSha": "822eb75530b7fef5ada097b46362e6fabae03c4d",
+  "invokedAt": "2026-10-15T07:50:36Z",
+  "invokedSha": "423e01a156af9e487014cbac8c3a14db783236f9",
   "vungVat": [
     "_acceptance/config.yaml",
     "_acceptance/so-do-can-chinh-don-vi/card-plain.json",
     "_acceptance/so-do-can-chinh-don-vi/card.html",
     "_acceptance/so-do-can-chinh-don-vi/contract.md",
     "_acceptance/so-do-can-chinh-don-vi/evals.yaml",
+    "_acceptance/so-do-can-chinh-don-vi/evidence-page.html",
     "_acceptance/so-do-can-chinh-don-vi/evidence/E12-output.txt",
     "_acceptance/so-do-can-chinh-don-vi/evidence/chu-y-1440.png",
     "_acceptance/so-do-can-chinh-don-vi/evidence/danh-sach-390.png",
@@ -497,6 +478,7 @@
     "_acceptance/so-do-can-chinh-don-vi/decisions.jsonl",
     "_acceptance/so-do-can-chinh-don-vi/duong-nen.md",
     "_acceptance/so-do-can-chinh-don-vi/evals.yaml",
+    "_acceptance/so-do-can-chinh-don-vi/evidence-page.html",
     "_acceptance/so-do-can-chinh-don-vi/evidence-report.md",
     "_acceptance/so-do-can-chinh-don-vi/evidence/E12-output.txt",
     "_acceptance/so-do-can-chinh-don-vi/evidence/chu-y-1440.png",
@@ -559,6 +541,7 @@
     "_acceptance/so-do-can-chinh-don-vi/card.html",
     "_acceptance/so-do-can-chinh-don-vi/contract.md",
     "_acceptance/so-do-can-chinh-don-vi/evals.yaml",
+    "_acceptance/so-do-can-chinh-don-vi/evidence-page.html",
     "_acceptance/so-do-can-chinh-don-vi/evidence/E12-output.txt",
     "_acceptance/so-do-can-chinh-don-vi/evidence/chu-y-1440.png",
     "_acceptance/so-do-can-chinh-don-vi/evidence/danh-sach-390.png",
@@ -601,7 +584,6 @@
     "_acceptance/so-do-can-chinh-don-vi/contract.md",
     "_acceptance/so-do-can-chinh-don-vi/rang/ca-man.json",
     "_acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs",
-    "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
     "_acceptance/so-do-can-chinh-don-vi/rang/man.mjs",
     "_acceptance/so-do-can-chinh-don-vi/rang/ranh-gioi.mjs",
     "apps/api/src/okr/okr-xem.contracts.ts",
@@ -622,9 +604,133 @@
     "packages/ui/src/lib/messages.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "f7103f7535caab10970dbb5a6fffe7d9d244f50e7dc804ca9818e1ac4a851c20",
+  "evalsHash": "8b4391752620586ffa3e6e5ebc2f4a9debcd75f7ac2dc0ae53b52101e9755fb7",
   "runBaseline": true,
+  "carriedEvals": [
+    {
+      "id": "E1",
+      "runId": "minted-so-do-can-chinh-don-vi-E1-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-du-lieu\""
+    },
+    {
+      "id": "E2",
+      "runId": "minted-so-do-can-chinh-don-vi-E2-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-chu-y\""
+    },
+    {
+      "id": "E3",
+      "runId": "minted-so-do-can-chinh-don-vi-E3-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-quyen\""
+    },
+    {
+      "id": "E5",
+      "runId": "minted-so-do-can-chinh-don-vi-E5-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-the"
+    },
+    {
+      "id": "E6",
+      "runId": "minted-so-do-can-chinh-don-vi-E6-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-loc"
+    },
+    {
+      "id": "E7",
+      "runId": "minted-so-do-can-chinh-don-vi-E7-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-mo-the"
+    },
+    {
+      "id": "E8",
+      "runId": "minted-so-do-can-chinh-don-vi-E8-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-thu-gon"
+    },
+    {
+      "id": "E9",
+      "runId": "minted-so-do-can-chinh-don-vi-E9-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-hep"
+    },
+    {
+      "id": "E10",
+      "runId": "minted-so-do-can-chinh-don-vi-E10-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-don-vi.dom.tsx -t dh4-trang-thai"
+    },
+    {
+      "id": "E15",
+      "runId": "minted-so-do-can-chinh-don-vi-E15-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "bun _acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs"
+    },
+    {
+      "id": "E17",
+      "runId": "minted-so-do-can-chinh-don-vi-E17-r2",
+      "fromRound": 2,
+      "verifiedAt": "2026-10-15T06:09:44Z",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-ly-do\""
+    }
+  ],
   "carriedFindings": [
+    {
+      "file": "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
+      "title": "Răng E14 (giu-ho-so.mjs) tha mọi eval đỏ trên vật thành «DO SAN» khi bản nền đỏ vì BẤT KỲ lý do gì, không so cùng mã như hợp đồng hứa",
+      "severity": "medium",
+      "plain": "Bước kiểm tra xem vòng này có làm hỏng các hồ sơ đã ký trước đó có thể bỏ sót một lỗi thật: nó coi mọi trường hợp bản gốc cũng lỗi là «lỗi sẵn có», kể cả khi bản gốc lỗi vì lý do khác. Người dùng cuối không bị ảnh hưởng ngay, nhưng báo cáo «giữ hồ sơ đã ký đạt» có thể xanh trong khi một hồ sơ đã ký thực ra bị hỏng.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
+      "title": "giu-ho-so.mjs: an eval that fails on the base for any reason, with any exit code, is labelled 'DO SAN' and is not counted against the round",
+      "severity": "high",
+      "plain": "Bước kiểm tra hồ sơ cũ có thể nhầm một lỗi thật thành «đã lỗi từ trước» chỉ vì bản đối chiếu cũng chạy lỗi vì lý do không liên quan. Khi đó một tính năng đã được ký nhận có thể hỏng mà báo cáo vẫn hiện xanh.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
+      "title": "giu-ho-so.mjs banNen: symlinking node_modules back to GOC makes @crm/* imports resolve to the changed packages, not the base",
+      "severity": "high",
+      "plain": "Phép so sánh với «bản trước khi sửa» thực ra vẫn dùng một phần mã mới, nên có thể che đi việc vòng này làm hỏng một tính năng cũ ở các màn dùng chung. Người dùng có thể gặp lỗi mà báo cáo kiểm tra không cảnh báo.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
+    {
+      "file": "packages/ui/src/components/flow-map.tsx",
+      "title": "FlowMap's node description tells users that Enter/Space opens the card, but on the node wrapper Enter only selects the node",
+      "severity": "low",
+      "plain": "Người dùng trình đọc màn hình có thể nghe «nhấn Enter để mở thẻ» ở một điểm dừng mà bấm Enter chỉ chọn thẻ chứ không mở ra. Họ phải chuyển sang nút bên trong thẻ mới mở được.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": true
+    },
+    {
+      "file": "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
+      "title": "Hình dạng 4 — assertion âm-tính-một-mình: nhánh «DO SAN» coi mọi lần bản nền không xanh là «đỏ sẵn», không đối chứng dương cho bản nền, không ghim mã/thông điệp",
+      "severity": "medium",
+      "plain": "Phép kiểm tra hồ sơ cũ có thể báo «lỗi sẵn có» cả khi bản đối chiếu hỏng vì lý do khác, mà không có bước xác nhận bản đối chiếu chạy được. Kết quả là một lỗi thật có thể bị bỏ sót và báo cáo vẫn hiện đạt.",
+      "proposal": "known-limits",
+      "fromRound": 2,
+      "tepDoi": false
+    },
     {
       "file": "apps/api/scripts/okr-mau/ca-so-do.ts",
       "title": "Lệnh nạp `ca-so-do.ts --nap` ghi vào DB mà không qua chặn production `kiemDuocNap`",
@@ -632,7 +738,7 @@
       "plain": "Nếu ai đó chạy tay lệnh nạp dữ liệu mẫu của sơ đồ khi máy đang trỏ vào hệ thống thật, dữ liệu mẫu sẽ chui vào dữ liệu thật của công ty, vì lối này không bị chặn như lối nạp mẫu cũ.",
       "proposal": "new-contract",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/src/okr/okr-xem.service.ts",
@@ -641,7 +747,7 @@
       "plain": "Quản trị viên chuyển từ Bảng sang Sơ đồ có thể thấy số mục tiêu và tiến độ của một đơn vị khác với con số ở Bảng, và hai người xem khác quyền có thể thấy hai con số khác nhau.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/src/okr/so-do-don-vi.ts",
@@ -650,7 +756,7 @@
       "plain": "Tiến độ trung bình của một đơn vị có thể lệch vài điểm phần trăm giữa Bảng và Sơ đồ do làm tròn khác nhau, và sau này sửa một chỗ dễ quên chỗ kia.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/app/app/(app)/[slug]/okr/toan-canh/the-don-vi.tsx",
@@ -686,7 +792,7 @@
       "plain": "Quản trị viên có thể thấy một đơn vị bị đánh dấu «Cần chú ý» hoặc «Chưa nối lên» chỉ vì có mục tiêu hạn chế mà hệ thống không cho nối, tức là cảnh báo về việc không ai sửa được, còn người xem hẹp quyền thì không thấy cảnh báo ấy.",
       "proposal": "new-contract",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/src/okr/so-do-don-vi.ts",
@@ -695,7 +801,7 @@
       "plain": "Khi một mục tiêu nối tới đơn vị đã bị đổi hoặc gỡ khỏi cây, thẻ có thể không hiện đường đi lên mà cũng không có nhãn «Chưa nối lên», và dòng trong thẻ mở ra có thể ghi «Chưa góp vào đâu» trong khi số đếm nói khác.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/test/okr-so-do-don-vi.spec.ts",
@@ -704,7 +810,7 @@
       "plain": "Một bài kiểm tra đối chiếu mức tin và lý do giữa sơ đồ và cây căn chỉnh có thể báo xanh dù sơ đồ dư thêm một dòng góp; người dùng chưa thấy lỗi nhưng độ tin của bài kiểm giảm.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/test/okr-so-do-don-vi.spec.ts",
@@ -713,7 +819,7 @@
       "plain": "Bài kiểm tra chưa bắt được trường hợp sơ đồ bỏ sót một mục tiêu mà người xem lẽ ra thấy, nên nếu có lỗi kiểu đó, người dùng sẽ thấy thiếu mục tiêu mà không ai báo trước.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/app/test/okr-so-do-don-vi.dom.tsx",
@@ -722,7 +828,7 @@
       "plain": "Bài kiểm tra có thể báo xanh dù sơ đồ không vẽ đường nối nào, nên nếu đường nối biến mất sau này thì không có bài nào kêu.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/app/test/okr-so-do-don-vi.dom.tsx",
@@ -731,7 +837,7 @@
       "plain": "Bài kiểm tra bộ lọc «Cần chú ý» có thể vẫn xanh nếu bộ lọc xoá hẳn các thẻ thay vì làm mờ, nên lỗi kiểu này có thể lọt tới người dùng.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/app/test/okr-so-do-don-vi.dom.tsx",
@@ -740,7 +846,7 @@
       "plain": "Bài kiểm tra chưa chắc chắn rằng Bảng vẫn hiện ra khi đường dẫn mang giá trị lạ, nên nếu trang trống trong ca đó thì không bài nào báo.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/app/test/okr-so-do-don-vi.dom.tsx",
@@ -749,7 +855,7 @@
       "plain": "Bài kiểm tra chưa chứng minh ba nút thu phóng có nhãn đọc được và chuyển động đã tắt thật khi người dùng chọn giảm chuyển động; nếu hỏng, người dùng đọc màn hình hoặc nhạy chuyển động sẽ gặp trước.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/app/test/okr-so-do-don-vi.dom.tsx",
@@ -758,7 +864,7 @@
       "plain": "Bài kiểm tra chỉ đếm danh sách chú giải chứ không đếm chú giải hiện trên màn, nên nếu chú giải bị mất khỏi sơ đồ thì bài kiểm vẫn xanh.",
       "proposal": "wont-fix",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "apps/api/scripts/okr-mau/ca-so-do.ts",
@@ -767,7 +873,7 @@
       "plain": "Các bài kiểm tra giao diện dùng dữ liệu dựng tay chứ không phải dữ liệu thật từ máy chủ, nên nếu hình dạng dữ liệu thật đổi, sơ đồ có thể sai trên màn mà bài kiểm vẫn xanh.",
       "proposal": "known-limits",
       "fromRound": 1,
-      "tepDoi": true
+      "tepDoi": false
     },
     {
       "file": "_acceptance/so-do-can-chinh-don-vi/rang/ranh-gioi.mjs",
@@ -780,40 +886,158 @@
     }
   ],
   "deltaFiles": [
+    "_acceptance/config.yaml",
+    "_acceptance/hop-thong-bao-tren-web/card-plain.json",
+    "_acceptance/hop-thong-bao-tren-web/card.html",
+    "_acceptance/hop-thong-bao-tren-web/evals.yaml",
+    "_acceptance/hop-thong-bao-tren-web/evidence-page.html",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step1.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step2.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step3.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step4.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step5.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step6.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step7.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step8.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/E14-step9.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/bam-1280.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/chuong-375.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/chuong-okr-1280.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/chuong-tong-quan-1280.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/chuong-viec-1280.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-99--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-99--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-99--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-99--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-cho-tai--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-cho-tai--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-cho-tai--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-cho-tai--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-co-chua-doc--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-co-chua-doc--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-co-chua-doc--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-co-chua-doc--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-het-chua-doc--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-het-chua-doc--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-het-chua-doc--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-het-chua-doc--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-loi--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-loi--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-loi--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-loi--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-rong--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-rong--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-rong--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-chuong-rong--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-ngu-canh--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-ngu-canh--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-ngu-canh--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-ngu-canh--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-cho-tai--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-cho-tai--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-cho-tai--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-cho-tai--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-co--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-co--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-co--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-co--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loc-chua-doc-rong--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loc-chua-doc-rong--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loc-chua-doc-rong--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loc-chua-doc-rong--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loi--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loi--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loi--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-loi--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-rong--desktop-1280--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-rong--desktop-1280--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-rong--mobile-375--dark.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/design-pass/ST-trang-rong--mobile-375--light.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/doc-het-1280.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/mo-1280.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/trang-1280.png",
+    "_acceptance/hop-thong-bao-tren-web/evidence/trang-375.png",
+    "_acceptance/hop-thong-bao-tren-web/figures/duong-ghi.html",
+    "_acceptance/hop-thong-bao-tren-web/figures/duong-ghi.png",
+    "_acceptance/hop-thong-bao-tren-web/figures/muc-lap.html",
+    "_acceptance/hop-thong-bao-tren-web/figures/muc-lap.png",
+    "_acceptance/hop-thong-bao-tren-web/rang/chup-proto.mjs",
+    "_acceptance/hop-thong-bao-tren-web/rang/do-man.mjs",
+    "_acceptance/so-do-can-chinh-don-vi/card-plain.json",
+    "_acceptance/so-do-can-chinh-don-vi/card.html",
     "_acceptance/so-do-can-chinh-don-vi/contract.md",
     "_acceptance/so-do-can-chinh-don-vi/evals.yaml",
+    "_acceptance/so-do-can-chinh-don-vi/evidence-page.html",
     "_acceptance/so-do-can-chinh-don-vi/evidence/E12-output.txt",
     "_acceptance/so-do-can-chinh-don-vi/evidence/chu-y-1440.png",
     "_acceptance/so-do-can-chinh-don-vi/evidence/danh-sach-390.png",
     "_acceptance/so-do-can-chinh-don-vi/evidence/so-do-1440.png",
     "_acceptance/so-do-can-chinh-don-vi/evidence/the-mo-1440.png",
-    "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs",
-    "_acceptance/so-do-can-chinh-don-vi/rang/man.mjs",
     "_acceptance/so-do-can-chinh-don-vi/s4-args.json",
-    "apps/api/scripts/okr-mau/ca-so-do.ts",
-    "apps/api/src/okr/okr-xem.service.ts",
-    "apps/api/src/okr/so-do-don-vi.ts",
-    "apps/api/test/okr-so-do-don-vi.spec.ts",
+    "apps/agent/agent/lib/nhac-ke-hoach.ts",
+    "apps/agent/agent/lib/thong-bao-doi-chieu.ts",
+    "apps/agent/agent/lib/thong-bao-don.ts",
+    "apps/agent/agent/lib/thong-bao-ghi.ts",
+    "apps/agent/agent/schedules/dispatch.ts",
+    "apps/agent/scripts/thong-bao-doi-chieu.ts",
+    "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json",
+    "apps/agent/test/support/chup-tin-nhac.ts",
+    "apps/agent/test/support/muc-mau.ts",
+    "apps/agent/test/thong-bao-doi-chieu.integration.spec.ts",
+    "apps/agent/test/thong-bao-duong.spec.ts",
+    "apps/agent/test/thong-bao-ghi.integration.spec.ts",
+    "apps/api/src/app.module.ts",
+    "apps/api/src/generated/server.ts",
+    "apps/api/src/thong-bao/thong-bao.contracts.ts",
+    "apps/api/src/thong-bao/thong-bao.module.ts",
+    "apps/api/src/thong-bao/thong-bao.router.ts",
+    "apps/api/src/thong-bao/thong-bao.service.ts",
+    "apps/api/test/thong-bao.spec.ts",
     "apps/api/test/vai-chi-okr.spec.ts",
+    "apps/app/app/(app)/[slug]/thong-bao/danh-sach-thong-bao-trang.tsx",
+    "apps/app/app/(app)/[slug]/thong-bao/khung-cho.tsx",
+    "apps/app/app/(app)/[slug]/thong-bao/page.tsx",
+    "apps/app/app/(app)/[slug]/thong-bao/thong-bao-search-params.ts",
+    "apps/app/app/proto/_modules/hop-thong-bao-tren-web/du-lieu.ts",
+    "apps/app/app/proto/_modules/hop-thong-bao-tren-web/index.tsx",
+    "apps/app/app/proto/catalog.ts",
+    "apps/app/app/proto/registry.ts",
+    "apps/app/components/app-header.tsx",
+    "apps/app/components/thong-bao/chuong-thong-bao.tsx",
+    "apps/app/components/thong-bao/dong-thong-bao.tsx",
+    "apps/app/components/thong-bao/trang-thong-bao.tsx",
+    "apps/app/lib/messages/thong-bao.ts",
+    "apps/app/lib/search-param-keys.ts",
+    "apps/app/lib/thong-bao/cau.ts",
+    "apps/app/lib/thong-bao/dong.ts",
     "apps/app/lib/trpc/cache.ts",
-    "apps/app/test/okr-so-do-don-vi.dom.tsx",
+    "apps/app/test/thong-bao-cau.spec.ts",
+    "apps/app/test/thong-bao-mat-dich.dom.tsx",
+    "apps/app/test/thong-bao.dom.tsx",
+    "apps/app/test/tin-hieu.dom.tsx",
+    "package.json",
+    "packages/db/prisma/migrations/20261014061202_thong_bao/migration.sql",
+    "packages/db/prisma/schema.prisma",
     "packages/ui/src/components/flow-map.tsx",
     "packages/ui/src/lib/messages.ts",
-    "packages/ui/test/render-diff.spec.tsx"
+    "packages/validation/package.json",
+    "packages/validation/src/nhac-ke-hoach.ts",
+    "packages/validation/src/thong-bao.ts",
+    "packages/validation/test/thong-bao.spec.ts"
   ],
   "thuocChup": {
-    "sha": "822eb75530b7fef5ada097b46362e6fabae03c4d",
-    "n": 597,
-    "digest": "2cda7bc69e0e57d626cf7ee11d359c7c0f3ee8020f124966cad3a00ff0fac579",
+    "sha": "423e01a156af9e487014cbac8c3a14db783236f9",
+    "n": 603,
+    "digest": "ae41a56ec8787222b7ff5dbe2fe98ffbba5dc217f0f59d23449d7701f1367e46",
     "tep": {
       ".github/scripts/test/phan-loai.test.mjs": "c31bdfccd3c5d75e92a9935c16e6dbd02fcb305d2ede2b99f81cd569e666648a",
       "_acceptance/bo-cau-hoi-mau/rang/do-bo-mau.test.ts": "4045f221a89dfae9477e72a2bcae44afe88640d1dd6ca614615234f4b42660fb",
       "_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts": "6de051839243101755d1bc549371b590b09371bd655b392b45208b9bad3b61ee",
       "_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.spec.ts": "28af3a1eedc19126a24cea60132b3b2b93faa64e5b67781ffd7d6aa08fecd77d",
-      "_acceptance/config.yaml": "f4753a5a548e86c5967111d37bdfe2da3e7bd9123b562f2a6df7fc5aef85c581",
+      "_acceptance/config.yaml": "12ea2d1bdffeeedfce538b5055a59b4bf524e44500f40baa2377c0fb576c4b2a",
       "_acceptance/kho-nguon-khong-ket/rang/dem-ket.spec.ts": "a028d96c6a360d82710d937775fa07f039745073cca95cdc25e3a60a46bbc9fa",
       "_acceptance/man-xin-quyen-co-rang/rang/ban-sao.spec.mjs": "3a36154a24ffb662d1488ff3c96b059cb9dc9bdb58606f0108f744f9b5aad7a7",
-      "_acceptance/so-do-can-chinh-don-vi/evals.yaml": "f7103f7535caab10970dbb5a6fffe7d9d244f50e7dc804ca9818e1ac4a851c20",
+      "_acceptance/so-do-can-chinh-don-vi/evals.yaml": "8b4391752620586ffa3e6e5ebc2f4a9debcd75f7ac2dc0ae53b52101e9755fb7",
       "_acceptance/so-do-can-chinh-don-vi/rang/ca-man.json": "d283997d421823d4809d14b2d1f97c3f069e8d05f571d279c6e0cf97620837bc",
       "_acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs": "a919e8871631fcb3536afac23ce594e16cd6e61fbe37130407427e9712090466",
       "_acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs": "7f95c441be3d2ef8484389bcb0ff457b2d182589c944d8dd1961cd70f556cbcb",
@@ -934,6 +1158,9 @@
       "apps/agent/test/tai-lieu-ranh-gioi.spec.ts": "387e50eefeda8eaf9c5c060c1995e1cc7bfa5ca211e6263db519210aadfce2f6",
       "apps/agent/test/tai-lieu-soan.integration.spec.ts": "3e80d502b3ceab257170fe1fe063ef220dcdfc9e447b267cd2b375913899f132",
       "apps/agent/test/tasks.integration.spec.ts": "1296d9d37f3d25aa2e46ca68bb798cc68f44ce4591885d7f4a75a5d1e04f1558",
+      "apps/agent/test/thong-bao-doi-chieu.integration.spec.ts": "f96cc345140e5a9f8a867fafc26cb00a6622bfdeba62212508e334438abf07b5",
+      "apps/agent/test/thong-bao-duong.spec.ts": "fc241b40dd95d1bc567fc53a211afc1180640ab0f65de7cb6e20e2f7601874e4",
+      "apps/agent/test/thong-bao-ghi.integration.spec.ts": "e22097947a5ab47836b029123124d660b4d138d2f20f3d1f6cfd76afb00a6416",
       "apps/agent/test/tim-theo-so.integration.spec.ts": "a6f4eaf37c811c4cfbcd0c8e2682a71c1793616f2b476b76f402c301f5cd4070",
       "apps/agent/test/tra-loi-tin-nhac-nguong.integration.spec.ts": "cdc849495b8fdeb3abac29806471e51cf5ba380e3d92abf196dcb2c06e522b67",
       "apps/agent/test/tra-loi-tin-nhac.integration.spec.ts": "72e2350890cd4f7fb2da51b8505750023870b31e40bcfde4fa814ae1c9367c44",
@@ -1146,6 +1373,7 @@
       "apps/api/test/telemetry-zalo-hoi.spec.ts": "0348c052f7372d662fab7f1a0310f20a4f8f1c08fda1c6b70d16fc1f0c859573",
       "apps/api/test/thanh-vien-vao-dung.spec.ts": "f3099dacea718eca1a45c323ddd80be8013c43e59678dbde9fb45ed454429f54",
       "apps/api/test/them-buoc-bao-dung.spec.ts": "3ff56078ada55084915845b261f927b3e14555423aa4e72e2943e931f4b259f2",
+      "apps/api/test/thong-bao.spec.ts": "8cc6f4dd1f35cae455f045410ef0deab3e65c829ed974f6b9f4977d50891a116",
       "apps/api/test/tin-hieu-tat-ca.spec.ts": "ba4a364c5f4841e4851e749ed4ed7c669986567cbc6fb21748849217bd5ccaa5",
       "apps/api/test/tin-hieu.spec.ts": "8d4c986cb90574cf2bca8cb4f3c51d251230c50c1cadc0c7404868afcc54ab2c",
       "apps/api/test/to-chuc-chi-tiet.spec.ts": "38622c93caacfc29b79b9605119a7e211bf1e6521f54c5cf419e28bc702f5176",
@@ -1174,7 +1402,7 @@
       "apps/api/test/tro-ly-okr-tom-tat-thuoc.spec.ts": "dcfc1817a62082498f7cbea2917f393822a28222a74f7192c13b79e79a8dffee",
       "apps/api/test/tro-ly-okr-xu-huong.spec.ts": "2663fd06a4c00d4be6e0714505aa3721eb6c9e5bdb9a39113d0490ddc8327489",
       "apps/api/test/vai-chi-okr-ke-hoach.spec.ts": "b6b55f336636c71b1207fe55e721e68ba792e98c82c3e180997948c36885127a",
-      "apps/api/test/vai-chi-okr.spec.ts": "9dcebc5b49877da56226195ea4503b2d91458534d8f54a1a53c06f0f746895da",
+      "apps/api/test/vai-chi-okr.spec.ts": "743417bb2a956b6984418f57fe994ad3e979ecb20f28dc3f1193aada22bc81cd",
       "apps/api/test/viec-bang-do-nguong.spec.ts": "63140b073263bad20d6f96384d00d0a987fc42a2b7c7a4aaa3b8013480dd8c85",
       "apps/api/test/viec-bang.spec.ts": "a28efefb88b9e2d6c8ef5b61e4331284f941a8656a0d1f1d1d82a55e1e6dcbc4",
       "apps/api/test/viec-can-lam-cu.spec.ts": "6f639086d60fcc530be38f8612102ab2109795e8415eacc0ee3aa4290ab467fa",
@@ -1262,6 +1490,7 @@
       "apps/app/test/soan-so-do-ky-an.spec.ts": "2d1a8d153e385cf10ea0b02966330134607638d79ddd5c2244b3f4996494cedd",
       "apps/app/test/tai-lieu-chu-lien-ket.spec.ts": "5b4845a09e7f67647cb834ba68acbb45b1cf10f1b5088fd64ce987c81579eb25",
       "apps/app/test/ten-goi.spec.ts": "9d8efa0c19b95398c8740019eb2129b1fb4c096ccb9c0fd54df26eaf9386144a",
+      "apps/app/test/thong-bao-cau.spec.ts": "b87781e40bd4939f15a011e65d3fdba27b42799a6e744164a137df357462f785",
       "apps/app/test/tin-hieu-tat-ca.spec.ts": "a2ecfa315bc47450055ad8f612fa85d5bd1aa078cfdec97440cb3d5c1e448fc2",
       "apps/app/test/tin-hieu-trang-thai.spec.ts": "58438ee1a29662ab0ca2bfec3964906a2260b841382e6918c90131672d1e5381",
       "apps/app/test/tracking-bundle.spec.ts": "a5d021755a9c645195395aa3b06d909d0ac6d9faa07ae885cc1056271e11d722",
@@ -1384,6 +1613,7 @@
       "packages/validation/test/tai-lieu-markdown.spec.ts": "7db0786ab2750794ae6a5b09ba618f59e9b63d1f92a3badb7e7e9a3d7b8804ec",
       "packages/validation/test/tai-lieu-tim.spec.ts": "a4bb92500c44df49acce24a0819f357a3a5198ceb5727798dd825ab9e5e12c82",
       "packages/validation/test/tai-lieu.spec.ts": "87ea07a94c7ce488d394974713af1a13dca631d9cbb65a8f0e0958a32bfaea79",
+      "packages/validation/test/thong-bao.spec.ts": "594205beb41479f3f600280986d3358bb16fb017d5bafcd9e0506bdd3d1b5676",
       "packages/validation/test/tin-hieu-dong-dau.spec.ts": "a955761f93f0ce05d3463ac1465660f2127f6143177a0289fd007cb1fd205647",
       "packages/validation/test/tin-hieu-nguong-song.spec.ts": "306536af2bdbd8d256e5c270c39cee80f03b28f2decc21dbf1aea91967d194fa",
       "packages/validation/test/tin-hieu.spec.ts": "fba15cf87c2d18f36f79cd5e6ecea7a18c6eb8618e264d6b889417ef2aadbfbd",
@@ -1406,7 +1636,7 @@
     }
   },
   "cayChup": {
-    "sha": "822eb75530b7fef5ada097b46362e6fabae03c4d",
+    "sha": "423e01a156af9e487014cbac8c3a14db783236f9",
     "ban": {},
     "chuaTheoDoi": []
   }
