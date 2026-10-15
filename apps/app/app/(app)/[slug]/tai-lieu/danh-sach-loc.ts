@@ -19,19 +19,25 @@ export type DoiLoc = (sua: Partial<Loc>) => void;
 const K = SEARCH_PARAM.taiLieu;
 const L = SEARCH_PARAM.list;
 
+function soTrang(page: number | undefined): number | null | undefined {
+	if (page === undefined) return undefined;
+	return page > 1 ? page : null;
+}
+
+function luuTru(archived: boolean | undefined): true | null | undefined {
+	if (archived === undefined) return undefined;
+	return archived ? true : null;
+}
+
 function sangKhoa(sua: Partial<Loc>) {
 	return {
-		...(sua.tab === undefined ? {} : { [K.tab]: sua.tab }),
-		...(sua.loai === undefined ? {} : { [K.loai]: sua.loai }),
-		...(sua.donVi === undefined ? {} : { [K.donVi]: sua.donVi }),
-		...(sua.chu === undefined ? {} : { [K.chu]: sua.chu }),
-		...(sua.nhom === undefined ? {} : { [K.nhom]: sua.nhom }),
-		...(sua.page === undefined
-			? {}
-			: { [L.page]: sua.page > 1 ? sua.page : null }),
-		...(sua.archived === undefined
-			? {}
-			: { [L.archived]: sua.archived ? true : null }),
+		[K.tab]: sua.tab,
+		[K.loai]: sua.loai,
+		[K.donVi]: sua.donVi,
+		[K.chu]: sua.chu,
+		[K.nhom]: sua.nhom,
+		[L.page]: soTrang(sua.page),
+		[L.archived]: luuTru(sua.archived),
 	};
 }
 
