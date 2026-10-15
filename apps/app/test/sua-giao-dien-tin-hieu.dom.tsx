@@ -94,6 +94,7 @@ mock.module("@/lib/trpc/client", () => ({
 				hangCuaToi = hangCuaToi.filter((h) => h.id !== v.id);
 				return { ok: true };
 			}),
+			tatCa: truyVan("tinHieu.tatCa", () => ({ rows: [] })),
 			cuaToi: truyVan("tinHieu.cuaToi", async () => {
 				if (treLamMoi > 0) await new Promise((r) => setTimeout(r, treLamMoi));
 				return { rows: hangCuaToi };
@@ -718,7 +719,7 @@ describe("sgt-ten-man", () => {
 describe("sgt-chu", () => {
 	const CAM = {
 		vi: ["gom", "kéo về", "kit", "khối", "bản vẽ", "lượt", "hồ sơ"],
-		en: ["group", "pull", "kit", "block", "snapshot", "run"],
+		en: ["grouped", "grouping", "pull", "pick-up", "kit", "block", "snapshot", "run"],
 	} as const;
 
 	function laChuoi(o: unknown, ra: string[] = []): string[] {

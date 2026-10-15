@@ -1,12 +1,14 @@
 "use client";
 
 import OverflowMenuVertical from "@carbon/icons-react/es/OverflowMenuVertical";
+import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import {
@@ -33,11 +35,21 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
+import type { Locale } from "@crm/ui/lib/locale";
 import type { NghiaTrangThai } from "@crm/ui/lib/status-tone";
 import { toneTheoNghia } from "@crm/ui/lib/status-tone";
+import { NGAY_VN } from "@crm/validation/ngay-vn";
 import { useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
+import { tenMan } from "@/lib/tin-hieu/ten-man";
+
+export type TrangThaiDong = {
+	nhan: string;
+	cau: string;
+	nghia: NghiaTrangThai;
+	khongDich?: boolean;
+};
 
 export type DongTinHieu = {
 	id: string;
@@ -47,7 +59,7 @@ export type DongTinHieu = {
 	man: string;
 	guiLuc: string;
 	coTheXoa: boolean;
-	trangThai: { nhan: string; cau: string; nghia: NghiaTrangThai };
+	trangThai: TrangThaiDong;
 };
 
 export type DanhSachTinHieuProps = {
@@ -57,21 +69,28 @@ export type DanhSachTinHieuProps = {
 	dangXoa: string | null;
 	onXoa: (id: string) => void;
 	hoiXoaBanDau?: string;
+	daXoa?: string | null;
+	xoaHong?: string | null;
 };
 
-const GIO = new Intl.DateTimeFormat("vi-VN", {
-	timeZone: "Asia/Ho_Chi_Minh",
+const KHUON_GIO: Intl.DateTimeFormatOptions = {
+	timeZone: NGAY_VN.muiGio,
 	day: "2-digit",
 	month: "2-digit",
 	hour: "2-digit",
 	minute: "2-digit",
-});
+};
+
+const GIO: Record<Locale, Intl.DateTimeFormat> = {
+	vi: new Intl.DateTimeFormat("vi-VN", KHUON_GIO),
+	en: new Intl.DateTimeFormat("en-GB", KHUON_GIO),
+};
 
 export function TrangThai({
 	trangThai,
 	gon = false,
 }: {
-	trangThai: { nhan: string; cau: string; nghia: NghiaTrangThai };
+	trangThai: TrangThaiDong;
 	gon?: boolean;
 }) {
 	return (
@@ -89,6 +108,7 @@ export function TrangThai({
 						: "whitespace-normal break-words"
 				}
 				data-cau-trang-thai=""
+				translate={trangThai.khongDich ? "no" : undefined}
 			>
 				{trangThai.cau}
 			</SimpleTableNote>
@@ -103,47 +123,75 @@ export function DanhSachTinHieu({
 	dangXoa,
 	onXoa,
 	hoiXoaBanDau,
+	daXoa,
+	xoaHong,
 }: DanhSachTinHieuProps) {
-	const m = tinHieuMessages(useLocale()).trang;
+	const locale = useLocale();
+	const m = tinHieuMessages(locale).trang;
 	const [hoiXoa, setHoiXoa] = useState<DongTinHieu | null>(
 		() => dong.find((d) => d.id === hoiXoaBanDau) ?? null,
+	);
+	const gio = (d: DongTinHieu) => GIO[locale].format(new Date(d.guiLuc));
+	const thongBao = (
+		<span aria-live="polite" className="sr-only" data-da-xoa="">
+			{daXoa ? dien(m.daXoa, { ma: daXoa }) : ""}
+		</span>
 	);
 
 	if (dong.length === 0) {
 		return (
-			<Empty border="solid" data-tin-hieu-rong="">
-				<EmptyHeader>
-					<EmptyTitle>{m.rongTieuDe}</EmptyTitle>
-					<EmptyDescription>{m.rongMoTa}</EmptyDescription>
-				</EmptyHeader>
-				<EmptyContent>{nutGui}</EmptyContent>
-			</Empty>
+			<>
+				{thongBao}
+				<Empty border="solid" data-tin-hieu-rong="">
+					<EmptyHeader>
+						<EmptyTitle>{m.rongTieuDe}</EmptyTitle>
+						<EmptyDescription>{m.rongMoTa}</EmptyDescription>
+					</EmptyHeader>
+					<EmptyContent>{nutGui}</EmptyContent>
+				</Empty>
+			</>
 		);
 	}
 
-	const thaoTac = (d: DongTinHieu) =>
-		d.coTheXoa ? (
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button data-thao-tac-tin-hieu={d.ma} size="icon-xs" variant="ghost">
-						<Icon icon={OverflowMenuVertical} />
-						<span className="sr-only">{dien(m.thaoTac, { ma: d.ma })}</span>
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="end">
-					<DropdownMenuItem
-						data-xoa-tin-hieu={d.ma}
-						onSelect={() => setHoiXoa(d)}
-						variant="destructive"
-					>
-						{m.xoa}
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
-		) : null;
+	const thaoTac = (d: DongTinHieu, co: "icon-xs" | "icon-lg") => (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button data-thao-tac-tin-hieu={d.ma} size={co} variant="ghost">
+					<Icon icon={OverflowMenuVertical} />
+					<span className="sr-only">{dien(m.thaoTac, { ma: d.ma })}</span>
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end">
+				<DropdownMenuItem
+					data-xoa-tin-hieu={d.ma}
+					disabled={!d.coTheXoa}
+					onSelect={() => setHoiXoa(d)}
+					variant="destructive"
+				>
+					{m.xoa}
+				</DropdownMenuItem>
+				{d.coTheXoa ? null : (
+					<DropdownMenuLabel>{m.khongXoaDuoc}</DropdownMenuLabel>
+				)}
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
+
+	const maVaMuon = (d: DongTinHieu) => (
+		<>
+			<span translate="no">{d.ma}</span> ·{" "}
+			<span translate="no">{dien(m.muonLam, { muonLam: d.muonLam })}</span>
+		</>
+	);
 
 	return (
 		<div className="flex flex-col gap-3">
+			{thongBao}
+			{xoaHong ? (
+				<Alert data-xoa-hong="" variant="destructive">
+					<AlertDescription>{xoaHong}</AlertDescription>
+				</Alert>
+			) : null}
 			{banVeDocDuoc ? null : (
 				<SimpleTableNote aria-live="polite" data-ban-ve-chua-doc="">
 					{m.banVeChuaDoc}
@@ -153,15 +201,14 @@ export function DanhSachTinHieu({
 				<SimpleTable
 					columns={[
 						{ id: "ke", header: m.cot.dieuDaKe },
-						{ id: "man", header: m.cot.man, width: "w-32" },
-						{ id: "luc", header: m.cot.guiLuc, width: "w-32" },
-						{ id: "trang-thai", header: m.cot.trangThai, width: "w-[36%]" },
+						{ id: "gui", header: m.cot.gui, width: "w-36" },
+						{ id: "trang-thai", header: m.cot.trangThai, width: "w-[30%]" },
 						{ id: "thao-tac", srLabel: m.cot.thaoTac, width: "w-12" },
 					]}
 					surface="page"
 				>
 					{dong.map((d) => (
-						<SimpleTableRow data-tin-hieu={d.ma} key={d.id}>
+						<SimpleTableRow data-tin-hieu={d.ma} key={d.id} tabIndex={-1}>
 							<SimpleTableCell className="whitespace-normal">
 								<div className="flex min-w-0 flex-col gap-0.5">
 									<span
@@ -174,50 +221,61 @@ export function DanhSachTinHieu({
 									<SimpleTableNote
 										className="line-clamp-1 break-words"
 										data-muon-lam=""
-										translate="no"
 									>
-										{dien(m.muonLam, { muonLam: d.muonLam })}
+										{maVaMuon(d)}
 									</SimpleTableNote>
 								</div>
 							</SimpleTableCell>
-							<SimpleTableCell>
-								<span className="truncate text-muted-foreground" translate="no">
-									{d.man}
-								</span>
-							</SimpleTableCell>
-							<SimpleTableCell numeric>
-								{GIO.format(new Date(d.guiLuc))}
+							<SimpleTableCell className="whitespace-normal">
+								<div className="flex min-w-0 flex-col gap-0.5">
+									<span className="break-words" data-ten-man="">
+										{tenMan(d.man, locale)}
+									</span>
+									<SimpleTableNote className="tabular-nums" data-gio-gui="">
+										{gio(d)}
+									</SimpleTableNote>
+								</div>
 							</SimpleTableCell>
 							<SimpleTableCell className="whitespace-normal">
 								<TrangThai trangThai={d.trangThai} />
 							</SimpleTableCell>
-							<SimpleTableCell align="right">{thaoTac(d)}</SimpleTableCell>
+							<SimpleTableCell align="right">
+								{thaoTac(d, "icon-xs")}
+							</SimpleTableCell>
 						</SimpleTableRow>
 					))}
 				</SimpleTable>
 			</div>
 			<ItemGroup className="md:hidden">
 				{dong.map((d) => (
-					<Item data-tin-hieu={d.ma} key={d.id} variant="outline">
+					<Item data-tin-hieu={d.ma} key={d.id} tabIndex={-1} variant="outline">
 						<ItemContent>
 							<ItemTitle className="line-clamp-2 break-words" translate="no">
 								{d.tieuDe}
 							</ItemTitle>
-							<ItemDescription data-muon-lam="" translate="no">
-								{dien(m.muonLam, { muonLam: d.muonLam })}
-							</ItemDescription>
+							<ItemDescription data-muon-lam="">{maVaMuon(d)}</ItemDescription>
 							<ItemDescription>
-								<span translate="no">{d.man}</span> ·{" "}
-								{GIO.format(new Date(d.guiLuc))}
+								<span data-ten-man="">{tenMan(d.man, locale)}</span> ·{" "}
+								<span className="tabular-nums" data-gio-gui="">
+									{gio(d)}
+								</span>
 							</ItemDescription>
 							<TrangThai trangThai={d.trangThai} />
 						</ItemContent>
-						<ItemActions>{thaoTac(d)}</ItemActions>
+						<ItemActions>{thaoTac(d, "icon-lg")}</ItemActions>
 					</Item>
 				))}
 			</ItemGroup>
 			<ConfirmDialog
+				noiDung={
+					hoiXoa ? (
+						<p className="text-sm" translate="no">
+							«{hoiXoa.tieuDe}»
+						</p>
+					) : null
+				}
 				nut={m.xoaNut}
+				onCloseAutoFocus={(e) => e.preventDefault()}
 				onConfirm={() => {
 					if (hoiXoa) onXoa(hoiXoa.id);
 					setHoiXoa(null);

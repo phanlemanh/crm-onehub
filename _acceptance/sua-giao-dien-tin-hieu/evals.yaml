@@ -176,7 +176,7 @@ evals:
       describe "sgt-chu":
         1 duyet MOI chuoi la duoi bon khoa hop, trang, nhan, trangThai cua tinHieuMessages("vi") (de quy, khong liet ke tay):
           khong chuoi nao chua mot tu trong bang cam {gom, kéo về, kit, khối, bản vẽ, lượt, hồ sơ} (so khop theo tu, khong
-          phan biet hoa thuong); tinHieuMessages("en") duyet cung cach voi bang cam {group, pull, kit, block, snapshot, run}
+          phan biet hoa thuong); tinHieuMessages("en") duyet cung cach voi bang cam {grouped, grouping, pull, pick-up, kit, block, snapshot, run}
           — in so chuoi da duyet cho moi ngon ngu (> 0)
         2 voi hai trang thai CRM (choLayVe/choKeoVe, choGom/choGom) x {vi, en}: cau trangThai khong chua nguyen van nhan cua no
         3 DanhSachTinHieu voi dong daKeoVe -> co nut thao tac; mo menu -> muc Xoa mang data-disabled va aria-disabled, cung

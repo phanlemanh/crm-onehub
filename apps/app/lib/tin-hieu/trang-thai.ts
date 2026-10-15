@@ -66,6 +66,7 @@ export type TrangThaiTinHieu = {
 	nhan: string;
 	cau: string;
 	nghia: NghiaTrangThai;
+	khongDich?: boolean;
 };
 export type TrangThaiDu = TrangThaiTinHieu & { khoa: string };
 export type CuaToiTom = { ma: string; daKeoVe: boolean };
@@ -95,32 +96,60 @@ function theoKit(
 ): TrangThaiDu {
 	const nhan = m.nhan;
 	const cau = cauSauGom(b, nhanCuaHang(b, nhom, m), tenViec, m);
+	const khongDich =
+		b.cho !== "chua-gom" && b.cho !== "da-phu" ? true : undefined;
 	switch (b.cho) {
 		case "chua-gom":
-			return { khoa: "cho-gom", nhan: nhan.choGom, cau, nghia: "nhap" };
+			return {
+				khoa: "cho-gom",
+				nhan: nhan.choGom,
+				cau,
+				khongDich,
+				nghia: "nhap",
+			};
 		case "le":
-			return { khoa: "le", nhan: nhan.le, cau, nghia: "nhap" };
+			return { khoa: "le", nhan: nhan.le, cau, khongDich, nghia: "nhap" };
 		case "da-phu":
-			return { khoa: "da-phu", nhan: nhan.daCoViec, cau, nghia: "xong" };
+			return {
+				khoa: "da-phu",
+				nhan: nhan.daCoViec,
+				cau,
+				khongDich,
+				nghia: "xong",
+			};
 		case "nhom-chua-cat":
 			return {
 				khoa: "nhom-chua-cat",
 				nhan: nhan.daVaoNhom,
 				cau,
+				khongDich,
 				nghia: "nhap",
 			};
 		case "chan-troi":
-			return { khoa: "chan-troi", nhan: nhan.deSau, cau, nghia: "nhap" };
+			return {
+				khoa: "chan-troi",
+				nhan: nhan.deSau,
+				cau,
+				khongDich,
+				nghia: "nhap",
+			};
 		case "hang-chua-ho-so":
 		case "hang-co-ho-so": {
 			const n = b.hang ? nhom.get(b.hang) : undefined;
 			if (n === "da-giao")
-				return { khoa: "da-giao", nhan: nhan.daGiao, cau, nghia: "xong" };
+				return {
+					khoa: "da-giao",
+					nhan: nhan.daGiao,
+					cau,
+					khongDich,
+					nghia: "xong",
+				};
 			if (n === "dang-lam")
 				return {
 					khoa: "dang-lam",
 					nhan: nhan.dangLam,
 					cau,
+					khongDich,
 					nghia: "dangChay",
 				};
 			if (n === "chua-bat-dau")
@@ -128,9 +157,16 @@ function theoKit(
 					khoa: "chua-bat-dau",
 					nhan: nhan.chuaBatDau,
 					cau,
+					khongDich,
 					nghia: "nhap",
 				};
-			return { khoa: "hang-khac", nhan: nhan.khac, cau, nghia: "nhap" };
+			return {
+				khoa: "hang-khac",
+				nhan: nhan.khac,
+				cau,
+				khongDich,
+				nghia: "nhap",
+			};
 		}
 	}
 }
