@@ -1,32 +1,4 @@
 {
-  "feature_plain": "Đang soạn OKR trong khung bên phải mà bấm một liên kết, người dùng được hỏi trước khi rời — chữ đang gõ không mất nếu chọn ở lại.",
-  "will_do": [
-    {"id": "AC-2", "p": "Sẽ hỏi «Bỏ những gì vừa nhập?» khi người đã gõ dở chữ hay số trong khung mà bấm liên kết; chọn ở lại thì chữ còn nguyên."},
-    {"id": "AC-3", "p": "Sẽ đưa người tới đúng trang của liên kết khi họ chọn rời, và lượt Kara đang soạn vẫn chạy tới hết ở máy chủ."},
-    {"id": "AC-4", "p": "Sẽ đi ngay, không hỏi, khi trong khung không có gì dở."},
-    {"id": "AC-6", "p": "Sẽ giữ nguyên cách mọi hộp và khung khác hỏi khi đóng; chỉ khung soạn bật chặn liên kết."},
-    {"id": "AC-7", "p": "Sẽ chạy đúng như trên trên màn thật ở khổ máy tính và điện thoại, kể cả nhấn Enter trên liên kết."}
-  ],
-  "wont_do": [
-    {"id": "AC-1", "p": "Chặn việc rời trang khi Kara đang soạn mà người bấm liên kết trong khung — hộp «Kara đang soạn. Đóng khung?» hiện trước."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG chặn khi người cố ý mở chỗ khác: Cmd/Ctrl+bấm, chuột giữa, liên kết mở thẻ mới, sang trang ngoài, tải xuống."},
-    {"id": "OOS-1", "p": "KHÔNG hỏi khi đóng thẻ hay tải lại trình duyệt lúc chỉ có chữ gõ dở (lúc Kara soạn thì đã có từ trước)."},
-    {"id": "OOS-2", "p": "KHÔNG bật chặn liên kết ở các khung khác (trao đổi Mục tiêu, thêm nhanh) — việc riêng."},
-    {"id": "OOS-3", "p": "KHÔNG giữ chữ gõ dở sau khi đã chọn rời; KHÔNG chặn nút Quay lại."},
-    {"id": "OOS-4", "p": "Liên kết trong câu trả lời của Kara vốn mở thẻ mới nên không bị chặn."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Bốn tình trạng của khung — Kara đang soạn, gõ dở chữ, gõ dở số, không gì dở — mỗi tình trạng có ca đo riêng (AC-1 Kara soạn, AC-2 gõ dở, AC-4 không gì dở)."},
-    {"i": 1, "p": "Mọi cách bấm liên kết: bấm thường và Enter thì hỏi; Cmd/Ctrl, chuột giữa, thẻ mới, trang ngoài, tải xuống thì để trình duyệt tự xử (AC-1, AC-5 không chặn khi cố ý, AC-7 màn thật)."},
-    {"i": 2, "p": "Hai liên kết thật trong khung — «Tới Kho tài liệu» và «Xem theo đơn vị»; liên kết trong chữ Kara mở thẻ mới (AC-1, AC-2, AC-4)."},
-    {"i": 3, "p": "Ba lựa chọn ở hộp hỏi — ở lại bằng nút, ở lại bằng Esc, rời (AC-2 ở lại, AC-3 rời)."},
-    {"i": 4, "p": "Khổ máy tính và điện thoại; các hộp khác không đổi; lượt Kara không bị dừng (AC-3, AC-6, AC-7)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Chưa chứng lượt Kara thật sự chạy tiếp sau khi người rời trang, vì bài kiểm cũ không gỡ khung thật — đã thêm phép đo trên máy chủ thật đọc bản nháp được nộp sau khi rời."},
-    {"i": 1, "p": "Lo nút «Xem theo đơn vị» không phải liên kết thật nên lọt bộ chặn — đã bác: nó là liên kết có địa chỉ thật, bộ chặn bắt mọi liên kết như nhau."},
-    {"i": 2, "p": "Hành vi nút Quay lại sau khi rời bị ghi như ràng buộc kỹ thuật, trong khi nó là lựa chọn của người — đã đổi thành câu Hỏi-2."},
-    {"i": 3, "p": "Lý do bỏ phép đo ngưỡng trích một ô còn trống, không quyết được gì — đã ghi lại lý do: chưa có ngưỡng nào để đo."},
-    {"i": 4, "p": "Bỏ bản mẫu bấm được chỉ đúng khi Hỏi-1 giữ lời cũ — đã ghi điều kiện: chọn lời mới thì chụp hộp hỏi trước khi làm."}
-  ]
+  "feature_plain": "Đang soạn OKR trong khung bên phải mà bấm một liên kết, người dùng được hỏi trước khi rời; ở lại thì chữ đang gõ còn nguyên, rời thì tới đúng trang và lượt Kara vẫn chạy tới hết.",
+  "analyst_plain": "Không có phép đo nào xanh ở cả hai phía; ba eval dùng lại kết quả lượt 2 vì lần sửa cuối chỉ chạm định dạng một tệp kiểm."
 }
