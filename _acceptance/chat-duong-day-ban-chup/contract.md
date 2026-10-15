@@ -5,7 +5,7 @@ slug: chat-duong-day-ban-chup
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ci]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-10-15
 design_doc: docs/superpowers/specs/2026-10-15-chat-duong-day-ban-chup-design.md
