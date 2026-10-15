@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ee527ed2b3bfc99e94ffdf50532680af3c9be8b9
+verified_commit: b5218917ab425fd3ef147e89ddfdbaf40a615a25
 human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 3 (17/17 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -268,3 +268,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, không 
 Round 1: E11 failed — dong 2 cua t1.mjs bao pre-merge-check co 1 violation va chan gop tren commit chi chua tin-hieu/crm/crm-9.json (dong 1 va dong 3 DUNG). Bo suite api cung do 5 ca (go-la-cat-quyen, ba-lop), khong gan eval nao. Returned to implementation.
 Round 2: moi eval may xanh (E11 nay do quan he thay vi dem tuyet doi; hang cho bo hook bang CRM_SKIP_HOOKS; duong lich theo luat tu choi chung) va bay lenh suite xanh. Con cho nguoi: E11b (judgment, de xuat PASS, chua co human_override). Verdict PENDING-JUDGMENT.
 Round 3: tren ee527ed2b moi eval may xanh va bay lenh suite xanh (E4 nay do doi chung bang phien that cua chu khoa o ba duong doc phien; E1b chay lai tren ban chay moi). Con cho nguoi: E11b (judgment T3, panel giu nguyen tu round 2, de xuat PASS, chua co human_override) va cac muc ngoai hop dong trong review-findings.md. Verdict PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-10-15, do gộp onehub 3818ad4ec (#414 sửa test ngày 15)
+run_id: repin-20261015T002109Z-94805
+sha: b5218917ab425fd3ef147e89ddfdbaf40a615a25 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
