@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import {
+	notifyManager,
 	QueryClient,
 	QueryClientProvider,
 	useQuery,
@@ -658,6 +659,9 @@ async function lamMoiLoi(o: HTMLElement) {
 				.status === "error",
 		"lam moi loi",
 	);
+	await act(async () => {
+		await new Promise<void>((xong) => notifyManager.schedule(xong));
+	});
 	phai(
 		o.querySelector('[data-slot="page-shell-title"]')?.textContent ===
 			CHIEN_DICH.name && o.querySelector("[data-vung-tai-loi]") === null,

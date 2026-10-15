@@ -133,7 +133,8 @@ Hai ô là **một bề mặt**: chia bằng đúng một đường kẻ dọc, 
 mảnh thẳng hàng (khuôn «dock» của ReUI `ai-chat-2`). Khung chưa có vật phẩm thì chỉ có cột Kara; vật phẩm tới thì
 khung mở rộng sang trái mà Kara không dời. Dưới 1024 px hai ô thành hai tab; dưới 768 px khung phủ toàn màn.
 
-Đang áp: Soạn OKR (khung bản ghi `?record=soan:<cuộc>`, lượt `soan-okr-trong-khung`). Khung deal chuyển tab Agent
+Đang áp: Soạn OKR (khung bản ghi `?record=soan:<cuộc>`, lượt `soan-okr-trong-khung`); hỏi đáp OKR (chỉ cột Kara,
+`?record=hoi-okr:<cuộc>`, hàng C `hoi-dap-okr`). Khung deal chuyển tab Agent
 thành cột Kara bên phải ở K5 `chat-deal-mot-khung`. Thành phần: `KaraDock` (`kara/dock.tsx`), `KaraArtifact
 variant="docked"`, cỡ sheet `kara`.
 
@@ -149,5 +150,6 @@ variant="docked"`, cỡ sheet `kara`.
 | `soan-okr-trang-rieng` | T2 | K2 — Soạn OKR thành trang riêng `/okr/soan/<cuộc>`: hội thoại `KaraTranscript` + `KaraComposer` cạnh bản nháp `KaraArtifact` (hai ô co giãn từ 1024 px, hai tab dưới đó); dòng đề xuất inline với Thêm · Sửa · Bỏ qua · Hỏi Kara, nhận cả nhóm, biên nhận có Hoàn tác về lần nộp mới nhất; khoá khi Kara đang soạn; mốc mỗi lần nộp nối hai chiều với dòng đổi; dòng hệ thống báo quyết sẽ gửi kèm. Màn đầu tiên dùng cả sáu khối |
 | `tac-tu-xin-duyet` | T3 | Tab bản ghi: công cụ ghi thành đề xuất |
 | `kara-mot-ten` | T2 | K6a — Đã làm phần chữ: 118 chuỗi gọi AI bằng tên khác (kiểm kê `_acceptance/kara-mot-ten/kiem-ke.json`) thành «Kara» trên tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu và câu Zalo; luật máy `apps/app/test/kara-mot-ten.spec.ts` chặn tên cũ quay lại. Lời mô hình tự xưng tách hàng riêng |
+| `hoi-dap-okr` | T3 | Hàng C — Hỏi Kara về OKR trong cột Kara của khu OKR và tổng quan chỉ OKR: câu trả lời do mã dựng từ `nop_tra_loi`, mỗi câu có `InlineCitation` mở Mục tiêu hay KR chồng lên, `AiFeedback` lưu ở `OkrHoiPhanHoi`; hết lượt khoá ô gõ kèm `FieldDescription` |
 
 Bản mẫu: `/proto/gop-y-dung-cho`.

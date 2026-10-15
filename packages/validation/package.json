@@ -34,6 +34,8 @@
 		"./okr-theo-kara": "./src/okr-theo-kara.ts",
 		"./okr-cuoc-soan": "./src/okr-cuoc-soan.ts",
 		"./okr-phien-soan": "./src/okr-phien-soan.ts",
+		"./okr-phien-hoi": "./src/okr-phien-hoi.ts",
+		"./okr-tra-loi": "./src/okr-tra-loi.ts",
 		"./to-chuc": "./src/to-chuc.ts",
 		"./to-chuc-luu-tru": "./src/to-chuc-luu-tru.ts",
 		"./phien-tac-tu": "./src/phien-tac-tu.ts",
