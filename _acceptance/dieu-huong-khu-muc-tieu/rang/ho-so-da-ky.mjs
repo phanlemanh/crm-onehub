@@ -52,10 +52,11 @@ const cauHinh = Bun.YAML.parse(
 	readFileSync(join(GOC, "_acceptance/config.yaml"), "utf8"),
 );
 const giaiRef = (cmd) => {
-	if (typeof cmd !== "string" || !cmd.startsWith("config:")) return cmd;
+	if (!cmd.startsWith("config:")) return cmd;
 	let o = cauHinh;
 	for (const k of cmd.slice("config:".length).split(".")) o = o?.[k];
-	return typeof o === "string" ? o : null;
+	const lenh = o == null ? "" : String(o);
+	return lenh === "" || lenh.startsWith("[object") ? null : lenh;
 };
 
 const viec = new Map();

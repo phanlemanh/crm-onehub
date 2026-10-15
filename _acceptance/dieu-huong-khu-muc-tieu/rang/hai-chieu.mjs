@@ -4,16 +4,27 @@
  *
  *   bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs <nhom>
  *
- * 1. Đối chứng dương: chạy nhóm trên vật lành → phải thoát 0.
+ * 1. Đối chứng dương: chạy nhóm trên vật lành (cây thật) → phải thoát 0.
  * 2. Với từng đột biến của nhóm (bảng DOT_BIEN): thay ĐÚNG một đoạn trong một tệp
- *    vật tại chỗ, chạy lại nhóm → phải thoát ≠ 0 VÀ đầu ra chứa thông điệp ghim;
- *    hoàn nguyên tệp trong `finally` (kể cả khi bị ngắt), rồi kiểm băm tệp bằng bản gốc.
+ *    vật của MỘT WORKTREE TẠM (HEAD + thay đổi chưa commit của cây thật, node_modules
+ *    trỏ về cây thật), chạy nhóm ở đó → phải thoát ≠ 0 VÀ đầu ra chứa thông điệp ghim.
+ *    Cây thật không bao giờ bị ghi: lượt chấm chạy các lệnh song song, nên một đột
+ *    biến tại chỗ lọt vào lượt vật-lành của nhóm khác (S4 vòng 1, 15/10). Băm mọi tệp
+ *    bị đột biến trên cây thật trước và sau phải bằng nhau.
  * Đoạn cần thay không có trong tệp → mã 2 «KHONG DO DUOC» (đột biến chết = phép đo mù).
  * Mã thoát: 0 hai chiều đúng · 1 có chiều sai · 2 không đo được.
  */
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdtempSync,
+	readFileSync,
+	rmSync,
+	symlinkSync,
+	writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -68,6 +79,13 @@ const DOT_BIEN = {
 			cu: "	const bp = headOf?.divisions[0];",
 			moi: '	if (donUrl) return { don: donUrl, nguon: "url" };\n	const bp = headOf?.divisions[0];',
 			ghim: "dhk-don-dich: donOkr=pb:P9 + truong phong ban P2: mong pb:P2, nhan pb:P9",
+		},
+		{
+			ten: "ky-hoi-y",
+			tep: `${OKR}/hanh-dong-khu.tsx`,
+			cu: "cycleId && cycleId !== kyChay ? cycleId : thamSo[SEARCH_PARAM.okr.ky];",
+			moi: "thamSo[SEARCH_PARAM.okr.ky];",
+			ghim: "dhk-don-dich: hoi-y gui sang Theo don vi ky «q4», quyen hoi ky «n27», mong kyOkr=n27",
 		},
 	],
 	"dhk-menu-soan": [
@@ -125,7 +143,7 @@ if (!nhom || !(nhom in DOT_BIEN)) {
 	process.exit(2);
 }
 
-function chayNhom() {
+function chayNhom(app) {
 	const r = spawnSync(
 		"bun",
 		[
@@ -139,7 +157,7 @@ function chayNhom() {
 			nhom,
 		],
 		{
-			cwd: APP,
+			cwd: app,
 			encoding: "utf8",
 			env: { ...process.env, TZ: "Asia/Ho_Chi_Minh" },
 			maxBuffer: 64 * 1024 * 1024,
@@ -151,18 +169,19 @@ function chayNhom() {
 }
 
 const bam = (s) => createHash("sha256").update(s).digest("hex");
-const daSua = new Map();
-function hoanNguyen() {
-	for (const [tep, goc] of daSua) writeFileSync(tep, goc);
-	daSua.clear();
-}
-for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"])
-	process.on(tin, () => {
-		hoanNguyen();
-		process.exit(128 + { SIGINT: 2, SIGTERM: 15, SIGHUP: 1 }[tin]);
+const git = (cwd, ...a) =>
+	execFileSync("git", a, {
+		cwd,
+		encoding: "utf8",
+		maxBuffer: 256 * 1024 * 1024,
 	});
 
-const lanh = chayNhom();
+const tepDot = [...new Set(DOT_BIEN[nhom].map((d) => d.tep))];
+const bamTruoc = new Map(
+	tepDot.map((t) => [t, bam(readFileSync(join(GOC, t), "utf8"))]),
+);
+
+const lanh = chayNhom(APP);
 if (lanh.ma !== 0 || lanh.soPass === 0) {
 	console.log(lanh.chu.split("\n").slice(-40).join("\n"));
 	console.log(
@@ -172,21 +191,62 @@ if (lanh.ma !== 0 || lanh.soPass === 0) {
 }
 console.log(`DUNG ${nhom} doi chung: vat lanh xanh (${lanh.soPass} pass)`);
 
+const tam = mkdtempSync(join(tmpdir(), "dhk-hai-chieu-"));
+const sao = join(tam, "crm");
 let sai = 0;
-for (const db of DOT_BIEN[nhom]) {
-	const tep = join(GOC, db.tep);
-	const goc = readFileSync(tep, "utf8");
-	const soLan = goc.split(db.cu).length - 1;
-	if (soLan !== 1) {
-		console.log(
-			`KHONG DO DUOC: dot bien ${db.ten} — doan can thay xuat hien ${soLan} lan trong ${db.tep}`,
-		);
-		process.exit(2);
-	}
-	daSua.set(tep, goc);
+let khongDo = null;
+function don() {
 	try {
+		git(GOC, "worktree", "remove", "--force", sao);
+	} catch {}
+	rmSync(tam, { recursive: true, force: true });
+	try {
+		git(GOC, "worktree", "prune");
+	} catch {}
+}
+for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"])
+	process.on(tin, () => {
+		don();
+		process.exit(128 + { SIGINT: 2, SIGTERM: 15, SIGHUP: 1 }[tin]);
+	});
+try {
+	git(GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD");
+	const va = git(GOC, "diff", "HEAD", "--binary");
+	if (va.trim()) {
+		const tepVa = join(tam, "chua-commit.patch");
+		writeFileSync(tepVa, va);
+		git(sao, "apply", "--whitespace=nowarn", tepVa);
+	}
+	for (const nm of git(
+		GOC,
+		"ls-files",
+		"-o",
+		"--directory",
+		"--exclude-standard",
+		"-i",
+	)
+		.split("\n")
+		.filter(
+			(d) =>
+				/(^|\/)node_modules\/$/.test(d) &&
+				!d.slice(0, -1).includes("node_modules/"),
+		)) {
+		const dich = join(sao, nm.slice(0, -1));
+		if (!existsSync(dich)) symlinkSync(join(GOC, nm.slice(0, -1)), dich);
+	}
+	if (!existsSync(join(sao, "apps/app/node_modules")))
+		throw new Error("worktree tam thieu apps/app/node_modules");
+	for (const db of DOT_BIEN[nhom]) {
+		const tep = join(sao, db.tep);
+		const goc = readFileSync(tep, "utf8");
+		const soLan = goc.split(db.cu).length - 1;
+		if (soLan !== 1) {
+			khongDo = `dot bien ${db.ten} — doan can thay xuat hien ${soLan} lan trong ${db.tep}`;
+			break;
+		}
 		writeFileSync(tep, goc.replace(db.cu, db.moi));
-		const r = chayNhom();
+		const r = chayNhom(join(sao, "apps", "app"));
+		writeFileSync(tep, goc);
 		const coGhim = r.chu.includes(db.ghim);
 		if (r.ma !== 0 && coGhim)
 			console.log(`DUNG ${nhom} chieu do ${db.ten}: ma ${r.ma}, «${db.ghim}»`);
@@ -203,17 +263,22 @@ for (const db of DOT_BIEN[nhom]) {
 				`SAI ${nhom} chieu do ${db.ten}: ma ${r.ma}, ${coGhim ? "co" : "THIEU"} thong diep «${db.ghim}»`,
 			);
 		}
-	} finally {
-		hoanNguyen();
 	}
-	if (bam(readFileSync(tep, "utf8")) !== bam(goc)) {
-		console.log(`KHONG DO DUOC: hoan nguyen ${db.tep} that bai`);
-		process.exit(2);
-	}
+} catch (e) {
+	khongDo = `worktree tam: ${String(e).slice(0, 300)}`;
+} finally {
+	don();
+}
+for (const t of tepDot)
+	if (bam(readFileSync(join(GOC, t), "utf8")) !== bamTruoc.get(t))
+		khongDo = `cay that bi ghi: ${t} doi bam trong luot — phep do khong duoc ghi vao cay`;
+if (khongDo) {
+	console.log(`KHONG DO DUOC: ${khongDo}`);
+	process.exit(2);
 }
 console.log(
 	sai === 0
-		? `KET LUAN ${nhom}: hai chieu dung (${DOT_BIEN[nhom].length} dot bien)`
+		? `KET LUAN ${nhom}: hai chieu dung (${DOT_BIEN[nhom].length} dot bien, worktree tam)`
 		: `KET LUAN ${nhom}: ${sai} chieu do sai`,
 );
 process.exit(sai === 0 ? 0 : 1);

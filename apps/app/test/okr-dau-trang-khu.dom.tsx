@@ -71,13 +71,13 @@ const TRANG_SUC_KHOE = await import(
 );
 
 type TabOkr = (typeof TAB)[number];
-const DUONG_TAB: Record<TabOkr, string> = {
+const DUONG_TAB = {
 	"cua-toi": "/ws/okr",
 	"cap-nhat-tuan": "/ws/okr/cap-nhat-tuan",
 	"theo-don-vi": "/ws/okr/theo-don-vi",
 	"toan-canh": "/ws/okr/toan-canh",
 	"hoi-y": "/ws/okr/hoi-y",
-};
+} satisfies Record<TabOkr, string>;
 const DUONG_SUC_KHOE = "/ws/okr/toan-canh/suc-khoe";
 
 const GOC_KHO = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -143,6 +143,35 @@ const CAY = orgTreeOutput.parse({
 });
 
 type Pha = "lap-ke-hoach" | "dang-chay";
+const kyMau = (id: string, kind: "quy" | "nam", pha: Pha) => ({
+	id,
+	kind,
+	name: kind === "nam" ? "Năm 2027" : "Quý 4/2026",
+	parentId: null,
+	startsOn: kind === "nam" ? "2027-01-01" : "2026-10-01",
+	endsOn: kind === "nam" ? "2027-12-31" : "2026-12-31",
+	phase: pha,
+	breakStartsOn: null,
+	breakEndsOn: null,
+	updateWeekday: 1,
+	cuaSoRa: null,
+	anLuc: null,
+	anLyDo: null,
+	quyConHien: 0,
+	viec: { suaMoiO: false, suaTen: false, go: false, an: false, hienLai: false },
+});
+
+// Hai chu kỳ: q4 đang chạy (mặc định của Theo đơn vị) và n27 lập kế hoạch
+// (mặc định của Hỏi ý) — bộ hai mặc định khác nhau.
+const haiChuKy = () =>
+	cyclesOutput.parse({
+		cycles: [
+			kyMau("q4", "quy", "dang-chay"),
+			kyMau("n27", "nam", "lap-ke-hoach"),
+		],
+		currentId: "q4",
+	});
+
 const chuKy = (pha: Pha) =>
 	cyclesOutput.parse({
 		cycles: [
@@ -214,6 +243,7 @@ const BAT = soanSanSangOutput.parse({
 });
 
 type Nen = {
+	haiKy?: boolean;
 	xem?: NguoiXem;
 	pha?: Pha;
 	duoc?: boolean;
@@ -224,6 +254,7 @@ type Nen = {
 };
 
 function datNen({
+	haiKy = false,
 	xem = QT,
 	pha = "dang-chay",
 	duoc = true,
@@ -231,7 +262,7 @@ function datNen({
 	treoQuyen = false,
 	loiQuyen = false,
 }: Nen) {
-	dat("okr.cycles", () => chuKy(pha));
+	dat("okr.cycles", () => (haiKy ? haiChuKy() : chuKy(pha)));
 	dat("okr.access", () => {
 		if (treoQuyen) return new Promise(() => {});
 		if (loiQuyen) throw new Error("may chu loi");
@@ -398,13 +429,13 @@ describe("dhk-don-dich", () => {
 		{ ten: "donOkr=pb:P9", don: { loai: "pb", id: "P9" } },
 		{ ten: "khong donOkr", don: null },
 	];
-	const KY_VONG: Record<string, string[]> = {
+	const KY_VONG = {
 		[QT.ten]: ["bp:B2", "pb:P2", "nguoi:hung", "goc", "pb:P9", "goc"],
 		[TB1.ten]: ["bp:B1", "bp:B1", "bp:B1", "bp:B1", "bp:B1", "bp:B1"],
 		[TP2.ten]: ["pb:P2", "pb:P2", "pb:P2", "pb:P2", "pb:P2", "pb:P2"],
 		[CA.ten]: ["bp:B1", "bp:B1", "bp:B1", "bp:B1", "bp:B1", "bp:B1"],
 		[TV.ten]: ["bp:B2", "pb:P2", "nguoi:hung", "goc", "pb:P9", "goc"],
-	};
+	} satisfies Record<string, string[]>;
 
 	test("dhk-don-dich: 30 ô — đơn vị mình dẫn trước, rồi đường dẫn, rồi công ty", () => {
 		const s = soSai();
@@ -453,6 +484,35 @@ describe("dhk-don-dich", () => {
 		expect(u.searchParams.get("donOkr")).toBe("pb:P2");
 		expect(u.searchParams.get("new")).toBe("true");
 		await don();
+
+		// Hỏi ý mặc định chu kỳ lập kế hoạch, Theo đơn vị mặc định chu kỳ đang chạy:
+		// liên kết phải mang đúng chu kỳ mà quyền vừa được hỏi.
+		for (const [tab, mong] of [
+			["hoi-y", "n27"],
+			["cua-toi", null],
+		] as const) {
+			await dauTrang(tab, { xem: TP2, haiKy: true });
+			await cho(
+				() => nutThem() !== null && !nutThem()?.hasAttribute("disabled"),
+				`nut them ${tab}`,
+			);
+			const ds = goiCua("okr.danhSach").at(-1)?.dauVao as
+				| { cycleId?: string }
+				| undefined;
+			const a =
+				nutThem()?.closest("a") ??
+				(nutThem()?.tagName === "A" ? nutThem() : null);
+			const ky = new URL(
+				a?.getAttribute("href") ?? "/",
+				"http://x",
+			).searchParams.get("kyOkr");
+			const chay = ky ?? "q4";
+			if (chay !== (ds?.cycleId ?? "?") || ky !== mong)
+				throw new Error(
+					`dhk-don-dich: ${tab} gui sang Theo don vi ky «${chay}», quyen hoi ky «${ds?.cycleId}», mong kyOkr=${mong ?? "(vang)"}`,
+				);
+			await don();
+		}
 
 		const san = await dauTrang("theo-don-vi", { xem: TP2 }, "?donOkr=pb:P2");
 		await cho(
@@ -1002,16 +1062,10 @@ describe("dhk-suc-khoe", () => {
 		}
 		localeMayChu = "vi";
 		soO += 1;
-		const chuoi: string[] = [];
-		const gom = (x: unknown) => {
-			if (typeof x === "string") chuoi.push(x);
-			else if (typeof x === "function")
-				chuoi.push(String((x as (...a: string[]) => string)("1", "2", "3")));
-			else if (x && typeof x === "object")
-				for (const v of Object.values(x)) gom(v);
-		};
-		gom(okrToanCanhMessages("en"));
-		const sai = chuoi.filter((c) => c.includes("Programme"));
+		const chu = JSON.stringify(okrToanCanhMessages("en"), (_k, v) =>
+			v instanceof Function ? String(v("1", "2", "3")) : v,
+		);
+		const sai = chu.match(/[^"]*Programme[^"]*/g) ?? [];
 		s.kiem(
 			sai.length === 0,
 			`dhk-suc-khoe: en con «Programme»: ${sai.join(" | ")}`,
