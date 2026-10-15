@@ -49,6 +49,7 @@ export const PHIEN_TRO_LY = {
 	},
 	soDu: {
 		url: "https://ai-gateway.vercel.sh/v1/credits",
+		bienUrl: "TDX_URL_SO_DU",
 		hoiMs: 10 * GIAY_MS,
 	},
 	maNgat: { SIGINT: 130, SIGTERM: 143, SIGHUP: 129 },
@@ -107,7 +108,8 @@ export async function soDuGateway(env = process.env, layFetch = fetch) {
 		.find(Boolean);
 	if (!khoa) return { khongDoc: "thieu khoa" };
 	try {
-		const r = await layFetch(PHIEN_TRO_LY.soDu.url, {
+		const url = env[PHIEN_TRO_LY.soDu.bienUrl]?.trim() || PHIEN_TRO_LY.soDu.url;
+		const r = await layFetch(url, {
 			headers: { authorization: `Bearer ${khoa}` },
 			signal: AbortSignal.timeout(PHIEN_TRO_LY.soDu.hoiMs),
 		});

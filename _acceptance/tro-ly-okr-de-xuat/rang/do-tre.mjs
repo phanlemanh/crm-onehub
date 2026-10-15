@@ -208,8 +208,7 @@ async function trongPhien() {
 		const hangBat = bang.find((h) => h.nac === E24.nac) ?? {};
 		console.log(`do-tre.sql okr.thang=${thang}: ${JSON.stringify(bang)}`);
 
-		const soHongDau = so.filter((l) => l.hong).length;
-		if (soHongDau === so.length)
+		if (laHongHet(so))
 			return khongDo(hongHet(so, join(RA, "do-tre", "tac-tu.log")));
 
 		const msList = so.map((l) => l.ms);
@@ -242,6 +241,10 @@ async function trongPhien() {
 	} finally {
 		await tacTu.dung();
 	}
+}
+
+export function laHongHet(so) {
+	return so.length > 0 && so.every((l) => l.hong);
 }
 
 export function hongHet(so, tepNhatKy, doc = (t) => readFileSync(t, "utf8")) {
