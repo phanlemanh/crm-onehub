@@ -387,7 +387,8 @@ describe("kcl-ngoai", () => {
 		);
 		expect(`kcl-ngoai: khong chan ${!ket.chan}`).toBe(
 			"kcl-ngoai: khong chan true",
-		);		await act(async () => {
+		);
+		await act(async () => {
 			document
 				.querySelector("[data-slot='sheet-content']")
 				?.dispatchEvent(
