@@ -69,7 +69,7 @@ import { hienSo } from "../hop-thoai-kr";
 import type { DuLieuCapNhat, KrCapNhat } from "../kieu";
 import { KHOA_DAU } from "../nguon-so";
 
-const TUAN = { chuNhat: 6, soNgay: 7 } as const;
+export const TUAN = { chuNhat: 6, soNgay: 7 } as const;
 
 const VI_DU_SO = 3.5;
 
@@ -96,13 +96,13 @@ type KetQuaGui = {
 	dong: DongDaGui[];
 };
 
-function congNgay(ngay: string, n: number): string {
+export function congNgay(ngay: string, n: number): string {
 	const d = new Date(`${ngay}T00:00:00Z`);
 	d.setUTCDate(d.getUTCDate() + n);
 	return d.toISOString().slice(0, 10);
 }
 
-function ngayThang(ngay: string): string {
+export function ngayThang(ngay: string): string {
 	const [, thang, ngayTrongThang] = ngay.split("-");
 	return `${ngayTrongThang}/${thang}`;
 }
@@ -291,12 +291,18 @@ function Rong() {
 	);
 }
 
-function BangCapNhat({
+export function BangCapNhat({
 	duLieu,
 	sessionId,
+	taiCho = false,
+	suaNgay = false,
+	focusDau = false,
 }: {
 	duLieu: DuLieuCapNhat;
 	sessionId: string;
+	taiCho?: boolean;
+	suaNgay?: boolean;
+	focusDau?: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -307,7 +313,7 @@ function BangCapNhat({
 			new Map(duLieu.items.map((kr) => [kr.keyResultId, oBanDau(kr, locale)])),
 	);
 	const [daGui, setDaGui] = useState<KetQuaGui | null>(null);
-	const [dangSua, setDangSua] = useState(false);
+	const [dangSua, setDangSua] = useState(suaNgay);
 	const gui = useMutation(trpc.okr.guiCapNhat.mutationOptions());
 
 	const dong = duLieu.items.map((kr) => {
@@ -333,12 +339,19 @@ function BangCapNhat({
 					).length
 				}
 				ketQua={daGui}
+				taiCho={taiCho}
 				weekStart={duLieu.weekStart}
 			/>
 		);
 
 	if (!dangSua && tong > 0 && soDaGuiTuanNay === tong)
-		return <DaXongTuanNay duLieu={duLieu} sua={() => setDangSua(true)} />;
+		return (
+			<DaXongTuanNay
+				duLieu={duLieu}
+				sua={() => setDangSua(true)}
+				taiCho={taiCho}
+			/>
+		);
 
 	const motPhan = soDaGuiTuanNay > 0 && soDaGuiTuanNay < tong;
 
@@ -424,7 +437,7 @@ function BangCapNhat({
 									loi={d.loi}
 									o={d.o}
 									so={d.so}
-									tuDongFocus={dangSua && i === 0}
+									tuDongFocus={(dangSua || focusDau) && i === 0}
 									weekStart={duLieu.weekStart}
 								/>
 							</Fragment>
@@ -741,10 +754,12 @@ function DaGui({
 	ketQua,
 	chuaGui,
 	weekStart,
+	taiCho,
 }: {
 	ketQua: KetQuaGui;
 	chuaGui: number;
 	weekStart: string;
+	taiCho: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -787,9 +802,11 @@ function DaGui({
 					</ItemGroup>
 				</CardContent>
 			</Card>
-			<div>
-				<VeCuaToi />
-			</div>
+			{taiCho ? null : (
+				<div>
+					<VeCuaToi />
+				</div>
+			)}
 		</div>
 	);
 }
@@ -797,9 +814,11 @@ function DaGui({
 function DaXongTuanNay({
 	duLieu,
 	sua,
+	taiCho,
 }: {
 	duLieu: DuLieuCapNhat;
 	sua: () => void;
+	taiCho: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -848,7 +867,7 @@ function DaXongTuanNay({
 				<Button data-nut="sua-cap-nhat" onClick={sua} variant="outline">
 					{m.daXong.sua}
 				</Button>
-				<VeCuaToi />
+				{taiCho ? null : <VeCuaToi />}
 			</div>
 		</div>
 	);
