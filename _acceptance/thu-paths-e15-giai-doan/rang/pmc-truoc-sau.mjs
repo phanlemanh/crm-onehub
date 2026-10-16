@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, realpathSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -65,7 +65,7 @@ function chay() {
 		console.log("da gop, khong so");
 		return 0;
 	}
-	const tam = mkdtempSync(join(tmpdir(), "tpe-pmc-"));
+	const tam = mkdtempSync(join(realpathSync(tmpdir()), "tpe-pmc-"));
 	const cay = join(tam, "cay");
 	const go = () => {
 		spawnSync("git", ["-C", GOC, "worktree", "remove", "--force", cay]);
@@ -113,5 +113,5 @@ function chay() {
 	}
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url))
+if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url))
 	process.exit(chay() ? 1 : 0);

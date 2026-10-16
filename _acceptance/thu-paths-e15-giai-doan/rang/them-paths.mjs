@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join, normalize, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -328,5 +328,5 @@ function chay() {
 	khongDo("can --ke | --ghi | --kiem | --kiem-bo-qua");
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url))
+if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url))
 	process.exit(chay() ? 1 : 0);

@@ -1,5 +1,11 @@
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+	mkdtempSync,
+	readFileSync,
+	realpathSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -329,7 +335,7 @@ function trangThaiChinh() {
 
 function chay() {
 	const truoc = trangThaiChinh();
-	const tam = mkdtempSync(join(tmpdir(), "tpe-dot-bien-"));
+	const tam = mkdtempSync(join(realpathSync(tmpdir()), "tpe-dot-bien-"));
 	const cay = join(tam, "cay");
 	const go = () => {
 		spawnSync("git", ["-C", GOC, "worktree", "remove", "--force", cay]);
@@ -351,6 +357,13 @@ function chay() {
 			if (!daChayLanh.has(c.eval))
 				daChayLanh.set(c.eval, chayLenh(cay, c.eval));
 			const lanh = daChayLanh.get(c.eval);
+			if (lanh.ma === 0 && !lanh.ra.trim()) {
+				lot += 1;
+				console.log(
+					`LOT ${c.eval} ${c.ten}: ban lanh ma 0 ma khong in gi — rang khong chay`,
+				);
+				continue;
+			}
 			if (lanh.ma !== 0) {
 				if (
 					c.canF23 &&
@@ -408,4 +421,5 @@ function chay() {
 	return lot ? 1 : 0;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) process.exit(chay());
+if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url))
+	process.exit(chay());

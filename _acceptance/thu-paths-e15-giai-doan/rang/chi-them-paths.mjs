@@ -1,3 +1,4 @@
+import { realpathSync } from "node:fs";
 import { execFileSync, spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
@@ -185,5 +186,5 @@ function chay() {
 	return dem.lech;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url))
+if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url))
 	process.exit(chay() ? 1 : 0);

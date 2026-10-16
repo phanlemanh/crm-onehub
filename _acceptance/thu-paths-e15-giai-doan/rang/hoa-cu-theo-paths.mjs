@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -264,4 +264,4 @@ function chay() {
 	process.exit(hong ? 1 : 0);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) chay();
+if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) chay();
