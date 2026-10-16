@@ -128,18 +128,17 @@ async function main() {
 			luuY: "mau so lan chuyen doc tu STAGE_CHANGE va giai doan dau cua deal, khong doc bang goi y",
 		};
 		console.log(JSON.stringify(ket, null, 2));
-		if (lanChuyen === 0) {
+		const khongDoDuoc = lanChuyen === 0 || (thieu === 0 && tiLe === null);
+		if (khongDoDuoc) {
 			console.error(
-				"do-nguong: khong co lan chuyen sang thang nao trong cua so",
+				lanChuyen === 0
+					? "do-nguong: khong co lan chuyen sang thang nao trong cua so"
+					: "do-nguong: chua goi y nao du 3 ngay de phan",
 			);
 			process.exitCode = MA_KHONG_DO;
-		} else if (thieu > 0) {
-			process.exitCode = MA_DUOI_NGUONG;
-		} else if (tiLe === null) {
-			console.error("do-nguong: chua goi y nao du 3 ngay de phan");
-			process.exitCode = MA_KHONG_DO;
 		} else {
-			process.exitCode = tiLe < NGUONG ? MA_DUOI_NGUONG : 0;
+			const chet = thieu > 0 || (tiLe !== null && tiLe < NGUONG);
+			process.exitCode = chet ? MA_DUOI_NGUONG : 0;
 		}
 	} finally {
 		await client.end();
