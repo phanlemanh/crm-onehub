@@ -1012,6 +1012,7 @@ const GHIM = {
 	"okr-toan-canh:hopTuan.phuTrach": ["Phụ trách 1", "Phụ trách 12"],
 	"okr-toan-canh:soDo.soMucTieu": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
 	"okr-toan-canh:soDo.tienDo": ["1% tiến độ", "12% tiến độ"],
+	"okr-quanh:tienDo": ["1% tiến độ", "12% tiến độ"],
 	"okr-toan-canh:soDo.phongBanGop": ["+1 phòng ban", "+12 phòng ban"],
 	"okr-toan-canh:soDo.chuYBenTrong": [
 		"1 cần chú ý bên trong",
