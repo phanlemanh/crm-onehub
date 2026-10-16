@@ -1,10 +1,8 @@
 "use client";
 
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
-import {
-	type StatusTone,
-	StatusIndicator,
-} from "@crm/ui/components/status-indicator";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import {
 	Tooltip,
 	TooltipContent,
@@ -23,12 +21,19 @@ export type Attendee = {
 	imageUrl?: string | null;
 };
 
-const RESPONSE_TONE: Record<string, StatusTone> = {
-	accepted: "success",
-	declined: "error",
-	tentative: "warning",
-	needsAction: "neutral",
-};
+export const NGHIA_PHAN_HOI = {
+	accepted: "xong",
+	declined: "hong",
+	tentative: "cho",
+	needsAction: "nhap",
+} as const satisfies Record<string, NghiaTrangThai>;
+
+function nghiaPhanHoi(trangThai: string | null): NghiaTrangThai {
+	const khoa = trangThai ?? "needsAction";
+	return khoa in NGHIA_PHAN_HOI
+		? NGHIA_PHAN_HOI[khoa as keyof typeof NGHIA_PHAN_HOI]
+		: "nhap";
+}
 
 
 function AttendeeList({
@@ -71,7 +76,7 @@ function AttendeeList({
 							<span className="flex items-center gap-2">
 								{attendee.name ?? attendee.email}
 								<StatusIndicator
-									tone={RESPONSE_TONE[attendee.responseStatus ?? "needsAction"] ?? "neutral"}
+									tone={toneTheoNghia(nghiaPhanHoi(attendee.responseStatus))}
 									label={
 										msg.attendee[
 											(attendee.responseStatus ??

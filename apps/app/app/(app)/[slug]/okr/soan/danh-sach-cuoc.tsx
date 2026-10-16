@@ -28,23 +28,21 @@ import {
 	SheetTitle,
 } from "@crm/ui/components/sheet";
 import { Spinner } from "@crm/ui/components/spinner";
-import {
-	StatusIndicator,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { formatNgayGio } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { CuocSoan, DonViSoan } from "./kieu";
 
-const TONE_CUOC = {
-	dang: "warning",
-	"da-dua-vao": "success",
-	bo: "neutral",
-} as const satisfies Record<CuocSoan["trangThai"], StatusTone>;
+export const NGHIA_CUOC = {
+	dang: "dangChay",
+	"da-dua-vao": "xong",
+	bo: "ketThuc",
+} as const satisfies Record<CuocSoan["trangThai"], NghiaTrangThai>;
 
 function NutMoCuoc({
 	donVi,
@@ -127,7 +125,7 @@ function DanhSachDong({
 							</ItemDescription>
 							<StatusIndicator
 								size="sm"
-								tone={TONE_CUOC[c.trangThai]}
+								tone={toneTheoNghia(NGHIA_CUOC[c.trangThai])}
 								label={m.cuoc.trangThai[c.trangThai]}
 							/>
 						</ItemContent>
