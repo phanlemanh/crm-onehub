@@ -1,3 +1,17 @@
 {
-  "feature_plain": "Kara thôi lấy nhầm thông tin Meta khi rep dán trang Facebook vào ô tên miền, viết mô tả công ty bằng tiếng Việt, và hiện tên quốc gia theo ngôn ngữ người đang xem."
+  "feature_plain": "Kara thôi lấy nhầm thông tin Meta khi rep dán trang Facebook vào ô tên miền, viết mô tả công ty bằng tiếng Việt, và hiện tên quốc gia theo ngôn ngữ người đang xem. Lần mở lại này sửa ba lỗi do chính lần sửa trước gây ra.",
+  "will_do": [
+    {"id": "AC-4", "p": "Sẽ nhận ra trang của 14 nền tảng (Facebook, Zalo, LinkedIn, TikTok, batdongsan…), kể cả tên miền con, mà không nhận nhầm tên miền trông giống."},
+    {"id": "AC-6", "p": "Sẽ xin nhà cung cấp dữ liệu công ty trả mô tả bằng tiếng Việt ở mọi lượt tra."},
+    {"id": "AC-7", "p": "Sẽ để «Tra cứu lại» thay phần Kara điền lần trước mà rep chưa sửa, giữ nguyên ô rep đã sửa hay tự gõ; mô tả công cụ tra của Kara nói đúng luật này. (mới: phần mô tả công cụ)"},
+    {"id": "AC-8", "p": "Sẽ hiện «Hoa Kỳ» cho người xem tiếng Việt và «United States» cho người xem tiếng Anh; quốc gia rep tự gõ hiện nguyên văn."},
+    {"id": "AC-9", "p": "Sẽ chụp màn ở khổ máy tính và điện thoại để người ký nhìn dòng báo lỗi và tên quốc gia."},
+    {"id": "AC-10", "p": "Sẽ để «Tra cứu lại» xoá ô địa chỉ Kara điền mà kết quả mới không còn (hết cảnh «Hà Nội, CA, Việt Nam»); tra lại mà không có gì mới thì không ghi gì và Kara báo mọi thứ đã có. (mới)"}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn tạo công ty khi rep dán trang mạng xã hội: dưới ô hiện câu gọi tên nền tảng và bảo rep dán trang web riêng của công ty hoặc để trống. (mới: vế «dán trang web riêng»)"},
+    {"id": "AC-2", "p": "Chặn sửa tên miền trong ngăn công ty thành trang mạng xã hội — báo đúng câu như khi tạo."},
+    {"id": "AC-3", "p": "Chặn ở máy chủ luôn: lời gọi thẳng không qua màn cũng bị từ chối."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG tra cứu công ty đã lỡ mang tên miền nền tảng (như Titan), không tốn lượt tra."}
+  ]
 }
