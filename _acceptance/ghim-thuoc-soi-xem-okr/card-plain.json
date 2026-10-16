@@ -1,32 +1,4 @@
 {
-  "feature_plain": "Phép kiểm «mỗi lần đọc OKR đều tôn trọng mức hiển thị giới hạn» xanh trở lại, và từ nay chạy tự động trên từng PR thay vì chỉ khi có người nhớ chạy.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho phép kiểm đọc OKR xanh trở lại trên nhánh: bảy lời đọc mới (đã xác minh đều nằm sau cổng xem) được ghi miễn có lý do, dòng miễn thừa được bỏ."},
-    {"id": "AC-2", "p": "Sẽ chứng mỗi dòng miễn mới chỉ che đúng một chỗ: bỏ dòng nào thì phép kiểm đỏ đúng chỗ ấy, thêm dòng thừa hay để trống lý do cũng đỏ."},
-    {"id": "AC-4", "p": "Sẽ thêm bước «OKR read rule» vào job kiểm luật kho trên CI, chạy trên mọi PR (cả PR nháp) và mọi lần gộp vào onehub, đỏ thì chặn."},
-    {"id": "AC-5", "p": "Sẽ chứng chính dòng lệnh CI thoát đỏ khi có lời đọc OKR không cổng — đúng mã GitHub dùng để đánh đỏ bước."},
-    {"id": "AC-6", "p": "Sẽ giữ các phép kiểm của hồ sơ cũ đang soi tệp CI này: ba cái đang xanh vẫn xanh, năm cái đỏ sẵn không đỏ thêm dòng nào."},
-    {"id": "AC-7", "p": "Sẽ ghi vào tài liệu API rằng CI chạy phép kiểm này trên mọi PR và mọi lần gộp."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "KHÔNG sửa hợp đồng đã ký của hồ sơ mức hiển thị giới hạn (dòng «ai gộp sau nhớ chạy lại»)."},
-    {"id": "OOS-2", "p": "KHÔNG đổi cách phép kiểm soi mã hay cách khoá một dòng miễn."},
-    {"id": "OOS-3", "p": "KHÔNG đặt bước CI thành check bắt buộc — onehub chưa có luật bảo vệ nhánh, đó là cài đặt của chủ kho."},
-    {"id": "OOS-4", "p": "KHÔNG lọc bước CI theo đường dẫn — theo khuyến nghị của Hỏi-1; anh chọn lọc thì mục này đổi."},
-    {"id": "OOS-5", "p": "KHÔNG chạm các chế độ kiểm khác và phép kiểm của hồ sơ khác."}
-  ],
-  "scope_plain": "Phần cắt bỏ giữ vòng này đúng hai việc: cho phép kiểm xanh và cho CI chạy nó.",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi kiểu sửa danh sách miễn (thêm đúng chỗ, bỏ dòng thừa, thiếu lý do, lời đọc mới không miễn) đều có ca đo — AC-1, AC-2 (hai chiều của dòng miễn), AC-3 (lý do đúng nghĩa)."},
-    {"i": 1, "p": "Mọi nơi phép kiểm chạy: khi ghim lại hồ sơ, PR nháp, PR sẵn sàng, gộp vào onehub — AC-4 (hình bước CI)."},
-    {"i": 2, "p": "Ba lớp của bước CI: hình tệp workflow, hành vi dòng lệnh, không làm hỏng phép kiểm khác của tệp — AC-4, AC-5, AC-6."},
-    {"i": 3, "p": "Lần chạy thật trên GitHub chưa đo ở bước chấm; đọc khi PR mở."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Câu giao nói «PR chạm ba nhóm tệp OKR», máy định cho chạy mọi PR — chọn lọc hay không là khẩu vị rủi ro, đưa lên anh thành Hỏi-1."},
-    {"i": 1, "p": "Năm phép kiểm cũ đã đỏ sẵn có thể che một hỏng mới — đã thêm phép so dòng lỗi trước và sau (E6d)."},
-    {"i": 2, "p": "Bước CI chưa được ghim tên nên số đo sau gộp có thể không tìm ra bước — đã ghim tên «OKR read rule»."},
-    {"i": 3, "p": "Hai PR xanh riêng vẫn có thể làm onehub đỏ khi gộp cùng lô — đã ghi giới hạn và luật phân loại khi đếm 14 ngày."},
-    {"i": 4, "p": "Lý do miễn cho hàm cổng chung của căn chỉnh chưa rõ đáp án — đã viết luật riêng cho người chấm."}
-  ]
+  "feature_plain": "Phép kiểm «mỗi lần đọc OKR đều tôn trọng mức hiển thị giới hạn» xanh trở lại, và từ nay chạy tự động trên mọi PR và mọi lần gộp vào onehub.",
+  "analyst_plain": ""
 }
