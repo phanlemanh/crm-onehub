@@ -131,6 +131,7 @@ single place that knows what is set.
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
 | `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document library — the drafting machine (`may_soan`) and the AI assistant that answers from approved pages (`tro_ly_kho`) — so their spend is billed apart. Without it both run on the key above |
 | `OKR_AI_GATEWAY_API_KEY` | A separate AI Gateway key used only by Trợ lý OKR (suggestions, weekly summaries and the drafting chat in `apps/agent-okr`), so its spend is billed apart and the key can carry its own monthly budget. Without it Trợ lý OKR runs on `AI_GATEWAY_API_KEY`, or on Vercel OIDC |
+| `TRO_LY_OKR_MO_HINH` | Measurement only, never for production: the model Trợ lý OKR runs while `thu-haiku-tro-ly-okr` compares models. Exactly two values, `google/gemini-3.8-flash` (the default) and `anthropic/claude-haiku-5.5`. Ignored when `NODE_ENV` is `production`, where Trợ lý OKR always runs `google/gemini-3.8-flash`; any other value stops the agent from starting with an error that names the variable |
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
 | `OKR_AGENT_URL` | Where the app forwards the OKR drafting chat (`/eve/agents/okr/eve/v1/*`); `apps/agent-okr` on `127.0.0.1:2100` by default |
 | `OKR_AGENT_BRIDGE_SECRET` | Signs the OKR gate's two-minute token (audience `crm-okr-agent`); deliberately not `AGENT_BRIDGE_SECRET` — see `agent.md` «App eve thứ hai» |

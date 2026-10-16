@@ -63,6 +63,7 @@ function thuTuc(duong: string) {
 						queryKey: [duong, vao ?? null],
 						queryFn: async () => doc(vao),
 					},
+		mutationKey: () => [duong],
 		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
@@ -722,10 +723,17 @@ export async function moKhung(
 		total: 0,
 		facetCounts: { phuTrach: [], loai: [], trangThai: [] },
 		canEdit,
+		canCreate: canEdit,
 	}));
 	const tham = new URLSearchParams(thamSo);
 	if (don !== "goc") tham.set("donOkr", don);
-	await mo(<TheoDonVi cauNoiOkr={cauNoi} />, `?${tham}`);
+	await mo(
+		<>
+			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />
+			<TheoDonVi />
+		</>,
+		`?${tham}`,
+	);
 	await cho(
 		() => document.querySelector("[data-hang-nut]") !== null,
 		"khung don vi",
