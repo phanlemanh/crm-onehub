@@ -13,6 +13,19 @@ const L = yeuCau(join(GOC, "lib", "evidence-core.cjs"));
 const Y = yeuCau(join(GOC, "lib", "eval-yaml.cjs"));
 
 const KHONG_CHAY = "not-run";
+const KHOA_THUOC = "da-cham-boi-thuc-te";
+
+function trangThaiHoSo(slug) {
+	try {
+		const c = readFileSync(
+			join(GOC, "_acceptance", slug, "contract.md"),
+			"utf8",
+		);
+		return (c.match(/^status:\s*(\S+)/m) ?? [])[1] ?? null;
+	} catch {
+		return null;
+	}
+}
 
 function khongDo(ly) {
 	console.log(`KHONG DO DUOC: ${ly}`);
@@ -45,6 +58,7 @@ export function lapKeHoach(coTep = tepTheoDoi()) {
 		const slug = tep.split("/")[1];
 		const chu = readFileSync(join(GOC, tep), "utf8");
 		const evs = Y.parseEvals(chu, ["executor", "status"]);
+		const khoa = trangThaiHoSo(slug) === KHOA_THUOC;
 		const ds = L.evalListsOf(chu, ["inputs", "paths"]).byId;
 		for (const e of evs) {
 			if (String(e.executor ?? "").trim() !== "judgment") continue;
@@ -52,6 +66,15 @@ export function lapKeHoach(coTep = tepTheoDoi()) {
 			const paths = Array.isArray(f.paths) && f.paths.length ? f.paths : null;
 			const inputs = Array.isArray(f.inputs) ? f.inputs : [];
 			const muc = { slug, id: String(e.id), tep };
+			if (khoa) {
+				ke.push({
+					...muc,
+					loai: "bo-qua",
+					ly_do: "khoa-thuoc-da-cham-thuc-te",
+					paths,
+				});
+				continue;
+			}
 			if (String(e.status ?? "").trim() === KHONG_CHAY) {
 				ke.push({ ...muc, loai: "bo-qua", ly_do: "khai-not-run", paths });
 				continue;

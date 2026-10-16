@@ -34,7 +34,7 @@ của `docs/plan/lo-trinh-okr.json`).
   `giai-doan-thoa-thuan` với một tệp đổi duy nhất, Then tệp chữ ngoài màn (`apps/app/lib/messages/tin-hieu.ts`) bị bỏ
   qua, còn `apps/app/lib/messages/settings.ts` vẫn bị giữ (hồ sơ hoá cũ).
 - AC-3: Given danh sách hồ sơ đóng của vòng ở một nguồn duy nhất `_acceptance/thu-paths-e15-giai-doan/danh-sach.txt`
-  (luật chọn: thêm `paths` xong thì hồ sơ không hoá cũ, hoặc hồ sơ chưa ghim; tính trên cây HEAD), When kiểm, Then
+  (luật chọn: thêm `paths` xong thì hồ sơ không hoá cũ, hoặc hồ sơ chưa ghim; trừ hồ sơ `da-cham-boi-thuc-te` vì thước đã khoá; tính trên cây HEAD), When kiểm, Then
   (a) danh sách bằng đúng tập luật chọn trả về, không thừa không thiếu; (b) danh sách có `thu-haiku-tro-ly-okr` và
   `ghim-thuoc-soi-xem-okr` — hai hồ sơ chủ kho gọi tên; và (c) mọi eval judgment của các hồ sơ trong danh sách, không
   khai `not-run` và có `inputs` giải được, có `paths` chứa mọi input đã quy về gốc kho (input khai tương đối thư mục hồ
@@ -47,7 +47,8 @@ của `docs/plan/lo-trinh-okr.json`).
 - AC-5: (cross-layer) Given các hồ sơ đã ký trong danh sách, When chạy bộ lọc hoá cũ của `pre-merge-check` (cùng
   `staleByPaths`, cây git của HEAD) với mọi tệp đổi từ `verified_commit` của chúng, Then mỗi hồ sơ không còn tệp nào bị
   giữ (`SACH`); hồ sơ chưa ghim báo `CHUA_GHIM`, không lỗi.
-- AC-6: Given eval judgment khai `not-run`, không có `inputs`, hay có input trỏ tệp không còn trong cây, When công cụ
+- AC-6: Given eval judgment khai `not-run`, không có `inputs`, có input trỏ tệp không còn trong cây, hay thuộc hồ sơ
+  `da-cham-boi-thuc-te` (thước đã khoá), When công cụ
   chạy `--ghi`, Then eval đó không bị thêm `paths` và lệnh `--ke` in nó thành `BO_QUA <hồ sơ>#<eval>: <lý do>`.
 
 - AC-7: (cross-layer) Given cây ở merge-base và cây ở HEAD, When chạy `bash scripts/pre-merge-check.sh` thật, không
