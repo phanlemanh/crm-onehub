@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 30b11d1a259e16a438613c61bf8fca8412283359
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-17 — ký Cổng Bằng chứng trên S4 lượt 3 (PASS; E1–E3, E5 máy đạt, E4 hội đồng 2–1 PASS sau hai lượt sửa kết luận; làn trước chữ ký repin-20261016T232358Z-66317 xanh). Ngoài-1 đến Ngoài-9 ghi Known limits; Ngoài-10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: tac-nhan-glm-5-3-cham

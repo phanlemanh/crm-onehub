@@ -5,7 +5,7 @@ slug: tac-nhan-glm-5-3-cham
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-16
 design_doc: _acceptance/tac-nhan-glm-5-3-cham/design.md
@@ -48,3 +48,13 @@ giả thuyết trần bài đo trả lời bằng đọc mã (mục 3). Bỏ qu�
 
 - Gọi model thật qua AI Gateway: các lượt Tác nhân (số lượt theo Hỏi-1) và hai lời gọi dò mức suy luận, dưới khoá s4.
 - Số của GLM 5.3 Flash không đo lại ở hồ sơ này; kết luận dẫn số P0 (dòng sổ «KHÔNG đo GLM 5.3 Flash»).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-1: Bản kết luận còn hai câu đem số bước và số giây của lượt bị cắt ngang ra so với các lượt chạy trọn. Người đọc có thể tưởng model mặc định chậm hơn hẳn bản nhanh, trong khi hai con số đó không so được với nhau.
+  - Ngoài-2: Trong bản kết luận, số giây của mỗi lượt được viết như thể là tổng thời gian chạy, nhưng thực ra không gồm thời gian của bước đầu tiên. Con số nhỏ hơn thời gian thật một chút, và người đọc dễ hiểu sai nếu không đọc phần giải thích ở cuối.
+  - Ngoài-3: Hôm nay bài kiểm vẫn xanh. Nhưng khi ai đó sửa cấu hình bộ dựng của Tác nhân (việc kế đã được đề xuất), lần kiểm lại sau này sẽ báo đỏ dù kết quả đo không đổi, và hệ thống không nói rõ vì sao.
+  - Ngoài-4: Giờ ghi trong dữ liệu đo bị lệch 7 giờ nhưng trông như giờ chuẩn, nên ai đọc sau phải tự biết cộng thêm. Các con số về thời gian chạy của Tác nhân vẫn đúng. Chạy lại bài đo ở máy khác múi giờ có thể báo đỏ sai.
+  - Ngoài-5: Bài kiểm sẽ tự đỏ khi cấu hình bộ dựng Tác nhân được sửa sau này, dù bằng chứng đo không đổi một byte, và hồ sơ không tự đánh dấu là đã cũ. Hiện chưa gây lỗi.
+  - Ngoài-6: Với các lượt bị cắt ở 180 giây, dòng xanh không chứng minh được phiên con của Tác nhân đã dừng hẳn, vì dữ liệu được chụp ngay lúc cắt rồi kho bị xoá.
+  - Ngoài-7: Một kiểm tra giờ ghi sớm bất thường chưa từng được thử xem có báo đỏ đúng lúc không. Nếu nó hỏng thầm, bài đo vẫn báo xanh như thường.
+  - Ngoài-8: Kiểm tra rằng cấu hình Tác nhân lúc đo đúng là bản đã lưu chưa được thử bằng ca cố ý sai. Nếu nó hỏng thầm, một lượt đo sai bản vẫn có thể được tính.
+  - Ngoài-9: Phần kiểm tra rằng nhánh không sửa tệp nào ngoài thư mục hồ sơ chưa được thử khi git bị lỗi. Nếu git lỗi thầm, kiểm tra có thể báo là không có tệp nào bị đổi.
