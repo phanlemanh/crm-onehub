@@ -448,7 +448,7 @@ function WhereItStands({ deal }: { deal: Deal }) {
 
 				<DetailSheetProperty label={m.section.onIt} wide>
 					{deal.contacts.length === 0 ? (
-						<span className="text-muted-foreground">
+						<span className="wrap-anywhere text-muted-foreground">
 							{m.deal.nobodyAttached(deal.company.name)}
 						</span>
 					) : (

@@ -354,7 +354,7 @@ const doTranNgan = (t) =>
 			return false;
 		};
 		const ten = (e) =>
-			`${e.tagName.toLowerCase()}${e.getAttribute("data-slot") ? `[${e.getAttribute("data-slot")}]` : ""}`;
+			`${e.tagName.toLowerCase()}${e.getAttribute("data-slot") ? `[${e.getAttribute("data-slot")}]` : ""} .${String(e.className).slice(0, 60)} «${(e.textContent ?? "").trim().slice(0, 30)}»`;
 		let dem = 0;
 		const tran = [];
 		for (const e of k.querySelectorAll("*")) {
