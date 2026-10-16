@@ -1,0 +1,91 @@
+slug: lam-moi-goi-y-ke-hoach
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.lmgy_stepper
+    expected: "exit 0; -t gy-lm-stepper của apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx, khung khung-gop-y như goi-y-ke-hoach.dom.tsx nhưng useCrmCache là bản THẬT của apps/app/lib/trpc/cache.ts (bắt trước khi khung thay nó bằng bản rỗng, đặt lại sau) và QueryClient của bài kiểm có staleTime 30_000 như apps/app/lib/trpc/query-client.ts. Deal d-1 ở giai đoạn mở 'mo', giaiDoan.list có 'mo' (OPEN, nhãn 'Đang mở') và 'thang' (WON, nhãn 'Chốt được'); goiYCuaDeal trả null tới khi deals.setStage được gọi, từ đó trả gợi ý CHO của 'Cty Gợi Ý'; deals.byId trả stage theo lần setStage cuối. Đối chứng trước khi bấm: sheet đã tải và không có [data-goi-y-ke-hoach], không thì ném 'gy-lm: the hien truoc khi thang'. Bấm nút 'Chốt được' trong [data-slot=stage-stepper] rồi chờ tối đa 40 nhịp: thẻ chứa nguyên văn tieuDe('Cty Gợi Ý') của messages không hiện thì ném 'gy-lm: the khong hien sau thang stepper'; deals.setStage không được gọi đúng một lần với {id:'d-1', stage:'thang'} thì ném 'gy-lm: stepper khong goi setStage'; số lần đọc goiYCuaDeal với {dealId:'d-1'} không tăng sau setStage thì ném 'gy-lm: khong doc lai goi y cua deal'. Sheet không bị dựng lại (cùng phần tử [role=dialog] trước và sau) — khác thì ném 'gy-lm: sheet dung lai'. Chiều đỏ ở E5 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/trpc/cache.ts, apps/app/components/crm/stage-stepper.tsx, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/goi-y-ke-hoach.tsx, apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.lmgy_menu
+    expected: "exit 0; -t gy-lm-menu của cùng tệp, cùng fixture E1. Mở menu giai đoạn ở đầu sheet (DealStageMenu variant control), chọn mục 'Chốt được' (role menuitemradio): thẻ không hiện sau tối đa 40 nhịp thì ném 'gy-lm: the khong hien sau thang menu'; deals.setStage không được gọi đúng một lần với {id:'d-1', stage:'thang'} thì ném 'gy-lm: menu khong goi setStage'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/trpc/cache.ts, apps/app/components/crm/stage-change.tsx, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/goi-y-ke-hoach.tsx, apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.lmgy_roi
+    expected: "exit 0; -t gy-lm-roi của cùng tệp. Deal d-1 ở 'thang', goiYCuaDeal trả gợi ý CHO tới khi deals.setStage được gọi, từ đó trả null. Hai ca cùng fixture, mỗi ca dựng lại từ đầu: (1) đối chứng trước — thẻ hiện, không thì ném 'gy-lm: the khong hien truoc khi roi'; bấm nút 'Đang mở' trong [data-slot=stage-stepper]; thẻ còn sau tối đa 40 nhịp thì ném 'gy-lm: the con sau khi roi thang stepper'; (2) chọn mục 'Đang mở' ở menu giai đoạn đầu sheet; thẻ còn thì ném 'gy-lm: the con sau khi roi thang menu'. Chiều đỏ ở E5 (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/trpc/cache.ts, apps/app/components/crm/stage-stepper.tsx, apps/app/components/crm/stage-change.tsx, apps/app/components/crm/record-sheet/goi-y-ke-hoach.tsx, apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.lmgy_cache
+    expected: "exit 0; -t gy-lm-cache của cùng tệp. Một thành phần thử trong khung đọc goiYCuaDeal của d-1 và d-2 bằng useQuery (staleTime 30_000) và giữ useCrmCache thật; đợi cả hai đọc xong một lần. Ma trận viết trước ba ô {goi: deal('d-1') · deal('d-1',{settle:'record'}) · deal()} × {doc lai d-1, doc lai d-2}, đáp án [có,không] · [có,không] · [có,có]; số ô đã chạy khác 3 thì ném 'gy-lm: ma tran thieu o'. Mỗi ô đếm số lần đọc goiYCuaDeal theo dealId NGAY SAU khi promise của lời gọi xong (không thêm nhịp): ô deal('d-1') d-1 không tăng thì ném 'gy-lm: cache.deal khong lam moi goi y d-1'; ô settle record d-1 không tăng thì ném 'gy-lm: settle record khong cho goi y'; ô deal('d-1') hay settle record mà d-2 tăng thì ném 'gy-lm: lam moi goi y deal khac'; ô deal() một trong hai không tăng thì ném 'gy-lm: cache.deal() khong lam moi moi goi y'. Chiều đỏ ở E5 (c), (d)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/trpc/cache.ts, apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.lmgy_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly như goi-y-mo-ke-hoach: mỗi cặp chạy phép đo trên bản sao lành phải xanh, rồi thay ĐÚNG MỘT chuỗi vật thật trong apps/app/lib/trpc/cache.ts và chạy lại phải đỏ với thông điệp ghim — (a) gỡ khoá goiYCuaDeal khỏi cache.deal → E1 'gy-lm: the khong hien sau thang stepper'; (b) cùng chỗ gỡ → E3 'gy-lm: the con sau khi roi thang stepper'; (c) cùng chỗ gỡ → E4 'gy-lm: cache.deal khong lam moi goi y d-1'; (d) thay khoá theo deal bằng khoá chung goiYCuaDeal.queryKey() → E4 'gy-lm: lam moi goi y deal khac'. Mỗi thông điệp ghim được chạy thử tay trên bản sao đột biến trước khi chép vào dot-bien.mjs. Thiếu cặp nào hay bản sao lành đỏ thì thoát khác 0 nêu cặp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/lam-moi-goi-y-ke-hoach/rang/dot-bien.mjs, apps/app/lib/trpc/cache.ts, apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lmgy_man
+    steps:
+      - "Chạy NGUYÊN VĂN từ gốc kho lệnh của config:executors.script.lmgy_man (bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/lam-moi-goi-y-ke-hoach/rang/man.mjs\") — phiên đo dựng kho crm_<cây>_do, API và app của chính cây; man.mjs chạy cảnh cây trước màn đầu, lệch cây thì mã 2"
+      - "man.mjs gieo qua API thật: công ty chưa có kế hoạch, deal của người P ở giai đoạn mở; mở sheet deal ở 1280 bằng phiên P; đối chứng trước: tên deal hiện và không có [data-goi-y-ke-hoach], không thì in «E6 truoc khi thang: KHONG DO DUOC» và thoát khác 0"
+      - "Giữ handle của phần tử sheet ([role=dialog] chứa tên deal) trước khi bấm. Bấm nút cột thắng trong [data-slot=stage-stepper] → chờ tối đa 5 giây, không tải lại trang: thẻ hiện với tên công ty → dòng «E6 hien sau thang <ms> ms» phải đạt; handle sheet còn gắn vào document (isConnected) → dòng «E6 sheet khong dung lai» phải đạt; ảnh evidence/E6-sau-thang-1280.png"
+      - "Bấm nút một cột mở trong [data-slot=stage-stepper] → chờ tối đa 5 giây: thẻ mất → dòng «E6 an sau roi thang <ms> ms» phải đạt, handle sheet vẫn còn gắn; ảnh evidence/E6-sau-roi-thang-1280.png"
+      - "Tự thử chiều đỏ, chạy trước lượt thật trên một deal riêng: man.mjs chặn (abort) mọi yêu cầu mạng có goiYCuaDeal trong URL sau lần tải đầu của sheet, rồi bấm cột thắng → phải in «E6 hien sau thang: KHONG DAT»; thiếu dòng tự thử ấy thì cả eval không đạt"
+      - "Đọc mọi dòng «E6 …» trong output; mọi dòng phải đạt, rồi mở từng ảnh E6-*.png để chấm"
+    expected: "Trên bàn đo của chính cây, bấm cột thắng trên thanh giai đoạn của sheet deal đang mở làm thẻ gợi ý hiện trong vòng 5 giây mà không tải lại trang, bấm cột mở làm thẻ mất trong vòng 5 giây; lượt tự thử khi chặn lần đọc lại gợi ý báo KHONG DAT. Ảnh ở .acceptance-runs/lam-moi-goi-y-ke-hoach/evidence/E6-*.png; người chấm nhìn ảnh: ảnh sau thắng có thẻ ở đầu sheet và thanh giai đoạn ở cột thắng, ảnh sau rời thắng không có thẻ."
+    evidence_required: [run_id, screenshot, observed, verified_at]
+    paths: [apps/app/lib/trpc/cache.ts, apps/app/components/crm/stage-stepper.tsx, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/goi-y-ke-hoach.tsx, _acceptance/lam-moi-goi-y-ke-hoach/rang/man.mjs]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.lmgy_hoi_quy
+    expected: "exit 0; node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu rồi --moc <merge-base của nhánh với origin/onehub, lấy lúc chạy> — quét MỌI tệp kiểm đã có ở mốc mà nhánh sửa, xoá hay đổi tên (git diff --name-status -M --diff-filter=MDR theo mẫu tệp kiểm); một câu expect sẵn có bị xoá hay sửa thì thoát 1 nêu tệp và câu; danh sách cho-phép rỗng; số tệp kiểm đã quét được in ra; rồi bun run check-types thoát 0. Vế «mọi suite của feature_loop.suite_keys thoát 0» không đo ở eval này: S4 chạy từng suite của suite_keys làm suiteCommands mỗi lượt và mã thoát của chúng nằm trong báo cáo bằng chứng — AC-7 chỉ đạt khi cả E7 và mọi suiteCommands thoát 0. Chiều đỏ: --tu-thu dựng một tệp kiểm giả có một expect bị xoá và phải thấy thoát 1, và một tệp kiểm giả không đổi phải thấy thoát 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/**/test/**", "packages/**/test/**", "apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts"]
+
+  - id: E8
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gymk_sinh
+    expected: "exit 0; bài kiểm đã ký E1 của goi-y-mo-ke-hoach chạy lại nguyên trạng (-t gy-sinh của apps/api/test/goi-y-mo-ke-hoach.spec.ts): ô mở→thắng qua deals.setStage để đúng một gợi ý CHO ngay khi lời gọi trả về, không thì 'gy: o sinh sai mo→thang'. Đây là tiền đề máy chủ của AC-1 — gợi ý sinh trong cùng giao dịch đổi giai đoạn, không qua tác tử chạy sau. Chiều đỏ đã ghim ở E11 (a) của goi-y-mo-ke-hoach."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/goi-y-ke-hoach.ts, apps/api/src/deals/**, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
+
+  - id: E9
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gymk_xu_ly
+    expected: "exit 0; bài kiểm đã ký E3 của goi-y-mo-ke-hoach chạy lại nguyên trạng (-t gy-xu-ly): deal của gợi ý chuyển thắng→mở thì goiYCuaDeal bởi người nhận trả null, không thì 'gy: goi y hien khi deal roi thang'; đối chứng dương cùng fixture: trước đó người nhận đọc được gợi ý CHO, không thì 'gy: nguoi nhan khong doc duoc'. Đây là tiền đề máy chủ của AC-3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/**, packages/db/src/goi-y-ke-hoach.ts, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
+
+  - id: E10
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.lmgy_duong
+    expected: "exit 0; node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs --tu-thu rồi chạy thật. Bảng viết trước trong script, bốn nơi: (stage-stepper.tsx, deals.setStage) · (stage-change.tsx, deals.setStage) · (use-deal-board-move.ts, deals.setStage) · (deals-bulk-actions.tsx, deals.bulkSetStage). Quét mọi tệp .ts/.tsx dưới apps/app trừ test/: mỗi chỗ có 'deals.setStage.mutationOptions(' hay 'deals.bulkSetStage.mutationOptions(' mà (tệp, thủ tục) không thuộc bảng thì thoát 1 với 'gy-lm: duong doi giai doan chua khai <tệp>'; nơi trong bảng không còn chỗ gọi thì thoát 1 với 'gy-lm: duong da khai khong con <tệp>'; khối đối số của mutationOptions (cắt theo ngoặc cân) không chứa 'cache.deal(' thì thoát 1 với 'gy-lm: duong khong lam moi cache.deal <tệp>'; số nơi đã kiểm khác 4 thì thoát 1 với 'gy-lm: bang thieu o'. --tu-thu chạy cùng hàm trên ba cây giả trong thư mục tạm: cây lành phải thoát 0; cây có một nơi bỏ cache.deal khỏi khối phải in 'gy-lm: duong khong lam moi cache.deal'; cây thêm một tệp gọi deals.setStage ngoài bảng phải in 'gy-lm: duong doi giai doan chua khai' — thiếu một trong ba thì thoát 2."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs, apps/app/components/crm/stage-stepper.tsx, apps/app/components/crm/stage-change.tsx, "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts", "apps/app/app/(app)/[slug]/deals/deals-bulk-actions.tsx", "apps/app/**/*.tsx", "apps/app/**/*.ts"]
