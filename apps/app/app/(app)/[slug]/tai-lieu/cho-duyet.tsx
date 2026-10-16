@@ -19,6 +19,7 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { TablePagination } from "@crm/ui/components/table-pagination";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { VungDangTai } from "@crm/ui/components/vung-dang-tai";
 import { TAI_LIEU } from "@crm/validation/tai-lieu";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -57,7 +58,10 @@ export function ChoDuyet() {
 	const trpc = useTRPC();
 	const [{ nhom, page }, doi] = useLocTaiLieu();
 	const url = useWorkspaceUrl();
-	const cho = useQuery(trpc.taiLieu.proposals.queryOptions({ nhom, page }));
+	const cho = useQuery({
+		...trpc.taiLieu.proposals.queryOptions({ nhom, page }),
+		placeholderData: (truoc) => truoc,
+	});
 	const coTrang = TAI_LIEU.danhSach.coTrang;
 
 	const chonNhom = (
@@ -89,55 +93,60 @@ export function ChoDuyet() {
 	return (
 		<div className="flex min-w-0 flex-col gap-4" data-cho-duyet="">
 			{chonNhom}
-			{rows.length === 0 ? (
-				<Empty data-cho-duyet-rong="">
-					<EmptyHeader>
-						<EmptyTitle>
-							{nhom === "cho" ? m.choDuyet.rong : m.choDuyet.rongDaXuLy}
-						</EmptyTitle>
-					</EmptyHeader>
-					<EmptyContent>
-						<Button asChild variant="outline">
-							<Link href={url(duongDanhSach())}>{m.choDuyet.veDanhSach}</Link>
-						</Button>
-					</EmptyContent>
-				</Empty>
-			) : (
-				<ItemGroup data-hang-cho-duyet="">
-					{rows.map((r) => {
-						const nhan = nhanTrangThai(m, r);
-						const viec =
-							r.loai === "LUU_TRU" || r.loai === "KHOI_PHUC" ? r.loai : null;
-						return (
-							<Item asChild key={r.id} variant="outline">
-								<Link data-de-xuat={r.id} href={url(duongDeXuat(r.id))}>
-									<ItemContent>
-										<ItemTitle translate="no">{r.ten}</ItemTitle>
-										<ItemDescription>
-											<span translate="no">{r.taoBoi.name}</span> ·{" "}
-											{ngayTaiLieu(r.luc, locale)}
-										</ItemDescription>
-									</ItemContent>
-									{nhan || viec ? (
-										<ItemActions>
-											{viec ? (
-												<Badge data-loai-de-xuat={viec} variant="secondary">
-													{loaiDeXuat[viec]}
-												</Badge>
-											) : null}
-											{nhan ? (
-												<Badge data-trang-thai={r.trangThai} variant="outline">
-													{nhan}
-												</Badge>
-											) : null}
-										</ItemActions>
-									) : null}
-								</Link>
-							</Item>
-						);
-					})}
-				</ItemGroup>
-			)}
+			<VungDangTai dangTai={cho.isPlaceholderData}>
+				{rows.length === 0 ? (
+					<Empty data-cho-duyet-rong="">
+						<EmptyHeader>
+							<EmptyTitle>
+								{nhom === "cho" ? m.choDuyet.rong : m.choDuyet.rongDaXuLy}
+							</EmptyTitle>
+						</EmptyHeader>
+						<EmptyContent>
+							<Button asChild variant="outline">
+								<Link href={url(duongDanhSach())}>{m.choDuyet.veDanhSach}</Link>
+							</Button>
+						</EmptyContent>
+					</Empty>
+				) : (
+					<ItemGroup data-hang-cho-duyet="">
+						{rows.map((r) => {
+							const nhan = nhanTrangThai(m, r);
+							const viec =
+								r.loai === "LUU_TRU" || r.loai === "KHOI_PHUC" ? r.loai : null;
+							return (
+								<Item asChild key={r.id} variant="outline">
+									<Link data-de-xuat={r.id} href={url(duongDeXuat(r.id))}>
+										<ItemContent>
+											<ItemTitle translate="no">{r.ten}</ItemTitle>
+											<ItemDescription>
+												<span translate="no">{r.taoBoi.name}</span> ·{" "}
+												{ngayTaiLieu(r.luc, locale)}
+											</ItemDescription>
+										</ItemContent>
+										{nhan || viec ? (
+											<ItemActions>
+												{viec ? (
+													<Badge data-loai-de-xuat={viec} variant="secondary">
+														{loaiDeXuat[viec]}
+													</Badge>
+												) : null}
+												{nhan ? (
+													<Badge
+														data-trang-thai={r.trangThai}
+														variant="outline"
+													>
+														{nhan}
+													</Badge>
+												) : null}
+											</ItemActions>
+										) : null}
+									</Link>
+								</Item>
+							);
+						})}
+					</ItemGroup>
+				)}
+			</VungDangTai>
 			{total > coTrang ? (
 				<TablePagination
 					loading={cho.isFetching}
