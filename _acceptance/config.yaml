@@ -1843,6 +1843,13 @@ executors:
     hdo_zdr: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/zdr-hoi.spec.ts
     hdo_chu: "cd apps/app && bun test ./test/messages-guard.spec.ts ./test/kara-mot-ten.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi.dom.tsx -t hdo-chu"
     tca_cham_health: 'bun run test -- "bun _acceptance/tran-cho-app-rieng/rang/cham-health.mjs"'
+    ttr_ban_chup: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-ban-chup"'
+    ttr_duong_khac: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-duong-khac"'
+    ttr_khuon_413: 'bun run test -- "cd apps/api && bun test test/tran-than-rest.spec.ts -t ttr-khuon-413"'
+    dcn_tu_choi: bun test scripts/ban-chup-lo-trinh/test/day.test.ts -t dcn-tu-choi
+    dcn_onehub: bun test scripts/ban-chup-lo-trinh/test/day.test.ts -t dcn-onehub
+    dcn_workflow: bun test scripts/ban-chup-lo-trinh/test/day.test.ts -t dcn-workflow
+    dcn_env_ci: GITHUB_ACTIONS=true GITHUB_REF=refs/pull/1/merge bun test scripts/ban-chup-lo-trinh/test
     kcl_soan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-soan"
     kcl_go_do: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-go-do"
     kcl_roi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-roi && cd ../.. && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t '^kcl-hop '"
@@ -1854,6 +1861,7 @@ executors:
     mtc_anh_xa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/mau-trang-thai-anh-xa.spec.ts"
     mtc_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/mau-trang-thai-dom.dom.tsx"
   script:
+    dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
     kmt_chup: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-mot-ten/rang/chup.mjs"'
