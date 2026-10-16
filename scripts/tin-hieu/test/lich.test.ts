@@ -53,6 +53,33 @@ function g(cwd: string, ...thamSo: string[]): string {
 
 type Kho = { origin: string; seed: string; goc: string };
 
+const TRANG = "LO-TRINH.html";
+
+const BAN_VE = `import { existsSync, readdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
+const ds = [];
+const di = (p) => {
+	if (!existsSync(p)) return;
+	for (const e of readdirSync(p, { withFileTypes: true })) {
+		const q = path.join(p, e.name);
+		if (e.isDirectory()) di(q);
+		else ds.push(q.split(path.sep).join("/"));
+	}
+};
+di("${TIN_HIEU.thuMucNguon}");
+writeFileSync("${TRANG}", \`<p>\${ds.sort().join(",")}</p>\\n\`);
+`;
+const VE_RONG = "<p></p>\n";
+
+function datBanVe(kho: Kho, them: string): void {
+	writeFileSync(
+		path.join(kho.seed, "scripts", "product-map.mjs"),
+		`${BAN_VE}${them}\n`,
+	);
+	g(kho.seed, "commit", "--quiet", "-am", "doi ban ve");
+	g(kho.seed, "push", "--quiet", "origin", LICH.nhanhChinh);
+}
+
 function dungKho(): Kho {
 	const origin = thuMuc("origin");
 	g(origin, "init", "--quiet", "--bare", "-b", LICH.nhanhChinh);
@@ -60,6 +87,9 @@ function dungKho(): Kho {
 	g(seed, "clone", "--quiet", origin, ".");
 	g(seed, "switch", "--quiet", "-c", LICH.nhanhChinh);
 	writeFileSync(path.join(seed, "README.md"), "kho thu\n");
+	mkdirSync(path.join(seed, "scripts"), { recursive: true });
+	writeFileSync(path.join(seed, "scripts", "product-map.mjs"), BAN_VE);
+	writeFileSync(path.join(seed, TRANG), VE_RONG);
 	g(seed, "add", ".");
 	g(seed, "commit", "--quiet", "-m", "goc");
 	g(seed, "push", "--quiet", "origin", LICH.nhanhChinh);
@@ -164,6 +194,14 @@ const chay = (
 		now: NOW,
 	});
 
+function trangTren(kho: Kho, ref: string): string {
+	return g(kho.origin, "show", `${ref}:${TRANG}`);
+}
+
+function veMong(kho: Kho, ref: string): string {
+	return `<p>${tepTren(kho, ref).join(",")}</p>`;
+}
+
 function docKit(kho: Kho, ref: string): { loi: number; so: number } {
 	const d = thuMuc("doc");
 	spawnSync("bash", [
@@ -200,7 +238,11 @@ describe("tvk-nhanh", () => {
 		expect(g(kho.origin, "rev-parse", `${HC}~1`)).toBe(sha(kho, CHINH) ?? "");
 		expect(
 			g(kho.origin, "diff", "--name-only", CHINH, HC).split("\n").sort(),
-		).toEqual(["tin-hieu/crm/crm-1.json", "tin-hieu/crm/crm-2.json"]);
+		).toEqual([
+			TRANG,
+			"tin-hieu/crm/crm-1.json",
+			"tin-hieu/crm/crm-2.json",
+		]);
 		expect(docKit(kho, HC)).toEqual({ loi: 0, so: 2 });
 
 		let truoc = truocCua();
@@ -243,13 +285,86 @@ describe("tvk-nhanh", () => {
 			g(kho.origin, "rev-parse", `${HC}~1`),
 			"nhanh hang cho khong dung lai tren nhanh chinh",
 		).toBe(sha(kho, CHINH) ?? "");
-		expect(g(kho.origin, "diff", "--name-only", CHINH, HC)).toBe(
-			"tin-hieu/crm/crm-4.json",
-		);
+		expect(
+			g(kho.origin, "diff", "--name-only", CHINH, HC).split("\n").sort(),
+		).toEqual([TRANG, "tin-hieu/crm/crm-4.json"]);
+		expect(trangTren(kho, HC)).toBe(veMong(kho, HC));
 		expect(docKit(kho, HC)).toEqual({ loi: 0, so: 4 });
 		khongRoi(truoc);
 		sv.dung();
 	}, 60_000);
+});
+
+describe("tvk-ve", () => {
+	test("tvk-ve: o1 commit cham dung thu muc tin hieu va trang lo trinh, trang ve khop tin hieu moi", async () => {
+		const kho = dungKho();
+		const sv = mayChu();
+		sv.dat([1, 2]);
+		const gh = ghGia();
+		const kq = await chay(kho, sv, gh);
+		sv.dung();
+		expect(kq.ma, kq.dong.join(" | ")).toBe(0);
+		const cham = g(kho.origin, "diff", "--name-only", CHINH, HC).split("\n");
+		expect(
+			cham.filter(
+				(t) =>
+					t !== TRANG &&
+					!t.startsWith(`${TIN_HIEU.thuMucNguon}/`),
+			),
+			"commit hang cho cham tep la",
+		).toEqual([]);
+		expect(cham).toContain(TRANG);
+		expect(trangTren(kho, CHINH)).toBe(VE_RONG.trim());
+		expect(trangTren(kho, HC), "trang lo trinh khong ve lai").toBe(
+			veMong(kho, HC),
+		);
+	});
+
+	test("tvk-ve: o2 ban ve hong thi luot do, khong day, khong goi gh", async () => {
+		const kho = dungKho();
+		datBanVe(kho, 'console.error("ve hong thu"); process.exit(3);');
+		const sv = mayChu();
+		sv.dat([1]);
+		const gh = ghGia();
+		const kq = await chay(kho, sv, gh);
+		sv.dung();
+		expect(kq.ma, "ban ve hong ma luot van xanh").not.toBe(0);
+		expect(kq.dong.join("\n")).toContain(LICH.thongDiep.veHong);
+		expect(kq.dong.join("\n")).toContain("ve hong thu");
+		expect(sha(kho, HC), "luot hong van day nhanh").toBeNull();
+		expect(gh.nhatKy()).toEqual([]);
+	});
+
+	test("tvk-ve: o3 tep la lot vao commit thi luot do, khong day", async () => {
+		const kho = dungKho();
+		datBanVe(
+			kho,
+			'import { execFileSync } from "node:child_process"; writeFileSync("PRODUCT-MAP.md", "doi\\n"); execFileSync("git", ["add", "PRODUCT-MAP.md"]);',
+		);
+		const sv = mayChu();
+		sv.dat([1]);
+		const gh = ghGia();
+		const kq = await chay(kho, sv, gh);
+		sv.dung();
+		expect(kq.ma, "commit cham PRODUCT-MAP.md ma luot van xanh").not.toBe(0);
+		expect(kq.dong.join("\n")).toContain(LICH.thongDiep.chamNgoai);
+		expect(kq.dong.join("\n")).toContain("PRODUCT-MAP.md");
+		expect(sha(kho, HC), "luot cham tep la van day nhanh").toBeNull();
+	});
+
+	test("tvk-ve: o4 ban ve doi tep khac trong cay thi commit van chi mang trang lo trinh", async () => {
+		const kho = dungKho();
+		datBanVe(kho, 'writeFileSync("PRODUCT-MAP.md", "doi\\n");');
+		const sv = mayChu();
+		sv.dat([1]);
+		const gh = ghGia();
+		const kq = await chay(kho, sv, gh);
+		sv.dung();
+		expect(kq.ma, kq.dong.join(" | ")).toBe(0);
+		expect(
+			g(kho.origin, "diff", "--name-only", CHINH, HC).split("\n").sort(),
+		).toEqual([TRANG, "tin-hieu/crm/crm-1.json"]);
+	});
 });
 
 describe("tvk-nhanh-hook", () => {
