@@ -1814,6 +1814,19 @@ executors:
     dhk_giu_don: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-giu-don
     dhk_suc_khoe: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-suc-khoe
     dhk_dang_tai: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-dang-tai
+    ctbp_phan_mot: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phan-mot
+    ctbp_cap_nhat_tai_cho: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-cap-nhat-tai-cho
+    ctbp_phien_cua_toi: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phien-cua-toi
+    ctbp_loi_vao_tu: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-vao-tu
+    ctbp_chuyen_huong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-chuyen-huong
+    ctbp_don_vi_dan: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-don-vi-dan
+    ctbp_kr_phu_trach: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-kr-phu-trach
+    ctbp_khong_dan: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-khong-dan
+    ctbp_bon_the: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-bon-the
+    ctbp_tai_loi: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-loi
+    ctbp_do_nguong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-do-nguong
+    ctbp_loi_mo: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-mo
+    ctbp_tai_lai_nen: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-lai-nen
     thk_mac_dinh: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-mac-dinh"'
     thk_haiku: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-haiku"'
     thk_gia_tri_la: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-gia-tri-la"'
@@ -1900,6 +1913,8 @@ executors:
     kcl_khong_do: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-soan-chan-lien-ket.dom.tsx -t kcl-khong-do && cd ../.. && cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-hop-sach"
     kcl_khong_chan: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-khong-chan"
     kcl_hoi_quy: "git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/giu-thay-doi.dom.tsx packages/ui/test/giu-thay-doi-loi-hoi.dom.tsx apps/app/test/soan-okr-trong-khung.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx apps/app/test/tai-lieu-soan.dom.tsx && (cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-loi-hoi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-ngoai) && cd apps/app && for t in soan-okr-trong-khung ngan-ban-ghi-giu tai-lieu-soan; do TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/$t.dom.tsx || exit 1; done"
+    zkd_lien_ket: 'bun run test -- "cd apps/agent && bun test test/zkd-lien-ket.integration.spec.ts"'
+    zkd_chi_dan: 'bun run test -- "cd apps/agent && bun test test/zkd-chi-dan.integration.spec.ts"'
     mtc_bang: "cd packages/ui && bun test ./test/status-tone.spec.ts"
     mtc_mot_bang: "cd packages/ui && bun test ./test/mau-trang-thai-mot-bang.spec.ts"
     mtc_anh_xa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/mau-trang-thai-anh-xa.spec.ts"
@@ -2927,6 +2942,10 @@ executors:
     dhk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"'
     dhk_ho_so_da_ky: bun _acceptance/dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs
     dhk_proto: bun _acceptance/dieu-huong-khu-muc-tieu/rang/proto-khu.mjs
+    ctbp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"'
+    ctbp_lien_ket_cu: bun _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs
+    ctbp_ho_so_da_ky: bun _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs
+    ctbp_proto: bun _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs
     dh4_giu_ho_so: bun _acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs
     dh4_ranh_gioi: node _acceptance/so-do-can-chinh-don-vi/rang/ranh-gioi.mjs
     dh4_dot_bien: bun _acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs
@@ -2945,6 +2964,7 @@ executors:
     kcl_dot_bien: node _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs
     kcl_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan man"'
     kcl_man_luot: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan luot"'
+    zkd_so_do: bun _acceptance/zalo-tro-ly-kho-chi-dan/rang/so-do.ts
     mtc_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs"'
     mtc_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs --chi-do"'
     bch_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"'

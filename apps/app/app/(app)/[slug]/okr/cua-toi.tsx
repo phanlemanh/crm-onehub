@@ -12,30 +12,37 @@ import {
 } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { SectionHeading } from "@crm/ui/components/section-heading";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
-import { BangMucTieu } from "./bang-muc-tieu";
-import { DIEM_CAM_GOP_Y } from "./chip-gop-y";
 import { useChuKy } from "./chon-chu-ky";
 import { NhomDaBo, NhomDangTheoDoi } from "./nhom-da-bo";
+import { PhanCanCapNhat } from "./phan-can-cap-nhat";
+import { PhanDonViDan } from "./phan-don-vi-dan";
+import { PhanKrPhuTrach } from "./phan-kr-phu-trach";
 import { ChuaChuKy, DangTai, Loi } from "./trang-thai-okr";
 import { ViecOkrCuaToi } from "./viec-cua-toi";
 
 export function CuaToi() {
 	return (
-		<div className="flex flex-col gap-6">
-			<ViecOkrCuaToi noi="cua-toi" khiHien="khi-co-viec" anKhiLoi={false} />
-			<MucTieuCuaToi />
+		<div className="flex flex-col gap-8">
+			<PhanCanCapNhat />
+			<ViecOkrCuaToi
+				anCapNhat
+				anKhiLoi={false}
+				khiHien="khi-co-viec"
+				noi="cua-toi"
+			/>
+			<TheoKy />
 		</div>
 	);
 }
 
-function MucTieuCuaToi() {
-	const m = okrMessages(useLocale());
+function TheoKy() {
 	const trpc = useTRPC();
 	const url = useWorkspaceUrl();
 	const { cycles, currentId, ky } = useChuKy();
@@ -46,61 +53,87 @@ function MucTieuCuaToi() {
 		),
 	);
 
-	if (cycles.isPending || access.isPending) return <DangTai />;
-	if (cycles.isError)
-		return (
-			<Loi
-				thuLai={() => {
-					void cycles.refetch();
-					void access.refetch();
-				}}
-			/>
-		);
+	if (cycles.isPending) return <DangTai />;
+	if (cycles.isError) return <Loi thuLai={() => void cycles.refetch()} />;
 	if (currentId === null)
 		return <ChuaChuKy quanTri={access.data?.canManageProgram === true} />;
-	if (mine.isPending) return <DangTai />;
-	if (mine.isError) return <Loi thuLai={() => void mine.refetch()} />;
+	const tenKy = cycles.data.cycles.find((c) => c.id === currentId)?.name ?? "";
 
-	const ds = mine.data.objectives;
-	const nhomTheoDoi = <NhomDangTheoDoi ds={mine.data.dangTheoDoi} />;
-	const nhomDaBo = <NhomDaBo danhDauCuaToi ds={mine.data.daBo} hienDonVi />;
-	if (ds.length === 0) {
-		const sang = url("/okr/theo-don-vi");
-		return (
-			<div className="flex flex-col gap-6">
-				<Empty data-trang-thai="ST-cuatoi-rong">
-					<EmptyHeader>
-						<EmptyMedia variant="icon">
-							<Icon icon={UserMultiple} />
-						</EmptyMedia>
-						<EmptyTitle>{m.cuaToiRong.title}</EmptyTitle>
-						<EmptyDescription>{m.cuaToiRong.body}</EmptyDescription>
-					</EmptyHeader>
-					<EmptyContent>
-						<Button asChild variant="outline">
-							<Link
-								href={
-									ky
-										? `${sang}?${new URLSearchParams({ [SEARCH_PARAM.okr.ky]: ky })}`
-										: sang
-								}
-							>
-								{m.cuaToiRong.action}
-							</Link>
-						</Button>
-					</EmptyContent>
-				</Empty>
-				{nhomTheoDoi}
-				{nhomDaBo}
-			</div>
-		);
-	}
+	const nhomSau = mine.data ? (
+		<>
+			<NhomDangTheoDoi ds={mine.data.dangTheoDoi} />
+			<NhomDaBo danhDauCuaToi ds={mine.data.daBo} hienDonVi />
+		</>
+	) : null;
+	const phanBa = mine.isPending ? (
+		<VoPhanBa>
+			<DangTai />
+		</VoPhanBa>
+	) : mine.isError ? (
+		<VoPhanBa>
+			<Loi thuLai={() => void mine.refetch()} />
+		</VoPhanBa>
+	) : mine.data.objectives.length === 0 ? (
+		<RongCuaToi ky={ky} nhomSau={nhomSau} url={url} />
+	) : (
+		<PhanKrPhuTrach ds={mine.data.objectives} nhomSau={nhomSau} tenKy={tenKy} />
+	);
 
 	return (
-		<div className="flex flex-col gap-6" data-trang-thai="ST-cuatoi-codulieu">
-			<BangMucTieu danhDauCuaToi diemCam={DIEM_CAM_GOP_Y} ds={ds} hienDonVi />
-			{nhomTheoDoi}
-			{nhomDaBo}
-		</div>
+		<>
+			<PhanDonViDan cycleId={currentId} ky={ky} tenKy={tenKy} />
+			{phanBa}
+		</>
+	);
+}
+
+function VoPhanBa({ children }: { children: React.ReactNode }) {
+	const m = okrMessages(useLocale());
+	return (
+		<section className="flex flex-col gap-3" data-phan="kr-phu-trach">
+			<SectionHeading level={2}>{m.baPhan.phan3}</SectionHeading>
+			{children}
+		</section>
+	);
+}
+
+function RongCuaToi({
+	ky,
+	url,
+	nhomSau,
+}: {
+	ky: string | null;
+	url: ReturnType<typeof useWorkspaceUrl>;
+	nhomSau: React.ReactNode;
+}) {
+	const m = okrMessages(useLocale());
+	const sang = url("/okr/theo-don-vi");
+	return (
+		<section className="flex flex-col gap-3" data-phan="kr-phu-trach">
+			<SectionHeading level={2}>{m.baPhan.phan3}</SectionHeading>
+			<Empty data-trang-thai="ST-cuatoi-rong">
+				<EmptyHeader>
+					<EmptyMedia variant="icon">
+						<Icon icon={UserMultiple} />
+					</EmptyMedia>
+					<EmptyTitle>{m.cuaToiRong.title}</EmptyTitle>
+					<EmptyDescription>{m.cuaToiRong.body}</EmptyDescription>
+				</EmptyHeader>
+				<EmptyContent>
+					<Button asChild variant="outline">
+						<Link
+							href={
+								ky
+									? `${sang}?${new URLSearchParams({ [SEARCH_PARAM.okr.ky]: ky })}`
+									: sang
+							}
+						>
+							{m.cuaToiRong.action}
+						</Link>
+					</Button>
+				</EmptyContent>
+			</Empty>
+			{nhomSau}
+		</section>
 	);
 }
