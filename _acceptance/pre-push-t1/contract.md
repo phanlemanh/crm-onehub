@@ -54,11 +54,11 @@ kho ký Cổng Đáng «build» ngày 16/10 (`opportunity.md`).
   byte bản gốc vòng; mỗi `sed` của `rang-hinh.sh --chan tan-cong` đổi đúng một dòng; thân vòng chạy độc lập dưới
   `bash -c` cho cả năm tác vụ; khối `rang` của checker `test` giống bản gốc vòng; và hai răng rẻ `dptm_hook_cay`,
   `rang_hook_loi_thoat` chạy thật thoát 0.
-- AC-8: Given cây thật của kho và một commit treo (không ref, không đổi thư mục làm việc) chỉ thêm một tệp dưới
-  `docs/`, When chạy hook thật với dòng stdin đẩy commit đó lên trên HEAD, Then hook thoát 0, in dòng bỏ `(1 tệp)`,
-  chạy `check-types`, `lint`, `lint:slop` bằng turbo thật, không turbo run summary nào của `test`/`build` sinh ra, và
-  `verify-gate-shape` thật in `pre-push: gate matches its shape` cùng dòng `skipped`; commit treo thứ hai có một tệp
-  `.ts` thì bộ phân loại cho stdout rỗng.
+- AC-8: Given cây thật của kho và một commit treo dựng bằng `commit-tree` trên HEAD (ngoài mọi ref, thư mục làm việc
+  giữ nguyên) chỉ thêm một tệp dưới `docs/`, When chạy hook thật với dòng stdin đẩy commit đó lên trên HEAD, Then hook
+  thoát 0, in dòng bỏ `(1 tệp)`, chạy `check-types`, `lint`, `lint:slop` bằng turbo thật, run summary mới của turbo chỉ
+  mang ba tác vụ đó, và `verify-gate-shape` thật in `pre-push: gate matches its shape` cùng dòng `skipped`; commit treo
+  thứ hai có một tệp `.ts` thì bộ phân loại cho stdout rỗng.
 - AC-9: Given cây thật, When lần đẩy sha remote bằng sha local (đường nền của răng đã ký), Then `rang-hook.sh --chan
   ep-chay` của `luoi-day-do-that` xanh — đủ năm tác vụ, không tác vụ nào đọc bộ nhớ đệm.
 
