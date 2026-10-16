@@ -235,6 +235,7 @@ function docKeHoach(db: Db, userId: string | undefined) {
 					updatedAt: true,
 					assigneeId: true,
 					assignee: { select: { name: true } },
+					viecId: true,
 				},
 			},
 		},
@@ -321,7 +322,9 @@ function viecKeHoach(k: KeHoach, buoc: Buoc[], now: Date): ViecKeHoach[] {
 function guiCua(k: KeHoach, thanhVien: Set<string>, now: Date): Gui[] {
 	const buoc = [...k.steps].sort((a, b) => a.position - b.position);
 	const theoBuoc = buoc.flatMap((s) => {
-		if (s.completedAt !== null || s.assigneeId === null) return [];
+		if (s.completedAt !== null || s.assigneeId === null || s.viecId !== null) {
+			return [];
+		}
 		const viec = viecBuoc(k, s, now);
 		return viec ? [{ userId: s.assigneeId, viec }] : [];
 	});
