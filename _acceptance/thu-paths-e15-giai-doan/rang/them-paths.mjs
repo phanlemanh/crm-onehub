@@ -7,6 +7,7 @@ import {
 	docDanhSach,
 	docTai,
 	hoaCuHoSo,
+	hoaCuTaiMoc,
 	mocTruoc,
 	tepTai,
 } from "./hoa-cu-theo-paths.mjs";
@@ -258,43 +259,49 @@ function kiemPhaiCo(chon, phaiCo) {
 	return hong;
 }
 
+const MOC_DANH_SACH = "5ac01b453b999483dadd29d31a3fdfc011327594";
+
 export function luatDocLap() {
-	const moc = mocTruoc();
-	if (!moc)
-		khongDo(
-			"khong tim duoc moc truoc vong (merge-base hay commit gop cua nhanh)",
-		);
-	const keTruoc = lapKeHoach(tepTai(moc), docTai(moc));
+	const moc = MOC_DANH_SACH;
+	const docMoc = docTai(moc);
+	const keTruoc = lapKeHoach(tepTai(moc), docMoc);
 	const keNay = lapKeHoach();
 	const nay = new Map(keNay.map((m) => [`${m.slug}#${m.id}`, m]));
-	const khoa = new Set(
-		keNay
-			.filter((m) => m.ly_do === "khoa-thuoc-da-cham-thuc-te")
-			.map((m) => m.slug),
-	);
 	const ungVien = new Map();
-	for (const m of [...keTruoc, ...keNay].filter((x) => x.loai === "them")) {
-		if (!ungVien.has(m.slug)) ungVien.set(m.slug, new Set());
-		ungVien.get(m.slug).add(m.id);
+	for (const m of keTruoc.filter((x) => x.loai === "them")) {
+		if (!ungVien.has(m.slug)) ungVien.set(m.slug, []);
+		ungVien.get(m.slug).push(m);
 	}
 	const luat = [];
-	for (const [slug, ids] of ungVien) {
-		if (khoa.has(slug)) continue;
+	const loaiTru = [];
+	for (const [slug, dsMoc] of ungVien) {
+		const chuMoc = docMoc(dsMoc[0].tep);
+		const rMoc = hoaCuTaiMoc(slug, chenTheoKeHoach(chuMoc, dsMoc), moc);
+		if (rMoc.vc && !(rMoc.apply && !rMoc.kept.length)) continue;
 		let chu = docDia(`_acceptance/${slug}/evals.yaml`);
-		if (chu == null) continue;
-		const conThieu = [...ids]
-			.map((id) => nay.get(`${slug}#${id}`))
+		if (chu == null) {
+			loaiTru.push({ slug, ly_do: "ho so khong con o HEAD" });
+			continue;
+		}
+		const conThieu = dsMoc
+			.map((m) => nay.get(`${slug}#${m.id}`))
 			.filter((m) => m?.loai === "them");
 		if (conThieu.length) chu = chenTheoKeHoach(chu, conThieu);
 		const r = hoaCuHoSo(slug, chu);
 		if (!r.vc || (r.apply && !r.kept.length)) luat.push(slug);
+		else
+			loaiTru.push({
+				slug,
+				ly_do: `hoa cu o HEAD do PR khac (${r.apply ? `${r.kept.length} tep` : r.reason})`,
+			});
 	}
-	return { moc, luat: luat.sort() };
+	return { moc, luat: luat.sort(), loaiTru };
 }
 
 function kiemDanhSach(chon) {
-	const { moc, luat } = luatDocLap();
+	const { moc, luat, loaiTru } = luatDocLap();
 	let hong = 0;
+	for (const x of loaiTru) console.log(`LOAI_TRU ${x.slug}: ${x.ly_do}`);
 	for (const s of luat)
 		if (!chon.includes(s)) {
 			hong += 1;
@@ -306,7 +313,7 @@ function kiemDanhSach(chon) {
 			console.log(`THUA_TRONG_DANH_SACH ${s}`);
 		}
 	console.log(
-		`danh sach: ${chon.length} ho so · luat chon tu moc ${moc.slice(0, 9)}: ${luat.length} · lech ${hong}`,
+		`danh sach: ${chon.length} ho so · luat chon tai moc ${moc.slice(0, 9)}: ${luat.length} · loai tru ${loaiTru.length} · lech ${hong}`,
 	);
 	return hong;
 }

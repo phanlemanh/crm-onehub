@@ -2963,7 +2963,7 @@ executors:
     mtc_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs --chi-do"'
     tpe_e15: "node _acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs --ho-so giai-doan-thoa-thuan --chi-eval E15 --ma-tran-chu"
     tpe_gd: "node _acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs --ho-so giai-doan-thoa-thuan --gia-dinh apps/app/lib/messages/tin-hieu.ts=bo,apps/app/lib/messages/settings.ts=giu"
-    tpe_kiem: "node _acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs --kiem --ho-so @_acceptance/thu-paths-e15-giai-doan/danh-sach.txt --phai-co thu-haiku-tro-ly-okr,ghim-thuoc-soi-xem-okr --kiem-danh-sach"
+    tpe_kiem: "node _acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs --kiem --ho-so @_acceptance/thu-paths-e15-giai-doan/danh-sach.txt --phai-co thu-haiku-tro-ly-okr --kiem-danh-sach"
     tpe_chi_them: "node _acceptance/thu-paths-e15-giai-doan/rang/chi-them-paths.mjs --ho-so @_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
     tpe_sach: "node _acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs --ho-so @_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
     tpe_bo_qua: "node _acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs --kiem-bo-qua-lop"

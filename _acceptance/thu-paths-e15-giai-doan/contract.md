@@ -5,7 +5,7 @@ slug: thu-paths-e15-giai-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: signed-off
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-16T05:50:40Z
 design_doc: docs/superpowers/specs/2026-10-16-thu-paths-e15-giai-doan-design.md
@@ -34,11 +34,13 @@ của `docs/plan/lo-trinh-okr.json`).
   `giai-doan-thoa-thuan` với một tệp đổi duy nhất, Then tệp chữ ngoài màn (`apps/app/lib/messages/tin-hieu.ts`) bị bỏ
   qua, còn `apps/app/lib/messages/settings.ts` vẫn bị giữ (hồ sơ hoá cũ).
 - AC-3: Given danh sách hồ sơ đóng của vòng ở một nguồn duy nhất `_acceptance/thu-paths-e15-giai-doan/danh-sach.txt`
-  (luật chọn: thêm `paths` xong thì hồ sơ không hoá cũ, hoặc hồ sơ chưa ghim; trừ hồ sơ `da-cham-boi-thuc-te` vì thước đã khoá; tính trên cây HEAD), When kiểm, Then
-  (a) danh sách bằng đúng tập luật chọn trả về, không thừa không thiếu; (b) danh sách có `thu-haiku-tro-ly-okr` và
-  `ghim-thuoc-soi-xem-okr` — hai hồ sơ chủ kho gọi tên; và (c) mọi eval judgment của các hồ sơ trong danh sách, không
-  khai `not-run` và có `inputs` giải được, có `paths` chứa mọi input đã quy về gốc kho (input khai tương đối thư mục hồ
-  sơ được giải từ thư mục hồ sơ).
+  và mốc cố định `5ac01b453` (đỉnh `onehub` lúc dựng; chủ kho chọn lối A ở P1-26), When kiểm, Then (a) danh sách bằng
+  đúng tập luật chọn tại mốc — hồ sơ có eval judgment thiếu `paths` ở cây mốc, không ở trạng thái
+  `da-cham-boi-thuc-te`, thêm `paths` xong thì không hoá cũ ở cây mốc hoặc chưa ghim — trừ hồ sơ hoá cũ ở HEAD do PR khác,
+  mỗi hồ sơ bị trừ được in tên và lý do, và không bị vòng này chạm; (b) danh sách có `thu-haiku-tro-ly-okr`, hồ sơ chủ kho
+  gọi tên (`ghim-thuoc-soi-xem-okr` thuộc nhóm bị trừ: thêm `paths` ở lần ghim kế của chính nó); và (c) mọi eval judgment
+  của các hồ sơ trong danh sách, không khai `not-run` và có `inputs` giải được, có `paths` chứa mọi input đã quy về gốc kho
+  (input khai tương đối thư mục hồ sơ được giải từ thư mục hồ sơ).
 - AC-4: Given diff `evals.yaml` từ merge-base tới HEAD, When so từng eval của mọi hồ sơ, Then ngoài E15 của
   `giai-doan-thoa-thuan`, thay đổi duy nhất là khối `paths` thêm vào eval judgment của các hồ sơ trong danh sách, với
   giá trị bằng đúng inputs quy đổi; không trường nào khác của eval nào đổi chữ, không `evals.yaml` nào ngoài danh sách

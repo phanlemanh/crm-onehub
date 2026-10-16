@@ -60,20 +60,20 @@ evals:
       - "lib/eval-yaml.cjs"
     expected: |
       exit 0. Ba phần, một lệnh (them-paths.mjs --kiem --ho-so @danh-sach.txt --phai-co
-      thu-haiku-tro-ly-okr,ghim-thuoc-soi-xem-okr --kiem-danh-sach):
-      (a) --kiem-danh-sach tính lại luật chọn KHÔNG đọc danh-sach.txt: ứng viên = mọi hồ sơ có eval judgment thiếu paths
-      ở cây MỐC TRƯỚC VÒNG (merge-base với origin/onehub; nhánh đã gộp thì cha thứ nhất của commit gộp nhánh) hoặc ở
-      HEAD, trừ hồ sơ da-cham-boi-thuc-te; với mỗi ứng viên, evals.yaml ở HEAD (eval còn thiếu thì giả lập chèn) qua bộ
-      lọc của hoa-cu-theo-paths (staleByPaths, tệp đổi từ verified_commit trừ _acceptance/ và t1_skip_globs): chưa ghim
-      hoặc SACH thì thuộc luật — rồi so với danh-sach.txt: thiếu → «THIEU_TRONG_DANH_SACH
-      <slug>», thừa → «THUA_TRONG_DANH_SACH <slug>», mã 1;
+      thu-haiku-tro-ly-okr --kiem-danh-sach):
+      (a) --kiem-danh-sach tính lại luật chọn KHÔNG đọc danh-sach.txt, tại MỐC CỐ ĐỊNH 5ac01b453 (hằng MOC_DANH_SACH, đỉnh
+      onehub lúc dựng, lối A ở P1-26): ứng viên = hồ sơ có eval judgment thiếu paths ở cây mốc, trừ da-cham-boi-thuc-te; giả
+      lập chèn paths rồi xét bộ lọc (staleByPaths, tệp đổi từ verified_commit tới mốc trừ _acceptance/ và t1_skip_globs, cây
+      git ls-tree của mốc): chưa ghim hoặc SACH thì thuộc luật; hồ sơ thuộc luật mà ở HEAD hoá cũ do PR khác thì in
+      «LOAI_TRU <slug>: hoa cu o HEAD do PR khac (<n> tep)» và không tính vào luật — rồi so với danh-sach.txt: thiếu →
+      «THIEU_TRONG_DANH_SACH <slug>», thừa → «THUA_TRONG_DANH_SACH <slug>», mã 1; hôm nay 6 thuộc luật, 2 loại trừ;
       (b) --phai-co: mỗi slug khai phải có trong danh sách, in «CO_TEN <slug>», thiếu → «KHONG_CO_TEN <slug>», mã 1;
       (c) mọi eval judgment không khai not-run, có inputs giải được, của hồ sơ trong danh sách có paths chứa mọi input quy
       về gốc kho: «kiem: <n> eval judgment co paths phu inputs · 0 hong». Hồ sơ trong danh sách không có eval judgment
       nào → mã 2 «KHONG DO DUOC: ho so khong co eval judgment nao: <slug>».
       CHIỀU ĐỎ (dot-bien.mjs): xoá khối paths vừa thêm của eval đầu tiên trong danh sách → mã 1 «THIEU_PATHS <slug>#<id>»;
-      bớt một mục khỏi khối đó → mã 1 «LECH_PATHS <slug>#<id>: thieu <tệp>»; xoá dòng ghim-thuoc-soi-xem-okr khỏi
-      danh-sach.txt → mã 1 với cả «KHONG_CO_TEN ghim-thuoc-soi-xem-okr» và «THIEU_TRONG_DANH_SACH ghim-thuoc-soi-xem-okr»;
+      bớt một mục khỏi khối đó → mã 1 «LECH_PATHS <slug>#<id>: thieu <tệp>»; xoá dòng tat-preview-agent-okr khỏi
+      danh-sach.txt → mã 1 với cả «KHONG_CO_TEN tat-preview-agent-okr» và «THIEU_TRONG_DANH_SACH tat-preview-agent-okr»;
       thêm một hồ sơ còn hoá cũ (khung-man-chung) vào danh-sach.txt → mã 1 «THUA_TRONG_DANH_SACH khung-man-chung».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

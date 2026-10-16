@@ -1,7 +1,5 @@
 ba-ho-so-do-san
 bo-cau-hoi-mau
-dieu-huong-khu-muc-tieu
-ghim-thuoc-soi-xem-okr
 ngan-ho-so-trong-lo-trinh
 tat-preview-agent-okr
 thu-haiku-tro-ly-okr

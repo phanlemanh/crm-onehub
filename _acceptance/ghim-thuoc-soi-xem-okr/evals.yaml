@@ -22,9 +22,6 @@ evals:
     criterion: AC-3
     executor: judgment
     inputs: ["_acceptance/ghim-thuoc-soi-xem-okr/nguon/phan-loai-soi-xem.md", "_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs"]
-    paths:
-      - "_acceptance/ghim-thuoc-soi-xem-okr/nguon/phan-loai-soi-xem.md"
-      - "_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs"
     question: "Trong soi-ma.mjs, mảng MIEN_XEM có bảy dòng cho: okr.service.ts xoaMucTieu (tho:okrKeyResult và okrObjective), packages/db/src/okr-muc-tieu-lich-su.ts lichSuMucTieu, okr.service.ts mine, tro-ly.service.ts coKrSuaDuoc, okr.service.ts congSuaCanChinh, okr.service.ts suaLyDoCanChinh. Với từng dòng, lyDo có nêu đúng cổng ở tầng trên mà bảng phân loại ghi cho chỗ ấy (hàm cổng như assertSuaMucTieu / assertXemMucTieu, hoặc vì sao đầu ra không rộng hơn điều kiện xem) không, và có khẳng định điều gì bảng không chứng không? Luật riêng cho congSuaCanChinh (hàng 6 và 7 của bảng): đây là hàm cổng chung, lý do phải nói lời đọc nằm trong chính hàm cổng, có assertSuaMucTieu trên nguồn ngay sau, và nêu đủ hai người gọi removeAlignment và suaLyDoCanChinh; lý do chỉ nói removeAlignment là FAIL. Trả PASS khi cả bảy dòng đúng và không dòng nào nói quá bảng; FAIL nêu dòng sai và câu sai."
     expected: "PASS — bảy lý do khớp cột «Cổng ở tầng trên» của bảng, không lý do nào nói quá."
     evidence_required: [run_id, verdict, rationale]

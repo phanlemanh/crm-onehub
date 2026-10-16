@@ -108,6 +108,39 @@ export function verifiedCommit(slug) {
 	return (bc && (bc.match(/^verified_commit:\s*(\S+)/m) ?? [])[1]) || null;
 }
 
+export function hoaCuTaiMoc(slug, evalsText, moc) {
+	const bc = docTai(moc)(`_acceptance/${slug}/evidence-report.md`);
+	const vc = (bc && (bc.match(/^verified_commit:\s*(\S+)/m) ?? [])[1]) || null;
+	if (!vc)
+		return {
+			slug,
+			vc: null,
+			apply: false,
+			reason: "chua-ghim",
+			kept: [],
+			files: [],
+		};
+	t1Nho ??= globT1();
+	const files = git("diff", "--name-only", vc, moc, "--")
+		.split("\n")
+		.filter(
+			(f) =>
+				f && !f.startsWith("_acceptance/") && !t1Nho.some((r) => r.test(f)),
+		);
+	const cay = L.dungCayPaths(
+		git("ls-tree", "-r", "-z", "--name-only", moc).split("\0").filter(Boolean),
+	);
+	const r = L.staleByPaths(files, evalsText, { cay });
+	return {
+		slug,
+		vc,
+		apply: r.apply,
+		reason: r.reason,
+		kept: r.apply ? r.kept : files,
+		files,
+	};
+}
+
 export function hoaCuHoSo(slug, evalsText = null) {
 	const evals = evalsText ?? docTep(slug, "evals.yaml");
 	if (evals == null) khongDo(`${slug} khong co evals.yaml`);
