@@ -29,6 +29,35 @@ describe("ten mien nen tang", () => {
 		expect(NEN_TANG.length).toBe(14);
 	});
 
+	test("ten mien con cua moi nen tang", () => {
+		const mongDoi = [
+			"Facebook",
+			"Instagram",
+			"Threads",
+			"Zalo",
+			"LinkedIn",
+			"TikTok",
+			"YouTube",
+			"X",
+			"Telegram",
+			"Linktree",
+			"Batdongsan",
+			"Chợ Tốt",
+			"Alonhadat",
+			"Muaban",
+		];
+		const daThu = NEN_TANG.map((nt) => {
+			const mien = `vn.${nt.tenMien[0]}`;
+			const ket = nenTangCuaTenMien(mien);
+			expect(ket, `ten mien con ${mien} khong duoc nhan ra`).toEqual({
+				ten: nt.ten,
+				tenMien: mien,
+			});
+			return ket?.ten;
+		});
+		expect(daThu).toEqual(mongDoi);
+	});
+
 	test("ten mien con", () => {
 		expect(nenTangCuaTenMien("m.facebook.com")?.ten).toBe("Facebook");
 		expect(nenTangCuaTenMien("vn.linkedin.com")?.ten).toBe("LinkedIn");
