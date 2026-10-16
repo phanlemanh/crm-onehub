@@ -238,11 +238,7 @@ describe("tvk-nhanh", () => {
 		expect(g(kho.origin, "rev-parse", `${HC}~1`)).toBe(sha(kho, CHINH) ?? "");
 		expect(
 			g(kho.origin, "diff", "--name-only", CHINH, HC).split("\n").sort(),
-		).toEqual([
-			TRANG,
-			"tin-hieu/crm/crm-1.json",
-			"tin-hieu/crm/crm-2.json",
-		]);
+		).toEqual([TRANG, "tin-hieu/crm/crm-1.json", "tin-hieu/crm/crm-2.json"]);
 		expect(docKit(kho, HC)).toEqual({ loi: 0, so: 2 });
 
 		let truoc = truocCua();
@@ -307,13 +303,11 @@ describe("tvk-ve", () => {
 		const cham = g(kho.origin, "diff", "--name-only", CHINH, HC).split("\n");
 		expect(
 			cham.filter(
-				(t) =>
-					t !== TRANG &&
-					!t.startsWith(`${TIN_HIEU.thuMucNguon}/`),
+				(t) => t !== TRANG && !t.startsWith(`${TIN_HIEU.thuMucNguon}/`),
 			),
 			"commit hang cho cham tep la",
 		).toEqual([]);
-		expect(cham).toContain(TRANG);
+		expect(cham, "trang lo trinh khong ve lai").toContain(TRANG);
 		expect(trangTren(kho, CHINH)).toBe(VE_RONG.trim());
 		expect(trangTren(kho, HC), "trang lo trinh khong ve lai").toBe(
 			veMong(kho, HC),
