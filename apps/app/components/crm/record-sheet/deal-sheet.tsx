@@ -280,7 +280,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 								<LocalRelativeTime date={deal.stageChangedAt} />
 							</DetailSheetStat>
 							<DetailSheetStat label={m.deal.fields.owner}>
-								<OwnerCell owner={deal.owner} />
+								<OwnerCell owner={deal.owner} xuongDongDienThoai />
 							</DetailSheetStat>
 						</DetailSheetStats>
 					</>

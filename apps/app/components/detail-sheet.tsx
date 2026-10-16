@@ -185,7 +185,7 @@ export function DetailSheetStats({ children }: { children: ReactNode }) {
 	return (
 		<dl
 			data-slot="detail-sheet-stats"
-			className="flex shrink-0 divide-x border-b bg-muted/40"
+			className="grid shrink-0 grid-cols-2 border-b bg-muted/40 md:flex md:divide-x"
 		>
 			{children}
 		</dl>
@@ -201,7 +201,9 @@ export function DetailSheetStat({
 }) {
 	return (
 		<div className={cn("flex min-w-0 flex-1 flex-col gap-1 py-2.5", GUTTER)}>
-			<dt className="truncate text-muted-foreground text-xs/5">{label}</dt>
+			<dt className="min-w-0 wrap-anywhere text-muted-foreground text-xs/5 md:truncate">
+				{label}
+			</dt>
 			<dd className="min-w-0 wrap-anywhere font-medium text-foreground text-sm/5 md:truncate">
 				{children}
 			</dd>
