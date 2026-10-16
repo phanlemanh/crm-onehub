@@ -3,6 +3,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import {
 	chmodSync,
 	copyFileSync,
+	cpSync,
 	existsSync,
 	mkdirSync,
 	mkdtempSync,
@@ -97,7 +98,7 @@ function ghi(goc: string, duong: string, chu: string): void {
 
 function commit(goc: string, ...tep: [string, string][]): string {
 	for (const [d, c] of tep) ghi(goc, d, c);
-	git(goc, "add", "-A");
+	git(goc, "add", "--", ...tep.map(([d]) => d));
 	git(goc, "commit", "-q", "-m", "c");
 	return git(goc, "rev-parse", "HEAD");
 }
@@ -113,18 +114,16 @@ function manifest(): string[] {
 	return ds;
 }
 
-function dungKho(bo: string[], sua: Sua): Kho {
-	const d = realpathSync(mkdtempSync(join(tmpdir(), "pre-push-t1-")));
+let mau = "";
+
+function khoMau(): string {
+	if (mau) return mau;
+	const d = realpathSync(mkdtempSync(join(tmpdir(), "pre-push-t1-mau-")));
 	tam.push(d);
 	const goc = join(d, "kho");
-	const remote = join(d, "remote.git");
-	const bin = join(d, "bin");
 	for (const t of [...TEP_CHEP, ...manifest()]) {
-		if (bo.includes(t)) continue;
 		mkdirSync(dirname(join(goc, t)), { recursive: true });
 		copyFileSync(join(NGUON, t), join(goc, t));
-		const f = sua[t];
-		if (f) writeFileSync(join(goc, t), f(readFileSync(join(goc, t), "utf8")));
 	}
 	chmodSync(join(goc, ".githooks/pre-push"), 0o755);
 	ghi(goc, "apps/api/a.ts", "export const a = 1;\n");
@@ -133,16 +132,27 @@ function dungKho(bo: string[], sua: Sua): Kho {
 	mkdirSync(join(goc, "node_modules/.bin"), { recursive: true });
 	writeFileSync(join(goc, "node_modules/.bin/oxlint"), OXLINT_GIA);
 	chmodSync(join(goc, "node_modules/.bin/oxlint"), 0o755);
-	mkdirSync(bin);
-	writeFileSync(join(bin, "bun"), BUN_GIA);
-	chmodSync(join(bin, "bun"), 0o755);
-	execFileSync("git", ["init", "-q", "--template=", "--bare", remote], { env: envSach({}) });
+	mkdirSync(join(d, "bin"));
+	writeFileSync(join(d, "bin", "bun"), BUN_GIA);
+	chmodSync(join(d, "bin", "bun"), 0o755);
+	execFileSync("git", ["init", "-q", "--template=", "--bare", join(d, "remote.git")], { env: envSach({}) });
 	git(d, "init", "-q", "--template=", "-b", "onehub", goc);
 	git(goc, "add", "-A");
 	git(goc, "commit", "-q", "-m", "goc");
-	git(goc, "remote", "add", "origin", remote);
+	git(goc, "remote", "add", "origin", "../remote.git");
 	git(goc, "push", "-q", "origin", "onehub");
-	return { goc, bin, so: join(d, "so-bun") };
+	mau = d;
+	return d;
+}
+
+function dungKho(bo: string[], sua: Sua): Kho {
+	const d = realpathSync(mkdtempSync(join(tmpdir(), "pre-push-t1-")));
+	tam.push(d);
+	cpSync(khoMau(), d, { recursive: true });
+	const goc = join(d, "kho");
+	for (const t of bo) rmSync(join(goc, t), { force: true });
+	for (const [t, f] of Object.entries(sua)) writeFileSync(join(goc, t), f(readFileSync(join(goc, t), "utf8")));
+	return { goc, bin: join(d, "bin"), so: join(d, "so-bun") };
 }
 
 function phanLoai(kho: Kho, ...dong: string[]): Ket {
