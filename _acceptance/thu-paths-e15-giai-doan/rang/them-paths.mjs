@@ -321,36 +321,51 @@ const LOP_BO_QUA = [
 function kiemBoQuaLop() {
 	const moc = mocTruoc();
 	if (!moc) khongDo("khong tim duoc moc truoc vong");
-	const docMoc = docTai(moc);
+	const keMoc = lapKeHoach(tepTai(moc), docTai(moc)).filter(
+		(x) => x.loai === "bo-qua",
+	);
+	const keNay = lapKeHoach();
+	const nay = new Map(keNay.map((m) => [`${m.slug}#${m.id}`, m]));
+	const daXet = new Set(keMoc.map((m) => `${m.slug}#${m.id}`));
+	const moi = keNay.filter(
+		(m) => m.loai === "bo-qua" && !daXet.has(`${m.slug}#${m.id}`),
+	);
+	const lopCua = (lyDo) =>
+		LOP_BO_QUA.find((l) => lyDo === l || lyDo.startsWith(`${l}:`));
 	const dem = Object.fromEntries(LOP_BO_QUA.map((l) => [l, 0]));
 	let hong = 0;
-	for (const m of lapKeHoach().filter((x) => x.loai === "bo-qua")) {
-		const lop = LOP_BO_QUA.find(
-			(l) => m.ly_do === l || m.ly_do.startsWith(`${l}:`),
-		);
+	for (const m of keMoc) {
+		const lop = lopCua(m.ly_do);
 		if (!lop) {
 			hong += 1;
 			console.log(`LY_DO_LA ${m.slug}#${m.id}: ${m.ly_do}`);
 			continue;
 		}
 		dem[lop] += 1;
-		const cu = docMoc(m.tep);
-		if (cu == null) {
-			console.log(`BO_QUA ${m.slug}#${m.id}: ${m.ly_do} (ho so moi sau moc)`);
-			continue;
-		}
-		const pCu = L.evalListsOf(cu, ["paths"]).byId.get(m.id)?.paths ?? [];
-		const pNay = m.paths ?? [];
-		if (JSON.stringify(pCu) !== JSON.stringify(pNay)) {
+		const h = nay.get(`${m.slug}#${m.id}`);
+		const pCu = m.paths ?? [];
+		const pNay = h?.paths ?? [];
+		if (!h)
+			console.log(
+				`BO_QUA ${m.slug}#${m.id}: ${m.ly_do} (eval khong con o HEAD)`,
+			);
+		else if (JSON.stringify(pCu) !== JSON.stringify(pNay)) {
 			hong += 1;
 			console.log(`DOI_PATHS ${m.slug}#${m.id}: ${lop}`);
 		} else console.log(`BO_QUA ${m.slug}#${m.id}: ${m.ly_do}`);
+	}
+	for (const m of moi) {
+		const lop = lopCua(m.ly_do);
+		if (!lop) {
+			hong += 1;
+			console.log(`LY_DO_LA ${m.slug}#${m.id}: ${m.ly_do}`);
+		} else console.log(`BO_QUA ${m.slug}#${m.id}: ${m.ly_do} (moi sau moc)`);
 	}
 	const rong = LOP_BO_QUA.filter((l) => !dem[l]);
 	if (rong.length) khongDo(`lop bo qua rong: ${rong.join(" ")}`);
 	const tong = Object.values(dem).reduce((x, y) => x + y, 0);
 	console.log(
-		`bo qua: ${tong} eval · ${LOP_BO_QUA.map((l) => `${l} ${dem[l]}`).join(" · ")} · doi ${hong}`,
+		`bo qua (lop tinh o moc ${moc.slice(0, 9)}): ${tong} eval · ${LOP_BO_QUA.map((l) => `${l} ${dem[l]}`).join(" · ")} · moi ${moi.length} · doi ${hong}`,
 	);
 	return hong;
 }

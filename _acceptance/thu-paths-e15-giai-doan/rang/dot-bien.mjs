@@ -266,8 +266,21 @@ const CAP = [
 				sang: `${DONG_INPUTS_OL}    paths:\n      - "packages/validation/src/okr-cuoc-soan.ts"\n`,
 			},
 		],
-		ma: 2,
-		dong: ["KHONG DO DUOC: lop bo qua rong: input-vang"],
+		ma: 1,
+		dong: ["DOI_PATHS okr-loai-hoc-tap#E14: input-vang"],
+	},
+	{
+		eval: "E6",
+		ten: "them-paths-khong-inputs",
+		doi: [
+			{
+				tep: "_acceptance/chu-mac-dinh-thu-vien-ngoai/evals.yaml",
+				tu: "    executor: judgment\n    cmd: judgment\n",
+				sang: '    executor: judgment\n    cmd: judgment\n    paths:\n      - "apps/app/lib/messages/settings.ts"\n',
+			},
+		],
+		ma: 1,
+		dong: ["DOI_PATHS chu-mac-dinh-thu-vien-ngoai#E10: khong-co-inputs"],
 	},
 	{
 		eval: "E8",

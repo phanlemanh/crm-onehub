@@ -134,15 +134,18 @@ evals:
       - "lib/evidence-core.cjs"
       - "lib/eval-yaml.cjs"
     expected: |
-      exit 0. them-paths.mjs --kiem-bo-qua-lop quét TRỌN lớp eval judgment bị xếp «bo-qua» ở HEAD (không chọn tay):
+      exit 0. them-paths.mjs --kiem-bo-qua-lop quét TRỌN lớp eval judgment bị xếp «bo-qua» ở CÂY MỐC TRƯỚC VÒNG (cùng mốc với E3; lớp
+      tính trước khi sửa, nên eval bị thêm paths không rời khỏi phép quét), so paths của từng eval ở HEAD; eval bo-qua mới
+      xuất hiện sau mốc in «(moi sau moc)»:
       mỗi eval phải mang đúng một trong bốn lý do — khoa-thuoc-da-cham-thuc-te (hồ sơ da-cham-boi-thuc-te), khai-not-run,
       khong-co-inputs, input-vang:<tệp> — và paths của nó ở HEAD bằng đúng paths ở cây mốc trước vòng (cùng mốc với E3):
       in «BO_QUA <slug>#<id>: <lý do>» từng eval, dòng cuối «bo qua: <n> eval · <lý do> <số> ×4 · doi 0». Lý do ngoài bốn
       loại → «LY_DO_LA», paths đổi → «DOI_PATHS <slug>#<id>: <lớp>», mã 1. Đối chứng dương: mỗi lớp trong bốn lớp phải có
       ít nhất một eval, lớp rỗng → mã 2 «KHONG DO DUOC: lop bo qua rong: <lớp>» (hôm nay 10 eval: 3 · 4 · 2 · 1).
       CHIỀU ĐỎ (dot-bien.mjs): thêm paths cho cua-vao-noi-tieng-viet#E14 (hồ sơ khoá) → mã 1 «DOI_PATHS
-      cua-vao-noi-tieng-viet#E14: khoa-thuoc-da-cham-thuc-te»; thêm paths cho okr-loai-hoc-tap#E14 (eval duy nhất của lớp
-      input-vang) → eval rời lớp, mã 2 «KHONG DO DUOC: lop bo qua rong: input-vang».
+      cua-vao-noi-tieng-viet#E14: khoa-thuoc-da-cham-thuc-te»; thêm paths cho okr-loai-hoc-tap#E14 → mã 1 «DOI_PATHS
+      okr-loai-hoc-tap#E14: input-vang»; thêm paths cho chu-mac-dinh-thu-vien-ngoai#E10 (lớp khong-co-inputs có hai eval) →
+      mã 1 «DOI_PATHS chu-mac-dinh-thu-vien-ngoai#E10: khong-co-inputs».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8

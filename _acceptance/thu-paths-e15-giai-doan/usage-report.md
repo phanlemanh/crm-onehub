@@ -47,3 +47,50 @@ wall: 2015s
 - **claude-sonnet-5-5**: 9 agent · 32 calls · out 30,136 · in 64 · cache_read 1,106,661 · cache_create 483,444
 - **claude-haiku-5-5**: 15 agent · 49 calls · out 25,865 · in 98 · cache_read 1,438,644 · cache_create 761,942
 
+### S4 round 2 — wf_27a12608-9ea (25 agent, 122,302 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 23 | 24,143 | 46 | 1,293,770 | 2076 |
+| review:bugs | claude-opus-5-5 | 18 | 17,659 | 36 | 1,377,723 | 227 |
+| review:measurement | claude-opus-5-5 | 15 | 13,608 | 30 | 1,159,915 | 156 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 12 | 12,515 | 24 | 565,758 | 1065 |
+| synthesize:report | claude-sonnet-5-5 | 5 | 11,496 | 10 | 282,121 | 83 |
+| baseline:diffBase | claude-sonnet-5-5 | 2 | 6,982 | 4 | 46,244 | 41 |
+| review:conventions | claude-opus-5-5 | 7 | 6,894 | 14 | 371,859 | 76 |
+| refute:them-paths.mjs | claude-sonnet-5-5 | 7 | 3,687 | 14 | 289,458 | 52 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 3,530 | 4 | 42,653 | 47 |
+| triage | claude-sonnet-5-5 | 2 | 3,321 | 4 | 44,983 | 32 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 2,580 | 4 | 42,731 | 14 |
+| refute:them-paths.mjs | claude-sonnet-5-5 | 3 | 1,955 | 6 | 93,199 | 23 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,941 | 4 | 42,655 | 15 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,927 | 4 | 5,738 | 364 |
+| refute:them-paths.mjs | claude-sonnet-5-5 | 3 | 1,778 | 6 | 91,383 | 22 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 1,182 | 4 | 42,763 | 9 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 1,022 | 4 | 42,700 | 8 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 959 | 4 | 42,730 | 9 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 848 | 4 | 42,774 | 25 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 827 | 4 | 42,710 | 77 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 788 | 4 | 42,725 | 7 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 781 | 4 | 39,786 | 284 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 775 | 4 | 42,680 | 272 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 694 | 4 | 42,649 | 9 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 410 | 4 | 38,575 | 13 |
+
+
+wall: 2259s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 6,982 | 46,244 | 41 | 10:34:09 | 10:34:50 |
+| machine | 15 | 54,512 | 2,374,822 | 2078 | 10:34:09 | 11:08:47 |
+| review | 3 | 38,161 | 2,909,497 | 228 | 10:34:09 | 10:37:57 |
+| triage | 1 | 3,321 | 44,983 | 32 | 11:08:47 | 11:09:19 |
+| refute | 3 | 7,420 | 474,040 | 52 | 11:09:19 | 11:10:11 |
+| capture | 1 | 410 | 38,575 | 13 | 11:10:11 | 11:10:25 |
+| synthesize | 1 | 11,496 | 282,121 | 83 | 11:10:25 | 11:11:48 |
+
+- **claude-haiku-5-5**: 15 agent · 61 calls · out 54,512 · in 122 · cache_read 2,374,822 · cache_create 714,934
+- **claude-opus-5-5**: 3 agent · 40 calls · out 38,161 · in 80 · cache_read 2,909,497 · cache_create 292,122
+- **claude-sonnet-5-5**: 7 agent · 24 calls · out 29,629 · in 48 · cache_read 885,963 · cache_create 391,576
+
