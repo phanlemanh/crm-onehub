@@ -1,32 +1,40 @@
-# Review findings: cho-tac-nhan-lau (round 3)
+# Review findings: cho-tac-nhan-lau (round 4)
 
 ## Trong hợp đồng
 
-Không có.
+- **Ảnh mo-tu-chuong-1280/375 chụp lại vòng này chỉ ra trang chủ /chat, không ra cuộc trò chuyện. Lỗi khi chờ URL bị nuốt, và docLuc cũng do moMot của chuông đặt**
+  AC: AC-9
+  file: `_acceptance/cho-tac-nhan-lau/rang/do-man.mjs:293`
+  severity: medium
+  source: bugs
+  detail: Trong moTuChuong, lệnh `p.waitForFunction((id) => location.pathname.endsWith(`/chat/${id}`), ...)` có `.catch(() => {})` nên lỗi bị nuốt. Nếu bấm dòng thông báo mà trang không chuyển sang /chat/<xong>, bước này vẫn chạy tiếp mà không báo gì. Sau đó hàm gọi `mo(p, `${APP}/${slug}/chat`, CHUONG)` rồi mới `anh(p, ma)`. Vì vậy ảnh bằng chứng luôn là trang chủ chat. Hai ảnh mới chụp đúng như vậy: dòng chữ chào bị cắt «nhân cần gì hôm nay?», thanh bên không chọn hội thoại nào, chuông không có số. E9-step7.png có cùng md5 với mo-tu-chuong-375.png. Lượt kiem chỉ xét `docLuc` và `sau === truoc - 1`. Nhưng khi bấm dòng trên chuông, `moMot` (apps/app/components/thong-bao/chuong-thong-bao.tsx:180-203) gọi thongBao.service.moMot, và hàm này tự đặt `docLuc: hang.docLuc ?? now` (apps/api/src/thong-bao/thong-bao.service.ts:95). Nên dòng này vẫn xanh dù cuộc trò chuyện không mở ra và markRead của conversations.service không chạy. evidence-report.md mục (b) viện cớ «conversations.service chỉ đặt docLuc khi lấy hội thoại theo id». Câu đó sai, vì moMot cũng đặt docLuc. Vậy ô «mở từ chuông» ở cả hai khổ chưa có bằng chứng nào cho thấy cuộc trò chuyện đã mở. Phát hiện này nối với phát hiện r2 về moMot, nhưng là lần đầu nó hiện ra trên ảnh bằng chứng mới chụp. Cách sửa: không nuốt lỗi khi chờ URL (đưa kết quả vào kiem), và chụp ảnh trước khi rời khỏi /chat/<xong>.
+  rationale: AC-9 đích danh trạng thái «mở cuộc trò chuyện từ chuông» ở khổ 375 và 1280; ảnh bằng chứng của ô này chỉ ra trang chủ chat nên AC-9 chưa được chứng minh (và AC-6 cũng chưa có bằng chứng mở cuộc trò chuyện).
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Sidebar markRead lists cache keys at the call site instead of calling useCrmCache().thongBao()**
+Không có mục mới ở round này.
+
+- **Sidebar markRead lists cache keys at the call site instead of calling useCrmCache().thongBao() (r3)**
   Người dùng thấy gì: Khi mở một cuộc trò chuyện từ thanh bên, số trên chuông giảm đúng, nhưng trang danh sách thông báo có thể còn hiện dòng đó là chưa đọc trong tối đa nửa phút cho tới khi tải lại.
   file: `apps/app/components/agent-builder/agent-builder-sidebar.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **do-man.mjs now depends on agent-builder-khung.ts, but E9's paths do not list that file**
+- **do-man.mjs now depends on agent-builder-khung.ts, but E9's paths do not list that file (r3)**
   Người dùng thấy gì: Nếu sau này ai đó đổi nhãn của danh sách hội thoại ở thanh bên, bài đo màn đã ký có thể không bị đánh dấu cũ và lặng lẽ đo lệch. Người dùng cuối không thấy gì khác.
   file: `_acceptance/cho-tac-nhan-lau/rang/do-man.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **markRead ở thanh bên làm mới chuông nhưng bỏ sót danh sách /thong-bao; không dùng cache.thongBao()**
+- **markRead ở thanh bên làm mới chuông nhưng bỏ sót danh sách /thong-bao; không dùng cache.thongBao() (r3)**
   Người dùng thấy gì: Mở cuộc trò chuyện từ thanh bên làm chuông giảm số, nhưng trang Thông báo mở lại ngay sau đó có thể vẫn hiện dòng ấy là chưa đọc, nên hai chỗ hiện lệch nhau một lúc.
   file: `apps/app/components/agent-builder/agent-builder-sidebar.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4 (chỉ có assertion âm tính): ô mo-tu-thanh-ben-1280 coi «không có huy hiệu» là đếm về 0, và nhãn «khong tai lai trang» in ra mà không đo**
+- **Hình dạng 4 (chỉ có assertion âm tính): ô mo-tu-thanh-ben-1280 coi «không có huy hiệu» là đếm về 0, và nhãn «khong tai lai trang» in ra mà không đo (r3)**
   Người dùng thấy gì: Bài kiểm tra màn cho trường hợp mở từ thanh bên có thể báo đạt cả khi trang bị tải lại thay vì chuông tự cập nhật. Sản phẩm chạy đúng, nhưng bằng chứng ở ca này yếu hơn vẻ ngoài.
   file: `_acceptance/cho-tac-nhan-lau/rang/do-man.mjs`
   severity: medium
@@ -44,13 +52,13 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình, rỗng): kiểm «không lẫn ngôn ngữ» cho dung.daTroi không bao giờ bắt được gì, và bản en của daTroi không có đối chứng dương (r2 · tệp đã đổi)**
+- **Hình dạng 4 (âm tính một mình, rỗng): kiểm «không lẫn ngôn ngữ» cho dung.daTroi không bao giờ bắt được gì, và bản en của daTroi không có đối chứng dương (r2)**
   Người dùng thấy gì: Bài kiểm tự động chưa bắt được trường hợp thẻ chờ hiện chữ «Đã» tiếng Việt ở bản tiếng Anh. Nếu có lỗi như vậy, người dùng tiếng Anh sẽ thấy chữ lẫn ngôn ngữ mà bài kiểm vẫn báo xanh.
   file: `apps/app/test/cho-tac-nhan-lau.dom.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo tín hiệu phụ thay vì đầu ra): dòng E9 «mở từ chuông» xanh nhờ moMot có sẵn của chuông, không cần cuộc trò chuyện mở ra (r2 · tệp đã đổi)**
+- **Hình dạng 1 (đo tín hiệu phụ thay vì đầu ra): dòng E9 «mở từ chuông» xanh nhờ moMot có sẵn của chuông, không cần cuộc trò chuyện mở ra (r2)**
   Người dùng thấy gì: Phép đo tự động cho bước «bấm thông báo trên chuông» có thể báo đạt dù trang không chuyển sang cuộc trò chuyện. Chưa thấy lỗi thật ở màn, chỉ là bằng chứng chưa chắc.
   file: `_acceptance/cho-tac-nhan-lau/rang/do-man.mjs`
   severity: medium
