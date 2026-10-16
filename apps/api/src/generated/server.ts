@@ -46,7 +46,7 @@ import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput, goG
 import { themViecInput, suaViecInput, danhDauViecInput, ganSangKienInput, themBangChungInput, guiGhiNhanInput } from "@crm/validation/okr-canh-kr";
 import { taoTuMauInput } from "@crm/validation/okr-mau";
 import { chiSoOutput, xemTruocChiSoInput, xemTruocChiSoOutput, datNguonKrVao, datNguonKrOutput, lichSuSoInput, lichSuSoOutput, banGhiChiSoInput, banGhiChiSoOutput, ghiSoKrInput, ghiSoKrOutput } from "../okr/okr-so.contracts";
-import { accessOutput, nguoiNhanViecOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, planCloseInput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
+import { accessOutput, nguoiNhanViecOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, goiYCuaDealInput, goiYCuaDealOutput, boQuaGoiYInput, boQuaGoiYOutput, planCloseInput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
@@ -1225,6 +1225,14 @@ const appRouter = t.router({
     createFromTemplate: publicProcedure
       .input(planCreateFromTemplateInput)
       .output(planOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    goiYCuaDeal: publicProcedure
+      .input(goiYCuaDealInput)
+      .output(goiYCuaDealOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    boQuaGoiY: publicProcedure
+      .input(boQuaGoiYInput)
+      .output(boQuaGoiYOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     closePlan: publicProcedure
       .input(planCloseInput)

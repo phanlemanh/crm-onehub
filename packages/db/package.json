@@ -16,6 +16,7 @@
 		"./currency": "./src/currency.ts",
 		"./crm-events": "./src/crm-events.ts",
 		"./giai-doan": "./src/giai-doan.ts",
+		"./goi-y-ke-hoach": "./src/goi-y-ke-hoach.ts",
 		"./enums": "./src/generated/prisma/enums.ts",
 		"./favicon": "./src/favicon.ts",
 		"./fields": "./src/fields.ts",
