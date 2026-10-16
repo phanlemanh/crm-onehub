@@ -254,6 +254,16 @@ describe("cho-tac-nhan-lau", () => {
 						luotId: "luotId" in d.nd ? d.nd.luotId : "",
 					});
 				}
+				if (ds.length > 0) {
+					const h = await db.agentConversation.findUniqueOrThrow({
+						where: { id },
+						select: { lastAssistantAt: true },
+					});
+					expect(
+						h.lastAssistantAt,
+						`co dieu moi cho nguoi dung: ${o.ten}`,
+					).not.toBeNull();
+				}
 				const xong = ds.find((d) => d.nd.loai === "tac-nhan-xong");
 				if (xong)
 					expect(xong.nd, `ten tac nhan: ${o.ten}`).toMatchObject({

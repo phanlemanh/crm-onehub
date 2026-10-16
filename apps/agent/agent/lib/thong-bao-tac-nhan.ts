@@ -93,7 +93,12 @@ export async function ghiThongBaoTacNhan(
 		],
 		skipDuplicates: true,
 	});
-	return ghi.count > 0;
+	if (ghi.count === 0) return false;
+	await db.agentConversation.updateMany({
+		where: { id: conversationId, kind: "BUILDER" },
+		data: { lastAssistantAt: now },
+	});
+	return true;
 }
 
 export async function baoTacNhan(

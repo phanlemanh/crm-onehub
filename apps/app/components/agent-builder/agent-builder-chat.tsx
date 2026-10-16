@@ -286,9 +286,14 @@ export function AgentBuilderChat({
 	const markRead = useMutation(
 		trpc.conversations.markRead.mutationOptions({
 			onSuccess: () =>
-				queryClient.invalidateQueries({
-					queryKey: trpc.conversations.builderList.pathKey(),
-				}),
+				Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: trpc.conversations.builderList.pathKey(),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: trpc.thongBao.chuong.pathKey(),
+					}),
+				]),
 		}),
 	);
 
