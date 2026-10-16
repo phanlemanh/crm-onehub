@@ -37,6 +37,9 @@ export const LOAI_THONG_BAO = [
 	"okr-tom-tat",
 	"ai-tran",
 	"ai-doi-soat-lech",
+	"tac-nhan-xong",
+	"tac-nhan-can-tra-loi",
+	"tac-nhan-hong",
 ] as const;
 
 export type LoaiThongBao = (typeof LOAI_THONG_BAO)[number];
@@ -60,6 +63,18 @@ const keHoach = <
 		soBuocXong: z.number().optional(),
 		soBuocTong: z.number().optional(),
 		targetDays: z.number().optional(),
+	});
+
+const tacNhan = <
+	L extends "tac-nhan-xong" | "tac-nhan-can-tra-loi" | "tac-nhan-hong",
+>(
+	loai: L,
+) =>
+	z.object({
+		loai: z.literal(loai),
+		conversationId: ma,
+		luotId: ma,
+		ten: z.string(),
 	});
 
 const viec = <L extends "viec-qua-han" | "viec-sap-han" | "viec-cho-danh-gia">(
@@ -176,6 +191,9 @@ export const noiDungThongBao = z.discriminatedUnion("loai", [
 		soGatewayUsd: z.number(),
 		lechPhanTram: z.number(),
 	}),
+	tacNhan("tac-nhan-xong"),
+	tacNhan("tac-nhan-can-tra-loi"),
+	tacNhan("tac-nhan-hong"),
 ]);
 
 export type NoiDungThongBao = z.infer<typeof noiDungThongBao>;
@@ -235,6 +253,10 @@ export function khoaThongBao(nd: NoiDungThongBao, now: Date): string {
 			return `${nd.loai}:${nd.thang}:${nd.muc}`;
 		case "ai-doi-soat-lech":
 			return `${nd.loai}:${nd.thang}`;
+		case "tac-nhan-xong":
+		case "tac-nhan-can-tra-loi":
+		case "tac-nhan-hong":
+			return `${nd.loai}:${nd.luotId}`;
 	}
 }
 

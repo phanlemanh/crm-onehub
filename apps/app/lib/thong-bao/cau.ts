@@ -48,6 +48,10 @@ function dienCau(mau: string, nd: NoiDungThongBao): string {
 			return dien(mau, { muc: nd.muc });
 		case "ai-doi-soat-lech":
 			return dien(mau, { thang: nd.thang, lech: nd.lechPhanTram });
+		case "tac-nhan-xong":
+		case "tac-nhan-can-tra-loi":
+		case "tac-nhan-hong":
+			return dien(mau, { ten: nd.ten });
 	}
 }
 
