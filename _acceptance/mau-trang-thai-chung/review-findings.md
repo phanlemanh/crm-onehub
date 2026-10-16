@@ -1,4 +1,4 @@
-# Review findings: mau-trang-thai-chung (round 2)
+# Review findings: mau-trang-thai-chung (round 3)
 
 ## Trong hợp đồng
 
@@ -8,13 +8,15 @@
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **laViPham still takes a `chat` parameter, but after this round every caller passes false, so its two `chat &&` branches can never run**
+(không có)
+
+- **laViPham still takes a `chat` parameter, but after this round every caller passes false, so its two `chat &&` branches can never run (r2)**
   Người dùng thấy gì: Có một đoạn thừa trong công cụ kiểm tra nội bộ, không ảnh hưởng gì đến màu hay màn hình người dùng thấy. Không cần làm gì thêm.
   file: `packages/ui/test/quet-mau-trang-thai.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 5 (tuyên quét cả lớp nhưng chỉ có ca điểm): đối chứng của luật chặt chỉ là năm dạng chép từ phát hiện vòng 1, và một prop JSX không tên `tone` vẫn lọt**
+- **Hình dạng 5 (tuyên quét cả lớp nhưng chỉ có ca điểm): đối chứng của luật chặt chỉ là năm dạng chép từ phát hiện vòng 1, và một prop JSX không tên `tone` vẫn lọt (r2 · tệp đã đổi)**
   Người dùng thấy gì: Công cụ kiểm tra tự động chưa bắt được trường hợp ai đó đưa màu trạng thái viết tay trở lại qua một thành phần bọc trung gian. Hiện chưa có chỗ nào sai màu, nhưng về sau một khu có thể lệch màu mà kiểm tra vẫn báo xanh.
   file: `apps/app/test/mau-trang-thai-anh-xa.spec.ts`
   severity: medium
@@ -32,7 +34,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **The color-string scan skips enrichment-status.ts entirely, so the strict 13-file check passes there no matter what the file contains (r1 · tệp đã đổi)**
+- **The color-string scan skips enrichment-status.ts entirely, so the strict 13-file check passes there no matter what the file contains (r1)**
   Người dùng thấy gì: Màu của trạng thái làm giàu dữ liệu hiện đúng, nhưng bài kiểm tự động không còn nhìn vào khu này. Nếu sau này ai đó viết lại bảng màu riêng ở đó, sẽ không có gì báo đỏ.
   file: `packages/ui/test/quet-mau-trang-thai.ts`
   severity: medium
@@ -56,7 +58,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Non-strict scan flags non-color status values (case labels, state/type properties) as 'khai bang mau rieng' (r1 · tệp đã đổi)**
+- **Non-strict scan flags non-color status values (case labels, state/type properties) as 'khai bang mau rieng' (r1)**
   Người dùng thấy gì: Về sau, một người viết mã hợp lệ có thể bị bài kiểm báo đỏ nhầm với thông báo gây khó hiểu, và phải gỡ rối mất thời gian. Người dùng cuối không bị ảnh hưởng.
   file: `packages/ui/test/quet-mau-trang-thai.ts`
   severity: low
@@ -73,5 +75,9 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `packages/ui/test/status-tone.spec.ts`
   severity: low
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
+
+(không có)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
