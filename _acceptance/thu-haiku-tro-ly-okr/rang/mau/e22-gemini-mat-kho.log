@@ -1,0 +1,43 @@
+tu kiem thuoc so: 9 ca dung (nguyen tu, giu dau)
+tu kiem kiemCa: 4 ca dung (ban ghi dung dongTongKet cua gop-y.eval.ts)
+kho tdx-e22 · okr:mau --moc 2026-10-14: 40 nguoi mau, 11 phong ban, 40 muc tieu
+eve eval okr/gop-y okr/ng --verbose thoat 1
+so-moi-lot: 0 dong
+DUNG gy-01
+DUNG gy-02 · phu boi luat luot 7: kr-la-viec
+DUNG gy-03 · phu boi luat luot 7: thieu-doi-trong
+DUNG gy-04
+DUNG gy-05
+DUNG gy-06
+DUNG gy-07
+DUNG gy-08
+DUNG gy-09
+DUNG gy-10
+SAI gy-11: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-12: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-13: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-14: khong co ban ghi — eval khong chay toi cuoi (xem eve.log) · phu boi luat luot 7: kr-la-viec
+SAI gy-15: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-16: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-17: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-18: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-19: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-20: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-21: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-22: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-23: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-24: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-25: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-26: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-27: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-28: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-29: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+SAI gy-30: khong co ban ghi — eval khong chay toi cuoi (xem eve.log)
+DOI CHUNG doi-chung-goi-50-cuoc: khong ra dong cho nao
+lap viet-lai 1: eve thoat 0, them 11 cap (tong 18/20)
+lap viet-lai 2: eve thoat 0, them 12 cap (tong 30/20)
+cap: 20/20 · judge trung binh 0.90 (20 cap co diem)
+chi: 0.807350 USD / tran 2 USD
+hieu chinh da cham (20 o) — giu nguyen _acceptance/tro-ly-okr-de-xuat/evidence/hieu-chinh-judge.md, ban moi 20 cap → .acceptance-runs/tro-ly-okr-de-xuat/e22/hieu-chinh-judge.2026-10-14T14-48-29-789Z.md
+ma: 10/30 · judge: 0.90 (20 cap, nguong 0.7)
+KHONG DO DUOC: ca doi chung khong co ban ghi
