@@ -2687,6 +2687,99 @@
       "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
       "trang_thai": "chưa mở",
       "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
+    },
+    {
+      "ma": "MH1",
+      "slug": "thu-haiku-tro-ly-okr",
+      "nhom": "tro-ly",
+      "thu_tu": 240.5,
+      "ngay": "2026-10-14",
+      "ten": "Thử Haiku cho Trợ lý OKR",
+      "ten_ngan": "Thử Haiku",
+      "cau_giao": "«Trợ lý OKR chạy trên Haiku 5.5 khi đạt ngưỡng đo; không đạt thì giữ Gemini 3.8 Flash»",
+      "ghi_chu": "Chủ kho duyệt 14/10 khoảng 16:40Z (phiên «Chẩn troLyDeXuat»): cấu hình suy nghĩ cho anthropic trong packages/ai-okr, trần token theo model; đo E22, E24, Tác nhân×3, chat; ngưỡng E24 0 hỏng, E22 ≥ 28/30 và 0 góp ý thừa, judge ≥ 0,9, Tác nhân 3/3. Gộp chung: gieo agentModelId bằng model production vào kho đo và kho test, không đổi DEFAULT_AGENT_MODEL. Chỉ đo sau khi phần sửa hai thước của tro-ly-okr-de-xuat gộp. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [
+        "9b"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đợt r2, phiên «Chẩn troLyDeXuat»; mốc chốt ở Cổng Phạm vi"
+    },
+    {
+      "ma": "NM5",
+      "slug": "dau-trang-okr-cho-nut-hoi-kara",
+      "nhom": "crm-chung",
+      "thu_tu": 450.2,
+      "ngay": "2026-10-15",
+      "ten": "Nút Hỏi Kara lúc chờ",
+      "ten_ngan": "Hỏi Kara lúc chờ",
+      "cau_giao": "«Khung chờ đầu trang OKR chừa đúng chỗ cho nút «Hỏi Kara», hàng tiêu đề không nhảy khi tải xong»",
+      "ghi_chu": "Hồi quy do #419: ở khổ 375 hàng tiêu đề Toàn cảnh cao 32 px lúc chờ, 96 px khi xong; E12m của khung-man-chung đỏ. Chủ kho ký Cổng Đáng ở phiên giám sát 15/10 12:22:27Z. Dãy P1. Tạm dừng 16/10 vì chồng vùng DH1 dieu-huong-khu-muc-tieu (M5) — khi DH1 lên onehub đo E12m: xanh thì đóng «DH1 đã sửa», đỏ thì dựng lại trên DH1. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [
+        "C"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ DH1 (M5) lên onehub; mốc chốt ở Cổng Phạm vi"
+    },
+    {
+      "ma": "F28",
+      "slug": "ho-so-do-kiem-cheo",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.4,
+      "ngay": "2026-10-13",
+      "ten": "Hồ sơ đỏ ở kiểm chéo",
+      "ten_ngan": "Đỏ kiểm chéo",
+      "cau_giao": "«Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do»",
+      "ghi_chu": "P7-5, Hỏi-1 của F24: 15 hồ sơ kiểm chéo gọi tên (ban-gieo-gop-y-sau-nop, bang-thanh-vien-giu-hang, bo-dung-chung-nhan-chuoi, bo-dung-khong-ket, bo-xuong-kara, ca-chap-chon-cach-ly, ca-chap-chon-con-lai, cai-dat-chung-chi-quan-tri, cai-dat-con-lai-noi-tieng-viet, cap-nhat-tuan-okr, chan-lai-component-ra-man, chan-trung-khoa-ban-nhap, chu-cuoi-cung-tien-de, chu-mac-dinh-thu-vien-ngoai, cron-theo-ban-khai). Nhận thêm: evals.yaml không phải YAML chuẩn, tro-ly-okr-nen, so-okr-tu-chay (bản vá E23/E25 ở nhánh F8), hai thước ranh-gioi.mjs --first-parent --ancestry-path. Dãy P7 sau F26, mốc đề xuất 14/11.",
+      "dung_tren": [
+        "F26"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mốc chốt ở Cổng Phạm vi"
+    },
+    {
+      "ma": "F29",
+      "slug": "ghim-thuoc-soi-xem-okr",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.5,
+      "ngay": "2026-10-15",
+      "ten": "Thước soi xem OKR",
+      "ten_ngan": "Soi xem OKR",
+      "cau_giao": "«Thước soi quyền xem OKR không báo lộ giả: tám chỗ đã phân loại, và thước chạy ở CI cho PR chạm vùng OKR»",
+      "ghi_chu": "Phân loại 8 chỗ ghd_soi_xem: 0 lộ thật, thước lệch mã sau #290, #300, #342, #395. (a) 7 dòng MIEN_XEM kèm lý do, đổi khoá removeAlignment thành congSuaCanChinh, ghim lại gioi-han-duyet-cay-okr. (b) ghd_soi_xem chạy ở CI cho PR chạm apps/api/src/okr/**, packages/db/src/okr-*, apps/agent/agent/lib/okr/**. Chủ kho ký Cổng Đáng 15/10 21:30:26Z. Dãy P0. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đợt r2, dãy P0; mốc chốt ở Cổng Phạm vi"
+    },
+    {
+      "ma": "F30",
+      "slug": "e24-qua-han-khong-phai-ha-tang",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.6,
+      "ngay": "2026-10-15",
+      "ten": "E24 quá hạn là trễ",
+      "ten_ngan": "E24 quá hạn",
+      "cau_giao": "«E24 của Trợ lý OKR đọc lượt quá hạn là trễ, không phải «không đo được»»",
+      "ghi_chu": "Ngoài-4 ở Cổng Bằng chứng của thuoc-tro-ly-okr-khong-lot, chủ kho chọn «mở hợp đồng mới». E24 chỉ chặn sớm «không đo được» khi mọi lượt hỏng do tác tử hoặc model; lượt quá 180 s vào nhánh ngưỡng. Dãy P0. Đã gộp 15/10 17:01Z (#425, f46c0bbda).",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        425
+      ],
+      "buoc_ke": "Đã gộp 15/10 17:01Z (#425)"
+    },
+    {
+      "ma": "F31",
+      "slug": "thu-paths-e15-giai-doan",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.7,
+      "ngay": "2026-10-15",
+      "ten": "Thu paths E15 giai đoạn",
+      "ten_ngan": "Paths E15",
+      "cau_giao": "«Đổi một tệp chữ khác không kéo hồ sơ giai-doan-thoa-thuan vào ghim lại: E15 chỉ theo dõi tệp chữ của màn giai đoạn»",
+      "ghi_chu": "Đề xuất 15/10 22:20Z từ F23: paths của E15 (ui-check) đang là apps/app/lib/messages/**, nên #424 sửa tin-hieu.ts làm #427 phải ghim lại. Cùng lớp E17 đã sửa ở F23. Chờ Cổng Đáng.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; mốc chốt ở Cổng Phạm vi"
     }
   ],
   "chan_troi": [

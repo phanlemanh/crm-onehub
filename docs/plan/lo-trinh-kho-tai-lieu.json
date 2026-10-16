@@ -245,6 +245,36 @@
         257
       ],
       "ngay": "2026-10-05"
+    },
+    {
+      "ma": "MH2",
+      "slug": "re-mo-hinh-mac-dinh",
+      "dong": 13,
+      "ngay": "2026-10-15",
+      "ten": "Model mặc định",
+      "ten_ngan": "Model mặc định",
+      "cau_giao": "«Tác nhân CRM và Trợ lý Kho tài liệu dùng model mặc định rẻ hơn mà không tụt chất lượng trên bộ đo»",
+      "ghi_chu": "Chủ kho «Đồng ý theo đề xuất trên» 15/10 khoảng 10:40Z: đổi DEFAULT_AGENT_MODEL và Trợ lý Kho tài liệu (soạn, hỏi) khỏi zai/glm-5.2-fast; không đổi judge; đo lại bộ câu mẫu Kho tài liệu. 15/10 22:20Z đổi đích: Gemini 3.8 Flash làm Tác nhân tụt (2/3), ứng viên GLM 5.3 Flash (3/3) chờ bộ 50 câu Kho. Dãy P6. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [
+        "l4"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi"
+    },
+    {
+      "ma": "l6",
+      "slug": "zalo-tro-ly-kho-chi-dan",
+      "dong": 14,
+      "ngay": "2026-10-15",
+      "ten": "Zalo hỏi Kho đúng chỉ dẫn",
+      "ten_ngan": "Zalo hỏi Kho",
+      "cau_giao": "«Hỏi Kho tài liệu qua Zalo thì Trợ lý kho trả lời đúng chỉ dẫn của kho»",
+      "ghi_chu": "Chủ kho ký Cổng Đáng ở phiên giám sát 15/10 23:44:49Z. Dãy P6. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [
+        "l4b"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi"
     }
   ],
   "da_bac": []
