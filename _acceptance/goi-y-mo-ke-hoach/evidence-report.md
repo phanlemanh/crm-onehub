@@ -7,11 +7,13 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4edd14fe3127e71e3a1b06ec66cd82ba62456f04
+verified_commit: 5239dd12f52548ccd38623b0ea3680d7d753b36d
 human_signoff:
 ---
 
 # Evidence Report: goi-y-mo-ke-hoach
+
+Round 3. Mọi eval máy được mang sang từ round 1 hoặc round 2 (carry-forward); round này chỉ chạy lại bảy lệnh suite. Còn đúng một việc chờ người: E9 (judgment) cần `human_override`.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -24,7 +26,7 @@ human_signoff:
 | E6 | AC-6 | ui-check | PASS |
 | E7 | AC-7 | test | PASS |
 | E8 | AC-8 | test | PASS |
-| E9 | AC-9 | judgment | PASS (đề xuất của panel, chờ người chốt ở Cổng 2) |
+| E9 | AC-9 | judgment | PASS (đề xuất của hội đồng, chờ human_override) |
 | E10 | AC-10 | script | PASS |
 | E11 | AC-1 | script | PASS |
 
@@ -36,8 +38,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.gymk_sinh
   verified_at: 2026-10-16T11:40:40Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mvawcilifsjp_test
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-goi-y-mo-ke-hoach-E2-r2
@@ -45,8 +48,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.gymk_chan
   verified_at: 2026-10-16T11:40:40Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mvawchmau0o5_test
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-goi-y-mo-ke-hoach-E3-r2
@@ -54,8 +58,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.gymk_xu_ly
   verified_at: 2026-10-16T11:40:40Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mvawchiqckek_test
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-goi-y-mo-ke-hoach-E4-r2
@@ -63,26 +68,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.gymk_dong
   verified_at: 2026-10-16T11:40:40Z
+  carried_from_round: 2
   output: |
-    test-run: dropped crm_mvawciphinhn_test
-
-- eval: E8
-  run_id: minted-goi-y-mo-ke-hoach-E8-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.gymk_thuoc
-  verified_at: 2026-10-16T11:40:40Z
-  output: |
-    test-run: dropped crm_mvawciny1xiq_test
-
-- eval: E10
-  run_id: minted-goi-y-mo-ke-hoach-E10-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.gymk_hoi_quy
-  verified_at: 2026-10-16T11:40:40Z
-  output: |
-    khong-xoa-expect.mjs --tu-thu, --moc (merge-base với origin/onehub) và check-types đều xanh
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E5
   run_id: minted-goi-y-mo-ke-hoach-E5-r1
@@ -119,7 +107,7 @@ human_signoff:
     E6-nguoi-khac-1280.png: phien Q mo cung sheet 'Hop dong goi y that kavcrpx' (khong ve dang nhap, khong 404, ten deal hien), khong co the goi y, noi dung bat dau tu 'Gia tri / Ngay du kien chot / O giai doan'. Khop Expected (khong hien cho nguoi khac).
     Ket luan: bon frame khop Expected; ba luot tu thu deu bao KHONG DAT.
   network_observed: n-a (driver)
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E7
   run_id: mvavcj94iwdv
@@ -130,6 +118,26 @@ human_signoff:
   carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E8
+  run_id: minted-goi-y-mo-ke-hoach-E8-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.gymk_thuoc
+  verified_at: 2026-10-16T11:40:40Z
+  carried_from_round: 2
+  output: |
+    carry-forward tu round 2 — delta khong cham paths cua eval
+
+- eval: E10
+  run_id: minted-goi-y-mo-ke-hoach-E10-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.gymk_hoi_quy
+  verified_at: 2026-10-16T11:40:40Z
+  carried_from_round: 2
+  output: |
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E11
   run_id: minted-goi-y-mo-ke-hoach-E11-r1
@@ -144,51 +152,51 @@ human_signoff:
 ### Judgment
 
 - eval: E9
-  judged_by: judge-subagent panel (fresh context) — đề xuất PASS, ba góc nhìn
+  judged_by: hoi dong ba lens (domain-correctness, operational-feasibility, spec-alignment) — panel giu nguyen tu round 2 — inputs khong doi, khong cham lai; rationale xem round do
   verdict: PASS
-  rationale: Cả ba góc nhìn thấy đủ sáu điều trong CONTEXT.md, docs/api.md và hàng DA3b của lo-trinh-viec-du-an.json. Đây là đề xuất của máy; người chốt ở Cổng 2.
+  rationale: panel giu nguyen tu round 2 — inputs khong doi, khong cham lai; rationale xem round do. Day la de xuat cua may, nguoi quyet o Cong 2.
   votes:
-    - domain-correctness: PASS — CONTEXT.md (dòng 348-364) phân biệt «Gợi ý» (một câu trong tin nhắc, không phải bản ghi) với «Gợi ý mở kế hoạch» (bản ghi máy sinh), nêu ba kết cục và ai được bỏ qua. docs/api.md (dòng 310-323) nêu luật sinh theo từng lần chuyển, việc đóng gợi ý khi tạo kế hoạch bằng bất kỳ đường nào, và hai thủ tục goiYCuaDeal, boQuaGoiY. Hàng DA3b ghi «đang dựng», không ghi «chưa mở». Cả ba tệp không dùng chữ «dự án» cho kế hoạch 30 ngày.
-    - operational-feasibility: PASS — Sáu điều đều có chữ rõ ràng trong ba tệp: phân biệt hai khái niệm, điều kiện sinh gợi ý («mỗi lần chuyển sang thắng là một gợi ý»), ba kết cục và quyền bỏ qua, mọi đường tạo kế hoạch đều chuyển gợi ý CHO sang DA_MO (tRPC lẫn REST), hai thủ tục được mô tả đủ, và DA3b ghi «đang dựng».
-    - spec-alignment: PASS — Sáu điều đều có trong ba tệp; CONTEXT.md dòng 348-364 và docs/api.md dòng 310-316 khớp; «chưa mở» chỉ ở DA4, DA3b có trang_thai «đang dựng».
+    - domain-correctness: PASS (r2)
+    - operational-feasibility: PASS (r2)
+    - spec-alignment: PASS (r2)
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-16T11:40:40Z
+  verified_at: 2026-10-16T12:17:52Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-16T11:40:40Z
+  verified_at: 2026-10-16T12:17:52Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-16T11:40:40Z
+  verified_at: 2026-10-16T12:17:52Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-16T11:40:40Z
+  verified_at: 2026-10-16T12:17:52Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-goi-y-mo-ke-hoach-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-goi-y-mo-ke-hoach-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-16T11:40:40Z
+  verified_at: 2026-10-16T12:17:52Z
 
 - cmd: bun run lint:slop
-  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_lint_slop-r2
+  run_id: minted-goi-y-mo-ke-hoach-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-16T11:40:40Z
+  verified_at: 2026-10-16T12:17:52Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-goi-y-mo-ke-hoach-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-goi-y-mo-ke-hoach-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-16T11:40:40Z
+  verified_at: 2026-10-16T12:17:52Z
 
 ## Known limits
 
@@ -196,9 +204,9 @@ human_signoff:
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay
+none — moi eval feature deu red tren baseline (co phan biet)
 
-none — không có eval nào xanh ở cả hai phía (baseline không đo lại, mọi block ghi n-a)
+Baseline khong do: moi eval feature trong round nay la carry-forward tu round 1 hoac round 2, khong chay lai tren diffBase nen baseline la n-a. Bảy lệnh suite khong gan eval, baseline n-a.
 
 ## Variance
 
@@ -206,5 +214,6 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: bị từ chối — E10 và ba lệnh suite (api, agent, agent-okr) đỏ; E10 đo với mốc ghim cũ trong config.yaml, không phải merge-base của nhánh. Trả về cho khâu dựng.
-Round 2: sửa ở bee3c52ed (bản chụp tin cho loại mới, đếm 22 loại thông báo, dọn AgentTask của bài kiểm, mốc hồi quy theo merge-base). E1, E2, E3, E4, E8, E10 và cả bảy lệnh suite chạy lại, đều xanh. E5, E5b, E6, E7, E11 mang sang từ round 1 vì delta không chạm paths của chúng. Kết luận PENDING-JUDGMENT vì E9 (judgment) còn chờ người chốt ở Cổng 2.
+Round 1: REJECT — ba lenh suite do (api, agent, agent-okr) va E10 dung moc cung; tra ve implementation.
+Round 2: PENDING-JUDGMENT — E1-E4, E8, E10 va bay lenh suite chay lai xanh; chi con E9 cho nguoi; Cong 1 duoc mo lai de ghi ngoai le co ten cho AC-10 (cau dem loai thong bao 21 thanh 22).
+Round 3: PENDING-JUDGMENT — delta chi cham evals.yaml va s4-args.json; moi eval may mang sang tu round 1 hoac 2, chi bay lenh suite chay lai xanh; E9 cho human_override. verified_at cua cac lenh suite la thoi diem ghi bao cao round 3.

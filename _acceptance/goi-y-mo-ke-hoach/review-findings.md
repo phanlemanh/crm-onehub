@@ -1,56 +1,72 @@
-# Review findings: goi-y-mo-ke-hoach (round 2)
-
 ## Trong hợp đồng
 
-- **Danh sách cho-phép của răng hồi quy E10 nay có một câu, trái với chữ của E10 và AC-10 đã ký**
-  file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs:34`
-  severity: medium
-  source: conventions
-  AC: AC-10
-  detail: Lượt này đổi `const CHO_PHEP = []` thành `["expect(new Set(LOAI_THONG_BAO).size).toBe(21)"]`. Trong khi đó evals.yaml E10 (dòng 109) vẫn ghi `expected: ... danh sách cho-phép rỗng`, còn contract.md AC-10 ghi «không `expect` nào bị xoá hay sửa ở các tệp kiểm đã có». Ngoại lệ chỉ được ghi ở decisions.jsonl (d-...-20) và trong một chú thích trong răng. Tiêu chí đã ký thì không đổi theo. Hệ quả: E10 chuyển xanh nhờ nới chính thước đo, còn chữ `expected` mà người ký Cổng Bằng chứng đọc thì vẫn nói danh sách rỗng. Việc đổi toBe(21) thành toBe(22) trong packages/validation/test/thong-bao.spec.ts chính là việc AC-10 cấm. Muốn có ngoại lệ thì phải ghi nó lên chính tiêu chí, đi qua đường sửa hồ sơ sau ký của kit. Không thì phải đổi bài kiểm cho số đếm không bị ghim cứng.
-
-- **Danh sách cho-phép không còn rỗng, trái AC-10 và câu expected của E10**
-  file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs:34`
-  severity: medium
-  source: bugs
-  AC: AC-10
-  detail: Commit bee3c52ed thêm `CHO_PHEP = ["expect(new Set(LOAI_THONG_BAO).size).toBe(21)"]` và đổi expect sẵn có ở packages/validation/test/thong-bao.spec.ts từ 21 lên 22. AC-10 trong contract.md hứa «không expect nào bị xoá hay sửa ở các tệp kiểm đã có». Câu expected của E10 trong evals.yaml (không đổi ở vòng này) ghi thẳng «danh sách cho-phép rỗng». Vậy răng đã được nới để cho qua đúng chỗ vi phạm mà nó phải bắt: chạy thật cho ra `1 tep · 8 cau expect san co · 1 cau cho phep mat`, mã thoát 0. Contract và evals không ghi chỗ rẽ này, nên người chấm đọc expected sẽ tưởng không có ngoại lệ nào. Thêm nữa, phép so ở dòng 83 là `c.includes(m)`, tức khớp chuỗi con, và áp lên mọi tệp chứ không riêng thong-bao.spec.ts. Hướng sửa: hoặc khai giới hạn qua sổ hay contract theo đường của kit, hoặc giữ danh sách rỗng và coi đây là thay đổi phải duyệt. Đừng nới răng một cách im lặng.
+Không có finding.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **CHO_PHEP so khớp theo chuỗi con và không gắn với tệp nào**
+- **E10 được mang sang từ lượt 2 dù chính câu expected của nó vừa đổi ở lượt này**
+  Người dùng thấy gì: Phép kiểm cho điều kiện «không xoá hay sửa bài kiểm cũ» được lấy lại từ lượt trước chứ không chạy lại, dù cách chấm của nó vừa đổi. Hồ sơ trình duyệt có thể ghi «đạt» cho điều kiện này mà chưa ai đo lại theo tiêu chí mới.
+  file: `_acceptance/goi-y-mo-ke-hoach/s4-args.json`
+  severity: high
+  Đề xuất: known-limits
+
+- **Câu expected mới của E10 tự mâu thuẫn về mốc: «mốc ghim trong lệnh» và «lấy lúc chạy»**
+  Người dùng thấy gì: Lời mô tả của một phép kiểm nội bộ có một cụm chữ cũ gây hiểu nhầm về mốc so sánh. Không ảnh hưởng người dùng tính năng, chỉ có thể làm người chấm đọc lệch một lần.
+  file: `_acceptance/goi-y-mo-ke-hoach/evals.yaml`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Lượt 3 mang E10 sang từ lượt 2 dù chính câu expected của E10 vừa sửa, nên tiêu chí AC-10 mới không được chấm lại**
+  Người dùng thấy gì: Điều kiện về bài kiểm cũ được ghi «đạt» theo cách chấm đã bị thay, nên tiêu chí mới chưa ai thật sự đo. Người duyệt cần biết con số «đạt» này chưa kiểm lại.
+  file: `_acceptance/goi-y-mo-ke-hoach/s4-args.json`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (assert chuỗi có mặt thay cho quan hệ): ngoại lệ của AC-10 chỉ khớp chuỗi con, không gắn với tệp và không đòi câu thay thế toBe(22)**
+  Người dùng thấy gì: Phép kiểm chống xoá bài kiểm cũ có thể bỏ sót vài trường hợp xoá bài kiểm ngoài ngoại lệ đã ký. Nguy cơ là một bài kiểm bị xoá mà không ai thấy.
+  file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình, không đối chứng): --tu-thu không chạy qua nhánh CHO_PHEP mà round này mới đưa vào lời hứa**
+  Người dùng thấy gì: Phần tự kiểm của phép đo chưa chứng minh được rằng ngoại lệ đã ký chỉ tha đúng một câu. Nếu phép đo tha quá rộng thì nó vẫn báo xanh.
+  file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **CHO_PHEP so khớp theo chuỗi con và không gắn với tệp nào (r2)**
   Người dùng thấy gì: Phép kiểm «không ai xoá hay sửa bài kiểm cũ» có một ngoại lệ được khai hơi rộng, nên về lý thuyết một bài kiểm khác có chữ giống vậy bị xoá vẫn lọt qua. Hiện chưa có bài kiểm nào bị xoá theo cách đó.
   file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Răng vẫn báo «không suy từ merge-base», nhưng lệnh cổng nay truyền mốc lấy từ merge-base**
+- **Răng vẫn báo «không suy từ merge-base», nhưng lệnh cổng nay truyền mốc lấy từ merge-base (r2)**
   Người dùng thấy gì: Khi phép kiểm bài kiểm cũ lỗi vì thiếu mốc so sánh, câu báo lỗi nêu sai nguyên nhân, nên người đọc có thể mất công đi tìm sai chỗ. Kết quả kiểm khi chạy bình thường không đổi.
   file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Lượt sửa viết thêm chú thích vào một tệp răng, trái luật không viết chú thích**
+- **Lượt sửa viết thêm chú thích vào một tệp răng, trái luật không viết chú thích (r2)**
   Người dùng thấy gì: Một tệp phụ trợ của phép kiểm có thêm vài dòng ghi chú trái quy ước của kho. Không ảnh hưởng gì tới người dùng cuối.
   file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **E10 suy mốc từ merge-base nên tự xanh rỗng khi nhánh đã nằm trong origin/onehub**
+- **E10 suy mốc từ merge-base nên tự xanh rỗng khi nhánh đã nằm trong origin/onehub (r2)**
   Người dùng thấy gì: Sau khi tính năng được gộp, phép kiểm «không xoá bài kiểm cũ» có thể chạy mà không so với gì và vẫn báo đạt. Việc này chỉ ảnh hưởng độ tin cậy của lần chấm lại, không ảnh hưởng tính năng người dùng dùng.
   file: `_acceptance/config.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): E10 xanh vì «0 câu bị mất», không có đối chứng dương nào cho thấy lần quét thật sự đã thấy tệp và đã dùng đúng ngoại lệ duy nhất**
+- **Hình dạng 4 (âm tính một mình): E10 xanh vì «0 câu bị mất», không có đối chứng dương nào cho thấy lần quét thật sự đã thấy tệp và đã dùng đúng ngoại lệ duy nhất (r2)**
   Người dùng thấy gì: Phép kiểm «không xoá bài kiểm cũ» báo đạt khi không thấy gì bị mất, nhưng không tự chứng minh là nó đã thật sự quét các tệp. Nếu nó quét rỗng thì vẫn báo đạt.
   file: `_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 (chỉ khẳng định số đếm, trong khi lời hứa là quan hệ): «du 22 loai, khong trung» chỉ đo cỡ của Set**
+- **Hình dạng 3 (chỉ khẳng định số đếm, trong khi lời hứa là quan hệ): «du 22 loai, khong trung» chỉ đo cỡ của Set (r2)**
   Người dùng thấy gì: Bài kiểm danh sách loại thông báo chỉ đếm số lượng, nên nếu loại thông báo mới bị thay bằng tên khác hoặc có mục lặp thì bài kiểm vẫn xanh. Chức năng nhắc cho người dùng được kiểm ở chỗ khác.
   file: `packages/validation/test/thong-bao.spec.ts`
   severity: low
@@ -98,10 +114,10 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4: ô «đọc rỗng» của bảng quyền E3 coi mọi phản hồi lỗi là null, không ghim giá trị trả về (r1 · tệp đã đổi)**
+- **Hình dạng 4: ô «đọc rỗng» của bảng quyền E3 coi mọi phản hồi lỗi là null, không ghim giá trị trả về (r1)**
   Người dùng thấy gì: Bài kiểm quyền đọc chưa phân biệt được «người khác nhận về trống» với «thủ tục bị lỗi». Nếu có lỗi, bài kiểm có thể vẫn xanh.
   file: `apps/api/test/goi-y-mo-ke-hoach.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 7/8 lỗi rơi vào file không bộ đo nào phủ (_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs, _acceptance/config.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 5/5 lỗi rơi vào file không bộ đo nào phủ (_acceptance/goi-y-mo-ke-hoach/s4-args.json, _acceptance/goi-y-mo-ke-hoach/evals.yaml, _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

@@ -5,7 +5,7 @@ slug: goi-y-mo-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: implemented
+status: verified
 approved_by: manh
 approved_at: 2026-10-16T12:17:07Z
 design_doc: docs/superpowers/specs/2026-10-16-goi-y-mo-ke-hoach-design.md
