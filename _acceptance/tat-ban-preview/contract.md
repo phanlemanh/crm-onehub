@@ -5,7 +5,7 @@ slug: tat-ban-preview
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [config, docs]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-16-tat-ban-preview-design.md
 approved_by: manh
 approved_at: 2026-10-16
