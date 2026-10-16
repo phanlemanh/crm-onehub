@@ -104,6 +104,7 @@ function docEvals(hoSo, sha) {
 	const ra = [];
 	let cur = null;
 	let trongPaths = false;
+	// F8 neo (ve-sinh-do-san-onehub): cung bo doc dong cho ca hai nguon (cay hien tai va commit D).
 	for (const dong of noiDung.split("\n")) {
 		const moi = /^ {2}- id:\s*(\S+)/.exec(dong);
 		if (moi) {
@@ -179,6 +180,7 @@ const tepBai = new Map();
 const nhinThay = [];
 for (const [h, evals] of docDuoc) {
 	for (const e of evals) {
+		// F8 neo (ve-sinh-do-san-onehub): eval nhin-thay dem rieng tren evals.yaml o D (vong lap ben duoi).
 		if (["ui-check", "judgment"].includes(e.executor)) continue;
 		if (e.status === "not-run") continue;
 		const ref = e.cmd.replace(/^config:/, "");

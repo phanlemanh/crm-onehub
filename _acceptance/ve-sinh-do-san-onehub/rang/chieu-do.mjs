@@ -107,7 +107,7 @@ const CA = {
 			"_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs",
 			"--bo-lan",
 		],
-		dat: (r) => r.status === 1 && r.out.includes('thieu ["nhac-qua-zalo E17"]'),
+		dat: (r) => r.status === 1 && r.out.includes('thua ["nhac-qua-zalo E17"]'),
 	},
 	"e16-cu": {
 		ap: (sao) =>

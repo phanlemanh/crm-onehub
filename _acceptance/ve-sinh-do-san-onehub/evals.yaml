@@ -142,7 +142,7 @@ evals:
       "CHIEU DO DAT: moi-chuoi-khai" va "CHIEU DO DAT: moi-chuoi-that", ma 0; mot ca khong dat -> "CHIEU DO HONG:
       <ca>" ma 1. Cay lam viec khong doi (cung phep so nhu E2). Them hai ca cho ve «tap eval nhin-thay» cua
       khong-hoi-quy.mjs (khung-trang-cai-dat E16) da neo vao evals.yaml o dinh D cua cap gop f1a32ab99 (F8): (e16-thieu)
-      ban sao bo "nhac-qua-zalo E17" khoi NHIN_THAY_BI_DUNG, chay --bo-lan -> ma 1 va 'thieu ["nhac-qua-zalo E17"]';
+      ban sao bo "nhac-qua-zalo E17" khoi NHIN_THAY_BI_DUNG, chay --bo-lan -> ma 1 va 'thua ["nhac-qua-zalo E17"]';
       (e16-cu) ban sao bo neo (docEvals(h) thay docEvals(h, DAU_VONG)) -> ma 1 va thua hai eval
       loi-tac-tu-zalo-noi-dung-nguyen-nhan E11, man-cai-dat-noi-tieng-viet E12 nhu do san tren onehub.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
