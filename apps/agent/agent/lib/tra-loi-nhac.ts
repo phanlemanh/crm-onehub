@@ -206,7 +206,13 @@ export async function xongTheoTinNhac(
 		if (!(m && "stepId" in m && m.stepId)) continue;
 		const ket = await datBuocXong(
 			tx,
-			{ stepId: m.stepId, done: true, nguoiId: input.userId, now: input.now },
+			{
+				stepId: m.stepId,
+				done: true,
+				nguoiId: input.userId,
+				now: input.now,
+				nguon: "zalo",
+			},
 			VET_ZALO,
 		);
 		if (ket.ket === "khong-co-buoc" || ket.ket === "ke-hoach-dong") {

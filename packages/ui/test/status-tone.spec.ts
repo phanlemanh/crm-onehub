@@ -13,6 +13,7 @@ const NHAN_NGHIA = {
 	hong: "hỏng",
 	nhap: "nháp",
 	dangChay: "đang chạy",
+	ketThuc: "đã kết thúc",
 } as const satisfies Record<NghiaTrangThai, string>;
 
 const THIET_KE = join(import.meta.dir, "..", "..", "..", "docs", "design.md");
@@ -33,17 +34,24 @@ function bangThietKe() {
 describe("bang nghia → mau dung chung", () => {
 	test("moi nghia trong ma khop dung mot dong cua docs/design.md", () => {
 		const bang = bangThietKe();
-		expect(bang.length).toBe(Object.keys(TONE_THEO_NGHIA).length);
 		for (const [khoa, tone] of Object.entries(TONE_THEO_NGHIA)) {
 			const dong = bang.filter((d) =>
 				d.nghia.includes(NHAN_NGHIA[khoa as NghiaTrangThai]),
 			);
-			expect(dong.length, `nghia ${khoa} khong co dong nao`).toBe(1);
-			expect(
-				dong[0]?.tone,
-				`bang mau lech docs/design.md o nghia ${khoa}`,
-			).toBe(tone);
+			if (dong.length !== 1 || dong[0]?.tone !== tone)
+				throw new Error(`bang mau lech docs/design.md o nghia ${khoa}`);
 		}
+		expect(bang.length).toBe(Object.keys(TONE_THEO_NGHIA).length);
+	});
+
+	test("muc mau trang thai khong con cau nam khu cu va noi bai quet", () => {
+		const chu = readFileSync(THIET_KE, "utf8");
+		const dau = chu.indexOf("### Màu trạng thái");
+		const het = chu.indexOf("\n#", dau + 1);
+		const muc = chu.slice(dau, het < 0 ? undefined : het);
+		if (muc.includes("Năm khu cũ còn tự khai"))
+			throw new Error("mtc-bang: docs/design.md con cau nam khu cu");
+		expect(muc).toContain("mau-trang-thai-mot-bang.spec.ts");
 	});
 
 	test("toneTheoNghia tra dung gia tri cua bang", () => {

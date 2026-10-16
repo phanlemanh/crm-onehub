@@ -8,6 +8,8 @@ export const BAN_CHUP_LO_TRINH = {
 	tranThanByte: 2 * MB,
 	tranCanhBao: 20,
 	ketQua: ["nhan", "trung", "cu-hon"],
+	duongRest: "/lo-trinh/ban-chup",
+	refDay: "refs/heads/onehub",
 } as const;
 
 const duLieuLoTrinh = z.record(z.string(), z.json()).superRefine((gt, ctx) => {

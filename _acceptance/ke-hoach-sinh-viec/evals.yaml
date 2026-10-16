@@ -1,0 +1,135 @@
+slug: ke-hoach-sinh-viec
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_tao
+    expected: "exit 0; -t kh-tao của apps/api/test/ke-hoach-sinh-viec.spec.ts. Dựng qua đường ghi thật: phòng A có trưởng phòng 'kh-h' (member), phòng B không trưởng phòng, người cầm trịch 'kh-o', người tạo 'kh-t'; khuôn ba bước (A lệch 0, A lệch 7, B lệch 3). Gọi onboarding.createFromTemplate qua caller tRPC thật với phiên kh-t, startedAt 2026-10-14T20:00:00Z (đã sang 15/10 giờ VN), không có nguoiTheoPhongBan. Đếm bước của kế hoạch khác 3 thì ném 'kh: tao sai so buoc <n>'; bước có viecId trống hay hai bước cùng viecId thì ném 'kh: buoc khong tro dung mot viec'; Việc phòng A nguoiThucHienId khác kh-h, phòng B khác kh-o, nguoiGiaoId khác kh-t thì ném 'kh: nguoi viec sai <phong>'; hanNgay khác đúng ngày VN 15/10 + lệch thì ném 'kh: han viec sai <buoc>'; ViecGan không phải đúng một hàng planId thì ném 'kh: viec khong gan ke hoach'; ViecVet không phải đúng một dòng loai 'tao' nguon 'khuon' thì ném 'kh: vet tao sai'; assigneeId, dueAt, label của bước khác người thực hiện, hạn, tiêu đề của Việc thì ném 'kh: buoc lech viec <cot>'. Ca REST: POST /onboarding/plans qua app Nest thật không có trường chọn người cho kết quả cùng bốn bất biến trên, không thì ném 'kh: rest khong sinh viec'. Đối chứng âm cùng fixture: một kế hoạch tạo bằng bản ghi trực tiếp kiểu trước lượt này (bước không viecId) không có Việc nào gắn, không thì ném 'kh: ke hoach cu bi sinh viec'. Chiều đỏ ở E16 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/src/viec-ghi.ts, packages/db/src/onboarding-buoc.ts, apps/api/src/onboarding/**, apps/api/test/ke-hoach-sinh-viec.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_chon_nguoi
+    expected: "exit 0; -t kh-chon-nguoi của apps/api/test/ke-hoach-sinh-viec.spec.ts trên fixture của E1, thêm 'kh-u' vai member và 'kh-okr' tên 'Người OKR KH' vai okr. (1) nguoiTheoPhongBan [{B, kh-u}] → Việc phòng B có người thực hiện kh-u, phòng A vẫn kh-h, không thì ném 'kh: chon nguoi khong ap <phong>'. (2) đổi member.role của kh-h sang okr trực tiếp rồi tạo không chọn người → Việc phòng A có người thực hiện kh-o, không thì ném 'kh: truong phong okr van mac dinh'. (3) nguoiTheoPhongBan [{A, kh-okr}] → TRPCError BAD_REQUEST, message chứa 'Người OKR KH', tên phòng A và 'chỉ OKR', và số onboardingPlan, onboardingStep, viec, viecVet trước và sau bằng nhau, không thì ném 'kh: chon vai okr khong bi chan' (thành công) hay 'kh: chon vai okr ghi do' (đếm đổi). (4) userId không thuộc workspace → BAD_REQUEST, không ghi gì, không thì ném 'kh: nguoi la lot'. Đối chứng dương: (1) chạy trước (3) trên cùng khuôn. Chiều đỏ ở E16 (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, apps/api/src/onboarding/**, packages/validation/src/onboarding*.ts, apps/api/test/ke-hoach-sinh-viec.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.kh_man_tao
+    expected: "exit 0; apps/app/test/tao-ke-hoach-nguoi.dom.tsx, mock tRPC theo khuôn ke-hoach-sheet.dom.tsx. Ca -t kh-man-co-phong: khuôn hai phòng (A có trưởng 'Hà', B không) → ô tạo hiện đúng hai hàng phòng ban theo thứ tự khuôn, hàng A điền sẵn 'Hà', hàng B điền sẵn người cầm trịch, không thì ném 'kh: o tao hang phong sai'; danh sách chọn đọc onboarding.nguoiNhanViec và không có người vai okr mock thêm vào listMembers, không thì ném 'kh: o chon co vai okr'; đổi hàng B sang 'Uyên' rồi bấm Tạo → createFromTemplate gọi một lần với nguoiTheoPhongBan đúng [{B, uyen}] — chỉ phòng người đã đổi, phòng giữ mặc định để máy chủ tự điền — không thì ném 'kh: o tao goi sai <json>'. Ca -t kh-man-trang-thai: listTemplates đang tải → khung chờ; trả lỗi → lời lỗi và nút 'Thử lại' gọi lại query; khuôn không bước → dòng rỗng mà nút Tạo vẫn bấm được (kế hoạch rỗng là ca kho hỗ trợ, dieu-phoi-va AC-4); danh sách phòng ban đang tải → không hàng nào, nút Tạo khoá; danh sách phòng ban lỗi → lời lỗi và 'Thử lại' gọi lại listDepartments — sai ca nào ném 'kh: trang thai o tao sai <ca>'. Ca -t kh-man-loi: createFromTemplate trả BAD_REQUEST 'chỉ OKR' → lời lỗi hiện dưới nút, lựa chọn còn nguyên, không thì ném 'kh: o tao mat lua chon khi loi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx", apps/app/components/onboarding/**, apps/app/lib/messages/onboarding.ts, apps/app/test/tao-ke-hoach-nguoi.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_ban_chieu
+    expected: "exit 0; -t kh-ban-chieu của apps/api/test/ke-hoach-sinh-viec.spec.ts. Bảng viết trước trong spec, chép từ bảng mục 5 design doc: mười lệnh — assignStep, setStepDone(true), setStepDone(false), rescheduleStep, datBuocXong nguồn zalo (đường «xong n»), onboarding.transferWork từ người làm sang 'kh-u', viec.doiTrangThai sang DANG_LAM, sang CHO_DANH_GIA, sang XONG, rồi XONG→DANG_LAM, viec.sua (hạn và tiêu đề), viec.doiNguoiThucHien; số ô đã chạy khác số hàng bảng thì ném 'kh: bang chieu thieu o <n>'. Mỗi ô trên một kế hoạch mới tạo từ khuôn (createFromTemplate thật); sau lệnh đọc lại bước và Việc từ cơ sở dữ liệu: assigneeId ≠ nguoiThucHienId, dueAt ≠ hanNgay, label ≠ tieuDe, hay (completedAt khác null) ≠ (trangThai = XONG), hay completedAt ≠ khepLuc khi XONG thì ném 'kh: buoc lech viec sau <lenh> <cot>'; số vết tăng khác 1 thì ném 'kh: vet sai sau <lenh>'. Ô quyền: phiên người được giao bước gọi setStepDone(true) thành công, không thì ném 'kh: nguoi duoc giao khong dong duoc buoc'. Chiều đỏ ở E16 (c): bản sao bỏ lời gọi chieuLenBuoc ở viec.sua làm bảng đỏ với 'kh: buoc lech viec sau viec.sua'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/onboarding-buoc.ts, apps/api/src/onboarding/**, apps/api/src/viec/**, apps/api/test/ke-hoach-sinh-viec.spec.ts]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_chan
+    expected: "exit 0; -t kh-chan của apps/api/test/ke-hoach-sinh-viec.spec.ts. Việc V1 trỏ bởi một bước (createFromTemplate thật) và Việc V2 gắn cùng kế hoạch nhưng tạo bằng viec.create. Bốn lệnh × hai Việc = 8 ô viết trước: viec.doiTrangThai sang HUY, viec.xoa, viec.go({planId}), viec.sua({hanNgay: null}) — bỏ hạn làm bước lệch bản chiếu nên cũng bị chặn. V1: mỗi lệnh TRPCError BAD_REQUEST message chứa nguyên văn 'gỡ bước ở kế hoạch', trangThai, ViecGan, hạn, bước không đổi, không thì ném 'kh: viec cua buoc khong bi chan <lenh>'. V2 (đối chứng dương, mỗi lệnh trên một bản V2 mới): thành công như trước lượt này, không thì ném 'kh: viec thuong bi chan nham <lenh>'. Số ô đã chạy khác 8 thì ném 'kh: ma tran chan thieu o'. Chiều đỏ ở E16 (d)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, apps/api/src/viec/**, apps/api/test/ke-hoach-sinh-viec.spec.ts]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_go_buoc
+    expected: "exit 0; -t kh-go-buoc của apps/api/test/ke-hoach-sinh-viec.spec.ts. Kế hoạch ba bước tạo từ khuôn, người cầm trịch gọi onboarding.removeStep trên bước thứ ba: bước còn trong cơ sở dữ liệu thì ném 'kh: go buoc buoc con'; Việc của nó mất hay trangThai khác HUY thì ném 'kh: go buoc viec sai'; không có vết 'doi-trang-thai' sau HUY kèm lý do chứa 'gỡ bước' thì ném 'kh: go buoc thieu vet'; còn bước nào có viecId đó thì ném 'kh: go buoc con tro'; onboarding.plansOfCompany (cùng hàng planRow buocXong/buocTong của danh mục) trả cho kế hoạch đó số bước xong/tổng khác 0/2 thì ném 'kh: danh muc dem sai sau go <x/y>'. Đóng kế hoạch (ca tên 'kh-go-buoc dong-ke-hoach', cùng bộ lọc): kế hoạch hai bước dở một bước xong; onboarding.closePlan với huyViecMo true → hai Việc HUY có vết nguồn 'dong-ke-hoach', Việc Xong giữ XONG, bản chiếu ba bước đúng, không thì ném 'kh: dong ke hoach viec sai <buoc>'; lenLichNhac rồi chayNhac sau đó (gọi bộ gom viecCanNhac trực tiếp) không có viec-qua-han cho hai Việc đó, không thì ném 'kh: nhac viec cua ke hoach da dong'; huyViecMo false trên một kế hoạch cùng hình → hai Việc giữ trangThai cũ, không thì ném 'kh: dong ke hoach huy khi khong chon'; reopenPlan → Việc HUY vẫn HUY, không thì ném 'kh: mo lai hoi viec'. Chiều đỏ ở E16 (e), (i)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/onboarding-nhac.ts, apps/api/src/onboarding/**, apps/app/components/onboarding/**, apps/api/test/ke-hoach-sinh-viec.spec.ts]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_them_buoc
+    expected: "exit 0; -t kh-them-buoc của apps/api/test/ke-hoach-sinh-viec.spec.ts. Kế hoạch rỗng R và kế hoạch K tạo từ khuôn; onboarding.addStep trên R có assigneeId 'kh-u' và trên K không có assigneeId ở phòng A (trưởng phòng kh-h): mỗi bước mới có viecId khác null, không thì ném 'kh: them buoc khong sinh viec <ke hoach>'; Việc trên R có người thực hiện kh-u, trên K có kh-h, không thì ném 'kh: them buoc nguoi sai <ke hoach>'; Việc gắn đúng kế hoạch, có vết 'tao' nguồn 'web', không thì ném 'kh: them buoc gan sai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/**, packages/db/src/viec-ghi.ts, apps/api/test/ke-hoach-sinh-viec.spec.ts]
+
+  - id: E7b
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.kh_e6_xanh
+    expected: "exit 0; chạy nguyên ba lệnh của hồ sơ dieu-phoi-va đo AC-4, AC-5, AC-6 (dpv_them_buoc_dom, dpv_bo_phan_hong) trên cây lượt này; mã khác 0 thì thoát khác 0 nêu lệnh. Lệnh rút từ config.yaml, không chép tay. Tên ca giữ nguyên: với mỗi tên ke-hoach-rong, bo-phan-khac, loi-bo-phan, bo-phan-hong, chạy đúng lệnh của config với bộ lọc -t thay bằng riêng tên đó — phải ≥1 pass và 0 fail, không thì thoát 1 với 'kh: ca e6 bi doi ten <ten>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/**, apps/app/components/crm/record-sheet/**, apps/app/test/dieu-phoi-va.dom.tsx, apps/api/test/dieu-phoi-va.spec.ts]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_ke_hoach_cu
+    expected: "exit 0; -t kh-ke-hoach-cu của apps/api/test/ke-hoach-sinh-viec.spec.ts. Kế hoạch cũ dựng bằng bản ghi trực tiếp (bước không viecId). assignStep, setStepDone(true/false), rescheduleStep, removeStep trên bước cũ: cột bước đổi đúng như trước lượt này và số hàng viec, viecVet không đổi, không thì ném 'kh: ke hoach cu doi hanh vi <lenh>' hay 'kh: ke hoach cu sinh viec <lenh>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/**, packages/db/src/onboarding-buoc.ts, apps/api/test/ke-hoach-sinh-viec.spec.ts]
+
+  - id: E8b
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh_nhac_buoc
+    expected: "exit 0; -t kh-nhac-buoc của apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts. B được giao một bước quá hạn ở kế hoạch cũ (bước không viecId) và một bước quá hạn ở kế hoạch tạo từ khuôn (Việc quá hạn, người thực hiện B). Gọi bộ gom nhắc viecCanNhac cửa sổ buổi sáng lúc 09:00 giờ VN (cùng bộ gom lenLichNhac/chayNhac đọc): bộ gom của B có đúng một buoc-qua-han (bước cũ) và đúng một viec-qua-han (Việc của bước mới), không thì ném 'kh: nhac buoc cu mat' hay 'kh: nhac viec cua buoc mat'; có buoc-qua-han mang stepId của bước mới thì ném 'kh: nhac trung buoc va viec'. Chiều đỏ ở E16 (f)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/test/ke-hoach-sinh-viec.integration.spec.ts]
+
+  - id: E13
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.kh_thuoc
+    expected: "exit 0; apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts gieo kho mẫu qua hàm ghi thật với đáp án viết trước trong spec: Việc nguồn khuon chuyển đúng hạn, đúng ngày hạn 23:00 giờ VN, trễ một ngày, chưa chuyển; một Việc tạo tay (không tính); một Việc khuon tạo ngoài cửa sổ (không tính); một Việc khuon hạn sau --den còn CHUA_LAM (không tính); một Việc khuon HUY do gỡ bước có roiChuaLamLuc (không tính). Chạy _acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs --tu --den: JSON viecKhuon {tong 4, dungHan 2, tiLe 0.5} khác đáp án thì ném 'kh: thuoc dem sai <truong>'; mã thoát khác 2 (vì tiLe < 0.7) thì ném 'kh: thuoc khong do khi duoi nguong'; thêm hai Việc khuôn đúng hạn rồi chạy lại → tiLe 4/6 vẫn 2, thêm một nữa → 5/7 ≥ 0.7 thoát 0, không thì ném 'kh: thuoc do sai chieu xanh'. Chỉ đọc đo trên ĐẦU RA: JSON của thước mang chiDoc = (SHOW transaction_read_only trong chính giao dịch của nó) và phải là true, không thì ném 'kh: thuoc khong chi doc'. Chiều đỏ ở E16 (g), (h)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs, apps/api/test/ke-hoach-sinh-viec-do-nguong.spec.ts]
+
+  - id: E14
+    criterion: AC-9
+    executor: judgment
+    question: >-
+      Đọc CONTEXT.md (mục bước 30 ngày, mục Việc, và mục mới «Gợi ý mở kế hoạch»), docs/api.md (mục router
+      onboarding) và docs/plan/lo-trinh-viec-du-an.json (hàng DA3 và DA4) như một người mới vào kho. Tài liệu có
+      nói rõ năm điều không: (1) bước của kế hoạch tạo sau lượt DA3 là bản chiếu của đúng một Việc — Việc là nguồn
+      sự thật cho người làm, hạn, tên, xong; kế hoạch tạo trước vẫn có bước không Việc; (2) ba thao tác bị chặn
+      trên Việc của một bước (Huỷ, xoá, gỡ gắn kế hoạch) và đường đúng là gỡ bước ở kế hoạch; (3) tạo kế hoạch từ khuôn chọn người làm cho từng phòng ban, mặc định trưởng phòng, không có thì người cầm trịch, người vai «chỉ OKR» bị từ chối; (4) trường chọn người theo phòng ban của createFromTemplate và việc đóng kế hoạch hỏi huỷ việc còn mở; (5) hàng DA3 không còn «chưa mở», có hàng DA3b cho gợi ý mở kế hoạch khi deal thắng, và chay_khi của DA4 ghi điều kiện ngày bắt đầu đã thoả
+      do chủ kho mở 14/10. Tài liệu không dùng chữ «dự án» cho kế hoạch 30 ngày. Trả PASS khi đủ năm điều, FAIL nêu
+      điều thiếu.
+    inputs: [CONTEXT.md, docs/api.md, docs/plan/lo-trinh-viec-du-an.json]
+    evidence_required: [verdict, rationale, verified_at]
+
+  - id: E15
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.kh_hoi_quy
+    expected: "exit 0; node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu (tự thử ba ca của bộ so câu expect) rồi --moc <mốc ghim trong lệnh, merge-base của nhánh với origin/onehub> — quét MỌI tệp kiểm đã có ở mốc mà nhánh sửa, xoá hay đổi tên (git diff --name-status -M --diff-filter=MDR theo mẫu tệp kiểm, không danh sách tay; tệp xoá so với rỗng, tệp đổi tên so tên cũ với tên mới; tự thử đọc dòng M/D/R và tệp bị xoá); một câu expect sẵn có bị xoá hay sửa thì thoát 1 nêu tệp và câu; danh sách cho-phép chỉ có expect(step.assigneeId).toBeNull() của dieu-phoi.spec.ts kèm lý do AC-1; rồi bun run check-types thoát 0. Chiều đỏ: bản sao bỏ danh sách cho-phép thì thoát 1 với 'apps/api/test/dieu-phoi.spec.ts: expect bi xoa hay sua'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/**/test/**", "packages/**/test/**", "apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts"]
+
+  - id: E16
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.kh_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly như viec-chung: với mỗi cặp chạy phép đo trên bản sao lành phải xanh, rồi thay một lần chuỗi vật thật và chạy lại phải đỏ với đúng thông điệp ghim — (a) bỏ tạo Việc trong createFromTemplate → E1 'kh: buoc khong tro dung mot viec'; (b) bỏ kiemNguoiNhanViec ở nhánh chọn người theo phòng ban → E2 'kh: chon vai okr khong bi chan'; (c) bỏ lời gọi chieuLenBuoc ở viec.sua → E4 'kh: buoc lech viec sau viec.sua'; (d) bỏ chặn Huỷ trên Việc của bước → E5 'kh: viec cua buoc khong bi chan'; (e) removeStep xoá Việc thay vì Huỷ → E6 'kh: go buoc viec sai'; (f) bỏ lọc bước đã nối ở viecBuoc → E8b 'kh: nhac trung buoc va viec'; (g) đổi so sánh «roiChuaLamLuc ≤ cuối ngày hạn giờ VN» thành «< đầu ngày hạn» ở thước → E13 'kh: thuoc dem sai dungHan'; (h) bỏ lọc hạn ≤ --den ở mẫu số (a) → E13 'kh: thuoc dem sai tong'; (i) closePlan bỏ qua cờ huyViecMo → E6 'kh: dong ke hoach viec sai'. Thiếu cặp nào hay bản sao lành đỏ thì thoát khác 0 nêu cặp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs, packages/db/src/viec-ghi.ts, packages/db/src/onboarding-buoc.ts, packages/db/src/onboarding-nhac.ts, apps/api/src/onboarding/**, _acceptance/ke-hoach-sinh-viec/rang/do-nguong.mjs]
+
+  - id: E17
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.kh_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static chạy trên mọi tệp .tsx mới hay sửa của ô tạo kế hoạch, thẻ Bước và thẻ gợi ý (danh sách lấy bằng git diff --name-only từ merge-base với origin/onehub, lọc theo glob trong lệnh); một tệp vi phạm sàn thiết kế thì thoát khác 0 nêu tệp. Chiều đỏ: một tệp thử có className='rounded-[7px]' trong bản sao làm lệnh thoát khác 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/onboarding/**", apps/app/components/onboarding/**, apps/app/components/crm/record-sheet/**]
