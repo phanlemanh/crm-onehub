@@ -52,6 +52,10 @@ jobs:
             bash scripts/pre-merge-check.sh . --base "HEAD^" --no-t1-escape
           fi
 
+      - name: OKR read rule
+        if: ${{ !cancelled() }}
+        run: bun _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem
+
   phan-loai:
     name: phân loại PR
     if: github.event_name == 'pull_request'
