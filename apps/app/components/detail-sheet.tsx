@@ -144,7 +144,7 @@ export function DetailSheetHeader({
 
 				{media}
 
-				<div className="min-w-0 flex-1 space-y-0.5 pt-0.5">
+				<div className="min-w-32 flex-1 space-y-0.5 pt-0.5">
 					<SheetTitle size="lg" className="wrap-anywhere">
 						{title}
 					</SheetTitle>
@@ -160,7 +160,7 @@ export function DetailSheetHeader({
 					) : null}
 				</div>
 
-				<div className="flex shrink-0 items-center gap-1">
+				<div className="flex min-w-0 items-center gap-1">
 					{actions}
 					{actions ? (
 						<Separator orientation="vertical" className="mx-1 h-5" />

@@ -222,7 +222,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 				deal ? (
 					<>
 						{deal.archivedAt ? (
-							<span data-giai-doan-tinh="" className="inline-flex items-center">
+							<span data-giai-doan-tinh="" className="inline-flex min-w-0 items-center">
 								<DealStageIndicator stage={deal.stage} />
 							</span>
 						) : (

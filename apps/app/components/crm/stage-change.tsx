@@ -76,6 +76,7 @@ export function DealStageMenu({
 					<Button
 						variant="outline"
 						size="sm"
+						shrinkable
 						disabled={setStage.isPending}
 						onClick={(event) => event.stopPropagation()}
 					>

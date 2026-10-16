@@ -12,6 +12,7 @@ const CHI_DO = process.argv.includes("--chi-do");
 const HEP = 375;
 const RONG = 1440;
 const CHO_MS = 30_000;
+const RONG_TIEU_DE_TOI_THIEU = 120;
 const MA = `bch${Date.now().toString(36).slice(-5)}`;
 
 const dai = (dau) => `${dau}${MA}`.padEnd(120, "x");
@@ -92,6 +93,19 @@ const CAY_DO = {
 			),
 		dauVet: '<span className="block truncate">',
 		ghim: /bch-man: thanh giai doan cat chu/,
+	},
+	7: {
+		nhan: "ban sao tieu de dau ngan bo be rong toi thieu",
+		tenCay: "bch-chieu-do-7",
+		chiBuoc: "6",
+		tep: TEP_STATS,
+		cam: (s) =>
+			s.replace(
+				'<div className="min-w-32 flex-1 space-y-0.5 pt-0.5">',
+				'<div className="min-w-0 flex-1 space-y-0.5 pt-0.5">',
+			),
+		dauVet: '<div className="min-w-0 flex-1 space-y-0.5 pt-0.5">',
+		ghim: /bch-man: tieu de ngan bi bop/,
 	},
 	6: {
 		nhan: "ban sao buoc chot bo bien the xuong dong",
@@ -304,7 +318,15 @@ const doTranNgan = (t) =>
 					`${e.tagName.toLowerCase()}${e.getAttribute("data-slot") ? `[${e.getAttribute("data-slot")}]` : ""}`,
 				);
 		}
-		return { dem, tran: tran.slice(0, 5), so: tran.length };
+		const tieuDe = k.querySelector(
+			'[data-slot="drawer-title"], [data-slot="sheet-title"]',
+		);
+		return {
+			dem,
+			tran: tran.slice(0, 5),
+			so: tran.length,
+			rongTieuDe: tieuDe ? Math.round(tieuDe.getBoundingClientRect().width) : 0,
+		};
 	}, SEL_NGAN);
 
 const cuonTrang = (t) =>
@@ -502,7 +524,11 @@ try {
 			const n = await doTranNgan(t);
 			if (n.loi) loi.push(`bch-man: tran ngang ${n.loi}`);
 			else {
-				console.log(`  do buoc 6: ${n.dem} phan tu trong ngan, tran ${n.so}`);
+				console.log(
+					`  do buoc 6: ${n.dem} phan tu trong ngan, tran ${n.so}, tieu de rong ${n.rongTieuDe}px`,
+				);
+				if (n.rongTieuDe < RONG_TIEU_DE_TOI_THIEU)
+					loi.push(`bch-man: tieu de ngan bi bop ${n.rongTieuDe}px`);
 				for (const x of n.tran) loi.push(`bch-man: tran ngang ngan ${x}`);
 			}
 			await t.close();
