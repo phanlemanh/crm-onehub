@@ -58,3 +58,4 @@ Local»).
 - Hẹn đếm lại ngày 2026-10-23 (7 ngày sau gộp): số bản Preview của app, api, agent kể từ commit gộp phải bằng 0. Lệnh: `bun _acceptance/tat-ban-preview/rang/dem-preview.mjs <ISO lúc gộp>`.
 - Đường lui nếu AC-6 đỏ: deploy Production `onehub` qua API như 04/10, rồi revert PR.
 - Gộp trong giờ chủ kho thức — đây là đổi cấu hình triển khai production.
+- Nền hạ tầng, chân engine đỏ (đường nền 16/10 01:59Z): nhãn *không đọc được ở đây* — tám tệp kit chép trong kho cũ hơn bộ đệm 2.30.0 đang chạy; lỗi đã biết của mọi vòng crm hôm nay, #413 (crm nhận kit) gỡ. Không phải câu hỏi cho chủ kho.
