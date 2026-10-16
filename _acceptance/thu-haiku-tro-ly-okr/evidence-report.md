@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f16bcb73ca6a68ca65c6996a33bf61a475454227
+verified_commit: 6c3152b57cbeeaf6e1a86bdb572327979d0a3f75
 human_signoff: Phan Le Manh 2026-10-15
 ---
 
@@ -176,3 +176,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, không 
 
 Round 1: bảy eval máy và bảy lệnh suite chạy xong; ba phát hiện trong hợp đồng từ bước review (AC-7: bước kiểm model của nhánh Trợ lý OKR chỉ xét lần chụp đầu; AC-2: trần Haiku trên đường nạp mô-đun thật chưa được đo; AC-2: cửa sổ ngữ cảnh của vai góp ý và tóm tắt so null với null). Trả về bên làm để sửa phép đo.
 Round 2: bảy eval máy và bảy lệnh suite xanh trên cây f16bcb73c sau commit fb80a0aa2 (tiến trình con đo trần và cửa sổ trên đường nạp thật; E7 đọc model suốt nhánh). Không còn phát hiện nào trong hợp đồng; E7 đo xong hai model, Haiku khong-dat ở cả hai vai. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-16, do gộp onehub e2ae94319 (#420 đổi .env.example, inputs của E8)
+run_id: repin-20261016T033915Z-29599
+sha: 6c3152b57cbeeaf6e1a86bdb572327979d0a3f75 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 (E8 không khai paths) · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
