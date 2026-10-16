@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: df27388dfce8ddbbff5623e1c9ff7747879f58c2
+verified_commit: 6da07b60c74da0aacad8c0c3f21dca5a43ba7671
 human_signoff: Phan Le Manh 2026-10-16
 ---
 
@@ -181,3 +181,7 @@ Round 2: chạy lại E1, E2, E5 và toàn bộ lệnh suite trên cây đã s�
 ### Re-pin lần 1 — 2026-10-16, do gộp onehub e2ae94319; ghim-thuoc-soi-xem-okr sửa MIEN_XEM của rang/soi-ma.mjs
 run_id: repin-20261016T030601Z-68580
 sha: df27388dfce8ddbbff5623e1c9ff7747879f58c2 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E3 (E3 không khai paths) · AC không có chốt máy: AC-3 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-16, do gộp onehub 7ebcb0242 (#431, #432)
+run_id: repin-20261016T045303Z-94282
+sha: 6da07b60c74da0aacad8c0c3f21dca5a43ba7671 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E3 (E3 không khai paths) · AC không có chốt máy: AC-3 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
