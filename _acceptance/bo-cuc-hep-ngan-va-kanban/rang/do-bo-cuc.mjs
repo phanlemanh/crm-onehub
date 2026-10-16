@@ -263,9 +263,15 @@ const doThanh = (t) =>
 				li.querySelector("button > span") ??
 				li.firstElementChild;
 			const nut = li.querySelector("button");
+			const o = li.getBoundingClientRect();
+			const q = e?.getBoundingClientRect();
 			return {
 				ten: e?.textContent?.trim() ?? "",
-				cat: !e || e.scrollWidth > e.clientWidth + 1,
+				cat:
+					!e ||
+					e.scrollWidth > e.clientWidth + 1 ||
+					q.right > o.right + 1 ||
+					q.left < o.left - 1,
 				cham: Boolean(li.querySelector('[data-slot="status-indicator-label"]')),
 				cao: Math.round((nut ?? li).getBoundingClientRect().height),
 			};
