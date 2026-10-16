@@ -98,10 +98,19 @@ ReUI vào `packages/ui` theo bốn chỗ sửa của `docs/reui.md` — ví dụ
 `@reui/stepper`, trên đó kho dựng `step-list`. Việc cài là một finding Nhóm 2
 của phiên design-pass, làm ở S3, không làm trong lúc dựng bản mẫu.
 
+**Ngoại lệ: thành phần nền mà bản mẫu không thể có nếu thiếu.** Khung vẽ sơ đồ,
+biểu đồ Gantt — thiếu chúng thì không có gì để Cổng 1 duyệt, nên chờ tới S3 là
+vòng lẩn quẩn. Thành phần đó được cài vào `packages/ui` **ngay lúc dựng bản
+mẫu**, theo `docs/reui.md`: thành phần miễn phí, hoặc tệp máy rút từ block Pro
+(mục «Block có phần máy»). Việc cài vẫn ghi thành finding Nhóm 2 để Cổng 1
+duyệt; Cổng 1 từ chối thì gỡ cùng bản mẫu. Phép thử: bỏ thành phần đó đi mà
+bản mẫu vẫn trả lời được câu hỏi của Cổng 1 thì không phải ngoại lệ.
+
 ## Ba điều cấm
 
 - **Không sửa `packages/ui`** để bản mẫu đẹp hơn. Thiếu hay xấu ở tầng component
-  là một finding chờ Cổng 1, sửa ở vòng của nó.
+  là một finding chờ Cổng 1, sửa ở vòng của nó. Cài thành phần nền theo ngoại lệ
+  ở trên không phải là sửa.
 - **Không đường ghi, không tRPC, không dữ liệu thật.** Bản mẫu là ý định, không
   phải bản chạy. Dữ liệu giả, chỉ đọc.
 - **Chỉ nhập `@crm/ui` theo subpath** (`@crm/ui/components/<tên>`). Barrel
