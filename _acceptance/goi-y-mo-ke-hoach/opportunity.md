@@ -3,10 +3,10 @@ schema_version: 1
 slug: goi-y-mo-ke-hoach
 feature: Deal thắng thì máy gợi ý mở kế hoạch onboard; người phụ trách mở hay bỏ qua ngay trên deal
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build        # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-16T08:07:01Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -43,4 +43,4 @@ Căn cứ: DA3 (cùng hạng T3, 10 tiêu chí) đi từ Cổng Đáng 14/10 t�
 
 ## Nguồn quyết định Cổng Đáng
 
-(chờ chủ kho ký ở phiên thợ DA3b, máy M5)
+Chủ kho gõ ở phiên thợ DA3b (máy M5) ngày 16/10/2026: «Cổng Đáng goi-y-mo-ke-hoach: build · ngưỡng: theo vế (b) đã ký ở DA3 · đo 14 ngày từ ngày DA3b gộp». `decided_at` là giờ phiên thợ ghi lại lời đó.
