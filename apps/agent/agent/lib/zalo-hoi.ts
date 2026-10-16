@@ -50,7 +50,7 @@ export type HangDangHoi = {
 	sessionId: string | null;
 };
 
-const DANG_HOI: ZaloHoiKetQua = "dang-hoi";
+export const DANG_HOI: ZaloHoiKetQua = "dang-hoi";
 const TINH_TRAN: ZaloHoiKetQua[] = [...KET_QUA_TINH_TRAN];
 
 export function tokenPhien(
