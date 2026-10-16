@@ -348,6 +348,7 @@ function chay() {
 		});
 	let lot = 0;
 	let lech = 0;
+	let soCap = 0;
 	try {
 		git(GOC, "worktree", "add", "--detach", "--quiet", cay, "HEAD");
 		const goc = git(cay, "rev-parse", "HEAD").trim();
@@ -355,6 +356,7 @@ function chay() {
 		const iChi = process.argv.indexOf("--chi");
 		const chi = iChi === -1 ? null : (process.argv[iChi + 1] ?? "").split(",");
 		for (const c of CAP.filter((x) => !chi || chi.includes(x.eval))) {
+			soCap += 1;
 			git(cay, "reset", "--hard", "--quiet", goc);
 			if (!daChayLanh.has(c.eval))
 				daChayLanh.set(c.eval, chayLenh(cay, c.eval));
@@ -418,7 +420,7 @@ function chay() {
 		lot += 1;
 		console.log("LOT cay-chinh: tep dot bien o cay chinh doi trang thai");
 	}
-	console.log(`dot bien: ${CAP.length} cap · lot ${lot} · lech ${lech}`);
+	console.log(`dot bien: ${soCap} cap · lot ${lot} · lech ${lech}`);
 	if (lech) return 2;
 	return lot ? 1 : 0;
 }
