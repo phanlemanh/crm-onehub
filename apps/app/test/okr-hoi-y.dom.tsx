@@ -477,7 +477,10 @@ mock.module("@/lib/trpc/client", () => ({
 			viecCuaToi: thuTuc("viecCuaToi", () => ({ viec: [], lienQuanOkr: true })),
 			objective: thuTuc("objective", () => null),
 			danhSach: thuTuc("danhSach", () => new Promise(() => {})),
-			hoiMo: { mutationOptions: () => ({ mutationFn: async () => null }) },
+			hoiMo: {
+				mutationKey: () => ["okr.hoiMo"],
+				mutationOptions: () => ({ mutationFn: async () => null }),
+			},
 			...Object.fromEntries(DOT_BIEN.map((t) => [t, thuTuc(t, () => null)])),
 		},
 		org: { tree: thuTuc("tree", () => null) },

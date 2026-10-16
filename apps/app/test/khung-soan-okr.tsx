@@ -63,6 +63,7 @@ function thuTuc(duong: string) {
 						queryKey: [duong, vao ?? null],
 						queryFn: async () => doc(vao),
 					},
+		mutationKey: () => [duong],
 		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
