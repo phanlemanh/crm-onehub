@@ -86,10 +86,10 @@ function CauDong({
 	const viTri = khongDich ? cau.indexOf(khongDich) : -1;
 	if (!khongDich || viTri < 0) return cau;
 	return (
-		<>
+		<span data-slot="cau-thong-bao">
 			{cau.slice(0, viTri)}
 			<span translate="no">{khongDich}</span>
 			{cau.slice(viTri + khongDich.length)}
-		</>
+		</span>
 	);
 }

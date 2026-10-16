@@ -84,6 +84,15 @@ describe("cho-tac-nhan-lau-chuong", () => {
 					/\{\w+\}|undefined/,
 				);
 				cau.add(kyVong);
+				const cauEl = a?.querySelector('[data-slot="cau-thong-bao"]');
+				expect(
+					cauEl?.textContent,
+					`cau mot khoi, khong vo thanh nhieu o ${loai} ${locale}`,
+				).toBe(kyVong);
+				expect(
+					cauEl?.parentElement?.childElementCount,
+					`cau mot khoi, khong vo thanh nhieu o ${loai} ${locale}`,
+				).toBe(1);
 				const khong = a?.querySelector('[translate="no"]');
 				expect(khong?.textContent, `ten khong dich ${loai} ${locale}`).toBe(
 					MAU_NOI_DUNG[loai].ten,
