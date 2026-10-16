@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 13140654c6eee35bbf8367e61d49a3efd0461ade
+verified_commit: 12bed328c30cd45ee4ec97b4e4efda8fd827d978
 human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 3 (17/17 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -292,3 +292,7 @@ sha: 7a3e69c5eb5cdc78520c655e147a921a3b92169f · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-16, do sửa workflow lịch kéo + đẩy bản chụp: DATABASE_URL giả cho bun install (#445)
 run_id: repin-20261016T160639Z-91397
 sha: 13140654c6eee35bbf8367e61d49a3efd0461ade · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7, suite 2/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-16, do sau gộp onehub có kit 2.31.0 (#413) — #445
+run_id: repin-20261016T180149Z-83573
+sha: 12bed328c30cd45ee4ec97b4e4efda8fd827d978 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
