@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { NGAY_MS } from "@crm/db/okr-tro-ly-danh-muc";
-import { TAI_LIEU } from "@crm/validation/tai-lieu";
+import { type SuKienChiTiet, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { TAI_LIEU_API } from "../src/tai-lieu/tai-lieu-config";
 import { datLuuTru } from "../src/tai-lieu/tai-lieu-luu-tru";
 import {
@@ -436,13 +436,17 @@ describe("tlkp", () => {
 	test("tlkp-dem: su kien sinh truoc khi chup khong duoc dem du luc o tuong lai, su kien sau thi duoc dem", async () => {
 		const t = await trangDangDung("Dem su kien");
 		const aiId = phien.chu.nguoi;
+		const deXuatTruoc = {
+			loai: "DE_XUAT",
+			deXuatId: t.deXuatId,
+		} satisfies SuKienChiTiet;
 		await db.taiLieuSuKien.create({
 			data: {
 				trangId: t.trangId,
-				loai: "DE_XUAT",
+				loai: deXuatTruoc.loai,
 				aiId,
 				luc: new Date(Date.now() + 5000),
-				chiTiet: {},
+				chiTiet: deXuatTruoc,
 			},
 		});
 		const moc = new Date(Date.now() - 1);
@@ -457,8 +461,17 @@ describe("tlkp", () => {
 			throw new Error("tlkp-dem: du lieu gieo khong kich duoc loi moc gio");
 		if (Object.keys((await suKienMoi(t.trangId, truoc)).so).length > 0)
 			throw new Error("tlkp-dem: dem nham su kien truoc moc");
+		const khoiPhucSau = {
+			loai: "KHOI_PHUC",
+			deXuatId: t.deXuatId,
+		} satisfies SuKienChiTiet;
 		await db.taiLieuSuKien.create({
-			data: { trangId: t.trangId, loai: "KHOI_PHUC", aiId, chiTiet: {} },
+			data: {
+				trangId: t.trangId,
+				loai: khoiPhucSau.loai,
+				aiId,
+				chiTiet: khoiPhucSau,
+			},
 		});
 		const sau = await suKienMoi(t.trangId, truoc);
 		if (sau.so.KHOI_PHUC !== 1)
@@ -487,10 +500,12 @@ describe("tlkp", () => {
 			{
 				ten: "than ca goi ham dem theo moc",
 				nguon: caKhoiPhuc([
+					"\t\tconst truoc = await idSuKien(b.trangId);",
 					'\t\tawait duyet(id, "chu");',
+					"\t\tawait suKienMoi(b.trangId, truoc);",
 					"\t\tawait suKienSau(b.trangId, truoc);",
 				]),
-				ghim: "tlkp-tinh: ca khoi-phuc: de xuat khoi phuc duoc duyet khong dem bang id",
+				ghim: "tlkp-tinh: con moc dong ho",
 			},
 			{
 				ten: "chup id sau lenh duyet",
