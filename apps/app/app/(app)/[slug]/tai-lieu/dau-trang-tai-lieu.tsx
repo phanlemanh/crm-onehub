@@ -12,26 +12,17 @@ import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { duongDanhSach, duongTrangMoi, TAI_LIEU_MAN } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
-import { type Loc, moTimNhanh, thamSo } from "./danh-sach-loc";
+import { duongTimNhanh, useLocTaiLieu } from "./danh-sach-loc";
 import { type LuaChonTai, NutTaiNguon } from "./hop-tai-nguon";
 
-export function HanhDongTaiLieu({
-	tab,
-	loai,
-	donVi = null,
-	chu = null,
-	nhom = "cho",
-	page,
-	luaChon,
-}: Pick<Loc, "tab" | "loai" | "page"> &
-	Partial<Pick<Loc, "donVi" | "chu" | "nhom">> & {
-		luaChon: LuaChonTai;
-	}) {
+export function HanhDongTaiLieu({ luaChon }: { luaChon: LuaChonTai }) {
 	const m = taiLieuMessages(useLocale());
 	const url = useWorkspaceUrl();
-	const lienKetTim = moTimNhanh(
-		`${url(duongDanhSach())}${thamSo({ tab, loai, donVi, chu, nhom, page })}`,
-	);
+	const [loc] = useLocTaiLieu();
+	const lienKetTim = duongTimNhanh(url(duongDanhSach()), {
+		...loc,
+		archived: false,
+	});
 
 	return (
 		<>

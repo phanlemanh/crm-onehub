@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
@@ -65,7 +66,6 @@ mock.module("next/link", () => ({
 const { DanhSachTrang } = await import(
 	"@/app/(app)/[slug]/tai-lieu/danh-sach-trang"
 );
-const { thamSo } = await import("@/app/(app)/[slug]/tai-lieu/danh-sach-loc");
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -87,31 +87,21 @@ async function mo(archived: boolean): Promise<HTMLElement> {
 	document.body.appendChild(khung);
 	root = createRoot(khung);
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-	const toi = (sua: { archived?: boolean }) =>
-		`/ws/tai-lieu${thamSo({
-			tab: "trang",
-			loai: null,
-			donVi: null,
-			chu: null,
-			nhom: "cho",
-			page: 1,
-			archived,
-			...sua,
-		})}`;
 	await act(async () => {
 		root?.render(
-			<QueryClientProvider client={qc}>
-				<LocaleProvider locale="vi">
-					<DanhSachTrang
-						archived={archived}
-						chu={null}
-						donVi={null}
-						loai={null}
-						page={1}
-						toi={toi}
-					/>
-				</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter
+				hasMemory
+				onUrlUpdate={(e) => {
+					canh.den.push(`/ws/tai-lieu${e.queryString}`);
+				}}
+				searchParams={archived ? "?archived=true" : ""}
+			>
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale="vi">
+						<DanhSachTrang />
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	for (let i = 0; i < 6; i += 1)

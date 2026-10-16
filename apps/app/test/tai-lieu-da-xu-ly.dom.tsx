@@ -2,6 +2,7 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { TRANG_THAI_DE_XUAT } from "@crm/validation/tai-lieu";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
@@ -82,11 +83,16 @@ async function mo(rows: Dong[]): Promise<HTMLElement> {
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 	await act(async () => {
 		root?.render(
-			<QueryClientProvider client={qc}>
-				<LocaleProvider locale="vi">
-					<ChoDuyet nhom="da-xu-ly" page={1} toi={() => "/ws/tai-lieu"} />
-				</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter
+				hasMemory
+				searchParams="?tabTaiLieu=cho-duyet&nhomDeXuat=da-xu-ly"
+			>
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale="vi">
+						<ChoDuyet />
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	for (let i = 0; i < 6 && !khung.querySelector("[data-de-xuat]"); i += 1)

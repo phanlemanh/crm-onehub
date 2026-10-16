@@ -14,6 +14,7 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { ChonChuKy } from "./chon-chu-ky";
 import { DaiKy } from "./dai-ky";
 import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
+import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import { kyMacDinhHoiY } from "./okr-search-params";
 import type { TabOkr } from "./tab-okr";
@@ -65,7 +66,14 @@ async function DauTrangCoDuLieu() {
 
 	return (
 		<HydrateClient>
-			<DauTrangOkrHoiY chonChuKy={<ChonChuKy />} />
+			<DauTrangOkrHoiY
+				chonChuKy={
+					<>
+						<NutHoiKara />
+						<ChonChuKy />
+					</>
+				}
+			/>
 			<DaiKy />
 		</HydrateClient>
 	);

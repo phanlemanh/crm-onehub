@@ -87,6 +87,11 @@ export const CUA_OKR = {
 	} satisfies Record<TuChoiLuot, number>,
 } as const;
 
+export const CUA_OKR_HOI = {
+	header: "x-crm-cuoc-hoi",
+	loi: { thieuCuoc: "thieu-cuoc-hoi", haiCuoc: "hai-loai-cuoc" },
+} as const;
+
 export const MA_LY_DO_HONG = [
 	"khong-noi-duoc",
 	"qua-han",

@@ -1,6 +1,7 @@
 "use client";
 
 import SendAlt from "@carbon/icons-react/es/SendAlt";
+import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
@@ -12,12 +13,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@crm/ui/components/dialog";
-import {
-	Field,
-	FieldDescription,
-	FieldError,
-	FieldLabel,
-} from "@crm/ui/components/field";
+import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
@@ -40,6 +36,7 @@ export type HopGuiTinHieuProps = {
 	man: string;
 	giaiDoan: GiaiDoanGui;
 	loi: string | null;
+	quaTran?: boolean;
 	ma: string | null;
 	hrefDaGui: string;
 	onGui: () => void;
@@ -85,6 +82,7 @@ export function HopGuiTinHieu({
 	man,
 	giaiDoan,
 	loi,
+	quaTran,
 	ma,
 	hrefDaGui,
 	onGui,
@@ -92,15 +90,23 @@ export function HopGuiTinHieu({
 	const m = tinHieuMessages(useLocale());
 	const idMuonLam = useId();
 	const idDaXayRa = useId();
+	const idLoi = useId();
+	const idLyDo = useId();
 	const dangGui = giaiDoan === "dang-gui";
 	const coChu = muonLam.trim().length > 0 && daXayRa.trim().length > 0;
+	const coThayDoi =
+		giaiDoan !== "da-gui" &&
+		(muonLam.trim().length > 0 || daXayRa.trim().length > 0);
+	const khoaTran = quaTran === true;
+	const khoaVi = khoaTran ? idLoi : coChu ? null : idLyDo;
 	const guiPhim = (e: React.KeyboardEvent) => {
-		if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && coChu) onGui();
+		if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && coChu && !khoaTran)
+			onGui();
 	};
 	const conLai = (chu: string) => TIN_HIEU.doDaiMoiO - chu.length;
 
 	return (
-		<Dialog onOpenChange={onOpenChange} open={open}>
+		<Dialog coThayDoi={coThayDoi} onOpenChange={onOpenChange} open={open}>
 			<DialogTrigger asChild>{nut}</DialogTrigger>
 			<DialogContent data-hop-tin-hieu={giaiDoan}>
 				{giaiDoan === "da-gui" && ma ? (
@@ -151,7 +157,7 @@ export function HopGuiTinHieu({
 								</FieldDescription>
 							) : null}
 						</Field>
-						<Field data-invalid={loi ? true : undefined}>
+						<Field>
 							<FieldLabel htmlFor={idDaXayRa}>{m.hop.daXayRa}</FieldLabel>
 							<Textarea
 								autoComplete="off"
@@ -166,22 +172,35 @@ export function HopGuiTinHieu({
 								value={daXayRa}
 							/>
 							<FieldDescription>
-								<span translate="no">{dien(m.hop.man, { man })}</span>
+								<span data-gui-tu-man="">{dien(m.hop.man, { man })}</span>
 								{conLai(daXayRa) < TIN_HIEU.nguongDem ? (
 									<span className="ms-2 tabular-nums">
 										{dien(m.hop.conLai, { so: String(conLai(daXayRa)) })}
 									</span>
 								) : null}
 							</FieldDescription>
-							{loi ? <FieldError aria-live="polite">{loi}</FieldError> : null}
 						</Field>
+						{loi ? (
+							<Alert id={idLoi} variant="destructive">
+								<AlertDescription>{loi}</AlertDescription>
+							</Alert>
+						) : null}
+						{!coChu && !khoaTran ? (
+							<FieldDescription data-ly-do-khoa="" id={idLyDo}>
+								{m.hop.lyDoKhoa}
+							</FieldDescription>
+						) : null}
 						<DialogFooter>
 							<DialogClose asChild>
 								<Button disabled={dangGui} variant="outline">
 									{m.hop.huy}
 								</Button>
 							</DialogClose>
-							<Button disabled={!coChu || dangGui} onClick={onGui}>
+							<Button
+								aria-describedby={khoaVi ?? undefined}
+								disabled={!coChu || dangGui || khoaTran}
+								onClick={onGui}
+							>
 								{dangGui ? <Spinner /> : null}
 								{dangGui ? m.hop.dangGui : m.hop.gui}
 							</Button>
