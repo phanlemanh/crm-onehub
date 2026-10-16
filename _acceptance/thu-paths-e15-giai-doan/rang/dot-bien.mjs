@@ -425,5 +425,8 @@ function chay() {
 	return lot ? 1 : 0;
 }
 
-if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url))
+if (
+	process.argv[1] &&
+	realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)
+)
 	process.exit(chay());

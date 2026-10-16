@@ -186,5 +186,8 @@ function chay() {
 	return dem.lech;
 }
 
-if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url))
+if (
+	process.argv[1] &&
+	realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)
+)
 	process.exit(chay() ? 1 : 0);

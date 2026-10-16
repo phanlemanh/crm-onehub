@@ -1,7 +1,9 @@
 ba-ho-so-do-san
 bo-cau-hoi-mau
 cua-vao-noi-tieng-viet
+ghim-thuoc-soi-xem-okr
 ngan-ho-so-trong-lo-trinh
 tat-preview-agent-okr
+thu-haiku-tro-ly-okr
 thuoc-cua-lat-3a-co-rang
 tieng-viet-cho-crm

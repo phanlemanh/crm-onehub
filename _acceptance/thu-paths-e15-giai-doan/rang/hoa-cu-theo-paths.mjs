@@ -264,4 +264,8 @@ function chay() {
 	process.exit(hong ? 1 : 0);
 }
 
-if (realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) chay();
+if (
+	process.argv[1] &&
+	realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)
+)
+	chay();
