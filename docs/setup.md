@@ -481,6 +481,14 @@ So a measurement now runs in a **measure session** on a database of its own tree
   (`crm phien do template-building created …`), replaced by the template mark when the
   seed finishes. A building template is never cloned; the next `--tao` of the tree
   rebuilds it.
+- The template also carries a model in the Settings model slot: after the seed,
+  `scripts/gieo-model-do.ts` writes `MEASURE_DATABASE.agentModel`
+  (`google/gemini-3.8-flash`) through `writeAgentModel`, so the main agent and Tác nhân
+  on a measure database run the model production runs instead of falling back to
+  GLM 5.2 Fast, which the owner does not use. Change it at `MEASURE_DATABASE.agentModel`
+  in `packages/db/src/measure-database.ts`; the template is rebuilt when it changes.
+  Trợ lý OKR's own model on a measurement is `TRO_LY_OKR_MO_HINH` — measurement only,
+  ignored in production; see `environment.md`.
 - `bun run db:do --xoa` drops the tree's measure database. It refuses a name that does
   not end in `_do`, and one without the measure-session `COMMENT`.
 - `bun run db:do --quet` drops every marked measure database and template with no

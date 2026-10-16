@@ -13,12 +13,13 @@ const vi = {
 		"hoi-y": "Hỏi ý",
 	},
 	nhanHoiYMoi: "Mới",
-	tieuDe: {
-		"cua-toi": "OKR của tôi",
-		"cap-nhat-tuan": "Cập nhật tuần của tôi",
-		"theo-don-vi": "OKR theo đơn vị",
-		"toan-canh": "Toàn cảnh OKR",
-		"hoi-y": "Hỏi ý mục tiêu",
+	khoaTao: {
+		khongSua:
+			"Bạn xem được {ten} nhưng không thêm mục tiêu được: chỉ trưởng đơn vị này, trưởng đơn vị cấp trên và quản trị làm được.",
+		chuaDan:
+			"Bạn chưa dẫn đơn vị nào nên chưa thêm được mục tiêu: mục tiêu thuộc về đơn vị và do trưởng đơn vị đặt.",
+		loiQuyen: "Chưa tải được quyền của bạn — tải lại trang để thử lại.",
+		themCach: "Thêm cách tạo mục tiêu",
 	},
 	moTa: {
 		"cua-toi":
@@ -711,12 +712,13 @@ const en: OkrMessages = {
 		"hoi-y": "Call for ideas",
 	},
 	nhanHoiYMoi: "New",
-	tieuDe: {
-		"cua-toi": "My OKRs",
-		"cap-nhat-tuan": "My weekly update",
-		"theo-don-vi": "OKRs by unit",
-		"toan-canh": "OKR overview",
-		"hoi-y": "Call for ideas on objectives",
+	khoaTao: {
+		khongSua:
+			"You can view {ten} but cannot add objectives to it: only this unit's head, a parent unit's head and admins can.",
+		chuaDan:
+			"You don't lead a unit yet, so you can't add objectives: objectives belong to a unit and its head sets them.",
+		loiQuyen: "Couldn't load your permissions — reload the page to try again.",
+		themCach: "More ways to add objectives",
 	},
 	moTa: {
 		"cua-toi":
