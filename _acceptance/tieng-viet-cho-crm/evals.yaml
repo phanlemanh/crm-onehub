@@ -107,4 +107,8 @@ evals:
     executor: judgment
     question: "Hai cau. (1) Muoi nhan cot tieng Viet da khai trong muc Notes cua contract — Ten, Ten mien, Nganh, Phu trach, Ca nhan, Thoa thuan mo, Ngay tao, Hoat dong cuoi, Bo sung, Luu tru — doc nhu tieng Viet cua nguoi trong nghe quan he doi tac, hay nhu ban dich may? (2) Nhan nao lap lai danh tu ma man hinh DA noi, tuc pham luat ngan-theo-ngu-canh trong CONTEXT.md? Goi ten nhan do."
     inputs: [contract.md, ../../CONTEXT.md, evidence/ban-mau-man-cong-ty.html]
+    paths:
+      - "_acceptance/tieng-viet-cho-crm/contract.md"
+      - "CONTEXT.md"
+      - "_acceptance/tieng-viet-cho-crm/evidence/ban-mau-man-cong-ty.html"
     evidence_required: [judged_by, verdict, rationale]

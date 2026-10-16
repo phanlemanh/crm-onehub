@@ -172,6 +172,9 @@ evals:
     inputs:
       - docs/setup.md
       - apps/agent-okr/vercel.json
+    paths:
+      - "docs/setup.md"
+      - "apps/agent-okr/vercel.json"
     expected: |
       PASS khi ca bon: (1) co, ten dung apps/agent-okr/vercel.json va git.deploymentEnabled;
       (2) khong con cau nao noi check do la binh thuong; (3) con loi dan kiem Production READY;

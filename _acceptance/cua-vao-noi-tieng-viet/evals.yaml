@@ -249,6 +249,12 @@ evals:
       - evidence/E14-chu-hien-ra.txt
       - evidence/E14-chu-loi.txt
       - contract.md
+    paths:
+      - "_acceptance/cua-vao-noi-tieng-viet/evidence/E14-ba-man-vi.png"
+      - "_acceptance/cua-vao-noi-tieng-viet/evidence/E14-ba-man-en.png"
+      - "_acceptance/cua-vao-noi-tieng-viet/evidence/E14-chu-hien-ra.txt"
+      - "_acceptance/cua-vao-noi-tieng-viet/evidence/E14-chu-loi.txt"
+      - "_acceptance/cua-vao-noi-tieng-viet/contract.md"
     expected: >-
       TRUOT CUNG khi thieu bat ky dau vao nao — thieu mot dau vao thi E14 la
       BLOCKED chu khong phai UNCERTAIN. `E14-chu-hien-ra.txt` do E1 va E2 xuat;

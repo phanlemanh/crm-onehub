@@ -132,8 +132,8 @@ evals:
       - "lib/evidence-core.cjs"
       - "lib/eval-yaml.cjs"
     expected: |
-      exit 0. them-paths.mjs --kiem-bo-qua okr-loai-hoc-tap#E14=input-vang,chu-mac-dinh-thu-vien-ngoai#E10=khong-co-inputs,
-      dieu-phoi-hai-tang#E22=khai-not-run: ba eval được xếp «bo-qua» với đúng lý do (tiền tố) và vẫn không có paths; in
+      exit 0. them-paths.mjs --kiem-bo-qua okr-loai-hoc-tap:E14=input-vang,chu-mac-dinh-thu-vien-ngoai:E10=khong-co-inputs,
+      dieu-phoi-hai-tang:E22=khai-not-run: ba eval được xếp «bo-qua» với đúng lý do (tiền tố) và vẫn không có paths; in
       «BO_QUA <slug>#<id>: <lý do>» cho từng eval, 3/3.
       CHIỀU ĐỎ (dot-bien.mjs): thêm paths cho okr-loai-hoc-tap#E14 → mã 1 với «KHONG_BO_QUA okr-loai-hoc-tap#E14: lech»;
       bỏ «status: not-run» của dieu-phoi-hai-tang#E22 → mã 1 với «KHONG_BO_QUA dieu-phoi-hai-tang#E22: bo-qua

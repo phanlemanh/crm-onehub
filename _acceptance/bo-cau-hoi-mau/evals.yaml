@@ -91,3 +91,13 @@ evals:
       - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/nghi-phep.md"
       - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/tam-ung.md"
       - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/thu-viec.md"
+    paths:
+      - "_acceptance/bo-cau-hoi-mau/bo-mau.json"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/bao-mat.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/cong-tac-phi.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/doi-soat.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/hoa-hong.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/khieu-nai.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/nghi-phep.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/tam-ung.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/thu-viec.md"
