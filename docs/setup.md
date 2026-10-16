@@ -109,9 +109,10 @@ Pháp chế, vai «chỉ OKR», chưa gửi Cập nhật tuần này).
 thước đã ký cần kho không có chu kỳ. Lượt nào cần thì nạp trong tiền đề của nó:
 `bun run do:man --chay "bun run okr:mau && <lệnh đo>"`.
 
-**Bản xem trước không có bộ mẫu:** preview dùng chung cơ sở dữ liệu và api với
-production (mục dưới), nên nạp vào đó là nạp vào production. Bản xem trước có bộ mẫu
-khi nó có cơ sở dữ liệu và api riêng.
+**Không có bản xem trước để nạp bộ mẫu:** Preview tắt ở cả bốn dự án từ 16/10
+(`docs/production.md`, mục Preview). Biến đích preview vẫn trỏ cơ sở dữ liệu
+production (mục dưới), nên bật lại Preview mà nạp vào đó là nạp vào production —
+bản xem trước chỉ có bộ mẫu khi nó có cơ sở dữ liệu và api riêng.
 
 **Ca góp ý của Trợ lý OKR:** 30 ca mẫu ở `apps/agent/evals/okr/ca-gop-y/mau/`, mỗi tệp
 một ca, khuôn `@crm/validation/okr-ca-gop-y`. Ca thật — OKR thật đã thay tên người và đối tác —
@@ -229,7 +230,8 @@ Copy the shape of `crm-onehub-agent` (`vercel project inspect crm-onehub-agent`)
 | Ignored Build Step | empty |
 | Preview deployments | off, by `apps/agent-okr/vercel.json` |
 
-**Preview deploys are turned off in `apps/agent-okr/vercel.json`.** Its
+**Preview deploys are turned off in `apps/agent-okr/vercel.json`** — the same rule
+the other three projects use since 2026-10-16. Its
 `git.deploymentEnabled` sets `"**": false` and `"onehub": true`: only a push to
 `onehub` deploys, so pull requests show no agent-okr check at all. The pattern is
 `**`, not `*` — Vercel matches branch names with minimatch, where `*` stops at a `/`,
@@ -336,13 +338,20 @@ build, gated on `VERCEL_ENV === "production"`. The schema therefore moves when t
 release pull request merges and `release` deploys — with the code that needs it,
 and once rather than once per branch.
 
-Preview deploys share the production database: `DATABASE_URL` is a single value
-across production, preview and development. Until that changes, **a preview of a
-branch that adds a migration runs against a database without those tables** — it
-builds, and the pages that touch them fail. Test schema changes locally, where
-`bun run dev` migrates for you. Before the gate existed the reverse was true and
-worse: every preview applied its own migrations to the production database, so on
-2026-08-07 the live schema ran six migrations ahead of the live code all day.
+Preview deploys are off for all four projects since 2026-10-16: each project's
+`vercel.json` at its Root Directory sets `git.deploymentEnabled` to `"**": false`,
+`"onehub": true` (the table is in `docs/production.md`, «Preview»). For
+`crm-onehub-api` that file is the `vercel.json` at the repository root, because the
+project's Root Directory is empty; `apps/api/vercel.json` only carries the crons.
+Test schema changes locally, where `bun run dev` migrates for you.
+
+Before that, previews shared the production database: `DATABASE_URL` is a single
+value across production, preview and development, and every pushed branch ran
+ungated code against live data. A preview of a branch that added a migration ran
+against a database without those tables; before the migration gate it was worse —
+every preview applied its own migrations to the production database, so on
+2026-08-07 the live schema ran six migrations ahead of the live code all day. Do not
+turn previews back on without giving the preview target its own database.
 
 ### `migrate deploy` is not proof the schema is right
 
