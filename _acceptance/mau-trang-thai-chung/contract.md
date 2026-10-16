@@ -5,7 +5,7 @@ slug: mau-trang-thai-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-15T21:34:55Z
 design_doc: docs/superpowers/specs/2026-10-16-mau-trang-thai-chung-design.md
@@ -73,3 +73,12 @@ Quét theo khuôn test-matrix của `morphological-scan`.
 ## Notes
 
 - Nhánh `feat/mau-trang-thai-chung`, cắt từ onehub f46c0bbda.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-2: Màu trạng thái viết tay đi qua một thành phần bọc trung gian vẫn lọt bài quét, nên một khu có thể lệch màu mà kiểm tra vẫn xanh.
+  - Ngoài-4: Tài liệu thiết kế hứa bài quét bắt mọi bảng màu riêng, nhưng luật thường chỉ đọc những tệp có dùng chấm trạng thái.
+  - Ngoài-5: Mục mang sang từ round 1 về khu làm giàu dữ liệu không được quét; đã sửa ở S4-r1, ghi lại để giữ vết.
+  - Ngoài-6: Ở bảy khu, bài kiểm xác nhận bảng nghĩa khai đúng chứ không xác nhận chấm vẽ ra đúng màu.
+  - Ngoài-7: Bài kiểm không tự khoá đúng sáu nghĩa và màu xám của nghĩa đã kết thúc; đổi cả bảng lẫn tài liệu cùng lúc thì không ai bị báo.
+  - Ngoài-9: Luật thường của bài quét có thể báo đỏ nhầm một nhãn hay thuộc tính trạng thái không phải màu.
+  - Ngoài-10: Trùng Ngoài-6 — bài kiểm so bảng khai chứ không nhìn màu thật sự hiện ra.
+  - Ngoài-11: Trùng Ngoài-7 — đổi màu nghĩa đã kết thúc hay thêm bớt một nghĩa cùng tài liệu thì bài kiểm vẫn xanh.
