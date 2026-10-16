@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5e6a798dff9d09258044816b292db4d3faf9fb35
+verified_commit: b8834ad3c3b4d882ecc261111806718db0e115cd
 human_signoff: Manh Phan 2026-10-16
 ---
 
@@ -214,3 +214,7 @@ Round 1: mọi eval máy đều xanh, hai mục judgment được hội đồng 
 ### Re-pin lần 1 — 2026-10-15, do gộp onehub b7f3f1620 (#420 LT1c) sau chữ ký
 run_id: repin-20261015T223548Z-67219
 sha: 5e6a798dff9d09258044816b292db4d3faf9fb35 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9 (E9 không khai paths), E10 (E10 không khai paths) · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-16, do gộp onehub 3ffded7b2 sau chữ ký
+run_id: repin-20261016T013814Z-80849
+sha: b8834ad3c3b4d882ecc261111806718db0e115cd · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9 (E9 không khai paths), E10 (E10 không khai paths) · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
