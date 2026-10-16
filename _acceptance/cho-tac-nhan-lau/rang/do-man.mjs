@@ -27,6 +27,7 @@ const DUOI_MS = 5_000;
 const LECH_GIAY = 5;
 const CHU_CU = "Chạy ngầm";
 const CHO_CHUONG_MS = 10_000;
+const TIEU_DE_XONG = "Đo màn: đã xong";
 const TEN_TAC_NHAN = "Đo màn: tóm tắt deal mỗi sáng";
 const t = troChuyenMessages("vi");
 const MA_TRAN = [
@@ -164,7 +165,7 @@ async function hoiThoaiDangDung(nguoi, daChoMs) {
 
 async function hoiThoaiXong(nguoi) {
 	const h = await db.agentConversation.create({
-		data: { userId: nguoi.id, kind: "BUILDER", title: "Đo màn: đã xong" },
+		data: { userId: nguoi.id, kind: "BUILDER", title: TIEU_DE_XONG },
 		select: { id: true },
 	});
 	tao.hoiThoai.push(h.id);
@@ -293,13 +294,29 @@ async function dongTacNhan(p) {
 async function moTuChuong(p, ma, nguoi, slug, xong, truoc) {
 	const d = await dongTacNhan(p);
 	if (d) await p.click(`[data-slot=danh-sach-thong-bao] a[href="${d.href}"]`);
-	await p
+	const denNoi = await p
 		.waitForFunction(
 			(id) => location.pathname.endsWith(`/chat/${id}`),
 			{ timeout: CHO_MS },
 			xong,
 		)
-		.catch(() => {});
+		.then(() => true)
+		.catch(() => false);
+	const tieuDe = denNoi
+		? await p
+				.waitForFunction(
+					(ten) =>
+						[...document.querySelectorAll("header h1")].some(
+							(h) => h.textContent?.trim() === ten,
+						),
+					{ timeout: CHO_MS },
+					TIEU_DE_XONG,
+				)
+				.then(() => TIEU_DE_XONG)
+				.catch(() => null)
+		: null;
+	const duong = await p.evaluate(() => location.pathname);
+	await anh(p, ma);
 	await p
 		.waitForNetworkIdle({ idleTime: 1500, timeout: CHO_MS })
 		.catch(() => {});
@@ -311,10 +328,13 @@ async function moTuChuong(p, ma, nguoi, slug, xong, truoc) {
 	const sau = await soChuong(p);
 	kiem(
 		ma,
-		`mo cuoc tro chuyen tu chuong: docLuc ${daDoc?.docLuc ? "co" : "khong"}, so chua doc ${truoc} -> ${sau}`,
-		Boolean(daDoc?.docLuc) && sau === truoc - 1,
+		`mo cuoc tro chuyen tu chuong: duong ${duong}, tieu de ${JSON.stringify(tieuDe)}, docLuc ${daDoc?.docLuc ? "co" : "khong"}, so chua doc ${truoc} -> ${sau}`,
+		denNoi &&
+			duong === `/${slug}/chat/${xong}` &&
+			tieuDe === TIEU_DE_XONG &&
+			Boolean(daDoc?.docLuc) &&
+			sau === truoc - 1,
 	);
-	await anh(p, ma);
 }
 
 async function chay() {
