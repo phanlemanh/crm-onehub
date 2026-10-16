@@ -67,14 +67,28 @@ async function dem(trangId: string) {
 	return { deXuat, suKien };
 }
 
-async function suKienSau(trangId: string, sau: Date) {
+async function idSuKien(trangId: string) {
 	const ds = await db.taiLieuSuKien.findMany({
-		where: { trangId, luc: { gt: sau } },
-		select: { loai: true, aiId: true },
+		where: { trangId },
+		select: { id: true },
 	});
+	return new Set(ds.map((d) => d.id));
+}
+
+function demLoai(ds: { loai: string }[]) {
 	const so: Record<string, number> = {};
 	for (const s of ds) so[s.loai] = (so[s.loai] ?? 0) + 1;
-	return { so, ds };
+	return so;
+}
+
+async function suKienMoi(trangId: string, truoc: Set<string>) {
+	const ds = (
+		await db.taiLieuSuKien.findMany({
+			where: { trangId },
+			select: { id: true, loai: true, aiId: true },
+		})
+	).filter((d) => !truoc.has(d.id));
+	return { so: demLoai(ds), ds };
 }
 
 const hangTrang = (id: string) =>
@@ -210,7 +224,7 @@ describe("lslt-luu-tru", () => {
 			const soBan = await db.taiLieuPhienBan.count({
 				where: { trangId: p.trangId },
 			});
-			const moc = new Date(Date.now() - 1);
+			const truocSuKien = await idSuKien(p.trangId);
 			const proposal = ok<{ diffHash: string }>(
 				await hoi("taiLieu.proposal", { id: luuTru }, "chu"),
 				"proposal luu tru",
@@ -236,7 +250,7 @@ describe("lslt-luu-tru", () => {
 					"CU",
 					"DA_DUYET",
 				]);
-				const { so, ds } = await suKienSau(p.trangId, moc);
+				const { so, ds } = await suKienMoi(p.trangId, truocSuKien);
 				expect(so).toEqual({ LUU_TRU: 1, CU: 1 });
 				expect(ds.find((d) => d.loai === "LUU_TRU")?.aiId).toBe(
 					phien[ai].nguoi,
@@ -284,10 +298,12 @@ describe("lslt-luu-tru", () => {
 		const id = await deXuatKhoiPhuc(b.slug, "cần lại");
 		const dx = await db.taiLieuDeXuat.findUniqueOrThrow({ where: { id } });
 		expect([dx.loai, dx.lyDoDeXuat]).toEqual(["KHOI_PHUC", "cần lại"]);
-		const moc = new Date(Date.now() - 1);
+		const truocSuKien = await idSuKien(b.trangId);
 		await duyet(id, "chu");
 		expect((await hangTrang(b.trangId)).archivedAt).toBeNull();
-		expect((await suKienSau(b.trangId, moc)).so).toEqual({ KHOI_PHUC: 1 });
+		expect((await suKienMoi(b.trangId, truocSuKien)).so).toEqual({
+			KHOI_PHUC: 1,
+		});
 		const tim = ok<{ rows: { slug: string }[] }>(
 			await hoi("taiLieu.tim", { q: tu }, "khac"),
 			"tim B",
@@ -362,5 +378,40 @@ describe("lslt-luu-tru", () => {
 		);
 		expect(theoId(cho.rows)).toEqual({ [choId]: "CHO_DUYET" });
 		expect(cho.total).toBe(1);
+	});
+});
+
+describe("tlkp", () => {
+	test("tlkp-dem: su kien sinh truoc khi chup khong duoc dem du luc o tuong lai, su kien sau thi duoc dem", async () => {
+		const t = await trangDangDung("Dem su kien");
+		const aiId = phien.chu.nguoi;
+		await db.taiLieuSuKien.create({
+			data: {
+				trangId: t.trangId,
+				loai: "DE_XUAT",
+				aiId,
+				luc: new Date(Date.now() + 5000),
+				chiTiet: {},
+			},
+		});
+		const moc = new Date(Date.now() - 1);
+		const truoc = await idSuKien(t.trangId);
+		const theoMoc = demLoai(
+			await db.taiLieuSuKien.findMany({
+				where: { trangId: t.trangId, luc: { gt: moc } },
+				select: { loai: true },
+			}),
+		);
+		if (theoMoc.DE_XUAT !== 1)
+			throw new Error("tlkp-dem: du lieu gieo khong kich duoc loi moc gio");
+		if (Object.keys((await suKienMoi(t.trangId, truoc)).so).length > 0)
+			throw new Error("tlkp-dem: dem nham su kien truoc moc");
+		await db.taiLieuSuKien.create({
+			data: { trangId: t.trangId, loai: "KHOI_PHUC", aiId, chiTiet: {} },
+		});
+		const sau = await suKienMoi(t.trangId, truoc);
+		if (sau.so.KHOI_PHUC !== 1)
+			throw new Error("tlkp-dem: ham moi khong dem su kien sau moc");
+		expect(sau.so).toEqual({ KHOI_PHUC: 1 });
 	});
 });
