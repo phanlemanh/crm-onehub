@@ -427,3 +427,28 @@ export type BangCotInput = z.infer<typeof bangCotInput>;
 export type BangCotThe = z.infer<typeof bangCotThe>;
 export type BangCotCot = z.infer<typeof bangCotCot>;
 export type BangCotOutput = z.infer<typeof bangCotOutput>;
+
+export const goiYCuaDealInput = z.object({ dealId: z.string().trim().min(1) });
+
+export const goiYKeHoachOutput = z.object({
+	id: z.string(),
+	dealId: z.string(),
+	companyId: z.string(),
+	companyName: z.string(),
+	nguoiNhanId: z.string(),
+	sinhLuc: z.date(),
+});
+
+export const goiYCuaDealOutput = goiYKeHoachOutput.nullable();
+
+export const boQuaGoiYInput = z.object({ id: z.string().trim().min(1) });
+
+export const boQuaGoiYOutput = z.object({
+	id: z.string(),
+	trangThai: z.literal("BO_QUA"),
+});
+
+export type GoiYCuaDealInput = z.infer<typeof goiYCuaDealInput>;
+export type GoiYCuaDealOutput = z.infer<typeof goiYCuaDealOutput>;
+export type BoQuaGoiYInput = z.infer<typeof boQuaGoiYInput>;
+export type BoQuaGoiYOutput = z.infer<typeof boQuaGoiYOutput>;
