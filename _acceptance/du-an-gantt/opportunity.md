@@ -52,3 +52,10 @@ Chủ kho gõ ở phiên thợ DA4 (máy M5) ngày 16/10/2026: «Cổng Đáng d
 T7+CN, quản trị thêm ngày lễ». `decided_at` là giờ phiên thợ ghi lại lời đó. Ngưỡng giữ đề xuất của máy ở mục
 «Ngưỡng chết / ngưỡng UAT». Ngày nghỉ: một lịch làm việc chung cho cả workspace, mặc định nghỉ Thứ Bảy và Chủ nhật,
 quản trị thêm ngày lễ bằng tay ở cài đặt.
+
+## Chính sách đợt
+
+chạm trần 3 lượt → thu phạm vi · đỏ sẵn trên nền → tách vòng vệ sinh · giữ cỡ khi tiêu chí là rào chắn
+
+Điều phối M5 đề xuất; chủ kho xác nhận ở phiên thợ DA4 lúc 2026-10-16T23:47:03Z («Đồng ý cả hai»). Máy áp ba luật này cho vòng DA4
+mà không hỏi lại.

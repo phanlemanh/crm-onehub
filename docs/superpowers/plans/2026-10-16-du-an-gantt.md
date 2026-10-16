@@ -8,6 +8,8 @@
 
 **Tech Stack:** Prisma + Postgres, NestJS + nestjs-trpc, Next.js (apps/app), nuqs, `@reui/gantt`, date-fns, bun test.
 
+**Gate 1.5:** chủ kho duyệt kế hoạch (2026-10-16T23:47:03Z, manh).
+
 **Spec:** `docs/superpowers/specs/2026-10-16-du-an-gantt-design.md` · hợp đồng `_acceptance/du-an-gantt/contract.md` (approved 16/10, manh) · `_acceptance/du-an-gantt/evals.yaml`.
 
 ## Global Constraints
