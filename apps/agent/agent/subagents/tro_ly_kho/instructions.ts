@@ -31,9 +31,12 @@ export default defineDynamic({
 			let hoiId: string;
 			try {
 				hoiId = await moHoi(ctx);
-			} catch (loi) {
+			} catch {
 				await ghiSaiCho(ctx);
-				throw loi;
+				console.warn(TAI_LIEU_AGENT.hoi.dungLai.canhBao);
+				return defineInstructions({
+					markdown: TAI_LIEU_AGENT.hoi.dungLai.chiDan,
+				});
 			}
 			return defineInstructions({
 				markdown: loiDanCo(hoiId, await cauHoiCua(hoiId)),

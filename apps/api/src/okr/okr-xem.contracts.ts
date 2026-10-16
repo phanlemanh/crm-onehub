@@ -317,3 +317,37 @@ export type DienBienOutput = z.infer<typeof dienBienOutput>;
 export type KhoiCuaToiInput = z.infer<typeof khoiCuaToiInput>;
 export type KhoiCuaToiOutput = z.infer<typeof khoiCuaToiOutput>;
 export type DongCuaToi = z.infer<typeof dongCuaToi>;
+
+export const quanhMucTieuInput = z.object({ objectiveId: ma });
+
+const nutQuanh = z.object({
+	id: z.string(),
+	loai: z.enum(["muc-tieu", "kr"]),
+	phia: z.enum(["tam", "tren", "duoi"]),
+	tieuDe: z.string(),
+	donVi: z.string(),
+	congTy: z.boolean(),
+	tienDo: z.number(),
+	mucTieuId: z.string(),
+});
+
+const canhQuanh = z.object({
+	tu: z.string(),
+	den: z.string(),
+	loai: z.enum(["cua", "gop"]),
+});
+
+const gopLenCongTy = z.object({
+	kr: z.object({ id: z.string(), tieuDe: z.string() }).nullable(),
+	mucTieu: z.object({ id: z.string(), tieuDe: z.string() }),
+});
+
+export const quanhMucTieuOutput = z.object({
+	tamId: z.string(),
+	laCongTy: z.boolean(),
+	nut: z.array(nutQuanh),
+	canh: z.array(canhQuanh),
+	gopLenCongTy: z.array(gopLenCongTy),
+});
+
+export type QuanhMucTieuOutput = z.infer<typeof quanhMucTieuOutput>;

@@ -1,0 +1,240 @@
+schema_version: 1
+slug: tat-ban-preview
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tbp_hop_le
+    paths:
+      - "vercel.json"
+      - "apps/app/vercel.json"
+      - "apps/agent/vercel.json"
+      - "apps/agent-okr/vercel.json"
+      - "apps/agent-okr/test/vercel-du-an.ts"
+      - "apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts"
+    expected: |
+      Ca "vercel-preview-moi-du-an > hop-le" doc bon tep that theo bang DU_AN cua
+      apps/agent-okr/test/vercel-du-an.ts (duong suy tu import.meta.dir — goc kho = ba cap tren thu muc
+      test, khong hardcode), JSON.parse tung tep, va doi cho MOI du an: khoa dinh DUNG {"$schema","git"},
+      git DUNG {"deploymentEnabled"}, deploymentEnabled la ban ghi nhanh -> boolean (zod .strict()).
+      Ca tinh ket qua cho CA BON du an (assert do dai 4 tren bang va tren ket qua), roi
+      expect(ketQua.filter(co loi)).toEqual([]) — dong loi cua bun liet dung cac du an lech kem ten, tep va
+      loi zod (hay loi doc tep). Bang co dung 4 phan tu (assert do dai).
+      Xanh: ca hop-le pass, 0 fail, ma 0. Chieu do o E4 (ca json, khoa, sai-cho).
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tbp_onehub
+    paths:
+      - "vercel.json"
+      - "apps/app/vercel.json"
+      - "apps/agent/vercel.json"
+      - "apps/agent-okr/vercel.json"
+      - "apps/agent-okr/test/vercel-du-an.ts"
+      - "apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts"
+    expected: |
+      Ca "vercel-preview-moi-du-an > onehub-trien-khai" ap ham duocTrienKhai(cauHinh, nhanh) cua
+      vercel-du-an.ts (minimatch khai trong devDependencies cua apps/agent-okr, khong tu viet bo khop;
+      khong mau khop -> true; co mau khop -> true khi IT NHAT mot mau khop mang true) cho "onehub" o
+      tung du an (assert do dai 4), roi expect(ketQua.filter(khong trien khai)).toEqual([]) — dong loi liet
+      du an chan onehub kem ten. Xanh: 1 pass. Chieu do o E4 (ca onehub).
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tbp_nhanh_khac
+    paths:
+      - "vercel.json"
+      - "apps/app/vercel.json"
+      - "apps/agent/vercel.json"
+      - "apps/agent-okr/vercel.json"
+      - "apps/agent-okr/test/vercel-du-an.ts"
+      - "apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts"
+    expected: |
+      Ca "vercel-preview-moi-du-an > nhanh-khac-khong-trien-khai" co bang NHANH viet truoc trong
+      vercel-du-an.ts, dung 18 ten theo thu tu: feat/a, fix/a, docs/a, chore/a, claude/a, proto/a,
+      test/a, ci/a, ops/a, thu/a, tam/a, dependabot/npm_and_yarn/a, main, release, test-lane-per-run,
+      onehub-thu, onehub/con, sao-luu/onehub. Ca doi do dai 18, tinh tich du an x nhanh va doi do dai 72
+      (moi cap duoc tinh), roi expect(cap.filter(trien khai)).toEqual([]) — dong loi cua bun liet DUNG cac
+      cap lech, moi cap kem "duAn" va "nhanh". Ca doi chung "vercel-preview-moi-du-an > bo-khop-bat-bay-sao" chay CUNG ham tren
+      { "*": false, "onehub": true } va doi fix/a -> true, main -> false, onehub -> true (bo khop phan
+      biet * voi **, khong phai ham hang). Xanh: 2 pass. Chieu do o E4 (ca mo-het-*, sao).
+
+  - id: E4
+    criterion: AC-1, AC-2, AC-3
+    executor: script
+    cmd: config:executors.script.tbp_pha_thu
+    paths:
+      - "vercel.json"
+      - "apps/app/vercel.json"
+      - "apps/agent/vercel.json"
+      - "apps/agent-okr/vercel.json"
+      - "apps/api/vercel.json"
+      - "apps/agent-okr/test/vercel-du-an.ts"
+      - "apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts"
+      - "_acceptance/tat-ban-preview/rang/**"
+    expected: |
+      Rang dung ban sao cay thu nho o .acceptance-runs/tat-ban-preview/sao-<ca>-<pid>/ (goc suy tu vi tri
+      rang): chep vercel.json goc kho, apps/app/vercel.json, apps/agent/vercel.json,
+      apps/agent-okr/vercel.json, apps/api/vercel.json, apps/agent-okr/test/vercel-du-an.ts va
+      apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts DUNG duong tuong doi; node_modules cua
+      apps/agent-okr la symlink. Moi ca chay `bun test test/vercel-preview-moi-du-an.spec.ts` trong
+      sao/apps/agent-okr:
+        lanh          — khong dot bien: ma 0, 4 pass, 0 fail (doi chung duong tren CUNG khuon ban sao).
+        mo-het-api    — vercel.json goc kho "**": false -> "**": true: ma khac 0, ca do DUNG
+                        nhanh-khac-khong-trien-khai (mot ca), khoi nhan (+) cua bun co phan tu
+                        {"duAn": "crm-onehub-api", "nhanh": "feat/a", "trienKhai": true}, dem dung 18 dong
+                        "duAn": "crm-onehub-api" va 0 dong "duAn" cua du an khac.
+        mo-het-app    — nhu tren voi apps/app/vercel.json; 18 dong "duAn": "crm-onehub-app", 0 du an khac.
+        mo-het-agent  — nhu tren voi apps/agent/vercel.json; 18 dong "duAn": "crm-onehub-agent", 0 du an khac.
+        sai-cho       — xoa vercel.json goc kho va them khoa git vao apps/api/vercel.json: ma khac 0, ca do
+                        hop-le, dong loi co "crm-onehub-api".
+        sao           — apps/app/vercel.json "**" -> "*": ma khac 0, ca do nhanh-khac-khong-trien-khai,
+                        khoi nhan co "nhanh": "fix/a" va khong co "nhanh": "main" (nhanh khong / van bi chan).
+        onehub        — bo "onehub": true o apps/agent/vercel.json: ma khac 0, ca do onehub-trien-khai.
+        json          — xoa dau } cuoi cua vercel.json goc kho: ma khac 0, ca do hop-le.
+        khoa          — them "crons": [] vao vercel.json goc kho: ma khac 0, ca do hop-le, dong loi co
+                        "crm-onehub-api".
+      Moi ca in mot dong "<ca>: <ket qua>". Ca khong dung chu ky -> ma 1. Dot bien khong an (tep khong
+      doi) -> ma 2 "DOT-BIEN-KHONG-AN". Ban sao khong dung duoc, hay bun khong chay toi test (khong thay
+      dong tong "N pass"/"N fail") -> ma 2, khong xanh. Rang khop dong "(fail) vercel-preview-moi-du-an >
+      <ca>" cua bun, khong khop khung ma nguon.
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tbp_goc_du_an_xanh
+    paths:
+      - "vercel.json"
+      - "apps/app/vercel.json"
+      - "apps/agent/vercel.json"
+      - "apps/agent-okr/vercel.json"
+      - "apps/agent-okr/test/vercel-du-an.ts"
+      - "_acceptance/tat-ban-preview/rang/**"
+    expected: |
+      Rang doc GET /v9/projects?repo=crm-onehub cua team (vercel api; nhi phan vercel lay tu PATH hoac
+      VERCEL_BIN, khong hardcode duong; khong doc bien nao), loc du an co
+      link.org "phanlemanh" va link.repo "crm-onehub", roi so voi bang DU_AN cua vercel-du-an.ts (import
+      that bang bun): tap ten bang nhau, va voi moi du an `${rootDirectory ? rootDirectory + "/" : ""}vercel.json`
+      bang dung tep cua bang. Xanh (ma 0): in "khop: <ten> -> <tep> (root <gia tri>)" cho ca bon. Lech ->
+      ma 1, in tung dong "lech: <ten>: Vercel doc <tep that>, bang ghi <tep bang>" hoac "thieu trong bang:
+      <ten>" / "thua trong bang: <ten>". Loi goi API -> ma 2.
+
+  - id: E6
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tbp_goc_du_an_do
+    paths:
+      - "apps/agent-okr/test/vercel-du-an.ts"
+      - "_acceptance/tat-ban-preview/rang/**"
+    expected: |
+      Cung ham so cua E5, tren bang DU_AN import that tu vercel-du-an.ts roi doi tep cua crm-onehub-api thanh
+      "apps/api/vercel.json" trong bo nho (dot bien sinh trong lan chay, tu bang that; bang da mang tep do
+      thi ma 2 "DOT-BIEN-KHONG-AN"). Che do do doi ham bao lech: ma 0
+      khi ham tra dung mot dong "lech: crm-onehub-api: Vercel doc vercel.json, bang ghi apps/api/vercel.json"
+      va khong dong lech nao khac. Ham bao khop -> ma 1. Dot bien khong an -> ma 2. Loi API -> ma 2.
+      Cap hai chieu voi E5 tren cung du lieu Vercel cua cung lan goi.
+
+  - id: E7
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tbp_vercel_preview_xanh
+    paths:
+      - "vercel.json"
+      - "apps/app/vercel.json"
+      - "apps/agent/vercel.json"
+      - "_acceptance/tat-ban-preview/rang/**"
+    expected: |
+      Rang lay ten nhanh hien tai (git rev-parse --abbrev-ref HEAD), doc moi su kien push cua nhanh qua
+      gh api repos/phanlemanh/crm-onehub/activity?ref=refs/heads/<nhanh>, giu su kien loai push, force_push
+      HOAC branch_creation (lan day dau cua nhanh moi GitHub ghi la branch_creation, khong phai push), va giu cac lan
+      day ma commit DAU (after) co cay chua ca ba tep (git cat-file -e <after>:vercel.json,
+      <after>:apps/app/vercel.json, <after>:apps/agent/vercel.json; fetch truoc, commit khong co tai cho ->
+      ma 2). Khong lan day nao duoc giu -> ma 2 "CHUA-DAY". Lan moi nhat chua du 5 phut -> cho toi du (toi da
+      10 phut tong). Voi TUNG commit dau duoc giu: doc deployment cua ba du an (crm-onehub-app,
+      crm-onehub-api, crm-onehub-agent) loc meta-githubCommitSha=<after> (bo loc cua API, khong phan trang
+      tay), va moi commit status GitHub cua no. Bo do lan day (ham timLanDay) va bo doc deployment
+      (ham trienKhaiCho) la CUNG ham E8 dung.
+      Xanh (ma 0): in "<n> lan day giu: <after[0:9]>, ..." roi "<du an>: 0 deployment cho <after[0:9]>" cho
+      moi cap, va khong status context nao bat dau "Vercel – crm-onehub-". Co deployment hay status -> ma 1, in
+      id/trang thai/context nguyen van. Loi API -> ma 2.
+
+  - id: E8
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tbp_vercel_preview_do
+    paths:
+      - "_acceptance/tat-ban-preview/rang/**"
+    expected: |
+      Cung timLanDay + trienKhaiCho cua E7, tren nhanh moc fix/gieo-nguoi-chiu-song-song va sha moc
+      1723dca25c205a7fd9cc7aa4a174797cfcf3e877 (lan day 2026-10-16T00:58:49Z e12f6e6b3 -> 1723dca25, truoc
+      vong nay; ba du an deu co Preview READY: app dpl_BYXyh7fE399TJoe4Nd4QyZL9GwAp, api
+      dpl_7njZhiiVhkrDWxoeLfYFbsQpx53G, agent dpl_75r8mrb1CmDPBpaTucpvuoYCEQqE), bo dieu kien ba tep va bo
+      buoc cho 5 phut. Che do do doi: timLanDay tra mot lan day co after = 1723dca25… (chung minh duong tra
+      lan day doc that), VA trienKhaiCho bat duoc ca ba — ma 0 khi rang in "lan day moc: 1723dca25" va
+      "<du an> co deployment cho 1723dca25: dpl_…" cho ca ba du an VA bo loc status cua CUNG ham doMotSha
+      bat duoc dong "status Vercel – <du an> …" cho ca ba du an (doi chung duong cho ve status cua E7: bo loc
+      tien to "Vercel – crm-onehub-" khop status that). Khong thay lan day moc, thieu deployment hay thieu
+      status cua du an nao -> ma 1, in "thieu: …". Loi API -> ma 2.
+
+  - id: E9
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tbp_vercel_production_xanh
+    status: not-run
+    paths:
+      - "vercel.json"
+      - "apps/app/vercel.json"
+      - "apps/agent/vercel.json"
+      - "_acceptance/tat-ban-preview/rang/**"
+    expected: |
+      Chi chay duoc SAU gop, o S5: rang nhan sha M cua commit gop tren onehub (doi so bat buoc; thieu ->
+      ma 2), doi M co tren origin/onehub va cay M co ba tep moi (git cat-file -e M:<tep>; thieu -> ma 2
+      "M-THIEU-TEP"). Cho toi da 15 phut toi khi MOI du an trong bon (app, api, agent, agent-okr) co
+      deployment target production, source "git", cho M o trang thai cuoi. Ban source khac "git" bi bo qua
+      va in "bo qua <dpl> (source <x>)". Roi doc /v9/projects/crm-onehub-api, doi crons.definitions co dung
+      tap path cua apps/api/vercel.json tai M (5 path).
+      Xanh (ma 0): in "<du an> production <dpl> (git): READY cho <M>" cho ca bon va "crons: 5/5 khop".
+      ERROR, hay CANCELED khong phai vi bi thay -> ma 1, in readyStateReason nguyen van. CANCELED vi commit
+      moi hon thay -> ma 2 "BI-THAY". Khong co ban git sau 15 phut -> ma 1 "KHONG-CO-PRODUCTION <du an>".
+      Crons lech -> ma 1, in tap thieu/thua. Loi API -> ma 2.
+
+  - id: E10
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tbp_vercel_production_do
+    paths:
+      - "_acceptance/tat-ban-preview/rang/**"
+    expected: |
+      Cung ham doc trang thai production cua E9, tren sha moc 226231c9cfb19a0c76cf28f2a8ded8d712c87948 (gop
+      #244), chi du an agent-okr (ban git dpl_7gzCfDYa3dzDcBe4jh36BLmKuTrd bi huy boi Ignored Build Step).
+      Che do do doi ham bao KHONG READY: ma 0 khi rang in "agent-okr production dpl_7gzCfDYa… (git):
+      CANCELED" kem readyStateReason nguyen van. Ham bao READY -> ma 1. Loi API -> ma 2.
+
+  - id: E11
+    criterion: AC-7
+    executor: judgment
+    cmd: judgment
+    question: |
+      Mot nguoi van hanh crm doc muc Preview cua docs/production.md va cac doan cua docs/setup.md noi ve
+      Preview, cung bon tep vercel.json di kem. Tra loi: (1) tai lieu co noi ro Preview da tat o CA BON du an
+      (app, api, agent, agent-okr) va chi dung tep tat cua tung du an khong — rieng api la vercel.json o GOC
+      KHO, va apps/api/vercel.json chi mang cron, khong tat duoc gi? (2) con cau nao mo ta Preview cua app,
+      api, agent nhu dang chay (vd «moi lan day mot nhanh, app, API va agent dung ban Preview») ma khong
+      danh dau la lich su khong? (3) tai lieu con dan kiem ban Production READY (khong Canceled) sau moi lan
+      doi vercel.json hay cai dat build khong? (4) co cau nao khuyen dung Ignored Build Step theo VERCEL_ENV
+      khong?
+    inputs:
+      - docs/production.md
+      - docs/setup.md
+      - vercel.json
+      - apps/app/vercel.json
+      - apps/agent/vercel.json
+      - apps/api/vercel.json
+    expected: |
+      PASS khi ca bon: (1) co, dung bon tep va bay apps/api/vercel.json; (2) khong con cau nao mo ta Preview
+      ba du an nhu dang chay; (3) con loi dan kiem Production READY; (4) khong khuyen Ignored Build Step
+      (canh bao dung no thi duoc). FAIL neu thieu mot. UNCERTAIN khi tai lieu mau
+      thuan voi tep vercel.json.
