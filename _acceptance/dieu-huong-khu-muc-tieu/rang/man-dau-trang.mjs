@@ -499,25 +499,29 @@ try {
 				{ name: "lang", value: "vi", domain: host, path: "/" },
 			);
 			await t.evaluateOnNewDocument(() => {
-				const moc = { h1: -1, nut: -1, cho: false, dinhDau: -1, dinhCuoi: -1 };
-				Object.assign(window, { __mocTai: moc });
-				const soi = () => {
-					const bay = performance.now();
-					const the = document.querySelector("[role=tablist]");
-					if (moc.h1 < 0 && document.querySelector("h1")) {
-						moc.h1 = bay;
-						moc.dinhDau = Math.round(the?.getBoundingClientRect().top ?? -1);
-					}
-					if (document.querySelector("[data-hang-cho]")) moc.cho = true;
-					if (moc.nut < 0 && document.querySelector("[data-nut=them-muc-tieu]"))
-						moc.nut = bay;
-					if (moc.dinhDau < 0 && the)
-						moc.dinhDau = Math.round(the.getBoundingClientRect().top);
+				const moc = {
+					h1: -1,
+					nut: -1,
+					cho: false,
+					dayDau: -1,
+					dayCuoi: -1,
 				};
-				new MutationObserver(soi).observe(document, {
-					childList: true,
-					subtree: true,
-				});
+				Object.assign(window, { __mocTai: moc });
+				const hien = (sel) =>
+					[...document.querySelectorAll(sel)].find(
+						(e) => e.getClientRects().length > 0,
+					);
+				const khung = () => {
+					const bay = performance.now();
+					const dau = hien("[data-slot=page-shell-header]");
+					if (moc.h1 < 0 && hien("h1")) moc.h1 = bay;
+					if (dau && moc.dayDau < 0)
+						moc.dayDau = Math.round(dau.getBoundingClientRect().bottom);
+					if (hien("[data-hang-cho]")) moc.cho = true;
+					if (moc.nut < 0 && hien("[data-nut=them-muc-tieu]")) moc.nut = bay;
+					if (moc.nut < 0) requestAnimationFrame(khung);
+				};
+				requestAnimationFrame(khung);
 			});
 			const batDau = Date.now();
 			await t.goto(`${d.APP}/${d.slug()}/okr/theo-don-vi`, {
@@ -531,9 +535,10 @@ try {
 			await choMs(500);
 			const moc = await t.evaluate(() => {
 				const m = Reflect.get(window, "__mocTai");
-				m.dinhCuoi = Math.round(
-					document.querySelector("[role=tablist]")?.getBoundingClientRect()
-						.top ?? -1,
+				m.dayCuoi = Math.round(
+					document
+						.querySelector("[data-slot=page-shell-header]")
+						?.getBoundingClientRect().bottom ?? -1,
 				);
 				return m;
 			});
@@ -541,10 +546,10 @@ try {
 				moc.h1 >= 0 &&
 				moc.nut >= 0 &&
 				moc.h1 <= moc.nut &&
-				moc.dinhDau === moc.dinhCuoi;
+				moc.dayDau === moc.dayCuoi;
 			dong(
 				dung,
-				`${dung ? "DUNG TAI" : "TAI: sai"} ${kho}: tieu de ${Math.round(moc.h1)}ms · nut them ${Math.round(moc.nut)}ms · khung xuong trinh duyet ${moc.cho ? "co" : "khong"} · dinh thanh the ${moc.dinhDau}px -> ${moc.dinhCuoi}px · tong ${Date.now() - batDau}ms`,
+				`${dung ? "DUNG TAI" : "TAI: sai"} ${kho}: tieu de ${Math.round(moc.h1)}ms · nut them ${Math.round(moc.nut)}ms · khung xuong trinh duyet ${moc.cho ? "co" : "khong"} · day dau trang ${moc.dayDau}px -> ${moc.dayCuoi}px · tong ${Date.now() - batDau}ms`,
 			);
 			await t.close();
 		}
