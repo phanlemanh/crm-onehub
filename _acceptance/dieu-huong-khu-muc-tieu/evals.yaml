@@ -251,6 +251,17 @@ evals:
       - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-deals-390.png
       - _acceptance/dieu-huong-khu-muc-tieu/evidence/khoa-ly-do-1440.png
       - _acceptance/dieu-huong-khu-muc-tieu/evidence/khoa-ly-do-390.png
+    paths:
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-theo-don-vi-1440.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-theo-don-vi-390.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-cua-toi-1440.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-cua-toi-390.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-suc-khoe-1440.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-suc-khoe-390.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-deals-1440.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-deals-390.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/khoa-ly-do-1440.png"
+      - "_acceptance/dieu-huong-khu-muc-tieu/evidence/khoa-ly-do-390.png"
     expected: "Đọc được cùng khuôn ở cả hai khổ; dòng lý do nằm ngay dưới tiêu đề và nói vì sao nút khoá."
 
   - id: E15
