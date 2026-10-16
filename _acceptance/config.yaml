@@ -44,6 +44,8 @@ feature_loop:
     - chuyen-goi-dieu-phoi/E10
     - bo-ca-mau-quy-4/E7
     - thu-haiku-tro-ly-okr/E7
+    - pre-push-t1/E9
+    - pre-push-t1/E10
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
