@@ -1,0 +1,119 @@
+slug: goi-y-mo-ke-hoach
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gymk_sinh
+    expected: "exit 0; -t gy-sinh của apps/api/test/goi-y-mo-ke-hoach.spec.ts. Dựng qua đường ghi thật: công ty không kế hoạch, người phụ trách 'gy-p', bốn giai đoạn (M1, M2 mở; W thắng; L thua) cộng W2 thắng cho ca lưu trữ. Ma trận 12 ô viết trước trong spec ({tu: tao|mo|thang|thua} × {den: mo|thang|thua}), mỗi ô một deal mới đưa tới giai đoạn đi rồi gọi deals.setStage qua caller tRPC thật (ô 'tao' gọi deals.create với stage đích; ô thắng→thắng đi W→W2; ô mở→mở đi M1→M2); số ô đã chạy khác 12 thì ném 'gy: ma tran thieu o <n>'. Ba ô đi từ thắng (thắng→mở, thắng→thắng, thắng→thua): gợi ý sinh lúc dựng deal tới W được bỏ qua bằng onboarding.boQuaGoiY thật TRƯỚC lần chuyển đo, để điều kiện «deal không có gợi ý chờ» không che ô; mỗi ô đếm delta gợi ý của riêng lần chuyển đo. Ba ô sinh (tao→thang, mo→thang, thua→thang): số GoiYKeHoach của deal khác 1 thì ném 'gy: o sinh sai <o> <n>'; trangThai khác CHO, nguoiNhanId khác gy-p, companyId khác công ty thì ném 'gy: goi y sai truong <o> <truong>'; chuyenLuc khác occurredAt của dòng STAGE_CHANGE của lần chuyển (ô tao: khác deal.createdAt) thì ném 'gy: chuyenLuc lech <o>'. Chín ô còn lại: delta gợi ý khác 0 thì ném 'gy: o khong sinh lai sinh <o>'. bulkSetStage mở→thắng cho hai deal: mỗi deal khác đúng một gợi ý thì ném 'gy: bulk khong sinh'. Lưu trữ giai đoạn W với moveTo W2 có một deal thắng mà gợi ý đã bỏ qua (không có gợi ý chờ): thêm gợi ý thì ném 'gy: luu tru giai doan sinh'. Chiều đỏ ở E11 (a), (b), (i)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/src/goi-y-ke-hoach.ts, apps/api/src/deals/**, apps/api/src/giai-doan/**, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gymk_chan
+    expected: "exit 0; -t gy-chan của apps/api/test/goi-y-mo-ke-hoach.spec.ts trên fixture của E1. (1) D có gợi ý CHO, chuyển thắng→mở→thắng: số gợi ý của D khác 1, hoặc setStage ném lỗi trùng khoá (P2002 trên chỉ mục gợi ý chờ), thì ném 'gy: chan cho khong chan'. (2) bỏ qua gợi ý của D bằng onboarding.boQuaGoiY rồi thắng→mở→thắng: số gợi ý CHO của D khác 1 hay tổng khác 2 thì ném 'gy: sinh lai sau bo qua sai'. (3) công ty của E có kế hoạch mở (createFromTemplate thật): E mở→thắng có gợi ý thì ném 'gy: chan ke hoach mo khong chan'; đóng kế hoạch (closePlan) rồi E thắng→mở→thắng không có gợi ý thì ném 'gy: ke hoach dong van chan' (đối chứng dương cùng fixture). (4) Promise.all hai setStage mở→thắng trên cùng deal F (hai caller riêng): số gợi ý CHO của F khác 1 thì ném 'gy: dong thoi sinh <n>'; migration có chỉ mục duy nhất một phần WHERE trangThai = 'CHO' trên dealId, đọc từ pg_indexes, không thì ném 'gy: thieu chi muc cho'. Chiều đỏ ở E11 (c), (d)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/**, packages/db/src/goi-y-ke-hoach.ts, apps/api/src/deals/**, apps/api/src/onboarding/**, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gymk_xu_ly
+    expected: "exit 0; -t gy-xu-ly của apps/api/test/goi-y-mo-ke-hoach.spec.ts. Ma trận viết trước bốn người × hai thủ tục: người nhận 'gy-p' (member), quản trị 'gy-qt' (admin), người thứ ba 'gy-x' (member), người vai okr 'gy-okr'. boQuaGoiY bởi gy-p: trangThai khác BO_QUA, xuLyBoiId khác gy-p hay xuLyLuc null thì ném 'gy: bo qua nguoi nhan sai'; bởi gy-qt trên gợi ý khác: xuLyBoiId khác gy-qt thì ném 'gy: bo qua quan tri sai'; bởi gy-x và gy-okr: không phải TRPCError FORBIDDEN hay gợi ý đổi (so cả hàng trước/sau) thì ném 'gy: nguoi khac bo qua duoc <ai>'; goiYCuaDeal bởi gy-x khác null thì ném 'gy: nguoi khac doc duoc', bởi gy-p trả gợi ý CHO của deal đang thắng, khác thì ném 'gy: nguoi nhan khong doc duoc' (đối chứng dương); deal của gợi ý chuyển thắng→mở thì goiYCuaDeal bởi gy-p trả null, không thì ném 'gy: goi y hien khi deal roi thang'. boQuaGoiY lại gợi ý đã BO_QUA: không phải BAD_REQUEST chứa nguyên văn 'Gợi ý này đã được xử lý.' hay hàng đổi thì ném 'gy: xu ly lai khong bi chan'. Số ô đã chạy khác số hàng bảng thì ném 'gy: bang quyen thieu o'. Chiều đỏ ở E11 (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/**, packages/db/src/goi-y-ke-hoach.ts, packages/validation/src/goi-y-ke-hoach.ts, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gymk_dong
+    expected: "exit 0; -t gy-dong của apps/api/test/goi-y-mo-ke-hoach.spec.ts. Công ty C hai deal thắng, mỗi deal một gợi ý CHO, cộng một gợi ý BO_QUA cũ; công ty K một gợi ý CHO. (1) gy-x (không phải người nhận) gọi onboarding.createFromTemplate cho C qua caller tRPC thật: hai gợi ý CHO của C khác DA_MO, planId khác kế hoạch mới, xuLyBoiId khác gy-x hay xuLyLuc null thì ném 'gy: tao ke hoach khong dong goi y <id>'; gợi ý BO_QUA đổi thì ném 'gy: dong ca goi y da bo qua'; gợi ý của K đổi thì ném 'gy: dong goi y cong ty khac'. (2) REST POST /onboarding/plans qua app Nest thật cho một công ty C2 cùng hình: kết quả khác (1) thì ném 'gy: rest khong dong goi y'. (3) createFromTemplate với khuôn đã lưu trữ cho C3 có gợi ý CHO: không ném hay gợi ý đổi thì ném 'gy: tao hong van dong goi y'. Chiều đỏ ở E11 (f)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/**, packages/db/src/goi-y-ke-hoach.ts, apps/api/test/goi-y-mo-ke-hoach.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.gymk_the
+    expected: "exit 0; apps/app/test/goi-y-ke-hoach.dom.tsx, mock tRPC theo khuôn của ke-hoach-sheet.dom.tsx, dựng DealSheet thật. Ca -t gy-the-hien: goiYCuaDeal trả gợi ý CHO của công ty 'Cty Gợi Ý' → có thẻ chứa nguyên văn chữ của messages (record-sheet deal.goiYKeHoach.tieuDe('Cty Gợi Ý')) cùng hai nút 'Mở kế hoạch' và 'Bỏ qua', không thì ném 'gy: the khong hien'. Ca -t gy-the-an: goiYCuaDeal trả null, đang tải, và trả lỗi — mỗi ca không có thẻ và tab Tổng quan vẫn hiện, sai ca nào ném 'gy: the hien sai <ca>'. Ca -t gy-the-mo: bấm 'Mở kế hoạch' → ô TaoKeHoach mở với ô công ty chỉ đọc mang 'Cty Gợi Ý', không thì ném 'gy: mo ke hoach khong khoa cong ty'. Ca -t gy-the-bo-qua: bấm 'Bỏ qua' → thẻ mất trước khi mutation trả, boQuaGoiY gọi đúng một lần với {id} của gợi ý, không thì ném 'gy: bo qua khong lac quan'; mutation trả BAD_REQUEST 'Gợi ý này đã được xử lý.' → thẻ hiện lại và lời đó hiện trong toast, không thì ném 'gy: bo qua loi mat the'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/goi-y-ke-hoach.tsx, "apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx", apps/app/lib/messages/record-sheet.ts, apps/app/test/goi-y-ke-hoach.dom.tsx]
+
+  - id: E5b
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.gymk_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static chạy trên mọi tệp .tsx mới hay sửa dưới apps/app/components/crm/record-sheet và apps/app/app/(app)/[slug]/onboarding (danh sách lấy bằng git diff --name-only từ merge-base với origin/onehub, lọc theo glob trong lệnh); một tệp vi phạm sàn thiết kế thì thoát khác 0 nêu tệp; danh sách rỗng thì thoát 1 với 'gy: san thiet ke khong co tep' (thước không được xanh khi không đo gì). Chiều đỏ: một tệp thử có className='rounded-[7px]' trong bản sao làm lệnh thoát khác 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/onboarding/**", apps/app/components/crm/record-sheet/**]
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gymk_man
+    steps:
+      - "Chạy NGUYÊN VĂN từ gốc kho lệnh của config:executors.script.gymk_man (bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/goi-y-mo-ke-hoach/rang/man.mjs\") — phiên đo dựng kho crm_<cây>_do, API và app của chính cây; man.mjs chạy cảnh cây trước màn đầu, lệch cây thì mã 2"
+      - "man.mjs gieo qua API thật: công ty 'Cty Màn Gợi Ý' không kế hoạch, deal của người P, rồi P gọi deals.setStage sang giai đoạn thắng"
+      - "Mở sheet deal ở 1280 và 375 bằng phiên P → thẻ gợi ý hiện với tên công ty và hai nút, không tràn ngang → ảnh evidence/E6-the-<rộng>.png; dòng «E6 the hien <rộng>» phải đạt"
+      - "Bấm «Bỏ qua» ở 1280 → thẻ mất trên màn; đọc gợi ý qua API thấy trangThai BO_QUA → dòng «E6 bo qua» đạt; ảnh evidence/E6-sau-bo-qua-1280.png"
+      - "Phiên người Q (member khác) mở cùng sheet → đối chứng dương trước: tên deal hiện trên sheet của Q (không về trang đăng nhập, không 404), không thì in «E6 nguoi khac: KHONG DO DUOC» và thoát khác 0; rồi không có thẻ → dòng «E6 nguoi khac khong thay» đạt"
+      - "Tự thử chiều đỏ, chạy trước lượt thật trên cùng dữ liệu: man.mjs --tu-thu (1) gỡ phần tử [data-goi-y-ke-hoach] khỏi trang của P bằng page.evaluate trước khi đọc → phải in «E6 the hien 1280: KHONG DAT»; (2) chèn một phần tử [data-goi-y-ke-hoach] giả vào trang của Q → phải in «E6 nguoi khac khong thay: KHONG DAT»; (3) chèn lại thẻ sau khi bấm «Bỏ qua» → phải in «E6 bo qua: KHONG DAT»; thiếu một trong ba dòng tự thử thì cả eval không đạt"
+      - "Đọc mọi dòng «E6 …» trong output; mọi dòng phải đạt, rồi mở từng ảnh E6-*.png để chấm"
+    expected: "Trên bàn đo của chính cây, thẻ gợi ý hiện ở sheet deal vừa thắng cho người phụ trách ở 1280 và 375 không tràn ngang, mất sau «Bỏ qua» và cơ sở dữ liệu ghi BO_QUA, không hiện cho người khác; lượt tự thử trên trang đã gỡ thẻ báo KHONG DAT. Ảnh ở .acceptance-runs/goi-y-mo-ke-hoach/evidence/E6-*.png; người chấm nhìn ảnh."
+    evidence_required: [run_id, screenshot, observed, verified_at]
+    paths: [apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/goi-y-ke-hoach.tsx, apps/api/src/onboarding/**, apps/api/src/deals/**, _acceptance/goi-y-mo-ke-hoach/rang/man.mjs]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gymk_nhac
+    expected: "exit 0; -t gy-nhac của apps/agent/test/goi-y-mo-ke-hoach.integration.spec.ts. P có ba gợi ý: G1 CHO của deal đang thắng, G2 CHO của deal đã rời thắng, G3 BO_QUA; Q không có gợi ý. Gọi viecCanNhac cửa sổ buổi sáng lúc 09:00 giờ VN: kiểm TRƯỚC — bộ gom của P có mục mang goiYId G2 hay G3 thì ném 'gy: nhac goi y da xu ly <id>'; rồi bộ gom của P không có đúng một mục loai 'goi-y-ke-hoach' mang goiYId G1 thì ném 'gy: nhac goi y sai <n>'; mục thiếu companyName hay tên deal thì ném 'gy: nhac goi y thieu ten'; bộ gom của Q có mục loại đó thì ném 'gy: nhac goi y lac nguoi'. Chạy chayNhac của nhac-ke-hoach.ts với kênh giả: tin của P không chứa tên công ty của G1 thì ném 'gy: tin nhac thieu goi y'; ghiThongBao không nhận một nội dung loai 'goi-y-ke-hoach' parse được bằng noiDungThongBao thì ném 'gy: thong bao goi y sai'. Bỏ qua G1 rồi gom lại: còn mục goi-y-ke-hoach thì ném 'gy: nhac goi y da xu ly'. Chiều đỏ ở E11 (g)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, packages/db/src/goi-y-ke-hoach.ts, packages/validation/src/nhac-ke-hoach.ts, packages/validation/src/thong-bao.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/test/goi-y-mo-ke-hoach.integration.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.gymk_thuoc
+    expected: "exit 0; apps/api/test/goi-y-mo-ke-hoach-do-nguong.spec.ts gieo kho mẫu qua hàm ghi thật (deals.setStage, deals.create, createFromTemplate, boQuaGoiY; đồng hồ giả cho now), đáp án viết trước trong spec: lần chuyển mở→thắng, gợi ý bỏ qua sau 1 ngày; thua→thắng, gợi ý mở kế hoạch sau 4 ngày; deal tạo thẳng ở thắng rồi chuyển sang thắng khác cột (tính một lần, giai đoạn đầu đọc từ meta.from); thắng→thắng (không tính); lần chuyển khi công ty có kế hoạch mở (không tính); gợi ý sinh 2 ngày trước --den (chưa phán). Chạy _acceptance/goi-y-mo-ke-hoach/rang/do-nguong.mjs --tu --den: JSON {lanChuyen 3, dealThangThieuGoiY 0, goiYPhan 2, xuLyKip 1, tiLe 0.5} khác đáp án thì ném 'gy: thuoc dem sai <truong>'; mã thoát khác 0 thì ném 'gy: thuoc do sai chieu xanh'. Chiều thiếu gợi ý: xoá một hàng GoiYKeHoach trong kho thử của spec (chỉ ở bài kiểm) → dealThangThieuGoiY 1 và mã 2, không thì ném 'gy: thuoc khong bat thieu goi y'. Chiều dưới ngưỡng: thêm một gợi ý xử lý sau 5 ngày → tiLe 1/3 và mã 2, không thì ném 'gy: thuoc khong do khi duoi nguong'. Mẫu số độc lập: xoá MỌI hàng GoiYKeHoach → lanChuyen vẫn 3, dealThangThieuGoiY 3 và mã 2, không thì ném 'gy: mau so doc tu bang goi y'. Không đo được thì không được xanh: cửa sổ không có lần chuyển nào → mã 3, không thì ném 'gy: thuoc xanh khi khong do'; gợi ý trong cửa sổ đều chưa phán (goiYPhan 0) → mã 3, không thì ném 'gy: thuoc xanh khi khong do'; thiếu --den → mã 3, không thì ném 'gy: thuoc thieu doi so khong chan'. JSON mang chiDoc = SHOW transaction_read_only trong chính giao dịch của thước và phải là true, không thì ném 'gy: thuoc khong chi doc'. Chiều đỏ ở E11 (h), (j)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/goi-y-mo-ke-hoach/rang/do-nguong.mjs, apps/api/test/goi-y-mo-ke-hoach-do-nguong.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: judgment
+    question: >-
+      Đọc CONTEXT.md (mục «Gợi ý mở kế hoạch» và mục «Gợi ý»), docs/api.md (mục router onboarding) và
+      docs/plan/lo-trinh-viec-du-an.json (hàng DA3b) như một người mới vào kho. Tài liệu có nói rõ sáu điều không:
+      (1) Gợi ý mở kế hoạch là một bản ghi máy sinh khi deal chuyển sang giai đoạn thắng, khác «Gợi ý» là câu hướng
+      xử lý đi kèm nhắc kế hoạch im; (2) máy sinh khi lần chuyển đi từ giai đoạn không phải thắng (hay tạo mới) sang
+      thắng, công ty chưa có kế hoạch mở, và deal chưa có gợi ý đang chờ — mỗi lần chuyển một gợi ý; (3) ba kết cục
+      chờ · đã mở kế hoạch · đã bỏ qua, và chỉ người nhận hoặc quản trị bỏ qua được; (4) tạo kế hoạch cho công ty
+      bằng bất kỳ đường nào cũng đóng các gợi ý đang chờ của công ty đó; (5) hai thủ tục goiYCuaDeal và boQuaGoiY
+      của router onboarding; (6) hàng DA3b không còn ghi «chưa mở». Tài liệu không dùng chữ «dự án» cho kế hoạch
+      30 ngày. Trả PASS khi đủ sáu điều, FAIL nêu điều thiếu.
+    inputs: [CONTEXT.md, docs/api.md, docs/plan/lo-trinh-viec-du-an.json]
+    evidence_required: [verdict, rationale, verified_at]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.gymk_hoi_quy
+    expected: "exit 0; node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu rồi --moc <mốc ghim trong lệnh, merge-base của nhánh với origin/onehub> — quét MỌI tệp kiểm đã có ở mốc mà nhánh sửa, xoá hay đổi tên (git diff --name-status -M --diff-filter=MDR theo mẫu tệp kiểm); một câu expect sẵn có bị xoá hay sửa thì thoát 1 nêu tệp và câu; danh sách cho-phép rỗng; rồi bun run check-types thoát 0. Chiều đỏ: --tu-thu dựng một tệp kiểm giả có một expect bị xoá và phải thấy thoát 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/**/test/**", "packages/**/test/**", "apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts"]
+
+  - id: E11
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.gymk_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly như ke-hoach-sinh-viec: với mỗi cặp chạy phép đo trên bản sao lành phải xanh, rồi thay một lần chuỗi vật thật và chạy lại phải đỏ với đúng thông điệp ghim — (a) bỏ lời gọi sinhGoiYKeHoach ở chuyenGiaiDoanTrongTx → E1 'gy: o sinh sai mo→thang'; (b) bỏ lời gọi ở DealsService.create → E1 'gy: o sinh sai tao→thang'; (c) bỏ điều kiện «công ty không có kế hoạch mở» → E2 'gy: chan ke hoach mo khong chan'; (d) bỏ điều kiện «deal không có gợi ý chờ» → E2 'gy: chan cho khong chan'; (e) bỏ kiểm quyền ở boQuaGoiY → E3 'gy: nguoi khac bo qua duoc'; (f) bỏ bước đóng gợi ý trong createFromTemplate → E4 'gy: tao ke hoach khong dong goi y'; (g) bỏ lọc trangThai CHO ở nguồn nhắc → E7 'gy: nhac goi y da xu ly'; (h) thước đếm mẫu số từ bảng gợi ý thay vì STAGE_CHANGE → E8 'gy: mau so doc tu bang goi y'; (i) bỏ điều kiện «giai đoạn đi không phải thắng» → E1 'gy: o khong sinh lai sinh thang→thang'; (j) thước bỏ nhánh «không đo được» (mẫu số 0) → E8 'gy: thuoc xanh khi khong do'. Mỗi thông điệp ghim được chạy thử tay trên bản sao đột biến trước khi chép vào dot-bien.mjs, để thông điệp ghim là thông điệp ra trước thật. Thiếu cặp nào hay bản sao lành đỏ thì thoát khác 0 nêu cặp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs, packages/db/src/goi-y-ke-hoach.ts, packages/db/src/onboarding-nhac.ts, apps/api/src/deals/**, apps/api/src/onboarding/**, _acceptance/goi-y-mo-ke-hoach/rang/do-nguong.mjs]
