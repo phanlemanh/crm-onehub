@@ -1,6 +1,15 @@
 import { db, EnrichmentStatus } from "@crm/db";
 import { mirrorBrandImages } from "./brand-images";
-import { brandToUpdate, filledFields, stillFillable } from "./brand-mapping";
+import { docBrandRaw } from "@crm/validation/brand-raw";
+import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
+import {
+	brandToUpdate,
+	filledFields,
+	type MayDien,
+	stillFillable,
+	truongMayDien,
+} from "./brand-mapping";
+import type { Brand } from "./context-dev";
 import { brandByDomain, contextDevEnabled } from "./context-dev";
 import { UNLESS_COMPLETE } from "./enrichment";
 
@@ -75,6 +84,13 @@ export async function runBrand({
 		return { enriched: false, reason: "No domain on this company." };
 	}
 
+	const nenTang = nenTangCuaTenMien(company.domain);
+	if (nenTang) {
+		const reason = `${company.domain} is a ${nenTang.ten} page, not the company's own site.`;
+		await settle(companyId, EnrichmentStatus.SKIPPED, reason, UNLESS_COMPLETE);
+		return { enriched: false, reason };
+	}
+
 	const charge = spend(2);
 	if (!charge.ok) return { enriched: false, reason: charge.reason };
 
@@ -102,7 +118,12 @@ export async function runBrand({
 		};
 	}
 
-	const update = brandToUpdate(result.brand, snapshot(company));
+	const brandCu = await brandLanTruoc(companyId);
+	const mayDien = (current: Parameters<typeof truongMayDien>[1]): MayDien =>
+		brandCu ? truongMayDien(brandCu, current) : new Set();
+
+	const truoc = snapshot(company);
+	const update = brandToUpdate(result.brand, truoc, mayDien(truoc));
 
 	const { mirrored } = await mirrorBrandImages(companyId, update);
 
@@ -114,7 +135,8 @@ export async function runBrand({
 
 		if (!current) return null;
 
-		const data = stillFillable(update, snapshot(current));
+		const hienTai = snapshot(current);
+		const data = stillFillable(update, hienTai, mayDien(hienTai));
 
 		await tx.company.update({
 			where: { id: companyId },
@@ -148,6 +170,21 @@ function snapshot<T extends { name: string; domain: string | null }>(
 	company: T,
 ) {
 	return { ...company, nameIsPlaceholder: company.name === company.domain };
+}
+
+async function brandLanTruoc(companyId: string): Promise<Brand | null> {
+	const truoc = await db.companyEnrichment.findUnique({
+		where: { companyId },
+		select: { raw: true },
+	});
+	if (!truoc) return null;
+
+	const doc = docBrandRaw(truoc.raw);
+	if (!doc.ok) {
+		console.warn(`brand raw unreadable: ${doc.loi}`);
+		return null;
+	}
+	return doc.brand;
 }
 
 export function brandOutcome(result: BrandResult): string {

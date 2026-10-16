@@ -11,6 +11,7 @@
 		"./ly-do-can-chinh": "./src/ly-do-can-chinh.ts",
 		"./agent-manifest": "./src/agent-manifest.ts",
 		"./agent-transcript": "./src/agent-transcript.ts",
+		"./brand-raw": "./src/brand-raw.ts",
 		"./builder-question": "./src/builder-question.ts",
 		"./cong-nghien-cuu": "./src/cong-nghien-cuu.ts",
 		"./enrichment-queue": "./src/enrichment-queue.ts",
