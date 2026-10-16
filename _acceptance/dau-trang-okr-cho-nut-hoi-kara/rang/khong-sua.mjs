@@ -13,13 +13,13 @@ const MA_DO = 1;
 const MA_KHONG_DO = 2;
 const TRAN_LENH_MS = 600_000;
 const GIU = [
-	"apps/app/test/khung-man-chung.dom.tsx",
-	"apps/app/test/khung-man-chung.spec.ts",
+	"apps/app/test/okr-dau-trang-khu.dom.tsx",
+	"apps/app/test/nut-hoi-kara-thay-khung.dom.tsx",
 ];
-const KIEM = [
-	"cd apps/app && bun test ./test/khung-man-chung.spec.ts",
-	"cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx",
-];
+const KIEM = GIU.map(
+	(tep) =>
+		`cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./${tep.replace("apps/app/", "")}`,
+);
 
 function git(goc, args) {
 	const r = spawnSync("git", args, { cwd: goc, encoding: "utf8" });
@@ -31,6 +31,7 @@ function git(goc, args) {
 function soCay(goc) {
 	const commit = git(goc, [
 		"log",
+		"--first-parent",
 		"--no-merges",
 		"--format=%H",
 		`--grep=${SLUG}`,
@@ -60,15 +61,15 @@ function inKet({ soCommit, cham }) {
 		return true;
 	}
 	for (const tep of cham)
-		console.log(`khong-sua: cham ${tep.split("/").pop()}`);
+		console.log(`CHAM ${tep}`);
 	return false;
 }
 
 function chieuDo() {
 	const dich = dungBanSao("dto-khong-sua");
 	try {
-		writeFileSync(join(dich, GIU[0]), "\n", { flag: "a" });
-		git(dich, ["add", GIU[0]]);
+		writeFileSync(join(dich, GIU[1]), "\n", { flag: "a" });
+		git(dich, ["add", GIU[1]]);
 		git(dich, [
 			"-c",
 			"user.name=kiem-do-do",
