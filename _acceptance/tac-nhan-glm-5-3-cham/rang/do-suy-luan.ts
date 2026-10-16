@@ -1,5 +1,5 @@
-import { writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 
 const DSL = {
 	tep: join(resolve(import.meta.dir, "..", "evidence"), "do-suy-luan.json"),
@@ -51,5 +51,6 @@ const ra = {
 	cau: DSL.cau,
 	muc,
 };
+mkdirSync(dirname(DSL.tep), { recursive: true });
 writeFileSync(DSL.tep, `${JSON.stringify(ra, null, 2)}\n`);
 console.log(JSON.stringify(ra));
