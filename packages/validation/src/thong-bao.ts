@@ -10,7 +10,7 @@ export const THONG_BAO = {
 	hoiLaiMs: 60 * GIAY_MS,
 	giuNgay: 90,
 	tranSo: 99,
-	nguon: { nhacBuoiSang: "nhac-buoi-sang" },
+	nguon: { nhacBuoiSang: "nhac-buoi-sang", tacNhan: "tac-nhan" },
 	doiChieu: { tranGiaoDichMs: 10 * 60 * GIAY_MS },
 	loi: { khongCo: "Không có thông báo này." },
 } as const;

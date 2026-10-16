@@ -55,6 +55,23 @@ function dienCau(mau: string, nd: NoiDungThongBao): string {
 	}
 }
 
+const LOAI_TAC_NHAN = new Set<NoiDungThongBao["loai"]>([
+	"tac-nhan-xong",
+	"tac-nhan-can-tra-loi",
+	"tac-nhan-hong",
+]);
+
+export function tenKhongDich(nd: NoiDungThongBao): string | null {
+	if (!LOAI_TAC_NHAN.has(nd.loai) || !("ten" in nd)) return null;
+	const ten = nd.ten.trim();
+	return ten.length > 0 ? ten : null;
+}
+
 export function cauThongBao(locale: Locale, nd: NoiDungThongBao): string {
-	return dienCau(thongBaoMessages(locale).cau[nd.loai], nd);
+	const m = thongBaoMessages(locale);
+	const ndDien =
+		LOAI_TAC_NHAN.has(nd.loai) && "ten" in nd && !tenKhongDich(nd)
+			? { ...nd, ten: m.chuong.tacNhanKhongTen }
+			: nd;
+	return dienCau(m.cau[nd.loai], ndDien);
 }
