@@ -28,6 +28,7 @@ import { cho, dat, datLai, nhip } from "./khung-soan-okr";
 
 const { BangMucTieu } = await import("@/app/(app)/[slug]/okr/bang-muc-tieu");
 const { BangKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
+const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { TheoDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
 );
@@ -469,22 +470,46 @@ describe("nut-them", () => {
 		},
 	] as const;
 
-	test("nut-them: quan tri khong la truong va truong phong thay Them muc tieu; thanh vien khong", async () => {
-		expect.assertions(VAI.length * 2 + 1);
+	test("nut-them: quan tri khong la truong va truong phong bam duoc Them muc tieu; thanh vien thay nut khoa", async () => {
+		expect.assertions(VAI.length * 3 + 1);
 		for (const vai of VAI) {
 			datDonVi(vai);
-			const san = await dung(<TheoDonVi cauNoiOkr={false} />);
+			const san = await dung(
+				<>
+					<DauTrangOkr cauNoi={false} chonChuKy={null} />
+					<TheoDonVi />
+				</>,
+			);
 			await cho(() => q("[data-hang-nut]", san.o) !== null, "thanh don vi");
+			await cho(
+				() => q("[data-nut=them-muc-tieu]", san.o) !== null,
+				"nut them",
+			);
 			await nhip(6);
-			const them = q("[data-nut=them-muc-tieu]", san.o);
-			const nhap = q("[data-nut=nhap-bang-tinh]", san.o);
+			const them = q(
+				"[data-nut=them-muc-tieu]",
+				san.o,
+			) as HTMLButtonElement | null;
 			expect(
-				them !== null,
+				them !== null && !them.disabled,
 				vai.thay
 					? `quan tri khong thay nut them: ${vai.ten}`
-					: `nguoi thuong thay nut them: ${vai.ten}`,
+					: `nguoi thuong bam duoc nut them: ${vai.ten}`,
 			).toBe(vai.thay);
-			expect(nhap !== null, `nut nhap sai: ${vai.ten}`).toBe(vai.thay);
+			expect(
+				them?.getAttribute("aria-describedby") ?? null,
+				`nut them khoa khong kem ly do: ${vai.ten}`,
+			).toBe(vai.thay ? null : "okr-khong-them-duoc");
+			await bam(q("[data-nut=them-cach]", san.o), "nut «…»");
+			const nhap = q("[data-nut=nhap-bang-tinh]");
+			expect(
+				nhap !== null && nhap.getAttribute("data-disabled") === null,
+				`nut nhap sai: ${vai.ten}`,
+			).toBe(vai.thay);
+			await act(async () => {
+				document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+			});
+			await nhip(4);
 			if (vai.ten === "quan-tri") {
 				await bam(them, "nut them muc tieu");
 				expect(

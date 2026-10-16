@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
-import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
@@ -14,12 +13,13 @@ import {
 } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { loadOkrSearchParams } from "../okr-search-params";
+import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { CapNhatTuan, DangTaiCapNhat } from "./cap-nhat-tuan";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata(): Promise<Metadata> {
-	return { title: okrMessages(await getLocale()).tieuDe["cap-nhat-tuan"] };
+	return { title: tieuDeTrinhDuyet(await getLocale(), "cap-nhat-tuan") };
 }
 
 export default function CapNhatTuanPage({
