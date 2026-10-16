@@ -1913,6 +1913,7 @@ executors:
     mtc_mot_bang: "cd packages/ui && bun test ./test/mau-trang-thai-mot-bang.spec.ts"
     mtc_anh_xa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/mau-trang-thai-anh-xa.spec.ts"
     mtc_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/mau-trang-thai-dom.dom.tsx"
+    bch_nhan: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/status-indicator-xuong-dong.dom.tsx"
   script:
     dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
@@ -2957,6 +2958,8 @@ executors:
     kcl_man_luot: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan luot"'
     mtc_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs"'
     mtc_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs --chi-do"'
+    bch_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"'
+    bch_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs --chi-do"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

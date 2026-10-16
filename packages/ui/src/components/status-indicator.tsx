@@ -73,6 +73,7 @@ function StatusIndicator({
 	busy = false,
 	bloom = "low",
 	size = "default",
+	wrapLabel = false,
 	className,
 	...props
 }: Omit<React.ComponentProps<"span">, "color"> & {
@@ -83,30 +84,42 @@ function StatusIndicator({
 	busy?: boolean;
 	bloom?: Bloom;
 	size?: StatusSize;
+	wrapLabel?: boolean;
 }) {
+	const dau = busy ? (
+		<Spinner className="size-3 shrink-0" />
+	) : (
+		<IndicatorDot
+			tone={tone}
+			color={color}
+			pulse={pulse}
+			bloom={bloom}
+			aria-hidden="true"
+		/>
+	);
 	return (
 		<span
 			data-slot="status-indicator"
 			data-tone={tone}
 			className={cn(
-				"inline-flex min-w-0 items-center gap-2 text-muted-foreground",
+				"inline-flex min-w-0 gap-2 text-muted-foreground",
+				wrapLabel ? "items-start" : "items-center",
 				SIZE_CLASS[size],
 				className,
 			)}
 			{...props}
 		>
-			{busy ? (
-				<Spinner className="size-3 shrink-0" />
+			{wrapLabel ? (
+				<span className="flex h-lh shrink-0 items-center">{dau}</span>
 			) : (
-				<IndicatorDot
-					tone={tone}
-					color={color}
-					pulse={pulse}
-					bloom={bloom}
-					aria-hidden="true"
-				/>
+				dau
 			)}
-			<span className="truncate">{label}</span>
+			<span
+				data-slot="status-indicator-label"
+				className={wrapLabel ? "min-w-0 wrap-anywhere" : "truncate"}
+			>
+				{label}
+			</span>
 		</span>
 	);
 }
