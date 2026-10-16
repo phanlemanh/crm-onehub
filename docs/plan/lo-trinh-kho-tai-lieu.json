@@ -258,8 +258,13 @@
       "dung_tren": [
         "l4"
       ],
-      "trang_thai": "chưa mở",
-      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi"
+      "trang_thai": "đang dựng",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-15T10:40:00Z"
+      },
+      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi; S4 đỏ AC-6, chủ kho chọn D, đang đo bảng bốn model"
     },
     {
       "ma": "l6",
@@ -274,6 +279,11 @@
         "l4b"
       ],
       "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-15T23:44:49Z"
+      },
       "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi"
     }
   ],
