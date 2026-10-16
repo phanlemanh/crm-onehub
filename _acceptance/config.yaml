@@ -1361,6 +1361,9 @@ executors:
     tpa_hop_le: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t hop-le
     tpa_onehub: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t onehub-trien-khai
     tpa_nhanh_khac: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t "nhanh-khac-khong-trien-khai|bo-khop-bat-bay-sao"
+    tbp_hop_le: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-preview-moi-du-an.spec.ts -t hop-le
+    tbp_onehub: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-preview-moi-du-an.spec.ts -t onehub-trien-khai
+    tbp_nhanh_khac: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-preview-moi-du-an.spec.ts -t "nhanh-khac-khong-trien-khai|bo-khop-bat-bay-sao"
     r1g_tam_loi: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t tam-loi"'
     r1g_token_sai: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t token-sai"'
     r1g_kiem_tam: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t kiem-tam"'
@@ -2616,6 +2619,13 @@ executors:
     tpa_vercel_production_xanh: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs xanh
     tpa_vercel_production_do: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs do
     tpa_vercel_production_bo_tay: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs bo-tay
+    tbp_pha_thu: bun _acceptance/tat-ban-preview/rang/pha-thu.mjs
+    tbp_goc_du_an_xanh: bun _acceptance/tat-ban-preview/rang/goc-du-an.mjs xanh
+    tbp_goc_du_an_do: bun _acceptance/tat-ban-preview/rang/goc-du-an.mjs do
+    tbp_vercel_preview_xanh: bun _acceptance/tat-ban-preview/rang/vercel-preview.mjs xanh
+    tbp_vercel_preview_do: bun _acceptance/tat-ban-preview/rang/vercel-preview.mjs do
+    tbp_vercel_production_xanh: bun _acceptance/tat-ban-preview/rang/vercel-production.mjs xanh
+    tbp_vercel_production_do: bun _acceptance/tat-ban-preview/rang/vercel-production.mjs do
     tcu_cho_truoc_doc: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/cho-truoc-doc.mjs"
     tcu_khang_dinh: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/khang-dinh.mjs"
     tcu_tre_url: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/tre-url.mjs"
