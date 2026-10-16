@@ -1,33 +1,4 @@
 {
-  "feature_plain": "Đẩy một nhánh làm việc sẽ không còn dựng bản xem trước (Preview) của app, api, agent — bản xem trước đang chạy trên dữ liệu thật mà không ai dùng; bản chạy thật của onehub giữ nguyên.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ đặt luật «chỉ onehub được triển khai» vào đúng tệp cấu hình mà mỗi dự án thật sự đọc — riêng api là tệp ở gốc kho — và tệp đó không mang gì khác."},
-    {"id": "AC-2", "p": "Sẽ giữ nhánh onehub được triển khai ở cả bốn dự án (bản chạy thật không đổi)."},
-    {"id": "AC-4", "p": "Sẽ đối chiếu bảng «dự án → tệp» với cài đặt thật trên Vercel lúc chấm, để không đặt nhầm tệp mà máy vẫn báo xanh."}
-  ],
-  "wont_do": [
-    {"id": "AC-3", "p": "Chặn mọi nhánh khác onehub ở cả bốn dự án — 18 tên nhánh mẫu viết trước, liệt từng cặp dự án × nhánh nếu lọt."},
-    {"id": "AC-5", "p": "Chặn bản xem trước thật: lần đẩy nhánh của chính vòng này phải ra 0 bản dựng ở ba dự án."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG làm hỏng bản chạy thật: sau khi gộp, cả bốn dự án dựng thành công từ onehub và api còn đủ năm việc chạy định kỳ."},
-    {"id": "OOS-1", "p": "KHÔNG đụng biến môi trường; gỡ địa chỉ cơ sở dữ liệu của đích xem trước là việc tuỳ chọn của anh."},
-    {"id": "OOS-2", "p": "KHÔNG đổi cài đặt dự án trên Vercel và KHÔNG dùng lại cách chặn từng huỷ bản chạy thật ngày 04/10."},
-    {"id": "OOS-3", "p": "KHÔNG xoá các bản xem trước cũ (vẫn nằm sau lớp đăng nhập của Vercel)."},
-    {"id": "OOS-4", "p": "KHÔNG kiểm bản dựng tạo tay qua dòng lệnh — đó là đường lui nếu bản chạy thật hỏng."},
-    {"id": "OOS-5", "p": "KHÔNG sửa cấu hình và phép thử của agent-okr (đã tắt xem trước từ 04/10, hồ sơ đã ký)."}
-  ],
-  "scope_plain": "Vòng chỉ thêm ba tệp cấu hình, một phép thử và sửa tài liệu vận hành; những việc dưới đây cố ý để ngoài.",
-  "coverage_plain": [
-    {"i": 0, "p": "Không chạy bước quét hình thái — không gian nhỏ, các trục dưới đây liệt kê tay."},
-    {"i": 1, "p": "Đủ bốn dự án Vercel nối kho (đo 16/10), kể cả bẫy api đọc tệp ở gốc kho — AC-1..4 (luật đúng chỗ)."},
-    {"i": 2, "p": "Đủ mọi kiểu tên nhánh từng dùng ở kho, kể cả nhánh mang chữ onehub mà không phải onehub — AC-2, AC-3 (chỉ onehub lọt)."},
-    {"i": 3, "p": "Hai đường kích hoạt: đẩy nhánh (AC-5, 0 bản xem trước) và gộp onehub (AC-6, bản chạy thật); dựng tay ngoài phạm vi."},
-    {"i": 4, "p": "Bốn lớp đo: luật chạy ở CI, đối chiếu cài đặt Vercel thật, Vercel thật cho xem trước và cho bản chạy thật, cộng tài liệu (AC-7)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Phép đo bản xem trước cần nhánh đã đẩy mà hợp đồng chưa nói đẩy lúc nào — đã sửa: đẩy một lần sau khi làm xong, chờ 5 phút rồi mới chấm."},
-    {"i": 1, "p": "Phép đo nhìn nhầm commit: Vercel chỉ dựng commit đầu của mỗi lần đẩy — đã sửa: đo từng commit đầu, và chiều đỏ chạy cùng đường tra trên một lần đẩy cũ có bản xem trước."},
-    {"i": 2, "p": "Lựa chọn «tắt hẳn» bị ghi là máy tự quyết trong khi hai máy kia chưa được hỏi — đã sửa: thành câu hỏi cho anh, kèm trả lời của hai máy ở #375."},
-    {"i": 3, "p": "Câu hỏi chấm tài liệu có hai vế không nằm trong tiêu chí — đã sửa: thêm vế «không khuyên cách chặn cũ» vào tiêu chí, bỏ vế biến cơ sở dữ liệu."},
-    {"i": 4, "p": "Lo tệp cấu hình agent-okr có khoá lạ làm phép thử kẹt — bác: đã đọc, tệp chỉ có hai khoá đúng khuôn."}
-  ]
+  "feature_plain": "Đẩy một nhánh làm việc không còn dựng bản xem trước (Preview) của app, api, agent — bản xem trước từng chạy trên dữ liệu thật mà không ai dùng; bản chạy thật của onehub giữ nguyên.",
+  "scope_plain": "Vòng chỉ thêm ba tệp cấu hình, một phép thử và sửa tài liệu vận hành; bản chạy thật sau gộp được đo ở bước kiểm sau gộp."
 }
