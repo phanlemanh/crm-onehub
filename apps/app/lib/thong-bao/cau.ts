@@ -42,6 +42,8 @@ function dienCau(mau: string, nd: NoiDungThongBao): string {
 			});
 		case "tai-lieu-cho-duyet":
 			return dien(mau, { so: nd.so });
+		case "goi-y-ke-hoach":
+			return dien(mau, { cty: nd.companyName, deal: nd.dealName });
 		case "okr-tom-tat":
 			return dien(mau, { phong: nd.phongTen });
 		case "ai-tran":

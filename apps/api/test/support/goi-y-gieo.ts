@@ -1,4 +1,4 @@
-import { db } from "@crm/db";
+import { db, type GoiYKeHoachModel } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { dichVu, gieoBoPhan, token } from "./ke-hoach-gieo";
 import { goi, type KetGoi } from "./viec-gieo";
@@ -110,7 +110,7 @@ export function doiGiaiDoan(
 	);
 }
 
-export function goiYCua(dealId: string) {
+export function goiYCua(dealId: string): Promise<GoiYKeHoachModel[]> {
 	return db.goiYKeHoach.findMany({
 		where: { dealId },
 		orderBy: { sinhLuc: "asc" },

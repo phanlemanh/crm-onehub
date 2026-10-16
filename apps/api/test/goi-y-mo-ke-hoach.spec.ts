@@ -124,6 +124,7 @@ async function chayO(o: (typeof MA_TRAN)[number]) {
 		where: { dealId, type: "STAGE_CHANGE" },
 		orderBy: { occurredAt: "desc" },
 	});
+	if (!hd.occurredAt) nem(`gy: chuyenLuc lech ${ten}`);
 	return { ten, dealId, congTyId, truoc, moc: hd.occurredAt };
 }
 
