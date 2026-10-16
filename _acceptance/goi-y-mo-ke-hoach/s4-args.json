@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-16T11:12:26Z",
-  "generated_sha": "5f6a54fe35437ad41b836188849699984376be1e",
+  "generated_at": "2026-10-16T11:40:40Z",
+  "generated_sha": "4edd14fe3127e71e3a1b06ec66cd82ba62456f04",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "goi-y-mo-ke-hoach",
-  "round": 1,
+  "round": 2,
   "riskTier": "T3",
   "evals": [
     {
@@ -232,12 +232,13 @@
         "verdict",
         "rationale",
         "verified_at"
-      ]
+      ],
+      "inputsHash": "f4f3726fe9fc8f279a078860a8011f48dfa146bfda49a4c13fb0bf3746d96133"
     },
     {
       "id": "E10",
       "criterion": "AC-10",
-      "cmd": "node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --moc 7ebcb0242 && bun run check-types",
+      "cmd": "node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --moc \"$(git merge-base HEAD origin/onehub)\" && bun run check-types",
       "expected": "\"exit 0; node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu rồi --moc <mốc ghim trong lệnh, merge-base của nhánh với origin/onehub> — quét MỌI tệp kiểm đã có ở mốc mà nhánh sửa, xoá hay đổi tên (git diff --name-status -M --diff-filter=MDR theo mẫu tệp kiểm); một câu expect sẵn có bị xoá hay sửa thì thoát 1 nêu tệp và câu; danh sách cho-phép rỗng; rồi bun run check-types thoát 0. Chiều đỏ: --tu-thu dựng một tệp kiểm giả có một expect bị xoá và phải thấy thoát 1.\"",
       "executor": "script",
       "expectedExit": 0,
@@ -297,13 +298,17 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.30.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\nLệnh dài hơn trần 600 s của công cụ thì KHÔNG bị giết: công cụ **đẩy nó sang\nnền** và nó chạy tiếp. Tệp đầu ra nền trống tới phút chót, vì khung bọc lệnh của\nkit chỉ in khi lệnh xong — đọc trống thành «bị giết» là đúng sự cố crm 07/10/2026\n(hồ sơ `lenh-dai-chay-rieng`: hai lượt BLOCKED giả). Dòng «chuyển sang nền» trong\nkhối dưới là lối LỜI cho mọi lệnh. Lối MÁY: eval khai `long_running: <phút>`\ntrong `evals.yaml` thì lượt chấm feature-loop tự chạy lệnh nền, ghi nhật ký ở\n`.acceptance-runs/<slug>/s4-lenh-dai/` và chờ bằng lệnh nó sinh ra\n(`eval-executors.md`, mục `long_running`).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\nDAU RA DAI: harness co the CAT DAU RA RA TEP (\"Output too large … saved to <tep>\") va chi hien doan DAU — do KHONG phai bi cong cu giet: doc DUOI tep do (tail) de lay dong tong ket va ma thoat; chi khai killedByTool khi tool result bao timeout/killed that.\nCHUYEN SANG NEN KHONG PHAI BI GIET: tool result bao lenh chua xong trong timeout va da duoc CHUYEN SANG NEN (\"moved to the background\", kem ID + tep dau ra) → lenh VAN DANG CHAY: KHONG khai killedByTool, KHONG ket luan tu tep dau ra luc do. Tep dau ra nen TRONG la binh thuong — khung boc lenh chi in duoi dau ra + dong __EXIT=<n> khi lenh XONG. Cho bang lenh Bash co gioi han (moi lan goi ≤ 100 giay, duoi tran mac dinh 120 giay cua cong cu; vd vong lap kiem tep do co dong __EXIT= chua, sleep vai giay, het 100 giay thi thoat) va goi lai toi khi tep co dong __EXIT=<n> → doc ma tu dong do nhu binh thuong. Tong thoi gian cho toi da = so phut eval khai o long_running (vang thi 30 phut), tinh tu luc chay lenh; qua ma chua co dong __EXIT → cannotRun=true + reason \"lenh chay qua <so> phut chua xong — khai long_running: <phut> cho eval trong evals.yaml\" (KHONG killedByTool), va dung tac vu nen neu cong cu cho phep.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n\nLệnh bị đẩy sang nền rồi QUÁ trần chờ (`long_running`, vắng thì 30 phút) cũng\nlà sự cố hạ tầng chứ không phải lệnh hỏng: dòng run-log `\"exit_code\": null`,\n`\"cannot_run\": true` (KHÔNG `killed_by_tool` — công cụ không giết nó), verdict\n`BLOCKED`, reason gọi tên việc cần làm (khai `long_running: <phút>` cho eval).\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub/.claude/worktrees/hungry-bouman-26bc50/_acceptance/goi-y-mo-ke-hoach/contract.md",
-  "invokedAt": "2026-10-16T11:12:26Z",
-  "invokedSha": "5f6a54fe35437ad41b836188849699984376be1e",
+  "invokedAt": "2026-10-16T11:40:40Z",
+  "invokedSha": "4edd14fe3127e71e3a1b06ec66cd82ba62456f04",
   "vungVat": [
     "_acceptance/config.yaml",
     "_acceptance/goi-y-mo-ke-hoach/card-plain.json",
     "_acceptance/goi-y-mo-ke-hoach/card.html",
     "_acceptance/goi-y-mo-ke-hoach/evals.yaml",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-nguoi-khac-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-sau-bo-qua-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-375.png",
     "_acceptance/goi-y-mo-ke-hoach/figures/noi-hien.html",
     "_acceptance/goi-y-mo-ke-hoach/figures/noi-hien.png",
     "_acceptance/goi-y-mo-ke-hoach/figures/vong-doi-goi-y.html",
@@ -313,8 +318,10 @@
     "_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs",
     "_acceptance/goi-y-mo-ke-hoach/rang/man.mjs",
     "_acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs",
+    "_acceptance/goi-y-mo-ke-hoach/s4-args.json",
     "apps/agent/agent/lib/nhac-ke-hoach.ts",
     "apps/agent/agent/lib/tin-nhac.ts",
+    "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json",
     "apps/agent/test/goi-y-mo-ke-hoach.integration.spec.ts",
     "apps/agent/test/support/muc-mau.ts",
     "apps/api/src/deals/deals.service.ts",
@@ -338,7 +345,8 @@
     "packages/db/src/goi-y-nhac.ts",
     "packages/db/src/onboarding-nhac.ts",
     "packages/validation/src/nhac-ke-hoach.ts",
-    "packages/validation/src/thong-bao.ts"
+    "packages/validation/src/thong-bao.ts",
+    "packages/validation/test/thong-bao.spec.ts"
   ],
   "ngoaiVatGlobs": [
     "docs/**",
@@ -385,10 +393,14 @@
     "_acceptance/goi-y-mo-ke-hoach/contract.md",
     "_acceptance/goi-y-mo-ke-hoach/decisions.jsonl",
     "_acceptance/goi-y-mo-ke-hoach/duong-nen.md",
+    "_acceptance/goi-y-mo-ke-hoach/evidence-report.md",
     "_acceptance/goi-y-mo-ke-hoach/figures/index.md",
     "_acceptance/goi-y-mo-ke-hoach/gap-probe.md",
     "_acceptance/goi-y-mo-ke-hoach/morphological-scan.md",
     "_acceptance/goi-y-mo-ke-hoach/opportunity.md",
+    "_acceptance/goi-y-mo-ke-hoach/review-findings.md",
+    "_acceptance/goi-y-mo-ke-hoach/run-log.jsonl",
+    "_acceptance/goi-y-mo-ke-hoach/usage-report.md",
     "docs/api.md",
     "docs/plan/lo-trinh-viec-du-an.json",
     "docs/superpowers/plans/2026-10-16-goi-y-mo-ke-hoach.md",
@@ -405,6 +417,11 @@
     "_acceptance/goi-y-mo-ke-hoach/decisions.jsonl",
     "_acceptance/goi-y-mo-ke-hoach/duong-nen.md",
     "_acceptance/goi-y-mo-ke-hoach/evals.yaml",
+    "_acceptance/goi-y-mo-ke-hoach/evidence-report.md",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-nguoi-khac-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-sau-bo-qua-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-375.png",
     "_acceptance/goi-y-mo-ke-hoach/figures/index.md",
     "_acceptance/goi-y-mo-ke-hoach/figures/noi-hien.html",
     "_acceptance/goi-y-mo-ke-hoach/figures/noi-hien.png",
@@ -418,8 +435,13 @@
     "_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs",
     "_acceptance/goi-y-mo-ke-hoach/rang/man.mjs",
     "_acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs",
+    "_acceptance/goi-y-mo-ke-hoach/review-findings.md",
+    "_acceptance/goi-y-mo-ke-hoach/run-log.jsonl",
+    "_acceptance/goi-y-mo-ke-hoach/s4-args.json",
+    "_acceptance/goi-y-mo-ke-hoach/usage-report.md",
     "apps/agent/agent/lib/nhac-ke-hoach.ts",
     "apps/agent/agent/lib/tin-nhac.ts",
+    "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json",
     "apps/agent/test/goi-y-mo-ke-hoach.integration.spec.ts",
     "apps/agent/test/support/muc-mau.ts",
     "apps/api/src/deals/deals.service.ts",
@@ -447,13 +469,18 @@
     "packages/db/src/goi-y-nhac.ts",
     "packages/db/src/onboarding-nhac.ts",
     "packages/validation/src/nhac-ke-hoach.ts",
-    "packages/validation/src/thong-bao.ts"
+    "packages/validation/src/thong-bao.ts",
+    "packages/validation/test/thong-bao.spec.ts"
   ],
   "fileDoTrongDiff": [
     "_acceptance/config.yaml",
     "_acceptance/goi-y-mo-ke-hoach/card-plain.json",
     "_acceptance/goi-y-mo-ke-hoach/card.html",
     "_acceptance/goi-y-mo-ke-hoach/evals.yaml",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-nguoi-khac-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-sau-bo-qua-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-375.png",
     "_acceptance/goi-y-mo-ke-hoach/figures/noi-hien.html",
     "_acceptance/goi-y-mo-ke-hoach/figures/noi-hien.png",
     "_acceptance/goi-y-mo-ke-hoach/figures/vong-doi-goi-y.html",
@@ -463,8 +490,10 @@
     "_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs",
     "_acceptance/goi-y-mo-ke-hoach/rang/man.mjs",
     "_acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs",
+    "_acceptance/goi-y-mo-ke-hoach/s4-args.json",
     "apps/agent/agent/lib/nhac-ke-hoach.ts",
     "apps/agent/agent/lib/tin-nhac.ts",
+    "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json",
     "apps/agent/test/goi-y-mo-ke-hoach.integration.spec.ts",
     "apps/agent/test/support/muc-mau.ts",
     "apps/api/src/deals/deals.service.ts",
@@ -487,7 +516,8 @@
     "packages/db/src/goi-y-nhac.ts",
     "packages/db/src/onboarding-nhac.ts",
     "packages/validation/src/nhac-ke-hoach.ts",
-    "packages/validation/src/thong-bao.ts"
+    "packages/validation/src/thong-bao.ts",
+    "packages/validation/test/thong-bao.spec.ts"
   ],
   "coverageFiles": [
     "_acceptance/goi-y-mo-ke-hoach/rang/do-nguong.mjs",
@@ -495,6 +525,7 @@
     "_acceptance/goi-y-mo-ke-hoach/rang/man.mjs",
     "apps/agent/agent/lib/nhac-ke-hoach.ts",
     "apps/agent/agent/lib/tin-nhac.ts",
+    "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json",
     "apps/agent/test/goi-y-mo-ke-hoach.integration.spec.ts",
     "apps/agent/test/support/muc-mau.ts",
     "apps/api/src/deals/deals.service.ts",
@@ -517,26 +548,159 @@
     "packages/db/src/goi-y-nhac.ts",
     "packages/db/src/onboarding-nhac.ts",
     "packages/validation/src/nhac-ke-hoach.ts",
-    "packages/validation/src/thong-bao.ts"
+    "packages/validation/src/thong-bao.ts",
+    "packages/validation/test/thong-bao.spec.ts"
   ],
   "coEvalPaths": true,
   "evalsHash": "714100ddf6dd39a64a930d6be12b355e14925f814a842b6f398fa27ccece1000",
-  "runBaseline": true,
+  "runBaseline": false,
+  "carriedAnalyst": {
+    "fromRound": 1,
+    "nonDiscriminating": []
+  },
+  "carriedEvals": [
+    {
+      "id": "E5",
+      "runId": "minted-goi-y-mo-ke-hoach-E5-r1",
+      "fromRound": 1,
+      "verifiedAt": "2026-10-16T11:12:26Z",
+      "cmd": "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/goi-y-ke-hoach.dom.tsx"
+    },
+    {
+      "id": "E5b",
+      "runId": "minted-goi-y-mo-ke-hoach-E5b-r1",
+      "fromRound": 1,
+      "verifiedAt": "2026-10-16T11:12:26Z",
+      "cmd": "node _acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs"
+    },
+    {
+      "id": "E6",
+      "runId": "minted-goi-y-mo-ke-hoach-E6-r1",
+      "fromRound": 1,
+      "verifiedAt": "2026-10-16T11:12:26Z",
+      "cmd": "ui-check:E6",
+      "screenshot": "evidence/E6-the-1280.png",
+      "observed": "E6-the-1280.png: trang Thoa thuan o 1280x900 (nen toi), sheet deal 'Hop dong goi y that kavcrpx' mo ben phai. Duoi tieu de co the goi y: icon, dong 'Deal da thang — mo ke hoach 30 ngay cho Cong ty Co phan Dau tu va Phat trien Thuong mai Dich vu ...' (ten cong ty hien, bi cat o mep phai viewport), cau 'Mo ke hoach cho cong ty nay thi goi y tu dong.', hai nut 'Mo ke hoach' (xanh, noi bat) va 'Bo qua'. Khop Expected (the + ten cong ty + hai nut).\nE6-the-375.png: khung dien thoai 375 rong, sheet day tu duoi len. The goi y hien tron ven: tieu de day du 'Deal da thang — mo ke hoach 30 ngay cho Cong ty Co phan Dau tu va Phat trien Thuong mai Dich vu An Phat Hung Thinh that kavcrpx?', mo ta, hai nut 'Mo ke hoach' va 'Bo qua' ngang toan chieu rong the. Khong thay noi dung tran ngang; cac cot 'Gia tri / Ngay du... / O giai doan / Phu trach' co hien nhung nam trong khung. (Phan dau sheet o 375: tieu de deal xuong dong rat hep canh nut trang thai — dang xau nhung khong phai tran ngang, ngoai pham vi AC-6.)\nE6-sau-bo-qua-1280.png: cung sheet deal sau khi bam 'Bo qua': khong con the goi y, tu thanh 'Gia tri / Ngay du kien chot / O giai doan' len ngay duoi tieu de. Khop Expected (the mat); DB ghi trangThai=BO_QUA qua dong 'E6 bo qua: DAT — the mat=true trangThai=BO_QUA'.\nE6-nguoi-khac-1280.png: phien Q mo cung sheet 'Hop dong goi y that kavcrpx' (khong ve dang nhap, khong 404, ten deal hien), khong co the goi y, noi dung bat dau tu 'Gia tri / Ngay du kien chot / O giai doan'. Khop Expected (khong hien cho nguoi khac).\nKet luan: bon frame khop Expected; ba luot tu thu deu bao KHONG DAT.",
+      "networkObserved": "n-a (driver)"
+    },
+    {
+      "id": "E7",
+      "runId": "mvavcj94iwdv",
+      "fromRound": 1,
+      "verifiedAt": "2026-10-16T11:12:26Z",
+      "cmd": "bun run test -- \"cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.integration.spec.ts -t gy-nhac\""
+    },
+    {
+      "id": "E11",
+      "runId": "minted-goi-y-mo-ke-hoach-E11-r1",
+      "fromRound": 1,
+      "verifiedAt": "2026-10-16T11:12:26Z",
+      "cmd": "node _acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs"
+    }
+  ],
+  "carriedFindings": [
+    {
+      "file": "apps/app/lib/messages/record-sheet.ts",
+      "title": "Chữ tiếng Việt trên màn và trong tin nhắc dùng «Deal … đã thắng», trái từ điển CONTEXT.md",
+      "severity": "medium",
+      "plain": "Thẻ gợi ý và tin nhắc buổi sáng gọi giao dịch là «Deal … đã thắng», khác với chữ «Thoả thuận» và «Chốt» mà phần còn lại của ứng dụng dùng. Người dùng thấy hai cách gọi cho cùng một thứ, và có chỗ còn lẫn chữ tiếng Anh «sheet».",
+      "proposal": "known-limits",
+      "fromRound": 1,
+      "tepDoi": false
+    },
+    {
+      "file": "packages/db/src/goi-y-ke-hoach.ts",
+      "title": "Chữ «gợi ý» trần trên màn, trái mục từ điển «Gợi ý mở kế hoạch» thêm ngay trong vòng này",
+      "severity": "medium",
+      "plain": "Một số câu báo cho người dùng chỉ nói «gợi ý», trong khi tên đầy đủ là «gợi ý mở kế hoạch». Người dùng có thể nhầm với câu «gợi ý» của nhắc kế hoạch im.",
+      "proposal": "known-limits",
+      "fromRound": 1,
+      "tepDoi": false
+    },
+    {
+      "file": "apps/api/src/onboarding/onboarding.service.ts",
+      "title": "companyId của gợi ý là bản chụp lúc sinh; đổi công ty của deal thì thẻ mở kế hoạch cho công ty cũ, và mở kế hoạch cho công ty mới không đóng gợi ý",
+      "severity": "medium",
+      "plain": "Nếu sau khi deal thắng người ta đổi công ty của deal, thẻ gợi ý vẫn đề nghị mở kế hoạch cho công ty cũ. Mở kế hoạch cho công ty mới cũng không làm gợi ý đó tự đóng, và nhắc buổi sáng vẫn ghi tên công ty cũ.",
+      "proposal": "known-limits",
+      "fromRound": 1,
+      "tepDoi": false
+    },
+    {
+      "file": "apps/api/src/onboarding/onboarding.service.ts",
+      "title": "boQuaGoiY trả 404 kèm lời «Gợi ý này đã được xử lý.» khi id không tồn tại",
+      "severity": "low",
+      "plain": "Nếu gợi ý không còn tồn tại, người dùng nhận lời báo «đã được xử lý» thay vì «không tìm thấy». Hiếm gặp và vô hại, chỉ là câu báo hơi lệch.",
+      "proposal": "wont-fix",
+      "fromRound": 1,
+      "tepDoi": false
+    },
+    {
+      "file": "apps/app/components/crm/record-sheet/goi-y-ke-hoach.tsx",
+      "title": "Đổi giai đoạn ngay trên sheet deal không làm mới query goiYCuaDeal, nên thẻ gợi ý không hiện sau khi thắng và không ẩn khi deal rời thắng",
+      "severity": "medium",
+      "plain": "Khi người phụ trách chuyển deal sang thắng ngay trên sheet đang mở, thẻ gợi ý không hiện ngay mà phải đợi khoảng nửa phút hoặc mở lại sheet. Ngược lại, deal rời thắng thì thẻ cũ vẫn còn đó một lúc.",
+      "proposal": "new-contract",
+      "fromRound": 1,
+      "tepDoi": false
+    },
+    {
+      "file": "_acceptance/goi-y-mo-ke-hoach/card-plain.json",
+      "title": "Thẻ Cổng Phạm vi xếp AC-1, AC-4 (và AC-6 ở bản HTML) vào mục «Sẽ KHÔNG làm / sẽ chặn»",
+      "severity": "medium",
+      "plain": "Thẻ người ký duyệt phạm vi xếp hai lời hứa chính (sinh gợi ý và đóng gợi ý) vào cột «sẽ không làm». Người ký có thể hiểu nhầm hệ thống hứa gì.",
+      "proposal": "known-limits",
+      "fromRound": 1,
+      "tepDoi": false
+    },
+    {
+      "file": "_acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs",
+      "title": "dot-bien.mjs ghim thông điệp cho cặp (h) khác với thông điệp mà evals.yaml E11 đã khai",
+      "severity": "low",
+      "plain": "Bằng chứng kiểm thử chứng minh một thông báo lỗi hơi khác với thông báo ghi trong mô tả. Người dùng cuối không thấy gì, nhưng người đọc hồ sơ nghiệm thu có thể bối rối.",
+      "proposal": "known-limits",
+      "fromRound": 1,
+      "tepDoi": false
+    },
+    {
+      "file": "apps/api/test/goi-y-mo-ke-hoach.spec.ts",
+      "title": "Hình dạng 4: ô «đọc rỗng» của bảng quyền E3 coi mọi phản hồi lỗi là null, không ghim giá trị trả về",
+      "severity": "medium",
+      "plain": "Bài kiểm quyền đọc chưa phân biệt được «người khác nhận về trống» với «thủ tục bị lỗi». Nếu có lỗi, bài kiểm có thể vẫn xanh.",
+      "proposal": "known-limits",
+      "fromRound": 1,
+      "tepDoi": true
+    }
+  ],
+  "deltaFiles": [
+    "_acceptance/config.yaml",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-nguoi-khac-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-sau-bo-qua-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-1280.png",
+    "_acceptance/goi-y-mo-ke-hoach/evidence/E6-the-375.png",
+    "_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs",
+    "_acceptance/goi-y-mo-ke-hoach/s4-args.json",
+    "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json",
+    "apps/api/test/goi-y-mo-ke-hoach-do-nguong.spec.ts",
+    "apps/api/test/goi-y-mo-ke-hoach.spec.ts",
+    "apps/api/test/support/goi-y-gieo.ts",
+    "packages/validation/test/thong-bao.spec.ts"
+  ],
   "thuocChup": {
-    "sha": "5f6a54fe35437ad41b836188849699984376be1e",
+    "sha": "4edd14fe3127e71e3a1b06ec66cd82ba62456f04",
     "n": 641,
-    "digest": "d84c8fc119e056d372043cd4edd8c4ca88092903807494064c76d6d09d0929ae",
+    "digest": "4b768c06d75cd12e181163e3cd0d3294f00f12f80fa90439ea7f91add8f06901",
     "tep": {
       ".github/scripts/test/phan-loai.test.mjs": "c31bdfccd3c5d75e92a9935c16e6dbd02fcb305d2ede2b99f81cd569e666648a",
       "_acceptance/bo-cau-hoi-mau/rang/do-bo-mau.test.ts": "4045f221a89dfae9477e72a2bcae44afe88640d1dd6ca614615234f4b42660fb",
       "_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts": "6de051839243101755d1bc549371b590b09371bd655b392b45208b9bad3b61ee",
       "_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.spec.ts": "28af3a1eedc19126a24cea60132b3b2b93faa64e5b67781ffd7d6aa08fecd77d",
-      "_acceptance/config.yaml": "ef299cbbc7752d2ec614a1a769f8217c3807f425d34a00743b37c291e246e3e5",
+      "_acceptance/config.yaml": "bd2c885cf0f789acf2669e2f9a37495e8f8d50dfc98414033a9c5e4017907c69",
       "_acceptance/e24-qua-han-khong-phai-ha-tang/rang/kiem.test.ts": "0e8a5cb89935ab8c95f5623381b3837fee821d87e28fd5ab6e5fb2dc9eff5c77",
       "_acceptance/goi-y-mo-ke-hoach/evals.yaml": "714100ddf6dd39a64a930d6be12b355e14925f814a842b6f398fa27ccece1000",
       "_acceptance/goi-y-mo-ke-hoach/rang/do-nguong.mjs": "18d24c79ab5c5d85171635381a556f7aae7a704810e9284bddb91e1ee945fc31",
       "_acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs": "1a85042b0176c58e1fe96203db1fd3ec6aae7b0bcd17826435ef116d5b3bd22d",
-      "_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs": "d238a19184d5c5a86638c00f9b347fd289019041c8b019553b8d70b6faa0dbf2",
+      "_acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs": "b95e4f75146e3096a898a28850982c85de6070dc86da9182d59dc493e71b6c56",
       "_acceptance/goi-y-mo-ke-hoach/rang/man.mjs": "63e5b875135995e04a1ac4ad031fb3d1bdd9225c0d55f06c694ff0660e183929",
       "_acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs": "c743ccaf697d99a44e853cd30805f160d161ed50d6943851c0ae48abd23ea5d9",
       "_acceptance/hoi-dap-okr/rang/do-hoi-dap.test.ts": "385daae0f516778a3f58551f0350b0329ffccc645c84548bbf7227626b1ea483",
@@ -754,8 +918,8 @@
       "apps/api/test/gieo-nguoi-song-song.spec.ts": "8fea8709e657f64101ee831a4033e71887bf492a547ce39b6e2f92e3d8ccd00d",
       "apps/api/test/go-la-cat-quyen.spec.ts": "b794b13503c61a8cdf73f306b41f6d5e5f2af61b9ecc758848e99af089dd9926",
       "apps/api/test/go-thanh-vien.spec.ts": "acda04e50048658f2328259c0a042d3e2324f05cf12b6769528d7f0bf0016110",
-      "apps/api/test/goi-y-mo-ke-hoach-do-nguong.spec.ts": "33243ca2d1372472bf1ed42f8b1673b7aa8a62ecdd73098e9bb38c203c54e920",
-      "apps/api/test/goi-y-mo-ke-hoach.spec.ts": "b3d954dc319546aedae7a5939ec5c1b2465f349956289692ceff5288db0d6763",
+      "apps/api/test/goi-y-mo-ke-hoach-do-nguong.spec.ts": "68f90a71f5854c966c5c792a3623efcff10f2c9b9d995a5d491edc00306766ae",
+      "apps/api/test/goi-y-mo-ke-hoach.spec.ts": "299198d1b1723b41db33d15def0825b994ed93c7057557a81c112b271a4221fe",
       "apps/api/test/gop-y-dung-cho.spec.ts": "20535f889fa8aa18a093447d05dc650d9d94c3522225b149300ace153c0b1ec3",
       "apps/api/test/han-viec.spec.ts": "62d4fcc5b00ea42e7f7a10162af975a88c04d52127f97bbe801c252cc726c5ef",
       "apps/api/test/hoan-tac-loat-bao-dung.spec.ts": "477446f062de4533efb84c109aeec0dbb4fee3ac891aa19b4516c7ba76a60100",
@@ -1146,7 +1310,7 @@
       "packages/validation/test/tai-lieu-markdown.spec.ts": "7db0786ab2750794ae6a5b09ba618f59e9b63d1f92a3badb7e7e9a3d7b8804ec",
       "packages/validation/test/tai-lieu-tim.spec.ts": "a4bb92500c44df49acce24a0819f357a3a5198ceb5727798dd825ab9e5e12c82",
       "packages/validation/test/tai-lieu.spec.ts": "87ea07a94c7ce488d394974713af1a13dca631d9cbb65a8f0e0958a32bfaea79",
-      "packages/validation/test/thong-bao.spec.ts": "594205beb41479f3f600280986d3358bb16fb017d5bafcd9e0506bdd3d1b5676",
+      "packages/validation/test/thong-bao.spec.ts": "a37e4d6b7db41a7a73944392add6332a554d66dc9816475f26f3ac89de8ee6ed",
       "packages/validation/test/tin-hieu-dong-dau.spec.ts": "a955761f93f0ce05d3463ac1465660f2127f6143177a0289fd007cb1fd205647",
       "packages/validation/test/tin-hieu-nguong-song.spec.ts": "306536af2bdbd8d256e5c270c39cee80f03b28f2decc21dbf1aea91967d194fa",
       "packages/validation/test/tin-hieu.spec.ts": "fba15cf87c2d18f36f79cd5e6ecea7a18c6eb8618e264d6b889417ef2aadbfbd",
@@ -1171,7 +1335,7 @@
     }
   },
   "cayChup": {
-    "sha": "5f6a54fe35437ad41b836188849699984376be1e",
+    "sha": "4edd14fe3127e71e3a1b06ec66cd82ba62456f04",
     "ban": {},
     "chuaTheoDoi": []
   }
