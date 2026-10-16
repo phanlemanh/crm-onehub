@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>147 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>134 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>135 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -44,7 +44,6 @@ flowchart TD
 
 ## Đang làm
 
-- Ca kiểm lưu trữ và khôi phục của Kho tài liệu không còn đỏ ngẫu nhiên (`tai-lieu-khoi-phuc-chap-chon`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -154,6 +153,7 @@ flowchart TD
 - Soạn OKR mở trong khung bản ghi như deal (?record=soan:<cuộc>), Kara cố định ở mép phải với bề ngang chuẩn, bản nháp mở thêm về bên trái, hai ô có khung liền, khung cao hết màn, dưới 768 px phủ toàn màn hai tab, đang soạn thì không lỡ tay đóng và đóng không giết lượt (`soan-okr-trong-khung`)
 - Người gửi tín hiệu đọc rõ hộp gửi và trang Tín hiệu đã gửi ở mọi khổ màn và mọi ngôn ngữ, thấy lỗi báo đúng chỗ, và đóng biên nhận không bị hỏi lại (`sua-giao-dien-tin-hieu`)
 - Màn tác nhân đọc được trên điện thoại, trạng thái nói tiếng Việt, và bộ dựng không treo im lặng: câu hỏi của bộ dựng ở lượt sau luôn hiện thay ô soạn (`tac-nhan-va`)
+- Ca kiểm lưu trữ và khôi phục của Kho tài liệu không còn đỏ ngẫu nhiên (`tai-lieu-khoi-phuc-chap-chon`)
 - Thành viên vào đúng — quản trị đặt được tên miền nội bộ; cho phép một người đã là thành viên không sinh dòng treo; nút «Cho phép một địa chỉ» không mất sau lỗi; dựng lại thành viên theo luật «có dòng còn hiệu lực thì cho» (`thanh-vien-vao-dung`)
 - Thẻ góp ý của Trợ lý OKR — hộp sửa rộng hơn khi cột góp ý mở, mỗi đề xuất là thẻ xếp dọc trải hết bề ngang với hàng nút ở chân và đúng một nút chính, dựng trên Confirmation của AI Elements; gợi ý thông tin ở tab Tổng quan dùng cùng thẻ; chỉ giao diện (`the-gop-y-okr`)
 - Thêm bước ở kế hoạch báo đúng: danh sách bộ phận không tải được thì nói lý do; số việc quá hạn đếm theo một ngày; bộ phận không có thật trả cùng một lỗi như mọi chỗ khác (`them-buoc-bao-dung`)

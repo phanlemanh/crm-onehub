@@ -5,7 +5,7 @@ slug: tai-lieu-khoi-phuc-chap-chon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-16T15:37:00Z
 design_doc: docs/superpowers/specs/2026-10-16-tai-lieu-khoi-phuc-chap-chon-design.md
@@ -56,3 +56,6 @@ Source input: câu giao F33 của giám sát · `opportunity.md` · design doc.
 ## Notes
 
 - Nhánh `fix/tai-lieu-khoi-phuc-chap-chon`, cắt từ onehub d5e01c5a3.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-2: Bộ canh nguồn của bài kiểm chỉ xét thứ tự các dòng chụp, duyệt, đếm, chưa xét đúng tập được đem đi đếm; chụp hai lần hay đếm bằng tập rỗng vẫn lọt.
+  - Ngoài-3: Bộ canh nguồn chỉ nhận ra hai kiểu đếm theo giờ đã biết; viết lại phép đếm theo giờ kiểu khác thì lỗi đỏ ngẫu nhiên có thể quay lại mà không bị chặn sớm.
