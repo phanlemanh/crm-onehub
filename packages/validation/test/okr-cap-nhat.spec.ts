@@ -1,11 +1,17 @@
 import { describe, expect, test } from "bun:test";
-import { guiCapNhatInput, kiemGiaTriTheoKieu } from "../src/okr-cap-nhat";
+import {
+	guiCapNhatInput,
+	kiemGiaTriTheoKieu,
+	moCapNhatInput,
+} from "../src/okr-cap-nhat";
 import { KIEU_KR } from "../src/okr-kr";
 import { addCommentInput, followInput } from "../src/okr-trao-doi";
 
 const muc = { keyResultId: "kr1", value: 3, confidence: "cao", note: "" };
 const DAU_VAO = [
 	["gui hop le", guiCapNhatInput, { sessionId: "s", items: [muc] }, true],
+	["mo tu cua toi", moCapNhatInput, { entry: "cua-toi" }, true],
+	["mo loi vao la", moCapNhatInput, { entry: "la" }, false],
 	[
 		"gui ghi chu 200",
 		guiCapNhatInput,

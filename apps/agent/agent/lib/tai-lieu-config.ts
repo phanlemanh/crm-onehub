@@ -41,6 +41,16 @@ export const TAI_LIEU_AGENT = {
 		tinGoc: (hoiId: string) => `Câu hỏi kho ${hoiId}.`,
 		saiCho: "tro-ly-kho.sai-cho",
 		phienKhongRo: "khong-ro",
+		lienKet: {
+			dong: "[lien-ket-hoi]",
+			canhBao: "[lien-ket-hoi] khong ghi duoc lien ket",
+			dauCho: (hoiId: string) => `gui:${hoiId}`,
+		},
+		dungLai: {
+			canhBao: "[tro-ly-kho] khong tim thay cau hoi",
+			chiDan:
+				"This session has no document-library question. Do not call any tool. Do not search or read anything. Stop now and end your turn.",
+		},
 	},
 	bangGia: {
 		"zai/glm-5.2-fast": { vaoMoiTrieu: 2.8, raMoiTrieu: 8.8 },
