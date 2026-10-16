@@ -69,17 +69,22 @@ export function duAnCuaKho() {
 		.map((p) => ({ ten: p.name, id: p.id, root: p.rootDirectory ?? null }));
 }
 
+export const LOAI_DAY = ["push", "force_push", "branch_creation"];
+
 export function timLanDay(nhanh) {
 	const ref = encodeURIComponent(`refs/heads/${nhanh}`);
 	const trang = chayJson("gh", [
 		"api",
-		`repos/${KHO}/activity?ref=${ref}&activity_type=push&per_page=100`,
+		`repos/${KHO}/activity?ref=${ref}&per_page=100`,
 	]);
-	return trang.map((s) => ({
-		after: s.after,
-		before: s.before,
-		luc: s.timestamp,
-	}));
+	return trang
+		.filter((s) => LOAI_DAY.includes(s.activity_type))
+		.map((s) => ({
+			after: s.after,
+			before: s.before,
+			luc: s.timestamp,
+			loai: s.activity_type,
+		}));
 }
 
 export function trienKhaiCho(duAn, sha) {

@@ -148,7 +148,8 @@ evals:
       - "_acceptance/tat-ban-preview/rang/**"
     expected: |
       Rang lay ten nhanh hien tai (git rev-parse --abbrev-ref HEAD), doc moi su kien push cua nhanh qua
-      gh api repos/phanlemanh/crm-onehub/activity?ref=refs/heads/<nhanh>&activity_type=push, va giu cac lan
+      gh api repos/phanlemanh/crm-onehub/activity?ref=refs/heads/<nhanh>, giu su kien loai push, force_push
+      HOAC branch_creation (lan day dau cua nhanh moi GitHub ghi la branch_creation, khong phai push), va giu cac lan
       day ma commit DAU (after) co cay chua ca ba tep (git cat-file -e <after>:vercel.json,
       <after>:apps/app/vercel.json, <after>:apps/agent/vercel.json; fetch truoc, commit khong co tai cho ->
       ma 2). Khong lan day nao duoc giu -> ma 2 "CHUA-DAY". Lan moi nhat chua du 5 phut -> cho toi du (toi da
