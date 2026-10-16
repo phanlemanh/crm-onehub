@@ -1,5 +1,6 @@
 import { dinhUsd } from "@crm/db/ai-chi-phi-danh-muc";
 import { LOAI_NHAC_AI, type ViecAi } from "@crm/db/ai-nhac";
+import type { ViecGoiY } from "@crm/db/goi-y-nhac";
 import type { ViecOkr } from "@crm/db/okr-nhac";
 import type { ViecTomTat } from "@crm/db/okr-tom-tat";
 import { OKR_TOM_TAT } from "@crm/db/okr-tro-ly-danh-muc";
@@ -23,6 +24,7 @@ export const TIEU_DE = {
 	"buoc-sap-han": "Sắp hạn",
 	"ke-hoach-im": "Kế hoạch im",
 	"moc-ngay": "Mốc ngày",
+	"goi-y-ke-hoach": "Deal đã thắng",
 	"viec-qua-han": "Việc quá hạn",
 	"viec-sap-han": "Việc sắp hạn",
 	"viec-cho-danh-gia": "Việc chờ bạn đánh giá",
@@ -203,6 +205,17 @@ function dongTaiLieu(
 	return `• ${chu}${url ? ` — <${url}|mở tab Chờ duyệt>` : ""}`;
 }
 
+function dongGoiY(
+	v: ViecGoiY,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
+	const chu = `${v.companyName} · Deal ${v.dealName} đã thắng — mở kế hoạch 30 ngày?`;
+	if (khuon === "tron") return `${so}. ${chu}${url ? ` — ${url}` : ""}`;
+	return `• ${thoat(chu)}${url ? ` — <${url}|mở deal>` : ""}`;
+}
+
 const DONG_TOM_TAT = "Tóm tắt tuần";
 
 function dongTomTat(
@@ -243,6 +256,7 @@ function dong(v: ViecNhac, so: number, lienKet: LienKet, khuon: KhuonTin) {
 	if (laNhacViec(v)) return dongViec(v, so, url, khuon);
 	if ("planId" in v) return dongKeHoach(v, so, url, khuon);
 	if (v.loai === "tai-lieu-cho-duyet") return dongTaiLieu(v, so, url, khuon);
+	if (v.loai === "goi-y-ke-hoach") return dongGoiY(v, so, url, khuon);
 	if (v.loai === "okr-tom-tat") return dongTomTat(v, so, url, khuon);
 	if (v.loai === "ai-tran" || v.loai === "ai-doi-soat-lech") {
 		return dongAi(v, so, url, khuon);
