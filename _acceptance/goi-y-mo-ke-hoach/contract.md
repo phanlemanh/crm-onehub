@@ -5,7 +5,7 @@ slug: goi-y-mo-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-16T12:17:07Z
 design_doc: docs/superpowers/specs/2026-10-16-goi-y-mo-ke-hoach-design.md
@@ -70,6 +70,23 @@ Quét `morphological-scan.md` (preset entity-feature), bốn trục:
 - Thêm dữ liệu gợi ý vào `bun run db:seed`.
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Phép kiểm cho điều kiện «không xoá hay sửa bài kiểm cũ» được lấy lại từ lượt trước chứ không chạy lại, dù cách chấm của nó vừa đổi. Hồ sơ trình duyệt có thể ghi «đạt» cho điều kiện này mà chưa ai đo lại theo tiêu chí mới.
+  - Ngoài-3: Điều kiện về bài kiểm cũ được ghi «đạt» theo cách chấm đã bị thay, nên tiêu chí mới chưa ai thật sự đo. Người duyệt cần biết con số «đạt» này chưa kiểm lại.
+  - Ngoài-4: Phép kiểm chống xoá bài kiểm cũ có thể bỏ sót vài trường hợp xoá bài kiểm ngoài ngoại lệ đã ký. Nguy cơ là một bài kiểm bị xoá mà không ai thấy.
+  - Ngoài-5: Phần tự kiểm của phép đo chưa chứng minh được rằng ngoại lệ đã ký chỉ tha đúng một câu. Nếu phép đo tha quá rộng thì nó vẫn báo xanh.
+  - Ngoài-6: Phép kiểm «không ai xoá hay sửa bài kiểm cũ» có một ngoại lệ được khai hơi rộng, nên về lý thuyết một bài kiểm khác có chữ giống vậy bị xoá vẫn lọt qua. Hiện chưa có bài kiểm nào bị xoá theo cách đó.
+  - Ngoài-7: Khi phép kiểm bài kiểm cũ lỗi vì thiếu mốc so sánh, câu báo lỗi nêu sai nguyên nhân, nên người đọc có thể mất công đi tìm sai chỗ. Kết quả kiểm khi chạy bình thường không đổi.
+  - Ngoài-9: Sau khi tính năng được gộp, phép kiểm «không xoá bài kiểm cũ» có thể chạy mà không so với gì và vẫn báo đạt. Việc này chỉ ảnh hưởng độ tin cậy của lần chấm lại, không ảnh hưởng tính năng người dùng dùng.
+  - Ngoài-10: Phép kiểm «không xoá bài kiểm cũ» báo đạt khi không thấy gì bị mất, nhưng không tự chứng minh là nó đã thật sự quét các tệp. Nếu nó quét rỗng thì vẫn báo đạt.
+  - Ngoài-11: Bài kiểm danh sách loại thông báo chỉ đếm số lượng, nên nếu loại thông báo mới bị thay bằng tên khác hoặc có mục lặp thì bài kiểm vẫn xanh. Chức năng nhắc cho người dùng được kiểm ở chỗ khác.
+  - Ngoài-12: Thẻ gợi ý và tin nhắc buổi sáng gọi giao dịch là «Deal … đã thắng», khác với chữ «Thoả thuận» và «Chốt» mà phần còn lại của ứng dụng dùng. Người dùng thấy hai cách gọi cho cùng một thứ, và có chỗ còn lẫn chữ tiếng Anh «sheet».
+  - Ngoài-13: Một số câu báo cho người dùng chỉ nói «gợi ý», trong khi tên đầy đủ là «gợi ý mở kế hoạch». Người dùng có thể nhầm với câu «gợi ý» của nhắc kế hoạch im.
+  - Ngoài-14: Nếu sau khi deal thắng người ta đổi công ty của deal, thẻ gợi ý vẫn đề nghị mở kế hoạch cho công ty cũ. Mở kế hoạch cho công ty mới cũng không làm gợi ý đó tự đóng, và nhắc buổi sáng vẫn ghi tên công ty cũ.
+  - Ngoài-17: Thẻ người ký duyệt phạm vi xếp hai lời hứa chính (sinh gợi ý và đóng gợi ý) vào cột «sẽ không làm». Người ký có thể hiểu nhầm hệ thống hứa gì.
+  - Ngoài-18: Bằng chứng kiểm thử chứng minh một thông báo lỗi hơi khác với thông báo ghi trong mô tả. Người dùng cuối không thấy gì, nhưng người đọc hồ sơ nghiệm thu có thể bối rối.
+  - Ngoài-19: Bài kiểm quyền đọc chưa phân biệt được «người khác nhận về trống» với «thủ tục bị lỗi». Nếu có lỗi, bài kiểm có thể vẫn xanh.
 
 - Deal rời thắng khi gợi ý còn «chờ»: gợi ý giữ «chờ» nhưng ẩn ở thẻ và nhắc; phép đo đếm nó là chưa xử lý (bi quan).
 - Thước «có kế hoạch mở lúc t» đọc `closedAt` hiện tại; kế hoạch đã đóng rồi mở lại có thể làm đếm thiếu một lần chuyển xảy ra lúc nó đang đóng.
