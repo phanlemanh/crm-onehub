@@ -34,6 +34,8 @@ const en = {
 	emptyArchived: "No archived companies.",
 	search: "Search companies by name or domain…",
 	archivedToggle: "Archived",
+	nenTang: (ten: string) =>
+		`This is a ${ten} page, not the company's own website. Leave it empty if the company has no site of its own.`,
 	create: {
 		title: "New company",
 		newButton: "New company",
@@ -44,7 +46,7 @@ const en = {
 		domain: "Domain",
 		domainPlaceholder: "stripe.com",
 		domainHint:
-			"A full URL is fine — it is reduced to the bare host, which has to be unique.",
+			"A full URL is fine — it is reduced to the bare host, which has to be unique. Facebook, Zalo or LinkedIn pages are not accepted here.",
 		owner: "Owner",
 		unassigned: "Unassigned",
 		submit: "Add company",
@@ -96,6 +98,8 @@ const vi = {
 	emptyArchived: "Chưa có công ty nào đã lưu trữ.",
 	search: "Tìm công ty theo tên hoặc tên miền…",
 	archivedToggle: "Đã lưu trữ",
+	nenTang: (ten: string) =>
+		`Đây là trang ${ten}, không phải trang web của công ty. Để trống nếu công ty chưa có trang web riêng.`,
 	create: {
 		title: "Công ty mới",
 		newButton: "Công ty mới",
@@ -106,7 +110,7 @@ const vi = {
 		domain: "Tên miền",
 		domainPlaceholder: "datxanh.vn",
 		domainHint:
-			"Dán cả đường dẫn cũng được — hệ thống rút về tên miền gốc, và tên miền đó phải là duy nhất.",
+			"Dán cả đường dẫn cũng được — hệ thống rút về tên miền gốc, và tên miền đó phải là duy nhất. Trang Facebook, Zalo hay LinkedIn không dùng được ở đây.",
 		owner: "Phụ trách",
 		unassigned: "Chưa giao",
 		submit: "Thêm công ty",
