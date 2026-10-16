@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5239dd12f52548ccd38623b0ea3680d7d753b36d
+verified_commit: bfb40466cb5e3c0917ddb1cbbae5d010c400601d
 human_signoff: manh 2026-10-16
 ---
 
@@ -230,3 +230,7 @@ Thợ đo, KHÔNG phải tác tử chấm: S4 lượt 3 mang E10 sang từ lư�
   - (b) ngoại lệ còn nguyên, đổi giá trị một expect khác cùng tệp (`toBe(b)` → `toBe(a)`) → exit 1: `… expect bi xoa hay sua: expect(a,"muc gop sinh thong bao moi khi so doi").toBe(b)` — ngoại lệ không mở cho câu khác.
   - (c) đối chứng: chỉ đổi khoảng trắng ngoài chuỗi ở câu đó → exit 0 (đúng luật của răng).
 - Giới hạn còn lại (Ngoài-4, Ngoài-6 trên thẻ): ngoại lệ so theo chuỗi con và không gắn tên tệp.
+
+### Re-pin lần 1 — 2026-10-16, do ghim lại sau gộp onehub 773115a69 (#443)
+run_id: repin-20261016T140424Z-16502
+sha: bfb40466cb5e3c0917ddb1cbbae5d010c400601d · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E6, E9 (E9 không khai paths) · diff chạm vật đo ngoài làn máy: E6 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-6, AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
