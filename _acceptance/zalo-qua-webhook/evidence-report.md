@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6d97b4eef5f75dc90fbe620ea58c5878eb4cc767
+verified_commit: 3920b33e3e1adb30c79b89759cc3f4ae74222080
 human_signoff: Phan Le Manh 2026-10-14
 ---
 
@@ -200,3 +200,7 @@ none — every multi-run eval is uniform (không eval nào khai `runs` > 1 trong
 
 Round 1: đã sinh review-findings với 5 mục ngoài hợp đồng (carried sang round 2, xem review-findings.md); dữ liệu bàn giao cho vòng này không kèm bản ghi kết quả máy của round 1.
 Round 2 (vòng hiện tại): chạy lại toàn bộ E1–E12 cùng bốn lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) — tất cả PASS, verdict PASS.
+
+### Re-pin lần 1 — 2026-10-16, do ghim lại sau nhận kit 2.31.0 và gộp onehub 28d8ca19f
+run_id: repin-20261016T104916Z-21330
+sha: 3920b33e3e1adb30c79b89759cc3f4ae74222080 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
