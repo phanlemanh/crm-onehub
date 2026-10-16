@@ -8,6 +8,8 @@
 
 **Tech Stack:** Prisma + Postgres, NestJS + nestjs-trpc, Next.js + `@crm/ui`, bun test, tác tử eve (`apps/agent`).
 
+**Gate 1.5:** duyệt — manh, 2026-10-16T08:52Z («Gate 1.5 goi-y-mo-ke-hoach: duyệt kế hoạch»).
+
 **Spec:** `docs/superpowers/specs/2026-10-16-goi-y-mo-ke-hoach-design.md` · hợp đồng `_acceptance/goi-y-mo-ke-hoach/contract.md` · evals `_acceptance/goi-y-mo-ke-hoach/evals.yaml` (Cổng Phạm vi ký 16/10, bốn câu theo khuyến nghị).
 
 ## Global Constraints
