@@ -106,7 +106,7 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.gymk_hoi_quy
-    expected: "exit 0; node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu rồi --moc <mốc ghim trong lệnh, merge-base của nhánh với origin/onehub> — quét MỌI tệp kiểm đã có ở mốc mà nhánh sửa, xoá hay đổi tên (git diff --name-status -M --diff-filter=MDR theo mẫu tệp kiểm); một câu expect sẵn có bị xoá hay sửa thì thoát 1 nêu tệp và câu; danh sách cho-phép rỗng; rồi bun run check-types thoát 0. Chiều đỏ: --tu-thu dựng một tệp kiểm giả có một expect bị xoá và phải thấy thoát 1."
+    expected: "exit 0; node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu rồi --moc <mốc ghim trong lệnh, merge-base của nhánh với origin/onehub> — quét MỌI tệp kiểm đã có ở mốc mà nhánh sửa, xoá hay đổi tên (git diff --name-status -M --diff-filter=MDR theo mẫu tệp kiểm); một câu expect sẵn có bị xoá hay sửa thì thoát 1 nêu tệp và câu; danh sách cho-phép có đúng một câu — expect(new Set(LOAI_THONG_BAO).size).toBe(21) của packages/validation/test/thong-bao.spec.ts, ngoại lệ có tên của AC-10 (AC-7 thêm loại thứ 22); mốc là merge-base của nhánh với origin/onehub lấy lúc chạy; rồi bun run check-types thoát 0. Chiều đỏ: --tu-thu dựng một tệp kiểm giả có một expect bị xoá và phải thấy thoát 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/**/test/**", "packages/**/test/**", "apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts"]
 

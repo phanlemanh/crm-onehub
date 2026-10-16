@@ -5,9 +5,9 @@ slug: goi-y-mo-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: implemented
 approved_by: manh
-approved_at: 2026-10-16T08:42:26Z
+approved_at: 2026-10-16T12:17:07Z
 design_doc: docs/superpowers/specs/2026-10-16-goi-y-mo-ke-hoach-design.md
 ---
 
@@ -36,7 +36,7 @@ Source input: hàng DA3b · `opportunity.md` (ngưỡng đã ký) · design doc 
 - AC-7 (cross-layer): Given P có một gợi ý «chờ» của deal đang thắng, một gợi ý «chờ» của deal đã rời thắng, và một gợi ý đã «bỏ qua», When bộ gom nhắc buổi sáng chạy cửa sổ 09:00 giờ VN, Then bộ gom của P có đúng một mục loại `goi-y-ke-hoach` (của deal đang thắng) mang tên công ty và tên deal, và mục ấy thành một Thông báo của P; bộ gom của người khác không có mục nào loại đó; sau khi P bỏ qua gợi ý ấy, lượt gom kế không còn mục đó.
 - AC-8: Given kho mẫu gieo qua đường ghi thật với đáp án viết trước — lần chuyển mở→thắng có gợi ý xử lý trong 1 ngày, thua→thắng có gợi ý xử lý sau 4 ngày, deal tạo thẳng ở thắng, lần chuyển thắng→thắng (không tính), lần chuyển khi công ty có kế hoạch mở (không tính), gợi ý sinh chưa tới 3 ngày trước `--den` (chưa phán), When chạy `rang/do-nguong.mjs --tu --den`, Then JSON in đúng số lần chuyển, `dealThangThieuGoiY`, số gợi ý xử lý kịp và tỉ lệ; khi xoá gợi ý của một lần chuyển trong bản sao kho thì `dealThangThieuGoiY` = 1 và thoát 2; khi tỉ lệ dưới 0,5 thì thoát 2; khi cửa sổ không có lần chuyển nào, không gợi ý nào đã đủ 3 ngày để phán, hay thiếu đối số thì thoát 3 (không đo được, không phải sống); mẫu số không đọc từ bảng gợi ý; thước chạy trong giao dịch chỉ đọc.
 - AC-9 (judgment): Given `CONTEXT.md`, `docs/api.md` và `docs/plan/lo-trinh-viec-du-an.json` sau vòng này, When người mới đọc, Then biết: Gợi ý mở kế hoạch là gì và khác «Gợi ý» của nhắc kế hoạch im ra sao; khi nào máy sinh nó (lần chuyển sang thắng, công ty chưa có kế hoạch mở, deal chưa có gợi ý chờ); ba kết cục và ai xử lý được; tạo kế hoạch bằng đường nào cũng đóng gợi ý; hai thủ tục mới của router onboarding; và hàng DA3b không còn «chưa mở».
-- AC-10: Given bộ kiểm hiện có của kho, When chạy các suite của `feature_loop.suite_keys` sau lượt này, Then mọi suite thoát 0, không `expect` nào bị xoá hay sửa ở các tệp kiểm đã có, và `check-types` thoát 0.
+- AC-10: Given bộ kiểm hiện có của kho, When chạy các suite của `feature_loop.suite_keys` sau lượt này, Then mọi suite thoát 0, không `expect` nào bị xoá hay sửa ở các tệp kiểm đã có — trừ đúng một ngoại lệ có tên: câu đếm loại thông báo `expect(new Set(LOAI_THONG_BAO).size).toBe(21)` của `packages/validation/test/thong-bao.spec.ts` đổi thành 22, vì AC-7 thêm loại `goi-y-ke-hoach` (chủ kho chốt 16/10) — và `check-types` thoát 0.
 
 ## Vòng đời (ba câu của `docs/vong-doi.md`)
 
