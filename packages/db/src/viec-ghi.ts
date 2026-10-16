@@ -1,3 +1,4 @@
+import { buocCuaViec, chieuLenBuoc } from "./buoc-viec-chieu";
 import { Prisma } from "./generated/prisma/client";
 import { ActivityType, TrangThaiViec } from "./generated/prisma/enums";
 import { docDuocDoiTac } from "./vai-doi-tac";
@@ -7,7 +8,6 @@ import {
 	banGhiCua,
 	CHON_GAN,
 	cotGan,
-	DICH_ROI_CHUA_LAM,
 	DO_THI,
 	dieuKienViecMoCua,
 	dieuKienXemViec,
@@ -19,6 +19,7 @@ import {
 	ngayHan,
 	parseViecCanLamMeta,
 	quyenDoi,
+	roiChuaLamMoi,
 	TRANG_THAI_KHEP,
 	TRANG_THAI_MO,
 	tenKeHoach,
@@ -103,7 +104,7 @@ function nguoiCua(n: { id: string; name: string }): NguoiVet {
 	return { id: n.id, ten: n.name };
 }
 
-async function ghiVet(
+export async function ghiVetViec(
 	tx: DbGhi,
 	dau: { viecId: string; nguoiId: string | null; nguon: NguonViec; luc: Date },
 	vet: VetViec,
@@ -144,6 +145,12 @@ async function docViecGhi(
 		throw new LoiViec("khong-thay", VIEC.thongDiep.khongCoViec(viecId));
 	}
 	return viec;
+}
+
+async function chanViecCuaBuoc(tx: DbGhi, viecId: string): Promise<void> {
+	if ((await buocCuaViec(tx, viecId)) !== null) {
+		throw new LoiViec("khong-hop-le", VIEC.thongDiep.goBuocOKeHoach);
+	}
 }
 
 export async function kiemNguoiNhanViec(
@@ -245,7 +252,7 @@ export async function taoViec(
 	for (const n of nguoiTheoDoi) {
 		await tx.viecTheoDoi.create({ data: { viecId: viec.id, userId: n.id } });
 	}
-	await ghiVet(
+	await ghiVetViec(
 		tx,
 		{
 			viecId: viec.id,
@@ -273,6 +280,7 @@ export async function doiTrangThai(
 	input: DoiTrangThaiInput,
 ): Promise<void> {
 	const viec = await docViecGhi(tx, input.viecId, input.nguoiId);
+	if (input.den === TrangThaiViec.HUY) await chanViecCuaBuoc(tx, viec.id);
 	const vai = vaiCua(viec, input.nguoiId);
 	const ket = quyenDoi(viec.trangThai, input.den, vai);
 	if (ket === "khong-hop-le") {
@@ -294,11 +302,7 @@ export async function doiTrangThai(
 	if (laMoLai(viec.trangThai, input.den)) {
 		await kiemNguoiNhanViec(tx, viec.nguoiThucHienId);
 	}
-	const roiChuaLam =
-		viec.roiChuaLamLuc === null &&
-		viec.nguoiThucHienId === input.nguoiId &&
-		viec.trangThai === TrangThaiViec.CHUA_LAM &&
-		DICH_ROI_CHUA_LAM.includes(input.den);
+	const roiChuaLam = roiChuaLamMoi(viec, input.nguoiId, input.den);
 	await tx.viec.update({
 		where: { id: viec.id },
 		data: {
@@ -307,11 +311,12 @@ export async function doiTrangThai(
 			roiChuaLamLuc: roiChuaLam ? input.now : undefined,
 		},
 	});
-	await ghiVet(tx, dauVet(input), {
+	await ghiVetViec(tx, dauVet(input), {
 		loai: "doi-trang-thai",
 		truoc: { trangThai: viec.trangThai },
 		sau: { trangThai: input.den },
 	});
+	await chieuLenBuoc(tx, viec.id);
 }
 
 export async function suaViec(tx: DbGhi, input: SuaViecInput): Promise<void> {
@@ -322,6 +327,9 @@ export async function suaViec(tx: DbGhi, input: SuaViecInput): Promise<void> {
 			"khong-quyen",
 			VIEC.thongDiep.chiGiaoVaThucHien(VIEC.lam.sua),
 		);
+	}
+	if (input.hanNgay === null && (await buocCuaViec(tx, viec.id)) !== null) {
+		throw new LoiViec("khong-hop-le", VIEC.thongDiep.buocLuonCoHan);
 	}
 	const tieuDe = input.tieuDe ?? viec.tieuDe;
 	const moTa = input.moTa === undefined ? viec.moTa : input.moTa;
@@ -339,19 +347,20 @@ export async function suaViec(tx: DbGhi, input: SuaViecInput): Promise<void> {
 		data: { tieuDe, moTa, hanNgay: input.hanNgay },
 	});
 	if (doiNoiDung) {
-		await ghiVet(tx, dauVet(input), {
+		await ghiVetViec(tx, dauVet(input), {
 			loai: "doi-noi-dung",
 			truoc: { tieuDe: viec.tieuDe, moTa: viec.moTa },
 			sau: { tieuDe, moTa },
 		});
 	}
 	if (hanMoi !== hanCu) {
-		await ghiVet(tx, dauVet(input), {
+		await ghiVetViec(tx, dauVet(input), {
 			loai: "doi-han",
 			truoc: { hanNgay: hanCu },
 			sau: { hanNgay: hanMoi },
 		});
 	}
+	await chieuLenBuoc(tx, viec.id);
 }
 
 export async function doiNguoiThucHien(
@@ -371,11 +380,12 @@ export async function doiNguoiThucHien(
 		where: { id: viec.id },
 		data: { nguoiThucHienId: moi.id },
 	});
-	await ghiVet(tx, dauVet(input), {
+	await ghiVetViec(tx, dauVet(input), {
 		loai: "doi-nguoi-thuc-hien",
 		truoc: nguoiCua(viec.nguoiThucHien),
 		sau: moi,
 	});
+	await chieuLenBuoc(tx, viec.id);
 }
 
 function nguoiTrongViec(viec: ViecGhi): string[] {
@@ -406,7 +416,7 @@ export async function ganBanGhi(
 	await tx.viecGan.create({
 		data: { viecId: viec.id, ...cotGan(input.banGhi) },
 	});
-	await ghiVet(tx, dauVet(input), { loai: "gan", truoc: null, sau: ban });
+	await ghiVetViec(tx, dauVet(input), { loai: "gan", truoc: null, sau: ban });
 }
 
 export async function goBanGhi(
@@ -415,13 +425,14 @@ export async function goBanGhi(
 ): Promise<void> {
 	const viec = await docViecGhi(tx, input.viecId, input.nguoiId);
 	canGiaoHayLam(viec, input.nguoiId, VIEC.lam.gan);
+	if (input.banGhi.loai === "plan") await chanViecCuaBuoc(tx, viec.id);
 	const co = await tx.viecGan.findFirst({
 		where: { viecId: viec.id, ...cotGan(input.banGhi) },
 		select: CHON_GAN,
 	});
 	if (!co) return;
 	await tx.viecGan.delete({ where: { id: co.id } });
-	await ghiVet(tx, dauVet(input), {
+	await ghiVetViec(tx, dauVet(input), {
 		loai: "go",
 		truoc: banGhiCua(co),
 		sau: null,
@@ -439,7 +450,7 @@ export async function themTheoDoi(
 	if (viec.theoDoi.some((t) => t.userId === input.userId)) return;
 	const nguoi = await kiemNguoiNhanViec(tx, input.userId);
 	await tx.viecTheoDoi.create({ data: { viecId: viec.id, userId: nguoi.id } });
-	await ghiVet(tx, dauVet(input), {
+	await ghiVetViec(tx, dauVet(input), {
 		loai: "theo-doi",
 		truoc: null,
 		sau: nguoi,
@@ -457,7 +468,7 @@ export async function boTheoDoi(tx: DbGhi, input: TheoDoiInput): Promise<void> {
 	});
 	if (!hang) return;
 	await tx.viecTheoDoi.delete({ where: { id: hang.id } });
-	await ghiVet(tx, dauVet(input), {
+	await ghiVetViec(tx, dauVet(input), {
 		loai: "bo-theo-doi",
 		truoc: nguoiCua(hang.user),
 		sau: null,
@@ -479,6 +490,7 @@ export async function xoaViec(
 	if (!vaiCua(viec, input.nguoiId).giao) {
 		throw new LoiViec("khong-quyen", VIEC.thongDiep.chiNguoiGiao(VIEC.lam.xoa));
 	}
+	await chanViecCuaBuoc(tx, viec.id);
 	if (await coLichSu(tx, viec.id)) {
 		throw new LoiViec("co-lich-su", VIEC.thongDiep.coLichSu);
 	}
@@ -514,7 +526,7 @@ export async function chuyenViecTrongGiaoDich(
 			nguoiGiao: nguoiCua(v.nguoiGiao),
 			nguoiThucHien: nguoiCua(v.nguoiThucHien),
 		};
-		await ghiVet(
+		await ghiVetViec(
 			tx,
 			{
 				viecId: v.id,
@@ -533,6 +545,7 @@ export async function chuyenViecTrongGiaoDich(
 				},
 			},
 		);
+		await chieuLenBuoc(tx, v.id);
 	}
 	return ds.length;
 }
@@ -552,7 +565,7 @@ export async function goTheoDoiCuaNguoi(
 	});
 	for (const h of hang) {
 		await tx.viecTheoDoi.delete({ where: { id: h.id } });
-		await ghiVet(
+		await ghiVetViec(
 			tx,
 			{ viecId: h.viecId, nguoiId: null, nguon: "api", luc: now },
 			{ loai: "bo-theo-doi", truoc: nguoiCua(h.user), sau: null },
@@ -569,7 +582,7 @@ export async function ghiGoDoXoa(
 	const hang = await tx.viecGan.findMany({ where, select: CHON_GAN });
 	for (const g of hang) {
 		const ban = banGhiCua(g);
-		await ghiVet(
+		await ghiVetViec(
 			tx,
 			{ viecId: g.viecId, nguoiId: null, nguon: "api", luc: now },
 			{ loai: "go-do-ban-ghi-xoa", truoc: ban, sau: { ten: ban.ten } },
@@ -679,7 +692,7 @@ export async function chepViecCanLam(
 	for (const b of ganDung) {
 		await tx.viecGan.create({ data: { viecId: viec.id, ...cotGan(b) } });
 	}
-	await ghiVet(
+	await ghiVetViec(
 		tx,
 		{
 			viecId: viec.id,
@@ -840,7 +853,7 @@ export async function taoViecCon(
 		now: input.now,
 	});
 	await tx.viec.update({ where: { id: con.id }, data: { chaId: cha.id } });
-	await ghiVet(
+	await ghiVetViec(
 		tx,
 		{ viecId: cha.id, nguoiId: input.nguoiId, nguon: "web", luc: input.now },
 		{

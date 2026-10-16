@@ -20,6 +20,7 @@ export const departmentOutput = z.object({
 	position: z.number(),
 	archivedAt: z.date().nullable(),
 	purgeable: z.boolean(),
+	headUserId: z.string().nullable().default(null),
 });
 
 export const departmentListOutput = z.array(departmentOutput);
@@ -80,6 +81,14 @@ export const planCreateFromTemplateInput = z.object({
 	templateId: z.string().trim().min(1),
 	startedAt: ngayLich,
 	ownerId: z.string().trim().min(1),
+	nguoiTheoPhongBan: z
+		.array(
+			z.object({
+				departmentId: z.string().trim().min(1),
+				userId: z.string().trim().min(1),
+			}),
+		)
+		.optional(),
 });
 
 export const stepOutput = z.object({
@@ -95,6 +104,11 @@ export const stepOutput = z.object({
 	assignee: z
 		.object({ id: z.string(), name: z.string(), image: z.string().nullable() })
 		.nullable(),
+	viecId: z.string().nullable().default(null),
+	viecTrangThai: z
+		.enum(["CHUA_LAM", "DANG_LAM", "CHO_DANH_GIA", "XONG", "HUY"])
+		.nullable()
+		.default(null),
 });
 
 export const planOutput = z.object({
@@ -289,6 +303,11 @@ export const planListOutput = z.object({
 
 export const planIdInput = z.object({ id: z.string().trim().min(1) });
 
+export const planCloseInput = z.object({
+	id: z.string().trim().min(1),
+	huyViecMo: z.boolean().optional(),
+});
+
 export const enrollmentStage = z.enum([
 	"accountAt",
 	"courseAt",
@@ -344,6 +363,7 @@ export type PlanListInput = z.infer<typeof planListInput>;
 export type PlanRow = z.infer<typeof planRow>;
 export type PlanListOutput = z.infer<typeof planListOutput>;
 export type PlanIdInput = z.infer<typeof planIdInput>;
+export type PlanCloseInput = z.infer<typeof planCloseInput>;
 export type EnrollmentStage = z.infer<typeof enrollmentStage>;
 export type EnrollmentUpsertInput = z.infer<typeof enrollmentUpsertInput>;
 export type EnrollmentRemoveInput = z.infer<typeof enrollmentRemoveInput>;

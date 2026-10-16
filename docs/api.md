@@ -290,6 +290,23 @@ self-hoster's admin cannot redeploy.
   một vết (`keHoach.doiCamTrich`, `buoc.giao`) trong cùng giao dịch. Người thường thì
   không đổi gì. `datBuocXong` (`@crm/db/onboarding-buoc`) không đổi: tin Zalo «xong n»
   chỉ đánh dấu xong.
+- **Bước là bản chiếu của Việc (hàng DA3, `ke-hoach-sinh-viec`).** `onboarding.createFromTemplate` nhận
+  thêm `nguoiTheoPhongBan?: { departmentId, userId }[]` (người làm cho từng phòng ban; vắng thì trưởng
+  phòng — `Department.headUserId`, có trong `onboarding.listDepartments` — nếu đọc được dữ liệu đối tác,
+  không thì người cầm trịch); người do người chọn mà mang vai «chỉ OKR» → 400
+  `ONBOARDING.thongDiep.vaiChiOkrPhong` (tên người, tên phòng), không ghi gì. Mỗi bước sinh từ khuôn, và
+  mỗi bước của `addStep`, mang đúng một Việc qua `OnboardingStep.viecId` (người giao là người tạo, nguồn
+  vết `khuon` hay `web`, gắn kế hoạch). `StepOutput` thêm `viecId` và `viecTrangThai` (vắng → null).
+  Việc là nguồn sự thật: `chieuLenBuoc` (`@crm/db/buoc-viec-chieu`) chép người làm, hạn, tên, xong sang
+  bước ở cuối mọi lệnh ghi Việc (`doiTrangThai`, `suaViec`, `doiNguoiThucHien`, `keoViec`, chuyển việc);
+  Việc Huỷ thì bước không có người làm. Bốn lệnh trên thẻ Bước (`assignStep`, `setStepDone`,
+  `rescheduleStep`, `removeStep`) và «xong n» (`datBuocXong`, tham số `nguon`) ghi vào Việc qua `ghiTuBuoc`
+  (`@crm/db/buoc-viec`) bằng quyền của kế hoạch, không bằng vai người giao/người làm; lệnh trên khung Việc
+  vẫn theo quyền Việc. Bỏ giao bước có Việc → 400 `buocLuonCoNguoi`; bỏ xong khi người làm đã sang vai
+  «chỉ OKR» → 400 như «Làm lại»; `removeStep` chuyển Việc sang Huỷ (vết kèm lý do) rồi xoá bước. Trên Việc
+  của một bước, Huỷ, xoá và gỡ gắn kế hoạch trả 400 `VIEC.thongDiep.goBuocOKeHoach`. `closePlan` nhận
+  `huyViecMo?: boolean`: đúng thì Việc còn mở của bước chưa xong sang Huỷ (nguồn `dong-ke-hoach`); mở lại
+  không hồi. Nhắc buổi sáng không phát `buoc-*` cho bước có Việc — Việc tự nhắc `viec-*`.
 - **Writes in the shared scope are either self-service or admin-only.** API keys
   and the person's own Zalo channel are self-service; every system setting —
   `settings.*` writes included, gated by `canManageSettings` — requires an owner
@@ -693,7 +710,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   same tree that decides edit rights, no extra query); the morning reminder and the
   agent build it with `nguCanhXemOkr`, and a test compares the two head sets on the
   sample OKR set. `_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem` fails on
-  a read without the condition unless `MIEN_XEM` names it with a reason.
+  a read without the condition unless `MIEN_XEM` names it with a reason. The
+  `acceptance gate` job of `.github/workflows/acceptance.yml` runs it on every pull request
+  and on every push to `onehub`.
   - Lists (`byUnit`, `mine`, `danhSach`, `bangCham`, `xuatKy`, `khoiCuaToi`) leave
     the objective out, and counts and pages do not include it.
   - Reads by id (`objective`, `dienBien`, `canhKr`, `comments`, `lichSuSo`,
