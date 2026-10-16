@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>146 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>123 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>124 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -46,7 +46,6 @@ flowchart TD
 
 ## Đang làm
 
-- Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu (`mau-trang-thai-chung`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -124,6 +123,7 @@ flowchart TD
 - Lý do Kara viết cho dòng căn chỉnh ở Soạn OKR đi theo căn chỉnh vào OKR thật, căn chỉnh cũ từ Soạn được điền lại, và khuôn trả của mục tiêu nói rõ mức tin của từng căn chỉnh (`ly-do-can-chinh-tu-soan`)
 - Lý do Kara nộp bản nháp bị từ chối hiện thành câu theo ngôn ngữ người dùng, không lộ mã máy (`ly-do-tu-choi-nop-theo-locale`)
 - Màn OKR trước R1 — Hồi ý không bị thanh công bố che, Cập nhật tuần nói «đã xong tuần này», thẻ Toàn cảnh không nói ngược bảng (`man-okr-truoc-r1`)
+- Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu (`mau-trang-thai-chung`)
 - Máy nhắc thay người canh — mỗi sáng một tin Slack riêng gom bước quá hạn, bước sắp hạn, kế hoạch im và mốc ngày 7 · 14 · 30; thẻ Tasks hiện cùng danh sách; ai cũng tự theo dõi được một kế hoạch (`may-nhac-truoc-nguoi`)
 - Máy soạn bản đề xuất — tải tệp quy định đang có (Word, PDF có chữ) lên kho tài liệu, máy soạn thành bản đề xuất có trích đoạn nguồn, chủ trang đọc nguồn cạnh nhau rồi duyệt (`may-soan-de-xuat`)
 - «Menu con của bộ lọc mở được trên điện thoại — không còn nằm ngoài màn ở khổ 375» (`menu-con-loc-dien-thoai`)
