@@ -64,7 +64,9 @@ function xuLy<K extends SuKienKenh>(suKien: K): NonNullable<ChannelEvents[K]> {
 	return ham;
 }
 
-function duLieu(suKien: SuKien): DuLieuLuot | DuLieuPhien | Record<never, never> {
+function duLieu(
+	suKien: SuKien,
+): DuLieuLuot | DuLieuPhien | Record<never, never> {
 	if (suKien === "turn.failed") return LOI_LUOT;
 	if (suKien === "session.failed") return LOI_PHIEN;
 	return {};
@@ -441,12 +443,18 @@ describe("cho-tac-nhan-lau", () => {
 			expect(sauHong.continuationToken, "failed van ghi token").toBe(
 				builderToken(id),
 			);
-			expect(sauHong.lastAssistantAt, "failed van ghi lastAssistantAt").not.toBeNull();
+			expect(
+				sauHong.lastAssistantAt,
+				"failed van ghi lastAssistantAt",
+			).not.toBeNull();
 
 			const dongLoi = loi.mock.calls
 				.map((g) => String(g[0]))
 				.filter((d) => d.startsWith(`[agent] thong bao tac nhan ${id}:`));
-			expect(dongLoi.length, "ca waiting va failed deu cham bo ghi va bi tu choi").toBe(2);
+			expect(
+				dongLoi.length,
+				"ca waiting va failed deu cham bo ghi va bi tu choi",
+			).toBe(2);
 			for (const d of dongLoi)
 				expect(d, "thong bao tac nhan").toContain("co so du lieu tu choi");
 		} finally {

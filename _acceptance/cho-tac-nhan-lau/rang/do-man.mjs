@@ -8,6 +8,7 @@ import suKienGoiBoDung from "../../../apps/agent/test/fixtures/goi-bo-dung-kem-k
 };
 import { ghiThongBaoTacNhan } from "../../../apps/agent/agent/lib/thong-bao-tac-nhan.ts";
 import { CHO_TAC_NHAN } from "../../../apps/app/lib/agent-builder-cho.ts";
+import { khungMessages } from "../../../apps/app/lib/messages/agent-builder-khung.ts";
 import { troChuyenMessages } from "../../../apps/app/lib/messages/agent-builder-tro-chuyen.ts";
 import { db } from "../../../packages/db/src/index.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
@@ -25,6 +26,7 @@ const DA_CHO_MS = CHO_TAC_NHAN.nguongLauMs + 50_000;
 const DUOI_MS = 5_000;
 const LECH_GIAY = 5;
 const CHU_CU = "Chạy ngầm";
+const CHO_CHUONG_MS = 10_000;
 const TEN_TAC_NHAN = "Đo màn: tóm tắt deal mỗi sáng";
 const t = troChuyenMessages("vi");
 const MA_TRAN = [
@@ -36,10 +38,12 @@ const MA_TRAN = [
 	"mo-tu-chuong-1280",
 	"chuong-375",
 	"mo-tu-chuong-375",
+	"mo-tu-thanh-ben-1280",
 ];
 const THE = "[data-slot=the-dang-dung]";
 const CHUONG = "[data-slot=chuong-thong-bao]";
 const SO = "[data-slot=so-chua-doc]";
+const THANH_BEN = `nav[aria-label="${khungMessages("vi").thanhBen.danhSachHoiThoai}"]`;
 
 const dong = [];
 const daPhat = new Set();
@@ -373,6 +377,51 @@ async function chay() {
 			);
 			await anh(p, `chuong-${kho}`);
 			await moTuChuong(p, `mo-tu-chuong-${kho}`, nguoi, slug, xong, truoc);
+		} finally {
+			await ctx.close();
+		}
+	}
+
+	await db.thongBao.updateMany({
+		where: { nguoiNhanId: nguoi.id },
+		data: { docLuc: null },
+	});
+	await db.agentConversation.update({
+		where: { id: xong },
+		data: { lastReadAt: null },
+	});
+	{
+		const { ctx, p } = await trang(c, 1280);
+		try {
+			await mo(p, `${APP}/${slug}/chat`, CHUONG);
+			const lienKet = `${THANH_BEN} a[href="/${slug}/chat/${xong}"]`;
+			const coLienKet = await p
+				.waitForSelector(lienKet, { timeout: CHO_MS })
+				.then(() => true)
+				.catch(() => false);
+			if (!coLienKet) khongDo(`thanh ben khong co ${lienKet}`);
+			const truoc = await soChuong(p);
+			await p.click(lienKet);
+			const giam = await p
+				.waitForFunction(
+					(sel, mong) => Number(document.querySelector(sel)?.textContent ?? 0) === mong,
+					{ timeout: CHO_CHUONG_MS },
+					SO,
+					truoc - 1,
+				)
+				.then(() => true)
+				.catch(() => false);
+			const sau = await soChuong(p);
+			const daDoc = await db.thongBao.findFirst({
+				where: { nguoiNhanId: nguoi.id, duongDan: `/chat/${xong}` },
+				select: { docLuc: true },
+			});
+			kiem(
+				"mo-tu-thanh-ben-1280",
+				`mo tu thanh ben: docLuc ${daDoc?.docLuc ? "co" : "khong"}, so chuong ${truoc} -> ${sau} trong ${CHO_CHUONG_MS / 1000} s, khong tai lai trang`,
+				truoc >= 1 && giam && Boolean(daDoc?.docLuc),
+			);
+			await anh(p, "mo-tu-thanh-ben-1280");
 		} finally {
 			await ctx.close();
 		}
