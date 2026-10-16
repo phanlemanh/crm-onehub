@@ -58,10 +58,12 @@ export function DealStageMenu({
 	dealId,
 	stage,
 	variant = "inline",
+	wrapLabel = false,
 }: {
 	dealId: string;
 	stage: string;
 	variant?: "inline" | "control";
+	wrapLabel?: boolean;
 }) {
 	const [, setCloseParams] = useQueryStates(closeReasonParams);
 	const setStage = useStageMutation();
@@ -85,9 +87,9 @@ export function DealStageMenu({
 						type="button"
 						onClick={(event) => event.stopPropagation()}
 						disabled={setStage.isPending}
-						className="flex min-w-0 items-center text-left hover:text-foreground disabled:opacity-50"
+						className="flex min-w-0 max-w-full items-center text-left hover:text-foreground disabled:opacity-50"
 					>
-						<DealStageIndicator stage={stage} />
+						<DealStageIndicator stage={stage} wrapLabel={wrapLabel} />
 					</button>
 				)}
 			</DropdownMenuTrigger>
