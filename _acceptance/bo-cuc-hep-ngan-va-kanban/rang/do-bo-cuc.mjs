@@ -369,8 +369,26 @@ const doTranNgan = (t) =>
 				cuon(st.overflowY) &&
 				!khungNgang(e) &&
 				e.scrollWidth > e.clientWidth + 1
-			)
-				tran.push(`cuon ngang ${ten(e)}`);
+			) {
+				const re = e.getBoundingClientRect();
+				let xa = null;
+				for (const c of e.querySelectorAll("*")) {
+					const qc = c.getBoundingClientRect();
+					if (qc.right > re.right + 1 && (!xa || qc.right > xa.r))
+						xa = { r: qc.right, c };
+				}
+				const duyet = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
+				for (let n = duyet.nextNode(); n; n = duyet.nextNode()) {
+					const dai = document.createRange();
+					dai.selectNodeContents(n);
+					const qn = dai.getBoundingClientRect();
+					if (qn.right > re.right + 1 && (!xa || qn.right > xa.r))
+						xa = { r: qn.right, c: n.parentElement };
+				}
+				tran.push(
+					`cuon ngang ${ten(e)}${xa ? ` vi ${ten(xa.c)} ${Math.round(xa.r - re.right)}px` : ""}`,
+				);
+			}
 		}
 		const tieuDe = k.querySelector(
 			'[data-slot="drawer-title"], [data-slot="sheet-title"]',
