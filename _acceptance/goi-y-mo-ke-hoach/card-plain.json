@@ -1,0 +1,39 @@
+{
+  "feature_plain": "Khi một deal sang giai đoạn thắng, máy tự tạo một gợi ý «mở kế hoạch onboard 30 ngày» cho người phụ trách; họ bấm mở kế hoạch hay bỏ qua ngay trên deal, và tạo kế hoạch bằng đường nào cũng đóng gợi ý.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ không tạo gợi ý trùng: deal còn gợi ý đang chờ thì thắng lại không thêm; đã bỏ qua rồi thắng lại thì có gợi ý mới (Hỏi-4); công ty đang có kế hoạch mở thì không gợi ý; hai lần bấm cùng lúc chỉ ra một gợi ý."},
+    {"id": "AC-3", "p": "Sẽ cho người nhận gợi ý hoặc quản trị bấm «Bỏ qua»; người khác bị từ chối và không thấy gợi ý; bấm lại gợi ý đã xử lý thì báo «Gợi ý này đã được xử lý.»."},
+    {"id": "AC-5", "p": "Sẽ hiện thẻ «Deal đã thắng — mở kế hoạch 30 ngày cho <công ty>?» ở đầu sheet deal với hai nút; «Mở kế hoạch» mở ô tạo kế hoạch đã khoá công ty; «Bỏ qua» ẩn thẻ ngay, lỗi thì thẻ hiện lại kèm lời báo."},
+    {"id": "AC-6", "p": "Sẽ chụp màn thật: người phụ trách thấy thẻ sau khi kéo deal sang thắng, bấm Bỏ qua thì thẻ mất và dữ liệu ghi «bỏ qua», người khác không thấy thẻ — và thước chụp phải tự báo hỏng trên trang đã gỡ hay chèn thẻ giả."},
+    {"id": "AC-7", "p": "Sẽ thêm một dòng vào nhắc buổi sáng và chuông của người nhận chừng nào gợi ý còn chờ và deal còn thắng (Hỏi-1)."},
+    {"id": "AC-8", "p": "Sẽ có thước đọc ngưỡng: đếm mọi lần deal sang thắng từ lịch sử giai đoạn (không từ bảng gợi ý), báo lần nào thiếu gợi ý và tỉ lệ xử lý trong 3 ngày; không có gì để đo thì báo «không đo được», không báo sống."},
+    {"id": "AC-9", "p": "Sẽ ghi vào từ điển và tài liệu API: gợi ý mở kế hoạch là gì, khác «Gợi ý» của nhắc kế hoạch im ra sao, khi nào sinh, ai xử lý, hai thủ tục mới; hàng DA3b đổi trạng thái."},
+    {"id": "AC-10", "p": "Sẽ giữ mọi bài kiểm cũ xanh, không xoá hay sửa câu kiểm nào đã có."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ sinh gợi ý ĐÚNG ba trường hợp — deal tạo thẳng ở thắng, mở → thắng, thua → thắng — và KHÔNG sinh ở chín trường hợp còn lại (kể cả dời deal giữa hai cột thắng); kiểm đủ 12 ô, qua kéo từng deal, kéo hàng loạt và lưu trữ cột."},
+    {"id": "AC-4", "p": "Sẽ đóng mọi gợi ý đang chờ của công ty khi bất kỳ ai tạo kế hoạch cho công ty đó (từ thẻ, danh mục hay API); KHÔNG đụng gợi ý đã bỏ qua hay gợi ý của công ty khác; tạo hỏng thì không đổi gì."},
+    {"id": "OOS-1", "p": "Không làm bản bàn giao do AI viết khi deal thắng — việc của tác tử, hàng khác."},
+    {"id": "OOS-2", "p": "Không tạo gợi ý cho các deal đã thắng trước ngày gộp."},
+    {"id": "OOS-3", "p": "Không có nút mở lại gợi ý đã bỏ qua, không có danh sách «gợi ý của tôi»."},
+    {"id": "OOS-4", "p": "Không tự tạo kế hoạch khi deal thắng mà không hỏi người."},
+    {"id": "OOS-5", "p": "Không đổi người nhận gợi ý khi deal đổi người phụ trách sau đó."},
+    {"id": "OOS-6", "p": "Không thêm gợi ý vào bộ dữ liệu mẫu chung; thước đo thử trên dữ liệu gieo trong bài kiểm."}
+  ],
+  "scope_plain": "Sáu thứ cố ý để ngoài lượt này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi đường làm đổi giai đoạn deal (kéo một deal, kéo hàng loạt, lưu trữ cột, tạo deal ở thắng) đều được thử — đã quét: chỉ hai chỗ trong mã ghi giai đoạn (AC-1)."},
+    {"i": 1, "p": "Đủ 12 cặp «từ loại giai đoạn → sang loại giai đoạn», vì giai đoạn chỉ có ba loại: mở, thắng, thua (AC-1)."},
+    {"i": 2, "p": "Mọi lý do không tạo gợi ý: công ty có kế hoạch mở, deal còn gợi ý chờ, bấm đồng thời — và trường hợp đã bỏ qua thì vẫn tạo lại (AC-2)."},
+    {"i": 3, "p": "Mọi cách một gợi ý kết thúc, theo từng người: tạo kế hoạch từ thẻ hay đường khác, bỏ qua bởi người nhận, quản trị, người khác, bấm lại, deal rời thắng (AC-3, AC-4, AC-5, AC-7)."},
+    {"i": 4, "p": "Hai chỗ người thấy gợi ý (thẻ trên deal, nhắc sáng/chuông) và thước đọc ngưỡng (AC-5 đến AC-8)."},
+    {"i": 5, "p": "Đối chiếu ngành: Pipedrive và HubSpot cũng lấy «deal thắng» làm cò cho khâu bàn giao; HubSpot tự tạo việc không hỏi — lượt này giữ đúng ngưỡng đã ký là gợi ý cho người xử lý."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Máy đã tự quyết hai điều lẽ ra anh quyết: có tính deal được tạo thẳng ở trạng thái thắng không, và có hỏi lại sau khi người đã bỏ qua không. Đã đưa thành câu Hỏi-4 cho anh."},
+    {"i": 1, "p": "Bài kiểm ba trường hợp «từ thắng» bị gợi ý tạo lúc dựng che mất nên không thật sự kiểm. Đã sửa: bỏ qua gợi ý dựng trước rồi mới đo, thêm một phép phá thử."},
+    {"i": 2, "p": "Thước ngưỡng có thể báo «sống» khi không có deal nào để đếm. Đã sửa: không có gì để đo thì thước báo «không đo được»."},
+    {"i": 3, "p": "Hai phép phá thử ghim sai câu báo lỗi nên sẽ đỏ oan ở bước chấm. Đã sửa câu ghim, và mỗi phép phá thử sẽ chạy thử tay trước khi ghim."},
+    {"i": 4, "p": "Phép chụp màn «người khác không thấy thẻ» có thể đạt chỉ vì trang của người đó không tải. Đã sửa: phải thấy tên deal trước, và thước tự thử cả ba chiều hỏng."}
+  ]
+}
