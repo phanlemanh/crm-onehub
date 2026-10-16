@@ -174,8 +174,10 @@ evals:
       dpl_7njZhiiVhkrDWxoeLfYFbsQpx53G, agent dpl_75r8mrb1CmDPBpaTucpvuoYCEQqE), bo dieu kien ba tep va bo
       buoc cho 5 phut. Che do do doi: timLanDay tra mot lan day co after = 1723dca25… (chung minh duong tra
       lan day doc that), VA trienKhaiCho bat duoc ca ba — ma 0 khi rang in "lan day moc: 1723dca25" va
-      "<du an> co deployment cho 1723dca25: dpl_…" cho ca ba du an. Khong thay lan day moc, hay thieu du an
-      nao -> ma 1. Loi API -> ma 2.
+      "<du an> co deployment cho 1723dca25: dpl_…" cho ca ba du an VA bo loc status cua CUNG ham doMotSha
+      bat duoc dong "status Vercel – <du an> …" cho ca ba du an (doi chung duong cho ve status cua E7: bo loc
+      tien to "Vercel – crm-onehub-" khop status that). Khong thay lan day moc, thieu deployment hay thieu
+      status cua du an nao -> ma 1, in "thieu: …". Loi API -> ma 2.
 
   - id: E9
     criterion: AC-6

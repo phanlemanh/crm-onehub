@@ -95,12 +95,21 @@ function doChieuDo() {
 	console.log(`lan day moc: ${lan.after.slice(0, 9)} (${lan.luc})`);
 	const kq = doMotSha(lan.after);
 	for (const d of kq.dong) console.log(d);
-	const du = BA_DU_AN.every((duAn) =>
-		kq.dong.some((d) =>
-			d.startsWith(`${duAn} co deployment cho ${SHA_MOC.slice(0, 9)}: dpl_`),
-		),
-	);
-	return du ? 0 : 1;
+	const thieu = BA_DU_AN.flatMap((duAn) => {
+		const ngan = SHA_MOC.slice(0, 9);
+		const ra = [];
+		if (
+			!kq.dong.some((d) =>
+				d.startsWith(`${duAn} co deployment cho ${ngan}: dpl_`),
+			)
+		)
+			ra.push(`deployment ${duAn}`);
+		if (!kq.dong.some((d) => d.startsWith(`status Vercel – ${duAn} `)))
+			ra.push(`status Vercel – ${duAn}`);
+		return ra;
+	});
+	if (thieu.length) console.log(`thieu: ${thieu.join(", ")}`);
+	return thieu.length ? 1 : 0;
 }
 
 const cheDo = process.argv[2];
