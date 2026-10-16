@@ -13,10 +13,11 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { LOI_VAO, type LoiVao } from "@crm/validation/okr-cap-nhat";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -57,11 +58,16 @@ export function PhanCanCapNhat() {
 	);
 	const coKr = (ds.data?.items.length ?? 0) > 0;
 
-	useEffect(() => {
-		if (!coKr || !moSan(tu) || daMoTuNgoai.current) return;
-		daMoTuNgoai.current = true;
-		moPhien.mutate({ entry: tu });
-	}, [coKr, tu, moPhien]);
+	const moTuNgoai =
+		coKr && moSan(tu) ? (
+			<MoTuNgoai
+				chay={() => {
+					if (daMoTuNgoai.current) return;
+					daMoTuNgoai.current = true;
+					moPhien.mutate({ entry: tu });
+				}}
+			/>
+		) : null;
 
 	const mo = (laSua: boolean) => {
 		setSua(laSua);
@@ -126,6 +132,7 @@ export function PhanCanCapNhat() {
 				}
 				tieuDe={m.phan1}
 			>
+				{moTuNgoai}
 				{loiMo}
 				<p className="text-muted-foreground text-sm">{m.daDu(tuan)}</p>
 			</VoPhan>
@@ -150,6 +157,7 @@ export function PhanCanCapNhat() {
 			}
 			tieuDe={m.phan1}
 		>
+			{moTuNgoai}
 			{loiMo}
 			<p className="text-muted-foreground text-sm">
 				{m.conThieu(
@@ -177,6 +185,11 @@ export function PhanCanCapNhat() {
 			</SimpleTable>
 		</VoPhan>
 	);
+}
+
+function MoTuNgoai({ chay }: { chay: () => void }) {
+	useMountEffect(chay);
+	return null;
 }
 
 function LoiMoPhien({ thuLai }: { thuLai: () => void }) {

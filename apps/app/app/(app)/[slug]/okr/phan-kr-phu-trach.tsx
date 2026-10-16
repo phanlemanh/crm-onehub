@@ -80,11 +80,11 @@ export function PhanKrPhuTrach({
 								<SimpleTableCell>
 									<span className="flex flex-col items-start gap-0.5">
 										<Button
-											className="h-auto p-0 text-left"
 											data-mo-muc-tieu={mucTieu.id}
 											onClick={() =>
 												openRecord({ kind: "objective", id: mucTieu.id })
 											}
+											size="xs-wrap"
 											variant="link"
 										>
 											<span translate="no">{k.title}</span>

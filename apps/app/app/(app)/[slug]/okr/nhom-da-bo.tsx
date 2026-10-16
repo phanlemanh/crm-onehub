@@ -9,7 +9,7 @@ import {
 } from "@crm/ui/components/collapsible";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { type ComponentProps, useEffect, useState } from "react";
+import { type ComponentProps, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { BangMucTieu } from "./bang-muc-tieu";
 import type { MucTieu } from "./kieu";
@@ -41,13 +41,11 @@ export function NhomMucTieuGap({
 	moNhuBangChinh?: boolean;
 	moKhi?: boolean;
 }) {
-	const [mo, setMo] = useState(moKhi);
-	useEffect(() => {
-		if (moKhi) setMo(true);
-	}, [moKhi]);
+	const [moTay, setMoTay] = useState<boolean | null>(null);
+	const mo = moTay ?? moKhi;
 	if (ds.length === 0) return null;
 	return (
-		<Collapsible {...DAU_NHOM[ma]} onOpenChange={setMo} open={mo}>
+		<Collapsible {...DAU_NHOM[ma]} onOpenChange={setMoTay} open={mo}>
 			<CollapsibleTrigger asChild>
 				<Button className="group" size="sm" variant="ghost">
 					<Icon

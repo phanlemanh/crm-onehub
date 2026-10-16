@@ -18,7 +18,14 @@ import { fileURLToPath } from "node:url";
 const TEP_NAY = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP_NAY), "..", "..", "..");
 const HO_SO = "cua-toi-ba-phan";
-process.env.BANG_CHUNG ??= join(GOC, "_acceptance", HO_SO, "evidence");
+const daThongCong = ["signed-off", "machine-cleared"].includes(
+	/^status:\s*(\S+)/m.exec(
+		readFileSync(join(GOC, "_acceptance", HO_SO, "contract.md"), "utf8"),
+	)?.[1] ?? "",
+);
+process.env.BANG_CHUNG ??= daThongCong
+	? join(GOC, ".acceptance-runs", HO_SO, "evidence")
+	: join(GOC, "_acceptance", HO_SO, "evidence");
 const BANG_CHUNG = process.env.BANG_CHUNG;
 const lib = await import("../../kho-tai-lieu/rang/man-lib.mjs");
 
@@ -54,7 +61,7 @@ const CHIEU_DO = {
 		chiBuoc: "E18",
 		tep: `${OKR}/phan-can-cap-nhat.tsx`,
 		cam: (s) => s.replace("				if (tu !== null) void datTu(null);\n", ""),
-		dauVet: "		moPhien.mutate({ entry: tu });\n	}",
+		dauVet: "				setPhien(kq.sessionId);\n			},",
 		ghim: /SAI AC-3: tai lai sau nhac \+1, mong \+0/,
 	},
 };

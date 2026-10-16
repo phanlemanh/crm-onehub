@@ -100,7 +100,7 @@ const NHOM = {
 					[
 						`${OKR}/phan-can-cap-nhat.tsx`,
 						"	const mo = (laSua: boolean) => {",
-						'	useEffect(() => {\n		moPhien.mutate({ entry: "cua-toi" });\n	}, []);\n	const mo = (laSua: boolean) => {',
+						'	useMountEffect(() => {\n		moPhien.mutate({ entry: "cua-toi" });\n	});\n	const mo = (laSua: boolean) => {',
 					],
 				],
 				ghim: "ctbp-cap-nhat-tai-cho: moCapNhat goi 1 lan khi chua bam, mong 0",
@@ -243,8 +243,8 @@ const NHOM = {
 				thay: [
 					[
 						`${OKR}/phan-can-cap-nhat.tsx`,
-						"		moPhien.mutate({ entry: tu });\n	}, [coKr, tu, moPhien]);",
-						"		moPhien.mutate({ entry: tu });\n		void datTu(null);\n	}, [coKr, tu, moPhien, datTu]);",
+						"					moPhien.mutate({ entry: tu });\n				}}",
+						"					moPhien.mutate({ entry: tu });\n					void datTu(null);\n				}}",
 					],
 				],
 				ghim: "ctbp-loi-mo: tu roi duong dan sau loi mo phien",

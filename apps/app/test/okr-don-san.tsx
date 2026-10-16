@@ -284,6 +284,7 @@ function thuTuc(duong: string) {
 	return {
 		queryKey: (vao?: DauVao) => [duong, vao ?? null],
 		pathKey: () => [duong],
+		mutationKey: () => [duong],
 		queryOptions: (vao?: DauVao | typeof skipToken) =>
 			vao === skipToken
 				? { queryKey: [duong, "skip"], queryFn: skipToken }
