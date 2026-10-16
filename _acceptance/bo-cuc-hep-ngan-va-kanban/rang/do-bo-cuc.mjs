@@ -378,7 +378,14 @@ const doTranNgan = (t) =>
 						xa = { r: qc.right, c };
 				}
 				const duyet = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
+				const biXen = (n) => {
+					for (let p = n.parentElement; p && p !== e; p = p.parentElement) {
+						if (getComputedStyle(p).overflowX !== "visible") return true;
+					}
+					return false;
+				};
 				for (let n = duyet.nextNode(); n; n = duyet.nextNode()) {
+					if (biXen(n)) continue;
 					const dai = document.createRange();
 					dai.selectNodeContents(n);
 					const qn = dai.getBoundingClientRect();
