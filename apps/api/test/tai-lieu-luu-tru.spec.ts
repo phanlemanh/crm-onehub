@@ -1,4 +1,6 @@
 import { describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { db } from "@crm/db";
 import { NGAY_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import { TAI_LIEU } from "@crm/validation/tai-lieu";
@@ -21,6 +23,55 @@ import {
 dungSan();
 
 const T = TAI_LIEU_API.thongDiep;
+
+const CA_DEM_BANG_ID = [
+	"khoi-phuc: de xuat khoi phuc duoc duyet",
+	"duyet-luu-tru: ma tran nguoi viet truoc",
+] as const;
+const CA_MIEN = ["tlkp-dem", "tlkp-tinh"] as const;
+const MOC_GIO = /Date\.now\(\)\s*-/;
+const DEM_THEO_MOC = /suKienSau\(/;
+const LENH_DUYET = /taiLieu\.approve|duyet\(/;
+const DAU_CA = /^\s*test\("([^"]+)"/;
+
+function quetMocGio(nguon: string): string[] {
+	const dong = nguon.split("\n");
+	const ca: { ten: string; tu: number; den: number }[] = [];
+	dong.forEach((d, i) => {
+		const m = d.match(DAU_CA);
+		if (m?.[1]) ca.push({ ten: m[1], tu: i, den: dong.length });
+	});
+	ca.forEach((c, i) => {
+		const ke = ca[i + 1];
+		if (ke) c.den = ke.tu;
+	});
+	const mien = (i: number) =>
+		ca.some(
+			(c) => CA_MIEN.some((t) => c.ten.startsWith(t)) && i >= c.tu && i < c.den,
+		);
+	const viPham: string[] = [];
+	dong.forEach((d, i) => {
+		if (mien(i)) return;
+		if (MOC_GIO.test(d) || DEM_THEO_MOC.test(d))
+			viPham.push(`tlkp-tinh: con moc dong ho o dong ${i + 1}`);
+	});
+	for (const ten of CA_DEM_BANG_ID) {
+		const c = ca.find((x) => x.ten.startsWith(ten));
+		if (!c) {
+			viPham.push(`tlkp-tinh: khong thay ca ${ten}`);
+			continue;
+		}
+		const than = dong.slice(c.tu, c.den);
+		const chup = than.findIndex((d) => d.includes("idSuKien("));
+		const dem = than.findIndex((d) => d.includes("suKienMoi("));
+		const duyetGiua =
+			chup >= 0 &&
+			dem > chup &&
+			than.slice(chup + 1, dem).some((d) => LENH_DUYET.test(d));
+		if (!duyetGiua) viPham.push(`tlkp-tinh: ca ${ten} khong dem bang id`);
+	}
+	return viPham;
+}
 
 async function trangDangDung(
 	nhan: string,
@@ -413,5 +464,58 @@ describe("tlkp", () => {
 		if (sau.so.KHOI_PHUC !== 1)
 			throw new Error("tlkp-dem: ham moi khong dem su kien sau moc");
 		expect(sau.so).toEqual({ KHOI_PHUC: 1 });
+	});
+
+	test("tlkp-tinh: hai ca dem bang id chup truoc lenh duyet, tep khong con moc dong ho", () => {
+		const nguon = readFileSync(
+			join(import.meta.dir, "tai-lieu-luu-tru.spec.ts"),
+			"utf8",
+		);
+		expect(quetMocGio(nguon)).toEqual([]);
+		const caKhoiPhuc = (than: string[]) =>
+			[
+				'\ttest("khoi-phuc: de xuat khoi phuc duoc duyet", async () => {',
+				...than,
+				"\t});",
+			].join("\n");
+		const MAU = [
+			{
+				ten: "moc khong dau cach",
+				nguon: caKhoiPhuc(["\t\tconst moc = new Date(Date.now()-1);"]),
+				ghim: "tlkp-tinh: con moc dong ho",
+			},
+			{
+				ten: "than ca goi ham dem theo moc",
+				nguon: caKhoiPhuc([
+					'\t\tawait duyet(id, "chu");',
+					"\t\tawait suKienSau(b.trangId, truoc);",
+				]),
+				ghim: "tlkp-tinh: ca khoi-phuc: de xuat khoi phuc duoc duyet khong dem bang id",
+			},
+			{
+				ten: "chup id sau lenh duyet",
+				nguon: caKhoiPhuc([
+					'\t\tawait duyet(id, "chu");',
+					"\t\tconst truoc = await idSuKien(b.trangId);",
+					"\t\tawait suKienMoi(b.trangId, truoc);",
+				]),
+				ghim: "tlkp-tinh: ca khoi-phuc: de xuat khoi phuc duoc duyet khong dem bang id",
+			},
+			{
+				ten: "dong doi chung chep vao ca khoi phuc",
+				nguon: nguon.replace(
+					'\t\tawait duyet(id, "chu");\n\t\texpect((await hangTrang(b.trangId)).archivedAt).toBeNull();',
+					'\t\tconst moc = new Date(Date.now() - 1);\n\t\tawait duyet(id, "chu");\n\t\texpect((await hangTrang(b.trangId)).archivedAt).toBeNull();',
+				),
+				ghim: "tlkp-tinh: con moc dong ho",
+			},
+		] as const;
+		expect(MAU).toHaveLength(4);
+		for (const mau of MAU) {
+			if (mau.nguon === nguon)
+				throw new Error(`tlkp-tinh: mau ${mau.ten} khong cay duoc`);
+			if (!quetMocGio(mau.nguon).some((v) => v.startsWith(mau.ghim)))
+				throw new Error(`tlkp-tinh: ham quet bo sot ${mau.ten}`);
+		}
 	});
 });
