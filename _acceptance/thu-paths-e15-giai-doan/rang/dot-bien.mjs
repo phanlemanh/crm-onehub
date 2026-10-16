@@ -234,9 +234,9 @@ const CAP = [
 		eval: "E5",
 		ten: "doi-input-that",
 		commit: true,
-		doi: [{ tep: "docs/setup.md", cuoi: "\nx\n" }],
+		doi: [{ tep: "apps/agent-okr/vercel.json", cuoi: "\n" }],
 		ma: 1,
-		dong: ["CON_HOA_CU tat-preview-agent-okr: docs/setup.md"],
+		dong: ["CON_HOA_CU tat-preview-agent-okr: apps/agent-okr/vercel.json"],
 	},
 	{
 		eval: "E5",
@@ -352,7 +352,9 @@ function chay() {
 		git(GOC, "worktree", "add", "--detach", "--quiet", cay, "HEAD");
 		const goc = git(cay, "rev-parse", "HEAD").trim();
 		const daChayLanh = new Map();
-		for (const c of CAP) {
+		const iChi = process.argv.indexOf("--chi");
+		const chi = iChi === -1 ? null : (process.argv[iChi + 1] ?? "").split(",");
+		for (const c of CAP.filter((x) => !chi || chi.includes(x.eval))) {
 			git(cay, "reset", "--hard", "--quiet", goc);
 			if (!daChayLanh.has(c.eval))
 				daChayLanh.set(c.eval, chayLenh(cay, c.eval));

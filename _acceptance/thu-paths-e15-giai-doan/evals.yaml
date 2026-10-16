@@ -115,8 +115,8 @@ evals:
       <verified_commit> trừ _acceptance/ và risk_tiers.t1_skip_globs (đúng hàm stale_files của pre-merge-check), lọc bằng
       staleByPaths với cây git ls-files của HEAD → mọi hồ sơ đã ký in «SACH <slug>: <k> tep doi tu <sha>, bo qua het
       theo paths», hồ sơ chưa ghim in «CHUA_GHIM <slug>»; dòng cuối «ho so: <n> · hong: 0».
-      CHIỀU ĐỎ (dot-bien.mjs, commit trong worktree tạm): sửa docs/setup.md (input của tat-preview-agent-okr#E9) → mã 1
-      với «CON_HOA_CU tat-preview-agent-okr: docs/setup.md»; xoá khối paths vừa thêm của tat-preview-agent-okr#E9 → mã 1
+      CHIỀU ĐỎ (dot-bien.mjs, commit trong worktree tạm): sửa apps/agent-okr/vercel.json (input của tat-preview-agent-okr#E9; docs/setup.md là tệp T1 nên bộ lọc không bao giờ tính) → mã 1
+      với «CON_HOA_CU tat-preview-agent-okr: apps/agent-okr/vercel.json»; xoá khối paths vừa thêm của tat-preview-agent-okr#E9 → mã 1
       với «KHONG_AP tat-preview-agent-okr: eval-ngoai-may-thieu-paths:E9».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
