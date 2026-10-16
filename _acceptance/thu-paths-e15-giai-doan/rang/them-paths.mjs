@@ -227,13 +227,39 @@ function kiemPhaiCo(chon, phaiCo) {
 	return hong;
 }
 
+function hoSoSuaTrongVong() {
+	const git = (...a) =>
+		execFileSync("git", ["-C", GOC, ...a], { maxBuffer: 1 << 30 })
+			.toString()
+			.trim();
+	const mb = git("merge-base", "HEAD", "origin/onehub");
+	if (mb === git("rev-parse", "HEAD")) return [];
+	return git("diff", "--name-only", mb, "HEAD", "--", "_acceptance")
+		.split("\n")
+		.filter((t) => /^_acceptance\/[^/]+\/evals\.yaml$/.test(t))
+		.map((t) => t.split("/")[1])
+		.filter(
+			(s) => s !== "thu-paths-e15-giai-doan" && s !== "giai-doan-thoa-thuan",
+		);
+}
+
 function kiemDanhSach(keToanKho, chon) {
-	const daThem = new Set(
-		keToanKho
-			.filter((m) => m.loai === "da-co" && chon.includes(m.slug))
-			.map((m) => m.slug),
+	const coDaCo = new Set(
+		keToanKho.filter((m) => m.loai === "da-co").map((m) => m.slug),
 	);
-	const luat = new Set([...hoSoThuocLuat(keToanKho), ...daThem]);
+	const sach = (slug) => {
+		const r = hoaCuHoSo(slug);
+		return !r.vc || (r.apply && !r.kept.length);
+	};
+	const luat = new Set(hoSoThuocLuat(keToanKho));
+	for (const s of hoSoSuaTrongVong()) if (sach(s)) luat.add(s);
+	for (const s of chon)
+		if (
+			coDaCo.has(s) &&
+			!keToanKho.some((m) => m.slug === s && m.loai === "them") &&
+			sach(s)
+		)
+			luat.add(s);
 	let hong = 0;
 	for (const s of [...luat].sort())
 		if (!chon.includes(s)) {
