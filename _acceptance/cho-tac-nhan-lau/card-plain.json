@@ -1,0 +1,34 @@
+{
+  "feature_plain": "Khi chờ Kara dựng Tác nhân lâu, người dùng thấy đã chờ bao lâu, biết là được rời trang, và nhận thông báo trong chuông khi Kara dựng xong, cần trả lời hay không dựng được.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ hiện thời gian đã chờ kể từ lúc gửi, tăng từng giây; rời trang rồi quay lại vẫn đúng giờ."},
+    {"id": "AC-2", "p": "Sẽ nói ngay dưới thẻ rằng người dùng rời trang được và Kara sẽ báo trong chuông khi xong."},
+    {"id": "AC-3", "p": "Sẽ thêm một dòng báo đã chờ lâu khi quá ngưỡng, không tự huỷ lượt dựng."},
+    {"id": "AC-4", "p": "Sẽ ghi đúng một thông báo cho người mở cuộc trò chuyện khi Kara dựng xong, cần trả lời, hay hỏng; người tự bấm dừng thì không."},
+    {"id": "AC-5", "p": "Sẽ hiện mỗi thông báo bằng một câu dễ hiểu có tên Tác nhân, bấm vào là về đúng cuộc trò chuyện."},
+    {"id": "AC-6", "p": "Sẽ tự đánh dấu đã đọc khi người dùng mở cuộc trò chuyện, số trên chuông giảm theo."},
+    {"id": "AC-7", "p": "Sẽ không làm hỏng việc dựng nếu ghi thông báo thất bại; lỗi chỉ ghi nhật ký."},
+    {"id": "AC-8", "p": "Sẽ có đủ chữ tiếng Việt và tiếng Anh cho mọi câu mới."},
+    {"id": "AC-9", "p": "Sẽ được nhìn bằng mắt trên màn thật ở khổ điện thoại và máy tính, không tràn, không chữ máy."}
+  ],
+  "wont_do": [
+    {"id": "AC-10", "p": "Chặn mọi vi phạm luật thiết kế tĩnh trên các tệp giao diện vòng này chạm."},
+    {"id": "OOS-1", "p": "KHÔNG báo qua Zalo, email hay thông báo trình duyệt ở vòng này (tuỳ câu trả lời Hỏi-4)."},
+    {"id": "OOS-2", "p": "KHÔNG rút ngắn thời gian dựng hay đổi model — việc của MH3, MH4."},
+    {"id": "OOS-3", "p": "KHÔNG đụng màn chạy Tác nhân đã triển khai."},
+    {"id": "OOS-4", "p": "KHÔNG đổi cách đếm bốn bước của thẻ."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Trạng thái lượt dựng: dưới ngưỡng, quá ngưỡng, xong, cần trả lời, hỏng, tự dừng — phủ bởi AC-1 tới AC-7."},
+    {"i": 1, "p": "Người dùng ở đâu: đang xem, sang màn khác, đóng trình duyệt rồi quay lại — phủ bởi AC-1, AC-5, AC-6."},
+    {"i": 2, "p": "Kênh báo: thẻ trên màn và chuông trong app; kênh ngoài CRM chờ Hỏi-4."},
+    {"i": 3, "p": "Làm ngay: mọi trạng thái qua thẻ và chuông. Không làm: tự huỷ khi quá ngưỡng."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chọn kênh báo là việc của người, không phải máy tự quyết — đã thành câu hỏi Hỏi-4."},
+    {"i": 1, "p": "Giữ thẻ hay dựng màn chờ riêng là việc của người — đã thành câu hỏi Hỏi-5."},
+    {"i": 2, "p": "Phép đo chưa phân biệt «chờ từ lúc gửi» với «từ lúc mở trang» — đã thêm ca mở trang muộn."},
+    {"i": 3, "p": "Phép đo chống báo trùng chưa có ca hai lượt và ca cần trả lời rồi xong — đã thêm ba ca."},
+    {"i": 4, "p": "Ngưỡng 200 giây đúng bằng thời gian bình thường của một model đang đo — đã thành câu hỏi Hỏi-6."}
+  ]
+}
