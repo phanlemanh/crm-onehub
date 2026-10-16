@@ -23,11 +23,13 @@ thông báo có sẵn nhưng chưa có loại nào cho Tác nhân.
 ## Criteria
 
 - AC-1: Given một lượt dựng đang chạy, When người dùng ở màn `/chat/<id>`, Then thẻ «Đang dựng tác nhân» hiện thời gian
-  đã trôi kể từ lúc gửi dạng `phút:giây`, tự tăng mỗi giây; dưới 1 giây không hiện dòng này.
+  đã trôi kể từ lúc gửi (mốc của hàng gửi ở máy chủ, không phải lúc mở trang) dạng `phút:giây`, tự tăng mỗi giây; dưới 1
+  giây không hiện dòng này; rời trang rồi quay lại thì thời gian vẫn tính từ lúc gửi.
 - AC-2: Given thẻ «Đang dựng», When đọc chân thẻ, Then câu «Chạy ngầm» được thay bằng một câu nói người dùng rời trang được
   và Kara sẽ báo trong hộp thông báo khi xong; nút «Dừng lại» giữ nguyên.
-- AC-3: Given thời gian đã trôi vượt ngưỡng (200 giây, hằng trong một tệp cấu hình của khu), When thẻ vẽ lại, Then thẻ thêm
-  một dòng «lâu hơn thường lệ»; dưới ngưỡng không có dòng này; lượt dựng không bị tự huỷ.
+- AC-3: Given thời gian đã trôi vượt ngưỡng (200 giây theo câu giao, hằng trong một tệp cấu hình của khu; con số và câu chữ
+  theo câu trả lời Hỏi-6), When thẻ vẽ lại, Then thẻ thêm một dòng báo đã chờ lâu; dưới ngưỡng không có dòng này; lượt dựng
+  không bị tự huỷ.
 - AC-4: Given một cuộc trò chuyện bộ dựng, When một lượt dựng kết thúc ở `apps/agent` — có kết quả (`session.waiting`
   không câu hỏi chờ), cần người dùng trả lời (`session.waiting` có câu hỏi chờ), hay hỏng (`session.failed`,
   `turn.failed`) — Then đúng một `ThongBao` được ghi cho người mở cuộc trò chuyện, loại `tac-nhan-xong`,
@@ -52,7 +54,8 @@ thông báo có sẵn nhưng chưa có loại nào cho Tác nhân.
   Thước CE: thanh bên và chuông [SUY-TỪ-REPO: apps/app/components/thong-bao/chuong-thong-bao.tsx].
 - Trục C — kênh báo: thẻ trên màn · chuông trong app · ngoài CRM (Zalo, email). [NGÀNH: GitHub Actions và Vercel
   deployments — trang tiến trình có thời gian đã trôi, rời đi thì báo qua thông báo trong app].
-- Core: A1–A5 × B1–B2 qua C1–C2 (AC-1 tới AC-7). Later: báo qua Zalo/email (C3) — gửi ra ngoài CRM, cần quyết riêng.
+- Core: A1–A5 × B1–B3 qua C1–C2 (AC-1 tới AC-7). C3 (Zalo, email, thông báo trình duyệt) theo câu trả lời Hỏi-4; khuyến
+  nghị để ngoài vòng này.
   Never: tự huỷ khi quá ngưỡng (người dùng mất kết quả đang gần xong).
 
 ## Đường đo
@@ -61,7 +64,7 @@ thông báo có sẵn nhưng chưa có loại nào cho Tác nhân.
 
 ## Out of scope
 
-- Gửi báo qua Zalo hay email.
+- Gửi báo qua Zalo, email hay thông báo của trình duyệt — theo câu trả lời Hỏi-4 (khuyến nghị: ngoài vòng này).
 - Rút ngắn thời gian dựng, đổi model (MH3, MH4 của dãy P6).
 - Màn chạy tác nhân đã triển khai và trần 20 phút của nó.
 - Đổi cách đếm bốn bước của thẻ.

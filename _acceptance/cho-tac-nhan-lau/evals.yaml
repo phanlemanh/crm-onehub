@@ -5,12 +5,14 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.ctnl_the_dung
-    paths: [apps/app/components/agent-builder/**, apps/app/lib/agent-builder-*.ts, apps/app/lib/messages/agent-builder-tro-chuyen.ts, apps/app/test/cho-tac-nhan-lau.dom.tsx]
+    paths: [apps/app/components/agent-builder/**, apps/app/lib/agent-builder-*.ts, apps/app/lib/use-seconds.ts, apps/app/lib/messages/agent-builder-tro-chuyen.ts, apps/app/test/cho-tac-nhan-lau.dom.tsx]
     expected: |
       apps/app/test/cho-tac-nhan-lau.dom.tsx, ca "thoi-gian": dong ho gia ghim (setSystemTime) tai startedAt; ma tran
       viet truoc {0,4 s -> khong co dong thoi gian; 1 s -> "0:01"; 65 s -> "1:05"; 3599 s -> "59:59"} doc tu the dang dung
-      sau khi day dong ho; doi chung: tang dong ho 1 s thi chu tang dung 1 giay. Chieu do: ban sao bo dong thoi gian
-      -> ca do voi thong diep ghim "thoi gian da troi".
+      sau khi day dong ho; doi chung: tang dong ho 1 s thi chu tang dung 1 giay. Ca "gan-muon": startedAt lay tu hang gui
+      that (createdAt cua submission tra ve tu builderById, khong viet tay); gan the luc dong ho da o startedAt+250 s -> the
+      hien ngay "4:10" va co dong qua nguong. Chieu do: ban sao bo dong thoi gian -> ca do voi thong diep ghim "thoi gian da
+      troi"; ban sao dem tu luc gan the -> ca "gan-muon" do voi thong diep ghim "dem tu luc gui".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -45,7 +47,9 @@ evals:
       apps/agent/test/cho-tac-nhan-lau.integration.spec.ts tren kho test that: goi crmEvents voi continuationToken cua mot
       cuoc tro chuyen bo dung. Ma tran viet truoc 6 o: session.waiting khong cau hoi -> 1 dong tac-nhan-xong; session.waiting
       co pendingInputRequest -> 1 dong tac-nhan-can-tra-loi; session.failed -> 1 dong tac-nhan-hong; turn.failed -> 1 dong
-      tac-nhan-hong; turn.cancelled -> 0 dong; session.waiting lap lai cung luot gui -> van 1 dong. Moi dong: nguoiNhanId =
+      tac-nhan-hong; turn.cancelled -> 0 dong; session.waiting lap lai cung luot gui -> van 1 dong; hai luot gui khac nhau
+      trong cung cuoc -> 2 dong; can-tra-loi, nguoi dung tra loi, roi waiting khong cau hoi -> dung 2 dong (can-tra-loi roi
+      xong, theo thu tu); turn.failed roi session.failed cung luot -> 1 dong tac-nhan-hong. Moi dong: nguoiNhanId =
       nguoi mo cuoc tro chuyen, duongDan = /<slug>/chat/<id>, noiDung qua noiDungThongBao.parse (round-trip tu ban ghi that).
       Doi chung: token khong phai bo dung (runId) -> 0 dong.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
