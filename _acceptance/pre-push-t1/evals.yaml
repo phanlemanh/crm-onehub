@@ -1,0 +1,219 @@
+schema_version: 1
+slug: pre-push-t1
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ppt_phan_loai
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t phan-loai. Moi ca dung kho git tam co remote tran, nhanh onehub da day, CHEP tep that cua kho (bo phan loai,
+      phan-loai.mjs, pre-merge-check.sh, lib/workspace-record.cjs, gate-shape.json, config.yaml), goi CLI bo phan loai bang
+      dong stdin dung khuon githooks(5). Ma tran 18 ca viet truoc, so test = 18 (lech -> do «so ca lech»):
+       1 ref moi chi docs/a.md -> stdout «test build», stderr dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI vẫn chạy đủ.»
+       2 ref moi docs/a.md + apps/api/a.ts -> stdout rong, stderr rong
+       3 ref moi chi .github/workflows/ci.yml -> rong
+       4 doi ten apps/api/a.ts -> docs/a2.md -> rong
+       5 remote co san (da day ma), day them commit docs -> «test build», «(1 tệp)»
+       6 remote co san, gop onehub mang tep ma vao roi day -> rong
+       7 ref moi, commit 1 ma + commit 2 docs -> rong (goc la merge-base, khong phai commit cuoi)
+       8 sha remote = sha local -> rong
+       9 chi dong xoa (sha local toan 0) -> rong
+      10 hai ref, dong docs TRUOC dong ma -> rong
+      11 ref moi, origin/onehub vang -> rong + stderr bat dau «pre-push: không phân loại được lần đẩy (»
+      12 gate-shape.json khong co khoi t1Only -> rong + «không phân loại được»
+      13 config.yaml vang -> rong + «không phân loại được»
+      14 sha remote khac 0 nhung khong co trong kho, nhanh chi docs -> «test build»
+      15 AGENTS.md o goc kho -> «test build»
+      16 ba tep T1 -> stderr «(3 tệp)»
+      17 hai ref, dong ma TRUOC dong docs -> rong
+      18 hai ref deu chi docs, ba tep khac nhau -> «test build», «(3 tệp)»
+      Moi ca: ma thoat 0. Doi chung duong o moi kho tam: git diff goc..local ra dung tep da sua.
+      Chieu do: E7.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ppt_mot_nguon
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".githooks/pre-push"
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/config.yaml"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "_acceptance/pre-push-t1/rang/mot-nguon.mjs"
+    expected: |
+      (a) bun test -t mot-nguon: kho tam voi config.yaml chep that cong them glob «apps/x/**» vao t1_skip_globs, ref moi chi
+          apps/x/a.ts -> stdout «test build»; cung kho voi config that -> rong (doi chung).
+      (c) bun test -t mot-nguon: kho tam cua E3 voi gate-shape.json chep that sua t1Only.skip = ["build"], nhanh chi docs:
+          so bun gia = [check-types, lint, lint:slop, test] dung thu tu; stderr co «bỏ build;»; dau ra co «  skipped: build»;
+          ma 0. Chieu do: E7 ca hook-viet-tay.
+      (b) node rang/mot-nguon.mjs: scripts/pre-push-t1.mjs import dung ba ten docGlobT1, tepT1, quyetDinh tu
+          .github/scripts/phan-loai.mjs (doc bang bo phan tich import, khong tim chuoi tu do); khong chuoi ky tu nao trong
+          scripts/pre-push-t1.mjs va .githooks/pre-push chua glob T1 (moi glob cua t1_skip_globs that, so bang chuoi nguyen
+          van) hay la nguyen van "test" / "build"; in «dat mot-nguon». Chieu do cung luot tren ban sao tam: chen
+          const G = ["docs/**"] vao ban sao bo phan loai -> «BAT glob-lan-hai»; chen chuoi "test" -> «BAT bo-qua-viet-tay».
+          Khong bat -> ma 1 «thuoc hong: <ca>».
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ppt_day_t1
+    paths:
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - "scripts/gate-shape-node-test.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t day-t1. Kho tam co remote tran, core.hooksPath .githooks, CHEP hook that, bo phan loai, verify-gate-shape,
+      gate-shape-node-test, gate-shape.json, config.yaml va moi package.json cua apps/* packages/* that; bun gia tren PATH
+      (bun run <tac vu> ghi so va ghi run summary turbo cho moi goi co kich ban do; bun <tep> chay node that); oxlint gia
+      in dong phu. git push that. Ba ca viet truoc:
+      (a) nhanh chi docs/a.md -> ma 0; dau ra co dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI vẫn chạy đủ.»;
+          so bun gia = [check-types, lint, lint:slop] dung thu tu; khong dong «pre-push: bun run test» / «… build»; co dong
+          «pre-push: gate matches its shape across <N> packages» voi N = so package.json da chep; co dong bat dau
+          «  skipped: test, build».
+      (b) nhu (a) voi bun gia thoat 1 cho test -> van ma 0 (chung bo that, khong phai chay roi bo qua ket qua).
+      (c) nhu (a) voi bun gia thoat 1 cho lint -> ma khac 0, dau ra co «`bun run lint` failed».
+      Chieu do: E7.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ppt_day_nang
+    paths:
+      - ".githooks/pre-push"
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t day-nang, cung kho tam va bun gia nhu E3. Nam ca viet truoc, moi ca so bun gia = [check-types, lint,
+      lint:slop, test, build] dung thu tu, khong dong «chỉ tệp T1», co «pre-push: gate matches its shape»:
+      (a) nhanh docs/a.md + apps/api/a.ts -> ma 0
+      (b) nhu (a) voi bun gia thoat 1 cho test -> ma khac 0, «`bun run test` failed»
+      (c) nhanh chi .github/workflows/ci.yml -> ma 0
+      (d) goi hook truc tiep voi dong stdin sha remote = sha local -> ma 0
+      (e) kho tam KHONG co scripts/pre-push-t1.mjs, nhanh chi docs -> ma 0, du nam, dau ra co dung dong
+          «pre-push: không phân loại được lần đẩy (thiếu scripts/pre-push-t1.mjs) — chạy đủ năm bước.» va KHONG co
+          «Cannot find module» hay dong vet loi «    at » cua node
+      Chieu do: E7.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ppt_verify
+    paths:
+      - "scripts/verify-gate-shape.mjs"
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t verify. Goi verify-gate-shape.mjs that voi --shape (ban chep gate-shape.json that, sua theo ca), so turbo
+      gia trong .turbo/runs cua kho tam, --log co dong phu lint:slop. Bay ca viet truoc:
+      (a) --bo-qua "test build", co t1Only, so co check-types va lint -> ma 0, dau ra co «  skipped: test, build»
+      (b) nhu (a) nhung xoa khoi t1Only -> ma 1, «declares no t1Only block»
+      (c) --bo-qua "test" -> ma 1, «t1Only declares»
+      (d) --bo-qua "test build" ma so co summary cua test -> ma 1, «is declared skipped for a T1-only push, but it ran»
+      (e) khong --bo-qua, so thieu test -> ma 1, «checker 'test' left no run summary» (doi chung: hom nay van chan)
+      (f) t1Only.skip chua "deploy" -> ma 1, thong diep goi ten «deploy»
+      (g) t1Only.vi_sao rong -> ma 1, thong diep goi ten «vi_sao»
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ppt_khai
+    paths:
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t khai: gate-shape.json that co t1Only.skip deepEqual ["test","build"]; classifier = "scripts/pre-push-t1.mjs"
+      va sameRuleAs = ".github/scripts/phan-loai.mjs", ca hai ton tai tren dia; vi_sao la chuoi khac rong. Spec khong goi
+      git nao (chay duoc trong clone --depth 1). Ve «khoi rang giu nguyen so voi goc vong» do o E8 ghim (5).
+
+  - id: E7
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ppt_dot_bien
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".githooks/pre-push"
+      - "scripts/verify-gate-shape.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "_acceptance/pre-push-t1/rang/dot-bien.mjs"
+    expected: |
+      node rang/dot-bien.mjs: chieu do cua E1, E3, E4, E5. Dung ban sao cac tep nguon trong .acceptance-runs/pre-push-t1/
+      dot-bien/<ca>/, cay mot dot bien, chay spec voi PRE_PUSH_T1_NGUON tro toi ban sao. Doi chung duong: ban sao KHONG dot
+      bien -> spec xanh. Tam dot bien viet truoc, moi ca phai lam DO dung ca test da ghim:
+      rong-la-t1 (tap rong coi la T1) -> phan-loai ca 8; bo-luat-github (goi laT1 thay quyetDinh) -> phan-loai ca 3;
+      goc-commit-cuoi (goc = local^ thay merge-base) -> phan-loai ca 7; bo-no-renames -> phan-loai ca 4;
+      hook-luon-bo (case khop moi tac vu test) -> day-nang (a); verify-khong-can-khai (bo kiem t1Only) -> verify (b);
+      chi-dong-dau (chi doc dong stdin dau) -> phan-loai ca 10; hook-viet-tay (hook bo test va build bang case viet tay
+      khi BO_QUA khac rong, bo qua danh sach) -> mot-nguon (c).
+      In «BAT <ca>: <ten test do>» moi ca; ca khong do hoac do sai test -> ma 1 «thuoc hong: <ca>». Ma 0 khi doi chung xanh
+      va ca tam ca bi bat.
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ppt_rang_cu
+    paths:
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "_acceptance/pre-push-t1/rang/rang-cu.mjs"
+    expected: |
+      node rang/rang-cu.mjs. Bon ghim doc tren hook that, in «dat <ghim>»:
+      (1) dong «for task in check-types lint lint:slop test build; do» va hai dong than vong echo/bun run giong tung byte
+          hook o merge-base voi origin/onehub (git show);
+      (2) hai lenh sed cua _acceptance/hinh-cua-luoi/rang-hinh.sh --chan tan-cong (rut tu chinh tep do, khong chep tay) moi
+          lenh doi dung mot dong cua hook;
+      (3) vong for rut bang regex cua dieu-phoi-va-bien/rang/cong.mjs chay duoi bash -c voi bun gia -> in du nam muc
+          «pre-push: bun run <tac vu>»;
+      (4) dong vong tim duoc bang /^for task in .*; do$/ (chuyen-goi-dieu-phoi/rang/cong.mjs);
+      (5) checker test cua gate-shape.json: khoi rang deepEqual khoi rang o merge-base voi origin/onehub (git show) — ref
+          vang -> ma 2 «khong co goc vong», khong xanh rong.
+      Roi chay that «node _acceptance/dieu-phoi-truoc-mo-dot/rang/hook-cay.mjs» va «bash _acceptance/luoi-day-do-that/
+      rang-hook.sh --chan loi-thoat», ca hai ma 0. Chieu do cung luot tren ban sao tam cua hook: doi dong for -> ghim (1)
+      do; nhan doi dong bun run -> ghim (2) do. Khong do -> ma 1 «thuoc hong». Ma 0 khi moi ghim dat.
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ppt_day_that
+    paths:
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/pre-push-t1/rang/day-that.mjs"
+    expected: |
+      node rang/day-that.mjs tren cay that (goc suy tu vi tri script). Dung commit treo bang GIT_INDEX_FILE rieng +
+      write-tree + commit-tree tren HEAD, them docs/pre-push-t1-<pid>.md — khong ref, khong doi thu muc lam viec, khong
+      dung index chung. Chay bash .githooks/pre-push origin <url> voi stdin «refs/heads/thu <commit> refs/heads/thu <HEAD>»:
+      ma 0; dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI vẫn chạy đủ.»; dung ba dong «pre-push: bun run
+      check-types|lint|lint:slop»; khong dong «pre-push: bun run test|build»; «pre-push: gate matches its shape»; dong bat dau
+      «  skipped: test, build». Doi chung am: commit treo thu hai them packages/env/src/pre-push-t1-<pid>.ts -> CLI bo phan
+      loai stdout rong. git status --porcelain truoc = sau. In «dat day-that».
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.rang_hook_ep_chay
+    paths:
+      - ".githooks/pre-push"
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+    expected: |
+      Rang da ky cua luoi-day-do-that: day sha = sha tren cay that -> du nam tac vu, «Cached: 0 cached» o moi tac vu qua
+      turbo, dong ket «rang-hook ep-chay: du 5 tac vu duoc goi»; ma 0. Rang nay kiem tung dong «pre-push: bun run <tac vu>»
+      ke ca build — cung dang day va cung dong ma lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs doc.
