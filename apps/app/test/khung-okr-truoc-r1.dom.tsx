@@ -309,6 +309,11 @@ function datNen({
 		mineOutput.parse({ dangTheoDoi: [], objectives: rows, daBo: [] }),
 	);
 	dat("okr.viecCuaToi", () => ({ viec: [], lienQuanOkr: false }));
+	dat("okr.capNhatTuan", () => ({
+		items: [],
+		weekStart: "2026-10-12",
+		dueWeekday: 5,
+	}));
 	dat("okr.comments", () => ({ comments: [], dong: [] }));
 	dat("okr.thanhVien", () => [HUNG]);
 	dat("users.me", () => HUNG);
@@ -720,7 +725,7 @@ describe("chip", () => {
 				expect(
 					q('[data-hang-muc-tieu="mt-a"] [aria-expanded]')?.getAttribute(
 						"aria-expanded",
-					),
+					) ?? null,
 				).toBe(mo ?? null);
 				soCa += 1;
 				for (const s of dangMo) await act(async () => s.root.unmount());

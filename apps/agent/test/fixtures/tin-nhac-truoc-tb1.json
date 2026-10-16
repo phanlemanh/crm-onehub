@@ -30,9 +30,9 @@
 		"duong": "https://crm.test/onehub?record=plan:kh-mau-3"
 	},
 	"okr-cap-nhat": {
-		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nCập nhật tuần\n1. 2 KR chờ cập nhật tuần này — https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
-		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Cập nhật tuần*\n• 2 KR chờ cập nhật tuần này — <https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac|mở cập nhật tuần>",
-		"duong": "https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac"
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nCập nhật tuần\n1. 2 KR chờ cập nhật tuần này — https://crm.test/onehub/okr?tu=nhac\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Cập nhật tuần*\n• 2 KR chờ cập nhật tuần này — <https://crm.test/onehub/okr?tu=nhac|mở cập nhật tuần>",
+		"duong": "https://crm.test/onehub/okr?tu=nhac"
 	},
 	"okr-cho-duyet": {
 		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nChờ bạn duyệt\n1. Lan gửi duyệt mục tiêu «Mở rộng miền Trung» — https://crm.test/onehub/okr?record=objective:ob-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
