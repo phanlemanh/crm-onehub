@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8cc8391b6634c7edf02b869c02ab5bf91bc7a095
-human_signoff:
+human_signoff: manh 2026-10-16 — ký Cổng Bằng chứng trên lượt chấm 2 (PASS, 9/9 eval máy đạt, E11 hội đồng PASS; lượt 1 có một finding trong hợp đồng đã sửa). Năm mục ngoài hợp đồng (Ngoài-1..5, đều ở công cụ đo của hồ sơ) ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: tat-ban-preview

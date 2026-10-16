@@ -5,7 +5,7 @@ slug: tat-ban-preview
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [config, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-16-tat-ban-preview-design.md
 approved_by: manh
 approved_at: 2026-10-16
@@ -58,5 +58,11 @@ Local»).
 - Hẹn đếm lại ngày 2026-10-23 (7 ngày sau gộp): số bản Preview của app, api, agent kể từ commit gộp phải bằng 0. Lệnh: `bun _acceptance/tat-ban-preview/rang/dem-preview.mjs <ISO lúc gộp>`.
 - Đường lui nếu AC-6 đỏ: deploy Production `onehub` qua API như 04/10, rồi revert PR.
 - Gộp trong giờ chủ kho thức — đây là đổi cấu hình triển khai production.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Khi bản Production bị huỷ vì có commit mới hơn, báo cáo kiểm tra chỉ nói chung chung là không đọc được, không ghi rõ lý do bị thay. Người đọc phải tự suy ra nguyên nhân, nhưng kết luận đúng sai của việc tắt Preview không đổi.
+  - Ngoài-2: Nếu tệp cấu hình của api bị mất danh sách cron hoặc hỏng, báo cáo sẽ ghi là lỗi hệ thống thay vì lỗi cấu hình. Người đọc có thể đi tìm nhầm hướng, nhưng kiểm tra vẫn không báo xanh.
+  - Ngoài-3: Lần đếm lại ngày 23/10 có thể báo đỏ chỉ vì ai đó đẩy nhánh cũ chưa cập nhật cấu hình mới, dù việc tắt Preview đã đúng. Cần đọc kết quả kèm xem nhánh nào gây ra.
+  - Ngoài-4: Báo cáo kiểm tra Production không in đúng nhãn mà mô tả kiểm tra đã hứa khi bản bị thay. Người đọc phải mở chi tiết lý do để biết vì sao, kết luận chính không đổi.
+  - Ngoài-5: Phép thử chứng minh bộ kiểm tra Production biết báo đỏ chưa đủ chặt: nó chỉ cho thấy báo đỏ được khi bản không READY, chưa chứng minh đã đọc đúng bản và đúng trạng thái. Độ tin vào bộ kiểm tra này thấp hơn vẻ ngoài.
 - Trả lời câu «có ai dùng Preview» ở crm #375: **Mac Studio — «Không dùng.»** (02:17Z, issuecomment-6206547961: không thước, workflow hay script nào mở URL Preview; check «Vercel – crm-onehub-*» sẽ thôi chạy, «CI xanh trọn» tính trên các job còn lại) · **MacBook Pro — chưa trả lời** (hỏi 01:40Z, nhắc 02:16Z).
 - Nền hạ tầng, chân engine đỏ (đường nền 16/10 01:59Z): nhãn *không đọc được ở đây* — tám tệp kit chép trong kho cũ hơn bộ đệm 2.30.0 đang chạy; lỗi đã biết của mọi vòng crm hôm nay, #413 (crm nhận kit) gỡ. Không phải câu hỏi cho chủ kho.
