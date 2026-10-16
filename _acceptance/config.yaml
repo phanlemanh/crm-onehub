@@ -1255,6 +1255,10 @@ executors:
     mlk_mo_lai: 'bun run test -- "cd apps/api && bun test test/mo-lai-vai-chi-okr.spec.ts -t mlk-mo-lai"'
     mlk_bo_xong: 'bun run test -- "cd apps/api && bun test test/mo-lai-vai-chi-okr.spec.ts -t mlk-bo-xong"'
     mlk_thuoc: 'bun run test -- "cd apps/api && bun test test/mo-lai-vai-chi-okr.spec.ts -t mlk-thuoc"'
+    gnss_song_song: 'bun run test -- "cd apps/api && bun test test/gieo-nguoi-song-song.spec.ts"'
+    gnss_tai_hien: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t dem-qua-han"'
+    gnss_cho_goi_dieu_phoi: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t xoa-ghi-danh"'
+    gnss_cho_goi_diem_nhan: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-diem-nhan.spec.ts -t khong-khop-agenttask"'
     sol_nut_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t nut-chua-cau-hinh
     sol_man_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t man-chua-cau-hinh
     sol_loi_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t loi-chua-cau-hinh
@@ -2072,6 +2076,8 @@ executors:
     build_khong_cache: 'bunx turbo run build --force'
     vlr_dot_bien: node _acceptance/va-lo-ro-vai-chi-okr/rang/dot-bien.mjs
     mlk_dot_bien: node _acceptance/mo-lai-khong-tra-viec-chi-okr/rang/dot-bien.mjs
+    gnss_dot_bien: node _acceptance/gieo-nguoi-chiu-song-song/rang/dot-bien.mjs
+    gnss_pham_vi: node _acceptance/gieo-nguoi-chiu-song-song/rang/pham-vi.mjs
     cdt_hang_xom_lanh: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh lanh"'
     cdt_hang_xom_pha: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha"'
     cdt_hang_xom_pha_don_bang: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha-don-bang"'
