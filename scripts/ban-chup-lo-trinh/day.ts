@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { REST_BRIDGE_PATH } from "../../apps/api/src/trpc/openapi.ts";
 import { docDuLieu } from "../../apps/app/lib/lo-trinh/doc-du-lieu.js";
 import {
 	BAN_CHUP_LO_TRINH,
@@ -8,7 +9,7 @@ import {
 	banChupVao,
 } from "../../packages/validation/src/ban-chup-lo-trinh.ts";
 
-export const DUONG_DAY = "/rest/lo-trinh/ban-chup";
+export const DUONG_DAY = `${REST_BRIDGE_PATH}${BAN_CHUP_LO_TRINH.duongRest}`;
 export const TIEU_DE_GHI_CHU = "ban-chup-lo-trinh";
 const TEP = "LO-TRINH.html";
 
@@ -47,7 +48,18 @@ function tomTatLoi(than: string): string {
 const ghiChu = (ketQua: string) =>
 	`::notice title=${TIEU_DE_GHI_CHU}::${ketQua}`;
 
+const ngoaiNhanh = (env: DauVaoDay["env"]) =>
+	env.GITHUB_ACTIONS === "true" && env.GITHUB_REF !== BAN_CHUP_LO_TRINH.refDay;
+
 export async function day(o: DauVaoDay): Promise<0 | 1> {
+	if (ngoaiNhanh(o.env)) {
+		const ref = o.env.GITHUB_REF?.trim() || "thiếu GITHUB_REF";
+		o.in(`::error title=${TIEU_DE_GHI_CHU}::ngoai-onehub`);
+		o.loi(
+			`Lượt này chạy từ ${ref}; chỉ ${BAN_CHUP_LO_TRINH.refDay} được đẩy bản chụp lộ trình lên CRM. Không gọi CRM.`,
+		);
+		return 1;
+	}
 	const urlApi = o.env.CRM_API_URL?.trim();
 	const khoa = o.env.CRM_KHOA_DAY_LO_TRINH?.trim();
 	if (!urlApi || !khoa) {

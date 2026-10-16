@@ -109,3 +109,10 @@ describe("doc-luu", () => {
 		expect(hong.ok).toBe(false);
 	});
 });
+
+describe("ban-chup-hang", () => {
+	test("ban-chup-hang: duong REST va ref day khai trong cau hinh", () => {
+		expect(BAN_CHUP_LO_TRINH.duongRest).toBe("/lo-trinh/ban-chup");
+		expect(BAN_CHUP_LO_TRINH.refDay).toBe("refs/heads/onehub");
+	});
+});
