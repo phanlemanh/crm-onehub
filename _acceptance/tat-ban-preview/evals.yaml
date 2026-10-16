@@ -18,8 +18,9 @@ evals:
       apps/agent-okr/test/vercel-du-an.ts (duong suy tu import.meta.dir — goc kho = ba cap tren thu muc
       test, khong hardcode), JSON.parse tung tep, va doi cho MOI du an: khoa dinh DUNG {"$schema","git"},
       git DUNG {"deploymentEnabled"}, deploymentEnabled la ban ghi nhanh -> boolean (zod .strict()).
-      Ca so CA BANG trong mot phep expect(DU_AN.map(du an -> {du an, loi zod})).toEqual(DU_AN.map(-> loi rong)),
-      nen dong loi cua bun liet moi du an lech kem ten. Bang co dung 4 phan tu (assert do dai).
+      Ca tinh ket qua cho CA BON du an (assert do dai 4 tren bang va tren ket qua), roi
+      expect(ketQua.filter(co loi)).toEqual([]) — dong loi cua bun liet dung cac du an lech kem ten, tep va
+      loi zod (hay loi doc tep). Bang co dung 4 phan tu (assert do dai).
       Xanh: ca hop-le pass, 0 fail, ma 0. Chieu do o E4 (ca json, khoa, sai-cho).
 
   - id: E2
@@ -37,7 +38,8 @@ evals:
       Ca "vercel-preview-moi-du-an > onehub-trien-khai" ap ham duocTrienKhai(cauHinh, nhanh) cua
       vercel-du-an.ts (minimatch khai trong devDependencies cua apps/agent-okr, khong tu viet bo khop;
       khong mau khop -> true; co mau khop -> true khi IT NHAT mot mau khop mang true) cho "onehub" o
-      tung du an, so ca bang {du an: true} cho ca bon. Xanh: 1 pass. Chieu do o E4 (ca onehub).
+      tung du an (assert do dai 4), roi expect(ketQua.filter(khong trien khai)).toEqual([]) — dong loi liet
+      du an chan onehub kem ten. Xanh: 1 pass. Chieu do o E4 (ca onehub).
 
   - id: E3
     criterion: AC-3
@@ -54,9 +56,9 @@ evals:
       Ca "vercel-preview-moi-du-an > nhanh-khac-khong-trien-khai" co bang NHANH viet truoc trong
       vercel-du-an.ts, dung 18 ten theo thu tu: feat/a, fix/a, docs/a, chore/a, claude/a, proto/a,
       test/a, ci/a, ops/a, thu/a, tam/a, dependabot/npm_and_yarn/a, main, release, test-lane-per-run,
-      onehub-thu, onehub/con, sao-luu/onehub. Ca doi do dai 18 roi so CA BANG tich du an x nhanh (72 cap)
-      trong mot phep expect(...).toEqual(... trienKhai: false), nen dong loi liet moi cap lech kem ten du
-      an va nhanh. Ca doi chung "vercel-preview-moi-du-an > bo-khop-bat-bay-sao" chay CUNG ham tren
+      onehub-thu, onehub/con, sao-luu/onehub. Ca doi do dai 18, tinh tich du an x nhanh va doi do dai 72
+      (moi cap duoc tinh), roi expect(cap.filter(trien khai)).toEqual([]) — dong loi cua bun liet DUNG cac
+      cap lech, moi cap kem "duAn" va "nhanh". Ca doi chung "vercel-preview-moi-du-an > bo-khop-bat-bay-sao" chay CUNG ham tren
       { "*": false, "onehub": true } va doi fix/a -> true, main -> false, onehub -> true (bo khop phan
       biet * voi **, khong phai ham hang). Xanh: 2 pass. Chieu do o E4 (ca mo-het-*, sao).
 
@@ -82,14 +84,15 @@ evals:
       sao/apps/agent-okr:
         lanh          — khong dot bien: ma 0, 4 pass, 0 fail (doi chung duong tren CUNG khuon ban sao).
         mo-het-api    — vercel.json goc kho "**": false -> "**": true: ma khac 0, ca do DUNG
-                        nhanh-khac-khong-trien-khai, diff cua bun co ca "crm-onehub-api" lan "feat/a" cung
-                        dong "trienKhai": true; khong cap nao cua crm-onehub-app lech.
-        mo-het-app    — nhu tren voi apps/app/vercel.json; cap lech la "crm-onehub-app".
-        mo-het-agent  — nhu tren voi apps/agent/vercel.json; cap lech la "crm-onehub-agent".
+                        nhanh-khac-khong-trien-khai (mot ca), khoi nhan (+) cua bun co phan tu
+                        {"duAn": "crm-onehub-api", "nhanh": "feat/a", "trienKhai": true}, dem dung 18 dong
+                        "duAn": "crm-onehub-api" va 0 dong "duAn" cua du an khac.
+        mo-het-app    — nhu tren voi apps/app/vercel.json; 18 dong "duAn": "crm-onehub-app", 0 du an khac.
+        mo-het-agent  — nhu tren voi apps/agent/vercel.json; 18 dong "duAn": "crm-onehub-agent", 0 du an khac.
         sai-cho       — xoa vercel.json goc kho va them khoa git vao apps/api/vercel.json: ma khac 0, ca do
                         hop-le, dong loi co "crm-onehub-api".
         sao           — apps/app/vercel.json "**" -> "*": ma khac 0, ca do nhanh-khac-khong-trien-khai,
-                        diff co "fix/a"; nhanh "main" khong lech.
+                        khoi nhan co "nhanh": "fix/a" va khong co "nhanh": "main" (nhanh khong / van bi chan).
         onehub        — bo "onehub": true o apps/agent/vercel.json: ma khac 0, ca do onehub-trien-khai.
         json          — xoa dau } cuoi cua vercel.json goc kho: ma khac 0, ca do hop-le.
         khoa          — them "crons": [] vao vercel.json goc kho: ma khac 0, ca do hop-le, dong loi co
@@ -111,7 +114,8 @@ evals:
       - "apps/agent-okr/test/vercel-du-an.ts"
       - "_acceptance/tat-ban-preview/rang/**"
     expected: |
-      Rang doc GET /v9/projects?repo=crm-onehub cua team (vercel api, khong doc bien nao), loc du an co
+      Rang doc GET /v9/projects?repo=crm-onehub cua team (vercel api; nhi phan vercel lay tu PATH hoac
+      VERCEL_BIN, khong hardcode duong; khong doc bien nao), loc du an co
       link.org "phanlemanh" va link.repo "crm-onehub", roi so voi bang DU_AN cua vercel-du-an.ts (import
       that bang bun): tap ten bang nhau, va voi moi du an `${rootDirectory ? rootDirectory + "/" : ""}vercel.json`
       bang dung tep cua bang. Xanh (ma 0): in "khop: <ten> -> <tep> (root <gia tri>)" cho ca bon. Lech ->
@@ -126,8 +130,9 @@ evals:
       - "apps/agent-okr/test/vercel-du-an.ts"
       - "_acceptance/tat-ban-preview/rang/**"
     expected: |
-      Cung ham so cua E5, tren ban sao vercel-du-an.ts ma tep cua crm-onehub-api doi thanh
-      "apps/api/vercel.json" (dot bien sinh trong lan chay, tu tep that). Che do do doi ham bao lech: ma 0
+      Cung ham so cua E5, tren bang DU_AN import that tu vercel-du-an.ts roi doi tep cua crm-onehub-api thanh
+      "apps/api/vercel.json" trong bo nho (dot bien sinh trong lan chay, tu bang that; bang da mang tep do
+      thi ma 2 "DOT-BIEN-KHONG-AN"). Che do do doi ham bao lech: ma 0
       khi ham tra dung mot dong "lech: crm-onehub-api: Vercel doc vercel.json, bang ghi apps/api/vercel.json"
       va khong dong lech nao khac. Ham bao khop -> ma 1. Dot bien khong an -> ma 2. Loi API -> ma 2.
       Cap hai chieu voi E5 tren cung du lieu Vercel cua cung lan goi.
