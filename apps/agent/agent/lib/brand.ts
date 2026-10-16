@@ -1,7 +1,7 @@
 import { db, EnrichmentStatus } from "@crm/db";
-import { mirrorBrandImages } from "./brand-images";
 import { docBrandRaw } from "@crm/validation/brand-raw";
 import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
+import { mirrorBrandImages } from "./brand-images";
 import {
 	brandToUpdate,
 	filledFields,

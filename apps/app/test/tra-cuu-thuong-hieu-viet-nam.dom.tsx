@@ -9,8 +9,8 @@ const toastGia = Object.assign(
 	(...vao: Parameters<typeof sonnerThat.toast>) => sonnerThat.toast(...vao),
 	sonnerThat.toast,
 	{
-		error: (thongDiep: unknown) => {
-			loiToast.push(String(thongDiep));
+		error: (thongDiep: string) => {
+			loiToast.push(thongDiep);
 			return "loi";
 		},
 	},
@@ -76,7 +76,14 @@ const dauVao = z
 		),
 	);
 
-const congTyGia = (doi: Record<string, unknown> = {}) => ({
+type DoiCongTy = {
+	city?: string;
+	stateCode?: string;
+	country?: string;
+	countryCode?: string;
+};
+
+const congTyGia = (doi: DoiCongTy = {}) => ({
 	id: "co-1",
 	name: "Công ty BĐS Titan Miền Nam",
 	domain: "titanmiennam.vn",
@@ -154,7 +161,7 @@ async function moTao(locale: Locale) {
 	);
 }
 
-async function moNgan(locale: Locale, doi: Record<string, unknown> = {}) {
+async function moNgan(locale: Locale, doi: DoiCongTy = {}) {
 	datNen();
 	dat("companies.byId", () => congTyGia(doi));
 	await mo(
@@ -183,7 +190,9 @@ function oCua(nhan: string): HTMLElement {
 }
 
 const oTenMien = () =>
-	document.querySelector<HTMLInputElement>("form#create-company input[inputmode=url]");
+	document.querySelector<HTMLInputElement>(
+		"form#create-company input[inputmode=url]",
+	);
 
 beforeEach(() => {
 	trangThai.daGoi.length = 0;

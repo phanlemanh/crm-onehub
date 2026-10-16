@@ -44,9 +44,9 @@ describe("ten mien nen tang", () => {
 		expect(nenTangCuaTenMien("zalo.me/123")?.ten).toBe("Zalo");
 		expect(nenTangCuaTenMien("FACEBOOK.COM/Titan")?.ten).toBe("Facebook");
 		expect(nenTangCuaTenMien("facebook.com:443/x")?.ten).toBe("Facebook");
-		expect(nenTangCuaTenMien("http://batdongsan.com.vn/nha-moi-gioi/a")?.ten).toBe(
-			"Batdongsan",
-		);
+		expect(
+			nenTangCuaTenMien("http://batdongsan.com.vn/nha-moi-gioi/a")?.ten,
+		).toBe("Batdongsan");
 	});
 
 	test("ten mien trong giong", () => {
@@ -78,9 +78,10 @@ describe("ten mien nen tang", () => {
 		const banBoDauCham = (host: string) =>
 			NEN_TANG.find((nt) => nt.tenMien.some((m) => host.endsWith(m)))?.ten ??
 			null;
-		expect(banBoDauCham("box.com"), "box.com bi nhan nham khi bo dau cham").toBe(
-			"X",
-		);
+		expect(
+			banBoDauCham("box.com"),
+			"box.com bi nhan nham khi bo dau cham",
+		).toBe("X");
 		expect(nenTangCuaTenMien("box.com")).toBeNull();
 	});
 

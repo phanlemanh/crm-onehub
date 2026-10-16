@@ -91,7 +91,9 @@ describe("ac3", () => {
 			["https://www.facebook.com/titanmiennam", "Facebook"],
 			["vn.linkedin.com", "LinkedIn"],
 		] as const) {
-			const loi = await loiCua(() => companies.create({ name: TEN, domain: mien }));
+			const loi = await loiCua(() =>
+				companies.create({ name: TEN, domain: mien }),
+			);
 			expect(loi).toBeInstanceOf(BadRequestException);
 			expect(loi.message).toContain(ten);
 		}
@@ -132,7 +134,10 @@ describe("ac3", () => {
 	});
 
 	test("doi chung duong: ten mien that tao duoc", async () => {
-		const tao = await companies.create({ name: `${TEN} that`, domain: MIEN_THAT });
+		const tao = await companies.create({
+			name: `${TEN} that`,
+			domain: MIEN_THAT,
+		});
 		expect(tao.domain).toBe(MIEN_THAT);
 		await don();
 	});

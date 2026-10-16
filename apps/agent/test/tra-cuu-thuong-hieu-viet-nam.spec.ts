@@ -12,6 +12,7 @@ import { readContextDevKey, writeContextDevKey } from "@crm/db/settings";
 import { docBrandRaw } from "@crm/validation/brand-raw";
 import ContextDev from "context.dev";
 import type { BrandRetrieveResponse } from "context.dev/resources/brand";
+import { z } from "zod";
 import { runBrand, type Spend } from "../agent/lib/brand";
 import { CONTEXT } from "../agent/lib/context-config";
 import { brandByDomain, brandByEmail } from "../agent/lib/context-dev";
@@ -20,7 +21,12 @@ const HAU_TO = (process.env.TEST_RUN_ID ?? "tthv-agent").toLowerCase();
 const KHOA = `ctx-tthv-${HAU_TO}`;
 const URL_BRAND = "https://api.context.dev/v1/brand/retrieve";
 
-type YeuCau = { url: string; than: Record<string, unknown> };
+const thanYeuCau = z.object({
+	type: z.string(),
+	force_language: z.string().optional(),
+});
+
+type YeuCau = { url: string; than: z.infer<typeof thanYeuCau> | null };
 
 const daGui: YeuCau[] = [];
 let phanHoi: BrandRetrieveResponse = {};
@@ -107,11 +113,11 @@ beforeAll(async () => {
 	khoaCu = await readContextDevKey(db);
 	await writeContextDevKey(db, KHOA);
 	globalThis.fetch = (async (vao: RequestInfo | URL, init?: RequestInit) => {
-		const url = typeof vao === "string" ? vao : vao.toString();
-		const than =
-			typeof init?.body === "string"
-				? (JSON.parse(init.body) as Record<string, unknown>)
-				: {};
+		const url = vao instanceof Request ? vao.url : String(vao);
+		const chuoi = z.string().safeParse(init?.body);
+		const than = chuoi.success
+			? thanYeuCau.parse(JSON.parse(chuoi.data))
+			: null;
 		daGui.push({ url, than });
 		if (url !== URL_BRAND) return new Response("{}", { status: 404 });
 		return new Response(JSON.stringify(phanHoi), {
@@ -188,9 +194,9 @@ describe("ac6", () => {
 		const gui = daGui.filter((y) => y.url === URL_BRAND);
 		expect(gui.length).toBe(2);
 		for (const y of gui) {
-			expect(y.than.force_language).toBe(CONTEXT.brandLanguage);
+			expect(y.than?.force_language).toBe(CONTEXT.brandLanguage);
 		}
-		expect(gui.map((y) => y.than.type)).toEqual(["by_domain", "by_email"]);
+		expect(gui.map((y) => y.than?.type)).toEqual(["by_domain", "by_email"]);
 		expect(CONTEXT.brandLanguage).toBe("vietnamese");
 	});
 
@@ -201,10 +207,11 @@ describe("ac6", () => {
 		});
 		const gui = daGui.filter((y) => y.url === URL_BRAND);
 		expect(gui.length).toBe(1);
+		expect(gui[0]?.than?.type).toBe("by_domain");
 		expect(
-			"force_language" in (gui[0]?.than ?? {}),
+			gui[0]?.than?.force_language,
 			"thieu force_language",
-		).toBe(false);
+		).toBeUndefined();
 	});
 });
 
