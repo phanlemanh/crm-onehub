@@ -106,6 +106,12 @@ model User {
   viecTheoDoi       ViecTheoDoi[]
   viecThuTu         ViecThuTu[]
   viecVet           ViecVet[]         @relation("ViecVetNguoi")
+  duAnTao           DuAn[]            @relation("DuAnTaoBoi")
+  duAnDong          DuAn[]            @relation("DuAnDongBoi")
+  duAnVet           DuAnVet[]         @relation("DuAnVetNguoi")
+  duAnMocTao        DuAnMoc[]         @relation("DuAnMocTaoBoi")
+  viecPhuThuocTao   ViecPhuThuoc[]    @relation("ViecPhuThuocTaoBoi")
+  ngayNghiTao       NgayNghi[]        @relation("NgayNghiTaoBoi")
 
   @@unique([email])
   @@map("user")
@@ -1498,6 +1504,8 @@ model AppSetting {
   zaloWebhookSecret String?
   zaloWebhookUrl    String?
   zaloWebhookLyDo   String?
+
+  ngayNghiTuan Int[] @default([])
 
   updatedAt DateTime @updatedAt
 
@@ -3003,34 +3011,41 @@ enum TrangThaiViec {
 }
 
 model Viec {
-  id              String        @id @default(cuid())
+  id              String          @id @default(cuid())
   tieuDe          String
   moTa            String?
-  trangThai       TrangThaiViec @default(CHUA_LAM)
+  trangThai       TrangThaiViec   @default(CHUA_LAM)
   hanNgay         DateTime?
   nguoiGiaoId     String
-  nguoiGiao       User          @relation("ViecNguoiGiao", fields: [nguoiGiaoId], references: [id], onDelete: Restrict)
+  nguoiGiao       User            @relation("ViecNguoiGiao", fields: [nguoiGiaoId], references: [id], onDelete: Restrict)
   nguoiThucHienId String
-  nguoiThucHien   User          @relation("ViecNguoiThucHien", fields: [nguoiThucHienId], references: [id], onDelete: Restrict)
+  nguoiThucHien   User            @relation("ViecNguoiThucHien", fields: [nguoiThucHienId], references: [id], onDelete: Restrict)
   taoBoiId        String
-  taoBoi          User          @relation("ViecTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
-  taoLuc          DateTime      @default(now())
-  doiLuc          DateTime      @updatedAt
+  taoBoi          User            @relation("ViecTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc          DateTime        @default(now())
+  doiLuc          DateTime        @updatedAt
   roiChuaLamLuc   DateTime?
   khepLuc         DateTime?
-  activityGocId   String?       @unique
-  activityGoc     Activity?     @relation("ViecChep", fields: [activityGocId], references: [id], onDelete: SetNull)
+  activityGocId   String?         @unique
+  activityGoc     Activity?       @relation("ViecChep", fields: [activityGocId], references: [id], onDelete: SetNull)
   khoaNguon       String?
   gan             ViecGan[]
   theoDoi         ViecTheoDoi[]
   vet             ViecVet[]
   chaId           String?
-  cha             Viec?         @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
-  con             Viec[]        @relation("ViecCon")
+  cha             Viec?           @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
+  con             Viec[]          @relation("ViecCon")
   thuTu           ViecThuTu[]
   buoc            OnboardingStep? @relation("BuocViec")
+  batDauNgay      DateTime?
+  duAnId          String?
+  duAn            DuAn?           @relation(fields: [duAnId], references: [id], onDelete: Restrict)
+  phaiCho         ViecPhuThuoc[]  @relation("PhuThuocSau")
+  choBoi          ViecPhuThuoc[]  @relation("PhuThuocTruoc")
+  mocCho          DuAnMocCho[]
 
   @@index([chaId])
+  @@index([duAnId])
   @@index([nguoiThucHienId, trangThai, hanNgay])
   @@index([nguoiGiaoId, trangThai])
   @@index([taoLuc])
@@ -3135,4 +3150,92 @@ model BanChupLoTrinh {
   layLuc    DateTime
   duLieu    Json
   canhBao   String[]
+}
+
+model DuAn {
+  id        String    @id @default(cuid())
+  ten       String
+  moTa      String?
+  taoBoiId  String
+  taoBoi    User      @relation("DuAnTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc    DateTime  @default(now())
+  doiLuc    DateTime  @updatedAt
+  dongLuc   DateTime?
+  dongBoiId String?
+  dongBoi   User?     @relation("DuAnDongBoi", fields: [dongBoiId], references: [id], onDelete: SetNull)
+  viec      Viec[]
+  vet       DuAnVet[]
+  moc       DuAnMoc[]
+
+  @@index([dongLuc])
+  @@index([taoLuc])
+  @@map("duAn")
+}
+
+model DuAnVet {
+  id      String   @id @default(cuid())
+  duAnId  String
+  duAn    DuAn     @relation(fields: [duAnId], references: [id], onDelete: Cascade)
+  luc     DateTime @default(now())
+  nguoiId String?
+  nguoi   User?    @relation("DuAnVetNguoi", fields: [nguoiId], references: [id], onDelete: SetNull)
+  loai    String
+  truoc   Json?
+  sau     Json?
+
+  @@index([duAnId, luc])
+  @@map("duAnVet")
+}
+
+model DuAnMoc {
+  id       String       @id @default(cuid())
+  duAnId   String
+  duAn     DuAn         @relation(fields: [duAnId], references: [id], onDelete: Cascade)
+  ten      String
+  ngay     DateTime
+  taoBoiId String
+  taoBoi   User         @relation("DuAnMocTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc   DateTime     @default(now())
+  cho      DuAnMocCho[]
+
+  @@index([duAnId, ngay])
+  @@map("duAnMoc")
+}
+
+model DuAnMocCho {
+  id     String  @id @default(cuid())
+  mocId  String
+  moc    DuAnMoc @relation(fields: [mocId], references: [id], onDelete: Cascade)
+  viecId String
+  viec   Viec    @relation(fields: [viecId], references: [id], onDelete: Cascade)
+
+  @@unique([mocId, viecId])
+  @@index([viecId])
+  @@map("duAnMocCho")
+}
+
+model ViecPhuThuoc {
+  id       String   @id @default(cuid())
+  truocId  String
+  truoc    Viec     @relation("PhuThuocTruoc", fields: [truocId], references: [id], onDelete: Cascade)
+  sauId    String
+  sau      Viec     @relation("PhuThuocSau", fields: [sauId], references: [id], onDelete: Cascade)
+  taoBoiId String
+  taoBoi   User     @relation("ViecPhuThuocTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc   DateTime @default(now())
+
+  @@unique([truocId, sauId])
+  @@index([sauId])
+  @@map("viecPhuThuoc")
+}
+
+model NgayNghi {
+  id       String   @id @default(cuid())
+  ngay     DateTime @unique
+  ten      String
+  taoBoiId String
+  taoBoi   User     @relation("NgayNghiTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc   DateTime @default(now())
+
+  @@map("ngayNghi")
 }
