@@ -213,8 +213,14 @@ describe("mtc-anh-xa", () => {
 	test("doi chung duong luat chat: nam dang truyen mau, ke ca tep khong nhac ten cham", () => {
 		const DANG = [
 			{ ten: "bien", ma: `const MAU = "success";\nexport const x = MAU;` },
-			{ ten: "doi so ham", ma: `export const x = chon(d, "success", "error");` },
-			{ ten: "hang mang", ma: `export const ROWS = [{ id: "a", tone: "success" }];` },
+			{
+				ten: "doi so ham",
+				ma: `export const x = chon(d, "success", "error");`,
+			},
+			{
+				ten: "hang mang",
+				ma: `export const ROWS = [{ id: "a", tone: "success" }];`,
+			},
 			{ ten: "phep va", ma: `export const x = d && "success";` },
 			{
 				ten: "tep khong nhac ten cham",
@@ -242,8 +248,7 @@ describe("mtc-anh-xa", () => {
 		for (const t of TEP_KHU) {
 			const nguon = `${readFileSync(join(GOC, t), "utf8")}\nexport const __doiChung = "success";\n`;
 			const vp = quetMau(nguon, t, { chat: true });
-			if (vp.length < 1)
-				throw new Error(`mtc-anh-xa: ${t} khong duoc quet`);
+			if (vp.length < 1) throw new Error(`mtc-anh-xa: ${t} khong duoc quet`);
 			dem += 1;
 		}
 		expect(dem).toBe(13);
