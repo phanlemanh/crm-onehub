@@ -72,6 +72,7 @@
 		"./test/*": "./test/*.ts",
 		"./vai-doi-tac": "./src/vai-doi-tac.ts",
 		"./du-an": "./src/du-an.ts",
+		"./du-an-ghi": "./src/du-an-ghi.ts",
 		"./lich-lam-viec": "./src/lich-lam-viec.ts",
 		"./lich-viec": "./src/lich-viec.ts",
 		"./viec": "./src/viec.ts",

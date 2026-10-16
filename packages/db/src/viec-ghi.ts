@@ -1,6 +1,9 @@
 import { buocCuaViec, chieuLenBuoc } from "./buoc-viec-chieu";
+import { DU_AN, docLichLam } from "./du-an";
 import { Prisma } from "./generated/prisma/client";
 import { ActivityType, TrangThaiViec } from "./generated/prisma/enums";
+import { ngayLamKe } from "./lich-lam-viec";
+import { LoiLich, tinhDoi } from "./lich-viec";
 import { docDuocDoiTac } from "./vai-doi-tac";
 import {
 	type BanGhiGan,
@@ -66,6 +69,7 @@ export type TaoViecInput = {
 	gan: BanGhiGan[];
 	nguon: NguonViec;
 	khoaNguon?: string | null;
+	duAnId?: string | null;
 	now: Date;
 };
 
@@ -75,7 +79,12 @@ export type SuaViecInput = DauGhi & {
 	tieuDe?: string;
 	moTa?: string | null;
 	hanNgay?: Date | null;
+	batDauNgay?: Date | null;
 };
+
+export type ViecNgan = { id: string; tieuDe: string };
+
+export type DoiDuAnInput = DauGhi & { duAnId: string | null };
 
 export type DoiNguoiInput = DauGhi & { nguoiThucHienId: string };
 
@@ -89,6 +98,8 @@ const CHON_GHI = {
 	moTa: true,
 	trangThai: true,
 	hanNgay: true,
+	batDauNgay: true,
+	duAnId: true,
 	nguoiGiaoId: true,
 	nguoiThucHienId: true,
 	roiChuaLamLuc: true,
@@ -233,6 +244,7 @@ export async function taoViec(
 	}
 	const ganDung: BanGhiVet[] = [];
 	for (const b of input.gan) ganDung.push(await docBanGhi(tx, b));
+	const duAn = input.duAnId ? await docDuAnMo(tx, input.duAnId) : null;
 	const viec = await tx.viec.create({
 		data: {
 			tieuDe: input.tieuDe,
@@ -243,9 +255,16 @@ export async function taoViec(
 			taoBoiId: input.nguoiId,
 			taoLuc: input.now,
 			khoaNguon: input.khoaNguon ?? null,
+			duAnId: duAn?.id ?? null,
 		},
 		select: { id: true },
 	});
+	if (duAn) {
+		await ghiVetDuAn(tx, duAn.id, input.nguoiId, input.now, {
+			loai: "them-viec",
+			sau: { id: viec.id, tieuDe: input.tieuDe },
+		});
+	}
 	for (const b of ganDung) {
 		await tx.viecGan.create({ data: { viecId: viec.id, ...cotGan(b) } });
 	}
@@ -319,7 +338,12 @@ export async function doiTrangThai(
 	await chieuLenBuoc(tx, viec.id);
 }
 
-export async function suaViec(tx: DbGhi, input: SuaViecInput): Promise<void> {
+export async function suaViec(
+	tx: DbGhi,
+	input: SuaViecInput,
+): Promise<{ daDoi: ViecNgan[] }> {
+	const coNgay = input.hanNgay !== undefined || input.batDauNgay !== undefined;
+	if (coNgay) await khoaDuAnCuaViec(tx, input.viecId);
 	const viec = await docViecGhi(tx, input.viecId, input.nguoiId);
 	const vai = vaiCua(viec, input.nguoiId);
 	if (!vai.giao && !vai.thucHien) {
@@ -333,24 +357,148 @@ export async function suaViec(tx: DbGhi, input: SuaViecInput): Promise<void> {
 	}
 	const tieuDe = input.tieuDe ?? viec.tieuDe;
 	const moTa = input.moTa === undefined ? viec.moTa : input.moTa;
-	const hanCu = viec.hanNgay ? ngayHan(viec.hanNgay) : null;
-	const hanMoi =
-		input.hanNgay === undefined
-			? hanCu
-			: input.hanNgay
-				? ngayHan(input.hanNgay)
-				: null;
 	const doiNoiDung = tieuDe !== viec.tieuDe || moTa !== viec.moTa;
-	if (!doiNoiDung && hanMoi === hanCu) return;
-	await tx.viec.update({
-		where: { id: viec.id },
-		data: { tieuDe, moTa, hanNgay: input.hanNgay },
-	});
 	if (doiNoiDung) {
+		await tx.viec.update({ where: { id: viec.id }, data: { tieuDe, moTa } });
 		await ghiVetViec(tx, dauVet(input), {
 			loai: "doi-noi-dung",
 			truoc: { tieuDe: viec.tieuDe, moTa: viec.moTa },
 			sau: { tieuDe, moTa },
+		});
+	}
+	const daDoi = coNgay ? await apLich(tx, { ...viec, tieuDe }, input) : [];
+	if (doiNoiDung || coNgay) await chieuLenBuoc(tx, viec.id);
+	return { daDoi };
+}
+
+export async function doiLich(
+	tx: DbGhi,
+	input: DauGhi & { batDauNgay?: Date | null; hanNgay?: Date | null },
+): Promise<{ daDoi: ViecNgan[] }> {
+	return suaViec(tx, input);
+}
+
+function sangNgay(d: Date | null): string | null {
+	return d ? ngayHan(d) : null;
+}
+
+function tuNgay(s: string): Date {
+	return new Date(`${s}T00:00:00.000Z`);
+}
+
+async function khoaDuAn(tx: DbGhi, ids: (string | null)[]): Promise<void> {
+	const ds = [...new Set(ids.filter((x): x is string => x !== null))].sort();
+	for (const id of ds) {
+		await tx.$queryRaw`SELECT id FROM "duAn" WHERE id = ${id} FOR UPDATE`;
+		await tx.$queryRaw`SELECT id FROM viec WHERE "duAnId" = ${id} ORDER BY id FOR UPDATE`;
+	}
+}
+
+async function khoaDuAnCuaViec(tx: DbGhi, viecId: string): Promise<void> {
+	const v = await tx.viec.findUnique({
+		where: { id: viecId },
+		select: { duAnId: true },
+	});
+	await khoaDuAn(tx, [v?.duAnId ?? null]);
+}
+
+export async function docDuAnMo(
+	tx: DbGhi,
+	duAnId: string,
+): Promise<{ id: string; ten: string }> {
+	const da = await tx.duAn.findUnique({
+		where: { id: duAnId },
+		select: {
+			id: true,
+			ten: true,
+			dongLuc: true,
+			_count: { select: { viec: true } },
+		},
+	});
+	if (da === null) {
+		throw new LoiViec("khong-thay", DU_AN.thongDiep.khongCoDuAn(duAnId));
+	}
+	if (da.dongLuc !== null) {
+		throw new LoiViec("khong-hop-le", DU_AN.thongDiep.daDong);
+	}
+	if (da._count.viec >= DU_AN.viecToiDa) {
+		throw new LoiViec("khong-hop-le", DU_AN.thongDiep.viecToiDa);
+	}
+	return { id: da.id, ten: da.ten };
+}
+
+export async function ghiVetDuAn(
+	tx: DbGhi,
+	duAnId: string,
+	nguoiId: string | null,
+	luc: Date,
+	vet: { loai: string; truoc?: unknown; sau?: unknown },
+): Promise<void> {
+	await tx.duAnVet.create({
+		data: {
+			duAnId,
+			nguoiId,
+			luc,
+			loai: vet.loai,
+			truoc: (vet.truoc ?? Prisma.DbNull) as Prisma.InputJsonValue,
+			sau: (vet.sau ?? Prisma.DbNull) as Prisma.InputJsonValue,
+		},
+	});
+}
+
+async function apLich(
+	tx: DbGhi,
+	viec: ViecGhi,
+	input: DauGhi & { batDauNgay?: Date | null; hanNgay?: Date | null },
+): Promise<ViecNgan[]> {
+	if (viec.duAnId) {
+		const da = await tx.duAn.findUnique({
+			where: { id: viec.duAnId },
+			select: { dongLuc: true },
+		});
+		if (da?.dongLuc) throw new LoiViec("khong-hop-le", DU_AN.thongDiep.daDong);
+	}
+	const batCu = sangNgay(viec.batDauNgay);
+	const hanCu = sangNgay(viec.hanNgay);
+	const batMoi =
+		input.batDauNgay === undefined ? batCu : sangNgay(input.batDauNgay);
+	const hanMoi = input.hanNgay === undefined ? hanCu : sangNgay(input.hanNgay);
+	if (batMoi && hanMoi && batMoi > hanMoi) {
+		throw new LoiViec("khong-hop-le", DU_AN.thongDiep.batDauSauHan);
+	}
+	if (batMoi === batCu && hanMoi === hanCu) return [];
+	const lich = viec.duAnId ? await docLichLam(tx) : null;
+	if (viec.duAnId && lich && batMoi && batMoi !== batCu) {
+		const truoc = await tx.viecPhuThuoc.findMany({
+			where: { sauId: viec.id },
+			select: { truoc: { select: { tieuDe: true, hanNgay: true } } },
+		});
+		let chan: { tieuDe: string; han: string; can: string } | null = null;
+		for (const t of truoc) {
+			const han = sangNgay(t.truoc.hanNgay);
+			if (!han) continue;
+			const can = ngayLamKe(han, lich);
+			if (!chan || can > chan.can) chan = { tieuDe: t.truoc.tieuDe, han, can };
+		}
+		if (chan && batMoi < chan.can) {
+			throw new LoiViec(
+				"khong-hop-le",
+				DU_AN.thongDiep.batDauTruocViecCho(chan.tieuDe, chan.han),
+			);
+		}
+	}
+	await tx.viec.update({
+		where: { id: viec.id },
+		data: {
+			batDauNgay: batMoi ? tuNgay(batMoi) : null,
+			hanNgay: hanMoi ? tuNgay(hanMoi) : null,
+		},
+	});
+	if (batMoi !== batCu) {
+		await ghiVetViec(tx, dauVet(input), {
+			loai: "doi-bat-dau",
+			truoc: { batDauNgay: batCu },
+			sau: { batDauNgay: batMoi },
 		});
 	}
 	if (hanMoi !== hanCu) {
@@ -360,7 +508,163 @@ export async function suaViec(tx: DbGhi, input: SuaViecInput): Promise<void> {
 			sau: { hanNgay: hanMoi },
 		});
 	}
-	await chieuLenBuoc(tx, viec.id);
+	if (!viec.duAnId || !batMoi || !hanMoi) return [];
+	return lanDoi(
+		tx,
+		viec.duAnId,
+		viec.id,
+		{ batDau: batMoi, han: hanMoi },
+		input,
+	);
+}
+
+export async function lanDoi(
+	tx: DbGhi,
+	duAnId: string,
+	gocId: string,
+	goc: { batDau: string; han: string },
+	dau: { nguoiId: string; now: Date },
+): Promise<ViecNgan[]> {
+	const lich = await docLichLam(tx);
+	const [viec, canh] = await Promise.all([
+		tx.viec.findMany({
+			where: { duAnId },
+			select: {
+				id: true,
+				tieuDe: true,
+				batDauNgay: true,
+				hanNgay: true,
+				trangThai: true,
+			},
+		}),
+		tx.viecPhuThuoc.findMany({
+			where: { truoc: { duAnId }, sau: { duAnId } },
+			select: { truocId: true, sauId: true },
+		}),
+	]);
+	const tieuDe = new Map(viec.map((v) => [v.id, v.tieuDe]));
+	let doi: ReturnType<typeof tinhDoi>;
+	try {
+		doi = tinhDoi(
+			viec.map((v) => ({
+				id: v.id,
+				tieuDe: v.tieuDe,
+				batDau: sangNgay(v.batDauNgay),
+				han: sangNgay(v.hanNgay),
+				dong: TRANG_THAI_KHEP.includes(v.trangThai),
+			})),
+			canh,
+			{ id: gocId, ...goc },
+			lich,
+		);
+	} catch (e) {
+		if (e instanceof LoiLich) {
+			throw new LoiViec(
+				"khong-hop-le",
+				DU_AN.thongDiep.vong(e.chuoi.map((id) => tieuDe.get(id) ?? id)),
+			);
+		}
+		throw e;
+	}
+	const cu = new Map(viec.map((v) => [v.id, v]));
+	for (const d of doi) {
+		const v = cu.get(d.id);
+		if (!v) continue;
+		const boi = { id: d.boi, tieuDe: tieuDe.get(d.boi) ?? d.boi };
+		await tx.viec.update({
+			where: { id: d.id },
+			data: { batDauNgay: tuNgay(d.batDau), hanNgay: tuNgay(d.han) },
+		});
+		const dauTuDoi = {
+			viecId: d.id,
+			nguoiId: dau.nguoiId,
+			nguon: "tu-doi" as const,
+			luc: dau.now,
+		};
+		await ghiVetViec(tx, dauTuDoi, {
+			loai: "doi-bat-dau",
+			truoc: { batDauNgay: sangNgay(v.batDauNgay) },
+			sau: { batDauNgay: d.batDau, boi },
+		});
+		if (sangNgay(v.hanNgay) !== d.han) {
+			await ghiVetViec(tx, dauTuDoi, {
+				loai: "doi-han",
+				truoc: { hanNgay: sangNgay(v.hanNgay) },
+				sau: { hanNgay: d.han, boi },
+			});
+		}
+		await chieuLenBuoc(tx, d.id);
+	}
+	return doi.map((d) => ({ id: d.id, tieuDe: tieuDe.get(d.id) ?? d.id }));
+}
+
+export async function doiDuAn(tx: DbGhi, input: DoiDuAnInput): Promise<void> {
+	const hien = await tx.viec.findUnique({
+		where: { id: input.viecId },
+		select: { duAnId: true },
+	});
+	await khoaDuAn(tx, [hien?.duAnId ?? null, input.duAnId]);
+	const viec = await docViecGhi(tx, input.viecId, input.nguoiId);
+	const vai = vaiCua(viec, input.nguoiId);
+	if (!vai.giao && !vai.thucHien) {
+		throw new LoiViec(
+			"khong-quyen",
+			VIEC.thongDiep.chiGiaoVaThucHien(VIEC.lam.sua),
+		);
+	}
+	if (viec.duAnId === input.duAnId) return;
+	const cu = viec.duAnId
+		? await tx.duAn.findUnique({
+				where: { id: viec.duAnId },
+				select: { id: true, ten: true, dongLuc: true },
+			})
+		: null;
+	if (cu?.dongLuc) throw new LoiViec("khong-hop-le", DU_AN.thongDiep.daDong);
+	const moi = input.duAnId ? await docDuAnMo(tx, input.duAnId) : null;
+	if (moi) await kiemNguoiNhanViec(tx, viec.nguoiThucHienId);
+	if (cu) {
+		const canh = await tx.viecPhuThuoc.findMany({
+			where: { OR: [{ truocId: viec.id }, { sauId: viec.id }] },
+			select: {
+				id: true,
+				truoc: { select: { id: true, tieuDe: true } },
+				sau: { select: { id: true, tieuDe: true } },
+			},
+		});
+		for (const c of canh) {
+			await tx.viecPhuThuoc.delete({ where: { id: c.id } });
+			await ghiVetViec(
+				tx,
+				{ ...dauVet(input), viecId: c.sau.id },
+				{ loai: "go-phu-thuoc", truoc: { viec: c.truoc }, sau: null },
+			);
+			await ghiVetViec(
+				tx,
+				{ ...dauVet(input), viecId: c.truoc.id },
+				{ loai: "go-phu-thuoc", truoc: { viec: c.sau }, sau: null },
+			);
+		}
+		await tx.duAnMocCho.deleteMany({ where: { viecId: viec.id } });
+		await ghiVetDuAn(tx, cu.id, input.nguoiId, input.now, {
+			loai: "bot-viec",
+			truoc: { id: viec.id, tieuDe: viec.tieuDe },
+		});
+	}
+	await tx.viec.update({
+		where: { id: viec.id },
+		data: { duAnId: moi?.id ?? null },
+	});
+	await ghiVetViec(tx, dauVet(input), {
+		loai: "doi-du-an",
+		truoc: cu ? { id: cu.id, ten: cu.ten } : null,
+		sau: moi ? { id: moi.id, ten: moi.ten } : null,
+	});
+	if (moi) {
+		await ghiVetDuAn(tx, moi.id, input.nguoiId, input.now, {
+			loai: "them-viec",
+			sau: { id: viec.id, tieuDe: viec.tieuDe },
+		});
+	}
 }
 
 export async function doiNguoiThucHien(
@@ -812,6 +1116,7 @@ export async function taoViecCon(
 		select: {
 			id: true,
 			chaId: true,
+			duAnId: true,
 			trangThai: true,
 			nguoiGiaoId: true,
 			nguoiThucHienId: true,
@@ -850,6 +1155,7 @@ export async function taoViecCon(
 			return { loai: b.loai, id: b.id };
 		}),
 		nguon: "web",
+		duAnId: cha.duAnId,
 		now: input.now,
 	});
 	await tx.viec.update({ where: { id: con.id }, data: { chaId: cha.id } });
