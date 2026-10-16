@@ -91,4 +91,7 @@ Thước `rang/do-nguong.mjs`, chạy chỉ đọc trên khoảng 14 ngày đầ
   kéo không bám ngày làm việc · tự dời chạy thay người không sửa được việc sau. AC-2, AC-5, AC-7, AC-8, AC-10, AC-11
   ghim theo lối máy khuyên; chủ kho chọn lối khác thì sửa đúng các vế đó trước khi duyệt.
 - Một nơi «Việc» với ô Phạm vi thay cho mục «Dự án» riêng: chủ kho chọn B ở Cổng Phạm vi 16/10 (sổ dòng 23).
-- Cỡ: 14 tiêu chí, trên mức 12 của luật cỡ — lời mời Cổng Phạm vi nêu chốt cỡ.
+- Cỡ: 14 tiêu chí, trên mức 12 của luật cỡ — chủ kho giữ cỡ ở Cổng Phạm vi 16/10: «14 tiêu chí cùng một câu giao
+  Gantt mức đủ».
+- Nền hạ tầng đỏ chấp nhận có tên ở Cổng Phạm vi 16/10: lưới trước gộp tự hết khi hồ sơ arm; engine lệch bản kit
+  vendored là việc của kit.
