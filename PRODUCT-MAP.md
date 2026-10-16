@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>5 việc"]
+  GD --> B["Sắp mở vòng<br/>4 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>147 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>130 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>133 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -37,7 +37,6 @@ flowchart TD
 
 ## Sắp mở vòng
 
-- Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
 - Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây (`khong-do-them-chay-gh`)
 - Danh sách góp ý đã gom được sửa trong một lượt (`sua-sau-chay-that`)
@@ -54,6 +53,7 @@ flowchart TD
 - Bàn gieo góp ý dùng chung chạy lại được sau khi công cụ nộp của Trợ lý OKR tự đóng việc, để ba bàn đo màn OKR đo được lại (`ban-gieo-gop-y-sau-nop`)
 - Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Bộ 50 câu hỏi mẫu viết theo tám trang mẫu của kho đo — câu trả lời được, câu phải nói không biết, câu gõ như tin Zalo — kèm lệnh kiểm bộ và lệnh đo trợ lý kho trên bộ bằng script chấm sẵn có (`bo-cau-hoi-mau`)
+- Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
 - Bộ xương Kara trong packages/ui — sáu khối KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact, một nút «Thử lại», và ba điểm cắm cho K2: co giãn trong thanh kéo, khoá đề xuất khi Kara đang soạn, nhận theo nhóm (`bo-xuong-kara`)
 - Ca kiểm chập chờn theo máy thôi làm đỏ lượt dài — dọn eve mồ côi của lượt bị ngắt, chờ route thật có trần, trần hook dựng Nest có tên, công tắc bỏ ca tới được test (`ca-chap-chon-cach-ly`)
 - Ba ca chập chờn còn lại chạy tất định — hai đối chứng «the fixture bites» của tasks.integration giữ thống kê đứng yên và gọi tên khi kế hoạch đổi; ma() của bộ gieo agent-okr không sinh chữ số (`ca-chap-chon-con-lai`)
@@ -143,6 +143,7 @@ flowchart TD
 - OKR và tổ chức vá — dựng cây và đặt OKR không vấp (R1d) (`okr-to-chuc-va`)
 - Quyết một góp ý của Kara mà máy chủ từ chối vì lý do cố định thì người dùng thấy đúng lý do theo ngôn ngữ trang, không phải câu «thử lại sau ít phút» (`quyet-gop-y-noi-dung-ly-do`)
 - Toàn cảnh › Theo đơn vị có cách xem Sơ đồ — mỗi đơn vị một thẻ, đường nối theo căn chỉnh thật, lọc «Cần chú ý», mở thẻ ngay trên sơ đồ, thu gọn khi hơn 12 đơn vị (`so-do-can-chinh-don-vi`)
+- Sơ đồ quanh một mục tiêu — từ ngăn chi tiết bấm «Xem quanh mục tiêu» thấy đường góp lên tới KR công ty, KR của nó và ai góp vào nó, mỗi mục tiêu hiện một lần, rê chuột làm nổi đường đi (`so-do-quanh-muc-tieu`)
 - Số OKR tự chảy — KR của khối kinh doanh lấy số từ danh mục chỉ số CRM có định nghĩa cố định; mỗi ngày chụp giá trị thành lịch sử không đổi; bấm vào con số ra danh sách bản ghi đằng sau; KR ngoài CRM nhận số qua khoá API và Google Sheets (`so-okr-tu-chay`)
 - Soạn OKR cùng Trợ lý — người sửa được OKR của một đơn vị mở một cuộc đối thoại với Trợ lý OKR cho đơn vị và chu kỳ đang lập kế hoạch; Trợ lý mang bối cảnh (hồ sơ công ty và chiến lược từ Kho tài liệu, đơn vị · mô tả · chức danh, OKR cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng) vào cuộc, hỏi vài câu, đưa bản nháp bộ OKR trên bảng sống cạnh chat; người nhận · sửa · bác từng dòng, «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp; chạy trên app eve riêng, vai «chỉ OKR» đi qua đường mới; dựng và đo trên bộ OKR mẫu (`soan-okr-cung-tro-ly`)
 - Trang soạn OKR không lạc: không nhảy tab khi mở hay đóng bản ghi bên cạnh, hoàn tác cả nhóm thất bại thì báo lỗi trên biên nhận nhóm, lần Kara nộp bị từ chối không thành mốc và không làm gốc so sánh (`soan-okr-khong-lac`)
@@ -178,6 +179,7 @@ flowchart TD
 - «Bài kiểm Zalo webhook không còn đỏ theo giờ thật» (`zalo-bom-gio`)
 - Zalo gửi hỏng thì nhật ký nói lý do của Zalo; đổi bot thì hỏi trước rồi gỡ liên kết cũ để mọi người nối lại; tin vào bị bỏ qua thì nhật ký nói vì sao (`zalo-gui-hong-ghi-ly-do`)
 - Zalo hỏi OKR không chết lượt — ngoài phiên OKR, agent gốc gọi tro_ly_okr thì nhận một kết quả từ chối có lý do và vẫn trả lời người hỏi (`zalo-hoi-okr-khong-chet`)
+- Phiên gốc của câu Kho (CRM và Zalo) tự ghi liên kết câu hỏi → phiên ngay khi bắt đầu, và trợ lý kho không bao giờ chạy thiếu chỉ dẫn kho; đo lại bộ 50 câu trên Gemini 3.8 Flash (`zalo-tro-ly-kho-chi-dan`)
 - «Zalo quá tải không bị báo token sai; bot chỉ đúng đường tới trang nhắc» (`zalo-va`)
 
 ## Đã giao
