@@ -25,6 +25,7 @@ jobs:
         with:
           ref: onehub
           fetch-depth: 0
+          token: ${{ secrets.TIN_HIEU_TOKEN }}
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -40,5 +41,5 @@ jobs:
         env:
           CRM_API_URL: ${{ secrets.CRM_API_URL }}
           CRM_KHOA_KEO_TIN_HIEU: ${{ secrets.CRM_KHOA_KEO_TIN_HIEU }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.TIN_HIEU_TOKEN }}
         run: bun scripts/tin-hieu/lich.ts
