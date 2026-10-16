@@ -260,6 +260,7 @@ mock.module("@/lib/trpc/client", () => ({
 				mutationOptions: () => ({ mutationFn: async () => null }),
 			},
 			hoiMo: {
+				mutationKey: () => ["okr.hoiMo"],
 				mutationOptions: () => ({ mutationFn: async () => null }),
 			},
 		},

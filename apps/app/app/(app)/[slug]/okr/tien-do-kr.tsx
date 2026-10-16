@@ -3,15 +3,13 @@
 import { Badge } from "@crm/ui/components/badge";
 import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
 import {
+	NGHIA_NHIP,
 	type NhipOkr,
 	PaceIndicator,
-	TONE_NHIP,
 } from "@crm/ui/components/okr-status";
 import { Progress } from "@crm/ui/components/progress";
-import {
-	StatusIndicator,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import {
 	type LoaiMucTieu,
 	type TrangThaiMucTieu,
@@ -21,12 +19,12 @@ import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 
-const TONE_TRANG_THAI = {
-	nhap: "neutral",
-	"cho-duyet": "warning",
-	"cong-bo": "success",
-	"da-bo": "neutral",
-} satisfies Record<TrangThaiMucTieu, StatusTone>;
+export const NGHIA_TRANG_THAI_MUC_TIEU = {
+	nhap: "nhap",
+	"cho-duyet": "cho",
+	"cong-bo": "xong",
+	"da-bo": "ketThuc",
+} as const satisfies Record<TrangThaiMucTieu, NghiaTrangThai>;
 
 export function nhipCua(
 	progress: number,
@@ -140,7 +138,7 @@ export function ChamTrangThai({ status }: { status: TrangThaiMucTieu }) {
 	return (
 		<StatusIndicator
 			size="sm"
-			tone={TONE_TRANG_THAI[status]}
+			tone={toneTheoNghia(NGHIA_TRANG_THAI_MUC_TIEU[status])}
 			label={m.trangThai[status]}
 		/>
 	);
@@ -157,7 +155,11 @@ function NhipGon({ pace }: { pace: NhipOkr }) {
 		"moc-chua": msg.mocChua,
 	} satisfies Record<NhipOkr, string>;
 	return (
-		<StatusIndicator label={nhan[pace]} size="sm" tone={TONE_NHIP[pace]} />
+		<StatusIndicator
+			label={nhan[pace]}
+			size="sm"
+			tone={toneTheoNghia(NGHIA_NHIP[pace])}
+		/>
 	);
 }
 

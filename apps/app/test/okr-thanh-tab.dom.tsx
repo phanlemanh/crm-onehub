@@ -39,6 +39,7 @@ const thuTucTreo = {
 		queryKey: ["treo", Math.random()],
 		queryFn: () => new Promise(() => {}),
 	}),
+	mutationKey: () => ["treo"],
 	mutationOptions: () => ({ mutationFn: async () => null }),
 };
 mock.module("@/lib/trpc/client", () => ({

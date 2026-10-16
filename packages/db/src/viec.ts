@@ -28,6 +28,23 @@ export const DICH_ROI_CHUA_LAM: readonly TrangThaiViec[] = [
 	TrangThaiViec.XONG,
 ];
 
+export function roiChuaLamMoi(
+	v: {
+		roiChuaLamLuc: Date | null;
+		nguoiThucHienId: string;
+		trangThai: TrangThaiViec;
+	},
+	nguoiId: string,
+	den: TrangThaiViec,
+): boolean {
+	return (
+		v.roiChuaLamLuc === null &&
+		v.nguoiThucHienId === nguoiId &&
+		v.trangThai === TrangThaiViec.CHUA_LAM &&
+		DICH_ROI_CHUA_LAM.includes(den)
+	);
+}
+
 export type QuyenDoi = "G" | "GT";
 
 export type DoThiViec = Record<
@@ -56,6 +73,9 @@ export const NGUON_VIEC = [
 	"chep-cu",
 	"bang-keo",
 	"bang-menu",
+	"khuon",
+	"ke-hoach",
+	"dong-ke-hoach",
 ] as const;
 
 export type NguonViec = (typeof NGUON_VIEC)[number];
@@ -157,6 +177,12 @@ export const VIEC = {
 			`Việc ${id} không phải bản chép từ việc cần làm cũ.`,
 		conKhongCoCon: "Việc con không có việc con.",
 		chiThemConKhiMo: "Chỉ thêm việc con cho việc đang mở.",
+		goBuocOKeHoach:
+			"Việc này là một bước của kế hoạch 30 ngày — gỡ bước ở kế hoạch thay vì huỷ, xoá hay gỡ khỏi kế hoạch.",
+		buocLuonCoHan:
+			"Việc của bước luôn có hạn — đổi hạn ở bước; muốn bỏ thì gỡ bước ở kế hoạch.",
+		buocLuonCoNguoi:
+			"Việc của bước luôn có người làm — chọn người khác thay vì bỏ giao.",
 	},
 	bang: { xongGanDayNgay: 7 },
 } as const;
@@ -321,7 +347,10 @@ const banGhiVet = z.object({
 	ten: z.string(),
 });
 
-const trangThaiVet = z.object({ trangThai: z.enum(TRANG_THAI_VIEC) });
+const trangThaiVet = z.object({
+	trangThai: z.enum(TRANG_THAI_VIEC),
+	lyDo: z.string().optional(),
+});
 
 const hanVet = z.object({ hanNgay: z.string().nullable() });
 
