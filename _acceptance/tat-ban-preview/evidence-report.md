@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8cc8391b6634c7edf02b869c02ab5bf91bc7a095
+verified_commit: 41ce3fc4ab687634d478c6bac6095a379173541a
 human_signoff: manh 2026-10-16 — ký Cổng Bằng chứng trên lượt chấm 2 (PASS, 9/9 eval máy đạt, E11 hội đồng PASS; lượt 1 có một finding trong hợp đồng đã sửa). Năm mục ngoài hợp đồng (Ngoài-1..5, đều ở công cụ đo của hồ sơ) ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
@@ -186,3 +186,7 @@ none — every multi-run eval is uniform
 
 Round 1: 16/16 lệnh trả về, toàn bộ xanh; hồ sơ ghi 5 finding ngoài hợp đồng và 1 finding trong hợp đồng (AC-5, vế commit status của E7/E8).
 Round 2: chạy lại E4, E5, E6, E7, E8, E10 và bảy lệnh suite, tất cả xanh; E1, E2, E3 mang sang từ round 1 vì delta không chạm paths của chúng. Ghi chú: payload không kèm giờ chạy của round 2 nên verified_at của round này lấy theo ngày 2026-10-16.
+
+### Re-pin lần 1 — 2026-10-16, do gộp onehub 5ac01b453 kéo mã của vòng khác vào nhánh; vật PV1 không đổi
+run_id: repin-20261016T090340Z-99660
+sha: 41ce3fc4ab687634d478c6bac6095a379173541a · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E9 · ngoài làn máy: E11 (E11 không khai paths) · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
