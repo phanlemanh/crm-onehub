@@ -86,13 +86,25 @@ function lenhCuaCauHinh() {
 	return lenh;
 }
 
-function docEvals(hoSo) {
-	const tep = join(GOC, "_acceptance", hoSo, "evals.yaml");
-	if (!existsSync(tep)) return null;
+// F8 neo (ve-sinh-do-san-onehub): docEvals nhan them sha — co sha thi doc evals.yaml o dung commit do
+// (paths cua eval ho so khac duoc «khai paths» sau khi vong ky, 04/10), khong co thi doc cay hien tai.
+function docEvals(hoSo, sha) {
+	let noiDung;
+	if (sha) {
+		const r = spawnSync("git", ["-C", GOC, "show", `${sha}:_acceptance/${hoSo}/evals.yaml`], {
+			encoding: "utf8",
+		});
+		if (r.status !== 0) return null;
+		noiDung = r.stdout;
+	} else {
+		const tep = join(GOC, "_acceptance", hoSo, "evals.yaml");
+		if (!existsSync(tep)) return null;
+		noiDung = readFileSync(tep, "utf8");
+	}
 	const ra = [];
 	let cur = null;
 	let trongPaths = false;
-	for (const dong of readFileSync(tep, "utf8").split("\n")) {
+	for (const dong of noiDung.split("\n")) {
 		const moi = /^ {2}- id:\s*(\S+)/.exec(dong);
 		if (moi) {
 			cur = { id: moi[1], paths: [], executor: "", cmd: "", status: "" };
@@ -167,11 +179,7 @@ const tepBai = new Map();
 const nhinThay = [];
 for (const [h, evals] of docDuoc) {
 	for (const e of evals) {
-		if (["ui-check", "judgment"].includes(e.executor)) {
-			if (doi.some((t) => e.paths.some((g) => khopGlob(g, t))))
-				nhinThay.push(`${h} ${e.id}`);
-			continue;
-		}
+		if (["ui-check", "judgment"].includes(e.executor)) continue;
 		if (e.status === "not-run") continue;
 		const ref = e.cmd.replace(/^config:/, "");
 		const c = lenh.get(ref);
@@ -185,6 +193,16 @@ for (const [h, evals] of docDuoc) {
 				const t = `${thuMuc}/${m[1]}`;
 				tepBai.set(t, [...(tepBai.get(t) ?? []), h]);
 			}
+	}
+}
+
+// F8 neo (ve-sinh-do-san-onehub): tap eval nhin-thay bi dung tinh tren evals.yaml o D cua cap gop — cung cho
+// voi diff moc..D; paths khai them sau khi vong ky khong lam tap nay lech.
+for (const h of HO_SO) {
+	for (const e of docEvals(h, DAU_VONG) ?? []) {
+		if (!["ui-check", "judgment"].includes(e.executor)) continue;
+		if (doi.some((t) => e.paths.some((g) => khopGlob(g, t))))
+			nhinThay.push(`${h} ${e.id}`);
 	}
 }
 
@@ -266,11 +284,16 @@ function cayGoc() {
 		"apps/agent/node_modules",
 		"packages/ui/node_modules",
 		"packages/db/node_modules",
-		"packages/db/src/generated",
 	];
 	for (const d of noi)
 		if (existsSync(join(GOC, d)) && !existsSync(join(goc, d)))
 			symlinkSync(join(GOC, d), join(goc, d));
+	// ve-sinh-do-san-onehub cach-toi: cay moc tu sinh Prisma client cua schema o moc; symlink generated tu cay that
+	// lam lenh db:generate trong cay moc ghi schema cu de len cay that (luot ghim lai 07:08Z, 16/10).
+	if (!existsSync(join(goc, "packages/db/src/generated"))) {
+		const r = spawnSync("bun", ["run", "db:generate"], { cwd: goc, encoding: "utf8" });
+		if (r.status !== 0) khongDo(`cay moc khong sinh duoc Prisma client (ma ${r.status})`);
+	}
 	return goc;
 }
 
