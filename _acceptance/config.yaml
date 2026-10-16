@@ -1796,6 +1796,16 @@ executors:
     kv_man_tra_ve: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-tra-ve"
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
+    kh_tao: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-tao"'
+    kh_chon_nguoi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chon-nguoi"'
+    kh_ban_chieu: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ban-chieu"'
+    kh_chan: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chan"'
+    kh_go_buoc: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-go-buoc"'
+    kh_them_buoc: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-them-buoc"'
+    kh_ke_hoach_cu: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ke-hoach-cu"'
+    kh_thuoc: 'bun run test -- "cd apps/api && bun test test/ke-hoach-sinh-viec-do-nguong.spec.ts"'
+    kh_nhac_buoc: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.integration.spec.ts -t kh-nhac-buoc"'
+    kh_man_tao: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tao-ke-hoach-nguoi.dom.tsx"
     dh4_du_lieu: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-du-lieu"'
     dh4_chu_y: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-chu-y"'
     dh4_quyen: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-quyen"'
@@ -2849,6 +2859,11 @@ executors:
     kv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kanban-viec/rang/man.mjs"'
     kv_san_thiet_ke: node _acceptance/kanban-viec/rang/san-thiet-ke.mjs
     kv_dot_bien: node _acceptance/kanban-viec/rang/dot-bien.mjs
+    kh_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ke-hoach-sinh-viec/rang/man.mjs"'
+    kh_san_thiet_ke: node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs
+    kh_dot_bien: node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs
+    kh_e6_xanh: node _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs
+    kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc 34d31a8bf && bun run check-types'
     sgt_ranh_gioi: node _acceptance/sua-giao-dien-tin-hieu/rang/ranh-gioi.mjs
     sgt_do_man: APP_URL=${APP_URL:-http://localhost:3372} API_URL=${API_URL:-http://localhost:3373} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/sua-giao-dien-tin-hieu/rang/do-man.mjs"
     sgt_thiet_ke: for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done

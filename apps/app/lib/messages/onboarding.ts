@@ -111,6 +111,12 @@ const en = {
 			template: "Template",
 			startedAt: "Start date",
 			owner: "Owner",
+			nguoiTheoPhong: "Who does each department's steps",
+			phongChuaCoTruong: "No department head — defaults to the owner",
+			dangTaiKhuon: "Loading templates…",
+			loiTaiKhuon: "Couldn’t load the templates.",
+			thuLai: "Try again",
+			khuonRong: "This template has no steps yet.",
 		},
 		moiGioi: {
 			title: "Add a broker",
@@ -148,6 +154,7 @@ const en = {
 		xacNhanDongThan:
 			"It leaves the default list. You can reopen it from the plan page.",
 		giu: "Keep open",
+		huyViecMo: "Cancel the {n} open work items of this plan",
 	},
 	bac: {
 		accountAt: "Has an account",
@@ -197,6 +204,7 @@ const en = {
 		unassigned: "Unassigned",
 		assignTo: "Assign {nhan}",
 		dueFor: "Change the due date of {nhan}",
+		moViecCuaBuoc: "Open the work item of {nhan}",
 		searchPeople: "Search people",
 		nobody: "Nobody matches",
 		unassign: "Unassign",
@@ -352,7 +360,13 @@ type OnboardingMessages = {
 			| "template"
 			| "startedAt"
 			| "owner"
-			| "created",
+			| "created"
+			| "nguoiTheoPhong"
+			| "phongChuaCoTruong"
+			| "dangTaiKhuon"
+			| "loiTaiKhuon"
+			| "thuLai"
+			| "khuonRong",
 			string
 		>;
 		moiGioi: Record<
@@ -385,7 +399,8 @@ type OnboardingMessages = {
 		| "daDong"
 		| "xacNhanDongTieuDe"
 		| "xacNhanDongThan"
-		| "giu",
+		| "giu"
+		| "huyViecMo",
 		string
 	>;
 	bac: Record<
@@ -436,6 +451,7 @@ type OnboardingMessages = {
 		unassigned: string;
 		assignTo: string;
 		dueFor: string;
+		moViecCuaBuoc: string;
 		searchPeople: string;
 		nobody: string;
 		unassign: string;
@@ -618,6 +634,13 @@ const vi = {
 			template: "Khuôn",
 			startedAt: "Ngày bắt đầu",
 			owner: "Người cầm trịch",
+			nguoiTheoPhong: "Người làm bước của từng phòng ban",
+			phongChuaCoTruong:
+				"Phòng chưa có trưởng phòng — mặc định người cầm trịch",
+			dangTaiKhuon: "Đang tải khuôn…",
+			loiTaiKhuon: "Không tải được khuôn.",
+			thuLai: "Thử lại",
+			khuonRong: "Khuôn này chưa có bước nào.",
 		},
 		moiGioi: {
 			title: "Thêm môi giới",
@@ -655,6 +678,7 @@ const vi = {
 		xacNhanDongThan:
 			"Kế hoạch rời danh mục mặc định. Mở lại được ở trang kế hoạch.",
 		giu: "Để mở",
+		huyViecMo: "Huỷ {n} việc còn mở của kế hoạch",
 	},
 	bac: {
 		accountAt: "Có tài khoản",
@@ -704,6 +728,7 @@ const vi = {
 		unassigned: "Chưa giao",
 		assignTo: "Giao bước {nhan}",
 		dueFor: "Đổi hạn {nhan}",
+		moViecCuaBuoc: "Mở việc của bước {nhan}",
 		searchPeople: "Tìm người",
 		nobody: "Không ai khớp",
 		unassign: "Bỏ giao",
