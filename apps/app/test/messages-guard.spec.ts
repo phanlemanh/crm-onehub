@@ -442,6 +442,10 @@ const GHIM = {
 		"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 	],
 	"companies:created": ["Đã thêm 1.", "Đã thêm 12."],
+	"companies:nenTang": [
+		"Đây là trang 1, không phải trang web của công ty. Để trống nếu công ty chưa có trang web riêng.",
+		"Đây là trang 12, không phải trang web của công ty. Để trống nếu công ty chưa có trang web riêng.",
+	],
 	"companies:bulk.reassigned": [
 		"Đã đổi người phụ trách cho 1.",
 		"Đã đổi người phụ trách cho 12.",
