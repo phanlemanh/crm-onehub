@@ -14,6 +14,11 @@
 //   node scripts/tin-hieu.mjs --root . --rang                 0 xanh · 1 đỏ · 2 không chạy được
 //   node scripts/tin-hieu.mjs --root . --chua-gom             JSON: tín hiệu chưa có chỗ + việc đã giao
 //   node scripts/tin-hieu.mjs --root . --duong [--id <id>]    JSON: đường đi từng tín hiệu
+//   node scripts/tin-hieu.mjs --root . --cau                  0 câu cho người gửi sạch · 1 có câu lọt · 2 không chạy được
+//
+// Câu cho người gửi (`cau_nguoi_gui`, hồ sơ cau-tin-hieu-nguoi-gui): tiếng sản phẩm, không mã, không từ nội bộ —
+// đứng CẠNH câu cũ `cau` (câu cho chủ kho, có mã để lần, giữ nguyên từng byte từ 2.27). Danh sách từ cấm
+// sống ở khối TIN-HIEU-CAU-CAM của khuôn tín hiệu; mã không mang từ nào của nó.
 import { readFileSync, readdirSync, existsSync, statSync, realpathSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
@@ -21,7 +26,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { kiemYeuCau } from '../dieu-phoi/scripts/hinh-dang.mjs';
 import { docPhamVi } from './cat-luot.mjs';
-import { phanTichKho, docCacTep, docTep } from './lo-trinh.mjs';
+import { phanTichKho, docCacTep, docTep, DA_GIAO_O, DANG_LAM_O, CHUA_LAM_O, CHUA_MO, KHONG_SUY } from './lo-trinh.mjs';
 
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
@@ -30,6 +35,8 @@ const { khoaTinHieu } = require(path.join(__dirname, 'tin-hieu-khoa.cjs'));
 const { frontmatterField } = require(path.join(__dirname, '..', 'lib', 'evidence-core.cjs'));
 // «Đã giao» là đúng tập trạng thái mà cắt lượt và lưới trước-gộp dùng — không chép danh sách.
 const { DA_THONG_CONG_2, DA_DONG_THUC_TE } = require(path.join(__dirname, '..', 'lib', 'workspace-record.cjs'));
+// Bỏ đúng một cặp «» bao trọn câu giao — cùng hàm trang hồ sơ và khối dữ liệu dùng (import, không chép).
+const { boNgoacNgoai, ngayChuKy } = require(path.join(__dirname, 'ho-so-tom-tat.cjs'));
 
 export const TEP_KHUON = path.join(__dirname, '..', 'skills', 'acceptance', 'references', 'tin-hieu-template.md');
 export const TEP_SKILL = path.join(__dirname, '..', 'skills', 'gom-tin-hieu', 'SKILL.md');
@@ -221,9 +228,70 @@ export const CAU = {
   'hang-co-ho-so': x => `vào nhóm ${x.ten_nhom} → việc ${x.hang} → hồ sơ ${x.ho_so}: ${x.trang_thai}`,
 };
 // Trường của một bản ghi đường đi — một nguồn cho khối dữ liệu lộ trình và tài liệu kho tiêu thụ.
-export const TRUONG_DUONG = ['id', 'loai', 'tieu_de', 'luc', 'cho', 'nhom', 'ten_nhom', 'ly_do', 'ho_so_phu', 'hang', 'ho_so', 'trang_thai', 'cau'];
+export const TRUONG_DUONG = ['id', 'loai', 'tieu_de', 'luc', 'cho', 'nhom', 'ten_nhom', 'ly_do', 'ho_so_phu', 'hang', 'ho_so', 'trang_thai', 'cau', 'cau_nguoi_gui'];
 
-export function duongDi({ root, classify, sections }) {
+// ── Câu cho người gửi (design 2026-10-12-cau-tin-hieu-nguoi-gui §3–§4) ────────
+// Khuôn viết sẵn; mọi chỗ trống lấy từ dữ liệu (tên nhóm · lý do · câu giao · ngày ký), KHÔNG chỗ nào chèn mã.
+// `c = { cauGiao, tinhTrang }` — câu giao đã bỏ một cặp «», cụm tình trạng do `tinhTrangCua` dựng.
+const q = s => `"${s}"`;
+const VIEC_KHONG_TEN = 'một việc chưa có tên';
+const viecCau = (x, c) => `đã vào nhóm ${q(x.ten_nhom)} và thành ${c.cauGiao ? `việc ${q(c.cauGiao)}` : VIEC_KHONG_TEN} — ${c.tinhTrang}`;
+export const CAU_NGUOI_GUI = {
+  'chua-gom': () => 'chưa xếp vào nhóm nào — đội sản phẩm sẽ xem ở lần xếp nhóm tới',
+  le: x => (x.ly_do ? `không xếp vào nhóm nào: ${x.ly_do}` : 'không xếp vào nhóm nào'),
+  'da-phu': (x, c) => `đã có trong ${c.cauGiao ? `việc ${q(c.cauGiao)}` : VIEC_KHONG_TEN} — ${c.tinhTrang}`,
+  'nhom-chua-cat': x => `đã vào nhóm ${q(x.ten_nhom)} — nhóm chưa thành việc`,
+  'chan-troi': x => `đã vào nhóm ${q(x.ten_nhom)} — để sau${x.ly_do ? `: ${x.ly_do}` : ''}`,
+  'hang-chua-ho-so': viecCau,
+  'hang-co-ho-so': viecCau,
+};
+// Cụm tình trạng theo NHÓM TIẾN ĐỘ của khối dữ liệu (DA_GIAO_O · DANG_LAM_O · CHUA_LAM_O + «Chưa mở» của
+// lo-trinh.mjs); nhóm «khác» tách theo ô. Ô mới của bản đồ chưa có cụm thì rơi về «chưa xem được tình
+// trạng» — ca CN-3 giữ ma trận toàn phần nên ô mới làm ca đỏ, không rơi lặng.
+const CUM_NHOM = { 'da-giao': 'đã giao', 'dang-lam': 'đang làm', 'chua-bat-dau': 'chưa bắt đầu', khac: 'chưa xem được tình trạng' };
+const CUM_KHAC = { 'xep-lai': 'tạm hoãn', 'da-bac': 'đội sản phẩm quyết định không làm', 'ngoai-pham-vi': 'đội sản phẩm quyết định không làm' };
+export function tinhTrangCua(chu, ngay = null, sections = []) {
+  const khoa = ((sections || []).find(([, t]) => t === chu) || [])[0] || null;
+  const nhom = khoa && DA_GIAO_O.includes(khoa) ? 'da-giao' : khoa && DANG_LAM_O.includes(khoa) ? 'dang-lam'
+    : (chu === CHUA_MO || (khoa && CHUA_LAM_O.includes(khoa))) ? 'chua-bat-dau' : 'khac';
+  const cum = nhom === 'khac' ? (CUM_KHAC[khoa] || CUM_NHOM.khac) : CUM_NHOM[nhom];
+  return { nhom, khoa, cum: nhom === 'da-giao' && ngay ? `${cum} ngày ${ngay}` : cum };
+}
+// Ngày người ký Cổng Bằng chứng: bộ đọc chung `ngayChuKy` (ho-so-tom-tat.cjs) trên `human_signoff` — năm-tháng-ngày
+// đầu tiên, vắng thì ngày/tháng/năm (lệnh ký ghi «<tên> YYYY-MM-DD», người ký tay có khi ghi «10/09/2026»), in n/t/năm. Không dùng ngày của dải tóm tắt: đó là mốc gần nhất.
+function chuKy(root, slug) {
+  const r = slug ? doc(path.join(root, '_acceptance', slug, 'evidence-report.md')) : null;
+  return r == null ? '' : chuoi(frontmatterField(r, 'human_signoff')).replace(/^["']|["']$/g, '');
+}
+export function ngayKy(root, slug) {
+  const n = ngayChuKy(chuKy(root, slug));
+  if (!n) return null;
+  const [y, mo, d] = n.split('-');
+  return `${Number(d)}/${Number(mo)}/${y}`;
+}
+// Có chữ ký người mà không rút được ngày → giá trị chữ ký (để `--cau` đỏ nêu nó); ngược lại null.
+export function chuKyKhongNgay(root, slug) {
+  const v = chuKy(root, slug);
+  return v && !ngayChuKy(v) ? v : null;
+}
+// Đường đọc-cũ: bản ghi vẽ bằng kit < 2.29 không có `cau_nguoi_gui` → câu cũ kèm MỘT cờ vàng.
+export const CO_BAN_VE_CU = 'bản vẽ cũ — chưa có câu cho người gửi; đang hiện câu cho chủ kho, có thể mang mã — vẽ lại bằng kit ≥ 2.29';
+export function cauChoNguoiGui(banGhi) {
+  if (banGhi && typeof banGhi.cau_nguoi_gui === 'string') return { cau: banGhi.cau_nguoi_gui, co: null };
+  return { cau: chuoi(banGhi && banGhi.cau), co: CO_BAN_VE_CU };
+}
+
+export function duongDi(opts) {
+  const ds = dungDuong(opts);
+  return ds == null ? null : ds.map(d => d.x);
+}
+// Phần KIT viết của mỗi câu cho người gửi (chữ lấy từ dữ liệu đã gỡ) — `--cau` kiểm từ (khung) trên nó.
+export function khungCacCau(opts) {
+  const ds = dungDuong(opts);
+  return ds == null ? null : ds.map(d => ({ id: d.x.id, cho: d.x.cho, cau_nguoi_gui: d.x.cau_nguoi_gui, khung: d.khung }));
+}
+// Mỗi phần tử { x: bản ghi, khung: phần kit viết, hoSoKy } — `--cau` đọc cả ba.
+function dungDuong({ root, classify, sections }) {
   const khai = docKhai(root);
   if (khai == null) return null;
   const doc_ = docTinHieu(root, khai.nguon);
@@ -245,12 +313,17 @@ export function duongDi({ root, classify, sections }) {
   });
   const TEN = Object.fromEntries(sections || []);
   const tenO = slug => { try { const c = classify(path.join(root, '_acceptance', slug), slug); return TEN[c.key] || c.key; } catch { return 'không xếp được'; } };
+  const SENT = '\u0000';
   const ra = [];
   for (const th of doc_.tinHieu) {
     const p = choCua.get(th.id);
     const x = { id: th.id, loai: th.loai, tieu_de: th.tieu_de, luc: th.luc, cho: 'chua-gom', nhom: null, ten_nhom: null, ly_do: null, ho_so_phu: null, hang: null, ho_so: null, trang_thai: null, cau: '' };
+    let cauGiao = ''; let hoSoKy = null;
     if (p && p.k === 'le') { x.cho = 'le'; x.ly_do = p.lyDo; }
-    else if (p && p.k === 'da-phu') { x.cho = 'da-phu'; x.ho_so_phu = p.hoSo; x.trang_thai = tenO(p.hoSo); }
+    else if (p && p.k === 'da-phu') {
+      x.cho = 'da-phu'; x.ho_so_phu = p.hoSo; x.trang_thai = tenO(p.hoSo);
+      cauGiao = boNgoacNgoai(chuoi(trangThaiHoSo(root, p.hoSo).feature)); hoSoKy = p.hoSo;
+    }
     else if (p && p.k === 'nhom') {
       x.nhom = p.ma; x.ten_nhom = p.ten; x.cho = 'nhom-chua-cat';
       const coPhu = r => r && chuoi(r.dot) === p.dot && Array.isArray(r.phu) && r.phu.map(chuoi).includes(p.ma);
@@ -260,12 +333,19 @@ export function duongDi({ root, classify, sections }) {
         if (!r) continue;
         const d = t.dong.find(z => z._ma === chuoi(r.ma));
         x.hang = chuoi(r.ma); x.trang_thai = d ? d.chu : null; x.ho_so = (d && d.hoSo) || null;
-        x.cho = x.ho_so ? 'hang-co-ho-so' : 'hang-chua-ho-so'; thay = true; break;
+        x.cho = x.ho_so ? 'hang-co-ho-so' : 'hang-chua-ho-so'; thay = true;
+        cauGiao = boNgoacNgoai(chuoi(r.cau_giao)); hoSoKy = x.ho_so; break;
       }
       if (!thay) for (const t of cacTep) { const c = t.chanTroi.find(coPhu); if (c) { x.cho = 'chan-troi'; x.ly_do = chuoi(c.ly_do); break; } }
     }
     x.cau = CAU[x.cho](x);
-    ra.push(x);
+    // Câu cho người gửi + bản «khung» (chữ lấy từ dữ liệu thay bằng dấu canh) cho phép kiểm từ khung.
+    const ngay = hoSoKy ? ngayKy(root, hoSoKy) : null;
+    const c = { cauGiao, tinhTrang: tinhTrangCua(x.trang_thai, ngay, sections).cum };
+    x.cau_nguoi_gui = CAU_NGUOI_GUI[x.cho](x, c);
+    const xk = { ...x, ten_nhom: x.ten_nhom ? SENT : x.ten_nhom, ly_do: x.ly_do ? SENT : x.ly_do };
+    const ck = { cauGiao: cauGiao ? SENT : cauGiao, tinhTrang: tinhTrangCua(x.trang_thai, ngay ? SENT : null, sections).cum };
+    ra.push({ x, khung: CAU_NGUOI_GUI[x.cho](xk, ck).split(SENT).join(''), hoSoKy });
   }
   return ra;
 }
@@ -284,6 +364,67 @@ export function chuaGom({ root }) {
   };
 }
 
+// ── Phép kiểm câu cho người gửi (`--cau`, design §5) ─────────────────────────
+// So chữ: chuẩn hoá NFC ở MỘT chỗ (chữ gõ bằng bảng mã tổ hợp vẫn khớp từ cấm).
+const nfc = s => String(s ?? '').normalize('NFC');
+// Khối TIN-HIEU-CAU-CAM của khuôn tín hiệu: `- <từ>` cấm cả câu · `- <từ> (khung)` chỉ cấm phần kit viết.
+export function napCam(tep = TEP_KHUON) {
+  const k = khoiMarker(doc(tep), 'TIN-HIEU-CAU-CAM');
+  if (k == null) throw new Error(`khuôn tín hiệu thiếu khối TIN-HIEU-CAU-CAM: ${tep}`);
+  const ds = k.split('\n').map(l => l.match(/^- (.+?)(\s+\(khung\))?\s*$/)).filter(Boolean).map(m => ({ tu: nfc(m[1].trim()), khung: !!m[2] }));
+  if (!ds.length) throw new Error(`khối TIN-HIEU-CAU-CAM không kê từ nào: ${tep}`);
+  return ds;
+}
+const escRe = t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const coTu = (cau, tu) => new RegExp(`(?<![\\p{L}\\p{N}])${escRe(tu.toLowerCase())}(?![\\p{L}\\p{N}])`, 'u').test(nfc(cau).toLowerCase());
+const coMa = (cau, ma) => new RegExp(`(?<![\\p{L}\\p{N}_-])${escRe(ma)}(?![\\p{L}\\p{N}_-])`, 'u').test(nfc(cau));
+// Mã giống chữ thường không kiểm được (báo nhầm trên dữ liệu thật: crm có câu giao «… quý 4» và việc mã «4»).
+const loaiMa = m => (/^\p{N}+$/u.test(m) ? 'chỉ chữ số' : /^\p{L}$/u.test(m) ? 'một chữ cái' : 'chữ thường liền');
+const kiemDuoc = m => /[-_]/.test(m) || (/\p{L}/u.test(m) && /\p{N}/u.test(m)) || /^\p{Lu}{2,}$/u.test(m);
+function thuMucHoSo(root) {
+  const acc = path.join(root, '_acceptance');
+  if (!existsSync(acc)) return [];
+  return readdirSync(acc, { withFileTypes: true }).filter(e => e.isDirectory()).map(e => e.name);
+}
+// Bộ mã của kho: id tín hiệu · mã nhóm và đợt của mọi bản gom · mã/slug hàng và mã chân trời của mọi tệp lộ
+// trình · tên mọi thư mục hồ sơ. Đo QUAN HỆ với dữ liệu của chính kho, không đoán bằng mẫu chữ.
+export function boMa(root, khai = docKhai(root)) {
+  const tap = new Set(); const them = v => { const t = chuoi(v); if (t) tap.add(nfc(t)); };
+  for (const t of docTinHieu(root, khai.nguon).tinHieu) them(t.id);
+  for (const bg of cacBanGom(root, khai)) { them(bg.dot); for (const n of bg.nhom) them(n.ma); }
+  const lt = docCacTep(root);
+  for (const tep of (lt ? lt.tep : [])) {
+    const { data } = docTep(root, tep);
+    for (const h of (data && Array.isArray(data.hang) ? data.hang : [])) if (h && typeof h === 'object') { them(h.ma); them(h.slug); }
+    for (const c of (data && Array.isArray(data.chan_troi) ? data.chan_troi : [])) if (c && typeof c === 'object') them(c.ma);
+  }
+  for (const s of thuMucHoSo(root)) them(s);
+  const kiem = []; const boQua = {};
+  for (const m of [...tap].sort()) { if (kiemDuoc(m)) kiem.push(m); else (boQua[loaiMa(m)] ||= []).push(m); }
+  return { kiem, boQua };
+}
+export function kiemCau({ root, classify, sections, cam = napCam() }) {
+  const khai = docKhai(root);
+  if (khai == null) return { thoat2: 'kho chưa khai cửa tín hiệu (khối tin_hieu: với nguon và gom trong _acceptance/config.yaml)' };
+  const ds = dungDuong({ root, classify, sections });
+  const { kiem, boQua } = boMa(root, khai);
+  const loi = []; let sach = 0;
+  for (const { x, khung, hoSoKy } of ds) {
+    const cau = x.cau_nguoi_gui; const truoc = loi.length;
+    for (const m of kiem) if (coMa(cau, m)) loi.push(`tín hiệu ${x.id}: câu cho người gửi lọt mã «${m}» — "${cau}"`);
+    for (const { tu, khung: chiKhung } of cam) if (coTu(chiKhung ? khung : cau, tu)) loi.push(`tín hiệu ${x.id}: câu cho người gửi có từ nội bộ «${tu}» — "${cau}"`);
+    const v = hoSoKy ? chuKyKhongNgay(root, hoSoKy) : null;
+    if (v) loi.push(`tín hiệu ${x.id}: hồ sơ ${hoSoKy} có chữ ký mà không đọc được ngày «${v}»`);
+    if (loi.length === truoc) sach += 1;
+  }
+  return { thoat2: null, loi, soCau: ds.length, sach, soKiem: kiem.length, boQua };
+}
+export function dongTomTatCau(kq) {
+  const bq = Object.entries(kq.boQua).map(([k, v]) => `${k} ${v.length}`).join(', ');
+  const soBq = Object.values(kq.boQua).reduce((a, v) => a + v.length, 0);
+  return `câu cho người gửi: ${kq.soCau} câu${kq.loi.length ? `, ${kq.soCau - kq.sach} câu lọt` : ' sạch'} · kiểm ${kq.soKiem} mã của kho · bỏ qua ${soBq} mã giống chữ thường${bq ? ` (${bq})` : ''}`;
+}
+
 // ── CLI ───────────────────────────────────────────────────────────────────────
 const isMain = (() => {
   if (!process.argv[1]) return false;
@@ -294,14 +435,14 @@ if (isMain) {
   const bail = m => { process.stderr.write(`tin-hieu: ${m}\n`); process.exit(2); };
   let root = '.'; let lenh = null; let id = null;
   for (let i = 0; i < a.length; i++) {
-    if (['--rang', '--chua-gom', '--duong'].includes(a[i])) { if (lenh) bail('chỉ một lệnh mỗi lần: --rang | --chua-gom | --duong'); lenh = a[i]; continue; }
+    if (['--rang', '--chua-gom', '--duong', '--cau'].includes(a[i])) { if (lenh) bail('chỉ một lệnh mỗi lần: --rang | --chua-gom | --duong | --cau'); lenh = a[i]; continue; }
     if (a[i] === '--root' || a[i] === '--id') {
       const v = a[i + 1]; if (v == null || v === '' || v.startsWith('--')) bail(`${a[i]} cần một giá trị ngay sau nó`);
       if (a[i] === '--root') root = v; else id = v; i++; continue;
     }
-    bail(`tham số lạ ${a[i]} — nhận --root <thư-mục> và một trong --rang | --chua-gom | --duong [--id <id>]`);
+    bail(`tham số lạ ${a[i]} — nhận --root <thư-mục> và một trong --rang | --chua-gom | --duong [--id <id>] | --cau`);
   }
-  if (!lenh) bail('thiếu lệnh: --rang | --chua-gom | --duong');
+  if (!lenh) bail('thiếu lệnh: --rang | --chua-gom | --duong | --cau');
   root = path.resolve(root);
   if (docKhai(root) == null) bail('kho chưa khai cửa tín hiệu (khối tin_hieu: với nguon và gom trong _acceptance/config.yaml)');
   if (lenh === '--rang') {
@@ -314,6 +455,13 @@ if (isMain) {
   }
   if (lenh === '--chua-gom') { process.stdout.write(JSON.stringify(chuaGom({ root }), null, 2) + '\n'); process.exit(0); }
   const PM = await import(pathToFileURL(path.join(__dirname, 'product-map.mjs')).href);
+  if (lenh === '--cau') {
+    let kq; try { kq = kiemCau({ root, classify: PM.classify, sections: PM.SECTIONS }); } catch (e) { bail(e.message); }
+    if (kq.thoat2) bail(kq.thoat2);
+    for (const l of kq.loi) process.stdout.write(`${l}\n`);
+    process.stdout.write(`${dongTomTatCau(kq)}\n`);
+    process.exit(kq.loi.length ? 1 : 0);
+  }
   const ds = duongDi({ root, classify: PM.classify, sections: PM.SECTIONS });
   if (id != null) {
     const x = ds.find(t => t.id === id);

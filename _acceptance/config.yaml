@@ -1810,6 +1810,19 @@ executors:
     dhk_giu_don: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-giu-don
     dhk_suc_khoe: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-suc-khoe
     dhk_dang_tai: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-dang-tai
+    ctbp_phan_mot: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phan-mot
+    ctbp_cap_nhat_tai_cho: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-cap-nhat-tai-cho
+    ctbp_phien_cua_toi: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-phien-cua-toi
+    ctbp_loi_vao_tu: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-vao-tu
+    ctbp_chuyen_huong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-chuyen-huong
+    ctbp_don_vi_dan: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-don-vi-dan
+    ctbp_kr_phu_trach: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-kr-phu-trach
+    ctbp_khong_dan: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-khong-dan
+    ctbp_bon_the: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-bon-the
+    ctbp_tai_loi: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-loi
+    ctbp_do_nguong: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-do-nguong
+    ctbp_loi_mo: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-loi-mo
+    ctbp_tai_lai_nen: bun _acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs ctbp-tai-lai-nen
     thk_mac_dinh: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-mac-dinh"'
     thk_haiku: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-haiku"'
     thk_gia_tri_la: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-gia-tri-la"'
@@ -1826,6 +1839,13 @@ executors:
     kh_thuoc: 'bun run test -- "cd apps/api && bun test test/ke-hoach-sinh-viec-do-nguong.spec.ts"'
     kh_nhac_buoc: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.integration.spec.ts -t kh-nhac-buoc"'
     kh_man_tao: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tao-ke-hoach-nguoi.dom.tsx"
+    gymk_sinh: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-sinh"'
+    gymk_chan: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-chan"'
+    gymk_xu_ly: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-xu-ly"'
+    gymk_dong: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-dong"'
+    gymk_the: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/goi-y-ke-hoach.dom.tsx"
+    gymk_nhac: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.integration.spec.ts -t gy-nhac"'
+    gymk_thuoc: 'bun run test -- "cd apps/api && bun test test/goi-y-mo-ke-hoach-do-nguong.spec.ts"'
     dh4_du_lieu: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-du-lieu"'
     dh4_chu_y: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-chu-y"'
     dh4_quyen: 'bun run test -- "cd apps/api && bun test test/okr-so-do-don-vi.spec.ts -t dh4-quyen"'
@@ -2909,6 +2929,10 @@ executors:
     kh_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ke-hoach-sinh-viec/rang/man.mjs"'
     kh_san_thiet_ke: node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs
     kh_dot_bien: node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs
+    gymk_san_thiet_ke: node _acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs
+    gymk_dot_bien: node _acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs
+    gymk_hoi_quy: 'node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types'
+    gymk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/goi-y-mo-ke-hoach/rang/man.mjs"'
     kh_e6_xanh: node _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs
     kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc 34d31a8bf && bun run check-types'
     sgt_ranh_gioi: node _acceptance/sua-giao-dien-tin-hieu/rang/ranh-gioi.mjs
@@ -2923,6 +2947,10 @@ executors:
     dhk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"'
     dhk_ho_so_da_ky: bun _acceptance/dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs
     dhk_proto: bun _acceptance/dieu-huong-khu-muc-tieu/rang/proto-khu.mjs
+    ctbp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"'
+    ctbp_lien_ket_cu: bun _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs
+    ctbp_ho_so_da_ky: bun _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs
+    ctbp_proto: bun _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs
     dh4_giu_ho_so: bun _acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs
     dh4_ranh_gioi: node _acceptance/so-do-can-chinh-don-vi/rang/ranh-gioi.mjs
     dh4_dot_bien: bun _acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs
@@ -2994,6 +3022,8 @@ risk_tiers:
     - "scripts/tin-hieu-khoa.cjs"
     - "scripts/tin-hieu.mjs"
     - "scripts/cat-luot.mjs"
+    # Kit 2.30.0 (gồm phần 2.29.0): tin-hieu.mjs nạp cat-luot.mjs, cat-luot.mjs nạp co-hop-dong.cjs.
+    - "scripts/co-hop-dong.cjs"
     # Bốn tệp cuối của INIT-CI-COPY-LIST 2.28.0, «chỉ khi khai tin_hieu»: kho khai cửa tín hiệu từ LT2
     # (gui-tin-hieu-trong-crm) nên bước bản đồ nạp tin-hieu.mjs, và thiếu chúng là ERR_MODULE_NOT_FOUND.
     - "dieu-phoi/scripts/hinh-dang.mjs"

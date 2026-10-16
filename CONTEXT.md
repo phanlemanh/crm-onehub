@@ -309,7 +309,7 @@ Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai
 **Nhắc buổi sáng**: một tin riêng qua Zalo hoặc Slack, theo lựa chọn của người
 đó, mỗi sáng lúc giờ đã khai, gom mọi bước quá hạn, bước sắp hạn, kế hoạch im, mốc
 ngày, việc quá hạn và việc sắp hạn người đó thực hiện, việc đang chờ người đó đánh
-giá; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
+giá, gợi ý mở kế hoạch đang chờ người đó; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
 thêm Việc 2026-10-13.
 _Avoid_: thông báo, notification
 Vì sao: thông báo là từng mục nằm trong chuông của CRM (mục **Thông báo**); nhắc
@@ -346,9 +346,22 @@ Vì sao: người không đăng nhập CRM bằng Zalo, và Zalo không cho CRM 
 khoản của họ; việc duy nhất xảy ra là CRM biết nhắn nhắc buổi sáng cho ai.
 
 **Gợi ý**: câu hướng xử lý đi kèm một nhắc kế hoạch im — «Giao bước X», «Bước X
-quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22.
+quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22. Khác **Gợi ý mở kế hoạch**: gợi ý là
+một câu trong tin nhắc, không phải bản ghi, và không ai xử lý nó.
 _Avoid_: việc cần làm, hành động
 Vì sao: "việc cần làm" là loại hoạt động cũ trên dòng thời gian, nay đã thành Việc.
+
+**Gợi ý mở kế hoạch**: một bản ghi máy sinh mỗi lần một deal chuyển sang giai đoạn thắng
+(từ giai đoạn mở, giai đoạn thua, hay tạo thẳng ở thắng) khi công ty của deal chưa có kế
+hoạch 30 ngày đang mở và deal chưa có gợi ý đang chờ. Người nhận là người phụ trách deal.
+Ba kết cục: **chờ**, **đã mở kế hoạch** (ai đó tạo kế hoạch cho công ty, bằng bất kỳ đường
+nào), **đã bỏ qua** (người nhận hoặc quản trị bấm «Bỏ qua»; không mở lại được). Hiện ở
+đầu sheet deal và trong nhắc buổi sáng chừng nào còn chờ và deal còn ở thắng. Không có
+nút xoá: gợi ý là vật đếm của ngưỡng «mọi deal thắng đều có gợi ý». Chốt 2026-10-16
+(DA3b).
+_Avoid_: gợi ý (trần), đề xuất, lời mời, suggestion
+Vì sao: «gợi ý» trần đã là câu hướng xử lý của nhắc kế hoạch im; «đề xuất» là dòng của
+Trợ lý OKR — luôn viết đủ «gợi ý mở kế hoạch».
 
 **Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
 ngày để theo dõi bốn bậc. Chốt 2026-09-22.

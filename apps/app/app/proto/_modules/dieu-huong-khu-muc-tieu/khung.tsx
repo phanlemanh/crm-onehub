@@ -74,7 +74,6 @@ const RAIL: MucRail[] = [
 
 const MO_TA = {
 	"cua-toi": "Việc OKR của bạn tuần này, KR bạn phụ trách và đơn vị bạn dẫn.",
-	"cap-nhat-tuan": "Cập nhật tiến độ tuần này cho các KR bạn phụ trách.",
 	"theo-don-vi":
 		"Bộ OKR của từng đơn vị trong chu kỳ, và cách chúng góp vào nhau.",
 	"toan-canh": "Cả công ty trong một màn.",

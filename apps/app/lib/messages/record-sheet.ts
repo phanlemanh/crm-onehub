@@ -137,6 +137,13 @@ const en = {
 		phoneInvalid: "That is not a phone number — for example 0901 234 567",
 	},
 	deal: {
+		goiYKeHoach: {
+			tieuDe: "Deal won — open a 30-day plan for {congTy}?",
+			moTa: "Opening a plan for this company closes this suggestion.",
+			mo: "Open plan",
+			boQua: "Skip",
+			taiLai: "Reload the sheet to see it.",
+		},
 		fallbackTitle: "Deal",
 		contactColumns: {
 			name: "Name",
@@ -339,6 +346,13 @@ const vi = {
 		phoneInvalid: "Số điện thoại chưa đúng — ví dụ 0901 234 567",
 	},
 	deal: {
+		goiYKeHoach: {
+			tieuDe: "Deal đã thắng — mở kế hoạch 30 ngày cho {congTy}?",
+			moTa: "Mở kế hoạch cho công ty này thì gợi ý tự đóng.",
+			mo: "Mở kế hoạch",
+			boQua: "Bỏ qua",
+			taiLai: "Tải lại sheet để xem.",
+		},
 		fallbackTitle: "Thoả thuận",
 		contactColumns: {
 			name: "Tên",

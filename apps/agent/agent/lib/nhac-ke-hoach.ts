@@ -72,6 +72,9 @@ function maViec(v: ViecNhac): MucNhac {
 	if (v.loai === "tai-lieu-cho-duyet") {
 		return mucNhac.parse({ loai: v.loai, so: v.so });
 	}
+	if (v.loai === "goi-y-ke-hoach") {
+		return mucNhac.parse({ loai: v.loai, goiYId: v.goiYId });
+	}
 	if (v.loai === "okr-tom-tat") {
 		return mucNhac.parse({
 			loai: v.loai,
@@ -165,12 +168,13 @@ export function duongTrongApp(v: ViecNhac): string {
 		return `/viec?record=viec:${v.viecId}`;
 	}
 	if ("planId" in v) return `?record=plan:${v.planId}`;
+	if (v.loai === "goi-y-ke-hoach") return `?record=deal:${v.dealId}`;
 	if (laViecAi(v)) return "/settings/okr";
 	if (v.loai === "tai-lieu-cho-duyet") {
 		return `/tai-lieu?${DUONG_CHO_DUYET}`;
 	}
 	if (v.loai === "okr-cap-nhat") {
-		return "/okr/cap-nhat-tuan?tu=nhac";
+		return "/okr?tu=nhac";
 	}
 	if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
 		const thamSo = new URLSearchParams({ [THAM_SO_OKR.ky]: v.cycleId });
