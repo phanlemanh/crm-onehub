@@ -1988,6 +1988,9 @@ model OnboardingStep {
   completedAt DateTime?
   position    Int
 
+  viecId String? @unique
+  viec   Viec?   @relation("BuocViec", fields: [viecId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -3025,6 +3028,7 @@ model Viec {
   cha             Viec?         @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
   con             Viec[]        @relation("ViecCon")
   thuTu           ViecThuTu[]
+  buoc            OnboardingStep? @relation("BuocViec")
 
   @@index([chaId])
   @@index([nguoiThucHienId, trangThai, hanNgay])
