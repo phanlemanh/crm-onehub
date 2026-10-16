@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 29fef6b0bcaf4f2e32577787260b3a26724a706d
+verified_commit: 13140654c6eee35bbf8367e61d49a3efd0461ade
 human_signoff: Manh Phan 2026-10-15
 ---
 
@@ -292,3 +292,7 @@ sha: 1cebbed3d3794b70c685ed2bb15f154e2c301e2d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-15, do gộp onehub 8f819cf6a (#419 #422 #407 #421 #409 #423), gọi lượt gộp #420
 run_id: repin-20261015T153900Z-77059
 sha: 29fef6b0bcaf4f2e32577787260b3a26724a706d · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E3b · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-16, do sửa workflow lịch kéo + đẩy bản chụp: DATABASE_URL giả cho bun install (#445)
+run_id: repin-20261016T160639Z-91397
+sha: 13140654c6eee35bbf8367e61d49a3efd0461ade · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E3, E3b · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7, suite 2/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
