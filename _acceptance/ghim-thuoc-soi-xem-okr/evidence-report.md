@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 80fa51452d92cf005f6876c2083bc26ddfb11086
+verified_commit: df27388dfce8ddbbff5623e1c9ff7747879f58c2
 human_signoff: Phan Le Manh 2026-10-16
 ---
 
@@ -177,3 +177,7 @@ none — every multi-run eval is uniform
 
 Round 1: kết quả máy xanh, E3 (judgment) chờ người nên verdict PENDING-JUDGMENT; sau đó sửa hai lý do miễn của bảng MIEN_XEM cho khớp bảng phân loại (commit 80fa51452).
 Round 2: chạy lại E1, E2, E5 và toàn bộ lệnh suite trên cây đã sửa, tất cả xanh; E4, E6a, E6b, E6c, E7 chuyển tiếp từ round 1 vì delta không chạm paths của các eval này; panel E3 chấm lại, đề xuất PASS.
+
+### Re-pin lần 1 — 2026-10-16, do gộp onehub e2ae94319; ghim-thuoc-soi-xem-okr sửa MIEN_XEM của rang/soi-ma.mjs
+run_id: repin-20261016T030601Z-68580
+sha: df27388dfce8ddbbff5623e1c9ff7747879f58c2 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E3 (E3 không khai paths) · AC không có chốt máy: AC-3 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
