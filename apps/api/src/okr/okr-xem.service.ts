@@ -57,10 +57,12 @@ import type {
 	KhoiCuaToiOutput,
 	LocDanhSach,
 	NutCayDayDu,
+	QuanhMucTieuOutput,
 	SoDoDonViOutput,
 	SucKhoeOutput,
 	ToanCanhOutput,
 } from "./okr-xem.contracts";
+import { gopQuanhMucTieu } from "./quanh-muc-tieu";
 import { type DauVaoSoDo, gopSoDoDonVi } from "./so-do-don-vi";
 import {
 	type CayGon,
@@ -482,6 +484,27 @@ export class OkrXemService {
 
 	async soDoDonVi(userId: string, cycleId: string): Promise<SoDoDonViOutput> {
 		return gopSoDoDonVi(await this.docDauVaoSoDo(userId, cycleId));
+	}
+
+	async quanhMucTieu(
+		userId: string,
+		objectiveId: string,
+	): Promise<QuanhMucTieuOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		const mt = await this.db.okrObjective.findFirst({
+			where: {
+				AND: [
+					{ id: objectiveId },
+					dieuKienXemMucTieu(this.quyenOkr.nguCanhXem(q, userId)),
+				],
+			},
+			select: { cycleId: true },
+		});
+		if (!mt) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
+		const { mts } = await this.okr.mucTieuCuaCay(userId, mt.cycleId);
+		const kq = gopQuanhMucTieu(mts, objectiveId);
+		if (!kq) throw new NotFoundException(OKR.thongDiep.khongThayMucTieu);
+		return kq;
 	}
 
 	async cayCanChinh(

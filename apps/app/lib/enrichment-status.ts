@@ -1,30 +1,34 @@
 import type { EnrichmentStatus } from "@crm/db/enums";
-import type { StatusTone } from "@crm/ui/components/status-indicator";
 import type { Locale } from "@crm/ui/lib/locale";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { crmMessages } from "@/lib/messages/crm";
+
+export const NGHIA_LAM_GIAU = {
+	PENDING: "dangChay",
+	RUNNING: "dangChay",
+	COMPLETE: "xong",
+	FAILED: "hong",
+	SKIPPED: "ketThuc",
+	QUEUED: "dangChay",
+} as const satisfies Record<EnrichmentStatus | "QUEUED", NghiaTrangThai>;
 
 type EnrichmentPresentation = Record<
 	EnrichmentStatus,
 	{
 		khoa: keyof ReturnType<typeof crmMessages>["enrichment"];
-		tone: StatusTone;
 		busy?: boolean;
 	}
 >;
 
 const PRESENTATION: EnrichmentPresentation = {
-	PENDING: { khoa: "pending", tone: "neutral" },
-	RUNNING: { khoa: "running", tone: "info", busy: true },
-	COMPLETE: { khoa: "complete", tone: "success" },
-	FAILED: { khoa: "failed", tone: "error" },
-	SKIPPED: { khoa: "skipped", tone: "neutral" },
+	PENDING: { khoa: "pending" },
+	RUNNING: { khoa: "running", busy: true },
+	COMPLETE: { khoa: "complete" },
+	FAILED: { khoa: "failed" },
+	SKIPPED: { khoa: "skipped" },
 };
 
-const QUEUED = {
-	khoa: "queued",
-	tone: "neutral" as StatusTone,
-	busy: false,
-} as const;
+const QUEUED = { khoa: "queued", busy: false } as const;
 
 export const ENRICHMENT_POLL_MS = 3_000;
 
@@ -43,9 +47,14 @@ export function enrichmentPresentation(
 	queued: boolean,
 	locale: Locale,
 ) {
-	const { khoa, ...con } =
-		status === "PENDING" && queued ? QUEUED : PRESENTATION[status];
-	return { ...con, label: crmMessages(locale).enrichment[khoa] };
+	const hang = status === "PENDING" && queued;
+	const { khoa, ...con } = hang ? QUEUED : PRESENTATION[status];
+	const nghia = NGHIA_LAM_GIAU[hang ? "QUEUED" : status];
+	return {
+		...con,
+		tone: toneTheoNghia(nghia),
+		label: crmMessages(locale).enrichment[khoa],
+	};
 }
 
 export function isEnriching(status: EnrichmentStatus, queued = false): boolean {

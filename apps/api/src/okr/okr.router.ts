@@ -220,6 +220,8 @@ import {
 	khoiCuaToiInput,
 	khoiCuaToiOutput,
 	moHopTuanOutput,
+	quanhMucTieuInput,
+	quanhMucTieuOutput,
 	soDoDonViOutput,
 	sucKhoeOutput,
 	toanCanhOutput,
@@ -1335,6 +1337,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.soDoDonVi(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: quanhMucTieuInput,
+		output: quanhMucTieuOutput,
+		meta: restMeta("GET", "/okr/objective-map", TAG),
+	})
+	quanhMucTieu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof quanhMucTieuInput>,
+	) {
+		return this.xem.quanhMucTieu(ctx.user.id, input.objectiveId);
 	}
 
 	@Query({
