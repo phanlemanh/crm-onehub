@@ -34,7 +34,8 @@ mở lại Cổng Phạm vi 16/10.
   một dòng và xanh.
 - AC-3: Given nhánh của vòng so với `onehub`, When soát tệp, Then không còn `dau-trang-okr-cho.tsx`, không còn bài kiểm
   `dau-trang-okr-cho.dom.tsx`, không còn khoá `dto_*` trong `_acceptance/config.yaml`, không tệp nào trong `apps/app` nhập
-  tới thành phần cũ; và tệp mã duy nhất vòng này đổi trong `apps/app` là `app/(app)/[slug]/okr/dau-trang-okr.tsx`.
+  tới thành phần cũ; và tệp mã vòng này thêm hoặc sửa trong `apps/app` chỉ là `app/(app)/[slug]/okr/dau-trang-okr.tsx` và (theo
+  Hỏi-2) `app/(app)/[slug]/okr/hanh-dong-khu.tsx`.
 - AC-4: Given máy chủ thật của cây, ở khổ 375 và 1280, When chụp Toàn cảnh lúc đang tải và lúc xong, Then hai ảnh cho
   thấy cùng hàng tiêu đề, hàng hành động lúc chờ chiếm cùng số dòng như lúc xong, và khối số tổng quan bắt đầu ở cùng độ
   cao.
@@ -43,14 +44,18 @@ mở lại Cổng Phạm vi 16/10.
 
 - Trục A — Khổ: 375 | 1280 [thước CE: hai khổ của E12m] → AC-1, AC-4.
 - Trục B — Trạng thái: đang tải | xong [thước CE: giữ/thả truy vấn của chup-man.mjs] → AC-1, AC-4.
-- Trục C — Vai: quản trị (đo được) | vai ít nút [GIẢ ĐỊNH: hàng có thể một dòng ở 375] → AC-1 (quản trị); vai ít nút là
-  Hỏi-1.
+- Trục C — Vai: quản trị (đo được) | vai ít nút [GIẢ ĐỊNH, chưa đo: hàng có thể một dòng ở 375] → AC-1 (quản trị); vai ít
+  nút là Hỏi-1.
+- Trục D — Ngôn ngữ và nhãn kỳ: vi + kỳ mẫu (đo được) | en | nhãn kỳ dài [GIẢ ĐỊNH, chưa đo: nút thật tự đúng bề rộng,
+  ô chọn kỳ là khung xương cố định] → AC-1 (vi); en và nhãn dài là giới hạn đo đã biết (design doc).
+- Trục E — Trạng thái: chờ | giữa (dữ liệu đã về, quyền chưa) | xong → AC-1 (chờ, xong); trạng thái giữa là Hỏi-2.
 - Cắt ngang: các màn khác của khung chờ chung không đổi; bộ kiểm của DH1 không sửa → AC-2; gỡ phần mồ côi → AC-3.
 
 ## Out of scope
 
 - Đổi bố cục hàng hành động hay đầu trang của DH1 (`HanhDongKhu`, `LuoiDauTrangOkr`) — trừ khi chủ kho chọn Hỏi-1 (b).
-- Khung chờ lồng của `HanhDongKhu` lúc quyền đang tải (`q.kieu === "cho"`) — phần của DH1, đã có bài kiểm.
+- Đo trạng thái giữa (dữ liệu đã về, quyền chưa) — E12m chỉ giữ một truy vấn; Hỏi-2 quyết có đổi khung xương lồng của
+  DH1 hay ghi Known limits.
 - Các màn OKR khác ngoài Toàn cảnh có cùng khung chờ (Của tôi, Theo đơn vị…) — không nằm trong phép đo E12m; cùng sửa
   nhờ dùng chung `DauTrangOkrCho`, nhưng không có thước riêng.
 

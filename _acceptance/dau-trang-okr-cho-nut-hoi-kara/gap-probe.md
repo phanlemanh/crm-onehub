@@ -1,9 +1,9 @@
 ---
 slug: dau-trang-okr-cho-nut-hoi-kara
-at: 2026-10-16T00:30:00Z
+at: 2026-10-16T15:20:00Z
 verdict: findings
-p0: 0
-p1: 3
+p0: 1
+p1: 2
 p2: 2
 ---
 
@@ -11,8 +11,8 @@ p2: 2
 
 | Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
 |---|---|---|---|---|---|
-| P1 | evals | AC-3 không có ca khung chờ bị gỡ giữa lúc okr.hoiMo còn chạy; AC-3 đi qua máy chủ mà không mang tag cross-layer | Dữ liệu tới trước khi hoiMo trả về, khung chờ bị gỡ, cột hỏi không mở; người bấm lại thành hai cuộc hỏi; E3 vẫn xanh | Ca «bam roi du lieu toi» giữ lời trả, gỡ khung chờ, dựng nút mới, rồi thả; đòi hoiMo đúng 1 lần và record=hoi-okr | fixed: AC-3 thêm vế khung chờ bị thay giữa chừng; E3 thành ma trận 2 ô (dung-yen, go-giua-chung) có ghim. rejected vế cross-layer: vòng này không đổi máy chủ, lời gọi okr.hoiMo y như khi đầu trang đã tải xong và đã được đo ở hồ sơ hoi-dap-okr |
-| P1 | evals | AC-4 hứa bộ kiểm nút hỏi đáp chạy không sửa nhưng không eval nào đo vế đó | Thợ đổi nut-hoi-kara.tsx và sửa kỳ vọng bộ kiểm hỏi đáp; E4 vẫn xanh | Neo git diff trên tệp kiểm của nút hỏi đáp rồi chạy chúng | fixed: kho không có bộ kiểm DOM riêng cho nút hỏi đáp; AC-4 đổi thành «không commit nào của vòng chạm nut-hoi-kara.tsx hay hai tệp kiểm khung-man-chung», E4 thành script khong-sua.mjs đo đúng điều đó, có chiều đỏ |
-| P1 | design | Dòng sổ mot-loi chỉ loại ô xương cỡ cố định; lối «nút thật nhưng khoá lúc chờ» chưa bị loại, nên việc cho bấm lúc chờ là máy chọn mà sổ không ghi | Người ký Cổng 1 tưởng chỉ có một lối, việc tạo cuộc hỏi lúc chờ lọt cổng không ai hỏi | Dòng sổ riêng cho «bấm được lúc chờ» hoặc đổi AC sang khoá | fixed: dòng sổ approach mới cho «bấm được lúc chờ», lối khoá bị loại vì docs/design.md đòi một dòng nói vì sao cho nút khoá; rủi ro bấm sớm được đo ở E3 go-giua-chung |
-| P2 | evals | AC-2 hứa nút lúc chờ cùng chữ, cùng dấu Kara như khi xong; E2 chỉ đo chữ | Khung chờ dựng biến thể nút không dấu Kara; E2 và E1 vẫn xanh, nút nhảy hình khi tải xong | So outerHTML nút khung chờ với NutHoiKara dựng riêng | fixed: E2 thêm phép so outerHTML, ghim «dto-cho <ngôn ngữ>: nut giong luc xong» |
-| P2 | evals | E4 neo «vòng này» bằng merge-base với origin/onehub, rỗng sau khi gộp [neo-thuoc-het-han#F1] | Sau gộp, một PR khác sửa kỳ vọng khung-man-chung mà E4 vẫn xanh rỗng | Neo cố định | fixed: E4 lấy commit của vòng bằng git log --no-merges --grep=<slug> (khuôn AC-6 của neo-thuoc-het-han), không dùng merge-base; không thấy commit nào → KHONG DO DUOC thoát 2 |
+| P0 | design | Lối «khung xương h-8 cho cả nút Hỏi Kara» không nói vì sao bỏ nút thật mà lần 1 đã chọn (sổ d-20261015T230745Z-1: bề rộng nút theo chữ từng ngôn ngữ) | Ở tiếng Anh nút thật hẹp hơn khung xương, hàng thật một dòng còn khung chờ hai dòng; E1 đo tiếng Việt vẫn xanh | Dòng sổ approach có căn cứ trích lần 1 | fixed: dòng sổ approach mới thay dòng cũ — khung chờ dùng nút «Hỏi Kara» thật, khung xương h-8 chỉ cho ô chọn kỳ và cụm nút theo quyền |
+| P1 | contract | Vai ít nút chưa đo: E1/E4 chạy bằng tài khoản quản trị | Người chỉ xem có hàng một dòng ở 375, khung chờ hai dòng làm nội dung nhảy lên khi tải xong | Đo bằng tài khoản vai xem | rejected: phiên đo chỉ có tài khoản quản trị; đưa thành Hỏi-1 cho chủ kho, trục C ghi rõ «chưa đo» |
+| P1 | design | Trạng thái giữa (dữ liệu đã về, quyền chưa) hiện khung xương lồng h-7 của HanhDongKhu, thấp hơn nút 4 px mỗi dòng | Ở 375 hai dòng lệch 8 px khi quyền về; E12m không giữ truy vấn quyền nên không thấy | Giữ riêng truy vấn quyền rồi đo | rejected: E12m chỉ giữ một truy vấn; đưa thành Hỏi-2 (khuyến nghị đổi h-7 → h-8 trong vùng DH1), trục E ghi trạng thái giữa |
+| P2 | evals | E3(d) hứa «chỉ dau-trang-okr.tsx đổi» nhưng hai tệp mồ côi chỉ có trên nhánh | Gỡ tệp mồ côi không hiện trong diff merge-base..HEAD, nên E3(d) không thấy việc gỡ | git ls-tree origin/onehub | fixed: E3(d) ghi rõ hai tệp mồ côi không hiện và thêm hanh-dong-khu.tsx theo Hỏi-2; vế (a) đo việc gỡ bằng git ls-files |
+| P2 | evals | AC-2 vế «bước 2–5 vẫn dat» không eval nào đo riêng; E1 chỉ đòi bước 1 | Sửa khung chờ làm màn khác lệch; E1 xanh vì chỉ đọc toancanh | Đòi đủ bốn dòng «buoc N: dat» | fixed: thêm E5 (AC-2) cùng lệnh kmc_man_do, đòi đủ bốn dòng dat và không dòng lech ngoài toancanh |

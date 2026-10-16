@@ -50,7 +50,8 @@ evals:
       exit 0. go-mo-coi.mjs: (a) không có apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx và
       apps/app/test/dau-trang-okr-cho.dom.tsx trong git ls-files; (b) không tệp nào dưới apps/app nhập «./dau-trang-okr-cho»
       hay «okr/dau-trang-okr-cho»; (c) _acceptance/config.yaml không còn khoá nào tên dto_; (d) git diff --name-only
-      merge-base(HEAD, origin/onehub)..HEAD -- apps/app chỉ có apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx. In
+      merge-base(HEAD, origin/onehub)..HEAD -- apps/app chỉ có apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx và
+      apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx (hai tệp mồ côi chỉ có trên nhánh nên không hiện). In
       «mo-coi: 0 tep cu · 0 nhap · 0 khoa dto · ma doi 1 tep». Vi phạm: «CON_TEP <tệp>», «CON_NHAP <tệp>», «CON_KHOA
       <khoá>», «DOI_NGOAI <tệp>», mã 1.
       CHIỀU ĐỎ (go-mo-coi.mjs --tu-kiem, bản sao): tạo lại dau-trang-okr-cho.tsx rỗng → «CON_TEP …»; thêm dòng nhập
@@ -73,3 +74,20 @@ evals:
       Bốn ảnh có mặt; ở cả hai khổ, ảnh lúc chờ và lúc xong cùng hàng tiêu đề, hàng hành động cùng số dòng, khối nội dung đầu
       tiên cùng độ cao (lệch không thấy bằng mắt, tương ứng ≤ 8 px của E1).
     evidence_required: [run_id, verdict, screenshot, observed]
+
+  - id: E5
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.kmc_man_do
+    long_running: 30
+    paths:
+      - "apps/app/app/(app)/[slug]/**"
+      - "apps/app/components/page-shell.tsx"
+      - "_acceptance/khung-man-chung/rang/chup-man.mjs"
+    expected: |
+      exit 0. Cùng lệnh với E1 (S4 chạy một lần); đầu ra có đủ bốn dòng «buoc 2: dat», «buoc 3: dat», «buoc 4: dat», «buoc 5:
+      dat», và không dòng «lech» nào ngoài toancanh. Thiếu một dòng «dat» hay có dòng «lech» ở màn khác → không đạt, gọi tên
+      bước.
+      CHIỀU ĐỎ: răng của khung-man-chung có sẵn chiều đỏ cho từng bước (CAY_DO 1–5 trong chup-man.mjs, ví dụ «ban sao fallback
+      Lien he ve Spinner»); vòng này không thêm răng mới cho AC-2.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
