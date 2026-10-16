@@ -161,11 +161,15 @@
       "dung_tren": [
         "DA2"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "ten": "Không lộ tiêu đề việc cha",
       "ten_ngan": "Che việc cha",
       "chay_khi": "DA2 đã gộp",
-      "ghi_chu": "Đọc cha trong viec.bang và viec.con qua dieuKienXemViec. Cùng họ với Ngoài-3 của DA2 (số việc con đếm cả con người xem không thấy), chủ kho ghi hạn chế — gộp vào lượt này nếu rẻ. Lên T3 nếu phải đổi luật thấy việc ở packages/db."
+      "ghi_chu": "Đọc cha trong viec.bang và viec.con qua dieuKienXemViec. Cùng họ với Ngoài-3 của DA2 (số việc con đếm cả con người xem không thấy), chủ kho ghi hạn chế — gộp vào lượt này nếu rẻ. Lên T3 nếu phải đổi luật thấy việc ở packages/db.",
+      "pr": [
+        421
+      ],
+      "buoc_ke": "Đã gộp #421 (7beabe309) 15/10; mốc m-1015 khép."
     },
     {
       "ma": "DA3",
