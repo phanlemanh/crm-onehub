@@ -29,6 +29,7 @@ import {
 	DialogTitle,
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
+import { FlowMap } from "../src/components/flow-map";
 import { Heatmap } from "../src/components/heatmap";
 import { KaraLabel } from "../src/components/kara";
 import { KhungXuong } from "../src/components/khung-xuong";
@@ -200,6 +201,17 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{
+		ten: "FlowMap",
+		ve: () => (
+			<FlowMap
+				edges={[]}
+				label=""
+				nodeTypes={{}}
+				nodes={[{ id: "a", position: { x: 0, y: 0 }, data: {} }]}
+			/>
+		),
+	},
 	{
 		ten: "CopyValue",
 		ve: () => <CopyValue value="crm_9f2c" label={DU_LIEU.thu} />,

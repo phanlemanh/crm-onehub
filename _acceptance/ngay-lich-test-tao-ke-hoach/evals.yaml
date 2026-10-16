@@ -1,0 +1,28 @@
+slug: ngay-lich-test-tao-ke-hoach
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nltk_ba_ngay
+    expected: "exit 0; rang/ba-ngay.mjs ghim đồng hồ bằng setSystemTime qua preload (sinh trong tmpdir) và chạy bài -t tao-ke-hoach với TZ=Asia/Ho_Chi_Minh. Ma trận viết trước 8 ô: bản sửa × {12:00 ngày 14, 12:00 ngày 15, 12:00 ngày 16, 00:30 ngày 15, 23:30 ngày 15 giờ VN} mong xanh; bản trước vòng × {12:00 ngày 14 xanh, 12:00 ngày 15 đỏ, 00:30 ngày 15 đỏ}. Xanh nghĩa là mã 0 với đúng '1 pass' và '0 fail'; đỏ nghĩa là mã khác 0 với '0 pass' và '1 fail'; khác hai dạng đó là ô lạ. Ô lệch thì 'SAI <bản> <giờ>' và mã 1. Chiều đỏ cùng mẫu (đã chạy ở S3, chép vào evidence): thay tệp test bằng bản c1864a3a2 thì 'SAI sua 12:00 ngay 15 VN' và KHONG DAT."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/test/noi-bon-nut.dom.tsx, "_acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs"]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nltk_ba_ngay
+    expected: "exit 0; cùng lệnh E1 — hai ô trước-vòng ngày 15 (12:00 và 00:30 giờ VN) phải đỏ VÀ đầu ra có nguyên văn 'khong toi trang thai nut ngay hien 2026-10-15' (dòng 'thong diep ghim co'); ô trước-vòng 12:00 ngày 14 xanh làm đối chứng dương. Bản trước vòng rút bằng git show c1864a3a2:apps/app/test/noi-bon-nut.dom.tsx, ghi tạm thành test/ngay-lich-ban-cu.tam.tsx (ngoài mẫu tệp của bun test và của bộ chạy *.dom.tsx, gọi bằng đường tường minh) và xoá trong finally; sau lượt, git status apps/app/test còn tệp .tam. thì 'SAI cay con tep tam' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/test/noi-bon-nut.dom.tsx, "_acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs"]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nltk_pham_vi
+    expected: "exit 0; rang/ba-ngay.mjs --pham-vi: git diff --name-only origin/onehub...HEAD (gốc là merge-base với onehub lúc đo, nên tệp từ các lần gộp onehub không tính) bỏ _acceptance/**, docs/**, *.md, LO-TRINH.html còn đúng một tệp apps/app/test/noi-bon-nut.dom.tsx; đối chứng âm: cùng danh sách thêm apps/app/lib/tep-ngoai.ts phải không đạt. Lệch thì 'KHONG DAT: chi duoc doi apps/app/test/noi-bon-nut.dom.tsx' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["**"]

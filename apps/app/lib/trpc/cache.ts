@@ -55,6 +55,7 @@ export type CrmCache = {
 	apiKeys(options?: Options): Promise<void>;
 	tracking(options?: Options): Promise<void>;
 	tinHieu(options?: Options): Promise<void>;
+	thongBao(options?: Options): Promise<void>;
 	everything(): Promise<void>;
 };
 
@@ -292,6 +293,7 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.aiChiTieu.queryKey(),
 					trpc.okr.danhSach.queryKey(),
 					trpc.okr.cayCanChinh.queryKey(),
+					trpc.okr.soDoDonVi.queryKey(),
 					trpc.okr.toanCanh.queryKey(),
 					trpc.okr.sucKhoe.queryKey(),
 					trpc.okr.hopTuan.queryKey(),
@@ -524,7 +526,18 @@ export function useCrmCache(): CrmCache {
 				options,
 			),
 
-		tinHieu: (options) => run([trpc.tinHieu.cuaToi.queryKey()], [], options),
+		tinHieu: (options) =>
+			run(
+				[trpc.tinHieu.cuaToi.queryKey(), trpc.tinHieu.tatCa.queryKey()],
+				[],
+				options,
+			),
+		thongBao: (options) =>
+			run(
+				[trpc.thongBao.chuong.queryKey()],
+				[trpc.thongBao.danhSach.pathKey()],
+				options,
+			),
 
 		everything: () => queryClient.invalidateQueries(),
 	};

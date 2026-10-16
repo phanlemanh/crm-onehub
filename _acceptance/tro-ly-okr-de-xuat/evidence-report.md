@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 03bc0b1a631154e18e89505193d24e1ac7a13dcf
+verified_commit: 0fdb254d4d425a654bead497a3780e4409bf6c14
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -389,3 +389,19 @@ sha: 499acb5f83f48ea18ec04b829326a0c66dd5dcbf · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-06, do E27 thuoc chi doi tep hang con trong cay (suggestion.tsx da go 7875d145e); khai bon con tro superseded_by E2 E3 E10 E29 theo gop-y-dung-cho; nhan kit 2.24.0
 run_id: repin-20261006T223851Z-46396
 sha: 03bc0b1a631154e18e89505193d24e1ac7a13dcf · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · không chạy theo hồ sơ: E2, E3, E10, E29 · thay bởi hồ sơ đã ký: E2→gop-y-dung-cho#AC-11, E3→gop-y-dung-cho#AC-11, E10→gop-y-dung-cho#AC-7, E29→gop-y-dung-cho#AC-14 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E25, E28 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-14, do F24 ba-ho-so-do-san: sửa thước chết và răng đỏ sẵn (phạm vi A, làn C 12 hồ sơ)
+run_id: repin-20261014T001054Z-11514
+sha: aeacc862fc3a28e5391c27772a4ad96e16ae3317 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · không chạy theo hồ sơ: E2, E3, E10, E29 · thay bởi hồ sơ đã ký: E2→gop-y-dung-cho#AC-11, E3→gop-y-dung-cho#AC-11, E10→gop-y-dung-cho#AC-7, E29→gop-y-dung-cho#AC-14 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E25, E28 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-15, do ghim ở đỉnh sau gộp onehub 3818ad4ec, ngay trước gộp #406 (làn X lần 2, 11 hồ sơ)
+run_id: repin-20261014T231434Z-99400
+sha: b9acad6b77fde52541221e857cd2eb01d839e45f · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · không chạy theo hồ sơ: E2, E3, E10, E29 · thay bởi hồ sơ đã ký: E2→gop-y-dung-cho#AC-11, E3→gop-y-dung-cho#AC-11, E10→gop-y-dung-cho#AC-7, E29→gop-y-dung-cho#AC-14 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E25, E28 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2 · chập chờn (đỏ lần đầu, đạt khi chạy lại): lenh-dung-do-khong-ai-thay E8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-15, do thuoc-tro-ly-okr-khong-lot sửa thước E22/E24; gộp onehub eb5ab4269
+run_id: repin-20261015T102638Z-69395
+sha: 3ed3f305eca997b56844e292d0238ed819e2bdcb · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · không chạy theo hồ sơ: E2, E3, E10, E29 · thay bởi hồ sơ đã ký: E2→gop-y-dung-cho#AC-11, E3→gop-y-dung-cho#AC-11, E10→gop-y-dung-cho#AC-7, E29→gop-y-dung-cho#AC-14 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E28 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-15, do gộp onehub 48993d6ab (#418 đổi thành phần ui trong paths E4, E28) và thước E24 mới của e24-qua-han-khong-phai-ha-tang
+run_id: repin-20261015T155515Z-64170
+sha: 0fdb254d4d425a654bead497a3780e4409bf6c14 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · không chạy theo hồ sơ: E2, E3, E10, E29 · thay bởi hồ sơ đã ký: E2→gop-y-dung-cho#AC-11, E3→gop-y-dung-cho#AC-11, E10→gop-y-dung-cho#AC-7, E29→gop-y-dung-cho#AC-14 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E28 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-2 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

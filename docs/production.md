@@ -100,10 +100,27 @@ deploy` is not proof»).
 hãng, nơi `release` lên production. Ở kho này nhánh production là `onehub` — đo từ
 `link.productionBranch` của cả bốn dự án.
 
-**Preview.** Mỗi lần đẩy một nhánh, app, API và agent dựng bản Preview (GitHub ghi
-`Preview – crm-onehub-*`). `agent-okr` không dựng. Preview dùng chung cơ sở dữ
-liệu với production (`docs/setup.md`), nên bản Preview của một nhánh có migration
-mới chạy trên bảng chưa có migration đó.
+**Preview: tắt ở cả bốn dự án (16/10).** Đẩy một nhánh không dựng bản Preview nào, và
+PR không còn check «Vercel – crm-onehub-*». Chỉ `onehub` được triển khai. Mỗi dự án
+tắt bằng `git.deploymentEnabled` `{"**": false, "onehub": true}` trong tệp
+`vercel.json` ở **Root Directory của chính nó** — Vercel chỉ đọc tệp ở đó:
+
+| Dự án | Root Directory | Tệp tắt Preview |
+| --- | --- | --- |
+| `crm-onehub-app` | `apps/app` | `apps/app/vercel.json` |
+| `crm-onehub-api` | *(trống — gốc kho)* | `vercel.json` ở gốc kho |
+| `crm-onehub-agent` | `apps/agent` | `apps/agent/vercel.json` |
+| `agent-okr` | `apps/agent-okr` | `apps/agent-okr/vercel.json` (từ 04/10) |
+
+Bẫy của api: `apps/api/vercel.json` **không** tắt được gì — Vercel không đọc nó cho dự
+án api; nó chỉ là nguồn năm cron mà `apps/api/scripts/build-func.mjs` chép vào bản
+dựng. `apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts` giữ bảng trên, và
+`_acceptance/tat-ban-preview/rang/goc-du-an.mjs` so nó với Root Directory thật.
+
+Trước 16/10, app, API và agent dựng Preview ở mỗi lần đẩy (840 bản trong 7 ngày đo
+16/10) trên chung cơ sở dữ liệu với production — mã chưa qua cổng nào chạy được trên
+dữ liệu thật. Muốn bật lại Preview cho một nhánh thì tách cơ sở dữ liệu của đích
+preview trước.
 
 **Biến mới phải đặt trên Vercel rồi triển khai lại** — biến chỉ vào những
 deployment dựng sau lúc đặt. Đặt biến là việc của chủ kho.
@@ -127,7 +144,8 @@ ls` thì cần một thư mục đã link. Biến chung của team: không có (
 | `crm-onehub-agent` | `AGENT_BRIDGE_SECRET` `API_URL` `APP_URL` `DATABASE_URL` `KHO_TAI_LIEU_BLOB_TOKEN` `POSTGRES_URL_NON_POOLING` |
 | `agent-okr` | `OKR_AGENT_BRIDGE_SECRET` `OKR_AI_GATEWAY_API_KEY` `DATABASE_URL`, cộng bộ biến Neon |
 
-App, API và agent có thêm một bản Preview của phần lớn các biến trên.
+App, API và agent có thêm một bản Preview của phần lớn các biến trên. Từ 16/10 không
+bản Preview nào được dựng, nên không deployment nào đọc các bản ghi đó.
 
 ### Vắng trên production, và vắng thì mất gì
 
@@ -154,6 +172,24 @@ tay trên màn production mà kho không thấy. Trước khi báo «chưa bật
 
 Agent tự in danh sách năng lực đang bật ở dòng `[agent] on …` / `[agent] off …`
 (`apps/agent/agent/lib/capabilities.ts`). Đọc nó cẩn thận — xem «Bẫy đã gặp».
+
+## Bản chụp lộ trình
+
+Workflow `ban-chup-lo-trinh.yml` chạy mỗi lần một lần gộp vào `onehub` đổi `LO-TRINH.html` (và
+chạy tay được bằng `workflow_dispatch`). Nó đẩy khối lộ trình sang API production; trang Lộ trình
+hiện bản đó trong khoảng một phút, không cần dựng lại.
+
+Cài một lần (việc của chủ kho):
+
+1. Cài đặt › Khoá API › Tạo khoá, loại «Đẩy lộ trình».
+2. Đặt bí mật kho `CRM_KHOA_DAY_LO_TRINH` = khoá vừa tạo (`CRM_API_URL` đã có từ đường kéo tín hiệu).
+3. Chạy workflow bằng tay một lần để có bản chụp đầu.
+
+Mỗi lượt để lại đúng một ghi chú `ban-chup-lo-trinh` với kết quả `nhan`, `trung`, `cu-hon` hay
+`chua-cai`. `chua-cai` là lượt xanh mà chưa đẩy gì — trang vẫn đọc bản dựng và dòng giờ lấy ghi
+«(bản dựng)». Lượt đỏ là CRM từ chối hay không trả lời; log của bước «Đẩy bản chụp» in lý do.
+
+Đo độ trễ (Cổng Giá trị của LT1c): `bun scripts/ban-chup-lo-trinh/do-tre.ts --tu <YYYY-MM-DD>`.
 
 ## Kho Blob
 

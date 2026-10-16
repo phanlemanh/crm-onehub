@@ -28,6 +28,7 @@ import {
 	enrollmentStageInput,
 	enrollmentUpsertInput,
 	nguoiNhanViecOutput,
+	planCloseInput,
 	planCreateFromTemplateInput,
 	planDetailOutput,
 	planIdInput,
@@ -202,19 +203,20 @@ export class OnboardingRouter {
 		meta: restMeta("POST", "/onboarding/plans", TAG),
 	})
 	createFromTemplate(
+		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof planCreateFromTemplateInput>,
 	) {
-		return this.onboarding.createFromTemplate(input);
+		return this.onboarding.createFromTemplate(input, ctx.user.id);
 	}
 
 	@Mutation({
-		input: planIdInput,
+		input: planCloseInput,
 		output: planOutput,
 		meta: restMeta("POST", "/onboarding/plans/{id}/close", TAG),
 	})
 	closePlan(
 		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof planIdInput>,
+		@Input() input: z.infer<typeof planCloseInput>,
 	) {
 		return this.onboarding.closePlan(input, ctx.user.id);
 	}

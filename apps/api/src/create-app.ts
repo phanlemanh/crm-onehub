@@ -1,4 +1,5 @@
 import { API_KEY_HEADER, apiUrl, SESSION_COOKIE_NAME } from "@crm/auth";
+import { BAN_CHUP_LO_TRINH } from "@crm/validation/ban-chup-lo-trinh";
 import { PayloadTooLargeException, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
@@ -16,7 +17,7 @@ import {
 import { AppModule } from "./app.module";
 import { LISTING_INGEST } from "./listings/listings-config";
 import { ContextLogger } from "./logging/context-logger";
-import { REST_BRIDGE_PATH } from "./trpc/openapi";
+import { REST_BRIDGE_BODY_LIMIT_BYTES, REST_BRIDGE_PATH } from "./trpc/openapi";
 import { createBaseTrpcContext } from "./trpc/trpc.context";
 
 export async function createApp(): Promise<NestExpressApplication> {
@@ -126,10 +127,20 @@ export async function createApp(): Promise<NestExpressApplication> {
 
 	const { appRouter } = app.get(AppRouterHost);
 
-	restBridge = createOpenApiExpressMiddleware({
+	const cauBanChup = createOpenApiExpressMiddleware({
 		router: appRouter,
 		createContext: ({ req }) => createBaseTrpcContext(req),
+		maxBodySize: BAN_CHUP_LO_TRINH.tranThanByte,
 	});
+	const cauChung = createOpenApiExpressMiddleware({
+		router: appRouter,
+		createContext: ({ req }) => createBaseTrpcContext(req),
+		maxBodySize: REST_BRIDGE_BODY_LIMIT_BYTES,
+	});
+	restBridge = (req, res) =>
+		req.path === BAN_CHUP_LO_TRINH.duongRest
+			? cauBanChup(req, res)
+			: cauChung(req, res);
 
 	return app;
 }

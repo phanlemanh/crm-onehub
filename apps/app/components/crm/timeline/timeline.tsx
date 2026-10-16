@@ -311,13 +311,12 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 						spacing={0}
 					>
 						{TIMELINE_TABS.map((option) => (
-							<ToggleGroupItem key={option} value={option}>
+							<ToggleGroupItem
+								count={counts.data?.[option] || undefined}
+								key={option}
+								value={option}
+							>
 								{tabLabels(m)[option]}
-								{counts.data?.[option] ? (
-									<span className="tabular-nums opacity-60">
-										{counts.data[option]}
-									</span>
-								) : null}
 							</ToggleGroupItem>
 						))}
 					</ToggleGroup>

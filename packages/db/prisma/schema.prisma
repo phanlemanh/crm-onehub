@@ -99,6 +99,7 @@ model User {
   taiLieuBaoSai     TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiNguoiBao")
   taiLieuBaoSaiXuLy TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiXuLyBoi")
   tinHieu           TinHieu[]         @relation("TinHieuNguoiGui")
+  thongBao          ThongBao[]        @relation("ThongBaoNguoiNhan")
   viecGiao          Viec[]            @relation("ViecNguoiGiao")
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
@@ -1987,6 +1988,9 @@ model OnboardingStep {
   completedAt DateTime?
   position    Int
 
+  viecId String? @unique
+  viec   Viec?   @relation("BuocViec", fields: [viecId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -2653,6 +2657,43 @@ model OkrCuocSoan {
   @@map("okrCuocSoan")
 }
 
+model OkrCuocHoi {
+  id                String   @id @default(cuid())
+  nguoiHoiUserId    String
+  sessionId         String   @unique
+  cacPhien          String[] @default([])
+  streamIndex       Int      @default(0)
+  continuationToken String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([nguoiHoiUserId, createdAt])
+  @@map("okrCuocHoi")
+}
+
+model OkrLuotHoi {
+  id        String   @id @default(cuid())
+  cuocHoiId String
+  userId    String
+  ngay      String
+  createdAt DateTime @default(now())
+
+  @@index([userId, ngay])
+  @@map("okrLuotHoi")
+}
+
+model OkrHoiPhanHoi {
+  id        String   @id @default(cuid())
+  cuocHoiId String
+  maTraLoi  String
+  userId    String
+  huuIch    Boolean
+  luc       DateTime
+
+  @@unique([cuocHoiId, maTraLoi, userId])
+  @@map("okrHoiPhanHoi")
+}
+
 model OkrTomTat {
   id           String   @id @default(cuid())
   taskId       String   @unique
@@ -2987,6 +3028,7 @@ model Viec {
   cha             Viec?         @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
   con             Viec[]        @relation("ViecCon")
   thuTu           ViecThuTu[]
+  buoc            OnboardingStep? @relation("BuocViec")
 
   @@index([chaId])
   @@index([nguoiThucHienId, trangThai, hanNgay])
@@ -3051,6 +3093,27 @@ model ViecVet {
   @@map("viecVet")
 }
 
+model ThongBao {
+  id          String    @id @default(cuid())
+  nguoiNhanId String
+  nguoiNhan   User      @relation("ThongBaoNguoiNhan", fields: [nguoiNhanId], references: [id], onDelete: Cascade)
+  nguon       String
+  khoa        String
+  noiDung     Json
+  duongDan    String
+  taoLuc      DateTime  @default(now())
+  ngayDau     String
+  thayNgay    String
+  docLuc      DateTime?
+  moLuc       DateTime?
+
+  @@unique([nguoiNhanId, khoa, ngayDau])
+  @@index([nguoiNhanId, taoLuc])
+  @@index([nguoiNhanId, docLuc])
+  @@index([taoLuc])
+  @@map("thongBao")
+}
+
 model ViecThuTu {
   id     String   @id @default(cuid())
   userId String
@@ -3063,4 +3126,13 @@ model ViecThuTu {
   @@unique([userId, viecId])
   @@index([userId])
   @@map("viecThuTu")
+}
+
+model BanChupLoTrinh {
+  nguon     String   @id
+  sha       String
+  commitLuc DateTime
+  layLuc    DateTime
+  duLieu    Json
+  canhBao   String[]
 }

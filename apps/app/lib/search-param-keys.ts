@@ -39,6 +39,9 @@ export const SEARCH_PARAM = {
 	overview: {
 		scope: "scope",
 	},
+	thongBao: {
+		loc: "locThongBao",
+	},
 	deals: {
 		view: "view",
 	},
@@ -80,6 +83,11 @@ export const SEARCH_PARAM = {
 		tabSoan: "tabSoan",
 		locSoan: "locSoan",
 		mucTinCay: "mucTinCay",
+		nhap: "nhapOkr",
+		xemToanCanh: "xemToanCanh",
+		locSoDo: "locSoDo",
+		moDonVi: "moDonVi",
+		moNhanh: "moNhanh",
 	},
 	loTrinh: {
 		vongDoi: "vongDoi",

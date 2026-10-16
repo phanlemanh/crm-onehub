@@ -11,6 +11,35 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "dieu-huong-khu-muc-tieu",
+		ten: "Điều hướng khu Mục tiêu — đầu trang «Mục tiêu» dùng chung, nút tạo ở góc phải",
+		states: [
+			{
+				id: "ST-dhk-don-vi",
+				nhan: "Theo đơn vị — trưởng đơn vị",
+			},
+			{ id: "ST-dhk-cua-toi", nhan: "Của tôi — trưởng một đơn vị" },
+			{ id: "ST-dhk-cap-nhat-tuan", nhan: "Cập nhật tuần" },
+			{ id: "ST-dhk-toan-canh", nhan: "Toàn cảnh" },
+			{ id: "ST-dhk-hoi-y", nhan: "Hỏi ý" },
+			{ id: "ST-dhk-suc-khoe", nhan: "Sức khoẻ chương trình" },
+			{ id: "ST-dhk-menu", nhan: "Menu «…» mở" },
+			{ id: "ST-dhk-soan", nhan: "Nút soạn khoá — hết lượt" },
+			{ id: "ST-dhk-khong-quyen", nhan: "Xem đơn vị không sửa được" },
+			{ id: "ST-dhk-khong-dan", nhan: "Không dẫn đơn vị nào" },
+		],
+	},
+	{
+		slug: "lo-trinh-doc-ban-chup",
+		ten: "Lộ trình đọc bản chụp — dòng giờ lấy",
+		states: [
+			{ id: "ST-lo-trinh-ban-chup", nhan: "Đọc bản chụp" },
+			{ id: "ST-lo-trinh-ban-dung", nhan: "Rơi về bản dựng" },
+			{ id: "ST-lo-trinh-ban-chup-en", nhan: "Đọc bản chụp — tiếng Anh" },
+			{ id: "ST-lo-trinh-ban-dung-en", nhan: "Rơi về bản dựng — tiếng Anh" },
+		],
+	},
+	{
 		slug: "ngan-ho-so-trong-lo-trinh",
 		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
 		states: [
@@ -1167,6 +1196,82 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "sua-giao-dien-tin-hieu",
+		ten: "Sửa giao diện tín hiệu — tám lỗi U1–U8 của hộp gửi và trang Tín hiệu đã gửi",
+		states: [
+			{ id: "ST-ds-co", nhan: "Trang — đủ trạng thái, cột Gửi gộp" },
+			{ id: "ST-ds-en", nhan: "Trang — tiếng Anh" },
+			{ id: "ST-ds-xac-nhan-xoa", nhan: "Trang — hỏi lại nêu điều đã kể" },
+			{
+				id: "ST-ds-xoa-khoa",
+				nhan: "Trang — dòng đã lấy về, Xoá khoá kèm lý do",
+			},
+			{ id: "ST-ds-xoa-hong", nhan: "Trang — xoá hỏng, nói vì sao" },
+			{ id: "ST-ds-da-xoa", nhan: "Trang — vừa xoá xong" },
+			{ id: "ST-ds-rong", nhan: "Trang — chưa gửi tín hiệu nào" },
+			{ id: "ST-hop-trong", nhan: "Hộp — ô trống, Gửi khoá có lý do" },
+			{ id: "ST-hop-dang-go", nhan: "Hộp — đã gõ, tên màn" },
+			{ id: "ST-hop-qua-tran", nhan: "Hộp — quá trần, lỗi của cả hộp" },
+			{ id: "ST-hop-qua-tran-en", nhan: "Hộp — quá trần, tiếng Anh" },
+			{ id: "ST-hop-loi", nhan: "Hộp — máy chủ lỗi, gửi lại được" },
+			{ id: "ST-hop-da-gui", nhan: "Hộp — biên nhận, đóng không hỏi" },
+		],
+	},
+	{
+		slug: "moi-tin-hieu-cho-quan-tri",
+		ten: "Mọi tín hiệu cho quản trị — thẻ Tất cả, ba ô số, lọc, câu báo trước trong hộp gửi",
+		states: [
+			{ id: "ST-tat-ca-co", nhan: "Tất cả — ba ô số và bảng đủ cột" },
+			{
+				id: "ST-tat-ca-thieu",
+				nhan: "Tất cả — người gửi đã xoá, chưa có phòng ban",
+			},
+			{
+				id: "ST-tat-ca-khong-ban-ve",
+				nhan: "Tất cả — chưa đọc được trạng thái sau gom",
+			},
+			{ id: "ST-tat-ca-rong", nhan: "Tất cả — chưa ai gửi tín hiệu" },
+			{ id: "ST-tat-ca-dang-tai", nhan: "Tất cả — đang tải" },
+			{ id: "ST-tat-ca-loi", nhan: "Tất cả — tải lỗi, có Thử lại" },
+			{
+				id: "ST-tat-ca-khong-quyen",
+				nhan: "Tất cả — thành viên mở thẳng đường dẫn",
+			},
+			{ id: "ST-cua-toi-quan-tri", nhan: "Của tôi — quản trị thấy thanh thẻ" },
+			{
+				id: "ST-hop-bao-truoc",
+				nhan: "Hộp gửi — câu báo trước quản trị thấy tên",
+			},
+		],
+	},
+	{
+		slug: "tin-hieu-tu-ve-kho",
+		ten: "Khoá chỉ kéo tín hiệu — tờ tạo khoá, hộp khoá vừa tạo, nhãn trên danh sách",
+		states: [
+			{
+				id: "ST-tao-khoa-quan-tri",
+				nhan: "Tờ tạo khoá — quản trị, mặc định toàn quyền",
+			},
+			{
+				id: "ST-tao-khoa-chon-keo",
+				nhan: "Tờ tạo khoá — đã chọn «Chỉ kéo tín hiệu»",
+			},
+			{
+				id: "ST-tao-khoa-thanh-vien",
+				nhan: "Tờ tạo khoá — thành viên, không có mục loại",
+			},
+			{ id: "ST-tao-khoa-dang-tao", nhan: "Tờ tạo khoá — đang tạo" },
+			{
+				id: "ST-khoa-moi-keo-tin-hieu",
+				nhan: "Hộp khoá vừa tạo — khoá chỉ kéo",
+			},
+			{
+				id: "ST-danh-sach-co-khoa-keo",
+				nhan: "Danh sách — có nhãn «Chỉ kéo tín hiệu»",
+			},
+		],
+	},
+	{
 		slug: "viec-chung",
 		ten: "Việc chung — Việc của tôi, khung việc, khối Việc trên thẻ Hoạt động",
 		states: [
@@ -1199,6 +1304,33 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-khoi-viec-phuong-an-tron",
 				nhan: "Thẻ Hoạt động — lối khác: trộn việc vào dòng sự kiện",
 			},
+		],
+	},
+	{
+		slug: "hop-thong-bao-tren-web",
+		ten: "Hộp thông báo — chuông trên đầu trang và trang Thông báo",
+		states: [
+			{
+				id: "ST-ngu-canh",
+				nhan: "Đầu trang — chuông có số cạnh nút «Gửi tín hiệu»",
+			},
+			{
+				id: "ST-chuong-co-chua-doc",
+				nhan: "Chuông mở — Hôm nay / Trước đó, có chưa đọc",
+			},
+			{ id: "ST-chuong-99", nhan: "Chuông — hơn 99 chưa đọc" },
+			{ id: "ST-chuong-het-chua-doc", nhan: "Chuông mở — đã đọc hết" },
+			{ id: "ST-chuong-rong", nhan: "Chuông mở — chưa có thông báo" },
+			{ id: "ST-chuong-cho-tai", nhan: "Chuông mở — đang tải" },
+			{ id: "ST-chuong-loi", nhan: "Chuông mở — tải hỏng" },
+			{ id: "ST-trang-co", nhan: "Trang Thông báo — nhóm theo ngày" },
+			{
+				id: "ST-trang-loc-chua-doc-rong",
+				nhan: "Trang — lọc Chưa đọc, đã đọc hết",
+			},
+			{ id: "ST-trang-rong", nhan: "Trang — chưa có thông báo" },
+			{ id: "ST-trang-cho-tai", nhan: "Trang — đang tải" },
+			{ id: "ST-trang-loi", nhan: "Trang — tải hỏng" },
 		],
 	},
 	{

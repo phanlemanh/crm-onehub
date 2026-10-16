@@ -119,7 +119,6 @@ evals:
     cmd: config:executors.test.tlk_qua_han
     paths:
       - "apps/agent/agent/lib/tai-lieu-hoi*.ts"
-      - "packages/db/src/tai-lieu-suc-khoe*.ts"
       - "apps/api/src/tai-lieu/tai-lieu-tim.service.ts"
       - "apps/agent/test/tro-ly-kho-nop.spec.ts"
     expected: |

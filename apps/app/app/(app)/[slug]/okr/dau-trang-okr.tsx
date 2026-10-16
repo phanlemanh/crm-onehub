@@ -1,30 +1,44 @@
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Suspense } from "react";
-import {
-	PageShellDescription,
-	PageShellHeader,
-	PageShellHeading,
-	PageShellTitle,
-} from "@/components/page-shell";
+import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { ChonChuKy } from "./chon-chu-ky";
 import { DaiKy } from "./dai-ky";
 import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
+import { donDich } from "./don-dich";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
-import { kyMacDinhHoiY } from "./okr-search-params";
+import {
+	giaiKy,
+	kyMacDinhHoiY,
+	loadOkrSearchParams,
+	locOkr,
+} from "./okr-search-params";
 import type { TabOkr } from "./tab-okr";
+import { tieuDeKhu } from "./tieu-de-khu";
 
-export async function DauTrangOkrTrang({ tab }: { tab: TabOkr }) {
-	const m = okrMessages(await getLocale());
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export async function DauTrangOkrTrang({
+	tab,
+	searchParams,
+}: {
+	tab: TabOkr;
+	searchParams?: SearchParams;
+}) {
+	const locale = await getLocale();
+	const m = okrMessages(locale);
 	return (
 		<Suspense
-			fallback={<DauTrangOkrCho moTa={m.moTa[tab]} tieuDe={m.tieuDe[tab]} />}
+			fallback={
+				<DauTrangOkrCho moTa={m.moTa[tab]} tieuDe={tieuDeKhu(locale)} />
+			}
 		>
-			<DauTrangCoDuLieu />
+			<DauTrangCoDuLieu searchParams={searchParams} tab={tab} />
 		</Suspense>
 	);
 }
@@ -32,21 +46,26 @@ export async function DauTrangOkrTrang({ tab }: { tab: TabOkr }) {
 function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	return (
 		<LuoiDauTrangOkr
-			dau={
-				<PageShellHeader>
-					<PageShellHeading>
-						<PageShellTitle>{tieuDe}</PageShellTitle>
-						<PageShellDescription>{moTa}</PageShellDescription>
-					</PageShellHeading>
-				</PageShellHeader>
+			hanhDong={
+				<>
+					<Skeleton className="h-7 w-24" />
+					<Skeleton className="h-7 w-56" data-hang-cho="" />
+				</>
 			}
-			chonChuKy={<Skeleton className="h-8 w-24 rounded-md" />}
+			moTa={moTa}
 			thanhTab={<Skeleton className="h-9 w-full max-w-xl" />}
+			tieuDe={tieuDe}
 		/>
 	);
 }
 
-async function DauTrangCoDuLieu() {
+async function DauTrangCoDuLieu({
+	tab,
+	searchParams,
+}: {
+	tab: TabOkr;
+	searchParams?: SearchParams;
+}) {
 	await requireSession();
 
 	const trpc = getServerTrpc();
@@ -62,10 +81,25 @@ async function DauTrangCoDuLieu() {
 		await queryClient.prefetchQuery(
 			trpc.okr.hoiYNhan.queryOptions({ cycleId: kyHoiY }),
 		);
+	if (tab === "theo-don-vi" && searchParams && cycles) {
+		const thamSo = await loadOkrSearchParams(searchParams);
+		const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);
+		if (cycleId)
+			await queryClient.prefetchQuery(
+				trpc.okr.danhSach.queryOptions({
+					cycleId,
+					unit: donDich(tab, thamSo[SEARCH_PARAM.okr.don], undefined).don,
+					loc: locOkr(thamSo),
+				}),
+			);
+	}
 
 	return (
 		<HydrateClient>
-			<DauTrangOkrHoiY chonChuKy={<ChonChuKy />} />
+			<DauTrangOkrHoiY
+				cauNoi={okrBridgeConfigured()}
+				chonChuKy={<ChonChuKy />}
+			/>
 			<DaiKy />
 		</HydrateClient>
 	);

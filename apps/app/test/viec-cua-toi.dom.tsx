@@ -188,7 +188,9 @@ describe("vc-man-co-viec", () => {
 		);
 		const so = ["giao-cho-toi", "toi-giao", "dang-theo-doi"].map(
 			(n) =>
-				document.querySelector(`[data-nhom="${n}"] [data-dem]`)?.textContent,
+				document.querySelector(
+					`[data-nhom="${n}"] [data-slot="toggle-group-item-count"]`,
+				)?.textContent,
 		);
 		const nhan = ["giao-cho-toi", "toi-giao", "dang-theo-doi"].map(
 			(n) => document.querySelector(`[data-nhom="${n}"]`)?.textContent ?? "",
