@@ -177,6 +177,28 @@ async function motLuot(b: BienThe, luot: number, goc: string) {
 	}
 }
 
+async function chayLai(chi: string, goc: string) {
+	const tep = join(DO.evidence, "tac-nhan.jsonl");
+	const dong = readFileSync(tep, "utf8").split("\n").filter(Boolean);
+	for (const muc of chi.split(",")) {
+		const [ten, so] = muc.split(":");
+		const luot = Number(so);
+		const b = DO.bienThe.find((x) => x.ten === ten);
+		if (!b || !Number.isInteger(luot)) throw new Error(`--chi sai muc ${muc}`);
+		const i = dong.findIndex((d) => {
+			const x = JSON.parse(d) as { bien_the: string; luot: number };
+			return x.bien_the === ten && x.luot === luot;
+		});
+		if (i < 0) throw new Error(`khong co dong ${muc} de chay lai`);
+		const r = await motLuot(b, luot, goc);
+		console.log(
+			`chay lai ${ten} luot ${luot}: ${r.ket_qua} ${r.giay}s phien ${r.phien_goc || "?"}`,
+		);
+		dong[i] = JSON.stringify(r);
+		writeFileSync(tep, `${dong.join("\n")}\n`);
+	}
+}
+
 async function main() {
 	mkdirSync(DO.evidence, { recursive: true });
 	const goc = readFileSync(DO.tepAgent, "utf8");
@@ -188,6 +210,13 @@ async function main() {
 		join(DO.evidence, "ke-hoach.json"),
 		`${JSON.stringify({ bien_the: DO.bienThe, so_luot: DO.soLuot, bam_agent_goc: bamGoc, bam_agent_low: bamLow }, null, 2)}\n`,
 	);
+	const i = process.argv.indexOf("--chi");
+	if (i > 0) {
+		await chayLai(process.argv[i + 1] ?? "", goc);
+		if (sha(readFileSync(DO.tepAgent, "utf8")) !== bamGoc)
+			throw new Error("agent.ts khong tra ve ban goc");
+		return;
+	}
 	const dong: string[] = [];
 	for (let luot = 1; luot <= DO.soLuot; luot++) {
 		for (const b of DO.bienThe) {
