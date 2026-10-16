@@ -34,12 +34,28 @@ mock.module("@/components/page-shell", () => ({
 	PageShellDescription: khoi("p"),
 	PageShellActions: khoi("div"),
 }));
+const thuTucTreo = {
+	queryOptions: () => ({
+		queryKey: ["treo", Math.random()],
+		queryFn: () => new Promise(() => {}),
+	}),
+	mutationKey: () => ["treo"],
+	mutationOptions: () => ({ mutationFn: async () => null }),
+};
+mock.module("@/lib/trpc/client", () => ({
+	useTRPC: () =>
+		new Proxy({}, { get: () => new Proxy({}, { get: () => thuTucTreo }) }),
+}));
 
 const { DauTrangOkr, ThanhTabOkr } = await import(
 	"@/app/(app)/[slug]/okr/thanh-tab"
 );
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { okrMessages } = await import("@/lib/messages/okr");
+const { khungUngDungMessages } = await import("@/lib/messages/khung-ung-dung");
+const { QueryClient, QueryClientProvider } = await import(
+	"@tanstack/react-query"
+);
 
 const m = okrMessages("vi");
 
@@ -62,7 +78,9 @@ async function ve(noiDung: ReactNode): Promise<HTMLElement> {
 	await act(async () => {
 		root.render(
 			<NuqsTestingAdapter searchParams="?kyOkr=q3">
-				<LocaleProvider locale="vi">{noiDung}</LocaleProvider>
+				<QueryClientProvider client={new QueryClient()}>
+					<LocaleProvider locale="vi">{noiDung}</LocaleProvider>
+				</QueryClientProvider>
 			</NuqsTestingAdapter>,
 		);
 	});
@@ -82,19 +100,17 @@ function nhan(o: HTMLElement): string | null {
 	return tabHoiY(o).querySelector('[data-slot="badge"]')?.textContent ?? null;
 }
 
-describe("thanh tab OKR — năm tab và huy hiệu Hỏi ý", () => {
-	test("năm tab, tab Hỏi ý trỏ /okr/hoi-y và giữ kyOkr", async () => {
+describe("thanh tab OKR — bốn tab và huy hiệu Hỏi ý", () => {
+	test("bốn tab, tab Hỏi ý trỏ /okr/hoi-y và giữ kyOkr", async () => {
 		const o = await ve(<ThanhTabOkr tab="hoi-y" />);
 		const tab = [...o.querySelectorAll('[role="tab"]')];
 		expect(tab.map((t) => t.getAttribute("href"))).toEqual([
 			"/ws/okr?kyOkr=q3",
-			"/ws/okr/cap-nhat-tuan?kyOkr=q3",
 			"/ws/okr/theo-don-vi?kyOkr=q3",
 			"/ws/okr/toan-canh?kyOkr=q3",
 			"/ws/okr/hoi-y?kyOkr=q3",
 		]);
 		expect(tab.map((t) => t.getAttribute("aria-selected"))).toEqual([
-			"false",
 			"false",
 			"false",
 			"false",
@@ -144,9 +160,11 @@ describe("thanh tab OKR — năm tab và huy hiệu Hỏi ý", () => {
 		]);
 	});
 
-	test("đầu trang ở /okr/hoi-y lấy tiêu đề tab Hỏi ý và chuyển huy hiệu xuống thanh tab", async () => {
+	test("đầu trang ở /okr/hoi-y mang tiêu đề khu «Mục tiêu» và chuyển huy hiệu xuống thanh tab", async () => {
 		const o = await ve(<DauTrangOkr chonChuKy={null} nhanHoiY={3} />);
-		expect(o.querySelector("h1")?.textContent).toBe(m.tieuDe["hoi-y"]);
+		expect(o.querySelector("h1")?.textContent).toBe(
+			khungUngDungMessages("vi").rail.okr,
+		);
 		expect(tabHoiY(o).getAttribute("aria-selected")).toBe("true");
 		expect(nhan(o)).toBe("3");
 	});
