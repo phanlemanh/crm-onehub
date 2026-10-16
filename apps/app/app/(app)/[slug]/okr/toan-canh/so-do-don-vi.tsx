@@ -259,17 +259,15 @@ export default function SoDoDonVi({ cycleId }: { cycleId: string }) {
 					value={loc}
 					variant="outline"
 				>
-					<ToggleGroupItem data-loc-so-do="moi" value="moi">
+					<ToggleGroupItem count={ve.soMoi} data-loc-so-do="moi" value="moi">
 						{m.moi}
-						<span className="text-muted-foreground tabular-nums">
-							{ve.soMoi}
-						</span>
 					</ToggleGroupItem>
-					<ToggleGroupItem data-loc-so-do="chu-y" value="chu-y">
+					<ToggleGroupItem
+						count={ve.soChuY}
+						data-loc-so-do="chu-y"
+						value="chu-y"
+					>
 						{m.chuY}
-						<span className="text-muted-foreground tabular-nums">
-							{ve.soChuY}
-						</span>
 					</ToggleGroupItem>
 				</ToggleGroup>
 				<span aria-live="polite" className="sr-only">
