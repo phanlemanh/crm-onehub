@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>146 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>128 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>129 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -78,6 +78,7 @@ flowchart TD
 - «Danh sách thoả thuận Kara trả có chấm màu giai đoạn; số liệu ẩn danh theo giai đoạn có tập khoá đóng» (`deal-va`)
 - «Số điện thoại là trường chính của cá nhân: nhập được lúc tạo, thấy ở bảng, tìm được theo số, không trùng» (`dien-thoai-ca-nhan`)
 - «Số điện thoại hiện ở thoả thuận và ở tab Cá nhân của công ty» (`dien-thoai-o-deal-cong-ty`)
+- Điều hướng khu Mục tiêu — một đầu trang «Mục tiêu» cho cả khu, nút «Thêm mục tiêu» ở góc phải như Thoả thuận, đổi thẻ giữ đơn vị và chu kỳ, Sức khoẻ chương trình khớp tên, nút tạo bị khoá kèm một dòng lý do thay vì biến mất; chỉ giao diện (`dieu-huong-khu-muc-tieu`)
 - «Mã đối tác không khớp vẫn có người xử lý; kế hoạch rỗng thêm được bước; thẻ quá hạn báo còn sót» (`dieu-phoi-va`)
 - Đổi tên sản phẩm trên mọi chữ người đọc từ «CRM» sang «OneHub Center» (trùng tên miền onehub.center), và làm lại cột trái /sign-in theo hướng A — nền lưới chấm bằng token cho năm trang AuthShell, dòng neo cỡ lớn, ba bước nối bằng đường dọc, không Card (`doi-ten-onehub-center`)
 - «Dòng thời gian giữ các hoạt động đã tải khi «Xem cũ hơn» hay làm mới ngầm bị lỗi» — lỗi sau khi đã có dữ liệu không thay danh sách bằng khung lỗi; thông báo tại chỗ kèm «Thử lại» tải đúng phần hỏng (`dong-thoi-gian-giu-khi-loi`)

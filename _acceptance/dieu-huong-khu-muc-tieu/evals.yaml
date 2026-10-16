@@ -1,0 +1,286 @@
+schema_version: 1
+slug: dieu-huong-khu-muc-tieu
+
+# Tệp kiểm DOM mới: apps/app/test/okr-dau-trang-khu.dom.tsx — mỗi eval chạy đúng một nhóm theo
+# tên (`-t dhk-...`). Bảng hai chiều của mỗi nhóm khai trong expected: đối chứng dương trên vật lành
+# và một lượt phá thử trên bản sao (DHK_PHA=<tên>) ghim thông điệp, cùng fixture.
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dhk_tieu_de
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "apps/app/lib/messages/khung-ung-dung.ts"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ma tran viet truoc: 6 duong (/okr, /okr/cap-nhat-tuan, /okr/theo-don-vi, /okr/toan-canh,
+      /okr/toan-canh/suc-khoe, /okr/hoi-y) x 2 ngon ngu (vi, en) x 2 pha (dang tai = khung cho Suspense,
+      da dung) = 24 o, moi o mot assert: h1 === khungUngDungMessages(locale).rail.okr (rut tu messages
+      that, khong viet tay chuoi). Them 2 assert: tap 5 cau mo ta cua 5 the co dung 5 phan tu khac
+      nhau (moi ngon ngu); generateMetadata cua 6 trang tra "<ten the> · <rail.okr>" (Suc khoe: "<ten
+      trang> · <rail.okr>"). Ten ca "dhk-tieu-de". DOI CHUNG DUONG: o /okr/theo-don-vi vi, h1 khop.
+      CHIEU DO (DHK_PHA=tieu-de-theo-the: ban sao thanh-tab.tsx dung lai m.tieuDe[tab]) -> ca do voi
+      thong diep ghim "dhk-tieu-de: h1 «OKR theo đơn vị» khac nhan thanh ben «Mục tiêu» o /okr/theo-don-vi vi".
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dhk_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, NGUYEN VAN: EVAL=E2 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs\" — script tu canh cay (canh-cay.mjs), tu dung phien do (phien-do.mjs: kho do rieng, bo OKR mau, may chu api+app cua CAY DANG XET), dang nhap dev:session va chup vao evidence/; khong goi thang trinh duyet ngoai script"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc (goi ten cho hong); ma 1 = co dong SAI"
+      - "Mo cac anh dau-trang-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/components/page-shell-note.tsx"
+      - "apps/app/app/(app)/[slug]/deals/page.tsx"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
+    expected: |
+      Ma tran viet truoc: 6 trang (cua-toi, cap-nhat-tuan, theo-don-vi, toan-canh, suc-khoe, hoi-y) x 2 kho
+      (1440, 390) = 12 o, dang nhap quan tri, chu ky mau o pha lap ke hoach. Moi o mot dong
+      "NUT <the> <kho>: phai <px> (Thoa thuan <px>) · dinh nut <px> < dinh thanh the <px> · tran ngang <px>".
+      DUNG khi: 1440 |phai - phai Thoa thuan| <= 1; dinh nut < dinh [role=tablist]; 390 nut chinh nam sau
+      h1 va dung CUNG thu tu hinh hoc (top) voi tieu de, mo ta nhu /deals cung kho (do tren /deals cung
+      luot, khong ghi cung thu tu); scrollWidth <= innerWidth.
+      Them 1 dong: "THAN theo-don-vi: 0 nut tao/nhap/soan trong main ngoai [data-slot=page-shell-header]".
+      Them luot dang nhap thanh vien khong dan don vi nao, o /okr, 2 kho: dong "KHOA <kho>: nut chinh disabled,
+      aria-describedby tro page-shell-note" va anh khoa-ly-do-<kho>.png.
+      Anh (danh sach dong, 16 tep): dau-trang-{cua-toi,cap-nhat-tuan,theo-don-vi,toan-canh,suc-khoe,hoi-y}-{1440,390}.png,
+      dau-trang-deals-1440.png, dau-trang-deals-390.png, khoa-ly-do-1440.png, khoa-ly-do-390.png; thieu tep nao -> ma 2.
+      Dong cham "DUNG AC-2: 12/12 o + than 0 nut + 2/2 khoa". Sai -> "SAI AC-2: <the> <kho> — <ly do>", ma 1.
+      DOI CHUNG DUONG: do cung bo do tren /deals voi chinh nut "Thêm thoả thuận" — phai lech 0.
+      CHIEU DO (DHK_PHA=nut-giua-than: ban sao dua NutThemMucTieu ve hang nut trong than theo-don-vi)
+      -> "SAI AC-2: theo-don-vi 1440 — phai <n>px (Thoa thuan 0px)" voi n >= 300, ma 1.
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dhk_hanh_dong
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ten ca "dhk-hanh-dong". Moi trang trong 5 the: [data-slot=page-shell-actions] chua theo thu tu o chu
+      ky, nut «…», (pha lap-ke-hoach) nhom soan, nut chinh [data-nut=them-muc-tieu]; than trang Theo don vi
+      ([data-hang-nut]) khong con [data-nut=them-muc-tieu], [data-nut=nhap-bang-tinh], [data-nhom-soan].
+      Nut «Hỏi Kara» cua hang hoi-dap-okr: neu cay co thanh phan NutHoiKara (rut luc chay bang git grep, khong
+      viet tay) thi no nam trong [data-slot=page-shell-actions] va so phan tu ky vong cong them 1; cay khong co
+      thi khong doi so. Hai nhanh deu phai tung DO (Dieu phoi M5 15/10 — nhanh tu re theo git grep ma chua
+      tung do la nhanh xanh rong): pha-thu (DHK_PHA=hoi-kara-ngoai-hang: ban sao co them mot NutHoiKara gia, dat
+      trong than trang thay vi hang hanh dong) -> "dhk-hanh-dong: co NutHoiKara nhung khong nam trong
+      page-shell-actions"; pha-thu (DHK_PHA=thua-cho-hoi-kara: ban sao KHONG co NutHoiKara ma hang hanh dong co
+      them mot nut gia o cho cua no) -> "dhk-hanh-dong: theo-don-vi lap-ke-hoach co 5 phan tu, mong 4".
+      Ma tran 5 the x 2 pha chu ky (lap-ke-hoach, dang-chay) = 10 o, so phan tu trong hang hanh dong = 4 / 3.
+      CHIEU DO (DHK_PHA=nut-giua-than) -> "dhk-hanh-dong: theo-don-vi con nut them-muc-tieu trong than".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dhk_don_dich
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ten ca "dhk-don-dich". Ma tran viet truoc cua ham giai don vi dich (the khac Theo don vi): nguon don
+      (co donOkr bp / pb / nguoi / goc, co donOkr la don vi nguoi xem KHONG sua duoc, khong co) x nguoi xem
+      (quan tri, truong bo phan B1, truong phong ban P2, truong ca B1 lan P3, thanh vien khong dan ai) = 30 o,
+      moi o mot assert ket qua theo thu tu: don vi minh dan -> donOkr -> goc (vd donOkr=pb:P9 + truong phong
+      ban P2 -> pb:P2; khong donOkr + thanh vien -> goc; donOkr=pb:P9 + quan tri -> pb:P9). Them: o the cua-toi, nut chinh la lien ket toi
+      /ws/okr/theo-don-vi?kyOkr=<K>&donOkr=<dich>&<khoa tao>=true; o theo-don-vi bam nut dat khoa tao
+      tren duong dan hien tai va NganTaoMucTieu mo voi don = don dang chon. Ngan tao gui dung thu tuc tao muc tieu
+      NganTaoMucTieu goi hom nay, voi don vi dich; du lieu parse bang schema input that cua thu tuc.
+      CHIEU DO (DHK_PHA=dich-goc: ban sao giai don vi dich luon tra goc) -> "dhk-don-dich: khong donOkr +
+      truong bo phan B1: mong bp:B1, nhan goc". Pha-thu hai (DHK_PHA=xem-truoc: ban sao uu tien donOkr truoc
+      don vi minh dan) -> "dhk-don-dich: donOkr=pb:P9 + truong phong ban P2: mong pb:P2, nhan pb:P9".
+
+  - id: E5
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dhk_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
+    expected: |
+      Cung phien do cua E2 (EVAL=E5). Dang nhap truong phong ban P1 cua bo OKR mau, mo /okr (Cua toi),
+      bam «Thêm mục tiêu» -> trang Theo don vi P1 voi ngan tao mo; go ten «DHK thu tao», luu. Script doc
+      kho do qua Prisma: dong "DUNG AC-3: muc tieu «DHK thu tao» thuoc phong-ban P1, ky <K>" (level
+      phong-ban, departmentId = P1, cycleId = chu ky dang chon) va anh tao-tu-cua-toi.png; don theo id o
+      cuoi ke ca khi do. Luot di-ve: cung truong P1 mo Theo don vi P2 (khong sua duoc), sang Cua toi -> nut
+      chinh bat, bam -> ngan tao cua P1 ("DUNG AC-3 di-ve: nut bat, dich phong-ban P1"). CHIEU DO (DHK_PHA=dich-goc: ban sao giai don vi dich luon tra goc) -> truong P1
+      khong tao duoc o goc nen ngan khong mo: "SAI AC-3: ngan tao khong mo sau khi bam o Cua toi", ma 1.
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dhk_menu_soan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ten ca "dhk-menu-soan". (a) Nut «…» mo menu co dung mot muc «Nhập từ bảng tính»; chon o theo-don-vi
+      -> HopThoaiNhapOkr mo voi don dang chon; chon o cua-toi -> dieu huong toi theo-don-vi cua don vi dich
+      voi khoa mo hop nhap, hop mo sau khi dung trang. (b) Nhom soan o dau trang, pha lap-ke-hoach: bam ->
+      useOpenRecord nhan {kind:"soan"} cua cuoc cho don vi dich (cung du lieu nhu NutSoan o than hom nay).
+      (c) Ma tran ly do khoa rieng cua soan: chua-cau-hinh, het-luot, het-tran, chua-co-khoa, tam-nghi = 5
+      o, moi o nut «i» mo popover co dung chuoi okrSoanMessages tuong ung (rut tu messages that). (d) Doi so
+      cua truy van okr.danhSach va okr.soanSanSang ma dau trang goi bang dung don vi dich do ham giai cua E4
+      tinh (khong viet tay) — o cua-toi voi donOkr=pb:P9 + truong P2, doi so la pb:P2.
+      CHIEU DO (DHK_PHA=nhap-sai-don: ban sao mo hop nhap voi goc thay don vi dich) -> "dhk-menu-soan:
+      hop nhap mo cho goc, mong pb:P2".
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dhk_khoa_ly_do
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ten ca "dhk-khoa-ly-do". Ma tran viet truoc: canCreate (true, false) x nguon dich (chon don vi, don vi
+      minh dan, khong dan ai) x pha (lap-ke-hoach, dang-chay) = 12 o. Moi o: canCreate=false -> nut chinh,
+      muc nhap, (lap-ke-hoach) nut soan co disabled va aria-describedby = id cua DUNG MOT
+      [data-slot=page-shell-note]; noi dung dong = cau cua nguon (rut tu okrMessages that, ten don vi chen
+      dung); canCreate=true -> 0 page-shell-note cua khu va khong dieu khien nao disabled vi quyen. Muc Nhap
+      va nut chinh luon cung trang thai (mot co canCreate — may chu dung nhapDuoc cho ca tao va nhap). Doi so
+      truy van okr.danhSach = don vi dich tu ham giai E4. Them:
+      duong dan co khoa tao + canCreate=false -> ngan khong mo, khoa roi URL. DOI CHUNG DUONG: o (true,
+      chon don vi, dang-chay) nut bat.
+      CHIEU DO (DHK_PHA=an-nut: ban sao tra null khi khong du quyen nhu cu) -> "dhk-khoa-ly-do: nut them-
+      muc-tieu vang khi canCreate=false (chon don vi, dang-chay)".
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dhk_giu_don
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
+      - "apps/app/app/(app)/[slug]/okr/tab-okr.ts"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ten ca "dhk-giu-don". Ma tran: duong dan dang dung (co ky + don, chi ky, chi don, khong gi, co ky + don
+      + xemOkr + phuTrach + dialog.create) x 5 the = 25 lien ket, moi lien ket mot assert: tap tham so ==
+      giao cua {kyOkr, donOkr} voi tham so dang co. Vong di-ve: dat URL theo-don-vi?kyOkr=K&donOkr=pb:P2,
+      lan luot bam 4 the khac roi bam Theo don vi -> URL cuoi chua kyOkr=K&donOkr=pb:P2.
+      CHIEU DO (DHK_PHA=bo-don: ban sao toi() chi giu ky nhu cu) -> "dhk-giu-don: lien ket toan-canh thieu
+      donOkr=pb:P2".
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dhk_suc_khoe
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/**"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ten ca "dhk-suc-khoe", vi va en: h1 == rail.okr; tab toan-canh co aria-current=page; muc dau
+      breadcrumb == nhan the dang chon (rut tu the co aria-current, khong viet tay); muc cuoi == phan dau
+      cua tieu de trinh duyet (generateMetadata); href muc dau giu kyOkr va donOkr dang co; quet moi chuoi
+      cua okrToanCanhMessages(en) khong co "Programme". CHIEU DO (DHK_PHA=breadcrumb-cu: ban sao lien ket
+      chi giu ky) -> "dhk-suc-khoe: lien ket Toan canh thieu donOkr".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.dhk_dang_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+    expected: |
+      Ten ca "dhk-dang-tai". (a) Truy van quyen dang cho: h1 va mo ta hien, hang hanh dong co khung xuong
+      [data-slot=skeleton] va 0 nut; (b) truy van quyen loi: nut chinh disabled, aria-describedby tro dong
+      «Chưa tải được quyền của bạn — tải lại trang để thử lại.» (rut tu messages). CHIEU DO
+      (DHK_PHA=an-khi-loi: ban sao tra null khi loi) -> "dhk-dang-tai: nut them-muc-tieu vang khi quyen loi".
+
+  - id: E11
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.dhk_ho_so_da_ky
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/**"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs"
+    expected: |
+      rang/ho-so-da-ky.mjs rut LUC CHAY danh sach eval may cua moi ho so signed-off/machine-cleared
+      co cmd tro mot khoa config chay tep kiem bi lượt nay sua (tap tep = git diff --name-only <merge-base>
+      -- apps/app/test), chay tung lenh (trung lenh chay mot lan), in "HO-SO <slug> <E>: ma <n> (ky vong
+      <m>)" moi dong va dong cham "DUNG AC-9: k/k lenh dat ma ky vong". Tap rong -> ma 2 "bo chon rong".
+      CHIEU DO (DHK_PHA=ho-so: ban sao mot tep kiem bi sua them expect(false)) -> "SAI AC-9: <slug> <E>:
+      ma 1 (ky vong 0)", ma 1.
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.dhk_proto
+    paths:
+      - "apps/app/app/proto/**"
+      - "docs/superpowers/specs/2026-10-15-dieu-huong-khu-muc-tieu-design.md"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/proto-khu.mjs"
+    expected: |
+      exit 0; rang/proto-khu.mjs rut danh sach id ST-dhk-* tu bang UX-STATE-TABLE cua design doc luc chay
+      (duong suy tu vi tri script), bo hai id do tren app that (ST-dhk-dang-tai, ST-dhk-loi-quyen); muc
+      dieu-huong-khu-muc-tieu trong PROTO_CATALOG co dung tap do; module ban mau dung 5 the cua tab-okr.ts;
+      roi test/proto-catalog.spec.ts xanh. CHIEU DO: ban sao design doc them dong ST-dhk-gia phai in
+      'thieu state: ST-dhk-gia' va ma 1.
+
+  - id: E13
+    criterion: AC-11
+    executor: judgment
+    question: >-
+      Đặt cạnh nhau các ảnh đầu trang khu Mục tiêu (Theo đơn vị, Của tôi, Sức khoẻ chương trình) và
+      đầu trang Thoả thuận ở 1440 px và 390 px, cùng ảnh trạng thái nút khoá: một người không làm lượt
+      này có đọc được khu Mục tiêu dùng cùng một khuôn đầu trang với Thoả thuận — tên khu bên trái,
+      nút chính bên phải, thanh thẻ ngay dưới — và dòng lý do khoá đọc được ngay dưới tiêu đề không?
+    inputs:
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-theo-don-vi-1440.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-theo-don-vi-390.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-cua-toi-1440.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-cua-toi-390.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-suc-khoe-1440.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-suc-khoe-390.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-deals-1440.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/dau-trang-deals-390.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/khoa-ly-do-1440.png
+      - _acceptance/dieu-huong-khu-muc-tieu/evidence/khoa-ly-do-390.png
+    expected: "Đọc được cùng khuôn ở cả hai khổ; dòng lý do nằm ngay dưới tiêu đề và nói vì sao nút khoá."
+
+  - id: E15
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dhk_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
+    expected: |
+      Cung phien do cua E2 (EVAL=E15), may chu that, quyen do okr-access.service.ts tinh. Hai ca viet truoc:
+      (a) thanh vien khong dan ai o /okr -> nut chinh va muc Nhap disabled, aria-describedby tro dong
+      «Bạn chưa dẫn đơn vị nào…» (rut tu okrMessages); (b) truong P1 o Theo don vi P2 -> cau «Bạn xem được
+      <tên P2 doc tu kho do>…». Them: goi thang thu tuc tao muc tieu bang phien cua thanh vien (a) cho don vi
+      dich cua no -> may chu tu choi (khong du quyen) — dau trang khoa dung cai may chu chan. Dong "DUNG AC-5 may
+      chu: 2/2 ca khoa dung cau + tu choi khop". DOI CHUNG DUONG: truong P1 o /okr -> nut bat. CHIEU DO
+      (DHK_PHA=an-nut) -> "SAI AC-5: (a) nut them-muc-tieu vang", ma 1.
+
+  - id: E16
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dhk_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
+    expected: |
+      Cung phien do cua E2 (EVAL=E16). Truong P1 o /okr (Cua toi) mo «…» -> «Nhập từ bảng tính» -> trang sang
+      Theo don vi P1, hop nhap mo; dan hai dong mau, bam xem truoc -> script bat yeu cau okr.previewImport tren
+      mang trinh duyet va doc don vi trong than yeu cau = phong-ban P1 ("DUNG AC-4: xem truoc nhap gui don vi
+      phong-ban P1"); khong luu (khong ghi kho). CHIEU DO (DHK_PHA=nhap-sai-don) -> "SAI AC-4: xem truoc nhap gui
+      goc, mong phong-ban P1", ma 1.

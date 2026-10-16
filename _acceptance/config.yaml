@@ -1798,6 +1798,15 @@ executors:
     kv_man_tra_ve: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-tra-ve"
     kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
     kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
+    # dieu-huong-khu-muc-tieu (DH1): mỗi khoá chạy một nhóm dhk-* hai chiều (đối chứng dương + đột biến ghim thông điệp).
+    dhk_tieu_de: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-tieu-de
+    dhk_hanh_dong: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-hanh-dong
+    dhk_don_dich: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-don-dich
+    dhk_menu_soan: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-menu-soan
+    dhk_khoa_ly_do: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-khoa-ly-do
+    dhk_giu_don: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-giu-don
+    dhk_suc_khoe: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-suc-khoe
+    dhk_dang_tai: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-dang-tai
     thk_mac_dinh: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-mac-dinh"'
     thk_haiku: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-haiku"'
     thk_gia_tri_la: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-gia-tri-la"'
@@ -2887,6 +2896,10 @@ executors:
     hdo_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoi-dap-okr/rang/man-hoi.mjs"'
     nltk_ba_ngay: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs
     nltk_pham_vi: bun _acceptance/ngay-lich-test-tao-ke-hoach/rang/ba-ngay.mjs --pham-vi
+    # dieu-huong-khu-muc-tieu (DH1)
+    dhk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"'
+    dhk_ho_so_da_ky: bun _acceptance/dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs
+    dhk_proto: bun _acceptance/dieu-huong-khu-muc-tieu/rang/proto-khu.mjs
     dh4_giu_ho_so: bun _acceptance/so-do-can-chinh-don-vi/rang/giu-ho-so.mjs
     dh4_ranh_gioi: node _acceptance/so-do-can-chinh-don-vi/rang/ranh-gioi.mjs
     dh4_dot_bien: bun _acceptance/so-do-can-chinh-don-vi/rang/dot-bien.mjs
