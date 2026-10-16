@@ -62,14 +62,14 @@ async function goiYCho(dealId: string) {
 	return ds.filter((g) => g.trangThai === "CHO");
 }
 
-const DICH: Record<
-	Exclude<LoaiO, "tao">,
-	Record<"mo" | "thang" | "thua", string>
-> = {
+const DICH = {
 	mo: { mo: "M2", thang: "W", thua: "L" },
 	thang: { mo: "M1", thang: "W2", thua: "L" },
 	thua: { mo: "M1", thang: "W", thua: "L2" },
-};
+} as const satisfies Record<
+	Exclude<LoaiO, "tao">,
+	Record<"mo" | "thang" | "thua", keyof GiaiDoanGieo>
+>;
 
 const MA_TRAN: { tu: LoaiO; den: "mo" | "thang" | "thua"; sinh: boolean }[] = [
 	{ tu: "tao", den: "mo", sinh: false },
@@ -86,8 +86,8 @@ const MA_TRAN: { tu: LoaiO; den: "mo" | "thang" | "thua"; sinh: boolean }[] = [
 	{ tu: "thua", den: "thua", sinh: false },
 ];
 
-function giaiDoanCua(ten: string): string {
-	return gd[ten as keyof GiaiDoanGieo];
+function giaiDoanCua(ten: keyof GiaiDoanGieo): string {
+	return gd[ten];
 }
 
 async function chayO(o: (typeof MA_TRAN)[number]) {
