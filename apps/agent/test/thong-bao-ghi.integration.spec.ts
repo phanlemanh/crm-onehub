@@ -58,6 +58,7 @@ const APP_URL = "https://crm.test";
 const GOC_KHO = resolve(import.meta.dir, "../../..");
 const TEP_CHUP = join(import.meta.dir, "fixtures/tin-nhac-truoc-tb1.json");
 const MOC_TRUOC_VONG = "762acca38";
+const MOC_SAU_VONG = "b57509860";
 
 function coMocTruocVong(maCa: string): boolean {
 	const co = spawnSync("git", [
@@ -409,7 +410,7 @@ describe("htb-kenh", () => {
 		const suaNhac = git(
 			"log",
 			"--format=%H",
-			`${MOC_TRUOC_VONG}..HEAD`,
+			`${MOC_TRUOC_VONG}..${MOC_SAU_VONG}`,
 			"--",
 			"apps/agent/agent/lib/nhac-ke-hoach.ts",
 		)

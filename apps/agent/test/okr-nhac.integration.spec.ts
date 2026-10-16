@@ -407,7 +407,7 @@ describe("mot-tin", () => {
 				text.indexOf("Cập nhật tuần") >= 0 &&
 				text.indexOf("Cập nhật tuần") < text.indexOf("Quá hạn"),
 			dongCapNhat: dongCo(text, "KR chờ cập nhật").map((d) =>
-				d.includes(`${APP_URL}/${s}/okr/cap-nhat-tuan?tu=nhac`),
+				d.includes(`${APP_URL}/${s}/okr?tu=nhac`),
 			),
 			dongNhacTen: dongCo(text, "nhắc tên bạn").map((d) =>
 				d.includes(`/okr?record=objective:${g.oA}`),
