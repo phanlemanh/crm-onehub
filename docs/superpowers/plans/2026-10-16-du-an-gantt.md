@@ -22,6 +22,9 @@
 - Giao diện chỉ từ `packages/ui`; màu trạng thái qua `toneTheoNghia`; dữ liệu người nhập `translate="no"`; nhãn qua `messages`.
 - `migration` mới mang mốc sau `20261015234401_ke_hoach_sinh_viec`; trước khi gộp onehub dời mốc nếu onehub có migration mới hơn.
 - Luật phối hợp crm: S4, đột biến, phiên đo màn xin làn Điều phối M5; sửa `_acceptance/config.yaml` báo #375 trước.
+- Không sửa `apps/app/components/detail-sheet.tsx` và `packages/ui/src/components/status-indicator.tsx`: hồ sơ đã ký
+  `bo-cuc-hep-ngan-va-kanban` (#440, onehub `04ddefc4f`) đo hai tệp này ở E1–E6, E8; DA4 chỉ dùng chúng. Cần đổi thì
+  báo #375 và Điều phối trước. `apps/app/lib/trpc/cache.ts` (#440 vừa sửa) chỉ được THÊM khoá làm mới ở Task 9.
 
 ## Review Focus
 
