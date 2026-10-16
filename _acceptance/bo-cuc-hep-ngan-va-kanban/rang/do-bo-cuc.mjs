@@ -13,6 +13,7 @@ const HEP = 375;
 const RONG = 1440;
 const CHO_MS = 30_000;
 const RONG_TIEU_DE_TOI_THIEU = 120;
+const PHAN_TU_NGAN_TOI_THIEU = 100;
 const MA = `bch${Date.now().toString(36).slice(-5)}`;
 
 const dai = (dau) => `${dau}${MA}`.padEnd(120, "x");
@@ -27,6 +28,7 @@ const TEP_STATS = "apps/app/components/detail-sheet.tsx";
 const TEP_BOARD = "apps/app/app/(app)/[slug]/deals/deals-board.tsx";
 const TEP_DEAL = "apps/app/components/crm/record-sheet/deal-sheet.tsx";
 const TEP_STEPPER = "apps/app/components/crm/stage-stepper.tsx";
+const TEP_CONG_TY = "apps/app/components/crm/record-sheet/company-sheet.tsx";
 
 const CAY_DO = {
 	1: {
@@ -106,6 +108,45 @@ const CAY_DO = {
 			),
 		dauVet: '<div className="min-w-0 flex-1 space-y-0.5 pt-0.5">',
 		ghim: /bch-man: tieu de ngan bi bop/,
+	},
+	8: {
+		nhan: "ban sao o Phu trach chi hien anh dai dien",
+		tenCay: "bch-chieu-do-8",
+		chiBuoc: "2",
+		tep: TEP_DEAL,
+		cam: (s) =>
+			s.replace(
+				"<OwnerCell owner={deal.owner} xuongDongDienThoai />",
+				"<OwnerCell owner={deal.owner} compact />",
+			),
+		dauVet: "<OwnerCell owner={deal.owner} compact />",
+		ghim: /bch-man: ngan so lieu thieu ten phu trach/,
+	},
+	9: {
+		nhan: "ban sao ten buoc khong xuong dong khong cat",
+		tenCay: "bch-chieu-do-9",
+		chiBuoc: "6",
+		tep: TEP_STEPPER,
+		cam: (s) =>
+			s.replace(
+				'<span className="block wrap-anywhere md:truncate">',
+				'<span className="block whitespace-nowrap">',
+			),
+		dauVet: '<span className="block whitespace-nowrap">',
+		ghim: /bch-man: tran ngang ngan/,
+	},
+	10: {
+		nhan: "ban sao o Phu trach ngan cong ty bo xuongDongDienThoai",
+		tenCay: "bch-chieu-do-10",
+		chiBuoc: "4",
+		tep: TEP_CONG_TY,
+		cam: (s) =>
+			s.replace(
+				"<OwnerCell owner={company.owner} xuongDongDienThoai />",
+				"<OwnerCell owner={company.owner} />",
+			),
+		dauVet: "<OwnerCell owner={company.owner} />",
+		ghim: /bch-man: ngan cong ty cat chu/,
 	},
 	6: {
 		nhan: "ban sao buoc chot bo bien the xuong dong",
@@ -262,7 +303,8 @@ const doStats = (t) =>
 				}
 			}
 		}
-		return { o: o.length, dinh, chu, phanTu, cat };
+		const cuoi = o.at(-1)?.querySelector("dd")?.textContent ?? "";
+		return { o: o.length, dinh, chu, phanTu, cat, cuoi };
 	});
 
 const doThanh = (t) =>
@@ -299,24 +341,36 @@ const doTranNgan = (t) =>
 			.at(-1);
 		if (!k) return { loi: "khong thay ngan" };
 		const r = k.getBoundingClientRect();
-		const biCat = (e) => {
+		const cuon = (v) => v === "auto" || v === "scroll";
+		const khungNgang = (p) => {
+			const st = getComputedStyle(p);
+			return cuon(st.overflowX) && !cuon(st.overflowY);
+		};
+		const catChu = (p) => getComputedStyle(p).textOverflow === "ellipsis";
+		const boQua = (e) => {
 			for (let p = e.parentElement; p && p !== k; p = p.parentElement) {
-				if (getComputedStyle(p).overflowX !== "visible") return true;
+				if (khungNgang(p) || catChu(p)) return true;
 			}
 			return false;
 		};
+		const ten = (e) =>
+			`${e.tagName.toLowerCase()}${e.getAttribute("data-slot") ? `[${e.getAttribute("data-slot")}]` : ""}`;
 		let dem = 0;
 		const tran = [];
 		for (const e of k.querySelectorAll("*")) {
 			if (!e.checkVisibility()) continue;
 			const q = e.getBoundingClientRect();
 			if (q.width === 0 && q.height === 0) continue;
-			if (biCat(e)) continue;
+			if (boQua(e)) continue;
 			dem += 1;
-			if (q.right > r.right + 1)
-				tran.push(
-					`${e.tagName.toLowerCase()}${e.getAttribute("data-slot") ? `[${e.getAttribute("data-slot")}]` : ""}`,
-				);
+			if (q.right > r.right + 1 || q.left < r.left - 1) tran.push(ten(e));
+			const st = getComputedStyle(e);
+			if (
+				cuon(st.overflowY) &&
+				!khungNgang(e) &&
+				e.scrollWidth > e.clientWidth + 1
+			)
+				tran.push(`cuon ngang ${ten(e)}`);
 		}
 		const tieuDe = k.querySelector(
 			'[data-slot="drawer-title"], [data-slot="sheet-title"]',
@@ -355,7 +409,10 @@ try {
 		label: NHAN_CHOT_DAI,
 		kind: "WON",
 	});
-	const cty = await d.lam(c, "companies.create", { name: TEN_CONG_TY });
+	const cty = await d.lam(c, "companies.create", {
+		name: TEN_CONG_TY,
+		ownerId: nguoiDai.id,
+	});
 	const taoDeal = async (name, ownerId, stage) => {
 		const r = await d.lam(c, "deals.create", {
 			name,
@@ -419,7 +476,9 @@ try {
 				if (!(s.dinh[2] > s.dinh[0] && s.dinh[3] > s.dinh[1]))
 					loi.push("bch-man: ngan so lieu mot hang");
 				for (const n of s.cat) loi.push(`bch-man: ngan so lieu cat chu ${n}`);
-				console.log("  8 o chu");
+				if (!s.cuoi.replace(/\s/g, "").includes(TEN_NGUOI_DAI))
+					loi.push("bch-man: ngan so lieu thieu ten phu trach");
+				console.log(`  ${s.chu} o chu, phu trach ${s.cuoi.length} ky tu`);
 			}
 			await chup(t, "bch-ngan-thoa-thuan-375.png");
 			await t.close();
@@ -476,6 +535,8 @@ try {
 				if (!(s.dinh[2] > s.dinh[0] && s.dinh[3] > s.dinh[1]))
 					loi.push("bch-man: ngan cong ty mot hang");
 				for (const n of s.cat) loi.push(`bch-man: ngan cong ty cat chu ${n}`);
+				if (!s.cuoi.replace(/\s/g, "").includes(TEN_NGUOI_DAI))
+					loi.push("bch-man: ngan cong ty thieu ten phu trach");
 			}
 			await chup(t, "bch-ngan-cong-ty-375.png");
 			await t.close();
@@ -527,6 +588,8 @@ try {
 				console.log(
 					`  do buoc 6: ${n.dem} phan tu trong ngan, tran ${n.so}, tieu de rong ${n.rongTieuDe}px`,
 				);
+				if (n.dem < PHAN_TU_NGAN_TOI_THIEU)
+					loi.push(`bch-man: tran ngang do qua it phan tu ${n.dem}`);
 				if (n.rongTieuDe < RONG_TIEU_DE_TOI_THIEU)
 					loi.push(`bch-man: tieu de ngan bi bop ${n.rongTieuDe}px`);
 				for (const x of n.tran) loi.push(`bch-man: tran ngang ngan ${x}`);

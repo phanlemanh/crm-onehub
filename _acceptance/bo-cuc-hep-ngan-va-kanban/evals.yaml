@@ -31,7 +31,7 @@ evals:
       - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
       - "apps/app/components/crm/owner-cell.tsx"
       - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
-    expected: "exit 0; do-bo-cuc.mjs in 'buoc 2: dat' va '8 o chu'. Vi pham in 'bch-man: ngan so lieu cat chu <nhan>' hoac 'bch-man: ngan so lieu mot hang', ma 1. 'Cat chu' do tren moi phan tu con cua tung o, khong chi dt va dd. CHIEU DO tren ban sao (E7): (1) DetailSheetStats tra ve mot hang flex -> ghim 'bch-man: ngan so lieu mot hang'; (4) o Phu trach bo xuongDongDienThoai -> ghim 'bch-man: ngan so lieu cat chu'."
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 2: dat' va '8 o chu, phu trach <n> ky tu' (so that). textContent o Phu trach (bo khoang trang) chua du ten 120 ky tu, khong thi in 'bch-man: ngan so lieu thieu ten phu trach'. Vi pham in 'bch-man: ngan so lieu cat chu <nhan>' hoac 'bch-man: ngan so lieu mot hang', ma 1. 'Cat chu' do tren moi phan tu con cua tung o, khong chi dt va dd. CHIEU DO tren ban sao (E7): (1) DetailSheetStats tra ve mot hang flex -> ghim 'bch-man: ngan so lieu mot hang'; (4) o Phu trach bo xuongDongDienThoai -> ghim 'bch-man: ngan so lieu cat chu'; (8) o Phu trach chi hien anh dai dien -> ghim 'bch-man: ngan so lieu thieu ten phu trach'."
 
   - id: E3
     criterion: AC-3
@@ -53,12 +53,12 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.bch_man
     steps:
-      - "Buoc 4 (375): mo ngan cong ty da gieo (ten 120 ky tu); trong [data-slot=detail-sheet-stats]: bon o, hai hang, moi dt va dd scrollWidth <= clientWidth + 1; chup bch-ngan-cong-ty-375.png"
+      - "Buoc 4 (375): mo ngan cong ty da gieo (ten 120 ky tu, nguoi phu trach ten 120 ky tu); trong [data-slot=detail-sheet-stats]: bon o, hai hang, moi dt va dd scrollWidth <= clientWidth + 1; chup bch-ngan-cong-ty-375.png"
     paths:
       - "apps/app/components/detail-sheet.tsx"
       - "apps/app/components/crm/record-sheet/company-sheet.tsx"
       - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
-    expected: "exit 0; do-bo-cuc.mjs in 'buoc 4: dat'. Vi pham in 'bch-man: ngan cong ty cat chu <nhan>' hoac 'bch-man: ngan cong ty mot hang', ma 1."
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 4: dat'. Vi pham in 'bch-man: ngan cong ty cat chu <nhan>', 'bch-man: ngan cong ty thieu ten phu trach' hoac 'bch-man: ngan cong ty mot hang', ma 1. CHIEU DO tren ban sao (E7): (10) o Phu trach ngan cong ty bo xuongDongDienThoai -> ghim 'bch-man: ngan cong ty cat chu'."
 
   - id: E5
     criterion: AC-5
@@ -85,7 +85,7 @@ evals:
       - "apps/app/components/detail-sheet.tsx"
       - "apps/app/app/(app)/[slug]/deals/deals-board.tsx"
       - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
-    expected: "exit 0; do-bo-cuc.mjs in 'buoc 6: dat' va be rong tieu de. Vi pham in 'bch-man: tran ngang <noi>' hoac 'bch-man: tieu de ngan bi bop <px>' (tieu de duoi 120 px, Hoi-5), ma 1. CHIEU DO tren ban sao (E7): (7) tieu de dau ngan bo be rong toi thieu -> ghim 'bch-man: tieu de ngan bi bop'."
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 6: dat' va be rong tieu de. Vi pham in 'bch-man: tran ngang <noi>' hoac 'bch-man: tieu de ngan bi bop <px>' (tieu de duoi 120 px, Hoi-5), ma 1. CHIEU DO tren ban sao (E7): (7) tieu de dau ngan bo be rong toi thieu -> ghim 'bch-man: tieu de ngan bi bop'; (9) ten buoc khong xuong dong khong cat -> ghim 'bch-man: tran ngang ngan'. Phep quet tran tinh ca than ngan (khung cuon doc), chi bo qua khung cuon ngang co chu dich va phan tu cat chu bang dau ba cham; khung cuon doc nao cuon ngang cung la tran; duoi 100 phan tu da do thi in 'bch-man: tran ngang do qua it phan tu <n>'."
 
   - id: E7
     criterion: AC-2
@@ -93,7 +93,7 @@ evals:
     cmd: config:executors.script.bch_man_do
     paths:
       - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
-    expected: "exit 0; do-bo-cuc.mjs --chi-do chay sau chieu do tren ban sao rieng, moi chieu pha dung mot thu ban sua giu: (1) hang so lieu tra ve mot hang, (2) the bo flex-wrap, (3) the bo bien the xuong dong, (4) o Phu trach bo xuongDongDienThoai, (5) ten buoc truncate, (6) buoc chot bo bien the xuong dong, (7) tieu de dau ngan bo be rong toi thieu; moi chieu ra dung thong diep ghim cua E1/E2/E3/E6 va ma 1, roi in 'bch-man-do: 7/7 chieu do ra dung ghim'. Thieu mot chieu hay mot chieu ra ma 0 -> do."
+    expected: "exit 0; do-bo-cuc.mjs --chi-do chay sau chieu do tren ban sao rieng, moi chieu pha dung mot thu ban sua giu: (1) hang so lieu tra ve mot hang, (2) the bo flex-wrap, (3) the bo bien the xuong dong, (4) o Phu trach bo xuongDongDienThoai, (5) ten buoc truncate, (6) buoc chot bo bien the xuong dong, (7) tieu de dau ngan bo be rong toi thieu, (8) o Phu trach chi hien anh dai dien, (9) ten buoc khong xuong dong khong cat, (10) o Phu trach ngan cong ty bo xuongDongDienThoai; moi chieu ra dung thong diep ghim cua E1/E2/E3/E4/E6 va ma 1, roi in 'bch-man-do: 10/10 chieu do ra dung ghim'. Thieu mot chieu hay mot chieu ra ma 0 -> do."
 
   - id: E8
     criterion: AC-7
