@@ -87,6 +87,17 @@ try {
 	return doc.id;
 }
 
+type HangPg = {
+	id: string;
+	at: Date | string;
+	sessionId: string;
+	phienCha: string | null;
+	modelId: string | null;
+	inputTokens: number | null;
+	outputTokens: number | null;
+	costUsd: string | number | null;
+};
+
 async function ketXuat(url: string, phien: string) {
 	const c = new pg.Client({ connectionString: url });
 	await c.connect();
@@ -95,7 +106,7 @@ async function ketXuat(url: string, phien: string) {
 			`select id, at, "sessionId", "phienCha", "modelId", "inputTokens", "outputTokens", "costUsd" from "aiChiPhi" where "sessionId" = $1 or "phienCha" = $1 order by at asc`,
 			[phien],
 		);
-		return r.rows.map((h: Record<string, unknown>) => ({
+		return (r.rows as HangPg[]).map((h) => ({
 			...h,
 			at: h.at instanceof Date ? h.at.toISOString() : String(h.at),
 			costUsd: h.costUsd === null ? null : Number(h.costUsd),
