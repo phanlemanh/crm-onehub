@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 30b11d1a259e16a438613c61bf8fca8412283359
+verified_commit: a69d0d9d910e92978528b134caace5fc7c7f9d88
 human_signoff: Phan Le Manh 2026-10-17 — ký Cổng Bằng chứng trên S4 lượt 3 (PASS; E1–E3, E5 máy đạt, E4 hội đồng 2–1 PASS sau hai lượt sửa kết luận; làn trước chữ ký repin-20261016T232358Z-66317 xanh). Ngoài-1 đến Ngoài-9 ghi Known limits; Ngoài-10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -133,3 +133,7 @@ Round 1: S4 round 1 — PENDING-JUDGMENT, hoi dong E4 de xuat FAIL 2–1, 15 muc
 Round 2: S4 round 2 — PENDING-JUDGMENT, hoi dong E4 2–1 de xuat FAIL vi mot cau suy so buoc bi cat; 8 muc ngoai hop dong. Ket-luan.md sua lai: thoi so so buoc bi cat voi so buoc tron, nguyen nhan dua tren ket cuc 0/3 thanh 3/3. Returned to implementation.
 Round 3: E1, E2 chay lai (sau khi sua ket-luan.md va bo so); E3, E5 carry-forward tu round 2; 7 lenh suite xanh; E4 hoi dong 2–1 de xuat PASS (mot y kien thieu so ve mot cau thieu ten tep nhat ky, nguoi quyet o Cong 2). Verdict PASS.
 
+
+### Re-pin lần 1 — 2026-10-16, do hoá cũ do gộp onehub (hai workflow .github) sau verify
+run_id: repin-20261016T233139Z-48600
+sha: a69d0d9d910e92978528b134caace5fc7c7f9d88 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
