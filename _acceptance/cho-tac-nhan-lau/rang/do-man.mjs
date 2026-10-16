@@ -22,14 +22,20 @@ const APP = process.env.APP_URL ?? "http://localhost:3000";
 const QUAN_TRI = process.env.NGUOI ?? "ada@trycomp.ai";
 const CHO_MS = 90_000;
 const DA_CHO_MS = CHO_TAC_NHAN.nguongLauMs + 50_000;
+const DUOI_MS = 5_000;
+const LECH_GIAY = 5;
+const CHU_CU = "Chạy ngầm";
 const TEN_TAC_NHAN = "Đo màn: tóm tắt deal mỗi sáng";
 const t = troChuyenMessages("vi");
 const MA_TRAN = [
-	"the-1280",
-	"the-375",
+	"tren-nguong-1280",
+	"tren-nguong-375",
+	"duoi-nguong-1280",
+	"duoi-nguong-375",
 	"chuong-1280",
 	"mo-tu-chuong-1280",
 	"chuong-375",
+	"mo-tu-chuong-375",
 ];
 const THE = "[data-slot=the-dang-dung]";
 const CHUONG = "[data-slot=chuong-thong-bao]";
@@ -40,6 +46,7 @@ const daPhat = new Set();
 let sai = 0;
 let trinhDuyet = null;
 const tao = { user: null, member: null, hoiThoai: [], agent: null };
+const batDau = new Map();
 
 function kiem(ma, nhan, dat) {
 	if (!MA_TRAN.includes(ma)) throw new Error(`ma ${ma} khong co trong MA_TRAN`);
@@ -109,18 +116,19 @@ async function nguoiDo() {
 	return { id: nguoi.id, email, ma };
 }
 
-async function hoiThoaiDangDung(nguoi) {
+async function hoiThoaiDangDung(nguoi, daChoMs) {
+	const phienId = `ctnl-phien-${nguoi.ma}-${tao.hoiThoai.length}`;
 	const h = await db.agentConversation.create({
 		data: {
 			userId: nguoi.id,
 			kind: "BUILDER",
 			title: "Đo màn: đang dựng",
-			sessionId: `ctnl-phien-${nguoi.ma}`,
+			sessionId: phienId,
 		},
 		select: { id: true },
 	});
 	tao.hoiThoai.push(h.id);
-	await db.agentConversationSubmission.create({
+	const gui = await db.agentConversationSubmission.create({
 		data: {
 			conversationId: h.id,
 			submittedById: nguoi.id,
@@ -132,19 +140,21 @@ async function hoiThoaiDangDung(nguoi) {
 				attachments: [],
 			},
 			status: "SENDING",
-			createdAt: new Date(Date.now() - DA_CHO_MS),
+			createdAt: new Date(Date.now() - daChoMs),
 		},
+		select: { createdAt: true },
 	});
 	await db.agentEvent.create({
 		data: {
-			id: `${suKienGoiBoDung.meta.id}-${nguoi.ma}`,
-			sessionId: `ctnl-phien-${nguoi.ma}`,
+			id: `${suKienGoiBoDung.meta.id}-${phienId}`,
+			sessionId: phienId,
 			conversationId: h.id,
 			type: suKienGoiBoDung.type,
 			data: suKienGoiBoDung.data,
-			emittedAt: new Date(Date.now() - DA_CHO_MS + 2_000),
+			emittedAt: new Date(gui.createdAt.getTime() + 1_000),
 		},
 	});
+	batDau.set(h.id, gui.createdAt.getTime());
 	return h.id;
 }
 
@@ -235,7 +245,7 @@ const soChuong = (p) =>
 		SO,
 	);
 
-async function kiemThe(p, ma, kho) {
+async function kiemThe(p, ma, kho, id, quaNguong) {
 	const doc = await p.evaluate(() => {
 		const the = document.querySelector("[data-slot=the-dang-dung]");
 		return {
@@ -244,15 +254,18 @@ async function kiemThe(p, ma, kho) {
 			chu: the?.textContent ?? "",
 		};
 	});
-	const phut = Number(/(\d+):\d{2}/.exec(doc.daTroi ?? "")?.[1] ?? -1);
+	const giayThat = Math.floor((Date.now() - batDau.get(id)) / 1000);
+	const khop = /(\d+):(\d{2})/.exec(doc.daTroi ?? "");
+	const giayThe = khop ? Number(khop[1]) * 60 + Number(khop[2]) : -1;
 	const rong = await rongTrang(p);
 	kiem(
 		ma,
-		`thoi gian ${JSON.stringify(doc.daTroi)} (phut ${phut}), dong qua nguong ${JSON.stringify(doc.lauHon)}, rong trang ${rong}`,
-		phut >= Math.floor(DA_CHO_MS / 60_000) &&
-			doc.lauHon === t.dung.lauHon &&
+		`thoi gian ${JSON.stringify(doc.daTroi)} (${giayThe} s, tu luc gui ${giayThat} s), dong qua nguong ${JSON.stringify(doc.lauHon)}, rong trang ${rong}`,
+		giayThe >= 1 &&
+			Math.abs(giayThe - giayThat) <= LECH_GIAY &&
+			doc.lauHon === (quaNguong ? t.dung.lauHon : null) &&
 			doc.chu.includes(t.dung.roiTrang) &&
-			!doc.chu.includes(t.dung.chayNen) &&
+			!doc.chu.includes(CHU_CU) &&
 			rong <= kho,
 	);
 	await anh(p, ma);
@@ -273,13 +286,40 @@ async function dongTacNhan(p) {
 	}, TEN_TAC_NHAN);
 }
 
+async function moTuChuong(p, ma, nguoi, slug, xong, truoc) {
+	const d = await dongTacNhan(p);
+	if (d) await p.click(`[data-slot=danh-sach-thong-bao] a[href="${d.href}"]`);
+	await p
+		.waitForFunction(
+			(id) => location.pathname.endsWith(`/chat/${id}`),
+			{ timeout: CHO_MS },
+			xong,
+		)
+		.catch(() => {});
+	await p
+		.waitForNetworkIdle({ idleTime: 1500, timeout: CHO_MS })
+		.catch(() => {});
+	const daDoc = await db.thongBao.findFirst({
+		where: { nguoiNhanId: nguoi.id, duongDan: `/chat/${xong}` },
+		select: { docLuc: true },
+	});
+	await mo(p, `${APP}/${slug}/chat`, CHUONG);
+	const sau = await soChuong(p);
+	kiem(
+		ma,
+		`mo cuoc tro chuyen tu chuong: docLuc ${daDoc?.docLuc ? "co" : "khong"}, so chua doc ${truoc} -> ${sau}`,
+		Boolean(daDoc?.docLuc) && sau === truoc - 1,
+	);
+	await anh(p, ma);
+}
+
 async function chay() {
 	const cay = await canhCay();
 	if (cay.ket !== "dung-cay") khongDo(`canh cay: ${cay.dong.join(" | ")}`);
 	mkdirSync(RA, { recursive: true });
 	const slug = await suySlug(phien(QUAN_TRI));
 	const nguoi = await nguoiDo();
-	const dangDung = await hoiThoaiDangDung(nguoi);
+	const tren = await hoiThoaiDangDung(nguoi, DA_CHO_MS);
 	const xong = await hoiThoaiXong(nguoi);
 	const c = phien(nguoi.email);
 	trinhDuyet = await puppeteer.launch({
@@ -290,70 +330,49 @@ async function chay() {
 	for (const kho of [1280, 375]) {
 		const { ctx, p } = await trang(c, kho);
 		try {
-			await mo(p, `${APP}/${slug}/chat/${dangDung}`, THE);
-			await kiemThe(p, `the-${kho}`, kho);
+			await mo(p, `${APP}/${slug}/chat/${tren}`, THE);
+			await kiemThe(p, `tren-nguong-${kho}`, kho, tren, true);
 		} finally {
 			await ctx.close();
 		}
 	}
 
-	{
-		const { ctx, p } = await trang(c, 1280);
+	for (const kho of [1280, 375]) {
+		const duoi = await hoiThoaiDangDung(nguoi, DUOI_MS);
+		const { ctx, p } = await trang(c, kho);
+		try {
+			await mo(p, `${APP}/${slug}/chat/${duoi}`, THE);
+			await p
+				.waitForSelector("[data-slot=da-troi]", { timeout: CHO_MS })
+				.catch(() => {});
+			await kiemThe(p, `duoi-nguong-${kho}`, kho, duoi, false);
+		} finally {
+			await ctx.close();
+		}
+	}
+
+	for (const kho of [1280, 375]) {
+		await db.thongBao.updateMany({
+			where: { nguoiNhanId: nguoi.id },
+			data: { docLuc: null },
+		});
+		const { ctx, p } = await trang(c, kho);
 		try {
 			await mo(p, `${APP}/${slug}/chat`, CHUONG);
 			const truoc = await soChuong(p);
 			await moChuong(p);
 			const d = await dongTacNhan(p);
-			kiem(
-				"chuong-1280",
-				`dong tac nhan ${JSON.stringify(d)}, so chua doc ${truoc}`,
-				d !== null && d.href === `/${slug}/chat/${xong}` && truoc >= 1,
-			);
-			await anh(p, "chuong-1280");
-			if (d)
-				await p.click(`[data-slot=danh-sach-thong-bao] a[href="${d.href}"]`);
-			await p.waitForFunction(
-				(id) => location.pathname.endsWith(`/chat/${id}`),
-				{ timeout: CHO_MS },
-				xong,
-			);
-			await p
-				.waitForNetworkIdle({ idleTime: 1500, timeout: CHO_MS })
-				.catch(() => {});
-			const daDoc = await db.thongBao.findFirst({
-				where: { nguoiNhanId: nguoi.id, duongDan: `/chat/${xong}` },
-				select: { docLuc: true },
-			});
-			await mo(p, `${APP}/${slug}/chat`, CHUONG);
-			const sau = await soChuong(p);
-			kiem(
-				"mo-tu-chuong-1280",
-				`mo cuoc tro chuyen tu chuong: docLuc ${daDoc?.docLuc ? "co" : "khong"}, so chua doc ${truoc} -> ${sau}`,
-				Boolean(daDoc?.docLuc) && sau === truoc - 1,
-			);
-			await anh(p, "mo-tu-chuong-1280");
-		} finally {
-			await ctx.close();
-		}
-	}
-
-	{
-		await db.thongBao.updateMany({
-			where: { nguoiNhanId: nguoi.id },
-			data: { docLuc: null },
-		});
-		const { ctx, p } = await trang(c, 375);
-		try {
-			await mo(p, `${APP}/${slug}/chat`, CHUONG);
-			await moChuong(p);
-			const d = await dongTacNhan(p);
 			const rong = await rongTrang(p);
 			kiem(
-				"chuong-375",
-				`dong tac nhan ${d ? "co" : "khong"}, rong trang ${rong}`,
-				d !== null && rong <= 375,
+				`chuong-${kho}`,
+				`dong tac nhan ${JSON.stringify(d)}, so chua doc ${truoc}, rong trang ${rong}`,
+				d !== null &&
+					d.href === `/${slug}/chat/${xong}` &&
+					truoc >= 1 &&
+					rong <= kho,
 			);
-			await anh(p, "chuong-375");
+			await anh(p, `chuong-${kho}`);
+			await moTuChuong(p, `mo-tu-chuong-${kho}`, nguoi, slug, xong, truoc);
 		} finally {
 			await ctx.close();
 		}

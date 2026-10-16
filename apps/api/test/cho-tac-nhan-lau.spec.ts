@@ -142,7 +142,7 @@ describe("cho-tac-nhan-lau", () => {
 				clientRequestId: `gui-${crypto.randomUUID()}`,
 				commandType: "CREATE_AGENT",
 				message: MAU_LUOT_GUI.message,
-				status: MAU_LUOT_GUI.status,
+				status: "SENDING",
 				createdAt: new Date(MAU_LUOT_GUI.createdAt),
 				sentAt: new Date(MAU_LUOT_GUI.createdAt),
 			},
