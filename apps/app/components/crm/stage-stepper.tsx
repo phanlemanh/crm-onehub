@@ -41,7 +41,7 @@ export function StageStepper({
 	const currentIndex = steps.indexOf(stage);
 
 	return (
-		<ol className="flex w-full gap-1">
+		<ol data-slot="stage-stepper" className="flex w-full gap-1">
 			{steps.map((option, index) => {
 				const reached = !exited && index <= currentIndex;
 				const current = !exited && option === stage;
