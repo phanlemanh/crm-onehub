@@ -18,7 +18,7 @@ const dai = (dau) => `${dau}${MA}`.padEnd(120, "x");
 const TEN_THOA_THUAN_DAI = dai("ThoaThuanDai");
 const TEN_CONG_TY = dai("CongTyDai");
 const TEN_NGUOI_DAI = dai("NguoiPhuTrachDai");
-const NHAN_MO_DAI = `Decision maker bought-in after procurement review ${MA}`;
+const NHAN_MO_DAI = `Decision maker bought-in review ${MA}`;
 const NHAN_MO_NGAN = `Gần ${MA}`;
 const NHAN_CHOT_DAI = `Closed won after procurement ${MA}`;
 
