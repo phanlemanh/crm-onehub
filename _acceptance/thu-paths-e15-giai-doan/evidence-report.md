@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 017b487d2ef3928013d1133346af07ababf0e55b
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-16 — ký Cổng 2 trên S4 lượt 3 (8/8 eval đạt, 7/7 suite xanh); Ngoài-1…Ngoài-13 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: thu-paths-e15-giai-doan

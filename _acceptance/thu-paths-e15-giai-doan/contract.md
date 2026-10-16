@@ -5,7 +5,7 @@ slug: thu-paths-e15-giai-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-16T05:50:40Z
 design_doc: docs/superpowers/specs/2026-10-16-thu-paths-e15-giai-doan-design.md
@@ -102,3 +102,17 @@ của `docs/plan/lo-trinh-okr.json`).
   Lúc dựng mà chúng không thoả luật chọn (thêm `paths` xong vẫn hoá cũ) thì máy dừng, hỏi chủ kho: ghim lại chúng trong
   PR, hay để tới lần ghim kế — không tự bỏ chúng khỏi danh sách.
 - Hỏi-1, Hỏi-2: xem design doc mục «Hỏi chủ kho».
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Mô tả trong hồ sơ nghiệm thu về dòng kết quả cuối của một bước kiểm đã cũ so với dòng thật mà công cụ in ra. Kết quả kiểm vẫn đúng, chỉ có chữ mô tả lệch nên người đọc đối chiếu có thể thấy khác nhau.
+  - Ngoài-2: Một bài kiểm nghiệm thu bị bỏ qua có thể lặng lẽ biến mất khỏi hồ sơ mà công cụ kiểm vẫn báo đạt. Chỉ xảy ra khi ai đó cố ý đổi loại hoặc xoá bài kiểm đó, và không làm sai kết quả đo hiện tại.
+  - Ngoài-3: Mô tả trong hồ sơ nghiệm thu về dòng kết quả cuối của một bước kiểm đã cũ so với dòng thật mà công cụ in ra. Kết quả kiểm vẫn đúng, chỉ có chữ mô tả lệch.
+  - Ngoài-4: Nếu ai đó đổi loại một bài kiểm đã bị bỏ qua rồi thêm phạm vi theo dõi cho nó, bước kiểm phụ vẫn báo đạt dù đáng lẽ phải bắt. Đây là trường hợp hiếm, chỉ do chỉnh tay cố ý, và không ảnh hưởng đến việc hồ sơ nào bị đòi ghim lại.
+  - Ngoài-5: Nếu chạy lại bước kiểm tra từ nhánh này sau khi đã gộp, công cụ có thể lấy nhầm mốc so sánh và báo sai. Lúc ký và gộp thì kết quả vẫn đúng.
+  - Ngoài-6: Sau khi vòng này được gộp, chạy lại phép kiểm trên một nhánh mới có thể báo lỗi giả cho tám hồ sơ. Việc gộp hôm nay không bị ảnh hưởng.
+  - Ngoài-7: Công cụ có thể coi nhầm một hồ sơ là chưa có tệp nào đổi trong vài tình huống hiếm. Với tám hồ sơ hiện tại thì kết quả vẫn đúng.
+  - Ngoài-8: Phép kiểm có thể bỏ qua nhầm một hồ sơ mà lưới nghiệm thu thật ra đã bỏ dở, nên chưa đo được chắc chắn. Với dữ liệu hiện tại thì chưa gây sai kết quả.
+  - Ngoài-9: Công cụ kiểm tra nội bộ chỉ đọc một phần danh sách tệp được miễn, nên sau này có thể báo đỏ nhầm hoặc xanh nhầm cho một hồ sơ. Hôm nay kết quả vẫn đúng, người dùng chưa bị ảnh hưởng.
+  - Ngoài-10: Bài thử kiểm tra chính bộ kiểm tra chưa chạy đúng lệnh mà chủ kho đã ký cho hai hồ sơ được gọi tên. Bộ kiểm tra có thể sai mà bài thử vẫn báo là bắt được.
+  - Ngoài-11: Khi công cụ kiểm tra gặp lỗi giữa chừng, nó để lại một bản sao kho tạm trên máy. Chỉ tốn chỗ và gây rối nhẹ, không ảnh hưởng người dùng sản phẩm.
+  - Ngoài-12: Bài thử có thể báo xanh dù hai phép thử chưa chạy, nếu sau này một hồ sơ khác thay đổi. Hiện tại chưa xảy ra.
+  - Ngoài-13: Bài thử kiểm tra chính bộ kiểm tra không phủ hết mọi trường hợp đã hứa và chạy một lệnh khác với lệnh đã ký. Bộ kiểm tra có thể bỏ sót lỗi mà vẫn báo là bắt được hết.
