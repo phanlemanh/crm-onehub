@@ -5,7 +5,7 @@ slug: pre-push-t1
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: []
-status: implemented
+status: verified
 approved_by: manh
 approved_at: 2026-10-16T15:30:37Z
 design_doc: docs/superpowers/specs/2026-10-16-pre-push-t1-design.md
