@@ -49,3 +49,46 @@ wall: 1183s
 - **claude-haiku-5-5**: 16 agent · 32 calls · out 10,470 · in 64 · cache_read 511,781 · cache_create 555,574
 - **claude-opus-5-5**: 3 agent · 36 calls · out 6,673 · in 72 · cache_read 2,046,731 · cache_create 229,778
 
+### S4 round 2 — wf_17df7964-c3c (22 agent, 22,093 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 3 | 8,069 | 6 | 103,371 | 50 |
+| judge:E11:operational-feasibility | claude-sonnet-5-5 | 3 | 3,141 | 8 | 101,283 | 23 |
+| judge:E11:spec-alignment | claude-sonnet-5-5 | 2 | 2,043 | 4 | 34,739 | 16 |
+| judge:E11:domain-correctness | claude-sonnet-5-5 | 2 | 1,763 | 4 | 31,377 | 17 |
+| review:measurement | claude-opus-5-5 | 6 | 1,554 | 12 | 208,455 | 45 |
+| machine:bun _acceptance/tat-ban-preview/rang/ver | claude-haiku-5-5 | 2 | 544 | 4 | 34,119 | 10 |
+| machine:bun _acceptance/tat-ban-preview/rang/ver | claude-haiku-5-5 | 2 | 508 | 4 | 34,117 | 11 |
+| machine:bun _acceptance/tat-ban-preview/rang/goc | claude-haiku-5-5 | 2 | 506 | 4 | 34,117 | 8 |
+| machine:bun _acceptance/tat-ban-preview/rang/ver | claude-haiku-5-5 | 2 | 491 | 4 | 34,116 | 9 |
+| review:bugs | claude-opus-5-5 | 10 | 417 | 20 | 421,485 | 65 |
+| review:conventions | claude-opus-5-5 | 7 | 362 | 14 | 257,036 | 28 |
+| baseline:diffBase | claude-sonnet-5-5 | 2 | 337 | 4 | 35,981 | 31 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 302 | 4 | 34,111 | 294 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 301 | 4 | 34,141 | 65 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 299 | 4 | 34,086 | 295 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 292 | 4 | 34,084 | 20 |
+| machine:bun _acceptance/tat-ban-preview/rang/goc | claude-haiku-5-5 | 2 | 286 | 4 | 34,119 | 7 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 270 | 4 | 34,086 | 6 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 230 | 4 | 2,869 | 317 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 215 | 4 | 34,080 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 151 | 4 | 30,005 | 7 |
+| machine:bun _acceptance/tat-ban-preview/rang/pha | claude-haiku-5-5 | 2 | 12 | 4 | 34,115 | 8 |
+
+
+wall: 1077s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 337 | 35,981 | 31 | 05:45:01 | 05:45:32 |
+| machine | 13 | 4,256 | 412,160 | 1016 | 05:45:01 | 06:01:57 |
+| judge | 3 | 6,947 | 167,399 | 26 | 05:45:01 | 05:45:26 |
+| review | 3 | 2,333 | 886,976 | 67 | 05:45:01 | 05:46:08 |
+| capture | 1 | 151 | 30,005 | 7 | 06:01:59 | 06:02:05 |
+| synthesize | 1 | 8,069 | 103,371 | 50 | 06:02:07 | 06:02:58 |
+
+- **claude-sonnet-5-5**: 6 agent · 14 calls · out 15,504 · in 30 · cache_read 336,756 · cache_create 336,067
+- **claude-opus-5-5**: 3 agent · 23 calls · out 2,333 · in 46 · cache_read 886,976 · cache_create 165,281
+- **claude-haiku-5-5**: 13 agent · 26 calls · out 4,256 · in 52 · cache_read 412,160 · cache_create 456,196
+

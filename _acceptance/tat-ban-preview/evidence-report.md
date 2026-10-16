@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 36c64c8281e5fac0bf651c3be0d58d2ca89af64c
+verified_commit: 8cc8391b6634c7edf02b869c02ab5bf91bc7a095
 human_signoff:
 ---
 
@@ -36,8 +36,9 @@ không chạy theo hồ sơ: E9
   baseline: n-a
   verifier: config:executors.test.tbp_hop_le
   verified_at: 2026-10-16T05:23:14Z
+  carried_from_round: 1
   output: |
-    Ran 1 test across 1 file. [21.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-tat-ban-preview-E2-r1
@@ -45,8 +46,9 @@ không chạy theo hồ sơ: E9
   baseline: n-a
   verifier: config:executors.test.tbp_onehub
   verified_at: 2026-10-16T05:23:14Z
+  carried_from_round: 1
   output: |
-    Ran 1 test across 1 file. [27.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-tat-ban-preview-E3-r1
@@ -54,114 +56,110 @@ không chạy theo hồ sơ: E9
   baseline: n-a
   verifier: config:executors.test.tbp_nhanh_khac
   verified_at: 2026-10-16T05:23:14Z
+  carried_from_round: 1
   output: |
-    Ran 2 tests across 1 file. [24.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E4
-  run_id: minted-tat-ban-preview-E4-r1
+  run_id: minted-tat-ban-preview-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbp_pha_thu
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
   output: |
     khoa: ma 1, 1 pass, fail [hop-le, onehub-trien-khai, nhanh-khac-khong-trien-khai]
 
 - eval: E5
-  run_id: minted-tat-ban-preview-E5-r1
+  run_id: minted-tat-ban-preview-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbp_goc_du_an_xanh
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
   output: |
     khop: crm-onehub-api -> vercel.json (root trong)
 
 - eval: E6
-  run_id: minted-tat-ban-preview-E6-r1
+  run_id: minted-tat-ban-preview-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbp_goc_du_an_do
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
   output: |
-    (khong in dong nao; ham bao lech dung nhu che do do doi yeu cau)
+    lech: crm-onehub-api: Vercel doc vercel.json, bang ghi apps/api/vercel.json
 
 - eval: E7
-  run_id: minted-tat-ban-preview-E7-r1
+  run_id: minted-tat-ban-preview-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbp_vercel_preview_xanh
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
   output: |
     crm-onehub-agent: 0 deployment cho 9e1336958
 
 - eval: E8
-  run_id: minted-tat-ban-preview-E8-r1
+  run_id: minted-tat-ban-preview-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbp_vercel_preview_do
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
   output: |
     status Vercel – crm-onehub-agent pending cho 1723dca25
 
 - eval: E10
-  run_id: minted-tat-ban-preview-E10-r1
+  run_id: minted-tat-ban-preview-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tbp_vercel_production_do
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
   output: |
     agent-okr production dpl_7gzCfDYa3dzDcBe4jh36BLmKuTrd (git): CANCELED — The deployment was canceled because the Ignored Build Step command is configured to skip this build.
-
-### Judgment
-
-Panel de xuat cho E11 (3 judge, fresh context; human_override de trong cho nguoi dien o Cong 2).
 
 - eval: E11
   judged_by: judge-subagent (fresh context)
   verdict: PASS
-  rationale: Ca ba lens deu cho PASS — tai lieu neu Preview tat o ca bon du an kem bang tep, moi cau ve Preview chay thuc deu dat o thi qua khu hoac dieu kien, co loi dan kiem Production Ready, va cam Ignored Build Step theo VERCEL_ENV.
+  rationale: Hội đồng đề xuất PASS, ba góc nhìn đồng thuận. Tài liệu (docs/production.md, setup.md) nói Preview tắt ở cả bốn dự án, chỉ ra tệp tắt của từng dự án (api là vercel.json ở gốc kho; apps/api/vercel.json chỉ mang cron), mọi câu nhắc Preview đang chạy của app/api/agent đều gắn nhãn lịch sử, dặn kiểm bản Production Ready sau khi đổi vercel.json hay cài đặt build, và cấm dùng Ignored Build Step theo VERCEL_ENV.
+  panel_proposal:
+    - domain-correctness: PASS — (1) production.md dòng 103–118 nói Preview tắt ở cả bốn dự án (16/10), có bảng Root Directory và tệp tắt của từng dự án; dòng 115 nói apps/api/vercel.json không tắt được gì, chỉ chứa cron; setup.md dòng 341–346 nói lại đúng như vậy; ba tệp app/agent/gốc đều có `"**": false, "onehub": true`. (2) Câu nào nói về Preview của app, API, agent đều đi kèm mốc «Trước 16/10», «Before that» hoặc «Từ 16/10 không bản Preview nào được dựng». (3) production.md dòng 385–386 và setup.md dòng 249–251 dặn kiểm bản Production dựng từ git là Ready, không phải Canceled. (4) Cả hai tài liệu cảnh báo không dùng Ignored Build Step theo VERCEL_ENV; bảng cài đặt ghi nó là «empty».
+    - operational-feasibility: PASS — Tài liệu nêu rõ Preview tắt ở cả bốn dự án, chỉ ra tệp tắt của từng dự án (api là vercel.json ở gốc kho; apps/api/vercel.json chỉ mang cron, khớp nội dung tệp), và mọi câu nhắc Preview đang chạy của app/api/agent đều gắn nhãn lịch sử. Tài liệu dặn kiểm Production Ready (không Canceled) sau khi đổi vercel.json hay cài đặt build, và cấm dùng Ignored Build Step theo VERCEL_ENV.
+    - spec-alignment: PASS — (1) production.md dòng 103 nói Preview tắt ở cả bốn dự án; bảng dòng 108-113 ghi từng tệp tắt, api là vercel.json ở gốc kho; dòng 115 nói rõ apps/api/vercel.json chỉ chứa cron và tệp đó đúng là chỉ có `crons`; ba tệp còn lại có `git.deploymentEnabled` `{"**": false, "onehub": true}`. (2) Mọi câu về Preview của app, API, agent đều đặt trong khung lịch sử hoặc đã tắt. (3) Kiểm Production là Ready chứ không phải Canceled có ở production.md dòng 383-386 và setup.md dòng 250-251. (4) Cả hai tài liệu cấm dùng Ignored Build Step `$VERCEL_ENV` và chỉ ra sự cố 04/10.
   human_override:  # chi nguoi ghi
-
-  Phieu cua tung judge:
-  - domain-correctness: PASS — (1) production.md noi Preview tat o ca bon du an (16/10). Bang liet ke dung tep cua tung du an, api la vercel.json o goc kho. Cung doan do va setup.md deu noi apps/api/vercel.json khong tat duoc gi, chi mang nam cron; ba tep vercel.json o goc, apps/app va apps/agent khop loi tai lieu. (2) Moi cau ve Preview cua app/API/agent deu danh dau la qua khu («Truoc 16/10…», «Before that, previews shared…») hoac la dieu kien («Tu 16/10 khong ban Preview nao duoc dung»); khong thay cau nao ta Preview nhu dang chay. (3) va (4) Ca hai tai lieu deu dan kiem ban Production dung tu git la Ready chu khong phai Canceled sau khi doi vercel.json hoac cai dat build. Ca hai cung cam Ignored Build Step theo VERCEL_ENV va neu su co 04/10 lam bang chung.
-  - operational-feasibility: PASS — Ca 4 cau deu dat. (1) production.md (muc Preview, bang Root Directory) va setup.md (muc Migrations) noi Preview tat o ca bon du an tu 16/10. Moi du an co tep rieng; api dung vercel.json o goc kho, con apps/api/vercel.json chi mang cron va «khong tat duoc gi». Hai tep app va agent trong input khop loi ta. (2) Moi cau nhac Preview chay that deu gan «Truoc 16/10», «Before that», «Tu 16/10 khong ban Preview nao duoc dung». Khong con cau nao ta Preview nhu dang chay. (3) Ca hai tai lieu dan sau moi lan doi vercel.json hay cai dat build phai kiem ban Production dung tu git la Ready, khong phai Canceled. (4) Khong cau nao khuyen dung Ignored Build Step theo VERCEL_ENV; ca hai neu no la bay ngay 04/10 va cam dung.
-  - spec-alignment: PASS — Tai lieu neu ro Preview tat o ca bon du an voi bang tep tat tung du an (api dung vercel.json o goc kho; apps/api/vercel.json chi mang cron va khong tat duoc gi), va ba tep vercel.json da doc khop. Cac cau nhac Preview cua app/api/agent deu duoc danh dau la qua khu («Truoc 16/10…», «Before that…»). Ca production.md lan setup.md deu dan kiem ban Production Ready (khong Canceled) sau khi doi vercel.json hay cai dat build, va cam dung Ignored Build Step theo VERCEL_ENV.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-tat-ban-preview-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tat-ban-preview-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tat-ban-preview-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tat-ban-preview-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tat-ban-preview-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tat-ban-preview-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tat-ban-preview-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-16T05:23:14Z
+  verified_at: 2026-10-16T05:44:46Z
 
 ## Known limits
 
@@ -172,9 +170,7 @@ Panel de xuat cho E11 (3 judge, fresh context; human_override de trong cho nguoi
 none — moi eval feature deu red tren baseline (co phan biet)
 
 Baseline khong do:
-- cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-preview-moi-du-an.spec.ts -t hop-le: bo qua baseline: tep apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts co o cay dang kiem nhung chua co o merge-base 34d31a8bfec1dbade4903cce2e00848bdf62ccd5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-preview-moi-du-an.spec.ts -t onehub-trien-khai: bo qua baseline: tep apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts co o cay dang kiem nhung chua co o merge-base 34d31a8bfec1dbade4903cce2e00848bdf62ccd5 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-preview-moi-du-an.spec.ts -t "nhanh-khac-khong-trien-khai|bo-khop-bat-bay-sao": bo qua baseline: tep apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts co o cay dang kiem nhung chua co o merge-base 34d31a8bfec1dbade4903cce2e00848bdf62ccd5 — eval moi, chay tren code cu khong phan biet gi
+
 - bun _acceptance/tat-ban-preview/rang/pha-thu.mjs: bo qua baseline: tep _acceptance/tat-ban-preview/rang/pha-thu.mjs co o cay dang kiem nhung chua co o merge-base 34d31a8bfec1dbade4903cce2e00848bdf62ccd5 — eval moi, chay tren code cu khong phan biet gi
 - bun _acceptance/tat-ban-preview/rang/goc-du-an.mjs xanh: bo qua baseline: tep _acceptance/tat-ban-preview/rang/goc-du-an.mjs co o cay dang kiem nhung chua co o merge-base 34d31a8bfec1dbade4903cce2e00848bdf62ccd5 — eval moi, chay tren code cu khong phan biet gi
 - bun _acceptance/tat-ban-preview/rang/goc-du-an.mjs do: bo qua baseline: tep _acceptance/tat-ban-preview/rang/goc-du-an.mjs co o cay dang kiem nhung chua co o merge-base 34d31a8bfec1dbade4903cce2e00848bdf62ccd5 — eval moi, chay tren code cu khong phan biet gi
@@ -188,4 +184,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: moi eval may (E1-E8, E10) va 7 lenh suite deu xanh, E11 do hoi dong judge de xuat PASS; E9 khong chay theo ho so. Khong co eval that bai.
+Round 1: 16/16 lệnh trả về, toàn bộ xanh; hồ sơ ghi 5 finding ngoài hợp đồng và 1 finding trong hợp đồng (AC-5, vế commit status của E7/E8).
+Round 2: chạy lại E4, E5, E6, E7, E8, E10 và bảy lệnh suite, tất cả xanh; E1, E2, E3 mang sang từ round 1 vì delta không chạm paths của chúng. Ghi chú: payload không kèm giờ chạy của round 2 nên verified_at của round này lấy theo ngày 2026-10-16.
