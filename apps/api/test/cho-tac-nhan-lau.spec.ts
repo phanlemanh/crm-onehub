@@ -4,6 +4,7 @@ import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import { ghiThongBaoTacNhan } from "../../agent/agent/lib/thong-bao-tac-nhan";
 import { createApp } from "../src/create-app";
+import MAU_LUOT_GUI from "../../app/test/fixtures/cho-tac-nhan-lau-luot-gui.json";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 const TIEN_TO = `ctnl${(process.env.TEST_RUN_ID ?? "").slice(0, 8)}`;
@@ -128,5 +129,35 @@ describe("cho-tac-nhan-lau", () => {
 		).toBe(200);
 		expect(await docLuc(b)).toBeNull();
 		expect(await soChuaDoc()).toBe(truoc);
+	});
+	test("mau-luot-gui: hang gui builderById tra ve khop mau ma the dang dung doc", async () => {
+		const h = await db.agentConversation.create({
+			data: { userId: NGUOI, kind: "BUILDER", title: "Hội thoại mẫu" },
+			select: { id: true },
+		});
+		await db.agentConversationSubmission.create({
+			data: {
+				conversationId: h.id,
+				submittedById: NGUOI,
+				clientRequestId: `gui-${crypto.randomUUID()}`,
+				commandType: "CREATE_AGENT",
+				message: MAU_LUOT_GUI.message,
+				status: MAU_LUOT_GUI.status,
+				createdAt: new Date(MAU_LUOT_GUI.createdAt),
+				sentAt: new Date(MAU_LUOT_GUI.createdAt),
+			},
+		});
+		const r = await request(app.getHttpServer())
+			.get(
+				`/api/trpc/conversations.builderById?input=${encodeURIComponent(JSON.stringify({ id: h.id }))}`,
+			)
+			.set("cookie", cookie);
+		expect(r.status).toBe(200);
+		const hang = r.body?.result?.data?.submissions?.[0];
+		expect(hang, "mau luot gui khop hang that").toEqual({
+			...MAU_LUOT_GUI,
+			id: hang?.id,
+			clientRequestId: hang?.clientRequestId,
+		});
 	});
 });

@@ -125,4 +125,26 @@ describe("cho-tac-nhan-lau-chuong", () => {
 			root = null;
 		}
 	});
+	test("dong-chuong: ten trung chu cua cau mau van nam trong vung khong dich", () => {
+		for (const locale of ["vi", "en"] as const) {
+			for (const ten of ["Kara", "building", "it", "Kara cần"]) {
+				const k = ve(locale, ten);
+				for (const a of k.querySelectorAll("a")) {
+					const khong = a.querySelector('[translate="no"]');
+					expect(khong?.textContent, `ten ${ten} ${locale}`).toBe(ten);
+					expect(
+						khong?.previousSibling?.textContent ?? "",
+						`vung khong dich ngay sau « ${ten} ${locale}`,
+					).toEndWith("«");
+					expect(
+						khong?.nextSibling?.textContent ?? "",
+						`vung khong dich ngay truoc » ${ten} ${locale}`,
+					).toStartWith("»");
+				}
+				act(() => root?.unmount());
+				k.remove();
+				root = null;
+			}
+		}
+	});
 });

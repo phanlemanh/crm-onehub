@@ -503,7 +503,7 @@ export function AgentBuilderChat({
 										conversationId={conversationId}
 										sessionId={data.sessionId}
 										artifacts={data.builderArtifacts}
-										startedAt={submissions.at(-1)?.createdAt ?? null}
+										submissions={submissions}
 									/>
 								</MessageScrollerItem>
 							) : null}
@@ -1109,18 +1109,19 @@ function ResponseActions({
 	);
 }
 
-function BuildingAgentCard({
+export function BuildingAgentCard({
 	conversationId,
 	sessionId,
 	artifacts,
-	startedAt,
+	submissions,
 }: {
 	conversationId: string;
 	sessionId: string | null;
 	artifacts: Conversation["builderArtifacts"];
-	startedAt: string | null;
+	submissions: readonly BuilderSubmission[];
 }) {
 	const t = troChuyenMessages(useLocale());
+	const startedAt = submissions.at(-1)?.createdAt ?? null;
 	const completed = completedBuilderSteps(artifacts, startedAt, sessionId);
 	const stop = useAsyncAction({
 		action: async () => {
