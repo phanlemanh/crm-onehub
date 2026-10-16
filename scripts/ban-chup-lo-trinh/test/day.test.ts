@@ -244,6 +244,8 @@ describe("chay-that", () => {
 					...process.env,
 					CRM_API_URL: `http://127.0.0.1:${mayThat.port}`,
 					CRM_KHOA_DAY_LO_TRINH: KHOA,
+					GITHUB_ACTIONS: "true",
+					GITHUB_REF: BAN_CHUP_LO_TRINH.refDay,
 				},
 				stdout: "pipe",
 				stderr: "pipe",
@@ -271,5 +273,125 @@ describe("chay-that", () => {
 		} finally {
 			mayThat.stop(true);
 		}
+	});
+});
+
+const ACTIONS = (ref?: string) => ({
+	...ENV,
+	GITHUB_ACTIONS: "true",
+	...(ref === undefined ? {} : { GITHUB_REF: ref }),
+});
+const loiChuThich = (ra: string[]) =>
+	ra.filter((d) => d.startsWith(`::error title=${TIEU_DE_GHI_CHU}::`));
+
+describe("dcn-tu-choi", () => {
+	const ca: [string, Record<string, string | undefined>][] = [
+		["nhanh khac", ACTIONS("refs/heads/feat/thu")],
+		["the", ACTIONS("refs/tags/v1")],
+		["thieu ref", ACTIONS()],
+		["nhanh mang chu onehub", ACTIONS("refs/heads/feat/onehub")],
+		[
+			"sai ref khong khoa",
+			{ GITHUB_ACTIONS: "true", GITHUB_REF: "refs/heads/feat/thu" },
+		],
+	];
+	for (const [ten, env] of ca)
+		test(`dcn-tu-choi ${ten}: ma 1, khong goi CRM, noi ref`, async () => {
+			const may = mayChu(traKetQua("nhan"));
+			const { ma, ra, loi } = await chay({ fetch: may.fetch, env });
+			expect(may.goi.length, "luot ngoai onehub da goi CRM").toBe(0);
+			expect(ghiChu(ra), "luot ngoai onehub xanh vi chua cai").toEqual([]);
+			expect(`${ten}: ma ${ma}`).toBe(`${ten}: ma 1`);
+			expect(loiChuThich(ra).length).toBe(1);
+			const cau = loi.join("\n");
+			expect(cau).toContain(BAN_CHUP_LO_TRINH.refDay);
+			expect(cau).toContain(env.GITHUB_REF ?? "thiếu GITHUB_REF");
+		});
+});
+
+describe("dcn-onehub", () => {
+	test("dcn-onehub actions + onehub: day nhu cu", async () => {
+		const may = mayChu(traKetQua("nhan"));
+		const { ma, ra } = await chay({
+			fetch: may.fetch,
+			env: ACTIONS(BAN_CHUP_LO_TRINH.refDay),
+		});
+		expect(ma).toBe(0);
+		expect(may.goi.length).toBe(1);
+		expect(may.goi[0]?.url).toBe(new URL(DUONG_DAY, URL_API).toString());
+		expect(ghiChu(ra)).toEqual([`::notice title=${TIEU_DE_GHI_CHU}::nhan`]);
+	});
+
+	test("dcn-onehub ngoai actions: nhu truoc vong", async () => {
+		const may = mayChu(traKetQua("nhan"));
+		const { ma } = await chay({
+			fetch: may.fetch,
+			env: { ...ENV, GITHUB_REF: "refs/heads/feat/thu" },
+		});
+		expect(ma).toBe(0);
+		expect(may.goi.length).toBe(1);
+	});
+
+	const tienTrinh: [string, number, number][] = [
+		[BAN_CHUP_LO_TRINH.refDay, 0, 1],
+		["refs/pull/1/merge", 1, 0],
+	];
+	for (const [ref, maKyVong, soThan] of tienTrinh)
+		test(`dcn-onehub tien trinh rieng ${ref}`, async () => {
+			const nhan: unknown[] = [];
+			const mayThat = Bun.serve({
+				port: 0,
+				fetch: async (req) => {
+					nhan.push(await req.json());
+					return Response.json(banChupRa.parse({ ketQua: "nhan" }));
+				},
+			});
+			try {
+				const tien = Bun.spawn(["bun", "scripts/ban-chup-lo-trinh/day.ts"], {
+					cwd: GOC,
+					env: {
+						...process.env,
+						CRM_API_URL: `http://127.0.0.1:${mayThat.port}`,
+						CRM_KHOA_DAY_LO_TRINH: KHOA,
+						GITHUB_ACTIONS: "true",
+						GITHUB_REF: ref,
+					},
+					stdout: "pipe",
+					stderr: "pipe",
+				});
+				expect(await tien.exited, await new Response(tien.stderr).text()).toBe(
+					maKyVong,
+				);
+				expect(nhan.length, "luot ngoai onehub da goi CRM").toBe(soThan);
+			} finally {
+				mayThat.stop(true);
+			}
+		});
+});
+
+describe("dcn-workflow", () => {
+	test("dcn-workflow: nhanh push trung refDay, buoc day khong tu dat ref", () => {
+		const wf: Workflow = Bun.YAML.parse(
+			readFileSync(
+				path.join(GOC, ".github", "workflows", "ban-chup-lo-trinh.yml"),
+				"utf8",
+			),
+		) as Workflow;
+		expect(wf.on.push.branches.length).toBe(1);
+		expect(
+			`refs/heads/${wf.on.push.branches[0]}`,
+			"nhanh day lech nhanh duoc phep",
+		).toBe(BAN_CHUP_LO_TRINH.refDay);
+		for (const job of Object.values(wf.jobs))
+			for (const buoc of job.steps) {
+				expect(
+					buoc.env?.GITHUB_REF,
+					"buoc day tu dat GITHUB_REF",
+				).toBeUndefined();
+				expect(
+					buoc.env?.GITHUB_ACTIONS,
+					"buoc day tu dat GITHUB_REF",
+				).toBeUndefined();
+			}
 	});
 });
