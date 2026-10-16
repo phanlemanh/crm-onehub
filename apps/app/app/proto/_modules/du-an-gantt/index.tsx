@@ -1,5 +1,8 @@
 "use client";
 
+import ChevronDown from "@carbon/icons-react/es/ChevronDown";
+import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
+import TrashCan from "@carbon/icons-react/es/TrashCan";
 import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -69,9 +72,6 @@ import { Textarea } from "@crm/ui/components/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
-import ChevronDown from "@carbon/icons-react/es/ChevronDown";
-import TrashCan from "@carbon/icons-react/es/TrashCan";
-import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { useState } from "react";
 import {
 	DetailSheet,
@@ -315,7 +315,7 @@ function TatCaDuAn({ state, onTao }: { state: string; onTao: () => void }) {
 	);
 }
 
-function KhungXuongGantt() {
+function ChoTaiGantt() {
 	return (
 		<div className="grid grid-cols-[14rem_1fr] gap-2">
 			{[1, 2, 3, 4, 5].map((n) => (
@@ -368,7 +368,7 @@ function NoiDungDuAn({ state }: { state: string }) {
 	const daDoi = state === "ST-gantt-da-doi";
 	const viec = daDoi ? viecDaDoi() : VIEC;
 	const moc = daDoi || state === "ST-gantt-moc-tre" ? MOC_TRE : MOC;
-	if (state === "ST-gantt-cho-tai") return <KhungXuongGantt />;
+	if (state === "ST-gantt-cho-tai") return <ChoTaiGantt />;
 	if (state === "ST-gantt-loi") {
 		return (
 			<VungTaiLoi tieuDe={CHU.loiLich} moTa={CHU.loiMoTa} onThuLai={() => {}} />

@@ -11,10 +11,10 @@ import type {
 } from "@crm/ui/components/reui/gantt/gantt-types";
 import { GanttView } from "@crm/ui/components/reui/gantt/gantt-view";
 import { TONE_COLOR } from "@crm/ui/components/status-indicator";
-import { useMessages } from "@crm/ui/components/locale-provider";
+import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
 import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { format, subMilliseconds } from "date-fns";
-import { vi } from "date-fns/locale";
+import { enUS, vi } from "date-fns/locale";
 import { useMemo } from "react";
 
 export const GANTT_DU_AN = {
@@ -89,8 +89,16 @@ function thuJs(thuIso: number): number {
 	return thuIso % 7;
 }
 
-function nhanGantt(msg: ReturnType<typeof useMessages>["gantt"]): GanttI18nOverrides {
-	const ngay = (d: Date) => format(d, "dd/MM", { locale: vi });
+const LICH_NGON_NGU = {
+	vi: { dateFns: vi, ngay: "dd/MM", ngayDai: "EEEE dd/MM/yyyy" },
+	en: { dateFns: enUS, ngay: "MMM d", ngayDai: "EEEE, MMM d, yyyy" },
+} as const;
+
+function nhanGantt(
+	msg: ReturnType<typeof useMessages>["gantt"],
+	lich: (typeof LICH_NGON_NGU)[keyof typeof LICH_NGON_NGU],
+): GanttI18nOverrides {
+	const ngay = (d: Date) => format(d, lich.ngay, { locale: lich.dateFns });
 	const khoang = (tu: Date, den: Date) => {
 		const cuoi = den.getTime() > tu.getTime() ? subMilliseconds(den, 1) : tu;
 		return ngay(tu) === ngay(cuoi) ? ngay(tu) : `${ngay(tu)} – ${ngay(cuoi)}`;
@@ -98,14 +106,14 @@ function nhanGantt(msg: ReturnType<typeof useMessages>["gantt"]): GanttI18nOverr
 	return {
 		formats: {
 			monthTitle: "MMMM yyyy",
-			dayTitle: "EEEE dd/MM/yyyy",
+			dayTitle: lich.ngayDai,
 			timeGutter: "HH",
 			eventTime: "HH:mm",
 		},
 		functions: {
 			formatTitle: (scale, { date, activeRange }) => {
-				if (scale === "day") return format(date, "EEEE dd/MM/yyyy", { locale: vi });
-				if (scale === "month") return format(date, "MMMM yyyy", { locale: vi });
+				if (scale === "day") return format(date, lich.ngayDai, { locale: lich.dateFns });
+				if (scale === "month") return format(date, "MMMM yyyy", { locale: lich.dateFns });
 				if (scale === "quarter") return msg.quy(format(date, "Q"), format(date, "yyyy"));
 				if (scale === "year") return format(date, "yyyy");
 				return `${khoang(activeRange.start, activeRange.end)}/${format(activeRange.start, "yyyy")}`;
@@ -156,7 +164,8 @@ export function GanttDuAn({
 	className,
 }: GanttDuAnProps) {
 	const msg = useMessages().gantt;
-	const i18n = useMemo(() => nhanGantt(msg), [msg]);
+	const lichNgonNgu = LICH_NGON_NGU[useLocale()];
+	const i18n = useMemo(() => nhanGantt(msg, lichNgonNgu), [msg, lichNgonNgu]);
 
 	const coLich = viec.filter((v) => v.batDau && v.han);
 	const chuaLich = viec.filter((v) => !(v.batDau && v.han));
@@ -271,7 +280,7 @@ export function GanttDuAn({
 			initialCenter={tam}
 			timeZone={GANTT_DU_AN.muiGio}
 			weekStartsOn={1}
-			locale={vi}
+			locale={lichNgonNgu.dateFns}
 			i18n={i18n}
 			offDays={offDays}
 			rowCheckboxes={false}
