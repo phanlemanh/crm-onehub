@@ -5,7 +5,7 @@ slug: cho-tac-nhan-lau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api, agent]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-16-cho-tac-nhan-lau-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-16T06:38:14Z
