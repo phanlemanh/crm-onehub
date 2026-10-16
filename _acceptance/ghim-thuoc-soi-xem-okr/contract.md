@@ -5,7 +5,7 @@ slug: ghim-thuoc-soi-xem-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-15T23:26:38Z
 design_doc: docs/superpowers/specs/2026-10-16-ghim-thuoc-soi-xem-okr-design.md
@@ -90,6 +90,10 @@ Quét tay ba trục.
   (`giam-phut-acceptance`) ghim trọn hình `acceptance.yml`, nên bất kỳ bước nào thêm vào tệp cũng đổi đầu ra của chúng;
   trên nhánh, mọi dòng lệch so với nền đều là hệ quả của bước «OKR read rule» («thừa lệnh `soi-ma.mjs --ca xem`», số bước
   của job `luat-kho`) — bằng chứng `evidence/lech-thuoc-do-san.md`. Ghim lại hình của hai hồ sơ đó là một hợp đồng riêng.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Thẻ Cổng Phạm vi cũ trong lịch sử hồ sơ còn ghi lời hứa «thước đỏ sẵn không đỏ thêm» đã bỏ khi mở lại cổng.
+  - Ngoài-2: Đổi tên job «acceptance gate» hay dời bước sang job khác thì tài liệu API nói sai mà không thước nào báo đỏ.
+  - Ngoài-3: Cho job kiểm luật kho phụ thuộc vào bước phân loại PR thì bước không chạy khi gộp onehub mà thước vẫn xanh; ba điều kiện khác của thước chưa có ca đột biến chứng chiều đỏ.
 - Năm thước của hồ sơ đã ký đọc `acceptance.yml` đã đỏ trên nền `d086bf8cf` trước vòng này (đo S1 16/10): `gpct_hinh_acceptance`, `gpct_luong` (`giam-phut-ci-nhap-t1`), `dpvb_cong` (`dieu-phoi-va-bien`, sập khi chạy), `gpa_hinh`, `gpa_khong_mat_lenh` (`giam-phut-acceptance`). Không nằm trong AC-6; báo giám sát.
 - Bước chạy trên lượt `pull_request` (merge ref lúc chạy). Kho gộp theo lô với `--match-head-commit` và không chạy lại khi
   base dời, nên hai PR mỗi PR xanh riêng vẫn có thể làm onehub đỏ — lượt push lên onehub bắt điều đó; Đường đo tách ca này

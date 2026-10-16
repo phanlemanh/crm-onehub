@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 80fa51452d92cf005f6876c2083bc26ddfb11086
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-16
 ---
 
 # Evidence Report: ghim-thuoc-soi-xem-okr
