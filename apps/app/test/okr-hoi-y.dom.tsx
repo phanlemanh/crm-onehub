@@ -476,9 +476,16 @@ mock.module("@/lib/trpc/client", () => ({
 			hoiYDoPhu: thuTuc("hoiYDoPhu", () => DO_PHU),
 			viecCuaToi: thuTuc("viecCuaToi", () => ({ viec: [], lienQuanOkr: true })),
 			objective: thuTuc("objective", () => null),
+			danhSach: thuTuc("danhSach", () => new Promise(() => {})),
+			hoiMo: {
+				mutationKey: () => ["okr.hoiMo"],
+				mutationOptions: () => ({ mutationFn: async () => null }),
+			},
 			...Object.fromEntries(DOT_BIEN.map((t) => [t, thuTuc(t, () => null)])),
 		},
+		org: { tree: thuTuc("tree", () => null) },
 		workspace: {
+			get: thuTuc("workspace", () => ({ name: "OneHub" })),
 			members: thuTuc("members", () => ({
 				rows: QUAN_TRI_MAU,
 				total: QUAN_TRI_MAU.length,

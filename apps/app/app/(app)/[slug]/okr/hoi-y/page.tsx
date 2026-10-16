@@ -3,19 +3,19 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
-import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKyHoiY, loadOkrSearchParams } from "../okr-search-params";
+import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { HoiYMan } from "./hoi-y";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata(): Promise<Metadata> {
-	return { title: okrMessages(await getLocale()).tieuDe["hoi-y"] };
+	return { title: tieuDeTrinhDuyet(await getLocale(), "hoi-y") };
 }
 
 export default function HoiYPage({
