@@ -9,7 +9,10 @@ const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
 const NGHIN_TOKEN = 1_000;
 const MO_HINH = "google/gemini-3.8-flash";
+const MO_HINH_HAIKU = "anthropic/claude-haiku-5.5";
 const MO_HINH_JUDGE = "zai/glm-5.2-fast";
+const CUA_SO_GEMINI = 1_048_576;
+const CUA_SO_HAIKU = 1_000_000;
 const THE = ["onehub:tro-ly-okr"] as const;
 const LY_DO_NGOAI_OKR =
 	"tro_ly_okr runs only inside background OKR tasks, so OKR and key-result figures cannot be read in this conversation. Tell the person, in their language, that they can see OKR and key-result progress in OneHub Center under OKR. Do not say you failed or ask them to try again.";
@@ -21,7 +24,22 @@ const MA_CAM_NG = [
 
 export const TRO_LY_OKR = {
 	model: MO_HINH,
-	moHinhZdr: [MO_HINH, MO_HINH_JUDGE],
+	moHinhZdr: [MO_HINH, MO_HINH_HAIKU, MO_HINH_JUDGE],
+	moHinhThu: {
+		bien: "TRO_LY_OKR_MO_HINH",
+		danhSach: [
+			{
+				ma: MO_HINH,
+				tranRaMoiLoiGoi: 2 * NGHIN_TOKEN,
+				cuaSoNguCanh: CUA_SO_GEMINI,
+			},
+			{
+				ma: MO_HINH_HAIKU,
+				tranRaMoiLoiGoi: 4 * NGHIN_TOKEN,
+				cuaSoNguCanh: CUA_SO_HAIKU,
+			},
+		],
+	},
 	judge: {
 		model: MO_HINH_JUDGE,
 		modelOptions: {
@@ -43,7 +61,7 @@ export const TRO_LY_OKR = {
 			thuMucCa: "TDX_THU_MUC_CA",
 		},
 	},
-	cuaSoNguCanh: 1_048_576,
+	cuaSoNguCanh: CUA_SO_GEMINI,
 	tranRaMoiLoiGoi: 2 * NGHIN_TOKEN,
 	tranRaTomTatMoiLoiGoi: 8 * NGHIN_TOKEN,
 	loaiViecTomTat: LOAI_VIEC_TOM_TAT_TUAN,
