@@ -227,7 +227,12 @@ export function useCrmCache(): CrmCache {
 
 		deal: (id, options) =>
 			run(
-				[id ? trpc.deals.byId.queryKey({ id }) : trpc.deals.byId.queryKey()],
+				[
+					id ? trpc.deals.byId.queryKey({ id }) : trpc.deals.byId.queryKey(),
+					id
+						? trpc.onboarding.goiYCuaDeal.queryKey({ dealId: id })
+						: trpc.onboarding.goiYCuaDeal.queryKey(),
+				],
 				[
 					...listKeys(),
 					trpc.deals.contactOptions.queryKey(),
