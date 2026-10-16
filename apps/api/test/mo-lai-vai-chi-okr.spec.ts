@@ -120,12 +120,27 @@ async function dungKeHoach(input: {
 		})),
 	});
 	const congTy = await gieoCongTy();
-	const plan = await dichVu().createFromTemplate({
-		companyId: congTy.id,
-		templateId: khuon.id,
-		startedAt: new Date("2026-10-12T00:00:00.000Z"),
-		ownerId: input.camTrich,
+	const batDau = new Date("2026-10-12T00:00:00.000Z");
+	const plan = await db.onboardingPlan.create({
+		data: {
+			companyId: congTy.id,
+			templateId: khuon.id,
+			startedAt: batDau,
+			targetDays: 30,
+			ownerId: input.camTrich,
+		},
 	});
+	for (const s of khuon.steps) {
+		await db.onboardingStep.create({
+			data: {
+				planId: plan.id,
+				label: s.label,
+				departmentId: s.departmentId,
+				dueAt: new Date(batDau.getTime() + s.offsetDays * 24 * 60 * 60 * 1000),
+				position: s.position,
+			},
+		});
+	}
 	const ds = await db.onboardingStep.findMany({
 		where: { planId: plan.id },
 		orderBy: { position: "asc" },

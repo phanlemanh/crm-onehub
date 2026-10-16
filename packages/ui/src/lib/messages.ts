@@ -250,6 +250,22 @@ const en = {
 		anDanhSach: "Hide the list",
 		cuonThem: "Scroll the list to see the rest",
 	},
+	soDo: {
+		dieuKhien: "Map controls",
+		thuNho: "Zoom out",
+		phongTo: "Zoom in",
+		vuaKhung: "Fit to view",
+		mucPhong: (phanTram: string) => `Zoom ${phanTram}%`,
+		vaiNut: "card",
+		vaiDay: "connection",
+		day: "Alignment line",
+		moTaNut: "Press Enter or Space to open this card.",
+		moTaDay: "An alignment line between two cards.",
+		banDoNho: "Overview map",
+		diemNoi: "Connection point",
+		nutDaDich: (huong: string, x: string, y: string) =>
+			`Card moved ${huong}. New position ${x}, ${y}`,
+	},
 };
 
 export type Messages = typeof en;
@@ -500,6 +516,22 @@ const vi = {
 		hienDanhSach: "Xem danh sách",
 		anDanhSach: "Ẩn danh sách",
 		cuonThem: "Cuộn danh sách để xem phần còn lại",
+	},
+	soDo: {
+		dieuKhien: "Điều khiển sơ đồ",
+		thuNho: "Thu nhỏ",
+		phongTo: "Phóng to",
+		vuaKhung: "Vừa khung",
+		mucPhong: (phanTram: string) => `Đang phóng ${phanTram}%`,
+		vaiNut: "thẻ",
+		vaiDay: "dây nối",
+		day: "Dây căn chỉnh",
+		moTaNut: "Nhấn Enter hoặc phím cách để mở thẻ này.",
+		moTaDay: "Dây căn chỉnh giữa hai thẻ.",
+		banDoNho: "Bản đồ thu nhỏ",
+		diemNoi: "Điểm nối",
+		nutDaDich: (huong: string, x: string, y: string) =>
+			`Đã dời thẻ về ${huong}. Vị trí mới ${x}, ${y}`,
 	},
 } satisfies Messages;
 

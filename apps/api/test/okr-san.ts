@@ -351,6 +351,15 @@ export function dungSan(
 			where: { name: { startsWith: TIEN_TO } },
 		});
 		await db.division.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
+		await db.viec.deleteMany({
+			where: {
+				OR: [
+					{ taoBoiId: { startsWith: TIEN_TO } },
+					{ nguoiGiaoId: { startsWith: TIEN_TO } },
+					{ nguoiThucHienId: { startsWith: TIEN_TO } },
+				],
+			},
+		});
 		await db.session.deleteMany({ where: { userId: { startsWith: TIEN_TO } } });
 		await db.member.deleteMany({ where: { userId: { startsWith: TIEN_TO } } });
 		await db.user.deleteMany({ where: { id: { startsWith: TIEN_TO } } });

@@ -1,4 +1,5 @@
 import {
+	BAN_CHUP_LO_TRINH,
 	type BanChupVao,
 	banChupRa,
 	banChupVao,
@@ -23,7 +24,7 @@ export class LoTrinhBanChupRouter {
 	@Mutation({
 		input: banChupVao,
 		output: banChupRa,
-		meta: restMeta("POST", "/lo-trinh/ban-chup", ["Roadmap"]),
+		meta: restMeta("POST", BAN_CHUP_LO_TRINH.duongRest, ["Roadmap"]),
 	})
 	async day(@Ctx() ctx: KhoaDayLoTrinhContext, @Input() input: BanChupVao) {
 		const ketQua = await this.banChup.ghi(input);

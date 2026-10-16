@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>7 việc"]
+  GD --> B["Sắp mở vòng<br/>6 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>145 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>121 việc"] --> GG{"Cổng Giá trị"}
+  GB --> DG["Đã giao<br/>146 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>125 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -41,7 +41,6 @@ flowchart TD
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
 - Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây (`khong-do-them-chay-gh`)
 - Phép kiểm «không rẽ theo tên» chạy một lần như luật kho, không còn là eval phủ cả app làm mọi PR chạm app thành hồ sơ cũ (`khong-re-theo-ten-thanh-luat-kho`)
-- Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu (`mau-trang-thai-chung`)
 - Danh sách góp ý đã gom được sửa trong một lượt (`sua-sau-chay-that`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
 
@@ -65,6 +64,7 @@ flowchart TD
 - Cây tổ chức hai cấp dưới gốc OneHub — bộ phận chứa phòng ban — có người, có trưởng, dựng và nhập hàng loạt ở Cài đặt › Tổ chức (`cau-truc-to-chuc`)
 - Cây căn chỉnh hiện lý do và mức tin của từng chỗ nối, lọc được các nhánh «Chưa có lý do» và «Đặt cược» (`cay-can-chinh-co-ly-do`)
 - «Thành viên thường không nhờ chat sửa trường của cả đội; model bị gỡ thì chat lùi về mặc định và báo quản trị» (`chat-an-toan-truoc-r1`)
+- Chỉ onehub đẩy được bản chụp lộ trình lên CRM; đường REST khác giữ trần thân 100 KB (`chat-duong-day-ban-chup`)
 - Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc (`chep-viec-can-lam-cu`)
 - Chỉ quản trị và chủ đổi được định nghĩa trường của cả đội — thành viên thường vẫn xem được, nhưng mọi đường đổi đều khoá, cả trên màn lẫn khi gọi thẳng máy chủ (`chi-quan-tri-sua-duoc-truong`)
 - Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360 (`chu-man-tieng-viet-khong-tran`)
@@ -104,6 +104,7 @@ flowchart TD
 - Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo (`kara-mot-ten`)
 - «Ở mọi nơi, lỗi tải không còn hiện như chưa có gì; lưu trữ bản ghi có Hoàn tác» — dòng thời gian, hoạt động trên website và 30 ngày đầu của ngăn bản ghi có khung «không tải được» kèm «Thử lại» thay vì rỗng hay biến mất; tóm tắt tuần nói «Kara đang…» và lỗi theo ai-ux; lưu trữ cá nhân, công ty, thoả thuận có Hoàn tác ngay trên toast; bước Kara không lưu được hiện khác bước đã lưu; ba việc chữ (`kara-trang-thai-toan-crm`)
 - Kế hoạch 30 ngày là một bản ghi làm việc được — mở như thoả thuận, giao bước, đánh dấu xong, đổi cầm trịch, ghi chú, và mọi thay đổi để lại vết (`ke-hoach-la-mot-ban-ghi`)
+- Tạo kế hoạch onboard từ khuôn là có sẵn việc cho từng phòng ban; deal thắng thì máy gợi ý mở kế hoạch (`ke-hoach-sinh-viec`)
 - Khép kỳ OKR — quản trị mở cửa sổ rà giữa kỳ; cuối kỳ máy gợi ý điểm từ số chốt, người chỉnh được kèm lý do; mỗi mục tiêu có ô điều học được; kỳ chỉ đóng khi mọi KR đã chấm; mục tiêu dở mang sang kỳ sau; số kỳ đã đóng bị khoá và xuất được; kiểm chất lượng khi đặt bằng luật (`khep-ky-okr`)
 - «Nguồn không kẹt mãi ở «đang đọc» khi máy soạn lỗi; «Soạn lại» chạy được; hộp chèn liên kết báo lỗi thay vì «không trang nào khớp»» (`kho-nguon-khong-ket`)
 - Khoá eve của bài thử không tranh nhau — chu.json ghi trọn một lần, lượt chờ giành khoá cũ bằng đổi tên có kiểm dấu, chủ khoá chỉ gỡ khoá của chính mình (`khoa-eve-khong-tranh`)
@@ -124,6 +125,7 @@ flowchart TD
 - Lý do Kara viết cho dòng căn chỉnh ở Soạn OKR đi theo căn chỉnh vào OKR thật, căn chỉnh cũ từ Soạn được điền lại, và khuôn trả của mục tiêu nói rõ mức tin của từng căn chỉnh (`ly-do-can-chinh-tu-soan`)
 - Lý do Kara nộp bản nháp bị từ chối hiện thành câu theo ngôn ngữ người dùng, không lộ mã máy (`ly-do-tu-choi-nop-theo-locale`)
 - Màn OKR trước R1 — Hồi ý không bị thanh công bố che, Cập nhật tuần nói «đã xong tuần này», thẻ Toàn cảnh không nói ngược bảng (`man-okr-truoc-r1`)
+- Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu (`mau-trang-thai-chung`)
 - Máy nhắc thay người canh — mỗi sáng một tin Slack riêng gom bước quá hạn, bước sắp hạn, kế hoạch im và mốc ngày 7 · 14 · 30; thẻ Tasks hiện cùng danh sách; ai cũng tự theo dõi được một kế hoạch (`may-nhac-truoc-nguoi`)
 - Máy soạn bản đề xuất — tải tệp quy định đang có (Word, PDF có chữ) lên kho tài liệu, máy soạn thành bản đề xuất có trích đoạn nguồn, chủ trang đọc nguồn cạnh nhau rồi duyệt (`may-soan-de-xuat`)
 - «Menu con của bộ lọc mở được trên điện thoại — không còn nằm ngoài màn ở khổ 375» (`menu-con-loc-dien-thoai`)
@@ -138,6 +140,7 @@ flowchart TD
 - Loại mục tiêu thứ ba «Học tập» cho OKR (`okr-loai-hoc-tap`)
 - OKR và tổ chức vá — dựng cây và đặt OKR không vấp (R1d) (`okr-to-chuc-va`)
 - Quyết một góp ý của Kara mà máy chủ từ chối vì lý do cố định thì người dùng thấy đúng lý do theo ngôn ngữ trang, không phải câu «thử lại sau ít phút» (`quyet-gop-y-noi-dung-ly-do`)
+- Toàn cảnh › Theo đơn vị có cách xem Sơ đồ — mỗi đơn vị một thẻ, đường nối theo căn chỉnh thật, lọc «Cần chú ý», mở thẻ ngay trên sơ đồ, thu gọn khi hơn 12 đơn vị (`so-do-can-chinh-don-vi`)
 - Số OKR tự chảy — KR của khối kinh doanh lấy số từ danh mục chỉ số CRM có định nghĩa cố định; mỗi ngày chụp giá trị thành lịch sử không đổi; bấm vào con số ra danh sách bản ghi đằng sau; KR ngoài CRM nhận số qua khoá API và Google Sheets (`so-okr-tu-chay`)
 - Soạn OKR cùng Trợ lý — người sửa được OKR của một đơn vị mở một cuộc đối thoại với Trợ lý OKR cho đơn vị và chu kỳ đang lập kế hoạch; Trợ lý mang bối cảnh (hồ sơ công ty và chiến lược từ Kho tài liệu, đơn vị · mô tả · chức danh, OKR cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng) vào cuộc, hỏi vài câu, đưa bản nháp bộ OKR trên bảng sống cạnh chat; người nhận · sửa · bác từng dòng, «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp; chạy trên app eve riêng, vai «chỉ OKR» đi qua đường mới; dựng và đo trên bộ OKR mẫu (`soan-okr-cung-tro-ly`)
 - Trang soạn OKR không lạc: không nhảy tab khi mở hay đóng bản ghi bên cạnh, hoàn tác cả nhóm thất bại thì báo lỗi trên biên nhận nhóm, lần Kara nộp bị từ chối không thành mốc và không làm gốc so sánh (`soan-okr-khong-lac`)
@@ -211,6 +214,7 @@ flowchart TD
 - Đường proto cho nghi thức design-pass — route /proto sau cờ dev, sổ đăng ký có khai state, proto mẫu ghép từ @crm/ui, và ba khoá design_pass trong config (`duong-proto-cho-design-pass`)
 - E24 của Trợ lý OKR: lượt quá hạn là trễ, không phải «không đo được» (`e24-qua-han-khong-phai-ha-tang`)
 - Quản trị viên tự cấu hình giai đoạn thoả thuận hợp tác trong Cài đặt, thay enum DealStage cứng (`giai-doan-thoa-thuan`)
+- Helper test gieoNguoi() chịu được gọi song song trên kho test mới — upsert tổ chức bắt P2002 rồi đọc lại, không đổi chỗ gọi (`gieo-nguoi-chiu-song-song`)
 - Bộ gieo rải mẫu đều qua các trang danh bạ, thay vì cắt 200 người đầu bảng (`gieo-rai-deu-danh-ba`)
 - Trình chạy test DOM từng tệp tự cắt một tệp quá giờ và gọi tên nó, in thời lượng thật của từng tệp và năm tệp chậm nhất (`gioi-han-tep-dom`)
 - Gỡ khoá góc nhìn — góc nhìn đang được chiến dịch dùng thì nói ra trước, và có lối trỏ chiến dịch sang góc nhìn khác (`go-khoa-goc-nhin`) — đã giao — máy thông, cửa veto còn mở
