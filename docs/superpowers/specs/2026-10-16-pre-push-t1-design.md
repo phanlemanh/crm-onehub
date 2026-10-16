@@ -30,7 +30,7 @@ lần đẩy được phân loại y như một PR sẵn sàng mang đúng các 
 nặng và «rỗng → nặng» đi theo CI.
 
 - `nang: false` (lý do `chi-t1`) → in ra stdout danh sách `t1Only.skip` của `.githooks/gate-shape.json`, và in ra stderr
-  đúng một dòng `pre-push: chỉ tệp T1 (<n> tệp) — bỏ test, build; CI vẫn chạy đủ.` (danh sách bỏ ghép từ khai).
+  đúng một dòng `pre-push: chỉ tệp T1 (<n> tệp) — bỏ test, build; CI phân loại PR theo cùng luật.` (danh sách bỏ ghép từ khai).
 - `nang: true` → stdout rỗng, không in gì.
 - Lỗi bất kỳ (git hỏng, ref `<remote>/onehub` vắng, config hay `gate-shape.json` hỏng, khối `t1Only` vắng, bash vắng)
   → stdout rỗng (đủ năm bước) và một dòng stderr `pre-push: không phân loại được lần đẩy (<lý do>) — chạy đủ năm bước.`
@@ -98,8 +98,8 @@ Sáu răng; E8 soát năm ghim đọc và chạy hai răng rẻ, E10 chạy răn
 
 ## Ngôn ngữ thông điệp
 
-Thông điệp bỏ chép nguyên văn đề bài. Đuôi «CI vẫn chạy đủ» chỉ đúng khi nhánh còn tệp mã khác so với `onehub`; với
-nhánh chỉ có tài liệu, CI cũng bỏ job nặng. Câu hỏi cho chủ kho ở Cổng Phạm vi (Hỏi-1).
+Đề bài viết đuôi «CI vẫn chạy đủ». Câu đó chỉ đúng khi nhánh còn tệp mã khác so với `onehub`; với nhánh chỉ có tài
+liệu, CI cũng bỏ job nặng. Chủ kho chọn ở Cổng Phạm vi (Hỏi-1, 16/10): đuôi là «CI phân loại PR theo cùng luật.»
 
 ## Đặc tả UX
 

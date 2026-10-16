@@ -5,7 +5,9 @@ slug: pre-push-t1
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
+approved_by: manh
+approved_at: 2026-10-16T15:30:37Z
 design_doc: docs/superpowers/specs/2026-10-16-pre-push-t1-design.md
 ---
 
@@ -25,7 +27,7 @@ kho ký Cổng Đáng «build» ngày 16/10 (`opportunity.md`).
   hợp của `git diff --name-only --no-renames <gốc> <local sha>` qua mọi dòng không phải xoá, với gốc = sha remote khi nó
   khác 0 và có trong kho, ngược lại = `git merge-base <remote>/onehub <local sha>`; quyết định là `quyetDinh` của CI cho
   một PR sẵn sàng mang đúng tập đó; `chi-t1` → stdout là `t1Only.skip` của `gate-shape.json` và stderr đúng một dòng
-  `pre-push: chỉ tệp T1 (<n> tệp) — bỏ test, build; CI vẫn chạy đủ.`; mọi kết cục khác → stdout rỗng; mọi lỗi (git,
+  `pre-push: chỉ tệp T1 (<n> tệp) — bỏ test, build; CI phân loại PR theo cùng luật.`; mọi kết cục khác → stdout rỗng; mọi lỗi (git,
   `<remote>/onehub` vắng, config hay `gate-shape.json` hỏng, khối `t1Only` vắng) → stdout rỗng và stderr
   `pre-push: không phân loại được lần đẩy (<lý do>) — chạy đủ năm bước.`; lệnh luôn thoát 0; thứ tự dòng stdin không
   đổi kết quả. Đúng bảng 18 ca viết trước ở `evals.yaml` E1.
@@ -101,3 +103,5 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
 - `t1_skip_globs` chỉ nhận `**/*.md` trong `_acceptance/`; `run-log.jsonl`, `decisions.jsonl`, `evals.yaml` không phải T1.
   Lần đẩy gói bằng chứng sau S4 vì thế vẫn chạy đủ năm lệnh. Lợi của vòng rơi vào lần đẩy tài liệu (docs, `.md`, bản
   đồ); nới `t1_skip_globs` là việc của config, ngoài vòng.
+- Đường nền 16/10 (`duong-nen.md`): engine đỏ vì 8 tệp kit vendored lệch engine 2.30 đang chạy — không đọc được ở đây;
+  đỏ sẵn của việc nâng kit, không phải của vòng này.

@@ -17,7 +17,7 @@ evals:
       bun test -t phan-loai. Moi ca dung kho git tam co remote tran, nhanh onehub da day, CHEP tep that cua kho (bo phan loai,
       phan-loai.mjs, pre-merge-check.sh, lib/workspace-record.cjs, gate-shape.json, config.yaml), goi CLI bo phan loai bang
       dong stdin dung khuon githooks(5). Ma tran 18 ca viet truoc, so test = 18 (lech -> do «so ca lech»):
-       1 ref moi chi docs/a.md -> stdout «test build», stderr dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI vẫn chạy đủ.»
+       1 ref moi chi docs/a.md -> stdout «test build», stderr dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.»
        2 ref moi docs/a.md + apps/api/a.ts -> stdout rong, stderr rong
        3 ref moi chi .github/workflows/ci.yml -> rong
        4 doi ten apps/api/a.ts -> docs/a2.md -> rong
@@ -79,7 +79,7 @@ evals:
       gate-shape-node-test, gate-shape.json, config.yaml va moi package.json cua apps/* packages/* that; bun gia tren PATH
       (bun run <tac vu> ghi so va ghi run summary turbo cho moi goi co kich ban do; bun <tep> chay node that); oxlint gia
       in dong phu. git push that. Ba ca viet truoc:
-      (a) nhanh chi docs/a.md -> ma 0; dau ra co dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI vẫn chạy đủ.»;
+      (a) nhanh chi docs/a.md -> ma 0; dau ra co dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.»;
           so bun gia = [check-types, lint, lint:slop] dung thu tu; khong dong «pre-push: bun run test» / «… build»; co dong
           «pre-push: gate matches its shape across <N> packages» voi N = so package.json da chep; co dong bat dau
           «  skipped: test, build».
@@ -200,7 +200,7 @@ evals:
       node rang/day-that.mjs tren cay that (goc suy tu vi tri script). Dung commit treo bang GIT_INDEX_FILE rieng +
       write-tree + commit-tree tren HEAD, them docs/pre-push-t1-<pid>.md — khong ref, khong doi thu muc lam viec, khong
       dung index chung. Chay bash .githooks/pre-push origin <url> voi stdin «refs/heads/thu <commit> refs/heads/thu <HEAD>»:
-      ma 0; dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI vẫn chạy đủ.»; dung ba dong «pre-push: bun run
+      ma 0; dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.»; dung ba dong «pre-push: bun run
       check-types|lint|lint:slop»; khong dong «pre-push: bun run test|build»; «pre-push: gate matches its shape»; dong bat dau
       «  skipped: test, build». Doi chung am: commit treo thu hai them packages/env/src/pre-push-t1-<pid>.ts -> CLI bo phan
       loai stdout rong. git status --porcelain truoc = sau. In «dat day-that».
