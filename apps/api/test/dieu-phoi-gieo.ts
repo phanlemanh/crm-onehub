@@ -86,6 +86,15 @@ export async function donGieo(): Promise<void> {
 	});
 	await db.company.deleteMany({ where: { id: { in: congTy } } });
 	await db.contact.deleteMany({ where: { id: { in: caNhan } } });
+	await db.viec.deleteMany({
+		where: {
+			OR: [
+				{ taoBoiId: { in: nguoi } },
+				{ nguoiGiaoId: { in: nguoi } },
+				{ nguoiThucHienId: { in: nguoi } },
+			],
+		},
+	});
 	await db.user.deleteMany({ where: { id: { in: nguoi } } });
 	await db.department.deleteMany({ where: { id: { in: boPhan } } });
 	for (const so of Object.values(daGieo)) so.length = 0;
