@@ -95,6 +95,37 @@ const CA = {
 		],
 		dat: (r) => r.status !== 0 && r.out.includes("tai luong cuoc nguoi khac"),
 	},
+	"e16-thieu": {
+		ap: (sao) =>
+			suaTep(
+				sao,
+				"_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs",
+				(s) => thayMotLan(s, '\t"nhac-qua-zalo E17",\n', "", "e16-thieu"),
+			),
+		lenh: [
+			"node",
+			"_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs",
+			"--bo-lan",
+		],
+		dat: (r) => r.status === 1 && r.out.includes('thieu ["nhac-qua-zalo E17"]'),
+	},
+	"e16-cu": {
+		ap: (sao) =>
+			suaTep(
+				sao,
+				"_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs",
+				(s) => thayMotLan(s, "docEvals(h, DAU_VONG)", "docEvals(h)", "e16-cu"),
+			),
+		lenh: [
+			"node",
+			"_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs",
+			"--bo-lan",
+		],
+		dat: (r) =>
+			r.status === 1 &&
+			r.out.includes("loi-tac-tu-zalo-noi-dung-nguyen-nhan E11") &&
+			r.out.includes("man-cai-dat-noi-tieng-viet E12"),
+	},
 	"moi-chuoi-khai": {
 		ap: (sao) =>
 			suaTep(

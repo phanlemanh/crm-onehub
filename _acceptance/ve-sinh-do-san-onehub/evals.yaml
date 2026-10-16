@@ -133,14 +133,18 @@ evals:
     executor: script
     layer: logic
     cmd: config:executors.script.vs_chieu_do_moi_chuoi
-    paths: ["_acceptance/man-cai-dat-noi-tieng-viet/rang/**", "_acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs"]
+    paths: ["_acceptance/man-cai-dat-noi-tieng-viet/rang/**", "_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs", "_acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs"]
     expected: |
       rang/chieu-do.mjs --ca moi-chuoi-khai --ca moi-chuoi-that: (khai) ban sao bo "hinh" khoi thuoc_jsx_ky_thuat
       cua khong-phai-chu-nguoi-doc.json -> moi-chuoi ma 1 va dung hai dong chua 'settings/page.tsx:39 [thuoc:hinh]
       "the"' va 'settings/currencies/page.tsx:36 [thuoc:hinh] "the"'; (that) ban sao chen <p>Loading settings</p>
       vao settings/page.tsx -> moi-chuoi ma 1 va mot dong "CON TIENG ANH" chua '"Loading settings"'. Ca hai dat ->
       "CHIEU DO DAT: moi-chuoi-khai" va "CHIEU DO DAT: moi-chuoi-that", ma 0; mot ca khong dat -> "CHIEU DO HONG:
-      <ca>" ma 1. Cay lam viec khong doi (cung phep so nhu E2).
+      <ca>" ma 1. Cay lam viec khong doi (cung phep so nhu E2). Them hai ca cho ve «tap eval nhin-thay» cua
+      khong-hoi-quy.mjs (khung-trang-cai-dat E16) da neo vao evals.yaml o dinh D cua cap gop f1a32ab99 (F8): (e16-thieu)
+      ban sao bo "nhac-qua-zalo E17" khoi NHIN_THAY_BI_DUNG, chay --bo-lan -> ma 1 va 'thieu ["nhac-qua-zalo E17"]';
+      (e16-cu) ban sao bo neo (docEvals(h) thay docEvals(h, DAU_VONG)) -> ma 1 va thua hai eval
+      loi-tac-tu-zalo-noi-dung-nguyen-nhan E11, man-cai-dat-noi-tieng-viet E12 nhu do san tren onehub.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
