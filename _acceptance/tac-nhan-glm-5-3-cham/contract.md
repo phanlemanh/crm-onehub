@@ -5,7 +5,7 @@ slug: tac-nhan-glm-5-3-cham
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: approved
+status: draft
 approved_by: Phan Le Manh
 approved_at: 2026-10-16
 design_doc: _acceptance/tac-nhan-glm-5-3-cham/design.md
@@ -21,7 +21,7 @@ build», ghi ở `opportunity.md`). Việc điều tra, không sửa sản phẩ
 ## Criteria
 
 - AC-1: Given bốn biến thể (mốc `zai/glm-5.2-fast`; `zai/glm-5.3`; `zai/glm-5.3-fast`; `zai/glm-5.3` với `reasoning: "low"` ở phiên con `agent_builder`), When chạy `eve eval agent-builder` xen kẽ theo vòng (mốc, glm53, glm53-fast, glm53-low) cho tới đủ số lượt mỗi biến thể, mỗi lượt một kho đo riêng, Then bằng chứng có một dòng mỗi lượt, ghi: biến thể, kết quả eval (qua hay hỏng, lý do), giờ bắt đầu và kết thúc, cờ `bi_cat` khi eval huỷ ở 180 giây, băm của `subagents/agent_builder/agent.ts` lúc chạy, và của phiên con `agent_builder`: số bước, token vào, token ra, giây từ bước đầu tới bước cuối — tính lại được từ bản kết xuất thô bảng `aiChiPhi` của chính lượt đó; And không hai lượt nào chồng giờ, không hai lượt liền nhau cùng biến thể.
-- AC-2: Given mỗi lượt, When đối chiếu bản kết xuất `aiChiPhi` của lượt, Then mọi bước phiên con có `modelId` bằng model của biến thể; lượt lệch được in «sai model» và loại khỏi kết luận, không làm đỏ cả hồ sơ; And chỉ các lượt glm53-low mang băm của bản sửa tạm, mọi lượt khác mang băm của bản đã commit.
+- AC-2: Given mỗi lượt, When đối chiếu dòng của lượt trong `evidence/tac-nhan.jsonl` với kế hoạch và đọc `rang/do-tac-nhan.ts`, Then dòng ghi model bằng model của biến thể, và ô model của kho đo được đọc lại ngay trước khi eval chạy (đọc lại lệch thì lượt dừng, không có dòng); lượt lệch được in «sai model» và loại khỏi kết luận, không làm đỏ cả hồ sơ; And chỉ các lượt glm53-low mang băm của bản sửa tạm, mọi lượt khác mang băm của bản đã commit. Bản kết xuất `aiChiPhi` không chứng model vì cột `modelId` luôn rỗng (`so-chi-phi.ts:90`); bằng chứng model theo từng bước thuộc hàng MH4.
 - AC-3: Given một phép dò thẳng AI Gateway với `zai/glm-5.3` ở mức suy luận `low` và `high` trên cùng một câu, When đọc `usage` Gateway trả, Then bằng chứng ghi token suy luận của hai mức, để biết mức `low` có tới nhà cung cấp hay không.
 - AC-4: Given bảng các lượt, When đọc kết luận, Then kết luận chỉ nêu nguyên nhân khi glm53 mặc định trong lô có ít nhất một lượt hỏng hay trên 180 giây (không thì ghi «không tái hiện»); mỗi câu về nguyên nhân dẫn chênh lệch số bước, token, giây của phiên con giữa hai biến thể kèm tên tệp nhật ký lượt; biến thể còn ít hơn số lượt đã định thì không được nói «cả n lượt»; mọi con số khớp một ô của bảng hay của phép dò AC-3, hoặc ghi nguồn P0 khi là số của GLM 5.3 Flash; và kết luận nói rõ trần 3 phút là của bài đo còn phiên bộ dựng thật có trần một ngày.
 - AC-5: Given nhánh của hàng này, When so với điểm cắt từ onehub, Then không tệp nào ngoài `_acceptance/tac-nhan-glm-5-3-cham/` và các dòng thêm vào `_acceptance/config.yaml` bị đổi.

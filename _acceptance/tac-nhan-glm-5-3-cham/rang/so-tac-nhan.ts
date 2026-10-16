@@ -19,6 +19,10 @@ const { z } = createRequire(join(GOC, "apps", "agent", "package.json"))(
 
 const SO = {
 	evidence: resolve(import.meta.dir, "..", "evidence"),
+	tepDo: resolve(import.meta.dir, "do-tac-nhan.ts"),
+	chanDocLai: "if (doc.id !== model)",
+	goiDat: "datModel(url, b.model);",
+	goiEval: "await chay(",
 	slug: "tac-nhan-glm-5-3-cham",
 	tran: 180,
 	tepBam: "bam.txt",
@@ -39,6 +43,7 @@ const SO = {
 		bang: "LECH bang.md",
 		bam: "BAM",
 		saiModel: "sai model",
+		docLai: "THIEU DOC LAI MODEL",
 		thieuLuot: "thieu luot",
 		roSuyLuan: "RO SUY LUAN",
 		doSuyLuan: "DO SUY LUAN THIEU",
@@ -133,7 +138,6 @@ type SoCon = {
 	token_vao: number;
 	token_ra: number;
 	giay: number;
-	models: string[];
 };
 
 function soCon(hang: z.infer<typeof khuonHang>[], phien: string): SoCon {
@@ -147,7 +151,6 @@ function soCon(hang: z.infer<typeof khuonHang>[], phien: string): SoCon {
 			t.length > 1
 				? Number((((t.at(-1) ?? 0) - (t[0] ?? 0)) / 1000).toFixed(1))
 				: 0,
-		models: [...new Set(con.map((h) => h.modelId ?? "?"))],
 	};
 }
 
@@ -168,21 +171,19 @@ function inBang(
 	);
 	const tom = thuTu.map((t) => {
 		const r = sx.filter((x) => x.d.bien_the === t);
-		const qua = r.filter(
-			(x) => x.d.ket_qua === "qua" && !x.d.bi_cat && x.d.giay < SO.tran,
-		).length;
+		const qua = r.filter((x) => x.d.ket_qua === "qua" && !x.d.bi_cat).length;
 		return `| ${t} | ${qua}/${r.length} | ${r.map((x) => x.c.giay).join(", ")} | ${r.map((x) => x.c.so_buoc).join(", ")} | ${r.map((x) => x.c.token_ra).join(", ")} |`;
 	});
 	return [
 		"# Bảng Tác nhân bộ dựng theo biến thể",
 		"",
-		"| biến thể | lượt | kết quả | giây cả lượt | bước phiên con | token vào con | token ra con | giây phiên con | nhật ký |",
+		"| biến thể | lượt | kết quả | giây cả lượt (gồm dựng kho) | bước phiên con | token vào con | token ra con | giây phiên con | nhật ký |",
 		"| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
 		...dong,
 		"",
 		"## Tóm theo biến thể",
 		"",
-		`| biến thể | qua dưới ${SO.tran} s | giây phiên con | bước phiên con | token ra con |`,
+		`| biến thể | qua eval (trần ${SO.tran} s của bài đo) | giây phiên con | bước phiên con | token ra con |`,
 		"| --- | --- | --- | --- | --- |",
 		...tom,
 		"",
@@ -218,7 +219,19 @@ function kiemSuyLuan(ev: string): KetSuyLuan {
 	};
 }
 
-function kiem(ev: string): Ket {
+function kiemDocLai(maNguon: string): string[] {
+	const chan = maNguon.indexOf(SO.chanDocLai);
+	const dat = maNguon.indexOf(SO.goiDat);
+	const evl = maNguon.indexOf(SO.goiEval, dat);
+	const sauChan = maNguon.slice(chan, chan + 200);
+	if (chan < 0 || !sauChan.includes("throw new Error"))
+		return [`${SO.nhan.docLai}: thieu chan doc lai trong do-tac-nhan.ts`];
+	if (dat < 0 || evl < 0)
+		return [`${SO.nhan.docLai}: datModel khong dung truoc eval`];
+	return [];
+}
+
+function kiem(ev: string, maNguon: string): Ket {
 	const ke = khuonKeHoach.parse(JSON.parse(doc(ev, "ke-hoach.json")));
 	const dongTho = doc(ev, "tac-nhan.jsonl").split("\n").filter(Boolean);
 	const ds = dongTho.map((d) => khuonDong.parse(JSON.parse(d)));
@@ -264,8 +277,8 @@ function kiem(ev: string): Ket {
 		const bamDung = b?.low ? ke.bam_agent_low : ke.bam_agent_goc;
 		if (d.bam_agent !== bamDung)
 			hong.push(`${SO.nhan.roSuyLuan} ${d.bien_the}#${d.luot}`);
-		if (!b || c.models.some((m) => m !== b.model)) {
-			const tin = `${SO.nhan.saiModel} ${d.bien_the} luot ${d.luot} (${c.models.join(", ")})`;
+		if (!b || d.model !== b.model) {
+			const tin = `${SO.nhan.saiModel} ${d.bien_the} luot ${d.luot} (${d.model})`;
 			ra.push(tin);
 			loai.push(tin);
 			continue;
@@ -281,11 +294,14 @@ function kiem(ev: string): Ket {
 	if (!existsSync(join(ev, SO.bang)) || doc(ev, SO.bang) !== bang)
 		hong.push(SO.nhan.bang);
 	const sl = kiemSuyLuan(ev);
-	hong.push(...sl.hong, ...kiemBam(ev));
+	hong.push(...sl.hong, ...kiemBam(ev), ...kiemDocLai(maNguon));
 	return {
 		ma: hong.length ? 1 : 0,
 		dong: [
 			...ra,
+			...(kiemDocLai(maNguon).length
+				? []
+				: ["doc lai model: o model cua kho do doc lai truoc moi luot"]),
 			...sl.dong,
 			`luot hop le: ${hop.length}/${can.length}`,
 			...hong,
@@ -327,6 +343,8 @@ function lenhPhamVi(): PhamViTho {
 	return { ds, cfg };
 }
 
+const maGoc = () => readFileSync(SO.tepDo, "utf8");
+
 const tam: string[] = [];
 function banSao(): string {
 	const t = mkdtempSync(join(tmpdir(), "tnc-so-"));
@@ -336,7 +354,7 @@ function banSao(): string {
 	return t;
 }
 const capLai = (ev: string) => {
-	writeFileSync(join(ev, SO.bang), kiem(ev).bang);
+	writeFileSync(join(ev, SO.bang), kiem(ev, maGoc()).bang);
 	writeFileSync(join(ev, SO.tepBam), ghiBam(ev));
 	return ev;
 };
@@ -358,7 +376,7 @@ type ChieuDo = {
 	ten: string;
 	chay: () => { ma: number; dong: string[]; mong: number; phaiCo: string[] };
 };
-const ket = (ev: string) => kiem(ev);
+const ket = (ev: string, ma = maGoc()) => kiem(ev, ma);
 
 const CHIEU_DO: readonly ChieuDo[] = [
 	{
@@ -433,28 +451,39 @@ const CHIEU_DO: readonly ChieuDo[] = [
 		},
 	},
 	{
-		ten: "doi modelId mot buoc cua glm53",
+		ten: "doi model mot dong cua glm53",
 		chay: () => {
-			const ev = banSao();
-			const d = khuonDong.parse(
-				JSON.parse(
-					doc(ev, "tac-nhan.jsonl")
-						.split("\n")
-						.find((x) => x.includes('"bien_the":"glm53"')) ?? "{}",
+			const ev = capLai(
+				suaJsonl(banSao(), (ds) =>
+					ds.map((d) =>
+						d.bien_the === "glm53" && d.luot === 1
+							? { ...d, model: "zai/glm-5.2-fast" }
+							: d,
+					),
 				),
 			);
-			const hang = z.array(khuonHang).parse(JSON.parse(doc(ev, d.aichiphi)));
-			const i = hang.findIndex((h) => h.phienCha === d.phien_goc);
-			if (i >= 0) hang[i] = { ...hang[i], modelId: "zai/glm-5.2-fast" };
-			writeFileSync(join(ev, d.aichiphi), `${JSON.stringify(hang, null, 2)}\n`);
-			capLai(ev);
 			const k = ket(ev);
+			const conTrongBang = k.bang
+				.split("\n")
+				.some((x) => x.startsWith("| glm53 | 1 |"));
 			return {
 				...k,
+				ma: conTrongBang ? 1 : k.ma,
 				mong: 0,
-				phaiCo: [`${SO.nhan.saiModel} glm53 luot ${d.luot}`],
+				phaiCo: [`${SO.nhan.saiModel} glm53 luot 1`],
 			};
 		},
+	},
+	{
+		ten: "bo chan doc lai model",
+		chay: () => ({
+			...ket(
+				banSao(),
+				maGoc().replace(SO.chanDocLai, "if (false)"),
+			),
+			mong: 1,
+			phaiCo: [SO.nhan.docLai],
+		}),
 	},
 	{
 		ten: "sua mot o bang.md",
@@ -555,12 +584,12 @@ if (!existsSync(join(SO.evidence, "tac-nhan.jsonl"))) {
 	process.exit(2);
 }
 if (doiSo.includes("--ghi-bam")) {
-	writeFileSync(join(SO.evidence, SO.bang), kiem(SO.evidence).bang);
+	writeFileSync(join(SO.evidence, SO.bang), kiem(SO.evidence, maGoc()).bang);
 	writeFileSync(join(SO.evidence, SO.tepBam), ghiBam(SO.evidence));
 	console.log(`da ghi ${SO.bang} va ${SO.tepBam}`);
 	process.exit(0);
 }
-const k = kiem(SO.evidence);
+const k = kiem(SO.evidence, maGoc());
 for (const d of k.dong) console.log(d);
 if (!chayChieuDo()) {
 	console.log("THUOC HONG: mot chieu do khong phan biet duoc");

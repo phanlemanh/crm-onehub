@@ -1,26 +1,68 @@
 {
   "feature_plain": "Tìm cho ra vì sao Tác nhân dựng tác nhân chậm gấp đôi trên GLM 5.3 so với GLM 5.2 Fast, bằng số đo thật, để chọn model và cấu hình cho Tác nhân có căn cứ.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ chạy Tác nhân trên bốn cấu hình (GLM 5.2 Fast làm mốc, GLM 5.3 mặc định, GLM 5.3 hạng nhanh, GLM 5.3 suy luận thấp), xen kẽ nhau, ghi số bước, chữ và giây của phần dựng tác nhân ở mỗi lượt."},
-    {"id": "AC-2", "p": "Sẽ chứng mỗi lượt chạy đúng model đã định; lượt chạy nhầm model bị loại khỏi kết luận."},
-    {"id": "AC-3", "p": "Sẽ thử thẳng với AI Gateway xem mức suy luận thấp có thật sự tới được nhà cung cấp không."},
-    {"id": "AC-4", "p": "Sẽ viết kết luận chỉ dựa trên số đo: nêu nguyên nhân khi tái hiện được chỗ chậm, mỗi câu dẫn số và nhật ký, và nói rõ trần 3 phút chỉ là của bài đo."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ chạy Tác nhân trên bốn cấu hình (GLM 5.2 Fast làm mốc, GLM 5.3 mặc định, GLM 5.3 hạng nhanh, GLM 5.3 suy luận thấp), xen kẽ nhau, ghi số bước, chữ và giây của phần dựng tác nhân ở mỗi lượt."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ chứng mỗi lượt chạy đúng model đã định bằng cách đọc lại ô model của kho đo ngay trước khi chạy; lượt nhầm model bị loại khỏi kết luận. Model theo từng bước sẽ do MH4 chứng, vì sổ chi phí không ghi model."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ thử thẳng với AI Gateway xem mức suy luận thấp có thật sự tới được nhà cung cấp không."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ viết kết luận chỉ dựa trên số đo: nêu nguyên nhân khi tái hiện được chỗ chậm, mỗi câu dẫn số và nhật ký, và nói rõ trần 3 phút chỉ là của bài đo."
+    }
   ],
   "wont_do": [
-    {"id": "AC-5", "p": "Sẽ KHÔNG sửa mã sản phẩm: chỉ thêm tệp hồ sơ; cấu hình suy luận thấp đổi tạm rồi trả lại."},
-    {"id": "OOS-1", "p": "KHÔNG đặt mức suy luận hay đổi model trong sản phẩm — hàng đo theo vai (MH4) quyết theo số của hàng này."},
-    {"id": "OOS-2", "p": "KHÔNG làm trải nghiệm chờ lâu — hàng K7."},
-    {"id": "OOS-3", "p": "KHÔNG đo chữ suy luận riêng của từng lượt Tác nhân (sổ chi phí không ghi); mức suy luận đo riêng ở phép thử Gateway."}
+    {
+      "id": "AC-5",
+      "p": "Sẽ KHÔNG sửa mã sản phẩm: chỉ thêm tệp hồ sơ; cấu hình suy luận thấp đổi tạm rồi trả lại."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG đặt mức suy luận hay đổi model trong sản phẩm — hàng đo theo vai (MH4) quyết theo số của hàng này."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG làm trải nghiệm chờ lâu — hàng K7."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG đo chữ suy luận riêng của từng lượt Tác nhân (sổ chi phí không ghi); mức suy luận đo riêng ở phép thử Gateway."
+    }
   ],
   "scope_plain": "Đây là việc điều tra: chỉ đo và kết luận, không đổi sản phẩm.",
   "coverage_plain": [
-    {"i": 0, "p": "Đủ khi: bốn cấu hình × số lượt (Hỏi-1) có số đo phần dựng tác nhân, cộng một phép thử mức suy luận ở Gateway; hai giả thuyết còn lại (ZDR, trần bài đo) đã trả lời bằng đọc mã."}
+    {
+      "i": 0,
+      "p": "Đủ khi: bốn cấu hình × số lượt (Hỏi-1) có số đo phần dựng tác nhân, cộng một phép thử mức suy luận ở Gateway; hai giả thuyết còn lại (ZDR, trần bài đo) đã trả lời bằng đọc mã."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Cấu hình suy luận thấp có thể không có tác dụng mà phép đo không bắt — đã thêm phép thử thẳng với Gateway và dấu chứng cấu hình tạm chỉ có ở đúng các lượt đó."},
-    {"i": 1, "p": "Bộ so chỉ đọc số trình đo tự viết — đã đổi sang tính lại từ bản chép thô sổ chi phí của từng lượt."},
-    {"i": 2, "p": "Thứ tự chạy có thể làm nhiễu so sánh — đã chạy xen kẽ, mỗi lượt một kho, cấm hai lượt chồng giờ."},
-    {"i": 3, "p": "Kết luận có thể vượt dữ liệu — chỉ được nêu nguyên nhân khi GLM 5.3 mặc định tái hiện được chỗ chậm."},
-    {"i": 4, "p": "Lượt bị cắt ở 180 giây bị tính như số thật — đã gắn cờ và ghi «≥180»."}
+    {
+      "i": 0,
+      "p": "Cấu hình suy luận thấp có thể không có tác dụng mà phép đo không bắt — đã thêm phép thử thẳng với Gateway và dấu chứng cấu hình tạm chỉ có ở đúng các lượt đó."
+    },
+    {
+      "i": 1,
+      "p": "Bộ so chỉ đọc số trình đo tự viết — đã đổi sang tính lại từ bản chép thô sổ chi phí của từng lượt."
+    },
+    {
+      "i": 2,
+      "p": "Thứ tự chạy có thể làm nhiễu so sánh — đã chạy xen kẽ, mỗi lượt một kho, cấm hai lượt chồng giờ."
+    },
+    {
+      "i": 3,
+      "p": "Kết luận có thể vượt dữ liệu — chỉ được nêu nguyên nhân khi GLM 5.3 mặc định tái hiện được chỗ chậm."
+    },
+    {
+      "i": 4,
+      "p": "Lượt bị cắt ở 180 giây bị tính như số thật — đã gắn cờ và ghi «≥180»."
+    }
   ]
 }

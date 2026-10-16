@@ -13,8 +13,8 @@ evals:
     criterion: AC-2
     executor: script
     cmd: config:executors.script.tnc_so
-    paths: [_acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts, _acceptance/tac-nhan-glm-5-3-cham/evidence/**]
-    expected: "exit 0; cùng lệnh E1. Lượt có một bước phiên con mang modelId khác model của biến thể → in «sai model <biến thể> luot <n>», đánh dấu loại, exit vẫn 0; biến thể còn ít lượt hợp lệ hơn kế hoạch → in «thieu luot <biến thể>». Băm agent_builder/agent.ts của lượt: glm53-low mang băm bản sửa tạm, mọi lượt khác mang băm bản đã commit (băm ghi trong ke-hoach.json). Chiều đỏ trên bản sao: đổi modelId một bước của lượt glm53 → dòng «sai model glm53» xuất hiện và lượt đó vắng khỏi bang.md in lại; đổi băm của một lượt glm53 thành băm bản sửa → exit 1 ghim «ro suy luan glm53»."
+    paths: [_acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts, _acceptance/tac-nhan-glm-5-3-cham/rang/do-tac-nhan.ts, _acceptance/tac-nhan-glm-5-3-cham/evidence/**]
+    expected: "exit 0; cùng lệnh E1. Lượt có model trong tac-nhan.jsonl khác model của biến thể ở ke-hoach.json → in «sai model <biến thể> luot <n>», lượt vắng khỏi bang.md in lại, exit vẫn 0; biến thể còn ít lượt hợp lệ hơn kế hoạch → in «thieu luot <biến thể>». rang/do-tac-nhan.ts có chặn đọc lại ô model (đọc lại lệch thì ném lỗi) và gọi datModel trước eval → in «doc lai model»; thiếu chặn → exit 1 ghim «THIEU DOC LAI MODEL». Băm agent_builder/agent.ts của lượt: glm53-low mang băm bản sửa tạm, mọi lượt khác mang băm bản đã commit (băm ghi trong ke-hoach.json). Chiều đỏ trên bản sao: đổi model một dòng glm53 → dòng «sai model glm53» xuất hiện và lượt đó vắng khỏi bang.md in lại; bỏ chặn đọc lại trong bản sao mã → exit 1 ghim «THIEU DOC LAI MODEL»; đổi băm của một lượt glm53 thành băm bản sửa → exit 1 ghim «RO SUY LUAN glm53»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
