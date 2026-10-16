@@ -17,6 +17,8 @@ const { z } = createRequire(join(GOC, "apps", "agent", "package.json"))(
 	"zod",
 ) as typeof import("zod");
 
+const GIO_MS = 60 * 60 * 1000;
+
 const SO = {
 	evidence: resolve(import.meta.dir, "..", "evidence"),
 	tepDo: resolve(import.meta.dir, "do-tac-nhan.ts"),
@@ -25,6 +27,8 @@ const SO = {
 	goiEval: "await chay(",
 	slug: "tac-nhan-glm-5-3-cham",
 	tran: 180,
+	lechKetXuatMs: 7 * GIO_MS,
+	tepAgent: "apps/agent/agent/subagents/agent_builder/agent.ts",
 	tepBam: "bam.txt",
 	bang: "bang.md",
 	khongBam: ["bam.txt", "ket-luan.md"],
@@ -39,6 +43,11 @@ const SO = {
 		chong: "CHONG GIO",
 		lien: "LIEN NHAU CUNG BIEN THE",
 		sauKetThuc: "PHIEN CON CHAY SAU HUY",
+		truocBatDau: "AICHIPHI TRUOC BAT DAU",
+		thua: "THUA CAP",
+		bamGoc: "BAM GOC KHONG KHOP AGENT.TS",
+		gatewayLoi: "DO SUY LUAN GATEWAY LOI",
+		gitLoi: "KHONG DO DUOC PHAM VI",
 		biCat: "BI CAT",
 		bang: "LECH bang.md",
 		bam: "BAM",
@@ -140,9 +149,11 @@ type SoCon = {
 	giay: number;
 };
 
+const gioThat = (at: string) => Date.parse(at) + SO.lechKetXuatMs;
+
 function soCon(hang: z.infer<typeof khuonHang>[], phien: string): SoCon {
 	const con = hang.filter((h) => h.phienCha === phien && h.sessionId !== phien);
-	const t = con.map((h) => Date.parse(h.at)).sort((a, b) => a - b);
+	const t = con.map((h) => gioThat(h.at)).sort((a, b) => a - b);
 	return {
 		so_buoc: con.length,
 		token_vao: con.reduce((s, h) => s + (h.inputTokens ?? 0), 0),
@@ -203,6 +214,9 @@ function kiemSuyLuan(ev: string): KetSuyLuan {
 	const hong: string[] = [];
 	if (!d.muc.low) hong.push(`${SO.nhan.doSuyLuan} low`);
 	if (!d.muc.high) hong.push(`${SO.nhan.doSuyLuan} high`);
+	for (const [ten, m] of Object.entries(d.muc))
+		if (m && m.status !== 200)
+			hong.push(`${SO.nhan.gatewayLoi} ${ten} status ${m.status}`);
 	const lo = d.muc.low?.token_suy_luan;
 	const hi = d.muc.high?.token_suy_luan;
 	const ket =
@@ -242,6 +256,15 @@ function kiem(ev: string, maNguon: string): Ket {
 	);
 	const co = new Set(ds.map((d) => `${d.bien_the}#${d.luot}`));
 	for (const k of can) if (!co.has(k)) hong.push(`${SO.nhan.thieu} ${k}`);
+	const canSet = new Set(can);
+	const daThay = new Set<string>();
+	for (const d of ds) {
+		const k = `${d.bien_the}#${d.luot}`;
+		if (!canSet.has(k) || daThay.has(k)) hong.push(`${SO.nhan.thua} ${k}`);
+		daThay.add(k);
+	}
+	const bamThat = sha(readFileSync(join(GOC, SO.tepAgent), "utf8"));
+	if (ke.bam_agent_goc !== bamThat) hong.push(SO.nhan.bamGoc);
 	const theoGio = [...ds].sort(
 		(a, b) => Date.parse(a.bat_dau) - Date.parse(b.bat_dau),
 	);
@@ -266,8 +289,10 @@ function kiem(ev: string, maNguon: string): Ket {
 		const c = soCon(hang, d.phien_goc);
 		if (c.so_buoc < 1)
 			hong.push(`${SO.nhan.lech} ${d.bien_the}#${d.luot}: so buoc phien con 0`);
-		if (hang.some((h) => Date.parse(h.at) > Date.parse(d.ket_thuc)))
+		if (hang.some((h) => gioThat(h.at) > Date.parse(d.ket_thuc)))
 			hong.push(`${SO.nhan.sauKetThuc} ${d.bien_the}#${d.luot}`);
+		if (hang.some((h) => gioThat(h.at) < Date.parse(d.bat_dau)))
+			hong.push(`${SO.nhan.truocBatDau} ${d.bien_the}#${d.luot}`);
 		if (
 			d.ket_qua === "hong" &&
 			(d.ly_do ?? "").includes("qua tran") &&
@@ -324,22 +349,22 @@ function phamVi(ds: string[], diffConfig: string): string[] {
 
 type PhamViTho = { ds: string[]; cfg: string };
 
+function chayGit(doiSo: string[]): string {
+	const r = spawnSync("git", ["-C", GOC, ...doiSo], { encoding: "utf8" });
+	if (r.status !== 0)
+		throw new Error(
+			`${SO.nhan.gitLoi}: git ${doiSo.join(" ")} — ${(r.stderr || "").trim()}`,
+		);
+	return r.stdout;
+}
+
 function lenhPhamVi(): PhamViTho {
-	const mb = spawnSync(
-		"git",
-		["-C", GOC, "merge-base", "HEAD", "origin/onehub"],
-		{ encoding: "utf8" },
-	).stdout.trim();
-	const ds = spawnSync("git", ["-C", GOC, "diff", "--name-only", mb, "HEAD"], {
-		encoding: "utf8",
-	})
-		.stdout.split("\n")
+	const mb = chayGit(["merge-base", "HEAD", "origin/onehub"]).trim();
+	if (!mb) throw new Error(`${SO.nhan.gitLoi}: merge-base rong`);
+	const ds = chayGit(["diff", "--name-only", mb, "HEAD"])
+		.split("\n")
 		.filter(Boolean);
-	const cfg = spawnSync(
-		"git",
-		["-C", GOC, "diff", mb, "HEAD", "--", "_acceptance/config.yaml"],
-		{ encoding: "utf8" },
-	).stdout;
+	const cfg = chayGit(["diff", mb, "HEAD", "--", "_acceptance/config.yaml"]);
 	return { ds, cfg };
 }
 
@@ -486,6 +511,60 @@ const CHIEU_DO: readonly ChieuDo[] = [
 		}),
 	},
 	{
+		ten: "mot hang aichiphi sau ket_thuc",
+		chay: () => {
+			const ev = banSao();
+			const d = khuonDong.parse(
+				JSON.parse(doc(ev, "tac-nhan.jsonl").split("\n")[0] ?? "{}"),
+			);
+			const hang = z.array(khuonHang).parse(JSON.parse(doc(ev, d.aichiphi)));
+			const cuoi = hang.length - 1;
+			const sau = new Date(
+				Date.parse(d.ket_thuc) - SO.lechKetXuatMs + 60_000,
+			).toISOString();
+			const moi = hang.map((h, i) => (i === cuoi ? { ...h, at: sau } : h));
+			writeFileSync(join(ev, d.aichiphi), `${JSON.stringify(moi, null, 2)}\n`);
+			capLai(ev);
+			return {
+				...ket(ev),
+				mong: 1,
+				phaiCo: [`${SO.nhan.sauKetThuc} ${d.bien_the}#${d.luot}`],
+			};
+		},
+	},
+	{
+		ten: "them mot dong ngoai ke hoach",
+		chay: () => {
+			const ev = capLai(
+				suaJsonl(banSao(), (ds) => [
+					...ds,
+					{ ...(ds.at(-1) as Dong), luot: 9, bat_dau: "2099-01-01T00:00:00.000Z", ket_thuc: "2099-01-01T00:01:00.000Z" },
+				]),
+			);
+			return { ...ket(ev), mong: 1, phaiCo: [SO.nhan.thua] };
+		},
+	},
+	{
+		ten: "do suy luan gateway loi",
+		chay: () => {
+			const ev = banSao();
+			const d = khuonDoSuyLuan.parse(JSON.parse(doc(ev, "do-suy-luan.json")));
+			const moi = {
+				...d,
+				muc: {
+					...d.muc,
+					low: d.muc.low && { ...d.muc.low, status: 402, token_suy_luan: null },
+				},
+			};
+			writeFileSync(
+				join(ev, "do-suy-luan.json"),
+				`${JSON.stringify(moi, null, 2)}\n`,
+			);
+			writeFileSync(join(ev, SO.tepBam), ghiBam(ev));
+			return { ...ket(ev), mong: 1, phaiCo: [`${SO.nhan.gatewayLoi} low`] };
+		},
+	},
+	{
 		ten: "sua mot o bang.md",
 		chay: () => {
 			const ev = banSao();
@@ -572,7 +651,14 @@ function chayChieuDo(chi?: (c: ChieuDo) => boolean): boolean {
 
 const doiSo = process.argv.slice(2);
 if (doiSo.includes("--pham-vi")) {
-	const { ds, cfg } = lenhPhamVi();
+	let tho: PhamViTho;
+	try {
+		tho = lenhPhamVi();
+	} catch (e) {
+		console.log(e instanceof Error ? e.message : String(e));
+		process.exit(2);
+	}
+	const { ds, cfg } = tho;
 	const r = phamVi(ds, cfg);
 	for (const d of r) console.log(d);
 	console.log(`tep doi: ${ds.length}`);

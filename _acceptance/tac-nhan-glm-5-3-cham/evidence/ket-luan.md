@@ -10,7 +10,7 @@ GLM 5.3 mặc định hỏng 0/3 lượt qua eval: cả ba lượt bị cắt �
 `luot-glm53-2.log`, `luot-glm53-3.log`). Mốc GLM 5.2 Fast qua 3/3, GLM 5.3 hạng nhanh qua 3/3, GLM 5.3 suy luận thấp
 qua 3/3.
 
-## Nguyên nhân: mức suy luận mặc định của GLM 5.3, không phải hạng phục vụ
+## Nguyên nhân: mức suy luận của GLM 5.3 ở phiên con
 
 - **Cùng model, chỉ hạ mức suy luận thì qua.** GLM 5.3 mặc định có phiên con chạy 115.9 và 141 giây mà chỉ được 4 và 2
   bước, ra 6992 và 4166 token (`luot-glm53-1.log`, `luot-glm53-2.log`); cùng `zai/glm-5.3` với `reasoning: "low"` ở
@@ -18,14 +18,22 @@ qua 3/3.
   và eval qua cả ba (`luot-glm53-low-1.log`, `luot-glm53-low-2.log`, `luot-glm53-low-3.log`). Token ra giảm mà số bước
   tăng nghĩa là thời gian bị tiêu vào phần suy luận của mỗi bước, không phải vào số bước.
 - **Gateway chuyển mức suy luận tới nhà cung cấp.** Phép dò thẳng `zai/glm-5.3` trên cùng một câu: mức `low` sinh 15
-  token suy luận, mức `high` sinh 81 (`do-suy-luan.json`). Vậy cờ `reasoning: "low"` có tác dụng thật, và mức mặc định
-  khi không khai không phải mức thấp.
+  token suy luận, mức `high` sinh 81 (`do-suy-luan.json`). Vậy cờ `reasoning: "low"` có tác dụng thật. Mức mặc định
+  khi không khai thì chưa đo riêng; điều đã đo là bỏ mặc định, đặt `low`, thì token ra của phiên con giảm từ 6992 và
+  4166 (`luot-glm53-1.log`, `luot-glm53-2.log`) xuống 1539 đến 1639 (`luot-glm53-low-1.log` tới `luot-glm53-low-3.log`).
 - **So với mốc.** Mốc GLM 5.2 Fast có phiên con 40 đến 45.7 giây với 5 đến 7 bước, ra 2698 đến 3887 token
   (`luot-moc-1.log`, `luot-moc-2.log`, `luot-moc-3.log`); GLM 5.3 mặc định tiêu 115.9 giây cho 4 bước ở
-  `luot-glm53-1.log`. GLM 5.3 suy luận thấp ra ít token hơn mốc (1539 đến 1639 so với 2698 đến 3887) với 6 bước.
-- **Hạng phục vụ nhanh cũng qua, nhưng không đều.** GLM 5.3 hạng nhanh qua 3/3, phiên con 77.5 giây với 6563 token ra ở
-  `luot-glm53-fast-1.log`, chỉ 15.2 và 10.3 giây ở `luot-glm53-fast-2.log` và `luot-glm53-fast-3.log`. Nó đổi tốc độ
-  phục vụ, không đổi mức suy luận, nên lượt đầu vẫn ra nhiều token như GLM 5.3 mặc định.
+  `luot-glm53-1.log`. GLM 5.3 suy luận thấp ra 1539 đến 1639 token với 6 bước (`luot-glm53-low-1.log`,
+  `luot-glm53-low-2.log`, `luot-glm53-low-3.log`), ít hơn mốc.
+
+## Hạng phục vụ nhanh: cũng làm lượt qua, chưa tách được hai yếu tố
+
+GLM 5.3 hạng nhanh, không khai mức suy luận, qua 3/3. Lượt đầu phiên con chạy 77.5 giây với 5 bước, ra 6563 token
+(`luot-glm53-fast-1.log`) — gần GLM 5.3 mặc định ở `luot-glm53-1.log` (6992 token ra, 4 bước, 115.9 giây). Hai lượt sau
+chỉ 15.2 và 10.3 giây với 6 bước, ra 2045 và 1796 token (`luot-glm53-fast-2.log`, `luot-glm53-fast-3.log`). Hồ sơ này
+không có phép đo tách tốc độ phục vụ khỏi mức suy luận ở hạng nhanh, nên không kết luận hạng nhanh đổi hay không đổi
+mức suy luận; chỉ nói được: với 3 lượt, hạng nhanh qua nhưng giây phiên con dao động từ 10.3 tới 77.5, còn suy luận
+thấp dao động từ 55.6 tới 120.2.
 
 ## Giới hạn của số đo
 
