@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 571b5072062f8aedb63c57cde89e3dd503950dcf
+verified_commit: c7d0cc39dc00411961e24c4a6fc87b55c798ef3d
 human_signoff: manh 2026-10-15
 ---
 
@@ -251,3 +251,7 @@ Panel E14 (AC-9) — đề xuất: PASS. Panel giữ nguyên từ round 2 — in
 Round 1: E3b không đạt. Script kh_man đạt ba bước đầu rồi lỗi ở bước 4 với PrismaClientValidationError tại `tx.viec.create` (packages/db/src/viec-ghi.ts:238, hàm taoViec), nên kế hoạch không được dựng và không có thẻ Bước; ba lệnh suite (api, app và @crm/ui, lint:slop) cũng đỏ. Trả về cho khâu cài đặt.
 Round 2: E3b vẫn không đạt, nguyên nhân đã đổi: lỗi tạo Việc ở round 1 hết, bảy lệnh suite xanh; còn một lỗi console hydration ở sheet công ty, frame 2 không có ô tạo kế hoạch và frame 4 không thấy người làm ở mỗi bước. Trả về cho khâu cài đặt.
 Round 3: bảy lệnh suite xanh, mọi eval máy mang từ round 1 và round 2 vì delta không chạm paths của chúng; E3b không còn trong evals.yaml và không có trong danh sách eval của round này nên không tính vào bảng. Còn E14 chờ người ở Cổng 2; verdict PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-10-16, do gộp onehub 725537a8c: dời mốc migration (luật #375), gỡ chú thích theo khong-chu-thich
+run_id: repin-20261016T010842Z-19477
+sha: c7d0cc39dc00411961e24c4a6fc87b55c798ef3d · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E14 (E14 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
