@@ -259,10 +259,9 @@ async function kiemThe(p, ma, kho) {
 }
 
 async function moChuong(p) {
-	await p.click(`${CHUONG} button`);
-	await p.waitForSelector("[data-slot=danh-sach-thong-bao]", {
-		timeout: CHO_MS,
-	});
+	await p.click(CHUONG);
+	await p.waitForSelector("[data-slot=danh-sach-thong-bao]", { timeout: CHO_MS });
+	await p.waitForNetworkIdle({ idleTime: 500, timeout: CHO_MS }).catch(() => {});
 }
 
 async function dongTacNhan(p) {
