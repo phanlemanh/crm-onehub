@@ -45,10 +45,11 @@ const lienKetKho: GhiLienKet = async (d, hoiId, phien) => {
 	return hang?.phienId === phien;
 };
 
-const GHI_THEO_PURPOSE: Readonly<Record<string, GhiLienKet>> = {
-	[ZALO.hoi.purpose]: lienKetZalo,
-	[PURPOSE_KHO]: lienKetKho,
-};
+function ghiCho(purpose: string | null): GhiLienKet | null {
+	if (purpose === ZALO.hoi.purpose) return lienKetZalo;
+	if (purpose === PURPOSE_KHO) return lienKetKho;
+	return null;
+}
 
 export async function lienKetPhienGoc(
 	ctx: NguCanhLienKet,
@@ -56,7 +57,7 @@ export async function lienKetPhienGoc(
 ): Promise<void> {
 	const purpose = attribute(ctx, "purpose");
 	const hoiId = attribute(ctx, "hoiId");
-	const ghi = purpose ? GHI_THEO_PURPOSE[purpose] : undefined;
+	const ghi = ghiCho(purpose);
 	if (!ghi || !hoiId) return;
 	const phien = ctx.session.id;
 	try {
