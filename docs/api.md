@@ -1663,6 +1663,16 @@ Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó m�
   `trung`, cũ hơn trả `cu-hon`, không đổi gì. Hai lượt chạy đua tạo hàng đầu bắt `P2002`.
 - Nhật ký ghi mã khoá, sha và kết quả, không ghi nội dung khối. Không `AgentTask`: không có việc
   phán nào ở API.
+- **Trần thân 2 MB chỉ áp riêng đường bản chụp.** `createApp` dựng hai cầu REST trên cùng router:
+  `POST /rest/lo-trinh/ban-chup` (khớp đúng đường, `BAN_CHUP_LO_TRINH.duongRest`) đọc thân tới
+  `tranThanByte`; mọi đường khác của `/rest` đọc tới `REST_BRIDGE_BODY_LIMIT_BYTES` (100 000 byte,
+  đúng mặc định của `trpc-to-openapi`). Thân được đọc trước khi thủ tục kiểm quyền, nên trần không
+  nới theo người gửi — người đã đăng nhập cũng nhận 413 khi quá 100 000 byte. Lỗi 413 của hai cầu
+  cùng một khuôn.
+- **Chỉ onehub đẩy được.** `day.ts` chạy trong GitHub Actions (`GITHUB_ACTIONS=true`) mà
+  `GITHUB_REF` khác `refs/heads/onehub` — kể cả bấm «Run workflow» trên một nhánh — thì lượt đỏ,
+  in ref đã chạy, không gọi CRM. Chạy ngoài Actions không bị chặn. Bước chặn sống trong kịch bản
+  của chính nhánh được chạy: nhánh lấy onehub trước khi bước chặn vào onehub thì không có nó.
 
 ## Money
 

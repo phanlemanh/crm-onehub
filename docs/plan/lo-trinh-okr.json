@@ -116,12 +116,36 @@
       ]
     },
     {
+      "ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
+      "ngay": "2026-10-20",
+      "loai": "phat-hanh",
+      "khoa": "m-1020dh",
+      "hang": [
+        "DH1",
+        "DH2",
+        "DH3",
+        "DH11"
+      ],
+      "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410."
+    },
+    {
       "ten": "Phòng ban công bố OKR quý 4",
       "ngay": "2026-10-21",
       "ai": "Phòng ban",
       "khoa": "m-1021",
       "loai": "ngoai",
       "hang": []
+    },
+    {
+      "ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
+      "ngay": "2026-10-21",
+      "loai": "phat-hanh",
+      "khoa": "m-1021dh",
+      "hang": [
+        "DH4",
+        "DH5"
+      ],
+      "nghia": "Lãnh đạo mở Toàn cảnh › Sơ đồ thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt; trưởng đơn vị xem quanh một mục tiêu nó góp vào đâu. Ước theo giờ máy: bắt đầu ~15/10 · ~18 giờ máy (DH4 tính T3: thêm React Flow + dagre, chạm packages/ui, gộp ×1,3) · % hạn mức tuần chưa ước · hoàn tất dự kiến 21/10 · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10."
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -2053,6 +2077,24 @@
       "dot": "vong-tin-hieu-1410"
     },
     {
+      "ma": "LT1e",
+      "slug": "lo-trinh-hien-ngay-du-kien",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 446.3,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Lộ trình hiện ngày dự kiến",
+      "ten_ngan": "Ngày dự kiến",
+      "ngay": "2026-10-16",
+      "cau_giao": "«Trưởng phòng ban mở trang Lộ trình và thấy mỗi việc, mỗi mốc có ngày dự kiến xong do máy tính — ghi rõ là dự kiến, có cờ khi số đo chưa đủ»",
+      "vai": "Trưởng phòng ban",
+      "vi_sao": "Gốc: _acceptance/lo-trinh-doc-ban-chup/ — trang Lộ trình đọc khối dữ liệu bản 2 của kit, nên giờ máy và ngày dự kiến của gói road-map (RM6 lo-trinh-gio-may) không tới được trang CRM; chủ kho mở 16/10 cùng hàng kit RM6c (khối dữ liệu mang ngày dự kiến).",
+      "bat_khi": "Sau khi giao, mọi mốc đang chạy trên trang có ngày dự kiến kèm nhãn «dự kiến»; ở mốc khép đầu tiên, ngày dự kiến lệch ngày khép thật không quá một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho mở 16/10 («mở RM6c và LT1e»). Chờ crm nhận bản kit có RM6c (gói road-map) — mở vòng sau khi nhận. Máy MacBook Pro giữ. Chưa gắn mốc."
+    },
+    {
       "ma": "LT3",
       "slug": "lo-trinh-nhieu-san-pham",
       "hang": "T3",
@@ -2493,6 +2535,28 @@
         "D4",
         "D6",
         "B5"
+      ]
+    },
+    {
+      "ma": "DH11",
+      "slug": "cua-toi-don-vi-dan-khi-cay-loi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.25,
+      "dung_tren": [
+        "DH3"
+      ],
+      "ten": "Đơn vị bạn dẫn đứng vững khi cây tổ chức chưa tải hoặc lỗi",
+      "ten_ngan": "Đơn vị dẫn khi cây lỗi",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Trưởng đơn vị mở Của tôi lúc cây tổ chức chưa tải hoặc lỗi thì vẫn biết mỗi thẻ là đơn vị nào, và thấy lỗi kèm nút Thử lại»",
+      "vai": "Trưởng đơn vị",
+      "vi_sao": "Đo ở Cổng Bằng chứng DH3 (Ngoài-9, 15/10): phần «Đơn vị bạn dẫn» chỉ xử trạng thái của okr.access, không xử org.tree; cây lỗi hay đang tải thì thẻ đơn vị mất tiêu đề, không báo lỗi, không có Thử lại, thứ tự rơi về thứ tự headOf — người đọc không biết thẻ nào là đơn vị nào.",
+      "bat_khi": "Ca DOM hai chiều: org.tree trả lỗi → phần hiện lỗi kèm Thử lại, không thẻ tiêu đề rỗng; org.tree đang tải → khung chờ, không tiêu đề rỗng",
+      "ghi_chu": "Chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng DH3 15/10. Nguyên nhân ở apps/app/app/(app)/[slug]/okr/phan-don-vi-dan.tsx: chỉ access có nhánh isPending/isError. Sửa: đưa cay vào nhánh tải/lỗi, dùng LoiPhan sẵn có; thêm ô org.tree vào ma trận lỗi của okr-cua-toi-ba-phan.dom.tsx. Không chạm apps/api, không chạm vùng Tổ chức. Một AC, ước 1–1,5 giờ máy; có thể đi làn V. Mở sau khi DH3 gộp.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "Ngoài-9 DH3"
       ]
     },
     {
