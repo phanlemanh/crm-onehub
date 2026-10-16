@@ -1,0 +1,33 @@
+{
+  "feature_plain": "Trợ lý OKR thử được Haiku 5.5 cạnh Gemini 3.8 Flash trong phép đo mà không ai phải sửa mã, kho đo thôi chạy model GLM đắt nhất, và một lượt so cho bảng số để anh quyết model.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giữ nguyên Trợ lý OKR như hôm nay khi không ai chọn model: Gemini 3.8 Flash, cùng trần chữ và cửa sổ ngữ cảnh cũ."},
+    {"id": "AC-2", "p": "Sẽ cho phép đo chạy Trợ lý OKR trên Haiku 5.5 bằng một biến môi trường, ở cả bốn chỗ gọi model, vẫn bật chế độ nhà cung cấp không lưu dữ liệu, và trần chữ nới lên 4 000."},
+    {"id": "AC-3", "p": "Sẽ không cho agent khởi động khi biến chọn model ghi sai, và nói rõ tên biến cùng hai giá trị được phép."},
+    {"id": "AC-4", "p": "Sẽ bỏ qua biến chọn model trên production: người dùng thật luôn gặp Gemini 3.8 Flash."},
+    {"id": "AC-5", "p": "Sẽ cho mọi kho đo mới mang sẵn Gemini 3.8 Flash cho agent chính và Tác nhân, ghi qua đúng đường lưu của màn Cài đặt → Model, không đụng kho dev."},
+    {"id": "AC-6", "p": "Sẽ đọc đúng số từ nhật ký đo thật và áp đúng ngưỡng anh khai, đúng tới từng mép ngưỡng."},
+    {"id": "AC-7", "p": "Sẽ chạy một lượt so Gemini với Haiku, cùng cây, chạy liền nhau, kiểm từng nhánh đúng là đã chạy model của nó, rồi in bảng số và kết luận từng vai."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG đổi model mà người dùng thật gặp trên production; anh quyết theo bảng số của lượt so."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG đổi model mặc định trong mã và KHÔNG gieo model vào kho kiểm thử, vì nhiều bài kiểm cần ô model trống."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG đổi thời hạn giữ việc góp ý theo từng model; nếu Haiku chạy quá hạn, bảng số sẽ cho thấy."},
+    {"id": "OOS-4", "p": "Sẽ KHÔNG bật chế độ suy nghĩ riêng cho Haiku, để số đo còn so được với lượt thử 14/10."},
+    {"id": "OOS-5", "p": "Sẽ KHÔNG đụng Soạn OKR, Kho tài liệu hay bộ chấm điểm nội bộ."},
+    {"id": "OOS-6", "p": "Sẽ KHÔNG sửa hai thước đo E22, E24 của hồ sơ Trợ lý OKR ở đây; việc đó đi PR riêng."}
+  ],
+  "scope_plain": "Phần dưới đây cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi chỗ gọi model của Trợ lý OKR (góp ý, tóm tắt tuần, phiên gốc) đều được đo ở AC-1 tới AC-4 (bốn cách chọn model); Tác nhân và agent chính được đo trên kho đo ở AC-5 và AC-7 (lượt so)."},
+    {"i": 1, "p": "Mỗi cách chọn model đều có tiêu chí riêng: không chọn và chọn Gemini (AC-1), chọn Haiku (AC-2), ghi sai (AC-3), production (AC-4)."},
+    {"i": 2, "p": "Chỉ kho đo được gieo model (AC-5); kho dev, kho kiểm thử và production cố ý không đổi."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa có phép đo nào chứng biến chọn model tới được agent mà lượt đo dựng, nên nhánh Haiku có thể âm thầm chạy Gemini. Đã sửa: thêm ca chạy agent ở tiến trình riêng, và lượt so đọc lại model đã thật sự chạy; lệch thì dừng."},
+    {"i": 1, "p": "Ngưỡng chưa được ghim vào đúng số anh khai và chưa thử ở mép ngưỡng. Đã sửa: ghim từng số, thử hai phía của từng ngưỡng, thêm ca Tác nhân 3/3 và 2/3."},
+    {"i": 2, "p": "Máy định bật chế độ suy nghĩ cho Haiku với căn cứ chỉ liên quan, mà làm vậy là đổi điều kiện so với lần đo 14/10. Đã sửa: bỏ hẳn, Haiku chạy như lần đo trước."},
+    {"i": 3, "p": "Câu hỏi chấm tài liệu chưa có đáp án, nên tài liệu ghi sai vẫn có thể được chấm đạt. Đã sửa: câu hỏi mang đáp án nguyên văn."},
+    {"i": 4, "p": "Trường hợp chọn Gemini tường minh chưa có tiêu chí. Đã sửa: thêm vào AC-1."}
+  ]
+}

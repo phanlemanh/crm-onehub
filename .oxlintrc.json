@@ -5,7 +5,8 @@
 		"correctness": "off"
 	},
 	"jsPlugins": [
-		"./tools/oxlint/anti-slop/index.ts"
+		"./tools/oxlint/anti-slop/index.ts",
+		"./tools/oxlint/onehub/index.ts"
 	],
 	"ignorePatterns": [
 		"**/node_modules/**",
@@ -72,6 +73,39 @@
 				"anti-slop/no-unsafe-dictionary-type": "off",
 				"anti-slop/no-unknown-parameters": "off",
 				"anti-slop/no-runtime-typeof": "off"
+			}
+		},
+		{
+			"files": [
+				"apps/api/src/**",
+				"apps/agent/agent/**",
+				"apps/app/app/**",
+				"apps/app/components/**",
+				"apps/app/lib/**",
+				"packages/db/src/**",
+				"packages/telemetry/src/**"
+			],
+			"rules": {
+				"onehub/khong-re-theo-ten-giai-doan": "error",
+				"onehub/khong-dung-giai-doan-goc": "error"
+			}
+		},
+		{
+			"files": [
+				"packages/db/src/giai-doan.ts",
+				"apps/app/app/proto/**"
+			],
+			"rules": {
+				"onehub/khong-re-theo-ten-giai-doan": "off",
+				"onehub/khong-dung-giai-doan-goc": "off"
+			}
+		},
+		{
+			"files": [
+				"packages/telemetry/src/allowlist.ts"
+			],
+			"rules": {
+				"onehub/khong-dung-giai-doan-goc": "off"
 			}
 		}
 	]
