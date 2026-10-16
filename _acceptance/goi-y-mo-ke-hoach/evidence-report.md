@@ -217,3 +217,16 @@ none — every multi-run eval is uniform
 Round 1: REJECT — ba lenh suite do (api, agent, agent-okr) va E10 dung moc cung; tra ve implementation.
 Round 2: PENDING-JUDGMENT — E1-E4, E8, E10 va bay lenh suite chay lai xanh; chi con E9 cho nguoi; Cong 1 duoc mo lai de ghi ngoai le co ten cho AC-10 (cau dem loai thong bao 21 thanh 22).
 Round 3: PENDING-JUDGMENT — delta chi cham evals.yaml va s4-args.json; moi eval may mang sang tu round 1 hoac 2, chi bay lenh suite chay lai xanh; E9 cho human_override. verified_at cua cac lenh suite la thoi diem ghi bao cao round 3.
+
+## Đo tay ngoài S4 — E10 (AC-10 sau sửa 12:17Z)
+
+Thợ đo, KHÔNG phải tác tử chấm: S4 lượt 3 mang E10 sang từ lượt 2 dù câu expected vừa đổi, và vòng đã chạm trần 3 lượt, nên AC-10 mới được đo lại bằng tay theo yêu cầu của Điều phối M5 (16/10). Người ký đọc mục này như số đo thật, không phải phán quyết của hội đồng.
+
+- cmd (nguyên văn `config:executors.script.gymk_hoi_quy`): `node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types`
+- sha: a335f8be94d25f2afecf1a8b49a948f7e4ac0c02 · lúc: 2026-10-16T12:55:55Z · exit_code: 0
+- output: `tu-thu 5/5 …` · `moc 28d8ca19f · 1 tep · 8 cau expect san co · 1 cau cho phep mat` · `khong expect san co nao bi xoa hay sua` · check-types `15 successful, 15 total`
+- Chiều đỏ, trên cây sao dùng một lần cắt từ cùng sha:
+  - (a) danh sách cho-phép rỗng → exit 1: `packages/validation/test/thong-bao.spec.ts: expect bi xoa hay sua: expect(newSet(LOAI_THONG_BAO).size).toBe(21)` — ngoại lệ là thứ duy nhất cho câu đếm qua.
+  - (b) ngoại lệ còn nguyên, đổi giá trị một expect khác cùng tệp (`toBe(b)` → `toBe(a)`) → exit 1: `… expect bi xoa hay sua: expect(a,"muc gop sinh thong bao moi khi so doi").toBe(b)` — ngoại lệ không mở cho câu khác.
+  - (c) đối chứng: chỉ đổi khoảng trắng ngoài chuỗi ở câu đó → exit 0 (đúng luật của răng).
+- Giới hạn còn lại (Ngoài-4, Ngoài-6 trên thẻ): ngoại lệ so theo chuỗi con và không gắn tên tệp.
