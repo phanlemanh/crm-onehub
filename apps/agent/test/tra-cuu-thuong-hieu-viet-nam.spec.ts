@@ -13,7 +13,7 @@ import { docBrandRaw } from "@crm/validation/brand-raw";
 import ContextDev from "context.dev";
 import type { BrandRetrieveResponse } from "context.dev/resources/brand";
 import { z } from "zod";
-import { runBrand, type Spend } from "../agent/lib/brand";
+import { brandOutcome, runBrand, type Spend } from "../agent/lib/brand";
 import { CONTEXT } from "../agent/lib/context-config";
 import { brandByDomain, brandByEmail } from "../agent/lib/context-dev";
 
@@ -311,5 +311,100 @@ describe("ac7", () => {
 		} finally {
 			canhBao.mockRestore();
 		}
+	});
+});
+
+const BRAND_KHONG_DIA_CHI = {
+	brand: {
+		domain: "meta.com",
+		title: "Meta",
+		description: "Mô tả không kèm địa chỉ.",
+	},
+} satisfies BrandRetrieveResponse;
+
+const BRAND_A_DOI_MO_TA = {
+	brand: { ...BRAND_A.brand, description: "Meta đổi mô tả." },
+} satisfies BrandRetrieveResponse;
+
+const OTHUONGHIEU = {
+	description: true,
+	industry: true,
+	subIndustry: true,
+	city: true,
+	stateCode: true,
+	country: true,
+	countryCode: true,
+	phone: true,
+	email: true,
+} as const;
+
+describe("ac10", () => {
+	test("dia chi thieu bang thi o bang may dien tro ve trong", async () => {
+		const id = await congTy(`tthv-dc-${HAU_TO}.vn`);
+		phanHoi = BRAND_A;
+		await runBrand({ companyId: id });
+		expect(
+			(await db.company.findUniqueOrThrow({ where: { id } })).stateCode,
+		).toBe("CA");
+
+		phanHoi = BRAND_B;
+		const ket = await runBrand({ companyId: id, fresh: true });
+		const sau = await db.company.findUniqueOrThrow({ where: { id } });
+		expect(sau.stateCode).toBeNull();
+		expect(sau.city).toBe("Hà Nội");
+		expect(sau.countryCode).toBe("VN");
+		expect(ket.cleared).toEqual(["stateCode"]);
+	});
+
+	test("doi chung: bang rep tu go giu nguyen", async () => {
+		const id = await congTy(`tthv-dc-go-${HAU_TO}.vn`);
+		phanHoi = BRAND_A;
+		await runBrand({ companyId: id });
+		await db.company.update({ where: { id }, data: { stateCode: "HN" } });
+
+		phanHoi = BRAND_B;
+		await runBrand({ companyId: id, fresh: true });
+		const sau = await db.company.findUniqueOrThrow({ where: { id } });
+		expect(sau.stateCode).toBe("HN");
+	});
+
+	test("doi chung: ket qua moi khong co dia chi thi khong xoa", async () => {
+		const id = await congTy(`tthv-dc-rong-${HAU_TO}.vn`);
+		phanHoi = BRAND_A;
+		await runBrand({ companyId: id });
+
+		phanHoi = BRAND_KHONG_DIA_CHI;
+		await runBrand({ companyId: id, fresh: true });
+		const sau = await db.company.findUniqueOrThrow({ where: { id } });
+		expect(sau.stateCode).toBe("CA");
+		expect(sau.city).toBe("Menlo Park");
+		expect(sau.description).toBe(BRAND_KHONG_DIA_CHI.brand.description);
+	});
+
+	test("tra lai cung ket qua thi khong ghi gi va bao da co", async () => {
+		const id = await congTy(`tthv-trung-${HAU_TO}.vn`);
+		phanHoi = BRAND_A;
+		await runBrand({ companyId: id });
+		const truoc = await db.company.findUniqueOrThrow({
+			where: { id },
+			select: OTHUONGHIEU,
+		});
+
+		const ket = await runBrand({ companyId: id, fresh: true });
+		expect(ket.filled).toEqual([]);
+		expect(ket.cleared).toEqual([]);
+		expect(brandOutcome(ket)).toBe(
+			"Everything Context.dev returned was already on the record.",
+		);
+		expect(
+			await db.company.findUniqueOrThrow({
+				where: { id },
+				select: OTHUONGHIEU,
+			}),
+		).toEqual(truoc);
+
+		phanHoi = BRAND_A_DOI_MO_TA;
+		const doi = await runBrand({ companyId: id, fresh: true });
+		expect(doi.filled).toEqual(["description"]);
 	});
 });

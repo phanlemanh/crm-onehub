@@ -4,6 +4,7 @@ import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import { mirrorBrandImages } from "./brand-images";
 import {
 	brandToUpdate,
+	clearedFields,
 	filledFields,
 	type MayDien,
 	stillFillable,
@@ -16,6 +17,7 @@ import { UNLESS_COMPLETE } from "./enrichment";
 export type BrandResult = {
 	enriched: boolean;
 	filled?: string[];
+	cleared?: string[];
 	mirrored?: string[];
 	reason?: string;
 	retryable?: boolean;
@@ -127,7 +129,7 @@ export async function runBrand({
 
 	const { mirrored } = await mirrorBrandImages(companyId, update);
 
-	const filled = await db.$transaction(async (tx) => {
+	const ghi = await db.$transaction(async (tx) => {
 		const current = await tx.company.findUnique({
 			where: { id: companyId },
 			select: COMPANY_FIELDS,
@@ -154,14 +156,17 @@ export async function runBrand({
 			update: { raw: result.raw as object, fetchedAt: new Date() },
 		});
 
-		return filledFields(data);
+		return { filled: filledFields(data), cleared: clearedFields(data) };
 	});
 
-	if (!filled) return { enriched: false, reason: "No such company." };
+	if (!ghi) return { enriched: false, reason: "No such company." };
+
+	const { filled, cleared } = ghi;
 
 	return {
 		enriched: true,
 		filled,
+		cleared,
 		mirrored: mirrored.filter((slot) => filled.includes(slot)),
 	};
 }
@@ -191,13 +196,21 @@ export function brandOutcome(result: BrandResult): string {
 	if (!result.enriched) return result.reason ?? "Nothing to fill.";
 
 	const filled = result.filled ?? [];
+	const cleared = result.cleared ?? [];
 	const mirrored = result.mirrored ?? [];
 
-	if (filled.length === 0) {
+	if (filled.length === 0 && cleared.length === 0) {
 		return "Everything Context.dev returned was already on the record.";
 	}
 
-	return `Filled ${filled.join(", ")}.${mirrored.length > 0 ? ` Copied ${mirrored.length} image(s) in-house.` : ""}`;
+	const phan = [
+		filled.length > 0 ? `Filled ${filled.join(", ")}.` : null,
+		cleared.length > 0
+			? `Cleared ${cleared.join(", ")}, which the new lookup no longer reports.`
+			: null,
+		mirrored.length > 0 ? `Copied ${mirrored.length} image(s) in-house.` : null,
+	];
+	return phan.filter((cau) => cau !== null).join(" ");
 }
 
 type SettleGuard =

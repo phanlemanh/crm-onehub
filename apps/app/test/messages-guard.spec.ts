@@ -443,8 +443,8 @@ const GHIM = {
 	],
 	"companies:created": ["Đã thêm 1.", "Đã thêm 12."],
 	"companies:nenTang": [
-		"Đây là trang 1, không phải trang web của công ty. Để trống nếu công ty chưa có trang web riêng.",
-		"Đây là trang 12, không phải trang web của công ty. Để trống nếu công ty chưa có trang web riêng.",
+		"Đây là trang 1, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
+		"Đây là trang 12, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
 	],
 	"companies:bulk.reassigned": [
 		"Đã đổi người phụ trách cho 1.",

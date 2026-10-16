@@ -122,6 +122,13 @@ function fillable(
 
 const KHONG_CO: MayDien = new Set();
 
+const DIA_CHI = [
+	["city", (brand: Brand) => brand.address?.city],
+	["stateCode", (brand: Brand) => brand.address?.state_code],
+	["country", (brand: Brand) => brand.address?.country],
+	["countryCode", (brand: Brand) => brand.address?.country_code],
+] as const;
+
 const SNAPSHOT_RONG: CompanySnapshot = {
 	name: "",
 	nameIsPlaceholder: false,
@@ -176,9 +183,9 @@ export function brandToUpdate(
 		key: K,
 		value: string | null,
 	) => {
-		if (value && fillable(key, current, mayDien)) {
-			update[key] = value;
-		}
+		if (!value || !fillable(key, current, mayDien)) return;
+		if (mayDien.has(key) && current[key] === value) return;
+		update[key] = value;
 	};
 
 	fill("name", clean(brand.title));
@@ -204,6 +211,19 @@ export function brandToUpdate(
 	fill("country", clean(brand.address?.country));
 	fill("countryCode", clean(brand.address?.country_code));
 
+	const coDiaChi = DIA_CHI.some(([, lay]) => clean(lay(brand)) !== null);
+	if (coDiaChi) {
+		for (const [key, lay] of DIA_CHI) {
+			if (
+				mayDien.has(key) &&
+				clean(lay(brand)) === null &&
+				current[key] !== null
+			) {
+				update[key] = null;
+			}
+		}
+	}
+
 	fill("phone", clean(brand.phone));
 	fill("email", clean(brand.email));
 
@@ -226,10 +246,22 @@ export function stillFillable(
 	mayDien: MayDien = KHONG_CO,
 ): BrandUpdate {
 	return Object.fromEntries(
-		Object.entries(update).filter(([key]) => fillable(key, current, mayDien)),
+		Object.entries(update).filter(
+			([key, value]) =>
+				fillable(key, current, mayDien) &&
+				(key === "iconUrl" || current[key as keyof CompanySnapshot] !== value),
+		),
 	);
 }
 
 export function filledFields(update: BrandUpdate): string[] {
-	return Object.keys(update);
+	return Object.entries(update)
+		.filter(([, value]) => value !== null)
+		.map(([key]) => key);
+}
+
+export function clearedFields(update: BrandUpdate): string[] {
+	return Object.entries(update)
+		.filter(([, value]) => value === null)
+		.map(([key]) => key);
 }

@@ -35,7 +35,7 @@ const en = {
 	search: "Search companies by name or domain…",
 	archivedToggle: "Archived",
 	nenTang: (ten: string) =>
-		`This is a ${ten} page, not the company's own website. Leave it empty if the company has no site of its own.`,
+		`This is a ${ten} page, not the company's own website. Paste the company's own site, or leave it empty if it has none.`,
 	create: {
 		title: "New company",
 		newButton: "New company",
@@ -99,7 +99,7 @@ const vi = {
 	search: "Tìm công ty theo tên hoặc tên miền…",
 	archivedToggle: "Đã lưu trữ",
 	nenTang: (ten: string) =>
-		`Đây là trang ${ten}, không phải trang web của công ty. Để trống nếu công ty chưa có trang web riêng.`,
+		`Đây là trang ${ten}, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.`,
 	create: {
 		title: "Công ty mới",
 		newButton: "Công ty mới",
