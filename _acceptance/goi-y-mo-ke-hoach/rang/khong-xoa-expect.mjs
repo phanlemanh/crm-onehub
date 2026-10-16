@@ -17,7 +17,8 @@ function docTenTrangThai(chu) {
 		.flatMap(([ma, cu, moi]) => {
 			if (!ma || !cu) return [];
 			const loai = ma[0];
-			if (loai === "M" || loai === "D") return [{ loai, cu, moi: loai === "D" ? null : cu }];
+			if (loai === "M" || loai === "D")
+				return [{ loai, cu, moi: loai === "D" ? null : cu }];
 			if (loai === "R" && moi) return [{ loai, cu, moi }];
 			return [];
 		})
@@ -28,9 +29,9 @@ function tepKiemDaSua(moc) {
 		git("diff", "--name-status", "-M", "--diff-filter=MDR", moc, "HEAD"),
 	);
 }
-// Câu expect được phép mất, mỗi câu kèm lý do có tên. goi-y-mo-ke-hoach không lật lời hứa nào của hồ sơ
-// khác, nên danh sách rỗng.
-const CHO_PHEP = [];
+// Câu expect được phép mất, mỗi câu kèm lý do có tên. Chỉ một: thong-bao.spec.ts đếm đúng số loại thông
+// báo, và goi-y-mo-ke-hoach thêm loại goi-y-ke-hoach (AC-7) nên số đếm phải tăng từ 21 lên 22.
+const CHO_PHEP = ["expect(new Set(LOAI_THONG_BAO).size).toBe(21)"];
 
 function chuanHoa(cau) {
 	let ra = "";
@@ -110,15 +111,23 @@ if (process.argv.includes("--tu-thu")) {
 		"M\tapps/api/test/a.spec.ts\nD\tapps/api/test/b.spec.ts\nR087\tapps/api/test/c.spec.ts\tapps/api/test/d.spec.ts\nM\tapps/api/src/x.ts\n",
 	);
 	const mongDs = JSON.stringify([
-		{ loai: "M", cu: "apps/api/test/a.spec.ts", moi: "apps/api/test/a.spec.ts" },
+		{
+			loai: "M",
+			cu: "apps/api/test/a.spec.ts",
+			moi: "apps/api/test/a.spec.ts",
+		},
 		{ loai: "D", cu: "apps/api/test/b.spec.ts", moi: null },
-		{ loai: "R", cu: "apps/api/test/c.spec.ts", moi: "apps/api/test/d.spec.ts" },
+		{
+			loai: "R",
+			cu: "apps/api/test/c.spec.ts",
+			moi: "apps/api/test/d.spec.ts",
+		},
 	]);
 	if (JSON.stringify(ds) !== mongDs) {
 		console.error(`tu-thu: doc ten-trang-thai sai ${JSON.stringify(ds)}`);
 		process.exit(2);
 	}
-	if (mat('expect(a).toBe(1);', "").sai.length !== 1) {
+	if (mat("expect(a).toBe(1);", "").sai.length !== 1) {
 		console.error("tu-thu: tep bi xoa khong bat");
 		process.exit(2);
 	}

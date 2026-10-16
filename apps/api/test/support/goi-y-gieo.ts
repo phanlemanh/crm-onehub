@@ -16,7 +16,32 @@ export type GiaiDoanGieo = {
 	L2: string;
 };
 
-const daGieo = { giaiDoan: [] as string[] };
+const daGieo = {
+	giaiDoan: [] as string[],
+	congTy: [] as string[],
+	deal: [] as string[],
+};
+
+export function ghiCongTy(id: string): string {
+	daGieo.congTy.push(id);
+	return id;
+}
+
+export function ghiDeal(id: string): string {
+	daGieo.deal.push(id);
+	return id;
+}
+
+export async function donViecTacNhan(): Promise<void> {
+	await db.agentTask.deleteMany({
+		where: {
+			OR: [
+				{ companyId: { in: daGieo.congTy } },
+				{ dealId: { in: daGieo.deal } },
+			],
+		},
+	});
+}
 
 export async function gieoGiaiDoan(): Promise<GiaiDoanGieo> {
 	const tao = async (kind: "OPEN" | "WON" | "LOST", i: number) => {
@@ -61,7 +86,7 @@ export async function taoCongTy(
 		{ name: `${token()} Cty gợi ý` },
 		nguoiId,
 	);
-	return (ok(ket, "gy: tao cong ty hong") as { id: string }).id;
+	return ghiCongTy((ok(ket, "gy: tao cong ty hong") as { id: string }).id);
 }
 
 export async function taoDeal(
@@ -87,7 +112,7 @@ export async function taoDeal(
 		args.nguoiId,
 	);
 	return {
-		dealId: (ok(ket, "gy: tao deal hong") as { id: string }).id,
+		dealId: ghiDeal((ok(ket, "gy: tao deal hong") as { id: string }).id),
 		congTyId,
 	};
 }

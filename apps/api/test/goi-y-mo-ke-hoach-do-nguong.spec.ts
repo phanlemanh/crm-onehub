@@ -13,7 +13,10 @@ import type { NestExpressApplication } from "@nestjs/platform-express";
 import { DealsService } from "../src/deals/deals.service";
 import {
 	donGiaiDoan,
+	donViecTacNhan,
 	type GiaiDoanGieo,
+	ghiCongTy,
+	ghiDeal,
 	gieoGiaiDoan,
 	khuonMotBuoc,
 } from "./support/goi-y-gieo";
@@ -91,12 +94,12 @@ async function luc<T>(khi: string, viec: () => Promise<T>): Promise<T> {
 
 async function ctyMoi(): Promise<string> {
 	const c = await gieoCongTy();
-	congTy.push(c.id);
+	congTy.push(ghiCongTy(c.id));
 	return c.id;
 }
 
 async function dealO(congTyId: string, stage: string, khi: string) {
-	return luc(khi, () =>
+	const deal = await luc(khi, () =>
 		deals.create({
 			name: `${token()} deal do`,
 			companyId: congTyId,
@@ -104,6 +107,8 @@ async function dealO(congTyId: string, stage: string, khi: string) {
 			stage,
 		}),
 	);
+	ghiDeal(deal.id);
+	return deal;
 }
 
 async function chuyen(
@@ -180,6 +185,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	await app.close();
+	await donViecTacNhan();
 	await donGiaiDoan();
 	await donViec();
 	await donDep();

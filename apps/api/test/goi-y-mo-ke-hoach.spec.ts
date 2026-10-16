@@ -6,6 +6,7 @@ import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import {
 	doiGiaiDoan,
 	donGiaiDoan,
+	donViecTacNhan,
 	type GiaiDoanGieo,
 	gieoGiaiDoan,
 	goiYCua,
@@ -40,6 +41,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	await app.close();
+	await donViecTacNhan();
 	await donGiaiDoan();
 	await donViec();
 	await donDep();
