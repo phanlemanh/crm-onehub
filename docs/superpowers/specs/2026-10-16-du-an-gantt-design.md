@@ -101,21 +101,33 @@ phuThuocToiDa: 600, ngayLeToiDa: 200 }` trong `@crm/db/du-an`.
 
 ### Giao diện
 
-- Thanh trái: mục «Dự án» ngay sau «Việc của tôi» (`khung-dieu-huong.ts`), ẩn với vai «chỉ OKR» qua
-  `pham-vi-man.ts`.
-- `/du-an`: `PageShell` «Dự án» + một câu mô tả; nút chính «Tạo dự án» (Dialog hai ô). Danh sách dự án đang mở:
-  `SimpleTable surface="page"` từ `md`, `Item variant="outline"` dưới `md`; cột tên, tiến độ «x/y việc xong»,
-  khoảng ngày (sớm nhất – muộn nhất), mốc kế và người tạo. «Đã đóng (n)» gập cuối danh sách.
-- `/du-an/[id]`: tiêu đề là tên dự án, câu mô tả là mô tả của dự án hay «n việc · dd/mm – dd/mm». Nút chính
-  «Thêm việc» (ô soạn việc của DA1, mặc định dự án này). Menu «…»: Sửa dự án · Thêm mốc · Đóng dự án · Xoá.
-  `ViewSwitch` ba kiểu Gantt · Danh sách · Bảng, ghi lên đường dẫn `xemDuAn`, mặc định Gantt.
-  - **Gantt**: hàng đầu «Mốc» chứa mọi mốc (hình thoi, nhãn tên, tô `error` khi trễ); mỗi việc một hàng, việc
+Một nơi, nhiều cách nhìn (chủ kho chọn B ở Cổng Phạm vi 16/10, sổ quyết định dòng 23): không thêm mục «Dự án» trên
+thanh trái. Màn «Việc» (`/[slug]/viec`) có thêm ô **Phạm vi** cạnh `ViewSwitch`:
+
+- Ô Phạm vi (`Combobox` có nhóm, ghi lên đường dẫn `phamVi` bằng `nuqs`): «Của tôi» (mặc định, khi vắng tham số) ·
+  «Tất cả dự án» · từng dự án đang mở · dòng gập «Đã đóng (n)» · «Tạo dự án…» (Dialog hai ô: tên, mô tả; tạo xong
+  sang phạm vi dự án mới, kiểu Gantt). Phạm vi «Của tôi» y như Việc của tôi của DA1–DA2: ba nhóm, Danh sách và Bảng,
+  không tham số thì không đổi gì; dòng và thẻ của việc trong dự án có thêm một dòng phụ «Dự án: <tên>», bấm sang
+  phạm vi dự án đó.
+- Kiểu xem `xemViec`: Danh sách · Bảng ở mọi phạm vi; Gantt chỉ có khi phạm vi là một dự án (ở «Của tôi» và «Tất
+  cả dự án» mục Gantt không hiện; đường dẫn mang `xemViec=gantt` với phạm vi khác thì về Danh sách). Phạm vi dự án
+  mở mặc định kiểu Gantt.
+- Phạm vi «Tất cả dự án»: bảng dự án đang mở — `SimpleTable surface="page"` từ `md`, `Item variant="outline"`
+  dưới `md`; cột tên, tiến độ «x/y việc xong», khoảng ngày (sớm nhất – muộn nhất), mốc kế và người tạo; bấm một
+  dòng sang phạm vi dự án đó; «Đã đóng (n)» gập cuối.
+- Khung trang: `PageShellTitle` vẫn «Việc», câu mô tả theo phạm vi (dựng ở `page.tsx`). Phạm vi là một dự án thì
+  dưới đầu trang có dải dự án: tên, mô tả hay «n việc · dd/mm – dd/mm», mốc kế, menu «…» (Sửa dự án · Thêm mốc ·
+  Đóng dự án · Mở lại · Xoá theo quyền). Nút chính đầu trang vẫn là «Giao việc»; ở phạm vi dự án nó mở ô soạn với
+  dự án điền sẵn.
+- Vai «chỉ OKR» không vào được màn Việc (như DA1), nên không thấy dự án nào.
+- **Gantt** (phạm vi một dự án): hàng đầu «Mốc» chứa mọi mốc (hình thoi, nhãn tên, tô `error` khi trễ); mỗi việc một hàng, việc
     con thụt dưới cha; thanh từ ngày bắt đầu tới hết ngày hạn, màu theo nghĩa trạng thái (`toneTheoNghia`);
     mũi tên xong-rồi-mới-bắt-đầu; cột ngày nghỉ tô xám; vạch hôm nay. Việc thiếu ngày nằm ở nhóm «Chưa có lịch»
     cuối cây, mỗi hàng có nút «Đặt ngày». Thanh việc mình không sửa được thì không kéo được. Mặc định thang
     tuần; `GanttNav` đổi thang và về hôm nay.
-  - **Danh sách**: `BangViec` lọc theo dự án, thêm cột Bắt đầu.
-  - **Bảng**: `Board` của DA2 lọc theo dự án; thứ tự trong cột vẫn của riêng từng người.
+- **Danh sách** (phạm vi dự án): `BangViec` lọc theo dự án, thêm cột Bắt đầu.
+- **Bảng** (phạm vi dự án): `Board` của DA2 lọc theo dự án; thứ tự trong cột là của riêng từng người và dùng chung với
+  Bảng ở phạm vi «Của tôi».
 - Khung việc: ô «Bắt đầu» cạnh «Hạn», ô «Dự án» (chọn hay bỏ), mục «Phải chờ» (chỉ khi việc ở trong dự án) liệt
   kê việc trước và nút «Thêm việc phải chờ» (chọn trong việc cùng dự án). Lịch sử đọc được vết `tu-doi`: «Hạn dời
   từ 23/10 sang 28/10 vì «Ký hợp đồng» dời».
@@ -174,12 +186,14 @@ mẫu sáu việc, ba phụ thuộc, một mốc, một ngày lễ, tạo qua đ
 <!-- <<<UX-SPEC-TEMPLATE -->
 ### 1. Luồng
 
-- Suôn sẻ: thanh trái › «Dự án» → «Tạo dự án» (tên, mô tả) → trang dự án, kiểu Gantt rỗng → «Thêm việc» vài lần
+- Suôn sẻ: thanh trái › «Việc» → ô Phạm vi › «Tạo dự án…» (tên, mô tả) → phạm vi dự án mới, kiểu Gantt rỗng →
+  «Giao việc» vài lần
   với ngày bắt đầu và hạn → khung việc B › «Thêm việc phải chờ» › A → Gantt vẽ mũi tên A → B → «Thêm mốc»
   «Go-live» 30/10, chọn việc phải xong trước → kéo thanh A trễ hai ngày → B dời theo, bỏ Thứ Bảy, Chủ nhật và
   ngày lễ, toast «Đã dời 1 việc»; mốc chuyển «Trễ» nếu B nay quá 30/10 (điểm ra: Gantt).
 - Biên: dự án chưa có việc; việc thiếu ngày (nhóm «Chưa có lịch»); người không sửa được việc (thanh không kéo);
-  phụ thuộc tạo vòng hay khác dự án (bị từ chối); dự án đã đóng (chỉ đọc); vai «chỉ OKR» (không có mục Dự án);
+  phụ thuộc tạo vòng hay khác dự án (bị từ chối); dự án đã đóng (chỉ đọc); vai «chỉ OKR» (không vào màn Việc);
+  phạm vi «Của tôi» (không có Gantt, dòng việc ghi dự án của nó);
   màn 375 (Gantt cuộn ngang trong khung).
 - Lỗi & quay lại: máy chủ từ chối lần kéo (đặt sớm hơn việc phải chờ, quyền vừa đổi) → thanh về chỗ cũ, toast đọc
   nguyên lời; tải hỏng → `VungTaiLoi` + «Thử lại»; tạo phụ thuộc hỏng → lỗi dưới ô chọn, việc không đổi.
@@ -188,9 +202,11 @@ mẫu sáu việc, ba phụ thuộc, một mốc, một ngày lễ, tạo qua đ
 
 | Màn | MỘT việc của màn | Vào từ / ra tới |
 |---|---|---|
-| Dự án (danh sách) | chọn hay tạo một đợt triển khai | thanh trái / trang dự án |
-| Dự án › Gantt | xếp lịch các việc của đợt và thấy hệ quả khi một việc trễ | danh sách dự án / khung việc |
-| Dự án › Danh sách, Bảng | xem và đẩy việc của đợt như Việc của tôi | cùng trang, `ViewSwitch` |
+| Việc › Phạm vi «Của tôi» | đẩy việc của mình, biết việc nào thuộc dự án nào | thanh trái / khung việc, phạm vi dự án |
+| Việc › ô Phạm vi | chọn mình đang nhìn việc của ai: của tôi, mọi dự án, hay một dự án | đầu màn Việc / phạm vi đã chọn |
+| Việc › Phạm vi «Tất cả dự án» | chọn hay tạo một đợt triển khai | ô Phạm vi / phạm vi một dự án |
+| Việc › Phạm vi một dự án › Gantt | xếp lịch các việc của đợt và thấy hệ quả khi một việc trễ | ô Phạm vi, dòng việc / khung việc |
+| Việc › Phạm vi một dự án › Danh sách, Bảng | xem và đẩy việc của đợt | cùng trang, `ViewSwitch` |
 | Khung việc › Bắt đầu, Dự án, Phải chờ | đặt lịch và ràng một việc | thanh Gantt, danh sách / Gantt |
 | Cài đặt › Lịch làm việc | khai ngày nào công ty nghỉ | thanh cài đặt / — |
 
@@ -199,24 +215,26 @@ mẫu sáu việc, ba phụ thuộc, một mốc, một ngày lễ, tạo qua đ
 <!-- <<<UX-STATE-TABLE -->
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
-| ST-du-an-ds-cho-tai | Dự án | tiêu đề giữ nguyên, khung xương năm hàng | chờ |
-| ST-du-an-ds-loi | Dự án | `VungTaiLoi` «Không tải được danh sách dự án» + «Thử lại» | thử lại |
-| ST-du-an-ds-rong | Dự án | `Empty` «Chưa có dự án» + «Tạo dự án» | tạo dự án |
-| ST-du-an-ds-co | Dự án | bảng dự án đang mở, «Đã đóng (n)» gập | mở dự án |
-| ST-du-an-tao | Dự án | Dialog «Tạo dự án»: tên (bắt buộc), mô tả | tạo, huỷ |
-| ST-gantt-cho-tai | Dự án › Gantt | tiêu đề giữ nguyên, khung xương cây năm hàng và trục ngày | chờ |
-| ST-gantt-loi | Dự án › Gantt | `VungTaiLoi` «Không tải được lịch dự án» + «Thử lại» | thử lại |
-| ST-gantt-rong | Dự án › Gantt | `Empty` «Dự án chưa có việc» + «Thêm việc» | thêm việc |
-| ST-gantt-co-lich | Dự án › Gantt | hàng Mốc, cây việc, thanh màu trạng thái, mũi tên, cột nghỉ xám, vạch hôm nay | kéo thanh, bấm thanh |
-| ST-gantt-chua-lich | Dự án › Gantt | nhóm «Chưa có lịch (n)», mỗi hàng nút «Đặt ngày» | đặt ngày |
-| ST-gantt-moc-tre | Dự án › Gantt | mốc tô `error`, chú giải «Trễ: «B» hạn 02/11» khi rê | dời việc, sửa mốc |
-| ST-gantt-dang-keo | Dự án › Gantt | bóng thanh theo con trỏ, nhãn ngày mới | thả, Esc |
-| ST-gantt-da-doi | Dự án › Gantt | thanh việc sau ở chỗ mới, toast «Đã dời n việc» | xem lịch sử |
-| ST-gantt-tu-choi | Dự án › Gantt | thanh về chỗ cũ, toast lời máy chủ | đọc, sửa |
-| ST-gantt-chi-xem | Dự án › Gantt | dự án đã đóng: dòng «Dự án đã đóng» dưới tiêu đề, thanh không kéo, không nút thêm | mở lại (người tạo, quản trị) |
-| ST-gantt-dien-thoai | Dự án › Gantt (375) | ô chọn kiểu xem; Gantt cuộn ngang trong khung, cây thu hẹp | chuyển Danh sách |
-| ST-du-an-hoi-dong | Dự án | `ConfirmDialog` «Dự án còn n việc chưa xong. Vẫn đóng?» | đồng ý, thôi |
-| ST-du-an-moc | Dự án | Dialog «Thêm mốc»: tên, ngày, việc phải xong trước | lưu, huỷ |
+| ST-viec-cua-toi-du-an | Việc › Của tôi | dòng và thẻ việc trong dự án có dòng phụ «Dự án: <tên>» | bấm sang phạm vi dự án |
+| ST-pham-vi-mo | Việc | ô Phạm vi mở: Của tôi · Tất cả dự án · dự án đang mở · «Đã đóng (n)» · «Tạo dự án…» | chọn phạm vi |
+| ST-du-an-ds-cho-tai | Việc › Tất cả dự án | tiêu đề giữ nguyên, khung xương năm hàng | chờ |
+| ST-du-an-ds-loi | Việc › Tất cả dự án | `VungTaiLoi` «Không tải được danh sách dự án» + «Thử lại» | thử lại |
+| ST-du-an-ds-rong | Việc › Tất cả dự án | `Empty` «Chưa có dự án» + «Tạo dự án» | tạo dự án |
+| ST-du-an-ds-co | Việc › Tất cả dự án | bảng dự án đang mở, «Đã đóng (n)» gập | mở dự án |
+| ST-du-an-tao | Việc › Tất cả dự án | Dialog «Tạo dự án»: tên (bắt buộc), mô tả | tạo, huỷ |
+| ST-gantt-cho-tai | Việc › một dự án › Gantt | tiêu đề giữ nguyên, khung xương cây năm hàng và trục ngày | chờ |
+| ST-gantt-loi | Việc › một dự án › Gantt | `VungTaiLoi` «Không tải được lịch dự án» + «Thử lại» | thử lại |
+| ST-gantt-rong | Việc › một dự án › Gantt | `Empty` «Dự án chưa có việc» + «Thêm việc» | thêm việc |
+| ST-gantt-co-lich | Việc › một dự án › Gantt | hàng Mốc, cây việc, thanh màu trạng thái, mũi tên, cột nghỉ xám, vạch hôm nay | kéo thanh, bấm thanh |
+| ST-gantt-chua-lich | Việc › một dự án › Gantt | nhóm «Chưa có lịch (n)», mỗi hàng nút «Đặt ngày» | đặt ngày |
+| ST-gantt-moc-tre | Việc › một dự án › Gantt | mốc tô `error`, chú giải «Trễ: «B» hạn 02/11» khi rê | dời việc, sửa mốc |
+| ST-gantt-dang-keo | Việc › một dự án › Gantt | bóng thanh theo con trỏ, nhãn ngày mới | thả, Esc |
+| ST-gantt-da-doi | Việc › một dự án › Gantt | thanh việc sau ở chỗ mới, toast «Đã dời n việc» | xem lịch sử |
+| ST-gantt-tu-choi | Việc › một dự án › Gantt | thanh về chỗ cũ, toast lời máy chủ | đọc, sửa |
+| ST-gantt-chi-xem | Việc › một dự án › Gantt | dự án đã đóng: dòng «Dự án đã đóng» dưới tiêu đề, thanh không kéo, không nút thêm | mở lại (người tạo, quản trị) |
+| ST-gantt-dien-thoai | Việc › một dự án › Gantt (375) | ô chọn kiểu xem; Gantt cuộn ngang trong khung, cây thu hẹp | chuyển Danh sách |
+| ST-du-an-hoi-dong | Việc › một dự án | `ConfirmDialog` «Dự án còn n việc chưa xong. Vẫn đóng?» | đồng ý, thôi |
+| ST-du-an-moc | Việc › một dự án | Dialog «Thêm mốc»: tên, ngày, việc phải xong trước | lưu, huỷ |
 | ST-khung-viec-lich | Khung việc | ô Bắt đầu, Hạn, Dự án; mục «Phải chờ (n)» | đổi ngày, thêm phụ thuộc |
 | ST-khung-viec-phai-cho-loi | Khung việc | lỗi dưới ô chọn: «Phụ thuộc này tạo vòng: A → B → A.» | chọn việc khác |
 | ST-lich-lam-viec | Cài đặt › Lịch làm việc | hai thẻ: ngày nghỉ trong tuần, ngày lễ | bật tắt, thêm, xoá |
@@ -254,7 +272,8 @@ kiện dọc). Bậc 2: shadcn gốc không có Gantt. Bậc 3: `@reui/gantt` c�
 ### 6. Khuôn IA đã chọn + căn cứ
 
 Khuôn IA: danh-sách-chi-tiết (master-detail)
-Căn cứ: danh sách dự án → trang một dự án có ba kiểu xem, như Asana, monday, ClickUp trong khảo sát
-(`docs/plan/viec-du-an-nghien-cuu/04-quan-ly-cong-viec.md`, mẫu «Gantt mức đủ» và mục từng hãng); không có khuôn
-thứ hai khả dĩ cho một bản ghi chứa nhiều việc, nên không tra thêm.
+Căn cứ: một danh sách việc, lọc theo phạm vi (của tôi · mọi dự án · một dự án) và đổi kiểu xem — kiểu Notion trong
+khảo sát («ít database dùng chung + view lọc thay vì mỗi dự án một database»,
+`docs/plan/viec-du-an-nghien-cuu/04-quan-ly-cong-viec.md`); chủ kho chọn lối này thay cho mục «Dự án» riêng kiểu
+Asana, monday, Linear ở Cổng Phạm vi 16/10 sau khi xem hai bản phác.
 <!-- UX-SPEC-TEMPLATE>>> -->

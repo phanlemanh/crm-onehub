@@ -3,11 +3,11 @@
  "will_do": [
   {
    "id": "AC-2",
-   "p": "Sẽ cho tạo việc ngay trong dự án và đưa việc có sẵn vào hay ra; việc riêng đưa vào dự án thì cả đội thấy, và máy báo trước điều đó (AC-2, gom việc)."
+   "p": "Sẽ cho tạo việc ngay trong dự án và đưa việc có sẵn vào hay ra; việc riêng đưa vào dự án thì cả đội thấy, máy báo trước điều đó; ở phạm vi «Của tôi» mỗi việc thuộc dự án ghi «Dự án: …» bấm sang dự án đó (AC-2, gom việc)."
   },
   {
    "id": "AC-4",
-   "p": "Sẽ có kiểu xem Gantt mặc định trên trang dự án: hàng mốc, việc con thụt dưới cha, thanh màu theo trạng thái, mũi tên việc phải chờ, ngày nghỉ tô nền, vạch hôm nay, nhóm «Chưa có lịch»; cùng hai kiểu Danh sách và Bảng (AC-4, xem Gantt)."
+   "p": "Sẽ có kiểu xem Gantt, mặc định khi chọn một dự án trong ô Phạm vi: hàng mốc, việc con thụt dưới cha, thanh màu theo trạng thái, mũi tên việc phải chờ, ngày nghỉ tô nền, vạch hôm nay, nhóm «Chưa có lịch»; ở «Của tôi» và «Tất cả dự án» không có Gantt (AC-4, xem Gantt)."
   },
   {
    "id": "AC-6",
@@ -45,7 +45,7 @@
  "wont_do": [
   {
    "id": "AC-1",
-   "p": "Chặn tạo dự án khi tên trống hay dài quá 120 ký tự; ngoài ra mọi người đọc được dữ liệu đối tác có trang «Dự án» với danh sách đang mở, «Đã đóng (n)» gập, và nút «Tạo dự án» (AC-1, danh sách dự án)."
+   "p": "Chặn tạo dự án khi tên trống hay dài quá 120 ký tự; ngoài ra màn «Việc» giữ nguyên khi không chọn gì, có thêm ô Phạm vi (Của tôi · Tất cả dự án · từng dự án · Đã đóng · Tạo dự án…) ghi lên đường dẫn, và không có mục «Dự án» riêng trên thanh trái (AC-1, một nơi «Việc»)."
   },
   {
    "id": "AC-3",
@@ -85,10 +85,14 @@
   },
   {
    "id": "OOS-8",
-   "p": "KHÔNG đếm dự án trong số liệu gửi về hằng ngày."
+   "p": "KHÔNG có Gantt ở phạm vi «Của tôi» hay «Tất cả dự án», không lọc «Của tôi» theo dự án."
   },
   {
    "id": "OOS-9",
+   "p": "KHÔNG đếm dự án trong số liệu gửi về hằng ngày."
+  },
+  {
+   "id": "OOS-10",
    "p": "KHÔNG đo ngưỡng trên dữ liệu thật ở lượt này — việc của Cổng Giá trị sau khi gộp."
   }
  ],

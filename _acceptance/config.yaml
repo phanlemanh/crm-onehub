@@ -1839,7 +1839,7 @@ executors:
     dg_man_dong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an.dom.tsx -t dg-man-dong"
     dg_man_gantt: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an-gantt.dom.tsx -t dg-man-gantt"
     dg_man_keo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an-gantt.dom.tsx -t dg-man-keo"
-    dg_man_khung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-khung"
+    dg_man_khung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-khung && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t dg-man-dong-phu"
     dg_man_phai_cho: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-phai-cho"
     dg_man_lich: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-lam-viec.dom.tsx"
     dg_man_ngay: "cd apps/app && for tz in Asia/Ho_Chi_Minh UTC; do TZ=$tz bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-ngay || exit 1; done"

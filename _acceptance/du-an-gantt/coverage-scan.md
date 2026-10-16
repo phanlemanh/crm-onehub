@@ -38,7 +38,8 @@ Preset entity-feature có bốn trục. «Vào–ra» co thành bề mặt thao 
 
 ## Core (≤20%)
 
-1. A·tạo dự án × B·thành viên đối tác × D·1280/375 — danh sách và tạo dự án, đủ bốn trạng thái màn. → AC-1
+1. A·tạo dự án × B·thành viên đối tác × D·1280/375 — một nơi «Việc», ô Phạm vi (Của tôi · Tất cả dự án · một
+   dự án), tạo dự án từ ô đó, «Của tôi» không đổi khi không tham số (chủ kho chọn B ở Cổng Phạm vi). → AC-1
 2. A·gom việc × B·người giao/thực hiện — tạo trong dự án, đưa vào, đưa ra, việc con mang dự án của cha; việc riêng
    vào dự án thành thấy được. → AC-2
 3. A·đặt ngày × B·người sửa được việc — ô Bắt đầu, luật bắt đầu không sau hạn, vết. → AC-3
@@ -67,6 +68,7 @@ bề mặt) ≈ 19%.
 - Kéo nối phụ thuộc trực tiếp trên Gantt; kéo mốc; kéo thanh tự bám ngày làm việc.
 - Dự án gắn công ty đối tác; khuôn dự án; nhân bản dự án.
 - Đếm dự án trong `install_daily`.
+- Gantt ở phạm vi «Của tôi» hay «Tất cả dự án»; lọc «Của tôi» theo dự án.
 - Ngày bắt đầu trong khuôn kế hoạch 30 ngày và trên màn kế hoạch.
 - Độ trễ, đường găng, baseline, tải từng người — DA6.
 

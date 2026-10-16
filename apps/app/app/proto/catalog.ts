@@ -1149,15 +1149,14 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	},
 	{
 		slug: "du-an-gantt",
-		ten: "Dự án và Gantt — danh sách dự án, Gantt có phụ thuộc và mốc, lịch làm việc",
+		ten: "Dự án và Gantt — màn Việc một nơi, ô Phạm vi, Gantt có phụ thuộc và mốc, lịch làm việc",
 		states: [
-			{
-				id: "ST-du-an-ds-co",
-				nhan: "Dự án — có dự án",
-			},
-			{ id: "ST-du-an-ds-rong", nhan: "Dự án — rỗng" },
-			{ id: "ST-du-an-ds-cho-tai", nhan: "Dự án — đang tải" },
-			{ id: "ST-du-an-ds-loi", nhan: "Dự án — tải hỏng" },
+			{ id: "ST-viec-cua-toi-du-an", nhan: "Việc — Của tôi" },
+			{ id: "ST-pham-vi-mo", nhan: "Ô Phạm vi mở" },
+			{ id: "ST-du-an-ds-co", nhan: "Tất cả dự án" },
+			{ id: "ST-du-an-ds-rong", nhan: "Tất cả dự án — rỗng" },
+			{ id: "ST-du-an-ds-cho-tai", nhan: "Tất cả dự án — tải" },
+			{ id: "ST-du-an-ds-loi", nhan: "Tất cả dự án — hỏng" },
 			{ id: "ST-du-an-tao", nhan: "Tạo dự án" },
 			{
 				id: "ST-gantt-co-lich",

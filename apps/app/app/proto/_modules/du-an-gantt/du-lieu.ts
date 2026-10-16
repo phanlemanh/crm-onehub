@@ -150,12 +150,58 @@ export const MOC_TRE: GanttDuAnMoc[] = [
 	{ id: "m-go", ten: "Go-live", ngay: "2026-10-30", tre: true, cho: ["v-dt"] },
 ];
 
+export const VIEC_CUA_TOI = [
+	{
+		id: "v-hd",
+		tieuDe: "Ký hợp đồng triển khai",
+		duAn: "Triển khai Ngân hàng An Phát",
+		gan: null,
+		han: "21/10",
+	},
+	{
+		id: "v-goi",
+		tieuDe: "Gọi lại anh Minh về gói đại lý",
+		duAn: null,
+		gan: "Thoả thuận Bảo Tín",
+		han: "20/10",
+	},
+	{
+		id: "v-dt",
+		tieuDe: "Đào tạo nhân viên quan hệ khách hàng",
+		duAn: "Triển khai Ngân hàng An Phát",
+		gan: null,
+		han: "29/10",
+	},
+	{
+		id: "v-rieng",
+		tieuDe: "Chuẩn bị báo cáo tuần",
+		duAn: null,
+		gan: null,
+		han: "17/10",
+	},
+];
+
 export const NGAY_LE = [
 	{ ngay: "26/10/2026", ten: "Nghỉ bù" },
 	{ ngay: "01/01/2027", ten: "Tết Dương lịch" },
 ];
 
 export const CHU = {
+	viec: "Việc",
+	phamVi: "Phạm vi",
+	cuaToi: "Của tôi",
+	tatCaDuAn: "Tất cả dự án",
+	duAnDangMo: "Dự án đang mở",
+	taoDuAnMo: "Tạo dự án…",
+	moTaCuaToi: "Việc bạn làm, bạn giao và bạn theo dõi.",
+	moTaTatCa: "Mọi đợt triển khai đang mở và đã đóng.",
+	moTaMotDuAn: "Việc của một đợt triển khai, xếp lịch trên Gantt.",
+	giaoViec: "Giao việc",
+	cotViec: "Việc",
+	dongDuAn: (ten: string) => `Dự án: ${ten}`,
+	thaoTacDuAn: "Thao tác dự án",
+	suaDuAn: "Sửa dự án",
+	themMoc: "Thêm mốc",
 	trangDuAn: "Dự án",
 	moTaDuAn: "Gom việc của một đợt triển khai và xếp lịch trên Gantt.",
 	taoDuAn: "Tạo dự án",

@@ -28,7 +28,10 @@ import {
 import {
 	DropdownMenu,
 	DropdownMenuContent,
+	DropdownMenuGroup,
 	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import {
@@ -66,6 +69,7 @@ import { Textarea } from "@crm/ui/components/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
+import ChevronDown from "@carbon/icons-react/es/ChevronDown";
 import TrashCan from "@carbon/icons-react/es/TrashCan";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { useState } from "react";
@@ -97,6 +101,7 @@ import {
 	MOC_TRE,
 	NGAY_LE,
 	VIEC,
+	VIEC_CUA_TOI,
 	viecDaDoi,
 } from "./du-lieu";
 
@@ -116,7 +121,11 @@ function DongDuAn({ da }: { da: DuAnMau }) {
 				{da.mocKe ? (
 					<StatusIndicator
 						tone={da.mocTre ? "error" : "neutral"}
-						label={<span translate="no">{da.mocTre ? `${da.mocKe} · ${CHU.tre}` : da.mocKe}</span>}
+						label={
+							<span translate="no">
+								{da.mocTre ? `${da.mocKe} · ${CHU.tre}` : da.mocKe}
+							</span>
+						}
 					/>
 				) : (
 					"—"
@@ -165,57 +174,299 @@ function BangDuAn({ ds }: { ds: DuAnMau[] }) {
 	);
 }
 
-function DanhSachDuAn({ state }: { state: string }) {
+type PhamVi = "cua-toi" | "tat-ca" | "du-an";
+
+function phamViCua(state: string): PhamVi {
+	if (state === "ST-viec-cua-toi-du-an" || state === "ST-pham-vi-mo")
+		return "cua-toi";
+	if (state.startsWith("ST-du-an-ds") || state === "ST-du-an-tao")
+		return "tat-ca";
+	return "du-an";
+}
+
+function OPhamVi({
+	phamVi,
+	moSan,
+	onTao,
+}: {
+	phamVi: PhamVi;
+	moSan: boolean;
+	onTao: () => void;
+}) {
+	const [mo, setMo] = useState(moSan);
+	const nhan =
+		phamVi === "cua-toi"
+			? CHU.cuaToi
+			: phamVi === "tat-ca"
+				? CHU.tatCaDuAn
+				: DU_AN_MO[0]?.ten;
+	return (
+		<DropdownMenu open={mo} onOpenChange={setMo}>
+			<DropdownMenuTrigger asChild>
+				<Button variant="outline" size="sm" aria-label={CHU.phamVi}>
+					<span className="text-muted-foreground">{CHU.phamVi}:</span>
+					<span translate={phamVi === "du-an" ? "no" : undefined}>{nhan}</span>
+					<ChevronDown aria-hidden="true" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="start">
+				<DropdownMenuItem>{CHU.cuaToi}</DropdownMenuItem>
+				<DropdownMenuItem>{CHU.tatCaDuAn}</DropdownMenuItem>
+				<DropdownMenuSeparator />
+				<DropdownMenuGroup>
+					<DropdownMenuLabel>{CHU.duAnDangMo}</DropdownMenuLabel>
+					{DU_AN_MO.map((da) => (
+						<DropdownMenuItem key={da.id}>
+							<span translate="no">{da.ten}</span>
+						</DropdownMenuItem>
+					))}
+					<DropdownMenuItem>{CHU.daDong(DU_AN_DONG.length)}</DropdownMenuItem>
+				</DropdownMenuGroup>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem onSelect={onTao}>{CHU.taoDuAnMo}</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
+}
+
+function ViecCuaToi() {
+	return (
+		<div className="flex flex-col gap-2">
+			<SimpleTable
+				surface="page"
+				columns={[
+					{ id: "ten", header: CHU.cotViec },
+					{ id: "han", header: CHU.han, align: "right" },
+				]}
+			>
+				{VIEC_CUA_TOI.map((v) => (
+					<SimpleTableRow key={v.id} clickable>
+						<SimpleTableCell>
+							<div className="flex min-w-0 flex-col">
+								<span translate="no">{v.tieuDe}</span>
+								{v.duAn ? (
+									<a
+										href="#pham-vi"
+										className="text-muted-foreground text-xs"
+										translate="no"
+									>
+										{CHU.dongDuAn(v.duAn)}
+									</a>
+								) : v.gan ? (
+									<span
+										className="text-muted-foreground text-xs"
+										translate="no"
+									>
+										{v.gan}
+									</span>
+								) : null}
+							</div>
+						</SimpleTableCell>
+						<SimpleTableCell numeric>{v.han}</SimpleTableCell>
+					</SimpleTableRow>
+				))}
+			</SimpleTable>
+		</div>
+	);
+}
+
+function TatCaDuAn({ state, onTao }: { state: string; onTao: () => void }) {
+	if (state === "ST-du-an-ds-cho-tai") {
+		return (
+			<div className="flex flex-col gap-2">
+				{[1, 2, 3, 4, 5].map((n) => (
+					<Skeleton key={n} className="h-10 w-full" />
+				))}
+			</div>
+		);
+	}
+	if (state === "ST-du-an-ds-loi") {
+		return (
+			<VungTaiLoi tieuDe={CHU.loiDs} moTa={CHU.loiMoTa} onThuLai={() => {}} />
+		);
+	}
+	if (state === "ST-du-an-ds-rong") {
+		return (
+			<Empty border="solid">
+				<EmptyHeader>
+					<EmptyTitle>{CHU.chuaCoDuAn}</EmptyTitle>
+					<EmptyDescription>{CHU.chuaCoDuAnMoTa}</EmptyDescription>
+				</EmptyHeader>
+				<EmptyContent>
+					<Button onClick={onTao}>{CHU.taoDuAn}</Button>
+				</EmptyContent>
+			</Empty>
+		);
+	}
+	return (
+		<div className="flex flex-col gap-4">
+			<BangDuAn ds={DU_AN_MO} />
+			<Collapsible>
+				<CollapsibleTrigger asChild>
+					<Button variant="ghost" size="sm">
+						{CHU.daDong(DU_AN_DONG.length)}
+					</Button>
+				</CollapsibleTrigger>
+				<CollapsibleContent>
+					<BangDuAn ds={DU_AN_DONG} />
+				</CollapsibleContent>
+			</Collapsible>
+		</div>
+	);
+}
+
+function KhungXuongGantt() {
+	return (
+		<div className="grid grid-cols-[14rem_1fr] gap-2">
+			{[1, 2, 3, 4, 5].map((n) => (
+				<div key={n} className="contents">
+					<Skeleton className="h-8" />
+					<Skeleton className="h-8" />
+				</div>
+			))}
+		</div>
+	);
+}
+
+function DaiDuAn({ chiXem, onDong }: { chiXem: boolean; onDong: () => void }) {
+	return (
+		<Item variant="outline">
+			<ItemContent>
+				<ItemTitle translate="no">Triển khai Ngân hàng An Phát</ItemTitle>
+				<ItemDescription>
+					{chiXem ? CHU.daDongDong : "7 việc · 19/10 – 06/11 · Go-live 30/10"}
+				</ItemDescription>
+			</ItemContent>
+			<ItemActions>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="ghost" size="icon" aria-label={CHU.thaoTacDuAn}>
+							<OverflowMenuHorizontal aria-hidden="true" />
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						{chiXem ? (
+							<DropdownMenuItem>{CHU.moLai}</DropdownMenuItem>
+						) : (
+							<>
+								<DropdownMenuItem>{CHU.suaDuAn}</DropdownMenuItem>
+								<DropdownMenuItem>{CHU.themMoc}</DropdownMenuItem>
+								<DropdownMenuItem onSelect={onDong}>
+									{CHU.dong}
+								</DropdownMenuItem>
+							</>
+						)}
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</ItemActions>
+		</Item>
+	);
+}
+
+function NoiDungDuAn({ state }: { state: string }) {
+	const chiXem = state === "ST-gantt-chi-xem";
+	const daDoi = state === "ST-gantt-da-doi";
+	const viec = daDoi ? viecDaDoi() : VIEC;
+	const moc = daDoi || state === "ST-gantt-moc-tre" ? MOC_TRE : MOC;
+	if (state === "ST-gantt-cho-tai") return <KhungXuongGantt />;
+	if (state === "ST-gantt-loi") {
+		return (
+			<VungTaiLoi tieuDe={CHU.loiLich} moTa={CHU.loiMoTa} onThuLai={() => {}} />
+		);
+	}
+	if (state === "ST-gantt-rong") {
+		return (
+			<Empty border="solid">
+				<EmptyHeader>
+					<EmptyTitle>{CHU.duAnChuaCoViec}</EmptyTitle>
+					<EmptyDescription>{CHU.duAnChuaCoViecMoTa}</EmptyDescription>
+				</EmptyHeader>
+				<EmptyContent>
+					<Button>{CHU.giaoViec}</Button>
+				</EmptyContent>
+			</Empty>
+		);
+	}
+	return (
+		<div className="flex flex-col gap-4">
+			{daDoi ? (
+				<Alert>
+					<AlertDescription>{CHU.daDoi}</AlertDescription>
+				</Alert>
+			) : null}
+			<GanttDuAn
+				className="h-[520px]"
+				viec={viec}
+				moc={moc}
+				lich={LICH}
+				homNay={HOM_NAY}
+				chiDoc={chiXem}
+				onDoiLich={() => {}}
+				onDatNgay={() => {}}
+				onMoViec={() => {}}
+			/>
+		</div>
+	);
+}
+
+function ManViec({ state }: { state: string }) {
+	const phamVi = phamViCua(state);
 	const [tao, setTao] = useState(state === "ST-du-an-tao");
+	const [hoiDong, setHoiDong] = useState(state === "ST-du-an-hoi-dong");
+	const [xem, setXem] = useState(phamVi === "du-an" ? "gantt" : "danh-sach");
+	const kieuXem = [
+		...(phamVi === "du-an" ? [{ value: "gantt", label: CHU.gantt }] : []),
+		{ value: "danh-sach", label: CHU.danhSach },
+		{ value: "bang", label: CHU.bang },
+	];
+	const moTa =
+		phamVi === "cua-toi"
+			? CHU.moTaCuaToi
+			: phamVi === "tat-ca"
+				? CHU.moTaTatCa
+				: CHU.moTaMotDuAn;
 	return (
 		<PageShell>
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>{CHU.trangDuAn}</PageShellTitle>
-					<PageShellDescription>{CHU.moTaDuAn}</PageShellDescription>
+					<PageShellTitle>{CHU.viec}</PageShellTitle>
+					<PageShellDescription>{moTa}</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
-					<Button onClick={() => setTao(true)}>{CHU.taoDuAn}</Button>
+					{state === "ST-gantt-chi-xem" ? null : (
+						<Button>{CHU.giaoViec}</Button>
+					)}
 				</PageShellActions>
 			</PageShellHeader>
 			<PageShellContent>
-				{state === "ST-du-an-ds-cho-tai" ? (
-					<div className="flex flex-col gap-2">
-						{[1, 2, 3, 4, 5].map((n) => (
-							<Skeleton key={n} className="h-10 w-full" />
-						))}
+				<div className="flex flex-col gap-4">
+					<div className="flex flex-wrap items-center gap-2">
+						<OPhamVi
+							phamVi={phamVi}
+							moSan={state === "ST-pham-vi-mo"}
+							onTao={() => setTao(true)}
+						/>
+						<ViewSwitch
+							label={CHU.kieuXem}
+							value={xem}
+							onValueChange={setXem}
+							items={kieuXem}
+						/>
 					</div>
-				) : state === "ST-du-an-ds-loi" ? (
-					<VungTaiLoi
-						tieuDe={CHU.loiDs}
-						moTa={CHU.loiMoTa}
-						onThuLai={() => {}}
-					/>
-				) : state === "ST-du-an-ds-rong" ? (
-					<Empty border="solid">
-						<EmptyHeader>
-							<EmptyTitle>{CHU.chuaCoDuAn}</EmptyTitle>
-							<EmptyDescription>{CHU.chuaCoDuAnMoTa}</EmptyDescription>
-						</EmptyHeader>
-						<EmptyContent>
-							<Button onClick={() => setTao(true)}>{CHU.taoDuAn}</Button>
-						</EmptyContent>
-					</Empty>
-				) : (
-					<div className="flex flex-col gap-4">
-						<BangDuAn ds={DU_AN_MO} />
-						<Collapsible>
-							<CollapsibleTrigger asChild>
-								<Button variant="ghost" size="sm">
-									{CHU.daDong(DU_AN_DONG.length)}
-								</Button>
-							</CollapsibleTrigger>
-							<CollapsibleContent>
-								<BangDuAn ds={DU_AN_DONG} />
-							</CollapsibleContent>
-						</Collapsible>
-					</div>
-				)}
+					{phamVi === "du-an" ? (
+						<DaiDuAn
+							chiXem={state === "ST-gantt-chi-xem"}
+							onDong={() => setHoiDong(true)}
+						/>
+					) : null}
+					{phamVi === "cua-toi" ? (
+						<ViecCuaToi />
+					) : phamVi === "tat-ca" ? (
+						<TatCaDuAn state={state} onTao={() => setTao(true)} />
+					) : (
+						<NoiDungDuAn state={state} />
+					)}
+				</div>
 			</PageShellContent>
 			<Dialog open={tao} onOpenChange={setTao}>
 				<DialogContent>
@@ -243,118 +494,6 @@ function DanhSachDuAn({ state }: { state: string }) {
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
-		</PageShell>
-	);
-}
-
-function KhungXuongGantt() {
-	return (
-		<div className="grid grid-cols-[14rem_1fr] gap-2">
-			{[1, 2, 3, 4, 5].map((n) => (
-				<div key={n} className="contents">
-					<Skeleton className="h-8" />
-					<Skeleton className="h-8" />
-				</div>
-			))}
-		</div>
-	);
-}
-
-function TrangDuAn({ state }: { state: string }) {
-	const [xem, setXem] = useState("gantt");
-	const [hoiDong, setHoiDong] = useState(state === "ST-du-an-hoi-dong");
-	const chiXem = state === "ST-gantt-chi-xem";
-	const daDoi = state === "ST-gantt-da-doi";
-	const viec = daDoi ? viecDaDoi() : VIEC;
-	const moc = daDoi || state === "ST-gantt-moc-tre" ? MOC_TRE : MOC;
-	return (
-		<PageShell>
-			<PageShellHeader>
-				<PageShellHeading>
-					<PageShellTitle translate="no">
-						Triển khai Ngân hàng An Phát
-					</PageShellTitle>
-					<PageShellDescription>7 việc · 19/10 – 06/11</PageShellDescription>
-				</PageShellHeading>
-				<PageShellActions>
-					{chiXem ? null : <Button>{CHU.themViec}</Button>}
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="outline" size="icon" aria-label="Thao tác dự án">
-								<OverflowMenuHorizontal aria-hidden="true" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							{chiXem ? (
-								<DropdownMenuItem>{CHU.moLai}</DropdownMenuItem>
-							) : (
-								<>
-									<DropdownMenuItem>Sửa dự án</DropdownMenuItem>
-									<DropdownMenuItem>Thêm mốc</DropdownMenuItem>
-									<DropdownMenuItem onSelect={() => setHoiDong(true)}>
-										{CHU.dong}
-									</DropdownMenuItem>
-								</>
-							)}
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</PageShellActions>
-			</PageShellHeader>
-			<PageShellContent>
-				<div className="flex flex-col gap-4">
-					{chiXem ? (
-						<Alert>
-							<AlertDescription>{CHU.daDongDong}</AlertDescription>
-						</Alert>
-					) : null}
-					{daDoi ? (
-						<Alert>
-							<AlertDescription>{CHU.daDoi}</AlertDescription>
-						</Alert>
-					) : null}
-					<ViewSwitch
-						label={CHU.kieuXem}
-						value={xem}
-						onValueChange={setXem}
-						items={[
-							{ value: "gantt", label: CHU.gantt },
-							{ value: "danh-sach", label: CHU.danhSach },
-							{ value: "bang", label: CHU.bang },
-						]}
-					/>
-					{state === "ST-gantt-cho-tai" ? (
-						<KhungXuongGantt />
-					) : state === "ST-gantt-loi" ? (
-						<VungTaiLoi
-							tieuDe={CHU.loiLich}
-							moTa={CHU.loiMoTa}
-							onThuLai={() => {}}
-						/>
-					) : state === "ST-gantt-rong" ? (
-						<Empty border="solid">
-							<EmptyHeader>
-								<EmptyTitle>{CHU.duAnChuaCoViec}</EmptyTitle>
-								<EmptyDescription>{CHU.duAnChuaCoViecMoTa}</EmptyDescription>
-							</EmptyHeader>
-							<EmptyContent>
-								<Button>{CHU.themViec}</Button>
-							</EmptyContent>
-						</Empty>
-					) : (
-						<GanttDuAn
-							className="h-[520px]"
-							viec={viec}
-							moc={moc}
-							lich={LICH}
-							homNay={HOM_NAY}
-							chiDoc={chiXem}
-							onDoiLich={() => {}}
-							onDatNgay={() => {}}
-							onMoViec={() => {}}
-						/>
-					)}
-				</div>
-			</PageShellContent>
 			<ConfirmDialog
 				tieuDe={CHU.hoiDongTieuDe}
 				than={CHU.hoiDongThan}
@@ -506,14 +645,12 @@ function LichLamViec({ khongQuyen }: { khongQuyen: boolean }) {
 
 export function DuAnGanttMau({ state }: { state: string }) {
 	const noiDung =
-		state.startsWith("ST-du-an-ds") || state === "ST-du-an-tao" ? (
-			<DanhSachDuAn state={state} />
-		) : state === "ST-khung-viec-lich" ? (
+		state === "ST-khung-viec-lich" ? (
 			<KhungViecLich />
 		) : state.startsWith("ST-lich-lam-viec") ? (
 			<LichLamViec khongQuyen={state === "ST-lich-lam-viec-khong-quyen"} />
 		) : (
-			<TrangDuAn state={state} />
+			<ManViec state={state} />
 		);
 	return <LocaleProvider locale="vi">{noiDung}</LocaleProvider>;
 }
