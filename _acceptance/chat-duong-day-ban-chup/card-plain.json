@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Chỉ nhánh chính đổi được lộ trình hiện trên trang Lộ trình, và máy chủ thôi nhận yêu cầu cỡ 2 MB ở mọi đường — chỉ đường nhận bản chụp lộ trình được nhận cỡ đó.",
+  "analyst_plain": "Một phép đo (chạy cả bộ bài kịch bản đẩy dưới môi trường giống CI) xanh cả trước lẫn sau vòng này — nó là lưới chống bài kiểm đỏ trên CI mà xanh ở máy, không đo hành vi mới; khi phá-thử, bỏ dòng đặt môi trường tường minh thì nó đỏ."
+}

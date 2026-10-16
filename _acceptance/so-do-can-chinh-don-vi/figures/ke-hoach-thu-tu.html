@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kế hoạch thứ tự</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --font-sans:    'Geist', system-ui, sans-serif;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 800px; width: 100%; }
+    svg { width: 100%; min-width: 640px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <svg viewBox="0 0 800 704" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">KẾ HOẠCH · THỨ TỰ</text>
+
+      <!-- Đường nối (vẽ trước hộp) -->
+      <path d="M220,144 V168 Q220,176 228,176 H352 Q360,176 360,184 V208" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+      <path d="M580,144 V168 Q580,176 572,176 H448 Q440,176 440,184 V208" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+      <path d="M400,280 V336" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+      <path d="M400,408 V464" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+      <path d="M400,536 V592" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+
+      <!-- Hộp -->
+      <rect x="60" y="72" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="60" y="72" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="220" y="102" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">1 · Khung vẽ dùng chung</text>
+      <text x="220" y="124" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">thêm React Flow + dagre — làn nặng</text>
+      <rect x="420" y="72" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="420" y="72" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="580" y="102" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">2 · Dữ liệu sơ đồ từ máy chủ</text>
+      <text x="580" y="124" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">năm cờ Cần chú ý, bộ gieo ca riêng</text>
+      <rect x="240" y="208" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="240" y="208" width="320" height="72" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="400" y="238" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">3 · Cách xem Sơ đồ ở Toàn cảnh</text>
+      <text x="400" y="260" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">thẻ, lọc, mở thẻ, thu gọn, điện thoại</text>
+      <rect x="240" y="336" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="240" y="336" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="366" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">4 · Bỏ cách xem Cây ở trang đơn vị (B5)</text>
+      <text x="400" y="388" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">nghỉ bài đo cây của 2 hồ sơ đã ký</text>
+      <rect x="240" y="464" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="240" y="464" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="400" y="494" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">5 · Răng của hồ sơ</text>
+      <text x="400" y="516" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">giữ hồ sơ, ranh giới, đột biến, màn thật</text>
+      <rect x="240" y="592" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="240" y="592" width="320" height="72" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="400" y="622" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">6 · Đóng S3 → chấm S4</text>
+      <text x="400" y="644" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">xin lượt S4</text>
+    </svg>
+  </div>
+</body>
+</html>

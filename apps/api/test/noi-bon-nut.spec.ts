@@ -90,6 +90,15 @@ afterAll(async () => {
 		where: { id: { in: daGieo.khuon } },
 	});
 	await db.session.deleteMany({ where: { token: { in: daGieo.phien } } });
+	await db.viec.deleteMany({
+		where: {
+			OR: [
+				{ taoBoiId: { in: daGieo.nguoi } },
+				{ nguoiGiaoId: { in: daGieo.nguoi } },
+				{ nguoiThucHienId: { in: daGieo.nguoi } },
+			],
+		},
+	});
 	await db.member.deleteMany({ where: { userId: { in: daGieo.nguoi } } });
 	await db.user.deleteMany({ where: { id: { in: daGieo.nguoi } } });
 	await db.department.deleteMany({ where: { id: { in: daGieo.boPhan } } });

@@ -243,6 +243,65 @@ export const khoiCuaToiOutput = z.object({
 });
 
 export type CayCanChinhOutput = z.infer<typeof cayCanChinhOutput>;
+
+const CO_CHU_Y = [
+	"chua-truong",
+	"chua-okr",
+	"chua-noi",
+	"muc-tieu-chua-gop",
+	"kr-truot",
+] as const;
+
+const dongGopSoDo = z.object({
+	dich: z.string(),
+	tenDich: z.string(),
+	donViDich: z.string(),
+	lyDo: z.string().nullable(),
+	mucTin: z.enum(MUC_TIN_CAN_CHINH),
+	lyDoTuKara: z.boolean(),
+});
+
+const mucTieuSoDo = z.object({
+	id: z.string(),
+	ten: z.string(),
+	gop: z.array(dongGopSoDo),
+});
+
+const nutSoDo = z.object({
+	khoa: z.string(),
+	ten: z.string(),
+	cap: z.enum(["goc", "bo-phan", "phong-ban"]),
+	cha: z.string().nullable(),
+	truong: z.object({ id: z.string(), name: z.string() }).nullable(),
+	soMucTieu: z.number(),
+	soKr: z.number(),
+	tienDo: z.number().nullable(),
+	tinhTrang: z.object({
+		dungNhip: z.number(),
+		chamNhip: z.number(),
+		truot: z.number(),
+	}),
+	chuaGop: z.number(),
+	co: z.array(z.enum(CO_CHU_Y)),
+	canChuY: z.boolean(),
+	mucTieu: z.array(mucTieuSoDo),
+});
+
+const duongSoDo = z.object({
+	tu: z.string(),
+	den: z.string(),
+	loai: z.enum(["lien", "dut"]),
+	soMucTieu: z.number(),
+});
+
+export const soDoDonViOutput = z.object({
+	nut: z.array(nutSoDo),
+	duong: z.array(duongSoDo),
+});
+
+export type CoChuY = (typeof CO_CHU_Y)[number];
+export type NutSoDo = z.infer<typeof nutSoDo>;
+export type SoDoDonViOutput = z.infer<typeof soDoDonViOutput>;
 export type LocDanhSach = z.infer<typeof locDanhSach>;
 export type DanhSachInput = z.infer<typeof danhSachInput>;
 export type DanhSachOutput = z.infer<typeof danhSachOutput>;
@@ -258,3 +317,37 @@ export type DienBienOutput = z.infer<typeof dienBienOutput>;
 export type KhoiCuaToiInput = z.infer<typeof khoiCuaToiInput>;
 export type KhoiCuaToiOutput = z.infer<typeof khoiCuaToiOutput>;
 export type DongCuaToi = z.infer<typeof dongCuaToi>;
+
+export const quanhMucTieuInput = z.object({ objectiveId: ma });
+
+const nutQuanh = z.object({
+	id: z.string(),
+	loai: z.enum(["muc-tieu", "kr"]),
+	phia: z.enum(["tam", "tren", "duoi"]),
+	tieuDe: z.string(),
+	donVi: z.string(),
+	congTy: z.boolean(),
+	tienDo: z.number(),
+	mucTieuId: z.string(),
+});
+
+const canhQuanh = z.object({
+	tu: z.string(),
+	den: z.string(),
+	loai: z.enum(["cua", "gop"]),
+});
+
+const gopLenCongTy = z.object({
+	kr: z.object({ id: z.string(), tieuDe: z.string() }).nullable(),
+	mucTieu: z.object({ id: z.string(), tieuDe: z.string() }),
+});
+
+export const quanhMucTieuOutput = z.object({
+	tamId: z.string(),
+	laCongTy: z.boolean(),
+	nut: z.array(nutQuanh),
+	canh: z.array(canhQuanh),
+	gopLenCongTy: z.array(gopLenCongTy),
+});
+
+export type QuanhMucTieuOutput = z.infer<typeof quanhMucTieuOutput>;

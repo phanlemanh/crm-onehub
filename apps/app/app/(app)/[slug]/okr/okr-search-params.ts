@@ -84,6 +84,21 @@ export const parseAsMucTinCay =
 
 export const loadOkrSearchParams = createLoader(okrParsers);
 
+const CACH_XEM_TOAN_CANH = ["bang", "so-do"] as const;
+
+const LOC_SO_DO = ["moi", "chu-y"] as const;
+
+export type LocSoDo = (typeof LOC_SO_DO)[number];
+
+export const soDoParsers = {
+	[SEARCH_PARAM.okr.xemToanCanh]:
+		parseAsStringLiteral(CACH_XEM_TOAN_CANH).withDefault("bang"),
+	[SEARCH_PARAM.okr.locSoDo]:
+		parseAsStringLiteral(LOC_SO_DO).withDefault("moi"),
+	[SEARCH_PARAM.okr.moDonVi]: parseAsString,
+	[SEARCH_PARAM.okr.moNhanh]: parseAsArrayOf(parseAsString).withDefault([]),
+};
+
 export const parseAsThuMucTieu = parseAsArrayOf(parseAsString).withDefault([]);
 
 export function chuanThuMucTieu(ids: readonly string[]): string[] {
