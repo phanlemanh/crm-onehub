@@ -1,0 +1,100 @@
+{
+  "feature_plain": "Một PR chỉ sửa chữ ở màn khác sẽ thôi bị đòi ghim lại hồ sơ giai-doan-thoa-thuan, và vài hồ sơ đã ký thôi bị coi là cũ chỉ vì một eval chấm tay không khai tệp nó đọc.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ cho phép đo màn giai đoạn (E15) chỉ theo dõi đúng các tệp chữ mà màn giai đoạn và bảng thoả thuận nhập thẳng; đổi tệp chữ khác không còn chạm nó — kiểm qua cả 48 tệp chữ."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ để hồ sơ giai-doan-thoa-thuan không còn bị coi là cũ khi chỉ một tệp chữ ngoài màn đổi, còn đổi chữ của chính màn thì vẫn bị đòi ghim lại — đúng khi #427 (F23) cũng đã lên onehub."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ giữ danh sách hồ sơ được sửa ở một tệp, khớp đúng luật chọn, có hai hồ sơ anh gọi tên, và mọi eval chấm tay trong đó khai đủ tệp nó đọc."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ chỉ thêm dòng khai tệp được đọc, không đổi chữ nào khác của bất kỳ phép đo nào, không chạm hồ sơ ngoài danh sách, không chạm tệp của kit."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ làm các hồ sơ đã ký trong danh sách thôi bị coi là cũ theo đúng bộ lọc của lưới trước khi gộp."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ để nguyên các eval không suy được tệp đọc (khai không chạy, không có tệp đầu vào, tệp đầu vào đã mất) và in lý do bỏ qua."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chạy lưới trước khi gộp thật trên bản trước và bản sau: số hồ sơ cũ giảm, không hồ sơ mới thành cũ."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG ghim lại hàng loạt 44 hồ sơ đã ký vẫn cũ thật; chúng được khai tệp đọc ở lần ghim kế của chính chúng (Hỏi-2)."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG thu tệp theo dõi của gioi-han-duyet-cay-okr: thứ nó đo đọc nhiều tệp hơn khai hiện tại (Hỏi-1)."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG sửa 18 eval chấm tay đã khai tệp nhưng khai thiếu so với tệp đọc — đề xuất hàng riêng."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG sửa phép đo máy và phép đo màn thiếu khai tệp — việc của hàng vệ sinh."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG sửa tệp của kit; đề xuất cho kit đi qua yêu cầu việc phụ."
+    }
+  ],
+  "scope_plain": "Vòng này chỉ sửa khai báo trong hồ sơ nghiệm thu, không chạm mã sản phẩm.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Loại phép đo: chấm tay (AC-3, AC-6), đo màn E15 (AC-1); phép đo máy thiếu khai để sau."
+    },
+    {
+      "i": 1,
+      "p": "Khai tệp so với tệp thật đọc: thiếu (AC-3), rộng hơn (AC-1); khai hẹp hơn để hàng riêng — đối chiếu cách Turborepo/Nx coi khai thiếu là nguy hiểm."
+    },
+    {
+      "i": 2,
+      "p": "Nguồn khai tệp đọc: từ gốc kho, tương đối hồ sơ, tệp đã mất, không có — đủ bốn ca, phủ bởi AC-3 và AC-6."
+    },
+    {
+      "i": 3,
+      "p": "Hồ sơ sau khi sửa: chưa ghim (3), sạch (4), vẫn cũ thật (44, để lần ghim kế) — AC-3, AC-5."
+    },
+    {
+      "i": 4,
+      "p": "Cắt ngang: không đổi thứ được đo, không chạm kit (AC-4); số thật từ lưới trước khi gộp (AC-7)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "P0: Hỏi-2 ngầm bỏ một ngưỡng SỐNG đã ghi trong ô cơ hội — đã sửa: Hỏi-2 nay nói thẳng ký theo khuyến nghị là đổi ngưỡng đó, và AC-7 đo nó ở các hồ sơ trong danh sách."
+    },
+    {
+      "i": 1,
+      "p": "Hai hồ sơ anh gọi tên có thể bị bỏ lặng — đã sửa: AC-3 bắt chúng có tên, không thoả luật thì máy dừng hỏi anh."
+    },
+    {
+      "i": 2,
+      "p": "Danh sách hồ sơ ở hai nơi và không ai kiểm nó đúng luật — đã sửa: một tệp, phép đo tính lại luật và so."
+    },
+    {
+      "i": 3,
+      "p": "Chỉ đo vài tệp chữ chọn tay — đã sửa: đo cả 48 tệp, tập giữ suy từ mã của màn."
+    },
+    {
+      "i": 4,
+      "p": "Số hồ sơ cũ chỉ đo tay — đã sửa: AC-7 chạy lưới thật trước và sau."
+    }
+  ]
+}
