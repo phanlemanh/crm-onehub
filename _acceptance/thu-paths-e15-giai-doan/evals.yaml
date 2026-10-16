@@ -105,6 +105,7 @@ evals:
   - id: E5
     criterion: AC-5
     executor: script
+    layer: backend-effect
     cmd: config:executors.script.tpe_sach
     paths:
       - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
@@ -151,6 +152,7 @@ evals:
   - id: E8
     criterion: AC-7
     executor: script
+    layer: backend-effect
     cmd: config:executors.script.tpe_pmc_that
     long_running: 45
     paths:
