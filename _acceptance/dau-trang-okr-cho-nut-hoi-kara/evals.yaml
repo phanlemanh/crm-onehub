@@ -6,104 +6,70 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.kmc_man_do
+    long_running: 30
     paths:
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
-      - "apps/app/app/(app)/[slug]/okr/luoi-dau-trang.tsx"
-      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/page-shell.tsx"
+      - "packages/ui/src/components/skeleton.tsx"
       - "_acceptance/khung-man-chung/rang/chup-man.mjs"
     expected: |
-      Chính phép đo E12m của hồ sơ đã ký khung-man-chung (chup-man.mjs --chi-do, phiên đo riêng của cây): thoát 0,
-      in 'buoc N: dat' cho 5 bước và dòng «do toancanh 375: …» với lệch hàng tiêu đề ≤ 4 px (y và chiều cao),
-      vùng nội dung ≤ 8 px. Ngưỡng là hằng NGUONG của chup-man.mjs, không chép số.
-      CHIỀU ĐỎ: trên cây chưa vá (origin/onehub 6fa8ce417) cùng lệnh in «toancanh 375: hang tieu de lech …» và
-      mã 1 — chạy ở bước RED của S3, ghi dòng đỏ vào sổ.
+      exit 0. E12m của khung-man-chung (chup-man.mjs --chi-do, phiên đo riêng của cây, tài khoản quản trị của phiên đo):
+      bước 1 không in «hang tieu de lech» hay «vung noi dung lech» cho toancanh ở 375 và 1280 (ngưỡng tieuDePx 4,
+      noiDungPx 8 của chính răng); dòng «do toancanh <khổ>: … => …» in noiDung lúc chờ và lúc xong cùng top trong 8 px.
+      CHIỀU ĐỎ (đã đo 16/10 trên onehub 04ddefc4f và d5e01c5a3, trước khi sửa): mã 1 với dòng «buoc 1: toancanh 375: vung
+      noi dung lech … noiDung 244/584 … -> … noiDung 284/1594». Đo lại trên merge-base của nhánh ở S3 trước khi sửa và
+      ghi dòng đó vào sổ.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
     criterion: AC-2
-    executor: test
-    cmd: config:executors.test.dto_cho
+    executor: script
+    cmd: config:executors.script.nm5_dh1
     paths:
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
-      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
-      - "apps/app/test/dau-trang-okr-cho.dom.tsx"
+      - "apps/app/test/okr-dau-trang-khu.dom.tsx"
+      - "apps/app/test/nut-hoi-kara-thay-khung.dom.tsx"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs"
     expected: |
-      apps/app/test/dau-trang-okr-cho.dom.tsx, describe "dto-cho": dựng khung chờ đầu trang OKR (DauTrangOkrCho)
-      thật. Ma trận viết trước {vi, en} = 2 ô, ca «đếm ô dto-cho» đòi đúng 2. Mỗi ô: có đúng một
-      [data-nut=hoi-kara]; chữ của nút bằng okrHoiMessages(<ngôn ngữ>).nut.hoi; nút không disabled; nút và ô xương
-      chọn kỳ cùng cha, nút đứng trước; outerHTML của [data-nut=hoi-kara] trong khung chờ bằng hệt outerHTML của
-      <NutHoiKara /> dựng riêng trong cùng bộ dựng (cùng chữ, cùng dấu Kara như khi xong). Ghim «dto-cho <ngôn ngữ>:
-      co nut hoi kara», «… dung truoc o ky», «… nut giong luc xong».
-      CHIỀU ĐỎ: đột biến của E6 (bỏ nút khỏi khung chờ) làm đỏ «dto-cho vi: co nut hoi kara».
+      exit 0. khong-sua.mjs: (1) không commit nào của vòng (git log --no-merges --grep=dau-trang-okr-cho-nut-hoi-kara) chạm
+      apps/app/test/okr-dau-trang-khu.dom.tsx hay apps/app/test/nut-hoi-kara-thay-khung.dom.tsx — in «khong-sua: <n>
+      commit cua vong, 0 cham»; (2) chạy hai tệp đó bằng bun test (preload setup-dom, TZ Asia/Ho_Chi_Minh) đều mã 0.
+      CHIỀU ĐỎ (khong-sua.mjs --kiem-do-do, bản sao): commit một sửa nhỏ vào nut-hoi-kara-thay-khung.dom.tsx mang tên vòng
+      → mã 1 với «CHAM apps/app/test/nut-hoi-kara-thay-khung.dom.tsx».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
     criterion: AC-3
-    executor: test
-    cmd: config:executors.test.dto_bam
+    executor: script
+    cmd: config:executors.script.nm5_mo_coi
     paths:
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
-      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
-      - "apps/app/test/dau-trang-okr-cho.dom.tsx"
+      - "apps/app/**"
+      - "_acceptance/config.yaml"
+      - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/go-mo-coi.mjs"
     expected: |
-      Cùng tệp, describe "dto-bam". Ma trận viết trước 4 ô, ca «đếm ô dto-bam» đòi đúng 4:
-        dung-yen: bấm nút «Hỏi Kara» của khung chờ → okr.hoiMo giả được gọi đúng 1 lần với đầu vào {}, rồi địa chỉ
-          ghi record=hoi-okr:<id trả về>; trước khi bấm số lần gọi là 0 (đối chứng dương trong ca).
-        go-giua-chung: bấm ở khung chờ, giữ lời trả của okr.hoiMo, gỡ khung chờ và dựng một <NutHoiKara /> mới (như
-          đầu trang đã tải xong), rồi mới thả lời trả → hoiMo được gọi tổng cộng đúng 1 lần và địa chỉ vẫn ghi
-          record=hoi-okr:<id>.
-        bam-lai-sau-thay: như go-giua-chung, nhưng trước khi thả lời trả thì nút ở đầu trang mới phải là «đang mở»
-          (disabled, chữ okrHoiMessages.nut.dangMo) và bấm nó không gọi thêm → hoiMo tổng cộng đúng 1 lần.
-        loi-sau-thay: bấm ở khung chờ, thay khung chờ, rồi lời trả của hoiMo bị từ chối → đầu trang mới hiện câu
-          okrHoiMessages.nut.loiMo và nút bật lại.
-      Ghim «dto-bam <ô>: goi hoiMo 1 lan», «dto-bam <ô>: mo cot hoi», «dto-bam bam-lai-sau-thay: dang mo»,
-      «dto-bam loi-sau-thay: bao loi».
+      exit 0. go-mo-coi.mjs: (a) không có apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx và
+      apps/app/test/dau-trang-okr-cho.dom.tsx trong git ls-files; (b) không tệp nào dưới apps/app nhập «./dau-trang-okr-cho»
+      hay «okr/dau-trang-okr-cho»; (c) _acceptance/config.yaml không còn khoá nào tên dto_; (d) git diff --name-only
+      merge-base(HEAD, origin/onehub)..HEAD -- apps/app chỉ có apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx. In
+      «mo-coi: 0 tep cu · 0 nhap · 0 khoa dto · ma doi 1 tep». Vi phạm: «CON_TEP <tệp>», «CON_NHAP <tệp>», «CON_KHOA
+      <khoá>», «DOI_NGOAI <tệp>», mã 1.
+      CHIỀU ĐỎ (go-mo-coi.mjs --tu-kiem, bản sao): tạo lại dau-trang-okr-cho.tsx rỗng → «CON_TEP …»; thêm dòng nhập
+      «./dau-trang-okr-cho» vào dau-trang-okr.tsx → «CON_NHAP …»; commit sửa một tệp khác dưới apps/app → «DOI_NGOAI …».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4
     criterion: AC-4
-    executor: script
-    cmd: config:executors.script.dto_hoi_quy
-    paths:
-      - "apps/app/app/(app)/[slug]/okr/**"
-      - "apps/app/test/khung-man-chung.dom.tsx"
-      - "apps/app/test/khung-man-chung.spec.ts"
-      - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/**"
-    expected: |
-      node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs: lấy các commit của vòng này bằng
-      git log --no-merges --grep=dau-trang-okr-cho-nut-hoi-kara (không dùng merge-base hay origin/onehub, để thước
-      không rỗng sau khi gộp), so từng commit với cha, đòi không commit nào chạm khung-man-chung.dom.tsx,
-      khung-man-chung.spec.ts; in «khong-sua: <n> commit cua vong, 0 cham» (n ≥ 1, không
-      thấy commit nào → «KHONG DO DUOC» thoát 2); rồi chạy trọn khung-man-chung.spec.ts và khung-man-chung.dom.tsx →
-      thoát 0. CHIỀU ĐỎ: --kiem-do-do (tự thêm một commit tạm chạm khung-man-chung.dom.tsx trên bản sao) phải in
-      «khong-sua: cham khung-man-chung.dom.tsx» và thoát 1.
-
-  - id: E5
-    criterion: AC-5
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.kmc_man
+    long_running: 30
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/khung-man-chung/rang/chup-man.mjs"
     steps:
-      - "Chạy Ở TIỀN CẢNH, Bash timeout 600000: lệnh kmc_man (chup-man.mjs của khung-man-chung, phiên đo riêng của cây)"
-      - "Đọc dòng «do toancanh 375: …» và «do toancanh 1280: …» và 'buoc 1: dat'"
-      - "Mở bốn ảnh kmc-toancanh-dangtai-375.png, kmc-toancanh-xong-375.png, kmc-toancanh-dangtai-1280.png, kmc-toancanh-xong-1280.png (ở .acceptance-runs/khung-man-chung/evidence/) và đối chiếu bằng mắt: tiêu đề cùng số dòng ở hai ảnh của mỗi khổ, nút «Hỏi Kara» có ở cả hai ảnh ở cùng chỗ"
-    expected: "exit 0; 'buoc 1: dat' cho 5 bước; hai cặp ảnh Toàn cảnh khớp như steps."
-    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths:
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
-      - "apps/app/app/(app)/[slug]/okr/luoi-dau-trang.tsx"
-      - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
-
-  - id: E6
-    criterion: AC-2
-    executor: script
-    cmd: config:executors.script.dto_dot_bien
-    paths:
-      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx"
-      - "apps/app/test/dau-trang-okr-cho.dom.tsx"
-      - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/**"
+      - "Chạy chup-man.mjs (đủ, không --chi-do) trên phiên đo riêng của cây; lấy ảnh kmc-toancanh-dangtai-<khổ>.png và kmc-toancanh-xong-<khổ>.png ở 375 và 1280"
+      - "So từng cặp ảnh: hàng tiêu đề cùng số dòng; hàng hành động lúc chờ chiếm cùng số dòng như lúc xong; khối số tổng quan bắt đầu cùng độ cao"
     expected: |
-      node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/dot-bien.mjs dựng bản sao cây (ban-sao.mjs của
-      ca-chap-chon-cach-ly). Đối chứng dương: lệnh dto_cho trên bản sao chưa đổi thoát 0, không thì thoát 2. Một
-      cặp: bỏ <NutHoiKara /> khỏi dau-trang-okr-cho.tsx bằng thayMotLan → lệnh dto_cho thoát khác 0 VÀ đầu ra chứa
-      «dto-cho vi: co nut hoi kara». In «cặp a: cắn» và «dto dot-bien: 1/1 cắn»; bộ canh cây thật chỉ xét tệp bị
-      đột biến.
+      Bốn ảnh có mặt; ở cả hai khổ, ảnh lúc chờ và lúc xong cùng hàng tiêu đề, hàng hành động cùng số dòng, khối nội dung đầu
+      tiên cùng độ cao (lệch không thấy bằng mắt, tương ứng ≤ 8 px của E1).
+    evidence_required: [run_id, verdict, screenshot, observed]

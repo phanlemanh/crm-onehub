@@ -1,70 +1,49 @@
-# Khung chờ đầu trang OKR chừa chỗ nút «Hỏi Kara» — thiết kế
+# dau-trang-okr-cho-nut-hoi-kara — thiết kế (lần 2, sau DH1)
 
-Hàng `dau-trang-okr-cho-nut-hoi-kara` của dãy P1 (đợt r2), Cổng Đáng chủ kho ký `build` ở phiên giám sát 15/10.
+Hàng NM5 của `docs/plan/lo-trinh-okr.json`. Cổng Đáng `build` 2026-10-15T12:22:27Z. Hạng T2, chỉ `apps/app`.
 
-## Vì sao có việc này
+## Vì sao mở lại
 
-#419 (`hoi-dap-okr`) thêm nút «Hỏi Kara» vào cụm bên phải đầu trang các màn OKR, cạnh ô chọn kỳ
-(`dau-trang-okr.tsx`, `DauTrangCoDuLieu`). Khung chờ của cùng đầu trang (`DauTrangOkrCho`) vẫn chỉ chừa một ô
-xương `w-24` cho cả cụm. Ở khổ 375 cụm thật rộng hơn nhiều, cột tiêu đề bị ép hẹp nên tiêu đề xuống dòng: hàng
-tiêu đề Toàn cảnh cao 32 px lúc chờ và 96 px khi xong. Phép đo E12m của hồ sơ đã ký `khung-man-chung`
-(«mỗi cặp đang tải/xong lệch ≤ 4 px ở y và chiều cao hàng tiêu đề») đỏ vì đó — M5 đo trên #375 lúc 11:22Z 15/10.
+Lần 1 (15–16/10) cho khung chờ đầu trang OKR dựng chính nút «Hỏi Kara», để hàng tiêu đề Toàn cảnh ở khổ 375 không
+nhảy 32 → 96 px. Vòng dừng ở S4 vì chồng vùng DH1 `dieu-huong-khu-muc-tieu` (M5). DH1 lên `onehub` 16/10 08:49Z (#437):
+đầu trang khu Mục tiêu viết lại, nút «Hỏi Kara» chuyển vào hàng hành động `HanhDongKhu`, khung chờ mới
+`DauTrangOkrCho` nằm ngay trong `dau-trang-okr.tsx`, và bản vá bấm hai lần của NM5 (a219fc9fd) được DH1 lấy về cùng hai
+ca kiểm của nó (`apps/app/test/nut-hoi-kara-thay-khung.dom.tsx`).
+
+Đo lại 16/10 trên nhánh đã gộp `onehub 04ddefc4f` (E12m của `khung-man-chung`, `chup-man.mjs --chi-do`):
+
+- Lỗi gốc đã hết: hàng tiêu đề 64/32 lúc chờ và lúc xong.
+- Còn lỗi mới, bước 1 đỏ: «toancanh 375: vung noi dung lech … noiDung 244/584 … -> … noiDung 284/1594».
+
+M5 chọn lối (b) trên #375 lúc 12:10Z: Mac Studio dựng lại NM5 trên DH1.
+
+## Chẩn đoán (đo 16/10 trên `onehub d5e01c5a3`, bản chép răng E12m in thêm từng phần đầu trang)
+
+| Khổ | Phần | Lúc chờ (top/cao) | Lúc xong (top/cao) |
+| --- | --- | --- | --- |
+| 1280 | đầu trang | 72/64 | 72/64 |
+| 1280 | hàng hành động | 76/28 | 74/32 |
+| 375 | đầu trang | 64/96 | 64/136 |
+| 375 | hàng hành động | 132/28 | 132/68 |
+| 375 | thanh tab | (khung xương) | 224/32 |
+
+Ở 375 hàng hành động lúc chờ là một dòng 28 px (hai khung xương `h-7`), lúc xong là hai dòng 68 px vì các nút thật
+cao 32 px (`h-8`) và không vừa một hàng. Đầu trang cao thêm 40 px, nên vùng nội dung tụt 40 px. Ở 1280 lệch 4 px, dưới
+ngưỡng 8 px của E12m.
 
 ## Cách làm
 
-Khung chờ dựng chính `NutHoiKara` ở đúng chỗ nó đứng khi xong: cụm phải của `DauTrangOkrCho` thành
-`<NutHoiKara />` rồi ô xương chọn kỳ như cũ. Nút không đọc dữ liệu nào của đầu trang (chỉ gọi `okr.hoiMo` khi
-bấm), nên dựng ngay lúc chờ được và bấm được ngay. Không đổi bố cục khi xong, không đổi `LuoiDauTrangOkr`.
+1. Khung chờ `DauTrangOkrCho` (trong `dau-trang-okr.tsx`) dựng hàng hành động bằng khung xương cùng cỡ với các phần thật
+   của `HanhDongKhu` lúc đã có quyền (cao `h-8` như nút, độ rộng theo từng phần: nút «Hỏi Kara», ô chọn kỳ, cụm nút
+   theo quyền), để ở 375 chúng xuống dòng y như hàng thật và ở 1280 cao bằng hàng thật. Không đổi `HanhDongKhu`,
+   `LuoiDauTrangOkr` hay `NutHoiKara`.
+2. Gỡ phần mồ côi của lần 1: `apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx`, `apps/app/test/dau-trang-okr-cho.dom.tsx`,
+   các khoá `dto_*` trong `_acceptance/config.yaml` (dòng của chính NM5, chưa lên `onehub`), và răng chỉ phục vụ chúng.
 
-Vì sao không dùng ô xương cùng cỡ: bề rộng nút theo chữ của từng ngôn ngữ («Hỏi Kara» / «Ask Kara») và theo dấu
-Kara; một ô xương cố định chỉ khớp một ngôn ngữ, và lệch lại khi ai đó đổi chữ nút.
+## Hỏi chủ kho (lên thẻ Cổng Phạm vi)
 
-`tong-quan-chi-okr.tsx` không có khung chờ riêng cho đầu trang (nút dựng từ máy chủ cùng tiêu đề) nên không đổi.
-
-<!-- <<<UX-SPEC-TEMPLATE -->
-## Đặc tả UX
-
-### 1. Luồng
-
-- Suôn sẻ: mở một màn OKR → đầu trang hiện ngay tiêu đề, mô tả, nút «Hỏi Kara» và ô xương chọn kỳ → dữ liệu tới,
-  ô xương thành ô chọn kỳ thật; hàng tiêu đề không nhảy.
-- Biên: bấm «Hỏi Kara» lúc đầu trang còn chờ → mở cột Kara như khi đã tải xong.
-
-### 2. Kiểm kê màn
-
-| Màn | MỘT việc của màn | Vào từ / ra tới |
-|---|---|---|
-| Đầu trang khu OKR (Toàn cảnh, Theo đơn vị, Của tôi…) | cho biết đang ở màn nào, chọn kỳ, hỏi Kara | thanh bên / các thẻ OKR |
-
-### 3. Bảng trạng thái
-
-<!-- <<<UX-STATE-TABLE -->
-| Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
-|---|---|---|---|
-| ST-dautrangokr-dangtai | Đầu trang OKR | tiêu đề, mô tả, nút «Hỏi Kara», ô xương chọn kỳ, ô xương thanh thẻ | chờ, hoặc bấm «Hỏi Kara» |
-| ST-dautrangokr-xong | Đầu trang OKR | như trên, ô chọn kỳ và thanh thẻ thật | chọn kỳ, chuyển thẻ, hỏi Kara |
-<!-- UX-STATE-TABLE>>> -->
-
-### 4. Hành vi
-
-- Khổ 375: cụm phải đứng cùng hàng tiêu đề ở cả hai trạng thái, tiêu đề xuống dòng như nhau ở cả hai.
-
-### 5. Xuất xứ component
-
-| Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
-|---|---|---|
-| `NutHoiKara` | dùng | chính nút thật, không vẽ ô xương mô phỏng |
-| `Skeleton` | dùng | ô xương chọn kỳ giữ nguyên |
-
-### 6. Khuôn IA đã chọn + căn cứ
-
-Khuôn IA: trung-tâm-toả-nhánh (hub-and-spoke)
-Căn cứ: không đổi IA — chỉ sửa trạng thái chờ của đầu trang đã có.
-<!-- UX-SPEC-TEMPLATE>>> -->
-
-## Đo
-
-- E12m của `khung-man-chung` (đo màn thật, 1280 và 375, lệch hàng tiêu đề ≤ 4 px) — chính phép đo đang đỏ.
-- DOM: khung chờ có nút «Hỏi Kara» thật, đứng trước ô chọn kỳ, bấm được, ở cả tiếng Việt lẫn tiếng Anh.
-- Sau khi gộp nhánh: ghim lại hồ sơ `khung-man-chung` cùng lượt với hồ sơ này, để bằng chứng đã ký của nó đứng
-  trên cây đã sửa.
+- **Hỏi-1** — vai ít nút: hàng hành động thật đổi theo quyền (menu thêm, nút soạn, nút thêm chỉ có với người có quyền).
+  Phép đo E12m chạy bằng tài khoản quản trị của phiên đo. Với vai ít nút, hàng ở 375 có thể chỉ một dòng, khi đó khung chờ
+  hai dòng làm vùng nội dung nhảy LÊN khi tải xong. Khuyến nghị (a): khung chờ khớp hàng của người có quyền đầy đủ (ca
+  đo được); vai ít nút ghi Known limits. Lối khác (b): hàng hành động ở 375 giữ chiều cao hai dòng cho mọi vai, cả lúc
+  xong — không nhảy với ai, nhưng người chỉ xem có một dòng trống và phải sửa bố cục DH1 (`LuoiDauTrangOkr`).
