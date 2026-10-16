@@ -27,23 +27,30 @@ const kenh = (token: string) => ({
 	setContinuationToken() {},
 });
 
-const DU_LIEU: Record<SuKien, unknown> = {
-	"session.waiting": {},
-	"session.failed": { code: "SESSION_FAILED", message: "hong" },
-	"turn.failed": { code: "TURN_FAILED", message: "hong" },
-	"turn.cancelled": {},
-};
+type DuLieuLuot = Parameters<NonNullable<ChannelEvents["turn.failed"]>>[0];
+type DuLieuPhien = Parameters<NonNullable<ChannelEvents["session.failed"]>>[0];
+
+const LOI_LUOT = { code: "TURN_FAILED", message: "hong" } satisfies DuLieuLuot;
+const LOI_PHIEN = {
+	code: "SESSION_FAILED",
+	message: "hong",
+} satisfies DuLieuPhien;
+
+function xuLy<K extends SuKien>(suKien: K): NonNullable<ChannelEvents[K]> {
+	const ham = crmEvents[suKien];
+	if (!ham) throw new Error(`kenh crm khong xu ly ${suKien}`);
+	return ham;
+}
 
 async function phat(suKien: SuKien, token: string): Promise<void> {
-	const xuLy = crmEvents[suKien] as
-		| ((
-				data: unknown,
-				channel: ReturnType<typeof kenh>,
-				ctx: never,
-		  ) => Promise<void>)
-		| undefined;
-	if (!xuLy) throw new Error(`kenh crm khong xu ly ${suKien}`);
-	await xuLy(DU_LIEU[suKien], kenh(token), undefined as never);
+	const k = kenh(token);
+	const ctx = undefined as never;
+	if (suKien === "session.waiting") await xuLy("session.waiting")({}, k, ctx);
+	else if (suKien === "turn.cancelled")
+		await xuLy("turn.cancelled")({}, k, ctx);
+	else if (suKien === "turn.failed")
+		await xuLy("turn.failed")(LOI_LUOT, k, ctx);
+	else await xuLy("session.failed")(LOI_PHIEN, k, ctx);
 }
 
 async function taoHoiThoai(): Promise<string> {

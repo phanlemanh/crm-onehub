@@ -28,12 +28,13 @@ afterEach(() => {
 });
 
 function noiDung(loai: (typeof LOAI)[number], ten?: string) {
-	return parseNoiDungThongBao({
+	const mau = {
 		...MAU_NOI_DUNG[loai],
 		conversationId: HOI_THOAI,
 		luotId: LUOT,
-		...(ten === undefined ? {} : { ten }),
-	});
+	};
+	if (ten !== undefined) mau.ten = ten;
+	return parseNoiDungThongBao(mau);
 }
 
 function ve(locale: "vi" | "en", ten?: string): HTMLElement {
