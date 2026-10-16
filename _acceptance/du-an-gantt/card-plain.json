@@ -1,0 +1,124 @@
+{
+ "feature_plain": "Người cầm một đợt triển khai gom việc vào một dự án, đặt ngày bắt đầu và hạn, nối việc phải chờ, đặt mốc, và xem cả đợt trên sơ đồ Gantt tự dời theo ngày làm việc.",
+ "will_do": [
+  {
+   "id": "AC-2",
+   "p": "Sẽ cho tạo việc ngay trong dự án và đưa việc có sẵn vào hay ra; việc riêng đưa vào dự án thì cả đội thấy, và máy báo trước điều đó (AC-2, gom việc)."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ có kiểu xem Gantt mặc định trên trang dự án: hàng mốc, việc con thụt dưới cha, thanh màu theo trạng thái, mũi tên việc phải chờ, ngày nghỉ tô nền, vạch hôm nay, nhóm «Chưa có lịch»; cùng hai kiểu Danh sách và Bảng (AC-4, xem Gantt)."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ cho người giao hay người thực hiện của một việc đặt «việc phải chờ» trong cùng dự án, và chặn vòng, khác dự án, tự chờ chính nó, trùng, thiếu ngày (AC-6, phụ thuộc)."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ tự dời việc sau khi việc trước trễ: bỏ Thứ Bảy, Chủ nhật và ngày lễ, giữ số ngày làm việc, lan theo chuỗi, không bao giờ kéo lùi, ghi lịch sử «dời vì việc nào» (AC-7, tự dời)."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ cho đặt mốc có ngày và việc phải xong trước; việc đó trễ quá mốc thì mốc giữ ngày và hiện «trễ» trên Gantt và danh sách dự án (AC-8, mốc)."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ có trang Cài đặt › Lịch làm việc: chủ và quản trị đổi ngày nghỉ trong tuần, thêm hay xoá ngày lễ có hoàn tác; người khác thấy «Không đủ quyền»; đổi lịch không dời việc đã xếp (AC-9, lịch làm việc)."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ kiểm quyền ở máy chủ cho mọi thao tác ghi của dự án theo bảng 65 ô viết sẵn; vai «chỉ OKR» không đọc được dự án nào (AC-10, ma trận quyền)."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ cho người tạo dự án và quản trị đóng dự án, hỏi lại khi còn việc mở, không đổi việc nào; dự án đóng thành chỉ đọc và mở lại được; dự án chưa có lịch sử thì xoá được (AC-11, vòng đời)."
+  },
+  {
+   "id": "AC-12",
+   "p": "Sẽ có thước đếm ngưỡng Cổng Đáng chỉ đọc, kiểm trên dữ liệu mẫu tạo qua đường ghi thật (AC-12, đường đo)."
+  },
+  {
+   "id": "AC-13",
+   "p": "Sẽ chụp các màn chính ở 1280 và 375 để người ký Cổng Bằng chứng nhìn thấy, trang không cuộn ngang ở 375 (AC-13, ảnh màn thật)."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-1",
+   "p": "Chặn tạo dự án khi tên trống hay dài quá 120 ký tự; ngoài ra mọi người đọc được dữ liệu đối tác có trang «Dự án» với danh sách đang mở, «Đã đóng (n)» gập, và nút «Tạo dự án» (AC-1, danh sách dự án)."
+  },
+  {
+   "id": "AC-3",
+   "p": "Chặn ngày bắt đầu sau hạn và chặn người không phải người giao hay người thực hiện đổi ngày; ngày bắt đầu không lan sang bước của kế hoạch 30 ngày (AC-3, ngày bắt đầu)."
+  },
+  {
+   "id": "AC-5",
+   "p": "Chặn kéo thanh của việc mình không sửa được; kéo hay dùng phím trên thanh của mình thì lưu cả hai ngày một lần, máy chủ từ chối thì thanh về chỗ cũ (AC-5, kéo thanh)."
+  },
+  {
+   "id": "OOS-1",
+   "p": "KHÔNG làm Gantt nâng cao (độ trễ, đường găng, baseline, tải từng người) — để DA6."
+  },
+  {
+   "id": "OOS-2",
+   "p": "KHÔNG làm hai chế độ dời «giữ khoảng cách» và «không dời» ở lượt này (Hỏi-1)."
+  },
+  {
+   "id": "OOS-3",
+   "p": "KHÔNG báo người thực hiện khi việc của họ bị tự dời; lượt này chỉ ghi lịch sử việc."
+  },
+  {
+   "id": "OOS-4",
+   "p": "KHÔNG gắn dự án với công ty đối tác, không khuôn dự án, không nhân bản dự án, không cho một việc ở nhiều dự án."
+  },
+  {
+   "id": "OOS-5",
+   "p": "KHÔNG hiện ngày bắt đầu trong khuôn hay trên màn kế hoạch 30 ngày."
+  },
+  {
+   "id": "OOS-6",
+   "p": "KHÔNG nạp sẵn lịch lễ Việt Nam, không lịch riêng từng người."
+  },
+  {
+   "id": "OOS-7",
+   "p": "KHÔNG kéo nối phụ thuộc trên Gantt, không kéo mốc, không bám ngày làm việc khi kéo (Hỏi-6)."
+  },
+  {
+   "id": "OOS-8",
+   "p": "KHÔNG đếm dự án trong số liệu gửi về hằng ngày."
+  },
+  {
+   "id": "OOS-9",
+   "p": "KHÔNG đo ngưỡng trên dữ liệu thật ở lượt này — việc của Cổng Giá trị sau khi gộp."
+  }
+ ],
+ "scope_plain": "Chín thứ để ngoài lượt, mỗi thứ một dòng:",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Đã quét bốn trục: thao tác trên dự án × người và quyền × lịch (ngày thường, cuối tuần, ngày lễ, đổi lịch, qua tháng, qua năm) × bề mặt và lỗi (chuột, phím, điện thoại, máy chủ từ chối, tải hỏng, hai người cùng dời). Thước đủ: câu giao của hàng DA4, mẫu «Gantt mức đủ» của Asana, monday, Notion, Smartsheet trong khảo sát, ba câu vòng đời và bảng quyền sửa việc của kho. Ô cốt lõi là AC-1…AC-11; AC-12 là đường đo, AC-13 là ảnh, AC-14 là tài liệu."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Hai lựa chọn người dùng cảm rõ nhất — kéo sớm hơn việc phải chờ thì bị từ chối, và kéo không bám ngày làm việc — đã bị máy tự quyết; nay thành Hỏi-5 và Hỏi-6 cho anh. Thứ tự các vế trong tiêu chí tự dời (AC-7) đã sửa cho chạy được."
+  },
+  {
+   "i": 1,
+   "p": "Tự dời làm đổi hạn việc của người khác kể cả khi người kéo không có quyền với việc đó, mà lượt này không báo ai; nay thành Hỏi-7, AC-7 có vế đo riêng và có một đột biến phải làm đỏ."
+  },
+  {
+   "i": 2,
+   "p": "Thước ngưỡng cũ cho cả bốn số bằng 1 nên không phân biệt được lỗi đếm; nay dữ liệu thử có bốn dự án, mỗi số một đáp án khác nhau, thêm ba đột biến. Việc không lọc dữ liệu mẫu có dòng sổ riêng (dữ liệu mẫu không lên production)."
+  },
+  {
+   "i": 3,
+   "p": "Bảng quyền cũ không suy được từ thiết kế ở lệnh xoá và mở lại; nay thiết kế ghi quyền kiểm trước lịch sử, bảng khai trạng thái dựng từng cột và có ô xoá thành công (65 ô)."
+  },
+  {
+   "i": 4,
+   "p": "Chưa có bài đo ô chọn ngày gửi đúng ngày lịch Việt Nam (lỗi lệch một ngày do múi giờ); nay có bài đo chạy dưới hai múi giờ, và ca «Đặt ngày» ở điện thoại."
+  }
+ ]
+}
