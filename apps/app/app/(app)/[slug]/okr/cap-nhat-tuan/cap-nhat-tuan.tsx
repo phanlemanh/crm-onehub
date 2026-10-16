@@ -38,15 +38,16 @@ import {
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { NGHIA_TU_TIN } from "@crm/ui/components/okr-status";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import {
 	IndicatorDot,
 	StatusIndicator,
-	type StatusTone,
 } from "@crm/ui/components/status-indicator";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import type { Locale } from "@crm/ui/lib/locale";
+import { toneTheoNghia } from "@crm/ui/lib/status-tone";
 import {
 	GHI_CHU_TOI_DA,
 	kiemGiaTriTheoKieu,
@@ -67,12 +68,6 @@ import { giaTri } from "../bang-kr";
 import { hienSo } from "../hop-thoai-kr";
 import type { DuLieuCapNhat, KrCapNhat } from "../kieu";
 import { KHOA_DAU } from "../nguon-so";
-
-const TONE_TU_TIN = {
-	cao: "success",
-	vua: "warning",
-	thap: "error",
-} satisfies Record<MucTuTin, StatusTone>;
 
 const TUAN = { chuNhat: 6, soNgay: 7 } as const;
 
@@ -698,7 +693,10 @@ export function ChonTuTin({
 						key={muc}
 						value={muc}
 					>
-						<IndicatorDot aria-hidden="true" tone={TONE_TU_TIN[muc]} />
+						<IndicatorDot
+							aria-hidden="true"
+							tone={toneTheoNghia(NGHIA_TU_TIN[muc])}
+						/>
 						{m.mucTuTin[muc]}
 					</ToggleGroupItem>
 				))}
@@ -781,7 +779,7 @@ function DaGui({
 									<StatusIndicator
 										label={m.tuTinNhan(m.mucTuTin[d.confidence])}
 										size="sm"
-										tone={TONE_TU_TIN[d.confidence]}
+										tone={toneTheoNghia(NGHIA_TU_TIN[d.confidence])}
 									/>
 								</Item>
 							</Fragment>
@@ -837,7 +835,7 @@ function DaXongTuanNay({
 										<StatusIndicator
 											label={m.tuTinNhan(m.mucTuTin[kr.lastConfidence])}
 											size="sm"
-											tone={TONE_TU_TIN[kr.lastConfidence]}
+											tone={toneTheoNghia(NGHIA_TU_TIN[kr.lastConfidence])}
 										/>
 									) : null}
 								</Item>
