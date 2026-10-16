@@ -100,6 +100,23 @@ evals:
     criterion: AC-1
     executor: judgment
     inputs: [apps/app/lib/messages/companies.ts, apps/app/components/crm/record-sheet/company-sheet.tsx]
-    question: "Trong tệp thông điệp này, câu báo khi rep dán trang mạng xã hội vào ô Tên miền (bản vi và bản en) có (1) gọi tên nền tảng, (2) nói rõ đó không phải trang web của công ty, (3) bảo rep làm gì tiếp — để trống hay dán trang web riêng — bằng chữ thường một môi giới hiểu, không thuật ngữ kỹ thuật? Gợi ý ô «Tên miền» bên dưới có còn nói «dán cả đường dẫn cũng được» mà không nhắc ngoại lệ trang mạng xã hội không? Trong tệp ngăn công ty, nhánh báo lỗi khi rep sửa ô Tên miền có dùng đúng hàm thông điệp đó của tệp thông điệp công ty (không tự viết câu khác) không?"
+    question: "Trong tệp thông điệp này, câu báo khi rep dán trang mạng xã hội vào ô Tên miền (bản vi và bản en) có (1) gọi tên nền tảng, (2) nói rõ đó không phải trang web của công ty, (3) bảo rep làm gì tiếp bằng chữ nói thẳng cả hai lối — dán trang web riêng của công ty, hoặc để trống — bằng chữ thường một môi giới hiểu, không thuật ngữ kỹ thuật? Gợi ý ô «Tên miền» bên dưới có còn nói «dán cả đường dẫn cũng được» mà không nhắc ngoại lệ trang mạng xã hội không? Trong tệp ngăn công ty, nhánh báo lỗi khi rep sửa ô Tên miền có dùng đúng hàm thông điệp đó của tệp thông điệp công ty (không tự viết câu khác) không?"
     expected: "Cả hai bản đạt ba ý; gợi ý ô không mâu thuẫn với câu báo."
+    evidence_required: [run_id, verdict, rationale]
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tthv_tac_nhan
+    expected: "exit 0; cùng tệp E6, khối 'ac10'. (a) Lượt 1 bộ giả trả brand có city 'Menlo Park', state_code 'CA', country 'United States', country_code 'US'; lượt 2 runBrand({fresh:true}) trả brand có city 'Hà Nội', country 'Vietnam', country_code 'VN' và KHÔNG có state_code → stateCode = null, city = 'Hà Nội', countryCode = 'VN'. Đối chứng cùng fixture: rep tự gõ stateCode 'HN' trước lượt 2 → stateCode vẫn 'HN'; lượt 2 trả brand KHÔNG có address → stateCode máy điền 'CA' giữ nguyên (chỉ xoá trong nhóm địa chỉ khi kết quả mới có địa chỉ). (b) Hai lượt liên tiếp bộ giả trả cùng một brand: kết quả lượt 2 có filled rỗng, brandOutcome(kết quả) bằng đúng chuỗi 'Everything Context.dev returned was already on the record.', và mọi ô thương hiệu của công ty (mô tả, ngành, địa chỉ, điện thoại…) đọc lại bằng hệt trước lượt 2. Đối chứng: lượt 2 đổi mô tả → filled chứa 'description'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/brand.ts, apps/agent/agent/lib/brand-mapping.ts, apps/agent/test/tra-cuu-thuong-hieu-viet-nam.spec.ts]
+
+  - id: E13
+    criterion: AC-7
+    executor: judgment
+    inputs: [apps/agent/agent/tools/enrich_company.ts]
+    question: "Mô tả của công cụ trong tệp này (chuỗi description và mô tả các tham số) có nói đúng luật hiện tại: công cụ điền ô còn trống, khi tra lại thì thay các ô mà lần tra trước máy đã điền và người chưa sửa, và không bao giờ ghi đè ô người đã gõ hay đã sửa? Có còn câu nào nói công cụ chỉ điền ô trống không?"
+    expected: "Mô tả nói đúng ba ý; không còn câu «chỉ điền ô trống»."
     evidence_required: [run_id, verdict, rationale]
