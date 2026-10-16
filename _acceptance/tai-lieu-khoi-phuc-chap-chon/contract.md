@@ -5,7 +5,9 @@ slug: tai-lieu-khoi-phuc-chap-chon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
+veto_state: mo
+veto_opened_at: 2026-10-16T15:37:00Z
 design_doc: docs/superpowers/specs/2026-10-16-tai-lieu-khoi-phuc-chap-chon-design.md
 ---
 
@@ -28,9 +30,13 @@ Source input: câu giao F33 của giám sát · `opportunity.md` · design doc.
   của lần duyệt được đếm bằng tập id chụp trước khi duyệt — ra đúng `{ LUU_TRU: 1, CU: 1 }` — không dùng mốc đồng hồ nào.
 - AC-3: Given một sự kiện của trang có `luc` ở tương lai, sinh TRƯỚC khi chụp mốc (giả lập trùng mili-giây hay đồng hồ
   Postgres chạy trước), When đếm sự kiện mới bằng hàm của bài kiểm, Then sự kiện đó không được đếm; And trên cùng dữ
-  liệu, cách đếm theo mốc `Date.now() - 1` cũ đếm nhầm nó (đối chứng: dữ liệu gieo thật sự kích được lỗi).
-- AC-4: Given mã nguồn `tai-lieu-luu-tru.spec.ts`, When quét, Then không còn mốc `Date.now() - 1` nào; And một chuỗi mẫu
-  có mốc đó thì phép quét bắt và gọi tên dòng.
+  liệu, cách đếm theo mốc `Date.now() - 1` cũ đếm nhầm nó (đối chứng: dữ liệu gieo thật sự kích được lỗi); And một
+  sự kiện sinh SAU khi chụp thì được đếm.
+- AC-4: Given mã nguồn `tai-lieu-luu-tru.spec.ts`, When quét, Then thân hai ca ở AC-1 và AC-2 chụp tập id trước lệnh
+  duyệt rồi đếm bằng id, và trong cả tệp — trừ thân ca đối chứng `tlkp-dem` và ca quét `tlkp-tinh` — không còn mốc
+  đồng hồ `Date.now()` theo sau là dấu trừ (bất kể khoảng trắng) hay lời gọi hàm đếm theo mốc; And mỗi mẫu vi phạm (mốc
+  không dấu cách, thân ca gọi hàm đếm theo mốc, thân ca chụp id sau lệnh duyệt, dòng đối chứng chép vào thân ca khôi
+  phục) thì phép quét bắt và gọi tên ca hay dòng.
 - AC-5: Given cả tệp `tai-lieu-luu-tru.spec.ts`, When chạy, Then mọi ca xanh — không ca nào khác hồi quy.
 
 ## Coverage

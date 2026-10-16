@@ -24,7 +24,7 @@ evals:
     cmd: config:executors.test.tlkp_dem
     paths:
       - "apps/api/test/tai-lieu-luu-tru.spec.ts"
-    expected: "ca «tlkp-dem» xanh: gieo mot su kien co luc = bay gio + 5 giay TRUOC khi chup moc; suKienMoi(trang, truoc) khong dem no (so moi = {}); tren cung du lieu, dem theo moc new Date(Date.now() - 1) dem nham no (so DE_XUAT = 1) — doi chung bat buoc, thieu thi ca do voi ghim 'tlkp-dem: du lieu gieo khong kich duoc loi moc gio'. Cach dem moi dem nham thi ghim 'tlkp-dem: dem nham su kien truoc moc'."
+    expected: "ca «tlkp-dem» xanh: gieo mot su kien DE_XUAT co luc = bay gio + 5 giay TRUOC khi chup tap id; suKienMoi(trang, truoc) khong dem no; tren cung du lieu, dem theo moc new Date(Date.now() - 1) dem nham no (DE_XUAT = 1) — doi chung bat buoc, thieu thi ghim 'tlkp-dem: du lieu gieo khong kich duoc loi moc gio'; roi sinh mot su kien SAU khi chup thi suKienMoi dem dung no (doi chung duong, thieu thi ghim 'tlkp-dem: ham moi khong dem su kien sau moc'). Cach dem moi dem nham su kien gieo thi ghim 'tlkp-dem: dem nham su kien truoc moc'. Cach dem theo moc gio chi song trong than ca tlkp-dem."
 
   - id: E4
     criterion: AC-4
@@ -32,7 +32,7 @@ evals:
     cmd: config:executors.test.tlkp_tinh
     paths:
       - "apps/api/test/tai-lieu-luu-tru.spec.ts"
-    expected: "ca «tlkp-tinh» xanh: quet ma nguon chinh tep, khong dong nao chua 'Date.now() - 1' (khong tinh dong mau cua chinh ca nay); chuoi mau co moc do thi ham quet tra ve dong vi pham — doi chung, thieu thi ghim 'tlkp-tinh: ham quet bo sot moc gio'. Con moc trong tep thi ghim 'tlkp-tinh: con moc dong ho o dong <n>'."
+    expected: "ca «tlkp-tinh» xanh: than ca khoi-phuc va ca duyet-luu-tru ma tran (tim theo ten ca) moi ca goi idSuKien truoc lenh duyet va suKienMoi sau no; trong ca tep tru than tlkp-dem va tlkp-tinh, khong dong nao khop /Date\\.now\\(\\)\\s*-/ hay goi suKienSau. Vi pham thi ghim 'tlkp-tinh: con moc dong ho o dong <n>' hoac 'tlkp-tinh: ca <ten> khong dem bang id'. CHIEU DO (cung ham quet, bon chuoi mau): 'Date.now()-1' khong dau cach; than ca goi suKienSau; than ca chup id sau lenh duyet; ban sao than ca 287 co chep dong doi chung vao — moi mau ham quet tra ve vi pham, thieu thi ghim 'tlkp-tinh: ham quet bo sot <mau>'."
 
   - id: E5
     criterion: AC-5
