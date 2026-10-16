@@ -23,6 +23,7 @@ feature_loop:
     - the-gop-y-okr/E1
     - the-gop-y-okr/E13
     - tro-ly-doc-kho/E15
+    - thu-haiku-tro-ly-okr/E7
     - tro-ly-okr-de-xuat/E4
     - tro-ly-okr-de-xuat/E22
     - eval-model-that-dung-luc/E5
@@ -42,6 +43,7 @@ feature_loop:
     - giam-phut-ci-nhap-t1/E7
     - chuyen-goi-dieu-phoi/E10
     - bo-ca-mau-quy-4/E7
+    - thu-haiku-tro-ly-okr/E7
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
@@ -1805,6 +1807,12 @@ executors:
     dhk_giu_don: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-giu-don
     dhk_suc_khoe: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-suc-khoe
     dhk_dang_tai: bun _acceptance/dieu-huong-khu-muc-tieu/rang/hai-chieu.mjs dhk-dang-tai
+    thk_mac_dinh: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-mac-dinh"'
+    thk_haiku: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-haiku"'
+    thk_gia_tri_la: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-gia-tri-la"'
+    thk_production: 'bun run test -- "cd apps/agent && bun test test/tro-ly-okr-mo-hinh-thu.integration.spec.ts -t thk-production"'
+    thk_kho_do: 'bun run test -- "cd packages/db && bun test test/measure-db-model.spec.ts"'
+    thk_doc_so: 'bun test ./_acceptance/thu-haiku-tro-ly-okr/rang/doc-so.test.ts'
     kh_tao: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-tao"'
     kh_chon_nguoi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-chon-nguoi"'
     kh_ban_chieu: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/ke-hoach-sinh-viec.spec.ts -t kh-ban-chieu"'
@@ -2450,6 +2458,10 @@ executors:
     ghd_migration_chi_them: "bun _acceptance/gioi-han-duyet-cay-okr/rang/migration-chi-them.mjs"
     ghd_soi_xem: "bun _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem"
     ghd_san_thiet_ke: "bun _acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca thiet-ke"
+    gtsx_mien_hai_chieu: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/mien-hai-chieu.mjs
+    gtsx_buoc_ci: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs
+    gtsx_buoc_ci_chay: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs --chay
+    gtsx_tai_lieu: bun _acceptance/ghim-thuoc-soi-xem-okr/rang/buoc-ci.mjs --tai-lieu
     hy_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs"'
     hy_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dot-hoi-y-tuong-okr/rang/ty-le.mjs"'
     hy_san_thiet_ke: "bun _acceptance/dot-hoi-y-tuong-okr/rang/soi-ma.mjs --ca thiet-ke"
@@ -2864,6 +2876,7 @@ executors:
     kv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kanban-viec/rang/man.mjs"'
     kv_san_thiet_ke: node _acceptance/kanban-viec/rang/san-thiet-ke.mjs
     kv_dot_bien: node _acceptance/kanban-viec/rang/dot-bien.mjs
+    thk_so_mo_hinh: 'bun _acceptance/thu-haiku-tro-ly-okr/rang/so-mo-hinh.mjs'
     kh_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ke-hoach-sinh-viec/rang/man.mjs"'
     kh_san_thiet_ke: node _acceptance/ke-hoach-sinh-viec/rang/san-thiet-ke.mjs
     kh_dot_bien: node _acceptance/ke-hoach-sinh-viec/rang/dot-bien.mjs
