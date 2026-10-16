@@ -346,7 +346,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 								{closing ? <LocalDay date={closing} /> : <EmptyCellValue />}
 							</DetailSheetStat>
 							<DetailSheetStat label={m.company.fields.owner}>
-								<OwnerCell owner={company.owner} />
+								<OwnerCell owner={company.owner} xuongDongDienThoai />
 							</DetailSheetStat>
 						</DetailSheetStats>
 					</>
