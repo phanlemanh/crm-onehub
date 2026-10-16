@@ -19,3 +19,5 @@ Ghi chú nhỏ #6/#7: mã căn chỉnh không tồn tại → «khongCo(id)», t
 Production: cả 4 merge đều là tổ tiên của onehub; 8f819cf6a có 4 dòng «Production – …» success 14:24–14:25Z 15/10. Mã đang chạy, nhưng không lộ.
 
 Nguyên nhân thước đỏ: E23 (ghd_soi_xem) không chạy ở CI theo PR — chỉ chạy khi ghim lại hồ sơ; lần sửa thước cuối d4e79220b 04/10. Luật «ai gộp sau chạy lại soi-ma --ca xem» (contract.md Notes) là luật chữ, 4 PR 07–14/10 lọt.
+
+Bổ sung 16/10 (P0, sau S4 vòng 1, đối chiếu mã ở onehub 3ffded7b2): hàng 2 — `okrObjective.findUniqueOrThrow` ở okr.service.ts:1020-1025 chọn `title` và `keyResults: { select: { id: true } }` của chính `mt.id`, tức đọc tiêu đề và mã KR của mục tiêu đã qua cổng; không đọc mục tiêu nào khác.

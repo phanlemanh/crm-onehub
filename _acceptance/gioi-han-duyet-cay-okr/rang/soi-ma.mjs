@@ -155,7 +155,7 @@ const MIEN_XEM = [
 		tep: "apps/api/src/okr/okr.service.ts",
 		ham: "congSuaCanChinh",
 		bang: "okrAlignment",
-		lyDo: "ghi: hàm cổng chung của removeAlignment và suaLyDoCanChinh — đọc căn chỉnh theo mã rồi assertSuaMucTieu trên nguồn ngay sau; đích giới hạn không có căn chỉnh",
+		lyDo: "ghi: hàm cổng chung của removeAlignment và suaLyDoCanChinh — đọc căn chỉnh theo mã rồi assertSuaMucTieu trên nguồn ngay sau; mục tiêu giới hạn không căn chỉnh được, trừ ca đua Ngoài-5 của gioi-han-duyet-cay-okr",
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
@@ -173,7 +173,7 @@ const MIEN_XEM = [
 		tep: "apps/api/src/okr/okr.service.ts",
 		ham: "xoaMucTieu",
 		bang: "okrObjective",
-		lyDo: "ghi: đọc tiêu đề và KR của chính mục tiêu vừa qua assertSuaMucTieu (đã qua điều kiện xem)",
+		lyDo: "ghi: đọc tiêu đề và mã KR của chính mục tiêu vừa qua assertSuaMucTieu (đã qua điều kiện xem)",
 	},
 	{
 		tep: "packages/db/src/okr-muc-tieu-lich-su.ts",
