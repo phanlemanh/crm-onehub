@@ -3,7 +3,7 @@
 import { Button } from "@crm/ui/components/button";
 import { KaraMark } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useMutationState } from "@tanstack/react-query";
 import { useRecordStack } from "@/components/crm/record-sheet/record-stack";
 import { okrHoiMessages } from "@/lib/messages/okr-hoi";
 import { useTRPC } from "@/lib/trpc/client";
@@ -17,18 +17,24 @@ export function NutHoiKara() {
 			onSuccess: (kq) => open({ kind: "hoi-okr", id: kq.cuocHoiId }),
 		}),
 	);
+	const lanCuoi = useMutationState({
+		filters: { mutationKey: trpc.okr.hoiMo.mutationKey() },
+		select: (lan) => lan.state.status,
+	}).at(-1);
+	const dangMo = mo.isPending || lanCuoi === "pending";
+	const loi = mo.isError || lanCuoi === "error";
 	return (
 		<div className="flex flex-col items-end gap-1">
 			<Button
 				variant="outline"
 				data-nut="hoi-kara"
-				disabled={mo.isPending}
+				disabled={dangMo}
 				onClick={() => mo.mutate({})}
 			>
 				<KaraMark />
-				{mo.isPending ? m.nut.dangMo : m.nut.hoi}
+				{dangMo ? m.nut.dangMo : m.nut.hoi}
 			</Button>
-			{mo.isError ? (
+			{loi ? (
 				<p className="text-muted-foreground text-sm" role="status">
 					{m.nut.loiMo}
 				</p>

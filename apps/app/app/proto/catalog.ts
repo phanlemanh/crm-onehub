@@ -11,6 +11,25 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "dieu-huong-khu-muc-tieu",
+		ten: "Điều hướng khu Mục tiêu — đầu trang «Mục tiêu» dùng chung, nút tạo ở góc phải",
+		states: [
+			{
+				id: "ST-dhk-don-vi",
+				nhan: "Theo đơn vị — trưởng đơn vị",
+			},
+			{ id: "ST-dhk-cua-toi", nhan: "Của tôi — trưởng một đơn vị" },
+			{ id: "ST-dhk-cap-nhat-tuan", nhan: "Cập nhật tuần" },
+			{ id: "ST-dhk-toan-canh", nhan: "Toàn cảnh" },
+			{ id: "ST-dhk-hoi-y", nhan: "Hỏi ý" },
+			{ id: "ST-dhk-suc-khoe", nhan: "Sức khoẻ chương trình" },
+			{ id: "ST-dhk-menu", nhan: "Menu «…» mở" },
+			{ id: "ST-dhk-soan", nhan: "Nút soạn khoá — hết lượt" },
+			{ id: "ST-dhk-khong-quyen", nhan: "Xem đơn vị không sửa được" },
+			{ id: "ST-dhk-khong-dan", nhan: "Không dẫn đơn vị nào" },
+		],
+	},
+	{
 		slug: "lo-trinh-doc-ban-chup",
 		ten: "Lộ trình đọc bản chụp — dòng giờ lấy",
 		states: [
