@@ -11,6 +11,30 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "cua-toi-ba-phan",
+		ten: "Của tôi ba phần — cần cập nhật tuần này, đơn vị bạn dẫn, KR bạn phụ trách",
+		states: [
+			{ id: "ST-ctbp-can-cap-nhat", nhan: "Trưởng đơn vị — còn KR thiếu số" },
+			{ id: "ST-ctbp-dang-cap-nhat", nhan: "Bảng cập nhật mở tại chỗ" },
+			{ id: "ST-ctbp-da-gui", nhan: "Vừa gửi cập nhật" },
+			{ id: "ST-ctbp-da-du", nhan: "Đã cập nhật đủ tuần này" },
+			{ id: "ST-ctbp-khong-kr", nhan: "Không phụ trách KR nào" },
+			{ id: "ST-ctbp-dan-mot", nhan: "Dẫn một đơn vị" },
+			{ id: "ST-ctbp-dan-hai", nhan: "Dẫn hai đơn vị" },
+			{ id: "ST-ctbp-don-vi-rong", nhan: "Đơn vị dẫn chưa có mục tiêu" },
+			{ id: "ST-ctbp-khong-dan", nhan: "Không dẫn đơn vị nào" },
+			{ id: "ST-ctbp-dang-cap-nhat-390", nhan: "Bảng cập nhật ở 390 px" },
+			{
+				id: "ST-ctbp-hoi-1-viec-tren",
+				nhan: "Hỏi-1 · Khối việc trên cùng (máy KHÔNG khuyên — khuyên: Phần 1 đứng đầu)",
+			},
+			{
+				id: "ST-ctbp-hoi-2-bang-muc-tieu",
+				nhan: "Hỏi-2 · Giữ bảng mục tiêu dưới bảng KR (máy KHÔNG khuyên — khuyên: nhóm thu gọn)",
+			},
+		],
+	},
+	{
 		slug: "dieu-huong-khu-muc-tieu",
 		ten: "Điều hướng khu Mục tiêu — đầu trang «Mục tiêu» dùng chung, nút tạo ở góc phải",
 		states: [
