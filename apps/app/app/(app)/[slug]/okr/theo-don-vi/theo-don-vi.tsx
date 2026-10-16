@@ -1,20 +1,17 @@
 "use client";
 
-import DocumentImport from "@carbon/icons-react/es/DocumentImport";
-import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
-import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { ViewSwitch } from "@crm/ui/components/view-switch";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { keepPreviousData, skipToken, useQuery } from "@tanstack/react-query";
-import { useQueryStates } from "nuqs";
-import { type ReactNode, useState } from "react";
+import { parseAsBoolean, useQueryState, useQueryStates } from "nuqs";
+import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
@@ -26,12 +23,13 @@ import { CayDonVi } from "../cay-don-vi";
 import { ChamDiem } from "../cham-diem";
 import { DIEM_CAM_GOP_Y } from "../chip-gop-y";
 import { useChuKy } from "../chon-chu-ky";
+import { GOC, giaiDon } from "../don-dich";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
 import { HopTuan } from "../hop-tuan";
 import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
 import type { CayDuLieu, MucTieu } from "../kieu";
 import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
-import { NganTaoMucTieu, NutThemMucTieu } from "../ngan-okr-url";
+import { BoKhoaUrl, NganTaoMucTieu } from "../ngan-okr-url";
 import { NhomDaBo } from "../nhom-da-bo";
 import {
 	CACH_XEM,
@@ -42,42 +40,35 @@ import {
 	okrParsers,
 } from "../okr-search-params";
 import { useChuyenLinkCuSoan } from "../soan/chuyen-link-cu";
-import { NutSoan } from "../soan/nut-soan";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 
-const GOC: DonChonOkr = { loai: "goc" };
 const PHA_CO_CHAM: readonly PhaChuKy[] = ["cham-diem", "da-dong"];
 
-type DonDaGiai = { ten: string; truong: string | null; coTruong: boolean };
-
-function giaiDon(
-	don: DonChonOkr,
-	cay: CayDuLieu,
-	tenGoc: string,
-): DonDaGiai | null {
-	const coTruong = (head: { name: string } | null) => ({
-		truong: head?.name ?? null,
-		coTruong: head !== null,
-	});
-	switch (don.loai) {
-		case "goc":
-			return { ten: tenGoc, truong: null, coTruong: true };
-		case "bp": {
-			const bp = cay.divisions.find((x) => x.id === don.id);
-			return bp ? { ten: bp.name, ...coTruong(bp.head) } : null;
-		}
-		case "pb": {
-			const pb = [
-				...cay.divisions.flatMap((x) => x.departments),
-				...cay.chuaXep,
-			].find((x) => x.id === don.id);
-			return pb ? { ten: pb.name, ...coTruong(pb.head) } : null;
-		}
-		case "nguoi": {
-			const nguoi = cay.people.find((x) => x.id === don.id);
-			return nguoi ? { ten: nguoi.name, truong: null, coTruong: true } : null;
-		}
-	}
+function HopNhapTheoUrl({
+	cycleId,
+	unit,
+	tenDonVi,
+	duoc,
+}: {
+	cycleId: string;
+	unit: DonChonOkr;
+	tenDonVi: string;
+	duoc: boolean | undefined;
+}) {
+	const [mo, datMo] = useQueryState(
+		SEARCH_PARAM.okr.nhap,
+		parseAsBoolean.withDefault(false),
+	);
+	if (mo && duoc === false) return <BoKhoaUrl bo={() => void datMo(null)} />;
+	if (!mo || !duoc) return null;
+	return (
+		<HopThoaiNhapOkr
+			cycleId={cycleId}
+			unit={unit}
+			tenDonVi={tenDonVi}
+			dong={() => void datMo(null)}
+		/>
+	);
 }
 
 function khoaMoiDonVi(cay: CayDuLieu): string[] {
@@ -144,7 +135,7 @@ function XemCay({
 const dangCho = (q: { isPending: boolean; isPlaceholderData: boolean }) =>
 	q.isPending || q.isPlaceholderData;
 
-export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
+export function TheoDonVi() {
 	useChuyenLinkCuSoan();
 	const locale = useLocale();
 	const m = okrMessages(locale);
@@ -177,7 +168,6 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 	const coCham = phaKy !== null && PHA_CO_CHAM.includes(phaKy);
 	const xinXem: CachXem = url[SEARCH_PARAM.okr.xem] ?? "danh-sach";
 	const xem: CachXem = xinXem === "cham" && !coCham ? "danh-sach" : xinXem;
-	const [nhapMo, setNhapMo] = useState(false);
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const access = useQuery(trpc.okr.access.queryOptions());
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
@@ -334,27 +324,6 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 										}
 									/>
 								) : null}
-								{byUnit.data?.canEdit || quanTri ? (
-									<Button
-										size="sm"
-										variant="outline"
-										aria-haspopup="dialog"
-										data-nut="nhap-bang-tinh"
-										onClick={() => setNhapMo(true)}
-									>
-										<Icon icon={DocumentImport} data-icon="inline-start" />
-										{m.nhapBangTinh}
-									</Button>
-								) : null}
-								<NutThemMucTieu suaDuoc={byUnit.data?.canCreate} />
-								<NutSoan
-									don={don}
-									cycleId={currentId}
-									phaKy={phaKy}
-									quanTri={quanTri}
-									canEdit={byUnit.data?.canEdit === true}
-									cauNoi={cauNoiOkr}
-								/>
 							</div>
 						</Card>
 						{don.loai === "nguoi" && xem === "danh-sach" ? (
@@ -370,14 +339,12 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 							don={don}
 							tenDon={dv.ten}
 						/>
-						{nhapMo ? (
-							<HopThoaiNhapOkr
-								cycleId={currentId}
-								unit={don}
-								tenDonVi={dv.ten}
-								dong={() => setNhapMo(false)}
-							/>
-						) : null}
+						<HopNhapTheoUrl
+							cycleId={currentId}
+							duoc={byUnit.data?.canCreate}
+							tenDonVi={dv.ten}
+							unit={don}
+						/>
 					</>
 				)}
 			</div>

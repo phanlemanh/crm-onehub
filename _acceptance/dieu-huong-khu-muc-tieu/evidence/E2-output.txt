@@ -1,0 +1,33 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_dieu_huong_khu_muc_tieu_do · app http://localhost:4554 · api http://localhost:4705
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts le-hai-dang@mau.onehub.test
+$ bun scripts/dev-session.ts nguyen-thi-lan@mau.onehub.test
+$ bun scripts/dev-session.ts vo-duc-anh@mau.onehub.test
+== E2 (AC-2): hang hanh dong o dau trang, canh Thoa thuan
+DOI CHUNG deals 1440: nut chinh Thoa thuan phai 52px
+NUT cua-toi 1440: phai 52px (Thoa thuan 52px) · dinh nut 76 < dinh thanh the 160 · tran ngang 0px
+NUT cap-nhat-tuan 1440: phai 52px (Thoa thuan 52px) · dinh nut 76 < dinh thanh the 160 · tran ngang 0px
+NUT theo-don-vi 1440: phai 52px (Thoa thuan 52px) · dinh nut 76 < dinh thanh the 160 · tran ngang 0px
+THAN theo-don-vi: 0 nut tao/nhap/soan trong main ngoai [data-slot=page-shell-header]
+NUT toan-canh 1440: phai 52px (Thoa thuan 52px) · dinh nut 76 < dinh thanh the 160 · tran ngang 0px
+NUT suc-khoe 1440: phai 52px (Thoa thuan 52px) · dinh nut 76 < dinh thanh the 160 · tran ngang 0px
+NUT hoi-y 1440: phai 52px (Thoa thuan 52px) · dinh nut 76 < dinh thanh the 160 · tran ngang 0px
+KHOA 1440: nut chinh disabled, aria-describedby tro page-shell-note
+DOI CHUNG deals 390: nut chinh Thoa thuan phai 246px
+NUT cua-toi 390: thu tu tieu-de>mo-ta>hang (Thoa thuan tieu-de>mo-ta>hang) · tran ngang 0px
+NUT cap-nhat-tuan 390: thu tu tieu-de>mo-ta>hang (Thoa thuan tieu-de>mo-ta>hang) · tran ngang 0px
+NUT theo-don-vi 390: thu tu tieu-de>mo-ta>hang (Thoa thuan tieu-de>mo-ta>hang) · tran ngang 0px
+NUT toan-canh 390: thu tu tieu-de>mo-ta>hang (Thoa thuan tieu-de>mo-ta>hang) · tran ngang 0px
+NUT suc-khoe 390: thu tu tieu-de>mo-ta>hang (Thoa thuan tieu-de>mo-ta>hang) · tran ngang 0px
+NUT hoi-y 390: thu tu tieu-de>mo-ta>hang (Thoa thuan tieu-de>mo-ta>hang) · tran ngang 0px
+KHOA 390: nut chinh disabled, aria-describedby tro page-shell-note
+DUNG AC-2: 12/12 o + than 0 nut + 2/2 khoa
+KET LUAN: dat
+man-dau-trang: dat
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0

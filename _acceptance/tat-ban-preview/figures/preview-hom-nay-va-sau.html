@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview hôm nay và sau vòng này</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 52rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">So sánh hai cột · tat-ban-preview · d-20261016T013339Z-7</p>
+    <h1>Preview hôm nay và sau vòng này</h1>
+    <p class="sub">Hôm nay mỗi lần đẩy nhánh, ba dự án dựng Preview đọc chung DB với production. Sau vòng này chỉ <code>onehub</code> được dựng, ở cả bốn dự án; khoá nằm ở đúng tệp mỗi dự án đọc.</p>
+
+    <svg viewBox="0 0 1200 648" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#c4161c"/></marker>
+        <marker id="arrow-grey" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9a9a9a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- Panel headers + dividers -->
+      <text x="40" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HÔM NAY</text>
+      <text x="640" y="36" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SAU VÒNG NÀY</text>
+      <line x1="600" y1="24" x2="600" y2="296" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="40" y1="320" x2="1160" y2="320" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <!-- Arrows (drawn before boxes) -->
+      <line x1="240" y1="84" x2="318" y2="84" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="440" y1="112" x2="440" y2="166" stroke="#c4161c" stroke-width="1.4" marker-end="url(#arrow-red)"/>
+      <line x1="140" y1="112" x2="140" y2="166" stroke="#9a9a9a" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-grey)"/>
+      <line x1="840" y1="84" x2="918" y2="84" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="840" y1="196" x2="918" y2="196" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <!-- Arrow label (vertical segment → side) -->
+      <rect x="148" y="128" width="68" height="16" rx="2" fill="#fafafa"/>
+      <text x="152" y="140" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">KHÔNG DỰNG</text>
+
+      <!-- LEFT · Hôm nay -->
+      <rect x="40" y="56" width="200" height="56" rx="6" fill="#fafafa"/>
+      <rect x="40" y="56" width="200" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="140" y="80" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đẩy nhánh</text>
+      <text x="140" y="96" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">106 nhánh / 7 ngày</text>
+
+      <rect x="320" y="56" width="240" height="56" rx="6" fill="#fafafa"/>
+      <rect x="320" y="56" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="80" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">3 dự án dựng Preview</text>
+      <text x="440" y="96" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">app · api · agent</text>
+
+      <rect x="320" y="168" width="240" height="56" rx="6" fill="#fafafa"/>
+      <rect x="320" y="168" width="240" height="56" rx="6" fill="rgba(196,22,28,0.05)" stroke="#c4161c" stroke-width="1.4"/>
+      <text x="440" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đọc biến đích preview</text>
+      <text x="440" y="208" fill="#c4161c" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">= DB production</text>
+
+      <rect x="40" y="168" width="200" height="56" rx="6" fill="#fafafa"/>
+      <rect x="40" y="168" width="200" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="140" y="192" fill="#575757" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">agent-okr</text>
+      <text x="140" y="208" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đã tắt Preview từ 04/10</text>
+
+      <text x="320" y="256" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SỐ ĐO 16/10 · BA DỰ ÁN</text>
+      <text x="320" y="276" fill="#171717" font-size="12" font-family="'Geist', sans-serif">840 bản / 7 ngày · 0 request / 24 h</text>
+
+      <!-- RIGHT · Sau vòng này -->
+      <rect x="640" y="56" width="200" height="56" rx="6" fill="#fafafa"/>
+      <rect x="640" y="56" width="200" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="740" y="80" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đẩy nhánh</text>
+      <text x="740" y="96" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">mọi nhánh khác onehub</text>
+
+      <rect x="920" y="56" width="240" height="56" rx="6" fill="#fafafa"/>
+      <rect x="920" y="56" width="240" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1040" y="80" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">0 bản Preview</text>
+      <text x="1040" y="96" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">cả bốn dự án · AC-5</text>
+
+      <rect x="640" y="168" width="200" height="56" rx="6" fill="#fafafa"/>
+      <rect x="640" y="168" width="200" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="740" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đẩy / gộp onehub</text>
+      <text x="740" y="208" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">commit gộp M</text>
+
+      <rect x="920" y="168" width="240" height="56" rx="6" fill="#fafafa"/>
+      <rect x="920" y="168" width="240" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1040" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Production cả bốn</text>
+      <text x="1040" y="208" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">kiểm READY · AC-6</text>
+
+      <text x="640" y="256" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LUẬT MỖI TỆP</text>
+      <text x="640" y="276" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">"git": { "deploymentEnabled": { "**": false, "onehub": true } }</text>
+
+      <!-- TABLE · dự án → tệp Vercel đọc -->
+      <text x="40" y="348" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">DỰ ÁN → TỆP VERCEL ĐỌC · AC-1 · AC-4</text>
+
+      <text x="40" y="380" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.1em">DỰ ÁN</text>
+      <text x="320" y="380" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.1em">ROOT DIRECTORY</text>
+      <text x="600" y="380" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.1em">TỆP VERCEL ĐỌC</text>
+      <text x="920" y="380" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.1em">VÒNG NÀY</text>
+      <line x1="40" y1="392" x2="1160" y2="392" stroke="#9a9a9a" stroke-width="0.8"/>
+
+      <text x="40" y="416" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">crm-onehub-app</text>
+      <text x="320" y="416" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">apps/app</text>
+      <text x="600" y="416" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">apps/app/vercel.json</text>
+      <text x="920" y="416" fill="#171717" font-size="12" font-family="'Geist', sans-serif">thêm tệp mới</text>
+      <line x1="40" y1="424" x2="1160" y2="424" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <text x="40" y="448" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">crm-onehub-api</text>
+      <text x="320" y="448" fill="#575757" font-size="12" font-family="'Geist', sans-serif">trống — gốc kho</text>
+      <text x="600" y="448" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">vercel.json (gốc kho)</text>
+      <text x="920" y="448" fill="#171717" font-size="12" font-family="'Geist', sans-serif">thêm tệp mới, không cron</text>
+      <line x1="40" y1="456" x2="1160" y2="456" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <text x="40" y="480" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">crm-onehub-agent</text>
+      <text x="320" y="480" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">apps/agent</text>
+      <text x="600" y="480" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">apps/agent/vercel.json</text>
+      <text x="920" y="480" fill="#171717" font-size="12" font-family="'Geist', sans-serif">thêm tệp mới</text>
+      <line x1="40" y1="488" x2="1160" y2="488" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <text x="40" y="512" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">agent-okr</text>
+      <text x="320" y="512" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">apps/agent-okr</text>
+      <text x="600" y="512" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">apps/agent-okr/vercel.json</text>
+      <text x="920" y="512" fill="#575757" font-size="12" font-family="'Geist', sans-serif">giữ nguyên (tắt từ 04/10)</text>
+      <line x1="40" y1="520" x2="1160" y2="520" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <!-- Trap note -->
+      <rect x="40" y="536" width="1120" height="40" rx="6" fill="rgba(196,22,28,0.04)" stroke="rgba(196,22,28,0.50)" stroke-width="1" stroke-dasharray="4,4"/>
+      <text x="56" y="560" fill="#c4161c" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BẪY</text>
+      <text x="96" y="560" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">apps/api/vercel.json</text>
+      <text x="236" y="560" fill="#171717" font-size="12" font-family="'Geist', sans-serif">chỉ mang 5 cron — Vercel không đọc nó cho dự án api; đặt khoá ở đó thì không gì đổi.</text>
+
+      <!-- Legend -->
+      <line x1="40" y1="596" x2="1160" y2="596" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="624" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="160" y="612" width="16" height="16" rx="2" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="184" y="624" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Thao tác đẩy</text>
+
+      <rect x="320" y="612" width="16" height="16" rx="2" fill="rgba(196,22,28,0.05)" stroke="#c4161c" stroke-width="1.4"/>
+      <text x="344" y="624" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Mã chưa qua cổng chạm dữ liệu thật</text>
+
+      <rect x="640" y="612" width="16" height="16" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="664" y="624" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Kết quả sau vòng này</text>
+
+      <rect x="840" y="612" width="16" height="16" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="864" y="624" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Đã tắt sẵn, không đổi</text>
+    </svg>
+  </div>
+</body>
+</html>

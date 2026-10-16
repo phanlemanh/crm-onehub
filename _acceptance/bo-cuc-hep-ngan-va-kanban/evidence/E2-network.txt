@@ -1,0 +1,1 @@
+E2: driver la script bun (do-bo-cuc.mjs) trong phien do rieng, khong co duong doc network -> n-a (driver)
