@@ -50,11 +50,7 @@ const lenh = {
 	],
 	E4: [`${RANG}/chi-them-paths.mjs`, "--ho-so", DS],
 	E5: [`${RANG}/hoa-cu-theo-paths.mjs`, "--ho-so", DS],
-	E6: [
-		`${RANG}/them-paths.mjs`,
-		"--kiem-bo-qua",
-		"okr-loai-hoc-tap:E14=input-vang,chu-mac-dinh-thu-vien-ngoai:E10=khong-co-inputs,dieu-phoi-hai-tang:E22=khai-not-run",
-	],
+	E6: [`${RANG}/them-paths.mjs`, "--kiem-bo-qua-lop"],
 	E8: [`${RANG}/pmc-truoc-sau.mjs`, "--ho-so", DS],
 };
 
@@ -249,7 +245,20 @@ const CAP = [
 	},
 	{
 		eval: "E6",
-		ten: "them-paths-cho-eval-bo-qua",
+		ten: "them-paths-ho-so-khoa",
+		doi: [
+			{
+				tep: "_acceptance/cua-vao-noi-tieng-viet/evals.yaml",
+				tu: "      - evidence/E14-chu-loi.txt\n      - contract.md\n    expected: >-\n",
+				sang: '      - evidence/E14-chu-loi.txt\n      - contract.md\n    paths:\n      - "_acceptance/cua-vao-noi-tieng-viet/contract.md"\n    expected: >-\n',
+			},
+		],
+		ma: 1,
+		dong: ["DOI_PATHS cua-vao-noi-tieng-viet#E14: khoa-thuoc-da-cham-thuc-te"],
+	},
+	{
+		eval: "E6",
+		ten: "them-paths-input-vang",
 		doi: [
 			{
 				tep: OL,
@@ -258,21 +267,7 @@ const CAP = [
 			},
 		],
 		ma: 1,
-		dong: ["KHONG_BO_QUA okr-loai-hoc-tap#E14: lech"],
-	},
-	{
-		eval: "E6",
-		ten: "bo-not-run",
-		doi: [
-			{
-				tep: "_acceptance/dieu-phoi-hai-tang/evals.yaml",
-				tu: "    status: not-run\n",
-				sang: "",
-				thu: 175,
-			},
-		],
-		ma: 1,
-		dong: ["KHONG_BO_QUA dieu-phoi-hai-tang#E22: bo-qua input-vang"],
+		dong: ["DOI_PATHS okr-loai-hoc-tap#E14: input-vang"],
 	},
 	{
 		eval: "E8",

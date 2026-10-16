@@ -66,6 +66,43 @@ export function tepDoiTuPin(vc) {
 		);
 }
 
+const NHANH = "fix/thu-paths-e15-giai-doan";
+
+export function mocTruoc() {
+	const head = git("rev-parse", "HEAD").trim();
+	const mb = git("merge-base", "HEAD", "origin/onehub").trim();
+	if (mb !== head) return mb;
+	for (const dong of git(
+		"log",
+		"--first-parent",
+		"--merges",
+		"--format=%H%x09%s",
+		"HEAD",
+	).split("\n"))
+		if (dong.includes(NHANH))
+			return git("rev-parse", `${dong.split("\t")[0]}^1`).trim();
+	return null;
+}
+
+export function docTai(sha) {
+	return (tep) => {
+		try {
+			return execFileSync("git", ["-C", GOC, "show", `${sha}:${tep}`], {
+				maxBuffer: 1 << 30,
+				stdio: ["ignore", "pipe", "ignore"],
+			}).toString();
+		} catch {
+			return null;
+		}
+	};
+}
+
+export function tepTai(sha) {
+	return new Set(
+		git("ls-tree", "-r", "-z", "--name-only", sha).split("\0").filter(Boolean),
+	);
+}
+
 export function verifiedCommit(slug) {
 	const bc = docTep(slug, "evidence-report.md");
 	return (bc && (bc.match(/^verified_commit:\s*(\S+)/m) ?? [])[1]) || null;

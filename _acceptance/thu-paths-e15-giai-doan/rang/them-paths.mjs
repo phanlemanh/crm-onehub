@@ -3,7 +3,13 @@ import { readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join, normalize, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { docDanhSach, hoaCuHoSo } from "./hoa-cu-theo-paths.mjs";
+import {
+	docDanhSach,
+	docTai,
+	hoaCuHoSo,
+	mocTruoc,
+	tepTai,
+} from "./hoa-cu-theo-paths.mjs";
 
 const GOC =
 	process.env.GOC_KHO ??
@@ -15,16 +21,17 @@ const Y = yeuCau(join(GOC, "lib", "eval-yaml.cjs"));
 const KHONG_CHAY = "not-run";
 const KHOA_THUOC = "da-cham-boi-thuc-te";
 
-function trangThaiHoSo(slug) {
+export function docDia(tep) {
 	try {
-		const c = readFileSync(
-			join(GOC, "_acceptance", slug, "contract.md"),
-			"utf8",
-		);
-		return (c.match(/^status:\s*(\S+)/m) ?? [])[1] ?? null;
+		return readFileSync(join(GOC, tep), "utf8");
 	} catch {
 		return null;
 	}
+}
+
+function trangThaiHoSo(slug, doc = docDia) {
+	const c = doc(`_acceptance/${slug}/contract.md`);
+	return c == null ? null : ((c.match(/^status:\s*(\S+)/m) ?? [])[1] ?? null);
 }
 
 function khongDo(ly) {
@@ -49,16 +56,17 @@ export function giaiInput(slug, input, coTep) {
 	return null;
 }
 
-export function lapKeHoach(coTep = tepTheoDoi()) {
+export function lapKeHoach(coTep = tepTheoDoi(), doc = docDia) {
 	const ke = [];
 	const hoSo = [...coTep]
 		.filter((t) => /^_acceptance\/[^/]+\/evals\.yaml$/.test(t))
 		.sort();
 	for (const tep of hoSo) {
 		const slug = tep.split("/")[1];
-		const chu = readFileSync(join(GOC, tep), "utf8");
+		const chu = doc(tep);
+		if (chu == null) continue;
 		const evs = Y.parseEvals(chu, ["executor", "status"]);
-		const khoa = trangThaiHoSo(slug) === KHOA_THUOC;
+		const khoa = trangThaiHoSo(slug, doc) === KHOA_THUOC;
 		const ds = L.evalListsOf(chu, ["inputs", "paths"]).byId;
 		for (const e of evs) {
 			if (String(e.executor ?? "").trim() !== "judgment") continue;
@@ -250,52 +258,99 @@ function kiemPhaiCo(chon, phaiCo) {
 	return hong;
 }
 
-function hoSoSuaTrongVong() {
-	const git = (...a) =>
-		execFileSync("git", ["-C", GOC, ...a], { maxBuffer: 1 << 30 })
-			.toString()
-			.trim();
-	const mb = git("merge-base", "HEAD", "origin/onehub");
-	if (mb === git("rev-parse", "HEAD")) return [];
-	return git("diff", "--name-only", mb, "HEAD", "--", "_acceptance")
-		.split("\n")
-		.filter((t) => /^_acceptance\/[^/]+\/evals\.yaml$/.test(t))
-		.map((t) => t.split("/")[1])
-		.filter(
-			(s) => s !== "thu-paths-e15-giai-doan" && s !== "giai-doan-thoa-thuan",
+export function luatDocLap() {
+	const moc = mocTruoc();
+	if (!moc)
+		khongDo(
+			"khong tim duoc moc truoc vong (merge-base hay commit gop cua nhanh)",
 		);
+	const keTruoc = lapKeHoach(tepTai(moc), docTai(moc));
+	const keNay = lapKeHoach();
+	const nay = new Map(keNay.map((m) => [`${m.slug}#${m.id}`, m]));
+	const khoa = new Set(
+		keNay
+			.filter((m) => m.ly_do === "khoa-thuoc-da-cham-thuc-te")
+			.map((m) => m.slug),
+	);
+	const ungVien = new Map();
+	for (const m of [...keTruoc, ...keNay].filter((x) => x.loai === "them")) {
+		if (!ungVien.has(m.slug)) ungVien.set(m.slug, new Set());
+		ungVien.get(m.slug).add(m.id);
+	}
+	const luat = [];
+	for (const [slug, ids] of ungVien) {
+		if (khoa.has(slug)) continue;
+		let chu = docDia(`_acceptance/${slug}/evals.yaml`);
+		if (chu == null) continue;
+		const conThieu = [...ids]
+			.map((id) => nay.get(`${slug}#${id}`))
+			.filter((m) => m?.loai === "them");
+		if (conThieu.length) chu = chenTheoKeHoach(chu, conThieu);
+		const r = hoaCuHoSo(slug, chu);
+		if (!r.vc || (r.apply && !r.kept.length)) luat.push(slug);
+	}
+	return { moc, luat: luat.sort() };
 }
 
-function kiemDanhSach(keToanKho, chon) {
-	const coDaCo = new Set(
-		keToanKho.filter((m) => m.loai === "da-co").map((m) => m.slug),
-	);
-	const sach = (slug) => {
-		const r = hoaCuHoSo(slug);
-		return !r.vc || (r.apply && !r.kept.length);
-	};
-	const luat = new Set(hoSoThuocLuat(keToanKho));
-	for (const s of hoSoSuaTrongVong()) if (sach(s)) luat.add(s);
-	for (const s of chon)
-		if (
-			coDaCo.has(s) &&
-			!keToanKho.some((m) => m.slug === s && m.loai === "them") &&
-			sach(s)
-		)
-			luat.add(s);
+function kiemDanhSach(chon) {
+	const { moc, luat } = luatDocLap();
 	let hong = 0;
-	for (const s of [...luat].sort())
+	for (const s of luat)
 		if (!chon.includes(s)) {
 			hong += 1;
 			console.log(`THIEU_TRONG_DANH_SACH ${s}`);
 		}
 	for (const s of chon)
-		if (!luat.has(s)) {
+		if (!luat.includes(s)) {
 			hong += 1;
 			console.log(`THUA_TRONG_DANH_SACH ${s}`);
 		}
 	console.log(
-		`danh sach: ${chon.length} ho so · luat chon: ${luat.size} · lech ${hong}`,
+		`danh sach: ${chon.length} ho so · luat chon tu moc ${moc.slice(0, 9)}: ${luat.length} · lech ${hong}`,
+	);
+	return hong;
+}
+
+const LOP_BO_QUA = [
+	"khoa-thuoc-da-cham-thuc-te",
+	"khai-not-run",
+	"khong-co-inputs",
+	"input-vang",
+];
+
+function kiemBoQuaLop() {
+	const moc = mocTruoc();
+	if (!moc) khongDo("khong tim duoc moc truoc vong");
+	const docMoc = docTai(moc);
+	const dem = Object.fromEntries(LOP_BO_QUA.map((l) => [l, 0]));
+	let hong = 0;
+	for (const m of lapKeHoach().filter((x) => x.loai === "bo-qua")) {
+		const lop = LOP_BO_QUA.find(
+			(l) => m.ly_do === l || m.ly_do.startsWith(`${l}:`),
+		);
+		if (!lop) {
+			hong += 1;
+			console.log(`LY_DO_LA ${m.slug}#${m.id}: ${m.ly_do}`);
+			continue;
+		}
+		dem[lop] += 1;
+		const cu = docMoc(m.tep);
+		if (cu == null) {
+			console.log(`BO_QUA ${m.slug}#${m.id}: ${m.ly_do} (ho so moi sau moc)`);
+			continue;
+		}
+		const pCu = L.evalListsOf(cu, ["paths"]).byId.get(m.id)?.paths ?? [];
+		const pNay = m.paths ?? [];
+		if (JSON.stringify(pCu) !== JSON.stringify(pNay)) {
+			hong += 1;
+			console.log(`DOI_PATHS ${m.slug}#${m.id}: ${lop}`);
+		} else console.log(`BO_QUA ${m.slug}#${m.id}: ${m.ly_do}`);
+	}
+	const rong = LOP_BO_QUA.filter((l) => !dem[l]);
+	if (rong.length) khongDo(`lop bo qua rong: ${rong.join(" ")}`);
+	const tong = Object.values(dem).reduce((x, y) => x + y, 0);
+	console.log(
+		`bo qua: ${tong} eval · ${LOP_BO_QUA.map((l) => `${l} ${dem[l]}`).join(" · ")} · doi ${hong}`,
 	);
 	return hong;
 }
@@ -338,17 +393,17 @@ function chay() {
 	}
 	if (che === "--kiem-bo-qua")
 		return kiemBoQua(lapKeHoach(), process.argv[3] ?? "");
+	if (che === "--kiem-bo-qua-lop") return kiemBoQuaLop();
 	if (che === "--kiem") {
 		if (!chon) khongDo("--kiem can --ho-so");
 		const keToanKho = lapKeHoach();
 		let hong = kiemThieu(locHoSo(keToanKho, chon));
 		const phaiCo = doiSo("--phai-co");
 		if (phaiCo != null) hong += kiemPhaiCo(chon, docDanhSach(phaiCo));
-		if (process.argv.includes("--kiem-danh-sach"))
-			hong += kiemDanhSach(keToanKho, chon);
+		if (process.argv.includes("--kiem-danh-sach")) hong += kiemDanhSach(chon);
 		return hong;
 	}
-	khongDo("can --ke | --ghi | --kiem | --kiem-bo-qua");
+	khongDo("can --ke | --ghi | --kiem | --kiem-bo-qua | --kiem-bo-qua-lop");
 }
 
 if (

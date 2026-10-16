@@ -40,7 +40,15 @@ function chayPmc(cay) {
 			/NOTE \[([^\]]+)\]: bộ lọc paths không áp \(eval-ngoai-may-thieu-paths:([^)]+)\)/g,
 		),
 	].map((m) => ({ slug: m[1], id: m[2] }));
-	return { hoaCu, khongAp };
+	const coTepDoi = new Set(
+		[
+			...ra.matchAll(
+				/NOTE \[([^\]]+)\]: (?:hoá cũ theo luật cũ|bộ lọc paths)/g,
+			),
+		].map((m) => m[1]),
+	);
+	for (const s of hoaCu) coTepDoi.add(s);
+	return { hoaCu, khongAp, coTepDoi };
 }
 
 function laJudgment(slug, id) {
@@ -88,7 +96,13 @@ function chay() {
 				hong += 1;
 				console.log(`VAN_HOA_CU ${s}`);
 			} else if (truoc.hoaCu.has(s)) roi.push(s);
-			else console.log(`GHI_CHU ${s}: khong hoa cu ca truoc`);
+			else if (truoc.coTepDoi.has(s)) {
+				hong += 1;
+				console.log(`KHONG_O_TAP_TRUOC ${s}`);
+			} else
+				console.log(
+					`KHONG_CO_TEP_DOI ${s}: luoi khong in dong nao cho ho so nay ca truoc`,
+				);
 		}
 		const moi = [...sau.hoaCu].filter((s) => !truoc.hoaCu.has(s));
 		for (const s of moi) {

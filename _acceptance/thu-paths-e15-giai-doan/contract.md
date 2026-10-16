@@ -5,7 +5,7 @@ slug: thu-paths-e15-giai-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-16T05:50:40Z
 design_doc: docs/superpowers/specs/2026-10-16-thu-paths-e15-giai-doan-design.md
@@ -52,7 +52,8 @@ của `docs/plan/lo-trinh-okr.json`).
   chạy `--ghi`, Then eval đó không bị thêm `paths` và lệnh `--ke` in nó thành `BO_QUA <hồ sơ>#<eval>: <lý do>`.
 
 - AC-7: (cross-layer) Given cây ở merge-base và cây ở HEAD, When chạy `bash scripts/pre-merge-check.sh` thật, không
-  `--base`, trên từng cây, Then mọi hồ sơ đã ký trong danh sách rời khỏi tập hồ sơ in `evidence is stale`; không hồ sơ
+  `--base`, trên từng cây, Then mọi hồ sơ đã ký trong danh sách không có trong tập hồ sơ in `evidence is stale` ở cây
+  sau và có trong tập ấy ở cây trước — trừ hồ sơ mà lưới không in dòng nào ở cây trước (không tệp nào đổi từ lúc ghim); không hồ sơ
   nào mới vào tập; số đếm sau nhỏ hơn số đếm trước; và không hồ sơ nào trong danh sách còn dòng
   `bộ lọc paths không áp (eval-ngoai-may-thieu-paths:<id>)` với `<id>` là một eval judgment.
 

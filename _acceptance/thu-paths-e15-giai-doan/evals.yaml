@@ -61,9 +61,11 @@ evals:
     expected: |
       exit 0. Ba phần, một lệnh (them-paths.mjs --kiem --ho-so @danh-sach.txt --phai-co
       thu-haiku-tro-ly-okr,ghim-thuoc-soi-xem-okr --kiem-danh-sach):
-      (a) --kiem-danh-sach tính lại luật chọn trên cây HEAD — mọi hồ sơ có eval judgment thiếu paths mà thêm được, giả
-      lập chèn paths rồi gọi bộ lọc của hoa-cu-theo-paths (staleByPaths, tệp đổi từ verified_commit trừ _acceptance/ và
-      t1_skip_globs): hồ sơ chưa ghim hoặc ra SACH thì thuộc luật — rồi so với danh-sach.txt: thiếu → «THIEU_TRONG_DANH_SACH
+      (a) --kiem-danh-sach tính lại luật chọn KHÔNG đọc danh-sach.txt: ứng viên = mọi hồ sơ có eval judgment thiếu paths
+      ở cây MỐC TRƯỚC VÒNG (merge-base với origin/onehub; nhánh đã gộp thì cha thứ nhất của commit gộp nhánh) hoặc ở
+      HEAD, trừ hồ sơ da-cham-boi-thuc-te; với mỗi ứng viên, evals.yaml ở HEAD (eval còn thiếu thì giả lập chèn) qua bộ
+      lọc của hoa-cu-theo-paths (staleByPaths, tệp đổi từ verified_commit trừ _acceptance/ và t1_skip_globs): chưa ghim
+      hoặc SACH thì thuộc luật — rồi so với danh-sach.txt: thiếu → «THIEU_TRONG_DANH_SACH
       <slug>», thừa → «THUA_TRONG_DANH_SACH <slug>», mã 1;
       (b) --phai-co: mỗi slug khai phải có trong danh sách, in «CO_TEN <slug>», thiếu → «KHONG_CO_TEN <slug>», mã 1;
       (c) mọi eval judgment không khai not-run, có inputs giải được, của hồ sơ trong danh sách có paths chứa mọi input quy
@@ -126,24 +128,28 @@ evals:
     cmd: config:executors.script.tpe_bo_qua
     paths:
       - "_acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs"
-      - "_acceptance/okr-loai-hoc-tap/evals.yaml"
-      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/evals.yaml"
-      - "_acceptance/dieu-phoi-hai-tang/evals.yaml"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/*/contract.md"
       - "lib/evidence-core.cjs"
       - "lib/eval-yaml.cjs"
     expected: |
-      exit 0. them-paths.mjs --kiem-bo-qua okr-loai-hoc-tap:E14=input-vang,chu-mac-dinh-thu-vien-ngoai:E10=khong-co-inputs,
-      dieu-phoi-hai-tang:E22=khai-not-run: ba eval được xếp «bo-qua» với đúng lý do (tiền tố) và vẫn không có paths; in
-      «BO_QUA <slug>#<id>: <lý do>» cho từng eval, 3/3.
-      CHIỀU ĐỎ (dot-bien.mjs): thêm paths cho okr-loai-hoc-tap#E14 → mã 1 với «KHONG_BO_QUA okr-loai-hoc-tap#E14: lech»;
-      bỏ «status: not-run» của dieu-phoi-hai-tang#E22 → mã 1 với «KHONG_BO_QUA dieu-phoi-hai-tang#E22: bo-qua
-      input-vang…» (lý do khác khai).
+      exit 0. them-paths.mjs --kiem-bo-qua-lop quét TRỌN lớp eval judgment bị xếp «bo-qua» ở HEAD (không chọn tay):
+      mỗi eval phải mang đúng một trong bốn lý do — khoa-thuoc-da-cham-thuc-te (hồ sơ da-cham-boi-thuc-te), khai-not-run,
+      khong-co-inputs, input-vang:<tệp> — và paths của nó ở HEAD bằng đúng paths ở cây mốc trước vòng (cùng mốc với E3):
+      in «BO_QUA <slug>#<id>: <lý do>» từng eval, dòng cuối «bo qua: <n> eval · <lý do> <số> ×4 · doi 0». Lý do ngoài bốn
+      loại → «LY_DO_LA», paths đổi → «DOI_PATHS <slug>#<id>: <lớp>», mã 1. Đối chứng dương: mỗi lớp trong bốn lớp phải có
+      ít nhất một eval, lớp rỗng → mã 2 «KHONG DO DUOC: lop bo qua rong: <lớp>» (hôm nay 10 eval: 3 · 4 · 2 · 1).
+      CHIỀU ĐỎ (dot-bien.mjs): thêm paths cho cua-vao-noi-tieng-viet#E14 (hồ sơ khoá) → mã 1 «DOI_PATHS
+      cua-vao-noi-tieng-viet#E14: khoa-thuoc-da-cham-thuc-te»; thêm paths cho okr-loai-hoc-tap#E14 → mã 1 «DOI_PATHS
+      okr-loai-hoc-tap#E14: input-vang».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
     criterion: AC-7
     executor: script
     cmd: config:executors.script.tpe_pmc_that
+    long_running: 45
     paths:
       - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
       - "_acceptance/thu-paths-e15-giai-doan/rang/pmc-truoc-sau.mjs"
@@ -154,7 +160,9 @@ evals:
       exit 0. rang/pmc-truoc-sau.mjs dựng worktree tạm tách rời ở merge-base(HEAD, origin/onehub), chạy THẬT
       «bash scripts/pre-merge-check.sh <cây>» không --base trên worktree đó và trên gốc kho (HEAD), gom tập slug có dòng
       «VIOLATION [<slug>]: evidence is stale» và dòng «NOTE [<slug>]: bộ lọc paths không áp (eval-ngoai-may-thieu-paths:<id>)»
-      của từng cây. Khẳng định: (a) mọi hồ sơ đã ký trong danh-sach.txt có trong tập trước và không có trong tập sau;
+      của từng cây. Khẳng định: (a) mọi hồ sơ đã ký trong danh-sach.txt không có trong tập sau, và có trong tập trước — hồ sơ không có trong tập
+      trước chỉ được nhận khi lưới không in dòng nào cho nó ở cây trước (không tệp nào đổi từ lúc ghim; in «KHONG_CO_TEP_DOI
+      <slug>»), còn lưới có in mà không hoá cũ thì «KHONG_O_TAP_TRUOC <slug>», mã 1;
       (b) tập sau ⊆ tập trước (không hồ sơ mới thành hoá cũ); (c) số sau < số trước; (d) không hồ sơ trong danh sách còn
       dòng KHONG_AP eval-ngoai-may-thieu-paths với id là eval judgment. In «pmc: truoc <a> · sau <b> · roi <danh sách> ·
       moi 0». Merge-base trùng HEAD (nhánh đã gộp) → «da gop, khong so», mã 0. Gỡ worktree tạm khi xong hay bị ngắt.
@@ -166,6 +174,7 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.tpe_dot_bien
+    long_running: 90
     paths:
       - "_acceptance/thu-paths-e15-giai-doan/rang/**"
       - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
@@ -173,7 +182,7 @@ evals:
       - "lib/eval-yaml.cjs"
     expected: |
       exit 0. rang/dot-bien.mjs dựng worktree tạm tách rời tại HEAD (git worktree add --detach), chạy lần lượt từng cặp
-      của E1–E6 và E8: bản lành → mã 0; mỗi đột biến khai ở «CHIỀU ĐỎ» của E1–E6 và E8 → đúng mã khai và đúng dòng ghim. In
+      của E1–E6 và E8 (lệnh E6 là --kiem-bo-qua-lop): bản lành → mã 0; mỗi đột biến khai ở «CHIỀU ĐỎ» của E1–E6 và E8 → đúng mã khai và đúng dòng ghim. In
       «<eval> <tên đột biến>: lanh 0, dot bien <mã>, bat» cho từng cặp; cặp không bắt → «LOT <eval> <tên>», mã 1. Đột
       biến không áp được (chuỗi gốc không còn) → «DOT_BIEN_LECH <tên>», mã 2. Gỡ worktree tạm khi xong hay khi bị ngắt;
       cây chính không đổi tệp nào (so git status --porcelain của đúng các tệp đột biến trước và sau).
