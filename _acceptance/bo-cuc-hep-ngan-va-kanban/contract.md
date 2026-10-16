@@ -5,7 +5,9 @@ slug: bo-cuc-hep-ngan-va-kanban
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-16T04:31:00Z
 design_doc: docs/superpowers/specs/2026-10-16-bo-cuc-hep-ngan-va-kanban-design.md
 ---
 
