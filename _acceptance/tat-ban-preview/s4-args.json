@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-16T04:52:04Z",
-  "generated_sha": "9e1336958dfeb94e4c144f8aca1e1ee88f326e15",
+  "generated_at": "2026-10-16T05:23:13Z",
+  "generated_sha": "3c0cbb08d855463b9960a1bf05f4a7b97a4ecbbf",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
@@ -113,7 +113,7 @@
       "id": "E7",
       "criterion": "AC-5",
       "cmd": "bun _acceptance/tat-ban-preview/rang/vercel-preview.mjs xanh",
-      "expected": "Rang lay ten nhanh hien tai (git rev-parse --abbrev-ref HEAD), doc moi su kien push cua nhanh qua\ngh api repos/phanlemanh/crm-onehub/activity?ref=refs/heads/<nhanh>&activity_type=push, va giu cac lan\nday ma commit DAU (after) co cay chua ca ba tep (git cat-file -e <after>:vercel.json,\n<after>:apps/app/vercel.json, <after>:apps/agent/vercel.json; fetch truoc, commit khong co tai cho ->\nma 2). Khong lan day nao duoc giu -> ma 2 \"CHUA-DAY\". Lan moi nhat chua du 5 phut -> cho toi du (toi da\n10 phut tong). Voi TUNG commit dau duoc giu: doc deployment cua ba du an (crm-onehub-app,\ncrm-onehub-api, crm-onehub-agent) loc meta-githubCommitSha=<after> (bo loc cua API, khong phan trang\ntay), va moi commit status GitHub cua no. Bo do lan day (ham timLanDay) va bo doc deployment\n(ham trienKhaiCho) la CUNG ham E8 dung.\nXanh (ma 0): in \"<n> lan day giu: <after[0:9]>, ...\" roi \"<du an>: 0 deployment cho <after[0:9]>\" cho\nmoi cap, va khong status context nao bat dau \"Vercel – crm-onehub-\". Co deployment hay status -> ma 1, in\nid/trang thai/context nguyen van. Loi API -> ma 2.",
+      "expected": "Rang lay ten nhanh hien tai (git rev-parse --abbrev-ref HEAD), doc moi su kien push cua nhanh qua\ngh api repos/phanlemanh/crm-onehub/activity?ref=refs/heads/<nhanh>, giu su kien loai push, force_push\nHOAC branch_creation (lan day dau cua nhanh moi GitHub ghi la branch_creation, khong phai push), va giu cac lan\nday ma commit DAU (after) co cay chua ca ba tep (git cat-file -e <after>:vercel.json,\n<after>:apps/app/vercel.json, <after>:apps/agent/vercel.json; fetch truoc, commit khong co tai cho ->\nma 2). Khong lan day nao duoc giu -> ma 2 \"CHUA-DAY\". Lan moi nhat chua du 5 phut -> cho toi du (toi da\n10 phut tong). Voi TUNG commit dau duoc giu: doc deployment cua ba du an (crm-onehub-app,\ncrm-onehub-api, crm-onehub-agent) loc meta-githubCommitSha=<after> (bo loc cua API, khong phan trang\ntay), va moi commit status GitHub cua no. Bo do lan day (ham timLanDay) va bo doc deployment\n(ham trienKhaiCho) la CUNG ham E8 dung.\nXanh (ma 0): in \"<n> lan day giu: <after[0:9]>, ...\" roi \"<du an>: 0 deployment cho <after[0:9]>\" cho\nmoi cap, va khong status context nao bat dau \"Vercel – crm-onehub-\". Co deployment hay status -> ma 1, in\nid/trang thai/context nguyen van. Loi API -> ma 2.",
       "executor": "script",
       "expectedExit": 0,
       "paths": [
@@ -184,8 +184,8 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.30.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\nLệnh dài hơn trần 600 s của công cụ thì KHÔNG bị giết: công cụ **đẩy nó sang\nnền** và nó chạy tiếp. Tệp đầu ra nền trống tới phút chót, vì khung bọc lệnh của\nkit chỉ in khi lệnh xong — đọc trống thành «bị giết» là đúng sự cố crm 07/10/2026\n(hồ sơ `lenh-dai-chay-rieng`: hai lượt BLOCKED giả). Dòng «chuyển sang nền» trong\nkhối dưới là lối LỜI cho mọi lệnh. Lối MÁY: eval khai `long_running: <phút>`\ntrong `evals.yaml` thì lượt chấm feature-loop tự chạy lệnh nền, ghi nhật ký ở\n`.acceptance-runs/<slug>/s4-lenh-dai/` và chờ bằng lệnh nó sinh ra\n(`eval-executors.md`, mục `long_running`).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\nDAU RA DAI: harness co the CAT DAU RA RA TEP (\"Output too large … saved to <tep>\") va chi hien doan DAU — do KHONG phai bi cong cu giet: doc DUOI tep do (tail) de lay dong tong ket va ma thoat; chi khai killedByTool khi tool result bao timeout/killed that.\nCHUYEN SANG NEN KHONG PHAI BI GIET: tool result bao lenh chua xong trong timeout va da duoc CHUYEN SANG NEN (\"moved to the background\", kem ID + tep dau ra) → lenh VAN DANG CHAY: KHONG khai killedByTool, KHONG ket luan tu tep dau ra luc do. Tep dau ra nen TRONG la binh thuong — khung boc lenh chi in duoi dau ra + dong __EXIT=<n> khi lenh XONG. Cho bang lenh Bash co gioi han (moi lan goi ≤ 100 giay, duoi tran mac dinh 120 giay cua cong cu; vd vong lap kiem tep do co dong __EXIT= chua, sleep vai giay, het 100 giay thi thoat) va goi lai toi khi tep co dong __EXIT=<n> → doc ma tu dong do nhu binh thuong. Tong thoi gian cho toi da = so phut eval khai o long_running (vang thi 30 phut), tinh tu luc chay lenh; qua ma chua co dong __EXIT → cannotRun=true + reason \"lenh chay qua <so> phut chua xong — khai long_running: <phut> cho eval trong evals.yaml\" (KHONG killedByTool), va dung tac vu nen neu cong cu cho phep.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n\nLệnh bị đẩy sang nền rồi QUÁ trần chờ (`long_running`, vắng thì 30 phút) cũng\nlà sự cố hạ tầng chứ không phải lệnh hỏng: dòng run-log `\"exit_code\": null`,\n`\"cannot_run\": true` (KHÔNG `killed_by_tool` — công cụ không giết nó), verdict\n`BLOCKED`, reason gọi tên việc cần làm (khai `long_running: <phút>` cho eval).\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub/.claude/worktrees/tat-ban-preview/_acceptance/tat-ban-preview/contract.md",
-  "invokedAt": "2026-10-16T04:52:04Z",
-  "invokedSha": "9e1336958dfeb94e4c144f8aca1e1ee88f326e15",
+  "invokedAt": "2026-10-16T05:23:13Z",
+  "invokedSha": "3c0cbb08d855463b9960a1bf05f4a7b97a4ecbbf",
   "vungVat": [
     "_acceptance/config.yaml",
     "_acceptance/tat-ban-preview/card-plain.json",
@@ -200,6 +200,7 @@
     "_acceptance/tat-ban-preview/rang/vercel-doc.mjs",
     "_acceptance/tat-ban-preview/rang/vercel-preview.mjs",
     "_acceptance/tat-ban-preview/rang/vercel-production.mjs",
+    "_acceptance/tat-ban-preview/s4-args.json",
     "apps/agent-okr/test/vercel-du-an.ts",
     "apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts",
     "apps/agent/vercel.json",
@@ -278,6 +279,7 @@
     "_acceptance/tat-ban-preview/rang/vercel-doc.mjs",
     "_acceptance/tat-ban-preview/rang/vercel-preview.mjs",
     "_acceptance/tat-ban-preview/rang/vercel-production.mjs",
+    "_acceptance/tat-ban-preview/s4-args.json",
     "apps/agent-okr/test/vercel-du-an.ts",
     "apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts",
     "apps/agent/vercel.json",
@@ -302,6 +304,7 @@
     "_acceptance/tat-ban-preview/rang/vercel-doc.mjs",
     "_acceptance/tat-ban-preview/rang/vercel-preview.mjs",
     "_acceptance/tat-ban-preview/rang/vercel-production.mjs",
+    "_acceptance/tat-ban-preview/s4-args.json",
     "apps/agent-okr/test/vercel-du-an.ts",
     "apps/agent-okr/test/vercel-preview-moi-du-an.spec.ts",
     "apps/agent/vercel.json",
@@ -322,12 +325,12 @@
     "vercel.json"
   ],
   "coEvalPaths": true,
-  "evalsHash": "25c0df12a0bf9963606782404e430843618913eb516d0a9b73a48e96ee65eb0c",
+  "evalsHash": "e7b3f522e36176349009b168458542bb8b1a7bab70e1258b693b87b4bbae9b55",
   "runBaseline": true,
   "thuocChup": {
-    "sha": "9e1336958dfeb94e4c144f8aca1e1ee88f326e15",
+    "sha": "3c0cbb08d855463b9960a1bf05f4a7b97a4ecbbf",
     "n": 633,
-    "digest": "7e7a53ca25183fb22d4e241a0dd1460879849fcfc41cc96957e703b4ddbcbd00",
+    "digest": "497b889c5523b44505742c424020d2caa55561745594356125146d9f24870849",
     "tep": {
       ".github/scripts/test/phan-loai.test.mjs": "c31bdfccd3c5d75e92a9935c16e6dbd02fcb305d2ede2b99f81cd569e666648a",
       "_acceptance/bo-cau-hoi-mau/rang/do-bo-mau.test.ts": "4045f221a89dfae9477e72a2bcae44afe88640d1dd6ca614615234f4b42660fb",
@@ -338,11 +341,11 @@
       "_acceptance/hoi-dap-okr/rang/do-hoi-dap.test.ts": "385daae0f516778a3f58551f0350b0329ffccc645c84548bbf7227626b1ea483",
       "_acceptance/kho-nguon-khong-ket/rang/dem-ket.spec.ts": "a028d96c6a360d82710d937775fa07f039745073cca95cdc25e3a60a46bbc9fa",
       "_acceptance/man-xin-quyen-co-rang/rang/ban-sao.spec.mjs": "3a36154a24ffb662d1488ff3c96b059cb9dc9bdb58606f0108f744f9b5aad7a7",
-      "_acceptance/tat-ban-preview/evals.yaml": "25c0df12a0bf9963606782404e430843618913eb516d0a9b73a48e96ee65eb0c",
+      "_acceptance/tat-ban-preview/evals.yaml": "e7b3f522e36176349009b168458542bb8b1a7bab70e1258b693b87b4bbae9b55",
       "_acceptance/tat-ban-preview/rang/dem-preview.mjs": "212fb7de19c4d9022f35d85402e328e6f186d085c6dd7bc37f0de9340d5c9f53",
       "_acceptance/tat-ban-preview/rang/goc-du-an.mjs": "1e73e60e6d57caba7dd1b0dc22fbc686370f0f6e6c40504845cc341464e23472",
       "_acceptance/tat-ban-preview/rang/pha-thu.mjs": "dc86947227b056fc528f1ee1791af4d703d39e243800ddddc00ebc8fb6155331",
-      "_acceptance/tat-ban-preview/rang/vercel-doc.mjs": "1bfa4219ead81a7152c14bfa8bb7194c225112cc2461697c075525650b8d095c",
+      "_acceptance/tat-ban-preview/rang/vercel-doc.mjs": "0440d69e5c06590624e047120b2793432f89cfe1c4a413c5fb4203b0865f2c2f",
       "_acceptance/tat-ban-preview/rang/vercel-preview.mjs": "6454a4fa17e62389934bcdf789ced94889667c1e795831939fa4120c729600d3",
       "_acceptance/tat-ban-preview/rang/vercel-production.mjs": "5474284eebebb8f35f984a296e08ebbbc7f496f12cb575e225f21ec688ffa9d0",
       "_acceptance/thuoc-7-ngay-loc-pr/rang/do-7-ngay.test.mjs": "97b44e1e2723057363556ae2a3af43b7371a2884a8b062b453a7bb4504058aef",
@@ -965,7 +968,7 @@
     }
   },
   "cayChup": {
-    "sha": "9e1336958dfeb94e4c144f8aca1e1ee88f326e15",
+    "sha": "3c0cbb08d855463b9960a1bf05f4a7b97a4ecbbf",
     "ban": {},
     "chuaTheoDoi": []
   }
