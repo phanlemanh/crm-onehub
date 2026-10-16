@@ -45,13 +45,18 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx"
       - "apps/app/test/dau-trang-okr-cho.dom.tsx"
     expected: |
-      Cùng tệp, describe "dto-bam". Ma trận viết trước 2 ô, ca «đếm ô dto-bam» đòi đúng 2:
+      Cùng tệp, describe "dto-bam". Ma trận viết trước 4 ô, ca «đếm ô dto-bam» đòi đúng 4:
         dung-yen: bấm nút «Hỏi Kara» của khung chờ → okr.hoiMo giả được gọi đúng 1 lần với đầu vào {}, rồi địa chỉ
           ghi record=hoi-okr:<id trả về>; trước khi bấm số lần gọi là 0 (đối chứng dương trong ca).
         go-giua-chung: bấm ở khung chờ, giữ lời trả của okr.hoiMo, gỡ khung chờ và dựng một <NutHoiKara /> mới (như
           đầu trang đã tải xong), rồi mới thả lời trả → hoiMo được gọi tổng cộng đúng 1 lần và địa chỉ vẫn ghi
           record=hoi-okr:<id>.
-      Ghim «dto-bam <ô>: goi hoiMo 1 lan», «dto-bam <ô>: mo cot hoi».
+        bam-lai-sau-thay: như go-giua-chung, nhưng trước khi thả lời trả thì nút ở đầu trang mới phải là «đang mở»
+          (disabled, chữ okrHoiMessages.nut.dangMo) và bấm nó không gọi thêm → hoiMo tổng cộng đúng 1 lần.
+        loi-sau-thay: bấm ở khung chờ, thay khung chờ, rồi lời trả của hoiMo bị từ chối → đầu trang mới hiện câu
+          okrHoiMessages.nut.loiMo và nút bật lại.
+      Ghim «dto-bam <ô>: goi hoiMo 1 lan», «dto-bam <ô>: mo cot hoi», «dto-bam bam-lai-sau-thay: dang mo»,
+      «dto-bam loi-sau-thay: bao loi».
 
   - id: E4
     criterion: AC-4
@@ -65,11 +70,11 @@ evals:
     expected: |
       node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs: lấy các commit của vòng này bằng
       git log --no-merges --grep=dau-trang-okr-cho-nut-hoi-kara (không dùng merge-base hay origin/onehub, để thước
-      không rỗng sau khi gộp), so từng commit với cha, đòi không commit nào chạm nut-hoi-kara.tsx,
-      khung-man-chung.dom.tsx, khung-man-chung.spec.ts; in «khong-sua: <n> commit cua vong, 0 cham» (n ≥ 1, không
+      không rỗng sau khi gộp), so từng commit với cha, đòi không commit nào chạm khung-man-chung.dom.tsx,
+      khung-man-chung.spec.ts; in «khong-sua: <n> commit cua vong, 0 cham» (n ≥ 1, không
       thấy commit nào → «KHONG DO DUOC» thoát 2); rồi chạy trọn khung-man-chung.spec.ts và khung-man-chung.dom.tsx →
-      thoát 0. CHIỀU ĐỎ: --kiem-do-do (tự thêm một commit tạm chạm nut-hoi-kara.tsx trên bản sao) phải in
-      «khong-sua: cham nut-hoi-kara.tsx» và thoát 1.
+      thoát 0. CHIỀU ĐỎ: --kiem-do-do (tự thêm một commit tạm chạm khung-man-chung.dom.tsx trên bản sao) phải in
+      «khong-sua: cham khung-man-chung.dom.tsx» và thoát 1.
 
   - id: E5
     criterion: AC-5

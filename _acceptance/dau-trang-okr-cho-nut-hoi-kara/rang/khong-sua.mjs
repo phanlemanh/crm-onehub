@@ -13,7 +13,6 @@ const MA_DO = 1;
 const MA_KHONG_DO = 2;
 const TRAN_LENH_MS = 600_000;
 const GIU = [
-	"apps/app/app/(app)/[slug]/okr/hoi/nut-hoi-kara.tsx",
 	"apps/app/test/khung-man-chung.dom.tsx",
 	"apps/app/test/khung-man-chung.spec.ts",
 ];
