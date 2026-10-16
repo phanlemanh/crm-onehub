@@ -1,98 +1,97 @@
+# Review findings: tra-cuu-thuong-hieu-viet-nam (round 2)
+
 ## Trong hợp đồng
 
-- **Shape 5, quét LỚP nhưng chỉ có điểm-case: tên miền con mới phủ 4 trên 14 nền tảng**
-  AC: AC-4
-  file: `packages/validation/test/ten-mien-nen-tang.spec.ts:32`
-  severity: medium
-  detail: AC-4 hứa 'một tên miền con của mỗi nền tảng', E1 viết 'mỗi nền tảng một tên miền con'. Nhưng test 'ten mien con' (dòng 32-38) chỉ có 5 assert chép tay cho Facebook, LinkedIn, Zalo, TikTok (hai lần). 10 nền tảng còn lại (Instagram, Threads, YouTube, X, Telegram, Linktree, Batdongsan, Chợ Tốt, Alonhadat, Muaban) không có ca tên miền con nào. Không có ma trận theo NEN_TANG kiểu 'số assert = số nền tảng'. Nhánh `host.endsWith(`.${mien}`)` chỉ được chứng trên 4/14 phần tử của lớp mà eval tuyên là quét hết.
-  source: measurement
+Không có finding nào trong hợp đồng ở round này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Đọc raw lần tra trước hỏng thì bị nuốt thành 'không có lần trước'**
+- **Đọc raw lần tra trước hỏng thì bị nuốt thành 'không có lần trước' (r1)**
   Người dùng thấy gì: Nếu dữ liệu lưu của lần tra trước bị hỏng, «Tra cứu lại» lặng lẽ không thay các ô máy đã điền mà vẫn báo xong. Người dùng không thấy dấu hiệu nào.
   Căn cứ: Hiếm khi xảy ra (cần dữ liệu lưu bị hỏng), không mất dữ liệu, và rep tự sửa tay các ô đó được.
   file: `apps/agent/agent/lib/brand.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Bàn chụp chèn thẳng bảng company thay vì đi qua đường ghi thật**
+- **Bàn chụp chèn thẳng bảng company thay vì đi qua đường ghi thật (r1)**
   Người dùng thấy gì: Công ty mẫu dùng để chụp màn được tạo bằng đường tắt, nên ảnh chụp không chứng minh được dữ liệu do đường ghi thật tạo ra hiển thị đúng. Người dùng thật không bị ảnh hưởng.
   Căn cứ: Chỉ ảnh hưởng độ chắc của bằng chứng chụp màn, không đụng sản phẩm; cách làm này đã phổ biến ở nhiều bàn đo khác.
   file: `_acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Script backfill vẫn ép kiểu raw sau khi raw đã có module schema riêng**
+- **Script backfill vẫn ép kiểu raw sau khi raw đã có module schema riêng (r1)**
   Người dùng thấy gì: Một script chạy tay để điền lại ảnh thương hiệu vẫn đọc dữ liệu lưu theo cách cũ, nên về sau có thể lệch với phần còn lại khi khuôn dữ liệu đổi. Người dùng không thấy gì hiện nay.
   Căn cứ: Chỉ là nợ gọn code, chưa gây sai kết quả nào, và sửa sau không tốn kém.
   file: `apps/agent/scripts/backfill-brand-images.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Logic rút host bị chép thành bản thứ hai cạnh normalizeDomain**
+- **Logic rút host bị chép thành bản thứ hai cạnh normalizeDomain (r1)**
   Người dùng thấy gì: Có hai nơi cùng định nghĩa cách lấy tên miền từ chuỗi người dùng dán, nên sau này một nơi sửa mà nơi kia quên thì chặn nền tảng có thể lệch với phần lưu tên miền.
   Căn cứ: Hiện hai bản cho kết quả khớp nhau, chưa ai bị ảnh hưởng; sửa sau không mất dữ liệu.
   file: `packages/validation/src/ten-mien-nen-tang.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Tra cứu lại thay một phần địa chỉ máy điền, phần còn lại thành dữ liệu cũ và bị khoá vĩnh viễn**
+- **Tra cứu lại thay một phần địa chỉ máy điền, phần còn lại thành dữ liệu cũ và bị khoá vĩnh viễn (r1)**
   Người dùng thấy gì: Sau «Tra cứu lại», địa chỉ có thể lẫn cũ và mới, như «Hà Nội, CA, Việt Nam», và phần cũ còn sót không được máy thay nữa. Rep phải tự sửa tay.
   Căn cứ: Hiển thị sai nhưng không mất dữ liệu, chỉ khi kết quả mới thiếu trường; rep sửa tay được trong vài giây.
   file: `apps/agent/agent/lib/brand-mapping.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Tra cứu lại khi dữ liệu không đổi vẫn báo «đã điền» mọi trường máy điền và ghi lại cùng giá trị**
+- **Tra cứu lại khi dữ liệu không đổi vẫn báo «đã điền» mọi trường máy điền và ghi lại cùng giá trị (r1)**
   Người dùng thấy gì: Khi «Tra cứu lại» không có gì mới, Kara vẫn báo đã điền hàng loạt trường như thể có thay đổi. Rep có thể tưởng dữ liệu vừa được cập nhật.
   Căn cứ: Chỉ là câu báo gây hiểu lầm nhẹ, dữ liệu vẫn đúng và không mất gì.
   file: `apps/agent/agent/lib/brand-mapping.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Mô tả công cụ enrich_company vẫn nói chỉ điền ô trống, giờ đã sai**
+- **Mô tả công cụ enrich_company vẫn nói chỉ điền ô trống, giờ đã sai (r1)**
   Người dùng thấy gì: Kara có thể trả lời rep sai về «Tra cứu lại», ví dụ nói mô tả cũ sẽ không bị thay trong khi thực tế có thể bị thay.
   Căn cứ: Chỉ làm lời giải thích của Kara sai, dữ liệu không bị hại, và đổi một dòng chữ sau này rất rẻ.
   file: `apps/agent/agent/tools/enrich_company.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Script chụp màn E10 chèn thẳng bảng company, trái bước «Tạo qua API của bàn đo» trong evals.yaml**
+- **Script chụp màn E10 chèn thẳng bảng company, trái bước «Tạo qua API của bàn đo» trong evals.yaml (r1)**
   Người dùng thấy gì: Phép đo ghi là tạo công ty qua API nhưng thực tế được tạo bằng đường tắt, nên người chấm đọc mô tả sẽ thấy không khớp. Người dùng thật không bị ảnh hưởng.
   Căn cứ: Chỉ lệch giữa lời khai và cách làm của phép đo; ảnh vẫn cho thấy đúng thứ cần xem.
   file: `_acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 5, ma trận không viết trước: khẳng định đếm ca không thể đỏ**
+- **Shape 5, ma trận không viết trước: khẳng định đếm ca không thể đỏ (r1 · tệp đã đổi)**
   Người dùng thấy gì: Nếu ai đó lỡ xoá một tên miền nền tảng khỏi danh sách chặn, bài kiểm vẫn xanh, và tên miền đó sẽ lọt qua mà không ai hay.
   Căn cứ: Chỉ xảy ra khi danh sách bị sửa nhầm, và thêm lại tên miền vào danh sách là xong, không mất dữ liệu.
   file: `packages/validation/test/ten-mien-nen-tang.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 2, fixture VIẾT TAY bỏ qua writer: ca 'công ty tạo từ email' chèn thẳng bảng**
+- **Shape 2, fixture VIẾT TAY bỏ qua writer: ca 'công ty tạo từ email' chèn thẳng bảng (r1)**
   Người dùng thấy gì: Chưa có bài kiểm chứng rằng email kiểu @linkedin.com vẫn tạo được công ty. Nếu sau này đường tạo công ty từ email chặn nhầm, sẽ không ai phát hiện sớm.
   Căn cứ: Hợp đồng đã ghi rõ ca này ngoài phạm vi, và nếu hỏng thì chỉ thiếu công ty tự tạo, rep thêm tay được.
   file: `apps/agent/test/tra-cuu-thuong-hieu-viet-nam.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 4, assertion âm-tính-một-mình: ca 'raw hong khuon' không có đối chứng dương 'điền trường trống'**
+- **Shape 4, assertion âm-tính-một-mình: ca 'raw hong khuon' không có đối chứng dương 'điền trường trống' (r1)**
   Người dùng thấy gì: Chưa có bài kiểm chứng rằng khi dữ liệu lần tra trước hỏng, lần tra mới vẫn điền được các ô còn trống. Một lỗi ở đây có thể lọt mà không ai thấy.
   Căn cứ: Ca hiếm, ngoài hợp đồng, và nếu hỏng thì chỉ một vài ô trống không được điền, rep tự điền được.
   file: `apps/agent/test/tra-cuu-thuong-hieu-viet-nam.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 2, fixture VIẾT TAY: bản chụp E10 chèn công ty thẳng vào DB thay vì tạo qua API như bước eval**
+- **Shape 2, fixture VIẾT TAY: bản chụp E10 chèn công ty thẳng vào DB thay vì tạo qua API như bước eval (r1)**
   Người dùng thấy gì: Ảnh chụp màn dùng công ty mẫu tạo bằng đường tắt, nên chưa chứng minh dữ liệu từ đường ghi thật hiển thị đúng như vậy. Người dùng thật không bị ảnh hưởng.
   Căn cứ: Chỉ làm bằng chứng chụp màn yếu hơn một chút, không đụng sản phẩm hay dữ liệu.
   file: `_acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs`
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 2/13 lỗi rơi vào file không bộ đo nào phủ (apps/agent/scripts/backfill-brand-images.ts, apps/agent/agent/tools/enrich_company.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+## Chưa adversarial-verify (refuter chết)
+
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
