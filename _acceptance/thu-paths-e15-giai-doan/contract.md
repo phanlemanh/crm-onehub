@@ -5,7 +5,7 @@ slug: thu-paths-e15-giai-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-16T05:50:40Z
 design_doc: docs/superpowers/specs/2026-10-16-thu-paths-e15-giai-doan-design.md

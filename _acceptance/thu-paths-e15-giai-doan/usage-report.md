@@ -94,3 +94,42 @@ wall: 2259s
 - **claude-opus-5-5**: 3 agent · 40 calls · out 38,161 · in 80 · cache_read 2,909,497 · cache_create 292,122
 - **claude-sonnet-5-5**: 7 agent · 24 calls · out 29,629 · in 48 · cache_read 885,963 · cache_create 391,576
 
+### S4 round 3 — wf_be959df5-16d (18 agent, 66,753 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 20 | 22,033 | 40 | 1,071,637 | 1911 |
+| synthesize:report | claude-sonnet-5-5 | 9 | 8,652 | 18 | 582,945 | 84 |
+| review:bugs | claude-opus-5-5 | 10 | 8,589 | 20 | 538,686 | 146 |
+| review:measurement | claude-opus-5-5 | 7 | 7,081 | 14 | 342,405 | 83 |
+| review:conventions | claude-opus-5-5 | 6 | 4,270 | 12 | 264,707 | 52 |
+| baseline:diffBase | claude-sonnet-5-5 | 2 | 4,089 | 4 | 43,683 | 27 |
+| triage | claude-sonnet-5-5 | 2 | 2,024 | 4 | 42,329 | 17 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,776 | 4 | 42,654 | 11 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 1,209 | 4 | 42,699 | 17 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 1,096 | 4 | 42,773 | 29 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 911 | 4 | 5,738 | 342 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 820 | 4 | 42,654 | 267 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 802 | 4 | 42,679 | 268 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 774 | 4 | 42,709 | 72 |
+| machine:node _acceptance/thu-paths-e15-giai-doan | claude-haiku-5-5 | 2 | 761 | 4 | 42,724 | 8 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 748 | 4 | 42,652 | 39 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 692 | 4 | 42,648 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 426 | 4 | 38,574 | 9 |
+
+
+wall: 2023s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 4,089 | 43,683 | 28 | 11:13:51 | 11:14:19 |
+| machine | 11 | 31,622 | 1,461,567 | 1913 | 11:13:51 | 11:45:44 |
+| review | 3 | 19,940 | 1,145,798 | 147 | 11:13:51 | 11:16:18 |
+| triage | 1 | 2,024 | 42,329 | 17 | 11:45:44 | 11:46:01 |
+| capture | 1 | 426 | 38,574 | 9 | 11:46:01 | 11:46:10 |
+| synthesize | 1 | 8,652 | 582,945 | 84 | 11:46:10 | 11:47:34 |
+
+- **claude-haiku-5-5**: 11 agent · 40 calls · out 31,622 · in 80 · cache_read 1,461,567 · cache_create 526,172
+- **claude-sonnet-5-5**: 4 agent · 15 calls · out 15,191 · in 30 · cache_read 707,531 · cache_create 227,083
+- **claude-opus-5-5**: 3 agent · 23 calls · out 19,940 · in 46 · cache_read 1,145,798 · cache_create 210,253
+
