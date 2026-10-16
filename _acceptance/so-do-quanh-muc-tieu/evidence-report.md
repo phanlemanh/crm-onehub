@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e18a944dd2d155e2407c0c84e46f8a63fa93f19b
+verified_commit: 4e87e5a8b846ea8b90ccb76d51974e13cd4ac58a
 human_signoff: manh 2026-10-15
 ---
 
@@ -248,3 +248,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, deterministic)
 Round 1: ba lenh suite (api, app, lint:slop) do theo run-log; E2 va E4 la khung cua round nay. Returned to implementation.
 Round 2: bay lenh suite xanh; E5-E12, E14, E15 la khung cua round nay (E11 mang gioi han da khai KHONG-DO-DUOC cho .tsx, ve nhin-thay do E12 ganh).
 Round 3: E1, E3, E16 chay lai (E16 la rang soi-xem moi); bay lenh suite chay lai va xanh; cac eval con lai carry-forward vi delta khong cham paths. Ghi chu: verified_at cua muc round 3 la ngay chay (15/10), gio khong do duoc vi run-log round 3 chua duoc append luc soan report.
+
+### Re-pin lần 1 — 2026-10-16, do hoá cũ do gộp onehub f1bf84a29 (có DH4 #429, #427): okr.router.ts, messages-guard.spec.ts
+run_id: repin-20261016T083454Z-78445
+sha: 4e87e5a8b846ea8b90ccb76d51974e13cd4ac58a · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
