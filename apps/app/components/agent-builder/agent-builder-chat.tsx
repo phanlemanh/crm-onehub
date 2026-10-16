@@ -81,7 +81,6 @@ import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { builderStepLabel } from "@/lib/nhan-buoc";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { useSeconds } from "@/lib/use-seconds";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { AgentCodeWorkspace } from "./agent-code-workspace";
 import { AgentComposer, type BuilderPrompt } from "./agent-composer";
@@ -1133,9 +1132,6 @@ function BuildingAgentCard({
 
 	const writingPath =
 		artifacts.find((artifact) => artifact.status === "WRITING")?.path ?? null;
-	const now = useSeconds();
-	const daTroiMs =
-		startedAt && now > 0 ? Math.max(0, now - Date.parse(startedAt)) : 0;
 
 	return (
 		<TheDangDung
@@ -1145,7 +1141,7 @@ function BuildingAgentCard({
 			}))}
 			daXong={completed}
 			dangGhi={writingPath}
-			daTroiMs={daTroiMs}
+			batDauLuc={startedAt}
 			chu={t.dung}
 			nutDung={
 				<Button

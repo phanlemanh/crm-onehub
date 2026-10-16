@@ -47,7 +47,7 @@ function TheMau({
 			}))}
 			daXong={DA_XONG[state]}
 			dangGhi={DANG_GHI[state]}
-			daTroiMs={DA_TROI_MS[state]}
+			batDauLuc={new Date(Date.now() - DA_TROI_MS[state]).toISOString()}
 			chu={t.dung}
 			nutDung={
 				<Button variant="outline" size="sm">

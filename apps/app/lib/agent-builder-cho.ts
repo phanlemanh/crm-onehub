@@ -18,3 +18,9 @@ export function dongHoDaTroi(daTroiMs: number): string | null {
 export function laLauHonThuongLe(daTroiMs: number): boolean {
 	return daTroiMs >= CHO_TAC_NHAN.nguongLauMs;
 }
+
+export function daTroiTuLucGui(batDauLuc: string | null, now: number): number {
+	if (!batDauLuc || now <= 0) return 0;
+	const goc = Date.parse(batDauLuc);
+	return Number.isNaN(goc) ? 0 : Math.max(0, now - goc);
+}

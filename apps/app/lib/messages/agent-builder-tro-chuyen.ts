@@ -42,7 +42,7 @@ const en = {
 		dungHong: "The agent could not be stopped. Try again.",
 		dangThuLai: "Retrying",
 		daTroi: (dongHo: string) => `${dongHo} elapsed`,
-		lauHon: "Taking longer than usual. Kara is still building.",
+		lauHon: "Over 3 minutes now. Kara is still building.",
 		roiTrang:
 			"You can leave this page. Kara will tell you in notifications when it is done.",
 	},
@@ -264,7 +264,7 @@ const vi = {
 		dungHong: "Không dừng được tác nhân. Thử lại.",
 		dangThuLai: "Đang thử lại",
 		daTroi: (dongHo: string) => `Đã ${dongHo}`,
-		lauHon: "Lâu hơn thường lệ. Kara vẫn đang dựng.",
+		lauHon: "Đã quá 3 phút. Kara vẫn đang dựng.",
 		roiTrang: "Bạn có thể rời trang. Kara sẽ báo trong hộp thông báo khi xong.",
 	},
 	loi: {

@@ -13,7 +13,12 @@ import { DotMatrix } from "@crm/ui/components/dot-matrix";
 import { Icon } from "@crm/ui/components/icon";
 import { cn } from "@crm/ui/lib/utils";
 import type { ReactNode } from "react";
-import { dongHoDaTroi, laLauHonThuongLe } from "@/lib/agent-builder-cho";
+import {
+	daTroiTuLucGui,
+	dongHoDaTroi,
+	laLauHonThuongLe,
+} from "@/lib/agent-builder-cho";
+import { useSeconds } from "@/lib/use-seconds";
 
 export type BuocDung = {
 	nhan: string;
@@ -37,17 +42,18 @@ export function TheDangDung({
 	buoc,
 	daXong,
 	dangGhi,
-	daTroiMs,
+	batDauLuc,
 	chu,
 	nutDung,
 }: {
 	buoc: BuocDung[];
 	daXong: number;
 	dangGhi: string | null;
-	daTroiMs: number;
+	batDauLuc: string | null;
 	chu: ChuTheDangDung;
 	nutDung: ReactNode;
 }) {
+	const daTroiMs = daTroiTuLucGui(batDauLuc, useSeconds());
 	const dongHo = dongHoDaTroi(daTroiMs);
 	const lauHon = laLauHonThuongLe(daTroiMs);
 
