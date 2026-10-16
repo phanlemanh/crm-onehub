@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 82bfe4c848a7179b524b3f51007a19ab45243916
+verified_commit: 5de0f518b1b2ae0d70e5e0fd1baeeb8686fbae70
 human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_6a944dda-fd4, engine feature-loop 2.30.0). E17 Đạt; Ngoài-1, 3, 5, 10–17, 19, 20 ghi Known limits; Ngoài-2, 4, 6, 7, 8, 18 chấp nhận, không sửa (4, 7, 8 đã sửa qua AC-14); Ngoài-9 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -298,3 +298,7 @@ none — every multi-run eval is uniform
 
 Round 1: E5, E12 PASS (run_id hậu tố -r1) và được mang sang round 2 vì delta không chạm paths của chúng; chi tiết các eval còn lại của round 1 xem run-log.jsonl.
 Round 2: 17 eval máy và ui-check chạy lại đều PASS (E1–E4, E6–E11, E13–E16, E18–E20), 7 lệnh suite xanh; E17 (judgment, AC-13) UNCERTAIN chờ người ở Cổng 2, nên verdict PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-10-16, do hoá cũ do gộp onehub 04ddefc4f, sửa sau gộp (sàn giả, bỏ useEffect) và thước #415 theo AC-4 DH3
+run_id: repin-20261016T120436Z-82027
+sha: 5de0f518b1b2ae0d70e5e0fd1baeeb8686fbae70 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15, E17 (E17 không khai paths) · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
