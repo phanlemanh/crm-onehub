@@ -1147,7 +1147,7 @@ function BuildingAgentCard({
 			daXong={completed}
 			dangGhi={writingPath}
 			batDauLuc={startedAt}
-			chu={t.dung}
+			t={t}
 			nutDung={
 				<Button
 					variant="outline"

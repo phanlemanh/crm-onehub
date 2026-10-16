@@ -46,7 +46,7 @@ function veThe(
 				daXong={1}
 				dangGhi="agent/instructions.md"
 				batDauLuc={BAT_DAU}
-				chu={t.dung}
+				t={t}
 				nutDung={
 					<button type="button" onClick={onDung}>
 						{t.dung.dungLai}
@@ -112,7 +112,6 @@ describe("cho-tac-nhan-lau", () => {
 			});
 			const chu = k.textContent ?? "";
 			expect(chu, `loi hua chan the ${locale}`).toContain(t.dung.roiTrang);
-			expect(chu, `loi hua chan the ${locale}`).not.toContain(t.dung.chayNen);
 			const nut = [...k.querySelectorAll("button")].find(
 				(b) => b.textContent === t.dung.dungLai,
 			);

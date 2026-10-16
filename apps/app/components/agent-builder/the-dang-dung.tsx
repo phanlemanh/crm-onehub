@@ -18,6 +18,7 @@ import {
 	dongHoDaTroi,
 	laLauHonThuongLe,
 } from "@/lib/agent-builder-cho";
+import type { TroChuyenMessages } from "@/lib/messages/agent-builder-tro-chuyen";
 import { useSeconds } from "@/lib/use-seconds";
 
 export type BuocDung = {
@@ -25,32 +26,19 @@ export type BuocDung = {
 	vat: string | null;
 };
 
-export type ChuTheDangDung = {
-	dangDung: string;
-	tienDo: (xong: string) => string;
-	nhanTienDo: string;
-	xong: string;
-	dangLam: string;
-	dangXep: string;
-	dangGhi: (duong: string) => string;
-	daTroi: (dongHo: string) => string;
-	lauHon: string;
-	roiTrang: string;
-};
-
 export function TheDangDung({
 	buoc,
 	daXong,
 	dangGhi,
 	batDauLuc,
-	chu,
+	t,
 	nutDung,
 }: {
 	buoc: BuocDung[];
 	daXong: number;
 	dangGhi: string | null;
 	batDauLuc: string | null;
-	chu: ChuTheDangDung;
+	t: TroChuyenMessages;
 	nutDung: ReactNode;
 }) {
 	const daTroiMs = daTroiTuLucGui(batDauLuc, useSeconds());
@@ -60,16 +48,16 @@ export function TheDangDung({
 	return (
 		<Card className="w-full max-w-lg" data-slot="the-dang-dung">
 			<CardHeader>
-				<CardTitle>{chu.dangDung}</CardTitle>
+				<CardTitle>{t.dung.dangDung}</CardTitle>
 				<CardAction className="flex items-center gap-3 text-muted-foreground text-xs tabular-nums">
 					{dongHo ? (
-						<span data-slot="da-troi">{chu.daTroi(dongHo)}</span>
+						<span data-slot="da-troi">{t.dung.daTroi(dongHo)}</span>
 					) : null}
-					<span className="font-mono">{chu.tienDo(String(daXong))}</span>
+					<span className="font-mono">{t.dung.tienDo(String(daXong))}</span>
 				</CardAction>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-2">
-				<ol className="flex flex-col gap-1" aria-label={chu.nhanTienDo}>
+				<ol className="flex flex-col gap-1" aria-label={t.dung.nhanTienDo}>
 					{buoc.map(({ nhan, vat }, index) => {
 						const done = index < daXong;
 						const active = index === daXong && daXong < buoc.length;
@@ -116,15 +104,15 @@ export function TheDangDung({
 										{done && vat
 											? vat.replace("agent/", "")
 											: done
-												? chu.xong
+												? t.dung.xong
 												: active
-													? chu.dangLam
-													: chu.dangXep}
+													? t.dung.dangLam
+													: t.dung.dangXep}
 									</span>
 								</div>
 								{active && dangGhi ? (
 									<p className="pl-7 font-mono text-muted-foreground text-xs">
-										{chu.dangGhi(dangGhi)}
+										{t.dung.dangGhi(dangGhi)}
 									</p>
 								) : null}
 							</li>
@@ -136,13 +124,13 @@ export function TheDangDung({
 						className="px-2 text-pretty text-muted-foreground text-xs"
 						data-slot="lau-hon"
 					>
-						{chu.lauHon}
+						{t.dung.lauHon}
 					</p>
 				) : null}
 			</CardContent>
 			<CardFooter className="gap-2 border-t">
 				<p className="min-w-0 flex-1 text-pretty text-muted-foreground text-xs">
-					{chu.roiTrang}
+					{t.dung.roiTrang}
 				</p>
 				{nutDung}
 			</CardFooter>

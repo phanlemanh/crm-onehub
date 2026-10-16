@@ -3,6 +3,7 @@ import { db, Prisma } from "@crm/db";
 import { parseNoiDungThongBao, THONG_BAO } from "@crm/validation/thong-bao";
 import type { ChannelEvents } from "eve/channels";
 import { crmEvents } from "../agent/channels/crm";
+import audit from "../agent/hooks/audit";
 import { builderToken } from "../agent/lib/custom-agent-dispatch";
 import {
 	baoTacNhan,
@@ -13,11 +14,30 @@ import MAU_NOI_DUNG from "./fixtures/cho-tac-nhan-lau-noi-dung.json";
 type SuKien =
 	| "session.waiting"
 	| "session.failed"
+	| "turn.completed"
 	| "turn.failed"
 	| "turn.cancelled";
 
+type XuLyAudit = (
+	event: {
+		type: SuKien;
+		data: DuLieuLuot | DuLieuPhien | Record<never, never>;
+		meta: { id: string; at: string };
+	},
+	ctx: {
+		session: {
+			id: string;
+			auth: {
+				current: { attributes: Record<string, string> };
+				initiator: null;
+			};
+		};
+	},
+) => Promise<void>;
+
 const hau = crypto.randomUUID();
 const nguoi = `cho-tac-nhan-${hau}`;
+const nguoiGui = `cho-tac-nhan-gui-${hau}`;
 const TEN_TAC_NHAN = "Tóm tắt deal mỗi sáng";
 let agentId = "";
 let soPhienBan = 0;
@@ -36,13 +56,21 @@ const LOI_PHIEN = {
 	message: "hong",
 } satisfies DuLieuPhien;
 
-function xuLy<K extends SuKien>(suKien: K): NonNullable<ChannelEvents[K]> {
+type SuKienKenh = Exclude<SuKien, "turn.completed">;
+
+function xuLy<K extends SuKienKenh>(suKien: K): NonNullable<ChannelEvents[K]> {
 	const ham = crmEvents[suKien];
 	if (!ham) throw new Error(`kenh crm khong xu ly ${suKien}`);
 	return ham;
 }
 
-async function phat(suKien: SuKien, token: string): Promise<void> {
+function duLieu(suKien: SuKien): DuLieuLuot | DuLieuPhien | Record<never, never> {
+	if (suKien === "turn.failed") return LOI_LUOT;
+	if (suKien === "session.failed") return LOI_PHIEN;
+	return {};
+}
+
+async function quaKenh(suKien: SuKien, token: string): Promise<void> {
 	const k = kenh(token);
 	const ctx = undefined as never;
 	if (suKien === "session.waiting") await xuLy("session.waiting")({}, k, ctx);
@@ -50,7 +78,37 @@ async function phat(suKien: SuKien, token: string): Promise<void> {
 		await xuLy("turn.cancelled")({}, k, ctx);
 	else if (suKien === "turn.failed")
 		await xuLy("turn.failed")(LOI_LUOT, k, ctx);
-	else await xuLy("session.failed")(LOI_PHIEN, k, ctx);
+	else if (suKien === "session.failed")
+		await xuLy("session.failed")(LOI_PHIEN, k, ctx);
+}
+
+async function quaAudit(suKien: SuKien, conversationId: string): Promise<void> {
+	const xuLyAudit = audit.events["*"] as unknown as XuLyAudit;
+	await xuLyAudit(
+		{
+			type: suKien,
+			data: duLieu(suKien),
+			meta: { id: `evt_${crypto.randomUUID()}`, at: new Date().toISOString() },
+		},
+		{
+			session: {
+				id: `ses_${conversationId}`,
+				auth: {
+					current: { attributes: { purpose: "builder", conversationId } },
+					initiator: null,
+				},
+			},
+		},
+	);
+}
+
+async function phat(
+	suKien: SuKien,
+	conversationId: string,
+	token = builderToken(conversationId),
+): Promise<void> {
+	await quaKenh(suKien, token);
+	await quaAudit(suKien, conversationId);
 }
 
 async function taoHoiThoai(): Promise<string> {
@@ -68,7 +126,7 @@ async function gui(
 	const s = await db.agentConversationSubmission.create({
 		data: {
 			conversationId,
-			submittedById: nguoi,
+			submittedById: nguoiGui,
 			clientRequestId: `gui-${crypto.randomUUID()}`,
 			commandType,
 			message: { text: "dung tac nhan", resources: [], attachments: [] },
@@ -120,8 +178,12 @@ async function dong(conversationId: string) {
 }
 
 beforeAll(async () => {
-	await db.user.create({
-		data: { id: nguoi, name: nguoi, email: `${nguoi}@example.test` },
+	await db.user.createMany({
+		data: [nguoi, nguoiGui].map((id) => ({
+			id,
+			name: id,
+			email: `${id}@example.test`,
+		})),
 	});
 	const agent = await db.agentDefinition.create({
 		data: { name: TEN_TAC_NHAN, status: "DRAFT", createdById: nguoi },
@@ -135,11 +197,11 @@ afterAll(async () => {
 	await db.agentVersion.deleteMany({ where: { agentId } });
 	await db.agentConversation.deleteMany({ where: { userId: nguoi } });
 	await db.agentDefinition.deleteMany({ where: { id: agentId } });
-	await db.user.deleteMany({ where: { id: nguoi } });
+	await db.user.deleteMany({ where: { id: { in: [nguoi, nguoiGui] } } });
 });
 
 describe("cho-tac-nhan-lau", () => {
-	test("bao-khi-xong: ma tran viet truoc 9 o", async () => {
+	test("bao-khi-xong: ma tran viet truoc 11 o", async () => {
 		const MA_TRAN: Array<{
 			ten: string;
 			chay: (id: string) => Promise<void>;
@@ -150,7 +212,8 @@ describe("cho-tac-nhan-lau", () => {
 				chay: async (id) => {
 					await gui(id);
 					await luuBanNhap(id);
-					await phat("session.waiting", builderToken(id));
+					await phat("turn.completed", id);
+					await phat("session.waiting", id);
 				},
 				loai: ["tac-nhan-xong"],
 			},
@@ -159,7 +222,7 @@ describe("cho-tac-nhan-lau", () => {
 				chay: async (id) => {
 					await gui(id);
 					await hoiCho(id, true);
-					await phat("session.waiting", builderToken(id));
+					await phat("session.waiting", id);
 				},
 				loai: ["tac-nhan-can-tra-loi"],
 			},
@@ -167,7 +230,7 @@ describe("cho-tac-nhan-lau", () => {
 				ten: "session.failed -> hong",
 				chay: async (id) => {
 					await gui(id);
-					await phat("session.failed", builderToken(id));
+					await phat("session.failed", id);
 				},
 				loai: ["tac-nhan-hong"],
 			},
@@ -175,26 +238,52 @@ describe("cho-tac-nhan-lau", () => {
 				ten: "turn.failed -> hong",
 				chay: async (id) => {
 					await gui(id);
-					await phat("turn.failed", builderToken(id));
+					await phat("turn.failed", id);
 				},
 				loai: ["tac-nhan-hong"],
 			},
 			{
-				ten: "turn.cancelled roi waiting -> khong bao",
+				ten: "da luu ban nhap roi nguoi dung dung -> khong bao",
 				chay: async (id) => {
 					await gui(id);
-					await phat("turn.cancelled", builderToken(id));
-					await phat("session.waiting", builderToken(id));
+					await luuBanNhap(id);
+					await phat("turn.cancelled", id);
+					await phat("session.waiting", id);
 				},
 				loai: [],
+			},
+			{
+				ten: "co cau hoi cho roi nguoi dung dung -> khong bao",
+				chay: async (id) => {
+					await gui(id);
+					await hoiCho(id, true);
+					await phat("turn.cancelled", id);
+					await phat("session.waiting", id);
+				},
+				loai: [],
+			},
+			{
+				ten: "luot truoc bi dung, luot sau xong -> 1 xong",
+				chay: async (id) => {
+					await gui(id);
+					await luuBanNhap(id);
+					await phat("turn.cancelled", id);
+					await phat("session.waiting", id);
+					await gui(id);
+					await luuBanNhap(id);
+					await phat("turn.completed", id);
+					await phat("session.waiting", id);
+				},
+				loai: ["tac-nhan-xong"],
 			},
 			{
 				ten: "waiting lap lai cung luot -> van 1",
 				chay: async (id) => {
 					await gui(id);
 					await luuBanNhap(id);
-					await phat("session.waiting", builderToken(id));
-					await phat("session.waiting", builderToken(id));
+					await phat("turn.completed", id);
+					await phat("session.waiting", id);
+					await phat("session.waiting", id);
 				},
 				loai: ["tac-nhan-xong"],
 			},
@@ -203,10 +292,12 @@ describe("cho-tac-nhan-lau", () => {
 				chay: async (id) => {
 					await gui(id);
 					await luuBanNhap(id);
-					await phat("session.waiting", builderToken(id));
+					await phat("turn.completed", id);
+					await phat("session.waiting", id);
 					await gui(id);
 					await luuBanNhap(id);
-					await phat("session.waiting", builderToken(id));
+					await phat("turn.completed", id);
+					await phat("session.waiting", id);
 				},
 				loai: ["tac-nhan-xong", "tac-nhan-xong"],
 			},
@@ -215,11 +306,12 @@ describe("cho-tac-nhan-lau", () => {
 				chay: async (id) => {
 					await gui(id);
 					await hoiCho(id, true);
-					await phat("session.waiting", builderToken(id));
+					await phat("session.waiting", id);
 					await gui(id);
 					await hoiCho(id, false);
 					await luuBanNhap(id);
-					await phat("session.waiting", builderToken(id));
+					await phat("turn.completed", id);
+					await phat("session.waiting", id);
 				},
 				loai: ["tac-nhan-can-tra-loi", "tac-nhan-xong"],
 			},
@@ -227,8 +319,8 @@ describe("cho-tac-nhan-lau", () => {
 				ten: "turn.failed roi session.failed cung luot -> 1",
 				chay: async (id) => {
 					await gui(id);
-					await phat("turn.failed", builderToken(id));
-					await phat("session.failed", builderToken(id));
+					await phat("turn.failed", id);
+					await phat("session.failed", id);
 				},
 				loai: ["tac-nhan-hong"],
 			},
@@ -286,17 +378,33 @@ describe("cho-tac-nhan-lau", () => {
 	test("bao-khi-xong: doi chung — luot tro chuyen va token khong phai bo dung", async () => {
 		const id = await taoHoiThoai();
 		await gui(id, "CHAT");
-		await phat("session.waiting", builderToken(id));
-		await phat("turn.failed", builderToken(id));
+		await phat("session.waiting", id);
+		await phat("turn.failed", id);
 		expect(
 			await dong(id),
 			"luot tro chuyen khong co ban nhap -> khong bao",
 		).toEqual([]);
 		const truoc = await db.thongBao.count({ where: { nguoiNhanId: nguoi } });
-		await phat("session.waiting", "khong-phai-bo-dung");
+		await quaKenh("session.waiting", "khong-phai-bo-dung");
 		expect(await db.thongBao.count({ where: { nguoiNhanId: nguoi } })).toBe(
 			truoc,
 		);
+	});
+
+	test("chan-trung: hai su kien cung luot o hai ngay VN -> van 1", async () => {
+		const id = await taoHoiThoai();
+		await gui(id);
+		const truocNuaDem = new Date("2026-10-16T16:59:59.000Z");
+		const sauNuaDem = new Date("2026-10-16T17:00:30.000Z");
+		expect(
+			await ghiThongBaoTacNhan(db, id, "hong", truocNuaDem),
+			"lan dau ghi",
+		).toBe(true);
+		expect(
+			await ghiThongBaoTacNhan(db, id, "hong", sauNuaDem),
+			"cung luot sang ngay moi khong ghi them",
+		).toBe(false);
+		expect((await dong(id)).map((d) => d.nd.loai)).toEqual(["tac-nhan-hong"]);
 	});
 
 	test("ghi-hong: bo ghi nem loi thi vong doi van ghi va khong nem", async () => {
@@ -304,25 +412,53 @@ describe("cho-tac-nhan-lau", () => {
 		await gui(id);
 		await luuBanNhap(id);
 		const loi = spyOn(console, "error").mockImplementation(() => {});
+		await db.$executeRawUnsafe(
+			`CREATE OR REPLACE FUNCTION ctnl_tu_choi() RETURNS trigger AS $$ BEGIN RAISE EXCEPTION 'co so du lieu tu choi'; END $$ LANGUAGE plpgsql`,
+		);
+		await db.$executeRawUnsafe(
+			`CREATE TRIGGER ctnl_tu_choi BEFORE INSERT ON "thongBao" FOR EACH ROW WHEN (NEW."nguoiNhanId" = '${nguoi}') EXECUTE FUNCTION ctnl_tu_choi()`,
+		);
 		try {
-			await baoTacNhan(id, "cho", async () => {
-				throw new Error("co so du lieu tu choi");
+			await phat("turn.completed", id);
+			await phat("session.waiting", id);
+			const sauCho = await db.agentConversation.findUniqueOrThrow({
+				where: { id },
+				select: { continuationToken: true },
 			});
-			expect(
-				loi.mock.calls.map((g) => String(g[0])),
-				"thong bao tac nhan",
-			).toContain(`[agent] thong bao tac nhan ${id}: co so du lieu tu choi`);
+			expect(sauCho.continuationToken, "waiting van ghi token").toBe(
+				builderToken(id),
+			);
+
+			await db.agentConversation.update({
+				where: { id },
+				data: { continuationToken: null, lastAssistantAt: null },
+			});
+			await phat("session.failed", id);
+			const sauHong = await db.agentConversation.findUniqueOrThrow({
+				where: { id },
+				select: { continuationToken: true, lastAssistantAt: true },
+			});
+			expect(sauHong.continuationToken, "failed van ghi token").toBe(
+				builderToken(id),
+			);
+			expect(sauHong.lastAssistantAt, "failed van ghi lastAssistantAt").not.toBeNull();
+
+			const dongLoi = loi.mock.calls
+				.map((g) => String(g[0]))
+				.filter((d) => d.startsWith(`[agent] thong bao tac nhan ${id}:`));
+			expect(dongLoi.length, "ca waiting va failed deu cham bo ghi va bi tu choi").toBe(2);
+			for (const d of dongLoi)
+				expect(d, "thong bao tac nhan").toContain("co so du lieu tu choi");
 		} finally {
+			await db.$executeRawUnsafe(
+				`DROP TRIGGER IF EXISTS ctnl_tu_choi ON "thongBao"`,
+			);
+			await db.$executeRawUnsafe("DROP FUNCTION IF EXISTS ctnl_tu_choi()");
 			loi.mockRestore();
 		}
 		expect(await dong(id), "bo ghi hong -> khong dong nao").toEqual([]);
 
-		await phat("session.waiting", builderToken(id));
-		const h = await db.agentConversation.findUniqueOrThrow({
-			where: { id },
-			select: { continuationToken: true },
-		});
-		expect(h.continuationToken, "vong doi van ghi").toBe(builderToken(id));
+		await phat("session.waiting", id);
 		expect(
 			(await dong(id)).map((d) => d.nd.loai),
 			"doi chung: bo ghi that thi co dong",
@@ -331,5 +467,17 @@ describe("cho-tac-nhan-lau", () => {
 			await ghiThongBaoTacNhan(db, id, "cho", new Date()),
 			"ghi lai cung luot thi khong them",
 		).toBe(false);
+	});
+
+	test("bao-tac-nhan: loi bo ghi khong lot ra ngoai", async () => {
+		const loi = spyOn(console, "error").mockImplementation(() => {});
+		try {
+			await baoTacNhan("khong-ton-tai", "cho", async () => {
+				throw new Error("co so du lieu tu choi");
+			});
+			expect(loi).toHaveBeenCalledTimes(1);
+		} finally {
+			loi.mockRestore();
+		}
 	});
 });

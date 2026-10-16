@@ -1163,6 +1163,7 @@ const GHIM = {
 		"Đã chuyển 1 mục tiêu sang A.",
 		"Đã chuyển 12 mục tiêu sang A.",
 	],
+	"agent-builder-tro-chuyen:dung.daTroi": ["Đã 1", "Đã 12"],
 } satisfies Record<string, [string, string]>;
 
 describe("kho chuoi cua vong ③a", () => {

@@ -8,11 +8,34 @@ import {
 
 export type KetThucLuot = "cho" | "hong";
 
+const SU_KIEN_HET_LUOT = ["turn.completed", "turn.failed", "turn.cancelled"];
+
+async function nguoiDungDaDung(
+	db: Db,
+	conversationId: string,
+	tuLuc: Date,
+): Promise<boolean> {
+	const cuoi = await db.agentEvent.findFirst({
+		where: {
+			conversationId,
+			type: { in: SU_KIEN_HET_LUOT },
+			emittedAt: { gte: tuLuc },
+		},
+		orderBy: { emittedAt: "desc" },
+		select: { type: true },
+	});
+	return cuoi?.type === "turn.cancelled";
+}
+
 export async function noiDungTacNhan(
 	db: Db,
 	conversationId: string,
 	ketThuc: KetThucLuot,
-): Promise<{ nguoiNhanId: string; noiDung: NoiDungThongBao } | null> {
+): Promise<{
+	nguoiNhanId: string;
+	luotLuc: Date;
+	noiDung: NoiDungThongBao;
+} | null> {
 	const hoiThoai = await db.agentConversation.findFirst({
 		where: { id: conversationId, kind: "BUILDER" },
 		select: {
@@ -39,6 +62,7 @@ export async function noiDungTacNhan(
 		if (luot.commandType !== "CREATE_AGENT") return null;
 		return {
 			nguoiNhanId: hoiThoai.userId,
+			luotLuc: luot.createdAt,
 			noiDung: { loai: "tac-nhan-hong", ...chung },
 		};
 	}
@@ -46,9 +70,12 @@ export async function noiDungTacNhan(
 	if (hoiThoai.pendingInputRequest !== null) {
 		return {
 			nguoiNhanId: hoiThoai.userId,
+			luotLuc: luot.createdAt,
 			noiDung: { loai: "tac-nhan-can-tra-loi", ...chung },
 		};
 	}
+
+	if (await nguoiDungDaDung(db, conversationId, luot.createdAt)) return null;
 
 	const banMoi = await db.agentVersion.findFirst({
 		where: {
@@ -61,6 +88,7 @@ export async function noiDungTacNhan(
 	if (!banMoi) return null;
 	return {
 		nguoiNhanId: hoiThoai.userId,
+		luotLuc: luot.createdAt,
 		noiDung: {
 			loai: "tac-nhan-xong",
 			...chung,
@@ -78,6 +106,7 @@ export async function ghiThongBaoTacNhan(
 	const kq = await noiDungTacNhan(db, conversationId, ketThuc);
 	if (!kq) return false;
 	const homNay = ngayVN(now);
+	const ngayLuot = ngayVN(kq.luotLuc);
 	const ghi = await db.thongBao.createMany({
 		data: [
 			{
@@ -86,7 +115,7 @@ export async function ghiThongBaoTacNhan(
 				khoa: khoaThongBao(kq.noiDung, now),
 				noiDung: kq.noiDung,
 				duongDan: `/chat/${conversationId}`,
-				ngayDau: homNay,
+				ngayDau: ngayLuot,
 				thayNgay: homNay,
 				taoLuc: now,
 			},
