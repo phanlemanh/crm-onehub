@@ -45,3 +45,41 @@ wall: 1106s
 - **claude-sonnet-5-5**: 7 agent · 17 calls · out 29,314 · in 34 · cache_read 513,114 · cache_create 427,665
 - **claude-haiku-5-5**: 15 agent · 30 calls · out 17,732 · in 60 · cache_read 594,831 · cache_create 668,327
 
+### S4 round 2 — wf_878d9e48-db1 (18 agent, 35,190 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 4 | 6,760 | 8 | 181,347 | 46 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 3,874 | 4 | 42,441 | 76 |
+| judge:E3:operational-feasibility | claude-sonnet-5-5 | 2 | 3,396 | 4 | 43,120 | 25 |
+| review:bugs | claude-opus-5-5 | 11 | 2,966 | 22 | 556,049 | 78 |
+| judge:E3:spec-alignment | claude-sonnet-5-5 | 2 | 2,165 | 4 | 43,118 | 18 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 2,147 | 4 | 2,869 | 326 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 2,113 | 4 | 42,443 | 12 |
+| judge:E3:domain-correctness | claude-sonnet-5-5 | 2 | 1,886 | 4 | 39,756 | 16 |
+| review:measurement | claude-opus-5-5 | 5 | 1,742 | 10 | 205,130 | 31 |
+| review:conventions | claude-opus-5-5 | 5 | 1,594 | 10 | 183,598 | 28 |
+| machine:bun _acceptance/ghim-thuoc-soi-xem-okr/r | claude-haiku-5-5 | 2 | 1,103 | 4 | 42,490 | 11 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 991 | 4 | 42,498 | 75 |
+| machine:bun _acceptance/gioi-han-duyet-cay-okr/r | claude-haiku-5-5 | 2 | 944 | 4 | 42,487 | 8 |
+| machine:bun _acceptance/ghim-thuoc-soi-xem-okr/r | claude-haiku-5-5 | 2 | 869 | 4 | 42,490 | 23 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 850 | 4 | 42,468 | 248 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 690 | 4 | 42,443 | 273 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 689 | 4 | 42,437 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 411 | 4 | 38,364 | 8 |
+
+
+wall: 1073s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 10 | 14,270 | 385,066 | 1018 | 01:57:37 | 02:14:36 |
+| judge | 3 | 7,447 | 125,994 | 27 | 01:57:37 | 01:58:04 |
+| review | 3 | 6,302 | 944,777 | 80 | 01:57:37 | 01:58:57 |
+| capture | 1 | 411 | 38,364 | 8 | 02:14:36 | 02:14:44 |
+| synthesize | 1 | 6,760 | 181,347 | 46 | 02:14:44 | 02:15:30 |
+
+- **claude-sonnet-5-5**: 5 agent · 12 calls · out 14,618 · in 24 · cache_read 345,705 · cache_create 315,962
+- **claude-haiku-5-5**: 10 agent · 20 calls · out 14,270 · in 40 · cache_read 385,066 · cache_create 459,716
+- **claude-opus-5-5**: 3 agent · 21 calls · out 6,302 · in 42 · cache_read 944,777 · cache_create 182,360
+
