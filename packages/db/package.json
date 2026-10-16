@@ -71,6 +71,7 @@
 		"./zalo-lien-ket": "./src/zalo-lien-ket.ts",
 		"./test/*": "./test/*.ts",
 		"./vai-doi-tac": "./src/vai-doi-tac.ts",
+		"./du-an": "./src/du-an.ts",
 		"./lich-lam-viec": "./src/lich-lam-viec.ts",
 		"./lich-viec": "./src/lich-viec.ts",
 		"./viec": "./src/viec.ts",

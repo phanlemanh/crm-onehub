@@ -74,6 +74,8 @@ const en = {
 			khuon: "from the 30-day plan template",
 			"ke-hoach": "from the 30-day plan steps",
 			"dong-ke-hoach": "when the 30-day plan was closed",
+			gantt: "on the Gantt chart",
+			"tu-doi": "rescheduled automatically",
 		},
 		loai: {
 			tao: "created the work",
@@ -88,6 +90,15 @@ const en = {
 			"chuyen-viec": "handed it over",
 			"go-do-ban-ghi-xoa": "unlinked {ten} because the record was deleted",
 			"them-viec-con": "added subtask {ten}",
+			"doi-bat-dau": "set the start date to {ngay}",
+			"doi-han-tu-doi":
+				"moved the due date from {truoc} to {sau} because «{viec}» moved",
+			"doi-bat-dau-tu-doi":
+				"moved the start date from {truoc} to {sau} because «{viec}» moved",
+			"vao-du-an": "moved it into project {ten}",
+			"ra-du-an": "took it out of project {ten}",
+			"them-phu-thuoc": "made it wait for «{ten}»",
+			"go-phu-thuoc": "stopped it waiting for «{ten}»",
 		},
 	},
 	xoa: {
@@ -239,6 +250,8 @@ const vi: ViecMessages = {
 			khuon: "từ khuôn kế hoạch 30 ngày",
 			"ke-hoach": "trên thẻ Bước của kế hoạch 30 ngày",
 			"dong-ke-hoach": "khi đóng kế hoạch 30 ngày",
+			gantt: "trên Gantt",
+			"tu-doi": "máy tự dời",
 		},
 		loai: {
 			tao: "tạo việc",
@@ -253,6 +266,14 @@ const vi: ViecMessages = {
 			"chuyen-viec": "chuyển việc 30 ngày",
 			"go-do-ban-ghi-xoa": "gỡ {ten} vì bản ghi đã bị xoá",
 			"them-viec-con": "thêm việc con {ten}",
+			"doi-bat-dau": "đổi ngày bắt đầu sang {ngay}",
+			"doi-han-tu-doi": "dời hạn từ {truoc} sang {sau} vì «{viec}» dời",
+			"doi-bat-dau-tu-doi":
+				"dời ngày bắt đầu từ {truoc} sang {sau} vì «{viec}» dời",
+			"vao-du-an": "đưa vào dự án {ten}",
+			"ra-du-an": "đưa ra khỏi dự án {ten}",
+			"them-phu-thuoc": "đặt việc phải chờ «{ten}»",
+			"go-phu-thuoc": "gỡ việc phải chờ «{ten}»",
 		},
 	},
 	xoa: {
