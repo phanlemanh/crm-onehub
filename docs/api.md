@@ -710,7 +710,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   same tree that decides edit rights, no extra query); the morning reminder and the
   agent build it with `nguCanhXemOkr`, and a test compares the two head sets on the
   sample OKR set. `_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem` fails on
-  a read without the condition unless `MIEN_XEM` names it with a reason.
+  a read without the condition unless `MIEN_XEM` names it with a reason. The
+  `acceptance gate` job of `.github/workflows/acceptance.yml` runs it on every pull request
+  and on every push to `onehub`.
   - Lists (`byUnit`, `mine`, `danhSach`, `bangCham`, `xuatKy`, `khoiCuaToi`) leave
     the objective out, and counts and pages do not include it.
   - Reads by id (`objective`, `dienBien`, `canhKr`, `comments`, `lichSuSo`,
