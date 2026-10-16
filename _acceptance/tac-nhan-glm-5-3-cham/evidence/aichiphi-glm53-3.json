@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "evt_01M52C3PBXD1XDYM7S904KHW04",
+    "at": "2026-10-16T05:48:37.245Z",
+    "sessionId": "wrun_01M52C0DC6ACSQQ4H4PKV44HXG",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 10904,
+    "outputTokens": 655,
+    "costUsd": 0.015705
+  },
+  {
+    "id": "evt_01M52C46SMPDW058WNRJ57TDA0",
+    "at": "2026-10-16T05:48:54.068Z",
+    "sessionId": "wrun_01M52C0DC6ACSQQ4H4PKV44HXG",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 11575,
+    "outputTokens": 355,
+    "costUsd": 0.01531
+  },
+  {
+    "id": "evt_01M52C4JMEPZ8G6WSH5ZP91FS5",
+    "at": "2026-10-16T05:49:06.190Z",
+    "sessionId": "wrun_01M52C46YNG8VZ47J6ANN01DJE",
+    "phienCha": "wrun_01M52C0DC6ACSQQ4H4PKV44HXG",
+    "modelId": null,
+    "inputTokens": 3973,
+    "outputTokens": 24,
+    "costUsd": 0.004864
+  }
+]

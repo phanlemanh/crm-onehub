@@ -8,45 +8,41 @@
 [agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
 [agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
 [33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-relative-extension-resolver (66%)
-  - eve-authored-asset-import (28%)
-See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
-
-[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-asset-import (53%)
-  - eve-authored-relative-extension-resolver (21%)
-See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
-
-[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-relative-extension-resolver (66%)
-  - eve-authored-asset-import (30%)
-See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
-
-[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-relative-extension-resolver (63%)
-  - eve-authored-asset-import (33%)
-See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
-
-[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-relative-extension-resolver (66%)
-  - eve-authored-asset-import (30%)
-See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
-
-[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-relative-extension-resolver (61%)
+  - eve-authored-relative-extension-resolver (64%)
   - eve-authored-asset-import (32%)
 See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
 
 [33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-relative-extension-resolver (63%)
-  - eve-authored-asset-import (34%)
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (32%)
 See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
 
 [33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
-  - eve-authored-relative-extension-resolver (60%)
-  - eve-authored-asset-import (33%)
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (29%)
 See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
 
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[eve:dev] 1 active local Workflow run(s) reference development generations that no longer exist (mvarrehn-5e5aba4d-0a1a-440d-9a90-473713f9ad65). Their deliveries are quarantined; remove ".eve/.workflow-data" to discard the app's active local Workflow runs.
 [agent] off  Web research (PERPLEXITY_API_KEY)
 [agent] off  Company brand data (Settings → General)
 [agent] off  LinkedIn (Settings → General)
@@ -57,51 +53,45 @@ See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more det
 [agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
 [agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
 
-<--- Last few GCs --->
+EVALS 1
+target http://127.0.0.1:53806/
 
-[49496:0xa9f40c000]    86717 ms: Mark-Compact 4093.1 (4103.0) -> 4093.1 (4103.8) MB, pooled: 0.8 MB, 652.41 / 0.00 ms (average mu = 0.093, current mu = 0.003) allocation failure; scavenge might not succeed
-[49496:0xa9f40c000]    87020 ms: Mark-Compact 4093.1 (4103.8) -> 4093.1 (4103.8) MB, pooled: 0.8 MB, 302.22 / 0.00 ms (average mu = 0.060, current mu = 0.000) allocation failure; scavenge might not succeed
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] ▸ session wrun_01M52C8K60ETF4WR69Y21YXXPW on channel:crm
+[agent] » Submission id: cmvayv02w0001gptysow6u8qo
 
-FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
------ Native stack trace -----
+Build me an agent that gives me a snapshot of our CRM accounts.
+[agent] → set_chat_title title=CRM account snapshot agent
+[agent] ✓ set_chat_title 0.0s
+[agent] · step 0 tool-calls  in 10.9k out 16 $0.0153
+[agent] → subagent agent_builder message=The user (a rep at this company, using Comp AI …
+[agent] · step 1 tool-calls  in 10.9k out 276 $0.0164
+[agent] ✓ subagent agent_builder 109.0s
+[agent] ◂ Your "CRM Account Snapshot" agent has been created as a draft — here's what it does:
 
- 1: 0x107c5e848 node::OOMErrorHandler(char const*, v8::OOMDetails const&) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 2: 0x106cbaa30 v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, v8::OOMDetails const&) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 3: 0x106cba9e0 v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, v8::OOMDetails const&) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 4: 0x106e778fc v8::internal::Heap::IsLoadingInitialized() const [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 5: 0x106e76db0 v8::internal::Heap::OldGenerationConsumedBytes() const [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 6: 0x106e76158 v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags, v8::internal::PerformHeapLimitCheck, v8::internal::PerformIneffectiveMarkCompactCheck) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 7: 0x106e6d4c0 v8::internal::HeapAllocator::CollectGarbageAndRetryAllocation(v8::base::FunctionRef<bool ()>, v8::internal::AllocationType) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 8: 0x106e6d3c0 v8::internal::HeapAllocator::RetryCustomAllocate(v8::base::FunctionRef<bool ()>, v8::internal::AllocationType) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
- 9: 0x106e6ce90 v8::internal::HeapAllocator::RetryCustomAllocateOrFail(v8::base::FunctionRef<bool ()>, v8::internal::AllocationType) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-10: 0x106e6cde8 v8::internal::HeapAllocator::AllocateRawSlowPath(v8::internal::HeapAllocator::AllocationRetryMode, int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment, v8::internal::AllocationHint) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-11: 0x106e53640 v8::internal::Factory::NewFillerObject(int, v8::internal::AllocationAlignment, v8::internal::AllocationType, v8::internal::AllocationOrigin) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-12: 0x107172378 v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-13: 0x1075fccac Builtins_CEntry_Return1_ArgvOnStack_NoBuiltinExit [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-14: 0x107558e68 Builtins_StringSubstring [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-15: 0x11a0d48bc 
-16: 0x10762c868 Builtins_ArrayMap [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-17: 0x119c55ebc 
-18: 0x107597764 Builtins_AsyncFunctionAwaitResolveClosure [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-19: 0x107675458 Builtins_PromiseFulfillReactionJob [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-20: 0x107586904 Builtins_RunMicrotasks [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-21: 0x107556678 Builtins_JSRunMicrotasksEntry [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-22: 0x106dd4b6c v8::internal::(anonymous namespace)::Invoke(v8::internal::Isolate*, v8::internal::(anonymous namespace)::InvokeParams const&) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-23: 0x106dd4fb0 v8::internal::(anonymous namespace)::InvokeWithTryCatch(v8::internal::Isolate*, v8::internal::(anonymous namespace)::InvokeParams const&) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-24: 0x106dd50a0 v8::internal::Execution::TryRunMicrotasks(v8::internal::Isolate*, v8::internal::MicrotaskQueue*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-25: 0x106df71ec v8::internal::MicrotaskQueue::RunMicrotasks(v8::internal::Isolate*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-26: 0x106df7008 v8::internal::MicrotaskQueue::PerformCheckpointInternal(v8::Isolate*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-27: 0x106a87f90 node::InternalCallbackScope::Close() [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-28: 0x106a87e18 node::InternalCallbackScope::~InternalCallbackScope() [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-29: 0x107c5d394 node::fs::FSReqPromise<node::AliasedBufferBase<double, v8::Float64Array>>::Resolve(v8::Local<v8::Value>) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-30: 0x106b36178 node::fs::AfterScanDir(uv_fs_s*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-31: 0x106b2a110 node::MakeLibuvRequestCallback<uv_fs_s, void (*)(uv_fs_s*)>::Wrapper(uv_fs_s*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-32: 0x1021cae64 uv__work_done [/opt/homebrew/Cellar/libuv/1.52.1/lib/libuv.1.0.0.dylib]
-33: 0x1021ce3cc uv__async_io [/opt/homebrew/Cellar/libuv/1.52.1/lib/libuv.1.0.0.dylib]
-34: 0x1021dd1b0 uv__io_poll [/opt/homebrew/Cellar/libuv/1.52.1/lib/libuv.1.0.0.dylib]
-35: 0x1021ceb64 uv_run [/opt/homebrew/Cellar/libuv/1.52.1/lib/libuv.1.0.0.dylib]
-36: 0x106a88fd0 node::SpinEventLoopInternal(node::Environment*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-37: 0x106b5ff60 node::NodeMainInstance::Run(node::ExitCode*, node::Environment*) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-38: 0x106b5fc94 node::NodeMainInstance::Run() [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-39: 0x106b01268 node::Start(int, char**) [/opt/homebrew/Cellar/node/26.7.0/lib/libnode.147.dylib]
-40: 0x194775d54 start [/usr/lib/dyld]
+**What it covers**
+- Reads every company (account) record across the workspace, along with each account's contacts, deals, and recent notes/tasks
+- Produces a per-account overview: contact count, open deals, pipel…
+[agent] · step 1 stop  in 11.4k out 276 cached 11.1k $0.0044
+✓  agent-builder  gates 10/10
+
+Results: 1 passed (1 total)
+Gates: 10 passed
+
+Completed in 2m 55s
+
+[world-local] Queue message failed (attempt 1, HTTP 503) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//turnWorkflow',
+  messageId: 'msg_01M52CDB5VSQJHPKQZ77DFNPTX',
+  runId: 'wrun_01M52C8KNT3HHZKJGP0J39Z23T',
+  handlerError: '{"error":"socket hang up"}'
+}
+[eve:dev] failed to stop development sandbox resources: configure is not a function
