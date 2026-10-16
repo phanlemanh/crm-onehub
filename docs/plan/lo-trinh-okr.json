@@ -2077,6 +2077,24 @@
       "dot": "vong-tin-hieu-1410"
     },
     {
+      "ma": "LT1e",
+      "slug": "lo-trinh-hien-ngay-du-kien",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 446.3,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Lộ trình hiện ngày dự kiến",
+      "ten_ngan": "Ngày dự kiến",
+      "ngay": "2026-10-16",
+      "cau_giao": "«Trưởng phòng ban mở trang Lộ trình và thấy mỗi việc, mỗi mốc có ngày dự kiến xong do máy tính — ghi rõ là dự kiến, có cờ khi số đo chưa đủ»",
+      "vai": "Trưởng phòng ban",
+      "vi_sao": "Gốc: _acceptance/lo-trinh-doc-ban-chup/ — trang Lộ trình đọc khối dữ liệu bản 2 của kit, nên giờ máy và ngày dự kiến của gói road-map (RM6 lo-trinh-gio-may) không tới được trang CRM; chủ kho mở 16/10 cùng hàng kit RM6c (khối dữ liệu mang ngày dự kiến).",
+      "bat_khi": "Sau khi giao, mọi mốc đang chạy trên trang có ngày dự kiến kèm nhãn «dự kiến»; ở mốc khép đầu tiên, ngày dự kiến lệch ngày khép thật không quá một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho mở 16/10 («mở RM6c và LT1e»). Chờ crm nhận bản kit có RM6c (gói road-map) — mở vòng sau khi nhận. Máy MacBook Pro giữ. Chưa gắn mốc."
+    },
+    {
       "ma": "LT3",
       "slug": "lo-trinh-nhieu-san-pham",
       "hang": "T3",
