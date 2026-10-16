@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 423e01a156af9e487014cbac8c3a14db783236f9
+verified_commit: cf4bcbc28ed17b12d567aec504517234fe697e1f
 human_signoff: manh 2026-10-15
 ---
 
@@ -239,3 +239,7 @@ none — every multi-run eval is uniform
 Round 1: chạy trên sha bd32cb3c, nhật ký ghi lúc 2026-10-15T04:58:21Z.
 Round 2: chạy trên sha 822eb755, nhật ký ghi lúc 2026-10-15T06:09:44Z; E1–E3, E5–E10, E15, E17 xanh ở round này.
 Round 3: chạy lại E4, E11, E12, E16 cùng bảy lệnh suite; E1–E3, E5–E10, E15, E17 mang từ round 2 vì delta không chạm paths của chúng. Tất cả xanh, verdict PASS.
+
+### Re-pin lần 1 — 2026-10-16, do gộp origin/onehub f59e83cd3 + sửa nút lọc theo luật lkx-quet (#418)
+run_id: repin-20261015T235856Z-83378
+sha: cf4bcbc28ed17b12d567aec504517234fe697e1f · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
