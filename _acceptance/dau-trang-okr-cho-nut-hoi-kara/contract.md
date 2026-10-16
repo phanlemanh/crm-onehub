@@ -5,7 +5,9 @@ slug: dau-trang-okr-cho-nut-hoi-kara
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-16
 design_doc: docs/superpowers/specs/2026-10-16-dau-trang-okr-cho-nut-hoi-kara-design.md
 ---
 
