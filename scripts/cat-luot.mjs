@@ -105,7 +105,7 @@ export function kiemPhu(pv, data) {
   }
   // Phủ: mỗi mã của bản phạm vi ở đúng một mục cùng đợt.
   const ct = (Array.isArray(data.chan_troi) ? data.chan_troi : []).filter(c => c && typeof c === 'object' && !Array.isArray(c) && chuoi(c.dot) === pv.dot);
-  for (const c of ct) if (!chuoi(c.ly_do)) loi.push(`chân trời ${chuoi(c.ma) || '?'}: thiếu ly_do`);
+  for (const c of ct) if (!chuoi(c.ly_do)) loi.push(`chờ điều kiện ${chuoi(c.ma) || '?'}: thiếu ly_do`);
   // Mốc của đợt (hàng S3b): chỉ mốc ngoài gánh mã — việc vận hành của người; mốc khác đợt không xét.
   const maHang = new Set(hang.map(r => r._ma).filter(Boolean));
   const maChanTroi = new Set((Array.isArray(data.chan_troi) ? data.chan_troi : []).filter(c => c && typeof c === 'object' && !Array.isArray(c)).map(c => chuoi(c.ma)).filter(Boolean));
@@ -124,15 +124,15 @@ export function kiemPhu(pv, data) {
   const cho = new Map();
   const ghi = (ma, noi) => { if (!cho.has(ma)) cho.set(ma, []); cho.get(ma).push(noi); };
   for (const r of dot) for (const x of (Array.isArray(r.phu) ? r.phu : []).map(chuoi)) ghi(x, `hàng ${r._nhan}`);
-  for (const c of ct) for (const x of (Array.isArray(c.phu) ? c.phu : []).map(chuoi)) ghi(x, `chân trời ${chuoi(c.ma) || '?'}`);
+  for (const c of ct) for (const x of (Array.isArray(c.phu) ? c.phu : []).map(chuoi)) ghi(x, `chờ điều kiện ${chuoi(c.ma) || '?'}`);
   for (const m of mocPhu) for (const x of m.phu.map(chuoi)) ghi(x, `mốc ngoài ${nhanMoc(m)}`);
   const bang = [];
-  if (!dot.length && !ct.length && !mocPhu.length) loi.push(`đợt ${pv.dot} chưa cắt: ${pv.ma.length} mã chưa ở hàng hay chân trời nào`);
+  if (!dot.length && !ct.length && !mocPhu.length) loi.push(`đợt ${pv.dot} chưa cắt: ${pv.ma.length} mã chưa ở hàng hay mục chờ điều kiện nào`);
   else {
     const coMa = new Set(pv.ma.map(m => m.ma));
     for (const { ma } of pv.ma) {
       const noi = cho.get(ma) || [];
-      if (!noi.length) loi.push(`mã ${ma} không ở hàng hay chân trời nào — cũng không ở mốc ngoài nào`);
+      if (!noi.length) loi.push(`mã ${ma} không ở hàng hay mục chờ điều kiện nào — cũng không ở mốc ngoài nào`);
       else if (noi.length > 1) loi.push(`mã ${ma} ở ${noi.length === 2 ? 'hai' : noi.length} chỗ: ${noi.join(', ')}`);
       bang.push({ ma, cho: noi[0] || null });
     }
@@ -142,38 +142,11 @@ export function kiemPhu(pv, data) {
 }
 
 // ── Khoảng cỡ (một nguồn: khối CAT-LUOT-CO của SKILL cắt lượt) ─────────────────
-// Chính sách của chủ kho (10/10): mục tiêu · cho phép tới · tách từ · trần lượt chấm · ngưỡng ít dữ liệu.
-// Bên viết là người sửa khối; bên đọc là hàm dưới — mã không mang số nào của khoảng.
-export const KHOA_CO = ['muc_tieu', 'cho_phep_den', 'tach_tu', 'tran_luot_cham', 'it_du_lieu_duoi'];
-export const TEP_SKILL = path.join(__dirname, '..', 'skills', 'cat-luot', 'SKILL.md');
-const KHOI_CO_RE = /<!-- <<<CAT-LUOT-CO -->\r?\n```[a-z]*\r?\n([\s\S]*?)```\r?\n<!-- CAT-LUOT-CO>>> -->/;
-export function docKhoang(txt) {
-  const m = String(txt ?? '').match(KHOI_CO_RE);
-  if (!m) return { khoang: null, loi: ['SKILL cắt lượt thiếu khối CAT-LUOT-CO (khoảng cỡ)'] };
-  const tho = {};
-  for (const dong of m[1].split(/\r?\n/)) { const k = dong.replace(/\s+#.*$/, '').match(/^\s*([a-z_]+):\s*(\S+)\s*$/); if (k && !(k[1] in tho)) tho[k[1]] = k[2]; }
-  const loi = KHOA_CO.filter(k => !(k in tho)).map(k => `khối CAT-LUOT-CO thiếu khoá ${k}`);
-  if (loi.length) return { khoang: null, loi };
-  const so = v => (/^\d+$/.test(v) ? Number(v) : NaN);
-  const mt = tho.muc_tieu.match(/^(\d+)-(\d+)$/);
-  const khoang = { muc_tieu: mt ? [Number(mt[1]), Number(mt[2])] : null };
-  for (const k of KHOA_CO.slice(1)) khoang[k] = so(tho[k]);
-  if (!khoang.muc_tieu || !(khoang.muc_tieu[0] >= 1)) loi.push(`khoá muc_tieu «${tho.muc_tieu}» phải là <đầu>-<cuối>, hai số nguyên dương`);
-  else if (khoang.muc_tieu[0] > khoang.muc_tieu[1]) loi.push(`khoá muc_tieu «${tho.muc_tieu}» ngược: đầu lớn hơn cuối`);
-  for (const k of KHOA_CO.slice(1)) if (!(khoang[k] >= 1)) loi.push(`khoá ${k} «${tho[k]}» phải là số nguyên dương`);
-  if (!loi.length) {
-    const [, cuoi] = khoang.muc_tieu; const c = khoang.cho_phep_den; const t = khoang.tach_tu;
-    if (c < cuoi) loi.push(`khoá cho_phep_den ${c} nhỏ hơn cuối muc_tieu ${cuoi}`);
-    else if (t !== c + 1) loi.push(`khoá tach_tu ${t} phải bằng cho_phep_den + 1 = ${c + 1} (khoảng ${t > c + 1 ? 'hở' : 'chồng'})`);
-  }
-  return loi.length ? { khoang: null, loi } : { khoang, loi };
-}
-export function napKhoang(tep = TEP_SKILL) {
-  let txt; try { txt = readFileSync(tep, 'utf8'); } catch { throw Object.assign(new Error(`không đọc được SKILL cắt lượt (khối CAT-LUOT-CO): ${tep}`), { ma: 2 }); }
-  const { khoang, loi } = docKhoang(txt);
-  if (!khoang) throw Object.assign(new Error(loi.join('; ')), { ma: 2 });
-  return khoang;
-}
+// Bộ đọc sống ở scripts/co-hop-dong.cjs (hồ sơ vong-mo-thang-bang-feature-loop): thẻ Cổng Phạm vi đọc
+// CHÍNH các hàm này — xuất lại để bên gọi cũ (ca LT-142…) không đổi. Mã không mang số nào của khoảng.
+const CHD = require(path.join(__dirname, 'co-hop-dong.cjs'));
+const { ngayChuKy } = require(path.join(__dirname, 'ho-so-tom-tat.cjs'));
+export const { KHOA_CO, TEP_SKILL, docKhoang, napKhoang } = CHD;
 
 // ── Cờ cỡ và dáng câu giao (hai trường của LƯỢT CẮT: `vai`, `tieu_chi`) ─────────
 // Agent không đọc hai trường này; trang lộ trình cũng không. Thiếu khai chỉ vàng (đường đọc-cũ: lộ
@@ -181,7 +154,7 @@ export function napKhoang(tep = TEP_SKILL) {
 // Bốn cờ cuối của hàng S3b: vận hành và dữ liệu giả.
 const CO_LAP = 'van-hanh-lap-chua-tu-phuc-vu';
 export const CO_TEN = ['can-tach', 'tren-muc-tieu', 'duoi-muc-tieu', 'tieu-chi-sai-kieu', 'chua-uoc-tieu-chi', 'vai-khong-mo-cau', 'nen-thieu-bat-khi', 'chua-khai-dang-giao',
-  'cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia', CO_LAP];
+  'cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia', CO_LAP, 'gan-moc-dang-chay'];
 const CO_LOI = new Set(['can-tach', 'tieu-chi-sai-kieu', 'vai-khong-mo-cau', 'nen-thieu-bat-khi']);
 // Cờ hàng của S3b: lỗi ở hàng trong đợt, một dòng gom ở hàng ngoài đợt (như mọi cờ hàng).
 const CO_LOI_S3B = new Set(['cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia']);
@@ -206,7 +179,8 @@ function coCuaHang(r, k) {
   else if (!chuanCau(r.cau_giao).startsWith(chuanCau(vai))) ra.push(['vai-khong-mo-cau', `câu giao không mở bằng vai «${vai}»`]);
   return ra;
 }
-export function kiemCo(pv, data, k) {
+// `homNay` (YYYY-MM-DD, hồ sơ ra-soat-lo-trinh): bật cờ `gan-moc-dang-chay`; vắng thì cờ đó im (bên gọi đời trước không đổi).
+export function kiemCo(pv, data, k, homNay = null) {
   const loi = []; const canhBao = [];
   const hang = (Array.isArray(data.hang) ? data.hang : []).map((r, i) => ({ r, nhan: (r && typeof r === 'object' && !Array.isArray(r) && chuoi(r.ma)) || `#${i + 1}` }))
     .filter(({ r }) => r && typeof r === 'object' && !Array.isArray(r));
@@ -218,7 +192,7 @@ export function kiemCo(pv, data, k) {
   const coS3b = r => {
     const ra = []; const dt = (Array.isArray(r.dung_tren) ? r.dung_tren : []).map(chuoi);
     const cho = [...new Set(dt.filter(x => !theoMa.has(x)).map(x => mocNgoaiCua(moc, x)).filter(Boolean).map(nhanMoc))];
-    if (cho.length) ra.push(['cho-van-hanh', `đứng chờ mốc vận hành ${cho.map(t => `«${t}»`).join(', ')} — hàng phát triển không chờ người: cần dữ liệu thì đứng trên hàng sinh dữ liệu giả (du_lieu: gia), phạm vi chỉ biết sau mốc thì đưa vào chân trời mở lại khi mốc xong`]);
+    if (cho.length) ra.push(['cho-van-hanh', `đứng chờ mốc vận hành ${cho.map(t => `«${t}»`).join(', ')} — hàng phát triển không chờ người: cần dữ liệu thì đứng trên hàng sinh dữ liệu giả (du_lieu: gia), phạm vi chỉ biết sau mốc thì đưa vào mục chờ điều kiện, mở lại khi mốc xong`]);
     if (r.du_lieu !== undefined && !DU_LIEU.includes(r.du_lieu)) ra.push(['du-lieu-sai-gia-tri', `du_lieu ${JSON.stringify(r.du_lieu)} — chỉ nhận "sinh-gia" (hàng sinh dữ liệu giả có nhãn) hoặc "gia" (hàng đo trên dữ liệu giả)`]);
     else if (r.du_lieu === DL_GIA && !coHangSinh(dt)) ra.push(['thieu-hang-sinh-gia', 'đo trên dữ liệu giả (du_lieu: gia) mà không đứng trực tiếp trên hàng sinh dữ liệu giả nào (du_lieu: sinh-gia)']);
     return ra;
@@ -240,10 +214,21 @@ export function kiemCo(pv, data, k) {
   for (const { r, nhan } of ngoai) for (const [co] of coCuaHang(r, k)) if (!CO_CHI_TRONG_DOT.has(co)) { if (!gom.has(co)) gom.set(co, []); gom.get(co).push(nhan); }
   for (const { r, nhan } of ngoai) for (const [co] of coS3b(r)) if (!CO_CHI_TRONG_DOT.has(co)) { if (!gom.has(co)) gom.set(co, []); gom.get(co).push(nhan); }
   for (const co of CO_TEN) { const ds = gom.get(co); if (ds) canhBao.push(`[${co}] ${ds.length} hàng ngoài đợt ${pv.dot} — ${ds.slice(0, 8).join(', ')}${ds.length > 8 ? ', …' : ''}`); }
-  // Mốc vận hành LẶP LẠI của đợt đang cắt mà chưa trỏ hàng tự phục vụ hay chân trời: nhắc (vàng) — phanh
+  // Mốc vận hành LẶP LẠI của đợt đang cắt mà chưa trỏ hàng tự phục vụ hay mục chờ điều kiện: nhắc (vàng) — phanh
   // «không phổ quát quá sớm» là phán xét của chủ kho, không phải lỗi.
   const mocLap = moc.filter(m => chuoi(m.loai) === LOAI_NGOAI && chuoi(m.dot) === pv.dot && m.lap === true);
-  for (const m of mocLap) if (m.tu_phuc_vu === undefined) canhBao.push(`mốc ${nhanMoc(m)} [${CO_LAP}]: việc vận hành lặp lại chưa trỏ hàng tự phục vụ hay chân trời (tu_phuc_vu) — xét tự phục vụ; chưa đáng thì ghi chân trời mở lại khi có tổ chức hay kho thứ hai thật`);
+  // Cắt lượt dưới đóng băng (hồ sơ ra-soat-lo-trinh, B′ §10): hàng của ĐỢT ĐANG CẮT gắn vào một mốc phát hành ĐANG CHẠY
+  // (ngày mốc ≥ hôm nay VÀ mốc đã có hàng ngoài đợt) là đổi đích chiến dịch giữa chừng — cảnh báo, không lỗi.
+  if (homNay) {
+    const dotCua = new Map(hang.map(({ r }) => [chuoi(r.ma), chuoi(r.dot)]));
+    const dangChay = moc.filter(x => chuoi(x.loai) === 'phat-hanh' && NGAY_RE.test(chuoi(x.ngay)) && chuoi(x.ngay) >= homNay);
+    for (const { r, nhan } of trongDot) for (const m of dangChay) {
+      const ds = (Array.isArray(m.hang) ? m.hang : []).map(chuoi);
+      if (!ds.includes(chuoi(r.ma)) || !ds.some(x => dotCua.get(x) !== pv.dot)) continue;
+      canhBao.push(`hàng ${nhan} [gan-moc-dang-chay]: gắn vào mốc «${nhanMoc(m)}» đang chạy (ngày ${chuoi(m.ngay)}) — đổi đích chiến dịch giữa chừng; gắn sang mốc kế hoặc để «Kế tiếp», chủ ý thì ghi vì sao vào mô tả PR`);
+    }
+  }
+  for (const m of mocLap) if (m.tu_phuc_vu === undefined) canhBao.push(`mốc ${nhanMoc(m)} [${CO_LAP}]: việc vận hành lặp lại chưa trỏ hàng tự phục vụ hay mục chờ điều kiện (tu_phuc_vu) — xét tự phục vụ; chưa đáng thì ghi mục chờ điều kiện, mở lại khi có tổ chức hay kho thứ hai thật`);
   return { loi, canhBao };
 }
 
@@ -278,13 +263,15 @@ export function dongHoCo(root, { khoang: k, tu = null, loTrinh = null }) {
     let luot = null;
     if (!DA_GIAO.has(st)) bo.chua_giao += 1;
     else { const u = doc(path.join(acc, slug, 'usage-report.md')); const n = u ? (u.match(LUOT_CHAM_RE) || []).length : 0; if (n) luot = n; else bo.khong_luot_cham += 1; }
-    chot.push({ slug, tc, luot });
+    chot.push({ slug, tc, luot, giu: !!CHD.dongGiu(doc(path.join(acc, slug, 'decisions.jsonl')) || '') });
   }
   const [dau, cuoi] = k.muc_tieu;
   const trong = (x, a, b) => x.tc >= a && (b == null || x.tc <= b);
   const nhom = [['duoi-muc-tieu', 1, dau - 1], ['muc-tieu', dau, cuoi], ['cho-phep', cuoi + 1, k.cho_phep_den], ['phai-tach', k.tach_tu, null]].map(([ten, a, b]) => {
     const g = chot.filter(x => trong(x, a, b)); const giao = g.filter(x => x.luot != null);
-    return { ten, tu: a, den: b, n_chot: g.length, ...thongKeLuot(giao, k), it_du_lieu: giao.length < k.it_du_lieu_duoi };
+    // n_giu: hồ sơ đã chốt của nhóm có dòng sổ «giữ cỡ» (vong-mo-thang-bang-feature-loop) — n_chot − n_giu ở
+    // nhóm phai-tach là số hợp đồng quá cỡ qua Cổng Phạm vi không lý do giữ có tên.
+    return { ten, tu: a, den: b, n_chot: g.length, n_giu: g.filter(x => x.giu).length, ...thongKeLuot(giao, k), it_du_lieu: giao.length < k.it_du_lieu_duoi };
   });
   let trongKhoang;
   if (!chot.length) trongKhoang = { n_chot: 0, chua_do_duoc: true };
@@ -304,7 +291,8 @@ export function dongHoCo(root, { khoang: k, tu = null, loTrinh = null }) {
 
 // ── Nhịp ──────────────────────────────────────────────────────────────────────
 // Số ngày từ lúc chốt phạm vi (approved_at, làn V thì veto_opened_at) tới ngày ký Cổng Bằng chứng
-// (chuỗi YYYY-MM-DD đầu tiên trong human_signoff — khuôn bên ghi của lệnh ký «<tên> <ngày>»).
+// (bộ đọc chung `ngayChuKy` của ho-so-tom-tat.cjs trên human_signoff — năm-tháng-ngày đầu tiên, vắng thì
+// ngày/tháng/năm).
 const ngayDau = s => { const m = String(s ?? '').match(/\d{4}-\d{2}-\d{2}/); return m ? m[0] : null; };
 const doc = p => { try { return readFileSync(p, 'utf8'); } catch { return null; } };
 // Ngày chốt phạm vi — MỘT bộ đọc cho nhịp và đồng hồ cỡ.
@@ -321,7 +309,7 @@ export function nhip(root) {
     tong += 1;
     const hang = chuoi(frontmatterField(c, 'risk_tier'));
     const dau = ngayChot(c);
-    const cuoi = ngayDau(ky);
+    const cuoi = ngayChuKy(ky);
     if (!dau || !cuoi || !(hang in ngay)) { boQua += 1; continue; }
     ngay[hang].push(Math.round((Date.parse(`${cuoi}T00:00:00Z`) - Date.parse(`${dau}T00:00:00Z`)) / 864e5));
   }
@@ -371,7 +359,9 @@ if (isMain) {
   try { data = JSON.parse(readFileSync(path.resolve(root, tepLt), 'utf8').replace(/^\uFEFF/, '')); } catch (e) { thoat(2, `tệp lộ trình không phải JSON hợp lệ: ${e.message}`); }
   if (data == null || typeof data !== 'object' || Array.isArray(data)) thoat(2, 'gốc tệp lộ trình phải là một object');
   const kq = kiemPhu(pv, data);
-  const co = kiemCo(pv, data, khoang);
+  const homNay = process.env.ACCEPTANCE_TODAY || new Date().toISOString().slice(0, 10);
+  if (!NGAY_RE.test(homNay)) thoat(2, `ACCEPTANCE_TODAY phải dạng YYYY-MM-DD (đang là «${homNay}»)`);
+  const co = kiemCo(pv, data, khoang, homNay);
   const loi = [...pv.loi, ...kq.loi, ...co.loi];
   const ra = [`bảng phủ đợt ${pv.dot} (${pv.dang}): ${pv.ma.length} mã`, ...kq.bang.map(b => `  ${b.ma} → ${b.cho || '—'}`),
     ...[...kq.canhBao, ...co.canhBao].map(c => `cảnh báo: ${c}`), ...loi.map(l => `lỗi: ${l}`)];
