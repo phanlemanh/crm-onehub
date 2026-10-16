@@ -12,11 +12,14 @@ qua 3/3.
 
 ## Nguyên nhân: mức suy luận của GLM 5.3 ở phiên con
 
-- **Cùng model, chỉ hạ mức suy luận thì qua.** GLM 5.3 mặc định có phiên con chạy 115.9 và 141 giây mà chỉ được 4 và 2
-  bước, ra 6992 và 4166 token (`luot-glm53-1.log`, `luot-glm53-2.log`); cùng `zai/glm-5.3` với `reasoning: "low"` ở
-  phiên con `agent_builder` thì phiên con đi đủ 6 bước, ra 1639, 1551 và 1539 token, trong 55.6, 120.2 và 101.3 giây,
-  và eval qua cả ba (`luot-glm53-low-1.log`, `luot-glm53-low-2.log`, `luot-glm53-low-3.log`). Token ra giảm mà số bước
-  tăng nghĩa là thời gian bị tiêu vào phần suy luận của mỗi bước, không phải vào số bước.
+- **Cùng model, chỉ hạ mức suy luận thì qua.** GLM 5.3 mặc định bị cắt ở cả ba lượt; trước lúc cắt, sổ chi phí ghi
+  được 4 và 2 bước đã xong của phiên con, ra 6992 và 4166 token, trong 115.9 và 141 giây (`luot-glm53-1.log`,
+  `luot-glm53-2.log`). Cùng `zai/glm-5.3` với `reasoning: "low"` ở phiên con `agent_builder` thì phiên con xong trọn
+  6 bước, ra 1639, 1551 và 1539 token, trong 55.6, 120.2 và 101.3 giây, và eval qua cả ba (`luot-glm53-low-1.log`,
+  `luot-glm53-low-2.log`, `luot-glm53-low-3.log`). Số bước của ba lượt mặc định là số đếm thiếu (mục «Giới hạn»), nên
+  không so số bước giữa hai biến thể. Điều số đo chứng được là kết cục: đổi đúng một thứ — mức suy luận — thì 0/3 thành
+  3/3. Còn giây phiên con thì hai biến thể chồng nhau (115.9 và 141 so với 55.6 đến 120.2), nên không tách được giây
+  tiêu vào suy luận ở từng bước; sổ chi phí cũng không tách token suy luận khỏi token ra.
 - **Gateway chuyển mức suy luận tới nhà cung cấp.** Phép dò thẳng `zai/glm-5.3` trên cùng một câu: mức `low` sinh 15
   token suy luận, mức `high` sinh 81 (`do-suy-luan.json`). Vậy cờ `reasoning: "low"` có tác dụng thật. Mức mặc định
   khi không khai thì chưa đo riêng; điều đã đo là bỏ mặc định, đặt `low`, thì token ra của phiên con giảm từ 6992 và
@@ -37,9 +40,10 @@ thấp dao động từ 55.6 tới 120.2.
 
 ## Giới hạn của số đo
 
-- Sổ chi phí chỉ ghi một bước khi bước đó xong. Ở `luot-glm53-3.log` phiên con mới ghi 1 bước (24 token ra, 0 giây giữa
-  bước đầu và bước cuối) thì eval đã bị cắt: bước đang suy luận dở lúc cắt không có hàng nào, nên số của lượt này đếm
-  thiếu chứ không phải phiên con rảnh.
+- Sổ chi phí chỉ ghi một bước khi bước đó xong. Cả ba lượt GLM 5.3 mặc định bị cắt ở 180 giây, nên bước đang chạy dở lúc
+  cắt không có hàng nào: số bước, token và giây của `luot-glm53-1.log` (4 bước), `luot-glm53-2.log` (2 bước) và
+  `luot-glm53-3.log` (1 bước, 24 token ra, 0 giây giữa bước đầu và bước cuối) đều là số đếm thiếu, không phải phiên con
+  rảnh.
 - Sổ chi phí không tách token suy luận khỏi token ra, và cột model luôn rỗng; model của từng lượt được chứng bằng ô model
   của kho đo đọc lại ngay trước khi eval chạy (AC-2). Model theo từng bước thuộc hàng MH4.
 - 3 lượt mỗi biến thể đủ cho chênh lệch này (0/3 so với 3/3), không đủ để xếp hạng mốc, hạng nhanh và suy luận thấp với
