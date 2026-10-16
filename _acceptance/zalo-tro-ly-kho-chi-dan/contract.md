@@ -5,7 +5,7 @@ slug: zalo-tro-ly-kho-chi-dan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-16
 design_doc: _acceptance/zalo-tro-ly-kho-chi-dan/design.md
