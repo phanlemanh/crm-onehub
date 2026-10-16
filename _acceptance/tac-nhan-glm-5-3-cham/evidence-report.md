@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1f906a4fa4aba3afe4507134450f8131c57f64db
+verified_commit: 4c73ca0b20b34a63e64a0222fbdaf77c8c6f97bd
 human_signoff:
 ---
 
@@ -18,44 +18,44 @@ human_signoff:
 | E1 | AC-1 | script | PASS |
 | E2 | AC-2 | script | PASS |
 | E3 | AC-3 | script | PASS |
-| E4 | AC-4 | judgment | PENDING-JUDGMENT (hội đồng đề xuất FAIL, chờ người quyết ở Cổng 2) |
+| E4 | AC-4 | judgment | PENDING-JUDGMENT (hội đồng đề xuất FAIL 2 trên 3, chờ người quyết ở Cổng 2) |
 | E5 | AC-5 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-tac-nhan-glm-5-3-cham-E1-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tnc_so
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
   output: |
     chieu do pham vi: config.yaml co dong xoa: dat (ma 1, mong 1)
 
 - eval: E2
-  run_id: minted-tac-nhan-glm-5-3-cham-E2-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tnc_so
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
   output: |
     chieu do pham vi: config.yaml co dong xoa: dat (ma 1, mong 1)
 
 - eval: E3
-  run_id: minted-tac-nhan-glm-5-3-cham-E3-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tnc_so
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
   output: |
     chieu do pham vi: config.yaml co dong xoa: dat (ma 1, mong 1)
 
 - eval: E5
-  run_id: minted-tac-nhan-glm-5-3-cham-E5-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tnc_pham_vi
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
   output: |
     chieu do pham vi: config.yaml co dong xoa: dat (ma 1, mong 1)
 
@@ -63,55 +63,54 @@ human_signoff:
   judged_by: judge panel (fresh context) — domain-correctness, operational-feasibility, spec-alignment
   verdict: PENDING-JUDGMENT
   proposal: FAIL
-  rationale: Hội đồng chia 2 đối 1. Hai lens đề xuất FAIL vì ket-luan.md có câu nguyên nhân so sánh biến thể mà không kèm số hoặc tên nhật ký lượt, và một câu suy diễn về mức suy luận mặc định không có phép đo. Một lens đề xuất PASS.
+  rationale: Hội đồng chia 2 đối 1. Hai lens (domain-correctness, operational-feasibility) đề xuất FAIL vì câu «Token ra giảm mà số bước tăng nghĩa là thời gian bị tiêu vào phần suy luận của mỗi bước» trong ket-luan.md nêu nguyên nhân mà không kèm tên nhật ký lượt, chưa được số liệu của bang.md chứng minh, và số bước 4 và 2 của glm53 là số đếm thiếu do lượt bị cắt ở 180 giây. Lens spec-alignment đề xuất PASS.
   votes:
-    - domain-correctness: FAIL — Vế 1, 3, 4, 5 đạt: glm53 mặc định hỏng 0/3 nên được nêu nguyên nhân, không có dòng «thieu luot», các số khớp bang.md hoặc do-suy-luan.json, trần 180 giây được ghi là của bài đo còn phiên thật có DAY_MS. Vế 2 và phần nhận định nguyên nhân lệch ở ba chỗ. (a) Tiêu đề «không phải hạng phục vụ» mâu thuẫn với bang.md: glm53-fast giữ mức suy luận mặc định mà vẫn qua 3/3 (77.5, 15.2, 10.3 giây), và hồ sơ không có phép đo tách riêng hai yếu tố. (b) Câu «mức mặc định khi không khai không phải mức thấp» là suy diễn, vì do-suy-luan.json chỉ đo low và high, không đo mức mặc định, và câu này không kèm số bước, token, giây hay tên nhật ký lượt nào. (c) Câu «không đổi mức suy luận, nên lượt đầu vẫn ra nhiều token như mặc định» không có bằng chứng, fast-2 và fast-3 (2045 và 1796 token) đi ngược lại, và câu này không nêu nhật ký glm53 để đối chiếu.
-    - operational-feasibility: FAIL — Vế (1), (3), (4) và (5) đạt. Mọi con số khớp bang.md hoặc do-suy-luan.json, glm53 hỏng 0/3 nên được nêu nguyên nhân, không có dòng «thieu luot», và trần 180 giây được tách khỏi DAY_MS. Vế (2) trượt vì hai câu so sánh số bước, token hoặc giây giữa các biến thể không kèm tên tệp nhật ký lượt.
-    - spec-alignment: PASS — Đủ năm vế. (1) bang.md cho glm53 hỏng 0/3 nên kết luận được phép nêu nguyên nhân. (2) Mỗi mệnh đề so bước, token và giây giữa các biến thể đều kèm tên tệp luot-*.log. (3) bang.md không có dòng «thieu luot» (mục «Loại khỏi bảng» ghi không có) và các cụm «3/3», «0/3» khớp bảng. (4) Mọi con số khớp một ô của bang.md hoặc do-suy-luan.json (15 và 81 token suy luận), và kết luận không dùng số P0 nào. (5) Phần «Trần 3 phút là của bài đo» tách rõ trần 180 giây của bài đo khỏi trần một ngày (`DAY_MS`) của phiên bộ dựng thật.
+    - domain-correctness: FAIL — Bốn vế (1), (3), (4), (5) đạt: glm53 hỏng 0/3, không có dòng «thieu luot», số khớp bang.md và do-suy-luan.json (15 và 81 token suy luận), trần 180 giây của bài đo được tách khỏi DAY_MS. Vế (2) lệch ở câu «Token ra giảm mà số bước tăng nghĩa là thời gian bị tiêu vào phần suy luận của mỗi bước, không phải vào số bước» (mục Nguyên nhân, gạch đầu dòng đầu). Câu này nêu nguyên nhân của chênh lệch số bước, token, giây mà không kèm tên tệp nhật ký nào. Nó cũng chưa được chứng minh: bang.md không tách token suy luận, giây phiên con của glm53-low (55.6, 120.2, 101.3) chồng lên glm53 (115.9, 141), và số bước 4 và 2 của glm53 là số đếm thiếu vì sổ chỉ ghi bước đã xong. Ket-luan.md chỉ thừa nhận phần thiếu này cho lượt 3, không thừa nhận cho lượt 1 và 2.
+    - operational-feasibility: FAIL — Vế 1, 3, 4 và 5 đạt: glm53 hỏng 0/3, bang.md không có dòng «thieu luot», số khớp bang.md và do-suy-luan.json, trần 180 giây được nói là của bài đo còn phiên bộ dựng thật là DAY_MS. Vế 2 lệch ở ý kết luận «Token ra giảm mà số bước tăng nghĩa là thời gian bị tiêu vào phần suy luận của mỗi bước». Câu này nêu nguyên nhân mà không có số giây và không có tên tệp nhật ký, còn bang.md không ủng hộ nó: giây phiên con của glm53-low-2 là 120.2, cao hơn glm53-1 là 115.9, và glm53-low-3 là 101.3, cũng không thấp hơn nhiều. Câu «bỏ mặc định, đặt low thì token ra giảm...» cũng thiếu số bước và số giây.
+    - spec-alignment: PASS — Đủ năm vế. (1) glm53 mặc định hỏng 0/3 (bang.md dòng 8–10), nên kết luận được nêu nguyên nhân. (2) Các câu về chênh lệch bước, token, giây đều kèm tên tệp luot-*.log; câu suy diễn «Token ra giảm mà số bước tăng…» không tự mang tên tệp nhưng đứng ngay sau câu đã nêu đủ tệp. (3) bang.md không có dòng «thieu luot» (mục «Loại khỏi bảng» ghi «không có»), nên không vi phạm. (4) Mọi con số đã đối chiếu khớp bang.md hay do-suy-luan.json (suy luận low 15, high 81), và không có số nào của GLM 5.3 Flash. (5) Mục «Trần 3 phút là của bài đo» nêu rõ trần 180 giây là của bài đo, còn phiên bộ dựng thật có trần một ngày (DAY_MS).
   required_evidence:
-    - domain-correctness: Sửa ket-luan.md: bỏ hoặc hạ nhẹ tiêu đề «không phải hạng phục vụ» thành «hạng nhanh cũng làm lượt qua nhưng không đều, chưa tách được hai yếu tố». Căn cứ là các dòng glm53-fast 1 đến 3 (qua 3/3) cạnh glm53 (0/3) trong evidence/bang.md.
-    - domain-correctness: Bỏ câu «mức mặc định khi không khai không phải mức thấp», hoặc thêm một phép dò mức mặc định: chạy rang/do-suy-luan.ts một lần không khai reasoning và ghi token_suy_luan vào evidence/do-suy-luan.json.
-    - domain-correctness: Mỗi câu nguyên nhân phải kèm số bước, token, giây của phiên con ở hai biến thể và tên nhật ký lượt tương ứng. Câu về hạng nhanh cần dẫn luot-glm53-1.log và luot-glm53-2.log cạnh luot-glm53-fast-1.log, luot-glm53-fast-2.log và luot-glm53-fast-3.log.
-    - operational-feasibility: Ở ket-luan.md, mục «So với mốc», câu «GLM 5.3 suy luận thấp ra ít token hơn mốc (1539 đến 1639 so với 2698 đến 3887) với 6 bước» cần ghi thêm luot-glm53-low-1.log, luot-glm53-low-2.log, luot-glm53-low-3.log. Câu này so bước và token giữa hai biến thể mà không nêu tệp nhật ký nào của các lượt low.
-    - operational-feasibility: Ở ket-luan.md, mục «Hạng phục vụ nhanh cũng qua, nhưng không đều», câu «Nó đổi tốc độ phục vụ, không đổi mức suy luận, nên lượt đầu vẫn ra nhiều token như GLM 5.3 mặc định» cần kèm số (6563 so với 6992 token ra, lấy từ bang.md) và tên tệp luot-glm53-fast-1.log, luot-glm53-1.log. Đây là câu nguyên nhân so sánh hai biến thể mà không có số hay tên tệp.
+    - domain-correctness: Viết lại câu «nghĩa là thời gian bị tiêu vào phần suy luận của mỗi bước» trong _acceptance/tac-nhan-glm-5-3-cham/evidence/ket-luan.md. Mỗi câu nguyên nhân phải kèm tên tệp nhật ký (luot-glm53-1.log, luot-glm53-2.log, luot-glm53-low-1.log đến luot-glm53-low-3.log). Hoặc hạ nó thành giả thuyết, vì sổ aiChiPhi không tách token suy luận.
+    - domain-correctness: Ghi trong ket-luan.md rằng số bước 4 và 2 của luot-glm53-1.log và luot-glm53-2.log cũng là số đếm thiếu do lượt bị cắt ở 180 giây, như đã ghi cho luot-glm53-3.log. Không dùng chúng làm cơ sở cho «số bước tăng».
+    - operational-feasibility: Sửa câu «Token ra giảm mà số bước tăng nghĩa là thời gian bị tiêu vào phần suy luận» trong _acceptance/tac-nhan-glm-5-3-cham/evidence/ket-luan.md. Hoặc bỏ nó, hoặc nêu cặp giây, bước và token cùng tên tệp nhật ký, khớp ô của bang.md. Ví dụ glm53-low-2 120.2 s so với glm53-1 115.9 s phải được giải thích hoặc thừa nhận là không tách được.
+    - operational-feasibility: Ghi vào ket-luan.md rằng bước đang chạy dở lúc cắt không có hàng trong sổ chi phí ở cả luot-glm53-1.log và luot-glm53-2.log, không chỉ ở luot-glm53-3.log. Khi đó so «4 và 2 bước» với «6 bước» của lượt hoàn tất là so số bị cắt với số trọn, và kết luận không được dùng chênh lệch số bước làm bằng chứng nguyên nhân.
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tac-nhan-glm-5-3-cham-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-16T17:01:56Z
+  verified_at: 2026-10-16T17:34:25Z
 
 ## Known limits
 
@@ -133,4 +132,5 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: các eval máy E1, E2, E3, E5 đều đạt, bảy lệnh suite đều đạt; E4 (judgment) hội đồng đề xuất FAIL với phiếu 2 chống 1 thuận (domain-correctness và operational-feasibility chống, spec-alignment thuận), human_override để trống. Verdict PENDING-JUDGMENT, chờ người quyết ở Cổng 2.
+Round 2: sau commit 4c73ca0b2 (sửa kết luận theo hội đồng E4 và vá năm chỗ hở của bộ so), các eval máy E1, E2, E3, E5 đều đạt và bảy lệnh suite đều đạt; E4 hội đồng vẫn đề xuất FAIL 2 chống 1 thuận (domain-correctness và operational-feasibility chống vì câu nguyên nhân «thời gian bị tiêu vào phần suy luận của mỗi bước» chưa có căn cứ và số bước 4 và 2 của glm53 là số đếm thiếu; spec-alignment thuận), human_override để trống. Verdict PENDING-JUDGMENT, chờ người quyết ở Cổng 2.
 
