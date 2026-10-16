@@ -147,12 +147,13 @@ type GiaTri = string | ((...doiSo: string[]) => string);
 type Nhanh = { readonly [khoa: string]: GiaTri | Nhanh };
 
 function phang(o: Nhanh, tien: string): Array<[string, GiaTri]> {
-	return Object.entries(o).flatMap(([k, v]): Array<[string, GiaTri]> =>
-		v instanceof Function
-			? [[`${tien}.${k}`, v]]
-			: v instanceof Object
-				? phang(v, `${tien}.${k}`)
-				: [[`${tien}.${k}`, v]],
+	return Object.entries(o).flatMap(
+		([k, v]): Array<[string, GiaTri]> =>
+			v instanceof Function
+				? [[`${tien}.${k}`, v]]
+				: v instanceof Object
+					? phang(v, `${tien}.${k}`)
+					: [[`${tien}.${k}`, v]],
 	);
 }
 
@@ -275,8 +276,14 @@ describe("cho-tac-nhan-lau", () => {
 			);
 			if (a instanceof Function && b instanceof Function)
 				expect(a.length, `hai ngon ngu cung so doi ${khoa}`).toBe(b.length);
-			expect(hienRa(a).trim().length, `hai ngon ngu ${khoa} vi`).toBeGreaterThan(0);
-			expect(hienRa(b).trim().length, `hai ngon ngu ${khoa} en`).toBeGreaterThan(0);
+			expect(
+				hienRa(a).trim().length,
+				`hai ngon ngu ${khoa} vi`,
+			).toBeGreaterThan(0);
+			expect(
+				hienRa(b).trim().length,
+				`hai ngon ngu ${khoa} en`,
+			).toBeGreaterThan(0);
 			expect(hienRa(a), `hai ngon ngu ${khoa} khac nhau`).not.toBe(hienRa(b));
 		}
 
@@ -292,9 +299,10 @@ describe("cho-tac-nhan-lau", () => {
 			go();
 			for (const [k, cau] of cauCua(khac)) {
 				const mau = cau.split("{ten}")[0] ?? cau;
-				expect(the, `hai ngon ngu — the ${locale} khong lan ${k}`).not.toContain(
-					mau,
-				);
+				expect(
+					the,
+					`hai ngon ngu — the ${locale} khong lan ${k}`,
+				).not.toContain(mau);
 				expect(
 					chuong,
 					`hai ngon ngu — chuong ${locale} khong lan ${k}`,

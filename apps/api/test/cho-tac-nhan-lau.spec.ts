@@ -3,8 +3,8 @@ import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import { ghiThongBaoTacNhan } from "../../agent/agent/lib/thong-bao-tac-nhan";
-import { createApp } from "../src/create-app";
 import MAU_LUOT_GUI from "../../app/test/fixtures/cho-tac-nhan-lau-luot-gui.json";
+import { createApp } from "../src/create-app";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 const TIEN_TO = `ctnl${(process.env.TEST_RUN_ID ?? "").slice(0, 8)}`;
