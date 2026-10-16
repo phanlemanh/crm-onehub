@@ -1,0 +1,74 @@
+schema_version: 1
+feature_slug: gieo-nguoi-chiu-song-song
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.gnss_song_song
+    paths:
+      - "apps/api/test/dieu-phoi-gieo.ts"
+      - "apps/api/test/gieo-nguoi-song-song.spec.ts"
+    expected: "exit 0; '1 pass', '0 fail', khong dong skip — ca gnss-dong-thoi chay that tren kho test moi; co dong log '[organization.upsert]' cua loi trung da bat (cuoc dua co xay ra)"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.gnss_dot_bien
+    paths:
+      - "_acceptance/gieo-nguoi-chiu-song-song/rang/dot-bien.mjs"
+      - "_acceptance/ca-chap-chon-cach-ly/rang/ban-sao.mjs"
+      - "apps/api/test/dieu-phoi-gieo.ts"
+      - "apps/api/test/gieo-nguoi-song-song.spec.ts"
+    expected: "exit 0; 'dot-bien: 1/1 cap dat' — cay lanh: 1 pass, khong skip, co log loi trung da bat; ban sao bo nhanh bat P2002 thi do CA BA luot, luot nao cung co '(fail) gieo-nguoi-song-song > gnss-dong-thoi' va 'code: \"P2002\"'; output in do-dung-ghim=3/3"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.gnss_tai_hien
+    paths:
+      - "apps/api/test/dieu-phoi-gieo.ts"
+      - "apps/api/test/dieu-phoi-va.spec.ts"
+    expected: "exit 0; ca dem-qua-han pass, 0 fail (log prisma:error cua loi trung da bat khong tinh)"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.gnss_pham_vi
+    paths:
+      - "_acceptance/gieo-nguoi-chiu-song-song/rang/pham-vi.mjs"
+    expected: "exit 0; 'mau cho goi: bi bat apps/api/test/dieu-phoi-va.spec.ts' (chieu do tren mau) roi 'pham-vi: N tep, 0 ngoai pham vi'"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: judgment
+    question: "Doc ham gieoToChuc trong dieu-phoi-gieo.ts. Khoi catch co nem lai nguyen ven moi loi khong phai PrismaClientKnownRequestError ma P2002 khong? Voi P2002, ham co doc lai hang WORKSPACE_ID theo cach lam loi hien ra neu hang van khong co (khong nuot im lang) khong? Co nhanh nao bien mot loi that thanh thanh cong gia khong? Va trong gieo-nguoi-song-song.spec.ts, ca gnss-dong-thoi co assert DUNG MOT hang to chuc WORKSPACE_ID va DUNG SO_LUOT hang thanh vien cua chinh cac userId vua gieo (quan he, khong chi cho Promise.all xong) khong?"
+    inputs: [_acceptance/gieo-nguoi-chiu-song-song/contract.md, apps/api/test/dieu-phoi-gieo.ts, apps/api/test/gieo-nguoi-song-song.spec.ts]
+    paths:
+      - "_acceptance/gieo-nguoi-chiu-song-song/contract.md"
+      - "apps/api/test/dieu-phoi-gieo.ts"
+      - "apps/api/test/gieo-nguoi-song-song.spec.ts"
+    evidence_required: [judged_by, verdict, rationale]
+
+  - id: E6
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.gnss_cho_goi_dieu_phoi
+    paths:
+      - "apps/api/test/dieu-phoi-gieo.ts"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: "exit 0; ca xoa-ghi-danh pass, 0 fail"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.gnss_cho_goi_diem_nhan
+    paths:
+      - "apps/api/test/dieu-phoi-gieo.ts"
+      - "apps/api/test/dieu-phoi-diem-nhan.spec.ts"
+    expected: "exit 0; ca khong-khop-agenttask pass, 0 fail"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
