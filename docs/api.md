@@ -877,7 +877,11 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `where`, a division includes its departments, and the facet counts are counted
   with every other filter applied but their own. `okr.toanCanh` rolls published
   objectives up by unit, `okr.cayCanChinh` returns the whole company alignment tree
-  with each objective's expected pace, and `okr.sucKhoe` is admin-only
+  with each objective's expected pace, `okr.quanhMucTieu` (GET `/okr/objective-map`) returns
+  one objective's map — every contribution path up to company level, its KRs and the
+  objectives contributing one step down, each objective or KR once — built by the pure
+  `quanh-muc-tieu.ts` over the same `mucTieuCuaCay` set the tree reads (so the same
+  visibility; a target outside that set is dropped, never named), and `okr.sucKhoe` is admin-only
   (`ForbiddenException` otherwise). `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
   number of queries whatever the unit count; `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
   pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
