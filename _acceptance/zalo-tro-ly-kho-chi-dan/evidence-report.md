@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8b088f672ed25a27d913ace4ec656961e05f3448
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-16 — ký Cổng 2 trên S4 lượt 1 (6/6 eval máy PASS, đo Gemini 0 phiên thiếu chỉ dẫn, 96/96 phiên gốc đã gắn, 2 câu lỗi). Ngoài-1, 2, 3, 5 ghi Known limits; Ngoài-4 mở hợp đồng mới; Ngoài-6 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: zalo-tro-ly-kho-chi-dan

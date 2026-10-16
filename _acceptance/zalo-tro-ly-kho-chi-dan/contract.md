@@ -5,7 +5,7 @@ slug: zalo-tro-ly-kho-chi-dan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-16
 design_doc: _acceptance/zalo-tro-ly-kho-chi-dan/design.md
@@ -55,3 +55,8 @@ một phép đo đầu-cuối (AC-6). Bỏ quét: dòng sổ `descope` «bỏ co
 
 - AC-6 gọi model thật qua AI Gateway một lượt (khoảng 100 lượt hỏi, khoảng 1,5 USD trên Gemini).
 - AC-6 đo trên cây có hai hằng model đổi tạm, không commit; bằng chứng ghi model mà Gateway trả trong báo cáo bộ chấm.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Khi cơ sở dữ liệu gặp sự cố lúc trợ lý kho tìm câu hỏi, nhật ký vẫn ghi «không tìm thấy câu hỏi» và không nói lý do thật.
+  - Ngoài-2: Bộ so lượt đo bỏ qua không báo một dòng kết quả thiếu mã phiên; số đo hôm nay vẫn đủ.
+  - Ngoài-3: Một sự cố cơ sở dữ liệu khi trợ lý kho bắt đầu bị xử lý như «không có câu hỏi», rồi câu hỏi bị đóng như lỗi của model.
+  - Ngoài-5: Bộ so lượt đo không tự khẳng định số phiên bằng số dòng kết quả, nên bằng chứng bị cắt bớt vẫn có thể báo đạt.
