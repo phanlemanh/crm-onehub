@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7ddbcff56a4588b9076259995bd647b0da3dc582
+verified_commit: bb270f580f87112750c29d87c204741adea7ad61
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng 2 trên verdict PASS 7/7 eval máy (S4 round 2, wf_e6feeefb-20e). Ngoài-1 mở hợp đồng mới; Ngoài-2 tới Ngoài-7 ghi Known limits; đồng ý phần cắt/hoãn; phê cả hai quyết định Treo-1, Treo-2.
 ---
 
@@ -150,3 +150,7 @@ none — moi eval la deterministic (runs: 1), khong eval nao co pass_rate hon ho
 
 Round 1: REJECT — mot lenh suite lane agent do, mot phat hien high trong hop dong (AC-3: model ZDR cua phien goc kho bi bo khi chay that vi session.started tra ve model song), kem cac phat hien do-bo-phan ve bai kiem. Quay lai implementation.
 Round 2: PASS — E1 den E7 deu xanh tai verified_commit 7ddbcff56a4588b9076259995bd647b0da3dc582 (fix 03815cc: phien goc kho giu ZDR khi chay that; 7ddbcff: kd-zdr parse lua chon model bang zod), bay lenh suite xanh, khong eval nao khai judgment nen khong co panel can cham.
+
+### Re-pin lần 1 — 2026-10-16, do l6 zalo-tro-ly-kho-chi-dan (#444) đổi tệp mà eval của hồ sơ đo
+run_id: repin-20261016T133331Z-42672
+sha: bb270f580f87112750c29d87c204741adea7ad61 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
