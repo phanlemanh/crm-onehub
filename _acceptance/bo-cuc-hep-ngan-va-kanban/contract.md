@@ -5,7 +5,7 @@ slug: bo-cuc-hep-ngan-va-kanban
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-16T04:31:00Z
 design_doc: docs/superpowers/specs/2026-10-16-bo-cuc-hep-ngan-va-kanban-design.md
@@ -68,3 +68,6 @@ Quét theo khuôn test-matrix của `morphological-scan`.
 ## Notes
 
 - Nhánh `feat/bo-cuc-hep-ngan-va-kanban`, cắt từ onehub 34d31a8bf.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-16:
+  - Ngoài-1: Ảnh minh hoạ ngăn công ty trên điện thoại trong hồ sơ là ảnh của lượt cũ, ô Phụ trách còn trống; phép đo đã kiểm tên phụ trách dài nhưng người xem ảnh không thấy.
+  - Ngoài-4: Mục ngoài phạm vi về đầu ngăn vẫn ghi «không sửa», trong khi vòng này sửa đầu ngăn theo Hỏi-5 A — chip giai đoạn co lại và cắt «…» trên điện thoại, tiêu đề giữ chỗ.
