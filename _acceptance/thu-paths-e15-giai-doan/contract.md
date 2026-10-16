@@ -91,7 +91,9 @@ của `docs/plan/lo-trinh-okr.json`).
   (`them-paths.mjs --kiem --ho-so <slug>`), không ghim lại hàng loạt trong vòng này (Hỏi-2).
 - Thu `paths` của `gioi-han-duyet-cay-okr` (Hỏi-1): bao đóng import các trang nó đo rộng hơn glob hiện tại, thu là đi
   ngược thứ nó đọc.
-- 18 eval judgment có `paths` hẹp hơn `inputs` (khoảng 10 bỏ sót tệp thật ngoài `_acceptance/`): hàng riêng.
+- 18 eval judgment có `paths` hẹp hơn `inputs` khi so chuỗi nguyên văn; theo luật lưới (khớp glob, trừ `_acceptance/` và
+  `risk_tiers.t1_skip_globs`, kể cả `CONTEXT.md`, `AGENTS.md` ở gốc) không eval nào bỏ sót tệp mà lưới tính (đếm 16/10 trên
+  `onehub d5e01c5a3`); việc dọn chuỗi thuộc hàng F32.
 - Eval test/script và ui-check thiếu `paths`, `paths` trỏ tệp mất: không có `inputs` để suy, việc của hàng vệ sinh.
 - Sửa `lib/evidence-core.cjs` (tệp của kit): đề xuất cho kit đi qua yêu cầu `viec-phu`.
 
