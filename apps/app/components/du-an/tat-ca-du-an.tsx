@@ -40,10 +40,10 @@ type DuAnDong = RouterOutputs["duAn"]["list"][number];
 
 const DONG_CHO = ["a", "b", "c", "d", "e"];
 
-function nhanMoc(m: DuAnMessages["ds"], da: DuAnDong): string | null {
+function nhanMoc(d: DuAnMessages, da: DuAnDong): string | null {
 	if (!da.mocKe) return null;
 	const chu = `${da.mocKe.ten} ${ngayNgan(da.mocKe.ngay)}`;
-	return da.mocKe.tre ? `${chu} · ${m.tre}` : chu;
+	return da.mocKe.tre ? `${chu} · ${d.ds.tre}` : chu;
 }
 
 function BangDuAn({
@@ -53,7 +53,8 @@ function BangDuAn({
 	ds: DuAnDong[];
 	onChon: (id: string) => void;
 }) {
-	const m = duAnMessages(useLocale()).ds;
+	const d = duAnMessages(useLocale());
+	const m = d.ds;
 	return (
 		<>
 			<div className="hidden md:block">
@@ -68,7 +69,7 @@ function BangDuAn({
 					surface="page"
 				>
 					{ds.map((da) => {
-						const moc = nhanMoc(m, da);
+						const moc = nhanMoc(d, da);
 						return (
 							<SimpleTableRow
 								clickable
@@ -107,7 +108,7 @@ function BangDuAn({
 			</div>
 			<ItemGroup className="gap-2 md:hidden">
 				{ds.map((da) => {
-					const moc = nhanMoc(m, da);
+					const moc = nhanMoc(d, da);
 					const khoang = khoangNgay(da.batDauSom, da.hanMuon);
 					return (
 						<Item asChild data-du-an={da.id} key={da.id} variant="outline">

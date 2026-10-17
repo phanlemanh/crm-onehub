@@ -1,10 +1,10 @@
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
 	PageShell,
 	PageShellContent,
 	PageShellDescription,
+	PageShellFallback,
 	PageShellHeader,
 	PageShellHeading,
 	PageShellTitle,
@@ -31,7 +31,7 @@ export default async function LichLamViecPage() {
 				</PageShellHeading>
 			</PageShellHeader>
 			<PageShellContent>
-				<Suspense fallback={<KhungXuong hinh="the" />}>
+				<Suspense fallback={<PageShellFallback />}>
 					<NoiDung />
 				</Suspense>
 			</PageShellContent>

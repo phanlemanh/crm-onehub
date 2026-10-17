@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	datNgayNghiTuanInput,
@@ -23,7 +23,7 @@ import { LichLamViecService } from "./lich-lam-viec.service";
 const TAG = ["LichLamViec"];
 
 @Router({ alias: "lichLamViec" })
-@UseMiddlewares(PhamViChungMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class LichLamViecRouter {
 	constructor(
 		@Inject(LichLamViecService) private readonly lich: LichLamViecService,

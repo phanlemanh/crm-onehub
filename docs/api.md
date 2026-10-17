@@ -648,7 +648,7 @@ lệnh ghi ở `@crm/db/du-an-ghi` và `@crm/db/viec-ghi`; ngày làm việc ở
   việc nào; dự án đã đóng từ chối thêm việc, mốc, phụ thuộc và đổi ngày (400 «Dự án đã đóng.»), việc trong
   đó vẫn đổi trạng thái. Đưa việc ra khỏi dự án gỡ phụ thuộc (vết `go-phu-thuoc` trên cả hai việc) và việc
   chờ mốc; xoá việc gỡ chúng theo khoá ngoại.
-- **Lịch làm việc.** Router `lichLamViec` (`PhamViChungMiddleware`): `get` (ai cũng đọc), `datNgayNghiTuan`,
+- **Lịch làm việc.** Router `lichLamViec` (`PhamViDoiTacMiddleware`, như `duAn`): `get` (ai đọc được phạm vi đối tác), `datNgayNghiTuan`,
   `themNgayLe`, `xoaNgayLe` (chủ, quản trị). `AppSetting.ngayNghiTuan` rỗng nghĩa là mặc định Thứ Bảy, Chủ
   nhật. Đổi lịch không dời việc đã có; chỉ lần ghi sau tính theo lịch mới.
 - **Dữ liệu mẫu và thước.** `gieoDuAnMau` (`@crm/db/du-an-gieo`, gọi từ `bun run db:seed`) dựng một dự án

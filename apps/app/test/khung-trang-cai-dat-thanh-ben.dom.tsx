@@ -53,7 +53,7 @@ const { SettingsSidebar, SettingsSidebarFallback } = await import(
 const NHOM = [
 	[
 		"Không gian làm việc",
-		["Chung", "Tiền tệ", "Trường", "Giai đoạn thoả thuận"],
+		["Chung", "Tiền tệ", "Trường", "Giai đoạn thoả thuận", "Lịch làm việc"],
 	],
 	[
 		"Con người",
@@ -67,6 +67,7 @@ const DUONG = [
 	["/ws/settings", "Chung"],
 	["/ws/settings/currencies", "Tiền tệ"],
 	["/ws/settings/fields", "Trường"],
+	["/ws/settings/lich-lam-viec", "Lịch làm việc"],
 	["/ws/settings/members", "Thành viên"],
 	["/ws/settings/organization", "Tổ chức"],
 	["/ws/settings/okr", "Chương trình OKR"],

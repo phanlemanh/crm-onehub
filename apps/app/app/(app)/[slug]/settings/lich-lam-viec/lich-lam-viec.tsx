@@ -35,8 +35,8 @@ import {
 	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { formatDay } from "@crm/ui/lib/format";
@@ -143,7 +143,18 @@ export function LichLamViec() {
 	const xoaLe = useMutation(trpc.lichLamViec.xoaNgayLe.mutationOptions());
 	const [moThem, setMoThem] = useState(false);
 
-	if (q.isPending) return <KhungXuong hinh="the" />;
+	if (q.isPending) {
+		return (
+			<div
+				aria-busy="true"
+				className="flex flex-col gap-6"
+				data-lich-cho-tai=""
+			>
+				<Skeleton className="h-32 w-full" />
+				<Skeleton className="h-48 w-full" />
+			</div>
+		);
+	}
 	if (!q.data) {
 		return (
 			<VungTaiLoi
