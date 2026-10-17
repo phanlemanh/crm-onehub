@@ -85,6 +85,7 @@ export const viecTheoDoiInput = z.object({ id: ma, userId: ma.optional() });
 export const viecCuaToiInput = z.object({
 	nhom: z.enum(NHOM_VIEC).default("giao-cho-toi"),
 	duAnId: ma.optional(),
+	tatCaDuAn: z.boolean().optional(),
 });
 
 const nguoiRa = z.object({

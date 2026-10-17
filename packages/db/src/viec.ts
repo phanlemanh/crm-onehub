@@ -324,9 +324,12 @@ export function dieuKienXemViec(userId: string): Prisma.ViecWhereInput {
 export function dieuKienNhomHayDuAn(
 	nhom: NhomViec,
 	userId: string,
-	duAnId?: string,
+	duAn?: { duAnId?: string; tatCaDuAn?: boolean },
 ): Prisma.ViecWhereInput {
-	return duAnId ? { duAnId } : dieuKienNhom(nhom, userId);
+	if (duAn?.duAnId) return { duAnId: duAn.duAnId };
+	if (duAn?.tatCaDuAn)
+		return { duAnId: { not: null }, duAn: { dongLuc: null } };
+	return dieuKienNhom(nhom, userId);
 }
 
 export function dieuKienNhom(

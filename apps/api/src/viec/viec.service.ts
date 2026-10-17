@@ -232,7 +232,7 @@ export class ViecService {
 			trangThai: Prisma.ViecWhereInput,
 		) => ({
 			AND: [
-				dieuKienNhomHayDuAn(nhom, userId, input.duAnId),
+				dieuKienNhomHayDuAn(nhom, userId, input),
 				dieuKienXemViec(userId),
 				trangThai,
 			],

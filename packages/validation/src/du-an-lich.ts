@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export { DU_AN } from "@crm/db/du-an";
+
 const ngay = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 
 export const NGHIA_TRANG_THAI_VIEC = [

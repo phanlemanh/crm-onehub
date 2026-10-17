@@ -26,6 +26,9 @@ const en = {
 		huy: "Cancel",
 		dangGiao: "Assigning…",
 		loi: "Couldn't assign. Check the fields and try again.",
+		duAn: "Project",
+		khongDuAn: "No project",
+		khongDuAnNao: "No open project matches",
 	},
 	khoi: { tieuDe: "Work" },
 	nut: {
@@ -108,7 +111,7 @@ const en = {
 		thoi: "Keep it",
 	},
 	trang: {
-		tieuDe: "My work",
+		tieuDe: "Work",
 		moTa: "Work assigned to you, work you assigned, and work you follow.",
 		giaoViec: "Assign work",
 		giaoMoTa:
@@ -202,6 +205,9 @@ const vi: ViecMessages = {
 		huy: "Huỷ",
 		dangGiao: "Đang giao…",
 		loi: "Chưa giao được. Kiểm lại các ô rồi thử lại.",
+		duAn: "Dự án",
+		khongDuAn: "Không dự án",
+		khongDuAnNao: "Không có dự án đang mở nào khớp",
 	},
 	khoi: { tieuDe: "Việc" },
 	nut: {
@@ -283,7 +289,7 @@ const vi: ViecMessages = {
 		thoi: "Giữ lại",
 	},
 	trang: {
-		tieuDe: "Việc của tôi",
+		tieuDe: "Việc",
 		moTa: "Việc người khác giao cho bạn, việc bạn giao, và việc bạn đang theo dõi.",
 		giaoViec: "Giao việc",
 		giaoMoTa: "Giao việc cho bạn hoặc đồng nghiệp, có thể gắn với một bản ghi.",

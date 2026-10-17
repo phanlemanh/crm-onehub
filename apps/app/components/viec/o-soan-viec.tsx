@@ -11,28 +11,41 @@ import { VIEC } from "@crm/validation/viec";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type ReactNode, useRef, useState } from "react";
 import type { TimelineAnchor } from "@/components/crm/timeline/timeline";
+import { duAnMessages } from "@/lib/messages/du-an";
 import { viecMessages } from "@/lib/messages/viec";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
 const TOI = "toi";
 
+const KHONG_DU_AN = "khong";
+
 export function OSoanViec({
 	anchor,
 	loaiChon,
 	onXong,
+	duAn,
 }: {
 	anchor: TimelineAnchor | null;
 	loaiChon?: ReactNode;
 	onXong?: () => void;
+	duAn?: { macDinh: string | null };
 }) {
-	const m = viecMessages(useLocale()).oSoan;
+	const locale = useLocale();
+	const m = viecMessages(locale).oSoan;
+	const d = duAnMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const [tieuDe, setTieuDe] = useState("");
 	const [nguoi, setNguoi] = useState(TOI);
 	const [han, setHan] = useState<string | null>(null);
 	const [theoDoi, setTheoDoi] = useState<string[]>([]);
+	const [duAnId, setDuAnId] = useState(duAn?.macDinh ?? KHONG_DU_AN);
+	const [batDau, setBatDau] = useState<string | null>(null);
+	const dsDuAn = useQuery({
+		...trpc.duAn.list.queryOptions({ trangThai: "mo" }),
+		enabled: duAn !== undefined,
+	});
 	const [loi, setLoi] = useState<string | null>(null);
 	const dangGui = useRef(false);
 	const ds = useQuery(trpc.onboarding.nguoiNhanViec.queryOptions());
@@ -59,6 +72,7 @@ export function OSoanViec({
 				setNguoi(TOI);
 				setHan(null);
 				setTheoDoi([]);
+				setBatDau(null);
 				setLoi(null);
 				await cache.viec();
 				onXong?.();
@@ -73,12 +87,19 @@ export function OSoanViec({
 	const gui = () => {
 		const chu = tieuDe.trim();
 		if (chu === "" || dangGui.current) return;
+		const vaoDuAn = duAnId === KHONG_DU_AN ? undefined : duAnId;
+		if (vaoDuAn && batDau && han && batDau > han) {
+			setLoi(d.gantt.batDauSauHan);
+			return;
+		}
 		dangGui.current = true;
 		setLoi(null);
 		tao.mutate({
 			...(anchor ?? {}),
 			tieuDe: chu,
 			hanNgay: han ? han : null,
+			duAnId: vaoDuAn,
+			batDauNgay: vaoDuAn && batDau ? batDau : null,
 			nguoiThucHienId: nguoi === TOI ? undefined : nguoi,
 			nguoiTheoDoiIds: theoDoi.filter((ma) => ma !== nguoiThucHienId),
 		});
@@ -135,6 +156,37 @@ export function OSoanViec({
 					/>
 				</Field>
 			</div>
+			{duAn ? (
+				<div className="grid gap-3 sm:grid-cols-3">
+					<Field>
+						<FieldLabel>{m.duAn}</FieldLabel>
+						<Combobox
+							aria-label={m.duAn}
+							empty={m.khongDuAnNao}
+							onValueChange={setDuAnId}
+							options={[
+								{ value: KHONG_DU_AN, label: m.khongDuAn },
+								...(dsDuAn.data ?? []).map((p) => ({
+									value: p.id,
+									label: p.ten,
+								})),
+							]}
+							translate="no"
+							value={duAnId}
+						/>
+					</Field>
+					{duAnId === KHONG_DU_AN ? null : (
+						<Field>
+							<FieldLabel>{d.gantt.batDau}</FieldLabel>
+							<DatePicker
+								onChange={setBatDau}
+								placeholder={m.chonHan}
+								value={batDau}
+							/>
+						</Field>
+					)}
+				</div>
+			) : null}
 			<div className="flex flex-col items-end gap-1">
 				<Button disabled={tao.isPending} type="submit">
 					{tao.isPending ? m.dangGiao : m.giao}

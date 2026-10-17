@@ -108,7 +108,7 @@ export class ViecBangService {
 		const now = new Date();
 		const loc = (trangThai: Prisma.ViecWhereInput): Prisma.ViecWhereInput => ({
 			AND: [
-				dieuKienNhomHayDuAn(input.nhom, userId, input.duAnId),
+				dieuKienNhomHayDuAn(input.nhom, userId, input),
 				dieuKienXemViec(userId),
 				trangThai,
 			],

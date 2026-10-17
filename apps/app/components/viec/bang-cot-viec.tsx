@@ -44,16 +44,22 @@ const THE_CHO = ["a", "b", "c"];
 export function BangCotViec({
 	nhom,
 	onXemDanhSach,
+	duAnId,
+	tatCaDuAn,
+	onMoDuAn,
 }: {
 	nhom: NhomViec;
 	onXemDanhSach: () => void;
+	duAnId?: string;
+	tatCaDuAn?: boolean;
+	onMoDuAn?: (id: string) => void;
 }) {
 	const m = viecMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const open = useOpenRecord();
 	const thamSo = useSearchParams();
-	const q = useQuery(trpc.viec.bang.queryOptions({ nhom }));
+	const q = useQuery(trpc.viec.bang.queryOptions({ nhom, duAnId, tatCaDuAn }));
 	const [cho, setCho] = useState<ReadonlyMap<string, Keo>>(new Map());
 	const [hoi, setHoi] = useState<{ keo: Keo; conMo: number } | null>(null);
 	const keo = useMutation(trpc.viec.keo.mutationOptions());
@@ -215,6 +221,7 @@ export function BangCotViec({
 								batDau({ id: v.id, den, thuTu: [], nguon: "bang-menu" })
 							}
 							onMo={() => open({ kind: "viec", id: v.id })}
+							onMoDuAn={onMoDuAn}
 							the={{ ...v, trangThai: cotCua(v) }}
 						/>
 					);
