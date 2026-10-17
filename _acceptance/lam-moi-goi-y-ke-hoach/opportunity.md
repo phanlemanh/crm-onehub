@@ -10,6 +10,8 @@ decided_at:    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
+lo_trinh_ma: DA3c
+lo_trinh_tep: docs/plan/lo-trinh-viec-du-an.json
 ---
 
 Gốc: Ngoài-16 của `_acceptance/goi-y-mo-ke-hoach/` (DA3b, phanlemanh/crm-onehub#447) — anh chọn «mở hợp đồng mới» ở Cổng Bằng chứng 16/10/2026 (dòng sổ d-20261016T130310Z-38). Mục tiêu và ngưỡng 14 ngày của DA3b là nền của vòng này.
