@@ -3,10 +3,10 @@ schema_version: 1
 slug: dich-ten-nganh-bang-bang
 feature: Tra cứu thương hiệu Việt Nam hiện tên ngành tiếng Việt từ một bảng, không dịch máy từng lần
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Phan Le Manh
+decided_at: 2026-10-17T12:05:45Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -39,10 +39,10 @@ Tra cứu thương hiệu Việt Nam hiện tên ngành tiếng Việt từ mộ
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Trên production, rep dùng giao diện tiếng Việt còn thấy tên ngành / ngành phụ tiếng Anh thuộc danh sách cố định ở ba chỗ (dòng phụ ngăn, cột bảng, bộ lọc) không?
-- Kết quả nào là SỐNG: [đề xuất] Đất Xanh Miền Bắc (đã tra 17/10) hiện ngành và ngành phụ tiếng Việt ở cả ba chỗ mà KHÔNG cần bấm tra lại; lọc theo ngành vẫn ra đúng số công ty như trước gộp.
-- Kết quả nào là CHẾT: [đề xuất] Còn một giá trị thuộc danh sách cố định hiện chữ Anh ở giao diện tiếng Việt, hoặc bộ lọc theo ngành đổi số kết quả.
-- Timebox: [đề xuất] ~2 giờ máy, xong trước mốc 21/10/2026; đọc ngưỡng trong ngày đầu sau khi bản lên production.
+- Câu hỏi phép đo trả lời: Trên production, rep dùng giao diện tiếng Việt còn thấy tên ngành / ngành phụ tiếng Anh thuộc danh sách cố định ở ba chỗ (dòng phụ ngăn, cột bảng, bộ lọc) không?
+- Kết quả nào là SỐNG: Đất Xanh Miền Bắc (đã tra 17/10) hiện ngành và ngành phụ tiếng Việt ở cả ba chỗ mà KHÔNG cần bấm tra lại; lọc theo ngành vẫn ra đúng số công ty như trước gộp.
+- Kết quả nào là CHẾT: Còn một giá trị thuộc danh sách cố định hiện chữ Anh ở giao diện tiếng Việt, hoặc bộ lọc theo ngành đổi số kết quả.
+- Timebox: ~2 giờ máy, xong trước mốc 21/10/2026; đọc ngưỡng trong ngày đầu sau khi bản lên production.
 
 ## Ngoài vòng — ghi lại, không gộp
 
