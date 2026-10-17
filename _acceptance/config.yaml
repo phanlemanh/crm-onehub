@@ -2957,7 +2957,7 @@ executors:
     gymk_hoi_quy: 'node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types'
     gymk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/goi-y-mo-ke-hoach/rang/man.mjs"'
     kh_e6_xanh: node _acceptance/ke-hoach-sinh-viec/rang/e6-xanh.mjs
-    kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --moc 34d31a8bf && bun run check-types'
+    kh_hoi_quy: 'node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/ke-hoach-sinh-viec/rang/khong-xoa-expect.mjs --gop 7ebcb0242 && bun run check-types'
     sgt_ranh_gioi: node _acceptance/sua-giao-dien-tin-hieu/rang/ranh-gioi.mjs
     sgt_do_man: APP_URL=${APP_URL:-http://localhost:3372} API_URL=${API_URL:-http://localhost:3373} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/sua-giao-dien-tin-hieu/rang/do-man.mjs"
     sgt_thiet_ke: for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done
