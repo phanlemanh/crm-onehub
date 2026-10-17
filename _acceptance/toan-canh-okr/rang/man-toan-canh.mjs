@@ -1170,6 +1170,17 @@ const boChan = () => fetch(`${CUA_CHAN}/__cua-chan/bo`, { method: "POST" });
 const ky = () => `kyOkr=${OKR.quy}`;
 const theoDonVi = (them) => `/okr/theo-don-vi?${ky()}${them ? `&${them}` : ""}`;
 
+/* Mục tiêu đã bỏ nằm trong nhóm «Đã bỏ» thu gọn dưới bảng (CollapsibleTrigger trong
+   [data-nhom-da-bo]); mở nhóm để mọi mục tiêu máy chủ trả cho đơn vị cùng hiện. */
+async function moNhomDaBo(t) {
+	await hienSel(t, "[data-nhom-da-bo]", "nhom «Da bo» hien");
+	await t.evaluate(() => {
+		const nut = window.__tim("[data-nhom-da-bo] button[aria-expanded='false']")[0];
+		if (nut instanceof HTMLElement) nut.click();
+	});
+	await cho(400);
+}
+
 async function buocLoc() {
 	const t = await moTrang(
 		cookie.truongB,
@@ -1177,6 +1188,8 @@ async function buocLoc() {
 		theoDonVi(`donOkr=bp:${ORG.B}`),
 	);
 	await hienSel(t, "[data-muc-tieu]");
+	// ve-sinh-do-san-onehub cach-toi: muc tieu da bo (P2a) nay o nhom «Da bo» thu gon duoi bang — mo nhom roi dem nhu danh sach cu.
+	await moNhomDaBo(t);
 	const bon = await thuocTinh(t, "[data-muc-tieu]", "data-muc-tieu");
 	kiem(
 		`E2 buoc 3: bo phan B hien dung 4 muc tieu B1, P1a, P1b, P2a, khong P3a (thay ${bon.length})`,
@@ -1250,6 +1263,8 @@ async function buocLoc() {
 		"[data-trang-thai='ST-donvi-loc-khongkhop'] button",
 		CHU.boLoc,
 	);
+	// ve-sinh-do-san-onehub cach-toi: bo loc thi danh sach nap lai, nhom «Da bo» dung lai o trang thai thu — mo lai roi dem.
+	await moNhomDaBo(t);
 	await doi(
 		t,
 		"E2 buoc 5: bo loc tra lai 4 muc tieu",
@@ -1961,7 +1976,8 @@ async function buocSucKhoe() {
 		`E21 buoc 2: URL la trang suc khoe (thay ${new URL(a.url()).pathname})`,
 		new URL(a.url()).pathname.endsWith("/suc-khoe"),
 	);
-	const vun = await chuSel(a, "nav[aria-label='breadcrumb']");
+	// ve-sinh-do-san-onehub cach-toi: nhãn trợ năng của breadcrumb đổi theo ngôn ngữ (3b35afcd0, 14/10) — đọc dấu ổn định data-slot
+	const vun = await chuSel(a, "nav[data-slot='breadcrumb']");
 	kiem(
 		`E21 buoc 2: breadcrumb Toan canh › Suc khoe chuong trinh (thay ${vun})`,
 		vun.indexOf(CHU.toanCanhTab) === 0 &&

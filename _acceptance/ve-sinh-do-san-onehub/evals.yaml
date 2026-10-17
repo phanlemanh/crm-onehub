@@ -1,0 +1,268 @@
+schema_version: 1
+slug: ve-sinh-do-san-onehub
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: ui
+    cmd: config:executors.script.vs_hydrat_record
+    paths: ["apps/app/app/(app)/[slug]/layout.tsx", "apps/app/lib/ngan-ban-ghi-nap-san.ts", "apps/app/components/crm/record-sheet/**", "apps/app/lib/trpc/**", "apps/app/app/(app)/[slug]/deals/**", "apps/app/app/(app)/[slug]/okr/**", "_acceptance/ve-sinh-do-san-onehub/rang/hydrat-record.mjs"]
+    expected: |
+      rang/hydrat-record.mjs chay trong phien do rieng (tien-de.mjs), dat nguoi quan tri va truong phong ban, mo
+      mot cuoc soan dang cua truong qua duong ghi that, roi mo thang bon o D1-D4 cua hop dong o 1440 va 390, moi
+      kho 5 luot tai cung (40 lan). Moi lan: dem pageerror va console.error khop /hydrat/i; doi tieu de ngan dung
+      ban ghi (ten thoa thuan seed o D1/D2, khung soan cua cuoc o D3/D4) va trang duoi co du lieu. Dong cuoi
+      "hydrat-record: 40 lan mo, 0 loi hydrat" va ma 0. Lan co loi in "HONG <o> <kho> luot <n>:" kem NGUYEN VAN
+      thong bao React (khong .slice) va ma 1. Tien de thieu (khong co thoa thuan seed, khong mo duoc cuoc) ->
+      "KHONG DO DUOC: ..." ma 2. Luot cuoi cua moi o o moi kho chup mot anh vao
+      .acceptance-runs/ve-sinh-do-san-onehub/evidence/<o>-<kho>.png (dung 8 anh D1-D4 x 1440/390), in duong tung
+      anh; thieu anh nao -> "THIEU ANH <o> <kho>" ma 1. Chieu do o E2.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: ui
+    cmd: config:executors.script.vs_chieu_do_hydrat
+    paths: ["apps/app/app/(app)/[slug]/layout.tsx", "apps/app/components/crm/record-sheet/record-sheet-host.tsx", "apps/app/components/crm/record-sheet/sau-khi-tai-xong.ts", "apps/app/lib/ngan-ban-ghi-nap-san.ts", "_acceptance/ve-sinh-do-san-onehub/rang/**"]
+    expected: |
+      rang/chieu-do.mjs --ca hydrat dung git worktree add --detach tam o HEAD, symlink node_modules va .env ve cay
+      that, tra apps/app/app/(app)/[slug]/layout.tsx va apps/app/components/crm/record-sheet/record-sheet-host.tsx ve ban
+      merge-base(HEAD, origin/onehub), chay
+      hydrat-record.mjs --mong-do trong ban sao (phien do rieng cua ban sao, 10 lan mo moi o). Moi o in mot dong
+      "O <o>: <k>/10 loi hydrat — tai hien | tai hien yeu | khong tai hien" (>=3 | 1-2 | 0). Dat khi >= 1 o "tai
+      hien": in "CHIEU DO DAT: <k> loi hydrat tren ban sao khong nap san; o tai hien: <ds>" va ma 0. Khong o nao
+      tai hien -> "CHIEU DO HONG: ban sao khong nap san ma khong o nao tai hien" ma 1. Truoc va sau: git status
+      --porcelain -uall cong git hash-object moi tep dang sua hay chua theo doi phai trung (khac -> "CHIEU DO GHI
+      CAY <tep>" ma 1); tu kiem --tu-thu-cay: ca gia ghi mot byte vao mot tep dang sua phai in "CHIEU DO GHI CAY";
+      worktree tam luon go.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vs_nap_san_dom
+    paths: ["apps/app/lib/ngan-ban-ghi-nap-san.ts", "apps/app/lib/trpc/hydrate.tsx", "apps/app/test/ngan-ban-ghi-nap-san.dom.tsx"]
+    expected: |
+      apps/app/test/ngan-ban-ghi-nap-san.dom.tsx xanh: (a) khoaNapSan cua vai chi-OKR bang dung ["okr.access"],
+      vai quan tri va truong bang dung danh sach day du da khai; (b) voi moi khoa trong danh sach: mot QueryClient
+      giai lap thu tu stream — HydrationBoundary cua ngan (trang thai nap san) render truoc va mot thanh phan ngan
+      goi useQuery khoa do, roi HydrationBoundary cua trang (cung du lieu, cung dataUpdatedAt) mount sau — thanh
+      phan trang thay du lieu ngay lan render dau. Doi chung trong cung tep: ngan KHONG nap san (trang thai rong)
+      thi thanh phan trang doc rong o lan render dau (chung co che that, khong phai bai hang dung). Thong diep ghim
+      khi do: "trang doc rong luc hydrate: <khoa>".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vs_chieu_do_nap_san
+    paths: ["apps/app/lib/ngan-ban-ghi-nap-san.ts", "apps/app/test/ngan-ban-ghi-nap-san.dom.tsx", "_acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs"]
+    expected: |
+      rang/chieu-do.mjs --ca nap-san: ban sao (worktree tam) bo "users.list" khoi danh sach trong
+      apps/app/lib/ngan-ban-ghi-nap-san.ts, chay bai E3 trong ban sao: ma khac 0 va dau ra chua
+      "trang doc rong luc hydrate: users.list" -> in "CHIEU DO DAT: nap-san" ma 0; khong thi "CHIEU DO HONG: nap-san"
+      kem 20 dong cuoi, ma 1. Cay lam viec khong doi (cung phep so porcelain -uall + hash-object nhu E2).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vs_403_dom
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/lib/agent-session.ts", "apps/app/test/khung-soan-okr.tsx", "apps/app/test/soan-okr-nguoi-xem-khong-mo.dom.tsx"]
+    expected: |
+      apps/app/test/soan-okr-nguoi-xem-khong-mo.dom.tsx xanh: cuoc dang soan CUOC (nguoiMo "hai"); (a) users.me =
+      quan tri id khac "hai" -> 0 lan loadThread sau khi khung on dinh, khung hien noi dung cuoc (khong con nhan
+      "dang mo" cua m.man.dangMo); (b) users.me = "hai" -> dung 1 lan loadThread. Thong diep ghim khi do (a): "tai
+      luong cuoc nguoi khac".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vs_chieu_do_403
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/dung-cuoc-soan.ts", "apps/app/test/soan-okr-nguoi-xem-khong-mo.dom.tsx", "_acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs"]
+    expected: |
+      rang/chieu-do.mjs --ca 403: ban sao bo dieu kien nguoi mo trong usePhienCuoc (enabled tro lai chi theo
+      trangThai va laChoGiuPhien), chay bai E5 trong ban sao: ma khac 0 va dau ra chua "tai luong cuoc nguoi khac"
+      -> "CHIEU DO DAT: 403" ma 0; khong thi "CHIEU DO HONG: 403" ma 1. Cay lam viec khong doi (cung phep so nhu E2).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vs_hydrat_record
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/eve/agents/okr/**", "_acceptance/ve-sinh-do-san-onehub/rang/hydrat-record.mjs"]
+    expected: |
+      Cung lan chay voi E1: hydrat-record.mjs ghi moi yeu cau va phan hoi mang. Moi lan mo D3 (quan tri, cuoc
+      cua truong): 0 yeu cau co duong /eve/agents/okr va 0 phan hoi 403 -> khong thi "HONG D3 <kho> luot <n>: goi
+      luong cuoc nguoi khac" ma 1. Moi lan mo D4 (truong, nguoi mo): >= 1 yeu cau /eve/agents/okr va khong yeu cau
+      nao tra 403 -> khong thi "HONG D4 <kho> luot <n>: nguoi mo khong tai luong" ma 1. Dau ra co dong "D3: 0 yeu
+      cau /eve/agents/okr" va "D4: <n> yeu cau /eve/agents/okr, 0 phan hoi 403".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    layer: logic
+    cmd: config:executors.script.cai_dat_moi_chuoi
+    paths: ["_acceptance/man-cai-dat-noi-tieng-viet/rang/**", "apps/app/app/(app)/[slug]/settings/*.tsx", "apps/app/app/(app)/[slug]/settings/currencies/**"]
+    expected: |
+      moi-chuoi.mjs (lat cai dat) thoat 0, dong cuoi "XANH: khong chuoi nguoi doc thay nao con la tieng Anh."; khong
+      dong "CON TIENG ANH" nao.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: script
+    layer: logic
+    cmd: config:executors.script.ktcd_khong_hoi_quy
+    paths: ["_acceptance/man-cai-dat-noi-tieng-viet/rang/**", "_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs", "apps/app/app/(app)/[slug]/settings/**"]
+    expected: |
+      khong-hoi-quy.mjs cua khung-trang-cai-dat (E16 cua ho so do) thoat 0 o dinh nhanh: khong lenh nao "hoi quy";
+      lenh moi-chuoi cua man-cai-dat-noi-tieng-viet khong con trong danh sach do.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-6
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vs_chieu_do_moi_chuoi
+    paths: ["_acceptance/man-cai-dat-noi-tieng-viet/rang/**", "_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs", "_acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs"]
+    expected: |
+      rang/chieu-do.mjs --ca moi-chuoi-khai --ca moi-chuoi-that: (khai) ban sao bo "hinh" khoi thuoc_jsx_ky_thuat
+      cua khong-phai-chu-nguoi-doc.json -> moi-chuoi ma 1 va dung hai dong chua 'settings/page.tsx:39 [thuoc:hinh]
+      "the"' va 'settings/currencies/page.tsx:36 [thuoc:hinh] "the"'; (that) ban sao chen <p>Loading settings</p>
+      vao settings/page.tsx -> moi-chuoi ma 1 va mot dong "CON TIENG ANH" chua '"Loading settings"'. Ca hai dat ->
+      "CHIEU DO DAT: moi-chuoi-khai" va "CHIEU DO DAT: moi-chuoi-that", ma 0; mot ca khong dat -> "CHIEU DO HONG:
+      <ca>" ma 1. Cay lam viec khong doi (cung phep so nhu E2). Them hai ca cho ve «tap eval nhin-thay» cua
+      khong-hoi-quy.mjs (khung-trang-cai-dat E16) da neo vao evals.yaml o dinh D cua cap gop f1a32ab99 (F8): (e16-thieu)
+      ban sao bo "nhac-qua-zalo E17" khoi NHIN_THAY_BI_DUNG, chay --bo-lan -> ma 1 va 'thua ["nhac-qua-zalo E17"]';
+      (e16-cu) ban sao bo neo (docEvals(h) thay docEvals(h, DAU_VONG)) -> ma 1 va thua hai eval
+      loi-tac-tu-zalo-noi-dung-nguyen-nhan E11, man-cai-dat-noi-tieng-viet E12 nhu do san tren onehub.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-7
+    executor: script
+    layer: logic
+    cmd: config:executors.script.osa_soi_ma
+    paths: ["_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs", "apps/app/app/(app)/[slug]/settings/okr/bang-chu-ky.tsx", "apps/app/lib/okr-chu-ky-nhan.ts"]
+    expected: |
+      soi-ma.mjs thoat 0, dong cuoi "KET LUAN <n> DUNG, 0 SAI — ma thoat 0"; dau ra nhac cap gop
+      679432a0f^1..679432a0f (neo F8), khong nhac merge-base; luat doc dong ho khong bat bang-chu-ky.tsx.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-7
+    executor: script
+    layer: logic
+    cmd: config:executors.script.osa_san_thiet_ke
+    paths: ["_acceptance/okr-soat-anh-luot-3/rang/san-thiet-ke.mjs"]
+    expected: |
+      san-thiet-ke.mjs thoat 0, "KET LUAN <n> DUNG, 0 SAI — ma thoat 0"; tap tep doc tu cap gop PR #146.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-7
+    executor: script
+    layer: logic
+    cmd: config:executors.script.osa_ktcd_khong_trinh_duyet
+    paths: ["_acceptance/khung-trang-cai-dat/rang/cau-truc.mjs", "apps/app/app/(app)/[slug]/settings/**"]
+    expected: |
+      cau-truc.mjs + san-thiet-ke.mjs cua khung-trang-cai-dat + bai thanh-ben thoat 0; bang cau truc khai du so trang
+      settings tren dia (co giai-doan va okr), khong dong "lech".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-8
+    executor: script
+    layer: logic
+    cmd: config:executors.script.sk_luat
+    paths: ["_acceptance/soan-okr-trong-khung/rang/luat.mjs"]
+    expected: |
+      luat.mjs thoat 0; in "muc 1: dat" toi "muc 6: dat" va "ranh gioi: dat"; diff doc tu cap gop d089cb8da^1..d089cb8da.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-9
+    executor: script
+    layer: ui
+    cmd: config:executors.script.tco_man_chrome
+    paths: ["_acceptance/toan-canh-okr/rang/man-toan-canh.mjs", "apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/layout.tsx"]
+    expected: |
+      man-toan-canh.mjs thoat 0, khong dong "HONG:"; E2 buoc 3 va buoc 5 dem 4 muc tieu sau khi mo nhom «Da bo»;
+      E21 buoc 2 doc breadcrumb bang nav[data-slot='breadcrumb'].
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-9
+    executor: script
+    layer: ui
+    cmd: config:executors.script.dok_man_chrome
+    paths: ["_acceptance/dat-okr-trong-crm/rang/man-okr.mjs", "apps/app/app/(app)/[slug]/layout.tsx", "apps/app/lib/ngan-ban-ghi-nap-san.ts", "apps/app/components/crm/record-sheet/**"]
+    expected: |
+      man-okr.mjs cua dat-okr-trong-crm thoat 0: "man-okr: <k> khang dinh, 0 hong"; khong dong "loi hydrat".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-10
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vs_khong_noi
+    paths: ["_acceptance/okr-soat-anh-luot-3/**", "_acceptance/toan-canh-okr/**", "_acceptance/soan-okr-trong-khung/**", "_acceptance/khung-trang-cai-dat/**", "_acceptance/man-cai-dat-noi-tieng-viet/**", "apps/app/app/eve/agents/okr/**", "_acceptance/ve-sinh-do-san-onehub/rang/khong-noi.mjs"]
+    expected: |
+      rang/khong-noi.mjs doc diff -U0 merge-base(HEAD, origin/onehub)..HEAD cho _acceptance/<ho so da ky>/rang/**:
+      moi hunk co dong them nam trong 12 dong cua mot chu thich khai "F8 neo (ve-sinh-do-san-onehub):",
+      "ve-sinh-do-san-onehub cach-toi:" hoac "ve-sinh-do-san-onehub khai-trang:" (thieu -> "HONG KHAI <tep>:<dong>"); khong evals.yaml da ky nao co dong them
+      "status: not-run" hay "expected_exit" (co -> "HONG NOI <tep>"); diff cua app/eve/agents/okr/** rong (khong ->
+      "HONG ROUTE"). Tu kiem truoc: --tu-thu chay bo soi tren mot diff gia thieu chu thich phai in "OK tu kiem
+      khai"; tren diff gia them status: not-run phai in "OK tu kiem noi". Dat -> "khong-noi: <n> hunk co khai" ma 0.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-11
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vs_ghim_xanh
+    paths: ["_acceptance/okr-soat-anh-luot-3/run-log.jsonl", "_acceptance/toan-canh-okr/run-log.jsonl", "_acceptance/soan-okr-trong-khung/run-log.jsonl", "_acceptance/khung-trang-cai-dat/run-log.jsonl", "_acceptance/man-cai-dat-noi-tieng-viet/run-log.jsonl", "_acceptance/dat-okr-trong-crm/run-log.jsonl", "_acceptance/muc-tieu-va-kr/run-log.jsonl", "_acceptance/ve-sinh-do-san-onehub/rang/ghim-xanh.mjs"]
+    expected: |
+      rang/ghim-xanh.mjs: tap = bay ho so ke trong AC-11 hop moi ho so status signed-off/machine-cleared co tep
+      _acceptance/<slug>/ trong diff merge-base..HEAD (tru chinh ve-sinh-do-san-onehub). Moi ho so: dong kind
+      "repin" cuoi trong run-log.jsonl co suites_exit toan 0, evals_exit toan 0, va git diff --quiet <sha> HEAD --
+      . ':!_acceptance' (khong -> "HONG GHIM <slug>: <ly do>"). Roi chay scripts/pre-merge-check.sh . --base
+      origin/onehub, loc dong VIOLATION khong mang [ve-sinh-do-san-onehub] -> phai rong (khong -> in tung dong, ma 1).
+      Chieu do (--tu-thu): run-log gia bo dong repin cuoi cua okr-soat-anh-luot-3 -> phai in "HONG GHIM
+      okr-soat-anh-luot-3: khong co dong repin" ("OK tu kiem ghim"). Dat -> "ghim-xanh: <n> ho so xanh, pre-merge
+      sach" ma 0.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-12
+    executor: script
+    layer: ui
+    cmd: config:executors.script.vs_hydrat_record
+    paths: ["apps/app/app/(app)/[slug]/layout.tsx", "apps/app/lib/ngan-ban-ghi-nap-san.ts", "apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx", "_acceptance/ve-sinh-do-san-onehub/rang/hydrat-record.mjs"]
+    expected: |
+      Cung lan chay voi E1: hydrat-record.mjs tai cung tam trang KHONG record= (ma tran viet truoc trong script, dung
+      8 duong cua AC-12) o 1440 va 390, 2 luot moi kho (32 lan). In "khong-record: 32 lan mo, 0 loi hydrat"; lan
+      co loi in "HONG K <duong> <kho> luot <n>:" kem nguyen van thong bao va ma 1. So duong da mo != 8 ->
+      "KHONG DO DUOC: ma tran khong-record lech" ma 2.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-12
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vs_nap_san_dom
+    paths: ["apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx", "apps/app/test/ngan-ban-ghi-nap-san.dom.tsx"]
+    expected: |
+      Cung tep voi E3, ca "khong ban ghi khong nap": render NapSanKhiMoNgan voi trang thai nap san co du ba khoa va
+      ngan KHONG co ban ghi -> sau render bo dem khong co khoa nao trong danh sach ("nap san khi ngan rong: <khoa>"
+      khi do); doi chung: ngan co mot ban ghi -> bo dem co du ba khoa sau render dau.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
