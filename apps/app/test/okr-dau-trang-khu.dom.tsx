@@ -576,7 +576,13 @@ describe("dhk-tieu-de", () => {
 function coNutHoiKara(): boolean {
 	const r = spawnSync(
 		"git",
-		["grep", "-q", "<NutHoiKara", "--", ":(literal)app/(app)/[slug]/okr"],
+		[
+			"grep",
+			"-q",
+			"<NutHoiKara",
+			"--",
+			":(literal)app/(app)/[slug]/okr/hanh-dong-khu.tsx",
+		],
 		{
 			cwd: GOC_KHO,
 		},
