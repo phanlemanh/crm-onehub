@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e6f43c9354e705567b62fb9e9e42e4988a7cce39
+verified_commit: 735c996977a6fa3e0aad9753f5b27adaea04267c
 human_signoff: manh 2026-10-15
 ---
 
@@ -143,3 +143,7 @@ Round 1: E1–E6 và bảy lệnh suite đều xanh ở lượt đầu — khôn
 ### Re-pin lần 1 — 2026-10-15, do hoá cũ do gỡ hai chú thích trong tệp test (luật khong-chu-thich) sau chữ ký
 run_id: repin-20261015T114914Z-49181
 sha: e6f43c9354e705567b62fb9e9e42e4988a7cce39 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-16, do lan-dem-16-10: gộp onehub ngày 16/10 (#434…#453)
+run_id: repin-20261016T233032Z-31285
+sha: 735c996977a6fa3e0aad9753f5b27adaea04267c · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
