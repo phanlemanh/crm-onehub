@@ -5,7 +5,7 @@ slug: pre-push-t1
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-16T15:30:37Z
 design_doc: docs/superpowers/specs/2026-10-16-pre-push-t1-design.md
@@ -105,3 +105,8 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
   đồ); nới `t1_skip_globs` là việc của config, ngoài vòng.
 - Đường nền 16/10 (`duong-nen.md`): engine đỏ vì 8 tệp kit vendored lệch engine 2.30 đang chạy — không đọc được ở đây;
   đỏ sẵn của việc nâng kit, không phải của vòng này.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-5: Bài kiểm hook dùng run summary turbo giả theo đúng khuôn bộ soát hình cổng đọc; turbo đổi khuôn thì chỉ phép đo trên cây thật (E9, E10) bắt được.
+  - Ngoài-6: Đối chứng dương «diff ra đúng tệp» chỉ có ở ca 1 của bảng phân loại, các ca khác không tự chứng kho tạm dựng đúng.
+  - Ngoài-7: Nửa kiểm hook của răng một-nguồn không có đột biến đối chứng, nên nó có thể hỏng im mà vẫn báo đạt.
+  - Ngoài-8: Răng một-nguồn chỉ bắt chuỗi đúng bằng «test» hay «build»; danh sách bỏ viết tay dạng khác có thể lọt.
