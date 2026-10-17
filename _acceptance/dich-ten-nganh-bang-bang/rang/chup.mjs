@@ -161,31 +161,58 @@ for (const lang of NGON_NGU) {
 			await khongDo(`E8 ${lang} ${rong}: bang khong co ${DAU_TEN} 01`);
 		await new Promise((xong) => setTimeout(xong, 600));
 		const o = await p.evaluate((td) => {
+			const hien = (e) => {
+				const r = e.getBoundingClientRect();
+				return r.width > 0 && getComputedStyle(e).display !== "none";
+			};
+			const cat = (o) => {
+				const chu = o.firstElementChild ?? o;
+				const r = document.createRange();
+				r.selectNodeContents(chu);
+				return (
+					chu.scrollWidth > chu.clientWidth + 1 ||
+					o.scrollWidth > o.clientWidth + 1 ||
+					r.getBoundingClientRect().width > o.clientWidth + 1
+				);
+			};
 			const th = [...document.querySelectorAll("th")];
 			const cot = th.findIndex((e) => e.textContent?.trim() === td);
-			if (cot < 0) return { cot: -1, hang: [] };
-			return {
-				cot,
-				hang: [...document.querySelectorAll("tbody tr")].map((tr) => {
-					const o = tr.querySelectorAll("td")[cot];
-					const chu = o?.querySelector("span") ?? o;
-					return {
-						ten: tr.textContent ?? "",
-						nganh: o?.textContent?.trim() ?? "",
-						cat: chu ? chu.scrollWidth > chu.clientWidth : false,
-					};
-				}),
-			};
+			if (cot < 0 || !hien(th[cot])) return { cot: -1, hang: [] };
+			const hang = [...document.querySelectorAll("tbody tr")].map((tr) => {
+				const o = tr.querySelectorAll("td")[cot];
+				return {
+					nganh: o?.textContent?.trim() ?? "",
+					hien: o ? hien(o) : false,
+					cat: o ? cat(o) : false,
+				};
+			});
+			const mau = document.querySelector("tbody tr")?.querySelectorAll("td")[
+				cot
+			];
+			const chuMau = mau?.firstElementChild ?? mau;
+			const goc = chuMau?.textContent ?? "";
+			let thu = null;
+			if (mau && chuMau) {
+				chuMau.textContent = "X".repeat(200);
+				const dai = cat(mau);
+				chuMau.textContent = "X";
+				const ngan = cat(mau);
+				chuMau.textContent = goc;
+				thu = { dai, ngan };
+			}
+			return { cot, hang, thu };
 		}, tieuDe);
 		const tep = join(RA, `E8-bang-${lang}-${rong}.png`);
 		await p.screenshot({ path: tep, fullPage: true });
 		dong.push(`ANH ${tep.slice(GOC.length + 1)}`);
 		if (o.cot < 0) {
-			dong.push(
-				`E8 cat ${lang} ${rong}: cot Nganh an o kho nay (hideBelow lg)`,
-			);
+			dong.push(`E8 cat ${lang} ${rong}: cot Nganh khong hien o kho nay`);
 		} else {
-			const hienRa = new Set(o.hang.map((h) => h.nganh));
+			kiem(
+				`E8 ${lang} ${rong}: thuoc cat do voi chuoi 200 ky tu, im voi «X»`,
+				o.thu?.dai === true && o.thu?.ngan === false,
+			);
+			const hienRa = new Set(o.hang.filter((h) => h.hien).map((h) => h.nganh));
 			const thieu = NGANH.filter((g) => !hienRa.has(mong(g)));
 			kiem(
 				`E8 ${lang} ${rong}: cot Nganh hien ${lang === "vi" ? "ten Viet" : "chu goc"} cua ca ${NGANH.length} nganh${thieu.length ? ` (thieu: ${thieu.join(", ")})` : ""}`,

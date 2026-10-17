@@ -96,11 +96,11 @@ function columnsFor(
 				const nganh = tenNganh(row.industry, locale);
 				if (!nganh) return <EmptyCellValue />;
 				return nganh.dich ? (
-					<span className="truncate" title={nganh.ten}>
+					<span className="block truncate" title={nganh.ten}>
 						{nganh.ten}
 					</span>
 				) : (
-					<ForeignText className="truncate" lang="en">
+					<ForeignText className="block truncate" lang="en">
 						{nganh.ten}
 					</ForeignText>
 				);
