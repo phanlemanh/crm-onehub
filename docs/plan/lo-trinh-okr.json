@@ -66,7 +66,7 @@
     },
     {
       "ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
-      "ngay": "2026-10-20",
+      "ngay": "2026-10-18",
       "loai": "phat-hanh",
       "khoa": "m-1020dh",
       "hang": [
@@ -74,7 +74,8 @@
         "DH2",
         "DH3"
       ],
-      "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410."
+      "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410.",
+      "ly_do": "Cắt theo giờ máy: còn DH2 (4–7 giờ máy) sau vòng vệ sinh của M5; M5 ước Cổng 2 khoảng 17:30Z 17/10, gộp tối 17/10 → 18/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     },
     {
       "ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
@@ -97,7 +98,8 @@
         "LT1e",
         "VN1",
         "TH6b"
-      ]
+      ],
+      "ly_do": "Cắt theo giờ máy: làn MacBook Pro LT1e → VN1 → TH6b nối nhau (3 × ≈ 25 giờ lịch) từ chiều 17/10 → xong ≈ 20/10; giữ 21/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -136,11 +138,11 @@
         "7n"
       ],
       "khoa": "m-1214",
-      "ly_do": "Phòng ban đặt và công bố OKR quý 1 từ 21/12: lượt 7 phải lên production trước đó"
+      "ly_do": "Phòng ban đặt và công bố OKR quý 1 từ 21/12: lượt 7 phải lên production trước đó. Dự kiến theo giờ máy: 7n (≈7 giờ máy cao ≈ 25 giờ lịch) xong ≈ 19/10, đầu dãy 7n→10→8b của R3. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     },
     {
-      "ten": "R3 lên production — mục tiêu theo giờ máy, trần 18/12",
-      "ngay": "2026-10-28",
+      "ten": "R3 lên production — cắt theo giờ máy, trần 18/12",
+      "ngay": "2026-10-22",
       "loai": "phat-hanh",
       "hang": [
         "10",
@@ -150,7 +152,7 @@
       ],
       "khoa": "m-1218",
       "den": "2026-12-18",
-      "ly_do": "Trần 18/12: trước khi phòng ban đặt OKR quý 1 (21/12); mục tiêu 28/10 theo giờ máy cộng dồn làn Mac Studio"
+      "ly_do": "Trần 18/12: trước khi phòng ban đặt OKR quý 1 (21/12). Ngày cắt theo giờ máy: làn Mac Studio từ 18/10, ba dãy — 7n→10→8b (7+10+10 giờ máy cao ≈ 97 giờ lịch) và L→T (7+7 ≈ 50 giờ lịch); xong khi dãy dài nhất xong ≈ 22/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     },
     {
       "ten": "K5 Chat và Deal về một khung lên production",
