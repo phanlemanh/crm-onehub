@@ -260,8 +260,8 @@ const CAP = [
 		[
 			[
 				KHUNG,
-				"sua.mutate({ id: v.id, batDauNgay: batDau });",
-				"sua.mutate({ id: v.id, batDauNgay: batDau ? new Date(`${batDau}T00:00:00`).toISOString().slice(0, 10) : null });",
+				"sua.mutate({ id: v.id, batDauNgay: batDau })",
+				"sua.mutate({ id: v.id, batDauNgay: batDau ? new Date(`${batDau}T00:00:00`).toISOString().slice(0, 10) : null })",
 			],
 		],
 		[[DG.manNgay, "dg: ngay gui lech"]],

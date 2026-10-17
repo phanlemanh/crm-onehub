@@ -5,15 +5,12 @@ import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { DatePicker } from "@crm/ui/components/date-picker";
-import { FieldError } from "@crm/ui/components/field";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { formatDay } from "@crm/ui/lib/format";
 import { VIEC } from "@crm/validation/viec";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { InlineTextArea, InlineTextCell } from "@/components/crm/inline-field";
-import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import {
 	lyDoLoi,
@@ -36,6 +33,7 @@ import { HoiDongCha } from "./hoi-dong-cha";
 import { LichSuViec } from "./lich-su-viec";
 import { MucPhaiCho } from "./muc-phai-cho";
 import { MucViecCon } from "./muc-viec-con";
+import { OBatDauViec, ODuAnViec } from "./o-lich-du-an";
 import {
 	HanViec,
 	type TrangThaiViec,
@@ -78,8 +76,6 @@ function nhanNut(
 	return nguon === "CHUA_LAM" ? m.nut.batDau : m.nut.lamLai;
 }
 
-const KHONG_DU_AN = "khong";
-
 export function KhungViec({ viecId }: { viecId: string }) {
 	const locale = useLocale();
 	const m = viecMessages(locale);
@@ -89,11 +85,6 @@ export function KhungViec({ viecId }: { viecId: string }) {
 	const { tab, setTab } = useRecordSheetView("chi-tiet");
 	const [hoiXoa, setHoiXoa] = useState(false);
 	const [hoiCha, setHoiCha] = useState<"XONG" | "HUY" | null>(null);
-	const [loiBatDau, setLoiBatDau] = useState<string | null>(null);
-	const [hoiCongKhai, setHoiCongKhai] = useState<{
-		id: string;
-		ten: string;
-	} | null>(null);
 	const q = useQuery(trpc.viec.get.queryOptions({ id: viecId }));
 	const conQ = useQuery(trpc.viec.con.queryOptions({ id: viecId }));
 	const conMo = conQ.data?.conMo ?? 0;
@@ -130,25 +121,6 @@ export function KhungViec({ viecId }: { viecId: string }) {
 		? THU_TU_NUT[v.trangThai].filter((d) => v.quyen.trangThai.includes(d))
 		: [];
 	const suaDuoc = v ? v.quyen.sua && !daKhep : false;
-	const dsDuAn = useQuery({
-		...trpc.duAn.list.queryOptions({ trangThai: "mo" }),
-		enabled: suaDuoc,
-	});
-	const duAnMo = dsDuAn.data ?? [];
-	const duAnHienTaiMo = v?.duAn
-		? duAnMo.some((d) => d.id === v.duAn?.id)
-		: true;
-
-	const chonDuAn = (id: string) => {
-		if (!v || id === (v.duAn?.id ?? KHONG_DU_AN)) return;
-		const moi = id === KHONG_DU_AN ? null : id;
-		const ten = duAnMo.find((d) => d.id === moi)?.ten;
-		if (moi && ten && !v.duAn && v.banGhi.length === 0) {
-			setHoiCongKhai({ id: moi, ten });
-			return;
-		}
-		doiDuAn.mutate({ id: v.id, duAnId: moi });
-	};
 
 	const chiTiet = v ? (
 		<DetailSheetBody>
@@ -186,28 +158,12 @@ export function KhungViec({ viecId }: { viecId: string }) {
 						)}
 					</DetailSheetProperty>
 					<DetailSheetProperty label={m.khung.batDau}>
-						{suaDuoc ? (
-							<span className="flex flex-col gap-1" data-o-bat-dau="">
-								<DatePicker
-									onChange={(ngay) => {
-										const batDau = ngay === "" ? null : ngay;
-										if (batDau && v.hanNgay && batDau > v.hanNgay) {
-											setLoiBatDau(m.khung.batDauSauHan);
-											return;
-										}
-										setLoiBatDau(null);
-										sua.mutate({ id: v.id, batDauNgay: batDau });
-									}}
-									placeholder={m.oSoan.chonHan}
-									value={v.batDauNgay}
-								/>
-								{loiBatDau ? <FieldError>{loiBatDau}</FieldError> : null}
-							</span>
-						) : (
-							<span className="text-muted-foreground tabular-nums">
-								{v.batDauNgay ? formatDay(v.batDauNgay, locale) : "—"}
-							</span>
-						)}
+						<OBatDauViec
+							batDauNgay={v.batDauNgay}
+							hanNgay={v.hanNgay}
+							onLuu={(batDau) => sua.mutate({ id: v.id, batDauNgay: batDau })}
+							suaDuoc={suaDuoc}
+						/>
 					</DetailSheetProperty>
 					<DetailSheetProperty label={m.khung.nguoiGiao}>
 						<span translate="no">{v.nguoiGiao.name}</span>
@@ -271,23 +227,13 @@ export function KhungViec({ viecId }: { viecId: string }) {
 						)}
 					</DetailSheetProperty>
 					<DetailSheetProperty label={m.khung.duAn}>
-						{suaDuoc && duAnHienTaiMo ? (
-							<Combobox
-								aria-label={m.khung.duAn}
-								onValueChange={chonDuAn}
-								options={[
-									{ value: KHONG_DU_AN, label: m.khung.khongDuAn },
-									...duAnMo.map((d) => ({ value: d.id, label: d.ten })),
-								]}
-								selectedOption={
-									v.duAn ? { value: v.duAn.id, label: v.duAn.ten } : undefined
-								}
-								translate="no"
-								value={v.duAn?.id ?? KHONG_DU_AN}
-							/>
-						) : (
-							<span translate="no">{v.duAn?.ten ?? m.khung.khongDuAn}</span>
-						)}
+						<ODuAnViec
+							dangDoi={doiDuAn.isPending}
+							duAn={v.duAn}
+							onDoi={(duAnId) => doiDuAn.mutate({ id: v.id, duAnId })}
+							rieng={v.banGhi.length === 0}
+							suaDuoc={suaDuoc}
+						/>
 					</DetailSheetProperty>
 				</DetailSheetProperties>
 			</DetailSheetSection>
@@ -327,24 +273,6 @@ export function KhungViec({ viecId }: { viecId: string }) {
 				/>
 			) : null}
 			<MucViecCon viecId={v.id} />
-			<ConfirmDialog
-				nut={m.khung.congKhaiNut}
-				onConfirm={() => {
-					if (hoiCongKhai) {
-						doiDuAn.mutate({ id: v.id, duAnId: hoiCongKhai.id });
-					}
-					setHoiCongKhai(null);
-				}}
-				onOpenChange={(mo) => {
-					if (!mo) setHoiCongKhai(null);
-				}}
-				open={hoiCongKhai !== null}
-				pending={doiDuAn.isPending}
-				than={m.khung.congKhaiThan}
-				thoi={m.khung.congKhaiThoi}
-				tieuDe={dien(m.khung.congKhaiTieuDe, { ten: hoiCongKhai?.ten ?? "" })}
-				tone="default"
-			/>
 		</DetailSheetBody>
 	) : null;
 

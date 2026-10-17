@@ -101,14 +101,16 @@ describe("lv-tinh-doi", () => {
 			{ truocId: "A", sauId: "B" },
 			{ truocId: "B", sauId: "A" },
 		];
-		let loi: unknown = null;
+		let loi: LoiLich | null = null;
+		let khac = "";
 		try {
 			tinhDoi(CHUOI, vong, KEO_A, LICH);
 		} catch (e) {
-			loi = e;
+			if (e instanceof LoiLich) loi = e;
+			else khac = String(e);
 		}
-		if (!(loi instanceof LoiLich) || loi.ma !== "vong") {
-			throw new Error(`lv: vong san khong bao ${String(loi)}`);
+		if (loi?.ma !== "vong") {
+			throw new Error(`lv: vong san khong bao ${khac}`);
 		}
 		expect(loi.chuoi.length).toBeGreaterThan(1);
 	});

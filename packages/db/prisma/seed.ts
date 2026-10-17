@@ -1,6 +1,7 @@
 import { mirror } from "../src/blob";
 import { db } from "../src/client";
 import { DEFAULT_REPORTING_CURRENCY } from "../src/currency";
+import { gieoDuAnMau } from "../src/du-an-gieo";
 import { resolveFavicon } from "../src/favicon";
 import { fieldKeyFromLabel } from "../src/fields-shape";
 import {
@@ -11,7 +12,6 @@ import {
 } from "../src/generated/prisma/enums";
 import type { LoaiGiaiDoan } from "../src/giai-doan";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
-import { gieoDuAnMau } from "../src/du-an-gieo";
 import { gieoBangMau, gieoViecMau } from "../src/viec-gieo";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
