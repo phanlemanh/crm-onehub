@@ -34,10 +34,11 @@ ngưỡng 8 px của E12m.
 ## Cách làm
 
 1. Khung chờ `DauTrangOkrCho` (trong `dau-trang-okr.tsx`) dựng hàng hành động giống `HanhDongKhu`: nút «Hỏi Kara» thật
-   (`NutHoiKara` — bề rộng theo chữ từng ngôn ngữ, sổ lần 1 d-20261015T230745Z-1), khung xương `h-8` cho ô chọn kỳ và khung
-   xương `h-8` cho cụm nút theo quyền, để ở 375 chúng xuống dòng như hàng thật và ở 1280 cao bằng hàng thật. Không đổi
-   `LuoiDauTrangOkr` hay `NutHoiKara`. Theo Hỏi-2 (khuyến nghị): khung xương lồng của `HanhDongKhu` lúc quyền đang tải đổi
-   `h-7` → `h-8` (một chữ, vùng DH1).
+   (`NutHoiKara` — bề rộng theo chữ từng ngôn ngữ, sổ lần 1 d-20261015T230745Z-1), khung xương `h-7 w-28` cho ô chọn kỳ và
+   khung xương `h-7 w-56` cho cụm nút theo quyền, để ở 375 chúng xuống dòng như hàng thật và ở 1280 cao bằng hàng thật.
+   Chỉ `NutHoiKara` cao 32 px (`Button` cỡ mặc định); ô chọn kỳ (`PeriodSelect` cỡ sm), menu thêm (`icon-sm`), nút soạn
+   và nút thêm (cỡ sm) cao 28 px — hàng thật 375 = 32 + 8 + 28 = 68 (sổ d-…-23 thay -18). Không đổi `HanhDongKhu`,
+   `LuoiDauTrangOkr` hay `NutHoiKara`.
 2. Gỡ phần mồ côi của lần 1: `apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx`, `apps/app/test/dau-trang-okr-cho.dom.tsx`,
    các khoá `dto_*` trong `_acceptance/config.yaml` (dòng của chính NM5, chưa lên `onehub`), và răng chỉ phục vụ chúng.
 
@@ -48,9 +49,9 @@ ngưỡng 8 px của E12m.
   hai dòng làm vùng nội dung nhảy LÊN khi tải xong. Khuyến nghị (a): khung chờ khớp hàng của người có quyền đầy đủ (ca
   đo được); vai ít nút ghi Known limits. Lối khác (b): hàng hành động ở 375 giữ chiều cao hai dòng cho mọi vai, cả lúc
   xong — không nhảy với ai, nhưng người chỉ xem có một dòng trống và phải sửa bố cục DH1 (`LuoiDauTrangOkr`).
-- **Hỏi-2** — trạng thái giữa: dữ liệu chính về trước quyền thì đầu trang hiện khung xương lồng `h-7` của `HanhDongKhu`
-  (DH1), thấp hơn nút 4 px mỗi dòng. Khuyến nghị: đổi sang `h-8`. Lối khác: giữ nguyên DH1, ghi Known limits. E1 và E4 chỉ
-  đo hai đầu (chờ, xong), không đo trạng thái giữa.
+- **Hỏi-2** — trạng thái giữa (dữ liệu chính về trước quyền): đề xuất đổi khung xương lồng `h-7` của `HanhDongKhu` sang
+  `h-8` dựa trên chẩn đoán sai (cụm nút thật cao 28 px, không phải 32). Chủ kho rút Hỏi-2 (P1-29, 16/10): giữ `h-7` của
+  DH1, vốn đã khớp dòng thứ hai của hàng thật; không chạm `hanh-dong-khu.tsx`.
 
 ## Giới hạn đo đã biết
 
