@@ -601,6 +601,7 @@ async function bamChu(trang, sel, chu) {
 	return true;
 }
 
+// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 const MUC_NHAP = "[role='menuitem'][data-nut='nhap-bang-tinh']";
 
 async function moMenuThem(trang) {
@@ -856,6 +857,7 @@ async function buocE11() {
 		"E11 buoc 5: truong phong ban thieu nut Them muc tieu",
 		await coSel(t, "[data-nut='them-muc-tieu']"),
 	);
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	kiem(
 		"E11 buoc 5: truong phong ban thieu nut Nhap tu bang tinh",
 		(await moMenuThem(t)) && (await mucNhapMo(t)),
@@ -867,6 +869,7 @@ async function buocE11() {
 		"E11 buoc 5: thanh vien thuong khong thay dong ly do khoa",
 		await hienSel(m, "[data-ly-do-khu]"),
 	);
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	const nutLo = await m.evaluate(() =>
 		[...document.querySelectorAll("[data-nut='them-muc-tieu']")]
 			.filter((b) => !b.disabled)
@@ -943,6 +946,7 @@ async function buocE11() {
 	await t.close();
 
 	const c = await moTrang(cookie.truong, RONG, "/okr", "E11");
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	const P3 = "[data-trang-thai='ST-cuatoi-codulieu']";
 	if (await hienSel(c, P3)) {
 		for (const o of ["o3", "o4", "o5"])
@@ -957,6 +961,7 @@ async function buocE11() {
 				`${P3} [data-kr='${OKR.o5.kr[0]}'] [data-mo-muc-tieu='${OKR.o5.id}']`,
 			),
 		);
+		// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 		kiem(
 			"E11 buoc 10: KR cua truong2 lot vao KR ban phu trach",
 			!(await coSel(c, `${P3} [data-kr='${OKR.o5.kr[1]}']`)),
@@ -1384,6 +1389,7 @@ async function buocE20() {
 		theoDonVi(`pb:${ORG.pb1}`),
 		"E20",
 	);
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	await hienSel(t, "[data-muc-tieu]");
 	await hienSel(t, "[data-nut='them-cach']");
 	const demTheTruoc = await demSel(t, "[data-muc-tieu]");
@@ -1485,6 +1491,7 @@ async function buocE20() {
 		demTheTruoc + 2,
 	);
 
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	await moNhap(t, "E20 lan 2");
 	await hienSel(t, "[data-buoc-nhap='1']");
 	if (await danLo(t, LO.slice(3))) {
@@ -1526,6 +1533,7 @@ async function buocE20() {
 			theoDonVi(`pb:${ORG.pb1}`, `&record=deal:${DEAL}`),
 			"E20",
 		);
+		// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 		await doi(
 			d,
 			`E20 ${ten}: sheet Thoa thuan tren Theo don vi`,

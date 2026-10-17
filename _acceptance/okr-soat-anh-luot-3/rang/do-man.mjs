@@ -375,6 +375,7 @@ async function buocNhap() {
 		CAO,
 		`/okr/theo-don-vi?donOkr=goc&kyOkr=${OKR.quy}`,
 	);
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	const MUC_NHAP = "[role='menuitem'][data-nut='nhap-bang-tinh']";
 	let coNut = await hien(t, "[data-nut='them-cach']");
 	if (coNut) {
@@ -399,6 +400,7 @@ async function buocNhap() {
 		await t.close();
 		return;
 	}
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	await t.$eval(MUC_NHAP, (e) => e.click());
 	await hien(t, "[data-buoc-nhap='1']");
 	if (!(await danLo(t))) {
