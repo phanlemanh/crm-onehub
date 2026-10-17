@@ -5,7 +5,7 @@ slug: t1-ma-doc
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: []
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-17T01:41:04Z
 design_doc: docs/superpowers/specs/2026-10-17-t1-ma-doc-design.md
