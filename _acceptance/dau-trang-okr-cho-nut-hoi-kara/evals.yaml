@@ -63,7 +63,6 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.kmc_man
-    long_running: 30
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/khung-man-chung/rang/chup-man.mjs"
