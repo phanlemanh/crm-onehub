@@ -60,59 +60,61 @@ function NoiDung({ duAnId, onXong }: { duAnId: string; onXong: () => void }) {
 	};
 
 	return (
-		<form
-			className="flex flex-col gap-4"
-			data-hop-moc=""
-			onSubmit={(event) => {
-				event.preventDefault();
-				void gui();
-			}}
-		>
-			<DialogHeader>
-				<DialogTitle>{m.tieuDe}</DialogTitle>
-			</DialogHeader>
-			<Field data-invalid={loi?.o === "ten" ? true : undefined}>
-				<FieldLabel htmlFor="ten-moc">{m.ten}</FieldLabel>
-				<Input
-					autoComplete="off"
-					id="ten-moc"
-					maxLength={DU_AN.tenToiDa}
-					onChange={(event) => setTen(event.target.value)}
-					placeholder={m.tenGoiY}
-					translate="no"
-					value={ten}
-				/>
-				{loi?.o === "ten" ? <FieldError>{loi.chu}</FieldError> : null}
-			</Field>
-			<Field data-invalid={loi?.o === "ngay" ? true : undefined}>
-				<FieldLabel>{m.ngay}</FieldLabel>
-				<DatePicker onChange={setNgay} value={ngay} />
-				{loi?.o === "ngay" ? <FieldError>{loi.chu}</FieldError> : null}
-			</Field>
-			<Field>
-				<FieldLabel>{m.cho}</FieldLabel>
-				<ComboboxMulti
-					aria-label={m.cho}
-					max={DU_AN.viecToiDa}
-					onValuesChange={setCho}
-					options={viec}
-					placeholder={m.chonViec}
-					translate="no"
-					values={cho}
-				/>
-				{loi?.o === "chung" ? <FieldError>{loi.chu}</FieldError> : null}
-			</Field>
-			<DialogFooter>
-				<DialogClose asChild>
-					<Button type="button" variant="outline">
-						{m.huy}
+		<DialogContent>
+			<form
+				className="flex flex-col gap-4"
+				data-hop-moc=""
+				onSubmit={(event) => {
+					event.preventDefault();
+					void gui();
+				}}
+			>
+				<DialogHeader>
+					<DialogTitle>{m.tieuDe}</DialogTitle>
+				</DialogHeader>
+				<Field data-invalid={loi?.o === "ten" ? true : undefined}>
+					<FieldLabel htmlFor="ten-moc">{m.ten}</FieldLabel>
+					<Input
+						autoComplete="off"
+						id="ten-moc"
+						maxLength={DU_AN.tenToiDa}
+						onChange={(event) => setTen(event.target.value)}
+						placeholder={m.tenGoiY}
+						translate="no"
+						value={ten}
+					/>
+					{loi?.o === "ten" ? <FieldError>{loi.chu}</FieldError> : null}
+				</Field>
+				<Field data-invalid={loi?.o === "ngay" ? true : undefined}>
+					<FieldLabel>{m.ngay}</FieldLabel>
+					<DatePicker onChange={setNgay} value={ngay} />
+					{loi?.o === "ngay" ? <FieldError>{loi.chu}</FieldError> : null}
+				</Field>
+				<Field>
+					<FieldLabel>{m.cho}</FieldLabel>
+					<ComboboxMulti
+						aria-label={m.cho}
+						max={DU_AN.viecToiDa}
+						onValuesChange={setCho}
+						options={viec}
+						placeholder={m.chonViec}
+						translate="no"
+						values={cho}
+					/>
+					{loi?.o === "chung" ? <FieldError>{loi.chu}</FieldError> : null}
+				</Field>
+				<DialogFooter>
+					<DialogClose asChild>
+						<Button type="button" variant="outline">
+							{m.huy}
+						</Button>
+					</DialogClose>
+					<Button disabled={tao.isPending} type="submit">
+						{m.luu}
 					</Button>
-				</DialogClose>
-				<Button disabled={tao.isPending} type="submit">
-					{m.luu}
-				</Button>
-			</DialogFooter>
-		</form>
+				</DialogFooter>
+			</form>
+		</DialogContent>
 	);
 }
 
@@ -127,11 +129,9 @@ export function HopThemMoc({
 }) {
 	return (
 		<Dialog onOpenChange={onOpenChange} open={open}>
-			<DialogContent>
-				{open ? (
-					<NoiDung duAnId={duAnId} onXong={() => onOpenChange(false)} />
-				) : null}
-			</DialogContent>
+			{open ? (
+				<NoiDung duAnId={duAnId} onXong={() => onOpenChange(false)} />
+			) : null}
 		</Dialog>
 	);
 }

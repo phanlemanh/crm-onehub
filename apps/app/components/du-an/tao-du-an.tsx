@@ -68,52 +68,54 @@ function NoiDung({
 	};
 
 	return (
-		<form
-			className="flex flex-col gap-4"
-			data-hop-du-an=""
-			onSubmit={(event) => {
-				event.preventDefault();
-				void gui();
-			}}
-		>
-			<DialogHeader>
-				<DialogTitle>{sua ? m.sua : m.tao}</DialogTitle>
-			</DialogHeader>
-			<Field data-invalid={loi ? true : undefined}>
-				<FieldLabel htmlFor="ten-du-an">{m.ten}</FieldLabel>
-				<Input
-					aria-invalid={loi ? true : undefined}
-					autoComplete="off"
-					id="ten-du-an"
-					maxLength={DU_AN.tenToiDa}
-					onChange={(event) => setTen(event.target.value)}
-					placeholder={m.tenGoiY}
-					translate="no"
-					value={ten}
-				/>
-				{loi ? <FieldError>{loi}</FieldError> : null}
-			</Field>
-			<Field>
-				<FieldLabel htmlFor="mo-ta-du-an">{m.moTa}</FieldLabel>
-				<Textarea
-					id="mo-ta-du-an"
-					maxLength={DU_AN.moTaToiDa}
-					onChange={(event) => setMoTa(event.target.value)}
-					translate="no"
-					value={moTa}
-				/>
-			</Field>
-			<DialogFooter>
-				<DialogClose asChild>
-					<Button type="button" variant="outline">
-						{m.huy}
+		<DialogContent>
+			<form
+				className="flex flex-col gap-4"
+				data-hop-du-an=""
+				onSubmit={(event) => {
+					event.preventDefault();
+					void gui();
+				}}
+			>
+				<DialogHeader>
+					<DialogTitle>{sua ? m.sua : m.tao}</DialogTitle>
+				</DialogHeader>
+				<Field data-invalid={loi ? true : undefined}>
+					<FieldLabel htmlFor="ten-du-an">{m.ten}</FieldLabel>
+					<Input
+						aria-invalid={loi ? true : undefined}
+						autoComplete="off"
+						id="ten-du-an"
+						maxLength={DU_AN.tenToiDa}
+						onChange={(event) => setTen(event.target.value)}
+						placeholder={m.tenGoiY}
+						translate="no"
+						value={ten}
+					/>
+					{loi ? <FieldError>{loi}</FieldError> : null}
+				</Field>
+				<Field>
+					<FieldLabel htmlFor="mo-ta-du-an">{m.moTa}</FieldLabel>
+					<Textarea
+						id="mo-ta-du-an"
+						maxLength={DU_AN.moTaToiDa}
+						onChange={(event) => setMoTa(event.target.value)}
+						translate="no"
+						value={moTa}
+					/>
+				</Field>
+				<DialogFooter>
+					<DialogClose asChild>
+						<Button type="button" variant="outline">
+							{m.huy}
+						</Button>
+					</DialogClose>
+					<Button disabled={dangGui} type="submit">
+						{sua ? m.nutLuu : m.nutTao}
 					</Button>
-				</DialogClose>
-				<Button disabled={dangGui} type="submit">
-					{sua ? m.nutLuu : m.nutTao}
-				</Button>
-			</DialogFooter>
-		</form>
+				</DialogFooter>
+			</form>
+		</DialogContent>
 	);
 }
 
@@ -130,9 +132,7 @@ export function HopDuAn({
 }) {
 	return (
 		<Dialog onOpenChange={onOpenChange} open={open}>
-			<DialogContent>
-				{open ? <NoiDung onXong={onXong} sua={sua} /> : null}
-			</DialogContent>
+			{open ? <NoiDung onXong={onXong} sua={sua} /> : null}
 		</Dialog>
 	);
 }

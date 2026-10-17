@@ -210,7 +210,12 @@ const SLUG = "apps/app/app/(app)/[slug]";
 
 const KHAI_TAY = [];
 
-const PHAN_TRONG_NGAN = ["apps/app/components/detail-sheet.tsx"];
+// du-an-gantt khai-hop: sheet-sua-chu-ky.tsx đặt nút Huỷ trong thành phần con FormSua, không lồng cú pháp trong
+// SheetContent, nên soi cả tệp như phần hiện trong ngăn để nút Huỷ được đo thật.
+const PHAN_TRONG_NGAN = [
+	"apps/app/components/detail-sheet.tsx",
+	"apps/app/app/(app)/[slug]/settings/okr/sheet-sua-chu-ky.tsx",
+];
 
 const DANH_SACH = [
 	`${SLUG}/okr/hop-thoai-can-chinh.tsx`,
@@ -232,12 +237,10 @@ const DANH_SACH = [
 	`${SLUG}/companies/create-company-sheet.tsx`,
 	`${SLUG}/contacts/create-contact-sheet.tsx`,
 	`${SLUG}/deals/create-deal-sheet.tsx`,
-	`${SLUG}/settings/api-keys/create-api-key-sheet.tsx`,
 	`${SLUG}/settings/okr/sheet-mo-chu-ky.tsx`,
 	`${SLUG}/settings/sso/add-sso-provider-sheet.tsx`,
 	`${SLUG}/deals/deals-bulk-actions.tsx`,
 	`${SLUG}/settings/connections/slack/slack-channels.tsx`,
-	"apps/app/components/crm/fields/field-editor.tsx",
 	`${SLUG}/settings/organization/hop-thoai-vi-tri.tsx`,
 	`${SLUG}/okr/hop-thoai-cap-nhat-kr.tsx`,
 	`${SLUG}/settings/giai-doan/hop-thoai-giai-doan.tsx`,
@@ -252,6 +255,20 @@ const DANH_SACH = [
 	`${SLUG}/okr/hoi-y/khoi-gom.tsx`,
 	`${SLUG}/okr/hoi-y/khoi-gop.tsx`,
 	`${SLUG}/okr/hoi-y/sheet-mo-hoi-y.tsx`,
+	// du-an-gantt khai-hop: mười một hộp máy rút ra, soát từng hộp bằng chính ca này — Huỷ qua nút đóng, 0 vi phạm.
+	// Bốn của DA4; bảy của các vòng đã gộp sau khi hồ sơ này ký. Bỏ field-editor.tsx (hộp gỡ ở 7c61ff1e3) và
+	// create-api-key-sheet.tsx (hộp dời sang to-tao-khoa.tsx).
+	"apps/app/components/du-an/tao-du-an.tsx",
+	"apps/app/components/du-an/them-moc.tsx",
+	"apps/app/components/du-an/gantt-cua-du-an.tsx",
+	`${SLUG}/settings/lich-lam-viec/lich-lam-viec.tsx`,
+	`${SLUG}/settings/api-keys/to-tao-khoa.tsx`,
+	"apps/app/components/tin-hieu/hop-gui-tin-hieu.tsx",
+	`${SLUG}/settings/okr/hop-thoai-an-chu-ky.tsx`,
+	`${SLUG}/settings/okr/sheet-sua-chu-ky.tsx`,
+	`${SLUG}/tai-lieu/[trang]/dat-xac-minh.tsx`,
+	`${SLUG}/tai-lieu/[trang]/hop-viec-trang.tsx`,
+	`${SLUG}/tai-lieu/hop-bao-sai.tsx`,
 ];
 
 const BA_HOP = [
