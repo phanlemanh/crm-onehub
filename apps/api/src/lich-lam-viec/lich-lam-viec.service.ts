@@ -1,14 +1,12 @@
 import { canManageSettings, workspaceRoleOf } from "@crm/auth";
 import type { Db } from "@crm/db";
-import { DU_AN, docLichLam } from "@crm/db/du-an";
+import { docLichLam } from "@crm/db/du-an";
+import { themNgayLe } from "@crm/db/du-an-ghi";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { ngayHan } from "@crm/db/viec";
-import {
-	BadRequestException,
-	ForbiddenException,
-	Injectable,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
+import { dichLoi } from "../viec/viec.service";
 import type { LichLamViecOutput } from "./lich-lam-viec.contracts";
 
 const KHONG_DU_QUYEN = "Chỉ chủ và quản trị đổi được lịch làm việc.";
@@ -57,20 +55,11 @@ export class LichLamViecService {
 		userId: string,
 	): Promise<{ ok: true }> {
 		await this.kiem(userId);
-		const [trung, dem] = await Promise.all([
-			this.db.ngayNghi.findUnique({
-				where: { ngay: input.ngay },
-				select: { id: true },
-			}),
-			this.db.ngayNghi.count(),
-		]);
-		if (trung) throw new BadRequestException(DU_AN.thongDiep.ngayLeTrung);
-		if (dem >= DU_AN.ngayLeToiDa) {
-			throw new BadRequestException(`Tối đa ${DU_AN.ngayLeToiDa} ngày lễ.`);
-		}
-		await this.db.ngayNghi.create({
-			data: { ngay: input.ngay, ten: input.ten, taoBoiId: userId },
-		});
+		await this.db
+			.$transaction((tx) =>
+				themNgayLe(tx, { nguoiId: userId, ngay: input.ngay, ten: input.ten }),
+			)
+			.catch(dichLoi);
 		return { ok: true };
 	}
 

@@ -11,6 +11,7 @@ import {
 } from "../src/generated/prisma/enums";
 import type { LoaiGiaiDoan } from "../src/giai-doan";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
+import { gieoDuAnMau } from "../src/du-an-gieo";
 import { gieoBangMau, gieoViecMau } from "../src/viec-gieo";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
@@ -1111,11 +1112,16 @@ async function main() {
 		nguon: "DATABASE_URL",
 		now: new Date(),
 	});
+	const duAn = await gieoDuAnMau(db, {
+		databaseUrl: process.env.DATABASE_URL ?? "",
+		nguon: "DATABASE_URL",
+		now: new Date(),
+	});
 
 	console.log(
 		`Seeded ${companies.length} companies, ${contacts.length} contacts, ` +
 			`${deals.length} deals, ${activities} activities, ${rates} exchange rates, ` +
-			`7 company fields, ${domains} tracked domains, ${viec.soViec} việc mẫu, workspace đã qua onboarding.`,
+			`7 company fields, ${domains} tracked domains, ${viec.soViec} việc mẫu, ${duAn.duAnId ? 1 : 0} dự án mẫu, workspace đã qua onboarding.`,
 	);
 }
 

@@ -225,10 +225,12 @@ export async function xoaMoc(
 	});
 }
 
+export type MocTre = { tre: boolean; treBoi: string[] };
+
 export function mocTre(
 	ngay: string,
 	cho: { tieuDe: string; han: string | null }[],
-): { tre: boolean; treBoi: string[] } {
+): MocTre {
 	const treBoi = cho
 		.filter((v) => v.han !== null && v.han > ngay)
 		.map((v) => v.tieuDe);
@@ -374,4 +376,26 @@ export async function xoaPhuThuoc(
 			sau: null,
 		},
 	);
+}
+
+export async function themNgayLe(
+	tx: DbGhi,
+	input: { nguoiId: string; ngay: Date; ten: string },
+): Promise<{ id: string }> {
+	const ten = tenSach(input.ten);
+	const [trung, dem] = await Promise.all([
+		tx.ngayNghi.findUnique({
+			where: { ngay: input.ngay },
+			select: { id: true },
+		}),
+		tx.ngayNghi.count(),
+	]);
+	if (trung) throw new LoiViec("khong-hop-le", DU_AN.thongDiep.ngayLeTrung);
+	if (dem >= DU_AN.ngayLeToiDa) {
+		throw new LoiViec("khong-hop-le", `Tối đa ${DU_AN.ngayLeToiDa} ngày lễ.`);
+	}
+	return tx.ngayNghi.create({
+		data: { ngay: input.ngay, ten, taoBoiId: input.nguoiId },
+		select: { id: true },
+	});
 }
