@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ce20af45ea95cfff1742a902c9462fff6bdd27b6
+verified_commit: e6faa870aa9b645af43f7885ce5ff796ad6296f1
 human_signoff: manh 2026-10-17 — ký Cổng Bằng chứng trên S4 vòng 2 PASS (20/20 eval, 7/7 suite); Ngoài-1, 4 chấp nhận không sửa; Ngoài-5, 11, 15 mở hợp đồng mới; 12 mục còn lại ghi Known limits; cắt/hoãn đồng ý cắt; Treo phê hết
 ---
 
@@ -267,3 +267,7 @@ Round 2: cả hai thước đã sửa; năm eval chạy lại (E1, E2, E7, E18, 
 ### Re-pin lần 1 — 2026-10-17, do ghim lại sau gộp onehub 9dfdf0628 và sau làn ghim bảy hồ sơ repin-20261017T113609Z-76485
 run_id: repin-20261017T122810Z-56563
 sha: ce20af45ea95cfff1742a902c9462fff6bdd27b6 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-17, do ghim lại sau gỡ chú thích c88b1658e và sau làn bảy hồ sơ repin-20261017T134627Z-69983
+run_id: repin-20261017T145006Z-66110
+sha: e6faa870aa9b645af43f7885ce5ff796ad6296f1 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
