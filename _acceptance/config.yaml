@@ -44,6 +44,8 @@ feature_loop:
     - chuyen-goi-dieu-phoi/E10
     - bo-ca-mau-quy-4/E7
     - thu-haiku-tro-ly-okr/E7
+    - pre-push-t1/E9
+    - pre-push-t1/E10
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
@@ -1923,6 +1925,16 @@ executors:
     mtc_anh_xa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/mau-trang-thai-anh-xa.spec.ts"
     mtc_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/mau-trang-thai-dom.dom.tsx"
     bch_nhan: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/status-indicator-xuong-dong.dom.tsx"
+    ppt_phan_loai: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t phan-loai"
+    ppt_day_t1: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-t1"
+    ppt_day_nang: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-nang"
+    ppt_verify: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t verify"
+    ppt_khai: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t khai"
+    tlkp_khoi_phuc: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t khoi-phuc:.de.xuat.khoi.phuc.duoc.duyet"'
+    tlkp_luu_tru: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t duyet-luu-tru:.ma.tran.nguoi.viet.truoc"'
+    tlkp_dem: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-dem"'
+    tlkp_tinh: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-tinh"'
+    tlkp_tep: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts"'
   script:
     dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
@@ -2969,11 +2981,19 @@ executors:
     kcl_dot_bien: node _acceptance/khung-soan-chan-lien-ket/rang/dot-bien.mjs
     kcl_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan man"'
     kcl_man_luot: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-soan-chan-lien-ket/rang/man.mjs --phan luot"'
+    nm5_dh1: node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs
+    nm5_mo_coi: node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/go-mo-coi.mjs
     zkd_so_do: bun _acceptance/zalo-tro-ly-kho-chi-dan/rang/so-do.ts
     mtc_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs"'
     mtc_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs --chi-do"'
+    tnc_so: bun _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts
+    tnc_pham_vi: bun _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts --pham-vi
     bch_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"'
     bch_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs --chi-do"'
+    ppt_mot_nguon: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t mot-nguon && cd ../.. && node _acceptance/pre-push-t1/rang/mot-nguon.mjs"
+    ppt_dot_bien: node _acceptance/pre-push-t1/rang/dot-bien.mjs
+    ppt_rang_cu: node _acceptance/pre-push-t1/rang/rang-cu.mjs
+    ppt_day_that: node _acceptance/pre-push-t1/rang/day-that.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

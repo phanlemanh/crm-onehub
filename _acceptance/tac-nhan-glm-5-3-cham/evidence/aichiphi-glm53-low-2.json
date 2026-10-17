@@ -1,0 +1,92 @@
+[
+  {
+    "id": "evt_01M521BJ68Z1QHPM7K4YDJFK3C",
+    "at": "2026-10-16T02:40:40.776Z",
+    "sessionId": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 10906,
+    "outputTokens": 32,
+    "costUsd": 0.015006
+  },
+  {
+    "id": "evt_01M521BRQCCVAWDYYQF7WBRGZ3",
+    "at": "2026-10-16T02:40:47.468Z",
+    "sessionId": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 10953,
+    "outputTokens": 198,
+    "costUsd": 0.003056
+  },
+  {
+    "id": "evt_01M521BWPXG6BZFMW5802GBZAV",
+    "at": "2026-10-16T02:40:51.549Z",
+    "sessionId": "wrun_01M521BRVT2V3P5DWC0TANCERC",
+    "phienCha": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "modelId": null,
+    "inputTokens": 3842,
+    "outputTokens": 6,
+    "costUsd": 0.005405
+  },
+  {
+    "id": "evt_01M521DG78KNQCEC2CAJF571E8",
+    "at": "2026-10-16T02:41:44.296Z",
+    "sessionId": "wrun_01M521BRVT2V3P5DWC0TANCERC",
+    "phienCha": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "modelId": null,
+    "inputTokens": 4092,
+    "outputTokens": 426,
+    "costUsd": 0.007603
+  },
+  {
+    "id": "evt_01M521DRXSFA9GFGD1HWB12X4V",
+    "at": "2026-10-16T02:41:53.209Z",
+    "sessionId": "wrun_01M521BRVT2V3P5DWC0TANCERC",
+    "phienCha": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "modelId": null,
+    "inputTokens": 4553,
+    "outputTokens": 147,
+    "costUsd": 0.002404
+  },
+  {
+    "id": "evt_01M521EAHC1F10GRCYVX1N5V7B",
+    "at": "2026-10-16T02:42:11.244Z",
+    "sessionId": "wrun_01M521BRVT2V3P5DWC0TANCERC",
+    "phienCha": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "modelId": null,
+    "inputTokens": 4733,
+    "outputTokens": 202,
+    "costUsd": 0.001944
+  },
+  {
+    "id": "evt_01M521F3RQGCZ733H5J9C2237C",
+    "at": "2026-10-16T02:42:37.079Z",
+    "sessionId": "wrun_01M521BRVT2V3P5DWC0TANCERC",
+    "phienCha": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "modelId": null,
+    "inputTokens": 4967,
+    "outputTokens": 528,
+    "costUsd": 0.003336
+  },
+  {
+    "id": "evt_01M521FJ1ZRKS5YY1MQEV3QNH4",
+    "at": "2026-10-16T02:42:51.711Z",
+    "sessionId": "wrun_01M521BRVT2V3P5DWC0TANCERC",
+    "phienCha": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "modelId": null,
+    "inputTokens": 5553,
+    "outputTokens": 242,
+    "costUsd": 0.002704
+  },
+  {
+    "id": "evt_01M521FWW6ZY6BYX44YVC8Z1GM",
+    "at": "2026-10-16T02:43:02.790Z",
+    "sessionId": "wrun_01M521BEH6EMGK0QE3CZAXVNH1",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 11391,
+    "outputTokens": 273,
+    "costUsd": 0.020578
+  }
+]
