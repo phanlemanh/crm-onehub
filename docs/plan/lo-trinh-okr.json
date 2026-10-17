@@ -26,7 +26,8 @@
       "den": "2026-10-12",
       "khoa": "m-1009",
       "loai": "ngoai",
-      "hang": []
+      "hang": [],
+      "that": "2026-10-11"
     },
     {
       "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc — đã xong trên production",
@@ -70,7 +71,8 @@
       "khoa": "m-1013n",
       "loai": "ngoai",
       "ai": "Chủ kho",
-      "hang": []
+      "hang": [],
+      "that": "2026-10-13"
     },
     {
       "ten": "Công bố OKR quý 4 — các phòng ban đã dùng thử OKR và Kho tài liệu từ trước",
@@ -78,13 +80,13 @@
       "loai": "han-cung",
       "ai": "Mọi phòng ban",
       "hang": [
-        "1",
         "4n",
         "S",
         "S2",
         "ZT"
       ],
-      "khoa": "m-1014"
+      "khoa": "m-1014",
+      "that": "2026-10-14"
     },
     {
       "ten": "Mở đợt r2 từ gói dieu-phoi của kit — chủ kho duyệt thẻ khởi tạo một lần",
@@ -92,7 +94,8 @@
       "khoa": "m-1014d",
       "loai": "ngoai",
       "ai": "Chủ kho",
-      "hang": []
+      "hang": [],
+      "that": "2026-10-13"
     },
     {
       "ten": "Vòng tín hiệu khép lần đầu — tín hiệu tự về kho, quản trị thấy mọi tín hiệu, ai cũng có chuông thông báo, hộp gửi tín hiệu sửa xong",
@@ -104,7 +107,8 @@
         "TH4",
         "TB1",
         "TH6"
-      ]
+      ],
+      "that": "2026-10-16"
     },
     {
       "ten": "Lộ trình nhiều sản phẩm — bước 1: trang đọc bản chụp",
@@ -113,7 +117,17 @@
       "loai": "phat-hanh",
       "hang": [
         "LT1c"
-      ]
+      ],
+      "that": "2026-10-17"
+    },
+    {
+      "ten": "crm nhận kit 2.32.0 (gói road-map, lượt chấm lại không tự dối)",
+      "ngay": "2026-10-18",
+      "ai": "Mac Studio",
+      "khoa": "m-1017k",
+      "loai": "ngoai",
+      "hang": [],
+      "that": "2026-10-17"
     },
     {
       "ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
@@ -123,8 +137,7 @@
       "hang": [
         "DH1",
         "DH2",
-        "DH3",
-        "DH11"
+        "DH3"
       ],
       "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410."
     },
@@ -145,7 +158,35 @@
         "DH4",
         "DH5"
       ],
-      "nghia": "Lãnh đạo mở Toàn cảnh › Sơ đồ thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt; trưởng đơn vị xem quanh một mục tiêu nó góp vào đâu. Ước theo giờ máy: bắt đầu ~15/10 · ~18 giờ máy (DH4 tính T3: thêm React Flow + dagre, chạm packages/ui, gộp ×1,3) · % hạn mức tuần chưa ước · hoàn tất dự kiến 21/10 · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10."
+      "nghia": "Lãnh đạo mở Toàn cảnh › Sơ đồ thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt; trưởng đơn vị xem quanh một mục tiêu nó góp vào đâu. Ước theo giờ máy: bắt đầu ~15/10 · ~18 giờ máy (DH4 tính T3: thêm React Flow + dagre, chạm packages/ui, gộp ×1,3) · % hạn mức tuần chưa ước · hoàn tất dự kiến 21/10 · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10.",
+      "that": "2026-10-16"
+    },
+    {
+      "ten": "Lộ trình bước 2 — ngày dự kiến, tên ngành tiếng Việt, tiêu điểm sau xoá",
+      "ngay": "2026-10-21",
+      "loai": "phat-hanh",
+      "khoa": "m-1021lt",
+      "hang": [
+        "LT1e",
+        "VN1",
+        "TH6b"
+      ]
+    },
+    {
+      "ten": "Buổi nghiệm thu chung ba máy — chủ kho và trưởng phòng ban",
+      "ngay": "2026-10-22",
+      "ai": "Chủ kho",
+      "khoa": "m-1022n",
+      "loai": "ngoai",
+      "hang": []
+    },
+    {
+      "ten": "Đo lần đầu cây tổ chức (Cổng Giá trị của hàng 1)",
+      "ngay": "2026-10-26",
+      "khoa": "m-1026d",
+      "hang": [
+        "1"
+      ]
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -219,17 +260,26 @@
       "khoa": "m-1214"
     },
     {
-      "ten": "R3 lên production",
-      "ngay": "2026-12-18",
+      "ten": "R3 lên production — mục tiêu theo giờ máy, trần 18/12",
+      "ngay": "2026-10-28",
       "loai": "phat-hanh",
       "hang": [
         "10",
         "8b",
         "L",
-        "T",
-        "K5"
+        "T"
       ],
-      "khoa": "m-1218"
+      "khoa": "m-1218",
+      "den": "2026-12-18"
+    },
+    {
+      "ten": "K5 Chat và Deal về một khung lên production",
+      "ngay": "2026-12-18",
+      "loai": "phat-hanh",
+      "khoa": "m-1218k",
+      "hang": [
+        "K5"
+      ]
     },
     {
       "ten": "Phòng ban đặt và công bố OKR quý 1",
@@ -713,7 +763,7 @@
       "nhom": "okr",
       "thu_tu": 82,
       "ghi_chu": "XEM-08, XEM-09, NH-05 — thành T3 ở Cổng Đáng của 8a vì cần hai chỗ lưu.",
-      "buoc_ke": "Làn B, cuối cùng",
+      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
       "chay_khi": "Làn B sau lượt 10",
       "cho_ai": "điều kiện"
     },
@@ -793,7 +843,7 @@
       "nhom": "okr",
       "thu_tu": 100,
       "ghi_chu": "Từ 28/09 (anh quyết): dựng bằng dữ liệu mẫu, bật bằng dữ liệu thật. Giữ cảnh báo trượt và nút trong Slack; hỏi đáp OKR tách sang C.",
-      "buoc_ke": "Làn B sau 7n, và khi 9c đã gộp",
+      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
       "chay_khi": "7n và 9c đã gộp (9c cùng chạm nhắc buổi sáng); 9c chậm thì 8b đi trước",
       "cho_ai": "điều kiện"
     },
@@ -1058,7 +1108,7 @@
       "nhom": "tro-ly",
       "thu_tu": 270,
       "ghi_chu": "Dùng lại sổ đề xuất của 9b.",
-      "buoc_ke": "Làn A sau C; Cổng Đáng cần một mã mới trong bản phạm vi",
+      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
       "chay_khi": "C đã gộp (làn A); dựng trên quý 3 mẫu của M",
       "cho_ai": "điều kiện"
     },
@@ -1079,7 +1129,7 @@
       "nhom": "tro-ly",
       "thu_tu": 280,
       "ghi_chu": "Gộp từ các bản tóm tắt phòng ban đã kiểm, không đọc lại Cập nhật tuần gốc.",
-      "buoc_ke": "Làn A, cuối cùng",
+      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
       "chay_khi": "L đã gộp (làn A)",
       "cho_ai": "điều kiện"
     },
@@ -2557,7 +2607,8 @@
       "dot": "okr-dieu-huong-1410",
       "phu": [
         "Ngoài-9 DH3"
-      ]
+      ],
+      "buoc_ke": "Dời khỏi m-1020dh sang đợt mới, làn M5 (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     },
     {
       "ma": "DH5",
@@ -2595,7 +2646,7 @@
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+      "buoc_ke": "Chờ điều kiện: tro-ly-okr-nen và bo-okr-mau gỡ kẹt"
     },
     {
       "ma": "E6b",
@@ -2750,7 +2801,7 @@
       "cau_giao": "«Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây»",
       "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
       "trang_thai": "chưa mở",
-      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
+      "buoc_ke": "Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     },
     {
       "ma": "MH1",
@@ -2811,7 +2862,7 @@
         "F26"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mốc chốt ở Cổng Phạm vi"
+      "buoc_ke": "Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     },
     {
       "ma": "F29",
@@ -2864,7 +2915,7 @@
       "ghi_chu": "Đề xuất 15/10 22:20Z từ F23: paths của E15 (ui-check) đang là apps/app/lib/messages/**, nên #424 sửa tin-hieu.ts làm #427 phải ghim lại. Cùng lớp E17 đã sửa ở F23. Chờ Cổng Đáng.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "S4 vòng 4 REJECT; chủ kho chọn hoãn (P1-30: B, 17/10). #439 giữ nháp. Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+      "buoc_ke": "Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     },
     {
       "ma": "F32",
@@ -2926,7 +2977,7 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T15:08:22Z"
       },
-      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+      "buoc_ke": "Làn Mac Studio, đợt mới (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     },
     {
       "ma": "K7",
@@ -2949,6 +3000,113 @@
         "decided_at": "2026-10-16T05:33:48Z"
       },
       "buoc_ke": "Đã gộp 2026-10-17 (#457)"
+    },
+    {
+      "ma": "VN1",
+      "slug": "dich-ten-nganh-bang-bang",
+      "nhom": "crm-chung",
+      "thu_tu": 446.4,
+      "ngay": "2026-10-17",
+      "ten": "Dịch tên ngành bằng bảng",
+      "ten_ngan": "Tên ngành tiếng Việt",
+      "cau_giao": "«Tra cứu thương hiệu Việt Nam hiện tên ngành tiếng Việt từ một bảng, không dịch máy từng lần»",
+      "ghi_chu": "Hỏi-5 của tra-cuu-thuong-hieu-viet-nam (#462). Làn MacBook Pro, nhóm 1, ~2 giờ máy.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn MacBook Pro sau LT1e (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+    },
+    {
+      "ma": "K7b",
+      "slug": "chuong-cuoc-dang-mo",
+      "nhom": "crm-chung",
+      "thu_tu": 450.4,
+      "ngay": "2026-10-17",
+      "ten": "Chuông không đếm cuộc đang mở",
+      "ten_ngan": "Chuông cuộc đang mở",
+      "cau_giao": "«Ngồi trên màn chat thấy kết quả rồi gõ tiếp thì chuông không còn đếm thông báo của chính cuộc đó»",
+      "ghi_chu": "Ngoài-13 của K7, chủ kho chọn «mở hợp đồng mới» khi ký 17/10. Tệp gốc apps/api/src/conversations/conversations.service.ts (markRead chỉ chạy khi lastAssistantAt > lastReadAt).",
+      "dung_tren": [
+        "K7"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+    },
+    {
+      "ma": "K7c",
+      "slug": "don-sau-cho-tac-nhan",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.1,
+      "ngay": "2026-10-17",
+      "ten": "Dọn giao diện sau K7",
+      "ten_ngan": "Dọn sau K7",
+      "cau_giao": "«TheDangDung sống ở packages/ui; CardAction và CardFooter không bị className đổi khoảng cách ở chỗ gọi»",
+      "ghi_chu": "Ngoài-5 và Ngoài-11 của K7 (ghi Known limits khi ký 17/10), trái docs/design.md.",
+      "dung_tren": [
+        "K7"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+    },
+    {
+      "ma": "F35",
+      "slug": "don-ho-so-cu",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.2,
+      "ngay": "2026-10-17",
+      "ten": "Dọn hồ sơ cũ",
+      "ten_ngan": "Dọn hồ sơ cũ",
+      "cau_giao": "«Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A»",
+      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "chay_khi": "crm nhận mốc kit có K-A (ho-so-da-ky-giu-tuoi)",
+      "buoc_ke": "Chờ điều kiện (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+    },
+    {
+      "ma": "F36",
+      "slug": "chu-thich-glob-md",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.3,
+      "ngay": "2026-10-17",
+      "ten": "Sửa chú thích glob .md",
+      "ten_ngan": "Chú thích glob",
+      "cau_giao": "«Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho»",
+      "ghi_chu": "Phát hiện của F32 (glob_variants GLOB-DOUBLESTAR-ZERO-DIRS). T1. Đi sau t1-ma-doc vì cùng khối config.",
+      "dung_tren": [
+        "C-1b"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "T1, máy làm sau C-1b"
+    },
+    {
+      "ma": "C-1b",
+      "slug": "t1-ma-doc",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.4,
+      "ngay": "2026-10-16",
+      "ten": "T1 cho mã đọc",
+      "ten_ngan": "T1 mã đọc",
+      "cau_giao": "«Lần đẩy chỉ chạm tệp đọc được phân loại đúng T1»",
+      "ghi_chu": "Làn M5. Cổng Đáng và Cổng Phạm vi đã ký, S3 xong, chờ làn.",
+      "dung_tren": [],
+      "trang_thai": "đang dựng",
+      "buoc_ke": "Làn M5 sau DA4"
+    },
+    {
+      "ma": "C-1c",
+      "slug": "push-ghim-lai-t1",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.5,
+      "ngay": "2026-10-17",
+      "ten": "Đẩy chỉ ghim lại là T1",
+      "ten_ngan": "Ghim lại là T1",
+      "cau_giao": "«Lần đẩy chỉ ghim lại (run-log, decisions) bỏ test và build, mà acceptance gate vẫn chạy và recheck bằng chứng vẫn đỏ được»",
+      "ghi_chu": "Đo 17/10: mỗi push ghim lại vẫn chạy test + build ~15′. Điều kiện bắt buộc ghi vào hợp đồng: acceptance gate chạy, recheck đỏ được (như #452); thiếu thì không mở.",
+      "dung_tren": [
+        "C-1b"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn M5 sau C-1b (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     }
   ],
   "chan_troi": [

@@ -3064,6 +3064,9 @@ risk_tiers:
     - "scripts/cat-luot.mjs"
     # Kit 2.30.0 (gồm phần 2.29.0): tin-hieu.mjs nạp cat-luot.mjs, cat-luot.mjs nạp co-hop-dong.cjs.
     - "scripts/co-hop-dong.cjs"
+    # Kit 2.32.0: lo-trinh.mjs nạp gio-may.mjs lúc nạp; pre-merge-check.sh gọi chan-lo-trinh.cjs (lớp chép 26 → 28 tệp).
+    - "scripts/gio-may.mjs"
+    - "lib/chan-lo-trinh.cjs"
     # Bốn tệp cuối của INIT-CI-COPY-LIST 2.28.0, «chỉ khi khai tin_hieu»: kho khai cửa tín hiệu từ LT2
     # (gui-tin-hieu-trong-crm) nên bước bản đồ nạp tin-hieu.mjs, và thiếu chúng là ERR_MODULE_NOT_FOUND.
     - "dieu-phoi/scripts/hinh-dang.mjs"
