@@ -1,9 +1,13 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const { expectedExits } = createRequire(import.meta.url)(
+	join(GOC, "lib", "eval-yaml.cjs"),
+);
 const VONG = "ve-sinh-do-san-onehub";
 const BAY = [
 	"okr-soat-anh-luot-3",
@@ -53,13 +57,21 @@ function dongRepinCuoi(runLog) {
 	return dong.filter((d) => d.kind === "repin").at(-1) ?? null;
 }
 
-function soiHoSo(slug, runLog, cayKhop) {
+function maKhai(slug) {
+	const tep = join(GOC, "_acceptance", slug, "evals.yaml");
+	if (!existsSync(tep)) return new Map();
+	return expectedExits(readFileSync(tep, "utf8")).byId;
+}
+
+function soiHoSo(slug, runLog, cayKhop, khai = new Map()) {
 	const r = dongRepinCuoi(runLog);
 	if (!r) return `HONG GHIM ${slug}: khong co dong repin`;
 	const suite = Array.isArray(r.suites_exit) ? r.suites_exit : [];
 	if (suite.some((m) => m !== 0))
 		return `HONG GHIM ${slug}: suites_exit ${JSON.stringify(suite)}`;
-	const evals = Object.entries(r.evals_exit ?? {}).filter(([, m]) => m !== 0);
+	const evals = Object.entries(r.evals_exit ?? {}).filter(
+		([e, m]) => m !== (khai.get(e) ?? 0),
+	);
 	if (!r.evals_exit) return `HONG GHIM ${slug}: dong repin thieu evals_exit`;
 	if (evals.length > 0)
 		return `HONG GHIM ${slug}: eval do ${evals.map(([e, m]) => `${e}=${m}`).join(", ")}`;
@@ -91,6 +103,20 @@ if (process.argv.includes("--tu-thu")) {
 		console.log("HONG tu kiem ghim: run-log lanh van bi bat");
 		process.exit(1);
 	}
+	const coGioiHan = JSON.stringify({
+		kind: "repin",
+		sha: "a",
+		suites_exit: [0],
+		evals_exit: { E1: 0, E5: 2 },
+	});
+	if (soiHoSo("x", coGioiHan, () => true, new Map([["E5", 2]])) !== null) {
+		console.log("HONG tu kiem ghim: ma 2 da khai expected_exit ma van bi bat");
+		process.exit(1);
+	}
+	if (soiHoSo("x", coGioiHan, () => true) !== "HONG GHIM x: eval do E5=2") {
+		console.log("HONG tu kiem ghim: ma 2 khong khai ma khong bi bat");
+		process.exit(1);
+	}
 	console.log("OK tu kiem ghim");
 	process.exit(0);
 }
@@ -105,9 +131,24 @@ const trongDiff = new Set(
 const tap = [
 	...new Set([...BAY, ...[...trongDiff].filter((s) => s !== VONG && daKy(s))]),
 ];
-const cayKhop = (sha) =>
-	chay("git", ["diff", "--quiet", sha, "HEAD", "--", ".", ":!_acceptance"])
-		.status === 0;
+const cayKhop = (sha) => {
+	const r = chay("git", [
+		"diff",
+		"--quiet",
+		sha,
+		"HEAD",
+		"--",
+		".",
+		":(exclude)_acceptance/",
+	]);
+	if (r.status !== 0 && r.status !== 1) {
+		console.log(
+			`KHONG DO DUOC: git diff ${sha} HEAD ma ${r.status} — ${r.stderr.trim()}`,
+		);
+		process.exit(2);
+	}
+	return r.status === 0;
+};
 
 const hong = [];
 for (const slug of tap) {
@@ -116,6 +157,7 @@ for (const slug of tap) {
 		slug,
 		existsSync(tep) ? readFileSync(tep, "utf8") : "",
 		cayKhop,
+		maKhai(slug),
 	);
 	if (loi) hong.push(loi);
 }

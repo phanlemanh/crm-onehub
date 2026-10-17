@@ -5,7 +5,6 @@ import {
 	APP,
 	chuanBi,
 	duongDonVi,
-	duongKhung,
 	GOC,
 	KHUNG,
 	KY,
@@ -15,10 +14,12 @@ import {
 	mo as moKhung,
 	moCuoc,
 	moPhien,
+	PHONG,
 	sql,
 	the,
 	trang,
 } from "../../soan-okr-trong-khung/rang/man-chung.mjs";
+import { idMau } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
 
 const RANG = dirname(fileURLToPath(import.meta.url));
 const ANH = join(GOC, ".acceptance-runs", "ve-sinh-do-san-onehub", "evidence");
@@ -67,19 +68,34 @@ if (!daKhoi || !phienCuoc || phienCuoc.sessionId.startsWith("cho-eve:"))
 
 const slug = the.slug;
 const daoDonVi = duongDonVi();
+const donViCoMucTieu = `${APP}/${slug}/okr/theo-don-vi?kyOkr=${encodeURIComponent(idMau("chu-ky", "quy4"))}&donOkr=${encodeURIComponent(`pb:${PHONG}`)}`;
 const O = {
 	D1: {
 		url: `${APP}/${slug}/deals?record=${encodeURIComponent(`deal:${DEAL}`)}`,
 		cookie: the.qt,
 		ngan: "deal",
+		trang: "deals",
 	},
 	D2: {
-		url: `${daoDonVi}&record=${encodeURIComponent(`deal:${DEAL}`)}`,
+		url: `${donViCoMucTieu}&record=${encodeURIComponent(`deal:${DEAL}`)}`,
 		cookie: the.qt,
 		ngan: "deal",
+		trang: "don-vi",
 	},
-	D3: { url: duongKhung(cuoc.id), cookie: the.qt, ngan: "soan", eve: "khong" },
-	D4: { url: duongKhung(cuoc.id), cookie: the.tl, ngan: "soan", eve: "co" },
+	D3: {
+		url: `${donViCoMucTieu}&record=${encodeURIComponent(`soan:${cuoc.id}`)}`,
+		cookie: the.qt,
+		ngan: "soan",
+		trang: "don-vi",
+		eve: "khong",
+	},
+	D4: {
+		url: `${donViCoMucTieu}&record=${encodeURIComponent(`soan:${cuoc.id}`)}`,
+		cookie: the.tl,
+		ngan: "soan",
+		trang: "don-vi",
+		eve: "co",
+	},
 };
 
 const KHONG_RECORD = [
@@ -126,14 +142,19 @@ async function nganDung(p, o) {
 	return false;
 }
 
-async function trangCoNoiDung(p) {
-	return p.evaluate(() => {
-		const khungCho = [
-			...document.querySelectorAll("[data-khung-xuong]"),
-		].filter((x) => x.checkVisibility());
-		const main = document.querySelector("main") ?? document.body;
-		return khungCho.length === 0 && (main.textContent ?? "").trim().length > 0;
-	});
+const DU_LIEU_TRANG = {
+	deals: "tbody tr, [data-slot='table-body'] [data-slot='table-row']",
+	"don-vi": "[data-muc-tieu]",
+};
+
+async function demDuLieuTrang(p, trang) {
+	return p.evaluate(
+		(chon, khung) =>
+			[...document.querySelectorAll(chon)].filter((x) => !x.closest(khung))
+				.length,
+		DU_LIEU_TRANG[trang],
+		KHUNG,
+	);
 }
 
 async function mo(nhan, url, cookie, kho, luot, them) {
@@ -166,10 +187,10 @@ for (const [ten, o] of Object.entries(O)) {
 		const soLuot = DO.luotRecord;
 		for (let luot = 1; luot <= soLuot; luot += 1) {
 			let nganOk = false;
-			let coNoiDung = false;
+			let duLieu = 0;
 			const r = await mo(ten, o.url, o.cookie, kho, luot, async (p) => {
 				nganOk = await nganDung(p, o);
-				coNoiDung = await trangCoNoiDung(p);
+				duLieu = await demDuLieuTrang(p, o.trang);
 			});
 			demLoi[ten] += r.loi;
 			if (!MONG_DO) {
@@ -177,9 +198,9 @@ for (const [ten, o] of Object.entries(O)) {
 					hong.push(
 						`HONG ${ten} ${kho.ten} luot ${luot}: ngan khong mo dung ban ghi`,
 					);
-				if (!coNoiDung)
+				if (duLieu === 0)
 					hong.push(
-						`HONG ${ten} ${kho.ten} luot ${luot}: trang duoi khong co noi dung`,
+						`HONG ${ten} ${kho.ten} luot ${luot}: trang duoi ngan khong co ${o.trang === "deals" ? "dong thoa thuan" : "muc tieu"} (${DU_LIEU_TRANG[o.trang]})`,
 					);
 				const eveOkr = r.yeuCau.length;
 				const cam = r.bi403.filter((u) => u.includes(EVE_OKR)).length;
