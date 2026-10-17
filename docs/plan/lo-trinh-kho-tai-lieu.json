@@ -51,13 +51,6 @@
       "that": "2026-10-04"
     },
     {
-      "ten": "Chạy thật — mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ (chủ kho chốt 04/10)",
-      "ngay": "2026-10-22",
-      "loai": "ngoai",
-      "ai": "Mọi phòng ban",
-      "hang": []
-    },
-    {
       "ten": "Sửa một đợt",
       "ngay": "2026-10-21",
       "loai": "phat-hanh",
@@ -190,28 +183,6 @@
       "pr": [
         410
       ]
-    },
-    {
-      "ma": "d9",
-      "cau_giao": "Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
-      "hang": "T3",
-      "dung_tren": [],
-      "slug": "chu-trang-va-pham-vi",
-      "trang_thai": "để sau",
-      "dong": 9,
-      "ten": "Để sau",
-      "buoc_ke": "Để sau; trung vị duyệt của mốc ngoài «Chạy thật» vượt 5 ngày là tín hiệu xếp lên trước, không phải điều kiện mở"
-    },
-    {
-      "ma": "d6",
-      "cau_giao": "Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
-      "hang": "T3",
-      "dung_tren": [],
-      "slug": "bao-tri-trang-luat",
-      "trang_thai": "để sau",
-      "dong": 6,
-      "ten": "Để sau",
-      "buoc_ke": "Để sau; số đo của mốc ngoài «Chạy thật» là tín hiệu xếp lại, không phải điều kiện mở"
     },
     {
       "ma": "l4a",
@@ -355,5 +326,19 @@
       "hang": "T3"
     }
   ],
-  "da_bac": []
+  "da_bac": [],
+  "chan_troi": [
+    {
+      "ma": "d9",
+      "cau_giao": "Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
+      "ly_do": "Xếp lên khi số đo chạy thật của phòng ban có: trung vị thời gian duyệt vượt 5 ngày.",
+      "mo_lai_khi": "Phòng ban dùng Kho tài liệu thật ít nhất hai tuần và có số đo thời gian duyệt"
+    },
+    {
+      "ma": "d6",
+      "cau_giao": "Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
+      "ly_do": "Số đo chạy thật của phòng ban quyết thứ tự; chưa có số.",
+      "mo_lai_khi": "Phòng ban dùng Kho tài liệu thật ít nhất hai tuần và có số đo"
+    }
+  ]
 }

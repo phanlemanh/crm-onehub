@@ -11,35 +11,6 @@
   },
   "moc": [
     {
-      "ten": "Nhân sự gửi danh sách người, phòng ban, bộ phận, trưởng — đã xong trên production",
-      "ngay": "2026-10-07",
-      "ai": "Nhân sự",
-      "khoa": "m-1007",
-      "that": "2026-10-04",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Ban lãnh đạo gửi OKR quý 4 cấp OneHub — đã gửi (chủ kho báo 11/10)",
-      "ngay": "2026-10-09",
-      "ai": "Ban lãnh đạo",
-      "den": "2026-10-12",
-      "khoa": "m-1009",
-      "loai": "ngoai",
-      "hang": [],
-      "that": "2026-10-11"
-    },
-    {
-      "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc — đã xong trên production",
-      "ngay": "2026-10-09",
-      "ai": "Chủ kho",
-      "den": "2026-10-13",
-      "khoa": "m-1009b",
-      "that": "2026-10-04",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
       "ten": "Làn R1 vá xong trên production, trước ngày dùng thật",
       "ngay": "2026-10-12",
       "loai": "phat-hanh",
@@ -57,24 +28,6 @@
       "that": "2026-10-06"
     },
     {
-      "ten": "Kit phát hành 2.28.0 — mốc ổn định, có gói dieu-phoi đã vá trước đợt r2 (DP8)",
-      "ngay": "2026-10-13",
-      "that": "2026-10-13",
-      "khoa": "m-1013k",
-      "loai": "ngoai",
-      "ai": "Kit",
-      "hang": []
-    },
-    {
-      "ten": "crm nhận kit 2.28.0 và chuyển sang gói dieu-phoi (#373) — chủ kho dời từ 15/10 ngày 13/10",
-      "ngay": "2026-10-13",
-      "khoa": "m-1013n",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": [],
-      "that": "2026-10-13"
-    },
-    {
       "ten": "Công bố OKR quý 4 — các phòng ban đã dùng thử OKR và Kho tài liệu từ trước",
       "ngay": "2026-10-14",
       "loai": "han-cung",
@@ -87,15 +40,6 @@
       ],
       "khoa": "m-1014",
       "that": "2026-10-14"
-    },
-    {
-      "ten": "Mở đợt r2 từ gói dieu-phoi của kit — chủ kho duyệt thẻ khởi tạo một lần",
-      "ngay": "2026-10-14",
-      "khoa": "m-1014d",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": [],
-      "that": "2026-10-13"
     },
     {
       "ten": "Vòng tín hiệu khép lần đầu — tín hiệu tự về kho, quản trị thấy mọi tín hiệu, ai cũng có chuông thông báo, hộp gửi tín hiệu sửa xong",
@@ -121,15 +65,6 @@
       "that": "2026-10-17"
     },
     {
-      "ten": "crm nhận kit 2.32.0 (gói road-map, lượt chấm lại không tự dối)",
-      "ngay": "2026-10-18",
-      "ai": "Mac Studio",
-      "khoa": "m-1017k",
-      "loai": "ngoai",
-      "hang": [],
-      "that": "2026-10-17"
-    },
-    {
       "ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
       "ngay": "2026-10-20",
       "loai": "phat-hanh",
@@ -140,14 +75,6 @@
         "DH3"
       ],
       "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410."
-    },
-    {
-      "ten": "Phòng ban công bố OKR quý 4",
-      "ngay": "2026-10-21",
-      "ai": "Phòng ban",
-      "khoa": "m-1021",
-      "loai": "ngoai",
-      "hang": []
     },
     {
       "ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
@@ -171,22 +98,6 @@
         "VN1",
         "TH6b"
       ]
-    },
-    {
-      "ten": "Buổi nghiệm thu chung ba máy — chủ kho và trưởng phòng ban",
-      "ngay": "2026-10-22",
-      "ai": "Chủ kho",
-      "khoa": "m-1022n",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Đo lần đầu cây tổ chức (Cổng Giá trị của hàng 1)",
-      "ngay": "2026-10-26",
-      "khoa": "m-1026d",
-      "hang": [],
-      "loai": "ngoai",
-      "ai": "Chủ kho"
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -218,38 +129,14 @@
       "that": "2026-10-17"
     },
     {
-      "ten": "Phiên nghiệm thu R1",
-      "ngay": "2026-11-13",
-      "ai": "Chủ kho và trưởng đơn vị",
-      "hang": [],
-      "khoa": "m-1113",
-      "loai": "ngoai"
-    },
-    {
-      "ten": "Đọc số lượt 6",
-      "ngay": "2026-12-01",
-      "ai": "Chủ kho",
-      "hang": [],
-      "khoa": "m-1201",
-      "loai": "ngoai"
-    },
-    {
-      "ten": "Ban lãnh đạo đặt OKR năm 2027 cấp OneHub",
-      "ngay": "2026-12-07",
-      "ai": "Ban lãnh đạo",
-      "den": "2026-12-18",
-      "hang": [],
-      "khoa": "m-1207",
-      "loai": "ngoai"
-    },
-    {
       "ten": "Hạn cứng: lượt 7 lên production",
       "ngay": "2026-12-14",
       "loai": "han-cung",
       "hang": [
         "7n"
       ],
-      "khoa": "m-1214"
+      "khoa": "m-1214",
+      "ly_do": "Phòng ban đặt và công bố OKR quý 1 từ 21/12: lượt 7 phải lên production trước đó"
     },
     {
       "ten": "R3 lên production — mục tiêu theo giờ máy, trần 18/12",
@@ -262,7 +149,8 @@
         "T"
       ],
       "khoa": "m-1218",
-      "den": "2026-12-18"
+      "den": "2026-12-18",
+      "ly_do": "Trần 18/12: trước khi phòng ban đặt OKR quý 1 (21/12); mục tiêu 28/10 theo giờ máy cộng dồn làn Mac Studio"
     },
     {
       "ten": "K5 Chat và Deal về một khung lên production",
@@ -272,40 +160,6 @@
       "hang": [
         "K5"
       ]
-    },
-    {
-      "ten": "Phòng ban đặt và công bố OKR quý 1",
-      "ngay": "2026-12-21",
-      "ai": "Phòng ban",
-      "den": "2027-01-11",
-      "khoa": "m-1221",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Chấm và nhìn lại quý 4 trong công cụ",
-      "ngay": "2026-12-28",
-      "ai": "Phòng ban",
-      "den": "2027-01-08",
-      "khoa": "m-1228",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Tết Đinh Mùi",
-      "ngay": "2027-02-06",
-      "khoa": "m-0206",
-      "loai": "ngoai",
-      "ai": "Công ty",
-      "hang": []
-    },
-    {
-      "ten": "Đo bốn tuần đầu quý 1: Cổng Giá trị R1–R3",
-      "ngay": "2027-02-09",
-      "ai": "Chủ kho",
-      "khoa": "m-0209",
-      "loai": "ngoai",
-      "hang": []
     }
   ],
   "hang": [

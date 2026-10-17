@@ -231,21 +231,6 @@
       "chay_khi": "DA2 và DA3 đã gộp (mục từ điển «Dự án» đã mở 07/10); điều kiện ngày bắt đầu đã thoả — chủ kho mở dòng «không làm: ngày bắt đầu cho bước» của lộ trình 30 ngày ngày 14/10"
     },
     {
-      "ma": "DA5",
-      "cau_giao": "«Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác»",
-      "vi_sao": "Mục tiêu trỏ tới việc, không sở hữu việc; bỏ loại việc riêng của KR.",
-      "hang": "T3",
-      "slug": "okr-tro-viec",
-      "dung_tren": [
-        "DA1"
-      ],
-      "trang_thai": "chưa mở",
-      "ten": "KR nối việc chung",
-      "ten_ngan": "Nối OKR",
-      "chay_khi": "Sau buổi đọc số của hàng 8a (lộ trình OKR, 01/12), để không đổi thước giữa kỳ",
-      "ghi_chu": "Tiến độ KR không cộng từ việc; thêm dòng «tiến độ việc» riêng. Đếm trước các việc (KR) có người làm vai «chỉ OKR» gắn kế hoạch hay chiến dịch."
-    },
-    {
       "ma": "DA6",
       "cau_giao": "«Gantt nâng cao: độ trễ, đường găng, baseline, tải công việc từng người»",
       "hang": "T2",
@@ -325,6 +310,12 @@
       "cau_giao": "«Bốn bậc onboarding tự đổ vào phễu từ nền tảng OneHub; so được lứa đối tác này với lứa trước»",
       "ly_do": "Phụ thuộc đội nền tảng dựng bên gửi cho điểm nhận onboarding-ingest.service.ts — việc của người ngoài kho; lượt 5 của lộ trình Điều phối 30 ngày.",
       "mo_lai_khi": "Đội nền tảng có bên gửi; schema lô đã đưa họ đọc"
+    },
+    {
+      "ma": "DA5",
+      "cau_giao": "«Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác»",
+      "ly_do": "Đứng chờ một lần đo giá trị của hàng 8a (lộ trình OKR), để không đổi thước giữa kỳ.",
+      "mo_lai_khi": "Hồ sơ của hàng 8a đã có kết quả đọc số 01/12 do người ghi (observed → da-cham-boi-thuc-te)"
     }
   ]
 }
