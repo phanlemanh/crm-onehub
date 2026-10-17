@@ -6,16 +6,21 @@ import type { GanttI18nOverrides } from "@crm/ui/components/reui/gantt/gantt-i18
 import { GanttNav } from "@crm/ui/components/reui/gantt/gantt-nav";
 import type {
 	GanttEvent,
+	GanttOccurrence,
 	GanttProposedUpdate,
 	GanttResource,
 } from "@crm/ui/components/reui/gantt/gantt-types";
 import { GanttView } from "@crm/ui/components/reui/gantt/gantt-view";
-import { TONE_COLOR } from "@crm/ui/components/status-indicator";
+import { Skeleton } from "@crm/ui/components/skeleton";
+import { type StatusTone, TONE_COLOR } from "@crm/ui/components/status-indicator";
 import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
+import type { Locale } from "@crm/ui/lib/locale";
+import type { Messages } from "@crm/ui/lib/messages";
 import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
+import { cn } from "@crm/ui/lib/utils";
 import { format, subMilliseconds } from "date-fns";
 import { enUS, vi } from "date-fns/locale";
-import { useMemo } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 
 export const GANTT_DU_AN = {
 	muiGio: "Asia/Ho_Chi_Minh",
@@ -25,6 +30,8 @@ export const GANTT_DU_AN = {
 	hangMoc: "__moc",
 	hangChuaLich: "__chua-lich",
 	rongNgayRem: 2.5,
+	manHep: "(max-width: 767px)",
+	cotHep: { width: 168, minWidth: 120, nameColumnWidth: 168 },
 } as const;
 
 export type GanttDuAnViec = {
@@ -70,7 +77,44 @@ export type GanttDuAnProps = {
 	className?: string;
 };
 
-type DuLieuThanh = { loai: "viec" | "moc"; tre?: boolean };
+type DuLieuThanh =
+	| { loai: "viec"; tone: StatusTone }
+	| { loai: "moc"; ten: string; tre: boolean };
+
+function khongDoi(): () => void {
+	return () => {};
+}
+
+function ngheManHep(bao: () => void): () => void {
+	const mql = window.matchMedia(GANTT_DU_AN.manHep);
+	mql.addEventListener("change", bao);
+	return () => mql.removeEventListener("change", bao);
+}
+
+function useDaHydrat(): boolean {
+	return useSyncExternalStore(
+		khongDoi,
+		() => true,
+		() => false,
+	);
+}
+
+function useManHep(): boolean {
+	return useSyncExternalStore(
+		ngheManHep,
+		() => window.matchMedia(GANTT_DU_AN.manHep).matches,
+		() => false,
+	);
+}
+
+function thuocTinhThanh(
+	occurrence: GanttOccurrence<DuLieuThanh>,
+): Record<`data-${string}`, string> {
+	const du = occurrence.event.data;
+	if (du?.loai === "viec") return { "data-gantt-bar": "", "data-tone": du.tone };
+	if (du?.loai === "moc") return { "data-gantt-moc": du.ten };
+	return {};
+}
 
 function dauNgay(ngay: string): Date {
 	return new Date(`${ngay}T00:00:00${GANTT_DU_AN.lechGio}`);
@@ -94,10 +138,8 @@ const LICH_NGON_NGU = {
 	en: { dateFns: enUS, ngay: "MMM d", ngayDai: "EEEE, MMM d, yyyy" },
 } as const;
 
-function nhanGantt(
-	msg: ReturnType<typeof useMessages>["gantt"],
-	lich: (typeof LICH_NGON_NGU)[keyof typeof LICH_NGON_NGU],
-): GanttI18nOverrides {
+export function nhanGantt(msg: Messages["gantt"], locale: Locale): GanttI18nOverrides {
+	const lich = LICH_NGON_NGU[locale];
 	const ngay = (d: Date) => format(d, lich.ngay, { locale: lich.dateFns });
 	const khoang = (tu: Date, den: Date) => {
 		const cuoi = den.getTime() > tu.getTime() ? subMilliseconds(den, 1) : tu;
@@ -152,7 +194,16 @@ function nhanGantt(
 	};
 }
 
-export function GanttDuAn({
+export function GanttDuAn(props: GanttDuAnProps) {
+	const daHydrat = useDaHydrat();
+	const hep = useManHep();
+	if (!daHydrat) {
+		return <Skeleton aria-hidden data-gantt-cho="" className={cn("min-h-64 w-full", props.className)} />;
+	}
+	return <GanttDuAnDaDung {...props} hep={hep} />;
+}
+
+function GanttDuAnDaDung({
 	viec,
 	moc,
 	lich,
@@ -162,10 +213,12 @@ export function GanttDuAn({
 	onDatNgay,
 	onMoViec,
 	className,
-}: GanttDuAnProps) {
+	hep,
+}: GanttDuAnProps & { hep: boolean }) {
 	const msg = useMessages().gantt;
-	const lichNgonNgu = LICH_NGON_NGU[useLocale()];
-	const i18n = useMemo(() => nhanGantt(msg, lichNgonNgu), [msg, lichNgonNgu]);
+	const locale = useLocale();
+	const lichNgonNgu = LICH_NGON_NGU[locale];
+	const i18n = useMemo(() => nhanGantt(msg, locale), [msg, locale]);
 
 	const coLich = viec.filter((v) => v.batDau && v.han);
 	const chuaLich = viec.filter((v) => !(v.batDau && v.han));
@@ -217,7 +270,7 @@ export function GanttDuAn({
 				draggable: keoDuoc,
 				resizable: keoDuoc,
 				dependencies: v.phaiCho.filter((id) => coLich.some((c) => c.id === id)),
-				data: { loai: "viec" },
+				data: { loai: "viec", tone: toneTheoNghia(v.nghia) },
 			};
 		});
 		const moi: GanttEvent<DuLieuThanh>[] = moc.map((m) => {
@@ -234,7 +287,7 @@ export function GanttDuAn({
 				draggable: false,
 				resizable: false,
 				dependencies: m.cho.filter((id) => coLich.some((c) => c.id === id)),
-				data: { loai: "moc", tre: m.tre },
+				data: { loai: "moc", ten: m.ten, tre: m.tre },
 			};
 		});
 		return [...moi, ...thanh];
@@ -284,6 +337,8 @@ export function GanttDuAn({
 			i18n={i18n}
 			offDays={offDays}
 			rowCheckboxes={false}
+			treePanel={hep ? GANTT_DU_AN.cotHep : undefined}
+			getEventAttributes={thuocTinhThanh}
 			metrics={{ unitWidths: { month: GANTT_DU_AN.rongNgayRem, week: GANTT_DU_AN.rongNgayRem } }}
 			wheelZoom={false}
 			dragCreate={false}
@@ -318,7 +373,7 @@ export function GanttDuAn({
 			}
 		>
 			<GanttNav />
-			<GanttView />
+			<GanttView key={hep ? "hep" : "rong"} />
 		</Gantt>
 	);
 }

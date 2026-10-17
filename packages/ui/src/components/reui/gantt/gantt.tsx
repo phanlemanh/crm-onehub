@@ -976,6 +976,7 @@ interface GanttViewConfig<TData = unknown> {
         resource: GanttResource;
         events: GanttEvent<TData>[];
     }) => number | null;
+    getEventAttributes?: (occurrence: GanttOccurrence<TData>) => Record<`data-${string}`, string | undefined>;
 }
 const DEFAULT_VIEW_CONFIG: GanttViewConfig = {
     nowIndicator: true,
@@ -1057,6 +1058,7 @@ const VIEW_CONFIG_KEYS: Array<keyof GanttViewConfig> = [
     "renderBaseline",
     "renderRowBaseline",
     "getSummaryProgress",
+    "getEventAttributes",
 ];
 interface GanttProps<TData = unknown> extends UseGanttStateOptions<TData>, Partial<GanttViewConfig<TData>>, Omit<HTMLAttributes<HTMLDivElement>, "children" | "defaultValue"> {
     calendar?: GanttInstance<TData>;

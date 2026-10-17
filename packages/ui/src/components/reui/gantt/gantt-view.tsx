@@ -114,6 +114,7 @@ interface TimelineUnit {
     weight: number;
     isToday?: boolean;
     isOff?: boolean;
+    day?: string;
 }
 interface TimelineGroup {
     key: string;
@@ -262,6 +263,7 @@ function GanttView({ className, asChild = false, interval: intervalProp, ...prop
                         ms: time.getTime(),
                         weight,
                         isOff: dayOff,
+                        day: getDayKey(dayCursor, timeZone),
                     });
                     span += weight;
                 }
@@ -352,6 +354,7 @@ function GanttView({ className, asChild = false, interval: intervalProp, ...prop
                 weight,
                 isToday: getDayKey(cursor, timeZone) === todayDayKey,
                 isOff: resolveOffDay(cursor, timeZone, viewConfig.offDays ?? true),
+                day: getDayKey(cursor, timeZone),
             });
             const weekNumber = getWeek(zoned, {
                 locale: settings.locale,
@@ -1701,7 +1704,7 @@ function GanttView({ className, asChild = false, interval: intervalProp, ...prop
         <div data-gantt-axis="" data-gantt-range-start={rangeStartMs} data-gantt-range-end={rangeEndMs} data-gantt-snap={snapMin} className="relative h-8">
           
           <div aria-hidden className="absolute inset-0">
-            {unitFractions.map(({ unit, start, width }) => unit.isOff && (<span key={unit.key} className={cn("absolute inset-y-0", offDayClassName)} style={{
+            {unitFractions.map(({ unit, start, width }) => unit.isOff && (<span key={unit.key} data-off-day={unit.day} className={cn("absolute inset-y-0", offDayClassName)} style={{
                 insetInlineStart: `${start * 100}%`,
                 width: `${width * 100}%`,
             }}/>))}
@@ -1726,7 +1729,7 @@ function GanttView({ className, asChild = false, interval: intervalProp, ...prop
         
         <div aria-hidden data-slot="gantt-timeline-backdrop" className="pointer-events-none absolute inset-0">
           {unitFractions.map(({ unit, start, width }) => (<span key={unit.key} className="contents">
-              {unit.isOff && (<span data-off="" className={cn("absolute inset-y-0", offDayBodyClassName)} style={{
+              {unit.isOff && (<span data-off="" data-off-day={unit.day} className={cn("absolute inset-y-0", offDayBodyClassName)} style={{
                     insetInlineStart: `${start * 100}%`,
                     width: `${width * 100}%`,
                 }}/>)}
@@ -1938,7 +1941,7 @@ const GanttDependencyLayer = memo(function GanttDependencyLayer({ edges, totalRe
                 laneStep: laneHeightRem / 2 + laneGapRem,
                 arrowSize: 0.375,
             });
-            return (<g key={edge.key} data-slot="gantt-dependency" data-dragging={dragged || undefined} className={dragged ? "opacity-50" : undefined}>
+            return (<g key={edge.key} data-slot="gantt-dependency" data-gantt-dependency="" data-tu={edge.fromId} data-den={edge.toId} data-dragging={dragged || undefined} className={dragged ? "opacity-50" : undefined}>
             <path d={geometry.line} fill="none" stroke="currentColor" strokeWidth={1.5} vectorEffect="non-scaling-stroke"/>
             <path d={geometry.arrow} fill="currentColor"/>
           </g>);
@@ -1967,7 +1970,7 @@ const GanttTreeRow = memo(function GanttTreeRow({ row, heightRem, bandRem, colum
     };
     const menu = viewConfig.renderResourceMenu?.(ctx);
     const alignStart = (viewConfig.rowAlign ?? DEFAULT_ROW_ALIGN) === "start";
-    const rowNode = (<div data-slot="gantt-row-group" data-gantt-row-id={row.resource.id} data-selected={selected || undefined} className={cn("group/gantt-row data-hover:bg-muted/40 data-selected:bg-primary/5 data-selected:data-hover:bg-primary/5 flex border-b", dimmed && "opacity-50")} style={{ height: `${heightRem}rem` }} onClick={settings.onResourceClick
+    const rowNode = (<div data-slot="gantt-row-group" data-gantt-row-id={row.resource.id} data-gantt-cha={row.parentId ?? undefined} data-selected={selected || undefined} className={cn("group/gantt-row data-hover:bg-muted/40 data-selected:bg-primary/5 data-selected:data-hover:bg-primary/5 flex border-b", dimmed && "opacity-50")} style={{ height: `${heightRem}rem` }} onClick={settings.onResourceClick
             ? (e: React.MouseEvent) => {
                 if ((e.target as HTMLElement).closest("button, [role=checkbox]"))
                     return;
