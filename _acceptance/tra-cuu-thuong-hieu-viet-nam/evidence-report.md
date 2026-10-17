@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 151afe63a845f221d2acc94e9237087a7ff639d9
+verified_commit: def2833bb5487859238b8d233a0c618985c66b8b
 human_signoff:
 ---
 
@@ -26,6 +26,8 @@ human_signoff:
 | E9 | AC-8 | test | PASS |
 | E10 | AC-9 | ui-check | PASS |
 | E11 | AC-1 | judgment | PASS |
+| E12 | AC-10 | test | PASS |
+| E13 | AC-7 | judgment | PASS |
 
 ## Evidence
 
@@ -35,9 +37,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.tthv_danh_sach
   verified_at: 2026-10-16T14:28:56Z
+  carried_from_round: 2
   output: |
-    cd packages/validation && bun test ./test/ten-mien-nen-tang.spec.ts
-    Ran 8 tests across 1 file. [21.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: mvb1gdhyi51x
@@ -50,64 +52,64 @@ human_signoff:
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-E3-r1
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tthv_man
-  verified_at: 2026-10-16T08:25:52Z
-  carried_from_round: 1
+  verified_at: 2026-10-17T03:36:45Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx
+    Ran 11 tests across 1 file. [2.63s]
 
 - eval: E4
-  run_id: mvb1gdhyi51x
+  run_id: mvbuhzmuvt4w
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tthv_api
-  verified_at: 2026-10-16T08:25:52Z
-  carried_from_round: 1
+  verified_at: 2026-10-17T03:36:45Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    bun run test -- "cd apps/api && bun test test/ten-mien-nen-tang.spec.ts"
+    test-run: dropped crm_mvbuhzmuvt4w_test
 
 - eval: E5
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-E5-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-E5-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tthv_man
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
   output: |
     cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx
-    Ran 11 tests across 1 file. [2.10s]
+    Ran 11 tests across 1 file. [2.63s]
 
 - eval: E6
-  run_id: mvb1gddjkuaf
+  run_id: mvbuhzivlql1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tthv_tac_nhan
-  verified_at: 2026-10-16T08:25:52Z
-  carried_from_round: 1
+  verified_at: 2026-10-17T03:36:45Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    bun run test -- "cd apps/agent && bun test test/tra-cuu-thuong-hieu-viet-nam.spec.ts"
+    test-run: dropped crm_mvbuhzivlql1_test
 
 - eval: E7
-  run_id: mvb1gddjkuaf
+  run_id: mvbuhzivlql1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tthv_tac_nhan
-  verified_at: 2026-10-16T08:25:52Z
-  carried_from_round: 1
+  verified_at: 2026-10-17T03:36:45Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    bun run test -- "cd apps/agent && bun test test/tra-cuu-thuong-hieu-viet-nam.spec.ts"
+    test-run: dropped crm_mvbuhzivlql1_test
 
 - eval: E8
-  run_id: mvb1gddjkuaf
+  run_id: mvbuhzivlql1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.tthv_tac_nhan
-  verified_at: 2026-10-16T08:25:52Z
-  carried_from_round: 1
+  verified_at: 2026-10-17T03:36:45Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    bun run test -- "cd apps/agent && bun test test/tra-cuu-thuong-hieu-viet-nam.spec.ts"
+    test-run: dropped crm_mvbuhzivlql1_test
 
 - eval: E9
   run_id: minted-tra-cuu-thuong-hieu-viet-nam-E9-r2
@@ -115,9 +117,9 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.tthv_man
   verified_at: 2026-10-16T14:28:56Z
+  carried_from_round: 2
   output: |
-    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx
-    Ran 11 tests across 1 file. [2.10s]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E10
   run_id: E10-tthv-mot-luot-2026-10-16
@@ -125,6 +127,7 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.script.tthv_chup
   verified_at: 2026-10-16T14:28:56Z
+  carried_from_round: 2
   screenshot: evidence/E10-quoc-gia-vi-1440.png
   observed: |
     Đã mở từng ảnh vừa lưu.
@@ -144,58 +147,74 @@ human_signoff:
     Đối chiếu Expected: (1) vi hiện «Hoa Kỳ» ở dòng phụ và ô Quốc gia, en hiện «United States», ở cả 1440 và 390; (2) sheet có dòng lỗi gọi tên Facebook ngay dưới ô Tên miền ở cả 1440 và 390; không tràn ngang ở khung nào. Tất cả khớp.
   network_observed: n-a (driver)
   output: |
-    Cả 6 ảnh đã mở bằng Read và khớp Expected.
-    Mạng: driver là script puppeteer của chup.mjs, không có đường đọc network. Không ghi E10-network.txt, networkObserved = n-a (driver).
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E11
   judged_by: judge panel (fresh context, 3 lens)
   verdict: PASS
-  rationale: Đề xuất của hội đồng là PASS (hai lens PASS, một lens chưa chắc). Chữ người dùng thấy gọi tên nền tảng, nói đó không phải trang web của công ty, kèm gợi ý ô không mâu thuẫn câu báo. Ý bất đồng của lens operational-feasibility ghi đầy đủ bên dưới; người quyết ở Cổng 2.
+  rationale: Đề xuất của hội đồng là PASS, cả ba lens cùng PASS. Chữ người dùng thấy gọi tên nền tảng, nói đó không phải trang web của công ty, rồi chỉ hai lối bằng chữ thường (dán trang web riêng, hoặc để trống nếu chưa có); gợi ý ô nêu ngoại lệ nên không mâu thuẫn câu báo. Người quyết ở Cổng 2.
   panel:
-    - domain-correctness: PASS — Câu `nenTang(ten)` ở cả bản en và vi gọi tên nền tảng qua tham số `ten`. Câu nói đó không phải trang web của công ty, rồi bảo để trống nếu công ty chưa có trang web riêng, bằng chữ thường. `domainHint` ở cả hai bản vẫn nói «dán cả đường dẫn cũng được» nhưng liền sau đó nêu ngoại lệ Facebook, Zalo, LinkedIn. Nhánh `onSave` của ô Tên miền trong `company-sheet.tsx` gọi `companyMessages(locale).nenTang(nenTang.ten)` qua `toast.error`, không tự viết câu khác. Một điểm hơi hẹp: câu chỉ nói rõ «để trống» và chỉ ngầm hiểu «dán trang web riêng». Tôi coi vậy là đủ cho ý (3).
-    - operational-feasibility: UNCERTAIN — Hầu hết các ý đều đạt. Hàm `nenTang` (vi và en) gọi tên nền tảng và nói rõ đó không phải trang web của công ty, bằng chữ thường. `domainHint` ở cả hai bản vẫn kèm ngoại lệ Facebook, Zalo, LinkedIn. Nhánh `onSave` của ô Tên miền trong `company-sheet.tsx` gọi đúng `companyMessages(locale).nenTang(nenTang.ten)`. Ý (3) thì chỉ nói rõ nhánh "Để trống nếu công ty chưa có trang web riêng". Nhánh "dán trang web riêng" chỉ được suy ra, không có chữ nào bảo rep dán, nên tôi không chắc câu này đã đủ.
-      required_evidence:
-        - Chữ chính xác của AC-1 trong contract.md (thư mục hồ sơ `_acceptance/tra-cuu-thuong-hieu-viet-nam/`). Cần biết AC-1 đòi câu báo nói rõ cả hai việc để trống và dán trang web riêng, hay chỉ cần một câu chỉ dẫn. Nếu đòi rõ cả hai thì kết luận đổi thành FAIL. Nếu chấp nhận 'Để trống nếu chưa có trang web riêng' thì kết luận là PASS.
-        - Hoặc bản sửa `nenTang` trong `apps/app/lib/messages/companies.ts` (cả `en` và `vi`) thêm một vế nói rõ nếu công ty có trang web riêng thì dán trang đó vào. Ví dụ: 'Nếu công ty có trang web riêng, hãy dán trang đó; nếu chưa có thì để trống.' Có vế này thì ý (3) đạt rõ ràng và kết luận đổi thành PASS.
-    - spec-alignment: PASS — Hàm `nenTang(ten)` trong `companies.ts` (cả `en` lẫn `vi`) gọi tên nền tảng, nói đó không phải trang web của công ty, và bảo để trống nếu công ty chưa có trang web riêng, bằng chữ thường. Lời khuyên "dùng trang web riêng nếu có" chỉ hàm ý qua câu "chưa có trang web riêng", không nói thẳng. `domainHint` ở hai bản đều nêu ngoại lệ "Trang Facebook, Zalo hay LinkedIn không dùng được ở đây". Nhánh `onSave` của ô Tên miền trong `company-sheet.tsx` gọi `companyMessages(locale).nenTang(nenTang.ten)` qua `toast.error`, không tự viết câu khác.
+    - domain-correctness: PASS — Hàm `nenTang(ten)` ở cả bản vi và en gọi tên nền tảng, nói đó không phải trang web của công ty, rồi chỉ hai lối bằng chữ thường: dán trang web riêng của công ty, hoặc để trống nếu chưa có. Gợi ý `domainHint` vẫn nói «dán cả đường dẫn cũng được» nhưng liền sau đó nêu ngoại lệ: trang Facebook, Zalo hay LinkedIn không dùng được. Ở `company-sheet.tsx`, nhánh `onSave` của ô Tên miền gọi `companyMessages(locale).nenTang(nenTang.ten)` qua `toast.error`, không tự viết câu khác.
+    - operational-feasibility: PASS — Trong `companies.ts`, hàm `nenTang(ten)` ở cả en và vi gọi tên nền tảng và nói đó không phải trang web riêng của công ty. Câu đó bảo cả hai lối bằng chữ thường, không thuật ngữ: dán trang web riêng của công ty, hoặc để trống nếu chưa có. `create.domainHint` (en và vi) có nói thêm rằng trang Facebook, Zalo, LinkedIn không dùng được ở đây, nên không bỏ sót ngoại lệ. Ở `company-sheet.tsx`, nhánh `onSave` của ô Tên miền gọi `companyMessages(locale).nenTang(nenTang.ten)` qua toast lỗi, không tự viết câu khác.
+    - spec-alignment: PASS — Hàm `nenTang(ten)` ở cả bản vi và en gọi tên nền tảng, nói đó không phải trang web của công ty, rồi bảo rõ hai lối bằng chữ thường: dán trang web riêng của công ty, hoặc để trống nếu chưa có. Gợi ý `domainHint` ở cả hai bản vẫn có câu ngoại lệ về trang Facebook, Zalo, LinkedIn ngay sau câu «dán cả đường dẫn cũng được». Trong `company-sheet.tsx`, nhánh `onSave` của ô Tên miền gọi `companyMessages(locale).nenTang(nenTang.ten)` qua `toast.error` và không tự viết câu khác.
+  human_override:  # chi nguoi ghi
+
+- eval: E12
+  run_id: mvbuhzivlql1
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.tthv_tac_nhan
+  verified_at: 2026-10-17T03:36:45Z
+  output: |
+    bun run test -- "cd apps/agent && bun test test/tra-cuu-thuong-hieu-viet-nam.spec.ts"
+    test-run: dropped crm_mvbuhzivlql1_test
+
+- eval: E13
+  judged_by: judge panel (fresh context, 3 lens)
+  verdict: PASS
+  rationale: Đề xuất của hội đồng là PASS, cả ba lens cùng PASS. Chuỗi description của công cụ nói đúng luật hiện tại (điền ô trống, thay ô máy điền lần trước mà chưa ai đổi, không ghi đè ô người đã gõ hay đã sửa) và không còn câu nào nói chỉ điền ô trống. Người quyết ở Cổng 2.
+  panel:
+    - domain-correctness: PASS — Chuỗi description nói đúng luật: điền ô trống, khi tra lại thì thay ô lần trước máy điền mà người chưa sửa, xoá phần địa chỉ mới không còn báo, và «Never overwrites a field a person typed or edited». Không còn câu nào nói công cụ chỉ điền ô trống. Tham số `companyId` không có mô tả. Tham số `fresh` chỉ nói về bộ đệm của nhà cung cấp, không nói gì sai về luật ghi đè. Câu `note` «Everything it returned was already on the record» cũng khớp, vì chỉ hiện khi không điền và không xoá gì.
+    - operational-feasibility: PASS — Chuỗi description nói đúng luật hiện tại: điền ô trống, khi tra lại thì thay các ô lần trước đã điền mà chưa ai đổi, xoá phần địa chỉ mà kết quả mới không còn báo, và không bao giờ ghi đè ô người đã gõ hay đã sửa. Hai mô tả tham số, `companyId` (không có mô tả) và `fresh` (chỉ nói về bộ nhớ đệm), không có câu nào bảo công cụ chỉ điền ô trống.
+    - spec-alignment: PASS — Chuỗi description nói đủ ba vế của luật: điền ô trống, khi tra lại thì thay ô lần tra trước đã điền mà chưa ai đổi, và không bao giờ ghi đè ô người đã gõ hay đã sửa. Mô tả tham số `fresh` chỉ nói về bộ đệm 90 ngày của nhà cung cấp, `companyId` không có mô tả, và không câu nào còn nói công cụ chỉ điền ô trống. Phần "clears address parts" là thêm vào, khớp với trường `cleared` trong mã và không mâu thuẫn với luật.
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_lint_slop-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-tra-cuu-thuong-hieu-viet-nam-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-16T14:28:56Z
+  verified_at: 2026-10-17T03:36:45Z
 
 ## Known limits
 
@@ -207,8 +226,9 @@ baseline: BLOCKED ha tang — dau ra thieu dong __BL_XONG — lenh baseline khon
 
 Baseline khong do:
 
-- cd packages/validation && bun test ./test/ten-mien-nen-tang.spec.ts: BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
 - cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx: BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
+- bun run test -- "cd apps/api && bun test test/ten-mien-nen-tang.spec.ts": BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
+- bun run test -- "cd apps/agent && bun test test/tra-cuu-thuong-hieu-viet-nam.spec.ts": BLOCKED ha tang baseline: dau ra thieu dong __BL_XONG — lenh baseline khong chay het (bi dung, cho hop xin quyen, dau ra bi cat, hoac lenh eval vo cu phap shell)
 
 Eval khong-phan-biet: khong co eval nao duoc liet ke, nhung baseline khong do duoc o round nay nen danh sach nay KHONG chung minh duoc eval nao co phan biet.
 
@@ -220,3 +240,4 @@ none — every multi-run eval is uniform (moi eval chay mot lan, deterministic)
 
 Round 1: moi eval xanh; mot muc trong hop dong (AC-4, ma tran ten mien con moi phu 4 tren 14 nen tang) can va. Returned to implementation (commit 04244033a).
 Round 2: E1, E5, E9, E10 chay lai tren cay 151afe63a; E2, E3, E4, E6, E7, E8 carry-forward tu round 1 (delta khong cham paths cua eval). Tat ca PASS.
+Round 3: them E12 (AC-10) va E13 (AC-7); E3, E4, E5, E6, E7, E8, E12 chay lai tren cay def2833bb, E11 va E13 do hoi dong cham lai; E1, E2, E9, E10 carry-forward (delta khong cham paths cua eval). Tat ca PASS.
