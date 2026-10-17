@@ -64,6 +64,7 @@ export type TaoViecInput = {
 	tieuDe: string;
 	moTa?: string | null;
 	hanNgay?: Date | null;
+	batDauNgay?: Date | null;
 	nguoiThucHienId?: string;
 	nguoiTheoDoiIds?: string[];
 	gan: BanGhiGan[];
@@ -245,11 +246,17 @@ export async function taoViec(
 	const ganDung: BanGhiVet[] = [];
 	for (const b of input.gan) ganDung.push(await docBanGhi(tx, b));
 	const duAn = input.duAnId ? await docDuAnMo(tx, input.duAnId) : null;
+	const batDau = sangNgay(input.batDauNgay ?? null);
+	const han = sangNgay(input.hanNgay ?? null);
+	if (batDau && han && batDau > han) {
+		throw new LoiViec("khong-hop-le", DU_AN.thongDiep.batDauSauHan);
+	}
 	const viec = await tx.viec.create({
 		data: {
 			tieuDe: input.tieuDe,
 			moTa: input.moTa ?? null,
 			hanNgay: input.hanNgay ?? null,
+			batDauNgay: batDau ? tuNgay(batDau) : null,
 			nguoiGiaoId: input.nguoiId,
 			nguoiThucHienId: nguoiThucHien.id,
 			taoBoiId: input.nguoiId,
@@ -286,6 +293,7 @@ export async function taoViec(
 				tieuDe: input.tieuDe,
 				nguoiThucHien,
 				hanNgay: input.hanNgay ? ngayHan(input.hanNgay) : null,
+				batDauNgay: batDau,
 				banGhi: ganDung,
 				nguoiTheoDoi,
 			},

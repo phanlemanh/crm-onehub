@@ -396,6 +396,7 @@ export const vetViec = z.discriminatedUnion("loai", [
 			tieuDe: z.string(),
 			nguoiThucHien: nguoiVet,
 			hanNgay: z.string().nullable(),
+			batDauNgay: z.string().nullable().optional(),
 			banGhi: z.array(banGhiVet),
 			nguoiTheoDoi: z.array(nguoiVet),
 			chep: z

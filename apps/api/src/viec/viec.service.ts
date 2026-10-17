@@ -295,23 +295,13 @@ export class ViecService {
 				tieuDe: input.tieuDe,
 				moTa: input.moTa ?? null,
 				hanNgay: input.hanNgay ?? null,
+				batDauNgay: input.batDauNgay ?? null,
 				nguoiThucHienId: input.nguoiThucHienId,
 				nguoiTheoDoiIds: input.nguoiTheoDoiIds,
 				gan: b ? [b] : [],
 				duAnId: input.duAnId ?? null,
 				nguon: "web",
 				now: new Date(),
-			}).then(async (tao) => {
-				if (input.batDauNgay) {
-					await suaViec(tx, {
-						viecId: tao.id,
-						nguoiId: userId,
-						batDauNgay: input.batDauNgay,
-						nguon: "web",
-						now: new Date(),
-					});
-				}
-				return tao;
 			}),
 		);
 	}

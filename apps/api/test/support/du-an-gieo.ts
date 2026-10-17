@@ -1,6 +1,5 @@
 import { db } from "@crm/db";
 import { taoDuAn } from "@crm/db/du-an-ghi";
-import { suaViec } from "@crm/db/viec-ghi";
 import { taoThu } from "./viec-gieo";
 
 export function ngayDb(s: string): Date {
@@ -11,13 +10,20 @@ export function ngayCua(d: Date | null | undefined): string | null {
 	return d ? d.toISOString().slice(0, 10) : null;
 }
 
-export function duAnThu(nguoiId: string, ten = "Dự án thử"): Promise<{ id: string }> {
+export function duAnThu(
+	nguoiId: string,
+	ten = "Dự án thử",
+): Promise<{ id: string }> {
 	return db.$transaction((tx) =>
-		taoDuAn(tx, { nguoiId, ten: `${ten} ${Math.random().toString(36).slice(2, 7)}`, now: new Date() }),
+		taoDuAn(tx, {
+			nguoiId,
+			ten: `${ten} ${Math.random().toString(36).slice(2, 7)}`,
+			now: new Date(),
+		}),
 	);
 }
 
-export async function viecCoLich(input: {
+export function viecCoLich(input: {
 	duAnId: string | null;
 	giaoId: string;
 	thucHienId?: string;
@@ -25,26 +31,15 @@ export async function viecCoLich(input: {
 	batDau?: string;
 	han?: string;
 }): Promise<{ id: string }> {
-	const v = await taoThu({
+	return taoThu({
 		nguoiId: input.giaoId,
 		nguoiThucHienId: input.thucHienId ?? input.giaoId,
 		tieuDe: input.tieuDe,
 		gan: [],
 		duAnId: input.duAnId,
 		hanNgay: input.han ? ngayDb(input.han) : null,
+		batDauNgay: input.batDau ? ngayDb(input.batDau) : null,
 	});
-	if (input.batDau) {
-		await db.$transaction((tx) =>
-			suaViec(tx, {
-				viecId: v.id,
-				nguoiId: input.giaoId,
-				batDauNgay: ngayDb(input.batDau as string),
-				nguon: "web",
-				now: new Date(),
-			}),
-		);
-	}
-	return v;
 }
 
 export async function lichCua(id: string) {
@@ -52,7 +47,12 @@ export async function lichCua(id: string) {
 		where: { id },
 		select: { batDauNgay: true, hanNgay: true, duAnId: true, trangThai: true },
 	});
-	return { batDau: ngayCua(v.batDauNgay), han: ngayCua(v.hanNgay), duAnId: v.duAnId, trangThai: v.trangThai };
+	return {
+		batDau: ngayCua(v.batDauNgay),
+		han: ngayCua(v.hanNgay),
+		duAnId: v.duAnId,
+		trangThai: v.trangThai,
+	};
 }
 
 export async function donDuAn(): Promise<void> {
@@ -64,7 +64,11 @@ export async function donDuAn(): Promise<void> {
 	});
 }
 
-export async function themLe(ngay: string, taoBoiId: string, ten = "Lễ thử"): Promise<void> {
+export async function themLe(
+	ngay: string,
+	taoBoiId: string,
+	ten = "Lễ thử",
+): Promise<void> {
 	await db.ngayNghi.upsert({
 		where: { ngay: ngayDb(ngay) },
 		create: { ngay: ngayDb(ngay), ten, taoBoiId },
