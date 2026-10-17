@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: fb95c9db3980834b4ac3a4ec9e0cba7c689a8fdc
-human_signoff: Manh Phan 2026-10-14 — ký Cổng Bằng chứng trên S4 vòng 3 (17/17 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
+human_signoff: Manh Phan 2026-10-17 — ký lại Cổng Bằng chứng sau đổi lời AC-8 (#453: commit hàng chờ chạm thư mục nguồn tín hiệu và trang lộ trình máy vẽ lại từ chính các tín hiệu đó; giới hạn mới — onehub đổi hồ sơ sau lượt lịch thì PR hàng chờ lệch trang tới lượt kế, gỡ bằng chạy tay lịch) trên bằng chứng ghim lại repin-20261016T191234Z-42788 (17/17 eval máy đạt, E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo. Chữ ký 2026-10-14 trước đó phủ lời AC-8 cũ.
 ---
 
 # Evidence Report: tin-hieu-tu-ve-kho
