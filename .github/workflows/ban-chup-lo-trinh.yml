@@ -26,7 +26,11 @@ jobs:
         with:
           bun-version-file: package.json
 
+      # @crm/db chạy prisma generate lúc cài, và prisma.config đòi DATABASE_URL có mặt
+      # (không kết nối). Kịch bản đẩy chỉ gọi API của CRM, nên một địa chỉ giả là đủ.
       - run: bun install --frozen-lockfile
+        env:
+          DATABASE_URL: postgresql://khong-dung@localhost:5432/khong-dung
 
       - name: Đẩy bản chụp
         env:
