@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Thiếu cột Loại mục tiêu",
+    "muon_lam": "Bổ sung cột Loại mục tiêu trong giao diện Nhập OKR từ bảng tính",
+    "da_xay_ra": "Thiếu cột Loại mục tiêu",
+    "man": "/lo-trinh"
+  },
+  "luc": "2026-10-15T03:46:23.376Z"
+}

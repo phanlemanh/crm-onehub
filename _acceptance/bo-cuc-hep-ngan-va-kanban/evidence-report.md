@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 30c0982b1ab0c8e9507410cad6b59fc4b8b1034d
+verified_commit: 735c996977a6fa3e0aad9753f5b27adaea04267c
 human_signoff: Phan Le Manh 2026-10-16
 ---
 
@@ -171,3 +171,7 @@ none — mọi eval chạy một lần (runs: 1), không eval nào có phương 
 
 Round 1: cả tám eval (E1-E8) đạt, các lệnh suite hồi quy đều xanh; verdict PASS.
 Round 2: E1-E7 chạy lại trên cây đã sửa ở vật (S4-r1), đều đạt; E8 giữ nguyên từ round 1 vì delta không chạm paths của nó; các lệnh suite đều xanh; verdict PASS.
+
+### Re-pin lần 1 — 2026-10-16, do lan-dem-16-10: gộp onehub ngày 16/10 (#434…#453)
+run_id: repin-20261016T233032Z-31285
+sha: 735c996977a6fa3e0aad9753f5b27adaea04267c · suites: 7 lệnh exit 0 · evals: 2/2 eval máy đạt kỳ vọng · ngoài làn máy: E1, E2, E3, E4, E5, E6 · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-3, AC-4, AC-5, AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

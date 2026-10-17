@@ -1394,6 +1394,16 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "cho-tac-nhan-lau",
+		ten: "Chờ Tác nhân lâu — thời gian đã trôi, lời hứa và báo khi xong",
+		states: [
+			{ id: "ST-duoi-nguong", nhan: "Đang dựng — dưới 200 giây" },
+			{ id: "ST-tren-nguong", nhan: "Đang dựng — lâu hơn thường lệ" },
+			{ id: "ST-chuong-ba-loai", nhan: "Chuông — xong, cần trả lời, hỏng" },
+			{ id: "ST-chuong-da-doc", nhan: "Chuông — đã đọc sau khi mở" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
