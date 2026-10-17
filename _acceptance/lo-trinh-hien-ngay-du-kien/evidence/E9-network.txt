@@ -1,0 +1,1 @@
+E9: driver = puppeteer script (do-man.mjs) qua mot-luot.sh; khong co duong doc network/console rieng -> n-a (driver). Log: 12 DUNG, 0 SAI, ma thoat 0.

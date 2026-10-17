@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: lo-trinh-hien-ngay-du-kien
-verdict: REJECT
-failed_evals: [E9]
+verdict: PASS
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9c286aa175c408695618eba7aaf679759ec480b1
+verified_commit: 10374629c9f36a709e157750964855b18048a56f
 human_signoff:
 ---
 
@@ -23,9 +23,9 @@ human_signoff:
 | E6 | AC-5 | test | PASS |
 | E7 | AC-6 | test | PASS |
 | E8 | AC-7 | test | PASS |
-| E9 | AC-8 | ui-check | FAIL |
+| E9 | AC-8 | ui-check | PASS |
 | E10 | AC-8 | test | PASS |
-| E11 | AC-5 | judgment | PASS (đề xuất của hội đồng, chờ người điền human_override) |
+| E11 | AC-5 | judgment | PASS |
 | E12 | AC-7 | test | PASS |
 
 ## Evidence
@@ -36,91 +36,99 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ldk_ban_chep
   verified_at: 2026-10-17T15:55:01Z
+  carried_from_round: 1
   output: |
-    Ran 2 tests across 1 file. [58.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E2-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ldk_khuon
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    Ran 5 tests across 1 file. [63.00ms]
+    cd packages/validation && bun test test/lo-trinh-du-lieu.spec.ts -t gio-may
+    Ran 6 tests across 1 file. [216.00ms]
 
 - eval: E3
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E3-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ldk_co_ngay
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    Ran 2 tests across 1 file. [2.18s]
+    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t co-ngay
+    Ran 2 tests across 1 file. [4.26s]
 
 - eval: E4
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E4-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ldk_so_do
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    Ran 2 tests across 1 file. [1.78s]
+    lo-trinh-du-kien.spec.ts -t so-do roi lo-trinh-du-kien.dom.tsx -t so-do
+    Ran 2 tests across 1 file. [4.72s]
 
 - eval: E5
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E5-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ldk_qua_tai
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    Ran 2 tests across 1 file. [1.98s]
+    lo-trinh-du-kien.spec.ts -t qua-tai roi lo-trinh-du-kien.dom.tsx -t qua-tai
+    Ran 2 tests across 1 file. [4.85s]
 
 - eval: E6
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E6-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ldk_chua_co
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    Ran 2 tests across 1 file. [1.93s]
+    lo-trinh-du-kien.spec.ts -t chua-co roi lo-trinh-du-kien.dom.tsx -t chua-co
+    Ran 2 tests across 1 file. [4.75s]
 
 - eval: E7
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E7-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ldk_viec
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    Ran 6 tests across 1 file. [3.95s]
+    lo-trinh-du-kien.dom.tsx -t viec
+    Ran 8 tests across 1 file. [8.63s]
 
 - eval: E8
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E8-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ldk_ban_cu
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    Ran 4 tests across 1 file. [2.18s]
+    ban-chup-lo-trinh.spec.ts -t gio-may, lo-trinh-du-kien.spec.ts -t ban-cu, lo-trinh-du-kien.dom.tsx -t ban-cu
+    Ran 4 tests across 1 file. [5.62s]
 
 - eval: E9
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E9-r1
-  exit_code: 1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E9-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ldk_do_man
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   screenshot: evidence/E9-step1.png
   observed: |
-    step1 (dong-goi-moc-1280-vi, 1280x900, nen sang): trang Lo trinh kieu Moc, 4 moc dau (Kho cho nguoi 1 thg 10, Noi dung vao nhanh, Tim duoc, Lan R1 va xong tren production) tat ca «Đã giao»; khong thay chu «dự kiến» hay co nao. step2 (dong-goi-moc-375-en, 375x812): "Roadmap", Shipped, 2-3 moc dau; khong co «Expected». step3-6 (ban-chup-moc-375 vi/en x sang/toi): cung dau trang, 2-3 moc dau «Đã giao»/«Shipped»; nen toi doc duoc, nhung khong co ngay du kien, khong co co. step7-10 (ban-chup-moc-1280 vi/en x sang/toi): cung 4 moc dau da giao; khong co «dự kiến»/«Expected», khong co co; nen toi co tuong phan on, khong chong chu. step11 (ban-chup-ngan-375-vi): ngan ho so viec DH2 mo toan man: «Ngày dự kiến — Dự kiến xong 15 thg 10, 2026», chip «ước sơ bộ», hai co «sau ngày mục tiêu», «đã qua ngày dự kiến», chu bi cat o day khung nhin, khong chong chu. step12 (ban-chup-ngan-1280-en): ngan DH2 voi «Expected date: Expected by Oct 15, 2026», chip «rough estimate», co «after target date» va «past expected date», giai thich «Estimated by the system when the milestone started...», «Effort estimate 4–6.5 machine hours rough estimate»; doc duoc, khong chong chu. Tom lai: chi 2 anh ngan (step11-12) cho thay noi dung du kien; 10 anh con lai khong chua phan tu can kiem.
+    Da mo 12 frame bang Read. Step1 (1280 vi, dong goi): moc «Lo trinh buoc 2» co dong «Du kien xong 17 thg 10, 2026» canh chip «uoc so bo», doan giai thich cach tinh; 3 viec ben duoi, khong chong chu.
+    Step2 (375 en, dong goi): «Expected by Oct 17, 2026» + «rough estimate» + cau «Estimated by the system when the milestone started...», xuong dong gon trong the, khong tran.
+    Step3 (375 vi sang): tieu de moc, «Du kien xong 15 thg 10, 2026», chip «uoc so bo», hai co «sau ngay muc tieu» va «da qua ngay du kien» (xuong dong gon), cau cach tinh; nen sang, khong cat chu.
+    Step4 (375 vi toi): cung noi dung tren nen toi, doc ro, cac cham co cam de nhin.
+    Step5 va step6 (375 en sang/toi): «Expected by Oct 15, 2026», «rough estimate», «after target date», «past expected date», cau cach tinh; doc duoc ca hai nen.
+    Step7-8 (1280 vi sang/toi): mot hang «Du kien xong 15 thg 10, 2026» + «uoc so bo» + hai co cam tren cung hang, cau cach tinh duoi, khong chong len nhau, nen toi van doc ro.
+    Step9-10 (1280 en sang/toi): tuong tu bang tieng Anh, «Expected by Oct 15, 2026» canh «rough estimate».
+    Step11 (375 vi, ngan ho so): «Du kien xong 15 thg 10, 2026», chip «uoc so bo», hai co, cau cach tinh, khong tran ngang; dong «Uoc luong cong» o duoi mep anh chup nen khong thay trong khung nhung assertion DOM xac nhan «4–6,5 gio may uoc so bo».
+    Step12 (1280 en, ngan): «Expected by Oct 15, 2026» + «rough estimate» + hai co + cau cach tinh, «Effort estimate 4–6.5 machine hours» + «rough estimate», khong chong chu.
+    Moi frame khop Expected: ngay du kien canh chu «du kien»/«Expected», co nhin duoc o nen toi, khong chu chong nhau.
   network_observed: n-a (driver)
-  output: |
-    Phiên đo riêng (kho crm_lo_trinh_hien_ngay_du_kien_1f947b_do, app :4746, api :4770), tự dọn khi xong.
-    Dòng kết luận của máy: "KET LUAN: 12 DUNG, 0 SAI" — các khẳng định dựa trên DOM đều đúng ở cả 12 ô.
-    Đối chiếu mắt (bước 3) trên 12 ảnh E9-step1..12.png: sai ở 10 ảnh mốc và đóng gói (step1-10).
-    Cả 10 ảnh là ảnh đầu trang (fullPage không mở rộng vì trang cuộn trong khung bên trong), chỉ thấy 4 mốc đầu đã giao.
-    Không ảnh nào trong 10 ảnh đó chứa chữ «dự kiến»/«Expected», cờ chưa-đủ-số-đo / quá-tải / đã-qua hay câu cách tính.
-    Kỳ vọng «ngày dự kiến đọc được cạnh chữ dự kiến, có dễ nhìn ở nền tối, không chữ nào chồng lên nhau» không kiểm chứng được bằng mắt ở nền sáng lẫn nền tối của 8 ô mốc và 2 ảnh đóng gói.
-    Hai ảnh ngăn hồ sơ (step11, step12) đạt: đọc được, không chồng chữ.
-    Đề nghị của người đối chiếu: chụp phần tử hoặc cuộn tới mốc M (scrollIntoView), hoặc chụp vùng chứa timeline thay vì fullPage.
 
 - eval: E10
   run_id: minted-lo-trinh-hien-ngay-du-kien-E10-r1
@@ -128,76 +136,66 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.test.ldk_khoi_that
   verified_at: 2026-10-17T15:55:01Z
+  carried_from_round: 1
   output: |
-    Ran 3 tests across 1 file. [108.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E11
-  judged_by: judge-subagent panel (fresh context) — đề xuất, chưa có người chốt
+  judged_by: judge-subagent (fresh context)
   verdict: PASS
-  rationale: Cả ba lăng kính cùng cho PASS — mọi chuỗi hiện ngày mang chữ «dự kiến»/«Expected», ba câu lý do không có từ nội bộ, hai ngôn ngữ cùng nghĩa.
-  required_evidence:
-    - (judge không nêu bằng-chứng-thiếu)
+  rationale: Hoi dong ba judge (domain-correctness, operational-feasibility, spec-alignment) deu cham PASS, moi y co cau trich. De xuat panel, human_override de trong cho nguoi quyet o Cong 2.
+  votes:
+    - domain-correctness: PASS — (1) Hai chuoi hien ngay deu mang chu du kien: vi «Dự kiến xong ${ngay}», «dự kiến ${ngay}»; en «Expected by ${ngay}», «expected ${ngay}». cachTinh noi ro uoc tinh va gia dinh chay mot minh, dung muc «Lời ước, không phải cam kết»: vi «coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.»; en «as if it were the only milestone running. Not a commitment.». (2) Ba lyDo khong chua tu noi bo (kit, khoi, du-bao, gio_may) va noi duoc chuyen dang xay ra, vi du «Bản lộ trình này chưa mang ngày dự kiến.» va «Ngày dự kiến trong dữ liệu lộ trình không đọc được.». Chu «Máy» trong «Máy đặt ngày khi việc đầu tiên của mốc được mở» hoi mo ho nhung khong thuoc danh sach cam. (3) vi va en cung nghia o moi cap: «giờ máy» / «machine hours», «ước sơ bộ» / «rough estimate», «sau ngày mục tiêu» / «after target date», «ước theo luật chung» / «rule-of-thumb guess».
+    - operational-feasibility: PASS — (1) Cac chuoi mang ngay deu co chu «dự kiến»/«Expected»: «Dự kiến xong ${ngay}» / «Expected by ${ngay}», «dự kiến ${ngay}» / «expected ${ngay}». cachTinh noi ro gia dinh va viec khong phai cam ket. Hai nhan co «ước sơ bộ» va «sau ngày mục tiêu» khong chua chu «dự kiến»; judge coi chung la co di kem dong ngay, khong phai chuoi mang ngay. (2) Ba lyDo khong dung tu noi bo trong danh sach cam. Cau chua-mo-viec «Máy đặt ngày khi việc đầu tiên của mốc được mở; mốc này chưa có việc nào mở từ lúc máy bắt đầu tính ngày.» co chu «Máy» hoi mo ho nhung khong thuoc danh sach cam. (3) vi va en tuong ung nghia o moi cap chuoi, gom cachTinh, chuaDuSoDoMoTa va ba lyDo; cho khac duy nhat la «Máy» va «The system», cung chi mot chu the.
+    - spec-alignment: PASS — (1) Dat. Moi chuoi ngay deu mang chu du kien: vi «Dự kiến xong ${ngay}», «dự kiến ${ngay}», «Ngày dự kiến», «Chưa có ngày dự kiến»; en «Expected by ${ngay}», «expected ${ngay}», «Expected date», «No expected date yet». cachTinh noi dung gia dinh cua muc «Lời ước, không phải cam kết». Hai co canh ngay («ước sơ bộ», «sau ngày mục tiêu») khong co chu du kien, nhung tep thiet ke chi doi chu nay tren chuoi ngay nen khong coi la loi. (2) Dat. Ba cau lyDo khong chua kit, khoi, du-bao hay gio_may; cau thu hai hoi mo ho ve «máy» va «mở việc» nhung chua toi muc dung tu noi bo. (3) Dat. Hai ngon ngu cung nghia o moi cap: ngay, ngayGon, chuaDuSoDo, quaTai, daQua, cachTinh, cachTinhKhongNgay, chuaDuSoDoMoTa, chuaCo, ba lyDo, nhan, uocLuong, gio. Lech nho nhat la «mở việc» o ban vi va «starts» o ban en, khong doi nghia.
   human_override:  # chi nguoi ghi
 
-  Phiếu từng lăng kính (không giấu bất đồng nào — cả ba cùng PASS):
-  - domain-correctness: PASS — (1) Hai chuỗi hiện ngày đều có chữ «dự kiến»/«Expected»: vi `Dự kiến xong ${ngay}` và `dự kiến ${ngay}`, en `Expected by ${ngay}` và `expected ${ngay}`. Câu cách tính nói rõ là ước tính và nêu giả định chỉ mình mốc đang chạy. Vi: «Máy tính lúc mốc bắt đầu (…), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.» En: «…as if it were the only milestone running. Not a commitment.» Khớp mục «Lời ước, không phải cam kết» của tệp thiết kế («máy tính lúc mốc bắt đầu, coi như chỉ mình mốc ấy đang chạy»). (2) Ba câu lyDo không chứa từ nội bộ kit, khối, dự báo hay giờ máy, và nói được điều đang xảy ra. «Bản lộ trình này chưa mang ngày dự kiến.» «Máy đặt ngày khi việc đầu tiên của mốc được mở; mốc này chưa có việc nào mở từ lúc máy bắt đầu tính ngày.» «Ngày dự kiến trong dữ liệu lộ trình không đọc được.» (3) Bản en khớp nghĩa với bản vi ở cả ba lyDo. Ví dụ «This copy of the roadmap does not carry expected dates yet.» và «The system sets the date when the first item of the milestone starts; none has started since it began doing so.» Các chuỗi còn lại cũng khớp: `quaTai` «after target date», `daQua` «past expected date», `chuaDuSoDoMoTa`. Hai điểm lệch nhỏ không đổi verdict. Vi nói «việc … được mở», en nói «starts». Ngoài lyDo, `gio` hiện «giờ máy» / «machine hours», nằm ngoài phạm vi câu hỏi nên không tính.
-  - operational-feasibility: PASS — (1) Mọi chuỗi hiện ngày đều có «Dự kiến xong» / «dự kiến» / «Expected by» / «expected». Câu cachTinh nói rõ ước tính và giả định chỉ một mốc chạy: «Máy tính lúc mốc bắt đầu (${ngay}), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.» và «Estimated by the system when the milestone started (${ngay}), as if it were the only milestone running. Not a commitment.», khớp mục «Lời ước, không phải cam kết». (2) Ba câu lyDo («Bản lộ trình này chưa mang ngày dự kiến.», «Máy đặt ngày khi việc đầu tiên của mốc được mở; …», «Ngày dự kiến trong dữ liệu lộ trình không đọc được.») không chứa kit, khối, du-bao hay gio_may. Từ «Máy» chưa được giải thích nhưng không thuộc danh sách từ cấm. (3) Các cặp vi/en (chuaDuSoDo, quaTai, daQua, chuaCo, gio, lyDo, chuaDuSoDoMoTa) cùng nghĩa.
-  - spec-alignment: PASS — (1) Hai chuỗi hiện ngày đều mang chữ «dự kiến»/«Expected»: vi `ngay: "Dự kiến xong ${ngay}"` và `ngayGon: "dự kiến ${ngay}"`, en `"Expected by ${ngay}"` và `"expected ${ngay}"`. Chuỗi `cachTinh` nói rõ đây là ước tính và nêu giả định chạy một mình. Bản vi: «Máy tính lúc mốc bắt đầu (${ngay}), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.» Bản en: "…as if it were the only milestone running. Not a commitment." Cả hai khớp mục «Lời ước, không phải cam kết» của tệp thiết kế. (2) Ba `lyDo` không chứa từ nội bộ nào trong danh sách cấm (kit, khối, du-bao, gio_may). Ví dụ vi: «Bản lộ trình này chưa mang ngày dự kiến.», «Máy đặt ngày khi việc đầu tiên của mốc được mở; mốc này chưa có việc nào mở từ lúc máy bắt đầu tính ngày.», «Ngày dự kiến trong dữ liệu lộ trình không đọc được.» Với trưởng phòng ban, các câu này đủ nói chuyện gì đang xảy ra, dù chữ «Máy» hơi trừu tượng. (3) Bản vi và en cùng nghĩa ở từng cặp: «sau ngày mục tiêu» và "after target date", «đã qua ngày dự kiến» và "past expected date", «giờ máy» và "machine hours", «không phải cam kết» và "Not a commitment". Chỉ lệch nhỏ «mở» và "starts", không đổi nghĩa.
-
 - eval: E12
-  run_id: minted-lo-trinh-hien-ngay-du-kien-E12-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-E12-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ldk_day
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
   output: |
-    test-run: dropped crm_mvckvoklshwp_test
+    bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldk-gio-may"
+    test-run: dropped crm_mvcmdl2teyxr_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-17T15:55:01Z
+  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-10-17T16:37:03Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 1
-  verified_at: 2026-10-17T15:55:01Z
+  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bunx_turbo_run_lint_force-r2
+  exit_code: 0
+  verified_at: 2026-10-17T16:37:03Z
 
 - cmd: bun run lint:slop
-  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_lint_slop-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-17T15:55:01Z
+  verified_at: 2026-10-17T16:37:03Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-lo-trinh-hien-ngay-du-kien-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-17T15:55:01Z
-
-### Lệnh fail không gắn eval
-
-Hai lệnh suite đỏ không gắn eval nào. Máy chưa chẩn đoán nguyên nhân; người đọc output ở run-log trước khi kết luận.
-
-- `bun run test -- --filter=app --filter=@crm/ui`: 882 test qua, 2 test đỏ trên 89 tệp — «kho chuoi cua vong ③a > moi ham ghep bien co khang dinh, va so ham bang so khang dinh» và «khoa chet > moi khoa da khai deu co cho goi, tru ban khai CHUA_NOI». Gói app#test đỏ, các gói còn lại trong lượt chạy xanh.
-- `bunx turbo run lint --force`: gói app#lint đỏ với 1 lỗi, 34 cảnh báo, 20 thông tin. Phần cuối output cho thấy khác biệt định dạng ở các mảng `dung_tren` trong một tệp JSON (output không in tên tệp). 10 trên 11 tác vụ lint xanh.
-
-Lệnh `ui-check:E9` đỏ và đã gắn với E9 ở trên.
+  verified_at: 2026-10-17T16:37:03Z
 
 ## Known limits
 
@@ -205,23 +203,15 @@ Lệnh `ui-check:E9` đỏ và đã gắn với E9 ở trên.
 
 ## Analyst
 
-Non-discriminating: none — không eval nào xanh trên cả bản cũ lẫn HEAD. E2 và E12 đỏ trên baseline (có phân biệt). Tám eval test còn lại và E9 (ui-check) không đo được baseline (n-a); lý do ở mục dưới. Lệnh suite xanh cả hai phía là regression-guard bình thường, không liệt kê.
+carried tu round 1 — baseline khong do lai round nay.
 
-### Baseline khong do
-
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-chep: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.spec.ts co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t co-ngay: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.dom.tsx co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t so-do && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t so-do: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.spec.ts co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t qua-tai && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t qua-tai: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.spec.ts co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t chua-co && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t chua-co: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.spec.ts co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t viec: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.dom.tsx co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
-- cd packages/validation && bun test test/ban-chup-lo-trinh.spec.ts -t gio-may && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-cu && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t ban-cu: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.spec.ts co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that && TZ=UTC bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that: bo qua baseline: tep apps/app/test/lo-trinh-du-kien.spec.ts co o cay dang kiem nhung chua co o merge-base 9dfdf062845daed5298e251d10a33501b1640527 — eval moi, chay tren code cu khong phan biet gi
+Eval khong-phan-biet (pass tren ca HEAD lan baseline): khong co. Lenh suite xanh o ca hai phia la regression-guard binh thuong, khong liet ke.
 
 ## Variance
 
-none — mọi eval chạy một lượt, không eval nào có pass_rate lẫn.
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E9 failed — máy báo 12 dòng đúng, nhưng 12 ảnh đối chiếu mắt đều là ảnh đầu trang (fullPage không mở rộng vì trang cuộn trong khung bên trong), 10 ảnh mốc và đóng gói không chứa phần tử ngày dự kiến nên kỳ vọng nhìn thấy ở nền sáng và nền tối không chứng được; hai ảnh ngăn hồ sơ đạt. Hai lệnh suite đỏ không gắn eval (test app/@crm/ui hai ca, lint app một lỗi). Review còn sáu mục trong hợp đồng về phép đo yếu (E12, E2, E9, E7, E3) và một mục ngoài hợp đồng, xem review-findings.md. Returned to implementation.
+Round 1: ket qua REJECT — E9 (do man) va hai lenh suite (test app + @crm/ui, lint) do; nhat sua sau do va ban hai bai canh nhan, dinh dang du lieu mau, sau phep do yeu, anh do man. Returned to implementation.
+Round 2: E2-E9 va E12 chay lai, E1 va E10 carry-forward tu round 1, E11 do hoi dong judge; moi eval va moi lenh suite xanh, ket qua PASS.

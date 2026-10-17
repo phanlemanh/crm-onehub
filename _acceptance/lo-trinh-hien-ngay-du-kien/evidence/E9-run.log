@@ -1,0 +1,24 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_lo_trinh_hien_ngay_du_kien_1f947b_do · app http://localhost:4559 · api http://localhost:4803
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts ada@trycomp.ai
+DUNG dong-goi-moc-1280-vi: 7 moc dang chay (1 co ngay, 6 co co), thieu: khong, tren man 7, cuon ngang false, cat chu 0
+DUNG dong-goi-moc-375-en: 7 moc dang chay (1 co ngay, 6 co co), thieu: khong, tren man 7, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-375-vi-sang: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-375-vi-toi: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-375-en-sang: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-375-en-toi: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-1280-vi-sang: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-1280-vi-toi: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-1280-en-sang: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-moc-1280-en-toi: co: chua-du-so-do,da-qua,qua-tai, cau cach tinh true, cuon ngang false, cat chu 0
+DUNG ban-chup-ngan-375-vi: co: chua-du-so-do,da-qua,qua-tai, uoc luong «4–6,5 giờ máyước sơ bộ», cuon ngang false, cat chu 0
+DUNG ban-chup-ngan-1280-en: co: chua-du-so-do,da-qua,qua-tai, uoc luong «4–6.5 machine hoursrough estimate», cuon ngang false, cat chu 0
+ANH _acceptance/lo-trinh-hien-ngay-du-kien/evidence
+KET LUAN: 12 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0
