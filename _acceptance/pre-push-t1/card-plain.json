@@ -1,0 +1,37 @@
+{
+  "feature_plain": "Lần đẩy chỉ có tài liệu thôi chạy test và build ở máy (≈15′ mỗi lần), vẫn chạy ba lệnh kiểm nhanh; lần đẩy có mã giữ nguyên năm lệnh.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ phân loại mỗi lần đẩy theo tập tệp thật sự đẩy lên, đúng 18 ca viết trước; hỏng ở đâu thì chạy đủ năm lệnh và nói vì sao."},
+    {"id": "AC-2", "p": "Sẽ dùng chung luật T1 với CI và đọc danh sách bỏ từ một chỗ khai duy nhất — đổi chỗ khai là hook đổi theo."},
+    {"id": "AC-3", "p": "Sẽ cho lần đẩy chỉ tài liệu đi qua ba lệnh kiểm nhanh, in một dòng báo đã bỏ test và build."},
+    {"id": "AC-4", "p": "Sẽ giữ đủ năm lệnh cho lần đẩy có mã, có tệp CI, đẩy rỗng, hay cây cũ chưa có bộ phân loại."},
+    {"id": "AC-5", "p": "Sẽ để bộ soát hình cổng chỉ nhận lần bỏ test và build khi có khai kèm lý do; thiếu khai thì chặn và nói rõ."},
+    {"id": "AC-6", "p": "Sẽ có một khối khai nói bỏ gì, ai phân loại, theo luật nào, vì sao an toàn."},
+    {"id": "AC-7", "p": "Sẽ giữ nguyên các dòng hook mà sáu bộ răng đã ký đang ghim, và chạy lại hai răng rẻ."},
+    {"id": "AC-8", "p": "Sẽ chứng trên cây thật với turbo thật: một lần đẩy tài liệu chạy đúng ba lệnh rồi qua bộ soát hình cổng."},
+    {"id": "AC-9", "p": "Sẽ chứng lần đẩy rỗng trên cây thật vẫn chạy đủ năm lệnh, không đọc bộ nhớ đệm."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG đụng việc chạy-mới-hết của các lệnh còn lại."},
+    {"id": "OOS-2", "p": "KHÔNG đổi luật phân loại của CI hay danh sách tệp T1, T3."},
+    {"id": "OOS-3", "p": "KHÔNG đổi lối thoát khẩn cấp đang có."},
+    {"id": "OOS-4", "p": "KHÔNG đo thời lượng trước/sau — Cổng Đáng đã chọn không đo."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi kiểu dòng đẩy git gửi cho hook (nhánh mới, nhánh có sẵn, xoá, đẩy rỗng, nhiều nhánh một lần) — AC-1 (phân loại), AC-4 (đủ năm lệnh)."},
+    {"i": 1, "p": "Mọi kiểu tập tệp (chỉ tài liệu, có mã, có tệp CI, đổi tên mã thành tài liệu, gộp onehub) — AC-1, AC-3, AC-4."},
+    {"i": 2, "p": "Mọi cách khai sai hay thiếu ở tệp hình cổng đều bị bộ soát hình chặn — AC-5 (bảy ca), AC-6."},
+    {"i": 3, "p": "Mọi đường hỏng đều rơi về chạy đủ năm lệnh — AC-1 (phân loại), AC-4 (cây cũ)."},
+    {"i": 4, "p": "Răng đã ký và turbo thật được chứng riêng — AC-7, AC-8, AC-9."},
+    {"i": 5, "p": "Để sau: in thời lượng mỗi lần đẩy. Không làm: bỏ ba lệnh kiểm nhanh, coi tệp CI là tài liệu, danh sách tệp riêng cho hook."},
+    {"i": 6, "p": "Đối chiếu ngoài: khuôn dòng đẩy của git (githooks), và nếp «kiểm theo tệp đổi» của lint-staged."},
+    {"i": 7, "p": "Giả định cần anh gạch: mã đã lên remote từng qua đủ năm lệnh, nên chỉ cần so với bản remote."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ca cây cũ không có bộ phân loại: thiết kế cũ không ai in được dòng báo. Đã sửa — hook tự kiểm và in đúng một dòng."},
+    {"i": 1, "p": "Đẩy nhiều nhánh một lần chỉ thử một thứ tự. Đã sửa — thử cả hai thứ tự, thêm ca hai nhánh tài liệu, thêm đột biến «chỉ đọc dòng đầu»."},
+    {"i": 2, "p": "«Một chỗ khai» chỉ đo bằng quét chữ. Đã sửa — thêm ca đổi khai thành chỉ bỏ build và xem hook làm theo."},
+    {"i": 3, "p": "Bài kiểm thường trực gọi git, sẽ đỏ ở CI. Đã sửa — phần so với gốc vòng chuyển sang răng của hồ sơ."},
+    {"i": 4, "p": "Bảng răng và phép đo lệch nhau. Đã khớp bảng; không chạy lại răng ba-nơi vì nó chạy hook thật hai lượt (≈30′) — cùng dạng đẩy đã nằm trong AC-9."}
+  ]
+}

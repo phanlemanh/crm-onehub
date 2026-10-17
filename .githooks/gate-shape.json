@@ -89,5 +89,12 @@
 				"@crm/validation": "Source-only package, built by whichever app imports it."
 			}
 		}
-	]
+	],
+	"t1Only": {
+		"note": "Added 2026-10-16 (_acceptance/pre-push-t1). A push whose every file is T1 skips the checkers listed in skip. The classifier reads this list, and verify-gate-shape accepts the missing run summaries only when the hook passes --bo-qua with exactly this list. Remove the block and every push runs all checkers again.",
+		"skip": ["test", "build"],
+		"classifier": "scripts/pre-push-t1.mjs",
+		"sameRuleAs": ".github/scripts/phan-loai.mjs",
+		"vi_sao": "Lần đẩy chỉ tệp T1 (theo đúng quyetDinh và t1_skip_globs mà CI dùng) không đổi mã nào test hay build đọc; CI ở PR sẵn sàng chỉ T1 cũng bỏ hai job này, nên bỏ ở đây không mất chiều đỏ nào so với CI. Răng nền chat trong @crm/ui#test cùng vậy. check-types, lint, lint:slop vẫn chạy. Lần đẩy có tệp mã, có .github/**, đẩy rỗng hay phân loại hỏng đều chạy đủ."
+	}
 }
