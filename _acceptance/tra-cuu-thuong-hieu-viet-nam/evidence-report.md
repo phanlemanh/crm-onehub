@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 27b6e31d76d17cdf9f8fbb39ffa8c9974ebc45f5
+verified_commit: 0784b1e8c29062b23855ef1aa6fc9152d5bf2744
 human_signoff: Manh Phan 2026-10-17
 ---
 
@@ -249,3 +249,7 @@ sha: b23b82b213795b4ba7f5da2fcbf518848b35c476 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-17, do gộp onehub 1448d63b6 — vé gộp-ghim-đẩy #462
 run_id: repin-20261017T070703Z-69284
 sha: 27b6e31d76d17cdf9f8fbb39ffa8c9974ebc45f5 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 (E11 không khai paths), E13 (E13 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-17, do làn đêm C-2 17/10: hoá cũ vì các lần gộp trong ngày (onehub 093e294e5→30d982d22)
+run_id: repin-20261017T183217Z-62449
+sha: 0784b1e8c29062b23855ef1aa6fc9152d5bf2744 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 (E11 không khai paths), E13 (E13 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
