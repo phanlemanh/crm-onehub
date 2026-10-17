@@ -423,9 +423,7 @@ async function moDonVi({
 	return san;
 }
 
-// Trang đơn vị một bảng (DH2): thẻ đơn vị cũ thành hàng công cụ của bảng.
 const theDonVi = () => q("[data-hang-cong-cu-don-vi]")?.parentElement ?? null;
-// Dòng của mục tiêu: hàng khối (Của tôi) hoặc dòng bảng đơn vị chứa ô tên (DH2).
 const dongMt = (id: string) =>
 	q(`[data-hang-muc-tieu="${id}"]`)?.closest("tr") ?? null;
 const chuNgoaiPopover = () => {

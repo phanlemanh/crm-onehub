@@ -8,10 +8,6 @@ import {
 } from "react";
 import { createRoot } from "react-dom/client";
 
-/* Bản mẫu /proto/trang-don-vi-mot-bang (AC-11, E13): mỗi state của sổ bản mẫu
-   dựng bằng chính hàm của sổ (TrangDonViMotBangMau) ra một cây DOM khác nhau.
-   rang/proto-don-vi.mjs chạy nhóm này và đọc dòng «PROTO-DOM: …». */
-
 const SLUG = "trang-don-vi-mot-bang";
 
 mock.module("next/navigation", () => ({
@@ -34,8 +30,6 @@ mock.module("next/link", () => ({
 }));
 
 const { PROTO_CATALOG } = await import("@/app/proto/catalog");
-// Hàm của sổ bản mẫu cho slug này (registry.ts ghép slug → TrangDonViMotBangMau);
-// nhập thẳng mô-đun để khỏi nạp mọi bản mẫu khác của sổ.
 const { TrangDonViMotBangMau } = await import(
 	"@/app/proto/_modules/trang-don-vi-mot-bang"
 );
@@ -46,7 +40,6 @@ afterEach(() => {
 	document.body.innerHTML = "";
 });
 
-/** Bỏ id do React/Radix sinh để hai lần dựng cùng state cho cùng một chuỗi. */
 const chuan = (html: string) =>
 	html
 		.replace(

@@ -675,8 +675,6 @@ export const docCua = (duong: string) =>
 	kho.daDoc.filter((g) => g.duong === duong);
 export const hangMt = (id: string) => qs(`[data-hang-muc-tieu="${id}"]`);
 export const khoiMt = (id: string) => qs(`[data-muc-tieu="${id}"]`);
-/** Số hàng bảng của một mục tiêu: khối riêng (Của tôi) đếm mọi `tr` của khối;
- * dòng của bảng đơn vị (Theo đơn vị, DH2) đếm dòng cha và các dòng KR ngay dưới. */
 export function soHangMt(id: string): number {
 	const k = khoiMt(id);
 	const dong = k?.closest("tr");

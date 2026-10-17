@@ -31,9 +31,6 @@ const CACH_XEM: { value: CachXem; label: string }[] = [
 	{ value: "cham", label: "Chấm điểm" },
 ];
 
-/* Đúng lớp khung hàng công cụ của DataTable (packages/ui data-table.tsx). Ba
-   cách xem không phải bảng bọc khối ô chọn + cách xem trong khung này để hàng
-   công cụ đứng yên khi đổi cách xem. */
 export const LOP_HANG_CONG_CU =
 	"flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between";
 
@@ -41,9 +38,6 @@ const LOP_KHOI = "flex flex-col gap-2 sm:flex-row sm:items-center";
 
 type LuaChon = ComboboxOption & { tim: string };
 
-/* Gợi ý trong ô chọn bỏ tên công ty ở đầu đường (mọi đơn vị đều thuộc công
-   ty): Combobox giữ gợi ý `shrink-0`, nên gợi ý dài cắt tên đơn vị còn «Ki…».
-   Chân bảng vẫn ghi đủ «Thuộc A › B». */
 function goiY(d: DonViPhang): string {
 	if (d.duong.length <= 1) return thuoc(d);
 	return `Thuộc ${d.duong.slice(1).join(" › ")}`;
@@ -153,8 +147,6 @@ export function KhungHangCongCu({ children }: { children: ReactNode }) {
 	return <div className={LOP_HANG_CONG_CU}>{children}</div>;
 }
 
-/* Khung xương của hàng công cụ: cùng khung, cùng cỡ ô chọn (h-8, sm:w-72) và
-   chỗ của cách xem, nên đỉnh ô chọn không nhảy khi dữ liệu về. */
 export function HangCongCuKhungXuong() {
 	return (
 		<div className={LOP_HANG_CONG_CU} data-khung-hang="thanh-cong-cu">

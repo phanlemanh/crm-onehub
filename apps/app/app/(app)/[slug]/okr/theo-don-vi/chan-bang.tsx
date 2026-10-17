@@ -9,11 +9,6 @@ import type { DonChonOkr } from "../okr-search-params";
 
 type TruongDon = { truong: string | null; coTruong: boolean };
 
-/**
- * Chân bảng (`meta` của DataTable): trưởng đơn vị hoặc cờ «Chưa có trưởng»,
- * «N mục tiêu · M KR» đếm trên các dòng máy chủ trả, «Thuộc A › B». Đơn vị
- * người: phòng ban chính và quản lý như thẻ đơn vị hôm trước.
- */
 export function ChanBang({
 	don,
 	dv,

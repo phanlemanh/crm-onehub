@@ -106,7 +106,6 @@ function XemCay({
 	);
 }
 
-/** Các thân không phải bảng: cùng hàng công cụ trong khung cùng lớp với DataTable. */
 function KhungCachXem({
 	hang,
 	children,
@@ -240,7 +239,6 @@ export function TheoDonVi() {
 			</KhungCachXem>
 		);
 	} else if (byUnit.isPending || byUnit.isPlaceholderData) {
-		/* Đổi đơn vị: khung xương, không giữ dòng của đơn vị trước (khung-xuong). */
 		than = <KhungDangTaiDonVi hang={hang} />;
 	} else if (byUnit.isError) {
 		than = (

@@ -13,9 +13,6 @@ import { tienDo, tinhTrang } from "../ban-mau-okr/phan-chung";
 
 export const DUONG = "/proto/trang-don-vi-mot-bang";
 
-/* Hai mục tiêu thêm cho Chăm sóc khách hàng để bảng có đủ ca: một mục tiêu
-   chưa góp vào đâu có KR trượt (rơi vào cả «Cần bàn» lẫn «Chưa góp vào đâu»),
-   và một mục tiêu nháp chưa có KR (không có mũi tên mở). */
 const MT_CSKH_3: MucTieuMau = {
 	id: "c3",
 	ten: "Đối tác được trả lời trong một giờ làm việc",
@@ -139,8 +136,6 @@ export function thuoc(dv: DonViPhang): string {
 	return dv.duong.length === 0 ? "cả công ty" : `Thuộc ${dv.duong.join(" › ")}`;
 }
 
-/* Đơn vị người: một người là một lựa chọn của ô chọn khi đường dẫn mang
-   `donOkr=nguoi:<id>`. Mục tiêu của người là mục tiêu người đó phụ trách. */
 export type NguoiPhang = {
 	nguoi: NguoiMau;
 	phongBan: string;
@@ -186,8 +181,6 @@ export function tienDoMucTieu(mt: MucTieuMau): number {
 	);
 }
 
-/* «N KR chậm» dưới tên mục tiêu: KR số (không phải mốc) đang chậm nhịp hoặc
-   trượt. «Cần bàn» dùng đúng phép đếm này (khuyến nghị Hỏi-1). */
 export function soKrCham(mt: MucTieuMau): number {
 	return mt.kr.filter(
 		(k) => k.kieu !== "moc" && tinhTrang(tienDo(k), mt.loai).tone !== "success",
@@ -202,7 +195,6 @@ export function chuaGop(laCongTy: boolean, mt: MucTieuMau): boolean {
 	return !laCongTy && mt.gopVao.length === 0;
 }
 
-/* Bậc tình trạng để sắp xếp: trượt → chậm nhịp → đúng nhịp → chưa có kỳ vọng. */
 export function bacTinhTrang(mt: MucTieuMau): number {
 	if (mt.kr.length === 0) return 3;
 	const tone = tinhTrang(tienDoMucTieu(mt), mt.loai).tone;

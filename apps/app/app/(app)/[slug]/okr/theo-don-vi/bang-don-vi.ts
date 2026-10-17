@@ -3,13 +3,9 @@ import type { CayDuLieu, MucTieu } from "../kieu";
 import { type DonChonOkr, khoaDon } from "../okr-search-params";
 import { nhipCua } from "../tien-do-kr";
 
-/* Logic thuần của bảng đơn vị (DH2): lọc nhanh, sắp xếp, lựa chọn của ô chọn
-   đơn vị và con trực tiếp. Tách khỏi giao diện để bài kiểm chạy không cần DOM. */
-
 export const LOC_NHANH = ["can-ban", "chua-gop"] as const;
 export type LocNhanh = (typeof LOC_NHANH)[number];
 
-/** «N KR chậm» dưới tên mục tiêu: KR đang chậm nhịp hoặc trượt (mốc không tính). */
 export function soKrCham(mt: MucTieu): number {
 	return mt.keyResults.filter((kr) => {
 		const nhip = nhipCua(kr.progress, mt.expected, mt.kind, kr.kind === "moc");
@@ -17,12 +13,10 @@ export function soKrCham(mt: MucTieu): number {
 	}).length;
 }
 
-/** «Cần bàn» dùng đúng phép đếm «N KR chậm» (Hỏi-1). */
 export function canBan(mt: MucTieu): boolean {
 	return soKrCham(mt) > 0;
 }
 
-/** «Chưa góp vào đâu»: không ở cấp công ty và không góp vào mục tiêu hay KR nào. */
 export function chuaGop(mt: MucTieu): boolean {
 	return mt.level !== "onehub" && mt.alignments.length === 0;
 }
@@ -43,13 +37,11 @@ export function demLocNhanh(ds: MucTieu[]) {
 	} satisfies Record<LocNhanh, number>;
 }
 
-/** «detail» là mục «Dòng có chi tiết lên trước» DataTable tự thêm khi có dòng mở rộng. */
 export const COT_SAP = ["tien-do", "tinh-trang", "detail"] as const;
 export type CotSap = (typeof COT_SAP)[number];
 export const CHIEU_SAP = ["asc", "desc"] as const;
 export type ChieuSap = (typeof CHIEU_SAP)[number];
 
-/** Bậc tình trạng khi sắp xếp: trượt → chậm nhịp → đúng nhịp → chưa có kỳ vọng. */
 const BAC_TINH_TRANG = {
 	truot: 0,
 	"cham-nhip": 1,
@@ -57,7 +49,6 @@ const BAC_TINH_TRANG = {
 	"chua-co-ky-vong": 3,
 } satisfies Record<TinhTrang, number>;
 
-/** Tình trạng của dòng mục tiêu: mục tiêu chưa có KR thì chưa có kỳ vọng để so. */
 export function tinhTrangMucTieu(mt: MucTieu): TinhTrang {
 	if (mt.keyResults.length === 0) return "chua-co-ky-vong";
 	return tinhTrang(mt.progress, mt.expected, mt.kind);
@@ -69,7 +60,6 @@ const KHOA_SAP = {
 	detail: (mt: MucTieu) => (mt.keyResults.length > 0 ? 0 : 1),
 } satisfies Record<CotSap, (mt: MucTieu) => number>;
 
-/** Sắp ổn định: mục tiêu cùng khoá giữ thứ tự máy chủ trả, ở cả hai chiều. */
 export function sapXep(
 	ds: MucTieu[],
 	cot: CotSap | null,
@@ -84,7 +74,6 @@ export function sapXep(
 		.map((x) => x.mt);
 }
 
-/** Gấp dấu để tìm: «Phòng Kế toán» → «phong ke toan», «Đ» → «d». */
 export function gapDau(s: string): string {
 	return s
 		.normalize("NFD")
@@ -117,11 +106,6 @@ function voiDem(
 	return dem ? `${goiY} · ${m.demMucTieu(dem[khoa] ?? 0)}` : goiY;
 }
 
-/**
- * Lựa chọn của ô chọn đơn vị: công ty, mọi bộ phận và phòng ban của nó, phòng
- * ban chưa xếp; người trên đường dẫn đứng đầu. Gợi ý bỏ tên công ty ở đầu đường
- * khi đơn vị sâu hơn một cấp (gợi ý dài cắt tên đơn vị trong ô).
- */
 export function luaChonDonVi(
 	cay: CayDuLieu,
 	tenGoc: string,
@@ -184,7 +168,6 @@ export function khopTim(lc: LuaChonDonVi, chuoi: string): boolean {
 	return [lc.ten, ...lc.tuKhoa].some((t) => gapDau(t).includes(q));
 }
 
-/** Đường cha của đơn vị (gồm tên công ty) cho «Thuộc A › B» ở chân bảng. */
 export function duongCha(
 	cay: CayDuLieu,
 	don: DonChonOkr,
@@ -200,7 +183,6 @@ export function duongCha(
 
 export type DonViCon = { khoa: string; ten: string; coTruong: boolean };
 
-/** Con trực tiếp theo cây tổ chức: công ty → bộ phận và phòng ban chưa xếp; bộ phận → phòng ban. */
 export function conTrucTiep(cay: CayDuLieu, don: DonChonOkr): DonViCon[] {
 	const thanh = (
 		loai: "bp" | "pb",

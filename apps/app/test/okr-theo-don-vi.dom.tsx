@@ -377,8 +377,6 @@ async function cho(xong: () => boolean, moTa: string): Promise<void> {
 	);
 }
 
-/* Trang đơn vị một bảng (DH2): ô chọn đơn vị thay cây; dòng KR là dòng con
-   ngay dưới dòng mục tiêu. */
 async function moOChon(o: HTMLElement) {
 	const nut = o.querySelector("[data-chon-don-vi]");
 	if (!nut) throw new Error("khong co o chon don vi");
@@ -435,8 +433,6 @@ function soDongKrDuoi(o: Element): number {
 	return so;
 }
 
-/** Nút của hàng công cụ ở 1440: ô chọn, ba nút cách xem + ô chọn cách xem của
- * điện thoại, «Lọc» gộp của điện thoại, ô lọc nhanh, «Lọc», «Sắp xếp», «Cột». */
 const SO_NUT_HANG_CONG_CU = 10;
 
 const nutCo = (o: ParentNode, chu: string) =>
@@ -468,8 +464,6 @@ describe("theo-don-vi", () => {
 			canEdit: false,
 		});
 		dem = { "pb:pb-1": 3, goc: 1 };
-		// Trang đơn vị một bảng (DH2): mặc định thu — mở ba dòng qua `expand` để
-		// đọc KR; số đếm của đơn vị nằm ở gợi ý của ô chọn đơn vị thay cây.
 		const s = await mo("pb:pb-1", null, true, { expand: "a,b,c" });
 		const khoi = [...s.o.querySelectorAll("[data-muc-tieu]")];
 		const goiY = await goiYOChon(s.o);
@@ -647,7 +641,6 @@ describe("theo-don-vi-bien", () => {
 			canEdit: true,
 		});
 		const s = await mo("pb:pb-1");
-		// Hàng nút cũ của thẻ đơn vị thành hàng công cụ của bảng (DH2, AC-2).
 		const hang = s.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement;
 		expect({
 			wrap: hang?.classList.contains("lg:flex-wrap"),

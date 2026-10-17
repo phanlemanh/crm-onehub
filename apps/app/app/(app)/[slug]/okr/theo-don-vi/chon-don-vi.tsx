@@ -14,10 +14,6 @@ const thanhOChon = (lc: LuaChonDonVi): ComboboxOption => ({
 	hint: lc.goiY,
 });
 
-/**
- * Ô chọn đơn vị có tìm kiếm, thay cột cây. Lọc phía trang bằng `khopTim` (gấp
- * dấu, theo cả tên đơn vị cha) vì bộ lọc của cmdk không gấp dấu tiếng Việt.
- */
 export function ChonDonVi({
 	cay,
 	tenGoc,

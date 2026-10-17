@@ -10,11 +10,6 @@ import { LocaleProvider } from "../src/components/locale-provider";
 import { TooltipProvider } from "../src/components/tooltip";
 import type { TableQueryState } from "../src/lib/table-query";
 
-/* Ô mũi tên của dòng mở rộng là nút thật (Hỏi-4 của trang-don-vi-mot-bang,
-   AC-3): `button` có `aria-expanded` và nhãn nói tên dòng, mở/thu bằng bấm nút,
-   Enter, Space hoặc bấm phần trống của dòng. Khi một điều khẳng định hỏng bài
-   ném đúng chuỗi ghim của E18. */
-
 type Dong = { id: string; name: string; con: string[] };
 
 const DONG: Dong[] = [
@@ -111,9 +106,6 @@ function nutMuiTen(o: HTMLElement, id: string): HTMLButtonElement | null {
 	);
 }
 
-/* jsdom không có hành vi kích hoạt mặc định của `button` khi nhấn phím: mô
-   phỏng đúng trình duyệt — Enter bấm ở keydown, Space bấm ở keyup — nếu không
-   có trình xử lý nào chặn mặc định. */
 async function nhanPhim(nut: HTMLButtonElement, phim: "Enter" | " ") {
 	await act(async () => {
 		nut.focus();

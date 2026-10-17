@@ -92,7 +92,6 @@ export function luaChonPhuTrach(
 	];
 }
 
-/** Năm mặt lọc máy chủ của OKR, dạng `facets` của DataTable. */
 export function useMatLocOkr(
 	dem: DemMatLoc | undefined,
 	loc: LocOkrGiaTri,

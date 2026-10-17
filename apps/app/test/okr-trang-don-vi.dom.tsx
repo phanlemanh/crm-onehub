@@ -25,16 +25,9 @@ import type {
 } from "../../api/src/okr/okr.contracts";
 import type { TreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 
-/* Trang đơn vị một bảng (DH2). Mỗi `describe` là một nhóm `dvb-…` để
-   `-t dvb-…` chọn đúng một eval. Khi một điều khẳng định hỏng, bài ném Error
-   mang đúng chuỗi ghim của evals.yaml, để đột biến của rang/hai-chieu.mjs đỏ
-   đúng thông điệp. */
-
 function phai(dung: boolean, thongDiep: string): void {
 	if (!dung) throw new Error(thongDiep);
 }
-
-/* ——— Fixture: cây tổ chức có dấu, sinh bằng hàm ——— */
 
 const nguoi = (id: string, name: string) => ({
 	id,
@@ -204,7 +197,6 @@ const NOI_GOP = {
 	mucTin: "chua-co-ly-do" as const,
 };
 
-/** Một mục tiêu một KR: nhịp KR do (progress, expected) quyết; `gop` thêm một nơi góp. */
 function mucTieuNhip(
 	id: string,
 	progress: number,
@@ -219,8 +211,6 @@ function mucTieuNhip(
 		alignments: gop ? [{ ...NOI_GOP, alignmentId: `al-${id}` }] : [],
 	});
 }
-
-/* ——— Giả lập tRPC, nuqs, next ——— */
 
 let cycles: RouterOutputs["okr"]["cycles"];
 let quanTri: boolean;
@@ -291,8 +281,6 @@ const docAccess = () => ({
 const docWorkspace = () => ({ name: "OneHub" });
 const docDem = () => dem;
 
-/* Thủ tục chưa giả lập (bảng của Họp tuần, Chấm điểm, khối KR của người…)
-   treo ở đang tải: bài của trang chỉ đo hàng công cụ và bảng mục tiêu. */
 const TREO_MAI = () => new Promise<never>(() => {});
 const OKR_GIA = {
 	cycles: thuTuc("cycles", docCycles),
@@ -480,7 +468,6 @@ function luaChonDangHien(): LuaChonHien[] {
 	});
 }
 
-/** Khoá mọi đơn vị của cây fixture, theo thứ tự ô chọn. */
 function khoaCuaCay(cay: TreeOutput): string[] {
 	return [
 		"goc",
@@ -492,7 +479,6 @@ function khoaCuaCay(cay: TreeOutput): string[] {
 	];
 }
 
-/** countByUnit giả lập sinh từ cây (0, 1, 2 lần lượt) — không viết tay số. */
 function demGiaLap(cay: TreeOutput): Record<string, number> {
 	return Object.fromEntries(khoaCuaCay(cay).map((k, i) => [k, i % 3]));
 }
@@ -507,9 +493,6 @@ beforeEach(() => {
 	goiDanhSach = [];
 });
 
-/* ——— Nhóm thuần: lọc nhanh ——— */
-
-/** Nhãn kỳ vọng tính độc lập bằng `tinhTrang` của @crm/validation. */
 function kyVongCanBan(mt: MucTieuOutput): boolean {
 	return mt.keyResults.some((k) => {
 		if (k.kind === "moc") return false;
@@ -572,13 +555,10 @@ describe("dvb-loc-nhanh", () => {
 		});
 		expect(dem["can-ban"]).toBe(locNhanh(ds, "can-ban").length);
 		expect(dem["chua-gop"]).toBe(locNhanh(ds, "chua-gop").length);
-		// đối chứng dương: ma trận có đủ ca cho cả hai ô
 		expect(dem["can-ban"]).toBeGreaterThan(0);
 		expect(dem["chua-gop"]).toBeGreaterThan(0);
 	});
 });
-
-/* ——— Nhóm thuần: sắp xếp ——— */
 
 const BAC = ["truot", "cham-nhip", "dung-nhip", "chua-co-ky-vong"] as const;
 
@@ -675,8 +655,6 @@ describe("dvb-sap-xep", () => {
 		expect(bac.length - new Set(bac).size).toBeGreaterThan(0);
 	});
 });
-
-/* ——— Nhóm thuần của ô chọn và chân bảng ——— */
 
 const CHU_LUA_CHON = {
 	caCongTy: "cả công ty",
@@ -958,8 +936,6 @@ describe("dvb-hang-cong-cu", () => {
 	});
 });
 
-/* ——— Mức trang ——— */
-
 async function moTrang(
 	don: string,
 	them: Record<string, string> = {},
@@ -968,9 +944,6 @@ async function moTrang(
 	const thamSo = new URLSearchParams({ kyOkr: QUY.id, ...them });
 	if (don !== "goc") thamSo.set("donOkr", don);
 	const s = await ve(<TheoDonVi />, thamSo, locale);
-	/* Xong khi cây tổ chức đã về: có ô chọn — hoặc, ở bản bị phá, bất kỳ dấu
-	   nào của thân trang — để điều khẳng định sau đó in đúng chuỗi ghim thay vì
-	   hết giờ chờ. */
 	await cho(
 		() =>
 			s.o.querySelector(
@@ -1298,7 +1271,6 @@ describe("dvb-dong-mo", () => {
 		datDon("pb:P1", ba());
 		const s = await moTrang("pb:P1", { expand: "M1,M2" });
 		await choBang(s);
-		// muc-tieu-va-kr AC-10: o 375 tien do cua muc tieu va KR nam duoi ten, khong thanh cot rieng.
 		const duoiTen = (o: Element | null) =>
 			[...(o?.querySelectorAll("[data-o-tien-do]") ?? [])].filter(
 				(x) => x.closest(".md\\:hidden") !== null,
@@ -1811,8 +1783,6 @@ describe("dvb-trang-thai", () => {
 		).toBe(true);
 	});
 });
-
-/* ——— Đổi thẻ giữ cách xem (AC-13, E15) ——— */
 
 const HOP_DONG_DH1 = join(
 	dirname(fileURLToPath(import.meta.url)),

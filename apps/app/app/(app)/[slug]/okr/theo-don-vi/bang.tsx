@@ -53,10 +53,6 @@ const thamSoBang = {
 	[SEARCH_PARAM.okr.chieu]: parseAsStringLiteral(CHIEU_SAP).withDefault("asc"),
 };
 
-/**
- * Trạng thái truy vấn của bảng gắn đường dẫn: ô lọc nhanh và sắp xếp lọc trên
- * hàng máy chủ đã trả; năm bộ lọc của «Lọc» đi qua `loc` tới `okr.danhSach`.
- */
 function useTruyVanBang(
 	loc: LocOkrGiaTri,
 	doiLoc: (thay: Partial<LocOkrGiaTri>) => void,
@@ -104,7 +100,6 @@ function useTruyVanBang(
 	return { query, tab, cot, chieu };
 }
 
-/** Mục tiêu đã bỏ (chỉ lên bảng khi lọc trạng thái «Đã bỏ»): không mở KR, không tính tiến độ. */
 const laDaBo = (mt: MucTieu) => mt.status === "da-bo";
 
 function TenMucTieu({ mt }: { mt: MucTieu }) {
@@ -223,7 +218,6 @@ function useCot(): DataTableColumn<MucTieu>[] {
 			header: b.cot.tinhTrang,
 			sortable: true,
 			width: "w-36",
-			// Dưới md tình trạng đã nằm trong bản gọn dưới tên — cột riêng chỉ ép hẹp ô tên.
 			hideBelow: "md",
 			cell: (mt) =>
 				laDaBo(mt) ? null : (
@@ -244,10 +238,6 @@ function useCot(): DataTableColumn<MucTieu>[] {
 	];
 }
 
-/**
- * Ô tên của dòng KR. Dưới md (cột Tiến độ và Tình trạng ẩn) bản gọn của tiến độ
- * nằm dưới tên — như hàng KR của khối mục tiêu cũ (muc-tieu-va-kr AC-10).
- */
 function TenKr({ kr, mt }: { kr: KetQua; mt: MucTieu }) {
 	const locale = useLocale();
 	const laMoc = kr.kind === "moc";
@@ -312,11 +302,6 @@ function oKr(kr: KetQua, cot: string, mt: MucTieu): ReactNode {
 	}
 }
 
-/**
- * Bảng mục tiêu của một đơn vị trên DataTable: mỗi mục tiêu một dòng, mở ra
- * KR cùng cột; hàng công cụ là ô chọn + cách xem (trong `search`), ô lọc nhanh
- * (`tabs`), «Lọc» (năm mặt lọc máy chủ) và «Sắp xếp».
- */
 export function BangDonVi({
 	rows,
 	loc,

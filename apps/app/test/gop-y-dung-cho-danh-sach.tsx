@@ -156,8 +156,6 @@ async function moMatGopY(): Promise<HTMLElement> {
 	return chon;
 }
 
-/* Bỏ lọc trên bảng đơn vị (DH2): mục «Bỏ chọn» trong mặt «Góp ý của Kara» của
-   menu Lọc — cùng cách mọi DataTable bỏ một mặt lọc. */
 async function moBoChonGopY(): Promise<HTMLElement> {
 	const moLoc = qsa('[aria-haspopup="menu"]').find((o) =>
 		o.textContent?.trim().startsWith(ui.table.filters),

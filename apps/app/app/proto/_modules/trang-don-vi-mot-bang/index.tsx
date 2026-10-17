@@ -76,8 +76,6 @@ import {
 	KhungHangCongCu,
 } from "./hang-cong-cu";
 
-/* ——— Cảnh của từng state ——— */
-
 type Canh = {
 	don: string;
 	xem: CachXem;
@@ -103,8 +101,6 @@ const CANH = {
 	"ST-dvb-dang-tai": { don: "pb:cskh", xem: "danh-sach", kieu: "dang-tai" },
 	"ST-dvb-loi": { don: "pb:cskh", xem: "danh-sach", kieu: "loi" },
 } satisfies Record<string, Canh>;
-
-/* ——— Đơn đang xem: một đơn vị của cây, hoặc một người ——— */
 
 type Don = {
 	ma: string;
@@ -142,8 +138,6 @@ function giaiDon(ma: string): Don | null {
 		mucTieu: mucTieuCua(dv.id),
 	};
 }
-
-/* ——— Truy vấn bảng (giữ trong bộ nhớ: bản mẫu không ghi máy chủ) ——— */
 
 const TAB_LOC: DataTableTabs = {
 	id: "loc",
@@ -225,8 +219,6 @@ function useTruyVan(tabDau: string): TableQueryState {
 		setFilter: (id, values) => setFilters((f) => ({ ...f, [id]: values })),
 	};
 }
-
-/* ——— Cột ——— */
 
 function gopVaoChu(don: Don, mt: MucTieuMau): string {
 	if (mt.gopVao.length > 0) {
@@ -366,8 +358,6 @@ function sapXep(ds: MucTieuMau[], sort: string, dir: "asc" | "desc") {
 	return [...ds].sort((a, b) => (khoa(a) - khoa(b)) * dau);
 }
 
-/* ——— Chân bảng ——— */
-
 function ChanBang({ don }: { don: Don }) {
 	const soKr = don.mucTieu.reduce((t, mt) => t + mt.kr.length, 0);
 	const dem = (
@@ -409,8 +399,6 @@ function ChanBang({ don }: { don: Don }) {
 		</span>
 	);
 }
-
-/* ——— Khối dưới bảng ——— */
 
 function DonViCon({ dv }: { dv: DonViPhang }) {
 	if (dv.con.length === 0 || dv.loai === "pb") return null;
@@ -533,8 +521,6 @@ function NganChiTiet({
 	);
 }
 
-/* ——— Danh sách ——— */
-
 function MoKrSan({ ids }: { ids: string[] }) {
 	const [, setExpand] = useQueryState("expand", parseAsArrayOf(parseAsString));
 	const daDat = useRef(false);
@@ -647,8 +633,6 @@ function DanhSach({ don, canh }: { don: Don; canh: Canh }) {
 	);
 }
 
-/* ——— Đang tải, lỗi ——— */
-
 const DONG_KHUNG = ["mot", "hai", "ba", "bon", "nam"] as const;
 
 function DangTai() {
@@ -685,8 +669,6 @@ function DangTai() {
 	);
 }
 
-/* ——— Trang ——— */
-
 function ThanTrang({
 	state,
 	canh,
@@ -712,8 +694,6 @@ function ThanTrang({
 			</div>
 		);
 	if (canh.xem !== "danh-sach") {
-		/* DataTable của Họp tuần luôn vẽ khung hàng công cụ (rỗng) kèm gap-3 của
-		   nó, nên khung ngoài không thêm khoảng nữa: đỉnh bảng trùng Danh sách. */
 		return (
 			<div
 				className={

@@ -9,18 +9,11 @@ import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { CACH_XEM, type CachXem } from "../okr-search-params";
 
-/* Đúng lớp khung hàng công cụ của DataTable (packages/ui data-table.tsx). Ba
-   cách xem không phải bảng bọc ô chọn + cách xem trong khung này, nên hàng công
-   cụ đứng yên khi đổi cách xem. Bài dvb-hang-cong-cu so lớp này với DOM thật. */
 export const LOP_HANG_CONG_CU =
 	"flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between";
 
 const LOP_KHOI = "flex flex-col gap-2 sm:flex-row sm:items-center";
 
-/**
- * Ô chọn đơn vị + cách xem. Ở Danh sách nó đứng TRONG ô `search` của DataTable
- * (không ở `leadingActions`, thứ DataTable giấu sau «Lọc» trên điện thoại).
- */
 export function HangCongCuDonVi({
 	chon,
 	xem,
@@ -61,8 +54,6 @@ export function KhungHangCongCu({ children }: { children: ReactNode }) {
 	return <div className={LOP_HANG_CONG_CU}>{children}</div>;
 }
 
-/* Phần phải của hàng công cụ lúc tải: chỗ của ô lọc nhanh, «Lọc», «Sắp xếp»,
-   «Cột» — và nút «Lọc» gộp trên điện thoại — cùng cỡ với DataTable. */
 function XuongPhaiHang() {
 	return (
 		<>
@@ -77,8 +68,6 @@ function XuongPhaiHang() {
 	);
 }
 
-/* Khung xương của hàng công cụ: cùng khung, cùng cỡ ô chọn và chỗ của cách
-   xem, nên đỉnh ô chọn không nhảy khi dữ liệu về. */
 export function XuongHangCongCu() {
 	return (
 		<div className={LOP_HANG_CONG_CU} data-khung-hang="thanh-cong-cu">
@@ -93,10 +82,6 @@ export function XuongHangCongCu() {
 
 const DONG_KHUNG = ["mot", "hai", "ba", "bon", "nam"] as const;
 
-/**
- * Lúc tải: hàng công cụ (thật khi đã có cây tổ chức, khung xương khi chưa) và
- * các dòng bảng bằng khung xương — không vòng quay toàn trang, không cây.
- */
 export function KhungDangTaiDonVi({ hang }: { hang?: ReactNode }) {
 	const m = okrMessages(useLocale());
 	return (

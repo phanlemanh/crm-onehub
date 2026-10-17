@@ -509,8 +509,6 @@ const hangMt = (id: string) =>
 	);
 const hangKr = (id: string) =>
 	document.body.querySelector<HTMLTableRowElement>(`[data-kr="${id}"]`);
-// Trang đơn vị một bảng (DH2): mục tiêu là một dòng của bảng chung (dấu nằm ở ô
-// tên, không ở `tr`), KR là các dòng con ngay dưới; Của tôi giữ khối riêng.
 const dongCua = (id: string) => hangMt(id)?.closest("tr") ?? hangMt(id);
 const nutMo = (id: string) =>
 	dongCua(id)?.querySelector<HTMLButtonElement>("button[aria-expanded]") ??
@@ -523,8 +521,6 @@ const khoaHang = (tr: Element) =>
 	dauHang(tr, "data-kr") ??
 	dauHang(tr, "data-chua-co-kr") ??
 	"khac";
-/** Các hàng của một mục tiêu: `tbody tr` của khối riêng (Của tôi), hoặc dòng
- * của nó trong bảng đơn vị cùng các dòng KR ngay dưới (Theo đơn vị). */
 function hangCuaMt(id: string): Element[] {
 	const k = khoi(id);
 	const dong = k?.closest("tr");
@@ -537,7 +533,6 @@ function hangCuaMt(id: string): Element[] {
 	}
 	return ra;
 }
-/** Id mục tiêu đang thu theo `expand` của bảng đơn vị. */
 const dangThu = (url: URLSearchParams, ds: { id: string }[]) => {
 	const mo = new Set((url.get("expand") ?? "").split(",").filter(Boolean));
 	return ds
@@ -791,7 +786,6 @@ describe("theo-don-vi", () => {
 			["mt3", "mt3-kr1", "mt3-kr2", "mt3-kr3"],
 		];
 		expect.assertions(MA_TRAN.length);
-		// DH2: mặc định thu — mở cả ba dòng qua `expand` để đọc KR.
 		await dungTheoDonVi(
 			[
 				mucTieu("mt1", krCua("mt1", 2)),
@@ -1971,7 +1965,6 @@ const CA_TRANG_THAI = {
 				{
 					hang: ["mt-a"],
 					ariaExpanded: "false",
-					// DH2: nhãn nút mở của dòng bảng đơn vị do DataTable ghép từ tên mục tiêu.
 					nhanNut:
 						man === "cua-toi"
 							? m.khoiMucTieu.moRa("Mục tiêu mt-a")
@@ -1997,7 +1990,6 @@ const CA_TRANG_THAI = {
 							m.khoiMucTieu.chuaCoKrDeTinh,
 						) ?? false,
 				},
-				// DH2: mục tiêu không KR là một dòng không nút mở, không dòng «chưa có KR».
 				man === "cua-toi"
 					? {
 							hang: ["mt-rong", "mt-rong"],

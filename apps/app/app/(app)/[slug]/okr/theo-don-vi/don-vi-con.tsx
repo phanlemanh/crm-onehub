@@ -16,11 +16,6 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import type { DonViCon as Con } from "./bang-don-vi";
 
-/**
- * «Đơn vị trực thuộc» dưới bảng: mỗi con trực tiếp một ô liên kết tới trang
- * của nó (giữ `kyOkr`), số mục tiêu đã công bố theo `okr.countByUnit` (thủ tục
- * không trả số KR) hoặc «Chưa đặt OKR», và cờ «Chưa có trưởng».
- */
 export function DonViCon({
 	con,
 	dem,
