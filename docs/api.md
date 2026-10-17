@@ -1657,12 +1657,16 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
   đè nhánh không làm rơi tệp vì thủ tục trả mọi tín hiệu còn lại. `tin-hieu/crm/**` nằm trong
   `t1_skip_globs`, nên PR hàng chờ là T1. Lượt hỏng (thiếu bí mật, CRM lỗi, tệp lệch byte, kho
   cấm mở PR) kết thúc đỏ và GitHub gửi thư cho người sửa dòng lịch gần nhất.
-- **Giới hạn đã biết:** PR do tác vụ mở bằng `GITHUB_TOKEN` không kích hoạt CI; điều phối đóng
-  rồi mở lại PR để chạy bước nhẹ trước khi đưa vào lô.
+- **Giới hạn đã biết (đã gỡ từ #445):** PR do tác vụ mở bằng `GITHUB_TOKEN` không kích hoạt CI.
+  Lịch giờ lấy mã, đẩy nhánh và mở PR bằng bí mật `TIN_HIEU_TOKEN`, nên CI tự chạy trên PR hàng
+  chờ như PR của người.
 - **Ba việc cài một lần của chủ kho** (ngoài kho): tạo khoá chỉ-kéo trên production; đặt hai bí
-  mật kho `CRM_API_URL`, `CRM_KHOA_KEO_TIN_HIEU`; bật «Allow GitHub Actions to create and approve
-  pull requests» (Settings › Actions › General). Thiếu việc cuối thì lượt vẫn kéo và đẩy nhánh —
-  người gửi vẫn thấy «Chờ gom» — rồi đỏ ở bước mở PR với câu gọi tên quyền đó.
+  mật kho `CRM_API_URL`, `CRM_KHOA_KEO_TIN_HIEU`; tạo một token fine-grained chỉ cho kho này, quyền
+  «Contents: Read and write» và «Pull requests: Read and write», rồi đặt nó làm bí mật
+  `TIN_HIEU_TOKEN`. Token có hạn (bản tạo 16/10 hết hạn khoảng 14/01/2027) — tạo token mới và đặt
+  lại bí mật trước ngày đó. Token thiếu quyền «Pull requests» thì lượt vẫn kéo và đẩy nhánh —
+  người gửi vẫn thấy «Chờ gom» — rồi đỏ ở bước mở PR với câu gọi tên quyền đó; token hết hạn thì
+  lượt đỏ ngay ở bước lấy mã.
 - Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban (tên và `phongBanId`) chỉ đi
   kèm trong phản hồi để lệnh kéo về đếm cho ngưỡng.
 - `tinHieu.tatCa` chỉ owner/admin (cùng câu kiểm với `keoVe`), chỉ đọc — không đóng dấu. Trả mọi tín
