@@ -66,7 +66,7 @@ const en = {
 		daXoaToast: "Project deleted",
 	},
 	gantt: {
-		nhanKieu: "Gantt",
+		nhanKieu: "Gantt chart",
 		loi: "Couldn't load the project schedule",
 		loiMoTa: "Check your connection and try again.",
 		rong: "This project has no tasks",
@@ -168,7 +168,7 @@ const vi: DuAnMessages = {
 		daXoaToast: "Đã xoá dự án",
 	},
 	gantt: {
-		nhanKieu: "Gantt",
+		nhanKieu: "Sơ đồ Gantt",
 		loi: "Không tải được lịch dự án",
 		loiMoTa: "Kiểm kết nối rồi thử lại.",
 		rong: "Dự án chưa có việc",
@@ -187,7 +187,7 @@ const vi: DuAnMessages = {
 	moc: {
 		tieuDe: "Thêm mốc",
 		ten: "Tên mốc",
-		tenGoiY: "Go-live",
+		tenGoiY: "Ngày ra mắt",
 		ngay: "Ngày",
 		cho: "Việc phải xong trước",
 		chonViec: "Chọn việc…",

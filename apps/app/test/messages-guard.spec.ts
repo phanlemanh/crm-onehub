@@ -153,15 +153,6 @@ const KHONG_DAU = new Set([
 	"so.troLyOkr",
 	"nhom.tro-ly-okr",
 	"lichSu.dongDuyet",
-	"gantt.nhanKieu",
-	"moc.tenGoiY",
-	"thu.0",
-	"thu.1",
-	"thu.2",
-	"thu.3",
-	"thu.4",
-	"thu.5",
-	"thu.6",
 ]);
 
 function mienDau(khoa: string): boolean {

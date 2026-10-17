@@ -266,7 +266,7 @@ const vi = {
 		khongDuQuyen: "Không đủ quyền: chỉ chủ và quản trị đổi được lịch làm việc.",
 		nghiTuan: "Ngày nghỉ trong tuần",
 		nghiTuanMoTa: "Bật một thứ để đánh dấu là ngày nghỉ hằng tuần.",
-		thu: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+		thu: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
 		thuDayDu: [
 			"Thứ Hai",
 			"Thứ Ba",
