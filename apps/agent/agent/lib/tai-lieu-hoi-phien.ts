@@ -47,7 +47,7 @@ async function nhanHoi(
 		{ cauHoi: string | null; nguoiHoiId: string }[]
 	>`
 		UPDATE "taiLieuHoi"
-		SET "phienId" = ${`gui:${hoiId}`}
+		SET "phienId" = ${HOI.lienKet.dauCho(hoiId)}
 		WHERE id = ${hoiId} AND "trangThai" = 'DANG_HOI' AND kenh = 'CRM' AND "phienId" IS NULL
 		RETURNING "cauHoi", "nguoiHoiId"
 	`;
@@ -117,7 +117,7 @@ export async function guiHoiKho(
 			mode: "task",
 		});
 		await db.taiLieuHoi.updateMany({
-			where: { id: hoiId, phienId: `gui:${hoiId}` },
+			where: { id: hoiId, phienId: HOI.lienKet.dauCho(hoiId) },
 			data: { phienId: phien.id },
 		});
 		await dongViecCua(hoiId, "Đã mở phiên Kara đọc kho.");

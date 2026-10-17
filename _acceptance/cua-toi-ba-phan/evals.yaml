@@ -1,0 +1,414 @@
+schema_version: 1
+slug: cua-toi-ba-phan
+
+# Tệp kiểm DOM mới: apps/app/test/okr-cua-toi-ba-phan.dom.tsx — mỗi eval DOM chạy đúng một nhóm theo tên
+# (`-t ctbp-...`) qua bộ chạy hai chiều `_acceptance/cua-toi-ba-phan/rang/hai-chieu.mjs <nhom>` (khuôn của DH1:
+# đối chứng dương trên vật lành, rồi mỗi đột biến thay đúng một đoạn trong một WORKTREE TẠM (git worktree add
+# --detach HEAD vào thư mục tạm, kèm node_modules liên kết), chạy lại nhóm ở đó, phải đỏ với thông điệp ghim; cây
+# đang xét KHÔNG bao giờ bị sửa — S4 chạy lệnh song song, nên đột biến tại chỗ lọt vào lượt vật-lành của eval khác
+# (DH1 round 1, 15/10). Đoạn cần thay không có trong tệp → mã 2 «KHONG DO DUOC»). Khoá `executors.*.ctbp_*` thêm vào `_acceptance/config.yaml` ở S3
+# cùng commit dựng bộ chạy. Dữ liệu DOM do hàm dựng fixture rút từ khuôn `capNhatTuanOutput` / `mineOutput` /
+# `danhSachOutput` của chính `okr.contracts.ts` (parse qua zod trước khi đưa vào trang), không viết tay khuôn đọc.
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ctbp_phan_mot
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-phan-mot". Ma tran viet truoc: 4 trang thai du lieu capNhatTuan (3 KR thieu / 1 thieu 2 du /
+      0 thieu 3 du / items rong) x 2 ngon ngu = 8 o. Moi o: section[data-phan=can-cap-nhat] la con dau tien cua than
+      trang (truoc [data-khoi=viec-okr]); so dong [data-kr] === so item updatedThisWeek=false; nut
+      [data-nut=cap-nhat-tai-cho] co nhan rut tu messages that m.cuaToi.capNhatN(N) va N === so dong; o "du" thi
+      khong co nut, co chu m.cuaToi.daDu(tuan) va nut [data-nut=sua-lan-gui]; o "rong" thi chu m.cuaToi.khongKr,
+      khong nut. Them 1 assert: khoi viec trong Cua toi khong co viec loai okr-cap-nhat du API tra viec do.
+      Them 1 o chu ky: o chu ky dau trang la K cu (kyOkr=K), chu ky dang chay K': okr.capNhatTuan duoc goi KHONG
+      kem kyOkr cua o chu ky va phan 1 hien KR cua K' (fixture rieng cho K').
+      DOI CHUNG DUONG: o 3 thieu vi co 3 dong, nut «Cập nhật 3 KR».
+      CHIEU DO (CTBP_PHA=theo-o-chu-ky: ban sao loc phan 1 theo kyOkr cua o chu ky) -> "ctbp-phan-mot: phan 1 theo
+      chu ky K cu, mong chu ky dang chay".
+      CHIEU DO (CTBP_PHA=dem-ca-da-gui: ban sao bo loc updatedThisWeek trong phan 1) -> do voi thong diep ghim
+      "ctbp-phan-mot: phan 1 co 3 dong, mong 1 (o 1 thieu 2 du)".
+      CHIEU DO (CTBP_PHA=viec-cap-nhat-con: ban sao bo an viec okr-cap-nhat trong Cua toi) -> "ctbp-phan-mot:
+      khoi viec trong Cua toi con viec okr-cap-nhat".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ctbp_cap_nhat_tai_cho
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-cap-nhat-tai-cho". Dung trang voi trpc gia ghi lai moi lan goi moCapNhat/guiCapNhat.
+      (a) dung xong, cho 2 vong render: so lan goi moCapNhat === 0. (b) bam [data-nut=cap-nhat-tai-cho]: moCapNhat
+      goi DUNG 1 lan voi { entry: "cua-toi" }; bang [data-trang-thai=ST-capnhat-*] hien TRONG section[data-phan=
+      can-cap-nhat]; usePathname/router.push khong bi goi voi duong khac "/ws/okr"; co du [data-o=gia-tri],
+      [data-o=tu-tin], [data-o=ghi-chu], [data-nut=gui] (bo chon cua bang cu). (c) dien 3 KR,
+      bam gui: guiCapNhat goi voi sessionId cua (b) va 3 items; phan 1 hien ST-capnhat-dagui; capNhatTuan duoc
+      invalidate (so lan refetch tang 1).
+      DOI CHUNG DUONG: (a)(b)(c) xanh tren vat lanh.
+      CHIEU DO (CTBP_PHA=mo-phien-khi-tai: ban sao goi moCapNhat trong useEffect luc mount) -> "ctbp-cap-nhat-tai-cho:
+      moCapNhat goi 1 lan khi chua bam, mong 0".
+      CHIEU DO (CTBP_PHA=entry-tab: ban sao truyen entry "tab") -> "ctbp-cap-nhat-tai-cho: entry «tab», mong «cua-toi»".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ctbp_phien_cua_toi
+    paths:
+      - "packages/validation/src/okr-cap-nhat.ts"
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "apps/api/test/cua-toi-ba-phan.spec.ts"
+    expected: |
+      Ten ca "ctbp-phien-cua-toi", may chu that tren co so du lieu thu (bun run test). Ma tran lop vao viet truoc:
+      LOI_VAO sau luot = [nhac, viec-cua-toi, tab, sheet, cua-toi] (5 gia tri, rut tu LOI_VAO that); moi gia tri:
+      okr.moCapNhat tra sessionId va dong okrCheckInSession co entry dung gia tri (5 assert); gia tri "la" bi
+      moCapNhatInput tu choi (1 assert). Luot day du voi entry "cua-toi": moCapNhat -> guiCapNhat 2 KR -> dong phien
+      co submittedAt khac null, seconds >= 0, va dung 2 okrCheckIn tro sessionId do (3 assert).
+      DOI CHUNG DUONG: entry "nhac" (gia tri da co tu truoc) xanh.
+      CHIEU DO (ban sao LOI_VAO bo "cua-toi"; dung bo chay hai chieu) -> "ctbp-phien-cua-toi: moCapNhat tu choi entry
+      «cua-toi»".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ctbp_loi_vao_tu
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-loi-vao-tu". Ma tran viet truoc: tu in {nhac, viec-cua-toi, (vang), "tab", "la"} = 5 o.
+      nhac / viec-cua-toi: bang cap nhat da mo sau render dau, moCapNhat goi 1 lan voi entry dung tham so,
+      document.activeElement la o so dau tien trong phan 1, tham so tu bi go khoi duong dan (setQuery goi voi
+      tu = null). vang / "tab" / "la": moCapNhat 0 lan, bang dong. Them 1 assert: dung lai trang voi duong dan sau
+      khi go tu -> moCapNhat van 1 lan tong (khong mo them).
+      DOI CHUNG DUONG: o nhac xanh.
+      CHIEU DO (CTBP_PHA=giu-tu: ban sao khong go tu) -> "ctbp-loi-vao-tu: tu con tren duong dan sau khi mo".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ctbp_chuyen_huong
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/test/okr-chuyen-huong-cap-nhat.spec.ts"
+    expected: |
+      Ten ca "ctbp-chuyen-huong". Duong cu chuyen huong o MAY CHU bang redirects() cua apps/app/next.config.ts (khong
+      dung trang, khong qua React — 17/10: redirect() trong page lam root layout dung lai phia trinh duyet, React bao
+      «Encountered a script tag»). Bai doc luat that tu next.config va tinh dich bang chinh getPathMatch +
+      prepareDestination cua Next (cung tuy chon resolve-routes dung). Ma tran viet truoc 6 o: rong · tu=nhac ·
+      tu=nhac&kyOkr=k1 · kyOkr=k1&donOkr=bp:x · la=1 · donOkr=a&donOkr=b -> dich "/<slug>/okr" + dung query, giu thu
+      tu va gia tri lap; luat la tam thoi (permanent false). Doi chung: /ws/okr/cap-nhat-tuan-x, /ws/okr/cap-nhat-tuan/x,
+      /ws/okr, /ws/okr/theo-don-vi khong bi luat nao bat.
+      DOI CHUNG DUONG: o rong -> "/ws/okr".
+      CHIEU DO (dich-sai: ban sao dich sang /theo-don-vi) -> "ctbp-chuyen-huong: dich «/ws/okr/theo-don-vi», mong «/ws/okr»".
+      CHIEU DO (bat-nham: ban sao them luat cap-nhat-tuan-:duoi) -> "ctbp-chuyen-huong: bat nham /ws/okr/cap-nhat-tuan-x → /ws/okr".
+      CHIEU DO (vinh-vien: ban sao permanent true) -> "ctbp-chuyen-huong: chuyen huong vinh vien, mong tam thoi (permanent false)".
+
+  - id: E6
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ctbp_lien_ket_cu
+    paths:
+      - "apps/app/**"
+      - "apps/agent/agent/**"
+      - "apps/agent/test/okr-nhac.integration.spec.ts"
+    expected: |
+      Script _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs: (1) tim LIEN KET toi duong cu trong apps/app va
+      apps/agent (khong tinh docs/, _acceptance/, luat chuyen huong o apps/app/next.config.ts va test chuyen huong): chuoi duong dan
+      "/okr/cap-nhat-tuan" dung trong href, url(...), template URL hoac Link — KHONG tinh dong import (from ".../okr/
+      cap-nhat-tuan/...") vi bang cap nhat cu duoc dung lai tu cho cu -> 0 dong; in tung dong neu co. (2) chay ca agent
+      "nhac-cap-nhat" cua okr-nhac.integration.spec.ts (khoa executors.test.cnt_nhac_cap_nhat) -> thoat 0, va ca do
+      khang dinh dong «KR chờ cập nhật» chua "/okr?tu=nhac".
+      DONG KET LUAN "DUNG AC-4: 0 lien ket cu + tin nhac /okr?tu=nhac" ma 0; sai -> "SAI AC-4: <tep>:<dong>" ma 1.
+      Hai chieu tren ban sao tam, chay TRUOC cay that: CHIEU DO — them mot dong `href={url("/okr/cap-nhat-tuan")}`
+      trong viec-cua-toi.tsx -> phai in "SAI AC-4: apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx"; CHIEU IM — chi
+      them mot dong nhac "/okr/cap-nhat-tuan" trong docs/ va mot import ".../okr/cap-nhat-tuan/cap-nhat-tuan" trong
+      apps/app -> phai in "DUNG AC-4". Ban sao khong dung duoc -> ma 2.
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ctbp_don_vi_dan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-don-vi-dan". Ma tran viet truoc: headOf in {1 bo phan · 1 phong ban · 1 bo phan + 1 phong ban
+      (dat nguoc thu tu trong API) · rong} x danhSach {co 3 muc tieu 5 KR · rong} = 8 o (o headOf rong chi 1 do).
+      Moi o: so the [data-don-vi-dan] === so don vi dan; thu tu the = bo phan truoc phong ban theo thu tu cay
+      org.tree; so muc tieu, so KR, tien do trung binh va ba dem tinh trang tinh bang CUNG ham tinh trang ma trang
+      Theo don vi dung (import, khong viet lai) va bang gia tri ky vong viet tay cua fixture; nut [data-nut=mo-don-vi]
+      href === "/ws/okr/theo-don-vi?donOkr=<id>&kyOkr=<K>"; danhSach rong -> chu m.cuaToi.donViRong(<ten ky>).
+      okr.danhSach goi voi { cycleId: K, unit: <id> } cho moi don vi.
+      DOI CHUNG DUONG: o 1 bo phan + 3 muc tieu xanh.
+      CHIEU DO (CTBP_PHA=thu-tu-api: ban sao bo sap theo cay) -> "ctbp-don-vi-dan: the 1 la phong ban, mong bo phan".
+      CHIEU DO (CTBP_PHA=dem-tron: ban sao dem KR theo muc tieu thay vi theo KR) -> "ctbp-don-vi-dan: so KR 3, mong 5".
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ctbp_kr_phu_trach
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-kr-phu-trach". Fixture mine sinh bang ham dung tu mineOutput: 4 muc tieu o 3 don vi —
+      O1 nguoi xem phu trach 2 KR, O2 nguoi khac phu trach muc tieu nhung nguoi xem 1 KR, O3 nguoi xem phu trach
+      muc tieu khong KR nao cua minh, O4 nguoi xem chi tham gia; them dangTheoDoi 1, daBo 1. Assert: phan 3 co dung
+      3 dong [data-kr] (KR cua O1, O2) theo thu tu muc tieu roi vi tri; nhom [data-nhom=tham-gia] co O3, O4; QUAN HE
+      (khong dem chuoi): tap id muc tieu (phan 3 ∪ nhom tham gia) === tap id mine.objectives; nhom dang theo doi va
+      da bo giu nguyen so dong; bam ten KR dau tien -> openRecord("objective", O1.id).
+      DOI CHUNG DUONG: fixture tren xanh.
+      CHIEU DO (CTBP_PHA=bo-tham-gia: ban sao khong dung nhom tham gia) -> "ctbp-kr-phu-trach: muc tieu O3, O4 roi khoi
+      Cua toi".
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ctbp_khong_dan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-khong-dan". Ma tran 2 o: chuong trinh tat / bat OKR ca nhan; nguoi xem headOf rong, canCreate
+      false. Moi o: khong co [data-phan=don-vi-dan]; nut [data-nut=them-muc-tieu] disabled va aria-describedby tro
+      dong co chu m.khoaTao.chuaDan (rut tu messages that); trong <main> ngoai [data-slot=page-shell-header]: 0 phan
+      tu nut/lien ket co nhan khop /tạo|thêm mục tiêu|OKR cá nhân/i va 0 phan tu [data-nut^=tao] / [data-nut=them-
+      muc-tieu]; trang thai rong chi co 1 lien ket, nhan m.cuaToiRong.action.
+      DOI CHUNG DUONG: o tat xanh.
+      CHIEU DO (CTBP_PHA=moi-ca-nhan: ban sao them nut «Tạo OKR cá nhân» vao trang thai rong) -> "ctbp-khong-dan:
+      than Cua toi co loi moi tao «Tạo OKR cá nhân»".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ctbp_bon_the
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/tab-okr.ts"
+      - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-bon-the". vi va en: [role=tab] hoac lien ket thanh the co dung 4 phan tu, nhan theo thu tu ===
+      [m.tab["cua-toi"], m.tab["theo-don-vi"], m.tab["toan-canh"], m.tab["hoi-y"]] va bang chuoi ky vong viet
+      truoc (vi: Của tôi, Theo đơn vị, Toàn cảnh, Hỏi ý; en: Mine, By unit, Overview, Call for ideas); TAB.length ===
+      4; okrMessages(locale) khong con khoa "cap-nhat-tuan" trong tab, moTa va tieuDeTrinhDuyet (okr/tieu-de-khu.ts) khong co ten the «Cập nhật tuần» (khoa vet giu nguyen); moTa
+      ["cua-toi"] vi === «Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách.»; moi lien ket the mang
+      kyOkr va donOkr hien co.
+      DOI CHUNG DUONG: vi xanh.
+      CHIEU DO (CTBP_PHA=nam-the: ban sao TAB co lai "cap-nhat-tuan") -> "ctbp-bon-the: 5 the, mong 4".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.ctbp_tai_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-tai-loi". Ma tran viet truoc: 3 truy van (capNhatTuan, danhSach don vi dan, mine) x {dang tai,
+      loi} = 6 o, hai truy van con lai tra du lieu. Dang tai: phan cua truy van do co [data-khung-xuong] o dung cho,
+      hai phan kia co du lieu. Loi: chi phan do co chu m.cuaToi.loiPhan va nut «Thử lại»; bam -> refetch dung truy
+      van do 1 lan; hai phan kia van co du lieu. Them 1 o: guiCapNhat loi 500 -> so da nhap con nguyen, nut gui co
+      chu m.capNhat.guiLai(n).
+      DOI CHUNG DUONG: o mine loi xanh.
+      CHIEU DO (CTBP_PHA=loi-chung: ban sao dung mot Loi cho ca trang khi mot truy van loi) -> "ctbp-tai-loi: capNhatTuan
+      loi lam an phan don vi dan".
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ctbp_do_nguong
+    paths:
+      - "apps/api/scripts/okr/do-cap-nhat-cua-toi.ts"
+      - "apps/api/test/do-cap-nhat-cua-toi.spec.ts"
+    expected: |
+      Ten ca "ctbp-do-nguong", co so du lieu thu that. Ham gieo trong spec tao: 2 truong don vi (T1 bo phan, T2 phong
+      ban), 1 thanh vien M; phien trong cua so: T1 cua-toi gui x4, T1 nhac gui x2, T1 sheet gui x2, T2 viec-cua-toi
+      gui x1, T2 cua-toi chua gui x3, M cua-toi gui x5; phien ngoai cua so: T1 sheet gui x4. Dap an viet truoc: n = 9,
+      k = 7, p = 77.8 % (lam tron 1 so), "khong du mau" (n < 10). Lan 2 gieo them T2 cua-toi gui x1: n = 10, k = 8,
+      80.0 %, het co "khong du mau". Them: gieo sua 1 phong ban trong cua so (updatedAt trong cua so) -> dong
+      "1 don vi sua trong cua so"; khong sua -> "0 don vi sua trong cua so". Assert chuoi in dung dap an + so dong moi
+      bang truoc/sau lenh bang nhau (chi doc).
+      DOI CHUNG DUONG: lan 2.
+      CHIEU DO (ban sao dem ca thanh vien) -> "ctbp-do-nguong: n 14, mong 9".
+      CHIEU DO (ban sao dem ca phien chua gui) -> "ctbp-do-nguong: n 12, mong 9".
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.ctbp_ho_so_da_ky
+    paths:
+      - "apps/app/test/**"
+      - "apps/agent/test/okr-nhac.integration.spec.ts"
+      - "apps/api/test/**"
+    expected: |
+      Script _acceptance/cua-toi-ba-phan/rang/ho-so-da-ky.mjs (khuon dhk_ho_so_da_ky cua DH1): rut LUC CHAY danh sach
+      tep kiem bi luot nay sua (git diff --name-only <merge-base> -- '*test*'), quet moi _acceptance/*/evals.yaml cua ho
+      so signed-off/machine-cleared co cmd (giai qua config) chay mot trong cac tep do, chay tung eval do va so ma
+      thoat voi expected_exit (vang = 0). In mot dong moi eval "<ho so>#<E>: <ma> (mong <ma>)". Dong ket luan "DUNG
+      AC-11: <k>/<k> eval ho so da ky" ma 0; co lech -> "SAI AC-11: <ho so>#<E>" ma 1; danh sach rong ma luot co sua
+      tep kiem -> ma 2 (phep do mu). Danh sach eval bat buoc co mat (rut luc chay, khong viet tay ten): moi eval cua
+      ho so dieu-huong-khu-muc-tieu chay test/okr-dau-trang-khu.dom.tsx hoac rang/proto-khu.mjs (ban mau DH1 bo the
+      «Cập nhật tuần» cung luot) — ho so do chua ky thi chay van chay va in "(chua ky)".
+      DOI CHUNG DUONG / CHIEU DO: script tu chay tren ban sao co mot assertion cu (5 the) dat lai trong
+      okr-thanh-tab.dom.tsx -> phai in "SAI AC-11" truoc khi chay tren cay that.
+      Bo chon rong (lan nay khong cham tep kiem hay vat nao ma eval ho so da ky KHAC chay — nhanh va sau gop): in
+      «AC-11: khong eval ho so da ky khac chay … — 0 eval bi luot nay cham», doi chung duong va chieu do chay tren cac
+      eval da ky chay thang gop-y-dung-cho.dom.tsx; dong ket «DUNG AC-11: 0 eval ho so da ky khac bi luot nay cham ·
+      doi chung duong N/N». Doi chung khong con eval nao chay -> ma 2 «KHONG DO DUOC».
+
+  - id: E14
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.ctbp_proto
+    paths:
+      - "apps/app/app/proto/_modules/cua-toi-ba-phan/**"
+      - "apps/app/app/proto/catalog.ts"
+      - "docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md"
+    expected: |
+      Script _acceptance/cua-toi-ba-phan/rang/proto-ba-phan.mjs: rut tap ST-ctbp-* tu bang trang thai cua thiet ke
+      (giua marker UX-STATE-TABLE), tru ST-ctbp-dang-tai va ST-ctbp-loi-phan; rut tap state khai trong catalog.ts cua
+      module cua-toi-ba-phan, tru state phuong an cau hoi (ST-ctbp-hoi-*); QUAN HE: hai tap bang nhau; module dung 4 the. Chay them phep do so ban mau cua kho
+      (khoa executors.script.proto_so neu co) -> thoat 0. Dong "DUNG AC-12: <n>/<n> state" ma 0.
+      CHIEU DO: script tu chay tren ban sao bang thiet ke them mot dong ST-ctbp-gia -> "SAI AC-12: thieu state
+      ST-ctbp-gia trong catalog".
+
+  - id: E15
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ctbp_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, NGUYEN VAN: EVAL=E15 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs\" — script tu canh cay, tu dung phien do (kho do rieng, bo OKR mau co truong don vi va thanh vien, may chu api+app cua CAY DANG XET), dang nhap dev:session tung vai va chup vao evidence/; khong goi thang trinh duyet ngoai script"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc (goi ten cho hong); ma 1 = co dong SAI"
+      - "Mo cac anh cua-toi-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/cua-toi-ba-phan/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "_acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"
+    expected: |
+      Ma tran viet truoc: 3 vai (truong bo phan co 3 KR thieu so · truong do dang mo bang cap nhat · thanh vien khong
+      dan don vi nao) x 2 kho (1440, 390) = 6 o, moi o mot anh cua-toi-<vai>-<kho>.png va mot dong
+      "O <vai> <kho>: thu tu phan <...> · day phan 1 <px> · nut cap nhat trong khung nhin <co|khong> · tran ngang <px>".
+      DUNG khi: thu tu [data-phan] trong DOM va theo toa do top la can-cap-nhat, (viec), don-vi-dan, kr-phu-trach
+      (thanh vien: can-cap-nhat, kr-phu-trach); 1440: day nut [data-nut=cap-nhat-tai-cho] <= innerHeight (khong cuon);
+      390: scrollWidth <= innerWidth o ca 3 vai, thanh gui dinh day khi bang mo; thanh vien: 0 nut/lien ket moi tao
+      trong than (cung bo loc E9). Dong cham "DUNG AC-13: 6/6 o". Anh thieu -> ma 2.
+      DOI CHUNG DUONG: vai truong bo phan 1440.
+      CHIEU DO (CTBP_PHA=phan-mot-cuoi: ban sao dua phan 1 xuong cuoi than) -> "SAI AC-13: truong 1440 — thu tu
+      don-vi-dan, kr-phu-trach, can-cap-nhat", ma 1.
+
+  - id: E16
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ctbp_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/api/src/okr/**"
+      - "_acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"
+    expected: |
+      Cung luot man-cua-toi.mjs voi E15, tren may chu that: truong bo phan mo Cua toi chu ky K, doc so cua the don vi
+      ([data-so=muc-tieu|kr|tien-do|dung-nhip|cham-nhip|truot]); roi mo /okr/theo-don-vi?donOkr=<id>&kyOkr=K va doc
+      cung sau so tu bang/ chan bang cua trang do; dong "SO <don vi>: Cua toi <6 so> · Theo don vi <6 so>" — DUNG khi
+      bang nhau tung so. Dong "DUNG AC-5 may chu".
+      CHIEU DO: dung CTBP_PHA=dem-tron cua E7 tren may chu that -> "SAI AC-5: so KR 3 / 5".
+
+  - id: E17
+    criterion: AC-13
+    executor: judgment
+    paths:
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-390.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-dang-cap-nhat-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-390.png
+      - docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md
+    inputs:
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-390.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-dang-cap-nhat-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-390.png
+      - docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md
+    question: |
+      Nhin cac anh Cua toi (truong don vi o 1440 va 390, truong dang mo bang cap nhat, thanh vien khong dan don vi
+      nao) va doc muc «Huong lam» cua thiet ke. Mot nguoi khong lam luot nay, mo trang nay lan dau, co doc duoc ngay
+      o man dau (anh 1440, khong cuon) viec can cap nhat tuan nay va nut de lam no, roi don vi minh dan, roi KR minh
+      phu trach, dung thu tu do khong? O anh thanh vien, co cho nao moi ho tao muc tieu hay OKR ca nhan khong?
+      Tra PASS chi khi ca hai deu dung; neu khong, neu anh nao va vung nao lam ho doc sai.
+
+  - id: E18
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ctbp_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/next.config.ts"
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "packages/validation/src/okr-cap-nhat.ts"
+      - "_acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"
+    expected: |
+      Cung luot man-cua-toi.mjs, may chu that, truong bo phan co KR thieu so. Ma tran viet truoc 5 o, moi o dem dong
+      okrCheckInSession MOI cua nguoi do qua lenh doc DB cua script (truoc/sau): /okr?tu=nhac -> +1, entry "nhac" ·
+      /okr?tu=viec-cua-toi -> +1, entry "viec-cua-toi" · /okr?tu=la -> +0 · tai lai trang sau o nhac (duong dan da go
+      tu) -> +0 · /okr/cap-nhat-tuan?tu=nhac&kyOkr=K -> +1, entry "nhac", duong dan sau chuyen huong la
+      /<slug>/okr?kyOkr=K (tu da go sau khi mo). Gui 1 KR o o nhac -> dong do co submittedAt.
+      Dong "DUNG AC-3 may chu: 5/5 o".
+      Them 3 o AC-4 goi thang may chu bang fetch redirect manual: /okr/cap-nhat-tuan?kyOkr=K&la=1&donOkr=a&donOkr=b
+      (truong) -> 307, location ket thuc /<slug>/okr?<cung query, cung thu tu>; /okr/cap-nhat-tuan?tu=nhac chua dang nhap
+      -> 307 toi /<slug>/okr?tu=nhac, roi /<slug>/okr chuyen tiep toi /sign-in; doi chung /okr/cap-nhat-tuan-x (truong)
+      khong bi chuyen ve /okr. Moi trang mo bang trinh duyet trong lan khong co console.error (thu vien man-lib dem).
+      CHIEU DO (CTBP_PHA=giu-tu cua E4 tren may chu that) -> "SAI AC-3: tai lai sau nhac +1, mong +0".
+
+  - id: E19
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.ctbp_loi_mo
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-loi-mo". Ma tran viet truoc: 4 loi mo (bam [data-nut=cap-nhat-tai-cho] · bam [data-nut=sua-lan-gui]
+      o fixture «du» · /okr?tu=nhac · /okr?tu=viec-cua-toi), moi o okr.moCapNhat tra loi 500 o lan goi dau va thanh
+      cong o lan hai. Sau loi: phan 1 co [role=alert] chua chu rut tu messages that m.baPhan.loiMo («Không mở được lượt
+      cập nhật.») va nut [data-nut=thu-lai-mo]; chua co bang cap nhat; o tu: tham so tu VAN tren duong dan. Bam Thu lai
+      -> moCapNhat goi lan hai voi dung entry cua o (cua-toi / cua-toi / nhac / viec-cua-toi); thanh cong -> bang mo, o so
+      dau nhan focus, [role=alert] bien mat, o tu: tu roi duong dan. Them 1 o: moCapNhat loi o lan dau cua o tu, dung lai
+      trang moi voi cung duong dan -> moCapNhat duoc goi lai voi entry cua tu (lan tai lai van mo tu loi vao do).
+      DOI CHUNG DUONG: o /okr?tu=nhac loi roi thu lai xanh.
+      CHIEU DO (CTBP_PHA=bo-bao-loi: ban sao bo khoi bao loi mo) -> "ctbp-loi-mo: mo phien loi khong bao".
+      CHIEU DO (CTBP_PHA=go-tu-som: ban sao go tu ngay sau khi goi moCapNhat, chua biet ket qua) -> "ctbp-loi-mo: tu
+      roi duong dan sau loi mo phien".
+      CHIEU DO (CTBP_PHA=thu-lai-cua-toi: ban sao Thu lai luon goi entry cua-toi) -> "ctbp-loi-mo: thu lai entry
+      «cua-toi», mong «nhac»".
+
+  - id: E20
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.ctbp_tai_lai_nen
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+    expected: |
+      Ten ca "ctbp-tai-lai-nen". Ma tran viet truoc 3 o, moi o lan tai dau cua okr.capNhatTuan thanh cong roi lan tai
+      lai nen (invalidate truy van) tra loi 500: (1) bang cap nhat dang mo, da go so vao o dau -> sau loi bang van con,
+      o dau giu dung so da go, phan 1 KHONG co [data-trang-thai=ST-ctbp-loi-phan]; (2) gui xong (lan tai lai sau gui
+      loi) -> dong «đã gửi» cua bang van hien, khong co ST-ctbp-loi-phan; (3) danh sach KR thieu dang hien, tai lai loi
+      -> van dung so dong va nut «Cập nhật N KR». Doi chung AC-9 khong doi: lan tai DAU loi -> phan 1 co
+      ST-ctbp-loi-phan va nut «Thử lại».
+      DOI CHUNG DUONG: o (1) xanh.
+      CHIEU DO (CTBP_PHA=go-bang: ban sao tra lai dieu kien loi cu «ds.isError || !ds.data») -> "ctbp-tai-lai-nen: bang
+      dang dien bien mat khi tai lai loi".

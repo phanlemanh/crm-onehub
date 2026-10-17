@@ -307,6 +307,20 @@ self-hoster's admin cannot redeploy.
   của một bước, Huỷ, xoá và gỡ gắn kế hoạch trả 400 `VIEC.thongDiep.goBuocOKeHoach`. `closePlan` nhận
   `huyViecMo?: boolean`: đúng thì Việc còn mở của bước chưa xong sang Huỷ (nguồn `dong-ke-hoach`); mở lại
   không hồi. Nhắc buổi sáng không phát `buoc-*` cho bước có Việc — Việc tự nhắc `viec-*`.
+- **Gợi ý mở kế hoạch khi deal thắng (hàng DA3b, `goi-y-mo-ke-hoach`).** Bảng `GoiYKeHoach` (`CHO · DA_MO ·
+  BO_QUA`). Luật tất định ở máy chủ, không qua tác tử: `sinhGoiYKeHoach` (`@crm/db/goi-y-ke-hoach`) chạy
+  trong chính giao dịch của `chuyenGiaiDoanTrongTx` (phủ `setStage`, `bulkSetStage`, lưu trữ giai đoạn) và
+  của `DealsService.create`. Sinh một gợi ý ⟺ lần chuyển đi từ giai đoạn không phải thắng (hay tạo mới)
+  sang giai đoạn thắng, công ty không có kế hoạch `closedAt` trống, và deal không có gợi ý `CHO`; người
+  nhận là `deal.ownerId` lúc sinh; chỉ mục duy nhất một phần `goiYKeHoach_dealId_cho_key` giữ «một gợi ý
+  chờ mỗi deal». Mỗi lần chuyển sang thắng là một gợi ý: đã bỏ qua rồi thắng lại thì sinh gợi ý mới.
+  Hai thủ tục mới: `onboarding.goiYCuaDeal({ dealId })` trả gợi ý `CHO` của deal đang thắng, chưa lưu
+  trữ, khi người gọi là người nhận hay quản trị (`canManageOnboarding`), không thì `null`;
+  `onboarding.boQuaGoiY({ id })` → `BO_QUA`, người khác 403 `GOI_Y.thongDiep.khongQuyen`, gợi ý đã xử lý 400
+  `GOI_Y.thongDiep.daXuLy` («Gợi ý này đã được xử lý.»). `createFromTemplate` (tRPC hay REST
+  `POST /onboarding/plans`, ai gọi cũng vậy) chuyển mọi gợi ý `CHO` của công ty sang `DA_MO` kèm `planId`
+  trong cùng giao dịch; tạo hỏng thì không đổi gì. Gợi ý còn `CHO` của deal đang thắng thành mục
+  `goi-y-ke-hoach` của nhắc buổi sáng và thông báo của người nhận đọc được dữ liệu đối tác.
 - **Writes in the shared scope are either self-service or admin-only.** API keys
   and the person's own Zalo channel are self-service; every system setting —
   `settings.*` writes included, gated by `canManageSettings` — requires an owner

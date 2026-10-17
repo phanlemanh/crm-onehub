@@ -219,10 +219,12 @@ evals:
       - "packages/ui/src/components/nav-item.tsx"
       - "_acceptance/okr-soat-anh-luot-3/rang/san-thiet-ke.mjs"
     expected: |
-      san-thiet-ke.mjs rut tap tep bang `git diff --name-only $(git merge-base HEAD
-      origin/onehub)` loc *.tsx duoi apps/app (tru test/, app/proto/) va
-      packages/ui/src/components, in "tap tep: <n>" va moi tep mot dong "DUNG <tep>: design-gate
-      ma 0"; <n> = so tep khop trong diff (dong doi chung). Tap rong -> ma 2 "KHONG DO DUOC".
+      san-thiet-ke.mjs rut tap tep bang `git diff --name-only B..D` cua cap gop PR #146 (moc co
+      dinh F8: B = 679432a0f^1 = 100847e8a, D = 679432a0f, sha day du trong script; sha khong giai
+      duoc -> ma 2 "KHONG DO DUOC") loc *.tsx duoi apps/app (tru test/, app/proto/) va
+      packages/ui/src/components, design-gate soi ban hien tai cua tung tep; in "tap tep: <n>" va
+      moi tep mot dong "DUNG <tep>: design-gate ma 0"; <n> = so tep khop trong diff (dong doi
+      chung). Tap rong -> ma 2 "KHONG DO DUOC".
       design-gate chan nam loi nen P0 (low-contrast, gray-on-color, text-overflow, broken-image,
       body-text-viewport-edge), khong soi lop mau — luat lop do E13 do. Doi chung am (--pha, ban
       sao tmpdir): chen className="bg-red-500 text-gray-400" vao mot TableCell cua
@@ -245,9 +247,10 @@ evals:
       xuat NavStrip), "DUNG hop-nhap-dung-table" (hop-thoai-nhap.tsx: DialogContent size="table",
       SimpleTableRow invalid=..., StatusIndicator), "DUNG khung-dung-nav-strip"
       (settings-sidebar.tsx dung NavStrip, khong con <nav ... overflow-x-auto>). Ma tran
-      "lop-o-cho-goi": tap tep rut tu diff nhu E12 (chi *.tsx duoi apps/app), moi tep lay tap ten
+      "lop-o-cho-goi": tap tep rut tu diff cap gop nhu E12 (chi *.tsx duoi apps/app; moc co dinh F8
+      B = 100847e8a, D = 679432a0f; soi ban D cua tep), moi tep lay tap ten
       nhap tu "@crm/ui/..."; MOI phan tu JSX mang mot trong cac ten do ma cham dong doi cua diff
-      (git diff -U0) la mot dong "DUNG lop-<tep>:<dong> <Ten>" (khong className, hoac className
+      (git diff -U0 B..D) la mot dong "DUNG lop-<tep>:<dong> <Ten>" (khong className, hoac className
       chi gom lop khong doi mau/goc/khoang cach/bong) hoac "SAI ..." goi ten lop vi pham; ten
       hang trong className (vd CELL) giai toi gia tri chuoi o tep khai no, khong giai duoc ->
       SAI; phan tu khong cham dong doi ma co lop cam -> "GHI CHU co-san ..." (khong tinh); luat lop: text-<mau>, bg-*, border-

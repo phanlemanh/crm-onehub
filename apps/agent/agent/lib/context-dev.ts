@@ -1,3 +1,4 @@
+import { type Brand, brandSchema } from "@crm/validation/brand-raw";
 import ContextDev from "context.dev";
 import { APIError } from "context.dev/core/error";
 import { z } from "zod";
@@ -21,37 +22,7 @@ export type JsonSchema = {
 	additionalProperties?: boolean | JsonSchema;
 };
 
-export type Brand = {
-	domain?: string | null;
-	title?: string | null;
-	description?: string | null;
-	slogan?: string | null;
-	email?: string | null;
-	phone?: string | null;
-	colors?: { hex?: string | null; name?: string | null }[] | null;
-	logos?:
-		| {
-				url?: string | null;
-				mode?: string | null;
-				type?: string | null;
-				colors?: { hex?: string | null; name?: string | null }[] | null;
-		  }[]
-		| null;
-	socials?: { type?: string | null; url?: string | null }[] | null;
-	address?: {
-		city?: string | null;
-		state_code?: string | null;
-		country?: string | null;
-		country_code?: string | null;
-	} | null;
-	industries?: {
-		eic?: { industry?: string | null; subindustry?: string | null }[] | null;
-	} | null;
-	links?: {
-		pricing?: string | null;
-		careers?: string | null;
-	} | null;
-};
+export type { Brand } from "@crm/validation/brand-raw";
 
 export type LookupResult =
 	| { outcome: "found"; brand: Brand; raw: unknown }
@@ -140,6 +111,7 @@ export async function brandByDomain(
 	const params = {
 		type: "by_domain",
 		domain,
+		force_language: CONTEXT.brandLanguage,
 		timeoutMS: CONTEXT.timeoutMs,
 	} as const;
 
@@ -147,7 +119,12 @@ export async function brandByDomain(
 }
 
 export async function brandByEmail(email: string): Promise<LookupResult> {
-	return lookup({ type: "by_email", email, timeoutMS: CONTEXT.timeoutMs });
+	return lookup({
+		type: "by_email",
+		email,
+		force_language: CONTEXT.brandLanguage,
+		timeoutMS: CONTEXT.timeoutMs,
+	});
 }
 
 export async function prefetch(domain: string): Promise<void> {
@@ -236,8 +213,17 @@ async function lookup(
 
 	try {
 		const response = await api.brand.retrieve(params);
-		const brand = response.brand as Brand | undefined;
+		const parsed = brandSchema.nullish().safeParse(response.brand);
 
+		if (!parsed.success) {
+			return {
+				outcome: "failed",
+				reason: `unreadable brand response: ${z.prettifyError(parsed.error)}`,
+				retryable: false,
+			};
+		}
+
+		const brand: Brand | null | undefined = parsed.data;
 		if (!brand) return { outcome: "skipped", reason: "No brand matched." };
 
 		return { outcome: "found", brand, raw: response };

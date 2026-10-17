@@ -1,5 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
+import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
 import loiDan from "../agent/subagents/tro_ly_kho/instructions";
 import {
 	type CtxBatDauEve,
@@ -75,8 +76,7 @@ describe("tlk-bat-dau", () => {
 			...ctxBatDauThat("x"),
 			channel: { kind: "zalo", continuationToken: `zalo:${ma("chat")}` },
 		};
-		await expect(batDau({ type: "session.started" }, ctx)).rejects.toThrow(
-			"This session is not a library question.",
-		);
+		const ra = await batDau({ type: "session.started" }, ctx);
+		expect(ra?.markdown).toBe(TAI_LIEU_AGENT.hoi.dungLai.chiDan);
 	});
 });

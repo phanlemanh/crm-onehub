@@ -1,0 +1,126 @@
+schema_version: 1
+slug: cho-tac-nhan-lau
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ctnl_the_dung
+    paths: [apps/app/components/agent-builder/**, apps/app/lib/agent-builder-*.ts, apps/app/lib/use-seconds.ts, apps/app/lib/messages/agent-builder-tro-chuyen.ts, apps/app/test/cho-tac-nhan-lau.dom.tsx]
+    expected: |
+      apps/app/test/cho-tac-nhan-lau.dom.tsx, ca "thoi-gian": dong ho gia ghim (setSystemTime) tai startedAt; ma tran
+      viet truoc {0,4 s -> khong co dong thoi gian; 1 s -> "0:01"; 65 s -> "1:05"; 3599 s -> "59:59"} doc tu the dang dung
+      sau khi day dong ho; doi chung: tang dong ho 1 s thi chu tang dung 1 giay. Ca "gan-muon": startedAt lay tu hang gui
+      that (createdAt cua submission tra ve tu builderById, khong viet tay); gan the luc dong ho da o startedAt+250 s -> the
+      hien ngay "4:10" va co dong qua nguong. Chieu do: ban sao bo dong thoi gian -> ca do voi thong diep ghim "thoi gian da
+      troi"; ban sao dem tu luc gan the -> ca "gan-muon" do voi thong diep ghim "dem tu luc gui".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ctnl_the_dung
+    paths: [apps/app/components/agent-builder/**, apps/app/lib/messages/agent-builder-tro-chuyen.ts, apps/app/test/cho-tac-nhan-lau.dom.tsx]
+    expected: |
+      Ca "loi-hua": chan the dang dung chua dung chu cua khoa messages moi (vi va en) noi roi trang duoc va Kara bao trong hop
+      thong bao; khong con chuoi "Chạy ngầm"/"Runs in the background"; nut "Dừng lại" con va bam goi cancel. Thong diep ghim
+      "loi hua chan the".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ctnl_the_dung
+    paths: [apps/app/components/agent-builder/**, apps/app/lib/agent-builder-*.ts, apps/app/test/cho-tac-nhan-lau.dom.tsx]
+    expected: |
+      Ca "qua-nguong": nguong doc tu hang cau hinh (khong viet so trong test); ma tran {nguong-1 s -> khong co dong "lau hon
+      thuong le"; nguong -> co; nguong+300 s -> co} va moi o nut "Dừng lại" con, khong goi cancel tu dong. Chieu do: ban sao
+      ha nguong ve 0 -> ca dong "nguong-1 s" do voi thong diep ghim "qua nguong".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ctnl_bao_khi_xong
+    paths: [apps/agent/agent/channels/crm.ts, apps/agent/agent/lib/thong-bao-*.ts, packages/validation/src/thong-bao.ts, apps/agent/test/cho-tac-nhan-lau.integration.spec.ts]
+    expected: |
+      apps/agent/test/cho-tac-nhan-lau.integration.spec.ts tren kho test that: goi crmEvents voi continuationToken cua mot
+      cuoc tro chuyen bo dung. Ma tran viet truoc 6 o: session.waiting khong cau hoi -> 1 dong tac-nhan-xong; session.waiting
+      co pendingInputRequest -> 1 dong tac-nhan-can-tra-loi; session.failed -> 1 dong tac-nhan-hong; turn.failed -> 1 dong
+      tac-nhan-hong; turn.cancelled -> 0 dong; session.waiting lap lai cung luot gui -> van 1 dong; hai luot gui khac nhau
+      trong cung cuoc -> 2 dong; can-tra-loi, nguoi dung tra loi, roi waiting khong cau hoi -> dung 2 dong (can-tra-loi roi
+      xong, theo thu tu); turn.failed roi session.failed cung luot -> 1 dong tac-nhan-hong. Moi dong: nguoiNhanId =
+      nguoi mo cuoc tro chuyen, duongDan = /<slug>/chat/<id>, noiDung qua noiDungThongBao.parse (round-trip tu ban ghi that).
+      Doi chung: token khong phai bo dung (runId) -> 0 dong.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ctnl_dong_chuong
+    paths: [apps/app/components/thong-bao/**, apps/app/lib/thong-bao*.ts, apps/app/lib/messages/thong-bao.ts, packages/validation/src/thong-bao.ts, apps/app/test/cho-tac-nhan-lau-chuong.dom.tsx]
+    expected: |
+      apps/app/test/cho-tac-nhan-lau-chuong.dom.tsx: ba noiDung lay tu ban ghi ma bo ghi cua E4 sinh (fixture rut tu writer
+      that, khong viet tay) -> moi dong chuong co cau rieng theo loai (vi va en), ten tac nhan nam trong phan tu translate="no",
+      href = duongDan. Thieu cau cho mot loai -> ca do voi thong diep ghim "cau thong bao <loai>".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ctnl_doc_khi_mo
+    paths: [apps/api/src/conversations/**, apps/api/src/thong-bao/**, apps/api/test/cho-tac-nhan-lau.spec.ts]
+    expected: |
+      apps/api/test/cho-tac-nhan-lau.spec.ts: hai cuoc tro chuyen moi cuoc mot thong bao chua doc; mo cuoc A (thu tuc danh dau
+      da doc cua bo dung) -> thong bao cua A co docLuc, cua B van chua doc, chuong dem giam dung 1. Doi chung: mo cuoc
+      khong co thong bao -> khong dong nao doi.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ctnl_bao_khi_xong
+    paths: [apps/agent/agent/channels/crm.ts, apps/agent/agent/lib/thong-bao-*.ts, apps/agent/test/cho-tac-nhan-lau.integration.spec.ts]
+    expected: |
+      Ca "ghi-hong": bo ghi thong bao bi thay bang ham nem loi -> session.waiting, session.failed van cap nhat continuationToken
+      va lastAssistantAt nhu cu, khong nem ra ngoai, console.error co dong ghim "thong bao tac nhan". Doi chung: bo ghi that
+      thi dong thong bao co.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ctnl_the_dung
+    paths: [apps/app/lib/messages/agent-builder-tro-chuyen.ts, apps/app/lib/messages/thong-bao.ts, apps/app/test/cho-tac-nhan-lau.dom.tsx]
+    expected: |
+      Ca "hai-ngon-ngu": moi khoa messages vong nay them co ca vi va en, khac rong, kieu ham giong nhau; render the dang dung
+      va dong chuong o locale en khong con chu tieng Viet cua vong nay va nguoc lai.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ctnl_do_man
+    steps:
+      - "Chay o tien canh, Bash timeout 600000, BANG_CHUNG=_acceptance/cho-tac-nhan-lau/evidence: lenh ctnl_do_man (tien-de.mjs dung kho do rieng, gieo cuoc tro chuyen bo dung va thong bao qua duong ghi that)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/cho-tac-nhan-lau/evidence/
+    paths: [apps/app/components/agent-builder/**, apps/app/components/thong-bao/**, apps/app/lib/messages/agent-builder-tro-chuyen.ts, apps/app/lib/messages/thong-bao.ts, _acceptance/cho-tac-nhan-lau/rang/do-man.mjs]
+    expected: |
+      Anh 375 va 1280: (1) the dang dung duoi nguong co dong thoi gian va loi hua chan the, khong dong qua nguong; (2) tren
+      nguong co dong "lau hon thuong le"; (3) chuong co dong "xong" voi ten tac nhan; (4) bam dong -> cuoc tro chuyen mo, so
+      chuong giam. Khong tran ngang, khong chu may, khong khoa messages tho.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.ctnl_san_thiet_ke
+    paths: [apps/app/components/agent-builder/**, apps/app/components/thong-bao/**]
+    expected: |
+      Cong thiet ke tinh tren tung tep giao dien vong nay cham (danh sach rut tu diff cua vong, khong viet tay): 0 vi pham.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

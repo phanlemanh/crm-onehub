@@ -11,6 +11,7 @@ import { ChonChuKy } from "./chon-chu-ky";
 import { DaiKy } from "./dai-ky";
 import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
 import { donDich } from "./don-dich";
+import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import {
 	giaiKy,
@@ -48,7 +49,8 @@ function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 		<LuoiDauTrangOkr
 			hanhDong={
 				<>
-					<Skeleton className="h-7 w-24" />
+					<NutHoiKara />
+					<Skeleton className="h-7 w-28" />
 					<Skeleton className="h-7 w-56" data-hang-cho="" />
 				</>
 			}

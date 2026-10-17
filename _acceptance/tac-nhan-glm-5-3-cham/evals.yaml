@@ -1,0 +1,41 @@
+schema_version: 1
+feature_slug: tac-nhan-glm-5-3-cham
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tnc_so
+    paths: [_acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts, _acceptance/tac-nhan-glm-5-3-cham/evidence/**]
+    expected: "exit 0; đọc evidence/tac-nhan.jsonl và từng evidence/aichiphi-<biến thể>-<lượt>.json qua khuôn Zod (không ép kiểu). Bảng VIẾT TRƯỚC {moc, glm53, glm53-fast, glm53-low} × số lượt khai trong evidence/ke-hoach.json: tập (biến thể, lượt) toEqual đúng bảng. Với mỗi lượt: số bước, token vào, token ra, giây bước đầu→cuối của phiên con agent_builder TÍNH LẠI từ bản kết xuất aiChiPhi (hàng có phienCha = phiên gốc của lượt) và toEqual số trong jsonl; lượt hỏng vì quá trần mang bi_cat true; giờ hai lượt không chồng nhau; hai lượt liền nhau khác biến thể; không hàng aiChiPhi nào ghi sau ket_thuc của lượt; bang.md in lại từ jsonl trùng từng byte với evidence/bang.md; băm sha256 của mọi tệp bằng chứng khớp evidence/bam.txt. Chiều đỏ tự chạy trên bản sao: xoá một dòng → ghim cặp thiếu; sửa một số bước trong jsonl → ghim «lech aichiphi»; hai lượt chồng giờ → ghim «chong gio»; một lượt hỏng thiếu bi_cat → ghim «bi cat»; sửa một ô bang.md → ghim «bang.md»; đổi một byte nhật ký lượt không cập nhật băm → ghim tên tệp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tnc_so
+    paths: [_acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts, _acceptance/tac-nhan-glm-5-3-cham/rang/do-tac-nhan.ts, _acceptance/tac-nhan-glm-5-3-cham/evidence/**]
+    expected: "exit 0; cùng lệnh E1. Lượt có model trong tac-nhan.jsonl khác model của biến thể ở ke-hoach.json → in «sai model <biến thể> luot <n>», lượt vắng khỏi bang.md in lại, exit vẫn 0; biến thể còn ít lượt hợp lệ hơn kế hoạch → in «thieu luot <biến thể>». rang/do-tac-nhan.ts có chặn đọc lại ô model (đọc lại lệch thì ném lỗi) và gọi datModel trước eval → in «doc lai model»; thiếu chặn → exit 1 ghim «THIEU DOC LAI MODEL». Băm agent_builder/agent.ts của lượt: glm53-low mang băm bản sửa tạm, mọi lượt khác mang băm bản đã commit (băm ghi trong ke-hoach.json). Chiều đỏ trên bản sao: đổi model một dòng glm53 → dòng «sai model glm53» xuất hiện và lượt đó vắng khỏi bang.md in lại; bỏ chặn đọc lại trong bản sao mã → exit 1 ghim «THIEU DOC LAI MODEL»; đổi băm của một lượt glm53 thành băm bản sửa → exit 1 ghim «RO SUY LUAN glm53»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tnc_so
+    paths: [_acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts, _acceptance/tac-nhan-glm-5-3-cham/rang/do-suy-luan.ts, _acceptance/tac-nhan-glm-5-3-cham/evidence/do-suy-luan.json]
+    expected: "exit 0; evidence/do-suy-luan.json (do rang/do-suy-luan.ts ghi từ phản hồi thật của AI Gateway) có hai mục {low, high} cho zai/glm-5.3 cùng một câu, mỗi mục có model Gateway trả và usage gồm token ra và token suy luận (hoặc ghi rõ Gateway không trả trường token suy luận); bộ so in hai số cạnh nhau và in «muc low toi nha cung cap» khi token suy luận của low nhỏ hơn high, «chua kiem duoc» khi không có trường. Chiều đỏ trên bản sao: xoá mục low → exit 1 ghim «do suy luan thieu low»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: judgment
+    inputs: [_acceptance/tac-nhan-glm-5-3-cham/evidence/ket-luan.md, _acceptance/tac-nhan-glm-5-3-cham/evidence/bang.md, _acceptance/tac-nhan-glm-5-3-cham/evidence/do-suy-luan.json, _acceptance/tac-nhan-glm-5-3-cham/design.md]
+    question: "Đọc ket-luan.md cạnh bang.md (bảng các lượt do rang/so-tac-nhan.ts in), do-suy-luan.json và design.md. Trả lời PASS chỉ khi đủ năm vế: (1) kết luận chỉ nêu nguyên nhân khi bang.md cho thấy glm53 mặc định có ít nhất một lượt hỏng hay trên 180 giây, không thì ghi «không tái hiện»; (2) mỗi câu về nguyên nhân dẫn chênh lệch số bước, token, giây của phiên con giữa hai biến thể và tên tệp nhật ký lượt; (3) không nói «cả n lượt» cho biến thể có dòng «thieu luot»; (4) mọi con số khớp một ô của bang.md hay do-suy-luan.json, hoặc ghi nguồn P0 khi là số của GLM 5.3 Flash; (5) nói rõ trần 3 phút là của bài đo còn phiên bộ dựng thật có trần một ngày. Nêu câu hay số nào lệch."
+    evidence_required: [verdict, rationale, verified_at]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tnc_pham_vi
+    paths: [_acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts]
+    expected: "exit 0; git diff --name-only <merge-base với origin/onehub> HEAD chỉ gồm tệp dưới _acceptance/tac-nhan-glm-5-3-cham/ và _acceptance/config.yaml, và diff của config.yaml chỉ có dòng thêm. Chiều đỏ trên bản sao danh sách: thêm apps/agent/agent/subagents/agent_builder/agent.ts → exit 1 ghim tên tệp; thêm một dòng xoá trong config.yaml → exit 1 ghim «config.yaml»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

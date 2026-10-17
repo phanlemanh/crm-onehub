@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4e87e5a8b846ea8b90ccb76d51974e13cd4ac58a
+verified_commit: b0c56f47a72eba40a97ee8764e5307bd52db0602
 human_signoff: manh 2026-10-15
 ---
 
@@ -252,3 +252,11 @@ Round 3: E1, E3, E16 chay lai (E16 la rang soi-xem moi); bay lenh suite chay lai
 ### Re-pin lần 1 — 2026-10-16, do hoá cũ do gộp onehub f1bf84a29 (có DH4 #429, #427): okr.router.ts, messages-guard.spec.ts
 run_id: repin-20261016T083454Z-78445
 sha: 4e87e5a8b846ea8b90ccb76d51974e13cd4ac58a · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-16, do lan-dem-16-10: gộp onehub ngày 16/10 (#434…#453)
+run_id: repin-20261016T233032Z-31285
+sha: 735c996977a6fa3e0aad9753f5b27adaea04267c · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-17, do vật đổi: the-quanh.tsx thêm variant neutral (toan-canh-okr#E7); gộp onehub 981ac1460
+run_id: repin-20261017T010211Z-42953
+sha: b0c56f47a72eba40a97ee8764e5307bd52db0602 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

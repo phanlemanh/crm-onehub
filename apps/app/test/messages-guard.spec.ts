@@ -442,6 +442,10 @@ const GHIM = {
 		"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 	],
 	"companies:created": ["Đã thêm 1.", "Đã thêm 12."],
+	"companies:nenTang": [
+		"Đây là trang 1, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
+		"Đây là trang 12, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
+	],
 	"companies:bulk.reassigned": [
 		"Đã đổi người phụ trách cho 1.",
 		"Đã đổi người phụ trách cho 12.",
@@ -874,6 +878,30 @@ const GHIM = {
 		"Tiến độ mục tiêu 12% tính từ A KR.",
 	],
 	"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
+	"okr:baPhan.capNhatN": ["Cập nhật 1 KR", "Cập nhật 12 KR"],
+	"okr:baPhan.conThieu": [
+		"1 KR chưa có số của tuần A, hạn B.",
+		"12 KR chưa có số của tuần A, hạn B.",
+	],
+	"okr:baPhan.daDu": [
+		"Bạn đã cập nhật đủ cho tuần 1.",
+		"Bạn đã cập nhật đủ cho tuần 12.",
+	],
+	"okr:baPhan.tomTatDonVi": [
+		"1 mục tiêu · A KR · trung bình B%",
+		"12 mục tiêu · A KR · trung bình B%",
+	],
+	"okr:baPhan.donViRong": [
+		"Chưa có mục tiêu nào ở 1.",
+		"Chưa có mục tiêu nào ở 12.",
+	],
+	"okr:baPhan.dungNhip": ["1 KR đúng nhịp", "12 KR đúng nhịp"],
+	"okr:baPhan.chamNhip": ["1 KR chậm nhịp", "12 KR chậm nhịp"],
+	"okr:baPhan.truot": ["1 KR trượt", "12 KR trượt"],
+	"okr:baPhan.krTrong": [
+		"1 KR ở mọi đơn vị trong A.",
+		"12 KR ở mọi đơn vị trong A.",
+	],
 	"okr:khoiMucTieu.tinhTu": ["Tính từ 1 KR", "Tính từ 12 KR"],
 	"okr:khoiMucTieu.thuGon": ["Thu gọn KR của «1»", "Thu gọn KR của «12»"],
 	"okr:khoiMucTieu.moRa": ["Mở KR của «1»", "Mở KR của «12»"],
@@ -1164,6 +1192,7 @@ const GHIM = {
 		"Đã chuyển 1 mục tiêu sang A.",
 		"Đã chuyển 12 mục tiêu sang A.",
 	],
+	"agent-builder-tro-chuyen:dung.daTroi": ["Đã 1", "Đã 12"],
 } satisfies Record<string, [string, string]>;
 
 describe("kho chuoi cua vong ③a", () => {

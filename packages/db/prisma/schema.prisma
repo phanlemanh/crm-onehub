@@ -55,6 +55,8 @@ model User {
   apiKeys Apikey[]
 
   onboardingPlansOwned    OnboardingPlan[]        @relation("OnboardingPlanOwner")
+  goiYKeHoachNhan         GoiYKeHoach[]           @relation("GoiYKeHoachNguoiNhan")
+  goiYKeHoachXuLy         GoiYKeHoach[]           @relation("GoiYKeHoachNguoiXuLy")
   onboardingStepsAssigned OnboardingStep[]        @relation("OnboardingStepAssignee")
   onboardingWatches       OnboardingWatch[]
   zaloLink                ZaloLink?
@@ -248,6 +250,12 @@ enum DealStageKind {
   LOST
 }
 
+enum TrangThaiGoiY {
+  CHO
+  DA_MO
+  BO_QUA
+}
+
 enum ActivityType {
   NOTE
   CALL
@@ -423,6 +431,7 @@ model Company {
 
   onboardingPlans OnboardingPlan[]
   viecGan         ViecGan[]
+  goiYKeHoach     GoiYKeHoach[]
 
   @@unique([domain], map: "company_domain_active_key", where: { archivedAt: null })
   @@index([ownerId])
@@ -1056,6 +1065,7 @@ model Deal {
   activities  Activity[]
   fieldValues FieldValue[]
   viecGan     ViecGan[]
+  goiYKeHoach GoiYKeHoach[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -1882,6 +1892,7 @@ model OnboardingPlan {
   watches     OnboardingWatch[]
   okrViecKr   OkrViecKr[]
   viecGan     ViecGan[]
+  goiYKeHoach GoiYKeHoach[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -3238,4 +3249,29 @@ model NgayNghi {
   taoLuc   DateTime @default(now())
 
   @@map("ngayNghi")
+}
+
+model GoiYKeHoach {
+  id          String          @id @default(cuid())
+  dealId      String
+  deal        Deal            @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  companyId   String
+  company     Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  nguoiNhanId String
+  nguoiNhan   User            @relation("GoiYKeHoachNguoiNhan", fields: [nguoiNhanId], references: [id])
+  chuyenLuc   DateTime
+  trangThai   TrangThaiGoiY   @default(CHO)
+  sinhLuc     DateTime
+  xuLyLuc     DateTime?
+  xuLyBoiId   String?
+  xuLyBoi     User?           @relation("GoiYKeHoachNguoiXuLy", fields: [xuLyBoiId], references: [id])
+  planId      String?
+  plan        OnboardingPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+
+  @@unique([dealId], map: "goiYKeHoach_dealId_cho_key", where: { trangThai: "CHO" })
+  @@index([dealId, trangThai])
+  @@index([nguoiNhanId, trangThai])
+  @@index([companyId, trangThai])
+  @@index([sinhLuc])
+  @@map("goiYKeHoach")
 }

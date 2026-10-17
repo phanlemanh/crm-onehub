@@ -13,6 +13,7 @@ import { KrSheet } from "./kr-sheet";
 import { ObjectiveSheet } from "./objective-sheet";
 import { PlanSheet } from "./plan-sheet";
 import { type RecordRef, recordKey, useRecordStack } from "./record-stack";
+import { useSauKhiTaiXong } from "./sau-khi-tai-xong";
 import { SoKrSheet } from "./so-kr-sheet";
 import { SoanSheet } from "./soan-sheet";
 
@@ -22,6 +23,7 @@ export function RecordSheetHost({
 	cauNoiOkr?: boolean;
 }) {
 	const { stack, top, closeAll } = useRecordStack();
+	const daTaiXong = useSauKhiTaiXong();
 
 	const [shown, setShown] = useState<RecordRef | null>(top);
 	if (top && (!shown || recordKey(shown) !== recordKey(top))) {
@@ -31,7 +33,7 @@ export function RecordSheetHost({
 	return (
 		<>
 			<DetailSheet
-				open={stack.length > 0}
+				open={daTaiXong && stack.length > 0}
 				size={
 					shown?.kind === "soan" || shown?.kind === "hoi-okr"
 						? "kara"

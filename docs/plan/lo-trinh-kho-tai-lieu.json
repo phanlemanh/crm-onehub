@@ -51,20 +51,14 @@
       "that": "2026-10-04"
     },
     {
-      "ten": "Chạy thật — mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ (chủ kho chốt 04/10)",
-      "ngay": "2026-10-14",
-      "loai": "ngoai",
-      "ai": "Mọi phòng ban",
-      "hang": []
-    },
-    {
       "ten": "Sửa một đợt",
-      "ngay": "2026-11-04",
-      "loai": "su-kien",
+      "ngay": "2026-10-19",
+      "loai": "phat-hanh",
       "hang": [
         "l5"
       ],
-      "nghia": "Góp ý đã gom được sửa trong một lượt"
+      "nghia": "Góp ý đã gom được sửa trong một lượt",
+      "ly_do": "Cắt theo giờ máy: l5 (#410, đã ký 14/10) cần gộp onehub, S4 phần đổi, ký lại — ≈ 7 giờ máy cao ≈ 25 giờ lịch từ 18/10 → 19/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     }
   ],
   "hang": [
@@ -185,30 +179,11 @@
       "trang_thai": "chưa mở",
       "dong": 8,
       "ten": "Lượt 5",
-      "buoc_ke": "Sửa theo góp ý gom được tới lúc mở lượt; không chờ chạy thật xong — thiếu góp ý thì dựng và đo trên bộ câu hỏi mẫu",
-      "du_lieu": "gia"
-    },
-    {
-      "ma": "d9",
-      "cau_giao": "Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
-      "hang": "T3",
-      "dung_tren": [],
-      "slug": "chu-trang-va-pham-vi",
-      "trang_thai": "để sau",
-      "dong": 9,
-      "ten": "Để sau",
-      "buoc_ke": "Để sau; trung vị duyệt của mốc ngoài «Chạy thật» vượt 5 ngày là tín hiệu xếp lên trước, không phải điều kiện mở"
-    },
-    {
-      "ma": "d6",
-      "cau_giao": "Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
-      "hang": "T3",
-      "dung_tren": [],
-      "slug": "bao-tri-trang-luat",
-      "trang_thai": "để sau",
-      "dong": 6,
-      "ten": "Để sau",
-      "buoc_ke": "Để sau; số đo của mốc ngoài «Chạy thật» là tín hiệu xếp lại, không phải điều kiện mở"
+      "buoc_ke": "Hoàn tất ngay ở đợt mới, làn Mac Studio: gộp onehub, S4 delta, ký lại (#410) (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
+      "du_lieu": "gia",
+      "pr": [
+        410
+      ]
     },
     {
       "ma": "l4a",
@@ -258,13 +233,13 @@
       "dung_tren": [
         "l4"
       ],
-      "trang_thai": "đang dựng",
+      "trang_thai": "để sau",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T10:40:00Z"
       },
-      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi; S4 đỏ AC-6, chủ kho chọn D, đang đo bảng bốn model"
+      "buoc_ke": "Chờ MH4 sửa phạm vi; làn Mac Studio sau MH4"
     },
     {
       "ma": "l6",
@@ -278,14 +253,93 @@
       "dung_tren": [
         "l4b"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T23:44:49Z"
       },
-      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi"
+      "buoc_ke": "Đã gộp 16/10 (#444)",
+      "pr": [
+        444
+      ]
+    },
+    {
+      "ma": "MH3",
+      "slug": "tac-nhan-glm-5-3-cham",
+      "dong": 15,
+      "ngay": "2026-10-16",
+      "ten": "Tác nhân GLM 5.3 chậm",
+      "ten_ngan": "GLM 5.3 chậm",
+      "cau_giao": "«Biết vì sao Tác nhân trên GLM 5.3 chậm, đo trên bốn biến thể»",
+      "ghi_chu": "Kết luận: mức suy luận mặc định (0/3); reasoning low 3/3; GLM 5.3 Fast 3/3. Dãy P6.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        449
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T05:33:48Z"
+      },
+      "buoc_ke": "Đã gộp 17/10 03:19Z (#449)"
+    },
+    {
+      "ma": "MH4",
+      "slug": "model-theo-vai-do-lai",
+      "dong": 16,
+      "ngay": "2026-10-16",
+      "ten": "Model theo vai đo lại",
+      "ten_ngan": "Model theo vai",
+      "cau_giao": "«Mỗi vai (Tác nhân, Trợ lý kho, judge, soạn) có model kiến nghị, đo lại sau l6»",
+      "ghi_chu": "Sau MH3. Kết quả vào bảng kiến nghị model.",
+      "dung_tren": [
+        "MH3"
+      ],
+      "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T05:33:48Z"
+      },
+      "buoc_ke": "Làn Mac Studio sau l7"
+    },
+    {
+      "ma": "l7",
+      "slug": "zalo-cau-thu-hai-lien-ket",
+      "dong": 17,
+      "ngay": "2026-10-16",
+      "ten": "Zalo câu thứ hai",
+      "ten_ngan": "Zalo câu hai",
+      "cau_giao": "«Hỏi Kho qua Zalo từ câu thứ hai trở đi trong ngày, trợ lý kho vẫn trả lời đúng chỉ dẫn»",
+      "ghi_chu": "Ngoài-4 của l6: câu thứ hai dùng lại phiên, session.started không chạy lại → nghe turn.started. T3. Bản nháp hồ sơ: .acceptance-runs/dieu-phoi-r2/dong-dot/l7-nhap/; Hỏi-1, Hỏi-2 chưa trả.",
+      "dung_tren": [
+        "l6"
+      ],
+      "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Làn Mac Studio sau l5, F34. Chủ kho 17/10: «l7 Hỏi-1: a · Hỏi-2: a» — T3 (apps/agent/agent/lib/zalo-* trong t3_paths); đo 8 người × 3 câu trên Gemini 3.8 Flash + một lượt đối chứng trên mã trước bản sửa",
+      "hang": "T3"
     }
   ],
-  "da_bac": []
+  "da_bac": [],
+  "chan_troi": [
+    {
+      "ma": "d9",
+      "cau_giao": "Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
+      "ly_do": "Xếp lên khi số đo chạy thật của phòng ban có: trung vị thời gian duyệt vượt 5 ngày.",
+      "mo_lai_khi": "Phòng ban dùng Kho tài liệu thật ít nhất hai tuần và có số đo thời gian duyệt"
+    },
+    {
+      "ma": "d6",
+      "cau_giao": "Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
+      "ly_do": "Số đo chạy thật của phòng ban quyết thứ tự; chưa có số.",
+      "mo_lai_khi": "Phòng ban dùng Kho tài liệu thật ít nhất hai tuần và có số đo"
+    }
+  ]
 }
