@@ -18,7 +18,6 @@ export function homNayVn(luc: Date): string {
 	}).format(luc);
 }
 
-/** Ngày (giờ VN) của một mốc ISO đã có — không đọc đồng hồ. */
 export function ngayVnTuIso(iso: string): string {
 	return homNayVn(new Date(iso));
 }
