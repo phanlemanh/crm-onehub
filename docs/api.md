@@ -538,7 +538,8 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
 - **Ai thấy một việc.** `dieuKienXemViec(userId)` đứng ở mọi câu đọc (một việc, lịch sử, Việc của
   tôi, khối của bản ghi, Tổng quan cả hai phạm vi) và là bước đầu của mọi lệnh ghi. Việc gắn ít nhất một
   bản ghi đối tác thì ai qua được cửa router cũng thấy; việc không gắn gì chỉ người giao, người thực hiện,
-  người theo dõi thấy — quản trị không thấy. Mã không thấy và mã không có trả cùng 404
+  người theo dõi thấy — quản trị không thấy. Việc nằm trong một dự án (`duAnId` khác rỗng) cũng thấy
+  với mọi người qua được cửa router (hàng DA4). Mã không thấy và mã không có trả cùng 404
   «Không có việc nào mang mã <id>.».
 - **Đồ thị trạng thái** (`DO_THI`): G là chỉ người giao, GT là người giao hoặc người thực hiện.
 
@@ -596,8 +597,48 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
   lọc `NOT { type: TASK, viecChep: { isNot: null } }`: việc chưa chép vẫn hiện, chỉ đọc; việc đã chép chỉ hiện
   như Việc. Dòng thời gian còn bốn bộ lọc `all`, `notes`, `email`, `meetings`.
 - **Nguồn vết** (`NGUON_VIEC`): `web`, `zalo`, `api`, `chuyen-viec`, `tac-nhan` (Tác nhân tự dựng và việc mã
-  môi giới lệch), `chep-cu` (bản chép). `Viec.khoaNguon` giữ khoá chặn trùng của đường máy — hôm nay chỉ
+  môi giới lệch), `chep-cu` (bản chép), `gantt` (kéo thanh hay dời bằng phím trên Gantt, `viec.doiLich`),
+  `tu-doi` (tự dời khi chồng, xem «Dự án»). `Viec.khoaNguon` giữ khoá chặn trùng của đường máy — hôm nay chỉ
   `ma-lech:<mã>`.
+
+### Dự án
+
+Router `duAn` (`apps/api/src/du-an`, alias `duAn`), `PhamViDoiTacMiddleware`. Luật ở `@crm/db/du-an`,
+lệnh ghi ở `@crm/db/du-an-ghi` và `@crm/db/viec-ghi`; ngày làm việc ở `@crm/db/lich-lam-viec`, tính dời ở
+`@crm/db/lich-viec`. Ngày chỉ-ngày lưu ở 00:00Z của ngày lịch Việt Nam; API trao đổi chuỗi `YYYY-MM-DD`.
+
+- **Thủ tục.** `duAn.list({ trangThai: "mo" | "dong" })` (mỗi hàng `soViec`, `soXong`, `batDauSom`,
+  `hanMuon`, `mocKe`, `taoBoi`, `quyen`), `duAn.get`, `duAn.lich` (việc, mốc, lịch — khuôn
+  `@crm/validation/du-an-lich`), `duAn.tao`, `duAn.sua`, `duAn.dong`, `duAn.moLai`, `duAn.xoa`. Mốc và
+  phụ thuộc là thủ tục phẳng của cùng router — `duAn.mocTao`, `duAn.mocSua`, `duAn.mocXoa`,
+  `duAn.phuThuocTao`, `duAn.phuThuocXoa` — mà hợp đồng gọi là `duAn.moc.*` và `duAn.phuThuoc.*`
+  (nestjs-trpc của kho không có router lồng). Trên `viec`: `viec.doiLich({ id, batDauNgay, hanNgay })`
+  (kéo thanh, nguồn `gantt`, trả `daDoi`), `viec.doiDuAn({ id, duAnId | null })`, `viec.sua` nhận thêm
+  `batDauNgay`, `viec.create` nhận `duAnId` và `batDauNgay`, `viec.cuaToi`/`viec.bang` nhận `duAnId` hay
+  `tatCaDuAn`.
+- **Quyền.** Sửa tên, mô tả, mốc: ai đọc được dự án. Đóng, mở lại, xoá: người tạo dự án và quản trị
+  (`duAn.xoa` kiểm quyền 403 trước lịch sử 409). Tạo việc trong dự án: ai đọc được dự án. Đổi ngày, kéo
+  thanh, đưa vào hay ra dự án: người giao hay người thực hiện của việc đó. Tạo hay gỡ phụ thuộc T → S:
+  người giao hay người thực hiện của S. Vai «chỉ OKR» bị chặn ở cửa và không nhận việc trong dự án.
+- **Luật dời khi chồng.** Phụ thuộc chỉ một kiểu xong-rồi-mới-bắt-đầu, cùng dự án, không vòng
+  (`timVong`, rồi `tinhDoi` dò lần nữa). S phải bắt đầu từ `ngayLamKe(hạn T)`. Mỗi lần ghi ngày hay tạo
+  phụ thuộc, `lanDoi` chạy trong cùng giao dịch: khoá hàng `duAn` rồi mọi việc của dự án theo `id`, đi theo
+  thứ tự topo, dời việc sau sang ngày làm việc kế sau hạn việc trước, giữ số ngày làm việc, bỏ Thứ Bảy, Chủ
+  nhật và ngày lễ. Không bao giờ kéo lùi; việc Xong, Huỷ không dời nhưng vẫn ràng việc sau. Mỗi việc dời có
+  một vết `doi-bat-dau` và một `doi-han` nguồn `tu-doi`, `sau.boi` là việc trước gây dời, người là người
+  đổi việc đầu chuỗi — kể cả khi người đó không sửa được việc sau. Đặt bắt đầu sớm hơn việc phải chờ → 400
+  «Việc này phải bắt đầu sau khi «A» xong (hạn dd/mm).».
+- **Mốc.** `DuAnMoc` có ngày và `DuAnMocCho` (việc phải xong trước). Trễ khi một việc chờ có hạn sau ngày
+  mốc (`mocTre`); mốc không tự dời.
+- **Vòng đời.** Dự án chưa có `DuAnVet` ngoài `tao` thì xoá được; còn lại Đóng · Mở lại. Đóng không đổi
+  việc nào; dự án đã đóng từ chối thêm việc, mốc, phụ thuộc và đổi ngày (400 «Dự án đã đóng.»), việc trong
+  đó vẫn đổi trạng thái. Đưa việc ra khỏi dự án gỡ phụ thuộc (vết `go-phu-thuoc` trên cả hai việc) và việc
+  chờ mốc; xoá việc gỡ chúng theo khoá ngoại.
+- **Lịch làm việc.** Router `lichLamViec` (`PhamViChungMiddleware`): `get` (ai cũng đọc), `datNgayNghiTuan`,
+  `themNgayLe`, `xoaNgayLe` (chủ, quản trị). `AppSetting.ngayNghiTuan` rỗng nghĩa là mặc định Thứ Bảy, Chủ
+  nhật. Đổi lịch không dời việc đã có; chỉ lần ghi sau tính theo lịch mới.
+- **Dữ liệu mẫu và thước.** `gieoDuAnMau` (`@crm/db/du-an-gieo`, gọi từ `bun run db:seed`) dựng một dự án
+  qua đúng các hàm ghi trên. Thước `_acceptance/du-an-gantt/rang/do-nguong.mjs --tu --den` chỉ đọc.
 
 ## The organization tree
 

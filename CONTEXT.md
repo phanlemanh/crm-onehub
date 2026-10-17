@@ -194,7 +194,8 @@ Tôi giao (tôi giao cho người khác), Đang theo dõi — mặc định ch�
 hai dòng gập cuối danh sách. Mục thứ hai của thanh trái. Đặt 2026-10-13 (hàng DA1). Có hai kiểu xem: Danh sách và Bảng — bốn cột Chưa
 làm · Đang làm · Chờ đánh giá · Xong, kéo thẻ giữa các cột hay chọn trong menu «Chuyển sang…»; cột Xong
 chỉ hiện việc xong trong 7 ngày, việc Huỷ ở dòng gập dưới bảng; thứ tự trong cột là của riêng từng người
-(hàng DA2).
+(hàng DA2). Từ hàng DA4 đây là phạm vi «Của tôi» — mặc định — của màn Việc: không tham số thì màn y như
+trước; dòng và thẻ của việc nằm trong một dự án có thêm dòng phụ «Dự án: <tên>», bấm sang phạm vi dự án đó.
 _Avoid_: hộp việc, my tasks
 Vì sao: «Việc của bạn» đã là thẻ của OKR; màn này là của chính người đang đứng ở đó.
 
@@ -225,13 +226,43 @@ mà người thực hiện đã sang vai «chỉ OKR» thì không làm lại đ
 _Avoid_: mở lại (dành cho việc đã Huỷ), reopen
 Vì sao: «Mở lại» đưa việc đã Huỷ về Chưa làm; hai nút khác nhau thì hai chữ khác nhau.
 
-**Dự án**: chỗ chứa các việc của một đợt triển khai có đầu có cuối; xem dạng danh
-sách, Kanban hay Gantt, có mốc, việc trong dự án có ngày bắt đầu, hạn và phụ
-thuộc xong-rồi-mới-bắt-đầu. Kế hoạch 30 ngày và sáng kiến (KR) không phải dự án.
-Chủ kho mở mục 2026-10-07; nghĩa chốt tại Cổng Phạm vi lượt V4.
+**Dự án**: chỗ chứa các việc của một đợt triển khai có đầu có cuối. Không có mục riêng trên thanh trái:
+xem trong màn Việc ở phạm vi một dự án — ô Phạm vi chọn Của tôi · Tất cả dự án · một dự án — với ba kiểu
+Danh sách, Bảng và Gantt; Gantt chỉ có ở phạm vi một dự án. Một việc nằm trong nhiều nhất một dự án; việc
+trong dự án có ngày bắt đầu, hạn, phụ thuộc và mốc. Ai đọc được phạm vi đối tác thì thấy mọi dự án và mọi
+việc trong đó; vai «chỉ OKR» không thấy dự án nào. Dự án chưa có lịch sử thì Xoá; đã có (thêm bớt việc,
+mốc, sửa, đóng) thì Đóng · Mở lại, do người tạo dự án hay quản trị; đóng không đổi việc nào, dự án đã đóng
+chỉ để xem. Kế hoạch 30 ngày và sáng kiến (KR) không phải dự án. Chủ kho mở mục 2026-10-07; nghĩa chốt tại
+Cổng Phạm vi lượt DA4 (2026-10-16).
 _Avoid_: project, chương trình
 Vì sao: «chương trình» đã là Chương trình OKR. Mục Kế hoạch 30 ngày và Sáng kiến
 (KR) vẫn tránh chữ «dự án», vì đúng hai thứ đó không phải dự án.
+
+**Phạm vi (màn Việc)**: ô đầu màn Việc chọn mình đang nhìn việc của ai — «Của tôi» (mặc định), «Tất cả
+dự án» (bảng các dự án đang mở, dòng gập «Đã đóng (n)») hay một dự án; ghi lên đường dẫn `phamVi`. Một
+nơi, nhiều cách nhìn: chủ kho chọn ở Cổng Phạm vi DA4 thay cho mục «Dự án» riêng. Đặt 2026-10-16.
+_Avoid_: bộ lọc dự án, workspace view
+Vì sao: «lọc» là chip trong một danh sách; phạm vi đổi cả thứ màn đang nói tới.
+
+**Mốc (dự án)**: một ngày đáng kể của dự án (go-live, ký kết) kèm danh sách việc phải xong trước nó. Mốc
+trễ khi một việc phải xong trước có hạn sau ngày mốc; mốc không tự dời theo việc — người sửa mốc. Hàng
+đầu Gantt chứa mọi mốc, mốc trễ tô màu lỗi. Đặt 2026-10-16 (hàng DA4).
+_Avoid_: milestone, cột mốc
+Vì sao: «mốc» ngắn và đã là chữ người làm triển khai dùng; «cột mốc» thừa một chữ.
+
+**Phụ thuộc (việc)**: ràng buộc «việc B phải chờ việc A» giữa hai việc cùng dự án, chỉ một kiểu
+xong-rồi-mới-bắt-đầu: B bắt đầu từ ngày làm việc kế sau hạn A. Khi A dời làm B chồng lên, B tự dời — giữ số
+ngày làm việc, bỏ ngày nghỉ — và lan tiếp; việc không bao giờ bị kéo lùi, việc đã Xong hay Huỷ không dời.
+Tự dời chạy thay người đổi A kể cả khi họ không sửa được B; lịch sử của B ghi nguồn «tự dời» và việc gây
+dời. Không tạo được vòng. Trên khung việc gọi là «Phải chờ». Đặt 2026-10-16 (hàng DA4).
+_Avoid_: dependency, liên kết, việc tiên quyết
+Vì sao: người dùng nói «B phải chờ A»; «liên kết» đã là chữ của gắn bản ghi.
+
+**Lịch làm việc**: ngày nào cả công ty nghỉ — các thứ nghỉ trong tuần (mặc định Thứ Bảy, Chủ nhật) và
+ngày lễ do chủ hay quản trị thêm ở Cài đặt. Tự dời và luật phụ thuộc bỏ qua ngày nghỉ; đổi lịch không
+dời việc đã có ngày, chỉ lần ghi sau mới tính theo lịch mới. Đặt 2026-10-16 (hàng DA4).
+_Avoid_: lịch nghỉ, calendar, working calendar
+Vì sao: «Lịch» trần lẫn với lịch hẹn của Google, Microsoft.
 
 **Người cầm trịch**: một người duy nhất chịu trách nhiệm cả kế hoạch 30 ngày của
 một đối tác, điều phối nhiều phòng ban. Chốt 2026-09-22.
