@@ -1790,6 +1790,28 @@ fi
 # Còn lại (scope KHÔNG rỗng, không chạy, không khai tắt) = khối bị trượt qua:
 # cố ý KHÔNG mark để chokepoint bắt (AC-2/AC-9).
 
+# ── Chặn lộ trình (hồ sơ kho-cam-ket-co-lo-trinh, nấc 4 của ADR 0025) ─────────────
+# Kho cam kết (gói road-map ở .claude/settings.json + lo_trinh.chan: true): hồ sơ MỚI trong diff mà không thuộc hàng
+# lộ trình nào là VIOLATION. Kho không bật → bộ đọc không in gì, đầu ra lưới giữ từng byte; vì vậy luật KHÔNG vào sổ
+# luật (LEDGER_EXPECTED) — thêm tên ở đó đổi dòng tổng kết của mọi kho. Bằng chứng luật đã chạy ở kho bật là chính dòng
+# VIOLATION/NOTE của nó. Không có phạm vi diff → kho bật nhận một dòng NOTE NOT ENFORCED, không im.
+CLT_LIB="$HERE/../lib/chan-lo-trinh.cjs"
+if command -v node >/dev/null 2>&1 && [ -f "$CLT_LIB" ]; then
+  if [ "$DIFF_READY" -eq 1 ]; then
+    _clt="$(node "$CLT_LIB" --root "$ROOT" --base "$BASE_SHA" 2>&1)"; _clt_rc=$?
+  else
+    _clt="$(node "$CLT_LIB" --root "$ROOT" --khong-base 2>&1)"; _clt_rc=$?
+  fi
+  [ -n "$_clt" ] && printf '%s\n' "$_clt"
+  if [ "$_clt_rc" -ne 0 ]; then
+    _clt_n="$(printf '%s\n' "$_clt" | grep -c '^VIOLATION')"
+    [ "$_clt_n" -eq 0 ] && { echo "VIOLATION [chan-lo-trinh]: bộ đọc chặn lộ trình thoát $_clt_rc mà không gọi tên hồ sơ — xem dòng trên"; _clt_n=1; }
+    violations=$((violations + _clt_n))
+  fi
+elif grep -qs '"road-map@' "$ROOT/.claude/settings.json" && grep -qs '^  chan:' "$ACC/config.yaml"; then
+  echo "NOTE: luật chặn lộ trình NOT ENFORCED — thiếu node hoặc lib/chan-lo-trinh.cjs (chép lại lớp CI theo đợt phát hành)"
+fi
+
 # ── T1-escape backstop (PR-level) ────────────────────────────────────────────
 # T1 is self-declared at Phase 0 from EXPECTED paths — nothing stops a "docs
 # typo" PR from also touching src/billing/. With a PR base: changed files
