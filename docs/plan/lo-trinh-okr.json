@@ -159,7 +159,6 @@
         "L2",
         "L3",
         "L4",
-        "E4b",
         "E5",
         "E6b",
         "NM1",
@@ -174,7 +173,8 @@
         "LT1b",
         "LT2"
       ],
-      "khoa": "m-1031"
+      "khoa": "m-1031",
+      "that": "2026-10-17"
     },
     {
       "ten": "Phiên nghiệm thu R1",
@@ -2595,7 +2595,7 @@
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 31/10 (tạm)"
+      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
     },
     {
       "ma": "E6b",
@@ -2786,13 +2786,16 @@
       "dung_tren": [
         "C"
       ],
-      "trang_thai": "đang dựng",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T12:22:27Z"
       },
-      "buoc_ke": "Chờ DH1 (M5) lên onehub; mốc chốt ở Cổng Phạm vi; tạm dừng vì chồng vùng DH1 (M5)"
+      "buoc_ke": "Đã gộp 17/10 03:53Z (#456)",
+      "pr": [
+        456
+      ]
     },
     {
       "ma": "F28",
@@ -2821,13 +2824,16 @@
       "cau_giao": "«Thước soi quyền xem OKR không báo lộ giả: tám chỗ đã phân loại, và thước chạy ở CI cho PR chạm vùng OKR»",
       "ghi_chu": "Phân loại 8 chỗ ghd_soi_xem: 0 lộ thật, thước lệch mã sau #290, #300, #342, #395. (a) 7 dòng MIEN_XEM kèm lý do, đổi khoá removeAlignment thành congSuaCanChinh, ghim lại gioi-han-duyet-cay-okr. (b) ghd_soi_xem chạy ở CI cho PR chạm apps/api/src/okr/**, packages/db/src/okr-*, apps/agent/agent/lib/okr/**. Chủ kho ký Cổng Đáng 15/10 21:30:26Z. Dãy P0. Mã tạm cấp 16/10 01:38Z.",
       "dung_tren": [],
-      "trang_thai": "đang dựng",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T21:30:04Z"
       },
-      "buoc_ke": "Đợt r2, dãy P0; mốc chốt ở Cổng Phạm vi; đã qua Cổng Phạm vi, chờ S4"
+      "buoc_ke": "Đã gộp 16/10 (#436)",
+      "pr": [
+        436
+      ]
     },
     {
       "ma": "F30",
@@ -2858,7 +2864,91 @@
       "ghi_chu": "Đề xuất 15/10 22:20Z từ F23: paths của E15 (ui-check) đang là apps/app/lib/messages/**, nên #424 sửa tin-hieu.ts làm #427 phải ghim lại. Cùng lớp E17 đã sửa ở F23. Chờ Cổng Đáng.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; mốc chốt ở Cổng Phạm vi"
+      "buoc_ke": "S4 vòng 4 REJECT; chủ kho chọn hoãn (P1-30: B, 17/10). #439 giữ nháp. Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+    },
+    {
+      "ma": "F32",
+      "slug": "paths-judgment-hep",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.8,
+      "ngay": "2026-10-16",
+      "ten": "Paths judgment hẹp",
+      "ten_ngan": "Paths hẹp",
+      "cau_giao": "«Eval chấm bằng giám khảo khai paths phủ mọi tệp ngoài T1 mà nó đọc»",
+      "ghi_chu": "Đề xuất từ F31. Đo lại theo luật lưới bash: 0/60 eval lọt tệp thật (CONTEXT.md là T1 qua glob_variants). Chủ kho chọn đóng (P0-23: a, 17/10 00:07Z); không PR.",
+      "dung_tren": [],
+      "trang_thai": "xong",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Đóng không sửa: lỗ không có thật"
+    },
+    {
+      "ma": "F33",
+      "slug": "tai-lieu-khoi-phuc-chap-chon",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.9,
+      "ngay": "2026-10-16",
+      "ten": "Ca khôi phục chập chờn",
+      "ten_ngan": "Khôi phục chập chờn",
+      "cau_giao": "«Hai ca lưu trữ và khôi phục của Kho tài liệu đếm sự kiện theo id, hết đỏ ngẫu nhiên ở pre-push»",
+      "ghi_chu": "tai-lieu-luu-tru.spec.ts:290 đếm từ Date.now()-1 nên lọt sự kiện DE_XUAT cùng mili-giây; #413 đã vấp. Dãy P4.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        450
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Đã gộp 17/10 (#450)"
+    },
+    {
+      "ma": "F34",
+      "slug": "cham-bo-do-chiu-cau-loi",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.0,
+      "ngay": "2026-10-16",
+      "ten": "Chấm bộ đo chịu câu lỗi",
+      "ten_ngan": "Bộ đo chịu lỗi",
+      "cau_giao": "«E15 của tro-ly-doc-kho coi lượt đủ mã là đã đo, ghi câu lỗi model vào cột riêng, có trần»",
+      "ghi_chu": "Một câu lỗi model (~2%) làm cả lượt ra mã 2; đỏ sẵn trên onehub. Bộ bo-cau-hoi-mau đã làm theo cách này.",
+      "dung_tren": [
+        "F32"
+      ],
+      "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+    },
+    {
+      "ma": "K7",
+      "slug": "cho-tac-nhan-lau",
+      "nhom": "crm-chung",
+      "thu_tu": 450.3,
+      "ngay": "2026-10-16",
+      "ten": "Chờ Tác nhân lâu",
+      "ten_ngan": "Chờ Tác nhân",
+      "cau_giao": "«Tác nhân dựng quá 200 giây thì người dùng thấy tiến độ, được rời trang, và nhận báo trên chuông khi xong»",
+      "ghi_chu": "Dãy P7. Năm vòng S4 (chủ kho cho thêm vòng 4, 5). Ngoài-13 mở hợp đồng mới: chuông còn đếm thông báo của chính cuộc đang mở (conversations.service.ts markRead).",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        457
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T05:33:48Z"
+      },
+      "buoc_ke": "Đã gộp 2026-10-17 (#457)"
     }
   ],
   "chan_troi": [
