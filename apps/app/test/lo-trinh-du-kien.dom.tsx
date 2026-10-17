@@ -40,6 +40,7 @@ const {
 	mocDangChay,
 	suaKhoi,
 	timMoc,
+	viecCuaMoc,
 } = await import("./lo-trinh-du-kien-mau");
 
 type DauVao = ReturnType<typeof docTrangLoTrinh>;
@@ -123,7 +124,7 @@ describe("co-ngay", () => {
 	);
 	const het = goc.lo_trinh
 		.flatMap((lo) => lo.moc.map((m) => ({ lo, m })))
-		.filter((x) => !x.m.con_viec && x.m.hang.length > 0)
+		.filter((x) => !x.m.con_viec && viecCuaMoc(x.lo, x.m).length > 0)
 		.map((x) => khoaMocTho(x.lo, x.m));
 
 	function kiem(loc: Loc): void {
@@ -135,9 +136,12 @@ describe("co-ngay", () => {
 			chu.includes(formatDay(M.moc.ngay, loc))
 		)
 			throw new Error("ngay du kien cua moc M sai");
-		for (const k of het)
+		for (const k of het) {
+			if (theoThuoc("data-lo-trinh-moc", k).length !== 1)
+				throw new Error(`khong thay moc het viec tren man: ${k}`);
 			if (theoThuoc("data-lo-trinh-du-kien-moc", k).length > 0)
 				throw new Error("moc het viec van co ngay du kien");
+		}
 	}
 
 	test("co-ngay: dong moc hien ngay hoan tat va cau cach tinh, vi va en", async () => {
@@ -457,32 +461,50 @@ describe("viec", () => {
 		expect(so).toBe(12);
 	});
 
+	function kiemUocLuong(v: (typeof viec)[number]): void {
+		const ngan = document.body.querySelector("[data-lo-trinh-chi-tiet-viec]");
+		if (!ngan) throw new Error(`khong thay ngan cua viec ${v.ma}`);
+		const ul = ngan.querySelector("[data-lo-trinh-uoc-luong]");
+		if ((ngan.textContent ?? "").includes("NaN"))
+			throw new Error("uoc luong hong khi thieu gio may");
+		if (v.gio === null) {
+			if (ul) throw new Error("uoc luong hong khi thieu gio may");
+			return;
+		}
+		const khoang = `${formatDecimal(v.gio.thap ?? 0, "vi")}–${formatDecimal(v.gio.cao ?? 0, "vi")}`;
+		if (!(ul?.textContent ?? "").includes(dk.gio(khoang)))
+			throw new Error(`uoc luong sai: ${v.ma}`);
+		if (
+			(ul?.querySelector("[data-lo-trinh-du-kien-co=chua-du-so-do]") !==
+				null) !==
+			(v.gio.co !== null)
+		)
+			throw new Error(`co uoc luong sai: ${v.ma}`);
+	}
+
 	test("viec: ngan ho so co uoc luong khi co gio may, khong vo khi thieu", async () => {
+		expect(viec.some((v) => v.gio === null)).toBe(true);
 		for (const v of viec) {
 			await mo(docTrangLoTrinh(html), THAM.ngan(v), HOM);
-			const ngan = document.body.querySelector("[data-lo-trinh-chi-tiet-viec]");
-			const ul = ngan?.querySelector("[data-lo-trinh-uoc-luong]");
-			expect(
-				(ngan?.textContent ?? "").includes("NaN"),
-				"uoc luong hong khi thieu gio may",
-			).toBe(false);
-			if (v.gio === null) {
-				expect(ul ?? null, "uoc luong hong khi thieu gio may").toBeNull();
-				continue;
-			}
-			const khoang = `${formatDecimal(v.gio.thap ?? 0, "vi")}–${formatDecimal(v.gio.cao ?? 0, "vi")}`;
-			expect(ul?.textContent ?? "").toContain(dk.gio(khoang));
-			expect(
-				ul?.querySelector("[data-lo-trinh-du-kien-co=chua-du-so-do]") !== null,
-			).toBe(v.gio.co !== null);
+			expect(() => kiemUocLuong(v)).not.toThrow();
 		}
 	});
 
-	test("viec: viec da giao va viec chua hen moc khong co ngay du kien", async () => {
+	test("viec: pha-thu — ngan hien NaN khi thieu gio may thi do", async () => {
+		const v = viec.find((x) => x.gio === null);
+		if (!v) throw new Error("khong co viec thieu gio may");
+		await mo(docTrangLoTrinh(html), THAM.ngan(v), HOM);
+		document.body
+			.querySelector("[data-lo-trinh-chi-tiet-viec]")
+			?.appendChild(document.createTextNode("NaN–NaN"));
+		expect(() => kiemUocLuong(v)).toThrow("uoc luong hong khi thieu gio may");
+	});
+
+	function chonKhongNgay() {
 		const loM1 = timMoc(sau, k[0] ?? "").lo;
 		const daGiao =
 			loM1.hang.find(
-				(h) => h.nhom_trang_thai === "da-giao" && M1.moc.hang.includes(h.ma),
+				(h) => h.nhom_trang_thai === "da-giao" && M1?.moc.hang.includes(h.ma),
 			) ?? loM1.hang.find((h) => h.nhom_trang_thai === "da-giao");
 		const coMoc = new Set(
 			sau.lo_trinh.flatMap((lo) =>
@@ -492,26 +514,53 @@ describe("viec", () => {
 		const khongMoc = sau.lo_trinh
 			.flatMap((lo) => lo.hang.map((h) => ({ lo, h })))
 			.find((x) => !coMoc.has(khoaViecTho(x.lo, x.h)));
-		expect(daGiao && khongMoc).toBeTruthy();
-		for (const [lo, h] of [
-			[loM1, daGiao],
-			[khongMoc?.lo, khongMoc?.h],
-		] as const) {
-			if (!lo || !h) continue;
-			const khoa = khoaViecTho(lo, h);
+		if (!daGiao || !khongMoc)
+			throw new Error("khoi that thieu viec da giao hay viec chua hen moc");
+		return [
+			{ ma: daGiao.ma, khoa: khoaViecTho(loM1, daGiao) },
+			{ ma: khongMoc.h.ma, khoa: khoaViecTho(khongMoc.lo, khongMoc.h) },
+		];
+	}
+
+	function kiemKhongNgay(
+		cho: "bang" | "ngan",
+		v: { ma: string; khoa: string },
+	): void {
+		const vung =
+			cho === "ngan"
+				? document.body.querySelector("[data-lo-trinh-chi-tiet-viec]")
+				: oViec(cho, v.khoa);
+		if (!vung) throw new Error(`khong thay ${cho} cua viec ${v.ma}`);
+		if (
+			cho === "ngan" &&
+			vung.getAttribute("data-lo-trinh-chi-tiet-viec") !== v.ma
+		)
+			throw new Error(`ngan mo nham viec: ${v.ma}`);
+		if (vung.querySelector("[data-lo-trinh-du-kien]"))
+			throw new Error("viec da giao co ngay du kien");
+	}
+
+	test("viec: viec da giao va viec chua hen moc khong co ngay du kien", async () => {
+		let so = 0;
+		for (const v of chonKhongNgay())
 			for (const cho of ["bang", "ngan"] as const) {
-				await mo(docTrangLoTrinh(html), THAM[cho]({ ma: h.ma, khoa }), HOM);
-				const el = oViec(cho, khoa);
-				const vung =
-					cho === "ngan"
-						? document.body.querySelector("[data-lo-trinh-chi-tiet-viec]")
-						: el;
-				expect(
-					vung?.querySelector("[data-lo-trinh-du-kien]") ?? null,
-					"viec da giao co ngay du kien",
-				).toBeNull();
+				await mo(docTrangLoTrinh(html), THAM[cho](v), HOM);
+				expect(() => kiemKhongNgay(cho, v)).not.toThrow();
+				so++;
 			}
-		}
+		expect(so).toBe(4);
+	});
+
+	test("viec: pha-thu — viec da giao bi gan ngay du kien thi do", async () => {
+		const v = chonKhongNgay()[0];
+		if (!v) throw new Error("thieu viec da giao");
+		await mo(docTrangLoTrinh(html), THAM.bang(v), HOM);
+		const gia = document.createElement("span");
+		gia.setAttribute("data-lo-trinh-du-kien", "co-ngay");
+		oViec("bang", v.khoa)?.appendChild(gia);
+		expect(() => kiemKhongNgay("bang", v)).toThrow(
+			"viec da giao co ngay du kien",
+		);
 	});
 
 	test("viec: pha-thu — dang gon bi go co thi do", async () => {

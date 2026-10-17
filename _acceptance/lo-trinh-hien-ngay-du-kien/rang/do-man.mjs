@@ -164,6 +164,7 @@ function khoiBanChup() {
 	};
 	return {
 		khoi,
+		ngayTinh: chon.m.du_kien.ngay_tinh,
 		khoa: khoaMoc(chon.lo, chon.m),
 		viec: `${chon.lo.tep}#${viec.ma}`,
 		ma: viec.ma,
@@ -234,9 +235,49 @@ async function mo(p, url, cho) {
 	});
 }
 
-const docMan = (p, vung) =>
+function tenTheoKhoa(duLieu) {
+	const ra = {};
+	for (const lo of duLieu.lo_trinh)
+		for (const m of lo.moc) ra[khoaMoc(lo, m)] = m.ten;
+	return ra;
+}
+
+async function chupMoc(p, khoa, tep) {
+	const el = await p.evaluateHandle(
+		(k) =>
+			[...document.querySelectorAll("[data-lo-trinh-moc]")].find(
+				(e) => e.getAttribute("data-lo-trinh-moc") === k,
+			) ?? null,
+		khoa,
+	);
+	const phanTu = el.asElement();
+	if (!phanTu) khongDo(`khong thay moc ${khoa} de chup can canh`);
+	await phanTu.scrollIntoView();
+	await new Promise((r) => setTimeout(r, 300));
+	await phanTu.screenshot({ path: tep });
+}
+
+async function chupDayDu(p, tep) {
+	const vp = p.viewport();
+	const them = await p.evaluate(() => {
+		let max = document.documentElement.scrollHeight - window.innerHeight;
+		for (const e of document.querySelectorAll("*")) {
+			const oy = getComputedStyle(e).overflowY;
+			if (oy === "auto" || oy === "scroll")
+				max = Math.max(max, e.scrollHeight - e.clientHeight);
+		}
+		return Math.max(0, max);
+	});
+	if (them > 0)
+		await p.setViewport({ ...vp, height: Math.min(vp.height + them, 8000) });
+	await new Promise((r) => setTimeout(r, 500));
+	await p.screenshot({ path: tep });
+	await p.setViewport(vp);
+}
+
+const docMan = (p, vung, ten) =>
 	p.evaluate(
-		(selMoc, selVung) => {
+		(selMoc, selVung, tenMoc) => {
 			const hien = (e) => e.getClientRects().length > 0;
 			const moc = {};
 			for (const e of document.querySelectorAll(selMoc))
@@ -272,11 +313,20 @@ const docMan = (p, vung) =>
 					document.documentElement.clientWidth,
 				khongDich:
 					tieuDe.length > 0 &&
-					tieuDe.every((e) => e.querySelector("[translate=no]") !== null),
+					tieuDe.every((e) => {
+						const can = tenMoc[e.getAttribute("data-lo-trinh-moc")];
+						return (
+							can !== undefined &&
+							[...e.querySelectorAll("[translate=no]")].some(
+								(x) => (x.textContent ?? "").trim() === can,
+							)
+						);
+					}),
 			};
 		},
 		MOC,
 		vung,
+		ten,
 	);
 
 async function phanDongGoi(cookie, slug) {
@@ -290,7 +340,11 @@ async function phanDongGoi(cookie, slug) {
 		const { ctx, p } = await trang(cookie, kho, lang, "sang");
 		try {
 			await mo(p, `${APP}/${slug}/lo-trinh?xemLoTrinh=moc&vongDoi=tat-ca`, MOC);
-			const t = await docMan(p, "[data-lo-trinh-xem-moc]");
+			const t = await docMan(
+				p,
+				"[data-lo-trinh-xem-moc]",
+				tenTheoKhoa(khoi.duLieu),
+			);
 			const thieu = [];
 			for (const { lo, m } of hien) {
 				const k = khoaMoc(lo, m);
@@ -307,10 +361,16 @@ async function phanDongGoi(cookie, slug) {
 			const coNgay = hien.filter(({ m }) =>
 				NGAY_ISO.test(m.du_kien?.hoan_tat ?? ""),
 			).length;
-			await p.screenshot({
-				path: join(RA, `dong-goi-moc-${kho}-${lang}.png`),
-				fullPage: true,
-			});
+			await chupDayDu(p, join(RA, `dong-goi-moc-${kho}-${lang}.png`));
+			const coNgayDau = hien.find(({ m }) =>
+				NGAY_ISO.test(m.du_kien?.hoan_tat ?? ""),
+			);
+			if (coNgayDau)
+				await chupMoc(
+					p,
+					khoaMoc(coNgayDau.lo, coNgayDau.m),
+					join(RA, `dong-goi-moc-${kho}-${lang}-can.png`),
+				);
 			kiem(
 				`dong-goi-moc-${kho}-${lang}`,
 				`${hien.length} moc dang chay (${coNgay} co ngay, ${hien.length - coNgay} co co), thieu: ${thieu.join(" | ") || "khong"}, tren man ${Object.keys(t.moc).length}, cuon ngang ${!t.cuon}, cat chu ${t.catChu.length}`,
@@ -357,7 +417,11 @@ async function phanBanChup(cookie, slug, chon) {
 		const { ctx, p } = await trang(cookie, kho, lang, nen);
 		try {
 			await mo(p, `${APP}/${slug}/lo-trinh?xemLoTrinh=moc&vongDoi=tat-ca`, MOC);
-			const t = await docMan(p, "[data-lo-trinh-xem-moc]");
+			const t = await docMan(
+				p,
+				"[data-lo-trinh-xem-moc]",
+				tenTheoKhoa(chon.khoi.duLieu),
+			);
 			const coBa = await p.evaluate((k) => {
 				const e = [
 					...document.querySelectorAll("[data-lo-trinh-du-kien-moc]"),
@@ -369,16 +433,18 @@ async function phanBanChup(cookie, slug, chon) {
 					: [];
 			}, chon.khoa);
 			const chu = t.moc[chon.khoa] ?? "";
-			await p.screenshot({
-				path: join(RA, `ban-chup-moc-${kho}-${lang}-${nen}.png`),
-				fullPage: true,
-			});
+			await chupDayDu(p, join(RA, `ban-chup-moc-${kho}-${lang}-${nen}.png`));
+			await chupMoc(
+				p,
+				chon.khoa,
+				join(RA, `ban-chup-moc-${kho}-${lang}-${nen}-can.png`),
+			);
 			kiem(
 				`ban-chup-moc-${kho}-${lang}-${nen}`,
-				`co: ${coBa.join(",")}, cau cach tinh ${chu.includes(t9.cachTinh("").split("(")[0].trim())}, cuon ngang ${!t.cuon}, cat chu ${t.catChu.join(" | ") || 0}`,
+				`co: ${coBa.join(",")}, cau cach tinh ${chu.includes(t9.cachTinh(formatDay(chon.ngayTinh, lang)))}, cuon ngang ${!t.cuon}, cat chu ${t.catChu.join(" | ") || 0}`,
 				JSON.stringify(coBa) ===
 					JSON.stringify(["chua-du-so-do", "da-qua", "qua-tai"]) &&
-					chu.includes(t9.cachTinh("").split("(")[0].trim()) &&
+					chu.includes(t9.cachTinh(formatDay(chon.ngayTinh, lang))) &&
 					t.cuon &&
 					t.catChu.length === 0 &&
 					t.khongDich,
@@ -414,7 +480,7 @@ async function phanBanChup(cookie, slug, chon) {
 				{ timeout: CHO_MS },
 			);
 			await new Promise((r) => setTimeout(r, 600));
-			const t = await docMan(p, "[role=dialog]");
+			const t = await docMan(p, "[role=dialog]", tenTheoKhoa(chon.khoi.duLieu));
 			const ngan = await p.evaluate(() => {
 				const n = document.querySelector("[data-lo-trinh-chi-tiet-viec]");
 				return {

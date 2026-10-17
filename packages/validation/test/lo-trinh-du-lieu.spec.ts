@@ -205,23 +205,45 @@ function khoiThat(): Json {
 	return json.parse(docDuLieu(HTML_THAT).duLieu);
 }
 
-function kiemGiuKhoa(phan: typeof phanTichLoTrinh, khoi: Json): void {
+function khoiCoQuaTai(): Json {
+	const khoi = khoiThat();
+	const tho = khoiTho.parse(khoi);
+	const m = tho.lo_trinh.flatMap((lo) => lo.moc).find((x) => x.du_kien != null);
+	if (!m) throw new Error("khoi that khong co moc co ngay du kien");
+	m.qua_tai = "mốc quá tải: dự kiến 31/10, mục tiêu 28/10";
+	return json.parse({ ...khoi, lo_trinh: tho.lo_trinh });
+}
+
+function kiemGiuKhoa(phan: typeof phanTichLoTrinh, khoi: Json): number {
 	const tho: KhoiTho = khoiTho.parse(khoi);
 	const kq = phan(khoi);
 	if (!kq.ok) throw new Error(`khoi that lech khuon: ${kq.duongKhoa}`);
-	kq.duLieu.lo_trinh.forEach((lo, i) => {
-		const lt = tho.lo_trinh[i];
-		lt?.hang.forEach((h, j) => {
+	const ra = kq.duLieu.lo_trinh;
+	if (ra.length !== tho.lo_trinh.length)
+		throw new Error("so lo trinh lech khi qua khuon");
+	let coNgayRa = 0;
+	tho.lo_trinh.forEach((lt, i) => {
+		const lo = ra[i];
+		if (
+			!lo ||
+			lo.hang.length !== lt.hang.length ||
+			lo.moc.length !== lt.moc.length
+		)
+			throw new Error(`so viec hay moc lech khi qua khuon: lo trinh ${i}`);
+		for (const m of lo.moc)
+			if (m.du_kien !== null && m.qua_tai !== null) coNgayRa++;
+		lt.hang.forEach((h, j) => {
 			if (!giong(lo.hang[j]?.gio_may, h.gio_may))
 				throw new Error(`gio may cua viec mat khi qua khuon: ${h.ma}`);
 		});
-		lt?.moc.forEach((m, j) => {
+		lt.moc.forEach((m, j) => {
 			const x = lo.moc[j];
 			for (const khoa of ["gio_may", "du_kien", "qua_tai"] as const)
 				if (!giong(x?.[khoa], m[khoa]))
 					throw new Error(`${khoa} cua moc mat khi qua khuon: ${m.ten}`);
 		});
 	});
+	return coNgayRa;
 }
 
 describe("gio-may", () => {
@@ -237,16 +259,12 @@ describe("gio-may", () => {
 		};
 		expect(() => kiemBangKhoa(hong)).toThrow("cap moc lech bo doc: du_kien");
 	});
-	test("gio-may: khoi that qua khuon giu nguyen bon khoa", () => {
-		const khoi = khoiThat();
-		const coNgay = khoiTho
-			.parse(khoi)
-			.lo_trinh.some((lo) => lo.moc.some((m) => m.du_kien != null));
-		expect(coNgay).toBe(true);
-		expect(() => kiemGiuKhoa(phanTichLoTrinh, khoi)).not.toThrow();
+	test("gio-may: khoi that qua khuon giu nguyen bon khoa, ca mot moc co qua tai", () => {
+		const khoi = khoiCoQuaTai();
+		expect(kiemGiuKhoa(phanTichLoTrinh, khoi)).toBeGreaterThan(0);
 	});
 	test("gio-may: pha-thu — khuon lot gio may cua viec thi do", () => {
-		const khoi = khoiThat();
+		const khoi = khoiCoQuaTai();
 		const hong: typeof phanTichLoTrinh = (gt) => {
 			const kq = phanTichLoTrinh(gt);
 			if (!kq.ok) return kq;
@@ -257,6 +275,18 @@ describe("gio-may", () => {
 		const ma = khoiTho.parse(khoi).lo_trinh[0]?.hang[0]?.ma;
 		expect(() => kiemGiuKhoa(hong, khoi)).toThrow(
 			`gio may cua viec mat khi qua khuon: ${ma}`,
+		);
+	});
+	test("gio-may: pha-thu — khuon cat bot moc thi do", () => {
+		const khoi = khoiCoQuaTai();
+		const hong: typeof phanTichLoTrinh = (gt) => {
+			const kq = phanTichLoTrinh(gt);
+			if (!kq.ok) return kq;
+			for (const lo of kq.duLieu.lo_trinh) lo.moc = lo.moc.slice(1);
+			return kq;
+		};
+		expect(() => kiemGiuKhoa(hong, khoi)).toThrow(
+			"so viec hay moc lech khi qua khuon",
 		);
 	});
 	test("gio-may: khoi khong mang bon khoa doc ra null o moi phan tu", () => {

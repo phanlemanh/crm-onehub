@@ -283,9 +283,7 @@
 					"cau_giao": "Dựng cây và đặt OKR không vấp: mục tiêu thu gọn giữ nguyên, KR từ mẫu báo người phụ trách, khôi phục phòng ban đúng chỗ",
 					"hang": "T2",
 					"nhom": "okr",
-					"dung_tren": [
-						"R1a"
-					],
+					"dung_tren": ["R1a"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "okr-to-chuc-va",
@@ -333,9 +331,7 @@
 					"cau_giao": "Quên mật khẩu giữ logo, đăng xuất lỗi báo tiếng Việt, lỗi cơ sở dữ liệu không đá người về đăng nhập",
 					"hang": "T2",
 					"nhom": "okr",
-					"dung_tren": [
-						"R1b"
-					],
+					"dung_tren": ["R1b"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "cua-vao-va",
@@ -383,9 +379,7 @@
 					"cau_giao": "Kara sập giữa lượt thì không mất lượt soạn; «Thử lại» nói rõ vì sao không chạy",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K0"
-					],
+					"dung_tren": ["K0"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "soan-okr-khong-tru-luot",
@@ -601,9 +595,7 @@
 					"cau_giao": "Mang sang đúng khi kỳ đích đổi pha, và đợt rà đặt lịch tương lai đóng được",
 					"hang": "T2",
 					"nhom": "okr",
-					"dung_tren": [
-						"8c"
-					],
+					"dung_tren": ["8c"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -675,9 +667,7 @@
 					"cau_giao": "Mục tiêu có mức hiển thị giới hạn, có bước duyệt nhẹ tuỳ chọn, và tái cơ cấu giữa kỳ không làm OKR mồ côi",
 					"hang": "T3",
 					"nhom": "okr",
-					"dung_tren": [
-						"8a"
-					],
+					"dung_tren": ["8a"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "gioi-han-duyet-cay-okr",
@@ -725,9 +715,7 @@
 					"cau_giao": "Bản tin tuần vào kênh Slack của đơn vị; lọc lưu được và tìm OKR trong ô tìm chung",
 					"hang": "T3",
 					"nhom": "okr",
-					"dung_tren": [
-						"10"
-					],
+					"dung_tren": ["10"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -823,10 +811,7 @@
 					"cau_giao": "Tôi cập nhật ngay trong Slack hoặc Zalo, và biết sớm KR nào đang trượt",
 					"hang": "T3",
 					"nhom": "okr",
-					"dung_tren": [
-						"7n",
-						"9c"
-					],
+					"dung_tren": ["7n", "9c"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -994,9 +979,7 @@
 					"cau_giao": "Quản trị thấy tháng này AI tiêu bao nhiêu cho từng việc, và bật tắt được Trợ lý OKR theo đơn vị",
 					"hang": "T3",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"S"
-					],
+					"dung_tren": ["S"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "tro-ly-okr-nen",
@@ -1020,9 +1003,7 @@
 					"cau_giao": "Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố",
 					"hang": "",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"M"
-					],
+					"dung_tren": ["M"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "bo-ca-mau-quy-4",
@@ -1048,10 +1029,7 @@
 					"cau_giao": "Tôi bấm «Nhờ Trợ lý OKR góp ý» và nhận vài đề xuất, câu cũ cạnh câu mới; tôi nhận, sửa hay bác từng dòng",
 					"hang": "T3",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"9a",
-						"M"
-					],
+					"dung_tren": ["9a", "M"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "tro-ly-okr-de-xuat",
@@ -1075,9 +1053,7 @@
 					"cau_giao": "Sáng hôm sau ngày cập nhật, tôi mở bảng họp tuần và thấy tóm tắt tuần của phòng; câu nào cũng bấm ra được lần cập nhật gốc",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"9b"
-					],
+					"dung_tren": ["9b"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "tro-ly-okr-tom-tat",
@@ -1125,10 +1101,7 @@
 					"cau_giao": "Tôi hỏi về OKR trên web hoặc Zalo và nhận câu trả lời theo quyền của tôi",
 					"hang": "T3",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"D",
-						"N1"
-					],
+					"dung_tren": ["D", "N1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "hoi-dap-okr",
@@ -1154,9 +1127,7 @@
 					"cau_giao": "Lúc đóng kỳ, Trợ lý soạn nháp điều học được; tôi nhận hay sửa",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"C"
-					],
+					"dung_tren": ["C"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -1180,10 +1151,7 @@
 					"cau_giao": "Trưởng bộ phận đọc một bản tóm tắt gộp từ các phòng ban",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"L",
-						"9c"
-					],
+					"dung_tren": ["L", "9c"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -1231,9 +1199,7 @@
 					"cau_giao": "Mọi chỗ AI nói đều mang một tên — Kara — và một dấu",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"MK"
-					],
+					"dung_tren": ["MK"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "nen-kara",
@@ -1257,9 +1223,7 @@
 					"cau_giao": "Góp ý của Kara hiện đúng chỗ, đếm đúng, nhận hay bác từng dòng",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"KN"
-					],
+					"dung_tren": ["KN"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "gop-y-dung-cho",
@@ -1283,9 +1247,7 @@
 					"cau_giao": "Chưa bật thì nút nói thẳng là chưa bật; cuộc chưa có lượt không bị trừ",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"D"
-					],
+					"dung_tren": ["D"],
 					"trang_thai": "Đã giao",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "soan-okr-song-lai",
@@ -1309,9 +1271,7 @@
 					"cau_giao": "Mọi bề mặt Kara dùng chung một bộ khung: lời, ô soạn, bước, trạng thái, đề xuất, bản nháp",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K0"
-					],
+					"dung_tren": ["K0"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "bo-xuong-kara",
@@ -1335,9 +1295,7 @@
 					"cau_giao": "Tôi soạn bộ OKR trên một trang riêng, bản nháp rộng bên cạnh cuộc trò chuyện",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K1"
-					],
+					"dung_tren": ["K1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "soan-okr-trang-rieng",
@@ -1361,9 +1319,7 @@
 					"cau_giao": "Trang soạn OKR không lạc: không nhảy tab khi mở bản ghi bên cạnh, hoàn tác nhóm lỗi thì báo, lần nộp bị từ chối không thành mốc",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K2"
-					],
+					"dung_tren": ["K2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "soan-okr-khong-lac",
@@ -1387,9 +1343,7 @@
 					"cau_giao": "Lý do Kara nộp bản nháp bị từ chối hiện thành câu theo ngôn ngữ người dùng, không lộ mã máy",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K2b"
-					],
+					"dung_tren": ["K2b"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "ly-do-tu-choi-nop-theo-locale",
@@ -1437,10 +1391,7 @@
 					"cau_giao": "Góp ý của Kara trên KR dùng cùng khung và hết các lỗi đã thấy",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K1",
-						"KG"
-					],
+					"dung_tren": ["K1", "KG"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "kara-gop-y-luot-2",
@@ -1464,10 +1415,7 @@
 					"cau_giao": "Kara trong hồ sơ bản ghi có một khung chung",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K1",
-						"R1a"
-					],
+					"dung_tren": ["K1", "R1a"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "khung-ban-ghi-kara",
@@ -1491,9 +1439,7 @@
 					"cau_giao": "Khung bản ghi tải lỗi nói đúng lý do: đã xoá, không có quyền, hay mất kết nối",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K4"
-					],
+					"dung_tren": ["K4"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "khung-loi-ban-ghi-dung-ly-do",
@@ -1517,10 +1463,7 @@
 					"cau_giao": "Ở mọi nơi, lỗi tải không còn hiện như chưa có gì; lưu trữ bản ghi có Hoàn tác",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K1",
-						"K4"
-					],
+					"dung_tren": ["K1", "K4"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "kara-trang-thai-toan-crm",
@@ -1544,9 +1487,7 @@
 					"cau_giao": "Dòng thời gian giữ các hoạt động đã tải khi «Xem cũ hơn» hay làm mới ngầm bị lỗi",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K6b"
-					],
+					"dung_tren": ["K6b"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "dong-thoi-gian-giu-khi-loi",
@@ -1570,9 +1511,7 @@
 					"cau_giao": "Thông báo lỗi của dòng thời gian theo đúng lượt tải đã hỏng, không theo lượt đang chạy",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K6c"
-					],
+					"dung_tren": ["K6c"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "dong-thoi-gian-loi-dung-luot",
@@ -1596,9 +1535,7 @@
 					"cau_giao": "Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo",
 					"hang": "T2",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K4"
-					],
+					"dung_tren": ["K4"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "kara-mot-ten",
@@ -1624,9 +1561,7 @@
 					"cau_giao": "Chat và hỏi đáp deal dùng cùng một khung Kara",
 					"hang": "T3",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K1"
-					],
+					"dung_tren": ["K1"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -1770,9 +1705,7 @@
 					"cau_giao": "Ngoại lệ telemetry của bảy mã giai đoạn gốc được khai trong tài liệu và có thước canh",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"E1"
-					],
+					"dung_tren": ["E1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "ngoai-le-telemetry-giai-doan",
@@ -1796,9 +1729,7 @@
 					"cau_giao": "Test của agent không nhập mã của app; danh sách thoả thuận Kara trả có một schema dùng chung",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"E1"
-					],
+					"dung_tren": ["E1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "agent-test-khong-nhap-app",
@@ -1846,9 +1777,7 @@
 					"cau_giao": "«Đã lưu trữ» ở Cài đặt › Giai đoạn báo lỗi tải và cho thử lại",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"E3"
-					],
+					"dung_tren": ["E3"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "da-luu-tru-tai-loi",
@@ -1970,9 +1899,7 @@
 					"cau_giao": "Menu con của bộ lọc mở được trên điện thoại — không còn nằm ngoài màn ở khổ 375",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"E7"
-					],
+					"dung_tren": ["E7"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "menu-con-loc-dien-thoai",
@@ -2020,9 +1947,7 @@
 					"cau_giao": "Tôi bấm Gửi tín hiệu ở bất kỳ màn nào, kể điều mình gặp, rồi thấy nó đã vào nhóm nào, thành việc nào, đã giao chưa",
 					"hang": "T3",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT1"
-					],
+					"dung_tren": ["LT1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "gui-tin-hieu-trong-crm",
@@ -2174,9 +2099,7 @@
 					"cau_giao": "Tôi bấm một việc đã giao trong trang Lộ trình và đọc trong một phút: vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì, ai quyết",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT1"
-					],
+					"dung_tren": ["LT1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "ngan-ho-so-trong-lo-trinh",
@@ -2202,9 +2125,7 @@
 					"cau_giao": "Quản trị mở thẻ Tất cả của trang Tín hiệu và thấy ai đã gửi, phòng ban nào, từ màn nào, đang ở đâu, cùng ba con số của ngưỡng sống",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT2"
-					],
+					"dung_tren": ["LT2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "moi-tin-hieu-cho-quan-tri",
@@ -2228,9 +2149,7 @@
 					"cau_giao": "Quản trị lưu trữ một tín hiệu rác trước khi đội sản phẩm lấy về, và hoàn tác được nếu lỡ tay",
 					"hang": "T3",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"TH4"
-					],
+					"dung_tren": ["TH4"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -2254,9 +2173,7 @@
 					"cau_giao": "Người gửi tín hiệu hôm nay thì sáng mai thấy trang của mình đã đổi sang Đội sản phẩm đã nhận, mà không ai phải chạy lệnh",
 					"hang": "T3",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT2"
-					],
+					"dung_tren": ["LT2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "tin-hieu-tu-ve-kho",
@@ -2304,9 +2221,7 @@
 					"cau_giao": "Người dùng CRM thấy thông báo nhận qua Zalo cũng nằm trong chuông, và tự chọn loại nào được đẩy qua kênh nào",
 					"hang": "T3",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"TB1"
-					],
+					"dung_tren": ["TB1"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -2330,10 +2245,7 @@
 					"cau_giao": "Chủ kho nhận trong ngày một đợt gom đề xuất sẵn nhóm và hàng mỗi khi có tín hiệu mới, và chỉ cần sửa hay phủ quyết",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"TH1",
-						"TB1"
-					],
+					"dung_tren": ["TH1", "TB1"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -2357,11 +2269,7 @@
 					"cau_giao": "Người gửi tín hiệu được báo trong ngày khi tín hiệu của mình đổi chỗ, và mở ra thấy câu dễ hiểu",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"TH1",
-						"TB1",
-						"LT1c"
-					],
+					"dung_tren": ["TH1", "TB1", "LT1c"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -2385,9 +2293,7 @@
 					"cau_giao": "Người gửi tín hiệu đọc rõ hộp gửi và trang Tín hiệu đã gửi ở mọi khổ màn và mọi ngôn ngữ, thấy lỗi báo đúng chỗ, và đóng biên nhận không bị hỏi lại",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT2"
-					],
+					"dung_tren": ["LT2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "sua-giao-dien-tin-hieu",
@@ -2411,9 +2317,7 @@
 					"cau_giao": "Người dùng bàn phím hay trình đọc màn bấm «Giữ lại» hoặc gặp lỗi khi xoá tín hiệu vẫn đứng đúng dòng mình vừa thao tác, không phải dò lại từ đầu trang",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"TH6"
-					],
+					"dung_tren": ["TH6"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -2437,9 +2341,7 @@
 					"cau_giao": "Trưởng phòng ban mở trang Lộ trình và thấy đúng lộ trình mới nhất của nhánh chính, kèm giờ lấy, mà trang không phải chờ một bản dựng production",
 					"hang": "T3",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT1"
-					],
+					"dung_tren": ["LT1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "lo-trinh-doc-ban-chup",
@@ -2463,9 +2365,7 @@
 					"cau_giao": "Máy chủ chỉ nhận thân yêu cầu lớn ở đúng đường nhận bản chụp lộ trình, và một lượt chạy tay từ nhánh chưa gộp không đổi được lộ trình trên trang",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT1c"
-					],
+					"dung_tren": ["LT1c"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "chat-duong-day-ban-chup",
@@ -2489,9 +2389,7 @@
 					"cau_giao": "Trưởng phòng ban mở trang Lộ trình và thấy mỗi việc, mỗi mốc có ngày dự kiến xong do máy tính — ghi rõ là dự kiến, có cờ khi số đo chưa đủ",
 					"hang": "T2",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT1c"
-					],
+					"dung_tren": ["LT1c"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -2515,9 +2413,7 @@
 					"cau_giao": "Chủ kho chọn OneHub Platform hay một sản phẩm khác ngay trên trang Lộ trình của OneHub Center và đọc lộ trình, tiến độ, hồ sơ của sản phẩm đó như của CRM",
 					"hang": "T3",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"LT1c"
-					],
+					"dung_tren": ["LT1c"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -2831,9 +2727,7 @@
 					"cau_giao": "Thước đo 7 ngày của ci-ma-tran-ba-o đọc đúng các lượt CI của PR vào onehub, chạy được bằng đúng lệnh ghi trong hồ sơ, và báo lỗi thay vì đoán",
 					"hang": "T2",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"F21"
-					],
+					"dung_tren": ["F21"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "thuoc-7-ngay-loc-pr",
@@ -2881,9 +2775,7 @@
 					"cau_giao": "Khi Kara đang soạn hoặc người dùng gõ dở trong khung, bấm một liên kết trong khung thì được hỏi trước khi rời, chữ đang gõ không mất",
 					"hang": "",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"K2e"
-					],
+					"dung_tren": ["K2e"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "khung-soan-chan-lien-ket",
@@ -2909,10 +2801,7 @@
 					"cau_giao": "Sheet mục tiêu hiện lý do căn chỉnh của từng đường nối lên mục tiêu cha",
 					"hang": "",
 					"nhom": "okr",
-					"dung_tren": [
-						"L1",
-						"K3"
-					],
+					"dung_tren": ["L1", "K3"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "duong-ly-do-muc-tieu",
@@ -2938,9 +2827,7 @@
 					"cau_giao": "Cây căn chỉnh hiện lý do của từng đường nối và lọc được các đường «Chưa có lý do»",
 					"hang": "",
 					"nhom": "okr",
-					"dung_tren": [
-						"L1"
-					],
+					"dung_tren": ["L1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "cay-can-chinh-co-ly-do",
@@ -2966,10 +2853,7 @@
 					"cau_giao": "Căn chỉnh gắn bằng tay và căn chỉnh Kara đề xuất đều mang lý do",
 					"hang": "",
 					"nhom": "okr",
-					"dung_tren": [
-						"L3",
-						"K3"
-					],
+					"dung_tren": ["L3", "K3"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "gan-tay-va-kara-co-ly-do",
@@ -3019,9 +2903,7 @@
 					"cau_giao": "Tôi chọn đơn vị bằng ô tìm kiếm và đọc mục tiêu của nó trong một bảng như Thoả thuận, mở từng mục tiêu ra KR",
 					"hang": "T2",
 					"nhom": "okr",
-					"dung_tren": [
-						"DH1"
-					],
+					"dung_tren": ["DH1"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3045,9 +2927,7 @@
 					"cau_giao": "Trưởng đơn vị mở Của tôi và thấy ngay KR cần cập nhật tuần này, đơn vị mình dẫn và KR mình phụ trách",
 					"hang": "T2",
 					"nhom": "okr",
-					"dung_tren": [
-						"DH1"
-					],
+					"dung_tren": ["DH1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "cua-toi-ba-phan",
@@ -3076,9 +2956,7 @@
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "so-do-can-chinh-don-vi",
 					"theo_loi": false,
-					"co": [
-						"kế hoạch ghi hạng T2, thực tế hạng T3"
-					],
+					"co": ["kế hoạch ghi hạng T2, thực tế hạng T3"],
 					"bat_khi": "Ban lãnh đạo chỉ ra đơn vị chưa nối lên công ty trong 5 giây ở phiên nghiệm thu (ngưỡng đề xuất — chốt ở Cổng Đáng)",
 					"vi_sao": "Cây căn chỉnh hôm nay là danh sách thụt lề cao khoảng 4.100px, mọi nhánh mở sẵn; căn chỉnh nhiều–nhiều nên mục tiêu góp hai chỗ phải hiện hai lần; không nhìn ra",
 					"tom_tat": null,
@@ -3097,9 +2975,7 @@
 					"cau_giao": "Trưởng đơn vị mở Của tôi lúc cây tổ chức chưa tải hoặc lỗi thì vẫn biết mỗi thẻ là đơn vị nào, và thấy lỗi kèm nút Thử lại",
 					"hang": "T2",
 					"nhom": "okr",
-					"dung_tren": [
-						"DH3"
-					],
+					"dung_tren": ["DH3"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3123,9 +2999,7 @@
 					"cau_giao": "Từ một mục tiêu, tôi bấm Xem quanh mục tiêu và thấy nó góp vào đâu, ai góp vào nó, mục tiêu góp hai chỗ chỉ hiện một lần",
 					"hang": "T2",
 					"nhom": "okr",
-					"dung_tren": [
-						"DH4"
-					],
+					"dung_tren": ["DH4"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "so-do-quanh-muc-tieu",
@@ -3149,9 +3023,7 @@
 					"cau_giao": "Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"E4"
-					],
+					"dung_tren": ["E4"],
 					"trang_thai": "Sắp mở vòng",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": "giai-doan-bo-mac-dinh",
@@ -3177,9 +3049,7 @@
 					"cau_giao": "Thêm bước ở kế hoạch báo đúng: danh sách bộ phận không tải được thì nói lý do; số việc quá hạn đếm theo một ngày; bộ phận không có thật trả cùng một lỗi như mọi chỗ khác",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"E6"
-					],
+					"dung_tren": ["E6"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "them-buoc-bao-dung",
@@ -3231,9 +3101,7 @@
 					"cau_giao": "Danh sách liên quan trong ngăn bản ghi không lẫn bản đã lưu trữ, kèm «+n đã lưu trữ» để mở xem",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"V2"
-					],
+					"dung_tren": ["V2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "lien-quan-loc-ban-da-cat",
@@ -3259,9 +3127,7 @@
 					"cau_giao": "Lưu trữ một trường thôi hỏi lại và có «Hoàn tác» như mọi chỗ lưu trữ khác",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"V2"
-					],
+					"dung_tren": ["V2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "luu-tru-truong-khong-hoi",
@@ -3287,10 +3153,7 @@
 					"cau_giao": "Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"V2",
-						"K2e"
-					],
+					"dung_tren": ["V2", "K2e"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "bo-cuc-hep-ngan-va-kanban",
@@ -3316,10 +3179,7 @@
 					"cau_giao": "Dải báo «Đã lưu trữ» và vùng khoá chỉ đọc là một mảnh dùng chung trong packages/ui, như docs/vong-doi.md dặn",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"V2",
-						"V2a"
-					],
+					"dung_tren": ["V2", "V2a"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "dai-luu-tru-dung-chung",
@@ -3345,9 +3205,7 @@
 					"cau_giao": "Lưu trữ và hoàn tác hàng loạt báo đúng: lỗi máy chủ không hiện thành «bị bỏ qua», hoàn tác khi mọi bản đã về không báo «chưa hoàn tác được», lỗi từng bản ghi có dòng log",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"V2"
-					],
+					"dung_tren": ["V2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "hoan-tac-loat-bao-dung",
@@ -3399,9 +3257,7 @@
 					"cau_giao": "Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do",
 					"hang": "",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"F10"
-					],
+					"dung_tren": ["F10"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "ba-ho-so-do-san",
@@ -3453,9 +3309,7 @@
 					"cau_giao": "Trợ lý OKR chạy trên Haiku 5.5 khi đạt ngưỡng đo; không đạt thì giữ Gemini 3.8 Flash",
 					"hang": "",
 					"nhom": "tro-ly",
-					"dung_tren": [
-						"9b"
-					],
+					"dung_tren": ["9b"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "thu-haiku-tro-ly-okr",
@@ -3481,9 +3335,7 @@
 					"cau_giao": "Khung chờ đầu trang OKR chừa đúng chỗ cho nút «Hỏi Kara», hàng tiêu đề không nhảy khi tải xong",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"C"
-					],
+					"dung_tren": ["C"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "dau-trang-okr-cho-nut-hoi-kara",
@@ -3507,9 +3359,7 @@
 					"cau_giao": "Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do",
 					"hang": "",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"F26"
-					],
+					"dung_tren": ["F26"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3610,9 +3460,7 @@
 					"nhom_trang_thai": "khac",
 					"ho_so": null,
 					"theo_loi": false,
-					"co": [
-						"kế hoạch ghi «xong» nhưng chưa có hồ sơ paths-judgment-hep"
-					],
+					"co": ["kế hoạch ghi «xong» nhưng chưa có hồ sơ paths-judgment-hep"],
 					"bat_khi": "",
 					"vi_sao": "",
 					"tom_tat": null,
@@ -3655,9 +3503,7 @@
 					"cau_giao": "E15 của tro-ly-doc-kho coi lượt đủ mã là đã đo, ghi câu lỗi model vào cột riêng, có trần",
 					"hang": "",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"F32"
-					],
+					"dung_tren": ["F32"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3729,9 +3575,7 @@
 					"cau_giao": "Ngồi trên màn chat thấy kết quả rồi gõ tiếp thì chuông không còn đếm thông báo của chính cuộc đó",
 					"hang": "",
 					"nhom": "crm-chung",
-					"dung_tren": [
-						"K7"
-					],
+					"dung_tren": ["K7"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3755,9 +3599,7 @@
 					"cau_giao": "TheDangDung sống ở packages/ui; CardAction và CardFooter không bị className đổi khoảng cách ở chỗ gọi",
 					"hang": "",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"K7"
-					],
+					"dung_tren": ["K7"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3805,9 +3647,7 @@
 					"cau_giao": "Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho",
 					"hang": "",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"C-1b"
-					],
+					"dung_tren": ["C-1b"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3836,9 +3676,7 @@
 					"nhom_trang_thai": "khac",
 					"ho_so": null,
 					"theo_loi": false,
-					"co": [
-						"kế hoạch ghi «đang dựng» nhưng chưa có hồ sơ t1-ma-doc"
-					],
+					"co": ["kế hoạch ghi «đang dựng» nhưng chưa có hồ sơ t1-ma-doc"],
 					"bat_khi": "",
 					"vi_sao": "",
 					"tom_tat": null,
@@ -3857,9 +3695,7 @@
 					"cau_giao": "Lần đẩy chỉ ghim lại (run-log, decisions) bỏ test và build, mà acceptance gate vẫn chạy và recheck bằng chứng vẫn đỏ được",
 					"hang": "",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"C-1b"
-					],
+					"dung_tren": ["C-1b"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -3910,16 +3746,7 @@
 				{
 					"ten": "Làn R1 vá xong trên production, trước ngày dùng thật",
 					"ngay": "2026-10-12",
-					"hang": [
-						"R1a",
-						"R1b",
-						"R1c",
-						"R1d",
-						"R1e",
-						"R1f",
-						"R1g",
-						"R1h"
-					],
+					"hang": ["R1a", "R1b", "R1c", "R1d", "R1e", "R1f", "R1g", "R1h"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -3946,12 +3773,7 @@
 				{
 					"ten": "Công bố OKR quý 4 — các phòng ban đã dùng thử OKR và Kho tài liệu từ trước",
 					"ngay": "2026-10-14",
-					"hang": [
-						"4n",
-						"S",
-						"S2",
-						"ZT"
-					],
+					"hang": ["4n", "S", "S2", "ZT"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -3969,12 +3791,7 @@
 				{
 					"ten": "Vòng tín hiệu khép lần đầu — tín hiệu tự về kho, quản trị thấy mọi tín hiệu, ai cũng có chuông thông báo, hộp gửi tín hiệu sửa xong",
 					"ngay": "2026-10-16",
-					"hang": [
-						"TH1",
-						"TH4",
-						"TB1",
-						"TH6"
-					],
+					"hang": ["TH1", "TH4", "TB1", "TH6"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -3983,9 +3800,7 @@
 				{
 					"ten": "Lộ trình nhiều sản phẩm — bước 1: trang đọc bản chụp",
 					"ngay": "2026-10-16",
-					"hang": [
-						"LT1c"
-					],
+					"hang": ["LT1c"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4003,11 +3818,7 @@
 				{
 					"ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
 					"ngay": "2026-10-20",
-					"hang": [
-						"DH1",
-						"DH2",
-						"DH3"
-					],
+					"hang": ["DH1", "DH2", "DH3"],
 					"con_viec": true,
 					"gio_may": {
 						"thap": 6.5,
@@ -4031,10 +3842,7 @@
 				{
 					"ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
 					"ngay": "2026-10-21",
-					"hang": [
-						"DH4",
-						"DH5"
-					],
+					"hang": ["DH4", "DH5"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4043,11 +3851,7 @@
 				{
 					"ten": "Lộ trình bước 2 — ngày dự kiến, tên ngành tiếng Việt, tiêu điểm sau xoá",
 					"ngay": "2026-10-21",
-					"hang": [
-						"LT1e",
-						"VN1",
-						"TH6b"
-					],
+					"hang": ["LT1e", "VN1", "TH6b"],
 					"con_viec": true,
 					"gio_may": {
 						"thap": 16.5,
@@ -4071,9 +3875,7 @@
 				{
 					"ten": "Đo lần đầu cây tổ chức (Cổng Giá trị của hàng 1)",
 					"ngay": "2026-10-26",
-					"hang": [
-						"1"
-					],
+					"hang": ["1"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4082,12 +3884,7 @@
 				{
 					"ten": "R3 lên production — mục tiêu theo giờ máy, trần 18/12",
 					"ngay": "2026-10-28",
-					"hang": [
-						"10",
-						"8b",
-						"L",
-						"T"
-					],
+					"hang": ["10", "8b", "L", "T"],
 					"con_viec": true,
 					"gio_may": {
 						"thap": 27.5,
@@ -4132,11 +3929,7 @@
 				{
 					"ten": "Phiên nghiệm thu R1",
 					"ngay": "2026-11-13",
-					"hang": [
-						"2",
-						"3",
-						"5"
-					],
+					"hang": ["2", "3", "5"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4145,10 +3938,7 @@
 				{
 					"ten": "Đọc số lượt 6",
 					"ngay": "2026-12-01",
-					"hang": [
-						"6",
-						"8a"
-					],
+					"hang": ["6", "8a"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4157,11 +3947,7 @@
 				{
 					"ten": "Ban lãnh đạo đặt OKR năm 2027 cấp OneHub",
 					"ngay": "2026-12-07",
-					"hang": [
-						"H",
-						"9b",
-						"D"
-					],
+					"hang": ["H", "9b", "D"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4170,9 +3956,7 @@
 				{
 					"ten": "Hạn cứng: lượt 7 lên production",
 					"ngay": "2026-12-14",
-					"hang": [
-						"7n"
-					],
+					"hang": ["7n"],
 					"con_viec": true,
 					"gio_may": {
 						"thap": 5,
@@ -4187,9 +3971,7 @@
 				{
 					"ten": "K5 Chat và Deal về một khung lên production",
 					"ngay": "2026-12-18",
-					"hang": [
-						"K5"
-					],
+					"hang": ["K5"],
 					"con_viec": true,
 					"gio_may": {
 						"thap": 9.5,
@@ -4377,10 +4159,7 @@
 					"cau_giao": "Tôi xem được các phiên bản cũ của trang, khôi phục một bản cũ qua duyệt, và lưu trữ trang không còn dùng",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"l4a",
-						"l4b"
-					],
+					"dung_tren": ["l4a", "l4b"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "lich-su-va-luu-tru-trang",
@@ -4456,10 +4235,7 @@
 					"cau_giao": "Danh sách góp ý đã gom được sửa trong một lượt",
 					"hang": "T2",
 					"nhom": "",
-					"dung_tren": [
-						"l4",
-						"cb"
-					],
+					"dung_tren": ["l4", "cb"],
 					"trang_thai": "Sắp mở vòng",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": "sua-sau-chay-that",
@@ -4531,9 +4307,7 @@
 					"cau_giao": "Nguồn không kẹt mãi ở «đang đọc» khi máy soạn lỗi; «Soạn lại» chạy được; hộp chèn liên kết báo lỗi thay vì «không trang nào khớp»",
 					"hang": "T2",
 					"nhom": "",
-					"dung_tren": [
-						"l4"
-					],
+					"dung_tren": ["l4"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "kho-nguon-khong-ket",
@@ -4557,9 +4331,7 @@
 					"cau_giao": "Trợ lý kho chỉ được mời ở tab Hỏi và Zalo, hết lỗi và hết tốn tiền vô ích",
 					"hang": "T2",
 					"nhom": "",
-					"dung_tren": [
-						"l4"
-					],
+					"dung_tren": ["l4"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "tro-ly-kho-dung-phien",
@@ -4583,9 +4355,7 @@
 					"cau_giao": "Tác nhân CRM và Trợ lý Kho tài liệu dùng model mặc định rẻ hơn mà không tụt chất lượng trên bộ đo",
 					"hang": "",
 					"nhom": "",
-					"dung_tren": [
-						"l4"
-					],
+					"dung_tren": ["l4"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -4609,9 +4379,7 @@
 					"cau_giao": "Hỏi Kho tài liệu qua Zalo thì Trợ lý kho trả lời đúng chỉ dẫn của kho",
 					"hang": "",
 					"nhom": "",
-					"dung_tren": [
-						"l4b"
-					],
+					"dung_tren": ["l4b"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "zalo-tro-ly-kho-chi-dan",
@@ -4659,9 +4427,7 @@
 					"cau_giao": "Mỗi vai (Tác nhân, Trợ lý kho, judge, soạn) có model kiến nghị, đo lại sau l6",
 					"hang": "",
 					"nhom": "",
-					"dung_tren": [
-						"MH3"
-					],
+					"dung_tren": ["MH3"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -4685,9 +4451,7 @@
 					"cau_giao": "Hỏi Kho qua Zalo từ câu thứ hai trở đi trong ngày, trợ lý kho vẫn trả lời đúng chỉ dẫn",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"l6"
-					],
+					"dung_tren": ["l6"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -4711,9 +4475,7 @@
 				{
 					"ten": "Kho cho người",
 					"ngay": "2026-10-01",
-					"hang": [
-						"l1"
-					],
+					"hang": ["l1"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4722,9 +4484,7 @@
 				{
 					"ten": "Nội dung vào nhanh",
 					"ngay": "2026-10-06",
-					"hang": [
-						"l2"
-					],
+					"hang": ["l2"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4733,9 +4493,7 @@
 				{
 					"ten": "Tìm được",
 					"ngay": "2026-10-08",
-					"hang": [
-						"l3"
-					],
+					"hang": ["l3"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4744,9 +4502,7 @@
 				{
 					"ten": "Hỏi được",
 					"ngay": "2026-10-13",
-					"hang": [
-						"l4"
-					],
+					"hang": ["l4"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -4755,9 +4511,7 @@
 				{
 					"ten": "Sửa một đợt",
 					"ngay": "2026-10-21",
-					"hang": [
-						"l5"
-					],
+					"hang": ["l5"],
 					"con_viec": true,
 					"gio_may": {
 						"thap": 5,
@@ -4846,9 +4600,7 @@
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "va-lo-ro-vai-chi-okr",
 					"theo_loi": false,
-					"co": [
-						"kế hoạch ghi hạng T2, thực tế hạng T3"
-					],
+					"co": ["kế hoạch ghi hạng T2, thực tế hạng T3"],
 					"bat_khi": "Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»",
 					"vi_sao": "Giao bước hiện chỉ kiểm có là thành viên; bộ gom nhắc không lọc vai và mang tên công ty qua Zalo/Slack. Gộp việc mà chưa vá là khuếch đại lỗ này.",
 					"tom_tat": null,
@@ -4867,9 +4619,7 @@
 					"cau_giao": "Mở lại một kế hoạch đã đóng hay bỏ «xong» một bước không trả việc về người đã sang vai «chỉ OKR»",
 					"hang": "T2",
 					"nhom": "",
-					"dung_tren": [
-						"DA0a"
-					],
+					"dung_tren": ["DA0a"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "mo-lai-khong-tra-viec-chi-okr",
@@ -4893,9 +4643,7 @@
 					"cau_giao": "Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai",
 					"hang": "T2",
 					"nhom": "ve-sinh",
-					"dung_tren": [
-						"DA0a"
-					],
+					"dung_tren": ["DA0a"],
 					"trang_thai": "Sắp mở vòng",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": "thuoc-viec-cua-ban-do-duoc",
@@ -4921,9 +4669,7 @@
 					"cau_giao": "Tôi giao một việc gắn với deal hay kế hoạch onboard; người nhận thấy nó trong Việc của tôi và được nhắc buổi sáng",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA0a"
-					],
+					"dung_tren": ["DA0a"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "viec-chung",
@@ -4947,9 +4693,7 @@
 					"cau_giao": "Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA1"
-					],
+					"dung_tren": ["DA1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "chep-viec-can-lam-cu",
@@ -4973,9 +4717,7 @@
 					"cau_giao": "Tôi kéo việc giữa các cột Chưa làm, Đang làm, Chờ đánh giá, Xong, và tách một việc to thành việc con",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA1"
-					],
+					"dung_tren": ["DA1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "kanban-viec",
@@ -4999,9 +4741,7 @@
 					"cau_giao": "viec.bang và viec.con không lộ tiêu đề việc cha khi người xem không có quyền với việc cha",
 					"hang": "T2",
 					"nhom": "",
-					"dung_tren": [
-						"DA2"
-					],
+					"dung_tren": ["DA2"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "viec-cha-khong-lo-tieu-de",
@@ -5025,9 +4765,7 @@
 					"cau_giao": "Tạo kế hoạch onboard từ khuôn là có sẵn việc cho từng phòng ban; deal thắng thì máy gợi ý mở kế hoạch",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA1"
-					],
+					"dung_tren": ["DA1"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "ke-hoach-sinh-viec",
@@ -5051,9 +4789,7 @@
 					"cau_giao": "Deal thắng thì máy gợi ý mở kế hoạch onboard; người phụ trách mở hay bỏ qua ngay trên deal",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA3"
-					],
+					"dung_tren": ["DA3"],
 					"trang_thai": "Đã giao — chờ phiên nghiệm thu",
 					"nhom_trang_thai": "da-giao",
 					"ho_so": "goi-y-mo-ke-hoach",
@@ -5077,17 +4813,12 @@
 					"cau_giao": "Tôi gom việc của một đợt triển khai vào một dự án và xem trên sơ đồ Gantt có phụ thuộc và mốc",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA2",
-						"DA3"
-					],
+					"dung_tren": ["DA2", "DA3"],
 					"trang_thai": "Không suy được",
 					"nhom_trang_thai": "khac",
 					"ho_so": null,
 					"theo_loi": false,
-					"co": [
-						"kế hoạch ghi «đang dựng» nhưng chưa có hồ sơ du-an-gantt"
-					],
+					"co": ["kế hoạch ghi «đang dựng» nhưng chưa có hồ sơ du-an-gantt"],
 					"bat_khi": "",
 					"vi_sao": "Dự án là chỗ chứa việc; Gantt mức đủ là ngày bắt đầu và hạn, phụ thuộc xong-rồi-mới-bắt-đầu, tự dời, mốc, bỏ ngày nghỉ.",
 					"tom_tat": null,
@@ -5106,9 +4837,7 @@
 					"cau_giao": "Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA1"
-					],
+					"dung_tren": ["DA1"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -5132,9 +4861,7 @@
 					"cau_giao": "Gantt nâng cao: độ trễ, đường găng, baseline, tải công việc từng người",
 					"hang": "T2",
 					"nhom": "",
-					"dung_tren": [
-						"DA4"
-					],
+					"dung_tren": ["DA4"],
 					"trang_thai": "Xếp lại sau",
 					"nhom_trang_thai": "khac",
 					"ho_so": null,
@@ -5158,9 +4885,7 @@
 					"cau_giao": "Trưởng phòng thấy việc của người trong phòng",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA1"
-					],
+					"dung_tren": ["DA1"],
 					"trang_thai": "Xếp lại sau",
 					"nhom_trang_thai": "khac",
 					"ho_so": null,
@@ -5184,9 +4909,7 @@
 					"cau_giao": "Máy đọc email và cuộc họp rồi đề xuất việc, tôi duyệt mới tạo",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA1"
-					],
+					"dung_tren": ["DA1"],
 					"trang_thai": "Xếp lại sau",
 					"nhom_trang_thai": "khac",
 					"ho_so": null,
@@ -5210,9 +4933,7 @@
 					"cau_giao": "Thẻ gợi ý mở kế hoạch được làm mới khi deal đổi, không đứng cũ",
 					"hang": "",
 					"nhom": "",
-					"dung_tren": [
-						"DA3b"
-					],
+					"dung_tren": ["DA3b"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -5236,9 +4957,7 @@
 					"cau_giao": "Một bước lớn chia được việc con có người và hạn riêng; khai được việc này xong mới mở việc kia",
 					"hang": "T3",
 					"nhom": "",
-					"dung_tren": [
-						"DA3"
-					],
+					"dung_tren": ["DA3"],
 					"trang_thai": "Chưa mở",
 					"nhom_trang_thai": "chua-bat-dau",
 					"ho_so": null,
@@ -5286,12 +5005,7 @@
 				{
 					"ten": "Việc chung chạy được — giao việc, kanban, chép việc cần làm cũ, không lộ việc cha",
 					"ngay": "2026-10-15",
-					"hang": [
-						"DA1",
-						"DA2",
-						"DA1b",
-						"DA2b"
-					],
+					"hang": ["DA1", "DA2", "DA1b", "DA2b"],
 					"con_viec": false,
 					"gio_may": null,
 					"du_kien": null,
@@ -5300,11 +5014,7 @@
 				{
 					"ten": "Kế hoạch sinh việc + Gantt mức đủ",
 					"ngay": "2026-10-24",
-					"hang": [
-						"DA3",
-						"DA3b",
-						"DA4"
-					],
+					"hang": ["DA3", "DA3b", "DA4"],
 					"con_viec": true,
 					"gio_may": {
 						"thap": 9.5,

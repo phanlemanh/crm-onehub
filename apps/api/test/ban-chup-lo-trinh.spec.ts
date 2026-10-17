@@ -525,20 +525,29 @@ async function kiemDayGioMay(
 	if (!luu) throw new Error("khong co hang ban chup");
 	const kq = doc(luu);
 	if (!kq.ok) throw new Error(`hang luu lech khuon: ${kq.duongKhoa}`);
-	kq.banChup.duLieu.lo_trinh.forEach((l, i) => {
-		const lt = tho.lo_trinh[i];
-		lt?.moc.forEach((x, j) => {
+	const ra = kq.banChup.duLieu.lo_trinh;
+	if (ra.length !== tho.lo_trinh.length)
+		throw new Error("ban chup mat ngay du kien: so lo trinh lech");
+	tho.lo_trinh.forEach((lt, i) => {
+		const l = ra[i];
+		if (!l || l.moc.length !== lt.moc.length || l.hang.length !== lt.hang.length)
+			throw new Error(`ban chup mat ngay du kien: so moc hay viec lech o lo trinh ${i}`);
+		lt.moc.forEach((x, j) => {
 			const y = l.moc[j];
 			for (const k of ["gio_may", "du_kien", "qua_tai"] as const)
 				if (!giong(y?.[k], x[k]))
 					throw new Error(`ban chup mat ngay du kien: ${x.ten}`);
 		});
-		lt?.hang.forEach((h, j) => {
+		lt.hang.forEach((h, j) => {
 			if (!giong(l.hang[j]?.gio_may, h.gio_may))
 				throw new Error(`ban chup mat gio may: ${h.ma}`);
 		});
 	});
-	return { khoa: m.ten, hoanTat: "2026-10-31" };
+	const mRa = ra.flatMap((l) => l.moc).find((x) => x.ten === m.ten);
+	const hoanTat = mRa?.du_kien?.hoan_tat;
+	if (hoanTat !== "2026-10-31")
+		throw new Error(`ban chup mat ngay du kien: ${m.ten}`);
+	return { khoa: m.ten, hoanTat };
 }
 
 describe("ldk-gio-may", () => {
@@ -558,6 +567,21 @@ describe("ldk-gio-may", () => {
 				if (!kq.ok) return kq;
 				for (const l of kq.banChup.duLieu.lo_trinh)
 					for (const m of l.moc) m.du_kien = null;
+				return kq;
+			};
+			await expect(kiemDayGioMay(hong)).rejects.toThrow(
+				"ban chup mat ngay du kien:",
+			);
+		},
+		CHO_MS,
+	);
+	test(
+		"ldk-gio-may: pha-thu — doc hang luu bi cut mot moc thi do",
+		async () => {
+			const hong: typeof phanTichBanChupLuu = (h) => {
+				const kq = phanTichBanChupLuu(h);
+				if (!kq.ok) return kq;
+				for (const l of kq.banChup.duLieu.lo_trinh) l.moc = l.moc.slice(1);
 				return kq;
 			};
 			await expect(kiemDayGioMay(hong)).rejects.toThrow(

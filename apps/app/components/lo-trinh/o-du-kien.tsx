@@ -15,19 +15,19 @@ function CoDuKien({
 	m,
 }: {
 	duKien: Extract<DuKienMoc, { kieu: "co-ngay" }>;
-	m: LoTrinhMessages["duKien"];
+	m: LoTrinhMessages;
 }) {
 	return (
 		<>
 			{duKien.chuaDuSoDo ? (
 				<Badge data-lo-trinh-du-kien-co="chua-du-so-do" variant="outline">
-					{m.chuaDuSoDo}
+					{m.duKien.chuaDuSoDo}
 				</Badge>
 			) : null}
 			{duKien.quaTai ? (
 				<StatusIndicator
 					data-lo-trinh-du-kien-co="qua-tai"
-					label={m.quaTai}
+					label={m.duKien.quaTai}
 					size="sm"
 					tone={toneTheoNghia("cho")}
 				/>
@@ -35,7 +35,7 @@ function CoDuKien({
 			{duKien.daQua ? (
 				<StatusIndicator
 					data-lo-trinh-du-kien-co="da-qua"
-					label={m.daQua}
+					label={m.duKien.daQua}
 					size="sm"
 					tone={toneTheoNghia("cho")}
 				/>
@@ -46,7 +46,7 @@ function CoDuKien({
 
 export function ODuKien({ duKien, gon }: { duKien: DuKienMoc; gon: boolean }) {
 	const locale = useLocale();
-	const m = loTrinhMessages(locale).duKien;
+	const m = loTrinhMessages(locale);
 	if (duKien.kieu === "chua-co")
 		return gon ? (
 			<span
@@ -54,7 +54,7 @@ export function ODuKien({ duKien, gon }: { duKien: DuKienMoc; gon: boolean }) {
 				data-lo-trinh-du-kien="chua-co"
 				data-ly-do={duKien.lyDo}
 			>
-				{m.chuaCo}
+				{m.duKien.chuaCo}
 			</span>
 		) : (
 			<span
@@ -63,12 +63,12 @@ export function ODuKien({ duKien, gon }: { duKien: DuKienMoc; gon: boolean }) {
 				data-ly-do={duKien.lyDo}
 			>
 				<StatusIndicator
-					label={m.chuaCo}
+					label={m.duKien.chuaCo}
 					size="sm"
 					tone={toneTheoNghia("nhap")}
 				/>
 				<span className="text-muted-foreground text-xs">
-					{m.lyDo[duKien.lyDo]}
+					{m.duKien.lyDo[duKien.lyDo]}
 				</span>
 			</span>
 		);
@@ -80,7 +80,7 @@ export function ODuKien({ duKien, gon }: { duKien: DuKienMoc; gon: boolean }) {
 				data-lo-trinh-du-kien="co-ngay"
 			>
 				<span className="tabular-nums">
-					{m.ngayGon(formatDayShort(duKien.hoanTat, locale))}
+					{m.duKien.ngayGon(formatDayShort(duKien.hoanTat, locale))}
 				</span>
 				<CoDuKien duKien={duKien} m={m} />
 			</span>
@@ -93,15 +93,15 @@ export function ODuKien({ duKien, gon }: { duKien: DuKienMoc; gon: boolean }) {
 		>
 			<span className="flex flex-wrap items-center gap-2">
 				<span className="tabular-nums">
-					{m.ngay(formatDay(duKien.hoanTat, locale))}
+					{m.duKien.ngay(formatDay(duKien.hoanTat, locale))}
 				</span>
 				<CoDuKien duKien={duKien} m={m} />
 			</span>
 			<span className="text-muted-foreground text-xs">
 				{duKien.ngayTinh
-					? m.cachTinh(formatDay(duKien.ngayTinh, locale))
-					: m.cachTinhKhongNgay}
-				{duKien.chuaDuSoDo ? ` ${m.chuaDuSoDoMoTa}` : ""}
+					? m.duKien.cachTinh(formatDay(duKien.ngayTinh, locale))
+					: m.duKien.cachTinhKhongNgay}
+				{duKien.chuaDuSoDo ? ` ${m.duKien.chuaDuSoDoMoTa}` : ""}
 			</span>
 		</span>
 	);
@@ -117,7 +117,7 @@ function khoangGio(gioMay: GioMayViec, locale: Locale): string | null {
 
 export function OUocLuong({ gioMay }: { gioMay: GioMayViec | null }) {
 	const locale = useLocale();
-	const m = loTrinhMessages(locale).duKien;
+	const m = loTrinhMessages(locale);
 	const khoang = gioMay ? khoangGio(gioMay, locale) : null;
 	if (khoang === null) return null;
 	return (
@@ -125,10 +125,10 @@ export function OUocLuong({ gioMay }: { gioMay: GioMayViec | null }) {
 			className="flex flex-wrap items-center gap-2"
 			data-lo-trinh-uoc-luong={gioMay?.nguon ?? ""}
 		>
-			<span className="tabular-nums">{m.gio(khoang)}</span>
+			<span className="tabular-nums">{m.duKien.gio(khoang)}</span>
 			{gioMayChuaDu(gioMay) ? (
 				<Badge data-lo-trinh-du-kien-co="chua-du-so-do" variant="outline">
-					{m.chuaDuSoDo}
+					{m.duKien.chuaDuSoDo}
 				</Badge>
 			) : null}
 		</span>
