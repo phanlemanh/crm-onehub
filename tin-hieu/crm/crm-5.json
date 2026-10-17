@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Xoá xong, tiêu điểm bàn phím nhảy về đầu trang; nút ⋮ trên điện thoại chỉ 24×24",
+    "muon_lam": "Dùng trang tín hiệu bằng bàn phím và trên điện thoại",
+    "da_xay_ra": "Xoá xong, tiêu điểm bàn phím nhảy về đầu trang; nút ⋮ trên điện thoại chỉ 24×24\nNgười dùng bàn phím mất chỗ đứng sau khi xoá. Nút ⋮ nhỏ cho ngón tay. Thêm: nút Gửi bị khoá (ô trống hoặc chỉ có dấu cách) mà không có dòng nào nói vì sao.",
+    "man": "/tin-hieu"
+  },
+  "luc": "2026-10-13T23:49:05.709Z"
+}
