@@ -2982,7 +2982,7 @@ executors:
     dvb_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"'
     dvb_ho_so_da_ky: 'bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ho-so-da-ky'
     dvb_proto: 'bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-proto'
-    dvb_ghim_nam: 'bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs'
+    dvb_ghim_nam: 'bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ghim-nam'
     # dieu-huong-khu-muc-tieu (DH1)
     dhk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"'
     dhk_ho_so_da_ky: bun _acceptance/dieu-huong-khu-muc-tieu/rang/ho-so-da-ky.mjs

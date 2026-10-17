@@ -25,6 +25,9 @@
  *    onehub, không thì gốc so.
  * 4. Notes của muc-tieu-va-kr/contract.md trỏ trang-don-vi-mot-bang AC-3.
  *
+ * Hồ sơ đã ký bị rút CHỈ vì lệnh eval gọi rang/ của hồ sơ khác (17/10, ve-sinh-do-san-onehub)
+ * không cần ghim riêng: mỗi lệnh mượn phải đã thoát 0 ở dòng ghim có trang mới của một hồ sơ
+ * AC-14 chạy CÙNG lệnh («MUON …»), không thì «SAI AC-14: <slug> muon <tệp> cua <chủ>: …».
  * Mã thoát: 0 đúng («DUNG AC-14: 10/10») · 1 sai («SAI AC-14: …») · 2 không đo được.
  */
 import { execFileSync, spawnSync } from "node:child_process";
@@ -154,6 +157,8 @@ const giaiRef = (cmd) => {
 	return o == null ? "" : String(o);
 };
 const rut = new Map();
+const muon = new Map();
+const lenhCua = new Map();
 const slugGoc = new Set(
 	git("ls-tree", "--name-only", `${base}:_acceptance`)
 		.split("\n")
@@ -168,7 +173,13 @@ for (const slug of slugGoc) {
 	const ev = tepOGoc(base, `_acceptance/${slug}/evals.yaml`) ?? "";
 	for (const e of parseEvals(ev, ["cmd"], stripComment)) {
 		const lenh = giaiRef(String(e.cmd ?? "").replace(/^["']|["']$/g, ""));
-		for (const f of tepCu) if (lenh.includes(f)) tep.add(f);
+		lenhCua.set(slug, [...(lenhCua.get(slug) ?? []), { id: e.id, lenh }]);
+		for (const f of tepCu)
+			if (lenh.includes(f)) {
+				tep.add(f);
+				if (!f.startsWith(`_acceptance/${slug}/`))
+					muon.set(slug, [...(muon.get(slug) ?? []), { f, lenh }]);
+			}
 	}
 	if (tep.size > 0) rut.set(slug, [...tep]);
 }
@@ -194,7 +205,18 @@ for (const c of rieng)
 		if (!ds.includes(f)) rut.set(m[1], [...ds, f]);
 	}
 for (const [slug, tep] of rut) console.log(`HO-SO ${slug}: ${tep.join(", ")}`);
-const thua = [...rut.keys()].filter((s) => !KHAI.includes(s));
+const chiMuon = [...rut.keys()].filter(
+	(s) =>
+		!KHAI.includes(s) &&
+		rut.get(s).every((f) => !f.startsWith(`_acceptance/${s}/`)),
+);
+for (const s of chiMuon)
+	console.log(
+		`MUON ${s}: chi goi rang cua ho so khac — chung bang ghim cua ho so AC-14 chay cung lenh`,
+	);
+const thua = [...rut.keys()].filter(
+	(s) => !KHAI.includes(s) && !chiMuon.includes(s),
+);
 const thieu = KHAI.filter((s) => !rut.has(s));
 if (thua.length > 0 || thieu.length > 0)
 	khongDo(
@@ -215,6 +237,7 @@ if (!moc) khongDo(`khong co commit nao doi ${TRANG} sau goc luot`);
 console.log(`moc trang moi: ${moc}`);
 
 const sai = [];
+const ghimCuoi = new Map();
 
 // 2. Ghim xanh trên một commit có trang mới.
 for (const slug of KHAI) {
@@ -243,6 +266,7 @@ for (const slug of KHAI) {
 	const xanh = suites.every((m) => m === 0) && evals.every(([, m]) => m === 0);
 	const coTrang =
 		/^[0-9a-f]{40}$/.test(String(cuoi.sha ?? "")) && laToTien(moc, cuoi.sha);
+	ghimCuoi.set(slug, { cuoi, coTrang });
 	if (!coTrang) {
 		sai.push(`${slug} ghim tren ${cuoi.sha} chua co trang moi`);
 		console.log(`SAI AC-14: ${slug} ghim tren ${cuoi.sha} chua co trang moi`);
@@ -254,6 +278,39 @@ for (const slug of KHAI) {
 		sai.push(`${slug} ghim do`);
 		console.log(`SAI AC-14: ${slug} ghim ${cuoi.sha} do: ${maDo.join(" ")}`);
 	} else console.log(`GHIM ${slug}: ${cuoi.sha} xanh`);
+}
+
+// 2b. Hồ sơ chỉ mượn lệnh: mỗi lệnh mượn phải đã chạy mã 0 ở dòng ghim (có trang mới) của một hồ sơ AC-14 chạy CÙNG lệnh.
+for (const slug of chiMuon) {
+	const daXet = new Set();
+	for (const { f, lenh } of muon.get(slug) ?? []) {
+		if (daXet.has(lenh)) continue;
+		daXet.add(lenh);
+		const chung = KHAI.flatMap((chu) =>
+			(lenhCua.get(chu) ?? [])
+				.filter((x) => x.lenh === lenh)
+				.map((x) => ({ chu, id: x.id, g: ghimCuoi.get(chu) })),
+		);
+		const dat = chung.find(
+			(x) => x.g?.coTrang && x.g.cuoi.evals_exit?.[x.id] === 0,
+		);
+		if (dat) {
+			console.log(
+				`MUON ${slug}: ${f} chung o ${dat.chu} ${dat.id} ${dat.g.cuoi.sha} xanh`,
+			);
+			continue;
+		}
+		const cu = chung.find((x) => x.g && !x.g.coTrang);
+		const ly =
+			chung.length === 0
+				? "khong ho so AC-14 nao chay cung lenh"
+				: cu
+					? `ghim tren ${cu.g.cuoi.sha} chua co trang moi`
+					: "lenh khong xanh o dong ghim cua ho so chu";
+		const chu = cu?.chu ?? chung[0]?.chu ?? "-";
+		sai.push(`${slug} muon ${f} cua ${chu}: ${ly}`);
+		console.log(`SAI AC-14: ${slug} muon ${f} cua ${chu}: ${ly}`);
+	}
 }
 
 // 3. Dòng xoá trong rang/ ngoài dấu cũ phải khai tại chỗ.

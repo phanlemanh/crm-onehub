@@ -41,6 +41,15 @@ const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const HO_SO = "_acceptance/trang-don-vi-mot-bang";
 const TRINH_DUYET = process.argv.includes("--trinh-duyet");
 
+const SHA_TRUOC_TRANG = "22925c91f7952c7cbd581a1148e877d01011843a";
+const shaGhimCuoi = (chu, sha) => {
+	const dong = chu.split("\n");
+	const i = dong.findLastIndex((l) => l.includes('"kind":"repin"'));
+	if (i < 0) return chu;
+	dong[i] = dong[i].replace(/"sha":"[0-9a-f]{40}"/, `"sha":"${sha}"`);
+	return dong.join("\n");
+};
+
 const DOT_BIEN = {
 	"dvb-chon-don-vi": [
 		{
@@ -238,9 +247,27 @@ const DOT_BIEN = {
 	"dvb-ghim-nam": [
 		{
 			ten: "ghim-cu",
-			thay: [],
-			ghim: /SAI AC-14: \S+ ghim tren \S+ chua co trang moi/,
-			chuaCo: true,
+			thay: [
+				{
+					tep: "_acceptance/okr-to-chuc-va/run-log.jsonl",
+					doi: (chu) => shaGhimCuoi(chu, SHA_TRUOC_TRANG),
+				},
+			],
+			ghim: new RegExp(
+				`SAI AC-14: okr-to-chuc-va ghim tren ${SHA_TRUOC_TRANG} chua co trang moi`,
+			),
+		},
+		{
+			ten: "muon-cu",
+			thay: [
+				{
+					tep: "_acceptance/toan-canh-okr/run-log.jsonl",
+					doi: (chu) => shaGhimCuoi(chu, SHA_TRUOC_TRANG),
+				},
+			],
+			ghim: new RegExp(
+				`SAI AC-14: ve-sinh-do-san-onehub muon _acceptance/toan-canh-okr/rang/man-toan-canh\\.mjs cua toan-canh-okr: ghim tren ${SHA_TRUOC_TRANG} chua co trang moi`,
+			),
 		},
 	],
 	"dvb-man": [
@@ -537,6 +564,15 @@ try {
 			const chu = goc.get(tep) ?? readFileSync(tep, "utf8");
 			goc.set(tep, goc.get(tep) ?? chu);
 			const hienTai = readFileSync(tep, "utf8");
+			if (t.doi) {
+				const moi = t.doi(hienTai);
+				if (moi === hienTai) {
+					khongDo = `dot bien ${db.ten} — doi khong doi gi trong ${t.tep}`;
+					break;
+				}
+				writeFileSync(tep, moi);
+				continue;
+			}
 			const soLan = hienTai.split(t.cu).length - 1;
 			if (soLan !== 1) {
 				khongDo = `dot bien ${db.ten} — doan can thay xuat hien ${soLan} lan trong ${t.tep}`;
