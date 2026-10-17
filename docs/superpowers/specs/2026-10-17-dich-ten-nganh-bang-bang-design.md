@@ -112,7 +112,7 @@ Khuôn IA: danh-sách-chi-tiết (master-detail)
 Căn cứ: không đổi IA — bảng công ty + ngăn chi tiết có sẵn; luồng hiển nhiên, không tra mẫu.
 <!-- UX-SPEC-TEMPLATE>>> -->
 
-## Tên Việt của 24 ngành (bản máy soạn — Hỏi-2)
+## Tên Việt của 24 ngành (bản máy soạn — Hỏi-2; sửa 7 dòng theo hội đồng S4 lượt 1)
 
 | Thư viện | Tên Việt | Số chữ (Anh → Việt) |
 |---|---|---|
@@ -123,23 +123,23 @@ Căn cứ: không đổi IA — bảng công ty + ngăn chi tiết có sẵn; lu
 | Retail & E-commerce | Bán lẻ & Thương mại điện tử | 19 → 27 |
 | Entertainment | Giải trí | 13 → 8 |
 | Education | Giáo dục | 9 → 8 |
-| Government & Nonprofit | Nhà nước & Phi lợi nhuận | 22 → 24 |
+| Government & Nonprofit | Cơ quan nhà nước & Phi lợi nhuận | 22 → 32 |
 | Industrial & Energy | Công nghiệp & Năng lượng | 19 → 24 |
-| Automotive & Transportation | Ô tô & Vận tải | 27 → 14 |
-| Lifestyle & Leisure | Phong cách sống & Thư giãn | 19 → 26 |
+| Automotive & Transportation | Ô tô & Phương tiện | 27 → 18 |
+| Lifestyle & Leisure | Phong cách sống & Sở thích | 19 → 26 |
 | Luxury & Fashion | Hàng xa xỉ & Thời trang | 16 → 23 |
 | News & Media | Tin tức & Truyền thông | 12 → 22 |
 | Sports | Thể thao | 6 → 8 |
-| Real Estate & PropTech | Bất động sản & Công nghệ bất động sản | 22 → 37 |
+| Real Estate & PropTech | Bất động sản & PropTech | 22 → 23 |
 | Legal & Compliance | Pháp lý & Tuân thủ | 18 → 18 |
 | Telecommunications | Viễn thông | 18 → 10 |
 | Agriculture & Food | Nông nghiệp & Thực phẩm | 18 → 23 |
-| Professional Services & Agencies | Dịch vụ chuyên nghiệp & Agency | 32 → 30 |
+| Professional Services & Agencies | Tư vấn & Dịch vụ doanh nghiệp | 32 → 29 |
 | Chemicals & Materials | Hoá chất & Vật liệu | 21 → 19 |
 | Logistics & Supply Chain | Logistics & Chuỗi cung ứng | 24 → 26 |
 | Hospitality & Tourism | Khách sạn & Du lịch | 21 → 19 |
-| Construction & Built Environment | Xây dựng & Công trình | 32 → 21 |
-| Consumer Packaged Goods (CPG) | Hàng tiêu dùng đóng gói | 29 → 23 |
+| Construction & Built Environment | Xây dựng & Hạ tầng | 32 → 18 |
+| Consumer Packaged Goods (CPG) | Hàng tiêu dùng nhanh | 29 → 20 |
 
 Giữ «&» như nguồn để nhãn ngắn trong cột hẹp; «Logistics», «Agency» giữ nguyên vì là cách gọi
 thông dụng trong giới kinh doanh Việt Nam (luật kho: không tự đúc từ ghép).

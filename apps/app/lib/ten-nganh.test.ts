@@ -49,6 +49,9 @@ const tacNhan = createRequire(
 const goc = dirname(tacNhan.resolve("context.dev/package.json"));
 const khaiBao = readFileSync(join(goc, "resources/brand.d.ts"), "utf8");
 const DS = nganhTuKhaiBao(khaiBao);
+const BANG: Record<string, string> = Object.fromEntries(
+	Object.entries(BANG_NGANH),
+);
 
 describe("phu-bang", () => {
 	test("rut duoc danh sach nganh tu thu vien tac nhan cai", () => {
@@ -58,12 +61,12 @@ describe("phu-bang", () => {
 	});
 
 	test("bang phu dung danh sach thu vien", () => {
-		expect(soTapNganh(BANG_NGANH, DS)).toEqual({ thieu: [], thua: [] });
-		expect(loiCua(() => kiemPhuBang(BANG_NGANH, DS))).toBeNull();
+		expect(soTapNganh(BANG, DS)).toEqual({ thieu: [], thua: [] });
+		expect(loiCua(() => kiemPhuBang(BANG, DS))).toBeNull();
 	});
 
 	test("chieu do: bang thieu mot nganh", () => {
-		const banSao = { ...BANG_NGANH };
+		const banSao = { ...BANG };
 		delete banSao["Real Estate & PropTech"];
 		expect(soTapNganh(banSao, DS)).toEqual({
 			thieu: ["Real Estate & PropTech"],
@@ -75,13 +78,13 @@ describe("phu-bang", () => {
 	});
 
 	test("chieu do: thu vien them nganh moi", () => {
-		expect(soTapNganh(BANG_NGANH, [...DS, "Quantum Computing"]).thieu).toEqual([
+		expect(soTapNganh(BANG, [...DS, "Quantum Computing"]).thieu).toEqual([
 			"Quantum Computing",
 		]);
 	});
 
 	test("chieu do: bang con khoa thu vien da bo", () => {
-		const banSao = { ...BANG_NGANH, "Old Industry": "Ngành cũ" };
+		const banSao = { ...BANG, "Old Industry": "Ngành cũ" };
 		expect(soTapNganh(banSao, DS)).toEqual({
 			thieu: [],
 			thua: ["Old Industry"],
@@ -107,7 +110,7 @@ describe("ten-nganh", () => {
 			for (const locale of ngonNgu) {
 				const mong =
 					locale === "vi"
-						? { ten: BANG_NGANH[nganh] ?? "", dich: true }
+						? { ten: BANG[nganh] ?? "", dich: true }
 						: { ten: nganh, dich: false };
 				expect(tenNganh(nganh, locale)).toEqual(mong);
 				dem += 1;

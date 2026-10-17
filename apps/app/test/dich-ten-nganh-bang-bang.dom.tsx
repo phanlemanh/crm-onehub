@@ -34,8 +34,10 @@ const { messages } = await import("@crm/ui/lib/messages");
 const { companyMessages } = await import("@/lib/messages/companies");
 const { BANG_NGANH } = await import("@/lib/ten-nganh");
 
+const BANG = new Map<string, string>(Object.entries(BANG_NGANH));
+
 function viet(goc: string): string {
-	const ten = BANG_NGANH[goc];
+	const ten = BANG.get(goc);
 	if (!ten) throw new Error(`bang khong co ${goc}`);
 	return ten;
 }
@@ -369,7 +371,11 @@ describe("ac5", () => {
 				expect(coLangEn(phanTuChua(la, o))).toBe(true);
 				ca += 1;
 			}
-			expect(oNganhTheo(locale, "Cty Z").textContent?.trim()).not.toBe("null");
+			const oTrong = oNganhTheo(locale, "Cty Z");
+			expect(oTrong.textContent?.trim()).toBe("—");
+			expect(oTrong.querySelector(".text-muted-foreground")?.textContent).toBe(
+				"—",
+			);
 			const muc = (await moBoLoc(locale)).map(nhanMuc);
 			for (const la of LA) {
 				expect(muc).toContain(la);
