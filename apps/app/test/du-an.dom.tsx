@@ -1,4 +1,12 @@
-import { afterAll, afterEach, beforeAll, describe, expect, mock, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	describe,
+	expect,
+	mock,
+	test,
+} from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, TRPCClientError, type TRPCLink } from "@trpc/client";
 import { observable } from "@trpc/server/observable";
@@ -7,6 +15,7 @@ import type { AppRouter } from "api/app-router";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, createElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { z } from "zod";
 
 type Json =
 	| string
@@ -16,6 +25,18 @@ type Json =
 	| Json[]
 	| { [khoa: string]: Json | undefined };
 type DauVao = Json | undefined;
+
+const vaoGoi = z.object({
+	trangThai: z.string().optional(),
+	duAnId: z.string().optional(),
+	batDauNgay: z.string().optional(),
+	hanNgay: z.string().optional(),
+});
+
+const docVao = (vao: DauVao) => {
+	const kq = vaoGoi.safeParse(vao);
+	return kq.success ? kq.data : {};
+};
 
 const traLoi = new Map<string, (input: DauVao) => Json | Promise<Json>>();
 const daGoi: { path: string; input: DauVao }[] = [];
@@ -67,12 +88,10 @@ mock.module("@/components/page-transition", () => ({
 }));
 mock.module("@/lib/locale/server", () => ({ getLocale: async () => "vi" }));
 
-type GanttProps = {
-	events?: { id: string; draggable?: boolean; start: Date; end: Date }[];
-};
-let ganttProps: GanttProps = {};
 const gocGantt = await import("@crm/ui/components/reui/gantt/gantt");
 const GanttThat = gocGantt.Gantt;
+type GanttProps = Parameters<typeof GanttThat>[0];
+let ganttProps: Partial<GanttProps> = {};
 mock.module("@crm/ui/components/reui/gantt/gantt", () => ({
 	...gocGantt,
 	Gantt: (props: Parameters<typeof GanttThat>[0]) => {
@@ -204,10 +223,7 @@ const LICH = (dong: boolean) => ({
 
 function datMacDinh(): void {
 	traLoi.set("duAn.list", (vao) => {
-		const trangThai =
-			vao && typeof vao === "object" && !Array.isArray(vao)
-				? vao.trangThai
-				: undefined;
+		const trangThai = docVao(vao).trangThai;
 		return trangThai === "dong" ? [P3] : [P1, P2];
 	});
 	traLoi.set("viec.cuaToi", () => CUA_TOI);
@@ -281,7 +297,8 @@ async function go(el: HTMLInputElement, chu: string) {
 	});
 }
 
-const chuCua = (el: Element | null | undefined) => (el?.textContent ?? "").trim();
+const chuCua = (el: Element | null | undefined) =>
+	(el?.textContent ?? "").trim();
 
 const mucMenu = () =>
 	[...document.querySelectorAll('[role="menuitem"]')].map((el) => chuCua(el));
@@ -295,6 +312,8 @@ const nutChu = (chu: string) =>
 	[...document.querySelectorAll("button")].find((b) => chuCua(b) === chu);
 
 const urlCuoi = () => urls.at(-1) ?? "";
+
+const lan = (n: number): number => n;
 
 async function moPhamVi() {
 	const nut = document.querySelector("[data-o-pham-vi]");
@@ -317,7 +336,10 @@ describe("dg-man-ds", () => {
 	test("dg-man-ds: mặc định Của tôi, ô Phạm vi, Tất cả dự án, tạo dự án, ba ca tải, 375", async () => {
 		datMacDinh();
 		await moTrang();
-		await cho(() => document.querySelectorAll("[data-nhom]").length === 3, "chip");
+		await cho(
+			() => document.querySelectorAll("[data-nhom]").length === 3,
+			"chip",
+		);
 		if (
 			!chuCua(document.querySelector("[data-o-pham-vi]")).includes(
 				D.phamVi.cuaToi,
@@ -344,7 +366,10 @@ describe("dg-man-ds", () => {
 		}
 
 		await bam(nutMenu(D.phamVi.tatCa));
-		await cho(() => document.querySelector("[data-du-an]") !== null, "bang du an");
+		await cho(
+			() => document.querySelector("[data-du-an]") !== null,
+			"bang du an",
+		);
 		if (!urlCuoi().includes("phamVi=tat-ca-du-an")) {
 			throw new Error(`dg: url pham vi sai ${urlCuoi()}`);
 		}
@@ -374,17 +399,22 @@ describe("dg-man-ds", () => {
 			throw new Error(`dg: bang du an sai ${hang.length}`);
 		}
 
-		let soTao = 0;
+		const dem = { tao: 0 };
 		traLoi.set("duAn.tao", () => {
-			soTao += 1;
+			dem.tao += 1;
 			return { id: "p-moi" };
 		});
 		await moPhamVi();
 		await bam(nutMenu(D.phamVi.tao));
-		await cho(() => document.querySelector("[data-hop-du-an]") !== null, "hop tao");
+		await cho(
+			() => document.querySelector("[data-hop-du-an]") !== null,
+			"hop tao",
+		);
 		await bam(nutChu(D.form.nutTao));
-		const loiTen = document.querySelector('[data-hop-du-an] [data-slot="field-error"]');
-		if (chuCua(loiTen) !== D.form.tenTrong || soTao !== 0) {
+		const loiTen = document.querySelector(
+			'[data-hop-du-an] [data-slot="field-error"]',
+		);
+		if (chuCua(loiTen) !== D.form.tenTrong || lan(dem.tao) !== 0) {
 			throw new Error("dg: ten trong van gui");
 		}
 		const o = document.querySelector<HTMLInputElement>("#ten-du-an");
@@ -392,10 +422,10 @@ describe("dg-man-ds", () => {
 		await go(o, "Triển khai Ngân hàng B");
 		await bam(nutChu(D.form.nutTao));
 		await cho(() => urlCuoi().includes("phamVi=p-moi"), "sang du an moi");
-		if (soTao !== 1 || !urlCuoi().includes("xemViec=gantt")) {
+		if (lan(dem.tao) !== 1 || !urlCuoi().includes("xemViec=gantt")) {
 			throw new Error("dg: tao khong sang pham vi moi");
 		}
-		expect(soTao).toBe(1);
+		expect(lan(dem.tao)).toBe(1);
 	});
 
 	test("dg-man-ds: ba ca tải ở Tất cả dự án, 375 là Item, giữ phạm vi khi tải lại", async () => {
@@ -404,12 +434,17 @@ describe("dg-man-ds", () => {
 		await moTrang("?phamVi=tat-ca-du-an");
 		await nhip(10);
 		if (
-			document.querySelector("[data-du-an-cho] [data-slot='skeleton']") === null ||
+			document.querySelector("[data-du-an-cho] [data-slot='skeleton']") ===
+				null ||
 			!(document.body.textContent ?? "").includes(V.trang.tieuDe)
 		) {
 			throw new Error("dg: ds cho tai sai");
 		}
-		if (!chuCua(document.querySelector("[data-o-pham-vi]")).includes(D.phamVi.tatCa)) {
+		if (
+			!chuCua(document.querySelector("[data-o-pham-vi]")).includes(
+				D.phamVi.tatCa,
+			)
+		) {
 			throw new Error("dg: khong giu pham vi");
 		}
 	});
@@ -420,7 +455,10 @@ describe("dg-man-ds", () => {
 			throw new Error("hong");
 		});
 		await moTrang("?phamVi=tat-ca-du-an");
-		await cho(() => document.querySelector("[data-vung-tai-loi]") !== null, "loi");
+		await cho(
+			() => document.querySelector("[data-vung-tai-loi]") !== null,
+			"loi",
+		);
 		const vung = document.querySelector("[data-vung-tai-loi]");
 		if (
 			!chuCua(vung).includes(D.ds.loi) ||
@@ -437,10 +475,15 @@ describe("dg-man-ds", () => {
 		traLoi.set("duAn.list", () => []);
 		await moTrang("?phamVi=tat-ca-du-an");
 		await cho(
-			() => document.querySelector('[data-slot="empty"]:not([data-vung-tai-loi])') !== null,
+			() =>
+				document.querySelector(
+					'[data-slot="empty"]:not([data-vung-tai-loi])',
+				) !== null,
 			"rong",
 		);
-		const rong = document.querySelector('[data-slot="empty"]:not([data-vung-tai-loi])');
+		const rong = document.querySelector(
+			'[data-slot="empty"]:not([data-vung-tai-loi])',
+		);
 		if (
 			!chuCua(rong).includes(D.ds.rong) ||
 			![...(rong?.querySelectorAll("button") ?? [])].some(
@@ -452,7 +495,10 @@ describe("dg-man-ds", () => {
 		await act(async () => root375());
 		datMacDinh();
 		await moTrangLai("?phamVi=tat-ca-du-an");
-		await cho(() => document.querySelector("[data-du-an]") !== null, "bang 375");
+		await cho(
+			() => document.querySelector("[data-du-an]") !== null,
+			"bang 375",
+		);
 		const the = document.querySelectorAll('[data-slot="item"][data-du-an]');
 		if (the.length !== 2) throw new Error("dg: 375 khong la item");
 	});
@@ -468,7 +514,9 @@ describe("dg-man-ds", () => {
 			"bao khong thay",
 		);
 		if (
-			!chuCua(document.querySelector("[data-o-pham-vi]")).includes(D.phamVi.cuaToi) ||
+			!chuCua(document.querySelector("[data-o-pham-vi]")).includes(
+				D.phamVi.cuaToi,
+			) ||
 			urlCuoi().includes("khong-co")
 		) {
 			throw new Error("dg: pham vi la khong ve cua toi");
@@ -503,17 +551,17 @@ describe("dg-man-dong", () => {
 	const moDuAn = async (p: ReturnType<typeof duAn>, coViecMo = true) => {
 		datMacDinh();
 		traLoi.set("duAn.list", (vao) => {
-			const trangThai =
-				vao && typeof vao === "object" && !Array.isArray(vao)
-					? vao.trangThai
-					: undefined;
+			const trangThai = docVao(vao).trangThai;
 			if (trangThai === "dong") return p.dong ? [p] : [];
 			return p.dong ? [P2] : [p, P2];
 		});
 		traLoi.set("duAn.get", () => p);
 		traLoi.set("duAn.lich", () => LICH(p.dong));
 		await moTrangLai(`?phamVi=${p.id}`);
-		await cho(() => document.querySelector("[data-dai-du-an]") !== null, "dai du an");
+		await cho(
+			() => document.querySelector("[data-dai-du-an]") !== null,
+			"dai du an",
+		);
 		void coViecMo;
 	};
 
@@ -525,41 +573,49 @@ describe("dg-man-dong", () => {
 	test("dg-man-dong: hỏi khi còn việc mở, thôi không gọi, đồng ý gọi một lần", async () => {
 		const p = duAn({ id: "p1", ten: P1.ten, soViec: 3, soXong: 2 });
 		await moDuAn(p);
-		let soDong = 0;
+		const dong = { n: 0 };
 		traLoi.set("duAn.dong", () => {
-			soDong += 1;
+			dong.n += 1;
 			return { ok: true };
 		});
 		await moMenu();
 		await bam(nutMenu(D.dai.dong));
-		await cho(() => document.querySelector('[role="alertdialog"]') !== null, "hoi");
+		await cho(
+			() =>
+				document.querySelector('[role="alertdialog"]') !== null ||
+				lan(dong.n) > 0,
+			"hoi",
+		);
 		const hoi = chuCua(document.querySelector('[role="alertdialog"]'));
-		if (!hoi.includes(dien(D.dai.hoiDong, { n: 1 })) || soDong !== 0) {
+		if (!hoi.includes(dien(D.dai.hoiDong, { n: 1 })) || lan(dong.n) !== 0) {
 			throw new Error("dg: dong khong hoi");
 		}
 		await bam(nutChu(D.dai.thoi));
 		await nhip(10);
-		if (soDong !== 0) throw new Error("dg: thoi van dong");
+		if (lan(dong.n) !== 0) throw new Error("dg: thoi van dong");
 		await moMenu();
 		await bam(nutMenu(D.dai.dong));
-		await cho(() => document.querySelector('[role="alertdialog"]') !== null, "hoi lan hai");
+		await cho(
+			() => document.querySelector('[role="alertdialog"]') !== null,
+			"hoi lan hai",
+		);
 		await bam(nutChu(D.dai.vanDong));
-		await cho(() => soDong > 0, "goi dong");
+		await cho(() => lan(dong.n) > 0, "goi dong");
 		await nhip(10);
-		if (soDong !== 1) throw new Error("dg: dong goi sai");
+		if (lan(dong.n) !== 1) throw new Error("dg: dong goi sai");
 	});
 
 	test("dg-man-dong: hết việc mở thì đóng không hỏi", async () => {
 		const p = duAn({ id: "p1", ten: P1.ten, soViec: 3, soXong: 3 });
 		await moDuAn(p);
-		let soDong = 0;
+		const dong = { n: 0 };
 		traLoi.set("duAn.dong", () => {
-			soDong += 1;
+			dong.n += 1;
 			return { ok: true };
 		});
 		await moMenu();
 		await bam(nutMenu(D.dai.dong));
-		await cho(() => soDong > 0, "dong thang");
+		await cho(() => lan(dong.n) > 0, "dong thang");
 		if (document.querySelector('[role="alertdialog"]') !== null) {
 			throw new Error("dg: hoi thua");
 		}
@@ -575,29 +631,48 @@ describe("dg-man-dong", () => {
 			throw new Error("dg: trang dong sai thanh");
 		}
 		await moMenu();
-		if (!mucMenu().includes(D.dai.moLai)) throw new Error("dg: trang dong sai mo lai");
+		if (!mucMenu().includes(D.dai.moLai))
+			throw new Error("dg: trang dong sai mo lai");
 		await act(async () => {
-			document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+			document.dispatchEvent(
+				new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+			);
 		});
 		await nhip();
 		await bam(nutChu(V.trang.giaoViec));
-		await cho(() => document.querySelector("[data-o-soan-viec]") !== null, "o soan");
+		await cho(
+			() => document.querySelector("[data-o-soan-viec]") !== null,
+			"o soan",
+		);
 		const oDuAn = document.querySelector(`[aria-label="${V.oSoan.duAn}"]`);
-		if (chuCua(oDuAn).includes(P1.ten)) throw new Error("dg: trang dong sai giao viec");
+		if (chuCua(oDuAn).includes(P1.ten))
+			throw new Error("dg: trang dong sai giao viec");
 		await bam(oDuAn);
 		await nhip(10);
-		const chon = [...document.querySelectorAll('[role="option"]')].map((x) => chuCua(x));
+		const chon = [...document.querySelectorAll('[role="option"]')].map((x) =>
+			chuCua(x),
+		);
 		if (chon.some((x) => x.includes(P1.ten))) {
 			throw new Error("dg: trang dong sai o soan");
 		}
 	});
 
 	test("dg-man-dong: có lịch sử thì không Xoá; người khác không thấy Đóng", async () => {
-		await moDuAn(duAn({ id: "p1", ten: P1.ten, coLichSu: true, quyen: { dong: true, xoa: false } }));
+		await moDuAn(
+			duAn({
+				id: "p1",
+				ten: P1.ten,
+				coLichSu: true,
+				quyen: { dong: true, xoa: false },
+			}),
+		);
 		await moMenu();
 		if (mucMenu().includes(D.dai.xoa)) throw new Error("dg: xoa hien sai");
-		await moDuAn(duAn({ id: "p1", ten: P1.ten, quyen: { dong: false, xoa: false } }));
+		await moDuAn(
+			duAn({ id: "p1", ten: P1.ten, quyen: { dong: false, xoa: false } }),
+		);
 		await moMenu();
-		if (mucMenu().includes(D.dai.dong)) throw new Error("dg: dong hien cho khac");
+		if (mucMenu().includes(D.dai.dong))
+			throw new Error("dg: dong hien cho khac");
 	});
 });
