@@ -18,6 +18,17 @@ async function luatCu(): Promise<ChuyenHuong> {
 	return luat;
 }
 
+function oMayChu<T>(lam: () => T): T {
+	const g = globalThis as { window?: unknown };
+	const cu = g.window;
+	g.window = undefined;
+	try {
+		return lam();
+	} finally {
+		g.window = cu;
+	}
+}
+
 async function dichTheo(
 	luat: ChuyenHuong,
 	duong: string,
@@ -28,12 +39,14 @@ async function dichTheo(
 		removeUnnamedParams: true,
 	})(ten);
 	if (!khop) return null;
-	const { parsedDestination } = prepareDestination({
-		appendParamsToQuery: false,
-		destination: luat.destination,
-		params: khop,
-		query: parse(chuoi),
-	});
+	const { parsedDestination } = oMayChu(() =>
+		prepareDestination({
+			appendParamsToQuery: false,
+			destination: luat.destination,
+			params: khop,
+			query: parse(chuoi),
+		}),
+	);
 	const q = new URLSearchParams();
 	for (const [k, v] of Object.entries(parsedDestination.query))
 		for (const x of Array.isArray(v) ? v : v === undefined ? [] : [v])

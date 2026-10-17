@@ -260,6 +260,10 @@ evals:
       «Cập nhật tuần» cung luot) — ho so do chua ky thi chay van chay va in "(chua ky)".
       DOI CHUNG DUONG / CHIEU DO: script tu chay tren ban sao co mot assertion cu (5 the) dat lai trong
       okr-thanh-tab.dom.tsx -> phai in "SAI AC-11" truoc khi chay tren cay that.
+      Bo chon rong (lan nay khong cham tep kiem hay vat nao ma eval ho so da ky KHAC chay — nhanh va sau gop): in
+      «AC-11: khong eval ho so da ky khac chay … — 0 eval bi luot nay cham», doi chung duong va chieu do chay tren cac
+      eval da ky chay thang gop-y-dung-cho.dom.tsx; dong ket «DUNG AC-11: 0 eval ho so da ky khac bi luot nay cham ·
+      doi chung duong N/N». Doi chung khong con eval nao chay -> ma 2 «KHONG DO DUOC».
 
   - id: E14
     criterion: AC-12
