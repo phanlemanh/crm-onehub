@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: def2833bb5487859238b8d233a0c618985c66b8b
+verified_commit: b23b82b213795b4ba7f5da2fcbf518848b35c476
 human_signoff: Manh Phan 2026-10-17
 ---
 
@@ -241,3 +241,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, deterministic)
 Round 1: moi eval xanh; mot muc trong hop dong (AC-4, ma tran ten mien con moi phu 4 tren 14 nen tang) can va. Returned to implementation (commit 04244033a).
 Round 2: E1, E5, E9, E10 chay lai tren cay 151afe63a; E2, E3, E4, E6, E7, E8 carry-forward tu round 1 (delta khong cham paths cua eval). Tat ca PASS.
 Round 3: them E12 (AC-10) va E13 (AC-7); E3, E4, E5, E6, E7, E8, E12 chay lai tren cay def2833bb, E11 va E13 do hoi dong cham lai; E1, E2, E9, E10 carry-forward (delta khong cham paths cua eval). Tat ca PASS.
+
+### Re-pin lần 1 — 2026-10-17, do gộp onehub b23b82b21 sau chữ ký (PR #462 xung đột)
+run_id: repin-20261017T065612Z-82444
+sha: b23b82b213795b4ba7f5da2fcbf518848b35c476 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 (E11 không khai paths), E13 (E13 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
