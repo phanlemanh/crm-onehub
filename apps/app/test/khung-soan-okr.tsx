@@ -63,6 +63,7 @@ function thuTuc(duong: string) {
 						queryKey: [duong, vao ?? null],
 						queryFn: async () => doc(vao),
 					},
+		mutationKey: () => [duong],
 		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
@@ -435,6 +436,12 @@ export function datLai(): void {
 	luongGia = null;
 	daPhanLoai.length = 0;
 	danhSach = { cuoc: CUOC, dong: [], thieuBoiCanh: false, lyDo: null };
+	dat("users.me", () => ({
+		id: CUOC.nguoiMo.id,
+		name: CUOC.nguoiMo.name,
+		email: "hai@onehub.vn",
+		image: null,
+	}));
 	dat("okr.soanDanhSach", () => danhSach);
 	dat("okr.soanQuyet", () => ({ ok: true }));
 	dat("okr.soanDuaVao", () => ({
@@ -720,7 +727,6 @@ export async function moKhung(
 	}));
 	const tham = new URLSearchParams(thamSo);
 	if (don !== "goc") tham.set("donOkr", don);
-	// Nút soạn ở đầu trang khu từ DH1 (dieu-huong-khu-muc-tieu) — dựng cả đầu trang lẫn thân.
 	await mo(
 		<>
 			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />

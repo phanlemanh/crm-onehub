@@ -34,14 +34,12 @@ mock.module("@/components/page-shell", () => ({
 	PageShellDescription: khoi("p"),
 	PageShellActions: khoi("div"),
 }));
-// Đầu trang khu hỏi quyền máy chủ (DH1); bài này chỉ đo tiêu đề và thanh tab nên
-// mọi truy vấn treo — hàng hành động đứng ở khung xương.
 const thuTucTreo = {
 	queryOptions: () => ({
 		queryKey: ["treo", Math.random()],
 		queryFn: () => new Promise(() => {}),
 	}),
-	// Nút «Hỏi Kara» ở đầu hàng hành động dựng useMutation(okr.hoiMo); bài không bấm nó.
+	mutationKey: () => ["treo"],
 	mutationOptions: () => ({ mutationFn: async () => null }),
 };
 mock.module("@/lib/trpc/client", () => ({
@@ -102,19 +100,17 @@ function nhan(o: HTMLElement): string | null {
 	return tabHoiY(o).querySelector('[data-slot="badge"]')?.textContent ?? null;
 }
 
-describe("thanh tab OKR — năm tab và huy hiệu Hỏi ý", () => {
-	test("năm tab, tab Hỏi ý trỏ /okr/hoi-y và giữ kyOkr", async () => {
+describe("thanh tab OKR — bốn tab và huy hiệu Hỏi ý", () => {
+	test("bốn tab, tab Hỏi ý trỏ /okr/hoi-y và giữ kyOkr", async () => {
 		const o = await ve(<ThanhTabOkr tab="hoi-y" />);
 		const tab = [...o.querySelectorAll('[role="tab"]')];
 		expect(tab.map((t) => t.getAttribute("href"))).toEqual([
 			"/ws/okr?kyOkr=q3",
-			"/ws/okr/cap-nhat-tuan?kyOkr=q3",
 			"/ws/okr/theo-don-vi?kyOkr=q3",
 			"/ws/okr/toan-canh?kyOkr=q3",
 			"/ws/okr/hoi-y?kyOkr=q3",
 		]);
 		expect(tab.map((t) => t.getAttribute("aria-selected"))).toEqual([
-			"false",
 			"false",
 			"false",
 			"false",

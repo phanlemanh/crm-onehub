@@ -290,6 +290,37 @@ self-hoster's admin cannot redeploy.
   một vết (`keHoach.doiCamTrich`, `buoc.giao`) trong cùng giao dịch. Người thường thì
   không đổi gì. `datBuocXong` (`@crm/db/onboarding-buoc`) không đổi: tin Zalo «xong n»
   chỉ đánh dấu xong.
+- **Bước là bản chiếu của Việc (hàng DA3, `ke-hoach-sinh-viec`).** `onboarding.createFromTemplate` nhận
+  thêm `nguoiTheoPhongBan?: { departmentId, userId }[]` (người làm cho từng phòng ban; vắng thì trưởng
+  phòng — `Department.headUserId`, có trong `onboarding.listDepartments` — nếu đọc được dữ liệu đối tác,
+  không thì người cầm trịch); người do người chọn mà mang vai «chỉ OKR» → 400
+  `ONBOARDING.thongDiep.vaiChiOkrPhong` (tên người, tên phòng), không ghi gì. Mỗi bước sinh từ khuôn, và
+  mỗi bước của `addStep`, mang đúng một Việc qua `OnboardingStep.viecId` (người giao là người tạo, nguồn
+  vết `khuon` hay `web`, gắn kế hoạch). `StepOutput` thêm `viecId` và `viecTrangThai` (vắng → null).
+  Việc là nguồn sự thật: `chieuLenBuoc` (`@crm/db/buoc-viec-chieu`) chép người làm, hạn, tên, xong sang
+  bước ở cuối mọi lệnh ghi Việc (`doiTrangThai`, `suaViec`, `doiNguoiThucHien`, `keoViec`, chuyển việc);
+  Việc Huỷ thì bước không có người làm. Bốn lệnh trên thẻ Bước (`assignStep`, `setStepDone`,
+  `rescheduleStep`, `removeStep`) và «xong n» (`datBuocXong`, tham số `nguon`) ghi vào Việc qua `ghiTuBuoc`
+  (`@crm/db/buoc-viec`) bằng quyền của kế hoạch, không bằng vai người giao/người làm; lệnh trên khung Việc
+  vẫn theo quyền Việc. Bỏ giao bước có Việc → 400 `buocLuonCoNguoi`; bỏ xong khi người làm đã sang vai
+  «chỉ OKR» → 400 như «Làm lại»; `removeStep` chuyển Việc sang Huỷ (vết kèm lý do) rồi xoá bước. Trên Việc
+  của một bước, Huỷ, xoá và gỡ gắn kế hoạch trả 400 `VIEC.thongDiep.goBuocOKeHoach`. `closePlan` nhận
+  `huyViecMo?: boolean`: đúng thì Việc còn mở của bước chưa xong sang Huỷ (nguồn `dong-ke-hoach`); mở lại
+  không hồi. Nhắc buổi sáng không phát `buoc-*` cho bước có Việc — Việc tự nhắc `viec-*`.
+- **Gợi ý mở kế hoạch khi deal thắng (hàng DA3b, `goi-y-mo-ke-hoach`).** Bảng `GoiYKeHoach` (`CHO · DA_MO ·
+  BO_QUA`). Luật tất định ở máy chủ, không qua tác tử: `sinhGoiYKeHoach` (`@crm/db/goi-y-ke-hoach`) chạy
+  trong chính giao dịch của `chuyenGiaiDoanTrongTx` (phủ `setStage`, `bulkSetStage`, lưu trữ giai đoạn) và
+  của `DealsService.create`. Sinh một gợi ý ⟺ lần chuyển đi từ giai đoạn không phải thắng (hay tạo mới)
+  sang giai đoạn thắng, công ty không có kế hoạch `closedAt` trống, và deal không có gợi ý `CHO`; người
+  nhận là `deal.ownerId` lúc sinh; chỉ mục duy nhất một phần `goiYKeHoach_dealId_cho_key` giữ «một gợi ý
+  chờ mỗi deal». Mỗi lần chuyển sang thắng là một gợi ý: đã bỏ qua rồi thắng lại thì sinh gợi ý mới.
+  Hai thủ tục mới: `onboarding.goiYCuaDeal({ dealId })` trả gợi ý `CHO` của deal đang thắng, chưa lưu
+  trữ, khi người gọi là người nhận hay quản trị (`canManageOnboarding`), không thì `null`;
+  `onboarding.boQuaGoiY({ id })` → `BO_QUA`, người khác 403 `GOI_Y.thongDiep.khongQuyen`, gợi ý đã xử lý 400
+  `GOI_Y.thongDiep.daXuLy` («Gợi ý này đã được xử lý.»). `createFromTemplate` (tRPC hay REST
+  `POST /onboarding/plans`, ai gọi cũng vậy) chuyển mọi gợi ý `CHO` của công ty sang `DA_MO` kèm `planId`
+  trong cùng giao dịch; tạo hỏng thì không đổi gì. Gợi ý còn `CHO` của deal đang thắng thành mục
+  `goi-y-ke-hoach` của nhắc buổi sáng và thông báo của người nhận đọc được dữ liệu đối tác.
 - **Writes in the shared scope are either self-service or admin-only.** API keys
   and the person's own Zalo channel are self-service; every system setting —
   `settings.*` writes included, gated by `canManageSettings` — requires an owner
@@ -560,14 +591,15 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
 - **Bảng và việc con** (hàng DA2, `ViecBangService`). `viec.bang({ nhom })` trả bốn cột Chưa làm · Đang làm
   · Chờ đánh giá · Xong; cột Xong chỉ việc có `khepLuc` trong `VIEC.bang.xongGanDayNgay` ngày, `tong` đếm đủ;
   mỗi thẻ mang `chuyenDuoc` (đích người xem được phép, máy chủ tính bằng `chuyenDuocCua` — giao diện không tự
-  suy đồ thị), `con` (`xong`/`tong`, không tính Huỷ), `cha` và `conMo`. `viec.keo({ id, den, thuTu, nguon })`
+  suy đồ thị), `con` (`xong`/`tong`, không tính Huỷ), `cha` và `conMo`; `con` và `conMo` chỉ đếm việc con người
+  xem thấy, và `cha` là `null` khi người xem không thấy việc cha (hàng DA2b — cùng luật 404, không có dòng thay chỗ). `viec.keo({ id, den, thuTu, nguon })`
   đi qua đúng `doiTrangThai` (cùng thứ tự kiểm 404 → 400 → 403 → vai «chỉ OKR»), với `nguon` là `bang-keo`
   (kéo bằng chuột, chạm, phím) hay `bang-menu` (menu «Chuyển sang…»); lần bị từ chối không ghi gì. Thứ tự
   trong cột là của riêng từng người, ở bảng `viecThuTu` (khoá chèn giữa base-62, `@crm/db/viec-thu-tu`);
   sắp thứ tự không ghi vết và không làm việc thành «có lịch sử». `viec.taoCon({ chaId, … })` (`taoViecCon`):
   chỉ người giao hay người thực hiện của cha, cha phải đang mở và không phải con (một tầng), con chép gắn của
   cha, người giao và người thực hiện của cha thành người theo dõi, cha nhận vết `them-viec-con` — nên cha đã
-  có con thì không xoá được. `viec.con({ id })` trả `cha`, các con người xem thấy, `conMo`, `themDuoc`.
+  có con thì không xoá được. `viec.con({ id })` trả `cha` (`null` khi người xem không thấy cha), các con người xem thấy, `conMo`, `themDuoc`.
 - **Tổng quan**: `viecQuaHan` (việc đang mở hạn trước hôm nay: tôi thực hiện ở «của tôi», tôi thấy ở «mọi
   người»; tối đa `VIEC.tranTongQuan` dòng); `quaHan.viec` cộng thêm số việc cùng điều kiện, đếm đủ.
 - **Việc cần làm cũ (hàng DA1b).** Hàng `activity` loại `TASK` không còn đường ghi: `activities.create` trả 400
@@ -692,7 +724,9 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   same tree that decides edit rights, no extra query); the morning reminder and the
   agent build it with `nguCanhXemOkr`, and a test compares the two head sets on the
   sample OKR set. `_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs --ca xem` fails on
-  a read without the condition unless `MIEN_XEM` names it with a reason.
+  a read without the condition unless `MIEN_XEM` names it with a reason. The
+  `acceptance gate` job of `.github/workflows/acceptance.yml` runs it on every pull request
+  and on every push to `onehub`.
   - Lists (`byUnit`, `mine`, `danhSach`, `bangCham`, `xuatKy`, `khoiCuaToi`) leave
     the objective out, and counts and pages do not include it.
   - Reads by id (`objective`, `dienBien`, `canhKr`, `comments`, `lichSuSo`,
@@ -857,7 +891,11 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `where`, a division includes its departments, and the facet counts are counted
   with every other filter applied but their own. `okr.toanCanh` rolls published
   objectives up by unit, `okr.cayCanChinh` returns the whole company alignment tree
-  with each objective's expected pace, and `okr.sucKhoe` is admin-only
+  with each objective's expected pace, `okr.quanhMucTieu` (GET `/okr/objective-map`) returns
+  one objective's map — every contribution path up to company level, its KRs and the
+  objectives contributing one step down, each objective or KR once — built by the pure
+  `quanh-muc-tieu.ts` over the same `mucTieuCuaCay` set the tree reads (so the same
+  visibility; a target outside that set is dropped, never named), and `okr.sucKhoe` is admin-only
   (`ForbiddenException` otherwise). `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
   number of queries whatever the unit count; `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
   pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
@@ -1638,6 +1676,38 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
   14/10 (`_acceptance/moi-tin-hieu-cho-quan-tri/`). Mở lại khi số tín hiệu vượt vài trăm.
 - Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
   phán nào ở API.
+
+## Bản chụp lộ trình: Actions đẩy, CRM giữ bản mới nhất
+
+Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó mới hơn bản đang chạy, và đọc
+`LO-TRINH.html` đóng sẵn trong bản dựng khi không (`apps/app/lib/lo-trinh/chon-nguon.ts`). Bảng
+`BanChupLoTrinh` giữ một hàng mỗi nguồn (hôm nay chỉ `crm`); không lịch sử, bản mới ghi đè.
+
+- **Người đẩy là GitHub Actions** (`.github/workflows/ban-chup-lo-trinh.yml`, kịch bản
+  `scripts/ban-chup-lo-trinh/day.ts`), gọi `POST /rest/lo-trinh/ban-chup` (thủ tục
+  `loTrinhBanChup.day`) với `x-api-key` là khoá loại «Đẩy lộ trình». Đây không phải điểm nhận
+  `/internal/*`: nó là thủ tục tRPC qua cầu REST, chặn bằng khoá máy như đường kéo tín hiệu.
+- **Khoá «Đẩy lộ trình» là cấu hình thứ ba của `apiKey([...])`** (`configId: "day-lo-trinh"`,
+  `enableSessionForAPIKeys: false`), đứng SAU khoá mặc định — cùng luật thứ tự với khoá chỉ-kéo.
+  `KhoaDayLoTrinhMiddleware` đọc lại vai người giữ khoá mỗi lần gọi: chỉ chủ hay quản trị.
+  Chỉ chủ hay quản trị tạo được loại khoá này.
+- **Phân tích ở biên, lưu nguyên khối**: thân đi qua `banChupVao`
+  (`@crm/validation/ban-chup-lo-trinh`), khối dữ liệu phải qua khuôn lộ trình; hàng lưu giữ cả
+  khoá ngoài khuôn của trang (danh sách tín hiệu) để TH3 đọc. Đọc ra thì phân tích lại.
+- **Không bao giờ lùi**: ghi bằng một câu `UPDATE … WHERE commitLuc < $moi`; cùng sha trả
+  `trung`, cũ hơn trả `cu-hon`, không đổi gì. Hai lượt chạy đua tạo hàng đầu bắt `P2002`.
+- Nhật ký ghi mã khoá, sha và kết quả, không ghi nội dung khối. Không `AgentTask`: không có việc
+  phán nào ở API.
+- **Trần thân 2 MB chỉ áp riêng đường bản chụp.** `createApp` dựng hai cầu REST trên cùng router:
+  `POST /rest/lo-trinh/ban-chup` (khớp đúng đường, `BAN_CHUP_LO_TRINH.duongRest`) đọc thân tới
+  `tranThanByte`; mọi đường khác của `/rest` đọc tới `REST_BRIDGE_BODY_LIMIT_BYTES` (100 000 byte,
+  đúng mặc định của `trpc-to-openapi`). Thân được đọc trước khi thủ tục kiểm quyền, nên trần không
+  nới theo người gửi — người đã đăng nhập cũng nhận 413 khi quá 100 000 byte. Lỗi 413 của hai cầu
+  cùng một khuôn.
+- **Chỉ onehub đẩy được.** `day.ts` chạy trong GitHub Actions (`GITHUB_ACTIONS=true`) mà
+  `GITHUB_REF` khác `refs/heads/onehub` — kể cả bấm «Run workflow» trên một nhánh — thì lượt đỏ,
+  in ref đã chạy, không gọi CRM. Chạy ngoài Actions không bị chặn. Bước chặn sống trong kịch bản
+  của chính nhánh được chạy: nhánh lấy onehub trước khi bước chặn vào onehub thì không có nó.
 
 ## Money
 

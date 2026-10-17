@@ -150,9 +150,17 @@ _Avoid_: onboarding, hồ sơ kế hoạch, dự án
 Vì sao: "onboarding" để nguyên thì màn lẫn tiếng; "hồ sơ" là tên trang riêng đã
 bỏ; "dự án" gợi một thứ có ngân sách và nghiệm thu, kế hoạch này thì không.
 
-**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một phòng ban, có hạn, có thể
-chưa giao cho ai. Được chép từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không
-đổi khuôn. Chốt 2026-09-22.
+**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một phòng ban, có hạn. Được chép
+từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không đổi khuôn. Chốt 2026-09-22. Từ hàng
+DA3 (2026-10-14), bước của kế hoạch tạo từ khuôn hay thêm tay mang đúng một **Việc** và
+là bản chiếu của Việc ấy: người làm, hạn, tên và xong lấy từ Việc — sửa ở bước hay ở
+Việc thì hai bên cùng đổi. Lúc tạo kế hoạch, người tạo chọn người làm cho từng phòng
+ban; mặc định là trưởng phòng, phòng chưa có trưởng phòng (hay trưởng phòng mang vai
+«chỉ OKR») thì là người cầm trịch. Việc của một bước không Huỷ, không xoá, không bỏ khỏi
+kế hoạch được — muốn bỏ thì dùng «Bỏ bước» ở kế hoạch, Việc chuyển Huỷ và còn lịch sử.
+Việc đã Huỷ thì bước không có người làm. Đóng kế hoạch còn việc dở thì hộp đóng hỏi có
+huỷ các việc đó không (đánh dấu sẵn); mở lại kế hoạch không tự hồi việc đã huỷ. Bước của
+kế hoạch tạo trước DA3 không mang Việc, có thể chưa giao cho ai và chạy như cũ.
 _Avoid_: task, việc cần làm, nhiệm vụ
 Vì sao: "việc cần làm" là loại hoạt động cũ trên dòng thời gian, nay đã chép thành
 Việc — hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
@@ -166,7 +174,7 @@ không đổi. Việc gắn ít nhất một bản ghi đối tác thì ai đọ
 gì là việc riêng, chỉ ba vai người trong cuộc thấy. Lượt này người vai «chỉ OKR» chưa dùng Việc (kể cả
 việc riêng). Việc cần làm cũ trên dòng thời gian đã được chép thành Việc (hàng DA1b): bản gốc còn
 trong bảng hoạt động để đảo, việc chưa chép hiện chỉ đọc, không đường nào tạo việc cần làm mới; Tác
-nhân giao việc bằng Việc. Việc (KR) thay ở lượt V5; bước của kế hoạch 30 ngày vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
+nhân giao việc bằng Việc. Việc (KR) thay ở lượt V5; bước của kế hoạch 30 ngày tạo từ hàng DA3 mang một Việc (xem **Bước**), bước của kế hoạch cũ vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
 _Avoid_: task, nhiệm vụ, đầu việc
 Vì sao: khảo sát 05/10 thấy mọi hãng tách hai loại việc đều phải vá — «việc của
 tôi» nằm hai chỗ, quyền theo hai luật. Một chữ cho một loại việc chung cả CRM.
@@ -301,7 +309,7 @@ Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai
 **Nhắc buổi sáng**: một tin riêng qua Zalo hoặc Slack, theo lựa chọn của người
 đó, mỗi sáng lúc giờ đã khai, gom mọi bước quá hạn, bước sắp hạn, kế hoạch im, mốc
 ngày, việc quá hạn và việc sắp hạn người đó thực hiện, việc đang chờ người đó đánh
-giá; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
+giá, gợi ý mở kế hoạch đang chờ người đó; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
 thêm Việc 2026-10-13.
 _Avoid_: thông báo, notification
 Vì sao: thông báo là từng mục nằm trong chuông của CRM (mục **Thông báo**); nhắc
@@ -338,9 +346,22 @@ Vì sao: người không đăng nhập CRM bằng Zalo, và Zalo không cho CRM 
 khoản của họ; việc duy nhất xảy ra là CRM biết nhắn nhắc buổi sáng cho ai.
 
 **Gợi ý**: câu hướng xử lý đi kèm một nhắc kế hoạch im — «Giao bước X», «Bước X
-quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22.
+quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22. Khác **Gợi ý mở kế hoạch**: gợi ý là
+một câu trong tin nhắc, không phải bản ghi, và không ai xử lý nó.
 _Avoid_: việc cần làm, hành động
 Vì sao: "việc cần làm" là loại hoạt động cũ trên dòng thời gian, nay đã thành Việc.
+
+**Gợi ý mở kế hoạch**: một bản ghi máy sinh mỗi lần một deal chuyển sang giai đoạn thắng
+(từ giai đoạn mở, giai đoạn thua, hay tạo thẳng ở thắng) khi công ty của deal chưa có kế
+hoạch 30 ngày đang mở và deal chưa có gợi ý đang chờ. Người nhận là người phụ trách deal.
+Ba kết cục: **chờ**, **đã mở kế hoạch** (ai đó tạo kế hoạch cho công ty, bằng bất kỳ đường
+nào), **đã bỏ qua** (người nhận hoặc quản trị bấm «Bỏ qua»; không mở lại được). Hiện ở
+đầu sheet deal và trong nhắc buổi sáng chừng nào còn chờ và deal còn ở thắng. Không có
+nút xoá: gợi ý là vật đếm của ngưỡng «mọi deal thắng đều có gợi ý». Chốt 2026-10-16
+(DA3b).
+_Avoid_: gợi ý (trần), đề xuất, lời mời, suggestion
+Vì sao: «gợi ý» trần đã là câu hướng xử lý của nhắc kế hoạch im; «đề xuất» là dòng của
+Trợ lý OKR — luôn viết đủ «gợi ý mở kế hoạch».
 
 **Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
 ngày để theo dõi bốn bậc. Chốt 2026-09-22.
@@ -1170,13 +1191,24 @@ tới tệp gốc.
 **Tín hiệu**: một điều người dùng gặp trong OneHub — chỗ hỏng, chỗ thiếu, một ý muốn có —
 kể bằng nút «Gửi tín hiệu» ở đầu mọi màn. CRM chỉ nhận và cất tín hiệu; đội sản phẩm lấy
 tín hiệu về, gom thành nhóm và chọn nhóm nào thành việc. Người gửi xem tín hiệu của mình
-đang ở đâu ở trang «Tín hiệu đã gửi»: chờ lấy về, chờ gom, vào nhóm nào, thành việc nào,
-đã giao chưa. Chỉ người gửi xoá được tín hiệu, và chỉ khi đội sản phẩm chưa lấy về. Chốt
-2026-10-12 tại Cổng Đáng của `gui-tin-hieu-trong-crm`.
+đang ở đâu ở trang «Tín hiệu đã gửi»: đã nhận, đang xem xét, vào nhóm nào, thành việc nào,
+đã giao chưa. Câu trạng thái sau khi đội sản phẩm xếp nhóm do CRM dựng theo ngôn ngữ người
+xem từ mã chỗ bộ kit ghi; tên nhóm, lý do và tên việc giữ nguyên chữ người viết. Chỉ người
+gửi xoá được tín hiệu, và chỉ khi đội sản phẩm chưa lấy về. Chốt 2026-10-12 tại Cổng Đáng
+của `gui-tin-hieu-trong-crm`; chữ trạng thái đổi 2026-10-14 ở `sua-giao-dien-tin-hieu`.
 _Avoid_: góp ý, phản hồi, feedback, báo lỗi, yêu cầu
 Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sai» là đánh dấu một câu trả
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
 được nhận làm, còn tín hiệu chưa hứa gì.
+
+**Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
+của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè
+bản cũ, không giữ lịch sử. Trang Lộ trình đọc bản chụp khi nó mới hơn bản CRM đang chạy, và
+đọc lộ trình đóng sẵn trong bản dựng khi không — người xem thấy chữ «bản dựng» cạnh giờ lấy.
+Đề xuất 2026-10-14 (LT1c `lo-trinh-doc-ban-chup`), chốt tại Cổng Phạm vi.
+_Avoid_: bản sao, cache, snapshot
+Vì sao: «bản sao» gợi một bản người tự chép tay; «cache» là chuyện kỹ thuật của trang, không
+nói bản này đến từ đâu và lấy lúc nào.
 
 **Khoá chỉ kéo tín hiệu**: một khoá API chỉ làm được đúng một việc — kéo tín hiệu về kho
 cho lịch chạy hằng ngày. Khoá không đăng nhập được ở đâu, không đọc bản ghi, không tạo hay
@@ -1186,6 +1218,14 @@ thôi làm quản trị thì khoá thôi kéo được. Chốt 2026-10-14 tại 
 _Avoid_: khoá máy, khoá dịch vụ, token kéo về
 Vì sao: «khoá máy» và «khoá dịch vụ» không nói khoá được làm gì; tên phải nói đúng việc duy
 nhất khoá làm được.
+
+**Khoá chỉ đẩy lộ trình**: một khoá API chỉ làm được đúng một việc — gửi bản lộ trình mới của
+nhánh chính sang CRM, cho GitHub dùng mỗi lần lộ trình đổi. Khoá không đăng nhập được ở đâu,
+không đọc bản ghi, không tạo hay sửa khoá; chủ sở hữu hoặc quản trị tạo nó ở Cài đặt → Khoá
+API, mục «Khoá dùng để». Chủ khoá thôi làm quản trị thì khoá thôi đẩy được. Đề xuất 2026-10-15
+(LT1c `lo-trinh-doc-ban-chup`).
+_Avoid_: khoá máy, khoá GitHub, token đẩy
+Vì sao: cùng lý do với khoá chỉ kéo tín hiệu — tên nói đúng việc duy nhất khoá làm được.
 
 **Nhánh hàng chờ**: nhánh `tin-hieu/keo-ve` mà lịch chạy kéo tín hiệu dựng lại mỗi lượt —
 nhánh chính cộng một commit chứa mọi tệp tín hiệu chưa gộp — kèm một PR «Tín hiệu kéo về»

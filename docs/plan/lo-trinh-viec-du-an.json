@@ -21,18 +21,21 @@
         "DA1b",
         "DA2b"
       ],
-      "nghia": "Người dùng giao và nhận việc chung, kéo việc trên bảng, thấy việc cần làm cũ đã chép sang Việc, không thấy tiêu đề việc cha ngoài quyền. Chủ kho duyệt mốc 14/10."
+      "nghia": "Người dùng giao và nhận việc chung, kéo việc trên bảng, thấy việc cần làm cũ đã chép sang Việc, không thấy tiêu đề việc cha ngoài quyền. Chủ kho duyệt mốc 14/10.",
+      "that": "2026-10-15"
     },
     {
       "ten": "Kế hoạch sinh việc + Gantt mức đủ",
-      "ngay": "2026-10-24",
+      "ngay": "2026-10-19",
       "loai": "phat-hanh",
       "khoa": "m-1024",
       "hang": [
         "DA3",
+        "DA3b",
         "DA4"
       ],
-      "nghia": "Kế hoạch tạo từ khuôn có sẵn việc; dự án xem trên Gantt có phụ thuộc và mốc. Chủ kho duyệt mốc 14/10; DA3b vào mốc này khi hàng lên onehub."
+      "nghia": "Kế hoạch tạo từ khuôn có sẵn việc; dự án xem trên Gantt có phụ thuộc và mốc. Chủ kho duyệt mốc 14/10; DA3b vào mốc này khi hàng lên onehub.",
+      "ly_do": "Cắt theo giờ máy: còn DA4 (S3 xong; S4 và Cổng 2 trong ngày 18/10 theo M5) → gộp 19/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     }
   ],
   "hang": [
@@ -71,12 +74,15 @@
       "dung_tren": [
         "DA0a"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "ten": "Mở lại không trả việc cho người «chỉ OKR»",
       "ten_ngan": "Mở lại an toàn",
       "bat_khi": "Trên bộ dữ liệu mẫu: mở lại kế hoạch hay bỏ «xong» một bước của người vai «chỉ OKR» không tạo việc đang mở nào cho họ",
       "ghi_chu": "Dựng và đo trên dữ liệu mẫu qua đường ghi thật; DA0a đếm production 12/10 ra 0 dữ liệu lộ. Truy cập production cần chủ kho cho phép riêng.",
-      "buoc_ke": "Đợt r2, dãy P0 — hàng đầu của đợt"
+      "buoc_ke": "Đợt r2, dãy P0 — hàng đầu của đợt",
+      "pr": [
+        381
+      ]
     },
     {
       "ma": "DA0c",
@@ -92,7 +98,7 @@
       "ten": "Thước «Việc của bạn» đỏ được",
       "ten_ngan": "Thước E7b",
       "ghi_chu": "Nhóm vệ sinh có hạn mức; sửa thước trong hồ sơ va-lo-ro-vai-chi-okr kéo theo ghim lại hồ sơ đó.",
-      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức)"
+      "buoc_ke": "Hoãn khi đóng r2 (17/10). Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     },
     {
       "ma": "DA1",
@@ -161,11 +167,15 @@
       "dung_tren": [
         "DA2"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "ten": "Không lộ tiêu đề việc cha",
       "ten_ngan": "Che việc cha",
       "chay_khi": "DA2 đã gộp",
-      "ghi_chu": "Đọc cha trong viec.bang và viec.con qua dieuKienXemViec. Cùng họ với Ngoài-3 của DA2 (số việc con đếm cả con người xem không thấy), chủ kho ghi hạn chế — gộp vào lượt này nếu rẻ. Lên T3 nếu phải đổi luật thấy việc ở packages/db."
+      "ghi_chu": "Đọc cha trong viec.bang và viec.con qua dieuKienXemViec. Cùng họ với Ngoài-3 của DA2 (số việc con đếm cả con người xem không thấy), chủ kho ghi hạn chế — gộp vào lượt này nếu rẻ. Lên T3 nếu phải đổi luật thấy việc ở packages/db.",
+      "pr": [
+        421
+      ],
+      "buoc_ke": "Đã gộp #421 (7beabe309) 15/10; mốc m-1015 khép."
     },
     {
       "ma": "DA3",
@@ -176,11 +186,35 @@
       "dung_tren": [
         "DA1"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "ten": "Kế hoạch sinh việc",
       "ten_ngan": "Kế hoạch sinh việc",
       "chay_khi": "DA1 đã gộp",
-      "ghi_chu": "Gom với hàng E6 (điều phối vá) của lộ trình OKR. Luật deal thắng là tất định ở máy chủ; bản bàn giao do AI viết thuộc tác tử."
+      "ghi_chu": "Gom với hàng E6 (điều phối vá) của lộ trình OKR. Luật deal thắng là tất định ở máy chủ; bản bàn giao do AI viết thuộc tác tử.",
+      "buoc_ke": "Cổng Phạm vi ký 14/10 (Mạnh); S3 xong, chờ S4 rồi Cổng Bằng chứng; vế gợi ý khi deal thắng tách sang DA3b",
+      "pr": [
+        432
+      ]
+    },
+    {
+      "ma": "DA3b",
+      "cau_giao": "«Deal thắng thì máy gợi ý mở kế hoạch onboard; người phụ trách mở hay bỏ qua ngay trên deal»",
+      "vi_sao": "Tách khỏi DA3 ngày 14/10 theo luật cỡ hợp đồng (15 tiêu chí); ngưỡng (b) chủ kho đã ký ở Cổng Đáng của DA3 đi theo hàng này.",
+      "hang": "T3",
+      "slug": "goi-y-mo-ke-hoach",
+      "dung_tren": [
+        "DA3"
+      ],
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Cổng Đáng ký 16/10 (manh, ngưỡng (b) của DA3), Cổng Phạm vi ký 16/10 (bốn câu theo khuyến nghị), Gate 1.5 duyệt; đang S3, rồi S4 và Cổng Bằng chứng",
+      "ten": "Gợi ý mở kế hoạch khi deal thắng",
+      "ten_ngan": "Gợi ý khi thắng",
+      "bat_khi": "Đã ký ở Cổng Đáng DA3 (14/10): mọi deal chuyển sang giai đoạn thắng của công ty chưa có kế hoạch mở đều sinh một gợi ý, và ít nhất 50% gợi ý được xử lý trong 3 ngày; đọc sau 14 ngày dùng thật",
+      "chay_khi": "DA3 đã gộp",
+      "ghi_chu": "Thiết kế nháp ở docs/superpowers/specs/2026-10-14-ke-hoach-sinh-viec-design.md mục 7 (ma trận giai đoạn 3×3, đếm theo lần chuyển). Luật deal thắng là tất định ở máy chủ; bản bàn giao do AI viết thuộc tác tử.",
+      "pr": [
+        447
+      ]
     },
     {
       "ma": "DA4",
@@ -192,25 +226,10 @@
         "DA2",
         "DA3"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đang dựng",
       "ten": "Dự án và Gantt",
       "ten_ngan": "Dự án, Gantt",
-      "chay_khi": "DA2 và DA3 đã gộp; chủ kho mở dòng «không làm: ngày bắt đầu cho bước» của lộ trình 30 ngày (mục từ điển «Dự án» đã mở 07/10)"
-    },
-    {
-      "ma": "DA5",
-      "cau_giao": "«Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác»",
-      "vi_sao": "Mục tiêu trỏ tới việc, không sở hữu việc; bỏ loại việc riêng của KR.",
-      "hang": "T3",
-      "slug": "okr-tro-viec",
-      "dung_tren": [
-        "DA1"
-      ],
-      "trang_thai": "chưa mở",
-      "ten": "KR nối việc chung",
-      "ten_ngan": "Nối OKR",
-      "chay_khi": "Sau buổi đọc số của hàng 8a (lộ trình OKR, 01/12), để không đổi thước giữa kỳ",
-      "ghi_chu": "Tiến độ KR không cộng từ việc; thêm dòng «tiến độ việc» riêng. Đếm trước các việc (KR) có người làm vai «chỉ OKR» gắn kế hoạch hay chiến dịch."
+      "chay_khi": "DA2 và DA3 đã gộp (mục từ điển «Dự án» đã mở 07/10); điều kiện ngày bắt đầu đã thoả — chủ kho mở dòng «không làm: ngày bắt đầu cho bước» của lộ trình 30 ngày ngày 14/10"
     },
     {
       "ma": "DA6",
@@ -247,6 +266,19 @@
         "DA1"
       ],
       "ghi_chu": "Thuộc tác tử, đi qua bước duyệt như create_crm_activity."
+    },
+    {
+      "ma": "DA3c",
+      "slug": "lam-moi-goi-y-ke-hoach",
+      "cau_giao": "«Thẻ gợi ý mở kế hoạch được làm mới khi deal đổi, không đứng cũ»",
+      "trang_thai": "chưa mở",
+      "ten": "Làm mới gợi ý kế hoạch",
+      "ten_ngan": "Làm mới gợi ý",
+      "dung_tren": [
+        "DA3b"
+      ],
+      "ghi_chu": "Ngoài-16 của DA3b. Hạt giống docs/plan/2026-10-16-hat-giong-goi-y-lam-moi-the.md (M5).",
+      "buoc_ke": "Chờ Cổng Đáng; làn M5 sau DA4 (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
     }
   ],
   "da_bac": [
@@ -265,6 +297,26 @@
     {
       "ma": "x4",
       "ly_do": "Tự đóng hay xoá việc khi đóng hoặc xoá bản ghi cha: hỏi người dùng thay vì tự làm"
+    }
+  ],
+  "chan_troi": [
+    {
+      "ma": "DA9",
+      "cau_giao": "«Một bước lớn chia được việc con có người và hạn riêng; khai được việc này xong mới mở việc kia»",
+      "ly_do": "Cần bằng chứng từ người dùng (bước bị đổi hạn hơn một lần, ghi chú dùng làm danh sách việc con) — số đo vận hành, chưa có; lượt 4 của lộ trình Điều phối 30 ngày.",
+      "mo_lai_khi": "Lượt 1 chạy ≥ 2 tuần và có bằng chứng bước còn quá to"
+    },
+    {
+      "ma": "DA10",
+      "cau_giao": "«Bốn bậc onboarding tự đổ vào phễu từ nền tảng OneHub; so được lứa đối tác này với lứa trước»",
+      "ly_do": "Phụ thuộc đội nền tảng dựng bên gửi cho điểm nhận onboarding-ingest.service.ts — việc của người ngoài kho; lượt 5 của lộ trình Điều phối 30 ngày.",
+      "mo_lai_khi": "Đội nền tảng có bên gửi; schema lô đã đưa họ đọc"
+    },
+    {
+      "ma": "DA5",
+      "cau_giao": "«Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác»",
+      "ly_do": "Đứng chờ một lần đo giá trị của hàng 8a (lộ trình OKR), để không đổi thước giữa kỳ.",
+      "mo_lai_khi": "Hồ sơ của hàng 8a đã có kết quả đọc số 01/12 do người ghi (observed → da-cham-boi-thuc-te)"
     }
   ]
 }

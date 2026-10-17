@@ -13,6 +13,7 @@ import {
 	API_KEY_HEADER,
 	API_KEY_PREFIX,
 	API_KEY_USAGE,
+	KHOA_DAY_LO_TRINH,
 	KHOA_KEO_TIN_HIEU,
 } from "./api-keys";
 import { canhKhoaApiPlugin } from "./canh-khoa-api";
@@ -101,6 +102,12 @@ export const API_KEY_PLUGIN_OPTIONS: ApiKeyConfigurationOptions = {
 export const API_KEY_KEO_TIN_HIEU_OPTIONS: ApiKeyConfigurationOptions = {
 	...API_KEY_PLUGIN_OPTIONS,
 	configId: KHOA_KEO_TIN_HIEU.configId,
+	enableSessionForAPIKeys: false,
+};
+
+export const API_KEY_DAY_LO_TRINH_OPTIONS: ApiKeyConfigurationOptions = {
+	...API_KEY_PLUGIN_OPTIONS,
+	configId: KHOA_DAY_LO_TRINH.configId,
 	enableSessionForAPIKeys: false,
 };
 
@@ -289,7 +296,11 @@ export const auth = betterAuth({
 			organizationProvisioning: { disabled: true },
 		}),
 
-		apiKey([API_KEY_PLUGIN_OPTIONS, API_KEY_KEO_TIN_HIEU_OPTIONS]),
+		apiKey([
+			API_KEY_PLUGIN_OPTIONS,
+			API_KEY_KEO_TIN_HIEU_OPTIONS,
+			API_KEY_DAY_LO_TRINH_OPTIONS,
+		]),
 		canhKhoaApiPlugin(),
 	],
 

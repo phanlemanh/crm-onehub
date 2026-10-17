@@ -309,6 +309,11 @@ function datNen({
 		mineOutput.parse({ dangTheoDoi: [], objectives: rows, daBo: [] }),
 	);
 	dat("okr.viecCuaToi", () => ({ viec: [], lienQuanOkr: false }));
+	dat("okr.capNhatTuan", () => ({
+		items: [],
+		weekStart: "2026-10-12",
+		dueWeekday: 5,
+	}));
 	dat("okr.comments", () => ({ comments: [], dong: [] }));
 	dat("okr.thanhVien", () => [HUNG]);
 	dat("users.me", () => HUNG);
@@ -411,7 +416,6 @@ async function moDonVi({
 		if (loi) throw new Error("mang loi");
 		return sanSang ?? SS(BAT);
 	});
-	// DH1 (dieu-huong-khu-muc-tieu): nhóm soạn ở hàng hành động đầu trang khu.
 	const san = await dung(
 		<>
 			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />
@@ -724,7 +728,7 @@ describe("chip", () => {
 				expect(
 					q("[aria-expanded]", dongMt("mt-a") ?? document.body)?.getAttribute(
 						"aria-expanded",
-					),
+					) ?? null,
 				).toBe(mo ?? null);
 				soCa += 1;
 				for (const s of dangMo) await act(async () => s.root.unmount());

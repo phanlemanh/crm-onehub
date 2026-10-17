@@ -142,7 +142,6 @@ export function NutSoan({
 	quanTri: boolean;
 	canEdit: boolean;
 	cauNoi: boolean;
-	/** id dòng lý do ở đầu trang: có thì người không đủ quyền thấy nút khoá thay vì không thấy gì. */
 	khoaVi?: string;
 }) {
 	const locale = useLocale();

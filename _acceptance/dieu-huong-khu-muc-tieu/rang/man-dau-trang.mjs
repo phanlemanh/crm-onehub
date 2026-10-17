@@ -3,7 +3,7 @@
  * Đo đầu trang khu Mục tiêu trên trình duyệt thật (hồ sơ dieu-huong-khu-muc-tieu).
  *
  *   bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
- *   EVAL=E2|AC8|E5|E15|E16 (vắng = chạy cả năm) · --chieu-do <nut-giua-than|khung-cao|dich-goc|an-nut|nhap-sai-don>
+ *   EVAL=E2|AC8|E5|E15|E16 (vắng = chạy cả năm; TAI, SOAN chỉ chạy khi gọi tên) · --chieu-do <nut-giua-than|khung-cao|dich-goc|an-nut|nhap-sai-don>
  * Mọi dòng SAI đổ vào sổ lỗi của man-lib nên mã thoát khác 0 (trước 15/10 chỉ in, mã vẫn 0).
  *
  * Phiên đo riêng (kho _do + API + app của CÂY ĐANG XÉT), nạp bộ OKR mẫu, đăng nhập
@@ -476,6 +476,83 @@ try {
 				: `AC-4: quan tri chua noi Kara — nhom soan ${n.coNhom ? "co" : "VANG"} o dau trang, khoa ${n.khoa}, «i» «${chuI.slice(0, 60)}», con trong than ${n.trongThan}`,
 		);
 		await t.close();
+	}
+
+	if (CHON.has("TAI")) {
+		console.log(
+			"== TAI (AC-8 o Theo don vi sau nap san may chu): tai cung, moc tieu de so voi du lieu",
+		);
+		for (const kho of [1440, 390]) {
+			const mo = await d.moTrang(TP1, kho, "/okr/hoi-y");
+			const t = await mo.browser().newPage();
+			await mo.close();
+			await t.setViewport({
+				width: kho,
+				height: kho < 500 ? 844 : 900,
+				deviceScaleFactor: 1,
+				isMobile: kho < 500,
+				hasTouch: kho < 500,
+			});
+			const host = new URL(d.APP).hostname;
+			await t.setCookie(
+				{ name: TP1.ten, value: TP1.gia, domain: host, path: "/" },
+				{ name: "lang", value: "vi", domain: host, path: "/" },
+			);
+			await t.evaluateOnNewDocument(() => {
+				const moc = {
+					h1: -1,
+					nut: -1,
+					cho: false,
+					dayDau: -1,
+					dayCuoi: -1,
+				};
+				Object.assign(window, { __mocTai: moc });
+				const hien = (sel) =>
+					[...document.querySelectorAll(sel)].find(
+						(e) => e.getClientRects().length > 0,
+					);
+				const khung = () => {
+					const bay = performance.now();
+					const dau = hien("[data-slot=page-shell-header]");
+					if (moc.h1 < 0 && hien("h1")) moc.h1 = bay;
+					if (dau && moc.dayDau < 0)
+						moc.dayDau = Math.round(dau.getBoundingClientRect().bottom);
+					if (hien("[data-hang-cho]")) moc.cho = true;
+					if (moc.nut < 0 && hien("[data-nut=them-muc-tieu]")) moc.nut = bay;
+					if (moc.nut < 0) requestAnimationFrame(khung);
+				};
+				requestAnimationFrame(khung);
+			});
+			const batDau = Date.now();
+			await t.goto(`${d.APP}/${d.slug()}/okr/theo-don-vi`, {
+				waitUntil: "load",
+				timeout: 120_000,
+			});
+			await d.doi(
+				t,
+				() => document.querySelector("[data-nut=them-muc-tieu]") !== null,
+			);
+			await choMs(500);
+			const moc = await t.evaluate(() => {
+				const m = Reflect.get(window, "__mocTai");
+				m.dayCuoi = Math.round(
+					document
+						.querySelector("[data-slot=page-shell-header]")
+						?.getBoundingClientRect().bottom ?? -1,
+				);
+				return m;
+			});
+			const dung =
+				moc.h1 >= 0 &&
+				moc.nut >= 0 &&
+				moc.h1 <= moc.nut &&
+				moc.dayDau === moc.dayCuoi;
+			dong(
+				dung,
+				`${dung ? "DUNG TAI" : "TAI: sai"} ${kho}: tieu de ${Math.round(moc.h1)}ms · nut them ${Math.round(moc.nut)}ms · khung xuong trinh duyet ${moc.cho ? "co" : "khong"} · day dau trang ${moc.dayDau}px -> ${moc.dayCuoi}px · tong ${Date.now() - batDau}ms`,
+			);
+			await t.close();
+		}
 	}
 
 	if (chay("E5")) {

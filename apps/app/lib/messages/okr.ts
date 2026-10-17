@@ -7,7 +7,6 @@ const vi = {
 	tabNhan: "Khu mục tiêu",
 	tab: {
 		"cua-toi": "Của tôi",
-		"cap-nhat-tuan": "Cập nhật tuần",
 		"theo-don-vi": "Theo đơn vị",
 		"toan-canh": "Toàn cảnh",
 		"hoi-y": "Hỏi ý",
@@ -23,9 +22,7 @@ const vi = {
 	},
 	moTa: {
 		"cua-toi":
-			"Mục tiêu bạn phụ trách hoặc tham gia, và mục tiêu có KR bạn phụ trách.",
-		"cap-nhat-tuan":
-			"Mọi KR bạn phụ trách ở chu kỳ đang chạy, gửi trong một lượt mỗi tuần.",
+			"Việc cần cập nhật tuần này, đơn vị bạn dẫn và KR bạn phụ trách.",
 		"theo-don-vi":
 			"Bộ OKR của từng đơn vị trong chu kỳ, và cách chúng góp vào nhau.",
 		"toan-canh": "Cả công ty trong một màn.",
@@ -147,6 +144,33 @@ const vi = {
 		},
 		donViTrucThuoc: "Đơn vị trực thuộc",
 		chuaDatOkr: "Chưa đặt OKR",
+	},
+	baPhan: {
+		phan1: "Cần cập nhật tuần này",
+		conThieu: (n: number, tuan: string, han: string) =>
+			`${n} KR chưa có số của tuần ${tuan}, hạn ${han}.`,
+		capNhatN: (n: number) => `Cập nhật ${n} KR`,
+		daDu: (tuan: string) => `Bạn đã cập nhật đủ cho tuần ${tuan}.`,
+		suaLanGui: "Sửa lần gửi tuần này",
+		khongKr: "Bạn không phụ trách KR nào ở chu kỳ đang chạy.",
+		loiPhan: "Chưa tải được phần này.",
+		loiMo: "Không mở được lượt cập nhật.",
+		thuLai: "Thử lại",
+		cotKr: "Tên KR",
+		cotHienTai: "Hiện tại",
+		cotTienDo: "Tiến độ",
+		cotTinhTrang: "Tình trạng",
+		phan2: "Đơn vị bạn dẫn",
+		tomTatDonVi: (mucTieu: number, kr: number, tb: number) =>
+			`${mucTieu} mục tiêu · ${kr} KR · trung bình ${tb}%`,
+		donViRong: (ky: string) => `Chưa có mục tiêu nào ở ${ky}.`,
+		moDonVi: "Mở trang đơn vị",
+		dungNhip: (n: number) => `${n} KR đúng nhịp`,
+		chamNhip: (n: number) => `${n} KR chậm nhịp`,
+		truot: (n: number) => `${n} KR trượt`,
+		phan3: "KR bạn phụ trách",
+		krTrong: (n: number, ky: string) => `${n} KR ở mọi đơn vị trong ${ky}.`,
+		thamGia: "Mục tiêu bạn tham gia",
 	},
 	cuaToiRong: {
 		title: "Bạn chưa phụ trách mục tiêu hay KR nào",
@@ -730,7 +754,6 @@ const en: OkrMessages = {
 	tabNhan: "Objectives area",
 	tab: {
 		"cua-toi": "Mine",
-		"cap-nhat-tuan": "Weekly update",
 		"theo-don-vi": "By unit",
 		"toan-canh": "Overview",
 		"hoi-y": "Call for ideas",
@@ -746,9 +769,7 @@ const en: OkrMessages = {
 	},
 	moTa: {
 		"cua-toi":
-			"Objectives you own or take part in, and objectives with a key result you own.",
-		"cap-nhat-tuan":
-			"Every key result you own in the running cycle, sent in one go each week.",
+			"Your weekly updates, the units you lead and the key results you own.",
 		"theo-don-vi":
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
@@ -874,6 +895,34 @@ const en: OkrMessages = {
 		},
 		donViTrucThuoc: "Units below",
 		chuaDatOkr: "No OKRs set",
+	},
+	baPhan: {
+		phan1: "Needs updating this week",
+		conThieu: (n: number, tuan: string, han: string) =>
+			`${n} key result${n === 1 ? "" : "s"} without a number for the week of ${tuan}, due ${han}.`,
+		capNhatN: (n: number) => `Update ${n} key result${n === 1 ? "" : "s"}`,
+		daDu: (tuan: string) => `You are up to date for the week of ${tuan}.`,
+		suaLanGui: "Edit this week's update",
+		khongKr: "You own no key results in the running cycle.",
+		loiPhan: "This part could not be loaded.",
+		loiMo: "Couldn't open the update.",
+		thuLai: "Try again",
+		cotKr: "Key result",
+		cotHienTai: "Current",
+		cotTienDo: "Progress",
+		cotTinhTrang: "Status",
+		phan2: "Units you lead",
+		tomTatDonVi: (mucTieu: number, kr: number, tb: number) =>
+			`${mucTieu} objective${mucTieu === 1 ? "" : "s"} · ${kr} key result${kr === 1 ? "" : "s"} · ${tb}% on average`,
+		donViRong: (ky: string) => `No objectives in ${ky} yet.`,
+		moDonVi: "Open unit page",
+		dungNhip: (n: number) => `${n} on track`,
+		chamNhip: (n: number) => `${n} behind`,
+		truot: (n: number) => `${n} off track`,
+		phan3: "Key results you own",
+		krTrong: (n: number, ky: string) =>
+			`${n} key result${n === 1 ? "" : "s"} across all units in ${ky}.`,
+		thamGia: "Objectives you take part in",
 	},
 	cuaToiRong: {
 		title: "You don't own any objectives or KRs",

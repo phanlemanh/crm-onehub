@@ -11,6 +11,7 @@ import { ChonChuKy } from "./chon-chu-ky";
 import { DaiKy } from "./dai-ky";
 import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
 import { donDich } from "./don-dich";
+import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import {
 	giaiKy,
@@ -28,7 +29,6 @@ export async function DauTrangOkrTrang({
 	searchParams,
 }: {
 	tab: TabOkr;
-	/** Theo đơn vị truyền vào để đầu trang nạp sẵn đúng truy vấn quyền của trang. */
 	searchParams?: SearchParams;
 }) {
 	const locale = await getLocale();
@@ -49,7 +49,8 @@ function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 		<LuoiDauTrangOkr
 			hanhDong={
 				<>
-					<Skeleton className="h-7 w-24" />
+					<NutHoiKara />
+					<Skeleton className="h-7 w-28" />
 					<Skeleton className="h-7 w-56" data-hang-cho="" />
 				</>
 			}
@@ -82,10 +83,6 @@ async function DauTrangCoDuLieu({
 		await queryClient.prefetchQuery(
 			trpc.okr.hoiYNhan.queryOptions({ cycleId: kyHoiY }),
 		);
-	// Hàng hành động hỏi okr.danhSach của đơn vị đích. Ở Theo đơn vị trang cũng nạp
-	// sẵn đúng khoá đó, nhưng đầu trang đứng trước trong cây nên nếu nó không có sẵn
-	// dữ liệu thì trình duyệt gọi lại một lần (no-sau-luot-5-okr E10). Các thẻ khác
-	// để truy vấn chạy ở trình duyệt sau khung xương (AC-8 đo đúng lúc chờ ấy).
 	if (tab === "theo-don-vi" && searchParams && cycles) {
 		const thamSo = await loadOkrSearchParams(searchParams);
 		const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);

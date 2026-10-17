@@ -26,12 +26,10 @@ import {
 	type SimpleTableColumn,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
-import {
-	StatusIndicator,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { formatDay } from "@crm/ui/lib/format";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { type PhaChuKy, phaSau } from "@crm/validation/okr-chu-ky";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
@@ -60,12 +58,12 @@ import { SheetMoRa } from "./sheet-mo-ra";
 import { SheetSuaChuKy } from "./sheet-sua-chu-ky";
 import { DangTaiThe, LoiThe, useQuyenChuongTrinh } from "./trang-thai-cai-dat";
 
-const TONE_PHA = {
-	"lap-ke-hoach": "info",
-	"dang-chay": "success",
-	"cham-diem": "warning",
-	"da-dong": "neutral",
-} as const satisfies Record<PhaChuKy, StatusTone>;
+export const NGHIA_PHA = {
+	"lap-ke-hoach": "nhap",
+	"dang-chay": "dangChay",
+	"cham-diem": "cho",
+	"da-dong": "ketThuc",
+} as const satisfies Record<PhaChuKy, NghiaTrangThai>;
 
 type Hoi = "chuyen" | "dong" | "mo-lai" | "go" | "an" | "hien-lai" | null;
 
@@ -194,13 +192,13 @@ export function BangChuKy({
 								{daAn(ky) ? (
 									<StatusIndicator
 										size="sm"
-										tone="neutral"
+										tone={toneTheoNghia("ketThuc")}
 										label={c.chuKy.daAn}
 									/>
 								) : (
 									<StatusIndicator
 										size="sm"
-										tone={TONE_PHA[ky.phase]}
+										tone={toneTheoNghia(NGHIA_PHA[ky.phase])}
 										label={c.pha[ky.phase]}
 									/>
 								)}

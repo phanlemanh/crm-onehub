@@ -67,6 +67,7 @@ import { savingField } from "@/lib/pending-field";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { TheGoiYKeHoach } from "./goi-y-ke-hoach";
 import { AttachDealContact } from "./quick-add";
 import { DaiLuuTruBanGhi, RecordActions } from "./record-actions";
 import {
@@ -222,7 +223,10 @@ export function DealSheet({ dealId }: { dealId: string }) {
 				deal ? (
 					<>
 						{deal.archivedAt ? (
-							<span data-giai-doan-tinh="" className="inline-flex items-center">
+							<span
+								data-giai-doan-tinh=""
+								className="inline-flex min-w-0 items-center"
+							>
 								<DealStageIndicator stage={deal.stage} />
 							</span>
 						) : (
@@ -254,7 +258,9 @@ export function DealSheet({ dealId }: { dealId: string }) {
 								record={{ kind: "deal", id: deal.id }}
 								archivedAt={deal.archivedAt}
 							/>
-						) : null}
+						) : (
+							<TheGoiYKeHoach dealId={deal.id} />
+						)}
 						<DetailSheetStats>
 							<DetailSheetStat label={m.deal.fields.amount}>
 								{deal.amountCents === null ? (
@@ -280,7 +286,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 								<LocalRelativeTime date={deal.stageChangedAt} />
 							</DetailSheetStat>
 							<DetailSheetStat label={m.deal.fields.owner}>
-								<OwnerCell owner={deal.owner} />
+								<OwnerCell owner={deal.owner} xuongDongDienThoai />
 							</DetailSheetStat>
 						</DetailSheetStats>
 					</>
@@ -445,7 +451,7 @@ function WhereItStands({ deal }: { deal: Deal }) {
 
 				<DetailSheetProperty label={m.section.onIt} wide>
 					{deal.contacts.length === 0 ? (
-						<span className="text-muted-foreground">
+						<span className="wrap-anywhere text-muted-foreground">
 							{m.deal.nobodyAttached(deal.company.name)}
 						</span>
 					) : (

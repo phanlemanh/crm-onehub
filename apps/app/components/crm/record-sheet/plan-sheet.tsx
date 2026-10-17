@@ -117,7 +117,7 @@ function DaiSo({ plan }: { plan: PlanDetail }) {
 			</DetailSheetStat>
 			<DetailSheetStat label={m.stats.owner}>
 				<span translate="no">
-					<OwnerCell owner={plan.owner} />
+					<OwnerCell owner={plan.owner} xuongDongDienThoai />
 				</span>
 			</DetailSheetStat>
 		</DetailSheetStats>

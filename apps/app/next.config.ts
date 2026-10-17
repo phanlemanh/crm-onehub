@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
 
 	env: {
 		NEXT_PUBLIC_API_URL: apiUrl,
+		LO_TRINH_DUNG_LUC: new Date().toISOString(),
 	},
 
 	transpilePackages: ["@crm/auth", "@crm/db", "@crm/telemetry", "@crm/ui"],
@@ -39,6 +40,16 @@ const nextConfig: NextConfig = {
 
 	cacheComponents: true,
 	partialPrefetching: true,
+
+	async redirects() {
+		return [
+			{
+				source: "/:slug/okr/cap-nhat-tuan",
+				destination: "/:slug/okr",
+				permanent: false,
+			},
+		];
+	},
 };
 
 export default nextConfig;

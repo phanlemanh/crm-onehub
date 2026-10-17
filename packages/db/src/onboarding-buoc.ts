@@ -1,4 +1,6 @@
+import { ghiTuBuoc } from "./buoc-viec";
 import type { Prisma } from "./generated/prisma/client";
+import type { NguonViec } from "./viec";
 import type { DbGhi } from "./zalo-lien-ket";
 
 export type BuocVet = { stepId: string; nhan: string };
@@ -29,6 +31,7 @@ export type DatBuocXongInput = {
 	done: boolean;
 	nguoiId: string;
 	now: Date;
+	nguon?: NguonViec;
 };
 
 export async function datBuocXong<M extends Prisma.InputJsonValue>(
@@ -44,6 +47,7 @@ export async function datBuocXong<M extends Prisma.InputJsonValue>(
 			label: true,
 			assigneeId: true,
 			completedAt: true,
+			viecId: true,
 			plan: {
 				select: {
 					closedAt: true,
@@ -54,17 +58,32 @@ export async function datBuocXong<M extends Prisma.InputJsonValue>(
 		},
 	});
 	if (goc === null) return { ket: "khong-co-buoc" };
-	const { plan, ...con } = goc;
+	const { plan, viecId, ...con } = goc;
 	const buoc: HangBuocXong = { ...con, companyName: plan.company.name };
 	if (plan.closedAt !== null) return { ket: "ke-hoach-dong", buoc };
 	if ((buoc.completedAt !== null) === input.done) {
 		return { ket: "khong-doi", buoc };
 	}
-	const completedAt = input.done ? input.now : null;
-	await tx.onboardingStep.update({
-		where: { id: buoc.id },
-		data: { completedAt },
-	});
+	let completedAt = input.done ? input.now : null;
+	if (viecId !== null) {
+		await ghiTuBuoc(tx, {
+			viecId,
+			nguoiId: input.nguoiId,
+			nguon: input.nguon ?? "web",
+			now: input.now,
+			lenh: { lenh: "xong", done: input.done },
+		});
+		const sau = await tx.onboardingStep.findUniqueOrThrow({
+			where: { id: buoc.id },
+			select: { completedAt: true },
+		});
+		completedAt = sau.completedAt;
+	} else {
+		await tx.onboardingStep.update({
+			where: { id: buoc.id },
+			data: { completedAt },
+		});
+	}
 	const chung = { stepId: buoc.id, nhan: buoc.label };
 	const meta = input.done
 		? vet.xong({ ...chung, giaoLucXong: buoc.assigneeId })

@@ -359,6 +359,8 @@ export function docThuTuc(duong: string, vao: DauVao): object | null {
 			return QUYEN;
 		case "okr.viecCuaToi":
 			return VIEC_RONG;
+		case "okr.capNhatTuan":
+			return { items: [], weekStart: "2026-10-12", dueWeekday: 5 };
 		case "okr.mine":
 			return kho.mine;
 		case "okr.countByUnit":
@@ -705,6 +707,10 @@ export async function dungCuaToi(
 		() => daTaiDanhSach() && qs("[data-so-kr-cho]") === null,
 		"cua toi tai xong",
 	);
+	const thamGia = document.body.querySelector<HTMLButtonElement>(
+		'[data-nhom="tham-gia"] button[aria-expanded="false"]',
+	);
+	if (thamGia) await bamChuot(thamGia);
 	return san;
 }
 

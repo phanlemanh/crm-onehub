@@ -35,7 +35,7 @@ const thao = (tab: TabOkr): Man => ({
 const MAN = {
 	"ST-dhk-don-vi": thao("theo-don-vi"),
 	"ST-dhk-cua-toi": thao("cua-toi"),
-	"ST-dhk-cap-nhat-tuan": thao("cap-nhat-tuan"),
+	"ST-dhk-cap-nhat-tuan": thao("cua-toi"),
 	"ST-dhk-toan-canh": thao("toan-canh"),
 	"ST-dhk-hoi-y": thao("hoi-y"),
 	"ST-dhk-suc-khoe": thao("toan-canh"),

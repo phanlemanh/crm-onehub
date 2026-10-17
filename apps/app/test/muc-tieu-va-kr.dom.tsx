@@ -260,6 +260,8 @@ function docThuTuc(duong: string): object | null {
 			return QUYEN;
 		case "okr.viecCuaToi":
 			return VIEC_RONG;
+		case "okr.capNhatTuan":
+			return { items: [], weekStart: "2026-10-12", dueWeekday: 5 };
 		case "okr.mine":
 			return mine;
 		case "okr.countByUnit":
@@ -685,7 +687,7 @@ function docHangMucTieu(id: string) {
 describe("co-du-lieu", () => {
 	test("co-du-lieu: phan tram muc tieu la progress API (10), khong phai trung binh KR 40", async () => {
 		expect.assertions(1);
-		await dungCuaToi([
+		await dungTheoDonVi([
 			mucTieu(
 				"mt10",
 				[
@@ -735,7 +737,7 @@ describe("co-du-lieu", () => {
 			},
 		];
 		expect.assertions(MA_TRAN.length);
-		await dungCuaToi([
+		await dungTheoDonVi([
 			mucTieu("mt1", krCua("mt1", 4), { progress: 49, expected: 47 }),
 			mucTieu("mt2", krCua("mt2", 2), { progress: 25, expected: 47 }),
 		]);
@@ -761,7 +763,7 @@ describe("co-du-lieu", () => {
 			{ id: "mt-0", mongDoi: { vach: [], nhip: "chua-co-ky-vong" } },
 		];
 		expect.assertions(MA_TRAN.length);
-		await dungCuaToi([
+		await dungTheoDonVi([
 			mucTieu("mt-47", krCua("mt-47", 2), { progress: 49, expected: 47 }),
 			mucTieu("mt-null", krCua("mt-null", 2), { progress: 49, expected: null }),
 			mucTieu("mt-0", krCua("mt-0", 2), { progress: 49, expected: 0 }),
@@ -1899,6 +1901,13 @@ async function thaoSan(san: San): Promise<void> {
 	document.body.innerHTML = "";
 }
 
+async function motMan(
+	lam: (man: "theo-don-vi") => Promise<void>,
+): Promise<void> {
+	duongTrang = "/ws/okr/theo-don-vi";
+	await lam("theo-don-vi");
+}
+
 async function haiMan(
 	lam: (man: "cua-toi" | "theo-don-vi") => Promise<void>,
 ): Promise<void> {
@@ -1916,8 +1925,8 @@ const dungMan = (
 
 const CA_TRANG_THAI = {
 	"ST-mtkr-co-du-lieu": () =>
-		haiMan(async (man) => {
-			await dungMan(man, HAI_MT(), man === "theo-don-vi" ? "?expand=mt-a" : "");
+		motMan(async (man) => {
+			await dungMan(man, HAI_MT(), "?expand=mt-a");
 			const k = khoi("mt-a");
 			const bang = k?.closest("table") ?? k?.querySelector("table") ?? null;
 			soCa(
@@ -1939,12 +1948,8 @@ const CA_TRANG_THAI = {
 			);
 		}),
 	"ST-mtkr-da-thu": () =>
-		haiMan(async (man) => {
-			const san = await dungMan(
-				man,
-				HAI_MT(),
-				man === "theo-don-vi" ? "?expand=mt-b" : "?thuMucTieu=mt-a",
-			);
+		motMan(async (man) => {
+			const san = await dungMan(man, HAI_MT(), "?expand=mt-b");
 			soCa(
 				{
 					hang: hangCuaMt("mt-a").map(khoaHang),
@@ -1977,7 +1982,7 @@ const CA_TRANG_THAI = {
 			);
 		}),
 	"ST-mtkr-chua-co-kr": () =>
-		haiMan(async (man) => {
+		motMan(async (man) => {
 			await dungMan(man, [mucTieu("mt-rong", [])]);
 			soCa(
 				{
@@ -2032,11 +2037,11 @@ const CA_TRANG_THAI = {
 			{ so: "Chưa xong", nhip: "moc-chua" },
 			{ so: "Xong", nhip: "moc-xong" },
 		];
-		const san = await dungCuaToi([mucTieu("mt-m", moc)]);
+		const san = await dungTheoDonVi([mucTieu("mt-m", moc)]);
 		soCa(
-			{ cuaToi: doc() },
-			{ cuaToi: mongDoi },
-			() => "ST-mtkr-kr-moc sai o cua-toi",
+			{ theoDonVi: doc() },
+			{ theoDonVi: mongDoi },
+			() => "ST-mtkr-kr-moc sai o theo-don-vi",
 		);
 		await thaoSan(san);
 		await dungSheet(chiTietTu(mucTieu("mt-m", moc)));
@@ -2047,7 +2052,7 @@ const CA_TRANG_THAI = {
 		);
 	},
 	"ST-mtkr-kr-may": async () => {
-		const san = await dungCuaToi([
+		const san = await dungTheoDonVi([
 			mucTieu("mt-may", [
 				kr("kr-do-canh", "mt-may", {
 					doCanh: true,
@@ -2150,15 +2155,26 @@ const CA_TRANG_THAI = {
 		);
 	},
 	"ST-cuatoi-codulieu": async () => {
-		await dungCuaToi(HAI_MT());
+		const cuaToi = HAI_MT().map((mt) => ({
+			...mt,
+			keyResults: mt.keyResults.map((k) => ({ ...k, laCuaToi: true })),
+		}));
+		await dungCuaToi(cuaToi);
+		await cho(
+			() =>
+				document.body.querySelector(
+					"[data-trang-thai='ST-cuatoi-codulieu']",
+				) !== null,
+			"phan KR ban phu trach",
+		);
 		soCa(
 			{
 				dau: trangThaiDau(),
 				boc: document.body.querySelectorAll(
-					"[data-trang-thai='ST-cuatoi-codulieu'] [data-muc-tieu]",
+					"[data-trang-thai='ST-cuatoi-codulieu'] [data-kr]",
 				).length,
 			},
-			{ dau: "ST-cuatoi-codulieu", boc: 2 },
+			{ dau: "ST-cuatoi-codulieu", boc: 4 },
 			(truong) => `ST-cuatoi-codulieu sai: ${truong}`,
 		);
 	},

@@ -67,7 +67,7 @@ export const okrParsers = {
 	[SEARCH_PARAM.okr.tuTin]: parseAsArrayOf(
 		parseAsStringLiteral(MUC_TU_TIN),
 	).withDefault([]),
-	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO).withDefault("tab"),
+	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO),
 	[SEARCH_PARAM.okr.gopY]: parseAsArrayOf(
 		parseAsStringLiteral(LOC_GOP_Y),
 	).withDefault([]),
@@ -83,6 +83,21 @@ export const parseAsMucTinCay =
 	parseAsStringLiteral(LOC_MUC_TIN_CAY).withDefault("tat-ca");
 
 export const loadOkrSearchParams = createLoader(okrParsers);
+
+const CACH_XEM_TOAN_CANH = ["bang", "so-do"] as const;
+
+const LOC_SO_DO = ["moi", "chu-y"] as const;
+
+export type LocSoDo = (typeof LOC_SO_DO)[number];
+
+export const soDoParsers = {
+	[SEARCH_PARAM.okr.xemToanCanh]:
+		parseAsStringLiteral(CACH_XEM_TOAN_CANH).withDefault("bang"),
+	[SEARCH_PARAM.okr.locSoDo]:
+		parseAsStringLiteral(LOC_SO_DO).withDefault("moi"),
+	[SEARCH_PARAM.okr.moDonVi]: parseAsString,
+	[SEARCH_PARAM.okr.moNhanh]: parseAsArrayOf(parseAsString).withDefault([]),
+};
 
 export const parseAsThuMucTieu = parseAsArrayOf(parseAsString).withDefault([]);
 

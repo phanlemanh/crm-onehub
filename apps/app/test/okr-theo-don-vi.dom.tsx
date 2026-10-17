@@ -260,6 +260,7 @@ mock.module("@/lib/trpc/client", () => ({
 				mutationOptions: () => ({ mutationFn: async () => null }),
 			},
 			hoiMo: {
+				mutationKey: () => ["okr.hoiMo"],
 				mutationOptions: () => ({ mutationFn: async () => null }),
 			},
 		},
@@ -549,8 +550,6 @@ describe("theo-don-vi", () => {
 		});
 	});
 
-	// DH1 (dieu-huong-khu-muc-tieu): «Thêm mục tiêu» và «Nhập từ bảng tính» rời thân
-	// trang lên đầu trang khu — khoá kèm lý do đo ở okr-dau-trang-khu.dom.tsx (dhk-*).
 	test("theo-don-vi-truong-thay-nut: than trang khong con nut them hay nhap o ca hai vai", async () => {
 		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
 			objectives: [mucTieu("a", 1)],
@@ -686,12 +685,11 @@ describe("thanh-tab", () => {
 			tieuDe: khungUngDungMessages("vi").rail.okr,
 			lienKet: [
 				"/ws/okr?kyOkr=q3&donOkr=pb%3Apb-1",
-				"/ws/okr/cap-nhat-tuan?kyOkr=q3&donOkr=pb%3Apb-1",
 				"/ws/okr/theo-don-vi?kyOkr=q3&donOkr=pb%3Apb-1",
 				"/ws/okr/toan-canh?kyOkr=q3&donOkr=pb%3Apb-1",
 				"/ws/okr/hoi-y?kyOkr=q3&donOkr=pb%3Apb-1",
 			],
-			dangChon: ["false", "false", "true", "false", "false"],
+			dangChon: ["false", "true", "false", "false"],
 		});
 	});
 });

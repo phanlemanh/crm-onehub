@@ -7,6 +7,7 @@ const en = {
 		nhan: "Notifications",
 		nhanSo: "Notifications, {so} unread",
 		docHet: "Mark all as read",
+		tacNhanKhongTen: "Untitled",
 		dangDocHet: "Marking…",
 		docHetLoi: "Couldn't mark them as read — try again.",
 		homNay: "Today",
@@ -50,9 +51,13 @@ const en = {
 			"«{nhan}» you follow has {capNhat} updates and {binhLuan} comments",
 		"tai-lieu-cho-duyet":
 			"{so} document proposals are waiting for your approval",
+		"goi-y-ke-hoach": "Deal {deal} with {cty} is won — open a 30-day plan?",
 		"okr-tom-tat": "This week's OKR summary for {phong} is ready",
 		"ai-tran": "AI spend reached {muc}% of this month's cap",
 		"ai-doi-soat-lech": "AI spend for {thang} differs {lech}% from the gateway",
+		"tac-nhan-xong": "Kara finished building «{ten}» — open it to review",
+		"tac-nhan-can-tra-loi": "Kara needs your answer to keep building «{ten}»",
+		"tac-nhan-hong": "Kara could not build «{ten}»",
 	} satisfies Record<LoaiThongBao, string>,
 };
 
@@ -64,6 +69,7 @@ const vi: ThongBaoMessages = {
 		nhan: "Thông báo",
 		nhanSo: "Thông báo, {so} chưa đọc",
 		docHet: "Đánh dấu tất cả đã đọc",
+		tacNhanKhongTen: "Chưa đặt tên",
 		dangDocHet: "Đang đánh dấu…",
 		docHetLoi: "Chưa đánh dấu được — thử lại.",
 		homNay: "Hôm nay",
@@ -107,9 +113,13 @@ const vi: ThongBaoMessages = {
 		"okr-theo-doi":
 			"«{nhan}» bạn theo dõi có {capNhat} cập nhật và {binhLuan} trao đổi mới",
 		"tai-lieu-cho-duyet": "{so} bản đề xuất tài liệu đang chờ bạn duyệt",
+		"goi-y-ke-hoach": "Deal {deal} của {cty} đã thắng — mở kế hoạch 30 ngày?",
 		"okr-tom-tat": "Tóm tắt OKR tuần của {phong} đã sẵn sàng",
 		"ai-tran": "Chi phí AI đã tới {muc}% trần tháng này",
 		"ai-doi-soat-lech": "Chi phí AI tháng {thang} lệch {lech}% so với cổng",
+		"tac-nhan-xong": "Kara đã dựng xong «{ten}» — mở để duyệt",
+		"tac-nhan-can-tra-loi": "Kara cần bạn trả lời để dựng tiếp «{ten}»",
+		"tac-nhan-hong": "Kara chưa dựng được «{ten}»",
 	},
 };
 

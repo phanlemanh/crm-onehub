@@ -29,7 +29,7 @@ const BANG_BE_RONG = {
 	"connections/zalo/page.tsx": "page",
 	"connections/intake/page.tsx": "narrow",
 	"../reminders/page.tsx": "page",
-	// Trang Cài đặt › Giai đoạn thoả thuận (có từ 674dc534d, sau khi hồ sơ này ký): khai bề rộng
+	// ve-sinh-do-san-onehub khai-trang: Cài đặt › Giai đoạn thoả thuận (có từ 674dc534d, sau khi hồ sơ này ký) — khai bề rộng
 	// đang dùng để bảng đủ trang thật — chân đếm trang không nới (okr-soat-anh-luot-3 E11, DH2 15/10).
 	"giai-doan/page.tsx": "page",
 };

@@ -25,6 +25,7 @@ import {
 } from "@crm/ui/components/tooltip";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
+import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
@@ -58,6 +59,7 @@ import {
 import { LocalDay } from "@/components/local-date-time";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
 import { useGiaiDoan } from "@/lib/giai-doan";
+import { companyMessages } from "@/lib/messages/companies";
 import { crmMessages } from "@/lib/messages/crm";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import {
@@ -66,6 +68,7 @@ import {
 } from "@/lib/messages/record-sheet";
 import { savingField } from "@/lib/pending-field";
 import { hasCompanyLinks } from "@/lib/social-links";
+import { tenQuocGia } from "@/lib/ten-quoc-gia";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -181,7 +184,11 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 	const company = query.data;
 
 	const location = company
-		? [company.city, company.stateCode, company.country]
+		? [
+				company.city,
+				company.stateCode,
+				tenQuocGia(company.country, company.countryCode, locale)?.ten,
+			]
 				.filter(Boolean)
 				.join(", ")
 		: null;
@@ -346,7 +353,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 								{closing ? <LocalDay date={closing} /> : <EmptyCellValue />}
 							</DetailSheetStat>
 							<DetailSheetStat label={m.company.fields.owner}>
-								<OwnerCell owner={company.owner} />
+								<OwnerCell owner={company.owner} xuongDongDienThoai />
 							</DetailSheetStat>
 						</DetailSheetStats>
 					</>
@@ -416,7 +423,14 @@ function CompanyOverview({ company }: { company: Company }) {
 									type="url"
 									placeholder={m.company.domainPlaceholder}
 									saving={isSaving("domain")}
-									onSave={(domain) => save({ domain })}
+									onSave={(domain) => {
+										const nenTang = nenTangCuaTenMien(domain);
+										if (nenTang) {
+											toast.error(companyMessages(locale).nenTang(nenTang.ten));
+											return;
+										}
+										save({ domain });
+									}}
 								/>
 								<InlineField
 									label={m.company.fields.website}
@@ -450,6 +464,19 @@ function CompanyOverview({ company }: { company: Company }) {
 									label={m.company.fields.country}
 									value={company.country}
 									saving={isSaving("country")}
+									render={(country) => {
+										const quocGia = tenQuocGia(
+											country,
+											company.countryCode,
+											locale,
+										);
+										if (!quocGia) return country;
+										return quocGia.dich ? (
+											quocGia.ten
+										) : (
+											<span translate="no">{quocGia.ten}</span>
+										);
+									}}
 									onSave={(country) => save({ country })}
 								/>
 								<InlineSelectField

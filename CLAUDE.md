@@ -81,9 +81,13 @@ năng của kho này.
 
 Chủ kho chốt 11/10: `docs/plan/lo-trinh-*.json` chỉ chứa việc dựng tính năng.
 Không hàng nào chờ người — chờ phòng ban gửi dữ liệu, chờ gom câu hỏi thật, chờ
-chạy thật xong. Việc do người và tổ chức quyết là **mốc ngoài** trong chính lộ
-trình — `moc` có `loai: "ngoai"` và `ai` — theo khuôn S3b của kit; không hàng nào
-được đứng trên mốc ngoài (`dung_tren` chỉ trỏ hàng).
+chạy thật xong. Chủ kho chốt 17/10 «bỏ mốc ngoài»: lộ trình không còn mốc
+`loai: "ngoai"`, vì lời khai máy không kiểm được làm nhiễu giữa việc người và việc
+máy. Sự kiện của người tạo hạn thì thành hạn của chính mốc phát triển (`ngay` +
+một dòng `ly_do`). Đo giá trị là ngưỡng và ngày đọc trong `opportunity.md` của hồ
+sơ. Vận hành thuần (đặt OKR, công bố, buổi nghiệm thu) sống ở lịch của chủ kho và
+#375. Hàng cần kết quả vận hành mới mở thì vào `chan_troi` với `mo_lai_khi`
+(`dung_tren` chỉ trỏ hàng).
 
 Hàng cần dữ liệu thật thì đứng ngay sau một hàng sinh dữ liệu giả có nhãn
 (`du_lieu: "sinh-gia"`), và chính nó mang `du_lieu: "gia"`. Thiếu dữ liệu để dựng
