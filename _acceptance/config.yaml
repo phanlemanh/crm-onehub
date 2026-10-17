@@ -69,11 +69,11 @@ executors:
     ldk_ban_chep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-chep
     ldk_khuon: cd packages/validation && bun test test/lo-trinh-du-lieu.spec.ts -t gio-may
     ldk_co_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t co-ngay
-    ldk_so_do: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t so-do && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t so-do
-    ldk_qua_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t qua-tai && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t qua-tai
-    ldk_chua_co: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t chua-co && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t chua-co
+    ldk_so_do: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t so-do && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t so-do
+    ldk_qua_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t qua-tai && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t qua-tai
+    ldk_chua_co: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t chua-co && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t chua-co
     ldk_viec: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t viec
-    ldk_ban_cu: cd packages/validation && bun test test/ban-chup-lo-trinh.spec.ts -t gio-may && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-cu && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t ban-cu
+    ldk_ban_cu: cd packages/validation && bun test test/ban-chup-lo-trinh.spec.ts -t gio-may && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-cu && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t ban-cu
     ldk_khoi_that: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that && TZ=UTC bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that
     ldk_day: 'bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldk-gio-may"'
     ldb_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-khung.dom.tsx -t khung-chung

@@ -17,21 +17,20 @@ export const STATE = {
 export const NGAY_MAU = "2026-10-17";
 export const NGAY_DA_QUA = "2026-10-19";
 
-const DU_KIEN: Record<
-	string,
-	{ ngay_tinh: string; hoan_tat: string; qua_tai: string | null }
-> = {
-	"2026-10-21": {
-		ngay_tinh: "2026-10-17",
-		hoan_tat: "2026-10-17",
-		qua_tai: null,
-	},
-	"2026-10-28": {
-		ngay_tinh: "2026-10-15",
-		hoan_tat: "2026-10-30",
-		qua_tai: "mốc quá tải: dự kiến 30/10, mục tiêu 28/10",
-	},
-};
+const DU_KIEN = new Map([
+	[
+		"2026-10-21",
+		{ ngay_tinh: "2026-10-17", hoan_tat: "2026-10-17", qua_tai: null },
+	],
+	[
+		"2026-10-28",
+		{
+			ngay_tinh: "2026-10-15",
+			hoan_tat: "2026-10-30",
+			qua_tai: "mốc quá tải: dự kiến 30/10, mục tiêu 28/10",
+		},
+	],
+]);
 
 function hangDaDo(ma: string): boolean {
 	return ma === "l5";
@@ -56,7 +55,7 @@ function voiDuKien(goc: LoTrinhDuLieu): LoTrinhDuLieu {
 					: h,
 			),
 			moc: lo.moc.map((m) => {
-				const dk = m.con_viec ? DU_KIEN[m.ngay] : undefined;
+				const dk = m.con_viec ? DU_KIEN.get(m.ngay) : undefined;
 				if (lo.tep.endsWith("kho-tai-lieu.json") && m.con_viec)
 					return {
 						...m,
@@ -98,7 +97,7 @@ function banCu(goc: LoTrinhDuLieu): LoTrinhDuLieu {
 	};
 }
 
-function docLai(duLieu: unknown): LoTrinhDuLieu {
+function docLai(duLieu: LoTrinhDuLieu | typeof mau): LoTrinhDuLieu {
 	const kq = phanTichLoTrinh(duLieu);
 	if (!kq.ok) throw new Error(`du-lieu-mau.json lech khuon: ${kq.duongKhoa}`);
 	return kq.duLieu;

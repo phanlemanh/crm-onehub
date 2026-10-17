@@ -116,3 +116,65 @@ describe("ban-chup-hang", () => {
 		expect(BAN_CHUP_LO_TRINH.refDay).toBe("refs/heads/onehub");
 	});
 });
+
+const khoiTho = z.object({
+	lo_trinh: z.array(
+		z.looseObject({
+			hang: z.array(
+				z.looseObject({ ma: z.string(), gio_may: z.json().optional() }),
+			),
+			moc: z.array(
+				z.looseObject({ ten: z.string(), du_kien: z.json().optional() }),
+			),
+		}),
+	),
+});
+type DocLuu = typeof phanTichBanChupLuu;
+const giaTri = z.json().optional();
+type GiaTri = z.infer<typeof giaTri>;
+const giong = (a: GiaTri, b: GiaTri) =>
+	JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+
+function kiemNgayBanChup(doc: DocLuu): number {
+	const v = banChupVao.parse(vao());
+	expect(v.duLieu).toEqual(DU_LIEU);
+	const tho = khoiTho.parse(v.duLieu);
+	const kq = doc({
+		sha: v.sha,
+		commitLuc: new Date(v.commitLuc),
+		layLuc: new Date(),
+		duLieu: v.duLieu,
+		canhBao: v.canhBao,
+	});
+	if (!kq.ok) throw new Error(`hang luu lech khuon: ${kq.duongKhoa}`);
+	let coNgay = 0;
+	kq.banChup.duLieu.lo_trinh.forEach((lo, i) => {
+		const lt = tho.lo_trinh[i];
+		lt?.moc.forEach((m, j) => {
+			if (m.du_kien != null) coNgay++;
+			if (!giong(lo.moc[j]?.du_kien, m.du_kien))
+				throw new Error(`ban chup mat ngay du kien: ${m.ten}`);
+		});
+		lt?.hang.forEach((h, j) => {
+			if (!giong(lo.hang[j]?.gio_may, h.gio_may))
+				throw new Error(`ban chup mat gio may: ${h.ma}`);
+		});
+	});
+	return coNgay;
+}
+
+describe("gio-may", () => {
+	test("gio-may: ban chup nhan va doc lai giu ngay du kien va gio may cua khoi that", () => {
+		expect(kiemNgayBanChup(phanTichBanChupLuu)).toBeGreaterThan(0);
+	});
+	test("gio-may: pha-thu — doc hang luu bang khuon bo khoa thi do", () => {
+		const hong: DocLuu = (hang) => {
+			const kq = phanTichBanChupLuu(hang);
+			if (!kq.ok) return kq;
+			for (const lo of kq.banChup.duLieu.lo_trinh)
+				for (const m of lo.moc) m.du_kien = null;
+			return kq;
+		};
+		expect(() => kiemNgayBanChup(hong)).toThrow("ban chup mat ngay du kien:");
+	});
+});

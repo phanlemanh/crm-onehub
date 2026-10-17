@@ -1,5 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import type { AddressInfo } from "node:net";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { API_KEY_HEADER, auth, KHOA_DAY_LO_TRINH } from "@crm/auth";
@@ -436,6 +438,130 @@ describe("ldbc-thu-tu", () => {
 			expect(dau.sort()).toEqual(["nhan", "trung"]);
 			expect(await db.banChupLoTrinh.count({ where: { nguon: NGUON } })).toBe(
 				1,
+			);
+		},
+		CHO_MS,
+	);
+});
+
+const khoiTho = z.looseObject({
+	lo_trinh: z.array(
+		z.looseObject({
+			hang: z.array(
+				z.looseObject({ ma: z.string(), gio_may: z.json().optional() }),
+			),
+			moc: z.array(
+				z.looseObject({
+					ten: z.string(),
+					con_viec: z.boolean(),
+					gio_may: z.json().optional(),
+					du_kien: z.json().optional(),
+					qua_tai: z.json().optional(),
+				}),
+			),
+		}),
+	),
+});
+type DauVaoDay = {
+	goc: string;
+	env: Record<string, string | undefined>;
+	fetch: typeof fetch;
+	sha: string;
+	commitLuc: string;
+	in: (dong: string) => void;
+	loi: (dong: string) => void;
+};
+const KICH_BAN_DAY = join(GOC, "scripts", "ban-chup-lo-trinh", "day.ts");
+const { day: dayKichBan }: { day: (o: DauVaoDay) => Promise<number> } =
+	await import(KICH_BAN_DAY);
+const giaTri = z.json().optional();
+type GiaTri = z.infer<typeof giaTri>;
+const giong = (a: GiaTri, b: GiaTri) =>
+	JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+
+async function kiemDayGioMay(
+	doc: typeof phanTichBanChupLuu,
+): Promise<{ khoa: string; hoanTat: string }> {
+	await don();
+	const html = readFileSync(join(GOC, "LO-TRINH.html"), "utf8");
+	const tho = khoiTho.parse(structuredClone(KHOI));
+	const m = tho.lo_trinh.flatMap((l) => l.moc).find((x) => x.con_viec);
+	if (!m) throw new Error("khoi that khong co moc dang chay");
+	m.du_kien = {
+		ngay_tinh: "2026-10-15",
+		hoan_tat: "2026-10-31",
+		chu: "dự báo lúc bắt đầu (15/10): hoàn tất 31/10",
+	};
+	m.qua_tai = "mốc quá tải: dự kiến 31/10, mục tiêu 28/10";
+	const thu = mkdtempSync(join(tmpdir(), "ldk-day-"));
+	writeFileSync(
+		join(thu, "LO-TRINH.html"),
+		html.replace(
+			/<script type="application\/json" id="lo-trinh-du-lieu">[\s\S]*?<\/script>/,
+			`<script type="application/json" id="lo-trinh-du-lieu">${JSON.stringify(tho).replace(/</g, "\\u003c")}</script>`,
+		),
+	);
+	const khoa = await khoaDay("owner");
+	if (!app.getHttpServer().address()) await app.listen(0);
+	const may = app.getHttpServer().address() as AddressInfo;
+	const dong: string[] = [];
+	const ma = await dayKichBan({
+		goc: thu,
+		env: {
+			CRM_API_URL: `http://127.0.0.1:${may.port}`,
+			CRM_KHOA_DAY_LO_TRINH: khoa.key,
+		},
+		fetch,
+		sha: sha("e"),
+		commitLuc: iso(T1),
+		in: (d) => dong.push(d),
+		loi: (d) => dong.push(d),
+	});
+	expect(ma, dong.join("\n")).toBe(0);
+	expect(
+		dong.filter((d) => d === "::notice title=ban-chup-lo-trinh::nhan"),
+	).toHaveLength(1);
+	const luu = await docBanChupLoTrinh(db, NGUON);
+	if (!luu) throw new Error("khong co hang ban chup");
+	const kq = doc(luu);
+	if (!kq.ok) throw new Error(`hang luu lech khuon: ${kq.duongKhoa}`);
+	kq.banChup.duLieu.lo_trinh.forEach((l, i) => {
+		const lt = tho.lo_trinh[i];
+		lt?.moc.forEach((x, j) => {
+			const y = l.moc[j];
+			for (const k of ["gio_may", "du_kien", "qua_tai"] as const)
+				if (!giong(y?.[k], x[k]))
+					throw new Error(`ban chup mat ngay du kien: ${x.ten}`);
+		});
+		lt?.hang.forEach((h, j) => {
+			if (!giong(l.hang[j]?.gio_may, h.gio_may))
+				throw new Error(`ban chup mat gio may: ${h.ma}`);
+		});
+	});
+	return { khoa: m.ten, hoanTat: "2026-10-31" };
+}
+
+describe("ldk-gio-may", () => {
+	test(
+		"ldk-gio-may: kich ban day qua app that, ban chup luu giu ngay du kien va gio may",
+		async () => {
+			const { hoanTat } = await kiemDayGioMay(phanTichBanChupLuu);
+			expect(hoanTat).toBe("2026-10-31");
+		},
+		CHO_MS,
+	);
+	test(
+		"ldk-gio-may: pha-thu — doc hang luu bang khuon bo du_kien thi do",
+		async () => {
+			const hong: typeof phanTichBanChupLuu = (h) => {
+				const kq = phanTichBanChupLuu(h);
+				if (!kq.ok) return kq;
+				for (const l of kq.banChup.duLieu.lo_trinh)
+					for (const m of l.moc) m.du_kien = null;
+				return kq;
+			};
+			await expect(kiemDayGioMay(hong)).rejects.toThrow(
+				"ban chup mat ngay du kien:",
 			);
 		},
 		CHO_MS,

@@ -3,11 +3,7 @@
 import { Badge } from "@crm/ui/components/badge";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
-import {
-	formatDay,
-	formatDayShort,
-	formatDecimal,
-} from "@crm/ui/lib/format";
+import { formatDay, formatDayShort, formatDecimal } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { toneTheoNghia } from "@crm/ui/lib/status-tone";
 import type { GioMayViec } from "@crm/validation/lo-trinh-du-lieu";
