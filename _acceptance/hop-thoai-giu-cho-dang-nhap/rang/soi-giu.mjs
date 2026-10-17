@@ -680,9 +680,9 @@ function caTuKhaiChieuDo() {
 
 const MOC = "origin/onehub";
 const TEP_CHU = "packages/ui/src/lib/messages.ts";
-// du-an-gantt mien-effect: docs/crm-plan.md §12 cấm useEffect trong mã app và tính năng, miễn tệp vendor
-// dưới packages/ui/src/components (Biome bỏ qua thư mục này). Chỉ luật useEffect theo miễn trừ đó.
-const MIEN_EFFECT = /^packages\/ui\/src\/components\//;
+// du-an-gantt mien-effect: docs/crm-plan.md §12 cấm useEffect trong mã app và tính năng; chủ kho duyệt
+// miễn riêng thành phần ReUI chép nguyên dưới packages/ui/src/components/reui. Chỉ luật useEffect theo miễn trừ đó.
+const MIEN_EFFECT = /^packages\/ui\/src\/components\/reui\//;
 const KHOA_HOI = ["tieuDe", "than", "tiepTuc", "bo"];
 const LOP_DOI_KIEU =
 	/(^|\s)(bg-\S+|text-(?!xs\b|sm\b|base\b|lg\b|xl\b|left\b|right\b|center\b|wrap\b|nowrap\b|balance\b|pretty\b)\S+|border-\S+|rounded-\S+|p[xytrbl]?-\S+|m[xytrbl]?-\S+|gap-\S+|space-[xy]-\S+)/;
