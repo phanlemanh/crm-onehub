@@ -7,6 +7,7 @@ import {
 import { normalizeCurrency } from "@crm/db/currency";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { type LoaiGiaiDoan, laDaDong, laThua } from "@crm/db/giai-doan";
+import { sinhGoiYKeHoach } from "@crm/db/goi-y-ke-hoach";
 import { ghiGoDoXoa } from "@crm/db/viec-ghi";
 import {
 	BadRequestException,
@@ -395,6 +396,7 @@ export class DealsService {
 						ownerId: input.ownerId,
 						stage,
 						stageChangedAt: now,
+						createdAt: now,
 						closedAt: closed ? now : null,
 						amount: fromCents(input.amountCents),
 						currency,
@@ -402,6 +404,12 @@ export class DealsService {
 						expectedCloseDate: parseDate(input.expectedCloseDate),
 					},
 					select: { id: true, name: true, companyId: true, stage: true },
+				});
+				await sinhGoiYKeHoach(tx, {
+					dealId: created.id,
+					tuLoai: null,
+					denLoai: giaiDoan.kind,
+					now,
 				});
 				await emit({
 					type: "deal.created",
@@ -706,6 +714,12 @@ export class DealsService {
 				createdById: args.actingUserId,
 				meta: { from: deal.stage, to: den.id },
 			},
+		});
+		await sinhGoiYKeHoach(tx, {
+			dealId: deal.id,
+			tuLoai: tu.kind,
+			denLoai: den.kind,
+			now,
 		});
 		const data = { companyId: deal.companyId, from: deal.stage, to: den.id };
 		const record = { kind: "deal" as const, id: deal.id };

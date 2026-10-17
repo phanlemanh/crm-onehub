@@ -24,6 +24,7 @@ export const LOAI_THONG_BAO = [
 	"buoc-sap-han",
 	"ke-hoach-im",
 	"moc-ngay",
+	"goi-y-ke-hoach",
 	"viec-qua-han",
 	"viec-sap-han",
 	"viec-cho-danh-gia",
@@ -169,6 +170,13 @@ export const noiDungThongBao = z.discriminatedUnion("loai", [
 		so: z.number().int().positive(),
 	}),
 	z.object({
+		loai: z.literal("goi-y-ke-hoach"),
+		goiYId: ma,
+		dealId: ma,
+		dealName: z.string(),
+		companyName: z.string(),
+	}),
+	z.object({
 		loai: z.literal("okr-tom-tat"),
 		tomTatId: ma,
 		departmentId: ma,
@@ -247,6 +255,8 @@ export function khoaThongBao(nd: NoiDungThongBao, now: Date): string {
 			return `${nd.loai}:${nd.hoiYId}`;
 		case "tai-lieu-cho-duyet":
 			return nd.loai;
+		case "goi-y-ke-hoach":
+			return `${nd.loai}:${nd.goiYId}`;
 		case "okr-tom-tat":
 			return `${nd.loai}:${nd.tomTatId}`;
 		case "ai-tran":
