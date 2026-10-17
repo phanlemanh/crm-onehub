@@ -96,3 +96,7 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 Known limits — chấp nhận tại Cổng Phạm vi 2026-09-25 (Manh Phan — uỷ quyền phiên điều phối 2026-09-24):
 
 - Thanh tiến độ của KR và mục tiêu dùng `Progress` có sẵn (tô màu thương hiệu, không có vạch «lẽ ra»), lệch bản mẫu đã duyệt; lượt 5 thay bằng biến thể trung tính trong `packages/ui`.
+
+Lời hứa thay bởi hồ sơ khác (thêm 17/10, trang-don-vi-mot-bang AC-14):
+
+- Trên trang Theo đơn vị, KR là dòng con cùng bốn cột của bảng đơn vị, không còn bảng KR riêng trong thẻ mục tiêu (E11 bước 2) — thay bởi trang-don-vi-mot-bang AC-3.
