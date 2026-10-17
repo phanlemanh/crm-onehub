@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>148 việc"]
+  GB --> DG["Đã giao<br/>149 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>138 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -323,6 +323,7 @@ flowchart TD
 - Ba ca của to-chuc-chi-tiet.dom.tsx chờ URL trong bộ chờ trước khi đọc ?don, không còn đỏ chập chờn khi nuqs ghi URL trễ hơn khung (`to-chuc-chi-tiet-cho-url`)
 - Cài đặt › Tổ chức theo bố cục danh sách – chi tiết — trưởng chọn tại chỗ, thêm người và gắn nhiều phòng ban một lượt, ô số lọc được, nhập ba bước, nhất quán với các màn Cài đặt (`to-chuc-danh-sach-chi-tiet`)
 - Màn Tổng quan và khung điều hướng nói tiếng Việt — màn đầu tiên sau đăng nhập, thanh bên, thanh đầu, hộp tìm nhanh đọc đúng tiếng nhân viên chọn; và bộ thước màn nhìn thấy cả khung chứ không chỉ khung nội dung (`tong-quan-va-khung-noi-tieng-viet`)
+- Tra cứu thương hiệu không nhầm trang mạng xã hội, trả tiếng Việt, quốc gia theo ngôn ngữ người xem (`tra-cuu-thuong-hieu-viet-nam`)
 - Người nhận tin nhắc qua Zalo trả lời «xong 2» (hay «xong 1 3») thì các bước đó của tin sáng nay được đánh dấu xong bằng đúng thủ tục ghi của màn kế hoạch, bot xác nhận một dòng; tin nhắc Zalo đánh số dòng (`tra-loi-tin-nhac`)
 - Bài app-rieng chạy cạnh apps/agent có trần chờ riêng (`tran-cho-app-rieng`) — đã giao — máy thông, bằng chứng xanh-sạch
 - Trần một-lần-uỷ-thác agent_builder áp cho cả lượt KHÔNG có quyền — hook builder-delegation đang return sớm khi commandType khác CREATE_AGENT, nên chốt cứng duy nhất không chạy trên nhánh not_authorized và chỉ còn câu chữ trong prompt giữ trần (`tran-mot-lan-uy-thac`)

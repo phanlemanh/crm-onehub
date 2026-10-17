@@ -1,12 +1,23 @@
 import { db, EnrichmentStatus } from "@crm/db";
+import { docBrandRaw } from "@crm/validation/brand-raw";
+import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import { mirrorBrandImages } from "./brand-images";
-import { brandToUpdate, filledFields, stillFillable } from "./brand-mapping";
+import {
+	brandToUpdate,
+	clearedFields,
+	filledFields,
+	type MayDien,
+	stillFillable,
+	truongMayDien,
+} from "./brand-mapping";
+import type { Brand } from "./context-dev";
 import { brandByDomain, contextDevEnabled } from "./context-dev";
 import { UNLESS_COMPLETE } from "./enrichment";
 
 export type BrandResult = {
 	enriched: boolean;
 	filled?: string[];
+	cleared?: string[];
 	mirrored?: string[];
 	reason?: string;
 	retryable?: boolean;
@@ -75,6 +86,13 @@ export async function runBrand({
 		return { enriched: false, reason: "No domain on this company." };
 	}
 
+	const nenTang = nenTangCuaTenMien(company.domain);
+	if (nenTang) {
+		const reason = `${company.domain} is a ${nenTang.ten} page, not the company's own site.`;
+		await settle(companyId, EnrichmentStatus.SKIPPED, reason, UNLESS_COMPLETE);
+		return { enriched: false, reason };
+	}
+
 	const charge = spend(2);
 	if (!charge.ok) return { enriched: false, reason: charge.reason };
 
@@ -102,11 +120,16 @@ export async function runBrand({
 		};
 	}
 
-	const update = brandToUpdate(result.brand, snapshot(company));
+	const brandCu = await brandLanTruoc(companyId);
+	const mayDien = (current: Parameters<typeof truongMayDien>[1]): MayDien =>
+		brandCu ? truongMayDien(brandCu, current) : new Set();
+
+	const truoc = snapshot(company);
+	const update = brandToUpdate(result.brand, truoc, mayDien(truoc));
 
 	const { mirrored } = await mirrorBrandImages(companyId, update);
 
-	const filled = await db.$transaction(async (tx) => {
+	const ghi = await db.$transaction(async (tx) => {
 		const current = await tx.company.findUnique({
 			where: { id: companyId },
 			select: COMPANY_FIELDS,
@@ -114,7 +137,8 @@ export async function runBrand({
 
 		if (!current) return null;
 
-		const data = stillFillable(update, snapshot(current));
+		const hienTai = snapshot(current);
+		const data = stillFillable(update, hienTai, mayDien(hienTai));
 
 		await tx.company.update({
 			where: { id: companyId },
@@ -132,14 +156,17 @@ export async function runBrand({
 			update: { raw: result.raw as object, fetchedAt: new Date() },
 		});
 
-		return filledFields(data);
+		return { filled: filledFields(data), cleared: clearedFields(data) };
 	});
 
-	if (!filled) return { enriched: false, reason: "No such company." };
+	if (!ghi) return { enriched: false, reason: "No such company." };
+
+	const { filled, cleared } = ghi;
 
 	return {
 		enriched: true,
 		filled,
+		cleared,
 		mirrored: mirrored.filter((slot) => filled.includes(slot)),
 	};
 }
@@ -150,17 +177,40 @@ function snapshot<T extends { name: string; domain: string | null }>(
 	return { ...company, nameIsPlaceholder: company.name === company.domain };
 }
 
+async function brandLanTruoc(companyId: string): Promise<Brand | null> {
+	const truoc = await db.companyEnrichment.findUnique({
+		where: { companyId },
+		select: { raw: true },
+	});
+	if (!truoc) return null;
+
+	const doc = docBrandRaw(truoc.raw);
+	if (!doc.ok) {
+		console.warn(`brand raw unreadable: ${doc.loi}`);
+		return null;
+	}
+	return doc.brand;
+}
+
 export function brandOutcome(result: BrandResult): string {
 	if (!result.enriched) return result.reason ?? "Nothing to fill.";
 
 	const filled = result.filled ?? [];
+	const cleared = result.cleared ?? [];
 	const mirrored = result.mirrored ?? [];
 
-	if (filled.length === 0) {
+	if (filled.length === 0 && cleared.length === 0) {
 		return "Everything Context.dev returned was already on the record.";
 	}
 
-	return `Filled ${filled.join(", ")}.${mirrored.length > 0 ? ` Copied ${mirrored.length} image(s) in-house.` : ""}`;
+	const phan = [
+		filled.length > 0 ? `Filled ${filled.join(", ")}.` : null,
+		cleared.length > 0
+			? `Cleared ${cleared.join(", ")}, which the new lookup no longer reports.`
+			: null,
+		mirrored.length > 0 ? `Copied ${mirrored.length} image(s) in-house.` : null,
+	];
+	return phan.filter((cau) => cau !== null).join(" ");
 }
 
 type SettleGuard =
