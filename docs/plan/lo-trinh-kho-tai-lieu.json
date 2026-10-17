@@ -52,14 +52,14 @@
     },
     {
       "ten": "Chạy thật — mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ (chủ kho chốt 04/10)",
-      "ngay": "2026-10-14",
+      "ngay": "2026-10-22",
       "loai": "ngoai",
       "ai": "Mọi phòng ban",
       "hang": []
     },
     {
       "ten": "Sửa một đợt",
-      "ngay": "2026-11-04",
+      "ngay": "2026-10-21",
       "loai": "su-kien",
       "hang": [
         "l5"
@@ -185,7 +185,7 @@
       "trang_thai": "chưa mở",
       "dong": 8,
       "ten": "Lượt 5",
-      "buoc_ke": "Ký Cổng 2 14/10; #410 về nháp. Khi mở lại: gộp onehub, S4 delta, ký lại. Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới",
+      "buoc_ke": "Hoàn tất ngay ở đợt mới, làn Mac Studio: gộp onehub, S4 delta, ký lại (#410) (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
       "du_lieu": "gia",
       "pr": [
         410
@@ -267,7 +267,7 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T10:40:00Z"
       },
-      "buoc_ke": "Chờ MH4 sửa phạm vi. Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+      "buoc_ke": "Chờ MH4 sửa phạm vi; làn Mac Studio sau MH4"
     },
     {
       "ma": "l6",
@@ -331,7 +331,7 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T05:33:48Z"
       },
-      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+      "buoc_ke": "Làn Mac Studio sau l7"
     },
     {
       "ma": "l7",
@@ -351,7 +351,8 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T15:08:22Z"
       },
-      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+      "buoc_ke": "Làn Mac Studio sau l5, F34. Chủ kho 17/10: «l7 Hỏi-1: a · Hỏi-2: a» — T3 (apps/agent/agent/lib/zalo-* trong t3_paths); đo 8 người × 3 câu trên Gemini 3.8 Flash + một lượt đối chứng trên mã trước bản sửa",
+      "hang": "T3"
     }
   ],
   "da_bac": []
