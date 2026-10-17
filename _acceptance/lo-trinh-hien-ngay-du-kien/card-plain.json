@@ -1,0 +1,40 @@
+{
+  "feature_plain": "Trưởng phòng ban mở trang Lộ trình và thấy mỗi mốc đang chạy, mỗi việc chưa giao có ngày dự kiến xong do máy ước — luôn ghi «dự kiến», nói cách tính, có cờ khi số đo còn ít, và nói vì sao khi chưa có ngày.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đọc đúng ngày dự kiến và giờ máy mà bản lộ trình đang mang, bằng đúng bộ đọc của bộ công cụ — lần nhận bộ công cụ sau mà bộ đọc đổi thì bài kiểm đỏ ngay."},
+    {"id": "AC-2", "p": "Sẽ hiện «Dự kiến xong <ngày>» trên dòng mỗi mốc đang chạy ở kiểu xem Mốc, kèm câu: máy tính lúc mốc bắt đầu, coi như chỉ mình mốc này chạy, là ước tính chứ không phải cam kết."},
+    {"id": "AC-3", "p": "Sẽ gắn cờ «ước sơ bộ» khi ngày được tính từ việc chưa có số đo của các lần làm trước, và không gắn khi mọi việc còn lại đã có số đo."},
+    {"id": "AC-4", "p": "Sẽ gắn cờ «sau ngày mục tiêu» khi ngày dự kiến trễ hơn mục tiêu, và «đã qua ngày dự kiến» khi hôm nay đã qua ngày ấy mà mốc chưa xong."},
+    {"id": "AC-5", "p": "Sẽ hiện «Chưa có ngày dự kiến» kèm đúng một lý do khi chưa có ngày, và không bao giờ đem ngày mục tiêu ra thay."},
+    {"id": "AC-6", "p": "Sẽ hiện «dự kiến dd/mm» cùng cờ của mốc ở cột Mốc của bảng và thẻ, và trong ngăn hồ sơ có ngày đầy đủ cùng mục «Ước lượng» giờ máy."},
+    {"id": "AC-8", "p": "Sẽ đọc được ở điện thoại và máy tính, tiếng Việt và Anh, nền sáng và tối, không cắt chữ — và trên bản lộ trình thật, mọi mốc đang chạy đều có ngày hoặc cờ."}
+  ],
+  "wont_do": [
+    {"id": "AC-7", "p": "Sẽ KHÔNG vỡ trang hay bật hộp «Trang có thể thiếu một phần» khi bản lộ trình còn cũ — thay vào đó mỗi mốc đang chạy nói «Bản lộ trình này chưa mang ngày dự kiến»; bản lộ trình đẩy về CRM hiện đúng ngày như bản đóng gói."},
+    {"id": "OOS-1", "p": "KHÔNG sửa cách bộ công cụ tính ngày (mọi mốc bắt đầu hôm nay, máy chạy suốt ngày đêm) — việc của bộ công cụ."},
+    {"id": "OOS-2", "p": "KHÔNG tính ngày riêng cho từng việc — việc mang ngày của mốc chứa nó."},
+    {"id": "OOS-3", "p": "KHÔNG hiện phần trăm hạn mức tuần của máy (câu hỏi Hỏi-1 bên dưới)."},
+    {"id": "OOS-4", "p": "KHÔNG sửa đường đẩy bản lộ trình về CRM — chỉ chứng nó giữ nguyên ngày dự kiến."},
+    {"id": "OOS-5", "p": "KHÔNG sửa trang lộ trình gốc của bộ công cụ hay sửa tay bộ đọc."}
+  ],
+  "scope_plain": "Năm thứ để ngoài vòng này — mỗi thứ có lý do trong sổ quyết định:",
+  "coverage_plain": [
+    {"i": 0, "p": "Gốc của bảng phủ: trang Lộ trình đang chạy và tài liệu khối dữ liệu của bộ công cụ; đối chiếu ngành với báo cáo phiên bản của Jira (ngày dự đoán kèm cảnh báo khi việc chưa ước lượng)."},
+    {"i": 1, "p": "Nguồn bản lộ trình — bản mới, bản cũ, bản đẩy về CRM mới và cũ, ngày sai dạng: phủ bởi AC-1 (đọc đúng), AC-5 (ngày sai dạng), AC-7 (bản cũ và bản đẩy về)."},
+    {"i": 2, "p": "Tình trạng mốc — có ngày, chưa ngày, trễ hơn mục tiêu, đã qua ngày dự kiến, hết việc: phủ bởi AC-2, AC-4, AC-5."},
+    {"i": 3, "p": "Độ đủ số đo — mọi việc có số đo, có việc ước theo luật chung, có việc không giờ máy: phủ bởi AC-3 và AC-6 (ngăn không vỡ khi thiếu giờ máy)."},
+    {"i": 4, "p": "Chỗ hiện — xem theo mốc, bảng, bảng cột, ngăn hồ sơ: phủ bởi AC-2 và AC-6."},
+    {"i": 5, "p": "Áp mọi chỗ: tiếng Việt và Anh, điện thoại và máy tính, nền sáng và tối — AC-8 chụp và đo đủ ma trận."},
+    {"i": 6, "p": "Tám ô được làm, mỗi ô một tiêu chí từ AC-1 đến AC-8."},
+    {"i": 7, "p": "Để sau: ngày riêng từng việc, khoảng ngày sớm nhất–muộn nhất, phần trăm hạn mức cho chủ không gian làm việc."},
+    {"i": 8, "p": "Không bao giờ: CRM tự tính ngày — bộ công cụ là nguồn duy nhất, tự tính là có hai sự thật."},
+    {"i": 9, "p": "Giả định chờ anh gạch: trưởng phòng ban hiểu chữ «giờ máy» trong mục «Ước lượng» (đã thêm mục từ điển) — buổi nghiệm thu chung 22/10 sẽ cho biết."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bảng và thẻ chưa có phép đo chứng ngày gọn mang đủ cờ của mốc — đã thay bằng ma trận 12 ô so từng chỗ với dòng mốc."},
+    {"i": 1, "p": "Phép đo màn chỉ thấy trạng thái hẹp nhất của bản lộ trình thật — đã thêm phần đẩy một bản có mốc mang đủ ba cờ, đo ở hai khổ, hai ngôn ngữ, hai nền, cả ngăn hồ sơ."},
+    {"i": 2, "p": "Đường đẩy bản lộ trình về CRM chưa được chứng giữ ngày — đã gắn tiêu chí xuyên lớp, thêm phép đo đi trọn đường đẩy tới kho dữ liệu, và so bản đẩy với bản đóng gói."},
+    {"i": 3, "p": "Thước «mọi ngày trên số đo chưa đủ mang cờ» chưa có trên bản thật — đã thêm phép so độc lập trên bản lộ trình thật."},
+    {"i": 4, "p": "Chưa nói việc không có giờ máy thì ngăn hồ sơ hiện gì — đã ghi: không có mục «Ước lượng», ngăn không vỡ, và đo ca ấy."}
+  ]
+}

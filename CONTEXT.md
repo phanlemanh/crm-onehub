@@ -1253,3 +1253,17 @@ chủ trang duyệt; bậc 2 (tiền, giá, pháp lý) thêm một người ki�
 2026-09-26 (Manh Phan): mọi thay đổi đều qua duyệt, không có bậc tự áp dụng.
 _Avoid_: mức rủi ro, tier
 Vì sao: nhãn trên màn phải nói ai phải bấm, không nói máy đánh giá rủi ro thế nào.
+
+**Ngày dự kiến (lộ trình)**: ngày một mốc của lộ trình được máy ước sẽ xong, tính một lần lúc
+việc đầu tiên của mốc được mở rồi giữ nguyên; mỗi việc chưa giao mang ngày của mốc chứa nó.
+Luôn hiện kèm chữ «dự kiến» và câu nói cách tính; không phải hạn, không phải cam kết. Mốc
+chưa có ngày thì hiện «Chưa có ngày dự kiến» kèm lý do. Đề xuất 2026-10-17 (LT1e
+`lo-trinh-hien-ngay-du-kien`), chốt tại Cổng Phạm vi.
+_Avoid_: hạn, deadline, ngày chốt
+Vì sao: ngày ấy là ước tính của máy trên số đo còn ít; gọi là hạn thì người xem hẹn theo nó.
+
+**Giờ máy**: số giờ máy làm việc ước cho một việc của lộ trình (khoảng thấp–cao), cộng lại
+thành giờ của mốc. «Ước sơ bộ» khi chưa đủ số đo của các lần làm trước, nên máy ước theo
+luật chung. Đề xuất 2026-10-17 (LT1e `lo-trinh-hien-ngay-du-kien`), chốt tại Cổng Phạm vi.
+_Avoid_: giờ công, effort, story point
+Vì sao: không phải giờ của người; việc do máy dựng và người duyệt ở các cổng.
