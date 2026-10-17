@@ -1,0 +1,78 @@
+slug: dich-ten-nganh-bang-bang
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dtn_bang
+    expected: "exit 0; apps/app/lib/ten-nganh.test.ts, khối 'phu-bang'. Danh sách ngành KHÔNG chép tay: test giải gói context.dev từ thư mục apps/agent (đường suy từ import.meta.dir của tệp test, không hardcode gốc), đọc resources/brand.d.ts của chính bản đó, rút mọi union đứng sau 'industry:'. Khẳng định: đúng MỘT union khác nhau, số giá trị rút được > 0, rồi soTapNganh(BANG_NGANH, danh sách) trả thieu = [] và thua = []. Chiều đỏ trên CÙNG danh sách rút được: (a) bản sao BANG_NGANH bỏ khoá 'Real Estate & PropTech' → thieu đúng ['Real Estate & PropTech'] và thông điệp lỗi của hàm kiểm (kiemPhuBang) bằng 'bang nganh thieu: Real Estate & PropTech'; (b) danh sách + 'Quantum Computing' → thieu chứa 'Quantum Computing'; (c) bản sao bảng thêm khoá 'Old Industry' → thua đúng ['Old Industry'], thông điệp 'bang nganh thua: Old Industry'; (d) chuỗi d.ts đã gỡ union industry → hàm rút ném lỗi có chữ 'khuon thu vien doi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/ten-nganh.ts, apps/app/lib/ten-nganh.test.ts, apps/agent/package.json]
+
+  - id: E2
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dtn_bang
+    expected: "exit 0; cùng tệp E1, khối 'ten-nganh'. Ma trận viết trước, đếm bằng số: với MỌI ngành rút từ thư viện (cùng danh sách E1) × 'vi' → tenNganh trả { ten: BANG_NGANH[ngành], dich: true }; × 'en' → { ten: ngành, dich: false }; test khẳng định số ca đã chạy = 2 × số ngành. Ngoài danh sách: 'Môi giới nhà phố', 'Quantum Computing' × vi, en → { ten: nguyên văn, dich: false }. Biên: '  Technology  ' × vi → { ten: 'Công nghệ', dich: true }; 'technology' (lệch hoa thường) × vi → { ten: 'technology', dich: false }; null, '', '   ' → null."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/ten-nganh.ts, apps/app/lib/ten-nganh.test.ts]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: ui
+    cmd: config:executors.test.dtn_man
+    expected: "exit 0; apps/app/test/dich-ten-nganh-bang-bang.dom.tsx, khối 'ac2'. Render ngăn công ty (Tổng quan) với tRPC giả trả công ty city 'Hà Nội', industry 'Real Estate & PropTech'. Ở 'vi': dòng mô tả đầu ngăn có phần chữ bằng đúng BANG_NGANH['Real Estate & PropTech'] (nhập từ apps/app/lib/ten-nganh — không chép chuỗi tay), phần tử chứa nó KHÔNG có thuộc tính lang='en', và chuỗi 'Real Estate & PropTech' không xuất hiện trong dòng đó. Ở 'en': dòng có 'Real Estate & PropTech' trong một phần tử lang='en' như trước. Đối chứng dương cùng fixture: 'Hà Nội' có mặt ở cả hai ngôn ngữ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/components/crm/record-sheet/record-parts.tsx, apps/app/lib/ten-nganh.ts, apps/app/test/dich-ten-nganh-bang-bang.dom.tsx]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: ui
+    cmd: config:executors.test.dtn_man
+    expected: "exit 0; cùng tệp E3, khối 'ac3'. Render bảng công ty với tRPC giả trả hai dòng: 'Cty A' industry 'Technology', 'Cty B' industry 'Real Estate & PropTech'. Ở 'vi': ô Ngành của dòng Cty A có chữ bằng BANG_NGANH['Technology'] và không nằm trong phần tử lang='en'; ô Cty B có chữ bằng BANG_NGANH['Real Estate & PropTech'] và phần tử mang chữ có thuộc tính title bằng đúng chuỗi đó (đọc đủ khi rê chuột). Ở 'en': ô Ngành là 'Technology' trong phần tử lang='en' như trước. Đối chứng dương: ô Tên vẫn 'Cty A' ở cả hai."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/companies/companies-table.tsx", apps/app/lib/ten-nganh.ts, apps/app/test/dich-ten-nganh-bang-bang.dom.tsx]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: ui
+    cmd: config:executors.test.dtn_man
+    expected: "exit 0; cùng tệp E3, khối 'ac4'. tRPC giả trả facetCounts.industry { Technology: 3, Finance: 1 } và ghi lại input của mọi lời gọi companies.list. Ở 'vi': mở bộ lọc có nhãn companyMessages('vi').facets.industry → hai lựa chọn có nhãn BANG_NGANH['Technology'] và BANG_NGANH['Finance'], số đếm 3 và 1; chọn lựa chọn BANG_NGANH['Technology'] → lời gọi list kế tiếp có filters.industry bằng đúng ['Technology']. Lặp ở 'en', chọn 'Technology' → filters.industry ['Technology']; khẳng định hai input lọc bằng nhau (toEqual). Chiều đỏ cùng fixture: không lựa chọn nào ở 'vi' có nhãn 'Technology'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/companies/companies-table.tsx", packages/ui/src/components/data-table.tsx, apps/app/lib/ten-nganh.ts, apps/app/test/dich-ten-nganh-bang-bang.dom.tsx]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.dtn_man
+    expected: "exit 0; cùng tệp E3, khối 'ac5'. Ma trận viết trước: hai giá trị ngoài danh sách ('Môi giới nhà phố', 'Quantum Computing') × hai ngôn ngữ (vi, en) × ba chỗ (ô Ngành bảng, dòng phụ ngăn, nhãn lựa chọn bộ lọc) = 12 ca, test khẳng định đã chạy đủ 12. Mỗi ca: chữ hiện bằng đúng nguyên văn và nằm trong phần tử lang='en' ở ô bảng và dòng phụ — y như hôm nay (so với cách hiện một giá trị tiếng Anh trong bảng ở giao diện en); nhãn lựa chọn lọc là nguyên văn; render không ném lỗi. Thêm dòng industry null → ô hiện EmptyCellValue như trước. Đối chứng dương cùng fixture: thêm dòng 'Technology' ở vi → ô đó hiện BANG_NGANH['Technology'] không có lang='en'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/companies/companies-table.tsx", apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/lib/ten-nganh.ts, apps/app/test/dich-ten-nganh-bang-bang.dom.tsx]
+
+  - id: E7
+    criterion: AC-6
+    executor: judgment
+    inputs: [apps/app/lib/ten-nganh.ts, CLAUDE.md, CONTEXT.md]
+    question: "Bảng BANG_NGANH trong tệp ten-nganh.ts ghép mỗi tên ngành tiếng Anh của nhà cung cấp với một tên Việt. Đọc như một nhân viên kinh doanh Việt Nam gặp công ty thuộc đủ mọi ngành: mỗi tên Việt có đúng nghĩa ngành gốc không, có tự nhiên không, có hai ngành nào trùng hay gần trùng tên Việt khiến người đọc không phân biệt được không? Theo mục «Ngôn ngữ sản phẩm» của CLAUDE.md và từ điển CONTEXT.md, có tên nào là từ ghép tự đúc cho thuật ngữ, hay giữ chữ Anh mà không phải cách gọi thông dụng? Nêu đích danh từng dòng có vấn đề và tên đề xuất."
+    expected: "Không dòng nào sai nghĩa hay trùng; tên giữ chữ Anh (Logistics, Agency) là cách gọi thông dụng; nếu có dòng gượng thì nêu tên đề xuất."
+    evidence_required: [run_id, verdict, rationale]
+    paths: [apps/app/lib/ten-nganh.ts, CLAUDE.md, CONTEXT.md]
+
+  - id: E8
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dtn_chup
+    steps:
+      - "Chạy NGUYÊN VĂN từ gốc kho lệnh của executors.script.dtn_chup — không gọi thẳng chup.mjs (mot-luot.sh dựng phiên đo, kho dùng-một-lần)"
+      - "chup.mjs chạy cảnh cây trước màn đầu; lệch cây hay bàn đo không dựng được → mã 2"
+      - "Dựng qua API của bàn đo 24 công ty mẫu, mỗi công ty một ngành rút từ BANG_NGANH; mở bảng công ty ở vi và en, 1440 và 390 → ảnh evidence/E8-bang-<ngôn ngữ>-<rộng>.png; với mỗi ô Ngành đo scrollWidth > clientWidth và in một dòng «E8 cat <ngôn ngữ> <rộng>: <số tên bị cắt>/24 — <danh sách>»; bấm dòng ngành Real Estate & PropTech mở ngăn → ảnh evidence/E8-ngan-<ngôn ngữ>-<rộng>.png"
+      - "Đọc dòng «E8 …» trong output (chữ ngành ở cột và dòng phụ, scrollWidth ≤ clientWidth); mọi dòng phải đạt, rồi mở từng ảnh E8-*.png để chấm"
+    expected: "Trên bàn đo, chụp ở 1440 và 390: bảng và ngăn tiếng Việt hiện tên Việt (cột có thể cắt bằng dấu ba chấm), tiếng Anh hiện chữ gốc; không tràn ngang; output có đủ bốn dòng «E8 cat …» (số tên bị cắt là số đo trình người, không phải điều kiện đạt). Ảnh ở _acceptance/dich-ten-nganh-bang-bang/evidence/E8-*.png; người chấm nhìn ảnh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/companies/companies-table.tsx", apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/lib/ten-nganh.ts, _acceptance/dich-ten-nganh-bang-bang/rang/chup.mjs]

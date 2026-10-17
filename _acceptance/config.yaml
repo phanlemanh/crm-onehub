@@ -1932,6 +1932,8 @@ executors:
     tthv_api: 'bun run test -- "cd apps/api && bun test test/ten-mien-nen-tang.spec.ts"'
     tthv_tac_nhan: 'bun run test -- "cd apps/agent && bun test test/tra-cuu-thuong-hieu-viet-nam.spec.ts"'
     tthv_man: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tra-cuu-thuong-hieu-viet-nam.dom.tsx
+    dtn_bang: cd apps/app && bun test ./lib/ten-nganh.test.ts
+    dtn_man: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dich-ten-nganh-bang-bang.dom.tsx
     bch_nhan: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/status-indicator-xuong-dong.dom.tsx"
     ppt_phan_loai: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t phan-loai"
     ppt_day_t1: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-t1"
@@ -1945,6 +1947,7 @@ executors:
     tlkp_tep: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts"'
   script:
     tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
+    dtn_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dich-ten-nganh-bang-bang/rang/chup.mjs"
     dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
     kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
