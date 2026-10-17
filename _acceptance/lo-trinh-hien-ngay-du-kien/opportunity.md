@@ -3,10 +3,10 @@ schema_version: 1
 slug: lo-trinh-hien-ngay-du-kien
 feature: Trưởng phòng ban mở trang Lộ trình và thấy mỗi việc, mỗi mốc có ngày dự kiến xong do máy tính — ghi rõ là dự kiến, có cờ khi số đo chưa đủ
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-17T12:04:25Z # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -44,10 +44,10 @@ Số trước (đo 17/10 trên `LO-TRINH.html` của onehub 9dfdf0628, vẽ bằ
 > Bản máy sinh từ `bat_khi` của hàng giữ ở cuối mục; dưới đây là bản máy khuyên, tách phần trang CRM chịu khỏi phần
 > độ đúng của phép tính kit.
 
-- Câu hỏi phép đo trả lời: [đề xuất] trưởng phòng ban mở trang Lộ trình có thấy cho mỗi mốc đang chạy một ngày ghi rõ là dự kiến, hoặc một cờ nói vì sao chưa có ngày, và mỗi việc có giờ máy kèm cờ khi số đo chưa đủ — không chỗ nào trình ngày như cam kết?
-- Kết quả nào là SỐNG: [đề xuất] sau khi giao, 100 % mốc đang chạy trên trang hiện ngày kèm chữ «dự kiến» hoặc cờ «chưa có ngày dự kiến» kèm lý do; mọi ngày tính trên số đo chưa đủ mang cờ; độ lệch ngày dự kiến so với ngày khép thật ở mốc khép đầu tiên được ghi lại — lệch quá một ngày thì gửi tín hiệu cho kit (hạt giống 17/10), không tính là LT1e chết.
-- Kết quả nào là CHẾT: [đề xuất] có một mốc đang chạy hiện ngày không kèm chữ «dự kiến», hoặc không ngày mà không cờ, hoặc trang vỡ khi đọc trang đời trước, khi hết timebox.
-- Timebox: [đề xuất] 2026-10-21 (mốc Lộ trình bước 2 — ngày dự kiến, tên ngành tiếng Việt, tiêu điểm sau xoá)
+- Câu hỏi phép đo trả lời: trưởng phòng ban mở trang Lộ trình có thấy cho mỗi mốc đang chạy một ngày ghi rõ là dự kiến, hoặc một cờ nói vì sao chưa có ngày, và mỗi việc có giờ máy kèm cờ khi số đo chưa đủ — không chỗ nào trình ngày như cam kết?
+- Kết quả nào là SỐNG: sau khi giao, 100 % mốc đang chạy trên trang hiện ngày kèm chữ «dự kiến» hoặc cờ «chưa có ngày dự kiến» kèm lý do; mọi ngày tính trên số đo chưa đủ mang cờ; độ lệch ngày dự kiến so với ngày khép thật ở mốc khép đầu tiên được ghi lại — lệch quá một ngày thì gửi tín hiệu cho kit (hạt giống 17/10), không tính là LT1e chết.
+- Kết quả nào là CHẾT: có một mốc đang chạy hiện ngày không kèm chữ «dự kiến», hoặc không ngày mà không cờ, hoặc trang vỡ khi đọc trang đời trước, khi hết timebox.
+- Timebox: 2026-10-21 (mốc Lộ trình bước 2 — ngày dự kiến, tên ngành tiếng Việt, tiêu điểm sau xoá)
 
 Bản máy sinh từ hàng (giữ làm sử liệu): «Sau khi giao, mọi mốc đang chạy trên trang có ngày dự kiến kèm nhãn «dự kiến»; ở
 mốc khép đầu tiên, ngày dự kiến lệch ngày khép thật không quá một ngày». Vế thứ hai đo phép tính của kit chứ không đo
