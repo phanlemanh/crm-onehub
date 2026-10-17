@@ -2880,6 +2880,34 @@
       "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
     },
     {
+      "ma": "VS8",
+      "slug": "ngan-ban-ghi-giu-danh-tinh",
+      "nhom": "crm-chung",
+      "thu_tu": 450.5,
+      "ngay": "2026-10-17",
+      "ten": "Ngăn bản ghi không dựng lại khi mở, đóng",
+      "ten_ngan": "Ngăn bản ghi trượt mượt",
+      "cau_giao": "«Mở hay đóng ngăn bản ghi thì ngăn trượt ra, vào như cũ, không biến mất rồi hiện lại, mà vẫn chỉ nạp sẵn đúng các khoá của #469»",
+      "ghi_chu": "Ngoài-8 của ve-sinh-do-san-onehub (Known limit ở Cổng 2). Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx: HydrationBoundary chỉ bọc khi stack.length > 0 nên RecordSheetHost bị dựng lại. Chứng minh: bài kiểm DOM về danh tính RecordSheetHost qua mở, đóng; ca đối chứng apps/app/test/ngan-ban-ghi-nap-san.dom.tsx giữ xanh. T2, M5 ước 3–4 giờ máy. Đi sau khi #469 gộp.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+    },
+    {
+      "ma": "VS11",
+      "slug": "bao-loi-tac-nhan-sau-cau-hoi",
+      "nhom": "crm-chung",
+      "thu_tu": 450.6,
+      "ngay": "2026-10-17",
+      "ten": "Báo lỗi tác nhân cả sau câu hỏi giữa chừng",
+      "ten_ngan": "Báo lỗi tác nhân",
+      "cau_giao": "«Tác nhân hỏng trong lúc dựng thì người dùng nhận đúng một thông báo, kể cả khi đã trả lời một câu hỏi giữa chừng»",
+      "ghi_chu": "Ngoài-11 của ve-sinh-do-san-onehub. Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/agent/agent/lib/thong-bao-tac-nhan.ts: dòng tac-nhan-hong chỉ ghi khi lần gửi cuối là CREATE_AGENT. T2. Đi sau khi #469 gộp.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+    },
+    {
       "ma": "K7c",
       "slug": "don-sau-cho-tac-nhan",
       "nhom": "ve-sinh",
@@ -2904,7 +2932,7 @@
       "ten": "Dọn hồ sơ cũ",
       "ten_ngan": "Dọn hồ sơ cũ",
       "cau_giao": "«Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A»",
-      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng.",
+      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
       "chay_khi": "crm nhận mốc kit có K-A (ho-so-da-ky-giu-tuoi)",

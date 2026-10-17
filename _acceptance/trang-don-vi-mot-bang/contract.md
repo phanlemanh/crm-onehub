@@ -5,7 +5,7 @@ slug: trang-don-vi-mot-bang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-15T05:05:18Z
 design_doc: docs/superpowers/specs/2026-10-15-trang-don-vi-mot-bang-design.md
@@ -94,3 +94,14 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
   · Lời hứa DH1 mang qua lượt này (phép đo DH2 sửa theo khung DH1): `khung-okr-truoc-r1` theo `dieu-huong-khu-muc-tieu`
     AC-2 (hàng hành động kết thúc bằng «Thêm mục tiêu») và AC-5 (nút soạn khoá kèm lý do cho người thiếu quyền);
     `okr-to-chuc-va` theo `dieu-huong-khu-muc-tieu` AC-5.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-2: Người bật dịch tự động của trình duyệt sẽ không thấy một số chữ giao diện («Thuộc», «Đơn vị», «Tìm đơn vị…») được dịch; tên đơn vị vẫn giữ nguyên.
+  - Ngoài-4: Khi đang lọc xem cả mục tiêu đã bỏ, ô «Cần bàn» và «Chưa góp vào đâu» có thể đếm và hiện cả mục tiêu đã bỏ.
+  - Ngoài-5: Bài kiểm thứ tự phím Tab của ô chọn đơn vị ở hồ sơ toan-canh-okr yếu hơn trước, có thể vẫn xanh nếu thứ tự Tab hỏng.
+  - Ngoài-6: Bài kiểm chưa thật sự xác nhận cách xem đang bật khớp đường dẫn, nên lỗi bật nhầm cách xem có thể lọt.
+  - Ngoài-7: Bài kiểm «số dòng của mục tiêu không đổi khi có chip góp ý» trên trang đơn vị luôn ra cùng kết quả, không bắt được dòng thừa chen vào.
+  - Ngoài-8: Phép kiểm «không xoá dòng kiểm nào» chỉ nhận it/test/expect, bỏ sót các kiểu viết soCa/kiemCa/phai.
+  - Ngoài-9: Đột biến giả lập «cây đơn vị cũ quay lại» là bản giả đơn giản, có thể không bắt được cây thật quay lại dưới hình khác.
+- Mở hợp đồng mới — chọn ở Cổng Bằng chứng 2026-10-17: Ngoài-1 (hai khung chờ khác hình nối nhau khi trang đang tải;
+  sửa đúng tầng là thêm biến thể cho khung xương chung của packages/ui) và Ngoài-3 (menu «Lọc» tự đóng và khung Lọc trên
+  điện thoại tự thu lại sau mỗi lần chọn, vì bảng chuyển sang khung chờ khi đang tải lại).
