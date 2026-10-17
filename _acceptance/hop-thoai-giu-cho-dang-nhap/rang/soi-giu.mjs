@@ -663,6 +663,9 @@ function caTuKhaiChieuDo() {
 
 const MOC = "origin/onehub";
 const TEP_CHU = "packages/ui/src/lib/messages.ts";
+// du-an-gantt mien-effect: docs/crm-plan.md §12 cấm useEffect trong mã app và tính năng, miễn tệp vendor
+// dưới packages/ui/src/components (Biome bỏ qua thư mục này). Chỉ luật useEffect theo miễn trừ đó.
+const MIEN_EFFECT = /^packages\/ui\/src\/components\//;
 const KHOA_HOI = ["tieuDe", "than", "tiepTuc", "bo"];
 const LOP_DOI_KIEU =
 	/(^|\s)(bg-\S+|text-(?!xs\b|sm\b|base\b|lg\b|xl\b|left\b|right\b|center\b|wrap\b|nowrap\b|balance\b|pretty\b)\S+|border-\S+|rounded-\S+|p[xytrbl]?-\S+|m[xytrbl]?-\S+|gap-\S+|space-[xy]-\S+)/;
@@ -894,7 +897,7 @@ function caThietKe(thay = new Map()) {
 			hong.push(`thiet-ke: chu thich moi o ${t}:${d}`);
 		for (const k of soiKieu(sf, them, t.startsWith("apps/app/")))
 			hong.push(`thiet-ke: ${k.cau} o ${t}:${k.dong}`);
-		if (moi.has(t))
+		if (moi.has(t) && !MIEN_EFFECT.test(t))
 			for (const d of coUseEffect(sf))
 				hong.push(`thiet-ke: useEffect tran trong tep moi ${t}:${d}`);
 	}

@@ -517,7 +517,7 @@ describe("dg-man-ds", () => {
 			!chuCua(document.querySelector("[data-o-pham-vi]")).includes(
 				D.phamVi.cuaToi,
 			) ||
-			urlCuoi().includes("khong-co")
+			document.querySelectorAll("[data-nhom]").length !== 3
 		) {
 			throw new Error("dg: pham vi la khong ve cua toi");
 		}

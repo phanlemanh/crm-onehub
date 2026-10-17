@@ -17,12 +17,16 @@ import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { NHOM_VIEC, type NhomViec, VIEC } from "@crm/validation/viec";
 import { useQuery } from "@tanstack/react-query";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { DaiDuAn } from "@/components/du-an/dai-du-an";
 import { GanttCuaDuAn } from "@/components/du-an/gantt-cua-du-an";
 import { OPhamVi } from "@/components/du-an/o-pham-vi";
-import { type KieuXemViec, kieuXemCo } from "@/components/du-an/pham-vi";
+import {
+	type KieuXemViec,
+	kieuXemCo,
+	type PhamVi,
+} from "@/components/du-an/pham-vi";
 import { HopDuAn } from "@/components/du-an/tao-du-an";
 import { TatCaDuAn } from "@/components/du-an/tat-ca-du-an";
 import { usePhamVi } from "@/components/du-an/use-pham-vi";
@@ -142,11 +146,10 @@ export function ViecCuaToi() {
 	const m = viecMessages(locale);
 	const d = duAnMessages(locale);
 	const trpc = useTRPC();
-	const { phamVi, xem, chonPhamVi, chonXem } = usePhamVi();
+	const { phamVi: phamViUrl, xem: xemUrl, chonPhamVi, chonXem } = usePhamVi();
 	const [nhom, setNhom] = useQueryState(SEARCH_PARAM.viec.nhom, nhomParser);
 	const [tao, setTao] = useState(false);
-	const [khongThay, setKhongThay] = useState(false);
-	const duAnId = phamVi.loai === "du-an" ? phamVi.id : null;
+	const duAnId = phamViUrl.loai === "du-an" ? phamViUrl.id : null;
 	const duAn = useQuery({
 		...trpc.duAn.get.queryOptions({ id: duAnId ?? "" }),
 		enabled: duAnId !== null,
@@ -154,17 +157,11 @@ export function ViecCuaToi() {
 	});
 	const maLoi = duAn.error?.data?.code;
 
-	useEffect(() => {
-		if (duAnId !== null && maLoi === "NOT_FOUND") {
-			setKhongThay(true);
-			chonPhamVi({ loai: "cua-toi" });
-		}
-	}, [duAnId, maLoi, chonPhamVi]);
+	const khongThay = duAnId !== null && maLoi === "NOT_FOUND";
+	const phamVi: PhamVi = khongThay ? { loai: "cua-toi" } : phamViUrl;
+	const xem = khongThay && xemUrl === "gantt" ? "danh-sach" : xemUrl;
 
-	const moDuAn = (id: string) => {
-		setKhongThay(false);
-		chonPhamVi({ loai: "du-an", id });
-	};
+	const moDuAn = (id: string) => chonPhamVi({ loai: "du-an", id });
 
 	const nhanXem = {
 		gantt: d.gantt.nhanKieu,
@@ -182,10 +179,7 @@ export function ViecCuaToi() {
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div className="flex min-w-0 flex-wrap items-center gap-2">
 					<OPhamVi
-						onChon={(p) => {
-							setKhongThay(false);
-							chonPhamVi(p);
-						}}
+						onChon={(p) => chonPhamVi(p)}
 						onTao={() => setTao(true)}
 						phamVi={phamVi}
 					/>
