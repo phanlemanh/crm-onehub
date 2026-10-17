@@ -313,13 +313,26 @@ for (const slug of chiMuon) {
 	}
 }
 
-// 3. Dòng xoá trong rang/ ngoài dấu cũ phải khai tại chỗ.
+// 3. Dòng xoá trong rang/ ngoài dấu cũ phải khai tại chỗ; lời khai không tự miễn:
+//    khối `cach-toi`/`F8 neo` giữ NGUYÊN VĂN mọi dòng khẳng định bị xoá, khối
+//    `loi-hua-moi: <hồ sơ> <AC>` cần dòng Notes nhắc đúng cặp đó trong hợp đồng của hồ sơ.
+const GOI_KHANG_DINH =
+	/\b(kiem|phai|soCa|expect)\s*\(|\.(toBe|toEqual|toContain)\(/;
+const SO_SANH = /(===|!==)\s*([^\s&|,;)]+)/g;
+const KHANG_DINH = new RegExp(`${GOI_KHANG_DINH.source}|===|!==`);
+const notesCua = (slug) => {
+	const hd = join(GOC, "_acceptance", slug, "contract.md");
+	if (!existsSync(hd)) return [];
+	return (
+		readFileSync(hd, "utf8")
+			.split(/^## Notes\s*$/m)[1]
+			?.split(/^## /m)[0]
+			?.split("\n") ?? []
+	);
+};
 for (const slug of KHAI) {
 	const duong = `_acceptance/${slug}/rang`;
-	const cacDiff = [
-		...rieng.map((c) => git("diff", `${c}^`, c, "--", duong)),
-		git("diff", "HEAD", "--", duong),
-	];
+	const cacDiff = [git("diff", base, "--", duong)];
 	let ngoai = 0;
 	const khongKhai = [];
 	const khaiTaiCho = [];
@@ -337,9 +350,51 @@ for (const slug of KHAI) {
 		);
 		if (xoa.length === 0) continue;
 		ngoai += xoa.length;
-		const khai = dong.find((d) => d.startsWith("+") && KHAI_TAI_CHO.test(d));
-		if (khai) khaiTaiCho.push(khai.slice(1).trim());
-		else khongKhai.push(...xoa.map((d) => d.slice(1).trim()));
+		const khai = dong.filter((d) => d.startsWith("+") && KHAI_TAI_CHO.test(d));
+		if (khai.length === 0) {
+			khongKhai.push(...xoa.map((d) => d.slice(1).trim()));
+			continue;
+		}
+		khaiTaiCho.push(...khai.map((d) => d.slice(1).trim()));
+		const loiHua = khai.filter((d) => d.includes("AC-14 loi-hua-moi:"));
+		if (loiHua.length > 0) {
+			for (const d of loiHua) {
+				const m = /loi-hua-moi:\s*([a-z0-9-]+)\s+(AC-\d+)/.exec(d);
+				const ok =
+					m && notesCua(slug).some((l) => l.includes(m[1]) && l.includes(m[2]));
+				if (!ok) {
+					const ten = m ? `${m[1]} ${m[2]}` : d.slice(1, 80).trim();
+					sai.push(
+						`${slug} khai loi-hua-moi ${ten} ma hop dong thieu dong Notes`,
+					);
+					console.log(
+						`SAI AC-14: ${slug} khai loi-hua-moi ${ten} ma hop dong thieu dong Notes`,
+					);
+				}
+			}
+			continue;
+		}
+		const them = new Set(
+			dong.filter((d) => d.startsWith("+")).map((d) => d.slice(1).trim()),
+		);
+		const themChu = [...them].join("\n");
+		for (const d of xoa.filter((x) => KHANG_DINH.test(x.slice(1)))) {
+			const chu = d.slice(1).trim();
+			if (them.has(chu)) continue;
+			const goi = GOI_KHANG_DINH.test(chu);
+			const soSanh = [...chu.matchAll(SO_SANH)].map((m) => `${m[1]} ${m[2]}`);
+			const giu =
+				!goi &&
+				soSanh.length > 0 &&
+				soSanh.every((ss) =>
+					[...themChu.matchAll(SO_SANH)].some((m) => `${m[1]} ${m[2]}` === ss),
+				);
+			if (giu) continue;
+			sai.push(`${slug} khoi cach-toi doi dieu khang dinh`);
+			console.log(
+				`SAI AC-14: ${slug} khoi cach-toi doi dieu khang dinh: ${chu.slice(0, 160)}`,
+			);
+		}
 	}
 	console.log(
 		`XOA ${slug}: ${ngoai} dong xoa ngoai dau cu · ${ngoai - khongKhai.length} trong khoi khai tai cho · ${khongKhai.length} khong khai`,

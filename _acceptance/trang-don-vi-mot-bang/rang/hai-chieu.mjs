@@ -269,6 +269,33 @@ const DOT_BIEN = {
 				`SAI AC-14: ve-sinh-do-san-onehub muon _acceptance/toan-canh-okr/rang/man-toan-canh\\.mjs cua toan-canh-okr: ghim tren ${SHA_TRUOC_TRANG} chua co trang moi`,
 			),
 		},
+		{
+			ten: "cach-toi-doi",
+			thay: [
+				{
+					tep: "_acceptance/soan-okr-trong-khung/rang/man-dua-vao.mjs",
+					cu: "return ds.length === n;",
+					moi: "return ds.length >= n;",
+				},
+			],
+			ghim: /SAI AC-14: soan-okr-trong-khung khoi cach-toi doi dieu khang dinh: return \(ds\?\.firstElementChild\?\.children\.length \?\? 0\) === n;/,
+		},
+		{
+			ten: "bo-notes",
+			thay: [
+				{
+					tep: "_acceptance/toan-canh-okr/contract.md",
+					doi: (chu) =>
+						chu
+							.split("\n")
+							.filter(
+								(l) => !l.includes("— thay bởi trang-don-vi-mot-bang AC-5."),
+							)
+							.join("\n"),
+				},
+			],
+			ghim: /SAI AC-14: toan-canh-okr khai loi-hua-moi trang-don-vi-mot-bang AC-5 ma hop dong thieu dong Notes/,
+		},
 	],
 	"dvb-man": [
 		{

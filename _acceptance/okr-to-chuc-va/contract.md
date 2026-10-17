@@ -126,3 +126,11 @@ eval. [CE chưa kiểm chứng: chưa có bộ đếm máy so ô ↔ eval; ngư�
     có thể lọt.
   - Bài so-kr (E2) chỉ kiểm URL `record` sau khi bấm nút số, bài nut-them (E10) chỉ kiểm khoá URL — hai
     phát hiện round 1 này rơi khỏi thẻ round 2 vì tệp bị vòng sửa chạm.
+
+Lời hứa thay bởi hồ sơ khác (thêm 17/10, trang-don-vi-mot-bang AC-14):
+
+- Người không có quyền vẫn thấy nút ở đầu trang nhưng bị khoá; phép đo chỉ đếm nút bấm được — thay bởi
+  dieu-huong-khu-muc-tieu AC-5.
+- Trên trang Theo đơn vị, mọi dòng mục tiêu mặc định thu; đường dẫn nhớ dòng MỞ bằng `expand` thay cho dòng
+  thu bằng `thuMucTieu`, nên sau khi bấm mở thì nút mang `aria-expanded="true"` — thay bởi
+  trang-don-vi-mot-bang AC-3.

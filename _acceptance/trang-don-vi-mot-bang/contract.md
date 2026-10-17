@@ -85,3 +85,12 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
 - Hỏi-4 và NM2: NM2 sửa `data-table.tsx` (+49/−46) chỉ trong khoảng dòng 40–620 (import, `DataTableFacet`, toggle, khối
   bộ lọc, nút Bộ lọc), không đụng dòng mở rộng hay ô mũi tên (Mac Studio, #375 03:56Z) — không chồng logic, chỉ có thể
   lệch số dòng khi gộp; bên gộp sau giữ cả hai.
+- Lời hứa của hồ sơ đã ký đổi theo trang mới (AC-14, ghi 17/10 sau finding AC-14 của S4 lượt 2; mỗi dòng có bản đối
+  ở Notes của hồ sơ kia):
+  · AC-3 thay: `muc-tieu-va-kr` (mở sẵn mọi mục tiêu, nhớ dòng thu bằng `thuMucTieu`); `okr-to-chuc-va` (mặc định thu,
+    đường dẫn nhớ dòng mở bằng `expand`); `dat-okr-trong-crm` E11 (KR là dòng con cùng bốn cột, không còn bảng KR
+    riêng trong thẻ).
+  · AC-5 thay: `toan-canh-okr` E2 (lọc không khớp ghi «Không có mục tiêu nào khớp» kèm nút bỏ lọc).
+  · Lời hứa DH1 mang qua lượt này (phép đo DH2 sửa theo khung DH1): `khung-okr-truoc-r1` theo `dieu-huong-khu-muc-tieu`
+    AC-2 (hàng hành động kết thúc bằng «Thêm mục tiêu») và AC-5 (nút soạn khoá kèm lý do cho người thiếu quyền);
+    `okr-to-chuc-va` theo `dieu-huong-khu-muc-tieu` AC-5.
