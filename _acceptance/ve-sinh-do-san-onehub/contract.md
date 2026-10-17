@@ -5,7 +5,7 @@ slug: ve-sinh-do-san-onehub
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [web, tooling]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-16-ve-sinh-do-san-onehub-design.md
 approved_by: manh
 approved_at: 2026-10-15T23:04:27Z
@@ -128,3 +128,16 @@ ngoài D1–D4 — Out of scope.
 
 - Ghim lại đi một lượt `repin-lane.mjs` cho bảy hồ sơ, xin lượt `ghim-lai` qua Điều phối M5.
 - `cham-tep` cho các hồ sơ đã ký bị chạm đăng ở crm #375 trước Cổng Phạm vi.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-2: Nếu một hồ sơ nghiệm thu khai sai mã thoát mong đợi, công cụ kiểm tra ghim lại sẽ lặng lẽ bỏ qua lỗi khai đó và vẫn báo xanh, trong khi cổng chính thức của bộ kit coi là đỏ. Hiện cả bảy hồ sơ đều khai đúng nên chưa ảnh hưởng ai.
+  - Ngoài-3: Phần kiểm tra rằng mã nguồn ngoài thư mục nghiệm thu không bị đổi sau khi ghim lại chưa có ca thử chứng minh nó thật sự báo đỏ khi có khác biệt. Lần chạy thật cho thấy nó không báo nhầm, nhưng chưa ai thấy nó bắt được lỗi thật.
+  - Ngoài-6: Tài liệu cho người làm việc trong kho còn ghi bước kiểm trước khi đẩy chạy đủ mọi lệnh, trong khi thực tế lần đẩy chỉ sửa tài liệu thì được bỏ bớt. Người đọc có thể hiểu sai cổng đang làm gì.
+  - Ngoài-7: Thẻ «Đang dựng» có khoảng cách hơi khác các thẻ còn lại trong ứng dụng. Giao diện vẫn dùng được, chỉ lệch chút so với nếp chung.
+  - Ngoài-8: Khi đóng một bản ghi, ngăn bên phải có thể biến mất đột ngột thay vì trượt ra. Mỗi lần mở bản ghi cũng có thể chậm thêm một chút.
+  - Ngoài-9: Nếu công cụ kiểm trước khi gộp tự hỏng, bước kiểm vẫn có thể báo là sạch. Người duyệt có thể tin nhầm rằng đã kiểm xong.
+  - Ngoài-10: Nếu việc tải thông tin người dùng bị lỗi, người đã mở cuộc soạn sẽ bị đối xử như người xem và không thấy cuộc trò chuyện. Màn hình không báo lỗi hay có nút thử lại.
+  - Ngoài-12: Phép kiểm trước khi gộp chưa có ca thử chứng minh nó thật sự bắt được vi phạm. Nếu bản thân công cụ hỏng, kết quả vẫn có thể hiện là sạch.
+  - Ngoài-13: Một hồ sơ ghim lại có dòng ghi kết quả rỗng vẫn có thể bị coi là xanh. Người duyệt có thể tin nhầm rằng các kiểm tra đã chạy và đạt.
+  - Ngoài-14: Trong các tệp cấu hình dạng JSON, một thay đổi không được khai riêng vẫn có thể lọt qua phép kiểm nếu tệp đó đã có nhãn khai ở chỗ khác. Người duyệt có thể bỏ sót thay đổi không được báo.
+  - Ngoài-16: Bài kiểm thứ tự tải của ngăn bản ghi và trang đỏ khi thiếu dữ liệu, nhưng chưa chứng minh nó bắt đúng lỗi thứ tự gốc. Lỗi cũ có thể quay lại mà bài kiểm không nhận ra.
+  - Ngoài-17: Phép đo không tự kiểm số lần mở trang thật có đủ như đã khai hay không. Nếu một số lần mở bị bỏ sót, kết quả vẫn hiện như đủ.

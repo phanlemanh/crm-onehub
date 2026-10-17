@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 7dae0c90bdb1673a9941a21765b66a19543d8493
-human_signoff:
+human_signoff: manh 2026-10-17 — ký Cổng Bằng chứng trên S4 vòng 2 PASS (20/20 eval, 7/7 suite); Ngoài-1, 4 chấp nhận không sửa; Ngoài-5, 11, 15 mở hợp đồng mới; 12 mục còn lại ghi Known limits; cắt/hoãn đồng ý cắt; Treo phê hết
 ---
 
 # Evidence Report: ve-sinh-do-san-onehub
