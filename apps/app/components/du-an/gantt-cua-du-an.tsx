@@ -219,7 +219,7 @@ export function GanttCuaDuAn({ duAnId }: { duAnId: string }) {
 		<>
 			<GanttDuAn
 				chiDoc={du.duAn.dong}
-				className="h-[520px]"
+				className="h-130"
 				homNay={homNayVN()}
 				lich={du.lich}
 				moc={du.moc}
