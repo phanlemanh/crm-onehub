@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e9075efe117e3f98f37c5e26a78342813d4749d9
-human_signoff:
+human_signoff: manh 2026-10-17
 ---
 
 # Evidence Report: trang-don-vi-mot-bang
