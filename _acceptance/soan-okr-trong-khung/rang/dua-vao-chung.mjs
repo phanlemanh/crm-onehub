@@ -74,7 +74,7 @@ export async function demCsdl() {
 
 export async function demManNen(p) {
 	return p.evaluate(() => {
-		const ds = [...document.querySelectorAll('[data-trang-thai="ST-donvi-danhsach"]')].find((o) => o.checkVisibility());
-		return ds ? (ds.firstElementChild?.children.length ?? 0) : 0;
+		// AC-14 cach-toi: moi muc tieu la mot dong [data-muc-tieu] cua bang don vi (trang-don-vi-mot-bang AC-3), khong con the con cua ST-donvi-danhsach.
+		return [...document.querySelectorAll("[data-muc-tieu]")].filter((o) => o.checkVisibility()).length;
 	});
 }

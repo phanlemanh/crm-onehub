@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 91b4e246850c022b600b63901a2666a3aac8428e
+verified_commit: ea2082066a7f3804de3aecfe7f38bdcfa0c5b272
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -455,3 +455,11 @@ sha: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 14 — 2026-10-17, do ve-sinh-do-san-onehub: ghim lại bảy hồ sơ sau gộp onehub 9dfdf0628 (#459, #462, #463, #465) trước khi đẩy
 run_id: repin-20261017T113609Z-76485
 sha: 91b4e246850c022b600b63901a2666a3aac8428e · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 15 — 2026-10-17, do ve-sinh-do-san-onehub: ghim lại bảy hồ sơ sau gỡ chú thích JSDoc c88b1658e (luật kho khong-chu-thich)
+run_id: repin-20261017T134627Z-69983
+sha: c88b1658eaa07946eeb8f6b8c1d30e0daa464971 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 16 — 2026-10-17, do trang-don-vi-mot-bang (DH2): ghim lại sau gộp #469 da505732b + trang đơn vị một bảng, làn 1/3
+run_id: repin-20261017T155034Z-76983
+sha: ea2082066a7f3804de3aecfe7f38bdcfa0c5b272 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

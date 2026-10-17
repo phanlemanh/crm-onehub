@@ -1,0 +1,28 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_wt_onehub_do · app http://localhost:4853 · api http://localhost:4154 · cua chan http://localhost:4648
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+man-toan-canh: chay tron 11 eval; chay rieng mot eval: EVAL=E19 (ma: E2, E3, E5, E10, E14, E17, E19, E21, E23, E28, E29)
+$ bun scripts/dev-session.ts "at9kk0an@thu.test"
+$ bun scripts/dev-session.ts "bt9kk0an@thu.test"
+$ bun scripts/dev-session.ts "pt9kk0an@thu.test"
+$ bun scripts/dev-session.ts "qt9kk0an@thu.test"
+$ bun scripts/dev-session.ts "kt9kk0an@thu.test"
+$ bun scripts/dev-session.ts "ot9kk0an@thu.test"
+  E5 tieu diem tung buoc: tab=«Mở rộng mạng lưới đối tác toàn OneHubOneHub38%Chưa có kỳ vọn» → ArrowDown=«KR · Số đối tác hoạt động38%» → ArrowDown=«Khối Kinh doanh tăng doanh thu từ đối tácKhối Kinh doanh t9k» → ArrowLeft=«Khối Kinh doanh tăng doanh thu từ đối tácKhối Kinh doanh t9k» → ArrowRight=«Khối Kinh doanh tăng doanh thu từ đối tácKhối Kinh doanh t9k» → Home=«Mở rộng mạng lưới đối tác toàn OneHubOneHub38%Chưa có kỳ vọn» → End=«KR · Hợp đồng duyệt đúng hạn40%»
+  nhom loc (E2, E3, E5, E10): 69 s
+  nhom hop (E14, E28): 73 s
+  nhom dien (E17): 5 s
+  nhom tong (E19): 11 s
+  nhom suc (E21): 7 s
+  E23 danh sach chu ky: [{"nhan":"Năm 2026 t9kk0an","muc":["Năm 2026 t9kk0an","Quý 3/2026 t9kk0an · đã đóng","Quý 4/2026 t9kk0an · hiện tại"]},{"nhan":"Năm 2027 t9kk0an","muc":["Năm 2027 t9kk0an"]}]
+  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q3: 1 KR, Q4: 2 KR), thay [Phòng Chu kỳ t9kk0an,50%,0 · 1 · 0,1 KR có ghi chú mới,1,1]
+  nhom ky (E23, E29): 6 s
+man-toan-canh: 161 khang dinh, 3 hong, 37 anh, 173 s
+  HONG: E2 buoc 3: bo phan B hien dung 4 muc tieu B1, P1a, P1b, P2a, khong P3a (thay 3)
+  HONG: E2 buoc 5: bo loc tra lai 4 muc tieu: het 30000ms van chua thay
+  HONG: E21 buoc 2: breadcrumb Toan canh › Suc khoe chuong trinh (thay )
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1

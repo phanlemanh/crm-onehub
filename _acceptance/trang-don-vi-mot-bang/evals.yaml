@@ -1,0 +1,353 @@
+schema_version: 1
+slug: trang-don-vi-mot-bang
+
+# Tệp kiểm DOM mới: apps/app/test/okr-trang-don-vi.dom.tsx — mỗi eval chạy đúng một nhóm theo tên
+# (`-t dvb-...`). Bảng hai chiều của mỗi nhóm khai trong expected: đối chứng dương trên vật lành và một
+# lượt phá thử trên bản sao (DVB_PHA=<tên>) ghim thông điệp, cùng fixture. Đo trên trình duyệt thật:
+# _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs qua scripts/lan-do/tien-de.mjs (phiên đo riêng
+# của cây đang xét), mỗi eval một EVAL=<id>.
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dvb_chon_don_vi
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-chon-don-vi". Fixture cay to chuc sinh bang ham dung cay cua bai kiem (2 bo phan x 2 phong
+      ban + 1 phong ban chua xep + 1 nguoi). (a) 0 phan tu [data-nut-cay], 0 [role=tree]; dung 1 o chon
+      [data-chon-don-vi] trong vung o tim kiem cua DataTable. (b) Ma tran viet truoc cac lua chon: cong ty,
+      B1, B2, P1, P2, P3, P4, X1 (chua xep) = 8 o, moi o mot assert nhan + goi y («cả công ty» / «Thuộc B1» /
+      «Thuộc B1 › …») + so muc tieu rut tu okr.countByUnit gia lap (khong viet tay so). (c) Ma tran tim: 6 chuoi tren
+      ten fixture CO DAU sinh bang ham («Phòng Kế toán», «Dịch vụ khách hàng», «Kinh doanh»): "phong ke toan" ->
+      {Phòng Kế toán}, "dich" -> {Dịch vụ khách hàng}, "KINH" -> {Kinh doanh}, ten cha khong dau cua B1 -> {B1 va con cua B1} (B1 tu khop ten cua no), "zzz" -> rong + cau «Không có đơn vị nào khớp.», "" -> 8; moi chuoi mot assert tap ket qua. Pha-thu hai
+      (DVB_PHA=bo-go-dau: ban sao bo buoc gap dau) -> "dvb-chon-don-vi: \"phong ke toan\" ra rong, mong {Phòng Kế toán}". (d) Chon P2 -> URL donOkr=pb:P2 va doi so okr.danhSach ke tiep
+      = {loai:"pb", id:"P2"} (doc tu bo goi truy van gia lap). (e) URL donOkr=nguoi:U1 -> o chon hien ten U1.
+      DOI CHUNG DUONG: o chon nam trong [data-slot=data-table] (hoac khung hang cong cu) cua trang that.
+      CHIEU DO (DVB_PHA=cay-cu: ban sao dung lai CayDonVi) -> "dvb-chon-don-vi: con <n> nut cay
+      [data-nut-cay], mong 0".
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dvb_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, NGUYEN VAN: EVAL=E2 bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs\" — script tu canh cay, tu dung phien do (kho do rieng, bo OKR mau, may chu api+app cua CAY DANG XET), dang nhap dev:session va chup vao evidence/; khong goi thang trinh duyet ngoai script"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc (goi ten cho hong); ma 1 = co dong SAI"
+      - "Mo cac anh don-vi-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/trang-don-vi-mot-bang/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
+    expected: |
+      Dang nhap quan tri, bo OKR mau, mot phong ban co >= 3 muc tieu. 1440: dong "HANG 1440: <k> dieu khien,
+      dinh lech toi da <px>" — o chon, cach xem, o loc nhanh, «Lọc», «Sắp xếp» co cung hang (|top giua| <= 4);
+      dong "KHOANG 1440: don vi <a>px · Thoa thuan <b>px" voi a = dinh hang tieu de bang - day thanh the (Thoa
+      thuan: tu day dau trang), DUNG khi |a-b| <= 2; dong "THAN 1440: 0 [data-don-vi] card, 0 [data-hang-nut]".
+      390: "TRAN 390: scrollWidth <= innerWidth". Anh (danh sach dong, 8 tep): don-vi-danh-sach-{1440,390}.png,
+      don-vi-mo-kr-{1440,390}.png, don-vi-chon-{1440,390}.png, deals-{1440,390}.png; thieu tep nao -> ma 2.
+      Dong cham "DUNG AC-2: 1 hang · khoang lech <n>px · 0 the don vi · 0 tran". Sai -> "SAI AC-2: <ly do>", ma 1.
+      DOI CHUNG DUONG: do cung bo do khoang tren /deals voi chinh no — lech 0.
+      CHIEU DO (DVB_PHA=the-don-vi: ban sao chen lai Card don vi tren bang) -> "SAI AC-2: khoang lech <n>px"
+      voi n >= 60, ma 1.
+
+  - id: E3
+    criterion: AC-4
+    executor: script
+    layer: ui-observed
+    cmd: config:executors.script.dvb_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
+    expected: |
+      Cung phien do (EVAL=E3), chu ky mau o pha cham-diem de co du 4 cach xem. Ma tran viet truoc: 4 cach
+      xem (danh-sach, cay, hop-tuan, cham) x 2 kho (1440, 390) = 8 o, moi o mot dong "VI TRI <xem> <kho>: o
+      chon (<top>,<left>) · cach xem (<top>,<left>) · nut than <n>"; DUNG khi lech <= 1px so voi danh-sach
+      cung kho, n = 0, va o 390 cach xem hien (offsetParent khac null) khong can mo «Lọc». Anh
+      don-vi-{hop-tuan,cham,cay}-{1440,390}.png. Dong cham "DUNG AC-4: 8/8 o".
+      CHIEU DO (DVB_PHA=cach-xem-trong-loc: ban sao dua ViewSwitch vao leadingActions) -> "SAI AC-4: danh-sach
+      390 — cach xem bi giau sau Lọc", ma 1.
+
+  - id: E4
+    criterion: AC-8
+    executor: script
+    layer: ui-observed
+    cmd: config:executors.script.dvb_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
+    expected: |
+      Cung phien do (EVAL=E4). Kho 390, CDP Network.emulateNetworkConditions (latency 800ms); okr.danhSach
+      nap phia may chu (page.tsx) nen pha dang tai la luc cho dung phia may chu va cho JS — lay mau tu luc tao tai lieu. Lay mau DOM moi 50ms tu domcontentloaded toi khi co
+      [data-hang-muc-tieu] dau tien: dong "MAU 390: <k> mau · cay toi da <c> · o chon toi da <o> · dinh o chon
+      lech <px> · vong quay toan trang <v>". DUNG khi c = 0 ([data-nut-cay] va [role=tree]), o <= 1, lech
+      <= 1, v = 0, va co [data-slot=skeleton] trong mau dang tai. Anh dang-tai-390.png.
+      CHIEU DO (DVB_PHA=cay-cu: ban sao dung lai CayDonVi voi useKhoHep) -> "SAI AC-8: cay toi da <n> dong
+      luc dang tai", ma 1.
+
+  - id: E5
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dvb_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
+    expected: |
+      Cung phien do (EVAL=E5), 1440. Script doc kho do qua Prisma tap ten muc tieu cong-bo cua chu ky dang
+      chon cho 2 don vi P_a, P_b cua bo OKR mau. Tren trang: mo o chon, go mot phan ten P_b khong dau, chon ->
+      dong "CHON: URL donOkr=pb:<id P_b> · bang <k> dong · kho do <k'> muc tieu"; DUNG khi tap ten dong bang =
+      tap ten trong kho cho P_b va khac tap cua P_a. Them hai dong so, moi
+      dong so voi Prisma dem muc tieu status cong-bo cua chu ky cho don vi do (dang nhap quan tri): "SO CHON <P_a|P_b>:
+      o chon <n> · kho do <n'>"; DUNG khi bang nhau. Dong cham "DUNG AC-1: bang khop kho do cho P_b · so khop".
+      CHIEU DO (DVB_PHA=chon-khong-doi: ban sao bo qua onValueChange) -> "SAI AC-1: URL khong doi sau khi
+      chon", ma 1.
+
+  - id: E6
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dvb_dong_mo
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-dong-mo". Fixture 3 muc tieu (M1 co 2 KR, M2 co 1 KR, M3 khong KR). (a) Mac dinh 0 dong KR
+      [data-kr] trong bang; M1, M2 co nut aria-expanded=false, M3 khong co nut mo. (b) Ma tran viet truoc cach
+      mo: (nut mui ten, o trong cua dong) x (M1, M2) = 4 o, moi o assert dong KR cua dung muc tieu hien ngay
+      duoi, cung so cot voi dong cha, va URL expand chua id. (c) Dung lai trang voi URL expand=M2 -> M2 mo,
+      M1 thu. (d) Bam ten M1 -> useOpenRecord nhan {kind:"objective", id:"M1"} va URL expand khong doi. (e)
+      Bam dong KR -> {kind:"kr", id:<kr>}. (g) Ban phim: nut mo cua M1 la button co aria-expanded va aria-label chua ten M1;
+      focus roi Enter -> mo, Space -> thu. (f) Cot cua dong cha: ten, loai, trang thai, so KR, «góp vào» (rut
+      chu tu okrMessages), Tien do, Tinh trang, Phu trach. CHIEU DO (DVB_PHA=mo-san: ban sao dat mo mac dinh
+      moi dong) -> "dvb-dong-mo: mac dinh 3 dong KR, mong 0".
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dvb_hang_cong_cu
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-hang-cong-cu". Ma tran: 4 cach xem x 2 pha chu ky (dang-chay, cham-diem) = 8 o (cham ngoai
+      pha cham roi ve danh-sach, assert rieng). Moi o: dung 1 [data-hang-cong-cu-don-vi] chua theo thu tu
+      [data-chon-don-vi] roi [data-view-switch]; khung bao no co cung className voi hang cong cu cua DataTable
+      (rut lop tu DOM cua o danh-sach, khong viet tay); 0 [data-nut=them-muc-tieu], [data-nut=nhap-bang-tinh],
+      [data-nhom-soan] trong than. CHIEU DO (DVB_PHA=cach-xem-trong-loc) -> "dvb-hang-cong-cu: danh-sach:
+      [data-view-switch] khong nam trong [data-hang-cong-cu-don-vi]".
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dvb_loc_nhanh
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-loc-nhanh". Fixture sinh bang ham: 6 muc tieu phu ma tran viet truoc (KR dung-nhip / cham-nhip
+      / truot / chua-co-ky-vong / moc) x (co noi gop, khong noi gop) va mot muc tieu cap cong ty khong noi gop.
+      Nhan ky vong tinh bang chinh tinhTrang/nhipCua cua @crm/validation (khong viet tay ket qua). Moi muc tieu
+      mot assert co/khong trong «Cần bàn» va trong «Chưa góp vào đâu»; so dem tren nhan = so dong khi chon;
+      URL ghi gia tri, dung lai trang giu; en: «Needs discussion», «Not aligned» (rut tu messages). Chon «Cần
+      bàn» khi khong dong nao khop -> «Không có mục tiêu nào khớp» + nut bo loc dua ve «Tất cả». Nam bo loc
+      may chu van la facets cua DataTable va doi so okr.danhSach mang loc nhu cu. CHIEU DO
+      (DVB_PHA=chua-gop-tinh-cong-ty: ban sao tinh ca muc tieu cap cong ty) -> "dvb-loc-nhanh: muc tieu cong
+      ty nam trong Chưa góp vào đâu".
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dvb_sap_xep
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-sap-xep". Fixture 5 muc tieu tien do va tinh trang khac nhau (hai muc tieu cung bac). Ma tran:
+      (tien-do, tinh-trang) x (tang, giam) + (khong sap) = 5 o, moi o assert day id dong cha bang day tinh tu
+      ham sap tham chieu trong bai (sort on dinh tren progress / bac TINH_TRANG); dong KR luon ngay sau cha khi
+      mo; URL mang sort, dir. CHIEU DO (DVB_PHA=sap-chu: ban sao sap tinh trang theo chu cai) -> "dvb-sap-xep:
+      tinh-trang tang: mong truot dau, nhan cham-nhip".
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dvb_chan_bang
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-chan-bang". Ma tran viet truoc: loai don vi (goc, bo phan co truong, bo phan chua truong,
+      phong ban, phong ban chua xep, nguoi) = 6 o. Moi o: chan bang [data-dong-don-vi] co truong hoac co canh
+      bao «Chưa có trưởng», «N mục tiêu · M KR» (N, M dem tu cac dong cua okr.danhSach gia lap, rut bang ham dem
+      cua bai), «Thuộc …» (khong co o goc); khoi
+      [data-don-vi-con] co dung tap con truc tiep rut tu cay fixture (goc -> bo phan + chua xep; bo phan -> phong
+      ban; phong ban, nguoi -> khong khoi); moi o con la lien ket href co donOkr=<con> va kyOkr hien tai, so muc
+      tieu = gia tri okr.countByUnit gia lap cua dung khoa <con> (khoa rut bang khoaDonOkr, khong viet tay), chu
+      «Chưa đặt OKR» khi dem 0. So that tu may chu: E5. CHIEU DO (DVB_PHA=con-sai-cap: ban sao liet ca chau) -> "dvb-chan-bang: goc:
+      con co P1, mong chi bo phan va chua xep".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.dvb_trang_thai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-trang-thai". Ma tran: rong-co-truong, rong-chua-truong, loi-danh-sach, don-khong-thay,
+      chua-chu-ky, co-da-bo, nguoi, dang-tai = 8 o. Moi o mot assert data-trang-thai / chu rut tu messages
+      that: rong theo co/chua truong nhu Rong hom nay; loi -> nut «Thử lại» va [data-chon-don-vi] van bat;
+      don-khong-thay -> DonKhongThay; chua-chu-ky -> ChuaChuKy; co-da-bo -> NhomDaBo duoi bang; nguoi ->
+      KhoiKrCuaToi; dang-tai -> [data-slot=skeleton] o hang cong cu va dong bang, 0 [data-nut-cay]. CHIEU DO
+      (DVB_PHA=loi-che-hang: ban sao tra khoi Loi thay ca trang) -> "dvb-trang-thai: loi-danh-sach: khong co
+      [data-chon-don-vi]".
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.dvb_ho_so_da_ky
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs"
+    expected: |
+      rang/ho-so-da-ky.mjs rut LUC CHAY danh sach eval may cua moi ho so signed-off/machine-cleared co cmd
+      tro mot khoa config chay tep kiem bi luot nay sua (tap tep = git diff --name-only <merge-base voi nhanh
+      cua DH1 hoac onehub> -- apps/app/test, tru tep moi cua luot), chay tung lenh (trung lenh chay mot lan),
+      in "HO-SO <slug> <E>: ma <n> (ky vong <m>)" moi dong. Them ve quan he, tinh tu merge-base tren apps/app/test:
+      "XOA <tep>: <n> dong it/test/expect bi xoa khong chua dau cu" (dau cu: data-nut-cay, data-hang-nut,
+      data-don-vi, thuMucTieu, CayDonVi, BangMucTieu) va "SKIP <tep>: <n> .skip/.todo/.only them moi"; DUNG khi moi so
+      = 0. Dong cham "DUNG AC-10: k/k lenh dat ma ky vong · 0 dong kiem bi xoa ngoai dau cu · 0 skip".
+      Tap rong -> ma 2 "bo chon rong". CHIEU DO (DVB_PHA=ho-so: ban sao mot tep kiem bi sua them
+      expect(false)) -> "SAI AC-10: <slug> <E>: ma 1 (ky vong 0)", ma 1. Pha-thu hai (DVB_PHA=xoa-ca: ban sao
+      xoa mot ca it() khong chua dau cu) -> "SAI AC-10: <tep> xoa <n> dong kiem ngoai dau cu", ma 1; DOI CHUNG DUONG:
+      vat lanh in 0 o ca hai dem.
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.dvb_proto
+    paths:
+      - "apps/app/app/proto/**"
+      - "docs/superpowers/specs/2026-10-15-trang-don-vi-mot-bang-design.md"
+      - "_acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs"
+    expected: |
+      exit 0; rang/proto-don-vi.mjs rut danh sach id ST-dvb-* tu bang UX-STATE-TABLE cua design doc luc chay
+      (duong suy tu vi tri script); muc trang-don-vi-mot-bang trong PROTO_CATALOG co dung tap do; moi state
+      dung ra DOM khac nhau (render bang ham cua sổ ban mau); va `bun test test/proto-catalog.spec.ts` xanh.
+      In "PROTO: k/k state khop bang, k DOM khac nhau". CHIEU DO (DVB_PHA=thieu-state: ban sao bo ST-dvb-loi
+      khoi catalog) -> "SAI AC-11: thieu ST-dvb-loi trong PROTO_CATALOG", ma 1.
+
+  - id: E14
+    criterion: AC-12
+    executor: judgment
+    inputs:
+      - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-danh-sach-1440.png
+      - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-mo-kr-1440.png
+      - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-chon-1440.png
+      - _acceptance/trang-don-vi-mot-bang/evidence/deals-1440.png
+      - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-danh-sach-390.png
+      - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-mo-kr-390.png
+      - _acceptance/trang-don-vi-mot-bang/evidence/deals-390.png
+      - _acceptance/trang-don-vi-mot-bang/evidence/don-vi-hop-tuan-1440.png
+      - _acceptance/trang-don-vi-mot-bang/contract.md
+      - docs/superpowers/specs/2026-10-15-trang-don-vi-mot-bang-design.md
+    question: |
+      Đặt các ảnh cạnh nhau. Trang đơn vị (ảnh don-vi-*) có dùng cùng một khuôn bảng với Thoả thuận (ảnh
+      deals-*) không: ô chọn ở chỗ ô tìm kiếm, một hàng công cụ, bảng, chân bảng? Ở ảnh don-vi-mo-kr, người
+      chưa từng thấy trang có nhận ra KR là dòng con của mục tiêu nào mà không cần chữ hướng dẫn không? Ở ảnh
+      don-vi-hop-tuan, ô chọn đơn vị và cách xem có đứng cùng chỗ như Danh sách không (theo AC-4/AC-12 trong contract.md và
+      bảng trạng thái ST-dvb-hop-tuan của thiết kế: ở cách xem không phải bảng, hàng công cụ CHỈ gồm ô chọn + cách xem — ô lọc
+      nhanh, «Lọc», «Sắp xếp», «Cột» là của bảng Danh sách)? Trả lời từng ý kèm vị trí trong ảnh.
+    expected: |
+      PASS khi cả ba ý có: khuôn bảng giống Thoả thuận ở cả 1440 và 390; dòng KR thụt dưới đúng mục tiêu, cùng
+      cột; hàng công cụ Họp tuần giống Danh sách. Một ý không → FAIL kèm ảnh và vị trí.
+
+  - id: E15
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.dvb_giu_xem
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-trang-don-vi.dom.tsx"
+    expected: |
+      Ten ca "dvb-giu-xem". Ma tran: duong dan dang dung (ky + don + xemOkr=hop-tuan, ky + xemOkr=cay, chi
+      xemOkr=cham, khong xemOkr, ky + don + xemOkr + phuTrach + expand) x 4 the = 20 lien ket (the Cap nhat tuan go o onehub #459), moi lien ket mot
+      assert: tap tham so == giao cua {kyOkr, donOkr, xemOkr} voi tham so dang co. Vong di-ve: URL
+      theo-don-vi?kyOkr=K&donOkr=pb:P2&xemOkr=hop-tuan, bam 3 the khac roi Theo don vi -> trang dung cach xem
+      hop-tuan, don P2. Chu ky ngoai pha cham + xemOkr=cham -> danh-sach. Them: doc
+      _acceptance/dieu-huong-khu-muc-tieu/contract.md (duong suy tu vi tri tep kiem) phai co dong Notes chua
+      "trang-don-vi-mot-bang" va "AC-13"; pha-thu (DVB_PHA=bo-notes-dh1: ban sao hop dong khong dong do) ->
+      "dvb-giu-xem: hop dong DH1 thieu dong Notes tro AC-13". CHIEU DO (DVB_PHA=bo-xem: ban sao toi()
+      chi giu ky va don) -> "dvb-giu-xem: lien ket cua-toi thieu xemOkr=hop-tuan".
+
+  - id: E16
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.dvb_ghim_nam
+    paths:
+      - "_acceptance/dat-okr-trong-crm/**"
+      - "_acceptance/khung-okr-truoc-r1/**"
+      - "_acceptance/muc-tieu-va-kr/**"
+      - "_acceptance/okr-to-chuc-va/**"
+      - "_acceptance/toan-canh-okr/**"
+      - "_acceptance/okr-soat-anh-luot-3/**"
+      - "_acceptance/soan-okr-trong-khung/**"
+      - "_acceptance/dieu-huong-khu-muc-tieu/**"
+      - "_acceptance/no-sau-luot-5-okr/**"
+      - "_acceptance/khung-trang-cai-dat/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs"
+    expected: |
+      rang/ghim-nam.mjs rut LUC CHAY tap ho so signed-off co tep trong rang/ khop dau cu (git grep tren cay
+      tai merge-base voi onehub: data-nut-cay tren trang theo-don-vi, data-hang-nut, data-nhom-soan, thuMucTieu, data-loc-okr,
+      cay aria-label «Đơn vị») cong dieu-huong-khu-muc-tieu, va HOP voi ho so co rang/ hoac evals.yaml doi trong commit rieng cua DH2, so voi tap 10 ho so khai trong AC-14 (lech -> ma 2 goi ten). Moi ho so: dong repin cuoi trong
+      run-log.jsonl co suites_exit va evals_exit toan 0, va sha cua no chua commit dau tien cua luot doi
+      theo-don-vi.tsx (git merge-base --is-ancestor) -> "GHIM <slug>: <sha> xanh"; diff rang/ cua ho so tu
+      merge-base khong xoa dong expect/kiem nao ngoai dong chua dau cu (dem dong xoa khong khop dau cu = 0);
+      muc-tieu-va-kr/contract.md co dong Notes tro "trang-don-vi-mot-bang" AC-3. Dong cham "DUNG AC-14: 10/10".
+      Ho so da ky bi rut CHI vi lenh eval goi rang/ cua ho so khac (ve-sinh-do-san-onehub, them 17/10 sau Cong
+      Pham vi, Dieu phoi M5 duyet, chu kho chap nhan hay bac o Cong Bang chung): khong can ghim rieng, moi lenh
+      muon phai thoat 0 o dong ghim co trang moi cua mot ho so AC-14 chay CUNG lenh -> "MUON <slug>: <tep> chung o
+      <chu> <id> <sha> xanh". CHIEU DO (DVB_PHA=ghim-cu: ban sao run-log okr-to-chuc-va voi dong repin cuoi tren
+      sha truoc trang moi) -> "SAI AC-14: okr-to-chuc-va ghim tren <sha> chua co trang moi", ma 1; (DVB_PHA=muon-cu:
+      ban sao run-log toan-canh-okr nhu vay) -> "SAI AC-14: ve-sinh-do-san-onehub muon
+      _acceptance/toan-canh-okr/rang/man-toan-canh.mjs cua toan-canh-okr: ghim tren <sha> chua co trang moi", ma 1.
+
+  - id: E17
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dvb_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs"
+    expected: |
+      Cung phien do (EVAL=E17), 1440, dang nhap quan tri. Script doc kho do qua Prisma so muc tieu status cong-bo
+      cua chu ky dang chon cho tung don vi. Mo trang bo phan B cua bo OKR mau: moi o trong [data-don-vi-con] mot dong
+      "SO CON <con>: o <n> · kho do <n'>"; bam o dau tien -> trang cua con do: "SO CHAN <con>: chan bang <k> muc
+      tieu · bang <k'> dong". DUNG khi n = n' cho moi con va k = k'. Dong cham "DUNG AC-7: <m>/<m> o con khop kho do ·
+      chan bang khop bang". CHIEU DO (DVB_PHA=khoa-dem-sai: ban sao doc dem theo id tran thay khoa pb:<id>) -> "SAI
+      AC-7: o <con> hien Chưa đặt OKR, kho do <n>", ma 1.
+
+  - id: E18
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dvb_dong_mo_ui
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-mo-rong.spec.tsx"
+    expected: |
+      Tep moi packages/ui/test/data-table-mo-rong.spec.tsx (DataTable voi expandable, 3 dong: 2 mo duoc, 1 khong).
+      Ma tran viet truoc: 3 dong x (co nut / khong nut) + 2 dong mo duoc x (Enter, Space, bam nut, bam o trong cua
+      dong) = 11 assert: dong mo duoc co dung 1 phan tu button[aria-expanded] trong o mui ten, aria-label chua nhan
+      dong (tu prop moi cua expandable hoac chu mac dinh trong messages cua packages/ui); dong khong mo duoc co 0
+      button; moi cach mo doi aria-expanded false->true va hien dong con; bam nut khong goi onRowClick. DOI CHUNG
+      DUONG: bang khong expandable khong co cot mui ten. CHIEU DO (DVB_PHA=mui-ten-tran: ban sao tra lai ChevronRight
+      tran trong o) -> "data-table-mo-rong: dong r1 khong co button[aria-expanded] trong o mui ten".

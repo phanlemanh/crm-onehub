@@ -378,6 +378,8 @@ const { dien } = await import("@/components/crm/record-sheet/plan-copy");
 const { Card, CardHeader, CardTitle } = await import("@crm/ui/components/card");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
+const { messages: uiMessages } = await import("@crm/ui/lib/messages");
+const uiVi = uiMessages("vi");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { okrKhepMessages } = await import("@/lib/messages/okr-khep");
 const { okrSoMessages } = await import("@/lib/messages/okr-so");
@@ -509,12 +511,38 @@ const hangMt = (id: string) =>
 	);
 const hangKr = (id: string) =>
 	document.body.querySelector<HTMLTableRowElement>(`[data-kr="${id}"]`);
-const nutMo = (id: string) => hangMt(id)?.querySelector("button") ?? null;
+const dongCua = (id: string) => hangMt(id)?.closest("tr") ?? hangMt(id);
+const dongKr = (id: string) => hangKr(id)?.closest("tr") ?? hangKr(id);
+const nutMo = (id: string) =>
+	dongCua(id)?.querySelector<HTMLButtonElement>("button[aria-expanded]") ??
+	hangMt(id)?.querySelector("button") ??
+	null;
+const dauHang = (tr: Element, ten: string) =>
+	tr.getAttribute(ten) ?? tr.querySelector(`[${ten}]`)?.getAttribute(ten);
 const khoaHang = (tr: Element) =>
-	tr.getAttribute("data-hang-muc-tieu") ??
-	tr.getAttribute("data-kr") ??
-	tr.getAttribute("data-chua-co-kr") ??
+	dauHang(tr, "data-hang-muc-tieu") ??
+	dauHang(tr, "data-kr") ??
+	dauHang(tr, "data-chua-co-kr") ??
 	"khac";
+function hangCuaMt(id: string): Element[] {
+	const k = khoi(id);
+	const dong = k?.closest("tr");
+	if (!dong) return k ? hangTbody(k) : [];
+	const ra: Element[] = [dong];
+	let ke = dong.nextElementSibling;
+	while (ke?.querySelector("[data-kr]")) {
+		ra.push(ke);
+		ke = ke.nextElementSibling;
+	}
+	return ra;
+}
+const dangThu = (url: URLSearchParams, ds: { id: string }[]) => {
+	const mo = new Set((url.get("expand") ?? "").split(",").filter(Boolean));
+	return ds
+		.filter((x) => !mo.has(x.id))
+		.map((x) => x.id)
+		.join(",");
+};
 const hangTbody = (goc: Element) => [...goc.querySelectorAll("tbody tr")];
 const nhanKr = (tr: Element) =>
 	[...tr.querySelectorAll("span")]
@@ -642,16 +670,18 @@ function docHangMucTieu(id: string) {
 	const k = khoi(id);
 	const hang = hangMt(id);
 	if (!k || !hang) throw new Error(`khong thay khoi ${id}`);
-	const bang = k.querySelector("table");
+	const trongBang = k.closest("table") !== null;
+	const bang = trongBang ? null : k.querySelector("table");
+	const dong = trongBang ? hangCuaMt(id) : bang ? hangTbody(bang) : [];
 	return {
-		bang: k.querySelectorAll("table").length,
-		hangDau: bang ? khoaHang(hangTbody(bang)[0] ?? bang) : null,
-		hangTrongBang: bang ? hangTbody(bang).map(khoaHang) : [],
-		phanTram: phanTram(hang),
-		vach: vach(hang),
-		tinhTu: tinhTu(hang),
+		bang: trongBang ? 1 : k.querySelectorAll("table").length,
+		hangDau: dong[0] ? khoaHang(dong[0]) : null,
+		hangTrongBang: dong.map(khoaHang),
+		phanTram: phanTram(trongBang ? (dongCua(id) ?? hang) : hang),
+		vach: vach(trongBang ? (dongCua(id) ?? hang) : hang),
+		tinhTu: tinhTu(trongBang ? (dongCua(id) ?? hang) : hang),
 		nhip:
-			hang
+			(trongBang ? (dongCua(id) ?? hang) : hang)
 				.querySelector("[data-tinh-trang]")
 				?.getAttribute("data-tinh-trang") ?? null,
 	};
@@ -660,16 +690,19 @@ function docHangMucTieu(id: string) {
 describe("co-du-lieu", () => {
 	test("co-du-lieu: phan tram muc tieu la progress API (10), khong phai trung binh KR 40", async () => {
 		expect.assertions(1);
-		await dungTheoDonVi([
-			mucTieu(
-				"mt10",
-				[
-					kr("mt10-kr1", "mt10", { progress: 30 }),
-					kr("mt10-kr2", "mt10", { progress: 50 }),
-				],
-				{ progress: 10, expected: 47 },
-			),
-		]);
+		await dungTheoDonVi(
+			[
+				mucTieu(
+					"mt10",
+					[
+						kr("mt10-kr1", "mt10", { progress: 30 }),
+						kr("mt10-kr2", "mt10", { progress: 50 }),
+					],
+					{ progress: 10, expected: 47 },
+				),
+			],
+			"?expand=mt10",
+		);
 		soCa(
 			{ phanTram: docHangMucTieu("mt10").phanTram },
 			{ phanTram: ["10%", "10%"] },
@@ -690,7 +723,7 @@ describe("co-du-lieu", () => {
 					hangTrongBang: ["mt1", "mt1-kr1", "mt1-kr2", "mt1-kr3", "mt1-kr4"],
 					phanTram: ["49%", "49%"],
 					vach: ["47", "47"],
-					tinhTu: ["Tính từ 4 KR", "Tính từ 4 KR"],
+					tinhTu: ["Tính từ 4 KR", null],
 					nhip: "dung-nhip",
 				},
 			},
@@ -704,16 +737,19 @@ describe("co-du-lieu", () => {
 					hangTrongBang: ["mt2", "mt2-kr1", "mt2-kr2"],
 					phanTram: ["25%", "25%"],
 					vach: ["47", "47"],
-					tinhTu: ["Tính từ 2 KR", "Tính từ 2 KR"],
+					tinhTu: ["Tính từ 2 KR", null],
 					nhip: "cham-nhip",
 				},
 			},
 		];
 		expect.assertions(MA_TRAN.length);
-		await dungTheoDonVi([
-			mucTieu("mt1", krCua("mt1", 4), { progress: 49, expected: 47 }),
-			mucTieu("mt2", krCua("mt2", 2), { progress: 25, expected: 47 }),
-		]);
+		await dungTheoDonVi(
+			[
+				mucTieu("mt1", krCua("mt1", 4), { progress: 49, expected: 47 }),
+				mucTieu("mt2", krCua("mt2", 2), { progress: 25, expected: 47 }),
+			],
+			"?expand=mt1,mt2",
+		);
 		const thuTuKhoi = [
 			...document.body.querySelectorAll("[data-muc-tieu]"),
 		].map((k) => k.getAttribute("data-muc-tieu"));
@@ -761,21 +797,24 @@ describe("theo-don-vi", () => {
 			["mt3", "mt3-kr1", "mt3-kr2", "mt3-kr3"],
 		];
 		expect.assertions(MA_TRAN.length);
-		await dungTheoDonVi([
-			mucTieu("mt1", krCua("mt1", 2)),
-			mucTieu("mt2", krCua("mt2", 1)),
-			mucTieu("mt3", krCua("mt3", 3)),
-		]);
+		await dungTheoDonVi(
+			[
+				mucTieu("mt1", krCua("mt1", 2)),
+				mucTieu("mt2", krCua("mt2", 1)),
+				mucTieu("mt3", krCua("mt3", 3)),
+			],
+			"?expand=mt1,mt2,mt3",
+		);
 		const cacKhoi = [...document.body.querySelectorAll("[data-muc-tieu]")];
 		MA_TRAN.forEach((mongDoi, i) => {
 			const id = mongDoi[0] ?? "";
 			const k = cacKhoi[i];
-			const bang = k?.querySelector("table") ?? null;
-			const hang = bang ? hangTbody(bang) : [];
+			const bang = k?.closest("table") ?? null;
+			const hang = hangCuaMt(id);
 			soCa(
 				{
 					khoi: k?.getAttribute("data-muc-tieu") ?? null,
-					bang: k?.querySelectorAll("table").length ?? 0,
+					bang: document.body.querySelectorAll("table").length,
 					thuTu: hang.map(khoaHang),
 					nhan: hang.slice(1).map(nhanKr),
 					theadSrOnly:
@@ -788,8 +827,8 @@ describe("theo-don-vi", () => {
 					bang: 1,
 					thuTu: mongDoi,
 					nhan: mongDoi.slice(1).map((_, j) => `KR${j + 1}`),
-					theadSrOnly: true,
-					th: 4,
+					theadSrOnly: false,
+					th: 5,
 				},
 				(truong) =>
 					truong === "thuTu" || truong === "nhan"
@@ -1896,28 +1935,33 @@ const dungMan = (
 const CA_TRANG_THAI = {
 	"ST-mtkr-co-du-lieu": () =>
 		motMan(async (man) => {
-			await dungMan(man, HAI_MT());
+			await dungMan(man, HAI_MT(), "?expand=mt-a");
 			const k = khoi("mt-a");
-			const bang = k?.querySelector("table") ?? null;
+			const bang = k?.closest("table") ?? k?.querySelector("table") ?? null;
 			soCa(
 				{
 					hangDau: bang ? khoaHang(hangTbody(bang)[0] ?? bang) : null,
 					moSan: nutMo("mt-a")?.getAttribute("aria-expanded") ?? null,
-					nhan: [...(k?.querySelectorAll("[data-kr]") ?? [])].map(nhanKr),
+					nhan: hangCuaMt("mt-a").slice(1).map(nhanKr),
 					theadAn:
 						bang?.querySelector("thead")?.classList.contains("sr-only") ??
 						false,
 				},
-				{ hangDau: "mt-a", moSan: "true", nhan: ["KR1", "KR2"], theadAn: true },
+				{
+					hangDau: "mt-a",
+					moSan: "true",
+					nhan: ["KR1", "KR2"],
+					theadAn: false,
+				},
 				(truong) => `ST-mtkr-co-du-lieu sai o ${man}: ${truong}`,
 			);
 		}),
 	"ST-mtkr-da-thu": () =>
 		motMan(async (man) => {
-			const san = await dungMan(man, HAI_MT(), "?thuMucTieu=mt-a");
+			const san = await dungMan(man, HAI_MT(), "?expand=mt-b");
 			soCa(
 				{
-					hang: hangTbody(khoi("mt-a") ?? document.body).map(khoaHang),
+					hang: hangCuaMt("mt-a").map(khoaHang),
 					ariaExpanded: nutMo("mt-a")?.getAttribute("aria-expanded") ?? null,
 					nhanNut: nutMo("mt-a")?.getAttribute("aria-label") ?? null,
 					muiTenTheoNut:
@@ -1927,12 +1971,12 @@ const CA_TRANG_THAI = {
 							?.classList.contains("group-aria-expanded:rotate-90") ??
 							false),
 					doiChungMo: nutMo("mt-b")?.getAttribute("aria-expanded") ?? null,
-					url: san.url().get("thuMucTieu"),
+					url: dangThu(san.url(), HAI_MT()),
 				},
 				{
 					hang: ["mt-a"],
 					ariaExpanded: "false",
-					nhanNut: m.khoiMucTieu.moRa("Mục tiêu mt-a"),
+					nhanNut: uiVi.table.expandRow("Mục tiêu mt-a"),
 					muiTenTheoNut: true,
 					doiChungMo: "true",
 					url: "mt-a",
@@ -1945,7 +1989,7 @@ const CA_TRANG_THAI = {
 			await dungMan(man, [mucTieu("mt-rong", [])]);
 			soCa(
 				{
-					hang: hangTbody(khoi("mt-rong") ?? document.body).map(khoaHang),
+					hang: hangCuaMt("mt-rong").map(khoaHang),
 					chu:
 						khoi("mt-rong")?.querySelector("[data-chua-co-kr]")?.textContent ??
 						null,
@@ -1954,11 +1998,7 @@ const CA_TRANG_THAI = {
 							m.khoiMucTieu.chuaCoKrDeTinh,
 						) ?? false,
 				},
-				{
-					hang: ["mt-rong", "mt-rong"],
-					chu: "Mục tiêu này chưa có KR.",
-					oTienDo: true,
-				},
+				{ hang: ["mt-rong"], chu: null, oTienDo: true },
 				(truong) => `ST-mtkr-chua-co-kr sai o ${man}: ${truong}`,
 			);
 		}),
@@ -1981,7 +2021,7 @@ const CA_TRANG_THAI = {
 		];
 		const doc = () =>
 			["moc-1", "moc-2"].map((id) => {
-				const o = hangKr(id)?.querySelector("td[data-nguon] [data-o-tien-do]");
+				const o = dongKr(id)?.querySelector("[data-nguon] [data-o-tien-do]");
 				return {
 					so: o?.childNodes[0]?.textContent ?? null,
 					nhip:
@@ -1994,7 +2034,7 @@ const CA_TRANG_THAI = {
 			{ so: "Chưa xong", nhip: "moc-chua" },
 			{ so: "Xong", nhip: "moc-xong" },
 		];
-		const san = await dungTheoDonVi([mucTieu("mt-m", moc)]);
+		const san = await dungTheoDonVi([mucTieu("mt-m", moc)], "?expand=mt-m");
 		soCa(
 			{ theoDonVi: doc() },
 			{ theoDonVi: mongDoi },
@@ -2009,32 +2049,35 @@ const CA_TRANG_THAI = {
 		);
 	},
 	"ST-mtkr-kr-may": async () => {
-		const san = await dungTheoDonVi([
-			mucTieu("mt-may", [
-				kr("kr-do-canh", "mt-may", {
-					doCanh: true,
-					soMay: { giaTri: 15, ngay: "2026-10-25", nguon: "crm" },
-					nguonMay: nguonMay("crm"),
-					currentValue: 12,
-				}),
-				kr("kr-chua-chup", "mt-may", {
-					source: "crm",
-					nguonMay: nguonMay("crm"),
-				}),
-			]),
-		]);
+		const san = await dungTheoDonVi(
+			[
+				mucTieu("mt-may", [
+					kr("kr-do-canh", "mt-may", {
+						doCanh: true,
+						soMay: { giaTri: 15, ngay: "2026-10-25", nguon: "crm" },
+						nguonMay: nguonMay("crm"),
+						currentValue: 12,
+					}),
+					kr("kr-chua-chup", "mt-may", {
+						source: "crm",
+						nguonMay: nguonMay("crm"),
+					}),
+				]),
+			],
+			"?expand=mt-may",
+		);
 		await cho(
 			() => document.body.querySelectorAll("button[data-so-kr]").length === 2,
 			"nut so kr",
 		);
-		const nut = hangKr("kr-do-canh")?.querySelector("button[data-so-kr]");
+		const nut = dongKr("kr-do-canh")?.querySelector("button[data-so-kr]");
 		const truoc = {
 			dau: [...document.body.querySelectorAll("[data-dau-nguon]")].map((d) =>
 				d.getAttribute("data-dau-nguon"),
 			),
 			doCanh: nut?.textContent ?? null,
 			chuaChup:
-				hangKr("kr-chua-chup")?.querySelector("[data-chua-chup]")
+				dongKr("kr-chua-chup")?.querySelector("[data-chua-chup]")
 					?.textContent ?? null,
 		};
 		if (nut) await bamChuot(nut);

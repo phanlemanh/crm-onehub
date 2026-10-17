@@ -2,7 +2,6 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
 	cay: {
-		donVi: "Cây đơn vị",
 		canChinh: "Cây căn chỉnh toàn công ty",
 		chuaCanChinh: "Chưa căn chỉnh vào đâu",
 		cungHien: "cũng hiện ở chỗ góp kia",
@@ -16,9 +15,6 @@ const vi = {
 		tuTin: "Mức tự tin",
 		boLoc: "Bỏ lọc",
 		nguoiDaRoi: "Người không còn trong tổ chức",
-		khongKhop: "Không mục tiêu nào khớp bộ lọc",
-		khongKhopMoTa:
-			"Đổi hoặc bỏ bớt bộ lọc để thấy lại mục tiêu của đơn vị này.",
 	},
 	nguoi: {
 		phongBanChinh: "Phòng ban chính",
@@ -249,7 +245,6 @@ export type OkrToanCanhMessages = typeof vi;
 
 const en: OkrToanCanhMessages = {
 	cay: {
-		donVi: "Unit tree",
 		canChinh: "Company-wide alignment tree",
 		chuaCanChinh: "Not aligned anywhere",
 		cungHien: "also shown where it contributes",
@@ -263,9 +258,6 @@ const en: OkrToanCanhMessages = {
 		tuTin: "Confidence",
 		boLoc: "Clear filters",
 		nguoiDaRoi: "No longer in the organization",
-		khongKhop: "No objectives match these filters",
-		khongKhopMoTa:
-			"Change or clear a filter to see this unit's objectives again.",
 	},
 	nguoi: {
 		phongBanChinh: "Primary department",

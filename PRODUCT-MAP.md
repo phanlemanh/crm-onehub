@@ -11,7 +11,7 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>3 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>149 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>139 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -46,6 +46,7 @@ flowchart TD
 
 - Tôi gom việc của một đợt triển khai vào một dự án và xem trên sơ đồ Gantt có phụ thuộc và mốc (`du-an-gantt`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
+- Trang đơn vị một bảng — chọn đơn vị bằng ô tìm kiếm thay cột cây, đọc mục tiêu trong một bảng như Thoả thuận, mở từng mục tiêu ra KR, một hàng công cụ đứng yên khi đổi cách xem, lọc nhanh «Cần bàn» và «Chưa góp vào đâu», sắp xếp theo tiến độ và tình trạng, thông tin đơn vị ở chân bảng và đơn vị trực thuộc ở cuối trang; chỉ giao diện (`trang-don-vi-mot-bang`)
 
 ## Đã giao — chờ phiên nghiệm thu
 

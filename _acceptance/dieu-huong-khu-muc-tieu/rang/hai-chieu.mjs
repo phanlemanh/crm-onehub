@@ -46,15 +46,15 @@ const DOT_BIEN = {
 		{
 			ten: "nut-giua-than",
 			tep: `${OKR}/theo-don-vi/theo-don-vi.tsx`,
-			cu: '<div className="flex flex-wrap items-center gap-2" data-hang-nut>',
-			moi: '<div className="flex flex-wrap items-center gap-2" data-hang-nut><button data-nut="them-muc-tieu" type="button" />',
+			cu: '<div className="flex flex-col gap-6">\n\t\t\t{than}',
+			moi: '<div className="flex flex-col gap-6">\n\t\t\t<button data-nut="them-muc-tieu" type="button" />\n\t\t\t{than}',
 			ghim: "dhk-hanh-dong: theo-don-vi con nut them-muc-tieu trong than",
 		},
 		{
 			ten: "hoi-kara-ngoai-hang",
 			tep: `${OKR}/theo-don-vi/theo-don-vi.tsx`,
-			cu: '<div className="flex flex-wrap items-center gap-2" data-hang-nut>',
-			moi: '<div className="flex flex-wrap items-center gap-2" data-hang-nut><span data-nut="hoi-kara" />',
+			cu: '<div className="flex flex-col gap-6">\n\t\t\t{than}',
+			moi: '<div className="flex flex-col gap-6">\n\t\t\t{/* NutHoiKara gia */}<span data-nut="hoi-kara" />\n\t\t\t{than}',
 			ghim: "dhk-hanh-dong: co NutHoiKara nhung khong nam trong page-shell-actions",
 		},
 		{
