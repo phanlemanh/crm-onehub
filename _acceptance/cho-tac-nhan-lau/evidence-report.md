@@ -7,13 +7,13 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6f333c474fc9afd4997426bcc1a61ef07010003c
+verified_commit: 0d258734285530c1fcdc08f6fbd0640eee97fbdf
 human_signoff:
 ---
 
 # Evidence Report: cho-tac-nhan-lau
 
-Round 4. Bảy lệnh suite chạy lại trên cây 6f333c474fc9afd4997426bcc1a61ef07010003c; mười eval được mang sang từ round trước vì delta không chạm paths của chúng (xem từng khối).
+Round 5. Bốn eval (E4, E5, E8, E9) và bảy lệnh suite chạy lại trên cây 0d258734285530c1fcdc08f6fbd0640eee97fbdf; sáu eval còn lại (E1, E2, E3, E6, E7, E10) được mang sang từ round 3 vì delta không chạm paths của chúng (xem từng khối).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -61,24 +61,25 @@ Round 4. Bảy lệnh suite chạy lại trên cây 6f333c474fc9afd4997426bcc1a6
     carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E4
-  run_id: minted-cho-tac-nhan-lau-E4-r3
+  run_id: mvbn54ixobs2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctnl_bao_khi_xong
-  verified_at: 2026-10-16T12:22:26Z
-  carried_from_round: 3
+  verified_at: 2026-10-17T00:10:42Z
   output: |
-    carry-forward tu round 3 — delta khong cham paths cua eval
+    cmd: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 TZ=Asia/Ho_Chi_Minh bun test test/cho-tac-nhan-lau.integration.spec.ts"
+    1 lan chay, 1 dat, khong phuong sai.
+    test-run: dropped crm_mvbn54ixobs2_test
 
 - eval: E5
-  run_id: minted-cho-tac-nhan-lau-E5-r2
+  run_id: minted-cho-tac-nhan-lau-E5-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctnl_dong_chuong
-  verified_at: 2026-10-16T11:49:16Z
-  carried_from_round: 2
+  verified_at: 2026-10-17T00:10:42Z
   output: |
-    carry-forward tu round 2 — delta khong cham paths cua eval
+    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cho-tac-nhan-lau-chuong.dom.tsx
+    Ran 3 tests across 1 file. [463.00ms]
 
 - eval: E6
   run_id: minted-cho-tac-nhan-lau-E6-r3
@@ -101,37 +102,29 @@ Round 4. Bảy lệnh suite chạy lại trên cây 6f333c474fc9afd4997426bcc1a6
     carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E8
-  run_id: minted-cho-tac-nhan-lau-E8-r3
+  run_id: minted-cho-tac-nhan-lau-E8-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ctnl_the_dung
-  verified_at: 2026-10-16T12:22:26Z
-  carried_from_round: 3
+  verified_at: 2026-10-17T00:10:42Z
   output: |
-    carry-forward tu round 3 — delta khong cham paths cua eval
+    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cho-tac-nhan-lau.dom.tsx
+    Ran 6 tests across 1 file. [4.46s]
 
 - eval: E9
-  run_id: minted-cho-tac-nhan-lau-E9-r3
+  run_id: minted-cho-tac-nhan-lau-E9-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctnl_do_man
-  verified_at: 2026-10-16T12:22:26Z
-  carried_from_round: 3
-  screenshot: /Users/manh-macmini/dev/crm/.claude/worktrees/modest-shirley-bc29f7/.acceptance-runs/cho-tac-nhan-lau/frames/E9-step1-duoi-nguong-375.png
+  verified_at: 2026-10-17T00:10:42Z
+  screenshot: evidence/duoi-nguong-375.png
   observed: |
-    step1 (375, duoi nguong): the "Đang dựng tác nhân" voi "Đã 0:06", "1 trên 4", bon buoc (Phạm vi Xong, Chỉ dẫn Đang làm, Bản khai/Soát lại Đang xếp), loi hua "Bạn có thể rời trang. Kara sẽ báo trong hộp thông báo khi xong." + nut Dừng; khong co dong qua nguong; chuong "1"; khong tran ngang, khong chu may.
-    step2 (1280, duoi nguong): tuong tu, bo cuc co thanh ben, "Đã 0:06", loi hua va nut Dừng, khong dong qua nguong.
-    step3 (375, tren nguong): "Đã 4:17" va them dong "Đã quá 3 phút. Kara vẫn đang dựng." trong the, loi hua + Dừng van con.
-    step4 (1280, tren nguong): "Đã 4:14" va dong "Đã quá 3 phút. Kara vẫn đang dựng." (chu khac "lâu hơn thường lệ" cua Expected, xem ghi chu), loi hua + Dừng.
-    step5 (375, chuong mo): "Thông báo" voi "Kara đã dựng xong «Đo màn: tóm tắt deal mỗi sáng» — mở để duyệt 19:22", chuong badge 1; vua khung, khong tran.
-    step6 (1280, chuong mo): cung dong "Kara đã dựng xong «Đo màn: tóm tắt deal mỗi sáng» — mở để duyệt 19:22", chuong 1.
-    step7 (375, sau bam dong): trang chat chu, chuong khong con badge (1 -> 0), khong tran ngang; khong hien hoi thoai trong khung nay.
-    step8 (1280, sau bam dong): trang chat chu, chuong khong badge, thanh ben liet ke hoi thoai; khong hien hoi thoai trong khung nay.
-    step9 (1280, mo tu thanh ben): hoi thoai "Đo màn: đã xong" dang mo, thanh ben danh dau muc dang chon, chuong khong badge.
-    Khong khoa messages tho, khong chu may, khong tran ngang o frame nao.
+    duoi-nguong-375.png: the "Đang dựng tác nhân", "Đã 0:06", "1 trên 4", bốn bước (Phạm vi Xong, Chỉ dẫn Đang làm, Bản khai/Soát lại Đang xếp), ngay dưới là lời hứa "Bạn có thể rời trang. Kara sẽ báo trong hộp thông báo khi xong." + nút Dừng; KHÔNG có dòng quá ngưỡng; chuông "1"; không tràn ngang. duoi-nguong-1280.png: giống, bố cục có thanh bên, cùng lời hứa, không dòng quá ngưỡng. tren-nguong-375.png: "Đã 4:17", trong thẻ có dòng "Đã quá 3 phút. Kara vẫn đang dựng." cùng lời hứa chặn thẻ, vừa khổ 375. tren-nguong-1280.png: "Đã 4:14", cùng dòng quá ngưỡng. (Chữ "Đã quá 3 phút…" là cách nói của dòng "lâu hơn thường lệ" trong bản mẫu thiết kế.) chuong-375.png / chuong-1280.png: mở chuông ra hộp "Thông báo" có dòng "Kara đã dựng xong «Đo màn: tóm tắt deal mỗi sáng» — mở để duyệt" 07:11, chấm chưa đọc, nút chuông "1" — có tên tác nhân. mo-tu-chuong-375.png / -1280.png: sau khi bấm dòng, cuộc trò chuyện "Đo màn: đã xong" mở, chuông không còn số (1 -> 0). mo-tu-thanh-ben-1280.png: mở từ thanh bên, chuông cũng hết số. Không khung nào có tràn ngang, không khoá messages thô (không thấy chuỗi dạng a.b.c), không chữ máy trong thẻ/chuông. Ghi chú nhỏ: hàng "Eve:subagent:agent builder" phía trên thẻ là chrome có sẵn của thanh hội thoại, ngoài phạm vi AC-9.
   network_observed: n-a (driver)
   output: |
-    carry-forward tu round 3 — delta khong cham paths cua eval
+    9 assertion cua script deu DUNG: tren-nguong-1280 ("Đã 4:14", dong qua nguong "Đã quá 3 phút. Kara vẫn đang dựng.", rong trang 1280); tren-nguong-375 ("Đã 4:17", cung dong, rong 375); duoi-nguong-1280 ("Đã 0:06", dong qua nguong null); duoi-nguong-375 (nhu tren, rong 375); chuong-1280 (dong "Kara đã dựng xong «Đo màn: tóm tắt deal mỗi sáng» — mở để duyệt", chua doc 1, rong 1280); mo-tu-chuong-1280 (mo cuoc tro chuyen, chua doc 1 -> 0); chuong-375 (tuong tu, rong 375); mo-tu-chuong-375 (1 -> 0); mo-tu-thanh-ben-1280 (1 -> 0 trong 10 s, khong tai lai).
+    Doi chieu mat 9 anh moi (mtime 17/10 07:11) da Read: duoi-nguong-375/1280, tren-nguong-375/1280, chuong-375/1280, mo-tu-chuong-375/1280, mo-tu-thanh-ben-1280 (thu muc _acceptance/cho-tac-nhan-lau/evidence/). Tat ca khop Expected. Cac tep E9-step1..8.png va E9-network.txt trong thu muc la cua lan chay truoc (16/10), khong phai frame cua lan nay; lan chay nay da ghi de 8 anh nhom tren (tep theo doi git, la hanh vi cua chinh lenh eval). Network: driver capture-only, khong doc duoc network.
+    Ghi chu (khong lam fail): dong "Eve:subagent:agent builder" tren the dang dung la phan chrome cua thanh hoi thoai chung (goi tac nhan phu), khong thuoc diff vong nay va khong thuoc the/chuong ma AC-9 do; nhac de nguoi duyet biet.
 
 - eval: E10
   run_id: minted-cho-tac-nhan-lau-E10-r3
@@ -146,39 +139,39 @@ Round 4. Bảy lệnh suite chạy lại trên cây 6f333c474fc9afd4997426bcc1a6
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_api-r4
+  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_api-r5
   exit_code: 0
-  verified_at: 2026-10-16T15:02:02Z
+  verified_at: 2026-10-17T00:10:42Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
+  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_app_filter_crm_ui-r5
   exit_code: 0
-  verified_at: 2026-10-16T15:02:02Z
+  verified_at: 2026-10-17T00:10:42Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
+  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_agent_filter_crm_aut-r5
   exit_code: 0
-  verified_at: 2026-10-16T15:02:02Z
+  verified_at: 2026-10-17T00:10:42Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
+  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_test_filter_agent_okr_filter_crm-r5
   exit_code: 0
-  verified_at: 2026-10-16T15:02:02Z
+  verified_at: 2026-10-17T00:10:42Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cho-tac-nhan-lau-SUITE-bunx_turbo_run_lint_force-r4
+  run_id: minted-cho-tac-nhan-lau-SUITE-bunx_turbo_run_lint_force-r5
   exit_code: 0
-  verified_at: 2026-10-16T15:02:02Z
+  verified_at: 2026-10-17T00:10:42Z
 
 - cmd: bun run lint:slop
-  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_lint_slop-r4
+  run_id: minted-cho-tac-nhan-lau-SUITE-bun_run_lint_slop-r5
   exit_code: 0
-  verified_at: 2026-10-16T15:02:02Z
+  verified_at: 2026-10-17T00:10:42Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cho-tac-nhan-lau-SUITE-bunx_turbo_run_build_force-r4
+  run_id: minted-cho-tac-nhan-lau-SUITE-bunx_turbo_run_build_force-r5
   exit_code: 0
-  verified_at: 2026-10-16T15:02:02Z
+  verified_at: 2026-10-17T00:10:42Z
 
 ## Known limits
 
@@ -196,6 +189,8 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong eval nao 
 
 ## Iterations
 
+Round 1: baseline do lan cuoi (evals.yaml khong doi tu do).
 Round 2: E5 chay lai (run_id hau to -r2), cac round sau mang sang.
 Round 3: E1-E4, E6-E10 chay lai (run_id hau to -r3).
-Round 4: bay lenh suite chay lai tren cay 6f333c474fc9afd4997426bcc1a61ef07010003c va deu xanh; muoi eval mang sang vi delta khong cham paths. Gio chay suite r4 ghi theo ngay, ts chinh xac nam trong run-log.jsonl. Mot phat hien trong hop dong (AC-9, muc medium) nam o review-findings.md de nguoi xem o Cong 2.
+Round 4: bay lenh suite chay lai tren cay 6f333c474fc9afd4997426bcc1a61ef07010003c va deu xanh; muoi eval mang sang vi delta khong cham paths. Mot phat hien trong hop dong (AC-9, muc medium) nam o review-findings.md.
+Round 5: E4, E5, E8, E9 va bay lenh suite chay lai tren cay 0d258734285530c1fcdc08f6fbd0640eee97fbdf va deu xanh (E9 ghi de 8 anh nhom tren cung 1 anh moi, xem khoi E9); E1, E2, E3, E6, E7, E10 mang sang tu round 3 vi delta khong cham paths. Gio chay round 5 ghi theo ngay; ts chinh xac nam trong run-log.jsonl.
