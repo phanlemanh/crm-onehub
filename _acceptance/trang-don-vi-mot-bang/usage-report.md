@@ -113,3 +113,60 @@ wall: 1328s
 - **claude-opus-5-5**: 3 agent · 112 calls · out 14,345 · in 224 · cache_read 13,565,171 · cache_create 498,924
 - **claude-haiku-5-5**: 20 agent · 40 calls · out 16,338 · in 80 · cache_read 561,762 · cache_create 782,144
 
+
+## Lượt 3 — wf_66c5ea2f-37c
+
+### S4 lượt 3 — wf_66c5ea2f-37c (31 agent, 66,171 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 7 | 17,320 | 14 | 446,599 | 101 |
+| review:measurement | claude-opus-5-5 | 26 | 11,207 | 52 | 3,512,176 | 280 |
+| triage | claude-sonnet-5-5 | 2 | 5,082 | 4 | 37,439 | 32 |
+| judge:E14:spec-alignment | claude-sonnet-5-5 | 2 | 4,804 | 4 | 35,298 | 31 |
+| judge:E14:operational-feasibility | claude-sonnet-5-5 | 2 | 3,743 | 4 | 35,300 | 26 |
+| judge:E14:domain-correctness | claude-sonnet-5-5 | 3 | 3,381 | 6 | 92,824 | 24 |
+| machine:bun _acceptance/trang-don-vi-mot-bang/ra | claude-haiku-5-5 | 2 | 2,793 | 4 | 62,636 | 71 |
+| review:conventions | claude-opus-5-5 | 36 | 2,429 | 72 | 3,661,652 | 243 |
+| machine:bun scripts/lan-do/tien-de.mjs --chay "b | claude-haiku-5-5 | 2 | 1,932 | 4 | 62,592 | 112 |
+| machine:bun _acceptance/trang-don-vi-mot-bang/ra | claude-haiku-5-5 | 2 | 1,876 | 4 | 34,214 | 367 |
+| review:bugs | claude-opus-5-5 | 37 | 1,834 | 74 | 3,248,275 | 244 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,470 | 4 | 34,104 | 9 |
+| ui:E2 | claude-sonnet-5-5 | 4 | 1,101 | 8 | 359,733 | 175 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 721 | 4 | 62,798 | 30 |
+| baseline:diffBase | claude-sonnet-5-5 | 2 | 575 | 4 | 44,656 | 59 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 540 | 4 | 62,806 | 31 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 483 | 4 | 62,806 | 32 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 458 | 4 | 62,798 | 29 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 457 | 4 | 62,798 | 29 |
+| machine:bun _acceptance/trang-don-vi-mot-bang/ra | claude-haiku-5-5 | 2 | 443 | 4 | 62,722 | 31 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 437 | 4 | 2,869 | 357 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 423 | 4 | 62,810 | 29 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 391 | 4 | 62,798 | 27 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 379 | 4 | 62,798 | 30 |
+| machine:cd packages/ui && bun test --preload ./t | claude-haiku-5-5 | 2 | 331 | 4 | 62,690 | 23 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 308 | 4 | 2,869 | 338 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 303 | 4 | 34,159 | 65 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 300 | 4 | 34,104 | 340 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 287 | 4 | 34,102 | 21 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 215 | 4 | 34,098 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 148 | 4 | 30,028 | 6 |
+
+
+wall: 1297s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 575 | 44,656 | 59 | 19:18:56 | 19:19:55 |
+| machine | 20 | 14,547 | 963,571 | 1151 | 19:18:56 | 19:38:07 |
+| ui | 1 | 1,101 | 359,733 | 175 | 19:18:56 | 19:21:50 |
+| judge | 3 | 11,928 | 163,422 | 37 | 19:19:21 | 19:19:58 |
+| review | 3 | 15,470 | 10,422,103 | 282 | 19:19:26 | 19:24:08 |
+| triage | 1 | 5,082 | 37,439 | 32 | 19:38:09 | 19:38:41 |
+| capture | 1 | 148 | 30,028 | 6 | 19:38:43 | 19:38:49 |
+| synthesize | 1 | 17,320 | 446,599 | 101 | 19:38:52 | 19:40:33 |
+
+- **claude-sonnet-5-5**: 8 agent · 24 calls · out 36,154 · in 48 · cache_read 1,081,877 · cache_create 418,502
+- **claude-opus-5-5**: 3 agent · 99 calls · out 15,470 · in 198 · cache_read 10,422,103 · cache_create 466,650
+- **claude-haiku-5-5**: 20 agent · 40 calls · out 14,547 · in 80 · cache_read 963,571 · cache_create 379,707
+
