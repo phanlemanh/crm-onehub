@@ -54,6 +54,9 @@ evals:
     inputs:
       - "_acceptance/ba-ho-so-do-san/danh-sach.json"
       - "_acceptance/ba-ho-so-do-san/bang-truoc-sau.md"
+    paths:
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+      - "_acceptance/ba-ho-so-do-san/bang-truoc-sau.md"
 
   - id: E7
     criterion: AC-7

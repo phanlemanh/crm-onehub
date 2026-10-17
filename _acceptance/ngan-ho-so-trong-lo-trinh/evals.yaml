@@ -238,6 +238,15 @@ evals:
       - _acceptance/ngan-ho-so-trong-lo-trinh/evidence/ST-ngan-day-du--375--sang.png
       - _acceptance/ngan-ho-so-trong-lo-trinh/evidence/ST-ngan-doan-dai--375--sang.png
       - _acceptance/ngan-ho-so-trong-lo-trinh/evidence/ST-ngan-o-vang--1280--sang.png
+    paths:
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/components/lo-trinh/tom-tat-ho-so.tsx"
+      - "apps/app/components/lo-trinh/so-lieu-lam-viec.tsx"
+      - "apps/app/components/lo-trinh/ho-so-viec.tsx"
+      - "_acceptance/ngan-ho-so-trong-lo-trinh/evidence/ST-ngan-day-du--1280--sang.png"
+      - "_acceptance/ngan-ho-so-trong-lo-trinh/evidence/ST-ngan-day-du--375--sang.png"
+      - "_acceptance/ngan-ho-so-trong-lo-trinh/evidence/ST-ngan-doan-dai--375--sang.png"
+      - "_acceptance/ngan-ho-so-trong-lo-trinh/evidence/ST-ngan-o-vang--1280--sang.png"
     question: |
       Dat minh vao cho mot truong phong ban khong dung git, mo ngan cua mot viec da giao (anh LT1, R1g, 4n). Chi dua vao
       cac tep va anh trong inputs: tu ngan, ho co tra loi duoc trong mot phut nam cau — vi sao lam, da len chua, se do gi

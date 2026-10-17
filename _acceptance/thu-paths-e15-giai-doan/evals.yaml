@@ -1,0 +1,194 @@
+schema_version: 1
+slug: thu-paths-e15-giai-doan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tpe_e15
+    paths:
+      - "_acceptance/giai-doan-thoa-thuan/evals.yaml"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs"
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/lib/messages/**"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+    expected: |
+      exit 0. hoa-cu-theo-paths.mjs --ho-so giai-doan-thoa-thuan --chi-eval E15 --ma-tran-chu: tập phải giữ SUY từ mã
+      (mọi đường nhập «@/lib/messages/<tên>» trong tệp git theo dõi dưới settings/giai-doan/ và deals/ của
+      apps/app/app/(app)/[slug]/, không gõ tay); lặp qua MỌI tệp git ls-files apps/app/lib/messages/*.ts (ma trận toàn
+      phần viết trước: số khẳng định = số tệp, hôm nay 48). Tệp trong tập phải giữ in «GIU <tệp>: E15:<glob>», tệp ngoài
+      in «BO_QUA <tệp>»; dòng cuối «ma tran: <n> tep · giu <k> · bo <n-k> · sai 0», k khớp cỡ tập suy. Tệp sai lớp →
+      «SAI_LOP <tệp>: mong <giu|bo>, thay <giu|bo>», mã 1. Tập suy rỗng hay số tệp < 20 → mã 2 KHONG DO DUOC.
+      CHIỀU ĐỎ (rang/dot-bien.mjs, worktree tạm tách rời tại HEAD): đặt lại apps/app/lib/messages/** vào E15 → mã 1 với
+      «SAI_LOP apps/app/lib/messages/tin-hieu.ts: mong bo, thay giu»; thêm vào giai-doan-settings.tsx một dòng nhập
+      «@/lib/messages/okr» mà không sửa E15 → mã 1 với «SAI_LOP apps/app/lib/messages/okr.ts: mong giu, thay bo».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tpe_gd
+    paths:
+      - "_acceptance/giai-doan-thoa-thuan/evals.yaml"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+    expected: |
+      exit 0. hoa-cu-theo-paths.mjs --ho-so giai-doan-thoa-thuan (cả hồ sơ, gọi đúng staleByPaths với cây git ls-files
+      của HEAD như pre-merge-check): «BO_QUA giai-doan-thoa-thuan apps/app/lib/messages/tin-hieu.ts» và «GIU
+      giai-doan-thoa-thuan apps/app/lib/messages/settings.ts: E15:… », bộ lọc áp (không dòng KHONG_AP). Cần F23 (#427)
+      trên cây: thiếu thì mã 1 với «VAN_GIU … tin-hieu.ts: E17:apps/app/lib/**» — đó là dòng đỏ đúng, không phải lỗi
+      thước.
+      CHIỀU ĐỎ (dot-bien.mjs): đặt lại apps/app/lib/** vào paths của E17 → mã 1 với «VAN_GIU giai-doan-thoa-thuan
+      apps/app/lib/messages/tin-hieu.ts: E17:apps/app/lib/**»; xoá khối paths của một eval máy bất kỳ → mã 1 với
+      «KHONG_AP giai-doan-thoa-thuan apps/app/lib/messages/tin-hieu.ts: eval-may-thieu-paths:<id>».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tpe_kiem
+    paths:
+      - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/config.yaml"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+    expected: |
+      exit 0. Ba phần, một lệnh (them-paths.mjs --kiem --ho-so @danh-sach.txt --phai-co
+      thu-haiku-tro-ly-okr --kiem-danh-sach):
+      (a) --kiem-danh-sach tính lại luật chọn KHÔNG đọc danh-sach.txt, tại MỐC CỐ ĐỊNH 5ac01b453 (hằng MOC_DANH_SACH, đỉnh
+      onehub lúc dựng, lối A ở P1-26): ứng viên = hồ sơ có eval judgment thiếu paths ở cây mốc, trừ da-cham-boi-thuc-te; giả
+      lập chèn paths rồi xét bộ lọc (staleByPaths, tệp đổi từ verified_commit tới mốc trừ _acceptance/ và t1_skip_globs, cây
+      git ls-tree của mốc): chưa ghim hoặc SACH thì thuộc luật; hồ sơ thuộc luật mà ở HEAD hoá cũ do PR khác thì in
+      «LOAI_TRU <slug>: hoa cu o HEAD do PR khac (<n> tep)» và không tính vào luật — rồi so với danh-sach.txt: thiếu →
+      «THIEU_TRONG_DANH_SACH <slug>», thừa → «THUA_TRONG_DANH_SACH <slug>», mã 1; hôm nay 6 thuộc luật, 2 loại trừ;
+      (b) --phai-co: mỗi slug khai phải có trong danh sách, in «CO_TEN <slug>», thiếu → «KHONG_CO_TEN <slug>», mã 1;
+      (c) mọi eval judgment không khai not-run, có inputs giải được, của hồ sơ trong danh sách có paths chứa mọi input quy
+      về gốc kho: «kiem: <n> eval judgment co paths phu inputs · 0 hong». Hồ sơ trong danh sách không có eval judgment
+      nào → mã 2 «KHONG DO DUOC: ho so khong co eval judgment nao: <slug>».
+      CHIỀU ĐỎ (dot-bien.mjs): xoá khối paths vừa thêm của eval đầu tiên trong danh sách → mã 1 «THIEU_PATHS <slug>#<id>»;
+      bớt một mục khỏi khối đó → mã 1 «LECH_PATHS <slug>#<id>: thieu <tệp>»; xoá dòng tat-preview-agent-okr khỏi
+      danh-sach.txt → mã 1 với cả «KHONG_CO_TEN tat-preview-agent-okr» và «THIEU_TRONG_DANH_SACH tat-preview-agent-okr»;
+      thêm một hồ sơ còn hoá cũ (khung-man-chung) vào danh-sach.txt → mã 1 «THUA_TRONG_DANH_SACH khung-man-chung».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tpe_chi_them
+    paths:
+      - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/chi-them-paths.mjs"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs"
+      - "_acceptance/*/evals.yaml"
+      - "lib/**"
+    expected: |
+      exit 0. chi-them-paths.mjs --ho-so @danh-sach.txt so evals.yaml ở merge-base(HEAD, origin/onehub) và HEAD theo từng
+      eval (khối từ «- id:» tới «- id:» kế): bỏ khối paths ra thì mọi dòng còn lại trùng chữ; paths mới của eval judgment
+      trong danh sách bằng đúng inputs quy đổi (thứ tự giữ, không thừa không thiếu); E15 của giai-doan-thoa-thuan chỉ
+      đổi dòng messages/** thành các tệp chữ; không evals.yaml nào khác đổi — miễn trừ duy nhất là
+      _acceptance/thu-paths-e15-giai-doan/** (lệnh in «mien: _acceptance/thu-paths-e15-giai-doan/**» và không miễn gì
+      khác); git diff merge-base..HEAD -- lib/ rỗng. In
+      «chi-them: <n> eval them paths · E15 doi 1 dong · 0 lech». Diff rỗng vì nhánh đã nằm trong origin/onehub → in «da
+      gop, khong so» và mã 0.
+      CHIỀU ĐỎ (dot-bien.mjs, commit trong worktree tạm): sửa câu question của một eval trong danh sách → «DOI_TRUONG
+      <slug>#<id>»; thêm paths cho okr-loai-hoc-tap#E14 (ngoài danh sách) → «NGOAI_DANH_SACH okr-loai-hoc-tap»; thêm một
+      dòng chú thích vào lib/evidence-core.cjs → «CHAM_LIB lib/evidence-core.cjs»; thêm một mục thừa vào paths vừa thêm →
+      «PATHS_KHAC_INPUTS <slug>#<id>». Mỗi ca mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tpe_sach
+    paths:
+      - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs"
+      - "_acceptance/config.yaml"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+    expected: |
+      exit 0. hoa-cu-theo-paths.mjs --ho-so @danh-sach.txt: với mỗi hồ sơ, tệp đổi = git diff --name-only
+      <verified_commit> trừ _acceptance/ và risk_tiers.t1_skip_globs (đúng hàm stale_files của pre-merge-check), lọc bằng
+      staleByPaths với cây git ls-files của HEAD → mọi hồ sơ đã ký in «SACH <slug>: <k> tep doi tu <sha>, bo qua het
+      theo paths», hồ sơ chưa ghim in «CHUA_GHIM <slug>»; dòng cuối «ho so: <n> · hong: 0».
+      CHIỀU ĐỎ (dot-bien.mjs, commit trong worktree tạm): sửa apps/agent-okr/vercel.json (input của tat-preview-agent-okr#E9; docs/setup.md là tệp T1 nên bộ lọc không bao giờ tính) → mã 1
+      với «CON_HOA_CU tat-preview-agent-okr: apps/agent-okr/vercel.json»; xoá khối paths vừa thêm của tat-preview-agent-okr#E9 → mã 1
+      với «KHONG_AP tat-preview-agent-okr: eval-ngoai-may-thieu-paths:E9».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tpe_bo_qua
+    paths:
+      - "_acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/*/contract.md"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+    expected: |
+      exit 0. them-paths.mjs --kiem-bo-qua-lop quét TRỌN lớp eval judgment bị xếp «bo-qua» ở CÂY MỐC TRƯỚC VÒNG (cùng mốc với E3; lớp
+      tính trước khi sửa, nên eval bị thêm paths không rời khỏi phép quét), so paths của từng eval ở HEAD; eval bo-qua mới
+      xuất hiện sau mốc in «(moi sau moc)»:
+      mỗi eval phải mang đúng một trong bốn lý do — khoa-thuoc-da-cham-thuc-te (hồ sơ da-cham-boi-thuc-te), khai-not-run,
+      khong-co-inputs, input-vang:<tệp> — và paths của nó ở HEAD bằng đúng paths ở cây mốc trước vòng (cùng mốc với E3):
+      in «BO_QUA <slug>#<id>: <lý do>» từng eval, dòng cuối «bo qua: <n> eval · <lý do> <số> ×4 · doi 0». Lý do ngoài bốn
+      loại → «LY_DO_LA», paths đổi → «DOI_PATHS <slug>#<id>: <lớp>», mã 1. Đối chứng dương: mỗi lớp trong bốn lớp phải có
+      ít nhất một eval, lớp rỗng → mã 2 «KHONG DO DUOC: lop bo qua rong: <lớp>» (hôm nay 10 eval: 3 · 4 · 2 · 1).
+      CHIỀU ĐỎ (dot-bien.mjs): thêm paths cho cua-vao-noi-tieng-viet#E14 (hồ sơ khoá) → mã 1 «DOI_PATHS
+      cua-vao-noi-tieng-viet#E14: khoa-thuoc-da-cham-thuc-te»; thêm paths cho okr-loai-hoc-tap#E14 → mã 1 «DOI_PATHS
+      okr-loai-hoc-tap#E14: input-vang»; thêm paths cho chu-mac-dinh-thu-vien-ngoai#E10 (lớp khong-co-inputs có hai eval) →
+      mã 1 «DOI_PATHS chu-mac-dinh-thu-vien-ngoai#E10: khong-co-inputs».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tpe_pmc_that
+    long_running: 45
+    paths:
+      - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
+      - "_acceptance/thu-paths-e15-giai-doan/rang/pmc-truoc-sau.mjs"
+      - "scripts/pre-merge-check.sh"
+      - "lib/**"
+      - "_acceptance/config.yaml"
+    expected: |
+      exit 0. rang/pmc-truoc-sau.mjs dựng worktree tạm tách rời ở merge-base(HEAD, origin/onehub), chạy THẬT
+      «bash scripts/pre-merge-check.sh <cây>» không --base trên worktree đó và trên gốc kho (HEAD), gom tập slug có dòng
+      «VIOLATION [<slug>]: evidence is stale» và dòng «NOTE [<slug>]: bộ lọc paths không áp (eval-ngoai-may-thieu-paths:<id>)»
+      của từng cây. Khẳng định: (a) mọi hồ sơ đã ký trong danh-sach.txt không có trong tập sau, và có trong tập trước — hồ sơ không có trong tập
+      trước chỉ được nhận khi lưới không in dòng nào cho nó ở cây trước (không tệp nào đổi từ lúc ghim; in «KHONG_CO_TEP_DOI
+      <slug>»), còn lưới có in mà không hoá cũ thì «KHONG_O_TAP_TRUOC <slug>», mã 1;
+      (b) tập sau ⊆ tập trước (không hồ sơ mới thành hoá cũ); (c) số sau < số trước; (d) không hồ sơ trong danh sách còn
+      dòng KHONG_AP eval-ngoai-may-thieu-paths với id là eval judgment. In «pmc: truoc <a> · sau <b> · roi <danh sách> ·
+      moi 0». Merge-base trùng HEAD (nhánh đã gộp) → «da gop, khong so», mã 0. Gỡ worktree tạm khi xong hay bị ngắt.
+      CHIỀU ĐỎ (dot-bien.mjs, commit trong worktree tạm): xoá khối paths vừa thêm của tat-preview-agent-okr#E9 → mã 1
+      «VAN_HOA_CU tat-preview-agent-okr» và «KHONG_AP_JUDGMENT tat-preview-agent-okr#E9».
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tpe_dot_bien
+    long_running: 90
+    paths:
+      - "_acceptance/thu-paths-e15-giai-doan/rang/**"
+      - "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+    expected: |
+      exit 0. rang/dot-bien.mjs dựng worktree tạm tách rời tại HEAD (git worktree add --detach), chạy lần lượt từng cặp
+      của E1–E6 và E8 (lệnh E6 là --kiem-bo-qua-lop): bản lành → mã 0; mỗi đột biến khai ở «CHIỀU ĐỎ» của E1–E6 và E8 → đúng mã khai và đúng dòng ghim. In
+      «<eval> <tên đột biến>: lanh 0, dot bien <mã>, bat» cho từng cặp; cặp không bắt → «LOT <eval> <tên>», mã 1. Đột
+      biến không áp được (chuỗi gốc không còn) → «DOT_BIEN_LECH <tên>», mã 2. Gỡ worktree tạm khi xong hay khi bị ngắt;
+      cây chính không đổi tệp nào (so git status --porcelain của đúng các tệp đột biến trước và sau).
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

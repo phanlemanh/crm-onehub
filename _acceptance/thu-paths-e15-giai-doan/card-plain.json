@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Một PR chỉ sửa chữ ở màn khác thôi bị đòi ghim lại giai-doan-thoa-thuan, và 8 hồ sơ thôi bị coi là cũ chỉ vì một eval chấm tay không khai tệp nó đọc; lưới trước gộp thật giảm 245 → 241 hồ sơ hoá cũ (đo trên 7 hồ sơ đầu).",
+  "analyst_plain": "Mọi phép đo máy đạt sau ba lượt; lượt 1 kẹt vì phép thử đột biến chạy quá 30 phút, lượt 2 và 3 sửa bốn chỗ thước chưa chứng đủ lời hứa của AC-3, AC-6, AC-7."
+}

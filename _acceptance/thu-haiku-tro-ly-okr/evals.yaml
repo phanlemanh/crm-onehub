@@ -77,4 +77,9 @@ evals:
       nói đúng ý ấy (nêu tên tệp); Không đạt khi không tệp nào nói, hoặc có tệp nói khác đáp án (sai mã, sai
       chỗ đổi).
     inputs: [.env.example, docs/environment.md, docs/agent.md, docs/setup.md]
+    paths:
+      - ".env.example"
+      - "docs/environment.md"
+      - "docs/agent.md"
+      - "docs/setup.md"
     evidence_required: [run_id, verifier, verified_at, output]
