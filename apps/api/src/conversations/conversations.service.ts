@@ -6,6 +6,7 @@ import {
 	builderQuestion,
 	commandTypeFromAuthorization,
 } from "@crm/validation/builder-question";
+import { THONG_BAO } from "@crm/validation/thong-bao";
 import {
 	BadRequestException,
 	Injectable,
@@ -644,6 +645,16 @@ export class ConversationsService {
 		if (updated.count === 0) {
 			throw new NotFoundException(`No builder conversation with id ${id}.`);
 		}
+
+		await this.db.thongBao.updateMany({
+			where: {
+				nguoiNhanId: userId,
+				nguon: THONG_BAO.nguon.tacNhan,
+				duongDan: `/chat/${id}`,
+				docLuc: null,
+			},
+			data: { docLuc: new Date() },
+		});
 
 		return { id };
 	}
