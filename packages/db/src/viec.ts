@@ -321,6 +321,14 @@ export function dieuKienXemViec(userId: string): Prisma.ViecWhereInput {
 	};
 }
 
+export function dieuKienNhomHayDuAn(
+	nhom: NhomViec,
+	userId: string,
+	duAnId?: string,
+): Prisma.ViecWhereInput {
+	return duAnId ? { duAnId } : dieuKienNhom(nhom, userId);
+}
+
 export function dieuKienNhom(
 	nhom: NhomViec,
 	userId: string,
@@ -531,6 +539,7 @@ export const CHON_VIEC = {
 	hanNgay: true,
 	batDauNgay: true,
 	duAnId: true,
+	duAn: { select: { id: true, ten: true } },
 	taoLuc: true,
 	khepLuc: true,
 	nguoiGiaoId: true,

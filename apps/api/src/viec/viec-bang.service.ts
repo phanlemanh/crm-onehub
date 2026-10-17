@@ -3,7 +3,7 @@ import { DAY_MS } from "@crm/db/onboarding-nhac";
 import {
 	CHON_VIEC,
 	chuyenDuocCua,
-	dieuKienNhom,
+	dieuKienNhomHayDuAn,
 	dieuKienXemViec,
 	TRANG_THAI_MO,
 	theoHan,
@@ -108,7 +108,7 @@ export class ViecBangService {
 		const now = new Date();
 		const loc = (trangThai: Prisma.ViecWhereInput): Prisma.ViecWhereInput => ({
 			AND: [
-				dieuKienNhom(input.nhom, userId),
+				dieuKienNhomHayDuAn(input.nhom, userId, input.duAnId),
 				dieuKienXemViec(userId),
 				trangThai,
 			],

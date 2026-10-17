@@ -5,7 +5,7 @@ import {
 	banGhiCua,
 	CHON_VIEC,
 	dichDuoc,
-	dieuKienNhom,
+	dieuKienNhomHayDuAn,
 	dieuKienXemViec,
 	docViecCuaBanGhi,
 	type HangViec,
@@ -20,6 +20,8 @@ import {
 import {
 	boTheoDoi,
 	coLichSu,
+	doiDuAn,
+	doiLich,
 	doiNguoiThucHien,
 	doiTrangThai,
 	ganBanGhi,
@@ -47,6 +49,9 @@ import type {
 	ViecCuaBanGhiOutput,
 	ViecCuaToiInput,
 	ViecCuaToiNhomOutput,
+	ViecDaDoiOutput,
+	ViecDoiDuAnInput,
+	ViecDoiLichInput,
 	ViecDoiNguoiInput,
 	ViecDoiTrangThaiInput,
 	ViecDongOutput,
@@ -99,6 +104,8 @@ export function viecRa(h: HangViec, now: Date): ViecDongOutput {
 		tieuDe: h.tieuDe,
 		trangThai: h.trangThai,
 		hanNgay: h.hanNgay ? ngayHan(h.hanNgay) : null,
+		batDauNgay: h.batDauNgay ? ngayHan(h.batDauNgay) : null,
+		duAn: h.duAn,
 		quaHan: laQuaHan(h, now),
 		nguoiGiao: h.nguoiGiao,
 		nguoiThucHien: h.nguoiThucHien,
@@ -142,12 +149,29 @@ export class ViecService {
 
 	async get(id: string, userId: string): Promise<ViecChiTietOutput> {
 		const h = await this.docThay(id, userId);
-		const daCoLichSu = await coLichSu(this.db, h.id);
+		const [daCoLichSu, phaiCho] = await Promise.all([
+			coLichSu(this.db, h.id),
+			this.db.viecPhuThuoc.findMany({
+				where: { sauId: h.id },
+				select: {
+					truoc: {
+						select: { id: true, tieuDe: true, batDauNgay: true, hanNgay: true },
+					},
+				},
+				orderBy: { taoLuc: "asc" },
+			}),
+		]);
 		const vai = vaiCua(h, userId);
 		return {
 			...viecRa(h, new Date()),
 			moTa: h.moTa,
 			nguoiTheoDoi: h.theoDoi.map((t) => t.user),
+			phaiCho: phaiCho.map((p) => ({
+				id: p.truoc.id,
+				tieuDe: p.truoc.tieuDe,
+				batDauNgay: p.truoc.batDauNgay ? ngayHan(p.truoc.batDauNgay) : null,
+				hanNgay: p.truoc.hanNgay ? ngayHan(p.truoc.hanNgay) : null,
+			})),
 			coLichSu: daCoLichSu,
 			quyen: {
 				trangThai: dichDuoc(h.trangThai, vai),
@@ -207,7 +231,11 @@ export class ViecService {
 			nhom: ViecCuaToiInput["nhom"],
 			trangThai: Prisma.ViecWhereInput,
 		) => ({
-			AND: [dieuKienNhom(nhom, userId), dieuKienXemViec(userId), trangThai],
+			AND: [
+				dieuKienNhomHayDuAn(nhom, userId, input.duAnId),
+				dieuKienXemViec(userId),
+				trangThai,
+			],
 		});
 		const doc = (
 			trangThai: Prisma.ViecWhereInput,
@@ -270,10 +298,51 @@ export class ViecService {
 				nguoiThucHienId: input.nguoiThucHienId,
 				nguoiTheoDoiIds: input.nguoiTheoDoiIds,
 				gan: b ? [b] : [],
+				duAnId: input.duAnId ?? null,
+				nguon: "web",
+				now: new Date(),
+			}).then(async (tao) => {
+				if (input.batDauNgay) {
+					await suaViec(tx, {
+						viecId: tao.id,
+						nguoiId: userId,
+						batDauNgay: input.batDauNgay,
+						nguon: "web",
+						now: new Date(),
+					});
+				}
+				return tao;
+			}),
+		);
+	}
+
+	doiLich(input: ViecDoiLichInput, userId: string): Promise<ViecDaDoiOutput> {
+		return this.ghi((tx) =>
+			doiLich(tx, {
+				viecId: input.id,
+				nguoiId: userId,
+				batDauNgay: input.batDauNgay,
+				hanNgay: input.hanNgay,
+				nguon: "gantt",
+				now: new Date(),
+			}),
+		);
+	}
+
+	async doiDuAn(
+		input: ViecDoiDuAnInput,
+		userId: string,
+	): Promise<ViecChiTietOutput> {
+		await this.ghi((tx) =>
+			doiDuAn(tx, {
+				viecId: input.id,
+				nguoiId: userId,
+				duAnId: input.duAnId,
 				nguon: "web",
 				now: new Date(),
 			}),
 		);
+		return this.get(input.id, userId);
 	}
 
 	async doiTrangThai(
@@ -300,6 +369,7 @@ export class ViecService {
 				tieuDe: input.tieuDe,
 				moTa: input.moTa,
 				hanNgay: input.hanNgay,
+				batDauNgay: input.batDauNgay,
 				nguon: "web",
 				now: new Date(),
 			}),

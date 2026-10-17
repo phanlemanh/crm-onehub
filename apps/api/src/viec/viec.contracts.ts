@@ -39,6 +39,8 @@ export const viecCreateInput = z
 		hanNgay: ngayLich.nullable().optional(),
 		nguoiThucHienId: ma.optional(),
 		nguoiTheoDoiIds: z.array(ma).max(VIEC.theoDoiToiDa).default([]),
+		duAnId: ma.optional(),
+		batDauNgay: ngayLich.nullable().optional(),
 		...banGhiTruong,
 	})
 	.refine((v) => soBanGhi(v) <= 1, { message: VIEC.thongDiep.dungMotBanGhi });
@@ -61,6 +63,19 @@ export const viecSuaInput = z.object({
 	tieuDe: z.string().trim().min(1).max(VIEC.tieuDeToiDa).optional(),
 	moTa: z.string().trim().max(VIEC.moTaToiDa).nullable().optional(),
 	hanNgay: ngayLich.nullable().optional(),
+	batDauNgay: ngayLich.nullable().optional(),
+});
+
+export const viecDoiLichInput = z.object({
+	id: ma,
+	batDauNgay: ngayLich,
+	hanNgay: ngayLich,
+});
+
+export const viecDoiDuAnInput = z.object({ id: ma, duAnId: ma.nullable() });
+
+export const viecDaDoiOutput = z.object({
+	daDoi: z.array(z.object({ id: z.string(), tieuDe: z.string() })),
 });
 
 export const viecDoiNguoiInput = z.object({ id: ma, nguoiThucHienId: ma });
@@ -69,6 +84,7 @@ export const viecTheoDoiInput = z.object({ id: ma, userId: ma.optional() });
 
 export const viecCuaToiInput = z.object({
 	nhom: z.enum(NHOM_VIEC).default("giao-cho-toi"),
+	duAnId: ma.optional(),
 });
 
 const nguoiRa = z.object({
@@ -88,6 +104,8 @@ export const viecDong = z.object({
 	tieuDe: z.string(),
 	trangThai: z.enum(TRANG_THAI_VIEC),
 	hanNgay: z.string().nullable(),
+	batDauNgay: z.string().nullable(),
+	duAn: z.object({ id: z.string(), ten: z.string() }).nullable(),
 	quaHan: z.boolean(),
 	nguoiGiao: nguoiRa,
 	nguoiThucHien: nguoiRa,
@@ -97,6 +115,14 @@ export const viecDong = z.object({
 export const viecChiTietOutput = viecDong.extend({
 	moTa: z.string().nullable(),
 	nguoiTheoDoi: z.array(nguoiRa),
+	phaiCho: z.array(
+		z.object({
+			id: z.string(),
+			tieuDe: z.string(),
+			batDauNgay: z.string().nullable(),
+			hanNgay: z.string().nullable(),
+		}),
+	),
 	coLichSu: z.boolean(),
 	quyen: z.object({
 		trangThai: z.array(z.enum(TRANG_THAI_VIEC)),
@@ -208,5 +234,8 @@ export type ViecBangInput = z.infer<typeof viecBangInput>;
 export type ViecBangOutput = z.infer<typeof viecBangOutput>;
 export type TheBangOutput = z.infer<typeof theBang>;
 export type ViecKeoInput = z.infer<typeof viecKeoInput>;
+export type ViecDoiLichInput = z.infer<typeof viecDoiLichInput>;
+export type ViecDoiDuAnInput = z.infer<typeof viecDoiDuAnInput>;
+export type ViecDaDoiOutput = z.infer<typeof viecDaDoiOutput>;
 export type ViecTaoConInput = z.infer<typeof viecTaoConInput>;
 export type ViecConOutput = z.infer<typeof viecConOutput>;
