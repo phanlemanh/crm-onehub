@@ -5,7 +5,7 @@ slug: lo-trinh-hien-ngay-du-kien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-17-lo-trinh-hien-ngay-du-kien-design.md
 approved_by: Manh Phan
 approved_at: 2026-10-17T12:40:37Z
@@ -116,7 +116,8 @@ Dữ liệu trong mọi bài kiểm do code sinh trong lượt từ khối đún
     trong khối, 0 mốc trong số đó còn việc. E3 dòng 3 giữ điều này.
   - «Tên trước mã»: trang CRM đã hiện câu giao làm tên việc, mã chỉ là chữ phụ (bảng, thẻ bảng cột, dòng việc trong
     kiểu xem Mốc); khối «Mốc sắp tới» liệt mã là của trang lộ trình gốc của bộ công cụ, không phải trang CRM.
-- Giới hạn đã biết từ trước, mang vào Known limits:
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-18:
+  - Ngoài-1: Tệp dữ liệu mẫu của bài kiểm tự viết lại hình dạng khối lộ trình thay vì đọc qua khuôn có sẵn; người dùng không thấy gì, nhưng khi bộ công cụ đổi hình dữ liệu, bài kiểm sẽ đỏ ở chỗ khó tìm nguyên nhân hơn.
   - Kit 2.32.0 tính mọi mốc bắt đầu hôm nay (trừ khi có `dung_tren`) và cộng giờ 24/24, nên ngày của nhiều mốc song song có
     thể vô nghĩa (đo 17/10: «Lộ trình bước 2» hoàn tất 17/10, mục tiêu 21/10); trang ghi «dự kiến», nói cách tính và gắn
     cờ, không sửa phép tính.
