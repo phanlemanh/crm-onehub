@@ -184,9 +184,9 @@
       "ten": "Đo lần đầu cây tổ chức (Cổng Giá trị của hàng 1)",
       "ngay": "2026-10-26",
       "khoa": "m-1026d",
-      "hang": [
-        "1"
-      ]
+      "hang": [],
+      "loai": "ngoai",
+      "ai": "Chủ kho"
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -220,35 +220,27 @@
     {
       "ten": "Phiên nghiệm thu R1",
       "ngay": "2026-11-13",
-      "ai": "Chủ sản phẩm, người dùng đại diện",
-      "hang": [
-        "2",
-        "3",
-        "5"
-      ],
-      "khoa": "m-1113"
+      "ai": "Chủ kho và trưởng đơn vị",
+      "hang": [],
+      "khoa": "m-1113",
+      "loai": "ngoai"
     },
     {
       "ten": "Đọc số lượt 6",
       "ngay": "2026-12-01",
       "ai": "Chủ kho",
-      "hang": [
-        "6",
-        "8a"
-      ],
-      "khoa": "m-1201"
+      "hang": [],
+      "khoa": "m-1201",
+      "loai": "ngoai"
     },
     {
       "ten": "Ban lãnh đạo đặt OKR năm 2027 cấp OneHub",
       "ngay": "2026-12-07",
       "ai": "Ban lãnh đạo",
       "den": "2026-12-18",
-      "hang": [
-        "H",
-        "9b",
-        "D"
-      ],
-      "khoa": "m-1207"
+      "hang": [],
+      "khoa": "m-1207",
+      "loai": "ngoai"
     },
     {
       "ten": "Hạn cứng: lượt 7 lên production",
