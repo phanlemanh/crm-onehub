@@ -5,9 +5,9 @@ slug: tra-cuu-thuong-hieu-viet-nam
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: implemented
 approved_by: Manh Phan
-approved_at: 2026-10-16T08:08:51Z
+approved_at: 2026-10-17T02:50:10Z
 design_doc: docs/superpowers/specs/2026-10-16-tra-cuu-thuong-hieu-viet-nam-design.md
 ---
 
