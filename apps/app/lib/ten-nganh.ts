@@ -2,8 +2,6 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 export type TenNganh = { ten: string; dich: boolean };
 
-// Khoá là đúng danh sách ngành cố định của context.dev (Industries.Eic.industry).
-// ten-nganh.test.ts so khoá với bản thư viện tác nhân đang cài — lệch là đỏ.
 export const BANG_NGANH: Record<string, string> = {
 	"Aerospace & Defense": "Hàng không vũ trụ & Quốc phòng",
 	Technology: "Công nghệ",

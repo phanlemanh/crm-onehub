@@ -7,7 +7,6 @@ import { companyMessages } from "../../../apps/app/lib/messages/companies.ts";
 import { BANG_NGANH } from "../../../apps/app/lib/ten-nganh.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
-// Chạy qua executors.script.dtn_chup (mot-luot.sh dựng phiên đo, kho dùng-một-lần).
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
 const RA = join(HERE, "..", "evidence");
@@ -99,7 +98,6 @@ if (!cookie) await khongDo(`khong doc duoc cookie phien cua ${EMAIL}`);
 const slug = await suySlug(cookie);
 if (!slug) await khongDo(`${APP}/ khong chuyen toi trang chinh cua workspace`);
 
-// Dữ liệu mẫu qua đường ghi thật: tạo công ty rồi sửa ngành bằng API của bàn đo.
 const NGANH = Object.keys(BANG_NGANH);
 for (const [i, nganh] of NGANH.entries()) {
 	const so = String(i + 1).padStart(2, "0");
@@ -183,7 +181,6 @@ for (const lang of NGON_NGU) {
 		await p.screenshot({ path: tep, fullPage: true });
 		dong.push(`ANH ${tep.slice(GOC.length + 1)}`);
 		if (o.cot < 0) {
-			// Cột Ngành ẩn dưới khổ lg — đúng thiết kế bảng, không phải lỗi của vòng.
 			dong.push(
 				`E8 cat ${lang} ${rong}: cot Nganh an o kho nay (hideBelow lg)`,
 			);

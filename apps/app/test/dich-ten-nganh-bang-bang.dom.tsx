@@ -166,7 +166,6 @@ async function moBang(
 		);
 }
 
-// Phần tử nhỏ nhất chứa đúng chữ — chỗ đọc thuộc tính lang / translate / title.
 function phanTuChua(chu: string, goc: ParentNode = document.body): Element {
 	const tim = [...goc.querySelectorAll("*")].filter(
 		(e) => e.textContent?.trim() === chu,
@@ -269,7 +268,6 @@ describe("ac2", () => {
 		const dong = dongPhu();
 		expect(dong.textContent).toContain(ten);
 		expect(dong.textContent).not.toContain("Real Estate & PropTech");
-		// Dòng phụ ghép « · » cùng phần tử với tên, nên đọc nhãn ngôn ngữ của mọi phần tử chứa tên.
 		const gocAnh = [...dong.querySelectorAll('[lang="en"]')].filter((e) =>
 			e.textContent?.includes(ten),
 		);

@@ -5,7 +5,6 @@ import { dirname, join } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
 import { BANG_NGANH, tenNganh } from "./ten-nganh";
 
-// Danh sách ngành không chép tay: rút từ đúng bản context.dev mà tác nhân cài.
 const UNION_NGANH = /\bindustry:\s*((?:\|\s*)?'[^']*'(?:\s*\|\s*'[^']*')+)/g;
 
 function nganhTuKhaiBao(khaiBao: string): string[] {
