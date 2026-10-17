@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context sequential verification subagent (round 3, classifier-fallback)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d91b70b5d3ef94d8d51e67642d164f6fac8253aa
+verified_commit: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -337,3 +337,7 @@ sha: 944bd5dd993d38c3acc27f87820b5fe3e9351cb7 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-09-25, do gộp onehub #146 (thanh bên Cài đặt, packages/ui) khi tới lượt merge
 run_id: repin-20260925T222401Z-96602
 sha: d91b70b5d3ef94d8d51e67642d164f6fac8253aa · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3, E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4
+
+### Re-pin lần 6 — 2026-10-17, do ve-sinh-do-san-onehub: sửa gốc đỏ sẵn onehub (hydration record=, 403, moi-chuoi, neo F8, E16) + thước DH1/DH3 trên onehub 21b709411
+run_id: repin-20261017T062808Z-56916
+sha: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3, E4, E6, E11, E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

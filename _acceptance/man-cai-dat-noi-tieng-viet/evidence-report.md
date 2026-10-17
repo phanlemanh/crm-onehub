@@ -10,7 +10,7 @@ slug: man-cai-dat-noi-tieng-viet
 verdict: PASS
 round: 3
 run_id: s4r3d-20260904T130156Z-16359
-verified_commit: 8a12ef6b73932d74e7e6a322b242aee5164c0478
+verified_commit: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c
 verified_at: 2026-09-04T13:04:00Z
 human_signoff: Manh Phan 2026-09-04
 ---
@@ -380,3 +380,7 @@ sha: 2bf938e6511c00c6c2d29af571759b2afaad2a49 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-06, do sửa thước đỏ lô 2-4 (d2)
 run_id: repin-20261006T094613Z-99306
 sha: 8a12ef6b73932d74e7e6a322b242aee5164c0478 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 9 — 2026-10-17, do ve-sinh-do-san-onehub: sửa gốc đỏ sẵn onehub (hydration record=, 403, moi-chuoi, neo F8, E16) + thước DH1/DH3 trên onehub 21b709411
+run_id: repin-20261017T062808Z-56916
+sha: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

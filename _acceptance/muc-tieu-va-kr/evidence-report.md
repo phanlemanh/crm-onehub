@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 03861afa641779b48425f4a39866c5138dff88b9
+verified_commit: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c
 human_signoff: Phan Le Manh 2026-10-03
 ---
 
@@ -372,3 +372,7 @@ Round 5 (sau Cổng Phạm vi duyệt lại 03/10): BLOCKED/REJECT vì ca api ng
 Round 6: REJECT vì ux-lai-thu-8c-okr/E15 đỏ dưới tải.
 Round 7–9: BLOCKED vì agent chết. Nhánh đã gộp onehub 9660bf6c có bản vá nguon-khoa.
 Round 10: mọi eval máy và ui-check xanh, bảy suite xanh lần đầu, E14 hoi quy 0 (14 eval đỏ sẵn ở merge-base đúng danh sách Known limits của hợp đồng); E15 chưa chấm → PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-10-17, do ve-sinh-do-san-onehub: sửa gốc đỏ sẵn onehub (hydration record=, 403, moi-chuoi, neo F8, E16) + thước DH1/DH3 trên onehub 21b709411
+run_id: repin-20261017T062808Z-56916
+sha: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E1, E5, E13, E15, E16 · diff chạm vật đo ngoài làn máy: E1, E5, E13, E15, E16 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
