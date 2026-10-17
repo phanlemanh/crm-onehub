@@ -297,11 +297,11 @@ describe("dg-man-ngay", () => {
 		await cho(() => goiSua().length > 0, "goi sua");
 		const gui = docVao(goiSua()[0]?.input).batDauNgay;
 		if (gui !== "2026-10-20") throw new Error(`dg: ngay gui lech ${TZ} ${gui}`);
-		await cho(
-			() => chuCua(oBatDau()) === formatDay("2026-10-20", "vi"),
-			"hien lai",
-		);
-		if (!chuCua(oBatDau()) === formatDay("2026-10-20", "vi")) {
+		const mong = formatDay("2026-10-20", "vi");
+		for (let i = 0; i < 100 && chuCua(oBatDau()) !== mong; i += 1) {
+			await nhip();
+		}
+		if (chuCua(oBatDau()) !== mong) {
 			throw new Error(`dg: hien ngay lech ${TZ}`);
 		}
 
