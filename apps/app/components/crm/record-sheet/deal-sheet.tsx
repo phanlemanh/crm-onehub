@@ -67,6 +67,7 @@ import { savingField } from "@/lib/pending-field";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { TheGoiYKeHoach } from "./goi-y-ke-hoach";
 import { AttachDealContact } from "./quick-add";
 import { DaiLuuTruBanGhi, RecordActions } from "./record-actions";
 import {
@@ -257,7 +258,9 @@ export function DealSheet({ dealId }: { dealId: string }) {
 								record={{ kind: "deal", id: deal.id }}
 								archivedAt={deal.archivedAt}
 							/>
-						) : null}
+						) : (
+							<TheGoiYKeHoach dealId={deal.id} />
+						)}
 						<DetailSheetStats>
 							<DetailSheetStat label={m.deal.fields.amount}>
 								{deal.amountCents === null ? (

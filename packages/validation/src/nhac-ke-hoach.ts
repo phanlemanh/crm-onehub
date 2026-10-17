@@ -66,6 +66,7 @@ export const mucNhac = z.union([
 			so: z.number().int().positive(),
 		})
 		.strict(),
+	z.object({ loai: z.literal("goi-y-ke-hoach"), goiYId: ma }).strict(),
 ]);
 
 export type MucNhac = z.infer<typeof mucNhac>;
