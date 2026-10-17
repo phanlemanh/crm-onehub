@@ -108,6 +108,12 @@ Dữ liệu trong mọi bài kiểm do code sinh trong lượt từ khối đún
 
 - Ba câu vòng đời (`docs/vong-doi.md`): không có loại bản ghi mới, không nút xoá hay lưu trữ, không trạng thái kết thúc
   mới — không áp.
+- Hai góp ý của chủ kho 17/10 (qua điều phối), đã có sẵn trên trang CRM nên không mở rộng phạm vi:
+  - «Bỏ mốc ngoài»: trang chỉ vẽ mốc có việc gắn (kiểu xem Mốc, bộ lọc mốc), nên mốc ngoài không hiện; ngày dự kiến chỉ
+    gắn cho mốc còn việc chưa giao (AC-2, AC-5), nên mốc ngoài không bao giờ có ngày. Đo 17/10: 14 mốc không có việc
+    trong khối, 0 mốc trong số đó còn việc. E3 dòng 3 giữ điều này.
+  - «Tên trước mã»: trang CRM đã hiện câu giao làm tên việc, mã chỉ là chữ phụ (bảng, thẻ bảng cột, dòng việc trong
+    kiểu xem Mốc); khối «Mốc sắp tới» liệt mã là của trang lộ trình gốc của bộ công cụ, không phải trang CRM.
 - Giới hạn đã biết từ trước, mang vào Known limits:
   - Kit 2.32.0 tính mọi mốc bắt đầu hôm nay (trừ khi có `dung_tren`) và cộng giờ 24/24, nên ngày của nhiều mốc song song có
     thể vô nghĩa (đo 17/10: «Lộ trình bước 2» hoàn tất 17/10, mục tiêu 21/10); trang ghi «dự kiến», nói cách tính và gắn
