@@ -66,6 +66,16 @@ executors:
     ltc_da_bac: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t da-bac
     ltc_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-ngay.spec.ts && TZ=UTC bun test ./test/lo-trinh-ngay.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ngay
     ltc_vai: cd apps/app && bun test ./test/pham-vi-man.spec.ts ./test/khung-dieu-huong.spec.ts ./test/proxy-lo-trinh.spec.ts -t lo-trinh
+    ldk_ban_chep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-chep
+    ldk_khuon: cd packages/validation && bun test test/lo-trinh-du-lieu.spec.ts -t gio-may
+    ldk_co_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t co-ngay
+    ldk_so_do: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t so-do && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t so-do
+    ldk_qua_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t qua-tai && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t qua-tai
+    ldk_chua_co: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t chua-co && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t chua-co
+    ldk_viec: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t viec
+    ldk_ban_cu: cd packages/validation && bun test test/ban-chup-lo-trinh.spec.ts -t gio-may && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t ban-cu && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-du-kien.dom.tsx -t ban-cu
+    ldk_khoi_that: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that && TZ=UTC bun test ./test/lo-trinh-du-kien.spec.ts -t khoi-that
+    ldk_day: 'bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldk-gio-may"'
     ldb_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-khung.dom.tsx -t khung-chung
     lhs_tom_tat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ho-so.dom.tsx -t tom-tat
     lhs_o_vang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ho-so.dom.tsx -t o-vang
@@ -2889,6 +2899,7 @@ executors:
     gth_thiet_ke: 'for f in apps/app/components/tin-hieu/*.tsx "apps/app/app/(app)/[slug]/tin-hieu/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     gth_do_man: 'APP_URL=${APP_URL:-http://localhost:3370} API_URL=${API_URL:-http://localhost:3371} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/gui-tin-hieu-trong-crm/rang/do-man.mjs"'
     ldbc_do_man: 'APP_URL=${APP_URL:-http://localhost:3390} API_URL=${API_URL:-http://localhost:3391} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lo-trinh-doc-ban-chup/rang/do-man.mjs"'
+    ldk_do_man: 'APP_URL=${APP_URL:-http://localhost:3394} API_URL=${API_URL:-http://localhost:3395} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lo-trinh-hien-ngay-du-kien/rang/do-man.mjs"'
     ldbc_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx" "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     mth_khop: bun test scripts/tin-hieu/test/nguong-song-khop.test.ts
     mth_ban_dung: node _acceptance/moi-tin-hieu-cho-quan-tri/rang/ban-dung.mjs

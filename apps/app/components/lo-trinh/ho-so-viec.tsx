@@ -19,6 +19,7 @@ import {
 } from "@/components/detail-sheet";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongLienQuan } from "./dong-lien-quan";
+import { ODuKien, OUocLuong } from "./o-du-kien";
 import { ChuConNgay } from "./o-moc";
 import { ChamTrangThai, coTrangThaiPhu } from "./o-trang-thai";
 import { SoLieuLamViec } from "./so-lieu-lam-viec";
@@ -130,7 +131,7 @@ export function HoSoViec({
 											</DetailSheetSection>
 										) : null}
 										<TomTatHoSo moiNguoi={v.tom_tat?.moi_nguoi ?? null} />
-										{phu || v.moc || v.bat_khi || v.vi_sao ? (
+										{phu || v.moc || v.bat_khi || v.vi_sao || v.duKien ? (
 											<DetailSheetSection
 												data-lo-trinh-chi-tiet=""
 												title={m.hoSo.chiTiet}
@@ -146,6 +147,16 @@ export function HoSoViec({
 													{v.moc ? (
 														<DetailSheetProperty label={m.hoSo.moc}>
 															<span translate="no">{v.moc.ten}</span>
+														</DetailSheetProperty>
+													) : null}
+													{v.duKien ? (
+														<DetailSheetProperty label={m.duKien.nhan}>
+															<ODuKien duKien={v.duKien} gon={false} />
+														</DetailSheetProperty>
+													) : null}
+													{v.nhom_trang_thai !== "da-giao" && v.gio_may ? (
+														<DetailSheetProperty label={m.duKien.uocLuong}>
+															<OUocLuong gioMay={v.gio_may} />
 														</DetailSheetProperty>
 													) : null}
 													{v.bat_khi ? (

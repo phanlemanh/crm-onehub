@@ -23,12 +23,15 @@ import { SectionHeading } from "@crm/ui/components/section-heading";
 import { formatDay } from "@crm/ui/lib/format";
 import type {
 	DuLieuChoXem,
+	LoTrinhChoXem,
 	MocLoTrinh,
 } from "@crm/validation/lo-trinh-du-lieu";
+import { duKienMoc } from "@/lib/lo-trinh/du-kien";
 import { soSanhMoc } from "@/lib/lo-trinh/ngay";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongLienQuan } from "./dong-lien-quan";
 import { KhungTrong } from "./khung-trong";
+import { ODuKien } from "./o-du-kien";
 import { khoaMoc, khoaMocCua, type Viec } from "./viec";
 
 export function XemMoc({
@@ -46,19 +49,24 @@ export function XemMoc({
 	const m = loTrinhMessages(locale);
 	const theoKhoa = new Map<
 		string,
-		{ moc: MocLoTrinh; lo: string; ds: Viec[] }
+		{ moc: MocLoTrinh; lo: string; loTrinh: LoTrinhChoXem; ds: Viec[] }
 	>();
 	for (const lo of duLieu.lo_trinh)
 		for (const moc of lo.moc)
 			theoKhoa.set(khoaMocCua(lo.tep, moc), {
 				moc,
 				lo: lo.ten ?? lo.tep,
+				loTrinh: lo,
 				ds: [],
 			});
 	for (const v of viec) theoKhoa.get(khoaMoc(v))?.ds.push(v);
 	const mocs = [...theoKhoa.entries()]
 		.filter(([, x]) => x.ds.length > 0)
-		.sort((a, b) => soSanhMoc(a[1].moc, b[1].moc));
+		.sort((a, b) => soSanhMoc(a[1].moc, b[1].moc))
+		.map(
+			([khoa, x]) =>
+				[khoa, { ...x, duKien: duKienMoc(x.loTrinh, x.moc, homNay) }] as const,
+		);
 	const daQua =
 		homNay === null
 			? 0
@@ -90,6 +98,11 @@ export function XemMoc({
 								<span className="text-muted-foreground text-xs" translate="no">
 									{x.lo}
 								</span>
+								{x.duKien ? (
+									<span className="text-sm" data-lo-trinh-du-kien-moc={khoa}>
+										<ODuKien duKien={x.duKien} gon={false} />
+									</span>
+								) : null}
 								<ItemGroup>
 									{x.ds.map((v) => (
 										<DongLienQuan key={v.khoa} moViec={moViec} x={v} />

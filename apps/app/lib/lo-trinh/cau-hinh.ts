@@ -8,6 +8,7 @@ export const LO_TRINH = {
 	tranTheCot: 8,
 	ngayMs: 86_400_000,
 	maNgan: 7,
+	canhBaoThieuGioMay: "chưa có giờ máy và ngày dự kiến",
 	vaiThaySoLieu: "owner" satisfies WorkspaceRole,
 	timPr: (ma: string) =>
 		`https://github.com/search?q=${encodeURIComponent(ma)}&type=pullrequests`,

@@ -56,11 +56,14 @@ describe("lo-trinh-du-lieu", () => {
 		const kq = phanTichLoTrinh({ ...goc, la: 1 });
 		expect(kq.ok).toBe(true);
 	});
-	test("bang khoa du muoi mot cap cua ban 2", () => {
+	test("bang khoa du muoi bon cap cua ban 2 co gio may", () => {
 		expect(Object.keys(KHOA_LO_TRINH_DU_LIEU).sort()).toEqual([
 			"can_sua",
 			"chu_kho",
 			"da_bac",
+			"du_kien",
+			"gio_may",
+			"gio_may_moc",
 			"goc",
 			"hang",
 			"hang_ke",

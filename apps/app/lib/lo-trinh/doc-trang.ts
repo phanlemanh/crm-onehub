@@ -8,6 +8,7 @@ import {
 	phanTichLoTrinh,
 } from "@crm/validation/lo-trinh-du-lieu";
 import type { WorkspaceRole } from "@crm/validation/vai-workspace";
+import { LO_TRINH } from "./cau-hinh";
 import { choVaiXem } from "./cho-vai";
 import { type BanDung, chonNguon, type NguonLoTrinh } from "./chon-nguon";
 import { docDuLieu } from "./doc-du-lieu.js";
@@ -29,6 +30,11 @@ export type KetQuaDocBanChup =
 	| { kieu: "loi"; lyDo: string }
 	| { kieu: "hong"; lyDo: string };
 
+function canhBaoChoTrang(phienBan: number, canhBao: string[]): string[] {
+	if (phienBan === 1) return [];
+	return canhBao.filter((c) => !c.includes(LO_TRINH.canhBaoThieuGioMay));
+}
+
 export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {
 	if (html === null) return { kieu: "tep-vang" };
 	const { duLieu, canhBao } = docDuLieu(html);
@@ -44,7 +50,7 @@ export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {
 	return {
 		kieu: "co-du-lieu",
 		duLieu: kq.duLieu,
-		canhBao: kq.duLieu.phien_ban === 1 ? [] : canhBao,
+		canhBao: canhBaoChoTrang(kq.duLieu.phien_ban, canhBao),
 	};
 }
 
@@ -83,7 +89,7 @@ export async function docDauVaoChoVai(
 			{
 				kieu: "co-du-lieu",
 				duLieu: banChup.duLieu,
-				canhBao: banChup.duLieu.phien_ban === 1 ? [] : banChup.canhBao,
+				canhBao: canhBaoChoTrang(banChup.duLieu.phien_ban, banChup.canhBao),
 				nguon: chon,
 			},
 			vai,

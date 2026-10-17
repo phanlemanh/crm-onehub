@@ -4,6 +4,7 @@ import type {
 	MocLoTrinh,
 	NhomTrangThai,
 } from "@crm/validation/lo-trinh-du-lieu";
+import { type DuKienMoc, duKienMoc } from "@/lib/lo-trinh/du-kien";
 import { soNgay, soSanhMoc, viecTre } from "@/lib/lo-trinh/ngay";
 import type { BoLoc, VongDoi } from "./tham-so";
 
@@ -30,6 +31,7 @@ export type Viec = HangChoXem & {
 	moc: MocLoTrinh | null;
 	tre: boolean;
 	conNgay: number | null;
+	duKien: DuKienMoc | null;
 	khoa: string;
 };
 
@@ -54,6 +56,10 @@ export function phangViec(duLieu: DuLieuChoXem, homNay: string | null): Viec[] {
 				conNgay:
 					homNay !== null && moc?.ngayHopLe
 						? soNgay(homNay, moc.ngayHopLe)
+						: null,
+				duKien:
+					moc && h.nhom_trang_thai !== "da-giao"
+						? duKienMoc(lo, moc, homNay)
 						: null,
 				khoa: `${lo.tep}#${h.ma}`,
 			};

@@ -64,6 +64,18 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "lo-trinh-hien-ngay-du-kien",
+		ten: "Lộ trình hiện ngày dự kiến — ngày của mốc và của việc",
+		states: [
+			{ id: "ST-du-kien-moc", nhan: "Xem theo mốc — hôm nay 17/10" },
+			{ id: "ST-du-kien-bang", nhan: "Bảng — cột mốc có ngày dự kiến" },
+			{ id: "ST-du-kien-ngan", nhan: "Ngăn hồ sơ việc LT1e" },
+			{ id: "ST-du-kien-da-qua", nhan: "Hôm nay 19/10 — đã qua ngày dự kiến" },
+			{ id: "ST-du-kien-ban-cu", nhan: "Bản lộ trình chưa mang ngày dự kiến" },
+			{ id: "ST-du-kien-moc-en", nhan: "Xem theo mốc — tiếng Anh" },
+		],
+	},
+	{
 		slug: "ngan-ho-so-trong-lo-trinh",
 		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
 		states: [
