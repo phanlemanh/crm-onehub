@@ -41,7 +41,7 @@ evals:
     executor: test
     layer: ui
     cmd: config:executors.test.dtn_man
-    expected: "exit 0; cùng tệp E3, khối 'ac4'. tRPC giả trả facetCounts.industry { Technology: 3, Finance: 1 } và ghi lại input của mọi lời gọi companies.list. Ở 'vi': mở bộ lọc có nhãn companyMessages('vi').facets.industry → hai lựa chọn có nhãn BANG_NGANH['Technology'] và BANG_NGANH['Finance'], số đếm 3 và 1; chọn lựa chọn BANG_NGANH['Technology'] → lời gọi list kế tiếp có filters.industry bằng đúng ['Technology']. Lặp ở 'en', chọn 'Technology' → filters.industry ['Technology']; khẳng định hai input lọc bằng nhau (toEqual). Chiều đỏ cùng fixture: không lựa chọn nào ở 'vi' có nhãn 'Technology'."
+    expected: "exit 0; cùng tệp E3, khối 'ac4'. tRPC giả trả facetCounts.industry { Technology: 3, Finance: 1 } và ghi lại input của mọi lời gọi companies.list. Ở 'vi': mở bộ lọc có nhãn companyMessages('vi').facets.industry → hai lựa chọn có nhãn BANG_NGANH['Technology'] và BANG_NGANH['Finance'], số đếm 3 và 1; chọn lựa chọn BANG_NGANH['Technology'] → lời gọi list kế tiếp có trường industry của input bằng đúng ['Technology']. Lặp ở 'en', chọn 'Technology' → industry ['Technology']; khẳng định hai input lọc bằng nhau (toEqual). Chiều đỏ cùng fixture: không lựa chọn nào ở 'vi' có nhãn 'Technology'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/companies/companies-table.tsx", packages/ui/src/components/data-table.tsx, apps/app/lib/ten-nganh.ts, apps/app/test/dich-ten-nganh-bang-bang.dom.tsx]
 

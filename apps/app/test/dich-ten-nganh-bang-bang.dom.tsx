@@ -34,9 +34,15 @@ const { messages } = await import("@crm/ui/lib/messages");
 const { companyMessages } = await import("@/lib/messages/companies");
 const { BANG_NGANH } = await import("@/lib/ten-nganh");
 
+function viet(goc: string): string {
+	const ten = BANG_NGANH[goc];
+	if (!ten) throw new Error(`bang khong co ${goc}`);
+	return ten;
+}
+
 type Locale = "vi" | "en";
 const NGON_NGU: Locale[] = ["vi", "en"];
-const LA = ["Môi giới nhà phố", "Quantum Computing"];
+const LA = ["Môi giới nhà phố", "Quantum Computing"] as const;
 
 const congTyGia = (industry: string | null) => ({
 	id: "co-1",
@@ -155,7 +161,7 @@ async function moBang(
 	);
 	if (dong.length > 0)
 		await cho(
-			() => document.body.textContent?.includes(dong[0].name) === true,
+			() => document.body.textContent?.includes(dong[0]?.name ?? "") === true,
 			"bang cong ty",
 		);
 }
@@ -259,11 +265,16 @@ afterEach(async () => {
 describe("ac2", () => {
 	test("dau ngan tieng Viet hien ten Viet, khong gan nhan tieng Anh", async () => {
 		await moNgan("vi", "Real Estate & PropTech");
-		const ten = BANG_NGANH["Real Estate & PropTech"];
+		const ten = viet("Real Estate & PropTech");
 		const dong = dongPhu();
 		expect(dong.textContent).toContain(ten);
 		expect(dong.textContent).not.toContain("Real Estate & PropTech");
-		expect(coLangEn(phanTuChua(ten, dong))).toBe(false);
+		// Dòng phụ ghép « · » cùng phần tử với tên, nên đọc nhãn ngôn ngữ của mọi phần tử chứa tên.
+		const gocAnh = [...dong.querySelectorAll('[lang="en"]')].filter((e) =>
+			e.textContent?.includes(ten),
+		);
+		expect(gocAnh).toEqual([]);
+		expect(coLangEn(dong)).toBe(false);
 		expect(dong.textContent).toContain("Hà Nội");
 	});
 
@@ -284,9 +295,9 @@ describe("ac3", () => {
 	test("cot Nganh tieng Viet: ten Viet, khong lang=en, ten dai co title", async () => {
 		await moBang("vi", DONG);
 		const oA = oNganhTheo("vi", "Cty A");
-		expect(oA.textContent?.trim()).toBe(BANG_NGANH.Technology);
-		expect(coLangEn(phanTuChua(BANG_NGANH.Technology, oA))).toBe(false);
-		const tenB = BANG_NGANH["Real Estate & PropTech"];
+		expect(oA.textContent?.trim()).toBe(viet("Technology"));
+		expect(coLangEn(phanTuChua(viet("Technology"), oA))).toBe(false);
+		const tenB = viet("Real Estate & PropTech");
 		const oB = oNganhTheo("vi", "Cty B");
 		expect(oB.textContent?.trim()).toBe(tenB);
 		expect(phanTuChua(tenB, oB).getAttribute("title")).toBe(tenB);
@@ -315,11 +326,11 @@ describe("ac4", () => {
 		const nhan = muc.map(nhanMuc);
 		const mong =
 			locale === "vi"
-				? [BANG_NGANH.Finance, BANG_NGANH.Technology]
+				? [viet("Finance"), viet("Technology")]
 				: ["Finance", "Technology"];
 		expect([...nhan].sort()).toEqual([...mong].sort());
-		const tenCongNghe = locale === "vi" ? BANG_NGANH.Technology : "Technology";
-		const tenTaiChinh = locale === "vi" ? BANG_NGANH.Finance : "Finance";
+		const tenCongNghe = locale === "vi" ? viet("Technology") : "Technology";
+		const tenTaiChinh = locale === "vi" ? viet("Finance") : "Finance";
 		const mucCN = muc.find((m) => nhanMuc(m) === tenCongNghe);
 		const mucTC = muc.find((m) => nhanMuc(m) === tenTaiChinh);
 		expect(mucCN && soMuc(mucCN)).toBe("3");
@@ -360,9 +371,7 @@ describe("ac5", () => {
 				expect(coLangEn(phanTuChua(la, o))).toBe(true);
 				ca += 1;
 			}
-			expect(oNganhTheo(locale, "Cty Z").textContent?.trim()).not.toBe(
-				"null",
-			);
+			expect(oNganhTheo(locale, "Cty Z").textContent?.trim()).not.toBe("null");
 			const muc = (await moBoLoc(locale)).map(nhanMuc);
 			for (const la of LA) {
 				expect(muc).toContain(la);
@@ -387,7 +396,7 @@ describe("ac5", () => {
 			dongGia("t", "Cty T", "Technology"),
 		]);
 		const o = oNganhTheo("vi", "Cty T");
-		expect(o.textContent?.trim()).toBe(BANG_NGANH.Technology);
-		expect(coLangEn(phanTuChua(BANG_NGANH.Technology, o))).toBe(false);
+		expect(o.textContent?.trim()).toBe(viet("Technology"));
+		expect(coLangEn(phanTuChua(viet("Technology"), o))).toBe(false);
 	});
 });

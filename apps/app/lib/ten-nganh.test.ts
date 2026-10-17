@@ -10,12 +10,14 @@ const UNION_NGANH = /\bindustry:\s*((?:\|\s*)?'[^']*'(?:\s*\|\s*'[^']*')+)/g;
 
 function nganhTuKhaiBao(khaiBao: string): string[] {
 	const khoi = new Set(
-		[...khaiBao.matchAll(UNION_NGANH)].map((m) => m[1].replace(/\s+/g, " ")),
+		[...khaiBao.matchAll(UNION_NGANH)].map((m) =>
+			(m[1] ?? "").replace(/\s+/g, " "),
+		),
 	);
 	if (khoi.size !== 1)
 		throw new Error(`khuon thu vien doi: ${khoi.size} union industry`);
-	const [mot] = khoi;
-	return [...mot.matchAll(/'([^']*)'/g)].map((m) => m[1]);
+	const [mot = ""] = khoi;
+	return [...mot.matchAll(/'([^']*)'/g)].map((m) => m[1] ?? "");
 }
 
 function soTapNganh(bang: Record<string, string>, ds: string[]) {
@@ -28,7 +30,8 @@ function soTapNganh(bang: Record<string, string>, ds: string[]) {
 
 function kiemPhuBang(bang: Record<string, string>, ds: string[]) {
 	const { thieu, thua } = soTapNganh(bang, ds);
-	if (thieu.length > 0) throw new Error(`bang nganh thieu: ${thieu.join(", ")}`);
+	if (thieu.length > 0)
+		throw new Error(`bang nganh thieu: ${thieu.join(", ")}`);
 	if (thua.length > 0) throw new Error(`bang nganh thua: ${thua.join(", ")}`);
 }
 
@@ -41,7 +44,9 @@ function loiCua(chay: () => void): string | null {
 	}
 }
 
-const tacNhan = createRequire(join(import.meta.dir, "../../agent/package.json"));
+const tacNhan = createRequire(
+	join(import.meta.dir, "../../agent/package.json"),
+);
 const goc = dirname(tacNhan.resolve("context.dev/package.json"));
 const khaiBao = readFileSync(join(goc, "resources/brand.d.ts"), "utf8");
 const DS = nganhTuKhaiBao(khaiBao);
@@ -71,14 +76,17 @@ describe("phu-bang", () => {
 	});
 
 	test("chieu do: thu vien them nganh moi", () => {
-		expect(soTapNganh(BANG_NGANH, [...DS, "Quantum Computing"]).thieu).toEqual(
-			["Quantum Computing"],
-		);
+		expect(soTapNganh(BANG_NGANH, [...DS, "Quantum Computing"]).thieu).toEqual([
+			"Quantum Computing",
+		]);
 	});
 
 	test("chieu do: bang con khoa thu vien da bo", () => {
 		const banSao = { ...BANG_NGANH, "Old Industry": "Ngành cũ" };
-		expect(soTapNganh(banSao, DS)).toEqual({ thieu: [], thua: ["Old Industry"] });
+		expect(soTapNganh(banSao, DS)).toEqual({
+			thieu: [],
+			thua: ["Old Industry"],
+		});
 		expect(loiCua(() => kiemPhuBang(banSao, DS))).toBe(
 			"bang nganh thua: Old Industry",
 		);
@@ -100,7 +108,7 @@ describe("ten-nganh", () => {
 			for (const locale of ngonNgu) {
 				const mong =
 					locale === "vi"
-						? { ten: BANG_NGANH[nganh], dich: true }
+						? { ten: BANG_NGANH[nganh] ?? "", dich: true }
 						: { ten: nganh, dich: false };
 				expect(tenNganh(nganh, locale)).toEqual(mong);
 				dem += 1;

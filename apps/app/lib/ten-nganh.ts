@@ -37,7 +37,9 @@ export function tenNganh(
 ): TenNganh | null {
 	const goc = industry?.trim();
 	if (!goc) return null;
-	if (locale !== "vi" || !Object.hasOwn(BANG_NGANH, goc))
-		return { ten: goc, dich: false };
-	return { ten: BANG_NGANH[goc], dich: true };
+	const ten =
+		locale === "vi" && Object.hasOwn(BANG_NGANH, goc)
+			? BANG_NGANH[goc]
+			: undefined;
+	return ten ? { ten, dich: true } : { ten: goc, dich: false };
 }

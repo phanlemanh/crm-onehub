@@ -16,6 +16,7 @@ import {
 import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
@@ -38,6 +39,7 @@ import {
 	type CompanyMessages,
 	companyMessages,
 } from "@/lib/messages/companies";
+import { tenNganh } from "@/lib/ten-nganh";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { CompaniesBulkActions } from "./companies-bulk-actions";
@@ -45,7 +47,10 @@ import { companiesSearchParams } from "./companies-search-params";
 
 type CompanyRow = RouterOutputs["companies"]["list"]["rows"][number];
 
-function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
+function columnsFor(
+	m: CompanyMessages,
+	locale: Locale,
+): DataTableColumn<CompanyRow>[] {
 	return [
 		{
 			id: "name",
@@ -87,14 +92,19 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			sortable: true,
 			width: "w-[12%]",
 			hideBelow: "lg",
-			cell: (row) =>
-				row.industry ? (
-					<ForeignText className="truncate" lang="en">
-						{row.industry}
-					</ForeignText>
+			cell: (row) => {
+				const nganh = tenNganh(row.industry, locale);
+				if (!nganh) return <EmptyCellValue />;
+				return nganh.dich ? (
+					<span className="truncate" title={nganh.ten}>
+						{nganh.ten}
+					</span>
 				) : (
-					<EmptyCellValue />
-				),
+					<ForeignText className="truncate" lang="en">
+						{nganh.ten}
+					</ForeignText>
+				);
+			},
 		},
 		{
 			id: "owner",
@@ -236,7 +246,10 @@ export function CompaniesTable() {
 			options: facetValueOptions(
 				facetCounts?.industry,
 				query.filters.industry ?? [],
-			),
+			).map((option) => ({
+				...option,
+				label: tenNganh(option.value, locale)?.ten ?? option.value,
+			})),
 		},
 		{
 			id: "enrichment",
@@ -255,9 +268,9 @@ export function CompaniesTable() {
 	const columns = useMemo(
 		() =>
 			input.archived
-				? [...columnsFor(m), archivedColumn(m), ...fieldColumns]
-				: [...columnsFor(m), ...fieldColumns],
-		[fieldColumns, input.archived, m],
+				? [...columnsFor(m, locale), archivedColumn(m), ...fieldColumns]
+				: [...columnsFor(m, locale), ...fieldColumns],
+		[fieldColumns, input.archived, m, locale],
 	);
 
 	return (
