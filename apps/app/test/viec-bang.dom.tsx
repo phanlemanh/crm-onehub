@@ -563,3 +563,56 @@ describe("kv-man-tra-ve", () => {
 		expect(the_trong("CHUA_LAM", "w")).toBe(false);
 	});
 });
+
+describe("dg-man-dong-phu", () => {
+	const P = { id: "p1", ten: "Triển khai Ngân hàng A" };
+	const dongCo = (id: string, duAn: { id: string; ten: string } | null) => ({
+		...the(id, "CHUA_LAM", ["DANG_LAM"]),
+		batDauNgay: null,
+		duAn,
+	});
+
+	const kiem = (kieu: string) => {
+		const cua = (id: string) =>
+			k().querySelector(
+				kieu === "danh-sach"
+					? `tr[data-viec="${id}"]`
+					: `[data-the-viec="${id}"]`,
+			);
+		const lienKet = cua("v")?.querySelector(`a[data-dong-du-an="${P.id}"]`);
+		if (
+			!lienKet ||
+			!(lienKet.getAttribute("href") ?? "").includes(`phamVi=${P.id}`) ||
+			!(lienKet.textContent ?? "").includes(P.ten)
+		) {
+			throw new Error(`dg: thieu dong du an ${kieu}`);
+		}
+		if (cua("v3")?.querySelector("[data-dong-du-an]")) {
+			throw new Error("dg: dong du an thua");
+		}
+	};
+
+	test("dg-man-dong-phu: Của tôi kiểu Danh sách — việc trong dự án có dòng phụ là liên kết", async () => {
+		traLoi.set("viec.cuaToi", () => ({
+			mo: [dongCo("v", P), dongCo("v3", null)],
+			daXong: [],
+			daHuy: [],
+			soXong: 0,
+			soHuy: 0,
+			demNhom: { "giao-cho-toi": 2, "toi-giao": 0, "dang-theo-doi": 0 },
+		}));
+		await moTrang("");
+		await cho(20);
+		kiem("danh-sach");
+	});
+
+	test("dg-man-dong-phu: Của tôi kiểu Bảng — thẻ việc trong dự án có dòng phụ là liên kết", async () => {
+		traLoi.set("viec.cuaToi", () => CUA_TOI);
+		traLoi.set("viec.bang", () =>
+			bangTu([dongCo("v", P), dongCo("v3", null)] as unknown as The[]),
+		);
+		await moTrang("?xemViec=bang");
+		await cho(20);
+		kiem("bang");
+	});
+});
