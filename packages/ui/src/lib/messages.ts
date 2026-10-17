@@ -280,6 +280,8 @@ const en = {
 		mocNhom: "Milestones",
 		chuaLich: (count: string) => `Not scheduled (${count})`,
 		datNgay: "Set dates",
+		phimDoi: (ten: string, n: string) =>
+			`${ten}: move ${n} days. Enter to save, Esc to cancel.`,
 	},
 	saveBar: {
 		hienDanhSach: "Show the list",
@@ -583,6 +585,8 @@ const vi = {
 		mocNhom: "Mốc",
 		chuaLich: (count: string) => `Chưa có lịch (${count})`,
 		datNgay: "Đặt ngày",
+		phimDoi: (ten: string, n: string) =>
+			`${ten}: dời ${n} ngày. Enter để lưu, Esc để thôi.`,
 	},
 	saveBar: {
 		hienDanhSach: "Xem danh sách",

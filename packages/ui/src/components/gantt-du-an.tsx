@@ -20,7 +20,7 @@ import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { cn } from "@crm/ui/lib/utils";
 import { format, subMilliseconds } from "date-fns";
 import { enUS, vi } from "date-fns/locale";
-import { useMemo, useSyncExternalStore } from "react";
+import { type KeyboardEvent, useMemo, useState, useSyncExternalStore } from "react";
 
 export const GANTT_DU_AN = {
 	muiGio: "Asia/Ho_Chi_Minh",
@@ -78,7 +78,7 @@ export type GanttDuAnProps = {
 };
 
 type DuLieuThanh =
-	| { loai: "viec"; tone: StatusTone }
+	| { loai: "viec"; tone: StatusTone; keoDuoc: boolean }
 	| { loai: "moc"; ten: string; tre: boolean };
 
 function khongDoi(): () => void {
@@ -109,9 +109,16 @@ function useManHep(): boolean {
 
 function thuocTinhThanh(
 	occurrence: GanttOccurrence<DuLieuThanh>,
-): Record<`data-${string}`, string> {
+): Record<`data-${string}`, string | undefined> {
 	const du = occurrence.event.data;
-	if (du?.loai === "viec") return { "data-gantt-bar": "", "data-tone": du.tone };
+	if (du?.loai === "viec") {
+		return {
+			"data-gantt-bar": "",
+			"data-tone": du.tone,
+			"data-viec": occurrence.event.id,
+			"data-keo": du.keoDuoc ? "" : undefined,
+		};
+	}
 	if (du?.loai === "moc") return { "data-gantt-moc": du.ten };
 	return {};
 }
@@ -127,6 +134,11 @@ function ngayCua(date: Date): string {
 		month: "2-digit",
 		day: "2-digit",
 	}).format(date);
+}
+
+function congNgay(ngay: string, n: number): string {
+	const t = new Date(`${ngay}T00:00:00.000Z`).getTime() + n * GANTT_DU_AN.ngayMs;
+	return new Date(t).toISOString().slice(0, 10);
 }
 
 function thuJs(thuIso: number): number {
@@ -270,7 +282,7 @@ function GanttDuAnDaDung({
 				draggable: keoDuoc,
 				resizable: keoDuoc,
 				dependencies: v.phaiCho.filter((id) => coLich.some((c) => c.id === id)),
-				data: { loai: "viec", tone: toneTheoNghia(v.nghia) },
+				data: { loai: "viec", tone: toneTheoNghia(v.nghia), keoDuoc },
 			};
 		});
 		const moi: GanttEvent<DuLieuThanh>[] = moc.map((m) => {
@@ -314,6 +326,38 @@ function GanttDuAnDaDung({
 
 	const chuaLichIds = new Set(chuaLich.map((v) => v.id));
 
+	const [phim, setPhim] = useState<{ id: string; n: number } | null>(null);
+
+	function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+		if (!(e.target instanceof HTMLElement) || !onDoiLich) return;
+		const id = e.target.closest<HTMLElement>("[data-viec][data-keo]")?.dataset.viec;
+		const v = id ? coLich.find((x) => x.id === id) : undefined;
+		if (!id || !v?.batDau || !v.han) return;
+		const n = phim?.id === id ? phim.n : 0;
+		if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+			e.preventDefault();
+			setPhim({ id, n: n + (e.key === "ArrowRight" ? 1 : -1) });
+			return;
+		}
+		if (e.key === "Enter" && n !== 0) {
+			e.preventDefault();
+			setPhim(null);
+			onDoiLich({
+				id,
+				batDau: congNgay(v.batDau, n),
+				han: congNgay(v.han, n),
+				nguon: "phim",
+			});
+			return;
+		}
+		if (e.key === "Escape" && phim) {
+			e.preventDefault();
+			setPhim(null);
+		}
+	}
+
+	const viecPhim = phim ? coLich.find((v) => v.id === phim.id) : undefined;
+
 	const tam = useMemo(() => {
 		const moc_ = [
 			...coLich.flatMap((v) => [dauNgay(v.batDau as string), dauNgay(v.han as string)]),
@@ -324,6 +368,7 @@ function GanttDuAnDaDung({
 	}, [coLich, moc, homNay]);
 
 	return (
+		<div className="flex flex-col gap-2" data-gantt-du-an="" onKeyDown={onKeyDown} role="group">
 		<Gantt<DuLieuThanh>
 			className={className}
 			resources={resources}
@@ -375,5 +420,11 @@ function GanttDuAnDaDung({
 			<GanttNav />
 			<GanttView key={hep ? "hep" : "rong"} />
 		</Gantt>
+		{viecPhim && phim ? (
+			<p aria-live="polite" className="text-muted-foreground text-xs" data-gantt-phim="">
+				{msg.phimDoi(viecPhim.tieuDe, String(phim.n))}
+			</p>
+		) : null}
+		</div>
 	);
 }
