@@ -1,0 +1,35 @@
+{
+  "feature_plain": "PR hay lần đẩy chỉ sửa một tài liệu mà bài kiểm hoặc ứng dụng đọc vào sẽ chạy đủ bài kiểm và bản dựng; tài liệu không ai đọc vẫn đi nhanh như hôm nay.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đọc một danh sách mới «tệp T1 mà mã đọc» trong cấu hình, và tách mỗi tệp tài liệu thành «nhẹ» hay «nặng vì có người đọc»; thiếu danh sách thì báo lỗi chứ không coi là rỗng."},
+    {"id": "AC-2", "p": "Sẽ cho CI chạy đủ job khi PR chỉ sửa tài liệu có người đọc, và ghi lý do «t1-ma-doc» ở tóm tắt bước; PR chỉ sửa tài liệu không ai đọc vẫn nhẹ."},
+    {"id": "AC-3", "p": "Sẽ cho bước kiểm trước khi đẩy chạy đủ năm lệnh khi lần đẩy chạm tài liệu có người đọc, kèm một dòng nói vì sao (theo khuyến nghị Hỏi-2)."},
+    {"id": "AC-5", "p": "Sẽ làm bài kiểm đỏ và gọi tên tệp lẫn bên đọc khi ai đó thêm bài kiểm đọc một tài liệu chưa khai, khi khai thừa, hay khi miễn trừ đã cũ."},
+    {"id": "AC-6", "p": "Sẽ tìm bên đọc theo luật cố định: mã trong apps/ packages/, mã mà chúng gọi tới một bậc, và răng khai trong gate-shape; không đi qua tệp dữ liệu."},
+    {"id": "AC-7", "p": "Sẽ sửa câu giải thích trong gate-shape và CLAUDE.md cho đúng: chỉ lần đẩy toàn tài liệu không ai đọc mới được bỏ bài kiểm."},
+    {"id": "AC-8", "p": "Sẽ giữ xanh các bài kiểm của hai hồ sơ đã ký dùng chung bộ phân loại (giảm phút CI nháp, pre-push bỏ T1)."},
+    {"id": "AC-9", "p": "Sẽ chứng mỗi phép đo mới biết đỏ: phá từng chỗ thật trong bản sao thì đúng phép đo đỏ với tên ca."},
+    {"id": "AC-10", "p": "Sẽ chứng rằng chạy nặng thật sự bắt được lệch: bài kiểm không dùng cache, và sửa lệch bảng màu trong tài liệu thiết kế thì bài kiểm màu trạng thái đỏ."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Chặn mọi tài liệu có người đọc trên cây hiện tại mà chưa nằm trong danh sách — hôm nay danh sách phải đủ, và phải thấy đúng các bên đọc đã biết (tài liệu thiết kế, telemetry, setup, từ điển, trang lộ trình…)."},
+    {"id": "OOS-1", "p": "Sẽ KHÔNG dạy cổng nghiệm thu của kit hiểu danh sách mới — sửa tài liệu vẫn không cần hồ sơ, và không làm bằng chứng cũ hết hạn; việc đó là chip riêng sang kit."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG đổi danh sách T1 hiện có, đường T3, hay các tệp cổng chép từ kit."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG bắt tài liệu được đọc bằng tên ghép lúc chạy hay qua hai bậc gọi trở lên — giới hạn đã khai."},
+    {"id": "OOS-4", "p": "Sẽ KHÔNG quét các công cụ dưới scripts/ mà bài kiểm không chạy."}
+  ],
+  "scope_plain": "Phần cắt khỏi vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Chỗ tệp nằm: trong cây mã, tài liệu docs, tệp .md ở gốc, hồ sơ nghiệm thu, tệp cổng chép từ kit, trang lộ trình — mỗi chỗ có ca ở AC-1."},
+    {"i": 1, "p": "Ai đọc: bài kiểm, ứng dụng lúc chạy, răng chạy trong bài kiểm, mã gọi một bậc, prompt agent, và chỗ chỉ nhắc tên (miễn) — đo bằng bộ quét ở AC-4, AC-6."},
+    {"i": 2, "p": "Đường phân loại: PR sẵn sàng, PR nháp, lần đẩy, cấu hình hỏng — AC-2, AC-3."},
+    {"i": 3, "p": "Giữ danh sách đủ: bên đọc mới, khai thừa, miễn cũ, và giới hạn tên ghép — AC-5."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Việc gộp nguyên khối cây mã vào danh sách nặng là đánh đổi của người, không phải máy — đã thành câu Hỏi-1 kèm số đo 0/465 PR."},
+    {"i": 1, "p": "Các phép đo chỉ đo quyết định, chưa đo bài kiểm có thật sự đỏ — đã thêm AC-10: sửa lệch tài liệu thiết kế thì bài kiểm đỏ, và bài kiểm không dùng cache."},
+    {"i": 2, "p": "Miễn trừ theo tệp sẽ che một bên đọc mới — đã đổi thành miễn theo cặp tệp và bên đọc; bài kiểm của vòng không còn đọc CLAUDE.md."},
+    {"i": 3, "p": "Ca lần đẩy chỉ ghim đầu ra rỗng, lẫn với nhánh lỗi — nay đi qua git push thật và ghim đúng dòng thông báo."},
+    {"i": 4, "p": "Lý do giữ pre-push im lặng không đứng vững — đã thành câu Hỏi-2."}
+  ]
+}

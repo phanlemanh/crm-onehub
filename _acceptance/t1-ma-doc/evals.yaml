@@ -1,0 +1,248 @@
+schema_version: 1
+slug: t1-ma-doc
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tmd_phan_loai
+    paths:
+      - ".github/scripts/phan-loai.mjs"
+      - ".github/scripts/test/phan-loai.test.mjs"
+      - "_acceptance/config.yaml"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+    expected: |
+      node --test .github/scripts/test/phan-loai.test.mjs, cac ca ten bat dau «tachT1» va «docGlobT1».
+      (a) docGlobT1(KHO): phan dau bang dung configList(t1_skip_globs) theo thu tu; phan sau bang dung
+          configList(t1_ma_doc) moi muc mang tien to «!» theo thu tu; tong do dai = tong hai danh sach.
+      (b) docGlobT1 tren kho tam co config chep that bo khoa t1_ma_doc -> nem loi chua «t1_ma_doc rong»;
+          cung kho tam voi khoa t1_ma_doc rong ([]) -> cung loi. Doi chung: config chep nguyen -> khong nem.
+      (c) Ma tran tachT1(docGlobT1(KHO), tep) viet truoc, 12 ca, so ca = 12 (lech -> do «so ca lech»):
+           1 docs/api.md                                   -> t1
+           2 docs/design.md                                -> maDoc
+           3 docs/telemetry.md                             -> maDoc
+           4 CONTEXT.md                                    -> maDoc
+           5 AGENTS.md                                     -> t1
+           6 LO-TRINH.html                                 -> maDoc
+           7 apps/agent/agent/subagents/x/instructions.md  -> maDoc
+           8 packages/ui/README.md                         -> maDoc
+           9 docs/plan/lo-trinh-okr.json                   -> t1
+          10 apps/api/src/a.ts                             -> khong o ca hai
+          11 scripts/pre-merge-check.sh                    -> maDoc
+          12 _acceptance/soan-okr-cung-tro-ly/rang/ma-tran-quyen.md -> maDoc
+          Moi ca assert ca hai tap (tep o dung mot tap, hoac khong tap nao).
+      (d) tepT1(g, tep) deepEqual tachT1(g, tep).t1 tren ca 12 tep cua (c).
+      Chieu do: E8 ca «tepT1-khong-tru».
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tmd_phan_loai
+    paths:
+      - ".github/scripts/phan-loai.mjs"
+      - ".github/scripts/test/phan-loai.test.mjs"
+      - "_acceptance/config.yaml"
+    expected: |
+      node --test .github/scripts/test/phan-loai.test.mjs.
+      (a) quyetDinh ma tran them 4 dong (laT1 + laMaDoc gia, PR san sang):
+          [docs/design.md] -> {nang:true, lyDo:"t1-ma-doc"}; [docs/design.md, docs/a.md] -> t1-ma-doc;
+          [docs/design.md, apps/api/x.ts] -> co-tep-nang; [docs/design.md] khong truyen laMaDoc -> co-tep-nang.
+          PR nhap [docs/design.md] -> {nang:false, lyDo:"nhap"}. Moi ca cu cua MA_TRAN giu nguyen ket qua.
+      (b) CLI tren kho tam (dungKho, commit hop nhat hai cha, config chep that):
+          PR chi sua docs/design.md -> «nang=true» va «ly_do=t1-ma-doc»;
+          PR chi sua docs/api.md -> «nang=false», «ly_do=chi-t1» (doi chung);
+          config bo khoa t1_ma_doc, PR chi docs/api.md -> «nang=true», ly_do bat dau «loi: » va chua «t1_ma_doc».
+      Chieu do: E8 ca «phan-loai-khong-ma-doc».
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tmd_day
+    paths:
+      - ".github/scripts/phan-loai.mjs"
+      - "scripts/pre-push-t1.mjs"
+      - "_acceptance/config.yaml"
+      - "packages/ui/test/t1-ma-doc.spec.ts"
+    expected: |
+      cd packages/ui && bun test ./test/t1-ma-doc.spec.ts -t day. Kho git tam co remote tran «origin», nhanh onehub da
+      day, chep that scripts/pre-push-t1.mjs, .github/scripts/phan-loai.mjs, scripts/pre-merge-check.sh,
+      lib/workspace-record.cjs, .githooks/gate-shape.json, _acceptance/config.yaml. core.hooksPath tro thu muc hook tam
+      co pre-push: `node scripts/pre-push-t1.mjs "$1" >"$RA" 2>"$LOI"; exit 0` — stdin do git push sinh, khong viet tay.
+      Moi ca: nhanh moi mot commit, `git push origin <nhanh>` ma 0, roi doc RA/LOI. Ma tran 6 ca viet truoc, so ca = 6:
+        1 chi docs/design.md -> RA rong; LOI dung dong «pre-push: có tệp T1 mà mã đọc (docs/design.md) — chạy đủ năm bước.»
+        2 chi apps/agent/agent/subagents/x/instructions.md -> RA rong; LOI dung dong voi «(apps/agent/agent/subagents/x/instructions.md)»
+        3 chi LO-TRINH.html -> RA rong; LOI dung dong voi «(LO-TRINH.html)»
+        4 chi docs/api.md -> RA «test build»; LOI dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.» (doi chung)
+        5 docs/api.md + docs/design.md -> RA rong; LOI dung dong voi «(docs/design.md)»
+        6 apps/api/a.ts -> RA rong; LOI rong (AC-1 pre-push-t1 giu nguyen)
+      Moi ca: LOI khong chua «không phân loại được». Doi chung duong o moi ca: git diff goc..local ra dung tep da sua.
+      Byte: phan so .githooks/pre-push voi origin/chore/pre-push-t1 nam o E7a (rang), khong o day.
+      Chieu do: E8 ca «tepT1-khong-tru» lam ca 1 do.
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tmd_quet
+    paths:
+      - ".github/scripts/t1-ma-doc.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/config.yaml"
+      - ".githooks/gate-shape.json"
+      - "apps/**"
+      - "packages/**"
+      - "packages/ui/test/t1-ma-doc.spec.ts"
+    expected: |
+      cd packages/ui && bun test ./test/t1-ma-doc.spec.ts -t quet-that. Goi quetDauVao(GOC_KHO) tren cay that:
+      (a) phan.thieu = [], phan.mienThua = [], phan.globChet = [] (deepEqual mang rong; khac rong -> thong diep liet
+          ke tung dong).
+      (b) doi chung duong — tap dich chua du 7 tep va ben doc ghim:
+          docs/design.md <- {packages/ui/test/status-tone.spec.ts, _acceptance/nen-chat-ai-elements/rang/mau-ban-kinh.mjs}
+          docs/telemetry.md <- packages/telemetry/test/allowlist.spec.ts
+          docs/setup.md <- apps/api/test/okr-mau-chan.spec.ts
+          CONTEXT.md <- apps/api/test/okr-mau-chan.spec.ts
+          docs/environment.md <- apps/agent/test/zalo-qua-webhook.integration.spec.ts
+          LO-TRINH.html <- apps/app/lib/lo-trinh/doc-tep.ts
+          scripts/pre-merge-check.sh <- .github/scripts/phan-loai.mjs
+          (moi cap la «ben doc thuoc tap ben doc cua dich», khong so bang).
+      (c) thoi gian quetDauVao < 5000 ms.
+      Chieu do: E5, E8 ca «go-design-md» va «bo-cau-gate-shape».
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tmd_quet_do
+    paths:
+      - ".github/scripts/t1-ma-doc.mjs"
+      - "packages/ui/test/t1-ma-doc.spec.ts"
+    expected: |
+      cd packages/ui && bun test ./test/t1-ma-doc.spec.ts -t quet-do. Kho git tam, config chep that, cac tep duoc
+      git add. Ca, moi ca mot kho:
+        1 nen: docs/moi.md + apps/x/a.ts KHONG goi doc, chi chuoi "docs/moi.md" -> thieu = [] (khong phai dich)
+        2 cung kho, them apps/x/b.ts goi readFileSync(join(GOC, "docs", "moi.md")) -> dong
+          «thieu-khai docs/moi.md ← apps/x/b.ts» co trong baoCao, ma CLI 1
+        3 config chep sua: go "docs/design.md" khoi t1_ma_doc, kho co docs/design.md va apps/x/c.ts doc no
+          -> «thieu-khai docs/design.md ← apps/x/c.ts»
+        4 MIEN = {"docs/cu.md": {"apps/x/a.ts": "ly do"}} ma khong tep nao nhac docs/cu.md -> «mien-thua docs/cu.md ← apps/x/a.ts»
+        5 config them glob "docs/khong-co/**" vao t1_ma_doc -> «glob-chet docs/khong-co/**»
+        6 doi chung: kho cua ca 2 them "docs/moi.md" vao t1_ma_doc -> thieu = [], ma CLI 0
+       12 mien theo cap: MIEN = {"docs/cu.md": {"apps/x/a.ts": "ly do"}}, apps/x/a.ts doc docs/cu.md -> thieu = [];
+          them apps/x/d.ts doc docs/cu.md -> «thieu-khai docs/cu.md ← apps/x/d.ts», va KHONG co dong cho apps/x/a.ts
+      Chieu do: chinh cac ca 2-5 la chieu do; E8 ca «bo-loc-loi-goi-doc» lam ca 1 do.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tmd_quet_do
+    paths:
+      - ".github/scripts/t1-ma-doc.mjs"
+      - "packages/ui/test/t1-ma-doc.spec.ts"
+    expected: |
+      cd packages/ui && bun test ./test/t1-ma-doc.spec.ts -t quet-do (ca «cau»). Kho git tam:
+        7 scripts/a.mjs doc docs/x.md; apps/y/t.ts goi spawnSync va nhac "scripts/a.mjs" -> docs/x.md la dich,
+          ben doc gom scripts/a.mjs (cau mot bac)
+        8 scripts/b.mjs doc docs/z.md; chi scripts/a.mjs nhac scripts/b.mjs -> docs/z.md KHONG la dich (hai bac)
+        9 apps/y/du-lieu.json chua chuoi "docs/w.md" va readFileSync -> docs/w.md KHONG la dich (JSON khong la nguon)
+       10 .githooks/gate-shape.json khoi rang khai script _acceptance/s/rang/r.mjs doc docs/v.md -> docs/v.md la dich
+       11 apps/y/README.md duoc apps/y/t.ts doc -> KHONG co trong tap dich (da co glob apps/**)
+      Chieu do: E8 ca «bo-cau-gate-shape» lam ca 10 do.
+
+  - id: E7a
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tmd_khai
+    paths:
+      - ".githooks/gate-shape.json"
+      - ".githooks/pre-push"
+      - "scripts/pre-push-t1.mjs"
+      - "CLAUDE.md"
+      - "_acceptance/t1-ma-doc/rang/khai.mjs"
+    expected: |
+      node _acceptance/t1-ma-doc/rang/khai.mjs (rang, KHONG chay trong bun run test). Thieu ref origin/chore/pre-push-t1
+      va thieu ca onehub chua no -> «thuoc hong: thieu ref goc», ma 2 (khong bo qua).
+      (a) gate-shape.json t1Only.vi_sao chua «t1_ma_doc» va «t1_skip_globs», KHONG chua «không đổi mã nào test hay build
+          đọc»; t1Only.skip, classifier, sameRuleAs bang ban goc. Doi chung: chuoi cu co trong ban goc o ref.
+      (b) .githooks/pre-push bang tung byte ban o ref goc.
+      (c) scripts/pre-push-t1.mjs import docGlobT1, tepT1, quyetDinh tu ../.github/scripts/phan-loai.mjs.
+      (d) CLAUDE.md doan «PR mở ở dạng nháp» chua «t1_ma_doc».
+      (e) khong tep nao duoi apps/ packages/ nhac CLAUDE.md kem loi goi doc (bo quet: khong cap CLAUDE.md ← <spec cua vong>).
+      In «dat khai» va ma 0 khi du; moi vi pham mot dong «DO <muc>», ma 1.
+  - id: E7b
+    criterion: AC-7
+    executor: judgment
+    inputs:
+      - ".githooks/gate-shape.json"
+      - "CLAUDE.md"
+      - "docs/superpowers/specs/2026-10-17-t1-ma-doc-design.md"
+    question: |
+      Doc khoi t1Only trong .githooks/gate-shape.json va doan «PR mở ở dạng nháp» trong CLAUDE.md, doi chieu voi
+      muc «Thiết kế» cua design doc. Cau vi_sao va doan CLAUDE.md co noi dung su that khong: lan day/PR duoc bo test
+      va build chi khi moi tep khop t1_skip_globs VA khong tep nao khop t1_ma_doc; t1_ma_doc la tep T1 ma bai kiem,
+      ban dung hay runtime doc; khong con cau nao hua «khong mat chieu do nao» ma khong kem dieu kien do; giu duoc y
+      check-types, lint, lint:slop van chay. Tra PASS neu ca bon y dung, FAIL neu mot y sai hay thieu, neu ro cau sai.
+
+  - id: E8a
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tmd_ho_so_cu
+    paths:
+      - ".github/scripts/phan-loai.mjs"
+      - ".github/scripts/test/phan-loai.test.mjs"
+      - "_acceptance/config.yaml"
+      - ".githooks/gate-shape.json"
+      - "scripts/pre-push-t1.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "_acceptance/pre-push-t1/rang/mot-nguon.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs"
+    expected: |
+      Lenh ghep, dung lai o lenh dau tien do, ma thoat cua no la ma cua eval:
+        node --test .github/scripts/test/phan-loai.test.mjs
+        cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t "phan-loai|mot-nguon"
+        node _acceptance/pre-push-t1/rang/mot-nguon.mjs
+        bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs
+      Ca bon thoat 0. mot-nguon in «dat mot-nguon», «BAT glob-lan-hai», «BAT bo-qua-viet-tay».
+
+  - id: E8
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.tmd_dot_bien
+    paths:
+      - ".github/scripts/phan-loai.mjs"
+      - ".github/scripts/t1-ma-doc.mjs"
+      - ".github/scripts/test/phan-loai.test.mjs"
+      - "scripts/pre-push-t1.mjs"
+      - "packages/ui/test/t1-ma-doc.spec.ts"
+      - "_acceptance/config.yaml"
+      - "_acceptance/t1-ma-doc/rang/dot-bien.mjs"
+    expected: |
+      node _acceptance/t1-ma-doc/rang/dot-bien.mjs. Ban sao cay dung tu `git stash create` (chi muc git rieng qua
+      GIT_INDEX_FILE) + `git archive`, node_modules lien ket; tren ban sao chay luot lanh truoc: ca nam phep do xanh
+      (lanh khong xanh -> «thuoc hong: <ca>», ma 2). Roi moi dot bien mot ban sao rieng, thay mot cho, xac nhan tep da
+      doi (khong doi -> «thuoc hong: <ca> khong cay duoc»), chay dung lenh, doi do VA thong diep ghim:
+        tepT1-khong-tru       : tachT1 bo dieu kien glob «!» -> phan-loai.test do o ca «tachT1 2 docs/design.md»,
+                                VA t1-ma-doc.spec -t day do o ca «day 1 chi docs/design.md»
+        phan-loai-khong-ma-doc: phanLoai thoi truyen laMaDoc  -> phan-loai.test do o ca «CLI: PR chi docs/design.md ra nang t1-ma-doc»
+        go-design-md          : xoa dong "docs/design.md" khoi t1_ma_doc -> t1-ma-doc.spec -t quet-that do, chua «thieu-khai docs/design.md»
+        bo-cau-gate-shape     : bo vong doc gate-shape.json   -> t1-ma-doc.spec -t quet-do do o ca 10
+        bo-loc-loi-goi-doc    : bo kiem loi goi doc            -> t1-ma-doc.spec -t quet-do do o ca 1
+      In «BAT <ca>» moi ca; mot ca khong bat -> ma 1. Ma 0 khi du nam BAT.
+
+  - id: E9
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.tmd_dau_ra_that
+    paths:
+      - "turbo.json"
+      - ".githooks/pre-push"
+      - "docs/design.md"
+      - "packages/ui/test/status-tone.spec.ts"
+      - "packages/ui/src/lib/status-tone.ts"
+      - "_acceptance/t1-ma-doc/rang/dau-ra-that.mjs"
+    expected: |
+      node _acceptance/t1-ma-doc/rang/dau-ra-that.mjs.
+      (a) turbo.json tasks.test.cache === false (doc JSON, khong tim chuoi); .githooks/pre-push co dong
+          «export TURBO_FORCE=true».
+      (b) Ban sao lanh cua docs/design.md + packages/ui (thu muc tam, node_modules lien ket): `bun test
+          ./test/status-tone.spec.ts` trong packages/ui ma 0 (doi chung duong).
+      (c) Cung ban sao, doi `tone` cua dong «hỏng, trễ, bị chặn» tu `error` sang `warning` trong muc «### Màu trạng
+          thái» (xac nhan tep da doi) -> ma khac 0 va dau ra chua «bang mau lech docs/design.md».
+      In «dat dau-ra-that» va ma 0 khi du ba muc; muc nao sai -> «DO <muc>», ma 1; khong dung duoc ban sao -> «thuoc hong», ma 2.
