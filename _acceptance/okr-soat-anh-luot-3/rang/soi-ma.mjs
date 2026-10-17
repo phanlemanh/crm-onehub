@@ -17,7 +17,14 @@ const DAY = dirname(fileURLToPath(import.meta.url));
 const GOC_THAT = join(DAY, "..", "..", "..");
 const GOC = process.env.GOC_KHO ?? GOC_THAT;
 const ts = createRequire(import.meta.url)("typescript");
-const NHANH_GOC = "origin/onehub";
+// F8 neo (ve-sinh-do-san-onehub): tap tep va dong doi cua vong nay rut tu cap gop PR #146 da dua vong len onehub
+// (B = 679432a0f^1, D = 679432a0f), khong tu merge-base(HEAD, onehub) — sau khi vong gop,
+// merge-base chua san vong nay nen diff rong (lop-dem-tep 0 = 0, do sai tren moi nhanh).
+const CAP = Object.freeze({
+	goc: "100847e8a747d474b79bc10adb82a94e06313f82",
+	dinh: "679432a0f013398f717f4d04d3b779d5f3472a3d",
+});
+const NEO = !process.env.OSA_TEP;
 const VUNG_APP = /^apps\/app\/(?!test\/|app\/proto\/).+\.tsx$/;
 
 const OKR_CAI_DAT = "apps/app/app/(app)/[slug]/settings/okr";
@@ -150,17 +157,40 @@ function caDongHo() {
 	);
 }
 
+function kiemCap() {
+	for (const sha of [CAP.goc, CAP.dinh])
+		if (
+			spawnSync("git", ["-C", GOC_THAT, "cat-file", "-e", `${sha}^{commit}`])
+				.status !== 0
+		)
+			khongDo(`khong giai duoc cap gop ${sha}`);
+}
+
+/** Chu cua tep: o D cua cap gop khi neo, khong thi tren cay dang soi (ban sao). */
+function docChu(tep) {
+	if (!NEO) {
+		const duong = join(GOC, tep);
+		return existsSync(duong) ? readFileSync(duong, "utf8") : null;
+	}
+	const r = spawnSync("git", ["-C", GOC_THAT, "show", `${CAP.dinh}:${tep}`], {
+		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
+	});
+	return r.status === 0 ? r.stdout : null;
+}
+
 function tepDiff() {
 	if (process.env.OSA_TEP)
 		return process.env.OSA_TEP.split(",").filter(Boolean);
 	const git = (...doi) =>
 		execFileSync("git", ["-C", GOC_THAT, ...doi], { encoding: "utf8" }).trim();
-	const moc = git("merge-base", "HEAD", NHANH_GOC);
-	return git("diff", "--name-only", moc)
+	kiemCap();
+	// F8 neo (ve-sinh-do-san-onehub): tep cua vong = diff cap gop B..D, ton tai o D.
+	return git("diff", "--name-only", `${CAP.goc}..${CAP.dinh}`)
 		.split("\n")
 		.filter(Boolean)
 		.filter((t) => VUNG_APP.test(t))
-		.filter((t) => existsSync(join(GOC, t)));
+		.filter((t) => docChu(t) !== null);
 }
 
 const HANG = new Map();
@@ -169,10 +199,12 @@ function hangTrongTep(tep) {
 	if (HANG.has(tep)) return HANG.get(tep);
 	const bang = new Map();
 	HANG.set(tep, bang);
-	if (!existsSync(join(GOC, tep))) return bang;
+	// F8 neo (ve-sinh-do-san-onehub): hang doc o cung ban voi tep dang soi (D khi neo).
+	const chu = docChu(tep);
+	if (chu === null) return bang;
 	const sf = ts.createSourceFile(
 		tep,
-		readFileSync(join(GOC, tep), "utf8"),
+		chu,
 		ts.ScriptTarget.Latest,
 		true,
 		ts.ScriptKind.TSX,
@@ -199,7 +231,8 @@ function duongNhap(tep, nguon) {
 			: null;
 	if (goc === null) return null;
 	for (const duoi of [".ts", ".tsx", "/index.ts"])
-		if (existsSync(join(GOC, goc + duoi))) return goc + duoi;
+		// F8 neo (ve-sinh-do-san-onehub): tep nhap tim o cung ban voi tep dang soi (D khi neo).
+		if (docChu(goc + duoi) !== null) return goc + duoi;
 	return null;
 }
 
@@ -245,9 +278,9 @@ function dongDoi(tep) {
 	if (process.env.OSA_TEP) return null;
 	const git = (...doi) =>
 		execFileSync("git", ["-C", GOC_THAT, ...doi], { encoding: "utf8" });
-	const moc = git("merge-base", "HEAD", NHANH_GOC).trim();
+	// F8 neo (ve-sinh-do-san-onehub): dong doi cua vong = diff -U0 cap gop B..D (so dong theo ban D).
 	const dong = new Set();
-	for (const d of git("diff", "-U0", moc, "--", tep).split("\n")) {
+	for (const d of git("diff", "-U0", `${CAP.goc}..${CAP.dinh}`, "--", tep).split("\n")) {
 		const m = d.match(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/);
 		if (!m) continue;
 		const dau = Number(m[1]);
@@ -317,7 +350,10 @@ function caThanhPhan() {
 	const tep = tepDiff();
 	let soTep = 0;
 	for (const t of tep) {
-		const sf = cay(t);
+		// F8 neo (ve-sinh-do-san-onehub): soi ban D cua tep (cung ban voi dong doi cua cap gop).
+		const chu = docChu(t);
+		if (chu === null) khongDo(`khong doc duoc ${t} o ${CAP.dinh}`);
+		const sf = ts.createSourceFile(t, chu, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 		soTep += 1;
 		const ten = new Set();
 		for (const s of sf.statements) {
