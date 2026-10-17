@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5a7743186ec76a68a64df6b1a40d77beee105363
+verified_commit: 90b973202977b9fc4266b1709b9804339c7ec4c2
 human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_6a944dda-fd4, engine feature-loop 2.30.0). E17 Đạt; Ngoài-1, 3, 5, 10–17, 19, 20 ghi Known limits; Ngoài-2, 4, 6, 7, 8, 18 chấp nhận, không sửa (4, 7, 8 đã sửa qua AC-14); Ngoài-9 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -310,3 +310,7 @@ sha: 5bf12dfc1bc2270132ac9e52030191189311a3f3 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-17, do đường cũ cap-nhat-tuan chuyển hướng ở máy chủ (redirects() next.config) — hết console.error script tag; E5 viết lại, E13 đối chứng khi bộ chọn rỗng, E18 thêm 3 ô; gộp onehub f6b0cb479
 run_id: repin-20261017T040420Z-18378
 sha: 5a7743186ec76a68a64df6b1a40d77beee105363 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15, E17 (E17 không khai paths) · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-17, do hoá cũ do #457 (sổ bản mẫu trong paths E14) sau update-branch 21b00434e; E17 khai paths
+run_id: repin-20261017T055756Z-75739
+sha: 90b973202977b9fc4266b1709b9804339c7ec4c2 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15, E17 · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
