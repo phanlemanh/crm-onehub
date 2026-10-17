@@ -1,6 +1,6 @@
 # Lộ trình điều phối 30 ngày đầu — sau vòng một
 
-> **Đã khép 17/10/2026.** Lượt 1–3 đã giao (22/09). Lượt 4 `buoc-co-viec-con` và lượt 5 `so-lua-va-noi-nen-tang` chuyển thành hàng chờ điều kiện DA9, DA10 trong `docs/plan/lo-trinh-viec-du-an.json`. Tệp này giữ làm lịch sử, không cập nhật nữa.
+> **Đã khép 17/10/2026.** Lượt 1–3 đã giao (22/09). Lượt 4 `buoc-co-viec-con` và lượt 5 `so-lua-va-noi-nen-tang` chuyển thành mục chờ điều kiện DA9, DA10 (khoá `chan_troi`) trong `docs/plan/lo-trinh-viec-du-an.json`. Tệp này giữ làm lịch sử, không cập nhật nữa.
 
 Viết 2026-09-22, sau ba lượt rà trên `onehub.center` và một bản quét không gian
 (kiểu Zwicky, preset entity-feature, thước Trello) chạy cùng ngày. Vòng một

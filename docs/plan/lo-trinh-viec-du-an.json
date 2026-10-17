@@ -293,32 +293,6 @@
       ],
       "ghi_chu": "Ngoài-16 của DA3b. Hạt giống docs/plan/2026-10-16-hat-giong-goi-y-lam-moi-the.md (M5).",
       "buoc_ke": "Chờ Cổng Đáng; làn M5 sau DA4 (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
-    },
-    {
-      "ma": "DA9",
-      "slug": "buoc-co-viec-con",
-      "cau_giao": "«Một bước lớn chia được việc con có người và hạn riêng; khai được việc này xong mới mở việc kia»",
-      "hang": "T3",
-      "trang_thai": "để sau",
-      "ten": "Bước có việc con",
-      "ten_ngan": "Việc con của bước",
-      "dung_tren": [
-        "DA3"
-      ],
-      "ghi_chu": "Lượt 4 của lộ trình Điều phối 30 ngày (tệp md đã khép 17/10).",
-      "chay_khi": "Sau lượt 1 chạy ≥ 2 tuần và có bằng chứng bước còn quá to (bước đổi hạn > 1 lần, ghi chú dùng làm danh sách việc con)"
-    },
-    {
-      "ma": "DA10",
-      "slug": "so-lua-va-noi-nen-tang",
-      "cau_giao": "«Bốn bậc onboarding tự đổ vào phễu từ nền tảng OneHub; so được lứa đối tác này với lứa trước»",
-      "hang": "T3",
-      "trang_thai": "để sau",
-      "ten": "So lứa và nối nền tảng",
-      "ten_ngan": "Nối nền tảng",
-      "dung_tren": [],
-      "ghi_chu": "Lượt 5 của lộ trình Điều phối 30 ngày (tệp md đã khép 17/10). Điểm nhận onboarding-ingest.service.ts đã dựng ở vòng một.",
-      "chay_khi": "Đội nền tảng có bên gửi cho điểm nhận; schema lô đưa họ đọc trước"
     }
   ],
   "da_bac": [
@@ -337,6 +311,20 @@
     {
       "ma": "x4",
       "ly_do": "Tự đóng hay xoá việc khi đóng hoặc xoá bản ghi cha: hỏi người dùng thay vì tự làm"
+    }
+  ],
+  "chan_troi": [
+    {
+      "ma": "DA9",
+      "cau_giao": "«Một bước lớn chia được việc con có người và hạn riêng; khai được việc này xong mới mở việc kia»",
+      "ly_do": "Cần bằng chứng từ người dùng (bước bị đổi hạn hơn một lần, ghi chú dùng làm danh sách việc con) — số đo vận hành, chưa có; lượt 4 của lộ trình Điều phối 30 ngày.",
+      "mo_lai_khi": "Lượt 1 chạy ≥ 2 tuần và có bằng chứng bước còn quá to"
+    },
+    {
+      "ma": "DA10",
+      "cau_giao": "«Bốn bậc onboarding tự đổ vào phễu từ nền tảng OneHub; so được lứa đối tác này với lứa trước»",
+      "ly_do": "Phụ thuộc đội nền tảng dựng bên gửi cho điểm nhận onboarding-ingest.service.ts — việc của người ngoài kho; lượt 5 của lộ trình Điều phối 30 ngày.",
+      "mo_lai_khi": "Đội nền tảng có bên gửi; schema lô đã đưa họ đọc"
     }
   ]
 }
