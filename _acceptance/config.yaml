@@ -1930,6 +1930,10 @@ executors:
     ppt_day_nang: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t day-nang"
     ppt_verify: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t verify"
     ppt_khai: "cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t khai"
+    tmd_phan_loai: node --test .github/scripts/test/phan-loai.test.mjs
+    tmd_day: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t day"
+    tmd_quet: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t quet-that"
+    tmd_quet_do: "cd packages/ui && bun test --timeout 120000 ./test/t1-ma-doc.spec.ts -t quet-do"
   script:
     dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
@@ -2985,6 +2989,11 @@ executors:
     ppt_dot_bien: node _acceptance/pre-push-t1/rang/dot-bien.mjs
     ppt_rang_cu: node _acceptance/pre-push-t1/rang/rang-cu.mjs
     ppt_day_that: node _acceptance/pre-push-t1/rang/day-that.mjs
+    tmd_khai: node _acceptance/t1-ma-doc/rang/khai.mjs
+    tmd_ho_so_cu: 'node --test .github/scripts/test/phan-loai.test.mjs && (cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t "phan-loai|mot-nguon") && node _acceptance/pre-push-t1/rang/mot-nguon.mjs'
+    tmd_gpct_phan_loai: bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs
+    tmd_dau_ra_that: node _acceptance/t1-ma-doc/rang/dau-ra-that.mjs
+    tmd_dot_bien: node _acceptance/t1-ma-doc/rang/dot-bien.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
@@ -3055,6 +3064,30 @@ risk_tiers:
     # — PR #216 đã bị cổng chặn hai ngày vì đúng lớp «đổi cấu hình, không hồ sơ».
     - ".github/workflows/ci.yml"
     - "tin-hieu/crm/**"   # tệp tín hiệu lịch chạy kéo về (TH1) — PR hàng chờ chỉ chạm thư mục này
+  # Tệp T1 mà bài kiểm, bản dựng hay runtime đọc (_acceptance/t1-ma-doc). Chỉ CI (.github/scripts/phan-loai.mjs) và
+  # pre-push (scripts/pre-push-t1.mjs) đọc khoá này, qua docGlobT1/tachT1: tệp khớp ở đây là NẶNG dù khớp
+  # t1_skip_globs. Cổng nghiệm thu của kit không đọc nó — sửa các tệp này vẫn không cần hồ sơ. Danh sách giữ đủ
+  # bằng bộ quét .github/scripts/t1-ma-doc.mjs (chạy trong @crm/ui#test): bài kiểm mới đọc một tệp T1 chưa khai
+  # là đỏ. Gỡ hết khoá thì mọi PR và lần đẩy đều nặng, không phải đều nhẹ.
+  t1_ma_doc:
+    - "apps/**"
+    - "packages/**"
+    - "CONTEXT.md"
+    - "LO-TRINH.html"
+    - "docs/design.md"
+    - "docs/environment.md"
+    - "docs/setup.md"
+    - "docs/telemetry.md"
+    - "docs/superpowers/specs/2026-09-30-soan-okr-cung-tro-ly-design.md"
+    - "docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md"
+    - "docs/superpowers/specs/2026-10-01-va-tro-ly-okr-sau-thu-design.md"
+    - "docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md"
+    - "docs/superpowers/specs/2026-10-03-gop-y-dung-cho-design.md"
+    - "_acceptance/soan-okr-cung-tro-ly/rang/ma-tran-quyen.md"
+    - "scripts/pre-merge-check.sh"
+    - "lib/workspace-record.cjs"
+    - "lib/evidence-core.cjs"
+    - "lib/eval-yaml.cjs"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"

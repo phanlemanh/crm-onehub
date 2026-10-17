@@ -73,8 +73,8 @@ evals:
         1 chi docs/design.md -> RA rong; LOI dung dong «pre-push: có tệp T1 mà mã đọc (docs/design.md) — chạy đủ năm bước.»
         2 chi apps/agent/agent/subagents/x/instructions.md -> RA rong; LOI dung dong voi «(apps/agent/agent/subagents/x/instructions.md)»
         3 chi LO-TRINH.html -> RA rong; LOI dung dong voi «(LO-TRINH.html)»
-        4 chi docs/api.md -> RA «test build»; LOI dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.» (doi chung)
-        5 docs/api.md + docs/design.md -> RA rong; LOI dung dong voi «(docs/design.md)»
+        4 chi docs/khong-ai-doc.md -> RA «test build»; LOI dung dong «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.» (doi chung)
+        5 docs/khong-ai-doc.md + docs/design.md -> RA rong; LOI dung dong voi «(docs/design.md)»
         6 apps/api/a.ts -> RA rong; LOI rong (AC-1 pre-push-t1 giu nguyen)
       Moi ca: LOI khong chua «không phân loại được». Doi chung duong o moi ca: git diff goc..local ra dung tep da sua.
       Byte: phan so .githooks/pre-push voi origin/chore/pre-push-t1 nam o E7a (rang), khong o day.
@@ -144,6 +144,8 @@ evals:
         9 apps/y/du-lieu.json chua chuoi "docs/w.md" va readFileSync -> docs/w.md KHONG la dich (JSON khong la nguon)
        10 .githooks/gate-shape.json khoi rang khai script _acceptance/s/rang/r.mjs doc docs/v.md -> docs/v.md la dich
        11 apps/y/README.md duoc apps/y/t.ts doc -> KHONG co trong tap dich (da co glob apps/**)
+       13 scripts/cong.sh khai trong t1_skip_globs, duoc apps/y/t.ts goi spawnSync va nhac ten, tu no doc docs/u.md
+          -> scripts/cong.sh la dich (ben doc apps/y/t.ts), docs/u.md KHONG la dich (tep cau khop T1 khong la nguon)
       Chieu do: E8 ca «bo-cau-gate-shape» lam ca 10 do.
 
   - id: E7a
@@ -192,15 +194,29 @@ evals:
       - "scripts/pre-push-t1.mjs"
       - "packages/ui/test/pre-push-t1.spec.ts"
       - "_acceptance/pre-push-t1/rang/mot-nguon.mjs"
-      - "_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs"
     expected: |
       Lenh ghep, dung lai o lenh dau tien do, ma thoat cua no la ma cua eval:
         node --test .github/scripts/test/phan-loai.test.mjs
         cd packages/ui && bun test --timeout 120000 ./test/pre-push-t1.spec.ts -t "phan-loai|mot-nguon"
         node _acceptance/pre-push-t1/rang/mot-nguon.mjs
-        bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs
-      Ca bon thoat 0. mot-nguon in «dat mot-nguon», «BAT glob-lan-hai», «BAT bo-qua-viet-tay».
+      Ca ba thoat 0. mot-nguon in «dat mot-nguon», «BAT glob-lan-hai», «BAT bo-qua-viet-tay».
+      Rang thu tu cua AC-8 (giam-phut-ci-nhap-t1) o E8b.
 
+  - id: E8b
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tmd_gpct_phan_loai
+    status: not-run
+    paths:
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/config.yaml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs"
+    expected: |
+      bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs thoat 0, moi dong «dat ma-tran …».
+      KHONG CHAY TREN MAY NAY: rang commit ban chep _acceptance/config.yaml vao kho git tam, va hook git-secrets cap he
+      thong cua may (/opt/git-secrets/hooks) chan commit vi config co san hai dong giong khoa (sol_man_that, tl45_man_that)
+      — do san, khong do vong nay; rang la vat cua ho so da ky nen vong nay khong sua no, va khong lach hook bao mat.
+      Chay o may khong co hook do (CI, lan ghim lai giam-phut-ci-nhap-t1). Phan logic cung bo phan loai do E1, E2 va E8a.
   - id: E8
     criterion: AC-9
     executor: script
@@ -214,10 +230,11 @@ evals:
       - "_acceptance/config.yaml"
       - "_acceptance/t1-ma-doc/rang/dot-bien.mjs"
     expected: |
-      node _acceptance/t1-ma-doc/rang/dot-bien.mjs. Ban sao cay dung tu `git stash create` (chi muc git rieng qua
-      GIT_INDEX_FILE) + `git archive`, node_modules lien ket; tren ban sao chay luot lanh truoc: ca nam phep do xanh
-      (lanh khong xanh -> «thuoc hong: <ca>», ma 2). Roi moi dot bien mot ban sao rieng, thay mot cho, xac nhan tep da
-      doi (khong doi -> «thuoc hong: <ca> khong cay duoc»), chay dung lenh, doi do VA thong diep ghim:
+      node _acceptance/t1-ma-doc/rang/dot-bien.mjs. Ban sao cay dung tu chi muc git rieng (GIT_INDEX_FILE, `git add -A`,
+      `write-tree`) + `git archive`, roi `git init` + `git add -A` trong ban sao de bo quet thay du tep moi; tren ban sao
+      chay luot lanh truoc: bon lenh xanh (lanh khong xanh -> «thuoc hong: luot lanh do o <lenh>», ma 2). Roi moi ca thay
+      mot cho trong mot tep, xac nhan tep da doi (khong doi -> «thuoc hong: <ca> khong cay duoc»), chay dung lenh, tra lai
+      nguyen ban va kiem da tra lai (khong -> «thuoc hong», ma 2), doi do VA thong diep ghim:
         tepT1-khong-tru       : tachT1 bo dieu kien glob «!» -> phan-loai.test do o ca «tachT1 2 docs/design.md»,
                                 VA t1-ma-doc.spec -t day do o ca «day 1 chi docs/design.md»
         phan-loai-khong-ma-doc: phanLoai thoi truyen laMaDoc  -> phan-loai.test do o ca «CLI: PR chi docs/design.md ra nang t1-ma-doc»

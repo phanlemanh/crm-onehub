@@ -75,6 +75,10 @@ Luật đọc, tất định:
 1. **Nguồn**: mọi tệp mã (`.ts .tsx .mts .cts .js .jsx .mjs .cjs .sh`) được theo dõi, không khớp T1, dưới `apps/`,
    `packages/` (bỏ `node_modules`); cộng **một bậc cầu**: tệp mã ngoài hai gốc đó mà một nguồn gốc có lời gọi đọc/chạy
    nhắc tên; cộng các script mà khối `rang` của `.githooks/gate-shape.json` khai (chúng chạy trong `@crm/ui#test`).
+   Tệp cầu phải KHÔNG khớp T1: bộ cổng chép từ kit (`scripts/pre-merge-check.sh`, `lib/*.cjs`) là đích, không là nguồn —
+   chúng nhắc tên hàng chục tệp trong chú thích lịch sử (đo 17/10: 22 dương tính giả khi để chúng làm cầu).
+   Bộ quét không tự làm nguồn (nó là thước; bảng miễn của nó nhắc tên tệp như dữ liệu). Fixture của bài kiểm
+   dùng tên tệp không có trong kho, để chính bài kiểm không thành bên đọc giả.
    Cầu chỉ một bậc và chỉ từ mã: đi qua dữ liệu JSON (fixture bản mẫu, `package.json`) cho hàng chục dương tính giả
    (đo 17/10: bản bắc cầu không giới hạn ra `docs/plan/*`, `README.md`, 20 `contract.md`, 22 giây).
 2. **Lời gọi đọc**: tệp nguồn chứa một trong `readFileSync readFile( existsSync Bun.file( createReadStream

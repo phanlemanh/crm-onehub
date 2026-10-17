@@ -241,7 +241,7 @@ function boKhoiT1(chu: string): string {
 function themGlob(chu: string): string {
 	return chu.replace(
 		"  t1_skip_globs:\n",
-		'  t1_skip_globs:\n    - "apps/x/**"\n',
+		'  t1_skip_globs:\n    - "scripts/x/**"\n',
 	);
 }
 
@@ -519,11 +519,11 @@ describe("pre-push-t1", () => {
 	test("mot-nguon (a): them mot glob vao config doi ket qua", () => {
 		const that = dungKho([], {});
 		git(that.goc, "checkout", "-q", "-b", "x");
-		commit(that.goc, ["apps/x/a.ts", "export const x = 1;\n"]);
+		commit(that.goc, ["scripts/x/a.ts", "export const x = 1;\n"]);
 		expect(phanLoai(that, dongMoi(that, "x")).ra).toBe("");
 		const them = dungKho([], { "_acceptance/config.yaml": themGlob });
 		git(them.goc, "checkout", "-q", "-b", "x");
-		commit(them.goc, ["apps/x/a.ts", "export const x = 1;\n"]);
+		commit(them.goc, ["scripts/x/a.ts", "export const x = 1;\n"]);
 		expect(phanLoai(them, dongMoi(them, "x")).ra).toBe(BO);
 	}, 60_000);
 });

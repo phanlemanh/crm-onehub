@@ -57,7 +57,7 @@ Chủ kho ký Cổng Đáng «build» 17/10 (`opportunity.md`).
   tệp nào thì đỏ `glob-chet <glob>`; tệp chỉ được nhắc trong tệp mã KHÔNG có lời gọi đọc thì không phải đích.
 - AC-6: Given luật đọc của bộ quét, When nguồn nằm ngoài `apps/` `packages/`, Then nó là nguồn chỉ khi một tệp mã dưới
   hai gốc đó có lời gọi đọc và nhắc tên nó (một bậc), hoặc nó là `script` của khối `rang` trong
-  `.githooks/gate-shape.json`; tệp JSON không bao giờ là nguồn; tệp T1 dưới `apps/` `packages/` không phải đích (đã có
+  `.githooks/gate-shape.json`; tệp cầu khớp T1 (bộ cổng chép từ kit) là đích chứ không là nguồn; tệp JSON không bao giờ là nguồn; tệp T1 dưới `apps/` `packages/` không phải đích (đã có
   glob `apps/**`, `packages/**`).
 - AC-7: Given `.githooks/gate-shape.json` khối `t1Only` và đoạn «PR mở ở dạng nháp» của `CLAUDE.md` sau vòng này, When
   đọc, Then câu `vi_sao` nói lần đẩy được bỏ `test`/`build` là lần đẩy mà mọi tệp khớp `t1_skip_globs` và không tệp nào
@@ -107,6 +107,10 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
 - Mã dưới `scripts/**` không chạy trong `bun run test`.
 
 ## Notes
+
+- Răng `_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs` (một vế của AC-8) không chạy được trên máy M5: nó commit bản
+  chép `config.yaml` vào kho git tạm và hook git-secrets cấp hệ thống chặn commit (hai dòng giống khoá có sẵn trong
+  config). Eval E8b khai `status: not-run`; vế này chạy ở CI và ở lượt ghim lại `giam-phut-ci-nhap-t1`.
 
 - `t1_ma_doc` không làm PR tài liệu cần hồ sơ: pre-merge-check của kit không đọc khoá này.
 - Ghim lại `giam-phut-ci-nhap-t1` và `pre-push-t1` trong PR này (đổi `phan-loai.mjs`, `gate-shape.json`).

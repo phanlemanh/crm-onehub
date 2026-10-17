@@ -2,13 +2,14 @@ import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { docGlobT1, quyetDinh, tepT1 } from "../.github/scripts/phan-loai.mjs";
+import { docGlobT1, quyetDinh, tachT1, tepT1 } from "../.github/scripts/phan-loai.mjs";
 
 const KHO = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SHA_RONG = /^0+$/;
 const NHU_PR_SAN_SANG = { suKien: "pull_request", nhap: "false" };
 const NHANH_CHINH = "onehub";
 const DUOI = "CI phân loại PR theo cùng luật.";
+const TOI_DA_TEP_MA_DOC = 3;
 
 function git(goc, ...args) {
 	const r = spawnSync("git", args, { cwd: goc, encoding: "utf8" });
@@ -63,9 +64,11 @@ export function docBoQua(goc) {
 export function phanLoaiDay(goc, dongs, remote) {
 	const boQua = docBoQua(goc);
 	const tep = tepDay(goc, dongs, remote);
-	const t1 = tep.length ? tepT1(docGlobT1(goc), tep) : new Set();
-	const kq = quyetDinh({ ...NHU_PR_SAN_SANG, tep, laT1: (t) => t1.has(t) });
-	return { boQua: kq.nang ? [] : boQua, tep, lyDo: kq.lyDo };
+	const globs = tep.length ? docGlobT1(goc) : [];
+	const t1 = tep.length ? tepT1(globs, tep) : new Set();
+	const maDoc = tep.length ? tachT1(globs, tep).maDoc : new Set();
+	const kq = quyetDinh({ ...NHU_PR_SAN_SANG, tep, laT1: (t) => t1.has(t), laMaDoc: (t) => maDoc.has(t) });
+	return { boQua: kq.nang ? [] : boQua, tep, lyDo: kq.lyDo, maDoc: [...maDoc].sort() };
 }
 
 function chay() {
@@ -82,6 +85,10 @@ function chay() {
 		if (kq.boQua.length) {
 			process.stderr.write(`pre-push: chỉ tệp T1 (${kq.tep.length} tệp) — bỏ ${kq.boQua.join(", ")}; ${DUOI}\n`);
 			process.stdout.write(`${kq.boQua.join(" ")}\n`);
+		} else if (kq.lyDo === "t1-ma-doc") {
+			const dau = kq.maDoc.slice(0, TOI_DA_TEP_MA_DOC).join(", ");
+			const con = kq.maDoc.length - TOI_DA_TEP_MA_DOC;
+			process.stderr.write(`pre-push: có tệp T1 mà mã đọc (${dau}${con > 0 ? ` +${con}` : ""}) — chạy đủ năm bước.\n`);
 		}
 	} catch (e) {
 		process.stderr.write(`pre-push: không phân loại được lần đẩy (${String(e.message).replace(/\s+/g, " ").trim()}) — chạy đủ năm bước.\n`);
