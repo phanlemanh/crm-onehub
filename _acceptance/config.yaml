@@ -1923,6 +1923,11 @@ executors:
     mtc_anh_xa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/mau-trang-thai-anh-xa.spec.ts"
     mtc_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/mau-trang-thai-dom.dom.tsx"
     bch_nhan: "cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/status-indicator-xuong-dong.dom.tsx"
+    tlkp_khoi_phuc: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t khoi-phuc:.de.xuat.khoi.phuc.duoc.duyet"'
+    tlkp_luu_tru: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t duyet-luu-tru:.ma.tran.nguoi.viet.truoc"'
+    tlkp_dem: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-dem"'
+    tlkp_tinh: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-tinh"'
+    tlkp_tep: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts"'
   script:
     dcn_mot_cho: node _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs
     kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
