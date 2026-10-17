@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>148 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>135 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>136 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -44,7 +44,6 @@ flowchart TD
 
 ## Đang làm
 
-- Chờ Tác nhân lâu: thẻ «Đang dựng» có thời gian đã trôi, lời hứa thật và dòng quá ngưỡng; Kara báo trong hộp thông báo khi bộ dựng xong, cần trả lời hay hỏng (`cho-tac-nhan-lau`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -66,6 +65,7 @@ flowchart TD
 - Chỉ onehub đẩy được bản chụp lộ trình lên CRM; đường REST khác giữ trần thân 100 KB (`chat-duong-day-ban-chup`)
 - Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc (`chep-viec-can-lam-cu`)
 - Chỉ quản trị và chủ đổi được định nghĩa trường của cả đội — thành viên thường vẫn xem được, nhưng mọi đường đổi đều khoá, cả trên màn lẫn khi gọi thẳng máy chủ (`chi-quan-tri-sua-duoc-truong`)
+- Chờ Tác nhân lâu: thẻ «Đang dựng» có thời gian đã trôi, lời hứa thật và dòng quá ngưỡng; Kara báo trong hộp thông báo khi bộ dựng xong, cần trả lời hay hỏng (`cho-tac-nhan-lau`)
 - Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360 (`chu-man-tieng-viet-khong-tran`)
 - CI của kho chạy test thành ma trận ba ô song song trên ba máy, và ci.yml do OneHub tự giữ thay vì là tệp cấm sửa của hãng (`ci-ma-tran-ba-o`)
 - Của tôi ba phần — KR cần cập nhật tuần này (gửi ngay tại chỗ), đơn vị bạn dẫn, KR bạn phụ trách; bỏ thẻ «Cập nhật tuần», đường cũ chuyển về Của tôi; người không dẫn đơn vị nào không được mời tạo mục tiêu (`cua-toi-ba-phan`)

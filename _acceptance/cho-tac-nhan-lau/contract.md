@@ -5,7 +5,7 @@ slug: cho-tac-nhan-lau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api, agent]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-16-cho-tac-nhan-lau-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-16T06:38:14Z
@@ -68,3 +68,19 @@ thông báo có sẵn nhưng chưa có loại nào cho Tác nhân.
 - Rút ngắn thời gian dựng, đổi model (MH3, MH4 của dãy P6).
 - Màn chạy tác nhân đã triển khai và trần 20 phút của nó.
 - Đổi cách đếm bốn bước của thẻ.
+
+## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-1: Mở cuộc trò chuyện từ thanh bên thì số trên chuông giảm đúng, nhưng trang Thông báo có thể còn hiện dòng đó là chưa đọc tới khoảng nửa phút, cho tới khi tải lại.
+  - Ngoài-2: Đổi nhãn danh sách hội thoại ở thanh bên thì bài đo màn đã ký có thể không bị đánh dấu cũ và đo lệch mà không ai hay.
+  - Ngoài-3: Ngay sau khi mở cuộc trò chuyện từ thanh bên, trang Thông báo và chuông có thể hiện lệch nhau một lúc.
+  - Ngoài-4: Bài đo màn cho ca mở từ thanh bên không phân biệt được chuông tự làm mới với trang bị tải lại.
+  - Ngoài-5: Thẻ «Đang dựng» nằm trong apps/app thay vì packages/ui, nên sửa giao diện chat sau này phải làm ở hai nơi.
+  - Ngoài-6: Đường dẫn /chat/<id> được ghép tay ở cả agent lẫn API; đổi một phía mà quên phía kia thì chuông giữ «chưa đọc» mãi.
+  - Ngoài-7: Bài kiểm hai ngôn ngữ chưa bắt được chữ «Đã» tiếng Việt hiện trên thẻ bản tiếng Anh.
+  - Ngoài-8: Phép đo bước bấm thông báo trên chuông từng có thể báo đạt dù trang không chuyển; thước đã vá ở vòng 4, mục mang sang để ghi lại.
+  - Ngoài-9: Bài kiểm chuông chưa chặn được việc hoán nhầm câu giữa «xong», «cần trả lời» và «hỏng».
+  - Ngoài-10: Mở cuộc trò chuyện từ màn chat làm chuông giảm đúng, nhưng trang Thông báo có thể còn hiện chưa đọc cho tới khi tải lại.
+  - Ngoài-11: Khoảng cách ở đầu và chân thẻ «Đang dựng» được chỉnh riêng thay vì dùng kiểu chung, nên có thể lệch nhẹ so với màn khác.
+  - Ngoài-12: Dòng «quá 3 phút» viết cứng; đổi ngưỡng 200 giây thì câu không khớp con số mới.

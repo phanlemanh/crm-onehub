@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 09fe4bcad3ec78687309419c3c249d7b3dbc9d9c
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-17 — ký Cổng 2 trên S4 vòng 5 (10/10 eval, 7/7 suite PASS; ghim lại ở 09fe4bcad, repin-20261017T030953Z-59292). Ngoài-1 tới Ngoài-12 ghi Known limits; Ngoài-13 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: cho-tac-nhan-lau
