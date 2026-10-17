@@ -5,7 +5,7 @@ slug: dich-ten-nganh-bang-bang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-10-17T12:19:51Z
 design_doc: docs/superpowers/specs/2026-10-17-dich-ten-nganh-bang-bang-design.md
