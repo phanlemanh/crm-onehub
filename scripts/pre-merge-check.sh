@@ -460,16 +460,19 @@ xanh_sach_check() { # <report path>
   # cạnh báo cáo có mục nào CHƯA có dòng sổ gate2 của người → còn cần người. CÙNG hàm
   # mucChuaDinhTuyen mà bản mjs (khong-can-nguoi.mjs) gọi; tệp vắng → vế này im; lib vắng
   # hoặc đọc lỗi → fail-closed như khối section ngay trên.
+  # Hồ sơ dinh-tuyen-theo-ma-muc (S4-r1 t1/t3): truyền thêm run-log.jsonl — CÙNG ba đối số bản mjs truyền, để
+  # dòng sổ ghi trước một lượt chấm được đọc như nhau ở hai bản dựng (tệp vắng → null → đọc như trước vòng).
   if [ "$clean_ok" -eq 1 ] && [ -f "$_cdir/review-findings.md" ]; then
     local _ooc
     _ooc="$(node -e '
-      const {mucChuaDinhTuyen}=require(process.argv[1]);
+      const {mucChuaDinhTuyen,cumCu}=require(process.argv[1]);
       const fs=require("fs");
       const rd=p=>{try{return fs.readFileSync(p,"utf8")}catch{return null}};
-      const m=mucChuaDinhTuyen(rd(process.argv[2]),rd(process.argv[3]));
+      const a=[rd(process.argv[2]),rd(process.argv[3]),rd(process.argv[4])];
+      const m=mucChuaDinhTuyen(a[0],a[1],a[2]);
       if(m.suspect){process.stdout.write("__NGO__");process.exit(0);}
-      process.stdout.write(m.chua.length?m.chua.length+"|"+m.chua.join(", "):"OK:"+m.tong);
-    ' "$ROOT/lib/out-of-contract.cjs" "$_cdir/review-findings.md" "$_cdir/decisions.jsonl" 2>/dev/null || printf '__LOI__')"
+      process.stdout.write(m.chua.length?m.chua.length+"|"+m.chua.join(", ")+cumCu(a[0],a[1],a[2]):"OK:"+m.tong);
+    ' "$ROOT/lib/out-of-contract.cjs" "$_cdir/review-findings.md" "$_cdir/decisions.jsonl" "$_cdir/run-log.jsonl" 2>/dev/null || printf '__LOI__')"
     case "$_ooc" in
       OK:*) CLEAN_OOC_DINH_TUYEN="${_ooc#OK:}" ;;
       __NGO__) clean_ok=0; clean_why="review-findings.md có chữ trong mục «Ngoài hợp đồng» nhưng không đọc ra mục nào (sai khuôn OOC-ITEM-TEMPLATE)" ;;

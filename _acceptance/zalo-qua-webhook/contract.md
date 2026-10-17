@@ -5,7 +5,7 @@ slug: zalo-qua-webhook
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, config, docs]
-status: machine-cleared
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-zalo-qua-webhook-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T01:36:20Z
@@ -100,4 +100,9 @@ nghĩa, cắt còn 11 ô Core (khoảng 20%).
 - Chuyển sang vòng 2 (`noi-zalo-cho-nguoi-moi`): Ngoài-3 (tin lỗi giữa chừng mất
   hẳn vì đã đánh dấu đã thấy mà vẫn trả 200) và Ngoài-4 (trang báo bot sống chỉ dựa
   vào `getMe`).
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: hằng mã HTTP của webhook khai tại chỗ trong `zalo-webhook.ts`, chưa nằm trong `ZALO`.
+  - Ngoài-4: vòng tay `zalo:poll` dùng một mốc giờ cho cả lượt dài nhiều phút, nên hạn mã và cửa sổ chặn tính theo mốc đó; chỉ ảnh hưởng bot thử.
+  - Ngoài-5: vỏ thân webhook và phản hồi `setWebhook` của Zalo giả dựng theo khuôn bên đọc, chưa đối chiếu với tin Zalo thật.
 

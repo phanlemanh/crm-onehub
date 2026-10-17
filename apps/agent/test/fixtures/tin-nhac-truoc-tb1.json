@@ -19,6 +19,11 @@
 		"slack": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\n*Sắp hạn*\n• Vinamilk · Chốt giá trước thứ Sáu, hạn 16/10 — <https://crm.test/onehub?record=plan:kh-mau-1|mở kế hoạch>",
 		"duong": "https://crm.test/onehub?record=plan:kh-mau-1"
 	},
+	"goi-y-ke-hoach": {
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nDeal đã thắng\n1. Công ty mẫu · Deal Hợp đồng mẫu đã thắng — mở kế hoạch 30 ngày? — https://crm.test/onehub?record=deal:deal-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Deal đã thắng*\n• Công ty mẫu · Deal Hợp đồng mẫu đã thắng — mở kế hoạch 30 ngày? — <https://crm.test/onehub?record=deal:deal-mau-1|mở deal>",
+		"duong": "https://crm.test/onehub?record=deal:deal-mau-1"
+	},
 	"ke-hoach-im": {
 		"zalo": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\nKế hoạch im\n1. Hoà Phát · im 8 ngày · Hỏi lại tiến độ với người cầm trịch — https://crm.test/onehub?record=plan:kh-mau-2\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
 		"slack": "Chào Lan, sáng nay có 1 việc 30 ngày đầu cần bạn để ý.\n\n*Kế hoạch im*\n• Hoà Phát · im 8 ngày · Hỏi lại tiến độ với người cầm trịch — <https://crm.test/onehub?record=plan:kh-mau-2|mở kế hoạch>",
@@ -30,9 +35,9 @@
 		"duong": "https://crm.test/onehub?record=plan:kh-mau-3"
 	},
 	"okr-cap-nhat": {
-		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nCập nhật tuần\n1. 2 KR chờ cập nhật tuần này — https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
-		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Cập nhật tuần*\n• 2 KR chờ cập nhật tuần này — <https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac|mở cập nhật tuần>",
-		"duong": "https://crm.test/onehub/okr/cap-nhat-tuan?tu=nhac"
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nCập nhật tuần\n1. 2 KR chờ cập nhật tuần này — https://crm.test/onehub/okr?tu=nhac\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Cập nhật tuần*\n• 2 KR chờ cập nhật tuần này — <https://crm.test/onehub/okr?tu=nhac|mở cập nhật tuần>",
+		"duong": "https://crm.test/onehub/okr?tu=nhac"
 	},
 	"okr-cho-duyet": {
 		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nChờ bạn duyệt\n1. Lan gửi duyệt mục tiêu «Mở rộng miền Trung» — https://crm.test/onehub/okr?record=objective:ob-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",

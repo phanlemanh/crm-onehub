@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Bảng «Tín hiệu đã gửi» bóp cột «Điều đã kể» còn khoảng 80px ở khổ 768–1100px",
+    "muon_lam": "Xem lại các tín hiệu đã gửi trên máy tính bảng hoặc cửa sổ trình duyệt hẹp",
+    "da_xay_ra": "Bảng «Tín hiệu đã gửi» bóp cột «Điều đã kể» còn khoảng 80px ở khổ 768–1100px\nTiêu đề chỉ còn «Tín hiệu thử số 10…», không đọc được. Cột «Màn» chiếm 222px, «Trạng thái» 267px; một đường dẫn màn dài làm cột Màn phình thêm. Ở khổ 1280 thì ổn. Mong: cột «Điều đã kể» được ưu tiên rộng, cột Màn và Trạng thái cắt bớt.",
+    "man": "/tin-hieu"
+  },
+  "luc": "2026-10-13T23:45:57.066Z"
+}

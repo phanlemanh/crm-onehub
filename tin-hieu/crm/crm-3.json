@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Cột «Gửi lúc» luôn ghi giờ kiểu Việt «06:39 14-10», kể cả khi chọn English",
+    "muon_lam": "Xem giờ gửi tín hiệu khi dùng giao diện tiếng Anh",
+    "da_xay_ra": "Cột «Gửi lúc» luôn ghi giờ kiểu Việt «06:39 14-10», kể cả khi chọn English\nTrang tự định dạng giờ thay vì dùng định dạng chung của app. Thêm: tiêu đề cột «Gửi lúc» căn trái nhưng giá trị căn phải.",
+    "man": "/tin-hieu"
+  },
+  "luc": "2026-10-13T23:48:10.524Z"
+}
