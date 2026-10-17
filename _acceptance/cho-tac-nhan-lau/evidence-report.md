@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0d258734285530c1fcdc08f6fbd0640eee97fbdf
+verified_commit: 09fe4bcad3ec78687309419c3c249d7b3dbc9d9c
 human_signoff:
 ---
 
@@ -194,3 +194,7 @@ Round 2: E5 chay lai (run_id hau to -r2), cac round sau mang sang.
 Round 3: E1-E4, E6-E10 chay lai (run_id hau to -r3).
 Round 4: bay lenh suite chay lai tren cay 6f333c474fc9afd4997426bcc1a61ef07010003c va deu xanh; muoi eval mang sang vi delta khong cham paths. Mot phat hien trong hop dong (AC-9, muc medium) nam o review-findings.md.
 Round 5: E4, E5, E8, E9 va bay lenh suite chay lai tren cay 0d258734285530c1fcdc08f6fbd0640eee97fbdf va deu xanh (E9 ghi de 8 anh nhom tren cung 1 anh moi, xem khoi E9); E1, E2, E3, E6, E7, E10 mang sang tu round 3 vi delta khong cham paths. Gio chay round 5 ghi theo ngay; ts chinh xac nam trong run-log.jsonl.
+
+### Re-pin lần 1 — 2026-10-17, do ghim lại ở tip sau gộp onehub 7bf7be206, trước chữ ký Cổng 2
+run_id: repin-20261017T030953Z-59292
+sha: 09fe4bcad3ec78687309419c3c249d7b3dbc9d9c · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
