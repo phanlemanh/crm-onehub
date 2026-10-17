@@ -530,8 +530,14 @@ async function kiemDayGioMay(
 		throw new Error("ban chup mat ngay du kien: so lo trinh lech");
 	tho.lo_trinh.forEach((lt, i) => {
 		const l = ra[i];
-		if (!l || l.moc.length !== lt.moc.length || l.hang.length !== lt.hang.length)
-			throw new Error(`ban chup mat ngay du kien: so moc hay viec lech o lo trinh ${i}`);
+		if (
+			!l ||
+			l.moc.length !== lt.moc.length ||
+			l.hang.length !== lt.hang.length
+		)
+			throw new Error(
+				`ban chup mat ngay du kien: so moc hay viec lech o lo trinh ${i}`,
+			);
 		lt.moc.forEach((x, j) => {
 			const y = l.moc[j];
 			for (const k of ["gio_may", "du_kien", "qua_tai"] as const)
