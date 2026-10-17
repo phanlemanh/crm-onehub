@@ -5,7 +5,7 @@ slug: dau-trang-okr-cho-nut-hoi-kara
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-16
 design_doc: docs/superpowers/specs/2026-10-16-dau-trang-okr-cho-nut-hoi-kara-design.md
@@ -66,3 +66,9 @@ mở lại Cổng Phạm vi 16/10.
 - Hạng T2: chỉ `apps/app` và dòng của chính NM5 trong `_acceptance/config.yaml`.
 - `dau-trang-okr.tsx` là vùng DH1 (M5): gửi `cham-tep` trước commit chạm nó (M5 không phản đối, #375 12:10Z).
 - Hồ sơ đã ký `khung-man-chung` không bị chạm; E12m của nó là thước của vòng này.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-1: Hồ sơ vẫn ghi là được phép sửa hàng nút hành động dù chủ kho đã quyết không sửa. Nếu ai lỡ sửa vùng đó thì bộ kiểm không báo, còn thẻ ký vẫn nhắc một lựa chọn đã bị rút.
+  - Ngoài-2: Phép kiểm các màn Chiến dịch, Onboarding và Tài liệu báo xanh, nhưng chưa từng được chứng minh là biết báo đỏ khi các màn đó lỗi. Nên chữ trong hồ sơ nói chắc hơn thực tế.
+  - Ngoài-3: Thẻ người ký liệt kê tên các màn khác với những màn thực sự được đo. Người ký có thể hiểu sai là màn nào đã được kiểm.
+  - Ngoài-4: Sau khi gộp, phép kiểm này có thể báo đỏ giả mỗi khi có thay đổi ở khu OKR, dù không ai sửa hai bài kiểm kia. Chỉ gây nhiễu cho lần kiểm lại, không làm hỏng tính năng.
+  - Ngoài-5: Phép kiểm "không sửa hai bài kiểm" dựa vào tên commit, nên một thay đổi đi qua commit gộp hoặc commit không mang tên vòng này có thể lọt mà không bị báo.
