@@ -185,8 +185,11 @@
       "trang_thai": "chưa mở",
       "dong": 8,
       "ten": "Lượt 5",
-      "buoc_ke": "Sửa theo góp ý gom được tới lúc mở lượt; không chờ chạy thật xong — thiếu góp ý thì dựng và đo trên bộ câu hỏi mẫu",
-      "du_lieu": "gia"
+      "buoc_ke": "Ký Cổng 2 14/10; #410 về nháp. Khi mở lại: gộp onehub, S4 delta, ký lại. Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới",
+      "du_lieu": "gia",
+      "pr": [
+        410
+      ]
     },
     {
       "ma": "d9",
@@ -258,13 +261,13 @@
       "dung_tren": [
         "l4"
       ],
-      "trang_thai": "đang dựng",
+      "trang_thai": "để sau",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T10:40:00Z"
       },
-      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi; S4 đỏ AC-6, chủ kho chọn D, đang đo bảng bốn model"
+      "buoc_ke": "Chờ MH4 sửa phạm vi. Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
     },
     {
       "ma": "l6",
@@ -278,13 +281,77 @@
       "dung_tren": [
         "l4b"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T23:44:49Z"
       },
-      "buoc_ke": "Đợt r2, dãy P6; mốc chốt ở Cổng Phạm vi"
+      "buoc_ke": "Đã gộp 16/10 (#444)",
+      "pr": [
+        444
+      ]
+    },
+    {
+      "ma": "MH3",
+      "slug": "tac-nhan-glm-5-3-cham",
+      "dong": 15,
+      "ngay": "2026-10-16",
+      "ten": "Tác nhân GLM 5.3 chậm",
+      "ten_ngan": "GLM 5.3 chậm",
+      "cau_giao": "«Biết vì sao Tác nhân trên GLM 5.3 chậm, đo trên bốn biến thể»",
+      "ghi_chu": "Kết luận: mức suy luận mặc định (0/3); reasoning low 3/3; GLM 5.3 Fast 3/3. Dãy P6.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        449
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T05:33:48Z"
+      },
+      "buoc_ke": "Đã gộp 17/10 03:19Z (#449)"
+    },
+    {
+      "ma": "MH4",
+      "slug": "model-theo-vai-do-lai",
+      "dong": 16,
+      "ngay": "2026-10-16",
+      "ten": "Model theo vai đo lại",
+      "ten_ngan": "Model theo vai",
+      "cau_giao": "«Mỗi vai (Tác nhân, Trợ lý kho, judge, soạn) có model kiến nghị, đo lại sau l6»",
+      "ghi_chu": "Sau MH3. Kết quả vào bảng kiến nghị model.",
+      "dung_tren": [
+        "MH3"
+      ],
+      "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T05:33:48Z"
+      },
+      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
+    },
+    {
+      "ma": "l7",
+      "slug": "zalo-cau-thu-hai-lien-ket",
+      "dong": 17,
+      "ngay": "2026-10-16",
+      "ten": "Zalo câu thứ hai",
+      "ten_ngan": "Zalo câu hai",
+      "cau_giao": "«Hỏi Kho qua Zalo từ câu thứ hai trở đi trong ngày, trợ lý kho vẫn trả lời đúng chỉ dẫn»",
+      "ghi_chu": "Ngoài-4 của l6: câu thứ hai dùng lại phiên, session.started không chạy lại → nghe turn.started. T3. Bản nháp hồ sơ: .acceptance-runs/dieu-phoi-r2/dong-dot/l7-nhap/; Hỏi-1, Hỏi-2 chưa trả.",
+      "dung_tren": [
+        "l6"
+      ],
+      "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Dời khi đóng đợt r2 (chủ kho 17/10: «Đóng mốc: theo kế hoạch»); chờ lộ trình và mốc mới"
     }
   ],
   "da_bac": []
