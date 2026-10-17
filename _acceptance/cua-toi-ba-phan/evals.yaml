@@ -95,15 +95,20 @@ evals:
     executor: test
     cmd: config:executors.test.ctbp_chuyen_huong
     paths:
-      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/page.tsx"
+      - "apps/app/next.config.ts"
       - "apps/app/test/okr-chuyen-huong-cap-nhat.spec.ts"
     expected: |
-      Ten ca "ctbp-chuyen-huong". Goi thang ham trang /okr/cap-nhat-tuan voi searchParams cua ma tran viet truoc
-      6 o: {} · {tu:"nhac"} · {tu:"nhac",kyOkr:"k1"} · {kyOkr:"k1",donOkr:"bo-phan:x"} · {la:"1"} ·
-      {donOkr:["a","b"]}. Moi o: ham nem loi chuyen huong cua next/navigation voi dich === "/<slug>/okr" + query
-      dung bang URLSearchParams cua dau vao (giu thu tu, lap gia tri mang); khong o nao dung JSX.
-      DOI CHUNG DUONG: o {} -> "/<slug>/okr".
-      CHIEU DO (ban sao bo query khi chuyen) -> "ctbp-chuyen-huong: dich «/ws/okr», mong «/ws/okr?tu=nhac»".
+      Ten ca "ctbp-chuyen-huong". Duong cu chuyen huong o MAY CHU bang redirects() cua apps/app/next.config.ts (khong
+      dung trang, khong qua React — 17/10: redirect() trong page lam root layout dung lai phia trinh duyet, React bao
+      «Encountered a script tag»). Bai doc luat that tu next.config va tinh dich bang chinh getPathMatch +
+      prepareDestination cua Next (cung tuy chon resolve-routes dung). Ma tran viet truoc 6 o: rong · tu=nhac ·
+      tu=nhac&kyOkr=k1 · kyOkr=k1&donOkr=bp:x · la=1 · donOkr=a&donOkr=b -> dich "/<slug>/okr" + dung query, giu thu
+      tu va gia tri lap; luat la tam thoi (permanent false). Doi chung: /ws/okr/cap-nhat-tuan-x, /ws/okr/cap-nhat-tuan/x,
+      /ws/okr, /ws/okr/theo-don-vi khong bi luat nao bat.
+      DOI CHUNG DUONG: o rong -> "/ws/okr".
+      CHIEU DO (dich-sai: ban sao dich sang /theo-don-vi) -> "ctbp-chuyen-huong: dich «/ws/okr/theo-don-vi», mong «/ws/okr»".
+      CHIEU DO (bat-nham: ban sao them luat cap-nhat-tuan-:duoi) -> "ctbp-chuyen-huong: bat nham /ws/okr/cap-nhat-tuan-x → /ws/okr".
+      CHIEU DO (vinh-vien: ban sao permanent true) -> "ctbp-chuyen-huong: chuyen huong vinh vien, mong tam thoi (permanent false)".
 
   - id: E6
     criterion: AC-4
@@ -115,7 +120,7 @@ evals:
       - "apps/agent/test/okr-nhac.integration.spec.ts"
     expected: |
       Script _acceptance/cua-toi-ba-phan/rang/lien-ket-cu.mjs: (1) tim LIEN KET toi duong cu trong apps/app va
-      apps/agent (khong tinh docs/, _acceptance/, tep trang chuyen huong va test chuyen huong): chuoi duong dan
+      apps/agent (khong tinh docs/, _acceptance/, luat chuyen huong o apps/app/next.config.ts va test chuyen huong): chuoi duong dan
       "/okr/cap-nhat-tuan" dung trong href, url(...), template URL hoac Link — KHONG tinh dong import (from ".../okr/
       cap-nhat-tuan/...") vi bang cap nhat cu duoc dung lai tu cho cu -> 0 dong; in tung dong neu co. (2) chay ca agent
       "nhac-cap-nhat" cua okr-nhac.integration.spec.ts (khoa executors.test.cnt_nhac_cap_nhat) -> thoat 0, va ca do
@@ -255,6 +260,10 @@ evals:
       «Cập nhật tuần» cung luot) — ho so do chua ky thi chay van chay va in "(chua ky)".
       DOI CHUNG DUONG / CHIEU DO: script tu chay tren ban sao co mot assertion cu (5 the) dat lai trong
       okr-thanh-tab.dom.tsx -> phai in "SAI AC-11" truoc khi chay tren cay that.
+      Bo chon rong (lan nay khong cham tep kiem hay vat nao ma eval ho so da ky KHAC chay — nhanh va sau gop): in
+      «AC-11: khong eval ho so da ky khac chay … — 0 eval bi luot nay cham», doi chung duong va chieu do chay tren cac
+      eval da ky chay thang gop-y-dung-cho.dom.tsx; dong ket «DUNG AC-11: 0 eval ho so da ky khac bi luot nay cham ·
+      doi chung duong N/N». Doi chung khong con eval nao chay -> ma 2 «KHONG DO DUOC».
 
   - id: E14
     criterion: AC-12
@@ -318,6 +327,13 @@ evals:
   - id: E17
     criterion: AC-13
     executor: judgment
+    paths:
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-390.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-dang-cap-nhat-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-390.png
+      - docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md
     inputs:
       - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-1440.png
       - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-390.png
@@ -339,6 +355,7 @@ evals:
     cmd: config:executors.script.ctbp_man
     paths:
       - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/next.config.ts"
       - "apps/api/src/okr/okr-cap-nhat.service.ts"
       - "packages/validation/src/okr-cap-nhat.ts"
       - "_acceptance/cua-toi-ba-phan/rang/man-cua-toi.mjs"
@@ -349,6 +366,10 @@ evals:
       tu) -> +0 · /okr/cap-nhat-tuan?tu=nhac&kyOkr=K -> +1, entry "nhac", duong dan sau chuyen huong la
       /<slug>/okr?kyOkr=K (tu da go sau khi mo). Gui 1 KR o o nhac -> dong do co submittedAt.
       Dong "DUNG AC-3 may chu: 5/5 o".
+      Them 3 o AC-4 goi thang may chu bang fetch redirect manual: /okr/cap-nhat-tuan?kyOkr=K&la=1&donOkr=a&donOkr=b
+      (truong) -> 307, location ket thuc /<slug>/okr?<cung query, cung thu tu>; /okr/cap-nhat-tuan?tu=nhac chua dang nhap
+      -> 307 toi /<slug>/okr?tu=nhac, roi /<slug>/okr chuyen tiep toi /sign-in; doi chung /okr/cap-nhat-tuan-x (truong)
+      khong bi chuyen ve /okr. Moi trang mo bang trinh duyet trong lan khong co console.error (thu vien man-lib dem).
       CHIEU DO (CTBP_PHA=giu-tu cua E4 tren may chu that) -> "SAI AC-3: tai lai sau nhac +1, mong +0".
 
   - id: E19

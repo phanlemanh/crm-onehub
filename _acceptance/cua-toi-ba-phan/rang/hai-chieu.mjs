@@ -282,15 +282,33 @@ const NHOM = {
 		lenh: LENH.spec("./test/okr-chuyen-huong-cap-nhat.spec.ts"),
 		dotBien: [
 			{
-				ten: "bo-query",
+				ten: "dich-sai",
 				thay: [
 					[
-						`${OKR}/cap-nhat-tuan/page.tsx`,
-						"return chuoi ? `/${slug}/okr?${chuoi}` : `/${slug}/okr`;",
-						"return `/${slug}/okr`;",
+						"apps/app/next.config.ts",
+						'destination: "/:slug/okr",',
+						'destination: "/:slug/okr/theo-don-vi",',
 					],
 				],
-				ghim: "ctbp-chuyen-huong: dich «/ws/okr», mong «/ws/okr?tu=nhac»",
+				ghim: "ctbp-chuyen-huong: dich «/ws/okr/theo-don-vi», mong «/ws/okr»",
+			},
+			{
+				ten: "bat-nham",
+				thay: [
+					[
+						"apps/app/next.config.ts",
+						"		return [\n",
+						'		return [\n			{\n				source: "/:slug/okr/cap-nhat-tuan-:duoi",\n				destination: "/:slug/okr",\n				permanent: false,\n			},\n',
+					],
+				],
+				ghim: "ctbp-chuyen-huong: bat nham /ws/okr/cap-nhat-tuan-x → /ws/okr",
+			},
+			{
+				ten: "vinh-vien",
+				thay: [
+					["apps/app/next.config.ts", "permanent: false,", "permanent: true,"],
+				],
+				ghim: "ctbp-chuyen-huong: chuyen huong vinh vien, mong tam thoi (permanent false)",
 			},
 		],
 	},

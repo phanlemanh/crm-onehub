@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * E6 (AC-4): không còn LIÊN KẾT nào trỏ đường cũ `/okr/cap-nhat-tuan` trong apps/app và
- * apps/agent (ngoài trang chuyển hướng và bài kiểm chuyển hướng), và tin nhắc cập nhật
+ * apps/agent (ngoài luật chuyển hướng ở next.config.ts và bài kiểm chuyển hướng), và tin nhắc cập nhật
  * tuần mang `/okr?tu=nhac`.
  *
  * «Liên kết» = chuỗi `/okr/cap-nhat-tuan` KHÔNG theo sau bởi `/` hay chữ — đường mô-đun
@@ -30,7 +30,7 @@ import { fileURLToPath } from "node:url";
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const VIEC = "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx";
 const BO_QUA = [
-	"apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/page.tsx",
+	"apps/app/next.config.ts",
 	"apps/app/test/okr-chuyen-huong-cap-nhat.spec.ts",
 ];
 
