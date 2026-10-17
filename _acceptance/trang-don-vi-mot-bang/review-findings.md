@@ -1,87 +1,61 @@
-# Review findings: trang-don-vi-mot-bang (round 1)
-
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC.
+- **Hình dạng 1 (đo LỜI KHAI thay vì ĐẦU RA): người sửa tự thêm chú thích `// AC-14 …` là đủ để miễn đếm dòng kiểm bị xoá**
+  file: `_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs:340`
+  severity: high
+  AC: AC-14
+  source: measurement
+  detail: Mẫu `KHAI_TAI_CHO = /\/\/ (AC-14 (cach-toi|loi-hua-moi)|F8 neo): \S/` ở dòng 64. Ở dòng 340-342, khối diff nào có một dòng `+` khớp mẫu đó thì mọi dòng xoá trong khối được đưa vào `khaiTaiCho` thay vì `khongKhai`, và chỉ `khongKhai` mới làm đỏ. Chạy trên cây hiện tại: 62 dòng xoá ngoài dấu cũ (soan-okr-trong-khung 26, okr-soat-anh-luot-3 15, dat-okr-trong-crm 10, muc-tieu-va-kr 4, okr-to-chuc-va 3, khung-okr-truoc-r1 2, toan-canh-okr 2) đều thành «trong khoi khai tai cho», kết quả «DUNG AC-14». Trong số đó có những chỗ đổi điều khẳng định thật. okr-to-chuc-va/man-okr.mjs lật `mo === "false"` thành `mo === "true"`. khung-okr-truoc-r1/bon-vai.mjs nới `!d.coNhom` thành `(!d.coNhom || (d.khoa && d.hinh === "nut-khong-quyen"))`, trái với expected đã ký «ba vai kia không có [data-nhom-soan]». E16 expected viết rõ «dem dong xoa khong khop dau cu = 0» và không có ngoại lệ chú thích nào. Lượt 1, phép đo này đỏ với «soan-okr-trong-khung xoa 21 dong ngoai dau cu khong khai», và màu đỏ đó tắt bằng cách thêm chú thích. Trong DOT_BIEN["dvb-ghim-nam"] cũng không có đột biến nào phá vế XOA (chỉ có ghim-cu và muon-cu), nên vế này không có chiều đỏ.
+  Lý do gán AC-14: AC-14 đòi mỗi chỗ sửa trong rang/ chỉ đổi cách tới trạng thái và không bỏ điều khẳng định nào khác; finding chỉ ra các sửa thật đổi điều khẳng định (lật mo === "false" thành "true", nới điều kiện nhóm soạn) mà vẫn được miễn nhờ chú thích.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Thêm khoảng 47 khối chú thích vào mã sản phẩm, trái luật «Never add code comments»**
-  Người dùng thấy gì: Mã của trang có thêm nhiều dòng chú thích trái nếp của kho. Người dùng cuối không thấy gì, chỉ ảnh hưởng người bảo trì về sau.
-  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/bang-don-vi.ts`
+- **Khung chờ tải bảng đơn vị tự vẽ, trùng KhungXuong hinh="bang" của packages/ui, và lệch hình với fallback của chính trang**
+  Người dùng thấy gì: Khi trang đang tải, người dùng có thể thấy hai khung chờ hơi khác hình nối nhau trước khi bảng hiện ra. Chỉ là chênh lệch về vẻ ngoài lúc chờ, không làm sai dữ liệu hay chặn thao tác.
+  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx`
   severity: medium
   Đề xuất: known-limits
-- **Chép chuỗi lớp khung hàng công cụ của DataTable sang apps/app thay vì xuất một thành phần từ packages/ui**
-  Người dùng thấy gì: Khung hàng công cụ của ba cách xem được chép tay nên sau này nếu đổi giao diện bảng thì các trang này có thể lệch nhau. Hiện tại trang vẫn hiển thị đúng.
-  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx`
+- **Bộ đọc nuqs của bảng đơn vị khai riêng trong bang.tsx, không ở okr-search-params.ts nơi mọi bộ đọc OKR đang sống**
+  Người dùng thấy gì: Người dùng không thấy khác biệt nào. Chỉ khiến người sửa sau này phải mở thêm một tệp để đổi mặc định chiều sắp xếp.
+  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/bang.tsx`
+  severity: low
+  Đề xuất: wont-fix
+- **translate="no" bọc luôn nhãn giao diện «Thuộc» trong dòng chân bảng**
+  Người dùng thấy gì: Trình duyệt có thể không tự dịch chữ «Thuộc» ở chân bảng cho người dùng bật dịch tự động. Tên đơn vị vẫn hiện đúng, ảnh hưởng nhỏ.
+  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/chan-bang.tsx`
   severity: low
   Đề xuất: known-limits
-- **Đổi một bộ lọc máy chủ làm cả bảng bị gỡ ra thay bằng khung xương: menu «Lọc» chọn nhiều tự đóng sau mỗi lần tích**
-  Người dùng thấy gì: Khi người dùng tích chọn nhiều ô trong menu «Lọc», mỗi lần tích bảng chuyển sang khung xương và menu tự đóng, nên phải mở lại menu để tích tiếp. Trên điện thoại khối «Lọc» cũng gập lại sau mỗi lựa chọn.
+- **Footer count ignores the quick filter, so it disagrees with the visible rows**
+  Người dùng thấy gì: Khi bật lọc nhanh «Cần bàn» hoặc «Chưa góp vào đâu», bảng có thể chỉ còn vài mục tiêu mà chân bảng vẫn ghi tổng số cũ. Người xem dễ nhầm hai con số không khớp nhau.
   file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx`
   severity: medium
   Đề xuất: new-contract
-- **Ô chọn đơn vị: hai lựa chọn trùng tên (vd. bộ phận «Marketing» và phòng ban «Marketing» bên dưới) không đi được bằng bàn phím**
-  Người dùng thấy gì: Khi hai đơn vị trùng tên, người dùng dùng bàn phím trong ô chọn đơn vị sẽ bị kẹt ở đơn vị đầu và bấm Enter chọn nhầm sang đơn vị khác.
-  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/chon-don-vi.tsx`
-  severity: medium
-  Đề xuất: new-contract
-- **E3 trả pha chu kỳ thất bại thì bị nuốt im lặng, kho đo kẹt vĩnh viễn ở «cham-diem»**
-  Người dùng thấy gì: Nếu bước trả lại trạng thái chu kỳ của bộ kiểm hỏng thì các lần kiểm sau chạy trên dữ liệu sai mà không ai được báo. Người dùng cuối không bị ảnh hưởng.
+- **Restoring the cycle phase in the test DB swallows its error, so a run can say 'dat' while the DB is left in the wrong phase**
+  Người dùng thấy gì: Không ảnh hưởng người dùng sản phẩm. Nếu việc trả lại trạng thái trong DB thử bị lỗi mà không báo, các lần kiểm sau có thể đo sai mà không ai biết.
   file: `_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs`
   severity: low
   Đề xuất: known-limits
-- **ghim-nam coi dòng repin thiếu suites_exit/evals_exit là «xanh»**
-  Người dùng thấy gì: Bộ kiểm ghim lại có thể báo xanh khi bản ghi thiếu số liệu, nên màu xanh đó chưa chắc chứng minh gì. Người dùng cuối không thấy ảnh hưởng.
-  file: `_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs`
-  severity: low
-  Đề xuất: known-limits
-- **E5: dòng CHON có thể là SAI nhưng không mang tiền tố «AC-1», nên dòng chấm vẫn in «DUNG AC-1»**
-  Người dùng thấy gì: Báo cáo của bộ kiểm có thể in cùng lúc dòng «đúng» và dòng «sai» cho một mục, gây khó đọc nhưng kết luận cuối vẫn đúng.
-  file: `_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs`
-  severity: low
-  Đề xuất: wont-fix
-- **Hình dạng 3 (assert «có mặt» thay QUAN HỆ) + 5 (ma trận 8 ô chỉ là một cấu hình): dvb-hang-cong-cu không bao giờ so cách xem đang hiện với xemOkr được yêu cầu**
-  Người dùng thấy gì: Bài kiểm chuyển cách xem có thể vẫn xanh dù trang bỏ qua lựa chọn cách xem và luôn hiện Danh sách. Nếu trang hỏng kiểu đó thì bài kiểm sẽ không báo.
-  file: `apps/app/test/okr-trang-don-vi.dom.tsx`
-  severity: high
-  Đề xuất: known-limits
-- **Hình dạng 4 (assert âm một mình): «0 nút tạo/nhập/soạn trong thân» đo trên fixture đã cấm tạo**
-  Người dùng thấy gì: Bài kiểm nói không có nút tạo trong thân trang, nhưng dữ liệu thử đã cấm tạo từ đầu nên nếu nút tạo bị đưa lại cho người có quyền thì bài kiểm vẫn không phát hiện.
-  file: `apps/app/test/okr-trang-don-vi.dom.tsx`
-  severity: medium
-  Đề xuất: known-limits
-- **Hình dạng 4 (assert âm một mình): đếm 0 trên dấu cũ mà không mã nào còn phát ra**
-  Người dùng thấy gì: Vài bài kiểm đếm các phần tử cũ không còn tồn tại nên luôn xanh, không có giá trị bắt lỗi. Người dùng cuối không thấy ảnh hưởng.
-  file: `apps/app/test/okr-theo-don-vi.dom.tsx`
-  severity: medium
-  Đề xuất: known-limits
-- **Hình dạng 1 (đo lời tự khai thay vì đầu ra): ghim-nam.mjs miễn dòng kiểm bị xoá nếu tác giả thêm chú thích «// AC-14 cach-toi|loi-hua-moi»**
-  Người dùng thấy gì: Bộ kiểm tra việc xoá dòng kiểm có thể bị qua mặt chỉ bằng một dòng chú thích tự khai, nên việc xoá bớt điều khẳng định có thể lọt mà không bị báo.
+- **Hình dạng 3 (assert «có mặt» thay cho QUAN HỆ): «GHIM <slug> xanh» của E16 không chạm phần mã rang/ mà lượt này sửa**
+  Người dùng thấy gì: Báo cáo «mười hồ sơ cũ vẫn xanh» có thể xanh dù phần kiểm đã sửa chưa thật sự chạy lại. Nghĩa là con số này chưa đủ để tin hồ sơ cũ còn đúng với trang mới.
   file: `_acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs`
   severity: high
   Đề xuất: known-limits
-- **Hình dạng 5 (tuyên quét LỚP «dòng kiểm» nhưng chỉ liệt ba từ khoá): ho-so-da-ky.mjs không thấy soCa/phai/kiem hay khoá trong toEqual**
-  Người dùng thấy gì: Bộ kiểm xem có xoá dòng kiểm hay không chỉ nhận ra vài dạng viết, nên một số kiểu xoá điều khẳng định có thể không bị bắt.
+- **Hình dạng 4 (âm tính một mình): khẳng định «không chữ phụ trên thanh» quét vùng không chứa nhóm soạn**
+  Người dùng thấy gì: Một bài kiểm giao diện có thể báo xanh dù chữ phụ không mong muốn xuất hiện cạnh nút soạn. Người dùng sẽ không được báo sớm nếu chữ ấy xuất hiện sai chỗ.
+  file: `apps/app/test/khung-okr-truoc-r1.dom.tsx`
+  severity: high
+  Đề xuất: known-limits
+- **Hình dạng 3 (assert «chuỗi có mặt» thay cho QUAN HỆ): E12/AC-10 chỉ bắt dòng xoá có `it(`/`test(`/`expect(`, không bắt chỗ đổi giá trị kỳ vọng**
+  Người dùng thấy gì: Phép kiểm chỉ canh việc xoá bài kiểm, không canh việc nới kết quả mong đợi trong bài. Một bài có thể bị hạ yêu cầu mà không ai hay.
   file: `_acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs`
   severity: medium
   Đề xuất: known-limits
-- **Hình dạng 6 (đo bản chụp cố định thay vì cây đang kiểm): soi-ma.mjs đọc nội dung tệp tại sha cứng 679432a0f**
-  Người dùng thấy gì: Một bộ kiểm giao diện của hồ sơ khác đọc mã tại một mốc cố định, nên lỗi mới thêm vào sau đó sẽ không làm nó đỏ. Người dùng cuối không thấy ảnh hưởng trực tiếp.
-  file: `_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs`
+- **Hình dạng 1 (đo MÃ NGUỒN thay vì ĐẦU RA): số phần tử kỳ vọng của hàng hành động suy từ `git grep` trên tệp nguồn**
+  Người dùng thấy gì: Nếu nút Hỏi Kara bị gỡ khỏi hàng hành động đầu trang, bài kiểm tự hạ kỳ vọng và vẫn báo xanh. Người dùng có thể mất nút này mà không có cảnh báo nào.
+  file: `apps/app/test/okr-dau-trang-khu.dom.tsx`
   severity: medium
-  Đề xuất: known-limits
-- **Hình dạng 3 (đếm sự có mặt thay QUAN HỆ): toan-canh E5 «đúng một mục trong thứ tự Tab» giờ đếm chính một nút**
-  Người dùng thấy gì: Bài kiểm thứ tự Tab của ô chọn đơn vị giờ chỉ đếm một nút nên luôn xanh, không còn phát hiện được lỗi dùng bàn phím.
-  file: `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs`
-  severity: medium
-  Đề xuất: known-limits
-- **Hình dạng 3 (chuỗi có mặt thay QUAN HỆ cột): dvb-dong-mo (f) kiểm nội dung bằng includes trên cả dòng**
-  Người dùng thấy gì: Bài kiểm dòng mục tiêu chỉ xem các chữ có mặt trong dòng, nên nếu các cột bị đảo thứ tự hoặc dồn vào một ô thì bài kiểm vẫn xanh.
-  file: `apps/app/test/okr-trang-don-vi.dom.tsx`
-  severity: low
   Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

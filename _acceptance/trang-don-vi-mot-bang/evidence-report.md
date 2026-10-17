@@ -2,258 +2,260 @@
 schema_version: 2
 feature_slug: trang-don-vi-mot-bang
 verdict: REJECT
-failed_evals: [E3, E4, E5, E17, E12, E16]
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 31bb992712cfa0c26ae7d95ed750f7560baad30f
+verified_commit: 9cff76c580a66cad4ffb272d54c27efa03fb381e
 human_signoff:
 ---
 
 # Evidence Report: trang-don-vi-mot-bang
 
-Round 1. Có 6 eval máy hỏng (E3, E4, E5, E17, E12, E16), 1 mục judgment (E14) chưa ai chốt, và 1 lệnh suite lint hỏng không gắn eval nào. Không có lệnh nào bị chặn bởi hạ tầng.
+Lý do REJECT (round 2): 17 eval máy đều chạy xong với kết quả đạt và hội đồng đề xuất đạt cho E14, nhưng bước phân loại phạm vi xác nhận một finding TRONG hợp đồng, mức high, gắn AC-14 (phép đo của E16 miễn đếm dòng kiểm bị xoá chỉ nhờ một chú thích `// AC-14 …`). Finding đó nằm trong `review-findings.md`, mục «Trong hợp đồng». Không có eval nào hỏng nên `failed_evals` rỗng. Lệnh hỏng không gắn eval: không có.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
 | E1 | AC-1 | test | PASS |
 | E2 | AC-2 | ui-check | PASS |
-| E3 | AC-4 | script | FAIL |
-| E4 | AC-8 | script | FAIL |
-| E5 | AC-1 | script | FAIL |
+| E3 | AC-4 | script | PASS |
+| E4 | AC-8 | script | PASS |
+| E5 | AC-1 | script | PASS |
 | E6 | AC-3 | test | PASS |
 | E7 | AC-4 | test | PASS |
 | E8 | AC-5 | test | PASS |
 | E9 | AC-6 | test | PASS |
 | E10 | AC-7 | test | PASS |
 | E11 | AC-9 | test | PASS |
-| E12 | AC-10 | script | FAIL |
+| E12 | AC-10 | script | PASS |
 | E13 | AC-11 | script | PASS |
-| E14 | AC-12 | judgment | UNCERTAIN |
+| E14 | AC-12 | judgment | PASS (hội đồng đề xuất, chờ người) |
 | E15 | AC-13 | test | PASS |
-| E16 | AC-14 | script | FAIL |
-| E17 | AC-7 | script | FAIL |
+| E16 | AC-14 | script | PASS |
+| E17 | AC-7 | script | PASS |
 | E18 | AC-3 | test | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-trang-don-vi-mot-bang-E1-r1
+  run_id: minted-trang-don-vi-mot-bang-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_chon_don_vi
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-chon-don-vi: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E2
-  run_id: minted-trang-don-vi-mot-bang-E2-r1
+  run_id: minted-trang-don-vi-mot-bang-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dvb_man
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   screenshot: evidence/E2-step1.png
   observed: |
-    Da mo bang Read ca 8 anh. (1) don-vi-danh-sach-1440: trang Muc tieu, tab «Theo don vi», don vi «Phap che» co 3 muc tieu (tong ket 3 muc tieu · 5 KR). Mot hang duy nhat: o chon don vi, nut «Danh sach/Cay can chinh/Hop tuan», o loc nhanh «Tat ca», va ben phai «Loc», «Sap xep», «Cot (4)» cung o y~234, thang hang. Bang muc tieu truc tiep duoi hang, khong co Card don vi nao tren bang. (2) don-vi-danh-sach-390: cung trang o 390, cac dieu khien xep doc (o chon, Danh sach, Loc) khong bi tran ngang, bang hien 3 muc tieu dang the doc duoc. (3) don-vi-mo-kr-1440: muc tieu dau mo ra, hien 2 dong KR (KR1 100%, KR2 49%), mui ten xoay xuong. (4) don-vi-mo-kr-390: muc dau mo, 2 KR hien (KR1 1,9 ngay/2 ngay 100%, KR2 49,2%/80% 49%). (5) don-vi-chon-1440: o chon mo, go «mien», hien hai dong «Kinh d... Thuoc Khoi Kinh doanh · 2 muc tieu» (ten bi cat). (6) don-vi-chon-390: o chon mo, go «mien», hien «Kinh doanh mien Bac» va «Kinh doanh mien Na…». (7) deals-1440 (doi chung): trang Thoa thuan, dau bang bat dau cung kieu khoang canh phia tren (tieu de y~90 -> thanh cong cu y~175), ban do khoang Thoa thuan = 69px bang don vi 69px. (8) deals-390: trang Thoa thuan o 390 khong tran ngang, bang co cuon/cat cot nhung trang khong tran. Doi chieu Expected: mot hang, khoang canh bang Thoa thuan (lech 0), 0 the don vi, 0 tran -> khop, khong mau thuan.
+    Da mo bang Read tung anh (tat ca dang nhap quan tri, bo OKR mau «Quy 4 · mau», phong ban «Pháp chế» co 3 muc tieu).
+    - don-vi-danh-sach-1440: trang «Mục tiêu», tab «Theo đơn vị». MOT hang cong cu duy nhat: o chon «Pháp chế», cach xem «Danh sách / Cây cân chỉnh / Họp tuần», o loc nhanh «Tất cả 3 / Cần bàn 0 / Chưa góp vào đâu 1», ben phai «Lọc», «Sắp xếp», «Cột (4)» — cung hang ngang. Duoi la MOT bang (3 dong muc tieu, cot Tiến độ/Tình trạng/Phụ trách), chan «Trưởng An Khánh Linh · 3 mục tiêu · 5 KR». Khong co the (card) don vi nao tren bang.
+    - don-vi-mo-kr-1440: dong muc tieu dau mo (mui ten xuong), hien 2 dong KR (KR1, KR2) voi tien do 100% / 49%. Hang cong cu van mot hang.
+    - don-vi-chon-1440: o chon mo dropdown, go «mien» -> hai ket qua «Kinh doanh miền Bắc», «Kinh doanh miền Nam» (Thuộc Khối Kinh doanh · 2 mục tiêu); hang cong cu nguyen ven.
+    - don-vi-danh-sach-390 / mo-kr-390 / chon-390: bo cuc xep doc, cac dieu khien (o chon, cach xem, Lọc) xep cot, bang muc tieu dang the doc; khong thay thanh cuon ngang, khong cat noi dung ngang; KR mo ra 2 dong; dropdown hien hai ket qua «mien» dung.
+    - deals-1440: trang «Thoả thuận» (doi chung): tieu de + mo ta, hang cong cu mot hang (tim kiem, Tất cả 27/Đang mở/Đã chốt, Bảng/Bảng cột, Lọc, Sắp xếp, Cột, Đã lưu trữ), bang day du; khoang tu tieu de toi day thanh cong cu khop voi trang don vi (cung bo do 69px).
+    - deals-390: trang Thoả thuận tren mobile, o tim kiem + Lọc, bang cuon trong khung, khong tran trang.
+    Tat ca khop Expected; khong co anh mau thuan assertion.
   network_observed: n-a (driver)
+  output: |
+    Frames da luu trong _acceptance/trang-don-vi-mot-bang/evidence/: E2-step1.png (don-vi-danh-sach-1440), E2-step2.png (don-vi-danh-sach-390), E2-step3.png (don-vi-mo-kr-1440), E2-step4.png (don-vi-mo-kr-390), E2-step5.png (don-vi-chon-1440), E2-step6.png (don-vi-chon-390), E2-step7.png (deals-1440), E2-step8.png (deals-390).
+    Chieu do (DVB_PHA=the-don-vi) KHONG duoc chay vi steps chi yeu cau chay 1 lan thuong.
+    Network: driver la script (khong doc duoc network) -> n-a (driver); khong ghi E2-network.txt.
 
 - eval: E3
-  run_id: minted-trang-don-vi-mot-bang-E3-r1
-  exit_code: 2
+  run_id: minted-trang-don-vi-mot-bang-E3-r2
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.dvb_man
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
-    Lệnh dùng chung phiên đo với E4, E5, E17: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs", thoát mã 2, nên cả bốn eval của lệnh bị tính hỏng.
-    Đuôi log có dòng của E3: DUNG AC-4: 8/8 o (ma trận 4 cách xem x 2 khổ, lệch 0/0px, nút thân 0).
-    Nguyên nhân hỏng của lệnh nằm ở khối E4 bên dưới.
+    phien-do: xong — mã 0
 
 - eval: E4
-  run_id: minted-trang-don-vi-mot-bang-E4-r1
-  exit_code: 2
+  run_id: minted-trang-don-vi-mot-bang-E4-r2
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.dvb_man
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
-    MAU 390: 18 mau · cay toi da 0 · o chon toi da 1 · dinh o chon lech 0px · vong quay toan trang 0
-    SAI AC-8: khong co [data-slot=skeleton] trong mau dang tai
-    KHONG DO DUOC: khong chup duoc anh dang-tai-390.png luc dang tai
-    phien-do: xong, mã 2
+    phien-do: xong — mã 0
 
 - eval: E5
-  run_id: minted-trang-don-vi-mot-bang-E5-r1
-  exit_code: 2
+  run_id: minted-trang-don-vi-mot-bang-E5-r2
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.dvb_man
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
-    Cùng lệnh chung với E3/E4/E17, thoát mã 2. Đuôi log đã lưu không chứa dòng CHON / SO CHON / DUNG AC-1 của E5, nên không có dòng riêng để chứng minh E5 đạt; eval bị tính hỏng theo lệnh.
-
-- eval: E17
-  run_id: minted-trang-don-vi-mot-bang-E17-r1
-  exit_code: 2
-  baseline: red
-  verifier: config:executors.script.dvb_man
-  verified_at: 2026-10-15T14:06:55Z
-  output: |
-    Cùng lệnh chung với E3/E4/E5, thoát mã 2. Đuôi log đã lưu không chứa dòng SO CON / SO CHAN / DUNG AC-7 của E17, nên không có dòng riêng để chứng minh E17 đạt; eval bị tính hỏng theo lệnh.
+    phien-do: xong — mã 0
 
 - eval: E6
-  run_id: minted-trang-don-vi-mot-bang-E6-r1
+  run_id: minted-trang-don-vi-mot-bang-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_dong_mo
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-dong-mo: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E7
-  run_id: minted-trang-don-vi-mot-bang-E7-r1
+  run_id: minted-trang-don-vi-mot-bang-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_hang_cong_cu
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-hang-cong-cu: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E8
-  run_id: minted-trang-don-vi-mot-bang-E8-r1
+  run_id: minted-trang-don-vi-mot-bang-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_loc_nhanh
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
-    KET LUAN dvb-loc-nhanh: hai chieu dung (1 dot bien, worktree tam)
+    KET LUAN dvb-loc-nhanh: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E9
-  run_id: minted-trang-don-vi-mot-bang-E9-r1
+  run_id: minted-trang-don-vi-mot-bang-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_sap_xep
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-sap-xep: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E10
-  run_id: minted-trang-don-vi-mot-bang-E10-r1
+  run_id: minted-trang-don-vi-mot-bang-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_chan_bang
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-chan-bang: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E11
-  run_id: minted-trang-don-vi-mot-bang-E11-r1
+  run_id: minted-trang-don-vi-mot-bang-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_trang_thai
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-trang-thai: hai chieu dung (1 dot bien, worktree tam)
 
 - eval: E12
-  run_id: minted-trang-don-vi-mot-bang-E12-r1
-  exit_code: 1
+  run_id: minted-trang-don-vi-mot-bang-E12-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dvb_ho_so_da_ky
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
-    Các dòng HO-SO <slug> <E> đều báo mã 0 so với kỳ vọng 0 (124 lệnh, 0 lệch mã).
-    SAI AC-10: 0/124 lenh lech ma ky vong · 34 dong kiem bi xoa ngoai dau cu · 0 skip
-    Chiều quan hệ hỏng: 34 dòng kiểm bị xoá ngoài các dấu cũ đã khai.
+    KET LUAN dvb-ho-so-da-ky: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E13
-  run_id: minted-trang-don-vi-mot-bang-E13-r1
+  run_id: minted-trang-don-vi-mot-bang-E13-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dvb_proto
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-proto: hai chieu dung (1 dot bien, worktree tam)
 
+- eval: E14
+  judged_by: judge-subagent (fresh context)
+  verdict: PASS
+  rationale: Hội đồng ba góc nhìn đều đề xuất đạt; chi tiết từng phiếu ở mục «Judge panel E14» bên dưới. Đây chỉ là đề xuất, người quyết ở Cổng 2.
+  required_evidence:
+    - (judge không nêu bằng-chứng-thiếu)
+  human_override:  # chi nguoi ghi
+
 - eval: E15
-  run_id: minted-trang-don-vi-mot-bang-E15-r1
+  run_id: minted-trang-don-vi-mot-bang-E15-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_giu_xem
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-giu-xem: hai chieu dung (2 dot bien, worktree tam)
 
 - eval: E16
-  run_id: minted-trang-don-vi-mot-bang-E16-r1
-  exit_code: 1
+  run_id: minted-trang-don-vi-mot-bang-E16-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dvb_ghim_nam
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
-    XOA soan-okr-trong-khung: 27 dong xoa ngoai dau cu · 6 trong khoi khai tai cho · 21 khong khai
-    SAI AC-14: soan-okr-trong-khung xoa 21 dong ngoai dau cu khong khai
-    SAI AC-14: dat-okr-trong-crm ghim tren 787b6a34842f17cdf14e6beca7f6aef7b92f6c45 chua co trang moi · khung-okr-truoc-r1 ghim tren deee3ae5c9ebd163627dd9841bc6ad69b903486b chua co trang moi · muc-tieu-va-kr chua co dong repin · okr-to-chuc (còn tiếp, đuôi log bị cắt)
+    KET LUAN dvb-ghim-nam: hai chieu dung (2 dot bien, worktree tam)
+
+- eval: E17
+  run_id: minted-trang-don-vi-mot-bang-E17-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dvb_man
+  verified_at: 2026-10-17T18:44:49Z
+  output: |
+    phien-do: xong — mã 0
 
 - eval: E18
-  run_id: minted-trang-don-vi-mot-bang-E18-r1
+  run_id: minted-trang-don-vi-mot-bang-E18-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dvb_dong_mo_ui
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
   output: |
     KET LUAN dvb-dong-mo-ui: hai chieu dung (1 dot bien, worktree tam)
 
-- eval: E14
-  judged_by: judge-subagent (fresh context), ba lăng kính: domain-correctness, operational-feasibility, spec-alignment
-  verdict: UNCERTAIN
-  votes:
-    - domain-correctness: UNCERTAIN — Ý 1 và 2 đạt. Khung giống Thoả thuận: ô chọn đơn vị ở chỗ ô tìm kiếm (trên trái), một hàng công cụ, bảng, chân bảng. KR1/KR2 nằm ngay dưới mục tiêu cha có chevron mở và vạch trái, kèm "2 KR". Ý 3 không chốt được: ở don-vi-hop-tuan-1440 hàng công cụ thiếu ô "Tất cả" ở giữa và cụm Lọc, Sắp xếp, Cột bên phải mà don-vi-danh-sach-1440 có. Hàng này còn thêm nút "Chấm điểm" và một banner cam. Danh sách input không có contract để biết chỗ thiếu đó là chủ ý hay là lệch.
-    - operational-feasibility: UNCERTAIN — Ý 1 và 2 đạt phần lớn. Ý 3 lệch rõ nhưng các ảnh không nói lệch này là cố ý hay là lỗi, và judge không có văn bản AC-12 để biết «giống» nghĩa là giống đến đâu. Ý 1, khuôn bảng: don-vi-danh-sach-1440 và deals-1440 cùng một khuôn (tiêu đề + mô tả, hàng công cụ một dòng, bảng viền bo tròn có hàng tiêu đề, chân bảng); ô chọn «Pháp chế» (x≈108–395, y≈234) nằm đúng chỗ ô tìm kiếm của Thoả thuận (x≈108–363, y≈176); nhóm Lọc / Sắp xếp / Cột nằm bên phải ở cả hai. Ba chỗ lệch: don-vi không có cột checkbox; thứ tự «Tất cả» và nút chuyển chế độ bị đảo (Thoả thuận là «Tất cả» rồi «Bảng», đơn vị là «Danh sách» rồi «Tất cả»); chân bảng là dòng tóm tắt «3 mục tiêu · 5 KR» chứ không có phân trang. Ý 2, KR là dòng con (don-vi-mo-kr-1440): KR1 và KR2 (y≈388 và y≈433) thụt vào, nằm ngay dưới mục tiêu «Hợp đồng mùa Tết…» (y≈327), có chevron xổ xuống, thanh sáng bên trái, hai dòng KR nền tối hơn; bản 390 tương tự. Ý 3, hàng công cụ Họp tuần (don-vi-hop-tuan-1440): chỉ giống Danh sách ở nửa trái. Ô chọn «Pháp chế» và các nút Danh sách / Cây cân chỉnh / Họp tuần giống nhau, thêm nút «Chấm điểm» (x≈684–770, y≈314). Nhưng ô «Tất cả» và cụm Lọc / Sắp xếp / Cột (4) bên phải biến mất; cả hàng bị đẩy xuống y≈314 vì có biểu ngữ cam «Quý 4 · mẫu đang chấm điểm».
-    - spec-alignment: UNCERTAIN — Ý 1 và 2 đạt. Ý 1: ô chọn "Pháp chế" đứng đúng chỗ ô tìm kiếm của deals (x≈108–395, y≈234), có một hàng công cụ, bảng bo góc và chân bảng; thứ tự lọc "Tất cả" và nút chế độ xem thì lệch so với deals. Ý 2: dòng KR1/KR2 thụt vào ngay dưới hàng mục tiêu đang mở (mũi tên xoay xuống, vạch sáng bên trái). Ý 3: hàng công cụ ở don-vi-hop-tuan-1440 không giống Danh sách, vì thiếu "Tất cả" và cụm Lọc/Sắp xếp/Cột nhưng lại thêm "Chấm điểm". Ảnh này còn là trạng thái rỗng kèm banner, và judge không có AC-12 để biết "giống" nghĩa là cùng khuôn hay cùng bộ nút, nên không chốt PASS hay FAIL được.
-  rationale: Cả ba lăng kính đều UNCERTAIN, cùng một chỗ treo ở ý 3 (hàng công cụ Họp tuần thiếu ô «Tất cả» và cụm Lọc / Sắp xếp / Cột, thêm nút «Chấm điểm» và biểu ngữ cam). Ý 1 và ý 2 đạt. Đề xuất panel là UNCERTAIN; người quyết ở Cổng 2.
-  required_evidence:
-    - Văn bản AC-12 trong contract.md của hồ sơ trang-don-vi-mot-bang, nói rõ hàng công cụ Họp tuần phải giữ đủ ô «Tất cả» và cụm Lọc, Sắp xếp, Cột như Danh sách, hay được bỏ vì không áp dụng cho Họp tuần. Nếu bắt giữ đủ thì kết luận đổi thành FAIL; nếu chỉ đòi cùng khuôn hoặc cho bỏ thì đổi thành PASS.
-    - Một ảnh don-vi-hop-tuan-1440.png (hoặc evidence/don-vi-hop-tuan-co-du-lieu-1440.png) chụp 1440px ở kỳ không đang chấm điểm, không có banner cam và nút «Chấm điểm», có dữ liệu, sinh từ lệnh evidence của hồ sơ. Ảnh hiện có đang ở trạng thái chấm điểm nên không so được trực tiếp với ảnh Danh sách.
-    - Danh sách chi tiết của ô chọn đơn vị ở chân bảng khi trang có bộ lọc đang bật, nếu AC-12 đòi cột checkbox hoặc phân trang như Thoả thuận; hiện don-vi-danh-sach-1440 không có hai thứ này.
-  human_override:  # chi nguoi ghi
+### Judge panel E14 (đề xuất, chờ người; human_override để trống)
+
+Đề xuất tổng: PASS. Ba góc nhìn, mọi phiếu hiển thị đầy đủ:
+
+- domain-correctness: PASS — Ba ý đều đạt trên ảnh 1440 px, và ảnh 390 px khớp ở chỗ đã chụp. (1) Khuôn bảng giống Thoả thuận: ô chọn «Pháp chế» (x 108–396, y≈233) đứng đúng chỗ ô tìm kiếm của deals (x 108–364, y≈175), kế đó là nhóm nút/tab, «Lọc · Sắp xếp · Cột» bên phải, một bảng viền bo, rồi chân bảng («Trưởng … · 3 mục tiêu · 5 KR · Thuộc …» so với «27 thoả thuận · …»). Ở 390 px thì ô chọn, tiếp theo là «Lọc», giống ô tìm kiếm rồi «Lọc» của deals-390. (2) Ở don-vi-mo-kr, mục tiêu đang mở có mũi tên xuống, vạch sáng bên trái và hai dòng KR1/KR2 thụt vào ngay dưới, nằm trước mục tiêu kế tiếp có mũi tên phải, nên đọc ra KR thuộc «Hợp đồng mùa Tết…» mà không cần chữ hướng dẫn; 390 px cũng vậy. (3) Ở don-vi-hop-tuan, hàng công cụ chỉ có ô chọn «Pháp chế» (x 108–396, y 220–248) và ba nút cách xem, cùng tọa độ như Danh sách; tab lọc nhanh, «Lọc», «Sắp xếp», «Cột» không còn, đúng AC-4/AC-12 và ST-dvb-hop-tuan.
+- operational-feasibility: PASS — (1) Cùng khuôn bảng với Thoả thuận: ô chọn «Pháp chế» ở x≈108–396, y≈233, đúng chỗ ô tìm kiếm của deals-1440 (x≈108, y≈176). Cả hai có một hàng công cụ duy nhất (chọn/tìm, cách xem hoặc tab, ô lọc nhanh bên trái, «Lọc», «Sắp xếp», «Cột» bên phải), rồi khung bảng, rồi chân bảng («Trưởng … · 3 mục tiêu · 5 KR · Thuộc …» so với «27 thoả thuận · …»). (2) Ở don-vi-mo-kr, mục tiêu đầu có chevron xoay xuống (x≈139, y≈337) và vạch nhấn bên trái. Hai dòng KR1 và KR2 nằm ngay dưới, thụt vào cùng các cột Tiến độ, Tình trạng, Phụ trách, và dòng mục tiêu kế tiếp bắt đầu sau chúng, nên nhìn là thấy KR thuộc «Hợp đồng mùa Tết…» mà không cần chữ hướng dẫn. (3) Ở don-vi-hop-tuan-1440, ô chọn «Pháp chế» và ba nút cách xem nằm đúng vị trí như ở Danh sách (cùng y≈233, cùng x≈108 và 404/493/602). Hàng công cụ chỉ có hai thứ đó, không có ô lọc nhanh, «Lọc», «Sắp xếp», «Cột», khớp với ST-dvb-hop-tuan.
+- spec-alignment: PASS — Ba ý đều thấy được trong ảnh 1440. (1) Trang đơn vị dùng cùng khuôn với Thoả thuận: ô chọn «Pháp chế» ở chỗ ô tìm kiếm (x108–396), một hàng công cụ gồm cách xem, ô lọc nhanh, Lọc, Sắp xếp, Cột, rồi bảng, rồi chân bảng. (2) Ở don-vi-mo-kr, KR1 và KR2 là dòng thụt vào ngay dưới mục tiêu «Hợp đồng mùa Tết…», dưới mục tiêu có mũi tên chỉ xuống và vạch trắng bên trái; hai mục tiêu còn lại vẫn thu với mũi tên chỉ phải, nên không cần chữ hướng dẫn. (3) Ở don-vi-hop-tuan, ô chọn và cách xem nằm cùng toạ độ như Danh sách (y≈233, ô chọn x108, ba nút ở x404/493/602), và hàng công cụ chỉ có hai thứ đó.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-trang-don-vi-mot-bang-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 1
-  verified_at: 2026-10-15T14:06:55Z
+  run_id: minted-trang-don-vi-mot-bang-SUITE-bunx_turbo_run_lint_force-r2
+  exit_code: 0
+  verified_at: 2026-10-17T18:44:49Z
 
 - cmd: bun run lint:slop
-  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_lint_slop-r1
+  run_id: minted-trang-don-vi-mot-bang-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-15T14:06:55Z
+  verified_at: 2026-10-17T18:44:49Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-trang-don-vi-mot-bang-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-trang-don-vi-mot-bang-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-15T14:06:55Z
-
-Lệnh fail không gắn eval: `bunx turbo run lint --force` hỏng ở app#lint (1 lỗi định dạng ở tệp kiểm và ở app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx, 32 cảnh báo, 20 thông tin); 10/11 tác vụ thành công. Ba lệnh fail còn lại đều gắn eval và đã nằm ở khối eval tương ứng: lệnh man-don-vi.mjs (E3, E4, E5, E17), lệnh ho-so-da-ky.mjs (E12), lệnh ghim-nam.mjs (E16).
+  verified_at: 2026-10-17T18:44:49Z
 
 ## Known limits
 
@@ -261,22 +263,26 @@ Lệnh fail không gắn eval: `bunx turbo run lint --force` hỏng ở app#lint
 
 ## Analyst
 
-none — mọi eval feature đo được baseline đều red trên baseline (có phân biệt).
+none — danh sách eval KHÔNG-PHÂN-BIỆT rỗng (không eval nào xanh trên cả HEAD lẫn baseline). E3, E4, E5, E17 đỏ trên baseline (có phân biệt); các eval máy còn lại không đo được baseline (xem dưới).
+
+Ghi chú về phép đo của E2: chiều đỏ DVB_PHA=the-don-vi không được chạy vì các bước của eval chỉ yêu cầu chạy một lần thường. E2 mang baseline n-a và không nằm trong danh sách lệnh baseline do máy cung cấp, nên máy không nêu lý do riêng cho E2.
+
+Ghi chú về E16: eval đạt, nhưng finding trong hợp đồng AC-14 (xem `review-findings.md`) chỉ ra phép đo của nó miễn đếm dòng kiểm bị xoá chỉ nhờ một chú thích khai tại chỗ, và vế đếm dòng xoá không có đột biến phá nó. Đó là lý do verdict là REJECT dù `failed_evals` rỗng.
 
 ### Baseline khong do
 
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chon-don-vi && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chon-don-vi: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-dong-mo && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-hang-cong-cu && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-hang-cong-cu: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-loc-nhanh && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-loc-nhanh: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-sap-xep && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-sap-xep: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chan-bang && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chan-bang: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-trang-thai && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-trang-thai: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ho-so-da-ky: bo qua baseline: tep _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-proto: bo qua baseline: tep _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-giu-xem && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-giu-xem: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs: bo qua baseline: tep _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
-- cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-mo-rong.spec.tsx && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo-ui: bo qua baseline: tep packages/ui/test/data-table-mo-rong.spec.tsx co o cay dang kiem nhung chua co o merge-base a23e16282a055784886ccbd5eee77fa55f6baf85 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chon-don-vi && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chon-don-vi: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-dong-mo && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-hang-cong-cu && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-hang-cong-cu: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-loc-nhanh && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-loc-nhanh: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-sap-xep && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-sap-xep: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-chan-bang && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-chan-bang: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-trang-thai && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-trang-thai: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ho-so-da-ky: bo qua baseline: tep _acceptance/trang-don-vi-mot-bang/rang/ho-so-da-ky.mjs co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs && cd apps/app && bun test test/proto-catalog.spec.ts && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-proto: bo qua baseline: tep _acceptance/trang-don-vi-mot-bang/rang/proto-don-vi.mjs co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-trang-don-vi.dom.tsx -t dvb-giu-xem && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-giu-xem: bo qua baseline: tep apps/app/test/okr-trang-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- bun _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-ghim-nam: bo qua baseline: tep _acceptance/trang-don-vi-mot-bang/rang/ghim-nam.mjs co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
+- cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-mo-rong.spec.tsx && cd "$(git rev-parse --show-toplevel)" && bun _acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs dvb-dong-mo-ui: bo qua baseline: tep packages/ui/test/data-table-mo-rong.spec.tsx co o cay dang kiem nhung chua co o merge-base 30d982d2297b837f307dece57bffddc7120e8f64 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
@@ -284,4 +290,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E3, E4, E5, E17 failed — lệnh dùng chung man-don-vi.mjs thoát mã 2; chỗ hỏng thấy được là AC-8 (E4: không có [data-slot=skeleton] trong mẫu đang tải 390, và không chụp được dang-tai-390.png); dòng của E3 trong log là DUNG AC-4: 8/8 o, đuôi log không có dòng riêng của E5 và E17. E12 failed — AC-10: 34 dòng kiểm bị xoá ngoài dấu cũ đã khai (0/124 lệnh lệch mã, 0 skip). E16 failed — AC-14: soan-okr-trong-khung xoá 21 dòng ngoài dấu cũ không khai; dat-okr-trong-crm và khung-okr-truoc-r1 còn ghim trên sha trước trang mới, muc-tieu-va-kr chưa có dòng repin. E14 (AC-12) UNCERTAIN, chờ người chốt ở ý 3. Lệnh lint của suite cũng hỏng (app#lint). Returned to implementation.
+Round 1: lịch sử chi tiết của round 1 không có trong dữ liệu round này; finding t7 ghi rằng ở lượt 1 phép đo AC-14 từng đỏ với «soan-okr-trong-khung xoa 21 dong ngoai dau cu khong khai» và màu đỏ đó đã tắt bằng cách thêm chú thích. Returned to implementation.
+Round 2: 17 eval máy đạt, E14 hội đồng đề xuất PASS (chờ người); nhưng 1 finding trong hợp đồng AC-14 (mức high, phép đo E16 miễn đếm dòng kiểm bị xoá nhờ chú thích) được xác nhận. REJECT; chi tiết ở review-findings.md.
