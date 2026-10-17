@@ -1,4 +1,5 @@
 import { laVaiChiOkr, toWorkspaceRole } from "@crm/validation/vai-workspace";
+import { dehydrate } from "@tanstack/react-query";
 import { notFound, unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -6,10 +7,12 @@ import { ApiOriginProvider } from "@/components/api-origin";
 import { AppHeader, AppHeaderFallback } from "@/components/app-header";
 import { AppIconRail, AppIconRailFallback } from "@/components/app-icon-rail";
 import { QuickSwitcher } from "@/components/crm/quick-switcher";
+import { NapSanKhiMoNgan } from "@/components/crm/record-sheet/nap-san-khi-mo-ngan";
 import { RecordSheetHost } from "@/components/crm/record-sheet/record-sheet-host";
 import { MobileNavProvider } from "@/components/mobile-nav";
 import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { API_URL } from "@/lib/env";
+import { chiKhoaNapSan, khoaNapSan, napSan } from "@/lib/ngan-ban-ghi-nap-san";
 import { requireMailboxAccess } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -34,7 +37,7 @@ export default function AppLayout({
 					</div>
 
 					<Suspense fallback={null}>
-						<RecordSheetHost cauNoiOkr={okrBridgeConfigured()} />
+						<NganBanGhi />
 					</Suspense>
 
 					<Suspense fallback={null}>
@@ -96,6 +99,25 @@ async function RailTheoVai() {
 				workspace={workspace ? { viewerRole: workspace.viewerRole } : null}
 			/>
 		</HydrateClient>
+	);
+}
+
+async function NganBanGhi() {
+	await connection();
+	const workspace = await loadWorkspace();
+	const trpc = getServerTrpc();
+	const queryClient = getServerQueryClient();
+	const khoa = khoaNapSan(chiOkr(workspace?.viewerRole));
+	await napSan(khoa, trpc, queryClient);
+
+	return (
+		<NapSanKhiMoNgan
+			state={dehydrate(queryClient, {
+				shouldDehydrateQuery: chiKhoaNapSan(khoa, trpc),
+			})}
+		>
+			<RecordSheetHost cauNoiOkr={okrBridgeConfigured()} />
+		</NapSanKhiMoNgan>
 	);
 }
 
