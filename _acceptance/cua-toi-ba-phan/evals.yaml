@@ -327,6 +327,13 @@ evals:
   - id: E17
     criterion: AC-13
     executor: judgment
+    paths:
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-390.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-dang-cap-nhat-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-1440.png
+      - _acceptance/cua-toi-ba-phan/evidence/cua-toi-thanh-vien-390.png
+      - docs/superpowers/specs/2026-10-15-cua-toi-ba-phan-design.md
     inputs:
       - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-1440.png
       - _acceptance/cua-toi-ba-phan/evidence/cua-toi-truong-390.png
