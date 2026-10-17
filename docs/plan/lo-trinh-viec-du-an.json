@@ -26,7 +26,7 @@
     },
     {
       "ten": "Kế hoạch sinh việc + Gantt mức đủ",
-      "ngay": "2026-10-24",
+      "ngay": "2026-10-19",
       "loai": "phat-hanh",
       "khoa": "m-1024",
       "hang": [
@@ -34,7 +34,8 @@
         "DA3b",
         "DA4"
       ],
-      "nghia": "Kế hoạch tạo từ khuôn có sẵn việc; dự án xem trên Gantt có phụ thuộc và mốc. Chủ kho duyệt mốc 14/10; DA3b vào mốc này khi hàng lên onehub."
+      "nghia": "Kế hoạch tạo từ khuôn có sẵn việc; dự án xem trên Gantt có phụ thuộc và mốc. Chủ kho duyệt mốc 14/10; DA3b vào mốc này khi hàng lên onehub.",
+      "ly_do": "Cắt theo giờ máy: còn DA4 (S3 xong; S4 và Cổng 2 trong ngày 18/10 theo M5) → gộp 19/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     }
   ],
   "hang": [

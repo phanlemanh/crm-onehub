@@ -52,12 +52,13 @@
     },
     {
       "ten": "Sửa một đợt",
-      "ngay": "2026-10-21",
+      "ngay": "2026-10-19",
       "loai": "phat-hanh",
       "hang": [
         "l5"
       ],
-      "nghia": "Góp ý đã gom được sửa trong một lượt"
+      "nghia": "Góp ý đã gom được sửa trong một lượt",
+      "ly_do": "Cắt theo giờ máy: l5 (#410, đã ký 14/10) cần gộp onehub, S4 phần đổi, ký lại — ≈ 7 giờ máy cao ≈ 25 giờ lịch từ 18/10 → 19/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     }
   ],
   "hang": [
