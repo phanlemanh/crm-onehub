@@ -17,3 +17,7 @@ Luật tạm của Điều phối M5 (tới kit 2.32.0): eval đổi định ngh
 ## Nhóm trình duyệt `dvb-man --trinh-duyet` (18:38–18:44Z)
 
 Vật lành E2/E3/E4/E5/E17 mã 0 (E3: hàng công cụ 1440 một hàng với ô lọc dạng nút sau gộp NM2). Đột biến: `the-don-vi` «SAI AC-2: khoang lech 120px» · `cach-xem-trong-loc` «SAI AC-4: danh-sach 390 — cach xem bi giau sau Lọc» · `cay-cu` «SAI AC-8: cay toi da 14 dong luc dang tai» · `chon-khong-doi` «SAI AC-1: URL khong doi sau khi chon» · `khoa-dem-sai` «SAI AC-7: o Kinh doanh miền Bắc hien Chưa đặt OKR, kho do 2» — 5/5 mã 1.
+
+## Trước lượt chấm 3 (sau finding AC-14 của lượt 2)
+
+E16 vế XOA đổi sang đo diff ròng `<merge-base>..cây`; lời khai không tự miễn. Đo tại `8152f8eea`: vật lành mã 0 «DUNG AC-14: 10/10» (trước khi thêm Notes: đỏ 7 cặp «khai loi-hua-moi … thiếu dòng Notes» và 1 dòng chờ trong khối cach-toi — đúng điều finding nêu). Đột biến (worktree tạm), 4/4 mã 1 đúng câu: `ghim-cu` · `muon-cu` · `cach-toi-doi` «SAI AC-14: soan-okr-trong-khung khoi cach-toi doi dieu khang dinh: return (ds?.firstElementChild?.children.length ?? 0) === n;» · `bo-notes` «SAI AC-14: toan-canh-okr khai loi-hua-moi trang-don-vi-mot-bang AC-5 ma hop dong thieu dong Notes».
