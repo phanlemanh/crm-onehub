@@ -5,6 +5,7 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Field,
 	FieldDescription,
+	FieldError,
 	FieldGroup,
 	FieldLabel,
 } from "@crm/ui/components/field";
@@ -30,9 +31,10 @@ import {
 } from "@crm/ui/components/sheet";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
+import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { type ComponentProps, Suspense, useId, useState } from "react";
+import { type ComponentProps, Suspense, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { companyMessages } from "@/lib/messages/companies";
@@ -72,10 +74,13 @@ function CreateCompanyForm() {
 	);
 	const [name, setName] = useState("");
 	const [domain, setDomain] = useState("");
+	const [loiTenMien, setLoiTenMien] = useState<string | null>(null);
+	const oTenMien = useRef<HTMLInputElement>(null);
 	const [ownerId, setOwnerId] = useState(UNASSIGNED);
 
 	const nameId = useId();
 	const domainId = useId();
+	const loiTenMienId = useId();
 
 	const users = useQuery(trpc.users.list.queryOptions());
 
@@ -110,6 +115,12 @@ function CreateCompanyForm() {
 					className="flex-1 overflow-y-auto px-4"
 					onSubmit={(event) => {
 						event.preventDefault();
+						const nenTang = nenTangCuaTenMien(domain);
+						if (nenTang) {
+							setLoiTenMien(m.nenTang(nenTang.ten));
+							oTenMien.current?.focus();
+							return;
+						}
 						create.mutate({
 							name,
 							domain: domain || undefined,
@@ -133,13 +144,22 @@ function CreateCompanyForm() {
 						<Field>
 							<FieldLabel htmlFor={domainId}>{m.create.domain}</FieldLabel>
 							<Input
+								ref={oTenMien}
 								id={domainId}
 								value={domain}
-								onChange={(event) => setDomain(event.target.value)}
+								onChange={(event) => {
+									setDomain(event.target.value);
+									setLoiTenMien(null);
+								}}
 								placeholder={m.create.domainPlaceholder}
 								autoComplete="off"
 								inputMode="url"
+								aria-invalid={loiTenMien ? true : undefined}
+								aria-describedby={loiTenMien ? loiTenMienId : undefined}
 							/>
+							{loiTenMien ? (
+								<FieldError id={loiTenMienId}>{loiTenMien}</FieldError>
+							) : null}
 							<FieldDescription>{m.create.domainHint}</FieldDescription>
 						</Field>
 
