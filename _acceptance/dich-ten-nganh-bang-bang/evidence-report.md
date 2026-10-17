@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: dich-ten-nganh-bang-bang
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: da721a1238d7bacecc3913383b93a6b617eaafef
-human_signoff:
+human_signoff: Manh Phan 2026-10-18
 ---
 
 # Evidence Report: dich-ten-nganh-bang-bang
@@ -136,7 +136,7 @@ human_signoff:
     - (spec-alignment) Dòng 16 của cùng tệp: đổi "Phong cách sống & Sở thích" thành tên không mang nghĩa "sở thích" và không gần "Giải trí", ví dụ "Phong cách sống & Thư giãn". Hoặc chủ kho ghi quyết định giữ nguyên kèm lý do.
     - (spec-alignment) Dòng 20 của cùng tệp: đổi "Bất động sản & PropTech" thành "Bất động sản & Công nghệ bất động sản". Hoặc một mục trong CONTEXT.md xác nhận "PropTech" là chữ nhân viên OneHub vẫn dùng.
     - (spec-alignment) Tuỳ chọn, không bắt buộc cho PASS: dòng 24 "Tư vấn & Dịch vụ doanh nghiệp" bỏ mất nghĩa Agencies. Có thể đổi thành "Tư vấn & Dịch vụ chuyên môn (agency)", hoặc ghi lý do giữ nguyên.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-18 — Đạt
 
 ### Lệnh suite (hồi quy)
 

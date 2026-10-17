@@ -5,7 +5,7 @@ slug: dich-ten-nganh-bang-bang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-17T12:19:51Z
 design_doc: docs/superpowers/specs/2026-10-17-dich-ten-nganh-bang-bang-design.md
@@ -60,3 +60,8 @@ Source input: hàng VN1 của `docs/plan/lo-trinh-okr.json` + ô cơ hội đã 
 
 - Hỏi-1: ngành phụ ra ngoài vòng vì không màn nào hiện nó; ngưỡng đã ký ở Cổng Đáng có vế «ngành phụ» do đọc nhầm từ phiên đo — người xác nhận bỏ vế đó.
 - Hỏi-2: tên Việt của 24 ngành do máy soạn (bảng trong bản thiết kế, kèm số chữ so với chữ gốc); hội đồng chấm ở AC-6, lượt chụp AC-7 đếm tên bị cắt, người sửa từng dòng bất cứ lúc nào.
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-18:
+  - Ngoài-1: bảng ngành từng làm đỏ bộ kiểm chất lượng mã của kho ở lượt chấm 1; đã sửa ở lượt 2, không còn ảnh hưởng.
+  - Ngoài-2: ở màn rộng, dòng tự báo «ngăn công ty hiện tên ngành» của bàn chụp có thể đúng cả khi ngăn chưa mở — tin ảnh chụp, không tin dòng đó.
+  - Ngoài-3: cùng gốc với Ngoài-2 — dòng tự báo ở màn rộng đọc chữ của cả trang thay vì của ngăn công ty.
