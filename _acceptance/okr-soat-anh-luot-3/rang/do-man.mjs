@@ -375,14 +375,31 @@ async function buocNhap() {
 		CAO,
 		`/okr/theo-don-vi?donOkr=goc&kyOkr=${OKR.quy}`,
 	);
-	const coNut = await hien(t, "[data-nut='nhap-bang-tinh']");
+	const MUC_NHAP = "[role='menuitem'][data-nut='nhap-bang-tinh']";
+	let coNut = await hien(t, "[data-nut='them-cach']");
+	if (coNut) {
+		await t.$eval("[data-nut='them-cach']", (e) =>
+			e.dispatchEvent(
+				new PointerEvent("pointerdown", {
+					bubbles: true,
+					cancelable: true,
+					button: 0,
+					isPrimary: true,
+					pointerType: "mouse",
+				}),
+			),
+		);
+		coNut =
+			(await hien(t, MUC_NHAP)) &&
+			(await t.$eval(MUC_NHAP, (e) => !e.hasAttribute("data-disabled")));
+	}
 	if (!coNut) {
 		for (const ma of MA_TRAN.filter((m) => m.startsWith("nhap-")))
 			ghi(ma, false, "khong thay nut «Nhập từ bảng tính» o don vi OneHub");
 		await t.close();
 		return;
 	}
-	await t.click("[data-nut='nhap-bang-tinh']");
+	await t.$eval(MUC_NHAP, (e) => e.click());
 	await hien(t, "[data-buoc-nhap='1']");
 	if (!(await danLo(t))) {
 		for (const ma of MA_TRAN.filter((m) => m.startsWith("nhap-")))
