@@ -1,0 +1,43 @@
+schema_version: 1
+slug: tai-lieu-khoi-phuc-chap-chon
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tlkp_khoi_phuc
+    paths:
+      - "apps/api/test/tai-lieu-luu-tru.spec.ts"
+    expected: "ca «khoi-phuc: de xuat khoi phuc duoc duyet» xanh; phep dem su kien cua lan duyet dung tap id chup truoc khi duyet (suKienMoi) va ra dung { KHOI_PHUC: 1 }. CHIEU DO o E3: cung du lieu gieo, cach dem theo moc gio cu dem nham."
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tlkp_luu_tru
+    paths:
+      - "apps/api/test/tai-lieu-luu-tru.spec.ts"
+    expected: "ca «duyet-luu-tru: ma tran nguoi viet truoc» xanh voi ca nam nguoi; ba nguoi duoc phep dem dung { LUU_TRU: 1, CU: 1 } bang tap id chup truoc khi duyet. CHIEU DO o E3."
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tlkp_dem
+    paths:
+      - "apps/api/test/tai-lieu-luu-tru.spec.ts"
+    expected: "ca «tlkp-dem» xanh: gieo mot su kien DE_XUAT co luc = bay gio + 5 giay TRUOC khi chup tap id; suKienMoi(trang, truoc) khong dem no; tren cung du lieu, dem theo moc new Date(Date.now() - 1) dem nham no (DE_XUAT = 1) — doi chung bat buoc, thieu thi ghim 'tlkp-dem: du lieu gieo khong kich duoc loi moc gio'; roi sinh mot su kien SAU khi chup thi suKienMoi dem dung no (doi chung duong, thieu thi ghim 'tlkp-dem: ham moi khong dem su kien sau moc'). Cach dem moi dem nham su kien gieo thi ghim 'tlkp-dem: dem nham su kien truoc moc'. Cach dem theo moc gio chi song trong than ca tlkp-dem."
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tlkp_tinh
+    paths:
+      - "apps/api/test/tai-lieu-luu-tru.spec.ts"
+    expected: "ca «tlkp-tinh» xanh: than ca khoi-phuc va ca duyet-luu-tru ma tran (tim theo ten ca) moi ca goi idSuKien truoc lenh duyet va suKienMoi sau no; trong ca tep tru than tlkp-dem va tlkp-tinh, khong dong nao khop /Date\\.now\\(\\)\\s*-/ hay goi suKienSau. Vi pham thi ghim 'tlkp-tinh: con moc dong ho o dong <n>' hoac 'tlkp-tinh: ca <ten> khong dem bang id'. CHIEU DO (cung ham quet, bon chuoi mau): 'Date.now()-1' khong dau cach; than ca goi suKienSau; than ca chup id sau lenh duyet; ban sao than ca 287 co chep dong doi chung vao — moi mau ham quet tra ve vi pham, thieu thi ghim 'tlkp-tinh: ham quet bo sot <mau>'."
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tlkp_tep
+    paths:
+      - "apps/api/test/tai-lieu-luu-tru.spec.ts"
+    expected: "ca tep tai-lieu-luu-tru.spec.ts xanh, 0 fail."
