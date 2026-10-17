@@ -227,3 +227,70 @@ describe("data-table-mo-rong", () => {
 		expect(bamDong).toEqual(["r3"]);
 	});
 });
+
+async function veTab(allCount: number | undefined): Promise<HTMLElement> {
+	const o = document.createElement("div");
+	document.body.appendChild(o);
+	khung = o;
+	root = createRoot(o);
+	await act(async () => {
+		root?.render(
+			<NuqsTestingAdapter hasMemory>
+				<LocaleProvider locale="vi">
+					<TooltipProvider>
+						<DataTable<Dong, string>
+							columns={[{ id: "name", header: "Tên", cell: (r) => r.name }]}
+							facetCounts={{ loc: { a: 2, b: 2 } }}
+							getRowId={(r) => r.id}
+							query={truyVan}
+							rows={DONG}
+							tabs={{
+								id: "loc",
+								allLabel: "Tất cả",
+								allCount,
+								options: [
+									{ value: "a", label: "Cần bàn" },
+									{ value: "b", label: "Chưa góp" },
+								],
+							}}
+							total={DONG.length}
+						/>
+					</TooltipProvider>
+				</LocaleProvider>
+			</NuqsTestingAdapter>,
+		);
+	});
+	return o;
+}
+
+const demNut = (o: HTMLElement) =>
+	Object.fromEntries(
+		[...o.querySelectorAll('[data-slot="toggle-group-item"]')].map((n) => [
+			n.textContent?.replace(
+				n.querySelector('[data-slot="toggle-group-item-count"]')?.textContent ??
+					"",
+				"",
+			),
+			n.querySelector('[data-slot="toggle-group-item-count"]')?.textContent,
+		]),
+	);
+
+describe("data-table-tat-ca", () => {
+	test("allCount: o loc chong nhau thi Tat ca dem dung so dong, khong cong cac o", async () => {
+		const o = await veTab(DONG.length);
+		expect(demNut(o)).toEqual({
+			"Tất cả": "3",
+			"Cần bàn": "2",
+			"Chưa góp": "2",
+		});
+	});
+
+	test("doi chung: khong khai allCount thi Tat ca van la tong cac o", async () => {
+		const o = await veTab(undefined);
+		expect(demNut(o)).toEqual({
+			"Tất cả": "4",
+			"Cần bàn": "2",
+			"Chưa góp": "2",
+		});
+	});
+});

@@ -279,9 +279,9 @@ evals:
       - "apps/app/test/okr-trang-don-vi.dom.tsx"
     expected: |
       Ten ca "dvb-giu-xem". Ma tran: duong dan dang dung (ky + don + xemOkr=hop-tuan, ky + xemOkr=cay, chi
-      xemOkr=cham, khong xemOkr, ky + don + xemOkr + phuTrach + expand) x 5 the = 25 lien ket, moi lien ket mot
+      xemOkr=cham, khong xemOkr, ky + don + xemOkr + phuTrach + expand) x 4 the = 20 lien ket (the Cap nhat tuan go o onehub #459), moi lien ket mot
       assert: tap tham so == giao cua {kyOkr, donOkr, xemOkr} voi tham so dang co. Vong di-ve: URL
-      theo-don-vi?kyOkr=K&donOkr=pb:P2&xemOkr=hop-tuan, bam 4 the khac roi Theo don vi -> trang dung cach xem
+      theo-don-vi?kyOkr=K&donOkr=pb:P2&xemOkr=hop-tuan, bam 3 the khac roi Theo don vi -> trang dung cach xem
       hop-tuan, don P2. Chu ky ngoai pha cham + xemOkr=cham -> danh-sach. Them: doc
       _acceptance/dieu-huong-khu-muc-tieu/contract.md (duong suy tu vi tri tep kiem) phai co dong Notes chua
       "trang-don-vi-mot-bang" va "AC-13"; pha-thu (DVB_PHA=bo-notes-dh1: ban sao hop dong khong dong do) ->

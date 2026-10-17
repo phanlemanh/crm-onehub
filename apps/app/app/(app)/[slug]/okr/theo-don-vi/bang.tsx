@@ -16,7 +16,7 @@ import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
-import { giaTri } from "../bang-kr";
+import { giaTri, TienDoKrCoSo } from "../bang-kr";
 import { ChipGopY } from "../chip-gop-y";
 import { type KetQua, type MucTieu, nhanKr } from "../kieu";
 import {
@@ -275,13 +275,7 @@ function oKr(kr: KetQua, cot: string, mt: MucTieu): ReactNode {
 		case "ten":
 			return <TenKr kr={kr} mt={mt} />;
 		case "tien-do":
-			return (
-				<TienDo
-					expected={laMoc ? null : mt.expected}
-					progress={kr.progress}
-					ten={kr.title}
-				/>
-			);
+			return <TienDoKrCoSo expected={mt.expected} kind={mt.kind} kr={kr} />;
 		case "tinh-trang":
 			return (
 				<NhanTinhTrang
@@ -360,6 +354,7 @@ export function BangDonVi({
 				tabs={{
 					id: TAB_LOC_NHANH,
 					allLabel: b.locNhanh.tatCa,
+					allCount: rows.length,
 					options: LOC_NHANH.map((v) => ({
 						value: v,
 						label: b.locNhanh[v],

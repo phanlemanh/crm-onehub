@@ -625,7 +625,7 @@ function DanhSach({ don, canh }: { don: Don; canh: Canh }) {
 						moChon={canh.moChon}
 					/>
 				}
-				tabs={TAB_LOC}
+				tabs={{ ...TAB_LOC, allCount: quaLoc.length }}
 				total={hien.length}
 			/>
 			<NganChiTiet chiTiet={chiTiet} dong={() => setChiTiet(null)} />

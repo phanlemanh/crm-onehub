@@ -97,6 +97,7 @@ export type DataTableTabs = {
 	id: string;
 	label?: string;
 	allLabel?: string;
+	allCount?: number;
 	options: { value: string; label: string }[];
 };
 
@@ -585,13 +586,14 @@ export function DataTable<TRow, TSub = unknown>({
 							>
 								<ToggleGroupItem
 									count={
-										tabCounts === undefined
+										tabs.allCount ??
+										(tabCounts === undefined
 											? undefined
 											: tabs.options.reduce(
 													(tong, option) =>
 														tong + (tabCounts[option.value] ?? 0),
 													0,
-												)
+												))
 									}
 									value="all"
 								>

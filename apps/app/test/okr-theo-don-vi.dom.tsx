@@ -434,7 +434,7 @@ function soDongKrDuoi(o: Element): number {
 	return so;
 }
 
-const SO_NUT_HANG_CONG_CU = 10;
+const SO_NUT_HANG_CONG_CU = 12;
 
 const nutCo = (o: ParentNode, chu: string) =>
 	[...o.querySelectorAll("button")].some((b) => b.textContent?.trim() === chu);

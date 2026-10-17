@@ -110,6 +110,17 @@ const DOT_BIEN = {
 			],
 			ghim: /dvb-loc-nhanh: muc tieu cong ty nam trong Chưa góp vào đâu/,
 		},
+		{
+			ten: "tat-ca-cong-o",
+			thay: [
+				{
+					tep: "apps/app/app/(app)/[slug]/okr/theo-don-vi/bang.tsx",
+					cu: "\t\t\t\t\tallCount: rows.length,\n",
+					moi: "",
+				},
+			],
+			ghim: /dvb-loc-nhanh: nhan Tất cả dem \d+, so dong \d+/,
+		},
 	],
 	"dvb-sap-xep": [
 		{

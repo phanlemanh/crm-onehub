@@ -1333,6 +1333,24 @@ describe("dvb-dong-mo", () => {
 });
 
 describe("dvb-loc-nhanh", () => {
+	const oLoc = (
+		o: ParentNode,
+		chu: { tatCa: string; "can-ban": string; "chua-gop": string },
+	) =>
+		[...o.querySelectorAll<HTMLElement>('[data-slot="toggle-group-item"]')]
+			.map((n) => {
+				const so = n.querySelector('[data-slot="toggle-group-item-count"]');
+				const tat = n.textContent ?? "";
+				return {
+					n,
+					nhan: tat.slice(0, tat.length - (so?.textContent?.length ?? 0)),
+					dem: Number(so?.textContent ?? "NaN"),
+					bat: n.getAttribute("data-state") === "on",
+				};
+			})
+			.filter((x) =>
+				[chu.tatCa, chu["can-ban"], chu["chua-gop"]].includes(x.nhan),
+			);
 	const mong = (ds: MucTieuOutput[], loc: string | null) =>
 		ds
 			.filter((x) =>
@@ -1360,27 +1378,25 @@ describe("dvb-loc-nhanh", () => {
 				hien.join(",") === mong(ds, loc).join(","),
 				`dvb-loc-nhanh: ${loc ?? "tat-ca"}: hien ${hien.join(",")}, mong ${mong(ds, loc).join(",")}`,
 			);
-			const nutTab = [...s.o.querySelectorAll("button")].find(
-				(x) => x.textContent === (loc ? b.locNhanh[loc] : b.locNhanh.tatCa),
+			const o = oLoc(s.o, b.locNhanh);
+			if (o.length !== 3)
+				throw new Error("dvb-loc-nhanh: khong thay nut o loc nhanh");
+			expect(o.map((x) => x.nhan)).toEqual([
+				b.locNhanh.tatCa,
+				b.locNhanh["can-ban"],
+				b.locNhanh["chua-gop"],
+			]);
+			phai(
+				o.find((x) => x.bat)?.nhan ===
+					(loc ? b.locNhanh[loc] : b.locNhanh.tatCa),
+				`dvb-loc-nhanh: o dang bat ${o.find((x) => x.bat)?.nhan ?? "khong co"}`,
 			);
-			if (!nutTab) throw new Error("dvb-loc-nhanh: khong thay nut o loc nhanh");
-			await bamCon(nutTab);
-			await cho(
-				() => document.querySelectorAll('[role="menuitemradio"]').length === 3,
-				"menu loc nhanh",
-			);
-			const dem = new Map(
-				[...document.querySelectorAll('[role="menuitemradio"]')].map((x) => [
-					x.querySelector(":scope > span.flex-1")?.textContent ?? "",
-					Number(
-						x.querySelector('[data-slot="facet-count"]')?.textContent ?? "NaN",
-					),
-				]),
-			);
-			for (const k of ["can-ban", "chua-gop"] as const) {
+			for (const k of [null, "can-ban", "chua-gop"] as const) {
+				const nhan = k ? b.locNhanh[k] : b.locNhanh.tatCa;
+				const dem = o.find((x) => x.nhan === nhan)?.dem;
 				phai(
-					dem.get(b.locNhanh[k]) === mong(ds, k).length,
-					`dvb-loc-nhanh: nhan ${b.locNhanh[k]} dem ${dem.get(b.locNhanh[k])}, so dong ${mong(ds, k).length}`,
+					dem === mong(ds, k).length,
+					`dvb-loc-nhanh: nhan ${nhan} dem ${dem}, so dong ${mong(ds, k).length}`,
 				);
 			}
 		});
@@ -1391,19 +1407,11 @@ describe("dvb-loc-nhanh", () => {
 		datDon("pb:P1", ds);
 		const s = await moTrang("pb:P1");
 		await choBang(s);
-		const nutTab = [...s.o.querySelectorAll("button")].find(
-			(x) => x.textContent === b.locNhanh.tatCa,
-		);
-		if (!nutTab) throw new Error("dvb-loc-nhanh: khong thay o loc nhanh");
-		await bamCon(nutTab);
-		await cho(
-			() => document.querySelectorAll('[role="menuitemradio"]').length === 3,
-			"menu",
-		);
-		const canBanMuc = [
-			...document.querySelectorAll<HTMLElement>('[role="menuitemradio"]'),
-		].find((x) => x.textContent?.startsWith(b.locNhanh["can-ban"]));
-		await act(async () => canBanMuc?.click());
+		const canBanMuc = oLoc(s.o, b.locNhanh).find(
+			(x) => x.nhan === b.locNhanh["can-ban"],
+		)?.n;
+		if (!canBanMuc) throw new Error("dvb-loc-nhanh: khong thay o loc nhanh");
+		await bamCon(canBanMuc);
 		await cho(() => s.url().get("locNhanhOkr") !== null, "url locNhanhOkr");
 		expect(s.url().get("locNhanhOkr")).toBe("can-ban");
 		await cho(
@@ -1434,18 +1442,9 @@ describe("dvb-loc-nhanh", () => {
 		datDon("pb:P1", maTranLocNhanh());
 		const s = await moTrang("pb:P1", {}, "en");
 		await choBang(s);
-		const nutTab = [...s.o.querySelectorAll("button")].find(
-			(x) => x.textContent === en.tatCa,
-		);
-		if (!nutTab) throw new Error("dvb-loc-nhanh: en khong co nut All");
-		await bamCon(nutTab);
-		await cho(
-			() => document.querySelectorAll('[role="menuitemradio"]').length === 3,
-			"menu en",
-		);
-		const nhan = [...document.querySelectorAll('[role="menuitemradio"]')].map(
-			(x) => x.querySelector(":scope > span.flex-1")?.textContent,
-		);
+		const nhan = oLoc(s.o, en).map((x) => x.nhan);
+		if (nhan.length === 0)
+			throw new Error("dvb-loc-nhanh: en khong co nut All");
 		expect(nhan).toEqual([en.tatCa, en["can-ban"], en["chua-gop"]]);
 		expect([en["can-ban"], en["chua-gop"]]).toEqual([
 			"Needs discussion",
@@ -1805,14 +1804,13 @@ async function lienKetThe(tham: string, tab: (typeof TAB)[number]) {
 
 const DUONG_THE = {
 	"cua-toi": "/ws/okr",
-	"cap-nhat-tuan": "/ws/okr/cap-nhat-tuan",
 	"theo-don-vi": "/ws/okr/theo-don-vi",
 	"toan-canh": "/ws/okr/toan-canh",
 	"hoi-y": "/ws/okr/hoi-y",
 } satisfies Record<(typeof TAB)[number], string>;
 
 describe("dvb-giu-xem", () => {
-	test("25 lien ket the: tap tham so = giao {kyOkr, donOkr, xemOkr} voi duong dan dang dung", async () => {
+	test("20 lien ket the: tap tham so = giao {kyOkr, donOkr, xemOkr} voi duong dan dang dung", async () => {
 		const DUONG_DAN = [
 			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan",
 			"?kyOkr=q4&xemOkr=cay",
@@ -1842,19 +1840,13 @@ describe("dvb-giu-xem", () => {
 				);
 			}
 		}
-		expect(so).toBe(25);
+		expect(so).toBe(20);
 	});
 
-	test("vong di-ve qua 4 the khac roi Theo don vi: dung cach xem hop-tuan, don P2", async () => {
+	test("vong di-ve qua 3 the khac roi Theo don vi: dung cach xem hop-tuan, don P2", async () => {
 		let tham = `?kyOkr=${QUY.id}&donOkr=pb:P2&xemOkr=hop-tuan`;
 		let dangO: (typeof TAB)[number] = "theo-don-vi";
-		for (const t of [
-			"cua-toi",
-			"cap-nhat-tuan",
-			"toan-canh",
-			"hoi-y",
-			"theo-don-vi",
-		] as const) {
+		for (const t of ["cua-toi", "toan-canh", "hoi-y", "theo-don-vi"] as const) {
 			const ra = await lienKetThe(tham, dangO);
 			tham = ra.get(DUONG_THE[t]) ?? "";
 			dangO = t;
