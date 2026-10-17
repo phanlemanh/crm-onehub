@@ -5,7 +5,7 @@ slug: tra-cuu-thuong-hieu-viet-nam
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-17T02:50:10Z
 design_doc: docs/superpowers/specs/2026-10-16-tra-cuu-thuong-hieu-viet-nam-design.md
@@ -62,12 +62,22 @@ Source input: prompt (chủ kho, 16/10, kèm ảnh chụp ngăn công ty Titan)
 - Hỏi-2: AC-7 soạn theo khuyến nghị; người bỏ thì AC-7 rời hợp đồng và bản ghi cũ giữ mô tả tiếng Anh tới khi rep tự xoá.
 - Mở lại ở Cổng Bằng chứng 16/10 (Manh Phan): Ngoài-5, Ngoài-6, Ngoài-7 và vế «dán trang web riêng» của câu báo nâng thành phạm vi (AC-10, AC-7, AC-1).
 
-### Known limits
-
-- Ngoài-1: dữ liệu lưu của lần tra trước bị hỏng thì «Tra cứu lại» chỉ điền ô trống, có dòng cảnh báo trong nhật ký nhưng không báo trên màn.
-- Ngoài-2, Ngoài-8, Ngoài-12: bàn chụp màn dựng công ty mẫu bằng cách ghi thẳng bảng, không qua đường ghi thật.
-- Ngoài-3: script chạy tay điền lại ảnh thương hiệu vẫn đọc dữ liệu lưu theo cách cũ, chưa qua schema mới.
-- Ngoài-4: cách rút tên miền từ chuỗi rep dán có hai bản (danh sách nền tảng và máy chủ), hiện cho kết quả khớp nhau.
-- Ngoài-9: ca «mỗi tên miền trong danh sách» đếm số ca từ chính danh sách nên không tự đỏ được.
-- Ngoài-10: ca «công ty tạo từ email» dựng công ty bằng cách ghi thẳng bảng, không qua đường thư mục công ty.
-- Ngoài-11: ca «raw hỏng khuôn» chưa có đối chứng dương cho vế «vẫn điền ô trống».
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-17:
+  - Ngoài-1: sau một lần «Tra cứu lại» mà nhà cung cấp trả thiếu mô tả hay địa chỉ, các ô đó thôi được coi là máy điền; lần tra sau không thay chúng, rep xoá ô thì máy điền lại.
+  - Ngoài-2: bàn chụp màn tạo công ty mẫu bằng cách ghi thẳng cơ sở dữ liệu đo, chụp hỏng giữa chừng có thể để sót công ty mẫu tới lần chụp sau.
+  - Ngoài-3: bài kiểm ca dữ liệu lần tra trước bị hỏng chưa phân biệt được «giữ ô đã điền» với «ô không thuộc máy».
+  - Ngoài-4: ca công ty tạo từ email LinkedIn dựng công ty bằng cách ghi thẳng bảng, không chạy đường thư mục công ty thật.
+  - Ngoài-5: ca các trường trống (null) chỉ thử thẳng bộ đọc dữ liệu lưu, chưa đi trọn một lượt tra.
+  - Ngoài-6: ca «mỗi tên miền trong danh sách» đếm số ca từ chính danh sách nên không tự đỏ được.
+  - Ngoài-7: dữ liệu lưu của lần tra trước bị hỏng thì «Tra cứu lại» chỉ điền ô trống, có dòng cảnh báo trong nhật ký nhưng không báo trên màn.
+  - Ngoài-8: bàn chụp màn dựng công ty mẫu bằng cách ghi thẳng bảng, không qua đường ghi thật.
+  - Ngoài-9: script chạy tay điền lại ảnh thương hiệu vẫn đọc dữ liệu lưu theo cách cũ, chưa qua schema mới.
+  - Ngoài-10: cách rút tên miền từ chuỗi rep dán có hai bản (danh sách nền tảng và máy chủ), hiện cho kết quả khớp nhau.
+  - Ngoài-11: địa chỉ lẫn cũ mới sau «Tra cứu lại» — mục mang sang từ lượt 1, đã sửa ở AC-10.
+  - Ngoài-12: Kara báo «đã điền» khi tra lại không có gì mới — mục mang sang từ lượt 1, đã sửa ở AC-10.
+  - Ngoài-13: mô tả công cụ tra của Kara nói «chỉ điền ô trống» — mục mang sang từ lượt 1, đã sửa ở AC-7.
+  - Ngoài-14: script chụp màn E10 ghi thẳng bảng trong khi bước đo ghi «tạo qua API của bàn đo».
+  - Ngoài-15: ma trận tên miền trong danh sách không viết trước nên phép đếm không tự đỏ được.
+  - Ngoài-16: ca công ty tạo từ email dựng bằng cách ghi thẳng bảng.
+  - Ngoài-17: ca dữ liệu lưu hỏng thiếu đối chứng dương cho vế «vẫn điền ô trống».
+  - Ngoài-18: bản chụp E10 tạo công ty bằng cách ghi thẳng cơ sở dữ liệu đo.
