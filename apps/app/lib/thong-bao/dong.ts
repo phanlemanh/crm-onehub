@@ -6,7 +6,7 @@ import type {
 	DongThongBao,
 	NhomThongBao,
 } from "@/components/thong-bao/dong-thong-bao";
-import { cauThongBao } from "@/lib/thong-bao/cau";
+import { cauThongBao, tenKhongDich } from "@/lib/thong-bao/cau";
 
 export type ThongBaoRa = {
 	id: string;
@@ -58,6 +58,7 @@ export function dongTuRa(
 	return {
 		id: r.id,
 		cau: cauThongBao(ctx.locale, r.noiDung),
+		khongDich: tenKhongDich(r.noiDung),
 		gio:
 			kieuGio === "gio" || homNay
 				? gio(ctx.locale, luc)
