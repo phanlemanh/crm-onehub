@@ -108,6 +108,10 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
 
 ## Notes
 
+- Lời hứa của hồ sơ đã ký đổi theo vòng này (bản đối ở Notes của `pre-push-t1`): fixture ca `mot-nguon (a)` trong
+  `packages/ui/test/pre-push-t1.spec.ts` đổi `apps/x/**` → `scripts/x/**` vì Hỏi-1 đưa `apps/**` vào `t1_ma_doc`
+  (dòng sổ d-20261018T034036Z-17 — ba lối, mặc định giữ bản sửa).
+
 - Răng `_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs` (một vế của AC-8) không chạy được trên máy M5: nó commit bản
   chép `config.yaml` vào kho git tạm và hook git-secrets cấp hệ thống chặn commit (hai dòng giống khoá có sẵn trong
   config). Eval E8b khai `status: not-run`; vế này chạy ở CI và ở lượt ghim lại `giam-phut-ci-nhap-t1`.
