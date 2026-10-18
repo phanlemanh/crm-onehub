@@ -89,7 +89,7 @@ const NHOM: Nhom[] = [
 		muc: [
 			{ noi: "suc-khoe", nhan: "Sức khoẻ", state: STATE.sucKhoe },
 			{ noi: "moi-kr", nhan: "Mọi KR", state: STATE.moiKr },
-			{ noi: "so-do", nhan: "Sơ đồ góp vào", state: STATE.soDo },
+			{ noi: "so-do", nhan: "Sơ đồ", state: STATE.soDo },
 		],
 	},
 ];
