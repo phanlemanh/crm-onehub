@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 01089942a15cecbdcc387d41e69bc032346524fc
+verified_commit: a0124b2dba7fd0f324ebb62c0a560e6b83425141
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 3 (18/18 eval đạt, 7/7 lệnh suite xanh). Phát hiện trong hợp đồng AC-10 trên điện thoại (chip Kara không cuộn tới vùng Kara khi mục tiêu đã có sẵn dữ liệu) ghi Known limits, sửa trong R1d. Mười sáu mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 3–10, 12, 14, 15 ghi Known limits; Ngoài-2 mở hợp đồng mới; Ngoài-11, 13, 16 chấp nhận không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -314,3 +314,7 @@ sha: 9e9aa993dfc2cdd1788661f0715129ed417ff472 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-18, do t1-ma-doc đổi phan-loai.mjs, gate-shape.json, t1_ma_doc, bộ quét và spec trong packages/ui; gộp onehub 76e8fb215 (#475); thước E17 và E11 neo lần gộp của hồ sơ
 run_id: repin-20261018T111331Z-21656
 sha: 01089942a15cecbdcc387d41e69bc032346524fc · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1, E3, E8, E9, E10, E12, E13, E15, E18, E16 (E16 không khai paths) · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-7, AC-8, AC-9, AC-11, AC-13, AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-18, do gộp onehub 2374af730 (#472, #479) làm cũ lại 8 hồ sơ
+run_id: repin-20261018T122729Z-21270
+sha: a0124b2dba7fd0f324ebb62c0a560e6b83425141 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1, E3, E8, E9, E10, E12, E13, E15, E18, E16 (E16 không khai paths) · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-7, AC-8, AC-9, AC-11, AC-13, AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
