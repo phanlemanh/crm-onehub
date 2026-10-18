@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e9075efe117e3f98f37c5e26a78342813d4749d9
+verified_commit: 76d76e899ea5f4ee76aa9ec3989e9482cc1fe067
 human_signoff: manh 2026-10-17
 ---
 
@@ -286,3 +286,7 @@ none — every multi-run eval is uniform
 Round 1: E3, E4, E5, E12, E16, E17 failed trong run-log vòng 1 (sha 31bb9927). Returned to implementation.
 Round 2: chạy lại trên sha 9cff76c5; không còn lệnh eval nào ghi mã lỗi trong run-log vòng 2.
 Round 3: chạy lại trên cây verified_commit e9075efe117e3f98f37c5e26a78342813d4749d9; toàn bộ eval máy, bảy lệnh suite và khung ui-check E2 đều xanh; E14 judge đề xuất PASS, chờ người ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-18, do DA4 du-an-gantt: code Dự án làm DH2 cũ (E14 thiếu paths); răng E12, E16 đổi gốc so sánh ở a662ae69c
+run_id: repin-20261018T015456Z-96064
+sha: 76d76e899ea5f4ee76aa9ec3989e9482cc1fe067 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
