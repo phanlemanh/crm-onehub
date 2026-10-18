@@ -332,6 +332,7 @@ async function mo(
 	don = "goc",
 	xem: string | null = null,
 	doiXong = true,
+	them: Record<string, string> = {},
 ): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
@@ -345,6 +346,7 @@ async function mo(
 	const thamSo = new URLSearchParams();
 	if (don !== "goc") thamSo.set("donOkr", don);
 	if (xem) thamSo.set("xemOkr", xem);
+	for (const [k, v] of Object.entries(them)) thamSo.set(k, v);
 	await act(async () => {
 		root.render(
 			<NuqsTestingAdapter searchParams={`?${thamSo}`} hasMemory>
@@ -376,6 +378,64 @@ async function cho(xong: () => boolean, moTa: string): Promise<void> {
 	);
 }
 
+async function moOChon(o: HTMLElement) {
+	const nut = o.querySelector("[data-chon-don-vi]");
+	if (!nut) throw new Error("khong co o chon don vi");
+	await act(async () => {
+		for (const loai of ["pointerdown", "mousedown", "pointerup", "click"]) {
+			nut.dispatchEvent(
+				new window.PointerEvent(loai, {
+					bubbles: true,
+					cancelable: true,
+					button: 0,
+					pointerType: "mouse",
+				}),
+			);
+		}
+	});
+	await cho(
+		() => document.querySelectorAll('[role="option"]').length > 0,
+		"o chon don vi mo",
+	);
+}
+
+async function luaChon(o: HTMLElement, ten: string): Promise<HTMLElement> {
+	await moOChon(o);
+	const lc = [
+		...document.querySelectorAll<HTMLElement>('[role="option"]'),
+	].find((x) => x.querySelector("span")?.textContent === ten);
+	if (!lc) throw new Error(`khong thay don vi ${ten}`);
+	return lc;
+}
+
+async function goiYOChon(o: HTMLElement): Promise<Map<string, string>> {
+	await moOChon(o);
+	const ra = new Map(
+		[...document.querySelectorAll('[role="option"]')].map((x) => {
+			const [ten, goiY] = [...x.querySelectorAll("span")];
+			return [ten?.textContent ?? "", goiY?.textContent ?? ""] as const;
+		}),
+	);
+	await act(async () => {
+		document.activeElement?.dispatchEvent(
+			new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+		);
+	});
+	return ra;
+}
+
+function soDongKrDuoi(o: Element): number {
+	let so = 0;
+	let ke = o.closest("tr")?.nextElementSibling;
+	while (ke?.querySelector("[data-kr]")) {
+		so += 1;
+		ke = ke.nextElementSibling;
+	}
+	return so;
+}
+
+const SO_NUT_HANG_CONG_CU = 12;
+
 const nutCo = (o: ParentNode, chu: string) =>
 	[...o.querySelectorAll("button")].some((b) => b.textContent?.trim() === chu);
 
@@ -405,18 +465,19 @@ describe("theo-don-vi", () => {
 			canEdit: false,
 		});
 		dem = { "pb:pb-1": 3, goc: 1 };
-		const s = await mo("pb:pb-1");
+		const s = await mo("pb:pb-1", null, true, { expand: "a,b,c" });
 		const khoi = [...s.o.querySelectorAll("[data-muc-tieu]")];
+		const goiY = await goiYOChon(s.o);
 		expect({
 			khoi: khoi.map((k) => k.getAttribute("data-muc-tieu")),
-			cot: khoi.map((k) => k.querySelectorAll("thead th").length),
-			dongKr: khoi.map((k) => k.querySelectorAll("[data-kr]").length),
-			nutCay: s.o.querySelectorAll("[data-nut-cay]").length,
-			demPb1: s.o.querySelector('[data-nut-cay="pb:pb-1"]')?.textContent,
-			demKho: s.o.querySelector('[data-nut-cay="pb:pb-kho"]')?.textContent,
+			cot: khoi.map((k) => k.closest("tr")?.querySelectorAll("td").length),
+			dongKr: khoi.map((k) => soDongKrDuoi(k)),
+			nutCay: s.o.querySelectorAll("[data-chon-don-vi]").length,
+			demPb1: goiY.get("Kinh doanh vùng 1"),
+			demKho: goiY.get("Kho vận"),
 			dangChon: s.o
-				.querySelector('[data-nut-cay="pb:pb-1"]')
-				?.getAttribute("aria-selected"),
+				.querySelector("[data-chon-don-vi]")
+				?.getAttribute("data-don-chon"),
 			trangThai: s.o
 				.querySelector("[data-trang-thai]")
 				?.getAttribute("data-trang-thai"),
@@ -425,12 +486,12 @@ describe("theo-don-vi", () => {
 				?.getAttribute("data-tinh-trang"),
 		}).toEqual({
 			khoi: ["a", "b", "c"],
-			cot: [4, 4, 4],
+			cot: [5, 5, 5],
 			dongKr: [2, 1, 3],
-			nutCay: 6,
-			demPb1: "Kinh doanh vùng 13 mục tiêu",
-			demKho: "Kho vậnchưa đặt",
-			dangChon: "true",
+			nutCay: 1,
+			demPb1: "Thuộc Kinh doanh · 3 mục tiêu",
+			demKho: "Thuộc Vận hành · chưa đặt",
+			dangChon: "pb:pb-1",
 			trangThai: "ST-donvi-danhsach",
 			tinhTrang: "cham-nhip",
 		});
@@ -547,7 +608,7 @@ describe("theo-don-vi-bien", () => {
 			khongThay:
 				s.o.querySelector('[data-trang-thai="ST-donvi-khongthay"]') !== null,
 			theDonVi: s.o.querySelector("[data-don-vi]"),
-			cay: s.o.querySelectorAll("[data-nut-cay]").length,
+			cay: s.o.querySelectorAll("[data-chon-don-vi]").length,
 		};
 		const nutVe = [...s.o.querySelectorAll("button")].find(
 			(b) => b.textContent?.trim() === m.khongThay.action,
@@ -555,12 +616,20 @@ describe("theo-don-vi-bien", () => {
 		await act(async () => {
 			nutVe?.click();
 		});
-		await cho(() => s.o.querySelector("[data-don-vi]") !== null, "ve goc");
+		await cho(
+			() =>
+				s.o
+					.querySelector("[data-chon-don-vi]")
+					?.getAttribute("data-don-chon") === "goc",
+			"ve goc",
+		);
 		expect({
 			truoc,
-			sau: s.o.querySelector("[data-don-vi]")?.getAttribute("data-don-vi"),
+			sau: s.o
+				.querySelector("[data-chon-don-vi]")
+				?.getAttribute("data-don-chon"),
 		}).toEqual({
-			truoc: { khongThay: true, theDonVi: null, cay: 6 },
+			truoc: { khongThay: true, theDonVi: null, cay: 1 },
 			sau: "goc",
 		});
 	});
@@ -571,12 +640,12 @@ describe("theo-don-vi-bien", () => {
 			canEdit: true,
 		});
 		const s = await mo("pb:pb-1");
-		const hang = s.o.querySelector("[data-hang-nut]");
+		const hang = s.o.querySelector("[data-hang-cong-cu-don-vi]")?.parentElement;
 		expect({
-			wrap: hang?.classList.contains("flex-wrap"),
+			wrap: hang?.classList.contains("lg:flex-wrap"),
 			trongDau: hang?.closest('[data-slot="card-header"]') !== null,
 			cardAction: s.o.querySelectorAll(
-				'[data-don-vi] [data-slot="card-action"]',
+				'[data-slot="card"] [data-slot="card-action"]',
 			).length,
 			nut: hang?.querySelectorAll("button").length,
 			tinhTrang: s.o.querySelector("[data-tinh-trang]")?.textContent,
@@ -584,7 +653,7 @@ describe("theo-don-vi-bien", () => {
 			wrap: true,
 			trongDau: false,
 			cardAction: 0,
-			nut: 5,
+			nut: SO_NUT_HANG_CONG_CU,
 			tinhTrang: "Chưa có kỳ vọng",
 		});
 	});
@@ -718,12 +787,9 @@ describe("khung-xuong", () => {
 		),
 	});
 	const sangKho = async (o: HTMLElement) => {
-		const nut = [...o.querySelectorAll('[role="treeitem"]')].find((n) =>
-			n.textContent?.includes("Kho vận"),
-		);
-		if (!nut) throw new Error("khong thay don vi Kho van");
+		const nut = await luaChon(o, "Kho vận");
 		await act(async () => {
-			(nut.querySelector("button") ?? (nut as HTMLElement)).click();
+			nut.click();
 		});
 		await cho(
 			() => (o.textContent ?? "").includes("Kho vận"),

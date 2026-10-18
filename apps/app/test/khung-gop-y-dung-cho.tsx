@@ -677,6 +677,18 @@ export const docCua = (duong: string) =>
 	kho.daDoc.filter((g) => g.duong === duong);
 export const hangMt = (id: string) => qs(`[data-hang-muc-tieu="${id}"]`);
 export const khoiMt = (id: string) => qs(`[data-muc-tieu="${id}"]`);
+export function soHangMt(id: string): number {
+	const k = khoiMt(id);
+	const dong = k?.closest("tr");
+	if (!dong) return k?.querySelectorAll("tr").length ?? -1;
+	let so = 1;
+	let ke = dong.nextElementSibling;
+	while (ke?.querySelector("[data-kr]")) {
+		so += 1;
+		ke = ke.nextElementSibling;
+	}
+	return so;
+}
 export const sau = (a: Element | null, b: Element | null) =>
 	a !== null &&
 	b !== null &&

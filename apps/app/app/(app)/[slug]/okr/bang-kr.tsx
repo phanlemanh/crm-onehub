@@ -134,7 +134,10 @@ function SoCuaKr({
 									variant="link"
 									size="xs"
 									{...neo("data-so-kr", kr.id)}
-									onClick={() => moSo({ kind: "so-kr", id: kr.id })}
+									onClick={(e) => {
+										e.stopPropagation();
+										moSo({ kind: "so-kr", id: kr.id });
+									}}
 								>
 									{hienSo}
 								</Button>
@@ -443,6 +446,27 @@ function HangTraiCot({
 				{children}
 			</SimpleTableCell>
 		</SimpleTableRow>
+	);
+}
+
+export function TienDoKrCoSo({
+	kr,
+	kind,
+	expected,
+}: {
+	kr: KetQua;
+	kind: LoaiMucTieu;
+	expected: number | null;
+}) {
+	const xem = useXemDuocBanGhi();
+	return (
+		<span
+			className="block min-w-0"
+			data-do-canh={kr.doCanh ? "" : undefined}
+			data-nguon={kr.source}
+		>
+			<OTienDoKr expected={expected} kind={kind} kr={kr} moc xem={xem} />
+		</span>
 	);
 }
 
