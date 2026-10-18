@@ -164,3 +164,11 @@ Ngưỡng của `opportunity.md`, từng vế:
     khung chuyển sang tab Căn chỉnh.
 - **Hợp đồng mới (Ngoài-2):** chọn «ở lại» ở câu hỏi «Bỏ thay đổi?» rồi bấm X đóng hộp «Mức hiển thị» thì
   khung nhảy sang tab Căn chỉnh thay vì chỉ đóng hộp — tách thành việc riêng.
+
+Lời hứa thay bởi hồ sơ khác (thêm 17/10, trang-don-vi-mot-bang AC-14):
+
+- Hàng hành động đầu trang kết thúc bằng nút chính «Thêm mục tiêu», nhóm soạn đứng ngay trước nó, không còn
+  nằm trong thân trang (bốn vai) — thay bởi dieu-huong-khu-muc-tieu AC-2.
+- Ba vai không phải quản trị trong pha lập kế hoạch thấy nút soạn bị khoá kèm lý do (`nut-khong-quyen`)
+  thay vì không thấy nhóm soạn; vẫn không có nút bấm được hay câu «chưa cấu hình» — thay bởi
+  dieu-huong-khu-muc-tieu AC-5.

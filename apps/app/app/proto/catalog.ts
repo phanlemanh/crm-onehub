@@ -11,6 +11,26 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "trang-don-vi-mot-bang",
+		ten: "Trang đơn vị một bảng — ô chọn đơn vị ở chỗ ô tìm kiếm, mục tiêu mở ra KR, một hàng công cụ đứng yên",
+		states: [
+			{ id: "ST-dvb-danh-sach", nhan: "Danh sách — phòng ban có mục tiêu" },
+			{ id: "ST-dvb-mo-kr", nhan: "Một mục tiêu mở ra KR" },
+			{ id: "ST-dvb-chon-don-vi", nhan: "Ô chọn đơn vị đang mở, gõ «kinh»" },
+			{ id: "ST-dvb-can-ban", nhan: "Ô lọc nhanh «Cần bàn»" },
+			{ id: "ST-dvb-khong-khop", nhan: "Ô lọc không khớp dòng nào" },
+			{ id: "ST-dvb-rong", nhan: "Đơn vị chưa đặt OKR" },
+			{ id: "ST-dvb-chua-truong", nhan: "Đơn vị chưa có trưởng" },
+			{ id: "ST-dvb-cong-ty", nhan: "Cấp công ty" },
+			{ id: "ST-dvb-nguoi", nhan: "Một người" },
+			{ id: "ST-dvb-hop-tuan", nhan: "Họp tuần" },
+			{ id: "ST-dvb-cham-diem", nhan: "Chấm điểm" },
+			{ id: "ST-dvb-cay", nhan: "Cây căn chỉnh" },
+			{ id: "ST-dvb-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-dvb-loi", nhan: "Lỗi tải" },
+		],
+	},
+	{
 		slug: "cua-toi-ba-phan",
 		ten: "Của tôi ba phần — cần cập nhật tuần này, đơn vị bạn dẫn, KR bạn phụ trách",
 		states: [

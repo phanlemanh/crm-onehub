@@ -150,3 +150,4 @@ Source input: prompt (phiên «Phân tích và hoàn thiện OKR», 02/10) + pro
 - Móc DOM và chuỗi mã mà các hồ sơ đã ký đang đo: design doc mục «Móc DOM phải giữ» — AC-11.
 - `packages/ui/src/components/simple-table.tsx` và `packages/ui/src/lib/row-accent.ts` thuộc
   lượt này; `nen-kara` chạy song song không chạm hai tệp đó; S4 hai bên xếp tuần tự.
+- Trên trang Theo đơn vị, AC-3 (mở sẵn mọi mục tiêu, nhớ dòng thu bằng `thuMucTieu`) và AC-5 (hàng «chưa có KR» dưới mục tiêu) được thay bởi trang-don-vi-mot-bang AC-3 (mặc định thu, nhớ dòng mở bằng `expand`; mục tiêu chưa có KR là một dòng, không nút mở). Màn Của tôi giữ nguyên hai lời hứa này.

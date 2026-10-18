@@ -105,7 +105,7 @@ async function phanLe() {
 
 function doThanh() {
 	const hien = (e) => e.getClientRects().length > 0 && e.getBoundingClientRect().height > 0;
-	const h = [...document.querySelectorAll("[data-hang-nut]")].find(hien);
+	const h = [...document.querySelectorAll("[data-hang-hanh-dong]")].find(hien);
 	if (!h) return null;
 	const tam = [...h.querySelectorAll("button")]
 		.filter((b) => !b.closest("[data-radix-popper-content-wrapper]") && hien(b))
@@ -115,7 +115,7 @@ function doThanh() {
 		})
 		.sort((x, y) => x - y);
 	const nut = tam.filter((t, i) => i === 0 || t - tam[i - 1] > 4).map((t) => Math.round(t));
-	const the = h.closest("[data-don-vi]");
+	const the = h.closest("header");
 	const ds = [...document.querySelectorAll("[data-muc-tieu],[data-hang-muc-tieu],[data-trang-thai^='ST-donvi']")].find(hien);
 	const nhom = h.querySelector("[data-nhom-soan]");
 	const ban = the?.cloneNode(true);
@@ -124,7 +124,8 @@ function doThanh() {
 		tops: [...new Set(nut)],
 		cao: Math.round(the?.getBoundingClientRect().height ?? -1),
 		dsTop: ds ? Math.round(ds.getBoundingClientRect().top) : null,
-		cuoiLaNhom: Boolean(nhom) && h.lastElementChild === nhom,
+		// AC-14 loi-hua-moi: dieu-huong-khu-muc-tieu AC-2 — hang hanh dong dau trang ket thuc bang nut chinh «Them muc tieu»; nhom soan dung ngay truoc no.
+		cuoiLaNhom: Boolean(nhom) && h.lastElementChild?.previousElementSibling === nhom,
 		nutSoan: nhom?.querySelector("button")?.textContent?.trim() ?? null,
 		hinh: nhom ? (nhom.getAttribute("data-nut-soan") ?? nhom.querySelector("[data-nut-soan]")?.getAttribute("data-nut-soan") ?? null) : null,
 		nutKhoa: nhom?.querySelector("button")?.disabled ?? null,
@@ -147,7 +148,7 @@ async function doMotDang(ten, { chuPhu = [], chan = !TAT_CHAN, dangTaiCo = true 
 		});
 	}
 	await p.goto(`${APP}/${slug}/okr/theo-don-vi?kyOkr=${KYKE}&donOkr=pb:${PB}`, { waitUntil: "domcontentloaded" });
-	await p.waitForSelector("[data-hang-nut]", { visible: true, timeout: BD.cho.phanTu });
+	await p.waitForSelector("[data-hang-hanh-dong]", { visible: true, timeout: BD.cho.phanTu });
 	await p.waitForSelector("[data-trang-thai^='ST-donvi']:not([data-trang-thai='ST-donvi-dangtai'])", { visible: true, timeout: BD.cho.phanTu }).catch(() => {});
 	if (chan) for (let i = 0; i < 120 && giu === 0; i += 1) await tre(250);
 	await tre(300);
@@ -162,7 +163,7 @@ async function doMotDang(ten, { chuPhu = [], chan = !TAT_CHAN, dangTaiCo = true 
 	await yen(p);
 	if (CO_DO && ten === "tiep")
 		await p.evaluate((cau) => {
-			const h = [...document.querySelectorAll("[data-hang-nut]")].find((e) => e.getBoundingClientRect().height > 0);
+			const h = [...document.querySelectorAll("[data-hang-hanh-dong]")].find((e) => e.getBoundingClientRect().height > 0);
 			const k = document.createElement("p");
 			k.style.height = "20px";
 			k.textContent = cau;

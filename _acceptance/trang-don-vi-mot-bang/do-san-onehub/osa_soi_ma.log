@@ -1,0 +1,14 @@
+SAI dong-ho-bang-chu-ky: apps/app/app/(app)/[slug]/settings/okr/bang-chu-ky.tsx client=true, doc dong ho: new Date dong 160
+DUNG dong-ho-sheet-mo-chu-ky: apps/app/app/(app)/[slug]/settings/okr/sheet-mo-chu-ky.tsx client=true, doc dong ho: khong
+DUNG dong-ho-page: apps/app/app/(app)/[slug]/settings/okr/page.tsx server=true, goi homNayVn=true, goiYChuKy=true
+DUNG goi-y-khong-cung: 2 khoa tenGoiY trong okr.ts (can 2: vi, en), nam viet cung: khong
+DUNG dialog-co-table: packages/ui/src/components/dialog.tsx khai size "table": true
+DUNG hang-invalid: SimpleTableRow nhan invalid: true
+DUNG nav-strip-xuat: nav-item.tsx xuat NavGroup, NavGroupLabel, NavItem, NavStrip
+DUNG hop-nhap-dung-table: DialogContent size="table" true, SimpleTableRow invalid true, StatusIndicator true
+DUNG khung-dung-nav-strip: settings-sidebar dung NavStrip true, nav tu ve overflow-x-auto 0
+SAI lop-dem-tep: so tep 0 = so tep diff 0
+DUNG pha-dong-ho: them new Date() vao ban sao sheet-mo-chu-ky -> ma 1
+DUNG pha-lop: them className="text-destructive" vao TableCell cua ban sao -> ma 1
+goc: .
+KET LUAN 10 DUNG, 2 SAI — ma thoat 1
