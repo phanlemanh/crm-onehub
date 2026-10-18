@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: du-an-gantt
-verdict: BLOCKED
-failed_evals: []
-reason: 'ui-check:E13 không đo được. Lệnh tien-de.mjs không hoàn tất: phiên đo dựng xong (kho crm_cool_elbakyan_61bdff_do, app localhost:4582, api localhost:4626) nhưng man.mjs dòng 122 gọi viec.create bị API trả 400 "duAnId: Invalid input: expected string, received null". Rào chắn nằm ở dữ liệu dựng của rang/man.mjs (gửi duAnId null mà schema yêu cầu chuỗi), không phải ở giao diện. Chưa vẽ trang nào, chưa lưu ảnh dg-*.png nào.'
+verdict: REJECT
+failed_evals: [E13]
+reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ad235d5bf90ca41eafea4c2caeb7bd58a934b96e
+verified_commit: edad49a0d4f7638db47c1e159c15d1b0cfad9dde
 human_signoff:
 ---
 
 # Evidence Report: du-an-gantt
-
-Vòng 1. Verdict BLOCKED: mọi eval máy khác đều xanh, riêng E13 (ui-check) không đo được vì lỗi dữ liệu dựng của man.mjs. Cách gỡ là sửa dữ liệu dựng rồi chạy lại E13, không phải sửa giao diện.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -38,288 +36,282 @@ Vòng 1. Verdict BLOCKED: mọi eval máy khác đều xanh, riêng E13 (ui-chec
 | E11 | AC-11 | test | PASS |
 | E11b | AC-11 | test | PASS |
 | E12 | AC-12 | test | PASS |
-| E13 | AC-13 | ui-check | BLOCKED |
+| E13 | AC-13 | ui-check | FAIL |
 | E13b | AC-13 | script | PASS |
-| E14 | AC-14 | judgment | PASS (đề xuất của hội đồng, chờ người) |
+| E14 | AC-14 | judgment | PASS (đề xuất của hội đồng, chờ human_override) |
 | E15 | AC-10 | script | PASS |
+
+Lệnh fail không gắn eval: ui-check:E13 (gắn với E13, thoát khác 0). Không có lệnh fail nào khác.
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-du-an-gantt-E1-r1
+  run_id: minted-du-an-gantt-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_tao
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wp8v0m5g_test
+    test-run: dropped crm_mvd831ucycqm_test
 
 - eval: E1b
-  run_id: minted-du-an-gantt-E1b-r1
+  run_id: minted-du-an-gantt-E1b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_ds
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 5 tests across 1 file. [1086.00ms]
+    Ran 5 tests across 1 file. [1226.00ms]
 
 - eval: E2
-  run_id: minted-du-an-gantt-E2-r1
+  run_id: minted-du-an-gantt-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_gom
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wphccwys_test
+    test-run: dropped crm_mvd833de6oyt_test
 
 - eval: E2b
-  run_id: minted-du-an-gantt-E2b-r1
+  run_id: minted-du-an-gantt-E2b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_khung
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 2 tests across 1 file. [936.00ms]
+    Ran 2 tests across 1 file. [973.00ms]
 
 - eval: E3
-  run_id: minted-du-an-gantt-E3-r1
+  run_id: minted-du-an-gantt-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_bat_dau
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wolziiv7_test
+    test-run: dropped crm_mvd8331epet0_test
 
 - eval: E3b
-  run_id: minted-du-an-gantt-E3b-r1
+  run_id: minted-du-an-gantt-E3b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_ngay
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 1 test across 1 file. [1309.00ms]
+    Ran 1 test across 1 file. [1402.00ms]
 
 - eval: E4
-  run_id: minted-du-an-gantt-E4-r1
+  run_id: minted-du-an-gantt-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_gantt_ui
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 1 test across 1 file. [828.00ms]
+    Ran 1 test across 1 file. [913.00ms]
 
 - eval: E4b
-  run_id: minted-du-an-gantt-E4b-r1
+  run_id: minted-du-an-gantt-E4b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_gantt
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 3 tests across 1 file. [1164.00ms]
+    Ran 3 tests across 1 file. [877.00ms]
 
 - eval: E5
-  run_id: minted-du-an-gantt-E5-r1
+  run_id: minted-du-an-gantt-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_keo_thanh
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wpihaocz_test
+    test-run: dropped crm_mvd8332ieoes_test
 
 - eval: E5b
-  run_id: minted-du-an-gantt-E5b-r1
+  run_id: minted-du-an-gantt-E5b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_keo
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 3 tests across 1 file. [1392.00ms]
+    Ran 3 tests across 1 file. [1.58s]
 
 - eval: E6
-  run_id: minted-du-an-gantt-E6-r1
+  run_id: minted-du-an-gantt-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_phu_thuoc
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6woiztf46_test
+    test-run: dropped crm_mvd833fn8110_test
 
 - eval: E6b
-  run_id: minted-du-an-gantt-E6b-r1
+  run_id: minted-du-an-gantt-E6b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_phai_cho
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 2 tests across 1 file. [1235.00ms]
+    Ran 2 tests across 1 file. [1387.00ms]
 
 - eval: E7
-  run_id: minted-du-an-gantt-E7-r1
+  run_id: minted-du-an-gantt-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_ngay_lam
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 8 tests across 2 files. [11.00ms]
+    Ran 8 tests across 2 files. [23.00ms]
 
 - eval: E7b
-  run_id: minted-du-an-gantt-E7b-r1
+  run_id: minted-du-an-gantt-E7b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_tu_doi
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wpjmed1z_test
+    test-run: dropped crm_mvd833eegcfx_test
 
 - eval: E8
-  run_id: minted-du-an-gantt-E8-r1
+  run_id: minted-du-an-gantt-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_moc
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wvpz8qg6_test
+    test-run: dropped crm_mvd833im0jd0_test
 
 - eval: E9
-  run_id: minted-du-an-gantt-E9-r1
+  run_id: minted-du-an-gantt-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_lich
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wws0i08q_test
+    test-run: dropped crm_mvd83935j2ha_test
 
 - eval: E9b
-  run_id: minted-du-an-gantt-E9b-r1
+  run_id: minted-du-an-gantt-E9b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_lich
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    Ran 3 tests across 1 file. [552.00ms]
+    Ran 3 tests across 1 file. [494.00ms]
 
 - eval: E10
-  run_id: minted-du-an-gantt-E10-r1
+  run_id: minted-du-an-gantt-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_quyen
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6wwa5bia4_test
+    test-run: dropped crm_mvd839fz2fni_test
 
 - eval: E11
-  run_id: minted-du-an-gantt-E11-r1
+  run_id: minted-du-an-gantt-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_vong_doi
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6ww3lsuyd_test
+    test-run: dropped crm_mvd839escv7l_test
 
 - eval: E11b
-  run_id: minted-du-an-gantt-E11b-r1
+  run_id: minted-du-an-gantt-E11b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_dong
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    (lệnh không in dòng tóm tắt; kết thúc thành công)
+    Ran 4 tests across 1 file. [1476.00ms]
 
 - eval: E12
-  run_id: mvd6www919cg
+  run_id: mvd83abncc15
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_thuoc
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
-    test-run: dropped crm_mvd6www919cg_test
+    test-run: dropped crm_mvd83abncc15_test
 
 - eval: E13
-  run_id: minted-du-an-gantt-E13-r1
-  cannot_run: true
+  run_id: minted-du-an-gantt-E13-r2
+  exit_code: 1
   baseline: n-a
   verifier: config:executors.script.dg_man
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
+  screenshot: evidence/E13-step1.png
   observed: |
-    Không có khung nào để đối chiếu với expected: thư mục evidence không có ảnh dg-cua-toi-1280, dg-pham-vi-1280, dg-ds-1280, dg-gantt-1280, dg-gantt-moc-tre-1280, dg-gantt-da-doi-1280, dg-khung-viec-1280, dg-hoi-dong-1280, dg-lich-lam-viec-1280, dg-gantt-375 hay dg-ds-375.
-  network_observed: n-a (driver)
-  output: |
-    Lệnh: BANG_CHUNG=_acceptance/du-an-gantt/evidence bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/du-an-gantt/rang/man.mjs" (cd vào cây với || exit 97).
-    Phiên đo dựng xong: kho crm_cool_elbakyan_61bdff_do, app localhost:4582, api localhost:4626.
-    Dòng cuối: "KHONG DO DUOC: Error: viec.create tra 400: ... duAnId: Invalid input: expected string, received null" tại man-lib.mjs:215 (lam), gọi từ man.mjs:122; sau đó "phien-do: xong".
-    Không có dòng "du-an-gantt man: dat". Phiên đo dọn contextDevApiKey và ảnh đại diện bình thường.
-    Assertion cần đạt: lệnh thoát thành công kèm "du-an-gantt man: dat" — KHÔNG đạt (không đo được, mã thoát có trong run-log).
-    Không dùng browser tool nên không đọc network; server do phiên đo tự dựng và tự dọn.
-    Log đầy đủ: /private/tmp/claude-503/-Users-manhphan-dev-crm-onehub--claude-worktrees-cool-elbakyan-61bdff/475dba83-314e-44c8-b1f7-70a66e22d37f/scratchpad/e13.log
+    Đã mở 11 ảnh (E13-step1..11). Hình ảnh khớp Expected: phạm vi «Của tôi» có dòng phụ «Dự án: …», ô Phạm vi đủ mục, bảng dự án có «x/y việc xong», khoảng ngày, mốc kế, người tạo và dòng «Đã đóng (1)»; Gantt có hàng Mốc hình thoi, cây thụt, mũi tên, cột T7/CN tô nền, nhóm «Chưa có lịch (1)» với «Đặt ngày»; mốc «Ký kết» trễ màu đỏ; sau dời lịch thanh việc sau dịch phải và có toast «Đã dời 2 việc»; khung việc, hộp hỏi đóng dự án, trang Lịch làm việc và hai ảnh 375 (Gantt cuộn ngang trong khung, danh sách dạng thẻ) đều đúng.
+    Nguyên nhân REJECT không nằm ở ảnh: răng man.mjs báo 8 dòng lỗi console của app (Route "/[slug]/viec" gặp dữ liệu URL khi prerender/điều hướng) ở /viec?phamVi=tat-ca-du-an và /viec?phamVi=<id dự án>; dòng cuối của phiên đo là «du-an-gantt man: hong 1». Chi tiết ở evidence/E13-network.txt.
+  network_observed: app-fail
 
 - eval: E13b
-  run_id: minted-du-an-gantt-E13b-r1
+  run_id: minted-du-an-gantt-E13b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dg_san_thiet_ke
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
     dg san: 11 tep, 0 vi pham P0
 
 - eval: E15
-  run_id: minted-du-an-gantt-E15-r1
+  run_id: minted-du-an-gantt-E15-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dg_dot_bien
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
   output: |
     dot-bien: 21/21 dot bien chet
 
 ### Judgment
 
 - eval: E14
-  judged_by: hội đồng judge-subagent (fresh context), đề xuất PASS
+  judged_by: judge-subagent (fresh context)
   verdict: PASS
-  rationale: Ba thấu kính cùng đề xuất PASS (bên dưới). Hợp đồng là T3 nên người phải tự chốt, máy chưa chốt thay.
+  rationale: Hội đồng ba góc nhìn cùng đề xuất PASS, chờ người chốt (T3 đòi human_override trên mọi mục judgment).
+  panel:
+    - domain-correctness: PASS — CONTEXT.md có đủ mục «Dự án», «Việc của tôi», «Phạm vi», «Mốc (dự án)», «Phụ thuộc (việc)» và «Lịch làm việc» với các luật đã nêu. docs/api.md mục «Việc» có phần «Dự án» (dòng 618–655) nêu đủ duAn.list/lich, duAn.moc.*/phuThuoc.*, viec.doiLich/doiDuAn, luật dời khi chồng, nguồn vết gantt và tu-doi, và router lichLamViec.
+    - operational-feasibility: PASS — CONTEXT.md có đủ các mục «Dự án», «Việc của tôi», «Phạm vi (màn Việc)», «Mốc (dự án)», «Phụ thuộc (việc)» và «Lịch làm việc», nội dung khớp từng ý trong câu hỏi. docs/api.md có mục con «Dự án» ngay dưới «Việc» (dòng 618–655), nêu đủ các thủ tục, luật dời khi chồng, nguồn vết gantt và tu-doi, và router lichLamViec. Tên duAn.moc.* và duAn.phuThuoc.* được ghi rõ là bí danh của các thủ tục phẳng duAn.mocTao… và duAn.phuThuocTao…
+    - spec-alignment: PASS — Cả ba phần của câu hỏi đều có trong hai tệp. CONTEXT.md có mục «Dự án» và «Việc của tôi» (dòng 192–198, 229–239), «Mốc (dự án)» (247–249), «Phụ thuộc (việc)» (253–257) và «Lịch làm việc» (261–263), mỗi mục đủ các ý yêu cầu. docs/api.md có phần «### Dự án» (dòng 618–655), liệt kê duAn.list, duAn.lich, duAn.moc.*, duAn.phuThuoc.*, viec.doiLich, viec.doiDuAn, luật dời khi chồng, nguồn gantt và tu-doi (dòng 613–615), cùng router lichLamViec.
   human_override:  # chi nguoi ghi
-
-Phiếu của hội đồng cho E14 (lời lẽ nguyên văn, không rút gọn):
-
-- domain-correctness: PASS — CONTEXT.md có đủ các mục «Dự án» (dòng 229), «Phạm vi (màn Việc)», «Việc của tôi» (dòng 197), «Mốc (dự án)», «Phụ thuộc (việc)» và «Lịch làm việc», và nội dung khớp từng ý của câu hỏi. docs/api.md mục «Việc › Dự án» (dòng 618-655) nêu duAn.list, duAn.lich, duAn.moc.*, duAn.phuThuoc.*, viec.doiLich, viec.doiDuAn, luật dời khi chồng, nguồn vết `gantt` và `tu-doi`, và lichLamViec.*. Tôi không thấy điều nào bị thiếu.
-- operational-feasibility: PASS — CONTEXT.md (dòng 192-198, 229-263) có đủ các mục «Việc của tôi», «Dự án», «Mốc (dự án)», «Phụ thuộc (việc)» và «Lịch làm việc», nội dung khớp từng ý của câu hỏi. docs/api.md (dòng 613-655) có phần «Dự án» nêu đủ duAn.list, duAn.lich, duAn.moc.*, duAn.phuThuoc.*, viec.doiLich, viec.doiDuAn, luật dời khi chồng, nguồn vết gantt và tu-doi, và router lichLamViec.
-- spec-alignment: PASS — CONTEXT.md có đủ các mục «Dự án», «Việc của tôi», «Phạm vi», «Mốc (dự án)», «Phụ thuộc (việc)» và «Lịch làm việc» (dòng 192–263), nội dung khớp từng ý trong câu hỏi. Mục «Dự án» trong docs/api.md (dòng 618–655) nêu đủ duAn.list/lich, duAn.moc.*, duAn.phuThuoc.*, viec.doiLich, viec.doiDuAn, luật dời khi chồng, nguồn vết gantt và tu-doi (dòng 613–615) và lichLamViec.*.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
 
 - cmd: bun run lint:slop
-  run_id: minted-du-an-gantt-SUITE-bun_run_lint_slop-r1
+  run_id: minted-du-an-gantt-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-18T02:11:47Z
+  verified_at: 2026-10-18T02:44:44Z
 
 ## Known limits
 
@@ -327,33 +319,11 @@ Phiếu của hội đồng cho E14 (lời lẽ nguyên văn, không rút gọn)
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+carried từ round 1 — baseline không đo lại round này (evals.yaml không đổi từ lần đo baseline cuối, round 1). Trường baseline của từng eval ghi n-a.
 
-Baseline khong do:
+Eval không phân biệt (xanh trên cả HEAD lẫn baseline): không có.
 
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-tao": bo qua baseline: tep apps/api/test/du-an.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an.dom.tsx -t dg-man-ds: bo qua baseline: tep apps/app/test/du-an.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-gom": bo qua baseline: tep apps/api/test/du-an.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-khung && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t dg-man-dong-phu: bo qua baseline: tep apps/app/test/khung-viec-lich.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-bat-dau": bo qua baseline: tep apps/api/test/du-an-lich.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && for tz in Asia/Ho_Chi_Minh UTC; do TZ=$tz bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-ngay || exit 1; done: bo qua baseline: tep apps/app/test/khung-viec-lich.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/gantt-du-an.dom.tsx -t gantt-du-an: bo qua baseline: tep packages/ui/test/gantt-du-an.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an-gantt.dom.tsx -t dg-man-gantt: bo qua baseline: tep apps/app/test/du-an-gantt.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-keo-thanh": bo qua baseline: tep apps/api/test/du-an-lich.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an-gantt.dom.tsx -t dg-man-keo: bo qua baseline: tep apps/app/test/du-an-gantt.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-phu-thuoc": bo qua baseline: tep apps/api/test/du-an-lich.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-viec-lich.dom.tsx -t dg-man-phai-cho: bo qua baseline: tep apps/app/test/khung-viec-lich.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd packages/db && TZ=Asia/Ho_Chi_Minh bun test test/lich-lam-viec.spec.ts test/lich-viec.spec.ts: bo qua baseline: tep packages/db/test/lich-lam-viec.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-lich.spec.ts -t dg-tu-doi": bo qua baseline: tep apps/api/test/du-an-lich.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-moc": bo qua baseline: tep apps/api/test/du-an.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/lich-lam-viec.spec.ts": bo qua baseline: tep apps/api/test/lich-lam-viec.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lich-lam-viec.dom.tsx: bo qua baseline: tep apps/app/test/lich-lam-viec.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an-quyen.spec.ts": bo qua baseline: tep apps/api/test/du-an-quyen.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/du-an.spec.ts -t dg-vong-doi": bo qua baseline: tep apps/api/test/du-an.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/du-an.dom.tsx -t dg-man-dong: bo qua baseline: tep apps/app/test/du-an.dom.tsx co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && bun test test/du-an-do-nguong.spec.ts": bo qua baseline: tep apps/api/test/du-an-do-nguong.spec.ts co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/du-an-gantt/rang/san-thiet-ke.mjs: bo qua baseline: tep _acceptance/du-an-gantt/rang/san-thiet-ke.mjs co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/du-an-gantt/rang/dot-bien.mjs: bo qua baseline: tep _acceptance/du-an-gantt/rang/dot-bien.mjs co o cay dang kiem nhung chua co o merge-base baf78ee3aae40c288f6772d8b7223ebec633e808 — eval moi, chay tren code cu khong phan biet gi
+E13 trượt ở đâu: mọi khung hình khớp Expected, và các phép tự đo của răng (mốc trễ, tự dời, 375 không cuộn ngang) đều báo đạt. Chỉ phép đếm lỗi console của app trả 8 lỗi, nên ui-check kết luận hỏng. Đây là lỗi thật phía app (trang /viec), không phải lỗi của harness.
 
 ## Variance
 
@@ -362,3 +332,4 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E13 không đo được — man.mjs dòng 122 gửi duAnId null cho viec.create nên API từ chối 400, phiên đo thoát trước khi vẽ trang nào; các eval máy còn lại và bảy lệnh suite đều xanh. Verdict BLOCKED, cần sửa dữ liệu dựng của rang/man.mjs rồi chạy lại E13.
+Round 2: E13 trượt — đã sửa man.mjs, 11 khung hình được lưu và khớp Expected, nhưng trang /viec (phạm vi tất cả dự án và phạm vi một dự án) in 8 lỗi console «Route "/[slug]/viec": Next.js encountered URL data during prerendering or a navigation». Hai mươi bốn eval còn lại và bảy lệnh suite xanh. Returned to implementation.
