@@ -469,7 +469,15 @@ là để một chữ chỉ hai cấp.
 **Đơn vị**: chữ chung cho một bộ phận hoặc một phòng ban, khi câu nói về cả hai —
 «trưởng đơn vị», màn OKR «Theo đơn vị». Gốc OneHub cũng là một đơn vị khi đặt
 OKR cấp công ty. Chốt 2026-09-24.
-_Avoid_: tổ chức con, nhánh, unit
+Trên màn, đơn vị gốc mang tên không gian làm việc — ở đây là **OneHub** — như mọi đơn
+vị khác mang tên của mình. Khi câu nói về phạm vi thì viết «cả công ty» («sơ đồ cả công
+ty»); khi gọi tên cấp cạnh Bộ phận, Phòng ban, Cá nhân thì viết **Công ty**. Chốt
+2026-10-18 (Manh Phan).
+_Avoid_: tổ chức con, nhánh, unit; «Toàn công ty», «Toàn OneHub», «Cả công ty» làm tên
+đơn vị gốc
+Vì sao (tên gốc): gốc từng mang năm tên trên màn — Toàn công ty, Cả công ty, Toàn
+OneHub, cả công ty, Công ty — trong khi ô chọn đơn vị đã hiện tên không gian làm việc.
+Ba vai, ba chữ cố định: tên đơn vị, phạm vi trong câu, tên cấp.
 Vì sao: «tổ chức» đã là cả cây; «nhánh» gợi chi nhánh theo địa lý.
 
 **Trưởng đơn vị**: người đứng đầu một phòng ban (trưởng phòng ban) hoặc một bộ
@@ -698,10 +706,18 @@ ràng buộc người, còn chương trình chỉ là vài con số và công t�
 **Căn chỉnh**: liên kết nói một mục tiêu góp vào một mục tiêu hoặc một KR ở cấp
 trên. Đơn vị cấp dưới tự chọn chỗ mình góp; một mục tiêu có thể góp vào nhiều
 chỗ. Chốt 2026-09-24.
-_Avoid_: phân rã, cascade, alignment, cha–con
+«Căn chỉnh» là tên của khái niệm, dùng trong tài liệu, mã và lời giải thích. **Nhãn trên
+màn là «Góp vào»**, ở mọi chỗ: thẻ «Góp vào» của khung mục tiêu, khối «Góp vào đâu»,
+nút «Thêm chỗ góp vào», trạng thái «Chưa góp vào đâu», «Sơ đồ góp vào» và nút «Xem
+trên sơ đồ». Chốt 2026-10-18 (Manh Phan).
+_Avoid_: phân rã, cascade, alignment, cha–con; trên màn: căn chỉnh, đường lý do, gắn
+căn chỉnh, gắn thêm, chưa căn chỉnh vào đâu, chưa nối lên
 Vì sao: «phân rã» gợi KR cấp trên được chép xuống thành mục tiêu cấp dưới — đúng
 thứ sản phẩm đã quyết không làm. «Cha–con» gợi mỗi mục tiêu một cha, còn căn chỉnh
 thì nhiều–nhiều; cha–con là chuyện của cây tổ chức.
+Vì sao (nhãn màn): «căn chỉnh» dịch sát «alignment», người mới phải học mới hiểu; khái
+niệm từng mang chín tên trên màn. «Góp vào» tự nói hướng và nghĩa, và màn đã dùng nó ở
+nửa số chỗ — học từ Tability, nơi mỗi khái niệm một tên đời thường ở mọi chỗ.
 
 **Người phụ trách (OKR)**: người duy nhất trả lời cho một KR hoặc một mục tiêu —
 ghi cập nhật tuần, được nhắc khi KR im. Mỗi KR và mỗi mục tiêu có đúng một người
