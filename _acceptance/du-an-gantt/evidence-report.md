@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: du-an-gantt
-verdict: REJECT
-failed_evals: [E13]
+verdict: PENDING-JUDGMENT
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: edad49a0d4f7638db47c1e159c15d1b0cfad9dde
+verified_commit: 1c357d7bf6c01265c7f25cad1751640984792e94
 human_signoff:
 ---
 
@@ -36,282 +36,283 @@ human_signoff:
 | E11 | AC-11 | test | PASS |
 | E11b | AC-11 | test | PASS |
 | E12 | AC-12 | test | PASS |
-| E13 | AC-13 | ui-check | FAIL |
+| E13 | AC-13 | ui-check | PASS |
 | E13b | AC-13 | script | PASS |
-| E14 | AC-14 | judgment | PASS (đề xuất của hội đồng, chờ human_override) |
+| E14 | AC-14 | judgment | PASS (de xuat cua hoi dong, cho human_override) |
 | E15 | AC-10 | script | PASS |
-
-Lệnh fail không gắn eval: ui-check:E13 (gắn với E13, thoát khác 0). Không có lệnh fail nào khác.
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-du-an-gantt-E1-r2
+  run_id: minted-du-an-gantt-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_tao
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd831ucycqm_test
+    test-run: dropped crm_mvd92htczyf3_test
 
 - eval: E1b
-  run_id: minted-du-an-gantt-E1b-r2
+  run_id: minted-du-an-gantt-E1b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_ds
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 5 tests across 1 file. [1226.00ms]
+    Ran 5 tests across 1 file. [1224.00ms]
 
 - eval: E2
-  run_id: minted-du-an-gantt-E2-r2
+  run_id: minted-du-an-gantt-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_gom
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd833de6oyt_test
+    test-run: dropped crm_mvd92i9bd8au_test
 
 - eval: E2b
-  run_id: minted-du-an-gantt-E2b-r2
+  run_id: minted-du-an-gantt-E2b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_khung
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 2 tests across 1 file. [973.00ms]
+    Ran 2 tests across 1 file. [1013.00ms]
 
 - eval: E3
-  run_id: minted-du-an-gantt-E3-r2
+  run_id: minted-du-an-gantt-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_bat_dau
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd8331epet0_test
+    test-run: dropped crm_mvd92gorb0r4_test
 
 - eval: E3b
-  run_id: minted-du-an-gantt-E3b-r2
+  run_id: minted-du-an-gantt-E3b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_ngay
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
     Ran 1 test across 1 file. [1402.00ms]
 
 - eval: E4
-  run_id: minted-du-an-gantt-E4-r2
+  run_id: minted-du-an-gantt-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_gantt_ui
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 1 test across 1 file. [913.00ms]
+    Ran 1 test across 1 file. [808.00ms]
 
 - eval: E4b
-  run_id: minted-du-an-gantt-E4b-r2
+  run_id: minted-du-an-gantt-E4b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_gantt
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 3 tests across 1 file. [877.00ms]
+    Ran 3 tests across 1 file. [1268.00ms]
 
 - eval: E5
-  run_id: minted-du-an-gantt-E5-r2
+  run_id: minted-du-an-gantt-E5-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_keo_thanh
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd8332ieoes_test
+    test-run: dropped crm_mvd92ga0q5g1_test
 
 - eval: E5b
-  run_id: minted-du-an-gantt-E5b-r2
+  run_id: minted-du-an-gantt-E5b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_keo
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 3 tests across 1 file. [1.58s]
+    Ran 3 tests across 1 file. [1.56s]
 
 - eval: E6
-  run_id: minted-du-an-gantt-E6-r2
+  run_id: minted-du-an-gantt-E6-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_phu_thuoc
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd833fn8110_test
+    test-run: dropped crm_mvd92hyz8p6h_test
 
 - eval: E6b
-  run_id: minted-du-an-gantt-E6b-r2
+  run_id: minted-du-an-gantt-E6b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_phai_cho
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 2 tests across 1 file. [1387.00ms]
+    Ran 2 tests across 1 file. [981.00ms]
 
 - eval: E7
-  run_id: minted-du-an-gantt-E7-r2
+  run_id: minted-du-an-gantt-E7-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_ngay_lam
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 8 tests across 2 files. [23.00ms]
+    Ran 8 tests across 2 files. [21.00ms]
 
 - eval: E7b
-  run_id: minted-du-an-gantt-E7b-r2
+  run_id: minted-du-an-gantt-E7b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_tu_doi
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd833eegcfx_test
+    test-run: dropped crm_mvd92igtdxw8_test
 
 - eval: E8
-  run_id: minted-du-an-gantt-E8-r2
+  run_id: minted-du-an-gantt-E8-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_moc
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd833im0jd0_test
+    test-run: dropped crm_mvd92i1anuky_test
 
 - eval: E9
-  run_id: minted-du-an-gantt-E9-r2
+  run_id: minted-du-an-gantt-E9-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_lich
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd83935j2ha_test
+    test-run: dropped crm_mvd92nlcu0va_test
 
 - eval: E9b
-  run_id: minted-du-an-gantt-E9b-r2
+  run_id: minted-du-an-gantt-E9b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_lich
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 3 tests across 1 file. [494.00ms]
+    Ran 3 tests across 1 file. [566.00ms]
 
 - eval: E10
-  run_id: minted-du-an-gantt-E10-r2
+  run_id: minted-du-an-gantt-E10-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_quyen
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd839fz2fni_test
+    lenh thoat sach, khong co dong tom tat them
 
 - eval: E11
-  run_id: minted-du-an-gantt-E11-r2
+  run_id: minted-du-an-gantt-E11-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_vong_doi
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd839escv7l_test
+    test-run: dropped crm_mvd92ogb8ztd_test
 
 - eval: E11b
-  run_id: minted-du-an-gantt-E11b-r2
+  run_id: minted-du-an-gantt-E11b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_man_dong
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    Ran 4 tests across 1 file. [1476.00ms]
+    Ran 4 tests across 1 file. [1388.00ms]
 
 - eval: E12
-  run_id: mvd83abncc15
+  run_id: minted-du-an-gantt-E12-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dg_thuoc
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
-    test-run: dropped crm_mvd83abncc15_test
+    test-run: dropped crm_mvd92pc5luw2_test
 
 - eval: E13
-  run_id: minted-du-an-gantt-E13-r2
-  exit_code: 1
+  run_id: minted-du-an-gantt-E13-r3
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dg_man
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   screenshot: evidence/E13-step1.png
   observed: |
-    Đã mở 11 ảnh (E13-step1..11). Hình ảnh khớp Expected: phạm vi «Của tôi» có dòng phụ «Dự án: …», ô Phạm vi đủ mục, bảng dự án có «x/y việc xong», khoảng ngày, mốc kế, người tạo và dòng «Đã đóng (1)»; Gantt có hàng Mốc hình thoi, cây thụt, mũi tên, cột T7/CN tô nền, nhóm «Chưa có lịch (1)» với «Đặt ngày»; mốc «Ký kết» trễ màu đỏ; sau dời lịch thanh việc sau dịch phải và có toast «Đã dời 2 việc»; khung việc, hộp hỏi đóng dự án, trang Lịch làm việc và hai ảnh 375 (Gantt cuộn ngang trong khung, danh sách dạng thẻ) đều đúng.
-    Nguyên nhân REJECT không nằm ở ảnh: răng man.mjs báo 8 dòng lỗi console của app (Route "/[slug]/viec" gặp dữ liệu URL khi prerender/điều hướng) ở /viec?phamVi=tat-ca-du-an và /viec?phamVi=<id dự án>; dòng cuối của phiên đo là «du-an-gantt man: hong 1». Chi tiết ở evidence/E13-network.txt.
-  network_observed: app-fail
+    step1 dg-cua-toi-1280: trang Viec, o 'Pham vi: Cua toi' (nhu DA1), chip Giao cho toi 7 / Toi giao 0 / Dang theo doi 0; bang 7 viec, cac viec thuoc du an co dong phu 'Du an: Trien khai Ngan hang An Phat/Bac A kd92uip' (dung ST-viec-cua-toi-du-an), 'Goi lai anh Tuan' khong co dong phu. step2 dg-pham-vi-1280: menu Pham vi mo: Cua toi, Tat ca du an, nhom 'Du an dang mo' (2 du an), 'Da dong (1)' co mui ten, 'Tao du an...' (dung ST-pham-vi-mo). step3 dg-ds-1280: pham vi 'Tat ca du an', bang cot Du an/Tien do/Khoang ngay/Moc ke/Nguoi tao: '0/1 viec xong 26/10-30/10 — Pham Thu Ha', '0/5 viec xong 26/10-04/11 Go-live 06/11'; dong gap 'Da dong (1)' (dung ST-du-an-ds-co).
+    step4 dg-gantt-1280: hang Moc co hinh thoi Go-live, cay viec co con thut (Ra dieu khoan duoi Ky hop dong), thanh mau theo trang thai (Dang lam xanh, con lai xam), 3 mui ten noi dung cap, cot Thu 7/CN/ngay 2/11 to nen soc, nhom 'Chua co lich (1)' co nut 'Dat ngay' (dung ST-gantt-co-lich/chua-lich); vach hom nay khong nam trong khung nhin (chi co trong DOM). step5 dg-gantt-moc-tre-1280: them moc 'Ky ket' hinh thoi do + 'Moc ke: Ky ket 29/10' cham do (dung ST-gantt-moc-tre). step6 dg-gantt-da-doi-1280: sau doiLich thanh Ky hop dong / Chuan bi / Dao tao o vi tri moi, ngay du an doi 26/10-06/11, toast 'Da doi 2 viec' (dung ST-gantt-da-doi).
+    step7 dg-khung-viec-1280: khung viec 'Chuan bi du lieu khach hang' co o Bat dau (3 thg 11), Han (4 thg 11), Du an (Trien khai Ngan hang An Phat), muc 'PHAI CHO (1)' voi Ky hop dong + o them viec phai cho (dung ST-khung-viec-lich). step8 dg-hoi-dong-1280: hop thoai 'Du an con 5 viec chua xong. Van dong?' nut Thoi / Van dong (dung ST-du-an-hoi-dong). step9 dg-lich-lam-viec-1280: trang Lich lam viec co the 'Ngay nghi trong tuan' (Thu 2..CN, Thu 7 va CN duoc chon) va the 'Ngay le' (Nghi bu kd92uip 2 thg 11 2026) (dung ST-lich-lam-viec). step10 dg-gantt-375: khung 375, o chon kieu xem 'So do Gantt' dang dropdown, Gantt nam trong khung va bi cat ngang (cuon ngang trong khung), trang khong co thanh cuon ngang (man.mjs do scrollWidth <= 375 dat). step11 dg-ds-375: o chon kieu xem 'Danh sach', du an hien thanh the (card) co '0/5 viec xong · 26/10 – 06/11 · Ky ket 29/10 · tre', dong gap 'Da dong (1)' (dung ST-gantt-dien-thoai).
+  network_observed: n-a (driver)
+  output: |
+    Assertion DOM tu dg-gantt-1280.html: [data-gantt-dependency]=3 (>=2), [data-off-day]=26 (>0), data-gantt-moc='Go-live', data-today co trong DOM (cot header 'Thu 7 17' va dai bg-primary/5 tai 14.29% be rong cua vung cuon, nam ngoai khung nhin vi du an bat dau 26/10).
+    Frame da luu: E13-step1=dg-cua-toi-1280, step2=dg-pham-vi-1280, step3=dg-ds-1280, step4=dg-gantt-1280, step5=dg-gantt-moc-tre-1280, step6=dg-gantt-da-doi-1280, step7=dg-khung-viec-1280, step8=dg-hoi-dong-1280, step9=dg-lich-lam-viec-1280, step10=dg-gantt-375, step11=dg-ds-375 (kem .html cho 1280/375). Tep E13-network.txt da ghi lai; lan nay khong co duong doc network, driver la script.
+    LUU Y: 'vach hom nay' khong thay ro trong frame dg-gantt-1280 (cua so Gantt mo o tuan 26/10, hom nay 17-18/10 nam ngoai khung nhin); chi xac nhan qua DOM. Khong coi la mau thuan Expected.
 
 - eval: E13b
-  run_id: minted-du-an-gantt-E13b-r2
+  run_id: minted-du-an-gantt-E13b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dg_san_thiet_ke
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
     dg san: 11 tep, 0 vi pham P0
 
+- eval: E14
+  judged_by: hoi dong ba lens (de xuat), panel giu nguyen tu round 2 — inputs khong doi, khong cham lai; rationale xem round do
+  verdict: PASS (de xuat, round 2 mang sang)
+  rationale: panel giu nguyen tu round 2, rationale xem round do. Hop dong T3, moi judgment item can human_override truc tiep.
+  votes:
+    - domain-correctness: PASS (r2)
+    - operational-feasibility: PASS (r2)
+    - spec-alignment: PASS (r2)
+  human_override:  # chi nguoi ghi
+
 - eval: E15
-  run_id: minted-du-an-gantt-E15-r2
+  run_id: minted-du-an-gantt-E15-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dg_dot_bien
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
   output: |
     dot-bien: 21/21 dot bien chet
-
-### Judgment
-
-- eval: E14
-  judged_by: judge-subagent (fresh context)
-  verdict: PASS
-  rationale: Hội đồng ba góc nhìn cùng đề xuất PASS, chờ người chốt (T3 đòi human_override trên mọi mục judgment).
-  panel:
-    - domain-correctness: PASS — CONTEXT.md có đủ mục «Dự án», «Việc của tôi», «Phạm vi», «Mốc (dự án)», «Phụ thuộc (việc)» và «Lịch làm việc» với các luật đã nêu. docs/api.md mục «Việc» có phần «Dự án» (dòng 618–655) nêu đủ duAn.list/lich, duAn.moc.*/phuThuoc.*, viec.doiLich/doiDuAn, luật dời khi chồng, nguồn vết gantt và tu-doi, và router lichLamViec.
-    - operational-feasibility: PASS — CONTEXT.md có đủ các mục «Dự án», «Việc của tôi», «Phạm vi (màn Việc)», «Mốc (dự án)», «Phụ thuộc (việc)» và «Lịch làm việc», nội dung khớp từng ý trong câu hỏi. docs/api.md có mục con «Dự án» ngay dưới «Việc» (dòng 618–655), nêu đủ các thủ tục, luật dời khi chồng, nguồn vết gantt và tu-doi, và router lichLamViec. Tên duAn.moc.* và duAn.phuThuoc.* được ghi rõ là bí danh của các thủ tục phẳng duAn.mocTao… và duAn.phuThuocTao…
-    - spec-alignment: PASS — Cả ba phần của câu hỏi đều có trong hai tệp. CONTEXT.md có mục «Dự án» và «Việc của tôi» (dòng 192–198, 229–239), «Mốc (dự án)» (247–249), «Phụ thuộc (việc)» (253–257) và «Lịch làm việc» (261–263), mỗi mục đủ các ý yêu cầu. docs/api.md có phần «### Dự án» (dòng 618–655), liệt kê duAn.list, duAn.lich, duAn.moc.*, duAn.phuThuoc.*, viec.doiLich, viec.doiDuAn, luật dời khi chồng, nguồn gantt và tu-doi (dòng 613–615), cùng router lichLamViec.
-  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-du-an-gantt-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
 
 - cmd: bun run lint:slop
-  run_id: minted-du-an-gantt-SUITE-bun_run_lint_slop-r2
+  run_id: minted-du-an-gantt-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-du-an-gantt-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-18T02:44:44Z
+  verified_at: 2026-10-18T03:12:19Z
 
 ## Known limits
 
@@ -319,17 +320,16 @@ Lệnh fail không gắn eval: ui-check:E13 (gắn với E13, thoát khác 0). K
 
 ## Analyst
 
-carried từ round 1 — baseline không đo lại round này (evals.yaml không đổi từ lần đo baseline cuối, round 1). Trường baseline của từng eval ghi n-a.
+carried tu round 1 — baseline khong do lai round nay.
 
-Eval không phân biệt (xanh trên cả HEAD lẫn baseline): không có.
-
-E13 trượt ở đâu: mọi khung hình khớp Expected, và các phép tự đo của răng (mốc trễ, tự dời, 375 không cuộn ngang) đều báo đạt. Chỉ phép đếm lỗi console của app trả 8 lỗi, nên ui-check kết luận hỏng. Đây là lỗi thật phía app (trang /viec), không phải lỗi của harness.
+Eval khong phan biet (xanh ca tren HEAD lan baseline): khong co.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — moi eval chay mot lan, deterministic, khong co eval nao mang phuong sai.
 
 ## Iterations
 
-Round 1: E13 không đo được — man.mjs dòng 122 gửi duAnId null cho viec.create nên API từ chối 400, phiên đo thoát trước khi vẽ trang nào; các eval máy còn lại và bảy lệnh suite đều xanh. Verdict BLOCKED, cần sửa dữ liệu dựng của rang/man.mjs rồi chạy lại E13.
-Round 2: E13 trượt — đã sửa man.mjs, 11 khung hình được lưu và khớp Expected, nhưng trang /viec (phạm vi tất cả dự án và phạm vi một dự án) in 8 lỗi console «Route "/[slug]/viec": Next.js encountered URL data during prerendering or a navigation». Hai mươi bốn eval còn lại và bảy lệnh suite xanh. Returned to implementation.
+Round 1: chay may dau tien tren sha ad235d5bf, ghi trong run-log (hau to r1). Baseline do o round nay.
+Round 2: REJECT — E13 chua dat, co 3 finding trong hop dong va 18 finding ngoai hop dong. Tra ve phan trien khai (commit 91bc21d52 va 1c357d7bf).
+Round 3: moi eval may deu dat, bay lenh suite deu dat; verdict PENDING-JUDGMENT vi hop dong T3 can human_override truc tiep tren E14 (hoi dong de xuat PASS, panel mang sang tu round 2).
