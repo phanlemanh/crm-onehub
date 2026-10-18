@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: a77599bc56030840cbb95b81d8f228331fbc217e
-human_signoff:
+human_signoff: manh 2026-10-18 — ký Cổng 2 trên verdict PASS 11/11 eval (S4 round 1, wf_b93d2838-c1f). Ngoài-1, 2, 3, 4, 5 ghi Known limits; Ngoài-6, 7 chấp nhận, không sửa; đồng ý phần cắt; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: t1-ma-doc

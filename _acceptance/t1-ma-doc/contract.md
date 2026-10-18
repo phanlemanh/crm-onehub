@@ -5,7 +5,7 @@ slug: t1-ma-doc
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-17T01:41:04Z
 design_doc: docs/superpowers/specs/2026-10-17-t1-ma-doc-design.md
@@ -128,3 +128,9 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
 
 - `t1_ma_doc` không làm PR tài liệu cần hồ sơ: pre-merge-check của kit không đọc khoá này.
 - Ghim lại `giam-phut-ci-nhap-t1` và `pre-push-t1` trong PR này (đổi `phan-loai.mjs`, `gate-shape.json`).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-18:
+  - Ngoài-1: Gỡ hai dòng phủ `apps/**`, `packages/**` khỏi danh sách nặng thì bộ quét vẫn xanh, và tệp chữ mà ứng dụng đọc lúc chạy (như lời dặn của tác nhân) lại bị coi là nhẹ.
+  - Ngoài-2: Tệp khai hình dạng cổng mất hay đổi cấu trúc thì bộ quét im lặng bỏ qua răng của hồ sơ thay vì báo lỗi; trên cây hiện tại một ca khác vẫn đỏ thay.
+  - Ngoài-3: Bài kiểm đọc tệp ở gốc kho (như AGENTS.md) bằng đường dẫn tương đối hay chuỗi ghép thì bộ quét không nhận ra.
+  - Ngoài-4: Bài kiểm nạp tệp tài liệu hay dữ liệu bằng `require` hoặc `import` tĩnh thì bộ quét không thấy mối phụ thuộc.
+  - Ngoài-5: Ba ca kiểm của bộ quét (quet-do 8, 9, 11) chỉ xác nhận «không phải đích», không có đối chứng dương trong cùng kho.
