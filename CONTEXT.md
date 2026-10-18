@@ -498,9 +498,17 @@ Vì sao: màn điều phối dùng «bộ phận» cho cấp này tới hết l�
 là để một chữ chỉ hai cấp.
 
 **Đơn vị**: chữ chung cho một bộ phận hoặc một phòng ban, khi câu nói về cả hai —
-«trưởng đơn vị», màn OKR «Theo đơn vị». Gốc OneHub cũng là một đơn vị khi đặt
+«trưởng đơn vị», «bộ OKR của đơn vị». Gốc OneHub cũng là một đơn vị khi đặt
 OKR cấp công ty. Chốt 2026-09-24.
-_Avoid_: tổ chức con, nhánh, unit
+Trên màn, đơn vị gốc mang tên không gian làm việc — ở đây là **OneHub** — như mọi đơn
+vị khác mang tên của mình. Khi câu nói về phạm vi thì viết «cả công ty» («sơ đồ cả công
+ty»); khi gọi tên cấp cạnh Bộ phận, Phòng ban, Cá nhân thì viết **Công ty**. Chốt
+2026-10-18 (Manh Phan).
+_Avoid_: tổ chức con, nhánh, unit; «Toàn công ty», «Toàn OneHub», «Cả công ty» làm tên
+đơn vị gốc
+Vì sao (tên gốc): gốc từng mang năm tên trên màn — Toàn công ty, Cả công ty, Toàn
+OneHub, cả công ty, Công ty — trong khi ô chọn đơn vị đã hiện tên không gian làm việc.
+Ba vai, ba chữ cố định: tên đơn vị, phạm vi trong câu, tên cấp.
 Vì sao: «tổ chức» đã là cả cây; «nhánh» gợi chi nhánh theo địa lý.
 
 **Trưởng đơn vị**: người đứng đầu một phòng ban (trưởng phòng ban) hoặc một bộ
@@ -671,17 +679,45 @@ _Avoid_: KR chết, KR bỏ quên, KR trễ hạn
 Vì sao: «im» nói đúng điều máy biết — không ai ghi gì — mà không đoán KR có còn chạy.
 
 **Họp tuần**: buổi trưởng đơn vị cùng đơn vị đi qua OKR mỗi tuần. **Bảng họp tuần**
-là cách xem thứ ba của «Theo đơn vị», xếp KR theo thứ đáng bàn: tự tin tụt, KR im,
+là thẻ con «Họp tuần» của một bộ OKR (trước 18/10 là cách xem thứ ba của «Theo đơn
+vị»), xếp KR theo thứ đáng bàn: tự tin tụt, KR im,
 ghi chú mới. Bảng xếp theo KR, không liệt kê người chưa cập nhật. Chốt 2026-09-26.
 _Avoid_: điểm danh, báo cáo tuần, giao ban
 Vì sao: «điểm danh» và «giao ban» đặt người vào giữa; họp tuần bàn KR.
 
-**Toàn cảnh**: tab của khu OKR cho mọi vai, kể cả «chỉ OKR» — tiến độ, mức tự tin và
-heatmap của mọi đơn vị trong một chu kỳ. Chốt 2026-09-24 ở bản mẫu, nhãn chốt
-2026-09-26.
-_Avoid_: dashboard, bảng điều khiển
-Vì sao: «Tổng quan» đã là tên trang chủ của CRM; hai màn cùng chữ thì người không biết
-mình đang đứng ở đâu.
+**Bộ OKR**: các mục tiêu và KR của một đơn vị trong một chu kỳ — vật trung tâm của
+khu Mục tiêu. Mỗi đơn vị mỗi chu kỳ có đúng một bộ, sinh từ cây tổ chức chứ không tạo
+tay; khi chương trình bật OKR cá nhân thì một người cũng có bộ của mình. Trên thanh bên
+khu, mục «Bộ OKR» (nhóm OKR) liệt mọi bộ, lọc Tất cả · Tôi dẫn · Đang theo dõi; mỗi bộ có
+trang riêng với các thẻ con là phần của nó (OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm).
+Học từ «Plan» của Tability. Chốt 2026-10-18 (Manh Phan).
+Khác **Bộ OKR mẫu**: đó là dữ liệu mẫu của đội dựng, không phải tên trên màn.
+_Avoid_: kế hoạch, plan, bảng OKR, trang đơn vị
+Vì sao: «kế hoạch» đã là chữ của Kế hoạch 30 ngày (khuôn kế hoạch, kế hoạch im); «trang
+đơn vị» gọi tên cái trang chứ không gọi tên vật — người ta mở một bộ OKR, không mở một
+đơn vị.
+
+**Báo cáo (khu Mục tiêu)**: nhóm thứ hai trên thanh bên khu Mục tiêu, cho mọi vai, kể
+cả «chỉ OKR» — nơi nhìn ngang cả công ty trong một chu kỳ: **Sức khoẻ** (ô số, bảng đơn
+vị, mức tự tin theo tuần, phần quản trị), **Mọi KR** (mọi KR lọc theo tình trạng, đơn vị,
+người) và **Sơ đồ**. Thay thẻ «Toàn cảnh» (chốt 2026-09-24 ở bản mẫu, nhãn 2026-09-26) khi
+khu chuyển sang thanh bên chia theo việc và vật. Chốt 2026-10-18 (Manh Phan).
+_Avoid_: Toàn cảnh (tên cũ), dashboard, bảng điều khiển, Tổng quan
+Vì sao: thanh bên chia theo việc (OKR) và vật để đọc (Báo cáo), như Work · Reports của
+Tability; chia theo phạm vi (của tôi · đơn vị · cả công ty) làm người ta không biết một
+mục đang nói về bộ OKR hay về số liệu. «Tổng quan» vẫn là tên trang chủ của CRM.
+
+**Sơ đồ (khu Mục tiêu)**: mục trong nhóm Báo cáo chứa các sơ đồ của khu, mở ở khung
+toàn vùng — chiếm trọn vùng nội dung, có nút «Toàn màn hình». Hôm nay chứa **Sơ đồ góp
+vào** (xem mục Căn chỉnh); sơ đồ người hay sơ đồ phụ thuộc sau này vào cùng mục, thanh
+bên không thêm dòng. Chốt 2026-10-18 (Manh Phan).
+_Avoid_: bản đồ, xem bản đồ, cây căn chỉnh, map
+Vì sao: mọi mục trên thanh bên là danh từ chỉ nơi chốn; «bản đồ» trong giao diện tiếng
+Việt gợi bản đồ địa lý, còn hình nối các đơn vị quen gọi là sơ đồ, như sơ đồ tổ chức.
+
+Nhóm còn lại của thanh bên mang nhãn **OKR** (Bộ OKR · Lấy ý kiến); khi KPI có trong
+sản phẩm thì nhãn là «OKR và KPI», không phải «Mục tiêu» (trùng tên khu, và KPI không
+phải mục tiêu) hay «Kế hoạch» (đụng Kế hoạch 30 ngày). Chốt 2026-10-18 (Manh Phan).
 
 **Bộ OKR mẫu**: công ty giả «Hải Đăng Logistics» — 40 người tên giả, ba bộ phận, mười
 phòng ban — đang chạy OKR ở tuần 6 của quý, nạp bằng một lệnh vào máy dev hoặc phiên đo
@@ -706,7 +742,7 @@ ngày đầu, ngày cuối và khoảng nghỉ như Tết. Quản trị chương
 kỳ. Trong khu OKR, «kỳ» trần là chữ ngắn của chu kỳ — «cuối kỳ», «rà giữa kỳ».
 Chốt 2026-09-24.
 Chu kỳ tạo nhầm có hai đường dọn. **Gỡ** chu kỳ: xoá hẳn một chu kỳ còn trống — chưa
-có mục tiêu, lần hỏi ý, quý con, đợt rà, điểm hay mang sang; vết tạo và gỡ còn lại.
+có mục tiêu, lần lấy ý kiến, quý con, đợt rà, điểm hay mang sang; vết tạo và gỡ còn lại.
 **Ẩn** chu kỳ: chu kỳ đã có dữ liệu biến khỏi ô chọn kỳ, không nhận ghi, không nhắc,
 dữ liệu giữ nguyên, hiện lại được; ẩn phải ghi lý do. Chốt 2026-09-30.
 _Avoid_ (cho gỡ và ẩn): xoá mềm, lưu trữ, archive
@@ -729,10 +765,18 @@ ràng buộc người, còn chương trình chỉ là vài con số và công t�
 **Căn chỉnh**: liên kết nói một mục tiêu góp vào một mục tiêu hoặc một KR ở cấp
 trên. Đơn vị cấp dưới tự chọn chỗ mình góp; một mục tiêu có thể góp vào nhiều
 chỗ. Chốt 2026-09-24.
-_Avoid_: phân rã, cascade, alignment, cha–con
+«Căn chỉnh» là tên của khái niệm, dùng trong tài liệu, mã và lời giải thích. **Nhãn trên
+màn là «Góp vào»**, ở mọi chỗ: thẻ «Góp vào» của khung mục tiêu, khối «Góp vào đâu»,
+nút «Thêm chỗ góp vào», trạng thái «Chưa góp vào đâu», «Sơ đồ góp vào» và nút «Xem
+trên sơ đồ». Chốt 2026-10-18 (Manh Phan).
+_Avoid_: phân rã, cascade, alignment, cha–con; trên màn: căn chỉnh, đường lý do, gắn
+căn chỉnh, gắn thêm, chưa căn chỉnh vào đâu, chưa nối lên
 Vì sao: «phân rã» gợi KR cấp trên được chép xuống thành mục tiêu cấp dưới — đúng
 thứ sản phẩm đã quyết không làm. «Cha–con» gợi mỗi mục tiêu một cha, còn căn chỉnh
 thì nhiều–nhiều; cha–con là chuyện của cây tổ chức.
+Vì sao (nhãn màn): «căn chỉnh» dịch sát «alignment», người mới phải học mới hiểu; khái
+niệm từng mang chín tên trên màn. «Góp vào» tự nói hướng và nghĩa, và màn đã dùng nó ở
+nửa số chỗ — học từ Tability, nơi mỗi khái niệm một tên đời thường ở mọi chỗ.
 
 **Người phụ trách (OKR)**: người duy nhất trả lời cho một KR hoặc một mục tiêu —
 ghi cập nhật tuần, được nhắc khi KR im. Mỗi KR và mỗi mục tiêu có đúng một người
@@ -969,25 +1013,30 @@ _Avoid_: báo cáo tuần, bản tin tuần, digest
 Vì sao: «báo cáo tuần» là thứ người viết gửi lên để duyệt; «bản tin» gợi một tin gửi đi
 cho nhiều người, còn tóm tắt nằm trên màn và lọc theo người xem.
 
-**Hỏi ý mục tiêu**: lần cả công ty được hỏi «nếu là CEO, mục tiêu nào quan trọng cho kỳ
+**Lấy ý kiến**: lần cả công ty được hỏi «nếu là CEO, mục tiêu nào quan trọng cho kỳ
 tới» trước khi đặt OKR của một chu kỳ — bước 1–2 trong mười bước OKR của OneHub. Quản
 trị mở, kèm lời mở và vài con số công ty; mọi người góp ý tới hạn; sau hạn người chọn
 xếp ý thành chủ đề, kết luận từng chủ đề và công bố. Mỗi chu kỳ nhiều nhất một lần.
-Trong khu OKR, «hỏi ý» trần là chữ ngắn của nó. Đề xuất 2026-09-29, chờ Cổng Phạm vi của
-`dot-hoi-y-tuong-okr`.
-_Avoid_: đợt hỏi, khảo sát, chiến dịch ý tưởng, brainstorm
+Đề xuất 2026-09-29 (Cổng Phạm vi của `dot-hoi-y-tuong-okr`) dưới tên «Hỏi ý mục tiêu»;
+đổi tên thành «Lấy ý kiến» ngày 2026-10-18 (Manh Phan). Tên thẻ và tên màn là «Lấy ý
+kiến»; mỗi câu một người góp vẫn gọi là **Ý**. Mã và đường dẫn giữ `hoi-y` tới khi
+khu Mục tiêu đổi đường dẫn.
+_Avoid_: đợt hỏi, khảo sát, chiến dịch ý tưởng, brainstorm, hỏi ý (tên cũ)
 Vì sao: «đợt» đã là chữ của chiến dịch; «khảo sát» gợi câu hỏi có đáp án chọn sẵn và
 kết quả là biểu đồ, còn ở đây mỗi ý có người trả lời; «chiến dịch» là danh sách gọi.
+Vì sao (tên mới): «hỏi ý» ít người nói và đứng cạnh «Hỏi Kara» trên cùng hàng nút, hai
+tính năng khác hẳn mà tên gần trùng; «lấy ý kiến» là cụm ai cũng hiểu ngay.
 
-**Ý (hỏi ý)**: một câu một người góp trong một lần hỏi ý — nội dung, vì sao, đo bằng
+**Ý (lấy ý kiến)**: một câu một người góp trong một lần lấy ý kiến — nội dung, vì sao, đo bằng
 gì. Mỗi người tối đa ba ý mỗi lần. Ghi tên người góp: người chọn và quản trị thấy tên,
 đồng nghiệp thấy ý nhưng không thấy tên. Nút «Tôi cũng nghĩ vậy» trên ý người khác
 thay cho viết lại cùng ý; số đếm chỉ người chọn và quản trị thấy.
 _Avoid_: ý kiến, góp ý, đề xuất, ý tưởng (khi nói một mục)
 Vì sao: «góp ý» đã là việc Trợ lý OKR làm trên một mục tiêu; «đề xuất» là dòng của Trợ
-lý OKR; «ý kiến» gợi phản hồi về một thứ đã có, còn đây là điều chưa có.
+lý OKR; «ý kiến» gợi phản hồi về một thứ đã có, còn đây là điều chưa có. Lời tránh này
+nói về việc gọi **từng câu** là «ý kiến»; tên cả lần là «Lấy ý kiến» thì giữ.
 
-**Người chọn**: người quản trị được chỉ định khi mở một lần hỏi ý — thường là CEO. Chỉ
+**Người chọn**: người quản trị được chỉ định khi mở một lần lấy ý kiến — thường là CEO. Chỉ
 người chọn viết bản viết trước, kết luận từng chủ đề và công bố. Không phải một vai
 trong không gian làm việc; bị hạ vai thì quản trị chỉ định người khác.
 _Avoid_: CEO (trong màn và mã), người duyệt, chủ trì
@@ -1002,7 +1051,7 @@ _Avoid_: bản nháp của CEO, dự thảo, niêm phong (làm danh từ)
 Vì sao: «nháp» đã là trạng thái của mục tiêu; «dự thảo» gợi văn bản đưa ra lấy ý, còn
 bản này cố ý giấu tới cuối.
 
-**Chủ đề (hỏi ý)**: nhóm ý nói cùng một điều, do người chọn hoặc quản trị gom sau hạn.
+**Chủ đề (lấy ý kiến)**: nhóm ý nói cùng một điều, do người chọn hoặc quản trị gom sau hạn.
 Mỗi ý thuộc đúng một chủ đề trước khi công bố. Mỗi chủ đề có kết luận và lý do người
 chọn tự viết; chủ đề «chọn» thành một mục tiêu nháp cấp OneHub.
 _Avoid_: nhóm, cụm, theme, danh mục
@@ -1021,8 +1070,8 @@ kết luận và lý do của từng ý mình, và bấm «Tôi hiểu vì sao»
 _Avoid_: phán quyết, quyết định, trạng thái
 Vì sao: «quyết định» quá rộng; «trạng thái» là thứ máy đổi, còn kết luận là lời của người.
 
-**Kho ý**: các chủ đề kết luận «để sau» của những lần hỏi ý đã công bố — ai cũng đọc
-được, làm mồi cho lần hỏi ý kế.
+**Kho ý**: các chủ đề kết luận «để sau» của những lần lấy ý kiến đã công bố — ai cũng
+đọc được, làm mồi cho lần lấy ý kiến kế.
 _Avoid_: backlog, tồn đọng, ý bị loại
 Vì sao: «tồn đọng» và «bị loại» gợi ý đã hỏng; ý để sau là ý chưa tới lúc.
 
@@ -1051,7 +1100,7 @@ câu trả lời chỉ dựa trên những Mục tiêu và KR người hỏi xem
 Mục tiêu hay KR đó. Cuộc hỏi chỉ đọc, không ghi gì vào OKR, và không có trạng thái kết
 thúc: đóng cột không đổi gì, mở lại thấy cuộc đang dở. Đề xuất 2026-10-15 ở Cổng Phạm vi
 của `hoi-dap-okr`.
-_Avoid_: cuộc soạn (cuộc soạn ghi bản nháp), hỏi ý (lần cả công ty góp ý mục tiêu), phiên
+_Avoid_: cuộc soạn (cuộc soạn ghi bản nháp), lấy ý kiến (lần cả công ty góp ý mục tiêu), phiên
 
 **Bản nháp (OKR)**: bộ Mục tiêu và KR mà Trợ lý OKR đề nghị trong một cuộc soạn,
 hiện thành bảng cạnh lời hỏi. Mỗi dòng là một Đề xuất: người nhận, sửa rồi nhận, hay
