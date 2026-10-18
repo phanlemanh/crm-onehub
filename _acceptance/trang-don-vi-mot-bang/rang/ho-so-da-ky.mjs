@@ -68,14 +68,20 @@ const laToTien = (a, b) =>
 		.status === 0;
 
 // du-an-gantt goc-da-gop: DH2 đã vào onehub thì merge-base với onehub trùng đỉnh DH2 và
-// tập lượt rỗng. Gốc so và commit riêng khi đó rút từ chính lần gộp chứa verified_commit
-// của evidence-report.md hồ sơ này: gốc = merge-base(cha 1, cha 2), commit riêng =
-// rev-list cha 2 ^cha 1 ^DH1. Chưa gộp (hoặc có DVB_BASE) → luật cũ nguyên vẹn.
+// tập lượt rỗng. Gốc so và commit riêng khi đó rút từ chính lần gộp chứa sha của dòng
+// chot-truong-nguoi cuối trong run-log hồ sơ này (lượt chấm đã ký; làn ghim lại không ghi
+// dòng này, khác verified_commit mà làn ghim lại ghi đè): gốc = merge-base(cha 1, cha 2),
+// commit riêng = rev-list cha 2 ^cha 1 ^DH1. Chưa gộp (hoặc có DVB_BASE) → luật cũ nguyên vẹn.
 function khungDaGop(nhanhGop) {
 	const bc = readFileSync(
-		join(GOC, "_acceptance/trang-don-vi-mot-bang/evidence-report.md"),
+		join(GOC, "_acceptance/trang-don-vi-mot-bang/run-log.jsonl"),
 		"utf8",
-	).match(/^verified_commit:\s*([0-9a-f]{40})\s*$/m)?.[1];
+	)
+		.split("\n")
+		.filter((l) => l.includes('"kind":"chot-truong-nguoi"'))
+		.map((l) => l.match(/"sha":"([0-9a-f]{40})"/)?.[1])
+		.filter(Boolean)
+		.at(-1);
 	if (!bc || !nhanhGop || !coRef(nhanhGop) || !laToTien(bc, nhanhGop))
 		return null;
 	const gop = git(
@@ -93,7 +99,7 @@ function khungDaGop(nhanhGop) {
 		khongDo(`verified_commit ${bc} da vao ${nhanhGop} ma khong thay commit gop`);
 	const truoc = git("rev-parse", `${gop}^1`);
 	const dinh = git("rev-parse", `${gop}^2`);
-	console.log(`DH2 da gop o ${gop.slice(0, 9)}: goc so va commit rieng rut tu lan gop`);
+	console.log(`DH2 da gop o ${gop.slice(0, 9)}: goc so va commit rieng rut tu lan gop (chot ${bc.slice(0, 9)})`);
 	return { goc: git("merge-base", truoc, dinh), truoc, dinh };
 }
 
