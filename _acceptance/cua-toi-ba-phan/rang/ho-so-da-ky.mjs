@@ -110,52 +110,69 @@ const giaiRef = (cmd) => {
 	return lenh === "" || lenh.startsWith("[object") ? null : lenh;
 };
 
-const viec = new Map();
-for (const slug of readdirSync(join(GOC, "_acceptance"))) {
-	if (slug === HO_SO_NAY) continue;
-	const hd = join(GOC, "_acceptance", slug, "contract.md");
-	const ev = join(GOC, "_acceptance", slug, "evals.yaml");
-	if (!existsSync(hd) || !existsSync(ev)) continue;
-	const tt = /^status:\s*(\S+)/m.exec(readFileSync(hd, "utf8"))?.[1];
-	if (tt !== "signed-off" && tt !== "machine-cleared") continue;
-	const chuEv = readFileSync(ev, "utf8");
-	const { byId: kyVong } = expectedExits(chuEv);
-	for (const e of parseEvals(
-		chuEv,
-		["executor", "cmd", "status"],
-		stripComment,
-	)) {
-		if (!["test", "script"].includes(e.executor) || e.status === "not-run")
-			continue;
-		const lenh = giaiRef(String(e.cmd ?? "").replace(/^["']|["']$/g, ""));
-		if (!lenh) continue;
-		let cham = [...tap].filter((t) => lenh.includes(t));
-		// Lệnh gọi một bộ đo `_acceptance/<hồ sơ>/rang/*.mjs` không nhắc tên tệp kiểm trong
-		// chuỗi lệnh — đọc chính script: nhắc một tệp kiểm bị sửa hoặc một tệp vật bị sửa thì
-		// tính. Các lệnh này chạy TUẦN TỰ sau đợt song song (có bộ đo tiêm tại chỗ — DH1 r1).
-		let tuanTu = false;
-		if (cham.length === 0) {
-			const rang = /_acceptance\/[\w-]+\/rang\/[\w.-]+\.mjs/.exec(lenh)?.[0];
-			if (rang && existsSync(join(GOC, rang))) {
-				const chu = readFileSync(join(GOC, rang), "utf8");
-				// bộ đo tự chạy lại eval hồ sơ khác (đọc evals.yaml) bỏ — lượt này đã chạy chúng
-				if (chu.includes("evals.yaml")) continue;
-				cham = [
-					...[...tap].filter((t) => chu.includes(t)),
-					...vatSua.filter((f) => chu.includes(f)),
-				];
-				tuanTu = cham.length > 0;
+/** Lệnh của eval hồ sơ đã ký KHÁC chạy một tệp kiểm trong `tapChon` (hoặc bộ đo nhắc tệp vật trong `vatChon`). */
+function chonViec(tapChon, vatChon) {
+	const viec = new Map();
+	for (const slug of readdirSync(join(GOC, "_acceptance"))) {
+		if (slug === HO_SO_NAY) continue;
+		const hd = join(GOC, "_acceptance", slug, "contract.md");
+		const ev = join(GOC, "_acceptance", slug, "evals.yaml");
+		if (!existsSync(hd) || !existsSync(ev)) continue;
+		const tt = /^status:\s*(\S+)/m.exec(readFileSync(hd, "utf8"))?.[1];
+		if (tt !== "signed-off" && tt !== "machine-cleared") continue;
+		const chuEv = readFileSync(ev, "utf8");
+		const { byId: kyVong } = expectedExits(chuEv);
+		for (const e of parseEvals(
+			chuEv,
+			["executor", "cmd", "status"],
+			stripComment,
+		)) {
+			if (!["test", "script"].includes(e.executor) || e.status === "not-run")
+				continue;
+			const lenh = giaiRef(String(e.cmd ?? "").replace(/^["']|["']$/g, ""));
+			if (!lenh) continue;
+			let cham = [...tapChon].filter((t) => lenh.includes(t));
+			// Lệnh gọi một bộ đo `_acceptance/<hồ sơ>/rang/*.mjs` không nhắc tên tệp kiểm trong
+			// chuỗi lệnh — đọc chính script: nhắc một tệp kiểm bị sửa hoặc một tệp vật bị sửa thì
+			// tính. Các lệnh này chạy TUẦN TỰ sau đợt song song (có bộ đo tiêm tại chỗ — DH1 r1).
+			let tuanTu = false;
+			if (cham.length === 0) {
+				const rang = /_acceptance\/[\w-]+\/rang\/[\w.-]+\.mjs/.exec(lenh)?.[0];
+				if (rang && existsSync(join(GOC, rang))) {
+					const chu = readFileSync(join(GOC, rang), "utf8");
+					// bộ đo tự chạy lại eval hồ sơ khác (đọc evals.yaml) bỏ — lượt này đã chạy chúng
+					if (chu.includes("evals.yaml")) continue;
+					cham = [
+						...[...tapChon].filter((t) => chu.includes(t)),
+						...vatChon.filter((f) => chu.includes(f)),
+					];
+					tuanTu = cham.length > 0;
+				}
 			}
+			if (cham.length === 0) continue;
+			const mong = kyVong.get(e.id) ?? 0;
+			const v = viec.get(lenh) ?? { lenh, cham, ai: [], tuanTu };
+			v.ai.push({ slug, id: e.id, mong });
+			viec.set(lenh, v);
 		}
-		if (cham.length === 0) continue;
-		const mong = kyVong.get(e.id) ?? 0;
-		const v = viec.get(lenh) ?? { lenh, cham, ai: [], tuanTu };
-		v.ai.push({ slug, id: e.id, mong });
-		viec.set(lenh, v);
 	}
+	return viec;
 }
-if (viec.size === 0)
-	khongDo(`bo chon rong — khong eval da ky nao chay ${[...tap].join(", ")}`);
+
+/** Đối chứng khi lượt này không chạm tệp nào eval hồ sơ khác chạy: một tệp .dom.tsx đã ký có lệnh chạy thẳng nó. */
+const DOI_CHUNG = "gop-y-dung-cho.dom.tsx";
+let viec = chonViec(tap, vatSua);
+const rong = viec.size === 0;
+if (rong) {
+	console.log(
+		`AC-11: khong eval ho so da ky khac chay ${[...tap].join(", ")} — 0 eval bi luot nay cham; doi chung duong va chieu do tren ${DOI_CHUNG}`,
+	);
+	viec = chonViec(new Set([DOI_CHUNG]), []);
+	if (viec.size === 0)
+		khongDo(
+			`bo chon rong — doi chung ${DOI_CHUNG} khong con eval da ky nao chay`,
+		);
+}
 console.log(`tep kiem bi cham: ${[...tap].join(", ")}`);
 console.log(
 	`lenh: ${viec.size} · eval: ${[...viec.values()].reduce((t, v) => t + v.ai.length, 0)}`,
@@ -301,7 +318,9 @@ for (const v of dsViec) {
 }
 console.log(
 	sai === 0
-		? `DUNG AC-11: ${so - doSan}/${so - doSan} eval ho so da ky${doSan ? ` · ${doSan} do san tren goc hoac gan luot` : ""}`
+		? rong
+			? `DUNG AC-11: 0 eval ho so da ky khac bi luot nay cham · doi chung duong ${so - doSan}/${so - doSan} eval ${DOI_CHUNG}`
+			: `DUNG AC-11: ${so - doSan}/${so - doSan} eval ho so da ky${doSan ? ` · ${doSan} do san tren goc hoac gan luot` : ""}`
 		: `SAI AC-11: ${sai}/${so} eval lech ma ky vong`,
 );
 

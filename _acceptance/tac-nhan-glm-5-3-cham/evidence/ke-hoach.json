@@ -1,0 +1,27 @@
+{
+  "bien_the": [
+    {
+      "ten": "moc",
+      "model": "zai/glm-5.2-fast",
+      "low": false
+    },
+    {
+      "ten": "glm53",
+      "model": "zai/glm-5.3",
+      "low": false
+    },
+    {
+      "ten": "glm53-fast",
+      "model": "zai/glm-5.3-fast",
+      "low": false
+    },
+    {
+      "ten": "glm53-low",
+      "model": "zai/glm-5.3",
+      "low": true
+    }
+  ],
+  "so_luot": 3,
+  "bam_agent_goc": "e98cc696259ba27c123fca9817b14f227c2e2c9c5562e8b704c82247668f9b50",
+  "bam_agent_low": "6c07bca7c5ade82249b2dcd68e15f88ba6f3704803fbc08b7a5667e3499b7098"
+}

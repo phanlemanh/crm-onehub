@@ -442,6 +442,10 @@ const GHIM = {
 		"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 	],
 	"companies:created": ["Đã thêm 1.", "Đã thêm 12."],
+	"companies:nenTang": [
+		"Đây là trang 1, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
+		"Đây là trang 12, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.",
+	],
 	"companies:bulk.reassigned": [
 		"Đã đổi người phụ trách cho 1.",
 		"Đã đổi người phụ trách cho 12.",
@@ -1188,6 +1192,7 @@ const GHIM = {
 		"Đã chuyển 1 mục tiêu sang A.",
 		"Đã chuyển 12 mục tiêu sang A.",
 	],
+	"agent-builder-tro-chuyen:dung.daTroi": ["Đã 1", "Đã 12"],
 } satisfies Record<string, [string, string]>;
 
 describe("kho chuoi cua vong ③a", () => {

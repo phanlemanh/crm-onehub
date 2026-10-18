@@ -9,7 +9,7 @@ import {
 
 export default defineTool({
 	description:
-		"Look up a company's brand, industry, location and social links by domain, and fill in the blanks on its record. Fills empty fields only — never overwrites what a person typed.",
+		"Look up a company's brand, industry, location and social links by domain and fill in its record. Fills empty fields; on a repeat lookup it also replaces fields the previous lookup filled that nobody has changed since, and clears address parts the new result no longer reports. Never overwrites a field a person typed or edited.",
 	inputSchema: z.object({
 		companyId: z.string(),
 		fresh: z
@@ -33,13 +33,15 @@ export default defineTool({
 		}
 
 		const filled = result.filled ?? [];
+		const cleared = result.cleared ?? [];
 
 		return {
 			enriched: true as const,
 			filled,
+			cleared,
 			mirrored: result.mirrored ?? [],
 			note:
-				filled.length === 0
+				filled.length === 0 && cleared.length === 0
 					? "Everything it returned was already on the record."
 					: undefined,
 		};

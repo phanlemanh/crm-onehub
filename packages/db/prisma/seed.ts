@@ -1,6 +1,7 @@
 import { mirror } from "../src/blob";
 import { db } from "../src/client";
 import { DEFAULT_REPORTING_CURRENCY } from "../src/currency";
+import { gieoDuAnMau } from "../src/du-an-gieo";
 import { resolveFavicon } from "../src/favicon";
 import { fieldKeyFromLabel } from "../src/fields-shape";
 import {
@@ -1111,11 +1112,16 @@ async function main() {
 		nguon: "DATABASE_URL",
 		now: new Date(),
 	});
+	const duAn = await gieoDuAnMau(db, {
+		databaseUrl: process.env.DATABASE_URL ?? "",
+		nguon: "DATABASE_URL",
+		now: new Date(),
+	});
 
 	console.log(
 		`Seeded ${companies.length} companies, ${contacts.length} contacts, ` +
 			`${deals.length} deals, ${activities} activities, ${rates} exchange rates, ` +
-			`7 company fields, ${domains} tracked domains, ${viec.soViec} việc mẫu, workspace đã qua onboarding.`,
+			`7 company fields, ${domains} tracked domains, ${viec.soViec} việc mẫu, ${duAn.duAnId ? 1 : 0} dự án mẫu, workspace đã qua onboarding.`,
 	);
 }
 

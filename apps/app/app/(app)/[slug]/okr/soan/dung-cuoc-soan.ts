@@ -79,6 +79,9 @@ type ChoGuiLai = {
 type PhienThan = { theo: string; id: string; lan: number; choNap: boolean };
 
 export function usePhienCuoc(cuoc: CuocSoan) {
+	const trpc = useTRPC();
+	const toi = useQuery(trpc.users.me.queryOptions());
+	const laNguoiMo = toi.data?.id === cuoc.nguoiMo.id;
 	const [phien, setPhien] = useState<PhienThan>({
 		theo: cuoc.sessionId,
 		id: cuoc.sessionId,
@@ -98,7 +101,7 @@ export function usePhienCuoc(cuoc: CuocSoan) {
 	const idThan = phien.id;
 	const thread = useQuery<Thread>({
 		queryKey: ["soan-thread", cuoc.id, idThan],
-		enabled: cuoc.trangThai === "dang" && !laChoGiuPhien(idThan),
+		enabled: cuoc.trangThai === "dang" && !laChoGiuPhien(idThan) && laNguoiMo,
 		staleTime: SOAN_UI.giuPhienMs,
 		gcTime: 0,
 		refetchOnWindowFocus: false,
@@ -111,6 +114,7 @@ export function usePhienCuoc(cuoc: CuocSoan) {
 	return {
 		khoa: `${idThan}#${phien.lan}#${luong}`,
 		thread,
+		choNguoiXem: cuoc.trangThai === "dang" && toi.isPending,
 		napLai: () =>
 			setPhien((p) =>
 				laChoGiuPhien(p.theo)

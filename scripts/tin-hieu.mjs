@@ -25,6 +25,9 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { kiemYeuCau } from '../dieu-phoi/scripts/hinh-dang.mjs';
+// Một bộ giải «thư mục chính của kho» cho bên ghi và bên đọc (hồ sơ cua-tin-hieu-goc-moi-worktree) — dot.mjs kho tiêu
+// thụ đã chép theo INIT-CI-COPY-LIST cùng hinh-dang.mjs.
+import { gocKhoChinh } from '../dieu-phoi/scripts/dot.mjs';
 import { docPhamVi } from './cat-luot.mjs';
 import { phanTichKho, docCacTep, docTep, DA_GIAO_O, DANG_LAM_O, CHUA_LAM_O, CHUA_MO, KHONG_SUY } from './lo-trinh.mjs';
 
@@ -71,6 +74,16 @@ export function docKhai(root) {
 }
 
 // ── Bộ đọc tín hiệu ───────────────────────────────────────────────────────────
+// Gốc của thư mục NGUỒN (hộp ý chưa theo dõi): thư mục chính của kho khi gốc phiên là ĐỈNH của một worktree/kho git —
+// mọi worktree và mọi bên (người gửi, thợ qua đợt, bộ đọc) cùng một chỗ. Thư mục con, thư mục lồng trong kho git hay
+// không phải git → gốc phiên như cũ. Bản gom và cấu hình KHÔNG đi theo hàm này (bản gom sống trong git của nhánh).
+export function gocNguon(root) {
+  const r = path.resolve(root);
+  let top; let thuc;
+  try { top = execFileSync('git', ['-C', r, 'rev-parse', '--show-toplevel'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); thuc = realpathSync(r); } catch { return r; }
+  if (realpathSync(top) !== thuc) return r;
+  try { return gocKhoChinh(r); } catch { return r; }
+}
 export function tieuDeCua(nd) {
   if (typeof nd === 'string') return nd.trim();
   if (nd && typeof nd === 'object') for (const k of ['tieu_de', 'viec', 'cau_giao']) if (typeof nd[k] === 'string' && nd[k].trim()) return nd[k].trim();
@@ -81,7 +94,7 @@ const posix = p => p.split(path.sep).join('/');
 export function docTinHieu(root, nguon, { loai = napLoai() } = {}) {
   const tinHieu = []; const ngoaiKhuon = {}; const loi = []; const theoId = new Map();
   for (const ng of nguon) {
-    const dir = path.resolve(root, ng);
+    const dir = path.resolve(gocNguon(root), ng);
     let laThuMuc = false; try { laThuMuc = statSync(dir).isDirectory(); } catch { laThuMuc = false; }
     if (!laThuMuc) { loi.push(`nguồn tín hiệu không phải thư mục có thật: ${ng}`); continue; }
     for (const f of readdirSync(dir).filter(x => x.endsWith('.json')).sort()) {

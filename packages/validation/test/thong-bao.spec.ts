@@ -82,7 +82,7 @@ describe("khoa-thong-bao", () => {
 		);
 	});
 
-	test("du 22 loai, khong trung", () => {
-		expect(new Set(LOAI_THONG_BAO).size).toBe(22);
+	test("du 25 loai, khong trung", () => {
+		expect(new Set(LOAI_THONG_BAO).size).toBe(25);
 	});
 });

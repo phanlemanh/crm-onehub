@@ -76,6 +76,8 @@ export const NGUON_VIEC = [
 	"khuon",
 	"ke-hoach",
 	"dong-ke-hoach",
+	"gantt",
+	"tu-doi",
 ] as const;
 
 export type NguonViec = (typeof NGUON_VIEC)[number];
@@ -93,6 +95,10 @@ export const LOAI_VET_VIEC = [
 	"chuyen-viec",
 	"go-do-ban-ghi-xoa",
 	"them-viec-con",
+	"doi-bat-dau",
+	"doi-du-an",
+	"them-phu-thuoc",
+	"go-phu-thuoc",
 ] as const;
 
 export const LOAI_BAN_GHI = ["company", "contact", "deal", "plan"] as const;
@@ -307,11 +313,23 @@ export function dieuKienXemViec(userId: string): Prisma.ViecWhereInput {
 	return {
 		OR: [
 			{ gan: { some: {} } },
+			{ duAnId: { not: null } },
 			{ nguoiGiaoId: userId },
 			{ nguoiThucHienId: userId },
 			{ theoDoi: { some: { userId } } },
 		],
 	};
+}
+
+export function dieuKienNhomHayDuAn(
+	nhom: NhomViec,
+	userId: string,
+	duAn?: { duAnId?: string; tatCaDuAn?: boolean },
+): Prisma.ViecWhereInput {
+	if (duAn?.duAnId) return { duAnId: duAn.duAnId };
+	if (duAn?.tatCaDuAn)
+		return { duAnId: { not: null }, duAn: { dongLuc: null } };
+	return dieuKienNhom(nhom, userId);
 }
 
 export function dieuKienNhom(
@@ -352,7 +370,19 @@ const trangThaiVet = z.object({
 	lyDo: z.string().optional(),
 });
 
-const hanVet = z.object({ hanNgay: z.string().nullable() });
+const viecNganVet = z.object({ id: z.string(), tieuDe: z.string() });
+
+const hanVet = z.object({
+	hanNgay: z.string().nullable(),
+	boi: viecNganVet.optional(),
+});
+
+const batDauVet = z.object({
+	batDauNgay: z.string().nullable(),
+	boi: viecNganVet.optional(),
+});
+
+const duAnVet = z.object({ id: z.string(), ten: z.string() }).nullable();
 
 const noiDungVet = z.object({
 	tieuDe: z.string(),
@@ -369,6 +399,7 @@ export const vetViec = z.discriminatedUnion("loai", [
 			tieuDe: z.string(),
 			nguoiThucHien: nguoiVet,
 			hanNgay: z.string().nullable(),
+			batDauNgay: z.string().nullable().optional(),
 			banGhi: z.array(banGhiVet),
 			nguoiTheoDoi: z.array(nguoiVet),
 			chep: z
@@ -391,6 +422,22 @@ export const vetViec = z.discriminatedUnion("loai", [
 		sau: nguoiVet,
 	}),
 	z.object({ loai: z.literal("doi-han"), truoc: hanVet, sau: hanVet }),
+	z.object({
+		loai: z.literal("doi-bat-dau"),
+		truoc: batDauVet,
+		sau: batDauVet,
+	}),
+	z.object({ loai: z.literal("doi-du-an"), truoc: duAnVet, sau: duAnVet }),
+	z.object({
+		loai: z.literal("them-phu-thuoc"),
+		truoc: z.null(),
+		sau: z.object({ viec: viecNganVet }),
+	}),
+	z.object({
+		loai: z.literal("go-phu-thuoc"),
+		truoc: z.object({ viec: viecNganVet }),
+		sau: z.null(),
+	}),
 	z.object({
 		loai: z.literal("doi-noi-dung"),
 		truoc: noiDungVet,
@@ -494,6 +541,9 @@ export const CHON_VIEC = {
 	moTa: true,
 	trangThai: true,
 	hanNgay: true,
+	batDauNgay: true,
+	duAnId: true,
+	duAn: { select: { id: true, ten: true } },
 	taoLuc: true,
 	khepLuc: true,
 	nguoiGiaoId: true,

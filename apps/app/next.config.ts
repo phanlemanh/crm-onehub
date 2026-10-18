@@ -40,6 +40,16 @@ const nextConfig: NextConfig = {
 
 	cacheComponents: true,
 	partialPrefetching: true,
+
+	async redirects() {
+		return [
+			{
+				source: "/:slug/okr/cap-nhat-tuan",
+				destination: "/:slug/okr",
+				permanent: false,
+			},
+		];
+	},
 };
 
 export default nextConfig;

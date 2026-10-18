@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a8e229b52f9d3819c526d154271e98f18d9ebe28
+verified_commit: 9e9aa993dfc2cdd1788661f0715129ed417ff472
 human_signoff: Manh Phan 2026-09-26 — uỷ quyền phiên điều phối 2026-09-24
 ---
 
@@ -437,3 +437,31 @@ sha: 08d8837e1cc4222d84ebf0a880d0a64bdcbe5d64 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-06, do sửa thước đỏ lô 2-4 (b3)
 run_id: repin-20261006T104542Z-41641
 sha: a8e229b52f9d3819c526d154271e98f18d9ebe28 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E19 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15
+
+### Re-pin lần 3 — 2026-10-17, do ve-sinh-do-san-onehub: sửa gốc đỏ sẵn onehub (hydration record=, 403, moi-chuoi, neo F8, E16) + thước DH1/DH3 trên onehub 21b709411
+run_id: repin-20261017T062808Z-56916
+sha: 38ba7b5e8cdb6e285227092dfd7afb9ec9fcda2c · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-17, do ve-sinh-do-san-onehub: ghim lại bảy hồ sơ sau gộp onehub 9dfdf0628 (#459, #462, #463, #465) trước khi đẩy
+run_id: repin-20261017T113609Z-76485
+sha: 91b4e246850c022b600b63901a2666a3aac8428e · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E2, E5, E14, E17, E19, E21, E23 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-17, do ve-sinh-do-san-onehub: ghim lại bảy hồ sơ sau gỡ chú thích JSDoc c88b1658e (luật kho khong-chu-thich)
+run_id: repin-20261017T134627Z-69983
+sha: c88b1658eaa07946eeb8f6b8c1d30e0daa464971 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E21 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-17, do trang-don-vi-mot-bang (DH2): ghim lại sau gộp #469 da505732b + trang đơn vị một bảng, làn 2'/3 (dieu-huong-khu-muc-tieu tách riêng vì đỏ sẵn E3)
+run_id: repin-20261017T172149Z-45633
+sha: 39317b98772e8da923f3bb5fec658f5bee283236 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-17, do trang-don-vi-mot-bang (DH2): ghim lại sáu hồ sơ sau sửa coNutHoiKara (lối b, 374b5f9c5), một làn
+run_id: repin-20261017T174535Z-97743
+sha: b628afc16ae96714e56391e79605f2af26a101dd · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E21 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-18, do DA4 du-an-gantt: code Dự án, Lịch làm việc, răng HG đổi; 10 hồ sơ, trần 150′, bỏ DH2 (răng DH2 gãy sau gộp) theo Điều phối
+run_id: repin-20261018T002421Z-44023
+sha: 6e3d4c62116ca1cc0a4db4d18851f873814b448a · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E2, E19, E21, E27 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-18, do DA4 du-an-gantt: S4 lượt 1–2 sửa test và trang Việc; 7 hồ sơ bỏ DH2 (thước DH2 chờ chủ kho), trần 130′
+run_id: repin-20261018T042326Z-17299
+sha: 9e9aa993dfc2cdd1788661f0715129ed417ff472 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5, E10, E14, E17, E19, E21, E23, E27 · diff chạm vật đo ngoài làn máy: E19, E21 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
