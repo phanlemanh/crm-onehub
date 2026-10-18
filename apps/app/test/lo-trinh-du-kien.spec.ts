@@ -32,7 +32,7 @@ import {
 	khoaMocTho,
 	khoiTho,
 	mocDangChay,
-	mocNhieuViec,
+	mocSachNhieuViec,
 	suaKhoi,
 	timMoc,
 } from "./lo-trinh-du-kien-mau";
@@ -93,7 +93,7 @@ const HOM_NAY = "2026-10-17";
 
 function kiemSoDo(ham: HamDuKien): void {
 	const goc = khoiTho();
-	const chon = mocNhieuViec(goc, 2);
+	const chon = mocSachNhieuViec(goc, 2);
 	const khoa = khoaMocTho(chon.lo, chon.moc);
 	const o = (sua: (o: KhoiTho, mo: ReturnType<typeof chuaGiao>) => void) => {
 		const k = khoiTho();
@@ -167,6 +167,24 @@ function kiemSoDo(ham: HamDuKien): void {
 }
 
 describe("so-do", () => {
+	test("so-do: moc chon khong co viec da giao, khoi thieu moc sach thi bao ro", () => {
+		const goc = khoiTho();
+		const chon = mocSachNhieuViec(goc, 2);
+		const theoMa = new Map(chon.lo.hang.map((h) => [h.ma, h]));
+		expect(
+			chon.moc.hang.every(
+				(ma) => theoMa.get(ma)?.nhom_trang_thai !== "da-giao",
+			),
+		).toBe(true);
+		const ban = khoiTho();
+		for (const { lo, moc: m } of mocDangChay(ban)) {
+			const h = lo.hang.find((x) => m.hang.includes(x.ma));
+			if (h) h.nhom_trang_thai = "da-giao";
+		}
+		expect(() => mocSachNhieuViec(ban, 2)).toThrow(
+			"khoi that khong co moc >= 2 viec mo ma khong co viec da giao",
+		);
+	});
 	test("so-do: ma tran 5 o tren cung mot moc", () => {
 		expect(() => kiemSoDo(duKienMoc)).not.toThrow();
 	});

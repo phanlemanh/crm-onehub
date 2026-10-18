@@ -133,6 +133,21 @@ export function boGioMay(o: KhoiTho): void {
 	}
 }
 
+export function mocSachNhieuViec(o: KhoiTho, toiThieu: number) {
+	const ra = mocDangChay(o).find(({ lo, moc }) => {
+		const theoMa = new Map(lo.hang.map((h) => [h.ma, h]));
+		return (
+			chuaGiao(lo, moc).length >= toiThieu &&
+			moc.hang.every((ma) => theoMa.get(ma)?.nhom_trang_thai !== "da-giao")
+		);
+	});
+	if (!ra)
+		throw new Error(
+			`khoi that khong co moc >= ${toiThieu} viec mo ma khong co viec da giao`,
+		);
+	return ra;
+}
+
 export function mocNhieuViec(o: KhoiTho, toiThieu: number) {
 	const ra = mocDangChay(o).find(
 		(x) => chuaGiao(x.lo, x.moc).length >= toiThieu,
