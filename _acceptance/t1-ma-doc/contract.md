@@ -108,6 +108,12 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
 
 ## Notes
 
+- Engine của vòng (Điều phối M5 thống nhất 18/10): S1–S3 chạy skill feature-loop 2.28.0 với script acceptance-gate
+  2.30.0; làn ghim lại 8 hồ sơ chạy feature-loop + acceptance-gate 2.32.0 (bản kit onehub đã nâng, #463); S4 round 1
+  chạy `acceptance-verify.js` + `s4-args.mjs` của feature-loop 2.28.0 với `--ag-root` acceptance-gate 2.30.0.
+- Làn ghim lại 3 (dòng sổ «đỏ sẵn trên nền»): `khung-trang-cai-dat/E17` thoát 2 vì thước lấy diff so với
+  `origin/onehub` và sau #476 không còn tệp giao diện trong diff — 8 hồ sơ chưa ghim lại cho tới khi chủ kho chọn lối.
+
 - Lời hứa của hồ sơ đã ký đổi theo vòng này (bản đối ở Notes của `pre-push-t1`): fixture ca `mot-nguon (a)` trong
   `packages/ui/test/pre-push-t1.spec.ts` đổi `apps/x/**` → `scripts/x/**` vì Hỏi-1 đưa `apps/**` vào `t1_ma_doc`
   (dòng sổ d-20261018T034036Z-17 — ba lối, mặc định giữ bản sửa).
