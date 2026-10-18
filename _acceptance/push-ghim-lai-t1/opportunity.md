@@ -3,13 +3,13 @@ schema_version: 1
 slug: push-ghim-lai-t1
 feature: Lần đẩy chỉ ghim lại (run-log, decisions) bỏ test và build, mà acceptance gate vẫn chạy và recheck bằng chứng vẫn đỏ được
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided
+decision: build
+decided_by: manh
+decided_at: 2026-10-18T13:52:07Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
-  disposition:     # keep | archive
+  disposition: archive
 lo_trinh_ma: C-1c
 lo_trinh_tep: docs/plan/lo-trinh-okr.json
 ---
@@ -73,8 +73,8 @@ Không dựng bản thử — phép đo là bộ phân loại chạy trên danh 
 
 ## Cổng 0
 
-- **decision = ?** Khuyến nghị `build`: lỗ đã gọi tên, đo được trên commit thật, sửa một khối cấu hình + ca kiểm.
-- **Ngưỡng UAT chốt cùng lúc ký:** Không đo được (đề xuất).
+- **decision = build** Căn cứ: lỗ đã gọi tên, đo được trên commit thật `38ecca3be`; chủ kho ký 18/10.
+- **Ngưỡng UAT chốt cùng lúc ký:** Không đo được (giữ như đề xuất).
 - **disposition = archive** Căn cứ: không có code bản thử.
 
 ## Thước đo thành công → ứng viên criterion
