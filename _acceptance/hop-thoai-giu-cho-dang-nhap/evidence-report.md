@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 097ed193fc1146aa3fc297ea4ac73d019ee57f78
+verified_commit: 6e3d4c62116ca1cc0a4db4d18851f873814b448a
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -262,3 +262,7 @@ sha: 21b20e9fc9789a48272e69d636391a3544ec3e95 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-30, do gộp onehub (#219) trước khi gộp PR #220
 run_id: repin-20260930T092244Z-63714
 sha: 097ed193fc1146aa3fc297ea4ac73d019ee57f78 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E15 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10
+
+### Re-pin lần 5 — 2026-10-18, do DA4 du-an-gantt: code Dự án, Lịch làm việc, răng HG đổi; 10 hồ sơ, trần 150′, bỏ DH2 (răng DH2 gãy sau gộp) theo Điều phối
+run_id: repin-20261018T002421Z-44023
+sha: 6e3d4c62116ca1cc0a4db4d18851f873814b448a · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E15 · diff chạm vật đo ngoài làn máy: E10, E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

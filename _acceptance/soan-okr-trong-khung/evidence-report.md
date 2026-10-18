@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b628afc16ae96714e56391e79605f2af26a101dd
+verified_commit: 6e3d4c62116ca1cc0a4db4d18851f873814b448a
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -325,3 +325,7 @@ sha: ea2082066a7f3804de3aecfe7f38bdcfa0c5b272 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-17, do trang-don-vi-mot-bang (DH2): ghim lại sáu hồ sơ sau sửa coNutHoiKara (lối b, 374b5f9c5), một làn
 run_id: repin-20261017T174535Z-97743
 sha: b628afc16ae96714e56391e79605f2af26a101dd · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2b, E3, E4, E6, E7b, E8, E11, E12 (E12 không khai paths), E14 · AC không có chốt máy: AC-4, AC-6, AC-8, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-18, do DA4 du-an-gantt: code Dự án, Lịch làm việc, răng HG đổi; 10 hồ sơ, trần 150′, bỏ DH2 (răng DH2 gãy sau gộp) theo Điều phối
+run_id: repin-20261018T002421Z-44023
+sha: 6e3d4c62116ca1cc0a4db4d18851f873814b448a · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2b, E3, E4, E6, E7b, E8, E11, E12 (E12 không khai paths), E14 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4, AC-6, AC-8, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
