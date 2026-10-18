@@ -1,6 +1,10 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
 import {
+	chmodSync,
+	copyFileSync,
+	cpSync,
+	existsSync,
 	mkdirSync,
 	mkdtempSync,
 	readFileSync,
@@ -141,5 +145,216 @@ describe("pglt-sau", () => {
 		const thua = chat.filter((g) => g !== GLOB_RUN_LOG && g !== GLOB_DECISIONS);
 		if (thua.length) throw new Error(`glob thua: ${thua.join(", ")}`);
 		expect(chat.sort()).toEqual([GLOB_DECISIONS, GLOB_RUN_LOG].sort());
+	});
+});
+
+const TAC_GIA = {
+	GIT_AUTHOR_NAME: "t",
+	GIT_AUTHOR_EMAIL: "t@t",
+	GIT_COMMITTER_NAME: "t",
+	GIT_COMMITTER_EMAIL: "t@t",
+};
+
+function envSach(them: Record<string, string>): NodeJS.ProcessEnv {
+	const env: NodeJS.ProcessEnv = {};
+	for (const [k, v] of Object.entries(process.env)) {
+		if (v === undefined || k.startsWith("GIT_") || k === "CRM_SKIP_HOOKS")
+			continue;
+		env[k] = v;
+	}
+	Object.assign(env, TAC_GIA, them);
+	return env;
+}
+
+function git(goc: string, ...a: string[]): string {
+	const r = spawnSync("git", a, { cwd: goc, env: envSach({}), encoding: "utf8" });
+	if (r.status !== 0)
+		throw new Error(`git ${a.join(" ")} ma ${r.status}: ${r.stderr}`);
+	return r.stdout.trim();
+}
+
+const TEP_GHIM_LAI = [
+	"_acceptance/dieu-huong-khu-muc-tieu/evidence-report.md",
+	"_acceptance/dieu-huong-khu-muc-tieu/run-log.jsonl",
+	"_acceptance/khung-okr-truoc-r1/evidence-report.md",
+	"_acceptance/khung-okr-truoc-r1/run-log.jsonl",
+	"_acceptance/khung-trang-cai-dat/evidence-report.md",
+	"_acceptance/khung-trang-cai-dat/run-log.jsonl",
+	"_acceptance/okr-to-chuc-va/evidence-report.md",
+	"_acceptance/okr-to-chuc-va/run-log.jsonl",
+	"_acceptance/soan-okr-trong-khung/evidence-report.md",
+	"_acceptance/soan-okr-trong-khung/run-log.jsonl",
+	"_acceptance/t1-ma-doc/evidence-report.md",
+	"_acceptance/t1-ma-doc/run-log.jsonl",
+	"_acceptance/toan-canh-okr/evidence-report.md",
+	"_acceptance/toan-canh-okr/run-log.jsonl",
+	"_acceptance/trang-don-vi-mot-bang/evidence-report.md",
+	"_acceptance/trang-don-vi-mot-bang/run-log.jsonl",
+];
+
+type Pr = { ra: string; tep: string[] };
+
+function chayPr(tep: string[]): Pr {
+	const goc = thuMucTam("ci");
+	for (const t of tep) ghi(goc, t, "a\n");
+	git(goc, "init", "-q", "--template=", "-b", "onehub");
+	git(goc, "add", "-A");
+	git(goc, "commit", "-q", "-m", "goc");
+	git(goc, "checkout", "-q", "-b", "pr");
+	for (const t of tep) ghi(goc, t, "b\n");
+	git(goc, "commit", "-q", "-am", "pr");
+	git(goc, "checkout", "-q", "onehub");
+	git(goc, "merge", "-q", "--no-ff", "--no-edit", "pr");
+	ghi(goc, CAU_HINH, cauHinhThat());
+	const r = spawnSync("node", [PHAN_LOAI, "--goc", goc], {
+		env: envSach({ SU_KIEN: "pull_request", NHAP: "false" }),
+		encoding: "utf8",
+	});
+	return {
+		ra: r.stdout.trim(),
+		tep: git(goc, "diff", "--name-only", "HEAD^1", "HEAD")
+			.split("\n")
+			.filter(Boolean),
+	};
+}
+
+const NHE = "nang=false\nly_do=chi-t1";
+const nang = (lyDo: string) => `nang=true\nly_do=${lyDo}`;
+
+const MA_TRAN_CI: [string, string[], string][] = [
+	["16 tep ghim lai", [], NHE],
+	["+ evals.yaml", ["_acceptance/t1-ma-doc/evals.yaml"], nang("co-tep-nang")],
+	["+ config.yaml", [CAU_HINH], nang("co-tep-nang")],
+	["+ rang", ["_acceptance/x/rang/a.mjs"], nang("co-tep-nang")],
+	["+ evidence", ["_acceptance/x/evidence/a.json"], nang("co-tep-nang")],
+	[
+		"+ contract ma doc",
+		["_acceptance/dieu-huong-khu-muc-tieu/contract.md"],
+		nang("t1-ma-doc"),
+	],
+	["+ ci.yml", [".github/workflows/ci.yml"], nang("cham-github")],
+	[
+		"+ tep sau",
+		["_acceptance/x/rang/f/run-log.jsonl"],
+		nang("co-tep-nang"),
+	],
+];
+
+describe("pglt-ci", () => {
+	test("pglt-ci so ca", () => {
+		if (MA_TRAN_CI.length !== 8) throw new Error("so ca lech");
+		if (TEP_GHIM_LAI.length !== 16) throw new Error("so tep ghim lai lech");
+	});
+
+	MA_TRAN_CI.forEach(([ten, them, ra], i) => {
+		test(`pglt-ci ${i + 1} ${ten}`, () => {
+			const tep = [...TEP_GHIM_LAI, ...them];
+			const kq = chayPr(tep);
+			expect(kq.tep).toEqual([...tep].sort());
+			expect(kq.ra).toBe(ra);
+		}, 60000);
+	});
+});
+
+const TEP_CHEP_DAY = [
+	"scripts/pre-push-t1.mjs",
+	".github/scripts/phan-loai.mjs",
+	"scripts/pre-merge-check.sh",
+	"lib/workspace-record.cjs",
+	"lib/evidence-core.cjs",
+	"lib/eval-yaml.cjs",
+	".githooks/gate-shape.json",
+];
+const HOOK_TAM = `#!/bin/sh
+node scripts/pre-push-t1.mjs "$1" >"$RA" 2>"$LOI"
+exit 0
+`;
+const KHONG_PHAN_LOAI = "không phân loại được";
+const DONG_BO_BA =
+	"pre-push: chỉ tệp T1 (3 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.";
+
+let mauDay = "";
+
+function khoMauDay(): string {
+	if (mauDay) return mauDay;
+	const d = thuMucTam("day-mau");
+	const goc = join(d, "kho");
+	for (const t of TEP_CHEP_DAY) {
+		mkdirSync(dirname(join(goc, t)), { recursive: true });
+		copyFileSync(join(GOC_KHO, t), join(goc, t));
+	}
+	ghi(goc, "apps/api/a.ts", "export const a = 1;\n");
+	ghi(goc, ".gitignore", `${CAU_HINH}\n`);
+	ghi(goc, "hook/pre-push", HOOK_TAM);
+	chmodSync(join(goc, "hook/pre-push"), 0o755);
+	spawnSync("git", ["init", "-q", "--template=", "--bare", join(d, "remote.git")], {
+		env: envSach({}),
+	});
+	git(d, "init", "-q", "--template=", "-b", "onehub", goc);
+	git(goc, "add", "-A");
+	git(goc, "commit", "-q", "-m", "goc");
+	git(goc, "remote", "add", "origin", "../remote.git");
+	git(goc, "push", "-q", "origin", "onehub");
+	git(goc, "config", "core.hooksPath", "hook");
+	ghi(goc, CAU_HINH, cauHinhThat());
+	mauDay = d;
+	return d;
+}
+
+type Day = { ma: number; ra: string; loi: string; tep: string[] };
+
+function dayNhanh(tep: string[]): Day {
+	const d = thuMucTam("day");
+	cpSync(khoMauDay(), d, { recursive: true });
+	const goc = join(d, "kho");
+	git(goc, "checkout", "-q", "-b", "nhanh");
+	for (const t of tep) ghi(goc, t, "c\n");
+	git(goc, "add", "--", ...tep);
+	git(goc, "commit", "-q", "-m", "c");
+	const ra = join(d, "ra");
+	const loi = join(d, "loi");
+	const r = spawnSync("git", ["push", "-q", "origin", "nhanh"], {
+		cwd: goc,
+		env: envSach({ RA: ra, LOI: loi }),
+		encoding: "utf8",
+	});
+	const doc = (p: string) =>
+		existsSync(p) ? readFileSync(p, "utf8").trim() : "<vang>";
+	return {
+		ma: r.status ?? -1,
+		ra: doc(ra),
+		loi: doc(loi),
+		tep: git(goc, "diff", "--name-only", "onehub", "nhanh")
+			.split("\n")
+			.filter(Boolean),
+	};
+}
+
+const BA_TEP_GHIM = [
+	"_acceptance/x/run-log.jsonl",
+	"_acceptance/x/decisions.jsonl",
+	"_acceptance/x/evidence-report.md",
+];
+
+const MA_TRAN_DAY: [string, string[], string, string][] = [
+	["chi ba tep ghim lai", BA_TEP_GHIM, "test build", DONG_BO_BA],
+	["+ evals.yaml", [...BA_TEP_GHIM, "_acceptance/x/evals.yaml"], "", ""],
+	["+ tep sau", [...BA_TEP_GHIM, "_acceptance/x/rang/f/run-log.jsonl"], "", ""],
+];
+
+describe("pglt-day", () => {
+	test("pglt-day so ca", () => {
+		if (MA_TRAN_DAY.length !== 3) throw new Error("so ca lech");
+	});
+
+	MA_TRAN_DAY.forEach(([ten, tep, ra, loi], i) => {
+		test(`pglt-day ${i + 1} ${ten}`, () => {
+			const kq = dayNhanh(tep);
+			expect(kq.ma).toBe(0);
+			expect(kq.tep).toEqual([...tep].sort());
+			expect(kq.loi).not.toContain(KHONG_PHAN_LOAI);
+			expect(kq.ra).toBe(ra);
+			expect(kq.loi).toBe(loi);
+		}, 60000);
 	});
 });
