@@ -315,7 +315,7 @@ describe("gy-lm-cache", () => {
 			if (o.ten === "deal-d1")
 				chot(len1, "gy-lm: cache.deal khong lam moi goi y d-1");
 			if (o.ten === "deal-d1-settle-record")
-				chot(len1, "gy-lm: settle record khong cho goi y");
+				chot(len1, "gy-lm: settle record khong doc lai goi y");
 			if (o.ten === "deal-moi")
 				chot(len1 && len2, "gy-lm: cache.deal() khong lam moi moi goi y");
 			if (!o.d2) chot(!len2, "gy-lm: lam moi goi y deal khac");
@@ -325,5 +325,40 @@ describe("gy-lm-cache", () => {
 		}
 		chot(daChay === MA_TRAN.length, "gy-lm: ma tran thieu o");
 		expect(daChay).toBe(3);
+	});
+
+	test("settle record chỉ trả về sau khi gợi ý của deal đọc lại xong", async () => {
+		trangThai.daGoi = [];
+		let giu = false;
+		let tha: (() => void) | null = null;
+		dat("onboarding.goiYCuaDeal", () =>
+			giu
+				? new Promise((xong) => {
+						tha = () => xong(null);
+					})
+				: null,
+		);
+		await mo(<DocHaiDeal />);
+		await cho(
+			() => demDoc("d-1") === 1 && demDoc("d-2") === 1,
+			"hai gợi ý đọc lần đầu",
+		);
+		const c = cacheDangGiu;
+		if (!c) throw new Error("khong giu duoc useCrmCache");
+		const truoc1 = demDoc("d-1");
+		giu = true;
+		let daTraVe = false;
+		const loiGoi = c.deal("d-1", { settle: "record" }).then(() => {
+			daTraVe = true;
+		});
+		await nhip(10);
+		chot(demDoc("d-1") > truoc1, "gy-lm: settle record khong doc lai goi y");
+		chot(!daTraVe, "gy-lm: settle record khong cho goi y");
+		(tha as (() => void) | null)?.();
+		await act(async () => {
+			await loiGoi;
+		});
+		chot(daTraVe, "gy-lm: settle record khong tra ve sau khi doc xong");
+		expect(daTraVe).toBe(true);
 	});
 });
