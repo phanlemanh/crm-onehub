@@ -12,6 +12,7 @@ evals:
       - "scripts/pre-merge-check.sh"
       - "lib/workspace-record.cjs"
       - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+      - "packages/ui/test/fixtures/push-ghim-lai-t1.json"
     expected: |
       cd packages/ui && bun test ./test/push-ghim-lai-t1.spec.ts -t pglt-tach. Doc config that cua kho qua
       configList (lib/workspace-record.cjs), khong tim chuoi tren tep tho.
@@ -43,11 +44,13 @@ evals:
       - ".github/scripts/phan-loai.mjs"
       - "scripts/pre-merge-check.sh"
       - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+      - "packages/ui/test/fixtures/push-ghim-lai-t1.json"
     expected: |
       cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-ci. CLI that
       `node .github/scripts/phan-loai.mjs --goc <kho tam>` voi SU_KIEN=pull_request NHAP=false. Kho tam: config chep
       that, commit goc, nhanh PR, commit hop nhat hai cha (`git merge --no-ff`) de tepThayDoi doc diff HEAD^1..HEAD.
-      Danh sach 16 tep chep nguyen van tu `git show --name-only 38ecca3be` vao bai kiem (khong doc git luc chay);
+      Danh sach 16 tep chep nguyen van tu `git show --name-only 38ecca3be` vao fixture cua bai kiem
+      packages/ui/test/fixtures/push-ghim-lai-t1.json (khong doc git luc chay);
       so tep = 16 (lech -> «so tep ghim lai lech»). Ma tran 8 ca viet truoc, so ca = 8:
         1 16 tep                                              -> «nang=false», «ly_do=chi-t1»
         2 16 tep + _acceptance/t1-ma-doc/evals.yaml           -> «nang=true», «ly_do=co-tep-nang»
@@ -192,6 +195,7 @@ evals:
       - ".github/scripts/phan-loai.mjs"
       - ".github/workflows/acceptance.yml"
       - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+      - "packages/ui/test/fixtures/push-ghim-lai-t1.json"
       - "_acceptance/push-ghim-lai-t1/rang/dot-bien.mjs"
     expected: |
       node _acceptance/push-ghim-lai-t1/rang/dot-bien.mjs. Cay chep dung tu chi muc git rieng (GIT_INDEX_FILE,

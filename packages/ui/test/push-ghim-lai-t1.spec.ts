@@ -56,6 +56,19 @@ function boDong(chu: string, dong: string): string {
 	return sau;
 }
 
+const MAU = JSON.parse(
+	readFileSync(
+		join(import.meta.dir, "fixtures", "push-ghim-lai-t1.json"),
+		"utf8",
+	),
+) as {
+	tep_ghim_lai: string[];
+	ci_yml: string;
+	evals_ho_so_ky: string;
+	contract_ma_doc: string;
+	ly_do_ma_doc: string;
+};
+
 type Tap = "t1" | "maDoc" | "khong";
 const tapCua = (k: Tach, tep: string): Tap[] => [
 	...(k.t1.has(tep) ? (["t1"] as const) : []),
@@ -74,7 +87,7 @@ const MA_TRAN_TACH: [string, Tap][] = [
 	["_acceptance/x/evidence/a.json", "khong"],
 	["_acceptance/x/rang/a.mjs", "khong"],
 	["_acceptance/run-log.jsonl", "khong"],
-	["_acceptance/dieu-huong-khu-muc-tieu/contract.md", "maDoc"],
+	[MAU.contract_ma_doc, "maDoc"],
 ];
 
 describe("pglt-tach", () => {
@@ -177,24 +190,7 @@ function git(goc: string, ...a: string[]): string {
 	return r.stdout.trim();
 }
 
-const TEP_GHIM_LAI = [
-	"_acceptance/dieu-huong-khu-muc-tieu/evidence-report.md",
-	"_acceptance/dieu-huong-khu-muc-tieu/run-log.jsonl",
-	"_acceptance/khung-okr-truoc-r1/evidence-report.md",
-	"_acceptance/khung-okr-truoc-r1/run-log.jsonl",
-	"_acceptance/khung-trang-cai-dat/evidence-report.md",
-	"_acceptance/khung-trang-cai-dat/run-log.jsonl",
-	"_acceptance/okr-to-chuc-va/evidence-report.md",
-	"_acceptance/okr-to-chuc-va/run-log.jsonl",
-	"_acceptance/soan-okr-trong-khung/evidence-report.md",
-	"_acceptance/soan-okr-trong-khung/run-log.jsonl",
-	"_acceptance/t1-ma-doc/evidence-report.md",
-	"_acceptance/t1-ma-doc/run-log.jsonl",
-	"_acceptance/toan-canh-okr/evidence-report.md",
-	"_acceptance/toan-canh-okr/run-log.jsonl",
-	"_acceptance/trang-don-vi-mot-bang/evidence-report.md",
-	"_acceptance/trang-don-vi-mot-bang/run-log.jsonl",
-];
+const TEP_GHIM_LAI = MAU.tep_ghim_lai;
 
 type Pr = { ra: string; tep: string[] };
 
@@ -227,16 +223,12 @@ const nang = (lyDo: string) => `nang=true\nly_do=${lyDo}`;
 
 const MA_TRAN_CI: [string, string[], string][] = [
 	["16 tep ghim lai", [], NHE],
-	["+ evals.yaml", ["_acceptance/t1-ma-doc/evals.yaml"], nang("co-tep-nang")],
+	["+ evals.yaml", [MAU.evals_ho_so_ky], nang("co-tep-nang")],
 	["+ config.yaml", [CAU_HINH], nang("co-tep-nang")],
 	["+ rang", ["_acceptance/x/rang/a.mjs"], nang("co-tep-nang")],
 	["+ evidence", ["_acceptance/x/evidence/a.json"], nang("co-tep-nang")],
-	[
-		"+ contract ma doc",
-		["_acceptance/dieu-huong-khu-muc-tieu/contract.md"],
-		nang("t1-ma-doc"),
-	],
-	["+ ci.yml", [".github/workflows/ci.yml"], nang("cham-github")],
+	["+ contract ma doc", [MAU.contract_ma_doc], nang(MAU.ly_do_ma_doc)],
+	["+ workflow ci", [MAU.ci_yml], nang("cham-github")],
 	["+ tep sau", ["_acceptance/x/rang/f/run-log.jsonl"], nang("co-tep-nang")],
 ];
 
