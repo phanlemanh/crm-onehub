@@ -111,8 +111,12 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
 - Engine của vòng (Điều phối M5 thống nhất 18/10): S1–S3 chạy skill feature-loop 2.28.0 với script acceptance-gate
   2.30.0; làn ghim lại 8 hồ sơ chạy feature-loop + acceptance-gate 2.32.0 (bản kit onehub đã nâng, #463); S4 round 1
   chạy `acceptance-verify.js` + `s4-args.mjs` của feature-loop 2.28.0 với `--ag-root` acceptance-gate 2.30.0.
-- Làn ghim lại 3 (dòng sổ «đỏ sẵn trên nền»): `khung-trang-cai-dat/E17` thoát 2 vì thước lấy diff so với
-  `origin/onehub` và sau #476 không còn tệp giao diện trong diff — 8 hồ sơ chưa ghim lại cho tới khi chủ kho chọn lối.
+- Làn ghim lại 3: `khung-trang-cai-dat/E17` thoát 2 vì thước lấy diff so với `origin/onehub` và sau #476 không
+  còn tệp giao diện trong diff. **Đã sửa theo chữ chủ kho** «Cho sửa cả lớp này» (chuyển qua Điều phối M5, 18/10):
+  gốc so lấy từ lần gộp #138 `f1a32ab99` của chính hồ sơ (commit 7323ccde7). Số đo (`rang/thuoc-e17.mjs`): cây thật
+  và bản sao 28 tệp mã 0; ghi đè `verified_commit` không đổi kết quả; tiêm `NavItem` mang `className` → mã 1 đúng
+  chữ. Phát hiện kèm, lớp khác nên chỉ hỏi: nửa design-gate của E17 trả «KHONG-DO-DUOC» mã 0 cho mọi tệp `.tsx`.
+  8 hồ sơ chờ làn ghim lại mới.
 
 - Lời hứa của hồ sơ đã ký đổi theo vòng này (bản đối ở Notes của `pre-push-t1`): fixture ca `mot-nguon (a)` trong
   `packages/ui/test/pre-push-t1.spec.ts` đổi `apps/x/**` → `scripts/x/**` vì Hỏi-1 đưa `apps/**` vào `t1_ma_doc`
