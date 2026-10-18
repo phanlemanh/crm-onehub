@@ -5,7 +5,7 @@ slug: lam-moi-goi-y-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-18
 veto_state: mo
@@ -71,3 +71,5 @@ Quét `morphological-scan.md` (preset entity-feature), ba trục:
   một cú bấm không tới máy chủ cũng in đúng dòng «KHONG DAT» (phát hiện t2 của S4 lượt 3). Lượt ấy vẫn chạy và vẫn
   phải báo «KHONG DAT», nhưng không được kể là bằng chứng chiều đỏ của AC-6. Chiều thẻ hiện vẫn có chiều đỏ ở lớp
   bài kiểm giao diện (E5 cặp a). Vế này sang hạt giống `docs/plan/2026-10-18-hat-giong-tu-thu-hien-the-goi-y.md`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-19:
+  - Ngoài-2: khi trang sập hay mất ngữ cảnh giữa lúc chờ, lượt tự thử của thước màn vẫn có thể ghi là đã báo đỏ, nên bằng chứng chiều đỏ ở lớp màn kém chắc hơn; lượt đo thật vẫn báo không đạt và tính năng không đổi.
