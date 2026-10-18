@@ -202,3 +202,18 @@ none — every multi-run eval is uniform
 Round 1: S4 lượt 1 trả về phát hiện về quan hệ thứ tự của settle record; hồ sơ thêm cặp đột biến (e) ở E5 và ca thứ hai ở E4. Returned to implementation.
 Round 2: S4 lượt 2 REJECT — E6 bập bênh, hai phát hiện trong hợp đồng (AC-5, AC-6); sửa thước: E6 chụp theo khung, tự thử chiều mất, mỏ neo dương ở E3 và cặp (f) ở E5. Returned to implementation.
 Round 3: mười eval của feature xanh, sáu lệnh suite xanh; verdict BLOCKED vì lệnh `bunx turbo run build --force` không có kết quả (agent bị skip hoặc chết). Một phát hiện trong hợp đồng (AC-6, E6) chuyển người xem ở review-findings.md.
+
+## Đo tay ngoài S4
+
+Luật tạm của chủ kho (16/10): eval đổi định nghĩa giữa hai lượt thì đo tay, kèm chiều đỏ và đối chứng dương. Đo trong làn M5 của lượt 3, sau khi workflow trả về, trên cây 5a749d41a (vật và thước giống f6df5200f, chỉ thêm sổ lượt 3). Bản sao dựng bằng `ban-sao.mjs` của `ca-chap-chon-cach-ly`, gỡ ngay sau mỗi lượt. Nhật ký trọn ở `.acceptance-runs/lam-moi-goi-y-ke-hoach/do-tay-r3/ket-qua.txt`. Mục này là phép đo tay, không thay lượt chấm và không đổi verdict.
+
+Eval đổi định nghĩa: E4, E5 (lượt 1 → 2, ca thứ tự settle record và cặp e); E3, E5, E6 (lượt 2 → 3, mỏ neo dương khi rời thắng, cặp f, thước màn).
+
+| Eval | Đối chứng dương | Chiều đỏ | Kết |
+|---|---|---|---|
+| E3 | cây đang xét: 2/2 ca xanh; bản sao lành: thoát 0 | vật (gỡ khoá gợi ý khỏi `cache.deal`): thoát 1, «the con sau khi roi thang stepper» và «… menu»; thước (đóng sheet ngay sau khi rời, thẻ vắng mà không do làm mới): thoát 1, «sheet dung lai khi roi stepper», «sheet dung lai khi roi menu» | đạt |
+| E4 | cây đang xét: 2/2 ca xanh; bản sao lành: thoát 0 | (c) gỡ khoá: «cache.deal khong lam moi goi y d-1», «settle record khong doc lai goi y»; (d) khoá chung: «lam moi goi y deal khac»; (e) dời khoá sang phần chạy nền: «settle record khong cho goi y» | đạt |
+| E5 | cây đang xét: thoát 0, `dot-bien: 6/6 cap dat` | hạ thước (bỏ chốt thứ tự settle record, về kiểu lượt 1): thoát 1, `5/6`, cặp (e) `ghim=thieu`; hạ thước (bỏ chốt thẻ mất của ca menu): thoát 1, `5/6`, cặp (f) `ghim=thieu` | đạt |
+| E6 | `man.mjs` mới trên cây đang xét: thoát 0, hai lượt tự thử báo KHONG DAT đúng hướng, «hien sau thang» 170 ms, «an sau roi thang» 103 ms, «sheet khong dung lai» đạt cả hai lần (trước đó 3/3 lần chạy tay đều xanh) | thước cũ (`man.mjs` của 9858a5d70, chụp cả trang) trên cùng cây: 4/4 lần thoát 1, «E6 sheet khong dung lai: KHONG DAT — sau roi thang»; răng dò `do-e6/probe.mjs`: lượt có chụp ghi `resize 1x1` → `go dialog`/`them dialog` → `resize 1280x900`, lượt không chụp không lần nào gỡ sheet; vật (gỡ khoá trong bản sao): KHÔNG ĐO ĐƯỢC — máy chủ app của bản sao thoát trước khi sẵn sàng (mã 2) | đạt một phần: chiều đỏ trên vật của E6 chỉ có hai lượt tự thử trong chính lượt chấm |
+
+Lệnh bị chặn ở lượt 3, chạy tay để lấy thông tin (không phải bằng chứng, không gỡ BLOCKED): `bunx turbo run build --force` thoát 0, 5/5 task, 0 cache, 14 giây.
