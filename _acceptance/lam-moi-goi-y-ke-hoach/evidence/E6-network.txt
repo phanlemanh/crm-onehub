@@ -1,1 +1,1 @@
-driver: puppeteer trong man.mjs, khong co read_network_requests
+n-a (driver): man.mjs (puppeteer qua phien do app :4653 / api :4610) khong co duong doc network; khong co dev server nao do minh start con chay (phien do tu don).
