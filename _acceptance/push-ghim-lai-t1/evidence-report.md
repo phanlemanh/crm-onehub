@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: d2b2df27137418d19cd152a8f616bd3cd314abab
-human_signoff:
+human_signoff: manh 2026-10-18 — ký Cổng 2 trên verdict PASS 8/8 eval + 7 suite (S4 round 1, wf_25d58746-88d). Ngoài-1, 2, 5 ghi Known limits; Ngoài-3, 4 chấp nhận, không sửa; đồng ý phần cắt; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: push-ghim-lai-t1

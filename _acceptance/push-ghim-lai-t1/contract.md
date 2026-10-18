@@ -5,7 +5,7 @@ slug: push-ghim-lai-t1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-18T15:10:53Z
 design_doc: docs/superpowers/specs/2026-10-18-push-ghim-lai-t1-design.md
@@ -104,3 +104,7 @@ thuộc phân loại, không nuốt lỗi (AC-7) · bài kiểm đọc đúng t�
 - Bộ quét chỉ thấy tên tệp viết nguyên trong mã (giới hạn đã khai của `t1-ma-doc`).
 - Recheck kiểm báo cáo và sổ chạy nhất quán với nhau, không chạy lại eval. Một PR giả cả dòng repin lẫn mục Re-pin cho
   khớp nhau thì không bị bắt — như trước vòng này, ở mọi PR, nhẹ hay nặng. Vòng không đổi điều đó.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-18:
+  - Ngoài-1: Hằng «ký tự đại diện» của luật số đoạn khai ở `phan-loai.mjs` trùng hằng cùng tên ở bộ quét t1-ma-doc; đổi một bản mà quên bản kia thì hai bên hiểu mẫu tệp khác nhau.
+  - Ngoài-2: Mô tả E8 nói cây chép của răng đột biến có liên kết thư viện, nhưng răng không liên kết — kết quả đo không đổi.
+  - Ngoài-5: Răng cổng (E6) chạy bộ kiểm bằng chứng đóng băng ở commit ghim lại `38ecca3be`, không chạy bản của cây đang xét; hôm nay hai bản giống nhau, sau này cây làm hỏng bộ kiểm thì E6 vẫn có thể xanh.
