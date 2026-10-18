@@ -5,9 +5,9 @@ slug: lam-moi-goi-y-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: manh
+approved_at: 2026-10-18
 veto_state: mo
 veto_opened_at: 2026-10-16T15:44:35Z
 design_doc: docs/superpowers/specs/2026-10-16-lam-moi-goi-y-ke-hoach-design.md
