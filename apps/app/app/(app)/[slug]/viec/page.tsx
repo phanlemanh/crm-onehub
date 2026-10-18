@@ -47,7 +47,9 @@ export default async function ViecPage({ searchParams }: ThamSoViec = {}) {
 				<PageShellHeading>
 					<PageShellTitle>{m.trang.tieuDe}</PageShellTitle>
 					<Suspense
-						fallback={<PageShellDescription>{m.trang.moTa}</PageShellDescription>}
+						fallback={
+							<PageShellDescription>{m.trang.moTa}</PageShellDescription>
+						}
 					>
 						<MoTaViec searchParams={searchParams} />
 					</Suspense>
