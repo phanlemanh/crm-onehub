@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Răng cổng vẫn đỏ · push-ghim-lai-t1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 76ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.92em; color: var(--color-ink); }
+    svg { width: 100%; min-width: 1040px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Răng · push-ghim-lai-t1 · Cổng Phạm vi · d-…-10</p>
+    <h1>PR chỉ ghim lại vẫn chạy cổng, và cổng vẫn đỏ được</h1>
+    <p class="sub">Điều kiện chủ kho 17/10. Răng <code>rang/cong-van-do.mjs</code> dựng PR mô phỏng trên commit ghim lại thật <code>38ecca3be</code>, rồi chạy ba ca qua cùng năm bước.</p>
+
+    <svg viewBox="0 0 1200 572" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="300" y1="84" x2="338" y2="84" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="580" y1="84" x2="618" y2="84" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="860" y1="84" x2="898" y2="84" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M940 128 V156 Q940 164 932 164 H648 Q640 164 640 172 V198" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1020" y1="128" x2="1020" y2="198" stroke="#006B4F" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+      <line x1="640" y1="288" x2="640" y2="326" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="980" y1="288" x2="980" y2="326" stroke="#006B4F" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+
+      <rect x="60" y="40" width="240" height="88" rx="6" fill="#fafafa"/>
+      <rect x="60" y="40" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="72" y="58" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BƯỚC 1</text>
+      <text x="72" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Worktree tạm</text>
+      <text x="72" y="102" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">git worktree · 38ecca3be^</text>
+
+      <rect x="340" y="40" width="240" height="88" rx="6" fill="#fafafa"/>
+      <rect x="340" y="40" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="352" y="58" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BƯỚC 2</text>
+      <text x="352" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chép config của vòng</text>
+      <text x="352" y="102" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">_acceptance/config.yaml</text>
+      <text x="352" y="116" fill="#575757" font-size="9" font-family="'Geist', sans-serif">không commit</text>
+
+      <rect x="620" y="40" width="240" height="88" rx="6" fill="#fafafa"/>
+      <rect x="620" y="40" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="632" y="58" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BƯỚC 3</text>
+      <text x="632" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đặt gốc của PR</text>
+      <text x="632" y="102" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">origin/onehub = gốc</text>
+
+      <rect x="900" y="40" width="240" height="88" rx="6" fill="#fafafa"/>
+      <rect x="900" y="40" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="912" y="58" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BƯỚC 4</text>
+      <text x="912" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Mô phỏng PR</text>
+      <text x="912" y="102" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">git merge --no-ff 38ecca3be</text>
+      <text x="912" y="116" fill="#575757" font-size="9" font-family="'Geist', sans-serif">+ commit của ca</text>
+
+      <rect x="520" y="200" width="240" height="88" rx="6" fill="#fafafa"/>
+      <rect x="520" y="200" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="532" y="218" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BƯỚC 5A</text>
+      <text x="532" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Bộ phân loại CI</text>
+      <text x="532" y="262" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">.github/scripts/phan-loai.mjs</text>
+
+      <rect x="820" y="200" width="320" height="88" rx="6" fill="#fafafa"/>
+      <rect x="820" y="200" width="320" height="88" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="832" y="218" fill="#006B4F" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BƯỚC 5B</text>
+      <text x="832" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Kịch bản Pre-merge check</text>
+      <text x="832" y="262" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">.github/workflows/acceptance.yml</text>
+      <text x="832" y="276" fill="#575757" font-size="9" font-family="'Geist', sans-serif">đọc từ tệp thật, chạy đúng như CI</text>
+
+      <rect x="60" y="328" width="1080" height="176" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <line x1="60" y1="360" x2="1140" y2="360" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="60" y1="408" x2="1140" y2="408" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+      <line x1="60" y1="456" x2="1140" y2="456" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+      <line x1="500" y1="328" x2="500" y2="504" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+      <line x1="800" y1="328" x2="800" y2="504" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+
+      <text x="76" y="348" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">CA · COMMIT CỘNG Ở BƯỚC 4</text>
+      <text x="516" y="348" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">PHÂN LOẠI</text>
+      <text x="816" y="348" fill="#006B4F" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">CỔNG</text>
+
+      <text x="76" y="380" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Lành</text>
+      <text x="76" y="396" fill="#575757" font-size="9" font-family="'Geist', sans-serif">không cộng commit nào</text>
+      <text x="516" y="388" fill="#171717" font-size="11" font-family="'Geist Mono', monospace">chi-t1</text>
+      <text x="816" y="388" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">thoát 0</text>
+
+      <text x="76" y="428" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-weight="500">run_id</tspan> đổi sang mã giả</text>
+      <text x="76" y="444" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">_acceptance/t1-ma-doc/evidence-report.md</text>
+      <text x="516" y="436" fill="#171717" font-size="11" font-family="'Geist Mono', monospace">chi-t1</text>
+      <text x="816" y="428" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">thoát 1</text>
+      <text x="816" y="444" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">VIOLATION [t1-ma-doc] chứa mã giả</text>
+
+      <text x="76" y="476" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-weight="500">suites_exit</tspan> có số 1</text>
+      <text x="76" y="492" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">_acceptance/t1-ma-doc/run-log.jsonl</text>
+      <text x="516" y="484" fill="#171717" font-size="11" font-family="'Geist Mono', monospace">chi-t1</text>
+      <text x="816" y="476" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">thoát 1</text>
+      <text x="816" y="492" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">VIOLATION [t1-ma-doc] … nonzero suites_exit</text>
+
+      <line x1="60" y1="528" x2="1140" y2="528" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="60" y="548" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="140" y="540" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="172" y="549" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước dựng, đo</text>
+
+      <rect x="268" y="540" width="24" height="12" rx="2" fill="#ffffff" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="300" y="549" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Cổng nghiệm thu — thứ răng chứng</text>
+
+      <text x="1140" y="549" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-6</text>
+    </svg>
+  </div>
+</body>
+</html>
