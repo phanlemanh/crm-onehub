@@ -2984,6 +2984,278 @@
       ],
       "trang_thai": "chưa mở",
       "buoc_ke": "Chờ Cổng Đáng; làn M5 sau C-1b (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+    },
+    {
+      "ma": "VK1",
+      "slug": "thanh-ben-khu-dung-chung",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 450.8,
+      "dung_tren": [],
+      "ten": "Thanh bên khu dùng chung",
+      "ten_ngan": "Thanh bên khu",
+      "ngay": "2026-10-18",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên mở Cài đặt hay Hội thoại và gặp cùng một thanh bên khu — cùng bề rộng, cùng nhãn nhóm, trên điện thoại thành một hàng cuộn ngang»",
+      "vi_sao": "Cài đặt dựng thanh bên 224px bằng NavGroup/NavItem/NavStrip, Hội thoại tự dựng vỏ riêng 213px: hai bản của một mẫu. Khu Mục tiêu sắp là nơi thứ ba dùng mẫu này, luật kho bắt chuyển vào packages/ui trước khi dùng lần hai.",
+      "bat_khi": "Cài đặt và Hội thoại dùng chung một thành phần thanh bên khu trong packages/ui; docs/design.md có luật khi nào dùng thanh bên khu, khi nào dùng thẻ con",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Hàng nền cho VK2.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V1"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK2",
+      "slug": "vo-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.5,
+      "dung_tren": [
+        "VK1"
+      ],
+      "ten": "Vỏ khu Mục tiêu",
+      "ten_ngan": "Vỏ Mục tiêu",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Mục tiêu và đi giữa Của tôi, Bộ OKR, Lấy ý kiến và Báo cáo bằng một thanh bên, chu kỳ chọn một lần ở đầu thanh, và mọi đường dẫn cũ vẫn mở đúng chỗ»",
+      "vi_sao": "Hôm nay trang đơn vị có ba lớp điều khiển ngang chồng nhau; ô chu kỳ lẫn giữa các nút hành động; chia theo phạm vi (của tôi · đơn vị · cả công ty) làm người dùng không biết một mục nói về bộ OKR hay số liệu. Tability chia theo việc và vật, phạm vi là bộ lọc trong trang.",
+      "bat_khi": "Trên trang đơn vị chỉ còn một lớp thẻ ngang; mọi đường dẫn cũ (?donOkr=, ?xemOkr=, /okr/theo-don-vi, /okr/toan-canh, /okr/quanh-muc-tieu/…, /okr?tu=nhac) chuyển tới đúng chỗ mới",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Bản mẫu /proto/vo-khu-muc-tieu (nhánh feat/vo-khu-muc-tieu) là đầu vào của Cổng Phạm vi; slug bản mẫu trùng slug hàng. Chạy làn ghim lại chung với VK4 vì cả hai chạm cùng màn.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V2"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "VK3",
+      "slug": "trang-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.51,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Trang Bộ OKR",
+      "ten_ngan": "Bộ OKR",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Bộ OKR, lọc Tôi dẫn, mở bộ OKR của đơn vị mình và đi giữa OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm bằng thẻ con có đường dẫn riêng»",
+      "vi_sao": "Ô chọn đơn vị trên một màn chung thay cho trang riêng của từng bộ; cách xem và chip lọc trông giống hệt nhau. Mỗi bộ OKR một trang, như Plan của Tability.",
+      "bat_khi": "Mỗi bộ OKR có đường dẫn riêng; đổi thẻ con không mất chu kỳ và bộ đang xem; bộ lọc Tất cả · Tôi dẫn · Đang theo dõi ghi trên đường dẫn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V2b"
+      ],
+      "tieu_chi": 9
+    },
+    {
+      "ma": "VK4",
+      "slug": "doi-nhan-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.52,
+      "dung_tren": [],
+      "ten": "Đổi nhãn khu Mục tiêu",
+      "ten_ngan": "Đổi nhãn",
+      "ngay": "2026-10-18",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên đọc khu Mục tiêu thấy một tên cho một khái niệm: Góp vào cho căn chỉnh, OneHub cho đơn vị gốc, Lấy ý kiến thay Hỏi ý — ở cả bản tiếng Việt và tiếng Anh»",
+      "vi_sao": "Căn chỉnh mang chín tên trên màn, đơn vị gốc năm tên, «Hỏi ý» đứng cạnh «Hỏi Kara». Từ điển đã chốt 18/10 (PR #477).",
+      "bat_khi": "Không còn chuỗi «căn chỉnh», «Đường lý do», «Gắn căn chỉnh», «Chưa nối lên», «Hỏi ý», «Toàn công ty», «Toàn OneHub» trong tệp chữ của khu ở hai thứ tiếng; bản mẫu /proto không đổi",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Khoảng 70 chuỗi trong apps/app/lib/messages/okr*.ts; gốc «OneHub» lấy tên không gian làm việc ở ba màn. 35 hồ sơ đã ký và 46 tệp kiểm nhắc tên cũ (cận trên) — chạy làn ghim lại chung với VK2.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "A2"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK5",
+      "slug": "chu-may-sinh-ten-moi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.53,
+      "dung_tren": [
+        "VK4"
+      ],
+      "ten": "Chữ máy sinh dùng tên mới",
+      "ten_ngan": "Chữ máy sinh",
+      "ngay": "2026-10-18",
+      "vai": "nen",
+      "cau_giao": "«Câu báo lỗi của máy chủ, tin nhắc buổi sáng và lời Kara về OKR dùng đúng tên mới: Góp vào, Lấy ý kiến, OneHub»",
+      "vi_sao": "Khoảng 25 câu báo lỗi trong apps/api/src/okr/okr-config.ts, tin nhắc trong apps/agent/agent/lib/tin-nhac.ts và lời dặn soạn của Kara vẫn nói «căn chỉnh», «hỏi ý»: màn đổi tên mà máy nói tên cũ.",
+      "bat_khi": "Không còn tên cũ trong câu báo lỗi và tin nhắc người dùng thấy; bộ chấm soạn của Kara (eval okr-soan) không tụt so với đường nền trước khi đổi lời dặn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Gộp A3 và A3k: cả hai giao một kết quả (máy nói đúng tên mới). Đổi lời dặn gửi model phải đo lại bộ chấm soạn.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "A3",
+        "A3k"
+      ],
+      "tieu_chi": 9
+    },
+    {
+      "ma": "VK6",
+      "slug": "so-do-toan-vung",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.54,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Sơ đồ ở khung toàn vùng",
+      "ten_ngan": "Sơ đồ toàn vùng",
+      "ngay": "2026-10-18",
+      "vai": "Ban lãnh đạo",
+      "cau_giao": "«Ban lãnh đạo mở Báo cáo › Sơ đồ, thấy sơ đồ góp vào chiếm trọn vùng nội dung, bấm Toàn màn hình để thu thanh bên, và mở sơ đồ lấy tâm một mục tiêu từ ngăn của nó»",
+      "vi_sao": "Sơ đồ quanh mục tiêu dựng khung trang lồng trong khung trang nên bị nhốt trong bề rộng tối đa và một đầu trang lớn; căn chỉnh hiện ở sáu chỗ với ba cách vẽ. Tability đặt bản đồ trong vỏ nhưng cho nó trọn vùng, có Full screen.",
+      "bat_khi": "Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang Sơ đồ quanh mục tiêu; Esc thoát toàn màn hình",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Đứng trên DH4, DH5 đã ký.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V3"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK7",
+      "slug": "ngan-kr-mot-cho",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.55,
+      "dung_tren": [],
+      "ten": "Ngăn KR một chỗ",
+      "ten_ngan": "Ngăn KR",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm một KR ở bất kỳ đâu và mở cùng một ngăn KR, bấm Cập nhật ở đầu ngăn hay ngay trên dòng KR, thấy điểm mới nằm đâu so với đích, rồi sang KR kế mà không đóng ngăn»",
+      "vi_sao": "Hôm nay một KR có ba ngăn và một hộp, bấm ở bốn chỗ ra bốn nơi; cập nhật một KR mất 5–6 bấm qua menu «…». Tability: một ngăn KR, «Create check-in» ở đầu, ‹ › sang KR kế — 3 bấm.",
+      "bat_khi": "Cập nhật một KR từ trang bộ OKR trong 3 bấm; mọi lối bấm vào KR mở cùng một ngăn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Gộp B1 và B1b, 11 tiêu chí: kết quả «cập nhật một KR ở một chỗ» không tách được mà giữ nghĩa — nút trên dòng mở đúng ngăn ấy.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B1",
+        "B1b"
+      ],
+      "tieu_chi": 11
+    },
+    {
+      "ma": "VK8",
+      "slug": "bo-okr-co-so",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.56,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Bộ OKR có hàng số",
+      "ten_ngan": "Hàng số",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và biết ngay đội đang ra sao: ngày còn lại, tiến độ so với kỳ vọng, số KR đã cập nhật tuần này, số KR tự tin thấp, và mọi KR đã mở sẵn»",
+      "vi_sao": "Trang đơn vị hôm nay gập mục tiêu, không có số tóm tắt; phải mở từng dòng. Trang kế hoạch của Tability mở ra là thấy bốn ô số.",
+      "bat_khi": "Bốn ô số ở đầu thẻ OKR của mọi bộ; nút Mở tất cả / Gập tất cả",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Dưới mục tiêu cỡ (6) nhưng không gộp với VK3: VK3 là đường dẫn và thẻ con, hàng này là nội dung thẻ OKR.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B2"
+      ],
+      "tieu_chi": 6
+    },
+    {
+      "ma": "VK9",
+      "slug": "mot-nut-tao-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.57,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Một nút tạo mục tiêu",
+      "ten_ngan": "Một nút tạo",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Thêm mục tiêu và chọn một đường trong một hộp: tự viết, từ mẫu, từ bảng tính hay soạn cùng Kara; ở Báo cáo không có nút tạo nào»",
+      "vi_sao": "Sáu đường tạo mục tiêu ở bốn nơi; đầu trang sáu điều khiển; nút chính hiện cả trên màn chỉ đọc, trái nếp «Trang chỉ đọc không có nút chính». Tability: một nút mở hộp chọn đường.",
+      "bat_khi": "Đầu trang khu chỉ còn một nút chính, chỉ ở Của tôi và Bộ OKR",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B3"
+      ],
+      "tieu_chi": 7
+    },
+    {
+      "ma": "VK10",
+      "slug": "che-do-soan-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.58,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Chế độ Soạn bộ OKR",
+      "ten_ngan": "Chế độ Soạn",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Soạn OKR và viết cả bộ như một tài liệu — mục tiêu, KR liền mạch — với góp ý của Kara và điểm chất lượng ở cột bên, rồi công bố»",
+      "vi_sao": "Tạo một mục tiêu có ba KR mất khoảng mười bấm qua hộp tạo rồi từng hộp KR; góp ý Kara chiếm hai phần ba chiều cao ngăn theo dõi. Tability tách «Edit content» khỏi màn theo dõi.",
+      "bat_khi": "Tạo một mục tiêu có ba KR và công bố trong khoảng 3 bấm cộng phần gõ; ngăn theo dõi chỉ còn một chip góp ý",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Cần phiên design-pass trước Cổng Phạm vi.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5a"
+      ],
+      "tieu_chi": 11
+    },
+    {
+      "ma": "VK11",
+      "slug": "moi-kr-ca-cong-ty",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.59,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Mọi KR cả công ty",
+      "ten_ngan": "Mọi KR",
+      "ngay": "2026-10-18",
+      "vai": "Ban lãnh đạo",
+      "cau_giao": "«Ban lãnh đạo bấm ô Trượt ở Báo cáo › Sức khoẻ và đọc mọi KR đang trượt của cả công ty trong một danh sách lọc được theo đơn vị và người»",
+      "vi_sao": "Hôm nay không có lối thẳng tới mọi KR đang trượt — phải đi từng đơn vị; ô số ở Toàn cảnh không bấm được. Tability: All data › Key Results, ô Off track trên trang chủ dẫn thẳng tới đó.",
+      "bat_khi": "Từ Sức khoẻ tới danh sách KR trượt trong 1 bấm; bộ lọc ghi trên đường dẫn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5b"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "VK12",
+      "slug": "cap-nhat-gan-day",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.6,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Cập nhật gần đây",
+      "ten_ngan": "Cập nhật gần đây",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Cập nhật gần đây trước buổi họp tuần, đọc mọi lần cập nhật của bộ OKR mình dẫn, mới nhất trước, và trả lời ngay dưới từng lần»",
+      "vi_sao": "Lần cập nhật chỉ đọc được trong thẻ Trao đổi của từng mục tiêu; không có chỗ đọc chung. Tability có Recent updates lọc theo kế hoạch đang theo dõi, đội, cấp dưới.",
+      "bat_khi": "Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Bộ OKR bạn dẫn · Bạn theo dõi",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5c"
+      ],
+      "tieu_chi": 8
     }
   ],
   "chan_troi": [
@@ -3056,6 +3328,26 @@
         "E5"
       ],
       "mo_lai_khi": "NM2 chốt chỗ đặt và khu Mục tiêu cần theo"
+    },
+    {
+      "ma": "VK-C1",
+      "dot": "okr-vo-khu-1810",
+      "cau_giao": "«Thành viên thấy một tên cho lịch sử, mức chắc của lý do, danh sách đáng bàn và nút thêm việc»",
+      "ly_do": "Các tên này chưa chốt: gộp Vết và Diễn biến thành Lịch sử, «Đặt cược» thành «Phỏng đoán», «Cần bàn» thành «Đáng bàn», nút «Thêm» thành «Thêm việc», «Tiếp cuộc đang soạn» thành «Tiếp tục soạn OKR», và hai lỗi bản tiếng Anh (cột «Actions», thẻ «Overview» trùng trang chủ). Đổi tên là quyết định của chủ kho.",
+      "phu": [
+        "C1"
+      ],
+      "mo_lai_khi": "Chủ kho chốt các tên ở bảng «Đặt tên» của báo cáo 18/10; mục nào chạm từ điển thì sửa từ điển trước"
+    },
+    {
+      "ma": "VK-C2",
+      "dot": "okr-vo-khu-1810",
+      "cau_giao": "«Trưởng đơn vị thấy trong Của tôi ai trong đơn vị chưa cập nhật tuần này»",
+      "ly_do": "Từ điển (mục Họp tuần) cố ý không liệt kê người chưa cập nhật và tránh chữ «điểm danh», để họp tuần bàn KR chứ không bàn người. Bản mẫu 18/10 có khối này; giữ hay bỏ là quyết định sản phẩm của chủ kho.",
+      "phu": [
+        "C2"
+      ],
+      "mo_lai_khi": "Chủ kho quyết Của tôi có liệt kê người chưa cập nhật hay không, và sửa mục Họp tuần của từ điển nếu có"
     }
   ],
   "da_bac": [
