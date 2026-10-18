@@ -64,11 +64,16 @@ export function docBoQua(goc) {
 export function phanLoaiDay(goc, dongs, remote) {
 	const boQua = docBoQua(goc);
 	const tep = tepDay(goc, dongs, remote);
-	const globs = tep.length ? docGlobT1(goc) : [];
-	const t1 = tep.length ? tepT1(globs, tep) : new Set();
-	const maDoc = tep.length ? tachT1(globs, tep).maDoc : new Set();
+	const t1 = tep.length ? tepT1(docGlobT1(goc), tep) : new Set();
+	const kq = quyetDinh({ ...NHU_PR_SAN_SANG, tep, laT1: (t) => t1.has(t) });
+	return { boQua: kq.nang ? [] : boQua, tep, lyDo: kq.lyDo };
+}
+
+export function tepMaDocDay(goc, tep) {
+	if (tep.length === 0) return [];
+	const { t1, maDoc } = tachT1(docGlobT1(goc), tep);
 	const kq = quyetDinh({ ...NHU_PR_SAN_SANG, tep, laT1: (t) => t1.has(t), laMaDoc: (t) => maDoc.has(t) });
-	return { boQua: kq.nang ? [] : boQua, tep, lyDo: kq.lyDo, maDoc: [...maDoc].sort() };
+	return kq.lyDo === "t1-ma-doc" ? [...maDoc].sort() : [];
 }
 
 function chay() {
@@ -85,10 +90,13 @@ function chay() {
 		if (kq.boQua.length) {
 			process.stderr.write(`pre-push: chỉ tệp T1 (${kq.tep.length} tệp) — bỏ ${kq.boQua.join(", ")}; ${DUOI}\n`);
 			process.stdout.write(`${kq.boQua.join(" ")}\n`);
-		} else if (kq.lyDo === "t1-ma-doc") {
-			const dau = kq.maDoc.slice(0, TOI_DA_TEP_MA_DOC).join(", ");
-			const con = kq.maDoc.length - TOI_DA_TEP_MA_DOC;
-			process.stderr.write(`pre-push: có tệp T1 mà mã đọc (${dau}${con > 0 ? ` +${con}` : ""}) — chạy đủ năm bước.\n`);
+		} else {
+			const maDoc = tepMaDocDay(KHO, kq.tep);
+			if (maDoc.length) {
+				const dau = maDoc.slice(0, TOI_DA_TEP_MA_DOC).join(", ");
+				const con = maDoc.length - TOI_DA_TEP_MA_DOC;
+				process.stderr.write(`pre-push: có tệp T1 mà mã đọc (${dau}${con > 0 ? ` +${con}` : ""}) — chạy đủ năm bước.\n`);
+			}
 		}
 	} catch (e) {
 		process.stderr.write(`pre-push: không phân loại được lần đẩy (${String(e.message).replace(/\s+/g, " ").trim()}) — chạy đủ năm bước.\n`);

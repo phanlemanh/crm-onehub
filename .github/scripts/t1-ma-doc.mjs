@@ -32,6 +32,9 @@ export const MIEN = {
 	".github/workflows/ci.yml": {
 		"packages/ui/test/pre-push-t1.spec.ts": "viết tệp cùng tên vào kho tạm để thử lần đẩy, không đọc tệp của kho",
 	},
+	"_acceptance/trang-don-vi-mot-bang/contract.md": {
+		"apps/app/test/okr-trang-don-vi.dom.tsx": "chỉ nhắc tên hồ sơ trong chuỗi so với Notes của hợp đồng DH1, không đọc tệp này",
+	},
 	"_acceptance/hoi-dap-okr/evidence/do-hoi-dap.md": {
 		"_acceptance/hoi-dap-okr/rang/do-hoi-dap.mjs": "răng ghi bảng kết quả vào đó, không đọc",
 	},

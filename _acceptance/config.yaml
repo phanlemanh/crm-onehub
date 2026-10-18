@@ -3155,6 +3155,7 @@ risk_tiers:
     - "docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md"
     - "docs/superpowers/specs/2026-10-03-gop-y-dung-cho-design.md"
     - "_acceptance/soan-okr-cung-tro-ly/rang/ma-tran-quyen.md"
+    - "_acceptance/dieu-huong-khu-muc-tieu/contract.md"
     - "scripts/pre-merge-check.sh"
     - "lib/workspace-record.cjs"
     - "lib/evidence-core.cjs"
