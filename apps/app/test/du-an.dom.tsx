@@ -652,12 +652,22 @@ describe("dg-man-dong", () => {
 		const chon = [...document.querySelectorAll('[role="option"]')].map((x) =>
 			chuCua(x),
 		);
+		if (!chon.some((x) => x.includes(P2.ten))) {
+			throw new Error("dg: o soan khong mo danh sach du an");
+		}
 		if (chon.some((x) => x.includes(P1.ten))) {
 			throw new Error("dg: trang dong sai o soan");
 		}
 	});
 
 	test("dg-man-dong: có lịch sử thì không Xoá; người khác không thấy Đóng", async () => {
+		await moDuAn(
+			duAn({ id: "p1", ten: P1.ten, quyen: { dong: true, xoa: true } }),
+		);
+		await moMenu();
+		if (!mucMenu().includes(D.dai.xoa) || !mucMenu().includes(D.dai.dong)) {
+			throw new Error("dg: doi chung menu thieu xoa hay dong");
+		}
 		await moDuAn(
 			duAn({
 				id: "p1",

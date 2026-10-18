@@ -587,7 +587,9 @@ describe("dg-man-dong-phu", () => {
 		) {
 			throw new Error(`dg: thieu dong du an ${kieu}`);
 		}
-		if (cua("v3")?.querySelector("[data-dong-du-an]")) {
+		const v3 = cua("v3");
+		if (!v3) throw new Error(`dg: thieu viec ngoai du an ${kieu}`);
+		if (v3.querySelector("[data-dong-du-an]")) {
 			throw new Error("dg: dong du an thua");
 		}
 	};

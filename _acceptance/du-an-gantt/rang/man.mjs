@@ -121,7 +121,7 @@ try {
 		(
 			await d.lam(chu.cookie, "viec.create", {
 				tieuDe: `${tieuDe} ${lib.MA}`,
-				duAnId,
+				...(duAnId ? { duAnId } : {}),
 				batDauNgay: batDau,
 				hanNgay: han,
 			})

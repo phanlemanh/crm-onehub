@@ -791,13 +791,20 @@ describe("dg-tu-doi", () => {
 				throw new Error("dg: tao phu thuoc khong doi");
 			}
 
-			await goi(
+			const keoSom = await goi(
 				app,
 				"viec.doiLich",
 				"mutation",
 				{ id: A.id, batDauNgay: "2026-10-19", hanNgay: "2026-10-20" },
 				a.id,
 			);
+			const la2 = await lichCua(A.id);
+			if (
+				keoSom.status !== 200 ||
+				json([la2.batDau, la2.han]) !== json(["2026-10-19", "2026-10-20"])
+			) {
+				throw new Error(`dg: keo som khong ghi ${json(keoSom)}`);
+			}
 			const lb2 = await lichCua(B.id);
 			const lc2 = await lichCua(C.id);
 			if (
@@ -814,21 +821,32 @@ describe("dg-tu-doi", () => {
 				ai: string,
 			) => {
 				const t0 = performance.now();
-				await goi(
+				const r = await goi(
 					app,
 					"viec.doiLich",
 					"mutation",
 					{ id, batDauNgay: batDau, hanNgay: han },
 					ai,
 				);
-				return performance.now() - t0;
+				return { ms: performance.now() - t0, status: r.status };
 			};
-			const thoiGian = await Promise.all([
+			const [lanA, lanB] = await Promise.all([
 				doLan(A.id, "2026-10-19", "2026-10-23", a.id),
 				doLan(B.id, "2026-10-27", "2026-10-29", q.id),
 			]);
-			if (thoiGian.some((ms) => ms > HAI_LAN_MS)) {
+			if ([lanA, lanB].some((l) => l.ms > HAI_LAN_MS)) {
 				throw new Error("dg: hai lan doi treo");
+			}
+			const la3 = await lichCua(A.id);
+			const lb3 = await lichCua(B.id);
+			if (
+				![lanA, lanB].some((l) => l.status === 200) ||
+				(lanA.status === 200 && la3.han !== "2026-10-23") ||
+				(lanB.status === 200 && (lb3.batDau ?? "") < "2026-10-27")
+			) {
+				throw new Error(
+					`dg: hai lan doi khong ghi ${json([lanA, lanB, la3, lb3])}`,
+				);
 			}
 			const lichThat = await db.$transaction((tx) => docLichLam(tx));
 			const canh = await db.viecPhuThuoc.findMany({

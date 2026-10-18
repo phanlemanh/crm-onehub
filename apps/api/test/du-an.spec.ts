@@ -590,6 +590,24 @@ describe("dg-vong-doi", () => {
 			}
 
 			const R = await duAnThu(t.id, "Rỗng");
+			const quyenCua = async (id: string) => {
+				const g = await goi(app, "duAn.get", "query", { id }, t.id);
+				if (g.status !== 200) throw new Error(`dg: get loi ${json(g)}`);
+				return z
+					.object({
+						coLichSu: z.boolean(),
+						quyen: z.object({ dong: z.boolean(), xoa: z.boolean() }),
+					})
+					.parse(g.data);
+			};
+			if (
+				json(await quyenCua(R.id)) !==
+					json({ coLichSu: false, quyen: { dong: true, xoa: true } }) ||
+				json(await quyenCua(P)) !==
+					json({ coLichSu: true, quyen: { dong: true, xoa: false } })
+			) {
+				throw new Error("dg: quyen xoa sai lich su");
+			}
 			const xr = await goi(app, "duAn.xoa", "mutation", { id: R.id }, t.id);
 			if (
 				xr.status !== 200 ||
