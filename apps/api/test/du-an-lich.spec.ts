@@ -95,6 +95,23 @@ function boiCua(v: Vet): string | null {
 	return doc.sau.boi?.id ?? null;
 }
 
+type LichDoc = Awaited<ReturnType<typeof lichCua>>;
+type LanDoi = { ms: number; status: number };
+
+function ghiDung(r: KetGoi, l: LichDoc, mong: [string, string]): boolean {
+	return r.status === 200 && json([l.batDau, l.han]) === json(mong);
+}
+
+function haiLanCoGhi(
+	[lanA, lanB]: [LanDoi, LanDoi],
+	[la, lb]: [LichDoc, LichDoc],
+): boolean {
+	const coLan = lanA.status === 200 || lanB.status === 200;
+	const aDung = lanA.status !== 200 || la.han === "2026-10-23";
+	const bDung = lanB.status !== 200 || (lb.batDau ?? "") >= "2026-10-27";
+	return coLan && aDung && bDung;
+}
+
 function batDauSau(v: Vet): string | null {
 	const doc = parseVetViec(v);
 	return doc.loai === "doi-bat-dau" ? doc.sau.batDauNgay : null;
@@ -798,11 +815,7 @@ describe("dg-tu-doi", () => {
 				{ id: A.id, batDauNgay: "2026-10-19", hanNgay: "2026-10-20" },
 				a.id,
 			);
-			const la2 = await lichCua(A.id);
-			if (
-				keoSom.status !== 200 ||
-				json([la2.batDau, la2.han]) !== json(["2026-10-19", "2026-10-20"])
-			) {
+			if (!ghiDung(keoSom, await lichCua(A.id), ["2026-10-19", "2026-10-20"])) {
 				throw new Error(`dg: keo som khong ghi ${json(keoSom)}`);
 			}
 			const lb2 = await lichCua(B.id);
@@ -837,16 +850,9 @@ describe("dg-tu-doi", () => {
 			if ([lanA, lanB].some((l) => l.ms > HAI_LAN_MS)) {
 				throw new Error("dg: hai lan doi treo");
 			}
-			const la3 = await lichCua(A.id);
-			const lb3 = await lichCua(B.id);
-			if (
-				![lanA, lanB].some((l) => l.status === 200) ||
-				(lanA.status === 200 && la3.han !== "2026-10-23") ||
-				(lanB.status === 200 && (lb3.batDau ?? "") < "2026-10-27")
-			) {
-				throw new Error(
-					`dg: hai lan doi khong ghi ${json([lanA, lanB, la3, lb3])}`,
-				);
+			const sau = await Promise.all([lichCua(A.id), lichCua(B.id)]);
+			if (!haiLanCoGhi([lanA, lanB], sau)) {
+				throw new Error(`dg: hai lan doi khong ghi ${json([lanA, lanB, sau])}`);
 			}
 			const lichThat = await db.$transaction((tx) => docLichLam(tx));
 			const canh = await db.viecPhuThuoc.findMany({
