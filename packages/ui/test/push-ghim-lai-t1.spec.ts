@@ -358,3 +358,83 @@ describe("pglt-day", () => {
 		}, 60000);
 	});
 });
+
+type Quet = { baoCao: string[] };
+type BoQuet = {
+	quetDauVao: (
+		goc?: string,
+		tuy?: { mien?: Record<string, Record<string, string>> },
+	) => Quet;
+};
+const BO_QUET = join(GOC_KHO, ".github", "scripts", "t1-ma-doc.mjs");
+const quet = (): Promise<BoQuet> => import(BO_QUET);
+
+function khoQuet(tep: Record<string, string>, cfg = cauHinhThat()): string {
+	const goc = thuMucTam("quet");
+	const gon = cfg
+		.replace(/^ {2}t1_ma_doc:\r?\n(?:(?: {4}.*|\s*)\r?\n)*/m, "")
+		.replace(/^ {2}t1_skip_globs:\r?\n/m, (m) => `  t1_ma_doc:\n    - "docs/neo.md"\n${m}`);
+	ghi(goc, CAU_HINH, gon);
+	ghi(goc, "docs/neo.md", "n\n");
+	for (const [t, c] of Object.entries(tep)) ghi(goc, t, c);
+	git(goc, "init", "-q", "--template=");
+	git(goc, "add", "-A");
+	return goc;
+}
+
+const docTep = (duong: string) =>
+	`import { readFileSync } from "node:fs";\nimport { join } from "node:path";\nexport const x = readFileSync(join(GOC, ${duong
+		.split("/")
+		.map((p) => JSON.stringify(p))
+		.join(", ")}), "utf8");\n`;
+
+const SO_HO_SO = {
+	"_acceptance/s/run-log.jsonl": "{}\n",
+	"_acceptance/s/decisions.jsonl": "{}\n",
+};
+const BEN_DOC = {
+	"apps/x/a.ts": docTep("_acceptance/s/run-log.jsonl"),
+	"apps/x/b.ts": `import { readFileSync } from "node:fs";\nexport const y = readFileSync("../../_acceptance/s/decisions.jsonl", "utf8");\n`,
+};
+const THIEU_A = "thieu-khai _acceptance/s/run-log.jsonl ← apps/x/a.ts";
+const THIEU_B = "thieu-khai _acceptance/s/decisions.jsonl ← apps/x/b.ts";
+
+function cliQuet(goc: string) {
+	const r = spawnSync("node", [BO_QUET, "--goc", goc, "--mien-rong"], {
+		encoding: "utf8",
+	});
+	return { ma: r.status ?? -1, ra: r.stdout.trim() };
+}
+
+describe("pglt-doc", () => {
+	test("pglt-doc 1 ben doc run-log chua khai thi thieu-khai", async () => {
+		const { quetDauVao } = await quet();
+		const goc = khoQuet({ ...SO_HO_SO, ...BEN_DOC });
+		expect(quetDauVao(goc, { mien: {} }).baoCao).toContain(THIEU_A);
+		expect(cliQuet(goc).ma).toBe(1);
+	});
+
+	test("pglt-doc 2 ben doc decisions chua khai thi thieu-khai", async () => {
+		const { quetDauVao } = await quet();
+		const goc = khoQuet({ ...SO_HO_SO, ...BEN_DOC });
+		expect(quetDauVao(goc, { mien: {} }).baoCao).toContain(THIEU_B);
+	});
+
+	test("pglt-doc 3 doi chung khong ben doc thi bao cao rong", async () => {
+		const { quetDauVao } = await quet();
+		const goc = khoQuet({ ...SO_HO_SO });
+		expect(quetDauVao(goc, { mien: {} }).baoCao).toEqual([]);
+		expect(cliQuet(goc)).toEqual({ ma: 0, ra: expect.stringMatching(/^sach:/) });
+	});
+
+	test("pglt-doc 4 config khong glob run-log thi run-log khong la dich", async () => {
+		const { quetDauVao } = await quet();
+		const goc = khoQuet(
+			{ ...SO_HO_SO, ...BEN_DOC },
+			boDong(cauHinhThat(), GLOB_RUN_LOG),
+		);
+		const bc = quetDauVao(goc, { mien: {} }).baoCao;
+		expect(bc).not.toContain(THIEU_A);
+		expect(bc).toContain(THIEU_B);
+	});
+});
