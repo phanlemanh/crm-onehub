@@ -5,7 +5,7 @@ slug: lam-moi-goi-y-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 approved_by: manh
 approved_at: 2026-10-18
 veto_state: mo
