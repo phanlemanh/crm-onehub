@@ -96,10 +96,42 @@ const tepOGoc = (base, f) => {
 	return r.status === 0 ? r.stdout : null;
 };
 
+// du-an-gantt goc-da-gop: DH2 đã vào onehub thì merge-base với onehub trùng đỉnh DH2 và
+// tập lượt rỗng. Gốc so và commit riêng khi đó rút từ chính lần gộp chứa verified_commit
+// của evidence-report.md hồ sơ này: gốc = merge-base(cha 1, cha 2), commit riêng =
+// rev-list cha 2 ^cha 1 ^DH1. Chưa gộp (hoặc có DVB_BASE) → luật cũ nguyên vẹn.
+function khungDaGop(nhanhGop) {
+	const bc = readFileSync(
+		join(GOC, "_acceptance/trang-don-vi-mot-bang/evidence-report.md"),
+		"utf8",
+	).match(/^verified_commit:\s*([0-9a-f]{40})\s*$/m)?.[1];
+	if (!bc || !nhanhGop || !coRef(nhanhGop) || !laToTien(bc, nhanhGop))
+		return null;
+	const gop = git(
+		"rev-list",
+		"--first-parent",
+		"--merges",
+		"--reverse",
+		nhanhGop,
+		`^${bc}`,
+	)
+		.split("\n")
+		.filter(Boolean)
+		.find((m) => laToTien(bc, m) && !laToTien(bc, `${m}^1`));
+	if (!gop)
+		khongDo(`verified_commit ${bc} da vao ${nhanhGop} ma khong thay commit gop`);
+	const truoc = git("rev-parse", `${gop}^1`);
+	const dinh = git("rev-parse", `${gop}^2`);
+	console.log(`DH2 da gop o ${gop.slice(0, 9)}: goc so va commit rieng rut tu lan gop`);
+	return { goc: git("merge-base", truoc, dinh), truoc, dinh };
+}
+
 const nhanh = ["origin/onehub", "onehub"].find(coRef);
 if (!process.env.DVB_BASE && !nhanh)
 	khongDo("khong co origin/onehub hay onehub de rut goc so");
-const base = process.env.DVB_BASE ?? git("merge-base", "HEAD", nhanh);
+const khung = process.env.DVB_BASE ? null : khungDaGop(nhanh);
+const base =
+	process.env.DVB_BASE ?? khung?.goc ?? git("merge-base", "HEAD", nhanh);
 const NHANH_DH1 = "feat/dieu-huong-khu-muc-tieu";
 const gocLuot =
 	process.env.DVB_BASE ??
@@ -113,8 +145,8 @@ for (const r of [nhanh, NHANH_DH1])
 const rieng = git(
 	"rev-list",
 	"--no-merges",
-	"HEAD",
-	`^${nhanh}`,
+	khung?.dinh ?? "HEAD",
+	`^${khung?.truoc ?? nhanh}`,
 	`^${NHANH_DH1}`,
 )
 	.split("\n")

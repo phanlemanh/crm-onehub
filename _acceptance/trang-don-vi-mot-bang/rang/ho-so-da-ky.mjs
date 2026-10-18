@@ -67,21 +67,54 @@ const laToTien = (a, b) =>
 	spawnSync("git", ["merge-base", "--is-ancestor", a, b], { cwd: GOC })
 		.status === 0;
 
+// du-an-gantt goc-da-gop: DH2 đã vào onehub thì merge-base với onehub trùng đỉnh DH2 và
+// tập lượt rỗng. Gốc so và commit riêng khi đó rút từ chính lần gộp chứa verified_commit
+// của evidence-report.md hồ sơ này: gốc = merge-base(cha 1, cha 2), commit riêng =
+// rev-list cha 2 ^cha 1 ^DH1. Chưa gộp (hoặc có DVB_BASE) → luật cũ nguyên vẹn.
+function khungDaGop(nhanhGop) {
+	const bc = readFileSync(
+		join(GOC, "_acceptance/trang-don-vi-mot-bang/evidence-report.md"),
+		"utf8",
+	).match(/^verified_commit:\s*([0-9a-f]{40})\s*$/m)?.[1];
+	if (!bc || !nhanhGop || !coRef(nhanhGop) || !laToTien(bc, nhanhGop))
+		return null;
+	const gop = git(
+		"rev-list",
+		"--first-parent",
+		"--merges",
+		"--reverse",
+		nhanhGop,
+		`^${bc}`,
+	)
+		.split("\n")
+		.filter(Boolean)
+		.find((m) => laToTien(bc, m) && !laToTien(bc, `${m}^1`));
+	if (!gop)
+		khongDo(`verified_commit ${bc} da vao ${nhanhGop} ma khong thay commit gop`);
+	const truoc = git("rev-parse", `${gop}^1`);
+	const dinh = git("rev-parse", `${gop}^2`);
+	console.log(`DH2 da gop o ${gop.slice(0, 9)}: goc so va commit rieng rut tu lan gop`);
+	return { goc: git("merge-base", truoc, dinh), truoc, dinh };
+}
+
 const NHANH_DH1 = "feat/dieu-huong-khu-muc-tieu";
+const khung = process.env.DVB_BASE ? null : khungDaGop("origin/onehub");
 const base =
 	process.env.DVB_BASE ??
+	khung?.goc ??
 	(coRef(NHANH_DH1) && !laToTien(NHANH_DH1, "origin/onehub")
 		? git("merge-base", "HEAD", NHANH_DH1)
 		: git("merge-base", "HEAD", "origin/onehub"));
 console.log(`goc so: ${base}`);
+const dinhLuot = khung ? [khung.dinh] : [];
 
 const coOGoc = (f) =>
 	spawnSync("git", ["cat-file", "-e", `${base}:${f}`], { cwd: GOC }).status ===
 	0;
-const sua = git("diff", "--name-only", base, "--", "apps/app/test")
+const sua = git("diff", "--name-only", base, ...dinhLuot, "--", "apps/app/test")
 	.split("\n")
 	.filter((f) => f && existsSync(join(GOC, f)) && coOGoc(f));
-const moi = git("diff", "--name-only", base, "--", "apps/app/test")
+const moi = git("diff", "--name-only", base, ...dinhLuot, "--", "apps/app/test")
 	.split("\n")
 	.filter((f) => f && !coOGoc(f));
 if (moi.length > 0) console.log(`tep moi cua luot (bo): ${moi.join(", ")}`);
@@ -96,8 +129,8 @@ for (const r of [NHANH_GOC, NHANH_DH1])
 const rieng = git(
 	"rev-list",
 	"--no-merges",
-	"HEAD",
-	`^${NHANH_GOC}`,
+	khung?.dinh ?? "HEAD",
+	`^${khung?.truoc ?? NHANH_GOC}`,
 	`^${NHANH_DH1}`,
 )
 	.split("\n")
@@ -184,7 +217,7 @@ function commitXoa(tep, dong) {
 }
 let ngoaiLuot = 0;
 for (const { tep, d } of dongDoi(
-	git("diff", "-U0", base, "--", "apps/app/test"),
+	git("diff", "-U0", base, ...dinhLuot, "--", "apps/app/test"),
 )) {
 	if (!coOGoc(tep) || !laXoaKiem(d) || cuaLuot.has(d.slice(1).trim())) continue;
 	ngoaiLuot += 1;
