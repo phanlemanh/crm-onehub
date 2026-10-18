@@ -15,14 +15,17 @@ export const LICH = {
 	},
 	thongDiep: {
 		camMoPr:
-			"kho cấm tác vụ mở PR — chủ kho bật «Allow GitHub Actions to create and approve pull requests» ở Settings › Actions › General; nhánh hàng chờ đã đẩy",
+			"bí mật TIN_HIEU_TOKEN không mở được PR — token thiếu quyền «Pull requests: Read and write» trên kho, hoặc token đã hết hạn; chủ kho cấp lại quyền hoặc tạo token mới rồi đặt lại bí mật; nhánh hàng chờ đã đẩy",
 		moPrHong: "mở PR hàng chờ hỏng",
 		chamNgoai:
 			"commit hàng chờ chạm ngoài thư mục nguồn tín hiệu và trang lộ trình",
 		veHong: "vẽ lại trang lộ trình hỏng",
 		dayHong: "đẩy nhánh hàng chờ hỏng",
 	},
-	dauHieuCamMoPr: "not permitted to create",
+	dauHieuCamMoPr: [
+		"not permitted to create",
+		"Resource not accessible by personal access token",
+	],
 	veLoTrinh: {
 		lenh: "node",
 		thamSo: ["scripts/product-map.mjs", "--root", "."],
@@ -235,7 +238,7 @@ export async function chayLich(o: {
 		o.goc,
 	);
 	if (tao.ma !== 0) {
-		const ly = tao.loi.includes(LICH.dauHieuCamMoPr)
+		const ly = LICH.dauHieuCamMoPr.some((d) => tao.loi.includes(d))
 			? LICH.thongDiep.camMoPr
 			: `${LICH.thongDiep.moPrHong}: ${tao.loi.trim().split("\n")[0]}`;
 		return { ma: 1, dong: [...dong, ly] };

@@ -425,11 +425,32 @@ describe("tvk-pr", () => {
 		const kq = await chay(kho, sv, gh);
 		expect(kq.ma, "kho cam mo PR ma luot van xanh").not.toBe(0);
 		expect(kq.dong).toContain(LICH.thongDiep.camMoPr);
+		// Từ #445 lịch mở PR bằng bí mật TIN_HIEU_TOKEN: câu phải gọi đúng quyền
+		// còn thiếu của token (hoặc token hết hạn), không còn cài đặt Actions cũ.
+		const cau = kq.dong.at(-1) ?? "";
+		expect(cau, "cau khong goi ten bi mat").toContain("TIN_HIEU_TOKEN");
+		expect(cau, "cau khong goi ten quyen").toContain("Pull requests");
+		expect(cau, "cau khong noi token het han").toContain("hết hạn");
+		expect(cau, "cau con cai dat Actions cu").not.toContain(
+			"Allow GitHub Actions",
+		);
 		expect(sha(kho, HC)).not.toBeNull();
 		sv.dung();
 	});
 
-	test("tvk-pr: o4 cay trung khong day ma chua co PR thi van mo PR", async () => {
+	test("tvk-pr: o3b token thieu quyen PR thi luot do voi cung cau, nhanh van day", async () => {
+		// Lỗi GitHub trả cho token fine-grained thiếu quyền «Pull requests» (403).
+		gh.loiTao(
+			"pull request create failed: GraphQL: Resource not accessible by personal access token (createPullRequest)",
+		);
+		const kq = await chay(kho, sv, gh);
+		expect(kq.ma, "token thieu quyen ma luot van xanh").not.toBe(0);
+		expect(kq.dong).toContain(LICH.thongDiep.camMoPr);
+		expect(sha(kho, HC)).not.toBeNull();
+		sv.dung();
+	});
+
+	test("tvk-pr: o4cay trung khong day ma chua co PR thi van mo PR", async () => {
 		gh.loiTao(
 			"pull request create failed: GitHub Actions is not permitted to create or approve pull requests",
 		);
