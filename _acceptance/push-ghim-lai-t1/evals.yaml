@@ -1,0 +1,213 @@
+schema_version: 1
+slug: push-ghim-lai-t1
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.pglt_tach
+    paths:
+      - "_acceptance/config.yaml"
+      - ".github/scripts/phan-loai.mjs"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+    expected: |
+      cd packages/ui && bun test ./test/push-ghim-lai-t1.spec.ts -t pglt-tach. Doc config that cua kho qua
+      configList (lib/workspace-record.cjs), khong tim chuoi tren tep tho.
+      (a) configList(t1_skip_globs) chua «_acceptance/*/run-log.jsonl» dung 1 lan va «_acceptance/*/decisions.jsonl»
+          dung 1 lan; tap glob bat dau «_acceptance/» bang dung hai chuoi do (deepEqual, lech -> thong diep liet ke).
+      (b) Ma tran tachT1(docGlobT1(KHO), tep) viet truoc, 11 ca, so ca = 11 (lech -> do «so ca lech»):
+           1 _acceptance/x/run-log.jsonl                   -> t1
+           2 _acceptance/x/decisions.jsonl                 -> t1
+           3 _acceptance/x/evidence-report.md              -> t1
+           4 _acceptance/x/contract.md                     -> t1
+           5 _acceptance/x/review-findings.md              -> t1
+           6 _acceptance/x/evals.yaml                      -> khong o ca hai
+           7 _acceptance/config.yaml                       -> khong o ca hai
+           8 _acceptance/x/evidence/a.json                 -> khong o ca hai
+           9 _acceptance/x/rang/a.mjs                      -> khong o ca hai
+          10 _acceptance/run-log.jsonl                     -> khong o ca hai
+          11 _acceptance/dieu-huong-khu-muc-tieu/contract.md -> maDoc
+          Moi ca assert ca hai tap (tep o dung mot tap, hoac khong tap nao); ten ca «pglt-tach <so> <tep>».
+      Chieu do cung fixture: ca (c) chep config that vao kho tam, xoa dong run-log khoi t1_skip_globs -> tachT1 cho
+      ca 1 ra «khong o ca hai» (assert ket qua khac voi (b) ca 1). Chieu do tren cay that: E8 ca «go-glob-run-log»
+      va «glob-rong-ho-so».
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.pglt_ci
+    paths:
+      - "_acceptance/config.yaml"
+      - ".github/scripts/phan-loai.mjs"
+      - "scripts/pre-merge-check.sh"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+    expected: |
+      cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-ci. CLI that
+      `node .github/scripts/phan-loai.mjs --goc <kho tam>` voi SU_KIEN=pull_request NHAP=false. Kho tam: config chep
+      that, commit goc, nhanh PR, commit hop nhat hai cha (`git merge --no-ff`) de tepThayDoi doc diff HEAD^1..HEAD.
+      Danh sach 16 tep chep nguyen van tu `git show --name-only 38ecca3be` vao bai kiem (khong doc git luc chay);
+      so tep = 16 (lech -> «so tep ghim lai lech»). Ma tran 8 ca viet truoc, so ca = 8:
+        1 16 tep                                              -> «nang=false», «ly_do=chi-t1»
+        2 16 tep + _acceptance/t1-ma-doc/evals.yaml           -> «nang=true», «ly_do=co-tep-nang»
+        3 16 tep + _acceptance/config.yaml                    -> «nang=true», «ly_do=co-tep-nang»
+        4 16 tep + _acceptance/x/rang/a.mjs                   -> «nang=true», «ly_do=co-tep-nang»
+        5 16 tep + _acceptance/x/evidence/a.json              -> «nang=true», «ly_do=co-tep-nang»
+        6 16 tep + _acceptance/dieu-huong-khu-muc-tieu/contract.md -> «nang=true», «ly_do=t1-ma-doc»
+        7 16 tep + .github/workflows/ci.yml                   -> «nang=true», «ly_do=cham-github»
+        8 16 tep + _acceptance/x/rang/f/run-log.jsonl         -> «nang=true», «ly_do=co-tep-nang»
+      Ca 1 va ca 2-5, 8 la cap hai chieu tren cung kho. Doi chung duong: moi ca, diff HEAD^1..HEAD ra dung tap tep da
+      dung. Chieu do tren cay that: E8 ca «go-glob-run-log» (ca 1) va «bo-luat-so-doan» (ca 8).
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.pglt_day
+    paths:
+      - "_acceptance/config.yaml"
+      - ".github/scripts/phan-loai.mjs"
+      - "scripts/pre-push-t1.mjs"
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+    expected: |
+      cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-day. Kho git tam co remote
+      tran «origin», nhanh onehub da day, chep that scripts/pre-push-t1.mjs, .github/scripts/phan-loai.mjs,
+      scripts/pre-merge-check.sh, lib/workspace-record.cjs, .githooks/gate-shape.json, _acceptance/config.yaml.
+      core.hooksPath tro thu muc hook tam co pre-push: `node scripts/pre-push-t1.mjs "$1" >"$RA" 2>"$LOI"; exit 0` —
+      stdin do git push sinh, khong viet tay. Moi ca: nhanh moi mot commit, `git push origin <nhanh>` ma 0. 3 ca, so ca = 3:
+        1 _acceptance/x/run-log.jsonl + _acceptance/x/decisions.jsonl + _acceptance/x/evidence-report.md
+          -> RA dung «test build»; LOI dung mot dong
+          «pre-push: chỉ tệp T1 (3 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.»
+        2 ba tep cua ca 1 + _acceptance/x/evals.yaml -> RA rong, LOI rong (chieu do cung fixture)
+        3 ba tep cua ca 1 + _acceptance/x/rang/f/run-log.jsonl -> RA rong, LOI rong (chieu do, tep sau hon mot bac)
+      Moi ca: LOI khong chua «không phân loại được». Doi chung duong: git diff goc..local ra dung tep da sua.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.pglt_sau
+    paths:
+      - ".github/scripts/phan-loai.mjs"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+      - "_acceptance/config.yaml"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+    expected: |
+      cd packages/ui && bun test ./test/push-ghim-lai-t1.spec.ts -t pglt-sau. Goi tachT1 that (import tu
+      .github/scripts/phan-loai.mjs), khong chep logic. Ma tran 7 ca viet truoc, so ca = 7 (lech -> «so ca lech»):
+        1 docGlobT1(KHO), _acceptance/x/rang/f/run-log.jsonl        -> khong o ca hai
+        2 docGlobT1(KHO), _acceptance/x/evidence/decisions.jsonl    -> khong o ca hai
+        3 docGlobT1(KHO), _acceptance/x/rang/f/a.md                 -> t1 (khop **/*.md)
+        4 docGlobT1(KHO), _acceptance/x/run-log.jsonl               -> t1 (doi chung duong)
+        5 ["a/*/b.txt"], a/x/b.txt                                  -> t1 (doi chung duong cua luat)
+        6 ["a/*/b.txt"], a/x/y/b.txt                                -> khong o ca hai
+        7 ["a/*/b.txt", "!a/*/b.txt"], a/x/b.txt                    -> maDoc (luat ap ca glob tru)
+      Moi ca assert ca hai tap; ten ca «pglt-sau <so> <tep>». Ca 5/6 la cap hai chieu cung glob.
+      (b) configList(t1_skip_globs) + configList(t1_ma_doc) cua config that: tap glob co ky tu dai dien (*, ?, [)
+          ma khong chua «**» bang dung {«_acceptance/*/run-log.jsonl», «_acceptance/*/decisions.jsonl»} (deepEqual,
+          lech -> liet ke glob thua).
+      Chieu do tren cay that: E8 ca «bo-luat-so-doan».
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.pglt_doc
+    paths:
+      - ".github/scripts/t1-ma-doc.mjs"
+      - "_acceptance/config.yaml"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+    expected: |
+      cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-doc. Kho git tam, config chep
+      that (mang hai glob cua vong), tep _acceptance/s/run-log.jsonl va _acceptance/s/decisions.jsonl duoc git add:
+        1 apps/x/a.ts goi readFileSync(join(GOC, "_acceptance", "s", "run-log.jsonl")) -> baoCao co dong
+          «thieu-khai _acceptance/s/run-log.jsonl ← apps/x/a.ts», CLI ma 1
+        2 apps/x/b.ts goi readFileSync(".../_acceptance/s/decisions.jsonl") -> «thieu-khai _acceptance/s/decisions.jsonl ← apps/x/b.ts»
+        3 doi chung: cung kho bo apps/x/a.ts va apps/x/b.ts -> baoCao rong, CLI ma 0
+        4 doi chung chieu glob: cung kho ca 1 nhung config xoa dong «_acceptance/*/run-log.jsonl» -> khong dong
+          «thieu-khai _acceptance/s/run-log.jsonl» (tep khong T1 thi khong la dich) — chung ca 1 do vi glob cua vong.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.pglt_cong
+    paths:
+      - "_acceptance/config.yaml"
+      - ".github/scripts/phan-loai.mjs"
+      - ".github/workflows/acceptance.yml"
+      - "scripts/pre-merge-check.sh"
+      - "scripts/recheck-evidence.cjs"
+      - "lib/evidence-core.cjs"
+      - "_acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs"
+    expected: |
+      node _acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs (rang, khong chay trong bun run test). Commit 38ecca3be
+      khong voi toi -> «KHONG DO DUOC: thieu 38ecca3be», ma 2 (khong xanh). Kich ban cong lay tu acceptance.yml THAT:
+      Bun.YAML.parse, jobs.luat-kho.steps buoc name «Pre-merge check», truong run; thay «${{ github.event_name }}» =
+      pull_request va «${{ github.base_ref }}» = onehub; khong tim thay buoc -> «thuoc hong: thieu buoc Pre-merge check»,
+      ma 2. Moi ca: `git worktree add --detach` vao thu muc tam tai 38ecca3be^, chep _acceptance/config.yaml cua cay
+      dang xet vao (khong commit), `git update-ref refs/remotes/origin/onehub HEAD`, nhanh «pr» tu 38ecca3be (+ commit
+      cua ca), roi tren HEAD goc `git merge --no-ff pr` -> HEAD hai cha. Phan loai: `node <cay dang xet>/.github/scripts/
+      phan-loai.mjs --goc <worktree>` voi SU_KIEN=pull_request NHAP=false. Cong: `bash -c <kich ban>` trong worktree.
+        (a) lanh: diff HEAD^1..HEAD ra dung 16 tep cua 38ecca3be (doi chung duong); phan loai «nang=false»,
+            «ly_do=chi-t1»; cong ma 0, khong dong nao bat dau «VIOLATION».
+        (b) bao cao gia: them commit chi doi gia tri «run_id:» cua muc «### Re-pin» cuoi trong
+            _acceptance/t1-ma-doc/evidence-report.md sang «repin-gia-<nonce>» (xac nhan tep da doi, nonce khong co trong
+            run-log.jsonl) -> phan loai van «ly_do=chi-t1»; cong ma 1, co dong bat dau «VIOLATION [t1-ma-doc]» chua nonce.
+        (c) so chay gia: them commit chi doi «suites_exit» cua dong repin co run_id = run_id duoc trich o muc Re-pin cuoi
+            trong _acceptance/t1-ma-doc/run-log.jsonl thanh mang co so 1 (doc JSON, ghi lai dung mot dong; xac nhan tep
+            da doi) -> phan loai van «ly_do=chi-t1» (chi tep .jsonl vua noi); cong ma 1, co dong bat dau
+            «VIOLATION [t1-ma-doc]» chua «nonzero suites_exit».
+        Ca (a) la doi chung duong cua (b) va (c) tren cung commit ghim lai: dong VIOLATION cua (b), (c) khong co o (a).
+      In «dat cong-van-do» va ma 0 khi du; muc sai -> «DO <muc>», ma 1. Don worktree tam khi xong hay bi ngat.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.pglt_job
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+    expected: |
+      cd packages/ui && bun test ./test/push-ghim-lai-t1.spec.ts -t pglt-job. Ham kiemJobCong(chu) doc YAML bang
+      Bun.YAML.parse (khong tim chuoi tren tep tho) va tra danh sach vi pham, moi vi pham mot chuoi bat dau bang ten
+      luat. Ma tran 9 ca viet truoc, so ca = 9 (lech -> «so ca lech»):
+        1 tep that .github/workflows/acceptance.yml -> vi pham = []; jobs.luat-kho.name = «acceptance gate»
+        2 them «paths-ignore» vao on.pull_request             -> vi pham co «on-loc-duong»
+        3 them «paths» vao on.pull_request                    -> vi pham co «on-loc-duong»
+        4 types cua on.pull_request bo «synchronize»          -> vi pham co «on-types»
+        5 them «needs: phan-loai» vao luat-kho                -> vi pham co «job-needs»
+        6 them «if: needs.phan-loai.outputs.nang != 'false'» cap job -> vi pham co «job-if»
+        7 them «continue-on-error: true» cap job luat-kho     -> vi pham co «job-continue-on-error»
+        8 them «continue-on-error: true» vao buoc Pre-merge check -> vi pham co «buoc-continue-on-error»
+        9 doi if cua buoc Pre-merge check thanh «steps.x.outputs.nang == 'true'» -> vi pham co «buoc-if» va «buoc-nhac-phan-loai»
+      Ca 2-9 sua tren chu cua tep that (cung fixture voi ca 1), moi ca xac nhan chu da doi truoc khi kiem.
+      Chieu do tren tep that: E8 ca «cong-phu-thuoc» va «cong-loc-duong».
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.pglt_dot_bien
+    paths:
+      - "_acceptance/config.yaml"
+      - ".github/scripts/phan-loai.mjs"
+      - ".github/workflows/acceptance.yml"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+      - "_acceptance/push-ghim-lai-t1/rang/dot-bien.mjs"
+    expected: |
+      node _acceptance/push-ghim-lai-t1/rang/dot-bien.mjs. Cay chep dung tu chi muc git rieng (GIT_INDEX_FILE,
+      `git add -A`, `write-tree`) + `git archive`, roi `git init` + `git add -A` trong cay chep; node_modules lien ket.
+      Luot lanh truoc: `bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts` trong packages/ui cua cay chep ma 0
+      (khong xanh -> «thuoc hong: luot lanh do», ma 2). Moi ca thay mot cho trong mot tep, xac nhan tep da doi (khong
+      doi -> «thuoc hong: <ca> khong cay duoc»), chay dung lenh, tra nguyen ban va kiem da tra (khong -> «thuoc hong»,
+      ma 2), doi do VA thong diep ghim:
+        go-glob-run-log : xoa dong «_acceptance/*/run-log.jsonl» khoi t1_skip_globs
+                          -> -t pglt-tach do o ca «pglt-tach 1», VA -t pglt-ci do o ca «pglt-ci 1»
+        glob-rong-ho-so : thay «_acceptance/*/decisions.jsonl» bang «_acceptance/**»
+                          -> -t pglt-tach do o ca «pglt-tach 6»
+        bo-luat-so-doan : bo luat so doan trong tachT1 cua .github/scripts/phan-loai.mjs
+                          -> -t pglt-sau do o ca «pglt-sau 1», VA -t pglt-ci do o ca «pglt-ci 8»
+        cong-phu-thuoc  : them «needs: phan-loai» vao job luat-kho cua .github/workflows/acceptance.yml
+                          -> -t pglt-job do o ca «pglt-job 1»
+        cong-loc-duong  : them «paths-ignore» vao on.pull_request cua .github/workflows/acceptance.yml
+                          -> -t pglt-job do o ca «pglt-job 1»
+      In «BAT <ca>» moi ca; mot ca khong bat -> ma 1. Ma 0 khi du nam BAT.
