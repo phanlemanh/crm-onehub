@@ -92,9 +92,9 @@ export function NganMucTieu() {
 					<SimpleTable
 						columns={[
 							{ id: "kr", header: "KR" },
-							{ id: "gt", header: "Hiện tại", align: "right" },
-							{ id: "tt", header: "Tình trạng" },
-							{ id: "hd", srLabel: "Cập nhật", align: "right" },
+							{ id: "gt", header: "Hiện tại", align: "right", width: "w-24" },
+							{ id: "tt", header: "Tình trạng", width: "w-36" },
+							{ id: "hd", srLabel: "Cập nhật", align: "right", width: "w-28" },
 						]}
 						variant="panel"
 					>
@@ -159,9 +159,9 @@ export function NganKr() {
 							value={giaTri(kr)}
 						/>
 						<StatCard
-							description={`kỳ vọng ${KY.kyVong}%`}
-							label="Tình trạng"
-							value={<PaceIndicator pace={nhip(kr)} />}
+							description={<PaceIndicator pace={nhip(kr)} size="sm" />}
+							label={`Tiến độ · kỳ vọng ${KY.kyVong}%`}
+							value={`${phanTram(kr)}%`}
 						/>
 					</StatGroup>
 					<Progress expected={KY.kyVong} value={phanTram(kr)} />

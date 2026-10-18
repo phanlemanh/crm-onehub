@@ -121,7 +121,6 @@ export function KhungToanVung({ toanMan }: { toanMan: boolean }) {
 			</div>
 			<div className="min-h-0 flex-1" data-vung-so-do>
 				<FlowMap
-					centerId={DON_VI_TOI_DAN}
 					edges={DAY}
 					label="Sơ đồ góp vào cả công ty"
 					nodeTypes={KIEU_NUT}

@@ -1,5 +1,6 @@
 "use client";
 
+import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { STATE, type StateVo } from "./du-lieu";
 import { KhungKhu, type NoiDen } from "./khung";
 import {
@@ -82,12 +83,14 @@ function laState(s: string): s is StateVo {
 
 export function VoKhuMucTieuMau({ state }: { state: string }) {
 	return (
-		<KhungKhu
-			anThanhBen={state === STATE.toanMan}
-			dangO={laState(state) ? NOI_CUA[state] : "cua-toi"}
-			key={state}
-		>
-			<Man state={state} />
-		</KhungKhu>
+		<LocaleProvider locale="vi">
+			<KhungKhu
+				anThanhBen={state === STATE.toanMan}
+				dangO={laState(state) ? NOI_CUA[state] : "cua-toi"}
+				key={state}
+			>
+				<Man state={state} />
+			</KhungKhu>
+		</LocaleProvider>
 	);
 }

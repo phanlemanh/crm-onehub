@@ -82,9 +82,8 @@ function DauTrang({
 	hanhDong?: ReactNode;
 }) {
 	return (
-		<PageShellHeader>
+		<PageShellHeader breadcrumb={vet}>
 			<PageShellHeading>
-				{vet}
 				<PageShellTitle>{tieuDe}</PageShellTitle>
 				<PageShellDescription>{moTa}</PageShellDescription>
 			</PageShellHeading>
@@ -283,10 +282,10 @@ function BangKr({ mt }: { mt: MucTieuMau }) {
 		<SimpleTable
 			columns={[
 				{ id: "kr", header: "KR" },
-				{ id: "pt", header: "Phụ trách" },
-				{ id: "gt", header: "Hiện tại", align: "right" },
-				{ id: "tt", header: "Tình trạng" },
-				{ id: "hd", srLabel: "Cập nhật", align: "right" },
+				{ id: "pt", header: "Phụ trách", width: "w-40" },
+				{ id: "gt", header: "Hiện tại", align: "right", width: "w-24" },
+				{ id: "tt", header: "Tình trạng", width: "w-36" },
+				{ id: "hd", srLabel: "Cập nhật", align: "right", width: "w-28" },
 			]}
 			variant="panel"
 		>

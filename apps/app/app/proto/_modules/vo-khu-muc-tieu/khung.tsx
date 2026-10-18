@@ -109,7 +109,7 @@ function ChonChuKy() {
 	return (
 		<Select defaultValue={KY.ten}>
 			<SelectTrigger aria-label="Chu kỳ" className="w-full" size="sm">
-				<SelectValue />
+				<SelectValue placeholder={KY.ten} />
 			</SelectTrigger>
 			<SelectContent align="start">
 				{CHU_KY_KHAC.map((ky) => (
