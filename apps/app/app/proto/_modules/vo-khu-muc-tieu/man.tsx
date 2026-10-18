@@ -112,7 +112,7 @@ export function ManCuaToi() {
 		<PageShell>
 			<DauTrang
 				hanhDong={<NutThemMucTieu />}
-				moTa="Việc cần cập nhật tuần này, đơn vị bạn dẫn và người trong đơn vị."
+				moTa="Việc cần cập nhật tuần này, bộ OKR bạn dẫn và người trong đơn vị."
 				tieuDe="Của tôi"
 			/>
 			<PageShellContent>
@@ -136,7 +136,7 @@ export function ManCuaToi() {
 					/>
 					<StatCard
 						description="Chăm sóc khách hàng"
-						label="Đơn vị bạn dẫn"
+						label="Bộ OKR bạn dẫn"
 						value="1"
 					/>
 				</StatGroup>
@@ -168,7 +168,7 @@ export function ManCuaToi() {
 					</ItemGroup>
 				</section>
 				<section className="flex flex-col gap-3">
-					<SectionHeading level={2}>Đơn vị bạn dẫn</SectionHeading>
+					<SectionHeading level={2}>Bộ OKR bạn dẫn</SectionHeading>
 					<Item asChild variant="outline">
 						<Link href={duong(STATE.trangDonVi)}>
 							<ItemContent>
@@ -221,13 +221,26 @@ export function ManTatCaDonVi() {
 	return (
 		<PageShell>
 			<DauTrang
-				moTa="Mỗi đơn vị một trang OKR trong chu kỳ. Bấm tên để mở."
-				tieuDe="Đơn vị"
+				hanhDong={<NutThemMucTieu />}
+				moTa="Mỗi đơn vị một bộ OKR trong chu kỳ. Bấm tên để mở bộ OKR đó."
+				tieuDe="Bộ OKR"
 			/>
 			<PageShellContent>
+				<ToggleGroup
+					aria-label="Lọc bộ OKR"
+					defaultValue="tat-ca"
+					size="sm"
+					spacing={0}
+					type="single"
+					variant="outline"
+				>
+					<ToggleGroupItem value="tat-ca">Tất cả</ToggleGroupItem>
+					<ToggleGroupItem value="toi-dan">Tôi dẫn</ToggleGroupItem>
+					<ToggleGroupItem value="theo-doi">Đang theo dõi</ToggleGroupItem>
+				</ToggleGroup>
 				<SimpleTable
 					columns={[
-						{ id: "ten", header: "Đơn vị" },
+						{ id: "ten", header: "Bộ OKR của" },
 						{ id: "truong", header: "Trưởng" },
 						{ id: "mt", header: "Mục tiêu", align: "right" },
 						{ id: "td", header: "Tiến độ", width: "w-48" },
@@ -502,14 +515,14 @@ export function ManTrangDonVi({ the }: { the: TheDonVi }) {
 						<NutThemMucTieu />
 					</>
 				}
-				moTa={`Trưởng: ${TOI.ten} · ${KY.ten} · Đang chạy`}
+				moTa={`Bộ OKR ${KY.ten} · Trưởng: ${TOI.ten} · Đang chạy`}
 				tieuDe="Chăm sóc khách hàng"
 				vet={
 					<Breadcrumb>
 						<BreadcrumbList>
 							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
-									<Link href={duong(STATE.donVi)}>Đơn vị</Link>
+									<Link href={duong(STATE.donVi)}>Bộ OKR</Link>
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 							<BreadcrumbSeparator />
@@ -674,7 +687,7 @@ export function ManCapNhat() {
 		<PageShell width="page">
 			<DauTrang
 				moTa="Mọi lần cập nhật tuần, mới nhất trước. Đọc trước họp, trả lời ngay tại đây."
-				tieuDe="Cập nhật"
+				tieuDe="Cập nhật gần đây"
 			/>
 			<PageShellContent>
 				<ToggleGroup
@@ -686,7 +699,7 @@ export function ManCapNhat() {
 					variant="outline"
 				>
 					<ToggleGroupItem value="tat-ca">Tất cả</ToggleGroupItem>
-					<ToggleGroupItem value="don-vi">Đơn vị bạn dẫn</ToggleGroupItem>
+					<ToggleGroupItem value="don-vi">Bộ OKR bạn dẫn</ToggleGroupItem>
 					<ToggleGroupItem value="theo-doi">Bạn theo dõi</ToggleGroupItem>
 				</ToggleGroup>
 				<ItemGroup>

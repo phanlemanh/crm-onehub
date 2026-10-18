@@ -34,7 +34,7 @@ import {
 import Link from "next/link";
 import { type ReactNode, useId } from "react";
 import { CHU_KY_KHAC, KY } from "../ban-mau-okr/du-lieu";
-import { duong, LOI_TAT_DON_VI, STATE, type StateVo, TOI } from "./du-lieu";
+import { duong, STATE, type StateVo, TOI } from "./du-lieu";
 
 type MucRail = { key: string; nhan: string; icon: CarbonIcon };
 
@@ -55,14 +55,12 @@ const RAIL: MucRail[] = [
 
 export type NoiDen =
 	| "cua-toi"
-	| "tat-ca-don-vi"
-	| "don-vi:cskh"
-	| "don-vi:vanhanh"
+	| "cap-nhat"
+	| "bo-okr"
+	| "lay-y-kien"
 	| "suc-khoe"
 	| "moi-kr"
-	| "so-do"
-	| "cap-nhat"
-	| "lay-y-kien";
+	| "so-do";
 
 type Muc = { noi: NoiDen; nhan: string; state: StateVo };
 
@@ -70,38 +68,29 @@ type Nhom = { khoa: string; nhan: string | null; muc: Muc[] };
 
 const NHOM: Nhom[] = [
 	{
-		khoa: "toi",
+		khoa: "dau",
 		nhan: null,
-		muc: [{ noi: "cua-toi", nhan: "Của tôi", state: STATE.cuaToi }],
-	},
-	{
-		khoa: "don-vi",
-		nhan: "Đơn vị",
 		muc: [
-			{ noi: "tat-ca-don-vi", nhan: "Tất cả đơn vị", state: STATE.donVi },
-			...LOI_TAT_DON_VI.map(
-				(d): Muc => ({
-					noi: `don-vi:${d.id}`,
-					nhan: d.ten,
-					state: STATE.trangDonVi,
-				}),
-			),
+			{ noi: "cua-toi", nhan: "Của tôi", state: STATE.cuaToi },
+			{ noi: "cap-nhat", nhan: "Cập nhật gần đây", state: STATE.capNhat },
 		],
 	},
 	{
-		khoa: "cong-ty",
-		nhan: "Cả công ty",
+		khoa: "okr",
+		nhan: "OKR",
+		muc: [
+			{ noi: "bo-okr", nhan: "Bộ OKR", state: STATE.donVi },
+			{ noi: "lay-y-kien", nhan: "Lấy ý kiến", state: STATE.layYKien },
+		],
+	},
+	{
+		khoa: "bao-cao",
+		nhan: "Báo cáo",
 		muc: [
 			{ noi: "suc-khoe", nhan: "Sức khoẻ", state: STATE.sucKhoe },
 			{ noi: "moi-kr", nhan: "Mọi KR", state: STATE.moiKr },
 			{ noi: "so-do", nhan: "Sơ đồ góp vào", state: STATE.soDo },
-			{ noi: "cap-nhat", nhan: "Cập nhật", state: STATE.capNhat },
 		],
-	},
-	{
-		khoa: "ke-hoach",
-		nhan: "Lập kế hoạch",
-		muc: [{ noi: "lay-y-kien", nhan: "Lấy ý kiến", state: STATE.layYKien }],
 	},
 ];
 
@@ -128,12 +117,7 @@ function NhomThanhBen({ nhom, dangO }: { nhom: Nhom; dangO: NoiDen }) {
 		<NavGroup aria-labelledby={nhom.nhan ? id : undefined}>
 			{nhom.nhan ? <NavGroupLabel id={id}>{nhom.nhan}</NavGroupLabel> : null}
 			{nhom.muc.map((m) => (
-				<NavItem
-					active={m.noi === dangO}
-					asChild
-					key={m.noi}
-					level={m.noi.startsWith("don-vi:") ? 2 : 0}
-				>
+				<NavItem active={m.noi === dangO} asChild key={m.noi}>
 					<Link href={duong(m.state)}>{m.nhan}</Link>
 				</NavItem>
 			))}

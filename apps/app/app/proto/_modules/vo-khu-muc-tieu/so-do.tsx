@@ -86,7 +86,7 @@ export function KhungToanVung({ toanMan }: { toanMan: boolean }) {
 						<BreadcrumbList>
 							<BreadcrumbItem>
 								<BreadcrumbLink asChild>
-									<Link href={duong(STATE.sucKhoe)}>Cả công ty</Link>
+									<Link href={duong(STATE.sucKhoe)}>Báo cáo</Link>
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 							<BreadcrumbSeparator />

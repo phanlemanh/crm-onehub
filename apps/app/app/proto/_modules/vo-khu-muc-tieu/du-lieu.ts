@@ -40,11 +40,6 @@ export const TOI = NGUOI.thao;
 
 export const DON_VI_TOI_DAN = "cskh";
 
-export const LOI_TAT_DON_VI = [
-	{ id: "cskh", ten: "Chăm sóc khách hàng", vai: "Bạn dẫn" },
-	{ id: "vanhanh", ten: "Vận hành", vai: "Đang theo dõi" },
-] as const;
-
 export const MUC_TIEU_DON_VI: MucTieuMau[] = [MT_CSKH_1, MT_CSKH_2];
 
 function layKr(mt: MucTieuMau, id: string): KrMau {
