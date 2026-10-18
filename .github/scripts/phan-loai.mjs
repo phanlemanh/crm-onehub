@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url";
 const KHO = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const THU_MUC_GITHUB = ".github/";
 const DAU_TRU = "!";
+const KY_TU_DAI_DIEN = /[*?[]/;
+const DUOI_MOI_TANG = "**";
 const TEP_LUOI = join(KHO, "scripts", "pre-merge-check.sh");
 const TEP_DOC_DS = join(KHO, "lib", "workspace-record.cjs");
 const RUT_HAM = `eval "$(sed -n '/^glob_variants() {/,/^}/p;/^match_globs() {/,/^}/p' "$1")"; type match_globs >/dev/null 2>&1 || exit 3; while IFS= read -r f; do [ -n "$f" ] || continue; if match_globs "$f" "$2"; then printf '%s\\n' "$f"; fi; done`;
@@ -39,11 +41,22 @@ function khop(globs, tep) {
 	return new Set(r.stdout.split("\n").filter(Boolean));
 }
 
+const soDoan = (s) => s.split("/").length;
+const chiMotDoan = (g) => KY_TU_DAI_DIEN.test(g) && !g.includes(DUOI_MOI_TANG);
+
+function khopDungDoan(globs, tep) {
+	const ra = khop(globs.filter((g) => !chiMotDoan(g)), tep);
+	for (const g of globs.filter(chiMotDoan)) {
+		for (const t of khop([g], tep.filter((t) => soDoan(t) === soDoan(g)))) ra.add(t);
+	}
+	return ra;
+}
+
 export function tachT1(globs, tep) {
 	const duong = globs.filter((g) => !g.startsWith(DAU_TRU));
 	const am = globs.filter((g) => g.startsWith(DAU_TRU)).map((g) => g.slice(DAU_TRU.length));
-	const khopDuong = khop(duong, tep);
-	const khopAm = khop(am, [...khopDuong]);
+	const khopDuong = khopDungDoan(duong, tep);
+	const khopAm = khopDungDoan(am, [...khopDuong]);
 	return {
 		t1: new Set([...khopDuong].filter((t) => !khopAm.has(t))),
 		maDoc: khopAm,
