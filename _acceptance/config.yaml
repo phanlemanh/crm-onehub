@@ -3149,6 +3149,12 @@ risk_tiers:
     # — PR #216 đã bị cổng chặn hai ngày vì đúng lớp «đổi cấu hình, không hồ sơ».
     - ".github/workflows/ci.yml"
     - "tin-hieu/crm/**"   # tệp tín hiệu lịch chạy kéo về (TH1) — PR hàng chờ chỉ chạm thư mục này
+    # Sổ chạy và sổ quyết định của hồ sơ (_acceptance/push-ghim-lai-t1): ghim lại chỉ ghi hai tệp này cùng
+    # evidence-report.md, nên lần đẩy và PR chỉ ghim lại được nhẹ ở CI và pre-push. Cổng nghiệm thu vẫn chạy và
+    # vẫn đối chiếu chúng — pre-merge-check bỏ qua _acceptance/* trước khi xét T1. Ở CI và pre-push, `*` của hai
+    # glob này chỉ khớp đúng một đoạn (luật số đoạn trong tachT1), nên tệp cùng tên nằm sâu hơn vẫn nặng.
+    - "_acceptance/*/run-log.jsonl"
+    - "_acceptance/*/decisions.jsonl"
   # Tệp T1 mà bài kiểm, bản dựng hay runtime đọc (_acceptance/t1-ma-doc). Chỉ CI (.github/scripts/phan-loai.mjs) và
   # pre-push (scripts/pre-push-t1.mjs) đọc khoá này, qua docGlobT1/tachT1: tệp khớp ở đây là NẶNG dù khớp
   # t1_skip_globs. Cổng nghiệm thu của kit không đọc nó — sửa các tệp này vẫn không cần hồ sơ. Danh sách giữ đủ
