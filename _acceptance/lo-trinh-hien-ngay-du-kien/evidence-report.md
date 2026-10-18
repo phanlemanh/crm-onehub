@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 302e514663624a960e29bbfab7ade771510d48ed
+verified_commit: 3d28219c6d009a39dfa73405b509abe4730ea932
 human_signoff: Manh Phan 2026-10-18
 ---
 
@@ -219,3 +219,7 @@ Round 2: E2-E9 va E12 chay lai, E1 va E10 carry-forward tu round 1, E11 do hoi d
 ### Re-pin lần 1 — 2026-10-18, do gop onehub 30d982d22 sau Cong Bang chung
 run_id: repin-20261018T063734Z-79979
 sha: 302e514663624a960e29bbfab7ade771510d48ed · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9, E11 (E11 không khai paths) · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-18, do gop onehub sau #476 (du-an-gantt)
+run_id: repin-20261018T085800Z-91380
+sha: 3d28219c6d009a39dfa73405b509abe4730ea932 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9, E11 (E11 không khai paths) · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
