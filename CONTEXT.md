@@ -467,7 +467,7 @@ Vì sao: màn điều phối dùng «bộ phận» cho cấp này tới hết l�
 là để một chữ chỉ hai cấp.
 
 **Đơn vị**: chữ chung cho một bộ phận hoặc một phòng ban, khi câu nói về cả hai —
-«trưởng đơn vị», màn OKR «Theo đơn vị». Gốc OneHub cũng là một đơn vị khi đặt
+«trưởng đơn vị», «bộ OKR của đơn vị». Gốc OneHub cũng là một đơn vị khi đặt
 OKR cấp công ty. Chốt 2026-09-24.
 Trên màn, đơn vị gốc mang tên không gian làm việc — ở đây là **OneHub** — như mọi đơn
 vị khác mang tên của mình. Khi câu nói về phạm vi thì viết «cả công ty» («sơ đồ cả công
@@ -648,17 +648,45 @@ _Avoid_: KR chết, KR bỏ quên, KR trễ hạn
 Vì sao: «im» nói đúng điều máy biết — không ai ghi gì — mà không đoán KR có còn chạy.
 
 **Họp tuần**: buổi trưởng đơn vị cùng đơn vị đi qua OKR mỗi tuần. **Bảng họp tuần**
-là cách xem thứ ba của «Theo đơn vị», xếp KR theo thứ đáng bàn: tự tin tụt, KR im,
+là thẻ con «Họp tuần» của một bộ OKR (trước 18/10 là cách xem thứ ba của «Theo đơn
+vị»), xếp KR theo thứ đáng bàn: tự tin tụt, KR im,
 ghi chú mới. Bảng xếp theo KR, không liệt kê người chưa cập nhật. Chốt 2026-09-26.
 _Avoid_: điểm danh, báo cáo tuần, giao ban
 Vì sao: «điểm danh» và «giao ban» đặt người vào giữa; họp tuần bàn KR.
 
-**Toàn cảnh**: tab của khu OKR cho mọi vai, kể cả «chỉ OKR» — tiến độ, mức tự tin và
-heatmap của mọi đơn vị trong một chu kỳ. Chốt 2026-09-24 ở bản mẫu, nhãn chốt
-2026-09-26.
-_Avoid_: dashboard, bảng điều khiển
-Vì sao: «Tổng quan» đã là tên trang chủ của CRM; hai màn cùng chữ thì người không biết
-mình đang đứng ở đâu.
+**Bộ OKR**: các mục tiêu và KR của một đơn vị trong một chu kỳ — vật trung tâm của
+khu Mục tiêu. Mỗi đơn vị mỗi chu kỳ có đúng một bộ, sinh từ cây tổ chức chứ không tạo
+tay; khi chương trình bật OKR cá nhân thì một người cũng có bộ của mình. Trên thanh bên
+khu, mục «Bộ OKR» (nhóm OKR) liệt mọi bộ, lọc Tất cả · Tôi dẫn · Đang theo dõi; mỗi bộ có
+trang riêng với các thẻ con là phần của nó (OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm).
+Học từ «Plan» của Tability. Chốt 2026-10-18 (Manh Phan).
+Khác **Bộ OKR mẫu**: đó là dữ liệu mẫu của đội dựng, không phải tên trên màn.
+_Avoid_: kế hoạch, plan, bảng OKR, trang đơn vị
+Vì sao: «kế hoạch» đã là chữ của Kế hoạch 30 ngày (khuôn kế hoạch, kế hoạch im); «trang
+đơn vị» gọi tên cái trang chứ không gọi tên vật — người ta mở một bộ OKR, không mở một
+đơn vị.
+
+**Báo cáo (khu Mục tiêu)**: nhóm thứ hai trên thanh bên khu Mục tiêu, cho mọi vai, kể
+cả «chỉ OKR» — nơi nhìn ngang cả công ty trong một chu kỳ: **Sức khoẻ** (ô số, bảng đơn
+vị, mức tự tin theo tuần, phần quản trị), **Mọi KR** (mọi KR lọc theo tình trạng, đơn vị,
+người) và **Sơ đồ**. Thay thẻ «Toàn cảnh» (chốt 2026-09-24 ở bản mẫu, nhãn 2026-09-26) khi
+khu chuyển sang thanh bên chia theo việc và vật. Chốt 2026-10-18 (Manh Phan).
+_Avoid_: Toàn cảnh (tên cũ), dashboard, bảng điều khiển, Tổng quan
+Vì sao: thanh bên chia theo việc (OKR) và vật để đọc (Báo cáo), như Work · Reports của
+Tability; chia theo phạm vi (của tôi · đơn vị · cả công ty) làm người ta không biết một
+mục đang nói về bộ OKR hay về số liệu. «Tổng quan» vẫn là tên trang chủ của CRM.
+
+**Sơ đồ (khu Mục tiêu)**: mục trong nhóm Báo cáo chứa các sơ đồ của khu, mở ở khung
+toàn vùng — chiếm trọn vùng nội dung, có nút «Toàn màn hình». Hôm nay chứa **Sơ đồ góp
+vào** (xem mục Căn chỉnh); sơ đồ người hay sơ đồ phụ thuộc sau này vào cùng mục, thanh
+bên không thêm dòng. Chốt 2026-10-18 (Manh Phan).
+_Avoid_: bản đồ, xem bản đồ, cây căn chỉnh, map
+Vì sao: mọi mục trên thanh bên là danh từ chỉ nơi chốn; «bản đồ» trong giao diện tiếng
+Việt gợi bản đồ địa lý, còn hình nối các đơn vị quen gọi là sơ đồ, như sơ đồ tổ chức.
+
+Nhóm còn lại của thanh bên mang nhãn **OKR** (Bộ OKR · Lấy ý kiến); khi KPI có trong
+sản phẩm thì nhãn là «OKR và KPI», không phải «Mục tiêu» (trùng tên khu, và KPI không
+phải mục tiêu) hay «Kế hoạch» (đụng Kế hoạch 30 ngày). Chốt 2026-10-18 (Manh Phan).
 
 **Bộ OKR mẫu**: công ty giả «Hải Đăng Logistics» — 40 người tên giả, ba bộ phận, mười
 phòng ban — đang chạy OKR ở tuần 6 của quý, nạp bằng một lệnh vào máy dev hoặc phiên đo
