@@ -108,3 +108,7 @@ Known limits — chủ kho chấp nhận 26/09 tại Cổng Bằng chứng sau S
 - known-limits: E21 và E23 đọc theo sổ d-20260926T091042Z-26 — E21 nối Zalo cho trưởng P1 để khớp số viết trước của E20; E23 ở Toàn cảnh đọc số của hàng phòng ban vì màn không in tên mục tiêu.
 
 Mở hợp đồng mới (Ngoài-2 và 6, Ngoài-7, Ngoài-8; sổ -31, -35, -36, -37): tải trước danh sách Theo đơn vị kèm bộ lọc mức tự tin; bộ lọc phụ trách hiện tên thay cho mã; khối «OKR của bạn» báo lỗi khi không tải được chu kỳ.
+
+Lời hứa thay bởi hồ sơ khác (thêm 17/10, trang-don-vi-mot-bang AC-14):
+
+- Trang Theo đơn vị khi lọc không khớp ghi «Không có mục tiêu nào khớp» kèm nút bỏ lọc (E2 bước lọc) — thay bởi trang-don-vi-mot-bang AC-5.

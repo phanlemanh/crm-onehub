@@ -729,9 +729,12 @@ function cauHinhMan(ctx, man) {
 		return {
 			...goc,
 			duong: duongDonVi(ctx, ctx.ky, { loai: "bp", id: ctx.boPhan }),
-			cho: "[data-muc-tieu] [data-hang-muc-tieu]",
-			mt: "[data-muc-tieu] [data-hang-muc-tieu]",
-			kr: "[data-muc-tieu] [data-kr]",
+			// AC-14 cach-toi: trang-don-vi-mot-bang AC-3 — moi muc tieu la mot dong cua mot bang (o ten mang ca data-muc-tieu lan data-hang-muc-tieu), KR la dong con [data-kr] cung bang.
+			cho: "[data-hang-muc-tieu]",
+			mt: "[data-hang-muc-tieu]",
+			kr: "[data-kr]",
+			khoiCuon: '[data-trang-thai="ST-donvi-danhsach"]',
+			moDong: true,
 		};
 	if (man === "sheet")
 		return {
@@ -785,12 +788,28 @@ async function choMan(t, cauHinh) {
 	await tre(MTKR.cho.yenMs);
 }
 
+async function moMoiDong(t) {
+	for (const nut of await t.p.$$('[data-mo-dong][aria-expanded="false"]'))
+		await nut.click().catch(() => {});
+	await t.p
+		.waitForFunction(
+			() =>
+				document.querySelectorAll('[data-mo-dong][aria-expanded="false"]')
+					.length === 0,
+			{ timeout: MTKR.cho.bamMs },
+		)
+		.catch(() => {});
+	await tre(MTKR.cho.yenMs);
+}
+
 async function doMotMan(ctx, man, theme, { chen = false, ky = null } = {}) {
 	const cauHinh = cauHinhMan(ctx, man);
 	if (ky) cauHinh.duong = cauHinh.duong.replace(ctx.kyCham, ky);
 	const t = await trang(ctx.pt, MTKR.kho.hep, theme);
 	try {
 		await choMan(t, cauHinh);
+		// trang-don-vi-mot-bang AC-3: mac dinh moi dong thu — bam nut mo tung dong de KR hien nhu khoi mo san cu.
+		if (cauHinh.moDong) await moMoiDong(t);
 		if (chen)
 			await t.p.evaluate((rong) => {
 				const o = document.createElement("div");
@@ -859,7 +878,8 @@ async function anhDonVi(ctx, theme) {
 		await moTrang(
 			t,
 			duongDonVi(ctx, ctx.ky, { loai: "pb", id: ctx.phongBanAnh }),
-			"[data-muc-tieu] [data-hang-muc-tieu]",
+			// AC-14 cach-toi: o ten cua dong muc tieu mang ca data-muc-tieu lan data-hang-muc-tieu (trang-don-vi-mot-bang AC-3).
+			"[data-hang-muc-tieu]",
 		);
 		const so = await t.p.evaluate(
 			() => document.querySelectorAll("[data-muc-tieu]").length,

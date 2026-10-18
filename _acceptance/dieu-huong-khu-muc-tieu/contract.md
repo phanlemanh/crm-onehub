@@ -86,3 +86,4 @@ Quét bằng `morphological-scan` trong phiên (15/10), bảng đủ ở `covera
   - Ngoài-14: Bài kiểm tiêu đề lúc đang tải không chạm khung chờ thật của trang. Nếu ai đổi tiêu đề ở khung chờ đó, người dùng có thể thấy tiêu đề nhảy khi tải mà bài kiểm vẫn xanh.
   - Ngoài-15: Phép thử «hồ sơ đã ký phát hiện được lỗi» có thể báo đỏ vì lý do khác lỗi đã cố ý tiêm, nên màu đỏ đó chưa chắc chứng minh đúng điều nó khẳng định.
   - Ngoài-16: Bài kiểm xác nhận thân trang Theo đơn vị không còn nút tạo, nhưng không chắc trang đã dựng xong, nên một lần dựng hỏng cũng vẫn báo xanh.
+- AC-6 nới thêm `xemOkr` trên liên kết thẻ — xem trang-don-vi-mot-bang AC-13 (DH2 thi công phần cách xem DH1 giao lại).
