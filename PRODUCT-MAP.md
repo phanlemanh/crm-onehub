@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>149 việc"]
+  GB --> DG["Đã giao<br/>150 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>143 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -310,6 +310,7 @@ flowchart TD
 - Người quản trị sửa, sắp xếp, lưu trữ và khôi phục bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu — chỉ quản trị được đổi cấu hình (`sua-luu-tru-dieu-phoi`)
 - Sửa hai paths chết (E5, E17) trong evals.yaml của hồ sơ đã ký soan-okr-cung-tro-ly để lưới hoá cũ lọc theo paths được, rồi ghim lại hồ sơ một lần (`sua-paths-e5-soan-okr`) — đã giao — không đo, khai ở Cổng Đáng
 - Sửa hai lỗi môi trường làm suite test đỏ, và nối dây cổng nghiệm thu vào bản kit đang cài (`sua-test-do-thu-tu-nap`)
+- tệp T1 mà bài kiểm, bản dựng hay runtime đọc không còn được CI và pre-push tính là nhẹ; một nguồn luật trong _acceptance/config.yaml cho cả hai, có răng giữ danh sách đủ (`t1-ma-doc`) — đã giao — không đo, khai ở Cổng Đáng
 - Tác nhân chạy đúng với mọi model trong danh mục — khuôn model thấy di động giữa các nhà cung cấp, model giải theo vai lúc chạy thay vì ghim theo bản Tác nhân, lượt mà bộ chạy hỏng hoặc chưa nộp kết quả thì ghi Hỏng (`tac-nhan-model-rieng`)
 - soSanh bỏ vòng Myers mức khối vô ích khi cận dưới số bước sửa đã vượt trần, để ca tat-dinh của tai-lieu-diff hết đỏ chập chờn trên CI (`tai-lieu-diff-bo-myers-vo-ich`)
 - Ở màn Tài liệu, đổi bộ lọc rồi bấm lùi thì về bộ lọc trước, và thanh lọc không chớp thành khung chờ mỗi lần lọc (`tai-lieu-loc-giu-lich-su`)

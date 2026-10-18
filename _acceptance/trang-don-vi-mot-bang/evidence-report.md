@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 599119fac45a704a13ae3e2740ea85e55df67ede
+verified_commit: a0124b2dba7fd0f324ebb62c0a560e6b83425141
 human_signoff: manh 2026-10-17
 ---
 
@@ -294,3 +294,11 @@ sha: 76d76e899ea5f4ee76aa9ec3989e9482cc1fe067 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-18, do DA4 du-an-gantt: răng DH2 E12, E16 đổi mốc sang dòng chốt cuối ở 8140d6667 (chủ kho «(i) Cho sửa»)
 run_id: repin-20261018T051318Z-82451
 sha: 599119fac45a704a13ae3e2740ea85e55df67ede · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-18, do t1-ma-doc đổi phan-loai.mjs, gate-shape.json, t1_ma_doc, bộ quét và spec trong packages/ui; gộp onehub 76e8fb215 (#475); thước E17 và E11 neo lần gộp của hồ sơ
+run_id: repin-20261018T111331Z-21656
+sha: 01089942a15cecbdcc387d41e69bc032346524fc · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-18, do gộp onehub 2374af730 (#472, #479) làm cũ lại 8 hồ sơ
+run_id: repin-20261018T122729Z-21270
+sha: a0124b2dba7fd0f324ebb62c0a560e6b83425141 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E2, E14 (E14 không khai paths) · AC không có chốt máy: AC-2, AC-12 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

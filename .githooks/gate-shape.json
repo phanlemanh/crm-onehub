@@ -95,6 +95,6 @@
 		"skip": ["test", "build"],
 		"classifier": "scripts/pre-push-t1.mjs",
 		"sameRuleAs": ".github/scripts/phan-loai.mjs",
-		"vi_sao": "Lần đẩy chỉ tệp T1 (theo đúng quyetDinh và t1_skip_globs mà CI dùng) không đổi mã nào test hay build đọc; CI ở PR sẵn sàng chỉ T1 cũng bỏ hai job này, nên bỏ ở đây không mất chiều đỏ nào so với CI. Răng nền chat trong @crm/ui#test cùng vậy. check-types, lint, lint:slop vẫn chạy. Lần đẩy có tệp mã, có .github/**, đẩy rỗng hay phân loại hỏng đều chạy đủ."
+		"vi_sao": "Lần đẩy mà mọi tệp khớp t1_skip_globs và không tệp nào khớp t1_ma_doc của _acceptance/config.yaml được bỏ hai bước này. t1_ma_doc là tệp T1 mà bài kiểm, bản dựng hay runtime đọc (tài liệu thiết kế, spec mà bài kiểm đối chiếu, LO-TRINH.html, prompt agent, mọi tệp dưới apps/ và packages/); bộ quét .github/scripts/t1-ma-doc.mjs chạy trong @crm/ui#test giữ danh sách đủ, nên lần đẩy được bỏ không đổi đầu vào nào của test hay build mà bộ quét thấy. Giới hạn: tệp đọc bằng tên ghép lúc chạy hay qua hai bậc gọi thì bộ quét không thấy. CI phân loại PR sẵn sàng bằng cùng quyetDinh, tachT1 và hai khoá đó. Răng nền chat trong @crm/ui#test cùng vậy. check-types, lint, lint:slop vẫn chạy. Lần đẩy có tệp mã, có tệp t1_ma_doc, có .github/**, đẩy rỗng hay phân loại hỏng đều chạy đủ."
 	}
 }
