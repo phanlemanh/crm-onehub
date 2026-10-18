@@ -167,7 +167,11 @@ function envSach(them: Record<string, string>): NodeJS.ProcessEnv {
 }
 
 function git(goc: string, ...a: string[]): string {
-	const r = spawnSync("git", a, { cwd: goc, env: envSach({}), encoding: "utf8" });
+	const r = spawnSync("git", a, {
+		cwd: goc,
+		env: envSach({}),
+		encoding: "utf8",
+	});
 	if (r.status !== 0)
 		throw new Error(`git ${a.join(" ")} ma ${r.status}: ${r.stderr}`);
 	return r.stdout.trim();
@@ -233,11 +237,7 @@ const MA_TRAN_CI: [string, string[], string][] = [
 		nang("t1-ma-doc"),
 	],
 	["+ ci.yml", [".github/workflows/ci.yml"], nang("cham-github")],
-	[
-		"+ tep sau",
-		["_acceptance/x/rang/f/run-log.jsonl"],
-		nang("co-tep-nang"),
-	],
+	["+ tep sau", ["_acceptance/x/rang/f/run-log.jsonl"], nang("co-tep-nang")],
 ];
 
 describe("pglt-ci", () => {
@@ -287,9 +287,13 @@ function khoMauDay(): string {
 	ghi(goc, ".gitignore", `${CAU_HINH}\n`);
 	ghi(goc, "hook/pre-push", HOOK_TAM);
 	chmodSync(join(goc, "hook/pre-push"), 0o755);
-	spawnSync("git", ["init", "-q", "--template=", "--bare", join(d, "remote.git")], {
-		env: envSach({}),
-	});
+	spawnSync(
+		"git",
+		["init", "-q", "--template=", "--bare", join(d, "remote.git")],
+		{
+			env: envSach({}),
+		},
+	);
 	git(d, "init", "-q", "--template=", "-b", "onehub", goc);
 	git(goc, "add", "-A");
 	git(goc, "commit", "-q", "-m", "goc");
@@ -373,7 +377,10 @@ function khoQuet(tep: Record<string, string>, cfg = cauHinhThat()): string {
 	const goc = thuMucTam("quet");
 	const gon = cfg
 		.replace(/^ {2}t1_ma_doc:\r?\n(?:(?: {4}.*|\s*)\r?\n)*/m, "")
-		.replace(/^ {2}t1_skip_globs:\r?\n/m, (m) => `  t1_ma_doc:\n    - "docs/neo.md"\n${m}`);
+		.replace(
+			/^ {2}t1_skip_globs:\r?\n/m,
+			(m) => `  t1_ma_doc:\n    - "docs/neo.md"\n${m}`,
+		);
 	ghi(goc, CAU_HINH, gon);
 	ghi(goc, "docs/neo.md", "n\n");
 	for (const [t, c] of Object.entries(tep)) ghi(goc, t, c);
@@ -424,7 +431,10 @@ describe("pglt-doc", () => {
 		const { quetDauVao } = await quet();
 		const goc = khoQuet({ ...SO_HO_SO });
 		expect(quetDauVao(goc, { mien: {} }).baoCao).toEqual([]);
-		expect(cliQuet(goc)).toEqual({ ma: 0, ra: expect.stringMatching(/^sach:/) });
+		expect(cliQuet(goc)).toEqual({
+			ma: 0,
+			ra: expect.stringMatching(/^sach:/),
+		});
 	});
 
 	test("pglt-doc 4 config khong glob run-log thi run-log khong la dich", async () => {
@@ -436,5 +446,124 @@ describe("pglt-doc", () => {
 		const bc = quetDauVao(goc, { mien: {} }).baoCao;
 		expect(bc).not.toContain(THIEU_A);
 		expect(bc).toContain(THIEU_B);
+	});
+});
+
+const TEP_CONG = join(GOC_KHO, ".github", "workflows", "acceptance.yml");
+const LOC_DUONG = ["paths", "paths-ignore", "branches-ignore"];
+const TYPES_CAN = ["opened", "synchronize", "reopened"];
+const IF_BUOC = "\u0024{{ !cancelled() }}";
+const NHAC_PHAN_LOAI = /phan-loai|\bnang\b/;
+
+type Buoc = {
+	name?: string;
+	if?: string;
+	run?: string;
+	"continue-on-error"?: unknown;
+};
+type Job = {
+	name?: string;
+	needs?: unknown;
+	if?: unknown;
+	"continue-on-error"?: unknown;
+	steps?: Buoc[];
+};
+type Workflow = {
+	on?: {
+		pull_request?: {
+			types?: string[];
+			paths?: string[];
+			"paths-ignore"?: string[];
+			"branches-ignore"?: string[];
+		} | null;
+	};
+	jobs?: Record<string, Job>;
+};
+
+function kiemJobCong(chu: string): string[] {
+	const wf = Bun.YAML.parse(chu) as Workflow;
+	const loi: string[] = [];
+	const pr = wf.on?.pull_request ?? {};
+	for (const k of LOC_DUONG)
+		if (k in pr) loi.push(`on-loc-duong: on.pull_request co ${k}`);
+	const types = pr.types;
+	if (types) {
+		const thieu = TYPES_CAN.filter((t) => !types.includes(t));
+		if (thieu.length) loi.push(`on-types: thieu ${thieu.join(", ")}`);
+	}
+	const job = wf.jobs?.["luat-kho"];
+	if (job?.name !== "acceptance gate")
+		return [...loi, "job-thieu: khong co luat-kho «acceptance gate»"];
+	if ("needs" in job) loi.push("job-needs: luat-kho co needs");
+	if ("if" in job) loi.push("job-if: luat-kho co if cap job");
+	if ("continue-on-error" in job)
+		loi.push("job-continue-on-error: luat-kho co continue-on-error");
+	const buoc = (ten: string) => (job.steps ?? []).find((b) => b.name === ten);
+	const premerge = buoc("Pre-merge check");
+	if (!premerge) return [...loi, "buoc-thieu: khong co buoc Pre-merge check"];
+	if ("continue-on-error" in premerge)
+		loi.push("buoc-continue-on-error: Pre-merge check co continue-on-error");
+	if (premerge.if !== IF_BUOC)
+		loi.push(`buoc-if: Pre-merge check if = ${premerge.if}`);
+	for (const b of [premerge, buoc("Product map")]) {
+		if (b && NHAC_PHAN_LOAI.test(`${b.if ?? ""}\n${b.run ?? ""}`))
+			loi.push(`buoc-nhac-phan-loai: ${b.name} nhac phan-loai hay nang`);
+	}
+	return loi;
+}
+
+const DAU_PR = "    types: [opened, synchronize, reopened, ready_for_review]\n";
+const DAU_JOB = "    name: acceptance gate\n";
+const DAU_BUOC = `      - name: Pre-merge check\n        if: ${IF_BUOC}\n`;
+
+const MA_TRAN_JOB: [string, [string, string] | null, string[]][] = [
+	["tep that", null, []],
+	[
+		"paths-ignore",
+		[DAU_PR, `${DAU_PR}    paths-ignore: ['_acceptance/*/run-log.jsonl']\n`],
+		["on-loc-duong"],
+	],
+	["paths", [DAU_PR, `${DAU_PR}    paths: ['apps/**']\n`], ["on-loc-duong"]],
+	["types bo synchronize", ["synchronize, ", ""], ["on-types"]],
+	["needs", [DAU_JOB, `${DAU_JOB}    needs: phan-loai\n`], ["job-needs"]],
+	[
+		"if cap job",
+		[DAU_JOB, `${DAU_JOB}    if: needs.phan-loai.outputs.nang != 'false'\n`],
+		["job-if"],
+	],
+	[
+		"continue-on-error cap job",
+		[DAU_JOB, `${DAU_JOB}    continue-on-error: true\n`],
+		["job-continue-on-error"],
+	],
+	[
+		"continue-on-error buoc",
+		[DAU_BUOC, `${DAU_BUOC}        continue-on-error: true\n`],
+		["buoc-continue-on-error"],
+	],
+	[
+		"if buoc theo phan loai",
+		[
+			DAU_BUOC,
+			"      - name: Pre-merge check\n        if: steps.x.outputs.nang == 'true'\n",
+		],
+		["buoc-if", "buoc-nhac-phan-loai"],
+	],
+];
+
+describe("pglt-job", () => {
+	test("pglt-job so ca", () => {
+		if (MA_TRAN_JOB.length !== 9) throw new Error("so ca lech");
+	});
+
+	MA_TRAN_JOB.forEach(([ten, doi, luat], i) => {
+		test(`pglt-job ${i + 1} ${ten}`, () => {
+			const that = readFileSync(TEP_CONG, "utf8");
+			const chu = doi ? that.replace(doi[0], doi[1]) : that;
+			if (doi && chu === that)
+				throw new Error(`pglt-job ${i + 1}: ban chep khong doi`);
+			const loi = kiemJobCong(chu);
+			expect(loi.map((l) => l.split(":")[0]).sort()).toEqual([...luat].sort());
+		});
 	});
 });
