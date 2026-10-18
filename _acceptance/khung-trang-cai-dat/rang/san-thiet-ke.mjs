@@ -52,6 +52,7 @@ function moiNut(goc, lam) {
 	di(goc);
 }
 
+// F8 neo: gốc so lấy từ lần gộp đầu đưa evidence-report.md của hồ sơ vào onehub (#138), không merge-base với onehub — chủ kho «Cho sửa cả lớp này», 18/10
 function khungGop() {
 	const gop = git(
 		"log",
