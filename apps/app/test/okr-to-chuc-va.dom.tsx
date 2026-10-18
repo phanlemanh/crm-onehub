@@ -480,7 +480,7 @@ describe("nut-them", () => {
 					<TheoDonVi />
 				</>,
 			);
-			await cho(() => q("[data-hang-nut]", san.o) !== null, "thanh don vi");
+			await cho(() => q("[data-chon-don-vi]", san.o) !== null, "thanh don vi");
 			await cho(
 				() => q("[data-nut=them-muc-tieu]", san.o) !== null,
 				"nut them",

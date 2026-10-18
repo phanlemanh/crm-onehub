@@ -9,8 +9,6 @@ export type DuLieuCapNhat = RouterOutputs["okr"]["capNhatTuan"];
 export type KrCapNhat = DuLieuCapNhat["items"][number];
 export type ViecOkr = RouterOutputs["okr"]["viecCuaToi"]["viec"][number];
 
-export const KHO_HEP = "(max-width: 1023px)";
-
 export const CELL = "px-3 py-2.5 align-middle";
 
 export const nhanKr = (thuTu: number): string => `KR${thuTu}`;

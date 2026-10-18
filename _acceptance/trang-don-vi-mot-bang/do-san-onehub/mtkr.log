@@ -1,0 +1,59 @@
+bo ra: khung-tao-okr-nhu-deal/E18 — thuoc chay thuoc: rang/thuoc-cu.mjs tu chay eval cua ba ho so khac
+bo ra: okr-soat-anh-luot-3/E12 — luat pham vi vong: rang/san-thiet-ke.mjs do diff merge-base cua vong do
+bo ra: okr-soat-anh-luot-3/E13 — luat pham vi vong: rang/soi-ma.mjs do dong moi trong diff merge-base cua vong do
+khong chay duoc trong lan may: khung-tao-okr-nhu-deal/E11 (test, not-run)
+khong chay duoc trong lan may: khung-tao-okr-nhu-deal/E12 (test, not-run)
+merge-base eb5ab426 · dinh eb5ab4269cdb · danh sach 41 eval = se chay 39 (qua 20 lenh rieng) + khong chay duoc 2 · bo ra 3
+so ket qua: 0 lenh o dinh (ket-qua-eb5ab4269cdb-mac-dinh.jsonl), 0 lenh o merge-base (ket-qua-goc-eb5ab4269cdb.jsonl)
+Preparing worktree (detached HEAD eb5ab4269)
+Updating files:  52% (7174/13688)Updating files:  53% (7255/13688)Updating files:  54% (7392/13688)Updating files:  55% (7529/13688)Updating files:  56% (7666/13688)Updating files:  57% (7803/13688)Updating files:  58% (7940/13688)Updating files:  59% (8076/13688)Updating files:  60% (8213/13688)Updating files:  61% (8350/13688)Updating files:  62% (8487/13688)Updating files:  63% (8624/13688)Updating files:  64% (8761/13688)Updating files:  65% (8898/13688)Updating files:  66% (9035/13688)Updating files:  67% (9171/13688)Updating files:  68% (9308/13688)Updating files:  69% (9445/13688)Updating files:  70% (9582/13688)Updating files:  71% (9719/13688)Updating files:  72% (9856/13688)Updating files:  73% (9993/13688)Updating files:  74% (10130/13688)Updating files:  75% (10266/13688)Updating files:  76% (10403/13688)Updating files:  77% (10540/13688)Updating files:  78% (10677/13688)Updating files:  79% (10814/13688)Updating files:  80% (10951/13688)Updating files:  81% (11088/13688)Updating files:  82% (11225/13688)Updating files:  83% (11362/13688)Updating files:  84% (11498/13688)Updating files:  85% (11635/13688)Updating files:  86% (11772/13688)Updating files:  87% (11909/13688)Updating files:  88% (12046/13688)Updating files:  89% (12183/13688)Updating files:  90% (12320/13688)Updating files:  91% (12457/13688)Updating files:  92% (12593/13688)Updating files:  93% (12730/13688)Updating files:  94% (12867/13688)Updating files:  95% (13004/13688)Updating files:  96% (13141/13688)Updating files:  97% (13278/13688)Updating files:  98% (13415/13688)Updating files:  99% (13552/13688)Updating files: 100% (13688/13688)Updating files: 100% (13688/13688), done.
+cay dong bang head o eb5ab4269cdb: /private/tmp/claude-503/-Users-manhphan-dev-acceptance-gate-kit--claude-worktrees-sad-villani-97627b/4a4f3d01-fd65-41b7-af95-cb3c1b07086d/scratchpad/wt-onehub/.acceptance-runs/muc-tieu-va-kr/head
+[1/20] HEAD exit 0: canh-kr-okr/E13
+[2/20] HEAD exit 0: gioi-han-duyet-cay-okr/E17
+[3/20] HEAD exit 0: ux-lai-thu-8c-okr/E2, ux-lai-thu-8c-okr/E3, ux-lai-thu-8c-okr/E5, ux-lai-thu-8c-okr/E6, ux-lai-thu-8c-okr/E9, ux-lai-thu-8c-okr/E13, ux-lai-thu-8c-okr/E14
+[4/20] HEAD exit 1: toan-canh-okr/E2, toan-canh-okr/E3, toan-canh-okr/E14, toan-canh-okr/E23
+[5/20] HEAD exit 0: toan-canh-okr/E7
+[6/20] HEAD exit 0: no-sau-luot-5-okr/E10
+[7/20] HEAD exit 0: no-sau-luot-4-okr/E8
+[8/20] HEAD exit 0: khung-tao-okr-nhu-deal/E2
+[9/20] HEAD exit 0: khung-tao-okr-nhu-deal/E22
+[10/20] HEAD exit 0: hop-thoai-giu-cho-dang-nhap/E8
+[11/20] HEAD exit 1: hop-thoai-giu-cho-dang-nhap/E9
+[12/20] HEAD exit 0: okr-soat-anh-luot-3/E1, okr-soat-anh-luot-3/E2
+[13/20] HEAD exit 0: thanh-vien-hai-khoi-cung-khuon/E17
+[14/20] HEAD exit 1: dat-okr-trong-crm/E11, dat-okr-trong-crm/E12, dat-okr-trong-crm/E13, dat-okr-trong-crm/E20
+[15/20] HEAD exit 1: so-okr-tu-chay/E11, so-okr-tu-chay/E12, so-okr-tu-chay/E13
+[16/20] HEAD exit 1: canh-kr-okr/E11, canh-kr-okr/E12
+[17/20] HEAD exit 0: khep-ky-okr/E3, khep-ky-okr/E4, khep-ky-okr/E7
+[18/20] HEAD exit 1: cap-nhat-tuan-okr/E18, cap-nhat-tuan-okr/E29
+[19/20] HEAD exit 0: gioi-han-duyet-cay-okr/E15
+[20/20] HEAD exit 1: ux-lai-thu-8c-okr/E15
+da chay 39/39 eval; do o HEAD: 7 lenh
+Preparing worktree (detached HEAD eb5ab4269)
+Updating files:  48% (6612/13688)Updating files:  49% (6708/13688)Updating files:  50% (6844/13688)Updating files:  51% (6981/13688)Updating files:  52% (7118/13688)Updating files:  53% (7255/13688)Updating files:  54% (7392/13688)Updating files:  55% (7529/13688)Updating files:  56% (7666/13688)Updating files:  57% (7803/13688)Updating files:  58% (7940/13688)Updating files:  59% (8076/13688)Updating files:  60% (8213/13688)Updating files:  61% (8350/13688)Updating files:  62% (8487/13688)Updating files:  63% (8624/13688)Updating files:  64% (8761/13688)Updating files:  65% (8898/13688)Updating files:  66% (9035/13688)Updating files:  67% (9171/13688)Updating files:  68% (9308/13688)Updating files:  69% (9445/13688)Updating files:  70% (9582/13688)Updating files:  71% (9719/13688)Updating files:  72% (9856/13688)Updating files:  73% (9993/13688)Updating files:  74% (10130/13688)Updating files:  75% (10266/13688)Updating files:  76% (10403/13688)Updating files:  77% (10540/13688)Updating files:  78% (10677/13688)Updating files:  79% (10814/13688)Updating files:  80% (10951/13688)Updating files:  81% (11088/13688)Updating files:  82% (11225/13688)Updating files:  83% (11362/13688)Updating files:  84% (11498/13688)Updating files:  85% (11635/13688)Updating files:  86% (11772/13688)Updating files:  87% (11909/13688)Updating files:  88% (12046/13688)Updating files:  89% (12183/13688)Updating files:  90% (12320/13688)Updating files:  91% (12457/13688)Updating files:  92% (12593/13688)Updating files:  93% (12730/13688)Updating files:  94% (12867/13688)Updating files:  95% (13004/13688)Updating files:  96% (13141/13688)Updating files:  97% (13278/13688)Updating files:  98% (13415/13688)Updating files:  99% (13552/13688)Updating files: 100% (13688/13688)Updating files: 100% (13688/13688), done.
+cay dong bang goc o eb5ab4269cdb: /private/tmp/claude-503/-Users-manhphan-dev-acceptance-gate-kit--claude-worktrees-sad-villani-97627b/4a4f3d01-fd65-41b7-af95-cb3c1b07086d/scratchpad/wt-onehub/.acceptance-runs/muc-tieu-va-kr/goc
+HEAD 1 · merge-base 1: toan-canh-okr/E2, toan-canh-okr/E3, toan-canh-okr/E14, toan-canh-okr/E23
+do san o B: toan-canh-okr/E2
+do san o B: toan-canh-okr/E3
+do san o B: toan-canh-okr/E14
+do san o B: toan-canh-okr/E23
+HEAD 1 · merge-base 1: hop-thoai-giu-cho-dang-nhap/E9
+do san o B: hop-thoai-giu-cho-dang-nhap/E9
+HEAD 1 · merge-base 0 · HEAD chay lai 1: dat-okr-trong-crm/E11, dat-okr-trong-crm/E12, dat-okr-trong-crm/E13, dat-okr-trong-crm/E20
+hoi quy: dat-okr-trong-crm/E11
+hoi quy: dat-okr-trong-crm/E12
+hoi quy: dat-okr-trong-crm/E13
+hoi quy: dat-okr-trong-crm/E20
+HEAD 1 · merge-base 1: so-okr-tu-chay/E11, so-okr-tu-chay/E12, so-okr-tu-chay/E13
+do san o B: so-okr-tu-chay/E11
+do san o B: so-okr-tu-chay/E12
+do san o B: so-okr-tu-chay/E13
+HEAD 1 · merge-base 1: canh-kr-okr/E11, canh-kr-okr/E12
+do san o B: canh-kr-okr/E11
+do san o B: canh-kr-okr/E12
+HEAD 1 · merge-base 1: cap-nhat-tuan-okr/E18, cap-nhat-tuan-okr/E29
+do san o B: cap-nhat-tuan-okr/E18
+do san o B: cap-nhat-tuan-okr/E29
+HEAD 1 · merge-base 1: ux-lai-thu-8c-okr/E15
+do san o B: ux-lai-thu-8c-okr/E15
+tong 39 eval: xanh o HEAD 22 · chap chon 0 · do san o B 13 · hoi quy 4

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 34a15552ff23ee26d8a30938fd6ca7984f3bb1b8
+verified_commit: 468a79b5feefdf2ac856bb05df8943d99b65b845
 human_signoff: Manh Phan 2026-10-17 — ký lại Cổng Bằng chứng sau đổi lời AC-8 (#453: commit hàng chờ chạm thư mục nguồn tín hiệu và trang lộ trình máy vẽ lại từ chính các tín hiệu đó; giới hạn mới — onehub đổi hồ sơ sau lượt lịch thì PR hàng chờ lệch trang tới lượt kế, gỡ bằng chạy tay lịch) trên bằng chứng ghim lại repin-20261016T191234Z-42788 (17/17 eval máy đạt, E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo. Chữ ký 2026-10-14 trước đó phủ lời AC-8 cũ.
 ---
 
@@ -301,6 +301,10 @@ sha: 12bed328c30cd45ee4ec97b4e4efda8fd827d978 · suites: 7 lệnh exit 0 · eval
 run_id: repin-20261016T191234Z-42788
 sha: fb95c9db3980834b4ac3a4ec9e0cba7c689a8fdc · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
 
-### Re-pin lần 9 — 2026-10-17, do câu camMoPr sau #445
-run_id: repin-20261017T085502Z-19022
-sha: 34a15552ff23ee26d8a30938fd6ca7984f3bb1b8 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+### Re-pin lần 9 — 2026-10-17, do làn đêm C-2 17/10: hoá cũ vì các lần gộp trong ngày (onehub 093e294e5→30d982d22)
+run_id: repin-20261017T183217Z-62449
+sha: 0784b1e8c29062b23855ef1aa6fc9152d5bf2744 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-18, do làn đêm C-2 17/10, phần đổi: hoá cũ lại vì #471 gộp (onehub 30d982d22→b22c0a329)
+run_id: repin-20261018T031621Z-30260
+sha: 468a79b5feefdf2ac856bb05df8943d99b65b845 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E11b (E11b không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
