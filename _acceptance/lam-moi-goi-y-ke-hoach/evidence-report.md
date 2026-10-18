@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 296ad1a2112a4859b48a80b6fd5d22b19f03f8cf
+verified_commit: 3bde576a78048efb75508f592be5bd94c5d6fde3
 human_signoff: manh 2026-10-19
 ---
 
@@ -212,3 +212,7 @@ Eval đổi định nghĩa: E4, E5 (lượt 1 → 2, ca thứ tự settle record
 | E6 | `man.mjs` mới trên cây đang xét: thoát 0, hai lượt tự thử báo KHONG DAT đúng hướng, «hien sau thang» 170 ms, «an sau roi thang» 103 ms, «sheet khong dung lai» đạt cả hai lần (trước đó 3/3 lần chạy tay đều xanh) | thước cũ (`man.mjs` của 9858a5d70, chụp cả trang) trên cùng cây: 4/4 lần thoát 1, «E6 sheet khong dung lai: KHONG DAT — sau roi thang»; răng dò `do-e6/probe.mjs`: lượt có chụp ghi `resize 1x1` → `go dialog`/`them dialog` → `resize 1280x900`, lượt không chụp không lần nào gỡ sheet; vật (gỡ khoá trong bản sao): KHÔNG ĐO ĐƯỢC — máy chủ app của bản sao thoát trước khi sẵn sàng (mã 2) | đạt một phần: chiều đỏ trên vật của E6 chỉ có hai lượt tự thử trong chính lượt chấm |
 
 Lệnh bị chặn ở lượt 3, chạy tay để lấy thông tin (không phải bằng chứng, không gỡ BLOCKED): `bunx turbo run build --force` thoát 0, 5/5 task, 0 cache, 14 giây.
+
+### Re-pin lần 1 — 2026-10-18, do hoá cũ do gộp onehub 0c71e76c3 (#481)
+run_id: repin-20261018T235226Z-15856
+sha: 3bde576a78048efb75508f592be5bd94c5d6fde3 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E6 · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
