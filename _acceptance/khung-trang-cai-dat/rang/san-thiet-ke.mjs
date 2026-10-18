@@ -9,6 +9,7 @@ const GOC_THAT = join(DAY, "..", "..", "..");
 const GOC = process.env.GOC_KHO ?? GOC_THAT;
 const ts = createRequire(import.meta.url)("typescript");
 const NHANH_GOC = "origin/onehub";
+const BAO_CAO_HO_SO = "_acceptance/khung-trang-cai-dat/evidence-report.md";
 const VUNG_GIAO_DIEN =
 	/^(apps\/app\/(?!test\/|app\/proto\/).+\.tsx|packages\/ui\/src\/components\/.+\.tsx)$/;
 const THANH_BEN = "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx";
@@ -51,10 +52,32 @@ function moiNut(goc, lam) {
 	di(goc);
 }
 
-const moc = git("merge-base", "HEAD", NHANH_GOC);
-const doi = git("diff", "--name-only", `${moc}...HEAD`)
+// F8 neo: gốc so lấy từ lần gộp đầu đưa evidence-report.md của hồ sơ vào onehub (#138), không merge-base với onehub — chủ kho «Cho sửa cả lớp này», 18/10
+function khungGop() {
+	const gop = git(
+		"log",
+		"--first-parent",
+		"--diff-filter=A",
+		"--format=%H",
+		NHANH_GOC,
+		"--",
+		BAO_CAO_HO_SO,
+	)
+		.split("\n")
+		.filter(Boolean)
+		.at(-1);
+	if (!gop) return null;
+	const truoc = git("rev-parse", `${gop}^1`);
+	const dinh = git("rev-parse", `${gop}^2`);
+	console.log(`ho so da gop o ${gop.slice(0, 9)}: goc so rut tu lan gop`);
+	return { goc: git("merge-base", truoc, dinh), dinh };
+}
+
+const khung = khungGop();
+const moc = khung?.goc ?? git("merge-base", "HEAD", NHANH_GOC);
+const doi = git("diff", "--name-only", `${moc}...${khung?.dinh ?? "HEAD"}`)
 	.split("\n")
-	.concat(git("diff", "--name-only").split("\n"))
+	.concat(khung ? [] : git("diff", "--name-only").split("\n"))
 	.filter(Boolean)
 	.filter((t, i, ds) => ds.indexOf(t) === i)
 	.filter((t) => VUNG_GIAO_DIEN.test(t))

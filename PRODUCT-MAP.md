@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>149 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>141 việc"] --> GG{"Cổng Giá trị"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>150 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>143 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -44,7 +44,6 @@ flowchart TD
 
 ## Đang làm
 
-- tệp T1 mà bài kiểm, bản dựng hay runtime đọc không còn được CI và pre-push tính là nhẹ; một nguồn luật trong _acceptance/config.yaml cho cả hai, có răng giữ danh sách đủ (`t1-ma-doc`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -79,6 +78,7 @@ flowchart TD
 - «Bảng rỗng vì đang lọc thì nói rõ, nút bỏ lọc đúng tên, lựa chọn có số 0 vẫn hiện» (`datatable-loc-ro`)
 - Khung chờ đầu trang OKR cao bằng đầu trang thật, vùng nội dung Toàn cảnh không tụt khi tải xong (`dau-trang-okr-cho-nut-hoi-kara`)
 - «Danh sách thoả thuận Kara trả có chấm màu giai đoạn; số liệu ẩn danh theo giai đoạn có tập khoá đóng» (`deal-va`)
+- Tên ngành công ty hiện tiếng Việt từ một bảng theo danh sách cố định của nhà cung cấp (`dich-ten-nganh-bang-bang`)
 - «Số điện thoại là trường chính của cá nhân: nhập được lúc tạo, thấy ở bảng, tìm được theo số, không trùng» (`dien-thoai-ca-nhan`)
 - «Số điện thoại hiện ở thoả thuận và ở tab Cá nhân của công ty» (`dien-thoai-o-deal-cong-ty`)
 - Điều hướng khu Mục tiêu — một đầu trang «Mục tiêu» cho cả khu, nút «Thêm mục tiêu» ở góc phải như Thoả thuận, đổi thẻ giữ đơn vị và chu kỳ, Sức khoẻ chương trình khớp tên, nút tạo bị khoá kèm một dòng lý do thay vì biến mất; chỉ giao diện (`dieu-huong-khu-muc-tieu`)
@@ -125,6 +125,7 @@ flowchart TD
 - Trang của Kho tài liệu có lịch sử phiên bản xem và so được, quay lại một phiên bản cũ bằng một đề xuất qua duyệt, lưu trữ và khôi phục trang bằng đề xuất qua duyệt; trang đã lưu trữ vắng khỏi danh sách, tìm, trợ lý kho và Sức khoẻ, tìm lại ở «Đã lưu trữ»; đề xuất đã duyệt hiện ở nhóm «Đã xử lý» (`lich-su-va-luu-tru-trang`)
 - Danh sách liên quan trong ngăn bản ghi không lẫn bản đã lưu trữ, kèm «+n đã lưu trữ» để mở xem (`lien-quan-loc-ban-da-cat`)
 - Trưởng phòng ban mở trang Lộ trình và thấy đúng lộ trình mới nhất của nhánh chính, kèm giờ lấy, mà trang không phải chờ một bản dựng production (`lo-trinh-doc-ban-chup`)
+- Trưởng phòng ban mở trang Lộ trình và thấy mỗi việc, mỗi mốc có ngày dự kiến xong do máy tính — ghi rõ là dự kiến, có cờ khi số đo chưa đủ (`lo-trinh-hien-ngay-du-kien`)
 - «Trang lộ trình đúng tên OneHub Center và không làm vỡ bản dựng» (`lo-trinh-ten-va-build`)
 - Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc (`loc-va-kieu-xem-chung`)
 - Luật thứ bảy «vong-doi» của scripts/luat-kho — máy bắt mô hình có hai cột cất, thủ tục list lẫn bản đã cất, và xoá vĩnh viễn không kiểm bản đã lưu trữ — và cả bộ luật kho chạy ở CI Acceptance (`luat-kho-vong-doi`)
@@ -309,6 +310,7 @@ flowchart TD
 - Người quản trị sửa, sắp xếp, lưu trữ và khôi phục bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu — chỉ quản trị được đổi cấu hình (`sua-luu-tru-dieu-phoi`)
 - Sửa hai paths chết (E5, E17) trong evals.yaml của hồ sơ đã ký soan-okr-cung-tro-ly để lưới hoá cũ lọc theo paths được, rồi ghim lại hồ sơ một lần (`sua-paths-e5-soan-okr`) — đã giao — không đo, khai ở Cổng Đáng
 - Sửa hai lỗi môi trường làm suite test đỏ, và nối dây cổng nghiệm thu vào bản kit đang cài (`sua-test-do-thu-tu-nap`)
+- tệp T1 mà bài kiểm, bản dựng hay runtime đọc không còn được CI và pre-push tính là nhẹ; một nguồn luật trong _acceptance/config.yaml cho cả hai, có răng giữ danh sách đủ (`t1-ma-doc`) — đã giao — không đo, khai ở Cổng Đáng
 - Tác nhân chạy đúng với mọi model trong danh mục — khuôn model thấy di động giữa các nhà cung cấp, model giải theo vai lúc chạy thay vì ghim theo bản Tác nhân, lượt mà bộ chạy hỏng hoặc chưa nộp kết quả thì ghi Hỏng (`tac-nhan-model-rieng`)
 - soSanh bỏ vòng Myers mức khối vô ích khi cận dưới số bước sửa đã vượt trần, để ca tat-dinh của tai-lieu-diff hết đỏ chập chờn trên CI (`tai-lieu-diff-bo-myers-vo-ich`)
 - Ở màn Tài liệu, đổi bộ lọc rồi bấm lùi thì về bộ lọc trước, và thanh lọc không chớp thành khung chờ mỗi lần lọc (`tai-lieu-loc-giu-lich-su`)

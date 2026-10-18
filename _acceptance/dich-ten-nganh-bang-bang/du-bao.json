@@ -1,0 +1,28 @@
+{
+  "ngay_tinh": "2026-10-17",
+  "hang": {
+    "ma": "VN1",
+    "gio_may": [
+      4,
+      7
+    ],
+    "phan_tram": null
+  },
+  "moc": {
+    "ten": "Lộ trình bước 2 21/10",
+    "bat_dau": "2026-10-17",
+    "hoan_tat": "2026-10-17",
+    "gio_may": [
+      16.5,
+      27.5
+    ],
+    "gio_cho": 0,
+    "gio_cho_do": false,
+    "muc_tieu": "2026-10-21",
+    "hang": [
+      "LT1e",
+      "VN1",
+      "TH6b"
+    ]
+  }
+}

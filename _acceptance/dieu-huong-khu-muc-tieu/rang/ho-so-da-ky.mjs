@@ -32,8 +32,18 @@ function khongDo(cau) {
 
 const git = (...a) =>
 	execFileSync("git", a, { cwd: GOC, encoding: "utf8" }).trim();
-const base = process.env.DHK_BASE ?? git("merge-base", "HEAD", "origin/onehub");
-const sua = git("diff", "--name-only", base, "--", "apps/app/test")
+// F8 neo: gốc so lấy từ lần gộp đầu đưa evidence-report.md của hồ sơ vào onehub (#437), không merge-base với onehub — chủ kho «Cho sửa cả lớp này», 18/10
+const BAO_CAO_HO_SO = "_acceptance/dieu-huong-khu-muc-tieu/evidence-report.md";
+const gop = process.env.DHK_BASE
+	? ""
+	: git("log", "--first-parent", "--diff-filter=A", "--format=%H", "origin/onehub", "--", BAO_CAO_HO_SO)
+			.split("\n")
+			.filter(Boolean)
+			.at(-1);
+const base =
+	process.env.DHK_BASE ??
+	(gop ? git("merge-base", `${gop}^1`, `${gop}^2`) : git("merge-base", "HEAD", "origin/onehub"));
+const sua = git("diff", "--name-only", base, ...(gop ? [`${gop}^2`] : []), "--", "apps/app/test")
 	.split("\n")
 	.filter((f) => f && existsSync(join(GOC, f)));
 const laKiem = (f) => /\.(dom\.tsx|spec\.ts|spec\.tsx)$/.test(f);
