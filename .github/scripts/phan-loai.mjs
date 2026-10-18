@@ -6,31 +6,52 @@ import { fileURLToPath } from "node:url";
 
 const KHO = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const THU_MUC_GITHUB = ".github/";
+const DAU_TRU = "!";
 const TEP_LUOI = join(KHO, "scripts", "pre-merge-check.sh");
 const TEP_DOC_DS = join(KHO, "lib", "workspace-record.cjs");
 const RUT_HAM = `eval "$(sed -n '/^glob_variants() {/,/^}/p;/^match_globs() {/,/^}/p' "$1")"; type match_globs >/dev/null 2>&1 || exit 3; while IFS= read -r f; do [ -n "$f" ] || continue; if match_globs "$f" "$2"; then printf '%s\\n' "$f"; fi; done`;
 
-export function quyetDinh({ suKien, nhap, tep, laT1 }) {
+export function quyetDinh({ suKien, nhap, tep, laT1, laMaDoc }) {
 	if (suKien !== "pull_request") return { nang: true, lyDo: "khong-phai-pr" };
 	if (nhap === "true") return { nang: false, lyDo: "nhap" };
 	if (tep.length === 0) return { nang: true, lyDo: "khong-co-tep" };
 	if (tep.some((t) => t.startsWith(THU_MUC_GITHUB))) return { nang: true, lyDo: "cham-github" };
 	if (tep.every(laT1)) return { nang: false, lyDo: "chi-t1" };
+	if (laMaDoc && tep.every((t) => laT1(t) || laMaDoc(t))) return { nang: true, lyDo: "t1-ma-doc" };
 	return { nang: true, lyDo: "co-tep-nang" };
 }
 
 export function docGlobT1(goc) {
 	const { configList } = createRequire(import.meta.url)(TEP_DOC_DS);
-	const globs = configList(readFileSync(join(goc, "_acceptance", "config.yaml"), "utf8"), "t1_skip_globs");
+	const chu = readFileSync(join(goc, "_acceptance", "config.yaml"), "utf8");
+	const globs = configList(chu, "t1_skip_globs");
 	if (globs.length === 0) throw new Error("t1_skip_globs rong");
-	return globs;
+	const maDoc = configList(chu, "t1_ma_doc");
+	if (maDoc.length === 0) throw new Error("t1_ma_doc rong");
+	return [...globs, ...maDoc.map((g) => `${DAU_TRU}${g}`)];
 }
 
-export function tepT1(globs, tep) {
+function khop(globs, tep) {
+	if (globs.length === 0 || tep.length === 0) return new Set();
 	const r = spawnSync("bash", ["-c", RUT_HAM, "phan-loai", TEP_LUOI, globs.join("\n")], { input: `${tep.join("\n")}\n`, encoding: "utf8" });
 	if (r.error) throw new Error(`bash khong chay duoc: ${r.error.code ?? r.error.message}`);
 	if (r.status !== 0) throw new Error(`khong rut duoc bo khop glob cua pre-merge-check (ma ${r.status})`);
 	return new Set(r.stdout.split("\n").filter(Boolean));
+}
+
+export function tachT1(globs, tep) {
+	const duong = globs.filter((g) => !g.startsWith(DAU_TRU));
+	const am = globs.filter((g) => g.startsWith(DAU_TRU)).map((g) => g.slice(DAU_TRU.length));
+	const khopDuong = khop(duong, tep);
+	const khopAm = khop(am, [...khopDuong]);
+	return {
+		t1: new Set([...khopDuong].filter((t) => !khopAm.has(t))),
+		maDoc: khopAm,
+	};
+}
+
+export function tepT1(globs, tep) {
+	return tachT1(globs, tep).t1;
 }
 
 function git(goc, ...args) {
@@ -49,8 +70,8 @@ export function phanLoai({ goc, suKien, nhap }) {
 	try {
 		if (suKien !== "pull_request" || nhap === "true") return quyetDinh({ suKien, nhap, tep: [], laT1: () => false });
 		const tep = tepThayDoi(goc);
-		const t1 = tepT1(docGlobT1(goc), tep);
-		return { ...quyetDinh({ suKien, nhap, tep, laT1: (t) => t1.has(t) }), tep };
+		const { t1, maDoc } = tachT1(docGlobT1(goc), tep);
+		return { ...quyetDinh({ suKien, nhap, tep, laT1: (t) => t1.has(t), laMaDoc: (t) => maDoc.has(t) }), tep };
 	} catch (e) {
 		return { nang: true, lyDo: `loi: ${String(e.message).replace(/\s+/g, " ").trim()}` };
 	}

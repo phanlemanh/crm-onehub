@@ -110,3 +110,7 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
   - Ngoài-6: Đối chứng dương «diff ra đúng tệp» chỉ có ở ca 1 của bảng phân loại, các ca khác không tự chứng kho tạm dựng đúng.
   - Ngoài-7: Nửa kiểm hook của răng một-nguồn không có đột biến đối chứng, nên nó có thể hỏng im mà vẫn báo đạt.
   - Ngoài-8: Răng một-nguồn chỉ bắt chuỗi đúng bằng «test» hay «build»; danh sách bỏ viết tay dạng khác có thể lọt.
+- Lời hứa của hồ sơ đã ký đổi theo `t1-ma-doc` (Hỏi-1, chủ kho duyệt 17/10; bản đối ở Notes của `t1-ma-doc`): ca
+  `mot-nguon (a)` của E2 thêm glob vào `t1_skip_globs` rồi đẩy một tệp mã — nay mọi tệp dưới `apps/**` thuộc
+  `risk_tiers.t1_ma_doc` nên luôn nặng, fixture của ca đổi từ `apps/x/**` sang `scripts/x/**` (commit 091ee7a8e).
+  Lời hứa của AC-2 («thêm một glob vào `t1_skip_globs` đổi kết quả mà không sửa tệp nào khác») giữ nguyên.
