@@ -11,6 +11,29 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "vo-khu-muc-tieu",
+		ten: "Vỏ khu Mục tiêu — thanh bên hai lớp, một lớp thẻ ngang, khung toàn vùng cho sơ đồ",
+		states: [
+			{ id: "ST-vkm-cua-toi", nhan: "Của tôi" },
+			{ id: "ST-vkm-don-vi", nhan: "Tất cả đơn vị" },
+			{ id: "ST-vkm-trang-don-vi", nhan: "Trang một đơn vị · OKR" },
+			{ id: "ST-vkm-hop-tuan", nhan: "Trang một đơn vị · Họp tuần" },
+			{ id: "ST-vkm-viec", nhan: "Trang một đơn vị · Việc" },
+			{ id: "ST-vkm-so-do-don-vi", nhan: "Trang một đơn vị · Sơ đồ" },
+			{ id: "ST-vkm-ngan-muc-tieu", nhan: "Ngăn mục tiêu" },
+			{ id: "ST-vkm-ngan-kr", nhan: "Ngăn KR, nút Cập nhật ở đầu" },
+			{ id: "ST-vkm-suc-khoe", nhan: "Cả công ty · Sức khoẻ" },
+			{ id: "ST-vkm-moi-kr", nhan: "Cả công ty · Mọi KR, lọc Trượt" },
+			{
+				id: "ST-vkm-so-do",
+				nhan: "Cả công ty · Sơ đồ góp vào, khung toàn vùng",
+			},
+			{ id: "ST-vkm-toan-man", nhan: "Sơ đồ góp vào · toàn màn hình" },
+			{ id: "ST-vkm-cap-nhat", nhan: "Cả công ty · Cập nhật" },
+			{ id: "ST-vkm-lay-y-kien", nhan: "Lập kế hoạch · Lấy ý kiến" },
+		],
+	},
+	{
 		slug: "trang-don-vi-mot-bang",
 		ten: "Trang đơn vị một bảng — ô chọn đơn vị ở chỗ ô tìm kiếm, mục tiêu mở ra KR, một hàng công cụ đứng yên",
 		states: [
