@@ -5,7 +5,7 @@ slug: lam-moi-goi-y-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: draft
 approved_by:
 approved_at:
 veto_state: mo
@@ -39,7 +39,7 @@ design doc của vòng.
 - AC-3 (cross-layer): Given sheet của deal ở giai đoạn Chốt được có thẻ gợi ý, When người phụ trách đưa deal về giai đoạn Đang mở — một lần qua thanh giai đoạn, một lần qua menu giai đoạn — và máy chủ giờ trả `null`, Then thẻ mất khỏi sheet đang mở ở cả hai đường; và trên API thật, đọc `goiYCuaDeal` sau khi deal rời Chốt được trả `null`.
 - AC-4: Given lệnh làm mới thật trên bộ nhớ query có `goiYCuaDeal` của hai deal d-1, d-2 đang được đọc, When gọi `cache.deal("d-1")`, Then `goiYCuaDeal` của d-1 được đọc lại trước khi lời gọi xong, còn của d-2 không; When gọi `cache.deal("d-1", { settle: "record" })`, Then `goiYCuaDeal` của d-1 vẫn được đọc lại trước khi lời gọi xong; When gọi `cache.deal()` không id, Then `goiYCuaDeal` của cả hai được đọc lại; When quét `apps/app`, Then mọi lời gọi `deals.setStage` và `deals.bulkSetStage` nằm trong bảng bốn nơi khai trước (thanh giai đoạn · `useStageMutation` của menu và hộp lý do Không thành · Kanban · hàng loạt) và khối `mutationOptions` của từng nơi gọi `cache.deal`.
 - AC-5: Given bản sao kho, When gỡ `goiYCuaDeal` khỏi `cache.deal` trong bản sao, Then bài kiểm của AC-1, AC-3 và AC-4 đỏ với thông điệp ghim của từng ca; When đổi khoá thành khoá chung không theo deal trong bản sao, Then bài kiểm của AC-4 đỏ với thông điệp ghim «làm mới gợi ý deal khác»; trên bản sao lành cả bốn bài kiểm xanh.
-- AC-6: Given app và API của chính cây đang chạy trên kho dùng-một-lần, người phụ trách P đăng nhập, deal của một công ty chưa có kế hoạch ở giai đoạn Đang mở, sheet deal mở ở 1280 và không có thẻ, When P bấm cột Chốt được trên thanh giai đoạn, Then thẻ gợi ý hiện trong vòng 5 giây mà không tải lại trang và không dựng lại sheet; When P bấm một cột Đang mở, Then thẻ mất trong vòng 5 giây, sheet vẫn là sheet ban đầu; thước màn phải đỏ khi trang bị chặn mọi lần đọc lại `goiYCuaDeal` sau lần tải đầu.
+- AC-6: Given app và API của chính cây đang chạy trên kho dùng-một-lần, người phụ trách P đăng nhập, deal của một công ty chưa có kế hoạch ở giai đoạn Đang mở, sheet deal mở ở 1280 và không có thẻ, When P bấm cột Chốt được trên thanh giai đoạn, Then thẻ gợi ý hiện trong vòng 5 giây mà không tải lại trang và không dựng lại sheet; When P bấm một cột Đang mở, Then thẻ mất trong vòng 5 giây, sheet vẫn là sheet ban đầu; thước màn phải đỏ khi trang giữ treo mọi lần đọc lại `goiYCuaDeal` sau khi thẻ đã hiện rồi P bấm cột Đang mở (thẻ không được mất). Chiều hiện của lượt tự thử ấy (giữ treo từ lần tải đầu rồi bấm cột Chốt được) không thuộc tiêu chí này — xem Known limits ở Notes.
 - AC-7: Given bộ kiểm hiện có của kho, When chạy các suite của `feature_loop.suite_keys` sau lượt này, Then mọi suite thoát 0, không `expect` nào bị xoá hay sửa ở các tệp kiểm đã có, và `check-types` thoát 0.
 
 ## Coverage
@@ -65,3 +65,9 @@ Quét `morphological-scan.md` (preset entity-feature), ba trục:
 ## Notes
 
 - Bài kiểm của AC-1–AC-4 sống ở tệp mới `apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx`; `apps/app/test/goi-y-ke-hoach.dom.tsx` của DA3b không đổi.
+- Known limits — thu phạm vi chọn ở Cổng Bằng chứng 2026-10-18 (manh), sau khi S4 chạm trần 3 lượt: lượt tự thử chiều
+  hiện của thước màn (E6, `rang/man.mjs` bước 0, phần đầu) không chứng được cú bấm cột Chốt được đã thành trong lúc
+  mọi lần đọc lại bị giữ treo — app gom các lần đọc vào chung một yêu cầu, nên bộ giữ treo chặn cả lần đọc deal, và
+  một cú bấm không tới máy chủ cũng in đúng dòng «KHONG DAT» (phát hiện t2 của S4 lượt 3). Lượt ấy vẫn chạy và vẫn
+  phải báo «KHONG DAT», nhưng không được kể là bằng chứng chiều đỏ của AC-6. Chiều thẻ hiện vẫn có chiều đỏ ở lớp
+  bài kiểm giao diện (E5 cặp a). Vế này sang hạt giống `docs/plan/2026-10-18-hat-giong-tu-thu-hien-the-goi-y.md`.
