@@ -3171,6 +3171,7 @@ risk_tiers:
     - "lib/workspace-record.cjs"
     - "lib/evidence-core.cjs"
     - "lib/eval-yaml.cjs"
+    - "scripts/lo-trinh.mjs"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"
