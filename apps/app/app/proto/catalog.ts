@@ -84,6 +84,18 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "lo-trinh-hien-ngay-du-kien",
+		ten: "Lộ trình hiện ngày dự kiến — ngày của mốc và của việc",
+		states: [
+			{ id: "ST-du-kien-moc", nhan: "Xem theo mốc — hôm nay 17/10" },
+			{ id: "ST-du-kien-bang", nhan: "Bảng — cột mốc có ngày dự kiến" },
+			{ id: "ST-du-kien-ngan", nhan: "Ngăn hồ sơ việc LT1e" },
+			{ id: "ST-du-kien-da-qua", nhan: "Hôm nay 19/10 — đã qua ngày dự kiến" },
+			{ id: "ST-du-kien-ban-cu", nhan: "Bản lộ trình chưa mang ngày dự kiến" },
+			{ id: "ST-du-kien-moc-en", nhan: "Xem theo mốc — tiếng Anh" },
+		],
+	},
+	{
 		slug: "ngan-ho-so-trong-lo-trinh",
 		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
 		states: [
@@ -1189,6 +1201,39 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-khung-loi", nhan: "Khung bản ghi — tải lỗi, có Thử lại" },
 			{ id: "ST-tra-cuu-dang-chay", nhan: "Hàng nút — Kara đang tra cứu" },
 			{ id: "ST-them-nhanh-hoi", nhan: "Thêm nhanh — hỏi lại khi lỡ đóng" },
+		],
+	},
+	{
+		slug: "du-an-gantt",
+		ten: "Dự án và Gantt — màn Việc một nơi, ô Phạm vi, Gantt có phụ thuộc và mốc, lịch làm việc",
+		states: [
+			{ id: "ST-viec-cua-toi-du-an", nhan: "Việc — Của tôi" },
+			{ id: "ST-pham-vi-mo", nhan: "Ô Phạm vi mở" },
+			{ id: "ST-du-an-ds-co", nhan: "Tất cả dự án" },
+			{ id: "ST-du-an-ds-rong", nhan: "Tất cả dự án — rỗng" },
+			{ id: "ST-du-an-ds-cho-tai", nhan: "Tất cả dự án — tải" },
+			{ id: "ST-du-an-ds-loi", nhan: "Tất cả dự án — hỏng" },
+			{ id: "ST-du-an-tao", nhan: "Tạo dự án" },
+			{
+				id: "ST-gantt-co-lich",
+				nhan: "Gantt — có lịch",
+			},
+			{ id: "ST-gantt-moc-tre", nhan: "Gantt — mốc trễ" },
+			{ id: "ST-gantt-da-doi", nhan: "Gantt — đã tự dời" },
+			{ id: "ST-gantt-chi-xem", nhan: "Gantt — đã đóng" },
+			{ id: "ST-gantt-rong", nhan: "Gantt — rỗng" },
+			{ id: "ST-gantt-cho-tai", nhan: "Gantt — đang tải" },
+			{ id: "ST-gantt-loi", nhan: "Gantt — tải hỏng" },
+			{ id: "ST-du-an-hoi-dong", nhan: "Hỏi lại khi đóng" },
+			{
+				id: "ST-khung-viec-lich",
+				nhan: "Khung việc — lịch",
+			},
+			{ id: "ST-lich-lam-viec", nhan: "Lịch làm việc" },
+			{
+				id: "ST-lich-lam-viec-khong-quyen",
+				nhan: "Lịch làm việc — không quyền",
+			},
 		],
 	},
 	{
