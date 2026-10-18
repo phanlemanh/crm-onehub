@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7cfc90d514b682e0fcffc864b2f39b05e42bbd85
+verified_commit: b628afc16ae96714e56391e79605f2af26a101dd
 human_signoff: manh 2026-10-15 — ký Cổng 2 trên verdict PASS (S4 vòng 2, wf_0412087d-785, engine feature-loop 2.30.0). Ngoài-1, 3–16 ghi Known limits; Ngoài-2, 17, 18 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -250,3 +250,7 @@ sha: 6650f1063d7a61758993e6af6dddff336878c74c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-16, do gộp onehub f1bf84a29 + vá NutHoiKara a219fc9fd + lớp cấm/chú thích/nạp sẵn danhSach
 run_id: repin-20261016T080432Z-52909
 sha: 7cfc90d514b682e0fcffc864b2f39b05e42bbd85 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-17, do trang-don-vi-mot-bang (DH2): ghim lại sáu hồ sơ sau sửa coNutHoiKara (lối b, 374b5f9c5), một làn
+run_id: repin-20261017T174535Z-97743
+sha: b628afc16ae96714e56391e79605f2af26a101dd · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E2, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E2 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

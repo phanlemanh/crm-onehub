@@ -38,7 +38,7 @@ async function docNen(p) {
 		p,
 		() => {
 			const mo =
-				document.querySelector("[data-don-vi] [data-slot='card-description']")
+				document.querySelector("[data-dong-don-vi]")
 					?.innerText ?? "";
 			return /\d+ mục tiêu/.test(mo);
 		},
@@ -47,7 +47,7 @@ async function docNen(p) {
 	);
 	return p.evaluate((tiep) => {
 		const mo =
-			document.querySelector("[data-don-vi] [data-slot='card-description']")
+			document.querySelector("[data-dong-don-vi]")
 				?.innerText ?? "";
 		const nhom = document.querySelector("[data-nhom-soan]");
 		return {
@@ -188,10 +188,11 @@ export async function phanDuaVao({ doDo }) {
 		await choThay(
 			t.p,
 			(n) => {
-				const ds = [
-					...document.querySelectorAll('[data-trang-thai="ST-donvi-danhsach"]'),
-				].find((o) => o.checkVisibility());
-				return (ds?.firstElementChild?.children.length ?? 0) === n;
+				// AC-14 cach-toi: moi muc tieu la mot dong [data-muc-tieu] cua bang don vi (trang-don-vi-mot-bang AC-3), khong con the con cua ST-donvi-danhsach.
+				const ds = [...document.querySelectorAll("[data-muc-tieu]")].filter(
+					(o) => o.checkVisibility(),
+				);
+				return ds.length === n;
 			},
 			"trang nen lam moi",
 			CHO_LAM_MOI_MS,
