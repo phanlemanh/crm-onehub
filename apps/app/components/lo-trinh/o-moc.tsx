@@ -6,6 +6,7 @@ import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { formatDay } from "@crm/ui/lib/format";
 import { toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
+import { ODuKien } from "./o-du-kien";
 import type { Viec } from "./viec";
 
 export function ChuConNgay({ v }: { v: Viec }) {
@@ -40,6 +41,7 @@ export function OMoc({ v }: { v: Viec }) {
 		>
 			<span className="tabular-nums">{formatDay(v.moc.ngay, locale)}</span>
 			<ChuConNgay v={v} />
+			{v.duKien ? <ODuKien duKien={v.duKien} gon /> : null}
 		</span>
 	);
 }

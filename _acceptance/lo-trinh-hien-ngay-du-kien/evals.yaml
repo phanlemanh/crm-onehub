@@ -1,0 +1,280 @@
+schema_version: 1
+slug: lo-trinh-hien-ngay-du-kien
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ldk_ban_chep
+    paths:
+      - "apps/app/lib/lo-trinh/doc-du-lieu.js"
+      - "scripts/lo-trinh.mjs"
+      - "apps/app/test/lo-trinh-du-kien.spec.ts"
+    expected: |
+      apps/app/test/lo-trinh-du-kien.spec.ts describe "ban-chep": rut ham docDuLieu tu scripts/lo-trinh.mjs cua kho (tu dong
+      "export function docDuLieu" toi dong "}" dong ham — cung cach tai lieu kit lo-trinh-du-lieu.md bao kho tieu thu chep),
+      doc apps/app/lib/lo-trinh/doc-du-lieu.js; hai chuoi bang nhau tung byte. Duong dan suy tu vi tri tep test, khong ghim
+      goc kho.
+      DOI CHUNG DUONG: ham rut ra khong rong, chua "gio_may" va "du_kien" (chung minh da rut dung ban moi, khong rut nham).
+      CHIEU DO (pha-thu tren ban sao trong thu muc tam): ban sao bo doc thieu mot ky tu -> ca do voi thong diep ghim
+      "ban chep bo doc lech kit: apps/app/lib/lo-trinh/doc-du-lieu.js".
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ldk_khuon
+    paths:
+      - "packages/validation/src/lo-trinh-du-lieu.ts"
+      - "apps/app/lib/lo-trinh/doc-du-lieu.js"
+      - "packages/validation/test/lo-trinh-du-lieu.spec.ts"
+    expected: |
+      packages/validation/test/lo-trinh-du-lieu.spec.ts describe "gio-may":
+        1 bang khoa cua bo doc rut bang cach cho docDuLieu doc mot khoi co dung mot lo trinh, mot viec {} , mot moc {} voi
+          gio_may {}, du_kien {}, viec co gio_may {} va tom_tat {} (moi cap rong) — khoa cua ket qua o moi cap
+          (goc, lo_trinh, hang, moc, gio_may, gio_may_moc, du_kien, tom_tat, moi_nguoi, chu_kho, ...) BANG
+          KHOA_LO_TRINH_DU_LIEU cung cap, ca 14 cap, so tung cap (ma tran viet truoc 14 o)
+        2 khoi rut tu LO-TRINH.html that cua cay qua docDuLieu roi phanTichLoTrinh: moi hang.gio_may, moc.gio_may,
+          moc.du_kien, moc.qua_tai cua ket qua deep-equal gia tri trong khoi tho (round-trip tu ben viet that, khong viet tay)
+        3 cung khoi da xoa bon khoa o moi viec, moi moc: phanTichLoTrinh ok va ca bon cho la null o moi phan tu
+      CHIEU DO: ban sao khuon bo khoa du_kien khoi moc -> dong 1 do voi thong diep ghim "cap moc lech bo doc: du_kien";
+      ban sao doc thieu gio_may cua viec -> dong 2 do voi thong diep ghim "gio may cua viec mat khi qua khuon: <ma>".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ldk_co_ngay
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/du-kien.ts"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/test/lo-trinh-du-kien.dom.tsx"
+    expected: |
+      apps/app/test/lo-trinh-du-kien.dom.tsx describe "co-ngay" — khoi rut tu LO-TRINH.html that cua cay qua docDuLieu,
+      code dat cho moc M (con viec) du_kien {ngay_tinh 2026-10-15, hoan_tat 2026-10-30} roi moi qua phanTichLoTrinh; hom nay
+      ghim 2026-10-17; render TrangLoTrinh o xemLoTrinh=moc, locale vi va en:
+        1 phan tu [data-lo-trinh-du-kien-moc] cua M co text BANG loTrinhMessages(locale).duKien.ngay(formatDay("2026-10-30"))
+          va chua duKien.cachTinh(formatDay("2026-10-15")) — gia tri mong doi dung tu ham nhan + ngay viet san, khong doc DOM
+        2 text ay KHONG chua formatDay(ngay muc tieu cua M) (ngay muc tieu khong bi trinh nhu ngay du kien)
+        3 moi moc khong con viec (con_viec false) trong khoi: 0 phan tu [data-lo-trinh-du-kien-moc] cua no — dem bang danh
+          sach moc viet ra tu khoi, so luong khop
+      CHIEU DO: ban sao ODuKien dung moc.ngay thay hoan_tat -> dong 1 do voi thong diep ghim "ngay du kien cua moc M sai";
+      ban sao hien dong du kien cho moc het viec -> dong 3 do voi thong diep ghim "moc het viec van co ngay du kien".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ldk_so_do
+    paths:
+      - "apps/app/lib/lo-trinh/du-kien.ts"
+      - "apps/app/components/lo-trinh/o-du-kien.tsx"
+      - "apps/app/test/lo-trinh-du-kien.spec.ts"
+      - "apps/app/test/lo-trinh-du-kien.dom.tsx"
+    expected: |
+      lo-trinh-du-kien.spec.ts describe "so-do": CUNG mot moc co du_kien, ma tran viet truoc 4 o tren gio_may cua cac viec
+      chua giao cua moc: (a) moi viec nguon khai, co null -> chuaDuSoDo false; (b) moi viec nguon do, co null -> false;
+      (c) mot viec nguon luat co "máy ước" -> true; (d) mot viec gio_may null -> true. Them o (e): viec DA GIAO mang co
+      "máy ước", moi viec chua giao nguon do -> false (viec da giao khong lam co).
+      lo-trinh-du-kien.dom.tsx describe "so-do": o (a) va (c) render: (c) co phan tu [data-lo-trinh-du-kien-co=chua-du-so-do]
+      text BANG duKien.chuaDuSoDo va doan giai thich duKien.chuaDuSoDoMoTa; (a) khong co phan tu ay.
+      CHIEU DO: ban sao gioMayChuaDu luon false -> o (c) do voi thong diep ghim "ngay tinh tren so do chua du ma khong co";
+      ban sao tinh ca viec da giao -> o (e) do voi thong diep ghim "viec da giao lam co so do".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ldk_qua_tai
+    paths:
+      - "apps/app/lib/lo-trinh/du-kien.ts"
+      - "apps/app/components/lo-trinh/o-du-kien.tsx"
+      - "apps/app/test/lo-trinh-du-kien.spec.ts"
+      - "apps/app/test/lo-trinh-du-kien.dom.tsx"
+    expected: |
+      lo-trinh-du-kien.spec.ts describe "qua-tai": ma tran viet truoc tren mot moc hoan_tat 2026-10-20:
+        qua_tai null / chuoi x hom nay 2026-10-19 / 2026-10-20 / 2026-10-21 -> quaTai = (qua_tai != null),
+        daQua dung khi hom nay 2026-10-21 (ngay hoan tat dung hom nay chua qua), 6 o.
+      lo-trinh-du-kien.dom.tsx describe "qua-tai": o quaTai+daQua render hai phan tu [data-lo-trinh-du-kien-co=qua-tai] va
+      [=da-qua], moi phan tu data-tone="warning", text bang duKien.quaTai / duKien.daQua; khong phan tu nao trong vung du
+      kien mang data-tone success hay error.
+      CHIEU DO: ban sao daQua dung <= -> o hom nay 2026-10-20 do voi thong diep ghim "dung ngay hoan tat chua qua";
+      ban sao to qua tai bang tone error -> do voi thong diep ghim "co du kien dung mau hong".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ldk_chua_co
+    paths:
+      - "apps/app/lib/lo-trinh/du-kien.ts"
+      - "apps/app/components/lo-trinh/o-du-kien.tsx"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/test/lo-trinh-du-kien.spec.ts"
+      - "apps/app/test/lo-trinh-du-kien.dom.tsx"
+    expected: |
+      lo-trinh-du-kien.spec.ts describe "chua-co": ma tran 4 o viet truoc tren moc con viec: (gio_may co, du_kien null) ->
+      chua-co/chua-mo-viec; (gio_may null, du_kien null) -> chua-co/ban-cu; (du_kien.hoan_tat "30/10") -> chua-co/
+      khong-doc-duoc; moc con_viec false -> null. Doi chung duong: du_kien hop le -> co-ngay.
+      lo-trinh-du-kien.dom.tsx describe "chua-co": moi o render ODuKien dang du, text chua duKien.chuaCo va DUNG mot cau
+      duKien.lyDo[lyDo] cua o (hai cau ly do kia KHONG co mat); phan tu khong chua formatDay(moc.ngay) va khong chua chuoi
+      ngay ISO nao.
+      CHIEU DO: ban sao roi ve ngay muc tieu khi du_kien null -> do voi thong diep ghim "ngay muc tieu bi trinh nhu ngay du
+      kien"; ban sao ly do co dinh chua-mo-viec -> o ban-cu do voi thong diep ghim "ly do chua co ngay sai: ban-cu".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ldk_viec
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/du-kien.ts"
+      - "apps/app/test/lo-trinh-du-kien.dom.tsx"
+    expected: |
+      lo-trinh-du-kien.dom.tsx describe "viec" — khoi rut tu LO-TRINH.html that cua cay; code dat cho bon moc bon trang
+      thai: M1 co-ngay co viec may uoc, M2 co-ngay qua tai va da qua (hom nay sau hoan_tat), M3 co-ngay moi viec do du,
+      M4 chua-co ban-cu (xoa gio_may cua moc va viec). Ma tran viet truoc 3 cho hien (bang, bang cot, ngan ho so) x 4 moc =
+      12 o, moi o lay MOT viec chua giao cua moc:
+        1 o bang va bang cot: phan tu [data-lo-trinh-du-kien] cua viec co cung kieu (co-ngay/chua-co) va cung TAP gia tri
+          [data-lo-trinh-du-kien-co] cung data-tone voi phan tu [data-lo-trinh-du-kien-moc] cua chinh moc ay o xem theo moc
+          (so theo quan he voi o Moc, khong theo chuoi viet san); o co-ngay co text duKien.ngayGon(formatDayShort(hoan_tat));
+          o chua-co co data-ly-do bang o Moc
+        2 o ngan ho so: muc "Ngày dự kiến" chua duKien.ngay(formatDay(hoan_tat)) (hoac duKien.chuaCo + cau ly do), cung tap co
+        3 ngan ho so cua viec co gio_may: muc "Ước lượng" chua duKien.gio(khoang dung tu thap/cao bang formatDecimal), co
+          chua-du-so-do khi gio_may.co != null; viec gio_may null (M4): khong co muc "Ước lượng", ngan khong chua "NaN",
+          khong nem
+        4 mot viec da giao cua M1 va mot viec chua hen moc: khong co [data-lo-trinh-du-kien] nao trong hang/the/ngan
+      CHIEU DO: ban sao dang gon bo co -> o 1 do voi thong diep ghim "bang thieu co cua moc: <ma viec>"; ban sao gan duKien
+      cho viec da giao -> dong 4 do voi thong diep ghim "viec da giao co ngay du kien"; ban sao OUocLuong khong chan null ->
+      dong 3 do voi thong diep ghim "uoc luong hong khi thieu gio may".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ldk_ban_cu
+    paths:
+      - "apps/app/lib/lo-trinh/doc-trang.ts"
+      - "apps/app/lib/lo-trinh/doc-du-lieu.js"
+      - "apps/app/lib/lo-trinh/cau-hinh.ts"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "packages/validation/src/lo-trinh-du-lieu.ts"
+      - "apps/app/components/lo-trinh/**"
+      - "packages/validation/test/ban-chup-lo-trinh.spec.ts"
+      - "apps/app/test/lo-trinh-du-kien.spec.ts"
+      - "apps/app/test/lo-trinh-du-kien.dom.tsx"
+    expected: |
+      Trang doi truoc dung bang code tu LO-TRINH.html that: xoa khoa gio_may o moi viec va moi moc, xoa du_kien, qua_tai,
+      ghi lai vao the script (khong viet tay khoi).
+      lo-trinh-du-kien.spec.ts describe "ban-cu":
+        1 docTrangLoTrinh(trang doi truoc) -> kieu co-du-lieu, canhBao rong (cau "chưa có giờ máy và ngày dự kiến" cua bo doc
+          bi go); DOI CHUNG: docDuLieu cung trang tra canhBao co dung cau ay (bo doc that da phat, trang chu dong go)
+        2 docDauVaoChoVai voi ban chup mang khoi doi truoc va canhBao gom cau ay -> canhBao rong
+        3 ban chup dung bang chinh duong cua day.ts: docDuLieu tren LO-TRINH.html that (code dat du_kien cho moc M truoc
+          khi ghi vao tep tam), roi banChupVao.parse, roi hang luu {duLieu} -> phanTichBanChupLuu -> docDauVaoChoVai voi ban
+          dung chon ban chup -> duLieu moc M co du_kien.hoan_tat bang gia tri da dat
+      packages/validation/test/ban-chup-lo-trinh.spec.ts describe "gio-may": banChupVao.parse giu nguyen bon khoa cua khoi
+      that trong duLieu tho (deep-equal), va phanTichBanChupLuu tren hang luu ay tra moc.du_kien, hang.gio_may bang khoi.
+      lo-trinh-du-kien.dom.tsx describe "ban-cu": (a) render NoiDungLoTrinh voi trang doi truoc, xemLoTrinh=moc: khong co
+      [data-lo-trinh-canh-bao]; moi moc con viec co [data-lo-trinh-du-kien=chua-co][data-ly-do=ban-cu] (dem khop so moc con
+      viec cua khoi); trang khong nem. (b) ban chup doi truoc qua docDauVaoChoVai: cung dem ban-cu. (c) ban chup moi cua dong
+      3 render qua docDauVaoChoVai: text [data-lo-trinh-du-kien-moc] cua M BANG text cua M khi render tu docTrangLoTrinh
+      cung tep (quan he ban chup == ban dong goi).
+      CHIEU DO: ban sao bo loc canhBao -> dong 1 do voi thong diep ghim "hop canh bao khuon bat vi thieu gio may";
+      ban sao phanTichBanChupLuu dung khuon cu (bo khoa) -> do voi thong diep ghim "ban chup mat ngay du kien".
+
+  - id: E9
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldk_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/lo-trinh-hien-ngay-du-kien/evidence dat tuong minh: lenh cua ldk_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/lo-trinh-hien-ngay-du-kien/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "packages/ui/src/lib/format.ts"
+      - "LO-TRINH.html"
+      - "_acceptance/lo-trinh-hien-ngay-du-kien/rang/do-man.mjs"
+      - "apps/api/src/lo-trinh/**"
+    expected: |
+      _acceptance/lo-trinh-hien-ngay-du-kien/rang/do-man.mjs tren trang Lo trinh that (/<slug>/lo-trinh, phien do rieng
+      cua tien-de.mjs, kho _do rieng). Hai phan:
+      PHAN BAN DONG GOI (khoi LO-TRINH.html that cua cay, chua co ban chup): o moc-1280-vi va moc-375-en:
+        1 tap moc con viec rut tu khoi cua LO-TRINH.html bang docDuLieu (khong tu DOM) — moi moc ay co mot
+          [data-lo-trinh-du-kien-moc] tren man trong pham vi loc mac dinh; moc co du_kien hop le -> text chua
+          loTrinhMessages(lang).duKien.ngay(formatDay(hoan_tat, lang)); moc khong -> text chua duKien.chuaCo va mot cau lyDo
+      PHAN BAN CHUP (trang thai rong nhat): chu kho tao khoa «Đẩy lộ trình»; khoi rut tu LO-TRINH.html that, code dat cho mot
+      moc M du_kien {hoan_tat truoc hom nay, ngay_tinh}, qua_tai, va mot viec chua giao cua M gio_may.co may uoc; day qua
+      POST /rest/lo-trinh/ban-chup that voi sha = HEAD cua cay (trang chon ban chup cung sha). Ma tran viet truoc 10 o:
+      moc x {375, 1280} x {vi, en} x {sang, toi} (8 o) + ngan ho so mot viec cua M o 375 vi va 1280 en (2 o):
+        2 o moc: phan tu cua M co du ba co [data-lo-trinh-du-kien-co] chua-du-so-do, qua-tai, da-qua va cau cach tinh
+        3 moi o: scrollWidth <= clientWidth; right cua moi [data-lo-trinh-du-kien], [data-lo-trinh-du-kien-co],
+          [data-lo-trinh-uoc-luong] <= right cua vung chua gan nhat (Card cua timeline / ngan) — khong cat chu
+        4 ten moc trong timeline mang translate=no
+      Don sau luot: xoa hang ban chup va khoa da tao. DUNG/SAI tung dong, KET LUAN cuoi, anh 12 o ve BANG_CHUNG. Doi chieu
+      mat: ngay du kien doc duoc canh chu «dự kiến» / «Expected», co de nhin o nen toi, khong chu nao chong len nhau.
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ldk_khoi_that
+    paths:
+      - "LO-TRINH.html"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/components/lo-trinh/viec.ts"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/test/lo-trinh-du-kien.spec.ts"
+    expected: |
+      lo-trinh-du-kien.spec.ts describe "khoi-that" (thuoc 1 cua Duong do): doc LO-TRINH.html that cua cay bang
+      docTrangLoTrinh; voi MOI moc con_viec true cua MOI lo trinh (dem in ra, khac 0): duKienMoc khac null; neu co-ngay
+      thi chuoi dung bang duKien.ngay chua "dự kiến" (vi) va "Expected" (en); neu chua-co thi lyDo thuoc ba gia tri va co
+      cau ly do khac rong o ca hai ngon ngu. In mot dong "thuoc-1: <co ngay>/<tong> co ngay, <chua co>/<tong> co co".
+      Them: voi moi moc co-ngay cua khoi that, chuaDuSoDo BANG (ton tai ma trong moc.hang cua khoi THO — doc JSON tu HTML,
+      khong qua khuon — co viec nhom_trang_thai khac da-giao va gio_may null hoac gio_may.co khac null); in
+      "thuoc-2: <co co>/<can co>".
+      Chay duoi TZ Asia/Ho_Chi_Minh va UTC, ket qua giong nhau.
+      CHIEU DO: ban sao duKienMoc tra null cho moc con viec khong du_kien -> do voi thong diep ghim "moc dang chay khong
+      ngay khong co: <ten moc>"; ban sao gioMayChuaDu luon false tren khoi that da dat mot viec may uoc -> do voi thong diep
+      ghim "ngay khong co tren so do chua du: <ten moc>".
+
+  - id: E11
+    criterion: AC-5
+    executor: judgment
+    inputs:
+      - apps/app/lib/messages/lo-trinh.ts
+      - docs/superpowers/specs/2026-10-17-lo-trinh-hien-ngay-du-kien-design.md
+    question: |
+      Trong khoi duKien cua ca hai ngon ngu (vi, en) o tep nhan: (1) moi chuoi hien ngay co tu «dự kiến» / «Expected» va
+      cau cachTinh noi ro day la uoc tinh, khong phai cam ket, va noi gia dinh "chi minh moc nay dang chay" dung nhu muc
+      «Lời ước, không phải cam kết» cua tep thiet ke; (2) ba cau lyDo noi cho mot truong phong ban (khong dung git, khong
+      biet kit) dieu gi dang xay ra, khong dung tu noi bo (kit, khoi, du-bao, gio_may); (3) ban vi va en noi cung mot
+      nghia. Tra loi tung y voi cau trich nguyen van tu tep.
+    expected: |
+      PASS khi ca ba y dat va moi y co cau trich. FAIL khi co chuoi ngay thieu chu du kien, co tu noi bo, hoac hai ngon ngu
+      lech nghia.
+
+  - id: E12
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldk_day
+    paths:
+      - "scripts/ban-chup-lo-trinh/day.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "packages/validation/src/lo-trinh-du-lieu.ts"
+      - "apps/app/lib/lo-trinh/doc-du-lieu.js"
+      - "apps/api/test/ban-chup-lo-trinh.spec.ts"
+    expected: |
+      apps/api/test/ban-chup-lo-trinh.spec.ts describe "ldk-gio-may" tren kho thu cua luot: app Nest that nghe tren mot cong
+      tu do; chu kho tao khoa «Đẩy lộ trình» qua duong tao khoa that; thu muc tam chua LO-TRINH.html = tep that cua cay voi
+      khoi da duoc code dat du_kien + qua_tai cho mot moc M (rut tu ben viet that, khong viet tay khoi). Goi ham day() cua
+      scripts/ban-chup-lo-trinh/day.ts voi goc = thu muc tam, CRM_API_URL = cong cua app, fetch that:
+        1 day() tra 0 va in dung mot dong "::notice title=ban-chup-lo-trinh::nhan"
+        2 docBanChupLoTrinh(db, "crm") -> phanTichBanChupLuu ok; voi MOI moc va MOI viec cua MOI lo trinh, gio_may, du_kien,
+          qua_tai deep-equal gia tri trong khoi da ghi vao tep tam; moc M co du_kien.hoan_tat bang gia tri da dat
+      CHIEU DO: ban sao phanTichBanChupLuu dung khuon bo khoa (z.object khong co du_kien) -> dong 2 do voi thong diep ghim
+      "ban chup mat ngay du kien: M".

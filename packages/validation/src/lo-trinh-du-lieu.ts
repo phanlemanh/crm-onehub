@@ -31,6 +31,32 @@ const chuKho = z.object({
 
 const tomTat = z.object({ moi_nguoi: moiNguoi, chu_kho: chuKho });
 
+export const NGUON_GIO_MAY = ["khai", "luat", "do"] as const;
+
+const gioMay = z.object({
+	thap: z.number().nullable(),
+	cao: z.number().nullable(),
+	nguon: z.enum(NGUON_GIO_MAY).nullable(),
+	chu: z.string().nullable(),
+	co: z.string().nullable(),
+	phan_tram_tuan: z.number().nullable(),
+	phan_tram_chu: z.string().nullable(),
+});
+
+const gioMayMoc = z.object({
+	thap: z.number().nullable(),
+	cao: z.number().nullable(),
+	chu: z.string().nullable(),
+	phan_tram_tuan: z.number().nullable(),
+	phan_tram_chu: z.string().nullable(),
+});
+
+const duKien = z.object({
+	ngay_tinh: z.string().nullable(),
+	hoan_tat: z.string().nullable(),
+	chu: z.string().nullable(),
+});
+
 const hangLoTrinh = z.object({
 	ma: z.string(),
 	cau_giao: z.string(),
@@ -45,6 +71,7 @@ const hangLoTrinh = z.object({
 	bat_khi: z.string(),
 	vi_sao: z.string(),
 	tom_tat: tomTat.nullable().default(null),
+	gio_may: gioMay.nullable().default(null),
 });
 
 const NGAY_ISO = /^\d{4}-\d{2}-\d{2}$/;
@@ -54,11 +81,19 @@ const khuonMoc = z.object({
 	ngay: z.string(),
 	hang: z.array(z.string()),
 	con_viec: z.boolean(),
+	gio_may: gioMayMoc.nullable().default(null),
+	du_kien: duKien.nullable().default(null),
+	qua_tai: z.string().nullable().default(null),
 });
+
+const ngayHopLe = (ngay: string | null) =>
+	ngay !== null && NGAY_ISO.test(ngay) ? ngay : null;
 
 const mocLoTrinh = khuonMoc.transform((moc) => ({
 	...moc,
-	ngayHopLe: NGAY_ISO.test(moc.ngay) ? moc.ngay : null,
+	ngayHopLe: ngayHopLe(moc.ngay),
+	hoanTatHopLe: ngayHopLe(moc.du_kien?.hoan_tat ?? null),
+	ngayTinhHopLe: ngayHopLe(moc.du_kien?.ngay_tinh ?? null),
 }));
 
 const hangKe = z.object({
@@ -105,6 +140,8 @@ export type HangLoTrinh = z.infer<typeof hangLoTrinh>;
 export type MocLoTrinh = z.infer<typeof mocLoTrinh>;
 export type NhomTrangThai = (typeof NHOM_TRANG_THAI)[number];
 export type TomTatHoSo = z.infer<typeof tomTat>;
+export type GioMayViec = z.infer<typeof gioMay>;
+export type NguonGioMay = (typeof NGUON_GIO_MAY)[number];
 export type TomTatChoXem = Omit<TomTatHoSo, "chu_kho"> & {
 	chu_kho: TomTatHoSo["chu_kho"] | null;
 };
@@ -128,6 +165,9 @@ export const KHOA_LO_TRINH_DU_LIEU = {
 	tom_tat: Object.keys(tomTat.shape),
 	moi_nguoi: Object.keys(moiNguoi.shape),
 	chu_kho: Object.keys(chuKho.shape),
+	gio_may: Object.keys(gioMay.shape),
+	gio_may_moc: Object.keys(gioMayMoc.shape),
+	du_kien: Object.keys(duKien.shape),
 } as const;
 
 export type KetQuaLoTrinh =
