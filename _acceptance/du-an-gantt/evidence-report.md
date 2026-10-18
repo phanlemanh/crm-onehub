@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: du-an-gantt
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 1c357d7bf6c01265c7f25cad1751640984792e94
-human_signoff:
+human_signoff: manh 2026-10-18
 ---
 
 # Evidence Report: du-an-gantt
@@ -266,7 +266,7 @@ human_signoff:
     - domain-correctness: PASS (r2)
     - operational-feasibility: PASS (r2)
     - spec-alignment: PASS (r2)
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — manh 2026-10-18
 
 - eval: E15
   run_id: minted-du-an-gantt-E15-r3

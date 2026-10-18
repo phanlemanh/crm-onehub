@@ -5,7 +5,7 @@ slug: du-an-gantt
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-16T11:20:49Z
 design_doc: docs/superpowers/specs/2026-10-16-du-an-gantt-design.md
@@ -95,3 +95,22 @@ Thước `rang/do-nguong.mjs`, chạy chỉ đọc trên khoảng 14 ngày đầ
   Gantt mức đủ».
 - Nền hạ tầng đỏ chấp nhận có tên ở Cổng Phạm vi 16/10: lưới trước gộp tự hết khi hồ sơ arm; engine lệch bản kit
   vendored là việc của kit.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-18:
+  - Ngoài-1: Không ảnh hưởng gì người dùng hiện nay. Về sau, nếu có người code sai tên loại vết thì lịch sử dự án có thể ghi một dòng sai hình và chỉ vỡ khi có người mở lại lịch sử.
+  - Ngoài-2: Khi một dự án trống bị xoá hoặc một ngày lễ bị xoá, hệ thống không lưu lại ai xoá và xoá lúc nào, nên sau này không tra lại được.
+  - Ngoài-4: Ở hộp thêm ngày lễ, nút Thêm vẫn bấm được khi chưa chọn ngày hay chưa gõ tên, rồi mới hiện lỗi. Hơi vướng nhưng không làm mất dữ liệu.
+  - Ngoài-5: Nếu việc tải thông tin một dự án hỏng vì lỗi máy chủ hay mạng, dải đầu trang dự án cứ hiện khung chờ mãi, không báo lỗi, không có nút thử lại, và các nút đóng, sửa, xoá dự án không xuất hiện.
+  - Ngoài-6: Từ nửa đêm đến 7 giờ sáng giờ Việt Nam, mốc kế của dự án có thể vẫn là mốc của hôm qua. Mở một dự án cũng chậm hơn cần thiết khi có nhiều dự án.
+  - Ngoài-10: Khi tải thông tin dự án gặp lỗi máy chủ hay mất mạng, dải đầu trang dự án hiện khung chờ mãi, không có nút thử lại, và các nút thao tác dự án biến mất.
+  - Ngoài-11: Nếu bấm Hoàn tác mà bị lỗi (ví dụ người khác vừa thêm lại ngày lễ đó, hay mất quyền), người dùng không thấy báo gì và tưởng đã hoàn tác xong.
+  - Ngoài-12: Phép thử cho việc đặt rồi hoàn tác ngày nghỉ tuần có thể vẫn xanh dù tính năng ghi hỏng, nên một lỗi về sau có thể lọt qua mà không ai biết.
+  - Ngoài-13: Nếu sau này ai đó thêm lại mục Dự án riêng ở thanh trái theo cách khác, phép thử này sẽ không bắt được.
+  - Ngoài-14: Nếu phần ghi lịch sử dự án lệch khuôn so với phần đọc, phép thử vẫn xanh và lỗi chỉ lộ khi người dùng mở lịch sử.
+  - Ngoài-15: Phép thử kiểm dự án đã có lịch sử thì không có nút Xoá dùng dữ liệu giả không bao giờ xảy ra, nên chưa chứng minh chắc chắn được điều đó.
+  - T2 (tự lái): Khung việc có hai chữ «Bắt đầu» đứng gần nhau — nút chuyển trạng thái và trường ngày bắt đầu.
+  - T3 (tự lái): Trên điện thoại, ở phạm vi Của tôi, dòng «Dự án: …» lệch sang phải so với tên việc.
+  - T4 (tự lái): Mới mở Gantt, nhãn khoảng ngày trên thanh công cụ ghi một tuần khác với tuần lưới đang hiện.
+  - T5 (tự lái): Dời bằng bàn phím thì thanh chưa di chuyển trước khi bấm Enter, chỉ có câu gợi ý ở đáy khung.
+  - T6 (tự lái): Mốc đã trễ nằm ngoài khung chỉ báo bằng một chấm đỏ nhỏ; dải đầu dự án không nhắc mốc trễ.
+  - T7 (tự lái): Việc con dời ra quá hạn việc cha mà không có lời nhắc.
+  - T8 (tự lái): Lối vào Dự án chỉ nằm trong ô «Phạm vi» của trang Việc, trông như một bộ lọc nên khó tìm.
