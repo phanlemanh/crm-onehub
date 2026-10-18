@@ -5,9 +5,9 @@ slug: push-ghim-lai-t1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: manh
+approved_at: 2026-10-18T15:10:53Z
 design_doc: docs/superpowers/specs/2026-10-18-push-ghim-lai-t1-design.md
 ---
 
