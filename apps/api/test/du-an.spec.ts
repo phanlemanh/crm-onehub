@@ -118,6 +118,39 @@ describe("dg-tao", () => {
 					if (!(truong in h)) throw new Error(`dg: list thieu cot ${truong}`);
 				}
 			}
+			const gieo = [
+				["A", "2026-10-19", "2026-10-21", "XONG"],
+				["B", "2026-10-22", "2026-11-06", null],
+				["C", "2026-10-20", "2026-10-25", "HUY"],
+			] as const;
+			for (const [tieuDe, batDau, han, den] of gieo) {
+				const v = await viecCoLich({
+					duAnId: mo1,
+					giaoId: t.id,
+					tieuDe,
+					batDau,
+					han,
+				});
+				if (den) {
+					const r = await goi(
+						app,
+						"viec.doiTrangThai",
+						"mutation",
+						{ id: v.id, den },
+						t.id,
+					);
+					if (r.status !== 200) throw new Error(`dg: gieo ${tieuDe} loi`);
+				}
+			}
+			const so = duAnListOutput
+				.parse(await listCua(t.id, "mo"))
+				.find((h) => h.id === mo1);
+			if (
+				json([so?.soViec, so?.soXong, so?.batDauSom, so?.hanMuon]) !==
+				json([2, 1, "2026-10-19", "2026-11-06"])
+			) {
+				throw new Error(`dg: list so sai ${json(so)}`);
+			}
 			const idDong = hang
 				.parse(await listCua(t.id, "dong"))
 				.filter((h) => h.taoBoi.id === t.id)

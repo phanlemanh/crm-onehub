@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { duAnLichOutput } from "../src/du-an/du-an.contracts";
 import type { DauVao } from "./ma-tran-thu";
 import { donDuAn, duAnThu, ngayDb, viecCoLich } from "./support/du-an-gieo";
 import { donDep, moXuong } from "./support/ke-hoach-gieo";
@@ -172,6 +173,18 @@ function json<T>(x: T): string {
 	return JSON.stringify(x);
 }
 
+async function suaDuocCua(
+	P: string,
+	V: string,
+	nguoiId: string,
+): Promise<boolean | null> {
+	const r = await goi(app, "duAn.lich", "query", { id: P }, nguoiId);
+	if (r.status !== 200) throw new Error(`dgq: lich loi ${json(r)}`);
+	return (
+		duAnLichOutput.parse(r.data).viec.find((v) => v.id === V)?.suaDuoc ?? null
+	);
+}
+
 async function demGhi() {
 	const [duAn, duAnVet, duAnMoc, viecPhuThuoc, viec, viecVet] =
 		await Promise.all([
@@ -339,6 +352,20 @@ describe("dg-quyen", () => {
 			const lich = await goi(app, "duAn.lich", "query", { id: P }, ai.okr.id);
 			if (ds.code !== "FORBIDDEN" || lich.code !== "FORBIDDEN") {
 				throw new Error("dgq: okr doc du an");
+			}
+
+			const moV = await duAnMo();
+			const suaDuoc = {
+				giao: await suaDuocCua(moV.P, moV.V, ai.giao.id),
+				thucHien: await suaDuocCua(moV.P, moV.V, ai.thucHien.id),
+				theoDoi: await suaDuocCua(moV.P, moV.V, ai.theoDoi.id),
+				taoDuAn: await suaDuocCua(moV.P, moV.V, ai.taoDuAn.id),
+			};
+			if (
+				json(suaDuoc) !==
+				json({ giao: true, thucHien: true, theoDoi: false, taoDuAn: false })
+			) {
+				throw new Error(`dgq: suaDuoc sai vai ${json(suaDuoc)}`);
 			}
 
 			if (thanhCong !== khaiOk) {

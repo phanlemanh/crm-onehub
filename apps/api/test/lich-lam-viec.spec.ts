@@ -135,6 +135,12 @@ describe("dg-lich", () => {
 			}
 			const docM = await goi(app, "lichLamViec.get", "query", undefined, m.id);
 			if (docM.status !== 200) throw new Error("llv: member khong doc duoc");
+			if (
+				lichLamViecOutput.parse(docM.data).sua !== false ||
+				(await lichCuaNguoi(q.id)).sua !== true
+			) {
+				throw new Error("llv: co sua sai vai");
+			}
 
 			const P = await duAnThu(q.id);
 			const V = await viecCoLich({

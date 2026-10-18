@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { docPhamVi } from "@/components/du-an/pham-vi";
 import {
 	PageShell,
@@ -21,9 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: viecMessages(await getLocale()).trang.tieuDe };
 }
 
-export default async function ViecPage({
-	searchParams,
-}: Partial<Pick<PageProps<"/[slug]/viec">, "searchParams">> = {}) {
+type ThamSoViec = Partial<Pick<PageProps<"/[slug]/viec">, "searchParams">>;
+
+async function MoTaViec({ searchParams }: ThamSoViec) {
 	const locale = await getLocale();
 	const m = viecMessages(locale);
 	const d = duAnMessages(locale);
@@ -35,12 +36,21 @@ export default async function ViecPage({
 			: phamVi.loai === "tat-ca"
 				? d.moTa.tatCa
 				: d.moTa.duAn;
+	return <PageShellDescription>{moTa}</PageShellDescription>;
+}
+
+export default async function ViecPage({ searchParams }: ThamSoViec = {}) {
+	const m = viecMessages(await getLocale());
 	return (
 		<PageShell>
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{m.trang.tieuDe}</PageShellTitle>
-					<PageShellDescription>{moTa}</PageShellDescription>
+					<Suspense
+						fallback={<PageShellDescription>{m.trang.moTa}</PageShellDescription>}
+					>
+						<MoTaViec searchParams={searchParams} />
+					</Suspense>
 				</PageShellHeading>
 				<PageShellActions>
 					<GiaoViec />
