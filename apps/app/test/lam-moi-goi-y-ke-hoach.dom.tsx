@@ -230,15 +230,37 @@ describe("gy-lm-menu", () => {
 	});
 });
 
+function chotSauKhiRoi(
+	sheetTruoc: Element | null,
+	docTruoc: number,
+	duong: "stepper" | "menu",
+) {
+	const goi = goiSetStage();
+	chot(
+		goi.length === 1 &&
+			JSON.stringify(goi[0]?.dauVao) ===
+				JSON.stringify({ id: "d-1", stage: MO.id }),
+		`gy-lm: ${duong} khong goi setStage ve mo`,
+	);
+	chot(docGoiY() > docTruoc, `gy-lm: khong doc lai goi y khi roi ${duong}`);
+	chot(
+		sheetTruoc !== null && sheet() === sheetTruoc,
+		`gy-lm: sheet dung lai khi roi ${duong}`,
+	);
+}
+
 describe("gy-lm-roi", () => {
 	test("đưa deal về Đang mở trên thanh giai đoạn thì thẻ mất", async () => {
 		datNen(THANG.id);
 		await moSheet();
 		const coTruoc = await choToi(() => the() !== null);
 		chot(coTruoc, "gy-lm: the khong hien truoc khi roi");
+		const sheetTruoc = sheet();
+		const docTruoc = docGoiY();
 		await bamCotThanh(MO.label);
 		const mat = await choToi(() => the() === null);
 		chot(mat, "gy-lm: the con sau khi roi thang stepper");
+		chotSauKhiRoi(sheetTruoc, docTruoc, "stepper");
 		expect(the()).toBeNull();
 	});
 
@@ -247,9 +269,12 @@ describe("gy-lm-roi", () => {
 		await moSheet();
 		const coTruoc = await choToi(() => the() !== null);
 		chot(coTruoc, "gy-lm: the khong hien truoc khi roi");
+		const sheetTruoc = sheet();
+		const docTruoc = docGoiY();
 		await chonTrenMenu(THANG.label, MO.label);
 		const mat = await choToi(() => the() === null);
 		chot(mat, "gy-lm: the con sau khi roi thang menu");
+		chotSauKhiRoi(sheetTruoc, docTruoc, "menu");
 		expect(the()).toBeNull();
 	});
 });

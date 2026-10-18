@@ -1,7 +1,8 @@
 // Hồ sơ _acceptance/lam-moi-goi-y-ke-hoach — E5: mỗi cặp chạy bài kiểm trên bản sao lành phải xanh, rồi thay
 // ĐÚNG MỘT chuỗi vật thật trong apps/app/lib/trpc/cache.ts và chạy lại phải đỏ với thông điệp ghim. Thông điệp
 // ghim là thông điệp ra trước thật, đã thấy tay (16/10): (a)(b)(c) ở lượt đỏ trên code trước khi sửa, (d) trên
-// cây có khoá chung, (e) trên cây dời khoá sang phần chạy nền (18/10, sau S4 lượt 1). Bản sao dùng chung ban-sao.mjs của ca-chap-chon-cach-ly như goi-y-mo-ke-hoach.
+// cây có khoá chung, (e) trên cây dời khoá sang phần chạy nền (18/10, sau S4 lượt 1), (f) ca rời thắng qua menu
+// (18/10, sau S4 lượt 2). Bản sao dùng chung ban-sao.mjs của ca-chap-chon-cach-ly như goi-y-mo-ke-hoach.
 import { spawnSync } from "node:child_process";
 import {
 	dungBanSao,
@@ -10,7 +11,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 5;
+const SO_CAP_KHAI = 6;
 const TRAN_MS = 300_000;
 const DOM = (t) =>
 	`cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t ${t}`;
@@ -58,6 +59,13 @@ const CAP = [
 		`${KHOA_THEO_DEAL}\t\t\t\t],\n\t\t\t\t[\n\t\t\t\t\t...listKeys(),\n\t\t\t\t\ttrpc.deals.contactOptions`,
 		`\t\t\t\t],\n\t\t\t\t[\n${KHOA_THEO_DEAL}\t\t\t\t\t...listKeys(),\n\t\t\t\t\ttrpc.deals.contactOptions`,
 		[[GY.cache, "gy-lm: settle record khong cho goi y"]],
+	],
+	[
+		"f go goi y khoi cache.deal → the con sau khi roi qua menu",
+		CACHE,
+		KHOA_THEO_DEAL,
+		"",
+		[[GY.roi, "gy-lm: the con sau khi roi thang menu"]],
 	],
 ];
 

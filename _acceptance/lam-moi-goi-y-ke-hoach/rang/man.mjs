@@ -1,8 +1,10 @@
 // Hồ sơ _acceptance/lam-moi-goi-y-ke-hoach — E6: bấm cột Chốt được rồi cột Đang mở trên thanh giai đoạn của sheet
 // deal thật, đo mili giây tới lúc thẻ gợi ý hiện và mất, giữ nguyên phần tử sheet. Chạy qua phiên đo:
 //   bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lam-moi-goi-y-ke-hoach/rang/man.mjs"
-// Lượt tự thử chiều đỏ chạy TRƯỚC lượt thật, trên một deal riêng: giữ treo mọi yêu cầu đọc lại goiYCuaDeal sau
-// lần tải đầu (không huỷ, để app không ghi lỗi console) — thẻ không được hiện, không thì thước không đo được gì.
+// Lượt tự thử chiều đỏ chạy TRƯỚC lượt thật, mỗi chiều trên một deal riêng: giữ treo mọi yêu cầu đọc lại goiYCuaDeal
+// (không huỷ, để app không ghi lỗi console) — sau lần tải đầu thì thẻ không được hiện, sau khi thẻ đã hiện thì thẻ
+// không được mất; không thì thước không đo được gì. Ảnh chụp theo khung nhìn: chụp cả trang co khung nhìn lại và
+// làm sheet dựng lại (đo 18/10, do-e6), nên phép đo «sheet không dựng lại» sẽ đo chính cái máy chụp.
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -75,6 +77,30 @@ async function dealDangMo(P, gd, ten) {
 	return { dealId: deal.id, tenDeal, tenCongTy: cty.name };
 }
 
+const sheetConMo = (sheet) =>
+	sheet.evaluate(
+		(e) =>
+			e?.isConnected === true &&
+			e.getAttribute("data-state") === "open" &&
+			e.checkVisibility(),
+	);
+
+async function chupKhung(t, ten) {
+	await lib.cho(300);
+	await t.screenshot({ path: join(lib.BANG_CHUNG, ten) });
+	console.log(`  anh ${ten}`);
+}
+
+function treoDocGoiY(t) {
+	return t.setRequestInterception(true).then(() =>
+		t.on("request", (r) => {
+			if (r.isInterceptResolutionHandled()) return;
+			if (r.url().includes("goiYCuaDeal")) return;
+			r.continue();
+		}),
+	);
+}
+
 async function moSheet(P, x) {
 	const t = await d.moTrang(
 		P.cookie,
@@ -141,12 +167,7 @@ try {
 		const x = await dealDangMo(P, gd, "tự thử");
 		const { t, daTai } = await moSheet(P, x);
 		if (!daTai) throw new Error("tu thu: sheet khong tai");
-		await t.setRequestInterception(true);
-		t.on("request", (r) => {
-			if (r.isInterceptResolutionHandled()) return;
-			if (r.url().includes("goiYCuaDeal")) return;
-			r.continue();
-		});
+		await treoDocGoiY(t);
 		await bamCot(t, gd.thang.label);
 		const k = await theCoTen(t, x.tenCongTy);
 		const baoDo = !dong(
@@ -158,7 +179,31 @@ try {
 			`E6 tu thu: ${baoDo ? "luot chan doc lai bao KHONG DAT" : "THUOC KHONG DO DUOC VAT HONG"}`,
 		);
 		await t.close();
-		d.dat(0, baoDo, "tu thu chieu do khong do");
+
+		const y = await dealDangMo(P, gd, "tự thử ẩn");
+		const u = await moSheet(P, y);
+		if (!u.daTai) throw new Error("tu thu an: sheet khong tai");
+		await bamCot(u.t, gd.thang.label);
+		const coThe = await theCoTen(u.t, y.tenCongTy);
+		if (!coThe.dung) throw new Error("tu thu an: the khong hien truoc khi roi");
+		await treoDocGoiY(u.t);
+		await bamCot(u.t, gd.mo.label);
+		const mat = await choTrong(
+			u.t,
+			(s) => document.querySelector(s) === null,
+			THE,
+			TRAN_MS,
+		);
+		const baoDoAn = !dong(
+			"E6 an sau roi thang",
+			mat.dung,
+			"tu thu: treo doc lai goi y",
+		);
+		console.log(
+			`E6 tu thu an: ${baoDoAn ? "luot chan doc lai bao KHONG DAT" : "THUOC KHONG DO DUOC VAT HONG"}`,
+		);
+		await u.t.close();
+		d.dat(0, baoDo && baoDoAn, `tu thu chieu do hien=${baoDo} an=${baoDoAn}`);
 	});
 
 	const x = await dealDangMo(P, gd, "thật");
@@ -177,9 +222,9 @@ try {
 		await bamCot(t, gd.thang.label);
 		const k = await theCoTen(t, x.tenCongTy);
 		dong("E6 hien sau thang", k.dung, `${k.ms} ms`);
-		const conSheet = await sheet.evaluate((e) => e?.isConnected === true);
+		const conSheet = await sheetConMo(sheet);
 		dong("E6 sheet khong dung lai", conSheet, "sau thang");
-		await d.chup(t, "E6-sau-thang-1280.png");
+		await chupKhung(t, "E6-sau-thang-1280.png");
 		d.dat(1, k.dung && conSheet, `hien=${k.dung} sheet=${conSheet}`);
 
 		await bamCot(t, gd.mo.label);
@@ -190,9 +235,9 @@ try {
 			TRAN_MS,
 		);
 		dong("E6 an sau roi thang", mat.dung, `${mat.ms} ms`);
-		const vanSheet = await sheet.evaluate((e) => e?.isConnected === true);
+		const vanSheet = await sheetConMo(sheet);
 		dong("E6 sheet khong dung lai", vanSheet, "sau roi thang");
-		await d.chup(t, "E6-sau-roi-thang-1280.png");
+		await chupKhung(t, "E6-sau-roi-thang-1280.png");
 		d.dat(1, mat.dung && vanSheet, `an=${mat.dung} sheet=${vanSheet}`);
 	});
 	await t.close();
