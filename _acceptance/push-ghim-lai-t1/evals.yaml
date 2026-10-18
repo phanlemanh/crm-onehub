@@ -147,10 +147,11 @@ evals:
       khong voi toi -> «KHONG DO DUOC: thieu 38ecca3be», ma 2 (khong xanh). Kich ban cong lay tu acceptance.yml THAT:
       Bun.YAML.parse, jobs.luat-kho.steps buoc name «Pre-merge check», truong run; thay «${{ github.event_name }}» =
       pull_request va «${{ github.base_ref }}» = onehub; khong tim thay buoc -> «thuoc hong: thieu buoc Pre-merge check»,
-      ma 2. Moi ca: `git worktree add --detach` vao thu muc tam tai 38ecca3be^, chep _acceptance/config.yaml cua cay
-      dang xet vao (khong commit), `git update-ref refs/remotes/origin/onehub HEAD`, nhanh «pr» tu 38ecca3be (+ commit
+      ma 2. Moi ca: `git clone -q --shared --no-checkout --template=` cay dang xet vao thu muc tam (ref rieng, khong
+      dung chung ref voi kho that nhu git worktree), `checkout --detach 38ecca3be^`, chep _acceptance/config.yaml cua
+      cay dang xet vao (khong commit), `git update-ref refs/remotes/origin/onehub HEAD`, nhanh «pr» tu 38ecca3be (+ commit
       cua ca), roi tren HEAD goc `git merge --no-ff pr` -> HEAD hai cha. Phan loai: `node <cay dang xet>/.github/scripts/
-      phan-loai.mjs --goc <worktree>` voi SU_KIEN=pull_request NHAP=false. Cong: `bash -c <kich ban>` trong worktree.
+      phan-loai.mjs --goc <ban clone>` voi SU_KIEN=pull_request NHAP=false. Cong: `bash -c <kich ban>` trong ban clone.
         (a) lanh: diff HEAD^1..HEAD ra dung 16 tep cua 38ecca3be (doi chung duong); phan loai «nang=false»,
             «ly_do=chi-t1»; cong ma 0, khong dong nao bat dau «VIOLATION».
         (b) bao cao gia: them commit chi doi gia tri «run_id:» cua muc «### Re-pin» cuoi trong
@@ -161,7 +162,7 @@ evals:
             da doi) -> phan loai van «ly_do=chi-t1» (chi tep .jsonl vua noi); cong ma 1, co dong bat dau
             «VIOLATION [t1-ma-doc]» chua «nonzero suites_exit».
         Ca (a) la doi chung duong cua (b) va (c) tren cung commit ghim lai: dong VIOLATION cua (b), (c) khong co o (a).
-      In «dat cong-van-do» va ma 0 khi du; muc sai -> «DO <muc>», ma 1. Don worktree tam khi xong hay bi ngat.
+      In «dat cong-van-do» va ma 0 khi du; muc sai -> «DO <muc>», ma 1. Don ban clone tam khi xong hay bi ngat.
 
   - id: E7
     criterion: AC-7
