@@ -402,6 +402,13 @@ const GHIM_LO_TRINH = {
 		"12 việc · A/B đã giao trong phạm vi lọc",
 	],
 	"lo-trinh:gioLay.capNhat": ["Cập nhật lúc 1", "Cập nhật lúc 12"],
+	"lo-trinh:duKien.ngay": ["Dự kiến xong 1", "Dự kiến xong 12"],
+	"lo-trinh:duKien.ngayGon": ["dự kiến 1", "dự kiến 12"],
+	"lo-trinh:duKien.cachTinh": [
+		"Máy tính lúc mốc bắt đầu (1), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.",
+		"Máy tính lúc mốc bắt đầu (12), coi như chỉ mình mốc này đang chạy. Đây là ước tính, không phải cam kết.",
+	],
+	"lo-trinh:duKien.gio": ["1 giờ máy", "12 giờ máy"],
 	"lo-trinh:metaTre": [" · 1 trễ mốc", " · 12 trễ mốc"],
 	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
 	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
