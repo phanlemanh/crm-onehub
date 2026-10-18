@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: da721a1238d7bacecc3913383b93a6b617eaafef
+verified_commit: d5178e9d5d9a439be657b9f65a586e824a5c0497
 human_signoff: Manh Phan 2026-10-18
 ---
 
@@ -197,3 +197,7 @@ none — mọi eval chạy một lần (deterministic), không eval nào có pas
 
 Round 1: REJECT — hai finding trong hợp đồng ở AC-5 (ca ngành null chưa ghim được ô trống) và cổng lint:slop đỏ. Returned to implementation.
 Round 2: mọi eval máy và mọi lệnh suite xanh; E7 (AC-6) hội đồng đề xuất FAIL 3/3 về dòng 15, 16, 20 của bảng ngành, chờ người quyết ở Cổng 2 (PENDING-JUDGMENT).
+
+### Re-pin lần 1 — 2026-10-18, do gộp onehub 16db970 vào nhánh PR #472
+run_id: repin-20261018T060124Z-42095
+sha: d5178e9d5d9a439be657b9f65a586e824a5c0497 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E7, E8 · AC không có chốt máy: AC-6, AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
