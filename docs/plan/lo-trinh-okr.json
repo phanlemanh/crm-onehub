@@ -75,7 +75,8 @@
         "DH3"
       ],
       "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410.",
-      "ly_do": "Cắt theo giờ máy: còn DH2 (4–7 giờ máy) sau vòng vệ sinh của M5; M5 ước Cổng 2 khoảng 17:30Z 17/10, gộp tối 17/10 → 18/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
+      "ly_do": "Cắt theo giờ máy: còn DH2 (4–7 giờ máy) sau vòng vệ sinh của M5; M5 ước Cổng 2 khoảng 17:30Z 17/10, gộp tối 17/10 → 18/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm. Về đích 18/10 00:13Z: DH2 gộp qua #471 (b22c0a329), đúng ngày cắt theo giờ máy.",
+      "that": "2026-10-18"
     },
     {
       "ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
@@ -2932,7 +2933,7 @@
       "ten": "Dọn hồ sơ cũ",
       "ten_ngan": "Dọn hồ sơ cũ",
       "cau_giao": "«Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A»",
-      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng.",
+      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng. Đêm 17→18/10 gom thêm chín ca cùng lớp «thước của hồ sơ đã ký gãy khi vào onehub» làm bằng chứng cho K-A (#375 03:40Z): hop-thoai-giu-cho-dang-nhap E11 (--ca thiet-ke lệch phạm vi §12; --ca huy dùng danh sách hộp viết tay, thừa 11 hộp); trang-don-vi-mot-bang E12, E16 (gốc so merge-base với onehub, gãy khi chính nó gộp) và E14 (không khai paths); dieu-huong-khu-muc-tieu E3 (coNutHoiKara grep cả thư mục); ve-sinh-do-san-onehub E18 (bất biến lúc gộp); so-do-quanh-muc-tieu E14 (ranh-gioi.mjs buộc nhánh feat/so-do-can-chinh-don-vi); tac-nhan-glm-5-3-cham E5 (so-tac-nhan.ts --pham-vi đếm mọi tệp đổi trên nhánh); tac-nhan-va E9 (lỗi kit resolveConfigKey không bỏ thoát hai nháy đơn). Luật tạm 18/10 (chủ kho đồng ý): máy không tự sửa thước hồ sơ đã ký tới khi có K-A.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
       "chay_khi": "crm nhận mốc kit có K-A (ho-so-da-ky-giu-tuoi)",
