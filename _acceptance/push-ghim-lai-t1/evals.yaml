@@ -140,7 +140,7 @@ evals:
       - "lib/evidence-core.cjs"
       - "_acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs"
     expected: |
-      node _acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs (rang, khong chay trong bun run test). Commit 38ecca3be
+      bun _acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs (rang, khong chay trong bun run test). Commit 38ecca3be
       khong voi toi -> «KHONG DO DUOC: thieu 38ecca3be», ma 2 (khong xanh). Kich ban cong lay tu acceptance.yml THAT:
       Bun.YAML.parse, jobs.luat-kho.steps buoc name «Pre-merge check», truong run; thay «${{ github.event_name }}» =
       pull_request va «${{ github.base_ref }}» = onehub; khong tim thay buoc -> «thuoc hong: thieu buoc Pre-merge check»,
