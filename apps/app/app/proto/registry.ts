@@ -11,6 +11,7 @@ import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
 import { DonOkrNhapSai } from "./_modules/don-okr-nhap-sai";
 import { DotHoiYTuongOkrMau } from "./_modules/dot-hoi-y-tuong-okr";
+import { DuAnGanttMau } from "./_modules/du-an-gantt";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
@@ -112,6 +113,7 @@ const BANG_GHEP = {
 	"hop-thong-bao-tren-web": HopThongBaoMau,
 	"moi-tin-hieu-cho-quan-tri": MoiTinHieuChoQuanTriMau,
 	"tin-hieu-tu-ve-kho": TinHieuTuVeKhoMau,
+	"du-an-gantt": DuAnGanttMau,
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 	"cho-tac-nhan-lau": ChoTacNhanLauMau,
