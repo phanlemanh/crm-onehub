@@ -1,17 +1,19 @@
 ---
 schema_version: 2
 feature_slug: lam-moi-goi-y-ke-hoach
-verdict: PASS
-failed_evals: []
+verdict: REJECT
+failed_evals: [E6]
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cef0d8c28f21ba18ea1d2a56ea080297921826ad
+verified_commit: 9858a5d701c844590562de84ad21b718b08bba0a
 human_signoff:
 ---
 
 # Evidence Report: lam-moi-goi-y-ke-hoach
+
+Round 2. Nội dung thay trọn round cũ; lịch sử round ở mục Iterations. Lệnh hỏng không gắn eval: không có. Lệnh `ui-check:E6` hỏng và gắn đúng eval E6.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -20,7 +22,7 @@ human_signoff:
 | E3 | AC-3 | test | PASS |
 | E4 | AC-4 | test | PASS |
 | E5 | AC-5 | script | PASS |
-| E6 | AC-6 | ui-check | PASS |
+| E6 | AC-6 | ui-check | FAIL |
 | E7 | AC-7 | script | PASS |
 | E8 | AC-1 | test | PASS |
 | E9 | AC-3 | test | PASS |
@@ -29,107 +31,108 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-lam-moi-goi-y-ke-hoach-E1-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lmgy_stepper
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-stepper
-    Ran 1 test across 1 file. [1028.00ms]
+    Ran 1 test across 1 file. [1102.00ms]
 
 - eval: E2
-  run_id: minted-lam-moi-goi-y-ke-hoach-E2-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lmgy_menu
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-menu
-    Ran 1 test across 1 file. [1133.00ms]
+    Ran 1 test across 1 file. [1346.00ms]
 
 - eval: E3
-  run_id: minted-lam-moi-goi-y-ke-hoach-E3-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lmgy_roi
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-roi
-    Ran 2 tests across 1 file. [1412.00ms]
+    Ran 2 tests across 1 file. [1308.00ms]
 
 - eval: E4
-  run_id: minted-lam-moi-goi-y-ke-hoach-E4-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.lmgy_cache
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-cache
-    Ran 1 test across 1 file. [956.00ms]
+    Ran 2 tests across 1 file. [1080.00ms]
 
 - eval: E5
-  run_id: minted-lam-moi-goi-y-ke-hoach-E5-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.lmgy_dot_bien
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     node _acceptance/lam-moi-goi-y-ke-hoach/rang/dot-bien.mjs
-    dot-bien: 4/4 cap dat
+    dot-bien: 5/5 cap dat
 
 - eval: E6
-  run_id: minted-lam-moi-goi-y-ke-hoach-E6-r1
-  exit_code: 0
+  run_id: minted-lam-moi-goi-y-ke-hoach-E6-r2
+  exit_code: 1
   baseline: n-a
   verifier: config:executors.script.lmgy_man
-  verified_at: 2026-10-18T09:29:44Z
-  screenshot: /Users/manhphan/dev/crm-onehub/.claude/worktrees/charming-kalam-8e7593/.acceptance-runs/lam-moi-goi-y-ke-hoach/evidence/E6-sau-thang-1280.png
+  verified_at: 2026-10-18T14:10:51Z
+  screenshot: evidence/E6-sau-thang-1280.png
   observed: |
-    E6-sau-thang-1280.png: sheet deal «Hợp đồng làm mới thật kdmkjlw» (công ty «Công ty Làm Mới Gợi Ý thật kdmkjlw») mở ở 1280; badge trạng thái đầu sheet «Closed won»; NGAY ĐẦU SHEET, dưới tiêu đề, có thẻ gợi ý «Deal đã thắng — mở kế hoạch 30 ngày cho Công ty Làm Mới Gợi Ý thật kdmkjlw?» kèm nút «Mở kế hoạch» và «Bỏ qua»; thanh GIAI ĐOẠN có 5 cột, cột cuối «Closed won» (chấm xanh) đang được chọn; toast «Đã đổi giai đoạn». Khớp Expected (thẻ ở đầu sheet, thanh giai đoạn ở cột thắng).
-    E6-sau-roi-thang-1280.png: cùng sheet deal «Hợp đồng làm mới thật kdmkjlw» (cùng deal, sheet không dựng lại); KHÔNG có thẻ gợi ý nào giữa tiêu đề và hàng số liệu (Giá trị / Ngày dự kiến chốt / Ở giai đoạn); thanh GIAI ĐOẠN có cột đầu «Demo booked» sáng (cột mở), không còn ở Closed won; mục «Đã chốt» biến mất khỏi «Đang tới đâu»; toast «Đã đổi giai đoạn». Khớp Expected (không có thẻ). Lưu ý: sheet ở khung này lệch phải/bị cắt mép (nhiều khả năng đang giữa chuyển động), không ảnh hưởng tiêu chí.
+    Frame evidence/E6-sau-thang-1280.png (bản của lần 2 trên đĩa): sheet deal "Hợp đồng làm mới thật kdwnek2" có thẻ "Deal đã thắng — mở kế hoạch 30 ngày cho Công ty Làm Mới Gợi Ý thật kdwnek2?" với nút "Mở kế hoạch" và "Bỏ qua" ở đầu sheet, toast "Đã đổi giai đoạn"; nhưng sheet bắt đầu ở x khoảng 745 và bị cắt ở mép phải, thanh GIAI ĐOẠN chỉ thấy tới "Decision maker in", không thấy cột thắng. Dòng bảng phía sau đã là "Closed won".
+    Frame evidence/E6-sau-roi-thang-1280.png: không có thẻ, thanh giai đoạn sáng cột đầu "Demo booked", dòng bảng phía sau là "Demo booked"; sheet vẫn lệch phải như frame trước. Thẻ hiện và mất đúng chiều (172 ms và 115 ms), nhưng sheet không đứng yên: ở lần 2 tay cầm sheet không còn gắn trong document sau khi rời cột thắng (sheet bị dựng lại), trái với «không tải lại, sheet không dựng lại».
   network_observed: n-a (driver)
   output: |
-    5. [PASS] «E6 sheet khong dung lai: DAT — sau roi thang»
-    6. Doi chung truoc khi thang: khong co dong «E6 truoc khi thang: KHONG DO DUOC»; «lam-moi-goi-y-ke-hoach man: dat».
-    Frame da luu: .acceptance-runs/lam-moi-goi-y-ke-hoach/evidence/E6-sau-thang-1280.png va E6-sau-roi-thang-1280.png; ban sao _acceptance/lam-moi-goi-y-ke-hoach/evidence/E6-step1.png, E6-step2.png; E6-network.txt (driver puppeteer khong co duong doc network).
+    Lệnh chạy nguyên văn từ gốc kho (config executors.script.lmgy_man) 2 lần, phiên đo kho crm_da3c_lam_moi_goi_y_do, app cổng 4130, api cổng 4136, tự dọn khi xong.
+    Lần 1 (thoát 0): tự thử chiều đỏ báo KHONG DAT đúng hướng; hiện sau thắng DAT 160 ms; sheet không dựng lại sau thắng DAT; ẩn sau rời thắng DAT 112 ms; sheet không dựng lại sau rời thắng DAT.
+    Lần 2 (cùng lệnh, cùng cây, thoát khác 0): tự thử đúng hướng; hiện sau thắng DAT 172 ms; sheet không dựng lại sau thắng DAT; ẩn sau rời thắng DAT 115 ms; "E6 sheet khong dung lai: KHONG DAT — sau roi thang" (tay cầm sheet không còn isConnected); "buoc 1: an=true sheet=false"; "lam-moi-goi-y-ke-hoach man: hong 1".
+    Kết luận: eval không ổn định, assertion «sheet không dựng lại» đo được 1 trên 2 lần; theo luật thoát 0 chỉ khi mọi assertion đạt nên E6 hỏng. Ảnh trên đĩa là bản của lần 2; ảnh lần 1 sao lưu ở /private/tmp/claude-503/e6run1/.
 
 - eval: E7
-  run_id: minted-lam-moi-goi-y-ke-hoach-E7-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.lmgy_hoi_quy
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types
-    (duoi dau ra trong sau lenh cuoi check-types)
+    (không có dòng cuối riêng; chuỗi lệnh kết thúc bình thường)
 
 - eval: E8
-  run_id: minted-lam-moi-goi-y-ke-hoach-E8-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E8-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.gymk_sinh
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-sinh"
-    test-run: dropped crm_mvdmjxxuv90e_test
+    test-run: dropped crm_mvdwls82damy_test
 
 - eval: E9
-  run_id: minted-lam-moi-goi-y-ke-hoach-E9-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E9-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.gymk_xu_ly
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-xu-ly"
-    test-run: dropped crm_mvdmjyvvrly8_test
+    test-run: dropped crm_mvdwlt3vcikl_test
 
 - eval: E10
-  run_id: minted-lam-moi-goi-y-ke-hoach-E10-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.lmgy_duong
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
   output: |
     node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs
     duong-doi-giai-doan: da kiem 4/4 noi, 0 loi
@@ -137,39 +140,39 @@ human_signoff:
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
 
 - cmd: bun run lint:slop
-  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_lint_slop-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-lam-moi-goi-y-ke-hoach-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-18T09:29:44Z
+  verified_at: 2026-10-18T14:10:51Z
 
 ## Known limits
 
@@ -177,23 +180,26 @@ human_signoff:
 
 ## Analyst
 
-Eval không-phân-biệt (xanh trên cả HEAD lẫn baseline; chứng minh phần tiền đề máy chủ đã có từ trước, không phải tính năng mới). Cả hai là bài kiểm đã ký của goi-y-mo-ke-hoach chạy lại nguyên trạng để làm tiền đề máy chủ cho AC-1 và AC-3, nên đây là regression-guard có chủ ý:
-- E8 (AC-1): -t gy-sinh của apps/api/test/goi-y-mo-ke-hoach.spec.ts, xanh trên baseline.
-- E9 (AC-3): -t gy-xu-ly của apps/api/test/goi-y-mo-ke-hoach.spec.ts, xanh trên baseline.
+Eval không phân biệt (xanh trên cả nhánh lẫn baseline, chứng minh harness chứ không phải feature):
+- E8: chạy lại nguyên trạng bài kiểm đã ký E1 của goi-y-mo-ke-hoach (-t gy-sinh); xanh trên cả code cũ là chủ ý, đây là tiền đề máy chủ của AC-1 và là regression-guard có chủ ý.
+- E9: chạy lại nguyên trạng bài kiểm đã ký E3 của goi-y-mo-ke-hoach (-t gy-xu-ly); cùng lý do, là tiền đề máy chủ của AC-3 và regression-guard có chủ ý.
 
-Baseline khong do
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-stepper: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 3a39a4b6b851d736ab2f1664c35c91d5b84ef49c — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-menu: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 3a39a4b6b851d736ab2f1664c35c91d5b84ef49c — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-roi: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 3a39a4b6b851d736ab2f1664c35c91d5b84ef49c — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-cache: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 3a39a4b6b851d736ab2f1664c35c91d5b84ef49c — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/lam-moi-goi-y-ke-hoach/rang/dot-bien.mjs: bo qua baseline: tep _acceptance/lam-moi-goi-y-ke-hoach/rang/dot-bien.mjs co o cay dang kiem nhung chua co o merge-base 3a39a4b6b851d736ab2f1664c35c91d5b84ef49c — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types: bo qua baseline: tep _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs co o cay dang kiem nhung chua co o merge-base 3a39a4b6b851d736ab2f1664c35c91d5b84ef49c — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs: bo qua baseline: tep _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs co o cay dang kiem nhung chua co o merge-base 3a39a4b6b851d736ab2f1664c35c91d5b84ef49c — eval moi, chay tren code cu khong phan biet gi
+Baseline khong do:
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-stepper: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 4f22bad4357f49b53ec24ea16c2c0a188d8a6154 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-menu: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 4f22bad4357f49b53ec24ea16c2c0a188d8a6154 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-roi: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 4f22bad4357f49b53ec24ea16c2c0a188d8a6154 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lam-moi-goi-y-ke-hoach.dom.tsx -t gy-lm-cache: bo qua baseline: tep apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx co o cay dang kiem nhung chua co o merge-base 4f22bad4357f49b53ec24ea16c2c0a188d8a6154 — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/lam-moi-goi-y-ke-hoach/rang/dot-bien.mjs: bo qua baseline: tep _acceptance/lam-moi-goi-y-ke-hoach/rang/dot-bien.mjs co o cay dang kiem nhung chua co o merge-base 4f22bad4357f49b53ec24ea16c2c0a188d8a6154 — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types: bo qua baseline: tep _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs co o cay dang kiem nhung chua co o merge-base 4f22bad4357f49b53ec24ea16c2c0a188d8a6154 — eval moi, chay tren code cu khong phan biet gi
+- node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs --tu-thu && node _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs: bo qua baseline: tep _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs co o cay dang kiem nhung chua co o merge-base 4f22bad4357f49b53ec24ea16c2c0a188d8a6154 — eval moi, chay tren code cu khong phan biet gi
+
+Không có mục chấm theo phán đoán (judgment) trong hợp đồng này; không có panel nào để ghi.
 
 ## Variance
 
-none — every multi-run eval is uniform
+- E6: flaky — cùng lệnh, cùng cây, hai lần liên tiếp cho hai kết quả khác nhau (lần 1 đạt mọi assertion, lần 2 hỏng ở «sheet không dựng lại sau rời thắng»). Máy ghi runs 1 nên không có pass_rate; mức đo thực tế là 1 trên 2 lần chạy tay. Cần tìm nguyên nhân gốc: sheet bị dựng lại khi rời cột thắng, hay thước đo bắt sheet đang đóng.
 
 ## Iterations
 
-Round 1: E1-E10 đều đạt (mọi eval xanh, bảy lệnh suite xanh). Không có eval hỏng, không có mục chờ người chấm.
+Round 1: cả 10 eval đạt ở cef0d8c28f21ba18ea1d2a56ea080297921826ad; review lượt 1 phát hiện thứ tự settle record chưa được đo, nên bổ sung ca thứ hai của E4 và cặp đột biến (e) của E5. Quay lại triển khai.
+Round 2: E6 hỏng — thước màn không ổn định, assertion «sheet không dựng lại» đạt ở lần 1 và hỏng ở lần 2 (tay cầm sheet không còn gắn sau khi rời cột thắng); frame còn thấy sheet lệch phải và bị cắt. Chín eval còn lại và bảy lệnh suite đạt. Quay lại triển khai.

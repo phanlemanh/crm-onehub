@@ -1,41 +1,33 @@
-# Review findings: lam-moi-goi-y-ke-hoach (round 1)
-
 ## Trong hợp đồng
 
-- **Hình dạng 3 (assert chuỗi có mặt trong khi lời hứa là quan hệ): ô settle record của gy-lm-cache chỉ đếm lần gọi, không đo thứ tự «đọc lại trước khi lời gọi xong»**
-  file: `apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx:313`
+- **Hình dạng 4 (assertion âm tính một mình): ca gy-lm-roi qua menu chỉ khẳng định thẻ vắng, không có đối chứng dương sau thao tác và không có cặp đột biến**
+  file:line: `apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx:250`
   severity: medium
-  AC: AC-4
+  AC: AC-5
   source: measurement
-  detail: AC-4 hứa một quan hệ thứ tự: với cache.deal("d-1", { settle: "record" }) thì goiYCuaDeal của d-1 được đọc lại TRƯỚC KHI promise xong, tức nó phải nằm trong danh sách được await (record), không nằm trong danh sách chạy nền (rest). Dòng 313 và 317-318 (`const len1 = demDoc("d-1") > truoc1` rồi `chot(len1, "gy-lm: settle record khong cho goi y")`) chỉ hỏi bộ đếm có tăng hay không. Bộ đếm đó tăng ngay khi queryFn được gọi: `doc()` trong khung-gop-y.tsx đẩy vào trangThai.daGoi lúc queryFn bắt đầu chứ không phải lúc nó xong. Trong run() của cache.ts, các khoá ở `behind` cũng được `void queryClient.invalidateQueries(...)` nên refetch vẫn khởi chạy đồng bộ. Ngoài ra lời gọi được bọc trong `await act(async () => { await o.goi(c); })`, mà act xả hết microtask trước khi trả về, nên câu «không thêm nhịp» của eval không đúng như viết. Hệ quả: đưa khoá goiYCuaDeal sang danh sách rest (chạy nền, không await) thì ô này vẫn xanh. Ô chỉ đỏ khi khoá bị gỡ hẳn, mà trường hợp đó ô deal-d1 đã bắt. E5 (dot-bien.mjs) cũng không có cặp đột biến «chuyển khoá sang rest» cho ô này, nên chưa từng thấy nó đỏ đúng lý do.
-  rationale: AC-4 hứa đích danh với settle record thì goiYCuaDeal của d-1 được đọc lại trước khi lời gọi xong, nhưng bài kiểm chỉ đếm lần gọi nên không đo được quan hệ thứ tự đó.
+  detail: Sau `await chonTrenMenu(THANG.label, MO.label)` (dòng 250), ca này chỉ kiểm `choToi(() => the() === null)` rồi `expect(the()).toBeNull()` (dòng 251–253). Không có kiểm nào rằng deals.setStage được gọi với {id:'d-1', stage:'mo'}, và không kiểm `sheet()` còn đúng phần tử cũ. Ca E1 và E2 có hai kiểm đó ở dòng 199–207 và 222–228. Vì vậy thẻ vắng mặt cũng thoả khi menu làm sheet sập (error boundary), khi sheet đóng hay bị gỡ, hoặc khi bộ chọn trúng phần tử khác: điều kiện `the() === null` đúng mà không cần lần đọc lại goiYCuaDeal nào. Ca stepper cùng describe (dòng 239–242) có cùng khuôn âm tính, nhưng được cặp đột biến (b) trong dot-bien.mjs che. Đường menu thì không có cặp nào trong CAP của dot-bien.mjs (dòng 26–62 chỉ có GY.stepper, GY.roi chạy cả hai ca dưới -t gy-lm-roi, nhưng thông điệp ghim chỉ là 'the con sau khi roi thang stepper'). Màu xanh của nhánh menu vì thế không có bằng chứng là không rỗng.
+
+- **Hình dạng 4 (assertion âm tính một mình): chiều 'mất' của E6 chỉ đo thẻ vắng mặt, không có lượt tự thử chiều đỏ, và đối chứng isConnected không phân biệt sheet đang mở với sheet đang đóng**
+  file:line: `_acceptance/lam-moi-goi-y-ke-hoach/rang/man.mjs:186`
+  severity: medium
+  AC: AC-6
+  source: measurement
+  detail: Dòng 186–191 coi thẻ đã mất khi `document.querySelector(THE) === null`. Lượt tự thử chiều đỏ (bước 0, dòng 140–162) chỉ chặn goiYCuaDeal cho chiều 'hiện sau thắng'. Chiều 'ẩn sau rời thắng' không có lượt nào chứng minh thước báo KHONG DAT khi lần đọc lại bị chặn, dù AC-6 đòi thước đỏ khi 'mọi lần đọc lại goiYCuaDeal' bị chặn. Đối chứng dương duy nhất của bước này là `sheet.evaluate(e => e?.isConnected === true)` (dòng 193). Một sheet Radix đang chạy hiệu ứng đóng vẫn còn gắn vào document, nên kiểm này không chứng minh được 'thẻ mất khỏi sheet đang mở'. Ảnh bằng chứng E6-step2.png cho thấy sheet lệch phải và bị cắt mép, lớp phủ đã nhạt so với E6-step1.png, và evidence-report.md tự ghi 'nhiều khả năng đang giữa chuyển động'. Như vậy kiểm âm tính `=== null` đứng một mình, không có phép đo trạng thái mở (ví dụ data-state=open) hay lượt đỏ đi kèm.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **man.mjs giữ treo yêu cầu goiYCuaDeal, trong khi bước E6 của evals.yaml ghi là chặn (abort)**
-  Người dùng thấy gì: Phép đo trên màn hình vẫn báo đỏ đúng khi thẻ gợi ý không tự làm mới. Chỉ có điều cách đo thật hơi khác với lời mô tả trong hồ sơ, nên người chấm đọc theo chữ có thể thấy lệch.
+- **choTrong nuốt mọi lỗi của waitForFunction, nên lượt tự thử chiều đỏ của E6 có thể đạt sai**
+  Người dùng thấy gì: Trong một số trường hợp hiếm (trang sập hoặc tải lại giữa lúc đo), phép tự thử của bàn đo có thể báo là đã bắt được lỗi trong khi thật ra nó chưa kiểm được gì. Tính năng gợi ý kế hoạch cho người dùng không bị ảnh hưởng; chỉ độ tin cậy của một lần đo thử giảm.
   file: `_acceptance/lam-moi-goi-y-ke-hoach/rang/man.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 6 (đường dẫn hardcode ROOT): s4-args.json đã commit ghim repoRoot và contractPath vào worktree charming-kalam-8e7593, nay là cây của nhánh khác**
+  Người dùng thấy gì: Nếu ai chạy lại phép chấm bằng tệp cấu hình cũ đã lưu, nó sẽ đo nhầm một bản làm việc của nhánh khác mà kết quả vẫn hiện bình thường. Người dùng cuối không bị ảnh hưởng; đã có bản cấu hình mới sửa đúng đường dẫn.
+  file: `_acceptance/lam-moi-goi-y-ke-hoach/s4-args.json`
   severity: medium
-  Đề xuất: known-limits
-
-- **E6 tự mâu thuẫn: lượt tự thử bắt buộc in dòng «E6 … KHONG DAT», nhưng bước chấm lại đòi mọi dòng «E6 …» phải đạt**
-  Người dùng thấy gì: Người chấm làm theo từng chữ có thể thấy một dòng ghi «không đạt» ở lượt tự thử và nhầm là phép đo hỏng, dù tính năng vẫn chạy đúng.
-  file: `_acceptance/lam-moi-goi-y-ke-hoach/evals.yaml`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (assertion âm tính một mình): gy-lm-roi chỉ đòi thẻ vắng mặt sau thao tác, không có mỏ neo dương nào sau thao tác**
-  Người dùng thấy gì: Bài kiểm có thể xanh trong trường hợp thẻ biến mất vì cả khung chi tiết deal bị đóng chứ không phải vì gợi ý được làm mới đúng. Hiện chưa thấy lỗi thật nào ngoài người dùng.
-  file: `apps/app/test/lam-moi-goi-y-ke-hoach.dom.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 5 (tuyên quét lớp nhưng bộ dò chỉ bắt một cách viết): duong-doi-giai-doan.mjs nói đo «mọi lời gọi deals.setStage» nhưng chỉ khớp đúng chuỗi `.mutationOptions(`**
-  Người dùng thấy gì: Nếu sau này ai thêm một đường đổi giai đoạn viết theo kiểu khác, phép quét có thể bỏ sót và thẻ gợi ý kế hoạch sẽ không tự làm mới ở đường đó. Hiện chưa có đường nào như vậy.
-  file: `_acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs`
-  severity: low
-  Đề xuất: known-limits
+  Đề xuất: wont-fix
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
