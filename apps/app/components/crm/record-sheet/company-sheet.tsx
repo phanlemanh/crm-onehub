@@ -68,6 +68,7 @@ import {
 } from "@/lib/messages/record-sheet";
 import { savingField } from "@/lib/pending-field";
 import { hasCompanyLinks } from "@/lib/social-links";
+import { tenNganh } from "@/lib/ten-nganh";
 import { tenQuocGia } from "@/lib/ten-quoc-gia";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -193,6 +194,8 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 				.join(", ")
 		: null;
 
+	const nganh = company ? tenNganh(company.industry, locale) : null;
+
 	const openDeals =
 		company?.deals.filter((deal) => !giaiDoan.laDaDong(deal.stage)) ?? [];
 	const openValueCents = openDeals.reduce(
@@ -279,7 +282,13 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 						lead={
 							<DomainLink domain={company.domain} website={company.website} />
 						}
-						parts={[{ text: location }, { text: company.industry, lang: "en" }]}
+						parts={[
+							{ text: location },
+							nganh && {
+								text: nganh.ten,
+								lang: nganh.dich ? undefined : "en",
+							},
+						]}
 					/>
 				) : undefined
 			}

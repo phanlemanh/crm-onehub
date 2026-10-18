@@ -1,0 +1,40 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_dich_ten_nganh_bang_bang_do · app http://localhost:4274 · api http://localhost:4743
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts ada@trycomp.ai
+DU LIEU 24 cong ty mau qua API (luot mvcr2ju0)
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-bang-vi-1440.png
+DUNG E8 vi 1440: thuoc cat do voi chuoi 200 ky tu, im voi «X»
+DUNG E8 vi 1440: cot Nganh hien ten Viet cua ca 24 nganh
+E8 cat vi 1440: 11/24 — Hàng tiêu dùng đóng gói | Logistics & Chuỗi cung ứng | Dịch vụ chuyên nghiệp & Agency | Nông nghiệp & Thực phẩm | Bất động sản & Công nghệ bất động sản | Hàng xa xỉ & Thời trang | Phong cách sống & Thư giãn | Công nghiệp & Năng lượng | Nhà nước & Phi lợi nhuận | Bán lẻ & Thương mại điện tử | Hàng không vũ trụ & Quốc phòng
+DUNG E8 vi 1440: bang tran ngang 0px
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-ngan-vi-1440.png
+DUNG E8 vi 1440: ngan cong ty hien Bất động sản & Công nghệ bất động sản
+DUNG E8 vi 1440: ngan tran ngang 0px
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-bang-vi-390.png
+E8 cat vi 390: cot Nganh khong hien o kho nay
+DUNG E8 vi 390: bang tran ngang 0px
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-ngan-vi-390.png
+DUNG E8 vi 390: ngan cong ty hien Bất động sản & Công nghệ bất động sản
+DUNG E8 vi 390: ngan tran ngang 0px
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-bang-en-1440.png
+DUNG E8 en 1440: thuoc cat do voi chuoi 200 ky tu, im voi «X»
+DUNG E8 en 1440: cot Nganh hien chu goc cua ca 24 nganh
+E8 cat en 1440: 6/24 — Consumer Packaged Goods (CPG) | Construction & Built Environment | Logistics & Supply Chain | Professional Services & Agencies | Automotive & Transportation | Government & Nonprofit
+DUNG E8 en 1440: bang tran ngang 0px
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-ngan-en-1440.png
+DUNG E8 en 1440: ngan cong ty hien Real Estate & PropTech
+DUNG E8 en 1440: ngan tran ngang 0px
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-bang-en-390.png
+E8 cat en 390: cot Nganh khong hien o kho nay
+DUNG E8 en 390: bang tran ngang 0px
+ANH _acceptance/dich-ten-nganh-bang-bang/evidence/E8-ngan-en-390.png
+DUNG E8 en 390: ngan cong ty hien Real Estate & PropTech
+DUNG E8 en 390: ngan tran ngang 0px
+KET LUAN: 16 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0
