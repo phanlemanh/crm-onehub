@@ -31,7 +31,9 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { HoiDongCha } from "./hoi-dong-cha";
 import { LichSuViec } from "./lich-su-viec";
+import { MucPhaiCho } from "./muc-phai-cho";
 import { MucViecCon } from "./muc-viec-con";
+import { OBatDauViec, ODuAnViec } from "./o-lich-du-an";
 import {
 	HanViec,
 	type TrangThaiViec,
@@ -75,7 +77,8 @@ function nhanNut(
 }
 
 export function KhungViec({ viecId }: { viecId: string }) {
-	const m = viecMessages(useLocale());
+	const locale = useLocale();
+	const m = viecMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { close } = useRecordStack();
@@ -99,6 +102,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 		trpc.viec.doiNguoiThucHien.mutationOptions(xong),
 	);
 	const go = useMutation(trpc.viec.go.mutationOptions(xong));
+	const doiDuAn = useMutation(trpc.viec.doiDuAn.mutationOptions(xong));
 	const theo = useMutation(trpc.viec.theoDoi.mutationOptions(xong));
 	const boTheo = useMutation(trpc.viec.boTheoDoi.mutationOptions(xong));
 	const xoa = useMutation(
@@ -152,6 +156,14 @@ export function KhungViec({ viecId }: { viecId: string }) {
 						) : (
 							<HanViec viec={v} />
 						)}
+					</DetailSheetProperty>
+					<DetailSheetProperty label={m.khung.batDau}>
+						<OBatDauViec
+							batDauNgay={v.batDauNgay}
+							hanNgay={v.hanNgay}
+							onLuu={(batDau) => sua.mutate({ id: v.id, batDauNgay: batDau })}
+							suaDuoc={suaDuoc}
+						/>
 					</DetailSheetProperty>
 					<DetailSheetProperty label={m.khung.nguoiGiao}>
 						<span translate="no">{v.nguoiGiao.name}</span>
@@ -214,6 +226,15 @@ export function KhungViec({ viecId }: { viecId: string }) {
 							</span>
 						)}
 					</DetailSheetProperty>
+					<DetailSheetProperty label={m.khung.duAn}>
+						<ODuAnViec
+							dangDoi={doiDuAn.isPending}
+							duAn={v.duAn}
+							onDoi={(duAnId) => doiDuAn.mutate({ id: v.id, duAnId })}
+							rieng={v.banGhi.length === 0}
+							suaDuoc={suaDuoc}
+						/>
+					</DetailSheetProperty>
 				</DetailSheetProperties>
 			</DetailSheetSection>
 			<DetailSheetSection title={m.khung.moTa}>
@@ -242,6 +263,14 @@ export function KhungViec({ viecId }: { viecId: string }) {
 							: m.khung.chiXem}
 					</p>
 				</DetailSheetSection>
+			) : null}
+			{v.duAn ? (
+				<MucPhaiCho
+					duAnId={v.duAn.id}
+					phaiCho={v.phaiCho}
+					suaDuoc={suaDuoc}
+					viecId={v.id}
+				/>
 			) : null}
 			<MucViecCon viecId={v.id} />
 		</DetailSheetBody>

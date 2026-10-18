@@ -13,6 +13,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { type ViecMessages, viecMessages } from "@/lib/messages/viec";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { DongDuAnViec } from "./dong-du-an";
 import { HanViec, type TrangThaiViec } from "./trang-thai-viec";
 
 export type TheBang =
@@ -87,12 +88,14 @@ export function TheViecBang({
 	khoa,
 	onMo,
 	onChuyen,
+	onMoDuAn,
 }: {
 	the: TheBang;
 	hienNguoi: boolean;
 	khoa: boolean;
 	onMo: () => void;
 	onChuyen: (den: CotBang) => void;
+	onMoDuAn?: (id: string) => void;
 }) {
 	const m = viecMessages(useLocale());
 	const dich = the.chuyenDuoc.filter(
@@ -109,6 +112,9 @@ export function TheViecBang({
 			>
 				{the.tieuDe}
 			</button>
+			{onMoDuAn && the.duAn ? (
+				<DongDuAnViec duAn={the.duAn} onMo={onMoDuAn} />
+			) : null}
 			<PhuTheViec hienNguoi={hienNguoi} the={the} />
 			{the.trangThai === "XONG" && dich.length === 0 ? null : (
 				<div>
