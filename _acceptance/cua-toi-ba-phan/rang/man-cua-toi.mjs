@@ -487,6 +487,49 @@ try {
 		);
 		await o4.t.close();
 		if (so === 5) console.log("DUNG AC-3 may chu: 5/5 o");
+
+		console.log(
+			"== E18 (AC-4): duong cu chuyen huong o may chu, khong dung trang",
+		);
+		const goc = `${process.env.APP_URL}/${d.slug()}`;
+		const hoi = (duong, phien) =>
+			fetch(`${goc}${duong}`, {
+				redirect: "manual",
+				headers: phien ? { Cookie: `${phien.ten}=${phien.gia}` } : {},
+			});
+		const q = `kyOkr=${encodeURIComponent(KY)}&la=1&donOkr=a&donOkr=b`;
+		const r5 = await hoi(`/okr/cap-nhat-tuan?${q}`, TR);
+		const dich5 = r5.headers.get("location") ?? "";
+		const dung5 = r5.status === 307 && dich5.endsWith(`/${d.slug()}/okr?${q}`);
+		dong(
+			dung5,
+			`${dung5 ? "" : "AC-4: "}duong cu giu query: may chu tra ${r5.status} toi ${dich5}`,
+		);
+		const r6 = await hoi("/okr/cap-nhat-tuan?tu=nhac", null);
+		const dich6 = r6.headers.get("location") ?? "";
+		const r6b = dich6
+			? await fetch(new URL(dich6, goc), { redirect: "manual" })
+			: null;
+		const dich6b = r6b?.headers.get("location") ?? "";
+		const dung6 =
+			r6.status === 307 &&
+			dich6.includes(`/${d.slug()}/okr?tu=nhac`) &&
+			r6b !== null &&
+			[302, 303, 307, 308].includes(r6b.status) &&
+			dich6b.includes("/sign-in");
+		dong(
+			dung6,
+			`${dung6 ? "" : "AC-4: "}chua dang nhap: ${r6.status} ${dich6} → ${r6b?.status ?? "-"} ${dich6b}`,
+		);
+		const r7 = await hoi("/okr/cap-nhat-tuan-x", TR);
+		const dich7 = r7.headers.get("location") ?? "";
+		const dung7 = !(
+			[307, 308].includes(r7.status) && dich7.includes(`/${d.slug()}/okr`)
+		);
+		dong(
+			dung7,
+			`${dung7 ? "" : "AC-4: "}doi chung cap-nhat-tuan-x khong bi chuyen: ${r7.status} ${dich7}`,
+		);
 	}
 } catch (e) {
 	await d.khongDoDuoc(e);

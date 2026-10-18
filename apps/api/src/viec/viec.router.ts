@@ -21,6 +21,9 @@ import {
 	viecCuaBanGhiOutput,
 	viecCuaToiInput,
 	viecCuaToiNhomOutput,
+	viecDaDoiOutput,
+	viecDoiDuAnInput,
+	viecDoiLichInput,
 	viecDoiNguoiInput,
 	viecDoiTrangThaiInput,
 	viecGanInput,
@@ -155,6 +158,30 @@ export class ViecRouter {
 		@Input() input: z.infer<typeof viecDoiTrangThaiInput>,
 	) {
 		return this.viec.doiTrangThai(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: viecDoiLichInput,
+		output: viecDaDoiOutput,
+		meta: restMeta("POST", "/viec/{id}/lich", TAG),
+	})
+	doiLich(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof viecDoiLichInput>,
+	) {
+		return this.viec.doiLich(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: viecDoiDuAnInput,
+		output: viecChiTietOutput,
+		meta: restMeta("POST", "/viec/{id}/du-an", TAG),
+	})
+	doiDuAn(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof viecDoiDuAnInput>,
+	) {
+		return this.viec.doiDuAn(input, ctx.user.id);
 	}
 
 	@Mutation({

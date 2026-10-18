@@ -30,7 +30,49 @@ function readShape() {
 	if (roots.length === 0 || checkers.length === 0) {
 		die(["the shape declaration names no roots or no checkers"]);
 	}
-	return { roots, checkers };
+	return { roots, checkers, t1Only: shape.t1Only ?? null };
+}
+
+function checkSkip(shape, boQua, ledger, problems, report) {
+	const asked = [...boQua].sort().join(" ");
+	if (!shape.t1Only) {
+		problems.push(
+			`the gate skipped ${asked} for a T1-only push, but gate-shape.json declares no t1Only block`,
+		);
+		return;
+	}
+	const skip = Array.isArray(shape.t1Only.skip) ? shape.t1Only.skip : [];
+	if (skip.length === 0) {
+		problems.push("gate-shape.json t1Only declares an empty skip list");
+	}
+	const ids = new Set(shape.checkers.map((c) => c.id));
+	for (const id of skip) {
+		if (!ids.has(id)) {
+			problems.push(
+				`gate-shape.json t1Only skips '${id}', which is not a declared checker`,
+			);
+		}
+	}
+	const viSao = String(shape.t1Only.vi_sao ?? "").trim();
+	if (!viSao) {
+		problems.push(
+			"gate-shape.json t1Only has no vi_sao — say why skipping is safe",
+		);
+	}
+	const declared = [...skip].sort().join(" ");
+	if (declared !== asked) {
+		problems.push(
+			`the gate skipped ${asked} but gate-shape.json t1Only declares ${declared}`,
+		);
+	}
+	for (const id of boQua) {
+		if (ledger.runs.some((run) => run.task === id)) {
+			problems.push(
+				`checker '${id}' is declared skipped for a T1-only push, but it ran`,
+			);
+		}
+	}
+	report.push(`  skipped: ${skip.join(", ")} — T1-only push; ${viSao}`);
 }
 
 function allRoots(declared) {
@@ -216,6 +258,7 @@ const before =
 		: [];
 
 const shape = readShape();
+const boQua = new Set(arg("--bo-qua").split(/\s+/).filter(Boolean));
 const roots = allRoots(shape.roots);
 const packages = readPackages(roots);
 const ledger = readLedger(before);
@@ -237,7 +280,10 @@ for (const run of ledger.runs) {
 	}
 }
 
+if (boQua.size > 0) checkSkip(shape, boQua, ledger, problems, report);
+
 for (const checker of shape.checkers) {
+	if (boQua.has(checker.id)) continue;
 	if (checker.kind === "turbo") {
 		checkTurbo(checker, packages, ledger, problems, report);
 	} else if (checker.kind === "oxlint") {

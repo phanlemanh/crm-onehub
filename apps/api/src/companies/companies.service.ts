@@ -7,6 +7,7 @@ import {
 } from "@crm/db";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { ghiGoDoXoa } from "@crm/db/viec-ghi";
+import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import {
 	BadRequestException,
 	ConflictException,
@@ -57,6 +58,14 @@ import type {
 } from "./companies.contracts";
 import { normalizeDomain } from "./domain";
 import { FaviconService } from "./favicon.service";
+
+function tuChoiNenTang(input: string | null | undefined): void {
+	const nenTang = nenTangCuaTenMien(input);
+	if (!nenTang) return;
+	throw new BadRequestException(
+		`"${input}" is a ${nenTang.ten} page, not the company's own website — leave the domain empty or use its own site.`,
+	);
+}
 
 const OWNER_SELECT = {
 	id: true,
@@ -306,6 +315,7 @@ export class CompaniesService {
 	}
 
 	async create(input: CompanyCreateInput) {
+		tuChoiNenTang(input.domain);
 		const domain = normalizeDomain(input.domain);
 
 		if (domain) {
@@ -380,6 +390,7 @@ export class CompaniesService {
 		}
 
 		if (input.domain !== undefined) {
+			tuChoiNenTang(input.domain);
 			const domain = normalizeDomain(input.domain);
 			if (input.domain.trim() && !domain) {
 				throw new BadRequestException(

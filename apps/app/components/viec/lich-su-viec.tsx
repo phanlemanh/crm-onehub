@@ -38,9 +38,45 @@ function moTaVet(m: ViecMessages, vet: DongVet["vet"], locale: Locale): string {
 		case "doi-nguoi-thuc-hien":
 			return dien(l["doi-nguoi-thuc-hien"], { ten: vet.sau.ten });
 		case "doi-han":
+			if (vet.sau.boi) {
+				return dien(l["doi-han-tu-doi"], {
+					truoc: vet.truoc.hanNgay
+						? formatDay(vet.truoc.hanNgay, locale)
+						: m.khongHan,
+					sau: vet.sau.hanNgay
+						? formatDay(vet.sau.hanNgay, locale)
+						: m.khongHan,
+					viec: vet.sau.boi.tieuDe,
+				});
+			}
 			return dien(l["doi-han"], {
 				han: vet.sau.hanNgay ? formatDay(vet.sau.hanNgay, locale) : m.khongHan,
 			});
+		case "doi-bat-dau":
+			if (vet.sau.boi) {
+				return dien(l["doi-bat-dau-tu-doi"], {
+					truoc: vet.truoc.batDauNgay
+						? formatDay(vet.truoc.batDauNgay, locale)
+						: m.khongHan,
+					sau: vet.sau.batDauNgay
+						? formatDay(vet.sau.batDauNgay, locale)
+						: m.khongHan,
+					viec: vet.sau.boi.tieuDe,
+				});
+			}
+			return dien(l["doi-bat-dau"], {
+				ngay: vet.sau.batDauNgay
+					? formatDay(vet.sau.batDauNgay, locale)
+					: m.khongHan,
+			});
+		case "doi-du-an":
+			return vet.sau
+				? dien(l["vao-du-an"], { ten: vet.sau.ten })
+				: dien(l["ra-du-an"], { ten: vet.truoc?.ten ?? "" });
+		case "them-phu-thuoc":
+			return dien(l["them-phu-thuoc"], { ten: vet.sau.viec.tieuDe });
+		case "go-phu-thuoc":
+			return dien(l["go-phu-thuoc"], { ten: vet.truoc.viec.tieuDe });
 		case "doi-noi-dung":
 			return l["doi-noi-dung"];
 		case "gan":

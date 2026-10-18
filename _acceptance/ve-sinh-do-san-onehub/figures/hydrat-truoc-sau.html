@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hydration trước và sau · ve-sinh-do-san-onehub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1380px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 1100px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình Cổng Phạm vi · cách B · ve-sinh-do-san-onehub</p>
+    <h1>Mở thẳng <code style="font-family: var(--font-mono); font-size: 0.8em;">record=</code>: vì sao hydration lệch, và cách B chặn ở đâu</h1>
+    <p class="sub">Trục dọc là thời gian phía trình duyệt. Ngăn bản ghi nằm trong <code>Suspense</code> riêng nên về trước khối trang. Trước sửa, nó để lại khoá rỗng; sau sửa, nó mang sẵn dữ liệu máy chủ — nhưng chỉ khi URL có <code>record=</code>.</p>
+
+    <svg viewBox="0 0 1380 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="688" y1="24" x2="688" y2="552" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <text x="40" y="36" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">TRƯỚC SỬA</text>
+      <text x="40" y="56" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Ngăn tạo khoá rỗng, trang bị hoãn</text>
+      <text x="720" y="36" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">SAU SỬA · CÁCH B</text>
+      <text x="720" y="56" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Máy chủ nạp sẵn khoá cho ngăn</text>
+
+      <g stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3">
+        <line x1="104" y1="124" x2="104" y2="512"/>
+        <line x1="228" y1="124" x2="228" y2="512"/>
+        <line x1="352" y1="124" x2="352" y2="512"/>
+        <line x1="476" y1="124" x2="476" y2="512"/>
+        <line x1="600" y1="124" x2="600" y2="456"/>
+        <line x1="784" y1="124" x2="784" y2="512"/>
+        <line x1="908" y1="124" x2="908" y2="512"/>
+        <line x1="1032" y1="124" x2="1032" y2="512"/>
+        <line x1="1156" y1="124" x2="1156" y2="512"/>
+        <line x1="1280" y1="124" x2="1280" y2="456"/>
+      </g>
+
+      <rect x="860" y="188" width="220" height="84" rx="4" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <rect x="860" y="188" width="40" height="16" rx="2" fill="#f2f2f2" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <text x="880" y="200" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">OPT</text>
+      <rect x="940" y="192" width="68" height="12" rx="2" fill="#fafafa"/>
+      <text x="944" y="201" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[có record=]</text>
+
+      <g font-family="'Geist Mono', monospace" font-size="8" fill="#666666" text-anchor="middle">
+        <text x="56" y="171">1</text>
+        <text x="56" y="259">2</text>
+        <text x="56" y="315">3</text>
+        <text x="56" y="371">4</text>
+        <text x="56" y="427">5</text>
+        <text x="736" y="171">1</text>
+        <text x="736" y="259">2</text>
+        <text x="736" y="315">3</text>
+        <text x="736" y="371">4</text>
+        <text x="736" y="427">5</text>
+      </g>
+
+      <line x1="104" y1="168" x2="226" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="228" y1="256" x2="350" y2="256" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="104" y1="312" x2="474" y2="312" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="476" y1="368" x2="354" y2="368" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="352" y1="424" x2="598" y2="424" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <line x1="784" y1="168" x2="906" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="908" y1="256" x2="1030" y2="256" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="784" y1="312" x2="1154" y2="312" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="1156" y1="368" x2="1034" y2="368" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="1032" y1="424" x2="1278" y2="424" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="126" y="149" width="80" height="12" rx="2" fill="#fafafa"/>
+      <text x="166" y="158" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">ngăn về trước</text>
+
+      <rect x="238" y="225" width="104" height="24" rx="2" fill="#fafafa"/>
+      <text x="290" y="234" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">tạo khoá rỗng</text>
+      <text x="290" y="246" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">users.list · pending</text>
+
+      <rect x="238" y="293" width="104" height="12" rx="2" fill="#fafafa"/>
+      <text x="290" y="302" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">trang về, có dữ liệu</text>
+
+      <rect x="366" y="337" width="96" height="24" rx="2" fill="#fafafa"/>
+      <text x="414" y="346" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">khoá đã có → hoãn</text>
+      <text x="414" y="358" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">sang useEffect</text>
+
+      <rect x="494" y="393" width="88" height="24" rx="2" fill="#fafafa"/>
+      <text x="538" y="402" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đọc rỗng ≠ HTML</text>
+      <text x="538" y="414" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">render đầu</text>
+
+      <rect x="798" y="137" width="96" height="24" rx="2" fill="#fafafa"/>
+      <text x="846" y="146" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">ngăn về trước</text>
+      <text x="846" y="158" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">kèm khoá nạp sẵn</text>
+
+      <rect x="922" y="225" width="96" height="24" rx="2" fill="#fafafa"/>
+      <text x="970" y="234" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">NapSanKhiMoNgan</text>
+      <text x="970" y="246" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đổ vào bộ đệm</text>
+
+      <rect x="922" y="281" width="96" height="24" rx="2" fill="#fafafa"/>
+      <text x="970" y="290" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">trang về</text>
+      <text x="970" y="302" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">cùng dataUpdatedAt</text>
+
+      <rect x="1046" y="337" width="96" height="24" rx="2" fill="#fafafa"/>
+      <text x="1094" y="346" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không mới hơn</text>
+      <text x="1094" y="358" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">không hoãn</text>
+
+      <rect x="1174" y="393" width="88" height="24" rx="2" fill="#fafafa"/>
+      <text x="1218" y="402" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đọc có dữ liệu</text>
+      <text x="1218" y="414" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">render đầu</text>
+
+      <g font-family="'Geist', sans-serif" text-anchor="middle">
+        <rect x="48" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="104" y="97" fill="#171717" font-size="11" font-weight="600">Máy chủ</text>
+        <text x="104" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">stream</text>
+        <rect x="172" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="228" y="97" fill="#171717" font-size="11" font-weight="600">Ranh giới ngăn</text>
+        <text x="228" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">bản ghi · Suspense</text>
+        <rect x="296" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="352" y="97" fill="#171717" font-size="11" font-weight="600">Bộ đệm truy vấn</text>
+        <text x="352" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">QueryClient</text>
+        <rect x="420" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="476" y="97" fill="#171717" font-size="11" font-weight="600">Ranh giới trang</text>
+        <text x="476" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">HydrationBoundary</text>
+        <rect x="544" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="600" y="97" fill="#171717" font-size="11" font-weight="600">React hydrate</text>
+        <text x="600" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">render đầu</text>
+
+        <rect x="728" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="784" y="97" fill="#171717" font-size="11" font-weight="600">Máy chủ</text>
+        <text x="784" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">stream</text>
+        <rect x="852" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="908" y="97" fill="#171717" font-size="11" font-weight="600">Ranh giới ngăn</text>
+        <text x="908" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">bản ghi · Suspense</text>
+        <rect x="976" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="1032" y="97" fill="#171717" font-size="11" font-weight="600">Bộ đệm truy vấn</text>
+        <text x="1032" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">QueryClient</text>
+        <rect x="1100" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="1156" y="97" fill="#171717" font-size="11" font-weight="600">Ranh giới trang</text>
+        <text x="1156" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">HydrationBoundary</text>
+        <rect x="1224" y="76" width="112" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text x="1280" y="97" fill="#171717" font-size="11" font-weight="600">React hydrate</text>
+        <text x="1280" y="113" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">render đầu</text>
+      </g>
+
+      <rect x="540" y="456" width="120" height="56" rx="6" fill="#fafafa"/>
+      <rect x="540" y="456" width="120" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+      <rect x="548" y="462" width="28" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="562" y="471" fill="rgba(23,23,23,0.8)" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỖI</text>
+      <text x="600" y="489" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hydration failed</text>
+      <text x="600" y="503" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">lệch chữ · thuộc tính</text>
+
+      <rect x="1220" y="456" width="120" height="56" rx="6" fill="#fafafa"/>
+      <rect x="1220" y="456" width="120" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="1228" y="462" width="28" height="12" rx="2" fill="transparent" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+      <text x="1242" y="471" fill="#006B4F" font-size="7" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐẠT</text>
+      <text x="1280" y="489" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Khớp HTML</text>
+      <text x="1280" y="503" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">0 lỗi hydration</text>
+
+      <text x="40" y="540" fill="#575757" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif">Chập chờn: tuỳ khối nào stream về trước.</text>
+      <text x="720" y="540" fill="#575757" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif">Không có record= → NapSanKhiMoNgan không bọc, không đổ gì, như hôm nay.</text>
+
+      <line x1="40" y1="568" x2="1340" y2="568" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="592" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <line x1="136" y1="588" x2="168" y2="588" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="176" y="591" fill="#575757" font-size="9" font-family="'Geist', sans-serif">gửi hoặc ghi</text>
+      <line x1="272" y1="588" x2="304" y2="588" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="312" y="591" fill="#575757" font-size="9" font-family="'Geist', sans-serif">quyết định hoãn hay không hoãn nạp</text>
+      <line x1="504" y1="588" x2="536" y2="588" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="544" y="591" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ cách B thêm vào</text>
+      <rect x="664" y="582" width="24" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <text x="696" y="591" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỉ chạy khi URL có <tspan font-family="'Geist Mono', monospace" font-size="8">record=</tspan></text>
+    </svg>
+
+    <footer>ve-sinh-do-san-onehub · Cổng Phạm vi · d-20261015T213611Z-1 · d-20261015T214100Z-12 · AC-1 · AC-2 · AC-3 · AC-12</footer>
+  </div>
+</body>
+</html>

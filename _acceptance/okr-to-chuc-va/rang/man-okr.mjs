@@ -100,9 +100,12 @@ async function phanThem() {
 			waitUntil: "domcontentloaded",
 		},
 	);
-	await p.waitForSelector("[data-hang-nut]", { timeout: BD.cho.phanTu });
+	await p.waitForSelector("[data-hang-hanh-dong] [data-nut=them-muc-tieu]", {
+		timeout: BD.cho.phanTu,
+	});
 	await yen(p);
-	const so = await hien(p, "[data-nut=them-muc-tieu]");
+	// AC-14 loi-hua-moi: dieu-huong-khu-muc-tieu AC-5 — nguoi khong co quyen van thay nut o dau trang nhung bi khoa; dem nut bam duoc.
+	const so = await hien(p, "[data-nut=them-muc-tieu]:not(:disabled)");
 	if (
 		!kiem(so === 1, `khong thay nut them: ${CO_DO ? "thanh-vien" : "quan-tri"}`)
 	) {
@@ -207,6 +210,29 @@ async function phanKara() {
 	console.log(`so o: ${soO}`);
 }
 
+/* trang-don-vi-mot-bang (AC-14): ô chọn đơn vị có tìm kiếm thay cây — mở ô
+   chọn rồi bấm lựa chọn mang đúng tên phòng ban (đổi đơn vị phía trình duyệt như
+   bấm cây, không tải lại trang). */
+async function chonDon(p, idPb) {
+	const { name } = await db.department.findUniqueOrThrow({
+		where: { id: idPb },
+		select: { name: true },
+	});
+	await p.click("[data-chon-don-vi]");
+	await p.waitForSelector("[cmdk-item]", {
+		visible: true,
+		timeout: BD.cho.phanTu,
+	});
+	const muc = await p.evaluateHandle(
+		(ten) =>
+			[...document.querySelectorAll("[cmdk-item]")].find(
+				(e) => e.querySelector(":scope > span")?.textContent?.trim() === ten,
+			) ?? null,
+		name,
+	);
+	await muc.asElement()?.click();
+}
+
 async function phanThuGon() {
 	const nhanVien = idMau("nguoi", "do-minh-khoa");
 	await trpc(API, cookie["truong-phong"]).lam("okr.updateObjective", {
@@ -218,7 +244,8 @@ async function phanThuGon() {
 		const { ctx, p } = await moTrang(cookie["truong-phong"], BD.kho[1440]);
 		const goc = `${APP}/${slug}/okr/theo-don-vi?kyOkr=${KY4}&donOkr=pb:${PB_BAC}`;
 		await p.goto(goc, { waitUntil: "domcontentloaded" });
-		const nutThu = (id) => `[data-hang-muc-tieu="${id}"] button[aria-expanded]`;
+		// AC-14 cach-toi: nut mo/thu dong la o mui ten cua DataTable (trang-don-vi-mot-bang AC-3), khong nam trong o ten.
+		const nutThu = (id) => `[data-mo-dong="${id}"]`;
 		await p.waitForSelector(nutThu(MT_A), { timeout: BD.cho.phanTu });
 		await yen(p);
 		await p.click(nutThu(MT_A));
@@ -229,7 +256,7 @@ async function phanThuGon() {
 			u.searchParams.set("phuTrachOkr", nhanVien);
 			await p.goto(u.toString(), { waitUntil: "domcontentloaded" });
 		} else {
-			await p.click(`[data-nut-cay="pb:${PB_NAM}"]`);
+			await chonDon(p, PB_NAM);
 		}
 		await p.waitForSelector(nutThu(khac), { timeout: BD.cho.phanTu });
 		await yen(p);
@@ -238,10 +265,10 @@ async function phanThuGon() {
 		if (CO_DO)
 			await p.evaluate((a) => {
 				const u = new URL(location.href);
-				const giu = (u.searchParams.get("thuMucTieu") ?? "")
+				const giu = (u.searchParams.get("expand") ?? "")
 					.split(",")
 					.filter((x) => x && x !== a);
-				u.searchParams.set("thuMucTieu", giu.join(","));
+				u.searchParams.set("expand", giu.join(","));
 				history.replaceState(history.state, "", u.toString());
 			}, MT_A);
 		if (cach === "loc") {
@@ -249,17 +276,18 @@ async function phanThuGon() {
 			u.searchParams.delete("phuTrachOkr");
 			await p.goto(u.toString(), { waitUntil: "domcontentloaded" });
 		} else {
-			await p.click(`[data-nut-cay="pb:${PB_BAC}"]`);
+			await chonDon(p, PB_BAC);
 		}
 		await p.waitForSelector(nutThu(MT_A), { timeout: BD.cho.phanTu });
 		await yen(p);
 		const mo = await p.$eval(nutThu(MT_A), (e) =>
 			e.getAttribute("aria-expanded"),
 		);
-		const url = new URL(p.url()).searchParams.get("thuMucTieu") ?? "";
+		const url = new URL(p.url()).searchParams.get("expand") ?? "";
 		if (
 			kiem(
-				mo === "false" && url.includes(MT_A),
+				// AC-14 loi-hua-moi: trang-don-vi-mot-bang AC-3 — mac dinh moi dong thu, duong dan nho dong MO (expand) thay dong thu (thuMucTieu).
+				mo === "true" && url.includes(MT_A),
 				`mat id khuat: ${cach} (aria=${mo} url=${url})`,
 			)
 		)

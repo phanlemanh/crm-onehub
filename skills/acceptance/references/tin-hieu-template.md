@@ -45,6 +45,33 @@ theo từng loại — không im.
 Tiêu đề hiển thị của một tín hiệu: `noi_dung.tieu_de`, vắng thì `noi_dung.viec`, rồi
 `noi_dung.cau_giao`, rồi chính `noi_dung` khi nó là chuỗi.
 
+### Câu cho người gửi — từ cấm
+
+Mỗi đường đi tín hiệu mang một câu cho người gửi (`cau_nguoi_gui` — tiếng sản phẩm, không mã). Lệnh
+`node scripts/tin-hieu.mjs --root . --cau` kiểm mọi câu ấy: không câu nào chứa mã của kho (id tín hiệu,
+mã nhóm, mã/slug việc, tên hồ sơ — trừ mã giống chữ thường, có đếm) và không câu nào chứa từ dưới đây.
+Từ thường cấm trong CẢ câu, kể cả chữ lấy từ dữ liệu (tên nhóm, lý do, câu giao): chúng không có nghĩa
+sản phẩm ở kho nào. Từ `(khung)` chỉ cấm trong phần kit viết: chúng là từ nội bộ của kit nhưng là chữ
+sản phẩm ở kho khác (CRM có «hồ sơ khách hàng», «bán lẻ»). So không phân biệt hoa thường, sau khi chuẩn
+hoá NFC. Đổi danh sách là đổi chính sách của mọi kho — đổi ở đây, không ở mã.
+
+<!-- <<<TIN-HIEU-CAU-CAM -->
+```
+- lượt gom
+- bản gom
+- cắt lượt
+- bản phạm vi
+- chân trời
+- slug
+- hồ sơ (khung)
+- gom (khung)
+- lẻ (khung)
+- lượt (khung)
+- hàng (khung)
+- lộ trình (khung)
+```
+<!-- TIN-HIEU-CAU-CAM>>> -->
+
 ## Bản gom
 
 Bản gom là MỘT tệp markdown trong git, trong thư mục `tin_hieu.gom`. Nó cũng là **bản phạm vi** của cắt

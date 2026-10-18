@@ -118,8 +118,32 @@ const vi = {
 	},
 	khongThay: {
 		title: "Không thấy đơn vị này",
-		body: "Đơn vị có thể đã được lưu trữ. Chọn một đơn vị khác trong cây.",
+		body: "Đơn vị có thể đã được lưu trữ. Chọn một đơn vị khác ở ô Đơn vị.",
 		action: "Về toàn công ty",
+	},
+	donViBang: {
+		chonDonVi: "Đơn vị",
+		timDonVi: "Tìm đơn vị…",
+		khongKhopDonVi: "Không có đơn vị nào khớp.",
+		caCongTy: "cả công ty",
+		thuoc: "Thuộc",
+		locNhanh: {
+			tatCa: "Tất cả",
+			"can-ban": "Cần bàn",
+			"chua-gop": "Chưa góp vào đâu",
+		},
+		khongKhopLoc: "Không có mục tiêu nào khớp",
+		khongKhopLocMoTa:
+			"Đổi ô lọc nhanh hoặc bỏ bớt bộ lọc để thấy lại mục tiêu của đơn vị.",
+		boLoc: "Bỏ lọc",
+		cot: {
+			mucTieu: "Mục tiêu",
+			tienDo: "Tiến độ",
+			tinhTrang: "Tình trạng",
+			phuTrach: "Phụ trách",
+		},
+		donViTrucThuoc: "Đơn vị trực thuộc",
+		chuaDatOkr: "Chưa đặt OKR",
 	},
 	baPhan: {
 		phan1: "Cần cập nhật tuần này",
@@ -845,8 +869,32 @@ const en: OkrMessages = {
 	},
 	khongThay: {
 		title: "Unit not found",
-		body: "It may have been archived. Pick another unit from the tree.",
+		body: "It may have been archived. Pick another unit in the Unit box.",
 		action: "Back to the whole company",
+	},
+	donViBang: {
+		chonDonVi: "Unit",
+		timDonVi: "Find a unit…",
+		khongKhopDonVi: "No unit matches.",
+		caCongTy: "whole company",
+		thuoc: "In",
+		locNhanh: {
+			tatCa: "All",
+			"can-ban": "Needs discussion",
+			"chua-gop": "Not aligned",
+		},
+		khongKhopLoc: "No objective matches",
+		khongKhopLocMoTa:
+			"Change the quick filter or clear a filter to see this unit's objectives again.",
+		boLoc: "Clear filter",
+		cot: {
+			mucTieu: "Objective",
+			tienDo: "Progress",
+			tinhTrang: "Status",
+			phuTrach: "Owner",
+		},
+		donViTrucThuoc: "Units below",
+		chuaDatOkr: "No OKRs set",
 	},
 	baPhan: {
 		phan1: "Needs updating this week",

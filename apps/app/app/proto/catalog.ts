@@ -11,6 +11,26 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "trang-don-vi-mot-bang",
+		ten: "Trang đơn vị một bảng — ô chọn đơn vị ở chỗ ô tìm kiếm, mục tiêu mở ra KR, một hàng công cụ đứng yên",
+		states: [
+			{ id: "ST-dvb-danh-sach", nhan: "Danh sách — phòng ban có mục tiêu" },
+			{ id: "ST-dvb-mo-kr", nhan: "Một mục tiêu mở ra KR" },
+			{ id: "ST-dvb-chon-don-vi", nhan: "Ô chọn đơn vị đang mở, gõ «kinh»" },
+			{ id: "ST-dvb-can-ban", nhan: "Ô lọc nhanh «Cần bàn»" },
+			{ id: "ST-dvb-khong-khop", nhan: "Ô lọc không khớp dòng nào" },
+			{ id: "ST-dvb-rong", nhan: "Đơn vị chưa đặt OKR" },
+			{ id: "ST-dvb-chua-truong", nhan: "Đơn vị chưa có trưởng" },
+			{ id: "ST-dvb-cong-ty", nhan: "Cấp công ty" },
+			{ id: "ST-dvb-nguoi", nhan: "Một người" },
+			{ id: "ST-dvb-hop-tuan", nhan: "Họp tuần" },
+			{ id: "ST-dvb-cham-diem", nhan: "Chấm điểm" },
+			{ id: "ST-dvb-cay", nhan: "Cây căn chỉnh" },
+			{ id: "ST-dvb-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-dvb-loi", nhan: "Lỗi tải" },
+		],
+	},
+	{
 		slug: "cua-toi-ba-phan",
 		ten: "Của tôi ba phần — cần cập nhật tuần này, đơn vị bạn dẫn, KR bạn phụ trách",
 		states: [
@@ -1172,6 +1192,39 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "du-an-gantt",
+		ten: "Dự án và Gantt — màn Việc một nơi, ô Phạm vi, Gantt có phụ thuộc và mốc, lịch làm việc",
+		states: [
+			{ id: "ST-viec-cua-toi-du-an", nhan: "Việc — Của tôi" },
+			{ id: "ST-pham-vi-mo", nhan: "Ô Phạm vi mở" },
+			{ id: "ST-du-an-ds-co", nhan: "Tất cả dự án" },
+			{ id: "ST-du-an-ds-rong", nhan: "Tất cả dự án — rỗng" },
+			{ id: "ST-du-an-ds-cho-tai", nhan: "Tất cả dự án — tải" },
+			{ id: "ST-du-an-ds-loi", nhan: "Tất cả dự án — hỏng" },
+			{ id: "ST-du-an-tao", nhan: "Tạo dự án" },
+			{
+				id: "ST-gantt-co-lich",
+				nhan: "Gantt — có lịch",
+			},
+			{ id: "ST-gantt-moc-tre", nhan: "Gantt — mốc trễ" },
+			{ id: "ST-gantt-da-doi", nhan: "Gantt — đã tự dời" },
+			{ id: "ST-gantt-chi-xem", nhan: "Gantt — đã đóng" },
+			{ id: "ST-gantt-rong", nhan: "Gantt — rỗng" },
+			{ id: "ST-gantt-cho-tai", nhan: "Gantt — đang tải" },
+			{ id: "ST-gantt-loi", nhan: "Gantt — tải hỏng" },
+			{ id: "ST-du-an-hoi-dong", nhan: "Hỏi lại khi đóng" },
+			{
+				id: "ST-khung-viec-lich",
+				nhan: "Khung việc — lịch",
+			},
+			{ id: "ST-lich-lam-viec", nhan: "Lịch làm việc" },
+			{
+				id: "ST-lich-lam-viec-khong-quyen",
+				nhan: "Lịch làm việc — không quyền",
+			},
+		],
+	},
+	{
 		slug: "kanban-viec",
 		ten: "Kanban việc — bảng bốn cột ở Việc của tôi, việc con trong khung việc",
 		states: [
@@ -1392,6 +1445,16 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-cho-duyet-da-xu-ly",
 				nhan: "Chờ duyệt — Đã xử lý có cả đề xuất đã duyệt",
 			},
+		],
+	},
+	{
+		slug: "cho-tac-nhan-lau",
+		ten: "Chờ Tác nhân lâu — thời gian đã trôi, lời hứa và báo khi xong",
+		states: [
+			{ id: "ST-duoi-nguong", nhan: "Đang dựng — dưới 200 giây" },
+			{ id: "ST-tren-nguong", nhan: "Đang dựng — lâu hơn thường lệ" },
+			{ id: "ST-chuong-ba-loai", nhan: "Chuông — xong, cần trả lời, hỏng" },
+			{ id: "ST-chuong-da-doc", nhan: "Chuông — đã đọc sau khi mở" },
 		],
 	},
 ];

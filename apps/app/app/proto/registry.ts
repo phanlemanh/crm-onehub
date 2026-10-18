@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
+import { ChoTacNhanLauMau } from "./_modules/cho-tac-nhan-lau";
 import { CuaToiBaPhanMau } from "./_modules/cua-toi-ba-phan";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
 import { CuaVaoVaMau } from "./_modules/cua-vao-va";
@@ -10,6 +11,7 @@ import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
 import { DonOkrNhapSai } from "./_modules/don-okr-nhap-sai";
 import { DotHoiYTuongOkrMau } from "./_modules/dot-hoi-y-tuong-okr";
+import { DuAnGanttMau } from "./_modules/du-an-gantt";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
@@ -45,6 +47,7 @@ import { ThanhVienVaoDungMau } from "./_modules/thanh-vien-vao-dung";
 import { TinHieuTuVeKhoMau } from "./_modules/tin-hieu-tu-ve-kho";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
+import { TrangDonViMotBangMau } from "./_modules/trang-don-vi-mot-bang";
 import { TrangLoTrinhMau } from "./_modules/trang-lo-trinh-trong-crm";
 import { TroLyOkrDeXuatMau } from "./_modules/tro-ly-okr-de-xuat";
 import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
@@ -59,6 +62,7 @@ const BANG_GHEP = {
 	"giai-doan-thoa-thuan": GiaiDoanThoaThuanProto,
 	"cua-toi-ba-phan": CuaToiBaPhanMau,
 	"dieu-huong-khu-muc-tieu": DieuHuongKhuMucTieuMau,
+	"trang-don-vi-mot-bang": TrangDonViMotBangMau,
 	"ban-mau-okr": BanMauOkrMau,
 	"canh-kr-okr": CanhKrOkrMau,
 	"cau-truc-to-chuc": CauTrucToChucMau,
@@ -109,8 +113,10 @@ const BANG_GHEP = {
 	"hop-thong-bao-tren-web": HopThongBaoMau,
 	"moi-tin-hieu-cho-quan-tri": MoiTinHieuChoQuanTriMau,
 	"tin-hieu-tu-ve-kho": TinHieuTuVeKhoMau,
+	"du-an-gantt": DuAnGanttMau,
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
+	"cho-tac-nhan-lau": ChoTacNhanLauMau,
 } satisfies Record<string, ProtoComponent>;
 
 export const PROTO_COMPONENTS = new Map(Object.entries(BANG_GHEP));

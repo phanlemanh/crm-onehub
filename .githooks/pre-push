@@ -15,7 +15,10 @@ if [ -f "$HOOK_CAY" ] && [ "$(realpath "$0")" != "$(realpath "$HOOK_CAY")" ]; th
 fi
 
 deleting_only=1
+DAY=""
 while read -r _local_ref local_sha _remote_ref _remote_sha; do
+	DAY="${DAY}${_local_ref} ${local_sha} ${_remote_ref} ${_remote_sha}
+"
 	case "$local_sha" in
 	0000000000000000000000000000000000000000) ;;
 	*) deleting_only=0 ;;
@@ -38,12 +41,25 @@ RUNS_BEFORE="$(mktemp)"
 trap 'rm -f "$LOG" "$RUNS_BEFORE"' EXIT
 ls -1 "$ROOT/.turbo/runs" 2>/dev/null >"$RUNS_BEFORE" || true
 
+PHAN_LOAI="$ROOT/scripts/pre-push-t1.mjs"
+BO_QUA=""
+if [ -f "$PHAN_LOAI" ]; then
+	BO_QUA="$(printf '%s' "$DAY" | node "$PHAN_LOAI" --remote "${1:-origin}")" || BO_QUA=""
+else
+	echo "pre-push: không phân loại được lần đẩy (thiếu scripts/pre-push-t1.mjs) — chạy đủ năm bước."
+fi
+
 export TURBO_FORCE=true
 export TURBO_RUN_SUMMARY=true
 
 for task in check-types lint lint:slop test build; do
+	case " ${BO_QUA:-} " in *" $task "*) continue ;; esac
 	echo "pre-push: bun run $task" | tee -a "$LOG"
 	bun run "$task" 2>&1 | tee -a "$LOG" || fail "$task"
 done
 
-bun "$ROOT/scripts/verify-gate-shape.mjs" --log "$LOG" --runs-before "$RUNS_BEFORE"
+if [ -n "$BO_QUA" ]; then
+	bun "$ROOT/scripts/verify-gate-shape.mjs" --log "$LOG" --runs-before "$RUNS_BEFORE" --bo-qua "$BO_QUA"
+else
+	bun "$ROOT/scripts/verify-gate-shape.mjs" --log "$LOG" --runs-before "$RUNS_BEFORE"
+fi

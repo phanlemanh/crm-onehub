@@ -14,6 +14,7 @@ import Link from "next/link";
 export type DongThongBao = {
 	id: string;
 	cau: string;
+	khongDich?: string | null;
 	gio: string;
 	chuaDoc: boolean;
 	href: string;
@@ -60,7 +61,9 @@ export function DanhSachNhomThongBao({
 											)}
 										</ItemMedia>
 										<ItemContent>
-											<ItemTitle>{dong.cau}</ItemTitle>
+											<ItemTitle>
+												<CauDong cau={dong.cau} khongDich={dong.khongDich} />
+											</ItemTitle>
 											<ItemDescription>{dong.gio}</ItemDescription>
 										</ItemContent>
 									</Link>
@@ -70,5 +73,23 @@ export function DanhSachNhomThongBao({
 					</section>
 				))}
 		</div>
+	);
+}
+
+function CauDong({
+	cau,
+	khongDich,
+}: {
+	cau: string;
+	khongDich?: string | null;
+}) {
+	const viTri = khongDich ? cau.indexOf(`«${khongDich}»`) + 1 : 0;
+	if (!khongDich || viTri < 1) return cau;
+	return (
+		<span data-slot="cau-thong-bao">
+			{cau.slice(0, viTri)}
+			<span translate="no">{khongDich}</span>
+			{cau.slice(viTri + khongDich.length)}
+		</span>
 	);
 }

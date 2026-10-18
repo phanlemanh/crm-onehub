@@ -422,12 +422,14 @@ async function moDonVi({
 			<TheoDonVi />
 		</>,
 	);
-	await cho(() => q("[data-hang-nut]") !== null, "thanh don vi");
+	await cho(() => q("[data-chon-don-vi]") !== null, "thanh don vi");
 	await nhip(10);
 	return san;
 }
 
-const theDonVi = () => q("[data-don-vi]");
+const theDonVi = () => q("[data-hang-cong-cu-don-vi]")?.parentElement ?? null;
+const dongMt = (id: string) =>
+	q(`[data-hang-muc-tieu="${id}"]`)?.closest("tr") ?? null;
 const chuNgoaiPopover = () => {
 	const the = theDonVi();
 	if (!the) return "";
@@ -714,7 +716,8 @@ describe("chip", () => {
 					nhanLoai?.getAttribute("data-variant") ?? "",
 				);
 				const mo = q(
-					'[data-hang-muc-tieu="mt-a"] [aria-expanded]',
+					"[aria-expanded]",
+					dongMt("mt-a") ?? document.body,
 				)?.getAttribute("aria-expanded");
 				await phim(chip, ten, "chip");
 				expect(
@@ -723,7 +726,7 @@ describe("chip", () => {
 				).toBe("objective:mt-a");
 				expect(san.url().get("neoGopY")).not.toBeNull();
 				expect(
-					q('[data-hang-muc-tieu="mt-a"] [aria-expanded]')?.getAttribute(
+					q("[aria-expanded]", dongMt("mt-a") ?? document.body)?.getAttribute(
 						"aria-expanded",
 					) ?? null,
 				).toBe(mo ?? null);

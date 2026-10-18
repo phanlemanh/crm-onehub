@@ -188,7 +188,7 @@ function ThanCuoc({
 	const m = okrSoanMessages(useLocale());
 	const nhap = useNhapCuoc(dong, cuoc.id);
 	const phien = usePhienCuoc(cuoc);
-	if (phien.thread.isLoading)
+	if (phien.thread.isLoading || phien.choNguoiXem)
 		return <KaraState kind="working" label={m.man.dangMo} delayMs={0} />;
 	return (
 		<Than

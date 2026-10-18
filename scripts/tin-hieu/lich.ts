@@ -8,7 +8,7 @@ export const LICH = {
 	nhanhHangCho: "tin-hieu/keo-ve",
 	tieuDePr: "TH1 · chore(tin-hieu-keo-ve): Tín hiệu kéo về",
 	thanPr:
-		"Lịch chạy kéo tín hiệu về kho mở PR này và cập nhật nó mỗi lượt. PR chỉ chạm thư mục nguồn tín hiệu; gộp theo lô như mọi PR — lịch chạy không bao giờ tự gộp.",
+		"Lịch chạy kéo tín hiệu về kho mở PR này và cập nhật nó mỗi lượt. PR chỉ chạm thư mục nguồn tín hiệu và trang lộ trình máy vẽ lại từ chính các tín hiệu đó; gộp theo lô như mọi PR — lịch chạy không bao giờ tự gộp.",
 	tacGia: {
 		ten: "github-actions[bot]",
 		thu: "41898282+github-actions[bot]@users.noreply.github.com",
@@ -17,10 +17,17 @@ export const LICH = {
 		camMoPr:
 			"kho cấm tác vụ mở PR — chủ kho bật «Allow GitHub Actions to create and approve pull requests» ở Settings › Actions › General; nhánh hàng chờ đã đẩy",
 		moPrHong: "mở PR hàng chờ hỏng",
-		chamNgoai: "commit hàng chờ chạm ngoài thư mục nguồn tín hiệu",
+		chamNgoai:
+			"commit hàng chờ chạm ngoài thư mục nguồn tín hiệu và trang lộ trình",
+		veHong: "vẽ lại trang lộ trình hỏng",
 		dayHong: "đẩy nhánh hàng chờ hỏng",
 	},
 	dauHieuCamMoPr: "not permitted to create",
+	veLoTrinh: {
+		lenh: "node",
+		thamSo: ["scripts/product-map.mjs", "--root", "."],
+		tep: "LO-TRINH.html",
+	},
 	boHookTruocDay: { CRM_SKIP_HOOKS: "1" },
 } as const;
 
@@ -117,6 +124,17 @@ export async function chayLich(o: {
 	}
 
 	gitPhai(o.goc, "add", "--", TIN_HIEU.thuMucNguon);
+	const ve = chay(LICH.veLoTrinh.lenh, [...LICH.veLoTrinh.thamSo], o.goc);
+	if (ve.ma !== 0) {
+		return {
+			ma: 1,
+			dong: [
+				...dong,
+				`${LICH.thongDiep.veHong}: ${(ve.loi || ve.ra).trim().split("\n")[0]}`,
+			],
+		};
+	}
+	gitPhai(o.goc, "add", "--", LICH.veLoTrinh.tep);
 	const soTep = gitPhai(o.goc, "diff", "--cached", "--name-only")
 		.split("\n")
 		.filter(Boolean);
@@ -130,7 +148,10 @@ export async function chayLich(o: {
 	const cham = gitPhai(o.goc, "diff", "--name-only", chinh, "HEAD")
 		.split("\n")
 		.filter(Boolean);
-	const ngoai = cham.filter((t) => !t.startsWith(`${TIN_HIEU.thuMucNguon}/`));
+	const ngoai = cham.filter(
+		(t) =>
+			t !== LICH.veLoTrinh.tep && !t.startsWith(`${TIN_HIEU.thuMucNguon}/`),
+	);
 	if (ngoai.length > 0) {
 		return {
 			ma: 1,

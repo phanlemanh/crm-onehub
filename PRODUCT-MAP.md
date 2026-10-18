@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>147 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>134 việc"] --> GG{"Cổng Giá trị"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>149 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>141 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -44,6 +44,7 @@ flowchart TD
 
 ## Đang làm
 
+- tệp T1 mà bài kiểm, bản dựng hay runtime đọc không còn được CI và pre-push tính là nhẹ; một nguồn luật trong _acceptance/config.yaml cho cả hai, có răng giữ danh sách đủ (`t1-ma-doc`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -65,6 +66,7 @@ flowchart TD
 - Chỉ onehub đẩy được bản chụp lộ trình lên CRM; đường REST khác giữ trần thân 100 KB (`chat-duong-day-ban-chup`)
 - Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc (`chep-viec-can-lam-cu`)
 - Chỉ quản trị và chủ đổi được định nghĩa trường của cả đội — thành viên thường vẫn xem được, nhưng mọi đường đổi đều khoá, cả trên màn lẫn khi gọi thẳng máy chủ (`chi-quan-tri-sua-duoc-truong`)
+- Chờ Tác nhân lâu: thẻ «Đang dựng» có thời gian đã trôi, lời hứa thật và dòng quá ngưỡng; Kara báo trong hộp thông báo khi bộ dựng xong, cần trả lời hay hỏng (`cho-tac-nhan-lau`)
 - Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360 (`chu-man-tieng-viet-khong-tran`)
 - CI của kho chạy test thành ma trận ba ô song song trên ba máy, và ci.yml do OneHub tự giữ thay vì là tệp cấm sửa của hãng (`ci-ma-tran-ba-o`)
 - Của tôi ba phần — KR cần cập nhật tuần này (gửi ngay tại chỗ), đơn vị bạn dẫn, KR bạn phụ trách; bỏ thẻ «Cập nhật tuần», đường cũ chuyển về Của tôi; người không dẫn đơn vị nào không được mời tạo mục tiêu (`cua-toi-ba-phan`)
@@ -75,6 +77,7 @@ flowchart TD
 - «Kéo để sắp xếp ở Tổ chức và Giai đoạn chạy giống nhau; giai đoạn thoả thuận lưu trữ và khôi phục được» (`danh-sach-keo-chung`)
 - Khu OKR trong CRM — quản trị mở chu kỳ năm và quý; mỗi cấp đặt mục tiêu với KR đủ sáu kiểu, căn chỉnh vào cấp trên, công bố; nhập bộ OKR quý 4 từ bảng tính có xem trước; mọi sửa đổi để lại vết (`dat-okr-trong-crm`)
 - «Bảng rỗng vì đang lọc thì nói rõ, nút bỏ lọc đúng tên, lựa chọn có số 0 vẫn hiện» (`datatable-loc-ro`)
+- Khung chờ đầu trang OKR cao bằng đầu trang thật, vùng nội dung Toàn cảnh không tụt khi tải xong (`dau-trang-okr-cho-nut-hoi-kara`)
 - «Danh sách thoả thuận Kara trả có chấm màu giai đoạn; số liệu ẩn danh theo giai đoạn có tập khoá đóng» (`deal-va`)
 - «Số điện thoại là trường chính của cá nhân: nhập được lúc tạo, thấy ở bảng, tìm được theo số, không trùng» (`dien-thoai-ca-nhan`)
 - «Số điện thoại hiện ở thoả thuận và ở tab Cá nhân của công ty» (`dien-thoai-o-deal-cong-ty`)
@@ -84,6 +87,7 @@ flowchart TD
 - «Dòng thời gian giữ các hoạt động đã tải khi «Xem cũ hơn» hay làm mới ngầm bị lỗi» — lỗi sau khi đã có dữ liệu không thay danh sách bằng khung lỗi; thông báo tại chỗ kèm «Thử lại» tải đúng phần hỏng (`dong-thoi-gian-giu-khi-loi`)
 - «Thông báo lỗi của dòng thời gian theo đúng lượt tải đã hỏng, không theo lượt đang chạy» — khi lỗi «Xem cũ hơn» và lỗi làm mới chồng nhau, thông báo chỉ đổi khi một lượt tải đã xong (`dong-thoi-gian-loi-dung-luot`)
 - Hỏi ý mục tiêu — trước mỗi kỳ đặt OKR cả công ty góp ý cho mục tiêu công ty, người gom xếp ý thành chủ đề, người chọn (CEO) viết trước rồi kết luận từng chủ đề bằng lý do tự viết, chủ đề chọn thành bản nháp mục tiêu cấp OneHub, ai góp cũng thấy ý mình đi đâu và vì sao (bước 1–2 chu kỳ OKR, hạng mục 11 lộ trình OKR) (`dot-hoi-y-tuong-okr`)
+- Tôi gom việc của một đợt triển khai vào một dự án và xem trên sơ đồ Gantt có phụ thuộc và mốc (`du-an-gantt`)
 - Sheet mục tiêu hiện lý do căn chỉnh, căn cứ và mức tin của từng chỗ nối lên mục tiêu cha, kèm dấu Kara khi Kara viết lý do; bộ OKR mẫu gieo đủ ba mức tin (`duong-ly-do-muc-tieu`)
 - Eval model thật của Kho tài liệu (E15) chỉ gọi model khi đầu vào đổi, tách lỗi hạ tầng khỏi lỗi model, giữ nhật ký theo lượt, và hỏi lại một lần khi sát ngưỡng thay vì đỏ cứng (`eval-model-that-dung-luc`)
 - Căn chỉnh gắn bằng tay và căn chỉnh Kara đề xuất đều mang lý do — hộp thoại gắn có ô lý do và căn cứ, sửa được lý do sau khi gắn, đề xuất căn chỉnh của Kara mang lý do và căn cứ khi nhận (`gan-tay-va-kara-co-ly-do`)
@@ -152,7 +156,9 @@ flowchart TD
 - Soạn OKR trên trang riêng /okr/soan/<cuộc>: hội thoại và bản nháp là hai ô co giãn, bản nháp là KaraArtifact với dòng inline, nhận cả nhóm, hoàn tác mọi quyết định, khoá khi Kara soạn, mốc nộp nối hai chiều, hỏi Kara từ một dòng, quyết trên bảng gửi kèm lượt sau, số đã gõ giữ theo khoá dòng (`soan-okr-trang-rieng`)
 - Soạn OKR mở trong khung bản ghi như deal (?record=soan:<cuộc>), Kara cố định ở mép phải với bề ngang chuẩn, bản nháp mở thêm về bên trái, hai ô có khung liền, khung cao hết màn, dưới 768 px phủ toàn màn hai tab, đang soạn thì không lỡ tay đóng và đóng không giết lượt (`soan-okr-trong-khung`)
 - Người gửi tín hiệu đọc rõ hộp gửi và trang Tín hiệu đã gửi ở mọi khổ màn và mọi ngôn ngữ, thấy lỗi báo đúng chỗ, và đóng biên nhận không bị hỏi lại (`sua-giao-dien-tin-hieu`)
+- Đo Tác nhân bộ dựng trên bốn biến thể model (GLM 5.2 Fast, GLM 5.3, GLM 5.3 hạng nhanh, GLM 5.3 suy luận thấp) bằng số bước, token và giây của phiên con, và nêu nguyên nhân GLM 5.3 chạy quá trần kèm số làm bằng (`tac-nhan-glm-5-3-cham`)
 - Màn tác nhân đọc được trên điện thoại, trạng thái nói tiếng Việt, và bộ dựng không treo im lặng: câu hỏi của bộ dựng ở lượt sau luôn hiện thay ô soạn (`tac-nhan-va`)
+- Ca kiểm lưu trữ và khôi phục của Kho tài liệu không còn đỏ ngẫu nhiên (`tai-lieu-khoi-phuc-chap-chon`)
 - Thành viên vào đúng — quản trị đặt được tên miền nội bộ; cho phép một người đã là thành viên không sinh dòng treo; nút «Cho phép một địa chỉ» không mất sau lỗi; dựng lại thành viên theo luật «có dòng còn hiệu lực thì cho» (`thanh-vien-vao-dung`)
 - Thẻ góp ý của Trợ lý OKR — hộp sửa rộng hơn khi cột góp ý mở, mỗi đề xuất là thẻ xếp dọc trải hết bề ngang với hàng nút ở chân và đúng một nút chính, dựng trên Confirmation của AI Elements; gợi ý thông tin ở tab Tổng quan dùng cùng thẻ; chỉ giao diện (`the-gop-y-okr`)
 - Thêm bước ở kế hoạch báo đúng: danh sách bộ phận không tải được thì nói lý do; số việc quá hạn đếm theo một ngày; bộ phận không có thật trả cùng một lỗi như mọi chỗ khác (`them-buoc-bao-dung`)
@@ -164,6 +170,7 @@ flowchart TD
 - Tìm và điều hướng kho tài liệu — ⌘K có dấu hay không dấu, trang nhắc tới trang này kèm câu, lọc theo đơn vị, loại, chủ, tab Sức khoẻ, dòng «N bản chờ bạn duyệt» trong nhắc sáng (`tim-va-dieu-huong-kho`)
 - «Người gửi tín hiệu hôm nay thì sáng mai thấy trang của mình đã đổi sang Đội sản phẩm đã nhận, mà không ai phải chạy lệnh» (`tin-hieu-tu-ve-kho`)
 - Toàn cảnh OKR và họp tuần — danh sách theo đơn vị có lọc ở máy chủ, cây căn chỉnh toàn công ty đi bằng bàn phím, bảng họp tuần xếp theo thứ đáng bàn, toàn cảnh cho lãnh đạo có heatmap, phần «OKR của bạn» trên Tổng quan và trang OKR của một người, màn sức khoẻ chương trình cho quản trị; các biến thể packages/ui từ bản mẫu (`toan-canh-okr`)
+- Trang đơn vị một bảng — chọn đơn vị bằng ô tìm kiếm thay cột cây, đọc mục tiêu trong một bảng như Thoả thuận, mở từng mục tiêu ra KR, một hàng công cụ đứng yên khi đổi cách xem, lọc nhanh «Cần bàn» và «Chưa góp vào đâu», sắp xếp theo tiến độ và tình trạng, thông tin đơn vị ở chân bảng và đơn vị trực thuộc ở cuối trang; chỉ giao diện (`trang-don-vi-mot-bang`)
 - «Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi» (`trang-lo-trinh-trong-crm`)
 - Trợ lý AI đọc Kho tài liệu — hỏi bằng lời thường trong CRM (tab «Hỏi») hay qua bot Zalo, trả lời có trích trang, phiên bản, đoạn nguyên văn do máy chủ kiểm; câu từ chối cố định; cảnh báo quá hạn xác minh và ô đặt hạn; báo sai thành việc cho chủ trang; nhật ký hỏi và hàng câu chưa trả lời được (`tro-ly-doc-kho`)
 - «Trợ lý kho chỉ được mời ở tab Hỏi và Zalo, hết lỗi và hết tốn tiền vô ích» (`tro-ly-kho-dung-phien`)
@@ -174,6 +181,7 @@ flowchart TD
 - Người vai «chỉ OKR» không được giao bước onboard, không cầm trịch hay theo dõi kế hoạch đối tác, và không nhận tên đối tác qua tin nhắc buổi sáng (`va-lo-ro-vai-chi-okr`)
 - Vai «chỉ OKR» — người mang vai này đăng nhập được, thấy khu OKR và hồ sơ của chính mình, nhưng không đọc được danh bạ, công ty, thoả thuận, chiến dịch, kế hoạch 30 ngày qua màn, tRPC, cầu REST, khoá API hay trợ lý AI (`vai-chi-okr`)
 - Vào được CRM từ mạng đang chặn Google — đăng nhập bằng email và mật khẩu (`vao-bang-email-va-mat-khau`)
+- Các hồ sơ đã ký đỏ sẵn trên onehub xanh lại: hết lỗi hydration khi mở thẳng record=, hết 403 khi quản trị mở cuộc soạn của người khác, thước quét chuỗi đúng định nghĩa, mang các sửa gốc từ nhánh DH2 (`ve-sinh-do-san-onehub`)
 - viec.bang / viec.con không lộ tiêu đề việc cha khi người xem không có quyền với việc cha (`viec-cha-khong-lo-tieu-de`)
 - Tôi giao một việc gắn với deal hay kế hoạch onboard; người nhận thấy nó trong Việc của tôi và được nhắc buổi sáng (`viec-chung`)
 - «Một cách cất, một bộ chữ» — lưu trữ hàng loạt ở ba bảng CRM có Hoàn tác, bản ghi đã cất mở ra có dải báo «Đã lưu trữ ngày … · Khôi phục» và chỉ đọc, Kanban thoả thuận có nút «Đã lưu trữ», chữ nút xem và hộp xoá vĩnh viễn đúng bộ chữ (`vong-doi-mot-cach-cat`)
@@ -289,6 +297,7 @@ flowchart TD
 - Soát ảnh OKR lượt 3 — hộp Nhập thấy đủ bảy cột và đánh dấu dòng hỏng ở 1440; hàng thẻ Cài đặt ở 390 tự đưa thẻ đang mở vào tầm nhìn; bộ chọn chu kỳ bỏ nhãn loại lặp; gợi ý tên chu kỳ theo năm hiện tại tính ở server (`okr-soat-anh-luot-3`)
 - Trang 30 ngày đầu theo khuôn trang danh sách của deals (`onboarding-giong-deals`)
 - Phiên chết về trang đăng nhập — người mang cookie phiên đã hết không còn thấy landing của hãng ở / hay trang «không còn trong không gian làm việc»; proxy tách 401 của workspace.get khỏi «không biết», trang / và /het-quyen tự kiểm phiên (`phien-chet-ve-dang-nhap`)
+- pre-push bỏ test và build khi mọi tệp của lần đẩy là tệp T1; vẫn chạy check-types, lint, lint:slop; verify-gate-shape chấp nhận nhánh này qua một khối khai có lý do trong gate-shape.json (`pre-push-t1`) — đã giao — không đo, khai ở Cổng Đáng
 - Người điều phối lọc, sắp, tìm và xem theo bảng cột trên danh mục 30 ngày đầu — và bộ lọc ra không kết quả không còn đẩy họ vào ngõ cụt (`quan-ly-danh-muc-30-ngay`) — đã chấm bởi thực tế
 - Quên mật khẩu — người dùng tự xin liên kết đặt lại qua thư (tiếp quản PR (`quen-mat-khau`)
 - Quyền của lượt builder mang theo tường minh — bỏ luật suy commandType từ hình dạng tin nhắn, câu trả lời kế thừa đúng quyền của lượt đã hỏi, và dạy con agent_builder cửa ra not_authorized (`quyen-luot-mang-theo`)
@@ -318,6 +327,7 @@ flowchart TD
 - Ba ca của to-chuc-chi-tiet.dom.tsx chờ URL trong bộ chờ trước khi đọc ?don, không còn đỏ chập chờn khi nuqs ghi URL trễ hơn khung (`to-chuc-chi-tiet-cho-url`)
 - Cài đặt › Tổ chức theo bố cục danh sách – chi tiết — trưởng chọn tại chỗ, thêm người và gắn nhiều phòng ban một lượt, ô số lọc được, nhập ba bước, nhất quán với các màn Cài đặt (`to-chuc-danh-sach-chi-tiet`)
 - Màn Tổng quan và khung điều hướng nói tiếng Việt — màn đầu tiên sau đăng nhập, thanh bên, thanh đầu, hộp tìm nhanh đọc đúng tiếng nhân viên chọn; và bộ thước màn nhìn thấy cả khung chứ không chỉ khung nội dung (`tong-quan-va-khung-noi-tieng-viet`)
+- Tra cứu thương hiệu không nhầm trang mạng xã hội, trả tiếng Việt, quốc gia theo ngôn ngữ người xem (`tra-cuu-thuong-hieu-viet-nam`)
 - Người nhận tin nhắc qua Zalo trả lời «xong 2» (hay «xong 1 3») thì các bước đó của tin sáng nay được đánh dấu xong bằng đúng thủ tục ghi của màn kế hoạch, bot xác nhận một dòng; tin nhắc Zalo đánh số dòng (`tra-loi-tin-nhac`)
 - Bài app-rieng chạy cạnh apps/agent có trần chờ riêng (`tran-cho-app-rieng`) — đã giao — máy thông, bằng chứng xanh-sạch
 - Trần một-lần-uỷ-thác agent_builder áp cho cả lượt KHÔNG có quyền — hook builder-delegation đang return sớm khi commandType khác CREATE_AGENT, nên chốt cứng duy nhất không chạy trên nhánh not_authorized và chỉ còn câu chữ trong prompt giữ trần (`tran-mot-lan-uy-thac`)
@@ -329,7 +339,7 @@ flowchart TD
 - Vùng cuộn của khung trang là khối chứa — phần tử định vị bên trong mọi trang dùng PageShell không kéo dài document, trang dài chỉ có một vùng cuộn và khung ứng dụng không trượt (`vung-cuon-la-khoi-chua`)
 - Màn Kết nối › Zalo in «trả lời lần cuối» theo múi giờ của xưởng (Asia/Ho_Chi_Minh) thay vì giờ UTC của máy chủ (`zalo-gio-theo-mui-gio-xuong`)
 - Khi Zalo nhận đăng ký nhưng gọi thử địa chỉ nhận tin hỏng, màn Kết nối › Zalo hiện đúng bot vừa lưu kèm cảnh báo «Đăng ký lại», và cảnh báo giữ nguyên qua các nhịp kiểm cho tới lần đăng ký lại thành công (`zalo-goi-thu-hong-hien-dung-bot`)
-- Bot Zalo nhận tin qua webhook — tin mã tới là nối ngay, không còn mất giữa hai nhịp cron; cron chỉ kiểm bot sống; hai lệnh tay đăng ký webhook và đọc tin cho bot thử (`zalo-qua-webhook`) — đã giao — máy thông, bằng chứng xanh-sạch
+- Bot Zalo nhận tin qua webhook — tin mã tới là nối ngay, không còn mất giữa hai nhịp cron; cron chỉ kiểm bot sống; hai lệnh tay đăng ký webhook và đọc tin cho bot thử (`zalo-qua-webhook`)
 - Bài kiểm Zalo của apps/agent thôi nhập mã apps/app; hai bài «câu chào» xuyên ứng dụng và hàm nhãn điều hướng dời nguyên văn sang test của apps/app — luật cách ly hai agent xanh trở lại (`zalo-va-cach-ly`) — đã giao — không đo, khai ở Cổng Đáng
 - Webhook Zalo đọc được thân thật {event_name, message} mà production gửi (và vẫn đọc khuôn có vỏ ok/result theo tài liệu), để người nhắn mã cho bot được nối và nhận trả lời; Zalo giả của test dựng khuôn thật (`zalo-webhook-doc-khuon-that`)
 

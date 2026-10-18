@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e0cc19b2b60e10ec4cb16988205c2f8c04d52658
+verified_commit: 735c996977a6fa3e0aad9753f5b27adaea04267c
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -236,3 +236,7 @@ Round 3: PASS — mọi eval của tính năng và cả bảy lệnh suite đề
 ### Re-pin lần 1 — 2026-10-14, do gộp onehub aac0975b5 (DA2, l3b), dời migration chep_viec_can_lam sang 20261014060147, sửa đua upsert ở dem-qua-han
 run_id: repin-20261014T063030Z-77767
 sha: e0cc19b2b60e10ec4cb16988205c2f8c04d52658 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 · diff chạm vật đo ngoài làn máy: E10, E11 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-16, do lan-dem-16-10: gộp onehub ngày 16/10 (#434…#453)
+run_id: repin-20261016T233032Z-31285
+sha: 735c996977a6fa3e0aad9753f5b27adaea04267c · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

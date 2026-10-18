@@ -1,5 +1,5 @@
 import type { Prisma } from "@crm/db";
-import type { Brand } from "./context-dev";
+import type { Brand } from "@crm/validation/brand-raw";
 
 export type BrandUpdate = Prisma.CompanyUpdateInput;
 
@@ -98,15 +98,84 @@ function clean(value: string | null | undefined): string | null {
 	return trimmed ? trimmed : null;
 }
 
-function fillable(key: string, current: CompanySnapshot): boolean {
+export type MayDien = ReadonlySet<string>;
+
+const KHONG_DIEN_LAI = new Set([
+	"name",
+	"logoUrl",
+	"logoDarkUrl",
+	"iconUrl",
+	"iconDarkUrl",
+	"iconTone",
+]);
+
+function fillable(
+	key: string,
+	current: CompanySnapshot,
+	mayDien: MayDien,
+): boolean {
 	if (key === "iconUrl") return true;
 	if (key === "name") return current.nameIsPlaceholder;
+	if (mayDien.has(key)) return true;
 	return current[key as keyof CompanySnapshot] === null;
+}
+
+const KHONG_CO: MayDien = new Set();
+
+const DIA_CHI = [
+	["city", (brand: Brand) => brand.address?.city],
+	["stateCode", (brand: Brand) => brand.address?.state_code],
+	["country", (brand: Brand) => brand.address?.country],
+	["countryCode", (brand: Brand) => brand.address?.country_code],
+] as const;
+
+const SNAPSHOT_RONG: CompanySnapshot = {
+	name: "",
+	nameIsPlaceholder: false,
+	description: null,
+	logoUrl: null,
+	logoDarkUrl: null,
+	iconUrl: null,
+	iconDarkUrl: null,
+	iconTone: null,
+	brandColor: null,
+	industry: null,
+	subIndustry: null,
+	city: null,
+	stateCode: null,
+	country: null,
+	countryCode: null,
+	phone: null,
+	email: null,
+	linkedinUrl: null,
+	twitterUrl: null,
+	githubUrl: null,
+	pricingUrl: null,
+	careersUrl: null,
+};
+
+export function truongMayDien(
+	brandCu: Brand,
+	current: CompanySnapshot,
+): MayDien {
+	const cu = brandToUpdate(brandCu, SNAPSHOT_RONG);
+
+	return new Set(
+		Object.entries(cu)
+			.filter(
+				([key, value]) =>
+					!KHONG_DIEN_LAI.has(key) &&
+					value !== undefined &&
+					current[key as keyof CompanySnapshot] === value,
+			)
+			.map(([key]) => key),
+	);
 }
 
 export function brandToUpdate(
 	brand: Brand,
 	current: CompanySnapshot,
+	mayDien: MayDien = KHONG_CO,
 ): BrandUpdate {
 	const update: BrandUpdate = {};
 
@@ -114,9 +183,9 @@ export function brandToUpdate(
 		key: K,
 		value: string | null,
 	) => {
-		if (value && fillable(key, current)) {
-			update[key] = value;
-		}
+		if (!value || !fillable(key, current, mayDien)) return;
+		if (mayDien.has(key) && current[key] === value) return;
+		update[key] = value;
 	};
 
 	fill("name", clean(brand.title));
@@ -142,6 +211,19 @@ export function brandToUpdate(
 	fill("country", clean(brand.address?.country));
 	fill("countryCode", clean(brand.address?.country_code));
 
+	const coDiaChi = DIA_CHI.some(([, lay]) => clean(lay(brand)) !== null);
+	if (coDiaChi) {
+		for (const [key, lay] of DIA_CHI) {
+			if (
+				mayDien.has(key) &&
+				clean(lay(brand)) === null &&
+				current[key] !== null
+			) {
+				update[key] = null;
+			}
+		}
+	}
+
 	fill("phone", clean(brand.phone));
 	fill("email", clean(brand.email));
 
@@ -161,12 +243,25 @@ export function brandToUpdate(
 export function stillFillable(
 	update: BrandUpdate,
 	current: CompanySnapshot,
+	mayDien: MayDien = KHONG_CO,
 ): BrandUpdate {
 	return Object.fromEntries(
-		Object.entries(update).filter(([key]) => fillable(key, current)),
+		Object.entries(update).filter(
+			([key, value]) =>
+				fillable(key, current, mayDien) &&
+				(key === "iconUrl" || current[key as keyof CompanySnapshot] !== value),
+		),
 	);
 }
 
 export function filledFields(update: BrandUpdate): string[] {
-	return Object.keys(update);
+	return Object.entries(update)
+		.filter(([, value]) => value !== null)
+		.map(([key]) => key);
+}
+
+export function clearedFields(update: BrandUpdate): string[] {
+	return Object.entries(update)
+		.filter(([, value]) => value === null)
+		.map(([key]) => key);
 }

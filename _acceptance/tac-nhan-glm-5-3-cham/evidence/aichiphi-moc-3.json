@@ -1,0 +1,102 @@
+[
+  {
+    "id": "evt_01M521K2TR5VYRT298DWHZBN4M",
+    "at": "2026-10-16T02:44:47.192Z",
+    "sessionId": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 10904,
+    "outputTokens": 64,
+    "costUsd": 0.02622
+  },
+  {
+    "id": "evt_01M521K737C4H8S0KMC50MJ35G",
+    "at": "2026-10-16T02:44:51.559Z",
+    "sessionId": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 10984,
+    "outputTokens": 255,
+    "costUsd": 0.008628
+  },
+  {
+    "id": "evt_01M521K9NWCTC4T4WQ7705KSAN",
+    "at": "2026-10-16T02:44:54.204Z",
+    "sessionId": "wrun_01M521K77K535PP9NHZNVPGF9P",
+    "phienCha": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "modelId": null,
+    "inputTokens": 3862,
+    "outputTokens": 29,
+    "costUsd": 0.010495
+  },
+  {
+    "id": "evt_01M521KVZA26634DX46G237HAH",
+    "at": "2026-10-16T02:45:12.938Z",
+    "sessionId": "wrun_01M521K77K535PP9NHZNVPGF9P",
+    "phienCha": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "modelId": null,
+    "inputTokens": 4139,
+    "outputTokens": 1708,
+    "costUsd": 0.018018
+  },
+  {
+    "id": "evt_01M521KZJ11M82779QYPSQJ79X",
+    "at": "2026-10-16T02:45:16.609Z",
+    "sessionId": "wrun_01M521K77K535PP9NHZNVPGF9P",
+    "phienCha": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "modelId": null,
+    "inputTokens": 5878,
+    "outputTokens": 219,
+    "costUsd": 0.009211
+  },
+  {
+    "id": "evt_01M521M4P7PMMQ6KQ1GSNHEW5W",
+    "at": "2026-10-16T02:45:21.863Z",
+    "sessionId": "wrun_01M521K77K535PP9NHZNVPGF9P",
+    "phienCha": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "modelId": null,
+    "inputTokens": 6127,
+    "outputTokens": 345,
+    "costUsd": 0.007289
+  },
+  {
+    "id": "evt_01M521MDWRXMEZ8XAQNXPD2T4Y",
+    "at": "2026-10-16T02:45:31.288Z",
+    "sessionId": "wrun_01M521K77K535PP9NHZNVPGF9P",
+    "phienCha": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "modelId": null,
+    "inputTokens": 6503,
+    "outputTokens": 1043,
+    "costUsd": 0.013911
+  },
+  {
+    "id": "evt_01M521MK3M69F8W88Z2BSE04XD",
+    "at": "2026-10-16T02:45:36.628Z",
+    "sessionId": "wrun_01M521K77K535PP9NHZNVPGF9P",
+    "phienCha": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "modelId": null,
+    "inputTokens": 7600,
+    "outputTokens": 359,
+    "costUsd": 0.010103
+  },
+  {
+    "id": "evt_01M521MPAJK3EW9NVN7RVCPDX1",
+    "at": "2026-10-16T02:45:39.922Z",
+    "sessionId": "wrun_01M521K77K535PP9NHZNVPGF9P",
+    "phienCha": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "modelId": null,
+    "inputTokens": 8360,
+    "outputTokens": 179,
+    "costUsd": 0.008067
+  },
+  {
+    "id": "evt_01M521MV6NCZJRTGZ8XTQ0R268",
+    "at": "2026-10-16T02:45:44.917Z",
+    "sessionId": "wrun_01M521JZ5ZRMPKXCJMXWMC54NK",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 11386,
+    "outputTokens": 221,
+    "costUsd": 0.009454
+  }
+]

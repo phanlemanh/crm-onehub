@@ -1,0 +1,16 @@
+{
+	"id": "luot-mau",
+	"clientRequestId": "gui-mau",
+	"commandType": "CREATE_AGENT",
+	"message": {
+		"text": "Dựng tác nhân tóm tắt deal mỗi sáng",
+		"resources": [],
+		"attachments": []
+	},
+	"status": "SENDING",
+	"errorCode": null,
+	"errorMessage": null,
+	"createdAt": "2026-10-16T03:00:00.000Z",
+	"sentAt": "2026-10-16T03:00:00.000Z",
+	"acceptedAt": null
+}
