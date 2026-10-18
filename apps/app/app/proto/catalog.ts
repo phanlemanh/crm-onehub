@@ -1204,6 +1204,39 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "du-an-gantt",
+		ten: "Dự án và Gantt — màn Việc một nơi, ô Phạm vi, Gantt có phụ thuộc và mốc, lịch làm việc",
+		states: [
+			{ id: "ST-viec-cua-toi-du-an", nhan: "Việc — Của tôi" },
+			{ id: "ST-pham-vi-mo", nhan: "Ô Phạm vi mở" },
+			{ id: "ST-du-an-ds-co", nhan: "Tất cả dự án" },
+			{ id: "ST-du-an-ds-rong", nhan: "Tất cả dự án — rỗng" },
+			{ id: "ST-du-an-ds-cho-tai", nhan: "Tất cả dự án — tải" },
+			{ id: "ST-du-an-ds-loi", nhan: "Tất cả dự án — hỏng" },
+			{ id: "ST-du-an-tao", nhan: "Tạo dự án" },
+			{
+				id: "ST-gantt-co-lich",
+				nhan: "Gantt — có lịch",
+			},
+			{ id: "ST-gantt-moc-tre", nhan: "Gantt — mốc trễ" },
+			{ id: "ST-gantt-da-doi", nhan: "Gantt — đã tự dời" },
+			{ id: "ST-gantt-chi-xem", nhan: "Gantt — đã đóng" },
+			{ id: "ST-gantt-rong", nhan: "Gantt — rỗng" },
+			{ id: "ST-gantt-cho-tai", nhan: "Gantt — đang tải" },
+			{ id: "ST-gantt-loi", nhan: "Gantt — tải hỏng" },
+			{ id: "ST-du-an-hoi-dong", nhan: "Hỏi lại khi đóng" },
+			{
+				id: "ST-khung-viec-lich",
+				nhan: "Khung việc — lịch",
+			},
+			{ id: "ST-lich-lam-viec", nhan: "Lịch làm việc" },
+			{
+				id: "ST-lich-lam-viec-khong-quyen",
+				nhan: "Lịch làm việc — không quyền",
+			},
+		],
+	},
+	{
 		slug: "kanban-viec",
 		ten: "Kanban việc — bảng bốn cột ở Việc của tôi, việc con trong khung việc",
 		states: [

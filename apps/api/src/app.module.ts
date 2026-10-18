@@ -19,11 +19,13 @@ import { CurrencyModule } from "./currency/currency.module";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { DatabaseModule } from "./database/database.module";
 import { DealsModule } from "./deals/deals.module";
+import { DuAnModule } from "./du-an/du-an.module";
 import { EnrichmentModule } from "./enrichment/enrichment.module";
 import { FieldsModule } from "./fields/fields.module";
 import { GiaiDoanModule } from "./giai-doan/giai-doan.module";
 import { GoogleModule } from "./google/google.module";
 import { HealthModule } from "./health/health.module";
+import { LichLamViecModule } from "./lich-lam-viec/lich-lam-viec.module";
 import { ListingsModule } from "./listings/listings.module";
 import { LoTrinhModule } from "./lo-trinh/lo-trinh.module";
 import { LoggingModule } from "./logging/logging.module";
@@ -82,6 +84,8 @@ import { ZaloModule } from "./zalo/zalo.module";
 		EnrichmentModule,
 		DashboardModule,
 		ViecModule,
+		DuAnModule,
+		LichLamViecModule,
 		SearchModule,
 		MailboxModule,
 		GoogleModule,
