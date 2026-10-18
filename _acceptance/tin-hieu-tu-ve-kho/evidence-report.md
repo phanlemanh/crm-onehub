@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 579f59356f27c2ebd35755b02bcb988e01b68521
-human_signoff: Manh Phan 2026-10-17 — ký lại Cổng Bằng chứng sau đổi lời AC-8 (#453: commit hàng chờ chạm thư mục nguồn tín hiệu và trang lộ trình máy vẽ lại từ chính các tín hiệu đó; giới hạn mới — onehub đổi hồ sơ sau lượt lịch thì PR hàng chờ lệch trang tới lượt kế, gỡ bằng chạy tay lịch) trên bằng chứng ghim lại repin-20261016T191234Z-42788 (17/17 eval máy đạt, E11b Đạt). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo. Chữ ký 2026-10-14 trước đó phủ lời AC-8 cũ.
+human_signoff: Manh Phan 2026-10-18 — ký lại Cổng Bằng chứng sau nhát sửa câu báo không mở được PR (235a7b4bd, sổ d-20261017T085439Z-52 — câu gọi đúng quyền TIN_HIEU_TOKEN và token hết hạn, nhận thêm lỗi token thiếu quyền, docs/api.md cập nhật việc cài thứ ba; lời AC giữ nguyên) trên bằng chứng ghim lại sau gộp onehub (0d55d8e6a). Ngoài-1 đến 7, 9, 11 đến 14 ghi Known limits; Ngoài-8, 10 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo. Chữ ký 2026-10-17 trước đó phủ bản trước nhát sửa này (đổi lời AC-8, #453); chữ ký 2026-10-14 phủ lời AC-8 cũ.
 ---
 
 # Evidence Report: tin-hieu-tu-ve-kho
