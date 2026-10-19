@@ -1,0 +1,433 @@
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] on   Company brand data (Settings → General)
+[agent] on   LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] on   Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+
+EVALS 1
+target http://127.0.0.1:59464/
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] on   Company brand data (Settings → General)
+[agent] on   LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] on   Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[lien-ket-hoi] zalo cmvffpuvc0005ki8g6c7v2iyf -> wrun_01M5ADXRX3P7KKF5MTA401QBS5
+[lien-ket-hoi] zalo cmvffpuv80003ki8gm2ouvkt3 -> wrun_01M5ADXRX44XJ4CTXNP36JZ3MK
+[lien-ket-hoi] zalo cmvffpuuf0000ki8gygzpre53 -> wrun_01M5ADXRWERT43BKXB4VXHKM1N
+[lien-ket-hoi] zalo cmvffpuuf0001ki8garw8dv7y -> wrun_01M5ADXRWH8K7N896XATHPV0ZB
+[lien-ket-hoi] zalo cmvffpuuf0002ki8g8uukdj9w -> wrun_01M5ADXRWJ14JVD66AV36V24QT
+[lien-ket-hoi] zalo cmvffpuv90004ki8g5vhtru68 -> wrun_01M5ADXRX2T23F1A28VXEAMGBR
+[lien-ket-hoi] zalo cmvffpuvh0007ki8gqfnlav09 -> wrun_01M5ADXRYG9R78VG31XQ9MA4JB
+[lien-ket-hoi] zalo cmvffpuvh0006ki8g8vhk1eef -> wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ
+[lien-ket-hoi] zalo cmvffpuvc0005ki8g6c7v2iyf -> wrun_01M5ADXRX3P7KKF5MTA401QBS5
+[lien-ket-hoi] zalo cmvffpuv80003ki8gm2ouvkt3 -> wrun_01M5ADXRX44XJ4CTXNP36JZ3MK
+[lien-ket-hoi] zalo cmvffpuvh0006ki8g8vhk1eef -> wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ
+[lien-ket-hoi] zalo cmvffpuuf0002ki8g8uukdj9w -> wrun_01M5ADXRWJ14JVD66AV36V24QT
+[lien-ket-hoi] zalo cmvffpuuf0001ki8garw8dv7y -> wrun_01M5ADXRWH8K7N896XATHPV0ZB
+[lien-ket-hoi] zalo cmvffpuv90004ki8g5vhtru68 -> wrun_01M5ADXRX2T23F1A28VXEAMGBR
+[lien-ket-hoi] zalo cmvffpuuf0000ki8gygzpre53 -> wrun_01M5ADXRWERT43BKXB4VXHKM1N
+[lien-ket-hoi] zalo cmvffpuvh0007ki8gqfnlav09 -> wrun_01M5ADXRYG9R78VG31XQ9MA4JB
+eve: opening sandbox session "root" on backend "docker"...
+eve: initializing 1 sandbox template...
+eve: sandbox template "root" (docker): starting template build container
+eve: sandbox template "root" (docker): preparing base runtime inside container
+eve: sandbox template "root" (docker): applying network policy
+eve: sandbox template "root" (docker): writing 5 seed file(s)
+eve: sandbox template "root" (docker): stopping template build container
+eve: sandbox template "root" (docker): committing template image "eve-sandbox-template:eve-sbx-tpl-docker-1dca451f308861ac-dfb95ab308cd137475d9-b8755874f8dada3d15fa"
+eve: initialized 1 sandbox template (0 reused, 1 built).
+eve: sandbox template is ready; retrying sandbox creation...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find /workspace -maxdepth 3
+eve: sandbox command finished (exit 0): find /workspace -maxdepth 3
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+[tro-ly-kho/cau-thu-hai] n6 cau 1: da-tra-loi phien wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ
+[tro-ly-kho/cau-thu-hai] n7 cau 1: da-tra-loi phien wrun_01M5ADXRX44XJ4CTXNP36JZ3MK
+eve: opening sandbox session "root" on backend "docker"...
+[lien-ket-hoi] zalo cmvffqg7d000hki8g2vagk9cz -> wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ
+[lien-ket-hoi] zalo cmvffqg7d000gki8gilteqr6x -> wrun_01M5ADXRX44XJ4CTXNP36JZ3MK
+[tro-ly-kho/cau-thu-hai] n5 cau 1: da-tra-loi phien wrun_01M5ADXRX2T23F1A28VXEAMGBR
+[lien-ket-hoi] zalo cmvffqhd9000iki8g6ozfbnjk -> wrun_01M5ADXRX2T23F1A28VXEAMGBR
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find $HOME/.agents -type f
+eve: sandbox command finished (exit 0): find $HOME/.agents -type f
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: cat /workspace/README.md
+eve: sandbox command finished (exit 0): cat /workspace/README.md
+[tro-ly-kho/cau-thu-hai] n3 cau 1: da-tra-loi phien wrun_01M5ADXRWJ14JVD66AV36V24QT
+[lien-ket-hoi] zalo cmvffqi4y000jki8ghu4ljmgo -> wrun_01M5ADXRWJ14JVD66AV36V24QT
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la ~/.agents/skills
+eve: sandbox command finished (exit 0): ls -la ~/.agents/skills
+[tro-ly-kho/cau-thu-hai] n1 cau 1: da-tra-loi phien wrun_01M5ADXRWH8K7N896XATHPV0ZB
+[lien-ket-hoi] zalo cmvffqjp4000kki8gmwu0g6bw -> wrun_01M5ADXRWH8K7N896XATHPV0ZB
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la $HOME/.agents/skills
+eve: sandbox command finished (exit 0): ls -la $HOME/.agents/skills
+[tro-ly-kho/cau-thu-hai] n8 cau 1: da-tra-loi phien wrun_01M5ADXRYG9R78VG31XQ9MA4JB
+[lien-ket-hoi] zalo cmvffqqaj000qki8g16zvnhjg -> wrun_01M5ADXRYG9R78VG31XQ9MA4JB
+[tro-ly-kho/cau-thu-hai] n4 cau 1: da-tra-loi phien wrun_01M5ADXRX3P7KKF5MTA401QBS5
+[lien-ket-hoi] zalo cmvffqqo0000rki8g7dfb24xu -> wrun_01M5ADXRX3P7KKF5MTA401QBS5
+[tro-ly-kho/cau-thu-hai] n2 cau 1: da-tra-loi phien wrun_01M5ADXRWERT43BKXB4VXHKM1N
+[lien-ket-hoi] zalo cmvffqr28000ski8gqe66ioxs -> wrun_01M5ADXRWERT43BKXB4VXHKM1N
+[tro-ly-kho/cau-thu-hai] n5 cau 2: da-tra-loi phien wrun_01M5ADXRX2T23F1A28VXEAMGBR
+[lien-ket-hoi] zalo cmvffqu6m000tki8gu5693ns6 -> wrun_01M5ADXRX2T23F1A28VXEAMGBR
+[tro-ly-kho/cau-thu-hai] n7 cau 2: da-tra-loi phien wrun_01M5ADXRX44XJ4CTXNP36JZ3MK
+[lien-ket-hoi] zalo cmvffqukj000uki8glq1cl6z6 -> wrun_01M5ADXRX44XJ4CTXNP36JZ3MK
+[tro-ly-kho/cau-thu-hai] n1 cau 2: da-tra-loi phien wrun_01M5ADXRWH8K7N896XATHPV0ZB
+[lien-ket-hoi] zalo cmvffqww8000yki8gyn2sr3fv -> wrun_01M5ADXRWH8K7N896XATHPV0ZB
+[tro-ly-kho/cau-thu-hai] n3 cau 2: da-tra-loi phien wrun_01M5ADXRWJ14JVD66AV36V24QT
+[tro-ly-kho/cau-thu-hai] n6 cau 2: da-tra-loi phien wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ
+[lien-ket-hoi] zalo cmvffqz7j0010ki8g47zhohhv -> wrun_01M5ADXRWJ14JVD66AV36V24QT
+[lien-ket-hoi] zalo cmvffqz7k0011ki8gjsz70w4w -> wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ
+[tro-ly-kho/cau-thu-hai] n2 cau 2: da-tra-loi phien wrun_01M5ADXRWERT43BKXB4VXHKM1N
+[lien-ket-hoi] zalo cmvffr33d0016ki8gngo6el46 -> wrun_01M5ADXRWERT43BKXB4VXHKM1N
+[tro-ly-kho/cau-thu-hai] n4 cau 2: da-tra-loi phien wrun_01M5ADXRX3P7KKF5MTA401QBS5
+[lien-ket-hoi] zalo cmvffr3gy0017ki8g2y86zlcp -> wrun_01M5ADXRX3P7KKF5MTA401QBS5
+[tro-ly-kho/cau-thu-hai] n5 cau 3: da-tra-loi phien wrun_01M5ADXRX2T23F1A28VXEAMGBR
+[tro-ly-kho/cau-thu-hai] n7 cau 3: da-tra-loi phien wrun_01M5ADXRX44XJ4CTXNP36JZ3MK
+[tro-ly-kho/cau-thu-hai] n3 cau 3: da-tra-loi phien wrun_01M5ADXRWJ14JVD66AV36V24QT
+[tro-ly-kho/cau-thu-hai] n1 cau 3: da-tra-loi phien wrun_01M5ADXRWH8K7N896XATHPV0ZB
+[tro-ly-kho/cau-thu-hai] n4 cau 3: da-tra-loi phien wrun_01M5ADXRX3P7KKF5MTA401QBS5
+[tro-ly-kho/cau-thu-hai] n8 cau 2: da-tra-loi phien wrun_01M5ADXRYG9R78VG31XQ9MA4JB
+[lien-ket-hoi] zalo cmvffrg9r001aki8g2cpefsr9 -> wrun_01M5ADXRYG9R78VG31XQ9MA4JB
+[tro-ly-kho/cau-thu-hai] n6 cau 3: da-tra-loi phien wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ
+[tro-ly-kho/cau-thu-hai] n2 cau 3: da-tra-loi phien wrun_01M5ADXRWERT43BKXB4VXHKM1N
+[tro-ly-kho/cau-thu-hai] n8 cau 3: da-tra-loi phien wrun_01M5ADXRYG9R78VG31XQ9MA4JB
+✓  tro-ly-kho/cau-thu-hai
+
+Results: 1 passed (1 total)
+
+Completed in 1m 35s
+
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (61%)
+  - eve-authored-relative-extension-resolver (29%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (52%)
+  - eve-authored-asset-import (40%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (49%)
+  - eve-authored-asset-import (40%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (65%)
+  - eve-authored-asset-import (28%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (51%)
+  - eve-authored-asset-import (41%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (48%)
+  - eve-authored-asset-import (38%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (59%)
+  - eve-authored-relative-extension-resolver (27%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (55%)
+  - eve-authored-relative-extension-resolver (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugin `eve-authored-asset-import`. See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (29%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (32%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (34%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (64%)
+  - eve-authored-asset-import (32%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (32%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpaf9-14: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-20: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-17: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafm-32: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafm-28: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafc-23: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafo-36: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafq-39: http-408 zalo-tu-choi 408 «timeout»
+[agent] ▸ session wrun_01M5ADXRX3P7KKF5MTA401QBS5 on channel:zalo
+[agent] ▸ session wrun_01M5ADXRWH8K7N896XATHPV0ZB on channel:zalo
+[agent] ▸ session wrun_01M5ADXRX44XJ4CTXNP36JZ3MK on channel:zalo
+[agent] ▸ session wrun_01M5ADXRWERT43BKXB4VXHKM1N on channel:zalo
+[agent] ▸ session wrun_01M5ADXRX2T23F1A28VXEAMGBR on channel:zalo
+[agent] ▸ session wrun_01M5ADXRWJ14JVD66AV36V24QT on channel:zalo
+[agent] ▸ session wrun_01M5ADXRYCB8DVCBG6HTKA8HHJ on channel:zalo
+[agent] ▸ session wrun_01M5ADXRYG9R78VG31XQ9MA4JB on channel:zalo
+[agent] » Nhân viên tiếp nhận khiếu nại phải xác nhận với khách hàng trong bao lâu?
+[agent] » Khách hàng khiếu nại vì nghi bị lộ dữ liệu thì khiếu nại ghi vào đâu, và phải báo bộ phận nào?
+[agent] » Đối tác tầng 1 hưởng bao nhiêu phần trăm, và hoa hồng được chuyển khoản vào ngày nào?
+[agent] » Công tác phí trong nước mỗi ngày được bao nhiêu tiền?
+[agent] » Đối tác tầng 2 được hưởng bao nhiêu phần trăm doanh thu thuần?
+[agent] » Xin nghỉ phép thì phải gửi đơn trước ít nhất mấy ngày?
+[agent] » nhan vien chinh thuc duoc bao nhieu ngay nghi phep mot nam
+[agent] » Đối tác có bao lâu để xác nhận bảng đối soát?
+[agent] → subagent tro_ly_kho message=Khách hàng khiếu nại vì nghi bị lộ dữ liệu thì …
+[agent] → subagent tro_ly_kho message=Xin nghỉ phép thì phải gửi đơn trước ít nhất mấ…
+[agent] · step 0 tool-calls  in 5.3k out 317 $0.0052
+[agent] · step 0 tool-calls  in 5.4k out 319 $0.0052
+[agent] → subagent tro_ly_kho message=Công tác phí trong nước mỗi ngày được bao nhiêu…
+[agent] · step 0 tool-calls  in 5.3k out 286 $0.0051
+[agent] → subagent tro_ly_kho message=Đối tác tầng 1 hưởng bao nhiêu phần trăm, và ho…
+[agent] · step 0 tool-calls  in 5.4k out 325 $0.0052
+[agent] → subagent tro_ly_kho message=Nhân viên tiếp nhận khiếu nại phải xác nhận với…
+[agent] · step 0 tool-calls  in 5.4k out 372 $0.0054
+[agent] → subagent tro_ly_kho message=nhan vien chinh thuc duoc bao nhieu ngay nghi p…
+[agent] · step 0 tool-calls  in 5.4k out 296 $0.0051
+[agent] → subagent tro_ly_kho message=Đối tác có bao lâu để xác nhận bảng đối soát?
+[agent] · step 0 tool-calls  in 5.3k out 589 $0.0062
+[agent] → subagent tro_ly_kho message=Đối tác tầng 2 được hưởng bao nhiêu phần trăm d…
+[agent] · step 0 tool-calls  in 5.3k out 350 $0.0053
+[agent] ✓ subagent tro_ly_kho 10.3s
+[agent] ✓ subagent tro_ly_kho 10.6s
+[agent] ✓ subagent tro_ly_kho 13.2s
+[agent] ✓ subagent tro_ly_kho 13.1s
+[agent] ✓ subagent tro_ly_kho 12.7s
+[agent] ✓ subagent tro_ly_kho 12.6s
+[agent] ✓ subagent tro_ly_kho 13.8s
+[agent] → glob pattern=**/*
+[agent] ✓ subagent tro_ly_kho 17.6s
+[agent] → bash command=find /workspace -maxdepth 3
+[agent] ✓ glob 2.5s
+[agent] · step 0 tool-calls  in 5.8k out 541 cached 3.3k $0.0041
+[agent] ✓ bash 0.6s
+[agent] · step 0 tool-calls  in 6.0k out 606 $0.0067
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.4s
+[agent] · step 0 tool-calls  in 5.7k out 674 cached 3.3k $0.0046
+[agent] ◂ Câu trả lời từ kho tài liệu quy định đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.7k out 605 cached 3.3k $0.0043
+[agent] ◂ Thông tin quy trình xử lý khiếu nại đã được gửi trực tiếp từ kho tài liệu.
+[agent] · step 0 stop  in 5.7k out 475 $0.0061
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafm-33: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafo-37: http-408 zalo-tu-choi 408 «timeout»
+[agent] → read_file filePath=/workspace/README.md
+[agent] » Nhân viên thử việc có được nhận hoa hồng đối tác không, và có ngày nghỉ phép năm không?
+[agent] » Hợp đồng gia hạn được tính hoa hồng thế nào, và đối tác có bao lâu để xác nhận bảng đối soát?
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.3k out 40 $0.0049
+[agent] ◂ Thông tin theo quy định nội bộ từ kho tài liệu của OneHub Center.
+[agent] · step 0 stop  in 5.7k out 710 cached 3.3k $0.0047
+[agent] → bash command=find $HOME/.agents -type f
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafm-29: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Thời gian thử việc của nhân viên kinh doanh là bao lâu?
+[agent] → bash command=cat /workspace/README.md
+[agent] ✓ bash 0.2s
+[agent] · step 1 tool-calls  in 6.6k out 36 $0.0051
+[agent] ✓ bash 0.2s
+[agent] · step 1 tool-calls  in 6.5k out 33 cached 3.4k $0.0027
+[agent] ◂ Thông tin quy định về công tác phí đã được gửi từ kho tài liệu nội bộ.
+[agent] · step 0 stop  in 5.7k out 645 cached 3.3k $0.0044
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-18: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Đi công tác ở Hà Nội thì được cộng thêm bao nhiêu mỗi ngày?
+[agent] ◂ Thông tin từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.7k out 868 $0.0076
+[agent] → bash command=ls -la ~/.agents/skills
+[agent] ✓ bash 0.2s
+[agent] · step 2 tool-calls  in 6.7k out 36 cached 3.4k $0.0029
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-21: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Đối tác tầng 3 được hưởng hoa hồng bao nhiêu?
+[agent] → subagent tro_ly_kho message=Thời gian thử việc của nhân viên kinh doanh là …
+[agent] → subagent tro_ly_kho message=Hợp đồng gia hạn được tính hoa hồng thế nào, và…
+[agent] · step 0 tool-calls  in 6.2k out 342 cached 3.4k $0.0037
+[agent] · step 0 tool-calls  in 6.4k out 230 $0.0057
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.2s
+[agent] · step 2 tool-calls  in 6.7k out 35 $0.0052
+[agent] → bash command=ls -la $HOME/.agents/skills
+[agent] → subagent tro_ly_kho message=Đi công tác ở Hà Nội thì được cộng thêm bao nhi…
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 6.3k out 180 $0.0054
+[agent] · step 2 tool-calls  in 6.8k out 34 $0.0052
+[agent] → subagent tro_ly_kho message=Nhân viên thử việc có được nhận hoa hồng đối tá…
+[agent] · step 0 tool-calls  in 6.3k out 258 cached 3.4k $0.0034
+[agent] → subagent tro_ly_kho message=Đối tác tầng 3 được hưởng hoa hồng bao nhiêu?
+[agent] · step 0 tool-calls  in 6.6k out 218 $0.0058
+[agent] ◂ Câu trả lời theo quy định nội bộ đã được gửi tới bạn.
+[agent] · step 3 stop  in 7.0k out 403 cached 3.4k $0.0045
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafr-40: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Hóa đơn CT nộp trong bn ngày sau khi về?
+[agent] ◂ Thông tin quy định từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 3 stop  in 7.0k out 945 cached 3.4k $0.0065
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafc-24: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Khiếu nại thông thường được giải quyết trong bao nhiêu ngày?
+[agent] ◂ Thông tin giải đáp từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 3 stop  in 7.1k out 599 cached 3.4k $0.0053
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-15: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Khi nghi ngờ lộ dữ liệu khách hàng thì phải báo cho bộ phận nào?
+[agent] ✓ subagent tro_ly_kho 8.7s
+[agent] ✓ subagent tro_ly_kho 9.6s
+[agent] ✓ subagent tro_ly_kho 10.3s
+[agent] ◂ Thông tin thời gian thử việc theo quy định nội bộ từ kho tài liệu của OneHub Center.
+[agent] · step 0 stop  in 6.7k out 113 cached 3.4k $0.0031
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafm-30: http-408 zalo-tu-choi 408 «timeout»
+[agent] ✓ subagent tro_ly_kho 9.7s
+[agent] ◂ Thông tin chính sách hoa hồng và thời hạn đối soát đã được gửi trực tiếp từ kho tài liệu.
+[agent] · step 0 stop  in 6.6k out 72 cached 3.4k $0.0029
+[agent] » Biểu mẫu tạm ứng đã ký thì nộp cho phòng nào?
+[agent] → subagent tro_ly_kho message=Khi nghi ngờ lộ dữ liệu khách hàng thì phải báo…
+[agent] · step 0 tool-calls  in 7.7k out 247 cached 3.4k $0.0044
+[agent] → subagent tro_ly_kho message=Khiếu nại thông thường được giải quyết trong ba…
+[agent] · step 0 tool-calls  in 7.9k out 256 cached 3.5k $0.0046
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafm-34: http-408 zalo-tu-choi 408 «timeout»
+[agent] → subagent tro_ly_kho message=Hóa đơn CT nộp trong bn ngày sau khi về?
+[agent] · step 0 tool-calls  in 7.4k out 274 cached 3.4k $0.0043
+[agent] » cong tac phi trong nuoc moi ngay duoc bao nhieu tien?
+[agent] ✓ subagent tro_ly_kho 13.9s
+[agent] ◂ Thông tin từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 6.9k out 32 cached 3.4k $0.0030
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-22: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Phòng Kế toán đối soát hoa hồng đối tác vào ngày nào trong tháng?
+[agent] → subagent tro_ly_kho message=Biểu mẫu tạm ứng đã ký thì nộp cho phòng nào?
+[agent] · step 0 tool-calls  in 6.8k out 225 cached 3.4k $0.0037
+[agent] ◂ Câu trả lời từ kho tài liệu quy định đã được gửi đến bạn.
+[agent] · step 0 stop  in 6.6k out 43 cached 3.4k $0.0028
+[agent] ◂ Thông tin quy định phụ cấp công tác tại Hà Nội đã được gửi từ kho tài liệu nội bộ.
+[agent] · step 0 stop  in 6.5k out 53 cached 3.4k $0.0028
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-19: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafo-38: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Hoá đơn công tác phải nộp trong bao lâu sau khi về?
+[agent] » Tạm ứng trên 10 triệu đồng thì cần ai ký, và tiền phòng khách sạn khi công tác được thanh toán tối đa bao nhiêu một đêm?
+[agent] → subagent tro_ly_kho message=cong tac phi trong nuoc moi ngay duoc bao nhieu…
+[agent] · step 0 tool-calls  in 6.7k out 269 cached 3.4k $0.0037
+[agent] ✓ subagent tro_ly_kho 7.2s
+[agent] → subagent tro_ly_kho message=Phòng Kế toán đối soát hoa hồng đối tác vào ngà…
+[agent] ✓ subagent tro_ly_kho 7.6s
+[agent] · step 0 tool-calls  in 6.9k out 255 cached 3.4k $0.0038
+[agent] → subagent tro_ly_kho message=Hoá đơn công tác phải nộp trong bao lâu sau khi…
+[agent] · step 0 tool-calls  in 6.6k out 205 $0.0057
+[agent] ✓ subagent tro_ly_kho 6.7s
+[agent] ◂ Thông tin hướng dẫn từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 0 stop  in 8.0k out 51 cached 3.5k $0.0039
+[agent] → subagent tro_ly_kho message=Tạm ứng trên 10 triệu đồng thì cần ai ký, và ti…
+[agent] · step 0 tool-calls  in 6.7k out 257 cached 3.4k $0.0037
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafb-16: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Tài liệu giấy có thông tin khách hàng phải cất ở đâu?
+[agent] ◂ Thông tin quy trình xử lý khiếu nại từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 0 stop  in 8.2k out 47 cached 3.5k $0.0040
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafc-25: http-408 zalo-tu-choi 408 «timeout»
+[agent] » Nhân viên chính thức được bao nhiêu ngày nghỉ phép một năm?
+[agent] ◂ Thông tin về nơi tiếp nhận biểu mẫu tạm ứng từ kho tài liệu của OneHub Center.
+[agent] · step 0 stop  in 7.1k out 41 cached 3.4k $0.0032
+[eve:harness.tool-loop] tool execution failed {
+  toolName: 'nop_tra_loi',
+  toolCallId: 'call_29bd90284a1a4d9492faa7ec',
+  error: {
+    errorId: 'a52ba7c0-6b7e-4e26-9a3b-24d5d3b93350',
+    message: 'Error: Rejected: qua-nhieu: từ 1 tới 8 câu. Copy each excerpt verbatim from read_page of the current version and keep every number inside an excerpt of its own sentence, then submit again.',
+    detail: 'Error: Rejected: qua-nhieu: từ 1 tới 8 câu. Copy each excerpt verbatim from read_page of the current version and keep every number inside an excerpt of its own sentence, then submit again.\n' +
+      '    at execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/apps/agent/.eve/dev-runtime/snapshots/mvffpt01-18d8f67e-bdb7-4254-91bb-dd0343597866/source/apps/agent/.eve/compile/authored-modules/b7658c6b8de0181d0c95509059d1d63c5074ba84fb41e09edc52c9e7b1268a3d.mjs?generation=authored-modules%2Fb7658c6b8de0181d0c95509059d1d63c5074ba84fb41e09edc52c9e7b1268a3d.mjs:209610:21)\n' +
+      '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+      '    at async file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/apps/agent/.eve/dev-hosts/06254118-0610-415a-a194-2888a6f33000/nitro/dev/index.mjs:112804:11\n' +
+      '    at async Object.execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/apps/agent/.eve/dev-hosts/06254118-0610-415a-a194-2888a6f33000/nitro/dev/index.mjs:142432:11)\n' +
+      '    at async executeTool (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/@ai-sdk+provider-utils@5.0.34+68a1e3a0c4588df3/node_modules/@ai-sdk/provider-utils/dist/index.js:4248:36)\n' +
+      '    at async execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:3212:32)\n' +
+      '    at async executeTool (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:4551:14)\n' +
+      '    at async execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:3194:9)\n' +
+      '    at async runWithTracingChannelSpan (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:4325:12)\n' +
+      '    at async Object.runInTracingChannelSpan (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:4483:66)'
+  }
+}
+[agent] ✓ subagent tro_ly_kho 8.0s
+[agent] → subagent tro_ly_kho message=Nhân viên chính thức được bao nhiêu ngày nghỉ p…
+[agent] · step 0 tool-calls  in 8.3k out 207 cached 3.5k $0.0046
+[agent] ✓ subagent tro_ly_kho 8.2s
+[agent] ✓ subagent tro_ly_kho 10.7s
+[agent] ◂ Thông tin định mức công tác phí trong nước đã được gửi trực tiếp từ kho tài liệu.
+[agent] · step 0 stop  in 7.0k out 47 cached 3.4k $0.0031
+[agent] ◂ Thông tin quy định thời hạn nộp hóa đơn công tác đã được gửi từ kho tài liệu nội bộ.
+[agent] · step 0 stop  in 6.8k out 50 cached 3.4k $0.0030
+[agent] ◂ Thông tin từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 7.2k out 37 cached 3.4k $0.0032
+[eve:harness.tool-loop] tool execution failed {
+  toolName: 'nop_tra_loi',
+  toolCallId: 'call_fd4440dd710145dc964eee03',
+  error: {
+    errorId: '14ea4bf5-97ef-4d31-8380-11f25bc68819',
+    message: 'Error: Rejected: qua-nhieu: từ 1 tới 8 câu. Copy each excerpt verbatim from read_page of the current version and keep every number inside an excerpt of its own sentence, then submit again.',
+    detail: 'Error: Rejected: qua-nhieu: từ 1 tới 8 câu. Copy each excerpt verbatim from read_page of the current version and keep every number inside an excerpt of its own sentence, then submit again.\n' +
+      '    at execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/apps/agent/.eve/dev-runtime/snapshots/mvffpt01-18d8f67e-bdb7-4254-91bb-dd0343597866/source/apps/agent/.eve/compile/authored-modules/b7658c6b8de0181d0c95509059d1d63c5074ba84fb41e09edc52c9e7b1268a3d.mjs?generation=authored-modules%2Fb7658c6b8de0181d0c95509059d1d63c5074ba84fb41e09edc52c9e7b1268a3d.mjs:209610:21)\n' +
+      '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+      '    at async file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/apps/agent/.eve/dev-hosts/06254118-0610-415a-a194-2888a6f33000/nitro/dev/index.mjs:112804:11\n' +
+      '    at async Object.execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/apps/agent/.eve/dev-hosts/06254118-0610-415a-a194-2888a6f33000/nitro/dev/index.mjs:142432:11)\n' +
+      '    at async executeTool (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/@ai-sdk+provider-utils@5.0.34+68a1e3a0c4588df3/node_modules/@ai-sdk/provider-utils/dist/index.js:4248:36)\n' +
+      '    at async execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:3212:32)\n' +
+      '    at async executeTool (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:4551:14)\n' +
+      '    at async execute (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:3194:9)\n' +
+      '    at async runWithTracingChannelSpan (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:4325:12)\n' +
+      '    at async Object.runInTracingChannelSpan (file:///Users/manhphan/dev/crm-onehub/.claude/worktrees/compassionate-swanson-591af0/node_modules/.bun/ai@7.0.85+68a1e3a0c4588df3/node_modules/ai/dist/index.js:4483:66)'
+  }
+}
+[agent] ✓ subagent tro_ly_kho 22.4s
+[agent] ✓ subagent tro_ly_kho 7.5s
+[agent] ✓ subagent tro_ly_kho 14.6s
+[agent] ◂ Thông tin chính sách nghỉ phép từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 0 stop  in 8.5k out 55 cached 3.5k $0.0042
+[agent] → subagent tro_ly_kho message=Tài liệu giấy có thông tin khách hàng phải cất …
+[agent] · step 0 tool-calls  in 8.1k out 240 cached 3.5k $0.0046
+[agent] ◂ Câu trả lời theo quy trình nội bộ đã được gửi tới bạn.
+[agent] · step 0 stop  in 7.7k out 133 cached 3.4k $0.0040
+[zalo] sendChatAction hong message_id=tlk-msg-mvffpafr-41: http-408 zalo-tu-choi 408 «timeout»
+[agent] » NVKD thử việc bao lâu vậy?
+[agent] ◂ Câu trả lời từ kho tài liệu quy định đã được gửi đến bạn.
+[agent] · step 0 stop  in 7.0k out 43 cached 3.4k $0.0031
+[agent] → subagent tro_ly_kho message=NVKD thử việc bao lâu vậy?
+[agent] · step 0 tool-calls  in 7.9k out 261 cached 3.4k $0.0046
+[agent] ✓ subagent tro_ly_kho 7.7s
+[agent] ◂ Thông tin quy định từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 0 stop  in 8.3k out 51 cached 3.5k $0.0041
+[agent] ✓ subagent tro_ly_kho 7.5s
+[agent] ◂ Câu trả lời theo quy định nội bộ đã được gửi tới bạn.
+[agent] · step 0 stop  in 8.2k out 45 cached 3.5k $0.0040
