@@ -4,6 +4,7 @@ export const LO_TRINH = {
 	tep: "LO-TRINH.html",
 	nguonCrm: "crm",
 	tenCrm: "CRM",
+	nguonCrmMoTa: "phanlemanh/crm-onehub · onehub · LO-TRINH.html",
 	nhipLamMoiMs: 60_000,
 	coTrang: 25,
 	tranTheCot: 8,
