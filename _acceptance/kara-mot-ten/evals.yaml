@@ -1,0 +1,162 @@
+slug: kara-mot-ten
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_ban_ghi
+    expected: "exit 0; -t kmt-ban-ghi của apps/app/test/messages-guard.spec.ts. Đọc _acceptance/kara-mot-ten/kiem-ke.json (E15), lấy đúng 17 mục be_mat 'ban-ghi' có hanh_dong 'doi'; số mục khác 17 thì ném 'kmt: kiem-ke ban-ghi <n> khac 17'. Mục kho chữ: nạp mô-đun bằng đường nạp động sẵn có của messages-guard, lấy giá trị vi và en (hàm gọi với đối số mẫu); giá trị không chứa «Kara» hoặc khớp một cụm của CAM thì ném 'kmt: <tệp>#<khoá> <ngôn ngữ> chua doi: <giá trị>'. Mục chữ cứng (apps/app/components/landing/product-shot/*): đọc tệp dạng chữ, chuỗi cũ ghi trong kiem-ke còn nguyên thì ném 'kmt: <tệp> con <cũ>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/crm.ts, apps/app/lib/messages/record-sheet.ts, apps/app/lib/messages/companies.ts, apps/app/lib/messages/khung-ung-dung.ts, apps/app/lib/messages/auth.ts, apps/app/components/landing/product-shot/**, apps/app/test/messages-guard.spec.ts, _acceptance/kara-mot-ten/kiem-ke.json]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_tom_tat
+    expected: "exit 0; -t kmt-tom-tat của messages-guard.spec.ts: 8 mục be_mat 'tom-tat' hanh_dong 'doi' của kiem-ke.json, cùng luật E1 (số mục khác 8 thì ném 'kmt: kiem-ke tom-tat <n> khac 8'); mục ở apps/agent/agent/lib/tin-nhac.ts xét dạng chữ: chuỗi cũ còn thì ném 'kmt: tin-nhac con <cũ>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr-toan-canh.ts, apps/app/lib/messages/nhac-qua-zalo.ts, apps/app/lib/messages/tro-ly-okr.ts, apps/agent/agent/lib/tin-nhac.ts, apps/app/test/messages-guard.spec.ts, _acceptance/kara-mot-ten/kiem-ke.json]
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmt_tin_nhac
+    expected: "exit 0; -t kmt-tin-nhac của apps/agent/test/kara-mot-ten.spec.ts. Gọi dungTin (apps/agent/agent/lib/tin-nhac.ts) với một việc 'okr-tom-tat' và hai việc 'ai-tran' (muc 80 và muc 100), khuôn 'tron' và 'slack'. Văn bản ra phải có dòng tiêu đề nhóm chứa đúng «Kara · OKR», không thì ném 'kmt: tin nhac tieu de <khuôn> <dòng>'; câu trần tháng phải mở đầu «Kara », không thì ném 'kmt: tin nhac tran <muc> <câu>'; văn bản ra chứa «Trợ lý» thì ném 'kmt: tin nhac con tro ly <khuôn>'. Đối chứng dương: cùng lời gọi, việc 'okr-cap-nhat' ra tiêu đề «Cập nhật tuần» như trước, không thì ném 'kmt: tin nhac doi nhom khac'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/tin-nhac.ts, apps/agent/test/kara-mot-ten.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_soan
+    expected: "exit 0; -t kmt-soan của messages-guard.spec.ts: 24 mục be_mat 'soan' hanh_dong 'doi' của kiem-ke.json (okr-soan.ts, to-chuc.ts, apps/api/src/okr/okr-config.ts), cùng luật E1; số mục khác 24 thì ném 'kmt: kiem-ke soan <n> khac 24'. Mục «trợ lý phụ» phải thành câu chứa «Kara» và «trợ tác», không thì ném 'kmt: tro ly phu mat nghia <khoá>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr-soan.ts, apps/app/lib/messages/to-chuc.ts, apps/api/src/okr/okr-config.ts, apps/app/test/messages-guard.spec.ts, _acceptance/kara-mot-ten/kiem-ke.json]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_cai_dat
+    expected: "exit 0; -t kmt-cai-dat của messages-guard.spec.ts: 25 mục be_mat 'cai-dat' hanh_dong 'doi' của kiem-ke.json, cùng luật E1; số mục khác 25 thì ném 'kmt: kiem-ke cai-dat <n> khac 25'. tro-ly-okr.ts trang.tieuDe vi và en đúng «Kara · OKR»; nhãn nhóm sổ chi phí của tab bản ghi đúng «Kara · hồ sơ» và của OKR đúng «Kara · OKR»; khác thì ném 'kmt: ten pham vi <khoá> <giá trị>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/tro-ly-okr.ts, apps/app/lib/messages/settings.ts, apps/app/test/messages-guard.spec.ts, _acceptance/kara-mot-ten/kiem-ke.json]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_tai_lieu
+    expected: "exit 0; -t kmt-tai-lieu của messages-guard.spec.ts: 43 mục be_mat 'tai-lieu' hanh_dong 'doi' của kiem-ke.json (tai-lieu.ts, packages/validation/src/tai-lieu-nguon.ts, tai-lieu-hoi.ts, apps/api/src/tai-lieu/tai-lieu-config.ts, apps/agent/agent/lib/tai-lieu-config.ts, tai-lieu-phien.ts, tai-lieu-hoi-phien.ts), cùng luật E1; số mục khác 43 thì ném 'kmt: kiem-ke tai-lieu <n> khac 43'. Câu hết hạn mức người hỏi qua Zalo thấy (tai-lieu-hoi.ts) phải chứa «Kara», không thì ném 'kmt: cau het han muc zalo <giá trị>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/tai-lieu.ts, packages/validation/src/tai-lieu-nguon.ts, packages/validation/src/tai-lieu-hoi.ts, apps/api/src/tai-lieu/tai-lieu-config.ts, apps/agent/agent/lib/tai-lieu-config.ts, apps/app/test/messages-guard.spec.ts, _acceptance/kara-mot-ten/kiem-ke.json]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_dung_chung
+    expected: "exit 0; -t kmt-dung-chung của messages-guard.spec.ts: 1 mục be_mat 'dung-chung' của kiem-ke.json; chatMessage.roleAssistant của kho chữ packages/ui vi và en đều đúng «Kara», không thì ném 'kmt: roleAssistant <ngôn ngữ> <giá trị>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/ui/src/lib/messages.ts, apps/app/test/messages-guard.spec.ts, _acceptance/kara-mot-ten/kiem-ke.json]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_luat
+    expected: "exit 0; -t kmt-luat của apps/app/test/kara-mot-ten.spec.ts. CAM khai trong apps/app/test/kara-mot-ten-luat.ts đúng 16 cụm: vi so đúng chữ (13) «Trợ lý», «trợ lý», «Máy soạn», «máy soạn», «Máy góp ý», «máy góp ý», «Máy tóm tắt», «máy tóm tắt», «Máy ghi số», «Máy chạy ở chế độ ẩn», «Máy đang soạn», «máy không đọc», «Tác nhân nghiên cứu»; en so không phân biệt hoa thường (3) «assistant», «composer», «your agent». Luật nghĩa: «tác nhân», «Tác nhân», en «agent» (không phân biệt hoa thường) chỉ được ở mô-đun hay khoá thuộc VAT_DOI_DUNG. (a) Kho chữ: rải phẳng mọi giá trị vi và en của mọi mô-đun apps/app/lib/messages/*.ts và kho chữ packages/ui; áp soatMotTen(muc, CAM, VAT_DOI_DUNG); danh sách lỗi khác rỗng thì ném nguyên danh sách, mỗi dòng '<tệp>#<khoá> <ngôn ngữ>: <cụm>'; số mô-đun nạp được nhỏ hơn số tệp *.ts dưới apps/app/lib/messages thì ném 'kmt: luat bo sot mo-dun <danh sách>'. (b) Chữ cứng: đọc dạng chữ mọi *.ts, *.tsx dưới apps/app/app, apps/app/components (trừ apps/app/app/proto/**), apps/api/src, apps/agent/agent, packages/validation/src; mỗi dòng chứa một cụm vi của CAM là lỗi '<tệp>:<dòng>: <cụm>', trừ đúng các dòng của 7 mục hanh_dong 'mien' trong kiem-ke.json (lời cho mô hình của Hỏi-1, nhật ký vận hành); mục miễn mà chuỗi cũ không còn ở tệp thì ném 'kmt: mien mo coi <tệp>#<khoá>'. (c) Chiều đỏ viết trước: với mỗi cụm của CAM một mục giả {khoá 'gia-<i>'} mang cụm đó (en viết hoa đầu để thử không phân biệt hoa thường) phải ra đúng một lỗi gọi tên khoá đó — 16 mục, 16 lỗi; ba mục giả «tác nhân», «Tác nhân», «Agent» ở khoá ngoài VAT_DOI_DUNG ra đúng ba lỗi; cùng ba giá trị ở một khoá thuộc VAT_DOI_DUNG ra 0 lỗi. Số lỗi khác 19 hoặc mục giả được phép ra lỗi thì ném 'kmt: luat khong bat <khoá>'. (d) VAT_DOI_DUNG trùng khít hợp của hai nhóm mô-đun vật đội dựng (mọi agent-builder-*.ts và settings-ket-noi.ts) với các mục hanh_dong 'giu' của kiem-ke.json; lệch thì ném 'kmt: vat doi dung lech kiem-ke <khoá>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/test/kara-mot-ten-luat.ts, apps/app/test/kara-mot-ten.spec.ts, apps/app/lib/messages/**, packages/ui/src/lib/messages.ts, apps/app/app/**, apps/app/components/**, apps/api/src/**, apps/agent/agent/**, packages/validation/src/**]
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.kmt_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly: trên bản sao lành, config:executors.test.kmt_luat phải xanh; rồi với từng cặp, thayMotLan một giá trị «Kara» đã đổi trong tệp thật của bản sao thành cụm cấm và chạy lại phải đỏ với dòng gọi tên đúng tệp và khoá: (a) apps/app/lib/messages/okr-soan.ts ← «Trợ lý»; (b) apps/app/lib/messages/tai-lieu.ts en ← «the composer»; (c) apps/app/lib/messages/crm.ts ← «tác nhân»; (d) packages/ui/src/lib/messages.ts roleAssistant ← «Assistant»; (e) packages/validation/src/tai-lieu-hoi.ts ← «Trợ lý AI»; (f) apps/agent/agent/lib/tin-nhac.ts ← «Trợ lý OKR»; (g) thêm khoá crm.ts fields.agentLabel vào VAT_DOI_DUNG của kara-mot-ten-luat.ts ← lỗi 'kmt: vat doi dung lech kiem-ke'. Thiếu chuỗi vật ở tệp thì ném KhongDo gọi tên cặp. In 'dot-bien: 7/7 cap dat'; số cặp khác SO_CAP_KHAI = 7 thì thoát 1. Cây thật không đổi (git diff --quiet trên các tệp vật sau lượt)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/kara-mot-ten/rang/dot-bien.mjs, apps/app/test/kara-mot-ten-luat.ts, apps/app/test/kara-mot-ten.spec.ts]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_giu
+    expected: "exit 0; -t kmt-giu của kara-mot-ten.spec.ts. Bảng GIU ghim nguyên văn giá trị vi và en trên origin/onehub 4abc05e0 của đúng 6 mục: (1) nhãn nhóm tac-nhan sổ chi phí [vat]; (2) khối Slack của Kết nối có «Tác nhân» [vat]; (3) khoá so.doiSoat.khongCoKhoaRieng của tro-ly-okr.ts (vi «tác tử») [ha-tang]; (4) chữ «bot» Zalo của nhac-qua-zalo.ts và chữ en «agent» chỉ máy chủ tác tử ở ketNoi.imMoTa [ha-tang]; (5) «Máy đếm», «Số máy», «Máy gợi ý» của khu số đo OKR; (6) «tác tử» của trang sức khoẻ. SO_GIU_KHAI = 6. Giá trị hiện tại khác bản ghim thì ném 'kmt: giu bi doi <tệp>#<khoá>'; số mục khác 6 thì ném 'kmt: giu thieu muc'. Đối chứng: bản ghim của GIU phải bằng giá trị đọc từ git show 4abc05e0:<tệp> (round-trip với bản thật), không thì ném 'kmt: giu ghim sai goc <khoá>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/**, apps/app/test/kara-mot-ten.spec.ts]
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kmt_bai_cu_app
+    expected: "exit 0; rang/bai-cu.mjs --app chạy apps/app/test/messages-guard.spec.ts cùng mọi bài của apps/app mà tệp có chuỗi khớp CAM hay «tác nhân» ở merge-base origin/onehub (danh sách rút bằng git grep trên merge-base lúc chạy, không viết tay; in số bài). Mọi bài xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/kara-mot-ten/rang/bai-cu.mjs, apps/app/test/**, apps/app/lib/messages/**]
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    layer: integration
+    cmd: config:executors.test.kmt_bai_cu_may
+    expected: "exit 0; rang/bai-cu.mjs --may chạy qua bun run test -- (mỗi lượt một cơ sở dữ liệu riêng) mọi bài của apps/agent/test, apps/api/test, packages/validation/test, packages/ui/test mà tệp có chuỗi khớp CAM hay «tác nhân» ở merge-base (rút bằng git grep lúc chạy; in số bài). Mọi bài xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/kara-mot-ten/rang/bai-cu.mjs, apps/agent/test/**, apps/api/test/**, packages/validation/test/**, packages/ui/test/**, apps/agent/agent/lib/tin-nhac.ts, apps/agent/agent/lib/tai-lieu-config.ts, apps/api/src/okr/okr-config.ts, apps/api/src/tai-lieu/tai-lieu-config.ts, packages/validation/src/**]
+
+  - id: E12
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.kmt_khong_go_bai
+    expected: "exit 0; rang/khong-go-bai.mjs so cây với merge-base origin/onehub: không tệp *.spec.ts, *.dom.tsx, *.test.ts nào bị xoá; số lời gọi test( và it( của mỗi tệp bài đã đổi không giảm; không thêm .skip, .todo, .only, test.if(false). Vi phạm thì thoát 1 in '<tệp>: <loại>'. In 'khong-go-bai: <n> tep doi, 0 vi pham'. Ghi .acceptance-runs/kara-mot-ten/ho-so-bai-doi.md (bản chụp lúc ký ở _acceptance/kara-mot-ten/evidence/ho-so-bai-doi.md): mỗi tệp bài đã đổi cùng các hồ sơ đã ký có eval chạy tệp đó (để ghim lại ở đuôi vòng)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/kara-mot-ten/rang/khong-go-bai.mjs, apps/app/test/**, apps/agent/test/**, apps/api/test/**, packages/validation/test/**, packages/ui/test/**]
+
+  - id: E15
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.kmt_kiem_ke
+    expected: "exit 0; rang/kiem-ke.mjs đọc _acceptance/kara-mot-ten/kiem-ke.json: (a) đúng 133 mục — 118 'doi' đếm theo be_mat ban-ghi 17 · tom-tat 8 · soan 24 · cai-dat 25 · tai-lieu 43 · dung-chung 1, 8 'giu', 7 'mien' — lệch thì thoát 1 in '<be_mat>/<hanh_dong> <n> khac <k>'; mục 'giu' và 'mien' phải có ly_do; (b) round-trip với bản thật: với mỗi mục, mỗi giá trị cũ (phần trước chỗ đối số mẫu 'X' nếu có) phải là chuỗi con của git show 4abc05e0:<tệp>, và mục 'doi' phải khớp ít nhất một cụm CAM hay «tác nhân»/«agent», không thì thoát 1 in 'kiem-ke <tệp>#<khoá> khong khop goc'; (c) quét lại mọi kho chữ apps/app ở 4abc05e0 bằng cùng hàm soatMotTen của E7: mỗi khoá trúng phải có mục trong kiem-ke, không thì thoát 1 in 'kiem-ke sot <tệp>#<khoá>'; (d) kiem-ke.json có trong một commit đứng trước mọi commit của nhánh chạm apps/** hay packages/**, và không đổi sau commit đó (git log), không thì thoát 1 in 'kiem-ke viet sau khi sua'. In 'kiem-ke: 133 muc, 118 doi, goc khop'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/kara-mot-ten/kiem-ke.json, _acceptance/kara-mot-ten/rang/kiem-ke.mjs]
+
+  - id: E16
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kmt_bang_chu
+    expected: "exit 0; rang/bang-chu.mjs ghi .acceptance-runs/kara-mot-ten/bang-chu.md (bản chụp E13 chấm nằm ở _acceptance/kara-mot-ten/evidence/bang-chu.md): mỗi mục của kiem-ke.json một dòng — be_mat, tệp#khoá, ngôn ngữ, chữ cũ (git show 4abc05e0) và chữ hiện tại. Số dòng khác số mục × số ngôn ngữ của mục thì thoát 1. In 'bang-chu: <n> dong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/kara-mot-ten/rang/bang-chu.mjs, _acceptance/kara-mot-ten/kiem-ke.json, apps/app/lib/messages/**, packages/ui/src/lib/messages.ts, packages/validation/src/**, apps/api/src/okr/okr-config.ts, apps/api/src/tai-lieu/tai-lieu-config.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/agent/lib/tai-lieu-config.ts]
+
+  - id: E13
+    criterion: AC-1
+    executor: judgment
+    question: >-
+      Đọc bảng _acceptance/kara-mot-ten/evidence/bang-chu.md (mỗi dòng: bề mặt, khoá, ngôn ngữ, chữ cũ, chữ mới) và
+      mục «Bảng thay chữ» của design doc. Như một người dùng OneHub đọc màn, mỗi chữ mới có (1) gọi AI đúng một tên
+      «Kara», (2) giữ đúng nghĩa chữ cũ — không mất ai làm gì, «trợ lý phụ» còn ý nhờ trợ tác, (3) đọc tự nhiên bằng
+      tiếng Việt và tiếng Anh, không ghép cứng kiểu «Kara · OKR đang soạn», và (4) chỉ dùng dạng «Kara · <phần>» ở
+      tên trang, tên nhóm, tiêu đề không? Trả PASS khi không dòng nào vi phạm; FAIL nêu từng dòng vi phạm kèm khoá và
+      điều vi phạm.
+    inputs: [_acceptance/kara-mot-ten/evidence/bang-chu.md, docs/superpowers/specs/2026-10-13-kara-mot-ten-design.md]
+    evidence_required: [verdict, rationale, verified_at]
+    paths: [_acceptance/kara-mot-ten/evidence/bang-chu.md]
+
+  - id: E14
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kmt_chup
+    expected: "Lệnh thoát 0, dòng KET LUAN báo 0 SAI và không dòng KHONG DO DUOC; mọi dòng E14 là DUNG. Ảnh E14-cai-dat-okr-1440/390 cho thấy thẻ cấu hình mang tiêu đề «Kara · OKR» và nút «Bật Kara», không chữ «Trợ lý» nào; ảnh soan-okr, tai-lieu, tab-kara ở 1440 cho thấy đúng màn đó (không phải màn đăng nhập hay onboarding) và mọi chỗ gọi AI là «Kara»."
+    steps:
+      - "Chạy NGUYÊN VĂN từ gốc kho: bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/kara-mot-ten/rang/chup.mjs\" — tien-de tự dựng phiên đo (kho crm_<cây>_do, API và app của chính cây) và đặt tiền đề khoá nghiên cứu cho đúng lượt"
+      - "chup.mjs chạy cảnh cây trước màn đầu; lệch cây hay bàn đo không dựng được → mã 2"
+      - "chup.mjs nạp bộ OKR mẫu (bun run okr:mau, đường ghi thật), mở một cuộc soạn bằng moCuoc cho phòng mẫu Kinh doanh miền Bắc quý 4, và ghi ba dòng chi bằng ghiChiPhi (crm.nghien-cuu, okr.de-xuat, crm.tac-nhan) vào kho đo"
+      - "Cài đặt › OKR ở 1440 và 390, vi: cuộn tới thẻ cấu hình mang tiêu đề «Kara · OKR», nút bật «Bật Kara» → ảnh evidence/E14-cai-dat-okr-<rộng>.png; cuộn tới khối sổ chi phí có nhãn nhóm «Kara · OKR», «Kara · hồ sơ» và nhóm «Tác nhân» còn nguyên → ảnh evidence/E14-so-chi-phi-<rộng>.png"
+      - "Ở 1440, vi: khung Soạn OKR của cuộc vừa mở, tab Kara của khung bản ghi một công ty mẫu, thẻ Hỏi của Tài liệu — mỗi màn phải hiện dấu hiệu đã mở (chữ của kho chữ đúng màn đó), có chữ «Kara», và chữ cả trang không khớp cụm vi nào của CAM → ảnh evidence/E14-<màn>-1440.png"
+      - "Đọc dòng «E14 …» trong output; mọi dòng kiểm phải đạt, rồi mở từng ảnh E14-*.png để chấm"
+    evidence_required: [run_id, verifier, verified_at, output, screenshot]
+    paths: [apps/app/lib/messages/tro-ly-okr.ts, apps/app/lib/messages/settings.ts, apps/app/lib/messages/okr-soan.ts, apps/app/lib/messages/crm.ts, apps/app/lib/messages/tai-lieu.ts, "apps/app/app/(app)/[slug]/settings/okr/**", _acceptance/kara-mot-ten/rang/chup.mjs]

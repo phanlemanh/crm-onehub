@@ -91,6 +91,7 @@ describe.skipIf(!EVE_CHAY_DUOC)("app-rieng", () => {
 			const cu = await fetch(`${mayCu.url}/health`);
 			expect(cu.status).toBe(404);
 		},
+		KHOI_DONG.baiHaiMay.tranMs,
 	);
 
 	test("máy dò còn sống: eve của «cây khác» trả dấu mốc khác cây này (một gốc app chỉ một eve dev, nên dừng máy chính trước)", async () => {

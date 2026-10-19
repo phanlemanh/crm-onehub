@@ -8,9 +8,6 @@ evals:
     cmd: config:executors.script.kcq_lich
     status: not-run
     superseded_by: chuyen-goi-dieu-phoi#AC-5
-    paths:
-      - "scripts/dieu-phoi/lich.mjs"
-      - "scripts/dieu-phoi/test/lich.test.mjs"
     expected: |
       exit 0; node --test scripts/dieu-phoi/test/lich.test.mjs: ma tran viet truoc (so assert = so o) gom don kiem-cheo co/khong
       moc x don tho s4/ghim-lai thuong/ghim-lai mo_merge/duong-nen: xepHang dat moi don tho truoc moi don kiem-cheo; capLuot voi

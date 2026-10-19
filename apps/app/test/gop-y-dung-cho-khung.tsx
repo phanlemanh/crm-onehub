@@ -444,7 +444,7 @@ describe("khoa-gui", () => {
 		const mo = khac.filter((b) => !(b as HTMLButtonElement).disabled).length;
 		if (mo > 0)
 			throw new Error(`de xuat khac khong khoa: ${mo}/${khac.length} nut mo`);
-		expect(khac.length).toBe(4);
+		expect(khac.length).toBe(5);
 		expect(qs("[data-slot=spinner]", kr1)).not.toBeNull();
 		await act(async () => tha());
 		await cho(
@@ -534,6 +534,7 @@ describe("focus-khung", () => {
 			`${D_DOI_TRONG.id}:loi-di`,
 			`${D_DOI_TRONG.id}:bo-qua`,
 			`${D_CAN.id}:can-chinh`,
+			`${D_CAN.id}:sua-ly-do`,
 			`${D_CAN.id}:bo-qua`,
 			`${D_KR1.id}:nhan`,
 			`${D_KR1.id}:sua`,

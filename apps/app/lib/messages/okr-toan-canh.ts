@@ -2,7 +2,6 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
 	cay: {
-		donVi: "Cây đơn vị",
 		canChinh: "Cây căn chỉnh toàn công ty",
 		chuaCanChinh: "Chưa căn chỉnh vào đâu",
 		cungHien: "cũng hiện ở chỗ góp kia",
@@ -16,9 +15,6 @@ const vi = {
 		tuTin: "Mức tự tin",
 		boLoc: "Bỏ lọc",
 		nguoiDaRoi: "Người không còn trong tổ chức",
-		khongKhop: "Không mục tiêu nào khớp bộ lọc",
-		khongKhopMoTa:
-			"Đổi hoặc bỏ bớt bộ lọc để thấy lại mục tiêu của đơn vị này.",
 	},
 	nguoi: {
 		phongBanChinh: "Phòng ban chính",
@@ -99,9 +95,9 @@ const vi = {
 		loi: "Không tính được sức khoẻ chương trình. Toàn cảnh vẫn xem được.",
 	},
 	tomTat: {
-		tieuDe: "Tóm tắt tuần của Trợ lý OKR",
+		tieuDe: "Tóm tắt tuần của Kara",
 		dongNguon: (n: string, ngay: string) =>
-			`Trợ lý OKR tóm tắt từ ${n} lần cập nhật · tuần ${ngay}`,
+			`Kara tóm tắt từ ${n} lần cập nhật · tuần ${ngay}`,
 		dangTai: "Đang tải tóm tắt tuần…",
 		dangSoan: "Kara đang tóm tắt tuần này…",
 		dangSoanMoTa:
@@ -110,7 +106,7 @@ const vi = {
 		taiLai: "Tải lại",
 		chuaCapNhat: "Tuần này chưa có Cập nhật tuần nào",
 		chuaCapNhatMoTa:
-			"Trợ lý OKR tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần Cập nhật tuần.",
+			"Kara tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần Cập nhật tuần.",
 		locHet: "Không có câu nào bạn xem được trong tóm tắt tuần này",
 		locHetMoTa:
 			"Mọi câu đều dựa vào Mục tiêu bạn không xem được. Bảng đáng bàn bên dưới vẫn đủ các KR bạn xem được.",
@@ -200,13 +196,55 @@ const vi = {
 	loiTieuDe: "Không tải được phần này",
 	tienDoLeRa: (ten: string, p: string, k: string) =>
 		`Tiến độ ${ten}: ${p}%, lẽ ra đã tới ${k}%`,
+	soDo: {
+		cachXem: "Cách xem",
+		bang: "Bảng",
+		soDo: "Sơ đồ",
+		moTa: "Mỗi đơn vị một thẻ. Dây là căn chỉnh thật: nét liền góp vào cấp trên trực tiếp, nét đứt góp thẳng hay chéo sang nhánh khác.",
+		nhan: "Sơ đồ căn chỉnh theo đơn vị",
+		moi: "Mọi đơn vị",
+		chuY: "Cần chú ý",
+		locNhan: "Lọc đơn vị",
+		chuGiaiLien: "Nét liền: góp vào mục tiêu hay KR của đơn vị cấp trên",
+		chuGiaiDut: "Nét đứt: góp thẳng lên cấp cao hơn hoặc chéo sang nhánh khác",
+		chuGiaiChuaNoi:
+			"Chưa nối lên: có mục tiêu mà không mục tiêu nào góp ra ngoài đơn vị",
+		chuaNoiLen: "Chưa nối lên",
+		chuaCoTruong: "Chưa có trưởng",
+		chuaDatOkr: "Chưa đặt OKR",
+		soMucTieu: (mt: number, kr: number) => `${mt} mục tiêu · ${kr} KR`,
+		tienDo: (pt: number) => `${pt}% tiến độ`,
+		dungNhip: "Đúng nhịp",
+		chamNhip: "Chậm nhịp",
+		truot: "Trượt",
+		co: {
+			"chua-truong": "Chưa có trưởng",
+			"chua-okr": "Chưa đặt OKR",
+			"chua-noi": "Chưa nối lên",
+			"muc-tieu-chua-gop": "Có mục tiêu chưa góp vào đâu",
+			"kr-truot": "Có KR trượt",
+		},
+		gopVao: "góp vào",
+		chuaGopDong: "Chưa góp vào đâu",
+		phongBanGop: (n: number) => `+${n} phòng ban`,
+		chuYBenTrong: (n: number) => `${n} cần chú ý bên trong`,
+		moNhanh: "Mở nhánh",
+		dongNhanh: "Thu nhánh",
+		dong: "Đóng thẻ",
+		khongChuY: "Không đơn vị nào cần chú ý trong kỳ này.",
+		kyRong: "Kỳ này chưa có mục tiêu công bố.",
+		dangTai: "Đang tải sơ đồ…",
+		loiTieuDe: "Không tải được sơ đồ",
+		loiMoTa:
+			"Máy chủ không trả về sơ đồ của kỳ này. Dữ liệu OKR vẫn còn nguyên.",
+		soDangLoc: (k: number, n: number) => `${k} trên ${n} đơn vị cần chú ý`,
+	},
 };
 
 export type OkrToanCanhMessages = typeof vi;
 
 const en: OkrToanCanhMessages = {
 	cay: {
-		donVi: "Unit tree",
 		canChinh: "Company-wide alignment tree",
 		chuaCanChinh: "Not aligned anywhere",
 		cungHien: "also shown where it contributes",
@@ -220,9 +258,6 @@ const en: OkrToanCanhMessages = {
 		tuTin: "Confidence",
 		boLoc: "Clear filters",
 		nguoiDaRoi: "No longer in the organization",
-		khongKhop: "No objectives match these filters",
-		khongKhopMoTa:
-			"Change or clear a filter to see this unit's objectives again.",
 	},
 	nguoi: {
 		phongBanChinh: "Primary department",
@@ -304,9 +339,9 @@ const en: OkrToanCanhMessages = {
 		loi: "Couldn't compute program health. The overview still works.",
 	},
 	tomTat: {
-		tieuDe: "OKR assistant's weekly summary",
+		tieuDe: "Kara's weekly summary",
 		dongNguon: (n: string, ngay: string) =>
-			`The OKR assistant summarised ${n} updates · week of ${ngay}`,
+			`Kara summarised ${n} updates · week of ${ngay}`,
 		dangTai: "Loading the weekly summary…",
 		dangSoan: "Kara is summarising this week…",
 		dangSoanMoTa:
@@ -315,7 +350,7 @@ const en: OkrToanCanhMessages = {
 		taiLai: "Reload",
 		chuaCapNhat: "No weekly updates yet this week",
 		chuaCapNhatMoTa:
-			"The OKR assistant summarises the morning after the update day, once the department has at least one weekly update.",
+			"Kara summarises the morning after the update day, once the department has at least one weekly update.",
 		locHet: "There are no sentences you can see in this week's summary",
 		locHetMoTa:
 			"Every sentence rests on objectives you can't see. The table below still has every KR you can see.",
@@ -330,7 +365,7 @@ const en: OkrToanCanhMessages = {
 		ghiChu: "Note",
 		xemDienBien: "See KR history",
 		phanHoiNhom: "Was this week's summary useful",
-		daGhi: "Noted — admins see these counts under Overview › Programme health.",
+		daGhi: "Noted — admins see these counts under Overview › Program health.",
 		phanHoiLoi: "Couldn't send your feedback. Try again.",
 	},
 	quanTri: {
@@ -405,6 +440,49 @@ const en: OkrToanCanhMessages = {
 	loiTieuDe: "Couldn’t load this",
 	tienDoLeRa: (ten: string, p: string, k: string) =>
 		`Progress of ${ten}: ${p}%, expected ${k}% by now`,
+	soDo: {
+		cachXem: "View",
+		bang: "Table",
+		soDo: "Map",
+		moTa: "One card per unit. Lines are real alignments: solid lines feed the unit directly above, dashed lines skip a level or cross to another branch.",
+		nhan: "Alignment map by unit",
+		moi: "All units",
+		chuY: "Needs attention",
+		locNhan: "Filter units",
+		chuGiaiLien: "Solid: feeds an objective or KR of the unit above",
+		chuGiaiDut: "Dashed: feeds a higher level directly or another branch",
+		chuGiaiChuaNoi:
+			"Not connected: has objectives, none of them feeds outside the unit",
+		chuaNoiLen: "Not connected",
+		chuaCoTruong: "No head",
+		chuaDatOkr: "No OKRs yet",
+		soMucTieu: (mt: number, kr: number) => `${mt} objectives · ${kr} KRs`,
+		tienDo: (pt: number) => `${pt}% progress`,
+		dungNhip: "On track",
+		chamNhip: "Behind",
+		truot: "Off track",
+		co: {
+			"chua-truong": "No head",
+			"chua-okr": "No OKRs yet",
+			"chua-noi": "Not connected",
+			"muc-tieu-chua-gop": "Has an objective that feeds nothing",
+			"kr-truot": "Has an off-track KR",
+		},
+		gopVao: "feeds",
+		chuaGopDong: "Feeds nothing yet",
+		phongBanGop: (n: number) => `+${n} departments`,
+		chuYBenTrong: (n: number) => `${n} need attention inside`,
+		moNhanh: "Expand",
+		dongNhanh: "Collapse",
+		dong: "Close card",
+		khongChuY: "No unit needs attention this cycle.",
+		kyRong: "No published objectives this cycle yet.",
+		dangTai: "Loading map…",
+		loiTieuDe: "Couldn't load the map",
+		loiMoTa:
+			"The server didn't return this cycle's map. Your OKR data is intact.",
+		soDangLoc: (k: number, n: number) => `${k} of ${n} units need attention`,
+	},
 };
 
 const BANG = { en, vi } satisfies Record<Locale, OkrToanCanhMessages>;

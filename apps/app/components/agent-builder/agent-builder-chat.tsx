@@ -62,7 +62,6 @@ import {
 	latestCompletedArtifactVersionId,
 	reviewVersionId,
 } from "@/lib/agent-builder-state";
-import { toolLabel } from "@/lib/agent-tool-display";
 import {
 	conversationTimeline,
 	eventStreamSettled,
@@ -78,6 +77,8 @@ import {
 	type TroChuyenMessages,
 	troChuyenMessages,
 } from "@/lib/messages/agent-builder-tro-chuyen";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
+import { builderStepLabel } from "@/lib/nhan-buoc";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -102,6 +103,7 @@ import {
 } from "./chat-chips";
 import { DeleteChatAction } from "./delete-chat-action";
 import { ShareChatDialog } from "./share-chat-dialog";
+import { TheDangDung } from "./the-dang-dung";
 
 type Conversation = RouterOutputs["conversations"]["builderById"];
 type SharedConversation = RouterOutputs["conversations"]["shared"];
@@ -161,7 +163,7 @@ const builderMessage = z
 
 type BuilderMessage = z.infer<typeof builderMessage>;
 
-const builderSubmissions = z.array(
+export const builderSubmissions = z.array(
 	z.object({
 		id: z.string(),
 		createdAt: z.string(),
@@ -169,6 +171,7 @@ const builderSubmissions = z.array(
 		commandType: z.enum(["CHAT", "CREATE_AGENT"]),
 		message: builderMessage,
 		status: z.string(),
+		errorCode: z.string().nullable().catch(null),
 		errorMessage: z.string().nullable().catch(null),
 	}),
 );
@@ -283,9 +286,14 @@ export function AgentBuilderChat({
 	const markRead = useMutation(
 		trpc.conversations.markRead.mutationOptions({
 			onSuccess: () =>
-				queryClient.invalidateQueries({
-					queryKey: trpc.conversations.builderList.pathKey(),
-				}),
+				Promise.all([
+					queryClient.invalidateQueries({
+						queryKey: trpc.conversations.builderList.pathKey(),
+					}),
+					queryClient.invalidateQueries({
+						queryKey: trpc.thongBao.chuong.pathKey(),
+					}),
+				]),
 		}),
 	);
 
@@ -443,7 +451,7 @@ export function AgentBuilderChat({
 										<UserSubmission
 											submission={item.submission}
 											failed={item.submission.status === "FAILED"}
-											error={item.submission.errorMessage}
+											errorCode={item.submission.errorCode}
 										/>
 									) : (
 										<AssistantMessage
@@ -470,10 +478,11 @@ export function AgentBuilderChat({
 											commandType: item.commandType,
 											message: item.message,
 											status: "PENDING",
+											errorCode: null,
 											errorMessage: null,
 										}}
 										failed={false}
-										error={null}
+										errorCode={null}
 										sending
 									/>
 								</MessageScrollerItem>
@@ -494,7 +503,7 @@ export function AgentBuilderChat({
 										conversationId={conversationId}
 										sessionId={data.sessionId}
 										artifacts={data.builderArtifacts}
-										startedAt={submissions.at(-1)?.createdAt ?? null}
+										submissions={submissions}
 									/>
 								</MessageScrollerItem>
 							) : null}
@@ -645,6 +654,8 @@ export function AgentToolStep({
 }: {
 	item: Extract<TranscriptItem, { kind: "did" }>;
 }) {
+	const locale = useLocale();
+	const kara = karaBanGhiMessages(locale);
 	return (
 		<div className="flex min-w-0 flex-col gap-1">
 			<div className="flex min-w-0 items-start gap-2 text-sm">
@@ -655,7 +666,9 @@ export function AgentToolStep({
 				) : (
 					<Icon icon={Checkmark} className="size-3.5 text-ring" />
 				)}
-				<span className="min-w-0 wrap-break-word">{toolLabel(item)}</span>
+				<span className="min-w-0 wrap-break-word">
+					{builderStepLabel(item, kara, locale)}
+				</span>
 			</div>
 			{item.errorText ? (
 				<p className="pl-[22px] wrap-break-word text-destructive text-xs leading-5">
@@ -735,7 +748,7 @@ function SharedAgentChat({
 										<UserSubmission
 											submission={item.submission}
 											failed={item.submission.status === "FAILED"}
-											error={item.submission.errorMessage}
+											errorCode={item.submission.errorCode}
 										/>
 									) : (
 										<AssistantMessage
@@ -832,15 +845,15 @@ function ChatHeader({
 	);
 }
 
-function UserSubmission({
+export function UserSubmission({
 	submission,
 	failed,
-	error,
+	errorCode,
 	sending = false,
 }: {
 	submission: BuilderSubmission;
 	failed: boolean;
-	error: string | null;
+	errorCode: string | null;
 	sending?: boolean;
 }) {
 	const locale = useLocale();
@@ -902,7 +915,7 @@ function UserSubmission({
 				) : null}
 				{failed ? (
 					<p className="mt-2 text-destructive text-xs">
-						{error ?? t.man.guiHong}
+						{loiGuiCua(t, errorCode)}
 					</p>
 				) : null}
 			</div>
@@ -1096,18 +1109,19 @@ function ResponseActions({
 	);
 }
 
-function BuildingAgentCard({
+export function BuildingAgentCard({
 	conversationId,
 	sessionId,
 	artifacts,
-	startedAt,
+	submissions,
 }: {
 	conversationId: string;
 	sessionId: string | null;
 	artifacts: Conversation["builderArtifacts"];
-	startedAt: string | null;
+	submissions: readonly BuilderSubmission[];
 }) {
 	const t = troChuyenMessages(useLocale());
+	const startedAt = submissions.at(-1)?.createdAt ?? null;
 	const completed = completedBuilderSteps(artifacts, startedAt, sessionId);
 	const stop = useAsyncAction({
 		action: async () => {
@@ -1126,103 +1140,34 @@ function BuildingAgentCard({
 		artifacts.find((artifact) => artifact.status === "WRITING")?.path ?? null;
 
 	return (
-		<div className="w-full max-w-lg">
-			<div className="overflow-hidden rounded-lg border bg-card">
-				<div className="flex items-center gap-2 px-4 pt-4">
-					<span className="min-w-0 flex-1 font-medium text-sm">
-						{t.dung.dangDung}
-					</span>
-					<span className="shrink-0 font-mono text-muted-foreground text-xs">
-						{t.dung.tienDo(String(completed))}
-					</span>
-				</div>
-				<ol className="flex flex-col gap-1 p-3" aria-label={t.dung.nhanTienDo}>
-					{t.man.buoc.map((label: string, index: number) => {
-						const done = index < completed;
-						const active = index === completed && completed < t.man.buoc.length;
-						const artifact = BUILDER_STEP_ARTIFACTS[index];
-
-						return (
-							<li
-								key={label}
-								className={cn(
-									"flex min-h-8 min-w-0 flex-col justify-center gap-1 rounded-md px-2",
-									active && "bg-muted py-2",
-								)}
-								aria-current={active ? "step" : undefined}
-							>
-								<div className="flex min-w-0 items-center gap-2">
-									<span
-										className={cn(
-											"flex size-5 shrink-0 items-center justify-center font-mono text-xs",
-											(done || active) && "text-ring",
-											!done && !active && "text-muted-foreground",
-										)}
-									>
-										{done ? (
-											<Icon icon={Checkmark} className="size-3.5" />
-										) : active ? (
-											<DotMatrix decorative />
-										) : (
-											index + 1
-										)}
-									</span>
-									<span
-										className={cn(
-											"min-w-0 flex-1 wrap-break-word text-sm",
-											!done && !active && "text-muted-foreground",
-										)}
-									>
-										{label}
-									</span>
-									<span
-										className={cn(
-											"shrink-0 text-xs",
-											done && artifact && "font-mono",
-											active ? "text-foreground" : "text-muted-foreground",
-										)}
-									>
-										{done && artifact
-											? artifact.replace("agent/", "")
-											: done
-												? t.dung.xong
-												: active
-													? t.dung.dangLam
-													: t.dung.dangXep}
-									</span>
-								</div>
-								{active && writingPath ? (
-									<p className="pl-7 font-mono text-muted-foreground text-xs">
-										{t.dung.dangGhi(writingPath)}
-									</p>
-								) : null}
-							</li>
-						);
-					})}
-				</ol>
-				<footer className="flex items-center gap-2 border-t bg-muted px-4 py-3">
-					<p className="min-w-0 flex-1 text-pretty text-muted-foreground text-xs">
-						{t.dung.chayNen}
-					</p>
-					<Button
-						variant="outline"
-						size="sm"
-						disabled={!sessionId || stop.pending}
-						aria-busy={stop.pending}
-						onClick={() => stop.run()}
+		<TheDangDung
+			buoc={t.man.buoc.map((nhan: string, index: number) => ({
+				nhan,
+				vat: BUILDER_STEP_ARTIFACTS[index] ?? null,
+			}))}
+			daXong={completed}
+			dangGhi={writingPath}
+			batDauLuc={startedAt}
+			t={t}
+			nutDung={
+				<Button
+					variant="outline"
+					size="sm"
+					disabled={!sessionId || stop.pending}
+					aria-busy={stop.pending}
+					onClick={() => stop.run()}
+				>
+					<AsyncButtonContent
+						status={stop.status}
+						pendingLabel={t.dung.dangDungLai}
+						successLabel={t.dung.dangDungLai}
+						errorLabel={t.dung.thuLai}
 					>
-						<AsyncButtonContent
-							status={stop.status}
-							pendingLabel={t.dung.dangDungLai}
-							successLabel={t.dung.dangDungLai}
-							errorLabel={t.dung.thuLai}
-						>
-							{t.dung.dungLai}
-						</AsyncButtonContent>
-					</Button>
-				</footer>
-			</div>
-		</div>
+						{t.dung.dungLai}
+					</AsyncButtonContent>
+				</Button>
+			}
+		/>
 	);
 }
 
@@ -1574,4 +1519,10 @@ function compactSummary(value: string | undefined, fallback: string): string {
 
 function textOf(value: string | undefined, fallback: string): string {
 	return value?.trim() ? value : fallback;
+}
+
+function loiGuiCua(t: TroChuyenMessages, errorCode: string | null): string {
+	const bang = t.man.loiGui;
+	const ma = (errorCode ?? "") as keyof typeof bang;
+	return Object.hasOwn(bang, ma) ? bang[ma] : t.man.guiHong;
 }

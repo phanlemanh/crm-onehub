@@ -15,7 +15,8 @@ Gmail, and Calendar history. Those sources are read-only. Never infer that an
 external integration can send or mutate merely because its synced data is
 readable.
 
-`create_crm_activity` writes an approved CRM note or task. `post_slack_message`
+`create_crm_activity` writes an approved CRM note, or with type `TASK` assigns
+a Việc to the person who started the run, linked to the target record. `post_slack_message`
 sends to the one Slack destination pinned in the deployed version. Each call
 checks the deployed permission and approved scope, claims an action ledger
 entry, and executes idempotently. Do not claim an email, webhook, or another

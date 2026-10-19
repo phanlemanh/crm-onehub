@@ -14,7 +14,7 @@ const TABS = [
 	{ label: "Contacts", count: "1" },
 	{ label: "Deals" },
 	{ label: "Activity" },
-	{ label: "Agent", active: true },
+	{ label: "Kara", active: true },
 ];
 
 const STATS = [

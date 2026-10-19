@@ -9,10 +9,8 @@ import {
 import { KaraRetry } from "@crm/ui/components/kara/state";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import { useEffect, useState } from "react";
-import {
-	IndicatorDot,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { IndicatorDot } from "@crm/ui/components/status-indicator";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 
 export type KaraStep = {
 	id: string;
@@ -25,13 +23,13 @@ export type KaraStepsProps = {
 	onRetry?: () => void;
 };
 
-const TONE = {
-	done: "success",
-	running: "info",
-	error: "error",
-	unsaved: "warning",
-	skipped: "neutral",
-} as const satisfies Record<KaraStep["state"], StatusTone>;
+export const NGHIA_BUOC = {
+	done: "xong",
+	running: "dangChay",
+	error: "hong",
+	unsaved: "cho",
+	skipped: "ketThuc",
+} as const satisfies Record<KaraStep["state"], NghiaTrangThai>;
 
 const DAU = {
 	done: "xong",
@@ -81,7 +79,7 @@ export function KaraSteps({ steps, onRetry }: KaraStepsProps) {
 						className="flex items-baseline gap-2"
 					>
 						<IndicatorDot
-							tone={TONE[b.state]}
+							tone={toneTheoNghia(NGHIA_BUOC[b.state])}
 							pulse={b.state === "running"}
 							aria-hidden="true"
 						/>

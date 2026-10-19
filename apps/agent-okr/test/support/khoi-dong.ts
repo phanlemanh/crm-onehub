@@ -36,6 +36,7 @@ export const KHOI_DONG = {
 	congBan: { dau: "EADDRINUSE", soLanThu: 3 },
 	moCoi: { dau: "/node_modules/.bin/eve dev" },
 	sanSang: { choMs: 30 * SECOND_MS, nhipMs: 300 },
+	baiHaiMay: { tranMs: 30 * SECOND_MS },
 	khoa: {
 		thuMuc: [APP, "..", "..", "node_modules", ".cache", "crm-eve-khoa"],
 		tep: "chu.json",

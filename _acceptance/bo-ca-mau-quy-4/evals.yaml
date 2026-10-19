@@ -46,7 +46,7 @@ evals:
     executor: test
     cmd: config:executors.test.bcq4_chon_bo
     paths: [apps/agent/evals/okr/ca-gop-y.ts, apps/agent/evals/okr/gop-y.eval.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/okr-ca-quy-4.spec.ts]
-    expected: "exit 0; với khoá K = "TDX_THU_MUC_CA" (bài khẳng định config.ts khai đúng thuMucCa: K): thuMucBoCa({ [K]: THU_MUC_CA_QUY_4 }, K) trả THU_MUC_CA_QUY_4; thuMucBoCa({}, K) trả thư mục mẫu; thuMucBoCa với thư mục không có ném lỗi chứa đường dẫn đó; bài đọc nguồn gop-y.eval.ts khẳng định boCa() gọi thuMucBoCa(process.env, GOP_Y_EVAL.env.thuMucCa, …) với GOP_Y_EVAL.env lấy từ TRO_LY_OKR.danhGia.env, và không còn tham chiếu THU_MUC_CA_MAU trực tiếp trong boCa (đo nối dây, vì eval cần mô hình nên bài không chạy nó). CHIỀU ĐỎ: thuMucBoCa với biến là chuỗi rỗng trả thư mục mẫu, không ném — ghim để biến rỗng của CI không làm đổi bộ."
+    expected: "exit 0; với khoá K = \"TDX_THU_MUC_CA\" (bài khẳng định config.ts khai đúng thuMucCa: K): thuMucBoCa({ [K]: THU_MUC_CA_QUY_4 }, K) trả THU_MUC_CA_QUY_4; thuMucBoCa({}, K) trả thư mục mẫu; thuMucBoCa với thư mục không có ném lỗi chứa đường dẫn đó; bài đọc nguồn gop-y.eval.ts khẳng định boCa() gọi thuMucBoCa(process.env, GOP_Y_EVAL.env.thuMucCa, …) với GOP_Y_EVAL.env lấy từ TRO_LY_OKR.danhGia.env, và không còn tham chiếu THU_MUC_CA_MAU trực tiếp trong boCa (đo nối dây, vì eval cần mô hình nên bài không chạy nó). CHIỀU ĐỎ: thuMucBoCa với biến là chuỗi rỗng trả thư mục mẫu, không ném — ghim để biến rỗng của CI không làm đổi bộ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7

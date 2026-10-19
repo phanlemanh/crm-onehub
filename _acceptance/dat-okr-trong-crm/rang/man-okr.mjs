@@ -601,6 +601,54 @@ async function bamChu(trang, sel, chu) {
 	return true;
 }
 
+// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+const MUC_NHAP = "[role='menuitem'][data-nut='nhap-bang-tinh']";
+
+async function moMenuThem(trang) {
+	await trang.bringToFront();
+	const coNut = await trang
+		.waitForSelector("[data-nut='them-cach']", { timeout: CHO })
+		.then(() => true)
+		.catch(() => false);
+	if (!coNut) return false;
+	await trang.$eval("[data-nut='them-cach']", (e) =>
+		e.dispatchEvent(
+			new PointerEvent("pointerdown", {
+				bubbles: true,
+				cancelable: true,
+				button: 0,
+				isPrimary: true,
+				pointerType: "mouse",
+			}),
+		),
+	);
+	return trang
+		.waitForSelector(MUC_NHAP, { timeout: CHO })
+		.then(() => true)
+		.catch(() => false);
+}
+
+async function dongMenuThem(trang) {
+	await trang.keyboard.press("Escape");
+	await cho(200);
+}
+
+const mucNhapMo = (trang) =>
+	trang.evaluate((s) => {
+		const e = document.querySelector(s);
+		return e !== null && !e.hasAttribute("data-disabled");
+	}, MUC_NHAP);
+
+async function moNhap(trang, nhan) {
+	const mo = kiem(
+		`${nhan}: nut «…» khong mo duoc muc Nhap tu bang tinh`,
+		await moMenuThem(trang),
+	);
+	if (!mo) return false;
+	await trang.$eval(MUC_NHAP, (e) => e.click());
+	return true;
+}
+
 async function bamSel(trang, sel) {
 	await trang.bringToFront();
 	let loi = null;
@@ -688,6 +736,15 @@ async function byUnit(c, don) {
 	return hoi(c, "okr.byUnit", { cycleId: OKR.quy, unit: don });
 }
 
+/* trang-don-vi-mot-bang (AC-14): ô chọn đơn vị có tìm kiếm thay cây — mở ô
+   chọn rồi bấm lựa chọn theo tên đơn vị. */
+const LUA_CHON = "[cmdk-item]";
+async function chonDon(trang, ten) {
+	await bamSel(trang, "[data-chon-don-vi]");
+	await hienSel(trang, LUA_CHON);
+	return bamChu(trang, LUA_CHON, ten);
+}
+
 async function buocE11ChuaChuKy() {
 	const a = await moTrang(cookie.admin, RONG, theoDonVi(), "E11");
 	if (await hienSel(a, "[data-trang-thai='ST-donvi-chuakychay']")) {
@@ -730,12 +787,25 @@ async function buocE11ChuaChuKy() {
 async function buocE11() {
 	const pb = (k) => `pb:${ORG[k]}`;
 	const t = await moTrang(cookie.truong, RONG, theoDonVi(), "E11");
-	await hienSel(t, "[data-nut-cay]");
+	await hienSel(t, "[data-chon-don-vi]");
+	await bamSel(t, "[data-chon-don-vi]");
+	await hienSel(t, LUA_CHON);
 	const nut = await t.evaluate(() =>
-		[...document.querySelectorAll("[data-nut-cay]")].map((e) =>
-			e.getAttribute("data-nut-cay"),
+		[...document.querySelectorAll("[cmdk-item]")].map((e) =>
+			(([ten, goiY]) =>
+				goiY?.textContent?.startsWith("cả công ty")
+					? "goc"
+					: (ten?.textContent?.trim() ?? ""))(
+				e.querySelectorAll(":scope > span"),
+			),
 		),
 	);
+	// Ô chọn không mang khoá đơn vị trên DOM: đổi tên lựa chọn ra khoá như nút cây cũ.
+	const khoaTheoTen = new Map([
+		[TEN.bp, `bp:${ORG.bp}`],
+		...["pb1", "pb2", "pb3", "pb4"].map((k) => [TEN[k], pb(k)]),
+	]);
+	for (const [i, ten] of nut.entries()) nut[i] = khoaTheoTen.get(ten) ?? ten;
 	const canCo = [
 		"goc",
 		`bp:${ORG.bp}`,
@@ -750,20 +820,41 @@ async function buocE11() {
 	);
 	const dem = await hoi(cookie.truong, "okr.countByUnit", { cycleId: OKR.quy });
 	const demPb1 = dem[pb("pb1")] ?? 0;
-	const chuPb1 = await chuSel(t, `[data-nut-cay='${pb("pb1")}']`);
+	const chuPb1 = await t.evaluate(
+		(ten) =>
+			[...document.querySelectorAll("[cmdk-item]")]
+				.find(
+					(e) => e.querySelector(":scope > span")?.textContent?.trim() === ten,
+				)
+				?.textContent?.replace(/\s+/g, " ")
+				.trim() ?? "",
+		TEN.pb1,
+	);
 	kiem(
 		`E11 buoc 1: so dem canh ${TEN.pb1} phai «${demPb1} mục tiêu», thay «${chuPb1}»`,
 		demPb1 > 0 && chuPb1.endsWith(`${demPb1} mục tiêu`),
 	);
 	await chup(t, "E11-step1.png", true);
 
-	await bamSel(t, `[data-nut-cay='${pb("pb1")}']`);
+	await bamChu(t, LUA_CHON, TEN.pb1);
 	await hienSel(t, `[data-muc-tieu='${OKR.o3.id}']`);
 	kiem(
 		`E11 buoc 2: URL phai co donOkr=${pb("pb1")}, thay ${thamSo(t, "donOkr")}`,
 		thamSo(t, "donOkr") === pb("pb1"),
 	);
-	const cot = await demSel(t, `[data-muc-tieu='${OKR.o3.id}'] thead th`);
+	await bamSel(t, `[data-mo-dong='${OKR.o3.id}']`);
+	await hienSel(t, `[data-kr='${OKR.o3.kr[0]}']`);
+	// AC-14 loi-hua-moi: trang-don-vi-mot-bang AC-3 — KR la dong con cung 4 cot cua bang don vi, khong con bang KR rieng trong the.
+	const cot = await t.evaluate(
+		(id) =>
+			[
+				...(document
+					.querySelector(`[data-muc-tieu='${id}']`)
+					?.closest("table")
+					?.querySelectorAll("thead th") ?? []),
+			].filter((th) => !th.querySelector(".sr-only")).length,
+		OKR.o3.id,
+	);
 	kiem(`E11 buoc 2: thead bang KR phai 4 cot, thay ${cot}`, cot === 4);
 	await chup(t, "E11-step2.png", true);
 
@@ -809,19 +900,28 @@ async function buocE11() {
 		"E11 buoc 5: truong phong ban thieu nut Them muc tieu",
 		await coSel(t, "[data-nut='them-muc-tieu']"),
 	);
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 	kiem(
 		"E11 buoc 5: truong phong ban thieu nut Nhap tu bang tinh",
-		await coSel(t, "[data-nut='nhap-bang-tinh']"),
+		(await moMenuThem(t)) && (await mucNhapMo(t)),
 	);
+	await dongMenuThem(t);
 	const m = await moTrang(cookie.thuong, RONG, theoDonVi(pb("pb1")), "E11");
 	await hienSel(m, `[data-muc-tieu='${OKR.o3.id}']`);
-	const nutLo = await m.evaluate(() =>
-		[
-			...document.querySelectorAll(
-				"[data-nut='them-muc-tieu'],[data-nut='nhap-bang-tinh']",
-			),
-		].map((b) => b.textContent?.trim()),
+	kiem(
+		"E11 buoc 5: thanh vien thuong khong thay dong ly do khoa",
+		await hienSel(m, "[data-ly-do-khu]"),
 	);
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+	const nutLo = await m.evaluate(() =>
+		[...document.querySelectorAll("[data-nut='them-muc-tieu']")]
+			.filter((b) => !b.disabled)
+			.map((b) => b.textContent?.trim()),
+	);
+	if (await moMenuThem(m)) {
+		if (await mucNhapMo(m)) nutLo.push("Nhap tu bang tinh");
+		await dongMenuThem(m);
+	}
 	kiem(
 		`E11 buoc 5: thanh vien thuong thay nut ${nutLo.join(", ")}`,
 		nutLo.length === 0,
@@ -830,7 +930,7 @@ async function buocE11() {
 	await m.close();
 	await t.bringToFront();
 
-	await bamSel(t, `[data-nut-cay='${pb("pb4")}']`);
+	await chonDon(t, TEN.pb4);
 	if (await hienSel(t, "[data-trang-thai='ST-donvi-rong']")) {
 		const chu = await chuSel(t, "[data-trang-thai='ST-donvi-rong']");
 		kiem(
@@ -840,7 +940,7 @@ async function buocE11() {
 	}
 	await chup(t, "E11-step6.png", true);
 
-	await bamSel(t, `[data-nut-cay='${pb("pb3")}']`);
+	await chonDon(t, TEN.pb3);
 	await doi(
 		t,
 		"E11 buoc 7: Empty phong ban chua truong",
@@ -870,7 +970,7 @@ async function buocE11() {
 		else void r.continue();
 	};
 	t.on("request", chanByUnit);
-	await bamSel(t, `[data-nut-cay='${pb("pb2")}']`);
+	await chonDon(t, TEN.pb2);
 	if (await hienSel(t, "[data-trang-thai='ST-donvi-loi']")) {
 		kiem(
 			"E11 buoc 8: Empty loi thieu nut Thu lai",
@@ -889,18 +989,25 @@ async function buocE11() {
 	await t.close();
 
 	const c = await moTrang(cookie.truong, RONG, "/okr", "E11");
-	if (await hienSel(c, "[data-trang-thai='ST-cuatoi-codulieu']")) {
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+	const P3 = "[data-trang-thai='ST-cuatoi-codulieu']";
+	if (await hienSel(c, P3)) {
 		for (const o of ["o3", "o4", "o5"])
 			kiem(
-				`E11 buoc 10: Cua toi thieu the ${TEN[o]}`,
-				await coSel(c, `[data-muc-tieu='${OKR[o].id}']`),
+				`E11 buoc 10: Cua toi thieu KR cua muc tieu ${TEN[o]}`,
+				await coSel(c, `${P3} [data-mo-muc-tieu='${OKR[o].id}']`),
 			);
 		kiem(
-			"E11 buoc 10: KR cua truong o phong ban khac khong duoc danh dau",
+			"E11 buoc 10: KR cua truong o phong ban khac khong co trong KR ban phu trach",
 			await coSel(
 				c,
-				`[data-muc-tieu='${OKR.o5.id}'] [data-kr-hang='${OKR.o5.kr[0]}'] [data-cua-toi]`,
+				`${P3} [data-kr='${OKR.o5.kr[0]}'] [data-mo-muc-tieu='${OKR.o5.id}']`,
 			),
+		);
+		// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+		kiem(
+			"E11 buoc 10: KR cua truong2 lot vao KR ban phu trach",
+			!(await coSel(c, `${P3} [data-kr='${OKR.o5.kr[1]}']`)),
 		);
 	}
 	await chup(c, "E11-step10.png", true);
@@ -1325,9 +1432,11 @@ async function buocE20() {
 		theoDonVi(`pb:${ORG.pb1}`),
 		"E20",
 	);
-	await hienSel(t, "[data-nut='nhap-bang-tinh']");
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+	await hienSel(t, "[data-muc-tieu]");
+	await hienSel(t, "[data-nut='them-cach']");
 	const demTheTruoc = await demSel(t, "[data-muc-tieu]");
-	await bamSel(t, "[data-nut='nhap-bang-tinh']");
+	await moNhap(t, "E20");
 	if (await hienSel(t, "[data-buoc-nhap='1']")) {
 		const dien = await t.evaluate(() =>
 			[
@@ -1425,7 +1534,8 @@ async function buocE20() {
 		demTheTruoc + 2,
 	);
 
-	await bamSel(t, "[data-nut='nhap-bang-tinh']");
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+	await moNhap(t, "E20 lan 2");
 	await hienSel(t, "[data-buoc-nhap='1']");
 	if (await danLo(t, LO.slice(3))) {
 		const nut = await t.$eval("[data-nut='ghi-lo']", (e) => ({
@@ -1466,6 +1576,7 @@ async function buocE20() {
 			theoDonVi(`pb:${ORG.pb1}`, `&record=deal:${DEAL}`),
 			"E20",
 		);
+		// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
 		await doi(
 			d,
 			`E20 ${ten}: sheet Thoa thuan tren Theo don vi`,
@@ -1473,12 +1584,14 @@ async function buocE20() {
 				document
 					.querySelector("[data-slot='sheet-title'],[data-slot='drawer-title']")
 					?.textContent?.includes(tenDeal) &&
-				document.querySelector("[data-nut='nhap-bang-tinh']"),
+				document.querySelector("[data-hang-hanh-dong]"),
 			dealSan.name,
 		);
-		await d.evaluate(() =>
-			document.querySelector("[data-nut='nhap-bang-tinh']")?.click(),
-		);
+		await d.evaluate(() => {
+			const u = new URL(window.location.href);
+			u.searchParams.set("nhapOkr", "true");
+			window.history.pushState(null, "", u);
+		});
 		if (await hienSel(d, "[data-buoc-nhap='1']")) await danLo(d, LO);
 		kiem(
 			`E20 ${ten}: sheet Thoa thuan dong mat khi mo hop nhap`,

@@ -1,7 +1,10 @@
 import { db, type Prisma } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { type InputRequested, parse, schemas } from "@crm/validation";
-import { buildPendingInputRequest } from "@crm/validation/builder-question";
+import {
+	builderQuestion,
+	buildPendingInputRequest,
+} from "@crm/validation/builder-question";
 import type { ChannelEvents } from "eve/channels";
 import {
 	builderIdFromToken,
@@ -70,26 +73,25 @@ export async function persistBuilderInputRequest(
 		if (replay) return false;
 
 		const conversation = await lockBuilderConversation(tx, conversationId);
-		if (conversation?.kind !== "BUILDER" || !conversation.sessionId) {
-			return false;
+		if (conversation?.kind !== "BUILDER") {
+			return dropped(conversationId, "not a builder conversation");
+		}
+		if (!conversation.sessionId) {
+			return dropped(conversationId, "no builder session yet");
 		}
 
-		const recorded = await tx.agentEvent.findFirst({
-			where: {
-				conversationId: conversation.id,
-				id: { startsWith: eventPrefix(conversation.id) },
-			},
-			orderBy: [{ emittedAt: "desc" }, { id: "desc" }],
-			select: { id: true, data: true },
-		});
+		const waiting = await waitingQuestionEvent(tx, conversation.id);
 		if (
-			recorded &&
+			waiting &&
 			!supersedes(
 				event,
-				parse(schemas.agents.inputRequested, recorded.data, recorded.id),
+				parse(schemas.agents.inputRequested, waiting.data, waiting.id),
 			)
 		) {
-			return false;
+			return dropped(
+				conversation.id,
+				`older than the waiting question ${waiting.id}`,
+			);
 		}
 
 		await tx.agentEvent.create({
@@ -115,6 +117,29 @@ export async function persistBuilderInputRequest(
 		});
 
 		return true;
+	});
+}
+
+function dropped(conversationId: string, reason: string): false {
+	console.error(
+		`[agent] builder conversation ${conversationId} input request dropped: ${reason}`,
+	);
+	return false;
+}
+
+async function waitingQuestionEvent(
+	tx: Prisma.TransactionClient,
+	conversationId: string,
+) {
+	const row = await tx.agentConversation.findUnique({
+		where: { id: conversationId },
+		select: { pendingInputRequest: true },
+	});
+	const waiting = builderQuestion.parse(row?.pendingInputRequest ?? null);
+	if (!waiting) return null;
+	return tx.agentEvent.findUnique({
+		where: { id: `${eventPrefix(conversationId)}${waiting.requestId}` },
+		select: { id: true, data: true },
 	});
 }
 

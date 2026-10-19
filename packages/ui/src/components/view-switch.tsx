@@ -16,11 +16,13 @@ export function ViewSwitch({
 	value,
 	items,
 	onValueChange,
+	disabled,
 }: {
 	label: string;
 	value: string;
 	items: ViewSwitchItem[];
 	onValueChange: (value: string) => void;
+	disabled?: boolean;
 }) {
 	return (
 		<>
@@ -28,6 +30,7 @@ export function ViewSwitch({
 				aria-label={label}
 				className="hidden md:flex"
 				data-view-switch="nut"
+				disabled={disabled}
 				size="sm"
 				type="single"
 				value={value}
@@ -43,7 +46,11 @@ export function ViewSwitch({
 				))}
 			</ToggleGroup>
 			<div className="md:hidden" data-view-switch="chon">
-				<Select value={value} onValueChange={onValueChange}>
+				<Select
+					disabled={disabled}
+					value={value}
+					onValueChange={onValueChange}
+				>
 					<SelectTrigger aria-label={label} size="sm">
 						<SelectValue />
 					</SelectTrigger>

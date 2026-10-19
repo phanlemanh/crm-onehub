@@ -62,6 +62,8 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.hv_viec_cua_toi
+    status: not-run
+    superseded_by: chep-viec-can-lam-cu#AC-6
     paths:
       - "apps/api/src/activities/**"
       - "apps/api/test/han-viec.spec.ts"

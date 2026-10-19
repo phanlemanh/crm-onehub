@@ -1,7 +1,9 @@
 "use client";
 
 import Add from "@carbon/icons-react/es/Add";
+import ChartNetwork from "@carbon/icons-react/es/ChartNetwork";
 import Close from "@carbon/icons-react/es/Close";
+import Edit from "@carbon/icons-react/es/Edit";
 import Link from "@carbon/icons-react/es/Link";
 import Notification from "@carbon/icons-react/es/Notification";
 import NotificationFilled from "@carbon/icons-react/es/NotificationFilled";
@@ -38,6 +40,7 @@ import {
 import { TableCell } from "@crm/ui/components/table";
 import { krTheoKara } from "@crm/validation/okr-theo-kara";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import NextLink from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
 import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -82,11 +85,13 @@ import {
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
+import { okrQuanhMessages } from "@/lib/messages/okr-quanh";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { LyDoNoiGop } from "./ly-do-noi-gop";
 import { TabDienBien } from "./objective-dien-bien";
 import {
@@ -723,6 +728,7 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 	const trpc = useTRPC();
 	const [gan, setGan] = useState(false);
 	const [goDi, setGoDi] = useState<NoiGop | null>(null);
+	const [suaDi, setSuaDi] = useState<NoiGop | null>(null);
 	const go = useMutation(
 		trpc.okr.removeAlignment.mutationOptions(
 			useXong(mt.id, m.daGo, () => setGoDi(null)),
@@ -748,7 +754,7 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 		{ id: "donVi", header: m.cotCanChinh.donVi, width: "w-36" },
 		{ id: "mucTieu", header: m.cotCanChinh.mucTieu },
 		{ id: "kr", header: m.cotCanChinh.kr },
-		...(sua ? [{ id: "go", srLabel: m.hoiGo.action, width: "w-12" }] : []),
+		...(sua ? [{ id: "go", srLabel: m.hoiGo.action, width: "w-20" }] : []),
 	];
 
 	return (
@@ -788,15 +794,27 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 									</TableCell>
 									{sua ? (
 										<TableCell className={CELL}>
-											<Button
-												aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
-												size="icon-sm"
-												variant="ghost"
-												disabled={go.isPending}
-												onClick={() => setGoDi(g)}
-											>
-												<Icon icon={Close} />
-											</Button>
+											<div className="flex items-center gap-1">
+												<Button
+													aria-label={dien(m.suaLyDo, { ten: tenNoi(g) })}
+													aria-haspopup="dialog"
+													data-nut="sua-ly-do"
+													size="icon-sm"
+													variant="ghost"
+													onClick={() => setSuaDi(g)}
+												>
+													<Icon icon={Edit} />
+												</Button>
+												<Button
+													aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
+													size="icon-sm"
+													variant="ghost"
+													disabled={go.isPending}
+													onClick={() => setGoDi(g)}
+												>
+													<Icon icon={Close} />
+												</Button>
+											</div>
 										</TableCell>
 									) : null}
 								</SimpleTableRow>
@@ -811,6 +829,20 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 					objectiveId={mt.id}
 					daGop={mt.alignments}
 					dong={() => setGan(false)}
+				/>
+			) : null}
+			{suaDi ? (
+				<HopThoaiCanChinh
+					objectiveId={mt.id}
+					daGop={mt.alignments}
+					dong={() => setSuaDi(null)}
+					cheDo={{
+						loai: "sua",
+						alignmentId: suaDi.alignmentId,
+						tenDich: tenNoi(suaDi),
+						lyDo: suaDi.lyDo,
+						canCu: suaDi.canCu,
+					}}
 				/>
 			) : null}
 			<ConfirmDialog
@@ -1040,6 +1072,7 @@ export function ObjectiveSheet({
 				actions={
 					mt ? (
 						<>
+							<NutXemQuanh id={mt.id} />
 							<NutTheoDoi mt={mt} />
 							{ghiDuoc(mt) ||
 							(mt.status === "da-bo" && (mt.quyen.dungLai || mt.quyen.xoa)) ? (
@@ -1091,5 +1124,18 @@ export function ObjectiveSheet({
 				/>
 			) : null}
 		</div>
+	);
+}
+
+function NutXemQuanh({ id }: { id: string }) {
+	const m = okrQuanhMessages(useLocale());
+	const url = useWorkspaceUrl();
+	return (
+		<Button asChild size="sm" variant="outline">
+			<NextLink href={url(`/okr/quanh-muc-tieu/${id}`)}>
+				<Icon data-icon="inline-start" icon={ChartNetwork} />
+				{m.nutXemQuanh}
+			</NextLink>
+		</Button>
 	);
 }

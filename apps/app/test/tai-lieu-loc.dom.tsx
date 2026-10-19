@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
@@ -92,8 +93,7 @@ mock.module("next/link", () => ({
 const { DanhSachTrang } = await import(
 	"@/app/(app)/[slug]/tai-lieu/danh-sach-trang"
 );
-const { thamSo } = await import("@/app/(app)/[slug]/tai-lieu/danh-sach-loc");
-type ToiLoc = import("@/app/(app)/[slug]/tai-lieu/danh-sach-loc").ToiLoc;
+const { duongLoc } = await import("@/app/(app)/[slug]/tai-lieu/danh-sach-loc");
 
 type LocGia = {
 	loai: "quy-dinh" | null;
@@ -132,21 +132,22 @@ async function mo(loc: LocGia): Promise<HTMLElement> {
 	document.body.appendChild(khung);
 	root = createRoot(khung);
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-	const toi: ToiLoc = (sua) =>
-		`/ws/tai-lieu${thamSo({ tab: "trang", nhom: "cho", ...loc, ...sua })}`;
+	const duong = duongLoc("", loc);
 	await act(async () => {
 		root?.render(
-			<QueryClientProvider client={qc}>
-				<LocaleProvider locale="vi">
-					<DanhSachTrang
-						chu={loc.chu}
-						donVi={loc.donVi}
-						loai={loc.loai}
-						page={loc.page}
-						toi={toi}
-					/>
-				</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter
+				hasMemory
+				onUrlUpdate={(e) => {
+					canh.den.push(`/ws/tai-lieu${e.queryString}`);
+				}}
+				searchParams={duong}
+			>
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale="vi">
+						<DanhSachTrang />
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	await cho();
@@ -210,14 +211,25 @@ describe("man-loc", () => {
 		});
 		expect(goc.textContent).toContain("Không có trang nào khớp bộ lọc");
 		expect(goc.querySelector("[data-kho-rong]")).toBeNull();
-		const boLoc = [...goc.querySelectorAll("a")].filter(
-			(a) => a.textContent === "Bỏ lọc",
-		);
-		expect(boLoc.length > 0).toBe(true);
-		for (const a of boLoc) {
-			const q = new URLSearchParams(
-				a.getAttribute("href")?.split("?")[1] ?? "",
+		const nutBoLoc = (o: HTMLElement) =>
+			[...o.querySelectorAll("button")].filter(
+				(b) => b.textContent === "Bỏ lọc",
 			);
+		const soNut = nutBoLoc(goc).length;
+		expect(soNut > 0).toBe(true);
+		for (let i = 0; i < soNut; i += 1) {
+			act(() => root?.unmount());
+			khung?.remove();
+			canh.den = [];
+			const lai = await mo({
+				loai: "quy-dinh",
+				donVi: "dv1",
+				chu: "u1",
+				page: 1,
+			});
+			await bam(nutBoLoc(lai)[i]);
+			const q = thamSoCuoi();
+			expect(canh.den.length > 0).toBe(true);
 			expect([q.get("loai"), q.get("donVi"), q.get("chuTrang")]).toEqual([
 				null,
 				null,

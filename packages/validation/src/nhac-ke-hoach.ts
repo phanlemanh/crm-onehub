@@ -66,6 +66,7 @@ export const mucNhac = z.union([
 			so: z.number().int().positive(),
 		})
 		.strict(),
+	z.object({ loai: z.literal("goi-y-ke-hoach"), goiYId: ma }).strict(),
 ]);
 
 export type MucNhac = z.infer<typeof mucNhac>;
@@ -76,6 +77,11 @@ export const nhacPayload = z
 		daGui: z.array(mucNhac).optional(),
 		kenh: z.enum(["zalo", "slack"]).optional(),
 		lechKenh: z.boolean().optional(),
+		mucTinh: z
+			.object({ ngay: z.string(), khoa: z.array(z.string()) })
+			.strict()
+			.optional(),
+		thongBaoLoi: z.string().optional(),
 	})
 	.strict();
 

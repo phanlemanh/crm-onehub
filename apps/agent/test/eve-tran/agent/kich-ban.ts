@@ -3,6 +3,14 @@ export const KICH_BAN = {
 	khongKhuon: "khong-khuon",
 	tiep: "tiep",
 	dung: "dung",
+	hoi: "hoi",
+} as const;
+
+export const CAU_HOI_THU = {
+	prompt: "chon mot",
+	option: { id: "a", label: "A" },
+	daTraLoi: "da-tra-loi",
+	tienToMa: "cau-hoi-",
 } as const;
 
 export const DAU_BUOC_HAI = "buoc-hai-sau-cap-them";

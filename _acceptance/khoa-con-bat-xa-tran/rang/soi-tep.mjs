@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { API, GOC, hong, loiGoiTest, quetLoiGoi, SPEC } from "./chung.mjs";
+import { xetTran } from "./tran-co-ly-do.mjs";
 
 const SO_CA = 18;
 const CHO_GOI_MA_TRAN = [
@@ -52,8 +53,9 @@ function soiTran(vat) {
 		loi.push(`tep co ${cacCa.length} loi goi test(, ky vong ${SO_CA}`);
 	else dat.push(`tep co dung ${SO_CA} loi goi test(`);
 	for (const ca of cacCa) {
-		if (ca.doiSo.length !== 2)
-			loi.push(`test ${ca.ten} co tran rieng (${ca.doiSo.length} doi so)`);
+		const x = xetTran(spec, ca);
+		if (!x.dat) loi.push(`test ${ca.ten} co tran rieng (${ca.doiSo.length} doi so): ${x.chu}`);
+		else if (x.ten) dat.push(`test ${ca.ten}: tran ${x.ten} co ly do — ${x.lyDo}`);
 		else dat.push(`test ${ca.ten}: 2 doi so`);
 	}
 	const preload = tepPreload(vat[GOI_TUONG_DOI]);
@@ -190,6 +192,18 @@ if (nhom === "khong-noi-tran") {
 		SPEC_TUONG_DOI,
 		(nd) => themVaoCuoiCa(nd, "khoa-con-bat", ", 15_000"),
 		"test khoa-con-bat co tran rieng",
+	);
+	tuKiemTran(
+		"tran so tran",
+		SPEC_TUONG_DOI,
+		(nd) => nd.replace("\t\tTRAN_MA_TRAN_MS,\n\t);", "\t\t60_000,\n\t);"),
+		"co tran rieng (3 doi so): tran 60_000 khong nam trong bang tran co ly do",
+	);
+	tuKiemTran(
+		"tran hang ngoai bang",
+		SPEC_TUONG_DOI,
+		(nd) => nd.replace("\t\tTRAN_MA_TRAN_MS,\n\t);", "\t\tTRAN_KHAC,\n\t);").replace("const TRAN_MA_TRAN_MS = 60_000;", "const TRAN_MA_TRAN_MS = 60_000;\nconst TRAN_KHAC = 90_000;"),
+		"co tran rieng (3 doi so): tran TRAN_KHAC khong nam trong bang tran co ly do",
 	);
 	tuKiemTran(
 		"package.json",

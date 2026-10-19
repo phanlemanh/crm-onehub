@@ -1,0 +1,26 @@
+diff --git a/apps/agent/agent/lib/tai-lieu-config.ts b/apps/agent/agent/lib/tai-lieu-config.ts
+index 2172f3948..f5b68f468 100644
+--- a/apps/agent/agent/lib/tai-lieu-config.ts
++++ b/apps/agent/agent/lib/tai-lieu-config.ts
+@@ -22,7 +22,7 @@ export const TAI_LIEU_AGENT = {
+ 		},
+ 	},
+ 	hoi: {
+-		maModel: "zai/glm-5.2-fast",
++		maModel: "google/gemini-3.8-flash",
+ 		bienKhoaRieng: "KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
+ 		gateway: { zeroDataRetention: true },
+ 		soKetQua: 8,
+diff --git a/packages/db/src/settings.ts b/packages/db/src/settings.ts
+index 2959bf05b..1b877c129 100644
+--- a/packages/db/src/settings.ts
++++ b/packages/db/src/settings.ts
+@@ -8,7 +8,7 @@ import {
+ export const SETTINGS_ID = "app";
+ 
+ export const DEFAULT_AGENT_MODEL = {
+-	id: "zai/glm-5.2-fast",
++	id: "google/gemini-3.8-flash",
+ 	contextWindowTokens: 1_000_000,
+ } as const;
+ 

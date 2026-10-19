@@ -1,14 +1,22 @@
+"use client";
+
 import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Icon } from "@crm/ui/components/icon";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
 import { Slot } from "radix-ui";
 import type * as React from "react";
 
-function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
+function Breadcrumb({
+	className,
+	"aria-label": nhan,
+	...props
+}: React.ComponentProps<"nav">) {
+	const msg = useMessages();
 	return (
 		<nav
-			aria-label="breadcrumb"
+			aria-label={nhan ?? msg.breadcrumb.nhan}
 			data-slot="breadcrumb"
 			className={cn(className)}
 			{...props}

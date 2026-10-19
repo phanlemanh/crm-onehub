@@ -43,11 +43,9 @@ import {
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import {
-	StatusIndicator,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { formatDay } from "@crm/ui/lib/format";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { TU_XU_LY_ESC } from "@crm/ui/lib/tu-xu-ly-esc";
 import { OKR_CANH_KR, themViecInput } from "@crm/validation/okr-canh-kr";
 import { useId, useState } from "react";
@@ -128,13 +126,13 @@ const KHUNG_TAI = ["mot", "hai", "ba"] as const;
 
 type TrangThaiGoc = Extract<LienKet, { coQuyen: true }>["trangThai"];
 
-const TONE_GOC = {
-	"chua-chay": "neutral",
-	"dang-chay": "success",
-	"da-dong": "neutral",
-	"da-luu-tru": "warning",
-	"da-xoa": "warning",
-} as const satisfies Record<TrangThaiGoc, StatusTone>;
+export const NGHIA_VIEC_GOC = {
+	"chua-chay": "nhap",
+	"dang-chay": "dangChay",
+	"da-dong": "ketThuc",
+	"da-luu-tru": "ketThuc",
+	"da-xoa": "ketThuc",
+} as const satisfies Record<TrangThaiGoc, NghiaTrangThai>;
 
 function trangThaiMan(du: TrangThaiCanh): string {
 	if (du.loai === "dang-tai") return TRANG_THAI_MAN.dangTai;
@@ -301,7 +299,7 @@ function MoTaViec({ v, m }: { v: DongViec; m: OkrCanhKrMessages }) {
 					{v.quaHan ? (
 						<StatusIndicator
 							size="sm"
-							tone="error"
+							tone={toneTheoNghia("hong")}
 							label={`${han} · ${m.viec.quaHan}`}
 							data-qua-han
 						/>
@@ -404,7 +402,7 @@ function NoiDungSangKien({ s, m }: { s: DongSangKien; m: OkrCanhKrMessages }) {
 			<ItemDescription>
 				<StatusIndicator
 					size="sm"
-					tone={TONE_GOC[lk.trangThai]}
+					tone={toneTheoNghia(NGHIA_VIEC_GOC[lk.trangThai])}
 					label={m.sangKien.trangThai[lk.trangThai]}
 				/>
 			</ItemDescription>

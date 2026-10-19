@@ -3,6 +3,7 @@
 import { useLocale } from "@crm/ui/components/locale-provider";
 import type { DauVaoLoTrinh } from "@/lib/lo-trinh/doc-trang";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
+import { DongGioLay } from "./dong-gio-lay";
 import { KhungTrong } from "./khung-trong";
 import { TrangLoTrinh } from "./trang-lo-trinh";
 
@@ -40,11 +41,18 @@ export function NoiDungLoTrinh({
 				tieuDe={m.trong.khoiHongTieuDe}
 			/>
 		);
-	return (
+	const trang = (
 		<TrangLoTrinh
 			canhBao={dauVao.canhBao}
 			duLieu={dauVao.duLieu}
 			homNayCoDinh={homNayCoDinh}
 		/>
+	);
+	if (!dauVao.nguon) return trang;
+	return (
+		<div className="flex flex-col gap-3">
+			<DongGioLay nguon={dauVao.nguon} />
+			{trang}
+		</div>
 	);
 }

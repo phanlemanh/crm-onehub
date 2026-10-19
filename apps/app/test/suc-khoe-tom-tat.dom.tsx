@@ -377,7 +377,7 @@ const CA = {
 		await cho(() => trangThai("ST-suckhoe-tomtat-co") !== null, "bang");
 		const khoi = document.body.querySelector('[data-khoi="tom-tat-quan-tri"]');
 		expect(chu(khoi?.querySelector('[data-slot="card-title"]'))).toBe(
-			"Tóm tắt tuần của Trợ lý OKR",
+			"Tóm tắt tuần của Kara",
 		);
 		expect(
 			chu(khoi?.querySelector('[data-slot="card-description"]')),

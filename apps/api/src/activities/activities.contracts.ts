@@ -7,7 +7,6 @@ const COMPOSABLE_TYPES = [
 	ActivityType.CALL,
 	ActivityType.EMAIL,
 	ActivityType.MEETING,
-	ActivityType.TASK,
 ] as const;
 
 const composableEnum = z.enum(COMPOSABLE_TYPES);
@@ -25,15 +24,7 @@ const ALL_ACTIVITY_TYPES = [
 
 const activityTypeOutput = z.enum(ALL_ACTIVITY_TYPES);
 
-const TIMELINE_FILTERS = [
-	"all",
-	"history",
-	"notes",
-	"upcoming",
-	"done",
-	"email",
-	"meetings",
-] as const;
+const TIMELINE_FILTERS = ["all", "notes", "email", "meetings"] as const;
 
 export type TimelineFilter = (typeof TIMELINE_FILTERS)[number];
 
@@ -62,7 +53,6 @@ export const activityCreateInput = z
 		subject: z.string().trim().optional(),
 		body: z.string().trim().optional(),
 		occurredAt: z.string().optional(),
-		dueAt: z.string().nullable().optional(),
 		companyId: z.string().optional(),
 		contactId: z.string().optional(),
 		dealId: z.string().optional(),
@@ -75,28 +65,9 @@ export const activityCreateInput = z
 			message:
 				"An activity has to be about a company, a contact, a deal or a 30-day plan.",
 		},
-	)
-	.refine(
-		(input) => input.type !== ActivityType.TASK || Boolean(input.subject),
-		{
-			message: "A task needs a subject — it is the thing to do.",
-			path: ["subject"],
-		},
 	);
 
 export type ActivityCreateInput = z.infer<typeof activityCreateInput>;
-
-export const completeInput = z.object({
-	id: z.string(),
-	completed: z.boolean().default(true),
-});
-
-export const myTasksInput = z.object({
-	window: z.enum(["overdue", "upcoming", "all"]).default("all"),
-	limit: z.number().int().min(1).max(100).default(25),
-});
-
-export type MyTasksInput = z.infer<typeof myTasksInput>;
 
 const activityAuthorOutput = z.object({
 	id: z.string(),
@@ -185,16 +156,10 @@ export type TimelineResult = z.infer<typeof timelineOutput>;
 export const timelineCountsOutput = z.object({
 	all: z.number(),
 	notes: z.number(),
-	upcoming: z.number(),
-	done: z.number(),
 	email: z.number(),
 	meetings: z.number(),
 });
 
 export type TimelineCounts = z.infer<typeof timelineCountsOutput>;
 
-export const myTasksOutput = z.array(activityEntryOutput);
-
 export const activityCreateOutput = activityEntryOutput;
-
-export const completeOutput = activityEntryOutput;

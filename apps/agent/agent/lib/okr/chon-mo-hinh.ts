@@ -2,6 +2,7 @@ import type { LanguageModel } from "ai";
 import type { NguCanhKenh } from "../phien-con";
 import { TRO_LY_OKR } from "./config";
 import { MO_HINH_TOM_TAT } from "./mo-hinh";
+import { MO_HINH_DANG_CHAY } from "./mo-hinh-thu";
 import { type ViecCon, viecCuaPhienCon } from "./viec-con";
 
 export type MoHinhChon = {
@@ -17,6 +18,6 @@ export async function chonMoHinhTheoViec(
 	if (hang?.kind !== TRO_LY_OKR.loaiViecTomTat) return null;
 	return {
 		model: MO_HINH_TOM_TAT,
-		modelContextWindowTokens: TRO_LY_OKR.cuaSoNguCanh,
+		modelContextWindowTokens: MO_HINH_DANG_CHAY.cuaSoNguCanh,
 	};
 }

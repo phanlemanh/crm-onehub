@@ -3,6 +3,7 @@ import { DEFAULT_LOCALE, type Locale } from "./locale";
 const en = {
 	table: {
 		clearFilters: "Clear",
+		status: "Status",
 		clearSelection: "Clear selection",
 		selected: (count: string) => `${count} selected`,
 		filters: "Filters",
@@ -17,6 +18,9 @@ const en = {
 		selectAllRows: "Select every row on this page",
 		selectRow: (label: string) => `Select ${label}`,
 		selectRowFallback: "Select row",
+		expandRow: (label: string) => `Expand ${label}`,
+		collapseRow: (label: string) => `Collapse ${label}`,
+		rowFallback: "row",
 		searchFacet: (label: string) => `Search ${label}…`,
 		facetOptions: "Options",
 		facetEmpty: "Nothing matches.",
@@ -147,6 +151,9 @@ const en = {
 	khungXuong: {
 		dangTai: "Loading…",
 	},
+	breadcrumb: {
+		nhan: "Breadcrumb",
+	},
 	reasoning: {
 		thinking: "Thinking…",
 		thoughtBrief: "Thought for a few seconds",
@@ -154,7 +161,7 @@ const en = {
 	},
 	chatMessage: {
 		roleUser: "You",
-		roleAssistant: "Assistant",
+		roleAssistant: "Kara",
 		previousBranch: "Previous branch",
 		nextBranch: "Next branch",
 		branchPage: (current: string, total: string) => `${current} of ${total}`,
@@ -241,6 +248,44 @@ const en = {
 		chuGiai:
 			"Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
 	},
+	gantt: {
+		today: "Today",
+		previous: "Previous",
+		next: "Next",
+		addTask: "Add task",
+		allDay: "All day",
+		loading: "Loading schedule",
+		event: "task",
+		events: (count: string) => `${count} tasks`,
+		week: (n: string) => `W${n}`,
+		resources: "Tasks",
+		goToDate: "Go to date",
+		scheduleHint: "Click to schedule",
+		reorder: "Reorder",
+		selectView: "Select scale",
+		zoomIn: "Zoom in",
+		zoomOut: "Zoom out",
+		resizePanel: "Resize panel",
+		jumpToBar: (title: string) => `Scroll to "${title}"`,
+		progress: (percent: string) => `${percent}% complete`,
+		durationDays: (days: string) => `${days} days`,
+		continues: "continues",
+		planned: (range: string) => `Planned ${range}`,
+		milestone: "milestone",
+		scales: {
+			day: "Day",
+			week: "Week",
+			month: "Month",
+			quarter: "Quarter",
+			year: "Year",
+		},
+		quy: (q: string, year: string) => `Q${q} ${year}`,
+		mocNhom: "Milestones",
+		chuaLich: (count: string) => `Not scheduled (${count})`,
+		datNgay: "Set dates",
+		phimDoi: (ten: string, n: string) =>
+			`${ten}: move ${n} days. Enter to save, Esc to cancel.`,
+	},
 	lienKet: {
 		chiHttps: "Only https links are accepted",
 		daBoHttp: (so: string) =>
@@ -251,6 +296,22 @@ const en = {
 		anDanhSach: "Hide the list",
 		cuonThem: "Scroll the list to see the rest",
 	},
+	soDo: {
+		dieuKhien: "Map controls",
+		thuNho: "Zoom out",
+		phongTo: "Zoom in",
+		vuaKhung: "Fit to view",
+		mucPhong: (phanTram: string) => `Zoom ${phanTram}%`,
+		vaiNut: "card",
+		vaiDay: "connection",
+		day: "Alignment line",
+		moTaNut: "Press Enter or Space to open this card.",
+		moTaDay: "An alignment line between two cards.",
+		banDoNho: "Overview map",
+		diemNoi: "Connection point",
+		nutDaDich: (huong: string, x: string, y: string) =>
+			`Card moved ${huong}. New position ${x}, ${y}`,
+	},
 };
 
 export type Messages = typeof en;
@@ -258,6 +319,7 @@ export type Messages = typeof en;
 const vi = {
 	table: {
 		clearFilters: "Bỏ chọn",
+		status: "Trạng thái",
 		clearSelection: "Bỏ chọn",
 		selected: (count: string) => `Đã chọn ${count} dòng`,
 		filters: "Lọc",
@@ -272,6 +334,9 @@ const vi = {
 		selectAllRows: "Chọn tất cả dòng trên trang này",
 		selectRow: (label: string) => `Chọn ${label}`,
 		selectRowFallback: "Chọn dòng",
+		expandRow: (label: string) => `Mở ${label}`,
+		collapseRow: (label: string) => `Thu gọn ${label}`,
+		rowFallback: "dòng",
 		searchFacet: (label: string) => `Tìm ${label}…`,
 		facetOptions: "Các lựa chọn",
 		facetEmpty: "Không có gì khớp.",
@@ -400,6 +465,9 @@ const vi = {
 	khungXuong: {
 		dangTai: "Đang tải…",
 	},
+	breadcrumb: {
+		nhan: "Vị trí trang",
+	},
 	reasoning: {
 		thinking: "Đang suy nghĩ…",
 		thoughtBrief: "Đã nghĩ vài giây",
@@ -407,7 +475,7 @@ const vi = {
 	},
 	chatMessage: {
 		roleUser: "Bạn",
-		roleAssistant: "Trợ lý",
+		roleAssistant: "Kara",
 		previousBranch: "Nhánh trước",
 		nextBranch: "Nhánh sau",
 		branchPage: (current: string, total: string) => `${current} trên ${total}`,
@@ -493,6 +561,44 @@ const vi = {
 		chuGiai:
 			"Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
 	},
+	gantt: {
+		today: "Hôm nay",
+		previous: "Trước",
+		next: "Kế tiếp",
+		addTask: "Thêm việc",
+		allDay: "Cả ngày",
+		loading: "Đang tải lịch",
+		event: "việc",
+		events: (count: string) => `${count} việc`,
+		week: (n: string) => `Tuần ${n}`,
+		resources: "Việc",
+		goToDate: "Tới ngày",
+		scheduleHint: "Bấm để xếp lịch",
+		reorder: "Sắp lại",
+		selectView: "Chọn thang",
+		zoomIn: "Phóng to",
+		zoomOut: "Thu nhỏ",
+		resizePanel: "Đổi bề rộng khung",
+		jumpToBar: (title: string) => `Tới «${title}»`,
+		progress: (percent: string) => `đã xong ${percent}%`,
+		durationDays: (days: string) => `${days} ngày`,
+		continues: "còn tiếp",
+		planned: (range: string) => `Dự kiến ${range}`,
+		milestone: "mốc",
+		scales: {
+			day: "Ngày",
+			week: "Tuần",
+			month: "Tháng",
+			quarter: "Quý",
+			year: "Năm",
+		},
+		quy: (q: string, year: string) => `Quý ${q} ${year}`,
+		mocNhom: "Mốc",
+		chuaLich: (count: string) => `Chưa có lịch (${count})`,
+		datNgay: "Đặt ngày",
+		phimDoi: (ten: string, n: string) =>
+			`${ten}: dời ${n} ngày. Enter để lưu, Esc để thôi.`,
+	},
 	lienKet: {
 		chiHttps: "Chỉ nhận liên kết https",
 		daBoHttp: (so: string) => `Đã bỏ ${so} liên kết http — chỉ nhận https`,
@@ -501,6 +607,22 @@ const vi = {
 		hienDanhSach: "Xem danh sách",
 		anDanhSach: "Ẩn danh sách",
 		cuonThem: "Cuộn danh sách để xem phần còn lại",
+	},
+	soDo: {
+		dieuKhien: "Điều khiển sơ đồ",
+		thuNho: "Thu nhỏ",
+		phongTo: "Phóng to",
+		vuaKhung: "Vừa khung",
+		mucPhong: (phanTram: string) => `Đang phóng ${phanTram}%`,
+		vaiNut: "thẻ",
+		vaiDay: "dây nối",
+		day: "Dây căn chỉnh",
+		moTaNut: "Nhấn Enter hoặc phím cách để mở thẻ này.",
+		moTaDay: "Dây căn chỉnh giữa hai thẻ.",
+		banDoNho: "Bản đồ thu nhỏ",
+		diemNoi: "Điểm nối",
+		nutDaDich: (huong: string, x: string, y: string) =>
+			`Đã dời thẻ về ${huong}. Vị trí mới ${x}, ${y}`,
 	},
 } satisfies Messages;
 

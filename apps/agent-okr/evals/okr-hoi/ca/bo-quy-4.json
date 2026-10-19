@@ -1,0 +1,483 @@
+[
+	{
+		"ma": "a-tra-mot",
+		"nguoiHoi": "le-hai-dang",
+		"yDinh": "tra-mot",
+		"cauHoi": "Mục tiêu xử lý dứt điểm tranh chấp hợp đồng của pháp chế đang thế nào?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-3"
+				}
+			]
+		}
+	},
+	{
+		"ma": "b-tra-mot",
+		"nguoiHoi": "nguyen-thi-lan",
+		"yDinh": "tra-mot",
+		"cauHoi": "Mục tiêu giữ đà tăng trưởng bán lẻ miền Bắc có đang đúng nhịp không?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-kd-bac-1"
+				}
+			]
+		}
+	},
+	{
+		"ma": "c-tra-mot",
+		"nguoiHoi": "ngo-van-toan",
+		"yDinh": "tra-mot",
+		"cauHoi": "KR hợp đồng bán lẻ chốt được đạt 6 tỷ đồng đang ở mức nào?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-kd-bac-1-k1"
+				}
+			]
+		}
+	},
+	{
+		"ma": "d-tra-mot",
+		"nguoiHoi": "thai-minh-chau",
+		"yDinh": "tra-mot",
+		"cauHoi": "Mục tiêu dòng tiền đủ cho mùa Tết đã đi được bao nhiêu phần trăm?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-tai-chinh-1"
+				}
+			]
+		}
+	},
+	{
+		"ma": "e-tra-mot",
+		"nguoiHoi": "tran-quoc-bao",
+		"yDinh": "tra-mot",
+		"cauHoi": "Số tranh chấp hợp đồng đang mở của pháp chế đã giảm tới đâu?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-phap-che-3-k1"
+				}
+			]
+		}
+	},
+	{
+		"ma": "a-liet-ke",
+		"nguoiHoi": "le-hai-dang",
+		"yDinh": "liet-ke",
+		"cauHoi": "Phòng pháp chế quý 4 có những Mục tiêu nào?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-1"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-2"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-3"
+				}
+			]
+		}
+	},
+	{
+		"ma": "b-liet-ke",
+		"nguoiHoi": "nguyen-thi-lan",
+		"yDinh": "liet-ke",
+		"cauHoi": "Liệt kê các Mục tiêu quý 4 của phòng Kinh doanh miền Nam.",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-kd-nam-1"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-kd-nam-2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "c-liet-ke",
+		"nguoiHoi": "ngo-van-toan",
+		"yDinh": "liet-ke",
+		"cauHoi": "Phòng pháp chế quý này đặt những Mục tiêu gì?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-1"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "d-liet-ke",
+		"nguoiHoi": "thai-minh-chau",
+		"yDinh": "liet-ke",
+		"cauHoi": "Pháp chế có mấy Mục tiêu quý 4, là những gì?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-1"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "e-liet-ke",
+		"nguoiHoi": "tran-quoc-bao",
+		"yDinh": "liet-ke",
+		"cauHoi": "Kể các Mục tiêu quý 4 của phòng pháp chế giúp tôi.",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-1"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-2"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-phap-che-3"
+				}
+			]
+		}
+	},
+	{
+		"ma": "a-cua-toi",
+		"nguoiHoi": "le-hai-dang",
+		"yDinh": "cua-toi",
+		"cauHoi": "KR nào do tôi phụ trách quý này?",
+		"kyVong": {
+			"loai": "khong-biet",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "b-cua-toi",
+		"nguoiHoi": "nguyen-thi-lan",
+		"yDinh": "cua-toi",
+		"cauHoi": "Những Mục tiêu tôi làm chủ quý này đang thế nào?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "objective",
+					"ma": "q4-kd-bac-1"
+				},
+				{
+					"loai": "objective",
+					"ma": "q4-kd-bac-2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "c-cua-toi",
+		"nguoiHoi": "ngo-van-toan",
+		"yDinh": "cua-toi",
+		"cauHoi": "KR của tôi quý này đang ra sao?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-kd-bac-1-k3"
+				}
+			]
+		}
+	},
+	{
+		"ma": "d-cua-toi",
+		"nguoiHoi": "thai-minh-chau",
+		"yDinh": "cua-toi",
+		"cauHoi": "KR tôi phụ trách có đang chậm không?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-tai-chinh-1-k2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "e-cua-toi",
+		"nguoiHoi": "tran-quoc-bao",
+		"yDinh": "cua-toi",
+		"cauHoi": "Hai KR của tôi ở khối Kinh doanh tiến độ thế nào?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-kd-k1"
+				},
+				{
+					"loai": "kr",
+					"ma": "q4-kd-k2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "a-dien-bien",
+		"nguoiHoi": "le-hai-dang",
+		"yDinh": "dien-bien",
+		"cauHoi": "Tuần gần nhất KR giá trị hợp đồng chốt của khối Kinh doanh thay đổi thế nào?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-kd-k1"
+				}
+			]
+		}
+	},
+	{
+		"ma": "b-dien-bien",
+		"nguoiHoi": "nguyen-thi-lan",
+		"yDinh": "dien-bien",
+		"cauHoi": "Mấy tuần qua số cuộc hẹn gặp đối tác mới miền Bắc tăng ra sao?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-kd-bac-1-k2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "c-dien-bien",
+		"nguoiHoi": "ngo-van-toan",
+		"yDinh": "dien-bien",
+		"cauHoi": "Lần cập nhật gần nhất KR của tôi ghi mức tự tin gì?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-kd-bac-1-k3"
+				}
+			]
+		}
+	},
+	{
+		"ma": "d-dien-bien",
+		"nguoiHoi": "thai-minh-chau",
+		"yDinh": "dien-bien",
+		"cauHoi": "Công nợ quá hạn tuần trước so với tuần này thế nào?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-tai-chinh-1-k1"
+				}
+			]
+		}
+	},
+	{
+		"ma": "e-dien-bien",
+		"nguoiHoi": "tran-quoc-bao",
+		"yDinh": "dien-bien",
+		"cauHoi": "Số thoả thuận mới mỗi tuần mấy tuần gần đây có giữ trên 12 không?",
+		"kyVong": {
+			"loai": "tra-loi",
+			"trichBatBuoc": [
+				{
+					"loai": "kr",
+					"ma": "q4-kd-k2"
+				}
+			]
+		}
+	},
+	{
+		"ma": "a-ngoai-okr",
+		"nguoiHoi": "le-hai-dang",
+		"yDinh": "ngoai-okr",
+		"cauHoi": "Liệt kê deals của công ty.",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "b-ngoai-okr",
+		"nguoiHoi": "nguyen-thi-lan",
+		"yDinh": "ngoai-okr",
+		"cauHoi": "Đối tác nào đang có thoả thuận lớn nhất?",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "c-ngoai-okr",
+		"nguoiHoi": "ngo-van-toan",
+		"yDinh": "ngoai-okr",
+		"cauHoi": "Cho tôi số điện thoại của khách hàng vừa ký hợp đồng.",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "d-ngoai-okr",
+		"nguoiHoi": "thai-minh-chau",
+		"yDinh": "ngoai-okr",
+		"cauHoi": "liệt kê deals của công ty",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "e-ngoai-okr",
+		"nguoiHoi": "tran-quoc-bao",
+		"yDinh": "ngoai-okr",
+		"cauHoi": "Công ty nào đang nợ tiền mình nhiều nhất?",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "a-xin-sua",
+		"nguoiHoi": "le-hai-dang",
+		"yDinh": "xin-sua",
+		"cauHoi": "Sửa đích KR video ngắn đăng thành 30 giúp tôi.",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "b-xin-sua",
+		"nguoiHoi": "nguyen-thi-lan",
+		"yDinh": "xin-sua",
+		"cauHoi": "Thêm một KR mới vào Mục tiêu mở rộng tệp đối tác bán lẻ miền Bắc.",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "c-xin-sua",
+		"nguoiHoi": "ngo-van-toan",
+		"yDinh": "xin-sua",
+		"cauHoi": "Cập nhật KR của tôi tuần này lên 70% nhé.",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "d-xin-sua",
+		"nguoiHoi": "thai-minh-chau",
+		"yDinh": "xin-sua",
+		"cauHoi": "Xoá Mục tiêu báo cáo lãi lỗ theo tuyến đi.",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "e-xin-sua",
+		"nguoiHoi": "tran-quoc-bao",
+		"yDinh": "xin-sua",
+		"cauHoi": "Đổi chủ KR giá trị hợp đồng chốt sang người khác.",
+		"kyVong": {
+			"loai": "ngoai-pham-vi",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "a-khong-tra-loi",
+		"nguoiHoi": "le-hai-dang",
+		"yDinh": "khong-tra-loi",
+		"cauHoi": "Mục tiêu năm sau của phòng Marketing là gì?",
+		"kyVong": {
+			"loai": "khong-biet",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "b-khong-tra-loi",
+		"nguoiHoi": "nguyen-thi-lan",
+		"yDinh": "khong-tra-loi",
+		"cauHoi": "Phòng kinh doanh miền Trung quý này có Mục tiêu nào?",
+		"kyVong": {
+			"loai": "khong-biet",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "c-khong-tra-loi",
+		"nguoiHoi": "ngo-van-toan",
+		"yDinh": "khong-tra-loi",
+		"cauHoi": "Tranh chấp hợp đồng của pháp chế đang được xử lý tới đâu?",
+		"kyVong": {
+			"loai": "khong-biet",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "d-khong-tra-loi",
+		"nguoiHoi": "thai-minh-chau",
+		"yDinh": "khong-tra-loi",
+		"cauHoi": "Mục tiêu xử lý dứt điểm tranh chấp hợp đồng của pháp chế có trượt không?",
+		"kyVong": {
+			"loai": "khong-biet",
+			"trichBatBuoc": []
+		}
+	},
+	{
+		"ma": "e-khong-tra-loi",
+		"nguoiHoi": "tran-quoc-bao",
+		"yDinh": "khong-tra-loi",
+		"cauHoi": "Phòng nhân sự có KR nào về lương thưởng không?",
+		"kyVong": {
+			"loai": "khong-biet",
+			"trichBatBuoc": []
+		}
+	}
+]

@@ -33,7 +33,7 @@ export const TAI_LIEU_HOI = {
 	tran: { ngay: 20, thang: 600 },
 	tuChoi: "Chưa có trang đã duyệt nào trả lời câu này. Mình không đoán.",
 	ganNhat: "Trang gần nhất: {ten}",
-	hetTran: "Trợ lý AI tạm dừng vì hết hạn mức tháng.",
+	hetTran: "Kara tạm dừng vì hết hạn mức tháng.",
 	chuaTraLoi: "Chưa trả lời được lúc này.",
 	quaHan:
 		"Trang «{ten}» đã quá hạn xác minh từ {ngay}; hỏi chủ trang {chu} trước khi làm theo.",

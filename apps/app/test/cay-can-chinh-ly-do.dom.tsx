@@ -334,7 +334,8 @@ describe("l3-dem", () => {
 		await dung(CAY_LOC);
 		const so = (loc: string) =>
 			Number(
-				qs(`[data-loc-muc-tin="${loc}"] [data-so-loc]`)?.textContent ?? "-1",
+				qs(`[data-loc-muc-tin="${loc}"] [data-slot="toggle-group-item-count"]`)
+					?.textContent ?? "-1",
 			);
 		const dem = (muc: MucTin | "tat-ca") =>
 			muc === "tat-ca"

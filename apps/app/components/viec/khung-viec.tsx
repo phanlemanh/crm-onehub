@@ -27,7 +27,11 @@ import { lyDoLoi } from "@/lib/ly-do-loi";
 import { type ViecMessages, viecMessages } from "@/lib/messages/viec";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import { HoiDongCha } from "./hoi-dong-cha";
 import { LichSuViec } from "./lich-su-viec";
+import { MucPhaiCho } from "./muc-phai-cho";
+import { MucViecCon } from "./muc-viec-con";
+import { OBatDauViec, ODuAnViec } from "./o-lich-du-an";
 import {
 	HanViec,
 	type TrangThaiViec,
@@ -71,13 +75,17 @@ function nhanNut(
 }
 
 export function KhungViec({ viecId }: { viecId: string }) {
-	const m = viecMessages(useLocale());
+	const locale = useLocale();
+	const m = viecMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { close } = useRecordStack();
 	const { tab, setTab } = useRecordSheetView("chi-tiet");
 	const [hoiXoa, setHoiXoa] = useState(false);
+	const [hoiCha, setHoiCha] = useState<"XONG" | "HUY" | null>(null);
 	const q = useQuery(trpc.viec.get.queryOptions({ id: viecId }));
+	const conQ = useQuery(trpc.viec.con.queryOptions({ id: viecId }));
+	const conMo = conQ.data?.conMo ?? 0;
 	const dsNguoi = useQuery(trpc.onboarding.nguoiNhanViec.queryOptions());
 	const xong = {
 		onSuccess: () => void cache.viec(),
@@ -92,6 +100,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 		trpc.viec.doiNguoiThucHien.mutationOptions(xong),
 	);
 	const go = useMutation(trpc.viec.go.mutationOptions(xong));
+	const doiDuAn = useMutation(trpc.viec.doiDuAn.mutationOptions(xong));
 	const theo = useMutation(trpc.viec.theoDoi.mutationOptions(xong));
 	const boTheo = useMutation(trpc.viec.boTheoDoi.mutationOptions(xong));
 	const xoa = useMutation(
@@ -145,6 +154,14 @@ export function KhungViec({ viecId }: { viecId: string }) {
 						) : (
 							<HanViec viec={v} />
 						)}
+					</DetailSheetProperty>
+					<DetailSheetProperty label={m.khung.batDau}>
+						<OBatDauViec
+							batDauNgay={v.batDauNgay}
+							hanNgay={v.hanNgay}
+							onLuu={(batDau) => sua.mutate({ id: v.id, batDauNgay: batDau })}
+							suaDuoc={suaDuoc}
+						/>
 					</DetailSheetProperty>
 					<DetailSheetProperty label={m.khung.nguoiGiao}>
 						<span translate="no">{v.nguoiGiao.name}</span>
@@ -207,6 +224,15 @@ export function KhungViec({ viecId }: { viecId: string }) {
 							</span>
 						)}
 					</DetailSheetProperty>
+					<DetailSheetProperty label={m.khung.duAn}>
+						<ODuAnViec
+							dangDoi={doiDuAn.isPending}
+							duAn={v.duAn}
+							onDoi={(duAnId) => doiDuAn.mutate({ id: v.id, duAnId })}
+							rieng={v.banGhi.length === 0}
+							suaDuoc={suaDuoc}
+						/>
+					</DetailSheetProperty>
 				</DetailSheetProperties>
 			</DetailSheetSection>
 			<DetailSheetSection title={m.khung.moTa}>
@@ -236,6 +262,15 @@ export function KhungViec({ viecId }: { viecId: string }) {
 					</p>
 				</DetailSheetSection>
 			) : null}
+			{v.duAn ? (
+				<MucPhaiCho
+					duAnId={v.duAn.id}
+					phaiCho={v.phaiCho}
+					suaDuoc={suaDuoc}
+					viecId={v.id}
+				/>
+			) : null}
+			<MucViecCon viecId={v.id} />
 		</DetailSheetBody>
 	) : null;
 
@@ -250,7 +285,13 @@ export function KhungViec({ viecId }: { viecId: string }) {
 									<Button
 										disabled={doi.isPending}
 										key={den}
-										onClick={() => doi.mutate({ id: v.id, den })}
+										onClick={() => {
+											if ((den === "XONG" || den === "HUY") && conMo > 0) {
+												setHoiCha(den);
+												return;
+											}
+											doi.mutate({ id: v.id, den });
+										}}
 										size="sm"
 										variant={den === "XONG" ? "default" : "outline"}
 									>
@@ -339,6 +380,21 @@ export function KhungViec({ viecId }: { viecId: string }) {
 				thoi={m.xoa.thoi}
 				tieuDe={m.xoa.tieuDe}
 			/>
+			{hoiCha ? (
+				<HoiDongCha
+					conMo={conMo}
+					den={hoiCha}
+					onDongY={() => {
+						if (v) doi.mutate({ id: v.id, den: hoiCha });
+						setHoiCha(null);
+					}}
+					onOpenChange={(mo) => {
+						if (!mo) setHoiCha(null);
+					}}
+					open
+					pending={doi.isPending}
+				/>
+			) : null}
 		</>
 	);
 }

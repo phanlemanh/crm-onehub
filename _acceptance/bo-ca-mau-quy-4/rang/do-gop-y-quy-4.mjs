@@ -53,10 +53,7 @@ const DO = {
 	caMau9b: { ma: "30/30", judge: 0.95 },
 	co: { tuKiem: "--tu-kiem", thuMuc: "--thu-muc", tranUsd: "--tran-usd" },
 	ra: join(GOC, ".acceptance-runs/bo-ca-mau-quy-4/do"),
-	bangChung: join(
-		GOC,
-		"_acceptance/bo-ca-mau-quy-4/evidence/do-gop-y-quy-4.md",
-	),
+	bangChung: join(GOC, ".acceptance-runs/bo-ca-mau-quy-4/do/do-gop-y-quy-4.md"),
 	soMoiLot: join(GOC, "_acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs"),
 	eve: join(AGENT, "node_modules/.bin/eve"),
 	caDoiChung: {

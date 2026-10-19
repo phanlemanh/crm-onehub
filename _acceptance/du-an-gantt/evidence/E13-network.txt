@@ -1,0 +1,1 @@
+E13 run 2026-10-18T03:14:14Z: driver = man.mjs (Node script in phien do), khong co duong doc network/console cua browser tool. Dong console-error cu trong tep nay (run 09:46) da bi thay; lan chay nay log khong in loi console. networkObserved = n-a (driver).

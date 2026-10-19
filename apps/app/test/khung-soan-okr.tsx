@@ -63,6 +63,7 @@ function thuTuc(duong: string) {
 						queryKey: [duong, vao ?? null],
 						queryFn: async () => doc(vao),
 					},
+		mutationKey: () => [duong],
 		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
@@ -435,6 +436,12 @@ export function datLai(): void {
 	luongGia = null;
 	daPhanLoai.length = 0;
 	danhSach = { cuoc: CUOC, dong: [], thieuBoiCanh: false, lyDo: null };
+	dat("users.me", () => ({
+		id: CUOC.nguoiMo.id,
+		name: CUOC.nguoiMo.name,
+		email: "hai@onehub.vn",
+		image: null,
+	}));
 	dat("okr.soanDanhSach", () => danhSach);
 	dat("okr.soanQuyet", () => ({ ok: true }));
 	dat("okr.soanDuaVao", () => ({
@@ -716,12 +723,19 @@ export async function moKhung(
 		total: 0,
 		facetCounts: { phuTrach: [], loai: [], trangThai: [] },
 		canEdit,
+		canCreate: canEdit,
 	}));
 	const tham = new URLSearchParams(thamSo);
 	if (don !== "goc") tham.set("donOkr", don);
-	await mo(<TheoDonVi cauNoiOkr={cauNoi} />, `?${tham}`);
+	await mo(
+		<>
+			<DauTrangOkr cauNoi={cauNoi} chonChuKy={null} />
+			<TheoDonVi />
+		</>,
+		`?${tham}`,
+	);
 	await cho(
-		() => document.querySelector("[data-hang-nut]") !== null,
+		() => document.querySelector("[data-chon-don-vi]") !== null,
 		"khung don vi",
 	);
 	await nhip(10);

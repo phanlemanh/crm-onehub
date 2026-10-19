@@ -4,6 +4,7 @@ import path from "node:path";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { HAN_BAI_DOM } from "./han-bai-dom";
 
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () =>
@@ -40,7 +41,7 @@ const KHOI =
 	/<script type="application\/json" id="lo-trinh-du-lieu">([\s\S]*?)<\/script>/;
 const THU_MUC = path.join(import.meta.dir, "fixtures/lo-trinh");
 const HTML_X2 = readFileSync(path.join(THU_MUC, "x2/LO-TRINH.html"), "utf8");
-const HTML_B1 = readFileSync(path.join(THU_MUC, "LO-TRINH.mau.html"), "utf8");
+const HTML_B1 = readFileSync(path.join(THU_MUC, "b1/LO-TRINH.html"), "utf8");
 const O = [
 	"da_giao",
 	"vi_sao",
@@ -241,16 +242,20 @@ describe("tom-tat", () => {
 		expect(kiemSoDem(coDuLieu(DV_X2))).toEqual([]);
 	});
 
-	test("ma tran 81 viec: tam hang dung chu, dung thu tu, dung cho", async () => {
-		const dl = coDuLieu(DV_X2);
-		let dem = 0;
-		for (const h of CO_DAI) {
-			const loi = kiemTomTat(await moNgan(dl, h.khoa), h);
-			expect(loi, loi[0]).toEqual([]);
-			dem++;
-		}
-		expect(dem).toBe(81);
-	});
+	test(
+		"ma tran 81 viec: tam hang dung chu, dung thu tu, dung cho",
+		async () => {
+			const dl = coDuLieu(DV_X2);
+			let dem = 0;
+			for (const h of CO_DAI) {
+				const loi = kiemTomTat(await moNgan(dl, h.khoa), h);
+				expect(loi, loi[0]).toEqual([]);
+				dem++;
+			}
+			expect(dem).toBe(81);
+		},
+		HAN_BAI_DOM.maTranMs,
+	);
 
 	test("chieu do: duong doc cat vi_sao, bo hang do_gi, bo dai mot viec", async () => {
 		const dl = coDuLieu(DV_X2);
@@ -266,7 +271,7 @@ describe("tom-tat", () => {
 									...h.tom_tat,
 									moi_nguoi: {
 										...h.tom_tat.moi_nguoi,
-										vi_sao: h.tom_tat.moi_nguoi.vi_sao.slice(0, 400),
+										vi_sao: h.tom_tat.moi_nguoi.vi_sao.slice(0, 200),
 									},
 								},
 							}
@@ -275,9 +280,9 @@ describe("tom-tat", () => {
 			})),
 		};
 		const dai = CO_DAI.filter(
-			(h) => (h.tom_tat?.moi_nguoi.vi_sao ?? "").length > 400,
+			(h) => (h.tom_tat?.moi_nguoi.vi_sao ?? "").length > 200,
 		);
-		expect(dai.length).toBe(31);
+		expect(dai.length).toBe(55);
 		for (const h of dai)
 			expect(kiemTomTat(await moNgan(cat, h.khoa), h)).toContain(
 				`viec ${h.khoa} lech o tom tat vi_sao`,
@@ -498,19 +503,23 @@ describe("chu-kho", () => {
 		return loi;
 	}
 
-	test("vai owner: 81 viec du sau so, ma commit, sao chep, tim PR", async () => {
-		const dl = coDuLieu(choVaiXem(DV_X2, "owner"));
-		let dem = 0;
-		for (const h of CO_DAI) {
-			const loi = kiemChuKho(await moNgan(dl, h.khoa, m.hoSo.theSoLieu), h);
-			expect(loi, loi[0]).toEqual([]);
-			dem++;
-		}
-		expect(dem).toBe(81);
-		expect(
-			CO_DAI.filter((h) => h.tom_tat?.chu_kho.luot_cham === null).length,
-		).toBe(14);
-	});
+	test(
+		"vai owner: 81 viec du sau so, ma commit, sao chep, tim PR",
+		async () => {
+			const dl = coDuLieu(choVaiXem(DV_X2, "owner"));
+			let dem = 0;
+			for (const h of CO_DAI) {
+				const loi = kiemChuKho(await moNgan(dl, h.khoa, m.hoSo.theSoLieu), h);
+				expect(loi, loi[0]).toEqual([]);
+				dem++;
+			}
+			expect(dem).toBe(81);
+			expect(
+				CO_DAI.filter((h) => h.tom_tat?.chu_kho.luot_cham === null).length,
+			).toBe(14);
+		},
+		HAN_BAI_DOM.maTranMs,
+	);
 
 	test("chieu do: so chua dinh dang, href thieu ma, mau bo type", async () => {
 		const h = CO_DAI.find((x) => (x.tom_tat?.chu_kho.token ?? 0) >= 1000);

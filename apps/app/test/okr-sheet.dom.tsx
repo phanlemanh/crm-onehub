@@ -1162,7 +1162,7 @@ describe("sheet-hien-tai-chi-doc", () => {
 			khoa: {
 				readOnly: true,
 				disabled: false,
-				lienKet: "/ws/okr/cap-nhat-tuan",
+				lienKet: "/ws/okr",
 				chuLienKet: m.hopThoai.capNhatTuan,
 			},
 			goi: [

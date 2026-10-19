@@ -38,15 +38,16 @@ import {
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { NGHIA_TU_TIN } from "@crm/ui/components/okr-status";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import {
 	IndicatorDot,
 	StatusIndicator,
-	type StatusTone,
 } from "@crm/ui/components/status-indicator";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import type { Locale } from "@crm/ui/lib/locale";
+import { toneTheoNghia } from "@crm/ui/lib/status-tone";
 import {
 	GHI_CHU_TOI_DA,
 	kiemGiaTriTheoKieu,
@@ -68,13 +69,7 @@ import { hienSo } from "../hop-thoai-kr";
 import type { DuLieuCapNhat, KrCapNhat } from "../kieu";
 import { KHOA_DAU } from "../nguon-so";
 
-const TONE_TU_TIN = {
-	cao: "success",
-	vua: "warning",
-	thap: "error",
-} satisfies Record<MucTuTin, StatusTone>;
-
-const TUAN = { chuNhat: 6, soNgay: 7 } as const;
+export const TUAN = { chuNhat: 6, soNgay: 7 } as const;
 
 const VI_DU_SO = 3.5;
 
@@ -101,13 +96,13 @@ type KetQuaGui = {
 	dong: DongDaGui[];
 };
 
-function congNgay(ngay: string, n: number): string {
+export function congNgay(ngay: string, n: number): string {
 	const d = new Date(`${ngay}T00:00:00Z`);
 	d.setUTCDate(d.getUTCDate() + n);
 	return d.toISOString().slice(0, 10);
 }
 
-function ngayThang(ngay: string): string {
+export function ngayThang(ngay: string): string {
 	const [, thang, ngayTrongThang] = ngay.split("-");
 	return `${ngayTrongThang}/${thang}`;
 }
@@ -296,12 +291,18 @@ function Rong() {
 	);
 }
 
-function BangCapNhat({
+export function BangCapNhat({
 	duLieu,
 	sessionId,
+	taiCho = false,
+	suaNgay = false,
+	focusDau = false,
 }: {
 	duLieu: DuLieuCapNhat;
 	sessionId: string;
+	taiCho?: boolean;
+	suaNgay?: boolean;
+	focusDau?: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -312,7 +313,7 @@ function BangCapNhat({
 			new Map(duLieu.items.map((kr) => [kr.keyResultId, oBanDau(kr, locale)])),
 	);
 	const [daGui, setDaGui] = useState<KetQuaGui | null>(null);
-	const [dangSua, setDangSua] = useState(false);
+	const [dangSua, setDangSua] = useState(suaNgay);
 	const gui = useMutation(trpc.okr.guiCapNhat.mutationOptions());
 
 	const dong = duLieu.items.map((kr) => {
@@ -338,12 +339,19 @@ function BangCapNhat({
 					).length
 				}
 				ketQua={daGui}
+				taiCho={taiCho}
 				weekStart={duLieu.weekStart}
 			/>
 		);
 
 	if (!dangSua && tong > 0 && soDaGuiTuanNay === tong)
-		return <DaXongTuanNay duLieu={duLieu} sua={() => setDangSua(true)} />;
+		return (
+			<DaXongTuanNay
+				duLieu={duLieu}
+				sua={() => setDangSua(true)}
+				taiCho={taiCho}
+			/>
+		);
 
 	const motPhan = soDaGuiTuanNay > 0 && soDaGuiTuanNay < tong;
 
@@ -429,7 +437,7 @@ function BangCapNhat({
 									loi={d.loi}
 									o={d.o}
 									so={d.so}
-									tuDongFocus={dangSua && i === 0}
+									tuDongFocus={(dangSua || focusDau) && i === 0}
 									weekStart={duLieu.weekStart}
 								/>
 							</Fragment>
@@ -698,7 +706,10 @@ export function ChonTuTin({
 						key={muc}
 						value={muc}
 					>
-						<IndicatorDot aria-hidden="true" tone={TONE_TU_TIN[muc]} />
+						<IndicatorDot
+							aria-hidden="true"
+							tone={toneTheoNghia(NGHIA_TU_TIN[muc])}
+						/>
 						{m.mucTuTin[muc]}
 					</ToggleGroupItem>
 				))}
@@ -743,10 +754,12 @@ function DaGui({
 	ketQua,
 	chuaGui,
 	weekStart,
+	taiCho,
 }: {
 	ketQua: KetQuaGui;
 	chuaGui: number;
 	weekStart: string;
+	taiCho: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -781,7 +794,7 @@ function DaGui({
 									<StatusIndicator
 										label={m.tuTinNhan(m.mucTuTin[d.confidence])}
 										size="sm"
-										tone={TONE_TU_TIN[d.confidence]}
+										tone={toneTheoNghia(NGHIA_TU_TIN[d.confidence])}
 									/>
 								</Item>
 							</Fragment>
@@ -789,9 +802,11 @@ function DaGui({
 					</ItemGroup>
 				</CardContent>
 			</Card>
-			<div>
-				<VeCuaToi />
-			</div>
+			{taiCho ? null : (
+				<div>
+					<VeCuaToi />
+				</div>
+			)}
 		</div>
 	);
 }
@@ -799,9 +814,11 @@ function DaGui({
 function DaXongTuanNay({
 	duLieu,
 	sua,
+	taiCho,
 }: {
 	duLieu: DuLieuCapNhat;
 	sua: () => void;
+	taiCho: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -837,7 +854,7 @@ function DaXongTuanNay({
 										<StatusIndicator
 											label={m.tuTinNhan(m.mucTuTin[kr.lastConfidence])}
 											size="sm"
-											tone={TONE_TU_TIN[kr.lastConfidence]}
+											tone={toneTheoNghia(NGHIA_TU_TIN[kr.lastConfidence])}
 										/>
 									) : null}
 								</Item>
@@ -850,7 +867,7 @@ function DaXongTuanNay({
 				<Button data-nut="sua-cap-nhat" onClick={sua} variant="outline">
 					{m.daXong.sua}
 				</Button>
-				<VeCuaToi />
+				{taiCho ? null : <VeCuaToi />}
 			</div>
 		</div>
 	);

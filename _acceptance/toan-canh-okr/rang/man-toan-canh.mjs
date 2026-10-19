@@ -56,7 +56,8 @@ const CHU = {
 	cayCanChinh: "Cây căn chỉnh toàn công ty",
 	cayDonVi: "Cây đơn vị",
 	cungHien: "cũng hiện ở chỗ góp kia",
-	khongKhop: "Không mục tiêu nào khớp bộ lọc",
+	// AC-14 loi-hua-moi: trang-don-vi-mot-bang AC-5 — bang trong khi loc khong khop noi «Khong co muc tieu nao khop» kem nut bo loc.
+	khongKhop: "Không có mục tiêu nào khớp",
 	boLoc: "Bỏ lọc",
 	phuTrach: "Người phụ trách",
 	phongBanChinh: "Phòng ban chính",
@@ -1170,6 +1171,17 @@ const boChan = () => fetch(`${CUA_CHAN}/__cua-chan/bo`, { method: "POST" });
 const ky = () => `kyOkr=${OKR.quy}`;
 const theoDonVi = (them) => `/okr/theo-don-vi?${ky()}${them ? `&${them}` : ""}`;
 
+/* Mục tiêu đã bỏ nằm trong nhóm «Đã bỏ» thu gọn dưới bảng (CollapsibleTrigger trong
+   [data-nhom-da-bo]); mở nhóm để mọi mục tiêu máy chủ trả cho đơn vị cùng hiện. */
+async function moNhomDaBo(t) {
+	await hienSel(t, "[data-nhom-da-bo]", "nhom «Da bo» hien");
+	await t.evaluate(() => {
+		const nut = window.__tim("[data-nhom-da-bo] button[aria-expanded='false']")[0];
+		if (nut instanceof HTMLElement) nut.click();
+	});
+	await cho(400);
+}
+
 async function buocLoc() {
 	const t = await moTrang(
 		cookie.truongB,
@@ -1177,6 +1189,8 @@ async function buocLoc() {
 		theoDonVi(`donOkr=bp:${ORG.B}`),
 	);
 	await hienSel(t, "[data-muc-tieu]");
+	// ve-sinh-do-san-onehub cach-toi: muc tieu da bo (P2a) nay o nhom «Da bo» thu gon duoi bang — mo nhom roi dem nhu danh sach cu.
+	await moNhomDaBo(t);
 	const bon = await thuocTinh(t, "[data-muc-tieu]", "data-muc-tieu");
 	kiem(
 		`E2 buoc 3: bo phan B hien dung 4 muc tieu B1, P1a, P1b, P2a, khong P3a (thay ${bon.length})`,
@@ -1188,7 +1202,8 @@ async function buocLoc() {
 	await chup(t, "E2-buoc-loc-1.png");
 
 	trpc.length = 0;
-	await bamChu(t, "[data-loc-okr] button", "");
+	// AC-14 cach-toi: «Loc» (nam mat loc may chu) nay o hang cong cu cua bang don vi (trang-don-vi-mot-bang AC-5).
+	await bamChu(t, "button[aria-haspopup='menu']", "Lọc");
 	await cho(400);
 	await bamChu(t, "[role='menuitem']", CHU.phuTrach);
 	await cho(400);
@@ -1250,6 +1265,8 @@ async function buocLoc() {
 		"[data-trang-thai='ST-donvi-loc-khongkhop'] button",
 		CHU.boLoc,
 	);
+	// ve-sinh-do-san-onehub cach-toi: bo loc thi danh sach nap lai, nhom «Da bo» dung lai o trang thai thu — mo lai roi dem.
+	await moNhomDaBo(t);
 	await doi(
 		t,
 		"E2 buoc 5: bo loc tra lai 4 muc tieu",
@@ -1270,8 +1287,8 @@ async function buocLoc() {
 			rong,
 			theoDonVi(`donOkr=nguoi:${id.k}`),
 		);
-		await hienSel(n, "[data-don-vi]", "E2 buoc 6: dau trang mot nguoi");
-		const dau = await chuSel(n, "[data-don-vi]");
+		await hienSel(n, "[data-dong-don-vi]", "E2 buoc 6: dau trang mot nguoi");
+		const dau = `${await chuSel(n, "[data-chon-don-vi]")} ${await chuSel(n, "[data-dong-don-vi]")}`;
 		kiem(
 			`E2 buoc 6: dau trang co ten k, phong ban chinh, quan ly truc tiep (thay: ${dau.slice(0, 160)})`,
 			dau.includes(NGUOI.k.ten) &&
@@ -1287,6 +1304,19 @@ async function buocLoc() {
 		await chup(n, ten);
 		await n.close();
 	}
+}
+
+/* trang-don-vi-mot-bang (AC-14): ô chọn đơn vị thay cây «Đơn vị» — lựa chọn
+   không mang khoá trên DOM, nên khoá của lựa chọn đang sáng rút từ org.tree. */
+async function khoaTheoTenDon() {
+	const cay = await hoi(cookie.truongP1, "org.tree");
+	return Object.fromEntries([
+		...cay.divisions.flatMap((bp) => [
+			[bp.name, `bp:${bp.id}`],
+			...bp.departments.map((pb) => [pb.name, `pb:${pb.id}`]),
+		]),
+		...cay.chuaXep.map((pb) => [pb.name, `pb:${pb.id}`]),
+	]);
 }
 
 async function focusDau(t, nhan) {
@@ -1305,7 +1335,12 @@ const dangCo = (t) =>
 		return {
 			khoa:
 				e?.getAttribute("data-cay-khoa") ??
-				e?.getAttribute("data-nut-cay") ??
+				window.__khoaDon?.[
+					document
+						.getElementById(e?.getAttribute("aria-activedescendant") ?? "")
+						?.querySelector(":scope > span")
+						?.textContent?.trim() ?? ""
+				] ??
 				null,
 			level: e?.getAttribute("aria-level") ?? null,
 			chu: e?.textContent?.replace(/\s+/g, " ").trim().slice(0, 60) ?? "",
@@ -1412,9 +1447,9 @@ async function buocCay() {
 		RONG,
 		theoDonVi(`donOkr=nguoi:${id.k}`),
 	);
-	const cayDonVi = `[role='tree'][aria-label='${CHU.cayDonVi}']`;
+	const cayDonVi = "[data-chon-don-vi]";
 	await hienSel(p, cayDonVi, "E5: trang mot nguoi co cay don vi");
-	const tab0 = await demSel(p, `${cayDonVi} [tabindex='0']`);
+	const tab0 = await demSel(p, `${cayDonVi}:not([tabindex='-1'])`);
 	kiem(
 		`E5 (AC-3): trang mot nguoi, cay don vi co dung mot muc trong thu tu Tab (thay ${tab0})`,
 		tab0 === 1,
@@ -1442,8 +1477,16 @@ async function buocCay() {
 	await p.close();
 
 	const u = await moTrang(cookie.truongP1, RONG, theoDonVi());
-	await hienSel(u, `[role='tree'][aria-label='${CHU.cayDonVi}']`);
-	await focusDau(u, CHU.cayDonVi);
+	await hienSel(u, "[data-chon-don-vi]");
+	await u.evaluate(
+		(m) => {
+			window.__khoaDon = m;
+		},
+		await khoaTheoTenDon(),
+	);
+	await u.focus("[data-chon-don-vi]");
+	await u.keyboard.press("Enter");
+	await hienSel(u, "[cmdk-item]");
 	await u.keyboard.press("ArrowDown");
 	await cho(200);
 	const den = await dangCo(u);
@@ -1961,7 +2004,8 @@ async function buocSucKhoe() {
 		`E21 buoc 2: URL la trang suc khoe (thay ${new URL(a.url()).pathname})`,
 		new URL(a.url()).pathname.endsWith("/suc-khoe"),
 	);
-	const vun = await chuSel(a, "nav[aria-label='breadcrumb']");
+	// ve-sinh-do-san-onehub cach-toi: nhãn trợ năng của breadcrumb đổi theo ngôn ngữ (3b35afcd0, 14/10) — đọc dấu ổn định data-slot
+	const vun = await chuSel(a, "nav[data-slot='breadcrumb']");
 	kiem(
 		`E21 buoc 2: breadcrumb Toan canh › Suc khoe chuong trinh (thay ${vun})`,
 		vun.indexOf(CHU.toanCanhTab) === 0 &&

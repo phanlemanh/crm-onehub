@@ -161,15 +161,23 @@ describe("vai", () => {
 
 	test("chieu do: ban sao trang truyen khoi nguyen kem vai, ban sao bo buoc loc", async () => {
 		const goc = readFileSync(TRANG, "utf8");
-		const goi = /choVaiXem\(\s*(await docDauVao\(\))\s*,\s*vai\s*\)/;
-		if (!goi.test(goc))
+		const goi = /docDauVaoChoVai\(\s*vai\s*,/;
+		const khach = "<NoiDungLoTrinh dauVao={dauVao} />";
+		if (!goi.test(goc) || !goc.includes(khach))
 			throw new Error(
-				"khong thay cho goi choVaiXem(await docDauVao(), vai) trong page.tsx",
+				"khong thay cho goi docDauVaoChoVai(vai, …) va <NoiDungLoTrinh dauVao={dauVao} /> trong page.tsx",
 			);
 		mkdirSync(BAN_SAO, { recursive: true });
+		const boLoc = goc.replace(goi, 'docDauVaoChoVai("owner",');
 		const ca = [
-			{ ten: "kem-vai", ma: goc.replace(goi, "$1} vai={vai") },
-			{ ten: "bo-loc", ma: goc.replace(goi, "$1") },
+			{
+				ten: "kem-vai",
+				ma: boLoc.replace(
+					khach,
+					"<NoiDungLoTrinh dauVao={dauVao} vai={vai} />",
+				),
+			},
+			{ ten: "bo-loc", ma: boLoc },
 		];
 		for (const c of ca) {
 			const tep = path.join(BAN_SAO, `${c.ten}.tsx`);

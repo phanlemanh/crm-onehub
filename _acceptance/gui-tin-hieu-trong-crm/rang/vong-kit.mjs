@@ -170,18 +170,28 @@ try {
 		khoi?.tin_hieu ? idKhoi.join(",") : "ban ve khong mang danh sach tin hieu",
 	);
 	const m2 = tinHieuMessages("vi");
-	const tt = docTrangThaiTinHieu(
-		html,
-		ids.map((ma) => ({ ma, daKeoVe: true })),
-		m2,
-	);
-	const lech = (khoi?.tin_hieu ?? [])
-		.filter((t) => tt.trangThai[t.id]?.cau !== (t.cau_nguoi_gui ?? t.cau))
+	let tt = { banVe: "loi", trangThai: {} };
+	let loiDoc = "";
+	try {
+		tt = docTrangThaiTinHieu(
+			html,
+			ids.map((ma) => ({ ma, daKeoVe: true })),
+			m2,
+		);
+	} catch (e) {
+		loiDoc = String(e?.message ?? e);
+	}
+	const rong = (khoi?.tin_hieu ?? [])
+		.filter((t) => !(tt.trangThai[t.id]?.cau ?? "").trim())
 		.map((t) => t.id);
 	dong(
-		tt.banVe === "co" && lech.length === 0,
-		"ve: bo doc CRM ra dung cau kit",
-		lech.length ? `cau trang thai lech cau kit: ${lech.join(",")}` : "",
+		!loiDoc && tt.banVe === "co" && rong.length === 0,
+		"ve: bo doc CRM ra cau cho moi ma, khong loi",
+		loiDoc
+			? `bo doc CRM nem loi: ${loiDoc}`
+			: rong.length
+				? `bo doc CRM tra rong cho ma: ${rong.join(",")}`
+				: "",
 	);
 
 	const khoDu = dungKhoMau(kit);

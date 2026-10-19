@@ -1,0 +1,112 @@
+schema_version: 1
+slug: mau-trang-thai-chung
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.mtc_bang
+    paths:
+      - "packages/ui/src/lib/status-tone.ts"
+      - "packages/ui/test/status-tone.spec.ts"
+      - "docs/design.md"
+    expected: |
+      status-tone.spec.ts: bang nghia co dung 6 khoa (xong, cho, hong, nhap, dangChay, ketThuc), ketThuc = "neutral";
+      muc «Mau trang thai» cua docs/design.md co dung 6 dong, moi nghia khop dung mot dong va cung mau. CHIEU DO (cung
+      ham kiem, ban sao bo dong «da ket thuc» khoi docs/design.md): ghim "bang mau lech docs/design.md o nghia ketThuc".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.mtc_mot_bang
+    paths:
+      - "apps/app/**"
+      - "packages/ui/src/**"
+      - "packages/ui/test/mau-trang-thai-mot-bang.spec.ts"
+    expected: |
+      Quet cay cu phap TypeScript (ts.createSourceFile) moi tep .ts/.tsx trong git ls-files cua apps/app va packages/ui/src
+      (tru apps/app/app/proto/**, **/test/**, status-tone.ts, status-indicator.tsx) co import StatusIndicator hay
+      IndicatorDot: khong StringLiteral nao trong {success, warning, error, neutral, info, primary} dung o gia tri thuoc
+      tinh doi tuong, return, case hay doi so cua new Map. Chuoi o thuoc tinh JSX tone (ke ca trong bieu thuc dieu kien
+      cua no) duoc phep ngoai 13 tep khu. Doi chung duong viet truoc 4 o: ham quet chay tren bon chuoi ma mau — Record
+      satisfies, doi tuong as const, switch-return, new Map — moi chuoi ra dung 1 vi pham; dem dung 4. CHIEU DO (cung
+      ham quet, ban sao them lai bang TONE vao kara/steps.tsx): ghim
+      "mtc-mot-bang: packages/ui/src/components/kara/steps.tsx khai bang mau rieng".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.mtc_anh_xa
+    paths:
+      - "packages/ui/src/components/okr-status.tsx"
+      - "packages/ui/src/components/kara/steps.tsx"
+      - "packages/ui/src/components/attendee-list.tsx"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/app/(app)/[slug]/tai-lieu/bang-nguon.tsx"
+      - "apps/app/app/(app)/[slug]/settings/okr/bang-chu-ky.tsx"
+      - "apps/app/components/crm/record-sheet/kr-viec.tsx"
+      - "apps/app/components/enrichment-queue.tsx"
+      - "apps/app/lib/enrichment-status.ts"
+      - "apps/app/lib/giai-doan.ts"
+      - "apps/app/test/mau-trang-thai-anh-xa.spec.ts"
+    expected: |
+      Ma tran viet truoc theo bang anh xa cua design doc: moi (khu, trang thai) -> (nghia, mau). Moi khu xuat bang nghia
+      cua minh (NGHIA_*); voi moi o: bang nghia cua khu cho dung nghia, va toneTheoNghia(nghia) bang mau ky vong. So o
+      ma tran bang tong so trang thai cua 13 khu; moi khoa cua bang nghia cua khu co trong ma tran (khong thua, khong
+      thieu). Them: trong 13 tep khu (bang «Hien trang» cua design doc), dung cung ham quet cay cu phap cua E2 voi luat
+      chat — khong chuoi mau nao, ke ca o thuoc tinh JSX tone; dem 13 tep, moi tep 0 vi pham. CHIEU DO (1) (cung ham
+      kiem, ban sao doi nghia «dang-chay» cua kr-viec ve «xong»): ghim
+      "mtc-anh-xa: kr-viec dang-chay mang nghia xong, ky vong dangChay". CHIEU DO (2) (ban sao kr-viec giu bang NGHIA
+      dung nhung ve cham bang tone={s === "dang-chay" ? "success" : "neutral"}): ghim
+      "mtc-anh-xa: apps/app/components/crm/record-sheet/kr-viec.tsx truyen mau bang chuoi".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.mtc_dom
+    paths:
+      - "packages/ui/src/components/okr-status.tsx"
+      - "packages/ui/src/components/kara/steps.tsx"
+      - "packages/ui/src/components/attendee-list.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/bang-nguon.tsx"
+      - "apps/app/test/mau-trang-thai-dom.dom.tsx"
+    expected: |
+      jsdom. Ma tran viet truoc: ConfidenceIndicator x 3 muc, PaceIndicator x 6 nhip, KaraSteps x 5 trang thai,
+      AttendeeList x 4 phan hoi, BangNguon x 6 trang thai nguon = 24 o. Moi o: dung thanh phan voi dung mot trang thai,
+      doc data-tone cua cham ([data-slot=status-indicator] hoac [data-slot=indicator-dot]) — phai bang mau cua nghia o
+      bang anh xa. Dem dung 24 o. CHIEU DO (ban sao bang-nguon tra DANG_SOAN ve «neutral»): ghim
+      "mtc-dom: bang-nguon DANG_SOAN data-tone neutral, ky vong info".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.mtc_bang
+    paths:
+      - "docs/design.md"
+      - "packages/ui/test/status-tone.spec.ts"
+    expected: |
+      status-tone.spec.ts doc muc «Mau trang thai» cua docs/design.md: khong chua «Năm khu cũ còn tự khai», co chua ten
+      tep bai quet cua E2 (mau-trang-thai-mot-bang.spec.ts). CHIEU DO (ban sao giu cau cu): ghim
+      "mtc-bang: docs/design.md con cau nam khu cu".
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mtc_man
+    steps:
+      - "Phien do rieng (tien-de.mjs) qua bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh; dang nhap dev:session quan tri; dung ba chu ky OKR o ba pha (lap ke hoach, dang chay, da dong) qua service cua Cai dat OKR, khong chen thang bang"
+      - "Buoc 1 (1280): mo /settings/okr, cho bang chu ky; voi moi pha doc data-tone cua cham trang thai trong hang chu ky do; lap-ke-hoach phai la neutral, dang-chay phai la info, da-dong phai la neutral; dem dung 3 o; chup mtc-chu-ky-1280.png vao .acceptance-runs/mau-trang-thai-chung/evidence/"
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "packages/ui/src/lib/status-tone.ts"
+      - "_acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs"
+    expected: "exit 0; do-chu-ky.mjs in 'buoc 1: dat' va mot dong so do moi pha (pha, data-tone doc duoc, data-tone ky vong). CHIEU DO (--chieu-do tren ban sao): (1) bang-chu-ky giu nghia «dang-chay» -> xong -> ghim 'mtc-man: pha dang-chay data-tone success, ky vong info', ma 1; (2) ban sao bang do khong dung du ba pha -> ghim 'mtc-man: thieu pha lap-ke-hoach', ma 1."
+
+  - id: E6m
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.mtc_man_do
+    paths:
+      - "_acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs"
+    expected: "exit 0; do-chu-ky.mjs --chi-do chay hai chieu do cua E6 tren ban sao rieng, moi chieu ra dung thong diep ghim va ma 1, roi in 'mtc-man-do: 2/2 chieu do ra dung ghim'. Thieu mot chieu hay mot chieu ra ma 0 -> do."

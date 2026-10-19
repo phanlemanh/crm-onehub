@@ -359,6 +359,8 @@ export function docThuTuc(duong: string, vao: DauVao): object | null {
 			return QUYEN;
 		case "okr.viecCuaToi":
 			return VIEC_RONG;
+		case "okr.capNhatTuan":
+			return { items: [], weekStart: "2026-10-12", dueWeekday: 5 };
 		case "okr.mine":
 			return kho.mine;
 		case "okr.countByUnit":
@@ -675,6 +677,18 @@ export const docCua = (duong: string) =>
 	kho.daDoc.filter((g) => g.duong === duong);
 export const hangMt = (id: string) => qs(`[data-hang-muc-tieu="${id}"]`);
 export const khoiMt = (id: string) => qs(`[data-muc-tieu="${id}"]`);
+export function soHangMt(id: string): number {
+	const k = khoiMt(id);
+	const dong = k?.closest("tr");
+	if (!dong) return k?.querySelectorAll("tr").length ?? -1;
+	let so = 1;
+	let ke = dong.nextElementSibling;
+	while (ke?.querySelector("[data-kr]")) {
+		so += 1;
+		ke = ke.nextElementSibling;
+	}
+	return so;
+}
 export const sau = (a: Element | null, b: Element | null) =>
 	a !== null &&
 	b !== null &&
@@ -693,6 +707,10 @@ export async function dungCuaToi(
 		() => daTaiDanhSach() && qs("[data-so-kr-cho]") === null,
 		"cua toi tai xong",
 	);
+	const thamGia = document.body.querySelector<HTMLButtonElement>(
+		'[data-nhom="tham-gia"] button[aria-expanded="false"]',
+	);
+	if (thamGia) await bamChuot(thamGia);
 	return san;
 }
 

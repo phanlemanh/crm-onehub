@@ -6,6 +6,7 @@ import { docDanhMuc, ghiBiGoLui } from "./model-danh-muc";
 import { ghiModelPhien, modelPhienDaGhi } from "./model-phien";
 import { TRO_LY_OKR } from "./okr/config";
 import { moHinhTroLyOkr } from "./okr/mo-hinh";
+import { MO_HINH_DANG_CHAY, type MucMoHinh } from "./okr/mo-hinh-thu";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
 import { TAI_LIEU_AGENT } from "./tai-lieu-config";
 import { type ModelMaySoan, modelTaiLieu } from "./tai-lieu-model";
@@ -62,6 +63,7 @@ export type LuaChonPhienGoc = ModelSelection & {
 
 export function modelChoPhienGoc(
 	ctx: PurposeContext,
+	muc: MucMoHinh = MO_HINH_DANG_CHAY,
 ): Promise<LuaChonPhienGoc | null> {
 	if (purposeOf(ctx) === "kho") {
 		return Promise.resolve({
@@ -74,8 +76,8 @@ export function modelChoPhienGoc(
 	}
 	if (purposeOf(ctx) === "okr") {
 		return Promise.resolve({
-			model: TRO_LY_OKR.model,
-			modelContextWindowTokens: TRO_LY_OKR.cuaSoNguCanh,
+			model: muc.ma,
+			modelContextWindowTokens: muc.cuaSoNguCanh,
 			modelOptions: {
 				providerOptions: {
 					gateway: { zeroDataRetention: true, tags: [...TRO_LY_OKR.tags] },
@@ -90,12 +92,13 @@ export function modelChoBuocGoc(
 	ctx: PurposeContext,
 	tao: typeof createGateway = createGateway,
 	env: Readonly<Record<string, string | undefined>> = process.env,
+	muc: MucMoHinh = MO_HINH_DANG_CHAY,
 ): ModelMaySoan | null {
 	if (purposeOf(ctx) === "kho") return modelTaiLieu("hoi", env, tao);
 	if (purposeOf(ctx) === "okr")
 		return {
-			model: moHinhTroLyOkr(env, tao),
-			modelContextWindowTokens: TRO_LY_OKR.cuaSoNguCanh,
+			model: moHinhTroLyOkr(env, tao, undefined, muc),
+			modelContextWindowTokens: muc.cuaSoNguCanh,
 		};
 	return null;
 }

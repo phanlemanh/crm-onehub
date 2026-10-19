@@ -2,6 +2,8 @@ import { createHash, randomUUID } from "node:crypto";
 import { ActivityType, db, type Prisma } from "@crm/db";
 import type { AgentActionStatus, AgentTriggerType } from "@crm/db/enums";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
+import { hanTheoNgayVN, VIEC } from "@crm/db/viec";
+import { taoViec } from "@crm/db/viec-ghi";
 import {
 	AGENT_ACTION_TYPES,
 	type AgentManifestResource,
@@ -227,6 +229,20 @@ export async function readRunRecord(
 	});
 }
 
+function ketQuaGhi(
+	type: "NOTE" | "TASK",
+	actionId: string,
+	externalId: string | null,
+	replayed: boolean,
+) {
+	return {
+		actionId,
+		activityId: type === "NOTE" ? externalId : null,
+		viecId: type === "TASK" ? externalId : null,
+		replayed,
+	};
+}
+
 export async function createRunActivity(
 	runId: string,
 	callId: string,
@@ -262,11 +278,7 @@ export async function createRunActivity(
 	const requestHash = actionRequestHash(input);
 	const existing = await findRunAction(idempotencyKey, requestHash);
 	if (existing?.status === "SUCCEEDED") {
-		return {
-			actionId: existing.id,
-			activityId: existing.externalId,
-			replayed: true,
-		};
+		return ketQuaGhi(input.type, existing.id, existing.externalId, true);
 	}
 	if (run.status !== "RUNNING") {
 		throw new Error("This agent run is not active.");
@@ -298,75 +310,86 @@ export async function createRunActivity(
 		metadata: { activityType: input.type },
 	});
 	if (!claim.claimed) {
-		return {
-			actionId: claim.actionId,
-			activityId: claim.externalId,
-			replayed: true,
-		};
+		return ketQuaGhi(input.type, claim.actionId, claim.externalId, true);
 	}
 
 	try {
 		const activityId = `agent-action-${claim.actionId}`;
 		const now = new Date();
+		const nguoiId = run.initiatedById ?? run.agent.createdById;
 
-		await db.$transaction(async (tx) => {
+		const externalId = await db.$transaction(async (tx) => {
 			const activeRun = await lockAgentRun(tx, runId);
 			if (activeRun.status !== "RUNNING") {
 				throw new Error("This agent run is not active.");
 			}
-			await tx.activity.upsert({
-				where: { id: activityId },
-				create: {
-					id: activityId,
-					type: input.type === "TASK" ? ActivityType.TASK : ActivityType.NOTE,
-					subject: input.subject?.trim() || null,
-					body: input.body?.trim() || null,
-					occurredAt: now,
-					dueAt: input.type === "TASK" ? dueAt : null,
-					companyId: target.companyId,
-					contactId: target.contactId,
-					dealId: target.dealId,
-					createdById: run.initiatedById ?? run.agent.createdById,
-					meta: {
-						source: "agent",
-						agentId: run.agentId,
-						runId,
-						actionId: claim.actionId,
+			let ghi = activityId;
+			if (input.type === "TASK") {
+				const viec = await taoViec(tx, {
+					nguoiId,
+					tieuDe: (input.subject ?? "").trim().slice(0, VIEC.tieuDeToiDa),
+					moTa: input.body?.trim().slice(0, VIEC.moTaToiDa) || null,
+					hanNgay: dueAt ? hanTheoNgayVN(dueAt) : null,
+					gan: [{ loai: input.targetKind, id: input.targetId }],
+					nguon: "tac-nhan",
+					now,
+				});
+				ghi = viec.id;
+			} else {
+				await tx.activity.upsert({
+					where: { id: activityId },
+					create: {
+						id: activityId,
+						type: ActivityType.NOTE,
+						subject: input.subject?.trim() || null,
+						body: input.body?.trim() || null,
+						occurredAt: now,
+						companyId: target.companyId,
+						contactId: target.contactId,
+						dealId: target.dealId,
+						createdById: nguoiId,
+						meta: {
+							source: "agent",
+							agentId: run.agentId,
+							runId,
+							actionId: claim.actionId,
+						},
 					},
-				},
-				update: {},
-			});
+					update: {},
+				});
 
-			if (target.companyId) {
-				await tx.company.update({
-					where: { id: target.companyId },
-					data: { lastActivityAt: now },
-				});
-			}
-			if (target.contactId) {
-				await tx.contact.update({
-					where: { id: target.contactId },
-					data: { lastActivityAt: now },
-				});
-			}
-			if (target.dealId) {
-				await tx.deal.update({
-					where: { id: target.dealId },
-					data: { lastActivityAt: now },
-				});
+				if (target.companyId) {
+					await tx.company.update({
+						where: { id: target.companyId },
+						data: { lastActivityAt: now },
+					});
+				}
+				if (target.contactId) {
+					await tx.contact.update({
+						where: { id: target.contactId },
+						data: { lastActivityAt: now },
+					});
+				}
+				if (target.dealId) {
+					await tx.deal.update({
+						where: { id: target.dealId },
+						data: { lastActivityAt: now },
+					});
+				}
 			}
 
 			await tx.agentAction.update({
 				where: { id: claim.actionId },
 				data: {
 					status: "SUCCEEDED",
-					externalId: activityId,
+					externalId: ghi,
 					completedAt: now,
 				},
 			});
+			return ghi;
 		});
 
-		return { actionId: claim.actionId, activityId, replayed: false };
+		return ketQuaGhi(input.type, claim.actionId, externalId, false);
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
 		await failRunAction(claim, "ACTION_REJECTED", message);

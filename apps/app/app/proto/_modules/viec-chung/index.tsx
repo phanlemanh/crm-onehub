@@ -133,11 +133,12 @@ function ChipNhom({
 				onValueChange={(v) => v && onNhom(v as Nhom)}
 			>
 				{muc.map((m) => (
-					<ToggleGroupItem key={m.value} value={m.value}>
+					<ToggleGroupItem
+						count={VIEC_THEO_NHOM[m.value].length}
+						key={m.value}
+						value={m.value}
+					>
 						{m.nhan}
-						<span className="text-muted-foreground tabular-nums">
-							{VIEC_THEO_NHOM[m.value].length}
-						</span>
 					</ToggleGroupItem>
 				))}
 			</ToggleGroup>

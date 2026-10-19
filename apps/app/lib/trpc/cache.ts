@@ -55,6 +55,7 @@ export type CrmCache = {
 	apiKeys(options?: Options): Promise<void>;
 	tracking(options?: Options): Promise<void>;
 	tinHieu(options?: Options): Promise<void>;
+	thongBao(options?: Options): Promise<void>;
 	everything(): Promise<void>;
 };
 
@@ -82,7 +83,6 @@ export function useCrmCache(): CrmCache {
 	const activityKeys = () => [
 		trpc.activities.timeline.pathKey(),
 		trpc.activities.timelineCounts.queryKey(),
-		trpc.activities.myTasks.queryKey(),
 	];
 
 	const listKeys = () => [
@@ -132,6 +132,10 @@ export function useCrmCache(): CrmCache {
 				...activityKeys(),
 				trpc.viec.cuaToi.queryKey(),
 				trpc.viec.cuaBanGhi.queryKey(),
+				trpc.viec.bang.queryKey(),
+				trpc.viec.con.queryKey(),
+				trpc.duAn.list.queryKey(),
+				trpc.duAn.lich.queryKey(),
 				trpc.dashboard.summary.queryKey(),
 			],
 			[],
@@ -225,7 +229,12 @@ export function useCrmCache(): CrmCache {
 
 		deal: (id, options) =>
 			run(
-				[id ? trpc.deals.byId.queryKey({ id }) : trpc.deals.byId.queryKey()],
+				[
+					id ? trpc.deals.byId.queryKey({ id }) : trpc.deals.byId.queryKey(),
+					id
+						? trpc.onboarding.goiYCuaDeal.queryKey({ dealId: id })
+						: trpc.onboarding.goiYCuaDeal.queryKey(),
+				],
 				[
 					...listKeys(),
 					trpc.deals.contactOptions.queryKey(),
@@ -291,6 +300,8 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.aiChiTieu.queryKey(),
 					trpc.okr.danhSach.queryKey(),
 					trpc.okr.cayCanChinh.queryKey(),
+					trpc.okr.soDoDonVi.queryKey(),
+					trpc.okr.quanhMucTieu.queryKey(),
 					trpc.okr.toanCanh.queryKey(),
 					trpc.okr.sucKhoe.queryKey(),
 					trpc.okr.hopTuan.queryKey(),
@@ -331,6 +342,11 @@ export function useCrmCache(): CrmCache {
 					trpc.viec.cuaBanGhi.queryKey(),
 					trpc.viec.get.queryKey(),
 					trpc.viec.lichSu.queryKey(),
+					trpc.viec.bang.queryKey(),
+					trpc.viec.con.queryKey(),
+					trpc.duAn.list.queryKey(),
+					trpc.duAn.get.queryKey(),
+					trpc.duAn.lich.queryKey(),
 				],
 				[trpc.dashboard.summary.queryKey()],
 				options,
@@ -521,7 +537,18 @@ export function useCrmCache(): CrmCache {
 				options,
 			),
 
-		tinHieu: (options) => run([trpc.tinHieu.cuaToi.queryKey()], [], options),
+		tinHieu: (options) =>
+			run(
+				[trpc.tinHieu.cuaToi.queryKey(), trpc.tinHieu.tatCa.queryKey()],
+				[],
+				options,
+			),
+		thongBao: (options) =>
+			run(
+				[trpc.thongBao.chuong.queryKey()],
+				[trpc.thongBao.danhSach.pathKey()],
+				options,
+			),
 
 		everything: () => queryClient.invalidateQueries(),
 	};

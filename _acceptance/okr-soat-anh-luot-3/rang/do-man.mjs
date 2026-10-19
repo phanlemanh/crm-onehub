@@ -375,14 +375,33 @@ async function buocNhap() {
 		CAO,
 		`/okr/theo-don-vi?donOkr=goc&kyOkr=${OKR.quy}`,
 	);
-	const coNut = await hien(t, "[data-nut='nhap-bang-tinh']");
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+	const MUC_NHAP = "[role='menuitem'][data-nut='nhap-bang-tinh']";
+	let coNut = await hien(t, "[data-nut='them-cach']");
+	if (coNut) {
+		await t.$eval("[data-nut='them-cach']", (e) =>
+			e.dispatchEvent(
+				new PointerEvent("pointerdown", {
+					bubbles: true,
+					cancelable: true,
+					button: 0,
+					isPrimary: true,
+					pointerType: "mouse",
+				}),
+			),
+		);
+		coNut =
+			(await hien(t, MUC_NHAP)) &&
+			(await t.$eval(MUC_NHAP, (e) => !e.hasAttribute("data-disabled")));
+	}
 	if (!coNut) {
 		for (const ma of MA_TRAN.filter((m) => m.startsWith("nhap-")))
 			ghi(ma, false, "khong thay nut «Nhập từ bảng tính» o don vi OneHub");
 		await t.close();
 		return;
 	}
-	await t.click("[data-nut='nhap-bang-tinh']");
+	// ve-sinh-do-san-onehub cach-toi: thuoc DH1 ca99a6162 (Nhap tu bang tinh la muc menu «…» — AC-4/AC-5 DH1; Cua toi theo AC-6 DH3), gom vao vong ve-sinh theo Dieu phoi M5.
+	await t.$eval(MUC_NHAP, (e) => e.click());
 	await hien(t, "[data-buoc-nhap='1']");
 	if (!(await danLo(t))) {
 		for (const ma of MA_TRAN.filter((m) => m.startsWith("nhap-")))

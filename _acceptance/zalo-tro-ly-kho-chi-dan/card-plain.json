@@ -1,0 +1,28 @@
+{
+  "feature_plain": "Câu hỏi quy định công ty gửi qua Zalo (và hỏi trong OneHub) luôn được trợ lý kho trả lời theo đúng lời dặn của nó, kể cả khi model chạy nhanh.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ gắn câu Zalo với phiên trả lời ngay khi phiên bắt đầu, trước khi trợ lý kho được gọi."},
+    {"id": "AC-2", "p": "Sẽ gắn câu Kho hỏi trong OneHub với phiên trả lời ngay khi phiên bắt đầu, và lần gắn cũ đến sau không làm hỏng câu."},
+    {"id": "AC-4", "p": "Sẽ để trợ lý kho tìm thấy câu hỏi ngay lần tra đầu, không phải chờ."},
+    {"id": "AC-6", "p": "Sẽ đo lại 50 câu mẫu trên Gemini: không phiên nào thiếu lời dặn, mọi phiên đều được gắn, tổng câu lỗi không quá 2."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG gắn bừa: phiên của việc khác, thiếu mã câu, hay câu đã có phiên khác thì không đổi gì; lỗi khi gắn không làm hỏng lượt trả lời."},
+    {"id": "AC-5", "p": "Chặn trợ lý kho chạy không có lời dặn: không tìm được câu hỏi thì nó dừng ngay và ghi một dòng cảnh báo, thay vì đi dò linh tinh tới hết hạn mức chữ."},
+    {"id": "OOS-1", "p": "KHÔNG sửa máy soạn đề xuất dù nó có cùng kiểu rủi ro — việc riêng."},
+    {"id": "OOS-2", "p": "KHÔNG đổi model mặc định — việc của hồ sơ đổi model sang Gemini."},
+    {"id": "OOS-3", "p": "KHÔNG xử lỗi trả sai khuôn do chính model khi đã có lời dặn."},
+    {"id": "OOS-4", "p": "KHÔNG đổi câu Zalo người dùng nhận khi lượt trả lời hỏng."}
+  ],
+  "scope_plain": "Phạm vi giữ đúng câu giao: chỉ đường hỏi Kho; máy soạn và việc đổi model để việc khác.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ khi: hai đường hỏi (OneHub, Zalo) × ba trạng thái gắn câu (gắn sớm — AC-1, AC-2, AC-4; đầu vào sai — AC-3; không có câu — AC-5) đều có tiêu chí, cộng một lượt đo thật 50 câu (AC-6)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Sau bản sửa, lỗi «thiếu lời dặn» không còn hiện ra dưới dạng cũ, nên phép đo cũ sẽ báo sạch dù cách sửa chưa chạy — đã thêm hai dấu đếm được: dòng «không tìm thấy câu hỏi» phải bằng 0, và mọi phiên trả lời phải có dòng «đã gắn»."},
+    {"i": 1, "p": "Chỗ đọc mã câu trong phiên mới chỉ được thử trên dữ liệu dựng tay — đã đổi sang đọc đúng cách các hook đang chạy thật, dựng dữ liệu thử từ chính lời gọi mở phiên, và lượt đo thật phải thấy dòng «đã gắn» ở mọi phiên."},
+    {"i": 2, "p": "Việc sửa thêm đường hỏi trong OneHub chưa có số đo chứng là cần — nên thành câu hỏi Hỏi-1 cho anh."},
+    {"i": 3, "p": "Thiếu phép thử lần gắn cũ đến sau ở đường OneHub (có thể làm hỏng câu) — đã thêm."},
+    {"i": 4, "p": "Phép đo chưa kiểm nhật ký có đủ mọi phiên của lượt — đã thêm, kèm chiều đỏ cắt nửa nhật ký."}
+  ]
+}

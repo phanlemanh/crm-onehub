@@ -1,0 +1,7 @@
+{
+  "feature_plain": "Mọi người dùng CRM, kể cả người chưa nối Zalo hay Slack, thấy các nhắc mỗi sáng ở chuông trên đầu trang, biết còn bao nhiêu chưa đọc, bấm một dòng là tới đúng chỗ cần làm, và xem lại được ở trang Thông báo.",
+  "scope_plain": "Những việc dưới đây đã thống nhất ở Cổng Phạm vi là để vòng sau; vòng này không làm.",
+  "decisions": [
+    {"id": "E13", "q": "Từ điển giải thích «Thông báo» khác «Nhắc buổi sáng» đã đủ rõ chưa?", "why": "Ba người chấm độc lập đều thấy từ điển có mục «Thông báo» riêng (là gì, ai nhận) và mục «Nhắc buổi sáng» không còn câu nói CRM không có chỗ lưu thông báo."}
+  ]
+}

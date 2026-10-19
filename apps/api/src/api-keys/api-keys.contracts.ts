@@ -1,4 +1,4 @@
-import { API_KEY_EXPIRATION } from "@crm/auth";
+import { API_KEY_EXPIRATION, LOAI_KHOA_API } from "@crm/auth";
 import { z } from "zod";
 import { listInput } from "../trpc/list-input";
 
@@ -12,6 +12,7 @@ export const createApiKeyInput = z.object({
 		.min(API_KEY_EXPIRATION.minDays)
 		.max(API_KEY_EXPIRATION.maxDays)
 		.nullable(),
+	loai: z.enum(LOAI_KHOA_API).optional(),
 });
 
 export const revokeApiKeyInput = z.object({
@@ -26,11 +27,13 @@ export const apiKeySummaryOutput = z.object({
 	createdAt: z.string(),
 	lastRequest: z.string().nullable(),
 	expiresAt: z.string().nullable(),
+	loai: z.enum(LOAI_KHOA_API),
 });
 
 export const apiKeyListOutput = z.object({
 	rows: z.array(apiKeySummaryOutput),
 	total: z.number(),
+	taoDuocKeoTinHieu: z.boolean(),
 	facetCounts: z.record(z.string(), z.record(z.string(), z.number())),
 });
 

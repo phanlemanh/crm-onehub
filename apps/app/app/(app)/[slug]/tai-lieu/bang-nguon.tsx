@@ -19,12 +19,10 @@ import {
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
-import {
-	StatusIndicator,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import type { Locale } from "@crm/ui/lib/locale";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import type { TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
@@ -53,16 +51,23 @@ export type HangNguon = {
 	coTheSoanLai: boolean;
 };
 
-type Dang = { tone: StatusTone; busy: boolean };
+export const NGHIA_NGUON = {
+	CHO_DOC: "dangChay",
+	CHO_SOAN: "dangChay",
+	DANG_SOAN: "dangChay",
+	DA_SOAN: "xong",
+	CAN_GO_TAY: "cho",
+	LOI: "hong",
+} as const satisfies Record<TrangThaiNguon, NghiaTrangThai>;
 
-const DANG = {
-	CHO_DOC: { tone: "neutral", busy: true },
-	CHO_SOAN: { tone: "neutral", busy: true },
-	DANG_SOAN: { tone: "neutral", busy: true },
-	DA_SOAN: { tone: "success", busy: false },
-	CAN_GO_TAY: { tone: "warning", busy: false },
-	LOI: { tone: "error", busy: false },
-} as const satisfies Record<TrangThaiNguon, Dang>;
+const BAN = {
+	CHO_DOC: true,
+	CHO_SOAN: true,
+	DANG_SOAN: true,
+	DA_SOAN: false,
+	CAN_GO_TAY: false,
+	LOI: false,
+} as const satisfies Record<TrangThaiNguon, boolean>;
 
 const MA_LOI_MAY_CHU = 500;
 
@@ -71,7 +76,7 @@ function ngay(luc: Date | string, locale: Locale): string {
 }
 
 function dangBan(rows: readonly HangNguon[]): boolean {
-	return rows.some((r) => DANG[r.trangThai].busy);
+	return rows.some((r) => BAN[r.trangThai]);
 }
 
 export function BangNguon() {
@@ -227,14 +232,13 @@ function TenTrang({ r }: { r: HangNguon }) {
 }
 
 function TrangThai({ r, m }: { r: HangNguon; m: BangMessages }) {
-	const dang = DANG[r.trangThai];
 	return (
 		<span className="flex min-w-0 flex-col gap-1">
 			<StatusIndicator
-				busy={dang.busy}
+				busy={BAN[r.trangThai]}
 				label={m.trangThai[r.trangThai]}
 				size="sm"
-				tone={dang.tone}
+				tone={toneTheoNghia(NGHIA_NGUON[r.trangThai])}
 			/>
 			{r.trangThai === "LOI" && r.lyDo ? (
 				<span className="text-muted-foreground text-xs" data-ly-do="">

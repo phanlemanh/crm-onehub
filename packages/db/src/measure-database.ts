@@ -17,6 +17,10 @@ export const MEASURE_DATABASE = {
 	commentPrefix: "crm phien do",
 	buildingMark: "template-building",
 	treeVariable: "PHIEN_DO_TEN_CAY",
+	agentModel: {
+		id: "google/gemini-3.8-flash",
+		contextWindowTokens: 1_048_576,
+	},
 } as const;
 
 export type MeasureComment =

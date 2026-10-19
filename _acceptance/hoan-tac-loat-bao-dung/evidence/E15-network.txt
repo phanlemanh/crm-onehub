@@ -1,0 +1,1 @@
+n-a (driver): script Playwright noi bo man.mjs, khong co read_network_requests; log phien-do khong bao loi app

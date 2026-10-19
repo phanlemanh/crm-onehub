@@ -1,0 +1,447 @@
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+
+EVALS 31
+target http://127.0.0.1:61098/
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[okr/gop-y/0000] [{"id":"cmv87o4g300009gtyome3qwjw","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Triển khai CRM cho đội kinh doanh","sau":"Thoả thuận của đội kinh doanh được gom về một nơi trong CRM, không còn rải rác","maVanDe":null,"lyDo":"Tên hiện tại mô tả việc làm, chưa nói trạng thái đội sẽ đạt. Viết lại theo vì sao lúc này: thoả thuận đang nằm rải rác.","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0000  gates 3/3  judge.autoevals.closedQA [gy-01 cmv87o4g300009gtyome3qwjw]: 100%
+[okr/gop-y/0001] [{"id":"cmv87oh9j00019gtyhq68bzy6","loai":"viet-lai","keyResultId":"cmv87o9t300079gtyw67sb7t9","truong":"kr.title","truoc":"Gọi 50 cuộc cho đối tác mới mỗi tuần","sau":"Tỷ lệ đối tác mới được chăm sóc trong tháng đầu","maVanDe":"kr-la-viec","lyDo":"KR đang đếm cuộc gọi, một việc đã làm. Viết lại theo kết quả: đối tác mới thực sự được chăm sóc trong tháng đầu. Số 50 và đơn vị cuộc bỏ đi vì kết quả đo khác với số đã đếm.","trangThai":"cho","maLoai":null},{"id":"cmv87oh9j00029gtyj8oy81iz","loai":"hoi","keyResultId":"cmv87o9t300079gtyw67sb7t9","truong":"kr.title","truoc":null,"sau":null,"maVanDe":"khong-do-duoc","lyDo":"Tỷ lệ đối tác mới được chăm sóc trong tháng đầu cần mốc đầu và đích cụ thể, với đơn vị đo rõ ràng. Bạn đang ở mốc nào và muốn đạt bao nhiêu?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0001  gates 3/3  judge.autoevals.closedQA [gy-02 cmv87oh9j00019gtyhq68bzy6]: 100%
+[okr/gop-y/0002] [{"id":"cmv87orc100039gty7of4x1r6","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Tăng tốc ký hợp đồng","sau":"Hợp đồng mới được ký trước khi đối tác chốt ngân sách cuối năm","maVanDe":null,"lyDo":"Tên hiện tại chỉ nói hướng tăng tốc, chưa nói trạng thái cuối chu kỳ. Câu mới nêu kết quả đích theo đúng lý do cuối năm đã ghi.","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0002  gates 3/3  judge.autoevals.closedQA [gy-03 cmv87orc100039gty7of4x1r6]: 100%
+[okr/gop-y/0003] [{"id":"cmv87p2os00049gtya6eb1jph","loai":"viet-lai","keyResultId":"cmv87ovsa000g9gtyfpoqn6ov","truong":"kr.title","truoc":"Cải thiện trải nghiệm đối tác","sau":"Điểm hài lòng của đối tác với dịch vụ tăng lên","maVanDe":"khong-do-duoc","lyDo":"Tên KR nêu được điều đo: điểm hài lòng của đối tác, đúng với điều đã ghi ở vì sao lúc này.","trangThai":"cho","maLoai":null},{"id":"cmv87p2os00059gtyua627i5q","loai":"hoi","keyResultId":"cmv87ovsa000g9gtyfpoqn6ov","truong":"kr.title","truoc":null,"sau":null,"maVanDe":"khong-do-duoc","lyDo":"KR chưa có đơn vị đo. Điểm hài lòng được tính theo thang nào hoặc theo đơn vị nào?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0003  gates 3/3  judge.autoevals.closedQA [gy-04 cmv87p2os00049gtya6eb1jph]: 100%
+[okr/gop-y/0004] [{"id":"cmv87pf2n00069gtydi2a1mq0","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Về đích doanh thu cuối năm","sau":"Doanh thu cuối năm về đích, với tháng 12 là chặng quyết định","maVanDe":"muc-tieu-la-so","lyDo":"Tiêu đề nêu tên chỉ số doanh thu. Viết lại thành trạng thái đạt được khi kết thúc chu kỳ; con số vẫn nằm ở KR.","trangThai":"bi-loai","maLoai":"so-moi"}]
+✓  okr/gop-y/0004  gates 3/3
+[okr/gop-y/0005] [{"id":"cmv87pmyq00079gtyztfllsbc","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Doanh thu 20 tỷ đồng","sau":"Doanh thu từ hợp đồng mới đủ để hoàn thành chỉ tiêu cả năm","maVanDe":"muc-tieu-la-so","lyDo":"Tên Mục tiêu đang là một con số. Viết trạng thái đạt được vào tên, còn con số nằm ở KR đo nó.","trangThai":"cho","maLoai":null},{"id":"cmv87pmyq00089gty03gp1pld","loai":"hoi","keyResultId":"cmv87pf91000p9gtyc9j3exuf","truong":null,"truoc":null,"sau":null,"maVanDe":"thieu-doi-trong","lyDo":"Hiện chỉ có một KR và nó chỉ đẩy doanh thu lên. Có KR nào giữ chất lượng hợp đồng hoặc chi phí để cân đối không?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0005  gates 3/3  judge.autoevals.closedQA [gy-06 cmv87pmyq00079gtyztfllsbc]: 100%
+[okr/gop-y/0006] []
+✗  okr/gop-y/0006  gates 2/3
+  ✗ satisfies(viec dong bang da-nop) (0% < 100%): predicate did not hold for "hong:SUBAGENT_EXECUTION_FAILED"
+[okr/gop-y/0007] [{"id":"cmv87qfvw00099gtyv41lh1lb","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Tăng MRR mảng SaaS kho","sau":"Mảng phần mềm kho SaaS thu được doanh thu định kỳ theo nhịp khách thuê đang tăng nhanh","maVanDe":"muc-tieu-la-so","lyDo":"Tiêu đề hiện là tên chỉ số kèm chiều tăng. Viết lại thành trạng thái mảng đạt được, con số vẫn nằm ở KR.","trangThai":"cho","maLoai":null},{"id":"cmv87qfvw000a9gtytkhuk8a5","loai":"hoi","keyResultId":"cmv87q86i000y9gty2u8iqe7r","truong":null,"truoc":null,"sau":null,"maVanDe":"thieu-doi-trong","lyDo":"Hiện chỉ có một KR và nó chỉ đo tăng doanh thu. Bạn có KR nào giữ chất lượng hoặc tỷ lệ khách thuê ở lại không?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0007  gates 3/3  judge.autoevals.closedQA [gy-08 cmv87qfvw00099gtyv41lh1lb]: 100%
+[okr/gop-y/0008] []
+✗  okr/gop-y/0008  gates 2/3
+  ✗ satisfies(viec dong bang da-nop) (0% < 100%): predicate did not hold for "hong:SUBAGENT_EXECUTION_FAILED"
+[okr/gop-y/0009] [{"id":"cmv87rj9z000b9gtyfgv8qc39","loai":"viet-lai","keyResultId":"cmv87r3zs00169gty30z7kmre","truong":"kr.title","truoc":"Đơn xuất trong 30 phút","sau":"Tỷ lệ đơn xuất trong 30 phút","maVanDe":"khong-do-duoc","lyDo":"Đơn vị là %, nên tên KR nên nói rõ đang đo tỷ lệ đơn xuất trong 30 phút.","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0009  gates 3/3  judge.autoevals.closedQA [gy-10 cmv87rj9z000b9gtyfgv8qc39]: 100%
+[okr/gop-y/0010] [{"id":"cmv87rx8q000c9gty4xrosoqg","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Improve NPS của đối tác","sau":"Đối tác ngày càng sẵn sàng giới thiệu OneHub cho người khác","maVanDe":"muc-tieu-la-so","lyDo":"Tên hiện tại là tên một chỉ số kèm động từ cải thiện; viết lại thành trạng thái đối tác đang hướng tới, con số giữ ở KR.","trangThai":"cho","maLoai":null},{"id":"cmv87rx8q000d9gtyn0sxhfgb","loai":"hoi","keyResultId":"cmv87rpfn001b9gty7kv14owf","truong":null,"truoc":null,"sau":null,"maVanDe":"thieu-doi-trong","lyDo":"Mục tiêu hiện chỉ có một KR và KR chỉ đẩy NPS lên; bạn có muốn thêm một chỉ số giữ chất lượng dịch vụ cho đối tác không?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0010  gates 3/3  judge.autoevals.closedQA [gy-11 cmv87rx8q000c9gty4xrosoqg]: 100%
+[okr/gop-y/0011] [{"id":"cmv87sbgy000e9gty23mkowdf","loai":"viet-lai","keyResultId":"cmv87s2zx001g9gtyulbub7bj","truong":"kr.title","truoc":"Giữ tỷ lệ đơn Tết giao đúng hẹn trên 95%","sau":"Tỷ lệ đơn Tết giao đúng hẹn tăng từ 90% lên trên 95%","maVanDe":"khong-do-duoc","lyDo":"Tiêu đề nói «giữ» nhưng khởi điểm là 90% và đích là 95%, nên KR đang là một mức tăng. Viết lại để nêu rõ hướng và mức đi tới.","trangThai":"cho","maLoai":null},{"id":"cmv87sbgy000f9gty7k79c8io","loai":"hoi","keyResultId":"cmv87s2zx001g9gtyulbub7bj","truong":"kr.title","truoc":null,"sau":null,"maVanDe":"khong-do-duoc","lyDo":"Bạn muốn giữ tỷ lệ ở mức 90% hay nâng lên trên 95% trong mùa Tết? Hãy chọn một hướng để KR đo được rõ ràng.","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0011  gates 3/3  judge.autoevals.closedQA [gy-12 cmv87sbgy000e9gty23mkowdf]: 100%
+[okr/gop-y/0012] [{"id":"cmv87sot8000g9gty0as3xw0v","loai":"viet-lai","keyResultId":"cmv87shn4001l9gtylz42hdwo","truong":"kr.title","truoc":"Giữ tỷ lệ xuất sai dưới 0,5%","sau":"Tỷ lệ xuất sai giảm xuống dưới 0,5%","maVanDe":null,"lyDo":"Tiêu đề nói là giữ, nhưng số hiện tại là 1% đang cao hơn đích 0,5%. Viết là giảm xuống để khớp với số liệu đã ghi.","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0012  gates 3/3  judge.autoevals.closedQA [gy-13 cmv87sot8000g9gty0as3xw0v]: 100%
+[okr/gop-y/0013] [{"id":"cmv87t1yl000h9gty3gk6wsu1","loai":"viet-lai","keyResultId":"cmv87strm001p9gtyxdf96qsy","truong":"kr.title","truoc":"Tổ chức 3 buổi đào tạo sản phẩm","sau":"Người trong đội kinh doanh đã được đào tạo về tính năng mới","maVanDe":"kr-la-viec","lyDo":"Đếm buổi đào tạo là việc đã làm; đổi sang số người đã được đào tạo để đo kết quả.","trangThai":"cho","maLoai":null},{"id":"cmv87t1yl000i9gtymsikxavd","loai":"hoi","keyResultId":"cmv87strm001p9gtyxdf96qsy","truong":"kr.title","truoc":null,"sau":null,"maVanDe":"khong-do-duoc","lyDo":"Với cách đếm người đã được đào tạo, cần biết giá trị xuất phát và giá trị đích; số buổi và đơn vị buổi không còn áp dụng.","trangThai":"cho","maLoai":null}]
+○  okr/gop-y/0013  gates 3/3  judge.autoevals.closedQA [gy-14 cmv87t1yl000h9gty3gk6wsu1]: 0%
+  ✗ judge.autoevals.closedQA [gy-14 cmv87t1yl000h9gty3gk6wsu1] (0% < 70%): prompt: ""
+    criteria: "Trợ lý OKR đề xuất viết lại tên KR của một OKR. Bài nộp là câu đề xuất thay cho câu gốc.\nNội dung OKR gốc — Mục tiêu: «Đội kinh doanh bán được tính năng mới»;…
+    response: "Người trong đội kinh doanh đã được đào tạo về tính năng mới"
+    rationale: "Analyzing the submission against each part of the criterion:\n\n1. Result vs. work done: The submission \"Người trong đội kinh doanh đã được đào tạo về tính nă…
+    choice: "N"
+[okr/gop-y/0014] [{"id":"cmv87tjg6000j9gty9948xkef","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Giảm chi phí vận tải","sau":"Chi phí vận tải theo đơn trở về mức phù hợp khi giá dầu tăng","maVanDe":"muc-tieu-la-so","lyDo":"Tiêu đề hiện là tên một chỉ số có chiều hướng. Viết lại thành trạng thái đội đạt được; con số nằm ở KR đo lường.","trangThai":"cho","maLoai":null},{"id":"cmv87tjg6000k9gty8mq489xf","loai":"hoi","keyResultId":null,"truong":null,"truoc":null,"sau":null,"maVanDe":"thieu-doi-trong","lyDo":"Hai KR đều cắt chi phí, chưa KR nào giữ mức phục vụ hoặc số đơn giao được. Bạn có muốn thêm một KR giữ chất lượng giao hàng không?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0014  gates 3/3  judge.autoevals.closedQA [gy-15 cmv87tjg6000j9gty9948xkef]: 100%
+[okr/gop-y/0015] [{"id":"cmv87txrt000l9gtyf1yfp366","loai":"hoi","keyResultId":"cmv87tqq6001y9gtyvbfvj6xe","truong":"kr.title","truoc":null,"sau":null,"maVanDe":"khong-do-duoc","lyDo":"KR chưa có đơn vị đo nên chưa rõ tinh thần đội ngũ được đo bằng gì. Bạn đo bằng thang điểm, tỉ lệ hay cách nào khác, và đơn vị là gì?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0015  gates 3/3
+[okr/gop-y/0016] [{"id":"cmv87u4k5000m9gtyg65sgsdj","loai":"hoi","keyResultId":"cmv87txsm00239gty2bv54nwp","truong":"kr.title","truoc":"Số hợp đồng mới với đối tác hàng lạnh mới","sau":null,"maVanDe":"trung-y","lyDo":"Hai KR đều đếm đối tác hàng lạnh mới ký. Nếu mỗi đối tác chỉ ký một hợp đồng, KR hợp đồng sẽ trùng KR đối tác. Hợp đồng này khác ở điểm nào, hay nên giữ KR nào?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0016  gates 3/3
+[okr/gop-y/0017] [{"id":"cmv87ud71000n9gtyikoejq2a","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Giảm công nợ quá hạn xuống 8%","sau":"Công nợ quá hạn được thu hồi về mức đã đặt ra","maVanDe":"muc-tieu-la-so","lyDo":"Tiêu đề đang là một chỉ số. Con số 8% đã nằm ở KR đo lường, nên tiêu đề chỉ cần nói trạng thái cuối chu kỳ.","trangThai":"cho","maLoai":null},{"id":"cmv87ud71000o9gtyajrh8kza","loai":"hoi","keyResultId":null,"truong":null,"truoc":null,"sau":null,"maVanDe":"thieu-doi-trong","lyDo":"Hiện chỉ có một KR và nó chỉ đẩy công nợ xuống. Có chỉ số nào giữ lại mức phục vụ hoặc chất lượng công việc khác để việc thu nợ không làm xấu đi không?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0017  gates 3/3  judge.autoevals.closedQA [gy-18 cmv87ud71000n9gtyikoejq2a]: 100%
+[okr/gop-y/0018] [{"id":"cmv87uqp4000p9gtyl0pclhkv","loai":"hoi","keyResultId":"cmv87ujml002b9gtyab8k7zvh","truong":"kr.title","truoc":null,"sau":null,"maVanDe":"khong-do-duoc","lyDo":"KR đang ghi tăng lên, nhưng mục tiêu 40 thấp hơn mốc đầu 50. Bạn xác nhận giúp mốc đầu và mốc đích của cuộc hẹn từ web?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0018  gates 3/3
+[okr/gop-y/0019] [{"id":"cmv87uyuu000q9gtyp6sxrym1","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Q4 OKR: grow pipeline","sau":"Pipeline quý 4 dày lên, không còn mỏng hơn năm ngoái","maVanDe":"muc-tieu-la-so","lyDo":"Tên hiện tại là tên một chỉ số có chiều tăng, không phải trạng thái đích. Con số 30 tỷ đồng đã nằm ở KR nên không cần đưa vào tên Mục tiêu.","trangThai":"cho","maLoai":null},{"id":"cmv87uyuu000r9gty5tm2tx7f","loai":"hoi","keyResultId":null,"truong":null,"truoc":null,"sau":null,"maVanDe":"thieu-doi-trong","lyDo":"Mục tiêu hiện chỉ có một KR và KR đó chỉ đẩy giá trị pipeline lên. Bạn có muốn thêm một KR giữ chất lượng hoặc tỷ lệ của pipeline để cân bằng không?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0019  gates 3/3  judge.autoevals.closedQA [gy-20 cmv87uyuu000q9gtyp6sxrym1]: 100%
+[okr/gop-y/0020] [{"id":"cmv87vbku000s9gtyf37yt2pv","loai":"hoi","keyResultId":"cmv87v5h4002j9gtypgbkyeko","truong":"kr.title","truoc":null,"sau":null,"maVanDe":"thieu-doi-trong","lyDo":"Mọi KR hiện chỉ cắt thời gian duyệt, chưa có gì giữ đầu ra hoặc chất lượng. Bạn muốn giữ mức nào (số hợp đồng duyệt, chất lượng duyệt) để việc rút ngắn không làm giảm chất lượng?","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0020  gates 3/3
+[okr/gop-y/0021] []
+✓  okr/gop-y/0021  gates 3/3
+[okr/gop-y/0022] [{"id":"cmv87w354000t9gtygyg77pfy","loai":"viet-lai","keyResultId":null,"truong":"title","truoc":"Gọi 50 cuộc","sau":"Đội gọi điện mỗi ngày nhiều hơn trước","maVanDe":"muc-tieu-la-so","lyDo":"Tên Mục tiêu đang là một con số. Viết lại thành trạng thái đội muốn đạt; con số 50 đã nằm ở KR.","trangThai":"cho","maLoai":null}]
+✓  okr/gop-y/0022  gates 3/3  judge.autoevals.closedQA [doi-chung-goi-50-cuoc cmv87w354000t9gtygyg77pfy]: 100%
+[okr/ng/0000] []
+✗  okr/ng/0000  gates 2/3
+  ✗ satisfies(viec dong bang da-nop) (0% < 100%): predicate did not hold for "hong:SUBAGENT_EXECUTION_FAILED"
+[okr/ng/0001] [{"id":"cmv87wvus000u9gty9pibygkz","loai":"viet-lai","keyResultId":null,"truong":"whyNow","truoc":"Vì anh Toàn xử lý hồ sơ chậm nên quý 3 mất khách.","sau":"Hồ sơ ký với đối tác hàng lạnh đang chậm nên quý 3 đã mất khách.","maVanDe":null,"lyDo":"Bỏ tên người khỏi lý do, giữ nguyên ý: hồ sơ chậm làm mất khách trong quý 3.","trangThai":"cho","maLoai":null},{"id":"cmv87wvus000v9gtyt5rtyst9","loai":"can-chinh","keyResultId":null,"truong":null,"truoc":null,"sau":null,"maVanDe":null,"lyDo":"Ký đối tác hàng lạnh nhanh hơn giúp mảng kho lạnh mở rộng được thêm.","trangThai":"cho","maLoai":null}]
+✓  okr/ng/0001  gates 3/3
+[okr/ng/0002] [{"id":"cmv87x3r0000w9gtyhp96a39j","loai":"can-chinh","keyResultId":null,"truong":null,"truoc":null,"sau":null,"maVanDe":null,"lyDo":"Đối tác ở lại gia hạn giúp giữ doanh thu nền, góp phần để Khối Kinh doanh về đích doanh thu quý 4.","trangThai":"cho","maLoai":null}]
+✓  okr/ng/0002  gates 3/3
+[okr/ng/0003] [{"id":"cmv87x9qb000x9gtyf783gm76","loai":"can-chinh","keyResultId":null,"truong":null,"truoc":null,"sau":null,"maVanDe":null,"lyDo":"Mục tiêu này đưa kho lạnh sẵn sàng cho đợt Tết, góp phần vào việc scale mảng kho lạnh.","trangThai":"cho","maLoai":null}]
+✓  okr/ng/0003  gates 3/3
+[okr/ng/0004] []
+✗  okr/ng/0004  gates 2/3
+  ✗ satisfies(viec dong bang da-nop) (0% < 100%): predicate did not hold for "hong:SUBAGENT_EXECUTION_FAILED"
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[okr/ng/0005] []
+✗  okr/ng/0005  gates 2/3
+  ✗ satisfies(viec dong bang da-nop) (0% < 100%): predicate did not hold for "hong:SUBAGENT_EXECUTION_FAILED"
+[okr/ng/0006] [{"id":"cmv87yfsm000y9gtye379dww6","loai":"can-chinh","keyResultId":null,"truong":null,"truoc":null,"sau":null,"maVanDe":null,"lyDo":"Giao đúng hẹn ở tuyến miền Trung là một phần của giao đúng hẹn ở mọi tuyến, nên Mục tiêu này góp trực tiếp vào mục tiêu cấp trên.","trangThai":"cho","maLoai":null}]
+✓  okr/ng/0006  gates 3/3
+[okr/ng/0007] []
+✗  okr/ng/0007  gates 2/3
+  ✗ satisfies(viec dong bang da-nop) (0% < 100%): predicate did not hold for "hong:SUBAGENT_EXECUTION_FAILED"
+
+Results: 24 passed, 6 failed, 1 scored (31 total)
+Gates: 87 passed, 6 failed
+
+  judge.autoevals.closedQA [gy-01 cmv87o4g300009gtyome3qwjw]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-02 cmv87oh9j00019gtyhq68bzy6]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-03 cmv87orc100039gty7of4x1r6]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-04 cmv87p2os00049gtya6eb1jph]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-06 cmv87pmyq00079gtyztfllsbc]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-08 cmv87qfvw00099gtyv41lh1lb]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-10 cmv87rj9z000b9gtyfgv8qc39]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-11 cmv87rx8q000c9gty4xrosoqg]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-12 cmv87sbgy000e9gty23mkowdf]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-13 cmv87sot8000g9gty0as3xw0v]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-14 cmv87t1yl000h9gty3gk6wsu1]: 0% (1 evals)
+  judge.autoevals.closedQA [gy-15 cmv87tjg6000j9gty9948xkef]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-18 cmv87ud71000n9gtyikoejq2a]: 100% (1 evals)
+  judge.autoevals.closedQA [gy-20 cmv87uyuu000q9gtyp6sxrym1]: 100% (1 evals)
+  judge.autoevals.closedQA [doi-chung-goi-50-cuoc cmv87w354000t9gtygyg77pfy]: 100% (1 evals)
+
+Completed in 8m 34s
+
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (51%)
+  - eve-authored-relative-extension-resolver (25%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugin `eve-authored-asset-import`. See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (32%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (65%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (64%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (28%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (65%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[agent] ▸ session wrun_01M4XDC0GPTZ2SX8AFDWRJ3PTS on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 8.0s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDCFPCF01E5QF0FNH10335 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 9.4s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDCY6WNY1RYTWR9G5Z86HF on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 7.6s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDDBGEKY2GZRTQGT4KJHYZ on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 8.8s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDDV13NGGXZADKAFMG4N8Z on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ▸ session wrun_01M4XDE44NRBF8DZWSJS4K09H1 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 9.3s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ✓ subagent tro_ly_okr 9.8s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDEMVH24JX2SAF1AYT1BQP on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDEPAZDW0CT8ZMG2JCZZAA', turnId: 'turn_0' }
+[eve:harness.tool-loop] model call failed; failing the task run {
+  errorId: 'dc2a9467-8103-4146-9b6e-866588bb1b99',
+  sessionId: 'wrun_01M4XDEPAZDW0CT8ZMG2JCZZAA',
+  turnId: 'turn_0',
+  details: {}
+}
+[agent] ✗ subagent tro_ly_okr 18.6s failed: The model did not return a response. Please try again.
+[agent] ▸ session wrun_01M4XDF8RKWP53AEEW9AP64ZTF on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ The Trợ lý OKR task failed. The subagent returned `SUBAGENT_EXECUTION_FAILED: The model did not return a response.` I called it once, as instructed, so I have not retried. Nothing was submitted, so there is no OKR proposal or summary to report. The task will need to be run again.
+[agent] · step 0 stop  in 6.8k out 199 $0.0008
+[agent] ✓ subagent tro_ly_okr 10.0s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDFWCBX2WB9MBG3RWHJA40 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDFXTT9BWMHCKWW03FD5W9', turnId: 'turn_0' }
+[eve:harness.tool-loop] model call failed; failing the task run {
+  errorId: '1b1c5793-368e-4693-a029-da978777d6e8',
+  sessionId: 'wrun_01M4XDFXTT9BWMHCKWW03FD5W9',
+  turnId: 'turn_0',
+  details: {}
+}
+[agent] ✗ subagent tro_ly_okr 19.6s failed: The model did not return a response. Please try again.
+[agent] ▸ session wrun_01M4XDGH15036XQ1D1FMC0W41N on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ Trợ lý OKR không trả về kết quả: lệnh gọi thất bại với lỗi `SUBAGENT_EXECUTION_FAILED` ("The model did not return a response"). Phiên này chỉ cho phép gọi `tro_ly_okr` đúng một lần, nên tôi không thử lại. Tác vụ OKR chưa được thực hiện và chưa có đề xuất hay bản tóm tắt nào được nộp.
+[agent] · step 0 stop  in 6.8k out 252 $0.0008
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDGJGH3H3PFHVYXECAP5BP', turnId: 'turn_0' }
+[agent] ✓ subagent tro_ly_okr 19.9s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDHC55H2S4M0HB81JE0NCA on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 9.9s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDHXAE6HZYB57TMV6S9PYR on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 11.0s
+[agent] ▸ session wrun_01M4XDJFVKQ56ZAH6XPWD2AXHT on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 9.1s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDJZ6N1H3Q3FTT0BVYN5T9 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 10.5s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDKNC55TMTB2XPMS4VP56G on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ✓ subagent tro_ly_okr 10.2s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDM8Y9RQ6GRXHPGYD6HPHF on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ▸ session wrun_01M4XDMHVJGEZQM1ZQCDH7ENPG on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 8.7s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDMTH1V0ZH5NWAZ4JGKQ98 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 8.8s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ✓ subagent tro_ly_okr 11.0s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDNDG0G0G3FV3GR5AT9QN9 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ▸ session wrun_01M4XDNPN07HNVEDCZFGM87SW4 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 9.1s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ✓ subagent tro_ly_okr 10.8s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDP94RD80JGWPT9BNCW8W9 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ▸ session wrun_01M4XDPH2EAN8GJA342ZY9YYZ6 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 7.6s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ▸ session wrun_01M4XDPYXAPRH87095MJKFYP7H on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 7.2s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDQ08D3QT6TTSCMBAGCGDY', turnId: 'turn_0' }
+[agent] ✓ subagent tro_ly_okr 21.2s
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDQSV2GENY9W976PDEM3WE on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDQVDHXGBAA90YA68D30ZD', turnId: 'turn_0' }
+[eve:harness.tool-loop] model call failed; failing the task run {
+  errorId: '6bb7c320-a544-4e12-a201-dd34c1c76f65',
+  sessionId: 'wrun_01M4XDQVDHXGBAA90YA68D30ZD',
+  turnId: 'turn_0',
+  details: {}
+}
+[agent] ✗ subagent tro_ly_okr 19.1s failed: The model did not return a response. Please try again.
+[agent] ▸ session wrun_01M4XDRE6KV4AMQ3B5TEBD5ZMP on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ The Trợ lý OKR task did not complete. The subagent returned `SUBAGENT_EXECUTION_FAILED` ("The model did not return a response"), so no proposal or summary was submitted. I called the tool once, as instructed, and did not retry.
+[agent] · step 0 stop  in 6.8k out 260 $0.0008
+[agent] ▸ session wrun_01M4XDRRBQF6YSVK8ZM6PM0NTQ on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 10.1s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDS29PDPC9F3C869R3GP1N on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 10.2s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[agent] ▸ session wrun_01M4XDS9QFVC96YZHS1J9SHYYR on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 7.4s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDSB3F5CR70YNFRH1S917C', turnId: 'turn_0' }
+[eve:harness.tool-loop] model call failed; failing the task run {
+  errorId: 'a936991c-1527-437a-bd09-9591b7eb0a3e',
+  sessionId: 'wrun_01M4XDSB3F5CR70YNFRH1S917C',
+  turnId: 'turn_0',
+  details: {}
+}
+[agent] ✗ subagent tro_ly_okr 20.9s failed: The model did not return a response. Please try again.
+[agent] ▸ session wrun_01M4XDSZGTQ8XPQPA8PZCYYQ0D on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ The Trợ lý OKR task did not run. The subagent returned `SUBAGENT_EXECUTION_FAILED` ("The model did not return a response"). I called it once, as instructed, and did not retry, so no OKR proposal or weekly summary was submitted.
+[agent] · step 0 stop  in 6.8k out 211 $0.0008
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDT16R2A6SRGYW00W1VS0B', turnId: 'turn_0' }
+[agent] ✗ subagent tro_ly_okr failed: The model did not return a response. Please try again.
+[agent] ◂ The Trợ lý OKR task failed. The subagent returned `SUBAGENT_EXECUTION_FAILED: The model did not return a response.` I called it once, as instructed, and did not retry, so the task has not run.
+[agent] · step 0 stop  in 6.8k out 192 $0.0008
+[eve:harness.tool-loop] model call failed; failing the task run {
+  errorId: '5801bc03-3137-4f33-8b4e-744303fb4ba6',
+  sessionId: 'wrun_01M4XDT16R2A6SRGYW00W1VS0B',
+  turnId: 'turn_0',
+  details: {}
+}
+[agent] ✗ subagent tro_ly_okr 20.1s failed: The model did not return a response. Please try again.
+[agent] ▸ session wrun_01M4XDTN09WVZWZ91N5C9TCQ18 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ Trợ lý OKR không hoàn thành tác vụ. Lệnh gọi trả về lỗi `SUBAGENT_EXECUTION_FAILED` ("The model did not return a response"), nên không có đề xuất hay bản tóm tắt nào được nộp. Tôi đã gọi công cụ đúng một lần như yêu cầu và chưa thử lại. Cần chạy lại tác vụ OKR.
+[agent] · step 0 stop  in 6.8k out 274 $0.0008
+[agent] ▸ session wrun_01M4XDTYX61BMK3GMHPNGSD7D2 on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ✓ subagent tro_ly_okr 9.8s
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 6.7k out 52 $0.0007
+[agent] ◂ done
+[agent] · step 0 stop  in 6.7k out 3 $0.0007
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M4XDV072QFT3TFANM959FG06', turnId: 'turn_0' }
+[eve:harness.tool-loop] model call failed; failing the task run {
+  errorId: 'bc2fe199-3762-4601-a821-6a47b94b662d',
+  sessionId: 'wrun_01M4XDV072QFT3TFANM959FG06',
+  turnId: 'turn_0',
+  details: {}
+}
+[agent] ✗ subagent tro_ly_okr 22.4s failed: The model did not return a response. Please try again.
+[world-local] Queue message failed (attempt 1, HTTP 503) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//turnWorkflow',
+  messageId: 'msg_01M4XDVNZT4YASXKD711BRN3R5',
+  runId: 'wrun_01M4XDTYZBAT4WDYCPDTDYCAB1',
+  handlerError: '{"error":"socket hang up"}'
+}
+[eve:dev] failed to stop development sandbox resources: configure is not a function

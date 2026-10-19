@@ -37,6 +37,10 @@ export function formatCount(
 	return `${count} ${count === 1 ? noun : plural}`;
 }
 
+export function formatDecimal(value: number, locale: Locale): string {
+	return numberFormat(locale, { maximumFractionDigits: 1 }).format(value);
+}
+
 const WELL_FORMED_CURRENCY_CODE = /^[A-Za-z]{3}$/;
 
 function displayCurrencyCode(currency: string): string {
@@ -134,6 +138,19 @@ export function formatDay(
 				year: "numeric",
 			}).format(date)
 		: (value ?? "—");
+}
+
+export function formatDayShort(
+	value: string | null | undefined,
+	locale: Locale,
+): string {
+	const date = fromDay(value);
+	if (!date) return value ?? "—";
+	return dateFormat(locale, { month: "2-digit", day: "2-digit" })
+		.formatToParts(date)
+		.filter((part) => part.type === "day" || part.type === "month")
+		.map((part) => part.value)
+		.join("/");
 }
 
 export function initialsFromName(name: string | null | undefined): string {

@@ -1,0 +1,10 @@
+{
+  "feature_plain": "Người dùng hỏi Kara về OKR ngay trong khu OKR và nhận câu trả lời chỉ từ những Mục tiêu, KR mình được xem, mỗi câu có trích để bấm mở; vai chỉ OKR hỏi được OKR mà không chạm dữ liệu đối tác.",
+  "decisions": [
+    {
+      "id": "E9j",
+      "q": "Kara có trả lời đúng ý câu hỏi trên bộ 35 câu mẫu không?",
+      "why": "Lượt chấm cuối: quyền 100%, trích và số 97,1%, đúng ý trên 85%; hai lượt chạy thử ngay trước ra 94,3% và 100%. Hội đồng ba người chấm đề xuất ĐẠT."
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import {
 } from "@crm/ui/components/collapsible";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { type ComponentProps, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { BangMucTieu } from "./bang-muc-tieu";
 import type { MucTieu } from "./kieu";
@@ -18,6 +19,7 @@ const KHONG_MO: ReadonlySet<string> = new Set();
 const DAU_NHOM = {
 	"da-bo": { "data-nhom-da-bo": "" },
 	"dang-theo-doi": { "data-nhom-dang-theo-doi": "" },
+	"tham-gia": { "data-nhom": "tham-gia" },
 } as const;
 
 export function NhomMucTieuGap({
@@ -26,16 +28,24 @@ export function NhomMucTieuGap({
 	ds,
 	hienDonVi,
 	danhDauCuaToi,
+	diemCam,
+	moNhuBangChinh = false,
+	moKhi = false,
 }: {
 	nhan: string;
 	ma: keyof typeof DAU_NHOM;
 	ds: MucTieu[];
 	hienDonVi: boolean;
 	danhDauCuaToi: boolean;
+	diemCam?: ComponentProps<typeof BangMucTieu>["diemCam"];
+	moNhuBangChinh?: boolean;
+	moKhi?: boolean;
 }) {
+	const [moTay, setMoTay] = useState<boolean | null>(null);
+	const mo = moTay ?? moKhi;
 	if (ds.length === 0) return null;
 	return (
-		<Collapsible {...DAU_NHOM[ma]}>
+		<Collapsible {...DAU_NHOM[ma]} onOpenChange={setMoTay} open={mo}>
 			<CollapsibleTrigger asChild>
 				<Button className="group" size="sm" variant="ghost">
 					<Icon
@@ -49,7 +59,8 @@ export function NhomMucTieuGap({
 			<CollapsibleContent className="pt-3">
 				<BangMucTieu
 					danhDauCuaToi={danhDauCuaToi}
-					dangMo={KHONG_MO}
+					dangMo={moNhuBangChinh ? undefined : KHONG_MO}
+					diemCam={diemCam}
 					ds={ds}
 					hienDonVi={hienDonVi}
 				/>

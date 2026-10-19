@@ -14,7 +14,6 @@ import { InjectDatabase } from "../database/database.constants";
 import type {
 	ActivityCreateInput,
 	ActivityEntry,
-	MyTasksInput,
 	TimelineCounts,
 	TimelineFilter,
 	TimelineInput,
@@ -64,6 +63,10 @@ const ENTRY_SELECT = {
 	},
 } as const;
 
+const CHUA_CHEP = {
+	NOT: { type: ActivityType.TASK, viecChep: { isNot: null } },
+} satisfies Prisma.ActivityWhereInput;
+
 const NOTE_TYPES = [
 	ActivityType.NOTE,
 	ActivityType.CALL,
@@ -81,8 +84,9 @@ export class ActivitiesService {
 	) {}
 
 	async timeline(input: TimelineInput): Promise<TimelineResult> {
-		const where = this.anchor(input);
-		Object.assign(where, filterClause(input.filter));
+		const where: Prisma.ActivityWhereInput = {
+			AND: [this.anchor(input), filterClause(input.filter), CHUA_CHEP],
+		};
 
 		const rows = await this.db.activity.findMany({
 			where,
@@ -128,25 +132,19 @@ export class ActivitiesService {
 		input: Pick<TimelineInput, "companyId" | "contactId" | "dealId" | "planId">,
 	): Promise<TimelineCounts> {
 		const anchor = this.anchor(input);
+		const dem = (filter: TimelineFilter) =>
+			this.db.activity.count({
+				where: { AND: [anchor, filterClause(filter), CHUA_CHEP] },
+			});
 
-		const [all, notes, upcoming, done, email, meetings] = await Promise.all([
-			this.db.activity.count({ where: anchor }),
-			this.db.activity.count({
-				where: { ...anchor, ...filterClause("notes") },
-			}),
-			this.db.activity.count({
-				where: { ...anchor, ...filterClause("upcoming") },
-			}),
-			this.db.activity.count({ where: { ...anchor, ...filterClause("done") } }),
-			this.db.activity.count({
-				where: { ...anchor, ...filterClause("email") },
-			}),
-			this.db.activity.count({
-				where: { ...anchor, ...filterClause("meetings") },
-			}),
+		const [all, notes, email, meetings] = await Promise.all([
+			dem("all"),
+			dem("notes"),
+			dem("email"),
+			dem("meetings"),
 		]);
 
-		return { all, notes, upcoming, done, email, meetings };
+		return { all, notes, email, meetings };
 	}
 
 	async create(
@@ -155,15 +153,12 @@ export class ActivitiesService {
 	): Promise<ActivityEntry> {
 		const companyId = await this.resolveCompanyId(input);
 
-		const isTask = input.type === ActivityType.TASK;
-
 		const activity = await this.db.activity.create({
 			data: {
 				type: input.type,
 				subject: blankToNull(input.subject ?? ""),
 				body: blankToNull(input.body ?? ""),
 				occurredAt: parseDate(input.occurredAt) ?? new Date(),
-				dueAt: isTask ? parseDate(input.dueAt) : null,
 				companyId,
 				contactId: input.contactId ?? null,
 				dealId: input.dealId ?? null,
@@ -185,56 +180,6 @@ export class ActivitiesService {
 		});
 
 		return serializeEntry(activity);
-	}
-
-	async complete(id: string, completed: boolean): Promise<ActivityEntry> {
-		const activity = await this.db.activity.findUnique({
-			where: { id },
-			select: { type: true },
-		});
-
-		if (!activity) {
-			throw new NotFoundException(`No activity with id ${id}.`);
-		}
-
-		if (activity.type !== ActivityType.TASK) {
-			throw new BadRequestException("Only tasks can be completed.");
-		}
-
-		const updated = await this.db.activity.update({
-			where: { id },
-			data: { completedAt: completed ? new Date() : null },
-			select: ENTRY_SELECT,
-		});
-
-		return serializeEntry(updated);
-	}
-
-	async myTasks(
-		input: MyTasksInput,
-		actingUserId: string,
-	): Promise<ActivityEntry[]> {
-		const homNay = dauNgayVN(new Date());
-		const where: Prisma.ActivityWhereInput = {
-			type: ActivityType.TASK,
-			completedAt: null,
-			createdById: actingUserId,
-		};
-
-		if (input.window === "overdue") where.dueAt = { lt: homNay };
-		if (input.window === "upcoming") where.dueAt = { gte: homNay };
-
-		const tasks = await this.db.activity.findMany({
-			where,
-			take: input.limit,
-			orderBy: [
-				{ dueAt: { sort: "asc", nulls: "last" } },
-				{ createdAt: "desc" },
-			],
-			select: ENTRY_SELECT,
-		});
-
-		return tasks.map((task) => serializeEntry(task));
 	}
 
 	private anchor(
@@ -295,12 +240,6 @@ function filterClause(filter: TimelineFilter): Prisma.ActivityWhereInput {
 	switch (filter) {
 		case "notes":
 			return { type: { in: NOTE_TYPES } };
-		case "upcoming":
-			return { type: ActivityType.TASK, completedAt: null };
-		case "done":
-			return { type: ActivityType.TASK, completedAt: { not: null } };
-		case "history":
-			return { NOT: { type: ActivityType.TASK, completedAt: null } };
 		case "email":
 			return { type: ActivityType.EMAIL };
 		case "meetings":

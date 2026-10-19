@@ -1,0 +1,81 @@
+slug: ghim-thuoc-soi-xem-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ghd_soi_xem
+    expected: "exit 0; soi-ma.mjs --ca xem suy gốc kho từ vị trí của nó và soi apps/api/src, packages/db/src, apps/agent/agent/lib của cây; in 'XANH' và 'MIEN_XEM 114 dong' trong dòng tổng. Chiều đỏ: cùng thước trên onehub d086bf8cf (trước vòng) thoát 1 'DO: 8 loi' — đo ở S1 trên cây và trên gương; E2 giữ chiều đỏ từng dòng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs", "_acceptance/gioi-han-duyet-cay-okr/rang/duong-doc-okr.json", "apps/api/src/**", "packages/db/src/**", "apps/agent/agent/lib/**"]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.gtsx_mien_hai_chieu
+    expected: "exit 0; rang/mien-hai-chieu.mjs (gốc kho suy từ vị trí script) dựng gương ở .acceptance-runs/ghim-thuoc-soi-xem-okr/guong-<run>/: apps, packages, node_modules là liên kết tới cây, _acceptance/gioi-han-duyet-cay-okr/rang/ là bản chép (cây của hồ sơ đã ký không bị ghi). Ma trận viết trước mười ca, mỗi ca chép lại soi-ma.mjs từ cây rồi sửa đúng một chỗ của MIEN_XEM bằng khớp chuỗi khoá tep+ham+bang (khớp không đúng một chỗ thì 'SAI khong sua duoc <ca>' và mã 1): (1) nguyên → mã 0, 'XANH', 'MIEN_XEM 114 dong'; (2)–(8) bỏ từng dòng trong bảy dòng mới → mã 1, đúng MỘT dòng 'HONG thieu dieu kien xem: ' và dòng ấy bắt đầu bằng '<tệp>:' kèm '<hàm> <bảng>.' của ca, không dòng HONG nào khác; (9) thêm lại dòng removeAlignment#okrAlignment → mã 1, có 'MIEN_XEM thua (khong khop loi goi nao): apps/api/src/okr/okr.service.ts#removeAlignment#okrAlignment'; (10) xoá chữ lyDo của dòng coKrSuaDuoc → mã 1, có 'MIEN_XEM thieu ly do: apps/api/src/okr/tro-ly.service.ts#coKrSuaDuoc#okrKeyResult'. Thêm: soi-ma.mjs --ca xem --chieu-do của cây in '3/3 vi pham bi bat'. Mỗi ca in 'bat <ca>' hoặc 'LOT <ca>: <ma> <dong lech>'; một ca LOT → mã 1. Dọn gương khi xong. Gương không dựng được → 'KHONG DO DUOC: <lý do>' và mã 2."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/gioi-han-duyet-cay-okr/rang/**", "_acceptance/ghim-thuoc-soi-xem-okr/rang/**", "apps/api/src/okr/**", "packages/db/src/okr-*"]
+
+  - id: E3
+    criterion: AC-3
+    executor: judgment
+    inputs: ["_acceptance/ghim-thuoc-soi-xem-okr/nguon/phan-loai-soi-xem.md", "_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs"]
+    question: "Trong soi-ma.mjs, mảng MIEN_XEM có bảy dòng cho: okr.service.ts xoaMucTieu (tho:okrKeyResult và okrObjective), packages/db/src/okr-muc-tieu-lich-su.ts lichSuMucTieu, okr.service.ts mine, tro-ly.service.ts coKrSuaDuoc, okr.service.ts congSuaCanChinh, okr.service.ts suaLyDoCanChinh. Với từng dòng, lyDo có nêu đúng cổng ở tầng trên mà bảng phân loại ghi cho chỗ ấy (hàm cổng như assertSuaMucTieu / assertXemMucTieu, hoặc vì sao đầu ra không rộng hơn điều kiện xem) không, và có khẳng định điều gì bảng không chứng không? Luật riêng cho congSuaCanChinh (hàng 6 và 7 của bảng): đây là hàm cổng chung, lý do phải nói lời đọc nằm trong chính hàm cổng, có assertSuaMucTieu trên nguồn ngay sau, và nêu đủ hai người gọi removeAlignment và suaLyDoCanChinh; lý do chỉ nói removeAlignment là FAIL. Trả PASS khi cả bảy dòng đúng và không dòng nào nói quá bảng; FAIL nêu dòng sai và câu sai."
+    expected: "PASS — bảy lý do khớp cột «Cổng ở tầng trên» của bảng, không lý do nào nói quá."
+    evidence_required: [run_id, verdict, rationale]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.gtsx_buoc_ci
+    expected: "exit 0; rang/buoc-ci.mjs đọc .github/workflows/acceptance.yml bằng Bun.YAML và lệnh ghd_soi_xem từ _acceptance/config.yaml (dòng '    ghd_soi_xem: \"…\"'); kiểm: job luat-kho có đúng một bước name === 'OKR read rule' và run của bước ấy === lệnh ấy (bước nhận theo tên, rồi mới so run); chỉ số bước sau bước 'bun install --frozen-lockfile' và sau bước 'node scripts/luat-kho/do-cay.mjs --du-luat'; bước không continue-on-error; if vắng hoặc '${{ !cancelled() }}'; job luat-kho không có if và không continue-on-error; on.pull_request không có paths, paths-ignore, branches; on.push.branches có onehub. In 'dat <điều>' từng điều. Chiều đỏ trên CÙNG chữ tệp, sáu đột biến chuỗi: bỏ bước → 'thieu buoc soi-xem'; đổi tên bước → 'thieu buoc soi-xem'; thêm continue-on-error: true vào bước → 'buoc khong chan'; thêm if cấp job → 'job co if'; thêm paths: vào pull_request → 'pull_request bi loc'; đổi --ca xem thành --ca thiet-ke trong run (giữ tên) → 'lech lenh config'. Mỗi đột biến phải đỏ đúng thông điệp ghim, in 'bat <đột biến>'; một đột biến không bắt hoặc đột biến không áp được (chuỗi không đổi) → 'LOT <đột biến>' và mã 1. Bản thật sai một điều → 'SAI <điều>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [".github/workflows/acceptance.yml", "_acceptance/config.yaml", "_acceptance/ghim-thuoc-soi-xem-okr/rang/**"]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.gtsx_buoc_ci_chay
+    expected: "exit 0; rang/buoc-ci.mjs --chay rút chuỗi run của bước soi-xem trong job luat-kho của acceptance.yml (không lấy từ config), dựng gương như E2 rồi chạy ĐÚNG chuỗi ấy bằng bash -c với cwd = gốc gương: gương nguyên → mã 0 và có 'XANH'; gương bỏ dòng MIEN_XEM tro-ly.service.ts#coKrSuaDuoc#okrKeyResult → mã khác 0 và có 'DO:'. In 'bat guong-nguyen' và 'bat guong-bo-mien'; lệch → 'LOT <ca>: ma <n>' và mã 1. Không rút được bước → 'KHONG DO DUOC: <lý do>' và mã 2."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [".github/workflows/acceptance.yml", "_acceptance/gioi-han-duyet-cay-okr/rang/**", "_acceptance/ghim-thuoc-soi-xem-okr/rang/**"]
+
+  - id: E6a
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.lkv_ci
+    expected: "exit 0 — thước luat-kho-vong-doi (hình job luật kho của acceptance.yml) xanh trên nền d086bf8cf (đo S1) và vẫn xanh; nó tự mang chiều đỏ của nó."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [".github/workflows/acceptance.yml"]
+
+  - id: E6b
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.cgdp_cong
+    expected: "exit 0 — thước chuyen-goi-dieu-phoi (cổng chạy lệnh của acceptance.yml) xanh trên nền d086bf8cf (đo S1) và vẫn xanh; nó tự mang chiều đỏ của nó."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [".github/workflows/acceptance.yml"]
+
+  - id: E6c
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kcb_khong_noi_tran
+    expected: "exit 0 — thước khoa-con-bat-xa-tran (không nới trần thời gian trong ci.yml, acceptance.yml) xanh trên nền d086bf8cf (đo S1) và vẫn xanh; nó tự mang chiều đỏ của nó."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [".github/workflows/acceptance.yml"]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.gtsx_tai_lieu
+    expected: "exit 0; rang/buoc-ci.mjs --tai-lieu tìm trong docs/api.md đoạn (khối dòng liền nhau) chứa 'soi-ma.mjs --ca xem` fails on'; đoạn ấy phải có cả 'acceptance gate', '.github/workflows/acceptance.yml', 'every pull request' và 'onehub'. In 'dat tai-lieu'. Chiều đỏ trên CÙNG chữ: bỏ câu mới khỏi bản chép trong bộ nhớ → 'thieu cau CI trong docs/api.md', in 'bat tai-lieu-thieu'; không bắt → 'LOT' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["docs/api.md", "_acceptance/ghim-thuoc-soi-xem-okr/rang/**"]

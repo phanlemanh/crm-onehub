@@ -1,0 +1,55 @@
+slug: viec-cha-khong-lo-tieu-de
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vca_ma_tran
+    expected: "exit 0; -t vca-ma-tran của apps/api/test/viec-cha-an.spec.ts. Fixture qua đường ghi thật (taoThu, viec.taoCon, viec.go qua caller tRPC với phiên người thật): thoả thuận D; P gắn D, người giao vca-mt-a, người thực hiện vca-mt-b, người theo dõi vca-mt-w; vca-mt-b thêm con K cho vca-mt-c; thành viên vca-mt-x không vai. Đáp án là mảng mười phần tử viết sẵn trong tệp trước khi chạy — {nguoi, trangThaiCha: 'gan'|'rieng', thayCha: true|false}, tám true và hai false (c, x ở 'rieng') — không suy từ dieuKienXemViec. Mỗi ô gọi viec.con({id: K}) với phiên người đó; cha khác {id: P, tieuDe đúng} ở ô true thì ném 'vca: o vca-mt-<nguoi> <trang thai> mat cha <json>'; cha khác null ở ô false thì ném 'vca: cha lo vca-mt-<nguoi> <json>'; ở ô false mà con khác [], conMo khác 0 hay themDuoc khác false thì ném 'vca: o an sai hinh <json>'. Số ô đã so khác 10 thì ném 'vca: ma tran thieu o <n>'. Đối chứng dương cùng fixture: năm ô 'gan' chạy TRƯỚC khi gỡ D và phải thấy cha. Chiều đỏ trong lịch sử: commit test đứng trước commit sửa, chạy trên mã DA2 ném 'vca: cha lo vca-mt-c'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, apps/api/test/viec-cha-an.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vca_bang
+    expected: "exit 0; -t vca-bang của apps/api/test/viec-cha-an.spec.ts, fixture dựng như E1 với tiền tố vca-bg (P gắn D, con K của vca-bg-c). Trước khi gỡ D: viec.bang({nhom: 'giao-cho-toi'}) của vca-bg-c có thẻ K với cha.tieuDe khác tiêu đề P thì ném 'vca: bang doi chung mat cha'. Sau viec.go gỡ D khỏi P: thẻ K trên bảng của vca-bg-c có cha khác null thì ném 'vca: bang lo cha <json>'; thẻ K trên viec.bang({nhom: 'toi-giao'}) của vca-bg-b có cha.tieuDe khác tiêu đề P thì ném 'vca: bang nguoi trong cuoc mat cha'. Không tìm thấy thẻ K trên bảng nào trong ba lần đọc thì ném 'vca: bang khong co the K <nhom>' (chặn xanh rỗng). Chiều đỏ trong lịch sử: chạy trên mã DA2 ném 'vca: bang lo cha'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, apps/api/test/viec-cha-an.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vca_dem_con
+    expected: "exit 0; -t vca-dem-con của apps/api/test/viec-cha-an.spec.ts. Fixture: P2 riêng (không gắn), người giao vca-dc-a, người thực hiện vca-dc-b; vca-dc-b thêm K1, K2, K3, K5 cho vca-dc-c qua viec.taoCon; K1 sang Xong bằng doiThu, K5 sang Huỷ bằng doiThu của vca-dc-b (người giao K5); vca-dc-a tự bỏ theo dõi K3 bằng viec.boTheoDoi. Đọc viec.get(K3) với phiên vca-dc-a phải 404 'Không có việc nào mang mã <K3>.' — không thì ném 'vca: fixture K3 van thay' (chặn fixture hỏng). Thẻ P2 trên viec.bang({nhom: 'toi-giao'}) của vca-dc-a: con khác {xong: 1, tong: 2} hay conMo khác 1 thì ném 'vca: dem con lo <json>'. Đối chứng dương cùng fixture: thẻ P2 trên viec.bang({nhom: 'giao-cho-toi'}) của vca-dc-b có con khác {xong: 1, tong: 3} hay conMo khác 2 thì ném 'vca: doi chung dem con <json>'. Đọc lại bằng Prisma số viec có chaId = P2 khác 4 thì ném 'vca: con bi xoa'. Chiều đỏ trong lịch sử: chạy trên mã DA2 ném 'vca: dem con lo {\"xong\":1,\"tong\":3,\"conMo\":2}'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, apps/api/test/viec-cha-an.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vca_khop_khung
+    expected: "exit 0; -t vca-khop-khung của apps/api/test/viec-cha-an.spec.ts, fixture riêng dựng bằng cùng hàm của E3 với tiền tố vca-kk (P2 riêng, K1 Xong, K2, K3, K5 Huỷ; vca-kk-a đã bỏ theo dõi K3, kiểm lại bằng viec.get 404). Đối chứng fixture: viec.con({id: P2}) của vca-kk-b không chứa con HUY nào thì ném 'vca: fixture thieu con huy' (vế lọc Huỷ phải thật sự chạy). Lần lượt vca-kk-b rồi vca-kk-a: tính từ viec.con({id: P2}) của chính người đó số con trangThai khác HUY, số con XONG và conMo; khác con.tong, con.xong, conMo của thẻ P2 trên bảng của người đó thì ném 'vca: bang lech khung <nguoi> <json>'. Thêm P3 riêng (giao vca-kk-a, làm vca-kk-b) có đúng một con K4 cho vca-kk-c mà vca-kk-a đã bỏ theo dõi: đối chứng dương trước — thẻ P3 trên bảng của vca-kk-b có con khác {xong: 0, tong: 1} thì ném 'vca: doi chung P3 <json>'; thẻ P3 trên bảng của vca-kk-a có con khác null hay conMo khác 0 thì ném 'vca: con an het van dem <json>'; rồi vca-kk-a gọi viec.doiTrangThai({id: P3, den: 'XONG'}): khác 200 thì ném 'vca: dong P3 loi <json>', và đọc lại bằng Prisma K4 khác CHUA_LAM thì ném 'vca: dong cha cham con'. Chiều đỏ trong lịch sử: chạy trên mã DA2 ném 'vca: bang lech khung vca-kk-a'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, apps/api/test/viec-cha-an.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vca_tinh_luc_doc
+    expected: "exit 0; -t vca-tinh-luc-doc của apps/api/test/viec-cha-an.spec.ts. Fixture như E1 với tiền tố vca-td tới bước gỡ D (cha của K ẩn với vca-td-c — kiểm lại, không ẩn thì ném 'vca: fixture cha chua an'). Đếm viec, viecGan, viecTheoDoi, viecVet; gọi viec.con({id: K}) và viec.bang({nhom: 'giao-cho-toi'}) của vca-td-c năm lần; đếm lại khác thì ném 'vca: cau doc ghi <truoc> <sau>'. Rồi vca-td-a gắn lại D vào P bằng viec.gan: viec.con({id: K}) và thẻ K trên viec.bang của vca-td-c có cha.tieuDe khác tiêu đề P thì ném 'vca: gan lai khong hien cha viec.con' hay 'vca: gan lai khong hien cha viec.bang'. Chiều đỏ của vế gắn-lại: không có trên mã DA2 (mã DA2 luôn hiện cha) — vế này đỏ khi bản sửa lưu trạng thái ẩn thay vì tính lúc đọc; khai giới hạn: chiều đỏ của nó chỉ chứng được bằng đột biến tay lúc dựng (ghi kết quả vào sổ S3)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, apps/api/test/viec-cha-an.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vca_quet
+    expected: "exit 0; -t vca-quet của apps/api/test/viec-cha-an.spec.ts, fixture như E1 với tiền tố vca-q (tiêu đề P mang một chuỗi đánh dấu duy nhất sinh lúc chạy). Danh sách câu đọc viết sẵn thành mảng sáu phần tử trước khi chạy: viec.get(K), viec.lichSu(K), viec.con(K), viec.bang({nhom: 'giao-cho-toi'}), viec.cuaToi({nhom: 'giao-cho-toi'}), viec.cuaBanGhi({dealId: D}) — mỗi câu gọi bằng phiên vca-q-c, khác 200 thì ném 'vca: quet loi <cau doc> <json>'. Đối chứng dương TRƯỚC khi gỡ D: JSON của viec.con và viec.bang không chứa chuỗi đánh dấu thì ném 'vca: quet doi chung mat cha <cau doc>'. Sau viec.go gỡ D khỏi P: JSON.stringify của đầu ra câu nào chứa chuỗi đánh dấu hay mã P thì ném 'vca: quet lo <cau doc>'. Số câu đã quét khác 6 thì ném 'vca: quet thieu cau <n>'. Chiều đỏ trong lịch sử: chạy trên mã DA2 ném 'vca: quet lo viec.con'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, apps/api/test/viec-cha-an.spec.ts]

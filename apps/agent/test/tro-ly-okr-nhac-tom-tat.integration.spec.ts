@@ -601,7 +601,7 @@ describe("ma tran tam o", () => {
 				text.indexOf("Tóm tắt tuần Phòng"),
 			);
 			expect(text.indexOf("Tóm tắt tuần Phòng")).toBeLessThan(
-				text.indexOf("Trợ lý OKR đã dùng 80% trần tháng"),
+				text.indexOf("Kara đã dùng 80% trần tháng"),
 			);
 		},
 		CHO_DB,
@@ -621,7 +621,7 @@ describe("ma tran tam o", () => {
 	);
 
 	test(
-		"tieu de nhom la Tro ly OKR, chu Tom tat tuan dung mot lan moi tin — Slack va Zalo",
+		"tieu de nhom la Kara · OKR, chu Tom tat tuan dung mot lan moi tin — Slack va Zalo",
 		() => {
 			const ra = new Map<string, TieuDeNhom>();
 			const can = new Map<string, TieuDeNhom>();
@@ -637,7 +637,7 @@ describe("ma tran tam o", () => {
 				});
 				can.set(o, {
 					kenh: v.kenh,
-					tieuDe: v.kenh === "slack" ? "*Trợ lý OKR*" : "Trợ lý OKR",
+					tieuDe: v.kenh === "slack" ? "*Kara · OKR*" : "Kara · OKR",
 					soLan: 1,
 				});
 			}

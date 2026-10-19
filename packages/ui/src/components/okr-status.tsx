@@ -4,8 +4,8 @@ import { useMessages } from "@crm/ui/components/locale-provider";
 import {
 	type StatusSize,
 	StatusIndicator,
-	type StatusTone,
 } from "@crm/ui/components/status-indicator";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 
 export type MucTuTin = "cao" | "vua" | "thap";
 
@@ -17,20 +17,20 @@ export type NhipOkr =
 	| "moc-xong"
 	| "moc-chua";
 
-const TONE_TU_TIN = {
-	cao: "success",
-	vua: "warning",
-	thap: "error",
-} satisfies Record<MucTuTin, StatusTone>;
+const NGHIA_TU_TIN = {
+	cao: "xong",
+	vua: "cho",
+	thap: "hong",
+} as const satisfies Record<MucTuTin, NghiaTrangThai>;
 
-const TONE_NHIP = {
-	"dung-nhip": "success",
-	"cham-nhip": "warning",
-	truot: "error",
-	"chua-co-ky-vong": "neutral",
-	"moc-xong": "success",
-	"moc-chua": "neutral",
-} satisfies Record<NhipOkr, StatusTone>;
+const NGHIA_NHIP = {
+	"dung-nhip": "xong",
+	"cham-nhip": "cho",
+	truot: "hong",
+	"chua-co-ky-vong": "nhap",
+	"moc-xong": "xong",
+	"moc-chua": "nhap",
+} as const satisfies Record<NhipOkr, NghiaTrangThai>;
 
 function ConfidenceIndicator({
 	level,
@@ -50,7 +50,7 @@ function ConfidenceIndicator({
 			data-tu-tin={level}
 			label={nhan[level]}
 			size={size}
-			tone={TONE_TU_TIN[level]}
+			tone={toneTheoNghia(NGHIA_TU_TIN[level])}
 		/>
 	);
 }
@@ -70,9 +70,9 @@ function PaceIndicator({ pace, size }: { pace: NhipOkr; size?: StatusSize }) {
 			data-tinh-trang={pace}
 			label={nhan[pace]}
 			size={size}
-			tone={TONE_NHIP[pace]}
+			tone={toneTheoNghia(NGHIA_NHIP[pace])}
 		/>
 	);
 }
 
-export { ConfidenceIndicator, PaceIndicator, TONE_NHIP, TONE_TU_TIN };
+export { ConfidenceIndicator, NGHIA_NHIP, NGHIA_TU_TIN, PaceIndicator };

@@ -23,7 +23,7 @@ Phí bản rẽ là chi phí dài hạn lớn nhất ở đây. Sửa được �
 Phiên làm tính năng mở PR bằng `gh pr create --draft`. Sau ghim lại và vẽ bản đồ, đúng lúc trình thẻ Cổng Bằng
 chứng, chuyển sẵn sàng bằng `gh pr ready`. PR nháp chỉ chạy job nhẹ (phân loại PR, acceptance gate, `ci-ok`);
 chuyển sẵn sàng thì `ci.yml` và Acceptance chạy đủ một lượt. PR chỉ chạm tệp T1 (`risk_tiers.t1_skip_globs`, trừ
-mọi tệp dưới `.github/`) cũng bỏ job nặng. Bộ phân loại ở `.github/scripts/phan-loai.mjs`, hồ sơ
+mọi tệp dưới `.github/` và tệp khớp `risk_tiers.t1_ma_doc` — tài liệu mà bài kiểm, bản dựng hay runtime đọc) cũng bỏ job nặng. Bộ phân loại ở `.github/scripts/phan-loai.mjs`, hồ sơ
 `_acceptance/giam-phut-ci-nhap-t1/`. Đây là luật tạm: kit có đề xuất «PR nháp tới lúc trình Cổng 2»
 (phanlemanh/acceptance-gate-kit#301, dự kiến 25/10) thì theo kit.
 
@@ -81,9 +81,13 @@ năng của kho này.
 
 Chủ kho chốt 11/10: `docs/plan/lo-trinh-*.json` chỉ chứa việc dựng tính năng.
 Không hàng nào chờ người — chờ phòng ban gửi dữ liệu, chờ gom câu hỏi thật, chờ
-chạy thật xong. Việc do người và tổ chức quyết là **mốc ngoài** trong chính lộ
-trình — `moc` có `loai: "ngoai"` và `ai` — theo khuôn S3b của kit; không hàng nào
-được đứng trên mốc ngoài (`dung_tren` chỉ trỏ hàng).
+chạy thật xong. Chủ kho chốt 17/10 «bỏ mốc ngoài»: lộ trình không còn mốc
+`loai: "ngoai"`, vì lời khai máy không kiểm được làm nhiễu giữa việc người và việc
+máy. Sự kiện của người tạo hạn thì thành hạn của chính mốc phát triển (`ngay` +
+một dòng `ly_do`). Đo giá trị là ngưỡng và ngày đọc trong `opportunity.md` của hồ
+sơ. Vận hành thuần (đặt OKR, công bố, buổi nghiệm thu) sống ở lịch của chủ kho và
+#375. Hàng cần kết quả vận hành mới mở thì vào `chan_troi` với `mo_lai_khi`
+(`dung_tren` chỉ trỏ hàng).
 
 Hàng cần dữ liệu thật thì đứng ngay sau một hàng sinh dữ liệu giả có nhãn
 (`du_lieu: "sinh-gia"`), và chính nó mang `du_lieu: "gia"`. Thiếu dữ liệu để dựng

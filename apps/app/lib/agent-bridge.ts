@@ -1,4 +1,9 @@
 import {
+	OKR_PHIEN_HOI,
+	parseThuocTinhPhienHoi,
+	type ThuocTinhPhienHoi,
+} from "@crm/validation/okr-phien-hoi";
+import {
 	OKR_PHIEN_SOAN,
 	parseThuocTinhPhienSoan,
 	type ThuocTinhPhienSoan,
@@ -41,7 +46,7 @@ type BridgeClaims = {
 	exp: number;
 };
 
-type OkrBridgeClaims = ThuocTinhPhienSoan & {
+type OkrBridgeClaims = (ThuocTinhPhienSoan | ThuocTinhPhienHoi) & {
 	iss: string;
 	aud: string;
 	sub: string;
@@ -83,24 +88,33 @@ export async function mintBridgeToken(
 
 export async function mintOkrBridgeToken(
 	user: { id: string; email: string; name: string },
-	cuoc: { cuocSoanId: string; vai: WorkspaceRole },
+	cuoc:
+		| { cuocSoanId: string; vai: WorkspaceRole }
+		| { cuocHoiId: string; vai: WorkspaceRole },
 ): Promise<string> {
 	const secret = okrSecret();
 	if (!secret) throw new Error("OKR_AGENT_BRIDGE_SECRET is not set.");
 
 	const now = Math.floor(Date.now() / 1000);
+	const nguoi = { email: user.email, name: user.name, vai: cuoc.vai };
+	const thuoc =
+		"cuocHoiId" in cuoc
+			? parseThuocTinhPhienHoi({
+					purpose: OKR_PHIEN_HOI.purpose,
+					cuocHoiId: cuoc.cuocHoiId,
+					...nguoi,
+				})
+			: parseThuocTinhPhienSoan({
+					purpose: OKR_PHIEN_SOAN.purpose,
+					cuocSoanId: cuoc.cuocSoanId,
+					...nguoi,
+				});
 
 	const payload: OkrBridgeClaims = {
 		iss: OKR_PHIEN_SOAN.issuer,
 		aud: OKR_PHIEN_SOAN.audience,
 		sub: user.id,
-		...parseThuocTinhPhienSoan({
-			purpose: OKR_PHIEN_SOAN.purpose,
-			cuocSoanId: cuoc.cuocSoanId,
-			vai: cuoc.vai,
-			email: user.email,
-			name: user.name,
-		}),
+		...thuoc,
 		iat: now,
 		nbf: now - 5,
 		exp: now + TTL_SECONDS,

@@ -176,9 +176,9 @@ function DealBoardCard({ card }: { card: DealCard }) {
 					</span>
 				) : null}
 			</span>
-			<span className="flex items-center justify-between gap-2">
+			<span className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
 				<OwnerCell owner={card.owner} />
-				<DealStageMenu dealId={card.id} stage={card.stage} />
+				<DealStageMenu dealId={card.id} stage={card.stage} wrapLabel />
 			</span>
 		</>
 	);

@@ -1,0 +1,1 @@
+driver: bun script (playwright trong man-dau-trang.mjs), khong co doc network qua browser tool -> n-a (driver)

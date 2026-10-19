@@ -1,15 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
+import { LOI_DAN_SOAN } from "../agent/lib/loi-dan-soan";
 
 const MIEN_BO_MAU =
 	/đối tác|thanh toán|công nợ|tạm ứng|chuyến|giao hàng|kho hàng|kho lạnh|vận chuyển|hỗ trợ/iu;
 
-const LOI_DAN = readFileSync(
-	join(import.meta.dir, "..", "agent", "instructions.md"),
-	"utf8",
-);
+const LOI_DAN = LOI_DAN_SOAN;
 
 function muc(tieuDe: string): string {
 	const dau = LOI_DAN.indexOf(`## ${tieuDe}\n`);

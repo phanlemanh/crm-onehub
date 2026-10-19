@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luật số đoạn · push-ghim-lai-t1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 76ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.92em; color: var(--color-ink); }
+    svg { width: 100%; min-width: 1040px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Luồng quyết định · push-ghim-lai-t1 · Cổng Phạm vi · d-…-9</p>
+    <h1>Một tệp khớp glob có được tính là T1?</h1>
+    <p class="sub">Một hàm <code>tachT1</code> (<code>.github/scripts/phan-loai.mjs</code>) cho CI, pre-push và bộ quét t1-ma-doc. Bộ khớp glob của kit giữ nguyên; luật số đoạn chỉ thêm câu hỏi sau khi đã khớp.</p>
+
+    <svg viewBox="0 0 1200 660" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <rect x="480" y="72" width="528" height="176" rx="8" fill="rgba(0,107,79,0.03)" stroke="rgba(0,107,79,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="496" y="240" fill="#006B4F" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">LUẬT SỐ ĐOẠN · MỚI TRONG tachT1</text>
+
+      <line x1="152" y1="160" x2="190" y2="160" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="416" y1="160" x2="494" y2="160" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="720" y1="160" x2="766" y2="160" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="992" y1="160" x2="1054" y2="160" stroke="#006B4F" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+      <path d="M608 104 V64 Q608 56 616 56 H1116 Q1124 56 1124 64 V130" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="880" y1="216" x2="880" y2="262" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M980 292 H1116 Q1124 292 1124 284 V190" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="304" y1="216" x2="304" y2="390" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M880 320 V412 Q880 420 872 420 H406" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="436" y="140" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="448" y="149" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ</text>
+      <rect x="732" y="140" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="744" y="149" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ</text>
+      <rect x="1020" y="140" width="24" height="12" rx="2" fill="#fafafa"/>
+      <text x="1032" y="149" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ</text>
+      <rect x="840" y="36" width="40" height="12" rx="2" fill="#fafafa"/>
+      <text x="860" y="45" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG</text>
+      <rect x="888" y="228" width="40" height="12" rx="2" fill="#fafafa"/>
+      <text x="908" y="237" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG</text>
+      <rect x="1000" y="272" width="72" height="12" rx="2" fill="#fafafa"/>
+      <text x="1036" y="281" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHỚP **/*.md</text>
+      <rect x="312" y="292" width="40" height="12" rx="2" fill="#fafafa"/>
+      <text x="332" y="301" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG</text>
+      <rect x="612" y="400" width="60" height="12" rx="2" fill="#fafafa"/>
+      <text x="642" y="409" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG KHỚP</text>
+
+      <rect x="24" y="136" width="128" height="48" rx="24" fill="#fafafa"/>
+      <rect x="24" y="136" width="128" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="88" y="164" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tệp trong diff</text>
+
+      <polygon points="304,104 416,160 304,216 192,160" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="304" y="148" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Khớp một glob của</text>
+      <text x="304" y="164" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">t1_skip_globs?</text>
+      <text x="304" y="180" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">bộ khớp kit, không đổi</text>
+
+      <polygon points="608,104 720,160 608,216 496,160" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="608" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Glob có <tspan font-family="'Geist Mono', monospace" font-weight="500">*</tspan> mà</text>
+      <text x="608" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không có <tspan font-family="'Geist Mono', monospace" font-weight="500">**</tspan>?</text>
+
+      <polygon points="880,104 992,160 880,216 768,160" fill="#ffffff" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="880" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Số đoạn tệp</text>
+      <text x="880" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">= số đoạn glob?</text>
+
+      <rect x="780" y="264" width="200" height="56" rx="6" fill="#fafafa"/>
+      <rect x="780" y="264" width="200" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="880" y="288" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xét lại với</text>
+      <text x="880" y="304" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">các glob còn lại</text>
+
+      <rect x="1056" y="132" width="136" height="56" rx="28" fill="#fafafa"/>
+      <rect x="1056" y="132" width="136" height="56" rx="28" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1124" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">T1</text>
+      <text x="1124" y="172" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bỏ test, build</text>
+
+      <rect x="204" y="392" width="200" height="56" rx="28" fill="#fafafa"/>
+      <rect x="204" y="392" width="200" height="56" rx="28" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="304" y="416" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nặng</text>
+      <text x="304" y="432" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chạy test, build</text>
+
+      <line x1="24" y1="480" x2="1192" y2="480" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="500" fill="#575757" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BA VÍ DỤ · CONFIG THẬT</text>
+
+      <text x="24" y="524" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">_acceptance/x/run-log.jsonl</text>
+      <text x="320" y="524" fill="#575757" font-size="9" font-family="'Geist', sans-serif">khớp <tspan font-family="'Geist Mono', monospace">_acceptance/*/run-log.jsonl</tspan> · 3 đoạn = 3 đoạn</text>
+      <text x="1192" y="524" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end">→ T1</text>
+      <line x1="24" y1="536" x2="1192" y2="536" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+
+      <text x="24" y="556" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">_acceptance/x/rang/f/run-log.jsonl</text>
+      <text x="320" y="556" fill="#575757" font-size="9" font-family="'Geist', sans-serif">khớp vì <tspan font-family="'Geist Mono', monospace">*</tspan> vượt <tspan font-family="'Geist Mono', monospace">/</tspan> · 5 đoạn ≠ 3 · xét lại: không glob nào khác khớp</text>
+      <text x="1192" y="556" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end">→ nặng</text>
+      <line x1="24" y1="568" x2="1192" y2="568" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+
+      <text x="24" y="588" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">_acceptance/x/rang/f/a.md</text>
+      <text x="320" y="588" fill="#575757" font-size="9" font-family="'Geist', sans-serif">khớp <tspan font-family="'Geist Mono', monospace">**/*.md</tspan> · glob có <tspan font-family="'Geist Mono', monospace">**</tspan>, số đoạn không xét</text>
+      <text x="1192" y="588" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end">→ T1</text>
+
+      <line x1="24" y1="616" x2="1192" y2="616" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="636" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="104" y="628" width="24" height="12" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="136" y="637" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đầu vào, kết cục</text>
+
+      <polygon points="232,634 244,628 256,634 244,640" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="264" y="637" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi</text>
+
+      <rect x="320" y="628" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="352" y="637" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước</text>
+
+      <polygon points="400,634 412,628 424,634 412,640" fill="#ffffff" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="432" y="637" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi mới của vòng</text>
+
+      <text x="1192" y="637" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-4 · AC-2 CA 8 · AC-3 CA 3</text>
+    </svg>
+  </div>
+</body>
+</html>

@@ -27,9 +27,9 @@ import {
 	gieoViec,
 } from "./support/tai-lieu-gieo";
 
-const CAU_MO_COI = "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.";
+const CAU_MO_COI = "Kara dừng giữa chừng — bấm Soạn lại để thử lần nữa.";
 const CAU_DOC_LOI = "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.";
-const LY_DO_CU = "Chưa soạn được — máy soạn báo lỗi: 500";
+const LY_DO_CU = "Chưa soạn được — Kara báo lỗi: 500";
 const NHIP_DISPATCH_MS = 60_000;
 const KIND = "soan-tu-nguon";
 
@@ -124,10 +124,10 @@ const O_MO_COI: readonly O[] = [
 	{
 		ten: "CAN_GO_TAY",
 		muc: "CAN_GO_TAY",
-		lyDo: "Cần gõ tay — 2/2 trang là bản quét, máy không đọc được chữ.",
+		lyDo: "Cần gõ tay — 2/2 trang là bản quét, Kara không đọc được chữ.",
 		viec: "dong",
 		mong: "CAN_GO_TAY",
-		mongLyDo: "Cần gõ tay — 2/2 trang là bản quét, máy không đọc được chữ.",
+		mongLyDo: "Cần gõ tay — 2/2 trang là bản quét, Kara không đọc được chữ.",
 	},
 ];
 

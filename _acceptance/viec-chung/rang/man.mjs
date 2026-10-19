@@ -152,7 +152,10 @@ try {
 			const t = await d.moTrang(chu.cookie, KHO_RONG, "/viec");
 			await choThay(
 				t,
-				() => document.querySelectorAll("[data-nhom] [data-dem]").length === 3,
+				() =>
+					document.querySelectorAll(
+						"[data-nhom] [data-slot=toggle-group-item-count]",
+					).length === 3,
 				null,
 				"ba chip co so",
 			);
@@ -160,7 +163,10 @@ try {
 				Object.fromEntries(
 					[...document.querySelectorAll("[data-nhom]")].map((e) => [
 						e.getAttribute("data-nhom"),
-						Number(e.querySelector("[data-dem]")?.textContent ?? Number.NaN),
+						Number(
+							e.querySelector("[data-slot=toggle-group-item-count]")
+								?.textContent ?? Number.NaN,
+						),
 					]),
 				),
 			);

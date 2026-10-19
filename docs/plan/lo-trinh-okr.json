@@ -11,34 +11,6 @@
   },
   "moc": [
     {
-      "ten": "Nhân sự gửi danh sách người, phòng ban, bộ phận, trưởng — đã xong trên production",
-      "ngay": "2026-10-07",
-      "ai": "Nhân sự",
-      "khoa": "m-1007",
-      "that": "2026-10-04",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Ban lãnh đạo gửi OKR quý 4 cấp OneHub — đã gửi (chủ kho báo 11/10)",
-      "ngay": "2026-10-09",
-      "ai": "Ban lãnh đạo",
-      "den": "2026-10-12",
-      "khoa": "m-1009",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc — đã xong trên production",
-      "ngay": "2026-10-09",
-      "ai": "Chủ kho",
-      "den": "2026-10-13",
-      "khoa": "m-1009b",
-      "that": "2026-10-04",
-      "loai": "ngoai",
-      "hang": []
-    },
-    {
       "ten": "Làn R1 vá xong trên production, trước ngày dùng thật",
       "ngay": "2026-10-12",
       "loai": "phat-hanh",
@@ -56,51 +28,79 @@
       "that": "2026-10-06"
     },
     {
-      "ten": "Kit phát hành 2.28.0 — mốc ổn định, có gói dieu-phoi đã vá trước đợt r2 (DP8)",
-      "ngay": "2026-10-13",
-      "that": "2026-10-13",
-      "khoa": "m-1013k",
-      "loai": "ngoai",
-      "ai": "Kit",
-      "hang": []
-    },
-    {
-      "ten": "crm nhận kit 2.28.0 và chuyển sang gói dieu-phoi (#373) — chủ kho dời từ 15/10 ngày 13/10",
-      "ngay": "2026-10-13",
-      "khoa": "m-1013n",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": []
-    },
-    {
       "ten": "Công bố OKR quý 4 — các phòng ban đã dùng thử OKR và Kho tài liệu từ trước",
       "ngay": "2026-10-14",
       "loai": "han-cung",
       "ai": "Mọi phòng ban",
       "hang": [
-        "1",
         "4n",
         "S",
         "S2",
         "ZT"
       ],
-      "khoa": "m-1014"
+      "khoa": "m-1014",
+      "that": "2026-10-14"
     },
     {
-      "ten": "Mở đợt r2 từ gói dieu-phoi của kit — chủ kho duyệt thẻ khởi tạo một lần",
-      "ngay": "2026-10-14",
-      "khoa": "m-1014d",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": []
+      "ten": "Vòng tín hiệu khép lần đầu — tín hiệu tự về kho, quản trị thấy mọi tín hiệu, ai cũng có chuông thông báo, hộp gửi tín hiệu sửa xong",
+      "ngay": "2026-10-16",
+      "khoa": "m-1016",
+      "loai": "phat-hanh",
+      "hang": [
+        "TH1",
+        "TH4",
+        "TB1",
+        "TH6"
+      ],
+      "that": "2026-10-16"
     },
     {
-      "ten": "Phòng ban công bố OKR quý 4",
+      "ten": "Lộ trình nhiều sản phẩm — bước 1: trang đọc bản chụp",
+      "ngay": "2026-10-16",
+      "khoa": "m-1016b",
+      "loai": "phat-hanh",
+      "hang": [
+        "LT1c"
+      ],
+      "that": "2026-10-17"
+    },
+    {
+      "ten": "OKR · Khu Mục tiêu dễ đi — khung Mục tiêu, trang đơn vị một bảng, Của tôi ba phần",
+      "ngay": "2026-10-18",
+      "loai": "phat-hanh",
+      "khoa": "m-1020dh",
+      "hang": [
+        "DH1",
+        "DH2",
+        "DH3"
+      ],
+      "nghia": "Người dùng OKR gặp trang tên «Mục tiêu» khớp thanh bên, nút tạo ở góc phải, đọc mục tiêu của đơn vị trong một bảng mở ra KR, và trưởng đơn vị thấy ngay việc cần cập nhật trong Của tôi. Ước theo giờ máy (luật 15/10): bắt đầu ~15/10 · ~21 giờ máy (thêm DH11 ~1,5 giờ ngày 15/10) · % hạn mức tuần chưa ước (chưa đủ 5 vòng đo) · hoàn tất dự kiến 20/10 (gồm giờ chờ cổng ~9 giờ/vòng và chờ gộp ~20 giờ đo 15/10) · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10; M5 nhận đợt okr-dieu-huong-1410.",
+      "ly_do": "Cắt theo giờ máy: còn DH2 (4–7 giờ máy) sau vòng vệ sinh của M5; M5 ước Cổng 2 khoảng 17:30Z 17/10, gộp tối 17/10 → 18/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm. Về đích 18/10 00:13Z: DH2 gộp qua #471 (b22c0a329), đúng ngày cắt theo giờ máy.",
+      "that": "2026-10-18"
+    },
+    {
+      "ten": "OKR · Sơ đồ căn chỉnh — theo đơn vị và quanh một mục tiêu",
       "ngay": "2026-10-21",
-      "ai": "Phòng ban",
-      "khoa": "m-1021",
-      "loai": "ngoai",
-      "hang": []
+      "loai": "phat-hanh",
+      "khoa": "m-1021dh",
+      "hang": [
+        "DH4",
+        "DH5"
+      ],
+      "nghia": "Lãnh đạo mở Toàn cảnh › Sơ đồ thấy trong một màn đơn vị nào chưa nối lên công ty, đơn vị nào đang trượt; trưởng đơn vị xem quanh một mục tiêu nó góp vào đâu. Ước theo giờ máy: bắt đầu ~15/10 · ~18 giờ máy (DH4 tính T3: thêm React Flow + dagre, chạm packages/ui, gộp ×1,3) · % hạn mức tuần chưa ước · hoàn tất dự kiến 21/10 · mục tiêu: chủ kho chưa đặt. Chủ kho mở 15/10.",
+      "that": "2026-10-16"
+    },
+    {
+      "ten": "Lộ trình bước 2 — ngày dự kiến, tên ngành tiếng Việt, tiêu điểm sau xoá",
+      "ngay": "2026-10-21",
+      "loai": "phat-hanh",
+      "khoa": "m-1021lt",
+      "hang": [
+        "LT1e",
+        "VN1"
+      ],
+      "ly_do": "LT1e gộp 18/10 (#475), VN1 gộp 18/10 (#472). TH6b chuyển sang mốc m-1029th của làn MacBook Pro. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z.",
+      "that": "2026-10-18"
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -114,7 +114,6 @@
         "L2",
         "L3",
         "L4",
-        "E4b",
         "E5",
         "E6b",
         "NM1",
@@ -129,40 +128,8 @@
         "LT1b",
         "LT2"
       ],
-      "khoa": "m-1031"
-    },
-    {
-      "ten": "Phiên nghiệm thu R1",
-      "ngay": "2026-11-13",
-      "ai": "Chủ sản phẩm, người dùng đại diện",
-      "hang": [
-        "2",
-        "3",
-        "5"
-      ],
-      "khoa": "m-1113"
-    },
-    {
-      "ten": "Đọc số lượt 6",
-      "ngay": "2026-12-01",
-      "ai": "Chủ kho",
-      "hang": [
-        "6",
-        "8a"
-      ],
-      "khoa": "m-1201"
-    },
-    {
-      "ten": "Ban lãnh đạo đặt OKR năm 2027 cấp OneHub",
-      "ngay": "2026-12-07",
-      "ai": "Ban lãnh đạo",
-      "den": "2026-12-18",
-      "hang": [
-        "H",
-        "9b",
-        "D"
-      ],
-      "khoa": "m-1207"
+      "khoa": "m-1031",
+      "that": "2026-10-17"
     },
     {
       "ten": "Hạn cứng: lượt 7 lên production",
@@ -171,54 +138,86 @@
       "hang": [
         "7n"
       ],
-      "khoa": "m-1214"
+      "khoa": "m-1214",
+      "ly_do": "Phòng ban đặt và công bố OKR quý 1 từ 21/12: lượt 7 phải lên production trước đó. Dự kiến theo giờ máy: 7n (≈7 giờ máy cao ≈ 25 giờ lịch) xong ≈ 19/10, đầu dãy 7n→10→8b của R3. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     },
     {
-      "ten": "R3 lên production",
-      "ngay": "2026-12-18",
+      "ten": "R3 lên production — sau Vỏ khu Mục tiêu, trần 18/12",
+      "ngay": "2026-11-05",
       "loai": "phat-hanh",
       "hang": [
         "10",
         "8b",
         "L",
-        "T",
-        "K5"
+        "T"
       ],
-      "khoa": "m-1218"
+      "khoa": "m-1218",
+      "den": "2026-12-18",
+      "ly_do": "Trần 18/12: trước khi phòng ban đặt OKR quý 1 (21/12). Làn Mac Studio làm Vỏ khu Mục tiêu trước (mốc m-1026vk), R3 xếp sau: 7n → 10 → 8b và L → T. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     },
     {
-      "ten": "Phòng ban đặt và công bố OKR quý 1",
-      "ngay": "2026-12-21",
-      "ai": "Phòng ban",
-      "den": "2027-01-11",
-      "khoa": "m-1221",
-      "loai": "ngoai",
-      "hang": []
+      "ten": "K5 Chat và Deal về một khung lên production",
+      "ngay": "2026-12-18",
+      "loai": "phat-hanh",
+      "khoa": "m-1218k",
+      "hang": [
+        "K5"
+      ]
     },
     {
-      "ten": "Chấm và nhìn lại quý 4 trong công cụ",
-      "ngay": "2026-12-28",
-      "ai": "Phòng ban",
-      "den": "2027-01-08",
-      "khoa": "m-1228",
-      "loai": "ngoai",
-      "hang": []
+      "ten": "Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR",
+      "ngay": "2026-10-26",
+      "loai": "phat-hanh",
+      "khoa": "m-1026vk",
+      "hang": [
+        "VK1",
+        "VK2",
+        "VK3",
+        "VK4",
+        "VK5",
+        "VK6",
+        "VK7",
+        "VK8",
+        "VK9",
+        "VK10",
+        "VK11",
+        "VK12",
+        "DH11",
+        "DH12",
+        "DH13"
+      ],
+      "ly_do": "Đợt okr-vo-khu-1810 (#478). Ba dãy: VK1→VK2→VK3→VK10 · VK4→VK5 · sau VK2: VK6, VK9, VK11, VK12, VK8; VK7 sau VS8 (M5 làm chủ record-sheet). VK4 được đổi chuỗi tên cũ → mới trong khẳng định thước hồ sơ đã ký (chủ kho 19/10). Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     },
     {
-      "ten": "Tết Đinh Mùi",
-      "ngay": "2027-02-06",
-      "khoa": "m-0206",
-      "loai": "ngoai",
-      "ai": "Công ty",
-      "hang": []
+      "ten": "Tín hiệu và trang Lộ trình theo kit 2.33",
+      "ngay": "2026-10-29",
+      "loai": "phat-hanh",
+      "khoa": "m-1029th",
+      "hang": [
+        "LT1f",
+        "TH5",
+        "TH2",
+        "TH3",
+        "TB2",
+        "TH6b",
+        "LT3"
+      ],
+      "ly_do": "Làn MacBook Pro, sau mốc kit 22/10. LT1f trước LT3 (cùng vùng); TB2 sau l7 (M5). Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     },
     {
-      "ten": "Đo bốn tuần đầu quý 1: Cổng Giá trị R1–R3",
-      "ngay": "2027-02-09",
-      "ai": "Chủ kho",
-      "khoa": "m-0209",
-      "loai": "ngoai",
-      "hang": []
+      "ten": "Hồ sơ đã ký luôn tươi — dọn hồ sơ cũ và sửa thước",
+      "ngay": "2026-10-31",
+      "loai": "phat-hanh",
+      "khoa": "m-1031f",
+      "hang": [
+        "F26",
+        "F36",
+        "F35",
+        "F28",
+        "F31",
+        "F34"
+      ],
+      "ly_do": "Làn MacBook Pro, dùng giu-tuoi của kit 2.33 (K-A). Tồn đọng 262 hồ sơ ngày 19/10. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     }
   ],
   "hang": [
@@ -565,7 +564,7 @@
       "nhom": "okr",
       "thu_tu": 72,
       "ghi_chu": "Hai mục Cổng Bằng chứng lượt 7 (28/09) định mở hợp đồng mới. 04/10: Ngoài-1 và Ngoài-3 của khep-ky-okr kiểm lại vẫn mở (rà đặt lịch tương lai đóng không được; mang sang rơi vào kỳ đã chấm).",
-      "buoc_ke": "Làn B sau 8c; phải lên trước 14/12",
+      "buoc_ke": "Làn Mac Studio · thứ 15",
       "chay_khi": "8c đã gộp (làn B)",
       "cho_ai": "điều kiện",
       "han": "2026-12-14"
@@ -668,7 +667,7 @@
       "nhom": "okr",
       "thu_tu": 82,
       "ghi_chu": "XEM-08, XEM-09, NH-05 — thành T3 ở Cổng Đáng của 8a vì cần hai chỗ lưu.",
-      "buoc_ke": "Làn B, cuối cùng",
+      "buoc_ke": "Làn Mac Studio · thứ 17",
       "chay_khi": "Làn B sau lượt 10",
       "cho_ai": "điều kiện"
     },
@@ -748,7 +747,7 @@
       "nhom": "okr",
       "thu_tu": 100,
       "ghi_chu": "Từ 28/09 (anh quyết): dựng bằng dữ liệu mẫu, bật bằng dữ liệu thật. Giữ cảnh báo trượt và nút trong Slack; hỏi đáp OKR tách sang C.",
-      "buoc_ke": "Làn B sau 7n, và khi 9c đã gộp",
+      "buoc_ke": "Làn Mac Studio · thứ 16",
       "chay_khi": "7n và 9c đã gộp (9c cùng chạm nhắc buổi sáng); 9c chậm thì 8b đi trước",
       "cho_ai": "điều kiện"
     },
@@ -1013,7 +1012,7 @@
       "nhom": "tro-ly",
       "thu_tu": 270,
       "ghi_chu": "Dùng lại sổ đề xuất của 9b.",
-      "buoc_ke": "Làn A sau C; Cổng Đáng cần một mã mới trong bản phạm vi",
+      "buoc_ke": "Làn Mac Studio · thứ 18",
       "chay_khi": "C đã gộp (làn A); dựng trên quý 3 mẫu của M",
       "cho_ai": "điều kiện"
     },
@@ -1034,7 +1033,7 @@
       "nhom": "tro-ly",
       "thu_tu": 280,
       "ghi_chu": "Gộp từ các bản tóm tắt phòng ban đã kiểm, không đọc lại Cập nhật tuần gốc.",
-      "buoc_ke": "Làn A, cuối cùng",
+      "buoc_ke": "Làn Mac Studio · thứ 19",
       "chay_khi": "L đã gộp (làn A)",
       "cho_ai": "điều kiện"
     },
@@ -1356,7 +1355,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo»",
       "ghi_chu": "Chủ kho chốt 04/10: tính năng và UX trước, câu chữ sau. Khoảng 30 chỗ «Trợ lý»/«Tác nhân». Ghim khoá mới ở messages-guard.",
-      "buoc_ke": "R2 — lên production 31/10 (tạm); sau K4 (đã gộp)",
+      "buoc_ke": "Làn MacBook Pro · gom vào F35 (#411 đóng)",
       "trang_thai": "chưa mở",
       "dung_tren": [
         "K4"
@@ -1377,7 +1376,7 @@
         "K1"
       ],
       "ghi_chu": "T3 vì chạm đường chat chung của apps/agent và bản ghi deal. Gom: chốt nghĩa chữ «tác nhân», bộ dựng có «Kara đang…».",
-      "buoc_ke": "Sau 07/12",
+      "buoc_ke": "Làn Mac Studio · thứ 20",
       "ngay": "2026-10-04"
     },
     {
@@ -1818,7 +1817,8 @@
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "Q4"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 2"
     },
     {
       "ma": "TH1",
@@ -1882,12 +1882,13 @@
       "tieu_chi": 10,
       "vi_sao": "Zalo và Slack đang là đường đi riêng của tác nhân; rẽ chúng từ cùng bản ghi thì đã đọc ở một nơi là đủ, và người dùng tự chọn để không bị nhiễu.",
       "bat_khi": "Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TB1 theo luật cắt 4 (cỡ một vòng). Đổi cài đặt thông báo có thể chạm bảng dữ liệu cài đặt nên để hạng T3; giữ nguyên hồ sơ Zalo đã ký.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TB1 theo luật cắt 4 (cỡ một vòng). Đổi cài đặt thông báo có thể chạm bảng dữ liệu cài đặt nên để hạng T3; giữ nguyên hồ sơ Zalo đã ký. Kênh Zalo/Slack do làn Mac Studio làm chủ: TB2 chỉ thêm cổng rẽ, đứng sau l7 (M5).",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "N3",
         "N4"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 5"
     },
     {
       "ma": "TH2",
@@ -1907,12 +1908,13 @@
       "tieu_chi": 8,
       "vi_sao": "Gom nhóm và cắt lượt hôm nay cần người mở phiên máy và gõ lệnh; đây là chỗ thứ hai của vòng chưa ai làm.",
       "bat_khi": "Mỗi tín hiệu kéo về có chỗ trong bản gom trong vòng 2 ngày; chủ kho sửa ít hơn một nhóm trên năm (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Phần chạy theo lịch của skill gom và cắt lượt thuộc kit — sửa ở kho kit qua chip riêng, crm chỉ khai lịch và nhận PR. Quản trị nhận «Có n tín hiệu mới» qua TB1.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Phần chạy theo lịch của skill gom và cắt lượt thuộc kit — sửa ở kho kit qua chip riêng, crm chỉ khai lịch và nhận PR. Quản trị nhận «Có n tín hiệu mới» qua TB1. Chủ kho 19/10: TH2 chỉ mở PR nháp đề xuất hàng; chủ nhóm của tệp lộ trình gộp.",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "G1",
         "N5"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 3"
     },
     {
       "ma": "TH3",
@@ -1938,7 +1940,8 @@
       "phu": [
         "S1",
         "S2"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 4"
     },
     {
       "ma": "TH6",
@@ -1971,6 +1974,26 @@
       ]
     },
     {
+      "ma": "TH6b",
+      "slug": "tieu-diem-sau-hop-xoa-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 445.6,
+      "dung_tren": [
+        "TH6"
+      ],
+      "ten": "Tiêu điểm sau hộp xoá tín hiệu",
+      "ten_ngan": "Tiêu điểm sau xoá",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Người dùng bàn phím hay trình đọc màn bấm «Giữ lại» hoặc gặp lỗi khi xoá tín hiệu vẫn đứng đúng dòng mình vừa thao tác, không phải dò lại từ đầu trang»",
+      "vai": "Người gửi tín hiệu",
+      "vi_sao": "Gốc: _acceptance/sua-giao-dien-tin-hieu/ — Ngoài-6 ở Cổng Bằng chứng TH6 15/10, chủ kho chọn «mở hợp đồng mới».",
+      "bat_khi": "Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Mở từ thẻ Cổng Bằng chứng TH6 (chủ kho 15/10). Chưa gắn mốc.",
+      "dot": "vong-tin-hieu-1410",
+      "buoc_ke": "Làn MacBook Pro · thứ 6"
+    },
+    {
       "ma": "LT1c",
       "slug": "lo-trinh-doc-ban-chup",
       "hang": "T3",
@@ -1992,6 +2015,43 @@
       "phu": [
         "L1"
       ]
+    },
+    {
+      "ma": "LT1d",
+      "slug": "chat-duong-day-ban-chup",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 446.2,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Chặt đường đẩy bản chụp",
+      "ten_ngan": "Chặt đường đẩy",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Máy chủ chỉ nhận thân yêu cầu lớn ở đúng đường nhận bản chụp lộ trình, và một lượt chạy tay từ nhánh chưa gộp không đổi được lộ trình trên trang»",
+      "vai": "Chủ kho",
+      "vi_sao": "Gốc: _acceptance/lo-trinh-doc-ban-chup/ — Ngoài-8 (trần thân 2 MB áp cho mọi đường REST, kể cả người chưa đăng nhập) và Ngoài-11 (chạy tay từ nhánh chưa gộp làm trang hiện lộ trình chưa duyệt) ở Cổng Bằng chứng LT1c 15/10; chủ kho chọn «mở hợp đồng mới», mở luôn.",
+      "bat_khi": "Không đường REST nào ngoài đường nhận bản chụp nhận thân quá 100 KB; lượt chạy tay từ nhánh khác nhánh chính bị từ chối có lý do (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Mở từ thẻ Cổng Bằng chứng LT1c (chủ kho 15/10). Dựng sau khi LT1c gộp onehub. Chưa gắn mốc.",
+      "dot": "vong-tin-hieu-1410"
+    },
+    {
+      "ma": "LT1e",
+      "slug": "lo-trinh-hien-ngay-du-kien",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 446.3,
+      "dung_tren": [
+        "LT1c"
+      ],
+      "ten": "Lộ trình hiện ngày dự kiến",
+      "ten_ngan": "Ngày dự kiến",
+      "ngay": "2026-10-16",
+      "cau_giao": "«Trưởng phòng ban mở trang Lộ trình và thấy mỗi việc, mỗi mốc có ngày dự kiến xong do máy tính — ghi rõ là dự kiến, có cờ khi số đo chưa đủ»",
+      "vai": "Trưởng phòng ban",
+      "vi_sao": "Gốc: _acceptance/lo-trinh-doc-ban-chup/ — trang Lộ trình đọc khối dữ liệu bản 2 của kit, nên giờ máy và ngày dự kiến của gói road-map (RM6 lo-trinh-gio-may) không tới được trang CRM; chủ kho mở 16/10 cùng hàng kit RM6c (khối dữ liệu mang ngày dự kiến).",
+      "bat_khi": "Sau khi giao, mọi mốc đang chạy trên trang có ngày dự kiến kèm nhãn «dự kiến»; ở mốc khép đầu tiên, ngày dự kiến lệch ngày khép thật không quá một ngày (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho mở 16/10 («mở RM6c và LT1e»). Chờ crm nhận bản kit có RM6c (gói road-map) — mở vòng sau khi nhận. Máy MacBook Pro giữ. Chưa gắn mốc."
     },
     {
       "ma": "LT3",
@@ -2017,7 +2077,56 @@
         "L3",
         "L4",
         "L5"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 7"
+    },
+    {
+      "ma": "DH12",
+      "slug": "khung-cho-don-vi-mot-hinh",
+      "nhom": "okr",
+      "thu_tu": 458.12,
+      "ngay": "2026-10-19",
+      "ten": "Khung chờ trang đơn vị một hình",
+      "ten_ngan": "Khung chờ một hình",
+      "cau_giao": "«Mở trang Theo đơn vị lúc đang tải chỉ thấy một khung chờ đúng hình bảng, không hai khung khác hình nối nhau»",
+      "ghi_chu": "Ngoài-1 của trang-don-vi-mot-bang (DH2), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 17/10 (d-20261017T223322Z-56). Sửa đúng tầng: thêm biến thể cho khung xương chung của packages/ui.",
+      "dung_tren": [
+        "DH2"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 13"
+    },
+    {
+      "ma": "DH13",
+      "slug": "loc-don-vi-khong-tu-dong",
+      "nhom": "okr",
+      "thu_tu": 458.13,
+      "ngay": "2026-10-19",
+      "ten": "Lọc trang đơn vị không tự đóng",
+      "ten_ngan": "Lọc không tự đóng",
+      "cau_giao": "«Chọn một mục trong Lọc ở trang Theo đơn vị thì menu Lọc vẫn mở, khung Lọc trên điện thoại không tự thu lại»",
+      "ghi_chu": "Ngoài-3 của trang-don-vi-mot-bang (DH2), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 17/10 (d-20261017T223322Z-57). Nguyên nhân: bảng chuyển sang khung chờ khi đang tải lại.",
+      "dung_tren": [
+        "DH2"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 14"
+    },
+    {
+      "ma": "LT1f",
+      "slug": "trang-lo-trinh-mo-hinh-hien-thi",
+      "nhom": "crm-chung",
+      "thu_tu": 446.6,
+      "ngay": "2026-10-19",
+      "ten": "Trang Lộ trình đọc mô hình hiển thị",
+      "ten_ngan": "Lộ trình đọc mô hình",
+      "cau_giao": "«Trang Lộ trình trong CRM hiện việc chưa hẹn mốc và tên hiển thị đúng như LO-TRINH.html, không còn cờ vàng «khối chưa mang mô hình hiển thị»»",
+      "ghi_chu": "Mục 4 CHANGELOG kit 2.33.0: trang đọc năm khoá ten_hien_thi, hien, viec_hien, con_lai, chua_hen_moc thay vì tự lọc, kèm ca đối chiếu trang với tập hiển thị của khối. Đứng sau #483 (khuôn đã mang năm khoá).",
+      "dung_tren": [
+        "LT1e"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn MacBook Pro · thứ 1"
     },
     {
       "ma": "F8",
@@ -2437,6 +2546,29 @@
       ]
     },
     {
+      "ma": "DH11",
+      "slug": "cua-toi-don-vi-dan-khi-cay-loi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.25,
+      "dung_tren": [
+        "DH3"
+      ],
+      "ten": "Đơn vị bạn dẫn đứng vững khi cây tổ chức chưa tải hoặc lỗi",
+      "ten_ngan": "Đơn vị dẫn khi cây lỗi",
+      "ngay": "2026-10-15",
+      "cau_giao": "«Trưởng đơn vị mở Của tôi lúc cây tổ chức chưa tải hoặc lỗi thì vẫn biết mỗi thẻ là đơn vị nào, và thấy lỗi kèm nút Thử lại»",
+      "vai": "Trưởng đơn vị",
+      "vi_sao": "Đo ở Cổng Bằng chứng DH3 (Ngoài-9, 15/10): phần «Đơn vị bạn dẫn» chỉ xử trạng thái của okr.access, không xử org.tree; cây lỗi hay đang tải thì thẻ đơn vị mất tiêu đề, không báo lỗi, không có Thử lại, thứ tự rơi về thứ tự headOf — người đọc không biết thẻ nào là đơn vị nào.",
+      "bat_khi": "Ca DOM hai chiều: org.tree trả lỗi → phần hiện lỗi kèm Thử lại, không thẻ tiêu đề rỗng; org.tree đang tải → khung chờ, không tiêu đề rỗng",
+      "ghi_chu": "Chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng DH3 15/10. Nguyên nhân ở apps/app/app/(app)/[slug]/okr/phan-don-vi-dan.tsx: chỉ access có nhánh isPending/isError. Sửa: đưa cay vào nhánh tải/lỗi, dùng LoiPhan sẵn có; thêm ô org.tree vào ma trận lỗi của okr-cua-toi-ba-phan.dom.tsx. Không chạm apps/api, không chạm vùng Tổ chức. Một AC, ước 1–1,5 giờ máy; có thể đi làn V. Mở sau khi DH3 gộp.",
+      "dot": "okr-dieu-huong-1410",
+      "phu": [
+        "Ngoài-9 DH3"
+      ],
+      "buoc_ke": "Làn Mac Studio · gộp vào VK2 (cùng màn Của tôi)"
+    },
+    {
       "ma": "DH5",
       "slug": "so-do-quanh-muc-tieu",
       "hang": "T2",
@@ -2472,7 +2604,7 @@
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 31/10 (tạm)"
+      "buoc_ke": "Làn M5 · thứ 2"
     },
     {
       "ma": "E6b",
@@ -2625,9 +2757,626 @@
       "ten": "Thước hồi quy chạy được lệnh cần gh",
       "ten_ngan": "Thước cần gh",
       "cau_giao": "«Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây»",
-      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
+      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng. Gộp #396 (kiểm chéo dựng lại cây, cùng scripts/kiem-cheo).",
       "trang_thai": "chưa mở",
-      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
+      "buoc_ke": "Làn MacBook Pro · thứ 8"
+    },
+    {
+      "ma": "MH1",
+      "slug": "thu-haiku-tro-ly-okr",
+      "nhom": "tro-ly",
+      "thu_tu": 240.5,
+      "ngay": "2026-10-14",
+      "ten": "Thử Haiku cho Trợ lý OKR",
+      "ten_ngan": "Thử Haiku",
+      "cau_giao": "«Trợ lý OKR chạy trên Haiku 5.5 khi đạt ngưỡng đo; không đạt thì giữ Gemini 3.8 Flash»",
+      "ghi_chu": "Chủ kho duyệt 14/10 khoảng 16:40Z (phiên «Chẩn troLyDeXuat»): cấu hình suy nghĩ cho anthropic trong packages/ai-okr, trần token theo model; đo E22, E24, Tác nhân×3, chat; ngưỡng E24 0 hỏng, E22 ≥ 28/30 và 0 góp ý thừa, judge ≥ 0,9, Tác nhân 3/3. Gộp chung: gieo agentModelId bằng model production vào kho đo và kho test, không đổi DEFAULT_AGENT_MODEL. Chỉ đo sau khi phần sửa hai thước của tro-ly-okr-de-xuat gộp. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [
+        "9b"
+      ],
+      "trang_thai": "đang dựng",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-15T05:02:19Z"
+      },
+      "buoc_ke": "Đợt r2, phiên «Chẩn troLyDeXuat»; mốc chốt ở Cổng Phạm vi; đã ký Cổng Bằng chứng (ec6537686), chờ ghim lại rồi gộp"
+    },
+    {
+      "ma": "NM5",
+      "slug": "dau-trang-okr-cho-nut-hoi-kara",
+      "nhom": "crm-chung",
+      "thu_tu": 450.2,
+      "ngay": "2026-10-15",
+      "ten": "Nút Hỏi Kara lúc chờ",
+      "ten_ngan": "Hỏi Kara lúc chờ",
+      "cau_giao": "«Khung chờ đầu trang OKR chừa đúng chỗ cho nút «Hỏi Kara», hàng tiêu đề không nhảy khi tải xong»",
+      "ghi_chu": "Hồi quy do #419: ở khổ 375 hàng tiêu đề Toàn cảnh cao 32 px lúc chờ, 96 px khi xong; E12m của khung-man-chung đỏ. Chủ kho ký Cổng Đáng ở phiên giám sát 15/10 12:22:27Z. Dãy P1. Tạm dừng 16/10 vì chồng vùng DH1 dieu-huong-khu-muc-tieu (M5) — khi DH1 lên onehub đo E12m: xanh thì đóng «DH1 đã sửa», đỏ thì dựng lại trên DH1. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [
+        "C"
+      ],
+      "trang_thai": "đã lên onehub",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-15T12:22:27Z"
+      },
+      "buoc_ke": "Đã gộp 17/10 03:53Z (#456)",
+      "pr": [
+        456
+      ]
+    },
+    {
+      "ma": "F28",
+      "slug": "ho-so-do-kiem-cheo",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.4,
+      "ngay": "2026-10-13",
+      "ten": "Hồ sơ đỏ ở kiểm chéo",
+      "ten_ngan": "Đỏ kiểm chéo",
+      "cau_giao": "«Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do»",
+      "ghi_chu": "P7-5, Hỏi-1 của F24: 15 hồ sơ kiểm chéo gọi tên (ban-gieo-gop-y-sau-nop, bang-thanh-vien-giu-hang, bo-dung-chung-nhan-chuoi, bo-dung-khong-ket, bo-xuong-kara, ca-chap-chon-cach-ly, ca-chap-chon-con-lai, cai-dat-chung-chi-quan-tri, cai-dat-con-lai-noi-tieng-viet, cap-nhat-tuan-okr, chan-lai-component-ra-man, chan-trung-khoa-ban-nhap, chu-cuoi-cung-tien-de, chu-mac-dinh-thu-vien-ngoai, cron-theo-ban-khai). Nhận thêm: evals.yaml không phải YAML chuẩn, tro-ly-okr-nen, so-okr-tu-chay (bản vá E23/E25 ở nhánh F8), hai thước ranh-gioi.mjs --first-parent --ancestry-path. Dãy P7 sau F26, mốc đề xuất 14/11.",
+      "dung_tren": [
+        "F26"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn MacBook Pro · thứ 11"
+    },
+    {
+      "ma": "F29",
+      "slug": "ghim-thuoc-soi-xem-okr",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.5,
+      "ngay": "2026-10-15",
+      "ten": "Thước soi xem OKR",
+      "ten_ngan": "Soi xem OKR",
+      "cau_giao": "«Thước soi quyền xem OKR không báo lộ giả: tám chỗ đã phân loại, và thước chạy ở CI cho PR chạm vùng OKR»",
+      "ghi_chu": "Phân loại 8 chỗ ghd_soi_xem: 0 lộ thật, thước lệch mã sau #290, #300, #342, #395. (a) 7 dòng MIEN_XEM kèm lý do, đổi khoá removeAlignment thành congSuaCanChinh, ghim lại gioi-han-duyet-cay-okr. (b) ghd_soi_xem chạy ở CI cho PR chạm apps/api/src/okr/**, packages/db/src/okr-*, apps/agent/agent/lib/okr/**. Chủ kho ký Cổng Đáng 15/10 21:30:26Z. Dãy P0. Mã tạm cấp 16/10 01:38Z.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-15T21:30:04Z"
+      },
+      "buoc_ke": "Đã gộp 16/10 (#436)",
+      "pr": [
+        436
+      ]
+    },
+    {
+      "ma": "F30",
+      "slug": "e24-qua-han-khong-phai-ha-tang",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.6,
+      "ngay": "2026-10-15",
+      "ten": "E24 quá hạn là trễ",
+      "ten_ngan": "E24 quá hạn",
+      "cau_giao": "«E24 của Trợ lý OKR đọc lượt quá hạn là trễ, không phải «không đo được»»",
+      "ghi_chu": "Ngoài-4 ở Cổng Bằng chứng của thuoc-tro-ly-okr-khong-lot, chủ kho chọn «mở hợp đồng mới». E24 chỉ chặn sớm «không đo được» khi mọi lượt hỏng do tác tử hoặc model; lượt quá 180 s vào nhánh ngưỡng. Dãy P0. Đã gộp 15/10 17:01Z (#425, f46c0bbda).",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        425
+      ],
+      "buoc_ke": "Đã gộp 15/10 17:01Z (#425)"
+    },
+    {
+      "ma": "F31",
+      "slug": "thu-paths-e15-giai-doan",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.7,
+      "ngay": "2026-10-15",
+      "ten": "Thu paths E15 giai đoạn",
+      "ten_ngan": "Paths E15",
+      "cau_giao": "«Đổi một tệp chữ khác không kéo hồ sơ giai-doan-thoa-thuan vào ghim lại: E15 chỉ theo dõi tệp chữ của màn giai đoạn»",
+      "ghi_chu": "Đề xuất 15/10 22:20Z từ F23: paths của E15 (ui-check) đang là apps/app/lib/messages/**, nên #424 sửa tin-hieu.ts làm #427 phải ghim lại. Cùng lớp E17 đã sửa ở F23. Chờ Cổng Đáng.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn MacBook Pro · thứ 12"
+    },
+    {
+      "ma": "F32",
+      "slug": "paths-judgment-hep",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.8,
+      "ngay": "2026-10-16",
+      "ten": "Paths judgment hẹp",
+      "ten_ngan": "Paths hẹp",
+      "cau_giao": "«Eval chấm bằng giám khảo khai paths phủ mọi tệp ngoài T1 mà nó đọc»",
+      "ghi_chu": "Đề xuất từ F31. Đo lại theo luật lưới bash: 0/60 eval lọt tệp thật (CONTEXT.md là T1 qua glob_variants). Chủ kho chọn đóng (P0-23: a, 17/10 00:07Z); không PR.",
+      "dung_tren": [],
+      "trang_thai": "xong",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Đóng không sửa: lỗ không có thật"
+    },
+    {
+      "ma": "F33",
+      "slug": "tai-lieu-khoi-phuc-chap-chon",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.9,
+      "ngay": "2026-10-16",
+      "ten": "Ca khôi phục chập chờn",
+      "ten_ngan": "Khôi phục chập chờn",
+      "cau_giao": "«Hai ca lưu trữ và khôi phục của Kho tài liệu đếm sự kiện theo id, hết đỏ ngẫu nhiên ở pre-push»",
+      "ghi_chu": "tai-lieu-luu-tru.spec.ts:290 đếm từ Date.now()-1 nên lọt sự kiện DE_XUAT cùng mili-giây; #413 đã vấp. Dãy P4.",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        450
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Đã gộp 17/10 (#450)"
+    },
+    {
+      "ma": "F34",
+      "slug": "cham-bo-do-chiu-cau-loi",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.0,
+      "ngay": "2026-10-16",
+      "ten": "Chấm bộ đo chịu câu lỗi",
+      "ten_ngan": "Bộ đo chịu lỗi",
+      "cau_giao": "«E15 của tro-ly-doc-kho coi lượt đủ mã là đã đo, ghi câu lỗi model vào cột riêng, có trần»",
+      "ghi_chu": "Một câu lỗi model (~2%) làm cả lượt ra mã 2; đỏ sẵn trên onehub. Bộ bo-cau-hoi-mau đã làm theo cách này.",
+      "dung_tren": [
+        "F32"
+      ],
+      "trang_thai": "chưa mở",
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T15:08:22Z"
+      },
+      "buoc_ke": "Làn MacBook Pro · thứ 13"
+    },
+    {
+      "ma": "K7",
+      "slug": "cho-tac-nhan-lau",
+      "nhom": "crm-chung",
+      "thu_tu": 450.3,
+      "ngay": "2026-10-16",
+      "ten": "Chờ Tác nhân lâu",
+      "ten_ngan": "Chờ Tác nhân",
+      "cau_giao": "«Tác nhân dựng quá 200 giây thì người dùng thấy tiến độ, được rời trang, và nhận báo trên chuông khi xong»",
+      "ghi_chu": "Dãy P7. Năm vòng S4 (chủ kho cho thêm vòng 4, 5). Ngoài-13 mở hợp đồng mới: chuông còn đếm thông báo của chính cuộc đang mở (conversations.service.ts markRead).",
+      "dung_tren": [],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        457
+      ],
+      "cong_dang": {
+        "decision": "build",
+        "decided_by": "Phan Le Manh",
+        "decided_at": "2026-10-16T05:33:48Z"
+      },
+      "buoc_ke": "Đã gộp 2026-10-17 (#457)"
+    },
+    {
+      "ma": "VN1",
+      "slug": "dich-ten-nganh-bang-bang",
+      "nhom": "crm-chung",
+      "thu_tu": 446.4,
+      "ngay": "2026-10-17",
+      "ten": "Dịch tên ngành bằng bảng",
+      "ten_ngan": "Tên ngành tiếng Việt",
+      "cau_giao": "«Tra cứu thương hiệu Việt Nam hiện tên ngành tiếng Việt từ một bảng, không dịch máy từng lần»",
+      "ghi_chu": "Hỏi-5 của tra-cuu-thuong-hieu-viet-nam (#462). Làn MacBook Pro, nhóm 1, ~2 giờ máy.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn MacBook Pro sau LT1e (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+    },
+    {
+      "ma": "K7b",
+      "slug": "chuong-cuoc-dang-mo",
+      "nhom": "crm-chung",
+      "thu_tu": 450.4,
+      "ngay": "2026-10-17",
+      "ten": "Chuông không đếm cuộc đang mở",
+      "ten_ngan": "Chuông cuộc đang mở",
+      "cau_giao": "«Ngồi trên màn chat thấy kết quả rồi gõ tiếp thì chuông không còn đếm thông báo của chính cuộc đó»",
+      "ghi_chu": "Ngoài-13 của K7, chủ kho chọn «mở hợp đồng mới» khi ký 17/10. Tệp gốc apps/api/src/conversations/conversations.service.ts (markRead chỉ chạy khi lastAssistantAt > lastReadAt).",
+      "dung_tren": [
+        "K7"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · gộp vào K5 (cùng conversations)"
+    },
+    {
+      "ma": "VS8",
+      "slug": "ngan-ban-ghi-giu-danh-tinh",
+      "nhom": "crm-chung",
+      "thu_tu": 450.5,
+      "ngay": "2026-10-17",
+      "ten": "Ngăn bản ghi không dựng lại khi mở, đóng",
+      "ten_ngan": "Ngăn bản ghi trượt mượt",
+      "cau_giao": "«Mở hay đóng ngăn bản ghi thì ngăn trượt ra, vào như cũ, không biến mất rồi hiện lại, mà vẫn chỉ nạp sẵn đúng các khoá của #469»",
+      "ghi_chu": "Ngoài-8 của ve-sinh-do-san-onehub (Known limit ở Cổng 2). Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx: HydrationBoundary chỉ bọc khi stack.length > 0 nên RecordSheetHost bị dựng lại. Chứng minh: bài kiểm DOM về danh tính RecordSheetHost qua mở, đóng; ca đối chứng apps/app/test/ngan-ban-ghi-nap-san.dom.tsx giữ xanh. T2, M5 ước 3–4 giờ máy. Đi sau khi #469 gộp.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn M5 · thứ 1"
+    },
+    {
+      "ma": "VS11",
+      "slug": "bao-loi-tac-nhan-sau-cau-hoi",
+      "nhom": "crm-chung",
+      "thu_tu": 450.6,
+      "ngay": "2026-10-17",
+      "ten": "Báo lỗi tác nhân cả sau câu hỏi giữa chừng",
+      "ten_ngan": "Báo lỗi tác nhân",
+      "cau_giao": "«Tác nhân hỏng trong lúc dựng thì người dùng nhận đúng một thông báo, kể cả khi đã trả lời một câu hỏi giữa chừng»",
+      "ghi_chu": "Ngoài-11 của ve-sinh-do-san-onehub. Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/agent/agent/lib/thong-bao-tac-nhan.ts: dòng tac-nhan-hong chỉ ghi khi lần gửi cuối là CREATE_AGENT. T2. Đi sau khi #469 gộp.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 21"
+    },
+    {
+      "ma": "K7c",
+      "slug": "don-sau-cho-tac-nhan",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.1,
+      "ngay": "2026-10-17",
+      "ten": "Dọn giao diện sau K7",
+      "ten_ngan": "Dọn sau K7",
+      "cau_giao": "«TheDangDung sống ở packages/ui; CardAction và CardFooter không bị className đổi khoảng cách ở chỗ gọi»",
+      "ghi_chu": "Ngoài-5 và Ngoài-11 của K7 (ghi Known limits khi ký 17/10), trái docs/design.md.",
+      "dung_tren": [
+        "K7"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 22"
+    },
+    {
+      "ma": "F35",
+      "slug": "don-ho-so-cu",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.2,
+      "ngay": "2026-10-17",
+      "ten": "Dọn hồ sơ cũ",
+      "ten_ngan": "Dọn hồ sơ cũ",
+      "cau_giao": "«Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A»",
+      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng. Đêm 17→18/10 gom thêm chín ca cùng lớp «thước của hồ sơ đã ký gãy khi vào onehub» làm bằng chứng cho K-A (#375 03:40Z): hop-thoai-giu-cho-dang-nhap E11 (--ca thiet-ke lệch phạm vi §12; --ca huy dùng danh sách hộp viết tay, thừa 11 hộp); trang-don-vi-mot-bang E12, E16 (gốc so merge-base với onehub, gãy khi chính nó gộp) và E14 (không khai paths); dieu-huong-khu-muc-tieu E3 (coNutHoiKara grep cả thư mục); ve-sinh-do-san-onehub E18 (bất biến lúc gộp); so-do-quanh-muc-tieu E14 (ranh-gioi.mjs buộc nhánh feat/so-do-can-chinh-don-vi); tac-nhan-glm-5-3-cham E5 (so-tac-nhan.ts --pham-vi đếm mọi tệp đổi trên nhánh); tac-nhan-va E9 (lỗi kit resolveConfigKey không bỏ thoát hai nháy đơn). Luật tạm 18/10 (chủ kho đồng ý): máy không tự sửa thước hồ sơ đã ký tới khi có K-A. Nhận thêm DA0c và K6a (#411). Chủ kho duyệt 19/10: sửa thước hồ sơ đã ký nhóm F35/F28/F31/F34 với nghi thức hai chiều + dòng sổ fix, chỉ khi làn chủ hồ sơ không có vòng đã ký chờ gộp.",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "chay_khi": "crm nhận mốc kit có K-A (ho-so-da-ky-giu-tuoi)",
+      "buoc_ke": "Làn MacBook Pro · thứ 10"
+    },
+    {
+      "ma": "F36",
+      "slug": "chu-thich-glob-md",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.3,
+      "ngay": "2026-10-17",
+      "ten": "Sửa chú thích glob .md",
+      "ten_ngan": "Chú thích glob",
+      "cau_giao": "«Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho»",
+      "ghi_chu": "Phát hiện của F32 (glob_variants GLOB-DOUBLESTAR-ZERO-DIRS). T1. Đi sau t1-ma-doc vì cùng khối config.",
+      "dung_tren": [
+        "C-1b"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn MacBook Pro · thứ 9"
+    },
+    {
+      "ma": "C-1b",
+      "slug": "t1-ma-doc",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.4,
+      "ngay": "2026-10-16",
+      "ten": "T1 cho mã đọc",
+      "ten_ngan": "T1 mã đọc",
+      "cau_giao": "«Lần đẩy chỉ chạm tệp đọc được phân loại đúng T1»",
+      "ghi_chu": "Làn M5. Cổng Đáng và Cổng Phạm vi đã ký, S3 xong, chờ làn.",
+      "dung_tren": [],
+      "trang_thai": "đang dựng",
+      "buoc_ke": "Làn M5 sau DA4"
+    },
+    {
+      "ma": "C-1c",
+      "slug": "push-ghim-lai-t1",
+      "nhom": "ve-sinh",
+      "thu_tu": 501.5,
+      "ngay": "2026-10-17",
+      "ten": "Đẩy chỉ ghim lại là T1",
+      "ten_ngan": "Ghim lại là T1",
+      "cau_giao": "«Lần đẩy chỉ ghim lại (run-log, decisions) bỏ test và build, mà acceptance gate vẫn chạy và recheck bằng chứng vẫn đỏ được»",
+      "ghi_chu": "Đo 17/10: mỗi push ghim lại vẫn chạy test + build ~15′. Điều kiện bắt buộc ghi vào hợp đồng: acceptance gate chạy, recheck đỏ được (như #452); thiếu thì không mở.",
+      "dung_tren": [
+        "C-1b"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Chờ Cổng Đáng; làn M5 sau C-1b (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+    },
+    {
+      "ma": "VK1",
+      "slug": "thanh-ben-khu-dung-chung",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 450.8,
+      "dung_tren": [],
+      "ten": "Thanh bên khu dùng chung",
+      "ten_ngan": "Thanh bên khu",
+      "ngay": "2026-10-18",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên mở Cài đặt hay Hội thoại và gặp cùng một thanh bên khu — cùng bề rộng, cùng nhãn nhóm, trên điện thoại thành một hàng cuộn ngang»",
+      "vi_sao": "Cài đặt dựng thanh bên 224px bằng NavGroup/NavItem/NavStrip, Hội thoại tự dựng vỏ riêng 213px: hai bản của một mẫu. Khu Mục tiêu sắp là nơi thứ ba dùng mẫu này, luật kho bắt chuyển vào packages/ui trước khi dùng lần hai.",
+      "bat_khi": "Cài đặt và Hội thoại dùng chung một thành phần thanh bên khu trong packages/ui; docs/design.md có luật khi nào dùng thanh bên khu, khi nào dùng thẻ con",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Hàng nền cho VK2.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V1"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 1"
+    },
+    {
+      "ma": "VK2",
+      "slug": "vo-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.5,
+      "dung_tren": [
+        "VK1"
+      ],
+      "ten": "Vỏ khu Mục tiêu",
+      "ten_ngan": "Vỏ Mục tiêu",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Mục tiêu và đi giữa Của tôi, Bộ OKR, Lấy ý kiến và Báo cáo bằng một thanh bên, chu kỳ chọn một lần ở đầu thanh, và mọi đường dẫn cũ vẫn mở đúng chỗ»",
+      "vi_sao": "Hôm nay trang đơn vị có ba lớp điều khiển ngang chồng nhau; ô chu kỳ lẫn giữa các nút hành động; chia theo phạm vi (của tôi · đơn vị · cả công ty) làm người dùng không biết một mục nói về bộ OKR hay số liệu. Tability chia theo việc và vật, phạm vi là bộ lọc trong trang.",
+      "bat_khi": "Trên trang đơn vị chỉ còn một lớp thẻ ngang; mọi đường dẫn cũ (?donOkr=, ?xemOkr=, /okr/theo-don-vi, /okr/toan-canh, /okr/quanh-muc-tieu/…, /okr?tu=nhac) chuyển tới đúng chỗ mới",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Bản mẫu /proto/vo-khu-muc-tieu (nhánh feat/vo-khu-muc-tieu) là đầu vào của Cổng Phạm vi; slug bản mẫu trùng slug hàng. Chạy làn ghim lại chung với VK4 vì cả hai chạm cùng màn.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V2"
+      ],
+      "tieu_chi": 10,
+      "buoc_ke": "Làn Mac Studio · thứ 2"
+    },
+    {
+      "ma": "VK3",
+      "slug": "trang-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.51,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Trang Bộ OKR",
+      "ten_ngan": "Bộ OKR",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Bộ OKR, lọc Tôi dẫn, mở bộ OKR của đơn vị mình và đi giữa OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm bằng thẻ con có đường dẫn riêng»",
+      "vi_sao": "Ô chọn đơn vị trên một màn chung thay cho trang riêng của từng bộ; cách xem và chip lọc trông giống hệt nhau. Mỗi bộ OKR một trang, như Plan của Tability.",
+      "bat_khi": "Mỗi bộ OKR có đường dẫn riêng; đổi thẻ con không mất chu kỳ và bộ đang xem; bộ lọc Tất cả · Tôi dẫn · Đang theo dõi ghi trên đường dẫn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V2b"
+      ],
+      "tieu_chi": 9,
+      "buoc_ke": "Làn Mac Studio · thứ 3"
+    },
+    {
+      "ma": "VK4",
+      "slug": "doi-nhan-khu-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.52,
+      "dung_tren": [],
+      "ten": "Đổi nhãn khu Mục tiêu",
+      "ten_ngan": "Đổi nhãn",
+      "ngay": "2026-10-18",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên đọc khu Mục tiêu thấy một tên cho một khái niệm: Góp vào cho căn chỉnh, OneHub cho đơn vị gốc, Lấy ý kiến thay Hỏi ý — ở cả bản tiếng Việt và tiếng Anh»",
+      "vi_sao": "Căn chỉnh mang chín tên trên màn, đơn vị gốc năm tên, «Hỏi ý» đứng cạnh «Hỏi Kara». Từ điển đã chốt 18/10 (PR #477).",
+      "bat_khi": "Không còn chuỗi «căn chỉnh», «Đường lý do», «Gắn căn chỉnh», «Chưa nối lên», «Hỏi ý», «Toàn công ty», «Toàn OneHub» trong tệp chữ của khu ở hai thứ tiếng; bản mẫu /proto không đổi",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Khoảng 70 chuỗi trong apps/app/lib/messages/okr*.ts; gốc «OneHub» lấy tên không gian làm việc ở ba màn. 35 hồ sơ đã ký và 46 tệp kiểm nhắc tên cũ (cận trên) — chạy làn ghim lại chung với VK2.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "A2"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 5"
+    },
+    {
+      "ma": "VK5",
+      "slug": "chu-may-sinh-ten-moi",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.53,
+      "dung_tren": [
+        "VK4"
+      ],
+      "ten": "Chữ máy sinh dùng tên mới",
+      "ten_ngan": "Chữ máy sinh",
+      "ngay": "2026-10-18",
+      "vai": "nen",
+      "cau_giao": "«Câu báo lỗi của máy chủ, tin nhắc buổi sáng và lời Kara về OKR dùng đúng tên mới: Góp vào, Lấy ý kiến, OneHub»",
+      "vi_sao": "Khoảng 25 câu báo lỗi trong apps/api/src/okr/okr-config.ts, tin nhắc trong apps/agent/agent/lib/tin-nhac.ts và lời dặn soạn của Kara vẫn nói «căn chỉnh», «hỏi ý»: màn đổi tên mà máy nói tên cũ.",
+      "bat_khi": "Không còn tên cũ trong câu báo lỗi và tin nhắc người dùng thấy; bộ chấm soạn của Kara (eval okr-soan) không tụt so với đường nền trước khi đổi lời dặn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Gộp A3 và A3k: cả hai giao một kết quả (máy nói đúng tên mới). Đổi lời dặn gửi model phải đo lại bộ chấm soạn.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "A3",
+        "A3k"
+      ],
+      "tieu_chi": 9,
+      "buoc_ke": "Làn Mac Studio · thứ 6"
+    },
+    {
+      "ma": "VK6",
+      "slug": "so-do-toan-vung",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.54,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Sơ đồ ở khung toàn vùng",
+      "ten_ngan": "Sơ đồ toàn vùng",
+      "ngay": "2026-10-18",
+      "vai": "Ban lãnh đạo",
+      "cau_giao": "«Ban lãnh đạo mở Báo cáo › Sơ đồ, thấy sơ đồ góp vào chiếm trọn vùng nội dung, bấm Toàn màn hình để thu thanh bên, và mở sơ đồ lấy tâm một mục tiêu từ ngăn của nó»",
+      "vi_sao": "Sơ đồ quanh mục tiêu dựng khung trang lồng trong khung trang nên bị nhốt trong bề rộng tối đa và một đầu trang lớn; căn chỉnh hiện ở sáu chỗ với ba cách vẽ. Tability đặt bản đồ trong vỏ nhưng cho nó trọn vùng, có Full screen.",
+      "bat_khi": "Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang Sơ đồ quanh mục tiêu; Esc thoát toàn màn hình",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Đứng trên DH4, DH5 đã ký.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "V3"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 7"
+    },
+    {
+      "ma": "VK7",
+      "slug": "ngan-kr-mot-cho",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.55,
+      "dung_tren": [],
+      "ten": "Ngăn KR một chỗ",
+      "ten_ngan": "Ngăn KR",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm một KR ở bất kỳ đâu và mở cùng một ngăn KR, bấm Cập nhật ở đầu ngăn hay ngay trên dòng KR, thấy điểm mới nằm đâu so với đích, rồi sang KR kế mà không đóng ngăn»",
+      "vi_sao": "Hôm nay một KR có ba ngăn và một hộp, bấm ở bốn chỗ ra bốn nơi; cập nhật một KR mất 5–6 bấm qua menu «…». Tability: một ngăn KR, «Create check-in» ở đầu, ‹ › sang KR kế — 3 bấm.",
+      "bat_khi": "Cập nhật một KR từ trang bộ OKR trong 3 bấm; mọi lối bấm vào KR mở cùng một ngăn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Gộp B1 và B1b, 11 tiêu chí: kết quả «cập nhật một KR ở một chỗ» không tách được mà giữ nghĩa — nút trên dòng mở đúng ngăn ấy.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B1",
+        "B1b"
+      ],
+      "tieu_chi": 11,
+      "buoc_ke": "Làn Mac Studio · thứ 12"
+    },
+    {
+      "ma": "VK8",
+      "slug": "bo-okr-co-so",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.56,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Bộ OKR có hàng số",
+      "ten_ngan": "Hàng số",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở bộ OKR của đơn vị mình và biết ngay đội đang ra sao: ngày còn lại, tiến độ so với kỳ vọng, số KR đã cập nhật tuần này, số KR tự tin thấp, và mọi KR đã mở sẵn»",
+      "vi_sao": "Trang đơn vị hôm nay gập mục tiêu, không có số tóm tắt; phải mở từng dòng. Trang kế hoạch của Tability mở ra là thấy bốn ô số.",
+      "bat_khi": "Bốn ô số ở đầu thẻ OKR của mọi bộ; nút Mở tất cả / Gập tất cả",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Dưới mục tiêu cỡ (6) nhưng không gộp với VK3: VK3 là đường dẫn và thẻ con, hàng này là nội dung thẻ OKR.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B2"
+      ],
+      "tieu_chi": 6,
+      "buoc_ke": "Làn Mac Studio · thứ 11"
+    },
+    {
+      "ma": "VK9",
+      "slug": "mot-nut-tao-muc-tieu",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.57,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Một nút tạo mục tiêu",
+      "ten_ngan": "Một nút tạo",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Thêm mục tiêu và chọn một đường trong một hộp: tự viết, từ mẫu, từ bảng tính hay soạn cùng Kara; ở Báo cáo không có nút tạo nào»",
+      "vi_sao": "Sáu đường tạo mục tiêu ở bốn nơi; đầu trang sáu điều khiển; nút chính hiện cả trên màn chỉ đọc, trái nếp «Trang chỉ đọc không có nút chính». Tability: một nút mở hộp chọn đường.",
+      "bat_khi": "Đầu trang khu chỉ còn một nút chính, chỉ ở Của tôi và Bộ OKR",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B3"
+      ],
+      "tieu_chi": 7,
+      "buoc_ke": "Làn Mac Studio · thứ 8"
+    },
+    {
+      "ma": "VK10",
+      "slug": "che-do-soan-bo-okr",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.58,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Chế độ Soạn bộ OKR",
+      "ten_ngan": "Chế độ Soạn",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Soạn OKR và viết cả bộ như một tài liệu — mục tiêu, KR liền mạch — với góp ý của Kara và điểm chất lượng ở cột bên, rồi công bố»",
+      "vi_sao": "Tạo một mục tiêu có ba KR mất khoảng mười bấm qua hộp tạo rồi từng hộp KR; góp ý Kara chiếm hai phần ba chiều cao ngăn theo dõi. Tability tách «Edit content» khỏi màn theo dõi.",
+      "bat_khi": "Tạo một mục tiêu có ba KR và công bố trong khoảng 3 bấm cộng phần gõ; ngăn theo dõi chỉ còn một chip góp ý",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj). Cần phiên design-pass trước Cổng Phạm vi. 11 tiêu chí: viết cả bộ, góp ý và điểm chất lượng ở cột bên, công bố là một kết quả — tách ra thì nửa đầu không giao được gì người dùng thấy.",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5a"
+      ],
+      "tieu_chi": 11,
+      "buoc_ke": "Làn Mac Studio · thứ 4"
+    },
+    {
+      "ma": "VK11",
+      "slug": "moi-kr-ca-cong-ty",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.59,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Mọi KR cả công ty",
+      "ten_ngan": "Mọi KR",
+      "ngay": "2026-10-18",
+      "vai": "Ban lãnh đạo",
+      "cau_giao": "«Ban lãnh đạo bấm ô Trượt ở Báo cáo › Sức khoẻ và đọc mọi KR đang trượt của cả công ty trong một danh sách lọc được theo đơn vị và người»",
+      "vi_sao": "Hôm nay không có lối thẳng tới mọi KR đang trượt — phải đi từng đơn vị; ô số ở Toàn cảnh không bấm được. Tability: All data › Key Results, ô Off track trên trang chủ dẫn thẳng tới đó.",
+      "bat_khi": "Từ Sức khoẻ tới danh sách KR trượt trong 1 bấm; bộ lọc ghi trên đường dẫn",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5b"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 9"
+    },
+    {
+      "ma": "VK12",
+      "slug": "cap-nhat-gan-day",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.6,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Cập nhật gần đây",
+      "ten_ngan": "Cập nhật gần đây",
+      "ngay": "2026-10-18",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị mở Cập nhật gần đây trước buổi họp tuần, đọc mọi lần cập nhật của bộ OKR mình dẫn, mới nhất trước, và trả lời ngay dưới từng lần»",
+      "vi_sao": "Lần cập nhật chỉ đọc được trong thẻ Trao đổi của từng mục tiêu; không có chỗ đọc chung. Tability có Recent updates lọc theo kế hoạch đang theo dõi, đội, cấp dưới.",
+      "bat_khi": "Một dòng tin cho mọi lần cập nhật tuần trong chu kỳ, lọc Tất cả · Bộ OKR bạn dẫn · Bạn theo dõi",
+      "ghi_chu": "Chủ kho yêu cầu 18/10 rà UX khu Mục tiêu học từ Tability (đợt «okr-vo-khu-1810», bản phạm vi docs/plan/pham-vi-okr-vo-khu-1810.md, báo cáo https://claude.ai/artifact/AJuRPQDJK7ZB9GLKus6Tpj).",
+      "dot": "okr-vo-khu-1810",
+      "phu": [
+        "B5c"
+      ],
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 10"
     }
   ],
   "chan_troi": [
@@ -2700,6 +3449,26 @@
         "E5"
       ],
       "mo_lai_khi": "NM2 chốt chỗ đặt và khu Mục tiêu cần theo"
+    },
+    {
+      "ma": "VK-C1",
+      "dot": "okr-vo-khu-1810",
+      "cau_giao": "«Thành viên thấy một tên cho lịch sử, mức chắc của lý do, danh sách đáng bàn và nút thêm việc»",
+      "ly_do": "Các tên này chưa chốt: gộp Vết và Diễn biến thành Lịch sử, «Đặt cược» thành «Phỏng đoán», «Cần bàn» thành «Đáng bàn», nút «Thêm» thành «Thêm việc», «Tiếp cuộc đang soạn» thành «Tiếp tục soạn OKR», và hai lỗi bản tiếng Anh (cột «Actions», thẻ «Overview» trùng trang chủ). Đổi tên là quyết định của chủ kho.",
+      "phu": [
+        "C1"
+      ],
+      "mo_lai_khi": "Chủ kho chốt các tên ở bảng «Đặt tên» của báo cáo 18/10; mục nào chạm từ điển thì sửa từ điển trước"
+    },
+    {
+      "ma": "VK-C2",
+      "dot": "okr-vo-khu-1810",
+      "cau_giao": "«Trưởng đơn vị thấy trong Của tôi ai trong đơn vị chưa cập nhật tuần này»",
+      "ly_do": "Từ điển (mục Họp tuần) cố ý không liệt kê người chưa cập nhật và tránh chữ «điểm danh», để họp tuần bàn KR chứ không bàn người. Bản mẫu 18/10 có khối này; giữ hay bỏ là quyết định sản phẩm của chủ kho.",
+      "phu": [
+        "C2"
+      ],
+      "mo_lai_khi": "Chủ kho quyết Của tôi có liệt kê người chưa cập nhật hay không, và sửa mục Họp tuần của từ điển nếu có"
     }
   ],
   "da_bac": [

@@ -123,9 +123,18 @@ export const dongGopY = z
 		targetObjectiveId: z.string().min(1).nullable(),
 		targetKeyResultId: z.string().min(1).nullable(),
 		lyDo: z.string().trim().min(1).max(TRO_LY_OKR_TRAN.chu.lyDo),
+		canCu: z
+			.string()
+			.trim()
+			.min(1)
+			.max(TRO_LY_OKR_TRAN.chu.lyDo)
+			.nullable()
+			.optional(),
 	})
 	.superRefine((d, ctx) => {
 		const loi = (message: string) => ctx.addIssue({ code: "custom", message });
+		if (d.canCu != null && d.loai !== "can-chinh")
+			loi("canCu chi cho can-chinh");
 		if (d.loai === "viet-lai") {
 			if (!d.truong || d.truoc === null || !d.sau) {
 				loi("viet-lai can truong, truoc, sau");
@@ -238,7 +247,7 @@ export type HangSoan = {
 	cuocSoanId: string | null;
 	sau: string | null;
 	lyDo: string;
-	noiDung: unknown;
+	noiDung?: unknown;
 };
 
 export type HangSoanGhi = {
@@ -333,7 +342,12 @@ export type HangDeXuat = {
 	maVanDe: string | null;
 	dich: unknown;
 	lyDo: string;
+	noiDung?: unknown;
 };
+
+export const noiDungCanChinh = z.object({
+	canCu: z.string().nullable(),
+});
 
 export function dongTuHang(hang: HangDeXuat): DongGopY {
 	const dich =
@@ -350,6 +364,10 @@ export function dongTuHang(hang: HangDeXuat): DongGopY {
 		maVanDe: hang.maVanDe,
 		...dich,
 		lyDo: hang.lyDo,
+		canCu:
+			hang.loai === "can-chinh" && hang.noiDung != null
+				? noiDungCanChinh.parse(hang.noiDung).canCu
+				: null,
 	});
 }
 

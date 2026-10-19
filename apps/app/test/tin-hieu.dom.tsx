@@ -44,10 +44,16 @@ function truyVan<T>(ten: string, ra: () => T) {
 
 function ghi<TVao, TRa>(ten: string, chay: (v: TVao) => TRa) {
 	return {
-		mutationOptions: (o: { onSuccess?: (d: TRa) => void } = {}) => ({
+		mutationOptions: (
+			o: {
+				onSuccess?: (d: TRa) => void;
+				onError?: (e: Error) => void;
+				onSettled?: () => void;
+			} = {},
+		) => ({
+			...o,
 			mutationKey: [ten],
 			mutationFn: async (v: TVao) => chay(v),
-			onSuccess: o.onSuccess,
 		}),
 	};
 }
@@ -68,6 +74,11 @@ mock.module("@/lib/trpc/client", () => ({
 				scheduledTotal: 0,
 			})),
 		},
+		thongBao: {
+			chuong: truyVan("thongBao.chuong", () => ({ soChuaDoc: 0, dong: [] })),
+			moMot: ghi("thongBao.moMot", () => ({ ok: true })),
+			docHet: ghi("thongBao.docHet", () => ({ soDaDoc: 0 })),
+		},
 		tinHieu: {
 			gui: ghi("tinHieu.gui", (v: GuiVao) => {
 				if (loiGui) throw new LoiTrpc(loiGui);
@@ -78,6 +89,7 @@ mock.module("@/lib/trpc/client", () => ({
 				daXoa.push(v.id);
 				return { ok: true };
 			}),
+			tatCa: truyVan("tinHieu.tatCa", () => ({ rows: [] })),
 			cuaToi: {
 				...truyVan("tinHieu.cuaToi", () => ({ rows: hangCuaToi })),
 				queryKey: () => {
@@ -124,6 +136,8 @@ const { DanhSachTinHieuTrang } = await import(
 const { tinHieuMessages } = await import("@/lib/messages/tin-hieu");
 const { TIN_HIEU } = await import("@crm/validation/tin-hieu");
 const { toneTheoNghia } = await import("@crm/ui/lib/status-tone");
+const { tenMan } = await import("@/lib/tin-hieu/ten-man");
+const { dien } = await import("@/components/crm/record-sheet/plan-copy");
 
 const m = tinHieuMessages("vi");
 let root: Root | null = null;
@@ -235,7 +249,7 @@ describe("hop", () => {
 			expect(
 				document.body.textContent,
 				"man con mang ten khong gian lam viec",
-			).toContain("Gửi từ màn: /okr/kr");
+			).toContain(dien(m.hop.man, { man: tenMan("/okr/kr", "vi") }));
 		});
 	}
 
@@ -286,7 +300,7 @@ describe("hop", () => {
 		);
 	});
 
-	test("hop: loi — 429 hien thong diep may chu giu chu; 500 hien cau chung; maxLength moi o", async () => {
+	test("hop: loi — 500 hien cau chung bam lai duoc; 429 hien cau tran cua tep loi, khoa Gui, giu chu; maxLength moi o", async () => {
 		await ve(<AppHeader user={USER} />);
 		const nut = nutGui();
 		if (nut) await bam(nut);
@@ -296,19 +310,19 @@ describe("hop", () => {
 		const o2 = oDaXayRa();
 		if (o1) await go(o1, "a");
 		if (o2) await go(o2, "b");
-		loiGui = { status: 429, message: "Hôm nay bạn đã gửi 10 tín hiệu" };
-		const g = nutGuiTrongHop();
-		if (g) await bam(g);
-		expect(document.body.textContent).toContain(
-			"Hôm nay bạn đã gửi 10 tín hiệu",
-		);
-		expect(oDaXayRa()?.value, "loi lam mat chu da go").toBe("b");
-		expect(nutGuiTrongHop()?.disabled).toBe(false);
 		loiGui = { status: 500, message: "chi tiet may chu" };
 		const g2 = nutGuiTrongHop();
 		if (g2) await bam(g2);
 		expect(document.body.textContent).toContain(m.hop.chuaGui);
 		expect(document.body.textContent).not.toContain("chi tiet may chu");
+		loiGui = { status: 429, message: "Hôm nay bạn đã gửi 10 tín hiệu" };
+		const g = nutGuiTrongHop();
+		if (g) await bam(g);
+		expect(document.body.textContent).toContain(
+			dien(m.hop.quaTran, { tran: String(TIN_HIEU.tranMoiNgay) }),
+		);
+		expect(oDaXayRa()?.value, "loi lam mat chu da go").toBe("b");
+		expect(nutGuiTrongHop()?.disabled).toBe(true);
 	});
 
 	test("hop: menu — menu nguoi dung co muc Tin hieu da gui tro trang", async () => {
@@ -397,7 +411,19 @@ describe("trang", () => {
 			"tr[data-tin-hieu='crm-2'] [data-thao-tac-tin-hieu]",
 		);
 		expect(tt1).not.toBeNull();
-		expect(tt2, "dong da lay ve van xoa duoc").toBeNull();
+		expect(tt2, "dong da lay ve mat nut thao tac").not.toBeNull();
+		if (tt2) await bam(tt2);
+		expect(
+			document
+				.querySelector("[data-xoa-tin-hieu='crm-2']")
+				?.getAttribute("aria-disabled"),
+			"dong da lay ve van xoa duoc",
+		).toBe("true");
+		await act(async () => {
+			document.dispatchEvent(
+				new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+			);
+		});
 		expect([tt1?.dataset.variant, tt1?.dataset.size]).toEqual([
 			"ghost",
 			"icon-xs",

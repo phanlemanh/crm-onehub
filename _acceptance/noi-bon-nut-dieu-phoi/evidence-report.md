@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: fd4ed7c19a1d747430525b716a645d0a4fd7f732
+verified_commit: 50dea330749dbfd9150d050f27cce733f47bf696
 human_signoff: Phan Le Manh 2026-09-21
 ---
 
@@ -280,3 +280,7 @@ sha: dfc8ff345842e738f421c08891eb1754198d9064 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 12 — 2026-09-25, do gộp onehub 5d9e8b9c (#135 Zalo) vào nhánh — mã Zalo không chạm phòng ban
 run_id: repin-20260925T042418Z-71551
 sha: fd4ed7c19a1d747430525b716a645d0a4fd7f732 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-9
+
+### Re-pin lần 13 — 2026-10-14, do ngay-lich-test-tao-ke-hoach sửa ngayGiuaThangNay() trong apps/app/test/noi-bon-nut.dom.tsx
+run_id: repin-20261014T221230Z-92162
+sha: 50dea330749dbfd9150d050f27cce733f47bf696 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

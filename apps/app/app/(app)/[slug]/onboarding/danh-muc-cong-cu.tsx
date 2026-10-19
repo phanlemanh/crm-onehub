@@ -9,6 +9,7 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { useQueryStates } from "nuqs";
 import type { onboardingMessages } from "@/lib/messages/onboarding";
 import {
@@ -57,7 +58,6 @@ export function TrangThaiToggle({
 			type="single"
 			variant="outline"
 			size="sm"
-			spacing={0}
 			value={value}
 			aria-label={m.facets.status}
 			onValueChange={(next) => {
@@ -66,9 +66,8 @@ export function TrangThaiToggle({
 			}}
 		>
 			{ONBOARDING_TRANG_THAI.map((tt) => (
-				<ToggleGroupItem key={tt} value={tt}>
+				<ToggleGroupItem count={counts?.[tt] ?? 0} key={tt} value={tt}>
 					{tt === "dang-chay" ? m.facets.running : m.facets.closed}
-					<span className="tabular-nums opacity-60">{counts?.[tt] ?? 0}</span>
 				</ToggleGroupItem>
 			))}
 		</ToggleGroup>
@@ -85,24 +84,15 @@ export function CachXemToggle({
 	onChange: (next: DanhMucCachXem) => void;
 }) {
 	return (
-		<ToggleGroup
-			type="single"
-			variant="outline"
-			size="sm"
-			spacing={0}
+		<ViewSwitch
+			items={DANH_MUC_CACH_XEM.map((cx) => ({ value: cx, label: m.view[cx] }))}
+			label={m.view.label}
 			value={value}
-			aria-label={m.view.label}
 			onValueChange={(next) => {
 				const chon = DANH_MUC_CACH_XEM.find((cx) => cx === next);
 				if (chon) onChange(chon);
 			}}
-		>
-			{DANH_MUC_CACH_XEM.map((cx) => (
-				<ToggleGroupItem key={cx} value={cx}>
-					{m.view[cx]}
-				</ToggleGroupItem>
-			))}
-		</ToggleGroup>
+		/>
 	);
 }
 
@@ -116,25 +106,15 @@ export function CachChiaToggle({
 	onChange: (next: DanhMucCachChia) => void;
 }) {
 	return (
-		<ToggleGroup
-			type="single"
-			variant="outline"
-			size="sm"
-			spacing={0}
+		<ViewSwitch
+			items={DANH_MUC_CACH_CHIA.map((cc) => ({ value: cc, label: m.chia[cc] }))}
+			label={m.chia.label}
 			value={value}
-			aria-label={m.chia.label}
-			className="flex-wrap"
 			onValueChange={(next) => {
 				const chon = DANH_MUC_CACH_CHIA.find((cc) => cc === next);
 				if (chon) onChange(chon);
 			}}
-		>
-			{DANH_MUC_CACH_CHIA.map((cc) => (
-				<ToggleGroupItem key={cc} value={cc}>
-					{m.chia[cc]}
-				</ToggleGroupItem>
-			))}
-		</ToggleGroup>
+		/>
 	);
 }
 

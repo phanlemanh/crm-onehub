@@ -28,6 +28,23 @@ export const DICH_ROI_CHUA_LAM: readonly TrangThaiViec[] = [
 	TrangThaiViec.XONG,
 ];
 
+export function roiChuaLamMoi(
+	v: {
+		roiChuaLamLuc: Date | null;
+		nguoiThucHienId: string;
+		trangThai: TrangThaiViec;
+	},
+	nguoiId: string,
+	den: TrangThaiViec,
+): boolean {
+	return (
+		v.roiChuaLamLuc === null &&
+		v.nguoiThucHienId === nguoiId &&
+		v.trangThai === TrangThaiViec.CHUA_LAM &&
+		DICH_ROI_CHUA_LAM.includes(den)
+	);
+}
+
 export type QuyenDoi = "G" | "GT";
 
 export type DoThiViec = Record<
@@ -47,7 +64,21 @@ export const NHOM_VIEC = ["giao-cho-toi", "toi-giao", "dang-theo-doi"] as const;
 
 export type NhomViec = (typeof NHOM_VIEC)[number];
 
-export const NGUON_VIEC = ["web", "zalo", "api", "chuyen-viec"] as const;
+export const NGUON_VIEC = [
+	"web",
+	"zalo",
+	"api",
+	"chuyen-viec",
+	"tac-nhan",
+	"chep-cu",
+	"bang-keo",
+	"bang-menu",
+	"khuon",
+	"ke-hoach",
+	"dong-ke-hoach",
+	"gantt",
+	"tu-doi",
+] as const;
 
 export type NguonViec = (typeof NGUON_VIEC)[number];
 
@@ -63,6 +94,11 @@ export const LOAI_VET_VIEC = [
 	"bo-theo-doi",
 	"chuyen-viec",
 	"go-do-ban-ghi-xoa",
+	"them-viec-con",
+	"doi-bat-dau",
+	"doi-du-an",
+	"them-phu-thuoc",
+	"go-phu-thuoc",
 ] as const;
 
 export const LOAI_BAN_GHI = ["company", "contact", "deal", "plan"] as const;
@@ -92,8 +128,14 @@ const TEN_LOAI = {
 	plan: "kế hoạch 30 ngày",
 } as const satisfies Record<LoaiBanGhi, string>;
 
+const PHUT_MS = 60_000;
+
 export const VIEC = {
 	tieuDeToiDa: 200,
+	tieuDeViecCanLam: "Việc cần làm",
+	chepThuTranMs: 10 * PHUT_MS,
+	khoaMaLech: (ma: string) => `ma-lech:${ma}`,
+	vaiChepDuoc: ["owner", "admin"] as readonly string[],
 	moTaToiDa: 4000,
 	theoDoiToiDa: 20,
 	tranKhep: 50,
@@ -114,6 +156,7 @@ export const VIEC = {
 		gan: "gắn hay gỡ bản ghi",
 		theoDoiKhac: "thêm hay bỏ người theo dõi khác",
 		xoa: "xoá việc",
+		themCon: "thêm việc con",
 	},
 	thongDiep: {
 		khongCoViec: (id: string) => `Không có việc nào mang mã ${id}.`,
@@ -134,8 +177,32 @@ export const VIEC = {
 		vetHong: (id: string, chiTiet: string) =>
 			`Vết việc ${id} không đọc được: ${chiTiet}`,
 		ganHong: (id: string) => `Hàng gắn ${id} không trỏ tới bản ghi nào.`,
+		chiQuanTriChep:
+			"Chỉ quản trị chạy được lệnh chép việc cần làm — truyền --nguoi <email của một quản trị>.",
+		khongPhaiBanChep: (id: string) =>
+			`Việc ${id} không phải bản chép từ việc cần làm cũ.`,
+		conKhongCoCon: "Việc con không có việc con.",
+		chiThemConKhiMo: "Chỉ thêm việc con cho việc đang mở.",
+		goBuocOKeHoach:
+			"Việc này là một bước của kế hoạch 30 ngày — gỡ bước ở kế hoạch thay vì huỷ, xoá hay gỡ khỏi kế hoạch.",
+		buocLuonCoHan:
+			"Việc của bước luôn có hạn — đổi hạn ở bước; muốn bỏ thì gỡ bước ở kế hoạch.",
+		buocLuonCoNguoi:
+			"Việc của bước luôn có người làm — chọn người khác thay vì bỏ giao.",
 	},
+	bang: { xongGanDayNgay: 7 },
 } as const;
+
+const dinhNgayHan = new Intl.DateTimeFormat("en-CA", {
+	timeZone: VIEC.muiGio,
+	year: "numeric",
+	month: "2-digit",
+	day: "2-digit",
+});
+
+export function hanTheoNgayVN(d: Date): Date {
+	return new Date(`${dinhNgayHan.format(d)}T00:00:00.000Z`);
+}
 
 export function hanhDong(nguon: TrangThaiViec, den: TrangThaiViec): string {
 	if (den === TrangThaiViec.HUY) return VIEC.lam.huy;
@@ -189,6 +256,18 @@ export function dichDuoc(
 	return TRANG_THAI_VIEC.filter((den) => quyenDoi(nguon, den, vai) === "duoc");
 }
 
+export function chuyenDuocCua(
+	v: {
+		trangThai: TrangThaiViec;
+		nguoiGiaoId: string;
+		nguoiThucHienId: string;
+		theoDoi: { userId: string }[];
+	},
+	userId: string,
+): TrangThaiViec[] {
+	return dichDuoc(v.trangThai, vaiCua(v, userId));
+}
+
 export function laMoLai(nguon: TrangThaiViec, den: TrangThaiViec): boolean {
 	return (
 		(nguon === TrangThaiViec.CHO_DANH_GIA || TRANG_THAI_KHEP.includes(nguon)) &&
@@ -234,11 +313,23 @@ export function dieuKienXemViec(userId: string): Prisma.ViecWhereInput {
 	return {
 		OR: [
 			{ gan: { some: {} } },
+			{ duAnId: { not: null } },
 			{ nguoiGiaoId: userId },
 			{ nguoiThucHienId: userId },
 			{ theoDoi: { some: { userId } } },
 		],
 	};
+}
+
+export function dieuKienNhomHayDuAn(
+	nhom: NhomViec,
+	userId: string,
+	duAn?: { duAnId?: string; tatCaDuAn?: boolean },
+): Prisma.ViecWhereInput {
+	if (duAn?.duAnId) return { duAnId: duAn.duAnId };
+	if (duAn?.tatCaDuAn)
+		return { duAnId: { not: null }, duAn: { dongLuc: null } };
+	return dieuKienNhom(nhom, userId);
 }
 
 export function dieuKienNhom(
@@ -274,9 +365,24 @@ const banGhiVet = z.object({
 	ten: z.string(),
 });
 
-const trangThaiVet = z.object({ trangThai: z.enum(TRANG_THAI_VIEC) });
+const trangThaiVet = z.object({
+	trangThai: z.enum(TRANG_THAI_VIEC),
+	lyDo: z.string().optional(),
+});
 
-const hanVet = z.object({ hanNgay: z.string().nullable() });
+const viecNganVet = z.object({ id: z.string(), tieuDe: z.string() });
+
+const hanVet = z.object({
+	hanNgay: z.string().nullable(),
+	boi: viecNganVet.optional(),
+});
+
+const batDauVet = z.object({
+	batDauNgay: z.string().nullable(),
+	boi: viecNganVet.optional(),
+});
+
+const duAnVet = z.object({ id: z.string(), ten: z.string() }).nullable();
 
 const noiDungVet = z.object({
 	tieuDe: z.string(),
@@ -293,8 +399,16 @@ export const vetViec = z.discriminatedUnion("loai", [
 			tieuDe: z.string(),
 			nguoiThucHien: nguoiVet,
 			hanNgay: z.string().nullable(),
+			batDauNgay: z.string().nullable().optional(),
 			banGhi: z.array(banGhiVet),
 			nguoiTheoDoi: z.array(nguoiVet),
+			chep: z
+				.object({
+					activityGocId: z.string(),
+					trangThai: z.enum(TRANG_THAI_VIEC),
+					nguoiTaoGoc: nguoiVet.nullable(),
+				})
+				.optional(),
 		}),
 	}),
 	z.object({
@@ -308,6 +422,22 @@ export const vetViec = z.discriminatedUnion("loai", [
 		sau: nguoiVet,
 	}),
 	z.object({ loai: z.literal("doi-han"), truoc: hanVet, sau: hanVet }),
+	z.object({
+		loai: z.literal("doi-bat-dau"),
+		truoc: batDauVet,
+		sau: batDauVet,
+	}),
+	z.object({ loai: z.literal("doi-du-an"), truoc: duAnVet, sau: duAnVet }),
+	z.object({
+		loai: z.literal("them-phu-thuoc"),
+		truoc: z.null(),
+		sau: z.object({ viec: viecNganVet }),
+	}),
+	z.object({
+		loai: z.literal("go-phu-thuoc"),
+		truoc: z.object({ viec: viecNganVet }),
+		sau: z.null(),
+	}),
 	z.object({
 		loai: z.literal("doi-noi-dung"),
 		truoc: noiDungVet,
@@ -327,7 +457,25 @@ export const vetViec = z.discriminatedUnion("loai", [
 		truoc: banGhiVet,
 		sau: z.object({ ten: z.string() }),
 	}),
+	z.object({
+		loai: z.literal("them-viec-con"),
+		truoc: z.null(),
+		sau: z.object({ conId: z.string(), tieuDe: z.string() }),
+	}),
 ]);
+
+const viecCanLamMeta = z
+	.object({ platformBrokerId: z.string().trim().min(1).optional() })
+	.nullable();
+
+export type ViecCanLamMeta = { platformBrokerId: string | null };
+
+export function parseViecCanLamMeta(
+	value: Prisma.JsonValue | null,
+): ViecCanLamMeta {
+	const meta = viecCanLamMeta.parse(value ?? null);
+	return { platformBrokerId: meta?.platformBrokerId ?? null };
+}
 
 export type VetViec = z.infer<typeof vetViec>;
 
@@ -393,6 +541,9 @@ export const CHON_VIEC = {
 	moTa: true,
 	trangThai: true,
 	hanNgay: true,
+	batDauNgay: true,
+	duAnId: true,
+	duAn: { select: { id: true, ten: true } },
 	taoLuc: true,
 	khepLuc: true,
 	nguoiGiaoId: true,

@@ -197,6 +197,15 @@ afterAll(async () => {
 	await db.department.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
 	await db.division.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
 	await db.session.deleteMany({ where: { token: { in: daGieo.phien } } });
+	await db.viec.deleteMany({
+		where: {
+			OR: [
+				{ taoBoiId: { in: daGieo.nguoi } },
+				{ nguoiGiaoId: { in: daGieo.nguoi } },
+				{ nguoiThucHienId: { in: daGieo.nguoi } },
+			],
+		},
+	});
 	await db.member.deleteMany({ where: { userId: { in: daGieo.nguoi } } });
 	await db.user.deleteMany({ where: { id: { in: daGieo.nguoi } } });
 });

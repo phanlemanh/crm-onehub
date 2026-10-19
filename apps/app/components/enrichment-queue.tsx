@@ -18,10 +18,8 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@crm/ui/components/popover";
-import {
-	IndicatorDot,
-	type StatusTone,
-} from "@crm/ui/components/status-indicator";
+import { IndicatorDot } from "@crm/ui/components/status-indicator";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { cn } from "@crm/ui/lib/utils";
 import {
 	ENRICHMENT_PAGE,
@@ -46,11 +44,11 @@ type QueueSubject = QueueRow["subject"];
 
 const VISIBLE_ROWS = 5;
 
-const STATE_TONE = {
-	running: "primary",
-	queued: "neutral",
-	failed: "error",
-} satisfies Record<QueueRow["state"], StatusTone>;
+export const NGHIA_HANG_DOI = {
+	running: "dangChay",
+	queued: "dangChay",
+	failed: "hong",
+} as const satisfies Record<QueueRow["state"], NghiaTrangThai>;
 
 export function EnrichmentQueue() {
 	const m = khungUngDungMessages(useLocale()).enrichment;
@@ -100,7 +98,7 @@ export function EnrichmentQueue() {
 			<PopoverTrigger asChild>
 				<Button variant="outline" size="sm">
 					<IndicatorDot
-						tone={total > 0 ? "primary" : "neutral"}
+						tone={toneTheoNghia(total > 0 ? "dangChay" : "nhap")}
 						aria-hidden="true"
 					/>
 					{total > 0 ? m.enrichingCount(String(total)) : m.enriching}
@@ -240,7 +238,10 @@ function QueueRowButton({
 					className="hidden size-3.5 text-muted-foreground group-hover:block"
 					aria-hidden="true"
 				/>
-				<IndicatorDot tone={STATE_TONE[row.state]} aria-hidden="true" />
+				<IndicatorDot
+					tone={toneTheoNghia(NGHIA_HANG_DOI[row.state])}
+					aria-hidden="true"
+				/>
 			</span>
 		</button>
 	);

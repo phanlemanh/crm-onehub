@@ -1,0 +1,53 @@
+-- phien do co tac tu: cay great-cray-f3b5c2-tro-ly · tac tu cong 55692
+  dropped crm_zen_galileo_cb66ff__mau_do: older than 12h
+phien-do: kho crm_great_cray_f3b5c2_tro_ly_do · app http://localhost:4619 · api http://localhost:4631
+okr:mau --moc 2026-10-14: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-10-14T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ, 2 trang tài liệu.
+luot 1/20: mau-okr-mt-q4-cham-soc-1 cmv8784l80003sdty9gw0fzz8
+luot 2/20: mau-okr-mt-q4-dieu-phoi-1 cmv878djo0004sdtyzp4uaimv
+luot 3/20: mau-okr-mt-q4-kd cmv878v5e0005sdtyld87g3um
+luot 4/20: mau-okr-mt-q4-kd-bac-1 cmv879apt0006sdtytghqul2o
+luot 5/20: mau-okr-mt-q4-kd-nam-1 cmv879qar0007sdtyuy1bpeg7
+luot 6/20: mau-okr-mt-q4-kho-van-1 cmv879yds0008sdty835icvrd
+luot 7/20: mau-okr-mt-q4-marketing-1 cmv87aer90009sdtyv7fpjp0h
+luot 8/20: mau-okr-mt-q4-nhan-su-1 cmv87awdz000asdty5y7hnben
+luot 9/20: mau-okr-mt-q4-phap-che-1 cmv87bdwi000bsdtynn67j4yr
+luot 10/20: mau-okr-mt-q4-san-pham-1 cmv87bl7e000csdtynyrgc2y2
+luot 11/20: mau-okr-mt-q4-tai-chinh-1 cmv87c1jw000dsdtye6p41f7e
+luot 12/20: mau-okr-mt-q4-vh cmv87cg4w000esdtyoans7ag2
+luot 13/20: mau-okr-mt-q4-cham-soc-2 cmv87cwaa000fsdtydar2podv
+luot 14/20: mau-okr-mt-q4-dieu-phoi-2 cmv87dcta000gsdtyz2bgbedr
+luot 15/20: mau-okr-mt-q4-kd-bac-2 cmv87dtcq000hsdtyxvgrpmdh
+luot 16/20: mau-okr-mt-q4-kd-nam-2 cmv87e9wl000isdtybct6o49e
+luot 17/20: mau-okr-mt-q4-kho-van-2 cmv87ee98000jsdtyi244i7xz
+luot 18/20: mau-okr-mt-q4-marketing-2 cmv87enbz000ksdtyp72wypos
+luot 19/20: mau-okr-mt-q4-nhan-su-2 cmv87f496000lsdtyg92xo9hw
+luot 20/20: mau-okr-mt-q4-phap-che-2 cmv87f9s0000msdtyir8e8xdh
+1. 11098 ms · mau-okr-mt-q4-cham-soc-1
+2. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-dieu-phoi-1
+3. 19782 ms · mau-okr-mt-q4-kd
+4. 19849 ms · mau-okr-mt-q4-kd-bac-1
+5. 9975 ms · mau-okr-mt-q4-kd-nam-1
+6. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-kho-van-1
+7. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-marketing-1
+8. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-nhan-su-1
+9. 8925 ms · mau-okr-mt-q4-phap-che-1
+10. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-san-pham-1
+11. 18260 ms · mau-okr-mt-q4-tai-chinh-1
+12. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-vh
+13. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-cham-soc-2
+14. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-dieu-phoi-2
+15. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-kd-bac-2
+16. 5617 ms · mau-okr-mt-q4-kd-nam-2
+17. 11422 ms · mau-okr-mt-q4-kho-van-2
+18. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-marketing-2
+19. 7091 ms · mau-okr-mt-q4-nhan-su-2
+20. 30000 ms — hong (hong:SUBAGENT_EXECUTION_FAILED), tinh 30000 · mau-okr-mt-q4-phap-che-2
+do-tre.sql okr.thang=2026-10: [{"nac":"bat","so_luot_do":20,"p50_ms":20267,"p90_ms":22098},{"nac":"an","so_luot_do":0,"p50_ms":null,"p90_ms":null}]
+20 so: 11098, 30000, 19782, 19849, 9975, 30000, 30000, 30000, 8925, 30000, 18260, 30000, 30000, 30000, 30000, 5617, 11422, 30000, 7091, 30000
+p50 30000 ms (nguong 8000) · p90 30000 ms (nguong 15000) · 11 luot hong tinh 30000
+SAI do-tre.sql p50 20267 > 8000
+SAI do-tre.sql p90 22098 > 15000
+SAI p50 30000 > 8000
+SAI p90 30000 > 15000
+KHONG DAT
+phien-do: xong — mã 1

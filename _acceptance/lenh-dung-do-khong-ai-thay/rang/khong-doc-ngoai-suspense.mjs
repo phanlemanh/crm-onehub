@@ -1,4 +1,6 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
@@ -8,7 +10,18 @@ const MAC_DINH = resolve(RANG, "..", "..", "..");
 
 const doi = process.argv.slice(2);
 const iGoc = doi.indexOf("--goc");
-const GOC = iGoc === -1 ? MAC_DINH : resolve(doi[iGoc + 1]);
+const MOC_GOP = "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1";
+
+function cayTaiMocGop() {
+	const thuMuc = mkdtempSync(join(tmpdir(), "ld-moc-gop-"));
+	process.on("exit", () => rmSync(thuMuc, { recursive: true, force: true }));
+	const tar = join(thuMuc, "cay.tar");
+	execFileSync("git", ["archive", "--output", tar, MOC_GOP, "apps/app/app"], { cwd: MAC_DINH });
+	execFileSync("tar", ["-xf", tar, "-C", thuMuc]);
+	return thuMuc;
+}
+
+const GOC = iGoc === -1 ? cayTaiMocGop() : resolve(doi[iGoc + 1]);
 const iNeo = doi.indexOf("--neo");
 const NEO = iNeo === -1 ? 26 : Number(doi[iNeo + 1]);
 const LAYOUT_GOC = "apps/app/app/layout.tsx";

@@ -15,8 +15,10 @@ const DAY_KET_QUA =
 	"kq.push(...(await Promise.all(ds.slice(dau, dau + lo).map(fn))));";
 const GOI_TRPC = "\treturn theoLo(\n\t\tsoThuTuc(),\n";
 const GOI_REST = "\treturn theoLo(\n\t\tduongRest(),\n";
-const XOA_MEMBER_KHOA_CON_BAT =
-	'\t\texpect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);\n\t\tawait db.member.delete({ where: { id: await memberId(bi) } });\n';
+const DOI_CHUNG_REST = 'expect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);';
+const LUI_REST =
+	new RegExp(`^([\\t ]*)${DOI_CHUNG_REST.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").exec(readFileSync(SPEC, "utf8"))?.[1] ?? "\t\t";
+const XOA_MEMBER_KHOA_CON_BAT = `${LUI_REST}${DOI_CHUNG_REST}\n${LUI_REST}await db.member.delete({ where: { id: await memberId(bi) } });\n`;
 const LECH_TRPC = "ma tran tRPC song song lech danh sach thu tuc";
 const LECH_REST = "ma tran REST song song lech danh sach duong";
 const LOT_TRPC = "tRPC: khoa con bat cua nguoi ngoai van qua duoc";
@@ -99,7 +101,7 @@ const NHOM = {
 			{
 				ten: "con-thanh-vien",
 				tim: XOA_MEMBER_KHOA_CON_BAT,
-				thay: '\t\texpect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);\n',
+				thay: `${LUI_REST}${DOI_CHUNG_REST}\n`,
 				thongDiep: LOT_TRPC,
 				thongDiepLangGieng: LECH_TRPC,
 			},

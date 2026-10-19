@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { CopyValue } from "@crm/ui/components/copy-value";
 import {
@@ -18,15 +19,19 @@ import {
 } from "@crm/ui/components/input-group";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { khoaApiMessages } from "@/lib/messages/settings-khoa-api";
-import type { RouterOutputs } from "@/lib/trpc/types";
+import type { LoaiKhoa } from "./loai-khoa";
 
-type CreatedApiKey = RouterOutputs["apiKeys"]["create"];
+export type KhoaVuaTao = {
+	name: string | null;
+	key: string;
+	loai?: LoaiKhoa;
+};
 
 export function CreatedApiKeyDialog({
 	apiKey,
 	onOpenChange,
 }: {
-	apiKey: CreatedApiKey | null;
+	apiKey: KhoaVuaTao | null;
 	onOpenChange: (open: boolean) => void;
 }) {
 	const t = khoaApiMessages(useLocale());
@@ -53,6 +58,18 @@ export function CreatedApiKeyDialog({
 						<CopyValue value={apiKey?.key ?? ""} label={t.daTao.nhanChep} />
 					</InputGroupAddon>
 				</InputGroup>
+
+				{apiKey?.loai === "keo-tin-hieu" ? (
+					<Alert data-slot="khoa-keo-tin-hieu">
+						<AlertDescription>{t.daTao.keoTinHieu}</AlertDescription>
+					</Alert>
+				) : null}
+
+				{apiKey?.loai === "day-lo-trinh" ? (
+					<Alert data-slot="khoa-day-lo-trinh">
+						<AlertDescription>{t.daTao.dayLoTrinh}</AlertDescription>
+					</Alert>
+				) : null}
 
 				<DialogFooter>
 					<DialogClose asChild dongNgay>

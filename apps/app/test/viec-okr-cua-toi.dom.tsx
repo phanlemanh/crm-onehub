@@ -174,7 +174,7 @@ describe("the viec OKR", () => {
 		const [capNhat, im, giao, nhac, ghiNhan, theo] = dong();
 		expect(capNhat?.textContent).toContain("2 KR chờ cập nhật tuần này");
 		expect(capNhat?.querySelector("a")?.getAttribute("href")).toBe(
-			"/ws/okr/cap-nhat-tuan?tu=viec-cua-toi",
+			"/ws/okr?tu=viec-cua-toi",
 		);
 		expect(im?.textContent).toContain("KR im 15 ngày");
 		expect(giao?.textContent).toContain(m.cau.giaoKr);

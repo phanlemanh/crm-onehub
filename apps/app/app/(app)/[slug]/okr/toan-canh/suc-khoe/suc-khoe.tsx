@@ -42,7 +42,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "../../chon-chu-ky";
-import { okrParsers } from "../../okr-search-params";
+import { khoaDon, okrParsers } from "../../okr-search-params";
 import { ChuaChuKy, DangTai } from "../../trang-thai-okr";
 import { LoiXem } from "../toan-canh";
 import { KhoiMoCoi } from "./okr-mo-coi";
@@ -122,9 +122,11 @@ export function SucKhoe() {
 			currentId === null || !quanTri ? skipToken : { cycleId: currentId },
 		),
 	);
-	const veToanCanh = `${url("/okr/toan-canh")}${
-		ky ? `?${new URLSearchParams({ [SEARCH_PARAM.okr.ky]: ky })}` : ""
-	}`;
+	const don = thamSo[SEARCH_PARAM.okr.don];
+	const giu = new URLSearchParams();
+	if (ky) giu.set(SEARCH_PARAM.okr.ky, ky);
+	if (don) giu.set(SEARCH_PARAM.okr.don, khoaDon(don));
+	const veToanCanh = `${url("/okr/toan-canh")}${giu.size > 0 ? `?${giu}` : ""}`;
 
 	const dau = (
 		<Breadcrumb>

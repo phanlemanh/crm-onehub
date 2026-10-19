@@ -12,7 +12,13 @@ import { fileURLToPath } from "node:url";
 
 const DAY = dirname(fileURLToPath(import.meta.url));
 const GOC = join(DAY, "..", "..", "..");
-const NHANH_GOC = "origin/onehub";
+// F8 neo (ve-sinh-do-san-onehub): tap tep cua vong rut tu cap gop PR #146 da dua vong len onehub (B = 679432a0f^1,
+// D = 679432a0f), khong tu merge-base(HEAD, onehub) — sau khi gop, merge-base chua san vong
+// nay nen tap rong (ma 2) hoac la tep cua vong khac.
+const CAP = Object.freeze({
+	goc: "100847e8a747d474b79bc10adb82a94e06313f82",
+	dinh: "679432a0f013398f717f4d04d3b779d5f3472a3d",
+});
 const VUNG =
 	/^(apps\/app\/(?!test\/|app\/proto\/).+\.tsx|packages\/ui\/src\/components\/.+\.tsx)$/;
 const TEP_PHA = "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx";
@@ -69,14 +75,18 @@ if (process.argv.includes("--pha")) {
 	process.exit(dat ? 0 : 1);
 }
 
-const moc = git("merge-base", "HEAD", NHANH_GOC);
-const tep = git("diff", "--name-only", moc)
+for (const sha of [CAP.goc, CAP.dinh])
+	if (spawnSync("git", ["-C", GOC, "cat-file", "-e", `${sha}^{commit}`]).status !== 0)
+		khongDo(`khong giai duoc cap gop ${sha}`);
+// F8 neo (ve-sinh-do-san-onehub): tep cua vong = diff cap gop B..D; design-gate soi ban hien tai cua tung tep.
+const tep = git("diff", "--name-only", `${CAP.goc}..${CAP.dinh}`)
 	.split("\n")
 	.filter(Boolean)
 	.filter((t) => VUNG.test(t))
 	.filter((t) => existsSync(join(GOC, t)));
-if (tep.length === 0) khongDo(`khong tep giao dien nao trong diff so voi ${moc}`);
-console.log(`tap tep: ${tep.length} (diff so voi ${NHANH_GOC} @ ${moc.slice(0, 8)})`);
+// F8 neo (ve-sinh-do-san-onehub): cau in goi ten cap gop thay cho merge-base.
+if (tep.length === 0) khongDo(`khong tep giao dien nao trong diff cap gop ${CAP.goc.slice(0, 8)}..${CAP.dinh.slice(0, 8)}`);
+console.log(`tap tep: ${tep.length} (diff cap gop ${CAP.goc.slice(0, 8)}..${CAP.dinh.slice(0, 8)})`);
 
 let sai = 0;
 for (const t of tep) {

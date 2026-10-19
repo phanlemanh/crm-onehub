@@ -429,13 +429,20 @@ describe("so-dem", () => {
 
 	test("lua chon trang thai so 0 phai hien, kem so", async () => {
 		await veBang({ owner: {}, status: { open: 2, closed: 0 } });
-		await bam(nutCo(TABS.allLabel ?? ""));
-		const noi = document.body.querySelector(
-			'[data-slot="dropdown-menu-content"]',
-		);
-		if (!(noi instanceof HTMLElement))
-			throw new Error("menu trang thai khong mo");
-		expect(soTrong(noi, ["Mở", "Đóng"])).toEqual(["2", "0"]);
+		const chip = [
+			...document.body.querySelectorAll<HTMLElement>(
+				'[data-slot="toggle-group-item"]',
+			),
+		];
+		const so = ["Mở", "Đóng"].map((n) => {
+			const muc = chip.find((el) => (el.textContent ?? "").includes(n));
+			if (!muc) return "VANG";
+			return (
+				muc.querySelector('[data-slot="toggle-group-item-count"]')
+					?.textContent ?? null
+			);
+		});
+		expect(so).toEqual(["2", "0"]);
 	});
 });
 

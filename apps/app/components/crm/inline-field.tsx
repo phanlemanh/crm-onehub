@@ -388,9 +388,9 @@ export function InlineTextArea({
 		>
 			{saving ? <Spinner /> : null}
 			{shown ? (
-				<span className="min-w-0">{shown}</span>
+				<span className="min-w-0 wrap-anywhere">{shown}</span>
 			) : (
-				<span className="min-w-0 text-muted-foreground">
+				<span className="min-w-0 wrap-anywhere text-muted-foreground">
 					{placeholder ?? <EmptyCellValue />}
 				</span>
 			)}

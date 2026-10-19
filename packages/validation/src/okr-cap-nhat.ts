@@ -4,7 +4,13 @@ import { bangChungVao } from "./okr-canh-kr";
 import { type KieuKr, soKr } from "./okr-kr";
 
 export { MUC_TU_TIN, type MucTuTin };
-export const LOI_VAO = ["nhac", "viec-cua-toi", "tab", "sheet"] as const;
+export const LOI_VAO = [
+	"nhac",
+	"viec-cua-toi",
+	"tab",
+	"sheet",
+	"cua-toi",
+] as const;
 export type LoiVao = (typeof LOI_VAO)[number];
 export const KENH_CAP_NHAT = ["web"] as const;
 export const GHI_CHU_TOI_DA = 200;

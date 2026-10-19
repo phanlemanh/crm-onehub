@@ -18,6 +18,10 @@ export function homNayVn(luc: Date): string {
 	}).format(luc);
 }
 
+export function ngayVnTuIso(iso: string): string {
+	return homNayVn(new Date(iso));
+}
+
 export function ngayThangVn(luc: Date): string {
 	const ngay = homNayVn(luc);
 	return `${ngay.slice(8, 10)}/${ngay.slice(5, 7)}`;

@@ -1,0 +1,159 @@
+{
+  "feature_plain": "Ở Toàn cảnh, thẻ «Theo đơn vị» có thêm cách xem Sơ đồ: mỗi đơn vị một thẻ, dây nối theo căn chỉnh thật, nên lãnh đạo nhìn chỗ không có dây là biết đơn vị nào chưa nối lên công ty, bật «Cần chú ý» là thấy đơn vị đang trượt.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ trả về mỗi đơn vị một thẻ (công ty, bộ phận, phòng ban) cùng dây nối: nét liền khi góp vào cấp trên trực tiếp, nét đứt khi góp thẳng lên công ty hay chéo sang nhánh khác; góp trong nội bộ đơn vị không thành dây."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ gắn «Cần chú ý» cho đơn vị chưa có trưởng, chưa đặt OKR, chưa nối lên, có mục tiêu không căn chỉnh, hoặc có KR trượt — trượt tính đúng như các màn OKR khác."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ thêm nút chuyển Bảng · Sơ đồ trên thẻ «Theo đơn vị»; Bảng vẫn là mặc định, và trang Bảng không phải tải thêm thư viện vẽ."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ cho đơn vị chưa nối lên không có dây nào đi lên và mang nhãn «Chưa nối lên»; thẻ cần chú ý ghi rõ đang vướng cờ nào."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ có chip «Mọi đơn vị · Cần chú ý» kèm số; bật lọc thì thẻ không cần chú ý mờ đi, không có đơn vị nào thì hiện một câu nói rõ."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ cho bấm một thẻ để mở ngay trên sơ đồ: mục tiêu của đơn vị, góp vào đâu, mức tin và câu lý do căn chỉnh như đã thấy ở ngăn mục tiêu."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ thu gọn phòng ban vào bộ phận khi hơn 12 đơn vị, nhưng nhánh có đơn vị chưa nối luôn mở sẵn, và bật «Cần chú ý» thì nhánh có đơn vị cần chú ý tự mở."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ hiện khung xương khi đang tải, ô lỗi có nút thử lại khi hỏng, và một câu khi kỳ chưa có mục tiêu công bố."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ có đủ chữ tiếng Việt và tiếng Anh, đi được bằng bàn phím, và không lia hay phóng có hiệu ứng khi người dùng tắt chuyển động."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ được chấm trên bản đang chạy ở khổ máy tính và điện thoại, có ảnh từng trạng thái."
+    },
+    {
+      "id": "AC-15",
+      "p": "Sẽ chỉ đổi đúng các tệp đã khai, và chỉ thêm thư viện mà anh chọn ở cổng này."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG để lộ tên hay số đếm của mục tiêu mà người xem không được thấy."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ KHÔNG dựng khung vẽ trên điện thoại — thay bằng danh sách thụt lề cùng dữ liệu."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ KHÔNG còn cách xem «Cây căn chỉnh» ở trang đơn vị; đường cũ dẫn sang Sơ đồ mở sẵn thẻ đơn vị đó (chỉ khi anh chọn làm B5)."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không làm sơ đồ quanh một mục tiêu — đó là DH5, dựng trên khung vẽ của vòng này."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không đổi bảng Theo đơn vị thành cây, không làm lại trang đơn vị — các vòng khác của đợt."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không cho sửa hay kéo nối căn chỉnh trên sơ đồ, không đổi cơ sở dữ liệu."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đụng phần dựng cây căn chỉnh đã ký và không đổi dữ liệu bảng Toàn cảnh hiện có."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không đưa mã rút từ block trả phí vào PR gửi kho hãng."
+    }
+  ],
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đơn vị ở mọi kiểu căn chỉnh: góp cấp trên, góp thẳng, góp chéo, góp cả hai, chỉ nội bộ, không góp, chưa có OKR, công ty (AC-1)."
+    },
+    {
+      "i": 1,
+      "p": "Đủ vì tổ chức chỉ có hai cấp và căn chỉnh chỉ trỏ tới mục tiêu hoặc KR."
+    },
+    {
+      "i": 2,
+      "p": "Năm cờ «Cần chú ý» và ca không cờ nào (AC-2)."
+    },
+    {
+      "i": 3,
+      "p": "Đủ vì bốn cờ lấy từ bản phạm vi đợt, cộng cờ chưa nối lên; trượt theo luật chung."
+    },
+    {
+      "i": 4,
+      "p": "Mọi trạng thái màn: mặc định, mở thẻ, lọc, lọc rỗng, thu gọn, kỳ rỗng, đang tải, lỗi, điện thoại (AC-5 tới AC-10)."
+    },
+    {
+      "i": 5,
+      "p": "Đủ vì khớp nếp màn chung của app và bảy trạng thái của bản mẫu."
+    },
+    {
+      "i": 6,
+      "p": "Người xem thấy đủ và người xem thiếu mục tiêu giới hạn (AC-3)."
+    },
+    {
+      "i": 7,
+      "p": "Đủ vì sơ đồ đọc cùng tập mục tiêu mà cây căn chỉnh trả cho người đó."
+    },
+    {
+      "i": 8,
+      "p": "Áp mọi màn: hai khổ, hai thứ tiếng, bàn phím, tắt chuyển động (AC-11, AC-12)."
+    },
+    {
+      "i": 10,
+      "p": "Đối chiếu Tability Strategy Map (thẻ theo đơn vị) và Perdoo (chủ sở hữu theo đơn vị)."
+    },
+    {
+      "i": 11,
+      "p": "Để sau: nhớ vị trí lia/phóng, xuất ảnh, lọc từng cờ, sơ đồ quanh một mục."
+    },
+    {
+      "i": 12,
+      "p": "Không bao giờ: sửa căn chỉnh bằng kéo-thả; Sơ đồ thay Bảng làm mặc định trước phiên nghiệm thu."
+    },
+    {
+      "i": 9,
+      "p": "Mười bốn tiêu chí phủ các ô trên; giữ hồ sơ đã ký đã ra Known limits."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Khi gộp phòng ban, đơn vị chưa nối có thể nằm khuất ở màn đầu — đã sửa: nhánh có đơn vị chưa nối luôn mở sẵn, thẻ ghi rõ cờ, và mở thẻ trong nhánh gộp cũng mở nhánh."
+    },
+    {
+      "i": 1,
+      "p": "Chưa nói góp chéo nhánh hay góp nội bộ thì vẽ ra sao — đã sửa: góp chéo là nét đứt, góp nội bộ không vẽ, «chưa nối lên» thành cờ thứ năm, bài đo có thêm ba ca."
+    },
+    {
+      "i": 2,
+      "p": "Bài đo cờ và số liệu dùng dữ liệu viết tay, bài màn thật so với chính máy chủ — đã sửa: đo trên dữ liệu thật và lấy tập kỳ vọng từ bộ dữ liệu mẫu."
+    },
+    {
+      "i": 3,
+      "p": "Lý do căn chỉnh chưa được đo ở máy chủ theo từng chỗ nối — đã sửa: thêm bài đo so với cây căn chỉnh và một đột biến chứng nó bắt được lỗi."
+    },
+    {
+      "i": 4,
+      "p": "Bài đo «trang Bảng không tải thư viện vẽ» chỉ tìm chuỗi — đã sửa: đi theo cả chuỗi nhập gián tiếp."
+    }
+  ]
+}

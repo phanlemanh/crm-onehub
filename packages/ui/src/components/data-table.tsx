@@ -41,6 +41,10 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { TablePagination } from "@crm/ui/components/table-pagination";
 import {
+	ToggleGroup,
+	ToggleGroupItem,
+} from "@crm/ui/components/toggle-group";
+import {
 	Table,
 	TableBody,
 	TableCell,
@@ -91,7 +95,9 @@ export type DataTableFacet = {
 
 export type DataTableTabs = {
 	id: string;
+	label?: string;
 	allLabel?: string;
+	allCount?: number;
 	options: { value: string; label: string }[];
 };
 
@@ -101,6 +107,7 @@ export type DataTableExpandable<TRow, TSub> = {
 	getSubRowId: (sub: TSub, row: TRow) => string;
 	renderSubCell: (sub: TSub, columnId: string, row: TRow) => ReactNode;
 	onSubRowClick?: (sub: TSub, row: TRow) => void;
+	rowLabel?: (row: TRow) => string;
 };
 
 export type DataTableSelection<TRow> = {
@@ -246,7 +253,10 @@ function toggle(selected: string[], value: string, checked: boolean): string[] {
 function FacetCount({ count }: { count: number | undefined }) {
 	if (count === undefined) return null;
 	return (
-		<span data-slot="facet-count" className="tabular-nums opacity-60">
+		<span
+			data-slot="facet-count"
+			className="text-muted-foreground tabular-nums"
+		>
 			{count}
 		</span>
 	);
@@ -271,7 +281,7 @@ function FacetSubmenu({
 			<DropdownMenuSubTrigger>
 				<span className="flex-1">{facet.label}</span>
 				{selected.length > 0 && (
-					<span className="tabular-nums opacity-60">({selected.length})</span>
+					<span className="text-muted-foreground tabular-nums">({selected.length})</span>
 				)}
 			</DropdownMenuSubTrigger>
 			<DropdownMenuSubContent className="max-h-72 min-w-52 overflow-hidden">
@@ -389,7 +399,7 @@ export function DataTableFacetMenu({
 					<Filter data-icon="inline-start" />
 					{msg.table.filters}
 					{activeCount > 0 && (
-						<span className="tabular-nums opacity-60">({activeCount})</span>
+						<span className="text-muted-foreground tabular-nums">({activeCount})</span>
 					)}
 				</Button>
 			</DropdownMenuTrigger>
@@ -458,13 +468,6 @@ export function DataTable<TRow, TSub = unknown>({
 	const sortableColumns = columns.filter((column) => column.sortable);
 
 	const tabCounts = tabs ? facetCounts?.[tabs.id] : undefined;
-	const activeTabOption =
-		query.tab === "all"
-			? undefined
-			: tabs?.options.find((option) => option.value === query.tab);
-	const activeTabLabel = activeTabOption
-		? activeTabOption.label
-		: (tabs?.allLabel ?? "All");
 
 	const deferredRows = useDeferredValue(rows);
 	const anyExpandable =
@@ -546,7 +549,7 @@ export function DataTable<TRow, TSub = unknown>({
 							<Filter />
 							{msg.table.filters}
 							{activeFilterCount > 0 && (
-								<span className="tabular-nums opacity-60">
+								<span className="text-muted-foreground tabular-nums">
 									({activeFilterCount})
 								</span>
 							)}
@@ -570,44 +573,47 @@ export function DataTable<TRow, TSub = unknown>({
 					)}
 				>
 					{tabs && (
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									type="button"
-									variant="outline"
-									size="sm"
-									className="w-full justify-between sm:w-auto sm:min-w-44"
+						<div className="max-w-full overflow-x-auto">
+							<ToggleGroup
+								aria-label={tabs.label ?? msg.table.status}
+								size="sm"
+								type="single"
+								value={query.tab}
+								variant="outline"
+								onValueChange={(value) => {
+									if (value) query.setTab(value);
+								}}
+							>
+								<ToggleGroupItem
+									count={
+										tabs.allCount ??
+										(tabCounts === undefined
+											? undefined
+											: tabs.options.reduce(
+													(tong, option) =>
+														tong + (tabCounts[option.value] ?? 0),
+													0,
+												))
+									}
+									value="all"
 								>
-									<span className="truncate">{activeTabLabel}</span>
-									<ChevronDown className="shrink-0 opacity-60" />
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent align="start" className="min-w-52">
-								<DropdownMenuRadioGroup
-									value={query.tab}
-									onValueChange={(value) => query.setTab(value)}
-								>
-									<DropdownMenuRadioItem value="all">
-										<span className="flex-1">{tabs.allLabel ?? "All"}</span>
-									</DropdownMenuRadioItem>
-									{tabs.options.map((option) => (
-										<DropdownMenuRadioItem
-											key={option.value}
-											value={option.value}
-										>
-											<span className="flex-1">{option.label}</span>
-											<FacetCount
-												count={
-													tabCounts === undefined
-														? undefined
-														: (tabCounts[option.value] ?? 0)
-												}
-											/>
-										</DropdownMenuRadioItem>
-									))}
-								</DropdownMenuRadioGroup>
-							</DropdownMenuContent>
-						</DropdownMenu>
+									{tabs.allLabel ?? "All"}
+								</ToggleGroupItem>
+								{tabs.options.map((option) => (
+									<ToggleGroupItem
+										count={
+											tabCounts === undefined
+												? undefined
+												: (tabCounts[option.value] ?? 0)
+										}
+										key={option.value}
+										value={option.value}
+									>
+										{option.label}
+									</ToggleGroupItem>
+								))}
+							</ToggleGroup>
+						</div>
 					)}
 
 					{leadingActions}
@@ -675,7 +681,7 @@ export function DataTable<TRow, TSub = unknown>({
 									>
 										<Column data-icon="inline-start" />
 										{msg.table.columns}
-										<span className="tabular-nums opacity-60">
+										<span className="text-muted-foreground tabular-nums">
 											({visibleColumns.length})
 										</span>
 									</Button>
@@ -900,12 +906,14 @@ export function DataTable<TRow, TSub = unknown>({
 									{anyExpandable && (
 										<TableCell className="w-10 px-3 py-3 text-center text-muted-foreground">
 											{canExpand && (
-												<ChevronRight
-													size={12}
-													className={cn(
-														"inline-block transition-transform",
-														isOpen && "rotate-90",
-													)}
+												<ExpandRowButton
+													label={
+														expandable?.rowLabel?.(row) ??
+														msg.table.rowFallback
+													}
+													open={isOpen}
+													rowId={id}
+													onToggle={handleClick}
 												/>
 											)}
 										</TableCell>
@@ -989,5 +997,41 @@ export function DataTable<TRow, TSub = unknown>({
 				meta={meta}
 			/>
 		</div>
+	);
+}
+
+function ExpandRowButton({
+	label,
+	open,
+	rowId,
+	onToggle,
+}: {
+	label: string;
+	open: boolean;
+	rowId: string;
+	onToggle: () => void;
+}) {
+	const msg = useMessages();
+	return (
+		<Button
+			type="button"
+			size="icon-sm"
+			variant="ghost"
+			className="group"
+			aria-expanded={open}
+			aria-label={
+				open ? msg.table.collapseRow(label) : msg.table.expandRow(label)
+			}
+			data-mo-dong={rowId}
+			onClick={(event) => {
+				event.stopPropagation();
+				onToggle();
+			}}
+		>
+			<ChevronRight
+				size={12}
+				className="inline-block transition-transform group-aria-expanded:rotate-90 motion-reduce:transition-none"
+			/>
+		</Button>
 	);
 }

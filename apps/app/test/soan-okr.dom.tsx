@@ -475,9 +475,13 @@ describe("nut theo ly do", () => {
 		expect(goiCua("okr.soanSanSang")).toHaveLength(0);
 	});
 
-	test("người không sửa được đơn vị mà không phải quản trị: không có nút, không hỏi máy chủ", async () => {
+	test("người không sửa được đơn vị mà không phải quản trị: nút khoá trỏ dòng lý do đầu trang, không hỏi máy chủ", async () => {
 		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, canEdit: false });
-		expect(q("[data-nut-soan]")).toBeNull();
+		const nut = q(
+			'[data-nut-soan="nut-khong-quyen"] button',
+		) as HTMLButtonElement | null;
+		expect(nut?.disabled).toBe(true);
+		expect(nut?.getAttribute("aria-describedby")).toBe("okr-khong-them-duoc");
 		expect(goiCua("okr.soanSanSang")).toHaveLength(0);
 	});
 

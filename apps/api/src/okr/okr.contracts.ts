@@ -147,6 +147,7 @@ const noiDungDong = {
 	targetObjectiveId: z.string().nullable(),
 	targetKeyResultId: z.string().nullable(),
 	lyDo: z.string(),
+	canCu: z.string().nullable().default(null),
 };
 export const dongHien = z.object({
 	...noiDungDong,
@@ -163,6 +164,7 @@ export const troLyQuyetInput = z.object({
 	deXuatId: ma,
 	cach: z.enum(CACH_QUYET),
 	giaTri: z.string().trim().min(1).max(OKR.ten.viSao).optional(),
+	canCu: z.string().nullable().optional(),
 });
 export const troLyQuyetOutput = z.discriminatedUnion("ok", [
 	z.object({ ok: z.literal(true) }),
@@ -455,10 +457,18 @@ export const createKrInput = krInput.extend({ objectiveId: ma });
 export const updateKrInput = krInput
 	.partial()
 	.extend({ id: ma, lyDoDoiDich: lyDoDoiDich.optional() });
+const oLyDo = z.string().nullable().optional();
 export const alignmentInput = z.object({
 	objectiveId: ma,
 	targetObjectiveId: ma.nullable(),
 	targetKeyResultId: ma.nullable(),
+	lyDo: oLyDo,
+	canCu: oLyDo,
+});
+export const suaLyDoCanChinhInput = z.object({
+	id: ma,
+	lyDo: oLyDo,
+	canCu: oLyDo,
 });
 export const alignmentTargetsInput = z.object({ objectiveId: ma });
 export const alignmentTargetsOutput = z.object({

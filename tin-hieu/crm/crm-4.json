@@ -1,0 +1,12 @@
+{
+  "phien": "crm",
+  "loai": "tin-hieu",
+  "hang": null,
+  "noi_dung": {
+    "tieu_de": "Biên nhận và hộp xoá gọi tín hiệu bằng mã «crm-1» nhưng danh sách không hiện mã",
+    "muon_lam": "Đối chiếu tín hiệu trên biên nhận với danh sách, và chắc mình xoá đúng cái",
+    "da_xay_ra": "Biên nhận và hộp xoá gọi tín hiệu bằng mã «crm-1» nhưng danh sách không hiện mã\nKhông đối chiếu được biên nhận với hàng nào. Hộp xoá «Xoá tín hiệu crm-1?» nên nêu tên điều đã kể để chắc xoá đúng cái.",
+    "man": "/tin-hieu"
+  },
+  "luc": "2026-10-13T23:48:28.573Z"
+}

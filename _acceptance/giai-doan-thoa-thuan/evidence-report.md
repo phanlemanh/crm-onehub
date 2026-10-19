@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1946af2d61b3416e148f07e7b21c6419a8e46d59
+verified_commit: 04772b9829a167d53c220393dd7d1be8e0b87926
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -321,3 +321,27 @@ sha: 082c4fb65ee6c73d463ea7e50b242dba194ff32e · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 13 — 2026-10-10, do hoá cũ do gộp onehub f8be41ee (LT1 + H6) vào thuoc-khong-tu-het-han; ghim lại ở tip trước khi gộp
 run_id: repin-20261010T123509Z-40413
 sha: 1946af2d61b3416e148f07e7b21c6419a8e46d59 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 14 — 2026-10-15, do khong-re-theo-ten-thanh-luat-kho: E17 doc luat kho, paths thu ve tep dinh nghia luat
+run_id: repin-20261015T180157Z-13633
+sha: 304ed4e018160d950e90175ed467be9fbd6a757f · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 15 — 2026-10-15, do khong-re-theo-ten-thanh-luat-kho: E17 quet tap tep theo doi tren cau hinh bo ignorePatterns (S4 r1)
+run_id: repin-20261015T183248Z-35446
+sha: dbba844ab1d2125a287e65f8802e7719f786aed0 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 16 — 2026-10-15, do khong-re-theo-ten-thanh-luat-kho: ghim lai sau gop onehub (schema.prisma, vai-chi-okr, messages doi)
+run_id: repin-20261015T215124Z-75326
+sha: f5c54fb240b5a3acf0f89d8d2a965a55e598e62f · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 17 — 2026-10-15, do khong-re-theo-ten-thanh-luat-kho: ghim lai sau gop onehub 6fa8ce417 (messages tin-hieu)
+run_id: repin-20261015T225411Z-16866
+sha: 4f5d707d8a4127812480f9fc38be5e98799a23ba · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 18 — 2026-10-16, do khong-re-theo-ten-thanh-luat-kho: ghim lai sau gop onehub 725537a8c (vai-chi-okr, messages okr)
+run_id: repin-20261016T010443Z-22880
+sha: a1c04da0dc536ed04ae41794167f3835913956ed · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 19 — 2026-10-16, do khong-re-theo-ten-thanh-luat-kho: ghim lai sau gop onehub d62d596dc
+run_id: repin-20261016T071532Z-82040
+sha: 04772b9829a167d53c220393dd7d1be8e0b87926 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

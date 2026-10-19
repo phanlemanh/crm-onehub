@@ -8,6 +8,7 @@ import { AiFeedback } from "../src/components/ai-feedback";
 import { AsyncButtonContent } from "../src/components/async-action";
 import { AttendeeList } from "../src/components/attendee-list";
 import { Board } from "../src/components/board";
+import { Breadcrumb } from "../src/components/breadcrumb";
 import {
 	Carousel,
 	CarouselContent,
@@ -28,6 +29,8 @@ import {
 	DialogTitle,
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
+import { FlowMap } from "../src/components/flow-map";
+import { GanttDuAn } from "../src/components/gantt-du-an";
 import { Heatmap } from "../src/components/heatmap";
 import { KaraLabel } from "../src/components/kara";
 import { KhungXuong } from "../src/components/khung-xuong";
@@ -90,7 +93,9 @@ async function chuNguoiDoc(html: string): Promise<Set<string>> {
 			them(t.text);
 		},
 	});
-	await rw.transform(new Response(html)).text();
+	await rw
+		.transform(new Response(html.replace(/<style[\s\S]*?<\/style>/g, "")))
+		.text();
 	return ra;
 }
 
@@ -199,6 +204,58 @@ const CA: Ca[] = [
 			/>
 		),
 	},
+	{
+		ten: "GanttDuAn",
+		ve: () => (
+			<GanttDuAn
+				className="h-[320px]"
+				homNay="2026-10-16"
+				lich={{ ngayNghiTuan: [6, 7], ngayLe: ["2026-10-26"] }}
+				moc={[
+					{
+						id: "m",
+						ten: DU_LIEU.cot,
+						ngay: "2026-10-30",
+						tre: false,
+						cho: ["b"],
+					},
+				]}
+				viec={[
+					{
+						id: "a",
+						tieuDe: DU_LIEU.tenCongTy,
+						chaId: null,
+						batDau: "2026-10-19",
+						han: "2026-10-21",
+						nghia: "xong",
+						suaDuoc: true,
+						phaiCho: [],
+					},
+					{
+						id: "b",
+						tieuDe: DU_LIEU.cotHai,
+						chaId: null,
+						batDau: "2026-10-22",
+						han: "2026-10-23",
+						nghia: "dangChay",
+						suaDuoc: false,
+						phaiCho: ["a"],
+					},
+					{
+						id: "c",
+						tieuDe: DU_LIEU.nhomLoc,
+						chaId: null,
+						batDau: null,
+						han: null,
+						nghia: "nhap",
+						suaDuoc: true,
+						phaiCho: [],
+					},
+				]}
+				onDatNgay={() => {}}
+			/>
+		),
+	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
 	{
 		ten: "TrinhSoan",
@@ -220,6 +277,17 @@ const CA: Ca[] = [
 					lamLai: DU_LIEU.cot,
 				}}
 				onDoi={() => {}}
+			/>
+		),
+	},
+	{
+		ten: "FlowMap",
+		ve: () => (
+			<FlowMap
+				edges={[]}
+				label=""
+				nodeTypes={{}}
+				nodes={[{ id: "a", position: { x: 0, y: 0 }, data: {} }]}
 			/>
 		),
 	},
@@ -414,6 +482,7 @@ const CA: Ca[] = [
 	},
 	{ ten: "SortableItem", ve: () => <SortableItem id="1" label="Tên cột" /> },
 	{ ten: "KhungXuong", ve: () => <KhungXuong hinh="bang" /> },
+	{ ten: "Breadcrumb", ve: () => <Breadcrumb /> },
 	{
 		ten: "SkeletonSwap",
 		ve: () => (

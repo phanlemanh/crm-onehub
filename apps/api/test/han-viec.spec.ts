@@ -9,12 +9,6 @@ import {
 } from "bun:test";
 import { ActivityType, db } from "@crm/db";
 import { dauNgayVN, NHAC } from "@crm/db/onboarding-nhac";
-import {
-	activityCreateInput,
-	myTasksInput,
-} from "../src/activities/activities.contracts";
-import { ActivitiesService } from "../src/activities/activities.service";
-import { ActivityStampService } from "../src/crm/activity-stamp.service";
 import { ConversionService } from "../src/currency/conversion.service";
 import { DashboardService } from "../src/dashboard/dashboard.service";
 import { ngayLich } from "../src/onboarding/onboarding.contracts";
@@ -75,10 +69,6 @@ function tongQuan(): DashboardService {
 	return new DashboardService(db, new ConversionService(db));
 }
 
-function viec(): ActivitiesService {
-	return new ActivitiesService(db, new ActivityStampService(db));
-}
-
 async function tongQuanLuc(luc: Date, userId: string, scope: CheDo) {
 	setSystemTime(luc);
 	return tongQuan().summary(userId, { scope });
@@ -98,15 +88,17 @@ async function taoViec(
 	subject: string,
 	han: Date | null,
 ) {
-	return viec().create(
-		activityCreateInput.parse({
+	return db.activity.create({
+		data: {
 			type: ActivityType.TASK,
 			subject,
+			occurredAt: new Date(),
+			dueAt: han,
 			companyId: congTyId,
-			dueAt: han?.toISOString() ?? null,
-		}),
-		userId,
-	);
+			createdById: userId,
+		},
+		select: { id: true },
+	});
 }
 
 async function gieoNamViec() {
@@ -124,7 +116,10 @@ async function gieoNamViec() {
 		new Date(homNay.getTime() + GIO_T3 * GIO_MS),
 	);
 	const T4 = await taoViec(A.id, congTy.id, "T4", truoc(2));
-	await viec().complete(T4.id, true);
+	await db.activity.update({
+		where: { id: T4.id },
+		data: { completedAt: new Date() },
+	});
 	const T5 = await taoViec(A.id, congTy.id, "T5", null);
 	return { A, T1, T2, T3, T4, T5 };
 }
@@ -262,33 +257,6 @@ describe("ca-doi", () => {
 			},
 			"buoc cua toi va ke hoach can de y khac rong va giong nhau o hai che do",
 		).toEqual({ khacRong: [true, true, true, true], team: phanChung(me) });
-	});
-});
-
-describe("viec-cua-toi", () => {
-	let g: Awaited<ReturnType<typeof gieoNamViec>>;
-
-	beforeAll(async () => {
-		g = await gieoNamViec();
-	});
-
-	async function khung(window: "overdue" | "upcoming") {
-		setSystemTime(LUC_GIUA);
-		return viec().myTasks(myTasksInput.parse({ window }), g.A.id);
-	}
-
-	test("viec-cua-toi: khung qua han dung T2, khung sap toi co T1 T3 khong T2", async () => {
-		expect(
-			tapViec(await khung("overdue"), g),
-			"khung qua han khong gom viec han hom nay",
-		).toEqual(["T2"]);
-
-		const sapToi = await khung("upcoming");
-		const co = (id: string) => sapToi.some((v) => v.id === id);
-		expect(
-			{ T1: co(g.T1.id), T3: co(g.T3.id), T2: co(g.T2.id) },
-			"khung sap toi gom viec han hom nay, khong gom viec qua han",
-		).toEqual({ T1: true, T3: true, T2: false });
 	});
 });
 

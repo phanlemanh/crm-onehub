@@ -10,7 +10,9 @@ import {
 	LY_DO_TU_CHOI_NOP,
 } from "@crm/validation/okr-cuoc-soan";
 import type { MaLoaiBanNhap } from "@crm/validation/okr-kiem-ban-nhap";
+import { OKR_PHIEN_HOI } from "@crm/validation/okr-phien-hoi";
 import { OKR_PHIEN_SOAN } from "@crm/validation/okr-phien-soan";
+import { OKR_HOI_TRAN } from "@crm/validation/okr-tra-loi";
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -168,7 +170,7 @@ export const TRO_LY_OKR_SOAN = {
 		},
 	},
 	congCu: {
-		song: ["nop_ban_nhap"],
+		song: ["nop_ban_nhap", "tim_okr", "doc_okr", "nop_tra_loi"],
 		tat: [
 			"bash",
 			"read_file",
@@ -200,5 +202,38 @@ export const TRO_LY_OKR_SOAN = {
 			"2a-kr",
 		] as const satisfies readonly BuocCat[],
 		lopKhongCat: ["0-5", "1"],
+	},
+} as const;
+
+export const TRO_LY_OKR_HOI = {
+	purpose: OKR_PHIEN_HOI.purpose,
+	tinhNang: OKR_HOI_TRAN.tinhNang satisfies TinhNang,
+	tran: OKR_HOI_TRAN,
+	tenGoc: "OneHub",
+	tranKetQua: { mucTieu: 30, kr: 60, capNhat: 4, quet: 300 },
+	tuChoi: {
+		saiMucDich: "Công cụ này chỉ dùng trong cuộc hỏi OKR.",
+		khongThay:
+			"Không thấy Mục tiêu hay KR này trong những gì người hỏi được xem.",
+		cuocKhongThuocPhien: "Cuộc hỏi không thuộc người đang gọi.",
+	},
+	chiDuong: {
+		coCrm:
+			"then point them to Kara in the CRM — the Kara panel on the Thoả thuận, Liên hệ and Công ty pages — which answers about partners, deals and contacts",
+		chiOkr:
+			"then say their workspace role covers OKR only, so partners, deals and contacts are not available to them in OneHub",
+	},
+	loiNop: {
+		trichNgoaiQuyen: (ma: string) =>
+			`Trích ${ma} không phải Mục tiêu hay KR người hỏi được xem, hoặc không tồn tại; đọc lại bằng tim_okr hay doc_okr rồi nộp lại cả câu trả lời.`,
+		soLech: (so: string, lop: "truong" | "dem" | "la") =>
+			lop === "dem"
+				? `Số ${so} đếm Mục tiêu hay KR không bằng số thứ câu đó trích; sửa số hoặc trích đủ rồi nộp lại.`
+				: `Số ${so} không khớp tiến độ, khởi điểm, hiện tại, đích hay kỳ vọng của thứ câu đó trích; dùng đúng số đã đọc hoặc bỏ số rồi nộp lại.`,
+		traLoiRong: "Câu trả lời loại tra-loi cần ít nhất một câu.",
+		ngoaiPhamViRong:
+			"Câu trả lời loại ngoai-pham-vi cần ít nhất một câu nói vì sao Kara ở đây không làm việc đó và chỉ đường; nộp lại cả câu trả lời.",
+		cauKhongTrich: (thu: number) =>
+			`Câu ${thu} không trích Mục tiêu hay KR nào; mỗi câu của loại tra-loi trích thứ nó nói tới, hoặc bỏ câu đó rồi nộp lại.`,
 	},
 } as const;

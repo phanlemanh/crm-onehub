@@ -18,4 +18,15 @@ export const tinHieuCuaToiOutput = z.object({
 });
 export type TinHieuCuaToiOutput = z.infer<typeof tinHieuCuaToiOutput>;
 
+const thamChieu = z.object({ id: z.string(), ten: z.string() });
+
+export const dongTinHieuTatCa = dongTinHieuCuaToi.extend({
+	nguoiGui: thamChieu.nullable(),
+	phongBan: thamChieu.nullable(),
+});
+export const tinHieuTatCaOutput = z.object({
+	rows: z.array(dongTinHieuTatCa),
+});
+export type TinHieuTatCaOutput = z.infer<typeof tinHieuTatCaOutput>;
+
 export const xoaTinHieuOutput = z.object({ ok: z.literal(true) });

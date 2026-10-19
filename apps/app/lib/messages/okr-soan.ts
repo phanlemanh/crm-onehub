@@ -36,7 +36,7 @@ type Ket = "accepted" | "dismissed" | "skipped";
 
 const vi = {
 	nut: {
-		soan: "Soạn OKR cùng Trợ lý",
+		soan: "Soạn OKR cùng Kara",
 		tiep: "Tiếp cuộc đang soạn",
 		tiepMoTa: (ngay: string, luot: string, dongChuaQuyet: string) =>
 			`Mở ${ngay} · ${luot} lượt · ${dongChuaQuyet} dòng chưa quyết`,
@@ -44,7 +44,7 @@ const vi = {
 		cheDoAnMoTa:
 			"Chỉ quản trị thấy nút này; cuộc soạn tính vào số đo, không tính vào đơn vị.",
 		hetCuoc: (tran: string) => `Đã dùng hết ${tran} cuộc soạn kỳ này`,
-		tamNghi: (ngay: string) => `Trợ lý OKR tạm nghỉ tới ${ngay}`,
+		tamNghi: (ngay: string) => `Kara tạm nghỉ tới ${ngay}`,
 		dsCuoc: (da: string, tran: string) => `${da}/${tran} cuộc`,
 		loiMo: "Chưa mở được cuộc soạn",
 		chuaCauHinh:
@@ -64,23 +64,23 @@ const vi = {
 			"Cuộc không còn, hoặc bạn không xem được nó. Đóng màn này rồi mở lại từ khung đơn vị.",
 	},
 	hoiThoai: {
-		nhan: "Trò chuyện với Trợ lý OKR",
-		moDau: "Trợ lý OKR đang đọc bối cảnh của đơn vị…",
+		nhan: "Trò chuyện với Kara",
+		moDau: "Kara đang đọc bối cảnh của đơn vị…",
 		khongDocLai: "Không đọc lại được các lượt trước",
 		khongDocLaiMoTa:
 			"Bản nháp bên cạnh vẫn còn đủ; bạn nói tiếp được ở ô bên dưới.",
-		dangSoan: "Trợ lý OKR đang soạn…",
+		dangSoan: "Kara đang soạn…",
 		placeholder: "Trả lời, hoặc nói bạn muốn đổi gì trong bản nháp…",
-		khoaKhiSoan: "Ô soạn mở lại khi Trợ lý trả lời xong.",
+		khoaKhiSoan: "Ô soạn mở lại khi Kara trả lời xong.",
 		goiY: (hoi: string) => `Gợi ý trả lời: ${hoi}`,
-		loi: "Trợ lý OKR chưa trả lời được",
+		loi: "Kara chưa trả lời được",
 		loiMoTa: CAU_QUA_45S,
 		loiMoTaKhac: CAU_DUNG_GIUA,
 		lyDoHong: {
-			"khong-noi-duoc": "Không nối được tới Trợ lý OKR.",
-			"qua-han": "Trợ lý OKR không trả lời kịp.",
-			"tro-ly-tu-choi": "Trợ lý OKR từ chối lượt này.",
-			"tro-ly-loi": "Trợ lý OKR đang gặp lỗi.",
+			"khong-noi-duoc": "Không nối được tới Kara.",
+			"qua-han": "Kara không trả lời kịp.",
+			"tro-ly-tu-choi": "Kara từ chối lượt này.",
+			"tro-ly-loi": "Kara đang gặp lỗi.",
 			"chua-dem-duoc-luot":
 				"Chưa đếm được lượt nên chưa gửi. Thử lại sau ít phút.",
 			"chua-mo-duoc-phien": "Chưa mở được phiên trò chuyện.",
@@ -99,9 +99,9 @@ const vi = {
 			`Đã dùng hết ${n} lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới`,
 		moCuocMoi: "Mở cuộc mới",
 		thieuBoiCanh:
-			"Chưa có Hồ sơ công ty và Chiến lược năm — Trợ lý soạn với ít bối cảnh hơn",
+			"Chưa có Hồ sơ công ty và Chiến lược năm — Kara soạn với ít bối cảnh hơn",
 		thieuBoiCanhMoTa:
-			"Viết hai trang loại «Chiến lược» trong Kho tài liệu rồi duyệt; cuộc sau Trợ lý sẽ đọc.",
+			"Viết hai trang loại «Chiến lược» trong Kho tài liệu rồi duyệt; cuộc sau Kara sẽ đọc.",
 		toiKho: "Tới Kho tài liệu",
 		cuocDong: "Cuộc này đã kết thúc",
 		cuocDongMoTa: "Bản nháp bên cạnh còn để xem lại; không gửi thêm lượt nào.",
@@ -109,7 +109,7 @@ const vi = {
 	banNhap: {
 		rong: "Chưa có dòng nào",
 		rongMoTa:
-			"Trả lời Trợ lý trong khung trò chuyện; bản nháp sẽ hiện ở đây để bạn nhận, sửa hay bác từng dòng.",
+			"Trả lời Kara trong khung trò chuyện; bản nháp sẽ hiện ở đây để bạn nhận, sửa hay bác từng dòng.",
 		mucTieu: (stt: string) => `Mục tiêu ${stt}`,
 		loai: {
 			"cam-ket": "Cam kết",
@@ -174,7 +174,7 @@ const vi = {
 		} satisfies Record<LyDoDuaVao, string>,
 	},
 	cuoc: {
-		tieuDe: (ky: string) => `Cuộc soạn cùng Trợ lý · ${ky}`,
+		tieuDe: (ky: string) => `Cuộc soạn cùng Kara · ${ky}`,
 		dem: (n: string, tran: string) => `${n}/${tran} cuộc`,
 		nhan: "Các cuộc soạn của đơn vị",
 		nguoiMo: "Người mở:",
@@ -193,7 +193,7 @@ const vi = {
 		loi: "Chưa đọc được danh sách cuộc soạn",
 	},
 	soDo: {
-		tieuDe: "Soạn OKR cùng Trợ lý",
+		tieuDe: "Soạn OKR cùng Kara",
 		moTa: "Số đo của nấc bật và chế độ ẩn; Mục tiêu còn chờ duyệt chưa tính là công bố. Bấm một cuộc để xem bản nháp cuối.",
 		cotSo: "Số đo",
 		nacTen: { bat: "Bật", an: "Ẩn" } satisfies Record<Nac, string>,
@@ -219,7 +219,7 @@ const vi = {
 		} satisfies Record<HangSoDo, string>,
 		maLoai: {
 			"so-moi": "Có số không có trong dữ liệu",
-			"dich-khong-trong": "Máy ghi số đích",
+			"dich-khong-trong": "Kara ghi số đích",
 			"noi-ve-nguoi": "Nêu tên một người",
 			"tu-cam": "Dùng từ cần tránh",
 			"chep-cap-tren": "Chép KR của cấp trên",
@@ -351,7 +351,7 @@ const vi = {
 		web_search: "tìm trên web",
 		web_fetch: "đọc một trang web",
 		todo: "lập danh sách việc",
-		agent: "nhờ một trợ lý phụ",
+		agent: "Kara nhờ một trợ tác làm một phần việc",
 		bash: "chạy một lệnh",
 		write_file: "ghi ghi chú",
 		khac: "làm một bước",
@@ -372,7 +372,7 @@ const vi = {
 		"don-vi-chua-bat": "Đơn vị chưa được bật việc soạn",
 		"don-vi-che-do-an": "Đơn vị ở chế độ ẩn",
 		"het-cuoc-ky": "Đã dùng hết cuộc soạn kỳ này",
-		"het-tran-thang": "Trợ lý OKR tạm nghỉ tới đầu tháng sau",
+		"het-tran-thang": "Kara tạm nghỉ tới đầu tháng sau",
 		"con-cuoc-dang": "Đơn vị còn một cuộc đang soạn",
 		"cuoc-an-dang-mo":
 			"Quản trị đang có một cuộc soạn ở chế độ ẩn trên đơn vị này",
@@ -380,7 +380,7 @@ const vi = {
 	} satisfies Record<LyDoSoan, string>,
 	lyDoLuot: {
 		"het-luot-cuoc": "Đã dùng hết lượt của cuộc này",
-		"het-tran-thang": "Trợ lý OKR tạm nghỉ tới đầu tháng sau",
+		"het-tran-thang": "Kara tạm nghỉ tới đầu tháng sau",
 		"cuoc-khong-dang": "Cuộc này đã kết thúc",
 		"don-vi-chua-bat": "Đơn vị không còn được bật việc soạn",
 		"don-vi-luu-tru": "Đơn vị đã lưu trữ",
@@ -402,7 +402,7 @@ export type OkrSoanMessages = typeof vi;
 
 const en: OkrSoanMessages = {
 	nut: {
-		soan: "Draft OKRs with the Assistant",
+		soan: "Draft OKRs with Kara",
 		tiep: "Continue the open session",
 		tiepMoTa: (ngay, luot, dongChuaQuyet) =>
 			`Opened ${ngay} · ${luot} turns · ${dongChuaQuyet} lines undecided`,
@@ -410,7 +410,7 @@ const en: OkrSoanMessages = {
 		cheDoAnMoTa:
 			"Only admins see this button; the session counts in the metrics, not against the unit.",
 		hetCuoc: (tran) => `All ${tran} drafting sessions for this cycle are used`,
-		tamNghi: (ngay) => `The OKR Assistant is paused until ${ngay}`,
+		tamNghi: (ngay) => `Kara is paused until ${ngay}`,
 		dsCuoc: (da, tran) => `${da}/${tran} sessions`,
 		loiMo: "The drafting session could not be opened",
 		chuaCauHinh:
@@ -430,23 +430,23 @@ const en: OkrSoanMessages = {
 			"It no longer exists, or you cannot see it. Close this screen and open it again from the unit.",
 	},
 	hoiThoai: {
-		nhan: "Conversation with the OKR Assistant",
-		moDau: "The OKR Assistant is reading the unit's context…",
+		nhan: "Conversation with Kara",
+		moDau: "Kara is reading the unit's context…",
 		khongDocLai: "Earlier turns could not be loaded",
 		khongDocLaiMoTa:
 			"The draft alongside is complete; you can keep talking in the box below.",
-		dangSoan: "The OKR Assistant is drafting…",
+		dangSoan: "Kara is drafting…",
 		placeholder: "Answer, or say what you want changed in the draft…",
-		khoaKhiSoan: "The box reopens when the Assistant finishes.",
+		khoaKhiSoan: "The box reopens when Kara finishes.",
 		goiY: (hoi) => `Suggested answers: ${hoi}`,
-		loi: "The OKR Assistant did not answer",
+		loi: "Kara did not answer",
 		loiMoTa: CAU_QUA_45S_EN,
 		loiMoTaKhac: CAU_DUNG_GIUA_EN,
 		lyDoHong: {
-			"khong-noi-duoc": "Could not reach the OKR Assistant.",
-			"qua-han": "The OKR Assistant did not respond in time.",
-			"tro-ly-tu-choi": "The OKR Assistant refused this turn.",
-			"tro-ly-loi": "The OKR Assistant ran into an error.",
+			"khong-noi-duoc": "Could not reach Kara.",
+			"qua-han": "Kara did not respond in time.",
+			"tro-ly-tu-choi": "Kara refused this turn.",
+			"tro-ly-loi": "Kara ran into an error.",
 			"chua-dem-duoc-luot":
 				"Could not count the turn, so nothing was sent. Try again in a few minutes.",
 			"chua-mo-duoc-phien": "Could not open the conversation.",
@@ -467,7 +467,7 @@ const en: OkrSoanMessages = {
 			`All ${n} turns of this session are used — add it to the OKRs or open a new session`,
 		moCuocMoi: "Open a new session",
 		thieuBoiCanh:
-			"No company profile or annual strategy yet — the Assistant drafts with less context",
+			"No company profile or annual strategy yet — Kara drafts with less context",
 		thieuBoiCanhMoTa:
 			"Write two «Strategy» pages in the Document library and approve them; the next session will read them.",
 		toiKho: "Go to the Document library",
@@ -478,7 +478,7 @@ const en: OkrSoanMessages = {
 	banNhap: {
 		rong: "No lines yet",
 		rongMoTa:
-			"Answer the Assistant in the conversation; the draft appears here so you can accept, edit or reject each line.",
+			"Answer Kara in the conversation; the draft appears here so you can accept, edit or reject each line.",
 		mucTieu: (stt) => `Objective ${stt}`,
 		loai: {
 			"cam-ket": "Committed",
@@ -538,7 +538,7 @@ const en: OkrSoanMessages = {
 		},
 	},
 	cuoc: {
-		tieuDe: (ky) => `Drafting sessions with the Assistant · ${ky}`,
+		tieuDe: (ky) => `Drafting sessions with Kara · ${ky}`,
 		dem: (n, tran) => `${n}/${tran} sessions`,
 		nhan: "The unit's drafting sessions",
 		nguoiMo: "Opened by",
@@ -553,7 +553,7 @@ const en: OkrSoanMessages = {
 		loi: "The drafting sessions could not be loaded",
 	},
 	soDo: {
-		tieuDe: "Drafting OKRs with the Assistant",
+		tieuDe: "Drafting OKRs with Kara",
 		moTa: "Numbers for on and hidden mode; Objectives still awaiting approval do not count as published. Open a session to see its last draft.",
 		cotSo: "Measure",
 		nacTen: { bat: "On", an: "Hidden" },
@@ -714,7 +714,7 @@ const en: OkrSoanMessages = {
 		web_search: "search the web",
 		web_fetch: "read a web page",
 		todo: "make a task list",
-		agent: "ask a helper",
+		agent: "Kara asks a helper for part of the work",
 		bash: "run a command",
 		write_file: "write notes",
 		khac: "take a step",
@@ -735,7 +735,7 @@ const en: OkrSoanMessages = {
 		"don-vi-chua-bat": "Drafting is not switched on for the unit",
 		"don-vi-che-do-an": "The unit is in hidden mode",
 		"het-cuoc-ky": "All drafting sessions for this cycle are used",
-		"het-tran-thang": "The OKR Assistant is paused until next month",
+		"het-tran-thang": "Kara is paused until next month",
 		"con-cuoc-dang": "The unit still has an open drafting session",
 		"cuoc-an-dang-mo":
 			"An admin has a hidden-mode drafting session open on this unit",
@@ -743,7 +743,7 @@ const en: OkrSoanMessages = {
 	},
 	lyDoLuot: {
 		"het-luot-cuoc": "All turns of this session are used",
-		"het-tran-thang": "The OKR Assistant is paused until next month",
+		"het-tran-thang": "Kara is paused until next month",
 		"cuoc-khong-dang": "This session has ended",
 		"don-vi-chua-bat": "Drafting is no longer switched on for the unit",
 		"don-vi-luu-tru": "The unit is archived",

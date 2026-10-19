@@ -6,18 +6,20 @@ import { useGiaiDoan } from "@/lib/giai-doan";
 export function DealStageIndicator({
 	stage,
 	className,
+	wrapLabel = false,
 }: {
 	stage: string;
 	className?: string;
+	wrapLabel?: boolean;
 }) {
 	const giaiDoan = useGiaiDoan();
 	return (
-		<span translate="no">
-			<StatusIndicator
-				tone={giaiDoan.tone(stage)}
-				label={giaiDoan.label(stage)}
-				className={className}
-			/>
-		</span>
+		<StatusIndicator
+			translate="no"
+			tone={giaiDoan.tone(stage)}
+			label={giaiDoan.label(stage)}
+			wrapLabel={wrapLabel}
+			className={className}
+		/>
 	);
 }

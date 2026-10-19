@@ -1,0 +1,41 @@
+tu kiem thuoc so: 9 ca dung (nguyen tu, giu dau)
+tu kiem kiemCa: 4 ca dung (ban ghi dung dongTongKet cua gop-y.eval.ts)
+kho tdx-e22 · okr:mau --moc 2026-10-14: 40 nguoi mau, 11 phong ban, 40 muc tieu
+eve eval okr/gop-y okr/ng --verbose thoat 1
+so-moi-lot: 0 dong
+DUNG gy-01
+DUNG gy-02 · phu boi luat luot 7: kr-la-viec
+DUNG gy-03 · phu boi luat luot 7: thieu-doi-trong
+DUNG gy-04
+SAI gy-05: van de trung-y: khong dong nao dung truong hay dung maVanDe
+DUNG gy-06
+SAI gy-07: viec dong bang hong:SUBAGENT_EXECUTION_FAILED
+DUNG gy-08
+SAI gy-09: viec dong bang hong:SUBAGENT_EXECUTION_FAILED · van de kr-la-viec: khong dong nao dung truong hay dung maVanDe
+SAI gy-10: khongGopY nhung co 1 dong viet lai
+DUNG gy-11
+SAI gy-12: khongGopY nhung co 1 dong viet lai
+SAI gy-13: khongGopY nhung co 1 dong viet lai
+DUNG gy-14 · phu boi luat luot 7: kr-la-viec
+DUNG gy-15
+DUNG gy-16
+DUNG gy-17
+DUNG gy-18
+DUNG gy-19
+DUNG gy-20
+DUNG gy-21
+DUNG gy-22
+SAI gy-23: viec dong bang hong:SUBAGENT_EXECUTION_FAILED · van de muc-tieu-la-so: khong dong nao dung truong hay dung maVanDe
+DUNG gy-24
+DUNG gy-25
+DUNG gy-26
+SAI gy-27: viec dong bang hong:SUBAGENT_EXECUTION_FAILED · van de kr-la-viec: khong dong nao dung truong hay dung maVanDe
+SAI gy-28: viec dong bang hong:SUBAGENT_EXECUTION_FAILED · van de muc-tieu-la-so: khong dong nao dung truong hay dung maVanDe
+DUNG gy-29
+SAI gy-30: viec dong bang hong:SUBAGENT_EXECUTION_FAILED
+DOI CHUNG doi-chung-goi-50-cuoc: bat duoc — 1 dong cho (viet-lai:muc-tieu-la-so)
+lap viet-lai 1: eve thoat 1, them 12 cap (tong 26/20)
+cap: 20/20 · judge trung binh 0.95 (20 cap co diem)
+chi: 0.158889 USD / tran 2 USD
+hieu chinh da cham (20 o) — giu nguyen _acceptance/tro-ly-okr-de-xuat/evidence/hieu-chinh-judge.md, ban moi 20 cap → .acceptance-runs/tro-ly-okr-de-xuat/e22/hieu-chinh-judge.2026-10-14T14-34-08-859Z.md
+ma: 20/30 · judge: 0.95 (20 cap, nguong 0.7)

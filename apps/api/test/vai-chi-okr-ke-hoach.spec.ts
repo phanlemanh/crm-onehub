@@ -54,11 +54,23 @@ async function dung() {
 	const quanTri = await gieoThanhVien("Quản Trị VLR", "admin");
 	const { khuon, bp } = await gieoKhuon();
 	const congTy = await gieoCongTy();
-	const plan = await dichVu().createFromTemplate({
-		companyId: congTy.id,
-		templateId: khuon.id,
-		startedAt: new Date("2026-10-12T00:00:00.000Z"),
-		ownerId: thuong.id,
+	const plan = await db.onboardingPlan.create({
+		data: {
+			companyId: congTy.id,
+			templateId: khuon.id,
+			startedAt: new Date("2026-10-12T00:00:00.000Z"),
+			targetDays: 30,
+			ownerId: thuong.id,
+		},
+	});
+	await db.onboardingStep.create({
+		data: {
+			planId: plan.id,
+			label: "Buoc mot",
+			departmentId: bp.id,
+			dueAt: new Date("2026-10-12T00:00:00.000Z"),
+			position: 0,
+		},
 	});
 	const buoc = await db.onboardingStep.findFirstOrThrow({
 		where: { planId: plan.id },

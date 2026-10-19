@@ -1,5 +1,5 @@
 import { DEFAULT_WORKSPACE_NAME } from "@crm/auth";
-import { db } from "@crm/db";
+import { db, Prisma } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
 
 let dem = 0;
@@ -16,22 +16,35 @@ function duy(tien: string): string {
 	return `${tien}-${Date.now()}-${dem}`;
 }
 
+async function gieoToChuc(): Promise<void> {
+	try {
+		await db.organization.upsert({
+			where: { id: WORKSPACE_ID },
+			update: {},
+			create: {
+				id: WORKSPACE_ID,
+				name: DEFAULT_WORKSPACE_NAME,
+				slug: workspaceSlug(DEFAULT_WORKSPACE_NAME),
+				createdAt: new Date(),
+			},
+		});
+	} catch (loi) {
+		if (
+			!(loi instanceof Prisma.PrismaClientKnownRequestError) ||
+			loi.code !== "P2002"
+		)
+			throw loi;
+		await db.organization.findUniqueOrThrow({ where: { id: WORKSPACE_ID } });
+	}
+}
+
 export async function gieoNguoi() {
 	const id = duy("u");
 	daGieo.nguoi.push(id);
 	const nguoi = await db.user.create({
 		data: { id, name: "Nguoi thu nghiem", email: `${id}@thu.test` },
 	});
-	await db.organization.upsert({
-		where: { id: WORKSPACE_ID },
-		update: {},
-		create: {
-			id: WORKSPACE_ID,
-			name: DEFAULT_WORKSPACE_NAME,
-			slug: workspaceSlug(DEFAULT_WORKSPACE_NAME),
-			createdAt: new Date(),
-		},
-	});
+	await gieoToChuc();
 	await db.member.create({
 		data: {
 			id: `m-${id}`,
@@ -73,6 +86,15 @@ export async function donGieo(): Promise<void> {
 	});
 	await db.company.deleteMany({ where: { id: { in: congTy } } });
 	await db.contact.deleteMany({ where: { id: { in: caNhan } } });
+	await db.viec.deleteMany({
+		where: {
+			OR: [
+				{ taoBoiId: { in: nguoi } },
+				{ nguoiGiaoId: { in: nguoi } },
+				{ nguoiThucHienId: { in: nguoi } },
+			],
+		},
+	});
 	await db.user.deleteMany({ where: { id: { in: nguoi } } });
 	await db.department.deleteMany({ where: { id: { in: boPhan } } });
 	for (const so of Object.values(daGieo)) so.length = 0;

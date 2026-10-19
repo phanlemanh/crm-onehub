@@ -1,0 +1,31 @@
+{
+  "duong": [
+    { "o": 1, "ten": "REST tinHieu.cuaToi", "goi": { "method": "GET", "path": "/rest/tin-hieu/cua-toi" }, "cho": ["apps/api/src/trpc/trpc.context.ts"] },
+    { "o": 2, "ten": "REST tinHieu.keoVe của LT2", "goi": { "method": "POST", "path": "/rest/tin-hieu/keo-ve", "body": {} }, "cho": ["apps/api/src/trpc/trpc.context.ts"] },
+    { "o": 3, "ten": "REST contacts.list", "goi": { "method": "POST", "path": "/rest/contacts/search", "body": {} }, "cho": ["apps/api/src/trpc/trpc.context.ts"] },
+    { "o": 4, "ten": "REST apiKeys.list", "goi": { "method": "GET", "path": "/rest/api-keys" }, "cho": ["apps/api/src/trpc/trpc.context.ts", "apps/api/src/trpc/middlewares/session-only.middleware.ts"] },
+    { "o": 5, "ten": "tRPC gốc contacts.list", "goi": { "method": "GET", "path": "/api/trpc/contacts.list?input=%7B%7D" }, "cho": ["apps/api/src/trpc/trpc.context.ts"] },
+    { "o": 6, "ten": "thư viện: đọc phiên", "goi": { "method": "GET", "path": "/api/auth/get-session" }, "cho": ["packages/auth/src/auth.ts"] },
+    { "o": 7, "ten": "thư viện: tạo khoá", "goi": { "method": "POST", "path": "/api/auth/api-key/create", "body": { "name": "tvk-thu" } }, "plugin": "/api-key/create", "cho": [] },
+    { "o": 8, "ten": "thư viện: danh sách khoá", "goi": { "method": "GET", "path": "/api/auth/api-key/list" }, "plugin": "/api-key/list", "cho": [] },
+    { "o": 9, "ten": "thư viện: đọc một khoá", "goi": { "method": "GET", "path": "/api/auth/api-key/get?id={khoaKeo}" }, "plugin": "/api-key/get", "cho": [] },
+    { "o": 10, "ten": "thư viện: sửa khoá", "goi": { "method": "POST", "path": "/api/auth/api-key/update", "body": { "keyId": "{khoaKeo}", "name": "doi-ten" } }, "plugin": "/api-key/update", "cho": [] },
+    { "o": 11, "ten": "thư viện: xoá khoá", "goi": { "method": "POST", "path": "/api/auth/api-key/delete", "body": { "keyId": "{khoaThuong}" } }, "plugin": "/api-key/delete", "cho": [] },
+    { "o": 12, "ten": "Nest: phiên của tôi", "goi": { "method": "GET", "path": "/auth/me" }, "cho": ["apps/api/src/auth/auth.controller.ts"] },
+    { "o": 13, "ten": "hàm đọc phiên của trang web và cầu tác nhân", "goi": { "ham": "getSession" }, "cho": ["apps/app/lib/session.ts", "apps/app/lib/trang-goc.ts", "apps/app/app/eve/v1/[...path]/route.ts", "apps/app/app/eve/agents/okr/eve/v1/[...path]/route.ts", "apps/app/app/(landing)/sign-in/page.tsx", "apps/app/app/(landing)/het-quyen/page.tsx"] }
+  ],
+  "mien": [
+    { "cho": "apps/api/src/trpc/middlewares/khoa-keo-tin-hieu.middleware.ts", "ly_do": "cổng của chính đường kéo theo lịch — đo ở E3, E5" },
+    { "cho": "packages/auth/src/khoa-keo-tin-hieu.ts", "ly_do": "hàm xác minh khoá chỉ-kéo mà cổng trên gọi" },
+    { "cho": "apps/api/src/trpc/middlewares/khoa-day-lo-trinh.middleware.ts", "ly_do": "cổng của đường đẩy bản chụp lộ trình (LT1c) — đo ở E4 của lo-trinh-doc-ban-chup" },
+    { "cho": "packages/auth/src/khoa-day-lo-trinh.ts", "ly_do": "hàm xác minh khoá chỉ-đẩy lộ trình mà cổng trên gọi (LT1c)" },
+    { "cho": "packages/auth/src/api-keys.ts", "ly_do": "hằng tên đầu khoá, không đọc yêu cầu" },
+    { "cho": "packages/auth/src/index.ts", "ly_do": "chỉ xuất lại" },
+    { "cho": "apps/api/src/create-app.ts", "ly_do": "khai tên đầu khoá cho tài liệu OpenAPI, không đọc yêu cầu" },
+    { "cho": "apps/app/app/(app)/[slug]/okr/o-nguon-so.tsx", "ly_do": "chuỗi hướng dẫn curl hiện cho người dùng" }
+  ],
+  "plugin_mien": [
+    { "ten": "verifyApiKey", "ly_do": "chỉ gọi được từ máy chủ, không có đường HTTP" },
+    { "ten": "deleteAllExpiredApiKeys", "ly_do": "chỉ gọi được từ máy chủ, không có đường HTTP" }
+  ]
+}

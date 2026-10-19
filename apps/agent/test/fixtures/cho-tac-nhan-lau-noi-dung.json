@@ -1,0 +1,20 @@
+{
+	"tac-nhan-xong": {
+		"loai": "tac-nhan-xong",
+		"conversationId": "$HOI_THOAI",
+		"luotId": "$LUOT",
+		"ten": "Tóm tắt deal mỗi sáng"
+	},
+	"tac-nhan-can-tra-loi": {
+		"loai": "tac-nhan-can-tra-loi",
+		"conversationId": "$HOI_THOAI",
+		"luotId": "$LUOT",
+		"ten": "Hội thoại mẫu"
+	},
+	"tac-nhan-hong": {
+		"loai": "tac-nhan-hong",
+		"conversationId": "$HOI_THOAI",
+		"luotId": "$LUOT",
+		"ten": "Hội thoại mẫu"
+	}
+}

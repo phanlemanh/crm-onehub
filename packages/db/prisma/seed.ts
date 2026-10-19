@@ -1,6 +1,7 @@
 import { mirror } from "../src/blob";
 import { db } from "../src/client";
 import { DEFAULT_REPORTING_CURRENCY } from "../src/currency";
+import { gieoDuAnMau } from "../src/du-an-gieo";
 import { resolveFavicon } from "../src/favicon";
 import { fieldKeyFromLabel } from "../src/fields-shape";
 import {
@@ -11,7 +12,7 @@ import {
 } from "../src/generated/prisma/enums";
 import type { LoaiGiaiDoan } from "../src/giai-doan";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
-import { gieoViecMau } from "../src/viec-gieo";
+import { gieoBangMau, gieoViecMau } from "../src/viec-gieo";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
 function makeRandom(seed: number): () => number {
@@ -310,15 +311,6 @@ const CALL_SUBJECTS = [
 	"Pricing discussion",
 	"Follow-up call",
 	"Security review",
-] as const;
-
-const TASK_SUBJECTS = [
-	"Send the security questionnaire",
-	"Share pricing proposal",
-	"Book the technical deep dive",
-	"Chase procurement",
-	"Send SOC 2 report",
-	"Introduce the implementation team",
 ] as const;
 
 const MEETING_SUBJECTS = [
@@ -1022,28 +1014,6 @@ async function seedActivities(
 		});
 	}
 
-	for (const deal of deals) {
-		if (deal.closed) continue;
-
-		for (let n = 0; n < integer(1, 3); n++) {
-			const roll = random();
-			const overdue = roll < 0.3;
-			const done = roll >= 0.3 && roll < 0.6;
-			const dueAt = overdue
-				? daysFromNow(-integer(1, 14), 6)
-				: daysFromNow(integer(1, 21), 6);
-
-			rows.push({
-				...base(deal.companyId, deal.ownerId, daysFromNow(-integer(1, 30), 12)),
-				type: ActivityType.TASK,
-				dealId: deal.id,
-				subject: pick(TASK_SUBJECTS),
-				dueAt: done ? daysFromNow(-integer(1, 20), 6) : dueAt,
-				completedAt: done ? daysFromNow(-integer(1, 10), 6) : null,
-			});
-		}
-	}
-
 	for (const company of companies) {
 		if (!chance(0.6)) continue;
 		rows.push({
@@ -1137,11 +1107,21 @@ async function main() {
 		nguon: "DATABASE_URL",
 		now: new Date(),
 	});
+	await gieoBangMau(db, {
+		databaseUrl: process.env.DATABASE_URL ?? "",
+		nguon: "DATABASE_URL",
+		now: new Date(),
+	});
+	const duAn = await gieoDuAnMau(db, {
+		databaseUrl: process.env.DATABASE_URL ?? "",
+		nguon: "DATABASE_URL",
+		now: new Date(),
+	});
 
 	console.log(
 		`Seeded ${companies.length} companies, ${contacts.length} contacts, ` +
 			`${deals.length} deals, ${activities} activities, ${rates} exchange rates, ` +
-			`7 company fields, ${domains} tracked domains, ${viec.soViec} việc mẫu, workspace đã qua onboarding.`,
+			`7 company fields, ${domains} tracked domains, ${viec.soViec} việc mẫu, ${duAn.duAnId ? 1 : 0} dự án mẫu, workspace đã qua onboarding.`,
 	);
 }
 

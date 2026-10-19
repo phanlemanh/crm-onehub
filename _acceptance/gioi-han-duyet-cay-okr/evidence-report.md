@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: af6c2a1f766002ebfd92b37ea95ac53088d3fadc
+verified_commit: 63b4dcec19d614e005362ceb1e6c76c7fd0ef7cc
 human_signoff: Manh Phan 2026-09-29
 ---
 
@@ -376,3 +376,15 @@ sha: acf6075c3693321e23f0a28648a93996ab43f58e · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-06, do sửa thước đỏ lô 2-4 (b2c)
 run_id: repin-20261006T110126Z-87182
 sha: af6c2a1f766002ebfd92b37ea95ac53088d3fadc · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 5 — 2026-10-16, do gộp onehub e2ae94319; ghim-thuoc-soi-xem-okr sửa MIEN_XEM của rang/soi-ma.mjs
+run_id: repin-20261016T030601Z-68580
+sha: df27388dfce8ddbbff5623e1c9ff7747879f58c2 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-16, do gộp onehub 7ebcb0242 (#431, #432)
+run_id: repin-20261016T045303Z-94282
+sha: 6da07b60c74da0aacad8c0c3f21dca5a43ba7671 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-16, do gộp onehub 4bd29def6 (#438)
+run_id: repin-20261016T062657Z-68774
+sha: 63b4dcec19d614e005362ceb1e6c76c7fd0ef7cc · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

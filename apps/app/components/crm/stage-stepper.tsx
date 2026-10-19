@@ -41,7 +41,7 @@ export function StageStepper({
 	const currentIndex = steps.indexOf(stage);
 
 	return (
-		<ol className="flex w-full gap-1">
+		<ol data-slot="stage-stepper" className="flex w-full gap-1">
 			{steps.map((option, index) => {
 				const reached = !exited && index <= currentIndex;
 				const current = !exited && option === stage;
@@ -60,9 +60,13 @@ export function StageStepper({
 								current && "font-medium",
 							)}
 						>
-							<span className="block truncate">
+							<span className="block wrap-anywhere md:truncate">
 								{current && chot.includes(option) ? (
-									<DealStageIndicator stage={stage} className="text-xs" />
+									<DealStageIndicator
+										stage={stage}
+										wrapLabel
+										className="text-xs"
+									/>
 								) : (
 									<span translate="no">{giaiDoan.label(option)}</span>
 								)}
@@ -75,7 +79,7 @@ export function StageStepper({
 			{exited ? (
 				<li className="flex min-w-0 flex-1">
 					<div className="min-w-0 flex-1 border-foreground border-t-2 pt-2">
-						<DealStageIndicator stage={stage} className="text-xs" />
+						<DealStageIndicator stage={stage} wrapLabel className="text-xs" />
 					</div>
 				</li>
 			) : null}

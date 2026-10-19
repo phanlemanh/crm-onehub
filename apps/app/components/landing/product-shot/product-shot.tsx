@@ -22,7 +22,7 @@ export function ProductShot() {
 		<section className="relative flex w-full shrink-0 flex-col items-center px-6 pt-20">
 			<div
 				role="img"
-				aria-label="The companies list with an account open on its Agent tab"
+				aria-label="The companies list with an account open on its Kara tab"
 				className="w-[1183px] max-w-full select-none overflow-clip rounded-xl border border-border bg-background"
 			>
 				<div className="relative hidden h-[690px] w-[1182px] shrink-0 flex-col overflow-clip lg:flex">

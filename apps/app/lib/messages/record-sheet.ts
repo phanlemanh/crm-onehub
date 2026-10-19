@@ -128,7 +128,7 @@ const en = {
 		notOnDealsBody: (name: string) =>
 			`${name} is not attached to anything being sold yet. Deals are opened on the company, then people are added to them.`,
 		deleteWarning:
-			"Their notes, agent conversations and everything the agent found go too; emails and meetings stay filed against the company.",
+			"Their notes, Kara conversations and everything Kara found go too; emails and meetings stay filed against the company.",
 		added: (name: string) => `${name} added.`,
 		firstName: "First name",
 		lastName: "Last name",
@@ -137,6 +137,13 @@ const en = {
 		phoneInvalid: "That is not a phone number — for example 0901 234 567",
 	},
 	deal: {
+		goiYKeHoach: {
+			tieuDe: "Deal won — open a 30-day plan for {congTy}?",
+			moTa: "Opening a plan for this company closes this suggestion.",
+			mo: "Open plan",
+			boQua: "Skip",
+			taiLai: "Reload the sheet to see it.",
+		},
 		fallbackTitle: "Deal",
 		contactColumns: {
 			name: "Name",
@@ -194,7 +201,7 @@ const en = {
 		create: "Create deal",
 		remove: "Remove",
 		deleteWarning: (company: string, people: string) =>
-			`Its stage history, notes and agent conversations go too. ${company} and the ${people} on it stay in OneHub Center.`,
+			`Its stage history, notes and Kara conversations go too. ${company} and the ${people} on it stay in OneHub Center.`,
 		person: "person",
 		people: "people",
 		closed: "Closed",
@@ -330,7 +337,7 @@ const vi = {
 		notOnDealsBody: (name: string) =>
 			`${name} chưa gắn với thoả thuận nào. Thoả thuận mở trên công ty trước, rồi mới thêm người vào.`,
 		deleteWarning:
-			"Ghi chú, hội thoại với tác nhân và mọi thứ tác nhân tìm được đều mất theo; email và cuộc họp vẫn gắn với công ty.",
+			"Ghi chú, hội thoại với Kara và mọi thứ Kara tìm được đều mất theo; email và cuộc họp vẫn gắn với công ty.",
 		added: (name: string) => `Đã thêm ${name}.`,
 		firstName: "Tên",
 		lastName: "Họ",
@@ -339,6 +346,13 @@ const vi = {
 		phoneInvalid: "Số điện thoại chưa đúng — ví dụ 0901 234 567",
 	},
 	deal: {
+		goiYKeHoach: {
+			tieuDe: "Deal đã thắng — mở kế hoạch 30 ngày cho {congTy}?",
+			moTa: "Mở kế hoạch cho công ty này thì gợi ý tự đóng.",
+			mo: "Mở kế hoạch",
+			boQua: "Bỏ qua",
+			taiLai: "Tải lại sheet để xem.",
+		},
 		fallbackTitle: "Thoả thuận",
 		contactColumns: {
 			name: "Tên",
@@ -396,7 +410,7 @@ const vi = {
 		create: "Tạo thoả thuận",
 		remove: "Gỡ",
 		deleteWarning: (company: string, people: string) =>
-			`Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. ${company} và ${people} trong đó vẫn ở lại OneHub Center.`,
+			`Lịch sử giai đoạn, ghi chú và hội thoại với Kara đều mất theo. ${company} và ${people} trong đó vẫn ở lại OneHub Center.`,
 		person: "người",
 		people: "người",
 		closed: "Đã chốt",

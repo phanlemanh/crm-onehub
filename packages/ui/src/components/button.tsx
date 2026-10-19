@@ -38,10 +38,15 @@ const buttonVariants = cva(
 				"icon-sm": "size-7",
 				"icon-lg": "size-9",
 			},
+			shrinkable: {
+				true: "min-w-0 shrink",
+				false: "",
+			},
 		},
 		defaultVariants: {
 			variant: "default",
 			size: "default",
+			shrinkable: false,
 		},
 	},
 );
@@ -50,6 +55,7 @@ function Button({
 	className,
 	variant = "default",
 	size = "default",
+	shrinkable = false,
 	asChild = false,
 	...props
 }: React.ComponentProps<"button"> &
@@ -63,7 +69,7 @@ function Button({
 			data-slot="button"
 			data-variant={variant}
 			data-size={size}
-			className={cn(buttonVariants({ variant, size, className }))}
+			className={cn(buttonVariants({ variant, size, shrinkable, className }))}
 			{...props}
 		/>
 	);

@@ -1,0 +1,241 @@
+feature_slug: hoan-tac-loat-bao-dung
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.hlb_run_bulk
+    paths:
+      - "apps/api/src/crm/bulk.ts"
+      - "apps/api/test/hoan-tac-loat-bao-dung.spec.ts"
+    expected: |
+      exit 0; runBulk that voi 4 id [ok, nul, mat, hong]: act tra {id} cho ok, null cho nul, nem NotFoundException cho mat,
+      nem new Error("hong-that") cho hong -> ket qua === {requested 4, succeeded 1, skipped 1, failed 2, errored 1,
+      changedIds ["ok"], message khac null}. spyOn(Logger.prototype, "error") goi dung 1 lan, doi so dau co recordId "hong",
+      doi so hai === loi.stack cua dung doi tuong loi da nem (toBe, khong do chuoi co mat); spyOn(Logger.prototype, "warn") goi dung 1 lan voi recordId "mat".
+      Doi chung: 4 id deu tra {id} -> errored 0, failed 0, error va warn goi 0 lan.
+      CHIEU DO ghim: ban sao tinh NotFoundException vao errored -> do "hlb: khong con tinh la loi that"; ban sao bo
+      logger.error -> do "hlb: loi that khong co dong log"; ban sao bo recordId khoi log -> do "hlb: log khong co id"; ban sao truyen err.message thay stack -> do
+      "hlb: log khong co stack".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hlb_may_chu
+    paths:
+      - "apps/api/src/crm/bulk.ts"
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/companies/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/test/hoan-tac-loat-bao-dung.spec.ts"
+    expected: |
+      exit 0; tren co so du lieu that cua luot test, goi QUA HTTP tRPC that (AppModule + supertest + phien that, nhu
+      hoan-tac-loat-dung-id.spec.ts) <loai>.bulkArchive va <loai>.bulkRestore cho lo [dang dung a, da luu tru tu truoc p,
+      khong ton tai x]; ma tran viet truoc 3 loai x {bulkArchive, bulkRestore} = 6 o, expect(o.length).toBe(6): moi o body co
+      khoa errored === 0, bulkArchive succeeded 1 skipped 1 failed 1 changedIds [a]; bulkRestore failed 1 errored 0.
+      CHIEU DO ghim: ban sao schema output bo errored -> do "hlb: may chu khong tra errored".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.hlb_luu_tru_loi
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/hoan-tac-loat-bao-dung.dom.tsx"
+    expected: |
+      exit 0; baoLuuTruLoat that voi Toaster that, ma tran viet truoc 3 loai x 3 ca = 9, expect(o.length).toBe(9):
+      (co loi le) {succeeded 2, skipped 1, failed 2, errored 1, message "loi-tho-may-chu", changedIds [a,b]} -> vung toast co
+      bulk.boQua("2"), co bulk.chuaLuuTru("1"), co nut «Hoàn tác», KHONG chua "loi-tho-may-chu"; (loi het) {succeeded 0,
+      skipped 0, failed 3, errored 3, message "loi-tho-may-chu", changedIds []} -> toast kieu error co bulk.chuaLuuTru("3"),
+      KHONG chua chu «bị bỏ qua», khong co nut «Hoàn tác», khong chua "loi-tho-may-chu"; (tron, khong ban nao cat)
+      {succeeded 0, skipped 1, failed 2, errored 1, changedIds []} -> toast kieu error co bulk.boQua("2") va
+      bulk.chuaLuuTru("1"), khong co nut «Hoàn tác».
+      CHIEU DO ghim: ban sao dem errored vao bo qua -> do "hlb: loi may chu hien thanh bi bo qua"; ban sao noi message vao
+      toast -> do "hlb: toast in loi tho"; ban sao re nhanh theo errored === requested -> do "hlb: lo tron khong co
+      loi bao canh bao".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.hlb_hoan_tac_da_ve
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/hoan-tac-loat-bao-dung.dom.tsx"
+    expected: |
+      exit 0; baoHoanTacLoat that, ma tran 3 loai x 2 ca = 6, expect(o.length).toBe(6): (da ve) {succeeded 0, skipped 3,
+      failed 0, changedIds []} -> toast kieu success co bulk.daVeTruoc("3"), KHONG co bulk.hoanTacLoi; (loi) {succeeded 0,
+      skipped 0, failed 3} -> co bulk.hoanTacLoi.
+      CHIEU DO ghim: ban sao bo nhanh da ve -> do "hlb: hoan tac da ve van bao chua hoan tac duoc".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.hlb_thieu_truong
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/test/hoan-tac-loat-bao-dung.dom.tsx"
+    expected: |
+      exit 0; baoLuuTruLoat va baoHoanTacLoat voi ket qua KHONG co khoa errored: {succeeded 2, skipped 1, failed 1,
+      changedIds [a,b]} -> toast co bulk.boQua("2") (nhu V2d), khong co chu "NaN", khong co bulk.chuaLuuTru; {succeeded 0,
+      skipped 0, failed 3} hoan tac -> bulk.hoanTacLoi. 3 loai, expect(o.length).toBe(6).
+      CHIEU DO ghim: ban sao doc errored khong co mac dinh -> do "hlb: thieu errored ra NaN".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.htl_luu_tru_bo_qua
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/test/hoan-tac-loat-dung-id.dom.tsx"
+    expected: |
+      exit 0; bai htl-luu-tru-bo-qua cua ho so da ky hoan-tac-loat-dung-id chay lai KHONG SUA.
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.htl_hoan_tac_thieu
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/test/hoan-tac-loat-dung-id.dom.tsx"
+    expected: |
+      exit 0; bai htl-hoan-tac-thieu cua ho so da ky hoan-tac-loat-dung-id chay lai KHONG SUA.
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.htl_hoan_tac_dung_id
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/test/hoan-tac-loat-dung-id.dom.tsx"
+    expected: |
+      exit 0; bai htl-hoan-tac-dung-id cua ho so da ky hoan-tac-loat-dung-id chay lai KHONG SUA.
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htl_may_chu_luu_tru
+    paths:
+      - "apps/api/src/crm/bulk.ts"
+      - "apps/api/test/hoan-tac-loat-dung-id.spec.ts"
+    expected: |
+      exit 0; bai htl-luu-tru phia may chu cua ho so da ky hoan-tac-loat-dung-id chay lai KHONG SUA (id khong ton tai van vao
+      failed).
+
+  - id: E10
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.htl_may_chu_hoan_tac
+    paths:
+      - "apps/api/src/crm/bulk.ts"
+      - "apps/api/test/hoan-tac-loat-dung-id.spec.ts"
+    expected: |
+      exit 0; bai htl-hoan-tac phia may chu cua ho so da ky hoan-tac-loat-dung-id chay lai KHONG SUA.
+
+  - id: E11
+    criterion: AC-5
+    executor: script
+    layer: logic
+    cmd: config:executors.script.hlb_v2d_nguyen
+    paths:
+      - "apps/app/test/hoan-tac-loat-dung-id.dom.tsx"
+      - "apps/api/test/hoan-tac-loat-dung-id.spec.ts"
+      - "_acceptance/hoan-tac-loat-bao-dung/rang/v2d-nguyen.mjs"
+    expected: |
+      exit 0 va "hoan-tac-loat-bao-dung v2d-nguyen: dat"; moc = git merge-base HEAD origin/onehub; 2 tep kiem cua V2d:
+      git diff --quiet <moc> -- <tep> tung tep (dem = 2), va so ".skip(", ".only(", ".todo(" trong moi tep bang dung so o
+      <moc>. CHIEU DO ghim: --chieu-do ghep "test.skip(" vao ban sao tam cua tep app -> do "v2d-nguyen: bai V2d bi sua".
+
+  - id: E12
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.hlb_chu
+    paths:
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/hoan-tac-loat-bao-dung.dom.tsx"
+    expected: |
+      exit 0; crmMessages("vi").bulk.chuaLuuTru("3") === "3 bản chưa lưu trữ được vì máy chủ gặp lỗi — thử lại sau.",
+      bulk.daVeTruoc("3") === "3 bản đã được khôi phục từ trước."; ban en cua hai khoa khong khop /[À-ỹ]/.
+      CHIEU DO ghim: ban sao en co dau Viet -> do "hlb: chu en co dau Viet".
+
+  - id: E13
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.htl_cap_chu
+    paths:
+      - "apps/app/lib/messages/*.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    expected: |
+      exit 0; messages-guard cua kho: khoa moi du cap en/vi, khong khoa chet, ham ghep bien co khang dinh.
+
+  - id: E14
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.hlb_man
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/app/(app)/[slug]/contacts/contacts-bulk-actions.tsx"
+      - "apps/api/src/crm/bulk.ts"
+      - "_acceptance/hoan-tac-loat-bao-dung/rang/man.mjs"
+    expected: |
+      exit 0 va "hoan-tac-loat-bao-dung man: dat"; tren may chu that cua phien do: gieo 3 ca nhan qua duong ghi that, mo
+      /contacts o 1440, chon ca ba, «Hành động» -> «Lưu trữ»; truoc khi bam «Hoàn tác» khoi phuc ca ba qua db; bam «Hoàn tác»
+      -> db archivedAt null ca ba (doc lai sau bam), ca ba dong co trong bang.
+      CHIEU DO ghim: --chieu-do khong khoi phuc qua db truoc khi bam -> do "man: khong thay toast da ve truoc".
+
+  - id: E15
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.hlb_man
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/lib/messages/crm.ts"
+      - "_acceptance/hoan-tac-loat-bao-dung/rang/man.mjs"
+    expected: |
+      exit 0 va "hoan-tac-loat-bao-dung man: dat"; sau «Hoàn tác» vung toast co crmMessages("vi").bulk.daVeTruoc("3"), KHONG
+      co bulk.hoanTacLoi; toast trong khung nhin; chup hlb-da-ve-1440.png. Ho so da signed-off/machine-cleared, hoac
+      --chieu-do, thi khong chep anh vao ho so.
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
+      - "1440: luu tru loat 3 ca nhan, khoi phuc qua db, bam Hoan tac -> hlb-da-ve-1440.png"
+    evidence_required:
+      - "_acceptance/hoan-tac-loat-bao-dung/evidence/hlb-da-ve-1440.png"
+
+  - id: E16
+    criterion: AC-8
+    executor: judgment
+    inputs:
+      - "_acceptance/hoan-tac-loat-bao-dung/evidence/hlb-da-ve-1440.png"
+    question: |
+      Ghi chú cho người chấm: ảnh chụp bảng Cá nhân ngay sau khi người dùng bấm «Hoàn tác» cho một lần lưu trữ ba bản ghi,
+      trong khi ba bản đó đã được người khác khôi phục từ trước. Bề rộng màn 1440.
+      Nhìn ảnh: (1) người đọc có hiểu ngay ba bản ghi đang ở lại danh sách, không phải hệ thống gặp lỗi? (2) thông báo có
+      dùng chữ «khôi phục» đúng bộ chữ của sản phẩm, không có «xoá», «lỗi» hay «chưa hoàn tác được»? (3) thông báo có nằm
+      trong khung nhìn, không bị cắt? Nêu từng điểm kèm điều thấy trong ảnh.
+
+  - id: E17
+    criterion: AC-9
+    executor: script
+    layer: logic
+    cmd: config:executors.script.hlb_tai_lieu
+    paths:
+      - "docs/api.md"
+      - "_acceptance/hoan-tac-loat-bao-dung/rang/tai-lieu.mjs"
+    expected: |
+      exit 0 va "hoan-tac-loat-bao-dung tai-lieu: dat"; trong muc «## Deleting a record is archive first, purge later» cua
+      docs/api.md (cat toi «## » ke) co du 4 tu `changedIds`, `skipped`, `failed`, `errored` va co "recordId".
+      CHIEU DO ghim: --chieu-do doc ban docs/api.md cua merge-base -> do "tai-lieu: thieu errored".

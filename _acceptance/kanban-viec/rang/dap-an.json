@@ -1,0 +1,10 @@
+{
+  "_cach_tinh": "Gieo với now = 2026-02-14T03:00:00Z, đếm trong ngày VN 2026-02-14, --trong = người giao và người thực hiện mẫu. gieoViecMau: 5 vết đổi trạng thái có người (Gọi xác nhận → Đang làm, Kiểm hồ sơ → Chờ đánh giá, Chốt danh sách → Xong do người thực hiện; Soạn thư → Đang làm, Hẹn lịch → Huỷ do người giao), nguồn api. gieoBangMau: con 1 → Xong (api), con 2 → Đang làm (bang-keo), cha → Đang làm (bang-menu). Tổng 8; kéo 1; menu 1; một việc cha có vết them-viec-con, do một người (người thực hiện cha).",
+  "doiTrangThaiNguoi": 8,
+  "quaBangKeo": 1,
+  "quaBangMenu": 1,
+  "tiLeBangKeo": 0.125,
+  "tiLeBang": 0.25,
+  "viecCoCon": 1,
+  "nguoiTaoCon": 1
+}

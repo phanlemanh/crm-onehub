@@ -90,6 +90,8 @@ export async function nopDeXuatVao(
 						}
 					: undefined,
 			lyDo: d.lyDo,
+			noiDung:
+				d.loai === "can-chinh" && d.canCu ? { canCu: d.canCu } : undefined,
 			inputHash: viec.inputHash,
 			nguoiYeuCau: viec.nguoiYeuCau,
 			nac: viec.nac,

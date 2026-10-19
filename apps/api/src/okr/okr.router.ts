@@ -55,6 +55,16 @@ import {
 	troLyTomTatQuanTriOutput,
 } from "@crm/validation/okr-tom-tat";
 import {
+	hoiMoInput,
+	hoiMoOutput,
+	hoiPhanHoiInput,
+	hoiPhanHoiOutput,
+	hoiPhienInput,
+	hoiPhienOutput,
+	hoiTangLuotInput,
+	hoiTangLuotOutput,
+} from "@crm/validation/okr-tra-loi";
+import {
 	addCommentInput,
 	commentsInput,
 	followInput,
@@ -74,6 +84,7 @@ import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViOkrMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
+import { HoiService } from "./hoi.service";
 import {
 	addCommentOutput,
 	aiChiTieuOutput,
@@ -131,6 +142,7 @@ import {
 	soanSoDoInput,
 	soanSoDoOutput,
 	soanTangLuotOutput,
+	suaLyDoCanChinhInput,
 	thanhVienOutput,
 	transferOkrOutput,
 	troLyAnInput,
@@ -208,6 +220,9 @@ import {
 	khoiCuaToiInput,
 	khoiCuaToiOutput,
 	moHopTuanOutput,
+	quanhMucTieuInput,
+	quanhMucTieuOutput,
+	soDoDonViOutput,
 	sucKhoeOutput,
 	toanCanhOutput,
 } from "./okr-xem.contracts";
@@ -231,6 +246,7 @@ export class OkrRouter {
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
 		@Inject(SoanService) private readonly soan: SoanService,
+		@Inject(HoiService) private readonly hoiDap: HoiService,
 		@Inject(OkrHoiYService) private readonly hoiYDv: OkrHoiYService,
 		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
 		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
@@ -478,6 +494,51 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof soanMoVao>,
 	) {
 		return this.soan.mo(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: hoiMoInput,
+		output: hoiMoOutput,
+		meta: restMeta("POST", "/okr/hoi/sessions", TAG),
+	})
+	hoiMo(@Ctx() ctx: AuthedTrpcContext) {
+		return this.hoiDap.mo(ctx.user.id);
+	}
+
+	@Mutation({
+		input: hoiTangLuotInput,
+		output: hoiTangLuotOutput,
+		meta: restMeta("POST", "/okr/hoi/sessions/{cuocHoiId}/turn", TAG),
+	})
+	hoiTangLuot(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiTangLuotInput>,
+	) {
+		return this.hoiDap.tangLuot(ctx.user.id, input.cuocHoiId);
+	}
+
+	@Mutation({
+		input: hoiPhanHoiInput,
+		output: hoiPhanHoiOutput,
+		meta: restMeta("POST", "/okr/hoi/sessions/{cuocHoiId}/feedback", TAG),
+	})
+	hoiPhanHoi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiPhanHoiInput>,
+	) {
+		return this.hoiDap.phanHoi(ctx.user.id, input);
+	}
+
+	@Query({
+		input: hoiPhienInput,
+		output: hoiPhienOutput,
+		meta: restMeta("POST", "/okr/hoi/session", TAG),
+	})
+	hoiPhien(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof hoiPhienInput>,
+	) {
+		return this.hoiDap.phien(ctx.user.id, input);
 	}
 
 	@Query({
@@ -1171,6 +1232,18 @@ export class OkrRouter {
 	}
 
 	@Mutation({
+		input: suaLyDoCanChinhInput,
+		output: okOutput,
+		meta: restMeta("PATCH", "/okr/alignments/{id}", TAG),
+	})
+	suaLyDoCanChinh(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof suaLyDoCanChinhInput>,
+	) {
+		return this.okr.suaLyDoCanChinh(ctx.user.id, input);
+	}
+
+	@Mutation({
 		input: idInput,
 		output: okOutput,
 		meta: restMeta("DELETE", "/okr/alignments/{id}", TAG),
@@ -1252,6 +1325,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.cayCanChinh(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: cycleOnlyInput,
+		output: soDoDonViOutput,
+		meta: restMeta("GET", "/okr/unit-map", TAG),
+	})
+	soDoDonVi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleOnlyInput>,
+	) {
+		return this.xem.soDoDonVi(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: quanhMucTieuInput,
+		output: quanhMucTieuOutput,
+		meta: restMeta("GET", "/okr/objective-map", TAG),
+	})
+	quanhMucTieu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof quanhMucTieuInput>,
+	) {
+		return this.xem.quanhMucTieu(ctx.user.id, input.objectiveId);
 	}
 
 	@Query({

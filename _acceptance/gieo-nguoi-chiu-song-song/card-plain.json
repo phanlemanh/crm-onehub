@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Bài kiểm của khu Điều phối gieo nhiều người cùng lúc trên một kho thử mới thôi đỏ ngẫu nhiên vì lỗi trùng khoá ở bước tạo tổ chức.",
+  "analyst_plain": "Ba phép đo chạy lại các chỗ gọi cũ (E3, E6, E7) xanh cả trên bản chưa sửa, nên chúng chỉ canh không-hồi-quy; chỗ chứng cách sửa là bài kiểm mới (E1) và phép đột biến (E2) — bản tắt cách sửa đỏ 3/3 lượt."
+}

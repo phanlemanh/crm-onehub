@@ -26,6 +26,7 @@ const en = {
 		closing: "Closing",
 	},
 	tabs: {
+		label: "Status",
 		all: "All deals",
 		open: "Open",
 		closed: "Closed",
@@ -129,6 +130,7 @@ const vi = {
 		closing: "Hạn chốt",
 	},
 	tabs: {
+		label: "Trạng thái",
 		all: "Tất cả",
 		open: "Đang mở",
 		closed: "Đã chốt",

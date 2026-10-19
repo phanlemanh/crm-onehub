@@ -1,7 +1,8 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { khoNguonGia } from "../../../packages/db/test/blob-nguon-gia.ts";
-import { db } from "../../../packages/db/src/index.ts";
-import { dongNguonMoCoi, guiMaySoan } from "../../../apps/agent/agent/lib/tai-lieu-phien.ts";
+import {
+	dongNguonMoCoi,
+	guiMaySoan,
+} from "../../../apps/agent/agent/lib/tai-lieu-phien.ts";
 import { chaySoanTuNguon } from "../../../apps/agent/agent/lib/tai-lieu-soan.ts";
 import { completeTask } from "../../../apps/agent/agent/lib/tasks.ts";
 import { sendGia } from "../../../apps/agent/test/support/may-soan-gia.ts";
@@ -16,6 +17,8 @@ import {
 	gieoTrang,
 	gieoViec,
 } from "../../../apps/agent/test/support/tai-lieu-gieo.ts";
+import { db } from "../../../packages/db/src/index.ts";
+import { khoNguonGia } from "../../../packages/db/test/blob-nguon-gia.ts";
 import { CAU, demKet } from "./dem-ket.ts";
 
 const PHUT_MS = 60_000;
@@ -35,8 +38,16 @@ afterAll(async () => {
 
 async function moi(ten: string, tep = "quyet-dinh.docx", muc?: string) {
 	const trangId = await gieoTrang(nguoiId);
-	const byte = tep.endsWith(".pdf") ? docMau(tep) : docxTu([...DOAN_QUYET_DINH, ten]);
-	const nguon = await gieoNguon({ tep, trangId, taiBoiId: nguoiId, byte, trangThai: muc });
+	const byte = tep.endsWith(".pdf")
+		? docMau(tep)
+		: docxTu([...DOAN_QUYET_DINH, ten]);
+	const nguon = await gieoNguon({
+		tep,
+		trangId,
+		taiBoiId: nguoiId,
+		byte,
+		trangThai: muc,
+	});
 	const kho = khoNguonGia();
 	kho.daPut.set(nguon.pathname, nguon.byte);
 	const viec = await gieoViec(nguon.id);
@@ -44,13 +55,22 @@ async function moi(ten: string, tep = "quyet-dinh.docx", muc?: string) {
 }
 
 async function luiViec(taskId: string, phut: number) {
-	await db.agentTask.update({ where: { id: taskId }, data: { createdAt: truoc(phut) } });
+	await db.agentTask.update({
+		where: { id: taskId },
+		data: { createdAt: truoc(phut) },
+	});
 }
 
 async function chupAnh() {
 	const [nguon, viec] = await Promise.all([
-		db.taiLieuNguon.findMany({ select: { id: true, trangThai: true, lyDo: true }, orderBy: { id: "asc" } }),
-		db.agentTask.findMany({ select: { id: true, finishedAt: true, attempts: true }, orderBy: { id: "asc" } }),
+		db.taiLieuNguon.findMany({
+			select: { id: true, trangThai: true, lyDo: true },
+			orderBy: { id: "asc" },
+		}),
+		db.agentTask.findMany({
+			select: { id: true, finishedAt: true, attempts: true },
+			orderBy: { id: "asc" },
+		}),
 	]);
 	return JSON.stringify({ nguon, viec });
 }
@@ -71,12 +91,18 @@ describe("kn-dem-ket", () => {
 		await chaySoanTuNguon(dang31.viec, dang31.kho);
 		await guiMaySoan(dang31.nguon.id, model.send);
 		await luiViec(dang31.viec.id, 5);
-		await db.taiLieuNguon.update({ where: { id: dang31.nguon.id }, data: { soanLuc: truoc(31) } });
+		await db.taiLieuNguon.update({
+			where: { id: dang31.nguon.id },
+			data: { soanLuc: truoc(31) },
+		});
 		const dang5 = await moi("dang5");
 		await chaySoanTuNguon(dang5.viec, dang5.kho);
 		await guiMaySoan(dang5.nguon.id, model.send);
 		await luiViec(dang5.viec.id, 60);
-		await db.taiLieuNguon.update({ where: { id: dang5.nguon.id }, data: { soanLuc: truoc(5) } });
+		await db.taiLieuNguon.update({
+			where: { id: dang5.nguon.id },
+			data: { soanLuc: truoc(5) },
+		});
 		const daSoan = await moi("daSoan", "quyet-dinh.docx", "DA_SOAN");
 		await completeTask(daSoan.viec.id, "thu");
 		await luiViec(daSoan.viec.id, 60);
@@ -96,14 +122,24 @@ describe("kn-dem-ket", () => {
 			where: { taiBoiId: nguoiId },
 			select: { trangThai: true },
 		});
-		expect(muc.map((m) => m.trangThai).sort()).toEqual(
-			["CAN_GO_TAY", "CHO_DOC", "CHO_DOC", "CHO_DOC", "CHO_SOAN", "DANG_SOAN", "DANG_SOAN", "DA_SOAN", "LOI", "LOI"],
-		);
+		expect(muc.map((m) => m.trangThai).sort()).toEqual([
+			"CAN_GO_TAY",
+			"CHO_DOC",
+			"CHO_DOC",
+			"CHO_DOC",
+			"CHO_SOAN",
+			"DANG_SOAN",
+			"DANG_SOAN",
+			"DA_SOAN",
+			"LOI",
+			"LOI",
+		]);
 		const anhTruoc = await chupAnh();
 		const kq = await demKet(db, BAY_GIO);
 		const anhSau = await chupAnh();
 		const sai: string[] = [];
-		if (kq.ket30.CHO_DOC !== 1) sai.push(`kn-dem-ket: ket30 sai o CHO_DOC (${kq.ket30.CHO_DOC})`);
+		if (kq.ket30.CHO_DOC !== 1)
+			sai.push(`kn-dem-ket: ket30 sai o CHO_DOC (${kq.ket30.CHO_DOC})`);
 		if (kq.ket30.DANG_SOAN !== 1 || !kq.nguonKet.includes(dang31.nguon.id)) {
 			sai.push(`kn-dem-ket: ket30 sai o DANG_SOAN (${kq.ket30.DANG_SOAN})`);
 		}
@@ -113,7 +149,12 @@ describe("kn-dem-ket", () => {
 			[doc40.nguon.id, soan45.nguon.id, dang31.nguon.id].sort(),
 		);
 		expect(kq.loi).toEqual({ docLoi: 1, moCoi: 1 });
-		expect(CAU.moCoi).toBe("Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.");
+		expect(CAU.moCoi).toBe(
+			"Kara dừng giữa chừng — bấm Soạn lại để thử lần nữa.",
+		);
+		expect(CAU.moCoiCu).toBe(
+			"Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.",
+		);
 		expect(anhSau).toBe(anhTruoc);
 	});
 });

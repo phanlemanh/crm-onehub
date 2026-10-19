@@ -2,7 +2,7 @@ import { db } from "@crm/db";
 import { ghiChiPhi } from "@crm/db/ai-chi-phi";
 import { defineHook } from "eve/hooks";
 import { z } from "zod";
-import { TRO_LY_OKR_SOAN } from "../lib/config";
+import { TRO_LY_OKR_HOI, TRO_LY_OKR_SOAN } from "../lib/config";
 import { thuocTinhPhien } from "../lib/phien";
 
 const so = z.number().refine(Number.isFinite).nullable().catch(null);
@@ -36,6 +36,8 @@ export default defineHook({
 			const b = buoc.parse(event);
 			if (!b?.data.usage) return;
 			const u = b.data.usage;
+			const p = thuocTinhPhien(ctx);
+			const laHoi = p.purpose === TRO_LY_OKR_HOI.purpose;
 			try {
 				await ghiChiPhi(db, {
 					id: b.meta.id,
@@ -43,8 +45,8 @@ export default defineHook({
 					sessionId: ctx.session.id,
 					phienCha: null,
 					kenh: ctx.channel.kind ?? null,
-					tinhNang: TRO_LY_OKR_SOAN.tinhNang,
-					taskId: thuocTinhPhien(ctx).cuocSoanId,
+					tinhNang: laHoi ? TRO_LY_OKR_HOI.tinhNang : TRO_LY_OKR_SOAN.tinhNang,
+					taskId: laHoi ? p.cuocHoiId : p.cuocSoanId,
 					modelId: null,
 					inputTokens: u.inputTokens ?? null,
 					cacheReadTokens: u.cacheReadTokens ?? null,

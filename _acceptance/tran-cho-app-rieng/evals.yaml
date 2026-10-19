@@ -1,0 +1,28 @@
+slug: tran-cho-app-rieng
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tca_cham_health
+    expected: "exit 0; rang/cham-health.mjs (chạy qua bun run test để có CSDL riêng) ghi một preload trong tmpdir bọc globalThis.fetch: URL chứa /eve/v1/health thì Bun.sleep(ms) rồi mới gọi; chạy bun test --preload <đó> -t «chạy cạnh apps/agent» trong apps/agent-okr. Ma trận viết trước 4 ô: sửa × {0, 6000 ms} mong xanh; trước-vòng × {0 xanh, 6000 ms đỏ}. Riêng ô trước-vòng 0 ms (đối chứng dương, chính là ca hay chập chờn khi máy nặng) thử lại tối đa 3 lần và in 'thu <n> lan'; các ô khác chạy đúng một lần. Lệnh chạy tuần tự trong lượt S4, không cạnh eval khác. Xanh = mã 0, đúng '1 pass', '0 fail'; đỏ = mã khác 0, '0 pass', ≥ 1 fail; dòng 'bo qua ca chay canh apps/agent' là ô lạ (bài không chạy). Ô lệch → 'SAI <bản> cham <ms> ms', mã 1. Chiều đỏ cùng mẫu chép vào evidence: bỏ đối số trần trong bản sửa thì 'SAI sua cham 6000 ms'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/test/app-rieng.integration.spec.ts, apps/agent-okr/test/support/khoi-dong.ts, "_acceptance/tran-cho-app-rieng/rang/cham-health.mjs"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tca_cham_health
+    expected: "exit 0; cùng lệnh E1 — ô trước-vòng 6000 ms phải đỏ VÀ đầu ra có 'timed out after 5000ms' (dòng 'thong diep ghim co'); ô trước-vòng 0 ms xanh làm đối chứng dương. Bản trước vòng rút bằng git show 3818ad4ec:apps/agent-okr/test/app-rieng.integration.spec.ts, ghi tạm thành apps/agent-okr/test/app-rieng-cu.tam.ts (ngoài mẫu tệp của bun test), xoá trong finally; sau lượt còn tệp .tam. trong apps/agent-okr/test thì 'SAI cay con tep tam'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/test/app-rieng.integration.spec.ts, apps/agent-okr/test/support/khoi-dong.ts, "_acceptance/tran-cho-app-rieng/rang/cham-health.mjs"]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tca_pham_vi
+    expected: "exit 0; rang/cham-health.mjs --pham-vi: git diff --name-only origin/onehub...HEAD bỏ _acceptance/**, docs/**, *.md, LO-TRINH.html còn đúng hai tệp app-rieng.integration.spec.ts và support/khoi-dong.ts; đối chứng âm thêm apps/agent-okr/agent/lib/tep-ngoai.ts phải không đạt. Trần là hằng: đối số cuối của khối test có tên bắt đầu «chạy cạnh apps/agent» (từ tên bài tới dòng '\t);' đóng khối) phải đúng biểu thức KHOI_DONG.baiHaiMay.tranMs; đối chứng âm: cùng nguồn thay biểu thức đó bằng 30_000 phải không đạt. Lệch thì 'KHONG DAT'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["**"]

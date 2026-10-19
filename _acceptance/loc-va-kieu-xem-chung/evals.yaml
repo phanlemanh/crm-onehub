@@ -1,0 +1,168 @@
+schema_version: 1
+slug: loc-va-kieu-xem-chung
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.lkx_dem
+    paths:
+      - "packages/ui/src/components/toggle-group.tsx"
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/view-switch.tsx"
+      - "packages/ui/test/loc-va-kieu-xem.dom.tsx"
+    expected: |
+      jsdom, packages/ui. Ma tran viet truoc 4 o: ToggleGroupItem count={3} -> [data-slot=toggle-group-item-count]
+      chua "3", class co text-muted-foreground va tabular-nums, khong class nao bat dau opacity-; count={0} -> chua "0";
+      khong count -> 0 phan tu; asChild + count -> 0 phan tu. Dem dung 4 o. DataTable that co facet va tabs, dem ba so:
+      [data-slot=facet-count] va so bo loc dang bat tren nut "Bo loc" deu khong class opacity-* va co text-muted-foreground.
+      ViewSwitch disabled: moi nut [data-view-switch=nut] button co disabled va SelectTrigger co disabled.
+      CHIEU DO (cung ham kiem, thanh phan gia): item gia ve span tabular-nums opacity-60 -> ghim
+      "lkx-dem: so dem mo bang opacity"; ViewSwitch gia bo disabled o o chon -> ghim "lkx-dem: o chon khong khoa".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.lkx_quet
+    paths:
+      - "apps/app/**/*.tsx"
+      - "apps/app/test/loc-va-kieu-xem.spec.ts"
+      - "apps/app/test/lib/quet-jsx.ts"
+    expected: |
+      Quet ma doc cay that tu goc kho (suy goc tu vi tri tep test), bo node_modules, .next, test/fixtures. Voi moi
+      phan tu JSX ToggleGroupItem: khong co con la phan tu (span, Badge) chua bieu thuc so dem (class tabular-nums),
+      tru dung tep apps/app/components/lo-trinh/trang-lo-trinh.tsx (danh sach mien tru mot tep, khai ten). Quan he:
+      so tep co ToggleGroupItem da quet > 0 va gom danh-muc-cong-cu.tsx, danh-sach-trang.tsx, viec-cua-toi.tsx; ba tep
+      nay moi tep co it nhat mot ToggleGroupItem mang prop count. Mien tru phai van con vi pham (tep lo-trinh van tu
+      dat so) — het vi pham thi do "lkx-quet: mien tru thua". CHIEU DO (cung ham quet, ban doc chen loi):
+      danh-muc-cong-cu.tsx tra lai span tabular-nums opacity-60 -> ghim
+      "lkx-quet: ToggleGroupItem tu dat so dem o apps/app/app/(app)/[slug]/onboarding/danh-muc-cong-cu.tsx".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.lkx_trang_thai
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/test/loc-va-kieu-xem.dom.tsx"
+    expected: |
+      jsdom, DealsTable that trong NuqsTestingAdapter (ghi lai moi lan cap nhat duong dan), truy van deals.list gia
+      theo hop dong that, facetCounts.status = { open: 4, closed: 2 }. Cho truy van tra ve (dem goi > 0) truoc khi
+      khang dinh. Kiem: [data-slot=toggle-group] co aria-label cua bo loc trang thai chua dung 3 muc theo thu tu
+      Tat ca · Dang mo · Da chot voi so 6 · 4 · 2 qua [data-slot=toggle-group-item-count]; khong co
+      [data-slot=dropdown-menu-trigger] nao cua bo loc trang thai. Dung tu "?page=2": truoc khi bam, duong dan co
+      page=2 (doi chung duong); bam "Da chot" -> lan cap nhat duong dan cuoi co status=closed va khong con page (ve 1).
+      CHIEU DO (ban gia khong dat lai trang): ghim "lkx-trang-thai: doi trang thai khong ve trang 1". CHIEU DO (cung ham kiem, DataTable gia giu menu tha): ghim
+      "lkx-trang-thai: thoa thuan loc trang thai bang menu tha".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.lkx_kieu_xem
+    paths:
+      - "packages/ui/src/components/view-switch.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/app/(app)/[slug]/onboarding/danh-muc-cong-cu.tsx"
+      - "apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx"
+      - "apps/app/test/loc-va-kieu-xem.dom.tsx"
+    expected: |
+      jsdom, NuqsTestingAdapter. Ma tran viet truoc 3 cong tac x 2 dang = 6 o: kieu xem Thoa thuan (view), cach xem
+      Onboarding (cachXem), Chia cot theo cua Onboarding o bang cot (cachChia); moi cong tac co dung mot
+      [data-view-switch=nut] va mot [data-view-switch=chon] mang aria-label cua no; bam nut thu hai cua nhom nut ->
+      duong dan co view=board / cachXem=bang-cot / cachChia=<gia tri thu hai cua DANH_MUC_CACH_CHIA>. Dem dung 6 o. Thoa
+      thuan voi archived=true: moi button trong nhom nut disabled va o chon disabled. CHIEU DO (cung ham kiem,
+      thanh phan gia ToggleGroup tu ghep): ghim "lkx-kieu-xem: thoa thuan khong dung ViewSwitch".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.lkx_tai_lieu
+    paths:
+      - "apps/app/app/(app)/[slug]/tai-lieu/danh-sach.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-trang.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-loc.ts"
+      - "apps/app/app/(app)/[slug]/tai-lieu/cho-duyet.tsx"
+      - "apps/app/app/(app)/[slug]/tai-lieu/tai-lieu-search-params.ts"
+      - "apps/app/test/loc-va-kieu-xem.dom.tsx"
+    expected: |
+      jsdom, NuqsTestingAdapter ghi lai duong dan, router gia dem moi lan push, truy van taiLieu.list va
+      taiLieu.proposals gia ghi lai dau vao. Ma tran viet truoc 7 hanh dong: chon loai, chon don vi, chon chu trang,
+      bat luu tru, xoa loc, sang trang 2, doi nhom de xuat. Moi hanh dong dung tu "?page=2" (tru sang trang 2, dung tu
+      khong page) va khang dinh truoc khi bam co page=2; sau khi bam: lan cap nhat duong dan cuoi mang dung khoa cua
+      taiLieuParsers (loai, donVi, chuTrang, archived, page, nhomDeXuat) voi gia tri dung; hanh dong doi bo loc (5 cai
+      dau va doi nhom) khong con page; truy van danh sach duoc goi lai TREN CUNG lan dung voi dau vao moi va hang hien
+      la hang cua lan tra moi (ten hang doi); router.push dem 0. Dem dung 7 o. Quan he voi bo doc may chu: duong dan cuoi qua loadTaiLieuSearchParams ra dung gia tri vua
+      chon. Href cua 4 the trang con bang createSerializer(taiLieuParsers) cua cung bo gia tri. Quet tep:
+      danh-sach-trang.tsx, cho-duyet.tsx khong chua "router.push"; danh-sach-loc.ts khong chua "URLSearchParams".
+      CHIEU DO (cung ham kiem, ban gia goi router.push(toi(...))): ghim "lkx-tai-lieu: chon loai di qua router.push";
+      (ban gia ghi duong dan nhung truy van van doc loai tu prop may chu) ghim
+      "lkx-tai-lieu: chon loai khong doi danh sach tren trang".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.lkx_duong_dan
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "apps/app/components/data-table/**"
+      - "apps/app/test/loc-va-kieu-xem.dom.tsx"
+    expected: |
+      jsdom. Ma tran viet truoc 5 o: Thoa thuan bang "?status=closed&page=2", Thoa thuan bang cot "?view=board",
+      Onboarding "?trangThai=da-dong&cachXem=bang-cot&cachChia=<gia tri thu hai>", Tai lieu
+      "?loai=<loai thu hai>&donVi=dv1&chuTrang=u1&archived=true&page=2", Tai lieu cho duyet "?tabTaiLieu=cho-duyet&nhomDeXuat=da-xu-ly&page=2".
+      Hai o Tai lieu la chuoi truy van CHEP TAY dung khoa cua SEARCH_PARAM tren c1864a3a2 (khong qua serializer moi).
+      Moi man dung tu searchParams cua NuqsTestingAdapter (khong state nao khac): chip dang chon, ViewSwitch,
+      Combobox, nut luu tru doc dung gia tri cua duong dan; truy van danh sach gia nhan dung bo loc (status, page,
+      trangThai, loai, donViId, chuTrangId, archived) — dem goi > 0 truoc khi khang dinh. Vong khu hoi: bam doi mot
+      bo loc, lay duong dan cuoi, dung lai man moi tu duong dan do -> trang thai dieu khien va dau vao truy van bang
+      lan dau sau thao tac. Dem dung 5 o. CHIEU DO (ban gia Thoa thuan doc view tu mac dinh): ghim
+      "lkx-duong-dan: thoa thuan mo duong dan mat bang cot". CHIEU DO (cung ham kiem, Tai lieu gia doc loai tu useState khoi tao
+      null): ghim "lkx-duong-dan: tai lieu mo duong dan mat loai".
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lkx_man
+    steps:
+      - "Phien do rieng (tien-de.mjs); dang nhap dev:session quan tri; gieo du lieu mau qua duong ghi that: thoa thuan mo va da chot (deals.create, deals.update), mot ke hoach onboarding dang chay va mot da dong, ba trang tai lieu khac loai"
+      - "Buoc 1 (360, 1280 x Thoa thuan, Onboarding, Tai lieu): o 360 Thoa thuan bam nut Bo loc de mo khoi loc gap truoc khi chup va do (man duy nhat co khoi gap); chup lkx-<man>-<kho>.png; moi so dem trong chip: mau chu bang mau --muted-foreground cua trang, opacity tinh ra 1; ViewSwitch: o 360 [data-view-switch=chon] hien, nut an; o 1280 nguoc lai (Tai lieu khong co ViewSwitch); document.scrollingElement.scrollWidth <= be rong kho (vung cuon ngang ben trong bang DataTable va hang chip khong tinh)"
+      - "Buoc 1b (1280, Tai lieu): doc ten hang dau, bam chip loai khac TREN CUNG trang (khong dieu huong lai), cho danh sach doi, ten hang dau khac truoc va so muc performance.getEntriesByType navigation khong tang"
+      - "Buoc 2: o 1280 chon mot bo loc o moi man, doc location.href, mo trang moi (cung phien) voi href do, doc lai dieu khien dang chon"
+    paths:
+      - "packages/ui/src/components/toggle-group.tsx"
+      - "packages/ui/src/components/view-switch.tsx"
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/app/(app)/[slug]/tai-lieu/**"
+      - "_acceptance/loc-va-kieu-xem-chung/rang/chup-loc.mjs"
+    expected: "exit 0; chup-loc.mjs in 'buoc N: dat' cho 3 buoc, mot dong so do moi anh (moi so dem: chu, mau, opacity; ViewSwitch: dang hien). Dem du 6 anh; thieu so dem hay thieu hop -> do. Anh o .acceptance-runs/loc-va-kieu-xem-chung/evidence/, vong S4 chep sang _acceptance/loc-va-kieu-xem-chung/evidence/. CHIEU DO (--chieu-do tren ban sao): (1) ToggleGroupItem ve so dem opacity-60 -> ghim 'lkx-man: thoa thuan 1280 so dem mo', ma 1; (2) deals-table tra lai ToggleGroup kieu xem -> ghim 'lkx-man: thoa thuan 360 khong co o chon kieu xem', ma 1; (3) danh-sach-trang doc loai tu useState -> ghim 'lkx-man: tai lieu mo duong dan mat loai', ma 1; (4) truy van danh sach Tai lieu doc loai tu prop may chu -> ghim 'lkx-man: tai lieu bam chip danh sach dung yen', ma 1."
+
+  - id: E7m
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.lkx_man_do
+    paths:
+      - "_acceptance/loc-va-kieu-xem-chung/rang/chup-loc.mjs"
+    expected: "exit 0; chup-loc.mjs --chi-do chay bon chieu do cua E7 tren ban sao rieng (CONG_SAO), moi chieu ra dung thong diep ghim va ma 1, roi in 'phien-do: xong — mã 0'. Thieu mot chieu, hay mot chieu ra ma 0 -> do."
+
+  - id: E7j
+    criterion: AC-7
+    executor: judgment
+    inputs:
+      - "_acceptance/loc-va-kieu-xem-chung/evidence/lkx-thoa-thuan-1280.png"
+      - "_acceptance/loc-va-kieu-xem-chung/evidence/lkx-thoa-thuan-360.png"
+      - "_acceptance/loc-va-kieu-xem-chung/evidence/lkx-onboarding-1280.png"
+      - "_acceptance/loc-va-kieu-xem-chung/evidence/lkx-onboarding-360.png"
+      - "_acceptance/loc-va-kieu-xem-chung/evidence/lkx-tai-lieu-1280.png"
+      - "_acceptance/loc-va-kieu-xem-chung/evidence/lkx-tai-lieu-360.png"
+      - "docs/superpowers/specs/2026-10-14-loc-va-kieu-xem-chung-design.md"
+    question: |
+      Tren sau anh (ba man x hai kho): (1) chip loc cua ba man co cung dang (vien, co chu, khoang dem) va so dem trong
+      chip la chu phu, khong mo nhoe; (2) chuyen kieu xem o Thoa thuan va Onboarding cung mot dang — nhom nut o 1280,
+      o chon o 360; (3) o 360, ngoai hai vung cuon ngang da khai trong design doc (bang DataTable va hang chip trong khoi loc), khong phan tu nao bi cat ngoai mep man; (4) doi chieu bang trang thai cua design doc
+      (ST-thoa-thuan-loc, ST-onboarding-loc, ST-tai-lieu-loc): anh co hien dung nhung gi bang ghi khong.

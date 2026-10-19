@@ -53,7 +53,24 @@ function fm(t) {
   }
   return o;
 }
-const ngayCua = s => { const m = chu(s).match(/(?<!\d)(\d{4}-\d{2}-\d{2})(?!\d)/); return m ? m[1] : null; };
+// Ngày của một chữ ký / một mốc — MỘT bộ đọc cho bốn mặt đọc ngày ký (dải tóm tắt, câu cho người gửi của
+// tin-hieu.mjs, bảng điều khiển mở phiên của start-scan.mjs, nhịp của cat-luot.mjs — hồ sơ bo-doc-ho-so-khoan-dung).
+// Luật: năm-tháng-ngày ĐẦU TIÊN thắng bất kể vị trí, không kiểm lịch — giữ từng byte đầu ra cũ trên mọi chữ ký có
+// dạng ấy; chỉ khi vắng mới đọc ngày/tháng/năm (d/m/yyyy, ngày trước tháng — lối Việt), kiểm lịch thật (31/02 bỏ).
+// Trả 'YYYY-MM-DD' hoặc null. Giới hạn đã khai: chữ ký kiểu Mỹ tháng/ngày đọc sai khi ngày ≤ 12.
+function ngayChuKy(s) {
+  const t = s == null ? '' : String(s);
+  const m = t.match(/(?<!\d)(\d{4}-\d{2}-\d{2})(?!\d)/);
+  if (m) return m[1];
+  const re = /(?<![\d/])(\d{1,2})\/(\d{1,2})\/(\d{4})(?![\d/])/g;
+  for (let x = re.exec(t); x; x = re.exec(t)) {
+    const d = Number(x[1]); const mo = Number(x[2]); const y = Number(x[3]);
+    const lich = new Date(Date.UTC(y, mo - 1, d));
+    if (mo >= 1 && mo <= 12 && d >= 1 && lich.getUTCFullYear() === y && lich.getUTCMonth() === mo - 1 && lich.getUTCDate() === d) return `${x[3]}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+  return null;
+}
+const ngayCua = s => ngayChuKy(chu(s));
 // Chữ trơn cho dải: bỏ dấu nhấn markdown (`**`, backtick) — bản chiếu ngoài kho không vẽ markdown.
 const tron = s => (s == null ? s : String(s).replace(/\*\*(.+?)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1'));
 
@@ -442,4 +459,4 @@ function tomTatHoSo(dir, opts = {}) {
   return { dai: { moi_nguoi: moi, chu_kho: ck }, nguon, thieu, chiTiet };
 }
 
-module.exports = { docGioiHanBaoCao, O_MOI_NGUOI, O_CHU_KHO, TRAN_VI_SAO, nhanhProduction, trienKhai, boNgoacNgoai, laNguoi, docSo, docUsage, viSaoTu, gioiHanTuNotes, docGioiHanNotes, tieuChiCua, tomTatHoSo };
+module.exports = { ngayChuKy, docGioiHanBaoCao, O_MOI_NGUOI, O_CHU_KHO, TRAN_VI_SAO, nhanhProduction, trienKhai, boNgoacNgoai, laNguoi, docSo, docUsage, viSaoTu, gioiHanTuNotes, docGioiHanNotes, tieuChiCua, tomTatHoSo };

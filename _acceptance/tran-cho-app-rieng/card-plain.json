@@ -1,0 +1,22 @@
+{
+  "feature_plain": "Bài kiểm khởi động Soạn OKR cạnh agent chính thôi hết giờ oan khi máy đang nặng, để làn ghim lại của #406 không hỏng mãi.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho bài kiểm hai máy chạy cạnh nhau qua được ngay cả khi lần hỏi trạng thái đầu tiên chậm thêm 6 giây."},
+    {"id": "AC-2", "p": "Sẽ chứng bản cũ hết giờ đúng như lỗi đã thấy khi bị làm chậm cùng mức, và qua khi không bị làm chậm."},
+    {"id": "AC-3", "p": "Sẽ chỉ đổi hai tệp bài kiểm, và trần chờ lấy từ một hằng đặt tên trong cấu hình của bài kiểm, không viết số tại chỗ."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG nâng trần cho các bài khác trong cùng tệp; chúng chưa từng hết giờ."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG tìm vì sao lần hỏi đầu tiên chậm, và không đổi mã chạy thật."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ hai mức chậm của lần hỏi trạng thái (không chậm, chậm hơn trần cũ) cho cả bản sửa lẫn bản cũ — đo ở AC-1 và AC-2."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ca đối chứng «bản cũ, không làm chậm» chính là ca hay chập chờn khi máy nặng, nên có thể đỏ oan. Đã sửa: riêng ca đó được thử lại tối đa ba lần và in số lần thử."},
+    {"i": 1, "p": "Sổ ghi bỏ bước đo nền như thể không còn cách nào, trong khi vẫn chạy được trên bản sạch. Đã sửa: thành câu hỏi cho người (Hỏi-2)."},
+    {"i": 2, "p": "Sổ dẫn luật «hằng đặt ở module cấu hình» như thể nó quyết luôn trần riêng 30 giây. Đã sửa: tách thành câu hỏi riêng cho phạm vi và con số (Hỏi-1)."},
+    {"i": 3, "p": "Thước phạm vi chỉ dò xem tên hằng có xuất hiện không. Đã sửa: đọc đúng đối số của bài đó, và chứng rằng viết số 30 000 tại chỗ thì thước báo không đạt."},
+    {"i": 4, "p": "Sổ nói cách làm chậm là lối duy nhất mà chưa nêu các lối khác. Đã sửa: nêu lối chèn proxy và lối ép tải máy, cùng lý do chúng không dùng được."}
+  ]
+}

@@ -3,6 +3,7 @@ import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { TAI_LIEU_HOI } from "@crm/validation/tai-lieu-hoi";
 import { WORKSPACE_ROLES } from "@crm/validation/vai-workspace";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
@@ -196,9 +197,11 @@ async function mo(con: ReactNode): Promise<HTMLElement> {
 	});
 	await act(async () => {
 		root?.render(
-			<QueryClientProvider client={qc}>
-				<LocaleProvider locale="vi">{con}</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter hasMemory>
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale="vi">{con}</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	await cho();
@@ -252,7 +255,7 @@ describe("tlk-man-hoi", () => {
 			"Hỏi về quy định, chính sách, quy trình hay biểu mẫu của OneHub.",
 		);
 		expect(goc.textContent).toContain(
-			"Trợ lý AI chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
+			"Kara chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
 		);
 		expect(goc.querySelectorAll("[data-goi-y] button")).toHaveLength(3);
 		expect(oNhap(goc).disabled).toBe(false);
@@ -263,7 +266,7 @@ describe("tlk-man-hoi", () => {
 		const cau = await hoiGoiY(goc);
 		expect(canh.goiHoi).toEqual([cau]);
 		expect(goc.textContent).toContain(cau);
-		expect(goc.textContent).toContain("Trợ lý AI đang đọc kho…");
+		expect(goc.textContent).toContain("Kara đang đọc kho…");
 	});
 
 	test("tlk-man-hoi: ST-hoi-tra-loi dung tung y tu traLoi da kiem, trich duoi tung y, bao sai thanh da bao sai", async () => {
@@ -294,7 +297,7 @@ describe("tlk-man-hoi", () => {
 		});
 		expect(y[0]?.textContent).toContain("05/09/2026");
 		expect(goc.querySelector("[data-nhan-tra-loi]")?.textContent).toBe(
-			"Trợ lý AI · theo bản đang dùng",
+			"Kara · theo bản đang dùng",
 		);
 		expect(goc.querySelector("[aria-live=polite]")?.textContent).toContain(
 			TRA_LOI.traLoi.cau[0]?.chu ?? "x",
@@ -404,9 +407,7 @@ describe("tlk-man-hoi", () => {
 
 	test("tlk-man-hoi: vai okr khong co tab Hoi, vai khac co", async () => {
 		const tab = async (vai: string | null) => {
-			const goc = await mo(
-				<DanhSach coHoi={coHoiCuaVai(vai)} loai={null} page={1} tab="trang" />,
-			);
+			const goc = await mo(<DanhSach coHoi={coHoiCuaVai(vai)} />);
 			const ten = [...goc.querySelectorAll("[role=tablist] a")].map((a) =>
 				a.textContent?.trim(),
 			);

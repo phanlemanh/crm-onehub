@@ -1,0 +1,1479 @@
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] on   Company brand data (Settings → General)
+[agent] on   LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] on   Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] on   Company brand data (Settings → General)
+[agent] on   LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] on   Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+
+EVALS 2
+target http://127.0.0.1:50726/
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] on   Company brand data (Settings → General)
+[agent] on   LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] on   Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] on   Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] on   Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[tro-ly-kho/cham-bo-do/0001] m02: zaloHoi.sessionId sau 503 ms
+[tro-ly-kho/cham-bo-do/0001] m01: zaloHoi.sessionId sau 505 ms
+[tro-ly-kho/cham-bo-do/0001] m03: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m04: zaloHoi.sessionId sau 501 ms
+[tro-ly-kho/cham-bo-do/0001] m05: zaloHoi.sessionId sau 503 ms
+[tro-ly-kho/cham-bo-do/0001] m06: zaloHoi.sessionId sau 502 ms
+[lien-ket-hoi] zalo cmvallon90004vvtyrdqxrmkw -> wrun_01M51Q0ZNC801D05ABGCBSPY29
+[lien-ket-hoi] zalo cmvallona0005vvtyyvj1fdc2 -> wrun_01M51Q0ZNE2CZHR3AXC1FJCJMB
+[lien-ket-hoi] zalo cmvallomz0001vvty9s90ij5y -> wrun_01M51Q0ZNE2CZHR3AXC1FJCJMA
+[lien-ket-hoi] zalo cmvallomy0000vvtyht6s1s1s -> wrun_01M51Q0ZNE2CZHR3AXC1FJCJMD
+[lien-ket-hoi] zalo cmvallon80003vvtyi758gl16 -> wrun_01M51Q0ZNDH8AKM7VB8TXCX2XB
+[lien-ket-hoi] kho cmvallolv0000vvty9nj37ti4 -> wrun_01M51Q0ZNE2CZHR3AXC1FJCJMC
+[lien-ket-hoi] kho cmvallolv0001vvtyh1lwr2rg -> wrun_01M51Q0ZNFCTXK22NZ0WS23KHF
+[lien-ket-hoi] kho cmvallolv0002vvty79h4a39t -> wrun_01M51Q0ZNFCTXK22NZ0WS23KHG
+[lien-ket-hoi] kho cmvallolw0004vvtye7c67zlu -> wrun_01M51Q0ZNFCTXK22NZ0WS23KHK
+[lien-ket-hoi] zalo cmvallon20002vvtyg7lq5uyq -> wrun_01M51Q0ZNFCTXK22NZ0WS23KHJ
+[lien-ket-hoi] kho cmvallolw0005vvty3s9will5 -> wrun_01M51Q0ZNFCTXK22NZ0WS23KHH
+[lien-ket-hoi] kho cmvallolw0003vvty68r8gzgh -> wrun_01M51Q0ZNG2EH95X4HK9N7GFT3
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find /workspace -type f
+eve: sandbox command finished (exit 0): find /workspace -type f
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: pwd && ls -la
+eve: sandbox command finished (exit 0): pwd && ls -la
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la $HOME/.agents/skills/
+eve: sandbox command finished (exit 0): ls -la $HOME/.agents/skills/
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la
+eve: sandbox command finished (exit 0): ls -la
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: cat README.md
+eve: sandbox command finished (exit 0): cat README.md
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la $HOME/.agents/skills
+eve: sandbox command finished (exit 0): ls -la $HOME/.agents/skills
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find $HOME -maxdepth 3
+eve: sandbox command finished (exit 0): find $HOME -maxdepth 3
+[lien-ket-hoi] kho cmvalmlv1000avvty178g80zm -> wrun_01M51Q29RTV39BAPJ254X62H55
+[lien-ket-hoi] kho cmvalmlv10006vvtynt5gi4mj -> wrun_01M51Q29RSG5DAH2CCQFB48XFP
+[lien-ket-hoi] kho cmvalmlv10007vvty8y48h8u2 -> wrun_01M51Q2A1NXFP6K5QP4VTQHN40
+[lien-ket-hoi] kho cmvalmlv10009vvtyzw6df2t0 -> wrun_01M51Q2A1PC804F688C7WDDB5H
+[lien-ket-hoi] kho cmvalmlv1000bvvty7ckqn6d2 -> wrun_01M51Q2A1RTW8XZPK179W2PGAF
+[lien-ket-hoi] kho cmvalmlv10008vvtydjr1mg7y -> wrun_01M51Q2A6SPN6NJGB61M78QTDF
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: cat README.md
+eve: sandbox command finished (exit 0): cat README.md
+[tro-ly-kho/cham-bo-do/0001] m09: zaloHoi.sessionId sau 2013 ms
+[tro-ly-kho/cham-bo-do/0001] m10: zaloHoi.sessionId sau 2013 ms
+[tro-ly-kho/cham-bo-do/0001] m08: zaloHoi.sessionId sau 2013 ms
+[tro-ly-kho/cham-bo-do/0001] m12: zaloHoi.sessionId sau 2018 ms
+[tro-ly-kho/cham-bo-do/0001] m07: zaloHoi.sessionId sau 2282 ms
+[tro-ly-kho/cham-bo-do/0001] m11: zaloHoi.sessionId sau 2018 ms
+[lien-ket-hoi] zalo cmvalmw5k000fvvtykz4vle9m -> wrun_01M51Q2R5NDV7A4KH724CSAWKY
+[lien-ket-hoi] zalo cmvalmwbp000gvvtytuaqzmsf -> wrun_01M51Q2R5PCQJH7TX12YPW5XY2
+[lien-ket-hoi] zalo cmvalmw5k000evvtydpn5bxqf -> wrun_01M51Q2R5NDV7A4KH724CSAWKX
+[lien-ket-hoi] zalo cmvalmw5j000dvvty790jiqfh -> wrun_01M51Q2R5PCQJH7TX12YPW5XY0
+[lien-ket-hoi] zalo cmvalmw5j000cvvty1cn940fz -> wrun_01M51Q2R5PCQJH7TX12YPW5XY1
+[lien-ket-hoi] zalo cmvalmwbp000hvvtyr5tvl0sq -> wrun_01M51Q2R5QHFY5X1YTKGERBEWB
+[lien-ket-hoi] kho cmvalne8j000evvty2wn8z8v2 -> wrun_01M51Q3E6736B8Y1263MFNV3BQ
+[lien-ket-hoi] kho cmvalne8j000gvvty3ybawtjg -> wrun_01M51Q3E6736B8Y1263MFNV3BP
+[lien-ket-hoi] kho cmvalne8j000dvvtyoqxt4egk -> wrun_01M51Q3E68R86D7S7139YTYFA0
+[lien-ket-hoi] kho cmvalne8j000fvvtyd9r9s2va -> wrun_01M51Q3E6736B8Y1263MFNV3BN
+[lien-ket-hoi] kho cmvalne8j000cvvty4f187wb1 -> wrun_01M51Q3E68R86D7S7139YTYF9Z
+[lien-ket-hoi] kho cmvalne8j000hvvtynyovfaeq -> wrun_01M51Q3E691V5ZSX70ZF40JTDZ
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: git log -n 5 2>/dev/null || echo "no git"
+eve: sandbox command finished (exit 0): git log -n 5 2>/dev/null || echo "no git"
+[tro-ly-kho/cham-bo-do/0001] m16: zaloHoi.sessionId sau 2176 ms
+[tro-ly-kho/cham-bo-do/0001] m17: zaloHoi.sessionId sau 2512 ms
+[tro-ly-kho/cham-bo-do/0001] m14: zaloHoi.sessionId sau 2517 ms
+[tro-ly-kho/cham-bo-do/0001] m15: zaloHoi.sessionId sau 2517 ms
+[tro-ly-kho/cham-bo-do/0001] m13: zaloHoi.sessionId sau 2518 ms
+[tro-ly-kho/cham-bo-do/0001] m18: zaloHoi.sessionId sau 2517 ms
+[lien-ket-hoi] zalo cmvalnx7h000rvvty42qm7jif -> wrun_01M51Q478FM91C220WBCBC6GTQ
+[lien-ket-hoi] zalo cmvalnx76000qvvtyxip28705 -> wrun_01M51Q478G6J1T0853BPSY85X4
+[lien-ket-hoi] zalo cmvalnx7n000svvtyoyadubvd -> wrun_01M51Q478G6J1T0853BPSY85X5
+[lien-ket-hoi] zalo cmvalnx75000ovvty0b2kpo9u -> wrun_01M51Q478G6J1T0853BPSY85X6
+[lien-ket-hoi] zalo cmvalnx76000pvvtyr8wq5six -> wrun_01M51Q478FM91C220WBCBC6GTP
+[lien-ket-hoi] zalo cmvalnx7n000tvvtyj5xsgzmd -> wrun_01M51Q478HF3Y3GDSM3MB7TTBJ
+[lien-ket-hoi] kho cmvalo76j000jvvtya5cxvcp7 -> wrun_01M51Q4NYM150DA4G028S4067Z
+[lien-ket-hoi] kho cmvalo76j000lvvtyiy1r2ht3 -> wrun_01M51Q4NYM150DA4G028S4067Y
+[lien-ket-hoi] kho cmvalo76j000mvvty6epg1txn -> wrun_01M51Q4NYM150DA4G028S40680
+[lien-ket-hoi] kho cmvalo76j000nvvtyma0cpmb9 -> wrun_01M51Q4NYN4TZDZ5VQ063F1XC2
+[lien-ket-hoi] kho cmvalo76j000ivvtygd1wrulo -> wrun_01M51Q4NYN4TZDZ5VQ063F1XC0
+[lien-ket-hoi] kho cmvalo76j000kvvtyctuxaarc -> wrun_01M51Q4NYN4TZDZ5VQ063F1XC1
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: git log -p -n 3
+eve: sandbox command finished (exit 128): git log -p -n 3
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace $HOME/.agents/skills
+eve: sandbox command finished (exit 0): ls -la /workspace $HOME/.agents/skills
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la ~/.agents/skills/
+eve: sandbox command finished (exit 0): ls -la ~/.agents/skills/
+[tro-ly-kho/cham-bo-do/0001] m20: zaloHoi.sessionId sau 503 ms
+[tro-ly-kho/cham-bo-do/0001] m24: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m19: zaloHoi.sessionId sau 509 ms
+[tro-ly-kho/cham-bo-do/0001] m22: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m21: zaloHoi.sessionId sau 515 ms
+[tro-ly-kho/cham-bo-do/0001] m23: zaloHoi.sessionId sau 515 ms
+[lien-ket-hoi] zalo cmvalpjd60011vvty4ws56ak0 -> wrun_01M51Q6F4J4MPE6BY3394H4P2C
+[lien-ket-hoi] zalo cmvalpjdc0015vvty4u4dyltx -> wrun_01M51Q6F4KZEPDDGE41M51E6DM
+[lien-ket-hoi] zalo cmvalpjd60010vvtykfml5eeg -> wrun_01M51Q6F4KZEPDDGE41M51E6DJ
+[lien-ket-hoi] zalo cmvalpjdb0012vvtyckaqx2w0 -> wrun_01M51Q6F4KZEPDDGE41M51E6DK
+[lien-ket-hoi] zalo cmvalpjdc0014vvty35fwcysd -> wrun_01M51Q6F4N8EGAT6PV308KZX8F
+[lien-ket-hoi] zalo cmvalpjdc0013vvtyw340x8aq -> wrun_01M51Q6F4M6NAY8XH2WRG0YJRQ
+[lien-ket-hoi] kho cmvalpyxs000svvtyyrtldy6o -> wrun_01M51Q72YHKFMQ3G1YRSDV2RMP
+[lien-ket-hoi] kho cmvalpyxs000pvvtywbndb9pb -> wrun_01M51Q72YGDMNKSHE5ZPJ8TC1H
+[lien-ket-hoi] kho cmvalpyxr000ovvtyvt1w40w5 -> wrun_01M51Q72YHKFMQ3G1YRSDV2RMQ
+[lien-ket-hoi] kho cmvalpyxs000qvvtyzf1rnt3u -> wrun_01M51Q72YGDMNKSHE5ZPJ8TC1G
+[lien-ket-hoi] kho cmvalpyxs000rvvty5bjx544a -> wrun_01M51Q72YXCCAVJA9QYQPYYT71
+[lien-ket-hoi] kho cmvalpyxs000tvvtyxbmkgdmk -> wrun_01M51Q72YXCCAVJA9QYQPYYT72
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: git log -n 5
+eve: sandbox command finished (exit 128): git log -n 5
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la; ls -la $HOME
+eve: sandbox command finished (exit 0): ls -la; ls -la $HOME
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find $HOME/.agents -type f
+eve: sandbox command finished (exit 0): find $HOME/.agents -type f
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: git log -n 5
+eve: sandbox command finished (exit 128): git log -n 5
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace $HOME $HOME/.agents
+eve: sandbox command finished (exit 0): ls -la /workspace $HOME $HOME/.agents
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+[lien-ket-hoi] kho cmvalrjt3000xvvtysxnpehpx -> wrun_01M51Q9ASFNB3Z04EX66NZAH2F
+[lien-ket-hoi] kho cmvalrjt3000wvvtymaqez5sz -> wrun_01M51Q9ASR6M8CDKWDC23SKAXQ
+[lien-ket-hoi] kho cmvalrjt3000zvvtywrwzfnu4 -> wrun_01M51Q9ASR6M8CDKWDC23SKAXR
+[lien-ket-hoi] kho cmvalrjt3000vvvtyp0x62pg8 -> wrun_01M51Q9ASR6M8CDKWDC23SKAXS
+[lien-ket-hoi] kho cmvalrjt3000yvvtygwmo31w1 -> wrun_01M51Q9ASEZMRJKVAFE7AQW997
+[lien-ket-hoi] kho cmvalrjt3000uvvtydi45elwl -> wrun_01M51Q9AXJA79DV7SQ0T6R69CF
+[tro-ly-kho/cham-bo-do/0001] m28: zaloHoi.sessionId sau 504 ms
+[tro-ly-kho/cham-bo-do/0001] m25: zaloHoi.sessionId sau 504 ms
+[tro-ly-kho/cham-bo-do/0001] m30: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m29: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m27: zaloHoi.sessionId sau 515 ms
+[tro-ly-kho/cham-bo-do/0001] m26: zaloHoi.sessionId sau 516 ms
+[lien-ket-hoi] zalo cmvalsa3g001evvtymzkghlv9 -> wrun_01M51QAC2F2Q76E3T0PNBQKB9Y
+[lien-ket-hoi] zalo cmvalsa3g001dvvty5uzlqkxq -> wrun_01M51QAC2F2Q76E3T0PNBQKB9X
+[lien-ket-hoi] zalo cmvalsa3g001cvvtyzalhvpt8 -> wrun_01M51QAC2ERJ98XPKQXEQHZPSQ
+[lien-ket-hoi] zalo cmvalsa3p001gvvty1mrjpl8y -> wrun_01M51QAC2G0Y8G5WE2PTP2GTZX
+[lien-ket-hoi] zalo cmvalsa3p001hvvtyvqe13jka -> wrun_01M51QAC2F2Q76E3T0PNBQKB9Z
+[lien-ket-hoi] zalo cmvalsa3h001fvvty0l5j16ou -> wrun_01M51QAC2G0Y8G5WE2PTP2GTZW
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: grep -rn "tro_ly_kho" /workspace $HOME/.agents 2>/dev/null || true
+eve: sandbox command finished (exit 0): grep -rn "tro_ly_kho" /workspace $HOME/.agents 2>/dev/null || true
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: grep -rn "tro_ly_kho" /workspace
+eve: sandbox command finished (exit 1): grep -rn "tro_ly_kho" /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find / -name "*tro_ly_kho*" 2>/dev/null
+eve: sandbox command finished (exit 1): find / -name "*tro_ly_kho*" 2>/dev/null
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find $HOME -maxdepth 3 2>/dev/null
+eve: sandbox command finished (exit 0): find $HOME -maxdepth 3 2>/dev/null
+[lien-ket-hoi] kho cmvaltmib0012vvtyz49iillr -> wrun_01M51QC9DPZ64K65PT9Y24GN9E
+[lien-ket-hoi] kho cmvaltmib0014vvtydcompx7q -> wrun_01M51QC9DNA2BNFNQBWMBJH5J3
+[lien-ket-hoi] kho cmvaltmib0015vvtyrw0u2ph9 -> wrun_01M51QC9DRVQJC72MFMXZACQVZ
+[lien-ket-hoi] kho cmvaltmib0011vvtyycx9pv37 -> wrun_01M51QC9DQ1R4A1NWFQ0MEE8NR
+[lien-ket-hoi] kho cmvaltmib0010vvty0l43c8wr -> wrun_01M51QC9DQ1R4A1NWFQ0MEE8NS
+[lien-ket-hoi] kho cmvaltmib0013vvtycq4487wx -> wrun_01M51QC9DRVQJC72MFMXZACQVY
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find / -name "*tro_ly_kho*" 2>/dev/null
+eve: sandbox command finished (exit 1): find / -name "*tro_ly_kho*" 2>/dev/null
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find $HOME -maxdepth 4
+eve: sandbox command finished (exit 0): find $HOME -maxdepth 4
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la $HOME/.agents/skills
+eve: sandbox command finished (exit 0): ls -la $HOME/.agents/skills
+eve: opening sandbox session "root" on backend "docker"...
+[lien-ket-hoi] kho cmvaluew50017vvtyhd9vi1ug -> wrun_01M51QDD8GP9G9PTQJDG4MC60S
+[lien-ket-hoi] kho cmvaluew50016vvtywisfk75t -> wrun_01M51QDD8FQKPXNRF74X04TMRS
+[lien-ket-hoi] kho cmvaluew50019vvtyoe9wir3k -> wrun_01M51QDD8QD0NZMFKK2238FJYM
+[lien-ket-hoi] kho cmvaluew50018vvtysnxyq6ew -> wrun_01M51QDD8QD0NZMFKK2238FJYN
+[tro-ly-kho/cham-bo-do/0001] m33: zaloHoi.sessionId sau 3546 ms
+[tro-ly-kho/cham-bo-do/0001] m35: zaloHoi.sessionId sau 3546 ms
+[tro-ly-kho/cham-bo-do/0001] m36: zaloHoi.sessionId sau 3545 ms
+[tro-ly-kho/cham-bo-do/0001] m32: zaloHoi.sessionId sau 3546 ms
+[tro-ly-kho/cham-bo-do/0001] m34: zaloHoi.sessionId sau 3546 ms
+[tro-ly-kho/cham-bo-do/0001] m31: zaloHoi.sessionId sau 4111 ms
+[lien-ket-hoi] zalo cmvalukmj001qvvtyertmnsqk -> wrun_01M51QDQ8KMQTN2C5K9Z0SXJW4
+[lien-ket-hoi] zalo cmvalukmj001pvvtyh97mzjfv -> wrun_01M51QDQ8N7356DGHKNYMDGVBX
+[lien-ket-hoi] zalo cmvalukmk001rvvty0pakinby -> wrun_01M51QDQ8N7356DGHKNYMDGVBW
+[lien-ket-hoi] zalo cmvalukml001svvty27u4018q -> wrun_01M51QDQ8N7356DGHKNYMDGVBV
+[lien-ket-hoi] zalo cmvalukmr001tvvtyovzshqgt -> wrun_01M51QDQ8N7356DGHKNYMDGVBY
+[lien-ket-hoi] zalo cmvalukfq001ovvtyo8lxfcv0 -> wrun_01M51QDQ8MZVMWXX7XSRHGB6BP
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: git status || true; ls -la; find . -maxdepth 3
+eve: sandbox command finished (exit 0): git status || true; ls -la; find . -maxdepth 3
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find $HOME -maxdepth 4
+eve: sandbox command finished (exit 0): find $HOME -maxdepth 4
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la $HOME/.agents/skills
+eve: sandbox command finished (exit 0): ls -la $HOME/.agents/skills
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: env
+eve: sandbox command finished (exit 0): env
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+[tro-ly-kho/cham-bo-do/0001] m37: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m42: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m40: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m41: zaloHoi.sessionId sau 501 ms
+[tro-ly-kho/cham-bo-do/0001] m38: zaloHoi.sessionId sau 507 ms
+[tro-ly-kho/cham-bo-do/0001] m39: zaloHoi.sessionId sau 508 ms
+[lien-ket-hoi] zalo cmvalxbha0023vvty2pvkiipn -> wrun_01M51QHHJT1ZX6ZR6ST55HEBSD
+[lien-ket-hoi] zalo cmvalxbha0024vvty6x5who20 -> wrun_01M51QHHJVKZMN7YBBTKJHKZ3B
+[lien-ket-hoi] zalo cmvalxbh90022vvtys7fkqc2a -> wrun_01M51QHHJVKZMN7YBBTKJHKZ3D
+[lien-ket-hoi] zalo cmvalxbh90021vvtyc2dm5be7 -> wrun_01M51QHHJWKJ1YFB5DGNVS6D25
+[lien-ket-hoi] zalo cmvalxbh60020vvty2mbnnfmw -> wrun_01M51QHHJVKZMN7YBBTKJHKZ3C
+[lien-ket-hoi] zalo cmvalxbha0025vvty2cjcwxg7 -> wrun_01M51QHHJVKZMN7YBBTKJHKZ3E
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find /workspace -maxdepth 3
+eve: sandbox command finished (exit 0): find /workspace -maxdepth 3
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: rg -i "tro_ly_kho" /workspace || true
+eve: sandbox command finished (exit 0): rg -i "tro_ly_kho" /workspace || true
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find ~/.agents -maxdepth 4
+eve: sandbox command finished (exit 0): find ~/.agents -maxdepth 4
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la $HOME/.agents/skills
+eve: sandbox command finished (exit 0): ls -la $HOME/.agents/skills
+✓  tro-ly-kho/cham-bo-do/0000  gates 8/8
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: cat /workspace/README.md
+eve: sandbox command finished (exit 0): cat /workspace/README.md
+[tro-ly-kho/cham-bo-do/0001] m44: zaloHoi.sessionId sau 503 ms
+[tro-ly-kho/cham-bo-do/0001] m43: zaloHoi.sessionId sau 503 ms
+[tro-ly-kho/cham-bo-do/0001] m47: zaloHoi.sessionId sau 501 ms
+[tro-ly-kho/cham-bo-do/0001] m48: zaloHoi.sessionId sau 501 ms
+[tro-ly-kho/cham-bo-do/0001] m45: zaloHoi.sessionId sau 502 ms
+[tro-ly-kho/cham-bo-do/0001] m46: zaloHoi.sessionId sau 501 ms
+[lien-ket-hoi] zalo cmvalyc8s002evvtyc869rdxe -> wrun_01M51QK03H4W665NC22MBAVNHY
+[lien-ket-hoi] zalo cmvalyc8o002dvvtyf4fkpyun -> wrun_01M51QK03JBJFZ95E587E5C210
+[lien-ket-hoi] zalo cmvalyc8t002gvvty1zoexgub -> wrun_01M51QK03H4W665NC22MBAVNHZ
+[lien-ket-hoi] zalo cmvalyc8t002hvvtytfkt9l8h -> wrun_01M51QK03JBJFZ95E587E5C211
+[lien-ket-hoi] zalo cmvalyc8n002cvvtyfzxw6xqu -> wrun_01M51QK03JBJFZ95E587E5C212
+[lien-ket-hoi] zalo cmvalyc8t002fvvtyucf4osys -> wrun_01M51QK03JBJFZ95E587E5C213
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: env; ls -la /workspace
+eve: sandbox command finished (exit 0): env; ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la $HOME; ls -la $HOME/.agents
+eve: sandbox command finished (exit 0): ls -la $HOME; ls -la $HOME/.agents
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la /workspace
+eve: sandbox command finished (exit 0): ls -la /workspace
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: cat /workspace/README.md; ls -la $HOME/.agents
+eve: sandbox command finished (exit 0): cat /workspace/README.md; ls -la $HOME/.agents
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find $HOME/.agents -type f
+eve: sandbox command finished (exit 0): find $HOME/.agents -type f
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: python3 -c ' import datetime d = datetime.date(2026, 10, 16) print("Date:", d, "Weekday:", d.strftime("%A"), d.weekday()) '
+eve: sandbox command finished (exit 0): python3 -c ' import datetime d = datetime.date(2026, 10, 16) print("Date:", d, "Weekday:", d.strftime("%A"), d.weekday()) '
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: python3 -c ' import json deals = [ {"name": "Attio — Comp AI", "owner": "Ada Okafor", "date": "2026-11-11", "amount": "65,137.61 EUR", "stage": "Contract sent"}, {"name": "Retool — Comp AI", "owner": "Priya Raman", "date": "2026-10-16", "a…
+eve: sandbox command finished (exit 1): python3 -c ' import json deals = [ {"name": "Attio — Comp AI", "owner": "Ada Okafor", "date": "2026-11-11", "amount": "65,137.61 EUR", "stage": "Contract sent"}, {"name": "Retool — Comp AI", "owner": "Priya Raman", "date": "2026-10-16", "a…
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find /workspace -maxdepth 3 -ls
+eve: sandbox command finished (exit 0): find /workspace -maxdepth 3 -ls
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: python3 -c " deals = [ {'name': 'Attio — Comp AI', 'owner': 'Ada Okafor', 'date': '2026-11-11', 'amount': '65,137.61 EUR', 'stage': 'Contract sent'}, {'name': 'Retool — Comp AI', 'owner': 'Priya Raman', 'date': '2026-10-16', 'amount': '116…
+eve: sandbox command finished (exit 0): python3 -c " deals = [ {'name': 'Attio — Comp AI', 'owner': 'Ada Okafor', 'date': '2026-11-11', 'amount': '65,137.61 EUR', 'stage': 'Contract sent'}, {'name': 'Retool — Comp AI', 'owner': 'Priya Raman', 'date': '2026-10-16', 'amount': '116…
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: find /home -maxdepth 4 -ls 2>/dev/null
+eve: sandbox command finished (exit 1): find /home -maxdepth 4 -ls 2>/dev/null
+eve: opening sandbox session "root" on backend "docker"...
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: grep -rn "reaches the teammate as is" /home 2>/dev/null
+eve: sandbox command finished (exit 2): grep -rn "reaches the teammate as is" /home 2>/dev/null
+eve: opening sandbox session "root" on backend "docker"...
+eve: starting sandbox command: ls -la ~/.agents/skills
+eve: sandbox command finished (exit 0): ls -la ~/.agents/skills
+[tro-ly-kho/cham-bo-do/0001] m49: zaloHoi.sessionId sau 504 ms
+[tro-ly-kho/cham-bo-do/0001] m50: zaloHoi.sessionId sau 502 ms
+[lien-ket-hoi] zalo cmvam1qia002nvvtyea31h59v -> wrun_01M51QQTS7882SNVYVAEF3TEYM
+[lien-ket-hoi] zalo cmvam1qi7002mvvtykjebwb4p -> wrun_01M51QQTS7882SNVYVAEF3TEYK
+✓  tro-ly-kho/cham-bo-do/0001
+
+Results: 2 passed (2 total)
+Gates: 8 passed
+
+Completed in 12m 40s
+
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (29%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (54%)
+  - eve-package-tsconfig-paths (24%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (65%)
+  - eve-authored-asset-import (28%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (35%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (34%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (32%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (29%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (32%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzg9-102: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-103: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-104: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-106: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-105: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-107: http-408 zalo-tu-choi 408 «timeout»
+[agent] ▸ session wrun_01M51Q0ZNC801D05ABGCBSPY29 on channel:zalo
+[agent] » Đối tác có bao lâu để xác nhận bảng đối soát?
+[agent] ▸ session wrun_01M51Q0ZNDH8AKM7VB8TXCX2XB on channel:zalo
+[agent] ▸ session wrun_01M51Q0ZNE2CZHR3AXC1FJCJMD on channel:zalo
+[agent] ▸ session wrun_01M51Q0ZNE2CZHR3AXC1FJCJMB on channel:zalo
+[agent] ▸ session wrun_01M51Q0ZNE2CZHR3AXC1FJCJMA on channel:zalo
+[agent] ▸ session wrun_01M51Q0ZNE2CZHR3AXC1FJCJMC on channel:crm
+[agent] ▸ session wrun_01M51Q0ZNFCTXK22NZ0WS23KHF on channel:crm
+[agent] ▸ session wrun_01M51Q0ZNFCTXK22NZ0WS23KHG on channel:crm
+[agent] » Câu hỏi kho cmvallolv0000vvty9nj37ti4.
+[agent] » Tài liệu giấy có thông tin khách hàng phải cất ở đâu?
+[agent] » Đối tác tầng 2 được hưởng bao nhiêu phần trăm doanh thu thuần?
+[agent] » Khi nghi ngờ lộ dữ liệu khách hàng thì phải báo cho bộ phận nào?
+[agent] » Đối tác tầng 3 được hưởng hoa hồng bao nhiêu?
+[agent] » Câu hỏi kho cmvallolv0001vvtyh1lwr2rg.
+[agent] » Câu hỏi kho cmvallolv0002vvty79h4a39t.
+[agent] ▸ session wrun_01M51Q0ZNFCTXK22NZ0WS23KHK on channel:crm
+[agent] » Câu hỏi kho cmvallolw0004vvtye7c67zlu.
+[agent] ▸ session wrun_01M51Q0ZNFCTXK22NZ0WS23KHJ on channel:zalo
+[agent] » Phòng Kế toán đối soát hoa hồng đối tác vào ngày nào trong tháng?
+[agent] ▸ session wrun_01M51Q0ZNFCTXK22NZ0WS23KHH on channel:crm
+[agent] ▸ session wrun_01M51Q0ZNG2EH95X4HK9N7GFT3 on channel:crm
+[agent] » Câu hỏi kho cmvallolw0005vvty3s9will5.
+[agent] » Câu hỏi kho cmvallolw0003vvty68r8gzgh.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvallolv0001vvtyh1lwr2rg.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvallolw0003vvty68r8gzgh.
+[agent] · step 0 tool-calls  in 6.9k out 169 $0.0058
+[agent] · step 0 tool-calls  in 6.9k out 183 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvallolw0004vvtye7c67zlu.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvallolw0005vvty3s9will5.
+[agent] · step 0 tool-calls  in 6.9k out 188 $0.0059
+[agent] · step 0 tool-calls  in 6.9k out 148 $0.0057
+[agent] → subagent tro_ly_kho message=Khi nghi ngờ lộ dữ liệu khách hàng thì phải báo…
+[agent] → subagent tro_ly_kho message=Tài liệu giấy có thông tin khách hàng phải cất …
+[agent] · step 0 tool-calls  in 5.3k out 287 $0.0051
+[agent] · step 0 tool-calls  in 5.3k out 267 $0.0050
+[agent] → subagent tro_ly_kho message=Phòng Kế toán đối soát hoa hồng đối tác vào ngà…
+[agent] · step 0 tool-calls  in 5.4k out 320 $0.0052
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvallolv0000vvty9nj37ti4.
+[agent] · step 0 tool-calls  in 6.9k out 193 $0.0059
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvallolv0002vvty79h4a39t.
+[agent] · step 0 tool-calls  in 6.9k out 164 $0.0058
+[agent] → subagent tro_ly_kho message=Đối tác tầng 3 được hưởng hoa hồng bao nhiêu?
+[agent] → subagent tro_ly_kho message=Đối tác tầng 2 được hưởng bao nhiêu phần trăm d…
+[agent] · step 0 tool-calls  in 5.3k out 366 $0.0054
+[agent] · step 0 tool-calls  in 5.3k out 298 $0.0051
+[agent] → subagent tro_ly_kho message=Đối tác có bao lâu để xác nhận bảng đối soát?
+[agent] · step 0 tool-calls  in 5.3k out 537 $0.0060
+[agent] ✓ subagent tro_ly_kho 19.8s
+[agent] ✓ subagent tro_ly_kho 20.7s
+[agent] ✓ subagent tro_ly_kho 22.6s
+[agent] ✓ subagent tro_ly_kho 21.0s
+[agent] ✓ subagent tro_ly_kho 21.7s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 23 $0.0054
+[agent] ✓ subagent tro_ly_kho 23.0s
+[agent] ✓ subagent tro_ly_kho 23.3s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 18 $0.0054
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 11 cached 3.0k $0.0033
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 23 cached 3.0k $0.0034
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 58 $0.0055
+[agent] ✓ subagent tro_ly_kho 24.1s
+[agent] → bash command=find /workspace -type f
+[agent] ✓ bash 0.4s
+[agent] · step 0 tool-calls  in 5.7k out 407 $0.0058
+[agent] ✓ subagent tro_ly_kho 26.6s
+[agent] → bash command=pwd && ls -la
+[agent] ✓ subagent tro_ly_kho 28.0s
+[agent] ✓ bash 0.6s
+[agent] · step 0 tool-calls  in 5.7k out 355 $0.0056
+[agent] ✓ subagent tro_ly_kho 30.1s
+[agent] → bash command=ls -la $HOME/.agents/skills/
+[agent] ✓ subagent tro_ly_kho 30.6s
+[agent] ✓ bash 0.2s
+[agent] · step 1 tool-calls  in 6.2k out 50 $0.0048
+[agent] → bash command=ls -la
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.9k out 576 $0.0066
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 20 cached 3.0k $0.0034
+[agent] ◂ Câu trả lời từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.7k out 545 $0.0063
+[agent] ◂ Thông tin theo quy định từ thư viện tài liệu đã được chuyển tới bạn.
+[agent] · step 0 stop  in 5.7k out 423 cached 3.3k $0.0036
+[agent] → bash command=cat README.md
+[agent] ✓ bash 0.3s
+[agent] · step 1 tool-calls  in 6.2k out 41 cached 3.4k $0.0025
+[agent] → bash command=ls -la $HOME/.agents/skills
+[agent] ✓ bash 0.2s
+[agent] · step 1 tool-calls  in 6.6k out 34 cached 3.4k $0.0028
+[agent] → bash command=find $HOME -maxdepth 3
+[agent] ◂ Thông tin từ kho quy định nội bộ đã được gửi tới bạn.
+[agent] · step 0 stop  in 5.7k out 504 $0.0061
+[agent] ✓ bash 0.2s
+[agent] · step 2 tool-calls  in 6.4k out 39 cached 3.4k $0.0027
+[agent] ▸ session wrun_01M51Q29RTV39BAPJ254X62H55 on channel:crm
+[agent] » Câu hỏi kho cmvalmlv1000avvty178g80zm.
+[agent] ▸ session wrun_01M51Q29RSG5DAH2CCQFB48XFP on channel:crm
+[agent] » Câu hỏi kho cmvalmlv10006vvtynt5gi4mj.
+[agent] ▸ session wrun_01M51Q2A1NXFP6K5QP4VTQHN40 on channel:crm
+[agent] ▸ session wrun_01M51Q2A1PC804F688C7WDDB5H on channel:crm
+[agent] » Câu hỏi kho cmvalmlv10007vvty8y48h8u2.
+[agent] » Câu hỏi kho cmvalmlv10009vvtyzw6df2t0.
+[agent] ▸ session wrun_01M51Q2A1RTW8XZPK179W2PGAF on channel:crm
+[agent] » Câu hỏi kho cmvalmlv1000bvvty7ckqn6d2.
+[agent] ▸ session wrun_01M51Q2A6SPN6NJGB61M78QTDF on channel:crm
+[agent] » Câu hỏi kho cmvalmlv10008vvtydjr1mg7y.
+[agent] → bash command=cat README.md
+[agent] ✓ bash 0.1s
+[agent] · step 2 tool-calls  in 6.9k out 32 cached 3.4k $0.0030
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalmlv1000avvty178g80zm.
+[agent] · step 0 tool-calls  in 6.9k out 167 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalmlv1000bvvty7ckqn6d2.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalmlv10007vvty8y48h8u2.
+[agent] · step 0 tool-calls  in 6.9k out 150 $0.0057
+[agent] · step 0 tool-calls  in 6.9k out 140 $0.0057
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalmlv10009vvtyzw6df2t0.
+[agent] · step 0 tool-calls  in 6.9k out 164 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalmlv10008vvtydjr1mg7y.
+[agent] · step 0 tool-calls  in 6.9k out 160 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalmlv10006vvtynt5gi4mj.
+[agent] · step 0 tool-calls  in 6.9k out 159 $0.0058
+[agent] ◂ Câu trả lời từ kho tài liệu quy định nội bộ đã được gửi đến bạn.
+[agent] · step 2 stop  in 6.5k out 896 cached 3.4k $0.0059
+[agent] ◂ Thông tin chính sách đã được giải đáp từ kho tài liệu nội bộ của OneHub Center.
+[agent] · step 3 stop  in 6.6k out 624 cached 3.4k $0.0050
+[agent] ◂ Thông tin theo quy định từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 3 stop  in 7.2k out 778 cached 3.4k $0.0060
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-110: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-111: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-109: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-108: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-112: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-113: http-408 zalo-tu-choi 408 «timeout»
+[agent] ▸ session wrun_01M51Q2R5NDV7A4KH724CSAWKY on channel:zalo
+[agent] » Công tác phí trong nước mỗi ngày được bao nhiêu tiền?
+[agent] ▸ session wrun_01M51Q2R5PCQJH7TX12YPW5XY2 on channel:zalo
+[agent] ▸ session wrun_01M51Q2R5NDV7A4KH724CSAWKX on channel:zalo
+[agent] ▸ session wrun_01M51Q2R5PCQJH7TX12YPW5XY0 on channel:zalo
+[agent] ▸ session wrun_01M51Q2R5PCQJH7TX12YPW5XY1 on channel:zalo
+[agent] » Nhân viên chính thức được bao nhiêu ngày nghỉ phép một năm?
+[agent] » Hoá đơn công tác phải nộp trong bao lâu sau khi về?
+[agent] » Nhân viên tiếp nhận khiếu nại phải xác nhận với khách hàng trong bao lâu?
+[agent] » Đi công tác ở Hà Nội thì được cộng thêm bao nhiêu mỗi ngày?
+[agent] ▸ session wrun_01M51Q2R5QHFY5X1YTKGERBEWB on channel:zalo
+[agent] » Khiếu nại thông thường được giải quyết trong bao nhiêu ngày?
+[agent] → subagent tro_ly_kho message=Công tác phí trong nước mỗi ngày được bao nhiêu…
+[agent] · step 0 tool-calls  in 5.3k out 347 $0.0053
+[agent] → subagent tro_ly_kho message=Đi công tác ở Hà Nội thì được cộng thêm bao nhi…
+[agent] · step 0 tool-calls  in 5.3k out 315 $0.0052
+[agent] → subagent tro_ly_kho message=Khiếu nại thông thường được giải quyết trong ba…
+[agent] · step 0 tool-calls  in 5.3k out 361 $0.0054
+[agent] → subagent tro_ly_kho message=Nhân viên tiếp nhận khiếu nại phải xác nhận với…
+[agent] · step 0 tool-calls  in 5.4k out 391 $0.0055
+[agent] → subagent tro_ly_kho message=Nhân viên chính thức được bao nhiêu ngày nghỉ p…
+[agent] → subagent tro_ly_kho message=Hoá đơn công tác phải nộp trong bao lâu sau khi…
+[agent] · step 0 tool-calls  in 5.3k out 373 $0.0054
+[agent] · step 0 tool-calls  in 5.3k out 251 $0.0050
+[agent] ✓ subagent tro_ly_kho 24.2s
+[agent] ✓ subagent tro_ly_kho 23.8s
+[agent] ✓ subagent tro_ly_kho 24.5s
+[agent] ✓ subagent tro_ly_kho 24.6s
+[agent] ✓ subagent tro_ly_kho 25.7s
+[agent] ✓ subagent tro_ly_kho 25.3s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 16 cached 3.0k $0.0033
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 33 cached 3.0k $0.0034
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 19 $0.0054
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 15 cached 3.0k $0.0033
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 22 $0.0054
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 15 cached 3.0k $0.0033
+[agent] ▸ session wrun_01M51Q3E6736B8Y1263MFNV3BP on channel:crm
+[agent] ▸ session wrun_01M51Q3E6736B8Y1263MFNV3BQ on channel:crm
+[agent] ▸ session wrun_01M51Q3E68R86D7S7139YTYFA0 on channel:crm
+[agent] » Câu hỏi kho cmvalne8j000evvty2wn8z8v2.
+[agent] » Câu hỏi kho cmvalne8j000gvvty3ybawtjg.
+[agent] » Câu hỏi kho cmvalne8j000dvvtyoqxt4egk.
+[agent] ▸ session wrun_01M51Q3E6736B8Y1263MFNV3BN on channel:crm
+[agent] » Câu hỏi kho cmvalne8j000fvvtyd9r9s2va.
+[agent] ▸ session wrun_01M51Q3E68R86D7S7139YTYF9Z on channel:crm
+[agent] » Câu hỏi kho cmvalne8j000cvvty4f187wb1.
+[agent] ▸ session wrun_01M51Q3E691V5ZSX70ZF40JTDZ on channel:crm
+[agent] » Câu hỏi kho cmvalne8j000hvvtynyovfaeq.
+[agent] ✓ subagent tro_ly_kho 18.5s
+[agent] ✓ subagent tro_ly_kho 20.1s
+[agent] ✓ subagent tro_ly_kho 20.0s
+[agent] ✓ subagent tro_ly_kho 20.3s
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalne8j000fvvtyd9r9s2va.
+[agent] · step 0 tool-calls  in 6.9k out 170 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalne8j000evvty2wn8z8v2.
+[agent] · step 0 tool-calls  in 6.9k out 201 $0.0059
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalne8j000gvvty3ybawtjg.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalne8j000dvvtyoqxt4egk.
+[agent] · step 0 tool-calls  in 6.9k out 182 $0.0058
+[agent] ✓ subagent tro_ly_kho 20.0s
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalne8j000cvvty4f187wb1.
+[agent] · step 0 tool-calls  in 6.9k out 135 $0.0057
+[agent] · step 0 tool-calls  in 6.9k out 175 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalne8j000hvvtynyovfaeq.
+[agent] · step 0 tool-calls  in 6.9k out 222 $0.0060
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.4s
+[agent] · step 0 tool-calls  in 5.7k out 373 $0.0057
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.2s
+[agent] · step 0 tool-calls  in 5.7k out 265 cached 3.3k $0.0031
+[agent] ◂ Thông tin quy định về công tác phí trong nước đã được gửi đến bạn từ kho tài liệu nội bộ.
+[agent] · step 0 stop  in 5.7k out 622 $0.0066
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.2k out 29 cached 3.4k $0.0025
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ subagent tro_ly_kho 26.9s
+[agent] ✓ read_file 0.2s
+[agent] · step 1 tool-calls  in 6.1k out 36 $0.0047
+[agent] ◂ Thông tin từ tài liệu quy trình nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.8k out 968 $0.0080
+[agent] → bash command=git log -n 5 2>/dev/null || echo "no git"
+[agent] ✓ bash 0.1s
+[agent] · step 2 tool-calls  in 6.5k out 48 cached 3.4k $0.0028
+[agent] ◂ Câu trả lời từ kho quy định nội bộ đã được gửi tới bạn.
+[agent] · step 0 stop  in 5.8k out 796 $0.0073
+[agent] ◂ Câu trả lời từ kho tài liệu quy định đã được gửi đến bạn.
+[agent] · step 2 stop  in 6.6k out 474 cached 3.4k $0.0044
+[agent] ◂ Câu trả lời từ kho quy định và chính sách đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.6k out 630 $0.0066
+[agent] ◂ Câu trả lời từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 3 stop  in 6.6k out 859 cached 3.4k $0.0059
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-114: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-115: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-116: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-117: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-119: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-118: http-408 zalo-tu-choi 408 «timeout»
+[agent] ✓ subagent tro_ly_kho 17.7s
+[agent] ✓ subagent tro_ly_kho 17.7s
+[agent] ✓ subagent tro_ly_kho 17.7s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 21 $0.0054
+[agent] ✓ subagent tro_ly_kho 19.4s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 21 $0.0054
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 28 $0.0055
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 19 $0.0054
+[agent] ▸ session wrun_01M51Q478G6J1T0853BPSY85X4 on channel:zalo
+[agent] ▸ session wrun_01M51Q478FM91C220WBCBC6GTQ on channel:zalo
+[agent] » Biểu mẫu tạm ứng đã ký thì nộp cho phòng nào?
+[agent] » Đối tác tầng 1 hưởng bao nhiêu phần trăm, và hoa hồng được chuyển khoản vào ngày nào?
+[agent] ▸ session wrun_01M51Q478G6J1T0853BPSY85X5 on channel:zalo
+[agent] » Tạm ứng trên 10 triệu đồng thì cần ai ký, và tiền phòng khách sạn khi công tác được thanh toán tối đa bao nhiêu một đêm?
+[agent] ▸ session wrun_01M51Q478G6J1T0853BPSY85X6 on channel:zalo
+[agent] ▸ session wrun_01M51Q478FM91C220WBCBC6GTP on channel:zalo
+[agent] » Xin nghỉ phép thì phải gửi đơn trước ít nhất mấy ngày?
+[agent] » Thời gian thử việc của nhân viên kinh doanh là bao lâu?
+[agent] ▸ session wrun_01M51Q478HF3Y3GDSM3MB7TTBJ on channel:zalo
+[agent] » Nhân viên thử việc có được nhận hoa hồng đối tác không, và có ngày nghỉ phép năm không?
+[agent] ✓ subagent tro_ly_kho 26.4s
+[agent] ✓ subagent tro_ly_kho 26.2s
+[agent] → subagent tro_ly_kho message=Xin nghỉ phép thì phải gửi đơn trước ít nhất mấ…
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 16 $0.0054
+[agent] · step 0 tool-calls  in 5.3k out 249 $0.0049
+[agent] → subagent tro_ly_kho message=Biểu mẫu tạm ứng đã ký thì nộp cho phòng nào?
+[agent] · step 0 tool-calls  in 5.3k out 267 $0.0050
+[agent] → subagent tro_ly_kho message=Đối tác tầng 1 hưởng bao nhiêu phần trăm, và ho…
+[agent] → subagent tro_ly_kho message=Nhân viên thử việc có được nhận hoa hồng đối tá…
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 19 $0.0054
+[agent] · step 0 tool-calls  in 5.4k out 384 $0.0055
+[agent] → subagent tro_ly_kho message=Thời gian thử việc của nhân viên kinh doanh là …
+[agent] · step 0 tool-calls  in 5.4k out 296 $0.0051
+[agent] · step 0 tool-calls  in 5.3k out 285 $0.0051
+[agent] → subagent tro_ly_kho message=Tạm ứng trên 10 triệu đồng thì cần ai ký, và ti…
+[agent] · step 0 tool-calls  in 5.4k out 371 $0.0054
+[agent] ▸ session wrun_01M51Q4NYM150DA4G028S4067Z on channel:crm
+[agent] » Câu hỏi kho cmvalo76j000jvvtya5cxvcp7.
+[agent] ▸ session wrun_01M51Q4NYM150DA4G028S4067Y on channel:crm
+[agent] » Câu hỏi kho cmvalo76j000lvvtyiy1r2ht3.
+[agent] ▸ session wrun_01M51Q4NYM150DA4G028S40680 on channel:crm
+[agent] ▸ session wrun_01M51Q4NYN4TZDZ5VQ063F1XC2 on channel:crm
+[agent] ▸ session wrun_01M51Q4NYN4TZDZ5VQ063F1XC0 on channel:crm
+[agent] ▸ session wrun_01M51Q4NYN4TZDZ5VQ063F1XC1 on channel:crm
+[agent] » Câu hỏi kho cmvalo76j000mvvty6epg1txn.
+[agent] » Câu hỏi kho cmvalo76j000nvvtyma0cpmb9.
+[agent] » Câu hỏi kho cmvalo76j000kvvtyctuxaarc.
+[agent] » Câu hỏi kho cmvalo76j000ivvtygd1wrulo.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalo76j000ivvtygd1wrulo.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalo76j000mvvty6epg1txn.
+[agent] · step 0 tool-calls  in 6.9k out 145 $0.0057
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalo76j000jvvtya5cxvcp7.
+[agent] · step 0 tool-calls  in 6.9k out 171 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalo76j000lvvtyiy1r2ht3.
+[agent] · step 0 tool-calls  in 6.9k out 249 $0.0061
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalo76j000nvvtyma0cpmb9.
+[agent] · step 0 tool-calls  in 6.9k out 162 $0.0058
+[agent] · step 0 tool-calls  in 6.9k out 153 $0.0057
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalo76j000kvvtyctuxaarc.
+[agent] · step 0 tool-calls  in 6.9k out 161 $0.0058
+[agent] ✓ subagent tro_ly_kho 19.1s
+[agent] ✓ subagent tro_ly_kho 18.3s
+[agent] ✓ subagent tro_ly_kho 20.1s
+[agent] ◂ Câu trả lời từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.7k out 369 $0.0056
+[agent] → bash command=git log -p -n 3
+[agent] ✓ subagent tro_ly_kho 24.0s
+[agent] ✓ bash 0.5s
+[agent] · step 0 tool-calls  in 5.6k out 388 $0.0057
+[agent] ✓ subagent tro_ly_kho 25.1s
+[agent] ◂ Câu trả lời từ kho tài liệu quy định nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.6k out 580 $0.0064
+[agent] → bash command=ls -la /workspace $HOME/.agents/skills
+[agent] ✓ bash 0.1s
+[agent] · step 1 tool-calls  in 6.1k out 38 $0.0047
+[agent] ✓ subagent tro_ly_kho 27.2s
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 2 tool-calls  in 6.4k out 32 cached 3.4k $0.0027
+[agent] ◂ Câu trả lời từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.7k out 390 $0.0057
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.4s
+[agent] · step 0 tool-calls  in 5.8k out 708 $0.0070
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.6k out 38 $0.0051
+[agent] ✓ subagent tro_ly_kho 22.3s
+[agent] → bash command=ls -la /workspace
+[agent] ◂ Câu trả lời từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 3 stop  in 6.8k out 696 cached 3.4k $0.0054
+[agent] ✓ bash 0.2s
+[agent] · step 0 tool-calls  in 5.8k out 632 $0.0067
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.2k out 14 $0.0054
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.5k out 33 cached 3.4k $0.0027
+[agent] ◂ Thông tin chính sách và quy định hoa hồng đối tác đã được gửi đến bạn.
+[agent] · step 2 stop  in 7.0k out 295 cached 3.4k $0.0040
+[agent] → bash command=ls -la ~/.agents/skills/
+[agent] ✓ subagent tro_ly_kho 31.6s
+[agent] ✓ bash 0.5s
+[agent] · step 2 tool-calls  in 6.9k out 34 cached 3.4k $0.0030
+[agent] ✓ subagent tro_ly_kho 32.7s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 19 cached 3.0k $0.0033
+[agent] ◂ đã chuyển
+[agent] · step 0 stop  in 7.1k out 15 cached 3.0k $0.0033
+[agent] ✓ subagent tro_ly_kho 37.4s
+[agent] ◂ đã chuyển
+[agent] · step 0 stop  in 7.1k out 26 cached 3.0k $0.0034
+[agent] ◂ Thông tin giải đáp từ quy định nội bộ OneHub đã được chuyển tới bạn.
+[agent] · step 3 stop  in 7.1k out 725 cached 3.4k $0.0058
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-121: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-120: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-125: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzga-122: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-124: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-123: http-408 zalo-tu-choi 408 «timeout»
+[agent] ✓ subagent tro_ly_kho 53.3s
+[agent] ▸ session wrun_01M51Q6F4J4MPE6BY3394H4P2C on channel:zalo
+[agent] ▸ session wrun_01M51Q6F4KZEPDDGE41M51E6DM on channel:zalo
+[agent] » Khách hàng khiếu nại vì nghi bị lộ dữ liệu thì khiếu nại ghi vào đâu, và phải báo bộ phận nào?
+[agent] » Chuyến công tác 250 km có được đi máy bay không?
+[agent] ▸ session wrun_01M51Q6F4KZEPDDGE41M51E6DJ on channel:zalo
+[agent] » Hợp đồng gia hạn được tính hoa hồng thế nào, và đối tác có bao lâu để xác nhận bảng đối soát?
+[agent] ▸ session wrun_01M51Q6F4KZEPDDGE41M51E6DK on channel:zalo
+[agent] ▸ session wrun_01M51Q6F4N8EGAT6PV308KZX8F on channel:zalo
+[agent] ▸ session wrun_01M51Q6F4M6NAY8XH2WRG0YJRQ on channel:zalo
+[agent] » Hoá đơn công tác nộp sau 40 ngày có được thanh toán không?
+[agent] » Hợp đồng có doanh thu thuần 18 triệu đồng thì đối tác có được hoa hồng không?
+[agent] » Hoa hồng kỳ này của đối tác chỉ 350.000 đồng thì có được chuyển khoản không?
+[agent] → subagent tro_ly_kho message=Chuyến công tác 250 km có được đi máy bay không?
+[agent] · step 0 tool-calls  in 5.3k out 270 $0.0050
+[agent] → subagent tro_ly_kho message=Khách hàng khiếu nại vì nghi bị lộ dữ liệu thì …
+[agent] · step 0 tool-calls  in 5.4k out 397 $0.0055
+[agent] → subagent tro_ly_kho message=Hoa hồng kỳ này của đối tác chỉ 350.000 đồng th…
+[agent] → subagent tro_ly_kho message=Hoá đơn công tác nộp sau 40 ngày có được thanh …
+[agent] · step 0 tool-calls  in 5.4k out 308 $0.0052
+[agent] · step 0 tool-calls  in 5.4k out 384 $0.0055
+[agent] → subagent tro_ly_kho message=Hợp đồng gia hạn được tính hoa hồng thế nào, và…
+[agent] · step 0 tool-calls  in 5.4k out 598 $0.0063
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 14 cached 3.0k $0.0033
+[agent] → subagent tro_ly_kho message=Hợp đồng có doanh thu thuần 18 triệu đồng thì đ…
+[agent] · step 0 tool-calls  in 5.4k out 696 $0.0066
+[agent] ✓ subagent tro_ly_kho 68.7s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 4 cached 3.0k $0.0033
+[agent] ▸ session wrun_01M51Q72YHKFMQ3G1YRSDV2RMP on channel:crm
+[agent] ▸ session wrun_01M51Q72YGDMNKSHE5ZPJ8TC1H on channel:crm
+[agent] » Câu hỏi kho cmvalpyxs000svvtyyrtldy6o.
+[agent] ▸ session wrun_01M51Q72YHKFMQ3G1YRSDV2RMQ on channel:crm
+[agent] » Câu hỏi kho cmvalpyxs000pvvtywbndb9pb.
+[agent] ▸ session wrun_01M51Q72YGDMNKSHE5ZPJ8TC1G on channel:crm
+[agent] ▸ session wrun_01M51Q72YXCCAVJA9QYQPYYT72 on channel:crm
+[agent] ▸ session wrun_01M51Q72YXCCAVJA9QYQPYYT71 on channel:crm
+[agent] » Câu hỏi kho cmvalpyxr000ovvtyvt1w40w5.
+[agent] » Câu hỏi kho cmvalpyxs000tvvtyxbmkgdmk.
+[agent] » Câu hỏi kho cmvalpyxs000rvvty5bjx544a.
+[agent] » Câu hỏi kho cmvalpyxs000qvvtyzf1rnt3u.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalpyxs000qvvtyzf1rnt3u.
+[agent] · step 0 tool-calls  in 6.9k out 161 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalpyxs000rvvty5bjx544a.
+[agent] · step 0 tool-calls  in 6.9k out 193 $0.0059
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalpyxs000svvtyyrtldy6o.
+[agent] · step 0 tool-calls  in 6.9k out 163 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalpyxs000tvvtyxbmkgdmk.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalpyxs000pvvtywbndb9pb.
+[agent] · step 0 tool-calls  in 6.9k out 159 $0.0058
+[agent] · step 0 tool-calls  in 6.9k out 163 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalpyxr000ovvtyvt1w40w5.
+[agent] · step 0 tool-calls  in 6.9k out 162 $0.0058
+[agent] ✓ subagent tro_ly_kho 26.8s
+[agent] ✓ subagent tro_ly_kho 28.6s
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 6.0k out 379 cached 3.4k $0.0037
+[agent] → bash command=git log -n 5
+[agent] ✓ bash 0.5s
+[agent] · step 0 tool-calls  in 5.8k out 352 $0.0057
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.2s
+[agent] · step 1 tool-calls  in 6.5k out 32 cached 3.4k $0.0027
+[agent] ✓ subagent tro_ly_kho 15.8s
+[agent] → bash command=ls -la; ls -la $HOME
+[agent] ✓ bash 0.1s
+[agent] · step 1 tool-calls  in 6.2k out 36 cached 3.4k $0.0025
+[agent] ✓ subagent tro_ly_kho 18.4s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 19 $0.0054
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ subagent tro_ly_kho 39.5s
+[agent] ✓ read_file 0.6s
+[agent] · step 2 tool-calls  in 6.5k out 48 $0.0051
+[agent] ◂ Thông tin quy định từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 2 stop  in 6.9k out 429 cached 3.4k $0.0045
+[agent] ✓ subagent tro_ly_kho 19.4s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 20 $0.0054
+[agent] ◂ đã chuyển
+[agent] · step 0 stop  in 7.1k out 20 $0.0054
+[agent] → bash command=find $HOME/.agents -type f
+[agent] ✓ bash 0.4s
+[agent] · step 3 tool-calls  in 6.9k out 32 cached 3.4k $0.0030
+[agent] ✓ subagent tro_ly_kho 44.4s
+[agent] ◂ Thông tin trả lời theo quy định nội bộ đã được gửi tới bạn.
+[agent] · step 0 stop  in 5.7k out 761 $0.0071
+[agent] → bash command=git log -n 5
+[agent] ✓ bash 0.4s
+[agent] · step 0 tool-calls  in 5.8k out 325 $0.0055
+[agent] ◂ Câu trả lời từ kho tài liệu quy trình đã được gửi đến bạn.
+[agent] · step 4 stop  in 7.0k out 773 cached 3.4k $0.0059
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51Q6QFZMWPZHY03ND7XW087_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51Q6QFZMWPZHY03ND7XW087_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] → bash command=ls -la /workspace $HOME $HOME/.agents
+[agent] ✓ bash 0.1s
+[agent] · step 1 tool-calls  in 6.1k out 37 $0.0047
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51Q7DCX1PXNVDKRJER3HJW6_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51Q7DCX1PXNVDKRJER3HJW6_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 2 tool-calls  in 6.6k out 32 cached 3.4k $0.0028
+[agent] ✓ subagent tro_ly_kho 37.3s
+[agent] ◂ đã chuyển
+[agent] · step 0 stop  in 7.1k out 15 $0.0054
+[agent] ✓ subagent tro_ly_kho 59.6s
+[agent] ◂ Câu trả lời theo quy định nội bộ đã được gửi đến bạn.
+[agent] · step 3 stop  in 7.0k out 1.4k cached 3.4k $0.0081
+[agent] ✓ subagent tro_ly_kho 50.3s
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 6.1k out 561 $0.0067
+[agent] ◂ đã chuyển
+[agent] · step 0 stop  in 7.1k out 17 $0.0054
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.8k out 38 cached 3.4k $0.0029
+[agent] ✓ subagent tro_ly_kho 62.7s
+[agent] ◂ Câu trả lời từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 2 stop  in 7.1k out 737 cached 3.4k $0.0058
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 18 $0.0054
+[agent] ▸ session wrun_01M51Q9ASFNB3Z04EX66NZAH2F on channel:crm
+[agent] ▸ session wrun_01M51Q9ASR6M8CDKWDC23SKAXQ on channel:crm
+[agent] ▸ session wrun_01M51Q9ASR6M8CDKWDC23SKAXR on channel:crm
+[agent] ▸ session wrun_01M51Q9ASR6M8CDKWDC23SKAXS on channel:crm
+[agent] ▸ session wrun_01M51Q9ASEZMRJKVAFE7AQW997 on channel:crm
+[agent] » Câu hỏi kho cmvalrjt3000xvvtysxnpehpx.
+[agent] » Câu hỏi kho cmvalrjt3000vvvtyp0x62pg8.
+[agent] » Câu hỏi kho cmvalrjt3000yvvtygwmo31w1.
+[agent] » Câu hỏi kho cmvalrjt3000wvvtymaqez5sz.
+[agent] » Câu hỏi kho cmvalrjt3000zvvtywrwzfnu4.
+[agent] ▸ session wrun_01M51Q9AXJA79DV7SQ0T6R69CF on channel:crm
+[agent] » Câu hỏi kho cmvalrjt3000uvvtydi45elwl.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalrjt3000wvvtymaqez5sz.
+[agent] · step 0 tool-calls  in 6.9k out 148 $0.0057
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalrjt3000vvvtyp0x62pg8.
+[agent] · step 0 tool-calls  in 6.9k out 167 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalrjt3000yvvtygwmo31w1.
+[agent] · step 0 tool-calls  in 6.9k out 189 $0.0059
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalrjt3000zvvtywrwzfnu4.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalrjt3000xvvtysxnpehpx.
+[agent] · step 0 tool-calls  in 6.9k out 238 $0.0061
+[agent] · step 0 tool-calls  in 6.9k out 160 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvalrjt3000uvvtydi45elwl.
+[agent] · step 0 tool-calls  in 6.9k out 165 $0.0058
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-126: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-129: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-127: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-128: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-131: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-130: http-408 zalo-tu-choi 408 «timeout»
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51Q9NEFRGQYPZ6837NVZCRZ_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51Q9NEFRGQYPZ6837NVZCRZ_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51Q9MVXFMTC55MVS61DN1W8_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51Q9MVXFMTC55MVS61DN1W8_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] ▸ session wrun_01M51QAC2F2Q76E3T0PNBQKB9Y on channel:zalo
+[agent] ▸ session wrun_01M51QAC2F2Q76E3T0PNBQKB9X on channel:zalo
+[agent] ▸ session wrun_01M51QAC2ERJ98XPKQXEQHZPSQ on channel:zalo
+[agent] » Nghỉ phép liền 6 ngày thì cần ai duyệt?
+[agent] » Khiếu nại đã quá 7 ngày làm việc mà chưa giải quyết xong thì chuyển cho ai?
+[agent] » Ngày phép năm chưa dùng hết có được giữ sang năm sau không?
+[agent] ▸ session wrun_01M51QAC2G0Y8G5WE2PTP2GTZX on channel:zalo
+[agent] ▸ session wrun_01M51QAC2F2Q76E3T0PNBQKB9Z on channel:zalo
+[agent] » Công tác phí khi đi nước ngoài mỗi ngày là bao nhiêu?
+[agent] » Đối tác tầng 4 được hưởng hoa hồng bao nhiêu phần trăm?
+[agent] ▸ session wrun_01M51QAC2G0Y8G5WE2PTP2GTZW on channel:zalo
+[agent] » Còn khoản tạm ứng cũ chưa hoàn thì có đề nghị tạm ứng mới được không?
+[agent] → subagent tro_ly_kho message=Còn khoản tạm ứng cũ chưa hoàn thì có đề nghị t…
+[agent] · step 0 tool-calls  in 5.4k out 267 $0.0050
+[agent] → subagent tro_ly_kho message=Công tác phí khi đi nước ngoài mỗi ngày là bao …
+[agent] · step 0 tool-calls  in 5.3k out 389 $0.0055
+[agent] → subagent tro_ly_kho message=Khiếu nại đã quá 7 ngày làm việc mà chưa giải q…
+[agent] · step 0 tool-calls  in 5.4k out 301 cached 3.3k $0.0029
+[agent] → subagent tro_ly_kho message=Nghỉ phép liền 6 ngày thì cần ai duyệt?
+[agent] · step 0 tool-calls  in 5.3k out 365 $0.0054
+[agent] → subagent tro_ly_kho message=Đối tác tầng 4 được hưởng hoa hồng bao nhiêu ph…
+[agent] → subagent tro_ly_kho message=Ngày phép năm chưa dùng hết có được giữ sang nă…
+[agent] · step 0 tool-calls  in 5.3k out 497 $0.0059
+[agent] · step 0 tool-calls  in 5.3k out 266 $0.0050
+[agent] ✓ subagent tro_ly_kho 40.1s
+[agent] ✓ subagent tro_ly_kho 40.5s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 16 cached 3.0k $0.0033
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 20 $0.0054
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51Q9M1MTV67TMSKP54GJ4D2_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51Q9M1MTV67TMSKP54GJ4D2_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] ✓ subagent tro_ly_kho 45.8s
+[agent] ✓ subagent tro_ly_kho 47.4s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 13 $0.0054
+[agent] ✓ subagent tro_ly_kho 16.8s
+[agent] ✓ subagent tro_ly_kho 19.1s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 26 $0.0054
+[agent] ✓ subagent tro_ly_kho 55.2s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 25 $0.0054
+[agent] ✓ subagent tro_ly_kho 21.5s
+[agent] ◂ Đã gửi câu trả lời từ kho quy định nội bộ đến bạn.
+[agent] · step 0 stop  in 5.7k out 356 cached 3.3k $0.0033
+[agent] → bash command=grep -rn "tro_ly_kho" /workspace $HOME/.agents …
+[agent] ✓ bash 0.4s
+[agent] · step 0 tool-calls  in 5.7k out 637 $0.0067
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.4s
+[agent] · step 1 tool-calls  in 6.3k out 32 cached 3.4k $0.0026
+[agent] → bash command=grep -rn "tro_ly_kho" /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.6k out 491 $0.0061
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 2 tool-calls  in 6.5k out 29 $0.0050
+[agent] → bash command=find / -name "*tro_ly_kho*" 2>/dev/null
+[agent] ✓ bash 0.2s
+[agent] · step 1 tool-calls  in 6.1k out 51 cached 3.4k $0.0025
+[agent] ✓ subagent tro_ly_kho 33.4s
+[agent] ◂ Câu trả lời theo quy định đã được gửi đến bạn từ kho tài liệu.
+[agent] · step 3 stop  in 6.9k out 536 cached 3.4k $0.0049
+[agent] → bash command=find $HOME -maxdepth 3 2>/dev/null
+[agent] ✓ bash 0.1s
+[agent] · step 2 tool-calls  in 6.2k out 44 $0.0048
+[agent] ◂ Câu trả lời từ kho tài liệu nội bộ đã được gửi trực tiếp đến bạn.
+[agent] · step 0 stop  in 5.7k out 584 cached 3.3k $0.0043
+[agent] ✓ subagent tro_ly_kho 48.8s
+[agent] ✓ subagent tro_ly_kho 48.8s
+[agent] ✓ subagent tro_ly_kho 84.7s
+[agent] → list_fields entity=COMPANY
+[agent] → list_fields entity=CONTACT
+[agent] → list_fields entity=DEAL
+[agent] → search_crm query=hoa hong limit=10
+[agent] ✓ list_fields 0.3s
+[agent] ✓ list_fields 0.2s
+[agent] ✓ list_fields 0.2s
+[agent] ✓ search_crm 0.1s
+[agent] · step 0 tool-calls  in 5.9k out 192 $0.0051
+[agent] ✓ subagent tro_ly_kho 182.7s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 46 cached 3.0k $0.0035
+[agent] ▸ session wrun_01M51QC9DPZ64K65PT9Y24GN9E on channel:crm
+[agent] » Câu hỏi kho cmvaltmib0012vvtyz49iillr.
+[agent] ▸ session wrun_01M51QC9DNA2BNFNQBWMBJH5J3 on channel:crm
+[agent] ▸ session wrun_01M51QC9DRVQJC72MFMXZACQVZ on channel:crm
+[agent] ▸ session wrun_01M51QC9DQ1R4A1NWFQ0MEE8NR on channel:crm
+[agent] ▸ session wrun_01M51QC9DQ1R4A1NWFQ0MEE8NS on channel:crm
+[agent] » Câu hỏi kho cmvaltmib0014vvtydcompx7q.
+[agent] » Câu hỏi kho cmvaltmib0011vvtyycx9pv37.
+[agent] » Câu hỏi kho cmvaltmib0015vvtyrw0u2ph9.
+[agent] » Câu hỏi kho cmvaltmib0010vvty0l43c8wr.
+[agent] ▸ session wrun_01M51QC9DRVQJC72MFMXZACQVY on channel:crm
+[agent] » Câu hỏi kho cmvaltmib0013vvtycq4487wx.
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.5s
+[agent] · step 0 tool-calls  in 5.6k out 258 $0.0052
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaltmib0012vvtyz49iillr.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaltmib0010vvty0l43c8wr.
+[agent] · step 0 tool-calls  in 6.9k out 181 $0.0058
+[agent] · step 0 tool-calls  in 6.9k out 170 $0.0058
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaltmib0011vvtyycx9pv37.
+[agent] · step 0 tool-calls  in 6.9k out 186 $0.0059
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaltmib0014vvtydcompx7q.
+[agent] · step 0 tool-calls  in 6.9k out 156 $0.0057
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaltmib0015vvtyrw0u2ph9.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaltmib0013vvtycq4487wx.
+[agent] · step 0 tool-calls  in 6.9k out 167 $0.0058
+[agent] · step 0 tool-calls  in 6.9k out 183 $0.0058
+[agent] → bash command=ls -la /workspace
+[agent] ◂ Không có câu trả lời trong OneHub Center về mức công tác phí khi đi nước ngoài.
+[agent] · step 0 stop  in 5.8k out 1.6k $0.0102
+[agent] ✓ bash 0.4s
+[agent] · step 1 tool-calls  in 6.5k out 40 cached 3.2k $0.0028
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 2 tool-calls  in 6.6k out 41 cached 3.3k $0.0029
+[agent] → bash command=find / -name "*tro_ly_kho*" 2>/dev/null
+[agent] ✓ bash 0.1s
+[agent] · step 1 tool-calls  in 6.0k out 972 $0.0081
+[agent] → bash command=find $HOME -maxdepth 4
+[agent] ✓ bash 0.1s
+[agent] · step 3 tool-calls  in 7.0k out 34 cached 3.3k $0.0032
+[agent] → bash command=ls -la $HOME/.agents/skills
+[agent] ✓ bash 0.1s
+[agent] · step 2 tool-calls  in 7.0k out 39 cached 3.4k $0.0031
+[agent] → search_crm query=đối tác limit=10
+[agent] → search_crm query=tầng 4 limit=10
+[agent] ◂ Thông tin quy định về ngày phép năm đã được phản hồi từ tài liệu nội bộ.
+[agent] · step 3 stop  in 6.4k out 532 cached 3.3k $0.0045
+[agent] → search_crm query=Partner limit=10
+[agent] → list_deals status=all limit=50
+[agent] ✓ list_deals 0.1s
+[agent] ✓ search_crm 0.4s
+[agent] ✓ search_crm 0.2s
+[agent] ✓ search_crm 0.5s
+[agent] · step 4 tool-calls  in 7.3k out 329 cached 3.3k $0.0045
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.2s
+[agent] · step 3 tool-calls  in 7.2k out 32 $0.0055
+[agent] ✓ subagent tro_ly_kho 16.7s
+[agent] ✓ subagent tro_ly_kho 18.0s
+[agent] ✓ subagent tro_ly_kho 19.1s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 19 $0.0054
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 13 $0.0054
+[agent] ✓ subagent tro_ly_kho 20.5s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 17 $0.0054
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 18 cached 3.0k $0.0033
+[agent] ✓ subagent tro_ly_kho 23.3s
+[agent] ✓ subagent tro_ly_kho 26.3s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 16 $0.0054
+[zalo] tra loi khong con cau dang hoi hoiId=cmvalpjdc0015vvty4u4dyltx zaloChatId=?
+[agent] ◂ Câu trả lời từ kho tài liệu quy định đã được gửi đến bạn.
+[agent] · step 4 stop  in 7.6k out 1.5k cached 3.4k $0.0088
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 19 $0.0054
+[agent] ▸ session wrun_01M51QDD8GP9G9PTQJDG4MC60S on channel:crm
+[agent] ▸ session wrun_01M51QDD8FQKPXNRF74X04TMRS on channel:crm
+[agent] » Câu hỏi kho cmvaluew50017vvtyhd9vi1ug.
+[agent] » Câu hỏi kho cmvaluew50016vvtywisfk75t.
+[agent] ▸ session wrun_01M51QDD8QD0NZMFKK2238FJYN on channel:crm
+[agent] ▸ session wrun_01M51QDD8QD0NZMFKK2238FJYM on channel:crm
+[agent] » Câu hỏi kho cmvaluew50019vvtyoe9wir3k.
+[agent] » Câu hỏi kho cmvaluew50018vvtysnxyq6ew.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaluew50018vvtysnxyq6ew.
+[agent] · step 0 tool-calls  in 6.9k out 181 $0.0058
+[agent] ◂ Hiện không có câu trả lời trong OneHub Center về mức hoa hồng cho đối tác tầng 4.
+[agent] · step 5 stop  in 11.8k out 3.0k cached 6.3k $0.0157
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaluew50016vvtywisfk75t.
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-132: http-408 zalo-tu-choi 408 «timeout»
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaluew50017vvtyhd9vi1ug.
+[agent] → subagent tro_ly_kho message=Câu hỏi kho cmvaluew50019vvtyoe9wir3k.
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-133: http-408 zalo-tu-choi 408 «timeout»
+[agent] · step 0 tool-calls  in 6.9k out 223 $0.0060
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-135: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-136: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-134: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-137: http-408 zalo-tu-choi 408 «timeout»
+[agent] · step 0 tool-calls  in 6.9k out 163 $0.0058
+[agent] · step 0 tool-calls  in 6.9k out 161 $0.0058
+[agent] ▸ session wrun_01M51QDQ8KMQTN2C5K9Z0SXJW4 on channel:zalo
+[agent] » Giờ làm việc buổi sáng bắt đầu lúc mấy giờ?
+[agent] ▸ session wrun_01M51QDQ8N7356DGHKNYMDGVBX on channel:zalo
+[agent] » Khiếu nại của khách hàng doanh nghiệp lớn được ưu tiên giải quyết trong mấy ngày?
+[agent] ▸ session wrun_01M51QDQ8N7356DGHKNYMDGVBW on channel:zalo
+[agent] » Nhân viên được nghỉ thai sản bao nhiêu tháng?
+[agent] ▸ session wrun_01M51QDQ8N7356DGHKNYMDGVBY on channel:zalo
+[agent] ▸ session wrun_01M51QDQ8N7356DGHKNYMDGVBV on channel:zalo
+[agent] » Văn phòng có chỗ gửi xe máy miễn phí cho nhân viên không?
+[agent] » Công ty có hỗ trợ học phí học tiếng Anh cho nhân viên không?
+[agent] ▸ session wrun_01M51QDQ8MZVMWXX7XSRHGB6BP on channel:zalo
+[agent] » Thời gian thử việc của nhân viên kỹ thuật là bao lâu?
+[agent] → subagent tro_ly_kho message=Giờ làm việc buổi sáng bắt đầu lúc mấy giờ?
+[agent] · step 0 tool-calls  in 5.3k out 263 $0.0050
+[agent] → subagent tro_ly_kho message=Văn phòng có chỗ gửi xe máy miễn phí cho nhân v…
+[agent] · step 0 tool-calls  in 5.3k out 363 $0.0054
+[agent] → subagent tro_ly_kho message=Thời gian thử việc của nhân viên kỹ thuật là ba…
+[agent] · step 0 tool-calls  in 5.3k out 307 $0.0052
+[agent] → subagent tro_ly_kho message=Công ty có hỗ trợ học phí học tiếng Anh cho nhâ…
+[agent] · step 0 tool-calls  in 5.3k out 310 $0.0052
+[agent] → subagent tro_ly_kho message=Khiếu nại của khách hàng doanh nghiệp lớn được …
+[agent] → subagent tro_ly_kho message=Nhân viên được nghỉ thai sản bao nhiêu tháng?
+[agent] · step 0 tool-calls  in 5.4k out 333 $0.0053
+[agent] · step 0 tool-calls  in 5.3k out 368 $0.0054
+[agent] ✓ subagent tro_ly_kho 22.4s
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 16 $0.0054
+[agent] ✓ subagent tro_ly_kho 43.6s
+[agent] ✓ subagent tro_ly_kho 31.8s
+[agent] ◂ đã chuyển
+[agent] · step 0 stop  in 7.1k out 28 $0.0054
+[agent] ✓ subagent tro_ly_kho 49.1s
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51QDP20MF69PZJP4WAF07XA_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51QDP20MF69PZJP4WAF07XA_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] → bash command=git status || true; ls -la; find . -maxdepth 3
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.7k out 631 cached 3.3k $0.0044
+[agent] ✓ subagent tro_ly_kho 38.5s
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51QDZ1EP8Z4C88MHZ1NCAQC_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51QDZ1EP8Z4C88MHZ1NCAQC_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] ✓ subagent tro_ly_kho 39.8s
+[agent] → bash command=find $HOME -maxdepth 4
+[agent] ✓ bash 0.1s
+[agent] · step 1 tool-calls  in 6.5k out 44 cached 3.4k $0.0027
+[agent] → read_file filePath=/workspace/README.md
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51QE0AT4AAS8C88VBJDVPRK_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51QE0AT4AAS8C88VBJDVPRK_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] ✓ read_file 0.1s
+[agent] · step 2 tool-calls  in 6.7k out 36 cached 3.4k $0.0029
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.7k out 304 $0.0054
+[agent] ✓ subagent tro_ly_kho 47.7s
+[agent] → bash command=ls -la /workspace
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 22 $0.0054
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ bash 0.5s
+[agent] · step 0 tool-calls  in 5.7k out 656 $0.0068
+[agent] ✓ read_file 0.2s
+[agent] · step 1 tool-calls  in 6.1k out 34 cached 3.4k $0.0025
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.6s
+[agent] · step 1 tool-calls  in 6.5k out 29 cached 3.4k $0.0027
+[agent] → bash command=ls -la $HOME/.agents/skills
+[agent] ✓ bash 0.2s
+[agent] · step 2 tool-calls  in 6.9k out 36 cached 3.4k $0.0030
+[agent] ◂ Hiện không có câu trả lời trong OneHub Center về việc văn phòng có chỗ gửi xe máy miễn phí cho nhân viên hay không.
+[agent] · step 0 stop  in 5.7k out 908 $0.0077
+[agent] → bash command=env
+[agent] ✓ bash 0.2s
+[agent] · step 3 tool-calls  in 7.1k out 33 cached 3.4k $0.0032
+[agent] → list_fields entity=COMPANY
+[agent] ✓ list_fields 0.0s
+[agent] · step 2 tool-calls  in 6.5k out 2.4k cached 3.4k $0.0117
+[agent] → list_fields entity=DEAL
+[agent] ✓ list_fields 0.1s
+[agent] · step 3 tool-calls  in 9.1k out 32 cached 3.5k $0.0046
+[agent] ◂ Câu trả lời từ kho tài liệu nội bộ đã được gửi đến bạn.
+[agent] · step 3 stop  in 7.1k out 3.9k cached 3.4k $0.0176
+[agent] → search_crm query=khiếu nại limit=10
+[agent] ✓ search_crm 0.2s
+[agent] · step 4 tool-calls  in 9.2k out 42 cached 7.0k $0.0023
+[agent] ✓ subagent tro_ly_kho 76.7s
+[agent] ◂ Hiện không có câu trả lời trong OneHub Center về quy định nghỉ thai sản.
+[agent] · step 4 stop  in 7.3k out 2.8k cached 3.4k $0.0138
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.6k out 449 $0.0059
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51QE1QRXZZRJQW2HYEWGMDZ_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51QE1QRXZZRJQW2HYEWGMDZ_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] ✓ subagent tro_ly_kho 87.1s
+[agent] ◂ Không có câu trả lời trong OneHub Center.
+[agent] · step 5 stop  in 9.3k out 1.4k cached 6.9k $0.0073
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.2s
+[agent] · step 1 tool-calls  in 6.2k out 31 cached 3.4k $0.0025
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.7k out 512 cached 3.3k $0.0039
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.3k out 35 $0.0049
+[agent] ◂ Hiện không có câu trả lời trong OneHub Center về giờ làm việc buổi sáng.
+[agent] · step 2 stop  in 6.6k out 1.6k $0.0110
+[agent] ◂ Không có câu trả lời trong OneHub Center.
+[agent] · step 2 stop  in 6.7k out 2.8k cached 3.4k $0.0133
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-138: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-143: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-140: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-141: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-139: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-142: http-408 zalo-tu-choi 408 «timeout»
+[agent] ▸ session wrun_01M51QHHJVKZMN7YBBTKJHKZ3B on channel:zalo
+[agent] ▸ session wrun_01M51QHHJT1ZX6ZR6ST55HEBSD on channel:zalo
+[agent] » NVKD thử việc bao lâu vậy?
+[agent] » nhan vien chinh thuc duoc bao nhieu ngay nghi phep mot nam
+[agent] ▸ session wrun_01M51QHHJVKZMN7YBBTKJHKZ3D on channel:zalo
+[agent] » Hóa đơn CT nộp trong bn ngày sau khi về?
+[agent] ▸ session wrun_01M51QHHJVKZMN7YBBTKJHKZ3C on channel:zalo
+[agent] ▸ session wrun_01M51QHHJWKJ1YFB5DGNVS6D25 on channel:zalo
+[agent] ▸ session wrun_01M51QHHJVKZMN7YBBTKJHKZ3E on channel:zalo
+[agent] » cong tac phi trong nuoc moi ngay duoc bao nhieu tien?
+[agent] » Biễu mẫu tạm ứng kí xong thì nộp cho phòg nào?
+[agent] » Khiêú nại thông thường giải quyết trong bao nhiu ngày?
+[agent] → subagent tro_ly_kho message=NVKD thử việc bao lâu vậy?
+[agent] · step 0 tool-calls  in 5.3k out 244 $0.0049
+[agent] → subagent tro_ly_kho message=cong tac phi trong nuoc moi ngay duoc bao nhieu…
+[agent] · step 0 tool-calls  in 5.3k out 278 $0.0051
+[agent] → subagent tro_ly_kho message=nhan vien chinh thuc duoc bao nhieu ngay nghi p…
+[agent] → subagent tro_ly_kho message=Khiêú nại thông thường giải quyết trong bao nhi…
+[agent] · step 0 tool-calls  in 5.4k out 320 $0.0052
+[agent] · step 0 tool-calls  in 5.3k out 350 $0.0053
+[agent] → subagent tro_ly_kho message=Biễu mẫu tạm ứng kí xong thì nộp cho phòg nào?
+[agent] · step 0 tool-calls  in 5.4k out 437 $0.0057
+[agent] → subagent tro_ly_kho message=Hóa đơn CT nộp trong bn ngày sau khi về?
+[agent] · step 0 tool-calls  in 5.3k out 363 $0.0054
+[agent] ✓ subagent tro_ly_kho 17.1s
+[agent] ✓ subagent tro_ly_kho 18.4s
+[agent] ✓ subagent tro_ly_kho 17.8s
+[agent] ✓ subagent tro_ly_kho 19.7s
+[agent] ✓ subagent tro_ly_kho 16.6s
+[agent] ✓ subagent tro_ly_kho 21.3s
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.7k out 618 cached 3.3k $0.0044
+[agent] → bash command=find /workspace -maxdepth 3
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.8k out 512 cached 3.3k $0.0040
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.5k out 35 cached 3.4k $0.0027
+[agent] ◂ Thông tin từ quy định nội bộ đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.7k out 300 cached 3.3k $0.0032
+[agent] → bash command=rg -i "tro_ly_kho" /workspace || true
+[agent] ◂ Thông tin theo quy định từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.7k out 808 $0.0073
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ bash 0.6s
+[agent] · step 0 tool-calls  in 5.7k out 412 $0.0058
+[agent] ✓ read_file 0.1s
+[agent] · step 1 tool-calls  in 6.4k out 40 $0.0049
+[agent] → bash command=find ~/.agents -maxdepth 4
+[agent] ✓ bash 0.1s
+[agent] · step 2 tool-calls  in 6.8k out 38 cached 3.4k $0.0030
+[agent] ✗ subagent tro_ly_kho 165.8s failed: The session reached its configured output token limit.
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.1s
+[agent] · step 1 tool-calls  in 6.1k out 32 $0.0047
+[agent] → bash command=ls -la $HOME/.agents/skills
+[agent] ✓ bash 0.2s
+[agent] · step 2 tool-calls  in 6.7k out 53 cached 3.4k $0.0030
+[agent] ◂ Câu trả lời từ kho tài liệu quy định đã được gửi đến bạn.
+[agent] · step 0 stop  in 5.6k out 381 cached 3.3k $0.0034
+[agent] ◂ đã chuyển.
+[agent] · step 0 stop  in 7.1k out 73 $0.0056
+[agent] → bash command=cat /workspace/README.md
+[agent] ✓ bash 0.2s
+[agent] · step 2 tool-calls  in 6.2k out 32 cached 3.3k $0.0025
+[agent] ◂ Câu trả lời từ tài liệu quy trình nội bộ đã được gửi tới bạn.
+[agent] · step 3 stop  in 7.1k out 622 cached 3.4k $0.0053
+[agent] ◂ Câu trả lời từ kho tài liệu đã được gửi đến bạn.
+[agent] · step 3 stop  in 7.0k out 931 cached 3.4k $0.0065
+[agent] ◂ Thông tin quy định về công tác phí đã được gửi đến bạn.
+[agent] · step 3 stop  in 6.5k out 629 cached 3.4k $0.0050
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-145: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-144: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-148: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-149: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-146: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-147: http-408 zalo-tu-choi 408 «timeout»
+[agent] ▸ session wrun_01M51QK03H4W665NC22MBAVNHY on channel:zalo
+[agent] » Thoả thuận nào của em sắp đến hạn chốt trong tuần này?
+[agent] ▸ session wrun_01M51QK03JBJFZ95E587E5C210 on channel:zalo
+[agent] ▸ session wrun_01M51QK03H4W665NC22MBAVNHZ on channel:zalo
+[agent] ▸ session wrun_01M51QK03JBJFZ95E587E5C211 on channel:zalo
+[agent] » Nhân viên full-time có bao nhiêu ngày annual leave một năm?
+[agent] » ad ơi cho em hỏi công tác phí trong nước 1 ngày được bao nhiêu ạ
+[agent] » chị ơi em muốn nghỉ phép thì phải báo trước mấy hôm ạ 🙏
+[agent] ▸ session wrun_01M51QK03JBJFZ95E587E5C212 on channel:zalo
+[agent] ▸ session wrun_01M51QK03JBJFZ95E587E5C213 on channel:zalo
+[agent] » Deal có net revenue 18 triệu thì partner có được commission không?
+[agent] » KR doanh số quý này của phòng mình đang đạt bao nhiêu phần trăm?
+[agent] → subagent tro_ly_kho message=Nhân viên full-time có bao nhiêu ngày annual le…
+[agent] · step 0 tool-calls  in 5.3k out 341 $0.0053
+[agent] → subagent tro_ly_kho message=chị ơi em muốn nghỉ phép thì phải báo trước mấy…
+[agent] · step 0 tool-calls  in 5.3k out 309 $0.0052
+[agent] → subagent tro_ly_kho message=ad ơi cho em hỏi công tác phí trong nước 1 ngày…
+[agent] · step 0 tool-calls  in 5.4k out 422 $0.0056
+[agent] → list_deals status=open limit=50
+[agent] ✓ list_deals 0.2s
+[agent] · step 0 tool-calls  in 5.3k out 391 $0.0055
+[agent] → list_deals status=open limit=5
+[agent] ✓ list_deals 0.4s
+[agent] · step 0 tool-calls  in 5.3k out 735 $0.0068
+[agent] → bash command=env; ls -la /workspace
+[agent] ✓ bash 0.2s
+[agent] · step 1 tool-calls  in 8.3k out 188 $0.0069
+[agent] → subagent tro_ly_kho message=Deal có net revenue 18 triệu thì partner có đượ…
+[agent] → read_file filePath=/workspace/README.md
+[agent] · step 0 tool-calls  in 5.3k out 1.3k $0.0088
+[agent] ✓ read_file 0.1s
+[agent] · step 2 tool-calls  in 8.7k out 31 cached 6.4k $0.0023
+[agent] → search_crm query=OKR limit=10
+[agent] ✓ search_crm 0.4s
+[agent] · step 1 tool-calls  in 6.9k out 399 cached 3.3k $0.0044
+[agent] → bash command=ls -la $HOME; ls -la $HOME/.agents
+[agent] ✓ bash 0.1s
+[agent] · step 3 tool-calls  in 9.1k out 41 cached 6.5k $0.0026
+[agent] → search_crm query=doanh so limit=10
+[agent] ✓ search_crm 0.4s
+[agent] · step 2 tool-calls  in 7.3k out 43 cached 3.3k $0.0034
+[agent] → list_fields entity=CONTACT
+[agent] ✓ list_fields 0.0s
+[agent] · step 4 tool-calls  in 9.4k out 82 $0.0074
+[agent] ✓ subagent tro_ly_kho 15.2s
+[agent] → list_fields entity=DEAL
+[agent] ✓ list_fields 0.0s
+[agent] · step 5 tool-calls  in 9.6k out 35 cached 6.5k $0.0029
+[agent] → bash command=ls -la /workspace
+[agent] ✓ bash 0.3s
+[agent] · step 0 tool-calls  in 5.8k out 320 $0.0056
+[agent] → search_crm query=Zalo limit=10
+[agent] ✓ search_crm 0.0s
+[agent] · step 6 tool-calls  in 9.6k out 135 cached 6.5k $0.0033
+[agent] ◂ Hiện tại không có câu trả lời trong OneHub Center về số liệu và tiến độ đạt KR doanh số của phòng trong quý này.
+[agent] · step 3 stop  in 8.0k out 560 cached 3.3k $0.0059
+[agent] → bash command=cat /workspace/README.md; ls -la $HOME/.agents
+[agent] ✓ bash 0.2s
+[agent] · step 1 tool-calls  in 6.2k out 42 cached 3.4k $0.0026
+[agent] ✓ subagent tro_ly_kho 23.4s
+[agent] → bash command=find $HOME/.agents -type f
+[agent] ✓ bash 0.2s
+[agent] · step 2 tool-calls  in 6.6k out 33 cached 3.4k $0.0028
+[agent] → bash command=python3 -c '
+import datetime
+d = datetime.date(…
+[agent] ✓ bash 0.1s
+[agent] · step 7 tool-calls  in 9.8k out 665 cached 6.5k $0.0055
+[agent] ◂ Dạ, thông tin quy định về việc báo trước khi nghỉ phép gửi bạn nhé.
+[agent] · step 0 stop  in 5.7k out 464 cached 3.3k $0.0038
+[agent] ◂ Thông tin quy định về công tác phí đã được gửi đến bạn nhé.
+[agent] · step 3 stop  in 6.8k out 943 cached 3.4k $0.0063
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51QK8ZVGZ3A9QMR8TZF3JSK_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51QK8ZVGZ3A9QMR8TZF3JSK_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] → bash command=python3 -c '
+import json
+
+deals = [
+  {"name": …
+[agent] ✓ bash 0.1s
+[agent] · step 8 tool-calls  in 10.5k out 1.2k cached 6.6k $0.0078
+[agent] ✓ subagent tro_ly_kho 31.0s
+[agent] → bash command=find /workspace -maxdepth 3 -ls
+[agent] ✓ bash 0.2s
+[agent] · step 0 tool-calls  in 6.7k out 477 $0.0068
+[agent] → bash command=python3 -c "
+deals = [
+  {'name': 'Attio — Comp…
+[agent] ✓ bash 0.1s
+[agent] · step 9 tool-calls  in 11.7k out 1.1k cached 10.1k $0.0060
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 chunk:strm_01M51QK27FPTCDWCR0G8RXN90F_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:15403) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close:strm_01M51QK27FPTCDWCR0G8RXN90F_system_abort listeners added to [EventEmitter]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+[agent] → bash command=find /home -maxdepth 4 -ls 2>/dev/null
+[agent] ✓ bash 0.1s
+[agent] · step 1 tool-calls  in 7.3k out 50 cached 3.4k $0.0033
+[agent] → search_crm query=Ada limit=10
+[agent] ✓ search_crm 0.0s
+[agent] · step 10 tool-calls  in 13.5k out 124 cached 10.3k $0.0036
+[agent] → read_file filePath=/workspace/README.md
+[agent] ✓ read_file 0.4s
+[agent] · step 2 tool-calls  in 8.1k out 35 cached 3.5k $0.0038
+[agent] → read_deal_history dealId=seed-deal-retool-0 threads=5
+[agent] ✓ read_deal_history 0.1s
+[agent] → bash command=grep -rn "reaches the teammate as is" /home 2>/…
+[agent] · step 11 tool-calls  in 13.8k out 1.5k cached 10.2k $0.0091
+[agent] ✓ bash 0.4s
+[agent] · step 3 tool-calls  in 8.4k out 624 cached 3.5k $0.0063
+[agent] → bash command=ls -la ~/.agents/skills
+[agent] ✓ bash 0.5s
+[agent] · step 4 tool-calls  in 9.1k out 37 cached 7.0k $0.0022
+[agent] ◂ Câu trả lời từ tài liệu quy định nội bộ đã được gửi đến bạn.
+[agent] · step 5 stop  in 9.3k out 369 cached 7.1k $0.0036
+[agent] → read_deal_history dealId=seed-deal-cal-com-0 threads=5
+[agent] ✓ read_deal_history 0.0s
+[agent] · step 12 tool-calls  in 15.6k out 50 cached 13.8k $0.0026
+[agent] → read_deal_history dealId=seed-deal-stripe-0 threads=5
+[agent] ✓ read_deal_history 0.1s
+[agent] · step 13 tool-calls  in 16.1k out 37 cached 13.8k $0.0029
+[agent] ◂ Do hệ thống chưa xác định danh tính tài khoản Zalo của bạn, câu trả lời dựa trên giả định liệt kê các thoả thuận có hạn chốt trong tuần này (tính theo ngày 16/10/2026) theo từng người phụ trách:
+
+Nếu bạn là Priya Raman:
+Thoả thuận Retool — Comp AI đến hạn chốt vào hôm nay (16/10/2026), giá trị 116.…
+[agent] · step 14 stop  in 16.5k out 2.3k cached 13.7k $0.0118
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-150: http-408 zalo-tu-choi 408 «timeout»
+[zalo] sendChatAction hong message_id=tlk-msg-mvaljzgb-151: http-408 zalo-tu-choi 408 «timeout»
+[agent] ▸ session wrun_01M51QQTS7882SNVYVAEF3TEYM on channel:zalo
+[agent] ▸ session wrun_01M51QQTS7882SNVYVAEF3TEYK on channel:zalo
+[agent] » Chào bạn, hôm nay bạn khoẻ không?
+[agent] » Nhắc giúp em gọi lại cho khách vào chiều mai nhé.
+[agent] ◂ Chào bạn, mình khỏe, cảm ơn bạn. Mình sẵn sàng hỗ trợ tra cứu thông tin trên OneHub Center khi bạn cần.
+[agent] · step 0 stop  in 5.3k out 285 $0.0051
+[agent] ◂ Kênh Zalo hiện ở chế độ chỉ đọc nên không thể tạo lịch hẹn hay đặt lịch nhắc gọi lại. Bạn vui lòng tạo công việc trực tiếp trên OneHub Center hoặc cài đặt nhắc nhở trên thiết bị của mình nhé.
+[agent] · step 0 stop  in 5.3k out 952 $0.0076
+[world-local] Queue message failed (attempt 2, HTTP 503) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//turnWorkflow',
+  messageId: 'msg_01M51QQVYV5DT2SR1PVCCN8SBH',
+  runId: 'wrun_01M51QQVQ7ZWJGHV9HAQ3Y2DH2',
+  handlerError: '{"error":"socket hang up"}'
+}
+[eve:dev] failed to stop development sandbox resources: configure is not a function

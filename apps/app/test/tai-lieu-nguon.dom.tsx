@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
 	act,
 	type ComponentProps,
@@ -262,9 +263,11 @@ async function mo(nut: ReactNode): Promise<void> {
 	});
 	await act(async () => {
 		root.render(
-			<QueryClientProvider client={client}>
-				<LocaleProvider locale="vi">{nut}</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter hasMemory>
+				<QueryClientProvider client={client}>
+					<LocaleProvider locale="vi">{nut}</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		);
 	});
 	for (let i = 0; i < 4; i += 1) await nhip();
@@ -415,15 +418,10 @@ describe("nguon-tat — nút tải khoá khi chưa bật lưu tệp (E5d)", () =
 				<header data-dau-trang="">
 					<DongNguonTat />
 					<PageShellActions>
-						<HanhDongTaiLieu
-							loai={null}
-							luaChon={LUA_CHON}
-							page={1}
-							tab="trang"
-						/>
+						<HanhDongTaiLieu luaChon={LUA_CHON} />
 					</PageShellActions>
 				</header>
-				<DanhSach loai={null} page={1} tab="trang" />
+				<DanhSach />
 			</>,
 		);
 	}
@@ -509,14 +507,14 @@ describe("hang-nguon — tab Nguồn nói trạng thái bằng chữ thường (
 		}
 	});
 
-	test("hang-nguon: Cần gõ tay, Máy đang soạn, Đã soạn kèm «Xem bản đề xuất»", async () => {
+	test("hang-nguon: Cần gõ tay, Kara đang soạn, Đã soạn kèm «Xem bản đề xuất»", async () => {
 		canh.hang = BON_HANG;
 		await mo(<BangNguon />);
 
 		for (const goc of HAI_KHUNG) {
 			expect(hang(HANG_GO_TAY.id, goc).textContent).toContain("Cần gõ tay");
 			expect(hang(HANG_DANG_SOAN.id, goc).textContent).toContain(
-				"Máy đang soạn",
+				"Kara đang soạn",
 			);
 			const daSoan = hang(HANG_DA_SOAN.id, goc);
 			expect(daSoan.textContent).toContain("Đã soạn");

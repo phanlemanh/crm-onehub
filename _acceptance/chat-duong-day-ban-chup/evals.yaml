@@ -1,0 +1,221 @@
+schema_version: 1
+slug: chat-duong-day-ban-chup
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttr_ban_chup
+    paths:
+      - "apps/api/src/create-app.ts"
+      - "apps/api/src/trpc/openapi.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "apps/api/test/tran-than-rest.spec.ts"
+    expected: |
+      apps/api/test/tran-than-rest.spec.ts describe "ttr-ban-chup", app dung bang createApp() that, goi qua supertest.
+      Fixture KHONG viet tay: khoi du lieu rut tu LO-TRINH.html that cua cay (cung cach bai ldbc cua LT1c), chu kho tao
+      khoa «Đẩy lộ trình» qua thu tuc apiKeys.create that. Ma tran viet truoc cua hang ban chup (3 o, so assert = 3):
+        o1 than = khoi that; kiem truoc Buffer.byteLength(than) > tran mac dinh cua cau REST (doc tu hang cau hinh,
+           khong go so) -> 200, ketQua "nhan", doc lai Prisma dung sha da gui
+        o2 than 1,5 MB (khoi that + truong dem, sha moi, commitLuc moi hon o1) -> 200, ketQua "nhan", doc lai Prisma
+           dung sha moi (truong dem bi khuon bo, khong vao hang)
+        o3 than tranThanByte + 1 -> 413
+      CHIEU DO: ban sao createApp dat maxBodySize cua cau ban chup = tran mac dinh -> o1 do voi thong diep ghim
+      "khoi lo trinh that bi chan vi co"; ban sao bo cau ban chup (mot cau 100 000 cho moi duong) -> o2 do cung thong diep.
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttr_ban_chup
+    paths:
+      - "apps/api/src/create-app.ts"
+      - "apps/api/src/trpc/openapi.ts"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "apps/api/test/tran-than-rest.spec.ts"
+    expected: |
+      Cung describe "ttr-ban-chup" voi E1 (o2, o3 cua ma tran ban chup). Lenh trung E1 chay mot lan.
+      CHIEU DO: ban sao createApp dat cau ban chup maxBodySize = 4 MB -> o3 do voi thong diep ghim
+      "duong ban chup nhan than qua 2 MB".
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttr_duong_khac
+    paths:
+      - "apps/api/src/create-app.ts"
+      - "apps/api/src/trpc/openapi.ts"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "apps/api/test/tran-than-rest.spec.ts"
+    expected: |
+      describe "ttr-duong-khac": POST /rest/org/divisions (thu tuc that cua to-chuc router), KHONG cookie, KHONG khoa.
+      Ma tran viet truoc cua hang duong khac (5 o, so assert = 5), co than tinh tu hang tran chung doc tu cau hinh
+      (khong go so), kiem Buffer.byteLength(than) dung bang co cua o truoc khi gui:
+        o1 90 000 byte -> 401, code UNAUTHORIZED (than toi duoc buoc kiem quyen)
+        o2 dung bang tran chung -> 401, code UNAUTHORIZED
+        o3 tran chung + 1 -> 413
+        o4 150 000 byte -> 413
+        o5 tranThanByte + 1 -> 413
+      Ca o: kiem them KHONG co hang Division nao mang ten trong than (yeu cau khong toi duoc dich vu).
+      CHIEU DO: ban sao createApp dung mot cau 2 MB cho moi duong (nhu LT1c) -> o2 do voi thong diep ghim
+      "duong REST khac nhan than qua 100 KB"; ban sao dat tran chung = 100 * 1024 -> o3 do voi thong diep ghim
+      "tran chung khong phai 100 000 byte".
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttr_duong_khac
+    paths:
+      - "apps/api/src/create-app.ts"
+      - "apps/api/test/tran-than-rest.spec.ts"
+    expected: |
+      Cung describe "ttr-duong-khac": nguoi chu kho co phien (cookie mint qua helper phien that cua bai api), gui
+      150 000 byte toi POST /rest/org/divisions -> 413; doi chung cung nguoi, than nho hop le -> != 413.
+      CHIEU DO: ban sao chon cau 2 MB khi yeu cau co cookie -> o nay do voi thong diep ghim
+      "tran than noi theo nguoi gui".
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttr_khuon_413
+    paths:
+      - "apps/api/src/create-app.ts"
+      - "apps/api/test/tran-than-rest.spec.ts"
+    expected: |
+      describe "ttr-khuon-413": lay hai cau tra loi 413 that — duong ban chup voi than tranThanByte + 1 (co khoa) va
+      duong khac voi than 150 000 byte (khong khoa). So QUAN HE giua hai cau tra loi, khong so voi chuoi viet tay:
+      cung status 413, cung tap khoa JSON cap ngoai, cung gia tri truong code.
+      CHIEU DO: ban sao chan duong ban chup bang json({ limit }) truoc cau (mau LISTING_INGEST, loi Nest) -> do voi
+      thong diep ghim "hai duong tra loi 413 khac khuon".
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dcn_tu_choi
+    paths:
+      - "scripts/ban-chup-lo-trinh/**"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+    expected: |
+      scripts/ban-chup-lo-trinh/test/day.test.ts describe "dcn-tu-choi": goi day() voi env TRAO TUONG MINH (khong doc
+      process.env), may chu gia dem loi goi. Ma tran viet truoc (3 o tu choi, so assert = 3), moi o co du hai khoa
+      CRM_API_URL va CRM_KHOA_DAY_LO_TRINH:
+        GITHUB_ACTIONS=true + GITHUB_REF=refs/heads/feat/thu
+        GITHUB_ACTIONS=true + GITHUB_REF=refs/tags/v1
+        GITHUB_ACTIONS=true + khong GITHUB_REF
+      moi o: ma 1; so loi goi mang == 0; stdout co dung mot dong bat dau "::error title=ban-chup-lo-trinh::"; dong loi
+      chua nguyen van ref da chay (hoac chu bao thieu ref) va refDay. Them mot o: env Actions sai ref va KHONG co khoa
+      -> van ma 1 (chan dung truoc buoc chua-cai), KHONG co dong notice "chua-cai".
+      CHIEU DO: ban sao day.ts bo buoc chan -> o feat/thu do voi thong diep ghim "luot ngoai onehub da goi CRM";
+      ban sao dat buoc chan sau buoc chua-cai -> o khong-khoa do voi thong diep ghim "luot ngoai onehub xanh vi chua cai".
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dcn_onehub
+    paths:
+      - "scripts/ban-chup-lo-trinh/**"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+    expected: |
+      describe "dcn-onehub": cung may chu gia tra { ketQua: "nhan" } (rut tu banChupRa, khong viet tay chuoi):
+        o1 GITHUB_ACTIONS=true + GITHUB_REF=refs/heads/onehub -> ma 0, dung 1 loi goi toi DUONG_DAY, notice "nhan"
+        o2 khong GITHUB_ACTIONS (ngoai Actions), GITHUB_REF=refs/heads/feat/thu -> ma 0, dung 1 loi goi (nhu truoc vong)
+        o3 chay khoi chinh cua day.ts thanh tien trinh rieng, may chu gia Bun.serve, env tien trinh con DAT TUONG MINH
+           GITHUB_ACTIONS=true + GITHUB_REF=refs/heads/onehub -> ma 0, may chu nhan dung 1 than; cung bai voi
+           GITHUB_REF=refs/pull/1/merge -> ma khac 0, may chu nhan 0 than (chan o muc tien trinh, khong chi o ham)
+      Bai "chay-that" cua LT1c dat GITHUB_ACTIONS va GITHUB_REF tuong minh cho tien trinh con, khong ke thua env cua may
+      chay (tren CI env mang refs/pull/<n>/merge).
+      CHIEU DO: ban sao so ref bang endsWith("onehub") -> them o GITHUB_REF=refs/heads/feat/onehub vao dcn-tu-choi do voi
+      thong diep ghim "luot ngoai onehub da goi CRM" (doi chung: o1 o day van xanh).
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dcn_env_ci
+    paths:
+      - "scripts/ban-chup-lo-trinh/**"
+    expected: |
+      Toan bo bai cua scripts/ban-chup-lo-trinh/test chay voi env XUAT SAN giong CI cua PR: GITHUB_ACTIONS=true,
+      GITHUB_REF=refs/pull/1/merge -> ma 0 (moi bai trao env tuong minh cho day() va cho tien trinh con, khong ke thua
+      env may chay).
+      CHIEU DO: ban sao bai chay-that bo hai dong dat env tuong minh -> lenh do o chay-that (tien trinh con bi chan,
+      may chu nhan 0 than) voi thong diep ghim cua bai do.
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.dcn_workflow
+    paths:
+      - ".github/workflows/ban-chup-lo-trinh.yml"
+      - "scripts/ban-chup-lo-trinh/**"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+    expected: |
+      describe "dcn-workflow": doc .github/workflows/ban-chup-lo-trinh.yml bang parser YAML (Bun.YAML), so QUAN HE:
+      "refs/heads/" + on.push.branches[0] == BAN_CHUP_LO_TRINH.refDay va on.push.branches co dung mot phan tu; khong
+      buoc nao cua job co env GITHUB_REF hay GITHUB_ACTIONS.
+      CHIEU DO: ban sao workflow doi push.branches thanh [main] -> do voi thong diep ghim "nhanh day lech nhanh duoc phep";
+      ban sao them env GITHUB_REF: refs/heads/onehub vao buoc day -> do voi thong diep ghim "buoc day tu dat GITHUB_REF".
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E9
+    criterion: AC-9
+    executor: judgment
+    question: >-
+      Đọc năm tệp như người bảo trì kho, theo luật «hằng số thuộc một tệp cấu hình theo khu» của AGENTS.md. Trả PASS khi
+      đủ ba điều: (1) trần 2 MB của đường bản chụp, trần mặc định 100 000 byte của cầu REST và đường «/lo-trinh/ban-chup»
+      mỗi thứ được khai trong một hằng cấu hình có tên (BAN_CHUP_LO_TRINH hoặc hằng cạnh REST_BRIDGE_PATH), theo khuôn
+      «một object, as const» của AGENTS.md; (2) create-app.ts, router lo-trinh-ban-chup và scripts/ban-chup-lo-trinh/day.ts
+      đọc ba giá trị đó từ hằng, không gõ lại số hay chuỗi đường; (3) create-app.ts chọn cầu 2 MB bằng so khớp đúng đường
+      (bằng nhau), không theo tiền tố hay biểu thức khớp rộng hơn. FAIL nêu tệp và dòng vi phạm.
+    inputs:
+      - apps/api/src/create-app.ts
+      - apps/api/src/trpc/openapi.ts
+      - packages/validation/src/ban-chup-lo-trinh.ts
+      - apps/api/src/lo-trinh/lo-trinh-ban-chup.router.ts
+      - scripts/ban-chup-lo-trinh/day.ts
+    evidence_required: [verdict, rationale, verified_at]
+
+  - id: E9b
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.dcn_mot_cho
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "scripts/**"
+      - "_acceptance/chat-duong-day-ban-chup/rang/**"
+    expected: |
+      _acceptance/chat-duong-day-ban-chup/rang/mot-cho-khai.mjs, goc kho suy tu vi tri tep (khong go duong tuyet doi):
+      quet moi tep .ts .tsx .js .mjs .cjs duoi apps/, packages/, scripts/ (bo node_modules, .next*, generated, thu muc
+      test, tep *.spec.* *.test.* *.dom.*) tim chuoi "/lo-trinh/ban-chup"; ngoai packages/validation/src/ban-chup-lo-trinh.ts
+      phai 0 lan. Trong apps/api/src/create-app.ts: moi doi so maxBodySize la ten hang, khong so. In mot dong
+      KET LUAN: "mot-cho-khai: 0 vi pham" (ma 0) hoac tung "<tep>:<dong>: <chuoi>" (ma 1).
+      CHIEU DO (cung kho, ban chep vao tmpdir): them restMeta("POST", "/lo-trinh/ban-chup", …) go tay vao router ->
+      ma 1, dong ghim nhac lo-trinh-ban-chup.router.ts; dat maxBodySize: 100000 trong create-app.ts -> ma 1, dong ghim
+      "maxBodySize la so". Doi chung: cay lanh -> ma 0.
+    evidence_required: [exit_code, stdout_tail]
+
+  - id: E10
+    criterion: AC-10
+    executor: judgment
+    question: >-
+      Đọc mục «Bản chụp lộ trình: Actions đẩy, CRM giữ bản mới nhất» của docs/api.md như một người mới vào kho. Mục có
+      nói rõ hai điều không: (1) trần thân 2 MB chỉ áp riêng đường POST /rest/lo-trinh/ban-chup, mọi đường khác của
+      cầu REST giữ trần 100 KB, và thân được đọc trước khi kiểm quyền nên trần không nới theo người gửi; (2) kịch bản
+      đẩy từ chối (lượt đỏ, nêu ref) khi chạy trong GitHub Actions mà không từ nhánh onehub, kể cả khi bấm chạy tay, còn
+      chạy ngoài Actions thì không bị chặn. Mục không tự đúc từ ghép tiếng Việt cho thuật ngữ kỹ thuật. Trả PASS khi
+      đủ hai điều, FAIL nêu điều thiếu.
+    inputs: [docs/api.md]
+    evidence_required: [verdict, rationale, verified_at]

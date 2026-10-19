@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai thấy thanh thẻ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&subset=vietnamese&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #fafafa; color: #171717; padding: 3rem 2rem; display: flex; justify-content: center; }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow { font-family: 'Geist Mono', monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #575757; margin-bottom: 1rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình quyết định · Mọi tín hiệu cho quản trị</p>
+
+    <svg viewBox="0 0 1200 660" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#171717" font-size="24" font-family="'Lora', serif">Ai thấy thanh thẻ «Của tôi · Tất cả»?</text>
+      <text x="40" y="64" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Người mở trang Tín hiệu rẽ theo vai. Với thành viên có hai phương án — chủ sản phẩm chọn một.</text>
+
+      <!-- Arrows first -->
+      <line x1="600" y1="136" x2="600" y2="164" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M488 212 H188 Q180 212 180 220 V312" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M712 212 H832 Q840 212 840 220 V296" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="180" y1="368" x2="180" y2="416" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="688" y1="424" x2="688" y2="456" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="1000" y1="424" x2="1000" y2="456" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- Arrow labels (beside vertical segments) -->
+      <rect x="192" y="248" width="96" height="18" rx="2" fill="#fafafa"/>
+      <text x="196" y="261" fill="#575757" font-size="11" font-weight="500" font-family="'Geist', sans-serif">Chủ / quản trị</text>
+      <rect x="852" y="248" width="136" height="18" rx="2" fill="#fafafa"/>
+      <text x="856" y="261" fill="#575757" font-size="11" font-weight="500" font-family="'Geist', sans-serif">Thành viên / chỉ OKR</text>
+      <rect x="192" y="384" width="88" height="18" rx="2" fill="#fafafa"/>
+      <text x="196" y="397" fill="#575757" font-size="11" font-family="'Geist', sans-serif">bấm «Tất cả»</text>
+
+      <!-- Start oval -->
+      <rect x="464" y="88" width="272" height="48" rx="24" fill="#fafafa"/>
+      <rect x="464" y="88" width="272" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="600" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mở trang «Tín hiệu đã gửi»</text>
+
+      <!-- Decision diamond -->
+      <polygon points="600,164 712,212 600,260 488,212" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="600" y="216" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người mở là ai?</text>
+
+      <!-- Admin column -->
+      <rect x="40" y="312" width="280" height="56" rx="6" fill="#fafafa"/>
+      <rect x="40" y="312" width="280" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="180" y="336" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thấy thanh thẻ «Của tôi · Tất cả»</text>
+      <text x="180" y="354" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ngay dưới đầu trang</text>
+
+      <rect x="40" y="416" width="280" height="64" rx="32" fill="#fafafa"/>
+      <rect x="40" y="416" width="280" height="64" rx="32" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="180" y="444" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ba ô số + bảng mọi tín hiệu</text>
+      <text x="180" y="462" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ai gửi · phòng ban · màn · đang ở đâu</text>
+
+      <!-- Member options container -->
+      <rect x="520" y="296" width="640" height="264" rx="8" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="532" y="304" width="264" height="18" rx="2" fill="#fafafa"/>
+      <text x="536" y="317" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HAI PHƯƠNG ÁN · CHỌN MỘT</text>
+
+      <!-- Option A: recommended -->
+      <rect x="536" y="328" width="304" height="216" rx="6" fill="rgba(0,107,79,0.06)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="552" y="352" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Máy khuyên · ẩn thanh thẻ</text>
+
+      <rect x="556" y="368" width="264" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="688" y="392" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang «Của tôi» y như hôm nay</text>
+      <text x="688" y="410" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không có thanh thẻ</text>
+
+      <rect x="700" y="432" width="132" height="18" rx="2" fill="#ebf1f0"/>
+      <text x="704" y="445" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mở thẳng địa chỉ Tất cả</text>
+
+      <rect x="556" y="456" width="264" height="76" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="688" y="478" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">«Chỉ chủ và quản trị CRM</text>
+      <text x="688" y="494" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">xem được mọi tín hiệu.»</text>
+      <text x="688" y="516" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">nút về trang của mình · không lộ dữ liệu</text>
+
+      <!-- Option B: alternative -->
+      <rect x="856" y="328" width="288" height="216" rx="6" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="872" y="352" fill="#575757" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Lối khác · hiện thẻ bị khoá</text>
+
+      <rect x="876" y="368" width="248" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1000" y="392" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang «Của tôi» có thanh thẻ</text>
+      <text x="1000" y="410" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">thẻ «Tất cả» hiện nhưng bị khoá</text>
+
+      <rect x="876" y="456" width="248" height="76" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1000" y="486" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Một dòng lý do cạnh thẻ khoá</text>
+      <text x="1000" y="508" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">thành viên biết có trang mà không mở được</text>
+
+      <!-- Legend -->
+      <line x1="40" y1="592" x2="1160" y2="592" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="612" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="624" width="24" height="16" rx="8" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="72" y="636" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bắt đầu / kết thúc</text>
+      <rect x="208" y="624" width="24" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="240" y="636" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Màn người thấy</text>
+      <polygon points="364,632 376,624 388,632 376,640" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="396" y="636" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Rẽ theo vai</text>
+      <rect x="500" y="624" width="24" height="16" rx="2" fill="rgba(0,107,79,0.06)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="532" y="636" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Lối máy khuyên</text>
+      <rect x="664" y="624" width="24" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="696" y="636" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Phương án chờ chọn</text>
+      <text x="1160" y="636" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">TIÊU CHÍ AC-1 · AC-3</text>
+    </svg>
+  </div>
+</body>
+</html>

@@ -43,8 +43,8 @@ const CAP = [
 	[
 		"a bo hang ViecGan khi tao",
 		GHI,
-		"for (const b of ganDung) {",
-		"for (const b of []) {",
+		"for (const b of ganDung) {\n\t\tawait tx.viecGan.create({ data: { viecId: viec.id, ...cotGan(b) } });\n\t}\n\tfor (const n of nguoiTheoDoi) {",
+		"for (const b of []) {\n\t\tawait tx.viecGan.create({ data: { viecId: viec.id, ...cotGan(b) } });\n\t}\n\tfor (const n of nguoiTheoDoi) {",
 		[[VC.tao, "vc: gan sai"]],
 	],
 	[

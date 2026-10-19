@@ -10,12 +10,19 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams } from "../../okr-search-params";
+import { tieuDeTrinhDuyet } from "../../tieu-de-khu";
 import { SucKhoe } from "./suc-khoe";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata(): Promise<Metadata> {
-	return { title: okrToanCanhMessages(await getLocale()).toanCanh.suKhoe };
+	const locale = await getLocale();
+	return {
+		title: tieuDeTrinhDuyet(
+			locale,
+			okrToanCanhMessages(locale).toanCanh.suKhoe,
+		),
+	};
 }
 
 export default function SucKhoePage({

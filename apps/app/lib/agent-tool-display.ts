@@ -12,7 +12,7 @@ const ARTIFACT_NAMES: ArtifactNames = {
 	"agent/README.md": "the readme",
 };
 
-type LabelInput = {
+export type LabelInput = {
 	tool: string;
 	input: EveToolInput;
 	label: string;
@@ -42,9 +42,12 @@ const INPUT_LABELS: ToolInputLabels = {
 	},
 };
 
-export function toolLabel(item: LabelInput): string {
-	const fromInput = item.input
-		? INPUT_LABELS[item.tool]?.(item.input, item.pending)
+export function inputLabel(item: LabelInput): string | null {
+	return item.input
+		? (INPUT_LABELS[item.tool]?.(item.input, item.pending) ?? null)
 		: null;
-	return fromInput ?? item.label;
+}
+
+export function toolLabel(item: LabelInput): string {
+	return inputLabel(item) ?? item.label;
 }

@@ -171,7 +171,7 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 		const thamSo = new URLSearchParams({ [SEARCH_PARAM.okr.tu]: LOI_VAO_THE });
 		return (
 			<Button asChild size="sm">
-				<Link href={`${url("/okr/cap-nhat-tuan")}?${thamSo}`}>
+				<Link href={`${url("/okr")}?${thamSo}`}>
 					{m.capNhatTuan}
 					<Icon icon={ArrowRight} data-icon="inline-end" />
 				</Link>
@@ -248,10 +248,12 @@ export function ViecOkrCuaToi({
 	noi,
 	khiHien,
 	anKhiLoi,
+	anCapNhat = false,
 }: {
 	noi: NoiHienViec;
 	khiHien: KhiHienViec;
 	anKhiLoi: boolean;
+	anCapNhat?: boolean;
 }) {
 	const m = okrMessages(useLocale()).viecCuaToi;
 	const trpc = useTRPC();
@@ -300,7 +302,10 @@ export function ViecOkrCuaToi({
 		);
 	}
 
-	const { viec, lienQuanOkr } = duLieu;
+	const { lienQuanOkr } = duLieu;
+	const viec = anCapNhat
+		? duLieu.viec.filter((v) => v.loai !== "okr-cap-nhat")
+		: duLieu.viec;
 	const hien =
 		khiHien === "luon" ||
 		(khiHien === "khi-lien-quan" ? lienQuanOkr : viec.length > 0);

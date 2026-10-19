@@ -7,13 +7,23 @@ import { useKyHoiY } from "./chon-chu-ky";
 import { nhanTuHoiYNhan } from "./hoi-y/man-hoi-y";
 import { DauTrangOkr } from "./thanh-tab";
 
-export function DauTrangOkrHoiY({ chonChuKy }: { chonChuKy: ReactNode }) {
+export function DauTrangOkrHoiY({
+	chonChuKy,
+	cauNoi = false,
+}: {
+	chonChuKy: ReactNode;
+	cauNoi?: boolean;
+}) {
 	const trpc = useTRPC();
 	const { cycleId } = useKyHoiY();
 	const nhan = useQuery(
 		trpc.okr.hoiYNhan.queryOptions(cycleId === null ? skipToken : { cycleId }),
 	);
 	return (
-		<DauTrangOkr chonChuKy={chonChuKy} nhanHoiY={nhanTuHoiYNhan(nhan.data)} />
+		<DauTrangOkr
+			cauNoi={cauNoi}
+			chonChuKy={chonChuKy}
+			nhanHoiY={nhanTuHoiYNhan(nhan.data)}
+		/>
 	);
 }

@@ -173,7 +173,7 @@ afterEach(async () => {
 });
 
 describe("mo-ta-don-vi", () => {
-	test("hộp đổi tên phòng ban có ô Mô tả với gợi ý Trợ lý OKR, đếm ký tự, maxLength 500; lưu gửi renameDepartment với moTa", async () => {
+	test("hộp đổi tên phòng ban có ô Mô tả với gợi ý của Kara, đếm ký tự, maxLength 500; lưu gửi renameDepartment với moTa", async () => {
 		await mo(
 			<HopThoaiDonVi
 				cay={CAY}
@@ -193,7 +193,7 @@ describe("mo-ta-don-vi", () => {
 			String(TO_CHUC_TRAN.moTa),
 		);
 		expect(document.body.textContent).toContain(m.donVi.moTaGoiY);
-		expect(m.donVi.moTaGoiY).toBe("Trợ lý OKR đọc mô tả này khi soạn");
+		expect(m.donVi.moTaGoiY).toBe("Kara đọc mô tả này khi soạn");
 		expect(q("[data-dem-mo-ta]")?.textContent).toBe(
 			`${PB.moTa.length}/${TO_CHUC_TRAN.moTa}`,
 		);

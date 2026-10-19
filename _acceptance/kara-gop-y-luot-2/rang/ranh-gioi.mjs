@@ -114,26 +114,30 @@ function docDot() {
 }
 
 function chonNeo() {
+	const nhanh = lay("--nhanh") ?? NHANH_CHINH;
 	try {
-		git("rev-parse", "--verify", NHANH_CHINH);
+		git("rev-parse", "--verify", nhanh);
 	} catch {
-		boCuoc(`khong co ref ${NHANH_CHINH} — chay git fetch origin onehub`);
+		boCuoc(`khong co ref ${nhanh} — chay git fetch origin onehub`);
 	}
 	const them = git("log", "--diff-filter=A", "--format=%H", "--", `_acceptance/${SLUG}/contract.md`).trim().split("\n").filter(Boolean);
 	const dau = them.at(-1);
 	if (!dau) boCuoc(`khong tim thay commit dau them _acceptance/${SLUG}/contract.md`);
 	let daLen = true;
 	try {
-		git("merge-base", "--is-ancestor", dau, NHANH_CHINH);
+		git("merge-base", "--is-ancestor", dau, nhanh);
 	} catch {
 		daLen = false;
 	}
-	if (!daLen) return { kieu: "nhanh-mo", tu: git("merge-base", "HEAD", NHANH_CHINH).trim(), toi: "HEAD" };
-	const chuoi = git("rev-list", "--first-parent", "--ancestry-path", `${dau}..${NHANH_CHINH}`).trim().split("\n").filter(Boolean);
+	if (!daLen) return { kieu: "nhanh-mo", tu: git("merge-base", "HEAD", nhanh).trim(), toi: "HEAD" };
+	const conChau = new Set(git("rev-list", "--ancestry-path", `${dau}..${nhanh}`).trim().split("\n").filter(Boolean));
+	const chuoi = git("rev-list", "--first-parent", `${dau}..${nhanh}`).trim().split("\n").filter((c) => conChau.has(c));
 	const m = chuoi.at(-1);
-	if (!m) boCuoc("khong tim thay merge dua ho so len onehub");
-	const toi = git("rev-parse", `${m}^2`).trim();
-	return { kieu: `merge ${m.slice(0, 9)}`, tu: git("merge-base", `${m}^1`, toi).trim(), toi };
+	if (!m) boCuoc(`khong tim thay merge dua ho so len ${nhanh}`);
+	const cha = git("rev-list", "--parents", "-n", "1", m).trim().split(" ");
+	if (cha.length < 3) boCuoc(`${m.slice(0, 9)} khong phai merge — ho so len ${nhanh} khong qua PR`);
+	const toi = cha[2];
+	return { kieu: `merge ${m.slice(0, 9)}`, tu: git("merge-base", cha[1], toi).trim(), toi };
 }
 
 function dongDoi(tu, toi, tep) {

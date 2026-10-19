@@ -153,10 +153,12 @@ không theo khu:
 | hỏng, trễ, bị chặn | `error` |
 | nháp, chưa bắt đầu | `neutral` |
 | đang chạy | `info` |
+| đã kết thúc, đã bỏ, đã đóng | `neutral` |
 
 Bảng sống ở `packages/ui/src/lib/status-tone.ts` (`toneTheoNghia`), có
 bài kiểm giữ nó khớp bảng trên. Một khu chỉ khai trạng thái của mình thuộc nghĩa
-nào, không khai `tone`. Năm khu cũ còn tự khai ánh xạ (`okr-status.tsx`,
-`kara/steps.tsx`, `attendee-list.tsx`, `okr/tien-do-kr.tsx`,
-`tai-lieu/bang-nguon.tsx`); dời chúng về bảng là việc của NM3. Khai thêm một bản
-thứ sáu là sai.
+nào (`NGHIA_<…>: Record<TrangThai, NghiaTrangThai>`), không khai `tone`. Việc máy
+đang xếp hàng hay đang làm mang «đang chạy». Bài quét
+`packages/ui/test/mau-trang-thai-mot-bang.spec.ts` đỏ khi một tệp tự khai bảng hay
+hàm ánh xạ trạng thái sang màu; màu chọn tại chỗ theo một điều kiện trong JSX và
+nhãn `Badge` chưa thuộc luật này.

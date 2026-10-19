@@ -21,6 +21,10 @@ export const ONBOARDING = {
 			`Người ${id} không phải thành viên đang hoạt động.`,
 		vaiChiOkr: (ten: string) =>
 			`${ten} mang vai «chỉ OKR» — không nhận được việc của kế hoạch đối tác.`,
+		vaiChiOkrPhong: (ten: string, phong: string) =>
+			`${ten} mang vai «chỉ OKR» — không làm được bước của phòng ${phong} trong kế hoạch đối tác.`,
+		buocLuonCoNguoi:
+			"Việc của bước luôn có người làm — chọn người khác thay vì bỏ giao.",
 		sapLaiSaiTap:
 			"Danh sách sắp lại phải gồm đúng mọi bước của kế hoạch, mỗi bước một lần.",
 		khongCoBuoc: (id: string) => `Không có bước nào mang mã ${id}.`,

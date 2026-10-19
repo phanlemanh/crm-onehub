@@ -20,6 +20,7 @@ import { docPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import {
 	guiTinHieuOutput,
 	tinHieuCuaToiOutput,
+	tinHieuTatCaOutput,
 	xoaTinHieuOutput,
 } from "./tin-hieu.contracts";
 import { type NguoiGoiTinHieu, TinHieuService } from "./tin-hieu.service";
@@ -55,6 +56,14 @@ export class TinHieuRouter {
 	})
 	cuaToi(@Ctx() ctx: AuthedTrpcContext) {
 		return this.tinHieu.cuaToi(nguoiGoi(ctx));
+	}
+
+	@Query({
+		output: tinHieuTatCaOutput,
+		meta: restMeta("GET", "/tin-hieu/tat-ca", TAG),
+	})
+	tatCa(@Ctx() ctx: AuthedTrpcContext) {
+		return this.tinHieu.tatCa(nguoiGoi(ctx));
 	}
 
 	@Mutation({

@@ -730,10 +730,17 @@ describe("ho-so", () => {
 			expect(chu).toContain(h.nhom || m.loc.khongNhom);
 			expect(chu).toContain(h.moc ? h.moc.ten : m.loc.chuaHenMoc);
 			expect(chu).toContain(NHAN[h.nhom_trang_thai]);
+			const banSao = ngan?.cloneNode(true);
+			if (banSao instanceof HTMLElement)
+				for (const k of banSao.querySelectorAll("[data-lo-trinh-tom-tat]"))
+					k.remove();
+			const chuNgoaiTomTat =
+				banSao instanceof HTMLElement ? (banSao.textContent ?? "") : "";
+			expect(chuNgoaiTomTat).toContain(h.loTen);
 			if (h.bat_khi) expect(chu).toContain(h.bat_khi);
-			else expect(chu.includes(m.hoSo.thanhCongKhi)).toBe(false);
+			else expect(chuNgoaiTomTat.includes(m.hoSo.thanhCongKhi)).toBe(false);
 			if (h.vi_sao) expect(chu).toContain(h.vi_sao);
-			else expect(chu.includes(m.hoSo.viSao)).toBe(false);
+			else expect(chuNgoaiTomTat.includes(m.hoSo.viSao)).toBe(false);
 			expect(ngan?.querySelector("[data-lo-trinh-theo-loi]") !== null).toBe(
 				h.theo_loi,
 			);

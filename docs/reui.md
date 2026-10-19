@@ -89,6 +89,7 @@ Dùng:
   những thứ kho chưa có.
 - Block Pro — vật liệu cho `/proto` và phiên design-pass, xem `docs/proto.md`.
   Chỉ phần đã qua Cổng 1 mới được tách thành thành phần trong `packages/ui`.
+  Ngoại lệ là **phần máy** của block, xem mục «Block có phần máy» ngay dưới.
 
 Không dùng:
 
@@ -102,6 +103,29 @@ Không dùng:
 - Skill ReUI cài toàn cục — nó dạy «bảng luôn là data-grid» và «không chỉnh
   style của mục đã cài», cả hai ngược với kho. Bản trong kho ở mục dưới là để
   tra cứu, và mang sẵn dòng nói rõ hai điều đó không áp dụng.
+
+## Block có phần máy: rút tệp, không cài block
+
+Có block mà giá trị nằm ở phần máy chứ không ở bố cục: bộ xếp vị trí, đường
+nối, phím tắt và điều khiển khung vẽ của các block `flow-*` (React Flow và
+dagre). Nhìn ảnh rồi viết lại phần đó là làm lại thứ kho đã mua. Cài nguyên
+block thì không được: đo bằng `--dry-run` ngày 14/10/2026, `@reui/flow-2` ghi đè
+17 tệp đã tuỳ biến (`card` sang `rounded-xl`), thêm 18 biến màu vào
+`globals.css`, kéo gói `cn` và bảy logo hãng.
+
+Nên rút từng tệp:
+
+1. Xem tệp trong `packages/ui`:
+   `bun run ui:add @reui/<block> --dry-run --view <đường tệp>`.
+2. Chỉ chép **tệp máy** — xếp vị trí, đường nối, phím tắt, điều khiển khung vẽ —
+   vào `packages/ui/src/components/<tên>/`. Thẻ, ngăn bên, thanh công cụ, dữ
+   liệu mẫu và logo hãng không chép; dựng lại bằng thành phần của kho.
+3. Phụ thuộc mà tệp máy cần (`@xyflow/react`, `@dagrejs/dagre`) thêm bằng
+   `bun add` trong `packages/ui`, không qua CLI shadcn.
+4. Sửa đủ năm chỗ ở mục «Sau khi cài».
+
+Luật Base UI vẫn giữ: tệp máy nào nhập `@base-ui/react` thì dừng như mọi mục
+khác. Tệp rút từ block Pro vẫn là code trả phí, xem mục cuối.
 
 ## Skill ReUI
 

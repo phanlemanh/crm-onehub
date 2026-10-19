@@ -1,6 +1,4 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { db } from "@crm/db";
 import { docCuoc } from "@crm/db/okr-cuoc-soan";
 import { docTenThanhVien } from "@crm/db/okr-goi-soan";
@@ -18,6 +16,7 @@ import {
 	LOP,
 	uocToken,
 } from "../agent/lib/goi-soan";
+import { LOI_DAN_SOAN } from "../agent/lib/loi-dan-soan";
 import { donDep, gieoCuoc, gieoNguoi, ma, moXuong } from "./support/gieo";
 import {
 	CAU_CHEN,
@@ -562,10 +561,7 @@ describe("goi-soan", () => {
 	});
 
 	test("lời dặn tĩnh: câu hỏi mở đầu đúng khuôn «1. …?» rồi «- gợi ý: A · B»; gọi nop_ban_nhap; nhắc thẻ dữ liệu", () => {
-		const loiDan = readFileSync(
-			join(import.meta.dir, "..", "agent", "instructions.md"),
-			"utf8",
-		);
+		const loiDan = LOI_DAN_SOAN;
 		const dong = loiDan.split("\n");
 		const hoi = dong.findIndex((d) => /^\s*\d+[.)]\s+(.+\?)\s*$/.test(d));
 		expect(hoi, "loi dan thieu mau cau hoi danh so").toBeGreaterThanOrEqual(0);

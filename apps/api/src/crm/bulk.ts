@@ -1,5 +1,5 @@
 import type { Db } from "@crm/db";
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, Logger, NotFoundException } from "@nestjs/common";
 import { z } from "zod";
 
 export const MAX_BULK_IDS = 100;
@@ -16,6 +16,7 @@ export const crmBulkResultOutput = z.object({
 	succeeded: z.number(),
 	skipped: z.number(),
 	failed: z.number(),
+	errored: z.number(),
 	message: z.string().nullable(),
 	changedIds: z.array(z.string()),
 });
@@ -46,6 +47,8 @@ export async function requireOwner(
 	}
 }
 
+const logger = new Logger("CrmBulk");
+
 export async function runBulk(
 	ids: string[],
 	act: (id: string) => Promise<unknown>,
@@ -53,6 +56,7 @@ export async function runBulk(
 	const unique = [...new Set(ids)];
 	const changedIds: string[] = [];
 	let skipped = 0;
+	let errored = 0;
 	let message: string | null = null;
 
 	for (const id of unique) {
@@ -64,6 +68,18 @@ export async function runBulk(
 				changedIds.push(id);
 			}
 		} catch (error) {
+			if (error instanceof NotFoundException) {
+				logger.warn({
+					message: "Bulk action skipped a missing record",
+					recordId: id,
+				});
+			} else {
+				errored += 1;
+				logger.error(
+					{ message: "Bulk action failed", recordId: id },
+					error instanceof Error ? error.stack : undefined,
+				);
+			}
 			message ??=
 				error instanceof Error ? error.message : "Something went wrong.";
 		}
@@ -74,6 +90,7 @@ export async function runBulk(
 		succeeded: changedIds.length,
 		skipped,
 		failed: unique.length - changedIds.length - skipped,
+		errored,
 		message,
 		changedIds,
 	};

@@ -22,7 +22,12 @@ function khoi(html: string) {
 }
 
 type KhoiSua = {
-	tin_hieu?: { id?: string; cau?: string; cau_nguoi_gui?: string }[];
+	tin_hieu?: {
+		id?: string;
+		cau?: string;
+		cau_nguoi_gui?: string;
+		ten_nhom?: string | null;
+	}[];
 };
 
 function doiKhoi(sua: (o: KhoiSua) => void): string {
@@ -56,12 +61,19 @@ describe("tin-hieu-trang-thai", () => {
 	test("ma-tran: moi cho cua kit va hai trang thai CRM ra dung nhan, cau, nghia", () => {
 		const kq = docTrangThaiTinHieu(MAU, CUA_TOI, m);
 		expect(kq.banVe).toBe("co");
-		for (const o of MA_TRAN)
-			expect(kq.trangThai[o.ma], `nghia trang thai lech bang ${o.ma}`).toEqual({
+		for (const o of MA_TRAN) {
+			expect(
+				kq.trangThai[o.ma],
+				`nghia trang thai lech bang ${o.ma}`,
+			).toMatchObject({
 				nhan: o.nhan,
-				cau: CAU[o.ma] ?? "",
 				nghia: o.nghia,
 			});
+			expect(
+				kq.trangThai[o.ma]?.cau,
+				`cau sau gom van la cau kit nguyen van ${o.ma}`,
+			).not.toBe(CAU[o.ma] ?? "");
+		}
 		expect(kq.trangThai["crm-90"]).toEqual({
 			nhan: m.nhan.choLayVe,
 			cau: m.trangThai.choKeoVe,
@@ -91,22 +103,25 @@ describe("tin-hieu-trang-thai", () => {
 		expect(JSON.stringify(kq)).not.toContain(CAU["crm-7"] ?? "x");
 	});
 
-	test("cau-nguoi-gui: ban ve co cau_nguoi_gui thi nguoi gui doc cau do, vang thi roi ve cau", () => {
+	test("cau-nguoi-gui: ban ghi thieu truong cho cau song ngu thi nguoi gui doc cau_nguoi_gui, vang thi roi ve cau", () => {
 		const html = doiKhoi((o) => {
 			for (const t of o.tin_hieu ?? [])
-				if (t.id === "crm-3") t.cau_nguoi_gui = "Câu viết cho người gửi";
+				if (t.id === "crm-4") {
+					t.ten_nhom = null;
+					t.cau_nguoi_gui = "Câu viết cho người gửi";
+				}
 		});
 		const kq = docTrangThaiTinHieu(
 			html,
 			[
 				{ ma: "crm-1", daKeoVe: true },
-				{ ma: "crm-3", daKeoVe: true },
+				{ ma: "crm-4", daKeoVe: true },
 			],
 			m,
 		);
 		expect(kq.banVe).toBe("co");
-		expect(kq.trangThai["crm-3"]?.cau).toBe("Câu viết cho người gửi");
-		expect(kq.trangThai["crm-1"]?.cau).toBe(CAU["crm-1"] ?? "");
+		expect(kq.trangThai["crm-4"]?.cau).toBe("Câu viết cho người gửi");
+		expect(kq.trangThai["crm-1"]?.cau).toBe(m.cauSauGom.chuaGom);
 	});
 
 	test("khoan-dung: nam ca ban ve ra trang thai luc gui, phan biet hong voi khong co", () => {

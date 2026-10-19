@@ -1,8 +1,9 @@
 "use client";
 
 import Add from "@carbon/icons-react/es/Add";
+import { Button } from "@crm/ui/components/button";
 import { DatePicker } from "@crm/ui/components/date-picker";
-import { Field, FieldLabel } from "@crm/ui/components/field";
+import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { Link as TextLink } from "@crm/ui/components/link";
@@ -17,7 +18,7 @@ import {
 import { toDay } from "@crm/ui/lib/format";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
@@ -82,6 +83,7 @@ export function TaoKeHoach({
 	const [khuon, setKhuon] = useState("");
 	const [ngay, setNgay] = useState(() => toDay(new Date()));
 	const [nguoi, setNguoi] = useState("");
+	const [chonPhong, setChonPhong] = useState<Record<string, string>>({});
 	const [loi, setLoi] = useState<string | null>(null);
 
 	const openRecord = useOpenRecord();
@@ -94,7 +96,28 @@ export function TaoKeHoach({
 		enabled: dangMo,
 	});
 	const toi = useQuery({ ...trpc.users.me.queryOptions(), enabled: dangMo });
+	const dsPhong = useQuery({
+		...trpc.onboarding.listDepartments.queryOptions({ archived: false }),
+		enabled: dangMo,
+	});
 	const nguoiCam = nguoi || toi.data?.id || "";
+
+	const khuonChon = dsKhuon.data?.find((k) => k.id === khuon);
+	const phongCuaKhuon = useMemo(() => {
+		const buoc = [...(khuonChon?.steps ?? [])].sort(
+			(a, b) => a.position - b.position,
+		);
+		return [...new Set(buoc.map((b) => b.departmentId))];
+	}, [khuonChon]);
+	const nhanDuoc = new Set((dsNguoi.data ?? []).map((u) => u.id));
+	const tenPhong = new Map((dsPhong.data ?? []).map((p) => [p.id, p]));
+	const macDinh = (phongId: string) => {
+		const truong = tenPhong.get(phongId)?.headUserId;
+		return truong && nhanDuoc.has(truong) ? truong : nguoiCam;
+	};
+	const nguoiCuaPhong = (phongId: string) =>
+		chonPhong[phongId] ?? macDinh(phongId);
+	const khuonRong = khuonChon !== undefined && khuonChon.steps.length === 0;
 
 	const tao = useMutation(trpc.onboarding.createFromTemplate.mutationOptions());
 
@@ -110,7 +133,14 @@ export function TaoKeHoach({
 			tieuDe={m.tao.keHoach.title}
 			dangMo={dangMo}
 			doiMo={setDangMo}
-			sanSang={congTy !== "" && khuon !== "" && ngay !== "" && nguoiCam !== ""}
+			sanSang={
+				congTy !== "" &&
+				khuon !== "" &&
+				ngay !== "" &&
+				nguoiCam !== "" &&
+				!dsPhong.isPending &&
+				!dsPhong.isError
+			}
 			dangLuu={tao.isPending}
 			loi={loi}
 			nhanLuu={m.tao.save}
@@ -123,6 +153,12 @@ export function TaoKeHoach({
 						templateId: khuon,
 						startedAt: ngay,
 						ownerId: nguoiCam,
+						nguoiTheoPhongBan: phongCuaKhuon
+							.filter((departmentId) => chonPhong[departmentId] !== undefined)
+							.map((departmentId) => ({
+								departmentId,
+								userId: nguoiCuaPhong(departmentId),
+							})),
 					},
 					{
 						onSuccess: async (keHoach) => {
@@ -144,6 +180,7 @@ export function TaoKeHoach({
 							setKhuon("");
 							setNgay(toDay(new Date()));
 							setNguoi("");
+							setChonPhong({});
 							setDangMo(false);
 							toast.success(m.tao.keHoach.created);
 							openRecord({ kind: "plan", id: keHoach.id });
@@ -173,7 +210,13 @@ export function TaoKeHoach({
 			</Field>
 			<Field>
 				<FieldLabel>{m.tao.keHoach.template}</FieldLabel>
-				<Select value={khuon} onValueChange={setKhuon}>
+				<Select
+					value={khuon}
+					onValueChange={(ma) => {
+						setKhuon(ma);
+						setChonPhong({});
+					}}
+				>
 					<SelectTrigger aria-label={m.tao.keHoach.template}>
 						<SelectValue placeholder={m.tao.keHoach.template} />
 					</SelectTrigger>
@@ -205,6 +248,114 @@ export function TaoKeHoach({
 					</SelectContent>
 				</Select>
 			</Field>
+			<KhoiNguoiTheoPhong
+				dangTai={dsKhuon.isPending || (khuon !== "" && dsPhong.isPending)}
+				loiTai={dsKhuon.isError || (khuon !== "" && dsPhong.isError)}
+				thuLai={() => {
+					if (dsKhuon.isError) dsKhuon.refetch();
+					if (dsPhong.isError) dsPhong.refetch();
+				}}
+				rong={khuonRong}
+				phong={phongCuaKhuon.map((id) => ({
+					id,
+					ten: tenPhong.get(id)?.name ?? "",
+					chuaCoTruong: !tenPhong.get(id)?.headUserId,
+				}))}
+				nguoi={dsNguoi.data ?? []}
+				nguoiCuaPhong={nguoiCuaPhong}
+				doi={(phongId, userId) =>
+					setChonPhong((cu) => ({ ...cu, [phongId]: userId }))
+				}
+			/>
 		</KhungTao>
+	);
+}
+
+function KhoiNguoiTheoPhong({
+	dangTai,
+	loiTai,
+	thuLai,
+	rong,
+	phong,
+	nguoi,
+	nguoiCuaPhong,
+	doi,
+}: {
+	dangTai: boolean;
+	loiTai: boolean;
+	thuLai: () => void;
+	rong: boolean;
+	phong: { id: string; ten: string; chuaCoTruong: boolean }[];
+	nguoi: { id: string; name: string }[];
+	nguoiCuaPhong: (phongId: string) => string;
+	doi: (phongId: string, userId: string) => void;
+}) {
+	const m = onboardingMessages(useLocale());
+	if (dangTai) {
+		return (
+			<p className="text-muted-foreground text-sm" data-trang-thai="cho-tai">
+				{m.tao.keHoach.dangTaiKhuon}
+			</p>
+		);
+	}
+	if (loiTai) {
+		return (
+			<div className="flex items-center gap-2" data-trang-thai="loi">
+				<p className="text-destructive text-sm">{m.tao.keHoach.loiTaiKhuon}</p>
+				<Button type="button" variant="outline" size="sm" onClick={thuLai}>
+					{m.tao.keHoach.thuLai}
+				</Button>
+			</div>
+		);
+	}
+	if (rong) {
+		return (
+			<p className="text-muted-foreground text-sm" data-trang-thai="rong">
+				{m.tao.keHoach.khuonRong}
+			</p>
+		);
+	}
+	if (phong.length === 0) return null;
+	return (
+		<Field data-khoi="nguoi-theo-phong">
+			<FieldLabel>{m.tao.keHoach.nguoiTheoPhong}</FieldLabel>
+			<div className="flex flex-col gap-3">
+				{phong.map((p) => (
+					<div
+						key={p.id}
+						className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3"
+						data-phong={p.id}
+					>
+						<span className="text-sm sm:w-40 sm:shrink-0" translate="no">
+							{p.ten}
+						</span>
+						<div className="flex min-w-0 flex-1 flex-col gap-1">
+							<Select
+								value={nguoiCuaPhong(p.id)}
+								onValueChange={(u) => doi(p.id, u)}
+							>
+								<SelectTrigger
+									aria-label={`${m.tao.keHoach.nguoiTheoPhong} — ${p.ten}`}
+								>
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									{nguoi.map((u) => (
+										<SelectItem key={u.id} value={u.id}>
+											{u.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+							{p.chuaCoTruong ? (
+								<FieldDescription>
+									{m.tao.keHoach.phongChuaCoTruong}
+								</FieldDescription>
+							) : null}
+						</div>
+					</div>
+				))}
+			</div>
+		</Field>
 	);
 }

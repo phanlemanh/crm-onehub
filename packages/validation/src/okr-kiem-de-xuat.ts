@@ -193,7 +193,7 @@ export function trichSo(chu: string): number[] {
 }
 
 function chuCuaDong(dong: DongGopY): string[] {
-	return [dong.sau ?? "", dong.lyDo];
+	return [dong.sau ?? "", dong.lyDo, dong.canCu ?? ""];
 }
 
 export function khoaDong(dong: DongDeXuat): string {

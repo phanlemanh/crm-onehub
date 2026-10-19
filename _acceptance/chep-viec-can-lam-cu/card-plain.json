@@ -1,0 +1,103 @@
+{
+  "feature_plain": "Mọi việc cần làm cũ trên dòng thời gian thành Việc có người thực hiện và được nhắc, bản gốc còn nguyên để đảo; từ nay cả người lẫn Tác nhân chỉ giao việc bằng Việc.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ chép mỗi việc cần làm cũ thành đúng một Việc, giữ tiêu đề, hạn, trạng thái, người tạo và các bản ghi gắn; bản gốc không đổi một chữ."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ chạy lại được bao nhiêu lần cũng không nhân bản; một việc chép hỏng không kéo hỏng việc khác, và có chế độ chạy thử báo trước việc nào sẽ hỏng."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ đảo được: xoá bản chép thì việc cũ hiện lại; bản chép người dùng đã đổi chỉ bị xoá khi người chạy nói rõ."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ thôi hiện việc cần làm đã chép trên dòng thời gian; việc chưa chép vẫn hiện, chỉ đọc; bỏ hai thẻ «Sắp tới» và «Đã xong»."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ không còn đường nào tạo hay tích xong việc cần làm cũ; Tổng quan chỉ còn hiện việc cũ chưa chép, chỉ đọc."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ để Tác nhân tự dựng giao một Việc cho người khởi chạy thay vì ghi việc cần làm, chặn người vai «chỉ OKR», và bản khai cũ của Tác nhân vẫn chạy."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ giao Việc cho người cầm trịch kế hoạch khi có mã môi giới lệch, không giao trùng, kể cả khi việc cũ cùng mã chưa được chép."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ cho việc đã chép hiện đúng một lần ở Việc của tôi, khối Việc của bản ghi, Tổng quan và tin nhắc buổi sáng."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG để việc đang mở rơi vào tay người vai «chỉ OKR» hay người đã rời: quản trị chạy lệnh nhận việc đó; chặn lệnh khi người chạy không phải quản trị."
+    },
+    {
+      "id": "AC-10",
+      "p": "Chặn lệnh chép và lệnh đảo chạy trên kho xa khi chưa cho phép rõ; lệnh đếm không bao giờ ghi; dữ liệu mẫu không gieo việc cần làm nữa."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ KHÔNG còn ô tích hay thẻ «Sắp tới», «Đã xong» trên thẻ Hoạt động khi nhìn trên máy tính và điện thoại."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Chưa xoá loại việc cần làm cũ và các bản gốc — để sau khi đọc xong vế 14 ngày của ngưỡng."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Chưa cho Tác nhân chọn người thực hiện khác, chưa cho Tác nhân đọc Việc khi tóm tắt lịch sử bản ghi."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Chưa sửa chuyện «Chuyển việc 30 ngày» không làm mới màn Việc (đã có hạt giống riêng)."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Vòng này không tự chạy lệnh chép trên production — anh chạy sau khi gộp (Hỏi-1)."
+    }
+  ],
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đã quét bốn chiều: loại việc cũ đem chép, thao tác (đếm, chép, chép lại, hỏng giữa chừng, đảo, tạo mới sau chép), nơi việc hiện ra, và kiểu hỏng (sai, trùng, mất, lọt quyền, chết); mỗi ô quan trọng có một tiêu chí từ AC-1 tới AC-11 (AC-10 là lệnh đếm đọc ngưỡng)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Hai lựa chọn người dùng thấy được — việc cũ chưa chép có tích xong được không, và gọi API tạo việc cần làm thì trả lỗi hay tạo Việc — máy đã tự quyết mà căn cứ không đủ; nay thành câu hỏi Hỏi-5 và Hỏi-6 cho anh."
+    },
+    {
+      "i": 1,
+      "p": "Thiếu phép quét chứng minh không còn chỗ nào trong mã ghi việc cần làm cũ; đã thêm phép quét so với bảng liệt kê viết sẵn và một lần cấy lỗi để chứng nó đỏ được."
+    },
+    {
+      "i": 2,
+      "p": "Chưa phủ việc mở không gắn đối tác của người không còn nhận được việc, và không biết trước việc nào sẽ chép hỏng; đã mở rộng luật nhận việc cho mọi việc mở, đo bằng ma trận 18 ô, thêm chế độ chạy thử."
+    },
+    {
+      "i": 3,
+      "p": "Bản in của lệnh mà anh dán để đọc ngưỡng chưa được đo; đã thêm phép đo cho chạy thật, đảo, người chạy sai và đường cho phép kho xa."
+    },
+    {
+      "i": 4,
+      "p": "Chưa nói thứ tự lên production và thứ tự lùi khi phải lùi cả mã; đã ghi vào thiết kế và tài liệu: đợi api chạy xong migration rồi mới chép, đảo trước rồi mới lùi mã."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "E12",
+      "q": "Tài liệu đã đủ để người mới chạy chép và đảo trên production chưa?",
+      "why": "Ba người chấm độc lập đều thấy đủ sáu điều: việc cũ đã thành Việc và còn bản gốc, cách đếm–chép–đảo, cách đọc ngưỡng, những thao tác đã bỏ, Tác nhân giao Việc, và thứ tự lên–lùi. Mục đọc-hiểu ở hồ sơ T3 nên người phải tự chấm."
+    }
+  ],
+  "analyst_plain": ""
+}

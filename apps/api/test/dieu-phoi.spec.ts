@@ -212,7 +212,7 @@ describe("tao ke hoach tu khuon", () => {
 		});
 		if (step === null) throw new Error("khong co buoc nao duoc chep");
 		expect(step.departmentId).toBe(dep.id);
-		expect(step.assigneeId).toBeNull();
+		expect(step.assigneeId).toBe(nguoi.id);
 
 		const loc = await service.listSteps({
 			planId: plan.id,

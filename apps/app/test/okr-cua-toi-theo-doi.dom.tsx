@@ -44,6 +44,10 @@ async function dungCuaToi(locale: "vi" | "en" = "vi") {
 	datDuong("/ws/okr");
 	await dung(<CuaToi />, "", locale);
 	await cho(daTaiXong, "cua toi tai xong");
+	const thamGia = document.body.querySelector<HTMLButtonElement>(
+		'[data-nhom="tham-gia"] button[aria-expanded="false"]',
+	);
+	if (thamGia) await bamChuot(thamGia);
 }
 
 const datMine = (v: {

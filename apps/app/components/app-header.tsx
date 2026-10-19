@@ -29,6 +29,7 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { EnrichmentQueue } from "@/components/enrichment-queue";
 import { useMobileNav } from "@/components/mobile-nav";
+import { ChuongThongBao } from "@/components/thong-bao/chuong-thong-bao";
 import { NutGuiDauTrang } from "@/components/tin-hieu/hop-gui-tin-hieu";
 import { NutGuiTinHieu } from "@/components/tin-hieu/nut-gui-tin-hieu";
 import {
@@ -61,7 +62,7 @@ export function AppHeader({ user }: { user: User }) {
 
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-3 [view-transition-name:app-header]">
-			<div className="flex shrink-0 items-center gap-1">
+			<div className="flex min-w-0 items-center gap-1">
 				<Button
 					variant="ghost"
 					size="icon"
@@ -86,6 +87,7 @@ export function AppHeader({ user }: { user: User }) {
 
 			<div className="ml-auto flex shrink-0 items-center gap-1.5">
 				{coHangLamGiau ? <EnrichmentQueue /> : null}
+				<ChuongThongBao />
 				<NutGuiTinHieu nut={<NutGuiDauTrang />} />
 				<UserMenu
 					user={user}

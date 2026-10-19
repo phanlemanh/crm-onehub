@@ -167,7 +167,7 @@ const MAY_CO_GOC: DeXuat = {
 const CAU_BAN_MAY =
 	"Từ ngày 01/10/2026, tầng hai hưởng 1,5% và tầng ba hưởng 1,8%.";
 
-const DA_DOC = "Đã đọc nguồn, xem bản máy soạn";
+const DA_DOC = "Đã đọc nguồn, xem bản Kara soạn";
 const BA_NUT = ["Duyệt", "Trả lại", "Sửa bản này"] as const;
 const matchMediaGoc = window.matchMedia;
 
@@ -469,7 +469,7 @@ describe("man-duyet-may", () => {
 		const the = [...(khung?.querySelectorAll("[role='tab']") ?? [])].map((t) =>
 			t.textContent?.trim(),
 		);
-		expect(the).toEqual(["Nguồn", "Bản máy soạn"]);
+		expect(the).toEqual(["Nguồn", "Bản Kara soạn"]);
 	});
 
 	test("man-duyet-may doi chung: ban nguoi viet giu man luot 1, Duyet co ngay", async () => {

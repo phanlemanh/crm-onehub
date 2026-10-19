@@ -25,6 +25,7 @@ const PACKAGE = resolve(import.meta.dirname, "..");
 const MIGRATIONS = join(PACKAGE, "prisma", "migrations");
 const SCHEMA = join(PACKAGE, "prisma", "schema.prisma");
 const SEED = join(PACKAGE, "prisma", "seed.ts");
+const GIEO_MODEL = join(PACKAGE, "scripts", "gieo-model-do.ts");
 const PRISMA = join(PACKAGE, "node_modules", ".bin", "prisma");
 const LOCAL_HOSTS = new Set([
 	"localhost",
@@ -81,6 +82,7 @@ export const FINGERPRINT_SOURCES: FingerprintSources = {
 
 export function sourceFingerprint(
 	sources: FingerprintSources = FINGERPRINT_SOURCES,
+	measureModel: string = MEASURE_DATABASE.agentModel.id,
 ): string {
 	const hash = createHash("sha256");
 	const migrations = existsSync(sources.migrations)
@@ -93,6 +95,7 @@ export function sourceFingerprint(
 	hash.update(migrations.join("\n"));
 	hash.update(readFileSync(sources.schema));
 	hash.update(readFileSync(sources.seed));
+	hash.update(measureModel);
 
 	return hash.digest("hex").slice(0, 16);
 }
@@ -226,6 +229,7 @@ async function buildTemplate(
 		);
 		run(PRISMA, ["migrate", "deploy"], env, "prisma migrate deploy");
 		run("bun", [SEED], env, "prisma/seed.ts");
+		run("bun", [GIEO_MODEL], env, "scripts/gieo-model-do.ts");
 	} catch (error) {
 		await dropDatabase(client, name);
 		throw error;

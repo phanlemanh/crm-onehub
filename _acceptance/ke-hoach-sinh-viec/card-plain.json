@@ -1,0 +1,11 @@
+{
+ "feature_plain": "Tạo kế hoạch 30 ngày từ khuôn là mỗi bước có sẵn một Việc giao đúng người của từng phòng ban; Việc là nguồn sự thật, bước hiện theo Việc.",
+ "decisions": [
+  {
+   "id": "E14",
+   "q": "Tài liệu mới có giải thích đủ cách kế hoạch sinh Việc không?",
+   "why": "Ba người chấm (lượt 2, dùng lại ở lượt 3) đều thấy đủ năm điều cần có trong tài liệu và lộ trình."
+  }
+ ],
+ "analyst_plain": ""
+}

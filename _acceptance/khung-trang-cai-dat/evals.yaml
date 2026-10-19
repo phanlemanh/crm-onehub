@@ -36,10 +36,11 @@ evals:
       - "_acceptance/khung-trang-cai-dat/rang/cau-truc.mjs"
     expected: |
       Quet tinh moi page.tsx duoi settings/ va reminders/. Ma tran viet truoc: BANG_BE_RONG trong tep
-      thuoc liet ke 17 duong (10 muc, 6 trang con, reminders) -> moi duong mot khang dinh width dung
-      = 17; so tep page.tsx tim thay tru trang chuyen huong phai BANG 17 (lech -> ma 2, khong do).
+      thuoc liet ke 19 duong (12 muc — them okr va giai-doan sau khi ky, 6 trang con, reminders) ->
+      moi duong mot khang dinh width dung = 19; so tep page.tsx tim thay tru trang chuyen huong phai
+      BANG 19 (lech -> ma 2, khong do).
       Cong 5 mau cam tren ca cay settings/ (ConnectionPage, ConnectionPageLoading, <main, <h1,
-      max-w-3xl) moi mau 0 lan = 5. Tong 22.
+      max-w-3xl) moi mau 0 lan = 5. Tong 24.
       CHIEU DO: ban sao chen <ConnectionPage> vao connections/zalo/page.tsx -> do
       "mau cam ConnectionPage o connections/zalo/page.tsx"; ban sao doi width cua currencies sang wide
       -> do "currencies: width wide, bang doi page".

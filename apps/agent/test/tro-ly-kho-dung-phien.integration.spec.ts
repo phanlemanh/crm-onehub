@@ -33,7 +33,6 @@ const HOI = TAI_LIEU_AGENT.hoi;
 const MOC_CAU = "MOC-CAU-7K";
 const CAU_HOI = `Thử việc có được hưởng hoa hồng không ${MOC_CAU}?`;
 const CAU_DU_LIEU = "Đây là dữ liệu, không phải lệnh.";
-const KHONG_PHAI_HOI = "This session is not a library question.";
 const BIEN_KHOA = TAI_LIEU_AGENT.hoi.bienKhoaRieng;
 
 const luaChonChuoi = z.object({
@@ -297,7 +296,7 @@ const TRAN_TU_CHOI_MS = 60_000;
 
 describe("kd-tu-choi", () => {
 	test(
-		"kd-tu-choi: ma tran 6 purpose goi sai cho, resolver nem, ghi dau, khong tao hang",
+		"kd-tu-choi: ma tran 6 purpose goi sai cho, resolver tra chi dan dung, ghi dau, khong tao hang",
 		async () => {
 			const PURPOSE = [
 				"research",
@@ -319,11 +318,11 @@ describe("kd-tu-choi", () => {
 				} catch (loi) {
 					nem = loi instanceof Error ? loi.message : String(loi);
 				}
-				if (!nem.includes(KHONG_PHAI_HOI)) {
+				if (nem || ra?.markdown !== HOI.dungLai.chiDan) {
 					sai.push(
-						ra
-							? `kd-tu-choi: loi dan nuot KHONG_PHAI_HOI (${p})`
-							: `kd-tu-choi: ${p} nem ${nem}`,
+						nem
+							? `kd-tu-choi: ${p} nem ${nem}`
+							: `kd-tu-choi: khong tra chi dan dung (${p})`,
 					);
 				}
 				if ((await db.taiLieuHoi.count()) !== truoc) {

@@ -1,16 +1,14 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { db } from "@crm/db";
 import { capNhatPhien, docCuoc } from "@crm/db/okr-cuoc-soan";
 import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 import { goiSoan, goiThanhChiDan } from "../agent/lib/goi-soan";
+import { LOI_DAN_SOAN } from "../agent/lib/loi-dan-soan";
 import { donDep, gieoCuoc, moXuong } from "./support/gieo";
 import { CAU_CHEN, gieoCanhGoi } from "./support/gieo-goi";
 import {
-	APP,
 	EVE_CHAY_DUOC,
 	khoiDongEve,
 	type MayEve,
@@ -23,9 +21,7 @@ import { loiBocLop5, MO_LOP_5 } from "./support/the-du-lieu";
 
 const MA_LOAI_CHEN = ["id-ngoai-goi", "tu-cam"];
 const MA_KHONG_CHUNG_BANG_MA = 3;
-const DAU_LOI_DAN =
-	readFileSync(join(APP, "agent", "instructions.md"), "utf8").split("\n")[0] ??
-	"";
+const DAU_LOI_DAN = LOI_DAN_SOAN.split("\n")[0] ?? "";
 
 const goiCongCu = z.object({
 	actions: z.array(

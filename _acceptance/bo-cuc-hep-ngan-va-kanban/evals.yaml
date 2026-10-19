@@ -1,0 +1,105 @@
+schema_version: 1
+slug: bo-cuc-hep-ngan-va-kanban
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bch_man
+    steps:
+      - "Phien do rieng (tien-de.mjs) qua bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh; gieo qua service: giai doan mo ten dai 'Decision maker bought-in <ma>', giai doan chot ten dai 'Closed won after procurement <ma>', cong ty ten 120 ky tu khong dau cach, nguoi phu trach ten 120 ky tu khong dau cach, ba thoa thuan: DAI (ten 120 ky tu, giai doan mo dai, nguoi phu trach dai), CHOT (giai doan chot dai), NGAN (ten ngan, nguoi phu trach ten ngan, giai doan mo dai)"
+      - "Buoc 1 (375 roi 1440): mo /deals?view=board; the DAI [data-open-deal]: moi phan tu con co rect.right <= rect.right cua the + 1 (mot assert moi phan tu, in so phan tu da do); [data-slot=status-indicator] trong the co nhan scrollWidth <= clientWidth + 1; chup bch-kanban-375.png va bch-kanban-1440.png vao .acceptance-runs/bo-cuc-hep-ngan-va-kanban/evidence/"
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/deals-board.tsx"
+      - "apps/app/components/crm/deal-stage.tsx"
+      - "apps/app/components/crm/stage-change.tsx"
+      - "apps/app/components/crm/owner-cell.tsx"
+      - "packages/ui/src/components/status-indicator.tsx"
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 1: dat' va so phan tu da do o moi kho. Vi pham in 'bch-man: the kanban tran vien <kho> <phan tu>' hoac 'bch-man: the kanban cat nhan <kho>', ma 1. O 375 the DAI: chi bao giai doan dung o hang rieng duoi anh dai dien nguoi phu trach (Hoi-3), khong thi in 'bch-man: the kanban khong xuong dong'. CHIEU DO tren ban sao (E7): (2) hang nguoi phu trach cua the bo flex-wrap -> ghim 'bch-man: the kanban khong xuong dong'; (3) the bo bien the xuong dong cua nhan giai doan -> ghim 'bch-man: the kanban cat nhan'."
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bch_man
+    steps:
+      - "Buoc 2 (375): tu Bang cot bam the DAI, cho ngan mo; trong [data-slot=detail-sheet-stats]: dung bon o; o thu ba va thu tu co offsetTop lon hon o thu nhat (hai hang); moi dt va dd scrollWidth <= clientWidth + 1 (tam assert, in so da do); innerText o Phu trach chua du ten 120 ky tu; chup bch-ngan-thoa-thuan-375.png"
+    paths:
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "apps/app/components/crm/owner-cell.tsx"
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 2: dat' va '8 o chu, phu trach <n> ky tu' (so that). textContent o Phu trach (bo khoang trang) chua du ten 120 ky tu, khong thi in 'bch-man: ngan so lieu thieu ten phu trach'. Vi pham in 'bch-man: ngan so lieu cat chu <nhan>' hoac 'bch-man: ngan so lieu mot hang', ma 1. 'Cat chu' do tren moi phan tu con cua tung o, khong chi dt va dd. CHIEU DO tren ban sao (E7): (1) DetailSheetStats tra ve mot hang flex -> ghim 'bch-man: ngan so lieu mot hang'; (4) o Phu trach bo xuongDongDienThoai -> ghim 'bch-man: ngan so lieu cat chu'; (8) o Phu trach chi hien anh dai dien -> ghim 'bch-man: ngan so lieu thieu ten phu trach'."
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bch_man
+    steps:
+      - "Buoc 3 (375): ngan cua the DAI (giai doan mo dai) roi ngan cua the CHOT (giai doan chot dai); trong thanh giai doan (ol chua cac nut buoc): moi phan tu chu ten buoc scrollWidth <= clientWidth + 1, mot assert moi buoc; o the CHOT buoc chot hien bang [data-slot=status-indicator] mang ten giai doan chot dai; chup bch-giai-doan-375.png va bch-giai-doan-chot-375.png"
+    paths:
+      - "apps/app/components/crm/stage-stepper.tsx"
+      - "apps/app/components/crm/deal-stage.tsx"
+      - "packages/ui/src/components/status-indicator.tsx"
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 3: dat' va so buoc da do o moi ngan. Vi pham in 'bch-man: thanh giai doan cat chu <ten buoc>', ma 1. CHIEU DO tren ban sao (E7): (5) stage-stepper tra 'block truncate' cho ten buoc -> ghim 'bch-man: thanh giai doan cat chu'; (6) buoc chot bo bien the xuong dong -> ghim 'bch-man: thanh giai doan cat chu Closed won after procurement'."
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bch_man
+    steps:
+      - "Buoc 4 (375): mo ngan cong ty da gieo (ten 120 ky tu, nguoi phu trach ten 120 ky tu); trong [data-slot=detail-sheet-stats]: bon o, hai hang, moi dt va dd scrollWidth <= clientWidth + 1; chup bch-ngan-cong-ty-375.png"
+    paths:
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 4: dat'. Vi pham in 'bch-man: ngan cong ty cat chu <nhan>', 'bch-man: ngan cong ty thieu ten phu trach' hoac 'bch-man: ngan cong ty mot hang', ma 1. CHIEU DO tren ban sao (E7): (10) o Phu trach ngan cong ty bo xuongDongDienThoai -> ghim 'bch-man: ngan cong ty cat chu'."
+
+  - id: E5
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bch_man
+    steps:
+      - "Buoc 5 (1440): Bang cot, the NGAN: [data-slot=status-indicator] va anh dai dien nguoi phu trach cung offsetTop (+-4 px); bam the NGAN, trong ngan: bon o so lieu cung offsetTop; moi nut buoc cua thanh giai doan cao bang nhau; chup bch-ngan-1440.png"
+    paths:
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/crm/stage-stepper.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-board.tsx"
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 5: dat'. Vi pham in 'bch-man: 1440 so lieu khong cung hang', 'bch-man: 1440 giai doan xuong dong' hoac 'bch-man: 1440 the kanban tach hang', ma 1."
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.bch_man
+    steps:
+      - "Buoc 6 (375): o Bang cot va khi ngan the DAI mo: document.documentElement.scrollWidth <= clientWidth + 1; khong phan tu nao trong noi dung ngan co rect.right > rect.right cua ngan + 1"
+    paths:
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-board.tsx"
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
+    expected: "exit 0; do-bo-cuc.mjs in 'buoc 6: dat' va be rong tieu de. Vi pham in 'bch-man: tran ngang <noi>' hoac 'bch-man: tieu de ngan bi bop <px>' (tieu de duoi 120 px, Hoi-5), ma 1. CHIEU DO tren ban sao (E7): (7) tieu de dau ngan bo be rong toi thieu -> ghim 'bch-man: tieu de ngan bi bop'; (9) ten buoc khong xuong dong khong cat -> ghim 'bch-man: tran ngang ngan'. Phep quet tran tinh ca than ngan (khung cuon doc), chi bo qua khung cuon ngang co chu dich va phan tu cat chu bang dau ba cham; khung cuon doc nao cuon ngang cung la tran; duoi 100 phan tu da do thi in 'bch-man: tran ngang do qua it phan tu <n>'."
+
+  - id: E7
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bch_man_do
+    paths:
+      - "_acceptance/bo-cuc-hep-ngan-va-kanban/rang/do-bo-cuc.mjs"
+    expected: "exit 0; do-bo-cuc.mjs --chi-do chay sau chieu do tren ban sao rieng, moi chieu pha dung mot thu ban sua giu: (1) hang so lieu tra ve mot hang, (2) the bo flex-wrap, (3) the bo bien the xuong dong, (4) o Phu trach bo xuongDongDienThoai, (5) ten buoc truncate, (6) buoc chot bo bien the xuong dong, (7) tieu de dau ngan bo be rong toi thieu, (8) o Phu trach chi hien anh dai dien, (9) ten buoc khong xuong dong khong cat, (10) o Phu trach ngan cong ty bo xuongDongDienThoai; moi chieu ra dung thong diep ghim cua E1/E2/E3/E4/E6 va ma 1, roi in 'bch-man-do: 10/10 chieu do ra dung ghim'. Thieu mot chieu hay mot chieu ra ma 0 -> do."
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.bch_nhan
+    paths:
+      - "packages/ui/src/components/status-indicator.tsx"
+      - "packages/ui/test/status-indicator-xuong-dong.dom.tsx"
+    expected: "status-indicator-xuong-dong.dom.tsx: dung StatusIndicator khong truyen bien the -> phan tu nhan co lop truncate; truyen bien the xuong dong -> phan tu nhan khong co truncate va co lop xuong dong; hai ca tren cung mot nhan. CHIEU DO (cung ham kiem, ban sao status-indicator.tsx doi mac dinh sang xuong dong): ghim 'bch-nhan: mac dinh khong con cat'."

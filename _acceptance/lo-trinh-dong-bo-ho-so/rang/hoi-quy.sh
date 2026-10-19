@@ -2,12 +2,13 @@
 set -euo pipefail
 GOC="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 cd "$GOC"
-NEN="${NEN:-$(git merge-base HEAD origin/onehub)}"
-if ! git diff --quiet "$NEN" -- apps/app/test/lo-trinh.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx; then
-	echo "SAI bai kiem cu bi sua: $(git diff --name-only "$NEN" -- apps/app/test/lo-trinh.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx | tr '\n' ' ')"
+NEO="$(bash "$GOC/_acceptance/lo-trinh-dong-bo-ho-so/rang/neo.sh")" || { echo "$NEO"; exit 2; }
+read -r TU TOI <<<"$NEO"
+if ! git diff --quiet "$TU" ${TOI:-} -- apps/app/test/lo-trinh.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx; then
+	echo "SAI bai kiem cu bi sua: $(git diff --name-only "$TU" ${TOI:-} -- apps/app/test/lo-trinh.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx | tr '\n' ' ')"
 	exit 1
 fi
-echo "DUNG bai kiem cu khong doi so voi $NEN"
+echo "DUNG bai kiem cu khong doi so voi $TU..${TOI:-cay}"
 DOM="bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts"
 chay() {
 	local nhan="$1"; shift

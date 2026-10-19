@@ -43,6 +43,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import {
 	fieldsCopy,
 	fieldTypeLabel,
+	fieldTypeNgan,
 	optionCount,
 	TYPE_KEY,
 } from "./fields-copy";
@@ -346,9 +347,10 @@ export function FieldsList({
 
 											<Badge
 												variant="mono"
-												className="w-18 shrink-0 justify-center"
+												className="min-w-18 shrink-0 justify-center"
+												data-nhan-kieu={field.type}
 											>
-												{fieldTypeLabel(TYPE_KEY[field.type], locale)}
+												{fieldTypeNgan(TYPE_KEY[field.type], locale)}
 											</Badge>
 
 											<DropdownMenu>

@@ -1,0 +1,24 @@
+{
+	"jobs": [
+		{
+			"conclusion": "success",
+			"databaseId": 115758765931,
+			"name": "acceptance gate"
+		},
+		{
+			"conclusion": "success",
+			"databaseId": 115758766460,
+			"name": "lệnh dựng"
+		},
+		{
+			"conclusion": "skipped",
+			"databaseId": 115758767963,
+			"name": "phân loại PR"
+		},
+		{
+			"conclusion": "skipped",
+			"databaseId": 115758768258,
+			"name": "tác nhân OKR trên Node 24"
+		}
+	]
+}

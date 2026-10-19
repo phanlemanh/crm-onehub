@@ -47,7 +47,7 @@ async function nhanHoi(
 		{ cauHoi: string | null; nguoiHoiId: string }[]
 	>`
 		UPDATE "taiLieuHoi"
-		SET "phienId" = ${`gui:${hoiId}`}
+		SET "phienId" = ${HOI.lienKet.dauCho(hoiId)}
 		WHERE id = ${hoiId} AND "trangThai" = 'DANG_HOI' AND kenh = 'CRM' AND "phienId" IS NULL
 		RETURNING "cauHoi", "nguoiHoiId"
 	`;
@@ -113,18 +113,18 @@ export async function guiHoiKho(
 				attributes: { purpose: PURPOSE_KHO, hoiId, userId: h.nguoiHoiId },
 			},
 			continuationToken: tokenHoiKho(hoiId),
-			title: "Trợ lý AI đọc kho",
+			title: "Kara đọc kho",
 			mode: "task",
 		});
 		await db.taiLieuHoi.updateMany({
-			where: { id: hoiId, phienId: `gui:${hoiId}` },
+			where: { id: hoiId, phienId: HOI.lienKet.dauCho(hoiId) },
 			data: { phienId: phien.id },
 		});
-		await dongViecCua(hoiId, "Đã mở phiên trợ lý kho.");
+		await dongViecCua(hoiId, "Đã mở phiên Kara đọc kho.");
 		return phien;
 	} catch (error) {
 		await dongLoi(hoiId, "loi-model");
-		await dongViecCua(hoiId, "Không mở được phiên trợ lý kho.");
+		await dongViecCua(hoiId, "Không mở được phiên Kara đọc kho.");
 		throw error;
 	}
 }

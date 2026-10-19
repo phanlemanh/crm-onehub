@@ -34,17 +34,19 @@ const en = {
 	emptyArchived: "No archived companies.",
 	search: "Search companies by name or domain…",
 	archivedToggle: "Archived",
+	nenTang: (ten: string) =>
+		`This is a ${ten} page, not the company's own website. Paste the company's own site, or leave it empty if it has none.`,
 	create: {
 		title: "New company",
 		newButton: "New company",
 		description:
-			"Give it a name and a domain. The agent fills in the logo, description, industry, address and socials.",
+			"Give it a name and a domain. Kara fills in the logo, description, industry, address and socials.",
 		name: "Name",
 		namePlaceholder: "Stripe",
 		domain: "Domain",
 		domainPlaceholder: "stripe.com",
 		domainHint:
-			"A full URL is fine — it is reduced to the bare host, which has to be unique.",
+			"A full URL is fine — it is reduced to the bare host, which has to be unique. Facebook, Zalo or LinkedIn pages are not accepted here.",
 		owner: "Owner",
 		unassigned: "Unassigned",
 		submit: "Add company",
@@ -96,17 +98,19 @@ const vi = {
 	emptyArchived: "Chưa có công ty nào đã lưu trữ.",
 	search: "Tìm công ty theo tên hoặc tên miền…",
 	archivedToggle: "Đã lưu trữ",
+	nenTang: (ten: string) =>
+		`Đây là trang ${ten}, không phải trang web của công ty. Dán trang web riêng của công ty, hoặc để trống nếu chưa có.`,
 	create: {
 		title: "Công ty mới",
 		newButton: "Công ty mới",
 		description:
-			"Chỉ cần tên và tên miền. Tác nhân sẽ tự điền logo, mô tả, ngành, địa chỉ và mạng xã hội.",
+			"Chỉ cần tên và tên miền. Kara sẽ tự điền logo, mô tả, ngành, địa chỉ và mạng xã hội.",
 		name: "Tên",
 		namePlaceholder: "Đất Xanh",
 		domain: "Tên miền",
 		domainPlaceholder: "datxanh.vn",
 		domainHint:
-			"Dán cả đường dẫn cũng được — hệ thống rút về tên miền gốc, và tên miền đó phải là duy nhất.",
+			"Dán cả đường dẫn cũng được — hệ thống rút về tên miền gốc, và tên miền đó phải là duy nhất. Trang Facebook, Zalo hay LinkedIn không dùng được ở đây.",
 		owner: "Phụ trách",
 		unassigned: "Chưa giao",
 		submit: "Thêm công ty",

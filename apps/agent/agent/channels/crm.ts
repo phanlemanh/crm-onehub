@@ -56,6 +56,7 @@ import {
 	guiMaySoan,
 } from "../lib/tai-lieu-phien";
 import { completeTask, taskSubject } from "../lib/tasks";
+import { baoTacNhan } from "../lib/thong-bao-tac-nhan";
 
 const TASK_MARKER = "task:";
 const STALE_QUEUE_MS = DISPATCH.sweep.staleQueueMs;
@@ -170,6 +171,7 @@ export const crmEvents: ChannelEvents = {
 				data: { continuationToken: builderToken(conversationId) },
 			}),
 		);
+		await baoTacNhan(conversationId, "cho");
 	},
 
 	async "turn.failed"(data, channel) {
@@ -204,6 +206,7 @@ export const crmEvents: ChannelEvents = {
 					pendingInputRequest: Prisma.DbNull,
 				},
 			});
+			await baoTacNhan(conversationId, "hong");
 			return;
 		}
 
@@ -291,6 +294,7 @@ export const crmEvents: ChannelEvents = {
 					lastMessageAt: new Date(),
 				},
 			});
+			await baoTacNhan(conversationId, "hong");
 			return;
 		}
 

@@ -1,6 +1,7 @@
 "use client";
 
 import type { StatusTone } from "@crm/ui/components/status-indicator";
+import { type NghiaTrangThai, toneTheoNghia } from "@crm/ui/lib/status-tone";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/lib/trpc/client";
 
@@ -23,11 +24,11 @@ const MAU_MO = [
 
 const MAU_DONG = "var(--chart-5)";
 
-const TONE = {
-	OPEN: "info",
-	WON: "success",
-	LOST: "error",
-} as const satisfies Record<LoaiGiaiDoanHien, StatusTone>;
+export const NGHIA_GIAI_DOAN = {
+	OPEN: "dangChay",
+	WON: "xong",
+	LOST: "hong",
+} as const satisfies Record<LoaiGiaiDoanHien, NghiaTrangThai>;
 
 export function mauGiaiDoan(
 	giaiDoan: GiaiDoanHien | undefined,
@@ -39,7 +40,7 @@ export function mauGiaiDoan(
 }
 
 export function toneGiaiDoan(giaiDoan: GiaiDoanHien | undefined): StatusTone {
-	return giaiDoan ? TONE[giaiDoan.kind] : "neutral";
+	return toneTheoNghia(giaiDoan ? NGHIA_GIAI_DOAN[giaiDoan.kind] : "nhap");
 }
 
 export function useGiaiDoan() {

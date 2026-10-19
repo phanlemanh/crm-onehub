@@ -63,7 +63,7 @@ function dungQueryClient(): QueryClient {
 	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 	const goc = qc.invalidateQueries.bind(qc);
 	qc.invalidateQueries = ((bo?: InvalidateQueryFilters) => {
-		if (bo?.queryKey) daLamMoi.push(bo.queryKey);
+		daLamMoi.push(bo?.queryKey ?? ["(khong khoa)"]);
 		return goc(bo);
 	}) as QueryClient["invalidateQueries"];
 	return qc;
@@ -86,7 +86,10 @@ function khoaKhongLienQuan(): KhoaCoTen[] {
 			ten: "onboarding.listEnrollments",
 			khoa: t.onboarding.listEnrollments.queryKey({ id: "P1" }),
 		},
-		{ ten: "activities.myTasks", khoa: t.activities.myTasks.queryKey() },
+		{
+			ten: "activities.timelineCounts",
+			khoa: t.activities.timelineCounts.queryKey({ dealId: "d-1" }),
+		},
 		{ ten: "companies.byId", khoa: t.companies.byId.queryKey({ id: "ct-1" }) },
 	];
 }

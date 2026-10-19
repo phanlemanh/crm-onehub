@@ -12,32 +12,27 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { BangNguon } from "./bang-nguon";
 import { ChoDuyet } from "./cho-duyet";
-import { BO_LOC_TRONG, type Loc, thamSo } from "./danh-sach-loc";
+import {
+	BO_LOC_TRONG,
+	duongLoc,
+	type Loc,
+	useLocTaiLieu,
+} from "./danh-sach-loc";
 import { DanhSachTrang } from "./danh-sach-trang";
 import { HoiKho } from "./hoi";
 import { SucKhoe } from "./suc-khoe";
 
-export function DanhSach({
-	tab,
-	loai,
-	donVi = null,
-	chu = null,
-	nhom = "cho",
-	page,
-	archived = false,
-	coHoi = false,
-}: Pick<Loc, "tab" | "loai" | "page"> &
-	Partial<Pick<Loc, "donVi" | "chu" | "nhom" | "archived">> & {
-		coHoi?: boolean;
-	}) {
+export function DanhSach({ coHoi = false }: { coHoi?: boolean }) {
 	const locale = useLocale();
 	const m = taiLieuMessages(locale);
 	const trpc = useTRPC();
 	const url = useWorkspaceUrl();
 	const cho = useQuery(trpc.taiLieu.proposals.queryOptions());
 	const soCho = cho.data?.choToiDuyet ?? 0;
+	const [loc] = useLocTaiLieu();
+	const { tab } = loc;
 	const toi = (sua: Partial<Loc>) =>
-		`${url(duongDanhSach())}${thamSo({ tab, loai, donVi, chu, nhom, page, archived, ...sua })}`;
+		duongLoc(url(duongDanhSach()), { ...loc, ...sua });
 
 	return (
 		<>
@@ -103,7 +98,7 @@ export function DanhSach({
 			</Tabs>
 			<PageShellContent>
 				{tab === "cho-duyet" ? (
-					<ChoDuyet nhom={nhom} page={page} toi={toi} />
+					<ChoDuyet />
 				) : tab === "suc-khoe" ? (
 					<SucKhoe />
 				) : tab === "nguon" ? (
@@ -111,14 +106,7 @@ export function DanhSach({
 				) : tab === "hoi" && coHoi ? (
 					<HoiKho />
 				) : (
-					<DanhSachTrang
-						archived={archived}
-						chu={chu}
-						donVi={donVi}
-						loai={loai}
-						page={page}
-						toi={toi}
-					/>
+					<DanhSachTrang />
 				)}
 			</PageShellContent>
 		</>

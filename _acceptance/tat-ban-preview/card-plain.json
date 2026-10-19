@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Đẩy một nhánh làm việc không còn dựng bản xem trước (Preview) của app, api, agent — bản xem trước từng chạy trên dữ liệu thật mà không ai dùng; bản chạy thật của onehub giữ nguyên.",
+  "scope_plain": "Vòng chỉ thêm ba tệp cấu hình, một phép thử và sửa tài liệu vận hành; bản chạy thật sau gộp được đo ở bước kiểm sau gộp."
+}
