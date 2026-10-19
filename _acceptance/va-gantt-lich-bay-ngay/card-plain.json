@@ -1,0 +1,34 @@
+{
+  "feature_plain": "Công ty làm cả bảy ngày đặt được lịch đó và lịch giữ nguyên; dự án đã đủ 300 việc vẫn sửa được mốc và phụ thuộc.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giữ đúng lịch làm cả tuần sau khi quản trị bỏ chọn hết ngày nghỉ, ở màn Cài đặt và ở Gantt, mọi lần mở lại."},
+    {"id": "AC-2", "p": "Sẽ để công ty chưa từng đặt lịch tiếp tục nghỉ Thứ Bảy, Chủ nhật như hôm nay; lịch đã đặt từ trước giữ nguyên khi nâng cơ sở dữ liệu."},
+    {"id": "AC-3", "p": "Sẽ cho việc phải chờ tự dời sang Thứ Bảy, Chủ nhật khi lịch làm cả tuần."},
+    {"id": "AC-4", "p": "Sẽ cho nút Hoàn tác trên màn Cài đặt đưa lịch về đúng như trước, hai chiều, kể cả sau khi tải lại trang."},
+    {"id": "AC-5", "p": "Sẽ cho thêm, sửa, xoá mốc ở dự án đã đủ 300 việc, lịch sử dự án ghi đủ."},
+    {"id": "AC-6", "p": "Sẽ cho thêm, gỡ phụ thuộc và đổi ngày việc ở dự án đã đủ 300 việc, việc phải chờ vẫn tự dời."},
+    {"id": "AC-7", "p": "Sẽ chỉ chặn việc thứ 301 (tạo mới, việc con, chuyển từ ngoài vào) bằng câu «tối đa 300 việc»; hai người tranh việc thứ 300 thì đúng một người được; dự án đóng vẫn chặn mọi thao tác."},
+    {"id": "AC-8", "p": "Sẽ cho quản trị thấy cả bảy ô thứ ở trạng thái bỏ chọn và Gantt không tô cuối tuần, ở máy tính và điện thoại."},
+    {"id": "AC-9", "p": "Sẽ sửa tài liệu API và từ điển sản phẩm cho đúng nghĩa mới của lịch và của trần 300 việc."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG cho chọn nghỉ cả bảy ngày — lịch phải còn ít nhất một ngày làm."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG thêm câu báo mới trên màn Cài đặt; màn và Gantt giữ nguyên giao diện."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG sửa ô chọn «Dự án» bị cắt mép trên điện thoại — đã xin giám sát mở hàng riêng."},
+    {"id": "OOS-4", "p": "Sẽ KHÔNG đụng các hạn chế đã biết khác của vòng Dự án và Gantt (Ngoài-4, 5, 10, 11)."}
+  ],
+  "scope_plain": "Bốn thứ cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Lịch ở cả bốn trạng thái có thể lưu — chưa có cài đặt, có mà chưa từng đặt, đã đặt có ngày nghỉ, đã đặt làm cả tuần — đều có tiêu chí đo (AC-1 làm cả tuần, AC-2 mặc định và dữ liệu cũ); đối chiếu Microsoft Project và Smartsheet: làm cả tuần là lịch hợp lệ."},
+    {"i": 1, "p": "Mọi chỗ đọc lịch — màn Cài đặt, Gantt, tự dời, nút Hoàn tác — đều có tiêu chí (AC-1, AC-3 tự dời, AC-4 Hoàn tác, AC-8 màn); danh sách chỗ đọc lấy bằng tìm toàn kho ngày 19/10."},
+    {"i": 2, "p": "Đủ chín thao tác chạm dự án — ba đường thêm việc, ba thao tác mốc, hai thao tác phụ thuộc, đổi ngày — nằm trong một bảng viết trước (AC-5, AC-6, AC-7)."},
+    {"i": 3, "p": "Ba trạng thái dự án — mở 299 việc, mở 300 việc, đã đóng — nhân với chín thao tác thành 27 ô, mỗi ô có kết quả hứa trước."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bài kiểm của vòng trước dùng chung kho thử với bài mới, nên khuôn «đánh dấu đã đặt» làm nó đỏ tuỳ thứ tự chạy. Đã đổi khuôn sang «đánh dấu làm cả tuần» mà bài cũ không bao giờ bật, và mọi bài mới phải dọn dấu sau khi chạy."},
+    {"i": 1, "p": "Bản đầu ghi «không khoá được khi hai người cùng thêm việc thứ 300» là bất khả, mà thật ra khoá rẻ và gọn. Đã đưa khoá vào phạm vi, có ca đo hai người tranh nhau."},
+    {"i": 2, "p": "Bảng 27 ô mới hứa kết quả cho 19 ô. Đã viết đủ 27 kết quả trước khi chạy và đưa dự án 299 việc về lại 299 sau mỗi lần thêm."},
+    {"i": 3, "p": "Phép đếm «không ô nào được chọn» trên màn Cài đặt có thể ra 0 vì đếm nhầm chỗ. Đã thêm bước đối chứng: trước khi bỏ chọn phải đếm ra đúng hai ô Thứ Bảy, Chủ nhật."},
+    {"i": 4, "p": "Nút Hoàn tác chỉ được đo bằng lời gọi máy viết tay, chưa ai bấm nút thật. Đã thêm bước bấm Hoàn tác hai chiều trên màn thật, tải lại rồi đếm ô."}
+  ]
+}
