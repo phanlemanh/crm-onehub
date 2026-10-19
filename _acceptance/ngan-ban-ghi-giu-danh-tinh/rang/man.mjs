@@ -419,6 +419,13 @@ try {
 	}
 	const ten = deal.name;
 	const chu = await d.nguoiMoi("gdt", "owner", "Phan Kiểm Ngăn Bản Ghi");
+	if (!process.env.SLUG) {
+		const [ws] = await d.db.$queryRawUnsafe(
+			`SELECT slug FROM "organization" WHERE id = $1`,
+			"workspace",
+		);
+		if (ws?.slug) process.env.SLUG = ws.slug;
+	}
 	await d.batTrinhDuyet(chu.cookie);
 	const duong = `/deals?q=${encodeURIComponent(ten)}`;
 
