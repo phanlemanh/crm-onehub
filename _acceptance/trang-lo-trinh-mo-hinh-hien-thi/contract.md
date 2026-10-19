@@ -5,7 +5,7 @@ slug: trang-lo-trinh-mo-hinh-hien-thi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-19T13:48:09Z
 design_doc: docs/superpowers/specs/2026-10-19-trang-lo-trinh-mo-hinh-hien-thi-design.md
@@ -97,3 +97,8 @@ trong lượt khi ca cần khoá lệch luật cũ.
   này không đổi điều người xem thấy hôm nay ngoài dòng số của mốc. Giá trị của vòng là một nguồn sự thật.
 - Giới hạn đã biết: năm khoá liệt MÃ, không liệt hàng. Hai hàng cùng mã (kit báo «hai việc cùng mã» ở «Cần sửa») đều
   hiện dưới mốc của mã ở trang CRM, còn khối Mốc của `LO-TRINH.html` chỉ liệt hàng đầu. Đo 19/10: 0 mã trùng.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-19:
+  - Ngoài-1: Khi khối dữ liệu dời một việc sang mốc sau mà mốc cũ vẫn liệt việc ấy, trang có thể ghi «Trễ N ngày» cho việc thật ra còn N ngày và đếm nó vào bộ lọc «Trễ mốc»; dữ liệu thật hôm nay không rơi vào ca này.
+  - Ngoài-2: Bài kiểm chưa chứng minh bộ lọc mốc liệt đủ các mốc hiện, chỉ chứng minh mốc không hiện thì vắng mặt.
+  - Ngoài-4: Bài đối chiếu chỉ kiểm tên việc có nằm trong dòng, chưa kiểm dòng hiện đúng bằng tên ấy.
+  - Ngoài-5: Bài kiểm chưa thật sự soi tên việc trên bảng cột và ngăn hồ sơ.
