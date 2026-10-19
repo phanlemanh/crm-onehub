@@ -7,19 +7,13 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { ChonChuKy } from "./chon-chu-ky";
 import { DaiKy } from "./dai-ky";
-import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
 import { donDich } from "./don-dich";
 import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
-import {
-	giaiKy,
-	kyMacDinhHoiY,
-	loadOkrSearchParams,
-	locOkr,
-} from "./okr-search-params";
+import { giaiKy, loadOkrSearchParams, locOkr } from "./okr-search-params";
 import type { TabOkr } from "./tab-okr";
+import { DauTrangOkr } from "./thanh-tab";
 import { tieuDeKhu } from "./tieu-de-khu";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -50,12 +44,10 @@ function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 			hanhDong={
 				<>
 					<NutHoiKara />
-					<Skeleton className="h-7 w-28" />
 					<Skeleton className="h-7 w-56" data-hang-cho="" />
 				</>
 			}
 			moTa={moTa}
-			thanhTab={<Skeleton className="h-9 w-full max-w-xl" />}
 			tieuDe={tieuDe}
 		/>
 	);
@@ -78,11 +70,6 @@ async function DauTrangCoDuLieu({
 		queryClient.prefetchQuery(trpc.org.tree.queryOptions()),
 		queryClient.prefetchQuery(trpc.workspace.get.queryOptions()),
 	]);
-	const kyHoiY = cycles ? kyMacDinhHoiY(cycles) : null;
-	if (kyHoiY)
-		await queryClient.prefetchQuery(
-			trpc.okr.hoiYNhan.queryOptions({ cycleId: kyHoiY }),
-		);
 	if (tab === "theo-don-vi" && searchParams && cycles) {
 		const thamSo = await loadOkrSearchParams(searchParams);
 		const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);
@@ -98,10 +85,7 @@ async function DauTrangCoDuLieu({
 
 	return (
 		<HydrateClient>
-			<DauTrangOkrHoiY
-				cauNoi={okrBridgeConfigured()}
-				chonChuKy={<ChonChuKy />}
-			/>
+			<DauTrangOkr cauNoi={okrBridgeConfigured()} />
 			<DaiKy />
 		</HydrateClient>
 	);

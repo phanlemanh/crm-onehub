@@ -235,36 +235,27 @@ function MenuThem({
 export function HanhDongKhu({
 	q,
 	tab,
-	chonChuKy,
 	cauNoi,
 }: {
 	q: QuyenKhu;
 	tab: TabOkr;
-	chonChuKy: ReactNode;
+	chonChuKy?: ReactNode;
 	cauNoi: boolean;
 }) {
 	const m = okrMessages(useLocale());
 	const toi = useDuongTheoDonVi(q.kieu === "xong" ? q.cycleId : "");
 	const hoiKara = <NutHoiKara />;
-	if (q.kieu === "an")
-		return (
-			<>
-				{hoiKara}
-				{chonChuKy}
-			</>
-		);
+	if (q.kieu === "an") return hoiKara;
 	if (q.kieu === "cho")
 		return (
 			<>
 				{hoiKara}
-				{chonChuKy}
 				<Skeleton className="h-7 w-56" data-hang-cho="" />
 			</>
 		);
 	return (
 		<>
 			{hoiKara}
-			{chonChuKy}
 			<MenuThem
 				duong={toi(q.dich.don, SEARCH_PARAM.okr.nhap)}
 				q={q}

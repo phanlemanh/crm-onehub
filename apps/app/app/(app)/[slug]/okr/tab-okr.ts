@@ -24,3 +24,26 @@ export function tabTuDuong(duong: string | null): TabOkr {
 	if (laDoanMoi(con)) return DOAN_MOI[con];
 	return TAB.find((t) => t === con) ?? "cua-toi";
 }
+
+export const DUONG_SO_DO = "/okr/so-do";
+
+export const NHOM_THANH_BEN = [
+	{ khoa: "dau", muc: ["cua-toi"] },
+	{ khoa: "okr", muc: ["bo-okr", "lay-y-kien"] },
+	{ khoa: "bao-cao", muc: ["suc-khoe", "so-do"] },
+] as const;
+
+export type MucThanhBen = (typeof NHOM_THANH_BEN)[number]["muc"][number];
+
+export const DUONG_MUC = {
+	"cua-toi": DUONG["cua-toi"],
+	"bo-okr": DUONG["theo-don-vi"],
+	"lay-y-kien": DUONG["hoi-y"],
+	"suc-khoe": DUONG["toan-canh"],
+	"so-do": DUONG_SO_DO,
+} as const satisfies Record<MucThanhBen, string>;
+
+export function mucDangMo(href: string, goc: string, duong: string): boolean {
+	if (href === goc) return duong === href;
+	return duong === href || duong.startsWith(`${href}/`);
+}
