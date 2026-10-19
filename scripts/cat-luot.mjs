@@ -24,7 +24,7 @@ import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { kiemKhuon } from './lo-trinh.mjs';
+import { kiemKhuon, CAU_BON_CHO, DU_LIEU } from './lo-trinh.mjs';
 
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
@@ -39,8 +39,10 @@ export const DANG = ['chuoi', 'lan-va'];
 const chuoi = v => (v == null ? '' : String(v).trim());
 const NGAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 const nfc = v => chuoi(v).normalize('NFC');
-// Mốc ngoài (hàng S3b): việc vận hành của người. Nhãn in ra = ma, vắng thì ten, rồi ngày.
+// Mốc ngoài: loại mốc của luật S3b (11/10) mà luật 17/10 bỏ (hồ sơ road-map-de-dung, ADR 0026) — răng nhận ra nó để báo,
+// không còn là chỗ của bảng phủ. Nhãn in ra = ma, vắng thì ten, rồi ngày.
 export const LOAI_NGOAI = 'ngoai';
+export const CO_MOC_NGOAI = 'moc-ngoai-da-bo';
 const laNgoai = m => chuoi(m.loai) === LOAI_NGOAI;
 const nhanMoc = m => chuoi(m.ma) || chuoi(m.ten) || chuoi(m.ngay) || '?';
 // Mục `dung_tren` x trỏ một mốc ngoài (bất kỳ đợt) khi khớp `ma`, hoặc `ten` sau NFC — một bộ khớp cho răng phủ và cờ.
@@ -106,33 +108,30 @@ export function kiemPhu(pv, data) {
   // Phủ: mỗi mã của bản phạm vi ở đúng một mục cùng đợt.
   const ct = (Array.isArray(data.chan_troi) ? data.chan_troi : []).filter(c => c && typeof c === 'object' && !Array.isArray(c) && chuoi(c.dot) === pv.dot);
   for (const c of ct) if (!chuoi(c.ly_do)) loi.push(`chờ điều kiện ${chuoi(c.ma) || '?'}: thiếu ly_do`);
-  // Mốc của đợt (hàng S3b): chỉ mốc ngoài gánh mã — việc vận hành của người; mốc khác đợt không xét.
-  const maHang = new Set(hang.map(r => r._ma).filter(Boolean));
-  const maChanTroi = new Set((Array.isArray(data.chan_troi) ? data.chan_troi : []).filter(c => c && typeof c === 'object' && !Array.isArray(c)).map(c => chuoi(c.ma)).filter(Boolean));
+  // Mốc của đợt: luật 17/10 — mốc không gánh mã của bản phạm vi, việc của người không thành mốc (bốn chỗ đến); mốc khác đợt
+  // không xét ở đây (dòng gom ở kiemCo).
   const mocDot = k.moc.filter(m => chuoi(m.dot) === pv.dot);
   for (const m of mocDot) {
     const n = nhanMoc(m);
+    if (laNgoai(m)) { loi.push(`mốc ${n} [${CO_MOC_NGOAI}]: việc của người không còn là mốc (luật 17/10) — ${CAU_BON_CHO}`); continue; }
     if (m.phu !== undefined && !Array.isArray(m.phu)) loi.push(`mốc ${n}: phu phải là một mảng`);
     const phu = Array.isArray(m.phu) ? m.phu.map(chuoi).filter(Boolean) : [];
-    if (!laNgoai(m)) { if (phu.length) loi.push(`mốc ${n}: mang mã của bản phạm vi mà không phải mốc ngoài (loai: ngoai) — chỉ việc vận hành của người thành mốc`); continue; }
-    if (!chuoi(m.ai)) loi.push(`mốc ngoài ${n}: thiếu ai (người làm việc vận hành)`);
-    if (chuoi(m.ma) && maHang.has(chuoi(m.ma))) loi.push(`mốc ngoài ${n}: mã trùng mã hàng ${chuoi(m.ma)}`);
-    if (m.lap !== undefined && typeof m.lap !== 'boolean') loi.push(`mốc ${n}: lap phải là true hoặc false`);
-    if (m.tu_phuc_vu !== undefined) { const t = chuoi(m.tu_phuc_vu); if (!maHang.has(t) && !maChanTroi.has(t)) loi.push(`mốc ${n}: tu_phuc_vu trỏ mã không có: ${t || '(rỗng)'}`); }
+    if (phu.length) loi.push(`mốc ${n}: mang mã của bản phạm vi — mốc không gánh mã; mã việc phát triển ở hàng hay mục chờ điều kiện`);
   }
-  const mocPhu = mocDot.filter(m => laNgoai(m) && Array.isArray(m.phu));
+  // Bảng phủ hai chỗ (hàng · Chờ điều kiện): mốc không gánh mã nào (luật 17/10).
+  const mocPhu = [];
   const cho = new Map();
   const ghi = (ma, noi) => { if (!cho.has(ma)) cho.set(ma, []); cho.get(ma).push(noi); };
   for (const r of dot) for (const x of (Array.isArray(r.phu) ? r.phu : []).map(chuoi)) ghi(x, `hàng ${r._nhan}`);
   for (const c of ct) for (const x of (Array.isArray(c.phu) ? c.phu : []).map(chuoi)) ghi(x, `chờ điều kiện ${chuoi(c.ma) || '?'}`);
   for (const m of mocPhu) for (const x of m.phu.map(chuoi)) ghi(x, `mốc ngoài ${nhanMoc(m)}`);
   const bang = [];
-  if (!dot.length && !ct.length && !mocPhu.length) loi.push(`đợt ${pv.dot} chưa cắt: ${pv.ma.length} mã chưa ở hàng hay mục chờ điều kiện nào`);
+  if (!dot.length && !ct.length) loi.push(`đợt ${pv.dot} chưa cắt: ${pv.ma.length} mã chưa ở hàng hay mục chờ điều kiện nào`);
   else {
     const coMa = new Set(pv.ma.map(m => m.ma));
     for (const { ma } of pv.ma) {
       const noi = cho.get(ma) || [];
-      if (!noi.length) loi.push(`mã ${ma} không ở hàng hay mục chờ điều kiện nào — cũng không ở mốc ngoài nào`);
+      if (!noi.length) loi.push(`mã ${ma} không ở hàng hay mục chờ điều kiện nào`);
       else if (noi.length > 1) loi.push(`mã ${ma} ở ${noi.length === 2 ? 'hai' : noi.length} chỗ: ${noi.join(', ')}`);
       bang.push({ ma, cho: noi[0] || null });
     }
@@ -152,16 +151,15 @@ export const { KHOA_CO, TEP_SKILL, docKhoang, napKhoang } = CHD;
 // Agent không đọc hai trường này; trang lộ trình cũng không. Thiếu khai chỉ vàng (đường đọc-cũ: lộ
 // trình cắt trước luật 10/10 vẫn đọc được); khai sai thì đỏ ở hàng trong đợt.
 // Bốn cờ cuối của hàng S3b: vận hành và dữ liệu giả.
-const CO_LAP = 'van-hanh-lap-chua-tu-phuc-vu';
 export const CO_TEN = ['can-tach', 'tren-muc-tieu', 'duoi-muc-tieu', 'tieu-chi-sai-kieu', 'chua-uoc-tieu-chi', 'vai-khong-mo-cau', 'nen-thieu-bat-khi', 'chua-khai-dang-giao',
-  'cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia', CO_LAP, 'gan-moc-dang-chay'];
+  'cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia', CO_MOC_NGOAI, 'gan-moc-dang-chay'];
 const CO_LOI = new Set(['can-tach', 'tieu-chi-sai-kieu', 'vai-khong-mo-cau', 'nen-thieu-bat-khi']);
 // Cờ hàng của S3b: lỗi ở hàng trong đợt, một dòng gom ở hàng ngoài đợt (như mọi cờ hàng).
 const CO_LOI_S3B = new Set(['cho-van-hanh', 'du-lieu-sai-gia-tri', 'thieu-hang-sinh-gia']);
 // Gợi ý cỡ chỉ có nghĩa cho đợt đang cắt — hàng ngoài đợt không mang hai cờ này.
 const CO_CHI_TRONG_DOT = new Set(['tren-muc-tieu', 'duoi-muc-tieu']);
 // Nguồn dữ liệu của hàng (trường lượt cắt `du_lieu`): hàng sinh dữ liệu giả có nhãn, hoặc hàng đo trên nó.
-export const DU_LIEU = ['sinh-gia', 'gia'];
+export { DU_LIEU };
 const DL_SINH = 'sinh-gia'; const DL_GIA = 'gia';
 const VAI_NEN = 'nen';
 const chuanCau = s => String(s ?? '').normalize('NFC').replace(/^[\s«“"']+/u, '').toLocaleLowerCase('vi');
@@ -214,9 +212,12 @@ export function kiemCo(pv, data, k, homNay = null) {
   for (const { r, nhan } of ngoai) for (const [co] of coCuaHang(r, k)) if (!CO_CHI_TRONG_DOT.has(co)) { if (!gom.has(co)) gom.set(co, []); gom.get(co).push(nhan); }
   for (const { r, nhan } of ngoai) for (const [co] of coS3b(r)) if (!CO_CHI_TRONG_DOT.has(co)) { if (!gom.has(co)) gom.set(co, []); gom.get(co).push(nhan); }
   for (const co of CO_TEN) { const ds = gom.get(co); if (ds) canhBao.push(`[${co}] ${ds.length} hàng ngoài đợt ${pv.dot} — ${ds.slice(0, 8).join(', ')}${ds.length > 8 ? ', …' : ''}`); }
-  // Mốc vận hành LẶP LẠI của đợt đang cắt mà chưa trỏ hàng tự phục vụ hay mục chờ điều kiện: nhắc (vàng) — phanh
-  // «không phổ quát quá sớm» là phán xét của chủ kho, không phải lỗi.
-  const mocLap = moc.filter(m => chuoi(m.loai) === LOAI_NGOAI && chuoi(m.dot) === pv.dot && m.lap === true);
+  // Mốc ngoài NGOÀI đợt đang cắt (lộ trình cắt trước luật 17/10): một dòng gom vàng — lượt cắt không sửa mục ngoài đợt; cắt
+  // lại lộ trình bằng skill mới là đường dọn (chủ kho 17/10).
+  const mocNgoaiDot = moc.filter(m => chuoi(m.loai) === LOAI_NGOAI && chuoi(m.dot) !== pv.dot);
+  const tenNgoai = [];
+  for (const m of mocNgoaiDot) tenNgoai.push(nhanMoc(m));
+  if (tenNgoai.length) canhBao.push(`[${CO_MOC_NGOAI}] ${tenNgoai.length} mốc ngoài đợt ${pv.dot} — ${tenNgoai.slice(0, 8).join(', ')}${tenNgoai.length > 8 ? ', …' : ''}: việc của người không còn là mốc (luật 17/10) — dọn khi cắt lại lộ trình`);
   // Cắt lượt dưới đóng băng (hồ sơ ra-soat-lo-trinh, B′ §10): hàng của ĐỢT ĐANG CẮT gắn vào một mốc phát hành ĐANG CHẠY
   // (ngày mốc ≥ hôm nay VÀ mốc đã có hàng ngoài đợt) là đổi đích chiến dịch giữa chừng — cảnh báo, không lỗi.
   if (homNay) {
@@ -228,7 +229,6 @@ export function kiemCo(pv, data, k, homNay = null) {
       canhBao.push(`hàng ${nhan} [gan-moc-dang-chay]: gắn vào mốc «${nhanMoc(m)}» đang chạy (ngày ${chuoi(m.ngay)}) — đổi đích chiến dịch giữa chừng; gắn sang mốc kế hoặc để «Kế tiếp», chủ ý thì ghi vì sao vào mô tả PR`);
     }
   }
-  for (const m of mocLap) if (m.tu_phuc_vu === undefined) canhBao.push(`mốc ${nhanMoc(m)} [${CO_LAP}]: việc vận hành lặp lại chưa trỏ hàng tự phục vụ hay mục chờ điều kiện (tu_phuc_vu) — xét tự phục vụ; chưa đáng thì ghi mục chờ điều kiện, mở lại khi có tổ chức hay kho thứ hai thật`);
   return { loi, canhBao };
 }
 

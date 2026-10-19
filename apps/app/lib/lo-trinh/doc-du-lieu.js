@@ -2,12 +2,12 @@ export function docDuLieu(html) {
   const ID = 'lo-trinh-du-lieu'; const PHIEN_BAN = 2;
   const KHUON = {
     goc: ['khuon', 'phien_ban', 'nguon', 'lo_trinh', 'ngoai_lo_trinh'],
-    lo_trinh: ['tep', 'ten', 'loi', 'hang_ke', 'can_sua', 'tien_do', 'hang', 'moc', 'da_bac'],
+    lo_trinh: ['tep', 'ten', 'loi', 'hang_ke', 'can_sua', 'tien_do', 'hang', 'moc', 'da_bac', 'chua_hen_moc'],
     hang_ke: ['ma', 'cau_giao', 'lenh'],
     can_sua: ['ma', 'chu'],
     tien_do: ['tong', 'da_giao', 'dang_lam', 'chua_bat_dau', 'khac'],
-    hang: ['ma', 'cau_giao', 'hang', 'nhom', 'dung_tren', 'trang_thai', 'nhom_trang_thai', 'ho_so', 'theo_loi', 'co', 'bat_khi', 'vi_sao', 'tom_tat', 'gio_may'],
-    moc: ['ten', 'ngay', 'hang', 'con_viec', 'gio_may', 'du_kien', 'qua_tai'],
+    hang: ['ma', 'cau_giao', 'hang', 'nhom', 'dung_tren', 'trang_thai', 'nhom_trang_thai', 'ho_so', 'theo_loi', 'co', 'bat_khi', 'vi_sao', 'tom_tat', 'gio_may', 'ten_hien_thi'],
+    moc: ['ten', 'ngay', 'hang', 'con_viec', 'gio_may', 'du_kien', 'qua_tai', 'hien', 'viec_hien', 'con_lai'],
     da_bac: ['ma', 'ly_do'],
     tom_tat: ['moi_nguoi', 'chu_kho'],
     moi_nguoi: ['da_giao', 'vi_sao', 'trang_thai', 'ngay', 'production', 'do_gi', 'ket_qua', 'chua_lam', 'ai_quyet'],
@@ -16,9 +16,9 @@ export function docDuLieu(html) {
     gio_may_moc: ['thap', 'cao', 'chu', 'phan_tram_tuan', 'phan_tram_chu'],
     du_kien: ['ngay_tinh', 'hoan_tat', 'chu'],
   };
-  const MANG = ['nguon', 'lo_trinh', 'ngoai_lo_trinh', 'can_sua', 'hang', 'moc', 'da_bac', 'dung_tren', 'co'];
+  const MANG = ['nguon', 'lo_trinh', 'ngoai_lo_trinh', 'can_sua', 'hang', 'moc', 'da_bac', 'dung_tren', 'co', 'viec_hien', 'chua_hen_moc'];
   const BOOL = ['theo_loi', 'con_viec']; const SO = ['phien_ban', 'tong', 'da_giao', 'dang_lam', 'chua_bat_dau', 'khac'];
-  const NUL = ['ten', 'loi', 'hang_ke', 'lenh', 'ho_so', 'tom_tat', 'moi_nguoi', 'chu_kho', 'gio_may', 'du_kien', 'qua_tai'];
+  const NUL = ['ten', 'loi', 'hang_ke', 'lenh', 'ho_so', 'tom_tat', 'moi_nguoi', 'chu_kho', 'gio_may', 'du_kien', 'qua_tai', 'ten_hien_thi', 'hien', 'con_lai'];
   // Ô của dải vắng → null («chưa có»), xét theo CẤP chứ không theo tên: tên ô trùng tên trường ở cấp khác
   // (da_giao của tien_do, ma, trang_thai, vi_sao của hang) vẫn rỗng theo kiểu như bản 1. Ô vắng của giờ máy / dự kiến
   // cũng null — «chưa có», không phải 0 giờ.
@@ -43,6 +43,10 @@ export function docDuLieu(html) {
   // Trang khuôn bản 1 đã có cờ «vẽ lại bằng bộ kit mới» — không thêm cờ thứ hai cho cùng một việc vẽ lại.
   const thieuGio = Number(o.phien_ban) !== 1 && (Array.isArray(o.lo_trinh) ? o.lo_trinh : []).some(t => t && Array.isArray(t.hang) && t.hang.some(h => h && typeof h === 'object' && !('gio_may' in h)));
   if (thieuGio) canhBao.push('trang vẽ bằng bộ kit chưa có giờ máy trong khối — chưa có giờ máy và ngày dự kiến (gio_may, du_kien null); vẽ lại bằng bộ kit mới');
+  // Mô hình hiển thị chung (hồ sơ road-map-de-dung, cùng phiên bản 2): trang đời trước nhận ra bằng khoá `chua_hen_moc` vắng ở
+  // một lộ trình đọc được. Bộ đọc của kho tiêu thụ giữ luật lọc riêng của mình tới khi trang được vẽ lại.
+  const thieuMoHinh = Number(o.phien_ban) !== 1 && (Array.isArray(o.lo_trinh) ? o.lo_trinh : []).some(t => t && typeof t === 'object' && !t.loi && !('chua_hen_moc' in t));
+  if (thieuMoHinh) canhBao.push('trang vẽ bằng bộ kit chưa có luật hiển thị trong khối — khối chưa mang mô hình hiển thị (ten_hien_thi, hien, con_lai null; viec_hien, chua_hen_moc rỗng); vẽ lại bằng bộ kit mới');
   const g = va(o, 'goc');
   g.lo_trinh = (Array.isArray(g.lo_trinh) ? g.lo_trinh : []).map(t => {
     const x = va(t, 'lo_trinh');
