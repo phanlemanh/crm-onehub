@@ -5,9 +5,9 @@ slug: go-tin-hieu-rac
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-10-19T14:11:15Z
 design_doc: docs/superpowers/specs/2026-10-19-go-tin-hieu-rac-design.md
 ---
 
