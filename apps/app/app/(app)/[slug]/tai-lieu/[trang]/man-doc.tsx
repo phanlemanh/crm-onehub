@@ -2,7 +2,12 @@
 
 import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
 import Information from "@carbon/icons-react/es/Information";
-import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import {
+	Alert,
+	AlertAction,
+	AlertDescription,
+	AlertTitle,
+} from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
@@ -15,6 +20,7 @@ import {
 import { Separator } from "@crm/ui/components/separator";
 import type { DangCho, LoaiTrang } from "@crm/validation/tai-lieu";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import {
@@ -78,6 +84,7 @@ export type TrangDoc = {
 	choLanDau: ChoLanDau | null;
 	soBanCho: number;
 	deXuatChoId: string | null;
+	loiBanCho?: boolean;
 	nguon: NguonCuaTrang | null;
 	xacMinh?: XacMinhTrang;
 	luuTru?: LuuTruTrang;
@@ -94,6 +101,21 @@ export type XacMinhTrang = {
 	quaHan: boolean;
 	coQuyen: boolean;
 };
+
+function DongLoiBanCho() {
+	const m = taiLieuMessages(useLocale());
+	const router = useRouter();
+	return (
+		<Alert data-loi-ban-cho="" variant="warning">
+			<AlertDescription>{m.doc.loiBanCho}</AlertDescription>
+			<AlertAction>
+				<Button onClick={() => router.refresh()} size="xs" variant="outline">
+					{m.loiTai.thuLai}
+				</Button>
+			</AlertAction>
+		</Alert>
+	);
+}
 
 export function ManDoc({ trang }: { trang: TrangDoc }) {
 	const locale = useLocale();
@@ -144,6 +166,7 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 							<KhungCho cho={trang.choLanDau} chuTrang={trang.chuTrang} />
 						) : null}
 						<DaiDaLuuTru luuTru={luuTru} slug={trang.slug} />
+						{trang.loiBanCho ? <DongLoiBanCho /> : null}
 						<div className="flex flex-wrap items-center gap-2">
 							<HuyHieuLuuTruCho luuTru={luuTru} />
 							{trang.soBanCho > 0 ? (

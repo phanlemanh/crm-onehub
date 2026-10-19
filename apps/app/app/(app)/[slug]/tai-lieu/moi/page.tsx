@@ -46,11 +46,11 @@ export default async function TrangMoiPage({
 
 async function NoiDung() {
 	const session = await requireSession();
-	const { chuTrang, donVi } = await chuTrangVaDonVi(session.user);
+	const chon = await chuTrangVaDonVi(session.user);
 
 	return (
 		<HydrateClient>
-			<ManSoan vao={{ kieu: "moi", toiId: session.user.id, chuTrang, donVi }} />
+			<ManSoan vao={{ kieu: "moi", toiId: session.user.id, ...chon }} />
 		</HydrateClient>
 	);
 }
