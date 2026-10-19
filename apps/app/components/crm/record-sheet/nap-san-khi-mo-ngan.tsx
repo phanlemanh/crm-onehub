@@ -12,9 +12,9 @@ export function NapSanKhiMoNgan({
 	children: ReactNode;
 }) {
 	const { stack } = useRecordStack();
-	return stack.length > 0 ? (
-		<HydrationBoundary state={state}>{children}</HydrationBoundary>
-	) : (
-		children
+	return (
+		<HydrationBoundary state={stack.length > 0 ? state : undefined}>
+			{children}
+		</HydrationBoundary>
 	);
 }
