@@ -13,6 +13,11 @@ const vi = {
 		soDo: "Sơ đồ",
 	},
 	chuongTrinh: "Chương trình OKR",
+	soDo: {
+		tieuDe: "Sơ đồ",
+		moTa: "Bộ OKR của từng đơn vị góp vào mục tiêu công ty ra sao trong chu kỳ.",
+	},
+	veSoDo: "Về Sơ đồ",
 };
 
 type OkrVoKhuMessages = typeof vi;
@@ -30,6 +35,11 @@ const en: OkrVoKhuMessages = {
 		soDo: "Map",
 	},
 	chuongTrinh: "OKR program",
+	soDo: {
+		tieuDe: "Map",
+		moTa: "How each unit's OKR set contributes to company objectives in the cycle.",
+	},
+	veSoDo: "Back to Map",
 };
 
 export function okrVoKhuMessages(locale: Locale): OkrVoKhuMessages {

@@ -106,7 +106,7 @@ function DongSucKhoe({ h }: { h: HangSucKhoe }) {
 	);
 }
 
-export function SucKhoe() {
+export function SucKhoe({ duongDan = true }: { duongDan?: boolean }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
@@ -239,7 +239,7 @@ export function SucKhoe() {
 
 	return (
 		<div className="flex flex-col gap-6">
-			{dau}
+			{duongDan ? dau : null}
 			{than}
 			{quanTri && currentId !== null ? (
 				<TomTatQuanTri cycleId={currentId} key={currentId} />

@@ -18,8 +18,10 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useMemo } from "react";
 import { okrQuanhMessages } from "@/lib/messages/okr-quanh";
+import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { DUONG_SO_DO } from "../tab-okr";
 import { type NutQuanh, type QuanhMucTieu, TheQuanh } from "./the-quanh";
 
 export const QUANH = {
@@ -155,7 +157,9 @@ function KhungCho({ nhan }: { nhan: string }) {
 }
 
 export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
-	const m = okrQuanhMessages(useLocale());
+	const locale = useLocale();
+	const m = okrQuanhMessages(locale);
+	const t = okrVoKhuMessages(locale);
 	const trpc = useTRPC();
 	const url = useWorkspaceUrl();
 	const hep = useIsMobile();
@@ -168,7 +172,7 @@ export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
 				<div className="flex flex-col items-start gap-3" data-quanh-khong-thay>
 					<p className="text-sm">{m.khongThay}</p>
 					<Button asChild size="sm" variant="outline">
-						<Link href={url("/okr/suc-khoe")}>{m.veToanCanh}</Link>
+						<Link href={url(DUONG_SO_DO)}>{t.veSoDo}</Link>
 					</Button>
 				</div>
 			);
