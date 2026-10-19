@@ -66,6 +66,7 @@ Trong `apps/app`, mỗi mẫu dưới đây đã có thứ thay, và bị trả 
 | `<h1>`, `<h2>` tự đặt cỡ chữ | `PageShellTitle`, `CardTitle` |
 | `<h3>`, `<h4>` tự đặt cỡ chữ, có khi kèm số đếm hay nút cùng hàng | `SectionHeading` (`level={4}` cho h4, `actions` cho phần cùng hàng) |
 | `Button variant="ghost"` tô nền tay cho mục đang chọn của thanh điều hướng | `NavItem active`; thanh chỉ có icon dùng `size="icon"` |
+| `<aside>` tự đặt bề rộng cho điều hướng của một khu, kèm hàng ngang riêng cho điện thoại | `AreaSidebar` với `AreaSidebarGroup`, `AreaSidebarItem` |
 | `<Empty className="border-solid border">` để có viền liền | `Empty border="solid"` |
 | nhãn, mô tả và công tắc xếp bằng `div` | `Field orientation="horizontal"` |
 | chữ phụ `<p className="text-muted-foreground text-xs">` cạnh ô nhập | `FieldDescription` |
@@ -106,6 +107,29 @@ mục này ở những gì nó nói riêng.
   (`PageShellLoading`), không giấu tiêu đề.
 - **Lỗi tải**: `VungTaiLoi` — tiêu đề, một câu nói chuyện gì hỏng, nút thử lại.
   Không dựng khung lỗi riêng ở màn.
+
+### Thanh bên khu và thẻ con
+
+Hai cách đi giữa các trang con, mỗi cách cho một việc:
+
+- **Thanh bên khu** (`AreaSidebar` của `packages/ui`): các nơi đến ngang hàng của
+  một **khu** mà người đi qua lại — Cài đặt, Hội thoại, Mục tiêu. Đặt một lần trong
+  `layout.tsx` của khu, không đặt trong từng trang. Mục xếp vào nhóm có nhãn danh từ
+  (`AreaSidebarGroup label`), nhóm đầu có thể không mang nhãn; ô chọn chung cho cả khu (chu kỳ
+  của Mục tiêu) đặt ở `header`, liên kết ra ngoài khu đặt ở `footer`. Từ `md` thanh
+  rộng `w-56` bên trái; dưới `md` nó tự thành một hàng cuộn ngang không nhãn nhóm —
+  không dựng thêm bản điện thoại. Phần chỉ hợp với thanh dọc (nút xoá trên dòng, câu
+  rỗng) bọc bằng `useAreaSidebarOrientation() === "vertical"`. Trong ngăn điện thoại
+  của thanh biểu tượng dùng `placement="panel"`.
+- **Thẻ con** (mục «Thẻ con của trang» dưới đây): các phần của **một vật** mở trên
+  một trang — một bộ OKR (OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm), một bản ghi.
+  Cùng tiêu đề trang, không nhóm, ít thẻ.
+
+Câu hỏi để chọn: người đang đổi **nơi** trong khu, hay đổi **phần** của cùng một vật?
+Đổi nơi → thanh bên khu; đổi phần → thẻ con.
+
+Một màn có tối đa một thanh bên khu và một hàng thẻ con; thẻ con không lồng thẻ con,
+và không dựng hàng thẻ ngang thứ hai để thay một nhóm của thanh bên.
 
 ### Thẻ con của trang
 

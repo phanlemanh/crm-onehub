@@ -1,0 +1,187 @@
+schema_version: 1
+slug: trang-lo-trinh-mo-hinh-hien-thi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ltmh_viec_moc
+    paths:
+      - "apps/app/lib/lo-trinh/mo-hinh.ts"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/test/lo-trinh-mo-hinh.spec.ts"
+      - "apps/app/test/lo-trinh-mo-hinh.dom.tsx"
+      - "apps/app/test/lo-trinh-mo-hinh-mau.ts"
+    expected: |
+      Khoi rut tu LO-TRINH.html that cua cay (ben viet that la bo ve cua kit), code chon mot lo trinh co hai moc hien A
+      (ngay som hon) va B, va sua KHOA (khong sua hang cua moc): ma X dang trong A.viec_hien -> bo khoi A.viec_hien, them vao
+      B.hang va B.viec_hien (A.hang van gan X); ma Y dang trong A.viec_hien -> bo khoi A.viec_hien, them vao chua_hen_moc
+      (A.hang van gan Y). Luat cu cua trang (moc dau tien theo ngay gan ma) cho X->A, Y->A; khoa noi X->B, Y->khong moc.
+      lo-trinh-mo-hinh.spec.ts describe "ltmh-viec-moc": phangViec(khoi da sua): viec X co moc.ten = B.ten, viec Y co moc null;
+      giaTriLoc(X,"moc") chua khoaMocCua(tep,B), giaTriLoc(Y,"moc") chua KHONG_MOC; moi viec khac cua lo trinh co moc = moc
+      ma viec_hien cua khoi da sua liet no (quan he voi khoa, dem in ra, khac 0).
+      DOI CHUNG: tren khoi CHUA sua, luat cu va khoa cho cung ket qua o moi viec (chung minh ca lech la do khoa).
+      lo-trinh-mo-hinh.dom.tsx describe "ltmh-viec-moc": render NoiDungLoTrinh voi khoi da sua, kieu xem bang, vongDoi=tat-ca,
+      q=<ma X>: o [data-lo-trinh-moc-viec] cua X mang ngay B; mo ngan ho so X: muc Moc chua B.ten; bo loc moc=__khong-moc
+      cung q=<ma Y>: dong cua Y co mat.
+      CHIEU DO (pha-thu tren ban sao trong thu muc tam): ban sao phangViec dung luat moc dau tien -> do voi thong diep ghim
+      "viec theo luat cu, khong theo viec_hien: <ma X>".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ltmh_moc_hien
+    paths:
+      - "apps/app/lib/lo-trinh/mo-hinh.ts"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/test/lo-trinh-mo-hinh.dom.tsx"
+      - "apps/app/test/lo-trinh-mo-hinh-mau.ts"
+    expected: |
+      Khoi rut tu LO-TRINH.html that; code sua khoa cua ba moc cua mot lo trinh: C (moc hien) -> hien false, viec_hien [],
+      cac ma cua C.viec_hien dua vao chua_hen_moc, C.hang giu nguyen (khac rong); D (moc hien con viec mo) -> con_lai dat
+      bang 1 trong khi D co tu 2 viec chua giao tro len (so khoa khac so trang tu dem duoc); E (moc hien) -> con_lai 0.
+      lo-trinh-mo-hinh.dom.tsx describe "ltmh-moc-hien", vongDoi=tat-ca, locale vi va en:
+        1 khong co [data-lo-trinh-moc] nao mang khoa cua C; tuyChonLoc(khoi da sua).moc khong chua khoa cua C; tap khoa
+          [data-lo-trinh-moc] tren man BANG tap moc hien true cua khoi da sua (giao voi moc co viec qua loc)
+        2 [data-lo-trinh-moc-dem] cua D co text BANG chuoi viet san: vi "còn 1/<m> việc · <m-1> đã giao", en "1 of <m> left ·
+          <m-1> delivered" (m = do dai D.viec_hien cua khoi da sua); cua E: vi "đã giao đủ <m> việc", en "All <m> delivered"
+          — chuoi ghep tu khoa bang template viet trong bai, KHONG goi ham nhan cua trang
+        3 doi bo loc nhom sang mot nhom co viec cua D: text [data-lo-trinh-moc-dem] cua D khong doi
+      CHIEU DO: ban sao XemMoc loc theo hang.length > 0 -> dong 1 do voi thong diep ghim "moc hien false van hien: <C>";
+      ban sao dem tu ds da loc thay con_lai -> dong 2 hoac 3 do voi thong diep ghim "dong so moc khong theo con_lai: <D>".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ltmh_chua_hen
+    paths:
+      - "apps/app/lib/lo-trinh/mo-hinh.ts"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/test/lo-trinh-mo-hinh.dom.tsx"
+      - "apps/app/test/lo-trinh-mo-hinh-mau.ts"
+    expected: |
+      Cung khoi da sua cua E1 (Y vao chua_hen_moc du A.hang van gan Y).
+      lo-trinh-mo-hinh.dom.tsx describe "ltmh-chua-hen", vongDoi=tat-ca:
+        1 kieu xem moc: tap data-viec-khoa trong [data-lo-trinh-khong-moc] (sau khi bam nut Xem) BANG tap
+          <tep>#<ma> cua moi ma trong chua_hen_moc cua moi lo trinh; Y co mat; so dem trong tieu de nhom BANG kich thuoc tap ay
+        2 kieu xem bang, bo loc moc=__khong-moc, pageSize du lon de mot trang: tap data-viec-khoa cua cac dong BANG cung tap
+        3 vongDoi=chua-xong: tap trong nhom BANG chua_hen_moc giao viec chua giao hoac dang lam (tinh tu khoi tho)
+      CHIEU DO: ban sao nhom chua hen moc loc theo !v.moc cua luat cu -> dong 1 do voi thong diep ghim "nhom chua hen moc
+      lech chua_hen_moc: thieu <ma Y>".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ltmh_ten
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/mo-hinh.ts"
+      - "apps/app/test/lo-trinh-mo-hinh.dom.tsx"
+      - "apps/app/test/lo-trinh-mo-hinh-mau.ts"
+    expected: |
+      Khoi rut tu LO-TRINH.html that; code chon mot viec Z chua giao thuoc mot moc hien, dat cau_giao "" va ten_hien_thi
+      "Ten ngan LT1f <ma Z>" (dung hinh kit vẽ cho hang cau giao rong: tenHienThi lay ten ngan).
+      lo-trinh-mo-hinh.dom.tsx describe "ltmh-ten", ma tran viet truoc 4 cho hien:
+        1 bang (q=<ma Z>): o cot Viec cua Z chua ten_hien_thi
+        2 bang cot (xemLoTrinh=bang-cot): the cua Z chua ten_hien_thi
+        3 kieu xem moc: dong [data-viec-khoa] cua Z chua ten_hien_thi
+        4 ngan ho so cua Z: tieu de chua ten_hien_thi
+        moi cho: khong co phan tu ten viec nao co text rong (dem 0)
+        5 q="Ten ngan LT1f" o kieu xem bang: dung mot dong, la Z
+      CHIEU DO: ban sao DongLienQuan doc cau_giao -> o 3 do voi thong diep ghim "ten viec khong theo ten_hien_thi: kieu
+      xem moc"; ban sao hopTim chi tim cau_giao -> dong 5 do voi thong diep ghim "tim khong ra theo ten hien thi".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ltmh_doi_chieu
+    paths:
+      - "LO-TRINH.html"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/test/lo-trinh-mo-hinh.dom.tsx"
+      - "apps/app/test/lo-trinh-mo-hinh-mau.ts"
+    expected: |
+      lo-trinh-mo-hinh.dom.tsx describe "ltmh-doi-chieu" (ca doi chieu trang voi tap hien thi cua khoi — muc 4 CHANGELOG kit
+      2.33.0): khoi cua LO-TRINH.html that cua cay, KHONG sua; render NoiDungLoTrinh qua docTrangLoTrinh, xemLoTrinh=moc,
+      vongDoi=tat-ca, khong bo loc, mo nhom chua hen moc. Ky vong doc tu JSON THO cua khoi (rut bang regex tu HTML,
+      khong qua khuon, khong qua ham cua trang). Voi moi lo trinh:
+        1 tap khoa [data-lo-trinh-moc] cua lo trinh BANG tap moc co hien true
+        2 voi moi moc hien: day data-viec-khoa duoi moc BANG tap <tep>#<ma> cua viec_hien
+        3 voi moi viec: text ten cua dong BANG ten_hien_thi cua hang
+        4 [data-lo-trinh-moc-dem] cua moc (locale vi): text BANG text cua span dong so cua CHINH moc ay trong khoi Moc ma bo
+          ve kit da ghi vao LO-TRINH.html (li[data-ngay][data-ten] cua section lo trinh -> div.mu.nho dau tien, bo span.mu.nho
+          long trong (gio may, du kien) va span.co-o — rut tu HTML, khong tu khoa), so moi moc hien
+        5 tap data-viec-khoa trong [data-lo-trinh-khong-moc] BANG chua_hen_moc
+      va khong co [data-lo-trinh-canh-bao]. In mot dong "doi-chieu: <so moc>/<so viec>/<so chua hen> khop" — ba so khac 0.
+      CHIEU DO: ban sao XemMoc giu luat cu va khoi tho bi code sua mot khoa (mot ma doi moc) -> do voi thong diep ghim
+      "trang lech khoi o moc <ten>: <ma>".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ltmh_khoi_cu
+    paths:
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "packages/validation/src/ban-chup-lo-trinh.ts"
+      - "packages/validation/src/lo-trinh-du-lieu.ts"
+      - "apps/app/test/lo-trinh-mo-hinh.spec.ts"
+      - "apps/app/test/lo-trinh-mo-hinh.dom.tsx"
+      - "apps/app/test/lo-trinh-mo-hinh-mau.ts"
+    expected: |
+      Khoi doi truoc dung bang code tu LO-TRINH.html that: xoa ten_hien_thi o moi viec, hien/viec_hien/con_lai o moi moc,
+      chua_hen_moc o moi lo trinh, ghi lai vao the script (khong viet tay khoi).
+      lo-trinh-mo-hinh.spec.ts describe "ltmh-khoi-cu":
+        1 docTrangLoTrinh(trang doi truoc) -> co-du-lieu, canhBao rong; DOI CHUNG: docDuLieu cung trang tra canhBao co cau
+          "khối chưa mang mô hình hiển thị" (bo doc that da phat, trang chu dong go)
+        2 phangViec(trang doi truoc): moc cua moi viec BANG moc dau tien theo ngay co hang chua ma (tinh doc lap trong bai tu
+          JSON tho) — dem in ra, khac 0
+        3 ban chup dung bang duong cua day.ts: docDuLieu tren LO-TRINH.html that -> banChupVao.parse -> hang luu {duLieu,
+          canhBao} qua MOT luot JSON.parse(JSON.stringify(...)) nhu cot Json -> ketQuaTuHang -> docDauVaoChoVai voi ban dung
+          chon ban chup: duLieu giu nguyen nam khoa (deep-equal voi khoi tho)
+        4 cung duong ay voi trang DOI TRUOC: moHinhCua cua moi lo trinh co coMoHinh false; moc cua moi viec BANG moc dau
+          tien theo ngay (cung ky vong dong 2); DOI CHUNG: dong 3 (khoi moi) co coMoHinh true
+      lo-trinh-mo-hinh.dom.tsx describe "ltmh-khoi-cu": (a) trang doi truoc, xemLoTrinh=moc: khong co [data-lo-trinh-canh-bao],
+      khong co [data-lo-trinh-moc-dem], tap khoa [data-lo-trinh-moc] BANG tap moc co viec theo luat moc dau tien; trang
+      khong nem. (b) ban chup cua dong 3 render qua docDauVaoChoVai: tap khoa moc, day data-viec-khoa va text dong so BANG
+      ban render tu docTrangLoTrinh cung tep (quan he ban chup == ban dong goi).
+      CHIEU DO: ban sao canhBaoChoTrang khong go cau mo hinh -> dong 1 do voi thong diep ghim "hop canh bao bat vi khoi thieu
+      mo hinh"; ban sao moHinhCua bo nhanh khoi cu -> dong 2 do voi thong diep ghim "khoi cu mat moc: <ma>".
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ltmh_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/trang-lo-trinh-mo-hinh-hien-thi/evidence dat tuong minh: lenh cua ltmh_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/trang-lo-trinh-mo-hinh-hien-thi/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "LO-TRINH.html"
+      - "_acceptance/trang-lo-trinh-mo-hinh-hien-thi/rang/do-man.mjs"
+    expected: |
+      _acceptance/trang-lo-trinh-mo-hinh-hien-thi/rang/do-man.mjs tren trang Lo trinh that (/<slug>/lo-trinh, phien do rieng
+      cua tien-de.mjs, kho _do rieng, bang ban chup cua nguon crm xoa truoc luot nen trang doc tep dong goi = LO-TRINH.html
+      cua cay). Ma tran viet truoc 8 o: kieu xem moc, vongDoi=tat-ca, nhom chua hen moc mo, x {375, 1280} x {vi, en} x
+      {sang, toi}:
+        1 moi moc hien true cua khoi (rut bang docDuLieu tu LO-TRINH.html, khong tu DOM) co mot [data-lo-trinh-moc] tren man
+          va [data-lo-trinh-moc-dem] cua no co text BANG chu dung tu con_lai/viec_hien bang loTrinhMessages(lang); co it
+          nhat mot moc con viec va mot moc giao du tren man (dem in ra)
+        2 so dem nhom chua hen moc BANG tong do dai chua_hen_moc
+        3 scrollWidth <= clientWidth; right cua moi [data-lo-trinh-moc-dem] <= right cua [data-lo-trinh-xem-moc]; o MOI be
+          rong, top cua [data-lo-trinh-moc-dem] >= bottom cua ten lo trinh cung muc (dong so duoi ten lo trinh)
+        4 ten moc, ten viec va ten lo trinh cua moi muc mang translate=no
+        5 moi phan tu ten moc va ten viec dang hien: scrollWidth <= clientWidth (khong bi cat dau ba cham); in so phan tu da
+          xet, khac 0
+      DUNG/SAI tung dong, KET LUAN cuoi, anh 8 o ve BANG_CHUNG. Doi chieu mat: dong so doc duoc o nen toi, khong chu nao
+      chong len nhau, nhom chua hen moc mo ra liet ten viec day du.
