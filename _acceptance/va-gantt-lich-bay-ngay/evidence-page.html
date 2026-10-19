@@ -1,0 +1,151 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hồ sơ · va-gantt-lich-bay-ngay</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+.dai{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 8px}
+.o{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 11px;min-width:0}
+.o .hoi{font-size:11px;color:var(--mut);text-transform:none;letter-spacing:.02em}
+.o .tra{font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.vang{color:var(--hint);font-style:italic}
+.chu-kho{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 14px;margin:0 0 10px}.chu-kho b{color:var(--ink)}
+details.muc{background:var(--card);border:1px solid var(--bd);border-radius:12px;margin:0 0 10px;padding:0 14px}
+details.muc>summary{cursor:pointer;font-weight:600;font-size:14px;padding:11px 0}
+details.muc[open]>summary{border-bottom:1px solid var(--bd);margin-bottom:10px}
+details.muc .noi{padding:0 0 12px;font-size:13px}
+.loc{display:flex;gap:6px;margin:0 0 8px}.loc .btn[aria-pressed="true"]{background:#1f1f1d;color:#fff}
+.tl li[hidden]{display:none}
+@media (max-width:720px){.dai{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>Lịch làm việc chọn đủ bảy ngày vẫn giữ đúng như chọn, và dự án đủ 300 việc vẫn sửa được mốc và phụ thuộc</h1><div class="sub">Trang hồ sơ · <span class="mono">va-gantt-lich-bay-ngay</span> · tier T3</div>
+<section class="dai" aria-label="Hồ sơ trong một phút"><div class="o" data-o="da_giao" data-nguon="contract.md"><div class="hoi">Đã giao gì</div><div class="tra">Lịch làm việc chọn đủ bảy ngày vẫn giữ đúng như chọn, và dự án đủ 300 việc vẫn sửa được mốc và phụ thuộc</div></div><div class="o" data-o="vi_sao" data-nguon="contract.md"><div class="hoi">Vì sao</div><div class="tra">Hàng DA12 của docs/plan/lo-trinh-viec-du-an.json; chủ kho duyệt Cổng Đáng («build») ở thẻ khởi tạo đợt viec-du-an-kho-tai-lieu 19/10/2026…</div></div><div class="o" data-o="trang_thai" data-nguon="contract.md"><div class="hoi">Trạng thái</div><div class="tra">Đang làm</div></div><div class="o" data-o="ngay" data-nguon="contract.md"><div class="hoi">Ngày</div><div class="tra">2026-10-19</div></div><div class="o" data-o="production" data-nguon="git onehub"><div class="hoi">Đã lên production chưa</div><div class="tra">chưa gộp vào onehub (nhánh production kho khai)</div></div><div class="o" data-o="do_gi" data-nguon="opportunity.md"><div class="hoi">Sẽ đo gì, khi nào</div><div class="tra">quản trị đặt lịch làm cả bảy ngày có giữ được không; dự án đã đủ 300 việc có còn sửa được mốc và phụ thuộc không. — hạn một vòng (10 giờ máy), mốc 24/10/2026.</div></div><div class="o" data-o="ket_qua" data-nguon="uat-session.md"><div class="hoi">Kết quả</div><div class="tra">chưa đo</div></div><div class="o" data-o="chua_lam" data-nguon="contract.md"><div class="hoi">Chưa làm gì</div><div class="tra">4 mục để ngoài phạm vi · 0 giới hạn đã biết</div></div><div class="o" data-o="ai_quyet" data-nguon="contract.md"><div class="hoi">Ai quyết</div><div class="tra">Cổng Đáng: manh · Cổng Phạm vi: manh · Cổng Bằng chứng: chưa ký</div></div></section>
+<div class="chu-kho" data-chu-kho><span data-k="tieu_chi">Tiêu chí <b>9</b></span><span data-k="phep_do">Phép đo <b>13</b></span><span data-k="luot_cham">Lượt chấm <b>1</b></span><span data-k="token">Token <b>47.609</b></span><span data-k="quyet_dinh_may">Quyết định máy <b>11</b></span><span data-k="quyet_dinh_nguoi">người <b>1</b></span><span data-k="ma">Mã <b>285d5bf</b></span></div>
+<details class="muc" id="vi-sao"><summary>Vì sao làm</summary><div class="noi"><p>Hàng DA12 của docs/plan/lo-trinh-viec-du-an.json; chủ kho duyệt Cổng Đáng («build») ở thẻ khởi tạo đợt viec-du-an-kho-tai-lieu 19/10/2026. Gộp ba mục ngoài hợp đồng của DA4 mà chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 18/10: Ngoài-3 và Ngoài-9 — quản trị bỏ chọn hết ngày nghỉ trong tuần, máy báo đã lưu, nhưng Thứ Bảy và Chủ nhật bật lại; Ngoài-8 — dự án đủ 300 việc thì không thêm, sửa, xoá được mốc và không thêm, gỡ được phụ thuộc. Hạng T3 vì thêm một cột ở packages/db/prisma.</p></div></details>
+<details class="muc" id="da-hua"><summary>Đã hứa</summary><div class="noi"><ol class="hua"><li data-ac="AC-1"><b>AC-1</b> — Given lịch đang nghỉ Thứ Bảy, Chủ nhật, When chủ hay quản trị bỏ chọn hết ngày nghỉ trong tuần, Then lịch đọc</li><li data-ac="AC-2"><b>AC-2</b> — Given lịch chưa từng được đặt — chưa có cài đặt chung, hoặc có cài đặt từ trước vòng này với ô ngày nghỉ trống</li><li data-ac="AC-3"><b>AC-3</b> — Given lịch làm cả tuần và hai việc A (hạn Thứ Sáu 23/10) và B phải chờ A trong một dự án, When A dời hạn làm B</li><li data-ac="AC-4"><b>AC-4</b> — Given quản trị vừa đổi lịch trên màn Cài đặt, When bấm Hoàn tác trên thông báo «Đã lưu», Then lịch về đúng</li><li data-ac="AC-5"><b>AC-5</b> — Given dự án đủ 300 việc, When người dùng thêm, sửa, xoá một mốc, Then thao tác thành công và lịch sử dự án</li><li data-ac="AC-6"><b>AC-6</b> — Given dự án đủ 300 việc, When người giao hay người thực hiện thêm hay gỡ phụ thuộc giữa hai việc của dự án,</li><li data-ac="AC-7"><b>AC-7</b> — Given dự án đủ 300 việc, When tạo việc mới trong dự án, thêm việc con cho một việc của dự án, hay chuyển một</li><li data-ac="AC-8"><b>AC-8</b> — Given lịch làm cả tuần, When quản trị mở lại Cài đặt › Lịch làm việc và mở Gantt của một dự án có việc qua</li><li data-ac="AC-9"><b>AC-9</b> — Given vòng xong, When người đọc `docs/api.md` và `CONTEXT.md`, Then hai tệp nói: lịch chưa đặt thì nghỉ Thứ</li></ol></div></details>
+<details class="muc" id="thiet-ke"><summary>Thiết kế</summary><div class="noi"><p class="mono" data-design-doc>docs/superpowers/specs/2026-10-19-va-gantt-lich-bay-ngay-design.md</p></div></details>
+<details class="muc" id="quyet-dinh"><summary>Quyết định</summary><div class="noi"><div class="loc" role="group" aria-label="Lọc quyết định"><button class="btn" data-loc="tat-ca" aria-pressed="true">Tất cả 12</button><button class="btn" data-loc="may" aria-pressed="false">Máy 11</button><button class="btn" data-loc="nguoi" aria-pressed="false">Người 1</button></div><ol class="tl" data-dong-thoi-gian><li data-loai="may" data-id="d-20261019T151925Z-1"><b>2026-10-19</b> · Máy · approach · S1 — Lịch «không nghỉ ngày nào» lưu bằng một cột cờ mới ngayNghiTuanDaDat: chưa đặt thì theo mặc định Thứ Bảy, Chủ nhật, đã đặt thì đọc đúng mảng kể cả rỗng.<div class="note">Mảng rỗng hôm nay vừa là «chưa đặt» vừa là «không nghỉ»; cột cờ tách hai nghĩa mà mặc định vẫn ở một chỗ (LICH_LAM_VIEC.ngayNghiTuanMacDinh) và bài dg_lich đã ký của DA4 giữ xanh.</div></li><li data-loai="may" data-id="d-20261019T151925Z-2"><b>2026-10-19</b> · Máy · approach · S1 — Tách lời kiểm dự án: docDuAnMo chỉ kiểm dự án còn mở cho mốc và phụ thuộc; lời kiểm mới docDuAnNhanViec thêm trần 300 cho tạo việc, việc con và chuyển việc vào.<div class="note">Trần 300 nằm trong docDuAnMo mà mọi thao tác mốc, phụ thuộc đều gọi (packages/db/src/du-an-ghi.ts dòng 148, 193, 220, 289, 361), nên khoá oan chúng.</div></li><li data-loai="may" data-id="d-20261019T151925Z-3"><b>2026-10-19</b> · Máy · descope · S1 — Không gom hạt giống ô chọn «Dự án» bị cắt ở khổ 375 vào DA12; xin giám sát mở hàng riêng có mốc.<div class="note">Luật 23 của đợt: gom nếu cùng vùng; bản sửa nằm ở biến thể Combobox dùng chung của packages/ui, không ở lịch, dự án hay Gantt.</div></li><li data-loai="may" data-id="d-20261019T151925Z-4"><b>2026-10-19</b> · Máy · descope · S1 — bỏ design-pass — vòng không đổi mã màn nào; màn Cài đặt và Gantt đã vẽ đúng theo lịch API trả, chỉ dữ liệu sai.<div class="note">lich-lam-viec.tsx vẽ bảy ô theo du.ngayNghiTuan và gantt-du-an.tsx chuyển ngayNghiTuan sang weekendDays; gantt-lib chỉ dùng mặc định khi undefined.</div></li><li data-loai="may" data-id="d-20261019T151925Z-5"><b>2026-10-19</b> · Máy · descope · S1 — bỏ đặc-tả-UX — vòng không đổi cấu trúc, trạng thái hay chữ của màn nào.<div class="note">Hai lỗi nằm ở lớp đọc ghi dữ liệu (packages/db/src/du-an.ts, viec-ghi.ts); design doc mục «Cách làm đã chọn» nói màn không đổi mã.</div></li><li data-loai="may" data-id="d-20261019T151925Z-6"><b>2026-10-19</b> · Máy · descope · S1 — Không cho chọn đủ bảy ngày nghỉ; hợp đồng datNgayNghiTuan giữ trần sáu thứ.<div class="note">Lịch không còn ngày làm nào thì ngayLamKe ném lỗi sau 3660 ngày tìm (packages/db/src/lich-lam-viec.ts); câu giao chỉ đòi «chọn đủ bảy ngày» làm việc.</div></li><li data-loai="may" data-id="d-20261019T151925Z-7"><b>2026-10-19</b> · Máy · descope · S1 — Không khoá dự án khi đếm trần 300 ở taoViec; hai người cùng thêm việc thứ 300 có thể vượt trần một việc.<div class="note">Lỗi của hàng là trần khoá oan mốc, phụ thuộc; khoá cạnh tranh là việc khác của cùng trần, đã có từ DA4.</div></li><li data-loai="may" data-id="d-20261019T152533Z-8"><b>2026-10-19</b> · Máy · approach · S1 — Lịch «không nghỉ ngày nào» lưu bằng cột cờ khongNghiTuan (mặc định false), chỉ bật khi quản trị bỏ chọn hết; chưa bật thì giữ luật đọc hôm nay.<div class="note">Phản biện P0: kho test dùng chung cho mọi tệp một lượt, và bài dg_lich đã ký ghi lịch qua API rồi chỉ trả lại cột mảng; cờ «đã đặt» sẽ bị nó để lại true kèm mảng rỗng, còn cờ «không nghỉ» thì nó không bao giờ bật (gap-probe.md P0-1).</div></li><li data-loai="may" data-id="d-20261019T152534Z-9"><b>2026-10-19</b> · Máy · approach · S1 — Lời kiểm thêm việc docDuAnNhanViec khoá hàng duAn (SELECT … FOR UPDATE) trước khi đếm, để hai người cùng thêm việc thứ 300 thì người sau nhận lời trần.<div class="note">Phản biện P0: khoá nằm gọn trong lời kiểm chỉ ba đường thêm việc vào dự án gọi, nên lối «không khoá» không chết như dòng cũ ghi; giữ trần đúng là phần của luật DU_AN.viecToiDa (gap-probe.md P0-2).</div></li><li data-loai="nguoi" data-id="d-20261019T154209Z-10"><b>2026-10-19</b> · Người · seal · gate1 — </li><li data-loai="may" data-id="d-20261019T154442Z-11"><b>2026-10-19</b> · Máy · approach · S2 — Bảy task chạy tuần tự trong phiên chính, không tách worktree song song.<div class="note">Task 1 và Task 3 cùng sửa gói @crm/db và cùng chạy trong một lượt bun run test (kho test dùng chung), còn răng màn và răng đột biến cần mã của cả hai; gộp nhánh song song tốn hơn phần thời gian tiết kiệm.</div></li><li data-loai="may" data-id="d-20261019T220030Z-12"><b>2026-10-19</b> · Máy · fix · S3 — E8b đo Hoàn tác trên màn bằng hai chuyển kề — Thứ Bảy rồi Hoàn tác về làm cả tuần, làm cả tuần rồi Hoàn tác về Chủ nhật — thay cho chuyển thẳng giữa làm cả tuần và nghỉ Thứ Bảy, Chủ nhật.<div class="note">Mỗi lần bấm một ô trên màn Cài đặt chỉ đổi một thứ và Hoàn tác trả về giá trị ngay trước lần lưu đó (lich-lam-viec.tsx, luuTuan), nên chuyển thẳng hai thứ không có trên màn; hai chuyển kề vẫn đi qua cả hai chiều của cờ, còn chuyển thẳng đo ở E4 lớp API.</div></li></ol></div></details>
+<details class="muc" id="bang-chung"><summary>Bằng chứng</summary><div class="noi">
+<div class="card" style="margin-top:12px"><span class="badge pend">PENDING-JUDGMENT</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E1-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mvfujvr3oqsy</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E2b">E2b</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E2b-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E3-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E3b">E3b</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E3b-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E4-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E5-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E6-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E6b">E6b</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E6b-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E7-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E8-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E8b">E8b</a></td><td>AC-4</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-va-gantt-lich-bay-ngay-E8b-r1</td><td class="mono">2026-10-19T22:46:29Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>judgment</td><td><span class="badge pend">PENDING-JUDGMENT</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given lịch đang nghỉ Thứ Bảy, Chủ nhật, When chủ hay quản trị bỏ chọn hết ngày nghỉ trong tuần, Then lịch đọc</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E1-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_lich_api</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvlgngpw_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2: Given lịch chưa từng được đặt — chưa có cài đặt chung, hoặc có cài đặt từ trước vòng này với ô ngày nghỉ trống</p>
+<div class="kv"><span>run_id <b>mvfujvr3oqsy</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_lich_db</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvr3oqsy_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E2b"><h3><span class="badge pass">PASS</span> &nbsp;E2b · test</h3><p class="crit">AC-2: Given lịch chưa từng được đặt — chưa có cài đặt chung, hoặc có cài đặt từ trước vòng này với ô ngày nghỉ trống</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E2b-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dg_lich</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvoqjuhd_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given lịch làm cả tuần và hai việc A (hạn Thứ Sáu 23/10) và B phải chờ A trong một dự án, When A dời hạn làm B</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E3-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_lich_api</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvlgngpw_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E3b"><h3><span class="badge pass">PASS</span> &nbsp;E3b · test</h3><p class="crit">AC-3: Given lịch làm cả tuần và hai việc A (hạn Thứ Sáu 23/10) và B phải chờ A trong một dự án, When A dời hạn làm B</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E3b-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_gantt_ui</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [781.00ms]
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given quản trị vừa đổi lịch trên màn Cài đặt, When bấm Hoàn tác trên thông báo «Đã lưu», Then lịch về đúng</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E4-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_lich_api</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvlgngpw_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-5: Given dự án đủ 300 việc, When người dùng thêm, sửa, xoá một mốc, Then thao tác thành công và lịch sử dự án</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E5-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_tran_viec</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvo3mz31_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-6: Given dự án đủ 300 việc, When người giao hay người thực hiện thêm hay gỡ phụ thuộc giữa hai việc của dự án,</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E6-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_tran_viec</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvo3mz31_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E6b"><h3><span class="badge pass">PASS</span> &nbsp;E6b · test</h3><p class="crit">AC-7: Given dự án đủ 300 việc, When tạo việc mới trong dự án, thêm việc con cho một việc của dự án, hay chuyển một</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E6b-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.vg_tran_viec</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">test-run: dropped crm_mvfujvo3mz31_test
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · script</h3><p class="crit">AC-1: Given lịch đang nghỉ Thứ Bảy, Chủ nhật, When chủ hay quản trị bỏ chọn hết ngày nghỉ trong tuần, Then lịch đọc</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E7-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.vg_dot_bien</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">vg dot bien: 7/7 dot bien chet
+__EXIT=0</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · ui-check</h3><p class="crit">AC-8: Given lịch làm cả tuần, When quản trị mở lại Cài đặt › Lịch làm việc và mở Gantt của một dự án có việc qua</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E8-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.vg_man</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="6"><div class="frame"><img src="evidence/E8-step1.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E8-step2.png" alt="frame 2" loading="lazy"></div><div class="frame"><img src="evidence/E8-step3.png" alt="frame 3" loading="lazy"></div><div class="frame"><img src="evidence/E8-step4.png" alt="frame 4" loading="lazy"></div><div class="frame"><img src="evidence/E8-step5.png" alt="frame 5" loading="lazy"></div><div class="frame"><img src="evidence/E8-step6.png" alt="frame 6" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>6 frame · chạy như GIF</span></div>
+<pre class="out">Frame da luu (goc + ban sao E8-stepN): vg-lich-t7cn-1280.png = E8-step1.png; vg-gantt-t7cn-1280.png = E8-step2.png; vg-lich-rong-1280.png = E8-step3.png; vg-gantt-rong-1280.png = E8-step4.png; vg-lich-rong-375.png = E8-step5.png; vg-gantt-rong-375.png = E8-step6.png (trong _acceptance/va-gantt-lich-bay-ngay/evidence/).
+Con co vg-hoan-tac-ve-rong-1280.png, vg-hoan-tac-ve-co-nghi-1280.png (buoc 4, khong thuoc Expected).
+Network: driver la script man.mjs (khong co tool doc network) nen n-a (driver); khong ghi E8-network.txt.</pre>
+</div>
+<div class="card eval" id="E8b"><h3><span class="badge pass">PASS</span> &nbsp;E8b · ui-check</h3><p class="crit">AC-4: Given quản trị vừa đổi lịch trên màn Cài đặt, When bấm Hoàn tác trên thông báo «Đã lưu», Then lịch về đúng</p>
+<div class="kv"><span>run_id <b>minted-va-gantt-lich-bay-ngay-E8b-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.vg_man</b></span><span>verified_at <b>2026-10-19T22:46:29Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="2"><div class="frame"><img src="evidence/E8b-step1.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E8b-step2.png" alt="frame 2" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>2 frame · chạy như GIF</span></div>
+<pre class="out">Frame da luu (capture trong man.mjs, 1280): vg-hoan-tac-ve-rong-1280.png (= E8b-step1.png), vg-hoan-tac-ve-co-nghi-1280.png (= E8b-step2.png), kem .html cung ten, trong _acceptance/va-gantt-lich-bay-ngay/evidence/.
+Network: driver la script Playwright cua man.mjs, khong co read_network_requests; E8b-network.txt ghi chu &#39;n-a (driver)&#39;.
+Dev server do phien do tu dung va tu don (khong server nao con chay do toi start).</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pend">PENDING-JUDGMENT</span> &nbsp;E9 · judgment</h3><p class="crit">AC-9: Given vòng xong, When người đọc `docs/api.md` và `CONTEXT.md`, Then hai tệp nói: lịch chưa đặt thì nghỉ Thứ</p>
+<div class="kv"><span>judged_by <b>judge panel ba lens (fresh context), đề xuất của máy</b></span></div>
+<p class="note"><b>Phán đoán:</b> Đề xuất PASS của máy, chưa phải kết luận. Hợp đồng là T3 nên mọi mục judgment đều chờ người xác nhận trực tiếp ở Cổng 2.</p>
+<div class="ov ovok">human_override: # chi nguoi ghi</div>
+</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: mọi eval máy xanh; E9 (judgment, T3) chờ người xác nhận ở Cổng 2. Chưa có vòng nào bị trả về.</li></ul>
+</div></details>
+<details class="muc" id="tai-nguyen"><summary>Tài nguyên</summary><div class="noi"><table data-tai-nguyen><thead><tr><th>Khối</th><th>Tác tử</th><th>Token đầu ra</th></tr></thead><tbody><tr><td>S4 round 1</td><td>25</td><td>47.609</td></tr></tbody></table><p class="note">1 lượt chấm · tổng 47.609 token</p></div></details>
+<details class="muc" id="gioi-han"><summary>Giới hạn và ngoài hợp đồng</summary><div class="noi"><ul data-gioi-han><li data-loai="ngoai">Chọn đủ bảy ngày nghỉ: hợp đồng `datNgayNghiTuan` giữ trần sáu thứ.</li><li data-loai="ngoai">Câu báo mới trên màn Cài đặt khi không nghỉ ngày nào; màn và Gantt không đổi mã.</li><li data-loai="ngoai">Ô chọn «Dự án» bị cắt ở khổ 375 (hạt giống `docs/plan/2026-10-19-hat-giong-o-chon-du-an-375.md`) — hàng riêng.</li><li data-loai="ngoai">Các mục Known limits khác của DA4 (Ngoài-4, 5, 10, 11).</li></ul></div></details>
+<details class="muc" id="giao"><summary>Giao</summary><div class="noi"><div class="kv" data-giao><span>Mã đã chấm <b class="mono">285d5bf97e32b42e43040a2686bed1e64c9c7d2f</b></span><span>Ngày ký <b>—</b></span><span>Cổng Đáng: manh · Cổng Phạm vi: manh · Cổng Bằng chứng: chưa ký</span><span data-pr>chưa gộp</span></div><p class="note">chưa gộp vào onehub (nhánh production kho khai)</p></div></details>
+<details class="muc" id="gia-tri"><summary>Giá trị</summary><div class="noi"><ul data-gia-tri-nguong><li data-nguong>Câu hỏi phép đo trả lời: quản trị đặt lịch làm cả bảy ngày có giữ được không; dự án đã đủ 300 việc có còn sửa được mốc và phụ thuộc không. — <b>chưa đo</b></li><li data-nguong>Kết quả nào là SỐNG: bỏ chọn hết ngày nghỉ rồi tải lại vẫn thấy không ngày nào nghỉ, Gantt không bỏ qua Thứ Bảy, Chủ nhật; ở dự án đủ 300 việc vẫn thêm, sửa, xoá mốc và gỡ phụ thuộc được, câu báo lỗi chỉ hiện khi thêm việc thứ 301. — <b>chưa đo</b></li><li data-nguong>Kết quả nào là CHẾT: sau khi lưu, Thứ Bảy và Chủ nhật bật lại; hoặc dự án đủ 300 việc vẫn chặn thao tác mốc hay phụ thuộc. — <b>chưa đo</b></li><li data-nguong>Timebox: một vòng (10 giờ máy), mốc 24/10/2026. — <b>chưa đo</b></li></ul></div></details>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('[data-loc]').forEach(function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-loc');document.querySelectorAll('[data-loc]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});document.querySelectorAll('[data-dong-thoi-gian] li').forEach(function(li){li.hidden=!(v==='tat-ca'||li.getAttribute('data-loai')===v);});});});
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>
