@@ -218,6 +218,16 @@
         "F34"
       ],
       "ly_do": "Làn MacBook Pro, dùng giu-tuoi của kit 2.33 (K-A). Tồn đọng 262 hồ sơ ngày 19/10. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+    },
+    {
+      "ten": "Ngăn bản ghi trượt mượt — cùng đợt sửa record-sheet với l5",
+      "ngay": "2026-10-22",
+      "loai": "phat-hanh",
+      "khoa": "m-1022vs",
+      "hang": [
+        "VS8"
+      ],
+      "ly_do": "Làn M5 (đề xuất M5 #375 13:52Z): VS8 đi ngay sau l5 «Sửa một đợt» (lộ trình Kho tài liệu, 22/10) vì cùng vùng apps/app/components/crm/record-sheet; mốc riêng vì mốc không gom hàng của hai tệp lộ trình. VK7 của làn Mac Studio đứng sau. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng."
     }
   ],
   "hang": [
@@ -3075,8 +3085,8 @@
       "cau_giao": "«Lần đẩy chỉ chạm tệp đọc được phân loại đúng T1»",
       "ghi_chu": "Làn M5. Cổng Đáng và Cổng Phạm vi đã ký, S3 xong, chờ làn.",
       "dung_tren": [],
-      "trang_thai": "đang dựng",
-      "buoc_ke": "Làn M5 sau DA4"
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Đã gộp #480 (96a1cb64a) 18/10"
     },
     {
       "ma": "C-1c",
@@ -3091,8 +3101,8 @@
       "dung_tren": [
         "C-1b"
       ],
-      "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; làn M5 sau C-1b (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Đã gộp #481 (0c71e76c3) 18/10"
     },
     {
       "ma": "VK1",
