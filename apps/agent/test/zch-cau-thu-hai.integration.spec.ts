@@ -47,7 +47,7 @@ const batDau = (loiDan as unknown as { events: { "session.started": BatDau } })
 
 function hookCua(ten: SuKienHook): ChayHook {
 	const h = suKienHook[ten];
-	expect(typeof h, "hook thieu turn.started").toBe("function");
+	expect(h, "hook thieu turn.started").toBeInstanceOf(Function);
 	return h as ChayHook;
 }
 
