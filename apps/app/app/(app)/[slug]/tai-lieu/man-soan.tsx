@@ -39,6 +39,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import {
 	donViDaChon,
+	type LoiTaiLuaChon,
 	type LuaChon,
 	type TrangMoiChon,
 	TruongTrangMoi,
@@ -46,7 +47,13 @@ import {
 } from "./truong-trang-moi";
 
 export type ManSoanVao =
-	| { kieu: "moi"; toiId: string; chuTrang: LuaChon[]; donVi: LuaChon[] }
+	| {
+			kieu: "moi";
+			toiId: string;
+			chuTrang: LuaChon[];
+			donVi: LuaChon[];
+			loiTai?: LoiTaiLuaChon;
+	  }
 	| {
 			kieu: "sua";
 			slug: string;
@@ -240,6 +247,7 @@ function FormSoan({
 						chuTrang={vao.chuTrang}
 						donVi={vao.donVi}
 						giaTri={trangMoi}
+						loiTai={vao.loiTai}
 						onDoi={setTrangMoi}
 						toiId={vao.toiId}
 					/>

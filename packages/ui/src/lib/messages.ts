@@ -286,6 +286,11 @@ const en = {
 		phimDoi: (ten: string, n: string) =>
 			`${ten}: move ${n} days. Enter to save, Esc to cancel.`,
 	},
+	lienKet: {
+		chiHttps: "Only https links are accepted",
+		daBoHttp: (so: string) =>
+			`Removed ${so} http links — only https is accepted`,
+	},
 	saveBar: {
 		hienDanhSach: "Show the list",
 		anDanhSach: "Hide the list",
@@ -593,6 +598,10 @@ const vi = {
 		datNgay: "Đặt ngày",
 		phimDoi: (ten: string, n: string) =>
 			`${ten}: dời ${n} ngày. Enter để lưu, Esc để thôi.`,
+	},
+	lienKet: {
+		chiHttps: "Chỉ nhận liên kết https",
+		daBoHttp: (so: string) => `Đã bỏ ${so} liên kết http — chỉ nhận https`,
 	},
 	saveBar: {
 		hienDanhSach: "Xem danh sách",
