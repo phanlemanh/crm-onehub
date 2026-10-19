@@ -1,0 +1,135 @@
+slug: viec-rieng-chi-nguoi-trong-cuoc
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vrc_ma_tran
+    expected: "exit 0; -t vrc-ma-tran của apps/api/test/viec-rieng-trong-cuoc.spec.ts. Fixture qua đường ghi thật (taoThu và caller tRPC với phiên người thật): thoả thuận D, dự án P (duAn.tao), bốn việc V0 (không gắn, không dự án), V1 (trong P, không gắn), V2 (gắn D), V3 (gắn D, trong P), cùng người giao vrc-mt-a, người thực hiện vrc-mt-b, người theo dõi vrc-mt-w; vrc-mt-x thành viên không vai, vrc-mt-q quản trị, vrc-mt-o vai okr. Đáp án là mảng 24 phần tử viết sẵn trong tệp trước khi chạy — {nguoi, viec, doc: 'duoc'|'404'|'cam', aiThay: 'rieng'|'du-an'|'ban-ghi'|null} — không suy từ dieuKienXemViec. Mỗi ô gọi viec.get với phiên người đó: ô 'duoc' mà lỗi hay aiThay khác đáp án thì ném 'vrc: o <nguoi> <viec> aiThay <gia tri>'; ô '404' mà đọc được hay lời khác VIEC.thongDiep.khongCoViec(<id>) thì ném 'vrc: o <nguoi> <viec> khong an'; ô 'cam' mà không lỗi thì ném 'vrc: o <nguoi> <viec> okr doc duoc'. Sau ma trận, vế quan hệ: với mỗi việc, (aiThay mà vrc-mt-b đọc === 'rieng') khác (vrc-mt-x nhận 404) thì ném 'vrc: chu lech luat <viec>'. Số ô đã so khác 24 thì ném 'vrc: ma tran thieu o <n>'. Chiều đỏ trong lịch sử: commit test đứng trước commit sửa, chạy trên onehub 0d9ef3183 ném 'vrc: o vrc-mt-a V0 aiThay undefined'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, apps/api/test/viec-rieng-trong-cuoc.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.vrc_khung
+    expected: "exit 0; -t vrc-khung-chu của apps/app/test/viec-rieng-trong-cuoc.dom.tsx. Dựng KhungViec với ba bản viec.get giả lập ĐÚNG khuôn đầu ra thật: mỗi bản rút qua viecChiTietOutput.parse của apps/api/src/viec/viec.contracts.ts (round-trip qua bộ đọc thật, không dựng tay), aiThay lần lượt 'rieng' (banGhi rỗng, duAn null), 'du-an' (banGhi rỗng, duAn {ten: 'vrc Dự án P'}), 'ban-ghi' (banGhi một thoả thuận 'vrc Thoả thuận D'). Ma trận ba ô viết sẵn: chữ ô «Gắn với» và dòng mô tả dưới tiêu đề. Ô 'rieng' thiếu viecMessages('vi').khung.rieng ở cả hai chỗ thì ném 'vrc: khung rieng mat chu'; ô 'du-an' có chuỗi 'Việc riêng' ở bất kỳ đâu trong khung thì ném 'vrc: khung du-an hua rieng', thiếu khung.duAnChung ở «Gắn với» hay thiếu 'vrc Dự án P' ở dòng mô tả thì ném 'vrc: khung du-an thieu chu'; ô 'ban-ghi' có 'Việc riêng' thì ném 'vrc: khung ban-ghi hua rieng'. Số ô đã so khác 3 thì ném 'vrc: khung thieu o <n>'. Chiều đỏ trong lịch sử: trên onehub 0d9ef3183 ném 'vrc: khung du-an hua rieng'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/viec/khung-viec.tsx, apps/app/lib/messages/viec.ts, apps/api/src/viec/viec.contracts.ts, apps/app/test/viec-rieng-trong-cuoc.dom.tsx]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vrc_chuyen
+    expected: "exit 0; -t vrc-chuyen của apps/api/test/viec-rieng-trong-cuoc.spec.ts. Fixture: việc riêng V0 (giao vrc-cv-a, làm vrc-cv-b), dự án P, thành viên vrc-cv-x. Đối chứng dương trước: viec.get(V0) của vrc-cv-x khác 404 thì ném 'vrc: fixture V0 khong rieng'. vrc-cv-a gọi viec.doiDuAn({id: V0, duAnId: P}); viec.get(V0) của vrc-cv-a có aiThay khác 'du-an' thì ném 'vrc: vao du an aiThay <gia tri>'; của vrc-cv-x không đọc được thì ném 'vrc: vao du an x khong thay'. vrc-cv-a gọi viec.doiDuAn({id: V0, duAnId: null}); aiThay khác 'rieng' thì ném 'vrc: ra du an aiThay <gia tri>'; vrc-cv-x đọc được thì ném 'vrc: ra du an x van thay'. Vế khung không đóng mở lại do E2b đo. Chiều đỏ trong lịch sử: trên onehub ném 'vrc: vao du an aiThay undefined'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, packages/db/src/viec-ghi.ts, apps/api/test/viec-rieng-trong-cuoc.spec.ts]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.vrc_khung_doi
+    expected: "exit 0; -t vrc-khung-doi của apps/app/test/viec-rieng-trong-cuoc.dom.tsx. KhungViec dựng với kho trpc giả có viec.get trả bản 'rieng' (qua viecChiTietOutput.parse), rồi viec.doiDuAn thành công và viec.get lần sau trả bản 'du-an'. Bấm chọn dự án trong ô Dự án của khung (không unmount khung). Sau khi chờ, ô «Gắn với» không có khung.duAnChung thì ném 'vrc: khung khong doi sau doi du an'; số lần gọi viec.get nhỏ hơn 2 thì ném 'vrc: khung khong doc lai'. Đối chứng dương: trước khi bấm, ô «Gắn với» có khung.rieng, không có thì ném 'vrc: khung doi doi chung'. Chiều đỏ trong lịch sử: trên onehub ném 'vrc: khung khong doi sau doi du an'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/viec/khung-viec.tsx, apps/app/lib/messages/viec.ts, apps/app/test/viec-rieng-trong-cuoc.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vrc_phu_thuoc
+    expected: "exit 0; -t vrc-phu-thuoc của apps/api/test/viec-rieng-trong-cuoc.spec.ts. Fixture: dự án P; V (giao vrc-pt-a, làm vrc-pt-b, tiêu đề mang chuỗi đánh dấu duy nhất sinh lúc chạy) và W (giao vrc-pt-a, làm vrc-pt-y) trong P, cả hai có ngày; vrc-pt-a gọi duAn.phuThuocTao({truocId: V, sauId: W}); thành viên vrc-pt-x. Đối chứng dương trước khi rút: viec.lichSu(W) của vrc-pt-x không chứa chuỗi đánh dấu thì ném 'vrc: phu thuoc doi chung mat ten'. vrc-pt-a gọi viec.doiDuAn({id: V, duAnId: null}); viec.get(V) của vrc-pt-x không 404 thì ném 'vrc: fixture V chua rieng'. viec.lichSu(W) của vrc-pt-x: JSON.stringify chứa chuỗi đánh dấu hay mã V thì ném 'vrc: lich su lo V <loai>'; vết them-phu-thuoc hay go-phu-thuoc nào có viec khác null thì ném 'vrc: vet chua che <loai>'; thiếu một trong hai vết thì ném 'vrc: thieu vet <loai>' (chặn xanh rỗng). viec.lichSu(W) của vrc-pt-b: hai vết đó thiếu tiêu đề V thì ném 'vrc: nguoi trong cuoc mat ten <loai>'. Chiều đỏ trong lịch sử: trên onehub ném 'vrc: lich su lo V them-phu-thuoc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, packages/db/src/viec-ghi.ts, packages/db/src/du-an-ghi.ts, apps/api/test/viec-rieng-trong-cuoc.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vrc_tu_doi
+    expected: "exit 0; -t vrc-tu-doi của apps/api/test/viec-rieng-trong-cuoc.spec.ts. Fixture như E4 với tiền tố vrc-td (W chờ V, W bắt đầu ngay sau hạn V). vrc-td-b gọi viec.doiLich dời hạn V thêm hai ngày làm việc; lịch sử W phải có ít nhất một vết doi-han hay doi-bat-dau mang boi.id = V, không có thì ném 'vrc: fixture khong tu doi'. Đối chứng dương trước khi rút: viec.lichSu(W) của vrc-td-x không chứa chuỗi đánh dấu thì ném 'vrc: tu doi doi chung mat ten'. vrc-td-a rút V khỏi P. viec.lichSu(W) của vrc-td-x: JSON chứa chuỗi đánh dấu hay mã V thì ném 'vrc: tu doi lo V'; vết tự dời nào có boi khác null thì ném 'vrc: boi chua che'. viec.lichSu(W) của vrc-td-b: vết tự dời có boi.tieuDe khác tiêu đề V thì ném 'vrc: tu doi nguoi trong cuoc mat ten'. Chiều đỏ trong lịch sử: trên onehub ném 'vrc: tu doi lo V'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, packages/db/src/viec-ghi.ts, packages/db/src/lich-viec.ts, apps/api/test/viec-rieng-trong-cuoc.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vrc_viec_con
+    expected: "exit 0; -t vrc-viec-con của apps/api/test/viec-rieng-trong-cuoc.spec.ts. Fixture: việc riêng P0 (giao vrc-vc-a, làm vrc-vc-b, theo dõi vrc-vc-w); vrc-vc-b gọi viec.taoCon cho P0 với người thực hiện vrc-vc-c, tiêu đề K mang chuỗi đánh dấu; viec.get(K) của vrc-vc-w khác 404 thì ném 'vrc: fixture K khong an voi w'. viec.lichSu(P0) của vrc-vc-w: số vết them-viec-con khác 1 thì ném 'vrc: thieu vet them-viec-con'; vết đó có sau khác null thì ném 'vrc: viec con chua che'; JSON của cả đầu ra chứa chuỗi đánh dấu hay mã K thì ném 'vrc: viec con lo K'. viec.get(P0) của vrc-vc-w: JSON chứa chuỗi đánh dấu hay mã K thì ném 'vrc: khung P0 lo K'. Đối chứng dương cùng fixture: viec.lichSu(P0) của vrc-vc-b không chứa chuỗi đánh dấu thì ném 'vrc: viec con nguoi trong cuoc mat ten'. vrc-vc-b xoá K bằng viec.xoa; viec.lichSu(P0) của vrc-vc-b: số vết them-viec-con khác 1 thì ném 'vrc: viec da xoa mat vet'; vết đó có sau khác null, hay JSON chứa chuỗi đánh dấu hoặc mã K, thì ném 'vrc: viec da xoa con ten'. Chiều đỏ trong lịch sử: trên onehub ném 'vrc: viec con chua che'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, packages/db/src/viec.ts, packages/db/src/viec-ghi.ts, apps/api/test/viec-rieng-trong-cuoc.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: unit
+    cmd: config:executors.test.vrc_lich_su_khung
+    expected: "exit 0; -t vrc-lich-su-khung của apps/app/test/viec-rieng-trong-cuoc.dom.tsx. LichSuViec dựng với viec.lichSu giả lập rút qua viecVetOutput.parse của viec.contracts.ts: năm dòng viết sẵn — them-phu-thuoc và go-phu-thuoc với viec null, doi-han với boi null, them-viec-con với sau null, và một them-phu-thuoc với viec {tieuDe: 'vrc Việc thấy'}. Dòng che nào thiếu viecMessages('vi').lichSu.viecKhuat thì ném 'vrc: dong che thieu chu <loai>'; dòng 'vrc Việc thấy' thiếu tiêu đề thì ném 'vrc: dong thay mat ten'; khung ném lỗi khi vẽ thì ném 'vrc: lich su vo <loi>'. Số dòng đã so khác 5 thì ném 'vrc: lich su thieu dong <n>'. Chiều đỏ trong lịch sử: trên onehub viecVetOutput.parse từ chối viec null, ném 'vrc: lich su vo'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/viec/lich-su-viec.tsx, apps/app/lib/messages/viec.ts, apps/api/src/viec/viec.contracts.ts, apps/app/test/viec-rieng-trong-cuoc.dom.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vrc_man_du_an
+    expected: "exit 0; -t vrc-man-du-an của apps/api/test/viec-rieng-trong-cuoc.spec.ts. Fixture: dự án P có hai việc có ngày, U và V (tiêu đề V mang chuỗi đánh dấu, giao vrc-md-a, làm vrc-md-b); V bắt đầu sớm hơn và kết thúc muộn hơn U; thành viên vrc-md-x. Danh sách câu đọc viết sẵn thành mảng sáu phần tử trước khi chạy: duAn.lich({id: P}), duAn.get({id: P}), duAn.list({trangThai: 'mo'}), viec.cuaToi({nhom: 'giao-cho-toi', duAnId: P}), viec.cuaToi({nhom: 'giao-cho-toi', tatCaDuAn: true}), viec.bang({nhom: 'giao-cho-toi', duAnId: P}) — khi có duAnId hay tatCaDuAn, dieuKienNhomHayDuAn bỏ qua nhom và trả mọi việc của dự án, nên câu đọc đúng nhóm màn dự án dùng. Đối chứng dương trước khi rút, với cả vrc-md-x và vrc-md-a: bốn câu liệt việc (duAn.lich, hai câu viec.cuaToi, viec.bang) câu nào không chứa chuỗi đánh dấu hay mã V thì ném 'vrc: man du an doi chung thieu V <nguoi> <cau>'; hai câu tổng (duAn.get, duAn.list) không bao giờ mang tên hay mã việc, nên đối chứng của chúng là ngày: batDauSom hay hanMuon của P khác ngày của V thì ném 'vrc: khoang ngay doi chung <nguoi> <cau> <json>'; ghi lại soViec. vrc-md-a rút V khỏi P. Với cả vrc-md-x và vrc-md-a: câu khác 200 thì ném 'vrc: man du an loi <cau>'; JSON.stringify của câu nào chứa chuỗi đánh dấu hay mã V thì ném 'vrc: man du an lo V <nguoi> <cau>'; batDauSom hay hanMuon của P trong duAn.get và duAn.list khác ngày của U thì ném 'vrc: khoang ngay lo V <nguoi> <cau>'. soViec của P sau khác trước trừ 1 thì ném 'vrc: so viec lech <truoc> <sau>'. Số câu đã quét sau khi rút khác 12 thì ném 'vrc: man du an thieu cau <n>'. Chiều đỏ: mã onehub đã đúng ở vế này (bài kiểm giữ) — chứng bằng đột biến tay lúc dựng (bỏ điều kiện duAnId khỏi lọc viec của DuAnService.lich phải ném 'vrc: man du an lo V'), ghi vào sổ S3; giới hạn đã khai ở Notes của hợp đồng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/du-an/**, apps/api/src/viec/**, packages/db/src/viec.ts, packages/db/src/du-an.ts, apps/api/test/viec-rieng-trong-cuoc.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: judgment
+    question: "Đọc CONTEXT.md và docs/api.md. (1) CONTEXT.md mục «Việc» có định nghĩa việc riêng là việc không gắn bản ghi VÀ không thuộc dự án nào, và không còn câu nói việc không gắn gì là việc riêng (không kèm điều kiện dự án)? (2) CONTEXT.md mục «Dự án» vẫn nói ai đọc được phạm vi đối tác thì thấy mọi dự án và mọi việc trong đó? (3) Hai mục đó có còn chỗ nào mâu thuẫn nhau về ai thấy một việc trong dự án không gắn bản ghi? (4) docs/api.md mục «Việc» có nêu trường aiThay của viec.get với đúng ba giá trị rieng, du-an, ban-ghi và nghĩa của từng giá trị? (5) docs/api.md có nêu luật che trong viec.lichSu: vết nhắc một việc mà người xem không đọc được, hoặc việc đã xoá, thì không mang tiêu đề hay mã của việc đó? PASS khi (1), (2), (4), (5) có và (3) không."
+    inputs: [CONTEXT.md, docs/api.md]
+    evidence_required: [verdict, rationale, verified_at]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vrc_dem
+    expected: "exit 0; -t vrc-dem của packages/db/test/dem-viec-rieng.spec.ts trên kho thử riêng của lượt. Kho thử trống việc trước fixture (đếm khác 0 thì ném 'vrc: kho thu khong trong'). Fixture qua các hàm ghi thật của packages/db (viec-ghi, du-an-ghi): dự án P; W1, W2 trong P không gắn bản ghi, cùng chờ V (taoPhuThuoc); rút V khỏi P (doiDuAn) nên V thành riêng; mồi R3 riêng có việc con R2 (taoViecCon); mồi G gắn thoả thuận, trong P, W1 chờ G. Đọc lại viecVet sau fixture: lịch sử W1 và W2 mỗi bên khác đúng một them-phu-thuoc và một go-phu-thuoc nhắc V thì ném 'vrc: fixture vet <viec> <loai> <n>' (đáp án chốt sau bước này, không trước writer). Chạy lệnh thật bằng Bun.spawn('bun', ['run', 'viec:dem-rieng']) trong packages/db với DATABASE_URL của kho thử: mã thoát khác 0 thì ném 'vrc: dem thoat <ma>' TRƯỚC khi parse; stdout parse JSON khác đúng {viecDuAnKhongGan: 2, vetNhacViecRieng: 4, viecRiengBiNhac: 1} thì ném 'vrc: dem sai <json>'. Đếm hàng viec, viecVet, viecPhuThuoc trước và sau lệnh khác nhau thì ném 'vrc: dem ghi vao kho'. Chiều đỏ chỉ đọc cùng fixture: import động giaoDichChiDoc từ packages/db/scripts/dem-viec-rieng.ts (sau bước kiểm mã thoát), gọi với thân thử tx.viec.create; không ném lỗi Postgres mã 25006 (read_only_sql_transaction) thì ném 'vrc: giao dich ghi duoc'. Chạy lệnh với DATABASE_URL rỗng: mã thoát khác 2 hay stderr không chứa 'DATABASE_URL' thì ném 'vrc: thieu bien khong chan'. Chiều đỏ trong lịch sử: trên onehub chưa có script viec:dem-rieng, bun run thoát khác 0, ném 'vrc: dem thoat <ma>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/scripts/dem-viec-rieng.ts, packages/db/package.json, packages/db/test/dem-viec-rieng.spec.ts]
+
+  - id: E11
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vrc_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/viec-rieng-chi-nguoi-trong-cuoc/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này."
+      - "Đọc dòng cuối: mã 0 kèm 'vrc man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'vrc man: …'."
+      - "Mở các ảnh vrc-khung-rieng-1280.png, vrc-khung-du-an-1280.png, vrc-khung-ban-ghi-1280.png, vrc-khung-du-an-375.png và đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/viec-rieng-chi-nguoi-trong-cuoc/evidence/]
+    expected: |
+      Dữ liệu dựng qua API thật trong phiên đo: V0, V1, V2 của AC-1, người xem là người thực hiện B, đăng nhập bằng dev:session.
+      0. vrc-khung-rieng-1280: khung V0, ô «Gắn với» và dòng dưới tiêu đề ghi «Việc riêng — chỉ người trong cuộc thấy» (ST-khung-rieng).
+      1. vrc-khung-du-an-1280: khung V1, ô «Gắn với» ghi «Việc trong dự án — mọi người xem được dự án đều thấy việc này», dòng dưới tiêu đề ghi tên dự án, không có chữ «Việc riêng» ở đâu (ST-khung-du-an). man.mjs đọc DOM khung: có «Việc riêng» thì thoát 1 'vrc man: khung du-an hua rieng'.
+      2. vrc-khung-ban-ghi-1280: khung V2, ô «Gắn với» là liên kết tên thoả thuận (ST-khung-ban-ghi).
+      3. vrc-khung-du-an-375: khung V1 ở khổ 375; man.mjs đo document.documentElement.scrollWidth > 375 thì thoát 1 'vrc man: 375 cuon ngang'.
+      Chữ DA11 đổi (ô «Gắn với», dòng dưới tiêu đề) đọc được, không đè, không cắt; khung giữ đúng giao diện các màn khác của kho. Ngoại trừ có tên: ô chọn «Dự án» (ODuAnViec, Combobox của packages/ui với w-fit whitespace-nowrap) bị cắt mép phải ở 375 khi tên dự án dài là lỗi có sẵn trên nền từ DA4, DA11 không chạm — tách vòng vệ sinh theo chính sách đợt, không tính vào vế «không cắt» của eval này.
+    evidence_required: [verdict, screenshot, observed, verified_at]
+    paths: [apps/app/components/viec/khung-viec.tsx, apps/app/lib/messages/viec.ts, apps/api/src/viec/**, _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs]
+
+  - id: E12
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vrc_man
+    steps:
+      - "Cùng lượt chạy với E11 (một lệnh, một phiên đo)."
+      - "Mở các ảnh vrc-lich-su-x-1280.png và vrc-lich-su-b-1280.png và đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/viec-rieng-chi-nguoi-trong-cuoc/evidence/]
+    expected: |
+      Dữ liệu của AC-4 dựng qua API thật trong phiên đo: V và W trong P, W chờ V, rồi người giao rút V khỏi P.
+      0. vrc-lich-su-x-1280: thành viên X mở thẻ «Lịch sử» trong khung W; hai dòng phụ thuộc ghi «một việc bạn không có quyền xem», không dòng nào có tiêu đề V (ST-lich-su-khuat). man.mjs đọc DOM thẻ Lịch sử: có tiêu đề V thì thoát 1 'vrc man: lich su lo V'.
+      1. vrc-lich-su-b-1280: người thực hiện của V mở cùng thẻ; hai dòng đó ghi tiêu đề V (ST-lich-su-day-du). Thiếu tiêu đề thì thoát 1 'vrc man: lich su trong cuoc mat ten'.
+      Dòng che đọc tự nhiên trong câu, không lộ chuỗi kỹ thuật (null, mã).
+    evidence_required: [verdict, screenshot, observed, verified_at]
+    paths: [apps/app/components/viec/lich-su-viec.tsx, apps/app/lib/messages/viec.ts, apps/api/src/viec/**, _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs]

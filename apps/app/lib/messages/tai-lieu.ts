@@ -4,7 +4,11 @@ import type {
 	LoaiTrang,
 	TrangThaiDeXuat,
 } from "@crm/validation/tai-lieu";
-import { NGUON, type TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
+import {
+	danhSachKieuNguon,
+	NGUON,
+	type TrangThaiNguon,
+} from "@crm/validation/tai-lieu-nguon";
 
 const loaiMoTaEn = {
 	"chien-luoc": "Kara reads the version in use of this type",
@@ -152,6 +156,7 @@ const en = {
 		coBanCho: "{so} proposal awaiting review",
 		suaTrang: "Edit page",
 		xemBanCho: "View the proposal awaiting review",
+		loiBanCho: "Couldn't load the proposals awaiting review.",
 		cho: {
 			duyet: {
 				tieuDe: "This page is not visible to everyone yet.",
@@ -212,6 +217,9 @@ const en = {
 		loaiTrang: "Page type",
 		donVi: "Unit (optional)",
 		chonDonVi: "Choose a unit",
+		loiThanhVien: "Couldn't load the member list.",
+		loiDonVi: "Couldn't load the unit list.",
+		loiCaHai: "Couldn't load the member and unit lists.",
 		khongDonVi: "No unit",
 		chuTrang: "Page owner",
 		loaiMoTa: loaiMoTaEn,
@@ -297,6 +305,8 @@ const en = {
 		suaBanNay: "Edit this draft",
 		khoaDuyet: "Check every number against the source before approving",
 		soVoiBan: "Changes against the page in use",
+		soVoiBanGocMay: "Changes against the original from when Kara drafted this",
+		banDangDungDaDoi: "The page in use has changed since this draft was made.",
 	},
 	nguon: {
 		nutTai: "Upload a source",
@@ -324,7 +334,7 @@ const en = {
 				gui: "Sending the file…",
 				nhan: "Checking the file…",
 			},
-			saiLoai: "Only Word (.docx) or PDF, up to 20 MB.",
+			saiLoai: `Only ${danhSachKieuNguon(" or ")}, up to ${NGUON.toiDaMb} MB.`,
 			rong: "The file is empty.",
 			chuaChonTrang: "Choose the page to update.",
 			khongXong: "The upload did not finish, try again.",
@@ -380,6 +390,14 @@ const en = {
 		mayChu: "the server did not respond",
 		thuLai: "Try again",
 		loiKetQua: "Couldn't load the answer.",
+		tuChoi: "No approved page answers this question. I won't guess.",
+		loi: {
+			"het-tran": "Kara is paused: this month's limit is used up.",
+			"loi-model": "Couldn't answer right now.",
+			"qua-han": "Couldn't answer right now.",
+		},
+		quaHanXacMinh:
+			"The page «{ten}» passed its verification date on {ngay}; ask the page owner {chu} before acting on it.",
 	},
 	baoSai: {
 		nut: "Report wrong",
@@ -536,6 +554,7 @@ const vi: TaiLieuMessages = {
 		coBanCho: "Có {so} bản chờ duyệt",
 		suaTrang: "Sửa trang",
 		xemBanCho: "Xem bản chờ duyệt",
+		loiBanCho: "Chưa tải được bản chờ duyệt.",
 		cho: {
 			duyet: {
 				tieuDe: "Trang này chưa hiện cho mọi người.",
@@ -596,6 +615,9 @@ const vi: TaiLieuMessages = {
 		loaiTrang: "Loại trang",
 		donVi: "Đơn vị (tuỳ chọn)",
 		chonDonVi: "Chọn đơn vị",
+		loiThanhVien: "Chưa tải được danh sách thành viên.",
+		loiDonVi: "Chưa tải được danh sách đơn vị.",
+		loiCaHai: "Chưa tải được danh sách thành viên và đơn vị.",
 		khongDonVi: "Không thuộc đơn vị nào",
 		chuTrang: "Chủ trang",
 		loaiMoTa: loaiMoTaVi,
@@ -679,6 +701,8 @@ const vi: TaiLieuMessages = {
 		suaBanNay: "Sửa bản này",
 		khoaDuyet: "Đối chiếu từng con số với nguồn rồi mới duyệt được",
 		soVoiBan: "Thay đổi so với bản đang dùng",
+		soVoiBanGocMay: "So với bản gốc lúc Kara soạn",
+		banDangDungDaDoi: "Bản đang dùng đã đổi từ lúc Kara soạn bản này.",
 	},
 	nguon: {
 		nutTai: "Tải nguồn lên",
@@ -754,6 +778,14 @@ const vi: TaiLieuMessages = {
 		mayChu: "máy chủ không trả lời",
 		thuLai: "Thử lại",
 		loiKetQua: "Không tải được câu trả lời.",
+		tuChoi: "Chưa có trang đã duyệt nào trả lời câu này. Mình không đoán.",
+		loi: {
+			"het-tran": "Kara tạm dừng vì hết hạn mức tháng.",
+			"loi-model": "Chưa trả lời được lúc này.",
+			"qua-han": "Chưa trả lời được lúc này.",
+		},
+		quaHanXacMinh:
+			"Trang «{ten}» đã quá hạn xác minh từ {ngay}; hỏi chủ trang {chu} trước khi làm theo.",
 	},
 	baoSai: {
 		nut: "Báo sai",
