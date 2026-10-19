@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { type Db, type Prisma, Prisma as PrismaNamespace } from "@crm/db";
 import { type KhoNguon, PATHNAME_NGUON } from "@crm/db/blob-nguon";
+import { dieuKienThay } from "@crm/db/tai-lieu-quyen";
 import {
 	type DichNguon,
 	type KieuNguonTep,
@@ -30,6 +31,7 @@ import {
 	soanLaiDuoc,
 } from "./quyen";
 import { TaiLieuService, type TrangMoiSach } from "./tai-lieu.service";
+import { khongCo as khongCoTrang } from "./tai-lieu-chung";
 import { TAI_LIEU_API } from "./tai-lieu-config";
 import type {
 	NguonDong,
@@ -150,7 +152,10 @@ export class TaiLieuNguonService {
 		try {
 			dich = await this.kiemDich(nguoi, input.dich);
 		} catch (loi) {
-			if (loi instanceof BadRequestException) {
+			if (
+				loi instanceof BadRequestException ||
+				loi instanceof NotFoundException
+			) {
 				await this.xoaNeuMoCoi(input.pathname);
 			}
 			throw loi;
@@ -261,11 +266,15 @@ export class TaiLieuNguonService {
 			});
 			return { loai: "moi", trang };
 		}
-		const trang = await this.db.taiLieuTrang.findUnique({
-			where: { slug: dich.slug },
-			select: { id: true, banDangDungId: true },
+		const trang = await this.db.taiLieuTrang.findFirst({
+			where: { AND: [{ slug: dich.slug }, dieuKienThay(nguoi)] },
+			select: { id: true, banDangDungId: true, archivedAt: true },
 		});
-		if (!trang?.banDangDungId) throw new BadRequestException(T.dichChuaDung);
+		if (!trang) throw khongCoTrang();
+		if (!trang.banDangDungId) throw new BadRequestException(T.dichChuaDung);
+		if (trang.archivedAt) {
+			throw new BadRequestException(TAI_LIEU_API.thongDiep.daLuuTru);
+		}
 		return { loai: "cap-nhat", trangId: trang.id };
 	}
 
