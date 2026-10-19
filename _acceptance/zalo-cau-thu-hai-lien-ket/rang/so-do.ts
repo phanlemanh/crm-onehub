@@ -30,6 +30,7 @@ const LOG = {
 const NHAN = {
 	bam: "bam",
 	thieuCau: "thieu cau",
+	khongDuNguoi: "khong du nguoi",
 	khacPhien: "khac phien",
 	lechCau: "lech cau",
 	chuaXong: "chua xong",
@@ -72,6 +73,30 @@ const laLoiModel = (k: DongKetQua) =>
 	k.tlhTrangThai === "LOI" &&
 	ZCH.lyDoLoiModel.some((x) => x === k.tlhLyDo);
 
+const duDieuKien = (ketQua: readonly DongKetQua[]): Set<string> =>
+	new Set(
+		ketQua
+			.filter(
+				(k) => k.thuTu === 1 && k.loi === null && k.ketQua === ZCH.daTraLoi,
+			)
+			.map((k) => k.nguoi),
+	);
+
+export function nguoiKhongDu(ketQua: readonly DongKetQua[]): string[] {
+	const du = duDieuKien(ketQua);
+	return ketQua
+		.filter((k) => k.thuTu === 1 && !du.has(k.nguoi))
+		.map(
+			(k) =>
+				`${k.nguoi} (cau dau ${k.ketQua ?? "?"}${k.loi ? `, ${k.loi}` : ""})`,
+		);
+}
+
+const duocCham = (ketQua: readonly DongKetQua[]) => {
+	const du = duDieuKien(ketQua);
+	return ketQua.filter((k) => k.thuTu > 1 && du.has(k.nguoi));
+};
+
 const tenCua = (k: DongKetQua) => k.zaloHoiId ?? `${k.nguoi}/${k.thuTu}`;
 
 function kiemKetQua(
@@ -94,17 +119,24 @@ function kiemKetQua(
 				`${NHAN.thieuCau}: ${c.nguoi} cau ${c.thuTu} ${c.maCau} co ${so} dong`,
 			);
 	}
+	const du = duDieuKien(ketQua);
+	if (du.size < nguong.nguongDuDieuKien)
+		loi.push(
+			`${NHAN.khongDuNguoi}: ${du.size} < ${nguong.nguongDuDieuKien} nguoi co cau dau da tra loi; khong du: ${nguoiKhongDu(ketQua).join(", ")}`,
+		);
 	for (const c of chuoi.chuoi) {
+		if (!du.has(c.nguoi)) continue;
 		const phien = new Set(
 			ketQua.filter((k) => k.nguoi === c.nguoi).map((k) => k.sessionId),
 		);
 		if (phien.size !== 1 || phien.has(null))
 			loi.push(`${NHAN.khacPhien}: ${c.nguoi} co ${[...phien].join(", ")}`);
 	}
-	const soLoiModel = ketQua.filter(laLoiModel).length;
+	const cham = duocCham(ketQua);
+	const soLoiModel = cham.filter(laLoiModel).length;
 	if (soLoiModel > nguong.loiModelToiDa)
 		loi.push(`${NHAN.loiModel}: ${soLoiModel} > ${nguong.loiModelToiDa}`);
-	for (const k of ketQua) {
+	for (const k of cham) {
 		const ten = tenCua(k);
 		if (k.loi !== null) {
 			loi.push(`${NHAN.loiEval}: ${ten} ${k.loi}`);
@@ -131,14 +163,16 @@ function kiemKetQua(
 	return loi;
 }
 
+export function demSaiCho(eveLog: string): number {
+	return eveLog.split("\n").filter((d) => d.includes(LOG.saiCho)).length;
+}
+
 function kiemLog(eveLog: string, ketQua: readonly DongKetQua[]): string[] {
 	const dong = eveLog.split("\n");
 	const loi: string[] = [];
-	const saiCho = dong.filter((d) => d.includes(LOG.saiCho)).length;
-	if (saiCho > 0) loi.push(`${NHAN.saiCho}: ${saiCho} dong`);
 	const threw = dong.filter((d) => d.includes(LOG.threw)).length;
 	if (threw > 0) loi.push(`${NHAN.threw}: ${threw} dong`);
-	for (const k of ketQua) {
+	for (const k of duocCham(ketQua)) {
 		if (!k.zaloHoiId || !k.sessionId) continue;
 		const can = `${LOG.lienKet} zalo ${k.zaloHoiId} -> ${k.sessionId}`;
 		if (!dong.some((d) => d.includes(can)))
@@ -192,7 +226,7 @@ function ghiKq(thuMuc: string, k: readonly DongKetQua[]): void {
 }
 
 const lanh = (k: DongKetQua[]) =>
-	k.filter((x) => x.loi === null && !laLoiModel(x));
+	duocCham(k).filter((x) => x.loi === null && !laLoiModel(x));
 const thu = (k: DongKetQua[], thuTu: number) => {
 	const d = lanh(k).find(
 		(x) => x.thuTu === thuTu && x.zaloHoiId && x.sessionId,
@@ -231,12 +265,27 @@ const PHA: readonly Pha[] = [
 		},
 	},
 	{
-		ten: "them dong chi dan dung",
-		ghim: () => NHAN.saiCho,
+		ten: "them dong resolver threw",
+		ghim: () => NHAN.threw,
 		pha: (m) => {
 			const tep = join(m, ZCH.tep.eveLog);
-			writeFileSync(tep, `${readFileSync(tep, "utf8")}\n${LOG.saiCho}\n`);
+			writeFileSync(tep, `${readFileSync(tep, "utf8")}\n${LOG.threw}\n`);
 			ghiBam(m);
+		},
+	},
+	{
+		ten: "ba nguoi du dieu kien bi ket o cau dau",
+		ghim: () => NHAN.khongDuNguoi,
+		pha: (m, k) => {
+			const du = [...duDieuKien(k)].slice(0, 3);
+			ghiKq(
+				m,
+				k.map((x) =>
+					x.thuTu === 1 && du.includes(x.nguoi)
+						? { ...x, ketQua: "dang-hoi", loi: "het-cho" }
+						: x,
+				),
+			);
 		},
 	},
 	{
@@ -380,8 +429,17 @@ if (import.meta.main) {
 	const loi = soDo(ZCH.evidence, chuoi, nguong);
 	for (const d of loi) console.error(`KHONG DAT: ${d}`);
 	if (loi.length > 0) process.exit(1);
+	const kq = docKetQua(
+		readFileSync(join(ZCH.evidence, ZCH.tep.ketQua), "utf8"),
+	);
+	const khongDu = nguoiKhongDu(kq);
 	console.log(
-		`DAT: ${ZCH.evidence} — 24 cau, 8 nguoi, khong dong dung, lien ket du, moi cau nhan dung tra loi cua no`,
+		`DAT: ${ZCH.evidence} — ${8 - khongDu.length}/8 nguoi du dieu kien, ${duocCham(kq).length} cau sau duoc cham, lien ket du, moi cau nhan dung tra loi cua no`,
+	);
+	if (khongDu.length > 0)
+		console.log(`khong du dieu kien (Known limits): ${khongDu.join(", ")}`);
+	console.log(
+		`dong chi dan dung trong eve.log (Known limits, khong cham): ${demSaiCho(readFileSync(join(ZCH.evidence, ZCH.tep.eveLog), "utf8"))}`,
 	);
 	const truot = chayPha(ZCH.evidence, chuoi, nguong);
 	if (truot.length > 0) {

@@ -73,6 +73,7 @@ export function docChuoi(): Chuoi {
 const khuonNguong = z.object({
 	loiModelToiDa: z.number().int().min(0),
 	tranUsd: z.number().positive(),
+	nguongDuDieuKien: z.number().int().min(1).max(8),
 });
 
 export type Nguong = z.infer<typeof khuonNguong>;

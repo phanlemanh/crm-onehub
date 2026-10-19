@@ -70,6 +70,14 @@ Bằng chứng chép vào `evidence/`: `ket-qua.jsonl` (mỗi câu: người, th
 Vì sao phép đo phân biệt được: trên cây chưa vá không có hook ở `turn.started`, nên câu thứ hai và thứ ba không bao giờ
 có dòng `[lien-ket-hoi]` mang `zaloHoiId` của chúng. Đó là cái thước đếm, cạnh trạng thái hàng.
 
+## Thu phạm vi sau lượt đo 2 (chủ kho, 2026-10-19)
+
+Lượt đo 2 có 2/8 người kẹt ngay câu đầu: agent gốc Zalo với model mặc định chạy `bash`/`read_file`, gọi `tro_ly_kho` thêm
+lần với câu tự đặt (4 dòng chỉ dẫn dừng), lượt quá hạn chờ, câu sau bị «đang bận». Lỗi nằm ở lời dặn agent gốc Zalo (làn
+Mac Studio), không ở đường câu thứ hai. AC-5 nay chỉ chấm câu thứ hai, thứ ba của người có câu đầu đã trả lời, đòi tối
+thiểu 6/8 người như vậy (Hỏi-3); dòng chỉ dẫn dừng chỉ đếm. Thước gắn từng tin Zalo giả nhận vào đúng câu theo khoảng thời
+gian gửi và so với câu trả lời dựng từ `TaiLieuHoi` của chính câu; eval chờ 5 giây lắng sau khi câu xong.
+
 ## Đặc tả UX
 
 Không chạm giao diện (surface `agent`). Bỏ — dòng sổ `descope` «bỏ đặc-tả-UX».

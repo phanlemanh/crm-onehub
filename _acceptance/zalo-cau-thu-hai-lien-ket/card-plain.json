@@ -1,30 +1,91 @@
 {
-  "feature_plain": "Người hỏi Kho qua Zalo nhiều câu trong một ngày thì từ câu thứ hai trở đi vẫn được trợ lý kho trả lời đúng câu, không còn bị dừng giữa chừng rồi nhận câu báo lỗi.",
+  "feature_plain": "Người hỏi Kho qua Zalo nhiều câu trong một ngày thì từ câu thứ hai trở đi vẫn được trợ lý kho trả lời đúng câu, không còn bị dừng giữa chừng rồi nhận câu báo lỗi. Lần này phạm vi thu lại sau lượt đo 2: câu đầu bị agent gốc đi lạc là hạn chế đã biết.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ gắn câu Zalo thứ hai, thứ ba trong ngày vào cuộc trò chuyện đang có ngay khi lượt hỏi bắt đầu, trước khi trợ lý kho được gọi — kể cả khi bước gửi cũ đã kịp gắn trước."},
-    {"id": "AC-4", "p": "Sẽ đưa cho trợ lý kho đúng câu thứ hai ngay ở lần tra đầu, không lẫn sang câu đầu đã trả lời."},
-    {"id": "AC-5", "p": "Sẽ chứng trên trợ lý thật: tám người, mỗi người hỏi ba câu liền trong ngày qua Zalo, câu nào cũng được trả lời đúng câu, không câu nào nhận lệnh dừng."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ gắn câu Zalo thứ hai, thứ ba trong ngày vào cuộc trò chuyện đang có ngay khi lượt hỏi bắt đầu, trước khi trợ lý kho được gọi — kể cả khi bước gửi cũ đã kịp gắn trước."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ đưa cho trợ lý kho đúng câu thứ hai ngay ở lần tra đầu, không lẫn sang câu đầu đã trả lời."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ chứng trên trợ lý thật: tám người hỏi ba câu liền qua Zalo; với ít nhất 6 người có câu đầu đã trả lời xong, câu thứ hai và thứ ba nào cũng nhận đúng câu trả lời của chính nó."
+    }
   ],
   "wont_do": [
-    {"id": "AC-2", "p": "Sẽ KHÔNG làm đổi câu đầu ngày (Zalo hay màn Hỏi của CRM) khi bước gắn chạy hai lần — lần thứ hai không ghi đè gì."},
-    {"id": "AC-3", "p": "Chặn mọi lượt không phải câu hỏi Kho, câu đã đóng hay đã thuộc cuộc trò chuyện khác: không đổi dòng nào; lỗi cơ sở dữ liệu không làm hỏng lượt."},
-    {"id": "OOS-1", "p": "Chưa xử ca câu trước còn treo khi câu sau tới (quá hạn phía Zalo) — trợ lý có thể đọc nhầm câu trước; để việc riêng (Hỏi-1 quyết)."},
-    {"id": "OOS-2", "p": "Không đổi model mặc định, không chấm chất lượng câu trả lời — đó là hai việc khác đã có hồ sơ."},
-    {"id": "OOS-3", "p": "Không chạm phần nhận và gửi tin Zalo, vốn thuộc làn khác."},
-    {"id": "OOS-4", "p": "Không sửa máy soạn trang dù nó tìm cuộc trò chuyện theo cùng kiểu — việc riêng."}
+    {
+      "id": "AC-2",
+      "p": "Sẽ KHÔNG làm đổi câu đầu ngày (Zalo hay màn Hỏi của CRM) khi bước gắn chạy hai lần — lần thứ hai không ghi đè gì."
+    },
+    {
+      "id": "AC-3",
+      "p": "Chặn mọi lượt không phải câu hỏi Kho, câu đã đóng hay đã thuộc cuộc trò chuyện khác: không đổi dòng nào; lỗi cơ sở dữ liệu không làm hỏng lượt."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Chưa xử ca câu trước còn treo khi câu sau tới (quá hạn phía Zalo) — trợ lý có thể đọc nhầm câu trước; để việc riêng (Hỏi-1 quyết)."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không đổi model mặc định, không chấm chất lượng câu trả lời — đó là hai việc khác đã có hồ sơ."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không chạm phần nhận và gửi tin Zalo, vốn thuộc làn khác."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không sửa máy soạn trang dù nó tìm cuộc trò chuyện theo cùng kiểu — việc riêng."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không sửa việc agent gốc trên Zalo có lúc đi lạc ở một lượt (chạy việc ngoài lề, gọi trợ lý kho thừa) — ghi vào hạn chế đã biết, mở việc riêng cho làn Mac Studio."
+    }
   ],
   "coverage_plain": [
-    {"i": 0, "p": "Thứ tự câu trong ngày: câu đầu (AC-2 không ghi đè), câu thứ hai (AC-1, AC-4, AC-5), câu thứ ba (AC-1, AC-5) đều có tiêu chí."},
-    {"i": 1, "p": "Kênh: Zalo có đủ ba lớp tiêu chí; màn Hỏi của CRM (mỗi câu một cuộc) chỉ cần không bị làm hỏng (AC-2)."},
-    {"i": 2, "p": "Đầu vào lạ lúc lượt bắt đầu: hợp lệ (AC-1), sai loại, thiếu mã, câu đã thuộc nơi khác, câu đã đóng, cơ sở dữ liệu lỗi (AC-3)."},
-    {"i": 3, "p": "Ai gắn trước: bước gắn mới trước bước gửi cũ, hay ngược lại — cả hai thứ tự đều có ca (AC-1)."},
-    {"i": 4, "p": "Hai lớp bằng chứng: bài kiểm trên cơ sở dữ liệu thật (AC-1 tới AC-4) và một lượt đo trên trợ lý thật (AC-5)."}
+    {
+      "i": 0,
+      "p": "Thứ tự câu trong ngày: câu đầu (AC-2 không ghi đè), câu thứ hai (AC-1, AC-4, AC-5), câu thứ ba (AC-1, AC-5) đều có tiêu chí."
+    },
+    {
+      "i": 1,
+      "p": "Kênh: Zalo có đủ ba lớp tiêu chí; màn Hỏi của CRM (mỗi câu một cuộc) chỉ cần không bị làm hỏng (AC-2)."
+    },
+    {
+      "i": 2,
+      "p": "Đầu vào lạ lúc lượt bắt đầu: hợp lệ (AC-1), sai loại, thiếu mã, câu đã thuộc nơi khác, câu đã đóng, cơ sở dữ liệu lỗi (AC-3)."
+    },
+    {
+      "i": 3,
+      "p": "Ai gắn trước: bước gắn mới trước bước gửi cũ, hay ngược lại — cả hai thứ tự đều có ca (AC-1)."
+    },
+    {
+      "i": 4,
+      "p": "Hai lớp bằng chứng: bài kiểm trên cơ sở dữ liệu thật (AC-1 tới AC-4) và một lượt đo trên trợ lý thật cho câu thứ hai, thứ ba (AC-5)."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Máy từng ghi «chỉ một cách sửa», nhưng còn cách sửa rộng hơn đóng được cả ca câu trước còn treo — nay thành câu Hỏi-1 cho anh chọn."},
-    {"i": 1, "p": "Máy định đổi luật ghi nhật ký dựa trên một câu của hồ sơ trước không thật sự quyết điều đó, và luật mới làm phép đo báo đỏ oan — đã bỏ, giữ luật cũ."},
-    {"i": 2, "p": "Ngưỡng câu lỗi do model và tiền gọi model của lượt đo là chuyện khẩu vị rủi ro và chi tiêu — nay thành câu Hỏi-2 cho anh chốt."},
-    {"i": 3, "p": "Thiếu ca bước gửi cũ gắn trước bước gắn mới, ca này từng làm phép đo đỏ oan — đã thêm ca vào bài kiểm."},
-    {"i": 4, "p": "Phản biện lo bài kiểm «lần tra đầu» đo bằng đồng hồ dễ bập bênh — không sửa, vì mỗi lần tra lại đều chờ đúng 250 ms nên dưới mức đó là dấu hiệu chắc chắn; hồ sơ trước dùng cùng thước và xanh trên ba máy."}
+    {
+      "i": 0,
+      "p": "Máy từng ghi «chỉ một cách sửa», nhưng còn cách sửa rộng hơn đóng được cả ca câu trước còn treo — nay thành câu Hỏi-1 cho anh chọn."
+    },
+    {
+      "i": 1,
+      "p": "Máy định đổi luật ghi nhật ký dựa trên một câu của hồ sơ trước không thật sự quyết điều đó, và luật mới làm phép đo báo đỏ oan — đã bỏ, giữ luật cũ."
+    },
+    {
+      "i": 2,
+      "p": "Ngưỡng câu lỗi do model và tiền gọi model của lượt đo là chuyện khẩu vị rủi ro và chi tiêu — nay thành câu Hỏi-2 cho anh chốt."
+    },
+    {
+      "i": 3,
+      "p": "Thiếu ca bước gửi cũ gắn trước bước gắn mới, ca này từng làm phép đo đỏ oan — đã thêm ca vào bài kiểm."
+    },
+    {
+      "i": 4,
+      "p": "Phản biện lo bài kiểm «lần tra đầu» đo bằng đồng hồ dễ bập bênh — không sửa, vì mỗi lần tra lại đều chờ đúng 250 ms nên dưới mức đó là dấu hiệu chắc chắn; hồ sơ trước dùng cùng thước và xanh trên ba máy."
+    }
   ]
 }
