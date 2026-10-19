@@ -55,7 +55,7 @@ evals:
     expected: |
       Ca "vkm-mot-lop": dung DauTrangOkrTrang cho bon tab cu (cua-toi, theo-don-vi, toan-canh, hoi-y) va
       trang don vi: 0 phan tu [data-khung-tab] / role=tablist cua thanh tab khu; tren trang don vi dem
-      [role=tablist] + [data-slot=view-switch] hien = 1.
+      [role=tablist] + [data-view-switch] hien = 1.
       CHIEU DO: ban sao DauTrangOkr dung lai ThanhTabOkr -> do "con thanh the khu" va dem = 2.
 
   - id: E4
@@ -68,7 +68,7 @@ evals:
       - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
     expected: |
       Ban do qua tien-de (phien do rieng, nap bo OKR mau). Moi duong moi in mot dong
-      "DUNG AC-4 <duong>: <dau hieu>" — /okr/bo-okr: tieu de trang don vi va [data-slot=view-switch];
+      "DUNG AC-4 <duong>: <dau hieu>" — /okr/bo-okr: tieu de trang don vi va [data-view-switch];
       /okr/lay-y-kien: tieu de Hoi y; /okr/suc-khoe: bang don vi; quan tri vao -> #chuong-trinh co mat,
       truong don vi vao -> #chuong-trinh vang; /okr/so-do: so do gop vao (CayCanChinh) co it nhat mot nut;
       /okr/so-do/muc-tieu/<id>: so do quanh muc tieu va nut quay lai href /okr/so-do. Lech -> "SAI AC-4 ...",
@@ -216,7 +216,7 @@ evals:
       - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
     expected: |
       Cung luot ban do. /okr/bo-okr?donOkr=<d> o 1280 va 375: dem phan tu dang hien trong vung noi dung (ngoai
-      [data-slot=area-sidebar] va [data-slot=area-sidebar-strip]) khop [role=tablist], [data-slot=view-switch],
+      [data-slot=area-sidebar] va [data-slot=area-sidebar-strip]) khop [role=tablist], [data-view-switch],
       [data-khung-tab]; tong = 1. In "DUNG AC-3 bo-okr <kho>: 1 lop".
       CHIEU DO (ma chua sua, mo /okr/theo-don-vi): "SAI AC-3 ...: 2 lop".
 

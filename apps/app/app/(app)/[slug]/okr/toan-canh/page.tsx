@@ -12,6 +12,7 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
+import { CuonToiNeo } from "./cuon-toi-neo";
 import { SucKhoe } from "./suc-khoe/suc-khoe";
 import { ToanCanh } from "./toan-canh";
 
@@ -74,6 +75,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 						{okrVoKhuMessages(locale).chuongTrinh}
 					</SectionHeading>
 					<SucKhoe duongDan={false} />
+					<CuonToiNeo id="chuong-trinh" />
 				</section>
 			) : null}
 		</HydrateClient>
