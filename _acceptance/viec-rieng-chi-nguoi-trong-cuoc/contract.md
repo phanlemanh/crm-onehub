@@ -5,7 +5,7 @@ slug: viec-rieng-chi-nguoi-trong-cuoc
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-19T10:56:38Z
 design_doc: docs/superpowers/specs/2026-10-19-viec-rieng-chi-nguoi-trong-cuoc-design.md
