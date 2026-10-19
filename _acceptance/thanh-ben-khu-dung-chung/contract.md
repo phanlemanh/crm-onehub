@@ -5,7 +5,7 @@ slug: thanh-ben-khu-dung-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -80,3 +80,9 @@ Ngưỡng của `opportunity.md`: «Cài đặt và Hội thoại dùng chung m�
 - S3 19/10: `NavItem` cỡ `sm` là `h-7 text-xs` (`packages/ui/src/components/button.tsx`), bằng dòng hội thoại trước vòng — mật độ cột không đổi.
 - Ở điện thoại, trang trò chuyện có hai dòng mang chữ «Hội thoại»: đầu thanh khu (kèm «+» Hội thoại mới) và đầu trang trò chuyện — đúng AC-6, nêu ra để người ký thấy.
 - Gate 2 lượt 1 (19/10, Phan Le Manh): Ngoài-2 «nâng phạm vi sửa ngay» → AC-11, E12 (dòng sổ d-20261019T130202Z-15). Chiều đỏ trên `e613e64c` (trước bản sửa): «SAI AC-11 hoi-thoai 375 cuoc dai: vung tin khong cuon (3140/3140), day vung tin 3326px > 812px, day o soan 3375px > 812px, tran doc 2617px». Sau khi thêm `min-h-0` cho vỏ nội dung của `AgentBuilderShell`: 16 DUNG, 0 SAI (vùng tin 3140/523, ô soạn 758px); `TBK_PHA=cuon` trả lại đúng dòng SAI trên.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-19:
+  - Ngoài-2: trên điện thoại, lúc danh sách hội thoại đang tải, hàng ngang hiện một khối chờ cao hơn hàng thật nên trang giật nhẹ khi dữ liệu về, và trình đọc màn hình nghe «đang tải» hai lần.
+  - Ngoài-4: nút xoá đè lên vài ký tự cuối của tiêu đề hội thoại dài — luôn hiện trên điện thoại, hiện khi rê chuột trên máy tính.
+  - Ngoài-5: bàn đo màn `rang/do-man.mjs` nuốt lỗi hết giờ khi chờ thanh bên tải xong, nên có thể báo đạt khi thanh bên thật chưa hiện.
+  - Ngoài-6: ca `tbk-panel` không khẳng định ngăn có vẽ `aside`, nên một ngăn không vẽ thanh bên vẫn có thể xanh.
+  - Ngoài-7: nút xoá trong bài kiểm E4/E6 là bản giả, nên nhãn đọc to của nút xoá thật không được đo.

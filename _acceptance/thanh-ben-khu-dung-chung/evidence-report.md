@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 915cf201adc2f6391534a67163b213ceddc40227
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-19 — ký Cổng 2 trên S4 round 2 (12/12 eval, 7/7 suite PASS), ghim lại ở 915cf201a sau gộp onehub (repin-20261019T144005Z-34260). Ngoài-2, 4, 5, 6, 7 ghi Known limits; Ngoài-3 nâng phạm vi sửa ngay (đã sửa trong PR, AC-11); Ngoài-1, 8 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: thanh-ben-khu-dung-chung
