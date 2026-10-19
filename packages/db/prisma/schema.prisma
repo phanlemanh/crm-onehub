@@ -101,6 +101,8 @@ model User {
   taiLieuBaoSai     TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiNguoiBao")
   taiLieuBaoSaiXuLy TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiXuLyBoi")
   tinHieu           TinHieu[]         @relation("TinHieuNguoiGui")
+  tinHieuLuuTru     TinHieu[]         @relation("TinHieuLuuTru")
+  tinHieuVet        TinHieuVet[]      @relation("TinHieuVetNguoi")
   thongBao          ThongBao[]        @relation("ThongBaoNguoiNhan")
   viecGiao          Viec[]            @relation("ViecNguoiGiao")
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
@@ -2996,21 +2998,39 @@ model OkrHoiYHieu {
 }
 
 model TinHieu {
-  id         String      @id @default(cuid())
-  so         Int         @unique @default(autoincrement())
-  nguoiGuiId String?
-  nguoiGui   User?       @relation("TinHieuNguoiGui", fields: [nguoiGuiId], references: [id], onDelete: SetNull)
-  phongBanId String?
-  phongBan   Department? @relation(fields: [phongBanId], references: [id], onDelete: SetNull)
-  muonLam    String
-  daXayRa    String
-  tieuDe     String
-  man        String
-  guiLuc     DateTime    @default(now())
-  keoVeLuc   DateTime?
+  id           String       @id @default(cuid())
+  so           Int          @unique @default(autoincrement())
+  nguoiGuiId   String?
+  nguoiGui     User?        @relation("TinHieuNguoiGui", fields: [nguoiGuiId], references: [id], onDelete: SetNull)
+  phongBanId   String?
+  phongBan     Department?  @relation(fields: [phongBanId], references: [id], onDelete: SetNull)
+  muonLam      String
+  daXayRa      String
+  tieuDe       String
+  man          String
+  guiLuc       DateTime     @default(now())
+  keoVeLuc     DateTime?
+  archivedAt   DateTime?
+  archivedById String?
+  archivedBy   User?        @relation("TinHieuLuuTru", fields: [archivedById], references: [id], onDelete: SetNull)
+  vet          TinHieuVet[]
 
   @@index([nguoiGuiId, guiLuc])
   @@map("tinHieu")
+}
+
+model TinHieuVet {
+  id        String   @id @default(cuid())
+  tinHieuId String?
+  tinHieu   TinHieu? @relation(fields: [tinHieuId], references: [id], onDelete: SetNull)
+  so        Int
+  luc       DateTime @default(now())
+  nguoiId   String?
+  nguoi     User?    @relation("TinHieuVetNguoi", fields: [nguoiId], references: [id], onDelete: SetNull)
+  loai      String
+
+  @@index([tinHieuId, luc])
+  @@map("tinHieuVet")
 }
 
 enum TrangThaiViec {
