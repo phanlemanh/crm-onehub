@@ -480,12 +480,13 @@ const DUONG_TAB_MOI = {
 } as const;
 
 function demThanhThe(): number {
-	return qa("[data-khung-tab]").length + qa("[role=tablist]").length;
+	return qa("[role=tablist]").length;
 }
 
 describe("vkm-mot-lop", () => {
 	test("vkm-mot-lop: bon dau trang khu khong con thanh the khu; trang don vi chi mot lop the", async () => {
 		const ket: [string, number][] = [];
+		const sai: string[] = [];
 		for (const tab of TAB) {
 			datNen();
 			const dau = await giaiMayChu(await DauTrangOkrTrang({ tab }));
@@ -494,9 +495,8 @@ describe("vkm-mot-lop", () => {
 				() => q("h1, [data-slot=page-shell-title]") !== null,
 				`dau trang ${tab}`,
 			);
-			const so = demThanhThe();
-			if (so !== 0)
-				throw new Error(`vkm-mot-lop: ${tab} con thanh the khu (${so})`);
+			const so = qa("[data-khung-tab]").length + demThanhThe();
+			if (so !== 0) sai.push(`vkm-mot-lop: ${tab} con thanh the khu (${so})`);
 			ket.push([tab, so]);
 			await don();
 		}
@@ -521,9 +521,8 @@ describe("vkm-mot-lop", () => {
 		);
 		const lop = demThanhThe() + qa("[data-view-switch=nut]").length;
 		if (lop !== 1)
-			throw new Error(
-				`vkm-mot-lop: trang don vi con thanh the khu, dem = ${lop}`,
-			);
+			sai.push(`vkm-mot-lop: trang don vi con thanh the khu, dem = ${lop}`);
+		if (sai.length > 0) throw new Error(sai.join("\n"));
 		ket.push(["bo-okr", lop]);
 		expect(ket).toEqual([
 			["cua-toi", 0],
