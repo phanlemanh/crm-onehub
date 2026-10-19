@@ -1,0 +1,33 @@
+{
+ "feature_plain": "Thành viên đọc khu Mục tiêu thấy mỗi khái niệm một tên ở cả tiếng Việt lẫn tiếng Anh: «Góp vào» thay «căn chỉnh», đơn vị gốc mang tên không gian làm việc (OneHub), «Lấy ý kiến» thay «Hỏi ý».",
+ "will_do": [
+  {"id": "AC-1", "p": "Sẽ đổi mọi chữ «căn chỉnh», «Đường lý do», «Gắn căn chỉnh», «Gắn thêm», «Chưa nối lên» của khu sang họ chữ «Góp vào», kể cả nhãn dây trên sơ đồ."},
+  {"id": "AC-2", "p": "Sẽ đổi bản tiếng Anh từ «Alignment» sang «Contributes to», và nút tiếng Anh dài nhất không tràn ở màn rộng."},
+  {"id": "AC-3", "p": "Sẽ cho hàng gốc ở ô chọn đơn vị, thanh nút của khu và bảng độ phủ Lấy ý kiến hiện đúng tên không gian làm việc, chưa có tên thì hiện «Công ty»."},
+  {"id": "AC-4", "p": "Sẽ gọi cấp gốc là «Công ty» cạnh Bộ phận, Phòng ban, và nút quay về đọc «Về cả công ty»."},
+  {"id": "AC-5", "p": "Sẽ đổi «Hỏi ý» thành «Lấy ý kiến» ở bản tiếng Việt; bản tiếng Anh giữ «Call for ideas»."},
+  {"id": "AC-6", "p": "Sẽ có một bài kiểm tự đỏ khi tên cũ quay lại trong chữ của khu, ở cả hai thứ tiếng."},
+  {"id": "AC-8", "p": "Sẽ đổi đúng chuỗi tên cũ trong hai phép đo màn của hồ sơ đã ký và ghim lại hai hồ sơ đó trước khi gộp."}
+ ],
+ "wont_do": [
+  {"id": "AC-7", "p": "Sẽ KHÔNG đổi bản mẫu nào, và không gỡ hay bỏ qua bài kiểm cũ nào khi đổi chữ."},
+  {"id": "OOS-1", "p": "KHÔNG đổi câu báo lỗi máy chủ, tin nhắc buổi sáng, lời Kara và tên gốc máy chủ tự viết — để hàng VK5."},
+  {"id": "OOS-2", "p": "KHÔNG đổi tên trong mã, tên tệp hay đường dẫn trang Lấy ý kiến; thanh bên và thẻ «Toàn cảnh» để VK1, VK2."},
+  {"id": "OOS-3", "p": "KHÔNG sửa phép đo ngoài làn máy của hồ sơ cũ, và hai phép đo đã lệch từ trước hàng này."},
+  {"id": "OOS-4", "p": "KHÔNG sửa trang bản mẫu."}
+ ],
+ "scope_plain": "Những phần bỏ ngoài đều có hàng riêng hoặc không đổi màu nào của phép đo:",
+ "coverage_plain": [
+  {"i": 0, "p": "Ba khái niệm (Góp vào, đơn vị gốc, Lấy ý kiến) đều có tiêu chí riêng, đối chiếu với ba mục từ điển chốt 18/10 — AC-1 tới AC-5."},
+  {"i": 1, "p": "Cả tiếng Việt và tiếng Anh được kiểm cho mọi khái niệm — AC-1 tới AC-5."},
+  {"i": 2, "p": "Chữ trong tệp chữ, tên gốc đọc từ dữ liệu và chữ viết cứng đều được kiểm kê trước khi sửa; câu máy chủ để hàng VK5 — AC-1 tới AC-6."},
+  {"i": 3, "p": "Tên cũ không quay lại nhờ bài kiểm, bài cũ đổi theo, phép đo hồ sơ cũ đổi theo, bản mẫu không đổi — AC-6, AC-7, AC-8."}
+ ],
+ "gap_probe_plain": [
+  {"i": 0, "p": "Nhãn dây trên sơ đồ còn «Dây căn chỉnh» mà máy định để lại — đã đổi luôn trong hàng này, giám sát đã cho chạm tệp."},
+  {"i": 1, "p": "Thanh nút của khu chưa có phép đo tên gốc — đã thêm phép đo có tên và khi chưa có tên."},
+  {"i": 2, "p": "Bảng độ phủ có thể không bao giờ được chụp, bản tiếng Anh không có ảnh — đã bắt buộc ảnh độ phủ và thêm hai ảnh tiếng Anh."},
+  {"i": 3, "p": "Bốn phép đo so với điểm tách nhánh sẽ hết tác dụng sau khi gộp — đã đổi sang neo theo đúng dải commit của vòng."},
+  {"i": 4, "p": "Hội đồng chấm chữ không biết mỗi chữ đóng vai gì — đã thêm cột vai cho bảng chữ."}
+ ]
+}
