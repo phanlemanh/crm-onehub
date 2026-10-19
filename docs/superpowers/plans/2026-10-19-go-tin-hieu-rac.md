@@ -8,6 +8,8 @@
 
 **Tech Stack:** Prisma 7 (Postgres), NestJS + nestjs-trpc, Zod 4, Next (apps/app), TanStack Query, bun test, puppeteer-core (đo màn).
 
+**Gate 1.5:** duyệt — Manh Phan, 2026-10-19 («duyệt kế hoạch»).
+
 **Spec:** `docs/superpowers/specs/2026-10-19-go-tin-hieu-rac-design.md`; hợp đồng `_acceptance/go-tin-hieu-rac/contract.md`; eval `_acceptance/go-tin-hieu-rac/evals.yaml` (lệnh ở `_acceptance/config.yaml`, khoá `gtr_*`).
 
 ## Global Constraints
