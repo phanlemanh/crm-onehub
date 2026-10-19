@@ -1,2 +1,2 @@
-driver: bun man.mjs qua mot-luot.sh/tien-de.mjs (khong co duong doc network/console)
+driver: bun man.mjs qua mot-luot.sh/tien-de.mjs (puppeteer rang, khong co duong doc network/console cua cong cu)
 networkObserved: n-a (driver)
