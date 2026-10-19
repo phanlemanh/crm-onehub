@@ -5,7 +5,7 @@ slug: trang-lo-trinh-mo-hinh-hien-thi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 veto_state: mo
 veto_opened_at: 2026-10-19T13:48:09Z
 design_doc: docs/superpowers/specs/2026-10-19-trang-lo-trinh-mo-hinh-hien-thi-design.md
