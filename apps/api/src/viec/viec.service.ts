@@ -32,6 +32,7 @@ import {
 	themTheoDoi,
 	xoaViec,
 } from "@crm/db/viec-ghi";
+import { maViecNhac } from "@crm/db/viec-nhac";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
 import {
 	BadRequestException,
@@ -60,6 +61,7 @@ import type {
 	ViecTheoDoiInput,
 	ViecVetOutput,
 } from "./viec.contracts";
+import { aiThayCua, cheVet } from "./viec-khuat";
 
 export function dichLoi(loi: Error): never {
 	if (!(loi instanceof LoiViec)) throw loi;
@@ -173,6 +175,7 @@ export class ViecService {
 				hanNgay: p.truoc.hanNgay ? ngayHan(p.truoc.hanNgay) : null,
 			})),
 			coLichSu: daCoLichSu,
+			aiThay: aiThayCua(h),
 			quyen: {
 				trangThai: dichDuoc(h.trangThai, vai),
 				sua: vai.giao || vai.thucHien,
@@ -200,17 +203,26 @@ export class ViecService {
 				nguoi: { select: { id: true, name: true } },
 			},
 		});
-		return hang.map((h) => {
-			const { nguon, vet } = parseHangVet(h);
-			return {
-				id: h.id,
-				luc: h.luc.toISOString(),
-				nguon,
-				loai: vet.loai,
-				nguoi: h.nguoi,
-				vet,
-			};
-		});
+		const doc = hang.map((h) => ({ h, ...parseHangVet(h) }));
+		const nhac = [...new Set(doc.flatMap((d) => maViecNhac(d.vet)))];
+		const thay = new Set(
+			nhac.length === 0
+				? []
+				: (
+						await this.db.viec.findMany({
+							where: { AND: [{ id: { in: nhac } }, dieuKienXemViec(userId)] },
+							select: { id: true },
+						})
+					).map((v) => v.id),
+		);
+		return doc.map(({ h, nguon, vet }) => ({
+			id: h.id,
+			luc: h.luc.toISOString(),
+			nguon,
+			loai: vet.loai,
+			nguoi: h.nguoi,
+			vet: cheVet(vet, thay),
+		}));
 	}
 
 	async cuaBanGhi(

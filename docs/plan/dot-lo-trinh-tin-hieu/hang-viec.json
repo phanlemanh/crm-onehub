@@ -1,0 +1,178 @@
+{
+ "dot": "lo-trinh-tin-hieu",
+ "day": [
+  {
+   "id": "L1",
+   "worktree": "/CHUA-CO-WORKTREE/L1",
+   "link": ""
+  },
+  {
+   "id": "S1",
+   "worktree": "/CHUA-CO-WORKTREE/S1",
+   "link": ""
+  },
+  {
+   "id": "F1",
+   "worktree": "/CHUA-CO-WORKTREE/F1",
+   "link": ""
+  }
+ ],
+ "hang": [
+  {
+   "ma": "LT1f",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "trang-lo-trinh-mo-hinh-hien-thi",
+   "day": "L1",
+   "uu_tien": 0,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/trang-lo-trinh-mo-hinh-hien-thi/**"
+   ],
+   "moc": "2026-10-29"
+  },
+  {
+   "ma": "LT3",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "lo-trinh-nhieu-san-pham",
+   "day": "L1",
+   "uu_tien": 1,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/lo-trinh-nhieu-san-pham/**"
+   ],
+   "moc": "2026-10-29"
+  },
+  {
+   "ma": "TH5",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "go-tin-hieu-rac",
+   "day": "S1",
+   "uu_tien": 0,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/go-tin-hieu-rac/**"
+   ],
+   "moc": "2026-10-29"
+  },
+  {
+   "ma": "TH2",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "gom-tin-hieu-tu-chay",
+   "day": "S1",
+   "uu_tien": 1,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/gom-tin-hieu-tu-chay/**"
+   ],
+   "moc": "2026-10-29"
+  },
+  {
+   "ma": "TH3",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "trang-thai-tin-hieu-song",
+   "day": "S1",
+   "uu_tien": 2,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/trang-thai-tin-hieu-song/**"
+   ],
+   "moc": "2026-10-29"
+  },
+  {
+   "ma": "TB2",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "thong-bao-mot-nguon-nhieu-kenh",
+   "day": "S1",
+   "uu_tien": 3,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/thong-bao-mot-nguon-nhieu-kenh/**"
+   ],
+   "moc": "2026-10-29"
+  },
+  {
+   "ma": "TH6b",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "tieu-diem-sau-hop-xoa-tin-hieu",
+   "day": "S1",
+   "uu_tien": 4,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/tieu-diem-sau-hop-xoa-tin-hieu/**"
+   ],
+   "moc": "2026-10-29"
+  },
+  {
+   "ma": "F26",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "khong-do-them-chay-gh",
+   "day": "F1",
+   "uu_tien": 0,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/khong-do-them-chay-gh/**"
+   ],
+   "moc": "2026-10-31"
+  },
+  {
+   "ma": "F36",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "chu-thich-glob-md",
+   "day": "F1",
+   "uu_tien": 1,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/chu-thich-glob-md/**"
+   ],
+   "moc": "2026-10-31"
+  },
+  {
+   "ma": "F35",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "don-ho-so-cu",
+   "day": "F1",
+   "uu_tien": 2,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/don-ho-so-cu/**"
+   ],
+   "moc": "2026-10-31"
+  },
+  {
+   "ma": "F28",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "ho-so-do-kiem-cheo",
+   "day": "F1",
+   "uu_tien": 3,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/ho-so-do-kiem-cheo/**"
+   ],
+   "moc": "2026-10-31"
+  },
+  {
+   "ma": "F31",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "thu-paths-e15-giai-doan",
+   "day": "F1",
+   "uu_tien": 4,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/thu-paths-e15-giai-doan/**"
+   ],
+   "moc": "2026-10-31"
+  },
+  {
+   "ma": "F34",
+   "tep": "docs/plan/lo-trinh-okr.json",
+   "slug": "cham-bo-do-chiu-cau-loi",
+   "day": "F1",
+   "uu_tien": 5,
+   "s4": "local",
+   "ranh_gioi": [
+    "_acceptance/cham-bo-do-chiu-cau-loi/**"
+   ],
+   "moc": "2026-10-31"
+  }
+ ]
+}
