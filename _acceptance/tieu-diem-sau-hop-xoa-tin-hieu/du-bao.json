@@ -1,0 +1,32 @@
+{
+  "ngay_tinh": "2026-10-19",
+  "hang": {
+    "ma": "TH6b",
+    "gio_may": [
+      4,
+      7
+    ],
+    "phan_tram": null
+  },
+  "moc": {
+    "ten": "Tín hiệu và trang Lộ trình theo kit 2.33 29/10",
+    "bat_dau": "2026-10-24",
+    "hoan_tat": "2026-10-27",
+    "gio_may": [
+      45.5,
+      70.5
+    ],
+    "gio_cho": 15.504999999999999,
+    "gio_cho_do": true,
+    "muc_tieu": "2026-10-29",
+    "hang": [
+      "LT1f",
+      "TH5",
+      "TH2",
+      "TH3",
+      "TB2",
+      "TH6b",
+      "LT3"
+    ]
+  }
+}

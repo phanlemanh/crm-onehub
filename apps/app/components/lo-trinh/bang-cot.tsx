@@ -44,7 +44,7 @@ function cotCua(
 			cards: g.ds.slice(0, LO_TRINH.tranTheCot).map((v) => ({
 				id: v.khoa,
 				href: `#${v.khoa}`,
-				title: v.cau_giao,
+				title: v.ten,
 				subtitle: `${v.ma}${v.nhom ? ` · ${v.nhom}` : ""}`,
 				meta: (
 					<span className="flex flex-wrap items-center gap-2 text-muted-foreground text-xs">

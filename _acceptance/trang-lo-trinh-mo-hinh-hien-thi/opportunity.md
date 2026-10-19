@@ -1,0 +1,29 @@
+---
+schema_version: 1
+slug: trang-lo-trinh-mo-hinh-hien-thi
+feature: Trang Lộ trình trong CRM hiện việc chưa hẹn mốc và tên hiển thị đúng như LO-TRINH.html, không còn cờ vàng «khối chưa mang mô hình hiển thị»
+owner: phanlemanh@gmail.com
+stage: decided               # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Phan Le Manh
+decided_at: 2026-10-19T13:18:56Z     # ISO UTC
+prototype:
+  base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
+  disposition:     # keep | archive
+lo_trinh_ma: LT1f
+lo_trinh_tep: docs/plan/lo-trinh-okr.json
+---
+
+## Vấn đề & ai gặp
+
+Mở từ hàng LT1f của «OKR» (`docs/plan/lo-trinh-okr.json`).
+Mốc: Tín hiệu và trang Lộ trình theo kit 2.33 — 29/10/2026.
+
+Trang Lộ trình trong CRM hiện việc chưa hẹn mốc và tên hiển thị đúng như LO-TRINH.html, không còn cờ vàng «khối chưa mang mô hình hiển thị»
+
+## Ngưỡng chết / ngưỡng UAT
+
+- Câu hỏi phép đo trả lời: …
+- Kết quả nào là SỐNG: …
+- Kết quả nào là CHẾT: …
+- Timebox: …
