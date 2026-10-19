@@ -1,0 +1,247 @@
+schema_version: 1
+slug: vo-khu-muc-tieu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.vkm_thanh_ben
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/layout.tsx"
+      - "apps/app/app/(app)/[slug]/okr/tab-okr.ts"
+      - "apps/app/lib/messages/okr*.ts"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "apps/app/test/vo-khu-muc-tieu.dom.tsx"
+    expected: |
+      Ca "vkm-thanh-ben" dung ThanhBenMucTieu voi moi duong cua ma tran 7 dong (/ws/okr, /ws/okr/bo-okr,
+      /ws/okr/bo-okr?donOkr=pb:x, /ws/okr/lay-y-kien, /ws/okr/suc-khoe, /ws/okr/so-do,
+      /ws/okr/so-do/muc-tieu/m1): aside[data-slot=area-sidebar] nav aria-label "Mục tiêu"; nhan nhom doc ra
+      = [null, "OKR", "Báo cáo"]; href muc = [/ws/okr, /ws/okr/bo-okr, /ws/okr/lay-y-kien, /ws/okr/suc-khoe,
+      /ws/okr/so-do]; dung mot aria-current va dung muc mong cho tung dong (ma tran viet truoc, 7 khang
+      dinh). Nhan muc rut tu messages cua khu (khong viet tay chuoi). So y kien: hoiYNhan=3 -> muc Lay y
+      kien chua "3"; hoiYNhan=0 -> khong so. Vai: canManageProgram=true -> [data-slot=area-sidebar-footer]
+      co a[href="/ws/settings/okr"]; false -> khong co footer.
+      CHIEU DO: ban sao so muc dang mo bang so khop tuyet doi (bo startsWith) -> do o dong
+      /ws/okr/so-do/muc-tieu/m1 "khong muc nao sang"; bo dieu kien canManageProgram -> do "vai thuong thay
+      Chuong trinh OKR".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.vkm_chu_ky
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/chon-chu-ky.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx"
+      - "apps/app/test/vo-khu-muc-tieu.dom.tsx"
+    expected: |
+      Ca "vkm-chu-ky": [data-chon-chu-ky] nam trong [data-slot=area-sidebar-header] (ca aside lan dai dien
+      thoai) va 0 lan trong HanhDongKhu dung rieng; duong ?kyOkr=c2 -> moi href muc tren thanh ben chua
+      kyOkr=c2; duong khong kyOkr -> khong href nao chua kyOkr. Chon chu ky c3 qua ChonChuKy (nuqs test
+      adapter) -> url nhan kyOkr=c3 va href muc doi theo.
+      CHIEU DO: ban sao thanh ben bo kyOkr khoi href -> do "lien ket muc mat chu ky"; dat lai ChonChuKy
+      vao HanhDongKhu -> do "o chu ky con trong hang nut".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.vkm_mot_lop
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - "apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
+      - "apps/app/test/vo-khu-muc-tieu.dom.tsx"
+    expected: |
+      Ca "vkm-mot-lop": dung DauTrangOkrTrang cho bon tab cu (cua-toi, theo-don-vi, toan-canh, hoi-y) va
+      trang don vi: 0 phan tu [data-khung-tab] / role=tablist cua thanh tab khu; tren trang don vi dem
+      [role=tablist] + [data-slot=view-switch] hien = 1.
+      CHIEU DO: ban sao DauTrangOkr dung lai ThanhTabOkr -> do "con thanh the khu" va dem = 2.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.vkm_man
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Ban do qua tien-de (phien do rieng, nap bo OKR mau). Moi duong moi in mot dong
+      "DUNG AC-4 <duong>: <dau hieu>" — /okr/bo-okr: tieu de trang don vi va [data-slot=view-switch];
+      /okr/lay-y-kien: tieu de Hoi y; /okr/suc-khoe: bang don vi; quan tri vao -> #chuong-trinh co mat,
+      truong don vi vao -> #chuong-trinh vang; /okr/so-do: so do gop vao (CayCanChinh) co it nhat mot nut;
+      /okr/so-do/muc-tieu/<id>: so do quanh muc tieu va nut quay lai href /okr/so-do. Lech -> "SAI AC-4 ...",
+      ma 1. Bi day ve /sign-in hay /onboarding -> ma 2.
+      CHIEU DO (ma chua sua): 5 dong SAI "404". Pha-thu VKM_PHA=rewrite (ban do bo qua rewrites bang cach mo
+      duong cu ten moi khong ton tai /okr/bo-okr-x) -> SAI 404.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.vkm_chuyen_huong
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/test/vo-khu-chuyen-huong.spec.ts"
+    expected: |
+      Ca "vkm-chuyen-huong" doc nextConfig.redirects() va rewrites() (nhu okr-chuyen-huong-cap-nhat.spec.ts):
+      ma tran 6 duong cu viet truoc -> moi duong dung mot redirect permanent toi dung dich; ma tran 4
+      duong moi -> dung mot rewrite ve thu muc cu; khong destination nao cua redirect khop source cua
+      redirect khac (khong chuoi hai buoc); khong rewrite nao co source trung source cua redirect.
+      CHIEU DO: ban sao them redirect bo-okr -> theo-don-vi -> do "chuoi chuyen huong bo-okr"; bo redirect
+      hoi-y -> do "thieu chuyen huong /okr/hoi-y".
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.vkm_man
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Cung luot ban do. Ba lien ket dau dung bang chinh ham ghep duong cua apps/agent (duongTrongApp trong
+      nhac-ke-hoach.ts, goi that, khong chep chuoi); ma va id rut tu bo OKR mau trong DB. Ma tran 8 dong
+      viet truoc (lien ket cu -> duong + truy van dich chinh xac -> muc sang -> dau hieu man):
+      1 okr-tom-tat /okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb:<d>&kyOkr=<k> -> /okr/bo-okr?xemOkr=hop-tuan&donOkr=pb:<d>&kyOkr=<k> -> Bo OKR -> view switch o hop-tuan, ten don vi <d>
+      2 okr-hoi-y-gop /okr/hoi-y?kyOkr=<k> -> /okr/lay-y-kien?kyOkr=<k> -> Lay y kien -> tieu de Hoi y, o chu ky ten <k>
+      3 okr-cap-nhat /okr?tu=nhac -> /okr (tu= bi xoa sau khi mo) -> Cua toi -> hop thoai cap nhat tuan mo
+      4 /okr/toan-canh?kyOkr=<k> -> /okr/suc-khoe?kyOkr=<k> -> Suc khoe -> bang don vi
+      5 /okr/toan-canh/suc-khoe?kyOkr=<k> (vai quan tri) -> /okr/suc-khoe?kyOkr=<k>#chuong-trinh -> Suc khoe -> #chuong-trinh trong khung nhin
+      6 /okr/quanh-muc-tieu/<m> -> /okr/so-do/muc-tieu/<m> -> So do -> so do quanh muc tieu <m>
+      7 /okr?record=objective:<m> -> /okr?record=objective:<m> -> Cua toi -> ngan muc tieu <m> mo
+      8 /okr/soan/<c> -> /okr/bo-okr?kyOkr=<k>&donOkr=<d>&record=soan:<c> -> Bo OKR -> ngan soan mo
+      Moi dong: so lan chuyen (redirectChain) <= 1, duong + truy van dung nhu ma tran (so tung khoa), muc sang
+      dung, dau hieu man co. 8 khang dinh, moi dong "DUNG AC-6 <so>: <dich> (<n> lan chuyen)" hoac SAI, ma 1.
+      Vế quan he lien ket trong app (AC-7): tren nam man moi va thanh ben, gom moi a[href] cung duong, so voi
+      cac source cua nextConfig.redirects() (khop path-to-regexp) -> 0 khop; in "DUNG AC-7 man: <n> lien ket, 0
+      qua chuyen huong".
+      CHIEU DO (ma chua sua): dong 1 "SAI AC-6 1: dich /okr/theo-don-vi"; pha-thu VKM_PHA=chuoi (ban do gia lap
+      them mot buoc trung gian) -> "SAI ...: 2 lan chuyen"; VKM_PHA=lien-ket (ban do chen a[href=/ws/okr/hoi-y]
+      vao thanh ben) -> "SAI AC-7 man: 1 lien ket qua chuyen huong".
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.vkm_quet
+    paths:
+      - "apps/app/**/*.ts"
+      - "apps/app/**/*.tsx"
+      - "_acceptance/vo-khu-muc-tieu/rang/quet-duong-cu.mjs"
+    expected: |
+      Quet moi .ts/.tsx duoi apps/app (tru test/ va app/proto/), dem tai luot chay. Voi next.config.ts: nap
+      nextConfig, lay moi source/destination cua redirects() va rewrites(), va chi mien dung cac chuoi do (khong
+      mien theo khoi chu); chuoi duong cu nao khac trong tep van tinh. In "DUNG AC-7: <N> tep, 0 chuoi duong cu". Moi chuoi "/okr/theo-don-vi", "/okr/toan-canh",
+      "/okr/hoi-y", "/okr/quanh-muc-tieu" mot dong "SAI AC-7: <tep>:<dong>", ma 1; N = 0 -> ma 2.
+      CHIEU DO tren ma chua sua: SAI o tab-okr.ts, phan-don-vi-dan.tsx, toan-canh.tsx, luat-ban-nhap.ts…
+      (khao sat 19/10), ma 1; VKM_PHA=gieo gieo tep tam chua "/okr/toan-canh" -> SAI goi dung ten tep.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.vkm_don_vi_dan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/phan-don-vi-dan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/loi-phan.tsx"
+      - "apps/app/test/okr-don-vi-dan-cay.dom.tsx"
+    expected: |
+      Ca "vkm-don-vi-dan": PhanDonViDan voi okr.access san sang, org.tree lan luot dang tai / loi / co du
+      lieu (ma tran 3 o). Dang tai -> khung cho, 0 CardTitle rong; loi -> LoiPhan voi nut Thu lai, bam -> goi
+      lai queryFn cua org.tree dung 1 lan; co du lieu -> the don vi co ten khac rong theo thu tu cay.
+      CHIEU DO: ban sao bo xet org.tree (ma truoc DH11) -> do "the don vi tieu de rong" o o loi va o dang tai.
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vkm_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, nguyen van: VKM_CHEP_ANH=1 EVAL= bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/vo-khu-muc-tieu/rang/do-man.mjs\" (no tu dung phien do, chup anh va chi chep anh sang _acceptance/vo-khu-muc-tieu/evidence/ khi co VKM_CHEP_ANH=1)"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo cac anh trong _acceptance/vo-khu-muc-tieu/evidence/ va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/vo-khu-muc-tieu/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Anh cua-toi-1280, bo-okr-1280, suc-khoe-1280, cua-toi-375, bo-okr-375, suc-khoe-375. O 1280: thanh ben
+      trai co o chu ky o dau, ba nhom Cua toi / OKR / Bao cao, muc dang mo to nen; trang Bo OKR chi mot hang
+      chuyen kieu xem, khong hang the Cua toi · Theo don vi. O 375: o chu ky va mot hang muc nam ngang ngay
+      duoi dau trang, khong thanh doc, noi dung khong bi cat ngang. Ban do in "DUNG AC-9 <man> 375: aside
+      an, hang ngang 5 muc, 0 nhan nhom, tran ngang 0" cho ba man. Thieu anh -> khong dat.
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.vkm_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/next.config.ts"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Cung luot ban do. /okr?tu=nhac -> hop thoai cap nhat tuan mo va url thoi co tu=; /okr?record=objective:<id>
+      -> ngan muc tieu mo; /okr/lay-y-kien khong kyOkr -> o chu ky hien ten chu ky dang lap ke hoach cua bo
+      mau, /okr/suc-khoe khong kyOkr -> ten chu ky hien hanh (hai ten rut tu DB, khong viet tay); nguoi vai
+      chi OKR (dev:session voi vai okr) mo du nam muc khong bi day ve het-quyen. Moi ve mot dong DUNG/SAI AC-10.
+      CHIEU DO: pha-thu VKM_PHA=ky (ban do ep thanh ben mang kyOkr hien hanh khi vao Lay y kien) -> "SAI AC-10
+      lay-y-kien: chu ky <hien hanh> thay vi <lap ke hoach>".
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.vkm_loi_vao_cu
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/test/okr-cua-toi-ba-phan.dom.tsx"
+      - "apps/app/test/okr-giai-ky-an.spec.ts"
+      - "apps/app/test/okr-chuyen-huong-cap-nhat.spec.ts"
+    expected: |
+      Ba tep kiem da co chay xanh nguyen ven, khong sua dong nao (tep cua DH11 la tep moi
+      okr-don-vi-dan-cay.dom.tsx, khong cham okr-cua-toi-ba-phan.dom.tsx): okr-cua-toi-ba-phan.dom.tsx (gom ca ?tu=nhac),
+      okr-giai-ky-an.spec.ts (giaiKy, giaiKyHoiY), okr-chuyen-huong-cap-nhat.spec.ts (cap-nhat-tuan -> /okr).
+      CHIEU DO: ca ba tep la bai da ky co chieu do rieng cua ho so goc.
+
+  - id: E12
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.vkm_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Cung luot ban do. /okr/bo-okr?donOkr=<d> o 1280 va 375: dem phan tu dang hien trong vung noi dung (ngoai
+      [data-slot=area-sidebar] va [data-slot=area-sidebar-strip]) khop [role=tablist], [data-slot=view-switch],
+      [data-khung-tab]; tong = 1. In "DUNG AC-3 bo-okr <kho>: 1 lop".
+      CHIEU DO (ma chua sua, mo /okr/theo-don-vi): "SAI AC-3 ...: 2 lop".
+
+  - id: E13
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.vkm_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Cung luot ban do, bam that tren thanh ben (khong goto): (a) mo /okr/lay-y-kien khong kyOkr, bam Suc khoe;
+      (b) tu Suc khoe bam Lay y kien; (c) mo /okr/suc-khoe?kyOkr=<k1>, bam Bo OKR roi Lay y kien. Moi buoc: ten
+      trong [data-chon-chu-ky] trung ten chu ky cua than trang (dau trang hoac ky cua du lieu), ca hai ten rut tu
+      DB; (c) moi buoc deu la <k1>. In "DUNG AC-2 <buoc>: o <ten> than <ten>".
+      CHIEU DO: VKM_PHA=giu-o (ban do ghi de o chu ky bang ten cu sau chuyen trang) -> "SAI AC-2 <buoc>: o <A> than <B>".
+
+  - id: E14
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vkm_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx"
+      - "apps/app/app/(app)/[slug]/okr/layout.tsx"
+      - "_acceptance/vo-khu-muc-tieu/rang/do-man.mjs"
+    expected: |
+      Cung luot ban do. Goi tRPC that cua so y kien can gop (truy van ThanhTabOkr dung hom nay) voi cookie phien,
+      nhan n. Bo mau co n > 0: so tren muc Lay y kien = n. Doi chung: nguoi do khong co y kien can gop (dev:session
+      nguoi thu hai) -> API tra 0 va muc khong co so. In "DUNG AC-1 so y kien: thanh ben <n> = API <n>".
+      CHIEU DO: VKM_PHA=so (ban do cong 1 vao so API truoc khi so) -> "SAI AC-1 so y kien: thanh ben <n> != API <n+1>".
