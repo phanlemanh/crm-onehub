@@ -305,7 +305,7 @@ const en = {
 		suaBanNay: "Edit this draft",
 		khoaDuyet: "Check every number against the source before approving",
 		soVoiBan: "Changes against the page in use",
-		soVoiBanGocMay: "Changes against the original when the machine drafted",
+		soVoiBanGocMay: "Changes against the original from when Kara drafted this",
 		banDangDungDaDoi: "The page in use has changed since this draft was made.",
 	},
 	nguon: {
@@ -392,7 +392,7 @@ const en = {
 		loiKetQua: "Couldn't load the answer.",
 		tuChoi: "No approved page answers this question. I won't guess.",
 		loi: {
-			"het-tran": "The AI assistant is paused: this month's limit is used up.",
+			"het-tran": "Kara is paused: this month's limit is used up.",
 			"loi-model": "Couldn't answer right now.",
 			"qua-han": "Couldn't answer right now.",
 		},
@@ -701,8 +701,8 @@ const vi: TaiLieuMessages = {
 		suaBanNay: "Sửa bản này",
 		khoaDuyet: "Đối chiếu từng con số với nguồn rồi mới duyệt được",
 		soVoiBan: "Thay đổi so với bản đang dùng",
-		soVoiBanGocMay: "So với bản gốc lúc máy soạn",
-		banDangDungDaDoi: "Bản đang dùng đã đổi từ lúc máy soạn bản này.",
+		soVoiBanGocMay: "So với bản gốc lúc Kara soạn",
+		banDangDungDaDoi: "Bản đang dùng đã đổi từ lúc Kara soạn bản này.",
 	},
 	nguon: {
 		nutTai: "Tải nguồn lên",
@@ -780,7 +780,7 @@ const vi: TaiLieuMessages = {
 		loiKetQua: "Không tải được câu trả lời.",
 		tuChoi: "Chưa có trang đã duyệt nào trả lời câu này. Mình không đoán.",
 		loi: {
-			"het-tran": "Trợ lý AI tạm dừng vì hết hạn mức tháng.",
+			"het-tran": "Kara tạm dừng vì hết hạn mức tháng.",
 			"loi-model": "Chưa trả lời được lúc này.",
 			"qua-han": "Chưa trả lời được lúc này.",
 		},
