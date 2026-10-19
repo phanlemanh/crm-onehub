@@ -7,7 +7,7 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>8 việc"]
+  GD --> B["Sắp mở vòng<br/>4 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
@@ -37,14 +37,10 @@ flowchart TD
 
 ## Sắp mở vòng
 
-- Trưởng đơn vị mở bộ OKR của đơn vị mình và biết ngay đội đang ra sao: ngày còn lại, tiến độ so với kỳ vọng, số KR đã cập nhật tuần này, số KR tự tin thấp, và mọi KR đã mở sẵn (`bo-okr-co-so`)
-- Trưởng đơn vị bấm Soạn OKR và viết cả bộ như một tài liệu — mục tiêu, KR liền mạch — với góp ý của Kara và điểm chất lượng ở cột bên, rồi công bố (`che-do-soan-bo-okr`)
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
 - Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây (`khong-do-them-chay-gh`)
 - Danh sách góp ý đã gom được sửa trong một lượt (`sua-sau-chay-that`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
-- Trưởng đơn vị mở Bộ OKR, lọc Tôi dẫn, mở bộ OKR của đơn vị mình và đi giữa OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm bằng thẻ con có đường dẫn riêng (`trang-bo-okr`)
-- Trưởng đơn vị mở Mục tiêu và đi giữa Của tôi, Bộ OKR, Lấy ý kiến và Báo cáo bằng một thanh bên, chu kỳ chọn một lần ở đầu thanh, và mọi đường dẫn cũ vẫn mở đúng chỗ (`vo-khu-muc-tieu`)
 
 ## Đang làm
 
