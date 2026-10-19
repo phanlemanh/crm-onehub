@@ -22,7 +22,7 @@ export const LO_TRINH_SAN_PHAM = {
 	nhipKiemMs: 5 * MINUTE_MS,
 	toiDaMoiNhip: 10,
 	tranTepByte: 2 * MB,
-	hanNhipMs: 40 * GIAY_MS,
+	hanNhipMs: 50 * GIAY_MS,
 	tranGoiMs: 10 * GIAY_MS,
 	jwtSongGiay: 540,
 	jwtLuiGiay: 60,

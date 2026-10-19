@@ -180,11 +180,16 @@ export async function xoaVinhVienSanPham(db: Db, ma: string): Promise<boolean> {
 	});
 }
 
-export async function sanPhamDenHan(db: DbHoacTx, now: Date) {
+export async function sanPhamDenHan(
+	db: DbHoacTx,
+	now: Date,
+	loc: { tienTo?: string } = {},
+) {
 	const moc = new Date(now.getTime() - LO_TRINH_SAN_PHAM.nhipKiemMs);
 	const ds = await db.sanPhamLoTrinh.findMany({
 		where: {
 			luuTruLuc: null,
+			ma: loc.tienTo ? { startsWith: loc.tienTo } : undefined,
 			OR: [{ kiemLuc: null }, { kiemLuc: { lte: moc } }],
 		},
 		orderBy: [{ kiemLuc: { sort: "asc", nulls: "first" } }, { taoLuc: "asc" }],

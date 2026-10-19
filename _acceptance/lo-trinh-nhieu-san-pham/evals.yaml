@@ -88,7 +88,7 @@ evals:
       - "scripts/lo-trinh-san-pham/github-gia.ts"
       - "apps/agent/test/lo-trinh-san-pham.spec.ts"
     expected: |
-      describe "ltsp-hong", ma tran viet truoc 9 o, moi o mot san pham CO SAN ban chup hop le (sha S0) va mot san pham
+      describe "ltsp-hong", ma tran viet truoc 10 o, moi o mot san pham CO SAN ban chup hop le (sha S0) va mot san pham
       lanh "ok" cung nhip:
         thieu GITHUB_APP_ID / thieu GITHUB_APP_PRIVATE_KEY -> chua-cau-hinh (ca hai san pham)
         installation 404 -> chua-cai · branches 404 -> khong-thay-kho · contents 404 -> khong-thay-tep
@@ -97,7 +97,7 @@ evals:
           x-ratelimit-remaining: 0 -> loi-github
       Moi o: (1) trangThaiLay dung gia tri ky vong; (2) hang ban chup cua san pham van sha S0, duLieu khong doi; (3)
       lenLichLayLoTrinh khong nem; (4) san pham "ok" cung nhip co ban chup moi (tru hai o chua-cau-hinh); (5) hang ban chup
-      nguon crm khong doi. In so o da xet = 9.
+      nguon crm khong doi. In so o da xet = 10.
       DOI CHUNG: o lanh (tep hop le) -> da-lay va ban chup doi.
       CHIEU DO: ban sao de loi cua san pham dau nem ra ngoai vong -> dong 4 do voi thong diep ghim "loi mot san pham chan
       san pham khac: ok".

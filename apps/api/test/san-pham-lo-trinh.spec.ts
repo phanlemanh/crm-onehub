@@ -15,18 +15,20 @@ const MA_GOC = maTuTen(TIEN_TO);
 
 const AI = ["owner", "admin", "a", "b", "okr"] as const;
 type Ai = (typeof AI)[number];
-const VAI: Record<Ai, WorkspaceRole> = {
+const VAI = {
 	owner: "owner",
 	admin: "admin",
 	a: "member",
 	b: "member",
 	okr: "okr",
-};
+} as const satisfies Record<Ai, WorkspaceRole>;
 
 const id = (ai: Ai) => `${MA_GOC}-${ai}`;
 const cookie = {} as Record<Ai, string>;
 const phien: string[] = [];
 let app: INestApplication;
+
+type DauVao = { readonly [khoa: string]: string | readonly string[] };
 
 type TraLoi = { status: number; data: unknown; ma: string; loi: string };
 
@@ -39,7 +41,7 @@ function traLoi(res: request.Response): TraLoi {
 	};
 }
 
-async function ghi(ai: Ai, thuTuc: string, dauVao: object): Promise<TraLoi> {
+async function ghi(ai: Ai, thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
 	const res = await request(app.getHttpServer())
 		.post(`/api/trpc/sanPhamLoTrinh.${thuTuc}`)
 		.set("cookie", cookie[ai])
@@ -48,7 +50,7 @@ async function ghi(ai: Ai, thuTuc: string, dauVao: object): Promise<TraLoi> {
 	return traLoi(res);
 }
 
-async function doc(ai: Ai, thuTuc: string, dauVao?: object): Promise<TraLoi> {
+async function doc(ai: Ai, thuTuc: string, dauVao?: DauVao): Promise<TraLoi> {
 	const q = dauVao
 		? `?input=${encodeURIComponent(JSON.stringify(dauVao))}`
 		: "";
@@ -139,13 +141,13 @@ describe("ltsp-quyen", () => {
 			(await ghi("owner", "datNguoiXem", { ma: p, userIds: [id("a")] })).status,
 		).toBe(200);
 
-		const ky: Record<Ai, string[]> = {
+		const ky = {
 			owner: [p],
 			admin: [p],
 			a: [p],
 			b: [],
 			okr: [],
-		};
+		} satisfies Record<Ai, string[]>;
 		for (const ai of AI) {
 			const thay = await maThay(ai);
 			if (JSON.stringify(thay) !== JSON.stringify(ky[ai]))
