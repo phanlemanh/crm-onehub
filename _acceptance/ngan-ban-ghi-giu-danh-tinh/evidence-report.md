@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e4b67fef6fe603098a72abdf6ee9422b84344396
+verified_commit: 5b300090f1b150768f9d9a9e8037ab981447bc38
 human_signoff:
 ---
 
@@ -243,3 +243,7 @@ none — every multi-run eval is uniform
 Round 1: BLOCKED — E5 đỏ giả khi phép đo màn chạy song song, lệnh suite api đỏ. Returned to implementation (răng màn đọc slug workspace từ DB phiên đo).
 Round 2: REJECT — E1–E15 đều đạt (E1–E4, E13–E15 carry-forward từ round 1), nhưng lệnh suite `bun run test -- --filter=api` không gắn eval đã đỏ với 10 bài trượt và 1 lỗi. Returned to implementation.
 Round 3: PASS — E1–E15 đều đạt (carry-forward từ round 1 và round 2, delta không chạm paths của eval) và cả bảy lệnh suite xanh, kể cả suite api (bập bênh do tải ở round 2, xanh lại ở round 3).
+
+### Re-pin lần 1 — 2026-10-19, do gộp onehub (#489 VK1, #494 lộ trình) sau S4 lượt 3
+run_id: repin-20261019T184126Z-34217
+sha: 5b300090f1b150768f9d9a9e8037ab981447bc38 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E9, E10, E11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
