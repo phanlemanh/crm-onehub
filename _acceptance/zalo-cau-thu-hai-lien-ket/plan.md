@@ -13,6 +13,8 @@ eval eve thật cho AC-5 cùng bộ so lượt đo trong `rang/`.
 
 **Spec:** `design.md` · `contract.md` · `evals.yaml` (cùng thư mục).
 
+**Gate 1.5:** chủ kho duyệt kế hoạch 2026-10-19 («Duyệt kế hoạch thi công l7 (Gate 1.5), cho code.»).
+
 ## Global Constraints
 
 - Không chú thích trong code (AGENTS.md).
