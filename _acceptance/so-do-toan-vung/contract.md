@@ -28,8 +28,9 @@ tiêu).
 vỏ VK2 — đường dẫn của mục Sơ đồ, khung vỏ, bảng chuyển hướng — và được đối chiếu, sửa nếu lệch, trước Cổng Phạm vi.
 
 Từ ngữ: «Sơ đồ» = mục trong nhóm Báo cáo của thanh bên khu (`CONTEXT.md`). «Vùng nội dung» = phần của vỏ khu nằm phải
-thanh bên khu và dưới đầu ứng dụng. «Toàn màn hình» = trạng thái của vỏ khu mà thanh bên khu (và dải thay nó dưới `lg`)
-thu lại; thanh biểu tượng và đầu ứng dụng giữ nguyên. «Tâm» = mục tiêu mà sơ đồ đang xem quanh.
+thanh bên khu và dưới đầu ứng dụng. «Toàn màn hình» = trạng thái của vỏ khu mà thanh bên khu (`AreaSidebar` của VK1, `w-56` từ
+`md`) thu lại; thanh biểu tượng và đầu ứng dụng giữ nguyên. Dưới `md` thanh bên khu là hàng cuộn ngang và Sơ đồ không
+có nút Toàn màn hình (AC-7), nên toàn màn hình chỉ có từ `md`. «Tâm» = mục tiêu mà sơ đồ đang xem quanh.
 
 ## Criteria
 
@@ -39,7 +40,7 @@ thu lại; thanh biểu tượng và đầu ứng dụng giữ nguyên. «Tâm»
   cuộn dọc hay ngang; And trên khung vẽ chỉ có một dải công cụ một dòng gồm đường mảnh «Báo cáo › Sơ đồ góp
   vào», bộ lọc «Mọi đơn vị · Cần chú ý» và nút «Toàn màn hình», không `PageShellDescription`, và `docs/design.md` có
   dòng ngoại lệ «màn toàn vùng» ở mục «Khung trang». [ĐỐI CHIẾU VK2: đường của mục Sơ đồ]
-- AC-2: Given Sơ đồ đang ở khung thường, When bấm «Toàn màn hình», Then thanh bên khu không còn trong cây truy cập, khung
+- AC-2: Given Sơ đồ đang ở khung thường, When bấm «Toàn màn hình», Then thanh bên khu (`[data-slot=area-sidebar]`) không còn trong cây truy cập, khung
   vẽ rộng thêm đúng bề rộng của thanh bên, nút đổi thành «Thoát toàn màn hình» với `aria-pressed="true"`, tiêu điểm ở
   lại trên nút; trạng thái toàn màn hình sống trong vỏ khu suốt lúc đi giữa các kiểu xem của Sơ đồ, mất khi tải lại và
   không đi theo đường dẫn; When nhấn Esc khi không ngăn, hộp thoại, menu hay thẻ đơn vị nào đang mở, Then
@@ -94,9 +95,10 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 19/10; 
 - **Trục B — kiểu xem:** cả công ty | quanh một mục tiêu | lọc Cần chú ý.
   - Thước CE: [SUY-TỪ-REPO: _acceptance/so-do-can-chinh-don-vi/contract.md], [SUY-TỪ-REPO:
   _acceptance/so-do-quanh-muc-tieu/contract.md].
-- **Trục C — khung:** thường | toàn màn hình | dưới `md` | `md`–`lg`.
+- **Trục C — khung:** thường | toàn màn hình | dưới `md`.
   - Thước CE: `KhungKhu anThanhBen` [SUY-TỪ-REPO: apps/app/app/proto/_modules/vo-khu-muc-tieu/khung.tsx @2790552ac];
-  `md`–`lg` [GIẢ ĐỊNH: dải ngang thay thanh bên dưới `lg` như bản mẫu — đối chiếu VK2].
+  thanh dọc từ `md`, hàng ngang dưới `md` [SUY-TỪ-REPO: packages/ui/src/components/area-sidebar.tsx] — đối chiếu VK1
+  19/10 sau gộp `42060835e`: bản mẫu đổi ở `lg`, thành phần thật đổi ở `md`, nên ô `md`–`lg` không còn.
 - **Trục D — dữ liệu:** đang tải | lỗi | tâm không thấy | kỳ rỗng | có dữ liệu.
   - Thước CE: nếp «Chờ tải và lỗi tải» [SUY-TỪ-REPO: docs/design.md].
 - **Cross-cutting:** 1440 | 390; `vi` | `en`; `translate="no"`; phím, Esc theo tầng; không cuộn tài liệu; hồ sơ đã ký.
@@ -128,7 +130,9 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 19/10; 
   `apps/app/app/(app)/[slug]/okr/**` (trang Sơ đồ, `quanh-muc-tieu/**`, `toan-canh/**`, `theo-don-vi/**`,
   `cay-can-chinh.tsx`, `okr-search-params.ts`, `layout.tsx`), `apps/app/components/crm/record-sheet/objective-sheet.tsx`,
   `apps/app/lib/messages/okr*.ts` (chỉ thêm, luật 7), `apps/app/lib/search-param-keys.ts` (chỉ thêm),
-  `packages/validation/src/okr-tham-so.ts`, khung trang toàn vùng trong `packages/ui` (nếu bậc 1–4 không có),
+  `packages/validation/src/okr-tham-so.ts`, `packages/ui/src/components/area-sidebar.tsx` và
+  `packages/ui/test/area-sidebar.dom.tsx` (thêm cách thu — `AreaSidebar` của VK1 chưa có; hồ sơ đã ký
+  `thanh-ben-khu-dung-chung` đo tệp này, E11 giữ), khung trang toàn vùng trong `packages/ui` (nếu bậc 1–4 không có),
   `docs/design.md` (một dòng ngoại lệ, Hỏi-2), `apps/app/test/okr-so-do-toan-vung.dom.tsx` (mới),
   `_acceptance/config.yaml` (chỉ thêm), `_acceptance/so-do-toan-vung/**`.
 - Vùng chung (luật 19): thanh bên khu và `apps/app/lib/messages/okr*.ts` là của làn Mac Studio; `objective-sheet.tsx`

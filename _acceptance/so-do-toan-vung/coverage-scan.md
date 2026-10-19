@@ -23,10 +23,12 @@ Sơ đồ ở nhóm Báo cáo của vỏ khu Mục tiêu.
   - Thước CE: hai thủ tục đã ký [SUY-TỪ-REPO: _acceptance/so-do-can-chinh-don-vi/contract.md,
   _acceptance/so-do-quanh-muc-tieu/contract.md]; bản mẫu có bộ lọc «Mọi đơn vị · Cần chú ý» [SUY-TỪ-REPO:
   apps/app/app/proto/_modules/vo-khu-muc-tieu/so-do.tsx @2790552ac].
-- **Trục C — khung:** thường (thanh bên khu hiện) | toàn màn hình (thanh bên khu thu) | khổ dưới `md` | khổ `md`–`lg`
-  (thanh bên khu thành dải ngang ở bản mẫu).
+- **Trục C — khung:** thường (thanh bên khu hiện) | toàn màn hình (thanh bên khu thu) | khổ dưới `md` (thanh bên khu là
+  hàng cuộn ngang). Ô `md`–`lg` của bản quét đầu bỏ sau khi đối chiếu `AreaSidebar` của VK1 (19/10): thành phần thật đổi
+  ở `md`, không ở `lg` như bản mẫu.
   - Thước CE: `KhungKhu` `anThanhBen`, `DaiDienThoai` hiện dưới `lg` [SUY-TỪ-REPO:
-  apps/app/app/proto/_modules/vo-khu-muc-tieu/khung.tsx @2790552ac]; nếp «Danh sách» dưới `md` [SUY-TỪ-REPO:
+  apps/app/app/proto/_modules/vo-khu-muc-tieu/khung.tsx @2790552ac]; `AreaSidebar` [SUY-TỪ-REPO:
+  packages/ui/src/components/area-sidebar.tsx]; nếp «Danh sách» dưới `md` [SUY-TỪ-REPO:
   docs/design.md].
 - **Trục D — trạng thái dữ liệu:** đang tải | lỗi | kỳ chưa có OKR | tâm không thấy hay không có quyền | có dữ liệu.
   - Thước CE: nếp «Chờ tải và lỗi tải» [SUY-TỪ-REPO: docs/design.md]; `NOT_FOUND` của `okr.quanhMucTieu`

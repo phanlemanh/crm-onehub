@@ -35,8 +35,9 @@ Một màn **Sơ đồ** ở nhóm Báo cáo của thanh bên khu mà VK2 dựng
   - **Cả công ty** — dữ liệu `okr.soDoDonVi`, thẻ đơn vị của DH4 (mở thẻ thấy mục tiêu kèm lý do, `moDonVi`).
   - **Quanh một mục tiêu** — tham số tâm trên đường dẫn, dữ liệu `okr.quanhMucTieu`, thẻ và dòng «Đang xem quanh» của
     DH5, một liên kết «Về sơ đồ cả công ty».
-- **Toàn màn hình** là trạng thái của khung vỏ: thu thanh bên khu (và dải thay nó dưới `lg`), giữ thanh biểu tượng và
-  đầu ứng dụng — đúng như `anThanhBen` của bản mẫu. Sống trong vỏ khu khi đi giữa hai kiểu xem, mất khi tải lại, không
+- **Toàn màn hình** là trạng thái của khung vỏ: thu thanh bên khu (`AreaSidebar` của VK1), giữ thanh biểu tượng và đầu
+  ứng dụng — đúng như `anThanhBen` của bản mẫu. `AreaSidebar` chưa có cách thu: VK6 thêm nó trong `packages/ui` (luật
+  «biến thể mới làm ở `packages/ui`»), không giấu bằng `className` ở chỗ gọi. Sống trong vỏ khu khi đi giữa hai kiểu xem, mất khi tải lại, không
   đi theo đường dẫn (Hỏi-4). Esc thoát, trừ khi một ngăn, hộp thoại, menu hay thẻ đơn vị mở ra đang ở trên sơ đồ: Esc
   lúc đó đóng thứ ấy trước.
 - **Chiều cao**: hai sơ đồ hôm nay cao cố định 600 px do nơi gọi đặt (`style` trên vùng bọc), không phải do `FlowMap`.
@@ -134,8 +135,9 @@ câu dưới đây giữ nguyên để người đọc thấy lối đã bỏ; l
   thoát toàn màn hình.
 - Tâm nằm trên đường dẫn (`nuqs`); toàn màn hình sống trong vỏ khu (Hỏi-4); đổi kiểu xem, kể cả qua ngăn › «Xem trên
   sơ đồ», giữ trạng thái toàn màn hình.
-- Dưới `md`: không nút Toàn màn hình (không có khung vẽ để phóng). `md`–`lg`: thanh bên khu là dải ngang của VK2 — toàn
-  màn hình thu cả dải. **[ĐỐI CHIẾU VK2]**
+- Dưới `md`: không nút Toàn màn hình (không có khung vẽ để phóng); thanh bên khu ở đó là hàng cuộn ngang của
+  `AreaSidebar`. Từ `md` thanh dọc `w-56` — thứ toàn màn hình thu. (Đối chiếu VK1 19/10: bản mẫu đổi ở `lg`, thành phần
+  thật đổi ở `md`.)
 - Nút Toàn màn hình có `aria-pressed`, nhãn đổi theo trạng thái; tiêu điểm ở lại trên nút sau khi bấm.
 
 ### 5. Xuất xứ component
@@ -146,7 +148,7 @@ câu dưới đây giữ nguyên để người đọc thấy lối đã bỏ; l
 | `Breadcrumb` | dùng | đã có ở `packages/ui`, bản mẫu dùng cho đường mảnh |
 | `ToggleGroup variant="outline" size="sm"` | dùng | nếp «Chip lọc» của `docs/design.md` |
 | `Button variant="outline"` + `Icon` Maximize/Minimize | dùng | bản mẫu |
-| Khung vỏ khu và cờ thu thanh bên | mở rộng | VK2 dựng vỏ; VK6 thêm trạng thái thu **[ĐỐI CHIẾU VK2]** |
+| `AreaSidebar` (VK1) | mở rộng | thêm cách thu trong `packages/ui`; vỏ khu Mục tiêu của VK2 giữ trạng thái **[ĐỐI CHIẾU VK2]** |
 | Khung trang toàn vùng | mở rộng hay tạo trong `packages/ui` (bậc 5 của «Vẽ tay là bậc cuối») | `PageShell` chưa có biến thể không lề, không đầu trang; tra bậc 1–4 ở S2 |
 
 ### 6. Khuôn IA đã chọn + căn cứ
