@@ -91,13 +91,28 @@ export function tieuDeCua(nd) {
 }
 const posix = p => p.split(path.sep).join('/');
 
-export function docTinHieu(root, nguon, { loai = napLoai() } = {}) {
+// Tệp `.json` con trực tiếp của thư mục nguồn mà index git của cây `root` đang theo dõi — null khi `root` không thuộc kho
+// git nào (không có index để lọc). Đường trong index tương đối `root` (git -C), nên gốc là thư mục con của kho vẫn đúng.
+function tepTheoDoi(root, ng) {
+  let ra;
+  try { ra = execFileSync('git', ['-C', path.resolve(root), 'ls-files', '-z', '--', ng], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return null; } // không phải kho git
+  const thu = path.posix.normalize(posix(ng)).replace(/\/+$/, '');
+  return new Set(ra.split('\0').filter(p => p && path.posix.dirname(p) === thu && p.endsWith('.json')).map(p => path.posix.basename(p)));
+}
+
+// `chiTheoDoi` (hồ sơ ve-lo-trinh-doc-tin-hieu-cua-cay): bên VẼ trang commit (LO-TRINH.html) đọc thư mục nguồn của CHÍNH
+// cây đang vẽ và chỉ tệp đã theo dõi trong index của nó — CI vẽ lại từ bản tải sạch, nên trang chỉ được phụ thuộc cây.
+// Nội dung đọc từ đĩa: bốn lệnh đóng cổng vẽ trước commit cùng lượt. Mặc định tắt: bộ đọc tương tác giữ hộp ý chung.
+export function docTinHieu(root, nguon, { loai = napLoai(), chiTheoDoi = false } = {}) {
   const tinHieu = []; const ngoaiKhuon = {}; const loi = []; const theoId = new Map();
   for (const ng of nguon) {
-    const dir = path.resolve(gocNguon(root), ng);
+    const dir = path.resolve(chiTheoDoi ? root : gocNguon(root), ng);
     let laThuMuc = false; try { laThuMuc = statSync(dir).isDirectory(); } catch { laThuMuc = false; }
     if (!laThuMuc) { loi.push(`nguồn tín hiệu không phải thư mục có thật: ${ng}`); continue; }
-    for (const f of readdirSync(dir).filter(x => x.endsWith('.json')).sort()) {
+    const theoDoi = chiTheoDoi ? tepTheoDoi(root, ng) : null;
+    let ds = readdirSync(dir).filter(x => x.endsWith('.json'));
+    if (theoDoi) ds = ds.filter(f => theoDoi.has(f));
+    for (const f of ds.sort()) {
       const rel = posix(path.join(ng, f)); const id = f.slice(0, -'.json'.length);
       let o;
       try { o = JSON.parse(readFileSync(path.join(dir, f), 'utf8')); } catch { loi.push(`tín hiệu ${rel} sai khuôn: JSON hỏng`); continue; }
@@ -304,10 +319,10 @@ export function khungCacCau(opts) {
   return ds == null ? null : ds.map(d => ({ id: d.x.id, cho: d.x.cho, cau_nguoi_gui: d.x.cau_nguoi_gui, khung: d.khung }));
 }
 // Mỗi phần tử { x: bản ghi, khung: phần kit viết, hoSoKy } — `--cau` đọc cả ba.
-function dungDuong({ root, classify, sections }) {
+function dungDuong({ root, classify, sections, chiTheoDoi = false }) {
   const khai = docKhai(root);
   if (khai == null) return null;
-  const doc_ = docTinHieu(root, khai.nguon);
+  const doc_ = docTinHieu(root, khai.nguon, { chiTheoDoi });
   const banGom = cacBanGom(root, khai);
   // Chỗ ĐẦU TIÊN của mỗi tín hiệu — răng chịu phần «đúng một chỗ»; đường đi chỉ vẽ.
   const choCua = new Map();

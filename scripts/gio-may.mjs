@@ -150,12 +150,13 @@ export function duBao({ dong, moc, uoc, doCua = () => null, doVong = [], today }
     dang.add(i);
     const m = moc[i]; const ma = (Array.isArray(m.hang) ? m.hang : []).map(chuoi);
     const mo = ma.map(x => theoMa.get(x)).filter(d => d && !d.daGiao);
-    let batDau = gioTuNgay(today); let vong = false;
+    let batDau = gioTuNgay(today); let vong = false; const phu = new Set();
     for (const d of mo) for (const x of (Array.isArray(d.dung_tren) ? d.dung_tren : []).map(chuoi)) {
       if (ma.includes(x)) continue;
       const dx = theoMa.get(x); if (!dx || dx.daGiao) continue;
       const j = mocCua.get(x); if (j === undefined) continue;
       const t = tinh(j); if (t.vong) { vong = true; continue; }
+      phu.add(j);
       if (t.hoanTatGio > batDau) batDau = t.hoanTatGio;
     }
     const tong = tongMoc(m, mo, uoc, conLai);
@@ -165,14 +166,38 @@ export function duBao({ dong, moc, uoc, doCua = () => null, doVong = [], today }
     const mucTieu = NGAY.test(chuoi(m.ngay)) ? chuoi(m.ngay) : null;
     const r = {
       vong, mo: mo.length, batDau: ngayTuGio(batDau), hoanTat: ngayTuGio(hoanTatGio), hoanTatGio, khoang: tong.khoang,
-      phanTram: tong.phanTram, gioCho, gioChoDo: cho.do, mucTieu, hang: ma,
+      phanTram: tong.phanTram, gioCho, gioChoDo: cho.do, mucTieu, hang: ma, _bd: batDau, _dai: giua(tong.khoang) + gioCho, _phu: [...phu],
     };
     r.quaTai = !!(mucTieu && !vong && r.hoanTat > mucTieu);
     dang.delete(i); kq.set(i, r); return r;
   };
   moc.forEach((m, i) => tinh(i));
+  // Một lộ trình là MỘT làn (hồ sơ road-map-de-dung, AC-10; hạt giống 2026-10-17-hat-giong-gio-may-theo-moc-khong-xep-noi-tiep):
+  // mốc còn việc sắp theo ngày (mốc không ngày đứng cuối, cùng ngày giữ thứ tự tệp); bắt đầu của mốc k = max(hôm nay, hoàn tất
+  // mốc trước trong làn, ràng buộc dung_tren). Máy coi như chạy 24/24 — nhịp ngày chưa đo (nhãn ở dòng mốc).
+  // Thứ tự làn theo PHỤ THUỘC trước, ngày sau: mốc chỉ vào làn khi mọi mốc nó đứng trên (`_phu`) đã vào — mốc sớm đứng trên
+  // việc của mốc muộn thì mốc muộn chạy trước (lượt chấm 1 của hồ sơ, AC-10). `_phu` của mốc không vòng chỉ chứa mốc không vòng
+  // nên đồ thị không có chu trình; vẫn giữ lối thoát: không mốc nào sẵn thì lấy mốc kế theo ngày.
+  const coNgay = i => NGAY.test(chuoi(moc[i].ngay));
+  const theoNgay = moc.map((m, i) => i).sort((a, b) => (coNgay(a) ? 0 : 1) - (coNgay(b) ? 0 : 1) || chuoi(moc[a].ngay).localeCompare(chuoi(moc[b].ngay)) || a - b);
+  const thuTu = []; const daXep = new Set(); const conLaiMoc = [...theoNgay];
+  while (conLaiMoc.length) {
+    const k = conLaiMoc.findIndex(i => { const r = kq.get(i); return !r || r.vong || r._phu.every(j => daXep.has(j) || !conLaiMoc.includes(j)); });
+    const [i] = conLaiMoc.splice(k < 0 ? 0 : k, 1); thuTu.push(i); daXep.add(i);
+  }
+  let lan = gioTuNgay(today);
+  for (const i of thuTu) {
+    const r = kq.get(i); if (!r || r.vong || !r.mo) continue;
+    let bd = Math.max(r._bd, lan);
+    for (const j of r._phu) { const t = kq.get(j); if (t && !t.vong && t.hoanTatGio > bd) bd = t.hoanTatGio; }
+    r.hoanTatGio = bd + r._dai; r.batDau = ngayTuGio(bd); r.hoanTat = ngayTuGio(r.hoanTatGio);
+    r.quaTai = !!(r.mucTieu && r.hoanTat > r.mucTieu); lan = r.hoanTatGio;
+  }
+  for (const r of kq.values()) { delete r._bd; delete r._dai; delete r._phu; }
   return kq;
 }
+// Nhịp ngày của máy chưa đo (vế 2 của hạt giống giờ máy, để vòng sau) — dòng mốc nói ra giả định 24/24 thay vì im.
+export const NHAN_24 = ' (máy chạy 24/24 — chưa đo nhịp ngày)';
 // Dòng khuôn luật 15/10 cho một mốc (tên ngắn do bên gọi đưa).
 export function dongMoc(ten, r, kVong) {
   if (r.vong) return `${ten}: không tính được (phụ thuộc vòng)`;
@@ -180,7 +205,7 @@ export function dongMoc(ten, r, kVong) {
   return `${ten}: bắt đầu ~${ngayVN(r.batDau)} · ~${khoangVN(r.khoang)} giờ máy · ${pt} · hoàn tất dự kiến ${ngayVN(r.hoanTat)}`
     + (r.mucTieu ? ` · mục tiêu ${ngayVN(r.mucTieu)}` : '')
     + (r.quaTai ? ` (quá tải — dự kiến ${ngayVN(r.hoanTat)}, mục tiêu ${ngayVN(r.mucTieu)})` : '')
-    + (r.gioChoDo ? '' : ' (chưa có giờ chờ đo)');
+    + (r.gioChoDo ? '' : ' (chưa có giờ chờ đo)') + NHAN_24;
 }
 // Tệp đóng băng của một hàng sắp mở: ước của hàng + dự báo của mốc chứa nó (nếu có) tại `today`.
 export function duBaoHoSo({ d, u, mocI, r, ten, today }) {
