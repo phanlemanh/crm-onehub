@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 6eb92d6e79feb32b236ad0b95de7b8995a2d2091
-human_signoff:
+human_signoff: manh 2026-10-19
 ---
 
 # Evidence Report: viec-rieng-chi-nguoi-trong-cuoc

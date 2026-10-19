@@ -5,7 +5,7 @@ slug: viec-rieng-chi-nguoi-trong-cuoc
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-19T10:56:38Z
 design_doc: docs/superpowers/specs/2026-10-19-viec-rieng-chi-nguoi-trong-cuoc-design.md
@@ -165,6 +165,17 @@ Later và Never ở `coverage-scan.md`.
 
 ## Notes
 
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-19:
+  - Ngoài-1: Lệnh đếm việc riêng vẫn chạy và báo lỗi đúng khi thiếu cấu hình kết nối. Chỉ có điều bản mô tả của phép kiểm chưa nhắc tới một trường hợp thiếu mà bài kiểm đã kiểm, nên người đọc mô tả sẽ không biết trường hợp đó có được kiểm.
+  - Ngoài-2: Bài kiểm cũ của màn dự án dùng dữ liệu thử thiếu một trường mà hệ thống thật luôn có. Vì vậy bài kiểm đó xanh dù đo trên dữ liệu không có thật, và một việc trong dự án có thể bị bài kiểm đó tính nhầm là «Việc riêng».
+  - Ngoài-3: Hiện lịch sử việc hiển thị đúng. Nhưng nếu sau này ai thêm thông tin vào một loại dòng lịch sử mà quên sửa chỗ chép tay, thông tin đó sẽ lặng lẽ biến mất khỏi lịch sử người dùng thấy.
+  - Ngoài-4: Hôm nay dòng lịch sử hiện đúng «một việc bạn không có quyền xem». Nếu sau này ai đổi kiểu dấu ngoặc trong bản dịch, câu có thể hiện lệch hoặc còn dấu ngoặc thừa, nhưng tiêu đề việc bị che vẫn không lộ.
+  - Ngoài-5: Bài kiểm tự động có thể báo xanh dù dòng tự dời hạn trong lịch sử của người ngoài cuộc bị bỏ mất hoặc hiện sai, nên lời hứa «tên việc bị che» ở chỗ này chưa được máy canh chắc chắn.
+  - Ngoài-6: Người có vai chỉ OKR bị từ chối xem việc, đúng như hứa, nhưng máy không phân biệt được bị từ chối đúng cách hay do hệ thống lỗi.
+  - Ngoài-7: Sau khi bỏ việc khỏi dự án, người ngoài cuộc không đọc được việc. Máy chưa kiểm chắc là họ nhận đúng thông báo «không có việc này» thay vì một lỗi khác.
+  - Ngoài-8: Máy chưa kiểm chặt rằng ô «Gắn với» của việc gắn thoả thuận hiện đúng tên thoả thuận; nếu sai chữ thì chỉ phát hiện khi nhìn màn hình.
+  - Ngoài-9: Bài kiểm màn hình dùng dữ liệu viết tay thay vì dữ liệu do hệ thống thật tạo ra, nên khó bắt lỗi khi hai phía lệch nhau; ghi chú trong hồ sơ nói quá lên về mức đó.
+  - Ngoài-10: Vài bài kiểm của công cụ phân loại tài liệu có thể báo xanh dù công cụ không nhận ra gì. Người dùng sản phẩm không bị ảnh hưởng.
 - Không đổi `packages/db/src/viec.ts` (T3) hay `packages/db/prisma`. Chạm tới thì nâng T3.
 - Chiều đỏ trong lịch sử: commit bài kiểm đứng trước commit sửa, và bài kiểm phải đỏ trên onehub `0d9ef3183`.
 - Giới hạn đã biết của E8: vế «màn dự án không còn V» đã đúng trên onehub, nên không có chiều đỏ trong lịch sử. Chiều
