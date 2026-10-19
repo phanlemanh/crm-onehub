@@ -1,19 +1,16 @@
 ---
 schema_version: 2
 feature_slug: trang-lo-trinh-mo-hinh-hien-thi
-verdict: REJECT
+verdict: PASS
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6b908808932a7695e07fdd34f97e7f241d0b6d85
+verified_commit: e96ab66de1b77433d00fcbaac73eb7648e902c79
 human_signoff:
 ---
 
 # Evidence Report: trang-lo-trinh-mo-hinh-hien-thi
-
-Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite hồi quy không gắn eval nào (`bun run test -- --filter=app --filter=@crm/ui` và `bunx turbo run build --force`) đỏ. Build đỏ ở lỗi kiểu (type check) ngay trong tệp bài kiểm của tính năng này, `apps/app/test/lo-trinh-mo-hinh.spec.ts` dòng 191 và 194. Chi tiết ở mục «Lệnh suite (hồi quy)».
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -28,13 +25,13 @@ Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite h�
 ## Evidence
 
 - eval: E1
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E1-r1
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ltmh_viec_moc
-  verified_at: 2026-10-19T14:06:39Z
+  verified_at: 2026-10-19T15:15:32Z
   output: |
-    Ran 1 test across 1 file. [1081.00ms]
+    Ran 1 test across 1 file. [1102.00ms]
 
 - eval: E2
   run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E2-r1
@@ -42,8 +39,9 @@ Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite h�
   baseline: n-a
   verifier: config:executors.test.ltmh_moc_hien
   verified_at: 2026-10-19T14:06:39Z
+  carried_from_round: 1
   output: |
-    Ran 2 tests across 1 file. [1203.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E3-r1
@@ -51,8 +49,9 @@ Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite h�
   baseline: n-a
   verifier: config:executors.test.ltmh_chua_hen
   verified_at: 2026-10-19T14:06:39Z
+  carried_from_round: 1
   output: |
-    Ran 1 test across 1 file. [1490.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E4-r1
@@ -60,8 +59,9 @@ Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite h�
   baseline: n-a
   verifier: config:executors.test.ltmh_ten
   verified_at: 2026-10-19T14:06:39Z
+  carried_from_round: 1
   output: |
-    Ran 1 test across 1 file. [1072.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E5
   run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E5-r1
@@ -69,17 +69,18 @@ Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite h�
   baseline: n-a
   verifier: config:executors.test.ltmh_doi_chieu
   verified_at: 2026-10-19T14:06:39Z
+  carried_from_round: 1
   output: |
-    Ran 2 tests across 1 file. [1.69s]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E6-r1
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ltmh_khoi_cu
-  verified_at: 2026-10-19T14:06:39Z
+  verified_at: 2026-10-19T15:15:32Z
   output: |
-    Ran 2 tests across 1 file. [1.52s]
+    Ran 2 tests across 1 file. [1234.00ms]
 
 - eval: E7
   run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-E7-r1
@@ -87,6 +88,7 @@ Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite h�
   baseline: n-a
   verifier: config:executors.script.ltmh_do_man
   verified_at: 2026-10-19T14:06:39Z
+  carried_from_round: 1
   screenshot: evidence/E7-step1.png
   observed: |
     Da mo bang Read ca 8 anh (anh toan trang 12000px cao hien thi rat nho nen cat vung dau/cuoi bang PIL de doc chu; da xem day du cac vung: 1280-vi-toi dau + cuoi, 1280-en-sang dau, 375-vi-sang dau + cuoi, 375-en-toi dau; 4 anh con lai kiem o dang toan trang va khop ket qua do). Thay: trang Lo trinh o kieu xem Moc, loc Tat ca 194, dong thoi gian doc voi tung moc: ngay ben trai, ten moc, ten lo trinh (Kho tai lieu / OKR) ngay duoi, ROI MOI toi dong so rieng duoi ten lo trinh ("da giao du 1 viec", "da giao du 8 viec", "con 6/6 viec" o nen toi vi; "All 1 delivered", "All 8 delivered" o ban en), roi moi toi danh sach ten viec day du (co dong rot hai dong, khong bi cat ba cham), moi viec co chip trang thai (Da giao / Chua bat dau / Khac; Shipped o ban en).
@@ -95,54 +97,40 @@ Verdict REJECT dù bảy eval của tính năng đều xanh: hai lệnh suite h�
 
 ### Lệnh suite (hồi quy)
 
-Hai lệnh dưới đây không gắn eval nào và đỏ; đó là lý do verdict là REJECT trong khi `failed_evals` rỗng.
-
 - cmd: bun run test -- --filter=api
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-19T14:06:39Z
+  verified_at: 2026-10-19T15:15:32Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-19T14:06:39Z
-  output: |
-    Ran 906 tests across 91 files: 905 pass, 1 fail.
-    (fail) kho chuoi cua vong ③a > moi ham ghep bien co khang dinh, va so ham bang so khang dinh [1.40ms]
-    Failed: app#test. Nguyên nhân chưa quy được về tính năng này hay về cây nền.
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-10-19T15:15:32Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-19T14:06:39Z
+  verified_at: 2026-10-19T15:15:32Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-19T14:06:39Z
+  verified_at: 2026-10-19T15:15:32Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-19T14:06:39Z
+  verified_at: 2026-10-19T15:15:32Z
 
 - cmd: bun run lint:slop
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_lint_slop-r1
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-19T14:06:39Z
+  verified_at: 2026-10-19T15:15:32Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bunx_turbo_run_build_force-r1
-  exit_code: 1
-  verified_at: 2026-10-19T14:06:39Z
-  output: |
-    app:build: Compiled successfully in 14.7s, then Running TypeScript failed.
-    app:build: test/lo-trinh-mo-hinh.spec.ts(191,5): error TS2769: No overload matches this call.
-    app:build: Argument of type '(string | null | undefined)[]' is not assignable to parameter of type '(string | null)[]'.
-    app:build: test/lo-trinh-mo-hinh.spec.ts(194,5): error TS2769: No overload matches this call.
-    app:build: Argument of type '(number | boolean | string[] | null | undefined)[][]' is not assignable to parameter of type '(number | boolean | string[] | null)[][]'.
-    app:build: Failed to type check.
-    Tasks: 4 successful, 5 total. Failed: app#build
+  run_id: minted-trang-lo-trinh-mo-hinh-hien-thi-SUITE-bunx_turbo_run_build_force-r2
+  exit_code: 0
+  verified_at: 2026-10-19T15:15:32Z
 
 ## Known limits
 
@@ -150,21 +138,21 @@ Hai lệnh dưới đây không gắn eval nào và đỏ; đó là lý do verdi
 
 ## Analyst
 
-none — không eval nào của tính năng xanh trên cả HEAD lẫn baseline; cả bảy eval đều là eval mới, baseline không đo được nên mọi trường baseline là n-a (xem bên dưới).
+carried tu round 1 — baseline khong do lai round nay.
 
-### Baseline khong do
+Baseline khong do: round nay khong do lai (evals.yaml khong doi tu lan baseline cuoi, round 1); field baseline cua moi eval ghi n-a.
 
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-mo-hinh.spec.ts -t ltmh-viec-moc && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-viec-moc: bo qua baseline: tep apps/app/test/lo-trinh-mo-hinh.spec.ts co o cay dang kiem nhung chua co o merge-base 926dfc6076b6f47022a36f2a81c15d01ae4ae130 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-moc-hien: bo qua baseline: tep apps/app/test/lo-trinh-mo-hinh.dom.tsx co o cay dang kiem nhung chua co o merge-base 926dfc6076b6f47022a36f2a81c15d01ae4ae130 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-chua-hen: bo qua baseline: tep apps/app/test/lo-trinh-mo-hinh.dom.tsx co o cay dang kiem nhung chua co o merge-base 926dfc6076b6f47022a36f2a81c15d01ae4ae130 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-ten: bo qua baseline: tep apps/app/test/lo-trinh-mo-hinh.dom.tsx co o cay dang kiem nhung chua co o merge-base 926dfc6076b6f47022a36f2a81c15d01ae4ae130 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-doi-chieu: bo qua baseline: tep apps/app/test/lo-trinh-mo-hinh.dom.tsx co o cay dang kiem nhung chua co o merge-base 926dfc6076b6f47022a36f2a81c15d01ae4ae130 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-mo-hinh.spec.ts -t ltmh-khoi-cu && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-khoi-cu: bo qua baseline: tep apps/app/test/lo-trinh-mo-hinh.spec.ts co o cay dang kiem nhung chua co o merge-base 926dfc6076b6f47022a36f2a81c15d01ae4ae130 — eval moi, chay tren code cu khong phan biet gi
+Eval khong-phan-biet: none. Lenh suite xanh-ca-hai-phia la regression-guard binh thuong, khong liet ke.
+
+## Judge panels
+
+Khong co judgment item nao trong hop dong nay — khong co panel nao duoc cham, khong co human_override can dien.
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lần, không eval ngẫu nhiên)
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: bảy eval E1-E7 xanh; hai lệnh suite không gắn eval đỏ — `bun run test -- --filter=app --filter=@crm/ui` (một ca «kho chuoi cua vong ③a» đỏ, chưa quy nguyên nhân) và `bunx turbo run build --force` (lỗi kiểu TS2769 ở `apps/app/test/lo-trinh-mo-hinh.spec.ts` dòng 191 và 194, mảng có thể chứa `undefined` truyền vào `toEqual` kiểu hẹp). Returned to implementation.
+Round 1: lenh suite app/@crm/ui va build do (khong gan eval nao) — tra ve implementation; ghim nhan dong so moc, sua kieu bai kiem ban chup (a99a281d1), duong nen xanh tren ban sach (e96ab66de).
+Round 2: E1 va E6 chay lai, E2-E5 va E7 carry-forward tu round 1; bay lenh suite xanh tren verified_commit e96ab66de1b77433d00fcbaac73eb7648e902c79.
