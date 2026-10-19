@@ -71,7 +71,8 @@ const en = {
 			ten: "Give the product a name of 1–60 characters.",
 			kho: "Write the repository as owner/repo.",
 			nhanh: "Write a branch name without spaces.",
-			duongTep: "Write a path inside the repository, without «..» and not starting with /.",
+			duongTep:
+				"Write a path inside the repository, without «..» and not starting with /.",
 		},
 		huy: "Cancel",
 		luu: "Save",
@@ -162,7 +163,8 @@ const vi: SanPhamMessages = {
 			ten: "Đặt tên sản phẩm dài 1–60 ký tự.",
 			kho: "Viết kho theo dạng chủ/kho.",
 			nhanh: "Viết tên nhánh, không có khoảng trắng.",
-			duongTep: "Viết đường tệp trong kho, không chứa «..» và không bắt đầu bằng /.",
+			duongTep:
+				"Viết đường tệp trong kho, không chứa «..» và không bắt đầu bằng /.",
 		},
 		huy: "Huỷ",
 		luu: "Lưu",
