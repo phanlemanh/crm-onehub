@@ -1,9 +1,9 @@
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
 	PageShellContent,
 	PageShellDescription,
+	PageShellFallback,
 	PageShellHeader,
 	PageShellHeading,
 	PageShellTitle,
@@ -42,7 +42,7 @@ export default async function SoDoPage({
 				</PageShellHeading>
 			</PageShellHeader>
 			<PageShellContent>
-				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
+				<Suspense fallback={<PageShellFallback />}>
 					<NoiDung searchParams={searchParams} />
 				</Suspense>
 			</PageShellContent>
