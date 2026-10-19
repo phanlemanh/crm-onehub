@@ -167,7 +167,13 @@ export class TinHieuService {
 			if (doi.count === 0 && !hang.archivedAt)
 				throw new ConflictException(TIN_HIEU.loi.luuTruDaLayVe);
 			if (doi.count === 1)
-				await this.ghiVet(tx, id, hang.so, nguoi.id, "luu-tru");
+				await this.ghiVet(tx, {
+					tinHieuId: id,
+					so: hang.so,
+					nguoiId: nguoi.id,
+					loai: "luu-tru",
+					luc,
+				});
 			return { so: hang.so, luc: hang.archivedAt ?? luc, doi: doi.count };
 		});
 		this.logger.log({
@@ -183,6 +189,7 @@ export class TinHieuService {
 		if (!laQuanTriWorkspace(nguoi.role)) throw new ForbiddenException();
 		const kq = await this.db.$transaction(async (tx) => {
 			await tx.$executeRaw`LOCK TABLE "tinHieu" IN ROW EXCLUSIVE MODE`;
+			const luc = new Date();
 			const doi = await tx.tinHieu.updateMany({
 				where: { id, archivedAt: { not: null } },
 				data: { archivedAt: null, archivedById: null },
@@ -193,7 +200,13 @@ export class TinHieuService {
 			});
 			if (!hang) throw new NotFoundException(TIN_HIEU.loi.khongCo);
 			if (doi.count === 1)
-				await this.ghiVet(tx, id, hang.so, nguoi.id, "khoi-phuc");
+				await this.ghiVet(tx, {
+					tinHieuId: id,
+					so: hang.so,
+					nguoiId: nguoi.id,
+					loai: "khoi-phuc",
+					luc,
+				});
 			return { so: hang.so, doi: doi.count };
 		});
 		this.logger.log({
@@ -207,14 +220,15 @@ export class TinHieuService {
 
 	private ghiVet(
 		tx: Parameters<Parameters<Db["$transaction"]>[0]>[0],
-		tinHieuId: string,
-		so: number,
-		nguoiId: string,
-		loai: LoaiVetTinHieu,
+		vet: {
+			tinHieuId: string;
+			so: number;
+			nguoiId: string;
+			loai: LoaiVetTinHieu;
+			luc: Date;
+		},
 	) {
-		return tx.tinHieuVet.create({
-			data: { tinHieuId, so, nguoiId, loai },
-		});
+		return tx.tinHieuVet.create({ data: vet });
 	}
 
 	async xoa(nguoi: NguoiGoiTinHieu, id: string): Promise<{ ok: true }> {

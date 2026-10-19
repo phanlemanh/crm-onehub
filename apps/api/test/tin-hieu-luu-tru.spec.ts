@@ -209,6 +209,10 @@ describe("gtr-luu-tru", () => {
 			expect(v[0]?.nguoiId).toBe(uid(n));
 			expect(v[0]?.so).toBe(t.so);
 			expect(
+				v[0]?.luc.getTime(),
+				`${o}: vet luu tru khac luc luu tru tren tin hieu`,
+			).toBe(h.archivedAt?.getTime());
+			expect(
 				(await danhSach("owner", "tinHieu.tatCa")).map((d) => d.id),
 				`${o}: danh sach dang dung con tin hieu da luu tru`,
 			).not.toContain(t.id);

@@ -445,6 +445,27 @@ describe("ca-man", () => {
 		});
 });
 
+describe("ca-man-hai-dong", () => {
+	test("ca-man-hai-dong: dong dau dang cho thi khong luu tru hay khoi phuc duoc dong khac", async () => {
+		dangDung = [hang(1), hang(2)];
+		ketLuuTru = "cho";
+		const o = await trang();
+		await luuTruDong(o, "crm-1");
+		expect(goiLuuTru).toEqual(["t-1"]);
+		await bam(menuCua(o, "crm-2"));
+		expect(
+			trongMenu('[data-luu-tru-tin-hieu="crm-2"]')?.hasAttribute(
+				"data-disabled",
+			),
+			"luu tru dong khac khi dong truoc dang cho",
+		).toBe(true);
+		await bam(trongMenu('[data-luu-tru-tin-hieu="crm-2"]'));
+		expect(goiLuuTru, "luu tru dong khac khi dong truoc dang cho").toEqual([
+			"t-1",
+		]);
+	});
+});
+
 describe("nguoi-gui", () => {
 	test("nguoi-gui: tin hieu da luu tru mang nhan xam va cau rieng, van xoa duoc, khong lo nguoi luu tru", async () => {
 		for (const html of [null, "<html></html>"]) {

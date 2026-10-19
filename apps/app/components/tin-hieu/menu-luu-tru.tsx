@@ -32,7 +32,7 @@ export function MenuLuuTru({
 }) {
 	const m = tinHieuMessages(useLocale());
 	const t = m.tatCa.luuTru;
-	const cho = thaoTac.dangCho === dong.id;
+	const cho = thaoTac.dangCho !== null;
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
