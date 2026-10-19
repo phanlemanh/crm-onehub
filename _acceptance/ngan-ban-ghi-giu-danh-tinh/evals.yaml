@@ -1,0 +1,268 @@
+feature_slug: ngan-ban-ghi-giu-danh-tinh
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.gdt_danh_tinh
+    paths:
+      - "apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx"
+      - "apps/app/components/crm/record-sheet/record-stack.ts"
+      - "apps/app/test/ngan-ban-ghi-giu-danh-tinh.dom.tsx"
+    expected: |
+      exit 0; NapSanKhiMoNgan THAT boc mot dau do dem so lan dung (mount) va go (unmount); useRecordStack THAT tren
+      NuqsTestingAdapter hasMemory, cac ham goi tu nut ben trong cay. Ma tran viet truoc 7 buoc phu ca nam ham:
+      open(company:a) [rong->1], lotDuoi(contact:c) [1->2], close() [2->1], close() [1->rong], open(deal:b) [rong->1],
+      thayDinh(deal:d) [1->1 khac], closeAll() [->rong]. Sau MOI buoc doc stack de chung minh buoc da xay ra dung
+      (so khoa ky vong viet truoc tung buoc), roi doc dau do: dung === 1 va go === 0. expect(soBuoc).toBe(7).
+      CHIEU DO ghim (E5 ca 1): ban sao tep cua merge-base -> do "gdt: chu ngan dung lai khi doi ngan".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.gdt_tai_xong
+    paths:
+      - "apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx"
+      - "apps/app/components/crm/record-sheet/sau-khi-tai-xong.ts"
+      - "apps/app/test/ngan-ban-ghi-giu-danh-tinh.dom.tsx"
+    expected: |
+      exit 0; document.readyState "complete"; dau do ben trong NapSanKhiMoNgan ghi gia tri useSauKhiTaiXong() o moi
+      luot ve. Cho co bat true khi ngan rong, roi open(deal:b) va closeAll() roi open(deal:b) lan nua: moi gia tri ghi
+      tu luot ve dau sau lan open dau tro di deu la true. Doi chung duong cung tep: mot dau do dung moi ngay luc do
+      (khong boc) ghi false o luot ve dau — thuoc nhin thay duoc mot lan dung lai.
+      CHIEU DO ghim (E5 ca 1): ban sao tep cua merge-base -> do "gdt: ngan dong mot nhip roi moi mo".
+
+  - id: E3
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.gdt_nap_vai
+    paths:
+      - "apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx"
+      - "apps/app/lib/ngan-ban-ghi-nap-san.ts"
+      - "apps/app/test/ngan-ban-ghi-giu-danh-tinh.dom.tsx"
+    expected: |
+      exit 0; trang thai may chu dehydrate bang chiKhoaNapSan THAT tu mot QueryClient co ca ba khoa VA mot khoa ngoai
+      danh sach (users.me). Ma tran viet truoc 2 vai (khoaNapSan(true), khoaNapSan(false)): dung NapSanKhiMoNgan luc
+      ngan rong -> bo dem khong co khoa nap san nao va khong co users.me; open(deal:b) -> o luot ve dau sau open dau do
+      doc moi khoa cua vai thay du lieu may chu, tap khoa trong bo dem bang dung tap cua vai, users.me khong co.
+      expect(soVai).toBe(2). Ca them: bo dem trinh duyet co san users.list voi dataUpdatedAt nho hon ban may chu;
+      open(deal:b), qua mot nhip effect -> users.list mang du lieu may chu.
+      CHIEU DO ghim (E5 ca 2): luon do state ke ca khi ngan rong -> do "gdt: ngan rong da nap san"; (E5 ca 4) chi do
+      khoa chua co trong bo dem -> do "gdt: khoa cu khong nhan ban may chu moi hon".
+
+  - id: E4
+    criterion: AC-7
+    executor: test
+    layer: logic
+    cmd: config:executors.test.gdt_khong_de
+    paths:
+      - "apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx"
+      - "apps/app/test/ngan-ban-ghi-giu-danh-tinh.dom.tsx"
+    expected: |
+      exit 0; ban may chu users.list = [Lan] dehydrate luc T. Mo ngan, roi trinh duyet setQueryData users.list =
+      [Lan, Minh] (moi hon T), closeAll, open lai: users.list van la [Lan, Minh] o luot ve dau va sau mot nhip effect.
+      Doi chung duong cung tep: go khoa users.list khoi bo dem roi open lai -> nhan ban may chu [Lan].
+      CHIEU DO ghim (E5 ca 3): hydrate cuong buc moi lan mo -> do "gdt: du lieu moi bi ban may chu de".
+
+  - id: E5
+    criterion: AC-1
+    executor: script
+    layer: logic
+    cmd: config:executors.script.gdt_chieu_do
+    paths:
+      - "apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx"
+      - "apps/app/test/ngan-ban-ghi-giu-danh-tinh.dom.tsx"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/chieu-do.mjs"
+    expected: |
+      exit 0 va "gdt chieu do: dat 5/5". Tu kiem cay truoc. Moi ca dung mot git worktree tach roi tu HEAD (duong goc suy
+      tu vi tri tep rang), ap dung mot dot bien vao nap-san-khi-mo-ngan.tsx (khop dung 1 cho, khong khop -> ma 2), chay
+      tep DOM cua ho so trong ban sao; ca dat khi ma thoat khac 0 VA dau ra chua dung thong diep ghim:
+      (1) tep cua merge-base voi origin/onehub -> "gdt: chu ngan dung lai khi doi ngan" va "gdt: ngan dong mot nhip roi moi mo";
+      (2) luon do state -> "gdt: ngan rong da nap san";
+      (3) hydrate cuong buc moi lan stack khac rong -> "gdt: du lieu moi bi ban may chu de";
+      (4) chi do khoa chua co trong bo dem -> "gdt: khoa cu khong nhan ban may chu moi hon";
+      (5) doi chung duong: ban sao KHONG dot bien -> exit 0.
+      Cay that khong doi sau luot (so bam truoc/sau); lech -> "CHIEU DO GHI CAY <tep>" va exit 1.
+
+  - id: E6
+    criterion: AC-3
+    executor: script
+    layer: logic
+    cmd: config:executors.script.gdt_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/responsive-sheet.tsx"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
+    expected: |
+      exit 0 va "ngan-ban-ghi-giu-danh-tinh man: dat"; ma tran viet truoc 2 kho (1440, 390) x 3 phep (dong, mo, mo lai)
+      = 6 o; moi o in mot dong "o <kho> <phep>: dat|<ly do>" vao stdout VA vao evidence/gdt-man.log; so dong o === 6.
+      Phep dong: /deals?record=deal:seed-deal-wise-1 da mo xong; cai MutationObserver tren document.body (subtree)
+      truoc khi bam nut dong; ngay sau bam: phan tu ngan ([data-slot=sheet-content] o 1440, [data-slot=drawer-content]
+      o 390) con trong trang, data-state="closed", getAnimations() co it nhat mot animation playState "running"; lan go
+      phan tu do (observer) xay ra SAU luc moi animation cua no ket thuc (animationend hoac finished).
+      CHIEU DO ghim (E12): phien do dung tu ban sao mang nap-san-khi-mo-ngan.tsx cua merge-base -> do
+      "man: ngan bien mat khi dong".
+
+  - id: E7
+    criterion: AC-4
+    executor: script
+    layer: logic
+    cmd: config:executors.script.gdt_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/responsive-sheet.tsx"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
+    expected: |
+      exit 0 va "ngan-ban-ghi-giu-danh-tinh man: dat"; cung luot voi E6, phep mo: /deals da tai xong (khong record=),
+      cai MutationObserver roi bam dong «Wise» cua bang, ghi performance.now() luc bam. Phan tu ngan duoc chen vao trang
+      trong <= 150 ms ke tu luc bam, chen dung 1 lan, luc chen getAnimations() co animation dang chay, va observer khong
+      ghi lan go nao cho toi khi moi animation cua no ket thuc.
+      Gioi han khai: loi luc mo cua ban cu la tre mot nhip ranh (requestIdleCallback), khong phai bien roi hien; tren
+      may ranh nhip do co the < 150 ms nen E7 la thuoc giu-khong-hoi-quy. Chieu do cua no (E12) them do tre 400 ms vao
+      sau-khi-tai-xong.ts cua ban sao mang ma cu -> do "man: ngan mo tre".
+
+  - id: E8
+    criterion: AC-5
+    executor: script
+    layer: logic
+    cmd: config:executors.script.gdt_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/responsive-sheet.tsx"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
+    expected: |
+      exit 0 va "ngan-ban-ghi-giu-danh-tinh man: dat"; cung luot voi E6, phep mo lai: ngan dang mo deal Wise, gan
+      dataset.gdtDau = "<MA>" vao phan tu ngan, cai MutationObserver, bam dong, 60 ms sau (giua 300 ms truot ra; khung
+      truoc do phai co ngan dong voi hieu ung dang chay) goi .click() cua chinh phan tu dong «Wise» trong bang (khong
+      qua lop phu dang mo dan), cho moi animation ket thuc:
+      record= lai la deal:seed-deal-wise-1, phan tu ngan dang mo (data-state="open") VAN mang dataset.gdtDau = "<MA>",
+      va observer khong ghi lan go nao cua phan tu ngan.
+      CHIEU DO ghim (E12): ban sao mang ma cu -> do "man: ngan mo lai la phan tu moi".
+
+  - id: E9
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gdt_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/responsive-sheet.tsx"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
+    expected: |
+      exit 0 va "ngan-ban-ghi-giu-danh-tinh man: dat"; luot chup TACH khoi luot do cua E6–E8: tren mot trang moi, CDP
+      Animation.setPlaybackRate 0.1 (300 ms thanh 3 s), dong ngan dang mo deal Wise, chup giua luc truot ra:
+      gdt-dong-1440.png, gdt-dong-390.png. Nhin anh: ngan hien mot phan, lech khoi vi tri cuoi theo huong truot (phai o
+      1440, duoi o 390), noi dung «Wise» van doc duoc trong phan ngan con thay; danh sach phia sau thay ro. Doi chieu
+      voi gdt-man.log: dong "o 1440 dong" va "o 390 dong" la dat.
+      Ho so da signed-off/machine-cleared thi khong chep anh vao ho so.
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
+      - "Doc evidence/gdt-man.log (6 dong o)"
+      - "Nhin gdt-dong-1440.png va gdt-dong-390.png"
+    evidence_required:
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-man.log"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-dong-1440.png"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-dong-390.png"
+
+  - id: E10
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gdt_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/responsive-sheet.tsx"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
+    expected: |
+      exit 0 va "ngan-ban-ghi-giu-danh-tinh man: dat"; cung luot chup cham cua E9: tu /deals khong record=, bam dong
+      «Wise», chup giua luc truot vao: gdt-mo-1440.png, gdt-mo-390.png. Nhin anh: ngan dang vao, lech khoi vi tri cuoi
+      theo huong truot, danh sach van thay phia sau. Doi chieu gdt-man.log: "o 1440 mo" va "o 390 mo" la dat.
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd"
+      - "Nhin gdt-mo-1440.png va gdt-mo-390.png, doi chieu gdt-man.log"
+    evidence_required:
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-man.log"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-mo-1440.png"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-mo-390.png"
+
+  - id: E11
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gdt_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/components/responsive-sheet.tsx"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
+    expected: |
+      exit 0 va "ngan-ban-ghi-giu-danh-tinh man: dat"; cung luot chup cham cua E9, o 1440: dong ngan, giua luc truot ra
+      goi .click() cua dong «Wise», chup giua luc ngan quay lai: gdt-mo-lai-1440.png. Nhin anh: ngan dang o giua duong
+      (khong o vi tri dau cua mot lan mo moi tu mep), noi dung «Wise» doc duoc. Doi chieu gdt-man.log: "o 1440 mo lai"
+      va "o 390 mo lai" la dat.
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd"
+      - "Nhin gdt-mo-lai-1440.png, doi chieu gdt-man.log"
+    evidence_required:
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-man.log"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/gdt-mo-lai-1440.png"
+
+  - id: E12
+    criterion: AC-3
+    executor: script
+    layer: logic
+    cmd: config:executors.script.gdt_man_chieu_do
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
+    expected: |
+      exit 0 va "chieu do: DO DUNG GHIM"; man.mjs --chieu-do tu dung git worktree tu HEAD theo khuon chieuDo cua
+      _acceptance/kho-tai-lieu/rang/man-lib.mjs (bun install, .env, xoa bien phien) vi phai cam vao HAI tep, roi cam vao ban sao: nap-san-khi-mo-ngan.tsx cua merge-base voi origin/onehub VA them tre 400 ms truoc datXong(true)
+      trong sau-khi-tai-xong.ts; chay man.mjs qua phien do cua ban sao: ma 1 va dau ra chua du ca ba
+      "man: ngan bien mat khi dong", "man: ngan mo tre", "man: ngan mo lai la phan tu moi".
+
+  - id: E13
+    criterion: AC-8
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vs_nap_san_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx"
+      - "apps/app/lib/ngan-ban-ghi-nap-san.ts"
+      - "apps/app/test/ngan-ban-ghi-nap-san.dom.tsx"
+    expected: |
+      exit 0; bai ngan-ban-ghi-nap-san.dom.tsx cua #469 chay lai KHONG sua tep: sau ca deu xanh, gom ca doi chung
+      "ngan khong nap san tao khoa rong thi trang doc rong o lan render dau" va "ngan rong khong nap".
+
+  - id: E14
+    criterion: AC-8
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vs_chieu_do_nap_san
+    paths:
+      - "apps/app/lib/ngan-ban-ghi-nap-san.ts"
+      - "apps/app/test/ngan-ban-ghi-nap-san.dom.tsx"
+      - "_acceptance/ve-sinh-do-san-onehub/rang/chieu-do.mjs"
+    expected: |
+      exit 0; chieu do «nap-san» cua ho so da ky ve-sinh-do-san-onehub chay lai khong sua: ban sao bo users.list khoi
+      vai day du -> bai #469 do voi "trang doc rong luc hydrate: users.list" (thuoc #469 van biet do sau khi doi hinh cay).
+
+  - id: E15
+    criterion: AC-8
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vs_hydrat_record
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/app/(app)/[slug]/layout.tsx"
+      - "_acceptance/ve-sinh-do-san-onehub/rang/hydrat-record.mjs"
+    expected: |
+      exit 0; phep do loi hydrat cua ho so da ky ve-sinh-do-san-onehub chay lai khong sua: mo thang duong dan co
+      record= o 1440 va 390, khong mot loi console nao khop /hydrat/i.
