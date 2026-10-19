@@ -295,14 +295,14 @@
     {
       "ma": "DA11",
       "slug": "viec-rieng-chi-nguoi-trong-cuoc",
-      "cau_giao": "«Việc riêng chỉ người trong cuộc thấy — cả trên Gantt và mọi màn dự án»",
+      "cau_giao": "«Lịch sử việc che tiêu đề những việc người xem không được thấy, cả trong dự án»",
       "trang_thai": "chưa mở",
-      "ten": "Việc riêng chỉ người trong cuộc thấy",
-      "ten_ngan": "Việc riêng",
+      "ten": "Lịch sử việc không lộ tiêu đề việc khuất",
+      "ten_ngan": "Lịch sử che việc khuất",
       "dung_tren": [
         "DA4"
       ],
-      "ghi_chu": "T1 ở Cổng Bằng chứng DA4 18/10: khung việc trong dự án ghi «Việc riêng — chỉ người trong cuộc thấy» nhưng thành viên khác vẫn thấy việc đó trên Gantt; đang ở production từ 18/10. Chủ kho 19/10: sửa gấp, đứng đầu làn M5. Có thể T3 nếu đổi luật thấy việc ở packages/db.",
+      "ghi_chu": "T1 ở Cổng Bằng chứng DA4 18/10 («Việc riêng — chỉ người trong cuộc thấy» nhưng thành viên khác vẫn thấy trên Gantt). Phiên DA11 19/10 đo lại: việc trong dự án là việc chung, khung việc nói đúng; chỗ lộ thật là lịch sử việc hiện tiêu đề việc người xem không thấy (cùng họ DA2b). Chủ kho chọn «A · đếm: có» ở phiên DA11: không đổi luật thấy. Chủ kho 19/10: sửa gấp, đứng đầu làn M5.",
       "buoc_ke": "Làn M5 · thứ 1 (gấp)"
     },
     {
