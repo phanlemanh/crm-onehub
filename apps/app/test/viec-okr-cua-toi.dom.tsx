@@ -229,7 +229,7 @@ describe("the viec OKR", () => {
 		);
 		expect(
 			dong().map((d) => d.querySelector("a")?.getAttribute("href")),
-		).toEqual(["/ws/okr/hoi-y?kyOkr=n27", "/ws/okr/hoi-y?kyOkr=n26"]);
+		).toEqual(["/ws/okr/lay-y-kien?kyOkr=n27", "/ws/okr/lay-y-kien?kyOkr=n26"]);
 		expect(dong().map((d) => d.querySelector("svg") !== null)).toEqual([
 			true,
 			true,

@@ -467,7 +467,7 @@ describe("dhk-don-dich", () => {
 			(nutThem()?.tagName === "A" ? nutThem() : null);
 		const href = a?.getAttribute("href") ?? "";
 		const u = new URL(href, "http://x");
-		expect(u.pathname).toBe("/ws/okr/theo-don-vi");
+		expect(u.pathname).toBe("/ws/okr/bo-okr");
 		expect(u.searchParams.get("kyOkr")).toBe("q4");
 		expect(u.searchParams.get("donOkr")).toBe("pb:P2");
 		expect(u.searchParams.get("new")).toBe("true");
@@ -603,7 +603,7 @@ describe("dhk-hanh-dong", () => {
 				await nhip(6);
 				const h = hang();
 				const con = h ? [...h.children] : [];
-				const mong = (pha === "lap-ke-hoach" ? 4 : 3) + (hoiKara ? 1 : 0);
+				const mong = (pha === "lap-ke-hoach" ? 3 : 2) + (hoiKara ? 1 : 0);
 				s.kiem(
 					con.length === mong,
 					`dhk-hanh-dong: ${t} ${pha} co ${con.length} phan tu, mong ${mong}`,
@@ -614,9 +614,9 @@ describe("dhk-hanh-dong", () => {
 					`dhk-hanh-dong: ${t} ${pha} nut them-muc-tieu khong la cuoi hang hanh dong`,
 				);
 				s.kiem(
-					Boolean(q("[data-chon-chu-ky-gia]", h ?? document)) &&
+					!q("[data-chon-chu-ky-gia]", h ?? document) &&
 						Boolean(q("[data-nut=them-cach]", h ?? document)),
-					`dhk-hanh-dong: ${t} ${pha} thieu o chu ky hoac nut «…»`,
+					`dhk-hanh-dong: ${t} ${pha} o chu ky con trong hang hoac thieu nut «…»`,
 				);
 				s.kiem(
 					(pha === "lap-ke-hoach") ===
