@@ -48,8 +48,8 @@ import {
 	hopTim,
 	KHONG_MOC,
 	KHONG_NHOM,
-	khoaMocCua,
 	locHopLe,
+	mocHienCua,
 	phangViec,
 	sapXep,
 	TRE,
@@ -81,7 +81,7 @@ function cotBang(m: LoTrinhMessages): DataTableColumn<Viec>[] {
 					data-viec-khoa={v.khoa}
 				>
 					<span className="font-medium" translate="no">
-						{v.cau_giao}
+						{v.ten}
 					</span>
 					<span className="text-muted-foreground text-xs" translate="no">
 						{v.ma}
@@ -269,14 +269,10 @@ export function TrangLoTrinh({
 			searchable: true,
 			options: [
 				{ value: TRE, label: m.loc.treMoc },
-				...duLieu.lo_trinh.flatMap((lo) =>
-					lo.moc
-						.filter((x) => x.hang.length > 0)
-						.map((x) => ({
-							value: khoaMocCua(lo.tep, x),
-							label: `${formatDay(x.ngay, locale)} · ${x.ten}`,
-						})),
-				),
+				...mocHienCua(duLieu).map((x) => ({
+					value: x.khoa,
+					label: `${formatDay(x.moc.ngay, locale)} · ${x.moc.ten}`,
+				})),
 				{ value: KHONG_MOC, label: m.loc.chuaHenMoc },
 			],
 		},

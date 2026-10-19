@@ -76,7 +76,7 @@ export function HoSoViec({
 								{v.nhom ? ` · ${v.nhom}` : ""}
 							</span>
 						}
-						title={<span translate="no">{v.cau_giao}</span>}
+						title={<span translate="no">{v.ten}</span>}
 					/>
 					<DetailSheetStats>
 						<DetailSheetStat label={m.hoSo.trangThai}>
