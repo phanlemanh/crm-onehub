@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 1a899fe05955121f4f79fa2b52915c68fcb0acec
-human_signoff:
+human_signoff: manh 2026-10-19 — ký Cổng 2 trên verdict PASS 16/16 eval + 7 suite (S4 round 5, wf_5b4d3132-dfc, sau gộp onehub d479d1c6b). Ngoài-1, 4, 7, 8, 9, 10, 13, 15–21 ghi Known limits; Ngoài-2, 5, 6 mở hợp đồng mới; Ngoài-3, 11, 12, 14 chấp nhận, không sửa; đồng ý phần cắt; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: sua-sau-chay-that

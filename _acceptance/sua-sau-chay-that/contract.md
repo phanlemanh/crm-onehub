@@ -5,7 +5,7 @@ slug: sua-sau-chay-that
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-14
 design_doc: _acceptance/sua-sau-chay-that/design.md
@@ -56,3 +56,18 @@ Không quét không gian: danh sách mục là đầu vào chủ kho đã chọn
 
 - Mọi sửa là T2: không `migration`, không chạm `packages/auth` hay module T3 của API.
 - AC-13 gọi model thật qua AI Gateway (khoảng 96 lượt hỏi, ước $2–4 như lượt đo của `bo-cau-hoi-mau`).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-19:
+  - Ngoài-1: Thẻ Cổng Bằng chứng của lượt 4 đếm 8 phép kiểm chưa đạt trong khi chỉ có 2, vì bộ vẽ thẻ của kit đọc nguyên chữ ô kết quả có ghi chú «mang sang»; người dùng Kho tài liệu không bị ảnh hưởng.
+  - Ngoài-4: Danh sách loại tệp nhận khi tải nguồn còn một bản chép ở phía lưu trữ tệp; sửa một bên mà quên bên kia thì người dùng bị từ chối khi tải.
+  - Ngoài-7: Bộ quét quyết định bỏ qua kiểm thử cho thay đổi chỉ chạm tài liệu có thể coi một tệp không đọc được là tệp rỗng.
+  - Ngoài-8: Một phép kiểm của hồ sơ khác (push-ghim-lai-t1) đo cổng kiểm của một commit cũ chứ không phải bản của cây đang xét.
+  - Ngoài-9: Phép kiểm E7 của hồ sơ lam-moi-goi-y-ke-hoach lấy mốc theo nhánh đang mở, nên chấm lại sau gộp có thể quét nhầm phạm vi.
+  - Ngoài-10: Công cụ chống xoá bài kiểm của hồ sơ lam-moi-goi-y-ke-hoach bỏ sót vài dạng bài kiểm.
+  - Ngoài-13: Phép so kết quả đo bộ câu mẫu tự tính lại cách xét «đạt lượt hai» thay vì dùng chung với bộ câu mẫu; hôm nay hai bên khớp.
+  - Ngoài-15: Phép tự kiểm của bước so bộ câu mẫu chưa chứng minh được báo đúng lượt hai chứ không phải lượt một.
+  - Ngoài-16: Loại tệp nguồn Word và PDF khai ở hai nơi; hôm nay khớp, lệch sau này thì việc tải nguồn bị từ chối không rõ vì sao.
+  - Ngoài-17: Liên kết http do Kara soạn hay gửi thẳng qua API vẫn lưu được rồi mất lặng lúc đọc; chỉ người gõ trong trình soạn được báo.
+  - Ngoài-18: Dán địa chỉ trần có số cổng (như a.vn:8080) vào ô liên kết bị báo nhầm «chỉ nhận https»; người viết phải gõ thêm https://.
+  - Ngoài-19: Nút «Soạn lại» vẫn bấm được với nguồn có trang đích đã lưu trữ; mỗi lần bấm tốn một lượt gọi Kara rồi báo lỗi như cũ.
+  - Ngoài-20: Bài kiểm «không tạo đề xuất cho trang đã lưu trữ» gieo dữ liệu bằng tay thay vì qua đường ghi thật.
+  - Ngoài-21: Phép đo màn mục lục dùng nội dung viết tay thay vì lấy từ trình soạn.
