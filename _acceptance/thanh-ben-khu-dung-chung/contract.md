@@ -5,7 +5,7 @@ slug: thanh-ben-khu-dung-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -74,3 +74,7 @@ Ngưỡng của `opportunity.md`: «Cài đặt và Hội thoại dùng chung m�
 ## Notes
 
 - Hồ sơ đã ký `khung-trang-cai-dat` đọc DOM thanh bên Cài đặt (`aside nav`, `[data-slot=nav-group-label]`, `nav` ngoài `aside`, `nav[aria-label=Cài đặt]`); thiết kế giữ nguyên những bộ chọn ấy.
+- S3 19/10: bài quét `rang/quet-vo-tay.mjs` trên mã chưa sửa (`1fce5d49`) đỏ đúng chỗ — 4 vỏ tự dựng (`settings-sidebar.tsx:81`, `agent-builder-shell.tsx:25–26`, `(agent-builder)/layout.tsx:44`), 0/2 tệp nhập `AreaSidebar`, mã 1; `TBK_PHA=gieo` gọi đúng tên tệp gieo.
+- S3 19/10: bàn đo màn `rang/do-man.mjs` trên phiên đo riêng: 15 DUNG, 0 SAI; nhãn nhóm hai khu `12px/500/0.6px/uppercase/rgb(161, 161, 161)`; ở 1280×800 thấy 8 dòng hội thoại; `TBK_PHA=rong` → 2 SAI «aside 224px (mong 230px)»; `TBK_PHA=tran` → «SAI AC-8 hoi-thoai 375: tran ngang 825px».
+- S3 19/10: `NavItem` cỡ `sm` là `h-7 text-xs` (`packages/ui/src/components/button.tsx`), bằng dòng hội thoại trước vòng — mật độ cột không đổi.
+- Ở điện thoại, trang trò chuyện có hai dòng mang chữ «Hội thoại»: đầu thanh khu (kèm «+» Hội thoại mới) và đầu trang trò chuyện — đúng AC-6, nêu ra để người ký thấy.
