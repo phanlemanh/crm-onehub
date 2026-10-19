@@ -33,7 +33,7 @@ mock.module("@/lib/trpc/client", () => ({
 				pathKey: () => KHOA_CUOC,
 			},
 			markRead: {
-				mutationOptions: (o: object) => ({
+				mutationOptions: (o: { onSuccess?: () => unknown }) => ({
 					...o,
 					mutationFn: async (vao: { id: string }) => {
 						daDanhDau.push(vao);
