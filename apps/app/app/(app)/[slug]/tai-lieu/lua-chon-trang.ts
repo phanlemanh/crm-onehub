@@ -1,20 +1,24 @@
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import type { LuaChon } from "./truong-trang-moi";
+import type { LoiTaiLuaChon, LuaChon } from "./truong-trang-moi";
 
 type Toi = { id: string; name: string };
 
-export type ChuTrangVaDonVi = { chuTrang: LuaChon[]; donVi: LuaChon[] };
+export type ChuTrangVaDonVi = {
+	chuTrang: LuaChon[];
+	donVi: LuaChon[];
+	loiTai: LoiTaiLuaChon;
+};
 
 export async function chuTrangVaDonVi(toi: Toi): Promise<ChuTrangVaDonVi> {
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 	const [thanhVien, toChuc] = await Promise.all([
-		queryClient.fetchQuery(trpc.okr.thanhVien.queryOptions()).catch(() => []),
+		queryClient.fetchQuery(trpc.okr.thanhVien.queryOptions()).catch(() => null),
 		queryClient.fetchQuery(trpc.org.tree.queryOptions()).catch(() => null),
 	]);
 	const chuTrang: LuaChon[] = [
 		{ id: toi.id, ten: toi.name },
-		...thanhVien
+		...(thanhVien ?? [])
 			.filter((u) => u.id !== toi.id)
 			.map((u) => ({ id: u.id, ten: u.name })),
 	];
@@ -24,7 +28,11 @@ export async function chuTrangVaDonVi(toi: Toi): Promise<ChuTrangVaDonVi> {
 				...toChuc.chuaXep,
 			].map((d) => ({ id: d.id, ten: d.name }))
 		: [];
-	return { chuTrang, donVi };
+	return {
+		chuTrang,
+		donVi,
+		loiTai: { thanhVien: thanhVien === null, donVi: toChuc === null },
+	};
 }
 
 export async function trangDangDung(): Promise<LuaChon[]> {
