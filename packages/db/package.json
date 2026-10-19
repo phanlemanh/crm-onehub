@@ -82,10 +82,12 @@
 		"./viec-chep": "./src/viec-chep.ts",
 		"./viec-ghi": "./src/viec-ghi.ts",
 		"./viec-gieo": "./src/viec-gieo.ts",
+		"./viec-nhac": "./src/viec-nhac.ts",
 		"./viec-thu-tu": "./src/viec-thu-tu.ts"
 	},
 	"scripts": {
 		"viec:chep-cu": "bun scripts/chep-viec-can-lam.ts",
+		"viec:dem-rieng": "bun scripts/dem-viec-rieng.ts",
 		"build": "prisma generate",
 		"check-types": "tsc --noEmit",
 		"db:deploy": "prisma migrate deploy",
