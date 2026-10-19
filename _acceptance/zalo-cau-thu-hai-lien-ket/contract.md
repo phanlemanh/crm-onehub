@@ -5,7 +5,7 @@ slug: zalo-cau-thu-hai-lien-ket
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-20
 design_doc: _acceptance/zalo-cau-thu-hai-lien-ket/design.md
@@ -69,3 +69,11 @@ Trục và ô:
     câu tự đặt. Lần gọi thừa không có câu kho đang mở nên nhận chỉ dẫn dừng (lưới của l6) và ghi dòng «[tro-ly-kho] khong
     tim thay cau hoi»; lượt có thể quá hạn chờ, câu không đóng, và câu sau của người đó bị trả «đang bận». Lượt đo 2 gặp ở
     2/8 người, ngay câu đầu trong ngày. AC-5 không chấm ca này; dòng dừng chỉ được đếm trong báo cáo đo.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Công cụ đo đọc bộ câu hỏi mẫu không kiểm hình dạng dữ liệu; bộ mẫu đổi tên trường thì lượt đo có thể gửi tin rỗng thay vì báo lỗi.
+  - Ngoài-2: Bài kiểm lỗi cơ sở dữ liệu gọi thẳng hàm liên kết, không đi qua đúng cửa lượt hỏi thật đi qua.
+  - Ngoài-3: Ca thử phá «gắn nhầm hàng câu một» dựng một trạng thái mà lượt đo thật không sinh ra, nên không chứng gì thêm.
+  - Ngoài-4: Bảng các loại phiên không bị đụng tới bỏ sót một loại (okr-soan) và không tự cập nhật khi có loại mới.
+  - Ngoài-5: Bài kiểm đóng câu đầu bằng trạng thái lỗi thay vì đã trả lời như hồ sơ mô tả.
+  - Ngoài-6: Công cụ đo đọc bộ câu hỏi mẫu không kiểm hình dạng dữ liệu (cùng lỗi Ngoài-1, ghi ở lượt chấm 1).
+  - Ngoài-8: Phép kiểm «gắn nhầm hàng câu một» trong lượt đo thật tự đúng theo cách ghi, chưa chứng được việc trợ lý nhận nhầm câu.

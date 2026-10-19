@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 42a86fcd17b9e9a14c5013ee2478dc2c0a2b857e
-human_signoff:
+human_signoff: manh 2026-10-20 — ký Cổng Bằng chứng trên S4 vòng 2 (PASS, 0 finding trong hợp đồng; lượt đo eve thật 6/8 người đủ điều kiện, 12 câu sau nhận đúng câu trả lời). Ngoài-1–6 và Ngoài-8 ghi Known limits; Ngoài-7 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: zalo-cau-thu-hai-lien-ket
