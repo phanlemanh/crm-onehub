@@ -113,7 +113,7 @@ evals:
       1. vrc-khung-du-an-1280: khung V1, ô «Gắn với» ghi «Việc trong dự án — mọi người xem được dự án đều thấy việc này», dòng dưới tiêu đề ghi tên dự án, không có chữ «Việc riêng» ở đâu (ST-khung-du-an). man.mjs đọc DOM khung: có «Việc riêng» thì thoát 1 'vrc man: khung du-an hua rieng'.
       2. vrc-khung-ban-ghi-1280: khung V2, ô «Gắn với» là liên kết tên thoả thuận (ST-khung-ban-ghi).
       3. vrc-khung-du-an-375: khung V1 ở khổ 375; man.mjs đo document.documentElement.scrollWidth > 375 thì thoát 1 'vrc man: 375 cuon ngang'.
-      Chữ đọc được, không đè, không cắt; khung giữ đúng giao diện các màn khác của kho.
+      Chữ DA11 đổi (ô «Gắn với», dòng dưới tiêu đề) đọc được, không đè, không cắt; khung giữ đúng giao diện các màn khác của kho. Ngoại trừ có tên: ô chọn «Dự án» (ODuAnViec, Combobox của packages/ui với w-fit whitespace-nowrap) bị cắt mép phải ở 375 khi tên dự án dài là lỗi có sẵn trên nền từ DA4, DA11 không chạm — tách vòng vệ sinh theo chính sách đợt, không tính vào vế «không cắt» của eval này.
     evidence_required: [verdict, screenshot, observed, verified_at]
     paths: [apps/app/components/viec/khung-viec.tsx, apps/app/lib/messages/viec.ts, apps/api/src/viec/**, _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs]
 

@@ -1,4 +1,3 @@
-import "@crm/env/load";
 import type { Prisma } from "../src/generated/prisma/client";
 import { parseVetViec } from "../src/viec";
 import { LOAI_VET_NHAC_VIEC, maViecNhac } from "../src/viec-nhac";
@@ -70,6 +69,8 @@ if (import.meta.main) {
 		);
 		process.exit(2);
 	}
+	const kho = new URL(process.env.DATABASE_URL);
+	console.error(`${LENH}: đếm trên ${kho.host}${kho.pathname}`);
 	const { db } = await import("../src/client");
 	try {
 		console.log(JSON.stringify(await giaoDichChiDoc(db, demViecRieng)));

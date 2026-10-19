@@ -218,6 +218,16 @@ describe("vrc-dem", () => {
 			if (rong.ma !== 2 || !rong.loi.includes("DATABASE_URL")) {
 				throw new Error("vrc: thieu bien khong chan");
 			}
+			const { DATABASE_URL: _bo, ...khongBien } = process.env;
+			const vang = spawnSync("bun", ["run", "viec:dem-rieng"], {
+				cwd: GOI,
+				encoding: "utf8",
+				timeout: LENH_MS,
+				env: { ...khongBien, NODE_ENV: "development" },
+			});
+			if (vang.status !== 2 || !vang.stderr.includes("DATABASE_URL")) {
+				throw new Error(`vrc: bien vang van dem ${vang.status}`);
+			}
 		},
 		GIEO_MS,
 	);

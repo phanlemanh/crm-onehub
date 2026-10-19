@@ -243,7 +243,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 							dangDoi={doiDuAn.isPending}
 							duAn={v.duAn}
 							onDoi={(duAnId) => doiDuAn.mutate({ id: v.id, duAnId })}
-							rieng={v.aiThay === "rieng"}
+							rieng={v.banGhi.length === 0}
 							suaDuoc={suaDuoc}
 						/>
 					</DetailSheetProperty>
