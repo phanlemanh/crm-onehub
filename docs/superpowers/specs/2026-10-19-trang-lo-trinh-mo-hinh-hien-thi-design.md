@@ -61,8 +61,10 @@ trang sẽ hiện 0 mốc; (b) trang tự tính lại `moHinhHienThi` bằng b�
 
 ## Đối trọng chuẩn nội
 
-`feature_loop.ui_standards_skill: web-design-guidelines` — đã nạp ở S1; áp lên các tệp giao diện đổi ở cuối S3 (soát
-bằng bộ luật Vercel), kết quả vào sổ.
+`feature_loop.ui_standards_skill: web-design-guidelines` — đã nạp ở S1; soát cuối S3 (19/10) bộ luật Vercel lên
+`xem-moc.tsx`, `dong-lien-quan.tsx`, `bang-cot.tsx`, `ho-so-viec.tsx`: số dùng chữ số và `tabular-nums`, tên người nhập
+mang `translate="no"`, tên rỗng có lối lùi — đạt. Một điều có từ trước, không do vòng này: nhóm «Chưa hẹn mốc» liệt tới 99
+việc mà không ảo hoá danh sách (luật «trên 50 mục») — để ngoài phạm vi.
 
 <!-- <<<UX-SPEC-TEMPLATE -->
 ## Đặc tả UX
