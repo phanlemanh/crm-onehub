@@ -1,9 +1,9 @@
 # Đo trợ lý kho trên bộ câu hỏi mẫu
 
 bam bo-mau: 0b3f3f96ddddb749f0a1d78b43f4cdbe88af8648e6fae42722c9fb66b0e02ac2
-bam tro-ly: 45f84eddef27a34724bb8e92d484955fe7484930022aeb918c5f114516d728b7
+bam tro-ly: ccb483793ed13e84518244dd3f7baa8316d20a96caf5df396ba5a30b39a3424a
 ma thoat cham-bo-do: 0
-thu muc luot cham-bo-do: .acceptance-runs/tro-ly-doc-kho/cham-bo-do/2026-10-14T08-10-38-349Z-84303
+thu muc luot cham-bo-do: .acceptance-runs/tro-ly-doc-kho/cham-bo-do/2026-10-19T12-52-42-592Z-16051
 luot 1: 46 ma
 luot 2: 50 ma
 
