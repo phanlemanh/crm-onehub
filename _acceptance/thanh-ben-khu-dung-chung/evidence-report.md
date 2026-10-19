@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f2acec0f4b09fcc641abd830fe79372685f566ab
+verified_commit: 915cf201adc2f6391534a67163b213ceddc40227
 human_signoff:
 ---
 
@@ -203,3 +203,7 @@ none — every multi-run eval is uniform
 
 Round 1: PASS 11/11 — 7 muc ngoai hop dong chuyen Cong 2 (trong do Ngoai-2: chat dai tren dien thoai khong cuon, da thanh AC-11).
 Round 2: E6, E7, E8, E9, E10 va E12 (AC-11 moi) chay lai tren f2acec0f4b09fcc641abd830fe79372685f566ab, E1-E5 carry-forward tu round 1; PASS.
+
+### Re-pin lần 1 — 2026-10-19, do gộp onehub (#490, không chạm vật của hồ sơ) sau S4 round 2
+run_id: repin-20261019T144005Z-34260
+sha: 915cf201adc2f6391534a67163b213ceddc40227 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9, E11 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
