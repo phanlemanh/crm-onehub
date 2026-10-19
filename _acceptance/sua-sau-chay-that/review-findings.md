@@ -1,84 +1,91 @@
-# Review findings: sua-sau-chay-that (round 4)
+# Review findings — sua-sau-chay-that (round 5)
 
 ## Trong hợp đồng
 
-Không có.
+(không có)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Câu mới trong messages/tai-lieu.ts phạm luật «AI một tên»: kara-mot-ten.spec.ts đang đỏ**
+- **Thẻ Cổng Bằng chứng round 4 báo sai 6 eval đã đạt (E2, E4, E5, E6, E8, E10) thành «chưa đạt»**
+  Người dùng thấy gì: Người ký cổng thấy 8 phép kiểm đỏ trong khi thật ra chỉ 2 đỏ, nên có thể đánh giá mức hỏng nặng hơn thực tế khi chọn lối ra. Người dùng cuối của Kho tài liệu không bị ảnh hưởng.
+  Căn cứ: Chỉ làm người ký đọc thẻ nặng hơn thực tế, không mất hay lộ dữ liệu của người dùng, và bảng báo cáo đi kèm vẫn ghi đúng 2 phép kiểm hỏng để đối chiếu.
+  file: `_acceptance/sua-sau-chay-that/card.html`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Câu mới trong messages/tai-lieu.ts phạm luật «AI một tên»: kara-mot-ten.spec.ts đang đỏ (r4 · tệp đã đổi)**
   Người dùng thấy gì: Vài câu trên màn Kho tài liệu gọi AI là «máy soạn» hay «Trợ lý AI» thay vì tên Kara, trái quy ước tên của sản phẩm. Người dùng chỉ thấy tên gọi lệch, nhưng bộ kiểm chung đang đỏ nên chặn việc đẩy mã lên.
   Căn cứ: Hậu quả với người dùng nhẹ (chỉ lệch tên gọi, không mất dữ liệu), nhưng sửa rẻ và phải xong trước khi gộp vì bộ kiểm chung đang chặn.
   file: `apps/app/lib/messages/tai-lieu.ts`
   severity: high
   Đề xuất: new-contract
 
-- **Thêm chú thích code vào lich.test.ts, phạm luật «Never add code comments»**
+- **Thêm chú thích code vào lich.test.ts, phạm luật «Never add code comments» (r4)**
   Người dùng thấy gì: Một tệp kiểm nội bộ có thêm vài dòng ghi chú và một tên kiểm tra mất dấu cách. Người dùng cuối không thấy gì.
   Căn cứ: Không ảnh hưởng người dùng và không mất dữ liệu; chỉ là lỗi trình bày nội bộ, nhận và ghi vết là đủ.
   file: `scripts/tin-hieu/test/lich.test.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **Kiểu nội dung (MIME) của tệp nguồn vẫn khai ở hai nơi sau khi gom «một nguồn»**
+- **Kiểu nội dung (MIME) của tệp nguồn vẫn khai ở hai nơi sau khi gom «một nguồn» (r4)**
   Người dùng thấy gì: Danh sách loại tệp cho phép tải nguồn vẫn còn một bản chép nữa ở phía lưu trữ tệp. Nếu sau này ai sửa một bên mà quên bên kia, người dùng sẽ bị từ chối khi tải tệp.
   Căn cứ: Hiện hai bản đang khớp nên chưa ai gặp lỗi; nếu lệch thì người dùng chỉ bị từ chối tải và thử lại được, không mất dữ liệu.
   file: `packages/validation/src/tai-lieu-nguon.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Sau khi gộp onehub, câu mới ở messages tai-lieu vẫn gọi AI bằng tên cũ, làm đỏ kara-mot-ten.spec.ts**
+- **Sau khi gộp onehub, câu mới ở messages tai-lieu vẫn gọi AI bằng tên cũ, làm đỏ kara-mot-ten.spec.ts (r4 · tệp đã đổi)**
   Người dùng thấy gì: Sau khi gộp bản mới, một số câu trên màn Kho tài liệu vẫn gọi AI bằng tên cũ thay vì Kara. Người dùng thấy tên gọi không thống nhất và bộ kiểm chung đang đỏ.
   Căn cứ: Chỉ là tên gọi lệch, không mất dữ liệu và người dùng không bị chặn việc; nhưng phải sửa trước khi đẩy vì bộ kiểm chung đỏ.
   file: `apps/app/lib/messages/tai-lieu.ts`
   severity: high
   Đề xuất: new-contract
 
-- **Câu vi «het-tran» chép tay đã lệch khỏi nguồn sau khi onehub đổi tên thành Kara: ssct-hoi-en đỏ, câu trên web khác câu gửi Zalo**
+- **Câu vi «het-tran» chép tay đã lệch khỏi nguồn sau khi onehub đổi tên thành Kara: ssct-hoi-en đỏ, câu trên web khác câu gửi Zalo (r4 · tệp đã đổi)**
   Người dùng thấy gì: Khi hết hạn mức tháng, người dùng tiếng Việt đọc một câu trên web nhưng nhận một câu khác qua Zalo, vì một nơi đã đổi sang tên Kara còn nơi kia thì chưa.
   Căn cứ: Hậu quả nhẹ: chỉ khác chữ trong lúc hết hạn mức, không mất dữ liệu; sửa rẻ và cùng việc với lỗi tên AI.
   file: `apps/app/lib/messages/tai-lieu.ts`
   severity: high
   Đề xuất: new-contract
 
-- **Bộ quét t1-ma-doc nuốt lỗi đọc tệp, coi như tệp rỗng**
+- **Bộ quét t1-ma-doc nuốt lỗi đọc tệp, coi như tệp rỗng (r4)**
   Người dùng thấy gì: Công cụ kiểm nội bộ quyết định có bỏ qua kiểm thử cho thay đổi chỉ chạm tài liệu có thể im lặng bỏ qua một tệp không đọc được. Người dùng cuối không thấy ngay.
   Căn cứ: Chỉ xảy ra ở tình huống hiếm về tệp hỏng trong cây làm việc, không chạm dữ liệu người dùng; rủi ro là bỏ sót kiểm thử, ghi lại để theo dõi.
   file: `.github/scripts/t1-ma-doc.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 6 (đo checkout khác chứ không đo cây đang kiểm): E6 cong-van-do chạy cổng của commit 38ecca3be, không chạy cổng của cây**
+- **Hình dạng 6 (đo checkout khác chứ không đo cây đang kiểm): E6 cong-van-do chạy cổng của commit 38ecca3be, không chạy cổng của cây (r4)**
   Người dùng thấy gì: Một phép kiểm của hồ sơ khác có thể báo đạt trong khi đo cổng kiểm cũ chứ không phải bản hiện tại. Người dùng cuối không thấy tác động trực tiếp.
   Căn cứ: Là độ tin cậy của công cụ nghiệm thu nội bộ, không ảnh hưởng dữ liệu hay màn hình người dùng; sửa thuộc vòng của hồ sơ kia.
   file: `_acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs`
   severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 6 (đo khoảng diff khác, không phải vòng của hồ sơ): E7 lam-moi-goi-y-ke-hoach lấy mốc bằng merge-base lúc chạy nên sau khi gộp nó quét nhánh khác**
+- **Hình dạng 6 (đo khoảng diff khác, không phải vòng của hồ sơ): E7 lam-moi-goi-y-ke-hoach lấy mốc bằng merge-base lúc chạy nên sau khi gộp nó quét nhánh khác (r4)**
   Người dùng thấy gì: Lần chấm lại một hồ sơ cũ có thể ra đỏ hay xanh tuỳ nhánh đang mở, không phản ánh đúng lời hứa của hồ sơ đó. Người dùng cuối không thấy.
   Căn cứ: Chỉ làm nhiễu kết quả chấm lại nội bộ, không đụng người dùng hay dữ liệu; sửa thuộc hồ sơ khác.
   file: `_acceptance/config.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 5 (tuyên quét cả lớp nhưng chỉ bắt một dạng): khong-xoa-expect hứa quét MỌI tệp kiểm và mọi câu khẳng định, nhưng chỉ khớp *.spec/*.dom và chỉ thấy `expect(`**
+- **Hình dạng 5 (tuyên quét cả lớp nhưng chỉ bắt một dạng): khong-xoa-expect hứa quét MỌI tệp kiểm và mọi câu khẳng định, nhưng chỉ khớp *.spec/*.dom và chỉ thấy `expect(` (r4)**
   Người dùng thấy gì: Công cụ chống xoá bài kiểm của một hồ sơ cũ bỏ sót vài dạng bài kiểm, nên xoá chúng có thể không bị phát hiện. Người dùng cuối không thấy.
   Căn cứ: Là lỗ hổng độ phủ của công cụ nội bộ, không gây hỏng chức năng người dùng; chi phí vá cao so với tác hại.
   file: `_acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 (khẳng định «chuỗi có mặt» trong khi lời hứa là quan hệ): E10 chỉ kiểm khối mutationOptions có chứa chuỗi `cache.deal(`**
+- **Hình dạng 3 (khẳng định «chuỗi có mặt» trong khi lời hứa là quan hệ): E10 chỉ kiểm khối mutationOptions có chứa chuỗi `cache.deal(` (r4)**
   Người dùng thấy gì: Một phép kiểm cũ về việc làm mới gợi ý sau khi đổi giai đoạn thoả thuận chỉ so chuỗi chữ, có thể báo đạt dù gọi sai chỗ. Người dùng cuối không thấy ngay.
   Căn cứ: Chỉ làm phép kiểm lỏng hơn mong muốn, tác hại thấp và nếu hỏng thật người dùng chỉ thấy gợi ý chưa mới, tải lại là xong.
   file: `_acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 4 (khẳng định âm tính đứng một mình): quet-do 8, 9, 11 dựng sẵn cặp neo dương nhưng không khẳng định nó**
+- **Hình dạng 4 (khẳng định âm tính đứng một mình): quet-do 8, 9, 11 dựng sẵn cặp neo dương nhưng không khẳng định nó (r4)**
   Người dùng thấy gì: Ba bài kiểm nội bộ có thể vẫn xanh khi công cụ quét không quét gì cả. Người dùng cuối không bị ảnh hưởng.
   Căn cứ: Chỉ là bài kiểm nội bộ thiếu một dòng đối chứng, không tác động người dùng; tác hại thấp nên ghi vết là đủ.
   file: `packages/ui/test/t1-ma-doc.spec.ts`
@@ -106,7 +113,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Bảng MIME loại tệp nguồn giờ có hai bản: validation mới và BLOB_NGUON phía máy chủ (r1 · tệp đã đổi)**
+- **Bảng MIME loại tệp nguồn giờ có hai bản: validation mới và BLOB_NGUON phía máy chủ (r1)**
   Người dùng thấy gì: Hiện chưa có lỗi nào thấy được khi tải nguồn Word hay PDF. Nhưng nếu sau này ai đó sửa loại tệp ở một nơi mà quên nơi kia thì việc tải nguồn có thể bị từ chối mà không rõ vì sao.
   Căn cứ: 
   file: `packages/validation/src/tai-lieu-nguon.ts`
@@ -148,4 +155,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 7/11 lỗi rơi vào file không bộ đo nào phủ (scripts/tin-hieu/test/lich.test.ts, .github/scripts/t1-ma-doc.mjs, _acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs, _acceptance/config.yaml, _acceptance/lam-moi-goi-y-ke-hoach/rang/khong-xoa-expect.mjs, _acceptance/lam-moi-goi-y-ke-hoach/rang/duong-doi-giai-doan.mjs, packages/ui/test/t1-ma-doc.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
