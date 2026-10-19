@@ -45,7 +45,8 @@ export function NapSanKhiMoNgan({
 }
 `;
 
-const NHAP = 'import { type DehydratedState, HydrationBoundary } from "@tanstack/react-query";';
+const NHAP =
+	'import { type DehydratedState, HydrationBoundary } from "@tanstack/react-query";';
 const MOC_STACK = "const { stack } = useRecordStack();";
 const MOC_STATE = "state={stack.length > 0 ? state : undefined}";
 
@@ -104,7 +105,10 @@ const CA = [
 				thayMotLan(
 					s,
 					NHAP,
-					NHAP.replace("HydrationBoundary }", "HydrationBoundary, useQueryClient }"),
+					NHAP.replace(
+						"HydrationBoundary }",
+						"HydrationBoundary, useQueryClient }",
+					),
 					"chi-khoa-thieu nhap",
 				),
 				MOC_STATE,
@@ -204,7 +208,9 @@ for (const ca of CA) {
 		const duong = join(sao, TEP);
 		const cu = readFileSync(duong, "utf8");
 		if (!ca.doiChung && !cu.includes(MOC_STATE)) {
-			console.log(`KHONG DO DUOC: ${TEP} o HEAD khong mang ban sua (${MOC_STATE})`);
+			console.log(
+				`KHONG DO DUOC: ${TEP} o HEAD khong mang ban sua (${MOC_STATE})`,
+			);
 			process.exit(2);
 		}
 		const moi = ca.ap(cu);
