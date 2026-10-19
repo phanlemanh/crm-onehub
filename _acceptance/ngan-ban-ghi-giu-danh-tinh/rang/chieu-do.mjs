@@ -120,11 +120,17 @@ const CA = [
 	{ ten: "doi-chung", ap: (s) => s, ghim: [], doiChung: true },
 ];
 
+const BANG_CHUNG_CONG = "_acceptance/ngan-ban-ghi-giu-danh-tinh/evidence/";
+
 function chupCay(goc) {
-	const trangThai = git(goc, "status", "--porcelain", "-uall");
-	const tep = trangThai
+	const dong = git(goc, "status", "--porcelain", "-uall")
 		.split("\n")
 		.filter(Boolean)
+		.filter(
+			(d) => !d.slice(3).replace(/^"|"$/g, "").startsWith(BANG_CHUNG_CONG),
+		);
+	const trangThai = dong.join("\n");
+	const tep = dong
 		.map((d) => d.slice(3).replace(/^"|"$/g, ""))
 		.filter((d) => existsSync(join(goc, d)));
 	const bam = tep.length
