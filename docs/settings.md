@@ -29,7 +29,8 @@ cuối».
 
 ## Thanh bên
 
-- Mỗi mục là một `NavItem`. Không đè class lên `Button`.
+- Thanh dựng bằng `AreaSidebar` của `packages/ui` (luật «Thanh bên khu và thẻ con» ở
+  `docs/design.md`); mỗi mục là một `AreaSidebarItem` — một `NavItem`. Không đè class lên `Button`.
 - Nhãn của cả thanh là «Cài đặt».
 - Bốn nhóm, nhãn nhóm chỉ hiện trên desktop; trên điện thoại vẫn là một hàng
   cuộn ngang:
