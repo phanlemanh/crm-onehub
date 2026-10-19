@@ -36,6 +36,22 @@ let goiLuuTru: string[] = [];
 let goiKhoiPhuc: string[] = [];
 let soLanTaiDangDung = 0;
 let toasts: Toast[] = [];
+type DongCuaToiGia = {
+	id: string;
+	so: number;
+	ma: string;
+	tieuDe: string;
+	muonLam: string;
+	man: string;
+	guiLuc: string;
+	daKeoVe: boolean;
+	daLuuTru: boolean;
+	archivedAt?: string;
+	archivedById?: string;
+	nguoiLuuTru?: { id: string; ten: string };
+	archivedBy?: { id: string; name: string };
+};
+let dongCuaToi: DongCuaToiGia[] = [];
 
 class LoiTrpc extends Error {
 	data = { httpStatus: 409, code: "CONFLICT" };
@@ -70,7 +86,8 @@ function ghi(ten: string, lam: (id: string) => Promise<unknown>) {
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		tinHieu: {
-			cuaToi: truyVan("tinHieu.cuaToi", () => ({ rows: [] })),
+			cuaToi: truyVan("tinHieu.cuaToi", () => ({ rows: dongCuaToi })),
+			xoa: ghi("tinHieu.xoa", async () => ({ ok: true })),
 			tatCa: truyVan("tinHieu.tatCa", () => {
 				soLanTaiDangDung += 1;
 				return { rows: dangDung };
@@ -125,6 +142,9 @@ const { TIN_HIEU } = await import("@crm/validation/tin-hieu");
 const { TatCaTrang } = await import(
 	"@/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang"
 );
+const { DanhSachTinHieuTrang } = await import(
+	"@/app/(app)/[slug]/tin-hieu/danh-sach-tin-hieu-trang"
+);
 const { DanhSachTinHieu } = await import(
 	"@/components/tin-hieu/danh-sach-tin-hieu"
 );
@@ -150,6 +170,7 @@ afterEach(() => {
 	goiKhoiPhuc = [];
 	soLanTaiDangDung = 0;
 	toasts = [];
+	dongCuaToi = [];
 });
 
 async function cho(ms = 30) {
@@ -474,14 +495,70 @@ describe("nguoi-gui", () => {
 			tt.nghia,
 		);
 		expect(o.textContent).toContain(m.trangThai.daLuuTru);
-		expect(o.innerHTML).not.toContain(t.cotNguoi);
-		expect(o.innerHTML).not.toContain("Đỗ Minh Quân");
 		await bam(o.querySelector('[data-thao-tac-tin-hieu="crm-1"]'));
 		expect(
 			document.body
 				.querySelector('[data-xoa-tin-hieu="crm-1"]')
 				?.hasAttribute("data-disabled"),
 		).toBe(false);
+	});
+
+	test("nguoi-gui: trang that cua nguoi gui khong lo nguoi luu tru, ke ca khi du lieu mang ten do", async () => {
+		const TEN = "Đỗ Minh Quân";
+		const dongGui = (
+			so: number,
+			tieuDe: string,
+			them: Partial<DongCuaToiGia> & { daLuuTru: boolean },
+		): DongCuaToiGia => ({
+			id: `t-${so}`,
+			so,
+			ma: `crm-${so}`,
+			tieuDe,
+			muonLam: `muon ${so}`,
+			man: "/okr",
+			guiLuc: "2026-10-16T02:14:00.000Z",
+			daKeoVe: false,
+			...them,
+		});
+		const trangThaiCua = (ds: { ma: string; daLuuTru: boolean }[]) =>
+			docTrangThaiTinHieu(
+				null,
+				ds.map((d) => ({ ma: d.ma, daKeoVe: false, daLuuTru: d.daLuuTru })),
+				m,
+			).trangThai;
+		dongCuaToi = [dongGui(5, TEN, { daLuuTru: false })];
+		const doiChung = await ve(
+			<DanhSachTinHieuTrang
+				banVeDocDuoc
+				trangThai={trangThaiCua([{ ma: "crm-5", daLuuTru: false }])}
+			/>,
+		);
+		expect(
+			doiChung.innerHTML,
+			"doi chung duong: phep tim ten tren trang nguoi gui khong bat duoc gi",
+		).toContain(TEN);
+		act(() => root?.unmount());
+		document.body.innerHTML = "";
+		dongCuaToi = [
+			dongGui(1, "dieu gap 1", {
+				daLuuTru: true,
+				archivedAt: "2026-10-20T02:14:00.000Z",
+				archivedById: "u-q",
+				nguoiLuuTru: { id: "u-q", ten: TEN },
+				archivedBy: { id: "u-q", name: TEN },
+			}),
+		];
+		const o = await ve(
+			<DanhSachTinHieuTrang
+				banVeDocDuoc
+				trangThai={trangThaiCua([{ ma: "crm-1", daLuuTru: true }])}
+			/>,
+		);
+		expect(o.textContent).toContain(m.nhan.daLuuTru);
+		expect(o.innerHTML, "trang nguoi gui lo nguoi luu tru").not.toContain(TEN);
+		expect(o.innerHTML, "trang nguoi gui lo nguoi luu tru").not.toContain(
+			t.cotNguoi,
+		);
 	});
 
 	test("nguoi-gui: chu loi luu tru da lay ve dung bang chu may chu", () => {

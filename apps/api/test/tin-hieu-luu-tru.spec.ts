@@ -592,7 +592,14 @@ describe("gtr-cua-toi", () => {
 			"tin hieu bi luu tru bien mat khoi trang nguoi gui",
 		).toBe(true);
 		expect(rows.find((x) => x.id === giu.id)?.daLuuTru).toBe(false);
-		expect(r.text).not.toContain(uid("owner"));
+		const doiChung = await trpc("owner", "tinHieu.daLuuTru", "query");
+		expect(
+			doiChung.text,
+			"doi chung duong: danh sach Da luu tru khong mang ten nguoi luu tru",
+		).toContain(uid("owner"));
+		expect(r.text, "phan hoi nguoi gui lo nguoi luu tru").not.toContain(
+			uid("owner"),
+		);
 		expect(
 			(await trpc("a", "tinHieu.xoa", "mutation", { id: go.id })).status,
 		).toBe(200);
