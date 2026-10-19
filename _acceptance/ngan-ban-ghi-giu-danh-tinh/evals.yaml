@@ -137,8 +137,9 @@ evals:
       - "_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs"
     expected: |
       exit 0 va "ngan-ban-ghi-giu-danh-tinh man: dat"; cung luot voi E6, phep mo lai: ngan dang mo deal Wise, gan
-      dataset.gdtDau = "<MA>" vao phan tu ngan, cai MutationObserver, bam dong, khi getAnimations() cua ngan con chay
-      goi .click() cua chinh phan tu dong «Wise» trong bang (khong qua lop phu dang mo dan), cho moi animation ket thuc:
+      dataset.gdtDau = "<MA>" vao phan tu ngan, cai MutationObserver, bam dong, 60 ms sau (giua 300 ms truot ra; khung
+      truoc do phai co ngan dong voi hieu ung dang chay) goi .click() cua chinh phan tu dong «Wise» trong bang (khong
+      qua lop phu dang mo dan), cho moi animation ket thuc:
       record= lai la deal:seed-deal-wise-1, phan tu ngan dang mo (data-state="open") VAN mang dataset.gdtDau = "<MA>",
       va observer khong ghi lan go nao cua phan tu ngan.
       CHIEU DO ghim (E12): ban sao mang ma cu -> do "man: ngan mo lai la phan tu moi".
@@ -224,7 +225,7 @@ evals:
     expected: |
       exit 0 va "chieu do: DO DUNG GHIM"; chieuDo cua _acceptance/kho-tai-lieu/rang/man-lib.mjs dung git worktree tu
       HEAD, cam vao ban sao: nap-san-khi-mo-ngan.tsx cua merge-base voi origin/onehub VA them tre 400 ms truoc datXong(true)
-      trong sau-khi-tai-xong.ts; chay man.mjs qua phien do cua ban sao: ma 1 va dau ra chua, theo thu tu,
+      trong sau-khi-tai-xong.ts; chay man.mjs qua phien do cua ban sao: ma 1 va dau ra chua du ca ba
       "man: ngan bien mat khi dong", "man: ngan mo tre", "man: ngan mo lai la phan tu moi".
 
   - id: E13
