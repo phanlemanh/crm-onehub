@@ -125,6 +125,11 @@ describe("ltsp-doc-du", () => {
 		console.log(`ltsp-doc-du: ${mocSp.length} moc / ${viecSp.length} viec`);
 		expect(mocSp.length).toBeGreaterThan(0);
 		expect(viecSp.length).toBeGreaterThan(0);
+		const thieu = viecCrm.find((k) => !viecSp.includes(k));
+		if (thieu !== undefined || viecSp.length !== viecCrm.length)
+			throw new Error(
+				`trang san pham thieu lo trinh: ${thieu ?? viecSp.length}`,
+			);
 		expect(mocSp).toEqual(mocCrm);
 		expect(viecSp).toEqual(viecCrm);
 		const tepTrenMan = [
