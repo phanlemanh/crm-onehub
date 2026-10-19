@@ -85,7 +85,7 @@ export const DONG_CUA_TOI: DongTinHieu[] = [
 		coTheXoa: true,
 		trangThai: {
 			nhan: "Đã lưu trữ",
-			cau: "Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không lấy về.",
+			cau: "Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.",
 			nghia: "ketThuc",
 		},
 	},

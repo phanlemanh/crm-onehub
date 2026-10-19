@@ -20,7 +20,7 @@ import { docTepLoTrinh } from "@/lib/lo-trinh/doc-tep";
 import { getLocale } from "@/lib/locale/server";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { requireSession } from "@/lib/session";
-import { ghepTatCa } from "@/lib/tin-hieu/tat-ca";
+import { docNenTatCa } from "@/lib/tin-hieu/tat-ca";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import {
 	getServerQueryClient,
@@ -46,18 +46,14 @@ async function NoiDung() {
 	const tatCa = await getServerQueryClient().fetchQuery(
 		getServerTrpc().tinHieu.tatCa.queryOptions(),
 	);
-	const kq = ghepTatCa({
-		rows: tatCa.rows,
-		html: await docBanVe(),
-		now: new Date(),
-		m,
-	});
+	const nen = docNenTatCa({ rows: tatCa.rows, html: await docBanVe(), m });
 	return (
 		<HydrateClient>
 			<TatCaTrang
-				banVeDocDuoc={kq.banVeDocDuoc}
-				baSo={kq.baSo}
-				trangThai={kq.trangThai}
+				banVeDocDuoc={nen.banVeDocDuoc}
+				coCho={nen.coCho}
+				luc={new Date().toISOString()}
+				trangThai={nen.trangThai}
 			/>
 		</HydrateClient>
 	);

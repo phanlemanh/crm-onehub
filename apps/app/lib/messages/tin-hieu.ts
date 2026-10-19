@@ -78,7 +78,7 @@ const en = {
 		choGom:
 			"The product team is sorting it with similar signals. Follow its progress here.",
 		daLuuTru:
-			"An admin archived this signal — the product team won't pick it up.",
+			"An admin archived this signal — the product team won't review it.",
 	},
 	cauSauGom: {
 		chuaGom: "The product team hasn't sorted it into a group yet.",
@@ -215,7 +215,7 @@ const vi: TinHieuMessages = {
 		choGom:
 			"Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây.",
 		daLuuTru:
-			"Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không lấy về.",
+			"Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.",
 	},
 	cauSauGom: {
 		chuaGom: "Đội sản phẩm chưa xếp nó vào nhóm nào.",

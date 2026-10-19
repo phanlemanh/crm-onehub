@@ -81,7 +81,7 @@ Khuôn đầu vào mới (`luuTruTinHieuInput`, `khoiPhucTinHieuInput`, `tatCaTi
 ### 4. Trang người gửi
 
 Tín hiệu bị lưu trữ vẫn ở danh sách «Của tôi» với nhãn «Đã lưu trữ» (nghĩa «đã kết thúc» → `neutral`) và câu «Quản
-trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không lấy về.» Nút xoá của người gửi vẫn còn. Đây là câu Hỏi-1 ở Cổng
+trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.» Nút xoá của người gửi vẫn còn. Đây là câu Hỏi-1 ở Cổng
 Phạm vi: lối khác là ẩn hẳn khỏi trang người gửi.
 
 ### 5. Chữ

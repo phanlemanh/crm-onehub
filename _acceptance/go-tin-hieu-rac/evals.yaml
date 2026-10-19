@@ -310,7 +310,7 @@ evals:
       - "_acceptance/go-tin-hieu-rac/rang/**"
     expected: |
       do-man.mjs ca "nguoi-gui": owner luu tru tin hieu mau cua nguoi gui G; dang nhap G, mo /<slug>/tin-hieu o 1280 -> dong
-      cua tin hieu do co nhan «Đã lưu trữ» va cau «Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không lấy về.»;
+      cua tin hieu do co nhan «Đã lưu trữ» va cau «Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.»;
       anh evidence/E8b-nguoi-gui-1280.png. Doi chung duong: dong tin hieu chua luu tru cua G hien nhan khac.
 
   - id: E9
