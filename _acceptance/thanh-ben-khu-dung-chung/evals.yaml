@@ -1,0 +1,251 @@
+schema_version: 1
+slug: thanh-ben-khu-dung-chung
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tbk_khung
+    paths:
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "packages/ui/src/components/nav-item.tsx"
+      - "packages/ui/test/area-sidebar.dom.tsx"
+    expected: |
+      Ca "tbk-khung" dung AreaSidebar voi label "Khu thu", header <span>Dau</span>, footer
+      <span>Chan</span>, nhom 1 khong label (muc A, B), nhom 2 label "Nhom hai" (muc C, D dang mo),
+      nhom 3 label "Nhom ba" (muc E). Khang dinh, moi dong mot expect co thong diep ghim:
+      aside[data-slot=area-sidebar] co dung mot nav aria-label "Khu thu"; 3 [data-slot=nav-group]
+      trong aside; nhan nhom doc ra = [null, "Nhom hai", "Nhom ba"]; muc trong aside = [A,B,C,D,E]
+      deu data-slot nav-item; dung mot aria-current="page" va la D; "Dau" dung truoc nav va "Chan"
+      dung sau nav (compareDocumentPosition); ngoai aside co dung mot [data-slot=nav-strip]
+      aria-label "Khu thu" voi muc [A,B,C,D,E], 0 nav-group-label, khong chua "Chan", co "Dau" trong
+      [data-slot=area-sidebar-strip], aria-current chi o D.
+      CHIEU DO (pha-thu trong ban sao): AreaSidebarGroup bo dieu kien huong, luon ve nhan -> do
+      "hang ngang co nhan nhom"; bo footer khoi aside -> do "chan thanh khong o sau nav".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tbk_panel
+    paths:
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "packages/ui/test/area-sidebar.dom.tsx"
+    expected: |
+      Ca "tbk-panel": placement="panel" -> 0 [data-slot=nav-strip], aside[data-slot=area-sidebar]
+      class khong chua token "hidden" va khong chua "view-transition-name"; placement mac dinh ->
+      aside va [data-slot=area-sidebar-strip] deu co class "[view-transition-name:area-sidebar]"; mot con <OnlyVertical/> (render "chi-doc" khi
+      useAreaSidebarOrientation() === "vertical") xuat hien 1 lan; o placement mac dinh no xuat
+      hien dung 1 lan va nam trong aside, 0 lan trong nav-strip.
+      CHIEU DO: ban sao de panel van dung hang ngang -> do "panel co hang ngang"; hook luon tra
+      "vertical" -> do "chi-doc xuat hien trong hang ngang"; gan ten chuyen canh cho panel -> do
+      "panel mang ten chuyen canh".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tbk_cai_dat
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "apps/app/app/(app)/[slug]/settings/layout.tsx"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "apps/app/lib/pham-vi-man.ts"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "apps/app/test/khung-trang-cai-dat-thanh-ben.dom.tsx"
+      - "apps/app/test/thanh-ben-khu.dom.tsx"
+    expected: |
+      Chay ca hai tep: bai da ky khung-trang-cai-dat-thanh-ben.dom.tsx xanh tron (6 ca, khong sua mot
+      dong nao cua tep) va ca "tbk-cai-dat" trong thanh-ben-khu.dom.tsx: SettingsSidebar va
+      SettingsSidebarFallback deu dung trong aside[data-slot=area-sidebar] co nav aria-label "Cài đặt"
+      va mot [data-slot=nav-strip].
+      CHIEU DO: ban sao settings-sidebar.tsx dung lai <aside className="hidden w-56 ..."> tu dung ->
+      do "Cai dat khong dung AreaSidebar"; dao thu tu hai nhom trong cai-dat-dieu-huong.ts -> bai da
+      ky do o ca "bon nhom dung ten, dung thu tu".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tbk_hoi_thoai_may_tinh
+    paths:
+      - "apps/app/components/agent-builder/agent-builder-sidebar.tsx"
+      - "apps/app/lib/messages/agent-builder-khung.ts"
+      - "apps/app/lib/chat-date-group.ts"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "apps/app/test/thanh-ben-khu.dom.tsx"
+    expected: |
+      Ca "tbk-hoi-thoai-may-tinh": dong ho ghim (setSystemTime) va lastMessageAt dat theo dong ho ghim
+      do — hom nay (2 cuoc: mot unread, mot working), hom qua (1), 5 ngay truoc (1); 2 tac nhan;
+      duong dang mo /ws/chat/<cuoc hom qua>. Trong aside[data-slot=area-sidebar]: chu "Hội thoại" o
+      [data-slot=area-sidebar-header], a[href="/ws/chat"] aria-label "Hội thoại mới"; nhan nhom
+      [data-slot=nav-group-label] = ba nhan rut tu khungMessages("vi").thanhBen.nhom theo thu tu
+      Today, Yesterday, Last 7 days, roi nhan tac nhan; 4 nav-item tro /ws/chat/<id> theo thu tu;
+      dung mot aria-current la cuoc hom qua; mot cuoc co tieu de 120 ky tu va span tieu de cua moi
+      cuoc mang lop "truncate" va "min-w-0"; 4 nut xoa (aria-label rut tu khung message cua
+      DeleteChatAction); nhan nhom tac nhan chua a[href="/ws/agents"] va chu "2"; 2 nav-item tro
+      /ws/agents/<id>.
+      CHIEU DO: ban sao bo NavGroupLabel, dung lai div 11px -> do "nhan nhom khong phai nav-group-label";
+      so sanh active bang startsWith(/ws/chat) -> do "nhieu hon mot aria-current".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tbk_hoi_thoai_bam
+    paths:
+      - "apps/app/components/agent-builder/agent-builder-sidebar.tsx"
+      - "apps/app/test/thanh-ben-khu.dom.tsx"
+    expected: |
+      Ca "tbk-hoi-thoai-bam": bam vao link cuoc unread trong aside -> mutate cua markRead goi dung 1 lan
+      voi { id } dung ma; onNavigate goi 1 lan. Bam cuoc da doc -> markRead khong goi them.
+      Ca "tbk-hoi-thoai-rong": khong cuoc nao -> aside chua cau khungMessages("vi").thanhBen.trongBayNgay
+      va nhom tac nhan van co; nav-strip khong chua cau rong.
+      CHIEU DO: ban sao bo dieu kien conversation.unread -> do "markRead goi cho cuoc da doc"; bo cau
+      rong -> do "thieu cau rong".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tbk_hoi_thoai_dien_thoai
+    paths:
+      - "apps/app/components/agent-builder/agent-builder-sidebar.tsx"
+      - "apps/app/components/agent-builder/agent-builder-shell.tsx"
+      - "apps/app/components/app-icon-rail.tsx"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "apps/app/test/thanh-ben-khu.dom.tsx"
+    expected: |
+      Ca "tbk-hoi-thoai-dien-thoai" (cung fixture E4): [data-slot=nav-strip] aria-label rut tu
+      khungMessages("vi").thanhBen.danhSachHoiThoai; muc theo thu tu = 4 cuoc roi 2 tac nhan, bang dung
+      thu tu nav-item trong aside; aria-current dung o cuoc hom qua; 0 nut xoa, 0 nav-group-label trong
+      strip; [data-slot=area-sidebar-strip] co "Hội thoại" va a[href="/ws/chat"] dung truoc strip.
+      Ca "tbk-hoi-thoai-ngan": placement="panel" -> 0 nav-strip, 3+1 nav-group-label, 4 nut xoa; doc
+      chu nguon apps/app/components/app-icon-rail.tsx (duong suy tu vi tri tep test) -> moi the
+      <AgentBuilderSidebar trong tep mang placement="panel" (dem >= 1, khong the nao thieu), thong diep
+      ghim "ngan mat bo cuc doc".
+      CHIEU DO: ban sao de DeleteChatAction khong boc dieu kien huong -> do "hang ngang co nut xoa";
+      ban sao app-icon-rail bo prop placement -> ca ngan do "ngan mat bo cuc doc" va `bun run
+      check-types` do o app-icon-rail.tsx (prop bat buoc).
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tbk_dang_tai
+    paths:
+      - "apps/app/components/agent-builder/agent-builder-shell.tsx"
+      - "apps/app/app/(app)/[slug]/(agent-builder)/layout.tsx"
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "apps/app/test/thanh-ben-khu.dom.tsx"
+    expected: |
+      Ca "tbk-dang-tai": SettingsSidebarFallback va AgentBuilderSidebarFallback moi cai dung trong
+      aside[data-slot=area-sidebar] co nav aria-busy="true", aria-label lan luot "Cài đặt" va nhan
+      danh sach hoi thoai; doc chu nguon hai tep agent-builder-shell.tsx va (agent-builder)/layout.tsx
+      (readFileSync theo duong suy tu vi tri tep test) -> 0 lan "w-[213px]".
+      CHIEU DO: ban sao fallback Hoi thoai dung lai aside w-[213px] -> do o ca hai khang dinh.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tbk_man
+    paths:
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "packages/ui/src/components/nav-item.tsx"
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/app/(app)/[slug]/(agent-builder)/**"
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"
+    expected: |
+      Ban do chay qua tien-de (phien do rieng, tu chan cay). Gieo 8 cuoc hoi thoai cho nguoi do qua
+      duong ghi that: POST tRPC conversations.createBuilder voi cookie phien (khong chen thang bang);
+      cuoc moi chua dat ten nen hien «Hội thoại chưa đặt tên»; lay id cuoc dau. Moi (khu, kho) in mot dong:
+      "DUNG AC-8 <khu> 1280: aside 224px, nhan nhom <font-size>/<weight>/<letter-spacing>/<transform>/<color>, hang ngang an"
+      "GHI CHU AC-8 hoi-thoai 1280: <k> dong hoi thoai thay duoc trong khung nhin"
+      "DUNG AC-8 <khu> 375: aside an, hang ngang hien (cuon|vua khung), 0 nhan nhom hien, tran ngang 0"
+      Hoi thoai o 375 bat buoc "cuon" (scrollWidth > clientWidth cua nav-strip); "vua khung" o Hoi
+      thoai la SAI vi fixture 8 cuoc phai vuot 375px.
+      va mot dong so sanh "DUNG AC-8 nhan nhom hai khu giong nhau: <5 gia tri>". Lech -> "SAI AC-8 ..."
+      ma 1. Chup bon anh vao .acceptance-runs/thanh-ben-khu-dung-chung/evidence/{cai-dat,hoi-thoai}-{1280,375}.png
+      va chep vao _acceptance/thanh-ben-khu-dung-chung/evidence/. Khong mo duoc trang, bi day ve
+      /sign-in hay /onboarding -> ma 2 "KHONG DO DUOC".
+      CHIEU DO (ma chua sua, du doan): "SAI AC-8 hoi-thoai 1280: aside 213px" va "SAI AC-8 nhan nhom
+      hai khu khac nhau: font-size 11px≠12px ...", "SAI AC-8 hoi-thoai 375: khong thay hang ngang", ma 1.
+      Pha-thu sau khi sua: TBK_PHA=rong (ban do tu doi so bu 224 -> 230) -> SAI o ca hai khu;
+      TBK_PHA=tran (ban do chen style min-width:1200px vao [data-slot=nav-strip] tren trang Hoi thoai
+      truoc khi do) -> "SAI AC-8 hoi-thoai 375: tran ngang <n>px".
+
+  - id: E9
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tbk_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, nguyen van: TBK_CHEP_ANH=1 EVAL= bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs\" (no tu dung phien do, chup anh va chi chep anh sang _acceptance/thanh-ben-khu-dung-chung/evidence/ khi co TBK_CHEP_ANH=1)"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo bon anh trong _acceptance/thanh-ben-khu-dung-chung/evidence/ va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/thanh-ben-khu-dung-chung/evidence/
+    paths:
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"
+    expected: |
+      Du nam anh: cai-dat-1280.png, hoi-thoai-1280.png, cai-dat-375.png, hoi-thoai-375.png, hoi-thoai-375-dai.png. O 1280 hai
+      anh co cung mot thanh ben ben trai: cung be rong, nhan nhom chu hoa nho cung kieu, muc dang mo to
+      nen cung mau, vien phai. O 375 hai anh co mot hang muc nam ngang ngay duoi dau trang, khong co
+      thanh ben doc, khong nhan nhom, noi dung khong bi cat ngang. Anh hoi-thoai-375-dai.png: o soan tin con nam o day man, phan tin phia tren bi cat trong vung cuon chu khong day o soan ra khoi man. Thieu anh nao -> khong dat.
+
+  - id: E12
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tbk_man
+    paths:
+      - "apps/app/components/agent-builder/agent-builder-shell.tsx"
+      - "apps/app/app/(app)/[slug]/(agent-builder)/**"
+      - "apps/app/components/agent-builder/agent-builder-chat.tsx"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "_acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"
+    expected: |
+      Cung luot ban do cua E8. O 375x812 tren /chat/<id>: chen vao [data-slot=message-scroller-content]
+      mot div cao 3000px, doi hai khung hinh, roi in
+      "DUNG AC-11 hoi-thoai 375 cuoc dai: vung tin cuon (<scrollHeight>/<clientHeight>), day vung tin <n>px, day o soan <n>px <= <innerHeight>, tran doc 0"
+      va chup hoi-thoai-375-dai.png. Lech mot ve -> "SAI AC-11 hoi-thoai 375 cuoc dai: <ve lech>", ma 1.
+      Khong thay vung tin hay o soan (textarea) -> ma 2 "KHONG DO DUOC".
+      CHIEU DO tren ma truoc ban sua (AgentBuilderShell thieu min-h-0): "SAI AC-11 ... vung tin khong cuon"
+      va day o soan vuot innerHeight. Pha-thu sau khi sua: TBK_PHA=cuon (ban do dat style minHeight=auto cho
+      vo noi dung — div dung sau [data-slot=area-sidebar-strip]) -> dong SAI y het.
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.tbk_quet
+    paths:
+      - "apps/app/**/*.tsx"
+      - "_acceptance/thanh-ben-khu-dung-chung/rang/quet-vo-tay.mjs"
+    expected: |
+      Quet moi .tsx duoi apps/app (tru apps/app/test/** va apps/app/app/proto/**), dem tai luot chay.
+      In "DUNG AC-9: <N> tep, 0 vo thanh ben tu dung, 2/2 tep nhap AreaSidebar". Vo tu dung = chuoi
+      "w-[213px]", hoac the <aside co className chua mot lop be rong co dinh (w-56, w-60, w-64, w-[..px])
+      va mot lop an theo kho (hidden ... md:block|md:flex|lg:flex). Moi vi pham mot dong
+      "SAI AC-9: <tep>:<dong> <doan>" ma 1. N = 0 -> ma 2 "bo quet rong".
+      CHIEU DO tren ma chua sua: "SAI AC-9" o settings-sidebar.tsx (aside hidden w-56 md:block),
+      agent-builder-shell.tsx va (agent-builder)/layout.tsx (w-[213px]), va "0/2 tep nhap AreaSidebar",
+      ma 1. Doi chung duong tren cung bo quet: TBK_PHA=gieo them mot tep tam
+      apps/app/components/__tbk-pha.tsx chua <aside className="hidden w-56 md:flex"> -> SAI goi dung
+      ten tep do, roi xoa tep.
+
+  - id: E11
+    criterion: AC-10
+    executor: judgment
+    inputs:
+      - docs/design.md
+      - docs/settings.md
+    paths:
+      - "docs/design.md"
+      - "docs/settings.md"
+    question: |
+      Doc docs/design.md va docs/settings.md. Mot nguoi dung man moi cho kho nay co chon dung giua
+      «thanh bên khu» (AreaSidebar) va «thẻ con» (Tabs variant="line") chi bang hai tep nay khong?
+      Dat khi: design.md co mot muc noi ro (1) khi nao dung thanh ben khu — cac noi den ngang hang
+      cua mot khu, dat o layout cua khu, nhom co nhan, dien thoai thanh hang ngang; (2) khi nao dung
+      the con — cac phan cua mot vat tren mot trang; (3) gioi han mot thanh khu va mot hang the con
+      tren mot man, the con khong long; (4) it nhat mot vi du that cua kho cho moi ben (Cài đặt hay
+      Hội thoại; một bộ OKR hay một bản ghi); (5) mot dong trong bang «Dấu hiệu vẽ tay» tro
+      AreaSidebar; va settings.md muc «Thanh bên» tro AreaSidebar. Thieu y nao -> FAIL, neu ten y.
