@@ -76,9 +76,11 @@ evals:
               dinh sau 300 ms keoVe CHUA tra; trong giao dich dat archivedAt cho id roi commit -> phan hoi keoVe khong mang
               ma id, keoVeLuc cua id van null.
       CHIEU DO: ban sao bo cau kiem keoVeLuc o luuTru -> o 1 do voi thong diep ghim "luu tru duoc tin hieu da lay ve";
-      ban sao bo khoa bang o luuTru -> o 2(b) do voi thong diep ghim "luu tru khong cho luot keo ve" (loi goi tra truoc
-      khi khoa nha); ban sao bo archivedAt null o keoVe -> o 2(a) do voi thong diep ghim "keo ve mang tin hieu vua luu
-      tru".
+      ban sao go CA HAI lop bao ve cua luuTru — bo LOCK TABLE va doc keoVeLuc truoc roi cap nhat theo id (dieu kien
+      «chua lay ve» roi khoi cau cap nhat) -> o 2(b) do voi thong diep ghim "luu tru va keo ve cung thang"; ban sao bo
+      archivedAt null o keoVe -> o 2(a) do voi thong diep ghim "keo ve mang tin hieu vua luu tru". (Go mot lop thi van
+      xanh: cau UPDATE co dieu kien tu giu khoa ROW EXCLUSIVE xung dot voi khoa cua keoVe, con LOCK TABLE lam cach doc
+      truoc cung an toan — do 19/10.)
 
   - id: E4
     criterion: AC-4

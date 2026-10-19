@@ -372,9 +372,9 @@ describe("gtr-da-lay-ve", () => {
 				}),
 		);
 		expect(daTraTruoc, "luu tru khong cho luot keo ve").toBe(false);
-		expect((kq as Tra).status).toBe(409);
+		expect((kq as Tra).status, "luu tru va keo ve cung thang").toBe(409);
 		const h = await db.tinHieu.findUniqueOrThrow({ where: { id: t.id } });
-		expect(h.archivedAt).toBeNull();
+		expect(h.archivedAt, "luu tru va keo ve cung thang").toBeNull();
 		expect(h.keoVeLuc).not.toBeNull();
 	});
 
