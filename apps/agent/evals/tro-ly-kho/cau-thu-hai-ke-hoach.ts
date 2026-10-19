@@ -28,6 +28,7 @@ export const ketQuaCauThuHai = z.object({
 	thuTu: z.number().int().min(1),
 	maCau: z.string().min(1),
 	messageId: z.string().min(1),
+	guiLuc: z.number().int(),
 	zaloHoiId: z.string().nullable(),
 	sessionId: z.string().nullable(),
 	ketQua: z.string().nullable(),

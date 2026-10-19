@@ -22,6 +22,8 @@ export const ZCH = {
 		bao: "do.md",
 	},
 	xong: ["TRA_LOI", "TU_CHOI"],
+	daTraLoi: "da-tra-loi",
+	lyDoLoiModel: ["loi-model", "het-tran"],
 	dongChiPhi: "chi phi usd:",
 } as const;
 
@@ -36,7 +38,8 @@ export const dongKetQua = z.object({
 	tlhZaloHoiId: z.string().nullable(),
 	tlhTrangThai: z.string().nullable(),
 	tlhLyDo: z.string().nullable(),
-	daGuiZalo: z.boolean(),
+	tin: z.array(z.string()),
+	traLoiMong: z.array(z.string()),
 	loi: z.string().nullable(),
 });
 

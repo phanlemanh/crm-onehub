@@ -16,6 +16,7 @@ const CAU_HAI = {
 	khoDo: /\/crm_[a-z0-9_]+_do(\?|$)/,
 	choCauMs: 4 * MINUTE_MS,
 	nhipMs: 500,
+	langMs: 5 * SECOND_MS,
 	timeoutMs: 40 * MINUTE_MS,
 	dangHoi: "dang-hoi",
 } as const;
@@ -63,6 +64,7 @@ async function hoiMotCau(
 		thuTu,
 		maCau: c.maCau,
 		messageId: c.messageId,
+		guiLuc: Date.now(),
 		zaloHoiId: null,
 		sessionId: null,
 		ketQua: null,
@@ -92,6 +94,7 @@ async function hoiMotCau(
 		t.signal,
 		CAU_HAI.choCauMs,
 	);
+	if (xong) await new Promise((r) => setTimeout(r, CAU_HAI.langMs));
 	const h =
 		xong ??
 		(await db.zaloHoi.findUnique({ where: { messageId: c.messageId } }));

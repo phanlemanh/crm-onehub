@@ -101,14 +101,35 @@ const { gieoNguoi, ma, trangDaDuyet } = await import(
 	join(AGENT, "test/support/tro-ly-kho-gia.ts")
 );
 const { thanWebhook } = await import(join(AGENT, "test/support/zalo-tin.ts"));
-const { zaloMayChu } = await import(
-	join(AGENT, "test/support/zalo-may-chu.ts")
+const { zaloGia } = await import(join(AGENT, "test/support/zalo-gia.ts"));
+const { cauKhoChoZalo } = await import(
+	join(AGENT, "agent/lib/tai-lieu-hoi-zalo.ts")
 );
+const { locTraLoi } = await import(join(AGENT, "agent/lib/zalo-loc.ts"));
 const { CAU_THU_HAI_ENV, docKetQuaCauThuHai } = await import(
 	join(AGENT, "evals/tro-ly-kho/cau-thu-hai-ke-hoach.ts")
 );
 
-const mayChu = zaloMayChu();
+type GoiGia = { method: string; body: { chat_id?: string; text?: string } };
+const gia = zaloGia() as {
+	goi: GoiGia[];
+	fetcher: (
+		url: string,
+		init: { method: string; body: string },
+	) => Promise<Response>;
+};
+const lucGoi: number[] = [];
+const mayChu = Bun.serve({
+	port: 0,
+	fetch: async (req) => {
+		const r = await gia.fetcher(req.url, {
+			method: "POST",
+			body: await req.text(),
+		});
+		while (lucGoi.length < gia.goi.length) lucGoi.push(Date.now());
+		return r;
+	},
+});
 try {
 	const quanTri = await gieoNguoi("owner");
 	const slugCo = new Set<string>();
@@ -188,7 +209,7 @@ try {
 			AGENT_BRIDGE_SECRET: randomBytes(24).toString("hex"),
 			ZALO_BOT_TOKEN: randomBytes(16).toString("hex"),
 			ZALO_WEBHOOK_SECRET: randomBytes(24).toString("hex"),
-			ZALO_API_URL: mayChu.url,
+			ZALO_API_URL: `http://127.0.0.1:${mayChu.port}`,
 			CRM_TELEMETRY_DISABLED: "1",
 			[CAU_THU_HAI_ENV.keHoach]: tepKeHoach,
 			[CAU_THU_HAI_ENV.ketQua]: tepKetQua,
@@ -211,34 +232,53 @@ try {
 	);
 
 	const ket = docKetQuaCauThuHai(readFileSync(tepKetQua, "utf8"));
-	const guiCua = (nguoi: string) =>
-		mayChu.goi.filter(
-			(g: { method: string; body: { chat_id?: string } }) =>
-				g.method === "sendMessage" && g.body.chat_id === zaloCua.get(nguoi),
-		).length;
-	const ketQua: DongKetQua[] = ket
-		.map((k) => ({
-			nguoi: k.nguoi,
-			thuTu: k.thuTu as 1 | 2 | 3,
-			maCau: k.maCau,
-			zaloHoiId: k.zaloHoiId,
-			sessionId: k.sessionId,
-			ketQua: k.ketQua,
-			tlhId: k.tlhId,
-			tlhZaloHoiId: k.tlhZaloHoiId,
-			tlhTrangThai: k.tlhTrangThai,
-			tlhLyDo: k.tlhLyDo,
-			daGuiZalo: guiCua(k.nguoi) >= k.thuTu,
-			loi: k.loi,
-		}))
-		.sort((a, b) => a.nguoi.localeCompare(b.nguoi) || a.thuTu - b.thuTu);
+	const tinCua = (k: (typeof ket)[number]): string[] => {
+		const sau =
+			ket.find((x) => x.nguoi === k.nguoi && x.thuTu === k.thuTu + 1)?.guiLuc ??
+			Number.POSITIVE_INFINITY;
+		const chat = zaloCua.get(k.nguoi);
+		return gia.goi.flatMap((g, i) => {
+			const luc = lucGoi[i] ?? 0;
+			return g.method === "sendMessage" &&
+				g.body.chat_id === chat &&
+				luc >= k.guiLuc &&
+				luc < sau
+				? [g.body.text ?? ""]
+				: [];
+		});
+	};
+	const traLoiMongCua = async (k: (typeof ket)[number]): Promise<string[]> => {
+		if (!k.zaloHoiId || !ZCH.xong.some((x) => x === k.tlhTrangThai)) return [];
+		const cau: string | null = await cauKhoChoZalo(k.zaloHoiId);
+		return cau ? locTraLoi(cau) : [];
+	};
+	const ketQua: DongKetQua[] = (
+		await Promise.all(
+			ket.map(async (k) => ({
+				nguoi: k.nguoi,
+				thuTu: k.thuTu as 1 | 2 | 3,
+				maCau: k.maCau,
+				zaloHoiId: k.zaloHoiId,
+				sessionId: k.sessionId,
+				ketQua: k.ketQua,
+				tlhId: k.tlhId,
+				tlhZaloHoiId: k.tlhZaloHoiId,
+				tlhTrangThai: k.tlhTrangThai,
+				tlhLyDo: k.tlhLyDo,
+				tin: tinCua(k),
+				traLoiMong: await traLoiMongCua(k),
+				loi: k.loi,
+			})),
+		)
+	).sort((a, b) => a.nguoi.localeCompare(b.nguoi) || a.thuTu - b.thuTu);
 	ghiBangChung(ZCH.evidence, {
 		ketQua,
 		eveLog,
 		chiPhiUsd,
 		ghiChu: [
 			`Lượt chạy bằng \`eve eval ${DO.baiEval}\` trên kho đo dùng-một-lần, model mặc định của nhánh.`,
-			`Tám người đã nối Zalo, mỗi người ba câu kho liên tiếp qua \`/zalo/webhook\` (Zalo giả nhận trả lời); câu sau gửi khi câu trước ra khỏi \`dang-hoi\`.`,
+			`Tám người đã nối Zalo, mỗi người ba câu kho liên tiếp qua \`/zalo/webhook\` (Zalo giả nhận trả lời); câu sau gửi khi câu trước ra khỏi \`dang-hoi\` và đã lắng.`,
+			`Mỗi câu ghi các tin Zalo giả nhận trong khoảng từ lúc gửi câu đó tới lúc gửi câu kế, cạnh câu trả lời dựng từ hàng TaiLieuHoi của chính câu (\`cauKhoChoZalo\` → \`locTraLoi\`).`,
 			`Thư mục lượt: \`${relative(ZCH.goc, thuMuc)}\`; mã thoát eve eval: ${maThoat}.`,
 			`Ngưỡng: câu lỗi model tối đa ${nguong.loiModelToiDa}, trần ${nguong.tranUsd} USD.`,
 		],
@@ -249,6 +289,6 @@ try {
 			`QUA TRAN CHI: ${chiPhiUsd.toFixed(4)} > ${nguong.tranUsd} USD — khong chay lai`,
 		);
 } finally {
-	mayChu.dung();
+	mayChu.stop(true);
 	await db.$disconnect();
 }

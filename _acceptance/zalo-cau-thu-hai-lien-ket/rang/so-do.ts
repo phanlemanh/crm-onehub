@@ -33,7 +33,10 @@ const NHAN = {
 	khacPhien: "khac phien",
 	lechCau: "lech cau",
 	chuaXong: "chua xong",
+	chuaTraLoiZalo: "chua tra loi zalo",
 	khongGui: "khong gui zalo",
+	lechTraLoi: "lech tra loi",
+	loiEval: "loi eval",
 	thieuLienKet: "thieu lien ket",
 	saiCho: "sai cho",
 	threw: "resolver threw",
@@ -64,7 +67,12 @@ function kiemBam(thuMuc: string): string[] {
 	});
 }
 
-const laLoi = (k: DongKetQua) => k.loi !== null || k.tlhTrangThai === "LOI";
+const laLoiModel = (k: DongKetQua) =>
+	k.loi === null &&
+	k.tlhTrangThai === "LOI" &&
+	ZCH.lyDoLoiModel.some((x) => x === k.tlhLyDo);
+
+const tenCua = (k: DongKetQua) => k.zaloHoiId ?? `${k.nguoi}/${k.thuTu}`;
 
 function kiemKetQua(
 	ketQua: readonly DongKetQua[],
@@ -93,19 +101,32 @@ function kiemKetQua(
 		if (phien.size !== 1 || phien.has(null))
 			loi.push(`${NHAN.khacPhien}: ${c.nguoi} co ${[...phien].join(", ")}`);
 	}
-	const soLoi = ketQua.filter(laLoi).length;
-	if (soLoi > nguong.loiModelToiDa)
-		loi.push(`${NHAN.loiModel}: ${soLoi} > ${nguong.loiModelToiDa}`);
+	const soLoiModel = ketQua.filter(laLoiModel).length;
+	if (soLoiModel > nguong.loiModelToiDa)
+		loi.push(`${NHAN.loiModel}: ${soLoiModel} > ${nguong.loiModelToiDa}`);
 	for (const k of ketQua) {
-		if (laLoi(k)) continue;
-		const ten = k.zaloHoiId ?? `${k.nguoi}/${k.thuTu}`;
+		const ten = tenCua(k);
+		if (k.loi !== null) {
+			loi.push(`${NHAN.loiEval}: ${ten} ${k.loi}`);
+			continue;
+		}
+		if (laLoiModel(k)) continue;
 		if (!ZCH.xong.some((x) => x === k.tlhTrangThai))
 			loi.push(
 				`${NHAN.chuaXong}: ${ten} ${k.tlhTrangThai ?? "khong co TaiLieuHoi"}`,
 			);
 		if (k.tlhZaloHoiId !== k.zaloHoiId)
 			loi.push(`${NHAN.lechCau}: ${ten} gan TaiLieuHoi cua ${k.tlhZaloHoiId}`);
-		if (!k.daGuiZalo) loi.push(`${NHAN.khongGui}: ${ten}`);
+		if (k.ketQua !== ZCH.daTraLoi)
+			loi.push(`${NHAN.chuaTraLoiZalo}: ${ten} ketQua ${k.ketQua}`);
+		if (k.tin.length === 0) loi.push(`${NHAN.khongGui}: ${ten}`);
+		else if (
+			k.traLoiMong.length === 0 ||
+			JSON.stringify(k.tin) !== JSON.stringify(k.traLoiMong)
+		)
+			loi.push(
+				`${NHAN.lechTraLoi}: ${ten} gui ${k.tin.length} tin khong khop tra loi cua chinh cau`,
+			);
 	}
 	return loi;
 }
@@ -170,7 +191,8 @@ function ghiKq(thuMuc: string, k: readonly DongKetQua[]): void {
 	ghiBam(thuMuc);
 }
 
-const lanh = (k: DongKetQua[]) => k.filter((x) => !laLoi(x));
+const lanh = (k: DongKetQua[]) =>
+	k.filter((x) => x.loi === null && !laLoiModel(x));
 const thu = (k: DongKetQua[], thuTu: number) => {
 	const d = lanh(k).find(
 		(x) => x.thuTu === thuTu && x.zaloHoiId && x.sessionId,
@@ -179,6 +201,16 @@ const thu = (k: DongKetQua[], thuTu: number) => {
 		throw new Error(`so-do: bang chung khong co cau ${thuTu} lanh de pha`);
 	return d;
 };
+const doiDong = (
+	m: string,
+	k: DongKetQua[],
+	d: DongKetQua,
+	moi: Partial<DongKetQua>,
+) =>
+	ghiKq(
+		m,
+		k.map((x) => (x === d ? { ...x, ...moi } : x)),
+	);
 
 const PHA: readonly Pha[] = [
 	{
@@ -212,12 +244,7 @@ const PHA: readonly Pha[] = [
 		ghim: () => NHAN.khacPhien,
 		pha: (m, k) => {
 			const d = thu(k, 3);
-			ghiKq(
-				m,
-				k.map((x) =>
-					x === d ? { ...x, sessionId: `${x.sessionId}-khac` } : x,
-				),
-			);
+			doiDong(m, k, d, { sessionId: `${d.sessionId}-khac` });
 		},
 	},
 	{
@@ -226,13 +253,45 @@ const PHA: readonly Pha[] = [
 		pha: (m, k) => {
 			const d = thu(k, 2);
 			const mot = k.find((x) => x.nguoi === d.nguoi && x.thuTu === 1);
-			ghiKq(
-				m,
-				k.map((x) =>
-					x === d ? { ...x, tlhZaloHoiId: mot?.zaloHoiId ?? "khac" } : x,
-				),
-			);
+			doiDong(m, k, d, { tlhZaloHoiId: mot?.zaloHoiId ?? "khac" });
 		},
+	},
+	{
+		ten: "cau hai khong co TaiLieuHoi (tro ly kho nhan nham cau)",
+		ghim: () => NHAN.chuaXong,
+		pha: (m, k) => {
+			const d = thu(k, 2);
+			doiDong(m, k, d, {
+				tlhId: null,
+				tlhZaloHoiId: null,
+				tlhTrangThai: null,
+				tlhLyDo: null,
+			});
+		},
+	},
+	{
+		ten: "cau hai gui Zalo hong",
+		ghim: () => NHAN.chuaTraLoiZalo,
+		pha: (m, k) => doiDong(m, k, thu(k, 2), { ketQua: "gui-hong" }),
+	},
+	{
+		ten: "cau hai nhan tin tra loi cua cau mot",
+		ghim: () => NHAN.lechTraLoi,
+		pha: (m, k) => {
+			const d = thu(k, 2);
+			const mot = k.find((x) => x.nguoi === d.nguoi && x.thuTu === 1);
+			doiDong(m, k, d, { tin: mot?.tin ?? [] });
+		},
+	},
+	{
+		ten: "cau ba khong co tin nao",
+		ghim: () => NHAN.khongGui,
+		pha: (m, k) => doiDong(m, k, thu(k, 3), { tin: [] }),
+	},
+	{
+		ten: "cau hai webhook hong",
+		ghim: () => NHAN.loiEval,
+		pha: (m, k) => doiDong(m, k, thu(k, 2), { loi: "webhook 500" }),
 	},
 	{
 		ten: "xoa mot dong ket qua",
@@ -255,7 +314,11 @@ const PHA: readonly Pha[] = [
 			const chon = new Set(lanh(k).slice(0, n));
 			ghiKq(
 				m,
-				k.map((x) => (chon.has(x) ? { ...x, loi: "loi-model" } : x)),
+				k.map((x) =>
+					chon.has(x)
+						? { ...x, tlhTrangThai: "LOI", tlhLyDo: ZCH.lyDoLoiModel[0] }
+						: x,
+				),
 			);
 		},
 	},
@@ -318,7 +381,7 @@ if (import.meta.main) {
 	for (const d of loi) console.error(`KHONG DAT: ${d}`);
 	if (loi.length > 0) process.exit(1);
 	console.log(
-		`DAT: ${ZCH.evidence} — 24 cau, 8 nguoi, khong dong dung, lien ket du`,
+		`DAT: ${ZCH.evidence} — 24 cau, 8 nguoi, khong dong dung, lien ket du, moi cau nhan dung tra loi cua no`,
 	);
 	const truot = chayPha(ZCH.evidence, chuoi, nguong);
 	if (truot.length > 0) {

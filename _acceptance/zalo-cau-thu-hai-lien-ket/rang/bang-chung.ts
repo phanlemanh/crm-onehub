@@ -20,11 +20,11 @@ export function ghiBam(thuMuc: string): void {
 
 function bangMd(ketQua: readonly DongKetQua[]): string[] {
 	return [
-		"| người | câu | mã | phiên gốc | ZaloHoi | TaiLieuHoi | gửi Zalo | lỗi |",
+		"| người | câu | mã | phiên gốc | ZaloHoi | TaiLieuHoi | tin Zalo | lỗi |",
 		"| --- | --- | --- | --- | --- | --- | --- | --- |",
 		...ketQua.map(
 			(k) =>
-				`| ${k.nguoi} | ${k.thuTu} | ${k.maCau} | ${k.sessionId ?? "—"} | ${k.ketQua ?? "—"} | ${k.tlhTrangThai ?? "—"}${k.tlhLyDo ? ` ${k.tlhLyDo}` : ""} | ${k.daGuiZalo ? "có" : "không"} | ${k.loi ?? ""} |`,
+				`| ${k.nguoi} | ${k.thuTu} | ${k.maCau} | ${k.sessionId ?? "—"} | ${k.ketQua ?? "—"} | ${k.tlhTrangThai ?? "—"}${k.tlhLyDo ? ` ${k.tlhLyDo}` : ""} | ${k.tin.length} tin${k.tin.length > 0 && JSON.stringify(k.tin) === JSON.stringify(k.traLoiMong) ? " khớp" : " lệch"} | ${k.loi ?? ""} |`,
 		),
 	];
 }
