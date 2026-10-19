@@ -1,5 +1,5 @@
 {
-  "feature_plain": "Người hỏi Kho qua Zalo nhiều câu trong một ngày thì từ câu thứ hai trở đi vẫn được trợ lý kho trả lời đúng câu, không còn bị dừng giữa chừng rồi nhận câu báo lỗi. Lần này phạm vi thu lại sau lượt đo 2: câu đầu bị agent gốc đi lạc là hạn chế đã biết.",
+  "feature_plain": "Người hỏi Kho qua Zalo nhiều câu trong một ngày thì từ câu thứ hai trở đi vẫn được trợ lý kho trả lời đúng câu. Trên trợ lý thật: 6/8 người có câu đầu trả lời xong, cả 12 câu sau của họ nhận đúng câu trả lời của chính câu; 2 người kẹt ở câu đầu vì agent gốc đi lạc là hạn chế đã biết.",
   "will_do": [
     {
       "id": "AC-1",
@@ -87,5 +87,6 @@
       "i": 4,
       "p": "Phản biện lo bài kiểm «lần tra đầu» đo bằng đồng hồ dễ bập bênh — không sửa, vì mỗi lần tra lại đều chờ đúng 250 ms nên dưới mức đó là dấu hiệu chắc chắn; hồ sơ trước dùng cùng thước và xanh trên ba máy."
     }
-  ]
+  ],
+  "scope_plain": "Phần cắt khỏi vòng này, đã chốt ở Cổng Phạm vi:"
 }
