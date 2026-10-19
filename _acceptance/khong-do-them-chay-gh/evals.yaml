@@ -102,7 +102,10 @@ evals:
       va khong co dong «chay:». --chi-rut --chi (khong kem danh sach) -> ma 2, dong «KHONG DO DUOC» chua «--chi». Doi chung
       duong: tap khong --chi co hon 1 khoa va chua gpct_nen_gop. O thu nam, che do day du (khong --chi-rut) voi --chi
       khong_co_khoa_nay: ma 2 «KHONG DO DUOC», khong dong «neo:», va khong thu muc tam moi nao mang tien to «cgdp-kdt-» trong
-      thu muc tam he thong (so danh sach truoc va sau). Nam o, moi o in «dat <o>» hoac «sai <o>: <ly do>».
+      thu muc tam he thong (so danh sach truoc va sau). Nam o, moi o in «dat <o>» hoac «sai <o>: <ly do>». Chieu do: ban
+      chep cua ban do (.acceptance-runs/khong-do-them-chay-gh/chi/pha/, import doi thanh duong tuyet doi) ma dong loc
+      «const chayTap = CHI ? … : tap;» thay bang «const chayTap = tap;» (khong tim thay -> ma 2); chay --chi-rut --chi
+      gpct_nen_gop -> dong «chay:» lai liet ca tap -> «BAT bo-loc-bi-bo»; khong bat -> ma 1 «thuoc hong: bo-loc-bi-bo».
 
   - id: E6
     criterion: AC-6
@@ -110,15 +113,14 @@ evals:
     cmd: config:executors.script.kdtg_dung_lai_cay
     paths:
       - "scripts/kiem-cheo/**"
-      - "lib/evidence-core.cjs"
-      - "lib/eval-yaml.cjs"
+      - "lib/**"
       - "_acceptance/khong-do-them-chay-gh/rang/dung-lai-cay.mjs"
     expected: |
       bun rang/dung-lai-cay.mjs. Bon ca mang ten trong scripts/kiem-cheo/test/dem.test.mjs, moi ca giu mot bao dam cua AC-6:
       B1 «cay mat giua lan va phan loai», B2 «lan de cay ban o tep khac giua hai sha», B3 «lan de cay ban o tep giong nhau
-      giua hai sha», B4 «lenh git loi -> ly_do». Ban lanh: node --test --test-name-pattern <bon ten> tren cay that -> bon ca
-      pass, 0 fail (dem tu dong «ℹ pass»/«ℹ fail», so pass = 4). Chieu do tren ban guong o thu muc tam (chep scripts/kiem-cheo
-      va lib/evidence-core.cjs, lib/eval-yaml.cjs), moi lan go mot manh cua dem.mjs (thay chuoi; khong tim thay chuoi -> ma
+      giua hai sha», B4 «lenh git loi -> ly_do». Ban lanh: node --test --test-reporter=tap --test-name-pattern <bon ten>
+      tren cay that -> bon ca pass, 0 fail (dem tu dong tong ket «# pass N»/«# fail N» cua TAP, so pass = 4). Chieu do tren ban guong o thu muc tam (chep scripts/kiem-cheo
+      va ca thu muc lib/), moi lan go mot manh cua dem.mjs (thay chuoi; khong tim thay chuoi -> ma
       2) va ghi truoc ca nao phai fail: (a) datCay nem lai thay vi dungCay -> B1 fail; (c) bo «--force» o worktree add cua
       dungCay -> B1 fail; (e) datCay nem lai VA bo «--force» o checkout cua datCay -> B2 fail; (b) bo «--force» o checkout cua
       datCay -> B3 fail; (d) git fetch ly_do dung dong dau message thay dongLoi -> B4 fail. Moi lan: ten ca phai co trong dong
