@@ -21,18 +21,14 @@ import {
 } from "@crm/ui/components/reui/timeline";
 import { SectionHeading } from "@crm/ui/components/section-heading";
 import { formatDay } from "@crm/ui/lib/format";
-import type {
-	DuLieuChoXem,
-	LoTrinhChoXem,
-	MocLoTrinh,
-} from "@crm/validation/lo-trinh-du-lieu";
+import type { DuLieuChoXem } from "@crm/validation/lo-trinh-du-lieu";
 import { duKienMoc } from "@/lib/lo-trinh/du-kien";
 import { soSanhMoc } from "@/lib/lo-trinh/ngay";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongLienQuan } from "./dong-lien-quan";
 import { KhungTrong } from "./khung-trong";
 import { ODuKien } from "./o-du-kien";
-import { khoaMoc, khoaMocCua, type Viec } from "./viec";
+import { khoaMoc, mocHienCua, type Viec } from "./viec";
 
 export function XemMoc({
 	viec,
@@ -47,18 +43,12 @@ export function XemMoc({
 }) {
 	const locale = useLocale();
 	const m = loTrinhMessages(locale);
-	const theoKhoa = new Map<
-		string,
-		{ moc: MocLoTrinh; lo: string; loTrinh: LoTrinhChoXem; ds: Viec[] }
-	>();
-	for (const lo of duLieu.lo_trinh)
-		for (const moc of lo.moc)
-			theoKhoa.set(khoaMocCua(lo.tep, moc), {
-				moc,
-				lo: lo.ten ?? lo.tep,
-				loTrinh: lo,
-				ds: [],
-			});
+	const theoKhoa = new Map(
+		mocHienCua(duLieu).map((x) => [
+			x.khoa,
+			{ ...x, lo: x.loTrinh.ten ?? x.loTrinh.tep, ds: [] as Viec[] },
+		]),
+	);
 	for (const v of viec) theoKhoa.get(khoaMoc(v))?.ds.push(v);
 	const mocs = [...theoKhoa.entries()]
 		.filter(([, x]) => x.ds.length > 0)
@@ -73,7 +63,7 @@ export function XemMoc({
 			: mocs.filter(
 					([, x]) => x.moc.ngayHopLe !== null && x.moc.ngayHopLe < homNay,
 				).length;
-	const khongMoc = viec.filter((v) => !v.moc);
+	const khongMoc = viec.filter((v) => v.chuaHen);
 	if (!mocs.length && !khongMoc.length)
 		return (
 			<KhungTrong
@@ -98,6 +88,16 @@ export function XemMoc({
 								<span className="text-muted-foreground text-xs" translate="no">
 									{x.lo}
 								</span>
+								{x.dem ? (
+									<span
+										className="text-muted-foreground text-xs tabular-nums"
+										data-lo-trinh-moc-dem={khoa}
+									>
+										{x.dem.conLai > 0
+											? `${m.moc.conLai(String(x.dem.conLai), String(x.dem.tong))}${x.dem.tong > x.dem.conLai ? m.moc.daGiaoThem(String(x.dem.tong - x.dem.conLai)) : ""}`
+											: m.moc.giaoDu(String(x.dem.tong))}
+									</span>
+								) : null}
 								{x.duKien ? (
 									<span className="text-sm" data-lo-trinh-du-kien-moc={khoa}>
 										<ODuKien duKien={x.duKien} gon={false} />

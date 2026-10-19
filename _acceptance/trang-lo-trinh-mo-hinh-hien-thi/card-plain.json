@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Trang Lộ trình trong CRM lấy đúng tập việc, mốc và tên mà trang lộ trình của bộ công cụ đã tính, nên hai trang không bao giờ nói khác nhau về cùng một lộ trình; mỗi mốc có thêm dòng «còn n/m việc».",
+  "scope_plain": "Những phần dưới đây là việc của bộ công cụ hoặc đã có từ trước, vòng này không chạm:"
+}
