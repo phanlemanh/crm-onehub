@@ -8,10 +8,10 @@
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Thẻ Cổng Bằng chứng round 4 báo sai 6 eval đã đạt (E2, E4, E5, E6, E8, E10) thành «chưa đạt»**
+- **Thẻ Cổng Bằng chứng round 4 báo sai 6 eval đã đạt (E2, E4, E5, E6, E8, E10) thành «chưa đạt» — lỗi bộ vẽ thẻ kit, tái hiện ở evidence/the-dem-sai-tai-hien.md**
   Người dùng thấy gì: Người ký cổng thấy 8 phép kiểm đỏ trong khi thật ra chỉ 2 đỏ, nên có thể đánh giá mức hỏng nặng hơn thực tế khi chọn lối ra. Người dùng cuối của Kho tài liệu không bị ảnh hưởng.
   Căn cứ: Chỉ làm người ký đọc thẻ nặng hơn thực tế, không mất hay lộ dữ liệu của người dùng, và bảng báo cáo đi kèm vẫn ghi đúng 2 phép kiểm hỏng để đối chiếu.
-  file: `_acceptance/sua-sau-chay-that/card.html`
+  file: `acceptance-gate 2.33.0 scripts/gate-card.js:1035,1095,1262`
   severity: medium
   Đề xuất: known-limits
 
