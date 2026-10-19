@@ -48,7 +48,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.vg_lich_api
-    expected: "exit 0; -t vg-hoan-tac của apps/api/test/lich-bay-ngay.spec.ts. Chuỗi viết sẵn năm bước datNgayNghiTuan, mỗi bước gửi giá trị mà nút Hoàn tác của màn gửi (giá trị trước lần lưu), rồi một lần get: [6, 7] → [] → [6, 7] → [] → [7] → []; get sau bước nào khác giá trị đã đặt thì ném 'vg: hoan tac buoc <n> ra <json>'; số bước đã so khác 5 thì ném 'vg: chuoi hoan tac thieu <n>'. Sau mỗi bước đọc khongNghiTuan bằng Prisma: khác (giá trị đặt là []) thì ném 'vg: co khong nghi sai buoc <n>'. Bước dọn sau bài (afterAll) trả hàng appSetting về đúng ngayNghiTuan và khongNghiTuan đã chụp trước bài, rồi đọc lại: khongNghiTuan khác giá trị đã chụp hoặc lichLamViec.get khác giá trị trước bài thì ném 'vg: don lich de lai co <json>'. Lớp màn của AC-4 đo ở E8 bước 3. Chiều đỏ ở E7 (b)."
+    expected: "exit 0; -t vg-hoan-tac của apps/api/test/lich-bay-ngay.spec.ts. Chuỗi viết sẵn năm bước datNgayNghiTuan, mỗi bước gửi giá trị mà nút Hoàn tác của màn gửi (giá trị trước lần lưu), rồi một lần get: [6, 7] → [] → [6, 7] → [] → [7] → []; get sau bước nào khác giá trị đã đặt thì ném 'vg: hoan tac buoc <n> ra <json>'; số bước đã so khác 5 thì ném 'vg: chuoi hoan tac thieu <n>'. Sau mỗi bước đọc khongNghiTuan bằng Prisma: khác (giá trị đặt là []) thì ném 'vg: co khong nghi sai buoc <n>'. Bước dọn sau bài (afterAll) trả hàng appSetting về đúng ngayNghiTuan và khongNghiTuan đã chụp trước bài, rồi đọc lại: khongNghiTuan khác giá trị đã chụp hoặc lichLamViec.get khác giá trị trước bài thì ném 'vg: don lich de lai co <json>'. Lớp màn của AC-4 đo ở E8b. Chiều đỏ ở E7 (b)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/db/src/du-an.ts, apps/api/src/lich-lam-viec/**, apps/api/test/lich-bay-ngay.spec.ts]
 
@@ -99,7 +99,7 @@ evals:
     inputs: [_acceptance/va-gantt-lich-bay-ngay/evidence/]
     expected: |
       0. Đối chứng dương trên cùng màn, lịch mặc định của kho đo. vg-lich-t7cn-1280: thẻ «Ngày nghỉ trong tuần» có bảy ô, đúng hai ô Thứ Bảy, Chủ nhật ở trạng thái chọn — man.mjs đếm ô [data-thu] mang data-state='on': khác 2 hoặc không phải data-thu 6 và 7 thì thoát 1 'vg man: doi chung lich khong thay 2 o <json>'. vg-gantt-t7cn-1280: Gantt dự án có việc 22/10→27/10, cột 24/10 và 25/10 tô nền — số [data-off-day] bằng 0 thì thoát 1 'vg man: doi chung khong to T7 CN'.
-      1. vg-lich-rong-1280: man.mjs bấm bỏ hai ô Thứ Bảy, Chủ nhật trên màn, chờ thông báo «Đã lưu», tải lại trang: không ô nào ở trạng thái chọn — cùng phép đếm khác 0 thì thoát 1 'vg man: lich bat lai <n>'.
+      1. vg-lich-rong-1280: man.mjs bấm bỏ ô Thứ Bảy rồi ô Chủ nhật trên màn, chờ thông báo «Đã lưu» sau mỗi lần, tải lại trang: không ô nào ở trạng thái chọn — cùng phép đếm khác 0 thì thoát 1 'vg man: lich bat lai <n>'.
       2. vg-gantt-rong-1280: cùng dự án, Gantt không tô nền cột nào — số [data-off-day] khác 0 thì thoát 1 'vg man: gantt to ngay nghi <n>'.
       3. vg-lich-rong-375 và vg-gantt-rong-375: như 1 và 2 ở khổ 375; document.scrollingElement.scrollWidth > 375 thì thoát 1 'vg man: 375 cuon ngang <man>'.
       4. Bước dọn của man.mjs đặt lại lịch [6, 7] trong kho đo.
@@ -114,13 +114,13 @@ evals:
     steps:
       - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/va-gantt-lich-bay-ngay/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này."
       - "Đọc dòng cuối: mã 0 kèm 'va-gantt-lich-bay-ngay man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'vg man: …'."
-      - "Mở các ảnh vg-hoan-tac-ve-rong-1280.png, vg-hoan-tac-ve-t7cn-1280.png và đối chiếu bằng mắt với Expected."
+      - "Mở các ảnh vg-hoan-tac-ve-rong-1280.png, vg-hoan-tac-ve-co-nghi-1280.png và đối chiếu bằng mắt với Expected."
     inputs: [_acceptance/va-gantt-lich-bay-ngay/evidence/]
     expected: |
-      0. Cùng lượt man.mjs của E8, sau bước 1 của E8 (lịch không nghỉ, đã tải lại).
-      1. vg-hoan-tac-ve-rong-1280: man.mjs bấm hai ô Thứ Bảy, Chủ nhật để đặt lại [6, 7], chờ «Đã lưu», bấm «Hoàn tác» trên thông báo, chờ lần lưu, tải lại trang: không ô nào ở trạng thái chọn — khác 0 thì thoát 1 'vg man: hoan tac ra <n> buoc 1'.
-      2. vg-hoan-tac-ve-t7cn-1280: man.mjs bấm bỏ hai ô (lịch thành không nghỉ), chờ «Đã lưu», bấm «Hoàn tác», chờ lần lưu, tải lại trang: đúng hai ô data-thu 6 và 7 ở trạng thái chọn — khác thì thoát 1 'vg man: hoan tac ra <n> buoc 2'.
-      3. Đối chứng: ngay trước mỗi lần bấm Hoàn tác, man.mjs đọc lichLamViec.get qua API của phiên đo và đòi giá trị vừa lưu ([6, 7] ở bước 1, [] ở bước 2), không thì thoát 1 'vg man: luu truoc hoan tac sai <json>'.
+      0. Cùng lượt man.mjs của E8, sau bước 2 của E8 (lịch làm cả tuần, đã tải lại). Mỗi lần bấm một ô chỉ đổi một thứ, nên Hoàn tác trên màn quay về trạng thái kề trước; hai chuyển dưới đây đi qua cả hai chiều của cờ «làm cả tuần».
+      1. vg-hoan-tac-ve-rong-1280: man.mjs bấm ô Thứ Bảy (lịch thành [6]), chờ «Đã lưu», bấm «Hoàn tác» trên thông báo, chờ, tải lại trang: không ô nào ở trạng thái chọn — khác 0 thì thoát 1 'vg man: hoan tac ra <n> buoc 1'.
+      2. vg-hoan-tac-ve-co-nghi-1280: man.mjs bấm ô Chủ nhật (lịch [7]), tải lại, bấm lại ô Chủ nhật (lịch thành làm cả tuần), chờ «Đã lưu», bấm «Hoàn tác», chờ, tải lại: đúng một ô data-thu 7 ở trạng thái chọn — khác thì thoát 1 'vg man: hoan tac ra <n> buoc 2'.
+      3. Đối chứng: ngay trước mỗi lần bấm Hoàn tác, man.mjs đọc lichLamViec.get qua API của phiên đo và đòi giá trị vừa lưu ([6] ở bước 1, [] ở bước 2), không thì thoát 1 'vg man: luu truoc hoan tac sai <json>'. Chuyển thẳng giữa làm cả tuần và nghỉ Thứ Bảy, Chủ nhật đo ở E4 (lớp API).
     evidence_required: [run_id, exit_code, screenshot, observed, verified_at]
     paths: ["apps/app/app/(app)/[slug]/settings/lich-lam-viec/**", "apps/app/app/(app)/[slug]/viec/**", packages/ui/src/components/gantt-du-an.tsx, packages/ui/src/components/reui/gantt/**, packages/db/src/du-an.ts, apps/api/src/lich-lam-viec/**, _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs]
 
