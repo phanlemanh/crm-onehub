@@ -5,9 +5,9 @@ slug: zalo-cau-thu-hai-lien-ket
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [agent]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: manh
+approved_at: 2026-10-19
 design_doc: _acceptance/zalo-cau-thu-hai-lien-ket/design.md
 ---
 
