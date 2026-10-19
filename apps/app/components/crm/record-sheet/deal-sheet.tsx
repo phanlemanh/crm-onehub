@@ -59,6 +59,7 @@ import {
 	LocalDay,
 	LocalRelativeTime,
 } from "@/components/local-date-time";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import {
 	type RecordSheetMessages,
 	recordSheetMessages,
@@ -74,7 +75,6 @@ import {
 	AddRow,
 	BangDaLuuTru,
 	DongDaLuuTru,
-	lyDoLoi,
 	RecordSheetFrame,
 	tenCaNhan,
 } from "./record-parts";
