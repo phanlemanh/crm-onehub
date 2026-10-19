@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b72c8cb861f3334b33f99eb553443a2fa8421aa9
+verified_commit: 981b0903455633d53634e4b7d1ad82c6596d0b46
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -475,3 +475,7 @@ sha: f954777151aaa5f114998e81e75b9e9c1442d5fe · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 19 — 2026-10-19, do VK4 doi-nhan-khu-muc-tieu: ghim lại sau gộp onehub #410 và #493
 run_id: repin-20261019T150916Z-20885
 sha: b72c8cb861f3334b33f99eb553443a2fa8421aa9 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 20 — 2026-10-19, do ghim lại sau chữ ký Cổng 2 và các lần gộp onehub
+run_id: repin-20261019T232132Z-12370
+sha: 981b0903455633d53634e4b7d1ad82c6596d0b46 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7c606af12d40bfd642cca44faaf3c277df63d2a2
+verified_commit: 981b0903455633d53634e4b7d1ad82c6596d0b46
 human_signoff: Phan Le Manh 2026-10-20 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 15/15 eval, 7/7 lệnh suite, hội đồng E14 đạt; vòng 1 REJECT đã sửa). Ngoài-1, 3, 4, 5 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý cắt; Treo phê hết.
 ---
 
@@ -244,3 +244,7 @@ none — every multi-run eval is uniform
 
 Round 1: bao cao bi REJECT — cac phat hien trong hop dong o phep do E3, E4, E15 (AC-3, AC-4) va bai dnk-goc ve checkout nong (AC-7). Returned to implementation.
 Round 2: moi eval chay lai PASS, E8 va E9 carry-forward tu round 1. Luu y: verified_at cua vong 2 la moc lam tron do may khong cap gio tung lenh.
+
+### Re-pin lần 1 — 2026-10-19, do ghim lại sau chữ ký Cổng 2 và các lần gộp onehub
+run_id: repin-20261019T232132Z-12370
+sha: 981b0903455633d53634e4b7d1ad82c6596d0b46 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E14, E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
