@@ -1,35 +1,28 @@
-# Review findings: go-tin-hieu-rac (round 4)
+# Review findings: go-tin-hieu-rac (vòng 5)
 
 ## Trong hợp đồng
 
-- **The Undo button skips the pending-action lock, and a failed undo can be lost without any message**
-  file: `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx:56`
-  severity: medium
-  AC: AC-9
-  source: bugs
-  detail: The latest fix (81710e9f5) locks every row's menu while any archive or restore is pending (`cho = thaoTac.dangCho !== null`). The Undo button in the 'archived' toast does not go through that menu: `onHoanTac: () => goKhoiPhuc(d)` calls `khoiPhuc.mutate` without checking `dangCho`. The toast stays up for 10 s, so this is reachable in normal use.
-
-  Two concrete failures follow:
-
-  (1) The lock is released too early. `luuTru` and `khoiPhuc` share one `dangCho` slot, and each hook clears it in its own `onSettled: () => setDangCho(null)`. Example: archive A is in flight (`dangCho = A`), and the user clicks Undo on an earlier toast for B, so `dangCho = B`. When A finishes, `onSettled` sets `dangCho` back to null while B's restore is still pending. Every row's menu unlocks mid-request, which defeats the AC-9 behaviour this round set out to fix.
-
-  (2) A failed undo can go unreported. Each restore passes its own `onSuccess` and `onError` to the same `khoiPhuc` hook. In TanStack Query v5 (the app uses ^5.101.2), callbacks passed to `mutate()` fire only for the most recent call. Archive A, then archive B, so both toasts are visible. Click Undo on A, then on B before A's request returns. A's callbacks are dropped. If A's restore fails, no 'restore failed' toast appears and the user assumes the undo worked. If it succeeds, the 'restored' toast is lost.
-
-  The new test `ca-man-hai-dong` only covers two menu clicks, not a click on the toast's Undo, so it does not catch either case.
-  rationale: AC-9 đòi lệnh lưu trữ hay khôi phục hỏng thì có thông báo lỗi đúng lý do và lệnh đang chờ không bị gửi chồng; nút Hoàn tác bỏ qua khoá và có thể nuốt thông báo lỗi nên làm AC-9 thất bại.
+Không có phát hiện nào trong hợp đồng ở vòng này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 5 — ca ca-man-hai-dong tuyên khoá «lưu trữ hay khôi phục» ở dòng khác nhưng chỉ đo nhánh lưu trữ**
+- **Ảnh E5c đã thay bằng lượt chạy mới, nhưng nhật ký và tệp network của E5c vẫn là lượt cũ**
+  Người dùng thấy gì: Người chấm hồ sơ sẽ thấy ảnh chụp và nhật ký của cùng một bước kiểm nhưng thuộc hai lượt chạy khác ngày, nên giờ trên ảnh không khớp giờ trong nhật ký. Người dùng cuối không bị ảnh hưởng gì, chỉ làm việc đối chiếu bằng chứng khó tin hơn.
+  Căn cứ: Chỉ gây rối cho người đọc hồ sơ chứ không làm mất hay lộ dữ liệu của ai, tính năng chạy đúng như đã hứa; ghi chú một dòng là đủ, không cần chạy lại cả lượt đo.
+  file: `_acceptance/go-tin-hieu-rac/evidence/E5c-run.log`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 5 — ca ca-man-hai-dong tuyên khoá «lưu trữ hay khôi phục» ở dòng khác nhưng chỉ đo nhánh lưu trữ (r4 · tệp đã đổi)**
   Người dùng thấy gì: Hiện tại người dùng không gặp lỗi gì, nhưng việc khoá các dòng khác khi đang khôi phục chưa có bài kiểm bảo vệ. Nếu sau này ai đó sửa nhầm chỗ này thì có thể không ai phát hiện ngay.
   Căn cứ: Không có hậu quả nào với người dùng lúc này, không mất dữ liệu, và bổ sung bài kiểm sau này rẻ nên chấp nhận ghi lại như một hạn chế đã biết.
   file: `apps/app/test/tin-hieu-luu-tru.dom.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Ba con số ngưỡng chuyển từ server page sang client component tự tính (r3)**
+- **Ba con số ngưỡng chuyển từ server page sang client component tự tính (r3 · tệp đã đổi)**
   Người dùng thấy gì: Nếu quản trị để trang «Tất cả» mở rất lâu rồi mới lưu trữ hay khôi phục, ô «quá 7 ngày» có thể lệch nhẹ so với giờ thật cho tới khi tải lại trang.
   Căn cứ: Chỉ lệch ở một ô số khi trang mở rất lâu, không mất dữ liệu, và tải lại trang là số đúng ngay.
   file: `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx`
@@ -43,7 +36,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Archive fails silently-generic when the sender has already deleted the signal; the row never leaves the list (r3)**
+- **Archive fails silently-generic when the sender has already deleted the signal; the row never leaves the list (r3 · tệp đã đổi)**
   Người dùng thấy gì: Nếu người gửi vừa xoá một tín hiệu, quản trị bấm lưu trữ sẽ thấy báo «thử lại sau» và dòng vẫn nằm trong bảng. Thử lại bao nhiêu lần cũng hỏng cho tới khi tải lại trang.
   Căn cứ: Ca hiếm, không mất dữ liệu, và tải lại trang là dòng biến mất nên người dùng tự gỡ được.
   file: `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx`
@@ -71,14 +64,14 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 (khẳng định một chuỗi có mặt trong khi lời hứa là quan hệ): tổng kết của lệnh kéo về được ghim bằng hằng «2 tín hiệu» chứ không tính lại từ phản hồi (r3 · tệp đã đổi)**
+- **Hình dạng 3 (khẳng định một chuỗi có mặt trong khi lời hứa là quan hệ): tổng kết của lệnh kéo về được ghim bằng hằng «2 tín hiệu» chứ không tính lại từ phản hồi (r3)**
   Người dùng thấy gì: Bài kiểm tự động về dòng tổng kết của lệnh kéo về dùng con số viết tay thay vì tính lại từ kết quả. Bài vẫn đỏ nếu số sai, chỉ là chặt chẽ kém hơn lời hứa.
   Căn cứ: Không ảnh hưởng người dùng và bài vẫn bắt được sai số trong điều kiện kho thử hiện tại; sửa tốn công mà lợi ít.
   file: `apps/api/test/tin-hieu-luu-tru.spec.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 4 (khẳng định âm đứng một mình): «thân phản hồi 403 không chứa tiêu đề đã gieo» không có đối chứng dương cho chính phép tìm (r3 · tệp đã đổi)**
+- **Hình dạng 4 (khẳng định âm đứng một mình): «thân phản hồi 403 không chứa tiêu đề đã gieo» không có đối chứng dương cho chính phép tìm (r3)**
   Người dùng thấy gì: Bài kiểm khẳng định phản hồi từ chối không lộ tiêu đề tín hiệu có thể xanh dù chuỗi tìm lệch khỏi tiêu đề thật. Hiện chưa có bằng chứng sản phẩm đang lộ tiêu đề cho người không có quyền.
   Căn cứ: Là điểm yếu của bài kiểm chứ không phải lỗi người dùng gặp; mã từ chối 403 vẫn được kiểm và thêm đối chứng sau rất rẻ.
   file: `apps/api/test/tin-hieu-luu-tru.spec.ts`
@@ -92,7 +85,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Ba con số chuyển từ trang máy chủ sang component client tự tính (r1)**
+- **Ba con số chuyển từ trang máy chủ sang component client tự tính (r1 · tệp đã đổi)**
   Người dùng thấy gì: Ba ô số đầu thẻ hiển thị đúng như hợp đồng; chỉ là cách tính được đặt ở phía trình duyệt thay vì phía máy chủ. Người dùng không thấy khác biệt nào.
   Căn cứ: Không ảnh hưởng gì tới người dùng: số vẫn đúng, không mất hay lộ dữ liệu; chỉ là lệch nếp dựng nên có thể dọn sau.
   file: `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx`
@@ -127,7 +120,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Archiving or restoring a signal the sender has deleted shows 'try again in a moment' and leaves the row in place, so retrying can never succeed (r1)**
+- **Archiving or restoring a signal the sender has deleted shows 'try again in a moment' and leaves the row in place, so retrying can never succeed (r1 · tệp đã đổi)**
   Người dùng thấy gì: Nếu người gửi vừa xoá tín hiệu đúng lúc quản trị bấm Lưu trữ hay Khôi phục, quản trị thấy báo «thử lại sau» và dòng vẫn nằm đó; thử lại bao nhiêu lần cũng không được cho tới khi tải lại trang.
   Căn cứ: Hiếm gặp, không mất hay lộ dữ liệu, và người dùng tự gỡ được bằng cách tải lại trang; chỉ thông báo chưa nói đúng lý do.
   file: `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx`

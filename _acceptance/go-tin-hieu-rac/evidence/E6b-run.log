@@ -1,13 +1,13 @@
 mot-luot: da cho 51s de toi luot
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: kho crm_agitated_fermat_2191bc_do · app http://localhost:4424 · api http://localhost:4767
+phien-do: kho crm_agitated_fermat_2191bc_do · app http://localhost:4354 · api http://localhost:4148
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 $ bun scripts/dev-session.ts ada@trycomp.ai
-$ bun scripts/dev-session.ts "gtr-do-mvfsqs5b-lan@thu.test"
-$ bun scripts/dev-session.ts "gtr-do-mvfsqs5b-minh@thu.test"
-$ bun scripts/dev-session.ts "gtr-do-mvfsqs5b-ha@thu.test"
+$ bun scripts/dev-session.ts gtr-do-mvfvhttt-lan@thu.test
+$ bun scripts/dev-session.ts gtr-do-mvfvhttt-minh@thu.test
+$ bun scripts/dev-session.ts gtr-do-mvfvhttt-ha@thu.test
 DUNG doi-chung-dong-hien: dong crm-2 hien 1 lan truoc khi luu tru
 DUNG ba-so-truoc: o «4» — api 4
 DUNG luu-tru-menu: menu co «Lưu trữ»
@@ -16,13 +16,13 @@ DUNG luu-tru-toast: thong bao co, nut Hoan tac co
 DUNG ba-so-sau-luu-tru: o «3» — api 3, truoc 4; ba o so con dem tin hieu vua luu tru neu SAI
 DUNG hoan-tac-ve: dong crm-2 hien 1 lan; api co
 DUNG ba-so-sau-hoan-tac: o «4» — api 4
-DUNG da-luu-tru-cot: cot Mã | Điều đã kể | Người gửi | Phòng ban | Gửi lúc | Lưu trữ lúc | Người lưu trữ | Thao tác; luc «04:59 20-10»; nguoi «Ada Okafor»
+DUNG da-luu-tru-cot: cot Mã | Điều đã kể | Người gửi | Phòng ban | Gửi lúc | Lưu trữ lúc | Người lưu trữ | Thao tác; luc «06:16 20-10»; nguoi «Ada Okafor»
 DUNG khoi-phuc-roi: dang luu tru con 0 dong crm-2
 DUNG khoi-phuc-ve-dang-dung: dang dung co 1 dong crm-2
 DUNG ba-so-sau-khoi-phuc: o «4» — api 4
 DUNG da-lay-ve-khoa: muc Luu tru cua crm-1 khoa; ly do «Đội sản phẩm đã lấy về — không lưu trữ được nữa.»
 DUNG tai-lai-giu: sau tai lai: nut aria-pressed=true, co cot «Lưu trữ lúc» true
-DUNG nguoi-gui-nhan: dong crm-3: «Đo TH5: gửi nhầmcrm-3 · Muốn: ThửMục tiêu04:58 20-10Đã lưu trữQuản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.Thao tác với tín hiệu crm-3»
+DUNG nguoi-gui-nhan: dong crm-3: «Đo TH5: gửi nhầmcrm-3 · Muốn: ThửMục tiêu06:15 20-10Đã lưu trữQuản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.Thao tác với tín hiệu crm-3»
 DUNG nguoi-gui-doi-chung: dong crm-4 chua luu tru khong mang nhan Da luu tru
 DUNG 375-dang-dung: rong 375/375; 4 nut thao tac, mep phai xa nhat 349.203125
 DUNG 375-da-luu-tru: rong 375/375; 1 nut thao tac, mep phai xa nhat 351.9375
