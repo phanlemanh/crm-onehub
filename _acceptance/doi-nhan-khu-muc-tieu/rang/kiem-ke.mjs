@@ -72,7 +72,7 @@ chayRang(() => {
 	const viTriKiemKe = commit.indexOf(dai.commitKiemKe);
 	if (viTriKiemKe < 0) loi.push("kiem-ke viet sau khi sua: commit them kiem-ke khong o trong dai");
 	for (const [i, c] of commit.entries()) {
-		const tep = git("diff-tree", "--no-commit-id", "--name-only", "-r", "-m", "--first-parent", c).split("\n");
+		const tep = git("diff", "--name-only", `${c}^1`, c).split("\n");
 		if (i < viTriKiemKe && tep.some((t) => /^(apps|packages)\//.test(t)))
 			loi.push(`kiem-ke viet sau khi sua: ${c.slice(0, 9)} cham apps/packages truoc kiem-ke`);
 		if (i > viTriKiemKe && tep.includes(KIEM_KE)) loi.push(`kiem-ke viet sau khi sua: ${c.slice(0, 9)} doi kiem-ke.json`);
