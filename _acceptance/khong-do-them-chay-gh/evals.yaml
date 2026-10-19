@@ -120,7 +120,8 @@ evals:
       B1 «cay mat giua lan va phan loai», B2 «lan de cay ban o tep khac giua hai sha», B3 «lan de cay ban o tep giong nhau
       giua hai sha», B4 «lenh git loi -> ly_do». Ban lanh: node --test --test-reporter=tap --test-name-pattern <bon ten>
       tren cay that -> bon ca pass, 0 fail (dem tu dong tong ket «# pass N»/«# fail N» cua TAP, so pass = 4). Chieu do tren ban guong o thu muc tam (chep scripts/kiem-cheo
-      va ca thu muc lib/), moi lan go mot manh cua dem.mjs (thay chuoi; khong tim thay chuoi -> ma
+      ca thu muc lib/ va scripts/resolve-plugin.mjs ma goi-dieu-phoi.mjs nap). Doi chung duong: mot ban guong khong doi gi phai
+      ra pass 4, fail 0 — khong thi ma 2 «ban guong khong doi khong xanh». Roi moi lan go mot manh cua dem.mjs (thay chuoi; khong tim thay chuoi -> ma
       2) va ghi truoc ca nao phai fail: (a) datCay nem lai thay vi dungCay -> B1 fail; (c) bo «--force» o worktree add cua
       dungCay -> B1 fail; (e) datCay nem lai VA bo «--force» o checkout cua datCay -> B2 fail; (b) bo «--force» o checkout cua
       datCay -> B3 fail; (d) git fetch ly_do dung dong dau message thay dongLoi -> B4 fail. Moi lan: ten ca phai co trong dong

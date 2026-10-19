@@ -34,6 +34,7 @@ const DONG_LOI = [
 	'ly_do: `git fetch ${ref} loi: ${String(e.message).split("\\n")[0]}`,',
 ];
 const MANH = [
+	{ ten: "doi-chung-guong", thay: [], fail: null },
 	{ ten: "a-bo-dung-lai", thay: [DUNG_LAI], fail: "B1" },
 	{ ten: "c-bo-force-worktree", thay: [FORCE_WORKTREE], fail: "B1" },
 	{
@@ -94,6 +95,10 @@ for (const m of MANH) {
 			{ recursive: true },
 		);
 		cpSync(join(GOC, "lib"), join(tam, "lib"), { recursive: true });
+		cpSync(
+			join(GOC, "scripts", "resolve-plugin.mjs"),
+			join(tam, "scripts", "resolve-plugin.mjs"),
+		);
 		let chu = nguon;
 		for (const [cu, moi] of m.thay) {
 			if (!chu.includes(cu))
@@ -104,6 +109,18 @@ for (const m of MANH) {
 		}
 		writeFileSync(join(tam, "scripts", "kiem-cheo", "dem.mjs"), chu);
 		const r = chayBon(tam);
+		if (m.fail === null) {
+			ket.kiem(
+				r.pass === 4 && r.fail === 0,
+				`doi-chung-duong ban guong khong doi: pass ${r.pass}, fail ${r.fail}`,
+				`ma ${r.ma}, not ok: ${r.notOk.join(" | ")}`,
+			);
+			if (r.pass !== 4 || r.fail !== 0)
+				khongDoDuoc(
+					"ban guong khong doi khong xanh — guong thieu tep, phep pha khong do duoc",
+				);
+			continue;
+		}
 		const trung = r.notOk.some((d) => d.includes(BAO_DAM[m.fail]));
 		if (trung) coBat.add(m.fail);
 		bat(
