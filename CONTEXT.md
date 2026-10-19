@@ -170,8 +170,10 @@ dõi**, có thể có hạn; gắn được vào một hay nhiều bản ghi —
 ngày — mà vẫn là một việc (không nhân bản), và hiện ở khối «Việc» đầu thẻ Hoạt động của từng bản ghi đó.
 Trạng thái là một trong năm: Chưa làm · Đang làm · Chờ đánh giá · Xong · Huỷ. Người giao và người thực
 hiện đổi trạng thái theo bảng của `docs/api.md` mục «Việc»; người theo dõi, thành viên khác, quản trị
-không đổi. Việc gắn ít nhất một bản ghi đối tác thì ai đọc được dữ liệu đối tác cũng thấy; việc không gắn
-gì là việc riêng, chỉ ba vai người trong cuộc thấy. Lượt này người vai «chỉ OKR» chưa dùng Việc (kể cả
+không đổi. Việc gắn ít nhất một bản ghi đối tác thì ai đọc được dữ liệu đối tác cũng thấy; việc nằm trong
+một dự án thì ai thấy dự án cũng thấy (xem **Dự án**); việc không gắn bản ghi và không thuộc dự án nào là việc
+riêng, chỉ ba vai người trong cuộc thấy. Khung việc nói đúng một trong ba điều đó, và lịch sử việc không nêu
+tên một việc người xem không thấy (hàng DA11). Lượt này người vai «chỉ OKR» chưa dùng Việc (kể cả
 việc riêng). Việc cần làm cũ trên dòng thời gian đã được chép thành Việc (hàng DA1b): bản gốc còn
 trong bảng hoạt động để đảo, việc chưa chép hiện chỉ đọc, không đường nào tạo việc cần làm mới; Tác
 nhân giao việc bằng Việc. Việc (KR) thay ở lượt V5; bước của kế hoạch 30 ngày tạo từ hàng DA3 mang một Việc (xem **Bước**), bước của kế hoạch cũ vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
