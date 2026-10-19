@@ -336,6 +336,22 @@ DA1b: chạy `--dao` TRƯỚC — lùi mã khi bản chép còn thì một việ
 gian, bản chép ở Việc của tôi và tin nhắc) và việc mã môi giới lệch đời cũ giao trùng. Hai cột mới để lại vô
 hại cho mã cũ.
 
+## Đếm việc riêng đã lộ (hàng DA11)
+
+Việc của chủ kho, chạy trên máy của chủ kho; máy không vào production. Lệnh chỉ đọc: mở một `transaction`
+`READ ONLY`, Postgres từ chối mọi lệnh ghi trong đó.
+
+`DATABASE_URL=<chuỗi kết nối production> bun run --cwd packages/db viec:dem-rieng`
+
+In một dòng JSON:
+- `viecDuAnKhongGan` — số việc trong dự án mà không gắn bản ghi: trước DA11, khung của các việc này ghi
+  «Việc riêng — chỉ người trong cuộc thấy» trong khi cả đội dự án thấy chúng.
+- `vetNhacViecRieng` — số dòng lịch sử của một việc người ngoài cuộc đọc được (gắn bản ghi hay trong dự án)
+  đang nêu một việc nay là riêng: trước DA11, các dòng này lộ tiêu đề việc riêng.
+- `viecRiengBiNhac` — số việc riêng khác nhau bị nêu như vậy.
+
+Thiếu `DATABASE_URL` thì lệnh thoát 2. Dán bản in vào #375 khi chạy.
+
 ## Bẫy đã gặp
 
 - **«Máy này không thấy production» (08/10).** Một phiên giám sát kết luận thế vì
