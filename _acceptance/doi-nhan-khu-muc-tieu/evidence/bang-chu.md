@@ -6,10 +6,10 @@
 | gop-vao | — | okr-gioi-han.ts#duyet.hoiGui.than | en | While it awaits approval, its content, KRs, alignment and visibility are locked. You can withdraw it at any time. | While it awaits approval, its content, KRs, contributions and visibility are locked. You can withdraw it at any time. |
 | gop-vao | — | okr-gioi-han.ts#duyet.khoaSua | vi | Mục tiêu đang chờ duyệt — rút lại để sửa nội dung, KR, căn chỉnh hay mức hiển thị. | Mục tiêu đang chờ duyệt — rút lại để sửa nội dung, KR, chỗ góp vào hay mức hiển thị. |
 | gop-vao | — | okr-gioi-han.ts#duyet.khoaSua | en | The objective is awaiting approval — withdraw it to edit content, KRs, alignment or visibility. | The objective is awaiting approval — withdraw it to edit content, KRs, contributions or visibility. |
-| gop-vao | — | okr-gioi-han.ts#hienThi.congKhaiMoTa | vi | Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp và căn chỉnh được. | Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp và góp vào mục tiêu khác được. |
-| gop-vao | — | okr-gioi-han.ts#hienThi.congKhaiMoTa | en | Everyone in the OKR program sees it; it counts in rollups and can be aligned. | Everyone in the OKR program sees it; it counts in rollups and can contribute to other objectives. |
-| gop-vao | — | okr-gioi-han.ts#hienThi.gioiHanMoTa | vi | Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không căn chỉnh được. | Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không góp vào mục tiêu khác được. |
-| gop-vao | — | okr-gioi-han.ts#hienThi.gioiHanMoTa | en | Only the people involved and named viewers see it. Left out of rollups, cannot be aligned. | Only the people involved and named viewers see it. Left out of rollups, cannot contribute to other objectives. |
+| gop-vao | — | okr-gioi-han.ts#hienThi.congKhaiMoTa | vi | Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp và căn chỉnh được. | Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp, góp vào mục tiêu khác và nhận chỗ góp vào được. |
+| gop-vao | — | okr-gioi-han.ts#hienThi.congKhaiMoTa | en | Everyone in the OKR program sees it; it counts in rollups and can be aligned. | Everyone in the OKR program sees it; it counts in rollups, can contribute to other objectives and can be contributed to. |
+| gop-vao | — | okr-gioi-han.ts#hienThi.gioiHanMoTa | vi | Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không căn chỉnh được. | Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không góp vào mục tiêu khác và không nhận chỗ góp vào. |
+| gop-vao | — | okr-gioi-han.ts#hienThi.gioiHanMoTa | en | Only the people involved and named viewers see it. Left out of rollups, cannot be aligned. | Only the people involved and named viewers see it. Left out of rollups; it can neither contribute to other objectives nor be contributed to. |
 | gop-vao | — | okr-gioi-han.ts#hienThi.moCanChinh | vi | Mở tab Căn chỉnh | Mở thẻ Góp vào |
 | gop-vao | — | okr-gioi-han.ts#hienThi.moCanChinh | en | Open the Alignment tab | Open the Contributes to tab |
 | gop-vao | — | okr-gop-y.ts#bienNhan.boQuaCanChinh | en | Skipped aligning to “X” | Skipped contributing to “X” |
@@ -26,8 +26,8 @@
 | gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-cung-cap | en | The target isn't at a higher level, so it can't be aligned to. | The target isn't at a higher level, so this objective can't contribute to it. |
 | gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-da-gan | vi | Mục tiêu này đã căn chỉnh vào đích đó rồi. | Mục tiêu này đã góp vào đích đó rồi. |
 | gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-da-gan | en | This objective is already aligned to that target. | This objective already contributes to that target. |
-| gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-gioi-han | vi | Một bên đang ở mức giới hạn nên không căn chỉnh được. | Một bên đang ở mức giới hạn nên không góp vào được. |
-| gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-gioi-han | en | One side is restricted, so they can't be aligned. | One side is restricted, so it can't contribute there. |
+| gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-gioi-han | vi | Một bên đang ở mức giới hạn nên không căn chỉnh được. | Một bên đang ở mức giới hạn nên hai mục tiêu không góp vào nhau được. |
+| gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-gioi-han | en | One side is restricted, so they can't be aligned. | One side is restricted, so neither objective can contribute to the other. |
 | gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-khac-chu-ky | vi | Đích thuộc chu kỳ khác nên không căn chỉnh được. | Đích thuộc chu kỳ khác nên không góp vào được. |
 | gop-vao | — | okr-gop-y.ts#loiQuyet.can-chinh-khac-chu-ky | en | The target is in another cycle, so it can't be aligned to. | The target is in another cycle, so this objective can't contribute to it. |
 | gop-vao | — | okr-gop-y.ts#loiQuyet.dang-cho-duyet | vi | Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa. | Mục tiêu đang chờ duyệt nên nội dung, KR và chỗ góp vào đang khoá. Rút lại để sửa. |
@@ -72,7 +72,7 @@
 | gop-vao | — | okr-toan-canh.ts#soDo.co.chua-noi | vi | Chưa nối lên | Chưa góp vào đâu |
 | gop-vao | — | okr-toan-canh.ts#soDo.co.chua-noi | en | Not connected | Not contributing anywhere |
 | gop-vao | — | okr-toan-canh.ts#soDo.moTa | vi | Mỗi đơn vị một thẻ. Dây là căn chỉnh thật: nét liền góp vào cấp trên trực tiếp, nét đứt góp thẳng hay chéo sang nhánh khác. | Mỗi đơn vị một thẻ. Dây là chỗ góp vào thật: nét liền góp vào cấp trên trực tiếp, nét đứt góp thẳng hay chéo sang nhánh khác. |
-| gop-vao | — | okr-toan-canh.ts#soDo.moTa | en | One card per unit. Lines are real alignments: solid lines feed the unit directly above, dashed lines skip a level or cross to another branch. | One card per unit. Lines are real contributions: solid lines feed the unit directly above, dashed lines skip a level or cross to another branch. |
+| gop-vao | — | okr-toan-canh.ts#soDo.moTa | en | One card per unit. Lines are real alignments: solid lines feed the unit directly above, dashed lines skip a level or cross to another branch. | One card per unit. Lines are real contributions: solid lines contribute to the unit directly above, dashed lines skip a level or cross to another branch. |
 | gop-vao | — | okr-toan-canh.ts#soDo.nhan | vi | Sơ đồ căn chỉnh theo đơn vị | Sơ đồ góp vào theo đơn vị |
 | gop-vao | — | okr-toan-canh.ts#soDo.nhan | en | Alignment map by unit | Contribution map by unit |
 | lay-y-kien | — | okr.ts#caiDat.chuKy.go.than | vi | X chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết. | X chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết. |

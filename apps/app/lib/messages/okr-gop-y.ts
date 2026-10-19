@@ -121,7 +121,8 @@ const vi = {
 			"Mục tiêu đang chờ duyệt nên nội dung, KR và chỗ góp vào đang khoá. Rút lại để sửa.",
 		"so-sai-kieu":
 			"Khởi điểm và đích của KR này không khớp kiểu đo — sửa số hoặc kiểu đo của KR trước.",
-		"can-chinh-gioi-han": "Một bên đang ở mức giới hạn nên không góp vào được.",
+		"can-chinh-gioi-han":
+			"Một bên đang ở mức giới hạn nên hai mục tiêu không góp vào nhau được.",
 		"can-chinh-chinh-no": "Đích là chính Mục tiêu này nên không góp vào được.",
 		"can-chinh-cung-cap": "Đích không ở cấp cao hơn nên không góp vào được.",
 		"can-chinh-chua-cong-bo":
@@ -275,7 +276,7 @@ const en: OkrGopYMessages = {
 		"so-sai-kieu":
 			"This KR's start and target don't fit its measure type — fix its numbers or type first.",
 		"can-chinh-gioi-han":
-			"One side is restricted, so it can't contribute there.",
+			"One side is restricted, so neither objective can contribute to the other.",
 		"can-chinh-chinh-no":
 			"The target is this objective itself, so it can't contribute to it.",
 		"can-chinh-cung-cap":

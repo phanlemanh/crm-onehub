@@ -23,10 +23,10 @@ const vi = {
 		nhom: "Ai thấy mục tiêu này",
 		congKhai: "Công khai",
 		congKhaiMoTa:
-			"Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp và góp vào mục tiêu khác được.",
+			"Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp, góp vào mục tiêu khác và nhận chỗ góp vào được.",
 		gioiHan: "Giới hạn",
 		gioiHanMoTa:
-			"Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không góp vào mục tiêu khác được.",
+			"Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không góp vào mục tiêu khác và không nhận chỗ góp vào.",
 		nguoiXem: "Người xem có tên",
 		themNguoi: "Thêm người…",
 		timNguoi: "Tìm thành viên…",
@@ -126,10 +126,10 @@ const en: OkrGioiHanMessages = {
 		nhom: "Who sees this objective",
 		congKhai: "Public",
 		congKhaiMoTa:
-			"Everyone in the OKR program sees it; it counts in rollups and can contribute to other objectives.",
+			"Everyone in the OKR program sees it; it counts in rollups, can contribute to other objectives and can be contributed to.",
 		gioiHan: "Restricted",
 		gioiHanMoTa:
-			"Only the people involved and named viewers see it. Left out of rollups, cannot contribute to other objectives.",
+			"Only the people involved and named viewers see it. Left out of rollups; it can neither contribute to other objectives nor be contributed to.",
 		nguoiXem: "Named viewers",
 		themNguoi: "Add a person…",
 		timNguoi: "Search members…",

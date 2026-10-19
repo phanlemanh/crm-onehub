@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import {
@@ -40,6 +40,38 @@ function giaTri(tep: string, khoa: string, nn: NgonNgu): string {
 
 const muc = (khaiNiem: MucKiemKeDnk["khai_niem"], nn: NgonNgu) =>
 	docKiemKeDnk().filter((m) => m.khai_niem === khaiNiem && m.doi.includes(nn));
+
+const GIU_PHAM_VI: readonly { tep: string; khoa: string; vi: string }[] = [
+	{
+		tep: "apps/app/lib/messages/okr.ts",
+		khoa: "donViBang.caCongTy",
+		vi: "cả công ty",
+	},
+	{
+		tep: "apps/app/lib/messages/okr.ts",
+		khoa: "moTa.toan-canh",
+		vi: "Cả công ty trong một màn.",
+	},
+	{
+		tep: "apps/app/lib/messages/okr-hoi-y.ts",
+		khoa: "trong.quanTriMoTa",
+		vi: "Hỏi cả công ty một câu trước khi đặt mục tiêu {ky}.",
+	},
+];
+
+function khopKhoaGiaTri(khoa: string, giaTri: string, dong: string): boolean {
+	const cuoi = khoa.split(".").at(-1) ?? khoa;
+	const tachKhoa = dong.indexOf(":");
+	if (tachKhoa < 0) return false;
+	const trai = dong.slice(0, tachKhoa).trim().replaceAll('"', "");
+	return (
+		trai === cuoi &&
+		dong
+			.slice(tachKhoa + 1)
+			.trim()
+			.startsWith(JSON.stringify(giaTri))
+	);
+}
 
 const nguonGoc = (tep: string): string =>
 	execFileSync("git", ["-C", GOC_KHO, "show", `${MOC_GOC_DNK}:${tep}`], {
@@ -110,18 +142,50 @@ describe("dnk-goc", () => {
 		expect(loi).toEqual([]);
 	});
 
-	it("doi chung: cau van ca cong ty chi pham vi giu nguyen nhu goc", () => {
-		const M = "apps/app/lib/messages/";
-		const giu: [string, string][] = [
-			[`${M}okr.ts`, "donViBang.caCongTy"],
-			[`${M}okr.ts`, "moTa.toan-canh"],
-			[`${M}okr-hoi-y.ts`, "trong.quanTriMoTa"],
-		];
-		const loi = giu.flatMap(([tep, khoa]) => {
-			const v = giaTri(tep, khoa, "vi");
-			return nguonGoc(tep).includes(v) ? [] : [`dnk: pham vi bi doi ${khoa}`];
+	it("doi chung: cau van ca cong ty chi pham vi giu dung chu", () => {
+		const loi = GIU_PHAM_VI.flatMap((g) => {
+			const v = giaTri(g.tep, g.khoa, "vi");
+			return v === g.vi ? [] : [`dnk: pham vi bi doi ${g.khoa} ${v}`];
 		});
 		expect(loi).toEqual([]);
+	});
+
+	it("doi chung: ban ghim pham vi dung voi goc, cung khoa", () => {
+		const coGoc = spawnSync("git", [
+			"-C",
+			GOC_KHO,
+			"rev-parse",
+			"--verify",
+			"--quiet",
+			`${MOC_GOC_DNK}^{commit}`,
+		]);
+		if (coGoc.status !== 0) {
+			console.warn(
+				`dnk-goc: khong co commit ${MOC_GOC_DNK} (checkout nong) — bo qua phan so goc`,
+			);
+			return;
+		}
+		expect(
+			khopKhoaGiaTri(
+				"cayCanChinh",
+				"Sơ đồ góp vào",
+				'\tcayCanChinh: "Cây căn chỉnh",',
+			),
+		).toBe(false);
+		expect(
+			khopKhoaGiaTri(
+				"cayCanChinh",
+				"Cây căn chỉnh",
+				'\tcayCanChinh: "Cây căn chỉnh",',
+			),
+		).toBe(true);
+		const sai = GIU_PHAM_VI.filter(
+			(g) =>
+				!nguonGoc(g.tep)
+					.split("\n")
+					.some((d) => khopKhoaGiaTri(g.khoa, g.vi, d)),
+		);
+		expect(sai.map((g) => `dnk: ghim pham vi sai goc ${g.khoa}`)).toEqual([]);
 	});
 });
 

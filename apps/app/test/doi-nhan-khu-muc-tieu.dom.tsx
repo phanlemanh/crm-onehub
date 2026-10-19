@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { useQuery } from "@tanstack/react-query";
 import { hoiYDoPhuOutput } from "../../api/src/okr/okr-hoi-y.contracts";
 import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 import { workspaceOutput } from "../../api/src/workspace/workspace.contracts";
@@ -11,6 +12,7 @@ const { ChonDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/chon-don-vi"
 );
 const { useTenGoc } = await import("@/app/(app)/[slug]/okr/ten-goc");
+const { useTRPC } = await import("@/lib/trpc/client");
 
 const TEN = "Kho Thử Nghiệm";
 const CAM = ["Toàn công ty", "Toàn OneHub", "Whole company", "All of OneHub"];
@@ -68,6 +70,17 @@ function nhanGoc(o: HTMLElement): HTMLElement | null {
 const choCo = (o: HTMLElement, chu: string) =>
 	cho(() => (o.textContent ?? "").includes(chu), `dnk: cho «${chu}»`);
 
+function DauDo() {
+	const w = useQuery(useTRPC().workspace.get.queryOptions());
+	return <i data-ws-xong={w.isSuccess ? "1" : "0"} />;
+}
+
+const choDaTai = (o: HTMLElement) =>
+	cho(
+		() => o.querySelector('[data-ws-xong="1"]') !== null,
+		"dnk: cho workspace.get tra ve",
+	);
+
 function GocChon() {
 	return (
 		<ChonDonVi
@@ -106,10 +119,14 @@ describe("dnk-goc-man", () => {
 		test(`dnk-goc-man: do phu du phong ${locale} khi chua co ten`, async () => {
 			datTen("");
 			const s = await dung(
-				<BangDoPhu dangMo={false} doPhu={DO_PHU} />,
+				<>
+					<DauDo />
+					<BangDoPhu dangMo={false} doPhu={DO_PHU} />
+				</>,
 				"",
 				locale,
 			);
+			await choDaTai(s.o);
 			await choCo(s.o, "Kinh doanh");
 			const goc = [...s.o.querySelectorAll('[translate="no"]')].map(
 				(e) => e.textContent,
@@ -129,8 +146,18 @@ describe("dnk-goc-man", () => {
 		if (!o?.textContent?.includes(TEN))
 			throw new Error(`dnk: o chon goc ${o?.textContent ?? "(rong)"}`);
 		datTen("");
-		const r = await dung(<GocChon />);
-		await choCo(r.o, "Công ty");
+		const r = await dung(
+			<>
+				<DauDo />
+				<GocChon />
+			</>,
+		);
+		await choDaTai(r.o);
+		const oRong = r.o.querySelector('[translate="no"]');
+		if (!oRong?.textContent?.includes("Công ty"))
+			throw new Error(
+				`dnk: du phong o chon vi ${oRong?.textContent ?? "(rong)"}`,
+			);
 	});
 
 	test("dnk-goc-man: ba man goi useTenGoc, khong tu tinh ten goc", () => {

@@ -212,10 +212,14 @@ const idCoGop = idMau("mt", MAN.mucTieuCoGop);
 		await khongDo(`khong thay bang do phu «${hy.doPhu.tieuDe}» o lan lay y kien cua chu ky ${MAN.chuKyHoiY}`);
 	}
 	const hangGoc = await h.evaluate(
-		(ten) => [...document.querySelectorAll('[translate="no"]')].some((e) => e.textContent === ten),
+		(ten) => {
+			const khoi = document.querySelector('[data-khoi="do-phu"]');
+			const dau = khoi?.querySelector('tbody tr [translate="no"]');
+			return dau?.textContent === ten;
+		},
 		tenGoc,
 	);
-	kiem(`E15 do-phu: hang goc mang dung «${tenGoc}» trong translate=no`, hangGoc);
+	kiem(`E15 do-phu: hang dau bang do phu mang dung «${tenGoc}» trong translate=no`, hangGoc);
 	await h.evaluate(() => document.querySelector('[data-khoi="do-phu"]')?.scrollIntoView({ block: "start" }));
 	await tre(MAN.cho.yenMs);
 	const chuDoPhu = await chuTrang(h);
