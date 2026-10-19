@@ -1,0 +1,399 @@
+schema_version: 1
+slug: lo-trinh-nhieu-san-pham
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltsp_lay_dau
+    paths:
+      - "apps/agent/agent/lib/lo-trinh-github.ts"
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "apps/agent/agent/schedules/dispatch.ts"
+      - "packages/db/src/san-pham-lo-trinh.ts"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "packages/validation/src/san-pham-lo-trinh.ts"
+      - "packages/validation/src/doc-du-lieu-lo-trinh.js"
+      - "scripts/lo-trinh-san-pham/github-gia.ts"
+      - "apps/agent/test/lo-trinh-san-pham.spec.ts"
+    expected: |
+      apps/agent/test/lo-trinh-san-pham.spec.ts describe "ltsp-lay-dau", kho thu cua luot (bun run test), GitHub gia
+      (scripts/lo-trinh-san-pham/github-gia.ts) chay tren cong tu do, phuc vu LO-TRINH.html THAT doc tu dia
+      (~/dev/acceptance-gate-kit/LO-TRINH.html chep vao fixture apps/agent/test/mau/lo-trinh-kit.html luc viet bai) tai
+      dau nhanh sha S (40 hex) commit luc C, installation created_at I. San pham "kit" khai qua ham ghi THAT cua danh ba
+      (taoSanPham trong packages/db/src/san-pham-lo-trinh.ts), khong chen thang bang.
+        1 goi lenLichLayLoTrinh(now) mot lan: hang BanChupLoTrinh nguon="kit" co sha=S, commitLuc=C, duLieu deep-equal
+          docDuLieu(html fixture).duLieu (rut doc lap trong bai bang bo doc dung chung), canhBao = docDuLieu(...).canhBao
+        2 SanPhamLoTrinh "kit": trangThaiLay="da-lay", layDauLuc=now, caiLuc=I, phienBanKhuon=2, kiemLuc=now
+        3 dem hang BanChupLoTrinh: dung 1 hang moi (nguon kit), hang nguon "crm" (neu co) khong doi byte nao
+      DOI CHUNG: GitHub gia tra 404 cho installation -> khong co hang ban chup kit (chung minh dong 1 la do luot lay).
+      CHIEU DO (pha-thu tren ban sao trong thu muc tam): ban sao lenLichLayLoTrinh ghi commitLuc = now thay gio commit
+      -> do voi thong diep ghim "ban chup khong mang gio commit cua dau nhanh: kit".
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ltsp_doc_du
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/test/lo-trinh-san-pham.dom.tsx"
+      - "apps/app/test/lo-trinh-san-pham-mau.ts"
+    expected: |
+      apps/app/test/lo-trinh-san-pham.dom.tsx describe "ltsp-doc-du": khoi rut tu fixture LO-TRINH.html that cua kho kit.
+      Hai lan render qua docDauVaoSanPham (duong doc cua trang): (a) khoi la ban chup cua san pham "kit", (b) cung khoi
+      lam ban chup nguon crm. Vai owner, xemLoTrinh=moc va bang, vongDoi=tat-ca.
+        1 tap khoa [data-lo-trinh-moc], day data-viec-khoa va text o tien do cua moi lo trinh cua (a) BANG cua (b) — dem in
+          ra, khac 0, va so lo trinh BANG do dai lo_trinh cua khoi tho
+        2 mo ngan ho so cua mot viec co tom_tat o (a): tieu de, muc Moc va khoi so lieu chu kho co mat nhu (b)
+        3 (a) co dong [data-lo-trinh-gio-lay] chua kho va nhanh cua san pham (chuoi viet san trong bai)
+      CHIEU DO: ban sao docDauVaoSanPham bo lo_trinh thu hai tro di -> dong 1 do voi thong diep ghim "trang san pham thieu
+      lo trinh: <tep>".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ltsp_nhip
+    paths:
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "apps/agent/agent/lib/lo-trinh-github.ts"
+      - "packages/validation/src/san-pham-lo-trinh.ts"
+      - "scripts/lo-trinh-san-pham/github-gia.ts"
+      - "apps/agent/test/lo-trinh-san-pham.spec.ts"
+    expected: |
+      describe "ltsp-nhip", GitHub gia dem loi goi theo duong (installation, access_tokens, branches, contents):
+        1 da co ban chup sha S; dau nhanh doi sang S2 commit sau -> sau nhip ke (now + LO_TRINH_SAN_PHAM.nhipKiemMs) hang ban
+          chup mang S2; contents duoc goi dung 1 lan voi ref=S2
+        2 dau nhanh dung yen o S2 -> nhip sau: contents 0 lan, branches 1 lan, kiemLuc = now moi, ban chup khong doi
+        3 nhip goi lai truoc khi qua nhipKiemMs: 0 loi goi GitHub nao cho san pham do
+        4 khai (LO_TRINH_SAN_PHAM.toiDaMoiNhip + 2) san pham den han: mot nhip kiem dung toiDaMoiNhip san pham (dem
+          branches), nhip sau kiem phan con lai
+      Moi so ky vong doc tu LO_TRINH_SAN_PHAM trong bai, khong viet so tay.
+      CHIEU DO: ban sao bo nhanh "cung sha" -> dong 2 do voi thong diep ghim "tai lai tep khi nhanh dung yen".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltsp_hong
+    paths:
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "apps/agent/agent/lib/lo-trinh-github.ts"
+      - "apps/agent/agent/schedules/dispatch.ts"
+      - "packages/validation/src/san-pham-lo-trinh.ts"
+      - "packages/validation/src/doc-du-lieu-lo-trinh.js"
+      - "scripts/lo-trinh-san-pham/github-gia.ts"
+      - "apps/agent/test/lo-trinh-san-pham.spec.ts"
+    expected: |
+      describe "ltsp-hong", ma tran viet truoc 9 o, moi o mot san pham CO SAN ban chup hop le (sha S0) va mot san pham
+      lanh "ok" cung nhip:
+        thieu GITHUB_APP_ID / thieu GITHUB_APP_PRIVATE_KEY -> chua-cau-hinh (ca hai san pham)
+        installation 404 -> chua-cai · branches 404 -> khong-thay-kho · contents 404 -> khong-thay-tep
+        tep khong co the lo-trinh-du-lieu -> khoi-hong · khoi sai khuon (lo_trinh khong phai mang) -> khoi-hong, chiTietLay
+          chua duong khoa hong · tep 2 MB + 1 byte -> qua-tran · branches 502 -> loi-github · 403 voi
+          x-ratelimit-remaining: 0 -> loi-github
+      Moi o: (1) trangThaiLay dung gia tri ky vong; (2) hang ban chup cua san pham van sha S0, duLieu khong doi; (3)
+      lenLichLayLoTrinh khong nem; (4) san pham "ok" cung nhip co ban chup moi (tru hai o chua-cau-hinh); (5) hang ban chup
+      nguon crm khong doi. In so o da xet = 9.
+      DOI CHUNG: o lanh (tep hop le) -> da-lay va ban chup doi.
+      CHIEU DO: ban sao de loi cua san pham dau nem ra ngoai vong -> dong 4 do voi thong diep ghim "loi mot san pham chan
+      san pham khac: ok".
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ltsp_cau_trang_thai
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/san-pham/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/san-pham.ts"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "packages/validation/src/san-pham-lo-trinh.ts"
+      - "apps/app/test/san-pham-lo-trinh.dom.tsx"
+    expected: |
+      apps/app/test/san-pham-lo-trinh.dom.tsx describe "ltsp-cau-trang-thai": ma tran viet truoc moi gia tri cua
+      TRANG_THAI_LAY (doc tu packages/validation, dem in ra) x {vi, en}:
+        1 Cai dat › San pham voi mot san pham mang trang thai do: [data-san-pham-trang-thai] co text khac rong, khac moi
+          trang thai khac cung locale (tap text co kich thuoc BANG so trang thai), va StatusIndicator mang tone BANG
+          toneTheoNghia(NGHIA_TRANG_THAI_LAY[trang thai])
+        2 trang Lo trinh chon san pham chua co ban chup o trang thai do: [data-lo-trinh-san-pham-trong] chua cung cau ay
+        3 ma tran moi trang thai hong x CO ban chup (layLuc L viet san): trang hien lo trinh cua ban chup (co [data-lo-trinh-moc])
+          , dong [data-lo-trinh-gio-lay] chua gio cua L, va [data-lo-trinh-lay-hong] chua cau cua trang thai do (cung cau
+          dong 1); DOI CHUNG: trang thai da-lay -> 0 phan tu [data-lo-trinh-lay-hong]
+      CHIEU DO: ban sao bang cau dung chung mot cau cho khoi-hong va khong-thay-tep -> dong 1 do voi thong diep ghim "hai
+      trang thai cung mot cau: khoi-hong, khong-thay-tep".
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltsp_quyen_may_chu
+    paths:
+      - "packages/db/src/san-pham-lo-trinh.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/test/san-pham-lo-trinh.spec.ts"
+    expected: |
+      apps/api/test/san-pham-lo-trinh.spec.ts describe "ltsp-quyen", kho thu cua luot, nam nguoi that dung qua duong tao
+      thanh vien cua kho (owner, admin, member A, member B, okr). San pham P cap cho A qua thu tuc ghi that.
+        1 thu tuc doc danh ba (sanPham.danhSach) goi bang phien tung nguoi: tap ma tra ve — owner {P}, admin {P}, A {P},
+          B {}, okr {} (ma tran viet truoc 5 o)
+        2 sanPhamXemDuoc(db, {userId, vai}) cho cung ket qua o 5 o (mot ham)
+        3 B goi thu tuc doc ban chup cua P (neu thu tuc nhan ma) -> FORBIDDEN hoac NOT_FOUND, khong co duLieu
+      DOI CHUNG: bo cap A -> o A thanh {}.
+      CHIEU DO: ban sao sanPhamXemDuoc tra moi san pham cho member -> dong 1 do voi thong diep ghim "nguoi khong duoc cap
+      thay san pham: B".
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ltsp_quyen_trang
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/test/lo-trinh-san-pham.dom.tsx"
+      - "apps/app/test/lo-trinh-san-pham.spec.ts"
+    expected: |
+      apps/app/test/lo-trinh-san-pham.spec.ts va .dom.tsx describe "ltsp-quyen-trang": ham chon san pham cua trang
+      (chonSanPham(thayDuoc, thamSo)) va render voi danh sach thay duoc cua tung vai (lay tu ket qua E6, viet san trong bai):
+        1 B va okr, tham so ?san-pham=P: san pham dang mo = crm; text toan trang khong chua ten P; khong co bo chon
+        2 A: tham so P -> dang mo P; bo chon co P va CRM; render P voi vai member: 0 phan tu [data-lo-trinh-so-lieu] khi mo
+          ngan ho so cua mot viec co tom_tat.chu_kho; DOI CHUNG: cung viec voi vai owner -> co [data-lo-trinh-so-lieu]
+        3 tham so la ma khong ton tai / rong / "CRM" hoa -> crm, khong man loi
+      CHIEU DO: ban sao chonSanPham tin tham so khong doi chieu danh sach -> dong 1 do voi thong diep ghim "duong dan go tay
+      mo san pham khong duoc thay: P"; ban sao duong doc san pham truyen vai owner -> dong 2 do voi thong diep ghim "thanh vien
+      thay so lieu chu kho: P".
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltsp_danh_ba_may_chu
+    paths:
+      - "packages/db/src/san-pham-lo-trinh.ts"
+      - "packages/db/src/ban-chup-lo-trinh.ts"
+      - "packages/validation/src/san-pham-lo-trinh.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "apps/api/test/san-pham-lo-trinh.spec.ts"
+    expected: |
+      describe "ltsp-danh-ba":
+        1 member goi tao / sua / datNguoiXem -> FORBIDDEN, so hang SanPhamLoTrinh khong doi; owner va admin goi -> luu, doc
+          lai qua danhSach thay dung gia tri
+        2 ma tran khai sai viet truoc (kho "khong-co-gach", kho "a/b/c", nhanh "", nhanh "co khoang", tep "../x.html", tep
+          "/x.html", ten "", ten 61 ky tu, ten sinh ma "crm", ma trung) -> BAD_REQUEST voi path chi dung o; 0 hang moi
+        3 (theo Hoi-3, khuyen nghi) san pham co ban chup sha S0 commit C0; sua kho -> ban chup van sha S0, nguonDoiLuc dat,
+          trangThaiLay "chua-lay"; nhip lay (agent, GitHub gia tra commit C1 < C0) -> ban chup thay bang commit C1 (bo kiem mot
+          chieu dung mot lan), nguonDoiLuc khong con anh huong; nhip sau voi commit cu hon C1 -> giu C1 (mot chieu tro lai);
+          sua chi ten -> khong dat nguonDoiLuc
+        4 khong thu tuc nao nhan ma "crm" (sua, don) -> BAD_REQUEST
+      CHIEU DO: ban sao lan lay dau cua nguon moi van ghi mot chieu -> dong 3 do voi thong diep ghim "nguon moi khong thay ban
+      chup cua nguon cu: <ma>".
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ltsp_danh_ba_trang
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/san-pham/**"
+      - "apps/app/lib/messages/san-pham.ts"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "apps/app/test/san-pham-lo-trinh.dom.tsx"
+    expected: |
+      describe "ltsp-danh-ba-trang", tRPC gia o bien client:
+        1 vai member: nut "Them san pham" va moi muc menu disabled; [data-san-pham-khong-quyen] co mot dong khac rong ngay
+          duoi tieu de trang; danh sach van hien moi san pham
+        2 vai admin, Sheet them: go tung gia tri sai cua ma tran E8 dong 2 (tru ma trung) -> FieldError duoi dung o, nut Luu
+          disabled; gia tri hop le -> Luu bat, gui dung bon truong
+        3 hang CRM: khong co nut menu, co nhan "khai trong ma"
+        4 thanh ben Cai dat co muc San pham trong nhom Ket noi va du lieu
+      CHIEU DO: ban sao Sheet bo kiem duong tep -> dong 2 do voi thong diep ghim "o tep nhan ../ khong bao loi".
+
+  - id: E10
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltsp_vong_doi_may_chu
+    paths:
+      - "packages/db/src/san-pham-lo-trinh.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "apps/api/test/san-pham-lo-trinh.spec.ts"
+      - "apps/agent/test/lo-trinh-san-pham.spec.ts"
+    expected: |
+      describe "ltsp-vong-doi" (theo cau tra loi Hoi-2 da chot; khuyen nghi):
+        1 san pham chua tung co ban chup: xoa -> mat hang; luuTru khong can
+        2 san pham da co ban chup (layDauLuc khac null): xoa -> BAD_REQUEST; luuTru -> luuTruLuc dat; luuTru lan hai -> luuTruLuc
+          giu ngay dau; khoiPhuc -> null
+        3 xoaVinhVien san pham chua luu tru -> BAD_REQUEST; da luu tru -> mat SanPhamLoTrinh, BanChupLoTrinh nguon=ma va moi
+          SanPhamNguoiXem cua no (dem 0)
+        4 san pham da luu tru: khong co trong danhSach mac dinh, khong co trong sanPhamXemDuoc; lenLichLayLoTrinh 0 loi goi
+          GitHub cho no
+      CHIEU DO: ban sao xoaVinhVien bo kiem luuTruLuc -> dong 3 do voi thong diep ghim "xoa vinh vien san pham chua luu tru".
+
+  - id: E11
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ltsp_vong_doi_trang
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/san-pham/**"
+      - "apps/app/lib/messages/san-pham.ts"
+      - "apps/app/test/san-pham-lo-trinh.dom.tsx"
+    expected: |
+      describe "ltsp-vong-doi-trang": san pham chua co lich su -> menu co "Xoa", bam mo ConfirmDialog; san pham co lich su
+      -> menu co "Luu tru" khong co "Xoa", bam -> toast co nut "Hoan tac"; muc gap [data-archived-list] "Da luu tru (1)" cuoi
+      trang co Khoi phuc va Xoa vinh vien, Xoa vinh vien mo ConfirmDialog noi ban chup mat theo.
+      CHIEU DO: ban sao menu hien "Xoa" cho san pham co lich su -> do voi thong diep ghim "xoa hien cho san pham da co lich su".
+
+  - id: E12
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ltsp_khuon
+    paths:
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "packages/validation/src/doc-du-lieu-lo-trinh.js"
+      - "packages/validation/src/lo-trinh-du-lieu.ts"
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "apps/app/test/lo-trinh-san-pham.dom.tsx"
+      - "apps/app/test/san-pham-lo-trinh.dom.tsx"
+      - "apps/app/app/(app)/[slug]/settings/san-pham/**"
+      - "apps/agent/test/lo-trinh-san-pham.spec.ts"
+    expected: |
+      Ba khoi dung bang code tu fixture kho kit (khong viet tay): K1 phien_ban 1 bo tom_tat; K2 phien_ban 2 bo khoa mo hinh
+      hien thi (cung cach ltmh-khoi-cu); K3 phien_ban = ban bo doc + 1.
+      apps/app/test/lo-trinh-san-pham.dom.tsx describe "ltsp-khuon": moi khoi la ban chup cua san pham "kit":
+        1 trang render (khong nem), co [data-lo-trinh-khuon] chua so phien ban va ten san pham; K1, K2 noi "cu", K3 noi "moi hon"
+          (chuoi viet san); tap [data-lo-trinh-moc] BANG tap khi cung khoi la cua crm
+        2 khoi hien hanh (fixture nguyen) -> khong co [data-lo-trinh-khuon]
+      apps/agent/test/lo-trinh-san-pham.spec.ts describe "ltsp-khuon": tep co khoi khuon "khac" -> khoi-hong, khong ban chup;
+      K1, K2, K3 lan luot phuc vu qua GitHub gia -> moi khoi: trangThaiLay da-lay, ban chup ghi, phienBanKhuon BANG 1, 2 va
+      (PHIEN_BAN cua bo doc + 1) — so doc tu hang cua bo doc, khong viet tay.
+      apps/app/test/san-pham-lo-trinh.dom.tsx describe "ltsp-khuon": Cai dat › San pham voi ba san pham mang phienBanKhuon
+      1, 2, 3: o [data-san-pham-khuon] cua moi hang chua dung so cua hang do.
+      CHIEU DO: ban sao bo dong khuon cu -> dong 1 do voi thong diep ghim "khoi cu khong bao phien ban: K1"; ban sao bo doc
+      tac nhan coi phien_ban lon hon la khoi-hong -> do voi thong diep ghim "khuon moi hon bi tu choi: K3".
+
+  - id: E13
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ltsp_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/lo-trinh-nhieu-san-pham/evidence dat tuong minh: lenh cua ltsp_do_man (tien-de.mjs dung kho do rieng, GitHub gia tu bat)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/lo-trinh-nhieu-san-pham/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/app/(app)/[slug]/settings/san-pham/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "apps/app/lib/messages/san-pham.ts"
+      - "_acceptance/lo-trinh-nhieu-san-pham/rang/do-man.mjs"
+    expected: |
+      _acceptance/lo-trinh-nhieu-san-pham/rang/do-man.mjs tren app that (phien do rieng cua tien-de.mjs, kho _do rieng), GitHub
+      gia bat tren cong tu do, tac nhan lay qua lenLichLayLoTrinh that (khong chen ban chup tay). Danh ba: san pham "kit"
+      (da lay), "hong" (khong-thay-tep), cap "kit" cho mot thanh vien. Ma tran viet truoc {375, 1280} x {vi, en} x {sang,
+      toi} = 8 o, moi o:
+        1 chu: trang Lo trinh co bo chon; chon "kit" -> URL mang ?san-pham=kit; tai lai trang giu "kit"; dong
+          [data-lo-trinh-gio-lay] chua kho va nhanh cua kit; lien ket tim PR (neu hien) chua "repo:<kho>"
+        2 thanh vien khong duoc cap: khong co bo chon, mo /lo-trinh?san-pham=kit -> text trang khong chua ten kit
+        3 ten san pham trong bo chon va noi dung lo trinh mang translate=no
+        4 Cai dat › San pham: moi hang co [data-san-pham-trang-thai] co chu (khong chi cham mau); hang "hong" noi khong thay tep
+        5 scrollWidth <= clientWidth o ca hai man
+      DUNG/SAI tung dong, KET LUAN cuoi, anh 16 man (8 o x 2 man) ve BANG_CHUNG. Doi chieu mat: bo chon khong de len tieu de
+      o 375, trang thai doc duoc o nen toi.
+
+  - id: E14
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ltsp_do_man
+    steps:
+      - "Cung luot chay voi E13 (cung lenh), doc cac dong danh dau [AC-1] trong ket qua"
+      - "Mo anh trang Lo trinh cua kit o 1280 vi sang va doi chieu bang mat"
+    inputs:
+      - _acceptance/lo-trinh-nhieu-san-pham/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "_acceptance/lo-trinh-nhieu-san-pham/rang/do-man.mjs"
+    expected: |
+      Dong [AC-1] cua do-man.mjs: sau khi khai "kit" qua man Cai dat (bam that, khong goi thang thu tuc) va mot nhip lay
+      that, Cai dat hien "kit" o trang thai da lay kem gio; trang Lo trinh chon kit: so [data-lo-trinh-muc] BANG so lo trinh
+      cua khoi trong fixture kho kit, o tien do cua lo trinh dau BANG tien_do cua khoi (rut tu tep, khong tu DOM), mo ngan ho
+      so cua mot viec -> ngan mo co tieu de. Doi chieu mat: lo trinh cua kit hien giong trang CRM, khong o trong.
+
+  - id: E15
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ltsp_thiet_ke
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/app/(app)/[slug]/lo-trinh/page.tsx"
+      - "apps/app/app/(app)/[slug]/settings/san-pham/**"
+    expected: |
+      design-gate --mode static tren moi tep tsx moi hay sua cua trang Lo trinh va Cai dat › San pham: exit 0.
+      CHIEU DO: ban sao them className mau tay (bg-red-500) vao mot tep -> exit khac 0 va thong diep cua design-gate goi ten tep.
+
+  - id: E16
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.ltsp_khoa
+    paths:
+      - "apps/agent/agent/lib/lo-trinh-github.ts"
+      - "apps/agent/agent/lib/lo-trinh-san-pham.ts"
+      - "scripts/lo-trinh-san-pham/github-gia.ts"
+      - "apps/agent/test/lo-trinh-san-pham.spec.ts"
+    expected: |
+      describe "ltsp-khoa", cap khoa RSA thu sinh trong bai, GitHub gia ghi lai moi yeu cau:
+        1 than POST access_tokens BANG {repositories:[<ten kho>], permissions:{contents:"read", metadata:"read"}} (deep-equal)
+        2 JWT gui toi /installation va /access_tokens: kiem chu ky bang khoa cong khai -> hop le; exp - iat <= 600; iss =
+          GITHUB_APP_ID
+        3 moi dong console (bat bang spy) cua mot nhip lanh va mot nhip hong: khong chua chuoi nao dai 20 ky tu cua khoa
+          rieng (PEM bo dau dong) va khong chua token cai dat
+        4 sau nhip: JSON.stringify cua moi hang SanPhamLoTrinh, BanChupLoTrinh, AgentTask khong chua token hay manh khoa
+      CHIEU DO: ban sao xin token khong truyen repositories -> dong 1 do voi thong diep ghim "token khong thu hep theo kho".
+
+  - id: E17
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.ltsp_khoa_quet
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "scripts/lo-trinh-san-pham/**"
+      - "_acceptance/lo-trinh-nhieu-san-pham/rang/quet-khoa.mjs"
+    expected: |
+      _acceptance/lo-trinh-nhieu-san-pham/rang/quet-khoa.mjs quet cay (git ls-files, bo .eve, node_modules, _acceptance,
+      docs): (1) GITHUB_APP_PRIVATE_KEY chi xuat hien trong apps/agent/** va .env.example; (2) khong tep nao duoi
+      apps/agent/agent/lib/lo-trinh-* hay scripts/lo-trinh-san-pham/** doc GITHUB_TOKEN hay gui header Authorization: token
+      (kieu khoa ca nhan). In so tep da quet (khac 0) va DUNG/SAI tung dieu; exit 0 khi ca hai DUNG.
+      CHIEU DO: ban sao cay voi mot tep apps/api/src/x.ts doc process.env.GITHUB_APP_PRIVATE_KEY -> exit 1 voi thong diep ghim
+      "khoa rieng doc ngoai tac nhan: apps/api/src/x.ts".
+
+  - id: E18
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.ltsp_do
+    paths:
+      - "scripts/lo-trinh-san-pham/do.ts"
+      - "packages/db/src/san-pham-lo-trinh.ts"
+      - "scripts/lo-trinh-san-pham/test/do.spec.ts"
+    expected: |
+      scripts/lo-trinh-san-pham/test/do.spec.ts describe "ltsp-do", kho thu cua luot, ba san pham khai qua ham ghi that:
+      X (taoLuc T, caiLuc T+1h, layDauLuc T+1h05m), Y (caiLuc T, taoLuc T+2h, layDauLuc T+26h05m), Z (chua co ban chup).
+        1 lenh in dung 3 dong san pham; dong X do tre 5 phut (tu caiLuc), dong Y do tre 24h05m (tu taoLuc) va co co "qua mot
+          ngay", dong Z co co "chua co ban chup"
+        2 dong KET LUAN: "khong dat" (Y qua, Z chua co); bo Y, Z -> "dat"
+        3 DATABASE_URL tro kho khong ton tai -> exit 2, stdout khong chua "dat"
+      CHIEU DO: ban sao tinh do tre tu taoLuc bat ke caiLuc -> dong 1 do voi thong diep ghim "do tre khong tinh tu moc muon
+      hon: X".
