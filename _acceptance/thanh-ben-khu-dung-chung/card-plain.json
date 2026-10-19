@@ -1,0 +1,34 @@
+{
+  "feature_plain": "Cài đặt và Hội thoại dùng chung một thanh bên khu: cùng bề rộng, cùng nhãn nhóm, và trên điện thoại cả hai thành một hàng cuộn ngang.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ có một thanh bên khu dùng chung trong bộ giao diện: nhóm có nhãn, đầu và chân thanh, mục đang mở sáng; trên điện thoại cùng các mục ấy thành một hàng ngang, bỏ nhãn nhóm."},
+    {"id": "AC-3", "p": "Sẽ giữ nguyên thanh bên Cài đặt — bốn nhóm, thứ tự, mục sáng, lọc theo vai — nhưng dựng bằng thanh dùng chung."},
+    {"id": "AC-4", "p": "Sẽ cho Hội thoại cùng thanh ấy ở máy tính: ba nhóm ngày có nhãn như Cài đặt, cuộc đang mở sáng, mỗi cuộc còn nút xoá, nhóm tác nhân kèm số."},
+    {"id": "AC-5", "p": "Sẽ giữ cách Hội thoại phản ứng: bấm cuộc chưa đọc thì đánh dấu đã đọc; không có cuộc nào trong 7 ngày thì hiện câu rỗng."},
+    {"id": "AC-6", "p": "Sẽ cho Hội thoại một hàng cuộn ngang ở điện thoại, và ngăn menu của điện thoại vẫn liệt cuộc theo nhóm, có nút xoá."},
+    {"id": "AC-7", "p": "Sẽ giữ đúng bề rộng thanh lúc đang tải ở cả hai khu, không nhảy chỗ khi dữ liệu về."},
+    {"id": "AC-8", "p": "Sẽ đo trên bản chạy thật: hai khu rộng 224px, nhãn nhóm cùng kiểu chữ, điện thoại không tràn ngang, kèm bốn ảnh để anh nhìn."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG đặt hàng ngang trong ngăn menu điện thoại, và ngăn không tranh tên chuyển cảnh với trang."},
+    {"id": "AC-9", "p": "Chặn mọi vỏ thanh bên tự dựng còn sót trong ứng dụng — không còn bề rộng 213px nào."},
+    {"id": "OOS-1", "p": "KHÔNG làm khu Mục tiêu ở vòng này — đó là hàng VK2 ngay sau."},
+    {"id": "OOS-2", "p": "KHÔNG bỏ danh sách hội thoại khỏi ngăn menu điện thoại — đó là chỗ duy nhất xoá được hội thoại trên điện thoại."},
+    {"id": "OOS-3", "p": "KHÔNG làm thu gọn thanh, ô tìm trong thanh, hay phím mũi tên."},
+    {"id": "OOS-4", "p": "KHÔNG đổi chữ nào trên thanh bên của hai khu."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Khu: Cài đặt, Hội thoại, và ngăn menu điện thoại đều có tiêu chí (AC-3, AC-4, AC-6); Mục tiêu để VK2."},
+    {"i": 1, "p": "Khổ: máy tính từ 768px và điện thoại dưới 768px đều được kiểm, cả bằng bài DOM lẫn trên màn thật (AC-1, AC-8)."},
+    {"i": 2, "p": "Trạng thái: đang tải, đang mở một mục, rỗng, lọc theo vai đều có tiêu chí (AC-3, AC-5, AC-7)."},
+    {"i": 3, "p": "Phần tử: đầu thanh, nhóm có và không nhãn, mục, nút xoá trên dòng, chân thanh — đủ theo bản mẫu Mục tiêu (AC-1, AC-4)."},
+    {"i": 4, "p": "Cắt ngang: mục là liên kết thật và luôn đúng một mục sáng."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Mốc 768px trông như máy tự chọn trong khi bản mẫu Mục tiêu dùng 1024px — đã ghi rõ ràng buộc thật: thước Cài đặt anh đã ký đòi nhãn nhóm hiện ở 768px."},
+    {"i": 1, "p": "Bỏ bước duyệt hình và cỡ dòng hội thoại trông như máy tự quyết gu — đã trích câu giao «cùng một thanh bên khu»; đo lại thì dòng mục Cài đặt cao 28px, chữ nhỏ — đúng mật độ cột hội thoại hôm nay."},
+    {"i": 2, "p": "Ngăn menu điện thoại có thể mất bố cục dọc nếu quên một tham số — tham số nay bắt buộc, quên là lỗi biên dịch, và bài kiểm đọc chính tệp ngăn."},
+    {"i": 3, "p": "Hàng ngang Hội thoại chưa từng được đo khi dài hơn màn — bàn đo nay gieo 8 cuộc hội thoại và đòi trang không tràn ngang."},
+    {"i": 4, "p": "Ngăn menu và hàng ngang có thể trùng tên chuyển cảnh — ngăn nay không mang tên đó, có bài kiểm hai chiều."}
+  ]
+}
