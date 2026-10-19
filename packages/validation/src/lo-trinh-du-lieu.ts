@@ -72,6 +72,7 @@ const hangLoTrinh = z.object({
 	vi_sao: z.string(),
 	tom_tat: tomTat.nullable().default(null),
 	gio_may: gioMay.nullable().default(null),
+	ten_hien_thi: z.string().nullable().default(null),
 });
 
 const NGAY_ISO = /^\d{4}-\d{2}-\d{2}$/;
@@ -84,6 +85,9 @@ const khuonMoc = z.object({
 	gio_may: gioMayMoc.nullable().default(null),
 	du_kien: duKien.nullable().default(null),
 	qua_tai: z.string().nullable().default(null),
+	hien: z.boolean().nullable().default(null),
+	viec_hien: z.array(z.string()).default([]),
+	con_lai: z.number().nullable().default(null),
 });
 
 const ngayHopLe = (ngay: string | null) =>
@@ -124,6 +128,7 @@ const loTrinh = z.object({
 	hang: z.array(hangLoTrinh),
 	moc: z.array(mocLoTrinh),
 	da_bac: z.array(daBac),
+	chua_hen_moc: z.array(z.string()).default([]),
 });
 
 export const loTrinhDuLieu = z.object({
