@@ -121,7 +121,7 @@ Phục vụ: E5c, E6b, E8b, E9b · independent: false (cần Task 3, 4)
 ### Task 6: Chốt thiết kế và bộ chứng năm lệnh
 
 - [ ] Step 1: `gtr_thiet_ke` → exit 0; phá-thử `className` đổi màu trên một `Button` → đỏ; hoàn lại.
-- [ ] Step 2: Năm lệnh từ gốc: `bun run test`, `bun run check-types`, `bun run lint`, `bun run lint:slop`, `bun run build` (qua `chay-nang.sh` — memory khoa-may-viec-nang) → xanh.
+- [ ] Step 2: Năm lệnh từ gốc: `bun run test`, `bun run check-types`, `bun run lint`, `bun run lint:slop`, `bun run build` (lệnh nặng chạy nền qua `giu-nhip` của gói điều phối khi đang giữ khoá) → xanh.
 - [ ] Step 3: Đặt hợp đồng `status: implemented`, commit.
 
 Phục vụ: E12 và toàn bộ · independent: false
