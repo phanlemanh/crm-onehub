@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5b300090f1b150768f9d9a9e8037ab981447bc38
+verified_commit: 85f354e1b780ab9e22db19032c1073e642d9e1a5
 human_signoff:
 ---
 
@@ -247,3 +247,7 @@ Round 3: PASS — E1–E15 đều đạt (carry-forward từ round 1 và round 2
 ### Re-pin lần 1 — 2026-10-19, do gộp onehub (#489 VK1, #494 lộ trình) sau S4 lượt 3
 run_id: repin-20261019T184126Z-34217
 sha: 5b300090f1b150768f9d9a9e8037ab981447bc38 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E9, E10, E11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-19, do gộp onehub (trang Lộ trình) trước chữ ký Cổng Bằng chứng
+run_id: repin-20261019T213740Z-87652
+sha: 85f354e1b780ab9e22db19032c1073e642d9e1a5 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E9, E10, E11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
