@@ -1,0 +1,135 @@
+schema_version: 1
+slug: khong-do-them-chay-gh
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kdtg_ban_gh
+    paths:
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/chung.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/nen.mjs"
+    expected: |
+      bun rang/ban-gh.mjs (goc kho suy tu vi tri script). Nguon = cay goc (dang dung tren nhanh tinh nang). Hai sha: HEAD va
+      merge-base(HEAD, origin/onehub). Moi sha: cloneDocLap(sha) roi datNenBan(goc ban, sha, nguon) — dung hai ham THAT cua
+      _acceptance/chuyen-goi-dieu-phoi/rang/chung.mjs, khong dung lai buoc nao. Moi ban in mot dong «ban <nhan>: origin=<url>
+      repo=<nameWithOwner> nhanh=<ten> head=<sha12> onehub=<sha12> origin/onehub=<sha12>» va dat khi: url origin = url origin
+      cua nguon; gh repo view --json nameWithOwner = cua nguon; git rev-parse --abbrev-ref HEAD = ten nhanh cua nguon;
+      HEAD, onehub, origin/onehub = sha. Doi chung duong: ten nhanh cua nguon khac «HEAD» va khac «onehub» (khong thi ma 2
+      «nguon khong dung tren nhanh tinh nang»). Chieu do cung hai sha: ban chi qua cloneDocLap (khong datNenBan) -> phai sai
+      o ca hai «gh repo view» va «nhanh» -> in «BAT ban-tran-<nhan>»; khong bat -> ma 1 «thuoc hong: ban-tran-<nhan>».
+      Ma 0 khi moi o dat va moi ca dot bien BAT; tep tam o .acceptance-runs/khong-do-them-chay-gh/, don khi xong.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.kdtg_ban_gh_nguon
+    paths:
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/chung.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/nen.mjs"
+    expected: |
+      bun rang/ban-gh.mjs --nguon. Hai nguon dung tu cay goc: (a) worktree tach (git worktree add --detach) o HEAD; (b) ban
+      clone co url origin dat bang url origin cua cay goc va dung tren nhanh onehub (checkout -B onehub HEAD). Voi moi nguon,
+      hai sha HEAD va merge-base, dung ban bang cloneDocLap + datNenBan(goc ban, sha, nguon). Ma tran 2 nguon x 2 sha = 4 o,
+      moi o mot dong «ban <nguon>-<sha>: ...» nhu E1. Dat khi: nguon tach -> nhanh ban = «HEAD»; nguon onehub -> nhanh ban =
+      «onehub»; moi o url origin = url origin cua cay goc; HEAD, onehub, origin/onehub = sha. So o dat phai bang 4 (ma tran
+      viet truoc). Chieu do cung sha merge-base: ban dung tu nguon la cay goc (nhanh tinh nang) roi kiem bang ky vong cua
+      nguon tach -> ham kiem phai ra sai «nhanh» -> «BAT nguon-lech-tach»; ban dung tu nguon tach kiem bang ky vong cua
+      nguon onehub -> sai «nhanh» -> «BAT nguon-lech-onehub»; khong bat -> ma 1. Don worktree va clone tam khi xong.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.kdtg_lenh_gh
+    paths:
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/chung.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/luot-that.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/nen-gop.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/luong.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/chung.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/lenh-gh.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/nen.mjs"
+    expected: |
+      bun rang/lenh-gh.mjs. Giai lenh executors.script.gpct_nen_gop va gpct_luot_that tu _acceptance/config.yaml (khong chep
+      tay). Tien de: chay ca hai lenh o cay goc truoc — lenh nao khong thoat 0 o cay goc -> ma 2 «tien de: <lenh> ma <n> o
+      cay goc» (vd nhanh chua co PR mo, gh mat xac thuc), khong do gi them. Roi chay moi lenh trong ban HEAD va ban
+      merge-base dung bang cloneDocLap + datNenBan nhu E1; nhat ky moi lan chay ra
+      .acceptance-runs/khong-do-them-chay-gh/lenh-gh/<lenh>-<cay>.log. Ma tran viet truoc 4 o (2 lenh x 2 ban): ban HEAD dat
+      khi ma thoat = 0 (bang cay goc, cung cay); ban merge-base dat khi ma thoat thuoc {0, 1} (lenh chay that — ket qua co the
+      khac vi workflow o merge-base khac) VA dau ra khong chua «MA 2:». In «goc <lenh>: ma 0» va «dat <lenh> <ban>: ma <n>»;
+      so o dat phai bang 4. Chieu do cung hai sha, moi chuoi ghim lay tu chinh lan chay pha: (a) ban chi qua cloneDocLap ->
+      gpct_nen_gop ra dong bat dau «MA 2: gh repo view» o ca hai ban -> «BAT nen-gop-ban-tran-<ban>»; (b) ban qua cloneDocLap
+      roi chi dat url origin (khong checkout nhanh, van tach) -> gpct_luot_that ra dung «MA 2: nhanh HEAD khong co PR mo» ->
+      «BAT luot-that-ban-tach-<ban>». Khong bat -> ma 1 «thuoc hong: <ca>».
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.kdtg_ban_do
+    paths:
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/chung.mjs"
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/luot-that.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/nen-gop.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/ban-do-that.mjs"
+    expected: |
+      bun rang/ban-do-that.mjs. Tien de: nhanh hien tai co PR mo (gh pr list --head <nhanh> --state open), khong co -> ma 2
+      «khong co PR mo»; moi luot event pull_request cua sha dau PR (gh api actions/runs?head_sha=<sha>) da status completed,
+      con luot chua xong -> ma 2 «luot nhap chua xong». Chay THAT «bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
+      --chi gpct_luot_that,gpct_nen_gop» tu goc kho; dau ra ghi .acceptance-runs/khong-do-them-chay-gh/ban-do/that.log. Dat
+      khi: ma 0; dong «chay: ...» co tap khoa = {gpct_luot_that, gpct_nen_gop} va dung truoc dong «neo:» (dong in ngay truoc
+      khi dung ban dau tien); tap khoa tren cac dong ket qua (bat dau «xanh », «do san », «sai », «bo ») = dung tap tren
+      «chay:»; co «xanh gpct_luot_that» va «xanh gpct_nen_gop», khong dong nao bat dau «do san gpct_»; co «KET LUAN: xanh».
+      Chieu do: ban chep cua ban do vao .acceptance-runs/khong-do-them-chay-gh/ban-do/pha/khong-do-them.mjs (import tuong doi
+      doi thanh duong tuyet doi toi tep goc), trong do dong goi datNenBan cua dungBan thay bang hai lenh dat onehub truoc vong
+      (update-ref refs/remotes/origin/onehub, branch -f onehub); khong tim thay dong do -> ma 2. Chay ban chep voi cung --chi:
+      phai co dong «do san gpct_nen_gop» va nhat ky ma dong do tro toi chua «MA 2: gh repo view» -> «BAT ban-do-thieu-gh»;
+      khong bat -> ma 1 «thuoc hong: ban-do-thieu-gh».
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.kdtg_chi
+    paths:
+      - "_acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/chi.mjs"
+    expected: |
+      bun rang/chi.mjs. Chay ban do voi --chi-rut (khong --chi): rut tap tu cac dong «  <khoa>: <noi>» sau dong «rut duoc N
+      lenh»; dong «chay: ...» phai liet DUNG tap do (cung so phan tu, cung tap khoa), ma 0. --chi-rut --chi gpct_nen_gop ->
+      «chay: gpct_nen_gop», ma 0. --chi-rut --chi khong_co_khoa_nay -> ma 2, dong «KHONG DO DUOC» chua «khong_co_khoa_nay»,
+      va khong co dong «chay:». --chi-rut --chi (khong kem danh sach) -> ma 2, dong «KHONG DO DUOC» chua «--chi». Doi chung
+      duong: tap khong --chi co hon 1 khoa va chua gpct_nen_gop. O thu nam, che do day du (khong --chi-rut) voi --chi
+      khong_co_khoa_nay: ma 2 «KHONG DO DUOC», khong dong «neo:», va khong thu muc tam moi nao mang tien to «cgdp-kdt-» trong
+      thu muc tam he thong (so danh sach truoc va sau). Nam o, moi o in «dat <o>» hoac «sai <o>: <ly do>».
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.kdtg_dung_lai_cay
+    paths:
+      - "scripts/kiem-cheo/**"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+      - "_acceptance/khong-do-them-chay-gh/rang/dung-lai-cay.mjs"
+    expected: |
+      bun rang/dung-lai-cay.mjs. Bon ca mang ten trong scripts/kiem-cheo/test/dem.test.mjs, moi ca giu mot bao dam cua AC-6:
+      B1 «cay mat giua lan va phan loai», B2 «lan de cay ban o tep khac giua hai sha», B3 «lan de cay ban o tep giong nhau
+      giua hai sha», B4 «lenh git loi -> ly_do». Ban lanh: node --test --test-name-pattern <bon ten> tren cay that -> bon ca
+      pass, 0 fail (dem tu dong «ℹ pass»/«ℹ fail», so pass = 4). Chieu do tren ban guong o thu muc tam (chep scripts/kiem-cheo
+      va lib/evidence-core.cjs, lib/eval-yaml.cjs), moi lan go mot manh cua dem.mjs (thay chuoi; khong tim thay chuoi -> ma
+      2) va ghi truoc ca nao phai fail: (a) datCay nem lai thay vi dungCay -> B1 fail; (c) bo «--force» o worktree add cua
+      dungCay -> B1 fail; (e) datCay nem lai VA bo «--force» o checkout cua datCay -> B2 fail; (b) bo «--force» o checkout cua
+      datCay -> B3 fail; (d) git fetch ly_do dung dong dau message thay dongLoi -> B4 fail. Moi lan: ten ca phai co trong dong
+      «not ok» cua TAP -> «BAT <manh>»; khong -> ma 1 «thuoc hong: <manh>». Ma tran viet truoc: B1..B4 moi bao dam co >= 1
+      dong «BAT»; thieu bao dam nao -> ma 1 «bao dam <B> khong co chieu do».
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.kcs_don_vi
+    paths:
+      - "scripts/kiem-cheo/**"
+    expected: |
+      node --test "scripts/kiem-cheo/test/*.test.mjs": moi ca pass, ma 0.
