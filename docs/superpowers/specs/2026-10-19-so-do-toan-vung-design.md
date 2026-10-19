@@ -66,7 +66,10 @@ không vẽ lại. Không đổi `FlowMap`, `flow-layout`, đầu ra của ba th
 - **Giữ `PageShellHeader` đầy đủ (tiêu đề lớn và câu mô tả).** Đúng cái `vi_sao` gọi là lỗi («một đầu trang lớn»).
   Cách thay chờ Hỏi-2.
 
-## Câu chỉ người có (lên thẻ Cổng Phạm vi)
+## Câu chỉ người có — đã trả lời
+
+Chủ kho trả lời cả bốn trước Cổng Phạm vi, 19/10, ở phiên V3: «Theo khuyến nghị cả bốn» (sổ d-…-12 tới d-…-16). Mỗi
+câu dưới đây giữ nguyên để người đọc thấy lối đã bỏ; lối máy khuyên là lối đã chọn.
 
 - **Hỏi-1 — bỏ Cây căn chỉnh ngay ở VK6?** Hạt giống B5
   (`docs/plan/2026-10-15-hat-giong-b5-bo-cay-sau-nghiem-thu-l3.md`, chủ kho tách 15/10) bảo bỏ Cây SAU phiên nghiệm thu

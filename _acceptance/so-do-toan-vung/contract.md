@@ -36,13 +36,13 @@ thu lại; thanh biểu tượng và đầu ứng dụng giữ nguyên. «Tâm»
 - AC-1: Given người xem có quyền đọc OKR và kỳ có OKR, When mở Báo cáo › Sơ đồ ở khổ 1440 px, Then khung vẽ chiếm trọn
   vùng nội dung — bề rộng khung vẽ bằng bề rộng vùng nội dung trừ tối đa lề của dải công cụ, không có bề rộng tối đa
   của `PageShell`; khung vẽ cao hết phần còn lại của khung nhìn (đáy khung vẽ chạm đáy vùng nội dung); tài liệu không
-  cuộn dọc hay ngang; And (chờ Hỏi-2) trên khung vẽ chỉ có một dải công cụ một dòng gồm đường mảnh «Báo cáo › Sơ đồ góp
+  cuộn dọc hay ngang; And trên khung vẽ chỉ có một dải công cụ một dòng gồm đường mảnh «Báo cáo › Sơ đồ góp
   vào», bộ lọc «Mọi đơn vị · Cần chú ý» và nút «Toàn màn hình», không `PageShellDescription`, và `docs/design.md` có
   dòng ngoại lệ «màn toàn vùng» ở mục «Khung trang». [ĐỐI CHIẾU VK2: đường của mục Sơ đồ]
 - AC-2: Given Sơ đồ đang ở khung thường, When bấm «Toàn màn hình», Then thanh bên khu không còn trong cây truy cập, khung
   vẽ rộng thêm đúng bề rộng của thanh bên, nút đổi thành «Thoát toàn màn hình» với `aria-pressed="true"`, tiêu điểm ở
   lại trên nút; trạng thái toàn màn hình sống trong vỏ khu suốt lúc đi giữa các kiểu xem của Sơ đồ, mất khi tải lại và
-  không đi theo đường dẫn (chờ Hỏi-4); When nhấn Esc khi không ngăn, hộp thoại, menu hay thẻ đơn vị nào đang mở, Then
+  không đi theo đường dẫn; When nhấn Esc khi không ngăn, hộp thoại, menu hay thẻ đơn vị nào đang mở, Then
   thoát toàn màn hình, thanh bên khu hiện lại; And khi một lớp đang mở trên sơ đồ ở toàn màn hình — ngăn chi tiết, hộp
   thoại, menu, hay thẻ đơn vị mở ra (`moDonVi`) — nhấn Esc lần đầu chỉ đóng lớp ấy (vẫn toàn màn hình), lần hai mới
   thoát.
@@ -56,14 +56,14 @@ thu lại; thanh biểu tượng và đầu ứng dụng giữ nguyên. «Tâm»
 - AC-4: Given ngăn chi tiết một mục tiêu đọc được, When ngăn dựng xong, Then hàng hành động có nút «Xem trên sơ đồ» là
   một liên kết (`<a href>`) tới đường của Sơ đồ mang tham số tâm là id mục tiêu ấy và không mang khoá nào khác; bấm nó
   mở Sơ đồ lấy tâm ấy, giữ khung đang có (thường hay toàn màn hình); khu «Góp vào đâu» và tab «Góp vào» của ngăn không
-  đổi; And (chờ Hỏi-3) không còn liên kết nào trong `apps/app` trỏ tới `/okr/quanh-muc-tieu/`.
+  đổi; And không còn liên kết nào trong `apps/app` trỏ tới `/okr/quanh-muc-tieu/`.
 - AC-5: Given đường dẫn cũ đã lưu, When mở `/<slug>/okr/quanh-muc-tieu/<id>`, Then tới Sơ đồ lấy tâm `<id>`; When mở
   Toàn cảnh với `?xemToanCanh=so-do` (kèm hay không kèm `moDonVi`, `locSoDo`), Then tới Sơ đồ cả công ty, mang theo
-  `moDonVi`, `locSoDo`; And (chờ Hỏi-3) thư mục trang `okr/quanh-muc-tieu/[objectiveId]` không còn dựng sơ đồ (chỉ
+  `moDonVi`, `locSoDo`; And thư mục trang `okr/quanh-muc-tieu/[objectiveId]` không còn dựng sơ đồ (chỉ
   chuyển hướng hay bị xoá) và Toàn cảnh không còn cách xem Sơ đồ. [ĐỐI CHIẾU VK2: bảng chuyển hướng của vỏ, số phận của Toàn cảnh]
 - AC-6: Given đường dẫn cũ `?xemOkr=cay` (kèm `donOkr`), When mở, Then tới Sơ đồ cả công ty mở sẵn thẻ của đơn vị đang
   chọn (`moDonVi`); `cay` không còn là giá trị của `CACH_XEM_OKR`; không màn nào còn dựng `CayCanChinh` (`role="tree"`
-  của cây căn chỉnh); lý do góp vào vẫn đọc được trên thẻ đơn vị mở ra. (chờ Hỏi-1 của design doc)
+  của cây căn chỉnh); lý do góp vào vẫn đọc được trên thẻ đơn vị mở ra.
 - AC-7: Given khổ dưới `md`, When mở Sơ đồ (cả công ty hay lấy tâm), Then không dựng khung vẽ và không có nút «Toàn màn
   hình»; cùng dữ liệu hiện thành danh sách `Item` của DH4 (cả công ty) hay bốn nhóm của DH5 (lấy tâm); trang không cuộn
   ngang.
@@ -79,7 +79,7 @@ thu lại; thanh biểu tượng và đầu ứng dụng giữ nguyên. «Tâm»
   px, Then có ảnh từng bước: khung vẽ bằng bề rộng vùng nội dung ở khung thường; rộng thêm và không có thanh bên ở toàn
   màn hình; thanh bên trở lại sau Esc; sơ đồ quanh mục tiêu với dòng góp lên công ty gọi đúng KR mà tệp gieo khai; danh
   sách ở 390 và trang không cuộn ngang; And các eval `test`/`script` của hồ sơ đã ký mà `paths` ghi đích danh một tệp vòng
-  này sửa thoát đúng mã kỳ vọng, hoặc đã khai nghỉ có `superseded_by` theo Hỏi-3.
+  này sửa thoát đúng mã kỳ vọng, hoặc đã khai nghỉ có `superseded_by` theo khuôn luật 21 chủ kho đã cho.
 
 ## Coverage
 
@@ -133,11 +133,10 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 19/10; 
   `_acceptance/config.yaml` (chỉ thêm), `_acceptance/so-do-toan-vung/**`.
 - Vùng chung (luật 19): thanh bên khu và `apps/app/lib/messages/okr*.ts` là của làn Mac Studio; `objective-sheet.tsx`
   nằm dưới `apps/app/components/crm/record-sheet/**` — **vùng của làn M5** → gửi `cham-tep` trước S3.
-- Bốn câu chỉ người có ở design doc lên thẻ Cổng Phạm vi, và vế đổi theo từng câu:
-  - Hỏi-1 bỏ Cây → AC-6, E6.
-  - Hỏi-2 không `PageShellHeader` → vế dải công cụ và dòng ngoại lệ của AC-1, E1.
-  - Hỏi-3 sửa thước hồ sơ đã ký → vế liên kết cũ của AC-4, vế trang cũ của AC-5, vế hồ sơ đã ký của AC-10; E4, E5, E11.
-  - Hỏi-4 toàn màn hình có đi theo đường dẫn không → vế trạng thái của AC-2; E2 bước (3).
+- Bốn câu chỉ người có ở design doc đã được chủ kho trả lời trước Cổng Phạm vi (19/10, «Theo khuyến nghị cả bốn»; sổ
+  d-…-12 tới d-…-16): bỏ Cây ở VK6 (AC-6); dải công cụ thay `PageShellHeader` và thêm ngoại lệ «màn toàn vùng» (AC-1);
+  cho chuyển thước hồ sơ đã ký theo khuôn luật 21 (AC-4, AC-5, AC-10, E11); toàn màn hình là chế độ tạm của vỏ (AC-2).
+  Hợp đồng vẫn là bản nháp: Cổng Phạm vi duyệt sau khi đối chiếu VK2.
 - Known limit đã khai từ S1: sàn thiết kế tĩnh của kit trả KHONG-DO-DUOC cho `.tsx` (đo 15/10 ở DH5 E11), nên vòng này
   không có eval sàn tĩnh; vế nhìn-thấy của luật thiết kế do E10 (ui-check) và mắt người ở Cổng Bằng chứng gánh.
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/design.md`; trước S3 thêm `docs/reui.md` (bậc 3–4 cho khung
