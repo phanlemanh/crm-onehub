@@ -4,14 +4,20 @@ import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const APP = join(GOC, "apps", "app");
-const BO_QUA = [join(APP, "test"), join(APP, "app", "proto"), join(APP, "node_modules"), join(APP, ".next")];
+const BO_QUA = [
+	join(APP, "test"),
+	join(APP, "app", "proto"),
+	join(APP, "node_modules"),
+	join(APP, ".next"),
+];
 const PHAI_NHAP = [
 	"apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx",
 	"apps/app/components/agent-builder/agent-builder-sidebar.tsx",
 ];
 const NHAP = /from\s+["']@crm\/ui\/components\/area-sidebar["']/;
 const SO_TU_DAT = /w-\[213px\]/;
-const ASIDE = /<aside\b[^>]*className=(?:"([^"]*)"|\{[^}]*?["'`]([^"'`]*)["'`])/gs;
+const ASIDE =
+	/<aside\b[^>]*className=(?:"([^"]*)"|\{[^}]*?["'`]([^"'`]*)["'`])/gs;
 const BE_RONG = /(?:^|\s)(?:w-56|w-60|w-64|w-\[\d+px\])(?:\s|$)/;
 const AN_THEO_KHO = /(?:^|\s)hidden(?:\s|$)/;
 const HIEN_THEO_KHO = /(?:^|\s)(?:md|lg):(?:block|flex)(?:\s|$)/;
@@ -42,10 +48,14 @@ function quet() {
 		for (const m of chu.matchAll(ASIDE)) {
 			const lop = m[1] ?? m[2] ?? "";
 			if (BE_RONG.test(lop) && AN_THEO_KHO.test(lop) && HIEN_THEO_KHO.test(lop))
-				viPham.push(`${ten}:${dongCua(chu, m.index)} <aside className="${lop}">`);
+				viPham.push(
+					`${ten}:${dongCua(chu, m.index)} <aside className="${lop}">`,
+				);
 		}
 	}
-	const daNhap = PHAI_NHAP.filter((t) => NHAP.test(readFileSync(join(GOC, t), "utf8")));
+	const daNhap = PHAI_NHAP.filter((t) =>
+		NHAP.test(readFileSync(join(GOC, t), "utf8")),
+	);
 	return { soTep: tep.length, viPham, daNhap };
 }
 

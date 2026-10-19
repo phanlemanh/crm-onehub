@@ -35,7 +35,9 @@ function Muc({ ten, mo = false }: { ten: string; mo?: boolean }) {
 }
 
 function ChiDoc() {
-	return useAreaSidebarOrientation() === "vertical" ? <span>chi-doc</span> : null;
+	return useAreaSidebarOrientation() === "vertical" ? (
+		<span>chi-doc</span>
+	) : null;
 }
 
 function Khu({ placement }: { placement?: "area" | "panel" }) {
@@ -73,31 +75,47 @@ describe("area-sidebar", () => {
 		expect(navs.length, "aside phai co dung mot nav").toBe(1);
 		const nav = navs[0];
 		expect(nav?.getAttribute("aria-label"), "nav doc sai nhan").toBe("Khu thu");
-		const nhom = [...(aside?.querySelectorAll("[data-slot='nav-group']") ?? [])];
+		const nhom = [
+			...(aside?.querySelectorAll("[data-slot='nav-group']") ?? []),
+		];
 		expect(nhom.length, "thanh doc phai co 3 nhom").toBe(3);
 		expect(
-			nhom.map((n) => n.querySelector("[data-slot='nav-group-label']")?.textContent ?? null),
+			nhom.map(
+				(n) =>
+					n.querySelector("[data-slot='nav-group-label']")?.textContent ?? null,
+			),
 			"nhan nhom lech",
 		).toEqual([null, "Nhom hai", "Nhom ba"]);
 		const muc = [...(aside?.querySelectorAll("a") ?? [])];
 		expect(chu(muc), "muc doc lech").toEqual(["A", "B", "C", "D", "E"]);
 		for (const m of muc)
-			expect(m.getAttribute("data-slot"), `${m.textContent}: khong phai nav-item`).toBe("nav-item");
+			expect(
+				m.getAttribute("data-slot"),
+				`${m.textContent}: khong phai nav-item`,
+			).toBe("nav-item");
 		expect(
 			chu(aside?.querySelectorAll("[aria-current='page']") ?? []),
 			"muc dang mo lech",
 		).toEqual(["D"]);
-		const dau = [...(aside?.querySelectorAll("span") ?? [])].find((s) => s.textContent === "Dau");
-		const chan = [...(aside?.querySelectorAll("span") ?? [])].find((s) => s.textContent === "Chan");
+		const dau = [...(aside?.querySelectorAll("span") ?? [])].find(
+			(s) => s.textContent === "Dau",
+		);
+		const chan = [...(aside?.querySelectorAll("span") ?? [])].find(
+			(s) => s.textContent === "Chan",
+		);
 		expect(dau, "thieu dau thanh").toBeDefined();
 		expect(chan, "thieu chan thanh").toBeDefined();
 		if (!dau || !chan || !nav) throw new Error("thieu phan tu");
 		expect(
-			Boolean(dau.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING),
+			Boolean(
+				dau.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING,
+			),
 			"dau thanh khong o truoc nav",
 		).toBe(true);
 		expect(
-			Boolean(nav.compareDocumentPosition(chan) & Node.DOCUMENT_POSITION_FOLLOWING),
+			Boolean(
+				nav.compareDocumentPosition(chan) & Node.DOCUMENT_POSITION_FOLLOWING,
+			),
 			"chan thanh khong o sau nav",
 		).toBe(true);
 
@@ -106,21 +124,26 @@ describe("area-sidebar", () => {
 		);
 		expect(strips.length, "phai co dung mot hang ngang ngoai aside").toBe(1);
 		const strip = strips[0];
-		expect(strip?.getAttribute("aria-label"), "hang ngang sai nhan").toBe("Khu thu");
-		expect(chu(strip?.querySelectorAll("a") ?? []), "muc hang ngang lech").toEqual([
-			"A",
-			"B",
-			"C",
-			"D",
-			"E",
-		]);
+		expect(strip?.getAttribute("aria-label"), "hang ngang sai nhan").toBe(
+			"Khu thu",
+		);
+		expect(
+			chu(strip?.querySelectorAll("a") ?? []),
+			"muc hang ngang lech",
+		).toEqual(["A", "B", "C", "D", "E"]);
 		expect(
 			strip?.querySelectorAll("[data-slot='nav-group-label']").length,
 			"hang ngang co nhan nhom",
 		).toBe(0);
-		expect(strip?.textContent?.includes("Chan"), "hang ngang co chan thanh").toBe(false);
+		expect(
+			strip?.textContent?.includes("Chan"),
+			"hang ngang co chan thanh",
+		).toBe(false);
 		const bang = k.querySelector("[data-slot='area-sidebar-strip']");
-		expect(bang?.textContent?.includes("Dau"), "dai dien thoai thieu dau thanh").toBe(true);
+		expect(
+			bang?.textContent?.includes("Dau"),
+			"dai dien thoai thieu dau thanh",
+		).toBe(true);
 		expect(
 			chu(strip?.querySelectorAll("[aria-current='page']") ?? []),
 			"hang ngang sai muc dang mo",
@@ -129,7 +152,10 @@ describe("area-sidebar", () => {
 
 	test("tbk-panel: chi bo cuc doc, khong an theo kho, khong ten chuyen canh", () => {
 		const k = dung(<Khu placement="panel" />);
-		expect(k.querySelectorAll("[data-slot='nav-strip']").length, "panel co hang ngang").toBe(0);
+		expect(
+			k.querySelectorAll("[data-slot='nav-strip']").length,
+			"panel co hang ngang",
+		).toBe(0);
 		const aside = k.querySelector("aside[data-slot='area-sidebar']");
 		const lop = (aside?.getAttribute("class") ?? "").split(/\s+/);
 		expect(lop.includes("hidden"), "panel an theo kho").toBe(false);
@@ -138,7 +164,8 @@ describe("area-sidebar", () => {
 			"panel mang ten chuyen canh",
 		).toBe(false);
 		expect(
-			[...k.querySelectorAll("span")].filter((s) => s.textContent === "chi-doc").length,
+			[...k.querySelectorAll("span")].filter((s) => s.textContent === "chi-doc")
+				.length,
 			"panel thieu phan chi-doc",
 		).toBe(1);
 
@@ -147,14 +174,21 @@ describe("area-sidebar", () => {
 		const k2 = dung(<Khu />);
 		const aside2 = k2.querySelector("aside[data-slot='area-sidebar']");
 		const bang = k2.querySelector("[data-slot='area-sidebar-strip']");
-		expect(aside2?.getAttribute("class"), "aside thieu ten chuyen canh").toContain(
-			"[view-transition-name:area-sidebar]",
+		expect(
+			aside2?.getAttribute("class"),
+			"aside thieu ten chuyen canh",
+		).toContain("[view-transition-name:area-sidebar]");
+		expect(
+			bang?.getAttribute("class"),
+			"dai dien thoai thieu ten chuyen canh",
+		).toContain("[view-transition-name:area-sidebar]");
+		const chiDoc = [...k2.querySelectorAll("span")].filter(
+			(s) => s.textContent === "chi-doc",
 		);
-		expect(bang?.getAttribute("class"), "dai dien thoai thieu ten chuyen canh").toContain(
-			"[view-transition-name:area-sidebar]",
-		);
-		const chiDoc = [...k2.querySelectorAll("span")].filter((s) => s.textContent === "chi-doc");
 		expect(chiDoc.length, "chi-doc xuat hien trong hang ngang").toBe(1);
-		expect(chiDoc[0]?.closest("aside"), "chi-doc khong nam trong aside").not.toBeNull();
+		expect(
+			chiDoc[0]?.closest("aside"),
+			"chi-doc khong nam trong aside",
+		).not.toBeNull();
 	});
 });

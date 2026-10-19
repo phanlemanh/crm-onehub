@@ -3,6 +3,7 @@ import { copyFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 import {
 	API,
@@ -16,7 +17,6 @@ import {
 	phien,
 	suySlug,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
-import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
@@ -36,7 +36,13 @@ const DO = {
 	mayTinhTu: 768,
 	tranPha: "1200px",
 };
-const KIEU = ["fontSize", "fontWeight", "letterSpacing", "textTransform", "color"];
+const KIEU = [
+	"fontSize",
+	"fontWeight",
+	"letterSpacing",
+	"textTransform",
+	"color",
+];
 
 const PHA = process.env.TBK_PHA ?? "";
 if (!["", "rong", "tran"].includes(PHA)) {
@@ -83,12 +89,17 @@ async function taoCuoc(i) {
 
 const cuoc = [];
 for (let i = 0; i < DO.soCuoc; i += 1) cuoc.push(await taoCuoc(i));
-console.log(`gieo ${cuoc.length} cuoc hoi thoai qua conversations.createBuilder`);
+console.log(
+	`gieo ${cuoc.length} cuoc hoi thoai qua conversations.createBuilder`,
+);
 
 mkdirSync(BANG_CHUNG, { recursive: true });
 mkdirSync(BANG_CHUNG_HO_SO, { recursive: true });
 
-const trinhDuyet = await puppeteer.launch({ executablePath: CHROME, headless: true });
+const trinhDuyet = await puppeteer.launch({
+	executablePath: CHROME,
+	headless: true,
+});
 datTrinhDuyet(trinhDuyet);
 const host = new URL(APP).hostname;
 const trang = await trinhDuyet.newPage();
@@ -117,7 +128,10 @@ function bao(dat, dongDung, dongSai) {
 }
 
 async function mo(duong) {
-	await trang.goto(`${APP}${duong}`, { waitUntil: "domcontentloaded", timeout: CHO_TAI });
+	await trang.goto(`${APP}${duong}`, {
+		waitUntil: "domcontentloaded",
+		timeout: CHO_TAI,
+	});
 	const dich = new URL(trang.url()).pathname;
 	if (dich.startsWith("/sign-in") || dich.includes("/onboarding"))
 		await khongDo(`KHONG DO DUOC: ${duong} bi day ve ${dich}`);
@@ -134,17 +148,24 @@ async function mo(duong) {
 
 async function doc(kieu) {
 	return trang.evaluate((KIEU_) => {
-		const hien = (el) => !!el && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== "hidden";
+		const hien = (el) =>
+			!!el &&
+			el.getClientRects().length > 0 &&
+			getComputedStyle(el).visibility !== "hidden";
 		const asides = [...document.querySelectorAll("aside")].filter(
 			(a) => hien(a) && a.querySelector("nav, a"),
 		);
 		const aside = document.querySelector("aside[data-slot='area-sidebar']");
-		const asideHien = hien(aside) ? aside : asides[0] ?? null;
-		const nhan = [...document.querySelectorAll("[data-slot='nav-group-label']")].filter(hien);
+		const asideHien = hien(aside) ? aside : (asides[0] ?? null);
+		const nhan = [
+			...document.querySelectorAll("[data-slot='nav-group-label']"),
+		].filter(hien);
 		const kieuNhan = nhan[0]
 			? Object.fromEntries(KIEU_.map((k) => [k, getComputedStyle(nhan[0])[k]]))
 			: null;
-		const strip = [...document.querySelectorAll("[data-slot='nav-strip']")].find(hien) ?? null;
+		const strip =
+			[...document.querySelectorAll("[data-slot='nav-strip']")].find(hien) ??
+			null;
 		const doc_ = document.documentElement;
 		const dongHoiThoai = asideHien
 			? [...asideHien.querySelectorAll("a[href*='/chat/']")].filter((a) => {
@@ -154,11 +175,15 @@ async function doc(kieu) {
 			: 0;
 		return {
 			asideRong: asideHien ? asideHien.getBoundingClientRect().width : null,
-			asideCoSlot: !!asideHien && asideHien.getAttribute("data-slot") === "area-sidebar",
+			asideCoSlot:
+				!!asideHien && asideHien.getAttribute("data-slot") === "area-sidebar",
 			soNhan: nhan.length,
 			kieuNhan,
 			strip: strip
-				? { cuon: strip.scrollWidth > strip.clientWidth, so: strip.querySelectorAll("a").length }
+				? {
+						cuon: strip.scrollWidth > strip.clientWidth,
+						so: strip.querySelectorAll("a").length,
+					}
 				: null,
 			tran: doc_.scrollWidth - doc_.clientWidth,
 			dongHoiThoai,
@@ -172,7 +197,8 @@ for (const khu of KHU) {
 		await mo(khu.duong);
 		if (PHA === "tran" && khu.ten === "hoi-thoai")
 			await trang.evaluate((w) => {
-				for (const s of document.querySelectorAll("[data-slot='nav-strip']")) s.style.minWidth = w;
+				for (const s of document.querySelectorAll("[data-slot='nav-strip']"))
+					s.style.minWidth = w;
 			}, DO.tranPha);
 		const d = await doc(KIEU);
 		const anh = `${khu.ten}-${kho.rong}.png`;
@@ -181,7 +207,8 @@ for (const khu of KHU) {
 		const nhan = `${khu.ten} ${kho.rong}`;
 
 		if (kho.rong >= DO.mayTinhTu) {
-			const rongDung = d.asideRong !== null && Math.abs(d.asideRong - beRongMong) <= DO.lech;
+			const rongDung =
+				d.asideRong !== null && Math.abs(d.asideRong - beRongMong) <= DO.lech;
 			bao(
 				rongDung && d.asideCoSlot,
 				`DUNG AC-8 ${nhan}: aside ${d.asideRong}px (area-sidebar)`,
@@ -199,7 +226,9 @@ for (const khu of KHU) {
 			);
 			nhanTheoKhu[khu.ten] = d.kieuNhan;
 			if (khu.ten === "hoi-thoai")
-				console.log(`GHI CHU AC-8 ${nhan}: ${d.dongHoiThoai} dong hoi thoai thay duoc trong khung nhin`);
+				console.log(
+					`GHI CHU AC-8 ${nhan}: ${d.dongHoiThoai} dong hoi thoai thay duoc trong khung nhin`,
+				);
 		} else {
 			bao(
 				d.asideRong === null,
@@ -237,7 +266,11 @@ if (a && b) {
 		`SAI AC-8 nhan nhom hai khu khac nhau: ${lech.map((k) => `${k} ${a[k]}≠${b[k]}`).join(", ")}`,
 	);
 } else {
-	bao(false, "", `SAI AC-8 nhan nhom hai khu: thieu nhan o ${a ? "hoi-thoai" : "cai-dat"}`);
+	bao(
+		false,
+		"",
+		`SAI AC-8 nhan nhom hai khu: thieu nhan o ${a ? "hoi-thoai" : "cai-dat"}`,
+	);
 }
 
 console.log(`anh: ${BANG_CHUNG_HO_SO}`);

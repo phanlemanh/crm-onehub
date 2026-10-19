@@ -1,16 +1,15 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
 import {
-	NavGroup,
-	NavGroupLabel,
-	NavItem,
-	NavStrip,
-} from "@crm/ui/components/nav-item";
+	AreaSidebar,
+	AreaSidebarGroup,
+	AreaSidebarItem,
+} from "@crm/ui/components/area-sidebar";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useId, useMemo } from "react";
+import { useMemo } from "react";
 import {
 	GOC_CAI_DAT,
 	type MucCaiDat,
@@ -29,40 +28,19 @@ function Muc({
 	muc,
 	nhan,
 	trangThai,
-	orientation,
 }: {
 	muc: MucCaiDat;
 	nhan: string;
 	trangThai: TrangThaiMuc;
-	orientation: "vertical" | "horizontal";
 }) {
-	if (!trangThai) {
-		return (
-			<NavItem disabled orientation={orientation}>
-				{nhan}
-			</NavItem>
-		);
-	}
-
-	const dangMo = trangThai.dangMo(muc);
+	if (!trangThai) return <AreaSidebarItem disabled>{nhan}</AreaSidebarItem>;
 
 	return (
-		<NavItem asChild active={dangMo} orientation={orientation}>
+		<AreaSidebarItem asChild active={trangThai.dangMo(muc)}>
 			<Link href={muc.href} prefetch transitionTypes={["nav-lateral"]}>
 				{nhan}
 			</Link>
-		</NavItem>
-	);
-}
-
-function Nhom({ nhan, children }: { nhan: string; children: ReactNode }) {
-	const id = useId();
-
-	return (
-		<NavGroup aria-labelledby={id}>
-			<NavGroupLabel id={id}>{nhan}</NavGroupLabel>
-			{children}
-		</NavGroup>
+		</AreaSidebarItem>
 	);
 }
 
@@ -74,50 +52,22 @@ function ThanhBen({
 	trangThai: TrangThaiMuc;
 }) {
 	const t = settingsMessages(useLocale());
-	const dangTai = trangThai === null || undefined;
 
 	return (
-		<>
-			<aside className="hidden w-56 shrink-0 border-r md:block [view-transition-name:settings-sidebar]">
-				<nav
-					aria-label={t.thanhBen.nhan}
-					aria-busy={dangTai}
-					className="flex flex-col gap-4 p-3"
-				>
-					{nhom.map((n) => (
-						<Nhom key={n.khoa} nhan={t.nhomThanhBen[n.khoa]}>
-							{n.muc.map((muc) => (
-								<Muc
-									key={muc.href}
-									muc={muc}
-									nhan={t.thanhBen[muc.khoa]}
-									trangThai={trangThai}
-									orientation="vertical"
-								/>
-							))}
-						</Nhom>
-					))}
-				</nav>
-			</aside>
-
-			<NavStrip
-				aria-label={t.thanhBen.nhan}
-				aria-busy={dangTai}
-				className="md:hidden [view-transition-name:settings-sidebar]"
-			>
-				{nhom.flatMap((n) =>
-					n.muc.map((muc) => (
+		<AreaSidebar label={t.thanhBen.nhan} busy={trangThai === null}>
+			{nhom.map((n) => (
+				<AreaSidebarGroup key={n.khoa} label={t.nhomThanhBen[n.khoa]}>
+					{n.muc.map((muc) => (
 						<Muc
 							key={muc.href}
 							muc={muc}
 							nhan={t.thanhBen[muc.khoa]}
 							trangThai={trangThai}
-							orientation="horizontal"
 						/>
-					)),
-				)}
-			</NavStrip>
-		</>
+					))}
+				</AreaSidebarGroup>
+			))}
+		</AreaSidebar>
 	);
 }
 
