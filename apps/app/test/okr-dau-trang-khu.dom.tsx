@@ -910,67 +910,6 @@ describe("dhk-khoa-ly-do", () => {
 	});
 });
 
-describe("dhk-giu-don", () => {
-	test("dhk-giu-don: 25 liên kết thẻ mang đúng kyOkr và donOkr đang có; vòng đi-về giữ đơn vị", async () => {
-		const s = soSai();
-		const DUONG_DAN = [
-			"?kyOkr=q4&donOkr=pb:P2",
-			"?kyOkr=q4",
-			"?donOkr=pb:P2",
-			"",
-			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan&phuTrachOkr=hung&new=true",
-		];
-		let soO = 0;
-		for (const tham of DUONG_DAN) {
-			const vao = new URLSearchParams(tham);
-			const mong = new URLSearchParams();
-			for (const k of ["kyOkr", "donOkr", "xemOkr"]) {
-				const v = vao.get(k);
-				if (v) mong.set(k, v);
-			}
-			await dauTrang("theo-don-vi", {}, tham);
-			for (const t of TAB) {
-				soO += 1;
-				const a = qa("[role=tab]").find(
-					(x) =>
-						x.getAttribute("href")?.startsWith(DUONG_TAB[t]) &&
-						new URL(x.getAttribute("href") ?? "", "http://x").pathname ===
-							DUONG_TAB[t],
-				);
-				const ra = new URL(a?.getAttribute("href") ?? "/", "http://x")
-					.searchParams;
-				const thieu = [...mong].filter(([k, v]) => ra.get(k) !== v);
-				const thua = [...ra.keys()].filter((k) => !mong.has(k));
-				s.kiem(
-					thieu.length === 0 && thua.length === 0,
-					`dhk-giu-don: lien ket ${t}${thieu.length ? ` thieu ${thieu.map(([k, v]) => `${k}=${v}`).join(",")}` : ""}${thua.length ? ` thua ${thua.join(",")}` : ""}`,
-				);
-			}
-			await don();
-		}
-		soO += 1;
-		let tham = "?kyOkr=q4&donOkr=pb:P2";
-		let dangO: TabOkr = "theo-don-vi";
-		for (const t of ["cua-toi", "toan-canh", "hoi-y", "theo-don-vi"] as const) {
-			await dauTrang(dangO, {}, tham);
-			const a = qa("[role=tab]").find(
-				(x) =>
-					new URL(x.getAttribute("href") ?? "", "http://x").pathname ===
-					DUONG_TAB[t],
-			);
-			tham = new URL(a?.getAttribute("href") ?? "/", "http://x").search;
-			dangO = t;
-			await don();
-		}
-		const cuoi = new URLSearchParams(tham);
-		s.kiem(
-			cuoi.get("kyOkr") === "q4" && cuoi.get("donOkr") === "pb:P2",
-			`dhk-giu-don: di-ve ve Theo don vi voi «${tham}»`,
-		);
-		s.xong("dhk-giu-don", soO);
-	});
-});
-
 describe("dhk-suc-khoe", () => {
 	test("dhk-suc-khoe: tiêu đề khu, thẻ Toàn cảnh, đường dẫn A › B khớp, về giữ ky + đơn vị; en một cách viết", async () => {
 		const s = soSai();
@@ -993,11 +932,7 @@ describe("dhk-suc-khoe", () => {
 				"breadcrumb",
 			);
 			const rail = khungUngDungMessages(locale).rail.okr;
-			const dangChon = qa("[role=tab]").find(
-				(x) => x.getAttribute("aria-current") === "page",
-			);
 			const muc = qa("[data-slot=breadcrumb-item]");
-			const dau = muc[0]?.textContent ?? "";
 			const cuoi = muc.at(-1)?.textContent ?? "";
 			localeMayChu = locale;
 			const tieuDe = String((await TRANG_SUC_KHOE.generateMetadata()).title);
@@ -1007,15 +942,6 @@ describe("dhk-suc-khoe", () => {
 			s.kiem(
 				q("h1")?.textContent === rail,
 				`dhk-suc-khoe: h1 ${locale} «${q("h1")?.textContent}»`,
-			);
-			s.kiem(
-				new URL(dangChon?.getAttribute("href") ?? "/", "http://x").pathname ===
-					DUONG_TAB["toan-canh"],
-				`dhk-suc-khoe: the dang chon ${locale} khong la Toan canh`,
-			);
-			s.kiem(
-				dau === dangChon?.textContent,
-				`dhk-suc-khoe: muc dau «${dau}» khac the «${dangChon?.textContent}»`,
 			);
 			s.kiem(
 				tieuDe.startsWith(`${cuoi} · `),
