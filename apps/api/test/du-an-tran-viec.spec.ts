@@ -3,6 +3,7 @@ import { db } from "@crm/db";
 import { DU_AN } from "@crm/db/du-an";
 import { taoViec } from "@crm/db/viec-ghi";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { z } from "zod";
 import { viecDaDoiOutput } from "../src/viec/viec.contracts";
 import {
 	donDuAn,
@@ -17,6 +18,7 @@ import { batApp, donViec, goi, type KetGoi, nguoi } from "./support/viec-gieo";
 const MA_TEST_MS = 600_000;
 const GIEO_MS = 300_000;
 const TRAN = DU_AN.thongDiep.viecToiDa;
+const coId = z.object({ id: z.string() });
 const DONG = DU_AN.thongDiep.daDong;
 
 type ThaoTac =
@@ -140,10 +142,9 @@ async function soViec(duAnId: string): Promise<number> {
 }
 
 function idCua(r: KetGoi): string {
-	const id = (r.data as { id?: unknown } | undefined)?.id;
-	if (typeof id !== "string")
-		throw new Error(`vg tran: khong co id ${json(r)}`);
-	return id;
+	const kq = coId.safeParse(r.data);
+	if (!kq.success) throw new Error(`vg tran: khong co id ${json(r)}`);
+	return kq.data.id;
 }
 
 async function lam(t: ThaoTac, p: DuAnThu): Promise<KetGoi> {
@@ -365,13 +366,10 @@ describe("vg-tran", () => {
 			if (dongPD.status !== 200) {
 				throw new Error(`vg tran: dung PD loi ${json(dongPD)}`);
 			}
-			const duAn: Record<TenDuAn, DuAnThu> = { P300, P299, PD };
+			const duAn = { P300, P299, PD } satisfies Record<TenDuAn, DuAnThu>;
 
 			let daSo = 0;
-			const tuDoi: Record<"P300" | "P299", boolean> = {
-				P300: false,
-				P299: false,
-			};
+			const tuDoi = { P300: false, P299: false };
 			for (const d of MA_TRAN) {
 				const p = duAn[d.duAn];
 				const vetTruoc = await db.duAnVet.count({
