@@ -1,6 +1,21 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
+	sanPham: {
+		chon: "Product",
+		layTu: "Fetched from",
+		luc: (gio: string) => `at ${gio}`,
+		layHong: (lyDo: string) =>
+			`The last fetch failed: ${lyDo}. Showing the previous copy.`,
+		nguonDoi:
+			"Source just changed — showing the old source until the new one is fetched.",
+		khuonCu: (ten: string, n: number) =>
+			`${ten} uses roadmap format ${n} — some parts follow the old rules.`,
+		khuonMoi: (ten: string, n: number) =>
+			`${ten} uses roadmap format ${n}, newer than this page — some parts are not shown.`,
+		chuaCoTieuDe: (ten: string) => `No roadmap for ${ten} yet`,
+		moCaiDat: "Open Settings › Products",
+	},
 	gioLay: {
 		capNhat: (luc: string) => `Updated ${luc}`,
 		banDung: "(build)",
@@ -166,6 +181,21 @@ const en = {
 export type LoTrinhMessages = typeof en;
 
 const vi: LoTrinhMessages = {
+	sanPham: {
+		chon: "Sản phẩm",
+		layTu: "Lấy từ",
+		luc: (gio: string) => `lúc ${gio}`,
+		layHong: (lyDo: string) =>
+			`Lần lấy gần nhất hỏng: ${lyDo}. Trang đang hiện bản lấy trước đó.`,
+		nguonDoi:
+			"Nguồn vừa đổi — trang đang hiện lộ trình của nguồn cũ tới khi nguồn mới lấy được.",
+		khuonCu: (ten: string, n: number) =>
+			`${ten} đang ở khuôn lộ trình bản ${n} — vài phần hiện theo luật cũ.`,
+		khuonMoi: (ten: string, n: number) =>
+			`${ten} đang ở khuôn lộ trình bản ${n}, mới hơn trang — vài phần chưa hiện.`,
+		chuaCoTieuDe: (ten: string) => `Chưa có lộ trình của ${ten}`,
+		moCaiDat: "Mở Cài đặt › Sản phẩm",
+	},
 	gioLay: {
 		capNhat: (luc: string) => `Cập nhật lúc ${luc}`,
 		banDung: "(bản dựng)",

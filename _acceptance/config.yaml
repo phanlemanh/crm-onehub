@@ -87,7 +87,7 @@ executors:
     ltsp_doc_du: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx -t ltsp-doc-du
     ltsp_nhip: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-nhip"'
     ltsp_hong: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-hong"'
-    ltsp_cau_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx -t ltsp-cau-trang-thai
+    ltsp_cau_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx ./test/lo-trinh-san-pham.dom.tsx -t ltsp-cau-trang-thai
     ltsp_quyen_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-quyen"'
     ltsp_quyen_trang: cd apps/app && bun test ./test/lo-trinh-san-pham.spec.ts -t ltsp-quyen-trang && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx -t ltsp-quyen-trang
     ltsp_danh_ba_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-danh-ba && cd ../agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-danh-ba"'

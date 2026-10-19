@@ -98,6 +98,7 @@ export const SEARCH_PARAM = {
 		chia: "chiaCot",
 		daBac: "daBac",
 		viec: "viec",
+		sanPham: "sanPham",
 	},
 	taiLieu: {
 		tab: "tabTaiLieu",
