@@ -54,6 +54,7 @@ const en = {
 		nguoiTheoDoi: "Followers",
 		ganVoi: "Linked to",
 		rieng: "Private — only the people on it can see it",
+		duAnChung: "Project task — everyone who can see the project can see it",
 		chiXem: "Only the assigner and the assignee can change the status",
 		choNguoiGiao:
 			"Waiting for the assigner to review. Only the assigner can change the status now",
@@ -79,6 +80,7 @@ const en = {
 	},
 	lichSu: {
 		heThong: "System",
+		viecKhuat: "a task you can't view",
 		nguon: {
 			web: "in the app",
 			zalo: "replied on Zalo",
@@ -247,6 +249,7 @@ const vi: ViecMessages = {
 		nguoiTheoDoi: "Người theo dõi",
 		ganVoi: "Gắn với",
 		rieng: "Việc riêng — chỉ người trong cuộc thấy",
+		duAnChung: "Việc trong dự án — mọi người xem được dự án đều thấy việc này",
 		chiXem: "Chỉ người giao và người thực hiện đổi được trạng thái",
 		choNguoiGiao:
 			"Đang chờ người giao đánh giá. Bây giờ chỉ người giao đổi được trạng thái",
@@ -272,6 +275,7 @@ const vi: ViecMessages = {
 	},
 	lichSu: {
 		heThong: "Hệ thống",
+		viecKhuat: "một việc bạn không có quyền xem",
 		nguon: {
 			web: "trên màn",
 			zalo: "trả lời qua Zalo",
