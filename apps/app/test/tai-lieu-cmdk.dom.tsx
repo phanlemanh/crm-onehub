@@ -48,7 +48,10 @@ mock.module("@/lib/trpc/client", () => ({
 					queryKey: ["search.quick", vao],
 					queryFn: async () => {
 						canh.goi.quick += 1;
-						if (canh.doiTac === "cam") throw new Error("FORBIDDEN");
+						if (canh.doiTac === "cam")
+							throw Object.assign(new Error("Không có quyền."), {
+								data: { code: "FORBIDDEN", httpStatus: 403 },
+							});
 						return {
 							hits: [
 								{

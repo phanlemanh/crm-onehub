@@ -24,7 +24,11 @@ import {
 	TableHeader,
 	TableRow,
 } from "@crm/ui/components/table";
+import { lienKetAnToan } from "@crm/ui/lib/lien-ket-an-toan";
 import { cn } from "@crm/ui/lib/utils";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { gfmFromMarkdown } from "mdast-util-gfm";
+import { gfm } from "micromark-extension-gfm";
 import { type ComponentProps, useEffect, useState } from "react";
 import {
 	type Components,
@@ -48,6 +52,7 @@ type CalloutKind = "note" | "tip" | "important" | "warning" | "caution";
 type Node = {
 	type: string;
 	value?: string;
+	depth?: number;
 	url?: string;
 	tagName?: string;
 	properties?: Record<string, unknown>;
@@ -84,11 +89,9 @@ const DEFAULT_CALLOUT_LABELS: ReaderCalloutLabels = {
 	caution: "Caution",
 };
 
-const SAFE_LINK = /^(#|\/(?!\/)|https:\/\/|mailto:)/;
-
 function readerUrl(url: string, key: string): string | null {
 	if (key === "src") return null;
-	return SAFE_LINK.test(url) ? url : null;
+	return lienKetAnToan(url) ? url : null;
 }
 
 export function readerSlug(text: string): string {
@@ -101,29 +104,28 @@ export function readerSlug(text: string): string {
 		.replace(/^-+|-+$/g, "");
 }
 
-function plainHeading(source: string): string {
-	return source
-		.replace(WIKI_PATTERN, (_, target: string, label?: string) => label ?? target)
-		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-		.replace(/[*_`~]/g, "")
-		.trim();
+function headingText(node: Node): string {
+	if (node.type === "text" || node.type === "inlineCode") return node.value ?? "";
+	return (node.children ?? []).map(headingText).join("");
+}
+
+function collectHeadings(node: Node, out: ReaderHeading[]): void {
+	if (node.type === "heading" && (node.depth === 2 || node.depth === 3)) {
+		const text = headingText(node).trim();
+		out.push({ id: readerSlug(text), text, depth: node.depth });
+		return;
+	}
+	for (const child of node.children ?? []) collectHeadings(child, out);
 }
 
 export function readerHeadings(markdown: string): ReaderHeading[] {
+	const tree = fromMarkdown(markdown, {
+		extensions: [gfm()],
+		mdastExtensions: [gfmFromMarkdown()],
+	}) as Node;
+	remarkWikiLinks()(tree);
 	const headings: ReaderHeading[] = [];
-	let fenced = false;
-	for (const line of markdown.split("\n")) {
-		if (line.trimStart().startsWith("```")) fenced = !fenced;
-		if (fenced) continue;
-		const match = /^(#{2,3})\s+(.+?)\s*#*$/.exec(line);
-		if (!match?.[1] || !match[2]) continue;
-		const text = plainHeading(match[2]);
-		headings.push({
-			id: readerSlug(text),
-			text,
-			depth: match[1].length === 2 ? 2 : 3,
-		});
-	}
+	collectHeadings(tree, headings);
 	return headings;
 }
 
