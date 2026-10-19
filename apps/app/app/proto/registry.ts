@@ -15,6 +15,7 @@ import { DuAnGanttMau } from "./_modules/du-an-gantt";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
+import { GoTinHieuRacMau } from "./_modules/go-tin-hieu-rac";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
 import { HopThongBaoMau } from "./_modules/hop-thong-bao-tren-web";
@@ -114,6 +115,7 @@ const BANG_GHEP = {
 	"gui-tin-hieu-trong-crm": GuiTinHieuMau,
 	"hop-thong-bao-tren-web": HopThongBaoMau,
 	"moi-tin-hieu-cho-quan-tri": MoiTinHieuChoQuanTriMau,
+	"go-tin-hieu-rac": GoTinHieuRacMau,
 	"tin-hieu-tu-ve-kho": TinHieuTuVeKhoMau,
 	"du-an-gantt": DuAnGanttMau,
 	"kanban-viec": KanbanViecMau,

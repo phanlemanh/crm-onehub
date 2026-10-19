@@ -1469,6 +1469,27 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-chuong-da-doc", nhan: "Chuông — đã đọc sau khi mở" },
 		],
 	},
+	{
+		slug: "go-tin-hieu-rac",
+		ten: "Gỡ tín hiệu rác — lưu trữ, Hoàn tác, Đã lưu trữ, trang người gửi",
+		states: [
+			{ id: "ST-tat-ca-co-menu", nhan: "Tất cả — mỗi dòng có menu Lưu trữ" },
+			{
+				id: "ST-tat-ca-vua-luu-tru",
+				nhan: "Tất cả — vừa lưu trữ crm-9, thông báo có Hoàn tác",
+			},
+			{
+				id: "ST-tat-ca-luu-tru-loi",
+				nhan: "Tất cả — lưu trữ hỏng, crm-9 vừa bị lấy về",
+			},
+			{ id: "ST-da-luu-tru-co", nhan: "Đã lưu trữ — hai tín hiệu, Khôi phục" },
+			{ id: "ST-da-luu-tru-rong", nhan: "Đã lưu trữ — chưa có tín hiệu nào" },
+			{
+				id: "ST-cua-toi-da-luu-tru",
+				nhan: "Tín hiệu đã gửi — người gửi thấy tín hiệu bị lưu trữ",
+			},
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

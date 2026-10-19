@@ -71,11 +71,14 @@ const en = {
 		dangLam: "In progress",
 		daGiao: "Delivered",
 		khac: "Other",
+		daLuuTru: "Archived",
 	},
 	trangThai: {
 		choKeoVe: "Not opened by the product team yet. You can still delete it.",
 		choGom:
 			"The product team is sorting it with similar signals. Follow its progress here.",
+		daLuuTru:
+			"An admin archived this signal — the product team won't pick it up.",
 	},
 	cauSauGom: {
 		chuaGom: "The product team hasn't sorted it into a group yet.",
@@ -112,6 +115,26 @@ const en = {
 		khongQuyen: "Only CRM owners and admins can see all signals.",
 		khongQuyenMoTa: "Signals you sent are still under Sent signals.",
 		ve: "Go to sent signals",
+		luuTru: {
+			nut: "Archived",
+			luuTru: "Archive",
+			khoiPhuc: "Restore",
+			khongLuuTruDuoc:
+				"The product team has picked this up — it can't be archived anymore.",
+			daLuuTru: "Signal {ma} archived.",
+			daKhoiPhuc: "Signal {ma} restored.",
+			hoanTac: "Undo",
+			luuTruHong: "Couldn't archive {ma} — try again in a moment.",
+			khoiPhucHong: "Couldn't restore {ma} — try again in a moment.",
+			vuaLayVe:
+				"The product team just picked up signal {ma} — it can't be archived anymore.",
+			cotLuc: "Archived on",
+			cotNguoi: "Archived by",
+			rongTieuDe: "No archived signals",
+			rongMoTa:
+				"Signals you archive stay here. Restore one and the product team picks it up as usual.",
+			meta: "{so} archived signals",
+		},
 	},
 };
 
@@ -185,11 +208,14 @@ const vi: TinHieuMessages = {
 		dangLam: "Đang làm",
 		daGiao: "Đã giao",
 		khac: "Khác",
+		daLuuTru: "Đã lưu trữ",
 	},
 	trangThai: {
 		choKeoVe: "Đội sản phẩm chưa mở. Bạn còn xoá được.",
 		choGom:
 			"Đội sản phẩm đang xếp nó cùng những điều tương tự. Theo dõi tiến độ ở đây.",
+		daLuuTru:
+			"Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không lấy về.",
 	},
 	cauSauGom: {
 		chuaGom: "Đội sản phẩm chưa xếp nó vào nhóm nào.",
@@ -226,6 +252,25 @@ const vi: TinHieuMessages = {
 		khongQuyen: "Chỉ chủ và quản trị CRM xem được mọi tín hiệu.",
 		khongQuyenMoTa: "Tín hiệu bạn đã gửi vẫn ở «Tín hiệu đã gửi».",
 		ve: "Về tín hiệu đã gửi",
+		luuTru: {
+			nut: "Đã lưu trữ",
+			luuTru: "Lưu trữ",
+			khoiPhuc: "Khôi phục",
+			khongLuuTruDuoc: "Đội sản phẩm đã lấy về — không lưu trữ được nữa.",
+			daLuuTru: "Đã lưu trữ tín hiệu {ma}.",
+			daKhoiPhuc: "Đã khôi phục tín hiệu {ma}.",
+			hoanTac: "Hoàn tác",
+			luuTruHong: "Chưa lưu trữ được {ma} — thử lại sau.",
+			khoiPhucHong: "Chưa khôi phục được {ma} — thử lại sau.",
+			vuaLayVe:
+				"Đội sản phẩm vừa lấy tín hiệu {ma} về — không lưu trữ được nữa.",
+			cotLuc: "Lưu trữ lúc",
+			cotNguoi: "Người lưu trữ",
+			rongTieuDe: "Chưa lưu trữ tín hiệu nào",
+			rongMoTa:
+				"Tín hiệu quản trị lưu trữ nằm ở đây. Khôi phục thì đội sản phẩm lấy về như thường.",
+			meta: "{so} tín hiệu đã lưu trữ",
+		},
 	},
 };
 

@@ -2003,6 +2003,18 @@ executors:
     tlkp_dem: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-dem"'
     tlkp_tinh: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-tinh"'
     tlkp_tep: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts"'
+    gtr_luu_tru: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-luu-tru"'
+    gtr_keo_ve: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-keo-ve"'
+    gtr_da_lay_ve: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-da-lay-ve"'
+    gtr_quyen: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-quyen"'
+    gtr_khoi_phuc: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-khoi-phuc"'
+    gtr_ba_so: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-ba-so"'
+    gtr_cua_toi: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tin-hieu-luu-tru.spec.ts -t gtr-cua-toi"'
+    gtr_hoan_tac: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t hoan-tac
+    gtr_thanh_cong_cu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t thanh-cong-cu
+    gtr_ba_so_giu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t ba-so-giu
+    gtr_nguoi_gui: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t nguoi-gui
+    gtr_ca_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tin-hieu-luu-tru.dom.tsx -t ca-man
   script:
     tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
     dtn_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dich-ten-nganh-bang-bang/rang/chup.mjs"
@@ -3093,6 +3105,9 @@ executors:
     tmd_dot_bien: node _acceptance/t1-ma-doc/rang/dot-bien.mjs
     pglt_cong: bun _acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs
     pglt_dot_bien: node _acceptance/push-ghim-lai-t1/rang/dot-bien.mjs
+    gtr_do_man: 'APP_URL=${APP_URL:-http://localhost:3392} API_URL=${API_URL:-http://localhost:3393} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/go-tin-hieu-rac/rang/do-man.mjs"'
+    gtr_migration: bun _acceptance/go-tin-hieu-rac/rang/migration-chi-them.mjs
+    gtr_thiet_ke: 'for f in apps/app/components/tin-hieu/bang-tat-ca.tsx apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx apps/app/components/tin-hieu/menu-luu-tru.tsx "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/page.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

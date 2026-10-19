@@ -1,0 +1,394 @@
+schema_version: 1
+slug: go-tin-hieu-rac
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtr_luu_tru
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "packages/validation/src/tin-hieu.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/tin-hieu-luu-tru.spec.ts"
+    expected: |
+      tin-hieu-luu-tru.spec.ts describe "gtr-luu-tru" tren kho thu cua luot. Du lieu gieo qua tinHieu.gui that (khong chen
+      bang) cua hai nguoi vai member; ten tieu de mang tien to luot. Ma tran viet truoc hai vai goi (owner, admin) x hai
+      duong (tRPC luuTru, REST POST /rest/tin-hieu/{id}/luu-tru bang khoa API) = 4 o, moi o mot tin hieu rieng chua keo ve:
+        1 doc lai bang Prisma: archivedAt khac null, archivedById == id nguoi goi;
+        2 tinHieuVet cua tin hieu do: dung 1 dong, loai "luu-tru", nguoiId == id nguoi goi;
+        3 tatCa() mac dinh KHONG chua id do; tatCa({archived:true}) CO chua id do, dong mang archivedAt bang gia tri
+          doc o 1 va nguoiLuuTru {id, ten} cua nguoi goi;
+      Ca "luu-tru-lai": goi luuTru lan hai tren tin hieu cua o dau -> 4 archivedAt bang dung gia tri lan dau (so sanh
+      getTime), 5 so dong vet van la 1.
+      CHIEU DO: ban sao bo dieu kien archivedAt null o lenh cap nhat -> o 4 do voi thong diep ghim "luu tru lai doi ngay
+      luu tru dau"; ban sao bo lenh ghi vet -> o 2 do voi thong diep ghim "luu tru khong de vet nguoi go"; ban sao de tatCa
+      bo loc archivedAt -> o 3 do voi thong diep ghim "danh sach dang dung con tin hieu da luu tru".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtr_keo_ve
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "packages/validation/src/tin-hieu.ts"
+      - "scripts/tin-hieu/keo-ve.ts"
+      - "apps/api/test/tin-hieu-luu-tru.spec.ts"
+    expected: |
+      tin-hieu-luu-tru.spec.ts describe "gtr-keo-ve". Gieo qua tinHieu.gui ba tin hieu L (se luu tru), D (dang dung), K (luu
+      tru roi khoi phuc). Kho thu dung chung giua cac goi: moi khang dinh chi xet tap ma cua ba tin hieu nay (loc theo id
+      da gieo), khong dem toan kho.
+      Ma tran viet truoc hai duong keo ve x ba tin hieu = 6 o:
+        duong tay POST /rest/tin-hieu/keo-ve (khoa owner) va duong lich POST /rest/tin-hieu/lich/keo-ve (khoa keo lich
+        gieo nhu khoa-keo-tin-hieu.spec.ts); moi duong chay tren mot bo L, D, K moi:
+        L: khong co trong tep phan hoi va keoVeLuc doc lai van null;
+        D, K: co trong tep phan hoi va keoVeLuc khac null.
+      Ca "gtr-lenh": app.listen cong ngau nhien, goi chayKeoVe (scripts/tin-hieu/keo-ve.ts) that voi url do va root la thu
+      muc tam co LO-TRINH.html vang -> 7 tin-hieu/crm/<ma L>.json KHONG ton tai, <ma D>.json va <ma K>.json ton tai;
+      8 dong tong ket "trong 30 ngay: N" voi N == so tep phan hoi co luc trong 30 ngay (tinh lai tu phan hoi), va phan hoi
+      khong chua ma L.
+      Doi chung duong: tren cung bo, truoc khi luu tru L, mot luot keo ve thu khong ghi (doc phan hoi) CO chua ma L
+      (chung minh ma L that su la tin hieu keo ve thay neu khong luu tru) — luot nay chay o ban L' gieo rieng.
+      CHIEU DO: ban sao bo archivedAt null o findMany cua keoVe -> o L do voi thong diep ghim "keo ve mang tin hieu da luu
+      tru"; ban sao bo archivedAt null o updateMany -> do voi thong diep ghim "keo ve dong dau tin hieu da luu tru".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtr_da_lay_ve
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "packages/validation/src/tin-hieu.ts"
+      - "apps/api/test/tin-hieu-luu-tru.spec.ts"
+    expected: |
+      tin-hieu-luu-tru.spec.ts describe "gtr-da-lay-ve":
+        1 tin hieu da keo ve (dong dau bang keoVe that): luuTru (owner) -> TRPCError CONFLICT voi message dung bang
+          TIN_HIEU.loi.luuTruDaLayVe va chuoi do bang dung "Đội sản phẩm đã lấy tín hiệu này về — không lưu trữ được nữa.";
+          REST cung tin hieu -> 409; archivedAt van null, 0 dong vet.
+        2 ca dong thoi CO THU TU, hai chieu, moi chieu tren mot tin hieu moi:
+          (b) keo ve truoc: mo giao dich giu khoa SHARE ROW EXCLUSIVE tren "tinHieu" (dung khoa keoVe dung), goi luuTru(id)
+              khong await, khang dinh sau 300 ms loi goi CHUA tra (dang cho khoa); trong giao dich dong dau keoVeLuc cho id
+              roi commit -> luuTru tra CONFLICT, archivedAt null, keoVeLuc khac null;
+          (a) luu tru truoc: mo giao dich giu khoa ROW EXCLUSIVE (dung khoa luuTru dung), goi keoVe() khong await, khang
+              dinh sau 300 ms keoVe CHUA tra; trong giao dich dat archivedAt cho id roi commit -> phan hoi keoVe khong mang
+              ma id, keoVeLuc cua id van null.
+      CHIEU DO: ban sao bo cau kiem keoVeLuc o luuTru -> o 1 do voi thong diep ghim "luu tru duoc tin hieu da lay ve";
+      ban sao bo khoa bang o luuTru -> o 2(b) do voi thong diep ghim "luu tru khong cho luot keo ve" (loi goi tra truoc
+      khi khoa nha); ban sao bo archivedAt null o keoVe -> o 2(a) do voi thong diep ghim "keo ve mang tin hieu vua luu
+      tru".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtr_quyen
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/test/tin-hieu-luu-tru.spec.ts"
+    expected: |
+      tin-hieu-luu-tru.spec.ts describe "gtr-quyen": ma tran viet truoc hai vai (member, okr) x ba thu tuc (luuTru,
+      khoiPhuc, tatCa archived=true) x hai duong (tRPC, REST bang khoa API cua chinh ho) = 12 o; tin hieu dich do CHINH
+      nguoi goi gui (member) hoac nguoi khac (okr):
+        moi o: FORBIDDEN / 403; doc lai: archivedAt va so dong vet khong doi; than phan hoi khong chua tieu de nao gieo.
+      Doi chung duong: cung 3 thu tuc bang owner tren tin hieu khac -> thanh cong.
+      CHIEU DO: ban sao bo cau kiem vai o luuTru -> o member/luuTru do voi thong diep ghim "nguoi khong phai quan tri luu
+      tru duoc tin hieu".
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gth_vai
+    paths:
+      - "apps/api/src/tin-hieu/tin-hieu.router.ts"
+      - "apps/api/test/vai-chi-okr.spec.ts"
+    expected: |
+      vai-chi-okr.spec.ts: router "tinHieu" nam trong danh sach router pham vi chung nen spec tu quet moi thu tuc cua router
+      — gom luuTru va khoiPhuc moi — va xanh.
+      CHIEU DO: ban sao bo "tinHieu" khoi danh sach router pham vi chung cua spec -> do voi thong diep ghim cua spec ve router
+      chua khai pham vi.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtr_khoi_phuc
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/test/tin-hieu-luu-tru.spec.ts"
+    expected: |
+      tin-hieu-luu-tru.spec.ts describe "gtr-khoi-phuc": luuTru (owner) roi khoiPhuc (admin) qua tRPC va REST
+      POST /rest/tin-hieu/{id}/khoi-phuc:
+        1 archivedAt va archivedById null; 2 vet: dung hai dong theo thu tu luc ["luu-tru" owner, "khoi-phuc" admin];
+        3 tatCa() mac dinh co lai id; 4 keoVe ke tiep mang ma do va dong dau no;
+        5 khoiPhuc lan hai -> ok, so dong vet van la hai;
+        6 vong luu tru -> khoi phuc -> luu tru: ba dong vet, archivedAt moi > archivedAt lan dau (lan luu tru moi bat dau
+          ngay moi).
+      CHIEU DO: ban sao khoiPhuc khong ghi vet -> o 2 do voi thong diep ghim "khoi phuc khong de vet nguoi lam"; ban sao
+      khoiPhuc ghi vet ca khi khong doi -> o 5 do voi thong diep ghim "khoi phuc ban dang dung them vet".
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.gtr_hoan_tac
+    paths:
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-luu-tru.dom.tsx"
+    expected: |
+      tin-hieu-luu-tru.dom.tsx describe "hoan-tac": render bang Tat ca voi mot dong chua lay ve va ham luuTru/khoiPhuc gia
+      ghi lai loi goi; bam nut thao tac -> «Lưu trữ»:
+        1 luuTru goi dung mot lan voi id dong; 2 toast co chu m.tatCa.luuTru.daLuuTru dien ma va nut chu m.tatCa.luuTru.hoanTac;
+        3 bam «Hoàn tác» -> khoiPhuc goi dung mot lan voi cung id; bam lan hai -> van mot lan;
+        4 toast duoc tao qua baoDaLuuTru (thoi han LUU_TRU.hoanTacMs), khong qua toast tu dung.
+      CHIEU DO: ban sao bo nut Hoan tac -> o 3 do voi thong diep ghim "thong bao luu tru khong co Hoan tac".
+
+  - id: E5c
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gtr_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/go-tin-hieu-rac/evidence dat tuong minh: lenh cua gtr_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh evidence/E5c-*.png, E6b-*.png, E8b-*.png, E9b-*.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/go-tin-hieu-rac/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/api/src/tin-hieu/**"
+      - "_acceptance/go-tin-hieu-rac/rang/**"
+    expected: |
+      do-man.mjs ca "luu-tru-hoan-tac" tren ban chay voi du lieu mau (rang/sinh-mau.mjs gieo qua tinHieu.gui cua ba nguoi;
+      ma va tieu de rut tu tep mau, khong viet tay), dang nhap owner, 1280. O moi moc truoc buoc 2, sau buoc 2, sau buoc 3,
+      sau Khoi phuc o buoc 4: doc chu o «Tín hiệu 30 ngày qua» va so voi so tin hieu 30 ngay tinh lai tu tatCa() mac dinh
+      (fetch cung cookie) — bon moc, bon so bang nhau, va so sau buoc 2 = so truoc buoc 2 - 1 (X gui trong 30 ngay):
+        1 mo /<slug>/tin-hieu/tat-ca, bam nut thao tac cua dong mau X (chua lay ve) bang chuot that -> menu co «Lưu trữ»;
+        2 bam «Lưu trữ» -> dong X roi bang (tim theo data-tin-hieu-tat-ca=<ma X>, so dong hien = 0), toast co
+          «Đã lưu trữ tín hiệu <ma X>.» va nut «Hoàn tác»; anh evidence/E5c-vua-luu-tru-1280.png;
+        3 bam «Hoàn tác» -> dong X tro lai; API (fetch cung cookie) tatCa() co X;
+        4 luu tru X lan nua, bat «Đã lưu trữ» -> duong dan co tham so archived, dong X co cot «Lưu trữ lúc», «Người lưu trữ»
+          = ten owner mau; anh evidence/E5c-da-luu-tru-1280.png; bam thao tac -> «Khôi phục» -> X roi dang luu tru; tat
+          «Đã lưu trữ» -> X o bang dang dung.
+        DOI CHUNG DUONG: truoc buoc 2, dong X hien du 1 lan (bo dem phan tu dang hien song).
+      CHIEU DO: ban sao bo goi lam moi tatCa sau khi luu tru -> o 2 do voi thong diep ghim "dong da luu tru van o bang dang
+      dung"; ban sao giu ba o so tinh mot lan o trang may chu -> moc sau buoc 2 do voi thong diep ghim "ba o so con dem
+      tin hieu vua luu tru".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.gtr_thanh_cong_cu
+    paths:
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-luu-tru.dom.tsx"
+    expected: |
+      tin-hieu-luu-tru.dom.tsx describe "thanh-cong-cu": ma tran viet truoc hai dang (dang dung, da luu tru) x hai dong (chua
+      lay ve, da lay ve) = 4 o (o «da luu tru x da lay ve» khong ton tai -> khang dinh dang da luu tru khong bao gio co dong
+      da lay ve trong du lieu mau va bo qua), cong:
+        nut «Đã lưu trữ» (chu m.tatCa.luuTru.nut) co mat o ca hai dang; bam -> setArchived(true) va page ve 1, bo loc giu;
+        dang dung x chua lay ve: menu co muc «Lưu trữ» bat duoc;
+        dang dung x da lay ve: muc «Lưu trữ» mang data-disabled va chu m.tatCa.luuTru.khongLuuTruDuoc hien trong menu;
+        dang da luu tru: hai cot header «Lưu trữ lúc», «Người lưu trữ»; gio dinh dang Asia/Ho_Chi_Minh (mau 02:14Z -> 09:14);
+          menu co «Khôi phục», khong co «Lưu trữ»; ten nguoi luu tru trong phan tu translate="no";
+        dang da luu tru rong: chu m.tatCa.luuTru.rongTieuDe.
+      CHIEU DO: ban sao bo dieu kien daKeoVe o muc menu -> o «da lay ve» do voi thong diep ghim "luu tru bat duoc tren tin
+      hieu da lay ve".
+
+  - id: E6b
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gtr_do_man
+    steps:
+      - "Dung chung luot chay cua E5c; doc dong ket qua cua ca «thanh-cong-cu» va «da-lay-ve»"
+      - "Mo evidence/E6b-*.png va doi chieu bang mat"
+    inputs:
+      - _acceptance/go-tin-hieu-rac/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/components/tin-hieu/**"
+      - "_acceptance/go-tin-hieu-rac/rang/**"
+    expected: |
+      do-man.mjs ca "da-lay-ve": dong mau Y da keo ve (sinh-mau chay mot luot keo ve that truoc khi gieo X) -> mo menu bang
+      chuot that: muc «Lưu trữ» khoa (aria-disabled) va dong «Đội sản phẩm đã lấy về — không lưu trữ được nữa.» hien; anh
+      evidence/E6b-da-lay-ve-1280.png. Ca "tai-lai": bat «Đã lưu trữ», tai lai trang -> nut van dang bat va bang van la
+      dang luu tru.
+      CHIEU DO: nhu E6.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtr_ba_so
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "packages/validation/src/tin-hieu.ts"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/api/test/tin-hieu-luu-tru.spec.ts"
+    expected: |
+      tin-hieu-luu-tru.spec.ts describe "gtr-ba-so": gieo nam tin hieu cua hai phong ban, luu tru hai (mot moi phong ban);
+      xet tap id da gieo:
+        1 demNguongSong(dongDemTuTatCa(tatCa() loc theo id gieo)) va demNguongSong(dongDemTuKeoVe(keoVe().tep loc theo ma
+          gieo)) cung now, cung coCho rong -> trongKy, soPhong, chuaCoCho bang nhau va trongKy == 3 (khong dem hai ban luu tru);
+        2 ghepTatCa (apps/app/lib/tin-hieu/tat-ca.ts) tren tatCa() mac dinh cho baSo.trongKy khong gom ban luu tru.
+      Doi chung duong: truoc khi luu tru, cung phep tinh cho trongKy == 5.
+      CHIEU DO: ban sao tatCa mac dinh bo loc archivedAt -> o 1 do voi thong diep ghim "ba o so dem tin hieu da luu tru".
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.gtr_ba_so_giu
+    paths:
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/**"
+      - "apps/app/test/tin-hieu-luu-tru.dom.tsx"
+    expected: |
+      tin-hieu-luu-tru.dom.tsx describe "ba-so-giu": render trang Tat ca (TatCaTrang) voi query tatCa gia tra dong khac nhau
+      cho archived false/true (5 dong dang dung trong 30 ngay, 2 dong da luu tru):
+        1 ba o so doc chu: «5» o o thu nhat; bat «Đã lưu trữ» -> van «5» (khong doi theo dang xem), so dem bo loc la so cua
+          dang da luu tru;
+        2 tat «Đã lưu trữ», luuTru gia thanh cong tren mot dong va query mac dinh tra lai 4 dong -> o thu nhat «4» khong
+          tai lai trang; Hoan tac -> «5».
+      CHIEU DO: ban sao tinh lai baSo tu dong dang xem -> o 1 do voi thong diep ghim "ba o so doi theo dang Da luu tru";
+      ban sao giu baSo co dinh tu may chu -> o 2 do voi thong diep ghim "ba o so con dem tin hieu vua luu tru".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.gtr_nguoi_gui
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-luu-tru.dom.tsx"
+    expected: |
+      tin-hieu-luu-tru.dom.tsx describe "nguoi-gui": docTrangThaiTinHieu voi dong cuaToi {daKeoVe:false, daLuuTru:true} va ban
+      ve doc duoc lan vang -> ca hai cho nhan m.nhan.daLuuTru, cau m.trangThai.daLuuTru, nghia ma toneTheoNghia ra "neutral";
+      render DanhSachTinHieu voi dong do -> StatusIndicator data-nghia dung, cau hien, nut thao tac co «Xoá» bat duoc; HTML
+      render khong chua chuoi «Người lưu trữ» va khong chua ten nguoi luu tru mau.
+      CHIEU DO: ban sao bo nhanh daLuuTru -> do voi thong diep ghim "nguoi gui khong biet tin hieu da bi luu tru".
+
+  - id: E8a
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtr_cua_toi
+    paths:
+      - "apps/api/src/tin-hieu/**"
+      - "apps/api/test/tin-hieu-luu-tru.spec.ts"
+    expected: |
+      tin-hieu-luu-tru.spec.ts describe "gtr-cua-toi": member gui hai tin hieu, owner luu tru mot -> cuaToi cua member tra
+      ca hai dong, dong luu tru daLuuTru true, dong kia false; JSON phan hoi khong chua id hay ten owner; member xoa duoc
+      dong da luu tru (tinHieu.xoa ok, hang mat).
+      CHIEU DO: ban sao cuaToi loc archivedAt null -> do voi thong diep ghim "tin hieu bi luu tru bien mat khoi trang nguoi gui".
+
+  - id: E8b
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gtr_do_man
+    steps:
+      - "Dung chung luot chay cua E5c; doc dong ket qua ca «nguoi-gui»; mo evidence/E8b-*.png"
+    inputs:
+      - _acceptance/go-tin-hieu-rac/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "_acceptance/go-tin-hieu-rac/rang/**"
+    expected: |
+      do-man.mjs ca "nguoi-gui": owner luu tru tin hieu mau cua nguoi gui G; dang nhap G, mo /<slug>/tin-hieu o 1280 -> dong
+      cua tin hieu do co nhan «Đã lưu trữ» va cau «Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không lấy về.»;
+      anh evidence/E8b-nguoi-gui-1280.png. Doi chung duong: dong tin hieu chua luu tru cua G hien nhan khac.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.gtr_ca_man
+    paths:
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/**"
+      - "apps/app/lib/messages/tin-hieu.ts"
+      - "apps/app/test/tin-hieu-luu-tru.dom.tsx"
+    expected: |
+      tin-hieu-luu-tru.dom.tsx describe "ca-man": ma tran viet truoc ba ket cuc cua luuTru gia (dang cho, loi mang, loi
+      CONFLICT voi message TIN_HIEU.loi.luuTruDaLayVe) va hai cua khoiPhuc (dang cho, loi mang) = 5 o:
+        dang cho: muc menu mang data-disabled, bam lan hai khong goi them;
+        loi mang: toast loi co chu m.tatCa.luuTru.luuTruHong (hay m.tatCa.luuTru.khoiPhucHong) dien ma, dong van trong bang;
+        CONFLICT: toast loi co chu m.tatCa.luuTru.vuaLayVe dien ma (khac chu loi mang), query tatCa bi lam moi (invalidate goi).
+      CHIEU DO: ban sao gop hai loi ve mot chu -> o CONFLICT do voi thong diep ghim "loi vua lay ve noi nhu loi mang".
+
+  - id: E9b
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gtr_do_man
+    steps:
+      - "Dung chung luot chay cua E5c; doc dong ket qua ca «375»; mo evidence/E9b-*.png"
+    inputs:
+      - _acceptance/go-tin-hieu-rac/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/components/tin-hieu/**"
+      - "_acceptance/go-tin-hieu-rac/rang/**"
+    expected: |
+      do-man.mjs ca "375": 375x812, owner, dang dung va dang luu tru: scrollWidth cua documentElement <= 375; nut thao tac
+      cua moi dong dang hien nam tron trong khung (getBoundingClientRect right <= 375); anh E9b-dang-dung-375.png,
+      E9b-da-luu-tru-375.png. Doi chung duong: cung phep do tren mot phan tu duoc ep rong 600px trong ban sao trang do
+      (chen bang page.evaluate) -> bao tran.
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.gtr_migration
+    paths:
+      - "packages/db/prisma/**"
+      - "_acceptance/go-tin-hieu-rac/rang/migration-chi-them.mjs"
+    expected: |
+      rang/migration-chi-them.mjs: doc migration cua ho so (ten khai trong tep), tach cau lenh SQL: moi cau thuoc tap duoc
+      dung (CREATE TABLE "tinHieuVet", ALTER TABLE "tinHieu" ADD COLUMN cho phep rong khong DEFAULT, CREATE INDEX, ADD
+      CONSTRAINT FOREIGN KEY); khong UPDATE, DELETE, DROP, ALTER COLUMN, RENAME. Luat 2 cua dot: moi bang/cot ma migration
+      tro toi duoc tao o migration co ten xep truoc no. Rap: `prisma migrate diff --from-migrations --to-schema` tren ban
+      sao rong cho ket qua rong (khong troi).
+      Ma tran viet truoc: moi cau lenh cua migration la mot dong (so dong in == so cau lenh).
+      CHIEU DO: tu thu tren ban sao tam cua migration chen "UPDATE \"tinHieu\" SET ..." -> do voi thong diep ghim
+      "migration khong chi them"; chen ADD COLUMN NOT NULL -> do cung thong diep.
+
+  - id: E11
+    criterion: AC-6
+    executor: judgment
+    inputs:
+      - apps/app/lib/messages/tin-hieu.ts
+      - docs/vong-doi.md
+    question: |
+      Trong tep apps/app/lib/messages/tin-hieu.ts, xet DUNG cac khoa sau, o ca hai ban en va vi: moi khoa con cua
+      tatCa.luuTru (nut, luuTru, khoiPhuc, khongLuuTruDuoc, daLuuTru, daKhoiPhuc, hoanTac, luuTruHong, khoiPhucHong, vuaLayVe,
+      cotLuc, cotNguoi, rongTieuDe, rongMoTa, meta), nhan.daLuuTru va trangThai.daLuuTru. Chuan duy nhat la bang muc «Bộ chữ»
+      cua docs/vong-doi.md: «Lưu trữ · Khôi phục» cho hanh dong cat va lay lai; «Đã lưu trữ» cho cho xem thu da cat (khong
+      «Lưu trữ» tran cho nut xem); khong «ẩn», «xoá mềm», «archive» trong ban vi. Cac khoa do co theo dung bang ay khong, va
+      ban en co cung nghia voi ban vi tung khoa khong? Khong xet khoa nao ngoai danh sach.
+    expected: |
+      PASS khi moi chu moi theo bo chu va hai ngon ngu cung nghia; FAIL neu co chu nao dung tu cam hay lech nghia, neu ro
+      chu do.
+
+  - id: E12
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.gtr_thiet_ke
+    paths:
+      - "apps/app/components/tin-hieu/**"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+    expected: |
+      design-gate --mode static tren moi tep giao dien vong nay cham (bang-tat-ca.tsx, danh-sach-tin-hieu.tsx, tep menu
+      thao tac moi, tat-ca/page.tsx, tat-ca/tat-ca-trang.tsx): exit 0 tren tung tep.
+      CHIEU DO: ban sao chen className doi mau tren mot Button -> design-gate bao vi pham.
