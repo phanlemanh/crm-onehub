@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 42060835e78695e50f29d11134d2505368bc0a96
+verified_commit: ce94771bb02a0d8c05e06260b23834965b8352b0
 human_signoff: manh 2026-10-19
 ---
 
@@ -220,3 +220,7 @@ Round 2: sửa ở commit 6eb92d6e7; chạy lại E2, E3b, E10, E11 và toàn b�
 ### Re-pin lần 1 — 2026-10-19, do giữ tươi be5151e..4206083
 run_id: repin-20261019T185350Z-66190
 sha: 42060835e78695e50f29d11134d2505368bc0a96 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9 (E9 không khai paths), E11, E12 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-19, do #499 gộp onehub có #497 sau giữ tươi be5151e..4206083
+run_id: repin-20261019T202139Z-86729
+sha: ce94771bb02a0d8c05e06260b23834965b8352b0 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9 (E9 không khai paths), E11, E12 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
