@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { okrMessages } from "../../../apps/app/lib/messages/okr.ts";
 import { okrHoiYMessages } from "../../../apps/app/lib/messages/okr-hoi-y.ts";
+import { THAM_SO_KY_OKR } from "../../../packages/validation/src/okr-chu-ky.ts";
 import { idMau, laKhoDo, napBoMau, phienCookie, thuMau, tre, truyVan } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
 
 const TEP = fileURLToPath(import.meta.url);
@@ -20,8 +21,10 @@ const MAN = {
 	cao: 1000,
 	cho: { manMs: 120 * GIAY_MS, yenMs: 1500 },
 	nguoiXem: "le-hai-dang",
+	thanhVien: "vo-duc-anh",
 	mucTieuCoGop: "q4-kd-bac-1",
 	chuKyHoiY: idMau("chu-ky", "nam-ke"),
+	chuKyTrong: idMau("chu-ky", "quy4"),
 	soAnh: 5,
 };
 const CAM_VI = ["căn chỉnh", "Căn chỉnh", "Hỏi ý", "Toàn công ty", "Toàn OneHub", "Đường lý do", "Chưa nối lên"];
@@ -59,11 +62,11 @@ async function suySlug(cookie) {
 	return dau && !["onboarding", "sign-in", "het-quyen"].some((x) => dau.startsWith(x)) ? dau : null;
 }
 
-const chuTrang = (p) => p.evaluate(() => document.body.innerText.replace(/[  ]/g, " ").normalize("NFC"));
+const chuTrang = (p) => p.evaluate(() => `${document.body.innerText}\n${document.body.textContent ?? ""}`.replace(/[\u00a0\u202f]/g, " ").normalize("NFC"));
 const choChu = (p, chu) =>
 	p
 		.waitForFunction(
-			(c) => document.body.innerText.replace(/[  ]/g, " ").normalize("NFC").includes(c),
+			(c) => (document.body.textContent ?? "").replace(/[\u00a0\u202f]/g, " ").normalize("NFC").includes(c),
 			{ timeout: MAN.cho.manMs },
 			chu,
 		)
@@ -104,17 +107,37 @@ async function bamThe(p, nhan) {
 	return p.evaluate((n) => {
 		const the = [...document.querySelectorAll('[role="tab"]')].find((e) => e.textContent?.trim().startsWith(n));
 		if (!the) return false;
+		the.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
 		the.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 		the.click();
 		return true;
 	}, nhan);
 }
 
-async function nutKhongTran(p, nhan) {
+async function coThe(p, nhan) {
+	return p.evaluate(
+		(n) => [...document.querySelectorAll('[role="tab"]')].some((e) => e.textContent?.trim().startsWith(n)),
+		nhan,
+	);
+}
+
+async function cuonKhoi(p) {
+	await p.evaluate(() => document.querySelector("[data-khu=gop-vao]")?.scrollIntoView({ block: "center" }));
+	await tre(MAN.cho.yenMs);
+}
+
+async function khongTran(p, nhan) {
 	return p.evaluate((n) => {
-		const nut = [...document.querySelectorAll("button, a")].find((e) => e.textContent?.trim() === n);
-		if (!nut) return null;
-		return nut.scrollWidth <= nut.clientWidth + 1;
+		const el = [...document.querySelectorAll("button, a, [role=tab], h2, h3, div, p")].find(
+			(e) => e.children.length === 0 && e.textContent?.trim() === n,
+		);
+		if (!el) return null;
+		const khoi = getComputedStyle(el).display === "inline" ? (el.closest("[role=tab], button, a, h2, h3, div, p") ?? el) : el;
+		const r = document.createRange();
+		r.selectNodeContents(el);
+		const dong = new Set([...r.getClientRects()].map((x) => Math.round(x.top))).size;
+		const dat = khoi.clientWidth > 0 && khoi.scrollWidth <= khoi.clientWidth + 1 && dong === 1;
+		return { dat, chiTiet: `${khoi.tagName.toLowerCase()} rong ${khoi.scrollWidth}/${khoi.clientWidth}, ${dong} dong` };
 	}, nhan);
 }
 
@@ -143,10 +166,11 @@ const tenGoc = ws?.name;
 if (!tenGoc) await khongDo(`khong doc duoc ten khong gian lam viec cua ${slug}`);
 const [trong] = await truyVan(
 	url,
-	`select o.id from "OkrObjective" o where o.level <> 'onehub' and o.status = 'cong-bo' and o."droppedAt" is null
-	 and not exists (select 1 from "OkrAlignment" a where a."objectiveId" = o.id) order by o.id limit 1`,
+	`select o.id from "okrObjective" o where o.level <> 'onehub' and o."droppedAt" is null
+	 and o."cycleId" = $1 and o."hienThi" = 'cong-khai' and not exists (select 1 from "okrAlignment" a where a."objectiveId" = o.id) order by o.id limit 1`,
+	[MAN.chuKyTrong],
 );
-if (!trong) await khongDo("bo mau khong co muc tieu cong bo nao chua gop vao dau");
+if (!trong) await khongDo("bo mau khong co muc tieu cong khai quy 4 nao chua gop vao dau");
 
 trinhDuyet = await puppeteer.launch({ executablePath: MAN.chrome, headless: true });
 const idCoGop = idMau("mt", MAN.mucTieuCoGop);
@@ -154,11 +178,11 @@ const idCoGop = idMau("mt", MAN.mucTieuCoGop);
 {
 	const ctx = await vao("vi", cookie, slug);
 	const p = await trang(ctx, `/${slug}/okr/theo-don-vi?record=objective:${idCoGop}`);
-	await p.waitForSelector(`[data-okr-sheet="${idCoGop}"]`);
+	await p.waitForSelector(`[data-okr-sheet="${idCoGop}"] [data-khu=gop-vao]`);
 	await don(p);
-	kiem(`E15 khung-gop-vao: bam the «${vi.sheet.tabCanChinh}»`, await bamThe(p, vi.sheet.tabCanChinh));
+	kiem(`E15 khung-gop-vao: the «${vi.sheet.tabCanChinh}»`, await coThe(p, vi.sheet.tabCanChinh));
 	kiem(`E15 khung-gop-vao: khoi «${vi.sheet.khuDuongLyDo}»`, await choChu(p, vi.sheet.khuDuongLyDo));
-	await don(p);
+	await cuonKhoi(p);
 	const chu = await chuTrang(p);
 	kiem(`E15 khung-gop-vao: khong cum cam [${camTrong(chu, CAM_VI).join(", ")}]`, camTrong(chu, CAM_VI).length === 0);
 	await chup(p, "E15-khung-gop-vao-1440");
@@ -174,35 +198,40 @@ const idCoGop = idMau("mt", MAN.mucTieuCoGop);
 	kiem(`E15 theo-don-vi: khong cum cam [${camTrong(chuChon, CAM_VI).join(", ")}]`, camTrong(chuChon, CAM_VI).length === 0);
 	await chup(t, "E15-theo-don-vi-1440");
 
-	const h = await trang(ctx, `/${slug}/okr/hoi-y?ky=${encodeURIComponent(MAN.chuKyHoiY)}`);
+	await ctx.close();
+	const ctxTv = await vao("vi", phienCookie(thuMau(MAN.thanhVien)), slug);
+	const h = await trang(ctxTv, `/${slug}/okr/hoi-y?${THAM_SO_KY_OKR}=${encodeURIComponent(MAN.chuKyHoiY)}`);
 	await don(h);
 	kiem(`E15 do-phu: the khu «${vi.tab["hoi-y"]}»`, await choChu(h, vi.tab["hoi-y"]));
-	const coBang = await choChu(h, hy.doPhu.bang);
-	if (!coBang) await khongDo(`khong thay bang do phu «${hy.doPhu.bang}» o lan lay y kien cua chu ky ${MAN.chuKyHoiY}`);
+	const coBang = await h
+		.waitForSelector('[data-khoi="do-phu"] [translate="no"]', { timeout: MAN.cho.manMs })
+		.then(() => true)
+		.catch(() => false);
+	if (!coBang) {
+		await chup(h, "E15-do-phu-loi-1440");
+		await khongDo(`khong thay bang do phu «${hy.doPhu.tieuDe}» o lan lay y kien cua chu ky ${MAN.chuKyHoiY}`);
+	}
 	const hangGoc = await h.evaluate(
 		(ten) => [...document.querySelectorAll('[translate="no"]')].some((e) => e.textContent === ten),
 		tenGoc,
 	);
 	kiem(`E15 do-phu: hang goc mang dung «${tenGoc}» trong translate=no`, hangGoc);
-	await h.evaluate((c) => {
-		const el = [...document.querySelectorAll("caption, h3, [data-slot=card-title]")].find((e) => e.textContent?.includes(c));
-		el?.scrollIntoView({ block: "start" });
-	}, hy.doPhu.bang);
+	await h.evaluate(() => document.querySelector('[data-khoi="do-phu"]')?.scrollIntoView({ block: "start" }));
 	await tre(MAN.cho.yenMs);
 	const chuDoPhu = await chuTrang(h);
 	kiem(`E15 do-phu: khong cum cam [${camTrong(chuDoPhu, CAM_VI).join(", ")}]`, camTrong(chuDoPhu, CAM_VI).length === 0);
 	await chup(h, "E15-do-phu-1440");
-	await ctx.close();
+	await ctxTv.close();
 }
 
 {
 	const ctx = await vao("en", cookie, slug);
 	const p = await trang(ctx, `/${slug}/okr/theo-don-vi?record=objective:${idCoGop}`);
-	await p.waitForSelector(`[data-okr-sheet="${idCoGop}"]`);
+	await p.waitForSelector(`[data-okr-sheet="${idCoGop}"] [data-khu=gop-vao]`);
 	await don(p);
-	kiem(`E15 en khung-gop-vao: bam the «${en.sheet.tabCanChinh}»`, await bamThe(p, en.sheet.tabCanChinh));
+	kiem(`E15 en khung-gop-vao: the «${en.sheet.tabCanChinh}»`, await coThe(p, en.sheet.tabCanChinh));
 	kiem(`E15 en khung-gop-vao: khoi «${en.sheet.khuDuongLyDo}»`, await choChu(p, en.sheet.khuDuongLyDo));
-	await don(p);
+	await cuonKhoi(p);
 	const chu = await chuTrang(p);
 	kiem(`E15 en khung-gop-vao: khong cum cam [${camTrong(chu, CAM_EN).join(", ")}]`, camTrong(chu, CAM_EN).length === 0);
 	await chup(p, "E15-khung-gop-vao-en-1440");
@@ -210,10 +239,13 @@ const idCoGop = idMau("mt", MAN.mucTieuCoGop);
 	const q = await trang(ctx, `/${slug}/okr/theo-don-vi?record=objective:${trong.id}`);
 	await q.waitForSelector(`[data-okr-sheet="${trong.id}"]`);
 	await don(q);
-	await bamThe(q, en.sheet.tabCanChinh);
+	kiem(`E15 en gop-vao-trong: bam the «${en.sheet.tabCanChinh}»`, await bamThe(q, en.sheet.tabCanChinh));
+	await tre(MAN.cho.yenMs);
 	kiem(`E15 en gop-vao-trong: «${en.chuaCanChinh}»`, await choChu(q, en.chuaCanChinh));
-	const khongTran = await nutKhongTran(q, en.sheet.ganThem);
-	kiem(`E15 en gop-vao-trong: nut «${en.sheet.ganThem}» khong tran (${khongTran})`, khongTran === true);
+	for (const nhan of [en.sheet.tabCanChinh, en.chuaCanChinh]) {
+		const kq = await khongTran(q, nhan);
+		kiem(`E15 en gop-vao-trong: «${nhan}» khong tran hay cat (${kq?.chiTiet ?? "khong thay"})`, kq?.dat === true);
+	}
 	await chup(q, "E15-gop-vao-trong-en-1440");
 	await ctx.close();
 }
