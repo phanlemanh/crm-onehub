@@ -32,8 +32,8 @@ import {
 	okrParsers,
 } from "./okr-search-params";
 import { NutSoan } from "./soan/nut-soan";
-import { useTenGoc } from "./ten-goc";
 import { DUONG, type TabOkr } from "./tab-okr";
+import { useTenGoc } from "./ten-goc";
 
 export const ID_KHONG_THEM = "okr-khong-them-duoc";
 

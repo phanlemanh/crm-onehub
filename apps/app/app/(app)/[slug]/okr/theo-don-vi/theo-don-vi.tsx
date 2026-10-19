@@ -1,11 +1,9 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { keepPreviousData, skipToken, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
-import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { CayCanChinh } from "../cay-can-chinh";
@@ -123,7 +121,6 @@ function KhungCachXem({
 
 export function TheoDonVi() {
 	useChuyenLinkCuSoan();
-	const m = okrMessages(useLocale());
 	const trpc = useTRPC();
 	const [url, datUrl] = useQueryStates(okrParsers);
 	const loc: LocOkrGiaTri = locOkr(url);

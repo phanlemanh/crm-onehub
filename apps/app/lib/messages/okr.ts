@@ -1089,7 +1089,8 @@ const en: OkrMessages = {
 		loiCanCuCanChinh: "Evidence needs a reason with it.",
 		suaLyDoCanChinh: "Edit the contribution reason",
 		moTaSuaLyDo: "The target stays; only the reason and evidence change.",
-		moTaNhanDeXuat: "Reason and evidence drafted by Kara — edit, then add the contribution.",
+		moTaNhanDeXuat:
+			"Reason and evidence drafted by Kara — edit, then add the contribution.",
 		daSuaLyDo: "Reason saved",
 		dangTai: "Loading…",
 	},
