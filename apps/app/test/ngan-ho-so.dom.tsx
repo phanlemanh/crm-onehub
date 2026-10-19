@@ -593,10 +593,12 @@ describe("khoan-dung", () => {
 		}
 	});
 
-	test("doi chung duong: ban 2 nguyen khong canh bao, LT1 du tam hang", async () => {
-		expect(DV_X2.kieu === "co-du-lieu" && DV_X2.canhBao).toEqual([]);
+	test("doi chung duong: ban 2 ve bang kit cu chi mot canh bao ve lai, LT1 du tam hang", async () => {
+		const canhBao = DV_X2.kieu === "co-du-lieu" ? DV_X2.canhBao : null;
+		expect(canhBao?.length).toBe(1);
+		expect(canhBao?.[0]).toContain("vẽ lại bằng bộ kit mới");
 		const body = await trang(DV_X2);
-		expect(body.querySelector("[data-lo-trinh-canh-bao]")).toBeNull();
+		expect(body.querySelector("[data-lo-trinh-canh-bao]")).not.toBeNull();
 		const lt1 = CO_DAI.find((h) => h.ma === "LT1");
 		if (!lt1) throw new Error("tep mau thieu LT1");
 		const ngan = await moNgan(coDuLieu(DV_X2), lt1.khoa);
