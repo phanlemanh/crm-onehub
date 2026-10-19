@@ -1,0 +1,46 @@
+schema_version: 1
+feature_slug: zalo-cau-thu-hai-lien-ket
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zch_lien_ket
+    paths: [apps/agent/agent/hooks/**, apps/agent/agent/lib/tai-lieu-lien-ket.ts, apps/agent/agent/lib/zalo-hoi.ts, apps/agent/agent/lib/zalo-tra-loi.ts, apps/agent/test/zch-cau-thu-hai.integration.spec.ts]
+    expected: "exit 0; Postgres _test thật; ca tên «zch-lien-ket: cau-hai» và «zch-lien-ket: cau-ba». Một người, một chatId: gọi CHÍNH hoiTacTu ba lần cùng ngày (câu trước đóng bằng dongHoi trước câu sau); khẳng định continuationToken của ba YeuCauHoi bằng nhau (cùng phiên eve). Câu đầu: hook session.started gắn mã phiên gốc. Câu hai, câu ba: ngữ cảnh hook dựng từ CHÍNH auth.attributes của YeuCauHoi câu đó đặt ở auth.current, còn auth.initiator mang thuộc tính của câu ĐẦU (hình eve thật: initiator là người mở phiên); gọi CHÍNH events[\"turn.started\"] của hooks/lien-ket-hoi.ts. Sau hook: ZaloHoi câu mới .sessionId = mã phiên gốc; hàng các câu trước toEqual ảnh chụp trước hook; console.info có đúng một dòng «[lien-ket-hoi] zalo <hoiId câu mới> -> <mã>»; rồi gọi moPhien với deps.hoi trả cùng mã → đếm hàng ZaloHoi có sessionId = mã bằng số câu đã hỏi. Ca «zch-lien-ket: mophien-truoc» cùng fixture: moPhien ghi sessionId câu mới TRƯỚC (deps.hoi trả mã, không gọi hook), rồi gọi events[\"turn.started\"] → hàng toEqual ảnh chụp sau moPhien (không đổi) và console.info vẫn có đúng một dòng «[lien-ket-hoi] zalo <hoiId câu mới> -> <mã>». Chiều đỏ, ca «zch-lien-ket: cau-hai chieu do»: (1) trên cây chưa vá hook không khai turn.started — bài khẳng định typeof events[\"turn.started\"] là function với thông điệp ghim «hook thieu turn.started», nên chạy bài trên mốc gốc (merge-base) đỏ đúng thông điệp đó; (2) cùng fixture, ngữ cảnh câu hai thiếu auth.current (chỉ initiator mang hoiId câu đầu) → ZaloHoi câu hai vẫn null, hàng câu đầu không đổi, ghim «doc hoiId cua cau dau»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zch_lien_ket
+    paths: [apps/agent/agent/hooks/**, apps/agent/agent/lib/tai-lieu-lien-ket.ts, apps/agent/agent/lib/tai-lieu-hoi-phien.ts, apps/agent/test/zch-cau-thu-hai.integration.spec.ts]
+    expected: "exit 0; ca «zch-lien-ket: mot-dong-zalo» và «zch-lien-ket: mot-dong-kho» (tên giữ chữ mot-dong: một liên kết). Zalo: câu đầu từ CHÍNH hoiTacTu, gọi events[\"session.started\"] rồi events[\"turn.started\"] cùng ngữ cảnh → sessionId = mã sau lần gọi đầu; ảnh chụp bảng ZaloHoi sau lần gọi thứ hai toEqual sau lần đầu; số hàng ZaloHoi có sessionId = mã đúng 1. Kho: hàng TaiLieuHoi kênh CRM tạo qua TaiLieuHoiService.hoi, dấu chờ đặt bằng CHÍNH guiHoiKho với send giả; trong send giả chạy session.started rồi turn.started với CHÍNH auth.attributes send nhận → phienId = mã, ảnh chụp bảng TaiLieuHoi sau lần gọi thứ hai toEqual sau lần đầu, guiHoiKho resolve, trangThai vẫn DANG_HOI. Chiều đỏ cùng fixture, ca «zch-lien-ket: mot-dong chieu do»: gọi hook lần hai với hoiId của hàng đã gắn phiên KHÁC → liên kết không đổi và không có dòng «[lien-ket-hoi]» mới, thông điệp ghim «ghi de phien khac»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zch_lien_ket
+    paths: [apps/agent/agent/hooks/**, apps/agent/agent/lib/tai-lieu-lien-ket.ts, apps/agent/test/zch-cau-thu-hai.integration.spec.ts]
+    expected: "exit 0; ca «zch-lien-ket: bang-khong-doi». Bảng ca VIẾT TRƯỚC trên một fixture gồm một ZaloHoi đang hỏi chưa gắn phiên và một TaiLieuHoi mang dấu chờ, mỗi ca gọi events[\"turn.started\"]: purpose ∈ {okr, builder, may-soan, team-agent, research, vắng} × hoiId hợp lệ; zalo thiếu hoiId; zalo với hoiId của hàng đã gắn phiên khác; zalo với hàng ketQua da-tra-loi; kho với hàng đã có phienId thật. Mỗi ca chụp hai bảng trước và sau, toEqual, không dòng «[lien-ket-hoi]» nào; số ca chạy = số dòng bảng (khẳng định độ dài). Ca «zch-lien-ket: loi-db»: lienKetPhienGoc với phụ thuộc db ném lỗi, gọi qua đường turn.started → promise resolve, console.warn đúng một lần với «[lien-ket-hoi] khong ghi duoc lien ket»; đối chứng dương cùng fixture là ca cau-hai của E1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zch_chi_dan
+    paths: [apps/agent/agent/hooks/**, apps/agent/agent/lib/tai-lieu-lien-ket.ts, apps/agent/agent/lib/tai-lieu-hoi.ts, apps/agent/agent/subagents/tro_ly_kho/instructions.ts, apps/agent/test/zch-cau-thu-hai.integration.spec.ts]
+    expected: "exit 0; ca «zch-chi-dan: cau-hai». Câu đầu đi trọn: hook gắn, gọi CHÍNH bộ giải session.started của tro_ly_kho (instructions.ts) với ngữ cảnh đúng hình eve thật của phiên con (không session.parent, token subagent:<mã gốc>:…, dùng lại helper ctxBatDauThat của zkd-chi-dan nếu xuất được, không thì dựng cùng hình) → TaiLieuHoi câu đầu, rồi đóng câu đầu (ZaloHoi da-tra-loi, TaiLieuHoi TRA_LOI qua ghiKetQuaHoi). Câu hai từ CHÍNH hoiTacTu, hook turn.started gắn, rồi bộ giải của phiên con mới: markdown chứa «Question id: <id>» với <id> là hàng TaiLieuHoi có zaloHoiId = ZaloHoi câu hai, KHÔNG chứa mã TaiLieuHoi câu đầu; thời gian giải < TAI_LIEU_AGENT.hoi.timHoi.cachMs. Chiều đỏ cùng fixture, ca «zch-chi-dan: cau-hai chieu do»: bỏ hook turn.started, liên kết câu hai ghi sau cửa sổ tra (soLan × cachMs) → bộ giải trả TAI_LIEU_AGENT.hoi.dungLai.chiDan, thông điệp ghim «chi dan dung o cau hai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.zch_so_do
+    paths: [_acceptance/zalo-cau-thu-hai-lien-ket/rang/**, _acceptance/zalo-cau-thu-hai-lien-ket/evidence/**, apps/agent/evals/tro-ly-kho/cau-thu-hai.eval.ts, apps/agent/agent/hooks/**, apps/agent/agent/lib/tai-lieu-lien-ket.ts, apps/agent/agent/lib/tai-lieu-hoi.ts, apps/agent/agent/subagents/tro_ly_kho/instructions.ts]
+    expected: "exit 0; rang/so-do.ts đọc bằng chứng của hồ sơ (evidence/ket-qua.jsonl, evidence/eve.log, băm hai tệp trong evidence/eve-log.txt khớp sha256) và rang/chuoi.json (8 chuỗi × 3 câu, băm bo-mau.json khớp bản ghi trong chuoi.json). Bảng VIẾT TRƯỚC: số dòng ket-qua.jsonl = 24 = số câu của chuoi.json, mỗi câu đúng một dòng. Mỗi người: ba dòng cùng sessionId khác null. Mỗi câu không lỗi model: tlhTrangThai ∈ {TRA_LOI, TU_CHOI}, tlhZaloHoiId = zaloHoiId của chính dòng, daGuiZalo = true; eve.log có ít nhất một dòng «[lien-ket-hoi] zalo <zaloHoiId> -> <sessionId>» với đúng zaloHoiId và sessionId của dòng đó. eve.log có 0 dòng «[tro-ly-kho] khong tim thay cau hoi» và 0 dòng «Dynamic instructions resolver (session.started) threw». Câu lỗi model ≤ ngưỡng đọc từ rang/nguong.json (giá trị chốt ở Hỏi-2 của design.md, khuyên 1) và câu đó không có dòng dừng. Chiều đỏ tự chạy trên bản sao trong thư mục tạm, mỗi ca exit 1 với thông điệp ghim: xoá dòng [lien-ket-hoi] của câu thứ hai một người → ghim mã zaloHoi đó; thêm một dòng «[tro-ly-kho] khong tim thay cau hoi» (băm cập nhật) → «sai cho»; đổi sessionId câu ba một người → «khac phien»; đổi tlhZaloHoiId câu hai sang zaloHoiId câu một → «lech cau»; xoá một dòng ket-qua.jsonl (băm cập nhật) → «thieu cau»; đổi một byte eve.log không cập nhật băm → «bam eve.log»; số câu lỗi model = ngưỡng + 1 → «qua tran loi model»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
