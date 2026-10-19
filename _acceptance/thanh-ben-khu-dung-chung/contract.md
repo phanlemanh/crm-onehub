@@ -5,7 +5,7 @@ slug: thanh-ben-khu-dung-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: approved
 approved_by:
 approved_at:
 veto_state: mo
@@ -39,6 +39,7 @@ tiếng Việt, hai khổ 1280×800 và 375×812.
 - AC-7: Given lúc đang tải, When khung chờ của Cài đặt và của Hội thoại dựng, Then cả hai nằm trong `aside[data-slot=area-sidebar]` có `nav` mang `aria-busy="true"` và đúng nhãn của khu, và Hội thoại không còn chuỗi `w-[213px]`.
 - AC-8: Given cây đã sửa chạy thật trên phiên đo riêng, When bàn đo gieo cho người đo tám cuộc hội thoại qua đường ghi thật (`conversations.createBuilder`) rồi mở `/settings` và một cuộc `/chat/<id>` ở 1280×800 và 375×812, Then ở 1280 thanh bên của hai khu cùng rộng 224px, nhãn nhóm của hai khu cùng `font-size`, `font-weight`, `letter-spacing`, `text-transform`, `color`, không thấy hàng ngang, và bàn đo in số dòng hội thoại thấy được; ở 375 không thấy `aside` thanh khu, không thấy nhãn nhóm, hàng ngang của Hội thoại cuộn được (`scrollWidth > clientWidth`) còn của Cài đặt cuộn được hoặc vừa khung, và trang không tràn ngang (`documentElement.scrollWidth ≤ clientWidth`) ở cả hai khu; kèm bốn ảnh hai khu × hai khổ mà người xem thấy cùng một thanh.
 - AC-9: Given `apps/app` (trừ thư mục test và proto), When quét, Then không tệp nào còn tự dựng thanh bên khu — không chuỗi `w-[213px]`, không `<aside` nào mang lớp bề rộng cố định (`w-56`, `w-[…px]`) kèm lớp ẩn theo khổ — và `settings-sidebar.tsx` cùng `agent-builder-sidebar.tsx` nhập `AreaSidebar` từ `@crm/ui/components/area-sidebar`.
+- AC-11: Given một cuộc trò chuyện ở 375×812 có nội dung cao hơn khung (bàn đo chèn vào `[data-slot=message-scroller-content]` một khối cao 3000px, đại diện cho cuộc dài), When đo lại, Then vùng tin `[data-slot=message-scroller-viewport]` tự cuộn (`scrollHeight > clientHeight`), đáy của nó và của ô soạn tin nằm trong khung nhìn, và trang không tràn dọc (`documentElement.scrollHeight ≤ clientHeight`); kèm ảnh.
 - AC-10 (judgment): Given `docs/design.md` và `docs/settings.md` sau vòng này, When người đọc cần chọn giữa thanh bên khu và thẻ con cho một màn mới, Then `docs/design.md` có một mục nói khi nào dùng thanh bên khu (các nơi đến ngang hàng của một khu, đặt ở layout của khu, nhóm có nhãn, điện thoại thành hàng ngang), khi nào dùng thẻ con (các phần của một vật trên một trang), giới hạn một thanh khu và một hàng thẻ con trên một màn, ví dụ thật của kho cho mỗi bên, và một dòng «Dấu hiệu vẽ tay» trỏ `AreaSidebar`; `docs/settings.md` mục «Thanh bên» trỏ cùng thành phần.
 
 ## Coverage
@@ -78,3 +79,4 @@ Ngưỡng của `opportunity.md`: «Cài đặt và Hội thoại dùng chung m�
 - S3 19/10: bàn đo màn `rang/do-man.mjs` trên phiên đo riêng: 15 DUNG, 0 SAI; nhãn nhóm hai khu `12px/500/0.6px/uppercase/rgb(161, 161, 161)`; ở 1280×800 thấy 8 dòng hội thoại; `TBK_PHA=rong` → 2 SAI «aside 224px (mong 230px)»; `TBK_PHA=tran` → «SAI AC-8 hoi-thoai 375: tran ngang 825px».
 - S3 19/10: `NavItem` cỡ `sm` là `h-7 text-xs` (`packages/ui/src/components/button.tsx`), bằng dòng hội thoại trước vòng — mật độ cột không đổi.
 - Ở điện thoại, trang trò chuyện có hai dòng mang chữ «Hội thoại»: đầu thanh khu (kèm «+» Hội thoại mới) và đầu trang trò chuyện — đúng AC-6, nêu ra để người ký thấy.
+- Gate 2 lượt 1 (19/10, Phan Le Manh): Ngoài-2 «nâng phạm vi sửa ngay» → AC-11, E12 (dòng sổ d-20261019T130202Z-15). Chiều đỏ trên `e613e64c` (trước bản sửa): «SAI AC-11 hoi-thoai 375 cuoc dai: vung tin khong cuon (3140/3140), day vung tin 3326px > 812px, day o soan 3375px > 812px, tran doc 2617px». Sau khi thêm `min-h-0` cho vỏ nội dung của `AgentBuilderShell`: 16 DUNG, 0 SAI (vùng tin 3140/523, ô soạn 758px); `TBK_PHA=cuon` trả lại đúng dòng SAI trên.

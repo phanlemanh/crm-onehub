@@ -35,6 +35,7 @@ const DO = {
 	],
 	mayTinhTu: 768,
 	tranPha: "1200px",
+	cuocDaiPx: 3000,
 };
 const KIEU = [
 	"fontSize",
@@ -45,8 +46,10 @@ const KIEU = [
 ];
 
 const PHA = process.env.TBK_PHA ?? "";
-if (!["", "rong", "tran"].includes(PHA)) {
-	console.log(`KHONG DO DUOC: TBK_PHA=${PHA} la; chi nhan "rong" hoac "tran"`);
+if (!["", "rong", "tran", "cuon"].includes(PHA)) {
+	console.log(
+		`KHONG DO DUOC: TBK_PHA=${PHA} la; chi nhan "rong", "tran" hoac "cuon"`,
+	);
 	process.exit(2);
 }
 const beRongMong = PHA === "rong" ? DO.beRongPha : DO.beRong;
@@ -256,6 +259,63 @@ for (const khu of KHU) {
 	}
 }
 
+await trang.setViewport({ width: 375, height: 812 });
+await mo(KHU[1].duong);
+if (PHA === "cuon")
+	await trang.evaluate(() => {
+		const vo = document.querySelector("[data-slot='area-sidebar-strip'] ~ div");
+		if (vo) vo.style.minHeight = "auto";
+	});
+const dai = await trang.evaluate(async (caoPx) => {
+	const noiDung = document.querySelector(
+		"[data-slot='message-scroller-content']",
+	);
+	const vung = document.querySelector(
+		"[data-slot='message-scroller-viewport']",
+	);
+	const oSoan = document.querySelector("main [role='textbox'], main textarea");
+	if (!noiDung || !vung || !oSoan) return null;
+	const dem = document.createElement("div");
+	dem.style.height = `${caoPx}px`;
+	noiDung.appendChild(dem);
+	await new Promise((r) =>
+		requestAnimationFrame(() => requestAnimationFrame(r)),
+	);
+	const doc_ = document.documentElement;
+	return {
+		cuon: vung.scrollHeight > vung.clientHeight,
+		sh: vung.scrollHeight,
+		ch: vung.clientHeight,
+		dayVung: Math.round(vung.getBoundingClientRect().bottom),
+		daySoan: Math.round(oSoan.getBoundingClientRect().bottom),
+		cao: window.innerHeight,
+		tranDoc: doc_.scrollHeight - doc_.clientHeight,
+	};
+}, DO.cuocDaiPx);
+if (dai === null)
+	await khongDo(
+		"KHONG DO DUOC: AC-11 khong thay vung tin hay o soan tren trang tro chuyen",
+	);
+await trang.screenshot({ path: join(BANG_CHUNG, "hoi-thoai-375-dai.png") });
+copyFileSync(
+	join(BANG_CHUNG, "hoi-thoai-375-dai.png"),
+	join(BANG_CHUNG_HO_SO, "hoi-thoai-375-dai.png"),
+);
+{
+	const lech = [];
+	if (!dai.cuon) lech.push(`vung tin khong cuon (${dai.sh}/${dai.ch})`);
+	if (dai.dayVung > dai.cao)
+		lech.push(`day vung tin ${dai.dayVung}px > ${dai.cao}px`);
+	if (dai.daySoan > dai.cao)
+		lech.push(`day o soan ${dai.daySoan}px > ${dai.cao}px`);
+	if (dai.tranDoc > 0) lech.push(`tran doc ${dai.tranDoc}px`);
+	bao(
+		lech.length === 0,
+		`DUNG AC-11 hoi-thoai 375 cuoc dai: vung tin cuon (${dai.sh}/${dai.ch}), day vung tin ${dai.dayVung}px, day o soan ${dai.daySoan}px <= ${dai.cao}, tran doc 0`,
+		`SAI AC-11 hoi-thoai 375 cuoc dai: ${lech.join(", ")}`,
+	);
+}
+
 const a = nhanTheoKhu["cai-dat"];
 const b = nhanTheoKhu["hoi-thoai"];
 if (a && b) {
@@ -274,5 +334,5 @@ if (a && b) {
 }
 
 console.log(`anh: ${BANG_CHUNG_HO_SO}`);
-console.log(`KET LUAN AC-8: ${dung} DUNG, ${sai.length} SAI`);
+console.log(`KET LUAN AC-8 AC-11: ${dung} DUNG, ${sai.length} SAI`);
 await ket(sai.length === 0 ? 0 : 1);

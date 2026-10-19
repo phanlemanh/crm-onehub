@@ -187,10 +187,30 @@ evals:
       - "apps/app/components/agent-builder/**"
       - "_acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"
     expected: |
-      Du bon anh: cai-dat-1280.png, hoi-thoai-1280.png, cai-dat-375.png, hoi-thoai-375.png. O 1280 hai
+      Du nam anh: cai-dat-1280.png, hoi-thoai-1280.png, cai-dat-375.png, hoi-thoai-375.png, hoi-thoai-375-dai.png. O 1280 hai
       anh co cung mot thanh ben ben trai: cung be rong, nhan nhom chu hoa nho cung kieu, muc dang mo to
       nen cung mau, vien phai. O 375 hai anh co mot hang muc nam ngang ngay duoi dau trang, khong co
-      thanh ben doc, khong nhan nhom, noi dung khong bi cat ngang. Thieu anh nao -> khong dat.
+      thanh ben doc, khong nhan nhom, noi dung khong bi cat ngang. Anh hoi-thoai-375-dai.png: o soan tin con nam o day man, phan tin phia tren bi cat trong vung cuon chu khong day o soan ra khoi man. Thieu anh nao -> khong dat.
+
+  - id: E12
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tbk_man
+    paths:
+      - "apps/app/components/agent-builder/agent-builder-shell.tsx"
+      - "apps/app/app/(app)/[slug]/(agent-builder)/**"
+      - "apps/app/components/agent-builder/agent-builder-chat.tsx"
+      - "packages/ui/src/components/area-sidebar.tsx"
+      - "_acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"
+    expected: |
+      Cung luot ban do cua E8. O 375x812 tren /chat/<id>: chen vao [data-slot=message-scroller-content]
+      mot div cao 3000px, doi hai khung hinh, roi in
+      "DUNG AC-11 hoi-thoai 375 cuoc dai: vung tin cuon (<scrollHeight>/<clientHeight>), day vung tin <n>px, day o soan <n>px <= <innerHeight>, tran doc 0"
+      va chup hoi-thoai-375-dai.png. Lech mot ve -> "SAI AC-11 hoi-thoai 375 cuoc dai: <ve lech>", ma 1.
+      Khong thay vung tin hay o soan (textarea) -> ma 2 "KHONG DO DUOC".
+      CHIEU DO tren ma truoc ban sua (AgentBuilderShell thieu min-h-0): "SAI AC-11 ... vung tin khong cuon"
+      va day o soan vuot innerHeight. Pha-thu sau khi sua: TBK_PHA=cuon (ban do dat style minHeight=auto cho
+      vo noi dung — div dung sau [data-slot=area-sidebar-strip]) -> dong SAI y het.
 
   - id: E10
     criterion: AC-9
