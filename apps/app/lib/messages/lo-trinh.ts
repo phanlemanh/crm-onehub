@@ -54,6 +54,9 @@ const en = {
 		homNay: "today",
 		tre: (n: string) => `${n} days late`,
 		lechKeHoach: (n: string) => `${n} plan mismatches`,
+		conLai: (n: string, tong: string) => `${n} of ${tong} left`,
+		daGiaoThem: (n: string) => ` · ${n} delivered`,
+		giaoDu: (tong: string) => `All ${tong} delivered`,
 		xem: "Show",
 	},
 	duKien: {
@@ -216,6 +219,9 @@ const vi: LoTrinhMessages = {
 		homNay: "hôm nay",
 		tre: (n: string) => `Trễ ${n} ngày`,
 		lechKeHoach: (n: string) => `${n} chỗ lệch kế hoạch`,
+		conLai: (n: string, tong: string) => `còn ${n}/${tong} việc`,
+		daGiaoThem: (n: string) => ` · ${n} đã giao`,
+		giaoDu: (tong: string) => `đã giao đủ ${tong} việc`,
 		xem: "Mở",
 	},
 	duKien: {
