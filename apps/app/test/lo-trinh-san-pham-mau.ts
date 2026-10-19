@@ -39,17 +39,14 @@ export function hangCua(html = HTML_KIT, layLuc = LAY_LUC): HangBanChupLuu {
 const KHOI =
 	/(<script type="application\/json" id="lo-trinh-du-lieu">)([\s\S]*?)(<\/script>)/;
 
-export function khoiKit(): {
-	json: LoTrinhDuLieu;
-	ghep: (chu: string) => string;
-} {
+export function khoiKit() {
 	const m = KHOI.exec(HTML_KIT);
 	if (!m) throw new Error("mau kit khong co khoi");
 	const kq = phanTichLoTrinh(docDuLieu(HTML_KIT).duLieu);
 	if (!kq.ok) throw new Error(`mau kit khong qua khuon: ${kq.duongKhoa}`);
 	return {
 		json: kq.duLieu,
-		ghep: (chu) => HTML_KIT.replace(m[0], `${m[1]}${chu}${m[3]}`),
+		ghep: (chu: string) => HTML_KIT.replace(m[0], `${m[1]}${chu}${m[3]}`),
 	};
 }
 
