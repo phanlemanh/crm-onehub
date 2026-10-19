@@ -35,7 +35,19 @@
         "DA4"
       ],
       "nghia": "Kế hoạch tạo từ khuôn có sẵn việc; dự án xem trên Gantt có phụ thuộc và mốc. Chủ kho duyệt mốc 14/10; DA3b vào mốc này khi hàng lên onehub.",
-      "ly_do": "Cắt theo giờ máy: còn DA4 (S3 xong; S4 và Cổng 2 trong ngày 18/10 theo M5) → gộp 19/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
+      "ly_do": "Cắt theo giờ máy: còn DA4 (S3 xong; S4 và Cổng 2 trong ngày 18/10 theo M5) → gộp 19/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm. Về đích 18/10 07:32Z: DA4 gộp qua #476 (855e5b1d8).",
+      "that": "2026-10-18"
+    },
+    {
+      "ten": "Việc riêng đúng quyền và vá Gantt",
+      "ngay": "2026-10-24",
+      "loai": "phat-hanh",
+      "khoa": "m-1024da",
+      "hang": [
+        "DA11",
+        "DA12"
+      ],
+      "ly_do": "Làn M5: DA11 sửa gấp (lộ «Việc riêng» ở production) rồi DA12. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     }
   ],
   "hang": [
@@ -98,7 +110,7 @@
       "ten": "Thước «Việc của bạn» đỏ được",
       "ten_ngan": "Thước E7b",
       "ghi_chu": "Nhóm vệ sinh có hạn mức; sửa thước trong hồ sơ va-lo-ro-vai-chi-okr kéo theo ghim lại hồ sơ đó.",
-      "buoc_ke": "Hoãn khi đóng r2 (17/10). Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "buoc_ke": "Làn MacBook Pro · gom vào F35"
     },
     {
       "ma": "DA1",
@@ -279,6 +291,32 @@
       ],
       "ghi_chu": "Ngoài-16 của DA3b. Hạt giống docs/plan/2026-10-16-hat-giong-goi-y-lam-moi-the.md (M5).",
       "buoc_ke": "Chờ Cổng Đáng; làn M5 sau DA4 (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+    },
+    {
+      "ma": "DA11",
+      "slug": "viec-rieng-chi-nguoi-trong-cuoc",
+      "cau_giao": "«Lịch sử việc che tiêu đề những việc người xem không được thấy, cả trong dự án»",
+      "trang_thai": "chưa mở",
+      "ten": "Lịch sử việc không lộ tiêu đề việc khuất",
+      "ten_ngan": "Lịch sử che việc khuất",
+      "dung_tren": [
+        "DA4"
+      ],
+      "ghi_chu": "T1 ở Cổng Bằng chứng DA4 18/10 («Việc riêng — chỉ người trong cuộc thấy» nhưng thành viên khác vẫn thấy trên Gantt). Phiên DA11 19/10 đo lại: việc trong dự án là việc chung, khung việc nói đúng; chỗ lộ thật là lịch sử việc hiện tiêu đề việc người xem không thấy (cùng họ DA2b). Chủ kho chọn «A · đếm: có» ở phiên DA11: không đổi luật thấy. Chủ kho 19/10: sửa gấp, đứng đầu làn M5.",
+      "buoc_ke": "Làn M5 · thứ 1 (gấp)"
+    },
+    {
+      "ma": "DA12",
+      "slug": "va-gantt-lich-bay-ngay",
+      "cau_giao": "«Lịch làm việc chọn đủ bảy ngày vẫn giữ đúng như chọn, và dự án đủ 300 việc vẫn sửa được mốc và phụ thuộc»",
+      "trang_thai": "chưa mở",
+      "ten": "Vá Gantt: lịch bảy ngày, dự án 300 việc",
+      "ten_ngan": "Vá Gantt",
+      "dung_tren": [
+        "DA4"
+      ],
+      "ghi_chu": "Gộp Ngoài-3, Ngoài-9 (bỏ hết ngày nghỉ thì T7/CN tự bật lại) và Ngoài-8 (dự án đủ 300 việc khoá cả thao tác mốc và phụ thuộc) của du-an-gantt; chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng DA4 18/10.",
+      "buoc_ke": "Làn M5 · thứ 2"
     }
   ],
   "da_bac": [
