@@ -555,6 +555,16 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
   người theo dõi thấy — quản trị không thấy. Việc nằm trong một dự án (`duAnId` khác rỗng) cũng thấy
   với mọi người qua được cửa router (hàng DA4). Mã không thấy và mã không có trả cùng 404
   «Không có việc nào mang mã <id>.».
+- **Khung việc nói ai thấy** (hàng DA11). `viec.get` trả `aiThay`, một trong ba giá trị, tính ở máy chủ
+  (`apps/api/src/viec/viec-khuat.ts`) từ chính hàng việc: `ban-ghi` khi gắn ít nhất một bản ghi, `du-an` khi
+  không gắn mà nằm trong dự án, `rieng` khi không gắn và không thuộc dự án. Khung việc chỉ vẽ theo trường này,
+  không tự suy từ `banGhi` hay `duAn`.
+- **Lịch sử che việc người xem không thấy** (hàng DA11). Bốn loại vết nhắc một việc khác: `them-phu-thuoc`,
+  `go-phu-thuoc`, `doi-han`/`doi-bat-dau` mang `boi` (tự dời), `them-viec-con`. `viec.lichSu` gom mọi mã
+  việc được nhắc (`maViecNhac`, `@crm/db/viec-nhac`) rồi đọc một lần bằng `dieuKienXemViec` của người xem.
+  Việc người xem không đọc được, hay đã bị xoá, thì vết ra ngoài mang `null` ở chỗ đó (`viec`, `boi`, hay
+  `sau` của `them-viec-con`): không tiêu đề, không mã. Vết lưu trong `viecVet` không đổi, người trong cuộc
+  vẫn thấy đủ. Lược đồ đầu ra là `vetViecRa` (`viec.contracts.ts`).
 - **Đồ thị trạng thái** (`DO_THI`): G là chỉ người giao, GT là người giao hoặc người thực hiện.
 
   | Từ | Sang | Ai |

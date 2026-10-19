@@ -1937,6 +1937,16 @@ executors:
     vca_khop_khung: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-khop-khung"'
     vca_tinh_luc_doc: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-tinh-luc-doc"'
     vca_quet: 'bun run test -- "cd apps/api && bun test test/viec-cha-an.spec.ts -t vca-quet"'
+    vrc_ma_tran: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-ma-tran"'
+    vrc_chuyen: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-chuyen"'
+    vrc_phu_thuoc: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-phu-thuoc"'
+    vrc_tu_doi: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-tu-doi"'
+    vrc_viec_con: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-viec-con"'
+    vrc_man_du_an: 'bun run test -- "cd apps/api && bun test test/viec-rieng-trong-cuoc.spec.ts -t vrc-man-du-an"'
+    vrc_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-rieng-trong-cuoc.dom.tsx -t vrc-khung-chu
+    vrc_khung_doi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-rieng-trong-cuoc.dom.tsx -t vrc-khung-doi
+    vrc_lich_su_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-rieng-trong-cuoc.dom.tsx -t vrc-lich-su-khung
+    vrc_dem: 'bun run test -- "cd packages/db && bun test test/dem-viec-rieng.spec.ts -t vrc-dem"'
     tlk_so_du: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-so-du'
     tlk_hong_het: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-hong-het'
     tlk_kho_theo_cay: 'bun test ./_acceptance/thuoc-tro-ly-okr-khong-lot/rang/kiem.test.ts -t tlk-kho-theo-cay'
@@ -3024,6 +3034,7 @@ executors:
     dg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/du-an-gantt/rang/man.mjs"'
     dg_san_thiet_ke: node _acceptance/du-an-gantt/rang/san-thiet-ke.mjs
     dg_dot_bien: node _acceptance/du-an-gantt/rang/dot-bien.mjs
+    vrc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs"'
     gymk_san_thiet_ke: node _acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs
     gymk_dot_bien: node _acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs
     gymk_hoi_quy: 'node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --tu-thu && node _acceptance/goi-y-mo-ke-hoach/rang/khong-xoa-expect.mjs --moc "$(git merge-base HEAD origin/onehub)" && bun run check-types'
