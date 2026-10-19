@@ -129,8 +129,8 @@ evals:
 
   - id: E7
     criterion: AC-7
-    executor: script
-    cmd: config:executors.script.kcs_don_vi
+    executor: test
+    cmd: config:executors.test.kcs_don_vi
     paths:
       - "scripts/kiem-cheo/**"
     expected: |
