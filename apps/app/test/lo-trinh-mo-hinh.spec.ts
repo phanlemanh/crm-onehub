@@ -188,10 +188,14 @@ describe("ltmh-khoi-cu", () => {
 			const t = tho.lo_trinh.find((x) => x.tep === lo.tep);
 			expect(lo.chua_hen_moc).toEqual(t?.chua_hen_moc ?? []);
 			expect(lo.hang.map((h) => h.ten_hien_thi)).toEqual(
-				t?.hang.map((h) => h.ten_hien_thi) ?? [],
+				t?.hang.map((h) => h.ten_hien_thi ?? null) ?? [],
 			);
 			expect(lo.moc.map((m) => [m.hien, m.viec_hien, m.con_lai])).toEqual(
-				t?.moc.map((m) => [m.hien, m.viec_hien, m.con_lai]) ?? [],
+				t?.moc.map((m) => [
+					m.hien ?? null,
+					m.viec_hien ?? [],
+					m.con_lai ?? null,
+				]) ?? [],
 			);
 			expect(moHinhCua(lo).coMoHinh).toBe(true);
 		}
