@@ -23,6 +23,7 @@ const GOC = join(HERE, "..", "..", "..");
 const HO_SO = "thanh-ben-khu-dung-chung";
 const BANG_CHUNG = join(GOC, ".acceptance-runs", HO_SO, "evidence");
 const BANG_CHUNG_HO_SO = join(GOC, "_acceptance", HO_SO, "evidence");
+const CHEP_ANH = process.env.TBK_CHEP_ANH === "1";
 const DO = {
 	beRong: 224,
 	beRongPha: 230,
@@ -97,7 +98,11 @@ console.log(
 );
 
 mkdirSync(BANG_CHUNG, { recursive: true });
-mkdirSync(BANG_CHUNG_HO_SO, { recursive: true });
+function chepSangHoSo(ten) {
+	if (!CHEP_ANH) return;
+	mkdirSync(BANG_CHUNG_HO_SO, { recursive: true });
+	copyFileSync(join(BANG_CHUNG, ten), join(BANG_CHUNG_HO_SO, ten));
+}
 
 const trinhDuyet = await puppeteer.launch({
 	executablePath: CHROME,
@@ -206,7 +211,7 @@ for (const khu of KHU) {
 		const d = await doc(KIEU);
 		const anh = `${khu.ten}-${kho.rong}.png`;
 		await trang.screenshot({ path: join(BANG_CHUNG, anh) });
-		copyFileSync(join(BANG_CHUNG, anh), join(BANG_CHUNG_HO_SO, anh));
+		chepSangHoSo(anh);
 		const nhan = `${khu.ten} ${kho.rong}`;
 
 		if (kho.rong >= DO.mayTinhTu) {
@@ -297,10 +302,7 @@ if (dai === null)
 		"KHONG DO DUOC: AC-11 khong thay vung tin hay o soan tren trang tro chuyen",
 	);
 await trang.screenshot({ path: join(BANG_CHUNG, "hoi-thoai-375-dai.png") });
-copyFileSync(
-	join(BANG_CHUNG, "hoi-thoai-375-dai.png"),
-	join(BANG_CHUNG_HO_SO, "hoi-thoai-375-dai.png"),
-);
+chepSangHoSo("hoi-thoai-375-dai.png");
 {
 	const lech = [];
 	if (!dai.cuon) lech.push(`vung tin khong cuon (${dai.sh}/${dai.ch})`);
@@ -333,6 +335,10 @@ if (a && b) {
 	);
 }
 
-console.log(`anh: ${BANG_CHUNG_HO_SO}`);
+console.log(
+	CHEP_ANH
+		? `anh: ${BANG_CHUNG_HO_SO}`
+		: `anh: ${BANG_CHUNG} (khong chep sang ho so — dat TBK_CHEP_ANH=1 o buoc cua E9)`,
+);
 console.log(`KET LUAN AC-8 AC-11: ${dung} DUNG, ${sai.length} SAI`);
 await ket(sai.length === 0 ? 0 : 1);
