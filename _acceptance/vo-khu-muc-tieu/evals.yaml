@@ -199,10 +199,13 @@ evals:
       - "apps/app/test/okr-giai-ky-an.spec.ts"
       - "apps/app/test/okr-chuyen-huong-cap-nhat.spec.ts"
     expected: |
-      Ba tep kiem da co chay xanh nguyen ven, khong sua dong nao (tep cua DH11 la tep moi
-      okr-don-vi-dan-cay.dom.tsx, khong cham okr-cua-toi-ba-phan.dom.tsx): okr-cua-toi-ba-phan.dom.tsx (gom ca ?tu=nhac),
-      okr-giai-ky-an.spec.ts (giaiKy, giaiKyHoiY), okr-chuyen-huong-cap-nhat.spec.ts (cap-nhat-tuan -> /okr).
-      CHIEU DO: ca ba tep la bai da ky co chieu do rieng cua ho so goc.
+      Ba tep kiem da ky chay xanh sau khi doi DUNG chuoi duong cu -> duong moi trong khang dinh (Hoi-2, so
+      vo-khu-muc-tieu cua chu ko): okr-cua-toi-ba-phan.dom.tsx (gom ca ?tu=nhac), okr-giai-ky-an.spec.ts (giaiKy,
+      giaiKyHoiY, khong doi), okr-chuyen-huong-cap-nhat.spec.ts (cap-nhat-tuan -> /okr; doi chung doi sang duong
+      khong bi chuyen huong). Diff cua ba tep so voi merge-base chi gom cac dong chuoi duong (kiem bang mat o
+      review; logic khang dinh khong doi).
+      CHIEU DO: ca ba tep la bai da ky co chieu do rieng cua ho so goc; tren ma moi chua doi chuoi thi
+      ctbp-don-vi-dan do «Expected /ws/okr/theo-don-vi…».
 
   - id: E12
     criterion: AC-3
