@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: go-tin-hieu-rac
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 3a7a3d90c0bc0af759251de0d89837fa9d3ef798
-human_signoff:
+human_signoff: Manh Phan 2026-10-20
 ---
 
 # Evidence Report: go-tin-hieu-rac
@@ -227,7 +227,7 @@ Cột verified_at của các eval chạy lại ở vòng 5 lấy mốc giờ c�
 - eval: E11
   judged_by: hội đồng ba góc nhìn (fresh context), đề xuất PASS
   verdict: PASS
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-20
 
 Panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại; rationale xem round đó.
 

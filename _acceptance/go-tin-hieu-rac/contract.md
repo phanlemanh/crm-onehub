@@ -5,7 +5,7 @@ slug: go-tin-hieu-rac
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-19T14:11:15Z
 design_doc: docs/superpowers/specs/2026-10-19-go-tin-hieu-rac-design.md
@@ -78,3 +78,22 @@ Source input: `_acceptance/go-tin-hieu-rac/opportunity.md` (Cổng Đáng `build
 - Xem toàn bộ lịch sử vết trên màn — vết chỉ đọc qua máy chủ trong vòng này.
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Ảnh và nhật ký của bước đo màn E5c thuộc hai lượt chạy khác nhau, nên giờ trên ảnh không khớp giờ trong nhật ký.
+  - Ngoài-2: Việc khoá các dòng khác khi đang khôi phục chưa có bài kiểm riêng; mới chỉ đo nhánh lưu trữ.
+  - Ngoài-3: Ba ô số được tính ở trình duyệt; để trang mở rất lâu thì ô «quá 7 ngày» có thể lệch nhẹ tới khi tải lại.
+  - Ngoài-4: Ở dạng «Đã lưu trữ», bộ lọc Trạng thái vẫn hiện và ghi «Chờ lấy về» cho tín hiệu đã lưu trữ.
+  - Ngoài-5: Lưu trữ một tín hiệu mà người gửi vừa xoá chỉ báo lỗi chung và dòng ở lại bảng.
+  - Ngoài-6: Bộ lọc Trạng thái chọn ở bảng chính đi theo sang dạng «Đã lưu trữ», nên bảng có thể trống mà không rõ vì sao.
+  - Ngoài-7: Phép đo «không ghi đè giao diện» chỉ hiểu một cách viết className; cách viết động có thể lọt.
+  - Ngoài-8: Bài kiểm thanh công cụ chưa dựng đủ ma trận bốn ô như lời hứa của E6.
+  - Ngoài-10: Bài kiểm từ chối quyền khẳng định «không lộ tiêu đề» mà chưa có đối chứng dương cho chính phép tìm.
+  - Ngoài-11: Danh sách «Đã lưu trữ» tải hết về trình duyệt rồi mới lọc và chia trang; sẽ chậm khi danh sách lớn.
+  - Ngoài-12: Cách đếm ba ô số đặt ở trình duyệt thay vì trang máy chủ, lệch nếp «máy chủ tính, trình duyệt vẽ».
+  - Ngoài-13: Tín hiệu đã lưu trữ mang trạng thái dự phòng «Chờ lấy về» trong dạng «Đã lưu trữ».
+  - Ngoài-14: Chạy trần phép đo màn (không qua lệnh chuẩn) có thể ghi vào kho dữ liệu chung và đóng dấu «đã lấy về» lên tín hiệu thật.
+  - Ngoài-15: Ở dạng «Đã lưu trữ», bộ lọc gợi ý «Chưa lấy về» và bộ lọc mang sang có thể cho câu rỗng sai.
+  - Ngoài-16: Phép đo migration của hồ sơ so với mốc gộp nên sẽ đỏ sau khi PR gộp; các lượt chấm lại hồ sơ về sau sẽ vấp.
+  - Ngoài-17: Lưu trữ hoặc khôi phục tín hiệu người gửi vừa xoá báo «thử lại sau», nhưng thử lại không bao giờ được.
+  - Ngoài-18: Phép đo «không ghi đè giao diện» tuyên quét mọi phần tử nhưng chỉ có vài mẫu chiều đỏ.
