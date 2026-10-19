@@ -40,13 +40,21 @@ function dau(nhan: string): string {
 	return `vrc-dau-${nhan}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 }
 
-async function ghi(ten: string, input: Record<string, unknown>, userId: string) {
+async function ghi(
+	ten: string,
+	input: Record<string, unknown>,
+	userId: string,
+) {
 	const r = await goi(app, ten, "mutation", input, userId);
 	if (r.status !== 200) throw new Error(`vrc: ${ten} loi ${json(r)}`);
 	return r.data;
 }
 
-async function doc(ten: string, input: Record<string, unknown>, userId: string) {
+async function doc(
+	ten: string,
+	input: Record<string, unknown>,
+	userId: string,
+) {
 	const r = await goi(app, ten, "query", input, userId);
 	if (r.status !== 200) throw new Error(`vrc: ${ten} loi ${json(r)}`);
 	return r.data;
@@ -176,7 +184,10 @@ describe("vrc-ma-tran", () => {
 						);
 					}
 				} else if (o.doc === "404") {
-					if (r.status === 200 || r.message !== VIEC.thongDiep.khongCoViec(id)) {
+					if (
+						r.status === 200 ||
+						r.message !== VIEC.thongDiep.khongCoViec(id)
+					) {
 						throw new Error(`vrc: o ${o.nguoi} ${o.viec} khong an`);
 					}
 				} else if (r.status === 200) {
@@ -256,7 +267,8 @@ describe("vrc-phu-thuoc", () => {
 				const dong = cuaX.filter((h) => h.loai === loai);
 				if (dong.length === 0) throw new Error(`vrc: thieu vet ${loai}`);
 				for (const h of dong) {
-					if (coDau(h, dauV, V.id)) throw new Error(`vrc: lich su lo V ${loai}`);
+					if (coDau(h, dauV, V.id))
+						throw new Error(`vrc: lich su lo V ${loai}`);
 					const nhac =
 						loai === "them-phu-thuoc"
 							? (h.vet.sau as { viec: unknown }).viec
@@ -435,7 +447,9 @@ describe("vrc-man-du-an", () => {
 				for (const [cau, input] of TONG) {
 					const d = dongP(cau, await doc(cau, input, uid));
 					if (d.batDauSom !== "2026-11-02" || d.hanMuon !== "2026-11-06") {
-						throw new Error(`vrc: khoang ngay doi chung ${ten} ${cau} ${json(d)}`);
+						throw new Error(
+							`vrc: khoang ngay doi chung ${ten} ${cau} ${json(d)}`,
+						);
 					}
 					soTruoc = d.soViec;
 				}
