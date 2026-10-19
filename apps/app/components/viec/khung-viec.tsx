@@ -12,10 +12,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { InlineTextArea, InlineTextCell } from "@/components/crm/inline-field";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
-import {
-	lyDoLoi,
-	RecordSheetFrame,
-} from "@/components/crm/record-sheet/record-parts";
+import { RecordSheetFrame } from "@/components/crm/record-sheet/record-parts";
 import {
 	useRecordSheetView,
 	useRecordStack,
@@ -26,9 +23,11 @@ import {
 	DetailSheetProperty,
 	DetailSheetSection,
 } from "@/components/detail-sheet";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import { type ViecMessages, viecMessages } from "@/lib/messages/viec";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import type { RouterOutputs } from "@/lib/trpc/types";
 import { HoiDongCha } from "./hoi-dong-cha";
 import { LichSuViec } from "./lich-su-viec";
 import { MucPhaiCho } from "./muc-phai-cho";
@@ -39,6 +38,15 @@ import {
 	type TrangThaiViec,
 	TrangThaiViecNhan,
 } from "./trang-thai-viec";
+
+function moTaKhung(
+	v: Pick<RouterOutputs["viec"]["get"], "aiThay" | "banGhi" | "duAn">,
+	m: ViecMessages,
+): string {
+	if (v.aiThay === "ban-ghi") return v.banGhi[0]?.ten ?? m.khung.rieng;
+	if (v.aiThay === "du-an") return v.duAn?.ten ?? m.khung.duAnChung;
+	return m.khung.rieng;
+}
 
 function ganCua(b: {
 	loai: "company" | "contact" | "deal" | "plan";
@@ -199,8 +207,10 @@ export function KhungViec({ viecId }: { viecId: string }) {
 						</span>
 					</DetailSheetProperty>
 					<DetailSheetProperty label={m.khung.ganVoi}>
-						{v.banGhi.length === 0 ? (
-							<span className="text-muted-foreground">{m.khung.rieng}</span>
+						{v.aiThay !== "ban-ghi" ? (
+							<span className="text-muted-foreground">
+								{v.aiThay === "du-an" ? m.khung.duAnChung : m.khung.rieng}
+							</span>
 						) : (
 							<span className="flex flex-col gap-1">
 								{v.banGhi.map((b) => (
@@ -333,9 +343,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 					) : null
 				}
 				description={
-					v ? (
-						<span translate="no">{v.banGhi[0]?.ten ?? m.khung.rieng}</span>
-					) : undefined
+					v ? <span translate="no">{moTaKhung(v, m)}</span> : undefined
 				}
 				error={q.error?.message ?? null}
 				loading={q.isPending}

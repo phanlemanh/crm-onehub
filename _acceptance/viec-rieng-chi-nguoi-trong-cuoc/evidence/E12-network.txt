@@ -1,0 +1,2 @@
+driver: tien-de.mjs + man.mjs (playwright-style capture, khong co browser tool doc network)
+network: n-a (driver)
