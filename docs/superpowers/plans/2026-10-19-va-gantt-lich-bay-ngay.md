@@ -8,6 +8,8 @@
 
 **Tech Stack:** Prisma 7 + Postgres, NestJS tRPC, React 19, bun test.
 
+**Duyệt kế hoạch (Gate 1.5):** manh 2026-10-20 — «Duyệt kế hoạch DA12, chạy tuần tự như đề xuất.»
+
 **Spec:** `docs/superpowers/specs/2026-10-19-va-gantt-lich-bay-ngay-design.md` · hợp đồng `_acceptance/va-gantt-lich-bay-ngay/contract.md` · evals `_acceptance/va-gantt-lich-bay-ngay/evals.yaml`.
 
 ## Global Constraints
