@@ -271,7 +271,7 @@ describe("tom-tat", () => {
 									...h.tom_tat,
 									moi_nguoi: {
 										...h.tom_tat.moi_nguoi,
-										vi_sao: h.tom_tat.moi_nguoi.vi_sao.slice(0, 400),
+										vi_sao: h.tom_tat.moi_nguoi.vi_sao.slice(0, 200),
 									},
 								},
 							}
@@ -280,9 +280,9 @@ describe("tom-tat", () => {
 			})),
 		};
 		const dai = CO_DAI.filter(
-			(h) => (h.tom_tat?.moi_nguoi.vi_sao ?? "").length > 400,
+			(h) => (h.tom_tat?.moi_nguoi.vi_sao ?? "").length > 200,
 		);
-		expect(dai.length).toBe(31);
+		expect(dai.length).toBe(55);
 		for (const h of dai)
 			expect(kiemTomTat(await moNgan(cat, h.khoa), h)).toContain(
 				`viec ${h.khoa} lech o tom tat vi_sao`,
@@ -593,12 +593,10 @@ describe("khoan-dung", () => {
 		}
 	});
 
-	test("doi chung duong: ban 2 ve bang kit cu chi mot canh bao ve lai, LT1 du tam hang", async () => {
-		const canhBao = DV_X2.kieu === "co-du-lieu" ? DV_X2.canhBao : null;
-		expect(canhBao?.length).toBe(1);
-		expect(canhBao?.[0]).toContain("vẽ lại bằng bộ kit mới");
+	test("doi chung duong: ban 2 nguyen khong canh bao, LT1 du tam hang", async () => {
+		expect(DV_X2.kieu === "co-du-lieu" && DV_X2.canhBao).toEqual([]);
 		const body = await trang(DV_X2);
-		expect(body.querySelector("[data-lo-trinh-canh-bao]")).not.toBeNull();
+		expect(body.querySelector("[data-lo-trinh-canh-bao]")).toBeNull();
 		const lt1 = CO_DAI.find((h) => h.ma === "LT1");
 		if (!lt1) throw new Error("tep mau thieu LT1");
 		const ngan = await moNgan(coDuLieu(DV_X2), lt1.khoa);
