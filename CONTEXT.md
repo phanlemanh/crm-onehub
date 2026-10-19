@@ -263,6 +263,7 @@ Vì sao: người dùng nói «B phải chờ A»; «liên kết» đã là ch�
 **Lịch làm việc**: ngày nào cả công ty nghỉ — các thứ nghỉ trong tuần (mặc định Thứ Bảy, Chủ nhật) và
 ngày lễ do chủ hay quản trị thêm ở Cài đặt. Tự dời và luật phụ thuộc bỏ qua ngày nghỉ; đổi lịch không
 dời việc đã có ngày, chỉ lần ghi sau mới tính theo lịch mới. Đặt 2026-10-16 (hàng DA4).
+Quản trị bỏ chọn hết thì không nghỉ ngày nào trong tuần (hàng DA12).
 _Avoid_: lịch nghỉ, calendar, working calendar
 Vì sao: «Lịch» trần lẫn với lịch hẹn của Google, Microsoft.
 
