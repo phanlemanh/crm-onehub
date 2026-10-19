@@ -1,0 +1,44 @@
+{
+  "nhanh_chinh": "onehub",
+  "tick_giay": 5,
+  "han_thue_phut": {
+    "s4": 90,
+    "ghim-lai": 40,
+    "duong-nen": 40,
+    "merge": 120
+  },
+  "nhip_cu_phut": 10,
+  "suc_khoe": {
+    "swap_gb": 8,
+    "ap_luc_muc": 2,
+    "rss_gb": 8
+  },
+  "s4_tran_gom_phut": 60,
+  "bao_ve": [
+    "packages/db/prisma/schema.prisma",
+    "packages/db/prisma/migrations/**",
+    "PRODUCT-MAP.md",
+    "LO-TRINH.html",
+    "bun.lock",
+    "docs/plan/lo-trinh-*.json",
+    "_acceptance/config.yaml",
+    "CONTEXT.md",
+    "turbo.json",
+    ".env.example",
+    "packages/ui/src/lib/messages.ts",
+    "apps/app/lib/messages/*.ts"
+  ],
+  "nguon_hang": [
+    "docs/plan/lo-trinh-viec-du-an.json:DA12",
+    "docs/plan/lo-trinh-okr.json:VS8",
+    "docs/plan/lo-trinh-kho-tai-lieu.json:l7",
+    "docs/plan/lo-trinh-kho-tai-lieu.json:MH4",
+    "docs/plan/lo-trinh-kho-tai-lieu.json:MH2"
+  ],
+  "han_muc": {
+    "bao_truoc_pct": 80,
+    "ban_giao_pct": 90,
+    "cho_ban_giao_phut": 20,
+    "cho_dat_lai_phut": 45
+  }
+}

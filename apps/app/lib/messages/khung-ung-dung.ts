@@ -44,6 +44,9 @@ const en = {
 		groups: { company: "Companies", contact: "Contacts", deal: "Deals" },
 		taiLieu: "Documents",
 		taiLieuLoi: "Couldn't search right now. Try again.",
+		crm: "Companies, contacts, deals",
+		crmLoi:
+			"Couldn't search companies, contacts or deals right now. Try again.",
 		placeholderTaiLieu: "Search document pages…",
 		descriptionTaiLieu: "Jump to a document page",
 	},
@@ -111,6 +114,8 @@ const vi = {
 		groups: { company: "Công ty", contact: "Cá nhân", deal: "Thoả thuận" },
 		taiLieu: "Tài liệu",
 		taiLieuLoi: "Không tìm được lúc này. Thử lại.",
+		crm: "Công ty, cá nhân, thoả thuận",
+		crmLoi: "Chưa tìm được công ty, cá nhân, thoả thuận lúc này. Thử lại.",
 		placeholderTaiLieu: "Tìm trang tài liệu, có dấu hay không dấu…",
 		descriptionTaiLieu: "Nhảy tới một trang tài liệu",
 	},

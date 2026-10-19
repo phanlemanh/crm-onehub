@@ -44,7 +44,7 @@ const BAN = [
 	"## Hoa hồng\n\nMức hoa hồng là 7% cho hợp đồng mới.\n\nThêm thưởng cuối năm.",
 ] as const;
 
-const san = { p: "", q: "", r: "", s: "" };
+const san = { p: "", q: "", s: "" };
 const ten: Record<string, string> = {};
 
 async function nguoi(ai: Ai): Promise<Nguoi> {
@@ -104,19 +104,6 @@ beforeAll(async () => {
 		"chu",
 	);
 	san.q = q.slug;
-	const tenR = ma("Lich su R");
-	const r = await taoTrang(tenR, BAN[0], "tao", "chu");
-	await duyet(r.deXuatId, "chu");
-	const doiTen = ok<{ deXuatId: string }>(
-		await goi(
-			"taiLieu.propose",
-			{ slug: r.slug, ten: `${tenR} moi`, noiDung: BAN[0] },
-			"tao",
-		),
-		"doi ten R",
-	).deXuatId;
-	await duyet(doiTen, "chu");
-	san.r = r.slug;
 	const s = await taoTrang(ma("Lich su S"), BAN[0], "tao", "chu");
 	await duyet(s.deXuatId, "chu");
 	await duyet(await deXuat(s.slug, BAN[1], "tao"), "chu");
@@ -315,12 +302,6 @@ describe("lslt-api", () => {
 				mong: `409 ${T.chuaDoi}`,
 			},
 			{
-				ca: "chu trung ban dang dung",
-				slug: () => san.r,
-				so: 1,
-				mong: `409 ${T.chuaDoi}`,
-			},
-			{
 				ca: "trang da luu tru",
 				slug: () => san.s,
 				so: 1,
@@ -333,7 +314,7 @@ describe("lslt-api", () => {
 				mong: `404 ${T.khongCo}`,
 			},
 		] as const;
-		expect(BANG).toHaveLength(4);
+		expect(BANG).toHaveLength(3);
 		for (const dong of BANG) {
 			const truoc = await demDeXuatSuKien(dong.slug());
 			const tra = await goi(

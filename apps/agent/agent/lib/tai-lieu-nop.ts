@@ -205,6 +205,16 @@ export async function nopBanDeXuat(
 		if (khoa?.trangThai !== "DANG_SOAN") {
 			return { ok: false, loi: "Nguồn này không còn chờ soạn; dừng lại." };
 		}
+		const [trang] = await tx.$queryRaw<{ archivedAt: Date | null }[]>`
+			SELECT "archivedAt" FROM "taiLieuTrang" WHERE id = ${nguon.trangId} FOR UPDATE
+		`;
+		if (trang?.archivedAt) {
+			await tx.taiLieuNguon.update({
+				where: { id: nguonId },
+				data: { trangThai: "LOI", lyDo: LY_DO.daLuuTru },
+			});
+			return { ok: false, loi: `${LY_DO.daLuuTru} Dừng lại, không nộp nữa.` };
+		}
 		const { deXuatId } = await taoDeXuatTaiLieu(tx, {
 			trangId: nguon.trangId,
 			banGocId: nguon.banGocId,

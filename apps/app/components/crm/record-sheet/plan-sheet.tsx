@@ -27,6 +27,7 @@ import {
 	DetailSheetStats,
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -34,7 +35,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { PlanBrokers } from "./plan-brokers";
 import { dien } from "./plan-copy";
 import { PlanSteps } from "./plan-steps";
-import { lyDoLoi, RecordSheetFrame } from "./record-parts";
+import { RecordSheetFrame } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 import { LoiTheoDoi, TheoDoiKeHoach } from "./theo-doi-ke-hoach";
 
