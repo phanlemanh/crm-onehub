@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>151 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>143 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>144 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -122,6 +122,7 @@ flowchart TD
 - Khi Kara đang soạn hoặc người dùng gõ dở trong khung, bấm một liên kết trong khung thì được hỏi trước khi rời, chữ đang gõ không mất (`khung-soan-chan-lien-ket`)
 - Lượt kiểm chéo đêm xếp sau mọi đơn thợ khi xin khoá, và khi làn chạm trần thì lưu hồ sơ đã đo để đêm sau chạy tiếp phần còn lại (`kiem-cheo-chay-quang-lang`)
 - Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần mỗi đêm cho mọi lần gộp vào onehub từ mốc trước, ngoài mọi lượt ghim lại; đỏ thì gọi tên lần gộp gây đỏ (`kiem-cheo-sau-gop`)
+- Đổi giai đoạn ngay trên sheet deal thì thẻ gợi ý mở kế hoạch hiện ngay khi sang Chốt được và ẩn ngay khi rời Chốt được (`lam-moi-goi-y-ke-hoach`)
 - Trang của Kho tài liệu có lịch sử phiên bản xem và so được, quay lại một phiên bản cũ bằng một đề xuất qua duyệt, lưu trữ và khôi phục trang bằng đề xuất qua duyệt; trang đã lưu trữ vắng khỏi danh sách, tìm, trợ lý kho và Sức khoẻ, tìm lại ở «Đã lưu trữ»; đề xuất đã duyệt hiện ở nhóm «Đã xử lý» (`lich-su-va-luu-tru-trang`)
 - Danh sách liên quan trong ngăn bản ghi không lẫn bản đã lưu trữ, kèm «+n đã lưu trữ» để mở xem (`lien-quan-loc-ban-da-cat`)
 - Trưởng phòng ban mở trang Lộ trình và thấy đúng lộ trình mới nhất của nhánh chính, kèm giờ lấy, mà trang không phải chờ một bản dựng production (`lo-trinh-doc-ban-chup`)

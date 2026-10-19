@@ -1,0 +1,24 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_da3c_lam_moi_goi_y_do · app http://localhost:4871 · api http://localhost:4396
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts "lmgypke0h8zx@thu.test"
+E6 hien sau thang: KHONG DAT — tu thu: treo doc lai goi y
+E6 tu thu: luot chan doc lai bao KHONG DAT
+E6 an sau roi thang: KHONG DAT — tu thu: treo doc lai goi y
+E6 tu thu an: luot chan doc lai bao KHONG DAT
+buoc 0: dat
+E6 hien sau thang: DAT — 155 ms
+E6 sheet khong dung lai: DAT — sau thang
+  anh E6-sau-thang-1280.png
+buoc 1: dat
+E6 an sau roi thang: DAT — 104 ms
+E6 sheet khong dung lai: DAT — sau roi thang
+  anh E6-sau-roi-thang-1280.png
+buoc 1: dat
+lam-moi-goi-y-ke-hoach man: dat
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0
