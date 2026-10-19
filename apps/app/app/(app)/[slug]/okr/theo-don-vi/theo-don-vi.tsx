@@ -27,6 +27,7 @@ import {
 	okrParsers,
 } from "../okr-search-params";
 import { useChuyenLinkCuSoan } from "../soan/chuyen-link-cu";
+import { useTenGoc } from "../ten-goc";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 import { BangDonVi } from "./bang";
 import { conTrucTiep, duongCha } from "./bang-don-vi";
@@ -152,7 +153,7 @@ export function TheoDonVi() {
 	const xem: CachXem = xinXem === "cham" && !coCham ? "danh-sach" : xinXem;
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const access = useQuery(trpc.okr.access.queryOptions());
-	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const tenGoc = useTenGoc();
 	const dem = useQuery(
 		trpc.okr.countByUnit.queryOptions(
 			currentId === null ? skipToken : { cycleId: currentId },
@@ -179,7 +180,6 @@ export function TheoDonVi() {
 	if (cycles.isError || cay.isError) return <Loi thuLai={thuLai} />;
 	if (currentId === null) return <ChuaChuKy quanTri={quanTri} />;
 
-	const tenGoc = workspace.data?.name || m.goc;
 	const tenKy = cycles.data.cycles.find((c) => c.id === currentId)?.name ?? "";
 	const dv = giaiDon(don, cay.data, tenGoc);
 	const chonDon = (d: DonChonOkr) =>

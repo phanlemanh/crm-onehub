@@ -82,7 +82,7 @@ const vi = {
 		loai: {
 			"viet-lai": "Viết lại",
 			hoi: "Câu hỏi",
-			"can-chinh": "Căn chỉnh",
+			"can-chinh": "Góp vào",
 		},
 		truong: {
 			title: "Tên Mục tiêu",
@@ -95,7 +95,7 @@ const vi = {
 		bac: "Bác",
 		nhanBanSua: "Nhận bản đã sửa",
 		huySua: "Huỷ",
-		canChinh: "Căn chỉnh kèm lý do",
+		canChinh: "Góp vào kèm lý do",
 		suaLyDo: "Sửa lý do",
 		viSao: "Vì sao: {cau}",
 		canCu: "Căn cứ: {cau}",
@@ -118,18 +118,18 @@ const vi = {
 	loiQuyet: {
 		"muc-tieu-da-bo": "Mục tiêu này đã bỏ nên không quyết được góp ý.",
 		"dang-cho-duyet":
-			"Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa.",
+			"Mục tiêu đang chờ duyệt nên nội dung, KR và chỗ góp vào đang khoá. Rút lại để sửa.",
 		"so-sai-kieu":
 			"Khởi điểm và đích của KR này không khớp kiểu đo — sửa số hoặc kiểu đo của KR trước.",
 		"can-chinh-gioi-han":
-			"Một bên đang ở mức giới hạn nên không căn chỉnh được.",
+			"Một bên đang ở mức giới hạn nên không góp vào được.",
 		"can-chinh-chinh-no":
-			"Đích là chính Mục tiêu này nên không căn chỉnh được.",
-		"can-chinh-cung-cap": "Đích không ở cấp cao hơn nên không căn chỉnh được.",
+			"Đích là chính Mục tiêu này nên không góp vào được.",
+		"can-chinh-cung-cap": "Đích không ở cấp cao hơn nên không góp vào được.",
 		"can-chinh-chua-cong-bo":
-			"Đích chưa công bố hoặc đã bỏ nên không căn chỉnh được.",
-		"can-chinh-khac-chu-ky": "Đích thuộc chu kỳ khác nên không căn chỉnh được.",
-		"can-chinh-da-gan": "Mục tiêu này đã căn chỉnh vào đích đó rồi.",
+			"Đích chưa công bố hoặc đã bỏ nên không góp vào được.",
+		"can-chinh-khac-chu-ky": "Đích thuộc chu kỳ khác nên không góp vào được.",
+		"can-chinh-da-gan": "Mục tiêu này đã góp vào đích đó rồi.",
 	} satisfies Record<LyDoKhongQuyet, string>,
 	vet: {
 		theoKara: "theo đề xuất của Kara",
@@ -192,7 +192,7 @@ const en: OkrGopYMessages = {
 		daDoiTenKr: "KR renamed from Kara's suggestion",
 		daDoiTenMucTieu: "Objective renamed from Kara's suggestion",
 		daThayViSao: "“Why now” replaced from Kara's suggestion",
-		daCanChinh: "Aligned from Kara's suggestion",
+		daCanChinh: "Contribution added from Kara's suggestion",
 		hoanTacKr: (cu: string) => `Undone — the KR name is back to “${cu}”`,
 		hoanTacMucTieu: (cu: string) =>
 			`Undone — the Objective name is back to “${cu}”`,
@@ -201,7 +201,7 @@ const en: OkrGopYMessages = {
 			`Undone — no longer contributes to “${ten}”`,
 		boQuaTen: (sau: string) => `Skipped the name Kara suggested: “${sau}”`,
 		boQuaCau: (sau: string) => `Skipped Kara's wording: “${sau}”`,
-		boQuaCanChinh: (ten: string) => `Skipped aligning to “${ten}”`,
+		boQuaCanChinh: (ten: string) => `Skipped contributing to “${ten}”`,
 		boQuaHoi: (tomTat: string) => `Skipped Kara's question: ${tomTat}`,
 	},
 	tomTat: {
@@ -232,7 +232,7 @@ const en: OkrGopYMessages = {
 		loai: {
 			"viet-lai": "Rewrite",
 			hoi: "Question",
-			"can-chinh": "Alignment",
+			"can-chinh": "Contributes to",
 		},
 		truong: {
 			title: "Objective title",
@@ -245,7 +245,7 @@ const en: OkrGopYMessages = {
 		bac: "Reject",
 		nhanBanSua: "Accept edited",
 		huySua: "Cancel",
-		canChinh: "Align with reason",
+		canChinh: "Contribute with a reason",
 		suaLyDo: "Edit reason",
 		viSao: "Why: {cau}",
 		canCu: "Evidence: {cau}",
@@ -273,19 +273,19 @@ const en: OkrGopYMessages = {
 		"muc-tieu-da-bo":
 			"This objective was dropped, so the suggestion can't be decided.",
 		"dang-cho-duyet":
-			"The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit.",
+			"The objective is awaiting approval, so its content, KRs and contributions are locked. Withdraw it to edit.",
 		"so-sai-kieu":
 			"This KR's start and target don't fit its measure type — fix its numbers or type first.",
-		"can-chinh-gioi-han": "One side is restricted, so they can't be aligned.",
+		"can-chinh-gioi-han": "One side is restricted, so it can't contribute there.",
 		"can-chinh-chinh-no":
-			"The target is this objective itself, so it can't be aligned.",
+			"The target is this objective itself, so it can't contribute to it.",
 		"can-chinh-cung-cap":
-			"The target isn't at a higher level, so it can't be aligned to.",
+			"The target isn't at a higher level, so this objective can't contribute to it.",
 		"can-chinh-chua-cong-bo":
-			"The target is not published or was dropped, so it can't be aligned to.",
+			"The target is not published or was dropped, so this objective can't contribute to it.",
 		"can-chinh-khac-chu-ky":
-			"The target is in another cycle, so it can't be aligned to.",
-		"can-chinh-da-gan": "This objective is already aligned to that target.",
+			"The target is in another cycle, so this objective can't contribute to it.",
+		"can-chinh-da-gan": "This objective already contributes to that target.",
 	} satisfies Record<LyDoKhongQuyet, string>,
 	vet: {
 		theoKara: "suggested by Kara",

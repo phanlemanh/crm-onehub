@@ -299,9 +299,9 @@ const en = {
 		mucPhong: (phanTram: string) => `Zoom ${phanTram}%`,
 		vaiNut: "card",
 		vaiDay: "connection",
-		day: "Alignment line",
+		day: "Contribution line",
 		moTaNut: "Press Enter or Space to open this card.",
-		moTaDay: "An alignment line between two cards.",
+		moTaDay: "A contribution line between two cards.",
 		banDoNho: "Overview map",
 		diemNoi: "Connection point",
 		nutDaDich: (huong: string, x: string, y: string) =>
@@ -607,9 +607,9 @@ const vi = {
 		mucPhong: (phanTram: string) => `Đang phóng ${phanTram}%`,
 		vaiNut: "thẻ",
 		vaiDay: "dây nối",
-		day: "Dây căn chỉnh",
+		day: "Dây góp vào",
 		moTaNut: "Nhấn Enter hoặc phím cách để mở thẻ này.",
-		moTaDay: "Dây căn chỉnh giữa hai thẻ.",
+		moTaDay: "Dây góp vào giữa hai thẻ.",
 		banDoNho: "Bản đồ thu nhỏ",
 		diemNoi: "Điểm nối",
 		nutDaDich: (huong: string, x: string, y: string) =>
