@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { duongTrang } from "@/lib/tai-lieu-man";
@@ -81,6 +82,11 @@ export function QuickSwitcher({ coDoiTac }: { coDoiTac: boolean }) {
 	});
 
 	const hits = coDoiTac && !results.isError ? (results.data?.hits ?? []) : [];
+	const crmLoi =
+		coDoiTac &&
+		duChu &&
+		results.isError &&
+		lyDoLoi(results.error) !== "khong-quyen";
 	const trang = taiLieu.data?.rows ?? [];
 
 	const moTrang = (slug: string) => {
@@ -116,6 +122,14 @@ export function QuickSwitcher({ coDoiTac }: { coDoiTac: boolean }) {
 						<CommandGroup heading={m.taiLieu}>
 							<CommandItem data-tai-lieu-loi="" disabled value="tai-lieu-loi">
 								{m.taiLieuLoi}
+							</CommandItem>
+						</CommandGroup>
+					) : null}
+
+					{crmLoi ? (
+						<CommandGroup heading={m.crm}>
+							<CommandItem data-crm-loi="" disabled value="crm-loi">
+								{m.crmLoi}
 							</CommandItem>
 						</CommandGroup>
 					) : null}

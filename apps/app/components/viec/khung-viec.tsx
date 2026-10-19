@@ -12,10 +12,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { InlineTextArea, InlineTextCell } from "@/components/crm/inline-field";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
-import {
-	lyDoLoi,
-	RecordSheetFrame,
-} from "@/components/crm/record-sheet/record-parts";
+import { RecordSheetFrame } from "@/components/crm/record-sheet/record-parts";
 import {
 	useRecordSheetView,
 	useRecordStack,
@@ -26,6 +23,7 @@ import {
 	DetailSheetProperty,
 	DetailSheetSection,
 } from "@/components/detail-sheet";
+import { lyDoLoi } from "@/lib/ly-do-loi";
 import { type ViecMessages, viecMessages } from "@/lib/messages/viec";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";

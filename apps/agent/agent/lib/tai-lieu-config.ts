@@ -73,6 +73,7 @@ export const TAI_LIEU_AGENT = {
 		biBac: (chi: string) =>
 			`Chưa soạn được — bản nộp bị bác khi kiểm số: ${chi}`,
 		saiKhuon: (chi: string) => `Chưa soạn được — bản nộp sai khuôn: ${chi}`,
+		daLuuTru: "Chưa soạn được — trang đích đã lưu trữ.",
 		daSoan: "Đã soạn bản đề xuất.",
 		choSoan: "Đã đọc chữ, chờ Kara soạn.",
 		docLoi: "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.",
