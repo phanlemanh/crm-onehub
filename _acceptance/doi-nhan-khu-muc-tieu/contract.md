@@ -5,7 +5,7 @@ slug: doi-nhan-khu-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 veto_state: mo
 veto_opened_at: 2026-10-19T12:08:08Z
 approved_by:
