@@ -5,7 +5,7 @@ slug: doi-nhan-khu-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-19T12:08:08Z
 approved_by:
@@ -63,3 +63,8 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 - Bảng thay chữ nằm trong design doc; bảng chữ cũ → mới từng khoá do `rang/bang-chu.mjs` sinh.
 - Hai hồ sơ đã ký phải ghim lại ở đuôi vòng: `dat-okr-trong-crm`, `toan-canh-okr` (giám sát trả yêu cầu V2-2, 19/10).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Bảng đối chiếu chữ cũ và mới cho người duyệt có thể chứa một ô «không đọc được» mà không báo lỗi; màn người dùng không đổi.
+  - Ngoài-3: Phép kiểm danh sách chữ cần đổi có thể bỏ sót dòng trong tệp chữ lớn; chữ cũ lọt ra màn vẫn bị bài kiểm chính chặn.
+  - Ngoài-4: Phép quét chữ trên ảnh màn bỏ sót vài cách viết chữ cũ như «hỏi ý» viết thường; bài kiểm chính trên kho chữ vẫn chặn.
+  - Ngoài-5: Câu lý do khoá nút thêm mục tiêu chỉ được kiểm gián tiếp về tên công ty, nên ghép sai tên vào câu đó thì bài kiểm không thấy.
