@@ -37,8 +37,8 @@ Một màn **Sơ đồ** ở nhóm Báo cáo của thanh bên khu mà VK2 dựng
     DH5, một liên kết «Về sơ đồ cả công ty».
 - **Toàn màn hình** là trạng thái của khung vỏ: thu thanh bên khu (`AreaSidebar` của VK1), giữ thanh biểu tượng và đầu
   ứng dụng — đúng như `anThanhBen` của bản mẫu. `AreaSidebar` chưa có cách thu: VK6 thêm nó trong `packages/ui` (luật
-  «biến thể mới làm ở `packages/ui`»), không giấu bằng `className` ở chỗ gọi. **[ĐỐI CHIẾU VK2]**: giám sát đã hỏi V1 —
-  nếu VK2 cần thu thì VK2 làm chủ prop, VK6 dùng đúng tên ấy. Sống trong vỏ khu khi đi giữa hai kiểu xem, mất khi tải lại, không
+  «biến thể mới làm ở `packages/ui`»), không giấu bằng `className` ở chỗ gọi. Đã đối chiếu (V1 trả qua giám sát 20/10):
+  VK2 không làm thu, VK6 làm chủ prop; eval đã ký của `thanh-ben-khu-dung-chung` giữ xanh. Sống trong vỏ khu khi đi giữa hai kiểu xem, mất khi tải lại, không
   đi theo đường dẫn (Hỏi-4). Esc thoát, trừ khi một ngăn, hộp thoại, menu hay thẻ đơn vị mở ra đang ở trên sơ đồ: Esc
   lúc đó đóng thứ ấy trước.
 - **Chiều cao**: hai sơ đồ hôm nay cao cố định 600 px do nơi gọi đặt (`style` trên vùng bọc), không phải do `FlowMap`.

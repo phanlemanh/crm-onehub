@@ -132,8 +132,9 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 19/10; 
   `apps/app/lib/messages/okr*.ts` (chỉ thêm, luật 7), `apps/app/lib/search-param-keys.ts` (chỉ thêm),
   `packages/validation/src/okr-tham-so.ts`, `packages/ui/src/components/area-sidebar.tsx` và
   `packages/ui/test/area-sidebar.dom.tsx` (thêm cách thu — `AreaSidebar` của VK1 chưa có; hồ sơ đã ký
-  `thanh-ben-khu-dung-chung` đo tệp này, E11 giữ) [ĐỐI CHIẾU VK2: giám sát 19/10 — nếu VK2 cần thu thì VK2 làm chủ prop
-  và VK6 dùng đúng tên ấy, hai tệp này rời ranh giới], khung trang toàn vùng trong `packages/ui` (nếu bậc 1–4 không có),
+  `thanh-ben-khu-dung-chung` đo tệp này, E11 giữ — VK6 làm chủ prop thu: V1 trả qua giám sát 20/10 «VK2 không làm
+  thu», VK2 dùng ngưỡng `md` của `AreaSidebar`; eval đã ký của `thanh-ben-khu-dung-chung` phải giữ xanh, không sửa thước
+  của nó — cần sửa thì gửi giám sát trước), khung trang toàn vùng trong `packages/ui` (nếu bậc 1–4 không có),
   `docs/design.md` (một dòng ngoại lệ, Hỏi-2), `apps/app/test/okr-so-do-toan-vung.dom.tsx` (mới),
   `_acceptance/config.yaml` (chỉ thêm), `_acceptance/so-do-toan-vung/**`.
 - Vùng chung (luật 19): thanh bên khu và `apps/app/lib/messages/okr*.ts` là của làn Mac Studio; `objective-sheet.tsx`
