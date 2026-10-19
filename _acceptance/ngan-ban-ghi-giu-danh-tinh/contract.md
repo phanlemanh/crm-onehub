@@ -5,7 +5,7 @@ slug: ngan-ban-ghi-giu-danh-tinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -61,3 +61,18 @@ Source input: hàng VS8 (`docs/plan/lo-trinh-okr.json`), `_acceptance/ngan-ban-g
 - Ranh giới: `apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx`, tệp kiểm mới
   `apps/app/test/ngan-ban-ghi-giu-danh-tinh.dom.tsx`, `_acceptance/ngan-ban-ghi-giu-danh-tinh/**`, thêm khoá vào
   `_acceptance/config.yaml` (luật 7: chỉ thêm dòng). Vùng `record-sheet/**` là của làn M5 (luật 19).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Bản sao chiều đỏ của phép đo màn không bắt tín hiệu ngắt và dùng chung tên kho đo, nên huỷ giữa chừng có thể để lại bản sao tạm và hai vòng đo cùng lúc phải chờ nhau.
+  - Ngoài-2: Lời khai E5/E12 nói đột biến «bản cũ» lấy từ nhánh chính, thực tế là một bản chép cố định.
+  - Ngoài-3: Lời khai E3 nói khoá ngoài danh sách là khoá người dùng hiện tại, bài kiểm dùng một khoá mẫu tự đặt.
+  - Ngoài-4: Răng chiều đỏ DOM thoát giữa chừng khi lệch neo thì để lại bản sao tạm và bỏ bước kiểm cây sạch.
+  - Ngoài-5: Bản sao chiều đỏ của phép đo màn nuốt lỗi dựng, người chạy chỉ thấy «chưa chạy» mà không thấy nguyên nhân.
+  - Ngoài-6: Lượt chụp màn hỏng giữa chừng có thể để ảnh lượt trước nằm cạnh nhật ký mới.
+  - Ngoài-7: Bài kiểm chưa chứng riêng cho khoá tRPC thật nằm ngoài danh sách nạp sẵn.
+  - Ngoài-8: Vế «không có khoá ngoài danh sách trong bộ đệm» của bài kiểm không đỏ được khi ngăn bị sửa hỏng.
+  - Ngoài-9: Khi môi trường đo hỏng, phép đo màn có thể báo «tính năng hỏng» thay vì «không đo được».
+  - Ngoài-10: Bản sao chiều đỏ của phép đo màn không đặt tên cây riêng, nên dùng chung kho đo với các bản sao khác.
+  - Ngoài-11: Bản sao chiều đỏ của phép đo màn không chuyển tín hiệu ngắt và không kiểm bước dựng bản sao.
+  - Ngoài-12: Lời khai E3 nói khoá thật, bài kiểm dùng khoá giả (trùng Ngoài-3, mang từ lượt 1).
+  - Ngoài-13: Răng chiều đỏ DOM từng đỏ oan khi phép đo màn chạy song song; đã sửa ở lượt 1, mục mang theo từ lượt trước.
+  - Ngoài-15: Đột biến «bản cũ» của răng chiều đỏ là chuỗi chép tay, không rút từ nhánh chính như lời khai.

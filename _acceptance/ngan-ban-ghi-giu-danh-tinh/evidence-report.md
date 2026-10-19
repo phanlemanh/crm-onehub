@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 85f354e1b780ab9e22db19032c1073e642d9e1a5
-human_signoff:
+human_signoff: manh 2026-10-20
 ---
 
 # Evidence Report: ngan-ban-ghi-giu-danh-tinh
