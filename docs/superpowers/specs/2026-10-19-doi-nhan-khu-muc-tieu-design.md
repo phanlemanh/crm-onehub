@@ -45,9 +45,11 @@ Tên đơn vị gốc: màn Theo đơn vị (`theo-don-vi.tsx:182`) và thanh h�
 | Tên cấp cạnh Bộ phận, Phòng ban | «Công ty» | «Company» |
 | Phạm vi trong câu | «cả công ty» («Về cả công ty») | «the whole company» |
 
-3. **Tên đơn vị gốc ở khối độ phủ** — `NhanHang` của `khoi-do-phu.tsx` đọc `trpc.workspace.get` (đã nạp sẵn ở
-   `dau-trang-okr.tsx:79`) và in tên trong `<span translate="no">`, rơi về «Công ty» khi chưa có tên — cùng lối hai
-   màn kia đang dùng.
+3. **Tên đơn vị gốc từ một chỗ** — hook mới `useTenGoc()` (`okr/ten-goc.ts`) đọc `trpc.workspace.get` (đã nạp sẵn ở
+   `dau-trang-okr.tsx:79`) và trả tên, rơi về «Công ty» / «Company» khi chưa có. Theo đơn vị, thanh hành động khu và
+   `NhanHang` của `khoi-do-phu.tsx` cùng gọi nó thay cho ba biểu thức `workspace.data?.name || m.goc` chép tay; bảng độ
+   phủ in tên trong `<span translate="no">` như ô chọn đơn vị. Ở thanh hành động, tên chỉ nằm trong câu lý do khoá nút
+   thêm («Bạn xem được {ten} nhưng…») — tách câu đó để đánh dấu riêng tên là việc ngoài hàng này.
 4. **Luật máy giữ một tên** — bài mới `apps/app/test/doi-nhan-khu-muc-tieu.spec.ts`, luật ở
    `apps/app/test/doi-nhan-khu-muc-tieu-luat.ts`: rải phẳng mọi giá trị vi và en của các tệp chữ của khu (dùng lại
    `mucKhoChu` của `kara-mot-ten-luat.ts`); cụm cấm vi không phân biệt hoa thường «căn chỉnh», «đường lý do», «chưa
