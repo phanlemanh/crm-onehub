@@ -8,12 +8,12 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DaiKy } from "./dai-ky";
+import { DauTrangOkrHoiY } from "./dau-trang-hoi-y";
 import { donDich } from "./don-dich";
 import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import { giaiKy, loadOkrSearchParams, locOkr } from "./okr-search-params";
 import type { TabOkr } from "./tab-okr";
-import { DauTrangOkr } from "./thanh-tab";
 import { tieuDeKhu } from "./tieu-de-khu";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -85,7 +85,7 @@ async function DauTrangCoDuLieu({
 
 	return (
 		<HydrateClient>
-			<DauTrangOkr cauNoi={okrBridgeConfigured()} />
+			<DauTrangOkrHoiY cauNoi={okrBridgeConfigured()} />
 			<DaiKy />
 		</HydrateClient>
 	);
