@@ -167,7 +167,9 @@ evals:
       - "apps/api/src/tin-hieu/**"
       - "_acceptance/go-tin-hieu-rac/rang/**"
     expected: |
-      do-man.mjs ca "luu-tru-hoan-tac" tren ban chay voi du lieu mau (rang/sinh-mau.mjs gieo qua tinHieu.gui cua ba nguoi;
+      do-man.mjs (dong doi-chung-dong-hien, ba-so-truoc, luu-tru-menu, luu-tru-roi-bang, luu-tru-toast,
+      ba-so-sau-luu-tru, hoan-tac-ve, ba-so-sau-hoan-tac, da-luu-tru-cot, khoi-phuc-roi, khoi-phuc-ve-dang-dung,
+      ba-so-sau-khoi-phuc) tren ban chay voi du lieu mau (rang/sinh-mau.mjs gieo qua tinHieu.gui cua ba nguoi;
       ma va tieu de rut tu tep mau, khong viet tay), dang nhap owner, 1280. O moi moc truoc buoc 2, sau buoc 2, sau buoc 3,
       sau Khoi phuc o buoc 4: doc chu o «Tín hiệu 30 ngày qua» va so voi so tin hieu 30 ngay tinh lai tu tatCa() mac dinh
       (fetch cung cookie) — bon moc, bon so bang nhau, va so sau buoc 2 = so truoc buoc 2 - 1 (X gui trong 30 ngay):
@@ -211,7 +213,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.gtr_do_man
     steps:
-      - "Dung chung luot chay cua E5c; doc dong ket qua cua ca «thanh-cong-cu» va «da-lay-ve»"
+      - "Dung chung luot chay cua E5c; doc dong «da-lay-ve-khoa» va «tai-lai-giu»"
       - "Mo evidence/E6b-*.png va doi chieu bang mat"
     inputs:
       - _acceptance/go-tin-hieu-rac/evidence/
@@ -220,9 +222,9 @@ evals:
       - "apps/app/components/tin-hieu/**"
       - "_acceptance/go-tin-hieu-rac/rang/**"
     expected: |
-      do-man.mjs ca "da-lay-ve": dong mau Y da keo ve (sinh-mau chay mot luot keo ve that truoc khi gieo X) -> mo menu bang
+      do-man.mjs dong "da-lay-ve-khoa": dong mau Y da keo ve (sinh-mau chay mot luot keo ve that truoc khi gieo X) -> mo menu bang
       chuot that: muc «Lưu trữ» khoa (aria-disabled) va dong «Đội sản phẩm đã lấy về — không lưu trữ được nữa.» hien; anh
-      evidence/E6b-da-lay-ve-1280.png. Ca "tai-lai": bat «Đã lưu trữ», tai lai trang -> nut van dang bat va bang van la
+      evidence/E6b-da-lay-ve-1280.png. Dong "tai-lai-giu": bat «Đã lưu trữ», tai lai trang -> nut van dang bat va bang van la
       dang luu tru.
       CHIEU DO: nhu E6.
 
@@ -300,7 +302,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.gtr_do_man
     steps:
-      - "Dung chung luot chay cua E5c; doc dong ket qua ca «nguoi-gui»; mo evidence/E8b-*.png"
+      - "Dung chung luot chay cua E5c; doc dong «nguoi-gui-nhan», «nguoi-gui-doi-chung»; mo evidence/E8b-*.png"
     inputs:
       - _acceptance/go-tin-hieu-rac/evidence/
     paths:
@@ -309,7 +311,7 @@ evals:
       - "apps/app/lib/tin-hieu/**"
       - "_acceptance/go-tin-hieu-rac/rang/**"
     expected: |
-      do-man.mjs ca "nguoi-gui": owner luu tru tin hieu mau cua nguoi gui G; dang nhap G, mo /<slug>/tin-hieu o 1280 -> dong
+      do-man.mjs dong "nguoi-gui-nhan" va "nguoi-gui-doi-chung": owner luu tru tin hieu mau cua nguoi gui G; dang nhap G, mo /<slug>/tin-hieu o 1280 -> dong
       cua tin hieu do co nhan «Đã lưu trữ» va cau «Quản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.»;
       anh evidence/E8b-nguoi-gui-1280.png. Doi chung duong: dong tin hieu chua luu tru cua G hien nhan khac.
 
@@ -336,7 +338,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.gtr_do_man
     steps:
-      - "Dung chung luot chay cua E5c; doc dong ket qua ca «375»; mo evidence/E9b-*.png"
+      - "Dung chung luot chay cua E5c; doc dong «375-dang-dung», «375-da-luu-tru», «375-doi-chung»; mo evidence/E9b-*.png"
     inputs:
       - _acceptance/go-tin-hieu-rac/evidence/
     paths:
@@ -344,7 +346,7 @@ evals:
       - "apps/app/components/tin-hieu/**"
       - "_acceptance/go-tin-hieu-rac/rang/**"
     expected: |
-      do-man.mjs ca "375": 375x812, owner, dang dung va dang luu tru: scrollWidth cua documentElement <= 375; nut thao tac
+      do-man.mjs dong "375-dang-dung", "375-da-luu-tru", "375-doi-chung": 375x812, owner, dang dung va dang luu tru: scrollWidth cua documentElement <= 375; nut thao tac
       cua moi dong dang hien nam tron trong khung (getBoundingClientRect right <= 375); anh E9b-dang-dung-375.png,
       E9b-da-luu-tru-375.png. Doi chung duong: cung phep do tren mot phan tu duoc ep rong 600px trong ban sao trang do
       (chen bang page.evaluate) -> bao tran.
@@ -390,7 +392,16 @@ evals:
     paths:
       - "apps/app/components/tin-hieu/**"
       - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "_acceptance/go-tin-hieu-rac/rang/khong-ghi-de.mjs"
     expected: |
-      design-gate --mode static tren moi tep giao dien vong nay cham (bang-tat-ca.tsx, danh-sach-tin-hieu.tsx, tep menu
-      thao tac moi, tat-ca/page.tsx, tat-ca/tat-ca-trang.tsx): exit 0 tren tung tep.
-      CHIEU DO: ban sao chen className doi mau tren mot Button -> design-gate bao vi pham.
+      rang/khong-ghi-de.mjs: tren dung nam tep giao dien vong nay cham (bang-tat-ca.tsx, danh-sach-tin-hieu.tsx,
+      menu-luu-tru.tsx, tat-ca/page.tsx, tat-ca/tat-ca-trang.tsx), khong phan tu nao la thanh phan nhap tu
+      "@crm/ui/components/*" mang className doi mau, goc, vien, bong, khoang cach (bg-, rounded, shadow, border, ring-,
+      p*-, m*-, gap-, space-, text-<mau>) — luat «Không đổi màu, góc, khoảng cách của component @crm/ui» cua
+      docs/design.md. Ma tran: moi tep mot dong (so tep in == 5). Exit 0.
+      CHIEU DO (tu chay moi luot): ba mau tam (Button bg-red-500, Badge rounded-xl, Item text-red-600) deu bi bat voi
+      thong diep ghim "ghi de giao dien thanh phan dung chung"; doi chung duong: lop bo cuc (justify-start, truncate,
+      text-sm) khong bi bat. Pha thu tren tep that 19/10: chen className="bg-red-500 rounded-xl" vao nut thao tac cua
+      menu-luu-tru.tsx -> exit 1.
+      (Thay cho design-gate --mode static: pha thu 19/10 cho thay no in «không đo được tệp này (.tsx)» va thoat 0 —
+      xanh ma khong do.)

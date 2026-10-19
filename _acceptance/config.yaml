@@ -3107,7 +3107,7 @@ executors:
     pglt_dot_bien: node _acceptance/push-ghim-lai-t1/rang/dot-bien.mjs
     gtr_do_man: 'APP_URL=${APP_URL:-http://localhost:3392} API_URL=${API_URL:-http://localhost:3393} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/go-tin-hieu-rac/rang/do-man.mjs"'
     gtr_migration: bun _acceptance/go-tin-hieu-rac/rang/migration-chi-them.mjs
-    gtr_thiet_ke: 'for f in apps/app/components/tin-hieu/bang-tat-ca.tsx apps/app/components/tin-hieu/danh-sach-tin-hieu.tsx apps/app/components/tin-hieu/menu-luu-tru.tsx "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/page.tsx" "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
+    gtr_thiet_ke: node _acceptance/go-tin-hieu-rac/rang/khong-ghi-de.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

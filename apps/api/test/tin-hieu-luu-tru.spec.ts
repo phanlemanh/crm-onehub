@@ -38,12 +38,16 @@ const uid = (n: Nguoi) => `${TIEN_TO}-${n}`;
 const pb = { kd: "", ns: "" };
 
 type Tra = { status: number; data: unknown; loi: string; text: string };
+type DauVao =
+	| { id: string }
+	| { muonLam: string; daXayRa: string; man: string }
+	| { name: string; expiresInDays: null; loai: string };
 
 async function trpc(
 	n: Nguoi,
 	thuTuc: string,
 	kieu: "query" | "mutation",
-	vao?: Record<string, unknown>,
+	vao?: DauVao,
 ): Promise<Tra> {
 	const r =
 		kieu === "query"
