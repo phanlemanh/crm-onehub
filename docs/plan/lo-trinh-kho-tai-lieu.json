@@ -52,13 +52,25 @@
     },
     {
       "ten": "Sửa một đợt",
-      "ngay": "2026-10-19",
+      "ngay": "2026-10-22",
       "loai": "phat-hanh",
       "hang": [
         "l5"
       ],
       "nghia": "Góp ý đã gom được sửa trong một lượt",
-      "ly_do": "Cắt theo giờ máy: l5 (#410, đã ký 14/10) cần gộp onehub, S4 phần đổi, ký lại — ≈ 7 giờ máy cao ≈ 25 giờ lịch từ 18/10 → 19/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
+      "ly_do": "Làn M5 sau DA11, DA12: #410 gộp onehub, S4 phần đổi, ký lại. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+    },
+    {
+      "ten": "Kho tài liệu qua Zalo và model theo vai",
+      "ngay": "2026-10-30",
+      "loai": "phat-hanh",
+      "khoa": "m-1030kho",
+      "hang": [
+        "l7",
+        "MH4",
+        "MH2"
+      ],
+      "ly_do": "Làn M5: l7 (T3, đo 8 người × 3 câu) → MH4 → MH2; MH4 đo sau khi lời dặn Kara chốt. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     }
   ],
   "hang": [
@@ -179,11 +191,12 @@
       "trang_thai": "chưa mở",
       "dong": 8,
       "ten": "Lượt 5",
-      "buoc_ke": "Hoàn tất ngay ở đợt mới, làn Mac Studio: gộp onehub, S4 delta, ký lại (#410) (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
+      "buoc_ke": "Làn M5 · thứ 1",
       "du_lieu": "gia",
       "pr": [
         410
-      ]
+      ],
+      "ghi_chu": "PR nháp #410 giao làn M5 (19/10): gộp onehub, S4 phần đổi, ký lại."
     },
     {
       "ma": "l4a",
@@ -239,7 +252,7 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-15T10:40:00Z"
       },
-      "buoc_ke": "Chờ MH4 sửa phạm vi; làn Mac Studio sau MH4"
+      "buoc_ke": "Làn M5 · thứ 4"
     },
     {
       "ma": "l6",
@@ -293,7 +306,7 @@
       "ten": "Model theo vai đo lại",
       "ten_ngan": "Model theo vai",
       "cau_giao": "«Mỗi vai (Tác nhân, Trợ lý kho, judge, soạn) có model kiến nghị, đo lại sau l6»",
-      "ghi_chu": "Sau MH3. Kết quả vào bảng kiến nghị model.",
+      "ghi_chu": "Sau MH3. Kết quả vào bảng kiến nghị model. Đo sau khi làn Mac Studio chốt lời dặn Kara (VK5, VK10).",
       "dung_tren": [
         "MH3"
       ],
@@ -303,7 +316,7 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T05:33:48Z"
       },
-      "buoc_ke": "Làn Mac Studio sau l7"
+      "buoc_ke": "Làn M5 · thứ 3"
     },
     {
       "ma": "l7",
@@ -323,7 +336,7 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T15:08:22Z"
       },
-      "buoc_ke": "Làn Mac Studio sau l5, F34. Chủ kho 17/10: «l7 Hỏi-1: a · Hỏi-2: a» — T3 (apps/agent/agent/lib/zalo-* trong t3_paths); đo 8 người × 3 câu trên Gemini 3.8 Flash + một lượt đối chứng trên mã trước bản sửa",
+      "buoc_ke": "Làn M5 · thứ 2",
       "hang": "T3"
     }
   ],

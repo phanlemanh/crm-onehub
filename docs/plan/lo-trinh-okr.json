@@ -97,10 +97,10 @@
       "khoa": "m-1021lt",
       "hang": [
         "LT1e",
-        "VN1",
-        "TH6b"
+        "VN1"
       ],
-      "ly_do": "Cắt theo giờ máy: làn MacBook Pro LT1e → VN1 → TH6b nối nhau (3 × ≈ 25 giờ lịch) từ chiều 17/10 → xong ≈ 20/10; giữ 21/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
+      "ly_do": "LT1e gộp 18/10 (#475), VN1 gộp 18/10 (#472). TH6b chuyển sang mốc m-1029th của làn MacBook Pro. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z.",
+      "that": "2026-10-18"
     },
     {
       "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
@@ -142,8 +142,8 @@
       "ly_do": "Phòng ban đặt và công bố OKR quý 1 từ 21/12: lượt 7 phải lên production trước đó. Dự kiến theo giờ máy: 7n (≈7 giờ máy cao ≈ 25 giờ lịch) xong ≈ 19/10, đầu dãy 7n→10→8b của R3. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
     },
     {
-      "ten": "R3 lên production — cắt theo giờ máy, trần 18/12",
-      "ngay": "2026-10-22",
+      "ten": "R3 lên production — sau Vỏ khu Mục tiêu, trần 18/12",
+      "ngay": "2026-11-05",
       "loai": "phat-hanh",
       "hang": [
         "10",
@@ -153,7 +153,7 @@
       ],
       "khoa": "m-1218",
       "den": "2026-12-18",
-      "ly_do": "Trần 18/12: trước khi phòng ban đặt OKR quý 1 (21/12). Ngày cắt theo giờ máy: làn Mac Studio từ 18/10, ba dãy — 7n→10→8b (7+10+10 giờ máy cao ≈ 97 giờ lịch) và L→T (7+7 ≈ 50 giờ lịch); xong khi dãy dài nhất xong ≈ 22/10. Hiệu chuẩn đợt r2 (13–17/10, dãy chạy liền): 17–25 giờ lịch mỗi hàng, ≈ 3,6 giờ lịch mỗi giờ máy ước (mức cao), đã gồm chờ cổng và gộp. Lấy mức chậm."
+      "ly_do": "Trần 18/12: trước khi phòng ban đặt OKR quý 1 (21/12). Làn Mac Studio làm Vỏ khu Mục tiêu trước (mốc m-1026vk), R3 xếp sau: 7n → 10 → 8b và L → T. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     },
     {
       "ten": "K5 Chat và Deal về một khung lên production",
@@ -163,6 +163,61 @@
       "hang": [
         "K5"
       ]
+    },
+    {
+      "ten": "Vỏ khu Mục tiêu — thanh bên khu, Bộ OKR, đổi tên, ngăn KR",
+      "ngay": "2026-10-26",
+      "loai": "phat-hanh",
+      "khoa": "m-1026vk",
+      "hang": [
+        "VK1",
+        "VK2",
+        "VK3",
+        "VK4",
+        "VK5",
+        "VK6",
+        "VK7",
+        "VK8",
+        "VK9",
+        "VK10",
+        "VK11",
+        "VK12",
+        "DH11",
+        "DH12",
+        "DH13"
+      ],
+      "ly_do": "Đợt okr-vo-khu-1810 (#478). Ba dãy: VK1→VK2→VK3→VK10 · VK4→VK5 · sau VK2: VK6, VK9, VK11, VK12, VK8; VK7 sau VS8 (M5 làm chủ record-sheet). VK4 được đổi chuỗi tên cũ → mới trong khẳng định thước hồ sơ đã ký (chủ kho 19/10). Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+    },
+    {
+      "ten": "Tín hiệu và trang Lộ trình theo kit 2.33",
+      "ngay": "2026-10-29",
+      "loai": "phat-hanh",
+      "khoa": "m-1029th",
+      "hang": [
+        "LT1f",
+        "TH5",
+        "TH2",
+        "TH3",
+        "TB2",
+        "TH6b",
+        "LT3"
+      ],
+      "ly_do": "Làn MacBook Pro, sau mốc kit 22/10. LT1f trước LT3 (cùng vùng); TB2 sau l7 (M5). Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+    },
+    {
+      "ten": "Hồ sơ đã ký luôn tươi — dọn hồ sơ cũ và sửa thước",
+      "ngay": "2026-10-31",
+      "loai": "phat-hanh",
+      "khoa": "m-1031f",
+      "hang": [
+        "F26",
+        "F36",
+        "F35",
+        "F28",
+        "F31",
+        "F34"
+      ],
+      "ly_do": "Làn MacBook Pro, dùng giu-tuoi của kit 2.33 (K-A). Tồn đọng 262 hồ sơ ngày 19/10. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
     }
   ],
   "hang": [
@@ -509,7 +564,7 @@
       "nhom": "okr",
       "thu_tu": 72,
       "ghi_chu": "Hai mục Cổng Bằng chứng lượt 7 (28/09) định mở hợp đồng mới. 04/10: Ngoài-1 và Ngoài-3 của khep-ky-okr kiểm lại vẫn mở (rà đặt lịch tương lai đóng không được; mang sang rơi vào kỳ đã chấm).",
-      "buoc_ke": "Làn B sau 8c; phải lên trước 14/12",
+      "buoc_ke": "Làn Mac Studio · thứ 15",
       "chay_khi": "8c đã gộp (làn B)",
       "cho_ai": "điều kiện",
       "han": "2026-12-14"
@@ -612,7 +667,7 @@
       "nhom": "okr",
       "thu_tu": 82,
       "ghi_chu": "XEM-08, XEM-09, NH-05 — thành T3 ở Cổng Đáng của 8a vì cần hai chỗ lưu.",
-      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
+      "buoc_ke": "Làn Mac Studio · thứ 17",
       "chay_khi": "Làn B sau lượt 10",
       "cho_ai": "điều kiện"
     },
@@ -692,7 +747,7 @@
       "nhom": "okr",
       "thu_tu": 100,
       "ghi_chu": "Từ 28/09 (anh quyết): dựng bằng dữ liệu mẫu, bật bằng dữ liệu thật. Giữ cảnh báo trượt và nút trong Slack; hỏi đáp OKR tách sang C.",
-      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
+      "buoc_ke": "Làn Mac Studio · thứ 16",
       "chay_khi": "7n và 9c đã gộp (9c cùng chạm nhắc buổi sáng); 9c chậm thì 8b đi trước",
       "cho_ai": "điều kiện"
     },
@@ -957,7 +1012,7 @@
       "nhom": "tro-ly",
       "thu_tu": 270,
       "ghi_chu": "Dùng lại sổ đề xuất của 9b.",
-      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
+      "buoc_ke": "Làn Mac Studio · thứ 18",
       "chay_khi": "C đã gộp (làn A); dựng trên quý 3 mẫu của M",
       "cho_ai": "điều kiện"
     },
@@ -978,7 +1033,7 @@
       "nhom": "tro-ly",
       "thu_tu": 280,
       "ghi_chu": "Gộp từ các bản tóm tắt phòng ban đã kiểm, không đọc lại Cập nhật tuần gốc.",
-      "buoc_ke": "R3 mở ngay ở đợt mới, đủ Cổng Đáng · Phạm vi · Bằng chứng (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)",
+      "buoc_ke": "Làn Mac Studio · thứ 19",
       "chay_khi": "L đã gộp (làn A)",
       "cho_ai": "điều kiện"
     },
@@ -1300,7 +1355,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo»",
       "ghi_chu": "Chủ kho chốt 04/10: tính năng và UX trước, câu chữ sau. Khoảng 30 chỗ «Trợ lý»/«Tác nhân». Ghim khoá mới ở messages-guard.",
-      "buoc_ke": "R2 — lên production 31/10 (tạm); sau K4 (đã gộp)",
+      "buoc_ke": "Làn MacBook Pro · gom vào F35 (#411 đóng)",
       "trang_thai": "chưa mở",
       "dung_tren": [
         "K4"
@@ -1321,7 +1376,7 @@
         "K1"
       ],
       "ghi_chu": "T3 vì chạm đường chat chung của apps/agent và bản ghi deal. Gom: chốt nghĩa chữ «tác nhân», bộ dựng có «Kara đang…».",
-      "buoc_ke": "Sau 07/12",
+      "buoc_ke": "Làn Mac Studio · thứ 20",
       "ngay": "2026-10-04"
     },
     {
@@ -1762,7 +1817,8 @@
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "Q4"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 2"
     },
     {
       "ma": "TH1",
@@ -1826,12 +1882,13 @@
       "tieu_chi": 10,
       "vi_sao": "Zalo và Slack đang là đường đi riêng của tác nhân; rẽ chúng từ cùng bản ghi thì đã đọc ở một nơi là đủ, và người dùng tự chọn để không bị nhiễu.",
       "bat_khi": "Mọi thông báo đi qua Zalo trong hai tuần đều có bản tương ứng trong chuông; hành vi Zalo hiện có không đổi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TB1 theo luật cắt 4 (cỡ một vòng). Đổi cài đặt thông báo có thể chạm bảng dữ liệu cài đặt nên để hạng T3; giữ nguyên hồ sơ Zalo đã ký.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Tách khỏi TB1 theo luật cắt 4 (cỡ một vòng). Đổi cài đặt thông báo có thể chạm bảng dữ liệu cài đặt nên để hạng T3; giữ nguyên hồ sơ Zalo đã ký. Kênh Zalo/Slack do làn Mac Studio làm chủ: TB2 chỉ thêm cổng rẽ, đứng sau l7 (M5).",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "N3",
         "N4"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 5"
     },
     {
       "ma": "TH2",
@@ -1851,12 +1908,13 @@
       "tieu_chi": 8,
       "vi_sao": "Gom nhóm và cắt lượt hôm nay cần người mở phiên máy và gõ lệnh; đây là chỗ thứ hai của vòng chưa ai làm.",
       "bat_khi": "Mỗi tín hiệu kéo về có chỗ trong bản gom trong vòng 2 ngày; chủ kho sửa ít hơn một nhóm trên năm (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Phần chạy theo lịch của skill gom và cắt lượt thuộc kit — sửa ở kho kit qua chip riêng, crm chỉ khai lịch và nhận PR. Quản trị nhận «Có n tín hiệu mới» qua TB1.",
+      "ghi_chu": "Chủ kho duyệt 14/10 trong phiên LT2 (đợt «vòng tín hiệu tự chạy», bản phạm vi docs/plan/pham-vi-vong-tin-hieu-1410.md). Máy thực hiện: chủ kho quyết sau. Phần chạy theo lịch của skill gom và cắt lượt thuộc kit — sửa ở kho kit qua chip riêng, crm chỉ khai lịch và nhận PR. Quản trị nhận «Có n tín hiệu mới» qua TB1. Chủ kho 19/10: TH2 chỉ mở PR nháp đề xuất hàng; chủ nhóm của tệp lộ trình gộp.",
       "dot": "vong-tin-hieu-1410",
       "phu": [
         "G1",
         "N5"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 3"
     },
     {
       "ma": "TH3",
@@ -1882,7 +1940,8 @@
       "phu": [
         "S1",
         "S2"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 4"
     },
     {
       "ma": "TH6",
@@ -1931,7 +1990,8 @@
       "vi_sao": "Gốc: _acceptance/sua-giao-dien-tin-hieu/ — Ngoài-6 ở Cổng Bằng chứng TH6 15/10, chủ kho chọn «mở hợp đồng mới».",
       "bat_khi": "Trên production, bấm «Giữ lại» và ca xoá hỏng đều trả tiêu điểm về đúng nút ⋮ của dòng đó, đo bằng bàn phím ở 375 và 1280px (ngưỡng đề xuất — chốt ở Cổng Đáng)",
       "ghi_chu": "Mở từ thẻ Cổng Bằng chứng TH6 (chủ kho 15/10). Chưa gắn mốc.",
-      "dot": "vong-tin-hieu-1410"
+      "dot": "vong-tin-hieu-1410",
+      "buoc_ke": "Làn MacBook Pro · thứ 6"
     },
     {
       "ma": "LT1c",
@@ -2017,7 +2077,56 @@
         "L3",
         "L4",
         "L5"
-      ]
+      ],
+      "buoc_ke": "Làn MacBook Pro · thứ 7"
+    },
+    {
+      "ma": "DH12",
+      "slug": "khung-cho-don-vi-mot-hinh",
+      "nhom": "okr",
+      "thu_tu": 458.12,
+      "ngay": "2026-10-19",
+      "ten": "Khung chờ trang đơn vị một hình",
+      "ten_ngan": "Khung chờ một hình",
+      "cau_giao": "«Mở trang Theo đơn vị lúc đang tải chỉ thấy một khung chờ đúng hình bảng, không hai khung khác hình nối nhau»",
+      "ghi_chu": "Ngoài-1 của trang-don-vi-mot-bang (DH2), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 17/10 (d-20261017T223322Z-56). Sửa đúng tầng: thêm biến thể cho khung xương chung của packages/ui.",
+      "dung_tren": [
+        "DH2"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 13"
+    },
+    {
+      "ma": "DH13",
+      "slug": "loc-don-vi-khong-tu-dong",
+      "nhom": "okr",
+      "thu_tu": 458.13,
+      "ngay": "2026-10-19",
+      "ten": "Lọc trang đơn vị không tự đóng",
+      "ten_ngan": "Lọc không tự đóng",
+      "cau_giao": "«Chọn một mục trong Lọc ở trang Theo đơn vị thì menu Lọc vẫn mở, khung Lọc trên điện thoại không tự thu lại»",
+      "ghi_chu": "Ngoài-3 của trang-don-vi-mot-bang (DH2), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 17/10 (d-20261017T223322Z-57). Nguyên nhân: bảng chuyển sang khung chờ khi đang tải lại.",
+      "dung_tren": [
+        "DH2"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn Mac Studio · thứ 14"
+    },
+    {
+      "ma": "LT1f",
+      "slug": "trang-lo-trinh-mo-hinh-hien-thi",
+      "nhom": "crm-chung",
+      "thu_tu": 446.6,
+      "ngay": "2026-10-19",
+      "ten": "Trang Lộ trình đọc mô hình hiển thị",
+      "ten_ngan": "Lộ trình đọc mô hình",
+      "cau_giao": "«Trang Lộ trình trong CRM hiện việc chưa hẹn mốc và tên hiển thị đúng như LO-TRINH.html, không còn cờ vàng «khối chưa mang mô hình hiển thị»»",
+      "ghi_chu": "Mục 4 CHANGELOG kit 2.33.0: trang đọc năm khoá ten_hien_thi, hien, viec_hien, con_lai, chua_hen_moc thay vì tự lọc, kèm ca đối chiếu trang với tập hiển thị của khối. Đứng sau #483 (khuôn đã mang năm khoá).",
+      "dung_tren": [
+        "LT1e"
+      ],
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn MacBook Pro · thứ 1"
     },
     {
       "ma": "F8",
@@ -2457,7 +2566,7 @@
       "phu": [
         "Ngoài-9 DH3"
       ],
-      "buoc_ke": "Dời khỏi m-1020dh sang đợt mới, làn M5 (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "buoc_ke": "Làn Mac Studio · gộp vào VK2 (cùng màn Của tôi)"
     },
     {
       "ma": "DH5",
@@ -2495,7 +2604,7 @@
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ điều kiện: tro-ly-okr-nen và bo-okr-mau gỡ kẹt"
+      "buoc_ke": "Làn M5 · thứ 2"
     },
     {
       "ma": "E6b",
@@ -2648,9 +2757,9 @@
       "ten": "Thước hồi quy chạy được lệnh cần gh",
       "ten_ngan": "Thước cần gh",
       "cau_giao": "«Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây»",
-      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
+      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng. Gộp #396 (kiểm chéo dựng lại cây, cùng scripts/kiem-cheo).",
       "trang_thai": "chưa mở",
-      "buoc_ke": "Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "buoc_ke": "Làn MacBook Pro · thứ 8"
     },
     {
       "ma": "MH1",
@@ -2711,7 +2820,7 @@
         "F26"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "buoc_ke": "Làn MacBook Pro · thứ 11"
     },
     {
       "ma": "F29",
@@ -2764,7 +2873,7 @@
       "ghi_chu": "Đề xuất 15/10 22:20Z từ F23: paths của E15 (ui-check) đang là apps/app/lib/messages/**, nên #424 sửa tin-hieu.ts làm #427 phải ghim lại. Cùng lớp E17 đã sửa ở F23. Chờ Cổng Đáng.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Gom vào hàng F35 «dọn hồ sơ cũ», chờ crm nhận mốc kit có K-A (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "buoc_ke": "Làn MacBook Pro · thứ 12"
     },
     {
       "ma": "F32",
@@ -2826,7 +2935,7 @@
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T15:08:22Z"
       },
-      "buoc_ke": "Làn Mac Studio, đợt mới (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "buoc_ke": "Làn MacBook Pro · thứ 13"
     },
     {
       "ma": "K7",
@@ -2878,7 +2987,7 @@
         "K7"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+      "buoc_ke": "Làn Mac Studio · gộp vào K5 (cùng conversations)"
     },
     {
       "ma": "VS8",
@@ -2892,7 +3001,7 @@
       "ghi_chu": "Ngoài-8 của ve-sinh-do-san-onehub (Known limit ở Cổng 2). Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx: HydrationBoundary chỉ bọc khi stack.length > 0 nên RecordSheetHost bị dựng lại. Chứng minh: bài kiểm DOM về danh tính RecordSheetHost qua mở, đóng; ca đối chứng apps/app/test/ngan-ban-ghi-nap-san.dom.tsx giữ xanh. T2, M5 ước 3–4 giờ máy. Đi sau khi #469 gộp.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+      "buoc_ke": "Làn M5 · thứ 1"
     },
     {
       "ma": "VS11",
@@ -2906,7 +3015,7 @@
       "ghi_chu": "Ngoài-11 của ve-sinh-do-san-onehub. Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/agent/agent/lib/thong-bao-tac-nhan.ts: dòng tac-nhan-hong chỉ ghi khi lần gửi cuối là CREATE_AGENT. T2. Đi sau khi #469 gộp.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+      "buoc_ke": "Làn Mac Studio · thứ 21"
     },
     {
       "ma": "K7c",
@@ -2922,7 +3031,7 @@
         "K7"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; làn Mac Studio"
+      "buoc_ke": "Làn Mac Studio · thứ 22"
     },
     {
       "ma": "F35",
@@ -2933,11 +3042,11 @@
       "ten": "Dọn hồ sơ cũ",
       "ten_ngan": "Dọn hồ sơ cũ",
       "cau_giao": "«Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A»",
-      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng. Đêm 17→18/10 gom thêm chín ca cùng lớp «thước của hồ sơ đã ký gãy khi vào onehub» làm bằng chứng cho K-A (#375 03:40Z): hop-thoai-giu-cho-dang-nhap E11 (--ca thiet-ke lệch phạm vi §12; --ca huy dùng danh sách hộp viết tay, thừa 11 hộp); trang-don-vi-mot-bang E12, E16 (gốc so merge-base với onehub, gãy khi chính nó gộp) và E14 (không khai paths); dieu-huong-khu-muc-tieu E3 (coNutHoiKara grep cả thư mục); ve-sinh-do-san-onehub E18 (bất biến lúc gộp); so-do-quanh-muc-tieu E14 (ranh-gioi.mjs buộc nhánh feat/so-do-can-chinh-don-vi); tac-nhan-glm-5-3-cham E5 (so-tac-nhan.ts --pham-vi đếm mọi tệp đổi trên nhánh); tac-nhan-va E9 (lỗi kit resolveConfigKey không bỏ thoát hai nháy đơn). Luật tạm 18/10 (chủ kho đồng ý): máy không tự sửa thước hồ sơ đã ký tới khi có K-A.",
+      "ghi_chu": "Gom F31 (#439), F26, F28, NM5 E2, ghim lại thu-haiku-tro-ly-okr E7, K6a (#411), DA0c, Ngoài-15 của ve-sinh-do-san-onehub (thước _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts dò mã nguồn bằng indexOf thay vì chạy hành vi — chủ kho chọn gom vào F35 ở phiên Mac Studio 17/10) và vòng dọn ~240 hồ sơ (quét 16/10: 257 cũ / 280 ký). Hồ sơ đỏ sẵn giữ nhãn đỏ trên bản đồ; làn đêm C-2 vẫn ghim lại giữa chừng. Đêm 17→18/10 gom thêm chín ca cùng lớp «thước của hồ sơ đã ký gãy khi vào onehub» làm bằng chứng cho K-A (#375 03:40Z): hop-thoai-giu-cho-dang-nhap E11 (--ca thiet-ke lệch phạm vi §12; --ca huy dùng danh sách hộp viết tay, thừa 11 hộp); trang-don-vi-mot-bang E12, E16 (gốc so merge-base với onehub, gãy khi chính nó gộp) và E14 (không khai paths); dieu-huong-khu-muc-tieu E3 (coNutHoiKara grep cả thư mục); ve-sinh-do-san-onehub E18 (bất biến lúc gộp); so-do-quanh-muc-tieu E14 (ranh-gioi.mjs buộc nhánh feat/so-do-can-chinh-don-vi); tac-nhan-glm-5-3-cham E5 (so-tac-nhan.ts --pham-vi đếm mọi tệp đổi trên nhánh); tac-nhan-va E9 (lỗi kit resolveConfigKey không bỏ thoát hai nháy đơn). Luật tạm 18/10 (chủ kho đồng ý): máy không tự sửa thước hồ sơ đã ký tới khi có K-A. Nhận thêm DA0c và K6a (#411). Chủ kho duyệt 19/10: sửa thước hồ sơ đã ký nhóm F35/F28/F31/F34 với nghi thức hai chiều + dòng sổ fix, chỉ khi làn chủ hồ sơ không có vòng đã ký chờ gộp.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
       "chay_khi": "crm nhận mốc kit có K-A (ho-so-da-ky-giu-tuoi)",
-      "buoc_ke": "Chờ điều kiện (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "buoc_ke": "Làn MacBook Pro · thứ 10"
     },
     {
       "ma": "F36",
@@ -2953,7 +3062,7 @@
         "C-1b"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "T1, máy làm sau C-1b"
+      "buoc_ke": "Làn MacBook Pro · thứ 9"
     },
     {
       "ma": "C-1b",
@@ -3004,7 +3113,8 @@
       "phu": [
         "V1"
       ],
-      "tieu_chi": 8
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 1"
     },
     {
       "ma": "VK2",
@@ -3027,7 +3137,8 @@
       "phu": [
         "V2"
       ],
-      "tieu_chi": 10
+      "tieu_chi": 10,
+      "buoc_ke": "Làn Mac Studio · thứ 2"
     },
     {
       "ma": "VK3",
@@ -3050,7 +3161,8 @@
       "phu": [
         "V2b"
       ],
-      "tieu_chi": 9
+      "tieu_chi": 9,
+      "buoc_ke": "Làn Mac Studio · thứ 3"
     },
     {
       "ma": "VK4",
@@ -3071,7 +3183,8 @@
       "phu": [
         "A2"
       ],
-      "tieu_chi": 8
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 5"
     },
     {
       "ma": "VK5",
@@ -3095,7 +3208,8 @@
         "A3",
         "A3k"
       ],
-      "tieu_chi": 9
+      "tieu_chi": 9,
+      "buoc_ke": "Làn Mac Studio · thứ 6"
     },
     {
       "ma": "VK6",
@@ -3118,7 +3232,8 @@
       "phu": [
         "V3"
       ],
-      "tieu_chi": 8
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 7"
     },
     {
       "ma": "VK7",
@@ -3140,7 +3255,8 @@
         "B1",
         "B1b"
       ],
-      "tieu_chi": 11
+      "tieu_chi": 11,
+      "buoc_ke": "Làn Mac Studio · thứ 12"
     },
     {
       "ma": "VK8",
@@ -3163,7 +3279,8 @@
       "phu": [
         "B2"
       ],
-      "tieu_chi": 6
+      "tieu_chi": 6,
+      "buoc_ke": "Làn Mac Studio · thứ 11"
     },
     {
       "ma": "VK9",
@@ -3186,7 +3303,8 @@
       "phu": [
         "B3"
       ],
-      "tieu_chi": 7
+      "tieu_chi": 7,
+      "buoc_ke": "Làn Mac Studio · thứ 8"
     },
     {
       "ma": "VK10",
@@ -3209,7 +3327,8 @@
       "phu": [
         "B5a"
       ],
-      "tieu_chi": 11
+      "tieu_chi": 11,
+      "buoc_ke": "Làn Mac Studio · thứ 4"
     },
     {
       "ma": "VK11",
@@ -3232,7 +3351,8 @@
       "phu": [
         "B5b"
       ],
-      "tieu_chi": 8
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 9"
     },
     {
       "ma": "VK12",
@@ -3255,7 +3375,8 @@
       "phu": [
         "B5c"
       ],
-      "tieu_chi": 8
+      "tieu_chi": 8,
+      "buoc_ke": "Làn Mac Studio · thứ 10"
     }
   ],
   "chan_troi": [
