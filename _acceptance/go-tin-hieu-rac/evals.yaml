@@ -333,7 +333,13 @@ evals:
         CONFLICT: toast loi co chu m.tatCa.luuTru.vuaLayVe dien ma (khac chu loi mang), query tatCa bi lam moi (invalidate goi).
       Ca "ca-man-hai-dong": luuTru gia dang cho tren dong A -> mo menu dong B: muc «Lưu trữ» mang data-disabled, bam khong
       goi them (thong diep ghim "luu tru dong khac khi dong truoc dang cho").
+      Ca "ca-man-hoan-tac" (moi lenh luu tru, khoi phuc va Hoan tac xep mot hang, moi lenh tu bao ket qua): (1) dong A da luu
+      tru, dong B dang cho -> bam Hoan tac cua A: khoiPhuc CHUA goi va menu dong khac van khoa (thong diep ghim "hoan tac
+      chay chong khi lenh khac dang cho"); nha B -> khoiPhuc A chay, co ca thong bao luu tru B va khoi phuc A (thong diep
+      ghim "mat thong bao cua lenh truoc"); (2) bam Hoan tac lien hai thong bao, khoi phuc A hong mang -> dung mot loi
+      «Chưa khôi phục được crm-1» va thong bao khoi phuc B (thong diep ghim "hoan tac hong ma khong bao").
       CHIEU DO: ban sao gop hai loi ve mot chu -> o CONFLICT do voi thong diep ghim "loi vua lay ve noi nhu loi mang";
+      ban sao bo hang lenh (chay ngay) -> ca-man-hoan-tac (1) do; ban sao nuot loi khoi phuc -> ca-man-hoan-tac (2) do;
       ban sao chi khoa dung dong dang cho -> ca-man-hai-dong do voi thong diep ghim "luu tru dong khac khi dong truoc dang
       cho".
 

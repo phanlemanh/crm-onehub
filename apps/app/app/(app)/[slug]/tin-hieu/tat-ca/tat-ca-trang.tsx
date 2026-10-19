@@ -4,7 +4,8 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { baoDaLuuTru } from "@crm/ui/lib/bao-luu-tru";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { TRPCClientError } from "@trpc/client";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useTableQuery } from "@/components/data-table/use-table-query";
@@ -45,54 +46,51 @@ export function TatCaTrang({
 		...trpc.tinHieu.daLuuTru.queryOptions(),
 		enabled: input.archived,
 	});
-	const [dangCho, setDangCho] = useState<string | null>(null);
-	const luuTru = useMutation(
-		trpc.tinHieu.luuTru.mutationOptions({ onSettled: () => setDangCho(null) }),
-	);
-	const khoiPhuc = useMutation(
-		trpc.tinHieu.khoiPhuc.mutationOptions({
-			onSettled: () => setDangCho(null),
-		}),
-	);
+	const [soDangCho, setSoDangCho] = useState(0);
+	const hangDoi = useRef<Promise<void>>(Promise.resolve());
+	const luuTru = useMutation(trpc.tinHieu.luuTru.mutationOptions());
+	const khoiPhuc = useMutation(trpc.tinHieu.khoiPhuc.mutationOptions());
 
-	const goKhoiPhuc = (d: DongTatCa) => {
-		setDangCho(d.id);
-		khoiPhuc.mutate(
-			{ id: d.id },
-			{
-				onSuccess: () => {
-					void cache.tinHieu();
-					toast.success(dien(t.daKhoiPhuc, { ma: d.ma }));
-				},
-				onError: () => toast.error(dien(t.khoiPhucHong, { ma: d.ma })),
-			},
-		);
+	const xepHang = (viec: () => Promise<void>) => {
+		setSoDangCho((n) => n + 1);
+		hangDoi.current = hangDoi.current
+			.then(viec)
+			.finally(() => setSoDangCho((n) => n - 1));
 	};
 
-	const goLuuTru = (d: DongTatCa) => {
-		setDangCho(d.id);
-		luuTru.mutate(
-			{ id: d.id },
-			{
-				onSuccess: () => {
+	const goKhoiPhuc = (d: DongTatCa) =>
+		xepHang(async () => {
+			try {
+				await khoiPhuc.mutateAsync({ id: d.id });
+				void cache.tinHieu();
+				toast.success(dien(t.daKhoiPhuc, { ma: d.ma }));
+			} catch {
+				toast.error(dien(t.khoiPhucHong, { ma: d.ma }));
+			}
+		});
+
+	const goLuuTru = (d: DongTatCa) =>
+		xepHang(async () => {
+			try {
+				await luuTru.mutateAsync({ id: d.id });
+				void cache.tinHieu();
+				baoDaLuuTru({
+					thongDiep: dien(t.daLuuTru, { ma: d.ma }),
+					nhanHoanTac: t.hoanTac,
+					onHoanTac: () => goKhoiPhuc(d),
+				});
+			} catch (loi) {
+				if (
+					loi instanceof TRPCClientError &&
+					loi.data?.httpStatus === MA_VUA_LAY_VE
+				) {
+					toast.error(dien(t.vuaLayVe, { ma: d.ma }));
 					void cache.tinHieu();
-					baoDaLuuTru({
-						thongDiep: dien(t.daLuuTru, { ma: d.ma }),
-						nhanHoanTac: t.hoanTac,
-						onHoanTac: () => goKhoiPhuc(d),
-					});
-				},
-				onError: (loi) => {
-					if (loi.data?.httpStatus === MA_VUA_LAY_VE) {
-						toast.error(dien(t.vuaLayVe, { ma: d.ma }));
-						void cache.tinHieu();
-						return;
-					}
-					toast.error(dien(t.luuTruHong, { ma: d.ma }));
-				},
-			},
-		);
-	};
+					return;
+				}
+				toast.error(dien(t.luuTruHong, { ma: d.ma }));
+			}
+		});
 
 	const xem = input.archived ? daLuuTru : dangDung;
 	if (dangDung.isPending || xem.isPending) return <KhungChoTatCa />;
@@ -122,7 +120,11 @@ export function TatCaTrang({
 			<BangTatCa
 				banVeDocDuoc={banVeDocDuoc}
 				dong={dongTuHang(xem.data.rows, trangThai, m)}
-				thaoTac={{ dangCho, onKhoiPhuc: goKhoiPhuc, onLuuTru: goLuuTru }}
+				thaoTac={{
+					dangCho: soDangCho > 0,
+					onKhoiPhuc: goKhoiPhuc,
+					onLuuTru: goLuuTru,
+				}}
 			/>
 		</div>
 	);

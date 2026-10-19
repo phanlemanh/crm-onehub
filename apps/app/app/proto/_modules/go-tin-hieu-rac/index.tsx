@@ -81,7 +81,7 @@ function TatCa({ state }: { state: string }) {
 	const { input } = useTableQuery(tatCaListParams);
 	const [dangDung, setDangDung] = useState(() => dongBanDau(state, false));
 	const [daLuuTru, setDaLuuTru] = useState(() => dongBanDau(state, true));
-	const [dangCho, setDangCho] = useState<string | null>(null);
+	const [dangCho, setDangCho] = useState(false);
 	const hong = state === STATE.luuTruLoi;
 
 	const khoiPhuc = (d: DongTatCa) => {
@@ -99,7 +99,7 @@ function TatCa({ state }: { state: string }) {
 			toast.error(dien(m.luuTruHong, { ma: d.ma }));
 			return;
 		}
-		setDangCho(d.id);
+		setDangCho(true);
 		setDangDung((ds) => ds.filter((x) => x.id !== d.id));
 		setDaLuuTru((ds) => [
 			{
@@ -111,7 +111,7 @@ function TatCa({ state }: { state: string }) {
 			},
 			...ds,
 		]);
-		setDangCho(null);
+		setDangCho(false);
 		baoDaLuuTru({
 			thongDiep: dien(m.daLuuTru, { ma: d.ma }),
 			nhanHoanTac: m.hoanTac,

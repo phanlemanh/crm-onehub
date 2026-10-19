@@ -16,7 +16,7 @@ import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import type { DongTatCa } from "@/lib/tin-hieu/loc-tat-ca";
 
 export type ThaoTacLuuTru = {
-	dangCho: string | null;
+	dangCho: boolean;
 	onLuuTru: (dong: DongTatCa) => void;
 	onKhoiPhuc: (dong: DongTatCa) => void;
 };
@@ -32,7 +32,7 @@ export function MenuLuuTru({
 }) {
 	const m = tinHieuMessages(useLocale());
 	const t = m.tatCa.luuTru;
-	const cho = thaoTac.dangCho !== null;
+	const cho = thaoTac.dangCho;
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>

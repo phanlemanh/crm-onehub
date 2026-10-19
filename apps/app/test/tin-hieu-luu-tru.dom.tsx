@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TRPCClientError } from "@trpc/client";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import type { ReactNode } from "react";
 import { act } from "react";
@@ -20,7 +21,7 @@ type Hang = {
 	archivedAt: string | null;
 	nguoiLuuTru: { id: string; ten: string } | null;
 };
-type KetCuc = "ok" | "cho" | "mang" | "da-lay-ve";
+type KetCuc = "ok" | "cho" | "giu" | "mang" | "da-lay-ve";
 type Toast = {
 	kieu: "success" | "error";
 	chu: string;
@@ -53,9 +54,19 @@ type DongCuaToiGia = {
 };
 let dongCuaToi: DongCuaToiGia[] = [];
 
-class LoiTrpc extends Error {
-	data = { httpStatus: 409, code: "CONFLICT" };
-}
+let nhaGiu: (() => void) | null = null;
+let idKhoiPhucHong: string | null = null;
+
+const loiVuaLayVe = () =>
+	new TRPCClientError("vua lay ve", {
+		result: {
+			error: {
+				code: -32600,
+				message: "vua lay ve",
+				data: { code: "CONFLICT", httpStatus: 409 },
+			},
+		},
+	});
 
 function truyVan<T>(ten: string, ra: () => T) {
 	return {
@@ -67,8 +78,12 @@ function truyVan<T>(ten: string, ra: () => T) {
 
 async function chay(ket: KetCuc, viec: () => void) {
 	if (ket === "cho") await new Promise(() => {});
+	if (ket === "giu")
+		await new Promise<void>((r) => {
+			nhaGiu = r;
+		});
 	if (ket === "mang") throw new TypeError("Failed to fetch");
-	if (ket === "da-lay-ve") throw new LoiTrpc("vua lay ve");
+	if (ket === "da-lay-ve") throw loiVuaLayVe();
 	viec();
 	return { ok: true };
 }
@@ -112,7 +127,7 @@ mock.module("@/lib/trpc/client", () => ({
 			}),
 			khoiPhuc: ghi("tinHieu.khoiPhuc", (id) => {
 				goiKhoiPhuc.push(id);
-				return chay(ketKhoiPhuc, () => {
+				return chay(id === idKhoiPhucHong ? "mang" : ketKhoiPhuc, () => {
 					const h = daLuuTru.find((x) => x.id === id);
 					daLuuTru = daLuuTru.filter((x) => x.id !== id);
 					if (h)
@@ -171,6 +186,8 @@ afterEach(() => {
 	soLanTaiDangDung = 0;
 	toasts = [];
 	dongCuaToi = [];
+	nhaGiu = null;
+	idKhoiPhucHong = null;
 });
 
 async function cho(ms = 30) {
@@ -463,6 +480,63 @@ describe("ca-man-hai-dong", () => {
 		expect(goiLuuTru, "luu tru dong khac khi dong truoc dang cho").toEqual([
 			"t-1",
 		]);
+	});
+});
+
+describe("ca-man-hoan-tac", () => {
+	const baoCua = (ma: string) =>
+		toasts.find((x) => x.chu === dien(t.daLuuTru, { ma }));
+
+	test("ca-man-hoan-tac: bam Hoan tac khi lenh khac dang cho thi doi toi luot, ca hai deu bao ket qua", async () => {
+		dangDung = [hang(1), hang(2), hang(3)];
+		const o = await trang();
+		await luuTruDong(o, "crm-1");
+		ketLuuTru = "giu";
+		await luuTruDong(o, "crm-2");
+		expect(goiLuuTru).toEqual(["t-1", "t-2"]);
+		await act(async () => baoCua("crm-1")?.action?.onClick());
+		await cho(60);
+		expect(goiKhoiPhuc, "hoan tac chay chong khi lenh khac dang cho").toEqual(
+			[],
+		);
+		await bam(menuCua(o, "crm-3"));
+		expect(
+			trongMenu('[data-luu-tru-tin-hieu="crm-3"]')?.hasAttribute(
+				"data-disabled",
+			),
+			"hoan tac chay chong khi lenh khac dang cho",
+		).toBe(true);
+		await act(async () => nhaGiu?.());
+		await cho(120);
+		expect(goiKhoiPhuc).toEqual(["t-1"]);
+		const chu = toasts.map((x) => x.chu);
+		expect(chu, "mat thong bao cua lenh truoc").toContain(
+			dien(t.daLuuTru, { ma: "crm-2" }),
+		);
+		expect(chu, "mat thong bao cua lenh truoc").toContain(
+			dien(t.daKhoiPhuc, { ma: "crm-1" }),
+		);
+	});
+
+	test("ca-man-hoan-tac: bam Hoan tac lien hai thong bao, lan dau hong van bao loi", async () => {
+		dangDung = [hang(1), hang(2)];
+		const o = await trang();
+		await luuTruDong(o, "crm-1");
+		await luuTruDong(o, "crm-2");
+		idKhoiPhucHong = "t-1";
+		await act(async () => {
+			baoCua("crm-1")?.action?.onClick();
+			baoCua("crm-2")?.action?.onClick();
+		});
+		await cho(150);
+		expect(goiKhoiPhuc).toEqual(["t-1", "t-2"]);
+		expect(
+			toasts.filter((x) => x.kieu === "error").map((x) => x.chu),
+			"hoan tac hong ma khong bao",
+		).toEqual([dien(t.khoiPhucHong, { ma: "crm-1" })]);
+		expect(toasts.map((x) => x.chu)).toContain(
+			dien(t.daKhoiPhuc, { ma: "crm-2" }),
+		);
 	});
 });
 

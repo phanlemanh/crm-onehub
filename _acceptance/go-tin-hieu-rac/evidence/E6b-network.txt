@@ -1,1 +1,1 @@
-driver: do-man.mjs (puppeteer, mot-luot.sh); khong dung browser tool co duong doc network; xem run log
+driver: do-man.mjs (puppeteer, mot-luot.sh); khong dung browser tool co duong doc network; run 2026-10-20 ma thoat 0; log: /private/tmp/claude-501/e6b/run.log
