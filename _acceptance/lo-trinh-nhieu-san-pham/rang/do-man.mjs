@@ -145,14 +145,20 @@ async function khaiQuaMan(p, slug, sp) {
 	await p.waitForSelector('[data-o="ten"] input', { timeout: CHO_MS });
 	for (const [o, gt] of [["ten", sp.ten], ["kho", sp.kho], ["nhanh", sp.nhanh]]) {
 		const sel = `[data-o="${o}"] input`;
-		await p.click(sel, { clickCount: 3 });
+		await p.focus(sel);
+		await p.$eval(sel, (e) => e.select());
 		await p.keyboard.press("Backspace");
 		await p.type(sel, gt);
+		const da = await p.$eval(sel, (e) => e.value);
+		if (da !== gt) khongDo(`o ${o} nhan "${da}" thay vi "${gt}"`);
 	}
 	await p.click('[data-nut="luu-san-pham"]');
 	await p
 		.waitForSelector(`[data-san-pham="${sp.ma}"]`, { timeout: CHO_MS })
 		.catch(() => khongDo(`khai ${sp.ma} qua man khong hien dong`));
+	const luu = await db.sanPhamLoTrinh.findUnique({ where: { ma: sp.ma } });
+	if (luu?.kho !== sp.kho || luu?.nhanh !== sp.nhanh)
+		khongDo(`khai ${sp.ma} luu ${luu?.kho} · ${luu?.nhanh} thay vi ${sp.kho} · ${sp.nhanh}`);
 }
 
 function tepCoViec() {

@@ -11,6 +11,7 @@ export type LoiGia = Partial<Record<DuongGithub, number>>;
 export type KhoGia = {
 	html: (sha: string, duong: string) => string | null;
 	dauNhanh: { sha: string; commitLuc: string } | null;
+	nhanh?: string;
 	caiLuc: string | null;
 	loi?: LoiGia;
 	gioiHan?: boolean;
@@ -161,7 +162,10 @@ export function taoGithubGia(opts: {
 				);
 			if (k?.loi?.branches)
 				return json(k.loi.branches, { message: "Server Error" });
-			if (!k?.dauNhanh)
+			if (
+				!k?.dauNhanh ||
+				decodeURIComponent(mNhanh[2] ?? "") !== (k.nhanh ?? "main")
+			)
 				return json(404, { message: "Branch not found", status: "404" });
 			return json(200, {
 				name: decodeURIComponent(mNhanh[2] ?? ""),
