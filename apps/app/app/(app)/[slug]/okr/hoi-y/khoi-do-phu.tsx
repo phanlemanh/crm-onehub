@@ -21,7 +21,7 @@ type HangDoPhu = DoPhu["hang"][number];
 
 function NhanHang({ hang }: { hang: HangDoPhu }) {
 	const m = okrHoiYMessages(useLocale()).doPhu;
-	const tenGoc = useTenGoc();
+	const tenGoc = useTenGoc(m.goc);
 	if (hang.loai === "goc") return <span translate="no">{tenGoc}</span>;
 	if (hang.loai === "chua-xep") return m.chuaXep;
 	return <span translate="no">{hang.nhan}</span>;

@@ -935,8 +935,8 @@ const GHIM = {
 	],
 	"okr:caiDat.chuKy.go.tieuDe": ["Gỡ 1?", "Gỡ 12?"],
 	"okr:caiDat.chuKy.go.than": [
-		"1 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
-		"12 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"1 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"12 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
 	],
 	"okr:caiDat.chuKy.go.xong": ["Đã gỡ 1.", "Đã gỡ 12."],
 	"okr:caiDat.chuKy.an.tieuDe": ["Ẩn 1?", "Ẩn 12?"],

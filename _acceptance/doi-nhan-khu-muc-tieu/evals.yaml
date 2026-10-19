@@ -91,7 +91,7 @@ evals:
     executor: test
     layer: unit
     cmd: config:executors.test.dnk_bai_cu
-    expected: "exit 0; chạy bằng test:dom của apps/app các bài cũ đã đổi chữ: okr-cua-toi-ba-phan.dom.tsx, okr-sheet.dom.tsx, okr-tai-co-cau.dom.tsx, okr-gioi-han-duyet.dom.tsx, duong-ly-do.dom.tsx, okr-so-do-don-vi.dom.tsx, okr-theo-don-vi.dom.tsx, okr-hoi-y.dom.tsx; và bun test ./test/messages-guard.spec.ts. Mọi bài xanh."
+    expected: "exit 0; chạy bằng test:dom của apps/app các bài cũ đã đổi chữ: okr-cua-toi-ba-phan.dom.tsx, okr-sheet.dom.tsx, okr-tai-co-cau.dom.tsx, okr-gioi-han-duyet.dom.tsx, duong-ly-do.dom.tsx, okr-so-do-don-vi.dom.tsx, okr-theo-don-vi.dom.tsx, okr-hoi-y.dom.tsx, okr-thanh-tab.dom.tsx, okr-trang-don-vi.dom.tsx; và bun test ./test/messages-guard.spec.ts. Mọi bài xanh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/app/test/**, apps/app/lib/messages/**, "apps/app/app/(app)/[slug]/okr/**"]
 

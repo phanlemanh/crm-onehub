@@ -5,8 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { okrMessages } from "@/lib/messages/okr";
 import { useTRPC } from "@/lib/trpc/client";
 
-export function useTenGoc(): string {
+export function useTenGoc(duPhong?: string): string {
 	const trpc = useTRPC();
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
-	return workspace.data?.name || okrMessages(useLocale()).goc;
+	const goc = okrMessages(useLocale()).goc;
+	return workspace.data?.name || duPhong || goc;
 }

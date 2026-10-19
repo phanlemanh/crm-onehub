@@ -1671,7 +1671,7 @@ executors:
     dnk_lay_y_kien: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-lay-y-kien
     dnk_luat: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-luat
     dnk_goc_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-khu-muc-tieu.dom.tsx -t dnk-goc-man
-    dnk_bai_cu: 'cd apps/app && bun test ./test/messages-guard.spec.ts && for f in okr-cua-toi-ba-phan okr-sheet okr-tai-co-cau okr-gioi-han-duyet duong-ly-do okr-so-do-don-vi okr-theo-don-vi okr-hoi-y; do TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/$f.dom.tsx || exit 1; done'
+    dnk_bai_cu: 'cd apps/app && bun test ./test/messages-guard.spec.ts && for f in okr-cua-toi-ba-phan okr-sheet okr-tai-co-cau okr-gioi-han-duyet duong-ly-do okr-so-do-don-vi okr-theo-don-vi okr-hoi-y okr-thanh-tab okr-trang-don-vi; do TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/$f.dom.tsx || exit 1; done'
     kmc_quet: "cd apps/app && bun test ./test/khung-man-chung.spec.ts"
     kmc_xuong: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx"
     kmc_chi_tiet: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx -t chi-tiet && bun test ./test/khung-man-chung.spec.ts -t breadcrumb-chi-tiet"
