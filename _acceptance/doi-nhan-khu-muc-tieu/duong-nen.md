@@ -1,23 +1,18 @@
 ---
 slug: doi-nhan-khu-muc-tieu
-at: 2026-10-19T11:29:39.144Z
-sha: 1fce5d49cd8d5875a3b96171573eb7a9b22dacdb
-nen: do
+at: 2026-10-19T12:07:37.330Z
+sha: 10665b367ba7a3d9702522a75ea058afb541d411
+nen: xanh
 cong_cu: xanh
-suite: do
+suite: xanh
 luoi: xanh
 engine: xanh
 ---
 
 ## Dòng đỏ
 
-- nen suite: DO SAN executors.test.suite_app_ui ma 1
-- nen suite: DO SAN executors.script.lint_khong_cache ma 1
-- nen suite: DO SAN executors.script.build_khong_cache ma 1
-- nen suite: CAY BAN SAU SUITE apps/app/test/doi-nhan-khu-muc-tieu-luat.ts
+- không có
 
 ## Dòng vàng
 
-- nen suite: TEP CUA VONG _acceptance/doi-nhan-khu-muc-tieu/coverage-scan.md (khong tinh)
-- nen suite: TEP CUA VONG _acceptance/doi-nhan-khu-muc-tieu/kiem-ke.json (khong tinh)
-- nen suite: TEP CUA VONG docs/superpowers/specs/2026-10-19-doi-nhan-khu-muc-tieu-design.md (khong tinh)
+- nen suite: TEP CUA VONG _acceptance/doi-nhan-khu-muc-tieu/rang/chup.mjs (khong tinh)
