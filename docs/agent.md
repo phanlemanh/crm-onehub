@@ -644,6 +644,23 @@ API; the API only reads and writes rows.
   «Câu chưa trả lời được». A question it answers keeps no text — `ghiKetQuaHoi`
   clears `cauHoi` on `TRA_LOI`.
 
+### Lấy lộ trình sản phẩm
+
+`layLoTrinhSanPham` (`lib/lo-trinh-san-pham.ts`) chạy trên nhịp dispatch cạnh `chupSoOkr`, không có lịch
+riêng, không phiên model, không `AgentTask`. Mỗi nhịp lấy tối đa `LO_TRINH_SAN_PHAM.toiDaMoiNhip` sản
+phẩm chưa lưu trữ mà lần kiểm cuối cũ hơn `nhipKiemMs` (5 phút).
+
+- **Ứng dụng GitHub chỉ đọc** (`lib/lo-trinh-github.ts`): JWT RS256 của ứng dụng sống 9 phút; token cài
+  đặt xin cho đúng một kho với `contents: read` + `metadata: read`, không lưu. Đầu nhánh cùng sha với
+  bản chụp đang lưu thì không tải tệp. Thiếu `GITHUB_APP_ID` hay `GITHUB_APP_PRIVATE_KEY` thì mọi sản
+  phẩm thành `chua-cau-hinh`, không ném. `GITHUB_API_URL` chỉ ghi đè ngoài production — GitHub giả của
+  bài kiểm và phép đo màn ở `scripts/lo-trinh-san-pham/github-gia.ts`.
+- **Mỗi lỗi một trạng thái**: `chua-cai` · `khong-thay-kho` · `khong-thay-tep` · `khoi-hong` (kèm đường
+  khoá hỏng) · `qua-tran` (2 MB) · `loi-github`. Bản chụp đang lưu không đổi; lỗi một sản phẩm không
+  dừng sản phẩm khác. Nhật ký chỉ ghi mã và trạng thái — không token, không khoá.
+- **Bộ đọc khối** là `apps/app/lib/lo-trinh/doc-du-lieu.js` (bản chép kit, có hồ sơ đã ký đo nó khớp
+  từng byte), nhập theo đường tương đối; `tsconfig` của agent bật `allowJs` chỉ cho việc này.
+
 ### Chụp số OKR mỗi ngày
 
 Nhịp dispatch chụp số OKR qua `chupSoOkr` (`lib/okr-chup.ts`), cạnh `lenLichNhac` —

@@ -1292,6 +1292,15 @@ _Avoid_: bản sao, cache, snapshot
 Vì sao: «bản sao» gợi một bản người tự chép tay; «cache» là chuyện kỹ thuật của trang, không
 nói bản này đến từ đâu và lấy lúc nào.
 
+**Sản phẩm** (trên trang Lộ trình): một kho phần mềm của OneHub có lộ trình riêng mà trang Lộ trình
+đọc được — CRM, kho kit nghiệm thu, OneHub Platform. CRM khai sẵn trong mã và luôn có; sản phẩm
+khác do chủ hay quản trị khai ở Cài đặt › Sản phẩm (tên, kho GitHub, nhánh, đường tệp) và chọn
+người xem. Chủ và quản trị luôn thấy mọi sản phẩm. Đề xuất 2026-10-20 (LT3 `lo-trinh-nhieu-san-pham`),
+chốt tại Cổng Phạm vi.
+_Avoid_: dự án, repo, kho (khi nói với người dùng)
+Vì sao: «dự án» đã là một loại bản ghi của khu Việc và Dự án; «repo» và «kho» là chỗ lộ trình
+nằm, không phải thứ người đọc đang chọn.
+
 **Khoá chỉ kéo tín hiệu**: một khoá API chỉ làm được đúng một việc — kéo tín hiệu về kho
 cho lịch chạy hằng ngày. Khoá không đăng nhập được ở đâu, không đọc bản ghi, không tạo hay
 sửa khoá; chủ sở hữu hoặc quản trị tạo nó ở Cài đặt → Khoá API, mục «Khoá dùng để». Chủ khoá

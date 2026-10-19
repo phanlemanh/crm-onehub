@@ -1764,6 +1764,24 @@ Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó m�
   in ref đã chạy, không gọi CRM. Chạy ngoài Actions không bị chặn. Bước chặn sống trong kịch bản
   của chính nhánh được chạy: nhánh lấy onehub trước khi bước chặn vào onehub thì không có nó.
 
+
+## Danh bạ sản phẩm lộ trình
+
+Router `sanPhamLoTrinh` (`apps/api/src/lo-trinh/san-pham.router.ts`, REST `/roadmap-products`) giữ danh
+bạ sản phẩm mà trang Lộ trình đọc ngoài CRM, và ai xem được từng sản phẩm. API không gọi GitHub —
+tác nhân lấy lộ trình (`docs/agent.md`, «Lấy lộ trình sản phẩm»).
+
+- **Chỉ chủ và quản trị ghi** (`canManageSettings`): tạo, sửa, cấp người xem, lưu trữ, khôi phục, xoá,
+  xoá vĩnh viễn. `danhSach` mở cho mọi vai trong phạm vi «chung»; người không phải quản trị chỉ nhận
+  sản phẩm mình được cấp. Một hàm quyền duy nhất: `sanPhamXemDuoc` (`@crm/db/san-pham-lo-trinh`), trang
+  Lộ trình và lệnh đo cùng gọi nó.
+- **Mã sinh từ tên lúc tạo, không đổi sau.** Mã `crm` bị cấm (CRM là mục cố định trong mã); mã trùng
+  hay rỗng trả `BAD_REQUEST` với câu mở đầu «Name:».
+- **Sửa kho, nhánh hay tệp không xoá bản chụp**: đặt `nguonDoiLuc`, trang hiện bản cũ kèm dòng «nguồn
+  vừa đổi»; lần lấy đầu của nguồn mới thay hẳn bản cũ (bỏ kiểm một chiều đúng một lần).
+- **Vòng đời** (`docs/vong-doi.md`): Xoá khi chưa từng lấy được (`layDauLuc` null); đã lấy thì Lưu trữ →
+  Khôi phục → Xoá vĩnh viễn, và xoá vĩnh viễn từ chối sản phẩm chưa lưu trữ, mất cả bản chụp và
+  người xem.
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may
