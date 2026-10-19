@@ -60,3 +60,53 @@ wall: 1418s
 - **claude-opus-5-5**: 3 agent · 61 calls · out 9,708 · in 122 · cache_read 4,743,159 · cache_create 309,069
 - **claude-haiku-5-5**: 22 agent · 44 calls · out 18,865 · in 88 · cache_read 710,823 · cache_create 790,618
 
+### S4 round 2 — wf_3164fc7f-f53 (29 agent, 37,521 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 3 | 12,370 | 6 | 127,193 | 98 |
+| ui:E5c | claude-sonnet-5-5 | 5 | 3,501 | 10 | 379,511 | 66 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 1,960 | 4 | 35,121 | 193 |
+| review:bugs | claude-opus-5-5 | 11 | 1,878 | 22 | 531,864 | 67 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,794 | 4 | 2,973 | 462 |
+| judge:E11:operational-feasibility | claude-sonnet-5-5 | 3 | 1,708 | 6 | 78,290 | 16 |
+| judge:E11:domain-correctness | claude-sonnet-5-5 | 2 | 1,584 | 4 | 32,010 | 13 |
+| judge:E11:spec-alignment | claude-sonnet-5-5 | 2 | 1,546 | 4 | 35,476 | 16 |
+| machine:bun run test -- "cd apps/api && TZ=Asia/ | claude-haiku-5-5 | 2 | 1,514 | 4 | 35,005 | 13 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,386 | 4 | 35,096 | 12 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 1,325 | 4 | 5,946 | 473 |
+| machine:bun run test -- "cd apps/api && TZ=Asia/ | claude-haiku-5-5 | 2 | 1,259 | 4 | 35,004 | 17 |
+| machine:bun run test -- "cd apps/api && TZ=Asia/ | claude-haiku-5-5 | 2 | 817 | 4 | 35,003 | 16 |
+| machine:bun run test -- "cd apps/api && TZ=Asia/ | claude-haiku-5-5 | 2 | 758 | 4 | 35,005 | 15 |
+| review:measurement | claude-opus-5-5 | 7 | 589 | 14 | 288,645 | 52 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-5-5 | 2 | 461 | 4 | 34,966 | 25 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 379 | 4 | 35,037 | 10 |
+| machine:bun run test -- "cd apps/api && TZ=Asia/ | claude-haiku-5-5 | 2 | 361 | 4 | 35,007 | 14 |
+| machine:bun run test -- "cd apps/api && TZ=Asia/ | claude-haiku-5-5 | 2 | 332 | 4 | 35,005 | 13 |
+| machine:bun run test -- "cd apps/api && TZ=Asia/ | claude-haiku-5-5 | 2 | 283 | 4 | 35,007 | 13 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 260 | 4 | 35,094 | 22 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 229 | 4 | 35,034 | 9 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 228 | 4 | 35,032 | 9 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 218 | 4 | 35,090 | 7 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 205 | 4 | 35,035 | 10 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 202 | 4 | 35,035 | 9 |
+| review:conventions | claude-opus-5-5 | 7 | 195 | 14 | 270,020 | 44 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 149 | 4 | 30,911 | 9 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 30 | 4 | 35,151 | 76 |
+
+
+wall: 1370s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 20 | 14,001 | 639,646 | 1259 | 16:12:38 | 16:33:36 |
+| ui | 1 | 3,501 | 379,511 | 66 | 16:12:52 | 16:13:57 |
+| judge | 3 | 4,838 | 145,776 | 20 | 16:12:52 | 16:13:12 |
+| review | 3 | 2,662 | 1,090,529 | 68 | 16:12:56 | 16:14:04 |
+| capture | 1 | 149 | 30,911 | 9 | 16:33:38 | 16:33:48 |
+| synthesize | 1 | 12,370 | 127,193 | 98 | 16:33:50 | 16:35:27 |
+
+- **claude-sonnet-5-5**: 6 agent · 17 calls · out 20,858 · in 34 · cache_read 683,391 · cache_create 365,835
+- **claude-haiku-5-5**: 20 agent · 40 calls · out 14,001 · in 80 · cache_read 639,646 · cache_create 726,644
+- **claude-opus-5-5**: 3 agent · 25 calls · out 2,662 · in 50 · cache_read 1,090,529 · cache_create 177,365
+
