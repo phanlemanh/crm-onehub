@@ -1,4 +1,4 @@
-# Review findings: ngan-ban-ghi-giu-danh-tinh (round 1)
+# Review findings: ngan-ban-ghi-giu-danh-tinh (round 2)
 
 ## Trong hợp đồng
 
@@ -8,42 +8,49 @@ Không có finding nào map được vào AC.
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **chieuDo tự viết trong man.mjs không đặt PHIEN_DO_TEN_CAY, nên phiên đo của bản sao mang tên cây «crm» dùng chung với các chiếu đỏ khác**
+- **Bản sửa SLUG trong man.mjs bỏ luôn lớp chặn tiền đề của suySlug: API không với tới hay phiên hỏng giờ ra mã 1 (đỏ như lỗi tính năng, hoặc «LOT» ở chiều đỏ) thay vì mã 2 KHONG DO DUOC**
+  Người dùng thấy gì: Hành vi của ngăn bản ghi mà người dùng thấy không đổi. Chỉ khi môi trường đo nghiệm thu hỏng, phép đo có thể báo «tính năng hỏng» thay vì «không đo được», làm người duyệt hiểu nhầm nguyên nhân.
+  Căn cứ: Chỉ ảnh hưởng công cụ kiểm của nhóm khi môi trường đo hỏng, không mất dữ liệu và không đụng người dùng cuối; chạy lại sau khi sửa môi trường là gỡ được, nên ghi lại làm giới hạn đã biết là đủ.
+  file: `_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **chieuDo tự viết trong man.mjs không đặt PHIEN_DO_TEN_CAY, nên phiên đo của bản sao mang tên cây «crm» dùng chung với các chiếu đỏ khác (r1 · tệp đã đổi)**
   Người dùng thấy gì: Người dùng cuối không gặp gì. Chỉ người chạy nghiệm thu có thể thấy hai lượt đo cùng lúc ở hai nhánh tranh nhau một kho đo, làm một lượt chờ hoặc đỏ giả, chạy lại là xong.
   Căn cứ: Chỉ ảnh hưởng người chạy nghiệm thu, không mất dữ liệu, tự hết khi chạy lại, và không đụng tới thứ người dùng thấy.
   file: `_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **chieuDo tự viết lệch khuôn man-lib: không chuyển SIGINT/SIGTERM cho tien-de, không chép răng đang sửa vào bản sao, không kiểm `git worktree add`**
+- **chieuDo tự viết lệch khuôn man-lib: không chuyển SIGINT/SIGTERM cho tien-de, không chép răng đang sửa vào bản sao, không kiểm `git worktree add` (r1 · tệp đã đổi)**
   Người dùng thấy gì: Người dùng cuối không gặp gì. Người chạy nghiệm thu nếu ngắt giữa chừng có thể để lại phiên đo mồ côi trên máy, hoặc thấy lỗi dựng bản sao báo chậm và khó hiểu.
   Căn cứ: Hậu quả nhẹ và chỉ ở máy người chạy đo, dọn tay được, không liên quan hành vi giao cho người dùng.
   file: `_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/man.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **E3 khai khoá ngoài danh sách là users.me, nhưng bài kiểm dùng một khoá giả tự đặt**
+- **E3 khai khoá ngoài danh sách là users.me, nhưng bài kiểm dùng một khoá giả tự đặt (r1)**
   Người dùng thấy gì: Người dùng cuối không gặp gì. Lời mô tả bài kiểm nói một khoá thật nhưng bài dùng khoá giả, nên người đọc hồ sơ có thể hiểu sai mức bao phủ.
   Căn cứ: Chỉ là lệch giữa lời mô tả và bài kiểm, kết luận về hành vi vẫn đúng, sửa lúc nào cũng được và rất rẻ.
   file: `_acceptance/ngan-ban-ghi-giu-danh-tinh/evals.yaml`
   severity: low
   Đề xuất: known-limits
 
-- **E5 (chieu-do.mjs) cho REJECT giả khi phép đo màn E6–E11 chạy cùng lúc, vì nó coi bằng chứng mà chính cổng ghi là "ghi cây"**
+- **E5 (chieu-do.mjs) cho REJECT giả khi phép đo màn E6–E11 chạy cùng lúc, vì nó coi bằng chứng mà chính cổng ghi là "ghi cây" (r1 · tệp đã đổi)**
   Người dùng thấy gì: Người dùng cuối không gặp gì. Khi các phép đo chạy cùng lúc, cổng có thể báo đỏ oan dù tính năng đúng, làm người ký mất công chạy lại.
   Căn cứ: Chỉ gây đỏ giả và tốn một lượt chạy lại, không che mất lỗi thật và không ảnh hưởng người dùng; sửa riêng là việc của bộ công cụ nghiệm thu.
   file: `_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/chieu-do.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **`process.exit(2)` nằm trong `try` nên bỏ qua `finally go(sao)`, để lại git worktree mồ côi**
+- **`process.exit(2)` nằm trong `try` nên bỏ qua `finally go(sao)`, để lại git worktree mồ côi (r1 · tệp đã đổi)**
   Người dùng thấy gì: Người dùng cuối không gặp gì. Trên máy người chạy đo, khi bài đo thoát vì lỗi, có thể còn sót một bản sao tạm trong thư mục tạm.
   Căn cứ: Chỉ để lại rác nhỏ ở máy người chạy đo trong ca lỗi hiếm, dọn bằng một lệnh, nên không đáng mở việc sửa.
   file: `_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/chieu-do.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 2 (fixture viết tay thay cho rút từ nguồn): đột biến «bản cũ» là chuỗi chép tay, không lấy từ merge-base như evals khai**
+- **Hình dạng 2 (fixture viết tay thay cho rút từ nguồn): đột biến «bản cũ» là chuỗi chép tay, không lấy từ merge-base như evals khai (r1 · tệp đã đổi)**
   Người dùng thấy gì: Người dùng cuối không gặp gì. Nếu tệp gốc đổi về sau, phép thử chứng minh lỗi cũ vẫn xanh trên một bản cũ không còn là bản gốc, nên người ký có thể tin quá mức.
   Căn cứ: Hôm nay hai bản trùng nhau nên kết quả đúng, rủi ro chỉ xuất hiện nếu tệp gốc đổi trước khi ghim lại, và có thể kiểm lại bằng một lần so sánh.
   file: `_acceptance/ngan-ban-ghi-giu-danh-tinh/rang/chieu-do.mjs`
