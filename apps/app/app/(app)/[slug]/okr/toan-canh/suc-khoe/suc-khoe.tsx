@@ -126,7 +126,7 @@ export function SucKhoe() {
 	const giu = new URLSearchParams();
 	if (ky) giu.set(SEARCH_PARAM.okr.ky, ky);
 	if (don) giu.set(SEARCH_PARAM.okr.don, khoaDon(don));
-	const veToanCanh = `${url("/okr/toan-canh")}${giu.size > 0 ? `?${giu}` : ""}`;
+	const veToanCanh = `${url("/okr/suc-khoe")}${giu.size > 0 ? `?${giu}` : ""}`;
 
 	const dau = (
 		<Breadcrumb>

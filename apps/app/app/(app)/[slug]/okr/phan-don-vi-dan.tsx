@@ -186,10 +186,7 @@ function TheDonVi({
 				</CardDescription>
 				<CardAction>
 					<Button asChild size="sm" variant="outline">
-						<Link
-							data-nut="mo-don-vi"
-							href={`${url("/okr/theo-don-vi")}?${thamSo}`}
-						>
+						<Link data-nut="mo-don-vi" href={`${url("/okr/bo-okr")}?${thamSo}`}>
 							{m.moDonVi}
 						</Link>
 					</Button>

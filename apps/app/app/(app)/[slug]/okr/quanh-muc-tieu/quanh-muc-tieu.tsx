@@ -168,7 +168,7 @@ export function QuanhMucTieuNoiDung({ objectiveId }: { objectiveId: string }) {
 				<div className="flex flex-col items-start gap-3" data-quanh-khong-thay>
 					<p className="text-sm">{m.khongThay}</p>
 					<Button asChild size="sm" variant="outline">
-						<Link href={url("/okr/toan-canh")}>{m.veToanCanh}</Link>
+						<Link href={url("/okr/suc-khoe")}>{m.veToanCanh}</Link>
 					</Button>
 				</div>
 			);
