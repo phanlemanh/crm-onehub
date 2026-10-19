@@ -32,7 +32,11 @@ export type KetQuaDocBanChup =
 
 function canhBaoChoTrang(phienBan: number, canhBao: string[]): string[] {
 	if (phienBan === 1) return [];
-	return canhBao.filter((c) => !c.includes(LO_TRINH.canhBaoThieuGioMay));
+	return canhBao.filter(
+		(c) =>
+			!c.includes(LO_TRINH.canhBaoThieuGioMay) &&
+			!c.includes(LO_TRINH.canhBaoThieuMoHinh),
+	);
 }
 
 export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {

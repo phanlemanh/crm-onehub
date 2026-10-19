@@ -413,6 +413,9 @@ const GHIM_LO_TRINH = {
 	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
 	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
 	"lo-trinh:moc.lechKeHoach": ["1 chỗ lệch kế hoạch", "12 chỗ lệch kế hoạch"],
+	"lo-trinh:moc.conLai": ["còn 1/A việc", "còn 12/A việc"],
+	"lo-trinh:moc.daGiaoThem": [" · 1 đã giao", " · 12 đã giao"],
+	"lo-trinh:moc.giaoDu": ["đã giao đủ 1 việc", "đã giao đủ 12 việc"],
 	"lo-trinh:tre.tieuDe": [
 		"1 việc đã qua mốc mà chưa giao",
 		"12 việc đã qua mốc mà chưa giao",
