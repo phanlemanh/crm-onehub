@@ -1,6 +1,13 @@
 import { afterAll, beforeAll, describe, test } from "bun:test";
 import { VIEC } from "@crm/validation/viec";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import {
+	type DuAnDongOutput,
+	duAnDong,
+	duAnListOutput,
+} from "../src/du-an/du-an.contracts";
+import { type ViecVetOutput, viecVetOutput } from "../src/viec/viec.contracts";
+import type { DauVao } from "./ma-tran-thu";
 import { donDuAn, duAnThu, ngayDb } from "./support/du-an-gieo";
 import { donDep, moXuong } from "./support/ke-hoach-gieo";
 import {
@@ -32,7 +39,7 @@ afterAll(async () => {
 	await donDep();
 });
 
-function json(x: unknown): string {
+function json<T>(x: T): string {
 	return JSON.stringify(x);
 }
 
@@ -40,21 +47,13 @@ function dau(nhan: string): string {
 	return `vrc-dau-${nhan}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 }
 
-async function ghi(
-	ten: string,
-	input: Record<string, unknown>,
-	userId: string,
-) {
+async function ghi(ten: string, input: DauVao, userId: string) {
 	const r = await goi(app, ten, "mutation", input, userId);
 	if (r.status !== 200) throw new Error(`vrc: ${ten} loi ${json(r)}`);
 	return r.data;
 }
 
-async function doc(
-	ten: string,
-	input: Record<string, unknown>,
-	userId: string,
-) {
+async function doc(ten: string, input: DauVao, userId: string) {
 	const r = await goi(app, ten, "query", input, userId);
 	if (r.status !== 200) throw new Error(`vrc: ${ten} loi ${json(r)}`);
 	return r.data;
@@ -64,13 +63,26 @@ function getCua(id: string, userId: string): Promise<KetGoi> {
 	return goi(app, "viec.get", "query", { id }, userId);
 }
 
-type DongLichSu = { loai: string; vet: Record<string, unknown> };
+type DongLichSu = ViecVetOutput[number];
 
 async function lichSuCua(id: string, userId: string): Promise<DongLichSu[]> {
-	return (await doc("viec.lichSu", { id }, userId)) as DongLichSu[];
+	return viecVetOutput.parse(await doc("viec.lichSu", { id }, userId));
 }
 
-function coDau(x: unknown, dauV: string, maV: string): boolean {
+function nhacPhuThuoc(h: DongLichSu) {
+	if (h.vet.loai === "them-phu-thuoc") return h.vet.sau.viec;
+	if (h.vet.loai === "go-phu-thuoc") return h.vet.truoc.viec;
+	return undefined;
+}
+
+function boiCua(h: DongLichSu) {
+	if (h.vet.loai === "doi-han" || h.vet.loai === "doi-bat-dau") {
+		return h.vet.sau.boi;
+	}
+	return undefined;
+}
+
+function coDau<T>(x: T, dauV: string, maV: string): boolean {
 	const s = json(x);
 	return s.includes(dauV) || s.includes(maV);
 }
@@ -269,11 +281,8 @@ describe("vrc-phu-thuoc", () => {
 				for (const h of dong) {
 					if (coDau(h, dauV, V.id))
 						throw new Error(`vrc: lich su lo V ${loai}`);
-					const nhac =
-						loai === "them-phu-thuoc"
-							? (h.vet.sau as { viec: unknown }).viec
-							: (h.vet.truoc as { viec: unknown }).viec;
-					if (nhac !== null) throw new Error(`vrc: vet chua che ${loai}`);
+					if (nhacPhuThuoc(h) !== null)
+						throw new Error(`vrc: vet chua che ${loai}`);
 				}
 			}
 			if (coDau(cuaX, dauV, V.id)) throw new Error("vrc: lich su lo V toan-bo");
@@ -300,17 +309,9 @@ describe("vrc-tu-doi", () => {
 				b.id,
 			);
 			const tuDoi = (ds: DongLichSu[]) =>
-				ds.filter(
-					(h) =>
-						(h.loai === "doi-han" || h.loai === "doi-bat-dau") &&
-						(h.vet.sau as { boi?: unknown }).boi !== undefined,
-				);
+				ds.filter((h) => boiCua(h) !== undefined);
 			const truoc = tuDoi(await lichSuCua(W.id, b.id));
-			if (
-				!truoc.some(
-					(h) => (h.vet.sau as { boi?: { id?: string } }).boi?.id === V.id,
-				)
-			) {
+			if (!truoc.some((h) => boiCua(h)?.id === V.id)) {
 				throw new Error("vrc: fixture khong tu doi");
 			}
 			if (!coDau(await lichSuCua(W.id, x.id), dauV, V.id)) {
@@ -320,12 +321,12 @@ describe("vrc-tu-doi", () => {
 			const cuaX = await lichSuCua(W.id, x.id);
 			if (coDau(cuaX, dauV, V.id)) throw new Error("vrc: tu doi lo V");
 			for (const h of tuDoi(cuaX)) {
-				if ((h.vet.sau as { boi?: unknown }).boi !== null) {
+				if (boiCua(h) !== null) {
 					throw new Error("vrc: boi chua che");
 				}
 			}
 			for (const h of tuDoi(await lichSuCua(W.id, b.id))) {
-				const boi = (h.vet.sau as { boi?: { tieuDe?: string } | null }).boi;
+				const boi = boiCua(h);
 				if (!boi?.tieuDe?.includes(dauV)) {
 					throw new Error("vrc: tu doi nguoi trong cuoc mat ten");
 				}
@@ -419,17 +420,11 @@ describe("vrc-man-du-an", () => {
 				["duAn.get", { id: P.id }],
 				["duAn.list", { trangThai: "mo" }],
 			] as const;
-			type DongTong = {
-				id: string;
-				soViec: number;
-				batDauSom: string | null;
-				hanMuon: string | null;
-			};
-			const dongP = (ten: string, data: unknown): DongTong => {
+			const dongP = <T>(ten: string, data: T): DuAnDongOutput => {
 				const d =
 					ten === "duAn.list"
-						? (data as DongTong[]).find((r) => r.id === P.id)
-						: (data as DongTong);
+						? duAnListOutput.parse(data).find((r) => r.id === P.id)
+						: duAnDong.parse(data);
 				if (!d) throw new Error(`vrc: man du an loi ${ten} thieu P`);
 				return d;
 			};

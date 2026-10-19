@@ -100,6 +100,10 @@ const banGhiRa = z.object({
 	ten: z.string(),
 });
 
+export const AI_THAY = ["rieng", "du-an", "ban-ghi"] as const;
+
+export type AiThay = (typeof AI_THAY)[number];
+
 export const viecDong = z.object({
 	id: z.string(),
 	tieuDe: z.string(),
@@ -125,6 +129,7 @@ export const viecChiTietOutput = viecDong.extend({
 		}),
 	),
 	coLichSu: z.boolean(),
+	aiThay: z.enum(AI_THAY),
 	quyen: z.object({
 		trangThai: z.array(z.enum(TRANG_THAI_VIEC)),
 		sua: z.boolean(),
@@ -152,6 +157,42 @@ export const viecCuaToiNhomOutput = viecCuaBanGhiOutput.extend({
 	}),
 });
 
+const viecNhacRa = z.object({ id: z.string(), tieuDe: z.string() }).nullable();
+
+const hanRa = z.object({
+	hanNgay: z.string().nullable(),
+	boi: viecNhacRa.optional(),
+});
+
+const batDauRa = z.object({
+	batDauNgay: z.string().nullable(),
+	boi: viecNhacRa.optional(),
+});
+
+const vetCheRa = z.discriminatedUnion("loai", [
+	z.object({ loai: z.literal("doi-han"), truoc: hanRa, sau: hanRa }),
+	z.object({ loai: z.literal("doi-bat-dau"), truoc: batDauRa, sau: batDauRa }),
+	z.object({
+		loai: z.literal("them-phu-thuoc"),
+		truoc: z.null(),
+		sau: z.object({ viec: viecNhacRa }),
+	}),
+	z.object({
+		loai: z.literal("go-phu-thuoc"),
+		truoc: z.object({ viec: viecNhacRa }),
+		sau: z.null(),
+	}),
+	z.object({
+		loai: z.literal("them-viec-con"),
+		truoc: z.null(),
+		sau: z.object({ conId: z.string(), tieuDe: z.string() }).nullable(),
+	}),
+]);
+
+export const vetViecRa = z.union([vetCheRa, vetViec]);
+
+export type VetViecRa = z.infer<typeof vetViecRa>;
+
 export const viecVetOutput = z.array(
 	z.object({
 		id: z.string(),
@@ -159,7 +200,7 @@ export const viecVetOutput = z.array(
 		nguon: z.enum(NGUON_VIEC),
 		loai: z.enum(LOAI_VET_VIEC),
 		nguoi: z.object({ id: z.string(), name: z.string() }).nullable(),
-		vet: vetViec,
+		vet: vetViecRa,
 	}),
 );
 

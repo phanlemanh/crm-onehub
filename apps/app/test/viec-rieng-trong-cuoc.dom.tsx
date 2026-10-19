@@ -132,7 +132,7 @@ describe("vrc-khung-chu", () => {
 				if (toanKhung.includes(RIENG)) {
 					throw new Error("vrc: khung du-an hua rieng");
 				}
-				const chu = (M.khung as Record<string, string>).duAnChung;
+				const chu = M.khung.duAnChung;
 				if (!chu || !oGanVoi().includes(chu) || !moTa().includes(TEN_P)) {
 					throw new Error("vrc: khung du-an thieu chu");
 				}
@@ -202,7 +202,7 @@ describe("vrc-khung-doi", () => {
 			(b) => b.textContent?.trim() === M.khung.congKhaiNut,
 		);
 		if (dongY) await bam(dongY);
-		const chu = (M.khung as Record<string, string>).duAnChung;
+		const chu = M.khung.duAnChung;
 		try {
 			await cho(
 				() => daDoi && chu !== undefined && oGanVoi().includes(chu),
@@ -287,9 +287,7 @@ describe("vrc-lich-su-khung", () => {
 		const dong = [...document.querySelectorAll('[data-slot="item"]')].map(
 			(d) => d.textContent ?? "",
 		);
-		const khuat = (M.lichSu as Record<string, unknown>).viecKhuat as
-			| string
-			| undefined;
+		const khuat = M.lichSu.viecKhuat;
 		let daSo = 0;
 		for (const [i, d] of DONG.entries()) {
 			const chu = dong[i] ?? "";

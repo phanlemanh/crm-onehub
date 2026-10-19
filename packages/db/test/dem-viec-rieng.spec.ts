@@ -193,7 +193,7 @@ describe("vrc-dem", () => {
 			}
 			if ((await vanTay()) !== truoc) throw new Error("vrc: dem ghi vao kho");
 			const { giaoDichChiDoc } = await import("../scripts/dem-viec-rieng");
-			let maLoi: unknown = null;
+			let loiGhi = "";
 			try {
 				await giaoDichChiDoc(kho, (tx) =>
 					tx.viec.create({
@@ -206,9 +206,12 @@ describe("vrc-dem", () => {
 					}),
 				);
 			} catch (loi) {
-				maLoi = JSON.stringify(loi, Object.getOwnPropertyNames(loi));
+				loiGhi =
+					loi instanceof Error
+						? JSON.stringify(loi, Object.getOwnPropertyNames(loi))
+						: String(loi);
 			}
-			if (typeof maLoi !== "string" || !maLoi.includes("25006")) {
+			if (!loiGhi.includes("25006")) {
 				throw new Error("vrc: giao dich ghi duoc");
 			}
 			const rong = chay({ DATABASE_URL: "" });
