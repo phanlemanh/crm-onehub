@@ -1,12 +1,76 @@
+# Review findings: go-tin-hieu-rac (round 3)
+
 ## Trong hợp đồng
 
-Không có phát hiện mới ở vòng này.
+- **Dòng vết lưu trữ không mang cùng thời điểm với archivedAt — phép đo giá trị đã hứa sẽ không khớp** — `apps/api/src/tin-hieu/tin-hieu.service.ts:216` — severity: medium — AC: AC-1
+  Trong `luuTru` (dòng 157), lúc lưu trữ là `const luc = new Date()` và được ghi vào `archivedAt`. Nhưng `ghiVet` tạo dòng `tinHieuVet` mà không truyền `luc`: `data: { tinHieuId, so, nguoiId, loai }`. Vì vậy cột `luc` của vết lấy từ `@default(now())` (CURRENT_TIMESTAMP của giao dịch, hoặc giờ do engine Prisma tự sinh). Thời điểm đó khác `archivedAt`: nó có trước lệnh LOCK, cũng như trước `new Date()` của tiến trình, và còn lệch theo đồng hồ máy chủ DB. Trong contract.md, mục Thước «mỗi lần gỡ có vết người gỡ» đo trên production bằng điều kiện «có một dòng vết «lưu trữ» cùng tín hiệu với `luc` bằng `archivedAt`». Theo mã hiện tại, so khớp chính xác sẽ hỏng ở mọi tín hiệu. Bài `tin-hieu-luu-tru.spec.ts` chỉ sắp vết theo `luc` mà không kiểm `vet.luc === archivedAt`, nên không bắt được lỗi này. Cách sửa: truyền `luc` vào `ghiVet` cho nhánh lưu trữ, dùng cùng một biến đã ghi lên cột.
+  source: conventions
+  Lý do xếp trong hợp đồng: đường đo ghi AC-1 và AC-5 bảo đảm vết nằm «cùng lúc với cột» và thước so luc với archivedAt; AC-1 đòi đúng một dòng vết «lưu trữ» đi kèm lúc lưu trữ ghi trên tín hiệu.
+
+- **Archiving two signals quickly loses the result of the first, including its error** — `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx:75` — severity: medium — AC: AC-9
+  goLuuTru and goKhoiPhuc put onSuccess and onError on each mutate call of one shared useMutation. In TanStack Query 5.101 (query-core mutationObserver.js lines 57-61 and 77-119), every new mutate call replaces #mutateOptions and detaches the observer from the previous mutation. Only the latest call's callbacks ever run. The menu only disables the row whose id is in dangCho, so an admin can archive row A and then row B while A is still pending. If A fails (a 409 because the product team just pulled it, or a network error), no toast appears and the cache is not refreshed for A, so the failure is silent. If A succeeds, its 'archived' toast and Undo button never appear, so the admin cannot undo A. The mutation-level onSettled also clears dangCho when A finishes while B is still pending, which re-enables B's menu item. To fix, either move the per-row handling into mutation-level callbacks that read the row from the mutation variables, or block every row's action while any archive or restore is pending.
+  source: bugs
+  Lý do xếp trong hợp đồng: AC-9 đòi lệnh hỏng thì có thông báo lỗi đúng lý do và dòng ở lại bảng, mục đang chờ bị khoá; finding cho thấy lưu trữ hai dòng liên tiếp làm mất thông báo lỗi của dòng đầu và mở khoá sớm.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-Không có mục mới ở vòng này.
+- **Ba con số ngưỡng chuyển từ server page sang client component tự tính**
+  Người dùng thấy gì: Nếu quản trị để trang «Tất cả» mở rất lâu rồi mới lưu trữ hay khôi phục, ô «quá 7 ngày» có thể lệch nhẹ so với giờ thật cho tới khi tải lại trang.
+  Căn cứ: Chỉ lệch ở một ô số khi trang mở rất lâu, không mất dữ liệu, và tải lại trang là số đúng ngay.
+  file: `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Dạng «Đã lưu trữ» vẫn có bộ lọc Trạng thái, và gán nhãn «Chờ lấy về» cho tín hiệu đã lưu trữ**
+  Người dùng thấy gì: Ở dạng «Đã lưu trữ», ô lọc trạng thái vẫn hiện và liệt kê «Chờ lấy về» cho tín hiệu đã lưu trữ. Bộ lọc trạng thái chọn từ dạng đang dùng còn nguyên khi chuyển sang, nên bảng có thể trống mà người dùng không hiểu vì sao.
+  Căn cứ: Chỉ gây khó hiểu chứ không mất hay lộ dữ liệu, và người dùng tự gỡ được bằng cách bỏ chọn bộ lọc.
+  file: `apps/app/components/tin-hieu/bang-tat-ca.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Archive fails silently-generic when the sender has already deleted the signal; the row never leaves the list**
+  Người dùng thấy gì: Nếu người gửi vừa xoá một tín hiệu, quản trị bấm lưu trữ sẽ thấy báo «thử lại sau» và dòng vẫn nằm trong bảng. Thử lại bao nhiêu lần cũng hỏng cho tới khi tải lại trang.
+  Căn cứ: Ca hiếm, không mất dữ liệu, và tải lại trang là dòng biến mất nên người dùng tự gỡ được.
+  file: `apps/app/app/(app)/[slug]/tin-hieu/tat-ca/tat-ca-trang.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Archived view shows a status filter built from the wrong status and carries the status filter over from the active view**
+  Người dùng thấy gì: Ở dạng «Đã lưu trữ», tín hiệu bị gắn nhãn «Chờ lấy về» trong ô lọc, và bộ lọc chọn từ dạng đang dùng có thể làm danh sách đã lưu trữ hiện trống dù vẫn có tín hiệu.
+  Căn cứ: Gây nhầm lẫn nhẹ ở một màn quản trị, không mất hay lộ dữ liệu, bỏ chọn bộ lọc là thấy lại.
+  file: `apps/app/components/tin-hieu/bang-tat-ca.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (mẫu viết tay đúng khuôn bên đọc): mẫu chiều đỏ của bài quét ghi đè giao diện chỉ có dạng className="..." mà bộ đọc hiểu được, còn cây thật có dạng nó bỏ qua im lặng**
+  Người dùng thấy gì: Bài kiểm tự động về việc không ghi đè kiểu dáng giao diện bỏ sót một số cách viết, nên một lần ghi đè kiểu dáng sau này có thể lọt qua mà bài kiểm vẫn xanh. Người dùng không thấy ảnh hưởng ngay.
+  Căn cứ: Chỉ làm lưới kiểm tra thủng ở một dạng viết mã, không ảnh hưởng người dùng hiện tại, và có thể bổ sung sau với chi phí thấp.
+  file: `_acceptance/go-tin-hieu-rac/rang/khong-ghi-de.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (tuyên ma trận viết trước nhưng chỉ có điểm-case): E6 hứa ma trận 4 ô, bài kiểm không có ma trận và thiếu khẳng định cho ô thứ tư**
+  Người dùng thấy gì: Bài kiểm của màn thao tác lưu trữ không phủ ô «đã lưu trữ mà đã lấy về». Nếu sau này có dòng rơi vào ô đó thì bài kiểm sẽ không báo.
+  Căn cứ: Ô này vốn không nên xuất hiện trong dữ liệu thật, nên rủi ro thấp và chỉ là lỗ hổng trong lưới kiểm tra.
+  file: `apps/app/test/tin-hieu-luu-tru.dom.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (khẳng định một chuỗi có mặt trong khi lời hứa là quan hệ): tổng kết của lệnh kéo về được ghim bằng hằng «2 tín hiệu» chứ không tính lại từ phản hồi**
+  Người dùng thấy gì: Bài kiểm tự động về dòng tổng kết của lệnh kéo về dùng con số viết tay thay vì tính lại từ kết quả. Bài vẫn đỏ nếu số sai, chỉ là chặt chẽ kém hơn lời hứa.
+  Căn cứ: Không ảnh hưởng người dùng và bài vẫn bắt được sai số trong điều kiện kho thử hiện tại; sửa tốn công mà lợi ít.
+  file: `apps/api/test/tin-hieu-luu-tru.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 4 (khẳng định âm đứng một mình): «thân phản hồi 403 không chứa tiêu đề đã gieo» không có đối chứng dương cho chính phép tìm**
+  Người dùng thấy gì: Bài kiểm khẳng định phản hồi từ chối không lộ tiêu đề tín hiệu có thể xanh dù chuỗi tìm lệch khỏi tiêu đề thật. Hiện chưa có bằng chứng sản phẩm đang lộ tiêu đề cho người không có quyền.
+  Căn cứ: Là điểm yếu của bài kiểm chứ không phải lỗi người dùng gặp; mã từ chối 403 vẫn được kiểm và thêm đối chứng sau rất rẻ.
+  file: `apps/api/test/tin-hieu-luu-tru.spec.ts`
+  severity: low
+  Đề xuất: known-limits
 
 - **`tinHieu.daLuuTru` là thủ tục danh sách mới, không nhận listInput, mà không có ngoại lệ ghi tên (r1)**
   Người dùng thấy gì: Dạng xem «Đã lưu trữ» tải hết tín hiệu đã lưu trữ về trình duyệt rồi mới lọc và chia trang. Với số lượng hiện nay người dùng không thấy khác biệt, nhưng khi kho lưu trữ lớn dần thì trang sẽ chậm.
