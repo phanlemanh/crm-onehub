@@ -461,13 +461,20 @@ describe("vkm-chu-ky", () => {
 	});
 });
 
+type NutMayChu = ReactElement<{ children?: ReactNode }>;
+type ThanhPhanMayChu = (props: NutMayChu["props"]) => Promise<ReactNode>;
+const HAM_BAT_DONG_BO = (async () => null).constructor;
+
+function laThanhPhanMayChu(kieu: NutMayChu["type"]): kieu is ThanhPhanMayChu {
+	return kieu instanceof HAM_BAT_DONG_BO;
+}
+
 async function giaiMayChu(nut: ReactNode): Promise<ReactNode> {
 	if (Array.isArray(nut)) return Promise.all(nut.map(giaiMayChu));
 	if (!isValidElement(nut)) return nut;
-	const { type, props } = nut as ReactElement<{ children?: ReactNode }>;
+	const { type, props } = nut as NutMayChu;
 	if (type === Suspense) return giaiMayChu(props.children);
-	if (typeof type === "function" && type.constructor.name === "AsyncFunction")
-		return giaiMayChu(await (type as (p: object) => Promise<ReactNode>)(props));
+	if (laThanhPhanMayChu(type)) return giaiMayChu(await type(props));
 	if (props.children === undefined) return nut;
 	return cloneElement(nut, undefined, await giaiMayChu(props.children));
 }

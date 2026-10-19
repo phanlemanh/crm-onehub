@@ -111,11 +111,17 @@ const DUONG_MOI: [string, string, string][] = [
 	],
 ];
 
-const MAU_THAM_SO: Record<string, string> = { slug: "ws", id: "m1" };
+const MAU_THAM_SO = new Map([
+	["slug", "ws"],
+	["id", "m1"],
+]);
 
 function mauDuong(luatDuong: string): string {
 	const [ten = ""] = luatDuong.split(/[?#]/);
-	return ten.replace(/:([A-Za-z]+)/g, (_, k: string) => MAU_THAM_SO[k] ?? k);
+	return ten.replace(
+		/:([A-Za-z]+)/g,
+		(_, k: string) => MAU_THAM_SO.get(k) ?? k,
+	);
 }
 
 function tenSauOkr(duong: string): string {
