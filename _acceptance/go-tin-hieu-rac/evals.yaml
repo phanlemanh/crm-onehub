@@ -18,7 +18,7 @@ evals:
       duong (tRPC luuTru, REST POST /rest/tin-hieu/{id}/luu-tru bang khoa API) = 4 o, moi o mot tin hieu rieng chua keo ve:
         1 doc lai bang Prisma: archivedAt khac null, archivedById == id nguoi goi;
         2 tinHieuVet cua tin hieu do: dung 1 dong, loai "luu-tru", nguoiId == id nguoi goi;
-        3 tatCa() mac dinh KHONG chua id do; tatCa({archived:true}) CO chua id do, dong mang archivedAt bang gia tri
+        3 tatCa() mac dinh KHONG chua id do; daLuuTru() CO chua id do, dong mang archivedAt bang gia tri
           doc o 1 va nguoiLuuTru {id, ten} cua nguoi goi;
       Ca "luu-tru-lai": goi luuTru lan hai tren tin hieu cua o dau -> 4 archivedAt bang dung gia tri lan dau (so sanh
       getTime), 5 so dong vet van la 1.
@@ -90,7 +90,7 @@ evals:
       - "apps/api/test/tin-hieu-luu-tru.spec.ts"
     expected: |
       tin-hieu-luu-tru.spec.ts describe "gtr-quyen": ma tran viet truoc hai vai (member, okr) x ba thu tuc (luuTru,
-      khoiPhuc, tatCa archived=true) x hai duong (tRPC, REST bang khoa API cua chinh ho) = 12 o; tin hieu dich do CHINH
+      khoiPhuc, daLuuTru — REST GET /rest/tin-hieu/da-luu-tru) x hai duong (tRPC, REST bang khoa API cua chinh ho) = 12 o; tin hieu dich do CHINH
       nguoi goi gui (member) hoac nguoi khac (okr):
         moi o: FORBIDDEN / 403; doc lai: archivedAt va so dong vet khong doi; than phan hoi khong chua tieu de nao gieo.
       Doi chung duong: cung 3 thu tuc bang owner tren tin hieu khac -> thanh cong.

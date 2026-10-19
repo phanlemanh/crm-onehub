@@ -136,6 +136,8 @@ const DAU_VAO_HOP_LE = {
 	"zalo.luuBot": { token: "thu" },
 	"tinHieu.gui": { muonLam: "thu", daXayRa: "thu", man: "/" },
 	"tinHieu.xoa": { id: "khong-co" },
+	"tinHieu.luuTru": { id: "khong-co" },
+	"tinHieu.khoiPhuc": { id: "khong-co" },
 	"tinHieu.keoVe": {},
 	"thongBao.moMot": { id: "khong-co" },
 	"thongBao.docHet": {},

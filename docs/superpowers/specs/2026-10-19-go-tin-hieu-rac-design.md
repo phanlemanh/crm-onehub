@@ -48,9 +48,11 @@ lưu trữ, hai cột chỉ còn lần cuối; nhật ký máy chủ trên Verce
   thêm vết `luu-tru`. Nhật ký `tin-hieu.luu-tru` ghi người gọi và `so`.
 - `tinHieu.khoiPhuc({ id })` — REST `POST /tin-hieu/{id}/khoi-phuc`. Cùng quyền. Đang lưu trữ → xoá hai cột, thêm vết
   `khoi-phuc`; đang dùng → `{ ok: true }` không đổi gì.
-- `tinHieu.tatCa({ archived })` — mặc định `false`: chỉ hàng `archivedAt: null`. `true`: chỉ hàng đã lưu trữ, mỗi dòng
-  thêm `archivedAt` và `nguoiLuuTru` (`{ id, ten }`, null khi tài khoản đã xoá). Đầu vào tuỳ chọn để REST cũ
-  `GET /tin-hieu/tat-ca` vẫn trả đúng như TH4 cho tín hiệu đang dùng.
+- `tinHieu.tatCa` giữ nguyên đầu vào (không có) và chỉ trả hàng `archivedAt: null`; REST cũ `GET /tin-hieu/tat-ca`
+  vẫn trả đúng như TH4 cho tín hiệu đang dùng. Thủ tục mới `tinHieu.daLuuTru` — REST `GET /tin-hieu/da-luu-tru` — trả
+  hàng đã lưu trữ, mới lưu trữ trước. Dòng của cả hai thêm `archivedAt` và `nguoiLuuTru` (`{ id, ten }`, null khi tài
+  khoản đã xoá). (Đổi ở S3 so với bản duyệt — một thủ tục riêng thay cho tham số `archived`, để cầu REST không phải ép
+  kiểu tham số đúng/sai trên đường dẫn.)
 - `keoVe`: `updateMany` và `findMany` thêm `archivedAt: null`. Tín hiệu đang lưu trữ không bị đóng dấu và không có
   trong `tep`; khôi phục rồi thì lượt sau lấy về như mới. Đường lịch đi cùng hàm nên theo luôn.
 - `cuaToi`: mỗi dòng thêm `daLuuTru: boolean` cho trang người gửi.
