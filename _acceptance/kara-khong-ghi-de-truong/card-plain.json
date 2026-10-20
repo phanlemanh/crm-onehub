@@ -1,5 +1,5 @@
 {
-  "feature_plain": "Giá trị người bán hàng đã tự gõ vào một trường tự tạo không còn bị Kara lặng lẽ thay; Kara chỉ thay khi người bán hàng bảo thay ngay trong hội thoại.",
+  "feature_plain": "Kara không còn lặng lẽ thay giá trị người bán hàng đã gõ vào trường tự tạo: chạy nền thì không bao giờ thay, trong hội thoại chỉ thay khi người bán hàng bảo thay.",
   "will_do": [
     {
       "id": "AC-1",
