@@ -1,0 +1,104 @@
+slug: chu-may-sinh-ten-moi
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.cmst_loi
+    expected: "exit 0; apps/api/test/chu-may-sinh-ten-moi.spec.ts -t cmst-gop-vao. Duyệt mọi lá của OKR.thongDiep bằng laThongDiep (hàm gọi với tham số mẫu 2, «X», «id-1»); lá nào còn «căn chỉnh» (không phân biệt hoa thường) thì ném 'cmst: <đường khoá> con can chinh'. Bảy khoá của BANG_GOP_VAO (krDangLaDich, hienThi.conCanChinh(2), canChinh.cungCap, chinhNo, chuaCongBo, khongCo('id-1'), gioiHanKhongCanChinh) phải bằng đúng câu của bảng thay chữ, không thì ném 'cmst: <khoá> <giá trị>'. Nguồn okr.service.ts không còn chuỗi «Căn chỉnh ${», có «Chỗ góp vào ${», không thì ném 'cmst: okr.service loi khong co dich'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-config.ts, apps/api/src/okr/okr.service.ts, apps/api/test/chu-may-sinh-ten-moi.spec.ts, packages/validation/src/ten-cu-okr.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.cmst_loi
+    expected: "exit 0; -t cmst-lay-y-kien của chu-may-sinh-ten-moi.spec.ts. Mọi lá dưới OKR.thongDiep.hoiY và xoa.lyDo['muc-tieu.chuDeHoiY']: còn «hỏi ý» (không phân biệt hoa thường) thì ném 'cmst: <khoá> con hoi y'; các khoá kiểm kê ghi «lần hỏi ý» phải chứa «lần lấy ý kiến», không thì ném 'cmst: <khoá> thieu lan lay y kien'. parseSoLieuHoiY của @crm/validation/okr-hoi-y gọi với dữ liệu hỏng ném lỗi chứa «lần lấy ý kiến» và không chứa «hỏi ý», không thì ném 'cmst: validation <thông điệp>'. Đối chứng giữ: đường dẫn hoiY của router (OKR_HOI_Y hay hằng đường dẫn đang có) vẫn chứa 'hoi-y'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-config.ts, packages/validation/src/okr-hoi-y.ts, apps/api/test/chu-may-sinh-ten-moi.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.cmst_loi
+    expected: "exit 0; -t cmst-cap của chu-may-sinh-ten-moi.spec.ts: hoiY.congBoVuotTran(5, 6) và duyet.khongCanDuyet chứa «cấp Công ty», không thì ném 'cmst: cap <khoá>'; lá nào của OKR.thongDiep khớp /\\bOneHub\\b(?! Center)/ thì ném 'cmst: <khoá> con OneHub'. Đối chứng: chuỗi mẫu «OneHub Center» qua cùng biểu thức không bị bắt, «cấp OneHub» bị bắt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-config.ts, apps/api/test/chu-may-sinh-ten-moi.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cmst_goc
+    expected: "exit 0. (a) apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts -t cmst-goc: đổi organization WORKSPACE_ID name thành «Kho Thử Nghiệm» qua db.organization.update, tạo một mục tiêu cấp onehub và một mục tiêu phòng ban góp vào nó qua tRPC thật; okr.mucTieu (hoặc thủ tục đọc mục tiêu đang có) trả unitName «Kho Thử Nghiệm» cho mục tiêu gốc và cho đích góp vào của mục tiêu phòng ban, không thì ném 'cmst: unitName <giá trị>'; đổi name thành '   ' thì cùng chỗ trả «Công ty». readTenGoc(db) của @crm/db/workspace trả «Công ty» cho name rỗng và tên đã cắt khoảng trắng cho name có khoảng trắng hai đầu. Khôi phục name cũ trong afterAll. (b) okr-hoi-y.spec.ts -t 'do-phu: E11', okr-khep.spec.ts -t 'sang-cham|cham-va-nhin-lai', okr-khep-xuat.spec.ts xanh với kỳ vọng là tên không gian làm việc của CSDL kiểm (không còn OKR.tenGoc hay chữ «OneHub» cứng cho cột đơn vị gốc). (c) Dạng mã: không tệp nào dưới apps/api/src và apps/agent-okr/agent còn 'OKR.tenGoc', 'TRO_LY_OKR_HOI.tenGoc' hay 'tenGoc: \"OneHub\"'; mười chỗ kiểm kê khai_niem 'goc' (trừ hai dòng khai báo hằng) nay đọc tên qua readTenGoc hoặc nhận tham số từ một hàm gọi readTenGoc, không thì ném 'cmst: goc viet cung <tệp>:<dòng>'. (d) apps/agent-okr/test/chu-may-sinh-ten-moi.spec.ts -t cmst-goc-hoi: hàm đặt tên đơn vị của hoi-doc.ts với level onehub trả tên truyền vào từ readTenGoc."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/workspace.ts, apps/api/src/okr/**, apps/agent-okr/agent/lib/hoi-doc.ts, apps/agent-okr/agent/lib/config.ts, apps/api/test/chu-may-sinh-ten-moi-goc.spec.ts, apps/api/test/okr-hoi-y.spec.ts, apps/api/test/okr-khep.spec.ts, apps/api/test/okr-khep-xuat.spec.ts, apps/agent-okr/test/chu-may-sinh-ten-moi.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cmst_nhac
+    expected: "exit 0. (a) apps/agent/test/chu-may-sinh-ten-moi.spec.ts -t cmst-nhac: TIEU_DE['okr-hoi-y-gop'] đúng «Lấy ý kiến», TIEU_DE['okr-hoi-y-cong-bo'] đúng «Lấy ý kiến đã công bố»; dựng tin Slack và Zalo của hai loại với một mục mẫu (nhan «Doanh thu quý 1», hạn mẫu) bằng các hàm xuất của tin-nhac.ts: chữ chứa «Công ty đang lấy ý kiến cho mục tiêu «Doanh thu quý 1»», nhãn liên kết Slack «mở Lấy ý kiến», đường dẫn chứa '/okr/hoi-y', và soatTenCu trên toàn chữ trả rỗng; sai thì ném 'cmst: nhac <loại> <kênh> <chữ>'. (b) okr-nhac.integration.spec.ts -t hoi-y xanh với dòng kỳ vọng mới. (c) thong-bao-ghi.integration.spec.ts -t htb-kenh xanh: tin dựng từ mã khớp từng byte bản chụp tin-nhac-truoc-tb1.json đã sinh lại."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/tin-nhac.ts, apps/agent/test/chu-may-sinh-ten-moi.spec.ts, apps/agent/test/okr-nhac.integration.spec.ts, apps/agent/test/thong-bao-ghi.integration.spec.ts, apps/agent/test/fixtures/tin-nhac-truoc-tb1.json]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.cmst_loi_dan
+    expected: "exit 0; apps/agent-okr/test/chu-may-sinh-ten-moi.spec.ts -t cmst-loi-dan: đọc LOI_DAN_SOAN (chuỗi xuất của loi-dan-soan.ts) và tệp apps/agent/agent/subagents/tro_ly_okr/instructions.md; bỏ mọi đoạn trong dấu ` rồi: còn «Căn chỉnh» hay «căn chỉnh» thì ném 'cmst: loi dan <tệp> con can chinh'; dòng «Use these words» không chứa «Góp vào» thì ném 'cmst: loi dan <tệp> thieu Gop vao'; không có câu chứa cả «căn chỉnh» và «hỏi ý» trong một lời dặn không viết cho người đọc (khớp /never write[^.]*căn chỉnh[^.]*hỏi ý/i trên văn bản gốc, trước khi bỏ đoạn mã) thì ném 'cmst: loi dan <tệp> thieu cau dan'. Đối chứng giữ: văn bản gốc vẫn chứa `dichCanChinh` (instructions.md), `ungVienCanChinh` (loi-dan-soan.ts), `can-chinh` (instructions.md), không thì ném 'cmst: loi dan mat ten ma <tên>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/lib/loi-dan-soan.ts, apps/agent/agent/subagents/tro_ly_okr/instructions.md, apps/agent-okr/test/chu-may-sinh-ten-moi.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cmst_so_eval_soan
+    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs đọc evidence/eval-soan-nen.json và eval-soan-sau.json (do rang/eval-soan.mjs ghi sau hai lần eve eval okr-soan thật). Đỏ (exit 1, in từng dòng) khi: thiếu một tệp; bam.thuoc khác nhau (bộ ca, judge, tiêu chí lệch); model hay judge khác nhau; bam.loiDan của nen khác băm loi-dan-soan.ts ở commit nen.sha; bam.loiDan của sau khác băm tệp ở HEAD; hai băm lời dặn bằng nhau; nen.sha không là tổ tiên của HEAD; sau.chuCu khác rỗng; sau.dat < nen.dat − 2; sau.chotMaHong > nen.chotMaHong + 1; trung bình tiêu chí nào của sau < nen − 0,1. Chiều đỏ của hàm soSanh đo bằng rang/so-eval-soan-do.mjs (E8)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/lib/loi-dan-soan.ts, apps/agent-okr/evals/okr-soan/**, _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs, _acceptance/chu-may-sinh-ten-moi/rang/eval-soan-chung.mjs, _acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-nen.json, _acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json]
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cmst_so_eval_soan_do
+    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan-do.mjs gọi soSanh của so-eval-soan.mjs trên cặp tóm tắt giả: một cặp lành ra 0 lỗi; mỗi cặp hỏng (thuoc lệch, model lệch, nen sai băm, sau sai băm, hai băm bằng nhau, không là tổ tiên, sau còn chữ cũ, dat tụt 3, chot ma tăng 2, tc2 tụt 0,11) ra đúng một lỗi gọi tên lý do; ca biên (dat tụt đúng 2, tiêu chí tụt đúng 0,1) ra 0 lỗi. Lệch thì in tên ca và thoát 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs, _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan-do.mjs, _acceptance/chu-may-sinh-ten-moi/rang/eval-soan-chung.mjs]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: unit
+    cmd: config:executors.test.cmst_luat
+    expected: "exit 0; packages/validation/test/ten-cu-okr.spec.ts -t cmst-luat. (a) Chiều đỏ: mỗi cụm của CAM_TEN_CU (5) đặt trong một mục giả viết hoa chữ đầu ra đúng một lỗi dạng '<nguồn>#<khoá>: <cụm>'; ba mục giữ («Lấy ý kiến», «cả công ty», «OneHub Center») ra 0 lỗi. (b) Chiều xanh trên cây: bài cmst-gop-vao (API), cmst-nhac (agent), cmst-loi-dan (agent-okr) đều gọi soatTenCu trên toàn chữ của mình — kiểm bằng nguồn: ba tệp bài nhập soatTenCu từ @crm/validation/ten-cu-okr, không thì ném 'cmst: luat khong duoc dung <tệp>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/ten-cu-okr.ts, packages/validation/test/ten-cu-okr.spec.ts, apps/api/test/chu-may-sinh-ten-moi.spec.ts, apps/agent/test/chu-may-sinh-ten-moi.spec.ts, apps/agent-okr/test/chu-may-sinh-ten-moi.spec.ts]
+
+  - id: E10
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.cmst_kiem_ke
+    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/kiem-ke.mjs. (a) Quét lại 13 tệp ở mốc 37dc2da8d bằng bốn khuôn (/căn chỉnh/i, /hỏi ý/i, /cấp OneHub/, /\\btenGoc\\b/): tập (tệp, dòng, khái niệm) phải bằng tập của kiem-ke.json, không thì ném 'kiem-ke sot <tệp>:<dòng>' hoặc 'kiem-ke thua <tệp>:<dòng>'. (b) Ở HEAD, mỗi tệp có dòng xu_ly 'doi' không còn dòng nào khớp khuôn của khái niệm đó (khái niệm goc dùng /OKR\\.tenGoc|TRO_LY_OKR_HOI\\.tenGoc|tenGoc: \"OneHub\"/), trừ đúng nội dung các dòng xu_ly 'giu', không thì ném 'con chu cu <tệp>:<dòng>'. (c) Thứ tự: commit thêm kiem-ke.json đứng trước mọi commit của dải chạm apps/** hay packages/**, và không commit sau nó đổi kiem-ke.json, không thì ném 'kiem-ke viet sau khi sua: <sha>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/chu-may-sinh-ten-moi/kiem-ke.json, _acceptance/chu-may-sinh-ten-moi/rang/kiem-ke.mjs, _acceptance/chu-may-sinh-ten-moi/rang/dai.mjs, apps/api/src/okr/**, packages/validation/src/okr-hoi-y.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/agent/subagents/tro_ly_okr/instructions.md, apps/agent-okr/agent/lib/**]
+
+  - id: E11
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cmst_khong_go_bai
+    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/khong-go-bai.mjs: trong dải của vòng (merge-base với origin/onehub tới HEAD, hoặc cặp sha của commit gộp sau khi gộp), không tệp bài (*.spec.ts, *.spec.tsx, *.dom.tsx, *.test.ts) nào bị xoá, số lời gọi test/it của mỗi tệp không giảm, số .skip/.only/.todo không tăng; vi phạm thì in '<tệp>: <lý do>' và thoát 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/chu-may-sinh-ten-moi/rang/khong-go-bai.mjs, _acceptance/chu-may-sinh-ten-moi/rang/dai.mjs, "apps/**/test/**", "packages/**/test/**"]
+
+  - id: E12
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cmst_thuoc_da_ky
+    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/thuoc-da-ky.mjs: trong dải của vòng, tệp _acceptance/<hồ sơ đã ký>/** duy nhất đổi ngoài hồ sơ của hàng là gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs (và run-log, evidence-report do ghim lại); mỗi cặp dòng đổi của tệp đó, sau khi thay «chỗ góp vào» bằng «căn chỉnh» và «cho gop vao» bằng «can chinh», bằng đúng dòng cũ; sổ decisions.jsonl của gioi-han-duyet-cay-okr có một dòng fix mới mang decided_by «Phan Le Manh» và nêu chu-may-sinh-ten-moi. Bản chụp apps/agent/test/fixtures/tin-nhac-truoc-tb1.json: mỗi chuỗi đổi so với nền, sau khi thay ba cặp chữ mới → cũ của bảng tin nhắc, bằng đúng chuỗi cũ. Vi phạm thì in và thoát 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/chu-may-sinh-ten-moi/rang/thuoc-da-ky.mjs, _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs, _acceptance/gioi-han-duyet-cay-okr/decisions.jsonl, apps/agent/test/fixtures/tin-nhac-truoc-tb1.json]
