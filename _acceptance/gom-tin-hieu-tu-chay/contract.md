@@ -5,7 +5,7 @@ slug: gom-tin-hieu-tu-chay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: verified
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-10-20T13:45:00Z
 design_doc: docs/superpowers/specs/2026-10-20-gom-tin-hieu-tu-chay-design.md
@@ -70,3 +70,13 @@ Source input: `_acceptance/gom-tin-hieu-tu-chay/opportunity.md` (Cổng Đáng `
 
 - Phép phán (nhóm, tên nhóm, hàng) thuộc hai skill của kit, cài qua chợ gói trong Actions; crm không chép chữ skill. Lỗi của skill khi chạy không người trông thì mở chip sang kho kit.
 - Mọi bằng chứng của vòng chạy trên kho tạm với `claude` giả và `gh` giả theo đúng hợp đồng thật của chúng.
+- Known limits — anh chọn ở Cổng Bằng chứng 2026-10-20, từ S4 vòng 1 (Ngoài-1 tách thành việc gia cố riêng):
+  - Ngoài-2: Nếu tệp lộ trình bị hỏng, đề xuất vẫn được giao nhưng thân PR ghi mọi nhóm là chưa có hàng đề xuất, khiến chủ kho tưởng máy chưa cắt hàng chứ không biết tệp đọc không được. Số đo thời gian chờ cũng có thể lệch mà không báo.
+  - Ngoài-3: Người tự dựng kho sẽ không thấy các chìa khoá của lịch gom trong tệp mẫu cấu hình, nên có thể không biết cần đặt gì cho lịch này. Chức năng vẫn chạy bình thường.
+  - Ngoài-4: Nếu chủ kho đẩy sửa lên nhánh đề xuất đúng lúc máy đang gom (có thể kéo dài tới 25 phút), lần đẩy của máy sẽ đè mất sửa đó mà không báo.
+  - Ngoài-5: Khi lệnh lấy nhánh đề xuất về bị hỏng, máy có thể coi như không có sửa của người và đẩy đè lên bản chủ kho đã sửa.
+  - Ngoài-6: Bài kiểm chỉ thử một trong hai nhóm bị phủ quyết, nên nếu máy đánh rơi nhóm còn lại khi dặn lại mô hình thì bài kiểm vẫn báo xanh.
+  - Ngoài-7: Bài kiểm trang lộ trình dùng bản vẽ giả nên chưa chứng minh được hàng do mô hình viết sẽ hiện đúng trên trang lộ trình thật; một hàng sai khuôn có thể làm trang thật thành trang báo lỗi mà bài kiểm vẫn xanh.
+  - Ngoài-8: Bài kiểm không phân biệt được trường hợp hàng đề xuất của nhóm này bị ghi sang dòng của nhóm khác trong thân PR.
+  - Ngoài-9: Bài kiểm lệnh đo chưa thử trường hợp vừa chờ quá lâu vừa bị sửa nhiều, nên lỗi riêng ở trường hợp kép này sẽ không bị bắt.
+  - Ngoài-10: Bài kiểm trường hợp PR đã gộp chỉ chắc rằng máy không nói là bị phủ quyết, chứ không chắc máy làm tiếp đúng việc, nên một lỗi khác ở nhánh này có thể lọt.

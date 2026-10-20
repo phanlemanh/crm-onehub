@@ -26,7 +26,7 @@ export const GOM = {
 		tinHieu: "scripts/tin-hieu.mjs",
 		catLuot: "scripts/cat-luot.mjs",
 	},
-	khoaMoHinh: ["ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN"],
+	khoaMoHinh: ["ANTHROPIC_API_KEY"],
 	moHinh: {
 		ten: "sonnet",
 		tranLuot: 60,
@@ -80,7 +80,7 @@ export const GOM = {
 		phuQuyet:
 			"đề xuất cho đúng các tín hiệu này đã bị phủ quyết — chờ tín hiệu mới",
 		thieuKhoa:
-			"thiếu khoá mô hình — chủ kho đặt bí mật ANTHROPIC_API_KEY (hoặc CLAUDE_CODE_OAUTH_TOKEN) cho kho rồi chạy tay lại lịch gom",
+			"thiếu khoá mô hình — chủ kho đặt bí mật ANTHROPIC_API_KEY cho kho rồi chạy tay lại lịch gom",
 		thieuLenh:
 			"không chạy được lệnh claude — bước cài Claude Code của tệp lịch hỏng; chủ kho xem nhật ký bước cài rồi chạy tay lại",
 		moHinhHong: "phiên gom thoát lỗi — chạy tay lại lịch gom",

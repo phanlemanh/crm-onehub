@@ -790,7 +790,59 @@ async function kiemHong(fn: Chay): Promise<string[]> {
 	return loi;
 }
 
+function kiemKhoaLich(
+	yml: string,
+	khoa: readonly string[],
+	cau: string,
+): string[] {
+	const y = Bun.YAML.parse(yml) as {
+		jobs?: Record<
+			string,
+			{ steps?: { run?: string; env?: Record<string, string> }[] }
+		>;
+	};
+	const buoc = Object.values(y.jobs ?? {})
+		.flatMap((j) => j.steps ?? [])
+		.find((b) => String(b.run ?? "").includes("scripts/tin-hieu/gom-lich.ts"));
+	const env = Object.keys(buoc?.env ?? {});
+	const loi: string[] = [];
+	for (const k of khoa) {
+		can(
+			env.includes(k),
+			"cau bao dan dat bi mat ma tep lich khong truyen",
+			loi,
+		);
+		can(cau.includes(k), "cau bao thieu khoa khong goi ten khoa", loi);
+	}
+	return loi;
+}
+
 describe("gtc-hong", () => {
+	const YML = readFileSync(
+		path.resolve(
+			GOC_TEST,
+			"..",
+			"..",
+			".github",
+			"workflows",
+			"tin-hieu-gom.yml",
+		),
+		"utf8",
+	);
+	test("gtc-hong: khoa trong cau bao khop bi mat tep lich truyen vao", () => {
+		expect(kiemKhoaLich(YML, GOM.khoaMoHinh, GOM.thongDiep.thieuKhoa)).toEqual(
+			[],
+		);
+	});
+	test("gtc-hong: chieu do — them khoa ma tep lich khong truyen", () => {
+		expect(
+			kiemKhoaLich(
+				YML,
+				[...GOM.khoaMoHinh, "CLAUDE_CODE_OAUTH_TOKEN"],
+				`${GOM.thongDiep.thieuKhoa} CLAUDE_CODE_OAUTH_TOKEN`,
+			),
+		).toContain("cau bao dan dat bi mat ma tep lich khong truyen");
+	});
 	test(
 		"gtc-hong: 4 ca hong deu do, goi ten, khong lot khoa",
 		async () => {

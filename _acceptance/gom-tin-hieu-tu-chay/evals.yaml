@@ -170,7 +170,7 @@ evals:
       - "scripts/tin-hieu/test/gom-kho-tam.ts"
     expected: |
       gom-lich.test.ts describe "gtc-hong", ma tran viet truoc 4 ca tren kho tam co tin hieu chua co cho:
-        1 khong co ca ANTHROPIC_API_KEY lan CLAUDE_CODE_OAUTH_TOKEN -> GOM.thongDiep.thieuKhoa (goi ten ca hai bien)
+        1 khong co ANTHROPIC_API_KEY -> GOM.thongDiep.thieuKhoa (goi ten ANTHROPIC_API_KEY, bi mat ma tep lich truyen vao)
         2 duong lenh claude tro toi tep khong ton tai -> GOM.thongDiep.thieuLenh
         3 claude gia thoat 1 -> GOM.thongDiep.moHinhHong kem dong loi dau cua no
         4 claude gia ngu qua tran phut (tran ha xuong 1 giay qua tuy chon cua ham, khong doi cau hinh) -> GOM.thongDiep.quaTran
