@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 03a93a6eb78cca2fcfe67a96a13fabf3776d0f44
+verified_commit: 7cdfb7bc7c078a173bc27686c43c00befe3867ca
 human_signoff: Phan Le Manh 2026-10-13 — ký Cổng 2 trên S4 lượt 1 (10/10 eval PASS; E9j Đạt). Ngoài-1, 3, 4, 5, 6 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -205,3 +205,7 @@ sha: 2e7a4941db0f6e70eaa3e8e9f51fe08fffccac0b · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-13, do hoá cũ do gộp onehub 6791dc049 (L2, #383)
 run_id: repin-20261013T112221Z-18024
 sha: 03a93a6eb78cca2fcfe67a96a13fabf3776d0f44 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9j (E9j không khai paths) · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-20, do F35 don-ho-so-cu lô 2 (dọn hồ sơ cũ, có dot-hoi-y-tuong-okr)
+run_id: repin-20261020T230558Z-65599
+sha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9j (E9j không khai paths) · AC không có chốt máy: AC-8 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

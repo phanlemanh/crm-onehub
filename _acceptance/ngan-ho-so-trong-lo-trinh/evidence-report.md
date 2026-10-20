@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 66a18d3b9d944ebd4fba9bbd4bcb1c3937c142fa
+verified_commit: 7cdfb7bc7c078a173bc27686c43c00befe3867ca
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -217,3 +217,7 @@ sha: 7a3e69c5eb5cdc78520c655e147a921a3b92169f · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-19, do nhận kit 2.33.0, lối b′ chủ kho duyệt: tệp mẫu x2 sinh bằng 2.33.0, chiều đỏ vi_sao cắt 200
 run_id: repin-20261019T043148Z-12670
 sha: 66a18d3b9d944ebd4fba9bbd4bcb1c3937c142fa · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · giới hạn đã khai không còn: E7 (khai 2) · ngoài làn máy: E9, E10 (E10 không khai paths) · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-20, do F35 don-ho-so-cu lô 2 (dọn hồ sơ cũ, có dot-hoi-y-tuong-okr)
+run_id: repin-20261020T230558Z-65599
+sha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · giới hạn đã khai không còn: E7 (khai 2) · ngoài làn máy: E9, E10 (E10 không khai paths) · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
