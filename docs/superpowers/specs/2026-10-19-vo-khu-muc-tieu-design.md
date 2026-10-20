@@ -83,6 +83,10 @@ không còn thẻ tiêu đề rỗng. Bài kiểm mới `okr-don-vi-dan-cay.dom.
 `soan-okr-song-lai.spec.ts` và thước `data-khung-tab` của `dot-hoi-y-tuong-okr`, `khung-man-chung`
 đo thanh thẻ ngang sẽ bỏ. Đây là sửa thước hồ sơ đã ký — câu hỏi ở Cổng Phạm vi.
 
+Ca `dhk-giu-don` (dieu-huong-khu-muc-tieu/E8: liên kết thẻ ngang mang theo `kyOkr` và `donOkr`) bỏ cùng
+thanh thẻ theo Hỏi-1; phần còn sống của lời hứa — liên kết giữa các nơi đến mang theo chu kỳ — nay do AC-2
+của vòng này đo. Đơn vị đang xem không còn đi theo khi đổi nơi (thanh bên chỉ giữ chu kỳ).
+
 ## Không làm
 
 Mọi KR (VK11) · Cập nhật gần đây (VK12) · mỗi bộ OKR một trang và bộ lọc Tôi dẫn (VK3) · khung toàn

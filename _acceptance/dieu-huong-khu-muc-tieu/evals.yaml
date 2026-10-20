@@ -161,6 +161,8 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.dhk_giu_don
+    status: not-run
+    superseded_by: vo-khu-muc-tieu#AC-2
     paths:
       - "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx"
       - "apps/app/app/(app)/[slug]/okr/tab-okr.ts"
