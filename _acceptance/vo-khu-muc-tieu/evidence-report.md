@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3a0321d1f573da3ba5d87785aa50c8e1a340dc29
+verified_commit: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660
 human_signoff: Phan Le Manh 2026-10-20
 ---
 
@@ -226,3 +226,7 @@ none — every multi-run eval is uniform
 Round 1: bo eval dau tien chay va ghi log (verified_at 2026-10-20T00:50:13Z); E5, E8 giu nguyen den round 3 vi delta khong cham paths cua chung.
 Round 2: chay lai phan con lai cua bo eval (verified_at 2026-10-20T05:50:02Z); E1-E4, E6, E9-E14 giu nguyen den round 3.
 Round 3: chay lai E7 va bay lenh suite tren verified_commit 3a0321d1f573da3ba5d87785aa50c8e1a340dc29; 14 eval PASS, verdict PASS.
+
+### Re-pin lần 1 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T130437Z-49516
+sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
