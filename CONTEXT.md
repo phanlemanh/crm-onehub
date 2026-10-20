@@ -1284,6 +1284,15 @@ Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sa
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
 được nhận làm, còn tín hiệu chưa hứa gì.
 
+**Lưu trữ tín hiệu**: chủ hoặc quản trị CRM cất một tín hiệu rác (thử, trùng, gửi nhầm) khỏi thẻ «Tất cả» trước khi
+đội sản phẩm lấy về; lượt lấy về bỏ qua nó. Có «Hoàn tác» ngay sau khi bấm và «Khôi phục» ở «Đã lưu trữ»; mỗi lần lưu
+trữ hay khôi phục ghi lại ai làm. Tín hiệu đội sản phẩm đã lấy về thì không lưu trữ được nữa. Người gửi vẫn thấy tín
+hiệu của mình, nhãn «Đã lưu trữ», và vẫn tự xoá được. Không có xoá vĩnh viễn. Chốt 2026-10-19 tại Cổng Phạm vi của
+`go-tin-hieu-rac`.
+_Avoid_: gỡ (khi ý là lưu trữ), ẩn, xoá, đánh dấu rác
+Vì sao: «gỡ» và «ẩn» trong từ điển là chữ của quyền, liên kết và chu kỳ; «xoá» là mất thật — tín hiệu lưu trữ thì lấy
+lại được.
+
 **Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
 của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè
 bản cũ, không giữ lịch sử. Trang Lộ trình đọc bản chụp khi nó mới hơn bản CRM đang chạy, và

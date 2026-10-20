@@ -1,6 +1,8 @@
 import {
 	guiTinHieuInput,
 	keoVeOutput,
+	khoiPhucTinHieuInput,
+	luuTruTinHieuInput,
 	xoaTinHieuInput,
 } from "@crm/validation/tin-hieu";
 import { Inject } from "@nestjs/common";
@@ -19,6 +21,8 @@ import { restMeta } from "../trpc/openapi";
 import { docPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import {
 	guiTinHieuOutput,
+	khoiPhucTinHieuOutput,
+	luuTruTinHieuOutput,
 	tinHieuCuaToiOutput,
 	tinHieuTatCaOutput,
 	xoaTinHieuOutput,
@@ -64,6 +68,38 @@ export class TinHieuRouter {
 	})
 	tatCa(@Ctx() ctx: AuthedTrpcContext) {
 		return this.tinHieu.tatCa(nguoiGoi(ctx));
+	}
+
+	@Query({
+		output: tinHieuTatCaOutput,
+		meta: restMeta("GET", "/tin-hieu/da-luu-tru", TAG),
+	})
+	daLuuTru(@Ctx() ctx: AuthedTrpcContext) {
+		return this.tinHieu.tatCa(nguoiGoi(ctx), true);
+	}
+
+	@Mutation({
+		input: luuTruTinHieuInput,
+		output: luuTruTinHieuOutput,
+		meta: restMeta("POST", "/tin-hieu/{id}/luu-tru", TAG),
+	})
+	luuTru(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof luuTruTinHieuInput>,
+	) {
+		return this.tinHieu.luuTru(nguoiGoi(ctx), input.id);
+	}
+
+	@Mutation({
+		input: khoiPhucTinHieuInput,
+		output: khoiPhucTinHieuOutput,
+		meta: restMeta("POST", "/tin-hieu/{id}/khoi-phuc", TAG),
+	})
+	khoiPhuc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof khoiPhucTinHieuInput>,
+	) {
+		return this.tinHieu.khoiPhuc(nguoiGoi(ctx), input.id);
 	}
 
 	@Mutation({
