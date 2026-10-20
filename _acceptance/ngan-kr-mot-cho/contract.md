@@ -5,7 +5,7 @@ slug: ngan-kr-mot-cho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-20
 design_doc: docs/superpowers/specs/2026-10-20-ngan-kr-mot-cho-design.md
@@ -146,3 +146,19 @@ chân ngành: Tability — một ngăn KR, «Create check-in» ở đầu, ‹ �
   E7, E13, E14, E16, E19, E23, E29) đỏ sẵn trên nền merge-base `a0b110b06` ở bước E6 «5 thẻ, thẻ Cập nhật tuần», gãy từ
   `b9be1abfb` (A3 bỏ thẻ «Cập nhật tuần») và `6c1bf4e52` (`/okr/cap-nhat-tuan` chuyển hướng). E13 in `DO-SAN-NEN` cho
   chúng; đối chứng GIU của E13 chỉ còn `no-sau-luot-4-okr` E8. VK7 không sửa thước ấy.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Cập nhật một KR hai lần trong cùng một tuần thì lịch sử chỉ hiện một dòng với giá trị mới nhất, không thêm dòng thứ hai. Người dùng vẫn thấy đúng số vừa gửi, nhưng không thấy lần cập nhật trước của tuần đó.
+  - Ngoài-2: Hai ảnh minh hoạ lối mở KR từ sơ đồ và từ Của tôi giống hệt nhau vì ngăn phủ kín màn hình. Người ký chỉ có nhật ký chứ không có ảnh để thấy hai lối đều mở đúng ngăn.
+  - Ngoài-3: Liên kết về mục tiêu trong ngăn KR hoạt động bình thường, chỉ khác góc bo một chút so với các liên kết khác trong ứng dụng.
+  - Ngoài-4: Các mục trong ngăn KR hiển thị đủ và đúng thứ tự, chỉ là tiêu đề mục được dựng riêng thay vì dùng thành phần chung.
+  - Ngoài-6: Trên trang đơn vị, nút Cập nhật của từng dòng KR có thể hiện chậm hơn một chút so với phần còn lại, làm dòng nhích nhẹ khi nút xuất hiện.
+  - Ngoài-7: Việc nhớ hướng chuyển KR được giữ ở mức toàn trang thay vì từng ngăn, nên trong tình huống hiếm tiêu điểm bàn phím có thể nhảy sai chỗ.
+  - Ngoài-8: Người dùng không thấy gì khác; chỉ là tệp mã của ngăn KR đã dài hơn mức đội đặt ra, khó bảo trì hơn.
+  - Ngoài-10: Nếu việc tải lịch sử cho phần xem trước bị lỗi, hộp Cập nhật không hiện đồ thị xem trước và không báo gì, nhưng vẫn nhập và gửi được.
+  - Ngoài-11: Khi ngăn KR báo lỗi tải, bấm Thử lại vẫn tải lại nhưng nút không báo là đang chạy, nên người dùng có thể bấm thêm lần nữa.
+  - Ngoài-12: Trong tình huống hiếm, sau khi bấm sang KR đã bị xoá hoặc tải lỗi, lần mở ngăn KR kế tiếp có thể tự đưa tiêu điểm vào nút mũi tên.
+  - Ngoài-13: Phép kiểm tự động dò lối mở ngăn cũ có thể cho qua nhầm trong một kiểu hồi quy hiếm; người dùng hiện không bị ảnh hưởng.
+  - Ngoài-14: Hai dòng chữ mới của hộp Cập nhật chưa được bài kiểm tự động soát bản tiếng Anh, nên nếu sai thì sẽ không bị bắt tự động.
+  - Ngoài-15: Bài kiểm tự động chỉ thử một mức tự tin, nên nếu nút mức khác gửi nhầm giá trị thì bài kiểm này có thể không phát hiện.
+  - Ngoài-16: Bài kiểm tự động chưa chứng minh chắc rằng mục tiêu đã bỏ hay kỳ đã khép không hiện nút Cập nhật; sản phẩm thật chưa thấy lỗi.
+  - Ngoài-17: Phép đo trên màn chỉ xác nhận ô Hiện tại đã đổi chứ chưa chắc nó đúng bằng số vừa gửi, và số dòng lịch sử có tăng một hay không.
