@@ -100,6 +100,7 @@ const ALIAS_CHO_PHEP = [
 	"taiLieuNguon",
 	"tinHieu",
 	"thongBao",
+	"sanPhamLoTrinh",
 ] as const;
 const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
 const KHONG_NHAN_PHIEN = [

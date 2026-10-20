@@ -1,0 +1,43 @@
+{
+  "feature_plain": "Chủ kho mở trang Lộ trình, chọn Kit nghiệm thu, OneHub Platform hay sản phẩm khác ở một ô chọn, và đọc lộ trình, tiến độ, hồ sơ của sản phẩm đó y như đọc CRM; quản trị khai sản phẩm và người được xem ở Cài đặt.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ lấy lộ trình của một sản phẩm trong vòng một nhịp (5 phút) sau khi quản trị khai nó và kho đã cài ứng dụng GitHub chỉ đọc, rồi hiện đủ lộ trình, tiến độ, mốc và hồ sơ như trang CRM."},
+    {"id": "AC-4", "p": "Sẽ chỉ cho chủ, quản trị và người được cấp thấy một sản phẩm — kể cả khi ai đó gõ tay đường dẫn — và người được cấp không thấy số liệu riêng của chủ kho."},
+    {"id": "AC-5", "p": "Sẽ cho chủ và quản trị khai, sửa, cấp người xem ở Cài đặt › Sản phẩm; thành viên chỉ đọc, ô khai sai báo đúng ô, CRM là dòng cố định; sửa nguồn theo câu trả lời Hỏi-3."},
+    {"id": "AC-6", "p": "Sẽ dọn một sản phẩm theo ba câu trả lời của Hỏi-2: Xoá khi chưa từng lấy được, Lưu trữ có Hoàn tác khi đã lấy, Xoá vĩnh viễn chỉ từ «Đã lưu trữ»."},
+    {"id": "AC-7", "p": "Sẽ đọc được lộ trình vẽ bằng khuôn cũ và khuôn mới hơn, kèm một dòng nói sản phẩm đang ở khuôn bản nào; tệp không phải lộ trình thì báo hỏng."},
+    {"id": "AC-8", "p": "Sẽ hiện ô chọn sản phẩm chỉ khi người xem thấy từ hai sản phẩm, giữ lựa chọn trên đường dẫn, không cuộn ngang ở điện thoại và máy tính, hai thứ tiếng, nền sáng và tối."},
+    {"id": "AC-9", "p": "Sẽ đọc kho chỉ bằng quyền đọc của ứng dụng GitHub, xin quyền cho đúng một kho mỗi lần, không bao giờ dùng khoá cá nhân và không để lộ khoá ra nhật ký hay dữ liệu."},
+    {"id": "AC-10", "p": "Sẽ có lệnh đo in, với mỗi sản phẩm, từ lúc khai và cài tới lúc lộ trình hiện mất bao lâu, và kết luận đạt hay không theo ngưỡng «trong ngày cài»."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG tải lại tệp khi nhánh chính đứng yên, KHÔNG hỏi GitHub trước khi tới nhịp, và lấy bản mới ngay nhịp sau khi nhánh đổi."},
+    {"id": "AC-3", "p": "Sẽ KHÔNG làm hỏng trang hay mất bản đang hiện khi lấy hỏng (chưa cài, sai kho, sai tệp, tệp hỏng, quá lớn, GitHub lỗi): Cài đặt nói đúng chỗ hỏng, trang vẫn hiện bản cũ kèm một dòng báo."},
+    {"id": "OOS-1", "p": "KHÔNG làm GitHub báo về ngay khi nhánh đổi; máy tự hỏi mỗi 5 phút."},
+    {"id": "OOS-2", "p": "KHÔNG chuyển CRM sang ứng dụng GitHub trong vòng này (Hỏi-4)."},
+    {"id": "OOS-3", "p": "KHÔNG có nút «Lấy lại ngay»; nhịp sau tự lấy."},
+    {"id": "OOS-4", "p": "KHÔNG cấp quyền xem theo phòng ban hay nhóm."},
+    {"id": "OOS-5", "p": "KHÔNG giữ lịch sử các lần lấy; mỗi sản phẩm một bản mới nhất."},
+    {"id": "OOS-6", "p": "KHÔNG lùi về bản cũ khi ai đó đẩy đè nhánh về một lần gộp cũ hơn, như CRM hôm nay."},
+    {"id": "OOS-7", "p": "KHÔNG làm hộp gửi tín hiệu chọn sản phẩm — hàng riêng."},
+    {"id": "OOS-8", "p": "KHÔNG ghi gì vào kho sản phẩm và KHÔNG đọc toàn văn hồ sơ — chỉ phần tóm tắt có sẵn trong lộ trình."},
+    {"id": "OOS-9", "p": "KHÔNG tự tạo ứng dụng GitHub thật hay cài nó vào kho — việc của chủ kho sau khi gộp."}
+  ],
+  "scope_plain": "Những việc cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đối chiếu với sản phẩm cùng loại: danh mục phần mềm Backstage (đăng ký bằng một tệp trong kho, đọc qua ứng dụng GitHub, làm mới định kỳ, lỗi hiện trên từng mục) và cách GitHub cấp quyền đọc theo kho."},
+    {"i": 1, "p": "Mọi bước trong đời một sản phẩm — khai, sửa tên, sửa nguồn, cấp người xem, dọn, và CRM cố định — đều có tiêu chí (AC-5 danh bạ, AC-6 dọn)."},
+    {"i": 2, "p": "Mọi vai — chủ, quản trị, thành viên được cấp, thành viên không cấp, người chỉ OKR — đều được thử xem và sửa (AC-4 quyền xem, AC-5 danh bạ)."},
+    {"i": 3, "p": "Mọi cách lấy có thể hỏng hay đổi — chưa cài, sai kho, sai tệp, tệp hỏng, khuôn cũ hay mới, quá lớn, GitHub lỗi, nhánh đứng yên hay đổi — đều có ô đo (AC-2, AC-3, AC-7)."},
+    {"i": 4, "p": "Hai màn và lệnh đo được thử ở điện thoại và máy tính, hai thứ tiếng, nền sáng và tối (AC-8 màn, AC-10 lệnh đo)."},
+    {"i": 5, "p": "Mười tiêu chí ứng với mười ô cốt lõi của bản quét, mỗi ô một tiêu chí."},
+    {"i": 6, "p": "Ca đẩy đè nhánh về bản cũ để ngoài vòng (giống CRM hôm nay); khách chưa đăng nhập đã bị chặn ở cửa vào sẵn có."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Máy từng tự quyết «sửa nguồn thì xoá bản đang hiện», nhưng còn lối giữ bản cũ tới khi nguồn mới lấy được; một lỗi gõ ở ô nhánh có thể làm trang người đang đọc thành trống. Đã chuyển thành câu hỏi cho anh (Hỏi-3)."},
+    {"i": 1, "p": "Máy từng tự quyết giữ CRM trên khoá của một người, trích một câu không thật sự quyết điều đó; và lý do chọn «tự hỏi mỗi 5 phút» trích sai chỗ. Đã chuyển CRM thành câu hỏi cho anh (Hỏi-4) và đổi lý do nhịp sang ngưỡng «trong ngày cài»."},
+    {"i": 2, "p": "Chưa có bài nào thử người được cấp xem sản phẩm mà không thấy số liệu riêng của chủ kho. Đã thêm vào AC-4 và bài đo."},
+    {"i": 3, "p": "Chưa ai đo ô «bản khuôn» ở Cài đặt, và khuôn mới hơn chưa đi qua đường lấy thật. Đã thêm cả hai vào AC-7 và bài đo."},
+    {"i": 4, "p": "Trạng thái «lần lấy gần nhất hỏng» có trong bản vẽ nhưng không tiêu chí nào hứa. Đã thêm vào AC-3 và bài đo."}
+  ]
+}

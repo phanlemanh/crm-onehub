@@ -116,6 +116,8 @@ model User {
   duAnMocTao        DuAnMoc[]         @relation("DuAnMocTaoBoi")
   viecPhuThuocTao   ViecPhuThuoc[]    @relation("ViecPhuThuocTaoBoi")
   ngayNghiTao       NgayNghi[]        @relation("NgayNghiTaoBoi")
+  sanPhamLoTrinhTao  SanPhamLoTrinh[]  @relation("SanPhamLoTrinhTaoBoi")
+  sanPhamLoTrinhXem  SanPhamNguoiXem[]
 
   @@unique([email])
   @@map("user")
@@ -3182,6 +3184,40 @@ model BanChupLoTrinh {
   layLuc    DateTime
   duLieu    Json
   canhBao   String[]
+}
+
+model SanPhamLoTrinh {
+  ma            String            @id
+  ten           String
+  kho           String
+  nhanh         String
+  duongTep      String
+  trangThaiLay  String            @default("chua-lay")
+  chiTietLay    String?
+  kiemLuc       DateTime?
+  layDauLuc     DateTime?
+  caiLuc        DateTime?
+  nguonDoiLuc   DateTime?
+  phienBanKhuon Int?
+  luuTruLuc     DateTime?
+  taoBoiId      String
+  taoBoi        User              @relation("SanPhamLoTrinhTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc        DateTime          @default(now())
+  doiLuc        DateTime          @updatedAt
+  nguoiXem      SanPhamNguoiXem[]
+
+  @@index([luuTruLuc, kiemLuc])
+}
+
+model SanPhamNguoiXem {
+  sanPhamMa String
+  sanPham   SanPhamLoTrinh @relation(fields: [sanPhamMa], references: [ma], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  capLuc    DateTime       @default(now())
+
+  @@id([sanPhamMa, userId])
+  @@index([userId])
 }
 
 model DuAn {

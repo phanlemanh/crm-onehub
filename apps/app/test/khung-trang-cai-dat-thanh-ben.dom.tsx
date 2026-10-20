@@ -59,7 +59,7 @@ const NHOM = [
 		"Con người",
 		["Thành viên", "Tổ chức", "Chương trình OKR", "Điều phối 30 ngày"],
 	],
-	["Kết nối và dữ liệu", ["Kết nối", "Theo dõi & phân tích"]],
+	["Kết nối và dữ liệu", ["Kết nối", "Theo dõi & phân tích", "Sản phẩm"]],
 	["Bảo mật", ["SSO", "Khoá API"]],
 ] as const;
 
@@ -74,6 +74,7 @@ const DUONG = [
 	["/ws/settings/onboarding", "Điều phối 30 ngày"],
 	["/ws/settings/connections", "Kết nối"],
 	["/ws/settings/tracking", "Theo dõi & phân tích"],
+	["/ws/settings/san-pham", "Sản phẩm"],
 	["/ws/settings/sso", "SSO"],
 	["/ws/settings/api-keys", "Khoá API"],
 	["/ws/settings/connections/google", "Kết nối"],

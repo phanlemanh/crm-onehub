@@ -74,6 +74,35 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "lo-trinh-nhieu-san-pham",
+		ten: "Lộ trình nhiều sản phẩm — bộ chọn sản phẩm và Cài đặt › Sản phẩm",
+		states: [
+			{ id: "ST-lotrinh-chon", nhan: "Lộ trình — bộ chọn, CRM chọn sẵn" },
+			{ id: "ST-lotrinh-sp", nhan: "Lộ trình — Kit nghiệm thu đã lấy" },
+			{ id: "ST-lotrinh-sp-en", nhan: "Lộ trình — Kit nghiệm thu, tiếng Anh" },
+			{
+				id: "ST-lotrinh-sp-chua-co",
+				nhan: "Lộ trình — sản phẩm chưa có bản chụp",
+			},
+			{
+				id: "ST-lotrinh-sp-lay-hong",
+				nhan: "Lộ trình — lần lấy gần nhất hỏng",
+			},
+			{ id: "ST-lotrinh-sp-nguon-doi", nhan: "Lộ trình — nguồn vừa đổi" },
+			{ id: "ST-lotrinh-sp-khuon-cu", nhan: "Lộ trình — khuôn bản 1" },
+			{ id: "ST-sanpham-danh-sach", nhan: "Cài đặt — danh sách sản phẩm" },
+			{ id: "ST-sanpham-rong", nhan: "Cài đặt — chưa có sản phẩm khác" },
+			{ id: "ST-sanpham-khong-quyen", nhan: "Cài đặt — thành viên, chỉ đọc" },
+			{
+				id: "ST-sanpham-chua-cau-hinh",
+				nhan: "Cài đặt — máy chủ chưa có ứng dụng GitHub",
+			},
+			{ id: "ST-sanpham-them", nhan: "Cài đặt — Sheet thêm, ô tệp sai" },
+			{ id: "ST-sanpham-nguoi-xem", nhan: "Cài đặt — Sheet người xem" },
+			{ id: "ST-sanpham-da-luu-tru", nhan: "Cài đặt — mục Đã lưu trữ" },
+		],
+	},
+	{
 		slug: "lo-trinh-doc-ban-chup",
 		ten: "Lộ trình đọc bản chụp — dòng giờ lấy",
 		states: [
