@@ -831,6 +831,14 @@ const cuonToi = (trang, sel) =>
 		window.__tim(s)[0]?.scrollIntoView({ block: "start" });
 	}, sel);
 
+const huyHieuTab = (trang) =>
+	trang.evaluate(
+		() =>
+			window
+				.__tim("[data-khung-tab] a[href*='/okr/hoi-y'] [data-slot='badge']")[0]
+				?.innerText.trim() ?? null,
+	);
+
 async function xoaHoiYTren(cycleIds) {
 	const hoiY = await db.okrHoiY.findMany({
 		where: { cycleId: { in: cycleIds } },
@@ -1147,6 +1155,15 @@ async function nhomE12() {
 	nhom = "E12 buoc 5";
 	const t = await moTrang("A", DO.hep, duongHoiY(NAM_KE));
 	await choTrangThai(t, "gop", "E12 buoc 5");
+	await doi(
+		t,
+		`E12 buoc 5: tab Hoi y mang huy hieu «${CHU_OKR.nhanHoiYMoi}»`,
+		(c) =>
+			window
+				.__tim("[data-khung-tab] a[href*='/okr/hoi-y'] [data-slot='badge']")[0]
+				?.innerText.trim() === c,
+		CHU_OKR.nhanHoiYMoi,
+	);
 	await t.evaluate(() => {
 		const k = document.querySelector("[data-slot='page-shell-scroll']");
 		if (k) k.scrollTop = 0;
@@ -1169,6 +1186,8 @@ async function nhomE12() {
 		const clamp = window.__tim("[data-khoi='loi-mo'] p.line-clamp-3")[0];
 		const oSoan = window.__tim("[data-khoi='o-soan'] textarea")[0];
 		const gui = window.__tim("[data-khoi='o-soan'] button[type='submit']")[0];
+		const tab = window.__tim("[data-khung-tab] a[aria-current='page']")[0];
+		const r = tab?.getBoundingClientRect();
 		return {
 			moc,
 			the,
@@ -1185,6 +1204,7 @@ async function nhomE12() {
 				: null,
 			oSoanTop: oSoan ? Math.round(oSoan.getBoundingClientRect().top) : null,
 			guiDay: gui ? Math.round(gui.getBoundingClientRect().bottom) : null,
+			tab: r ? { trai: r.left, phai: r.right } : null,
 			rong: window.innerWidth,
 		};
 	});
@@ -1239,6 +1259,10 @@ async function nhomE12() {
 	kiem(
 		`E12 buoc 5: nut «${CHU.gop.gui}» nam tron trong man dau, day ${dau.guiDay}px <= ${DO.cao[DO.hep]}`,
 		dau.guiDay !== null && dau.guiDay <= DO.cao[DO.hep],
+	);
+	kiem(
+		`E12 buoc 5: tab Hoi y dang dung nam tron [0, ${dau.rong}] (thay ${JSON.stringify(dau.tab)})`,
+		dau.tab !== null && dau.tab.trai >= 0 && dau.tab.phai <= dau.rong,
 	);
 	await chup(t, "buoc-man-dau.png");
 	await bamChu(t, "[data-khoi='loi-mo'] button", CHU.moDau.docThem);
@@ -1396,6 +1420,13 @@ async function nhomE12() {
 	kiem(
 		`E12 buoc 6: y mang translate=no (thay ${JSON.stringify(khongDich)})`,
 		khongDich.so > 0 && khongDich.lech === 0,
+	);
+	await doi(
+		g,
+		"E12 buoc 6: tab Hoi y mat huy hieu Moi sau khi gui",
+		() =>
+			window.__tim("[data-khung-tab] a[href*='/okr/hoi-y'] [data-slot='badge']")
+				.length === 0,
 	);
 	const dongY = await db.okrYDongY.findMany({
 		where: { yId: yDau ?? "", userId: id.A },
@@ -2092,6 +2123,14 @@ async function nhomE15() {
 		if (k) k.scrollTop = 0;
 	});
 	await cho(600);
+	const chuaKl = () =>
+		db.okrChuDe.count({ where: { hoiYId: h.id, ketLuan: null } });
+	const soTab = await huyHieuTab(c);
+	const mongTab = String(await chuaKl());
+	kiem(
+		`E15 buoc 4: tab Hoi y mang so chu de chua ket luan ${mongTab} (thay «${soTab}»)`,
+		soTab === mongTab,
+	);
 	const chuDeNay = await db.okrChuDe.findMany({
 		where: { hoiYId: h.id },
 		orderBy: [{ viTri: "asc" }, { id: "asc" }],
@@ -2277,10 +2316,13 @@ async function nhomE15() {
 	];
 	for (const kl of ketLuan) {
 		await ketLuanMot(c, kl);
+		const conChua = await chuaKl();
+		const tab = await huyHieuTab(c);
 		const mlSau = await trangThaiMucLuc(c);
 		kiem(
-			`E15 buoc 5: sau «${kl.ten}» dau muc luc doi`,
-			mlSau.find((m) => m.id === kl.id)?.da === true,
+			`E15 buoc 5: sau «${kl.ten}» tab mang ${conChua || "khong huy hieu"} (thay «${tab}»), dau muc luc doi`,
+			(conChua === 0 ? tab === null : tab === String(conChua)) &&
+				mlSau.find((m) => m.id === kl.id)?.da === true,
 		);
 	}
 	kiem(
@@ -2307,6 +2349,7 @@ async function nhomE15() {
 		},
 		sanSang,
 	);
+	kiem("E15 buoc 5: tab het huy hieu", (await huyHieuTab(c)) === null);
 	await chup(c, "buoc-du.png");
 	const dbKl = await db.okrChuDe.findMany({
 		where: { id: { in: ketLuan.map((x) => x.id) } },
