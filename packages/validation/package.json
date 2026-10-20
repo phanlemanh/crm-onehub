@@ -84,6 +84,7 @@
 		"./lo-trinh-du-lieu": "./src/lo-trinh-du-lieu.ts",
 		"./ban-chup-lo-trinh": "./src/ban-chup-lo-trinh.ts",
 		"./san-pham-lo-trinh": "./src/san-pham-lo-trinh.ts",
+		"./doc-du-lieu-lo-trinh": "./src/doc-du-lieu-lo-trinh.js",
 		"./tin-hieu": "./src/tin-hieu.ts",
 		"./thong-bao": "./src/thong-bao.ts"
 	},

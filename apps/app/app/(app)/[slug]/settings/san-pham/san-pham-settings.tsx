@@ -37,8 +37,8 @@ import {
 	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { formatNgayGio } from "@crm/ui/lib/format";
@@ -277,7 +277,13 @@ export function SanPhamSettings() {
 			.catch((e: Error) => toast.error(e.message));
 	};
 
-	if (ds.isPending) return <KhungXuong hinh="danh-sach" />;
+	if (ds.isPending)
+		return (
+			<div className="flex flex-col gap-2" data-san-pham-dang-tai="">
+				<Skeleton className="h-14 w-full" />
+				<Skeleton className="h-14 w-full" />
+			</div>
+		);
 	if (ds.isError || !ds.data)
 		return (
 			<VungTaiLoi

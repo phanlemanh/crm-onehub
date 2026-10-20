@@ -658,8 +658,10 @@ phẩm chưa lưu trữ mà lần kiểm cuối cũ hơn `nhipKiemMs` (5 phút).
 - **Mỗi lỗi một trạng thái**: `chua-cai` · `khong-thay-kho` · `khong-thay-tep` · `khoi-hong` (kèm đường
   khoá hỏng) · `qua-tran` (2 MB) · `loi-github`. Bản chụp đang lưu không đổi; lỗi một sản phẩm không
   dừng sản phẩm khác. Nhật ký chỉ ghi mã và trạng thái — không token, không khoá.
-- **Bộ đọc khối** là `apps/app/lib/lo-trinh/doc-du-lieu.js` (bản chép kit, có hồ sơ đã ký đo nó khớp
-  từng byte), nhập theo đường tương đối; `tsconfig` của agent bật `allowJs` chỉ cho việc này.
+- **Bộ đọc khối** là bản chép kit `packages/validation/src/doc-du-lieu-lo-trinh.js`, trùng từng byte với
+  `apps/app/lib/lo-trinh/doc-du-lieu.js` (bài `doc-du-lieu-lo-trinh.spec.ts` giữ hai bản trùng nhau; nâng kit
+  thì chép cả hai). Bản dựng eve không với tới tệp trong `apps/app`, nên agent nhập bản trong gói;
+  `tsconfig` của agent bật `allowJs` chỉ cho việc này.
 
 ### Chụp số OKR mỗi ngày
 

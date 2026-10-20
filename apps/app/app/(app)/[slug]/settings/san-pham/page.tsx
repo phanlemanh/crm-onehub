@@ -1,4 +1,3 @@
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
@@ -6,6 +5,7 @@ import {
 	PageShellActions,
 	PageShellContent,
 	PageShellDescription,
+	PageShellFallback,
 	PageShellHeader,
 	PageShellHeading,
 	PageShellTitle,
@@ -79,7 +79,7 @@ export default async function SanPhamSettingsPage() {
 				</PageShellActions>
 			</PageShellHeader>
 			<PageShellContent>
-				<Suspense fallback={<KhungXuong hinh="danh-sach" />}>
+				<Suspense fallback={<PageShellFallback />}>
 					<DanhSach />
 				</Suspense>
 			</PageShellContent>

@@ -5,9 +5,9 @@ import {
 	type TrangThaiLay,
 } from "@crm/db/san-pham-lo-trinh-danh-muc";
 import { BAN_CHUP_LO_TRINH } from "@crm/validation/ban-chup-lo-trinh";
+import { docDuLieu } from "@crm/validation/doc-du-lieu-lo-trinh";
 import { phanTichLoTrinh } from "@crm/validation/lo-trinh-du-lieu";
 import { z } from "zod";
-import { docDuLieu } from "../../../app/lib/lo-trinh/doc-du-lieu.js";
 
 const API_GOC = "https://api.github.com";
 const PHIEN_BAN_API = "2022-11-28";

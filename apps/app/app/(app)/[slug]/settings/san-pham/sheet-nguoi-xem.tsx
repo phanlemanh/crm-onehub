@@ -4,7 +4,6 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { Checkbox } from "@crm/ui/components/checkbox";
 import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
@@ -15,6 +14,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@crm/ui/components/sheet";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
@@ -93,7 +93,10 @@ export function SheetNguoiXem({
 							))}
 						</FieldGroup>
 					) : (
-						<KhungXuong hinh="danh-sach" />
+						<div className="flex flex-col gap-2" data-san-pham-dang-tai="">
+							<Skeleton className="h-14 w-full" />
+							<Skeleton className="h-14 w-full" />
+						</div>
 					)}
 				</div>
 				<SheetFooter>

@@ -155,7 +155,7 @@ const vi: SanPhamMessages = {
 		suaTieuDe: (ten: string) => `Sửa ${ten}`,
 		moTa: "Trang Lộ trình đọc tệp này ở đầu nhánh, mỗi 5 phút.",
 		ten: "Tên",
-		kho: "Kho GitHub",
+		kho: "Kho trên GitHub",
 		khoMoTa: "Dạng chủ/kho, ví dụ phanlemanh/acceptance-gate-kit.",
 		nhanh: "Nhánh",
 		tep: "Đường tệp",
