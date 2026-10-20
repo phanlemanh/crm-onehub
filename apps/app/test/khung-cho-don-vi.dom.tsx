@@ -96,7 +96,7 @@ function fallbackCuaTrang(): ReactElement {
 	const cay = TheoDonViPage({ searchParams: Promise.resolve({}) });
 	const s = timSuspense(cay);
 	phai(s !== null, "SAI AC-5: page.tsx khong co Suspense");
-	const fallback = (s?.props as { fallback?: ReactNode }).fallback;
+	const fallback = s ? (s.props as { fallback?: ReactNode }).fallback : null;
 	phai(
 		isValidElement(fallback),
 		"SAI AC-5: Suspense cua page.tsx khong co fallback",
@@ -215,18 +215,18 @@ describe("kcd-a11y", () => {
 	for (const [ten, dung] of CA) {
 		test(`${ten}: aria-busy, mot dong Dang tai OKR, vach an`, () => {
 			const o = ve(dung());
-			const vo = o.querySelector('[data-trang-thai="ST-donvi-dangtai"]');
-			phai(vo !== null, `SAI AC-7: ${ten} thieu ST-donvi-dangtai`);
-			phai(
-				vo?.getAttribute("aria-busy") === "true",
-				`SAI AC-7: ${ten} khong aria-busy`,
-			);
 			const trangThai = o.querySelectorAll('[role="status"]');
 			phai(
 				trangThai.length === 1 && trangThai[0]?.textContent === M.dangTai,
 				ten === "fallback page.tsx"
 					? "SAI AC-7: fallback page.tsx khong doc Dang tai OKR"
 					: `SAI AC-7: ${ten} khong doc dung mot cau Dang tai OKR`,
+			);
+			const vo = o.querySelector('[data-trang-thai="ST-donvi-dangtai"]');
+			phai(vo !== null, `SAI AC-7: ${ten} thieu ST-donvi-dangtai`);
+			phai(
+				vo?.getAttribute("aria-busy") === "true",
+				`SAI AC-7: ${ten} khong aria-busy`,
 			);
 			for (const vach of o.querySelectorAll("[data-slot=skeleton]"))
 				phai(

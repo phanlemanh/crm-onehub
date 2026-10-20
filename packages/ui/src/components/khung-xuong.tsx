@@ -179,21 +179,38 @@ function ThanBangHaiDong() {
 	return (
 		<div
 			aria-hidden="true"
-			className="flex flex-col gap-1 overflow-hidden rounded-lg border bg-card"
+			className="flex flex-col overflow-hidden rounded-lg border bg-card"
 		>
-			<Skeleton className="h-11 w-full" data-khung-hang="dau-bang" />
+			<Skeleton className="h-11 w-full rounded-none" data-khung-hang="dau-bang" />
 			{day(KHUNG_XUONG.bangHaiDong.hang, "hang").map((k) => (
 				<div
-					className="flex items-center gap-4 px-4 py-3"
+					className="flex items-center gap-4 border-b px-4 py-3"
 					data-khung-hang="hang"
 					key={k}
 				>
-					<div className="flex min-w-0 flex-1 flex-col gap-2">
-						<Skeleton className="h-4 w-2/3" />
-						<Skeleton className="h-3 w-1/2" />
+					<div className="flex min-w-0 flex-1 flex-col gap-1">
+						<div className="flex flex-col gap-1 md:h-5 md:flex-row md:items-center md:gap-2">
+							<div className="flex h-4 items-center">
+								<Skeleton className="h-4 w-2/3 md:w-64" />
+							</div>
+							<div className="flex h-5 items-center gap-2">
+								<Skeleton className="h-5 w-14" />
+								<Skeleton className="h-5 w-20" />
+							</div>
+						</div>
+						<div className="flex h-4 items-center">
+							<Skeleton className="h-3 w-1/2" />
+						</div>
+						<div className="pt-1 md:hidden">
+							<div className="flex h-14 flex-col justify-center gap-2">
+								<Skeleton className="h-3 w-24" />
+								<Skeleton className="h-2 w-full" />
+							</div>
+						</div>
 					</div>
 					<Skeleton className="hidden h-3 w-56 md:block" />
-					<Skeleton className="h-4 w-24" />
+					<Skeleton className="hidden h-4 w-28 md:block" />
+					<Skeleton className="hidden h-4 w-36 lg:block" />
 				</div>
 			))}
 		</div>

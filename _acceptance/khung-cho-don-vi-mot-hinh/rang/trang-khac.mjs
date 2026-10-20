@@ -11,7 +11,14 @@
  * đếm lại trên bản sao → phải đỏ với «SAI AC-6: deals dung bang-hai-dong»; cây thật phải xanh.
  * Mã thoát: 0 đạt · 1 có dòng SAI · 2 không đo được.
  */
-import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+	cpSync,
+	mkdtempSync,
+	readdirSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -39,12 +46,25 @@ function demHinh(goc) {
 	for (const ten of readdirSync(thuMuc, { recursive: true })) {
 		if (!ten.endsWith(".tsx")) continue;
 		const duong = join(thuMuc, ten);
-		const nguon = ts.createSourceFile(duong, readFileSync(duong, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+		const nguon = ts.createSourceFile(
+			duong,
+			readFileSync(duong, "utf8"),
+			ts.ScriptTarget.Latest,
+			true,
+			ts.ScriptKind.TSX,
+		);
 		const trang = relative(thuMuc, dirname(duong)).split(sep).join("/");
 		const di = (n) => {
-			if ((ts.isJsxSelfClosingElement(n) || ts.isJsxOpeningElement(n)) && n.tagName.getText(nguon) === "KhungXuong") {
+			if (
+				(ts.isJsxSelfClosingElement(n) || ts.isJsxOpeningElement(n)) &&
+				n.tagName.getText(nguon) === "KhungXuong"
+			) {
 				for (const thuocTinh of n.attributes.properties) {
-					if (!ts.isJsxAttribute(thuocTinh) || thuocTinh.name.getText(nguon) !== "hinh") continue;
+					if (
+						!ts.isJsxAttribute(thuocTinh) ||
+						thuocTinh.name.getText(nguon) !== "hinh"
+					)
+						continue;
 					const gt = thuocTinh.initializer;
 					const hinh = gt && ts.isStringLiteral(gt) ? gt.text : "?";
 					const tap = ra.get(hinh) ?? new Set();
@@ -64,9 +84,14 @@ function cham(goc) {
 	const bang = dem.get("bang") ?? new Set();
 	const haiDong = dem.get("bang-hai-dong") ?? new Set();
 	const sai = [];
-	for (const trang of TRANG_BANG) if (!bang.has(trang)) sai.push(`SAI AC-6: ${trang.split("/").at(-1)} khong con dung bang`);
-	for (const trang of haiDong) if (trang !== TRANG_HAI_DONG) sai.push(`SAI AC-6: ${trang.split("/").at(-1)} dung bang-hai-dong`);
-	if (!haiDong.has(TRANG_HAI_DONG)) sai.push("SAI AC-6: theo-don-vi khong dung bang-hai-dong");
+	for (const trang of TRANG_BANG)
+		if (!bang.has(trang))
+			sai.push(`SAI AC-6: ${trang.split("/").at(-1)} khong con dung bang`);
+	for (const trang of haiDong)
+		if (trang !== TRANG_HAI_DONG)
+			sai.push(`SAI AC-6: ${trang.split("/").at(-1)} dung bang-hai-dong`);
+	if (!haiDong.has(TRANG_HAI_DONG))
+		sai.push("SAI AC-6: theo-don-vi khong dung bang-hai-dong");
 	const dong = `AC-6: ${bang.size} trang dung bang · bang-hai-dong ${haiDong.size === 0 ? "khong o dau" : `o ${[...haiDong].join(", ")}`}`;
 	return { dong, sai, bang: bang.size };
 }
@@ -95,9 +120,14 @@ if (process.argv.includes("--pha-thu")) {
 		cpSync(join(APP, NHOM), join(tam, NHOM), { recursive: true });
 		const deals = join(tam, NHOM, "[slug]", "deals", "page.tsx");
 		const cu = readFileSync(deals, "utf8");
-		const moi = cu.replace('<KhungXuong hinh="bang" />', '<KhungXuong hinh="bang-hai-dong" />');
+		const moi = cu.replace(
+			'<KhungXuong hinh="bang" />',
+			'<KhungXuong hinh="bang-hai-dong" />',
+		);
 		if (moi === cu) {
-			console.log("KHONG DO DUOC: pha-thu khong thay doan can thay trong deals/page.tsx");
+			console.log(
+				"KHONG DO DUOC: pha-thu khong thay doan can thay trong deals/page.tsx",
+			);
 			process.exit(2);
 		}
 		writeFileSync(deals, moi);
@@ -106,7 +136,11 @@ if (process.argv.includes("--pha-thu")) {
 		inKetQua(sao);
 		const doDung = sao.sai.includes("SAI AC-6: deals dung bang-hai-dong");
 		const xanhDung = that.sai.length === 0;
-		console.log(doDung && xanhDung ? "HAI CHIEU DUNG" : `HAI CHIEU SAI: that ${xanhDung ? "xanh" : "do"} · ban sao ${doDung ? "do dung thong diep" : "khong do dung thong diep"}`);
+		console.log(
+			doDung && xanhDung
+				? "HAI CHIEU DUNG"
+				: `HAI CHIEU SAI: that ${xanhDung ? "xanh" : "do"} · ban sao ${doDung ? "do dung thong diep" : "khong do dung thong diep"}`,
+		);
 		process.exit(doDung && xanhDung ? 0 : 1);
 	} finally {
 		rmSync(tam, { recursive: true, force: true });
