@@ -5,7 +5,7 @@ slug: lo-trinh-nhieu-san-pham
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-20
 design_doc: docs/superpowers/specs/2026-10-20-lo-trinh-nhieu-san-pham-design.md
@@ -33,7 +33,7 @@ build, Phan Le Manh 19/10) · `docs/plan/pham-vi-vong-tin-hieu-1410.md` (L2–L5
 - AC-5: Given danh bạ sản phẩm, When chủ hay quản trị thêm, sửa hay cấp quyền xem, Then thay đổi được lưu và hiện lại ngay; When thành viên mở Cài đặt › Sản phẩm, Then họ thấy danh sách và trạng thái, mọi điều khiển khoá cùng một dòng nói vì sao, và thủ tục ghi ở máy chủ từ chối họ; khai sai (kho không đúng dạng `owner/repo`, nhánh rỗng, đường tệp có `..` hay bắt đầu bằng `/`, tên rỗng, mã trùng hay mã `crm`) bị từ chối ở cả trình duyệt lẫn máy chủ với lời nói đúng ô; CRM là dòng cố định không sửa, không dọn; và sửa kho, nhánh hay đường tệp đổi sản phẩm theo cách chốt ở Cổng Phạm vi (Hỏi-3; khuyến nghị: bản chụp cũ vẫn hiện kèm dòng «nguồn vừa đổi» tới khi nguồn mới lấy được, lần lấy đầu của nguồn mới thay hẳn bản cũ kể cả khi commit của nó cũ hơn). (cross-layer)
 - AC-6: Given một sản phẩm, When quản trị dọn nó theo ba câu chốt ở Cổng Phạm vi (Hỏi-2), Then cách dọn đúng câu trả lời: sản phẩm chưa có lịch sử thì Xoá (hỏi lại một lần); đã có lịch sử thì Lưu trữ có Hoàn tác, Khôi phục và Xoá vĩnh viễn từ mục «Đã lưu trữ», máy chủ từ chối Xoá vĩnh viễn một sản phẩm chưa lưu trữ, Xoá vĩnh viễn mất cả bản chụp và người xem; sản phẩm đã lưu trữ biến khỏi bộ chọn và nhịp không lấy nó nữa. (cross-layer)
 - AC-7: Given khối của một sản phẩm là khuôn bản 1, bản 2 chưa mang mô hình hiển thị, hay bản mới hơn bộ đọc, When người có quyền mở sản phẩm đó, Then tác nhân vẫn lấy và ghi bản chụp cho cả ba đời khuôn, trang hiện phần đọc được (như khối cùng đời của CRM) và một dòng nói sản phẩm đang ở khuôn bản n — cũ hay mới hơn trang; Cài đặt › Sản phẩm hiện bản khuôn của từng sản phẩm; và khối mang `khuon` khác `lo-trinh-du-lieu` bị từ chối là khối hỏng (AC-3), không ghi bản chụp.
-- AC-8: Given người xem ở 375 px và 1280 px, tiếng Việt và tiếng Anh, nền sáng và tối, When họ mở trang Lộ trình thấy từ hai sản phẩm và mở Cài đặt › Sản phẩm, Then bộ chọn chỉ hiện khi thấy từ hai sản phẩm, chọn sản phẩm ghi lên đường dẫn và mở lại đường dẫn giữ sản phẩm, dòng giờ lấy nói kho và nhánh của sản phẩm, liên kết tìm PR của số liệu chủ kho giới hạn trong kho của sản phẩm, tên sản phẩm và dữ liệu lộ trình không bị dịch, không màn nào cuộn ngang, và trạng thái lấy ở Cài đặt đọc được bằng chữ chứ không chỉ bằng màu. (cross-layer)
+- AC-8: Given người xem ở 375 px và 1280 px, tiếng Việt và tiếng Anh, nền sáng và tối, When họ mở trang Lộ trình thấy từ hai sản phẩm và mở Cài đặt › Sản phẩm, Then bộ chọn chỉ hiện khi thấy từ hai sản phẩm, chọn sản phẩm ghi lên đường dẫn và mở lại đường dẫn giữ sản phẩm, dòng giờ lấy nói kho và nhánh của sản phẩm, liên kết tìm PR của số liệu chủ kho giới hạn trong kho của sản phẩm, tên sản phẩm và dữ liệu lộ trình không bị dịch, không màn nào cuộn ngang, và trạng thái lấy ở Cài đặt đọc được bằng chữ chứ không chỉ bằng màu.
 - AC-9: Given tác nhân lấy lộ trình bằng ứng dụng GitHub, When nó xin quyền đọc một kho, Then token xin đúng kho đã khai với đúng quyền `contents: read` và `metadata: read`, JWT của ứng dụng sống không quá 10 phút, khoá riêng chỉ được đọc trong `apps/agent` và không vào nhật ký, bảng nào hay bản chụp nào, và không đường nào trong kho đọc lộ trình sản phẩm bằng khoá cá nhân.
 - AC-10: Given danh bạ có sản phẩm đã khai, When chủ kho chạy lệnh đo, Then lệnh in mỗi sản phẩm một dòng — giờ khai, giờ cài ứng dụng, giờ bản chụp đầu, độ trễ tính từ mốc muộn hơn của khai và cài, cờ khi quá một ngày hay chưa có bản chụp — và một dòng kết luận đạt hay không đạt theo ngưỡng của Cổng Đáng; lệnh từ chối chạy khi không đọc được danh bạ thay vì in «đạt».
 
@@ -71,3 +71,34 @@ build, Phan Le Manh 19/10) · `docs/plan/pham-vi-vong-tin-hieu-1410.md` (L2–L5
 - Bốn câu chờ chủ kho chốt ở Cổng Phạm vi (sổ quyết định): Hỏi-1 cách cấp quyền xem (AC-4), Hỏi-2 ba câu vòng đời của `docs/vong-doi.md` (AC-6), Hỏi-3 sửa nguồn giữ hay xoá bản chụp cũ (AC-5), Hỏi-4 CRM có chuyển sang ứng dụng GitHub trong vòng này (Out of scope). Máy soạn theo khuyến nghị; trả lời khác thì AC liên quan viết lại trước khi duyệt.
 - GitHub giả (`scripts/lo-trinh-san-pham/github-gia.ts`) đi đúng năm đường REST thật mà tác nhân gọi, đúng hình JSON và mã lỗi của GitHub; bài kiểm, phép đo màn và bản demo local chạy trên nó. Ứng dụng thật chỉ có sau khi chủ kho tạo.
 - Biến mới (`GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY`, `GITHUB_API_URL` — chỉ ghi đè ngoài production) khai ở `.env.example`, chỉ tác nhân đọc.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-2: Người chỉ có vai OKR vẫn gọi được các thao tác về sản phẩm nhưng không thấy dữ liệu sản phẩm nào, và thao tác ghi bị từ chối. Điều lệch là bài kiểm giữ danh sách việc vai này được làm chưa cập nhật nên đỏ.
+  - Ngoài-3: Sau khi thêm sản phẩm, dòng sản phẩm cứ hiện «đang chờ lần lấy đầu» cho tới khi người dùng tải lại trang, dù nền đã lấy xong.
+  - Ngoài-4: Người tự cài đặt làm theo ghi chú sẽ tìm một tệp không tồn tại để lấy giá trị cấu hình mẫu.
+  - Ngoài-6: Nếu dữ liệu trạng thái bị hỏng, sản phẩm hiện như «đang chờ lần lấy đầu» thay vì báo dữ liệu hỏng.
+  - Ngoài-9: Khi kho dữ liệu lỗi hoặc bản chụp lưu bị hỏng, trang báo «chưa có lộ trình» trong khi trạng thái ghi «đã lấy», hai câu mâu thuẫn và không để lại dấu vết vì sao.
+  - Ngoài-10: Một lỗi lâu dài ở phía CRM sẽ hiện như «GitHub chưa trả lời, thử lại sau» và cứ thử lại mãi mà không ai biết nguyên nhân thật.
+  - Ngoài-11: Nếu quản trị đổi kho đúng lúc nền đang lấy dữ liệu, trang có thể hiện dữ liệu kho cũ dưới tên kho mới và mất dòng «nguồn vừa đổi».
+  - Ngoài-12: Khi nhánh bị đẩy lùi về commit cũ, trang vẫn giữ nội dung cũ mà Cài đặt ghi «đã lấy», và nền cứ tải lại tệp mỗi 5 phút mà không báo gì.
+  - Ngoài-13: Nếu việc tải danh sách người xem lỗi, ngăn cứ hiện khung chờ mãi, không có thông báo và nút lưu bị khoá.
+  - Ngoài-14: Bài kiểm nói thành viên không được cấp không đọc được sản phẩm, nhưng thực ra chỉ chứng minh thành viên không phải quản trị, nên bài sẽ xanh dù việc cấp quyền có hỏng.
+  - Ngoài-15: Bài kiểm không chứng minh lời báo lỗi chỉ đúng ô nhập sai, nên lỗi báo nhầm ô vẫn có thể lọt qua.
+  - Ngoài-16: Phép đo màn không chứng minh người được cấp quyền thật sự thấy sản phẩm, và một trang lỗi hay rỗng vẫn có thể bị tính là thành công.
+  - Ngoài-17: Bài kiểm có thể xanh chỉ vì nền không lấy gì cả, chứ không phải vì sản phẩm đã lưu trữ được bỏ qua.
+  - Ngoài-18: Bài kiểm về việc giữ bản mới hơn khi nhánh lùi có thể xanh dù nền chưa từng kiểm nhánh.
+  - Ngoài-19: Bài kiểm chỉ dò một đoạn nhỏ của khoá riêng trong nhật ký, nên một đoạn khác bị lộ sẽ không bị bắt.
+  - Ngoài-20: Phép quét chỉ bắt một vài cách viết việc dùng khoá cá nhân, nên một cách viết khác sẽ lọt mà không ai biết.
+  - Ngoài-21: Bài kiểm chỉ xác nhận ngăn hồ sơ có tiêu đề và thẻ, chưa chứng minh nó giống hệt ngăn hồ sơ của CRM.
+  - Ngoài-22: Phép đo không so con số tiến độ với dữ liệu gốc, nên tiến độ hiện sai vẫn có thể qua bài kiểm.
+  - Ngoài-24: Sau khi thêm một sản phẩm, dòng sản phẩm cứ báo «Đang chờ lấy» cho tới khi quản trị tải lại trang, dù hệ thống đã lấy xong lộ trình.
+  - Ngoài-26: Một quản trị gọi thẳng vào máy chủ vẫn sửa được sản phẩm đã lưu trữ hoặc đổi người xem của nó, dù trên màn các nút đó đã ẩn.
+  - Ngoài-28: Nếu khoá của ứng dụng GitHub đặt sai, sản phẩm cứ báo «GitHub chưa trả lời, sẽ thử lại» mãi và không để lại dấu vết nào cho người vận hành biết lỗi thật.
+  - Ngoài-29: Nếu bản lộ trình đã lưu của một sản phẩm bị lỗi khi đọc, trang chỉ báo «chưa có lộ trình» và vẫn ghi «Đã lấy», nên người xem tưởng sản phẩm chưa có gì.
+  - Ngoài-30: Nếu không tải được danh sách người xem (ví dụ bị đổi quyền hoặc sản phẩm vừa bị xoá), ngăn cứ hiện khung chờ mãi, không báo lỗi và không có nút thử lại.
+  - Ngoài-31: Khi nhánh của sản phẩm bị đưa về một commit cũ hơn, trang vẫn hiện lộ trình của commit mới hơn và báo «Đã lấy», không cho quản trị biết trang đã lệch nhánh.
+  - Ngoài-32: Nếu quản trị gõ sai tên kho, màn Cài đặt bảo cài ứng dụng GitHub vào kho thay vì bảo kiểm tra lại tên kho.
+  - Ngoài-33: Phép đo màn chỉ kiểm người không được cấp không thấy sản phẩm, chưa kiểm người được cấp thấy được; nếu sản phẩm bị ẩn với mọi người thì phép đo vẫn báo đạt.
+  - Ngoài-34: Bài kiểm quyền xem dùng một thủ tục vốn chặn mọi thành viên, nên nó không chứng minh được việc cấp quyền cho một người có tác dụng.
+  - Ngoài-35: Bài kiểm khai sai chỉ xác nhận máy chủ từ chối, chưa xác nhận lời báo lỗi chỉ đúng ô nhập sai.
+  - Ngoài-36: Bài kiểm chỉ dò một đoạn của khoá riêng trong nhật ký và dữ liệu lưu, nên một phần khác của khoá bị rò thì bài kiểm sẽ không bắt được.
+  - Ngoài-37: Phép đo màn chỉ xác nhận mọi lộ trình xuất hiện, chưa xác nhận ô tiến độ đúng với dữ liệu; tiến độ sai hoặc để trống vẫn có thể qua.

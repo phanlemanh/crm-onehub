@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 6bc1ebb767195ddff89d7c9ceef6fdfde445550e
-human_signoff:
+human_signoff: Manh Phan 2026-10-20 — ký Cổng 2 theo khuyến nghị trên verdict PASS 18/18 eval (S4 round 4, wf_be31e8f0-ebc). Ngoài-1, 5, 7, 8, 23, 25, 27, 38, 39, 40 chấp nhận, không sửa; 30 mục còn lại ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo; gỡ nhãn (cross-layer) khỏi AC-8.
 ---
 
 # Evidence Report: lo-trinh-nhieu-san-pham
