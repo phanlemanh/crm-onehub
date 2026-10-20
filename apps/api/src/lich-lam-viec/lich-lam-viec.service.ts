@@ -42,10 +42,11 @@ export class LichLamViecService {
 	): Promise<{ ok: true }> {
 		await this.kiem(userId);
 		const ds = [...new Set(ngayNghiTuan)].sort();
+		const khongNghiTuan = ds.length === 0;
 		await this.db.appSetting.upsert({
 			where: { id: SETTINGS_ID },
-			create: { id: SETTINGS_ID, ngayNghiTuan: ds },
-			update: { ngayNghiTuan: ds },
+			create: { id: SETTINGS_ID, ngayNghiTuan: ds, khongNghiTuan },
+			update: { ngayNghiTuan: ds, khongNghiTuan },
 		});
 		return { ok: true };
 	}
