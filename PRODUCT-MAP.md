@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>151 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>151 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>152 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -204,6 +204,7 @@ flowchart TD
 - Việc riêng chỉ người trong cuộc thấy — cả trên Gantt và mọi màn dự án (`viec-rieng-chi-nguoi-trong-cuoc`)
 - «Một cách cất, một bộ chữ» — lưu trữ hàng loạt ở ba bảng CRM có Hoàn tác, bản ghi đã cất mở ra có dải báo «Đã lưu trữ ngày … · Khôi phục» và chỉ đọc, Kanban thoả thuận có nút «Đã lưu trữ», chữ nút xem và hộp xoá vĩnh viễn đúng bộ chữ (`vong-doi-mot-cach-cat`)
 - «Bài kiểm Zalo webhook không còn đỏ theo giờ thật» (`zalo-bom-gio`)
+- Hỏi Kho qua Zalo từ câu thứ hai trở đi trong ngày, trợ lý kho vẫn trả lời đúng chỉ dẫn (`zalo-cau-thu-hai-lien-ket`)
 - Zalo gửi hỏng thì nhật ký nói lý do của Zalo; đổi bot thì hỏi trước rồi gỡ liên kết cũ để mọi người nối lại; tin vào bị bỏ qua thì nhật ký nói vì sao (`zalo-gui-hong-ghi-ly-do`)
 - Zalo hỏi OKR không chết lượt — ngoài phiên OKR, agent gốc gọi tro_ly_okr thì nhận một kết quả từ chối có lý do và vẫn trả lời người hỏi (`zalo-hoi-okr-khong-chet`)
 - Phiên gốc của câu Kho (CRM và Zalo) tự ghi liên kết câu hỏi → phiên ngay khi bắt đầu, và trợ lý kho không bao giờ chạy thiếu chỉ dẫn kho; đo lại bộ 50 câu trên Gemini 3.8 Flash (`zalo-tro-ly-kho-chi-dan`)
