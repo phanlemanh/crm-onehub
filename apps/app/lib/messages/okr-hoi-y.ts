@@ -6,23 +6,23 @@ type DemSo = { mot: string; nhieu: string };
 type KhoaDanhSach = { tieuDe: string; moTa: string };
 
 const vi = {
-	dangTai: "Đang tải lần hỏi ý…",
+	dangTai: "Đang tải lần lấy ý kiến…",
 	loi: {
-		tieuDe: "Không tải được lần hỏi ý",
+		tieuDe: "Không tải được lần lấy ý kiến",
 		moTa: "Chưa có gì bị mất — ý bạn đã gửi vẫn còn. Thử lại sau ít giây.",
 		thuLai: "Thử lại",
 	},
 	trong: {
-		quanTri: "Chưa hỏi ý cho kỳ này",
+		quanTri: "Chưa lấy ý kiến cho kỳ này",
 		quanTriMoTa: "Hỏi cả công ty một câu trước khi đặt mục tiêu {ky}.",
 		ngoaiPha:
 			"Chỉ mở được khi chu kỳ đang lập kế hoạch. Chọn một chu kỳ đang lập kế hoạch ở ô chu kỳ.",
-		thanhVien: "Chưa có lần hỏi ý nào cho kỳ này",
+		thanhVien: "Chưa có lần lấy ý kiến nào cho kỳ này",
 		thanhVienMoTa: "Khi quản trị mở, bạn nhận nhắc buổi sáng và góp ý ở đây.",
-		mo: "Mở hỏi ý",
+		mo: "Mở lần lấy ý kiến",
 	},
 	moc: {
-		nhan: "Các mốc của lần hỏi ý",
+		nhan: "Các mốc của lần lấy ý kiến",
 		ten: { mo: "Mở", han: "Hạn", gom: "Gom ý", "cong-bo": "Công bố" },
 		bayGio: "Bây giờ",
 		chuaDinh: "chưa định",
@@ -31,7 +31,7 @@ const vi = {
 			mot: "Còn {n} giờ tới hạn",
 			nhieu: "Còn {n} giờ tới hạn",
 		} satisfies DemSo,
-		sua: "Sửa lần hỏi ý",
+		sua: "Sửa lần lấy ý kiến",
 		duoiMotGio: "Còn chưa tới một giờ tới hạn",
 		daHetHan: "Đã hết hạn góp",
 		congBoLuc: "Công bố lúc {luc}",
@@ -115,7 +115,7 @@ const vi = {
 		tieuDe: "Độ phủ theo đơn vị",
 		moTa: "Phần trăm người trong mỗi đơn vị đã góp ít nhất một ý, tính tới hết ngày. Đích là 100%. Không màn nào liệt tên người chưa góp.",
 		bang: "Độ phủ góp ý theo đơn vị và ngày",
-		goc: "Toàn công ty",
+		goc: "Công ty",
 		chuaXep: "Chưa xếp phòng ban",
 		chuGiaiCao: "Ô càng đậm, càng nhiều người trong đơn vị đã góp",
 		chuGiaiTrong: "đơn vị chưa có người",
@@ -308,7 +308,7 @@ const vi = {
 		yTrongKho: "Ý: {chu}",
 	},
 	sheet: {
-		tieuDe: "Mở hỏi ý",
+		tieuDe: "Mở lần lấy ý kiến",
 		moTa: "Cả công ty trả lời một câu trước khi đặt mục tiêu. Mỗi chu kỳ hỏi một lần.",
 		chuKy: "Chu kỳ",
 		chuKyMoTa: "Chỉ chu kỳ đang lập kế hoạch.",
@@ -348,21 +348,21 @@ const vi = {
 			"Đã khoá vì người chọn đã niêm phong bản viết trước và vẫn là quản trị.",
 		huy: "Huỷ",
 		mo: "Mở",
-		daMo: "Đã mở hỏi ý.",
-		tieuDeSua: "Sửa lần hỏi ý",
+		daMo: "Đã mở lần lấy ý kiến.",
+		tieuDeSua: "Sửa lần lấy ý kiến",
 		moTaSua: "Thay đổi lưu ngay và ghi vào vết của chu kỳ.",
 		luu: "Lưu thay đổi",
-		daLuu: "Đã lưu lần hỏi ý.",
+		daLuu: "Đã lưu lần lấy ý kiến.",
 		chiNguoiChon: "Đã hết hạn góp: chỉ còn đổi được người chọn.",
 		nguoiChonThieu: "Chọn người chọn thì mới mở được.",
 		dongNgay: "Đóng ngay",
 		dongNgayMoTa:
 			"Đặt hạn bằng bây giờ: ngừng nhận ý và chuyển sang gom. Không mở lại được.",
-		dongNgayTieuDe: "Đóng hỏi ý ngay?",
+		dongNgayTieuDe: "Đóng lần lấy ý kiến ngay?",
 		dongNgayThan:
 			"Hạn thành bây giờ. Không ai góp, sửa, gỡ ý hay bấm «Tôi cũng nghĩ vậy» được nữa; quản trị và người chọn bắt đầu gom. Không mở lại được.",
 		dongNgayThoi: "Chưa đóng",
-		daDong: "Đã đóng hỏi ý — chuyển sang gom.",
+		daDong: "Đã đóng lần lấy ý kiến — chuyển sang gom.",
 	},
 };
 
@@ -479,7 +479,7 @@ const en: OkrHoiYMessages = {
 		tieuDe: "Coverage by unit",
 		moTa: "Share of people in each unit who gave at least one idea, by the end of each day. The goal is 100%. No screen lists who hasn't given one.",
 		bang: "Idea coverage by unit and day",
-		goc: "Whole company",
+		goc: "Company",
 		chuaXep: "No department yet",
 		chuGiaiCao:
 			"The darker the cell, the more people in the unit have given ideas",
