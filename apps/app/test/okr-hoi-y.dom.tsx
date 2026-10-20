@@ -1020,7 +1020,7 @@ describe("Hỏi ý — sheet: câu từ chối của máy chủ và nhánh hết
 	test("mở: máy chủ từ chối thì câu ghim hiện nguyên văn ở chân sheet, cạnh «Mở»", async () => {
 		hoiY = null;
 		quanTri = true;
-		const CAU = "Chu kỳ này đã có một lần hỏi ý.";
+		const CAU = "Chu kỳ này đã có một lần lấy ý kiến.";
 		loiGhi.set("moHoiY", CAU);
 		const o = await mo();
 		await cho(() => trangThai(o) === "trong-quan-tri", "trống quản trị");

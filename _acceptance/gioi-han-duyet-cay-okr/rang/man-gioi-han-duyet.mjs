@@ -1111,8 +1111,8 @@ async function buocConCanChinh() {
 		);
 		console.log(`  ${nhom}: loi «${loi}»`);
 		kiem(
-			`${nhom}: loi noi «con … can chinh» (thay «${loi}»)`,
-			/còn \d+ căn chỉnh/.test(loi),
+			`${nhom}: loi noi «con … cho gop vao» (thay «${loi}»)`,
+			/còn \d+ chỗ góp vào/.test(loi),
 		);
 		kiem(
 			`${nhom}: nut Luu khoa sau loi`,

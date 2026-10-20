@@ -2,6 +2,7 @@ import type { Db, Prisma } from "@crm/db";
 import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
+import { readTenGoc } from "@crm/db/workspace";
 import {
 	type GuiCapNhatInput,
 	kiemGiaTriTheoKieu,
@@ -92,6 +93,7 @@ export class OkrCapNhatService {
 			distinct: ["keyResultId"],
 		});
 		const thu = [...new Set(krs.map((k) => k.objective.cycle.updateWeekday))];
+		const tenGoc = await readTenGoc(this.db);
 		return {
 			items: krs.map((k) => {
 				const cuoi = lan.find((l) => l.keyResultId === k.id);
@@ -102,7 +104,7 @@ export class OkrCapNhatService {
 					title: k.title,
 					objectiveId: k.objectiveId,
 					objectiveTitle: k.objective.title,
-					unitName: tenDonVi(k.objective),
+					unitName: tenDonVi(k.objective, tenGoc),
 					kind: kieuKr.parse(k.kind),
 					unit: k.unit,
 					targetValue: soDb(k.targetValue),

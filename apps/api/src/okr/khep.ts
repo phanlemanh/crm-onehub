@@ -1,6 +1,7 @@
 import type { Db, Prisma } from "@crm/db";
 import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import { readTenGoc } from "@crm/db/workspace";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import type { OkrProgram } from "@crm/validation/okr-chuong-trinh";
 import { goiYDiem } from "@crm/validation/okr-khep";
@@ -127,7 +128,7 @@ type DongChuaCham = Prisma.OkrDiemKrGetPayload<{
 	select: typeof chonDongChuaCham;
 }>;
 
-function gopDongKy(dong: DongChuaCham[]): DongKy {
+function gopDongKy(dong: DongChuaCham[], tenGoc: string): DongKy {
 	const theo = new Map<string, { khoa: string; ten: string; conLai: number }>();
 	for (const { keyResult } of dong) {
 		const khoa = khoaDonViDong(keyResult.objective);
@@ -136,7 +137,7 @@ function gopDongKy(dong: DongChuaCham[]): DongKy {
 		else
 			theo.set(khoa, {
 				khoa,
-				ten: tenDonVi(keyResult.objective),
+				ten: tenDonVi(keyResult.objective, tenGoc),
 				conLai: 1,
 			});
 	}
@@ -155,6 +156,7 @@ export async function kiemDongKy(
 			where: { cycleId, diem: null },
 			select: chonDongChuaCham,
 		}),
+		await readTenGoc(tx),
 	);
 }
 
@@ -198,5 +200,6 @@ export async function dongKyChoNguoiXem(
 			},
 			select: chonDongChuaCham,
 		}),
+		await readTenGoc(tx),
 	);
 }
