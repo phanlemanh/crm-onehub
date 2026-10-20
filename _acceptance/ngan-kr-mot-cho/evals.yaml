@@ -77,7 +77,7 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.vk7_hep
-    expected: "exit 0; -t vk7-hep: matchMedia giả dưới md: ngăn KR dựng trong Drawer (data-slot drawer-content), đầu ngăn có đếm, ‹ ›, nút Cập nhật như trên md; trang đơn vị dạng danh sách có nút Cập nhật trên dòng K. Đối chứng dương: trên md cùng dữ liệu là Sheet."
+    expected: "exit 0; -t vk7-hep: matchMedia giả dưới md: ngăn KR dựng trong Drawer (data-slot drawer-content), đầu ngăn có đếm, ‹ ›, nút Cập nhật như trên md; trang đơn vị dạng danh sách có nút Cập nhật trên dòng K. Ca dưới ngưỡng ngược lại: từ md trở lên cùng dữ liệu là Sheet bên phải và KHÔNG có data-slot drawer-content (in 'drawer tren md')."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", apps/app/test/ngan-kr-mot-cho.dom.tsx]
 
