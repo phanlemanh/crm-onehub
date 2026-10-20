@@ -1,14 +1,42 @@
-# Review findings: vo-khu-muc-tieu (round 2)
+# Review findings: vo-khu-muc-tieu (round 3)
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC.
+(không có finding nào map được vào AC)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Prop chonChuKy bị bỏ dùng nhưng vẫn khai trong kiểu, bài kiểm vẫn truyền vào**
+- **E2 expected vẫn đòi «đỉnh nút < đỉnh [role=tablist]» mà thước đã gỡ vế đó**
+  Người dùng thấy gì: Người ký nghiệm thu của hồ sơ điều hướng cũ có thể đọc một lời hứa nói rằng thứ tự nút và thanh thẻ vẫn được kiểm, trong khi bài đo đã không còn kiểm nữa. Người dùng cuối không thấy gì khác trên màn hình.
+  Căn cứ: Chỉ làm lệch chữ trong hồ sơ nội bộ, không ảnh hưởng người dùng, không mất dữ liệu và sửa lại bất cứ lúc nào chỉ bằng việc chỉnh một câu mô tả.
+  file: `_acceptance/dieu-huong-khu-muc-tieu/evals.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
+- **E3 expected sửa vòng này nhưng còn nói 5 thẻ, 10 ô và ô chu kỳ nằm trong hàng hành động**
+  Người dùng thấy gì: Lời hứa trong hồ sơ nghiệm thu cũ mô tả năm thẻ và ô chu kỳ nằm trong hàng nút, trái với màn thật nay có bốn thẻ và ô chu kỳ ở thanh bên. Người dùng cuối vẫn dùng màn bình thường.
+  Căn cứ: Chỉ là chữ mô tả lỗi thời trong hồ sơ nội bộ, người dùng không bị ảnh hưởng, không mất dữ liệu và chỉnh lại rẻ.
+  file: `_acceptance/dieu-huong-khu-muc-tieu/evals.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Bước AC8 của man-dau-trang.mjs vẫn đo đỉnh [role=tablist], nay luôn -1 nên luôn «KHONG NHAY»**
+  Người dùng thấy gì: Một phép đo về việc đầu trang có bị nhảy hay không luôn báo xanh dù đầu trang có nhảy thật hay không. Hiện chưa có bài nghiệm thu nào dùng đến phép đo này nên người dùng không bị ảnh hưởng.
+  Căn cứ: Hậu quả nhẹ: chỉ là một phép đo nội bộ chưa ai dùng, người dùng không gặp gì, và có thể sửa hoặc gỡ sau khi cần dùng lại.
+  file: `_acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Phần «Chương trình OKR» trên Sức khoẻ biến mất không báo lỗi khi okr.access lỗi ở máy chủ; nút Sức khoẻ trỏ vào neo không tồn tại**
+  Người dùng thấy gì: Nếu việc kiểm quyền gặp lỗi tạm thời, người quản lý chương trình sẽ không thấy phần quản trị trên trang Sức khoẻ mà không có thông báo lỗi hay nút Thử lại. Nút Sức khoẻ ở Toàn cảnh khi đó bấm vào không dẫn tới đâu.
+  Căn cứ: Chỉ xảy ra khi có lỗi tạm và chỉ với người quản lý, không mất dữ liệu, tải lại trang thường khôi phục được; nhưng lỗi im lặng dễ gây hiểu nhầm nên đáng làm thành một việc riêng.
+  file: `apps/app/app/(app)/[slug]/okr/toan-canh/page.tsx`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Prop chonChuKy bị bỏ dùng nhưng vẫn khai trong kiểu, bài kiểm vẫn truyền vào (r2)**
   Người dùng thấy gì: Người dùng không thấy gì khác: ô chọn chu kỳ vẫn nằm ở đầu thanh bên và hoạt động đúng. Chỉ là trong mã còn sót một khai báo thừa, dễ gây hiểu nhầm cho người sửa sau này.
   Căn cứ: Không ảnh hưởng người dùng, không mất hay lộ dữ liệu, và dọn lúc nào cũng rẻ nên ghi lại là đủ, không cần chặn bản giao này.
   file: `apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx`
@@ -57,7 +85,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: wont-fix
 
-- **DUONG_CHUONG_TRINH chép lại đường cài đặt đã có hằng số trong cai-dat-dieu-huong (r1 · tệp đã đổi)**
+- **DUONG_CHUONG_TRINH chép lại đường cài đặt đã có hằng số trong cai-dat-dieu-huong (r1)**
   Người dùng thấy gì: Liên kết «Chương trình OKR» ở chân thanh bên vẫn mở đúng trang cài đặt. Nếu sau này đổi đường cài đặt thì liên kết này có thể bị lệch.
   Căn cứ: Hiện chạy đúng, rủi ro chỉ xảy ra khi có lần đổi đường sau và sửa rất rẻ lúc đó.
   file: `apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx`
@@ -113,4 +141,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+⚠ Cụm ngoài vùng phủ: 3/4 lỗi rơi vào file không bộ đo nào phủ (_acceptance/dieu-huong-khu-muc-tieu/evals.yaml, _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

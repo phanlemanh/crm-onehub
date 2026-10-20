@@ -7,13 +7,11 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3593e73ee219cff457f41055f9b600da5c026acb
+verified_commit: 3a0321d1f573da3ba5d87785aa50c8e1a340dc29
 human_signoff:
 ---
 
 # Evidence Report: vo-khu-muc-tieu
-
-Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mục Iterations.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -34,14 +32,23 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
 
 ## Evidence
 
+- eval: E7
+  run_id: minted-vo-khu-muc-tieu-E7-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.vkm_quet
+  verified_at: 2026-10-20T08:31:25Z
+  output: |
+    DUNG AC-7: 742 tep, 0 chuoi duong cu
+
 - eval: E1
   run_id: minted-vo-khu-muc-tieu-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vkm_thanh_ben
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Ran 3 tests across 1 file. [1.53s]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-vo-khu-muc-tieu-E2-r2
@@ -49,8 +56,8 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.vkm_chu_ky
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Ran 3 tests across 1 file. [1.50s]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-vo-khu-muc-tieu-E3-r2
@@ -58,8 +65,8 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.vkm_mot_lop
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Ran 1 test across 1 file. [1.69s]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-vo-khu-muc-tieu-E4-r2
@@ -67,19 +74,17 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.vkm_man
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Cùng một lượt bàn đo qua tien-de.mjs với E6, E10, E12, E13, E14.
-    phien-do: xong — mã 0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E5
   run_id: minted-vo-khu-muc-tieu-E5-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vkm_chuyen_huong
-  verified_at: 2026-10-20T01:14:53Z
+  verified_at: 2026-10-20T00:50:13Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
   run_id: minted-vo-khu-muc-tieu-E6-r2
@@ -87,28 +92,17 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.vkm_man
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Cùng một lượt bàn đo qua tien-de.mjs với E4, E10, E12, E13, E14.
-    phien-do: xong — mã 0
-
-- eval: E7
-  run_id: minted-vo-khu-muc-tieu-E7-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.vkm_quet
-  verified_at: 2026-10-20T05:50:02Z
-  output: |
-    DUNG AC-7: 730 tep, 0 chuoi duong cu
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E8
   run_id: minted-vo-khu-muc-tieu-E8-r1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vkm_don_vi_dan
-  verified_at: 2026-10-20T01:14:53Z
+  verified_at: 2026-10-20T00:50:13Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9
   run_id: minted-vo-khu-muc-tieu-E9-r2
@@ -116,6 +110,8 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.vkm_man
   verified_at: 2026-10-20T05:50:02Z
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
   screenshot: evidence/cua-toi-1280.png
   observed: |
     Da mo bang Read ca 6 anh moi (12:52).
@@ -134,9 +130,8 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.vkm_man
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Cùng một lượt bàn đo qua tien-de.mjs với E4, E6, E12, E13, E14.
-    phien-do: xong — mã 0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E11
   run_id: minted-vo-khu-muc-tieu-E11-r2
@@ -144,8 +139,8 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.test.vkm_loi_vao_cu
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Ran 5 tests across 2 files. [36.00ms]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E12
   run_id: minted-vo-khu-muc-tieu-E12-r2
@@ -153,9 +148,8 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.vkm_man
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Cùng một lượt bàn đo qua tien-de.mjs với E4, E6, E10, E13, E14.
-    phien-do: xong — mã 0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E13
   run_id: minted-vo-khu-muc-tieu-E13-r2
@@ -163,9 +157,8 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.vkm_man
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Cùng một lượt bàn đo qua tien-de.mjs với E4, E6, E10, E12, E14.
-    phien-do: xong — mã 0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E14
   run_id: minted-vo-khu-muc-tieu-E14-r2
@@ -173,46 +166,45 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
   baseline: n-a
   verifier: config:executors.script.vkm_man
   verified_at: 2026-10-20T05:50:02Z
-  output: |
-    Cùng một lượt bàn đo qua tien-de.mjs với E4, E6, E10, E12, E13.
-    phien-do: xong — mã 0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-20T05:50:02Z
+  verified_at: 2026-10-20T08:31:25Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-20T05:50:02Z
+  verified_at: 2026-10-20T08:31:25Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-20T05:50:02Z
+  verified_at: 2026-10-20T08:31:25Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-20T05:50:02Z
+  verified_at: 2026-10-20T08:31:25Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-vo-khu-muc-tieu-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-vo-khu-muc-tieu-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-20T05:50:02Z
+  verified_at: 2026-10-20T08:31:25Z
 
 - cmd: bun run lint:slop
-  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_lint_slop-r2
+  run_id: minted-vo-khu-muc-tieu-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-20T05:50:02Z
+  verified_at: 2026-10-20T08:31:25Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-vo-khu-muc-tieu-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-vo-khu-muc-tieu-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-20T05:50:02Z
+  verified_at: 2026-10-20T08:31:25Z
 
 ## Known limits
 
@@ -220,12 +212,10 @@ Round 2. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay. Moi eval ghi baseline: n-a vi round nay khong do lai (evals.yaml khong doi tu lan baseline cuoi, round 1).
+carried tu round 1 — baseline khong do lai round nay. Field baseline cua tung eval ghi n-a.
 
-Eval khong-phan-biet (pass tren ca HEAD lan baseline, carried tu round 1):
-- E11 (AC-10) — ba tep kiem da ky chi doi chuoi duong cu sang duong moi, logic khang dinh khong doi; day la regression-guard co chu y, khong chung minh hanh vi moi.
-
-Lenh suite xanh-ca-hai-phia la regression-guard binh thuong, khong liet ke.
+Eval khong-phan-biet (xanh ca tren HEAD lan baseline, chung minh harness chu khong phai feature; nen viet lai de assert hanh vi moi hoac xac nhan la regression-guard co chu y):
+- E11 (lenh: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-ba-phan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test ./test/okr-giai-ky-an.spec.ts ./test/okr-chuyen-huong-cap-nhat.spec.ts)
 
 ## Variance
 
@@ -233,5 +223,6 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: ket qua E5 va E8 ghi trong run-log (round 1) va duoc giu nguyen sang round 2 (carry-forward, delta khong cham paths cua hai eval nay).
-Round 2: cac eval con lai va 7 lenh suite chay lai tren commit 3593e73ee219cff457f41055f9b600da5c026acb, deu dat; khong co eval REJECT hay BLOCKED.
+Round 1: bo eval dau tien chay va ghi log (verified_at 2026-10-20T00:50:13Z); E5, E8 giu nguyen den round 3 vi delta khong cham paths cua chung.
+Round 2: chay lai phan con lai cua bo eval (verified_at 2026-10-20T05:50:02Z); E1-E4, E6, E9-E14 giu nguyen den round 3.
+Round 3: chay lai E7 va bay lenh suite tren verified_commit 3a0321d1f573da3ba5d87785aa50c8e1a340dc29; 14 eval PASS, verdict PASS.
