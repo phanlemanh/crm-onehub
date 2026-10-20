@@ -43,14 +43,17 @@ export async function docLichLam(tx: DbGhi): Promise<LichLam> {
 	const [cai, le] = await Promise.all([
 		tx.appSetting.findUnique({
 			where: { id: SETTINGS_ID },
-			select: { ngayNghiTuan: true },
+			select: { ngayNghiTuan: true, khongNghiTuan: true },
 		}),
 		tx.ngayNghi.findMany({ select: { ngay: true }, orderBy: { ngay: "asc" } }),
 	]);
 	const tuan = cai?.ngayNghiTuan ?? [];
 	return {
-		ngayNghiTuan:
-			tuan.length > 0 ? tuan : [...LICH_LAM_VIEC.ngayNghiTuanMacDinh],
+		ngayNghiTuan: cai?.khongNghiTuan
+			? []
+			: tuan.length > 0
+				? tuan
+				: [...LICH_LAM_VIEC.ngayNghiTuanMacDinh],
 		ngayLe: le.map((h) => h.ngay.toISOString().slice(0, 10)),
 	};
 }
