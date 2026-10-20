@@ -36,14 +36,21 @@ lẫn Tác nhân (15/10). Chưa có «bảng kiến nghị model» nào trong kh
 
 ## Câu chỉ người trả lời (sẽ lên Cổng Phạm vi — đã gửi giám sát)
 
-- **Hỏi-1 — ứng viên mỗi vai.** Khuyên: Tác nhân {GLM 5.2 Fast, GLM 5.3 Fast, GLM 5.3 + reasoning low, Gemini 3.8 Flash};
-  Trợ lý kho {GLM 5.2 Fast, Gemini 3.8 Flash, GLM 5.3 Fast}; Soạn OKR {Gemini 3.8 Flash, GLM 5.3 Fast}. Bỏ Haiku 5.5 (đã
-  trượt 15/10).
+- **Hỏi-1 — ứng viên mỗi vai. ĐÃ TRẢ (chủ kho, 20/10):** «dùng GLM 5.3 Flash bỏ GLM 5.2 Fast vì lý do chi phí tinh chỉnh
+  lại các thông số cho phù hợp model này». Gateway có `zai/glm-5.3-flash` (0,15/0,5 USD mỗi triệu token vào/ra, so với
+  2,8/8,8 của `zai/glm-5.2-fast` — khoảng 18 lần rẻ hơn); khác `zai/glm-5.3-fast` mà MH3 đã đo. Vì vậy:
+  - Tác nhân và Trợ lý kho: đo `zai/glm-5.3-flash` với các biến thể thông số — mức suy luận (mặc định · `low` · tắt khi
+    model cho phép) và trần bước/thời gian của phiên con — để chọn bộ thông số hợp model này. MH3 đã thấy GLM 5.3 với
+    suy luận mặc định bị cắt ở 180 s, nên mức suy luận là thông số phải dò đầu tiên.
+  - Không đo lại `zai/glm-5.2-fast`: số mốc lấy từ bằng chứng đã có (MH3 16/10, bộ 50 câu 13/10), ghi rõ cây và ngày.
+  - Soạn OKR (đang Gemini 3.8 Flash): khuyên thêm `zai/glm-5.3-flash` làm ứng viên cạnh mốc Gemini — chờ chủ kho xác nhận
+    có áp cho vai này không.
 - **Hỏi-2 — judge có vào bảng không.** Khuyên: vào bảng với số «không chấm được» và «judge mù» đo được, nhưng KHÔNG đổi
   ứng viên judge ở vòng này (đổi judge làm lệch mọi số soạn OKR đã có).
 - **Hỏi-3 — máy soạn kho.** Khuyên: ghi hàng «chưa có thước» trong bảng, Out of scope; dựng thước là việc riêng.
-- **Hỏi-4 — trần chi và cỡ mẫu.** Khuyên: 5 lượt mỗi ứng viên Tác nhân, 1 lượt bộ 50 câu mỗi ứng viên kho, 1 lượt eval
-  soạn mỗi ứng viên; trần tổng 12 USD (ước ~8 USD theo chi phí đã ghi), quá trần thì dừng.
+- **Hỏi-4 — trần chi và cỡ mẫu.** Khuyên: 5 lượt mỗi biến thể Tác nhân, 1 lượt bộ 50 câu mỗi biến thể kho, 1 lượt eval
+  soạn mỗi ứng viên; trần tổng 6 USD — GLM 5.3 Flash rẻ nên phần lớn chi là mốc Gemini của soạn OKR và judge; quá trần
+  thì dừng.
 
 ## Việc chờ
 
