@@ -194,7 +194,7 @@ Chủ kho chốt 20/10/2026. Người dùng không phân biệt được **trư�
 rồi nhìn phiếu, form tạo, bảng, bộ lọc, thẻ Kanban — còn đoán ra trường nào thuộc
 loại nào thì màn đó lệch.
 
-Đây là **đích**. Chỗ còn lệch theo dõi ở các hàng DA14–DA17 của
+Đây là **đích**. Chỗ còn lệch theo dõi ở các hàng DA14–DA20 của
 `docs/plan/lo-trinh-viec-du-an.json`, không sửa lẻ.
 
 ### Một bảng đăng ký theo kiểu
