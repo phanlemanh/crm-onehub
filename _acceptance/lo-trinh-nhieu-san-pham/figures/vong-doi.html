@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng đời sản phẩm</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · Hỏi-2 · lo-trinh-nhieu-san-pham · AC-6</p>
+    <h1>Dọn một sản phẩm: xoá khi chưa có lịch sử, lưu trữ khi đã có</h1>
+    <p class="sub">«Lịch sử» là đã từng lấy được một bản chụp. Sản phẩm đã lưu trữ biến khỏi bộ chọn và nhịp thôi lấy; khôi phục được, hoặc xoá vĩnh viễn từ mục «Đã lưu trữ».</p>
+
+    <svg viewBox="0 0 1200 552" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="56" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HỎI-2 · VÒNG ĐỜI MỘT SẢN PHẨM · AC-6 · CỔNG PHẠM VI</text>
+
+      <line x1="72" y1="140" x2="120" y2="140" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="240" y1="180" x2="240" y2="320" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M360 140 L1012 140 A8 8 0 0 1 1020 148 L1020 200" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="360" y1="344" x2="560" y2="344" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="560" y1="376" x2="360" y2="376" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M800 360 L1012 360 A8 8 0 0 0 1020 352 L1020 280" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="76" y="116" width="36" height="16" rx="2" fill="#fafafa"/>
+      <text x="94" y="128" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHAI</text>
+
+      <rect x="248" y="228" width="96" height="36" rx="2" fill="#fafafa"/>
+      <text x="252" y="242" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">NHỊP LẤY ĐƯỢC</text>
+      <text x="252" y="258" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">BẢN CHỤP ĐẦU</text>
+
+      <rect x="568" y="116" width="144" height="16" rx="2" fill="#fafafa"/>
+      <text x="640" y="128" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XOÁ · HỎI LẠI MỘT LẦN</text>
+
+      <rect x="388" y="320" width="144" height="16" rx="2" fill="#fafafa"/>
+      <text x="460" y="332" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LƯU TRỮ · CÓ HOÀN TÁC</text>
+
+      <rect x="424" y="384" width="72" height="16" rx="2" fill="#fafafa"/>
+      <text x="460" y="396" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔI PHỤC</text>
+
+      <rect x="828" y="336" width="160" height="16" rx="2" fill="#fafafa"/>
+      <text x="908" y="348" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XOÁ VĨNH VIỄN · HỎI LẠI</text>
+
+      <path d="M 556 456 Q 420 452 300 404" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="300" cy="404" r="2" fill="#171717"/>
+      <text x="564" y="452" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">Không có mũi tên từ «Đang dùng · có lịch sử» tới Mất:</text>
+      <text x="564" y="472" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">máy chủ từ chối xoá vĩnh viễn khi chưa lưu trữ.</text>
+
+      <circle cx="64" cy="140" r="6" fill="#171717"/>
+
+      <rect x="120" y="100" width="240" height="80" rx="8" fill="#fafafa"/>
+      <rect x="120" y="100" width="240" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="128" y="108" width="104" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="180" y="120" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CHƯA CÓ LỊCH SỬ</text>
+      <text x="240" y="148" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đang dùng</text>
+      <text x="240" y="168" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chưa có bản chụp</text>
+
+      <rect x="120" y="320" width="240" height="80" rx="8" fill="#fafafa"/>
+      <rect x="120" y="320" width="240" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="128" y="328" width="72" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="164" y="340" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CÓ LỊCH SỬ</text>
+      <text x="240" y="368" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đang dùng</text>
+      <text x="240" y="388" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đã có bản chụp</text>
+
+      <rect x="560" y="320" width="240" height="80" rx="8" fill="#fafafa"/>
+      <rect x="560" y="320" width="240" height="80" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="680" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đã lưu trữ</text>
+      <text x="680" y="372" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">biến khỏi bộ chọn</text>
+      <text x="680" y="388" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">nhịp thôi lấy</text>
+
+      <rect x="920" y="200" width="200" height="80" rx="8" fill="#fafafa"/>
+      <rect x="920" y="200" width="200" height="80" rx="8" fill="rgba(23,23,23,0.05)" stroke="#171717" stroke-width="1.2"/>
+      <rect x="928" y="208" width="100" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="978" y="220" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHÔNG HOÀN TÁC</text>
+      <text x="1020" y="248" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mất</text>
+      <text x="1020" y="268" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">sản phẩm, bản chụp, người xem</text>
+
+      <line x1="56" y1="496" x2="1144" y2="496" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="56" y="524" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <circle cx="160" cy="520" r="6" fill="#171717"/>
+      <text x="176" y="524" fill="#575757" font-size="10" font-family="'Geist', sans-serif">bắt đầu: quản trị khai</text>
+      <rect x="352" y="512" width="24" height="16" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="384" y="524" fill="#575757" font-size="10" font-family="'Geist', sans-serif">đường máy khuyên khi đã có lịch sử</text>
+      <rect x="652" y="512" width="24" height="16" rx="3" fill="rgba(23,23,23,0.05)" stroke="#171717" stroke-width="1.2"/>
+      <text x="684" y="524" fill="#575757" font-size="10" font-family="'Geist', sans-serif">hết đường quay lại</text>
+      <text x="852" y="524" fill="#575757" font-size="10" font-family="'Geist', sans-serif">«hỏi lại» = hộp xác nhận một lần</text>
+    </svg>
+
+    <footer>lo-trinh-nhieu-san-pham · Cổng Phạm vi · 20/10/2026</footer>
+  </div>
+</body>
+</html>
