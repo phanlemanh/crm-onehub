@@ -7,6 +7,7 @@ import {
 	type GuiTinHieuInput,
 	idTep,
 	type KeoVeOutput,
+	type LoaiVetTinHieu,
 	lamSachMan,
 	TIN_HIEU,
 	tepTuBanGhi,
@@ -25,11 +26,27 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
+import { archivedFilter } from "../trpc/list-input";
 import type {
 	GuiTinHieuOutput,
+	LuuTruTinHieuOutput,
 	TinHieuCuaToiOutput,
 	TinHieuTatCaOutput,
 } from "./tin-hieu.contracts";
+
+const CHON_TAT_CA = {
+	id: true,
+	so: true,
+	tieuDe: true,
+	muonLam: true,
+	man: true,
+	guiLuc: true,
+	keoVeLuc: true,
+	archivedAt: true,
+	nguoiGui: { select: { id: true, name: true } },
+	phongBan: { select: { id: true, name: true } },
+	archivedBy: { select: { id: true, name: true } },
+} as const;
 
 export type NguoiGoiTinHieu = { id: string; role: WorkspaceRole | null };
 
@@ -87,62 +104,151 @@ export class TinHieuService {
 				man: true,
 				guiLuc: true,
 				keoVeLuc: true,
+				archivedAt: true,
 			},
 		});
 		return {
-			rows: rows.map(({ keoVeLuc, ...r }) => ({
+			rows: rows.map(({ keoVeLuc, archivedAt, ...r }) => ({
 				...r,
 				ma: idTep(r.so),
 				daKeoVe: keoVeLuc !== null,
+				daLuuTru: archivedAt !== null,
 			})),
 		};
 	}
 
-	async tatCa(nguoi: NguoiGoiTinHieu): Promise<TinHieuTatCaOutput> {
+	async tatCa(
+		nguoi: NguoiGoiTinHieu,
+		daLuuTru = false,
+	): Promise<TinHieuTatCaOutput> {
 		if (!laQuanTriWorkspace(nguoi.role)) throw new ForbiddenException();
 		const rows = await this.db.tinHieu.findMany({
-			orderBy: { guiLuc: "desc" },
-			select: {
-				id: true,
-				so: true,
-				tieuDe: true,
-				muonLam: true,
-				man: true,
-				guiLuc: true,
-				keoVeLuc: true,
-				nguoiGui: { select: { id: true, name: true } },
-				phongBan: { select: { id: true, name: true } },
-			},
+			where: archivedFilter(daLuuTru),
+			orderBy: daLuuTru ? { archivedAt: "desc" } : { guiLuc: "desc" },
+			select: CHON_TAT_CA,
 		});
 		this.logger.log({
-			message: "tin-hieu.tat-ca",
+			message: daLuuTru ? "tin-hieu.da-luu-tru" : "tin-hieu.tat-ca",
 			userId: nguoi.id,
 			so: rows.length,
 		});
+		const thamChieu = (x: { id: string; name: string } | null) =>
+			x ? { id: x.id, ten: x.name } : null;
 		return {
-			rows: rows.map(({ keoVeLuc, nguoiGui, phongBan, ...r }) => ({
+			rows: rows.map(({ keoVeLuc, nguoiGui, phongBan, archivedBy, ...r }) => ({
 				...r,
 				ma: idTep(r.so),
 				daKeoVe: keoVeLuc !== null,
-				nguoiGui: nguoiGui ? { id: nguoiGui.id, ten: nguoiGui.name } : null,
-				phongBan: phongBan ? { id: phongBan.id, ten: phongBan.name } : null,
+				daLuuTru: r.archivedAt !== null,
+				nguoiGui: thamChieu(nguoiGui),
+				phongBan: thamChieu(phongBan),
+				nguoiLuuTru: thamChieu(archivedBy),
 			})),
 		};
 	}
 
+	async luuTru(
+		nguoi: NguoiGoiTinHieu,
+		id: string,
+	): Promise<LuuTruTinHieuOutput> {
+		if (!laQuanTriWorkspace(nguoi.role)) throw new ForbiddenException();
+		const kq = await this.db.$transaction(async (tx) => {
+			await tx.$executeRaw`LOCK TABLE "tinHieu" IN ROW EXCLUSIVE MODE`;
+			const luc = new Date();
+			const doi = await tx.tinHieu.updateMany({
+				where: { id, archivedAt: null, keoVeLuc: null },
+				data: { archivedAt: luc, archivedById: nguoi.id },
+			});
+			const hang = await tx.tinHieu.findUnique({
+				where: { id },
+				select: { so: true, keoVeLuc: true, archivedAt: true },
+			});
+			if (!hang) throw new NotFoundException(TIN_HIEU.loi.khongCo);
+			if (doi.count === 0 && !hang.archivedAt)
+				throw new ConflictException(TIN_HIEU.loi.luuTruDaLayVe);
+			if (doi.count === 1)
+				await this.ghiVet(tx, {
+					tinHieuId: id,
+					so: hang.so,
+					nguoiId: nguoi.id,
+					loai: "luu-tru",
+					luc,
+				});
+			return { so: hang.so, luc: hang.archivedAt ?? luc, doi: doi.count };
+		});
+		this.logger.log({
+			message: "tin-hieu.luu-tru",
+			userId: nguoi.id,
+			so: kq.so,
+			doi: kq.doi,
+		});
+		return { ok: true, daLuuTruLuc: kq.luc };
+	}
+
+	async khoiPhuc(nguoi: NguoiGoiTinHieu, id: string): Promise<{ ok: true }> {
+		if (!laQuanTriWorkspace(nguoi.role)) throw new ForbiddenException();
+		const kq = await this.db.$transaction(async (tx) => {
+			await tx.$executeRaw`LOCK TABLE "tinHieu" IN ROW EXCLUSIVE MODE`;
+			const luc = new Date();
+			const doi = await tx.tinHieu.updateMany({
+				where: { id, archivedAt: { not: null } },
+				data: { archivedAt: null, archivedById: null },
+			});
+			const hang = await tx.tinHieu.findUnique({
+				where: { id },
+				select: { so: true },
+			});
+			if (!hang) throw new NotFoundException(TIN_HIEU.loi.khongCo);
+			if (doi.count === 1)
+				await this.ghiVet(tx, {
+					tinHieuId: id,
+					so: hang.so,
+					nguoiId: nguoi.id,
+					loai: "khoi-phuc",
+					luc,
+				});
+			return { so: hang.so, doi: doi.count };
+		});
+		this.logger.log({
+			message: "tin-hieu.khoi-phuc",
+			userId: nguoi.id,
+			so: kq.so,
+			doi: kq.doi,
+		});
+		return { ok: true };
+	}
+
+	private ghiVet(
+		tx: Parameters<Parameters<Db["$transaction"]>[0]>[0],
+		vet: {
+			tinHieuId: string;
+			so: number;
+			nguoiId: string;
+			loai: LoaiVetTinHieu;
+			luc: Date;
+		},
+	) {
+		return tx.tinHieuVet.create({ data: vet });
+	}
+
 	async xoa(nguoi: NguoiGoiTinHieu, id: string): Promise<{ ok: true }> {
-		const so = await this.db.$transaction(async (tx) => {
+		const xoa = await this.db.$transaction(async (tx) => {
 			await tx.$executeRaw`LOCK TABLE "tinHieu" IN ROW EXCLUSIVE MODE`;
 			const hang = await tx.tinHieu.findFirst({
 				where: { id, nguoiGuiId: nguoi.id },
-				select: { so: true, keoVeLuc: true },
+				select: { so: true, keoVeLuc: true, archivedAt: true },
 			});
 			if (!hang) throw new NotFoundException(TIN_HIEU.loi.khongCo);
 			if (hang.keoVeLuc) throw new ConflictException(TIN_HIEU.loi.daLayVe);
 			await tx.tinHieu.delete({ where: { id } });
-			return hang.so;
+			return { so: hang.so, daLuuTru: hang.archivedAt !== null };
 		});
-		this.logger.log({ message: "tin-hieu.xoa", userId: nguoi.id, so });
+		this.logger.log({
+			message: "tin-hieu.xoa",
+			userId: nguoi.id,
+			so: xoa.so,
+			daLuuTru: xoa.daLuuTru,
+		});
 		return { ok: true };
 	}
 
@@ -152,10 +258,11 @@ export class TinHieuService {
 		const { hang, soDau } = await this.db.$transaction(async (tx) => {
 			await tx.$executeRaw`LOCK TABLE "tinHieu" IN SHARE ROW EXCLUSIVE MODE`;
 			const dau = await tx.tinHieu.updateMany({
-				where: { keoVeLuc: null },
+				where: { keoVeLuc: null, archivedAt: null },
 				data: { keoVeLuc: luc },
 			});
 			const rows = await tx.tinHieu.findMany({
+				where: { archivedAt: null },
 				orderBy: { so: "asc" },
 				include: { phongBan: { select: { name: true } } },
 			});

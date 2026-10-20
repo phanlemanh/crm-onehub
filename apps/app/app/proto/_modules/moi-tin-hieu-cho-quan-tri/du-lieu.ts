@@ -33,7 +33,7 @@ const CHO_GOM = {
 	nghia: "nhap" as const,
 };
 
-export const DONG_TAT_CA: DongTatCa[] = [
+const NGUON: Omit<DongTatCa, "daKeoVe" | "luuTru">[] = [
 	{
 		id: "t9",
 		ma: "crm-9",
@@ -132,6 +132,12 @@ export const DONG_TAT_CA: DongTatCa[] = [
 		trangThai: CHO_GOM,
 	},
 ];
+
+export const DONG_TAT_CA: DongTatCa[] = NGUON.map((d) => ({
+	...d,
+	daKeoVe: d.trangThai.khoa !== CHO_LAY_VE.khoa,
+	luuTru: null,
+}));
 
 export const DONG_THIEU: DongTatCa[] = DONG_TAT_CA.filter(
 	(d) => d.nguoiGui === null || d.ma === "crm-9" || d.ma === "crm-8",

@@ -40,6 +40,13 @@ mock.module("@/lib/trpc/client", () => ({
 				if (tatCaLoi) throw new Error("hong");
 				return { rows: hangTatCa };
 			}),
+			daLuuTru: truyVan("tinHieu.daLuuTru", () => ({ rows: [] })),
+			luuTru: {
+				mutationOptions: (o = {}) => ({ ...o, mutationFn: async () => ({}) }),
+			},
+			khoiPhuc: {
+				mutationOptions: (o = {}) => ({ ...o, mutationFn: async () => ({}) }),
+			},
 		},
 	}),
 }));
@@ -503,7 +510,7 @@ describe("hop-bao-truoc", () => {
 });
 
 describe("trang-thai-man", () => {
-	const SO = { ...dongCua([]).baSo, chuaCoCho: 0 };
+	const LUC = "2026-11-12T03:00:00.000Z";
 	test("trang-thai-man: dang tai co khung xuong ba o va cac dong", async () => {
 		const o = await ve(<KhungChoTatCa />);
 		const k = o.querySelector("[data-tin-hieu-tat-ca-dang-tai]");
@@ -515,7 +522,9 @@ describe("trang-thai-man", () => {
 
 	test("trang-thai-man: the khach dang cho thi hien khung xuong", async () => {
 		tatCaCho = true;
-		const o = await ve(<TatCaTrang banVeDocDuoc baSo={SO} trangThai={{}} />);
+		const o = await ve(
+			<TatCaTrang banVeDocDuoc coCho={[]} luc={LUC} trangThai={{}} />,
+		);
 		expect(
 			o.querySelector("[data-tin-hieu-tat-ca-dang-tai]"),
 			"the Tat ca trang luc dang tai",
@@ -524,7 +533,9 @@ describe("trang-thai-man", () => {
 
 	test("trang-thai-man: loi thi VungTaiLoi, Thu lai tai lai dung mot lan", async () => {
 		tatCaLoi = true;
-		const o = await ve(<TatCaTrang banVeDocDuoc baSo={SO} trangThai={{}} />);
+		const o = await ve(
+			<TatCaTrang banVeDocDuoc coCho={[]} luc={LUC} trangThai={{}} />,
+		);
 		expect(o.textContent).toContain(m.tatCa.taiLoiTieuDe);
 		const truoc = soLanTai;
 		const nut = [...o.querySelectorAll("button")].find((b) =>
@@ -537,7 +548,9 @@ describe("trang-thai-man", () => {
 
 	test("trang-thai-man: rong thi ba o 0 va cau chua ai gui", async () => {
 		hangTatCa = [];
-		const o = await ve(<TatCaTrang banVeDocDuoc baSo={SO} trangThai={{}} />);
+		const o = await ve(
+			<TatCaTrang banVeDocDuoc coCho={[]} luc={LUC} trangThai={{}} />,
+		);
 		expect(o.textContent).toContain(m.tatCa.rongTieuDe);
 		const so = [...o.querySelectorAll("[data-slot=stat-card]")].map(
 			(x) => x.querySelector(".text-3xl")?.textContent,
@@ -547,7 +560,9 @@ describe("trang-thai-man", () => {
 
 	test("trang-thai-man: co du lieu thi bang co dong", async () => {
 		hangTatCa = [hang(1, NG.lan, PB.kd, false)];
-		const o = await ve(<TatCaTrang banVeDocDuoc baSo={SO} trangThai={{}} />);
+		const o = await ve(
+			<TatCaTrang banVeDocDuoc coCho={[]} luc={LUC} trangThai={{}} />,
+		);
 		expect(maHien(o)).toEqual(["crm-1"]);
 	});
 });
