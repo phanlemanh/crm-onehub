@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1b29d3bcd0eeb359c6facf2f295183d7b1541de8
+verified_commit: 64dd33a5262ee7a042e5442226e5b5832c6e4168
 human_signoff: Manh Phan 2026-10-20
 ---
 
@@ -314,3 +314,7 @@ sha: 89d64f4b2f3b14be19f69c6184e0a04370a96a1f · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-20, do gộp origin/onehub #496 và kế tiếp trước khi đẩy
 run_id: repin-20261020T020903Z-46096
 sha: 1b29d3bcd0eeb359c6facf2f295183d7b1541de8 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E5c, E6b, E8b, E9b, E11 (E11 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-20, do sửa luật vòng đời ở lệnh xoá của người gửi (CI acceptance gate)
+run_id: repin-20261020T035506Z-56725
+sha: 64dd33a5262ee7a042e5442226e5b5832c6e4168 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E5c, E6b, E8b, E9b, E11 (E11 không khai paths) · diff chạm vật đo ngoài làn máy: E5c — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
