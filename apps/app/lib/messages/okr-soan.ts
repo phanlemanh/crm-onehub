@@ -118,7 +118,7 @@ const vi = {
 		} satisfies Record<LoaiMucTieu, string>,
 		viSaoLucNay: (chu: string) => `Vì sao lúc này: ${chu}`,
 		kr: "KR",
-		canChinhNhan: "Căn chỉnh",
+		canChinhNhan: "Góp vào",
 		canChinh: (ten: string) => `Góp vào «${ten}»`,
 		doBang: (donVi: string) => `đo bằng ${donVi}`,
 		goiYKhoiDiem: (so: string) => `khởi điểm gợi ý ${so}`,
@@ -245,7 +245,7 @@ const vi = {
 		loaiDong: {
 			"muc-tieu-moi": "Mục tiêu",
 			"kr-moi": "KR",
-			"can-chinh-moi": "Căn chỉnh",
+			"can-chinh-moi": "Góp vào",
 		} satisfies Record<LoaiDong, string>,
 		trangThai: {
 			cho: "Qua bộ kiểm",
@@ -301,7 +301,7 @@ const vi = {
 		moiDong: "Mọi dòng",
 		themMucTieu: "Thêm Mục tiêu",
 		themKr: "Thêm KR",
-		themCanChinh: "Thêm căn chỉnh",
+		themCanChinh: "Thêm chỗ góp vào",
 		themBanSua: "Thêm bản đã sửa",
 		boQua: "Bỏ qua",
 		hoiKara: "Hỏi Kara về dòng này",
@@ -358,7 +358,7 @@ const vi = {
 	},
 	heThong: {
 		seGui: (s: string) => `Sẽ gửi kèm lượt sau: ${s}`,
-		loai: { "muc-tieu": "Mục tiêu", kr: "KR", "can-chinh": "căn chỉnh" },
+		loai: { "muc-tieu": "Mục tiêu", kr: "KR", "can-chinh": "chỗ góp vào" },
 		cach: {
 			nhan: (loai: string, chu: string) => `Bạn đã thêm ${loai} «${chu}»`,
 			sua: (loai: string, chu: string) =>
@@ -487,7 +487,7 @@ const en: OkrSoanMessages = {
 		},
 		viSaoLucNay: (chu) => `Why now: ${chu}`,
 		kr: "KR",
-		canChinhNhan: "Alignment",
+		canChinhNhan: "Contributes to",
 		canChinh: (ten) => `Contributes to «${ten}»`,
 		doBang: (donVi) => `measured in ${donVi}`,
 		goiYKhoiDiem: (so) => `suggested start ${so}`,
@@ -605,7 +605,7 @@ const en: OkrSoanMessages = {
 		loaiDong: {
 			"muc-tieu-moi": "Objective",
 			"kr-moi": "KR",
-			"can-chinh-moi": "Alignment",
+			"can-chinh-moi": "Contributes to",
 		},
 		trangThai: {
 			cho: "Passed the checker",
@@ -662,7 +662,7 @@ const en: OkrSoanMessages = {
 		moiDong: "All lines",
 		themMucTieu: "Add objective",
 		themKr: "Add KR",
-		themCanChinh: "Add alignment",
+		themCanChinh: "Add where it contributes",
 		themBanSua: "Add edited version",
 		boQua: "Skip",
 		hoiKara: "Ask Kara about this line",
@@ -721,7 +721,7 @@ const en: OkrSoanMessages = {
 	},
 	heThong: {
 		seGui: (s: string) => `Sent with the next turn: ${s}`,
-		loai: { "muc-tieu": "objective", kr: "KR", "can-chinh": "alignment" },
+		loai: { "muc-tieu": "objective", kr: "KR", "can-chinh": "contribution" },
 		cach: {
 			nhan: (loai: string, chu: string) => `You added ${loai} «${chu}»`,
 			sua: (loai: string, chu: string) =>

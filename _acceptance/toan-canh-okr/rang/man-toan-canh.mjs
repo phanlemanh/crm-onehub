@@ -53,7 +53,7 @@ const MOI_EVAL = [
 ];
 
 const CHU = {
-	cayCanChinh: "Cây căn chỉnh toàn công ty",
+	cayCanChinh: "Sơ đồ góp vào cả công ty",
 	cayDonVi: "Cây đơn vị",
 	cungHien: "cũng hiện ở chỗ góp kia",
 	// AC-14 loi-hua-moi: trang-don-vi-mot-bang AC-5 — bang trong khi loc khong khop noi «Khong co muc tieu nao khop» kem nut bo loc.

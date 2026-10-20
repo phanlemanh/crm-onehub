@@ -1685,6 +1685,12 @@ executors:
     kmt_bai_cu_app: node _acceptance/kara-mot-ten/rang/bai-cu.mjs --app
     kmt_bai_cu_may: node _acceptance/kara-mot-ten/rang/bai-cu.mjs --may
     kmt_tin_nhac: 'bun run test -- "cd apps/agent && bun test test/kara-mot-ten.spec.ts -t kmt-tin-nhac"'
+    dnk_gop_vao: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-gop-vao
+    dnk_goc: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-goc
+    dnk_lay_y_kien: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-lay-y-kien
+    dnk_luat: cd apps/app && bun test ./test/doi-nhan-khu-muc-tieu.spec.ts -t dnk-luat
+    dnk_goc_man: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-khu-muc-tieu.dom.tsx -t dnk-goc-man
+    dnk_bai_cu: 'cd apps/app && bun test ./test/messages-guard.spec.ts && for f in okr-cua-toi-ba-phan okr-sheet okr-tai-co-cau okr-gioi-han-duyet duong-ly-do okr-so-do-don-vi okr-theo-don-vi okr-hoi-y okr-thanh-tab okr-trang-don-vi; do TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/$f.dom.tsx || exit 1; done'
     kmc_quet: "cd apps/app && bun test ./test/khung-man-chung.spec.ts"
     kmc_xuong: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx"
     kmc_chi_tiet: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx -t chi-tiet && bun test ./test/khung-man-chung.spec.ts -t breadcrumb-chi-tiet"
@@ -2064,6 +2070,13 @@ executors:
     kmt_chup: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-mot-ten/rang/chup.mjs"'
     kmt_kiem_ke: node _acceptance/kara-mot-ten/rang/kiem-ke.mjs
     kmt_bang_chu: node _acceptance/kara-mot-ten/rang/bang-chu.mjs
+    dnk_dot_bien: node _acceptance/doi-nhan-khu-muc-tieu/rang/dot-bien.mjs
+    dnk_kiem_ke: node _acceptance/doi-nhan-khu-muc-tieu/rang/kiem-ke.mjs
+    dnk_proto: node _acceptance/doi-nhan-khu-muc-tieu/rang/proto.mjs
+    dnk_khong_go_bai: node _acceptance/doi-nhan-khu-muc-tieu/rang/khong-go-bai.mjs
+    dnk_thuoc_da_ky: node _acceptance/doi-nhan-khu-muc-tieu/rang/thuoc-da-ky.mjs
+    dnk_bang_chu: node _acceptance/doi-nhan-khu-muc-tieu/rang/bang-chu.mjs
+    dnk_chup: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/doi-nhan-khu-muc-tieu/rang/chup.mjs"'
     ltk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/luu-tru-truong-khong-hoi/rang/man.mjs"'
     ltk_san_thiet_ke: 'for t in apps/app/components/crm/fields/field-editor.tsx apps/app/components/crm/fields/fields-list.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     dlt_mot_noi: bun _acceptance/dai-luu-tru-dung-chung/rang/mot-noi.mjs
