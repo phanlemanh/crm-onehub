@@ -30,17 +30,23 @@ evals:
     paths:
       - "_acceptance/don-ho-so-cu/rang/lo.mjs"
       - "_acceptance/don-ho-so-cu/rang/kiem-lo.mjs"
+      - "_acceptance/don-ho-so-cu/rang/chan-pr.mjs"
       - "_acceptance/don-ho-so-cu/rang/chung.mjs"
+      - "_acceptance/don-ho-so-cu/rang/uoc.mjs"
       - "_acceptance/don-ho-so-cu/kiem-ke-goc.json"
+      - "_acceptance/don-ho-so-cu/lo-goc.json"
+      - "_acceptance/don-ho-so-cu/chan-pr.json"
       - "_acceptance/don-ho-so-cu/lo.json"
     expected: |
-      bun rang/kiem-lo.mjs. Doc kiem-ke-goc.json (kiem ke o sha goc vong) va lo.json. Dat khi: (a) tap slug trong lo.json =
-      (slug nhom loc-ap cua kiem ke) hop (12 ca goi ten trong CA_GOI_TEN cua chung.mjs) tru slug co dong cho-lan-chu trong
-      xu-ly.json — so bang; (b) moi slug dung mot lan; (c) khong slug nhom thieu-paths nao ngoai ca goi ten; (d) moi lo co
-      uoc_phut <= feature_loop.repin_budget_min doc tu _acceptance/config.yaml. In mot dong moi lo «lo <n>: <k> ho so, uoc
-      <p>′». Chieu do, cung du lieu, ba ban pha trong bo nho: nhan doi mot slug -> «BAT trung»; bo mot slug -> «BAT thieu»;
-      them mot slug thieu-paths ngoai ca goi ten -> «BAT thieu-paths»; dat uoc_phut mot lo bang tran+1 -> «BAT vuot-tran».
-      Ban pha nao khong bat -> ma 1 «thuoc hong: <ten ca>». Ma 0 khi dat va ca bon ca BAT.
+      bun rang/kiem-lo.mjs. Doc kiem-ke-goc.json, lo-goc.json, chan-pr.json (pr_mo = danh sach PR mo da chup nguyen van, chan =
+      ho so bi chan) va lo.json. Dat khi: (a) tinh lai danh sach chan tu pr_mo bang ham hoSoChan cua chan-pr.mjs (PR khong
+      phai nhanh vong, cham _acceptance/<slug>/ cua ho so cu trong kiem-ke-goc, khong cham evidence-report.md cua slug do)
+      ra dung chan da ghi; (b) tap slug trong lo.json = (lo 8 cua lo-goc) hop (moi slug trong chan) hop (K6A) tru
+      okr-soat-anh-luot-3 tru slug co dong cho-lan-chu — so bang; (c) moi slug dung mot lan; (d) moi lo co uoc_phut <=
+      feature_loop.repin_budget_min doc tu _acceptance/config.yaml. In mot dong moi lo. Chieu do, cung du lieu, nam ban pha
+      trong bo nho: nhan doi mot slug -> «BAT trung»; bo mot slug -> «BAT thieu»; them okr-soat-anh-luot-3 -> «BAT
+      khong-dung»; uoc_phut lo dau = tran+1 -> «BAT vuot-tran»; bo PR chan dau tien khoi pr_mo -> «BAT bo-pr-chan». Ban pha
+      nao khong bat -> ma 1 «thuoc hong: <ten ca>». Ma 0 khi dat va ca nam ca BAT.
 
   - id: E3
     criterion: AC-3
@@ -130,16 +136,12 @@ evals:
     paths:
       - "_acceptance/don-ho-so-cu/rang/ca-goi-ten.mjs"
       - "_acceptance/don-ho-so-cu/rang/chung.mjs"
-      - "_acceptance/don-ho-so-cu/rang/kiem-ke.mjs"
-      - "_acceptance/don-ho-so-cu/xu-ly.json"
     expected: |
-      bun rang/ca-goi-ten.mjs. Ma tran viet truoc: 12 ho so trong CA_GOI_TEN cua chung.mjs (dung ten o design.md). Voi moi
-      ho so: dat khi khong co trong kiem ke HEAD (kiemKe --slug <ho so>), hoac co dong trong xu-ly.json. So o dat phai bang
-      12. Rieng tac-nhan-va: con cu tren HEAD thi dong cua no phai co cach loi-kit. Rieng K6a: khung-khong-con-dung-chu va
-      lich-su-va-luu-tru-trang khong cu tren HEAD; gh pr view 411 --json state,comments: state CLOSED va mot binh luan chua
-      so PR cua vong (doc tu gh pr view --json number tren nhanh vong). gh khong chay duoc -> ma 2 «khong doc duoc PR 411».
-      Chieu do: danh sach ca goi ten them mot ho so gia «khong-co-that» -> «BAT ca-khong-co-that»; tac-nhan-va gia lap con
-      cu va bo dong loi-kit trong ban chep -> «BAT tac-nhan-va». Ma 0 khi 12/12 dat va hai ca BAT.
+      bun rang/ca-goi-ten.mjs. Hai ho so K6A cua chung.mjs (khung-khong-con-dung-chu, lich-su-va-luu-tru-trang): kiemKe --slug
+      tung ho so tren HEAD, dat khi ca hai khong cu. gh pr view 411 --json state,comments: state CLOSED va mot binh luan chua
+      «#<so PR cua vong>» (so doc tu gh pr view feat/don-ho-so-cu --json number). gh khong chay duoc -> ma 2 «khong doc duoc
+      PR 411 hoac PR cua vong». Chieu do tren du lieu trong bo nho: mot ho so K6A con cu -> «BAT k6a-con-cu»; PR 411 OPEN ->
+      «BAT pr-411-mo»; PR 411 dong voi binh luan khong tro so PR vong -> «BAT khong-tro». Ma 0 khi dat va ba ca BAT.
 
   - id: E8
     criterion: AC-8

@@ -1,13 +1,16 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { docJson, HO_SO } from "./chung.mjs";
+import { hoSoChan } from "./chan-pr.mjs";
+import { docJson, HO_SO, KHONG_DUNG } from "./chung.mjs";
 import { tapGhim } from "./lo.mjs";
 import { tranLan } from "./uoc.mjs";
 
-export function kiemLo(kk, lo, xuLy, tran) {
+export function kiemLo({ kk, loGoc, chanPr, lo, xuLy, tran }) {
 	const loi = [];
-	const mong = new Set(tapGhim(kk, xuLy));
-	const thieuPaths = new Set(kk.ho_so.filter((h) => h.nhom !== "loc-ap").map((h) => h.slug));
+	const cu = new Set(kk.ho_so.map((h) => h.slug));
+	const chanTinhLai = hoSoChan(chanPr.pr_mo, cu);
+	if (JSON.stringify(chanTinhLai) !== JSON.stringify(chanPr.chan)) loi.push("chan-pr: danh sach chan khong khop pr_mo da chup");
+	const mong = new Set(tapGhim(loGoc, chanTinhLai, xuLy));
 	const dem = new Map();
 	for (const l of lo) {
 		if (l.uoc_phut > tran) loi.push(`vuot-tran: lo ${l.so} uoc ${l.uoc_phut}′ > ${tran}′`);
@@ -15,36 +18,37 @@ export function kiemLo(kk, lo, xuLy, tran) {
 	}
 	for (const [s, n] of dem) if (n > 1) loi.push(`trung: ${s} o ${n} lo`);
 	for (const s of mong) if (!dem.has(s)) loi.push(`thieu: ${s}`);
-	for (const s of dem.keys()) {
-		if (!mong.has(s)) loi.push(thieuPaths.has(s) ? `thieu-paths: ${s} khong thuoc ca goi ten` : `thua: ${s}`);
-	}
+	for (const s of dem.keys()) if (!mong.has(s)) loi.push(KHONG_DUNG.includes(s) ? `khong-dung: ${s}` : `thua: ${s}`);
 	return loi;
 }
 
-const kk = docJson(join(HO_SO, "kiem-ke-goc.json"));
-const lo = docJson(join(HO_SO, "lo.json")).lo;
-const pXuLy = join(HO_SO, "xu-ly.json");
-const xuLy = existsSync(pXuLy) ? docJson(pXuLy).dong : [];
-const tran = tranLan();
-for (const l of lo) console.log(`lo ${l.so}: ${l.ho_so.length} ho so, uoc ${l.uoc_phut}′`);
-const loi = kiemLo(kk, lo, xuLy, tran);
+const dl = {
+	kk: docJson(join(HO_SO, "kiem-ke-goc.json")),
+	loGoc: docJson(join(HO_SO, "lo-goc.json")).lo,
+	chanPr: docJson(join(HO_SO, "chan-pr.json")),
+	lo: docJson(join(HO_SO, "lo.json")).lo,
+	xuLy: existsSync(join(HO_SO, "xu-ly.json")) ? docJson(join(HO_SO, "xu-ly.json")).dong : [],
+	tran: tranLan(),
+};
+for (const l of dl.lo) console.log(`lo ${l.so}: ${l.ho_so.length} ho so, uoc ${l.uoc_phut}′`);
+const loi = kiemLo(dl);
 if (loi.length) {
 	console.log(`KET LUAN: do — ${loi.join("; ")}`);
 	process.exit(1);
 }
-const thieuPaths = kk.ho_so.find((h) => h.nhom !== "loc-ap" && !lo.some((l) => l.ho_so.includes(h.slug)));
+const pr0 = dl.chanPr.chan[0];
 const ca = [
-	["trung", (x) => x[0].ho_so.push(x[0].ho_so[0]), "trung:"],
-	["thieu", (x) => x[x.length - 1].ho_so.pop(), "thieu:"],
-	["thieu-paths", (x) => x[0].ho_so.push(thieuPaths?.slug ?? "khong-co-that"), thieuPaths ? "thieu-paths:" : "thua:"],
-	["vuot-tran", (x) => (x[0].uoc_phut = tran + 1), "vuot-tran:"],
+	["trung", (x) => x.lo[0].ho_so.push(x.lo[0].ho_so[0]), "trung:"],
+	["thieu", (x) => x.lo[x.lo.length - 1].ho_so.pop(), "thieu:"],
+	["khong-dung", (x) => x.lo[0].ho_so.push(KHONG_DUNG[0]), "khong-dung:"],
+	["vuot-tran", (x) => (x.lo[0].uoc_phut = dl.tran + 1), "vuot-tran:"],
+	["bo-pr-chan", (x) => (x.chanPr.pr_mo = x.chanPr.pr_mo.filter((p) => p.number !== pr0.number)), "chan-pr:"],
 ];
 let hong = false;
-for (const [ten, pha1, dau] of ca) {
-	const ban = structuredClone(lo);
-	pha1(ban);
-	const l = kiemLo(kk, ban, xuLy, tran);
-	if (l.some((x) => x.startsWith(dau))) console.log(`BAT ${ten}`);
+for (const [ten, pha, dau] of ca) {
+	const ban = structuredClone(dl);
+	pha(ban);
+	if (kiemLo(ban).some((x) => x.startsWith(dau))) console.log(`BAT ${ten}`);
 	else {
 		console.log(`thuoc hong: ${ten}`);
 		hong = true;

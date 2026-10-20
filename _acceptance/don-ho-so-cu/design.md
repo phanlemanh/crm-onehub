@@ -14,6 +14,24 @@ của hồ sơ ấy gãy thì vòng kia đỏ oan (đêm 17→18/10 gom chín ca
 (`giu-tuoi.mjs`, hàng K-A), nhưng lệnh ấy chỉ gọi tên hồ sơ **tồn đọng** — cũ từ trước khoảng — không ghim chúng: «cần
 một vòng dọn riêng của kho». F35 là vòng dọn đó.
 
+## Thu phạm vi 20/10 (chủ kho)
+
+Chia lô theo giờ máy thật cho ra 17 lô, ~21,6 giờ máy cho 214 hồ sơ — phần lớn là eval đo màn thật. Chủ kho quyết
+«Thực hiện theo lời khuyên.»: vòng chỉ ghim
+
+- lô 8 của bản chia ấy (`lo-goc.json`) — có `dot-hoi-y-tuong-okr`, hồ sơ mà vk cần ghim để có dấu đỏ E13/E16;
+- các hồ sơ đang chặn một PR mở: PR (không phải của vòng) chạm `_acceptance/<slug>/` của một hồ sơ cũ mà không tự ghim
+  lại hồ sơ đó (`rang/chan-pr.mjs` chụp `chan-pr.json`) — trừ `okr-soat-anh-luot-3` của #499, đang chờ chủ kho;
+- hai hồ sơ của K6a (luật 24: F35 thay PR #411).
+
+Tập ấy là 12 hồ sơ, 2 lô, ~2,6 giờ máy. Gần 200 hồ sơ còn lại không ghim hàng loạt: PR nào chạm tới hồ sơ thì tự ghim hồ
+sơ đó. Lý do theo thước North Star (giờ máy trên mỗi kết quả giao): một hồ sơ chỉ cần tươi khi có vòng chạm tới nó, nên
+ghim lười chỉ trả tiền cho hồ sơ thật sự được dùng, còn ghim trước trả cho cả hồ sơ không ai chạm — và gộp kế tiếp lại
+làm nhiều cái cũ lại. Các ca thước gãy đã gọi tên dưới đây mà không nằm trong tập ghim được sửa khi PR chạm tới (luật 23
+vẫn áp). Lỗi gốc — gần như mọi hồ sơ cũ sau mỗi gộp, `giu-tuoi.mjs` không có `--slug` — chuyển sang kho kit.
+
+Các mục dưới đây là thiết kế trước khi thu; phần «tập ghim» và «lô» đọc theo mục này.
+
 ## Cách làm
 
 1. **Kiểm kê** (`rang/kiem-ke.mjs`): chạy chính `scripts/pre-merge-check.sh` không `--base` trên một sha, rút mọi

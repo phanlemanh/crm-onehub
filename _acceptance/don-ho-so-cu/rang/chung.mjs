@@ -12,20 +12,9 @@ export const TAM = join(GOC, ".acceptance-runs", SLUG);
 export const DA_KY = ["signed-off", "machine-cleared"];
 export const NGUONG_TOAN_KHO = 40;
 
-export const CA_GOI_TEN = [
-	"hop-thoai-giu-cho-dang-nhap",
-	"trang-don-vi-mot-bang",
-	"dieu-huong-khu-muc-tieu",
-	"ve-sinh-do-san-onehub",
-	"so-do-quanh-muc-tieu",
-	"tac-nhan-glm-5-3-cham",
-	"tac-nhan-va",
-	"chuyen-goi-dieu-phoi",
-	"va-lo-ro-vai-chi-okr",
-	"khung-khong-con-dung-chu",
-	"lich-su-va-luu-tru-trang",
-	"thu-haiku-tro-ly-okr",
-];
+export const K6A = ["khung-khong-con-dung-chu", "lich-su-va-luu-tru-trang"];
+export const LO_GOC_CHON = 8;
+export const KHONG_DUNG = ["okr-soat-anh-luot-3"];
 
 const DONG_CU = /^VIOLATION \[([^\]]+)\]: evidence is stale/;
 const DONG_LOC = /^NOTE \[([^\]]+)\]: bộ lọc paths không áp \(([^)]*)\)/;

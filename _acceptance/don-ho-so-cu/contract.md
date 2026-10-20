@@ -5,9 +5,9 @@ slug: don-ho-so-cu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
-approved_by: Manh Phan
-approved_at: 2026-10-20T12:28:26Z
+status: draft
+approved_by:
+approved_at:
 design_doc: _acceptance/don-ho-so-cu/design.md
 ---
 
@@ -20,9 +20,15 @@ Trên đỉnh `onehub` 20/10 (`b32a1495f`) lưới trước-gộp chạy không 
 giữ tươi của kit 2.33 (`giu-tuoi.mjs`) chỉ gọi tên hồ sơ tồn đọng, không ghim chúng. Vòng này dọn tồn đọng một lượt:
 ghim lại bằng làn máy, và hồ sơ nào đỏ thì sửa thước (luật 23 của đợt) hoặc gọi tên vì sao không sửa.
 
+Thu phạm vi 20/10 (chủ kho, «Thực hiện theo lời khuyên.»): chia lô theo giờ máy thật cho ra 17 lô, ~21,6 giờ máy cho 214
+hồ sơ. Vòng chỉ ghim lô 8 của bản chia ấy (có `dot-hoi-y-tuong-okr`), các hồ sơ đang chặn một PR mở, và hai hồ sơ của K6a
+(luật 24: F35 thay PR #411). Phần còn lại không ghim hàng loạt: PR nào chạm tới hồ sơ thì tự ghim hồ sơ đó — ghim lười rẻ
+hơn ghim trước khi tính giờ máy trên mỗi kết quả giao.
+
 Từ dùng trong tiêu chí: «lưới» là `scripts/pre-merge-check.sh` chạy không `--base`; «hồ sơ cũ» là hồ sơ lưới in
-`VIOLATION [<slug>]: evidence is stale`; «tập ghim» là hồ sơ cũ mà bộ lọc `paths` áp cho, cộng các ca gọi tên ở
-`design.md`; «làn» là `repin-lane.mjs --tung-ho-so --write`; «sổ xử lý» là `_acceptance/don-ho-so-cu/xu-ly.json`.
+`VIOLATION [<slug>]: evidence is stale`; «tập ghim» là hồ sơ của lô 8 trong `lo-goc.json`, cộng hồ sơ cũ mà một
+PR mở (không phải của vòng) chạm thư mục mà không tự ghim lại theo ảnh chụp `chan-pr.json`, cộng hai hồ sơ K6a, trừ
+`okr-soat-anh-luot-3` (chờ chủ kho ở PR #499); «làn» là `repin-lane.mjs --tung-ho-so --write`; «sổ xử lý» là `_acceptance/don-ho-so-cu/xu-ly.json`.
 
 Source input: hàng F35 của `docs/plan/lo-trinh-okr.json`, luật 23–24 của đợt lo-trinh-tin-hieu, bàn giao F1 sau F26; ô
 `_acceptance/don-ho-so-cu/opportunity.md`.
@@ -32,8 +38,9 @@ Source input: hàng F35 của `docs/plan/lo-trinh-okr.json`, luật 23–24 củ
 - AC-1: Given một sha của kho, When chạy `rang/kiem-ke.mjs --sha <sha>`, Then `kiem-ke.json` liệt đúng tập hồ sơ mà lưới
   in «evidence is stale» trên sha đó — không thừa, không thiếu — mỗi hồ sơ một nhóm `loc-ap` hay `thieu-paths:<lý do>` lấy
   từ dòng NOTE của chính lưới; và một hồ sơ được làm cũ thêm trong bản sao thì xuất hiện trong kiểm kê của bản sao.
-- AC-2: Given `kiem-ke.json` của sha gốc vòng và danh sách ca gọi tên, When chạy `rang/lo.mjs`, Then `lo.json` chứa mỗi hồ
-  sơ của tập ghim đúng một lần, không chứa hồ sơ nhóm `thieu-paths` nào ngoài ca gọi tên, và mỗi lô ước dưới trần
+- AC-2: Given `kiem-ke-goc.json`, `lo-goc.json` và ảnh chụp PR mở `chan-pr.json`, When chạy `rang/lo.mjs`, Then `lo.json`
+  chứa đúng tập ghim — mỗi hồ sơ đúng một lần, không có `okr-soat-anh-luot-3`, không thừa hồ sơ nào ngoài tập — danh sách
+  chặn trong ảnh chụp tính lại được từ chính danh sách PR mở đã chụp, và mỗi lô ước dưới trần
   `feature_loop.repin_budget_min`.
 - AC-3: Given HEAD của nhánh vòng sau khi gộp `onehub` lần cuối, When chạy `rang/doi-chieu.mjs`, Then mọi hồ sơ của tập
   ghim hoặc không còn cũ trên HEAD hoặc có đúng một dòng trong sổ xử lý với cách xử khác `sua-thuoc`; hồ sơ có dòng
@@ -50,9 +57,8 @@ Source input: hàng F35 của `docs/plan/lo-trinh-okr.json`, luật 23–24 củ
 - AC-6: Given mọi hồ sơ đã ký mà vòng (PR lô và PR vòng) chạm, When so cây `_acceptance/<hồ sơ>/` giữa gốc vòng và HEAD,
   Then chỉ `run-log.jsonl`, `evidence-report.md`, `decisions.jsonl` đổi — trừ hồ sơ có dòng `sua-thuoc`, được đổi thêm đúng
   các tệp thước mà dòng đó khai; và hồ sơ có dòng cách xử khác `sua-thuoc` không đổi tệp nào.
-- AC-7: Given các ca gọi tên ở `design.md` (mười hai hồ sơ), When vòng xong, Then mỗi ca hoặc không còn cũ trên HEAD hoặc
-  có dòng trong sổ xử lý; `tac-nhan-va` còn cũ thì dòng của nó là `loi-kit`; hai hồ sơ của K6a không còn cũ và PR #411 đã
-  đóng với lời trỏ PR của vòng.
+- AC-7: Given hai hồ sơ của K6a (`khung-khong-con-dung-chu`, `lich-su-va-luu-tru-trang`), When vòng xong, Then cả hai không
+  còn cũ trên HEAD và PR #411 đã đóng với lời trỏ PR của vòng.
 - AC-8: Given luật 23 («chỉ khi làn chủ hồ sơ không có vòng đã ký chờ gộp»), When định sửa thước một hồ sơ, Then dòng
   `sua-thuoc` mang ảnh chụp lúc sửa của mọi PR mở có hợp đồng đã ký trong diff (vòng đã ký chờ gộp), và khi ảnh chụp không
   rỗng thì mang thêm câu hỏi trên #375 với lời làn chủ trả lời là không có vòng nào của mình trong đó; thiếu lời trả lời thì
@@ -70,7 +76,7 @@ coverage-scan» trong `decisions.jsonl`).
 - Trục cách xử: `sua-thuoc` (AC-5, AC-8) | `loi-kit` | `ngoai-pham-vi` | `cho-lan-chu` (AC-4, AC-8)
 - Trục cây hồ sơ đã ký: tệp sổ được phép đổi | tệp thước khi sửa | hồ sơ đỏ không đổi gì (AC-6, AC-9)
 - Trục PR: PR lô | PR vòng (AC-6, AC-9)
-- Ca gọi tên: mười hai hồ sơ (AC-7)
+- Nguồn của tập ghim: lô 8 của bản chia gốc | hồ sơ chặn PR mở | K6a | trừ hồ sơ chờ chủ kho (AC-2, AC-7)
 
 ## Đường đo
 
@@ -80,6 +86,9 @@ nằm sẵn trong `kiem-ke.json` của gốc vòng và của HEAD.
 ## Out of scope
 
 - 77 hồ sơ nhóm `thieu-paths` ngoài ca gọi tên: không ghim, không khai `paths` (Hỏi-1, một hàng riêng).
+- ~200 hồ sơ cũ còn lại ngoài tập ghim: không ghim hàng loạt; PR chạm tới hồ sơ nào thì tự ghim hồ sơ đó (thu phạm vi
+  20/10). Mười ca thước gãy đã gọi tên ở `design.md` mà không nằm trong tập ghim được sửa khi một PR chạm tới, theo luật 23.
+- Lỗi gốc — vì sao gần như mọi hồ sơ đã ký cũ sau mỗi gộp, và lệnh giữ tươi không chọn được một hồ sơ — thuộc kho kit.
 - Sửa mã sản phẩm để làm xanh một hồ sơ đỏ.
 - Sửa lỗi của bộ kit tại chỗ — mở việc ở kho kit.
 - Đổi lời AC hay ý của `expected` ở hồ sơ đã ký ngoài phần thước gãy.
