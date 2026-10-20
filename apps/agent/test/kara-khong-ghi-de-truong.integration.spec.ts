@@ -279,7 +279,7 @@ describe("kara-khong-ghi-de-truong", () => {
 					recordId: c,
 					key: truongF,
 					value: "Kara thấy",
-					...(replace ? { replace: true } : {}),
+					replace: replace || undefined,
 				});
 				phai(
 					kq.written === false,
