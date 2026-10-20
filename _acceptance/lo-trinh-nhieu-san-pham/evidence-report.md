@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6bc1ebb767195ddff89d7c9ceef6fdfde445550e
+verified_commit: 44f5b7d126347669fe571b323dd1d7c864e6d490
 human_signoff: Manh Phan 2026-10-20 — ký Cổng 2 theo khuyến nghị trên verdict PASS 18/18 eval (S4 round 4, wf_be31e8f0-ebc). Ngoài-1, 5, 7, 8, 23, 25, 27, 38, 39, 40 chấp nhận, không sửa; 30 mục còn lại ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo; gỡ nhãn (cross-layer) khỏi AC-8.
 ---
 
@@ -265,3 +265,7 @@ Round 1: bon lenh test suite do (api, app va ui, agent, agent-okr) — sua o cac
 Round 2: lenh test app va ui, roi lenh test agent-okr, do o hai lan chay — sua tiep.
 Round 3: E17 do — khoa rieng GitHub lot vao bien dung chung cua turbo goc. Returned to implementation.
 Round 4: khoa rieng chi di qua turbo cua tac nhan, E17 va bay lenh suite deu xanh; cac eval con lai carry-forward vi delta khong cham paths cua chung. Gio xac minh cua E17 va bay lenh suite round 4 la gio uoc luong cua luot chay, run_id da khop run-log.
+
+### Re-pin lần 1 — 2026-10-20, do hoá cũ do gộp onehub #501 (chạm packages/db)
+run_id: repin-20261020T065100Z-74709
+sha: 44f5b7d126347669fe571b323dd1d7c864e6d490 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
