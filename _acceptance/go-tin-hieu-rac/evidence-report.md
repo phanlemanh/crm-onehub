@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3a7a3d90c0bc0af759251de0d89837fa9d3ef798
+verified_commit: 89d64f4b2f3b14be19f69c6184e0a04370a96a1f
 human_signoff: Manh Phan 2026-10-20
 ---
 
@@ -306,3 +306,7 @@ Round 2: mọi eval của tính năng xanh (E5c đo lại, E6b/E8b/E9b/E10/E12 c
 Round 3: mọi eval của tính năng giữ xanh (carry-forward từ round 1 và 2, delta không chạm paths của chúng). Hai lệnh suite đỏ ở vòng 2 nay xanh, nhưng lệnh gói app và @crm/ui đỏ ở ca «dh4-mo-the» của `okr-so-do-don-vi.dom.tsx`, không gắn eval nào. Verdict REJECT. Trả về triển khai: đọc ca đỏ, xác định nó chập chờn hay do gộp onehub, chạy lại lệnh trên máy nhàn rỗi trước khi tin.
 Round 4: sau khi gộp onehub (d4361eebe), mười tám eval chạy lại xanh (E10 carry-forward từ round 1), cả bảy lệnh suite xanh, gồm lệnh gói app và @crm/ui đỏ ở vòng 3. Verdict PENDING-JUDGMENT: E11 chờ người chốt, một phát hiện trong hợp đồng ở AC-9 (nút Hoàn tác bỏ qua khoá thao tác đang chờ) và một phát hiện ngoài hợp đồng mới cần người đọc ở Cổng 2.
 Round 5: sau commit 3a7a3d90c (hàng lệnh lưu trữ/khôi phục, mỗi lệnh tự báo kết quả, Hoàn tác chờ tới lượt), mười hai eval chạy lại xanh (E5, E5b, E5c, E6, E6b, E7, E7b, E8, E8b, E9, E9b, E12), sáu eval E1, E2, E3, E4, E4b, E8a carry-forward từ round 4 và E10 từ round 1, cả bảy lệnh suite xanh. Verdict PENDING-JUDGMENT: E11 chờ người chốt, không còn phát hiện trong hợp đồng, và một phát hiện ngoài hợp đồng mới (lệch lượt giữa ảnh và nhật ký của E5c) cần người đọc ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-20, do gộp origin/onehub #498 trước khi đẩy
+run_id: repin-20261020T002931Z-75589
+sha: 89d64f4b2f3b14be19f69c6184e0a04370a96a1f · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E5c, E6b, E8b, E9b, E11 (E11 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
