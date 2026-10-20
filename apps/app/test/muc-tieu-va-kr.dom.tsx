@@ -1257,7 +1257,7 @@ describe("o-tien-do", () => {
 					(hangKr("tang-0")?.querySelector("button[data-so-kr]") ?? null) !==
 					null,
 			},
-			{ record: "so-kr:may-chua-co-so", nutTay: false },
+			{ record: "kr:may-chua-co-so", nutTay: false },
 			(truong) => `nut so kr sai: ${truong}`,
 		);
 		console.log("so ca o-tien-do so-kr: 1");
@@ -2088,7 +2088,7 @@ const CA_TRANG_THAI = {
 				dau: ["crm", "crm"],
 				doCanh: ms.trangThai.bangKr.doCanh("12", "15"),
 				chuaChup: ms.trangThai.bangKr.chuaChup,
-				record: "so-kr:kr-do-canh",
+				record: "kr:kr-do-canh",
 			},
 			(truong) => `ST-mtkr-kr-may sai: ${truong}`,
 		);
