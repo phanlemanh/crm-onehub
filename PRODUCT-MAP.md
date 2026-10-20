@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>14 việc"]
+  GD --> B["Sắp mở vòng<br/>13 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>151 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>150 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>152 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -44,7 +44,6 @@ flowchart TD
 - Quản trị lưu trữ một tín hiệu rác trước khi đội sản phẩm lấy về, và hoàn tác được nếu lỡ tay (`go-tin-hieu-rac`)
 - Chủ kho nhận trong ngày một đợt gom đề xuất sẵn nhóm và hàng mỗi khi có tín hiệu mới, và chỉ cần sửa hay phủ quyết (`gom-tin-hieu-tu-chay`)
 - Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do (`ho-so-do-kiem-cheo`)
-- Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây (`khong-do-them-chay-gh`)
 - Chủ kho chọn OneHub Platform hay một sản phẩm khác ngay trên trang Lộ trình của OneHub Center và đọc lộ trình, tiến độ, hồ sơ của sản phẩm đó như của CRM (`lo-trinh-nhieu-san-pham`)
 - Người dùng CRM thấy thông báo nhận qua Zalo cũng nằm trong chuông, và tự chọn loại nào được đẩy qua kênh nào (`thong-bao-mot-nguon-nhieu-kenh`)
 - Đổi một tệp chữ khác không kéo hồ sơ giai-doan-thoa-thuan vào ghim lại: E15 chỉ theo dõi tệp chữ của màn giai đoạn (`thu-paths-e15-giai-doan`)
@@ -126,6 +125,7 @@ flowchart TD
 - Khép kỳ OKR — quản trị mở cửa sổ rà giữa kỳ; cuối kỳ máy gợi ý điểm từ số chốt, người chỉnh được kèm lý do; mỗi mục tiêu có ô điều học được; kỳ chỉ đóng khi mọi KR đã chấm; mục tiêu dở mang sang kỳ sau; số kỳ đã đóng bị khoá và xuất được; kiểm chất lượng khi đặt bằng luật (`khep-ky-okr`)
 - «Nguồn không kẹt mãi ở «đang đọc» khi máy soạn lỗi; «Soạn lại» chạy được; hộp chèn liên kết báo lỗi thay vì «không trang nào khớp»» (`kho-nguon-khong-ket`)
 - Khoá eve của bài thử không tranh nhau — chu.json ghi trọn một lần, lượt chờ giành khoá cũ bằng đổi tên có kiểm dấu, chủ khoá chỉ gỡ khoá của chính mình (`khoa-eve-khong-tranh`)
+- Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây (`khong-do-them-chay-gh`)
 - Phép kiểm «không rẽ theo tên» chạy một lần như luật kho trong lint:slop; E17 của giai-doan-thoa-thuan đọc luật đó và thôi phủ cả app (`khong-re-theo-ten-thanh-luat-kho`)
 - «Kara trong hồ sơ bản ghi có một khung chung» — tab Kara của ngăn cá nhân, công ty, thoả thuận nói tiếng Việt với dấu, trạng thái và «Thử lại» của Kara; đề xuất thông tin liên hệ neo tại chỗ, nhận xong có biên nhận và Hoàn tác (thêm lệnh hoàn tác ở API); khung bản ghi tải lỗi có «Thử lại»; nút tra cứu mang dấu Kara; ngăn thêm nhanh hỏi lại khi lỡ đóng (`khung-ban-ghi-kara`)
 - «Khung bản ghi tải lỗi nói đúng lý do: đã xoá, không có quyền, hay mất kết nối» — ngăn cá nhân, công ty, thoả thuận, kế hoạch phân biệt NOT_FOUND, FORBIDDEN và lỗi khác; hai lý do đầu có «Đóng», lỗi mạng có «Thử lại» (`khung-loi-ban-ghi-dung-ly-do`)
@@ -205,6 +205,7 @@ flowchart TD
 - Việc riêng chỉ người trong cuộc thấy — cả trên Gantt và mọi màn dự án (`viec-rieng-chi-nguoi-trong-cuoc`)
 - «Một cách cất, một bộ chữ» — lưu trữ hàng loạt ở ba bảng CRM có Hoàn tác, bản ghi đã cất mở ra có dải báo «Đã lưu trữ ngày … · Khôi phục» và chỉ đọc, Kanban thoả thuận có nút «Đã lưu trữ», chữ nút xem và hộp xoá vĩnh viễn đúng bộ chữ (`vong-doi-mot-cach-cat`)
 - «Bài kiểm Zalo webhook không còn đỏ theo giờ thật» (`zalo-bom-gio`)
+- Hỏi Kho qua Zalo từ câu thứ hai trở đi trong ngày, trợ lý kho vẫn trả lời đúng chỉ dẫn (`zalo-cau-thu-hai-lien-ket`)
 - Zalo gửi hỏng thì nhật ký nói lý do của Zalo; đổi bot thì hỏi trước rồi gỡ liên kết cũ để mọi người nối lại; tin vào bị bỏ qua thì nhật ký nói vì sao (`zalo-gui-hong-ghi-ly-do`)
 - Zalo hỏi OKR không chết lượt — ngoài phiên OKR, agent gốc gọi tro_ly_okr thì nhận một kết quả từ chối có lý do và vẫn trả lời người hỏi (`zalo-hoi-okr-khong-chet`)
 - Phiên gốc của câu Kho (CRM và Zalo) tự ghi liên kết câu hỏi → phiên ngay khi bắt đầu, và trợ lý kho không bao giờ chạy thiếu chỉ dẫn kho; đo lại bộ 50 câu trên Gemini 3.8 Flash (`zalo-tro-ly-kho-chi-dan`)

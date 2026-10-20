@@ -2011,6 +2011,8 @@ executors:
     kcl_hoi_quy: "git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/giu-thay-doi.dom.tsx packages/ui/test/giu-thay-doi-loi-hoi.dom.tsx apps/app/test/soan-okr-trong-khung.dom.tsx apps/app/test/ngan-ban-ghi-giu.dom.tsx apps/app/test/tai-lieu-soan.dom.tsx && (cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-loi-hoi.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ./test/setup-dom.ts ./test/giu-thay-doi-lien-ket.dom.tsx -t kcl-ngoai) && cd apps/app && for t in soan-okr-trong-khung ngan-ban-ghi-giu tai-lieu-soan; do TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/$t.dom.tsx || exit 1; done"
     zkd_lien_ket: 'bun run test -- "cd apps/agent && bun test test/zkd-lien-ket.integration.spec.ts"'
     zkd_chi_dan: 'bun run test -- "cd apps/agent && bun test test/zkd-chi-dan.integration.spec.ts"'
+    zch_lien_ket: 'bun run test -- "cd apps/agent && bun test test/zch-cau-thu-hai.integration.spec.ts -t zch-lien-ket"'
+    zch_chi_dan: 'bun run test -- "cd apps/agent && bun test test/zch-cau-thu-hai.integration.spec.ts -t zch-chi-dan"'
     mtc_bang: "cd packages/ui && bun test ./test/status-tone.spec.ts"
     mtc_mot_bang: "cd packages/ui && bun test ./test/mau-trang-thai-mot-bang.spec.ts"
     mtc_anh_xa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/mau-trang-thai-anh-xa.spec.ts"
@@ -3029,6 +3031,12 @@ executors:
     cgdp_goi_dot: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-dot.mjs
     cgdp_thay_boi: bun _acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs
     cgdp_khong_do_them: bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
+    kdtg_ban_gh: bun _acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs
+    kdtg_ban_gh_nguon: bun _acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs --nguon
+    kdtg_lenh_gh: bun _acceptance/khong-do-them-chay-gh/rang/lenh-gh.mjs
+    kdtg_ban_do: bun _acceptance/khong-do-them-chay-gh/rang/ban-do-that.mjs
+    kdtg_chi: bun _acceptance/khong-do-them-chay-gh/rang/chi.mjs
+    kdtg_dung_lai_cay: bun _acceptance/khong-do-them-chay-gh/rang/dung-lai-cay.mjs
     bhds_paths_song: bun _acceptance/ba-ho-so-do-san/rang/paths-song.mjs
     bhds_danh_sach: bun _acceptance/ba-ho-so-do-san/rang/danh-sach.mjs
     bhds_khai_du: bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs
@@ -3142,6 +3150,7 @@ executors:
     nm5_dh1: node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs
     nm5_mo_coi: node _acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/go-mo-coi.mjs
     zkd_so_do: bun _acceptance/zalo-tro-ly-kho-chi-dan/rang/so-do.ts
+    zch_so_do: bun _acceptance/zalo-cau-thu-hai-lien-ket/rang/so-do.ts
     mtc_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs"'
     mtc_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/mau-trang-thai-chung/rang/do-chu-ky.mjs --chi-do"'
     tnc_so: bun _acceptance/tac-nhan-glm-5-3-cham/rang/so-tac-nhan.ts
