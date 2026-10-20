@@ -6,5 +6,8 @@ export default defineHook({
 		async "session.started"(_event, ctx) {
 			await lienKetPhienGoc(ctx);
 		},
+		async "turn.started"(_event, ctx) {
+			await lienKetPhienGoc(ctx);
+		},
 	},
 });
