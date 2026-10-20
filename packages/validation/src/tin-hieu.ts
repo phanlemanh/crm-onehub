@@ -16,6 +16,8 @@ export const TIN_HIEU = {
 			"Hôm nay bạn đã gửi {tran} tín hiệu — gửi tiếp được từ 0 giờ ngày mai.",
 		daLayVe: "Đội sản phẩm đã lấy tín hiệu này về — không xoá được nữa.",
 		khongCo: "Không có tín hiệu này.",
+		luuTruDaLayVe:
+			"Đội sản phẩm đã lấy tín hiệu này về — không lưu trữ được nữa.",
 	},
 } as const;
 
@@ -32,6 +34,11 @@ export const guiTinHieuInput = z.object({
 export type GuiTinHieuInput = z.infer<typeof guiTinHieuInput>;
 
 export const xoaTinHieuInput = z.object({ id: z.string().min(1) });
+export const luuTruTinHieuInput = z.object({ id: z.string().min(1) });
+export const khoiPhucTinHieuInput = z.object({ id: z.string().min(1) });
+
+export const LOAI_VET_TIN_HIEU = ["luu-tru", "khoi-phuc"] as const;
+export type LoaiVetTinHieu = (typeof LOAI_VET_TIN_HIEU)[number];
 
 export function idTep(so: number): string {
 	return `${TIN_HIEU.phien}-${so}`;

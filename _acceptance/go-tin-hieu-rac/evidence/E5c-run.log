@@ -1,0 +1,35 @@
+mot-luot: da cho 90s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_agitated_fermat_2191bc_do · app http://localhost:4175 · api http://localhost:4694
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts ada@trycomp.ai
+$ bun scripts/dev-session.ts "gtr-do-mvffhr28-lan@thu.test"
+$ bun scripts/dev-session.ts "gtr-do-mvffhr28-minh@thu.test"
+$ bun scripts/dev-session.ts "gtr-do-mvffhr28-ha@thu.test"
+DUNG doi-chung-dong-hien: dong crm-2 hien 1 lan truoc khi luu tru
+DUNG ba-so-truoc: o «4» — api 4
+DUNG luu-tru-menu: menu co «Lưu trữ»
+DUNG luu-tru-roi-bang: dong crm-2 hien 0 lan; api dang dung khong con crm-2
+DUNG luu-tru-toast: thong bao co, nut Hoan tac co
+DUNG ba-so-sau-luu-tru: o «3» — api 3, truoc 4; ba o so con dem tin hieu vua luu tru neu SAI
+DUNG hoan-tac-ve: dong crm-2 hien 1 lan; api co
+DUNG ba-so-sau-hoan-tac: o «4» — api 4
+DUNG da-luu-tru-cot: cot Mã | Điều đã kể | Người gửi | Phòng ban | Gửi lúc | Lưu trữ lúc | Người lưu trữ | Thao tác; luc «22:48 19-10»; nguoi «Ada Okafor»
+DUNG khoi-phuc-roi: dang luu tru con 0 dong crm-2
+DUNG khoi-phuc-ve-dang-dung: dang dung co 1 dong crm-2
+DUNG ba-so-sau-khoi-phuc: o «4» — api 4
+DUNG da-lay-ve-khoa: muc Luu tru cua crm-1 khoa; ly do «Đội sản phẩm đã lấy về — không lưu trữ được nữa.»
+DUNG tai-lai-giu: sau tai lai: nut aria-pressed=true, co cot «Lưu trữ lúc» true
+DUNG nguoi-gui-nhan: dong crm-3: «Đo TH5: gửi nhầmcrm-3 · Muốn: ThửMục tiêu22:47 19-10Đã lưu trữQuản trị đã lưu trữ tín hiệu này — đội sản phẩm sẽ không xem xét nó.Thao tác với tín hiệu crm-3»
+DUNG nguoi-gui-doi-chung: dong crm-4 chua luu tru khong mang nhan Da luu tru
+DUNG 375-dang-dung: rong 375/375; 4 nut thao tac, mep phai xa nhat 349.203125
+DUNG 375-da-luu-tru: rong 375/375; 1 nut thao tac, mep phai xa nhat 351.9375
+DUNG 375-doi-chung: chen khoi 600px: rong 600/375 — phep do bao tran
+ANH _acceptance/go-tin-hieu-rac/evidence
+KET LUAN: 19 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0
