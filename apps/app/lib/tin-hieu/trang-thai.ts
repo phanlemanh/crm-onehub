@@ -70,7 +70,7 @@ export type TrangThaiTinHieu = {
 	khongDich?: boolean;
 };
 export type TrangThaiDu = TrangThaiTinHieu & { khoa: string };
-export type CuaToiTom = { ma: string; daKeoVe: boolean };
+export type CuaToiTom = { ma: string; daKeoVe: boolean; daLuuTru?: boolean };
 export type KetQuaTrangThai = {
 	banVe: BanVe;
 	trangThai: Record<string, TrangThaiTinHieu>;
@@ -172,6 +172,17 @@ function theoKit(
 	}
 }
 
+function theoTom(t: CuaToiTom, m: TinHieuMessages): TrangThaiDu {
+	return t.daLuuTru
+		? {
+				khoa: "da-luu-tru",
+				nhan: m.nhan.daLuuTru,
+				cau: m.trangThai.daLuuTru,
+				nghia: "ketThuc",
+			}
+		: theoCrm(t.daKeoVe, m);
+}
+
 export function theoCrm(daKeoVe: boolean, m: TinHieuMessages): TrangThaiDu {
 	return daKeoVe
 		? {
@@ -201,7 +212,7 @@ export function docTrangThaiDu(
 ): KetQuaTrangThaiDu {
 	const traCrm = (banVe: BanVe): KetQuaTrangThaiDu => ({
 		banVe,
-		trangThai: Object.fromEntries(ds.map((t) => [t.ma, theoCrm(t.daKeoVe, m)])),
+		trangThai: Object.fromEntries(ds.map((t) => [t.ma, theoTom(t, m)])),
 		coCho: new Set(),
 	});
 	if (html === null) return traCrm("vang");
@@ -223,7 +234,10 @@ export function docTrangThaiDu(
 		trangThai: Object.fromEntries(
 			ds.map((t) => {
 				const b = theoMa.get(t.ma);
-				return [t.ma, b ? theoKit(b, nhom, tenViec, m) : theoCrm(t.daKeoVe, m)];
+				return [
+					t.ma,
+					b && !t.daLuuTru ? theoKit(b, nhom, tenViec, m) : theoTom(t, m),
+				];
 			}),
 		),
 		coCho: coChoSauGom(kq),
