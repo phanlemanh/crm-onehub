@@ -5,7 +5,7 @@ slug: kara-khong-ghi-de-truong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-20T15:07:46Z
 design_doc: docs/superpowers/specs/2026-10-20-kara-khong-ghi-de-truong-design.md
@@ -123,6 +123,8 @@ thay dòng `d-20261020T131406Z-5`).
 
 ## Notes
 
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Kara chạy nền vẫn không ghi đè giá trị người bán hàng đã gõ, nhưng ba trường hợp của bài kiểm chạy nền chỉ kiểm «bị từ chối» mà không kiểm lý do, nên nếu sau này luật riêng cho chạy nền bị làm hỏng thì ba trường hợp đó có thể không báo đỏ.
 - Chiều đỏ trong lịch sử: commit bài kiểm đứng trước commit sửa; trên commit bài kiểm, E1, E2, E4, E6 đỏ với thông
   điệp ghim trong `evals.yaml`.
 - Đường nền hạ tầng chưa chạy: khoá `duong-nen` đang do đợt `dieu-phoi-viec-du-an-kho-tai-lieu` giữ, phiên này không

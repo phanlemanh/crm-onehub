@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 6a24cd1cb909a3d869d5b1fd9cd94774fb847409
-human_signoff:
+human_signoff: manh 2026-10-20 — ký Cổng Bằng chứng trên S4 vòng 2 PASS (9/9 eval, 7/7 suite); Ngoài-1 ghi Known limits; đồng ý phạm vi đã cắt
 ---
 
 # Evidence Report: kara-khong-ghi-de-truong
