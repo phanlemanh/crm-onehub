@@ -1,6 +1,5 @@
 import { CAP_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import { z } from "zod";
-import { OKR } from "./okr-config";
 
 const capMucTieu = z.enum(CAP_MUC_TIEU);
 
@@ -11,10 +10,10 @@ type TenDonVi = {
 	person: { name: string } | null;
 };
 
-export function tenDonVi(r: TenDonVi): string {
+export function tenDonVi(r: TenDonVi, tenGoc: string): string {
 	switch (capMucTieu.parse(r.level)) {
 		case "onehub":
-			return OKR.tenGoc;
+			return tenGoc;
 		case "bo-phan":
 			return r.division?.name ?? "";
 		case "phong-ban":

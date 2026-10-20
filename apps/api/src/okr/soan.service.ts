@@ -22,6 +22,7 @@ import {
 	TRO_LY_OKR_TRAN,
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
+import { readTenGoc } from "@crm/db/workspace";
 import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
 import {
 	PHIEN_CHO_EVE,
@@ -429,8 +430,9 @@ export class SoanService {
 			(hienCua.get(id) ?? []).filter(
 				(d) => !chiNhan || daNhanDeXuat(d.hang.trangThai),
 			).length;
+		const tenGoc = await readTenGoc(client);
 		const tenDonVi = (c: CuocSoan) => {
-			if (c.level === "onehub") return OKR.tenGoc;
+			if (c.level === "onehub") return tenGoc;
 			if (c.level === "bo-phan") return tenBoPhan.get(c.divisionId ?? "") ?? "";
 			return tenPhongBan.get(c.departmentId ?? "") ?? "";
 		};
