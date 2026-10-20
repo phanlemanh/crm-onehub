@@ -5,7 +5,7 @@ slug: chu-may-sinh-ten-moi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, agent]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-20T01:52:01Z
 design_doc: docs/superpowers/specs/2026-10-20-chu-may-sinh-ten-moi-design.md
@@ -64,3 +64,19 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Luật 24: khi lời dặn chốt (đỉnh nhánh qua S4), báo giám sát để báo M5 trên #375.
 - Thước màn `gioi-han-duyet-cay-okr` chờ chủ kho cho đổi chuỗi (yêu cầu V2-9).
 - Thứ tự S3 vì AC-7: mọi sửa ngoài lời dặn soạn commit trước; chạy `nen`; commit đổi lời dặn soạn; chạy `sau`. Lượt nền đầu (trên `e74ed4be9`) giữ làm `nen-lap` — mẫu độ dao động cùng lời dặn.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Nếu kho git của máy chấm bị hỏng hoặc thiếu lịch sử, phép so chất lượng lời Kara có thể âm thầm châm chước hơn mức định, nên một lần Kara tụt chất lượng có thể lọt qua mà không ai biết. Với cách chạy hiện nay thì phép so vẫn đúng.
+  - Ngoài-2: Nếu tệp kết quả chấm Kara bị thiếu một số liệu, một điều kiện kiểm chất lượng sẽ im lặng bỏ qua thay vì báo lỗi. Hai tệp hiện tại vẫn đủ số liệu nên chưa ảnh hưởng.
+  - Ngoài-3: Hai chỗ cùng dò chữ tên cũ bằng hai đoạn mã riêng, nên sau này sửa cách dò ở một chỗ mà quên chỗ kia thì kết quả có thể lệch nhau. Hiện hai chỗ cho kết quả giống nhau.
+  - Ngoài-4: Kết quả chấm lời Kara đã lưu được đếm bằng cách dò chữ cũ chưa kỹ, nên nếu Kara có viết chữ «căn chỉnh» theo dạng mã hoá lạ thì lần đếm đó có thể bỏ sót. Chưa có dấu hiệu Kara viết như vậy.
+  - Ngoài-5: Nếu kho git hỏng, phép so chất lượng lời Kara có thể cho phép dao động rộng hơn mức định mà không báo. Với cách chạy hiện tại, phép so vẫn đúng.
+  - Ngoài-6: Hiện máy vẫn kiểm đủ năm cụm chữ cũ trên các câu của API, nhưng nếu sau này ai xoá phép kiểm đó thì bộ nghiệm thu vẫn báo xanh. Hôm nay phép kiểm còn nguyên.
+  - Ngoài-7: Kết luận «Kara không viết chữ cũ» dựa trên số đếm do cách dò cũ ghi lại, nên chưa được kiểm bằng cách dò đã vá. Chưa có dấu hiệu Kara thực sự viết chữ cũ.
+  - Ngoài-8: Bộ kiểm cho phép so chất lượng lời Kara mới thử một phần các tình huống nên nếu ai sửa nhầm điều kiện còn lại thì bộ nghiệm thu có thể vẫn xanh. Hôm nay chưa có sai sót nào.
+  - Ngoài-9: đã sửa ở vòng 2 — Sau khi tính năng được gộp, lần kiểm lại hồ sơ này có thể báo đỏ vì lẫn thay đổi của việc khác, dù chữ người dùng thấy vẫn đúng. Người dùng không thấy gì khác đi, chỉ người giữ hồ sơ phải xem kỹ khi đỏ.
+  - Ngoài-10: đã sửa ở vòng 2 — Nếu một lần chấm sau này không thu được đề xuất nào của Kara, kết luận «Kara không viết chữ cũ» vẫn có thể hiện xanh dù chưa đo gì. Lần chấm hiện tại có đủ đề xuất nên kết luận đang đúng.
+  - Ngoài-11: đã sửa ở vòng 2 — Nếu bộ chấm chất lượng lời Kara hỏng ở vài ca, phép so sánh trước và sau có thể bỏ qua mà không báo, nên chất lượng tụt nhẹ có thể lọt. Người dùng có thể thấy lời Kara kém đi mà không có cảnh báo.
+  - Ngoài-12: đã sửa ở vòng 2 — Chưa có bằng chứng rằng bộ dò chữ cũ trong lời Kara thật sự bắt được chữ cũ khi nó xuất hiện. Nếu nó dò hụt, Kara có thể vẫn nói «căn chỉnh» hay «hỏi ý» với người dùng mà không ai biết.
+  - Ngoài-13: đã sửa ở vòng 2 — Nếu sau này ai đó đưa lại các cụm như «toàn công ty» vào câu báo lỗi, bài kiểm có thể vẫn xanh nên chữ cũ quay lại mà không ai hay. Hiện tại các câu người dùng thấy đang đúng.
+  - Ngoài-14: đã sửa ở vòng 2 — Có thể còn một chỗ nào đó hiển thị tên đơn vị gốc theo kiểu cũ mà bài kiểm không đếm tới, nên ở chỗ đó tên không gian làm việc có thể không hiện đúng. Chưa thấy chỗ nào như vậy cụ thể.
+  - Ngoài-15: đã sửa ở vòng 2 — Dải cho phép chất lượng lời Kara dao động có thể rộng hơn thực tế, nên một sự tụt nhẹ có thể được chấp nhận nhầm. Người dùng có thể thấy lời Kara kém đi chút ít.
