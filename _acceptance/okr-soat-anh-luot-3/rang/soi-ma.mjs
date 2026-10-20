@@ -38,7 +38,6 @@ const TEP = {
 	navItem: "packages/ui/src/components/nav-item.tsx",
 	hopNhap: "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx",
 	sidebar: "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx",
-	areaSidebar: "packages/ui/src/components/area-sidebar.tsx",
 };
 
 const LOP_CAM =
@@ -338,16 +337,14 @@ function caThanhPhan() {
 	);
 
 	const sb = cay(TEP.sidebar);
-	const dungKhu = the(sb, "AreaSidebar").length >= 1;
-	const khuDungStrip = the(cay(TEP.areaSidebar), "NavStrip").length >= 1;
-	const dungStrip = dungKhu && khuDungStrip;
+	const dungStrip = the(sb, "NavStrip").length >= 1;
 	const navTay = the(sb, "nav").filter((n) =>
 		lopTrong(thuocTinh(n, "className") ?? n).lop.includes("overflow-x-auto"),
 	).length;
 	ghi(
 		"khung-dung-nav-strip",
 		dungStrip && navTay === 0,
-		`settings-sidebar dung AreaSidebar ${dungKhu}, area-sidebar dung NavStrip ${khuDungStrip}, nav tu ve overflow-x-auto ${navTay}`,
+		`settings-sidebar dung NavStrip ${dungStrip}, nav tu ve overflow-x-auto ${navTay}`,
 	);
 
 	const tep = tepDiff();
