@@ -23,7 +23,7 @@ const TEN_G = "Mở rộng kho Bình Dương";
 const GUI_LUC = "2026-09-28T18:30:00.000Z";
 const LY_DO = "KR thứ hai chưa có khởi điểm đo được, bổ sung rồi gửi lại.";
 const CAN_CHINH_CON =
-	"Mục tiêu còn 2 căn chỉnh — gỡ hết căn chỉnh (góp vào và nhận góp) rồi mới đặt mức giới hạn.";
+	"Mục tiêu còn 2 chỗ góp vào — gỡ hết, cả chỗ nó góp vào lẫn mục tiêu góp vào nó, rồi mới đặt mức giới hạn.";
 
 const QUY: ChuKyOutput = {
 	id: "q4",

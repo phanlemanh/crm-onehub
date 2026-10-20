@@ -1,0 +1,38 @@
+{
+  "nhan": "nen",
+  "luc": "2026-10-20T02:31:19.182Z",
+  "sha": "d9babc1d701f6ef3fc178e4a761ce3597f421b01",
+  "bam": {
+    "loiDan": "939d1c7d919f2ae4ef40c82585e280f81f2824396f07141426248e14e004221b",
+    "thuoc": "72f9a984ffa4dffbc2b72a80bb729649840c957d172d1b9e4631ee00ddc6ed82"
+  },
+  "moHinh": "google/gemini-3.8-flash",
+  "judge": "zai/glm-5.2-fast",
+  "lanChay": "2026-10-20T02-31-18",
+  "maEve": 1,
+  "tong": 18,
+  "dat": 13,
+  "hong": 2,
+  "duoiNguong": 3,
+  "boQua": 0,
+  "chotMaHong": 2,
+  "judgeHong": 1,
+  "judgeDuoiNguong": 5,
+  "tieuChiTrungBinh": [
+    0.8,
+    0.4,
+    1,
+    1,
+    0.8,
+    1
+  ],
+  "p50": 12304.301688000007,
+  "p90": 30292.763728899954,
+  "usd": 0.6913400000000001,
+  "soDeXuat": 126,
+  "chuCu": [],
+  "ketLuanThuocGoc": {
+    "ma": 1,
+    "cau": "chot ma hong 2: okr-soan/soan-do-tre/0009 satisfies(p50 <= 12000 ms); okr-soan/soan-do-tre/0009 satisfies(p90 <= 20000 ms)"
+  }
+}

@@ -658,9 +658,15 @@ lệnh ghi ở `@crm/db/du-an-ghi` và `@crm/db/viec-ghi`; ngày làm việc ở
   việc nào; dự án đã đóng từ chối thêm việc, mốc, phụ thuộc và đổi ngày (400 «Dự án đã đóng.»), việc trong
   đó vẫn đổi trạng thái. Đưa việc ra khỏi dự án gỡ phụ thuộc (vết `go-phu-thuoc` trên cả hai việc) và việc
   chờ mốc; xoá việc gỡ chúng theo khoá ngoại.
+- **Trần 300 việc.** Chỉ chặn việc thêm vào dự án: `viec.create` có `duAnId`, `viec.taoCon` của việc trong dự
+  án, `viec.doiDuAn` chuyển vào. Lời kiểm `docDuAnNhanViec` khoá hàng `duAn` rồi đếm, nên hai người cùng thêm
+  việc thứ 300 thì người sau nhận 400 «Một dự án chứa tối đa 300 việc.». Mốc, phụ thuộc và đổi ngày dùng
+  `docDuAnMo`, chỉ chặn khi dự án đã đóng.
 - **Lịch làm việc.** Router `lichLamViec` (`PhamViDoiTacMiddleware`, như `duAn`): `get` (ai đọc được phạm vi đối tác), `datNgayNghiTuan`,
-  `themNgayLe`, `xoaNgayLe` (chủ, quản trị). `AppSetting.ngayNghiTuan` rỗng nghĩa là mặc định Thứ Bảy, Chủ
-  nhật. Đổi lịch không dời việc đã có; chỉ lần ghi sau tính theo lịch mới.
+  `themNgayLe`, `xoaNgayLe` (chủ, quản trị). Lịch chưa từng đặt nghỉ Thứ Bảy, Chủ nhật
+  (`LICH_LAM_VIEC.ngayNghiTuanMacDinh`). Quản trị bỏ chọn hết thì `datNgayNghiTuan([])` bật
+  `AppSetting.khongNghiTuan`: không nghỉ ngày nào trong tuần, ở mọi đường đọc (`docLichLam`); đặt lại một
+  thứ nghỉ bất kỳ thì cờ tắt. Đổi lịch không dời việc đã có; chỉ lần ghi sau tính theo lịch mới.
 - **Dữ liệu mẫu và thước.** `gieoDuAnMau` (`@crm/db/du-an-gieo`, gọi từ `bun run db:seed`) dựng một dự án
   qua đúng các hàm ghi trên. Thước `_acceptance/du-an-gantt/rang/do-nguong.mjs --tu --den` chỉ đọc.
 
@@ -1764,6 +1770,24 @@ Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó m�
   in ref đã chạy, không gọi CRM. Chạy ngoài Actions không bị chặn. Bước chặn sống trong kịch bản
   của chính nhánh được chạy: nhánh lấy onehub trước khi bước chặn vào onehub thì không có nó.
 
+
+## Danh bạ sản phẩm lộ trình
+
+Router `sanPhamLoTrinh` (`apps/api/src/lo-trinh/san-pham.router.ts`, REST `/roadmap-products`) giữ danh
+bạ sản phẩm mà trang Lộ trình đọc ngoài CRM, và ai xem được từng sản phẩm. API không gọi GitHub —
+tác nhân lấy lộ trình (`docs/agent.md`, «Lấy lộ trình sản phẩm»).
+
+- **Chỉ chủ và quản trị ghi** (`canManageSettings`): tạo, sửa, cấp người xem, lưu trữ, khôi phục, xoá,
+  xoá vĩnh viễn. `danhSach` mở cho mọi vai trong phạm vi «chung»; người không phải quản trị chỉ nhận
+  sản phẩm mình được cấp. Một hàm quyền duy nhất: `sanPhamXemDuoc` (`@crm/db/san-pham-lo-trinh`), trang
+  Lộ trình và lệnh đo cùng gọi nó.
+- **Mã sinh từ tên lúc tạo, không đổi sau.** Mã `crm` bị cấm (CRM là mục cố định trong mã); mã trùng
+  hay rỗng trả `BAD_REQUEST` với câu mở đầu «Name:».
+- **Sửa kho, nhánh hay tệp không xoá bản chụp**: đặt `nguonDoiLuc`, trang hiện bản cũ kèm dòng «nguồn
+  vừa đổi»; lần lấy đầu của nguồn mới thay hẳn bản cũ (bỏ kiểm một chiều đúng một lần).
+- **Vòng đời** (`docs/vong-doi.md`): Xoá khi chưa từng lấy được (`layDauLuc` null); đã lấy thì Lưu trữ →
+  Khôi phục → Xoá vĩnh viễn, và xoá vĩnh viễn từ chối sản phẩm chưa lưu trữ, mất cả bản chụp và
+  người xem.
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may

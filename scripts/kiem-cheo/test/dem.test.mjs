@@ -167,9 +167,13 @@ describe("kcs-dem", () => {
 		kho.don();
 	});
 
-	const LAN_DEM = `import { appendFileSync } from "node:fs";
+	const LAN_DEM = `import { appendFileSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 const argv = process.argv.slice(2);
 const slugs = argv.flatMap((a, i) => (a === "--slug" ? [argv[i + 1]] : []));
+const goc = argv[argv.indexOf("--root") + 1];
+if (process.env.KCS_BAN_TEP) writeFileSync(join(goc, process.env.KCS_BAN_TEP), "ban\\n");
+if (process.env.KCS_XOA_CAY) rmSync(goc, { recursive: true, force: true });
 if (process.env.KCS_ARGV) appendFileSync(process.env.KCS_ARGV, JSON.stringify(slugs) + "\\n");
 if (process.env.KCS_TRAN) appendFileSync(process.env.KCS_TRAN, String(argv[argv.indexOf("--tran-phut") + 1]) + "\\n");
 const loi = (s) => process.stderr.write(s + "\\n");
@@ -318,4 +322,40 @@ process.exit(fs.existsSync("hong.txt") ? 1 : 0);
 		k.kho.don();
 	});
 
+	test("cay mat giua lan va phan loai -> dung lai cay, phan loai van ra do-moi", () => {
+		const k = khoSau();
+		const d = k.dem({ KCS_LECH: "a", KCS_XOA_CAY: "1" });
+		assert.equal(d.ket?.ket_qua, "do", JSON.stringify(d.ket));
+		assert.deepEqual(d.ket.do.map((x) => [x.ho_so, x.loai, x.lan_gop]), [["a", "do-moi", k.D1]]);
+		assert.equal(d.moc?.sha, k.D1);
+		assert.equal(d.cay, false, "cay dung lai van duoc don sau luot");
+		k.kho.don();
+	});
+
+	test("lan de cay ban o tep khac giua hai sha -> phan loai van chay o dung sha, khong khong-chay-duoc", () => {
+		const k = khoSau();
+		const d = k.dem({ KCS_LECH: "a", KCS_BAN_TEP: "x-a.txt" });
+		assert.equal(d.ket?.ket_qua, "do", JSON.stringify(d.ket));
+		assert.deepEqual(d.ket.do.map((x) => [x.ho_so, x.loai, x.lan_gop]), [["a", "do-moi", k.D1]]);
+		assert.equal(d.moc?.sha, k.D1);
+		k.kho.don();
+	});
+
+	test("lan de cay ban o tep giong nhau giua hai sha -> phan loai khong mang tep ban sang sha cu", () => {
+		const k = khoSau();
+		const d = k.dem({ KCS_LECH: "a", KCS_BAN_TEP: "kiem.js" });
+		assert.equal(d.ket?.ket_qua, "do", JSON.stringify(d.ket));
+		assert.deepEqual(d.ket.do.map((x) => [x.ho_so, x.loai, x.lan_gop]), [["a", "do-moi", k.D1]]);
+		k.kho.don();
+	});
+
+	test("lenh git loi -> ly_do mang dong loi cua git, khong chi dong Command failed", () => {
+		const kho = taoKho();
+		kho.git("remote", "set-url", "origin", "/khong/co/kho/nao");
+		const r = chay(kho, []);
+		assert.equal(r.ket?.ket_qua, "loi");
+		assert.match(r.ket.ly_do, /\/khong\/co\/kho\/nao/);
+		assert.match(r.ket.ly_do, /fatal|does not appear|not a git repository/i, r.ket.ly_do);
+		kho.don();
+	});
 });

@@ -52,6 +52,7 @@
 		"./okr-kr": "./src/okr-kr.ts",
 		"./okr-mau": "./src/okr-mau.ts",
 		"./okr-hoi-y": "./src/okr-hoi-y.ts",
+		"./ten-cu-okr": "./src/ten-cu-okr.ts",
 		"./okr-muc-tieu": "./src/okr-muc-tieu.ts",
 		"./okr-nguon": "./src/okr-nguon.ts",
 		"./okr-tom-tat": "./src/okr-tom-tat.ts",
@@ -83,6 +84,8 @@
 		"./tai-lieu-tim": "./src/tai-lieu-tim.ts",
 		"./lo-trinh-du-lieu": "./src/lo-trinh-du-lieu.ts",
 		"./ban-chup-lo-trinh": "./src/ban-chup-lo-trinh.ts",
+		"./san-pham-lo-trinh": "./src/san-pham-lo-trinh.ts",
+		"./doc-du-lieu-lo-trinh": "./src/doc-du-lieu-lo-trinh.js",
 		"./tin-hieu": "./src/tin-hieu.ts",
 		"./thong-bao": "./src/thong-bao.ts"
 	},

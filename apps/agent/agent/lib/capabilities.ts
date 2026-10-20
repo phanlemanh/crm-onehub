@@ -139,6 +139,17 @@ export function capabilitiesFrom(
 					process.env.GOOGLE_SHEETS_KHOA?.trim(),
 			),
 		},
+		{
+			id: "GITHUB_APP_PRIVATE_KEY",
+			from: "GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY",
+			label: "Product roadmaps",
+			gives:
+				"the roadmap of each product declared in Settings › Products, read from its GitHub repository through a read-only GitHub app. The dispatch tick reads it; there is no tool for it in a session",
+			enabled: Boolean(
+				process.env.GITHUB_APP_ID?.trim() &&
+					process.env.GITHUB_APP_PRIVATE_KEY?.trim(),
+			),
+		},
 	];
 }
 

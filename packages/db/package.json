@@ -56,6 +56,8 @@
 		"./safe-fetch": "./src/safe-fetch.ts",
 		"./settings": "./src/settings.ts",
 		"./ban-chup-lo-trinh": "./src/ban-chup-lo-trinh.ts",
+		"./san-pham-lo-trinh": "./src/san-pham-lo-trinh.ts",
+		"./san-pham-lo-trinh-danh-muc": "./src/san-pham-lo-trinh-danh-muc.ts",
 		"./slack-inventory": "./src/slack-inventory.ts",
 		"./tai-lieu-chien-luoc": "./src/tai-lieu-chien-luoc.ts",
 		"./tai-lieu-de-xuat": "./src/tai-lieu-de-xuat.ts",
