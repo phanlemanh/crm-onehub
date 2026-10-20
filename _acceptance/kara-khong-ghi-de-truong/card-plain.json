@@ -1,44 +1,140 @@
 {
-  "feature_plain": "Giá trị người bán hàng đã tự gõ vào một trường tuỳ chỉnh không còn bị Kara lặng lẽ thay; Kara chỉ thay khi người bán hàng bảo thay ngay trong hội thoại.",
+  "feature_plain": "Giá trị người bán hàng đã tự gõ vào một trường tự tạo không còn bị Kara lặng lẽ thay; Kara chỉ thay khi người bán hàng bảo thay ngay trong hội thoại.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ từ chối khi Kara, đang trò chuyện với người bán hàng, định ghi giá trị khác lên ô đã có chữ; Kara được báo giá trị đang có và chỉ được thay khi người bán hàng bảo thay (ô giữ nguyên)."},
-    {"id": "AC-2", "p": "Sẽ từ chối khi Kara định xoá trắng một ô đã có chữ mà chưa được bảo (ô giữ nguyên)."},
-    {"id": "AC-3", "p": "Sẽ cho Kara thay hoặc xoá giá trị khi người bán hàng đã bảo thay trong hội thoại."},
-    {"id": "AC-4", "p": "Sẽ từ chối mọi lần Kara chạy nền (tự điền, tra hồ sơ, lượt Tác nhân) ghi lên ô đã có chữ, kể cả khi Kara nói «thay»."},
-    {"id": "AC-5", "p": "Sẽ vẫn để Kara điền ô còn trống như hôm nay, ở cả hội thoại lẫn chạy nền."},
-    {"id": "AC-6", "p": "Sẽ chỉ để đúng một lần ghi thắng khi hai lượt chạy nền cùng điền một ô trống một lúc."},
-    {"id": "AC-7", "p": "Sẽ vẫn chặn Kara ở trường người bán hàng đã đặt «chỉ nhập tay», kể cả khi Kara nói «thay»."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ từ chối khi Kara, đang trò chuyện với người bán hàng, định ghi giá trị khác lên ô đã có chữ; Kara được báo giá trị đang có và chỉ được thay khi người bán hàng bảo thay (ô giữ nguyên)."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ từ chối khi Kara định xoá trắng một ô đã có chữ mà chưa được bảo (ô giữ nguyên)."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ cho Kara thay hoặc xoá giá trị khi người bán hàng đã bảo thay trong hội thoại."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ từ chối mọi lần Kara chạy nền (tự điền, tra hồ sơ, lượt Tác nhân) ghi lên ô đã có chữ, kể cả khi Kara nói «thay»."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ vẫn để Kara điền ô còn trống như hôm nay, ở cả hội thoại lẫn chạy nền."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ chỉ để đúng một lần ghi thắng khi hai lượt chạy nền cùng điền một ô trống một lúc."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ vẫn chặn Kara ở trường người bán hàng đã đặt «chỉ nhập tay», kể cả khi Kara nói «thay»."
+    }
   ],
   "wont_do": [
-    {"id": "OOS-1", "p": "Không ghi lại ai đã đặt từng giá trị (cột xuất xứ) — đó là lối A, nếu chủ kho chọn."},
-    {"id": "OOS-2", "p": "Không đổi Kara sang đề xuất để người bấm nhận — việc đó thuộc lượt Kara xin duyệt (T3)."},
-    {"id": "OOS-3", "p": "Không đổi cách người bán hàng và việc nạp tin đăng ghi trường qua CRM."},
-    {"id": "OOS-4", "p": "Không đổi màn hình nào."}
+    {
+      "id": "OOS-1",
+      "p": "Không thêm cột ghi ai đặt từng giá trị, nên ô trường tự tạo chưa có dấu gạch chân chấm như trường chuẩn của Liên hệ — đó là lối A, nếu chủ kho chọn."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không đổi Kara sang đề xuất để người bấm nhận — việc đó thuộc lượt Kara xin duyệt (T3)."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không đổi cách người bán hàng và việc nạp tin đăng ghi trường qua CRM."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi màn hình nào."
+    }
   ],
   "scope_plain": "Lượt này chỉ chặn chỗ mất dữ liệu trong lúc chờ lượt Kara xin duyệt; những thứ dưới đây cố ý để lại.",
   "coverage_plain": [
-    {"i": 0, "p": "Loại phiên: trò chuyện có người, tự điền ô trống, tra hồ sơ chạy nền, lượt Tác nhân, Zalo."},
-    {"i": 1, "p": "Ô trước khi Kara ghi: đang trống hay đã có chữ."},
-    {"i": 2, "p": "Kara làm gì: ghi một giá trị hay xoá trắng ô."},
-    {"i": 3, "p": "Kara có nói «thay» hay không, và trường có cho Kara điền hay chỉ nhập tay."},
-    {"i": 4, "p": "Thước «đủ»: thông tin liên hệ đã có luật không bao giờ ghi đè người."},
-    {"i": 5, "p": "Thước «đủ»: kế hoạch trường tuỳ chỉnh đã hứa không ghi đè thứ người bán hàng gõ."},
-    {"i": 6, "p": "Thước «đủ» từ ngành: HubSpot chỉ làm mới và xoá giá trị do chính bộ làm giàu điền — tức phân biệt theo người đặt (lối A); lối B chặt hơn."},
-    {"i": 7, "p": "Trò chuyện có người, ô có chữ, không nói thay → AC-1, AC-2 (từ chối)."},
-    {"i": 8, "p": "Trò chuyện có người, có nói thay → AC-3 (cho thay)."},
-    {"i": 9, "p": "Chạy nền, ô có chữ, có hay không nói thay → AC-4 (luôn từ chối)."},
-    {"i": 10, "p": "Mọi phiên, ô trống → AC-5 (vẫn điền)."},
-    {"i": 11, "p": "Chạy nền, ô trống, hai lượt cùng lúc → AC-6 (một lần thắng)."},
-    {"i": 12, "p": "Trường chỉ nhập tay, có nói thay → AC-7 (vẫn chặn)."},
-    {"i": 13, "p": "Lời mô tả và tài liệu nói đúng luật → AC-8 (đọc duyệt)."},
-    {"i": 14, "p": "Để sau: Kara làm mới giá trị chính nó điền ở chạy nền — cần lối A hoặc lượt xin duyệt."},
-    {"i": 15, "p": "Để sau: ghi lại đúng giá trị đang có cũng bị từ chối; Kara đọc lý do là thấy trùng."},
-    {"i": 16, "p": "Không làm: Zalo đã chặn Kara ghi từ trước."}
+    {
+      "i": 0,
+      "p": "Loại phiên: trò chuyện có người, tự điền ô trống, tra hồ sơ chạy nền, lượt Tác nhân, Zalo."
+    },
+    {
+      "i": 1,
+      "p": "Ô trước khi Kara ghi: đang trống hay đã có chữ."
+    },
+    {
+      "i": 2,
+      "p": "Kara làm gì: ghi một giá trị hay xoá trắng ô."
+    },
+    {
+      "i": 3,
+      "p": "Kara có nói «thay» hay không, và trường có cho Kara điền hay chỉ nhập tay."
+    },
+    {
+      "i": 4,
+      "p": "Thước «đủ»: thông tin liên hệ đã có luật không bao giờ ghi đè người."
+    },
+    {
+      "i": 5,
+      "p": "Thước «đủ»: kế hoạch trường tự tạo đã hứa không ghi đè thứ người bán hàng gõ."
+    },
+    {
+      "i": 6,
+      "p": "Thước «đủ» từ ngành: HubSpot chỉ làm mới và xoá giá trị do chính bộ làm giàu điền — tức phân biệt theo người đặt (lối A); lối B chặt hơn."
+    },
+    {
+      "i": 7,
+      "p": "Trò chuyện có người, ô có chữ, không nói thay → AC-1, AC-2 (từ chối)."
+    },
+    {
+      "i": 8,
+      "p": "Trò chuyện có người, có nói thay → AC-3 (cho thay)."
+    },
+    {
+      "i": 9,
+      "p": "Chạy nền, ô có chữ, có hay không nói thay → AC-4 (luôn từ chối)."
+    },
+    {
+      "i": 10,
+      "p": "Mọi phiên, ô trống → AC-5 (vẫn điền)."
+    },
+    {
+      "i": 11,
+      "p": "Chạy nền, ô trống, hai lượt cùng lúc → AC-6 (một lần thắng)."
+    },
+    {
+      "i": 12,
+      "p": "Trường chỉ nhập tay, có nói thay → AC-7 (vẫn chặn)."
+    },
+    {
+      "i": 13,
+      "p": "Lời mô tả và tài liệu nói đúng luật → AC-8 (đọc duyệt)."
+    },
+    {
+      "i": 14,
+      "p": "Để sau: Kara làm mới giá trị chính nó điền ở chạy nền — cần lối A hoặc lượt xin duyệt."
+    },
+    {
+      "i": 15,
+      "p": "Để sau: ghi lại đúng giá trị đang có cũng bị từ chối; Kara đọc lý do là thấy trùng."
+    },
+    {
+      "i": 16,
+      "p": "Không làm: Zalo đã chặn Kara ghi từ trước."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Việc bỏ đo sau khi gộp là quyết định của người, không phải của máy. Đã chuyển thành Hỏi-2 trên thẻ này."},
-    {"i": 1, "p": "Bài kiểm chưa ghim câu «chỉ thay khi người bán hàng bảo», nên Kara có thể đọc lý do thành lời mời tự thay. Đã ghim câu đó và cho bài đọc duyệt xem cả câu từ chối."},
-    {"i": 2, "p": "Phiên trò chuyện trong bài kiểm được dựng tay, không chắc giống phiên thật. Đã dựng bằng đúng hàm của kênh trò chuyện và kiểm nó được nhận là có người."},
-    {"i": 3, "p": "Lượt Tác nhân được xếp «không làm» mà chưa ô kiểm nào thử nó. Đã thêm hai ô lượt Tác nhân vào bài kiểm chạy nền."}
+    {
+      "i": 0,
+      "p": "Việc bỏ đo sau khi gộp là quyết định của người, không phải của máy. Đã chuyển thành Hỏi-2 trên thẻ này."
+    },
+    {
+      "i": 1,
+      "p": "Bài kiểm chưa ghim câu «chỉ thay khi người bán hàng bảo», nên Kara có thể đọc lý do thành lời mời tự thay. Đã ghim câu đó và cho bài đọc duyệt xem cả câu từ chối."
+    },
+    {
+      "i": 2,
+      "p": "Phiên trò chuyện trong bài kiểm được dựng tay, không chắc giống phiên thật. Đã dựng bằng đúng hàm của kênh trò chuyện và kiểm nó được nhận là có người."
+    },
+    {
+      "i": 3,
+      "p": "Lượt Tác nhân được xếp «không làm» mà chưa ô kiểm nào thử nó. Đã thêm hai ô lượt Tác nhân vào bài kiểm chạy nền."
+    }
   ]
 }

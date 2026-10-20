@@ -1,10 +1,10 @@
-# Kara không ghi đè giá trị trường tuỳ chỉnh đã có — thiết kế
+# Kara không ghi đè giá trị trường tự tạo đã có — thiết kế
 
 Ngày 20/10/2026. Hồ sơ `_acceptance/kara-khong-ghi-de-truong/`. Hạng T2 nếu đi lối B, T3 nếu đi lối A.
 
 ## Lỗi
 
-`writeField` (`apps/agent/agent/lib/fields.ts`) là đường ghi duy nhất của Kara vào giá trị trường tuỳ chỉnh
+`writeField` (`apps/agent/agent/lib/fields.ts`) là đường ghi duy nhất của Kara vào giá trị trường tự tạo
 (`FieldValue`). Công cụ `set_field_value` gọi nó. Nó chỉ kiểm «ô đã có giá trị» khi tác vụ đang chạy là
 `field-backfill`. Mọi đường khác ghi thẳng:
 
@@ -17,16 +17,26 @@ Luật đã khai mà mã đang trái:
 
 - `docs/plan/dynamic-fields.md` §5: «Nothing a rep typed is ever overwritten.»
 - `docs/agent.md` «Evidence, not confidence»: đường ghi thông tin liên hệ (`lib/facts.ts`) «never overwrite a human».
-  Trường tuỳ chỉnh chưa có luật tương đương.
+  Trường tự tạo chưa có luật tương đương.
 - `docs/ai-ux.md` §4: Kara không ghi thẳng vào bản ghi; `set_field_value` đang lệch, sửa ở lượt `tac-tu-xin-duyet`
   (T3, chưa làm). Lượt này không làm thay lượt đó. Nó chỉ chặn chỗ mất dữ liệu trong lúc chờ.
 
-## Hai lối
+Màn Cài đặt › Trường còn hứa thẳng với người quản trị: «Kara đề xuất giá trị kèm nguồn, và không bao giờ ghi đè giá
+trị của bạn» (`apps/app/lib/messages/crm.ts`, `agentHint`). Trường chuẩn của Liên hệ giữ lời hứa đó bằng đề xuất
+(`ContactFact`) và dấu gạch chân chấm (`SourcedValue`, `contact-sheet.tsx`); trường tự tạo không có cả hai, vì
+`FieldValue` không có cột nguồn (`record-fields.tsx` không có gì để gắn dấu).
+
+## Ba mức, hai lối của lượt này
+
+Lời hứa trên màn có hai vế. Vế «không ghi đè» lượt này giữ được. Vế «đề xuất kèm nguồn» là lượt `tac-tu-xin-duyet`
+(`dynamic-fields.md` §5 khuyên gộp `ContactFact` thành `RecordFact`); không lối nào dưới đây làm vế đó.
 
 **Lối A — xuất xứ trên `FieldValue`.** Thêm cột ghi ai đặt giá trị (người, Kara, nạp tin đăng). API, nạp tin đăng
 và Kara mỗi đường ghi đúng nguồn của mình. `writeField` chỉ từ chối khi ô đang giữ giá trị của người; giá trị Kara
 tự điền thì Kara được làm mới. Cần `migration` ở `packages/db/prisma` (T3, thêm Cổng 1.5), sửa `FieldsService`,
-`listing-ingest`, bộ đọc, và quyết cách đọc các hàng cũ (không biết nguồn thì coi là của người).
+`listing-ingest`, bộ đọc, và quyết cách đọc các hàng cũ (không biết nguồn thì coi là của người). Có cột nguồn thì ô trường tự tạo gắn được dấu gạch
+chân chấm như trường chuẩn của Liên hệ — nhưng đó là thêm việc giao diện (`record-fields.tsx`), lượt A phải khai riêng
+nếu chọn kèm. Kara vẫn ghi thẳng ở lối A: nó chỉ biết ô nào là của mình.
 
 **Lối B — chặn mọi lần ghi lên ô đã có giá trị, trừ khi người gọi nói rõ là thay.** Không đổi lược đồ.
 `writeField` luôn khoá và đọc ô trong cùng `transaction` (như nhánh `field-backfill` hôm nay), rồi:
@@ -69,7 +79,7 @@ T3.
 - `apps/agent/agent/tools/set_field_value.ts` — khoá `replace` trong `inputSchema`, truyền
   `unattended: isAutomated(ctx.session)`.
 - `apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts` — bài kiểm mới.
-- `docs/agent.md` — một mục ngắn: luật không ghi đè của trường tuỳ chỉnh.
+- `docs/agent.md` — một mục ngắn: luật không ghi đè của trường tự tạo.
 
 Không đụng `packages/db`, `apps/api`, giao diện.
 

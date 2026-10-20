@@ -1,6 +1,6 @@
 ---
 schema_version: 1
-feature: "Kara không ghi đè giá trị trường tuỳ chỉnh đã có — chỉ thay khi người bán hàng bảo thay trong hội thoại"
+feature: "Kara không ghi đè giá trị trường tự tạo đã có — chỉ thay khi người bán hàng bảo thay trong hội thoại"
 slug: kara-khong-ghi-de-truong
 owner: phanlemanh@gmail.com
 risk_tier: T2
@@ -13,7 +13,7 @@ design_doc: docs/superpowers/specs/2026-10-20-kara-khong-ghi-de-truong-design.md
 
 ## Context
 
-Phát hiện trong phiên phân tích UX trường tuỳ chỉnh và đính kèm hợp đồng, 20/10/2026. `writeField`
+Phát hiện trong phiên phân tích UX trường tự tạo và đính kèm hợp đồng, 20/10/2026. `writeField`
 (`apps/agent/agent/lib/fields.ts`) chỉ kiểm «ô đã có giá trị» trong tác vụ `field-backfill`. Ở phiên hội thoại và ở
 mọi tác vụ nền khác, `set_field_value` ghi đè giá trị người bán hàng đã gõ, và người đó không được báo.
 
@@ -66,7 +66,7 @@ Trong mọi tiêu chí:
   - mô tả công cụ nói: ô đã có giá trị thì không ghi; chỉ đặt `replace: true` khi người bán hàng đã bảo thay giá trị đó
     trong chính hội thoại này;
   - không câu nào — mô tả công cụ hay lý do từ chối — mời Kara đặt `replace: true` khi chưa có lời bảo của người;
-  - `docs/agent.md` có một mục nói luật không ghi đè của trường tuỳ chỉnh: phiên nền không bao giờ thay ô đã có giá
+  - `docs/agent.md` có một mục nói luật không ghi đè của trường tự tạo: phiên nền không bao giờ thay ô đã có giá
     trị, phiên có người chỉ thay khi có `replace: true`, và phiên nền xác định bằng `isAutomated`, không bằng lời model.
 
 ## Coverage
