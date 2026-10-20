@@ -5,7 +5,7 @@ slug: okr-mau-xoa-du
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-20
 design_doc: docs/superpowers/specs/2026-10-20-okr-mau-xoa-du-design.md
