@@ -1,35 +1,4 @@
 {
-  "feature_plain": "Mở trang Theo đơn vị, trong lúc chờ người dùng chỉ thấy một khung chờ đúng hình bảng mục tiêu, không còn hai khung khác hình nối nhau.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho tải trang (máy tính và điện thoại, mạng chậm) chỉ hiện một hình khung chờ từ đầu tới khi bảng hiện, không cây đơn vị, không vòng quay toàn trang."},
-    {"id": "AC-2", "p": "Sẽ giữ đúng hình khung chờ ấy khi bấm sang Theo đơn vị từ thẻ Toàn cảnh."},
-    {"id": "AC-3", "p": "Sẽ giữ ô chọn đơn vị và nút chuyển kiểu xem thật khi đổi đơn vị, bấm ô chọn vẫn mở danh sách, và ô chọn không nhảy chỗ."},
-    {"id": "AC-4", "p": "Sẽ làm khung chờ khớp bảng thật: tối đa năm dòng, mỗi dòng cao trong khoảng các dòng mục tiêu thật, đầu bảng và hàng công cụ lệch không quá 1 px."},
-    {"id": "AC-5", "p": "Sẽ cho mọi pha tải của trang dùng một khung chờ chung, và trang không còn tự vẽ vạch chờ nào."},
-    {"id": "AC-6", "p": "Sẽ thêm hình «bảng dòng hai tầng» vào bộ khung chờ dùng chung; năm hình cũ và chín trang đang dùng hình bảng thường giữ nguyên."},
-    {"id": "AC-7", "p": "Sẽ cho trình đọc màn hình đọc «Đang tải OKR…» một lần ở mọi pha, bỏ qua vạch, và vẫn tới được ô chọn đơn vị thật."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "Sẽ KHÔNG đổi khung chờ của kiểu xem cây căn chỉnh, họp tuần, chấm điểm — mỗi kiểu có khung riêng."},
-    {"id": "OOS-2", "p": "Sẽ KHÔNG giữ bảng cũ khi đổi lọc hay sửa menu Lọc tự đóng — đó là hàng DH13 (lọc đơn vị không tự đóng)."},
-    {"id": "OOS-3", "p": "Sẽ KHÔNG đổi khung chờ hình bảng của Liên hệ, Thoả thuận, Công ty, Chiến dịch, Onboarding, Cài đặt."},
-    {"id": "OOS-4", "p": "Sẽ KHÔNG đổi khung chờ của trang «Của tôi»."},
-    {"id": "OOS-5", "p": "Sẽ KHÔNG sửa chuyện chữ giao diện ở chân bảng bị chặn dịch tự động — anh đã ghi vào hạn chế đã biết ở DH2."}
-  ],
-  "scope_plain": "Vòng này chỉ đổi khung chờ của bảng mục tiêu ở kiểu xem danh sách; mọi thứ khác giữ nguyên.",
-  "coverage_plain": [
-    {"i": 0, "p": "Ba lúc trang có thể vẽ khung chờ (máy chủ chưa xong, trình duyệt chờ kỳ và cây, trình duyệt chờ danh sách) đều đi qua một khung — AC-1, AC-3 đo trên màn, AC-5 đo trong mã."},
-    {"i": 1, "p": "Ba đường vào trang (tải lại, bấm từ thẻ khác, đổi đơn vị) mỗi đường một tiêu chí — AC-1, AC-2, AC-3."},
-    {"i": 2, "p": "Đo ở cả máy tính (1440) và điện thoại (390), như mốc đo của DH2."},
-    {"i": 3, "p": "Chỉ kiểu xem danh sách; ba kiểu xem kia có khung riêng, để vòng sau."},
-    {"i": 4, "p": "Chuẩn ngoài: khung chờ phải giống bố cục sắp hiện và không trộn hình (Nielsen Norman Group, Carbon Design System)."},
-    {"i": 5, "p": "Lúc chờ kỳ, quyền, cây hiếm khi thấy trên màn nên được đo bằng bài kiểm mã (AC-5), không bằng ảnh màn."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Thước «một hình» ban đầu bỏ sót chiều cao hàng công cụ, nên khung giật 4 px vẫn đạt — đã thêm vào thước và đo ở mọi lúc chờ."},
-    {"i": 1, "p": "Thước chỉ nhận khung có nhãn riêng, nên một khung chờ lạ (vd khung chung của trang) lọt qua — đã đếm mọi vạch lạ là một hình riêng."},
-    {"i": 2, "p": "Lệnh cấm tự vẽ vạch chưa nói khung của kiểu xem khác nằm đâu và chỉ dò câu nhập — đã đo hôm nay chỉ một tệp vẽ vạch, và dò mọi kiểu vẽ."},
-    {"i": 3, "p": "Chưa kiểm khung lúc máy chủ chưa xong có đọc đúng «Đang tải OKR…» — đã thêm ca ấy và đòi khung đó là cùng thành phần."},
-    {"i": 4, "p": "Mới kiểm ô chọn «không bị khoá», chưa kiểm bấm được thật — đã đổi thành bấm thật và đòi danh sách đơn vị mở ra."}
-  ]
+  "feature_plain": "Mở trang Theo đơn vị hay đổi đơn vị, người dùng chỉ thấy một khung chờ đúng hình bảng mục tiêu (cao khớp từng dòng thật ở máy tính và điện thoại), không còn hai khung khác hình nối nhau.",
+  "decisions": []
 }
