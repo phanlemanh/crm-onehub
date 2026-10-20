@@ -78,6 +78,14 @@ export function cloneDocLap(sha, ten) {
 	return { goc, tam, don: () => rmSync(tam, { recursive: true, force: true }) };
 }
 
+export function datNenBan(goc, sha, nguon = GOC) {
+	git(goc, "update-ref", "refs/remotes/origin/onehub", sha);
+	git(goc, "branch", "-f", "onehub", sha);
+	git(goc, "remote", "set-url", "origin", git(nguon, "remote", "get-url", "origin").trim());
+	const nhanh = git(nguon, "rev-parse", "--abbrev-ref", "HEAD").trim();
+	if (nhanh !== "HEAD") git(goc, "checkout", "-q", "-B", nhanh, sha);
+}
+
 export function bangTrongDesign(tieuDe) {
 	const chu = readFileSync(DESIGN, "utf8");
 	const i = chu.indexOf(tieuDe);
