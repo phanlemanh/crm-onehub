@@ -16,6 +16,7 @@ const en = {
 		chuongTrinhOkr: "OKR program",
 		dieuPhoi: "Onboarding",
 		lichLamViec: "Working days",
+		sanPham: "Products",
 	},
 	nhomThanhBen: {
 		khongGian: "Workspace",
@@ -30,6 +31,7 @@ const en = {
 		giaiDoan: "Deal stages",
 		chuongTrinhOkr: "OKR program",
 		lichLamViec: "Working days",
+		sanPham: "Products",
 	},
 	lichLamViec: {
 		tieuDe: "Working days",
@@ -245,6 +247,7 @@ const vi = {
 		chuongTrinhOkr: "Chương trình OKR",
 		dieuPhoi: "Điều phối 30 ngày",
 		lichLamViec: "Lịch làm việc",
+		sanPham: "Sản phẩm",
 	},
 	nhomThanhBen: {
 		khongGian: "Không gian làm việc",
@@ -259,6 +262,7 @@ const vi = {
 		giaiDoan: "Giai đoạn thoả thuận",
 		chuongTrinhOkr: "Chương trình OKR",
 		lichLamViec: "Lịch làm việc",
+		sanPham: "Sản phẩm",
 	},
 	lichLamViec: {
 		tieuDe: "Lịch làm việc",
