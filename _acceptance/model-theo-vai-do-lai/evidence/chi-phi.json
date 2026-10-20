@@ -1,5 +1,5 @@
 {
-  "tran_usd": 6,
+  "tran_usd": 12,
   "luot": [
     {
       "vai": "dao",
@@ -108,10 +108,98 @@
     {
       "vai": "soan-okr",
       "luot": "2",
+      "luc": "2026-10-20T15:44:12.328Z",
       "trang_thai": "da-chay",
       "usd": 0.113161,
-      "tep": "eval-soan-flash-2.json",
-      "luc": "2026-10-20T15:44:12.328Z"
+      "tep": "eval-soan-flash-2.json"
+    },
+    {
+      "vai": "dao",
+      "luot": "ds-1",
+      "luc": "2026-10-20T23:22:16.706Z",
+      "trang_thai": "da-chay",
+      "usd": 0.001228,
+      "tep": "do-suy-luan-ds.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-1",
+      "luc": "2026-10-20T23:23:43.248Z",
+      "trang_thai": "da-chay",
+      "usd": 0.013265,
+      "tep": "aichiphi-ds-1.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-low-1",
+      "luc": "2026-10-20T23:24:41.633Z",
+      "trang_thai": "da-chay",
+      "usd": 0.00145,
+      "tep": "aichiphi-ds-low-1.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-2",
+      "luc": "2026-10-20T23:26:14.877Z",
+      "trang_thai": "da-chay",
+      "usd": 0.020211,
+      "tep": "aichiphi-ds-2.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-low-2",
+      "luc": "2026-10-20T23:27:36.889Z",
+      "trang_thai": "da-chay",
+      "usd": 0.01618,
+      "tep": "aichiphi-ds-low-2.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-3",
+      "luc": "2026-10-20T23:29:24.206Z",
+      "trang_thai": "da-chay",
+      "usd": 0.011175,
+      "tep": "aichiphi-ds-3.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-low-3",
+      "luc": "2026-10-20T23:30:17.182Z",
+      "trang_thai": "da-chay",
+      "usd": 0.006545,
+      "tep": "aichiphi-ds-low-3.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-4",
+      "luc": "2026-10-20T23:31:56.448Z",
+      "trang_thai": "da-chay",
+      "usd": 0.018562,
+      "tep": "aichiphi-ds-4.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-low-4",
+      "luc": "2026-10-20T23:33:18.079Z",
+      "trang_thai": "da-chay",
+      "usd": 0.016306,
+      "tep": "aichiphi-ds-low-4.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-5",
+      "luc": "2026-10-20T23:34:48.592Z",
+      "trang_thai": "da-chay",
+      "usd": 0.018567,
+      "tep": "aichiphi-ds-5.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "ds-low-5",
+      "trang_thai": "da-chay",
+      "usd": 0.014632,
+      "tep": "aichiphi-ds-low-5.json",
+      "luc": "2026-10-20T23:36:05.854Z"
     }
   ]
 }
