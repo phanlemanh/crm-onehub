@@ -189,18 +189,34 @@ try {
 		}),
 		"DO ngoai-lop .claude/settings.json",
 	);
-	const [slugBang, idBang] = bangTrongDesign("Eval cũ thay bởi vòng này")[0][0].split("/");
-	ket.bat(
-		"eval-mat-not-run",
-		tepSua(`_acceptance/${slugBang}/evals.yaml`, (t) => {
-			const dong = t.split("\n");
-			const i = dong.indexOf(`  - id: ${idBang}`);
-			const k = dong.findIndex((d, n) => n > i && /^ {4}status: not-run/.test(d));
-			dong.splice(k, 1);
-			return dong.join("\n");
-		}),
-		`DO ngoai-lop _acceptance/${slugBang}/evals.yaml`,
-	);
+	const coDongBao = (o) => {
+		const [slug, id] = o.split("/");
+		const tep = `_acceptance/${slug}/evals.yaml`;
+		const dong = readFileSync(join(ban.goc, tep), "utf8").split("\n");
+		return r.ds.some((muc) => {
+			const i = muc.lastIndexOf(":");
+			return muc.slice(0, i) === tep && khoiCua(dong, Number(muc.slice(i + 1)))?.id === id;
+		});
+	};
+	const hangBang = bangTrongDesign("Eval cũ thay bởi vòng này")
+		.map((o) => o[0])
+		.find(coDongBao);
+	if (!hangBang) ket.kiem(false, "eval-mat-not-run", "bang «Eval cũ thay bởi vòng này» khong con hang nao ma khoi eval co dong kiemChuyen bao");
+	else {
+		const [slugBang, idBang] = hangBang.split("/");
+		console.log(`eval-mat-not-run: chon ${hangBang} (khoi co dong kiemChuyen bao)`);
+		ket.bat(
+			"eval-mat-not-run",
+			tepSua(`_acceptance/${slugBang}/evals.yaml`, (t) => {
+				const dong = t.split("\n");
+				const i = dong.indexOf(`  - id: ${idBang}`);
+				const k = dong.findIndex((d, n) => n > i && /^ {4}status: not-run/.test(d));
+				dong.splice(k, 1);
+				return dong.join("\n");
+			}),
+			`DO ngoai-lop _acceptance/${slugBang}/evals.yaml`,
+		);
+	}
 	ket.bat(
 		"import-tuong-doi",
 		tepSua("scripts/kiem-cheo/khoa.mjs", (t) => `import { timThuMucDot } from "../dieu-phoi/dot.mjs";\n${t}`),

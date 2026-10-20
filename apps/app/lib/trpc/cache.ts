@@ -48,6 +48,7 @@ export type CrmCache = {
 	settings(options?: Options): Promise<void>;
 	currency(options?: Options): Promise<void>;
 	giaiDoan(options?: Options): Promise<void>;
+	sanPhamLoTrinh(options?: Options): Promise<void>;
 	workspace(options?: Options): Promise<void>;
 	slack(options?: Options): Promise<void>;
 	zalo(options?: Options): Promise<void>;
@@ -481,6 +482,17 @@ export function useCrmCache(): CrmCache {
 				options,
 			),
 
+		sanPhamLoTrinh: (options) =>
+			run(
+				[
+					trpc.sanPhamLoTrinh.danhSach.queryKey(),
+					trpc.sanPhamLoTrinh.daLuuTru.queryKey(),
+					trpc.sanPhamLoTrinh.nguoiXem.queryKey(),
+				],
+				[],
+				options,
+			),
+
 		giaiDoan: (options) =>
 			run(
 				[trpc.giaiDoan.list.queryKey(), trpc.giaiDoan.archived.queryKey()],
@@ -539,7 +551,11 @@ export function useCrmCache(): CrmCache {
 
 		tinHieu: (options) =>
 			run(
-				[trpc.tinHieu.cuaToi.queryKey(), trpc.tinHieu.tatCa.queryKey()],
+				[
+					trpc.tinHieu.cuaToi.queryKey(),
+					trpc.tinHieu.tatCa.queryKey(),
+					trpc.tinHieu.daLuuTru.queryKey(),
+				],
 				[],
 				options,
 			),

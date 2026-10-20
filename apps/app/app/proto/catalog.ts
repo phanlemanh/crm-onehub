@@ -74,6 +74,35 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "lo-trinh-nhieu-san-pham",
+		ten: "Lộ trình nhiều sản phẩm — bộ chọn sản phẩm và Cài đặt › Sản phẩm",
+		states: [
+			{ id: "ST-lotrinh-chon", nhan: "Lộ trình — bộ chọn, CRM chọn sẵn" },
+			{ id: "ST-lotrinh-sp", nhan: "Lộ trình — Kit nghiệm thu đã lấy" },
+			{ id: "ST-lotrinh-sp-en", nhan: "Lộ trình — Kit nghiệm thu, tiếng Anh" },
+			{
+				id: "ST-lotrinh-sp-chua-co",
+				nhan: "Lộ trình — sản phẩm chưa có bản chụp",
+			},
+			{
+				id: "ST-lotrinh-sp-lay-hong",
+				nhan: "Lộ trình — lần lấy gần nhất hỏng",
+			},
+			{ id: "ST-lotrinh-sp-nguon-doi", nhan: "Lộ trình — nguồn vừa đổi" },
+			{ id: "ST-lotrinh-sp-khuon-cu", nhan: "Lộ trình — khuôn bản 1" },
+			{ id: "ST-sanpham-danh-sach", nhan: "Cài đặt — danh sách sản phẩm" },
+			{ id: "ST-sanpham-rong", nhan: "Cài đặt — chưa có sản phẩm khác" },
+			{ id: "ST-sanpham-khong-quyen", nhan: "Cài đặt — thành viên, chỉ đọc" },
+			{
+				id: "ST-sanpham-chua-cau-hinh",
+				nhan: "Cài đặt — máy chủ chưa có ứng dụng GitHub",
+			},
+			{ id: "ST-sanpham-them", nhan: "Cài đặt — Sheet thêm, ô tệp sai" },
+			{ id: "ST-sanpham-nguoi-xem", nhan: "Cài đặt — Sheet người xem" },
+			{ id: "ST-sanpham-da-luu-tru", nhan: "Cài đặt — mục Đã lưu trữ" },
+		],
+	},
+	{
 		slug: "lo-trinh-doc-ban-chup",
 		ten: "Lộ trình đọc bản chụp — dòng giờ lấy",
 		states: [
@@ -1467,6 +1496,27 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-tren-nguong", nhan: "Đang dựng — lâu hơn thường lệ" },
 			{ id: "ST-chuong-ba-loai", nhan: "Chuông — xong, cần trả lời, hỏng" },
 			{ id: "ST-chuong-da-doc", nhan: "Chuông — đã đọc sau khi mở" },
+		],
+	},
+	{
+		slug: "go-tin-hieu-rac",
+		ten: "Gỡ tín hiệu rác — lưu trữ, Hoàn tác, Đã lưu trữ, trang người gửi",
+		states: [
+			{ id: "ST-tat-ca-co-menu", nhan: "Tất cả — mỗi dòng có menu Lưu trữ" },
+			{
+				id: "ST-tat-ca-vua-luu-tru",
+				nhan: "Tất cả — vừa lưu trữ crm-9, thông báo có Hoàn tác",
+			},
+			{
+				id: "ST-tat-ca-luu-tru-loi",
+				nhan: "Tất cả — lưu trữ hỏng, crm-9 vừa bị lấy về",
+			},
+			{ id: "ST-da-luu-tru-co", nhan: "Đã lưu trữ — hai tín hiệu, Khôi phục" },
+			{ id: "ST-da-luu-tru-rong", nhan: "Đã lưu trữ — chưa có tín hiệu nào" },
+			{
+				id: "ST-cua-toi-da-luu-tru",
+				nhan: "Tín hiệu đã gửi — người gửi thấy tín hiệu bị lưu trữ",
+			},
 		],
 	},
 ];

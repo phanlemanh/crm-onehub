@@ -28,6 +28,8 @@ const KEYS = [
 	"VERCEL_OIDC_TOKEN",
 	"KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
 	"KHO_TAI_LIEU_BLOB_TOKEN",
+	"GITHUB_APP_ID",
+	"GITHUB_APP_PRIVATE_KEY",
 ] as const;
 
 const saved: Record<string, string | undefined> = {};

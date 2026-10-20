@@ -13,7 +13,7 @@ import {
 } from "@crm/db/okr-tien-do";
 import { xepLuotAnSauKhiLuu } from "@crm/db/okr-tro-ly";
 import { ngayVN } from "@crm/db/onboarding-nhac";
-import { WORKSPACE_ID } from "@crm/db/workspace";
+import { readTenGoc, WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	capDichCanChinh,
 	chuKyDichCanChinh,
@@ -1620,6 +1620,7 @@ export class OkrService {
 			},
 			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 		});
+		const tenGoc = await readTenGoc(this.db);
 		const theoCap = [...rows].sort(
 			(a, b) =>
 				HANG_CAP[capMucTieu.parse(a.level)] -
@@ -1627,7 +1628,7 @@ export class OkrService {
 		);
 		return {
 			targets: theoCap.flatMap((r) => {
-				const unitName = tenDonVi(r);
+				const unitName = tenDonVi(r, tenGoc);
 				return [
 					{ objectiveId: r.id, keyResultId: null, label: r.title, unitName },
 					...r.keyResults.map((k) => ({
@@ -1711,6 +1712,7 @@ export class OkrService {
 		soGopY?: ReadonlyMap<string, number>,
 	): Promise<MucTieuOutput[]> {
 		const ct = await this.program(tx);
+		const tenGoc = await readTenGoc(tx);
 		const rows = await tx.okrObjective.findMany({
 			where: {
 				AND: [
@@ -1783,7 +1785,7 @@ export class OkrService {
 				cycleId: r.cycleId,
 				level,
 				unitId: r.divisionId ?? r.departmentId ?? r.personUserId,
-				unitName: tenDonVi(r),
+				unitName: tenDonVi(r, tenGoc),
 				title: r.title,
 				kind: loaiMucTieu.parse(r.kind),
 				status: trangThaiMucTieu.parse(r.status),
@@ -1799,12 +1801,12 @@ export class OkrService {
 					const dich = g.targetKeyResult?.objective ?? g.targetObjective;
 					const dichId = g.targetKeyResult?.objectiveId ?? g.targetObjectiveId;
 					if (!dich || !dichId)
-						throw new Error(`Căn chỉnh ${g.id} không có đích.`);
+						throw new Error(`Chỗ góp vào ${g.id} không có đích.`);
 					return {
 						alignmentId: g.id,
 						targetObjectiveId: dichId,
 						targetKeyResultId: g.targetKeyResultId,
-						unitName: tenDonVi(dich),
+						unitName: tenDonVi(dich, tenGoc),
 						objectiveTitle: dich.title,
 						keyResultTitle: g.targetKeyResult?.title ?? null,
 						lyDo: g.lyDo,

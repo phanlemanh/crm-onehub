@@ -41,6 +41,7 @@ export const NHOM_CAI_DAT: readonly NhomCaiDat[] = [
 		muc: [
 			{ khoa: "ketNoi", href: `${GOC_CAI_DAT}/connections` },
 			{ khoa: "theoDoi", href: `${GOC_CAI_DAT}/tracking` },
+			{ khoa: "sanPham", href: `${GOC_CAI_DAT}/san-pham` },
 		],
 	},
 	{

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { OKR_NHAC } from "@crm/db/okr-nhac";
-import { WORKSPACE_ID } from "@crm/db/workspace";
+import { readTenGoc, WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type KetLuan,
 	type NoiBanTruoc,
@@ -291,7 +291,7 @@ describe("do-phu", () => {
 				cot: E11_COT,
 				hang: e11KyVong(idDonVi, nguoiLa.length),
 			});
-			expect(bang.hang[0]?.nhan).toBe(OKR.tenGoc);
+			expect(bang.hang[0]?.nhan).toBe(await readTenGoc(db));
 			expect(bang.hang.at(-1)?.nhan).toBe(OKR_HOI_Y.doPhu.nhanChuaXep);
 			for (const ai of ["thuong", "okr", "chu", nguoiChon.cookie])
 				expect(await docBang(ai), "moi vai doc cung mot bang").toEqual(bang);

@@ -8,6 +8,7 @@ import {
 	queueDueAgentRuns,
 } from "../lib/custom-agent-dispatch";
 import { brief, drainAll, taskAuth } from "../lib/dispatch";
+import { layLoTrinhSanPham } from "../lib/lo-trinh-san-pham";
 import { lenLichNhac } from "../lib/nhac-ke-hoach";
 import { chupSoOkr } from "../lib/okr-chup";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
@@ -30,6 +31,7 @@ export default defineSchedule({
 				lenLichNhac(),
 				lenLichDoiSoat(),
 				chupSoOkr(),
+				layLoTrinhSanPham(),
 				kiemBot(),
 				donThongBaoDinhKy(),
 				dongHoiQuaHan(),

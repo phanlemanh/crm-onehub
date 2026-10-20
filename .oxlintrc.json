@@ -20,6 +20,7 @@
 		"packages/db/src/generated/**",
 		"packages/ui/src/components/**",
 		"apps/app/lib/lo-trinh/doc-du-lieu.js",
+		"packages/validation/src/doc-du-lieu-lo-trinh.js",
 		"tools/oxlint/anti-slop/**",
 		"lib/**",
 		"scripts/**",
