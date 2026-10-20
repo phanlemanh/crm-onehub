@@ -20,7 +20,7 @@ export function DongLienQuan({
 				type="button"
 			>
 				<ItemContent>
-					<ItemTitle translate="no">{x.cau_giao}</ItemTitle>
+					<ItemTitle translate="no">{x.ten}</ItemTitle>
 				</ItemContent>
 				<ChamTrangThai v={x} />
 			</button>

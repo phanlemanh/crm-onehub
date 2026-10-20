@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6e3d4c62116ca1cc0a4db4d18851f873814b448a
+verified_commit: 981b0903455633d53634e4b7d1ad82c6596d0b46
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -467,3 +467,15 @@ sha: ea2082066a7f3804de3aecfe7f38bdcfa0c5b272 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 17 — 2026-10-18, do DA4 du-an-gantt: code Dự án, Lịch làm việc, răng HG đổi; 10 hồ sơ, trần 150′, bỏ DH2 (răng DH2 gãy sau gộp) theo Điều phối
 run_id: repin-20261018T002421Z-44023
 sha: 6e3d4c62116ca1cc0a4db4d18851f873814b448a · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 18 — 2026-10-19, do VK4 doi-nhan-khu-muc-tieu đổi chuỗi trong răng màn (luật riêng 21)
+run_id: repin-20261019T140725Z-47604
+sha: f954777151aaa5f114998e81e75b9e9c1442d5fe · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 19 — 2026-10-19, do VK4 doi-nhan-khu-muc-tieu: ghim lại sau gộp onehub #410 và #493
+run_id: repin-20261019T150916Z-20885
+sha: b72c8cb861f3334b33f99eb553443a2fa8421aa9 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 20 — 2026-10-19, do ghim lại sau chữ ký Cổng 2 và các lần gộp onehub
+run_id: repin-20261019T232132Z-12370
+sha: 981b0903455633d53634e4b7d1ad82c6596d0b46 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

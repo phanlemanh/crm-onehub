@@ -414,6 +414,9 @@ const GHIM_LO_TRINH = {
 	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
 	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
 	"lo-trinh:moc.lechKeHoach": ["1 chỗ lệch kế hoạch", "12 chỗ lệch kế hoạch"],
+	"lo-trinh:moc.conLai": ["còn 1/A việc", "còn 12/A việc"],
+	"lo-trinh:moc.daGiaoThem": [" · 1 đã giao", " · 12 đã giao"],
+	"lo-trinh:moc.giaoDu": ["đã giao đủ 1 việc", "đã giao đủ 12 việc"],
 	"lo-trinh:tre.tieuDe": [
 		"1 việc đã qua mốc mà chưa giao",
 		"12 việc đã qua mốc mà chưa giao",
@@ -936,8 +939,8 @@ const GHIM = {
 	],
 	"okr:caiDat.chuKy.go.tieuDe": ["Gỡ 1?", "Gỡ 12?"],
 	"okr:caiDat.chuKy.go.than": [
-		"1 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
-		"12 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"1 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"12 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
 	],
 	"okr:caiDat.chuKy.go.xong": ["Đã gỡ 1.", "Đã gỡ 12."],
 	"okr:caiDat.chuKy.an.tieuDe": ["Ẩn 1?", "Ẩn 12?"],

@@ -972,7 +972,7 @@ const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
 
 describe("ctbp-bon-the", () => {
 	const KY_VONG = {
-		vi: ["Của tôi", "Theo đơn vị", "Toàn cảnh", "Hỏi ý"],
+		vi: ["Của tôi", "Theo đơn vị", "Toàn cảnh", "Lấy ý kiến"],
 		en: ["Mine", "By unit", "Overview", "Call for ideas"],
 	} as const;
 	for (const locale of ["vi", "en"] as const)
