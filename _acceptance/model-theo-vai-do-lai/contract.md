@@ -5,9 +5,9 @@ slug: model-theo-vai-do-lai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: manh
+approved_at: 2026-10-21
 design_doc: _acceptance/model-theo-vai-do-lai/design.md
 ---
 
