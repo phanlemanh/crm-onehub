@@ -5,7 +5,7 @@ const chan = (lyDo: string): DongSoKhoa => ({ loai: "chan", lyDo });
 const NGOAI =
 	"dữ liệu nghiệp vụ ngoài bộ mẫu — người mẫu không tạo trong phép đo nào";
 
-export const SO_KHOA_NGUOI: Readonly<Record<string, DongSoKhoa>> = {
+export const SO_KHOA_NGUOI = {
 	"AgentConversationSubmission.submittedBy": chan(NGOAI),
 	"AgentDefinition.createdBy": chan(NGOAI),
 	"AgentVersion.createdBy": chan(NGOAI),
@@ -53,7 +53,7 @@ export const SO_KHOA_NGUOI: Readonly<Record<string, DongSoKhoa>> = {
 	),
 	"NgayNghi.taoBoi": chan(NGOAI),
 	"GoiYKeHoach.nguoiNhan": chan(NGOAI),
-};
+} as const satisfies Readonly<Record<string, DongSoKhoa>>;
 
 const XOA_KHONG_CHAN = new Set(["Cascade", "SetNull", "SetDefault"]);
 
@@ -76,7 +76,7 @@ export function khoaChanTuLuocDo(luocDo: string): string[] {
 export function soKhoaLech(
 	luocDo: string,
 	so: Readonly<Record<string, DongSoKhoa>> = SO_KHOA_NGUOI,
-): { thieu: string[]; thua: string[] } {
+) {
 	const that = new Set(khoaChanTuLuocDo(luocDo));
 	const khai = new Set(Object.keys(so));
 	return {
