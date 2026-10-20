@@ -1,0 +1,113 @@
+slug: ngan-kr-mot-cho
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.vk7_moi_loi
+    expected: "exit 0; apps/app/test/ngan-kr-mot-cho.dom.tsx -t vk7-moi-loi: openRecord giả ghi lại mọi lần gọi; ma trận viết trước bảy lối (số ô === 7, mỗi ô dựng đúng thành phần thật của lối): dòng KR trang đơn vị (bang.tsx), nút Việc trong BangKr, con số data-so-kr trong BangKr, thẻ KR trên sơ đồ (the-quanh.tsx), khối KR Tổng quan (khoi-tom-tat.tsx), Của tôi (khoi-kr-cua-toi.tsx), họp tuần (hop-tuan.tsx); mỗi ô: openRecord gọi đúng một lần với {kind: 'kr', id: K}, không lần nào kind so-kr hay tab dien-bien (in 'loi lech: <lối> -> <kind>'); ô con số mang thêm khoá mục Số và nguồn. Dữ liệu KR rút từ mucTieuOutput parse bằng schema thật. Kèm quét tĩnh (rang/quet-loi.mjs, phân tích cú pháp TS, không grep chuỗi): liệt kê MỌI chỗ trong apps/app gọi openRecord, thayDinh, useMoDienBien hay hằng/hàm bọc của chúng mà tham số mang một KR; số lối quét được === số ô của ma trận (in 'loi ngoai ma tran: <tệp:dòng>'); không chỗ nào mở kind so-kr hay tab dien-bien cho KR (in 'con mo so-kr: <tệp>', 'con mo dien-bien: <tệp>'). Đối chứng dương cho lượt quét: thư mục mồi có một lời gọi so-kr qua hằng và một lời gọi useMoDienBien → lượt quét in đúng hai dòng. Đối chứng đỏ ghim: bản sao để một lối gọi useMoDienBien → in 'loi lech: <lối> -> objective'. (chờ Hỏi-1)"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.vk7_dau_ngan
+    expected: "exit 0; -t vk7-dau-ngan: dựng KrSheet trong RecordSheetHost thật (trpc giả trả canhKr và objective parse bằng schema thật, M có bốn KR position 0..3); KR thứ 2: liên kết tên M có href mở record objective:M; chữ đếm === '2/4'; hai nút aria-label msg.krTruoc, msg.krKe; nút msg.capNhat có data-variant primary. Ma trận quyền viết trước (số ô === 3): canEditKr chứa K và hienTaiQuaCapNhat → có nút; không chứa → không nút; hienTaiQuaCapNhat false → không nút. Mục tiêu một KR → không đếm, không ‹ ›."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.vk7_than_ngan
+    expected: "exit 0; -t vk7-than-ngan: thứ tự các mục trong thân ngăn (đọc data-muc-ngan theo DOM) toEqual [so, tien-do, lich-su, viec-bang-chung, so-nguon, chi-tiet]; StatCard Hiện tại chứa giá trị và đích của K; Progress có data-expected; TargetLineChart có [data-muc=dich] và số điểm === số lần cập nhật của dữ liệu lịch sử giả (rút từ cùng hàm đọc mà tab Diễn biến dùng); danh sách lịch sử mới nhất trước; hai tab Việc và Bằng chứng của ngăn hôm nay vẫn chuyển được. (vế so-nguon chờ Hỏi-1)"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, apps/app/components/crm/record-sheet/so-kr-sheet.tsx, apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vk7_kr_ke
+    expected: "exit 0; -t vk7-kr-ke: chồng ngăn bắt đầu [objective:M, kr:K2]; bấm msg.krKe → chồng toEqual [objective:M, kr:K3] (đọc qua useRecordStack thật), độ dài chồng không đổi, đếm '3/4', document.activeElement là nút KR kế; đếm số lần RecordSheetHost mount bằng spy trên chính thành phần === 1 suốt bài (in 'host bi go'); K4: nút KR kế disabled; K1: nút KR trước disabled. Ma trận viết trước bốn vị trí × hai nút (số assert === 8). Đối chứng đỏ ghim: bản sao dùng open thay thayDinh → độ dài chồng tăng, in 'chong ngan doi do dai'. (chờ Hỏi-2)"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.vk7_cap_nhat_ngan
+    expected: "exit 0; -t vk7-cap-nhat-ngan: bấm msg.capNhat ở đầu ngăn → [data-hop-cap-nhat-kr] có mặt và document.activeElement là ô giá trị; nhập giá trị, chọn tự tin, bấm [data-nut=gui-cap-nhat-kr] → mutation giả guiCapNhat nhận đúng một item keyResultId K; trpc giả trả dữ liệu cũ ở lần gọi đầu và dữ liệu mới ở mọi lần gọi sau mutation, bài KHÔNG tự gọi invalidate hay setQueryData: số lần gọi lại canhKr và truy vấn lịch sử sau gửi ≥ 1 mỗi truy vấn (in 'khong lam moi: <truy vấn>'); hộp vắng, chồng vẫn [objective:M, kr:K], StatCard Hiện tại hiện giá trị mới, số dòng lịch sử và số điểm đồ thị tăng 1. Đối chứng dương: trước khi gửi giá trị cũ hiện. Đối chứng đỏ ghim: bản sao bỏ làm mới truy vấn lịch sử → in 'khong lam moi: lich-su'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx", apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.vk7_tren_dong
+    expected: "exit 0; -t vk7-tren-dong: dựng bảng KR trang đơn vị thật với M bốn KR, canEditKr chứa K1, K3: đúng hai nút msg.capNhat hiện sẵn, mỗi nút trong dòng của K1, K3 (không nằm trong menu — không có tổ tiên role=menu); bấm nút dòng K3 → hộp cập nhật của K3 (tiêu đề chứa tên K3). Kèm ngăn M: menu «…» của dòng K1 còn [data-muc=cap-nhat-kr], bấm nó mở cùng [data-hop-cap-nhat-kr]. Ma trận viết trước bốn dòng (số assert dòng === 4)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vk7_ghi_that
+    expected: "exit 0; apps/api/test/ngan-kr-mot-cho.spec.ts -t vk7-ghi-that (CSDL kiểm thật): bộ mẫu nạp bằng writer thật; người phụ trách gọi okr.moCapNhat({entry: 'sheet'}) rồi okr.guiCapNhat với một item dựng bằng CHÍNH hàm dựng payload mà hộp cập nhật dùng (xuất từ hop-thoai-cap-nhat-kr.tsx hay cap-nhat-tuan.tsx, không viết tay) từ (K, giá trị, mức tự tin); đọc lại bằng okr.canhKr và lịch sử: giá trị hiện tại === giá trị gửi, có đúng một lần cập nhật mới cho K mang mức tự tin ấy (đếm trước/sau, in 'so lan cap nhat: <trước>-><sau>'); gọi với confidence vắng → lỗi parse, không ghi (đếm không đổi). Đối chứng dương: K có lịch sử trước bài."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-cap-nhat.service.ts, packages/validation/src/okr-cap-nhat.ts, apps/api/test/ngan-kr-mot-cho.spec.ts]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.vk7_ba_bam
+    expected: "exit 0; -t vk7-ba-bam: user-event thật đếm mọi pointer click trên trang đơn vị dựng thật (bộ đếm gắn ở document, capture): bấm nút Cập nhật trên dòng K (1), gõ giá trị bằng keyboard vào phần tử đang có tiêu điểm (không click), bấm một mức tự tin (2), bấm Gửi (3) → guiCapNhat giả nhận đúng một item toEqual {keyResultId: K, value: giá trị gõ, confidence: mức vừa bấm, note: ''} (keyResultId rút từ dòng đã bấm, không từ dòng kế; in 'lech tu tin', 'lech kr'); ma trận viết trước theo kiểu KR (tăng tới, giảm tới, mốc — số ô === 3), mỗi ô in 'so bam: <kiểu> <n>': tăng tới và giảm tới n === 3; mốc n === 4 (Xong là một bấm) — chờ Hỏi-3. Đối chứng đỏ ghim: bản sao bấm mức khác mức ghi trong bài → in 'lech tu tin'. Chiều đỏ ghim: bản sao bỏ tự tiêu điểm ô giá trị → gõ không vào ô, bài in 'o gia tri khong co tieu diem'. Chưa chọn tự tin mà bấm Gửi → guiCapNhat không được gọi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.vk7_xem_truoc
+    expected: "exit 0; -t vk7-xem-truoc: hộp của KR số (khoi 0, dich 100, lịch sử 3 điểm): gõ 40 → đồ thị có 3 điểm lịch sử + 1 điểm [data-diem-moi] mang giá trị 40, [data-muc=dich] có mặt; dòng tiến độ mới === kết quả tienDoKr(kieu, 0, 100, 40) gọi từ packages/validation thật (không chép số); gõ 60 → điểm và dòng đổi; gõ 'abc' → không [data-diem-moi], có lỗi msg.loiSo. Ma trận viết trước ba kiểu KR (tăng tới, giảm tới, mốc — số ô === 3): mốc → chữ Xong / Chưa xong, không TargetLineChart. Đối chứng đỏ: bản sao bỏ điểm mới → in 'thieu diem moi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx", "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx", apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.vk7_hep
+    expected: "exit 0; -t vk7-hep: matchMedia giả dưới md: ngăn KR dựng trong Drawer (data-slot drawer-content), đầu ngăn có đếm, ‹ ›, nút Cập nhật như trên md; trang đơn vị dạng danh sách có nút Cập nhật trên dòng K. Đối chứng dương: trên md cùng dữ liệu là Sheet."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", apps/app/test/ngan-kr-mot-cho.dom.tsx]
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.vk7_trang_thai
+    expected: "exit 0; -t vk7-trang-thai: ma trận bốn trạng thái viết trước (số ô === 4): đang chạy → khung xương aria-busy; lỗi thường → VungTaiLoi tiêu đề msg.loiTai, thử lại gọi refetch đúng một lần; NOT_FOUND → msg.khongThay; KR đã bỏ (hay chu kỳ khép) → ngăn dựng, không nút Cập nhật ở đầu ngăn và trên dòng. Chữ: mọi khoá mới (rút từ object vi của tệp chữ) có ở en và khác nhau; tên KR, mục tiêu, người trong phần tử translate=no; nút ‹ › và Cập nhật có class chứa focus-visible. Kèm messages-guard.spec.ts thoát 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/kr-sheet.tsx, apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-canh-kr.ts, apps/app/test/ngan-kr-mot-cho.dom.tsx, apps/app/test/messages-guard.spec.ts]
+
+  - id: E12
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vk7_man
+    steps:
+      - "Cảnh trước màn đầu: phiên đo riêng (do:man / tien-de.mjs, luật 8), bộ OKR mẫu nạp bằng okr:mau; người xem là người phụ trách một KR K của mục tiêu M có bốn KR; K, M và giá trị cũ rút từ hằng của writer bộ mẫu, không từ API"
+      - "Ở 1440×1000 trên trang đơn vị: bộ đếm click gắn ở document; bấm Cập nhật trên dòng K, gõ giá trị, chọn mức tự tin, bấm Gửi; đọc lại từ API lần cập nhật mới nhất của K: giá trị === giá trị gõ và mức tự tin === mức đã bấm; số click === 3; chụp ảnh hộp có điểm mới trước khi gửi"
+      - "Mở ngăn KR từ dòng K: đường dẫn có record=kr:<K>; chụp. Bấm Cập nhật ở đầu ngăn, gửi; ngăn vẫn mở, Hiện tại đổi, số dòng lịch sử trong ngăn tăng 1; chụp. Bấm KR kế: đường dẫn đổi sang KR kế, ngăn M vẫn ở dưới; chụp"
+      - "Mở sơ đồ quanh mục tiêu M, bấm thẻ K: record=kr:<K>; mở Của tôi, bấm khối KR của K: record=kr:<K>; chụp mỗi lối"
+      - "Ở 390×844: lặp đường trên dòng; ngăn là Drawer; không cuộn ngang ở cấp trang (đối chứng đỏ: chèn khối rộng vào body bản sao); chụp"
+    expected: "exit 0; ≥ 8 ảnh trong _acceptance/ngan-kr-mot-cho/evidence/; mỗi kiểm in 'DUNG'; console không lỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, _acceptance/ngan-kr-mot-cho/rang/man.mjs]
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.vk7_giu_ho_so
+    expected: "exit 0; script liệt mọi hồ sơ đã ký có eval test/script không khai status: not-run mà paths khớp một tệp vòng này sửa (diff so với merge-base onehub), chạy lại đúng lệnh của từng eval và so mã với expected_exit (mặc định 0). In 'GIU <hồ sơ>/<eval>' hoặc 'DO <hồ sơ>/<eval>: <mã>'. Với mỗi eval khai nghỉ: bảng ánh xạ viết trước _acceptance/ngan-kr-mot-cho/rang/anh-xa-nghi.json (eval cũ → eval của hồ sơ này đo cùng hành vi); số dòng ánh xạ === số eval nghỉ, thiếu thì in 'MAT THUOC <hồ sơ>/<eval>'. Đối chứng dương: danh sách khớp có cap-nhat-tuan-okr E18, no-sau-luot-4-okr E8, canh-kr-okr E13 và cả hai in GIU khi vòng giữ mục «…». Máy không tự sửa thước hồ sơ đã ký (luật tạm 18/10) trừ khi Hỏi-1 cho."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, _acceptance/ngan-kr-mot-cho/rang/giu-ho-so.mjs]
