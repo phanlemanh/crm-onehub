@@ -1,0 +1,80 @@
+slug: kara-khong-ghi-de-truong
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kgd_co_nguoi_dat
+    expected: "exit 0; -t kgd-co-nguoi-dat của apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts. Fixture: liên hệ C qua db.contact.create, trường F (TEXT, agentFilled true) qua db.fieldDefinition.create; giá trị «Người gõ» ghi qua writeValues của @crm/db/fields trong db.$transaction (cùng hàm FieldsService.applyValues). Đối chứng dương trước: F đọc lại khác «Người gõ» thì ném 'kgd: fixture nguoi go'. Ctx phiên có người: auth.current = {...(await thanhVienPrincipal(<thành viên thử>, 'crm-app')), attributes {purpose research}} — writer thật của channels/eve.ts, thành viên thử tạo qua db.user.create + db.member.create của WORKSPACE_ID; isAutomated(ctx.session) khác false thì ném 'kgd: ctx co nguoi la nen'. Gọi setFieldValue.execute trong trongNguCanhEve với ctx đó, {entity CONTACT, recordId C, key F, value 'Kara thấy'}. Kết quả written khác false thì ném 'kgd: co nguoi ghi de'; reason không chứa 'Người gõ' thì ném 'kgd: ly do thieu gia tri'; reason không chứa 'replace' thì ném 'kgd: ly do thieu cach thay'; reason không chứa 'only if the rep asked you to in this conversation' thì ném 'kgd: ly do thieu dieu kien'; F đọc lại khác «Người gõ» thì ném 'kgd: co nguoi mat gia tri'. Chiều đỏ trong lịch sử: trên commit bài kiểm (trước sửa) ném 'kgd: co nguoi ghi de'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/fields.ts, apps/agent/agent/tools/set_field_value.ts, apps/agent/agent/lib/approval.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kgd_co_nguoi_xoa
+    expected: "exit 0; -t kgd-co-nguoi-xoa của cùng tệp. Ctx phiên có người dựng như E1 (thanhVienPrincipal, isAutomated khác false thì ném 'kgd: ctx co nguoi la nen'). Fixture như E1 trên liên hệ riêng. Gọi setFieldValue.execute ở phiên có người với value null, không replace. written khác false thì ném 'kgd: co nguoi xoa duoc'; db.fieldValue.findFirst({fieldId F, contactId}) null thì ném 'kgd: hang bi xoa'; text khác «Người gõ» thì ném 'kgd: xoa doi gia tri'. Chiều đỏ trong lịch sử: trên commit bài kiểm ném 'kgd: co nguoi xoa duoc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/fields.ts, apps/agent/agent/tools/set_field_value.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kgd_co_nguoi_thay
+    expected: "exit 0; -t kgd-co-nguoi-thay của cùng tệp. Fixture như E1 trên liên hệ riêng, ctx phiên có người dựng như E1 (thanhVienPrincipal, kèm khẳng định 'kgd: ctx co nguoi la nen'). Phiên có người, value 'Kara thấy', replace true: written khác true thì ném 'kgd: thay bi chan'; F đọc lại khác «Kara thấy» thì ném 'kgd: thay khong ghi'. Gọi tiếp value null, replace true: written khác true thì ném 'kgd: xoa co co bi chan'; còn hàng FieldValue của F trên liên hệ thì ném 'kgd: xoa co co khong xoa'. Đây là đối chứng dương của E1, E2: chứng cờ mở đúng đường, không phải mọi lần ghi lên ô có giá trị đều chết. Không có chiều đỏ trong lịch sử (trước sửa cờ bị bỏ qua và lần ghi vẫn đi qua); chiều đỏ là đột biến tay lúc dựng: bỏ nhánh replace trong writeField thì ném 'kgd: thay bi chan', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/fields.ts, apps/agent/agent/tools/set_field_value.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kgd_nen
+    expected: "exit 0; -t kgd-nen của cùng tệp. Fixture như E1 trên liên hệ riêng. Ctx phiên nền dựng bằng taskAuth của apps/agent/agent/lib/dispatch.ts (writer thật, không tự dựng auth) cho hai tác vụ giả cùng contactId: kind 'field-backfill' (payload {keys: [F]}) và kind 'profile'. Đối chứng: isAutomated của mỗi ctx khác true thì ném 'kgd: ctx nen khong phai nen <kind>'. Ô thứ ba là lượt Tác nhân: ctx chép khuôn auth của runDeployedAgent (lib/custom-agent-dispatch.ts) — authenticator 'crm-user', principalType 'user', attributes purpose 'team-agent' (khuôn viết liền trong hàm, không có writer xuất ra để round-trip; đây là giới hạn đã khai). Ma trận sáu ô viết sẵn {field-backfill, profile, team-agent × replace có/không}: mỗi ô gọi setFieldValue.execute với value 'Kara thấy'; written khác false thì ném 'kgd: nen ghi de <kind> <replace>'. Sau ma trận F khác «Người gõ» thì ném 'kgd: nen mat gia tri'; số ô đã gọi khác 6 thì ném 'kgd: nen thieu o <n>'. Chiều đỏ trong lịch sử: trên commit bài kiểm ném 'kgd: nen ghi de profile khong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/fields.ts, apps/agent/agent/tools/set_field_value.ts, apps/agent/agent/lib/approval.ts, apps/agent/agent/lib/dispatch.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kgd_o_trong
+    expected: "exit 0; -t kgd-o-trong của cùng tệp. Ctx phiên có người dựng như E1 (thanhVienPrincipal, isAutomated khác false thì ném 'kgd: ctx co nguoi la nen'). Hai liên hệ trống C1, C2. Phiên có người không replace ghi 'A' lên F của C1: written khác true hay đọc lại khác 'A' thì ném 'kgd: o trong co nguoi khong ghi'. Phiên nền taskAuth kind 'profile' ghi 'B' lên F của C2: written khác true hay đọc lại khác 'B' thì ném 'kgd: o trong nen khong ghi'. Liên hệ trống C3, phiên có người value null: written khác true thì ném 'kgd: xoa o trong bi chan'; có hàng FieldValue của F trên C3 thì ném 'kgd: xoa o trong tao hang'. Đối chứng dương của E1, E4: chặn chỉ áp lên ô có giá trị. Không có chiều đỏ trong lịch sử (hành vi giữ nguyên); chiều đỏ là đột biến tay lúc dựng: cho writeField từ chối mọi lần ghi thì ném 'kgd: o trong co nguoi khong ghi', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/fields.ts, apps/agent/agent/tools/set_field_value.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kgd_dong_thoi
+    expected: "exit 0; -t kgd-dong-thoi của cùng tệp. Liên hệ trống C4. Hai lần setFieldValue.execute ở phiên nền taskAuth kind 'profile', giá trị 'X' và 'Y', chạy bằng Promise.all, mỗi lần trong trongNguCanhEve riêng. Số kết quả written true khác 1 thì ném 'kgd: dong thoi <so lan ghi>'; F đọc lại khác giá trị của lần written true thì ném 'kgd: dong thoi lech gia tri'. Lặp ba vòng trên ba liên hệ mới để chặn xanh may (mỗi vòng đúng một lần ghi). Chiều đỏ trong lịch sử: trên commit bài kiểm (khoá chỉ ở field-backfill) ném 'kgd: dong thoi 2'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/fields.ts, packages/db/src/idempotency.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kgd_chi_tay
+    expected: "exit 0; -t kgd-chi-tay của cùng tệp. Ctx phiên có người dựng như E1 (thanhVienPrincipal, isAutomated khác false thì ném 'kgd: ctx co nguoi la nen'). Trường M (TEXT, agentFilled false), liên hệ trống C5. Phiên có người, value 'Kara thấy', replace true: written khác false thì ném 'kgd: chi tay ghi duoc'; reason không chứa 'manual only' thì ném 'kgd: chi tay sai ly do'; có hàng FieldValue của M trên C5 thì ném 'kgd: chi tay tao hang'. Hồi quy: cờ replace không mở được trường người đã tắt cho Kara. Không có chiều đỏ trong lịch sử; chiều đỏ là đột biến tay: đưa kiểm replace lên trước kiểm agentFilled thì ném 'kgd: chi tay ghi duoc', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/fields.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kgd_mo_ta
+    expected: "exit 0; -t kgd-mo-ta của cùng tệp. Đọc đúng lời Kara nhận lúc chạy: setFieldValue.description và mô tả của khoá replace lấy từ setFieldValue.inputSchema (zod .shape.replace.description). description không chứa 'already has a value' thì ném 'kgd: mo ta thieu luat o co gia tri'; mô tả replace không chứa 'only if the rep asked you to in this conversation' thì ném 'kgd: mo ta replace thieu dieu kien'; inputSchema.safeParse với replace true thất bại thì ném 'kgd: schema khong nhan replace'; safeParse không có replace mà thất bại thì ném 'kgd: replace bat buoc'. Chốt máy cho phần lời-nói-với-model của AC-8; phần docs/agent.md và câu (5) vẫn do E8. Chiều đỏ trong lịch sử: trên commit bài kiểm ném 'kgd: mo ta thieu luat o co gia tri'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/tools/set_field_value.ts, apps/agent/test/kara-khong-ghi-de-truong.integration.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: judgment
+    question: "Đọc apps/agent/agent/tools/set_field_value.ts, apps/agent/agent/lib/fields.ts và docs/agent.md. (1) description của công cụ có nói rằng ô đã có giá trị thì công cụ không ghi? (2) mô tả của khoá replace trong inputSchema có nói chỉ đặt true khi người bán hàng đã bảo thay giá trị đó trong chính hội thoại này? (3) execute có truyền vào writeField một giá trị tính bằng isAutomated(ctx.session), chứ không lấy từ đầu vào của model? (4) docs/agent.md có một mục nói luật không ghi đè của trường tuỳ chỉnh: phiên nền không bao giờ thay ô đã có giá trị, phiên có người chỉ thay khi có replace: true, và phiên nền xác định bằng isAutomated? (5) Có chỗ nào trong ba tệp — kể cả các câu lý do từ chối mà writeField trả về — mời Kara đặt replace: true khi chưa có lời bảo của người, hoặc bảo Kara gọi lại với replace: true mà không kèm điều kiện người đã bảo thay? PASS khi (1)–(4) có và (5) không."
+    inputs: [apps/agent/agent/tools/set_field_value.ts, apps/agent/agent/lib/fields.ts, docs/agent.md]
+    evidence_required: [verdict, rationale, verified_at]
