@@ -6,9 +6,13 @@ import {
 	setSystemTime,
 	test,
 } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { boDoanMa, dongLoiTenCu, soatTenCu } from "@crm/validation/ten-cu-okr";
 import type { docOkr as docOkrTheoQuyen } from "../agent/lib/hoi-doc";
+import { LOI_DAN_SOAN } from "../agent/lib/loi-dan-soan";
 import type { NguCanhPhien } from "../agent/lib/phien";
 import docOkr from "../agent/tools/doc_okr";
 import { boMau } from "./support/bo-mau";
@@ -98,4 +102,54 @@ describe("cmst-goc-hoi", () => {
 			).toEqual([]);
 		});
 	}
+});
+
+const CAU_DAN =
+	"Never write `căn chỉnh` or `hỏi ý` to the person: the screen says «Góp vào» and «Lấy ý kiến».";
+const LOI_DAN = [
+	{
+		tep: "apps/agent-okr/agent/lib/loi-dan-soan.ts",
+		van: LOI_DAN_SOAN,
+		tenMa: ["ungVienCanChinh"],
+	},
+	{
+		tep: "apps/agent/agent/subagents/tro_ly_okr/instructions.md",
+		van: readFileSync(
+			join(
+				import.meta.dir,
+				"../../agent/agent/subagents/tro_ly_okr/instructions.md",
+			),
+			"utf8",
+		),
+		tenMa: ["dichCanChinh", "can-chinh"],
+	},
+] as const;
+
+describe("cmst-loi-dan", () => {
+	for (const ld of LOI_DAN) {
+		test(`loi dan ${ld.tep} dung ten moi`, () => {
+			const loi = soatTenCu([
+				{ nguon: ld.tep, khoa: "van", chu: boDoanMa(ld.van) },
+			]).map(dongLoiTenCu);
+			const dongChu = ld.van
+				.split("\n")
+				.find((d) => d.includes("Use these words"));
+			if (!dongChu?.includes("Góp vào"))
+				loi.push(`cmst: loi dan ${ld.tep} thieu Gop vao`);
+			if (!ld.van.includes(CAU_DAN))
+				loi.push(`cmst: loi dan ${ld.tep} thieu cau dan`);
+			for (const ma of ld.tenMa)
+				if (!ld.van.includes(`\`${ma}\``))
+					loi.push(`cmst: loi dan mat ten ma ${ma}`);
+			expect(loi).toEqual([]);
+		});
+	}
+
+	test("doi chung: cau dan viet chu cu ngoai dau ma bi bat", () => {
+		const ngoai = CAU_DAN.replaceAll("`", "«");
+		const soat = (chu: string) =>
+			soatTenCu([{ nguon: "gia", khoa: "cau", chu: boDoanMa(chu) }]);
+		expect(soat(ngoai).length).toBe(2);
+		expect(soat(CAU_DAN)).toEqual([]);
+	});
 });
