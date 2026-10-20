@@ -90,6 +90,7 @@ mock.module("@/lib/trpc/client", () => ({
 				return { ok: true };
 			}),
 			tatCa: truyVan("tinHieu.tatCa", () => ({ rows: [] })),
+			daLuuTru: truyVan("tinHieu.daLuuTru", () => ({ rows: [] })),
 			cuaToi: {
 				...truyVan("tinHieu.cuaToi", () => ({ rows: hangCuaToi })),
 				queryKey: () => {
