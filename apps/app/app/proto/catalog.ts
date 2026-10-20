@@ -11,6 +11,38 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "ngan-kr-mot-cho",
+		ten: "Ngăn KR một chỗ — Cập nhật ở đầu ngăn và trên dòng, sang KR kế",
+		states: [
+			{
+				id: "ST-nkr-dong",
+				nhan: "Trang đơn vị — nút Cập nhật trên mỗi dòng KR",
+			},
+			{ id: "ST-nkr-ngan", nhan: "Ngăn KR — KR 2/4, có Cập nhật" },
+			{ id: "ST-nkr-ngan-dau", nhan: "Ngăn KR — KR đầu, nút KR trước tắt" },
+			{
+				id: "ST-nkr-ngan-chi-doc",
+				nhan: "Ngăn KR — chỉ đọc, không nút Cập nhật",
+			},
+			{
+				id: "ST-nkr-hop",
+				nhan: "Hộp cập nhật — đã gõ 78, điểm mới trên đồ thị",
+			},
+			{ id: "ST-nkr-hop-moc", nhan: "Hộp cập nhật — KR mốc" },
+			{ id: "ST-nkr-hop-sai", nhan: "Hộp cập nhật — giá trị sai" },
+			{
+				id: "ST-nkr-hop-tu-ngan",
+				nhan: "Cảnh ngữ cảnh — hộp mở từ ngăn KR trên trang đơn vị",
+			},
+			{ id: "ST-nkr-dang-tai", nhan: "Ngăn KR — đang tải" },
+			{ id: "ST-nkr-loi", nhan: "Ngăn KR — lỗi" },
+			{
+				id: "ST-nkr-khong-thay",
+				nhan: "Ngăn KR — không thấy hay không có quyền",
+			},
+		],
+	},
+	{
 		slug: "trang-don-vi-mot-bang",
 		ten: "Trang đơn vị một bảng — ô chọn đơn vị ở chỗ ô tìm kiếm, mục tiêu mở ra KR, một hàng công cụ đứng yên",
 		states: [
