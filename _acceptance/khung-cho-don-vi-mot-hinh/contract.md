@@ -5,7 +5,7 @@ slug: khung-cho-don-vi-mot-hinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-20T09:56:59Z
 design_doc: docs/superpowers/specs/2026-10-20-khung-cho-don-vi-mot-hinh-design.md
@@ -84,3 +84,14 @@ Quét bằng skill morphological-scan, preset test-matrix — bản đầy đủ
   `ST-donvi-dangtai`); vòng này chuyển hình đó vào `packages/ui`, không vẽ hình mới.
 - Chạm `apps/app/app/(app)/[slug]/okr/theo-don-vi/**` và `packages/ui/src/components/khung-xuong.tsx`: các hồ sơ đã ký
   canh hai chỗ này sẽ được giữ tươi ở bước ghim lại trước khi gộp.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-21:
+  - Ngoài-1: trên CI (clone nông), ca chiều đỏ tep-goc-da-doi của bài khung-man-chung thoát sớm nên không kiểm gì; máy đầy đủ vẫn kiểm.
+  - Ngoài-2: cùng gốc với Ngoài-1 — trên CI, đường dời tệp của trang Theo đơn vị chỉ còn khẳng định âm, không có đối chứng dương.
+  - Ngoài-6: vế «không cây đơn vị» và «không vòng quay» của AC-1 chưa có đột biến nào chứng chiều đỏ trên trình duyệt.
+  - Ngoài-7: bài a11y dùng một nút giả mang data-chon-don-vi thay cho ô chọn đơn vị thật khi kiểm tiêu điểm.
+  - Ngoài-8: bài quét vẽ tay chỉ bắt câu nhập mang tên Skeleton, chưa bắt nhập kiểu namespace hay tên khác.
+  - Ngoài-9: lớp bố cục hàng công cụ được chép ở cả packages/ui và trang Theo đơn vị; sửa một bên mà quên bên kia thì khung lệch.
+  - Ngoài-12: thước màn có thể báo đạt khi chỉ bắt được mẫu khung lạ, không có mẫu bang-hai-dong nào (r1).
+  - Ngoài-13: hai chiều đỏ khai cho E2 không ghim thông điệp AC-2.
+  - Ngoài-14: như Ngoài-7, ghi ở lượt chấm 1.
+  - Ngoài-15: như Ngoài-8, kèm việc nhánh «nhập Skeleton» chưa có ca phá thử riêng.
