@@ -1,45 +1,4 @@
 {
-  "feature_plain": "Trưởng đơn vị bấm vào một KR ở đâu cũng mở cùng một ngăn KR, cập nhật KR trong 3 bấm ngay từ trang đơn vị, thấy trước điểm mới nằm đâu so với đích, và sang KR kế mà không phải đóng ngăn.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ mở cùng một ngăn KR dù bấm KR ở trang đơn vị, trong bảng KR của mục tiêu, trên sơ đồ, ở Tổng quan, Của tôi hay họp tuần — không còn ngăn số riêng hay tab Diễn biến cho một KR."},
-    {"id": "AC-2", "p": "Sẽ cho đầu ngăn KR có tên mục tiêu (bấm được), tên KR, vị trí «2/4», hai nút sang KR trước và KR kế, và nút Cập nhật khi người xem được cập nhật KR ấy."},
-    {"id": "AC-3", "p": "Sẽ gom trong thân ngăn: số hiện tại so với đích, tiến độ so với kỳ vọng, lịch sử cập nhật có đồ thị, việc và bằng chứng, số và nguồn, chi tiết."},
-    {"id": "AC-4", "p": "Sẽ cho nút KR kế, KR trước đổi sang KR khác của cùng mục tiêu mà ngăn không đóng; KR đầu và KR cuối thì nút tương ứng tắt."},
-    {"id": "AC-5", "p": "Sẽ cho nút Cập nhật ở đầu ngăn mở hộp cập nhật; gửi xong ngăn vẫn mở và số, lịch sử, đồ thị hiện giá trị mới ngay."},
-    {"id": "AC-6", "p": "Sẽ hiện sẵn nút Cập nhật trên mỗi dòng KR ở trang đơn vị cho người được cập nhật, và vẫn giữ mục «…» → Cập nhật."},
-    {"id": "AC-7", "p": "Sẽ cho cập nhật một KR số từ trang đơn vị trong đúng 3 bấm (Cập nhật · mức tự tin · Gửi), ghi thật vào hệ thống; KR mốc 4 bấm; mức tự tin vẫn bắt buộc."},
-    {"id": "AC-8", "p": "Sẽ cho hộp cập nhật vẽ trước điểm mới cạnh lịch sử và đường đích, kèm tiến độ mới, đổi theo từng lần gõ; KR mốc hiện Xong hay Chưa xong."},
-    {"id": "AC-9", "p": "Sẽ cho trên điện thoại ngăn KR thành ngăn kéo từ dưới lên với cùng các nút, và nút Cập nhật vẫn có trên mỗi dòng của danh sách."},
-    {"id": "AC-10", "p": "Sẽ cho ngăn KR có khung chờ tải, báo lỗi có thử lại, câu «không tìm thấy hay không có quyền», và ẩn nút Cập nhật khi KR đã bỏ hay chu kỳ đã khép."},
-    {"id": "AC-11", "p": "Sẽ chứng minh trên màn thật ở 1440 và 390: đếm đủ 3 bấm tới lần cập nhật đã ghi, mọi lối mở cùng một ngăn, và các hồ sơ đã ký liên quan vẫn đạt hoặc được chuyển thước đúng khuôn."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "Sẽ KHÔNG đổi phần lõi giữ chồng ngăn bản ghi mà VS8 vừa ký."},
-    {"id": "OOS-2", "p": "Sẽ KHÔNG đổi cách máy chủ ghi một lần cập nhật, và không đụng màn cập nhật tuần hàng loạt."},
-    {"id": "OOS-3", "p": "Sẽ KHÔNG dựng trang bộ OKR (VK3) hay vỏ khu (VK2); tab Diễn biến của ngăn mục tiêu giữ nguyên cho người xem cả mục tiêu."},
-    {"id": "OOS-4", "p": "Sẽ KHÔNG đổi đường dẫn KR trong tin nhắc buổi sáng và thông báo."}
-  ],
-  "scope_plain": "Những phần bỏ ngoài vòng này để không đụng việc của hàng khác và phần đã ký:",
-  "coverage_plain": [
-    {"i": 0, "p": "Lối vào KR: mọi chỗ người dùng bấm vào một KR hôm nay, cộng nút KR kế trong ngăn (AC-1 mọi lối một ngăn)."},
-    {"i": 1, "p": "Bằng chứng đủ: danh sách lối khảo sát từ mã ngày 20/10, đúng câu «bấm bốn chỗ ra bốn nơi» của hàng lộ trình."},
-    {"i": 2, "p": "Người xem và kiểu KR: được cập nhật hay chỉ đọc, KR số hay KR mốc, KR đã bỏ hay chu kỳ đã khép (AC-2, AC-7, AC-10)."},
-    {"i": 3, "p": "Bằng chứng đủ: cùng điều kiện quyền mà mục «…» Cập nhật dùng hôm nay, và cách tính tiến độ theo kiểu KR."},
-    {"i": 4, "p": "Vị trí KR trong mục tiêu: đầu, giữa, cuối, hay mục tiêu chỉ một KR (AC-2, AC-4)."},
-    {"i": 5, "p": "Bằng chứng đủ: thứ tự KR lưu sẵn trong mục tiêu."},
-    {"i": 6, "p": "Trạng thái của hộp và ngăn: đang tải, lỗi, không thấy, số hợp lệ, số sai, chưa chọn tự tin, gửi hỏng (AC-8, AC-10)."},
-    {"i": 7, "p": "Bằng chứng đủ: nếp chờ tải và lỗi tải của kho, và hộp cập nhật đang chạy hôm nay."},
-    {"i": 8, "p": "Áp mọi ô: máy tính và điện thoại, hai thứ tiếng, tên người và KR không bị trình duyệt dịch, bàn phím, chồng ngăn đã ký, hồ sơ đã ký."},
-    {"i": 9, "p": "Mười một ô lõi khớp mười một tiêu chí AC-1 tới AC-11."},
-    {"i": 10, "p": "Đối chiếu ngoài: Tability có một ngăn KR, nút cập nhật ở đầu và nút sang KR kế."},
-    {"i": 11, "p": "Để sau: nút KR kế đi qua cả bộ OKR, cập nhật hàng loạt trong ngăn, đường dẫn KR từ tin nhắc."},
-    {"i": 12, "p": "Không làm: sửa số ngay trong thân ngăn (thành hai nơi cập nhật), bỏ bắt buộc mức tự tin."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Phép đo «3 bấm» và phép đo ghi thật chưa nối với nhau: chưa kiểm lần gửi mang đúng KR, đúng số và đúng mức tự tin người vừa chọn — đã sửa: so trọn lần gửi, dựng đầu vào bằng chính hàm của hộp, đọc lại cả mức tự tin trên màn thật."},
-    {"i": 1, "p": "Ngưỡng 3 bấm chỉ đo trên KR số, KR mốc thật ra cần 4 bấm — đã sửa: đo cả ba kiểu KR, và chủ kho đã chọn 3 bấm cho KR số, 4 bấm cho KR mốc."},
-    {"i": 2, "p": "Phép đo «gửi xong ngăn hiện số mới» tự nạp lại dữ liệu nên không bắt được ngăn quên làm mới lịch sử — đã sửa: bài không tự nạp, đếm số lần ngăn tự hỏi lại, có ca đỏ khi bỏ làm mới."},
-    {"i": 3, "p": "Ngưỡng ký «từ trang bộ OKR» mà đo trên trang đơn vị hôm nay, chưa ghi lý do — đã sửa: chủ kho chọn đo trên trang đơn vị, ràng buộc nút trên dòng chuyển cho VK3."},
-    {"i": 4, "p": "«Mọi lối» dựa trên bảy lối kê tay, lượt quét chỉ tìm một kiểu gọi — đã sửa: quét mọi chỗ mở ngăn cho một KR trong mã, số lối quét phải bằng số ô kiểm, có thư mục mồi làm đối chứng."}
-  ]
+  "feature_plain": "Trưởng đơn vị bấm vào một KR ở bất kỳ màn nào đều mở cùng một ngăn KR; cập nhật được ngay ở đầu ngăn hoặc trên dòng KR của trang đơn vị, thấy trước điểm mới nằm đâu so với đích, rồi sang KR kế mà không phải đóng ngăn.",
+  "scope_plain": "Vòng này không đụng tới phần khung chồng ngăn đã ký, không đổi đường ghi cập nhật ở máy chủ, không làm trang bộ OKR hay vỏ khu, và không đổi lối KR trong tin nhắc buổi sáng."
 }
