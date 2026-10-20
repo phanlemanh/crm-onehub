@@ -14,13 +14,15 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { okrHoiYMessages } from "@/lib/messages/okr-hoi-y";
 import { useTRPC } from "@/lib/trpc/client";
+import { useTenGoc } from "../ten-goc";
 import { type DoPhu, type HoiY, ngayCot } from "./man-hoi-y";
 
 type HangDoPhu = DoPhu["hang"][number];
 
 function NhanHang({ hang }: { hang: HangDoPhu }) {
 	const m = okrHoiYMessages(useLocale()).doPhu;
-	if (hang.loai === "goc") return m.goc;
+	const tenGoc = useTenGoc(m.goc);
+	if (hang.loai === "goc") return <span translate="no">{tenGoc}</span>;
 	if (hang.loai === "chua-xep") return m.chuaXep;
 	return <span translate="no">{hang.nhan}</span>;
 }

@@ -95,7 +95,7 @@ const vi = {
 	},
 	phamVi: {
 		nhan: "Phạm vi",
-		"toan-cong-ty": "Toàn công ty",
+		"toan-cong-ty": "Công ty",
 		"bo-phan": "Bộ phận",
 		"phong-ban": "Phòng ban",
 		nguoi: "Người",
@@ -282,7 +282,7 @@ const en: OkrSoMessages = {
 	},
 	phamVi: {
 		nhan: "Scope",
-		"toan-cong-ty": "Whole company",
+		"toan-cong-ty": "Company",
 		"bo-phan": "Division",
 		"phong-ban": "Department",
 		nguoi: "Person",
