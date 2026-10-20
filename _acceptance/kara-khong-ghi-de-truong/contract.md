@@ -5,7 +5,9 @@ slug: kara-khong-ghi-de-truong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: draft
+status: approved
+approved_by: manh
+approved_at: 2026-10-20T15:07:46Z
 design_doc: docs/superpowers/specs/2026-10-20-kara-khong-ghi-de-truong-design.md
 ---
 
