@@ -658,9 +658,15 @@ lệnh ghi ở `@crm/db/du-an-ghi` và `@crm/db/viec-ghi`; ngày làm việc ở
   việc nào; dự án đã đóng từ chối thêm việc, mốc, phụ thuộc và đổi ngày (400 «Dự án đã đóng.»), việc trong
   đó vẫn đổi trạng thái. Đưa việc ra khỏi dự án gỡ phụ thuộc (vết `go-phu-thuoc` trên cả hai việc) và việc
   chờ mốc; xoá việc gỡ chúng theo khoá ngoại.
+- **Trần 300 việc.** Chỉ chặn việc thêm vào dự án: `viec.create` có `duAnId`, `viec.taoCon` của việc trong dự
+  án, `viec.doiDuAn` chuyển vào. Lời kiểm `docDuAnNhanViec` khoá hàng `duAn` rồi đếm, nên hai người cùng thêm
+  việc thứ 300 thì người sau nhận 400 «Một dự án chứa tối đa 300 việc.». Mốc, phụ thuộc và đổi ngày dùng
+  `docDuAnMo`, chỉ chặn khi dự án đã đóng.
 - **Lịch làm việc.** Router `lichLamViec` (`PhamViDoiTacMiddleware`, như `duAn`): `get` (ai đọc được phạm vi đối tác), `datNgayNghiTuan`,
-  `themNgayLe`, `xoaNgayLe` (chủ, quản trị). `AppSetting.ngayNghiTuan` rỗng nghĩa là mặc định Thứ Bảy, Chủ
-  nhật. Đổi lịch không dời việc đã có; chỉ lần ghi sau tính theo lịch mới.
+  `themNgayLe`, `xoaNgayLe` (chủ, quản trị). Lịch chưa từng đặt nghỉ Thứ Bảy, Chủ nhật
+  (`LICH_LAM_VIEC.ngayNghiTuanMacDinh`). Quản trị bỏ chọn hết thì `datNgayNghiTuan([])` bật
+  `AppSetting.khongNghiTuan`: không nghỉ ngày nào trong tuần, ở mọi đường đọc (`docLichLam`); đặt lại một
+  thứ nghỉ bất kỳ thì cờ tắt. Đổi lịch không dời việc đã có; chỉ lần ghi sau tính theo lịch mới.
 - **Dữ liệu mẫu và thước.** `gieoDuAnMau` (`@crm/db/du-an-gieo`, gọi từ `bun run db:seed`) dựng một dự án
   qua đúng các hàm ghi trên. Thước `_acceptance/du-an-gantt/rang/do-nguong.mjs --tu --den` chỉ đọc.
 

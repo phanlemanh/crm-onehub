@@ -1,0 +1,132 @@
+slug: va-gantt-lich-bay-ngay
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vg_lich_api
+    expected: "exit 0; -t vg-lich-rong của apps/api/test/lich-bay-ngay.spec.ts, caller tRPC thật. Chủ vg-q gọi lichLamViec.datNgayNghiTuan({ngayNghiTuan: []}): status khác 200 thì ném 'vg: dat rong loi <json>'. Ba lần đọc lại liên tiếp lichLamViec.get: ngayNghiTuan khác [] ở lần nào thì ném 'vg: get rong thanh <json> lan <n>'. duAn.lich của một dự án P: lich.ngayNghiTuan khác [] thì ném 'vg: lich du an rong thanh <json>'. docLichLam(db) đọc thẳng: ngayNghiTuan khác [] thì ném 'vg: doc lich rong thanh <json>'. Đối chứng dương cùng fixture, trước khi đặt rỗng: chủ đặt [7] rồi get trả [7], không thì ném 'vg: doi chung dat bay hong'. Bước dọn sau bài (afterAll) trả hàng appSetting về đúng ngayNghiTuan và khongNghiTuan đã chụp trước bài, rồi đọc lại: khongNghiTuan khác giá trị đã chụp hoặc lichLamViec.get khác giá trị trước bài thì ném 'vg: don lich de lai co <json>'. Chiều đỏ ở E7 (a), (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/src/du-an.ts, packages/db/src/lich-lam-viec.ts, apps/api/src/lich-lam-viec/**, apps/api/src/du-an/**, apps/api/test/lich-bay-ngay.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vg_lich_db
+    expected: "exit 0; packages/db/test/lich-bay-ngay.spec.ts, kho của lượt bun run test. (1) Mặc định của cột mới đọc từ chính kho đã nâng: information_schema.columns của appSetting.khongNghiTuan khác kiểu boolean, NOT NULL, mặc định false thì ném 'vg: cot khong nghi sai <json>'. (2) Bảng ca viết sẵn năm dòng {hang, mang, khongNghi, ra}, mỗi dòng ghi hàng qua db.appSetting.upsert: không có hàng appSetting → [6, 7]; [] và false → [6, 7]; [7] và false → [7]; [3, 7] và false → [3, 7]; [] và true → []. docLichLam lệch dòng nào thì ném 'vg: doc lich <hang> ra <json> ky vong <ra>'; số dòng đã so khác 5 thì ném 'vg: bang doc thieu <n>'. (3) Dữ liệu cũ: ghi riêng cột ngayNghiTuan bằng [] rồi [3, 7] mà không chạm khongNghiTuan (như dữ liệu trước vòng này): docLichLam ra [6, 7] rồi [3, 7], không thì ném 'vg: du lieu cu doi <json>'. Bước dọn sau bài (afterAll) trả hàng appSetting về đúng ngayNghiTuan và khongNghiTuan đã chụp trước bài, rồi đọc lại: khongNghiTuan khác giá trị đã chụp hoặc docLichLam khác giá trị trước bài thì ném 'vg: don lich de lai co <json>'. Chiều đỏ ở E7 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/prisma/migrations/**, packages/db/src/du-an.ts, packages/db/src/lich-lam-viec.ts, packages/db/test/lich-bay-ngay.spec.ts]
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dg_lich
+    expected: "exit 0; bài đã ký của DA4 apps/api/test/lich-lam-viec.spec.ts chạy nguyên văn, không sửa, trong cùng lượt bun run test với bài mới của vòng: lichLamViec.get khi AppSetting trống trả khác [6, 7] thì ném 'llv: mac dinh sai <json>'; các lời còn lại như E15 của du-an-gantt. Đối chứng rằng dữ liệu cũ với ô trống vẫn đọc ra Thứ Bảy, Chủ nhật. Chiều đỏ ở E7 (g): bài mới bỏ bước dọn thì bài này đỏ đúng 'llv: mac dinh sai []'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/du-an.ts, apps/api/src/lich-lam-viec/**, apps/api/test/lich-lam-viec.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vg_lich_api
+    expected: "exit 0; -t vg-tu-doi-bay-ngay của apps/api/test/lich-bay-ngay.spec.ts. Lịch không nghỉ (datNgayNghiTuan([])), dự án P, việc A 2026-10-20→2026-10-21, việc B 2026-10-22→2026-10-23, phụ thuộc A→B qua duAn.phuThuoc.tao. A gọi viec.doiLich hạn 2026-10-23: B đọc lại khác {batDau 2026-10-24, han 2026-10-25} thì ném 'vg: tu doi bo cuoi tuan <json>'; danh sách daDoi không chứa B thì ném 'vg: tu doi khong bao B'. Đối chứng dương cùng fixture với lịch [6, 7]: B dời sang {2026-10-26, 2026-10-27}, không thì ném 'vg: doi chung lich T7 CN hong <json>'. Bước dọn sau bài (afterAll) trả hàng appSetting về đúng ngayNghiTuan và khongNghiTuan đã chụp trước bài, rồi đọc lại: khongNghiTuan khác giá trị đã chụp hoặc lichLamViec.get khác giá trị trước bài thì ném 'vg: don lich de lai co <json>'. Chiều đỏ ở E7 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/du-an.ts, packages/db/src/lich-lam-viec.ts, packages/db/src/lich-viec.ts, packages/db/src/viec-ghi.ts, apps/api/src/lich-lam-viec/**, apps/api/test/lich-bay-ngay.spec.ts]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.vg_gantt_ui
+    expected: "exit 0; packages/ui/test/gantt-bay-ngay.dom.tsx. Mount GanttDuAn với hai việc 2026-10-22→2026-10-27 và lich {ngayNghiTuan: [], ngayLe: []}: số phần tử [data-off-day] khác 0 thì ném 'vg gantt: to ngay nghi khi lich rong <n>'. Đối chứng dương cùng việc với lich {ngayNghiTuan: [6, 7], ngayLe: []}: số [data-off-day] trong khung 2026-10-24, 2026-10-25 bằng 0 thì ném 'vg gantt: doi chung T7 CN khong to'. Chiều đỏ ở E7 (d)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/ui/src/components/gantt-du-an.tsx, packages/ui/src/components/reui/gantt/**, packages/ui/test/gantt-bay-ngay.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vg_lich_api
+    expected: "exit 0; -t vg-hoan-tac của apps/api/test/lich-bay-ngay.spec.ts. Chuỗi viết sẵn năm bước datNgayNghiTuan, mỗi bước gửi giá trị mà nút Hoàn tác của màn gửi (giá trị trước lần lưu), rồi một lần get: [6, 7] → [] → [6, 7] → [] → [7] → []; get sau bước nào khác giá trị đã đặt thì ném 'vg: hoan tac buoc <n> ra <json>'; số bước đã so khác 5 thì ném 'vg: chuoi hoan tac thieu <n>'. Sau mỗi bước đọc khongNghiTuan bằng Prisma: khác (giá trị đặt là []) thì ném 'vg: co khong nghi sai buoc <n>'. Bước dọn sau bài (afterAll) trả hàng appSetting về đúng ngayNghiTuan và khongNghiTuan đã chụp trước bài, rồi đọc lại: khongNghiTuan khác giá trị đã chụp hoặc lichLamViec.get khác giá trị trước bài thì ném 'vg: don lich de lai co <json>'. Lớp màn của AC-4 đo ở E8b. Chiều đỏ ở E7 (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/du-an.ts, apps/api/src/lich-lam-viec/**, apps/api/test/lich-bay-ngay.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vg_tran_viec
+    expected: "exit 0; apps/api/test/du-an-tran-viec.spec.ts. Dự án dựng qua taoViec thật: P300 mở 300 việc, P299 mở 299 việc, PD 300 việc có sẵn một mốc và một phụ thuộc rồi đóng. Ma trận viết sẵn 27 dòng {thaoTac, duAn, ket, loi} trước khi chạy, chín thao tác (tao-viec, viec-con, chuyen-vao, them-moc, sua-moc, xoa-moc, them-phu-thuoc, go-phu-thuoc, doi-ngay) × ba dự án, kết quả: P300 × ba đường thêm việc = tu-choi 'Một dự án chứa tối đa 300 việc.'; P300 × sáu thao tác mốc, phụ thuộc, đổi ngày = thanh-cong; P299 × chín thao tác = thanh-cong; PD × chín thao tác = tu-choi 'Dự án đã đóng.'. Dòng nào ra khác kỳ vọng thì ném 'vg tran: <thaoTac> <duAn> ra <json> ky vong <ket>'; số dòng đã so khác 27 thì ném 'vg tran: ma tran thieu <n>'. Vế AC-5: dòng them-moc, sua-moc, xoa-moc × P300 mỗi dòng thêm đúng một DuAnVet loai them-moc, sua-moc, xoa-moc, không thì ném 'vg tran: vet <loai> <n>'. Chiều đỏ ở E7 (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an-ghi.ts, packages/db/src/du-an.ts, apps/api/src/du-an/**, apps/api/src/viec/**, apps/api/test/du-an-tran-viec.spec.ts, apps/api/test/support/du-an-gieo.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vg_tran_viec
+    expected: "exit 0; cùng ma trận 27 dòng của apps/api/test/du-an-tran-viec.spec.ts. Vế AC-6, gọi bởi người giao của hai việc: sau them-phu-thuoc A→B × P300, doi-ngay A làm B chồng — B không có trong daDoi hoặc ngày B không đổi thì ném 'vg tran: tu doi P300 khong chay <json>'; sau go-phu-thuoc còn hàng ViecPhuThuoc A→B thì ném 'vg tran: go phu thuoc khong ghi'. Đối chứng dương: cùng chuỗi trên P299 cũng dời B, không thì ném 'vg tran: doi chung P299 hong <thaoTac>'. Chiều đỏ ở E7 (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an-ghi.ts, packages/db/src/lich-viec.ts, apps/api/src/du-an/**, apps/api/src/viec/**, apps/api/test/du-an-tran-viec.spec.ts]
+
+  - id: E6b
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vg_tran_viec
+    expected: "exit 0; cùng ma trận 27 dòng. Vế AC-7: sau ba dòng thêm việc × P300, số Viec của P300 khác 300 thì ném 'vg tran: P300 vuot tran <n>'. Mỗi dòng thêm việc × P299: sau dòng, P299 có đúng 300 việc, không thì ném 'vg tran: <thaoTac> P299 khong nhan viec thu 300 <n>'; rồi đưa việc vừa thêm ra khỏi dự án (viec.doiDuAn null) để P299 về 299 trước dòng kế, không về thì ném 'vg tran: P299 khong ve 299'. Ca tranh nhau trên một P299 mới: hai giao dịch db.$transaction song song cùng gọi taoViec vào nó — số Viec cuối khác 300 thì ném 'vg tran: tranh nhau vuot tran <n>'; số giao dịch bị từ chối khác 1 hoặc lời khác 'Một dự án chứa tối đa 300 việc.' thì ném 'vg tran: tranh nhau sai loi <json>'. Chiều đỏ ở E7 (f), (h)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an-ghi.ts, packages/db/src/du-an.ts, apps/api/src/du-an/**, apps/api/src/viec/**, apps/api/test/du-an-tran-viec.spec.ts]
+
+  - id: E7
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.vg_dot_bien
+    expected: "exit 0; node _acceptance/va-gantt-lich-bay-ngay/rang/dot-bien.mjs dựng bản sao cây từ git stash create (khoá ở git-common-dir, chỉ mục git riêng GIT_INDEX_FILE), cài từng đột biến vào bản sao, chạy đúng lệnh của eval tương ứng và đòi đỏ với lời ghim: (a) docLichLam bỏ qua khongNghiTuan → E1 đỏ 'vg: get rong thanh', E2 đỏ 'vg: doc lich', E3 đỏ 'vg: tu doi bo cuoi tuan'; (b) datNgayNghiTuan với mảng khác rỗng không trả khongNghiTuan về false → E4 đỏ 'vg: hoan tac buoc'; (d) gantt-du-an.tsx truyền weekendDays undefined khi lịch rỗng → E3b đỏ 'vg gantt: to ngay nghi khi lich rong'; (e) docDuAnMo kiểm lại trần 300 → E5 đỏ 'vg tran: them-moc P300 ra'; (f) bỏ trần ở docDuAnNhanViec → E5 đỏ 'vg tran: tao-viec P300 ra'; (g) bỏ bước dọn của lich-bay-ngay.spec.ts rồi chạy nó trước lich-lam-viec.spec.ts trong cùng kho → E2b đỏ 'llv: mac dinh sai'; (h) bỏ khoá FOR UPDATE ở docDuAnNhanViec → E6b đỏ 'vg tran: tranh nhau'. Đột biến nào xanh hoặc đỏ sai lời thì in '<ma> song' và thoát 1; bản sao lành chạy cùng các lệnh (kể cả thứ tự của (g)) phải xanh, không thì thoát 1 'vg dot bien: ban sao lanh do <lenh>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/va-gantt-lich-bay-ngay/rang/dot-bien.mjs, packages/db/src/du-an.ts, packages/db/src/viec-ghi.ts, packages/db/prisma/migrations/**, apps/api/src/lich-lam-viec/**, packages/ui/src/components/gantt-du-an.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vg_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/va-gantt-lich-bay-ngay/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này."
+      - "Đọc dòng cuối: mã 0 kèm 'va-gantt-lich-bay-ngay man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'vg man: …'."
+      - "Mở các ảnh vg-lich-t7cn-1280.png, vg-gantt-t7cn-1280.png, vg-lich-rong-1280.png, vg-gantt-rong-1280.png, vg-lich-rong-375.png, vg-gantt-rong-375.png và đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/va-gantt-lich-bay-ngay/evidence/]
+    expected: |
+      0. Đối chứng dương trên cùng màn, lịch mặc định của kho đo. vg-lich-t7cn-1280: thẻ «Ngày nghỉ trong tuần» có bảy ô, đúng hai ô Thứ Bảy, Chủ nhật ở trạng thái chọn — man.mjs đếm ô [data-thu] mang data-state='on': khác 2 hoặc không phải data-thu 6 và 7 thì thoát 1 'vg man: doi chung lich khong thay 2 o <json>'. vg-gantt-t7cn-1280: Gantt dự án có việc 22/10→27/10, cột 24/10 và 25/10 tô nền — số [data-off-day] bằng 0 thì thoát 1 'vg man: doi chung khong to T7 CN'.
+      1. vg-lich-rong-1280: man.mjs bấm bỏ ô Thứ Bảy rồi ô Chủ nhật trên màn, chờ thông báo «Đã lưu» sau mỗi lần, tải lại trang: không ô nào ở trạng thái chọn — cùng phép đếm khác 0 thì thoát 1 'vg man: lich bat lai <n>'.
+      2. vg-gantt-rong-1280: cùng dự án, Gantt không tô nền cột nào — số [data-off-day] khác 0 thì thoát 1 'vg man: gantt to ngay nghi <n>'.
+      3. vg-lich-rong-375 và vg-gantt-rong-375: như 1 và 2 ở khổ 375; document.scrollingElement.scrollWidth > 375 thì thoát 1 'vg man: 375 cuon ngang <man>'.
+      4. Bước dọn của man.mjs đặt lại lịch [6, 7] trong kho đo.
+    evidence_required: [run_id, exit_code, screenshot, observed, verified_at]
+    paths: ["apps/app/app/(app)/[slug]/settings/lich-lam-viec/**", "apps/app/app/(app)/[slug]/viec/**", packages/ui/src/components/gantt-du-an.tsx, packages/ui/src/components/reui/gantt/**, packages/db/src/du-an.ts, apps/api/src/lich-lam-viec/**, _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs]
+
+  - id: E8b
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vg_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/va-gantt-lich-bay-ngay/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này."
+      - "Đọc dòng cuối: mã 0 kèm 'va-gantt-lich-bay-ngay man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'vg man: …'."
+      - "Mở các ảnh vg-hoan-tac-ve-rong-1280.png, vg-hoan-tac-ve-co-nghi-1280.png và đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/va-gantt-lich-bay-ngay/evidence/]
+    expected: |
+      0. Cùng lượt man.mjs của E8, sau bước 2 của E8 (lịch làm cả tuần, đã tải lại). Mỗi lần bấm một ô chỉ đổi một thứ, nên Hoàn tác trên màn quay về trạng thái kề trước; hai chuyển dưới đây đi qua cả hai chiều của cờ «làm cả tuần».
+      1. vg-hoan-tac-ve-rong-1280: man.mjs bấm ô Thứ Bảy (lịch thành [6]), chờ «Đã lưu», bấm «Hoàn tác» trên thông báo, chờ, tải lại trang: không ô nào ở trạng thái chọn — khác 0 thì thoát 1 'vg man: hoan tac ra <n> buoc 1'.
+      2. vg-hoan-tac-ve-co-nghi-1280: man.mjs bấm ô Chủ nhật (lịch [7]), tải lại, bấm lại ô Chủ nhật (lịch thành làm cả tuần), chờ «Đã lưu», bấm «Hoàn tác», chờ, tải lại: đúng một ô data-thu 7 ở trạng thái chọn — khác thì thoát 1 'vg man: hoan tac ra <n> buoc 2'.
+      3. Đối chứng: ngay trước mỗi lần bấm Hoàn tác, man.mjs đọc lichLamViec.get qua API của phiên đo và đòi giá trị vừa lưu ([6] ở bước 1, [] ở bước 2), không thì thoát 1 'vg man: luu truoc hoan tac sai <json>'. Chuyển thẳng giữa làm cả tuần và nghỉ Thứ Bảy, Chủ nhật đo ở E4 (lớp API).
+    evidence_required: [run_id, exit_code, screenshot, observed, verified_at]
+    paths: ["apps/app/app/(app)/[slug]/settings/lich-lam-viec/**", "apps/app/app/(app)/[slug]/viec/**", packages/ui/src/components/gantt-du-an.tsx, packages/ui/src/components/reui/gantt/**, packages/db/src/du-an.ts, apps/api/src/lich-lam-viec/**, _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs]
+
+  - id: E9
+    criterion: AC-9
+    executor: judgment
+    question: "Đọc docs/api.md và CONTEXT.md. (1) docs/api.md mục «Lịch làm việc» (phần «Dự án» của mục «Việc») nói: lịch chưa từng đặt thì nghỉ Thứ Bảy, Chủ nhật; quản trị bỏ chọn hết là không nghỉ ngày nào; và KHÔNG còn câu nói ngayNghiTuan rỗng nghĩa là mặc định. (2) docs/api.md mục «Vòng đời» hoặc phần dự án nói trần 300 việc chỉ chặn thêm việc vào dự án (tạo, việc con, chuyển vào), còn mốc, phụ thuộc, đổi ngày chỉ bị chặn khi dự án đã đóng. (3) CONTEXT.md mục «Lịch làm việc» nói quản trị bỏ chọn hết thì không nghỉ ngày nào trong tuần. Thiếu hay sai điều nào thì FAIL và nêu điều đó."
+    inputs: [CONTEXT.md, docs/api.md]
+    evidence_required: [verdict, rationale, verified_at]
