@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: va-gantt-lich-bay-ngay
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: f88e754c2ceb18ae8f82fb09760f7d1792ad49f8
-human_signoff:
+human_signoff: manh 2026-10-20
 ---
 
 # Evidence Report: va-gantt-lich-bay-ngay
@@ -181,7 +181,7 @@ Round 1. Mọi eval máy đều xanh. Hợp đồng là T3 nên mục E9 (judgme
     - spec-alignment: PASS — Cả ba điều đều có. docs/api.md dòng 665-669 nói lịch chưa đặt nghỉ Thứ Bảy, Chủ nhật; `datNgayNghiTuan([])` bật `khongNghiTuan` nên không nghỉ ngày nào; không còn câu nào nói ngayNghiTuan rỗng nghĩa là mặc định (grep "ngayNghiTuan" chỉ ra dòng 667). Dòng 661-664 nói trần 300 chỉ chặn tạo, việc con và chuyển vào, còn mốc, phụ thuộc và đổi ngày chỉ bị chặn khi dự án đã đóng (kèm dòng 657-658 về dự án đã đóng). CONTEXT.md dòng 266 nói quản trị bỏ chọn hết thì không nghỉ ngày nào trong tuần.
   required_evidence:
     - (judge không nêu bằng-chứng-thiếu)
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — manh 2026-10-20
 
 ### Lệnh suite (hồi quy)
 

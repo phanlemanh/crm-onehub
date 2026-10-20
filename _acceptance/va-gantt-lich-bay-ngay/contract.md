@@ -5,7 +5,7 @@ slug: va-gantt-lich-bay-ngay
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-19T15:42:01Z
 design_doc: docs/superpowers/specs/2026-10-19-va-gantt-lich-bay-ngay-design.md
@@ -89,3 +89,6 @@ Quét bằng skill morphological-scan, preset test-matrix — bản đầy đủ
   cờ mới giữ `false` sau nó, bài giữ xanh mà không sửa. Kho test dùng chung cho mọi tệp của một lượt: bài mới của vòng
   đặt cờ thì trả về `false` ở bước dọn và tự kiểm sau dọn.
 - Trần 300 khoá hàng `duAn` trong lời kiểm thêm việc, nên chỉ ba đường thêm việc vào dự án chờ nhau.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-3: Khi chạy bộ kiểm, bài DB mới có thể xoá hàng cài đặt chung của kho thử và làm vài bài kiểm khác đỏ thất thường; không chạm dữ liệu thật.
+  - Ngoài-4: Phép kiểm bảy lỗi cố ý dựng bản sao từ bản đã commit, nên khi còn sửa chưa commit thì kết quả chưa phản ánh cây đang sửa.
