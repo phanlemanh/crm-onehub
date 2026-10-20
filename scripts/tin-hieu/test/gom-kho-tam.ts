@@ -144,6 +144,7 @@ export function themTinHieu(
 	so: number,
 	o: { luc?: Date; ngayCommit?: string } = {},
 ): void {
+	g(kho.seed, ["switch", "--quiet", GOM.nhanhChinh]);
 	g(kho.seed, ["pull", "--quiet", "--ff-only", "origin", GOM.nhanhChinh]);
 	writeFileSync(
 		path.join(kho.seed, "tin-hieu", "crm", `crm-${so}.json`),
@@ -193,12 +194,14 @@ export type CheDo =
 	| "xoa-tin-hieu"
 	| "ngoai-config"
 	| "khong-commit"
+	| "ba-nhom"
 	| "thoat-1"
 	| "ngu";
 
 export const TEN_NHOM = {
 	G1: "Người gửi xem được trọn bảng tín hiệu trên màn hẹp",
 	G2: "Quản trị nhập OKR từ bảng tính mà không mất cột",
+	G3: "Trưởng phòng thấy số tuần trước khi cập nhật kết quả",
 } as const;
 
 const CLAUDE_GIA = (d: string) => `#!/usr/bin/env bun
@@ -221,6 +224,8 @@ const le = con.pop();
 const nua = Math.ceil(con.length / 2);
 let g1 = con.slice(0, nua);
 let g2 = con.slice(nua);
+let g3 = [];
+if (cheDo === "ba-nhom") { const ba = Math.ceil(con.length / 3); g1 = con.slice(0, ba); g2 = con.slice(ba, 2 * ba); g3 = con.slice(2 * ba); }
 if (cheDo === "bo-sot") g1 = g1.slice(1);
 if (cheDo === "hai-cho") g2 = [...g2, g1[0]];
 const tenG1 = cheDo === "lot-ma" ? ten.G1 + " (" + ids[0] + ")" : ten.G1;
@@ -228,12 +233,13 @@ const ma = (xs) => xs.map((x) => "\`" + x + "\`").join(", ");
 const dong = ["dot: " + dot, "dang: chuoi", "nguon: cửa tín hiệu — lịch gom", "truc: ket-qua", "den: " + new Date().toISOString(), "",
   "- \`G1\` — " + tenG1, "  - tín hiệu: " + ma(g1)];
 if (g2.length) dong.push("- \`G2\` — " + ten.G2, "  - tín hiệu: " + ma(g2));
+if (g3.length) dong.push("- \`G3\` — " + ten.G3, "  - tín hiệu: " + ma(g3));
 dong.push("", "- lẻ \`" + le + "\` — lời cảm ơn, không phải điều cần làm");
 if (phu) dong.push("- đã phủ \`" + phu + "\` — " + cg.da_giao[0].slug);
 writeFileSync("tin-hieu/gom/" + dot + ".md", dong.join("\\n") + "\\n");
 if (cheDo === "hai-gom") writeFileSync("tin-hieu/gom/" + dot + "-b.md", dong.join("\\n").replace("dot: " + dot, "dot: " + dot + "-b") + "\\n");
 const lt = JSON.parse(readFileSync(${JSON.stringify(TEP_LO_TRINH)}, "utf8"));
-const nhom = g2.length ? ["G1", "G2"] : ["G1"];
+const nhom = ["G1", ...(g2.length ? ["G2"] : []), ...(g3.length ? ["G3"] : [])];
 for (const n of nhom) {
   if (cheDo === "hang-sai" && n === nhom[nhom.length - 1]) continue;
   lt.hang.push({ ma: dot + "-" + n, slug: dot + "-" + n.toLowerCase(), ten: ten[n], cau_giao: "«" + ten[n] + "»", hang: "T2", dot, phu: [n] });
@@ -369,5 +375,59 @@ export function gopDeXuat(kho: KhoGom, ngay?: string): void {
 		undefined,
 		them,
 	);
+	g(kho.seed, ["push", "--quiet", "origin", GOM.nhanhChinh]);
+}
+
+export function suaBanGomNguoi(
+	kho: KhoGom,
+	doi: (txt: string) => string,
+): void {
+	const d = thuMuc("sua");
+	g(d, ["clone", "--quiet", "-b", GOM.nhanhDeXuat, kho.origin, "."]);
+	const tep =
+		g(d, ["ls-files", "tin-hieu/gom/*.md"]).split("\n").filter(Boolean)[0] ??
+		"";
+	writeFileSync(
+		path.join(d, tep),
+		doi(readFileSync(path.join(d, tep), "utf8")),
+	);
+	g(d, ["commit", "--quiet", "-am", "chu kho sua nhom"], NGUOI);
+	g(d, ["push", "--quiet", "origin", GOM.nhanhDeXuat]);
+}
+
+export function quaNhanhHangCho(
+	kho: KhoGom,
+	so: number,
+	ngayTep: string,
+	ngayGop: string,
+): void {
+	g(kho.seed, ["switch", "--quiet", GOM.nhanhChinh]);
+	g(kho.seed, ["pull", "--quiet", "--ff-only", "origin", GOM.nhanhChinh]);
+	g(kho.seed, ["switch", "--quiet", "-c", "tin-hieu/keo-ve"]);
+	writeFileSync(
+		path.join(kho.seed, "tin-hieu", "crm", `crm-${so}.json`),
+		vietTep(
+			tepTuBanGhi({
+				tieuDe: `Tín hiệu hàng chờ ${so}`,
+				muonLam: `Muốn ${so}`,
+				daXayRa: `Gặp ${so}`,
+				man: "/okr",
+				guiLuc: new Date(Date.parse(ngayTep) - 3_600_000),
+			}),
+		),
+	);
+	g(kho.seed, ["add", "."]);
+	g(kho.seed, ["commit", "--quiet", "-m", `keo ${so}`], undefined, {
+		GIT_COMMITTER_DATE: ngayTep,
+		GIT_AUTHOR_DATE: ngayTep,
+	});
+	g(kho.seed, ["switch", "--quiet", GOM.nhanhChinh]);
+	g(
+		kho.seed,
+		["merge", "--quiet", "--no-ff", "-m", "gop keo ve", "tin-hieu/keo-ve"],
+		undefined,
+		{ GIT_COMMITTER_DATE: ngayGop, GIT_AUTHOR_DATE: ngayGop },
+	);
+	g(kho.seed, ["branch", "--quiet", "-D", "tin-hieu/keo-ve"]);
 	g(kho.seed, ["push", "--quiet", "origin", GOM.nhanhChinh]);
 }

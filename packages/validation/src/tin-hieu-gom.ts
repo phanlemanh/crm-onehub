@@ -21,7 +21,7 @@ export const chuaGomRa = z.object({
 		z.object({ id: z.string(), luc: z.string(), tieu_de: z.string() }),
 	),
 	da_giao: z.array(z.object({ slug: z.string(), cau_giao: z.string() })),
-	loi: z.array(z.unknown()),
+	loi: z.array(z.string()),
 });
 export type ChuaGomRa = z.infer<typeof chuaGomRa>;
 
@@ -58,7 +58,10 @@ export const prDeXuat = z.array(
 export type PrDeXuat = z.infer<typeof prDeXuat>;
 
 export const cauHinhGom = z.object({
-	tin_hieu: z.object({ gom: z.string() }),
+	tin_hieu: z.object({
+		gom: z.string(),
+		nguon: z.union([z.string(), z.array(z.string())]).optional(),
+	}),
 	lo_trinh: z.object({ tep: z.union([z.string(), z.array(z.string())]) }),
 });
 export type CauHinhGom = z.infer<typeof cauHinhGom>;

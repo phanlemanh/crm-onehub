@@ -123,10 +123,7 @@ export async function chayGom(o: {
 		return do1([GOM.thongDiep.tinHieuSai, ...cacDong(cg.loi).slice(0, 20)]);
 	}
 	if (cg.ma !== 0 || chua.loi.length)
-		return do1([
-			GOM.thongDiep.tinHieuSai,
-			...chua.loi.map((l) => (typeof l === "string" ? l : JSON.stringify(l))),
-		]);
+		return do1([GOM.thongDiep.tinHieuSai, ...chua.loi]);
 	const ids = chua.tin_hieu.map((t) => t.id);
 	if (!ids.length) return { ma: 0, dong: [GOM.thongDiep.khongMoi] };
 	const dau = dauTap(ids);
