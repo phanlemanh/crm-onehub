@@ -29,7 +29,7 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { TargetLineChart } from "@crm/ui/components/target-line-chart";
 import { homNayVN } from "@crm/validation/ngay-vn";
 import { bangChungVao } from "@crm/validation/okr-canh-kr";
-import { mucCapNhat } from "@crm/validation/okr-cap-nhat";
+import { type GuiCapNhatInput, mucCapNhat } from "@crm/validation/okr-cap-nhat";
 import { SO_KR_MOC, tienDoKr } from "@crm/validation/okr-kr";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
@@ -54,6 +54,25 @@ import type { KetQua, KrCapNhat } from "./kieu";
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
 type DienBien = RouterOutputs["okr"]["dienBien"];
+type O = ReturnType<typeof oBanDau>;
+type MucGui = GuiCapNhatInput["items"][number];
+
+export function mucGui(kr: KrCapNhat, o: O, bangChung: string): MucGui | null {
+	const so = docGiaTri(kr, o.giaTri);
+	if (so === null || loiSo(kr, so) !== null || o.tuTin === null) return null;
+	const coBangChung = kr.kind === "moc" && so === 1;
+	if (coBangChung && loiDuongDan(bangChung)) return null;
+	const bangChungGui = coBangChung
+		? bangChungVao.safeParse({ url: bangChung, ghiChu: "" })
+		: null;
+	return {
+		keyResultId: kr.keyResultId,
+		value: so,
+		confidence: o.tuTin,
+		note: o.ghiChu.trim(),
+		bangChung: bangChungGui?.success ? bangChungGui.data : undefined,
+	};
+}
 
 const XEM_TRUOC = { chieuCao: 144 } as const;
 
@@ -207,44 +226,19 @@ export function HopThoaiCapNhatKr({
 	const loi = loiSo(kr, so);
 	const hienBangChung = kr.kind === "moc" && so === 1;
 	const saiBangChung = hienBangChung && loiDuongDan(bangChung);
-	const bangChungGui = hienBangChung
-		? bangChungVao.safeParse({ url: bangChung, ghiChu: "" })
-		: null;
+	const muc = mucGui(kr, o, bangChung);
 	const lan: LanTruoc | null = kr.lastAt === null ? null : "lan-truoc";
 	const khoa = gui.isPending;
 	const dangMo = sessionId === null && !loiMo;
-	const sanSang =
-		sessionId !== null &&
-		o.tuTin !== null &&
-		so !== null &&
-		loi === null &&
-		!saiBangChung;
+	const sanSang = sessionId !== null && muc !== null;
 	const loiMayChu =
 		gui.error?.data?.httpStatus !== undefined && gui.error.data.httpStatus < 500
 			? gui.error.message
 			: t.capNhat.loiGui.mayChu;
 
 	const guiDi = () => {
-		if (
-			!sanSang ||
-			khoa ||
-			sessionId === null ||
-			o.tuTin === null ||
-			so === null
-		)
-			return;
-		gui.mutate({
-			sessionId,
-			items: [
-				{
-					keyResultId: kr.keyResultId,
-					value: so,
-					confidence: o.tuTin,
-					note: o.ghiChu.trim(),
-					bangChung: bangChungGui?.success ? bangChungGui.data : undefined,
-				},
-			],
-		});
+		if (khoa || sessionId === null || muc === null) return;
+		gui.mutate({ sessionId, items: [muc] });
 	};
 
 	return (
