@@ -19,6 +19,7 @@ import {
 	taoSanPham,
 } from "@crm/db/san-pham-lo-trinh";
 import { LO_TRINH_SAN_PHAM } from "@crm/db/san-pham-lo-trinh-danh-muc";
+import { docDuLieu } from "@crm/validation/doc-du-lieu-lo-trinh";
 import {
 	type LoTrinhDuLieu,
 	phanTichLoTrinh,
@@ -28,7 +29,6 @@ import {
 	type KhoGia,
 	taoGithubGia,
 } from "../../../scripts/lo-trinh-san-pham/github-gia";
-import { docDuLieu } from "@crm/validation/doc-du-lieu-lo-trinh";
 import { layLoTrinhSanPham } from "../agent/lib/lo-trinh-san-pham";
 import { gieoNguoi, moXuong } from "./support/nhac-gieo";
 
@@ -419,7 +419,7 @@ describe("ltsp-danh-ba", () => {
 		const khoCu = khoLanh(MAU, sha("e"), "2026-10-19T12:00:00Z");
 		const g1 = gia({ [kit.kho]: khoCu });
 		await lay(NOW, g1.fetch);
-		const khoMoi = "phanlemanh/kho-moi-" + kit.ma;
+		const khoMoi = `phanlemanh/kho-moi-${kit.ma}`;
 		await suaSanPham(db, kit.ma, { kho: khoMoi }, NOW);
 		const vanCu = await db.banChupLoTrinh.findUniqueOrThrow({
 			where: { nguon: kit.ma },
@@ -448,7 +448,7 @@ describe("ltsp-danh-ba", () => {
 	test("nguồn đổi giữa lúc đang lấy thì kết quả của nguồn cũ không được ghi", async () => {
 		const kit = await taoSp("doi-giua");
 		const g = gia({ [kit.kho]: khoLanh(MAU, sha("c")) });
-		const khoMoi = "phanlemanh/kho-giua-" + kit.ma;
+		const khoMoi = `phanlemanh/kho-giua-${kit.ma}`;
 		let daDoi = false;
 		const f = (async (url: string | URL | Request, init?: RequestInit) => {
 			if (!daDoi && String(url).includes("/contents/")) {
