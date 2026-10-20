@@ -247,7 +247,21 @@ async function doKho(tenKho, ca) {
 				hop,
 				ca.nhanTuTin[muc],
 			);
+			await p.waitForFunction(
+				(h) =>
+					(document.querySelector(h)?.getAnimations({ subtree: true }) ?? [])
+						.length === 0,
+				{},
+				hop,
+			);
 			await nut.click();
+			const chon = await p.$$eval(`${hop} [data-o="tu-tin"] button`, (ds) =>
+				ds.map(
+					(b) =>
+						`${(b.textContent ?? "").trim()}=${b.getAttribute("data-state")}`,
+				),
+			);
+			dong.push(`TU TIN ${tenKho} bam ${muc}: ${chon.join(" ")}`);
 		};
 		const guiVaDong = async () => {
 			await p.click(`${hop} [data-nut="gui-cap-nhat-kr"]`);
@@ -308,7 +322,9 @@ async function doKho(tenKho, ca) {
 
 			await p.click(`[data-kr="${ca.k}"]`);
 			await choDinh(`kr:${ca.k}`);
-			await p.waitForSelector(`[data-kr-sheet="${ca.k}"]`, { visible: true });
+			await p.waitForSelector(`[data-kr-sheet="${ca.k}"] [data-than-ngan-kr]`, {
+				visible: true,
+			});
 			kiem(
 				`ngan 1440: mo tu dong, record=${record()}`,
 				dinhChong(record()) === `kr:${ca.k}`,
@@ -333,15 +349,21 @@ async function doKho(tenKho, ca) {
 				)
 				.catch(() => {});
 			const hienSau = await p.$eval(oHienTai, (e) => e.textContent ?? "");
+			const moiNhat = `${dongLichSu} [data-gia-tri-lan]`;
+			const coSoMoi = (chu, so) => new RegExp(`(^|\\D)${so}(\\D|$)`).test(chu);
 			await p
 				.waitForFunction(
-					(s, n) => document.querySelectorAll(s).length > n,
+					(s, so) =>
+						new RegExp(`(^|\\D)${so}(\\D|$)`).test(
+							document.querySelector(s)?.textContent ?? "",
+						),
 					{ timeout: 30 * GIAY_MS },
-					dongLichSu,
-					lichTruoc,
+					moiNhat,
+					ca.cu + 2,
 				)
 				.catch(() => {});
 			const lichSau = await p.$$eval(dongLichSu, (ds) => ds.length);
+			const chuMoiNhat = await p.$eval(moiNhat, (e) => e.textContent ?? "");
 			kiem(
 				`ngan 1440: sau gui ngan van mo tren K (record=${record()})`,
 				dinhChong(record()) === `kr:${ca.k}` &&
@@ -352,8 +374,8 @@ async function doKho(tenKho, ca) {
 				hienSau !== hienTruoc,
 			);
 			kiem(
-				`ngan 1440: lich su ${lichTruoc} -> ${lichSau}`,
-				lichSau === lichTruoc + 1,
+				`ngan 1440: lich su moi nhat «${chuMoiNhat}» hien ${ca.cu + 2} (dong ${lichTruoc} -> ${lichSau}, gom theo tuan)`,
+				coSoMoi(chuMoiNhat, ca.cu + 2) && lichSau >= lichTruoc,
 			);
 			const lai = await docLai();
 			kiem(
@@ -365,7 +387,10 @@ async function doKho(tenKho, ca) {
 			const chongTruoc = tachChong(record());
 			await p.click(`[data-kr-sheet="${ca.k}"] [data-nut="kr-ke"]`);
 			await choDinh(`kr:${ca.kKe}`);
-			await p.waitForSelector(`[data-kr-sheet="${ca.kKe}"]`, { visible: true });
+			await p.waitForSelector(
+				`[data-kr-sheet="${ca.kKe}"] [data-than-ngan-kr]`,
+				{ visible: true },
+			);
 			const chongSau = tachChong(record());
 			kiem(
 				`kr-ke 1440: ${chongTruoc.join(",")} -> ${chongSau.join(",")}`,
@@ -405,7 +430,7 @@ async function doKho(tenKho, ca) {
 			);
 			const drawer = await p
 				.waitForSelector(
-					`[data-slot="drawer-content"] [data-kr-sheet="${ca.k}"]`,
+					`[data-slot="drawer-content"] [data-kr-sheet="${ca.k}"] [data-than-ngan-kr]`,
 					{
 						visible: true,
 						timeout: 30 * GIAY_MS,
