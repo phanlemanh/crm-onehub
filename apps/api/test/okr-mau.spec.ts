@@ -2366,6 +2366,11 @@ describe("okx", () => {
 		await napMau(new Date());
 	}
 
+	afterAll(async () => {
+		await donViecNgoai();
+		await donNgoai();
+	}, CHO);
+
 	test(
 		"okx-viec: việc chung do người mẫu tạo qua API, kèm việc con của người mẫu, được dọn và nạp lại được",
 		async () => {
