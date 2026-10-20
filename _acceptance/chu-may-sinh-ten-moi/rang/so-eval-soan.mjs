@@ -9,6 +9,12 @@ const BANG = join(GOC, "_acceptance", "chu-may-sinh-ten-moi", "evidence");
 const SAI_SO = 1e-9;
 const git = (...a) => spawnSync("git", a, { cwd: GOC, encoding: "utf8" });
 
+export function tepNhanhDoi(tu, den) {
+	const r = git("log", "--format=", "--name-only", "--no-merges", "--first-parent", `${tu}..${den}`, "--", ...VUNG_SOAN);
+	if (r.status !== 0) throw new Error(`so-eval-soan: git log ${tu}..${den} that bai: ${r.stderr.trim()}`);
+	return [...new Set(r.stdout.split("\n").filter(Boolean))].sort();
+}
+
 const docTom = (nhan) => {
 	const duong = join(BANG, `eval-soan-${nhan}.json`);
 	return existsSync(duong) ? JSON.parse(readFileSync(duong, "utf8")) : null;
@@ -76,9 +82,7 @@ if (import.meta.main ?? process.argv[1] === fileURLToPath(import.meta.url)) {
 	const show = git("show", `${nen.sha}:${LOI_DAN_SOAN}`);
 	const bamNen = show.status === 0 ? bam(show.stdout) : "";
 	const laTienBoi = git("merge-base", "--is-ancestor", nen.sha, "HEAD").status === 0;
-	const doiNgoai = git("diff", "--name-only", nen.sha, "HEAD", "--", ...VUNG_SOAN)
-		.stdout.split("\n")
-		.filter((t) => t && t !== LOI_DAN_SOAN);
+	const doiNgoai = tepNhanhDoi(nen.sha, "HEAD").filter((t) => t !== LOI_DAN_SOAN);
 	const lap = docTom("nen-lap");
 	const doiGiuaLapNen = lap
 		? git("diff", "--name-only", lap.sha, nen.sha, "--", ...VUNG_SOAN).stdout.split("\n").filter(Boolean)
