@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cờ không nghỉ thay cờ đã đặt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    code { font-family: var(--font-mono); font-size: 0.9em; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình quyết định · va-gantt-lich-bay-ngay · AC-1, AC-2, AC-4</p>
+    <h1>Cờ <code>khongNghiTuan</code> thay cờ «đã đặt»</h1>
+    <p class="sub">Trái: cách ghi và đọc lịch đã chọn. Phải: ba bước của bài <code>dg_lich</code> đã ký, và kết quả của tệp chạy sau dưới mỗi khuôn.</p>
+
+    <svg viewBox="0 0 1080 528" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="56" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CÁCH ĐÃ CHỌN · CỜ khongNghiTuan</text>
+      <text x="680" y="56" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BÀI dg_lich ĐÃ KÝ · CÙNG MỘT KHO TEST</text>
+
+      <line x1="640" y1="40" x2="640" y2="432" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <line x1="200" y1="112" x2="358" y2="112" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="176" x2="358" y2="176" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="272" x2="358" y2="272" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="336" x2="358" y2="336" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="400" x2="358" y2="400" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="860" y1="136" x2="860" y2="166" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="860" y1="216" x2="860" y2="246" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="764" y1="296" x2="764" y2="358" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="956" y1="296" x2="956" y2="358" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <rect x="228" y="88" width="104" height="16" rx="2" fill="#fafafa"/>
+      <text x="280" y="100" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">MẢNG RỖNG []</text>
+      <rect x="220" y="152" width="120" height="16" rx="2" fill="#fafafa"/>
+      <text x="280" y="164" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">MẢNG KHÁC RỖNG</text>
+
+      <rect x="208" y="248" width="144" height="16" rx="2" fill="#fafafa"/>
+      <text x="280" y="260" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.02em">1 · khongNghiTuan true</text>
+      <rect x="212" y="312" width="136" height="16" rx="2" fill="#fafafa"/>
+      <text x="280" y="324" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">2 · MẢNG KHÁC RỖNG</text>
+      <rect x="236" y="376" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="280" y="388" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">3 · CÒN LẠI</text>
+
+      <rect x="40" y="88" width="160" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="120" y="146" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị lưu lịch</text>
+      <text x="120" y="162" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">datNgayNghiTuan</text>
+
+      <rect x="360" y="88" width="240" height="48" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="480" y="110" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">khongNghiTuan = true</text>
+      <text x="480" y="126" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ngayNghiTuan: []</text>
+
+      <rect x="360" y="152" width="240" height="48" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="480" y="174" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">khongNghiTuan = false</text>
+      <text x="480" y="190" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">ghi đúng mảng đã chọn</text>
+
+      <rect x="40" y="248" width="160" height="176" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="120" y="334" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đọc lịch</text>
+      <text x="120" y="350" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">docLichLam</text>
+
+      <rect x="360" y="248" width="240" height="48" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="480" y="270" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không nghỉ ngày nào</text>
+      <text x="480" y="286" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">[]</text>
+
+      <rect x="360" y="312" width="240" height="48" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="480" y="334" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đúng mảng đã lưu</text>
+      <text x="480" y="350" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ngayNghiTuan</text>
+
+      <rect x="360" y="376" width="240" height="48" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="480" y="398" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mặc định T7, CN</text>
+      <text x="480" y="414" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">LICH_LAM_VIEC.ngayNghiTuanMacDinh</text>
+
+      <rect x="680" y="88" width="360" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="860" y="110" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">1 · Đặt [3, 6, 7] rồi [6, 7] qua API</text>
+      <text x="860" y="126" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">datNgayNghiTuan</text>
+
+      <rect x="680" y="168" width="360" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="860" y="190" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">2 · Bước dọn trả cột mảng về []</text>
+      <text x="860" y="206" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chỉ cột ngayNghiTuan, không chạm cờ</text>
+
+      <rect x="680" y="248" width="360" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="860" y="270" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">3 · Tệp sau đọc lịch</text>
+      <text x="860" y="286" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">tự dời, phụ thuộc</text>
+
+      <rect x="680" y="360" width="168" height="72" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="764" y="380" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CỜ «ĐÃ ĐẶT» · BỊ LOẠI</text>
+      <text x="764" y="404" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lịch không nghỉ</text>
+      <text x="764" y="420" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">tệp sau đỏ</text>
+
+      <rect x="872" y="360" width="168" height="72" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="956" y="380" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CỜ «KHÔNG NGHỈ» · CHỌN</text>
+      <text x="956" y="404" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">T7, CN</text>
+      <text x="956" y="420" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">tệp sau xanh</text>
+
+      <line x1="40" y1="460" x2="1040" y2="460" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="480" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="40" y="496" width="24" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="72" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước</text>
+
+      <rect x="160" y="496" width="24" height="16" rx="2" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="192" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Giá trị ghi hoặc đọc</text>
+
+      <rect x="340" y="496" width="24" height="16" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="372" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Cờ «không nghỉ» — được chọn</text>
+
+      <rect x="560" y="496" width="24" height="16" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="592" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Cờ «đã đặt» — bị loại</text>
+
+      <line x1="760" y1="504" x2="788" y2="504" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="796" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh</text>
+    </svg>
+  </div>
+</body>
+</html>
