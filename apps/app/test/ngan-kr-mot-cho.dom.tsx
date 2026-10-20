@@ -1,10 +1,15 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { homNayVN } from "@crm/validation/ngay-vn";
 import { guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { type KieuKr, tienDoKr } from "@crm/validation/okr-kr";
 import { troLyTomTatOutput } from "@crm/validation/okr-tom-tat";
+import { hoiPhienOutput, ketQuaNopTraLoi } from "@crm/validation/okr-tra-loi";
 import { useQuery } from "@tanstack/react-query";
+import { defaultMessageReducer, type EveAgentReducerEvent } from "eve/client";
 import { act, Profiler, useCallback } from "react";
+import { z } from "zod";
 import type { CapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
@@ -1227,6 +1232,105 @@ const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
 const { KhoiKrCuaToi } = await import("@/app/(app)/[slug]/okr/khoi-kr-cua-toi");
 const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
 
+const { CUA_OKR_HOI } = await import("@/lib/cua-okr-config");
+const CUOC_HOI = "cuoc-hoi-loi";
+
+const ghiHoi = z
+	.object({
+		suKien: z.array(z.object({ type: z.string() }).passthrough()).min(1),
+	})
+	.parse(
+		JSON.parse(
+			readFileSync(
+				join(import.meta.dir, "fixtures/okr-hoi-luong.json"),
+				"utf8",
+			),
+		),
+	);
+const NOP_HOI = z
+	.object({
+		type: z.literal("action.result"),
+		data: z
+			.object({
+				result: z
+					.object({
+						toolName: z.literal("nop_tra_loi"),
+						output: ketQuaNopTraLoi,
+					})
+					.passthrough(),
+			})
+			.passthrough(),
+	})
+	.passthrough();
+
+function suKienTrichKr(): EveAgentReducerEvent[] {
+	const { m, k } = krLoi();
+	const traLoi = ketQuaNopTraLoi.parse({
+		ok: true,
+		traLoi: {
+			loai: "tra-loi",
+			cau: [
+				{
+					chu: `${m.title} có một KR đáng xem.`,
+					trich: [{ loai: "kr", id: k.id, ten: k.title }],
+				},
+			],
+		},
+	});
+	const suKien = ghiHoi.suKien.map((e) => {
+		const r = NOP_HOI.safeParse(e);
+		if (!r.success || !r.data.data.result.output.ok) return e;
+		return {
+			...r.data,
+			data: {
+				...r.data.data,
+				result: { ...r.data.data.result, output: traLoi },
+			},
+		};
+	});
+	return suKien as unknown as EveAgentReducerEvent[];
+}
+
+function tinTrichKr() {
+	const r = defaultMessageReducer();
+	let trangThai = r.initial();
+	for (const e of suKienTrichKr()) trangThai = r.reduce(trangThai, e);
+	return trangThai.messages;
+}
+
+const laCuocHoi = (dau: Record<string, string> | undefined) =>
+	dau?.[CUA_OKR_HOI.header] === CUOC_HOI;
+
+const eveThat = await import("eve/react");
+type TuyChonEve = NonNullable<Parameters<typeof eveThat.useEveAgent>[0]>;
+mock.module("eve/react", () => ({
+	...eveThat,
+	useEveAgent: (tuyChon: TuyChonEve) => {
+		const dau = tuyChon.headers as Record<string, string> | undefined;
+		if (!laCuocHoi(dau)) throw new Error("useEveAgent ngoai cuoc hoi");
+		return {
+			status: "ready",
+			error: undefined,
+			data: { messages: tinTrichKr() },
+			session: null,
+			send: async () => {},
+		};
+	},
+}));
+const phienThat = await import("@/lib/agent-session");
+mock.module("@/lib/agent-session", () => ({
+	...phienThat,
+	loadThread: (
+		phien: string,
+		dau: Record<string, string>,
+		...con: [AbortSignal | undefined, string | undefined]
+	) =>
+		laCuocHoi(dau)
+			? Promise.resolve({ status: "new" as const })
+			: phienThat.loadThread(phien, dau, ...con),
+}));
+const { CotHoiKara } = await import("@/app/(app)/[slug]/okr/hoi/cot-hoi-kara");
+
 const M_LOI = () =>
 	mucTieu(
 		MT,
@@ -1434,11 +1538,26 @@ const MA_TRAN_LOI: OLoi[] = [
 		bam: () => qs(`[data-kr-hop] [data-mo-kr="${krLoi().k.id}"]`),
 		tab: null,
 	},
+	{
+		o: "hoi-kara",
+		dung: async () => {
+			kho.rieng.set("okr.hoiPhien", () =>
+				hoiPhienOutput.parse({ phien: "phien-hoi" }),
+			);
+			const san = await dung(<CotHoiKara cuocHoiId={CUOC_HOI} />);
+			await cho(() => qs('[data-nhan-trich="kr"]') !== null, "trich kr");
+			const nhan = qs<HTMLElement>('[data-nhan-trich="kr"]');
+			await act(async () => nhan?.click());
+			return san;
+		},
+		bam: () => qs('[data-trich-okr="kr"]'),
+		tab: null,
+	},
 ];
 
 describe("vk7-moi-loi", () => {
-	test("vk7-moi-loi: ma tran bay loi viet truoc — moi loi goi dung mot lan mo {kind: kr, id: K}, khong so-kr, khong tab dien-bien; loi con so mang tab so-nguon", async () => {
-		expect(MA_TRAN_LOI.length).toBe(7);
+	test("vk7-moi-loi: ma tran tam loi viet truoc — moi loi goi dung mot lan mo {kind: kr, id: K}, khong so-kr, khong tab dien-bien; loi con so mang tab so-nguon", async () => {
+		expect(MA_TRAN_LOI.length).toBe(8);
 		const thucTe: Record<string, Json> = {};
 		for (const o of MA_TRAN_LOI) {
 			datLai();

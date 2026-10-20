@@ -64,6 +64,11 @@ const MA_TRAN = [
 		tep: "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx",
 		ham: "DongBan",
 	},
+	{
+		o: "hoi-kara",
+		tep: "apps/app/app/(app)/[slug]/okr/hoi/cot-hoi-kara.tsx",
+		ham: "CuocHoiDang",
+	},
 ];
 
 function docThamSo(argv) {
