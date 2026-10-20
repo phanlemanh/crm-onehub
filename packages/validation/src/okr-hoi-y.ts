@@ -138,7 +138,7 @@ export function parseSoLieuHoiY(value: unknown): SoLieuHoiY {
 		const duongDan = r.error.issues
 			.map((i) => i.path.join(".") || "(gốc)")
 			.join(", ");
-		throw new Error(`Con số của lần hỏi ý không đọc được: ${duongDan}`);
+		throw new Error(`Con số của lần lấy ý kiến không đọc được: ${duongDan}`);
 	}
 	return r.data;
 }

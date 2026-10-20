@@ -9,11 +9,11 @@ import {
 import { WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import { readTenGoc } from "@crm/db/workspace";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
 import type { KieuKr } from "@crm/validation/okr-kr";
 import { chupSoOkr } from "../../agent/agent/lib/okr-chup";
 import { kiemDongKy } from "../src/okr/khep";
-import { OKR } from "../src/okr/okr-config";
 import {
 	chamHetBangGoiY,
 	donSanKhep,
@@ -1119,7 +1119,7 @@ describe("sang-cham", () => {
 		}).toEqual({
 			conLai: 3,
 			theoDonVi: [
-				{ khoa: "goc", ten: OKR.tenGoc, conLai: 2 },
+				{ khoa: "goc", ten: await readTenGoc(db), conLai: 2 },
 				{ khoa: `pb:${pb}`, ten: tenPb, conLai: 1 },
 			].sort((a, b) => a.khoa.localeCompare(b.khoa)),
 		});
@@ -1803,7 +1803,7 @@ describe("cham-va-nhin-lai", () => {
 		}).toEqual({
 			thang: ["0-1", "0-1"],
 			conLai: 1,
-			chuaCham: [{ khoa: "goc", ten: OKR.tenGoc, conLai: 1 }],
+			chuaCham: [{ khoa: "goc", ten: await readTenGoc(db), conLai: 1 }],
 		});
 		const doiDich = moi
 			.flatMap((m) => m.krs)
