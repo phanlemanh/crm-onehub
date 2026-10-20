@@ -1,0 +1,38 @@
+{
+  "feature_plain": "Mỗi khi tín hiệu mới về kho, máy tự gom chúng thành nhóm, đề xuất hàng cho lộ trình, và đưa anh một PR nháp để sửa, đóng hay để gộp — không ai phải mở phiên máy gõ lệnh.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ mở đúng một PR nháp «Đợt tín hiệu» gồm bản gom mới, các hàng đề xuất và trang lộ trình vẽ lại; thân PR kể từng nhóm, hàng đề xuất, tín hiệu lẻ, tín hiệu đã có việc làm, và cách sửa, cách phủ quyết, ai gộp."},
+    {"id": "AC-3", "p": "Sẽ không giao đề xuất nào khi có tín hiệu thiếu chỗ hay ở hai chỗ, tên nhóm lọt mã nội bộ, hàng đề xuất sai, hay số bản gom khác một — lượt báo đỏ và nói rõ chỗ sai."},
+    {"id": "AC-4", "p": "Sẽ không giao đề xuất nào khi máy đụng tới tệp ngoài bản gom, tệp lộ trình và trang lộ trình — lượt báo đỏ và gọi tên từng tệp."},
+    {"id": "AC-5", "p": "Sẽ để yên đề xuất anh đã sửa; đề xuất chưa ai sửa thì máy dựng lại khi có tín hiệu mới, vẫn trên cùng một PR."},
+    {"id": "AC-6", "p": "Sẽ không mở lại đề xuất anh đã đóng cho đúng các tín hiệu ấy; có tín hiệu mới thì đề xuất lại cả cũ lẫn mới và tránh cách gom đã bị phủ quyết."},
+    {"id": "AC-8", "p": "Sẽ có một lệnh đo cho biết mỗi tín hiệu chờ bao lâu mới có chỗ trong đề xuất, tín hiệu nào chờ quá hai ngày, và anh đã phải sửa bao nhiêu nhóm trên tổng số."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ KHÔNG gọi mô hình hay đụng PR khi mọi tín hiệu đã có chỗ; lịch chạy mỗi khi tín hiệu mới lên nhánh chính, mỗi ngày một lần và khi bấm tay, chỉ ở kho này, một lượt một lúc."},
+    {"id": "OOS-1", "p": "Máy không tự gộp, không tự chuyển PR đề xuất sang sẵn sàng."},
+    {"id": "OOS-2", "p": "Không có thông báo riêng cho anh ngoài thông báo PR của GitHub — việc đó ở hàng thông báo tín hiệu mới."},
+    {"id": "OOS-3", "p": "Người gửi chưa thấy trạng thái mới ngay sau khi gom — việc đó ở hàng trạng thái sống."},
+    {"id": "OOS-4", "p": "Chưa gom theo từng sản phẩm khi có nhiều sản phẩm."},
+    {"id": "OOS-5", "p": "Máy chưa học từ những lần anh sửa nhóm."},
+    {"id": "OOS-6", "p": "Lượt chạy thật đầu tiên và các việc cài một lần (khoá mô hình, quyền đọc kho bộ kit) là việc của anh sau khi gộp."}
+  ],
+  "scope_plain": "Phần cắt hay hoãn của vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã phủ ba tình trạng tín hiệu lúc lịch chạy: không có gì mới, có tín hiệu mới, tín hiệu viết sai khuôn (AC-1 không gọi mô hình, AC-2 đề xuất, AC-3 báo đỏ)."},
+    {"i": 1, "p": "Đã phủ bảy tình trạng của PR đề xuất đang có — chưa có, mở chưa ai sửa (cùng hay khác tập tín hiệu), mở có sửa của anh, đã đóng (cùng hay khác tập), đã gộp — đối chiếu cách Renovate và Dependabot cư xử (AC-2, AC-5, AC-6)."},
+    {"i": 2, "p": "Đã phủ mọi kết cục của lượt gom: xanh, từng lệnh kiểm đỏ, sai số bản gom, đụng tệp ngoài vùng, mô hình hỏng, quá giờ, thiếu khoá (AC-2, AC-3, AC-4, AC-7)."},
+    {"i": 3, "p": "Đã phủ bốn việc người làm với đề xuất: anh sửa, anh đóng, chủ nhóm gộp, không ai làm gì (AC-2, AC-5, AC-6, AC-8)."},
+    {"i": 4, "p": "Áp cho mọi ca: máy không bao giờ gộp, khoá không lọt vào nhật ký, lượt hỏng luôn báo đỏ có tên (AC-2, AC-3, AC-4, AC-7)."},
+    {"i": 5, "p": "Giả định chờ anh gạch: đồng hồ hai ngày bắt đầu khi tín hiệu lên nhánh chính (Hỏi-3)."},
+    {"i": 6, "p": "Giả định chờ anh gạch: bộ chạy dựng tạm ở kho này (Hỏi-4) và máy đứng yên khi anh đã sửa đề xuất (Hỏi-5)."},
+    {"i": 7, "p": "Bảng quét đầy đủ phần làm ngay, để sau và không làm nằm trong hồ sơ (coverage-scan.md)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Máy đã tự quyết dựng bộ chạy ngay trong kho này, trong khi ghi chú của hàng chỉ nói phần lịch thuộc bộ kit — lối «bộ kit làm, kho chỉ khai lịch» vẫn còn. Đã chuyển thành câu hỏi cho anh (Hỏi-4)."},
+    {"i": 1, "p": "Máy đã tự quyết đứng yên khi anh đã sửa đề xuất, trong khi còn lối thêm một bản gom thứ hai lên trên mà không đè sửa của anh; đánh đổi với ngưỡng hai ngày là của anh. Đã chuyển thành câu hỏi (Hỏi-5)."},
+    {"i": 2, "p": "Bài kiểm chưa soi lời gọi mô hình thật (cờ, công cụ được phép, tên hai skill). Đã thêm phép soi lời gọi; phần «lấy mẫu từ một bản gom thật» bị bác vì kho chưa có bản gom thật nào — mẫu vẫn đi qua bộ đọc và bộ kiểm thật."},
+    {"i": 3, "p": "Lệnh đo chỉ đếm tín hiệu của đề xuất đã gộp nên có thể báo «đạt» khi tín hiệu khác đang chờ lâu. Đã sửa tiêu chí đo: đếm mọi tín hiệu, gọi tên tín hiệu chờ quá hai ngày, tính đúng giờ lên nhánh chính."},
+    {"i": 4, "p": "Bài kiểm thân PR chưa đo mục tín hiệu đã có việc làm, chưa đo mã lọt, và chưa đo trang lộ trình có thật được vẽ lại. Đã thêm cả ba."}
+  ]
+}
