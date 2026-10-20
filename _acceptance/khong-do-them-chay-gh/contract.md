@@ -5,7 +5,7 @@ slug: khong-do-them-chay-gh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -84,3 +84,9 @@ Bỏ coverage-scan — không gian là ba trục nhỏ đã liệt hết ở b�
   ít nhất `chuyen-goi-dieu-phoi` và `kiem-cheo-sau-gop` — cần ghim lại trước gộp.
 - AC-4 cần PR nháp của branch đã mở và lượt CI nháp đã xong trước lượt chấm.
 - PR #396 đóng khi PR của vòng mở.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Sửa tệp tìm plugin mà bản gương của E6 dựa vào sẽ không làm bằng chứng E6 tự báo cũ; chạy lại thì vẫn đúng.
+  - Ngoài-2: Cùng giới hạn ấy nhìn từ phía E6 — đổi tệp tìm plugin không có tín hiệu báo kết quả đã ký là cũ.
+  - Ngoài-3: Đổi riêng lệnh kiểm luồng tự động trong cấu hình hay phần giải gói điều phối sẽ không làm hồ sơ này tự báo cũ.
+  - Ngoài-4: Chạy bàn đo với cờ chỉ-đo vẫn chạy thêm bước phá thử của phép kiểm luật kho và in thêm một dòng.
+  - Ngoài-5: Khi máy chưa đăng nhập GitHub hay mất mạng, ô kiểm tên kho của E1/E2 vẫn có thể báo đạt.
