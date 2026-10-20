@@ -16,8 +16,14 @@ const dong = (ten: string, n: number): string => `${ten} (${n})`;
 export async function chanKeoNgoai(tx: Tx, U: string[]): Promise<void> {
 	const V = await viecCuaMau(tx, U);
 	if (V.length === 0) return;
-	const [con, truoc, sau] = await Promise.all([
+	const [con, phuThuocNgoai, truoc, sau] = await Promise.all([
 		tx.viec.count({ where: { chaId: { in: V }, taoBoiId: { notIn: U } } }),
+		tx.viecPhuThuoc.count({
+			where: {
+				OR: [{ truocId: { in: V } }, { sauId: { in: V } }],
+				taoBoiId: { notIn: U },
+			},
+		}),
 		tx.viecPhuThuoc.count({
 			where: { truocId: { in: V }, sauId: { notIn: V } },
 		}),
@@ -27,6 +33,7 @@ export async function chanKeoNgoai(tx: Tx, U: string[]): Promise<void> {
 	]);
 	const giu = [
 		con > 0 ? dong("viec.chaId", con) : null,
+		phuThuocNgoai > 0 ? dong("viecPhuThuoc.taoBoiId", phuThuocNgoai) : null,
 		truoc > 0 ? dong("viecPhuThuoc.truocId", truoc) : null,
 		sau > 0 ? dong("viecPhuThuoc.sauId", sau) : null,
 	].filter((x): x is string => x !== null);

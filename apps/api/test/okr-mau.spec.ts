@@ -2473,6 +2473,25 @@ describe("okx", () => {
 	);
 
 	test(
+		"okx-ngoai-giu-phu-thuoc-trong: phụ thuộc do người ngoài tạo giữa hai việc người mẫu → mã 5, nêu viecPhuThuoc.taoBoiId, không đổi gì",
+		async () => {
+			await moi();
+			const a = await viecMauQuaApi("Việc mẫu A");
+			const b = await viecMauQuaApi("Việc mẫu B");
+			await db.viecPhuThuoc.create({
+				data: { truocId: a, sauId: b, taoBoiId: NGOAI },
+			});
+			const truoc = await vanTayKho();
+			const r = chayLenh([OKR_MAU.co.xoa]);
+			expect(r.ma, r.loi).toBe(OKR_MAU.ma.dangGiu);
+			expect(r.loi).toContain("viecPhuThuoc.taoBoiId");
+			expect(await vanTayKho()).toEqual(truoc);
+			await donViecNgoai();
+		},
+		CHO,
+	);
+
+	test(
 		"okx-ten-giu: thông điệp liệt đúng tập khoá đang giữ, không in (User) trần",
 		async () => {
 			await moi();
