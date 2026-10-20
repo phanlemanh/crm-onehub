@@ -576,6 +576,12 @@ executors:
     hy_do_phu: 'bun run test -- "cd apps/api && bun test test/okr-hoi-y-thuan.spec.ts -t do-phu && bun test test/okr-hoi-y.spec.ts -t do-phu && bun test test/okr-hoi-y-hieu-nang.spec.ts"'
     hy_man_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi-y.dom.tsx"
     hy_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t hoi-y"'
+    okx_viec: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-viec"'
+    okx_tin_hieu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-tin-hieu"'
+    okx_ngoai_giu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-ngoai-giu"'
+    okx_ten_giu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-ten-giu"'
+    okx_luoi: 'cd apps/api && bun test test/okr-mau-khoa-nguoi.spec.ts -t okx-luoi'
+    okx_da_ky: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t xoa-mau"'
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
     hd_cau_tu_choi: "cd packages/auth && bun test test/cau-tu-choi.spec.ts"
@@ -2664,6 +2670,7 @@ executors:
     dos_soi_chu: "bun _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs --ca chu"
     dos_san_thiet_ke: "bun _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs --ca thiet-ke"
     ckr_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/man-canh-kr.mjs"'
+    okx_man_canh_kr: 'EVAL=E12,E15,E17 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/man-canh-kr.mjs"'
     ckr_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/ty-le.mjs"'
     ckr_san_thiet_ke: "bun _acceptance/canh-kr-okr/rang/soi-ma.mjs --ca thiet-ke"
     ckr_migration_chi_them: "bun _acceptance/canh-kr-okr/rang/migration-chi-them.mjs"
