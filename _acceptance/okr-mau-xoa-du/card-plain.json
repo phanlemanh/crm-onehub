@@ -1,28 +1,76 @@
 {
-  "feature_plain": "Lệnh dọn bộ OKR mẫu dọn sạch cả việc và tín hiệu mà người mẫu tạo ra trong lúc đo màn, nói đúng tên bảng nào đang giữ khi phải dừng, và có lưới bắt bảng mới chưa khai — để các phép đo màn dùng bộ mẫu không còn đỏ ở bước dọn.",
+  "feature_plain": "Lệnh xoá bộ OKR mẫu nay dọn luôn việc chung và tín hiệu do người mẫu tạo, dừng và gọi đúng tên bảng khi dữ liệu thật còn bám vào người mẫu, và có bài kiểm báo khi lược đồ thêm bảng mới chưa khai.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ xoá các việc do người mẫu tạo (cùng người theo dõi và bản ghi gắn kèm), không còn gì trỏ vào người mẫu, và nạp lại bộ mẫu được ngay."},
-    {"id": "AC-2", "p": "Sẽ xoá tín hiệu do người mẫu gửi; tín hiệu của người ngoài giữ nguyên."},
-    {"id": "AC-3", "p": "Chặn có tên, không đổi gì: việc của người ngoài giao cho người mẫu, hoặc việc của người mẫu có việc con hay phụ thuộc do người ngoài tạo."},
-    {"id": "AC-6", "p": "Sẽ cho ba phép đo màn đang đỏ của hồ sơ cạnh KR (E12, E15, E17) chạy trọn mà bước dọn bộ mẫu thoát sạch."},
-    {"id": "AC-7", "p": "Sẽ giữ xanh ba ca đã ký của việc xoá bộ mẫu."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ xoá các việc do người mẫu tạo (cùng người theo dõi và bản ghi gắn kèm), không còn gì trỏ vào người mẫu, và nạp lại bộ mẫu được ngay."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ xoá tín hiệu do người mẫu gửi; tín hiệu của người ngoài giữ nguyên."
+    },
+    {
+      "id": "AC-3",
+      "p": "Chặn có tên, không đổi gì: việc của người ngoài giao cho người mẫu, hoặc việc của người mẫu có việc con hay phụ thuộc do người ngoài tạo."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ cho ba phép đo màn đang đỏ của hồ sơ cạnh KR (E12, E15, E17) chạy trọn mà bước dọn bộ mẫu thoát sạch."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ giữ xanh ba ca đã ký của việc xoá bộ mẫu."
+    }
   ],
   "wont_do": [
-    {"id": "AC-4", "p": "Sẽ KHÔNG còn báo lỗi chung chung «(User)»: khi phải dừng, lệnh nêu đúng từng bảng và cột đang giữ kèm số hàng."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG để một bảng mới trỏ vào người dùng lọt qua mà chưa khai: bài kiểm đỏ và gọi tên bảng đó."},
-    {"id": "OOS-1", "p": "Không dọn dữ liệu bán hàng và tác nhân trỏ vào người mẫu — gặp thì dừng có tên."},
-    {"id": "OOS-2", "p": "Không sửa thước của các hồ sơ đo màn khác — từng hàng tự ghim lại sau khi việc này gộp."},
-    {"id": "OOS-3", "p": "Không chạy trên production — lệnh vẫn từ chối như cũ."}
+    {
+      "id": "AC-4",
+      "p": "Sẽ KHÔNG còn báo lỗi chung chung «(User)»: khi phải dừng, lệnh nêu đúng từng bảng và cột đang giữ kèm số hàng."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ KHÔNG để một bảng mới trỏ vào người dùng lọt qua mà chưa khai: bài kiểm đỏ và gọi tên bảng đó."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không dọn dữ liệu bán hàng và tác nhân trỏ vào người mẫu — gặp thì dừng có tên."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không sửa thước của các hồ sơ đo màn khác — từng hàng tự ghim lại sau khi việc này gộp."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không chạy trên production — lệnh vẫn từ chối như cũ."
+    }
   ],
   "scope_plain": "Ba phần để ngoài vòng này:",
   "coverage_plain": [
-    {"i": 0, "p": "Không quét bảng độ phủ riêng: danh sách mọi bảng trỏ vào người dùng do máy rút thẳng từ lược đồ, và AC-5 (lưới bảng mới) giữ danh sách ấy đủ."}
+    {
+      "i": 0,
+      "p": "Không quét bảng độ phủ riêng: danh sách mọi bảng trỏ vào người dùng do máy rút thẳng từ lược đồ, và AC-5 (lưới bảng mới) giữ danh sách ấy đủ."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Lưới chống bảng mới chưa khai đặt luật lên PR lược đồ của mọi dãy — máy đã ghi nó là quyết định của người (Hỏi-2) thay vì tự chọn."},
-    {"i": 1, "p": "Nhãn «bộ mẫu dọn» dán sai sẽ lại sinh lỗi không tên — nay lệnh đọc thẳng cơ sở dữ liệu để gọi tên, và có ca đỏ cho nhãn dán sai."},
-    {"i": 2, "p": "Trước chỉ đo một trong ba phép đo màn đang đỏ — nay đo cả E12, E15, E17, đúng điều VK7 cần để ghim lại."},
-    {"i": 3, "p": "Xoá việc của người mẫu có thể kéo theo việc con của người ngoài — nay chặn có tên trong ca ấy, và giá được nêu ở Hỏi-1."},
-    {"i": 4, "p": "Phép kiểm tên trong thông điệp chỉ xem có mặt — nay so trọn tập, không thừa không thiếu."}
+    {
+      "i": 0,
+      "p": "Lưới chống bảng mới chưa khai đặt luật lên PR lược đồ của mọi dãy — máy đã ghi nó là quyết định của người (Hỏi-2) thay vì tự chọn."
+    },
+    {
+      "i": 1,
+      "p": "Nhãn «bộ mẫu dọn» dán sai sẽ lại sinh lỗi không tên — nay lệnh đọc thẳng cơ sở dữ liệu để gọi tên, và có ca đỏ cho nhãn dán sai."
+    },
+    {
+      "i": 2,
+      "p": "Trước chỉ đo một trong ba phép đo màn đang đỏ — nay đo cả E12, E15, E17, đúng điều VK7 cần để ghim lại."
+    },
+    {
+      "i": 3,
+      "p": "Xoá việc của người mẫu có thể kéo theo việc con của người ngoài — nay chặn có tên trong ca ấy, và giá được nêu ở Hỏi-1."
+    },
+    {
+      "i": 4,
+      "p": "Phép kiểm tên trong thông điệp chỉ xem có mặt — nay so trọn tập, không thừa không thiếu."
+    }
   ]
 }
