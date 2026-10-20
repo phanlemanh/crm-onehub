@@ -58,16 +58,20 @@ Bản chụp `apps/agent/test/fixtures/tin-nhac-truoc-tb1.json` sinh lại từ 
 
 `apps/agent-okr/agent/lib/loi-dan-soan.ts` và `apps/agent/agent/subagents/tro_ly_okr/instructions.md`:
 - câu khái niệm «contributes to a higher one through Căn chỉnh» → «contributes to a higher one (Góp vào)»;
-- danh sách chữ «Use these words: …, Căn chỉnh, …» → «…, Góp vào, …», thêm một câu: không viết «căn chỉnh»
-  hay «hỏi ý» cho người đọc — màn gọi là «Góp vào» và «Lấy ý kiến»;
+- danh sách chữ «Use these words: …, Căn chỉnh, …» → «…, Góp vào, …», thêm đúng câu: «Never write `căn chỉnh` or
+  `hỏi ý` to the person: the screen says «Góp vào» and «Lấy ý kiến».» — hai chữ cũ trong dấu `` ` `` để luật máy
+  (bỏ qua đoạn mã) không bắt chính câu dặn;
 - tên mã (`dichCanChinh`, `ungVienCanChinh`, `can-chinh`) giữ: đó là khoá dữ liệu, không phải chữ cho người.
 
-Bộ chấm soạn (eval `okr-soan`) chạy hai lần bằng `rang/eval-soan.mjs`: `--nhan nen` trên cây trước khi đổi lời
-dặn, `--nhan sau` trên đỉnh nhánh. Bản gốc của thước (`_acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs`)
+Bộ chấm soạn (eval `okr-soan`) chạy bằng `rang/eval-soan.mjs`: `--nhan nen` trên commit ngay trước commit đổi lời
+dặn soạn (mọi sửa khác của hàng đã commit, nên hai lần chỉ khác lời dặn — đường soạn đọc tên gốc qua
+`packages/db/src/okr-goi-soan.ts` từ trước, AC-4 không đổi nó), `--nhan sau` trên đỉnh nhánh; lượt đầu trên cây
+chưa sửa giữ làm `--nhan nen-lap`, mẫu độ dao động. Bộ so đỏ khi giữa `nen.sha` và HEAD có tệp nào dưới
+`apps/agent-okr/agent`, `apps/agent-okr/evals`, `packages/db/src` đổi ngoài `loi-dan-soan.ts`. Bản gốc của thước (`_acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs`)
 ghi đè bằng chứng của một hồ sơ đã ký, nên VK5 dùng bản sao ghi vào `.acceptance-runs/` và một tệp tóm tắt
 `evidence/eval-soan-<nhãn>.json` mang băm lời dặn và băm thước. `rang/so-eval-soan.mjs` so: cùng băm thước và
 cùng model; số ca đạt không tụt quá 2, chốt mã hỏng không tăng quá 1, trung bình mỗi tiêu chí judge không tụt
-quá 0,1; bản nháp Kara nộp ở lần `sau` không chứa «căn chỉnh» hay «hỏi ý».
+quá 0,1 (dải là câu hỏi cho chủ kho ở Cổng Phạm vi); bản nháp Kara nộp ở lần `sau` không chứa «căn chỉnh» hay «hỏi ý».
 
 ## Luật máy
 

@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { bam, bamTep, LOI_DAN_SOAN, NGUONG } from "./eval-soan-chung.mjs";
+import { bam, bamTep, LOI_DAN_SOAN, NGUONG, VUNG_SOAN } from "./eval-soan-chung.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const BANG = join(GOC, "_acceptance", "chu-may-sinh-ten-moi", "evidence");
@@ -14,7 +14,7 @@ const docTom = (nhan) => {
 	return existsSync(duong) ? JSON.parse(readFileSync(duong, "utf8")) : null;
 };
 
-export function soSanh(nen, sau, bamNenTaiSha, bamHead, laTienBoi) {
+export function soSanh(nen, sau, bamNenTaiSha, bamHead, laTienBoi, doiNgoaiLoiDan = []) {
 	const loi = [];
 	if (!nen) return ["thieu eval-soan-nen.json"];
 	if (!sau) return ["thieu eval-soan-sau.json"];
@@ -24,6 +24,7 @@ export function soSanh(nen, sau, bamNenTaiSha, bamHead, laTienBoi) {
 	if (sau.bam.loiDan !== bamHead) loi.push("sau khong chay tren loi dan hien tai");
 	if (nen.bam.loiDan === sau.bam.loiDan) loi.push("nen va sau cung mot loi dan: chua do lan doi");
 	if (!laTienBoi) loi.push(`nen ${nen.sha.slice(0, 9)} khong nam truoc HEAD`);
+	if (doiNgoaiLoiDan.length) loi.push(`doi tep ngoai loi dan giua nen va sau: ${doiNgoaiLoiDan.join(", ")}`);
 	if (sau.chuCu.length) loi.push(`Kara con viet chu cu: ${sau.chuCu.map((c) => c.cum).join(", ")}`);
 	if (sau.dat < nen.dat - NGUONG.dat) loi.push(`so ca dat tut: ${sau.dat} < ${nen.dat} - ${NGUONG.dat}`);
 	if (sau.chotMaHong > nen.chotMaHong + NGUONG.chotMa) loi.push(`chot ma hong tang: ${sau.chotMaHong} > ${nen.chotMaHong} + ${NGUONG.chotMa}`);
@@ -46,7 +47,10 @@ if (import.meta.main ?? process.argv[1] === fileURLToPath(import.meta.url)) {
 	const show = git("show", `${nen.sha}:${LOI_DAN_SOAN}`);
 	const bamNen = show.status === 0 ? bam(show.stdout) : "";
 	const laTienBoi = git("merge-base", "--is-ancestor", nen.sha, "HEAD").status === 0;
-	const loi = soSanh(nen, sau, bamNen, bamTep(join(GOC, LOI_DAN_SOAN)), laTienBoi);
+	const doiNgoai = git("diff", "--name-only", nen.sha, "HEAD", "--", ...VUNG_SOAN)
+		.stdout.split("\n")
+		.filter((t) => t && t !== LOI_DAN_SOAN);
+	const loi = soSanh(nen, sau, bamNen, bamTep(join(GOC, LOI_DAN_SOAN)), laTienBoi, doiNgoai);
 	const lap = docTom("nen-lap");
 	if (lap) console.log(`do dao dong nen: dat ${nen.dat}/${lap.dat}, chot ma ${nen.chotMaHong}/${lap.chotMaHong}`);
 	console.log(`nen ${nen.dat}/${nen.tong} dat, chot ma hong ${nen.chotMaHong} · sau ${sau.dat}/${sau.tong} dat, chot ma hong ${sau.chotMaHong} · chu cu Kara viet: nen ${nen.chuCu.length}, sau ${sau.chuCu.length}`);
