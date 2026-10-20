@@ -9,6 +9,8 @@ import {
 
 export const WORKSPACE_ID = "workspace";
 
+export const TEN_GOC_DU_PHONG = "Công ty";
+
 export const DEFAULT_WORKSPACE_SLUG = "workspace";
 
 export const MAX_SLUG = 48;
@@ -225,4 +227,14 @@ function readSections(value: JsonValue): WorkspaceProfileSections {
 		sellsTo: text("sellsTo"),
 		edge: text("edge"),
 	});
+}
+
+export async function readTenGoc(db: {
+	organization: Pick<Db["organization"], "findUnique">;
+}): Promise<string> {
+	const workspace = await db.organization.findUnique({
+		where: { id: WORKSPACE_ID },
+		select: { name: true },
+	});
+	return workspace?.name.trim() || TEN_GOC_DU_PHONG;
 }
