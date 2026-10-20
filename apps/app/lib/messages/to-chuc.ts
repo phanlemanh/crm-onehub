@@ -3,7 +3,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 const vi = {
 	title: "Tổ chức",
 	moTa: "Bộ phận, phòng ban, người và trưởng — một cây dùng chung cho cả OneHub Center.",
-	goc: "Toàn công ty",
+	goc: "Công ty",
 	loading: "Đang tải cây tổ chức…",
 	loi: {
 		title: "Không tải được cây tổ chức",
@@ -211,7 +211,7 @@ type ToChucMessages = typeof vi;
 const en: ToChucMessages = {
 	title: "Organization",
 	moTa: "Divisions, departments, people and heads — one tree shared across OneHub Center.",
-	goc: "Whole company",
+	goc: "Company",
 	loading: "Loading the organization tree…",
 	loi: {
 		title: "Couldn't load the organization tree",

@@ -12,7 +12,7 @@ const vi = {
 			"Nội dung OKR chỉ gửi tới nhà cung cấp mô hình cam kết không lưu dữ liệu. Người dùng chưa thấy nút nào cho tới khi góp ý mở.",
 		phamVi: {
 			tat: "Không đơn vị nào",
-			"toan-cong-ty": "Toàn công ty",
+			"toan-cong-ty": "Công ty",
 			"danh-sach": "Chọn đơn vị",
 		},
 		nac: {
@@ -165,7 +165,7 @@ const vi = {
 		loai: {
 			"viet-lai": "Viết lại",
 			hoi: "Câu hỏi",
-			"can-chinh": "Căn chỉnh",
+			"can-chinh": "Góp vào",
 		},
 		truong: {
 			title: "Viết lại tên Mục tiêu",
@@ -190,7 +190,7 @@ const vi = {
 			"noi-ve-nguoi": "Nêu tên một người",
 			"chep-cap-tren": "Chép KR của Mục tiêu cấp trên",
 			"trung-luat": "Trùng câu hỏi luật đã hỏi",
-			"dich-ngoai-tap": "Căn chỉnh tới đích ngoài danh sách",
+			"dich-ngoai-tap": "Góp vào đích ngoài danh sách",
 			"da-bac": "Trùng đề xuất đã bị bác",
 			"dang-cho": "Trùng đề xuất đang chờ",
 			"khong-doi": "Câu mới giống câu cũ",
@@ -211,7 +211,7 @@ const en: TroLyOkrMessages = {
 			"OKR content goes only to model providers that commit to keeping no data. Nobody sees a button until feedback opens.",
 		phamVi: {
 			tat: "No units",
-			"toan-cong-ty": "Whole company",
+			"toan-cong-ty": "Company",
 			"danh-sach": "Chosen units",
 		},
 		nac: {
@@ -365,7 +365,7 @@ const en: TroLyOkrMessages = {
 		loai: {
 			"viet-lai": "Rewrite",
 			hoi: "Question",
-			"can-chinh": "Alignment",
+			"can-chinh": "Contributes to",
 		},
 		truong: {
 			title: "Rewrite objective title",
@@ -390,7 +390,7 @@ const en: TroLyOkrMessages = {
 			"noi-ve-nguoi": "Names a person",
 			"chep-cap-tren": "Copies a KR of the parent objective",
 			"trung-luat": "Repeats a rule question already asked",
-			"dich-ngoai-tap": "Aligns to a target outside the list",
+			"dich-ngoai-tap": "Contributes to a target outside the list",
 			"da-bac": "Repeats a rejected suggestion",
 			"dang-cho": "Repeats a pending suggestion",
 			"khong-doi": "New text same as the old",
