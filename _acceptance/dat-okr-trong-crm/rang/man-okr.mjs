@@ -37,7 +37,7 @@ const CHU = {
 	chuaTruong: "Gán trưởng ở Cài đặt › Tổ chức",
 	rongBody: "Trưởng đơn vị thêm từng mục tiêu",
 	cuaToiRong: "Bạn chưa phụ trách mục tiêu hay KR nào",
-	cayCanChinh: "Cây căn chỉnh",
+	cayCanChinh: "Sơ đồ góp vào",
 	danhSach: "Danh sách",
 	quayLai: "Quay lại",
 	nhap: "Nháp",
@@ -1148,7 +1148,7 @@ async function buocE12() {
 		tab.length >= 3 &&
 			tab.length <= 5 &&
 			tab[0].startsWith("KR") &&
-			tab[1].startsWith("Căn chỉnh") &&
+			tab[1].startsWith("Góp vào") &&
 			tab[2].startsWith(CHU.vet) &&
 			(tab.length < 4 || tab[3].startsWith("Trao đổi")) &&
 			(tab.length < 5 || tab[4].startsWith("Diễn biến")),

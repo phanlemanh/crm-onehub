@@ -33,6 +33,7 @@ import {
 } from "./okr-search-params";
 import { NutSoan } from "./soan/nut-soan";
 import { DUONG, type TabOkr } from "./tab-okr";
+import { useTenGoc } from "./ten-goc";
 
 export const ID_KHONG_THEM = "okr-khong-them-duoc";
 
@@ -57,7 +58,7 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	const { cycles, currentId } = useChuKy();
 	const access = useQuery(trpc.okr.access.queryOptions());
 	const cay = useQuery(trpc.org.tree.queryOptions());
-	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const tenGoc = useTenGoc();
 	const dich = donDich(tab, url[SEARCH_PARAM.okr.don], access.data?.headOf);
 	const hoiDuoc = currentId !== null && access.data !== undefined;
 	const ds = useQuery(
@@ -84,10 +85,7 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 		};
 	if (currentId === null || !ds.data) return { kieu: "cho" };
 	const duoc = ds.data.canCreate === true;
-	const ten =
-		(cay.data &&
-			giaiDon(dich.don, cay.data, workspace.data?.name || m.goc)?.ten) ||
-		m.donVi;
+	const ten = (cay.data && giaiDon(dich.don, cay.data, tenGoc)?.ten) || m.donVi;
 	const lyDo = duoc
 		? null
 		: dich.nguon === "goc"

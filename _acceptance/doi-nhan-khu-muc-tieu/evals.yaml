@@ -1,0 +1,143 @@
+slug: doi-nhan-khu-muc-tieu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.dnk_gop_vao
+    expected: "exit 0; -t dnk-gop-vao-vi của apps/app/test/doi-nhan-khu-muc-tieu.spec.ts. Đọc kiem-ke.json bằng docKiemKeDnk (zod), lấy mọi mục khai_niem 'gop-vao' có 'vi' trong doi; số mục khác SO_GOP_VAO_VI khai trong bài thì ném 'dnk: kiem-ke gop-vao vi <n> khac <k>'. Giá trị vi hiện tại (mucKhoKhu) của mỗi khoá: còn một trong «căn chỉnh», «đường lý do», «gắn căn chỉnh», «gắn thêm», «chưa nối lên» (không phân biệt hoa thường) thì ném 'dnk: <tệp>#<khoá> vi con <cụm>'; bằng đúng giá trị cũ thì ném 'dnk: <tệp>#<khoá> vi chua doi'. Các nhãn của NHAN_GHIM (sheet.tabCanChinh, sheet.khuDuongLyDo, hopThoai.ganCanChinh, chuaCanChinh ở okr.ts và okr-toan-canh.ts, cayCanChinh, packages/ui soDo.day «Dây góp vào») phải đúng chữ vi, không thì ném 'dnk: nhan <khoá> vi <giá trị>'. Đối chứng dương: một khoá không thuộc kiem-ke (okr.ts gopVao) vẫn trả chữ «góp vào» như mốc nền."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr*.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/ui/src/lib/messages.ts, apps/app/test/doi-nhan-khu-muc-tieu.spec.ts, apps/app/test/doi-nhan-khu-muc-tieu-luat.ts, _acceptance/doi-nhan-khu-muc-tieu/kiem-ke.json]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.dnk_gop_vao
+    expected: "exit 0; -t dnk-gop-vao-en của doi-nhan-khu-muc-tieu.spec.ts: mọi mục khai_niem 'gop-vao' có 'en' trong doi (số mục khác SO_GOP_VAO_EN thì ném 'dnk: kiem-ke gop-vao en <n> khac <k>'); giá trị en hiện tại khớp /\\balign/i, chứa «Path of reasons» hay «Not connected» thì ném 'dnk: <tệp>#<khoá> en con <cụm>'; bằng giá trị cũ thì ném 'dnk: <tệp>#<khoá> en chua doi'. Các nhãn en của NHAN_GHIM đúng «Contributes to», «Where it contributes», «Add where it contributes», «Not contributing anywhere», «Contribution map», «Contribution line», không thì ném 'dnk: nhan <khoá> en <giá trị>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr*.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/ui/src/lib/messages.ts, apps/app/test/doi-nhan-khu-muc-tieu.spec.ts, apps/app/test/doi-nhan-khu-muc-tieu-luat.ts, _acceptance/doi-nhan-khu-muc-tieu/kiem-ke.json]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.dnk_goc_man
+    expected: "exit 0; apps/app/test/doi-nhan-khu-muc-tieu.dom.tsx -t dnk-goc-man. (a) Dựng BangDoPhu của okr/hoi-y/khoi-do-phu.tsx với một hàng loai 'goc' và một hàng phòng ban, mock workspace.get trả name «Kho Thử Nghiệm» (không phải «OneHub», để chứng tên đọc từ dữ liệu): nhãn hàng gốc đúng «Kho Thử Nghiệm» trong phần tử translate='no', không thì ném 'dnk: do phu goc <chữ>'. (b) Cùng dựng với name rỗng: nhãn là «Công ty» (vi) và «Company» (en), không thì ném 'dnk: do phu du phong <ngôn ngữ> <chữ>'. (c) Dựng ChonDonVi (theo-don-vi/chon-don-vi.tsx) với tenGoc lấy từ useTenGoc dưới cùng mock: lựa chọn gốc mang «Kho Thử Nghiệm» trong translate='no'; name rỗng thì «Công ty». (d) Dạng chữ: theo-don-vi.tsx, hanh-dong-khu.tsx và hoi-y/khoi-do-phu.tsx đều gọi useTenGoc và không còn biểu thức workspace.data?.name || m.goc riêng, không thì ném 'dnk: man tu tinh ten goc <tệp>'; đối chứng dương: chuỗi mẫu 'workspace.data?.name || m.goc' đưa qua cùng hàm dò phải bị bắt. (e) Mock workspace.get khai kiểu bằng RouterOutputs['workspace']['get'] (kiểu đầu ra thật, typecheck bắt lệch khuôn). (f) Chữ cả trang của mọi lần dựng không chứa «Toàn công ty», «Toàn OneHub», «Whole company», «All of OneHub»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/hoi-y/khoi-do-phu.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx", "apps/app/app/(app)/[slug]/okr/ten-goc.ts", apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-hoi-y.ts, apps/app/test/doi-nhan-khu-muc-tieu.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: unit
+    cmd: config:executors.test.dnk_goc
+    expected: "exit 0; -t dnk-goc của doi-nhan-khu-muc-tieu.spec.ts: bảng NHAN_GHIM phần gốc ghim cap.goc, hopThoai.capMucTieu.onehub, goc (okr.ts, okr-hoi-y.ts doPhu.goc, to-chuc.ts) đúng «Công ty» / «Company»; okr-so.ts phamVi.toan-cong-ty và tro-ly-okr.ts troLy.phamVi.toan-cong-ty đúng «Công ty» / «Company»; khongThay.action vi đúng «Về cả công ty». Sai thì ném 'dnk: goc <tệp>#<khoá> <ngôn ngữ> <giá trị>'. Đối chứng phạm vi giữ: donViBang.caCongTy vi «cả công ty», moTa.toan-canh vi «Cả công ty trong một màn.» và okr-hoi-y.ts trong.quanTriMoTa vi bằng giá trị ở git show 1fce5d49c, không thì ném 'dnk: pham vi bi doi <khoá>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-hoi-y.ts, apps/app/lib/messages/okr-so.ts, apps/app/lib/messages/tro-ly-okr.ts, apps/app/lib/messages/to-chuc.ts, apps/app/test/doi-nhan-khu-muc-tieu.spec.ts, apps/app/test/doi-nhan-khu-muc-tieu-luat.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: unit
+    cmd: config:executors.test.dnk_lay_y_kien
+    expected: "exit 0; -t dnk-lay-y-kien của doi-nhan-khu-muc-tieu.spec.ts: mọi mục khai_niem 'lay-y-kien' của kiem-ke (số mục khác SO_LAY_Y_KIEN thì ném 'dnk: kiem-ke lay-y-kien <n> khac <k>'): giá trị vi còn «hỏi ý» (không phân biệt hoa thường) thì ném 'dnk: <tệp>#<khoá> vi con hoi y'; giá trị vi không chứa «lấy ý kiến» (không phân biệt hoa thường) thì ném 'dnk: <tệp>#<khoá> vi thieu lay y kien'; okr.ts tab.hoi-y vi đúng «Lấy ý kiến». Giá trị en của mỗi khoá phải bằng đúng cu.en trong kiem-ke (đối chứng round-trip với git show 1fce5d49c), không thì ném 'dnk: <tệp>#<khoá> en bi doi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-hoi-y.ts, apps/app/test/doi-nhan-khu-muc-tieu.spec.ts, _acceptance/doi-nhan-khu-muc-tieu/kiem-ke.json]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.dnk_luat
+    expected: "exit 0; -t dnk-luat của doi-nhan-khu-muc-tieu.spec.ts. (a) soatDnk(mucKhoKhu()) trả rỗng; khác rỗng thì ném nguyên danh sách, mỗi dòng '<tệp>#<khoá> <ngôn ngữ>: <cụm>'. Số tệp chữ của khu nạp được bằng số tệp khớp okr*.ts, tro-ly-okr.ts, to-chuc.ts dưới apps/app/lib/messages, không thì ném 'dnk: luat bo sot tep <danh sách>'. (b) Chiều đỏ viết trước: với mỗi cụm của CAM_VI (7) một mục giả vi mang cụm đó viết hoa chữ đầu, mỗi regex của CAM_EN (3) một mục giả en, và một mục giả en đúng bằng «Whole company» phải ra đúng một lỗi gọi tên khoá giả — 11 mục, 11 lỗi; ba mục giả giữ («Cả công ty trong một màn.», «the whole company answers», «Lấy ý kiến») ra 0 lỗi; một mục giả ở tệp ngoài khu (apps/app/lib/messages/deals.ts) mang «căn chỉnh» ra 0 lỗi. Lệch thì ném 'dnk: luat khong bat <khoá>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/test/doi-nhan-khu-muc-tieu-luat.ts, apps/app/test/doi-nhan-khu-muc-tieu.spec.ts, apps/app/lib/messages/okr*.ts, apps/app/lib/messages/tro-ly-okr.ts, apps/app/lib/messages/to-chuc.ts]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.dnk_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly: trên bản sao lành, config:executors.test.dnk_luat xanh; rồi mỗi cặp thayMotLan một chữ mới trong tệp thật của bản sao thành chữ cũ và chạy lại phải đỏ với dòng gọi đúng tệp và khoá: (a) okr.ts sheet.tabCanChinh vi ← «Căn chỉnh»; (b) okr-toan-canh.ts soDo.chuaNoiLen vi ← «Chưa nối lên»; (c) okr.ts tab.hoi-y vi ← «Hỏi ý»; (d) okr-hoi-y.ts doPhu.goc en ← «Whole company»; (e) okr-gop-y.ts dong.loai.can-chinh en ← «Alignment». Thiếu chuỗi vật thì ném KhongDo gọi tên cặp. In 'dot-bien: 5/5 cap dat'; số cặp khác SO_CAP_KHAI = 5 thì thoát 1. Cây thật không đổi (git diff --quiet trên các tệp vật sau lượt)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/doi-nhan-khu-muc-tieu/rang/dot-bien.mjs, apps/app/test/doi-nhan-khu-muc-tieu-luat.ts, apps/app/test/doi-nhan-khu-muc-tieu.spec.ts]
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.dnk_kiem_ke
+    expected: "exit 0; rang/kiem-ke.mjs đọc kiem-ke.json: (a) đúng 84 mục — gop-vao 55 · lay-y-kien 21 · goc 8; 80 mục có 'vi', 62 mục có 'en' trong doi; mọi mục goc có vai; lệch thì thoát 1 in '<khái niệm> <n> khac <k>'; (b) round-trip: mỗi cu.vi và cu.en (phần trước đối số mẫu 'X' nếu có) là chuỗi con của git show 1fce5d49c:<tệp>, không thì thoát 1 in 'kiem-ke <tệp>#<khoá> khong khop goc'; (c) quét lại mọi tệp chữ của khu và hai khoá KHOA_UI ở 1fce5d49c bằng cùng cumCamDnk của E6: mỗi khoá trúng phải có mục trong kiem-ke, không thì thoát 1 in 'kiem-ke sot <tệp>#<khoá>'; (d) trong dải của vòng do rang/dai.mjs tính (nhánh còn mở: merge-base HEAD origin/onehub..HEAD; đã lên onehub: M^1..M^2 của commit gộp M trên đường first-parent của origin/onehub mang commit thêm kiem-ke.json; dải rỗng thì thoát 2 in 'khong do duoc: dai rong'), commit thêm kiem-ke.json đứng trước mọi commit chạm apps/** hay packages/** và kiem-ke.json không đổi sau commit đó, không thì thoát 1 in 'kiem-ke viet sau khi sua'. In 'kiem-ke: 84 muc, goc khop'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/doi-nhan-khu-muc-tieu/kiem-ke.json, _acceptance/doi-nhan-khu-muc-tieu/rang/kiem-ke.mjs, _acceptance/doi-nhan-khu-muc-tieu/rang/dai.mjs]
+
+  - id: E9
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.dnk_proto
+    expected: "exit 0; rang/proto.mjs: (a) trên dải của vòng do rang/dai.mjs tính (nhánh còn mở: merge-base HEAD origin/onehub..HEAD; đã lên onehub: M^1..M^2 của commit gộp M trên đường first-parent của origin/onehub mang commit thêm kiem-ke.json; dải rỗng thì thoát 2 in 'khong do duoc: dai rong'), git diff --name-only của dải -- apps/app/app/proto rỗng, không thì thoát 1 in 'proto doi: <tệp>'; (b) không tệp nào dưới apps/app/app/proto nhập '@/lib/messages/okr' hay 'lib/messages/okr', không thì thoát 1 in 'proto nap chu okr: <tệp>'. Đối chứng dương: (b) chạy trên một thư mục tạm có tệp nhập '@/lib/messages/okr' phải bắt đúng tệp đó. In 'proto: 0 tep doi, 0 tep nap chu okr'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/doi-nhan-khu-muc-tieu/rang/proto.mjs, _acceptance/doi-nhan-khu-muc-tieu/rang/dai.mjs, apps/app/app/proto/**]
+
+  - id: E10
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.dnk_khong_go_bai
+    expected: "exit 0; rang/khong-go-bai.mjs so hai đầu dải của vòng do rang/dai.mjs tính (nhánh còn mở: merge-base HEAD origin/onehub..HEAD; đã lên onehub: M^1..M^2 của commit gộp M trên đường first-parent của origin/onehub mang commit thêm kiem-ke.json; dải rỗng thì thoát 2 in 'khong do duoc: dai rong'): không tệp *.spec.ts, *.dom.tsx, *.test.ts nào bị xoá; số lời gọi test( và it( của mỗi tệp bài đã đổi không giảm; không thêm .skip, .todo, .only, test.if(false). Vi phạm thì thoát 1 in '<tệp>: <loại>'. In 'khong-go-bai: <n> tep doi, 0 vi pham'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/doi-nhan-khu-muc-tieu/rang/khong-go-bai.mjs, _acceptance/doi-nhan-khu-muc-tieu/rang/dai.mjs, apps/app/test/**]
+
+  - id: E11
+    criterion: AC-7
+    executor: test
+    layer: unit
+    cmd: config:executors.test.dnk_bai_cu
+    expected: "exit 0; chạy bằng test:dom của apps/app các bài cũ đã đổi chữ: okr-cua-toi-ba-phan.dom.tsx, okr-sheet.dom.tsx, okr-tai-co-cau.dom.tsx, okr-gioi-han-duyet.dom.tsx, duong-ly-do.dom.tsx, okr-so-do-don-vi.dom.tsx, okr-theo-don-vi.dom.tsx, okr-hoi-y.dom.tsx, okr-thanh-tab.dom.tsx, okr-trang-don-vi.dom.tsx; và bun test ./test/messages-guard.spec.ts. Mọi bài xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/test/**, apps/app/lib/messages/**, "apps/app/app/(app)/[slug]/okr/**"]
+
+  - id: E12
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.dnk_thuoc_da_ky
+    expected: "exit 0; rang/thuoc-da-ky.mjs với bảng THUOC = [{hồ sơ dat-okr-trong-crm, tệp rang/man-okr.mjs, cặp «Cây căn chỉnh»→okr.ts cayCanChinh vi, «Căn chỉnh»→okr.ts sheet.tabCanChinh vi}, {hồ sơ toan-canh-okr, tệp rang/man-toan-canh.mjs, cặp «Cây căn chỉnh toàn công ty»→okr-toan-canh.ts cay.canChinh vi}]. (a) git diff -U0 của mỗi tệp trên dải của vòng do rang/dai.mjs tính (nhánh còn mở: merge-base HEAD origin/onehub..HEAD; đã lên onehub: M^1..M^2 của commit gộp M trên đường first-parent của origin/onehub mang commit thêm kiem-ke.json; dải rỗng thì thoát 2 in 'khong do duoc: dai rong'): mỗi dòng '+' bằng đúng dòng '-' đối ứng sau khi thay chuỗi cũ bằng chữ mới; dòng đổi khác hay số dòng lệch thì thoát 1 in '<tệp>: dong doi ngoai chuoi'. (b) Chữ mới bằng giá trị vi hiện tại của khoá (nạp tệp chữ), không thì thoát 1 in '<tệp>: hang <chữ> khac khoa <khoá>'; chuỗi cũ còn trong tệp chữ của khu thì thoát 1 in '<chuỗi cũ> con trong tep chu'. (c) _acceptance/<hồ sơ>/decisions.jsonl có một dòng type 'fix' chứa 'doi-nhan-khu-muc-tieu' và decided_by 'Phan Le Manh', không thì thoát 1 in '<hồ sơ>: thieu dong so fix'. (d) Chiều đỏ: trên bản sao, trả một hằng về chữ cũ thì (b) đỏ gọi đúng tệp; thêm một dòng đổi logic thì (a) đỏ. In 'thuoc-da-ky: 2 ho so, 3 cap, 0 lech'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/doi-nhan-khu-muc-tieu/rang/thuoc-da-ky.mjs, _acceptance/doi-nhan-khu-muc-tieu/rang/dai.mjs, _acceptance/dat-okr-trong-crm/rang/man-okr.mjs, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs, _acceptance/dat-okr-trong-crm/decisions.jsonl, _acceptance/toan-canh-okr/decisions.jsonl, apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-toan-canh.ts]
+
+  - id: E13
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.dnk_bang_chu
+    expected: "exit 0; rang/bang-chu.mjs ghi .acceptance-runs/doi-nhan-khu-muc-tieu/bang-chu.md và chép sang _acceptance/doi-nhan-khu-muc-tieu/evidence/bang-chu.md (bỏ chép khi contract đã signed-off hay machine-cleared): mỗi mục của kiem-ke.json, mỗi ngôn ngữ trong doi, một dòng — khái niệm, vai (mục goc: tên cấp · phạm vi · dự phòng tên gốc; còn lại «—»), tệp#khoá, ngôn ngữ, chữ cũ, chữ hiện tại. Số dòng khác tổng độ dài doi (142) thì thoát 1; mục goc thiếu vai thì thoát 1 in 'bang-chu thieu vai <khoá>'. In 'bang-chu: 142 dong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/doi-nhan-khu-muc-tieu/rang/bang-chu.mjs, _acceptance/doi-nhan-khu-muc-tieu/kiem-ke.json, apps/app/lib/messages/okr*.ts, apps/app/lib/messages/tro-ly-okr.ts, apps/app/lib/messages/to-chuc.ts, packages/ui/src/lib/messages.ts]
+
+  - id: E14
+    criterion: AC-2
+    executor: judgment
+    question: >-
+      Đọc bảng _acceptance/doi-nhan-khu-muc-tieu/evidence/bang-chu.md (mỗi dòng: khái niệm, vai, khoá, ngôn ngữ, chữ cũ,
+      chữ mới) và mục «Bảng thay chữ» của design doc. Như một thành viên OneHub đọc khu Mục tiêu, mỗi chữ mới có (1) dùng
+      đúng một tên cho khái niệm của dòng — «Góp vào»/«contribute» cho căn chỉnh, «Lấy ý kiến» cho lần hỏi ý; với dòng
+      khái niệm goc, đúng chữ của cột vai theo design doc («Công ty»/«Company» cho tên cấp và dự phòng tên gốc, «cả công
+      ty» cho phạm vi); (2) giữ nghĩa chữ cũ — không mất hướng (cái gì góp vào cái gì), không mất ai làm gì; (3) đọc tự
+      nhiên bằng tiếng Việt và tiếng Anh, đúng ngữ pháp câu (không ghép cứng «Gỡ Góp vào», «Contributes to removed»)
+      không? Trả PASS khi không dòng nào vi phạm; FAIL nêu từng dòng vi phạm kèm khoá và điều vi phạm.
+    inputs: [_acceptance/doi-nhan-khu-muc-tieu/evidence/bang-chu.md, docs/superpowers/specs/2026-10-19-doi-nhan-khu-muc-tieu-design.md]
+    evidence_required: [verdict, rationale, verified_at]
+    paths: [_acceptance/doi-nhan-khu-muc-tieu/evidence/bang-chu.md]
+
+  - id: E15
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dnk_chup
+    expected: "Lệnh thoát 0, dòng KET LUAN báo 0 SAI và không dòng KHONG DO DUOC; mọi dòng E15 là DUNG. Ảnh E15-khung-gop-vao-1440 cho thấy khung mục tiêu với thẻ «Góp vào» đang mở và khối «Góp vào đâu»; E15-khung-gop-vao-en-1440 cùng màn ở tiếng Anh với thẻ «Contributes to», nhãn không tràn hay cắt; E15-gop-vao-trong-en-1440 thẻ «Contributes to» đang mở với trạng thái trống «Not contributing anywhere», nhãn thẻ và tiêu đề trạng thái trống không tràn hay bị cắt; E15-theo-don-vi-1440 cho thấy ô chọn đơn vị mở với hàng gốc mang tên không gian làm việc của kho đo; E15-do-phu-1440 cho thấy thẻ khu «Lấy ý kiến» và hàng gốc bảng độ phủ mang đúng tên không gian làm việc; không ảnh vi nào có «căn chỉnh», «Hỏi ý», «Toàn công ty», không ảnh en nào có «Alignment»."
+    steps:
+      - "Chạy NGUYÊN VĂN từ gốc kho: bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/doi-nhan-khu-muc-tieu/rang/chup.mjs\" — tien-de tự dựng phiên đo (kho crm_<cây>_do, API và app của chính cây); không gọi thẳng chup.mjs"
+      - "chup.mjs chạy cảnh cây trước màn đầu; lệch cây hay bàn đo không dựng được → mã 2"
+      - "chup.mjs nạp bộ OKR mẫu (bun run okr:mau, đường ghi thật), đọc tên không gian làm việc của kho đo bằng workspace.get; bộ mẫu chưa có lần lấy ý kiến đang mở có ý thì mở một lần và góp một ý qua service thật của okr-hoi-y (không chèn thẳng bảng)"
+      - "Ở 1440, vi: mở khung một mục tiêu mẫu có chỗ góp vào, bấm thẻ «Góp vào» → ảnh evidence/E15-khung-gop-vao-1440.png; mở Theo đơn vị, mở ô chọn đơn vị → ảnh evidence/E15-theo-don-vi-1440.png; mở thẻ «Lấy ý kiến» tới bảng độ phủ → ảnh evidence/E15-do-phu-1440.png, hàng gốc phải bằng đúng tên workspace.get, không có thì dòng KHONG DO DUOC"
+      - "Ở 1440, en: khung mục tiêu thẻ «Contributes to» → ảnh evidence/E15-khung-gop-vao-en-1440.png; khung một mục tiêu quý 4 công khai chưa góp vào đâu, bấm thẻ «Contributes to» → ảnh evidence/E15-gop-vao-trong-en-1440.png; đo nhãn thẻ «Contributes to» và tiêu đề «Not contributing anywhere» không tràn ngang (scrollWidth không vượt hộp) và nằm đúng một dòng"
+      - "Mỗi màn: chữ cả trang có chữ mới tương ứng và không khớp cụm vi nào của CAM_VI → dòng «E15 <màn> DUNG|SAI <lý do>»; rồi mở từng ảnh E15-*.png để chấm"
+    evidence_required: [run_id, verifier, verified_at, output, screenshot]
+    paths: [packages/ui/src/lib/messages.ts, apps/app/lib/messages/okr*.ts, "apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", _acceptance/doi-nhan-khu-muc-tieu/rang/chup.mjs]
