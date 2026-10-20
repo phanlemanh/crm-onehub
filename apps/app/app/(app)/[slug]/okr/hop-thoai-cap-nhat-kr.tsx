@@ -27,7 +27,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { bangChungVao } from "@crm/validation/okr-canh-kr";
 import { mucCapNhat } from "@crm/validation/okr-cap-nhat";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { loiDuongDan } from "@/components/crm/record-sheet/kr-bang-chung";
@@ -100,6 +100,7 @@ export function HopThoaiCapNhatKr({
 	const m = t.hopCapNhat;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const queryClient = useQueryClient();
 	const ma = useId();
 	const mc = okrCanhKrMessages(locale);
 	const [o, setO] = useState(() => oBanDau(kr, locale));
@@ -108,7 +109,18 @@ export function HopThoaiCapNhatKr({
 		trpc.okr.guiCapNhat.mutationOptions({
 			onSuccess: async () => {
 				toast.success(m.daGui);
-				await cache.okr(kr.objectiveId, { settle: "record" });
+				const theoKr = { keyResultId: kr.keyResultId };
+				await Promise.all([
+					cache.okr(kr.objectiveId, { settle: "record" }),
+					queryClient.invalidateQueries(
+						{ queryKey: trpc.okr.canhKr.queryKey(theoKr) },
+						{ cancelRefetch: false },
+					),
+					queryClient.invalidateQueries(
+						{ queryKey: trpc.okr.dienBien.queryKey(theoKr) },
+						{ cancelRefetch: false },
+					),
+				]);
 				dong();
 			},
 		}),
@@ -215,6 +227,7 @@ export function HopThoaiCapNhatKr({
 							lan={lan}
 							loi={loi}
 							so={so}
+							tuDongFocus
 							value={o.giaTri}
 						/>
 						{hienBangChung ? (

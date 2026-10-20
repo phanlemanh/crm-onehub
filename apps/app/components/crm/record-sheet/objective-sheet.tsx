@@ -46,13 +46,10 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
+import { coTheCapNhat, useCapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import type { DiemCam } from "@/app/(app)/[slug]/okr/diem-cam";
 import { useGopYMucTieu } from "@/app/(app)/[slug]/okr/gop-y-kara";
 import { HopThoaiCanChinh } from "@/app/(app)/[slug]/okr/hop-thoai-can-chinh";
-import {
-	HopThoaiCapNhatKr,
-	krCapNhatTuSheet,
-} from "@/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr";
 import { HopThoaiKr } from "@/app/(app)/[slug]/okr/hop-thoai-kr";
 import { HopThoaiMucTieu } from "@/app/(app)/[slug]/okr/hop-thoai-muc-tieu";
 import { CELL, type KetQua } from "@/app/(app)/[slug]/okr/kieu";
@@ -388,7 +385,7 @@ function MenuKr({
 	xoa: () => void;
 }) {
 	const m = okrMessages(useLocale()).sheet;
-	const capNhatDuoc = kr.hienTaiQuaCapNhat && mt.canEditKr.includes(kr.id);
+	const capNhatDuoc = coTheCapNhat(mt, kr);
 	const suaDuoc =
 		mt.status !== "da-bo" &&
 		mt.choDuyet === null &&
@@ -445,8 +442,6 @@ function demCanh(mt: ChiTiet): ReadonlyMap<string, DemCanhKr> {
 		]),
 	);
 }
-
-type HopKr = { loai: "cap-nhat"; kr: KetQua; sessionId: string | null };
 
 function NganOkr({ mt }: { mt: ChiTiet }) {
 	const [hop, datHop] = useHopOkr();
@@ -545,19 +540,8 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
-	const [hop, setHop] = useState<HopKr | null>(null);
+	const capNhat = useCapNhatKr();
 	const [, datHopOkr] = useHopOkr();
-	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
-	const moCapNhat = (kr: KetQua) => {
-		setHop({ loai: "cap-nhat", kr, sessionId: null });
-		moPhien.mutate(
-			{ entry: "sheet" },
-			{
-				onSuccess: ({ sessionId }) =>
-					setHop((cu) => (cu?.kr.id === kr.id ? { ...cu, sessionId } : cu)),
-			},
-		);
-	};
 	const [xoa, setXoa] = useState<KetQua | null>(null);
 	const go = useMutation(
 		trpc.okr.removeKeyResult.mutationOptions(
@@ -661,7 +645,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 										<MenuKr
 											mt={mt}
 											kr={kr}
-											capNhat={() => moCapNhat(kr)}
+											capNhat={() => capNhat.mo(mt, kr)}
 											sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
 											xoa={() => setXoa(kr)}
 										/>
@@ -692,17 +676,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 						</Button>
 					</div>
 				) : null}
-				{hop ? (
-					<HopThoaiCapNhatKr
-						kr={krCapNhatTuSheet(mt, hop.kr)}
-						chuTen={hop.kr.owner.name}
-						ghiHo={!hop.kr.laCuaToi}
-						sessionId={hop.sessionId}
-						loiMo={moPhien.isError}
-						moLai={() => moCapNhat(hop.kr)}
-						dong={() => setHop(null)}
-					/>
-				) : null}
+				{capNhat.hop}
 				<ConfirmDialog
 					tone="destructive"
 					nut={m.hoiXoaKr.action}
