@@ -135,13 +135,13 @@ evals:
     executor: script
     cmd: config:executors.script.kcd_trang_khac
     paths:
-      - "apps/app/app/(app)/**/page.tsx"
+      - "apps/app/app/(app)/**/*.tsx"
       - _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs
     expected: |
-      rang/trang-khac.mjs đọc mọi page.tsx dưới apps/app/app/(app) bằng bộ phân tích TypeScript, liệt các fallback
-      KhungXuong theo hình. Dòng "AC-6: <n> trang dung bang · bang-hai-dong chi o theo-don-vi". DUNG khi chín trang đang
-      dùng bang hôm nay (api-keys, sso, members, tai-lieu, contacts, deals, campaigns, companies, onboarding) vẫn dùng
-      bang, và bang-hai-dong chỉ xuất hiện ở okr/theo-don-vi. Exit 0.
+      rang/trang-khac.mjs đọc mọi .tsx dưới apps/app/app/(app) bằng bộ phân tích TypeScript, liệt các phần tử
+      KhungXuong theo hình và thư mục. Dòng "AC-6: <n> trang dung bang · bang-hai-dong o [slug]/okr/theo-don-vi". DUNG
+      khi chín trang đang dùng bang hôm nay (api-keys, sso, members, tai-lieu, contacts, deals, campaigns, companies,
+      onboarding) vẫn dùng bang, bang-hai-dong có ở okr/theo-don-vi và không ở thư mục nào khác. Exit 0.
       CHIEU DO (--pha-thu: bản sao đổi deals/page.tsx sang bang-hai-dong) -> "SAI AC-6: deals dung bang-hai-dong", mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
