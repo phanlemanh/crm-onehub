@@ -1117,7 +1117,7 @@ describe("hoi-y", () => {
 			};
 			const r = await guiQuaZalo(g.A.id, goc);
 			const text = r.z.guiToi("ZA")[0]?.body.text ?? "";
-			const dongHoiY = text.split("\n").filter((d) => d.includes("hỏi ý"));
+			const dongHoiY = text.split("\n").filter((d) => d.includes("lấy ý kiến"));
 			expect({
 				ket: r.ket,
 				tieuDe: text.split("\n").includes(TIEU_DE["okr-hoi-y-gop"]),
@@ -1134,7 +1134,7 @@ describe("hoi-y", () => {
 				soDong: 1,
 			});
 			expect(dongHoiY[0]).toBe(
-				`1. Công ty đang hỏi ý cho mục tiêu ${g.nhan} — hạn 17:00 14/10 — ${APP_URL}/${await slug()}/okr/hoi-y?kyOkr=${g.ky}`,
+				`1. Công ty đang lấy ý kiến cho mục tiêu ${g.nhan} — hạn 17:00 14/10 — ${APP_URL}/${await slug()}/okr/hoi-y?kyOkr=${g.ky}`,
 			);
 		},
 		CHO_MS,

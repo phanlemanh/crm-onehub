@@ -36,8 +36,8 @@ export const TIEU_DE = {
 	"okr-nhac-ten": "Nhắc tên",
 	"okr-ghi-nhan": "Ghi nhận",
 	"okr-theo-doi": "Đang theo dõi",
-	"okr-hoi-y-gop": "Hỏi ý mục tiêu",
-	"okr-hoi-y-cong-bo": "Hỏi ý đã công bố",
+	"okr-hoi-y-gop": "Lấy ý kiến",
+	"okr-hoi-y-cong-bo": "Lấy ý kiến đã công bố",
 	"okr-tom-tat": "Kara · OKR",
 	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
@@ -126,7 +126,7 @@ function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
 		case "okr-tra-lai":
 			return `${chu(v.nguoiTraLai)} trả lại mục tiêu «${chu(v.nhan)}»: ${chu(v.lyDo)}`;
 		case "okr-hoi-y-gop":
-			return `Công ty đang hỏi ý cho mục tiêu ${chu(v.nhan)} — hạn ${gioHan(v.hanLuc)}`;
+			return `Công ty đang lấy ý kiến cho mục tiêu ${chu(v.nhan)} — hạn ${gioHan(v.hanLuc)}`;
 		case "okr-hoi-y-cong-bo":
 			return `Mục tiêu ${chu(v.nhan)} đã công bố — xem ý của bạn đi đâu`;
 	}
@@ -175,8 +175,8 @@ const NHAN_LIEN_KET_OKR = {
 	"okr-theo-doi": "mở mục tiêu",
 	"okr-cho-duyet": "mở mục tiêu",
 	"okr-tra-lai": "mở mục tiêu",
-	"okr-hoi-y-gop": "mở hỏi ý",
-	"okr-hoi-y-cong-bo": "mở hỏi ý",
+	"okr-hoi-y-gop": "mở Lấy ý kiến",
+	"okr-hoi-y-cong-bo": "mở Lấy ý kiến",
 } as const satisfies { [K in ViecOkr["loai"]]: string };
 
 function dongOkr(

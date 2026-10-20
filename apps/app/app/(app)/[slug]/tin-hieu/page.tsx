@@ -48,7 +48,11 @@ async function NoiDung() {
 	);
 	const { banVe, trangThai } = docTrangThaiTinHieu(
 		await docBanVe(),
-		cuaToi.rows.map((r) => ({ ma: r.ma, daKeoVe: r.daKeoVe })),
+		cuaToi.rows.map((r) => ({
+			ma: r.ma,
+			daKeoVe: r.daKeoVe,
+			daLuuTru: r.daLuuTru,
+		})),
 		m,
 	);
 	return (

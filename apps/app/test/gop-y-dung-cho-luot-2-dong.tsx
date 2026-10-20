@@ -285,7 +285,7 @@ describe("k3-can-chinh", () => {
 		await nhanCanChinh(
 			MA_TRAN[1],
 			goDi,
-			new LoiTrpc("NOT_FOUND", "Không có căn chỉnh clx77"),
+			new LoiTrpc("NOT_FOUND", "Không có chỗ góp vào clx77"),
 		);
 		await bamChuot(
 			nut(ui.proposedChange.undo, deXuat(D_CAN.id) ?? document.body),

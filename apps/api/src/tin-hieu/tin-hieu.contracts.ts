@@ -12,6 +12,7 @@ export const dongTinHieuCuaToi = z.object({
 	man: z.string(),
 	guiLuc: z.date(),
 	daKeoVe: z.boolean(),
+	daLuuTru: z.boolean(),
 });
 export const tinHieuCuaToiOutput = z.object({
 	rows: z.array(dongTinHieuCuaToi),
@@ -23,6 +24,8 @@ const thamChieu = z.object({ id: z.string(), ten: z.string() });
 export const dongTinHieuTatCa = dongTinHieuCuaToi.extend({
 	nguoiGui: thamChieu.nullable(),
 	phongBan: thamChieu.nullable(),
+	archivedAt: z.date().nullable(),
+	nguoiLuuTru: thamChieu.nullable(),
 });
 export const tinHieuTatCaOutput = z.object({
 	rows: z.array(dongTinHieuTatCa),
@@ -30,3 +33,9 @@ export const tinHieuTatCaOutput = z.object({
 export type TinHieuTatCaOutput = z.infer<typeof tinHieuTatCaOutput>;
 
 export const xoaTinHieuOutput = z.object({ ok: z.literal(true) });
+export const luuTruTinHieuOutput = z.object({
+	ok: z.literal(true),
+	daLuuTruLuc: z.date(),
+});
+export type LuuTruTinHieuOutput = z.infer<typeof luuTruTinHieuOutput>;
+export const khoiPhucTinHieuOutput = z.object({ ok: z.literal(true) });

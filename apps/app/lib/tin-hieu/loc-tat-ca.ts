@@ -14,6 +14,13 @@ export type DongTatCa = {
 	nguoiGui: { id: string; ten: string } | null;
 	phongBan: { id: string; ten: string } | null;
 	trangThai: { khoa: string; nhan: string; cau: string; nghia: NghiaTrangThai };
+	daKeoVe: boolean;
+	luuTru: LuuTruDong | null;
+};
+
+export type LuuTruDong = {
+	luc: string;
+	nguoi: { id: string; ten: string } | null;
 };
 
 export type BaSo = {
@@ -37,6 +44,8 @@ export function dongTuHang(
 		daKeoVe: boolean;
 		nguoiGui: { id: string; ten: string } | null;
 		phongBan: { id: string; ten: string } | null;
+		archivedAt?: Date | string | null;
+		nguoiLuuTru?: { id: string; ten: string } | null;
 	}[],
 	trangThai: Record<string, TrangThaiDong>,
 	m: TinHieuMessages,
@@ -50,6 +59,13 @@ export function dongTuHang(
 		guiLuc: new Date(r.guiLuc).toISOString(),
 		nguoiGui: r.nguoiGui,
 		phongBan: r.phongBan,
+		daKeoVe: r.daKeoVe,
+		luuTru: r.archivedAt
+			? {
+					luc: new Date(r.archivedAt).toISOString(),
+					nguoi: r.nguoiLuuTru ?? null,
+				}
+			: null,
 		trangThai:
 			trangThai[r.ma] ??
 			(r.daKeoVe

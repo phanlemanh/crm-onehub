@@ -1,5 +1,6 @@
 import { isWorkspaceAdmin, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { readTenGoc } from "@crm/db/workspace";
 import { PHA_CHU_KY } from "@crm/validation/okr-chu-ky";
 import {
 	type ChuDeIdInput,
@@ -986,7 +987,7 @@ export class OkrHoiYService {
 		return bangDoPhu({
 			tu: h.createdAt,
 			den: h.hanLuc.getTime() < now.getTime() ? h.hanLuc : now,
-			donVi: donViTuCay(q.cay, OKR.tenGoc),
+			donVi: donViTuCay(q.cay, await readTenGoc(this.db)),
 			nguoi: nguoiTinhDoPhu(q.cay.people, h.nguoiChonUserId),
 			gop: gop.flatMap((g) =>
 				g._min.createdAt === null
