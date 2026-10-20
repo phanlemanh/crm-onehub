@@ -5,7 +5,7 @@ slug: okr-mau-xoa-du
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-20
 design_doc: docs/superpowers/specs/2026-10-20-okr-mau-xoa-du-design.md
@@ -61,3 +61,11 @@ sổ `bỏ coverage-scan`.
 - Ranh giới: `apps/api/scripts/okr-mau/**`, `apps/api/test/okr-mau*.spec.ts`, `_acceptance/config.yaml` (chỉ thêm),
   `_acceptance/okr-mau-xoa-du/**`.
 - Hạng T2: không chạm đường T3 nào.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-21:
+  - Ngoài-1: Nếu người thật đã gắn việc của người mẫu vào mốc dự án, kế hoạch onboarding hoặc một deal, lệnh xoá bộ mẫu sẽ gỡ các liên kết đó mà không báo trước.
+  - Ngoài-3: Sau khi xoá bộ mẫu, dòng tóm tắt không cho biết đã dọn bao nhiêu việc chung và tín hiệu, và con số việc hiện ra có thể bị hiểu nhầm.
+  - Ngoài-5: Một việc mẫu đã nằm trong dự án hay mốc của người thật sẽ bị gỡ khỏi đó khi xoá bộ mẫu, và lệnh vẫn báo thành công.
+  - Ngoài-6: Lệnh xoá hoặc nạp lại bộ mẫu dọn cả việc chung và tín hiệu mà không báo đã dọn bao nhiêu, kể cả việc đang giao cho người thật.
+  - Ngoài-7: Bài kiểm có thể báo xanh dù việc người theo dõi chưa từng được tạo, nên chưa chắc đã chứng minh phần dọn người theo dõi.
+  - Ngoài-8: Nếu ai đó vô tình bỏ hai nhánh dò phụ thuộc theo từng chiều, bài kiểm vẫn xanh nên lỗi có thể lọt không bị bắt.
+  - Ngoài-9: Thông điệp dừng có thể vô tình quay lại in chữ trần kiểu «(User)» ở một số ca mà bài kiểm không bắt được.
