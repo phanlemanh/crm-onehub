@@ -1,4 +1,4 @@
-import type { Db } from "@crm/db";
+import type { Db, Prisma } from "@crm/db";
 import { Injectable } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type {
@@ -51,11 +51,14 @@ export class ChiPhiAdsService {
 	}
 
 	async list(input: ChiPhiAdsListInput): Promise<ChiPhiAdsListOutput> {
+		const where: Prisma.ChiPhiAdsWhereInput = {
+			ngay: { gte: ngayUtc(input.from), lte: ngayUtc(input.to) },
+		};
+		if (input.nenTang) {
+			where.nenTang = input.nenTang;
+		}
 		const rows = await this.db.chiPhiAds.findMany({
-			where: {
-				ngay: { gte: ngayUtc(input.from), lte: ngayUtc(input.to) },
-				...(input.nenTang ? { nenTang: input.nenTang } : {}),
-			},
+			where,
 			orderBy: [{ ngay: "desc" }, { spend: "desc" }],
 			take: 5000,
 		});

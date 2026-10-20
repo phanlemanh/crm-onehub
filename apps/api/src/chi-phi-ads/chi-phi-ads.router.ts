@@ -1,6 +1,7 @@
 import { Inject } from "@nestjs/common";
-import { Input, Mutation, Query, Router } from "nestjs-trpc";
+import { Input, Mutation, Query, Router, UseMiddlewares } from "nestjs-trpc";
 import type { z } from "zod";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	chiPhiAdsListInput,
@@ -17,6 +18,7 @@ import { ChiPhiAdsService } from "./chi-phi-ads.service";
  *   GET  /rest/ad-spend  — đọc theo khoảng ngày (phục vụ app CRM hiển thị)
  */
 @Router({ alias: "chiPhiAds" })
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class ChiPhiAdsRouter {
 	constructor(
 		@Inject(ChiPhiAdsService) private readonly chiPhi: ChiPhiAdsService,
