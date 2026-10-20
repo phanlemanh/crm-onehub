@@ -1,0 +1,224 @@
+schema_version: 1
+slug: gom-tin-hieu-tu-chay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.gtc_tep_lich
+    paths:
+      - ".github/workflows/tin-hieu-gom.yml"
+      - "_acceptance/gom-tin-hieu-tu-chay/rang/tep-lich.mjs"
+    expected: |
+      rang/tep-lich.mjs doc .github/workflows/tin-hieu-gom.yml bang bo doc YAML that (khong regex tren chuoi tho) va kiem
+      ma tran viet truoc 8 dong, moi dong mot dong DUNG/SAI:
+        1 on.push.branches == ["onehub"] va on.push.paths chua "tin-hieu/crm/**"
+        2 on.schedule co dung mot cron
+        3 on co workflow_dispatch
+        4 job co if gioi han github.repository == 'phanlemanh/crm-onehub'
+        5 concurrency.group co mat va cancel-in-progress == false
+        6 permissions dung hai khoa {contents: write, pull-requests: write}
+        7 job co timeout-minutes la so
+        8 khong buoc nao (run) chua "gh pr merge", "gh pr ready", "--auto"; buoc cuoi chay "bun scripts/tin-hieu/gom-lich.ts"
+      Ma 0 chi khi ca 8 dong DUNG.
+      DOI CHUNG DUONG: chay tren tep that -> 8 DUNG. CHIEU DO: script co che do --tu-kiem chay lai cung ma tran tren ba ban
+      sao tiem trong thu muc tam: bo workflow_dispatch -> dong 3 SAI voi thong diep ghim "lich khong chay tay duoc";
+      them buoc "gh pr merge" -> dong 8 SAI voi thong diep ghim "tep lich co buoc gop"; permissions them actions: write ->
+      dong 6 SAI voi thong diep ghim "tep lich xin quyen thua". --tu-kiem ma 0 chi khi ban that xanh va ca ba ban tiem do
+      dung dong, dung thong diep.
+
+  - id: E1b
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.gtc_khong_moi
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-lich.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-lich.test.ts describe "gtc-khong-moi" tren kho tam (origin tran + ban sao, tin hieu chep tu tin-hieu/crm that,
+      mot ban gom phu het moi tin hieu, ban gom do chinh claude gia sinh tu dau ra that cua --chua-gom roi commit vao
+      onehub cua kho tam). Mot luot: ma 0; dong in == GOM.thongDiep.khongMoi doc tu cau hinh (khong viet tay);
+      claude gia KHONG duoc goi (tep dau-goi cua no vang); gh gia khong nhan loi goi nao ngoai "pr list" (hoac khong loi
+      goi nao); ref origin/tin-hieu/gom khong ton tai sau luot.
+      DOI CHUNG DUONG: cung kho tam nhung bo ban gom -> claude gia DUOC goi (tep dau-goi co mat).
+      CHIEU DO: ban sao cua luot luon goi mo hinh -> ca do voi thong diep ghim "goi mo hinh khi khong co tin hieu moi".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtc_de_xuat
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/gom-than-pr.ts"
+      - "scripts/tin-hieu/test/gom-lich.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-lich.test.ts describe "gtc-de-xuat" tren kho tam co N tin hieu chua co cho (chep tu tin-hieu/crm that), khong
+      PR nao. claude gia doc dau ra that cua `node scripts/tin-hieu.mjs --root . --chua-gom`, ghi mot ban gom hai nhom +
+      mot le theo khoi GOM-MAU, va them mot hang cho moi nhom vao tep lo trinh mau cua kho tam. Sau luot:
+        1 ma 0
+        2 origin/tin-hieu/gom ton tai; git merge-base origin/onehub origin/tin-hieu/gom == dinh onehub
+        3 git diff --name-only origin/onehub origin/tin-hieu/gom == dung {mot tep tin-hieu/gom/*.md moi, tep lo trinh, LO-TRINH.html}
+        4 `node scripts/tin-hieu.mjs --root . --rang` chay tren origin/tin-hieu/gom: ma 0
+        5 gh gia nhan dung MOT loi goi "pr create", mang "--draft", "--base onehub", "--head tin-hieu/gom"; tieu de khop
+          ^TH2 · chore\(gom-tin-hieu-tu-chay\): Đợt tín hiệu
+        6 than PR chua ten moi nhom va so tin hieu cua no va cau_giao cua hang de xuat cho nhom do (doc lai tu ban gom va tep
+          lo trinh tren nhanh, khong viet tay), ly do cua tin hieu le, ba dong GOM.than.sua / phuQuyet / gop, va dong dau
+          dung bang bam cua danh sach ma tin hieu da xep
+        7 khong loi goi gh nao chua "merge" hay "ready"
+        8 claude gia ghi lai argv cua no: co "-p", "--model" == GOM.moHinh.ten, "--max-turns" == GOM.moHinh.tranLuot,
+          "--allowedTools" == GOM.moHinh.congCu (doc tu cau hinh, khong viet tay), va loi dan chua ca hai ten skill
+          "acceptance-gate:gom-tin-hieu" va "acceptance-gate:cat-luot"
+        9 kho tam co mot tin hieu ma claude gia xep "da phu" (viec da giao doc tu phan da_giao cua --chua-gom that): than PR
+          co dong cua tin hieu do kem ten viec da giao; than PR khong chua ma tin hieu nao (khong khop /crm-\d+/)
+        10 chay lai `node scripts/product-map.mjs --root .` tren origin/tin-hieu/gom: LO-TRINH.html trung tung byte voi ban
+          da day, va chua cau_giao cua moi hang moi
+      CHIEU DO: ban sao bo "--draft" -> dong 5 do voi thong diep ghim "PR de xuat khong phai nhap"; ban sao than PR bo nhom
+      thu hai -> dong 6 do voi thong diep ghim "than PR thieu nhom G2"; ban sao bo vach ve lai LO-TRINH.html -> dong 10 do
+      voi thong diep ghim "trang lo trinh khong ve lai".
+      Gioi han da khai: claude gia theo hop dong goi cua `claude -p` (ma thoat, tep ghi trong thu muc lam viec); dong 8 chung
+      lenh goi dung, khong chung hai skill that ghi dung vung — luot that dau tien sau gop moi chung dieu do.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.gtc_rang_do
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-lich.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-lich.test.ts describe "gtc-rang-do", ma tran viet truoc 5 ca, moi ca mot kho tam va mot claude gia ghi sai mot cach:
+        1 ban gom bo sot mot tin hieu -> rang phu do
+        2 mot tin hieu o hai nhom -> rang phu do
+        3 ten nhom chua ma tin hieu (crm-N) -> kiem cau do
+        4 hang de xuat cho nhom khong co -> rang cat luot do
+        5 khong ghi ban gom nao; 5b ghi hai ban gom
+      Moi ca: ma 1; origin/tin-hieu/gom khong ton tai (hoac khong doi so voi truoc luot); gh gia khong nhan "pr create"
+      hay "pr edit"; nhat ky chua nguyen van it nhat mot dong loi cua lenh do (ca 1-2: ma tin hieu bi thieu/trung; ca 3: ma
+      bi lot; ca 4: ma nhom) hoac GOM.thongDiep.soBanGom (ca 5, 5b).
+      DOI CHUNG DUONG: cung kho tam, claude gia ghi dung -> ma 0 va PR mo (dung ca E2).
+      CHIEU DO: ban sao bo buoc kiem cau -> ca 3 do voi thong diep ghim "de xuat lot ma toi nguoi gui".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.gtc_cham_ngoai
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-lich.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-lich.test.ts describe "gtc-cham-ngoai", ma tran 4 ca, claude gia ghi dung ban gom va hang roi them:
+        1 sua apps/app/package.json va commit
+        2 tao tep chua theo doi scripts/x.ts (khong commit)
+        3 xoa mot tep tin hieu tin-hieu/crm/crm-1.json va commit
+        4 sua _acceptance/config.yaml (khong commit)
+      Moi ca: ma 1; nhat ky chua GOM.thongDiep.chamNgoai va dung duong tep cua ca; origin/tin-hieu/gom khong ton tai;
+      gh gia khong nhan "pr create"/"pr edit".
+      DOI CHUNG DUONG: claude gia chi ghi trong vung -> ma 0.
+      CHIEU DO: ban sao chi kiem tep da commit -> ca 2 va 4 do voi thong diep ghim "tep chua commit ngoai vung lot qua".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gtc_nguoi_sua
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-lich.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-lich.test.ts describe "gtc-nguoi-sua", ma tran 3 ca, moi ca dung PR mo do mot luot truoc cua chinh lenh dung
+      (khong viet tay nhanh hay than PR):
+        1 sau luot dau, mot commit tac gia "Manh Phan" len origin/tin-hieu/gom; them mot tin hieu moi len onehub; luot hai:
+          ma 0, claude gia khong duoc goi, sha origin/tin-hieu/gom khong doi, gh gia khong nhan "pr edit"/"pr create",
+          dong in == GOM.thongDiep.nguoiSua
+        2 khong commit cua nguoi, khong tin hieu moi; luot hai: claude gia khong duoc goi, sha khong doi, dong in ==
+          GOM.thongDiep.cungDau
+        3 khong commit cua nguoi, them mot tin hieu moi; luot hai: claude gia duoc goi; origin/tin-hieu/gom moi chua ban gom
+          xep CA tin hieu cu lan moi (rang phu ma 0); gh gia nhan mot "pr edit" vao dung so PR cu va khong "pr create";
+          dong dau trong than moi == bam cua tap moi
+      CHIEU DO: ban sao bo kiem tac gia -> ca 1 do voi thong diep ghim "luot may de len sua cua nguoi".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.gtc_phu_quyet
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-lich.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-lich.test.ts describe "gtc-phu-quyet", PR dung bang luot dau cua lenh roi gh gia chuyen no sang CLOSED (khong gop):
+        1 khong tin hieu moi; luot hai: ma 0, claude gia khong duoc goi, khong "pr create", dong in == GOM.thongDiep.phuQuyet
+        2 them mot tin hieu moi; luot hai: claude gia duoc goi va loi dan no nhan chua ten moi nhom cua ban gom da bi phu
+          quyet (doc lai tu nhanh cua PR da dong); gh gia nhan dung mot "pr create --draft" moi; ban gom moi xep moi tin
+          hieu chua co cho (cu va moi), rang phu ma 0
+      DOI CHUNG DUONG: PR o trang thai MERGED thay vi CLOSED -> luot hai khong in GOM.thongDiep.phuQuyet.
+      CHIEU DO: ban sao bo kiem PR da dong -> ca 1 do voi thong diep ghim "de xuat bi phu quyet mo lai".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.gtc_hong
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-lich.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-lich.test.ts describe "gtc-hong", ma tran viet truoc 4 ca tren kho tam co tin hieu chua co cho:
+        1 khong co ca ANTHROPIC_API_KEY lan CLAUDE_CODE_OAUTH_TOKEN -> GOM.thongDiep.thieuKhoa (goi ten ca hai bien)
+        2 duong lenh claude tro toi tep khong ton tai -> GOM.thongDiep.thieuLenh
+        3 claude gia thoat 1 -> GOM.thongDiep.moHinhHong kem dong loi dau cua no
+        4 claude gia ngu qua tran phut (tran ha xuong 1 giay qua tuy chon cua ham, khong doi cau hinh) -> GOM.thongDiep.quaTran
+      Moi ca: ma 1; origin/tin-hieu/gom khong ton tai; khong "pr create"/"pr edit"; chuoi khoa gia "sk-test-KHOA-BI-MAT"
+      dat trong env khong xuat hien trong stdout lan stderr cua luot. Moi thong diep doc tu GOM.thongDiep, khong viet tay.
+      CHIEU DO: ban sao in env khi mo hinh hong -> ca 3 do voi thong diep ghim "khoa mo hinh lot vao nhat ky".
+
+  - id: E7b
+    criterion: AC-7
+    executor: judgment
+    inputs:
+      - docs/setup.md
+      - .github/workflows/tin-hieu-gom.yml
+    question: |
+      Doc docs/setup.md va tep lich. Mot chu kho chua tung thay lich gom co the, chi tu docs/setup.md: (1) biet lich gom
+      lam gi va khi nao chay (khop voi khoi `on:` cua tep lich), (2) biet ba viec minh lam voi PR de xuat — sua tren nhanh,
+      dong de phu quyet, de chu nhom tep lo trinh gop — va rang may khong de len sua cua nguoi, khong mo lai de xuat da bi
+      phu quyet khi chua co tin hieu moi, (3) lam xong cac viec cai mot lan truoc luot that dau tien (bi mat nao, dat o
+      dau, quyen doc kho kit) ma khong phai doc ma? PASS khi ca ba dung va ten bi mat trong tai lieu trung ten bi mat ma
+      tep lich doc. FAIL khi thieu mot y hay ten bi mat lech.
+    paths:
+      - "docs/setup.md"
+      - ".github/workflows/tin-hieu-gom.yml"
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.gtc_do
+    paths:
+      - "scripts/tin-hieu/do-gom.ts"
+      - "scripts/tin-hieu/test/do-gom.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      do-gom.test.ts describe "gtc-do" tren kho tam dung bang chinh gom-lich (khong viet tay lich su): tin hieu A len onehub
+      o thoi diem T0 (GIT_COMMITTER_DATE dat san), luot gom o T0+30h mo PR; chu kho doi ten mot nhom va chuyen mot tin hieu
+      sang nhom khac tren nhanh; gh gia chuyen PR sang MERGED va onehub nhan merge. Lenh do in:
+        1 gio cho cua A == 30 (tinh tu commit dau dua tep A len onehub toi commit dau cua may tren PR)
+        2 "da sua 2/3 nhom" khi ban gom co 3 nhom va hai nhom bi dong cham (doi ten, doi thanh vien)
+        3 dong tong so voi nguong: 30h <= 48h "dat"; 2/3 > 1/5 "chua dat"
+        4 kho khong co tin hieu nao -> ma 0 va dong GOM_DO.khongCo
+        5 tin hieu B len onehub o T0, PR dang mo co sua cua nguoi tu truoc nen B chua co PR nao chua no; do o T0+60h ->
+          gio cho cua B == 60, dong tong "chua dat" va goi ten B
+        6 tin hieu C len onehub o T0, vao PR de xuat thu nhat o T0+10h, PR do bi dong (phu quyet), C vao PR moi o T0+50h
+          -> gio cho cua C == 10 (toi PR dau tien chua no) va lenh in them mot dong "C: qua mot de xuat bi phu quyet"
+        7 PR bi dung lai bang day ep (luot thu hai, AC-5 ca 3) -> ban gom dung de so la ban o lan day cuoi cua may truoc
+          commit dau cua nguoi
+        8 tin hieu D vao onehub qua commit gop cua nhanh hang cho, commit them tep tren nhanh hang cho co ngay som hon 20h
+          -> gio cho cua D tinh tu commit gop (cha thu nhat cua onehub), khong tu commit tren nhanh hang cho
+      Ma tran nguong viet truoc 4 o (gio <=48/>48 x ti le <1/5 / >=1/5), moi o mot assert dong tong.
+      CHIEU DO: ban sao so voi ban gom da gop thay vi commit xanh dau cua may -> o 2 do voi thong diep ghim "so sanh khong
+      lay moc may".
