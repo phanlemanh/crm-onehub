@@ -61,7 +61,9 @@ Không chạm `record-sheet-host.tsx`, `record-stack.ts`, `nap-san-khi-mo-ngan.t
 - **Đổi giá trị `entry` của `okr.moCapNhat` để tách nút trên dòng khỏi nút đầu ngăn.** Ngưỡng 3 bấm đo trên màn, không
   đo bằng dữ liệu đo lường; đổi lược đồ chạm `packages/validation` và API mà không lời hứa nào cần.
 
-## Câu chỉ người có (lên thẻ Cổng Phạm vi)
+## Câu chỉ người có — đã trả lời
+
+Chủ kho trả lời cả bốn trước Cổng Phạm vi, 20/10, ở phiên V3: «Theo khuyến nghị cả bốn». Lối máy khuyên là lối đã chọn.
 
 - **Hỏi-1 — gộp cả lối con số và lối diễn biến vào ngăn KR, và chuyển thước hồ sơ đã ký?** Ngưỡng nói «mọi lối». Hai lối
   ấy đang được hồ sơ đã ký đo: `okr-to-chuc-va` (E2, E3), `so-okr-tu-chay` (E14, E16) cho ngăn số; `toan-canh-okr` và

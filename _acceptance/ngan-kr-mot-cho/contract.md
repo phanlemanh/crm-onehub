@@ -33,8 +33,7 @@ phím không tính.
 - AC-1: Given một KR K của mục tiêu M, When bấm vào K ở mỗi lối — dòng KR ở trang đơn vị, nút «Việc» và con số của K
   trong bảng KR của ngăn M, thẻ K trên sơ đồ quanh mục tiêu, khối KR ở Tổng quan, Của tôi và họp tuần — Then mỗi lối gọi
   đúng một lần mở ngăn `{ kind: "kr", id: K }`, không lối nào mở `so-kr` hay tab «Diễn biến» của ngăn M; lối con số mở
-  ngăn KR ở mục «Số và nguồn»; không còn chỗ nào trong `apps/app` mở loại ngăn `so-kr`. (chờ Hỏi-1 cho lối con số và lối
-  diễn biến)
+  ngăn KR ở mục «Số và nguồn»; không còn chỗ nào trong `apps/app` mở loại ngăn `so-kr`.
 - AC-2: Given ngăn KR của K mở, When ngăn dựng xong, Then đầu ngăn có: tên M là liên kết mở ngăn M; tên K; đếm «n/N»
   (vị trí của K trong các KR của M theo `position`, N = số KR của M); nút «KR trước», «KR kế»; và nút «Cập nhật» kiểu
   `primary` khi người xem được cập nhật K — không được thì không có nút; mục tiêu chỉ một KR thì không có đếm và ‹ ›.
@@ -46,7 +45,7 @@ phím không tính.
 - AC-4: Given ngăn KR của K là KR thứ n của M, When bấm «KR kế» (hay «KR trước»), Then chồng ngăn thay đỉnh bằng KR thứ
   n+1 (n−1) của M — ngăn M nằm dưới giữ nguyên, số ngăn trong chồng không đổi, `RecordSheetHost` không bị gỡ, ngăn
   không đóng — đếm thành «n+1/N», tiêu điểm ở lại trên nút vừa bấm; ở KR đầu nút «KR trước» bị tắt, ở KR cuối nút «KR
-  kế» bị tắt. (chờ Hỏi-2: trong một mục tiêu)
+  kế» bị tắt.
 - AC-5: Given ngăn KR của K và người xem được cập nhật K, When bấm «Cập nhật» ở đầu ngăn, Then hộp cập nhật của K mở với
   tiêu điểm ở ô giá trị; When gửi một lần cập nhật hợp lệ, Then hộp đóng, ngăn KR vẫn mở trên K, ô «Hiện tại», lịch sử
   và đồ thị hiện giá trị vừa gửi mà không tải lại trang.
@@ -56,8 +55,8 @@ phím không tính.
 - AC-7 (cross-layer): Given trang đơn vị với KR K được cập nhật, When bấm «Cập nhật» trên dòng K (bấm 1), gõ giá trị
   vào ô đã có tiêu điểm, chọn một mức tự tin (bấm 2) và bấm «Gửi cập nhật» (bấm 3), Then đúng một lần cập nhật được
   ghi cho K qua `okr.guiCapNhat` với giá trị và mức tự tin đã chọn, đọc lại được từ máy chủ, và không cần bấm thêm lần
-  nào; And mức tự tin vẫn bắt buộc — gửi khi chưa chọn thì không ghi gì; And (chờ Hỏi-3) KR mốc đi cùng đường với một
-  bấm chọn «Xong», tức 4 bấm. (chờ Hỏi-4: đo trên trang đơn vị hôm nay)
+  nào; And mức tự tin vẫn bắt buộc — gửi khi chưa chọn thì không ghi gì; And KR mốc đi cùng đường với một
+  bấm chọn «Xong», tức 4 bấm.
 - AC-8: Given hộp cập nhật của KR số K mở, When gõ một giá trị hợp lệ, Then đồ thị xem trước trong hộp có các điểm lịch
   sử, đường đích và một điểm mới mang giá trị vừa gõ, cùng dòng tiến độ mới tính bằng `tienDoKr` của
   `packages/validation`; When đổi giá trị, Then điểm và dòng đổi theo; When giá trị sai, Then không có điểm mới và có lỗi
@@ -73,7 +72,7 @@ phím không tính.
   dòng ấy, bấm «Cập nhật» ở đầu ngăn, gửi, bấm «KR kế», rồi mở ngăn KR từ thẻ sơ đồ và từ khối Của tôi, rồi lặp đường
   trên dòng ở 390 px, Then có ảnh từng bước; số bấm thật từ trang đơn vị tới lần cập nhật đã ghi (đọc lại từ máy chủ)
   bằng 3; mọi lối đã thử mở cùng một ngăn KR (đường dẫn `record=kr:<id>`); And các eval `test`/`script` của hồ sơ đã ký
-  mà `paths` ghi đích danh một tệp vòng này sửa thoát đúng mã kỳ vọng, hoặc đã khai nghỉ có `superseded_by` theo Hỏi-1.
+  mà `paths` ghi đích danh một tệp vòng này sửa thoát đúng mã kỳ vọng, hoặc đã khai nghỉ có `superseded_by` theo khuôn luật 21 chủ kho đã cho.
 
 ## Coverage
 
@@ -102,7 +101,7 @@ chân ngành: Tability — một ngăn KR, «Create check-in» ở đầu, ‹ �
   nhật trên dòng (AC-6) · 3 bấm ghi thật (AC-7) · xem trước (AC-8) · hẹp (AC-9) · trạng thái, chữ (AC-10) · màn thật và
   hồ sơ đã ký (AC-11).
 - **Đối chiếu ngành:** [NGÀNH: Tability — KR drawer với Create check-in ở đầu, ‹ › giữa các KR].
-- **Later:** ‹ › qua cả bộ OKR (nếu Hỏi-2 chọn trong một mục tiêu); cập nhật hàng loạt trong ngăn; lối KR từ thông báo và
+- **Later:** ‹ › qua cả bộ OKR (chủ kho chọn trong một mục tiêu, 20/10); cập nhật hàng loạt trong ngăn; lối KR từ thông báo và
   tin nhắc (`record=kr:` chưa có ở tin nhắc); Kara gợi ý giá trị trong hộp.
 - **Never:** sửa tại chỗ trong thân ngăn — hai nơi cập nhật; bỏ bắt buộc mức tự tin — cập nhật mất tín hiệu tự tin.
 
@@ -128,12 +127,10 @@ chân ngành: Tability — một ngăn KR, «Create check-in» ở đầu, ‹ �
   ô xem trước và tiêu điểm), `okr/bang-kr.tsx`, `okr/theo-don-vi/bang.tsx`, `okr/khoi-tom-tat.tsx`,
   `okr/khoi-kr-cua-toi.tsx`, `okr/hop-tuan.tsx`, `apps/app/lib/messages/okr*.ts` (chỉ thêm, luật 7),
   `apps/app/test/ngan-kr-mot-cho.dom.tsx` (mới), `_acceptance/config.yaml` (chỉ thêm), `_acceptance/ngan-kr-mot-cho/**`.
-- Bốn câu chỉ người có ở design doc lên thẻ Cổng Phạm vi, và vế đổi theo từng câu:
-  - Hỏi-1 gộp lối con số và lối diễn biến, chuyển thước hồ sơ đã ký → AC-1, vế «Số và nguồn» của AC-3, vế hồ sơ đã ký
-    của AC-11; E1, E3, E13.
-  - Hỏi-2 ‹ › trong một mục tiêu hay cả bộ OKR → AC-4; E4.
-  - Hỏi-3 ngưỡng 3 bấm áp cho KR số, KR mốc 4 bấm → vế KR mốc của AC-7; E8.
-  - Hỏi-4 đo ngưỡng trên trang đơn vị hôm nay thay trang bộ OKR (VK3 chưa dựng) → AC-6, AC-7, AC-11; E6, E8, E12.
+- Bốn câu chỉ người có ở design doc đã được chủ kho trả lời trước Cổng Phạm vi (20/10, «Theo khuyến nghị cả bốn»; sổ
+  dòng `gate1` cuối sổ): gộp cả lối con số và lối diễn biến, cho chuyển thước hồ sơ đã ký theo khuôn luật 21 (AC-1, AC-3,
+  AC-11); ‹ › trong một mục tiêu (AC-4); 3 bấm cho KR số, KR mốc 4 bấm (AC-7); đo trên trang đơn vị hôm nay (AC-6,
+  AC-7, AC-11). Hợp đồng vẫn là bản nháp tới khi người duyệt Cổng Phạm vi.
 - Ràng buộc chuyển cho VK3 `trang-bo-okr`: bảng KR của trang bộ OKR mang nút «Cập nhật» trên dòng mở đúng hộp này; E8 và
   E12 khai `paths` trên `apps/app/app/(app)/[slug]/okr/**` nên VK3 chạm trang thì lưới giữ hồ sơ đã ký chạy lại hai
   thước ấy.
