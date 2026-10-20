@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1a899fe05955121f4f79fa2b52915c68fcb0acec
+verified_commit: 42060835e78695e50f29d11134d2505368bc0a96
 human_signoff: manh 2026-10-19 — ký Cổng 2 trên verdict PASS 16/16 eval + 7 suite (S4 round 5, wf_5b4d3132-dfc, sau gộp onehub d479d1c6b). Ngoài-1, 4, 7, 8, 9, 10, 13, 15–21 ghi Known limits; Ngoài-2, 5, 6 mở hợp đồng mới; Ngoài-3, 11, 12, 14 chấp nhận, không sửa; đồng ý phần cắt; phê hết các quyết định Treo.
 ---
 
@@ -245,3 +245,7 @@ Round 2: không eval nào đỏ (E13 và E14 chạy lại xanh, E1 đến E12 ma
 Round 3: chạy lại ở 3678528430a6f7672a9a0e1e1f69e3530842ff97 (commit 367852843 ghi ca api chập chờn ngoài nhánh). E13 và E14 xanh, E1 đến E12 mang từ round 1, cả bảy lệnh suite xanh. Nguyên nhân chỗ đỏ ở round 2: chưa rõ. Verdict PASS.
 Round 4: chạy lại ở 593ecaca453c8d89a56627bdda0ec7d932ce3f3f sau khi gộp onehub (d479d1c6b). E9 đỏ (câu «het-tran» bản tiếng Việt lệch nguồn sau khi onehub đổi tên thành Kara), E13 đỏ (33 tệp trợ lý đổi sau lần đo), và lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở ca `kmt-luat` (luật «AI một tên»). E2, E4, E5, E6, E8, E10 mang từ round 1. Verdict REJECT, trả về triển khai.
 Round 5: chạy lại ở 1a899fe05955121f4f79fa2b52915c68fcb0acec sau khi sửa câu Kho tài liệu theo luật một tên và đo lại 50 câu mẫu. E3, E9, E9b, E11, E13 chạy lại xanh; E1, E1b, E7, E12, E14 mang từ round 4; E2, E4, E5, E6, E8, E10 mang từ round 1; cả bảy lệnh suite xanh. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-19, do giữ tươi be5151e..4206083
+run_id: repin-20261019T185350Z-66190
+sha: 42060835e78695e50f29d11134d2505368bc0a96 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E14 · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
