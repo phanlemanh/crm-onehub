@@ -7,7 +7,7 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>13 việc"]
+  GD --> B["Sắp mở vòng<br/>14 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
@@ -45,6 +45,7 @@ flowchart TD
 - Chủ kho nhận trong ngày một đợt gom đề xuất sẵn nhóm và hàng mỗi khi có tín hiệu mới, và chỉ cần sửa hay phủ quyết (`gom-tin-hieu-tu-chay`)
 - Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do (`ho-so-do-kiem-cheo`)
 - Chủ kho chọn OneHub Platform hay một sản phẩm khác ngay trên trang Lộ trình của OneHub Center và đọc lộ trình, tiến độ, hồ sơ của sản phẩm đó như của CRM (`lo-trinh-nhieu-san-pham`)
+- Mỗi vai (Tác nhân, Trợ lý kho, judge, soạn) có model kiến nghị, đo lại sau l6 (`model-theo-vai-do-lai`)
 - Người dùng CRM thấy thông báo nhận qua Zalo cũng nằm trong chuông, và tự chọn loại nào được đẩy qua kênh nào (`thong-bao-mot-nguon-nhieu-kenh`)
 - Đổi một tệp chữ khác không kéo hồ sơ giai-doan-thoa-thuan vào ghim lại: E15 chỉ theo dõi tệp chữ của màn giai đoạn (`thu-paths-e15-giai-doan`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
