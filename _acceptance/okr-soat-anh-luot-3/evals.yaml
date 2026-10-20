@@ -240,13 +240,14 @@ evals:
       - "packages/ui/src/components/dialog.tsx"
       - "packages/ui/src/components/simple-table.tsx"
       - "packages/ui/src/components/nav-item.tsx"
+      - "packages/ui/src/components/area-sidebar.tsx"
       - "_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs"
     expected: |
       soi-ma.mjs --ca thanh-phan: "DUNG dialog-co-table" (dialog.tsx nhan size "table"),
       "DUNG hang-invalid" (SimpleTableRow nhan prop invalid), "DUNG nav-strip-xuat" (nav-item.tsx
       xuat NavStrip), "DUNG hop-nhap-dung-table" (hop-thoai-nhap.tsx: DialogContent size="table",
       SimpleTableRow invalid=..., StatusIndicator), "DUNG khung-dung-nav-strip"
-      (settings-sidebar.tsx dung NavStrip, khong con <nav ... overflow-x-auto>). Ma tran
+      (settings-sidebar.tsx dung AreaSidebar, area-sidebar.tsx dung NavStrip, khong con <nav ... overflow-x-auto>). Ma tran
       "lop-o-cho-goi": tap tep rut tu diff cap gop nhu E12 (chi *.tsx duoi apps/app; moc co dinh F8
       B = 100847e8a, D = 679432a0f; soi ban D cua tep), moi tep lay tap ten
       nhap tu "@crm/ui/..."; MOI phan tu JSX mang mot trong cac ten do ma cham dong doi cua diff

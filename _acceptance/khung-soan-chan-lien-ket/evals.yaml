@@ -98,7 +98,7 @@ evals:
   - id: E6
     criterion: AC-6
     executor: test
-    cmd: config:executors.test.kcl_hoi_quy
+    cmd: config:executors.test.kcl_hoi_quy_vkm
     paths:
       - "packages/ui/src/components/giu-thay-doi.tsx"
       - "packages/ui/src/components/dialog.tsx"
