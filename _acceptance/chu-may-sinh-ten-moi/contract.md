@@ -5,9 +5,9 @@ slug: chu-may-sinh-ten-moi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, agent]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-20T01:52:01Z
 design_doc: docs/superpowers/specs/2026-10-20-chu-may-sinh-ten-moi-design.md
 ---
 
