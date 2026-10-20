@@ -3170,7 +3170,7 @@ executors:
     tbk_quet: bun _acceptance/thanh-ben-khu-dung-chung/rang/quet-vo-tay.mjs
     tbk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"'
     vk7_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ngan-kr-mot-cho/rang/man.mjs"'
-    vk7_giu_ho_so: bun _acceptance/ngan-kr-mot-cho/rang/giu-ho-so.mjs
+    vk7_giu_ho_so: bun test _acceptance/ngan-kr-mot-cho/rang/giu-ho-so.test.mjs && bun _acceptance/ngan-kr-mot-cho/rang/giu-ho-so.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

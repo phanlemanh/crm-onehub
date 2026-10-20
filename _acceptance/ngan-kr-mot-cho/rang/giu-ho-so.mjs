@@ -1,5 +1,11 @@
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import {
+	existsSync,
+	readdirSync,
+	readFileSync,
+	rmSync,
+	symlinkSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
@@ -29,6 +35,15 @@ const GIU = {
 	lenhMan: /scripts\/lan-do\/tien-de\.mjs|rang\/mot-luot\.sh/,
 	hetGioMs: 40 * PHUT_MS,
 	maHoan: 3,
+	boRa: {
+		"doi-ten-onehub-center#E14":
+			"luat pham vi vong: rang/soi-ma.mjs cam diff merge-base cua vong do cham proto ngoai doi-ten-onehub-center",
+		"khung-khong-con-dung-chu#E5":
+			"luat pham vi vong: git diff --quiet merge-base tren messages-guard.spec.ts cua vong do",
+		"muc-tieu-va-kr#E14":
+			"thuoc chay thuoc: rang/ho-so-cham.mjs tu chay eval cua 14 ho so khac",
+	},
+	cayNen: ".acceptance-runs/ngan-kr-mot-cho/goc",
 };
 const ANH_XA = join(HERE, "anh-xa-nghi.json");
 
@@ -176,6 +191,16 @@ export function tapKhop(hoSo, tepDoi) {
 	return ra;
 }
 
+export function tachBoRa(tatCa, boRa = GIU.boRa) {
+	const khoaBoRa = new Set(Object.keys(boRa));
+	const conLai = tatCa.filter((e) => !khoaBoRa.has(`${e.hoSo}#${e.id}`));
+	const daBo = tatCa.filter((e) => khoaBoRa.has(`${e.hoSo}#${e.id}`));
+	const loi = [...khoaBoRa]
+		.filter((k) => !daBo.some((e) => `${e.hoSo}#${e.id}` === k))
+		.map((k) => `BO RA THUA ${k.replace("#", "/")}`);
+	return { conLai, daBo, loi };
+}
+
 function evalNghi(hoSo) {
 	const ra = [];
 	for (const { hoSo: h, ds } of hoSo)
@@ -250,13 +275,90 @@ function nhomLenh(ds) {
 	);
 }
 
-function chayLenh(lenh) {
+function chayLenh(lenh, cwd = GOC) {
 	const r = spawnSync("bash", ["-c", lenh], {
-		cwd: GOC,
+		cwd,
 		stdio: ["ignore", "inherit", "inherit"],
 		timeout: GIU.hetGioMs,
+		killSignal: "SIGKILL",
 	});
 	return r.error ? `het gio ${GIU.hetGioMs / PHUT_MS} phut` : r.status;
+}
+
+let cayNen = null;
+
+function layCayNen(nen) {
+	if (cayNen) {
+		git("-C", cayNen, "checkout", "-q", "--", ".");
+		git("-C", cayNen, "clean", "-fdq");
+		return cayNen;
+	}
+	const cay = join(GOC, GIU.cayNen);
+	spawnSync("git", ["-C", GOC, "worktree", "remove", "--force", cay]);
+	rmSync(cay, { recursive: true, force: true });
+	git("worktree", "add", "--detach", cay, nen);
+	cayNen = cay;
+	symlinkSync(join(GOC, ".env"), join(cay, ".env"));
+	for (const buoc of [["install"], ["run", "db:generate"]]) {
+		const r = spawnSync("bun", buoc, { cwd: cay, stdio: "ignore" });
+		if (r.status !== 0)
+			throw new Error(`khong dung duoc cay nen: bun ${buoc.join(" ")}`);
+	}
+	console.log(`cay nen ${nen.slice(0, 9)}: ${cay}`);
+	return cay;
+}
+
+function goCayNen() {
+	if (!cayNen) return;
+	spawnSync("git", ["-C", GOC, "worktree", "remove", "--force", cayNen]);
+	rmSync(cayNen, { recursive: true, force: true });
+	cayNen = null;
+}
+
+export function phanXu(ds, ma, chayNen, chayLai) {
+	if (ds.every((e) => ma === e.ky)) return ds.map((e) => ({ loai: "GIU", e }));
+	const maNen = chayNen();
+	const maLai = ds.some((e) => ma !== e.ky && maNen === e.ky)
+		? chayLai()
+		: null;
+	return ds.map((e) => {
+		if (ma === e.ky) return { loai: "GIU", e };
+		if (maNen !== e.ky)
+			return { loai: "DO-SAN-NEN", e, chu: `HEAD ${ma} · nen ${maNen}` };
+		if (maLai === e.ky)
+			return {
+				loai: "CHAP-CHON",
+				e,
+				chu: `HEAD ${ma} · nen ${maNen} · HEAD lai ${maLai}`,
+			};
+		return { loai: "DO", e, chu: `${ma}` };
+	});
+}
+
+const dongKetQua = (k) =>
+	k.loai === "GIU"
+		? `GIU ${ten(khoa(k.e))}`
+		: `${k.loai} ${ten(khoa(k.e))}: ${k.chu}`;
+
+const tepHoSoDaKy = (hoSo) => {
+	const thuMuc = hoSo.map(({ hoSo: h }) => `_acceptance/${h}/`);
+	return git("status", "--porcelain", "--", "_acceptance")
+		.split("\n")
+		.filter(Boolean)
+		.map((d) => ({ ma: d.slice(0, 2), tep: d.slice(3) }))
+		.filter(({ tep }) => thuMuc.some((t) => tep.startsWith(t)));
+};
+
+function traLaiHoSoDaKy(hoSo, truoc) {
+	const daBan = new Set(truoc.map((d) => d.tep));
+	const ra = [];
+	for (const { ma, tep } of tepHoSoDaKy(hoSo)) {
+		if (daBan.has(tep)) continue;
+		if (ma === "??") rmSync(join(GOC, tep), { recursive: true, force: true });
+		else git("checkout", "--", tep);
+		ra.push(tep);
+	}
+	return ra;
 }
 
 function locChay(argv) {
@@ -286,20 +388,23 @@ function chay() {
 		console.log(`KHONG DO DUOC: doi chung am khop ${am.map(khoa).join(", ")}`);
 		process.exit(2);
 	}
-	const tatCa = tapKhop(hoSo, tep);
+	const { conLai: tatCa, daBo, loi: loiBoRa } = tachBoRa(tapKhop(hoSo, tep));
 	const thieu = GIU.kiemDuong.filter((k) => !tatCa.some((e) => khoa(e) === k));
 	if (thieu.length > 0) {
 		console.log(`KHONG DO DUOC: doi chung duong thieu ${thieu.join(", ")}`);
 		process.exit(2);
 	}
+	for (const e of daBo)
+		console.log(`BO RA ${ten(khoa(e))} — ${GIU.boRa[khoa(e)]}`);
 	const { may, kemLenh, boQua } = chiaTap(tatCa);
 	console.log(
-		`khop ${tatCa.length} eval · ${may.length} test/script · ${kemLenh.length} ui-check cung lenh · bo qua ${boQua.length}`,
+		`khop ${tatCa.length} eval · ${may.length} test/script · ${kemLenh.length} ui-check cung lenh · bo qua ${boQua.length} · bo ra ${daBo.length}`,
 	);
 	for (const e of boQua)
 		console.log(`BO QUA ${e.hoSo}/${e.id} (${e.executor}, lenh rieng)`);
-	const { nghi, loi } = kiemNghi(hoSo);
-	console.log(`eval nghi tro ${SLUG}: ${nghi.length}`);
+	const kiem = kiemNghi(hoSo);
+	const loi = [...loiBoRa, ...kiem.loi];
+	console.log(`eval nghi tro ${SLUG}: ${kiem.nghi.length}`);
 	const nhom = nhomLenh([...may, ...kemLenh]);
 	if (process.argv.includes("--liet-ke")) {
 		for (const [lenh, ds] of nhom)
@@ -307,30 +412,47 @@ function chay() {
 		for (const l of loi) console.log(l);
 		process.exit(0);
 	}
+	const truoc = tepHoSoDaKy(hoSo);
 	const dong = [];
-	let soDo = 0;
-	let soHoan = 0;
-	for (const [thu, [lenh, ds]] of nhom.entries()) {
-		console.log(
-			`[${thu + 1}/${nhom.length}] ${ds.map(khoa).join(", ")} :: ${lenh}`,
-		);
-		const lyDo = hoan(lenh, ds);
-		if (lyDo) {
-			for (const e of ds) dong.push(`HOAN ${ten(khoa(e))} (${lyDo})`);
-			soHoan += ds.length;
-			continue;
+	const dem = { GIU: 0, DO: 0, "DO-SAN-NEN": 0, "CHAP-CHON": 0, HOAN: 0 };
+	const traLai = [];
+	try {
+		for (const [thu, [lenh, ds]] of nhom.entries()) {
+			console.log(
+				`[${thu + 1}/${nhom.length}] ${ds.map(khoa).join(", ")} :: ${lenh}`,
+			);
+			const lyDo = hoan(lenh, ds);
+			if (lyDo) {
+				for (const e of ds) dong.push(`HOAN ${ten(khoa(e))} (${lyDo})`);
+				dem.HOAN += ds.length;
+				continue;
+			}
+			const ma = chayLenh(lenh);
+			traLai.push(...traLaiHoSoDaKy(hoSo, truoc));
+			const kq = phanXu(
+				ds,
+				ma,
+				() => chayLenh(lenh, layCayNen(nen)),
+				() => {
+					const lai = chayLenh(lenh);
+					traLai.push(...traLaiHoSoDaKy(hoSo, truoc));
+					return lai;
+				},
+			);
+			for (const k of kq) {
+				dem[k.loai] += 1;
+				dong.push(dongKetQua(k));
+				console.log(dongKetQua(k));
+			}
 		}
-		const ma = chayLenh(lenh);
-		for (const e of ds) {
-			const d =
-				ma === e.ky ? `GIU ${ten(khoa(e))}` : `DO ${ten(khoa(e))}: ${ma}`;
-			if (ma !== e.ky) soDo += 1;
-			dong.push(d);
-			console.log(d);
-		}
+	} finally {
+		goCayNen();
 	}
 	console.log("---- ket qua ----");
+	for (const e of daBo) console.log(`BO RA ${ten(khoa(e))}`);
 	for (const d of dong) console.log(d);
+	for (const t of new Set(traLai))
+		console.log(`TRA LAI ${t} (lenh do ghi vao ho so da ky)`);
 	for (const l of loi) console.log(l);
 	const giuHong = GIU.giuDuong.filter(
 		(k) =>
@@ -339,10 +461,10 @@ function chay() {
 	);
 	for (const k of giuHong) console.log(`DOI CHUNG GIU HONG: ${k}`);
 	console.log(
-		`KET LUAN: ${dong.length - soDo - soHoan} GIU, ${soDo} DO, ${soHoan} HOAN, ${loi.length} loi nghi, ${nhom.length} lenh`,
+		`KET LUAN: ${dem.GIU} GIU, ${dem.DO} DO, ${dem["DO-SAN-NEN"]} DO-SAN-NEN, ${dem["CHAP-CHON"]} CHAP-CHON, ${dem.HOAN} HOAN, ${daBo.length} BO RA, ${loi.length} loi nghi, ${nhom.length} lenh`,
 	);
-	if (soDo > 0 || loi.length > 0 || giuHong.length > 0) process.exit(1);
-	process.exit(soHoan > 0 ? GIU.maHoan : 0);
+	if (dem.DO > 0 || loi.length > 0 || giuHong.length > 0) process.exit(1);
+	process.exit(dem.HOAN > 0 ? GIU.maHoan : 0);
 }
 
 if (import.meta.main) chay();
