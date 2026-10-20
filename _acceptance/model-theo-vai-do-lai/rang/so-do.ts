@@ -1291,7 +1291,7 @@ const CHIEU_DO: readonly ChieuDo[] = [
 	{
 		eval: "E1",
 		ten: "model phien con lui ve glm-5.2-fast",
-		mong: "do",
+		mong: "xanh",
 		phaiCo: [N.saiModelTn],
 		chay: () => {
 			const ev = banSao();
@@ -1452,27 +1452,43 @@ const CHIEU_DO: readonly ChieuDo[] = [
 	},
 	{
 		eval: "E4",
-		ten: "luot 1 khong nop de xuat",
-		mong: "do",
-		phaiCo: [`${N.luotHong} 1: khong nop de xuat`, `${N.traiLuat} soan-okr`],
+		ten: "luot 1 khong nop de xuat, luot 2 dat (doi chung: luot 1 nop thi kien nghi doi)",
+		mong: "xanh",
+		phaiCo: [`${N.luotHong} 1: khong nop de xuat`],
 		chay: () => {
-			const ev = banSao();
-			suaJson(ev, MTV.tep.soan(1), khuonSoanMh4, (x) => {
-				x.soDeXuat = 0;
-				x.khongNopDeXuat = true;
-				x.dat = 18;
-				x.hong = 0;
-			});
-			const k = tuDocs(ev, docsGoc() ?? "");
-			const ky = k.bang.hang.find((h) => h.vai === "soan-okr");
+			const dung = (khongNop: boolean) => {
+				const ev = banSao();
+				suaJson(ev, MTV.tep.soan(2), khuonSoanMh4, (x) => {
+					x.soDeXuat = 10;
+					x.khongNopDeXuat = false;
+					x.dat = 18;
+					x.hong = 0;
+				});
+				suaJson(ev, MTV.tep.soan(1), khuonSoanMh4, (x) => {
+					x.soDeXuat = khongNop ? 0 : 10;
+					x.khongNopDeXuat = khongNop;
+					x.dat = 18;
+					x.hong = 0;
+				});
+				const docs = capLai(ev);
+				return tuDocs(ev, docs);
+			};
+			const co = dung(true);
+			const khong = dung(false);
+			const kn = (k: KetTong) =>
+				k.bang.hang.find((h) => h.vai === "soan-okr")?.kien_nghi;
 			return {
 				hong: [
-					...k.hong,
-					...(ky?.kien_nghi === "giữ google/gemini-3.8-flash"
+					...co.hong,
+					...khong.hong,
+					...(kn(co) === "giữ google/gemini-3.8-flash"
 						? []
-						: ["bang in lai khong giu gemini khi luot khong nop"]),
+						: [`luot khong nop ma kien nghi ${kn(co)}`]),
+					...(kn(khong) === MTV.model
+						? []
+						: [`doi chung luot nop ma kien nghi ${kn(khong)}`]),
 				],
-				dong: k.dong,
+				dong: co.dong,
 			};
 		},
 	},
@@ -1656,7 +1672,7 @@ function chayChieuDo(): boolean {
 		);
 		const dung =
 			c.mong === "xanh"
-				? r.hong.length === 0
+				? r.hong.length === 0 && thieu.length === 0
 				: r.hong.length > 0 && thieu.length === 0;
 		if (!dung) ok = false;
 		console.log(

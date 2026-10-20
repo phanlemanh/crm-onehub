@@ -1,0 +1,347 @@
+{
+  "nguong": "_acceptance/model-theo-vai-do-lai/rang/nguong.json",
+  "ke_hoach": "_acceptance/model-theo-vai-do-lai/evidence/ke-hoach.json",
+  "hang": [
+    {
+      "vai": "tac-nhan",
+      "ten": "Tác nhân",
+      "model_dang_chay": "zai/glm-5.2-fast",
+      "ung_vien": "zai/glm-5.3-flash",
+      "so_ung_vien": [
+        {
+          "ten": "flash: lượt qua dưới 180 giây",
+          "gia_tri": "5/5",
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/tac-nhan.jsonl"
+        },
+        {
+          "ten": "flash: trung vị giây phiên con",
+          "gia_tri": 28.7,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/bang-tac-nhan.md"
+        },
+        {
+          "ten": "flash-low: lượt qua dưới 180 giây",
+          "gia_tri": "5/5",
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/tac-nhan.jsonl"
+        },
+        {
+          "ten": "flash-low: trung vị giây phiên con",
+          "gia_tri": 22.1,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/bang-tac-nhan.md"
+        }
+      ],
+      "so_moc": [
+        {
+          "ten": "moc zai/glm-5.2-fast: lượt qua",
+          "gia_tri": "3/3",
+          "tep": "_acceptance/tac-nhan-glm-5-3-cham/evidence/tac-nhan.jsonl"
+        }
+      ],
+      "usd_moi_luot": 0.0082,
+      "kien_nghi": "zai/glm-5.3-flash (flash-low)",
+      "ly_do": "flash-low qua 5/5 lượt; ngưỡng 4/5",
+      "ngay_do": "2026-10-20",
+      "ngay_moc": "2026-10-16",
+      "thong_so_chua_do": [
+        "trần bước phiên con",
+        "trần thời gian phiên con"
+      ],
+      "ghi_chu": []
+    },
+    {
+      "vai": "tro-ly-kho",
+      "ten": "Trợ lý kho",
+      "model_dang_chay": "zai/glm-5.2-fast",
+      "ung_vien": "zai/glm-5.3-flash",
+      "so_ung_vien": [
+        {
+          "ten": "lượt 1 mot.S1 đúng",
+          "gia_tri": 13,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 mot.S2 đúng",
+          "gia_tri": 5,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 mot.S3 đúng",
+          "gia_tri": 7,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 mot.S6-gan đúng",
+          "gia_tri": 3,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 mot.S6-ngoai đúng",
+          "gia_tri": 2,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 mot.S7 đúng",
+          "gia_tri": 8,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 hai.S1 đúng",
+          "gia_tri": 14,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 hai.S2 đúng",
+          "gia_tri": 5,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 hai.S3 đúng",
+          "gia_tri": 6,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 hai.S6-gan đúng",
+          "gia_tri": 3,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 hai.S6-ngoai đúng",
+          "gia_tri": 4,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 hai.S7 đúng",
+          "gia_tri": 10,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 hai.ngoai-kho đúng",
+          "gia_tri": 4,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        },
+        {
+          "ten": "lượt 1 câu lỗi",
+          "gia_tri": 10,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/luot-1/do-bo-mau.md"
+        }
+      ],
+      "so_moc": [
+        {
+          "ten": "mốc mot.S1 đúng",
+          "gia_tri": 14,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc mot.S2 đúng",
+          "gia_tri": 5,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc mot.S3 đúng",
+          "gia_tri": 7,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc mot.S6-gan đúng",
+          "gia_tri": 4,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc mot.S6-ngoai đúng",
+          "gia_tri": 4,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc mot.S7 đúng",
+          "gia_tri": 10,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc hai.S1 đúng",
+          "gia_tri": 15,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc hai.S2 đúng",
+          "gia_tri": 5,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc hai.S3 đúng",
+          "gia_tri": 8,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc hai.S6-gan đúng",
+          "gia_tri": 4,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc hai.S6-ngoai đúng",
+          "gia_tri": 4,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc hai.S7 đúng",
+          "gia_tri": 10,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc hai.ngoai-kho đúng",
+          "gia_tri": 4,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        },
+        {
+          "ten": "mốc câu lỗi",
+          "gia_tri": 2,
+          "tep": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md"
+        }
+      ],
+      "usd_moi_luot": 2.7498,
+      "kien_nghi": "giữ zai/glm-5.2-fast",
+      "ly_do": "tầng mot.S6-ngoai đúng 2, mốc 4",
+      "ngay_do": "2026-10-20",
+      "ngay_moc": "2026-10-13",
+      "thong_so_chua_do": [
+        "flash-low cho Trợ lý kho"
+      ],
+      "ghi_chu": [
+        "vòng hai qua Zalo: agent gốc chạy model mặc định zai/glm-5.2-fast, chỉ trợ lý kho đổi model",
+        "USD ước theo số dư Gateway trước và sau lượt: gồm cả agent gốc của vòng Zalo và lời gọi khác cùng nhóm khoá trong khoảng đó, nên là ước cao"
+      ]
+    },
+    {
+      "vai": "soan-okr",
+      "ten": "Soạn OKR",
+      "model_dang_chay": "google/gemini-3.8-flash",
+      "ung_vien": "zai/glm-5.3-flash",
+      "so_ung_vien": [
+        {
+          "ten": "lượt 1 đạt",
+          "gia_tri": "12/18",
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-1.json"
+        },
+        {
+          "ten": "lượt 1 hỏng",
+          "gia_tri": 6,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-1.json"
+        },
+        {
+          "ten": "lượt 1 p90 ms",
+          "gia_tri": 62009,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-1.json"
+        },
+        {
+          "ten": "lượt 2 đạt",
+          "gia_tri": "8/18",
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-2.json"
+        },
+        {
+          "ten": "lượt 2 hỏng",
+          "gia_tri": 10,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-2.json"
+        },
+        {
+          "ten": "lượt 2 p90 ms",
+          "gia_tri": 125940,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-2.json"
+        }
+      ],
+      "so_moc": [
+        {
+          "ten": "mốc đạt",
+          "gia_tri": "13/18",
+          "tep": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json"
+        },
+        {
+          "ten": "mốc hỏng",
+          "gia_tri": 3,
+          "tep": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json"
+        },
+        {
+          "ten": "mốc p90 ms",
+          "gia_tri": 34066,
+          "tep": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json"
+        }
+      ],
+      "usd_moi_luot": 0.1266,
+      "kien_nghi": "giữ google/gemini-3.8-flash",
+      "ly_do": "một lượt không nộp được đề xuất nào (đạt 8/18) — lượt hỏng",
+      "ngay_do": "2026-10-20",
+      "ngay_moc": "2026-10-20",
+      "thong_so_chua_do": [
+        "flash-low cho Soạn OKR"
+      ],
+      "ghi_chu": [
+        "USD của eval soạn chưa gồm judge"
+      ]
+    },
+    {
+      "vai": "judge-okr",
+      "ten": "Judge OKR",
+      "model_dang_chay": "zai/glm-5.2-fast",
+      "ung_vien": null,
+      "so_ung_vien": [
+        {
+          "ten": "lượt 1 judge hỏng",
+          "gia_tri": 0,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-1.json"
+        },
+        {
+          "ten": "lượt 1 judge dưới ngưỡng",
+          "gia_tri": 0,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-1.json"
+        },
+        {
+          "ten": "lượt 2 judge hỏng",
+          "gia_tri": 0,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-2.json"
+        },
+        {
+          "ten": "lượt 2 judge dưới ngưỡng",
+          "gia_tri": 0,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-2.json"
+        }
+      ],
+      "so_moc": [
+        {
+          "ten": "mốc judge hỏng",
+          "gia_tri": 2,
+          "tep": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json"
+        },
+        {
+          "ten": "mốc judge dưới ngưỡng",
+          "gia_tri": 3,
+          "tep": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json"
+        }
+      ],
+      "usd_moi_luot": null,
+      "kien_nghi": "giữ zai/glm-5.2-fast",
+      "ly_do": "Hỏi-3: không đổi judge ở vòng này, mọi số soạn OKR chấm bằng judge hiện tại",
+      "ngay_do": "2026-10-20",
+      "ngay_moc": "2026-10-20",
+      "thong_so_chua_do": [
+        "zai/glm-5.3-flash làm judge"
+      ],
+      "ghi_chu": []
+    },
+    {
+      "vai": "may-soan-kho",
+      "ten": "Máy soạn kho",
+      "model_dang_chay": "zai/glm-5.2-fast",
+      "ung_vien": null,
+      "so_ung_vien": [],
+      "so_moc": [],
+      "usd_moi_luot": null,
+      "kien_nghi": "giữ zai/glm-5.2-fast",
+      "ly_do": "Hỏi-4: chưa có thước",
+      "ngay_do": null,
+      "ngay_moc": null,
+      "thong_so_chua_do": [
+        "mọi thông số — chưa có thước"
+      ],
+      "ghi_chu": [
+        "chưa có thước"
+      ]
+    }
+  ]
+}

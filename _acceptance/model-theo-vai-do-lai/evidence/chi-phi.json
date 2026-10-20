@@ -100,10 +100,18 @@
     {
       "vai": "soan-okr",
       "luot": "1",
+      "luc": "2026-10-20T11:49:01.936Z",
       "trang_thai": "da-chay",
       "usd": 0.140082,
-      "tep": "eval-soan-flash-1.json",
-      "luc": "2026-10-20T11:49:01.936Z"
+      "tep": "eval-soan-flash-1.json"
+    },
+    {
+      "vai": "soan-okr",
+      "luot": "2",
+      "trang_thai": "da-chay",
+      "usd": 0.113161,
+      "tep": "eval-soan-flash-2.json",
+      "luc": "2026-10-20T15:44:12.328Z"
     }
   ]
 }
