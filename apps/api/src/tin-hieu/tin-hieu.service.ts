@@ -232,18 +232,23 @@ export class TinHieuService {
 	}
 
 	async xoa(nguoi: NguoiGoiTinHieu, id: string): Promise<{ ok: true }> {
-		const so = await this.db.$transaction(async (tx) => {
+		const xoa = await this.db.$transaction(async (tx) => {
 			await tx.$executeRaw`LOCK TABLE "tinHieu" IN ROW EXCLUSIVE MODE`;
 			const hang = await tx.tinHieu.findFirst({
 				where: { id, nguoiGuiId: nguoi.id },
-				select: { so: true, keoVeLuc: true },
+				select: { so: true, keoVeLuc: true, archivedAt: true },
 			});
 			if (!hang) throw new NotFoundException(TIN_HIEU.loi.khongCo);
 			if (hang.keoVeLuc) throw new ConflictException(TIN_HIEU.loi.daLayVe);
 			await tx.tinHieu.delete({ where: { id } });
-			return hang.so;
+			return { so: hang.so, daLuuTru: hang.archivedAt !== null };
 		});
-		this.logger.log({ message: "tin-hieu.xoa", userId: nguoi.id, so });
+		this.logger.log({
+			message: "tin-hieu.xoa",
+			userId: nguoi.id,
+			so: xoa.so,
+			daLuuTru: xoa.daLuuTru,
+		});
 		return { ok: true };
 	}
 
