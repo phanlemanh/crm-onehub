@@ -55,6 +55,7 @@ const vi = {
 		loiTai: "Không tải được KR",
 		loiTaiMoTa: "Mạng hoặc máy chủ đang lỗi. Thử lại sau ít phút.",
 		dangTaiNgan: "Đang tải KR…",
+		capNhatDong: "Cập nhật {ten}",
 	},
 	viec: {
 		danhDau: "Đánh dấu xong: {ten}",
@@ -350,6 +351,7 @@ const en: OkrCanhKrMessages = {
 		loiTaiMoTa:
 			"The network or the server is failing. Try again in a few minutes.",
 		dangTaiNgan: "Loading this KR…",
+		capNhatDong: "Update {ten}",
 	},
 	viec: {
 		danhDau: "Mark done: {ten}",

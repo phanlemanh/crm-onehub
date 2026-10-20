@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { homNayVN } from "@crm/validation/ngay-vn";
+import { guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { type KieuKr, tienDoKr } from "@crm/validation/okr-kr";
 import { troLyTomTatOutput } from "@crm/validation/okr-tom-tat";
 import { useQuery } from "@tanstack/react-query";
@@ -1041,6 +1042,7 @@ const KHOA_MOI = [
 	"loiTai",
 	"loiTaiMoTa",
 	"dangTaiNgan",
+	"capNhatDong",
 ] as const;
 
 describe("vk7-trang-thai", () => {
@@ -1469,5 +1471,360 @@ describe("vk7-moi-loi", () => {
 			await thaoHet();
 		}
 		expect(Object.keys(thucTe)).toEqual(MA_TRAN_LOI.map((o) => o.o));
+	});
+});
+
+const { DetailSheet, ObjectiveSheet } = await import("./khung-gop-y-dung-cho");
+
+const nutDong = (id: string) =>
+	qs<HTMLButtonElement>(`[data-kr="${id}"] [data-nut="cap-nhat-dong-kr"]`);
+const nutDongTatCa = () =>
+	[...document.querySelectorAll<HTMLButtonElement>("button")].filter(
+		(b) => b.textContent?.trim() === mk.capNhat,
+	);
+
+async function dungDongKr(
+	ds: KrMau[],
+	doi: Parameters<typeof chiTietTu>[1] = {},
+	doiMt: Parameters<typeof mucTieu>[2] = {},
+): Promise<San> {
+	const m = mucTieu(MT, ds, { canEdit: true, ...doiMt });
+	kho.chiTiet = () => chiTietTu(m, doi);
+	if (!kho.rieng.has("okr.dienBien"))
+		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
+	return dungTheoDonVi([m], `?expand=${MT}`);
+}
+
+describe("vk7-tren-dong", () => {
+	afterEach(() => {
+		globalThis.ResizeObserver = roCu;
+		HTMLElement.prototype.getBoundingClientRect = rectCu;
+	});
+
+	test("vk7-tren-dong: bang KR trang don vi, canEditKr co K1 K3 — dung hai nut Cap nhat hien san tren dong K1 K3, khong trong menu; bam dong K3 mo hop K3, khong mo ngan; menu «…» cua ngan M van mo cung hop", async () => {
+		coKhungDoThi();
+		const DUOC = ["k1", "k3"];
+		await dungDongKr(BON_KR, { canEditKr: DUOC });
+		await cho(() => nutDong("k1") !== null, "nut cap nhat dong K1");
+		const MA_TRAN = BON_KR.map((k) => ({ kr: k.id, co: DUOC.includes(k.id) }));
+		expect(MA_TRAN.length).toBe(4);
+		let soAssert = 0;
+		for (const o of MA_TRAN) {
+			const b = nutDong(o.kr);
+			expect({
+				kr: o.kr,
+				co: b !== null,
+				trongMenu: b ? b.closest('[role="menu"]') !== null : null,
+			}).toEqual({ kr: o.kr, co: o.co, trongMenu: o.co ? false : null });
+			soAssert += 1;
+		}
+		expect(soAssert).toBe(4);
+		expect(
+			nutDongTatCa().map((b) =>
+				b.closest("[data-kr]")?.getAttribute("data-kr"),
+			),
+		).toEqual(DUOC);
+
+		const k3 = BON_KR[2];
+		const b3 = nutDong("k3");
+		if (!k3 || !b3) throw new Error("thieu nut dong K3");
+		moGhi.goi = [];
+		await act(async () => {
+			await nguoiDung().click(b3);
+		});
+		await cho(() => hop() !== null, "hop K3 mo tu dong");
+		expect({
+			hop: hop()?.getAttribute("data-hop-cap-nhat-kr"),
+			tieuDe: hop()?.querySelector('[data-slot="dialog-description"]')
+				?.textContent,
+			moNgan: moGhi.goi,
+			phien: goiCua("okr.moCapNhat").map((g) => g.vao),
+		}).toEqual({
+			hop: k3.id,
+			tieuDe: k3.title,
+			moNgan: [],
+			phien: [{ entry: "sheet" }],
+		});
+		await thaoHet();
+
+		datLai();
+		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
+		kho.chiTiet = () =>
+			chiTietTu(mucTieu(MT, BON_KR, { canEdit: true }), { canEditKr: DUOC });
+		await dung(
+			<DetailSheet onOpenChange={() => {}} open>
+				<ObjectiveSheet objectiveId={MT} />
+			</DetailSheet>,
+			`?record=objective:${MT}`,
+		);
+		const menuK1 = () =>
+			qs<HTMLButtonElement>('[data-kr-hang="k1"] button[aria-haspopup="menu"]');
+		await cho(() => menuK1() !== null, "menu dong K1 trong ngan M");
+		const menu = menuK1();
+		if (!menu) throw new Error("thieu menu dong K1");
+		await act(async () => {
+			await nguoiDung().click(menu);
+		});
+		await cho(() => qs('[data-muc="cap-nhat-kr"]') !== null, "muc Cap nhat");
+		const muc = qs('[data-muc="cap-nhat-kr"]');
+		if (!muc) throw new Error("thieu muc Cap nhat");
+		await act(async () => {
+			await nguoiDung().click(muc);
+		});
+		await cho(() => hop() !== null, "hop tu menu ngan M");
+		expect(hop()?.getAttribute("data-hop-cap-nhat-kr")).toBe("k1");
+	});
+});
+
+type CaBaBam = {
+	ten: string;
+	doi: Parameters<typeof kr>[2];
+	go: string | null;
+	gui: number;
+	soBam: number;
+};
+
+const CA_BA_BAM: CaBaBam[] = [
+	{
+		ten: "tang-toi",
+		doi: {
+			kind: "tang-toi",
+			startValue: 0,
+			targetValue: 100,
+			currentValue: 20,
+			unit: "",
+		},
+		go: "40",
+		gui: 40,
+		soBam: 3,
+	},
+	{
+		ten: "giam-xuong",
+		doi: {
+			kind: "giam-xuong",
+			startValue: 100,
+			targetValue: 0,
+			currentValue: 80,
+			unit: "",
+		},
+		go: "60",
+		gui: 60,
+		soBam: 3,
+	},
+	{
+		ten: "moc",
+		doi: {
+			kind: "moc",
+			startValue: 0,
+			targetValue: 1,
+			currentValue: 0,
+			unit: "",
+		},
+		go: null,
+		gui: 1,
+		soBam: 4,
+	},
+];
+
+const MUC_TU_TIN = "vua" as const;
+const MUC_BAM = MUC_TU_TIN;
+
+function demBam() {
+	let so = 0;
+	const nghe = () => {
+		so += 1;
+	};
+	document.addEventListener("pointerdown", nghe, true);
+	return {
+		so: () => so,
+		go: () => document.removeEventListener("pointerdown", nghe, true),
+	};
+}
+
+async function goBangPhim(chu: string): Promise<void> {
+	const o = document.activeElement;
+	if (!(o instanceof HTMLInputElement))
+		throw new Error("o gia tri khong co tieu diem");
+	await act(async () => {
+		await nguoiDung().keyboard(`${"{Backspace}".repeat(o.value.length)}${chu}`);
+	});
+	await nhip(2);
+}
+
+describe("vk7-ba-bam", () => {
+	afterEach(() => {
+		globalThis.ResizeObserver = roCu;
+		HTMLElement.prototype.getBoundingClientRect = rectCu;
+	});
+
+	test("vk7-ba-bam: dem pointer click that tren trang don vi — ma tran ba kieu KR viet truoc: tang toi va giam xuong 3 bam, moc 4 bam; item gui dung KR cua dong da bam, gia tri go, muc tu tin vua bam", async () => {
+		expect(CA_BA_BAM.length).toBe(3);
+		const soBam: Record<string, number> = {};
+		for (const ca of CA_BA_BAM) {
+			datLai();
+			coKhungDoThi();
+			kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
+			const ds = BON_KR.map((k) => (k.id === "k2" ? { ...k, ...ca.doi } : k));
+			await dungDongKr(ds);
+			await cho(() => nutDong("k2") !== null, `nut dong ${ca.ten}`);
+			const nutK = nutDong("k2");
+			if (!nutK) throw new Error("thieu nut dong K");
+			const krDong = nutK.closest("[data-kr]")?.getAttribute("data-kr");
+			const u = nguoiDung();
+			const dem = demBam();
+			try {
+				await act(async () => {
+					await u.click(nutK);
+				});
+				await cho(() => hop() !== null, `hop ${ca.ten}`);
+				await nhip(3);
+				const h = hop();
+				if (!h) throw new Error("hop dong mat");
+				if (ca.go === null) {
+					await act(async () => {
+						await u.click(nut(mo.moc.xong, h));
+					});
+				} else {
+					await goBangPhim(ca.go);
+				}
+				await act(async () => {
+					await u.click(nut(mo.capNhat.mucTuTin[MUC_BAM], h));
+				});
+				const gui = () =>
+					h.querySelector<HTMLButtonElement>('[data-nut="gui-cap-nhat-kr"]');
+				await cho(() => gui()?.disabled === false, `nut gui bat ${ca.ten}`);
+				const btn = gui();
+				if (!btn) throw new Error("thieu nut gui");
+				await act(async () => {
+					await u.click(btn);
+				});
+				await cho(() => goiCua("okr.guiCapNhat").length > 0, "da gui");
+				soBam[ca.ten] = dem.so();
+			} finally {
+				dem.go();
+			}
+			console.log(`so bam: ${ca.ten} ${soBam[ca.ten]}`);
+			const muc = goiCua("okr.guiCapNhat").flatMap(
+				(g) => guiCapNhatInput.parse(g.vao).items,
+			);
+			const tuTin = muc[0]?.confidence ?? null;
+			const krGui = muc[0]?.keyResultId ?? null;
+			if (tuTin !== MUC_TU_TIN) throw new Error(`lech tu tin: ${tuTin}`);
+			if (krGui !== krDong) throw new Error(`lech kr: ${krGui} != ${krDong}`);
+			expect({ ten: ca.ten, muc }).toEqual({
+				ten: ca.ten,
+				muc: [
+					{
+						keyResultId: krDong ?? "",
+						value: ca.gui,
+						confidence: MUC_TU_TIN,
+						note: "",
+					},
+				],
+			});
+			expect({ ten: ca.ten, bam: soBam[ca.ten] }).toEqual({
+				ten: ca.ten,
+				bam: ca.soBam,
+			});
+			await thaoHet();
+		}
+		expect(Object.keys(soBam)).toEqual(CA_BA_BAM.map((c) => c.ten));
+
+		datLai();
+		coKhungDoThi();
+		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
+		await dungDongKr(BON_KR);
+		await cho(() => nutDong("k2") !== null, "nut dong chua tu tin");
+		const nutK = nutDong("k2");
+		if (!nutK) throw new Error("thieu nut dong K");
+		const u = nguoiDung();
+		await act(async () => {
+			await u.click(nutK);
+		});
+		await cho(() => hop() !== null, "hop chua tu tin");
+		await nhip(3);
+		await goBangPhim("40");
+		const h = hop();
+		const btn = h?.querySelector<HTMLButtonElement>(
+			'[data-nut="gui-cap-nhat-kr"]',
+		);
+		if (!btn) throw new Error("thieu nut gui");
+		await act(async () => {
+			await u.click(btn);
+		});
+		await nhip(3);
+		expect({
+			tat: btn.disabled,
+			gui: goiCua("okr.guiCapNhat").length,
+			hop: hop() !== null,
+		}).toEqual({ tat: true, gui: 0, hop: true });
+	});
+});
+
+describe("vk7-hep", () => {
+	test("vk7-hep: trang don vi duoi md van co nut Cap nhat tren dong K; tu md tro len cung vay", async () => {
+		const KHO = [
+			{ ten: "390", rong: 390 },
+			{ ten: "1280", rong: 1280 },
+		] as const;
+		const thucTe: Record<string, Json> = {};
+		for (const k of KHO) {
+			datLai();
+			const traLai = datKho(k.rong);
+			try {
+				await dungDongKr(BON_KR);
+				await cho(() => nutDong("k2") !== null, `nut dong o kho ${k.ten}`);
+				thucTe[k.ten] = {
+					nut: nutDong("k2")?.textContent?.trim() ?? null,
+					soNut: nutDongTatCa().length,
+				};
+			} finally {
+				await thaoHet();
+				traLai();
+			}
+		}
+		expect(thucTe).toEqual({
+			"390": { nut: mk.capNhat, soNut: BON_KR.length },
+			"1280": { nut: mk.capNhat, soNut: BON_KR.length },
+		});
+	});
+});
+
+describe("vk7-trang-thai", () => {
+	test("vk7-trang-thai: dong KR trang don vi — muc tieu da bo va ky khep khong co nut Cap nhat; doi chung muc tieu dang chay co nut", async () => {
+		const MA_TRAN = [
+			{ ten: "dang-chay", doi: {}, doiMt: {}, co: true },
+			{
+				ten: "muc-tieu-bo",
+				doi: {},
+				doiMt: {
+					status: "da-bo" as const,
+					droppedAt: "2026-10-10T00:00:00.000Z",
+				},
+				co: false,
+			},
+			{ ten: "ky-khep", doi: { kyGhiDuoc: false }, doiMt: {}, co: false },
+		];
+		expect(MA_TRAN.length).toBe(3);
+		const thucTe: Record<string, Json> = {};
+		for (const o of MA_TRAN) {
+			datLai();
+			await dungDongKr(BON_KR, o.doi, o.doiMt);
+			if (o.co) await cho(() => nutDong("k2") !== null, `nut ${o.ten}`);
+			else {
+				await cho(
+					() => docCua("okr.objective").length > 0 || qs("[data-kr]") === null,
+					`dong ${o.ten}`,
+				);
+				await nhip(5);
+			}
+			thucTe[o.ten] = nutDongTatCa().length;
+			await thaoHet();
+		}
+		expect(thucTe).toEqual({
+			"dang-chay": BON_KR.length,
+			"muc-tieu-bo": 0,
+			"ky-khep": 0,
+		});
 	});
 });
