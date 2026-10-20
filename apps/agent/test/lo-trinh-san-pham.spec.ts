@@ -28,7 +28,7 @@ import {
 	type KhoGia,
 	taoGithubGia,
 } from "../../../scripts/lo-trinh-san-pham/github-gia";
-import { docDuLieu } from "../../app/lib/lo-trinh/doc-du-lieu.js";
+import { docDuLieu } from "@crm/validation/doc-du-lieu-lo-trinh";
 import { layLoTrinhSanPham } from "../agent/lib/lo-trinh-san-pham";
 import { gieoNguoi, moXuong } from "./support/nhac-gieo";
 
