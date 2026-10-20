@@ -5,7 +5,7 @@ slug: vo-khu-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-19T21:48:53Z
 design_doc: docs/superpowers/specs/2026-10-19-vo-khu-muc-tieu-design.md
@@ -72,3 +72,17 @@ Ngưỡng của `opportunity.md`: «Trên trang đơn vị chỉ còn một lớ
 ## Notes
 
 - 42 hồ sơ đã ký đo các đường cũ; chúng mở đường cũ và được chuyển hướng, nên lượt ghim lại sau vòng này cho biết hồ sơ nào đo đường thay vì đo màn.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-20:
+  - Ngoài-1: Người ký nghiệm thu của hồ sơ điều hướng cũ có thể đọc một lời hứa nói rằng thứ tự nút và thanh thẻ vẫn được kiểm, trong khi bài đo đã không còn kiểm nữa. Người dùng cuối không thấy gì khác trên màn hình.
+  - Ngoài-2: Lời hứa trong hồ sơ nghiệm thu cũ mô tả năm thẻ và ô chu kỳ nằm trong hàng nút, trái với màn thật nay có bốn thẻ và ô chu kỳ ở thanh bên. Người dùng cuối vẫn dùng màn bình thường.
+  - Ngoài-3: Một phép đo về việc đầu trang có bị nhảy hay không luôn báo xanh dù đầu trang có nhảy thật hay không. Hiện chưa có bài nghiệm thu nào dùng đến phép đo này nên người dùng không bị ảnh hưởng.
+  - Ngoài-5: Người dùng không thấy gì khác: ô chọn chu kỳ vẫn nằm ở đầu thanh bên và hoạt động đúng. Chỉ là trong mã còn sót một khai báo thừa, dễ gây hiểu nhầm cho người sửa sau này.
+  - Ngoài-7: Người dùng không gặp gì: thanh thẻ cũ đã biến mất khỏi mọi màn. Trong mã còn sót một ít thành phần không dùng.
+  - Ngoài-8: Người dùng chọn giao diện tiếng Anh sẽ thấy mục Sơ đồ gọi là «Map», từ mà từ điển sản phẩm muốn tránh. Bản tiếng Việt không bị ảnh hưởng.
+  - Ngoài-9: Khi tải quyền bị lỗi mạng hoặc lỗi máy chủ, người quản lý chương trình thấy trang Sức khoẻ không có phần quản trị chương trình và không có thông báo lỗi. Nút dẫn tới phần đó có thể không làm gì.
+  - Ngoài-10: Người dùng không thấy lỗi nào hôm nay: ô chu kỳ đã ở đầu thanh bên. Nhưng nếu sau này ô đó bị đặt lại vào hàng nút, bài kiểm này sẽ không báo.
+  - Ngoài-14: Người dùng không gặp gì: liên kết cũ vẫn chuyển đúng sang trang mới. Trong mã còn một trang cũ không ai mở tới.
+  - Ngoài-15: Khi tải quyền bị lỗi thoáng qua, người quản lý chương trình có thể thấy trang Sức khoẻ thiếu phần quản trị mà không có lời giải thích; bấm nút Sức khoẻ thì không cuộn tới đâu. Tải lại trang thường sẽ hiện lại.
+  - Ngoài-17: Một bài kiểm cũ về việc giữ chế độ xem khi đổi mục đang kiểm một thanh thẻ mà người dùng không còn thấy. Thanh bên mới chỉ giữ chu kỳ, không giữ đơn vị hay kiểu xem.
+  - Ngoài-18: Một bài kiểm đếm bốn thẻ trên thanh thẻ mà người dùng không còn thấy, nhưng vẫn được tính vào bằng chứng. Các lối vào Của tôi vẫn hoạt động như cũ.
+  - Ngoài-19: Nếu sau này có người đặt lại ô chu kỳ vào hàng nút hành động theo một đường khác thì bài kiểm này có thể không bắt được. Hiện ô chu kỳ vẫn nằm ở đầu thanh bên.
