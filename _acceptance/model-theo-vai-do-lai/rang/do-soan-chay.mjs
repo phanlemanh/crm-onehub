@@ -488,8 +488,11 @@ const deXuat = await db.okrDeXuat.findMany({
 	select: { cuocSoanId: true, lyDo: true, noiDung: true, sau: true },
 });
 await db.$disconnect();
-if (!deXuat.length)
-	thoat(2, "khong doc duoc de xuat nao cua lan chay — ma 2, khong ghi tom tat");
+const khongNopDeXuat = deXuat.length === 0;
+if (khongNopDeXuat)
+	console.log(
+		"do-soan-chay: khong doc duoc de xuat nao cua lan chay — ghi tom tat voi khongNopDeXuat",
+	);
 const chuCu = demChuCu(deXuat);
 const ketLuan = ketLuanThuoc({
 	phan,
@@ -542,6 +545,7 @@ writeFileSync(
 			p90,
 			usd: tongUsd,
 			soDeXuat: deXuat.length,
+			khongNopDeXuat,
 			chuCu,
 			ketLuanThuocGoc: { ma: ketLuan.ma, cau: ketLuan.cau ?? null },
 		},

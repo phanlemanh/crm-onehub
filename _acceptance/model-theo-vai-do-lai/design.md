@@ -72,6 +72,11 @@ Thước soạn đọc `TRO_LY_OKR_SOAN.model` của `apps/agent-okr` — đó l
   Trợ lý kho mỗi tầng không kém mốc 13/10 quá 1 câu và câu lỗi ≤ 2; Soạn OKR mọi lượt ≥ 13/18 (bằng mốc) và hỏng ≤ 3.
   Lối khác: Soạn OKR cho kém mốc 1 câu (12/18) vì mốc dao động 2 câu.
 
+- **Hỏi-7 — lượt soạn không nộp đề xuất. ĐÃ TRẢ (chủ kho, 20/10):** lượt mà eval chạy xong nhưng không lưu đề xuất
+  nào là lượt hỏng, trượt ngưỡng. Thước MH4 ghi tóm tắt cho lượt đó (`soDeXuat` 0, `khongNopDeXuat` true) thay vì thoát 2.
+- **Hỏi-8 — lượt soạn 2 đã hỏng hai lần.** Khuyên: chạy lại một lần bằng thước đã sửa. Lối khác: dựng bản ghi từ
+  `summary.json` của eve còn lại — thiếu độ trễ, chi phí, băm lời dặn, model.
+
 ## Đổi model khi đo
 
 Sửa tạm hằng trong cây đo rồi trả lại, băm bản sửa vào bằng chứng — nếp MH3. Ba tệp: `agent_builder/agent.ts` (lượt

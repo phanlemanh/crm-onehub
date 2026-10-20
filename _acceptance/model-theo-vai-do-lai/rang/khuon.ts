@@ -215,6 +215,7 @@ export const khuonSoan = z.object({
 export type Soan = z.infer<typeof khuonSoan>;
 
 export const khuonSoanMh4 = khuonSoan.extend({
+	khongNopDeXuat: z.boolean().optional(),
 	modelGateway: z.string().nullable(),
 	bamSuaTam: z.string().length(64),
 	bamCommit: z.string().length(40),

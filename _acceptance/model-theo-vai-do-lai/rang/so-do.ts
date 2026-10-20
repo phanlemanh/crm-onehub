@@ -87,6 +87,8 @@ export const SO = {
 		loiDan: "LOI DAN LECH MOC",
 		saiModelSoan: "SAI MODEL SOAN",
 		thieuSoan: "THIEU LUOT SOAN",
+		khongNop: "khong nop lech",
+		luotHong: "luot soan hong",
 		thuoc: "THUOC LECH MOC",
 		judge: "JUDGE LECH MOC",
 		lechSo: "LECH SO",
@@ -481,6 +483,9 @@ export function kiemSoan(ev: string, ke: KeHoach): KetSoan {
 			lechLoiDan.push(n);
 			ok = false;
 		}
+		const khongNop = s.khongNopDeXuat ?? s.soDeXuat === 0;
+		if (khongNop !== (s.soDeXuat === 0)) hong.push(`${N.khongNop} ${n}`);
+		if (khongNop) ra.push(`${N.luotHong} ${n}: khong nop de xuat`);
 		if (ok) hop.push(s);
 		ra.push(
 			`soan luot ${n}: dat ${s.dat}/${s.tong} hong ${s.hong} judge hong ${s.judgeHong} usd ${s.usd}`,
@@ -566,7 +571,12 @@ export function kienNghiKho(
 }
 
 export function kienNghiSoan(
-	hop: { dat: number; hong: number; tong: number }[],
+	hop: {
+		dat: number;
+		hong: number;
+		tong: number;
+		soDeXuat: number;
+	}[],
 	soLuot: number,
 	lechLoiDan: boolean,
 	ng: Nguong["soan_okr"],
@@ -575,6 +585,12 @@ export function kienNghiSoan(
 		return {
 			kien_nghi: SO.ketKien.chuaDu,
 			ly_do: lechLoiDan ? SO.ketKien.loiDanLech : "thiếu lượt hợp lệ",
+		};
+	const khongNop = hop.find((h) => h.soDeXuat === 0);
+	if (khongNop)
+		return {
+			kien_nghi: `giữ ${ng.giu}`,
+			ly_do: `một lượt không nộp được đề xuất nào (đạt ${khongNop.dat}/${khongNop.tong}) — lượt hỏng`,
 		};
 	const xau = hop.find(
 		(h) => h.dat < ng.dat_toi_thieu || h.hong > ng.hong_toi_da,
@@ -1152,7 +1168,12 @@ function luatBien(): KetChieu {
 		).kien_nghi,
 		`giữ ${ng.tro_ly_kho.giu}`,
 	);
-	const s = (dat: number, hong: number) => ({ dat, hong, tong: 18 });
+	const s = (dat: number, hong: number, soDeXuat = 10) => ({
+		dat,
+		hong,
+		tong: 18,
+		soDeXuat,
+	});
 	ca(
 		"soan 13 hong 3",
 		kienNghiSoan([s(13, 3), s(14, 2)], 2, false, ng.soan_okr).kien_nghi,
@@ -1173,9 +1194,14 @@ function luatBien(): KetChieu {
 		kienNghiSoan([s(14, 0), s(14, 0)], 2, true, ng.soan_okr).kien_nghi,
 		SO.ketKien.chuaDu,
 	);
+	ca(
+		"soan khong nop",
+		kienNghiSoan([s(18, 0, 0), s(14, 0)], 2, false, ng.soan_okr).kien_nghi,
+		`giữ ${ng.soan_okr.giu}`,
+	);
 	return {
 		hong,
-		dong: hong.length ? [] : ["ma tran bien: 10 o dung kien nghi"],
+		dong: hong.length ? [] : ["ma tran bien: 11 o dung kien nghi"],
 	};
 }
 
@@ -1422,6 +1448,32 @@ const CHIEU_DO: readonly ChieuDo[] = [
 			const ev = banSao();
 			rmSync(join(ev, MTV.tep.soan(2)));
 			return tuDocs(ev, docsGoc() ?? "");
+		},
+	},
+	{
+		eval: "E4",
+		ten: "luot 1 khong nop de xuat",
+		mong: "do",
+		phaiCo: [`${N.luotHong} 1: khong nop de xuat`, `${N.traiLuat} soan-okr`],
+		chay: () => {
+			const ev = banSao();
+			suaJson(ev, MTV.tep.soan(1), khuonSoanMh4, (x) => {
+				x.soDeXuat = 0;
+				x.khongNopDeXuat = true;
+				x.dat = 18;
+				x.hong = 0;
+			});
+			const k = tuDocs(ev, docsGoc() ?? "");
+			const ky = k.bang.hang.find((h) => h.vai === "soan-okr");
+			return {
+				hong: [
+					...k.hong,
+					...(ky?.kien_nghi === "giữ google/gemini-3.8-flash"
+						? []
+						: ["bang in lai khong giu gemini khi luot khong nop"]),
+				],
+				dong: k.dong,
+			};
 		},
 	},
 	{

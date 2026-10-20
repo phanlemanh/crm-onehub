@@ -3,15 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { conTran, ghiLuot, keHoach, khoaGateway } from "./chi-phi";
 import { bamCommit } from "./do-kho";
-import {
-	GOC,
-	khuonSoan,
-	khuonSoanMh4,
-	MTV,
-	type SoanMh4,
-	sha256,
-	z,
-} from "./khuon";
+import { GOC, khuonSoanMh4, MTV, type SoanMh4, sha256, z } from "./khuon";
 
 export const DS = {
 	tep: join(GOC, MTV.suaTam.agentOkr),
@@ -93,7 +85,9 @@ async function motLuot(luot: number, goc: string) {
 		throw new Error(
 			`do-soan-chay luot ${luot} thoat ${ma}, khong co ${MTV.tep.soan(luot)}`,
 		);
-	const tom = khuonSoan.parse(JSON.parse(readFileSync(tep, "utf8")));
+	const tom = khuonSoanMh4
+		.omit({ modelGateway: true, bamSuaTam: true, bamCommit: true })
+		.parse(JSON.parse(readFileSync(tep, "utf8")));
 	const ra: SoanMh4 = khuonSoanMh4.parse({
 		...tom,
 		modelGateway: await modelGateway(tom.moHinh),
