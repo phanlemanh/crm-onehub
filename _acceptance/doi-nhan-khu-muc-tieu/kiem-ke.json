@@ -1,0 +1,1076 @@
+[
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gioi-han.ts",
+  "khoa": "duyet.hoiGui.than",
+  "cu": {
+   "vi": "Trong lúc chờ duyệt, nội dung, KR, căn chỉnh và mức hiển thị bị khoá. Bạn rút lại được bất cứ lúc nào.",
+   "en": "While it awaits approval, its content, KRs, alignment and visibility are locked. You can withdraw it at any time."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gioi-han.ts",
+  "khoa": "duyet.khoaSua",
+  "cu": {
+   "vi": "Mục tiêu đang chờ duyệt — rút lại để sửa nội dung, KR, căn chỉnh hay mức hiển thị.",
+   "en": "The objective is awaiting approval — withdraw it to edit content, KRs, alignment or visibility."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gioi-han.ts",
+  "khoa": "hienThi.congKhaiMoTa",
+  "cu": {
+   "vi": "Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp và căn chỉnh được.",
+   "en": "Everyone in the OKR program sees it; it counts in rollups and can be aligned."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gioi-han.ts",
+  "khoa": "hienThi.gioiHanMoTa",
+  "cu": {
+   "vi": "Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không căn chỉnh được.",
+   "en": "Only the people involved and named viewers see it. Left out of rollups, cannot be aligned."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gioi-han.ts",
+  "khoa": "hienThi.moCanChinh",
+  "cu": {
+   "vi": "Mở tab Căn chỉnh",
+   "en": "Open the Alignment tab"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "bienNhan.boQuaCanChinh",
+  "cu": {
+   "vi": "Đã bỏ qua góp ý góp vào «X»",
+   "en": "Skipped aligning to “X”"
+  },
+  "doi": [
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "bienNhan.daCanChinh",
+  "cu": {
+   "vi": "Đã góp vào mục tiêu theo Kara",
+   "en": "Aligned from Kara's suggestion"
+  },
+  "doi": [
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "dong.canChinh",
+  "cu": {
+   "vi": "Căn chỉnh kèm lý do",
+   "en": "Align with reason"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "dong.loai.can-chinh",
+  "cu": {
+   "vi": "Căn chỉnh",
+   "en": "Alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "loiQuyet.can-chinh-chinh-no",
+  "cu": {
+   "vi": "Đích là chính Mục tiêu này nên không căn chỉnh được.",
+   "en": "The target is this objective itself, so it can't be aligned."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "loiQuyet.can-chinh-chua-cong-bo",
+  "cu": {
+   "vi": "Đích chưa công bố hoặc đã bỏ nên không căn chỉnh được.",
+   "en": "The target is not published or was dropped, so it can't be aligned to."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "loiQuyet.can-chinh-cung-cap",
+  "cu": {
+   "vi": "Đích không ở cấp cao hơn nên không căn chỉnh được.",
+   "en": "The target isn't at a higher level, so it can't be aligned to."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "loiQuyet.can-chinh-da-gan",
+  "cu": {
+   "vi": "Mục tiêu này đã căn chỉnh vào đích đó rồi.",
+   "en": "This objective is already aligned to that target."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "loiQuyet.can-chinh-gioi-han",
+  "cu": {
+   "vi": "Một bên đang ở mức giới hạn nên không căn chỉnh được.",
+   "en": "One side is restricted, so they can't be aligned."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "loiQuyet.can-chinh-khac-chu-ky",
+  "cu": {
+   "vi": "Đích thuộc chu kỳ khác nên không căn chỉnh được.",
+   "en": "The target is in another cycle, so it can't be aligned to."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-gop-y.ts",
+  "khoa": "loiQuyet.dang-cho-duyet",
+  "cu": {
+   "vi": "Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa.",
+   "en": "The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "dangTai",
+  "cu": {
+   "vi": "Đang tải lần hỏi ý…",
+   "en": "Loading the call for ideas…"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "doPhu.goc",
+  "cu": {
+   "vi": "Toàn công ty",
+   "en": "Whole company"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ],
+  "vai": "du-phong-ten-goc"
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "loi.tieuDe",
+  "cu": {
+   "vi": "Không tải được lần hỏi ý",
+   "en": "Couldn't load the call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "moc.nhan",
+  "cu": {
+   "vi": "Các mốc của lần hỏi ý",
+   "en": "Milestones of the call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "moc.sua",
+  "cu": {
+   "vi": "Sửa lần hỏi ý",
+   "en": "Edit call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "sheet.daDong",
+  "cu": {
+   "vi": "Đã đóng hỏi ý — chuyển sang gom.",
+   "en": "Call for ideas closed — grouping starts."
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "sheet.daLuu",
+  "cu": {
+   "vi": "Đã lưu lần hỏi ý.",
+   "en": "Call for ideas saved."
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "sheet.daMo",
+  "cu": {
+   "vi": "Đã mở hỏi ý.",
+   "en": "The call for ideas is open."
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "sheet.dongNgayTieuDe",
+  "cu": {
+   "vi": "Đóng hỏi ý ngay?",
+   "en": "Close the call for ideas now?"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "sheet.tieuDe",
+  "cu": {
+   "vi": "Mở hỏi ý",
+   "en": "Open a call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "sheet.tieuDeSua",
+  "cu": {
+   "vi": "Sửa lần hỏi ý",
+   "en": "Edit call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "trong.mo",
+  "cu": {
+   "vi": "Mở hỏi ý",
+   "en": "Open a call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "trong.quanTri",
+  "cu": {
+   "vi": "Chưa hỏi ý cho kỳ này",
+   "en": "No call for ideas for this period yet"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr-hoi-y.ts",
+  "khoa": "trong.thanhVien",
+  "cu": {
+   "vi": "Chưa có lần hỏi ý nào cho kỳ này",
+   "en": "There is no call for ideas for this period"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-khep.ts",
+  "khoa": "mangSang.canChinh",
+  "cu": {
+   "vi": "Căn chỉnh không chép; đặt lại ở kỳ mới.",
+   "en": "Alignments are not copied; set them again in the new cycle."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/okr-so.ts",
+  "khoa": "phamVi.toan-cong-ty",
+  "cu": {
+   "vi": "Toàn công ty",
+   "en": "Whole company"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ],
+  "vai": "ten-cap"
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "banNhap.canChinhNhan",
+  "cu": {
+   "vi": "Căn chỉnh",
+   "en": "Alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "dong.themCanChinh",
+  "cu": {
+   "vi": "Thêm căn chỉnh",
+   "en": "Add alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "heThong.loai.can-chinh",
+  "cu": {
+   "vi": "căn chỉnh",
+   "en": "alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "soDo.loaiDong.can-chinh-moi",
+  "cu": {
+   "vi": "Căn chỉnh",
+   "en": "Alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-tai-co-cau.ts",
+  "khoa": "chuyen.moTa",
+  "cu": {
+   "vi": "Từ «{ten}». Mục tiêu giữ KR, cập nhật tuần, căn chỉnh, người xem và vết.",
+   "en": "From “{ten}”. Objectives keep their key results, weekly updates, alignments, viewers and history."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "cay.canChinh",
+  "cu": {
+   "vi": "Cây căn chỉnh toàn công ty",
+   "en": "Company-wide alignment tree"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "cay.chuaCanChinh",
+  "cu": {
+   "vi": "Chưa căn chỉnh vào đâu",
+   "en": "Not aligned anywhere"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "soDo.chuaNoiLen",
+  "cu": {
+   "vi": "Chưa nối lên",
+   "en": "Not connected"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "soDo.chuGiaiChuaNoi",
+  "cu": {
+   "vi": "Chưa nối lên: có mục tiêu mà không mục tiêu nào góp ra ngoài đơn vị",
+   "en": "Not connected: has objectives, none of them feeds outside the unit"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "soDo.co.chua-noi",
+  "cu": {
+   "vi": "Chưa nối lên",
+   "en": "Not connected"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "soDo.moTa",
+  "cu": {
+   "vi": "Mỗi đơn vị một thẻ. Dây là căn chỉnh thật: nét liền góp vào cấp trên trực tiếp, nét đứt góp thẳng hay chéo sang nhánh khác.",
+   "en": "One card per unit. Lines are real alignments: solid lines feed the unit directly above, dashed lines skip a level or cross to another branch."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "soDo.nhan",
+  "cu": {
+   "vi": "Sơ đồ căn chỉnh theo đơn vị",
+   "en": "Alignment map by unit"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "caiDat.chuKy.go.than",
+  "cu": {
+   "vi": "X chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+   "en": "X has no objective, check-in or quarter. Once removed it leaves this table; the trail keeps both its creation and its removal."
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "cap.goc",
+  "cu": {
+   "vi": "Cả công ty",
+   "en": "Whole company"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ],
+  "vai": "ten-cap"
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "cayCanChinh",
+  "cu": {
+   "vi": "Cây căn chỉnh",
+   "en": "Alignment tree"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "chuaCanChinh",
+  "cu": {
+   "vi": "Chưa căn chỉnh vào đâu",
+   "en": "Not aligned to anything"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "donViBang.locNhanh.chua-gop",
+  "cu": {
+   "vi": "Chưa góp vào đâu",
+   "en": "Not aligned"
+  },
+  "doi": [
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "goc",
+  "cu": {
+   "vi": "Toàn công ty",
+   "en": "Whole company"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ],
+  "vai": "du-phong-ten-goc"
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hanhDong.cong-bo-hoi-y",
+  "cu": {
+   "vi": "Công bố hỏi ý",
+   "en": "Published call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hanhDong.gan-can-chinh",
+  "cu": {
+   "vi": "Gắn căn chỉnh",
+   "en": "Aligned"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hanhDong.go-can-chinh",
+  "cu": {
+   "vi": "Gỡ căn chỉnh",
+   "en": "Removed alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hanhDong.mo-hoi-y",
+  "cu": {
+   "vi": "Mở hỏi ý",
+   "en": "Opened call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hanhDong.sua-hoi-y",
+  "cu": {
+   "vi": "Sửa hỏi ý",
+   "en": "Edited call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hanhDong.sua-ly-do-can-chinh",
+  "cu": {
+   "vi": "Sửa lý do căn chỉnh",
+   "en": "Edited alignment reason"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hopThoai.capMucTieu.onehub",
+  "cu": {
+   "vi": "Toàn OneHub",
+   "en": "All of OneHub"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ],
+  "vai": "ten-cap"
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hopThoai.daGan",
+  "cu": {
+   "vi": "Đã gắn căn chỉnh",
+   "en": "Alignment added"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hopThoai.gan",
+  "cu": {
+   "vi": "Gắn",
+   "en": "Align"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hopThoai.ganCanChinh",
+  "cu": {
+   "vi": "Gắn căn chỉnh",
+   "en": "Align objective"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hopThoai.moTaNhanDeXuat",
+  "cu": {
+   "vi": "Lý do và căn cứ Kara soạn — sửa rồi căn chỉnh.",
+   "en": "Reason and evidence drafted by Kara — edit, then align."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "hopThoai.suaLyDoCanChinh",
+  "cu": {
+   "vi": "Sửa lý do căn chỉnh",
+   "en": "Edit alignment reason"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "khongThay.action",
+  "cu": {
+   "vi": "Về toàn công ty",
+   "en": "Back to the whole company"
+  },
+  "doi": [
+   "vi"
+  ],
+  "vai": "pham-vi"
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.chuaCanChinh.body",
+  "cu": {
+   "vi": "Gắn mục tiêu này vào một mục tiêu hoặc KR cấp trên đã công bố.",
+   "en": "Align this objective to a published objective or KR one level up."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.chuaCanChinh.title",
+  "cu": {
+   "vi": "Chưa góp vào đâu",
+   "en": "Not aligned to anything"
+  },
+  "doi": [
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.daGo",
+  "cu": {
+   "vi": "Đã gỡ căn chỉnh",
+   "en": "Alignment removed"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.ganThem",
+  "cu": {
+   "vi": "Gắn thêm",
+   "en": "Align to more"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.goCanChinh",
+  "cu": {
+   "vi": "Gỡ căn chỉnh vào {ten}",
+   "en": "Remove alignment to {ten}"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.hoiGo.action",
+  "cu": {
+   "vi": "Gỡ căn chỉnh",
+   "en": "Remove alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.hoiGo.body",
+  "cu": {
+   "vi": "Mục tiêu này thôi góp vào chỗ đó. Gắn lại được bất cứ lúc nào.",
+   "en": "This objective stops contributing there. You can align it again any time."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.hoiGo.title",
+  "cu": {
+   "vi": "Gỡ căn chỉnh vào {ten}?",
+   "en": "Remove alignment to {ten}?"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.khuDuongLyDo",
+  "cu": {
+   "vi": "Đường lý do",
+   "en": "Path of reasons"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.suaLyDo",
+  "cu": {
+   "vi": "Sửa lý do căn chỉnh vào {ten}",
+   "en": "Edit the reason for the alignment to {ten}"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "sheet.tabCanChinh",
+  "cu": {
+   "vi": "Căn chỉnh",
+   "en": "Alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "tab.hoi-y",
+  "cu": {
+   "vi": "Hỏi ý",
+   "en": "Call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "viecCuaToi.cau.hoiYCongBo",
+  "cu": {
+   "vi": "Hỏi ý mục tiêu đã công bố — xem ý của bạn đi đâu",
+   "en": "The call for ideas is published — see where your ideas went"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "viecCuaToi.cau.hoiYGop",
+  "cu": {
+   "vi": "Hỏi ý mục tiêu đang chờ bạn góp",
+   "en": "The call for ideas on objectives is waiting for yours"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "lay-y-kien",
+  "tep": "apps/app/lib/messages/okr.ts",
+  "khoa": "viecCuaToi.moHoiY",
+  "cu": {
+   "vi": "Mở Hỏi ý",
+   "en": "Open the call for ideas"
+  },
+  "doi": [
+   "vi"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/to-chuc.ts",
+  "khoa": "goc",
+  "cu": {
+   "vi": "Toàn công ty",
+   "en": "Whole company"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ],
+  "vai": "du-phong-ten-goc"
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "soDo.loai.can-chinh",
+  "cu": {
+   "vi": "Căn chỉnh",
+   "en": "Alignment"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "soDo.maLoai.dich-ngoai-tap",
+  "cu": {
+   "vi": "Căn chỉnh tới đích ngoài danh sách",
+   "en": "Aligns to a target outside the list"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "goc",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.phamVi.toan-cong-ty",
+  "cu": {
+   "vi": "Toàn công ty",
+   "en": "Whole company"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ],
+  "vai": "ten-cap"
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "packages/ui/src/lib/messages.ts",
+  "khoa": "soDo.day",
+  "cu": {
+   "vi": "Dây căn chỉnh",
+   "en": "Alignment line"
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ },
+ {
+  "khai_niem": "gop-vao",
+  "tep": "packages/ui/src/lib/messages.ts",
+  "khoa": "soDo.moTaDay",
+  "cu": {
+   "vi": "Dây căn chỉnh giữa hai thẻ.",
+   "en": "An alignment line between two cards."
+  },
+  "doi": [
+   "vi",
+   "en"
+  ]
+ }
+]

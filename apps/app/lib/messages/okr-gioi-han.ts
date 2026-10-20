@@ -23,10 +23,10 @@ const vi = {
 		nhom: "Ai thấy mục tiêu này",
 		congKhai: "Công khai",
 		congKhaiMoTa:
-			"Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp và căn chỉnh được.",
+			"Mọi người trong chương trình OKR thấy; mục tiêu vào số gộp, góp vào mục tiêu khác và nhận chỗ góp vào được.",
 		gioiHan: "Giới hạn",
 		gioiHanMoTa:
-			"Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không căn chỉnh được.",
+			"Chỉ người liên quan và người xem có tên thấy. Không vào số gộp, không góp vào mục tiêu khác và không nhận chỗ góp vào.",
 		nguoiXem: "Người xem có tên",
 		themNguoi: "Thêm người…",
 		timNguoi: "Tìm thành viên…",
@@ -36,7 +36,7 @@ const vi = {
 		dem: "{n}/{max} người · chỉ thành viên của không gian làm việc.",
 		luonThay:
 			"Luôn thấy: người phụ trách, người phụ trách KR, người tham gia, trưởng sửa được mục tiêu, quản trị.",
-		moCanChinh: "Mở tab Căn chỉnh",
+		moCanChinh: "Mở thẻ Góp vào",
 		huy: "Huỷ",
 		luu: "Lưu",
 		daLuu: "Đã lưu mức hiển thị",
@@ -47,7 +47,7 @@ const vi = {
 		guiDuyet: "Gửi duyệt",
 		hoiGui: {
 			tieuDe: "Gửi mục tiêu này đi duyệt?",
-			than: "Trong lúc chờ duyệt, nội dung, KR, căn chỉnh và mức hiển thị bị khoá. Bạn rút lại được bất cứ lúc nào.",
+			than: "Trong lúc chờ duyệt, nội dung, KR, chỗ góp vào và mức hiển thị bị khoá. Bạn rút lại được bất cứ lúc nào.",
 			nut: "Gửi đi duyệt",
 			thoi: "Huỷ",
 		},
@@ -61,7 +61,7 @@ const vi = {
 		choQuanTri: "Chờ quản trị duyệt",
 		guiLuc: "gửi {ngay}",
 		khoaSua:
-			"Mục tiêu đang chờ duyệt — rút lại để sửa nội dung, KR, căn chỉnh hay mức hiển thị.",
+			"Mục tiêu đang chờ duyệt — rút lại để sửa nội dung, KR, chỗ góp vào hay mức hiển thị.",
 		choTuTruoc:
 			"Mục tiêu gửi duyệt từ trước khi chương trình tắt bước duyệt — nay công bố thẳng được, không cần chờ.",
 		rutLai: "Rút lại",
@@ -126,10 +126,10 @@ const en: OkrGioiHanMessages = {
 		nhom: "Who sees this objective",
 		congKhai: "Public",
 		congKhaiMoTa:
-			"Everyone in the OKR program sees it; it counts in rollups and can be aligned.",
+			"Everyone in the OKR program sees it; it counts in rollups, can contribute to other objectives and can be contributed to.",
 		gioiHan: "Restricted",
 		gioiHanMoTa:
-			"Only the people involved and named viewers see it. Left out of rollups, cannot be aligned.",
+			"Only the people involved and named viewers see it. Left out of rollups; it can neither contribute to other objectives nor be contributed to.",
 		nguoiXem: "Named viewers",
 		themNguoi: "Add a person…",
 		timNguoi: "Search members…",
@@ -139,7 +139,7 @@ const en: OkrGioiHanMessages = {
 		dem: "{n}/{max} people · workspace members only.",
 		luonThay:
 			"Always see it: the owner, KR owners, participants, leads who can edit the objective, admins.",
-		moCanChinh: "Open the Alignment tab",
+		moCanChinh: "Open the Contributes to tab",
 		huy: "Cancel",
 		luu: "Save",
 		daLuu: "Visibility saved",
@@ -150,7 +150,7 @@ const en: OkrGioiHanMessages = {
 		guiDuyet: "Submit for approval",
 		hoiGui: {
 			tieuDe: "Submit this objective for approval?",
-			than: "While it awaits approval, its content, KRs, alignment and visibility are locked. You can withdraw it at any time.",
+			than: "While it awaits approval, its content, KRs, contributions and visibility are locked. You can withdraw it at any time.",
 			nut: "Submit",
 			thoi: "Cancel",
 		},
@@ -164,7 +164,7 @@ const en: OkrGioiHanMessages = {
 		choQuanTri: "Waiting for an admin to approve",
 		guiLuc: "sent {ngay}",
 		khoaSua:
-			"The objective is awaiting approval — withdraw it to edit content, KRs, alignment or visibility.",
+			"The objective is awaiting approval — withdraw it to edit content, KRs, contributions or visibility.",
 		choTuTruoc:
 			"This was submitted before the program turned approval off — it can now be published directly, no wait needed.",
 		rutLai: "Withdraw",
