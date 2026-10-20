@@ -1,0 +1,183 @@
+schema_version: 1
+slug: khung-cho-don-vi-mot-hinh
+
+# Đo trên trình duyệt thật: _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs qua scripts/lan-do/tien-de.mjs
+# (phiên đo riêng của cây đang xét, bộ OKR mẫu, khuôn lấy mẫu 50 ms của E4 hồ sơ trang-don-vi-mot-bang). Một lượt đo
+# in một dòng cho mỗi AC; mỗi eval đọc dòng của mình. Chữ ký khung của một mẫu = chiều cao hàng công cụ (hàng thật
+# hoặc [data-khung-hang=thanh-cong-cu]) · khoảng từ đỉnh [data-slot=page-shell-content] tới đỉnh đầu bảng · chiều cao
+# đầu bảng ([data-khung-hang=dau-bang]) · số dòng khung hiện ([data-khung-hang=hang]) · chiều cao từng dòng, làm tròn
+# tới px. Mẫu «lạ» = trong vùng nội dung có [data-slot=skeleton] hoặc [aria-busy=true] mà không nằm trong
+# [data-khung-xuong=bang-hai-dong]: mỗi mẫu lạ tính là một hình riêng mang chữ ký "la".
+# Bài DOM mới: apps/app/test/khung-cho-don-vi.dom.tsx, mỗi eval một nhóm theo tên (-t kcd-...).
+# Hai chiều của mỗi thước: đối chứng dương trên vật lành, phá thử trên bản sao (KCD_PHA=<tên>) cùng fixture, ghim
+# thông điệp SAI AC-n.
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: ui-observed
+    cmd: config:executors.script.kcd_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - packages/ui/src/components/khung-xuong.tsx
+      - _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs
+    expected: |
+      Tải cứng kiểu xem danh sách, CDP latency 800 ms, lấy mẫu DOM mỗi 50 ms từ lúc tạo tài liệu tới [data-hang-muc-tieu]
+      đầu tiên, ở 1440 rồi 390. Mỗi khổ một dòng "AC-1 <khổ>: <k> mau · <m> mau khung · <h> hinh khung · cay toi da <c> ·
+      o chon toi da <o> · vong quay <v>". DUNG khi m >= 1, h = 1 (tính cả mẫu lạ), c = 0, o <= 1, v = 0 ở cả
+      hai khổ; m = 0 là "KHONG DO DUOC: khong bat duoc mau khung o <khổ>" mã 2, không phải đạt.
+      CHIEU DO, cùng phiên đo, mỗi lối một bản sao:
+      (KCD_PHA=fallback-cu: fallback page.tsx về KhungXuong hinh="bang", danh sách nạp ở trình duyệt) ->
+      "SAI AC-1: <h> hinh khung cho o <khổ>" với h >= 2, mã 1;
+      (KCD_PHA=cong-cu-lech: vạch hàng công cụ của khung cao 32 px thay 28 px) -> "SAI AC-1: dinh dau bang lech <px>
+      giua cac mau o <khổ>", mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: ui-observed
+    cmd: config:executors.script.kcd_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - packages/ui/src/components/khung-xuong.tsx
+      - _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs
+    expected: |
+      Cùng lượt đo. Từ thẻ Toàn cảnh bấm thẻ Theo đơn vị (điều hướng mềm), latency 800 ms, lấy mẫu như E1 ở 1440 và 390.
+      Dòng "AC-2 <khổ>: <m> mau khung · chu ky <chữ ký> · chu ky tai cung <chữ ký E1>". DUNG khi m >= 1 và mọi mẫu khung
+      cùng chữ ký với E1 cùng khổ. Mẫu lạ (vạch hay aria-busy ngoài khung bang-hai-dong,
+      vd PageShellFallback của một ranh tải) là sai, không phải "không có pha khung". Đường đi không có mẫu khung nào và
+      không có mẫu lạ (RSC về trước lần lấy mẫu đầu) thì dòng ghi "AC-2 <khổ>: khong co pha khung" và eval vẫn đạt —
+      lời hứa là «không hình khác», không phải «phải thấy khung».
+      CHIEU DO (KCD_PHA=fallback-cu) -> "SAI AC-2: chu ky <x> khac tai cung <y> o <khổ>", mã 1;
+      (KCD_PHA=khung-la: bản sao thêm okr/loading.tsx vẽ PageShellFallback) -> "SAI AC-2: mau khung la o <khổ>", mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    layer: ui-observed
+    cmd: config:executors.script.kcd_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - packages/ui/src/components/khung-xuong.tsx
+      - _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs
+    expected: |
+      Cùng lượt đo. Bảng của một đơn vị đã dựng; chặn yêu cầu tRPC okr.danhSach của trình duyệt, chọn đơn vị khác trong
+      ô chọn, lấy mẫu tới khi thả yêu cầu và dòng mục tiêu của đơn vị mới hiện, ở 1440 và 390. Trong lúc yêu cầu còn bị giữ: lấy
+      document.elementFromPoint tại tâm [data-chon-don-vi] (phần tử nhận phải là ô chọn hoặc con của nó), bấm thật vào
+      đó, chờ [role=listbox] hiện rồi đóng bằng Escape. Dòng "AC-3 <khổ>: <m> mau khung · o chon that <co|khong> · nhan
+      bam <co|khong> · mo danh sach <co|khong> · chu ky <chữ ký> · dinh o chon lech <px>". DUNG khi m >= 1, ô chọn thật
+      có trong mọi mẫu khung, nhận bấm và mở danh sách, chữ ký trùng E1 cùng khổ (trừ chiều cao hàng công cụ là hàng
+      thật), lệch <= 1.
+      CHIEU DO (KCD_PHA=hang-an: bản sao bỏ khe thanhCongCu, khung vẽ vạch thay hàng thật) -> "SAI AC-3: khong co o chon
+      that luc dang tai o <khổ>", mã 1; (KCD_PHA=khe-inert: khe thanhCongCu mang inert) -> "SAI AC-3: o chon khong nhan
+      bam o <khổ>", mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    layer: ui-observed
+    cmd: config:executors.script.kcd_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - packages/ui/src/components/khung-xuong.tsx
+      - _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs
+    expected: |
+      Cùng lượt đo. So MỌI mẫu khung của E1 với bảng đã dựng cùng khổ, lấy độ lệch lớn nhất (dòng [data-hang-muc-tieu] đầu tiên tính lên tới
+      hàng bảng chứa nó; mọi dòng mục tiêu của bảng; đầu bảng thật; hàng công cụ thật). Dòng "AC-4 <khổ>: dong khung
+      <n>/5 · cao dong khung <a> · dong that <min>-<max> · dau bang lech <e> · hang cong cu lech <f>". DUNG khi n <= 5,
+      min <= a <= max với mọi dòng khung, e <= 1, f <= 1 ở cả hai khổ; bảng mẫu có ít hơn hai dòng mục tiêu là
+      "KHONG DO DUOC" mã 2.
+      CHIEU DO (KCD_PHA=fallback-cu) -> "SAI AC-4: dong khung cao <a>px ngoai <min>-<max> o <khổ>" (dòng một vạch 36 px so
+      dòng hai tầng), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.kcd_cau_truc
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - packages/ui/src/components/khung-xuong.tsx
+      - apps/app/test/khung-cho-don-vi.dom.tsx
+    expected: |
+      Nhóm "kcd-cau-truc" của apps/app/test/khung-cho-don-vi.dom.tsx: gọi TheoDonViPage để lấy phần tử Suspense, dựng
+      props.fallback của nó, dựng KhungDangTaiDonVi không hàng và có hàng công cụ thật; cả ba có
+      [data-khung-xuong=bang-hai-dong] và cùng chữ ký (số [data-khung-hang=hang], số vạch con mỗi dòng, lớp của đầu bảng và
+      dòng). props.fallback có type đúng là KhungDangTaiDonVi.
+      Cùng nhóm quét mọi tệp .ts/.tsx dưới okr/theo-don-vi/ bằng bộ phân tích TypeScript: không câu nhập nào mang tên
+      Skeleton (mọi đường, kể cả đường con của @crm/ui) và không chuỗi lớp nào chứa animate-pulse. Đo trên origin/onehub
+      b32a1495f trước vòng: chỉ hang-cong-cu.tsx nhập Skeleton (khung riêng của cây, họp tuần, chấm điểm nằm ở
+      ../trang-thai-okr.tsx và các thư mục khác, ngoài phạm vi quét). Exit 0.
+      CHIEU DO (KCD_PHA=fallback-cu, cùng fixture) -> "SAI AC-5: fallback page.tsx khong phai KhungDangTaiDonVi", và
+      (KCD_PHA=ve-tay: bản sao thêm một div lớp animate-pulse vào hang-cong-cu.tsx) -> "SAI AC-5: hang-cong-cu.tsx tu ve
+      vach".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.kmc_xuong
+    paths:
+      - packages/ui/src/components/khung-xuong.tsx
+      - packages/ui/test/khung-xuong.dom.tsx
+    expected: |
+      packages/ui/test/khung-xuong.dom.tsx: ma trận vạch sáu hình — bang-hai-dong có thanh-cong-cu 1, dau-bang 1, hang 5,
+      mỗi [data-khung-hang=hang] có ít nhất hai [data-slot=skeleton]; năm hình cũ giữ đúng số vạch của bảng hôm nay
+      (bang 1/1/8, danh-sach 6, the 2/6, tong-quan 4/5, chi-tiet 1/3); sáu hình sáu cây khác nhau. Exit 0.
+      CHIEU DO (bản sao bớt một dòng của bang-hai-dong) -> "kmc-xuong: bang-hai-dong co 4 hang, bang ghi 5".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.kcd_trang_khac
+    paths:
+      - "apps/app/app/(app)/**/page.tsx"
+      - _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs
+    expected: |
+      rang/trang-khac.mjs đọc mọi page.tsx dưới apps/app/app/(app) bằng bộ phân tích TypeScript, liệt các fallback
+      KhungXuong theo hình. Dòng "AC-6: <n> trang dung bang · bang-hai-dong chi o theo-don-vi". DUNG khi chín trang đang
+      dùng bang hôm nay (api-keys, sso, members, tai-lieu, contacts, deals, campaigns, companies, onboarding) vẫn dùng
+      bang, và bang-hai-dong chỉ xuất hiện ở okr/theo-don-vi. Exit 0.
+      CHIEU DO (--pha-thu: bản sao đổi deals/page.tsx sang bang-hai-dong) -> "SAI AC-6: deals dung bang-hai-dong", mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.kcd_a11y
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - packages/ui/src/components/khung-xuong.tsx
+      - apps/app/test/khung-cho-don-vi.dom.tsx
+    expected: |
+      Nhóm "kcd-a11y", ba ca: props.fallback lấy từ TheoDonViPage (như E5), khung có hàng và khung không hàng — aria-busy="true" trên [data-trang-thai=ST-donvi-dangtai], đúng một
+      [role=status] đọc "Đang tải OKR…", phần vạch nằm trong [aria-hidden=true], không phần tử nhận tiêu điểm trong phần
+      ẩn; khung có hàng: [data-chon-don-vi] không nằm trong [aria-hidden=true] và nhận focus() (document.activeElement là
+      nó). Exit 0.
+      CHIEU DO (KCD_PHA=hang-an) -> "SAI AC-7: o chon don vi nam trong phan an"; (KCD_PHA=fallback-tran: fallback page.tsx
+      là KhungXuong không nhan) -> "SAI AC-7: fallback page.tsx khong doc Dang tai OKR".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-1, AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kcd_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
+      - packages/ui/src/components/khung-xuong.tsx
+      - _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs
+    steps:
+      - "Cùng lượt đo với E1–E4"
+      - "Tải cứng 1440: chụp mẫu khung đầu tiên → E9-khung-1440.png; chụp bảng đã dựng → E9-bang-1440.png"
+      - "Tải cứng 390: chụp mẫu khung đầu tiên → E9-khung-390.png; chụp bảng đã dựng → E9-bang-390.png"
+      - "Đổi đơn vị 1440: chụp lúc thân bảng là khung, hàng công cụ thật → E9-doi-don-1440.png"
+    expected: |
+      Năm ảnh trong evidence/. Người chấm đặt khung cạnh bảng cùng khổ: khung có hàng công cụ, đầu bảng và các dòng hai
+      tầng nằm đúng chỗ hàng công cụ, đầu bảng và các dòng mục tiêu của bảng; ở 390 không vạch nào tràn ngang; ảnh đổi
+      đơn vị có ô chọn đơn vị thật trên khung.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]

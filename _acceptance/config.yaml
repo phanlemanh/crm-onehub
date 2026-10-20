@@ -2069,6 +2069,8 @@ executors:
     tbk_hoi_thoai_bam: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-bam|tbk-hoi-thoai-rong'"
     tbk_hoi_thoai_dien_thoai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-dien-thoai|tbk-hoi-thoai-ngan'"
     tbk_dang_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t tbk-dang-tai"
+    kcd_cau_truc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-cau-truc"
+    kcd_a11y: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-a11y"
   script:
     tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
     dtn_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dich-ten-nganh-bang-bang/rang/chup.mjs"
@@ -3187,6 +3189,8 @@ executors:
     pglt_dot_bien: node _acceptance/push-ghim-lai-t1/rang/dot-bien.mjs
     tbk_quet: bun _acceptance/thanh-ben-khu-dung-chung/rang/quet-vo-tay.mjs
     tbk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"'
+    kcd_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs"'
+    kcd_trang_khac: node _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
