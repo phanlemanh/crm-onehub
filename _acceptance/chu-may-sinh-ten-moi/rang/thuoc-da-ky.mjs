@@ -4,6 +4,7 @@ const HO_SO = "_acceptance/chu-may-sinh-ten-moi/";
 const THUOC = "_acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs";
 const SO_THUOC = "_acceptance/gioi-han-duyet-cay-okr/decisions.jsonl";
 const BAN_CHUP = "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json";
+const CAU_HINH = "_acceptance/config.yaml";
 const GHIM = /^_acceptance\/[^/]+\/(run-log\.jsonl|evidence-report\.md)$/;
 const VE_CU_THUOC = [
 	["chỗ góp vào", "căn chỉnh"],
@@ -43,6 +44,10 @@ chayRang(() => {
 	const doi = git("diff", "--name-only", dai.tu, dai.den, "--", "_acceptance/").split("\n").filter(Boolean);
 	for (const t of doi) {
 		if (t.startsWith(HO_SO) || t === THUOC || t === SO_THUOC || GHIM.test(t)) continue;
+		if (t === CAU_HINH) {
+			if (capDoi(dai.tu, dai.den, CAU_HINH).bo.length) loi.push(`${CAU_HINH}: sua dong co san, chi duoc them`);
+			continue;
+		}
 		loi.push(`${t}: tep ho so khac bi doi`);
 	}
 	let soThuoc = 0;
