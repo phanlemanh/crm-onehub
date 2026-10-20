@@ -119,7 +119,7 @@ function ThanhBen({
 
 export function ThanhBenMucTieuCho() {
 	return (
-		<ThanhBen header={<Skeleton className="h-8 w-full" />} trangThai={null} />
+		<ThanhBen header={<Skeleton className="h-7 w-full" />} trangThai={null} />
 	);
 }
 

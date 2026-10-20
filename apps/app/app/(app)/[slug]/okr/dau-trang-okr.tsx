@@ -44,7 +44,7 @@ function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 			hanhDong={
 				<>
 					<NutHoiKara />
-					<Skeleton className="h-7 w-56" data-hang-cho="" />
+					<Skeleton className="h-7 w-36" data-hang-cho="" />
 				</>
 			}
 			moTa={moTa}

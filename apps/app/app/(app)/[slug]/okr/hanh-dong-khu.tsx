@@ -248,7 +248,7 @@ export function HanhDongKhu({
 		return (
 			<>
 				{hoiKara}
-				<Skeleton className="h-7 w-56" data-hang-cho="" />
+				<Skeleton className="h-7 w-36" data-hang-cho="" />
 			</>
 		);
 	return (
