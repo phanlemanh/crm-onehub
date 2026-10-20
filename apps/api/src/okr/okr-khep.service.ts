@@ -2,6 +2,7 @@ import type { Db, Prisma } from "@crm/db";
 import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import { readTenGoc } from "@crm/db/workspace";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
 import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
 import {
@@ -158,8 +159,16 @@ function dongXuat(
 	ky: string,
 	m: MucTieuXuat,
 	cham: MucTieuCham | undefined,
+	tenGoc: string,
 ): OCsv[][] {
-	const dau: OCsv[] = [ky, m.level, tenDonVi(m), m.title, m.kind, m.status];
+	const dau: OCsv[] = [
+		ky,
+		m.level,
+		tenDonVi(m, tenGoc),
+		m.title,
+		m.kind,
+		m.status,
+	];
 	if (cham) {
 		const cuoi: OCsv[] = [
 			cham.diem,
@@ -757,6 +766,7 @@ export class OkrKhepService {
 			}),
 		]);
 		const cham = new Map(bang.mucTieu.map((m) => [m.id, m]));
+		const tenGoc = await readTenGoc(this.db);
 		const dong = mts
 			.map((m) => ({ hang: HANG_CAP[donViCua(m).level], m }))
 			.sort((a, b) => a.hang - b.hang)
@@ -765,6 +775,7 @@ export class OkrKhepService {
 					c.name,
 					m,
 					m.status === "cong-bo" ? cham.get(m.id) : undefined,
+					tenGoc,
 				),
 			);
 		return {
