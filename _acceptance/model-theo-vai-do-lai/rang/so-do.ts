@@ -725,6 +725,7 @@ export function dungBang(
 		thong_so_chua_do: loc(ke, ["Trợ lý kho"]),
 		ghi_chu: [
 			"vòng hai qua Zalo: agent gốc chạy model mặc định zai/glm-5.2-fast, chỉ trợ lý kho đổi model",
+			"USD ước theo số dư Gateway trước và sau lượt: gồm cả agent gốc của vòng Zalo và lời gọi khác cùng nhóm khoá trong khoảng đó, nên là ước cao",
 		],
 	};
 	const moc = khuonSoan.parse(
