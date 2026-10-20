@@ -50,9 +50,12 @@ const NUT_GIU_CHO = [
 	"settings/sso/add-sso-provider-sheet.tsx",
 ].map((t) => `${TIEN_SLUG}${t}`);
 const HAI_COT = [`${TIEN_SLUG}settings/onboarding/page.tsx`];
-const TEP_DOI: Record<string, string> = {
-	[`${TIEN_SLUG}okr/theo-don-vi/page.tsx`]: `${TIEN_SLUG}okr/theo-don-vi/hang-cong-cu.tsx`,
-};
+const TEP_DOI = new Map([
+	[
+		`${TIEN_SLUG}okr/theo-don-vi/page.tsx`,
+		`${TIEN_SLUG}okr/theo-don-vi/hang-cong-cu.tsx`,
+	],
+]);
 const TRANG_NHAC = `${TIEN_SLUG}reminders/page.tsx`;
 const LAYOUT_OKR = `${TIEN_SLUG}okr/layout.tsx`;
 
@@ -130,7 +133,7 @@ export function quetHinhTheoMan(
 		loi.push(GHI_CHU_NONG);
 	} else {
 		const canCo = [
-			...tepGoc.map((t) => TEP_DOI[t] ?? t),
+			...tepGoc.map((t) => TEP_DOI.get(t) ?? t),
 			`${TIEN_SLUG}tai-lieu/page.tsx`,
 		];
 		for (const t of canCo) {
@@ -381,10 +384,8 @@ function docThay(
 
 const DOC = docTuDia();
 const TEP = tepAppTsx();
-const GOC_CUA = Object.fromEntries(
-	Object.entries(TEP_DOI).map(([goc, moi]) => [moi, goc]),
-);
-const TRANG_BANG = BANG_HINH.map((d) => GOC_CUA[d.tep] ?? d.tep);
+const GOC_CUA = new Map([...TEP_DOI].map(([goc, moi]) => [moi, goc]));
+const TRANG_BANG = BANG_HINH.map((d) => GOC_CUA.get(d.tep) ?? d.tep);
 const TEP_TIEU_DE = TRANG_BANG.filter(
 	(t) => t.endsWith("/page.tsx") && !TIEU_DE_THEO_DU_LIEU.includes(t),
 );
@@ -474,12 +475,17 @@ describe("tep-goc-da-doi", () => {
 	const MOI_DON_VI = `${TIEN_SLUG}okr/theo-don-vi/hang-cong-cu.tsx`;
 
 	test("bang ghi tep moi, tep goc khong con dung KhungXuong", () => {
-		const goc = tepGocCoVongQuay() ?? BANG_HINH.map((d) => d.tep);
 		expect(BANG_HINH.some((d) => d.tep === MOI_DON_VI)).toBe(true);
 		expect(BANG_HINH.some((d) => d.tep === GOC_DON_VI)).toBe(false);
-		expect(quetHinhTheoMan(DOC, BANG_HINH, goc, [GOC_DON_VI])).toEqual(
-			tepGocCoVongQuay() === null ? [GHI_CHU_NONG] : [],
-		);
+		expect(TRANG_BANG).toContain(GOC_DON_VI);
+		const goc = tepGocCoVongQuay();
+		if (goc === null) {
+			expect(quetHinhTheoMan(DOC, BANG_HINH, goc, [GOC_DON_VI])).toEqual([
+				GHI_CHU_NONG,
+			]);
+			return;
+		}
+		expect(quetHinhTheoMan(DOC, BANG_HINH, goc, [GOC_DON_VI])).toEqual([]);
 	});
 
 	test("chieu do: dong cu, sai hinh o tep moi, KhungXuong quay lai tep goc", () => {

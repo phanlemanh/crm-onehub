@@ -3,17 +3,16 @@ schema_version: 2
 feature_slug: khung-cho-don-vi-mot-hinh
 verdict: REJECT
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2338bd484502f1369e92b934c15a02b72e531c55
+verified_commit: 4c621c211bfb87aacc52614224988632033319fd
 human_signoff:
 ---
 
 # Evidence Report: khung-cho-don-vi-mot-hinh
 
-Verdict tổng REJECT. Cả chín eval của hợp đồng đạt, nhưng một lệnh suite hồi quy không gắn eval nào cho kết quả không đạt: `bun run test -- --filter=app --filter=@crm/ui` (xem mục «Lệnh suite (hồi quy)» và Iterations). Danh sách `failed_evals` để trống vì lệnh này không thuộc eval nào.
+Vòng 2. Chín eval đều đạt (E7 chạy lại ở vòng này, tám eval còn lại mang từ vòng 1 vì delta không chạm paths của chúng). Verdict REJECT đến từ một lệnh suite không gắn eval: `bun run lint:slop` đỏ ở bài `apps/app/test/khung-man-chung.spec.ts`. Chi tiết ở mục «Lệnh fail không gắn eval» bên dưới.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,42 +31,42 @@ Verdict tổng REJECT. Cả chín eval của hợp đồng đạt, nhưng một 
 - eval: E1
   run_id: minted-khung-cho-don-vi-mot-hinh-E1-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.kcd_man
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   output: |
-    lệnh: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs"
-    phien-do: xong — mã 0
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-khung-cho-don-vi-mot-hinh-E2-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.kcd_man
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   output: |
-    lệnh: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs"
-    phien-do: xong — mã 0
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-khung-cho-don-vi-mot-hinh-E3-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.kcd_man
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   output: |
-    lệnh: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs"
-    phien-do: xong — mã 0
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-khung-cho-don-vi-mot-hinh-E4-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.kcd_man
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   output: |
-    lệnh: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs"
-    phien-do: xong — mã 0
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E5
   run_id: minted-khung-cho-don-vi-mot-hinh-E5-r1
@@ -75,28 +74,27 @@ Verdict tổng REJECT. Cả chín eval của hợp đồng đạt, nhưng một 
   baseline: n-a
   verifier: config:executors.test.kcd_cau_truc
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   output: |
-    lệnh: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-cau-truc
-    Ran 3 tests across 1 file. [1108.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
   run_id: minted-khung-cho-don-vi-mot-hinh-E6-r1
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.kmc_xuong
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   output: |
-    lệnh: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx
-    Ran 24 tests across 1 file. [519.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E7
-  run_id: minted-khung-cho-don-vi-mot-hinh-E7-r1
+  run_id: minted-khung-cho-don-vi-mot-hinh-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kcd_trang_khac
-  verified_at: 2026-10-20T12:46:44Z
+  verified_at: 2026-10-20T16:16:23Z
   output: |
-    lệnh: node _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs
     AC-6: 9 trang dung bang · bang-hai-dong o [slug]/okr/theo-don-vi
 
 - eval: E8
@@ -105,9 +103,9 @@ Verdict tổng REJECT. Cả chín eval của hợp đồng đạt, nhưng một 
   baseline: n-a
   verifier: config:executors.test.kcd_a11y
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   output: |
-    lệnh: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-a11y
-    Ran 4 tests across 1 file. [766.00ms]
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9
   run_id: minted-khung-cho-don-vi-mot-hinh-E9-r1
@@ -115,6 +113,7 @@ Verdict tổng REJECT. Cả chín eval của hợp đồng đạt, nhưng một 
   baseline: n-a
   verifier: config:executors.script.kcd_man
   verified_at: 2026-10-20T12:46:44Z
+  carried_from_round: 1
   screenshot: evidence/E9-khung-1440.png
   observed: |
     Đã mở bằng Read từng ảnh.
@@ -125,57 +124,47 @@ Verdict tổng REJECT. Cả chín eval của hợp đồng đạt, nhưng một 
     5) E9-doi-don-1440.png: lúc thân bảng còn là khung (5 dòng xương, đầu bảng xương) nhưng hàng công cụ đã thật: ô chọn đơn vị thật «Kinh doanh miền Bắc» (đã đổi đơn vị từ Pháp chế), nhãn «Danh sách», «Sơ đồ góp vào», «Họp tuần» thật, kèm một thanh xương cho phần chip chưa có số, ba thanh xương cho Lọc/Sắp xếp/Cột; thẻ con thật, «Quý 4 · mẫu» thật, nút «Thêm mục tiêu» còn là thanh xương. Đỉnh ô chọn lệch 0 so với khung. Khớp Expected: ảnh đổi đơn vị có ô chọn đơn vị thật trên khung.
     Kết luận đối chiếu: không có mâu thuẫn với Expected; khung đặt cạnh bảng cùng khổ khớp ở hàng công cụ, đầu bảng, dòng hai tầng; 390 không tràn ngang; ảnh đổi đơn vị có ô chọn thật.
   network_observed: n-a (driver)
-  output: |
-    Kích thước ảnh: khung-1440, bang-1440, doi-don-1440 đều 1440x900; khung-390 và bang-390 đều 390x844. Năm ảnh có mặt trong evidence/ (ghi lại lúc 19:48-19:49 của lượt chạy này).
-    Frame đã lưu: E9-khung-1440.png, E9-bang-1440.png, E9-khung-390.png, E9-bang-390.png, E9-doi-don-1440.png (thư mục _acceptance/khung-cho-don-vi-mot-hinh/evidence/).
-    Dùng thước của kho (script Playwright), không dùng capture.ui riêng. E9-khung-390.png đổi so với bản đã commit (17408 sang 14517 byte), nội dung khung vẫn đúng; ba ảnh kia giữ nguyên số byte. Không commit.
-    Network: driver là script chạy trình duyệt trong phiên đo, không có công cụ đọc network; log không có dòng error, failed hay 5xx; ghi n-a (driver), không viết E9-network.txt.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-20T12:46:44Z
+  verified_at: 2026-10-20T16:16:23Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-20T12:46:44Z
-  note: lệnh này không gắn eval nào và là lý do verdict tổng là REJECT; hai ca không đạt nằm ở apps/app/test/khung-man-chung.spec.ts
-  output: |
-    app:test: 2 tests failed:
-    app:test: (fail) hinh-theo-man > bang hinh bang dung tap tep goc va moi tep dung hinh [58.14ms]
-    app:test: (fail) checkout-nong > thieu commit goc: bo phep so, chi mot dong ghi chu [20.41ms]
-    app:test:  923 pass
-    app:test:  2 fail
-    app:test: Ran 925 tests across 93 files. [7.92s]
-    Failed: app#test
+  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-10-20T16:16:23Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-20T12:46:44Z
+  verified_at: 2026-10-20T16:16:23Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-20T12:46:44Z
+  verified_at: 2026-10-20T16:16:23Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-20T12:46:44Z
+  verified_at: 2026-10-20T16:16:23Z
 
 - cmd: bun run lint:slop
-  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_lint_slop-r1
-  exit_code: 0
-  verified_at: 2026-10-20T12:46:44Z
+  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bun_run_lint_slop-r2
+  exit_code: 1
+  verified_at: 2026-10-20T16:16:23Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-khung-cho-don-vi-mot-hinh-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-20T12:46:44Z
+  verified_at: 2026-10-20T16:16:23Z
+
+### Lệnh fail không gắn eval
+
+`bun run lint:slop` (1 lần chạy, 0 lần đạt) báo 1 lỗi, 0 cảnh báo, ở luật `anti-slop(no-known-value-widening)`: biến `TEP_DOI` có giá trị khởi tạo đã biết kiểu nhưng bị khai kiểu `Record<string, string>` nên mất thông tin kiểu. Vị trí: `apps/app/test/khung-man-chung.spec.ts:53`. Tệp này là bài của hồ sơ đã ký `khung-man-chung`, vòng này được sửa để bảng hình ghi khung Theo đơn vị đã dời sang `hang-cong-cu.tsx`. Không eval nào của hồ sơ này gắn với lệnh đó, nên `failed_evals` để trống. Cách xử lý: giữ suy luận kiểu hoặc dùng `satisfies` cho `TEP_DOI`, rồi chạy lại.
 
 ## Known limits
 
@@ -183,20 +172,18 @@ Verdict tổng REJECT. Cả chín eval của hợp đồng đạt, nhưng một 
 
 ## Analyst
 
-Eval không phân biệt (xanh trên cả HEAD lẫn baseline), chứng minh harness chứ không chứng minh feature; nên viết lại để assert hành vi mới hoặc xác nhận là regression-guard có chủ ý:
+carried tu round 1 — baseline khong do lai round nay
 
-- E6 (`cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx`): baseline green.
+Eval không-phân-biệt (pass trên cả HEAD lẫn baseline, chứng minh harness chứ không phải feature; nên viết lại để assert hành vi mới hoặc xác nhận là regression-guard có chủ ý):
+- E6 — lệnh `cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx`
 
-Baseline khong do
-
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-cau-truc: bo qua baseline: tep apps/app/test/khung-cho-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base fb58ef9726823ff78ba5bb9fc11102c99febbd05 — eval moi, chay tren code cu khong phan biet gi
-- node _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs: bo qua baseline: tep _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs co o cay dang kiem nhung chua co o merge-base fb58ef9726823ff78ba5bb9fc11102c99febbd05 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-a11y: bo qua baseline: tep apps/app/test/khung-cho-don-vi.dom.tsx co o cay dang kiem nhung chua co o merge-base fb58ef9726823ff78ba5bb9fc11102c99febbd05 — eval moi, chay tren code cu khong phan biet gi
+Baseline không đo lại ở vòng này vì `evals.yaml` không đổi kể từ lần đo baseline cuối (vòng 1): field baseline của mọi eval ghi n-a. Các lệnh suite xanh cả hai phía là regression-guard bình thường, không liệt kê.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — every multi-run eval is uniform (mọi eval chạy một lần, deterministic)
 
 ## Iterations
 
-Round 1: không eval nào của hợp đồng đạt thiếu, nhưng lệnh suite `bun run test -- --filter=app --filter=@crm/ui` (không gắn eval) cho hai ca không đạt trong apps/app/test/khung-man-chung.spec.ts: `hinh-theo-man > bang hinh bang dung tap tep goc va moi tep dung hinh` và `checkout-nong > thieu commit goc`. Nguyên nhân theo bước rà soát (review-findings.md): fallback của okr/theo-don-vi/page.tsx đổi sang KhungDangTaiDonVi và hang-cong-cu.tsx dùng KhungXuong hinh="bang-hai-dong", còn bảng hình apps/app/test/fixtures/khung-man-chung-hinh.json chưa cập nhật. Trả về bước cài đặt.
+Round 1: REJECT — suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở bài khung-man-chung (bảng hình của hồ sơ đã ký chưa ghi khung Theo đơn vị đã dời sang hang-cong-cu.tsx). Returned to implementation.
+Round 2: REJECT — chín eval đều đạt (E7 chạy lại, tám eval mang từ vòng 1), bốn lệnh test và lint, build đều xanh, nhưng `bun run lint:slop` đỏ ở `apps/app/test/khung-man-chung.spec.ts:53` (luật no-known-value-widening, lỗi nằm trong phần sửa của vòng này). Giờ `verified_at` của vòng 2 là giờ đóng dấu lúc soạn báo cáo (payload không kèm giờ chạy). Returned to implementation.
