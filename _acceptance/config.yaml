@@ -580,7 +580,7 @@ executors:
     okx_tin_hieu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-tin-hieu"'
     okx_ngoai_giu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-ngoai-giu"'
     okx_ten_giu: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okx-ten-giu"'
-    okx_luoi: 'cd apps/api && bun test test/okr-mau-khoa-nguoi.spec.ts -t okx-luoi'
+    okx_luoi: 'bun run test -- "cd apps/api && bun test test/okr-mau-khoa-nguoi.spec.ts -t okx-luoi"'
     okx_da_ky: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t xoa-mau"'
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
