@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { homNayVN } from "@crm/validation/ngay-vn";
 import { type KieuKr, tienDoKr } from "@crm/validation/okr-kr";
+import { troLyTomTatOutput } from "@crm/validation/okr-tom-tat";
 import { useQuery } from "@tanstack/react-query";
-import { act, Profiler } from "react";
+import { act, Profiler, useCallback } from "react";
 import type { CapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
@@ -10,13 +11,19 @@ import {
 	banGhiChiSoOutput,
 	lichSuSoOutput,
 } from "../../api/src/okr/okr-so.contracts";
-import { dienBienOutput } from "../../api/src/okr/okr-xem.contracts";
+import {
+	dienBienOutput,
+	hopTuanOutput,
+	khoiCuaToiOutput,
+	quanhMucTieuOutput,
+} from "../../api/src/okr/okr-xem.contracts";
 import {
 	chiTietTu,
 	cho,
 	datLai,
 	docCua,
 	dung,
+	dungTheoDonVi,
 	goiCua,
 	type Json,
 	type KetQuaGhi,
@@ -28,6 +35,7 @@ import {
 	nhip,
 	nut,
 	qs,
+	type San,
 	thaoHet,
 } from "./khung-gop-y-dung-cho";
 
@@ -38,6 +46,7 @@ const { congNgay } = await import(
 	"@/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan"
 );
 const { hienSo } = await import("@/app/(app)/[slug]/okr/hop-thoai-kr");
+const { SEARCH_PARAM } = await import("@/lib/search-param-keys");
 
 const mo = okrMessages("vi");
 
@@ -1169,5 +1178,296 @@ describe("vk7-trang-thai", () => {
 			nguoi: true,
 			vong: [true, true, true],
 		});
+	});
+});
+
+const thatChong = await import("@/components/crm/record-sheet/record-stack");
+const { useRecordStack: chongThat } = thatChong;
+
+type RefMo = { kind: string; id: string };
+type GoiMo = RefMo & { cach: "open" | "thayDinh" };
+
+type GhiMo = { goi: GoiMo[] };
+
+const moGhi: GhiMo = { goi: [] };
+
+function useChongGhi() {
+	const s = chongThat();
+	const { open: moGoc, thayDinh: thayGoc } = s;
+	const open = useCallback(
+		(ref: Parameters<typeof moGoc>[0]) => {
+			moGhi.goi.push({ cach: "open", kind: ref.kind, id: ref.id });
+			moGoc(ref);
+		},
+		[moGoc],
+	);
+	const thayDinh = useCallback(
+		(ref: Parameters<typeof thayGoc>[0]) => {
+			moGhi.goi.push({ cach: "thayDinh", kind: ref.kind, id: ref.id });
+			thayGoc(ref);
+		},
+		[thayGoc],
+	);
+	return { ...s, open, thayDinh };
+}
+
+mock.module("@/components/crm/record-sheet/record-stack", () => ({
+	...thatChong,
+	useRecordStack: useChongGhi,
+	useOpenRecord: () => useChongGhi().open,
+}));
+
+const { BangKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
+const { TheQuanh } = await import(
+	"@/app/(app)/[slug]/okr/quanh-muc-tieu/the-quanh"
+);
+const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
+const { KhoiKrCuaToi } = await import("@/app/(app)/[slug]/okr/khoi-kr-cua-toi");
+const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
+
+const M_LOI = () =>
+	mucTieu(
+		MT,
+		BON_KR.map((k) => (k.id === "k2" ? { ...k, source: "crm" as const } : k)),
+		{ canEdit: true },
+	);
+
+function krLoi() {
+	const m = M_LOI();
+	const k = m.keyResults[1];
+	if (!k) throw new Error("thieu KR thu hai");
+	return { m, k };
+}
+
+function dongKrTu(m: ReturnType<typeof M_LOI>, k: KrMau) {
+	return {
+		keyResultId: k.id,
+		objectiveId: m.id,
+		tieuDe: k.title,
+		mucTieu: m.title,
+		chuTen: k.owner.name,
+		progress: k.progress,
+		expected: m.expected,
+		laMoc: k.kind === "moc",
+		tuTin: "vua" as const,
+	};
+}
+
+type OLoi = {
+	o: string;
+	dung: () => Promise<San>;
+	bam: () => Element | null;
+	tab: string | null;
+};
+
+const TAB_SO_NGUON_MONG = "so-nguon";
+const TAB_DIEN_BIEN_CAM = "dien-bien";
+
+const MA_TRAN_LOI: OLoi[] = [
+	{
+		o: "dong-kr-trang-don-vi",
+		dung: () => dungTheoDonVi([M_LOI()], `?expand=${MT}`),
+		bam: () => qs(`[data-kr="${krLoi().k.id}"]`)?.closest("tr") ?? null,
+		tab: null,
+	},
+	{
+		o: "nut-viec-bang-kr",
+		dung: () => {
+			const { m } = krLoi();
+			return dung(
+				<BangKr
+					canh={
+						new Map(
+							m.keyResults.map((k) => [
+								k.id,
+								{
+									xong: 1,
+									tong: 2,
+									sangKien: 0,
+									coBangChung: false,
+									suaDuoc: true,
+								},
+							]),
+						)
+					}
+					danhDauCuaToi={false}
+					expected={m.expected}
+					keyResults={m.keyResults}
+					kind={m.kind}
+				/>,
+			);
+		},
+		bam: () => qs(`[data-mo-khung-kr="${krLoi().k.id}"]`),
+		tab: null,
+	},
+	{
+		o: "con-so-bang-kr",
+		dung: () => {
+			const { m } = krLoi();
+			return dung(
+				<BangKr
+					danhDauCuaToi={false}
+					expected={m.expected}
+					keyResults={m.keyResults}
+					kind={m.kind}
+				/>,
+			);
+		},
+		bam: () => qs(`button[data-so-kr="${krLoi().k.id}"]`),
+		tab: TAB_SO_NGUON_MONG,
+	},
+	{
+		o: "the-so-do",
+		dung: () => {
+			const { m, k } = krLoi();
+			const quanh = quanhMucTieuOutput.parse({
+				tamId: m.id,
+				laCongTy: false,
+				nut: [
+					{
+						id: k.id,
+						loai: "kr",
+						phia: "tam",
+						tieuDe: k.title,
+						donVi: m.unitName,
+						congTy: false,
+						tienDo: k.progress,
+						mucTieuId: m.id,
+					},
+				],
+				canh: [],
+				gopLenCongTy: [],
+			});
+			const nutKr = quanh.nut[0];
+			if (!nutKr) throw new Error("thieu nut KR");
+			return dung(<TheQuanh bien="dong" laTam={false} nut={nutKr} />);
+		},
+		bam: () => qs(`[data-quanh-the="${krLoi().k.id}"]`),
+		tab: null,
+	},
+	{
+		o: "tong-quan",
+		dung: async () => {
+			const { m, k } = krLoi();
+			kho.rieng.set("okr.troLyTomTat", () =>
+				troLyTomTatOutput.parse({
+					ban: {
+						id: "tt-loi",
+						tuan: "2026-10-12",
+						soLanCapNhat: 1,
+						cau: [
+							{
+								vanBan: "Một KR đáng bàn.",
+								nguon: [
+									{
+										id: "ci-loi",
+										keyResultId: k.id,
+										krTen: k.title,
+										mucTieuId: m.id,
+										mucTieuTen: m.title,
+										ngay: "2026-10-12",
+										giaTri: k.currentValue,
+										donVi: k.unit,
+										tuTin: "vua",
+										ghiChu: "",
+									},
+								],
+							},
+						],
+						phanHoiCuaToi: null,
+					},
+					dangSoan: false,
+					chuaCapNhat: false,
+				}),
+			);
+			const san = await dung(
+				<KhoiTomTat cycleId="q4" departmentId={m.unitId ?? "pb-1"} />,
+			);
+			await cho(() => qs('button[data-trich-dan="1"]') !== null, "trich dan");
+			const trich = qs<HTMLButtonElement>('button[data-trich-dan="1"]');
+			await act(async () => trich?.click());
+			await cho(() => qs("[data-xem-dien-bien]") !== null, "the nguon mo");
+			return san;
+		},
+		bam: () => qs(`[data-xem-dien-bien="${krLoi().k.id}"]`),
+		tab: null,
+	},
+	{
+		o: "cua-toi",
+		dung: () => {
+			const { m, k } = krLoi();
+			kho.rieng.set("okr.khoiCuaToi", () =>
+				khoiCuaToiOutput.parse({
+					kr: [{ ...dongKrTu(m, k), nhip: "dung-nhip" }],
+					tong: 1,
+				}),
+			);
+			return dung(<KhoiKrCuaToi cycleId="q4" />);
+		},
+		bam: () => qs(`[data-kr-cua-toi] [data-mo-kr="${krLoi().k.id}"]`),
+		tab: null,
+	},
+	{
+		o: "hop-tuan",
+		dung: () => {
+			const { m, k } = krLoi();
+			kho.rieng.set("okr.hopTuan", () =>
+				hopTuanOutput.parse({
+					tuan: "2026-10-12",
+					tuanDau: false,
+					daCapNhat: 1,
+					tongKr: m.keyResults.length,
+					dangBan: [
+						{
+							...dongKrTu(m, k),
+							ghiChu: null,
+							lyDo: [{ loai: "ghi-chu", ngay: "2026-10-12" }],
+						},
+					],
+					conLai: [],
+				}),
+			);
+			return dung(<HopTuan cycleId="q4" unit={{ loai: "bp", id: "bp-1" }} />);
+		},
+		bam: () => qs(`[data-kr-hop] [data-mo-kr="${krLoi().k.id}"]`),
+		tab: null,
+	},
+];
+
+describe("vk7-moi-loi", () => {
+	test("vk7-moi-loi: ma tran bay loi viet truoc — moi loi goi dung mot lan mo {kind: kr, id: K}, khong so-kr, khong tab dien-bien; loi con so mang tab so-nguon", async () => {
+		expect(MA_TRAN_LOI.length).toBe(7);
+		const thucTe: Record<string, Json> = {};
+		for (const o of MA_TRAN_LOI) {
+			datLai();
+			const { k } = krLoi();
+			const san = await o.dung();
+			await cho(() => o.bam() !== null, `loi ${o.o} dung`);
+			const dich = o.bam();
+			if (!dich) throw new Error(`thieu cho bam: ${o.o}`);
+			moGhi.goi = [];
+			await act(async () => {
+				await nguoiDung().click(dich);
+			});
+			await nhip(3);
+			const goi = [...moGhi.goi];
+			for (const g of goi)
+				if (g.kind !== "kr") throw new Error(`loi lech: ${o.o} -> ${g.kind}`);
+			const tab = san.url().get(SEARCH_PARAM.record.tab);
+			if (tab === TAB_DIEN_BIEN_CAM)
+				throw new Error(`loi lech: ${o.o} -> ${TAB_DIEN_BIEN_CAM}`);
+			thucTe[o.o] = {
+				goi: goi.map((g) => ({ kind: g.kind, id: g.id })),
+				record: san.url().get(SEARCH_PARAM.record.stack),
+				tab,
+			};
+			expect(thucTe[o.o]).toEqual({
+				goi: [{ kind: "kr", id: k.id }],
+				record: `kr:${k.id}`,
+				tab: o.tab,
+			});
+			await thaoHet();
+		}
+		expect(Object.keys(thucTe)).toEqual(MA_TRAN_LOI.map((o) => o.o));
 	});
 });

@@ -69,6 +69,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { TAB_SO_NGUON } from "./dien-bien-kr";
 import { type BangChungVao, KrBangChung } from "./kr-bang-chung";
 import {
 	type CanhKr,
@@ -86,7 +87,7 @@ import { NoiDungSoKr } from "./so-kr-sheet";
 const TAB = {
 	viec: "viec",
 	bangChung: "bang-chung",
-	soNguon: "so-nguon",
+	soNguon: TAB_SO_NGUON,
 } as const;
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
