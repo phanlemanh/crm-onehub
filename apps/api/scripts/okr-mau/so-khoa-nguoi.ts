@@ -59,10 +59,10 @@ const XOA_KHONG_CHAN = new Set(["Cascade", "SetNull", "SetDefault"]);
 
 export function khoaChanTuLuocDo(luocDo: string): string[] {
 	const ra: string[] = [];
-	for (const [, model, than] of luocDo.matchAll(
+	for (const [, model = "", than = ""] of luocDo.matchAll(
 		/^model (\w+) \{([\s\S]*?)^\}/gm,
 	))
-		for (const [, truong, tuyChon, thamSo] of than.matchAll(
+		for (const [, truong = "", tuyChon, thamSo = ""] of than.matchAll(
 			/^\s+(\w+)\s+User(\?)?\s+@relation\(([^)]*)\)/gm,
 		)) {
 			const xoa =

@@ -30,7 +30,7 @@ function doiTruongViec(luocDo: string, doi: (dong: string) => string): string {
 
 function bangCuaModel(luocDo: string): Map<string, string> {
 	const ra = new Map<string, string>();
-	for (const [, model, than] of luocDo.matchAll(
+	for (const [, model = "", than = ""] of luocDo.matchAll(
 		/^model (\w+) \{([\s\S]*?)^\}/gm,
 	))
 		ra.set(model, than.match(/@@map\("([^"]+)"\)/)?.[1] ?? model);
@@ -90,7 +90,9 @@ describe("okx-luoi", () => {
 		const catalog = rows.map((r) => `${r.bang}.${r.cot}`).sort();
 		const bang = bangCuaModel(LUOC_DO);
 		const tuSo = Object.keys(SO_KHOA_NGUOI)
-			.map((k) => `${bang.get(k.split(".")[0])}.${cotCuaKhoa(LUOC_DO, k)}`)
+			.map(
+				(k) => `${bang.get(k.split(".")[0] ?? "")}.${cotCuaKhoa(LUOC_DO, k)}`,
+			)
 			.sort();
 		expect(tuSo).toEqual(catalog);
 	});
