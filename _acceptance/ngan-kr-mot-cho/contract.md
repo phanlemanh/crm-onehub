@@ -62,7 +62,8 @@ phím không tính.
   `packages/validation`; When đổi giá trị, Then điểm và dòng đổi theo; When giá trị sai, Then không có điểm mới và có lỗi
   chữ như hôm nay; And KR mốc thì hộp hiện «Xong» / «Chưa xong» cạnh đích, không có đồ thị số.
 - AC-9: Given khổ dưới `md`, When mở ngăn KR và trang đơn vị, Then ngăn KR là `Drawer` với cùng đầu ngăn (đếm, ‹ ›,
-  Cập nhật) và cùng các mục; nút «Cập nhật» trên dòng KR có trong danh sách của trang; trang không cuộn ngang.
+  Cập nhật) và cùng các mục; nút «Cập nhật» trên dòng KR có trong danh sách của trang; trang không cuộn ngang; And từ
+  `md` trở lên ngăn KR là `Sheet` bên phải, KHÔNG phải `Drawer`.
 - AC-10: Given truy vấn ngăn KR đang chạy / hỏng / KR không thấy hay không có quyền / KR đã bỏ hay chu kỳ đã khép, Then
   lần lượt: khung xương cùng hình; `VungTaiLoi` «Không tải được KR» có thử lại gọi lại truy vấn; câu «Không tìm thấy KR
   này, hoặc bạn không có quyền xem.»; ngăn đọc được nhưng không có nút «Cập nhật» ở đầu ngăn và trên dòng; And chữ mới
