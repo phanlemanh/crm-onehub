@@ -1088,10 +1088,20 @@ async function buocGioiHan(t) {
 
 async function buocConCanChinh() {
 	nhom = "E15 buoc-con-can-chinh";
-	const t = await moTrang("truong", DO.rong, "/okr", {
-		boQua: LOI_MANG,
-	});
-	if (!(await moSheet(t, MT_CAN_CHINH, nhom))) {
+	const t = await moTrang(
+		"truong",
+		DO.rong,
+		`/okr?record=objective:${MT_CAN_CHINH}`,
+		{ boQua: LOI_MANG },
+	);
+	if (
+		!(await doi(
+			t,
+			`${nhom}: khung muc tieu ${MT_CAN_CHINH} tai xong`,
+			(s) => window.__tim(`${s}[data-dau-khung]`).length > 0,
+			SHEET(MT_CAN_CHINH),
+		))
+	) {
 		await t.close();
 		return;
 	}

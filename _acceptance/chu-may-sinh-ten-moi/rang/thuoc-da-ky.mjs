@@ -6,6 +6,36 @@ const SO_THUOC = "_acceptance/gioi-han-duyet-cay-okr/decisions.jsonl";
 const BAN_CHUP = "apps/agent/test/fixtures/tin-nhac-truoc-tb1.json";
 const CAU_HINH = "_acceptance/config.yaml";
 const GHIM = /^_acceptance\/[^/]+\/(run-log\.jsonl|evidence-report\.md)$/;
+const BO_MO_KHUNG = [
+	'	const t = await moTrang("truong", DO.rong, "/okr", {',
+	"		boQua: LOI_MANG,",
+	"	});",
+	"	if (!(await moSheet(t, MT_CAN_CHINH, nhom))) {",
+];
+const THEM_MO_KHUNG = [
+	"	const t = await moTrang(",
+	'		"truong",',
+	"		DO.rong,",
+	"		`/okr?record=objective:${MT_CAN_CHINH}`,",
+	"		{ boQua: LOI_MANG },",
+	"	);",
+	"	if (",
+	"		!(await doi(",
+	"			t,",
+	"			`${nhom}: khung muc tieu ${MT_CAN_CHINH} tai xong`,",
+	"			(s) => window.__tim(`${s}[data-dau-khung]`).length > 0,",
+	"			SHEET(MT_CAN_CHINH),",
+	"		))",
+	"	) {",
+];
+const YEU_CAU_MO_KHUNG = "V2-10";
+
+function boKhoi(ds, khoi) {
+	for (let i = 0; i + khoi.length <= ds.length; i++)
+		if (khoi.every((d, k) => ds[i + k] === d)) return [...ds.slice(0, i), ...ds.slice(i + khoi.length)];
+	return null;
+}
+
 const VE_CU_THUOC = [
 	["chỗ góp vào", "căn chỉnh"],
 	["cho gop vao", "can chinh"],
@@ -30,8 +60,14 @@ function capDoi(tu, den, tep) {
 
 const veCu = (d, bang) => bang.reduce((s, [moi, cu]) => s.split(moi).join(cu), d);
 
-function soCap(tep, tu, den, bang, loi) {
-	const { bo, them } = capDoi(tu, den, tep);
+function soCap(tep, tu, den, bang, loi, moKhung = false) {
+	let { bo, them } = capDoi(tu, den, tep);
+	if (moKhung) {
+		const bo2 = boKhoi(bo, BO_MO_KHUNG);
+		const them2 = boKhoi(them, THEM_MO_KHUNG);
+		if (!bo2 || !them2) loi.push(`${tep}: khoi mo khung V2-10 khong dung nguyen van`);
+		else [bo, them] = [bo2, them2];
+	}
 	if (bo.length !== them.length) loi.push(`${tep}: ${bo.length} dong bo, ${them.length} dong them`);
 	for (const [i, d] of them.entries())
 		if (veCu(d, bang) !== bo[i]) loi.push(`${tep}: dong doi khong chi thay chu: ${d.trim().slice(0, 100)}`);
@@ -52,8 +88,9 @@ chayRang(() => {
 	}
 	let soThuoc = 0;
 	if (doi.includes(THUOC)) {
-		soThuoc = soCap(THUOC, dai.tu, dai.den, VE_CU_THUOC, loi);
 		const moi = capDoi(dai.tu, dai.den, SO_THUOC).them.map((d) => JSON.parse(d));
+		const moKhung = moi.some((d) => d.type === "fix" && d.decided_by === "Phan Le Manh" && JSON.stringify(d).includes(YEU_CAU_MO_KHUNG));
+		soThuoc = soCap(THUOC, dai.tu, dai.den, VE_CU_THUOC, loi, moKhung);
 		if (!moi.some((d) => d.type === "fix" && d.decided_by === "Phan Le Manh" && JSON.stringify(d).includes("chu-may-sinh-ten-moi")))
 			loi.push(`${SO_THUOC}: thieu dong fix decided_by chu kho neu chu-may-sinh-ten-moi`);
 	}
