@@ -374,7 +374,7 @@ try {
 			cuaToi.truot === theoDonVi.truot;
 		dong(khop, `${khop ? "" : "AC-5: "}nam so con lai khop`.trim());
 		const hrefDung = cuaToi.href.endsWith(
-			`/okr/theo-don-vi?${new URLSearchParams({ donOkr: khoa, kyOkr: KY })}`,
+			`/okr/bo-okr?${new URLSearchParams({ donOkr: khoa, kyOkr: KY })}`,
 		);
 		dong(
 			hrefDung,

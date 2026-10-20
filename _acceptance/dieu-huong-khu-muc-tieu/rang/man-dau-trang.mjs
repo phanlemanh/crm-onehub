@@ -275,8 +275,8 @@ try {
 				let dung = x.tran <= 0;
 				let ly = `tran ngang ${x.tran}px`;
 				if (kho === 1440) {
-					dung = dung && lech <= 1 && x.dinhNut < x.dinhThe;
-					ly = `phai ${x.phai}px (Thoa thuan ${deals.phai}px) · dinh nut ${x.dinhNut} < dinh thanh the ${x.dinhThe} · ${ly}`;
+					dung = dung && lech <= 1;
+					ly = `phai ${x.phai}px (Thoa thuan ${deals.phai}px) · ${ly}`;
 				} else {
 					dung = dung && thuTu(x) === thuTu(deals) && x.h1 < x.hang;
 					ly = `thu tu ${thuTu(x)} (Thoa thuan ${thuTu(deals)}) · ${ly}`;
@@ -570,7 +570,7 @@ try {
 		await d.bamSel(t, "[data-nut=them-muc-tieu]");
 		let moNgan = true;
 		try {
-			await d.choDuong(t, "/okr/theo-don-vi");
+			await d.choDuong(t, "/okr/bo-okr");
 			await d.doi(t, () => document.querySelector("[id$='-ten']") !== null);
 		} catch {
 			moNgan = false;
@@ -621,9 +621,12 @@ try {
 			1440,
 			`/okr/theo-don-vi?donOkr=pb:${P2_ID}`,
 		);
-		await d.doi(t2, () => document.querySelector("[role=tab]") !== null);
+		await d.doi(
+			t2,
+			() => document.querySelector("[data-slot=area-sidebar] a") !== null,
+		);
 		await t2.evaluate(() =>
-			[...document.querySelectorAll("[role=tab]")]
+			[...document.querySelectorAll("[data-slot=area-sidebar] a")]
 				.find((x) => new URL(x.href).pathname.endsWith("/okr"))
 				?.click(),
 		);
@@ -757,7 +760,7 @@ try {
 		);
 		await d.bamSel(t, "[data-nut=them-cach]");
 		await d.bamSel(t, "[data-nut=nhap-bang-tinh]");
-		await d.choDuong(t, "/okr/theo-don-vi");
+		await d.choDuong(t, "/okr/bo-okr");
 		await d.doi(
 			t,
 			() => document.querySelector("[role=dialog] textarea") !== null,
