@@ -38,7 +38,7 @@ const KR_DAU = KR_CUA_MUC_TIEU[0] as KrMau;
 const KR_HAI = KR_CUA_MUC_TIEU[1] as KrMau;
 const KR_MOC = KR_CUA_MUC_TIEU.find((k) => k.kieu === "moc") as KrMau;
 
-const CANH_THEO_STATE: Record<string, Canh> = {
+const CANH_THEO_STATE = {
 	"ST-nkr-dong": { ngan: null, hop: null },
 	"ST-nkr-ngan": { ngan: { viTri: 1, hinh: "mo" }, hop: null },
 	"ST-nkr-ngan-dau": { ngan: { viTri: 0, hinh: "mo" }, hop: null },
@@ -53,7 +53,7 @@ const CANH_THEO_STATE: Record<string, Canh> = {
 	"ST-nkr-dang-tai": { ngan: { viTri: 1, hinh: "dang-tai" }, hop: null },
 	"ST-nkr-loi": { ngan: { viTri: 1, hinh: "loi" }, hop: null },
 	"ST-nkr-khong-thay": { ngan: { viTri: 1, hinh: "khong-thay" }, hop: null },
-};
+} satisfies Record<string, Canh>;
 
 function BangKr({
 	daGui,
@@ -149,8 +149,10 @@ function BangKr({
 }
 
 function NganKrMotCho({ state }: { state: string }) {
-	const dau =
-		CANH_THEO_STATE[state] ?? (CANH_THEO_STATE["ST-nkr-dong"] as Canh);
+	const dau: Canh =
+		state in CANH_THEO_STATE
+			? CANH_THEO_STATE[state as keyof typeof CANH_THEO_STATE]
+			: CANH_THEO_STATE["ST-nkr-dong"];
 	const [ngan, setNgan] = useState(dau.ngan);
 	const [hop, setHop] = useState(dau.hop);
 	const [daGui, setDaGui] = useState<Record<string, number>>({});
