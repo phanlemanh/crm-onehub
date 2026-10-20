@@ -459,6 +459,27 @@ describe("vkm-chu-ky", () => {
 			HREF_MUC,
 		);
 	});
+
+	test("vkm-chu-ky: chon dung mac dinh cua trang khi hai mac dinh khac nhau van ghi kyOkr", async () => {
+		const sai: string[] = [];
+		for (const ca of [
+			{ duong: "/ws/okr/lay-y-kien?kyOkr=q4", ten: "Năm 2027", id: "c3" },
+			{ duong: "/ws/okr?kyOkr=c3", ten: "Quý 4/2026", id: "q4" },
+		]) {
+			datNen();
+			urlGhi.length = 0;
+			await dung(<ThanhBenMucTieu />, ca.duong);
+			await cho(() => mucTrenAside().length === 5, `nam muc ${ca.duong}`);
+			await chonKy(ca.ten);
+			const cuoi = urlGhi.at(-1) ?? "";
+			if (new URLSearchParams(cuoi).get("kyOkr") !== ca.id)
+				sai.push(
+					`vkm-chu-ky: ${ca.duong} chon ${ca.id} ma url ghi «${cuoi}» — lua chon bi xoa`,
+				);
+			await don();
+		}
+		expect(sai).toEqual([]);
+	});
 });
 
 type NutMayChu = ReactElement<{ children?: ReactNode }>;
