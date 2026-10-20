@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8c5d54c6e891311886b0e46957bab96c96ebd6c7
+verified_commit: e2bc919a9e454c04021f24d48d27991223505ff5
 human_signoff: Manh Phan 2026-10-20
 ---
 
@@ -326,3 +326,7 @@ sha: 88def2b8153bec02e17bdada3fe547b8956b1093 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-20, do gộp onehub #501, dời mốc migration lên sau lich_bay_ngay
 run_id: repin-20261020T065910Z-85106
 sha: 8c5d54c6e891311886b0e46957bab96c96ebd6c7 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E5c, E6b, E8b, E9b, E11 (E11 không khai paths) · diff chạm vật đo ngoài làn máy: E5c, E6b, E8b, E9b — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-20, do gộp onehub #504, dời mốc migration lên sau san_pham_lo_trinh
+run_id: repin-20261020T074706Z-39439
+sha: e2bc919a9e454c04021f24d48d27991223505ff5 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E5c, E6b, E8b, E9b, E11 (E11 không khai paths) · diff chạm vật đo ngoài làn máy: E5c, E6b, E8b, E9b — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
