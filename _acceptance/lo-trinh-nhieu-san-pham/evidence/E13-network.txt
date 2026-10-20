@@ -1,1 +1,1 @@
-driver puppeteer (do-man.mjs): khong co doc network; n-a (driver)
+driver: script puppeteer (do-man.mjs) - khong co duong doc network cua tool; networkObserved n-a (driver)

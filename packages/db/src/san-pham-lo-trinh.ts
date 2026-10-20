@@ -35,6 +35,22 @@ export type KetQuaLay = {
 	phienBanKhuon?: number | null;
 };
 
+export type NguonLay = {
+	kho: string;
+	nhanh: string;
+	duongTep: string;
+	nguonDoiLuc: Date | null;
+};
+
+export function cungNguon(a: NguonLay, b: NguonLay) {
+	return (
+		a.kho === b.kho &&
+		a.nhanh === b.nhanh &&
+		a.duongTep === b.duongTep &&
+		a.nguonDoiLuc?.getTime() === b.nguonDoiLuc?.getTime()
+	);
+}
+
 const CHON_THAY = {
 	ma: true,
 	ten: true,
@@ -199,10 +215,21 @@ export async function sanPhamDenHan(
 	return ds.map(thay);
 }
 
-export async function ghiKetQuaLay(db: DbHoacTx, ma: string, kq: KetQuaLay) {
+export async function ghiKetQuaLay(
+	db: DbHoacTx,
+	ma: string,
+	kq: KetQuaLay,
+	nguon?: NguonLay,
+): Promise<boolean> {
 	const daLay = kq.trangThai === "da-lay";
-	await db.sanPhamLoTrinh.updateMany({
-		where: { ma },
+	const ghi = await db.sanPhamLoTrinh.updateMany({
+		where: {
+			ma,
+			kho: nguon?.kho,
+			nhanh: nguon?.nhanh,
+			duongTep: nguon?.duongTep,
+			nguonDoiLuc: nguon ? nguon.nguonDoiLuc : undefined,
+		},
 		data: {
 			trangThaiLay: kq.trangThai,
 			chiTietLay: kq.chiTiet ?? null,
@@ -212,9 +239,11 @@ export async function ghiKetQuaLay(db: DbHoacTx, ma: string, kq: KetQuaLay) {
 			nguonDoiLuc: daLay ? null : undefined,
 		},
 	});
+	if (ghi.count === 0) return false;
 	if (daLay)
 		await db.sanPhamLoTrinh.updateMany({
 			where: { ma, layDauLuc: null },
 			data: { layDauLuc: kq.kiemLuc },
 		});
+	return true;
 }

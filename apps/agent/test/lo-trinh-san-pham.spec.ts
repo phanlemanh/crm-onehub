@@ -444,6 +444,35 @@ describe("ltsp-danh-ba", () => {
 				.sha,
 		).toBe(sha("f"));
 	});
+
+	test("nguồn đổi giữa lúc đang lấy thì kết quả của nguồn cũ không được ghi", async () => {
+		const kit = await taoSp("doi-giua");
+		const g = gia({ [kit.kho]: khoLanh(MAU, sha("c")) });
+		const khoMoi = "phanlemanh/kho-giua-" + kit.ma;
+		let daDoi = false;
+		const f = (async (url: string | URL | Request, init?: RequestInit) => {
+			if (!daDoi && String(url).includes("/contents/")) {
+				daDoi = true;
+				await suaSanPham(db, kit.ma, { kho: khoMoi }, sau(1));
+			}
+			return g.fetch(url, init);
+		}) as typeof fetch;
+		await lay(NOW, f);
+		expect(daDoi).toBe(true);
+		const sp = await db.sanPhamLoTrinh.findUniqueOrThrow({
+			where: { ma: kit.ma },
+		});
+		const banChup = await db.banChupLoTrinh.findUnique({
+			where: { nguon: kit.ma },
+		});
+		if (sp.nguonDoiLuc === null || banChup?.sha === sha("c"))
+			throw new Error(
+				`luot lay nguon cu ghi de thay doi nguon: ${kit.ma} trangThai=${sp.trangThaiLay}`,
+			);
+		expect(sp.kho).toBe(khoMoi);
+		expect(sp.trangThaiLay).toBe("chua-lay");
+		expect(sp.kiemLuc).toBeNull();
+	});
 });
 
 describe("ltsp-khuon", () => {

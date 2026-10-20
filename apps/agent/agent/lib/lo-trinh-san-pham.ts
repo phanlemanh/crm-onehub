@@ -3,7 +3,12 @@ import {
 	docBanChupLoTrinh,
 	ghiBanChupLoTrinh,
 } from "@crm/db/ban-chup-lo-trinh";
-import { ghiKetQuaLay, sanPhamDenHan } from "@crm/db/san-pham-lo-trinh";
+import {
+	cungNguon,
+	ghiKetQuaLay,
+	sanPhamDenHan,
+	timSanPham,
+} from "@crm/db/san-pham-lo-trinh";
 import { LO_TRINH_SAN_PHAM } from "@crm/db/san-pham-lo-trinh-danh-muc";
 import {
 	cauHinhGithubApp,
@@ -68,17 +73,33 @@ export async function layLoTrinhSanPham(
 				khongDoi: false,
 			};
 		}
+		const hienGio = await timSanPham(db, sp.ma);
+		if (hienGio === null || !cungNguon(hienGio, sp)) {
+			ketQua.boQua += 1;
+			console.log(`${NHAN} ${sp.ma} nguon-doi-giua-luot`);
+			continue;
+		}
 		if (kq.banChup)
 			await ghiBanChupLoTrinh(db, kq.banChup, now, {
 				thayHan: sp.nguonDoiLuc !== null,
 			});
-		await ghiKetQuaLay(db, sp.ma, {
-			trangThai: kq.trangThai,
-			chiTiet: kq.chiTiet,
-			kiemLuc: now,
-			caiLuc: kq.caiLuc,
-			phienBanKhuon: kq.phienBan,
-		});
+		const daGhi = await ghiKetQuaLay(
+			db,
+			sp.ma,
+			{
+				trangThai: kq.trangThai,
+				chiTiet: kq.chiTiet,
+				kiemLuc: now,
+				caiLuc: kq.caiLuc,
+				phienBanKhuon: kq.phienBan,
+			},
+			sp,
+		);
+		if (!daGhi) {
+			ketQua.boQua += 1;
+			console.log(`${NHAN} ${sp.ma} nguon-doi-giua-luot`);
+			continue;
+		}
 		if (kq.trangThai === "da-lay") ketQua.lay += 1;
 		else ketQua.hong += 1;
 		console.log(
