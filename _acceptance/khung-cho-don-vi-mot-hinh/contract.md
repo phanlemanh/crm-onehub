@@ -5,7 +5,7 @@ slug: khung-cho-don-vi-mot-hinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-20T09:56:59Z
 design_doc: docs/superpowers/specs/2026-10-20-khung-cho-don-vi-mot-hinh-design.md

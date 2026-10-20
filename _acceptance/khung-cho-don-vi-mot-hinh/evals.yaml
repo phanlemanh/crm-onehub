@@ -22,7 +22,7 @@ evals:
       - packages/ui/src/components/khung-xuong.tsx
       - _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs
     expected: |
-      Tải cứng kiểu xem danh sách, CDP latency 800 ms, lấy mẫu DOM mỗi 50 ms từ lúc tạo tài liệu tới [data-hang-muc-tieu]
+      Tải cứng kiểu xem danh sách, CDP latency 800 ms và băng thông tải xuống 40 KB/s (KCD_BANG_THONG), lấy mẫu DOM mỗi 50 ms từ lúc tạo tài liệu tới [data-hang-muc-tieu]
       đầu tiên, ở 1440 rồi 390. Mỗi khổ một dòng "AC-1 <khổ>: <k> mau · <m> mau khung · <h> hinh khung · cay toi da <c> ·
       o chon toi da <o> · vong quay <v>". DUNG khi m >= 1, h = 1 (tính cả mẫu lạ), c = 0, o <= 1, v = 0 ở cả
       hai khổ; m = 0 là "KHONG DO DUOC: khong bat duoc mau khung o <khổ>" mã 2, không phải đạt.
