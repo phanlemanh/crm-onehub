@@ -10,7 +10,7 @@ const lanh = () => ({
 	toTien: true,
 	doiNgoai: [],
 });
-const chay = (c) => soSanh(c.nen, c.sau, c.bamNen, c.bamHead, c.toTien, c.doiNgoai);
+const chay = (c) => soSanh(c.nen, c.sau, c.bamNen, c.bamHead, c.toTien, c.doiNgoai, c.lap ?? null);
 const doi = (sua) => {
 	const c = lanh();
 	sua(c);
@@ -27,6 +27,9 @@ const CA = [
 	["hai bam bang", doi((c) => { c.sau.bam.loiDan = BAM_NEN; c.bamHead = BAM_NEN; }), 1, "cung mot loi dan"],
 	["khong to tien", doi((c) => { c.toTien = false; }), 1, "khong nam truoc"],
 	["doi tep ngoai loi dan", doi((c) => { c.doiNgoai = ["apps/agent-okr/agent/lib/config.ts"]; }), 1, "doi tep ngoai loi dan"],
+	["lap noi dai chot ma", doi((c) => { c.lap = { ...c.nen, chotMaHong: 1 }; c.sau.chotMaHong = 5; }), 0],
+	["lap noi dai tieu chi", doi((c) => { c.lap = { ...c.nen, tieuChiTrungBinh: [0.8, 0.3] }; c.sau.tieuChiTrungBinh = [0.8, 0.3]; }), 0],
+	["lap noi dai van chan qua dai", doi((c) => { c.lap = { ...c.nen, dat: 17 }; c.sau.dat = 16; }), 1, "so ca dat tut"],
 	["sau con chu cu", doi((c) => { c.sau.chuCu = [{ cum: "hỏi ý" }]; }), 1, "Kara con viet"],
 	["dat tut 3", doi((c) => { c.sau.dat = 17; }), 1, "so ca dat tut"],
 	["chot ma tang 2", doi((c) => { c.sau.chotMaHong = 5; }), 1, "chot ma hong tang"],
