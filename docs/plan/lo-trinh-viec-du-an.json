@@ -343,6 +343,212 @@
       ],
       "ghi_chu": "Nguồn: _acceptance/va-gantt-lich-bay-ngay/decisions.jsonl d-20261020T032627Z-13, -14. Gợi ý của V1: khoá duAn trước khoá việc cha trong docDuAnNhanViec.",
       "buoc_ke": "Làn M5 · thứ 1"
+    },
+    {
+      "ma": "DA14",
+      "cau_giao": "«Nhân viên quan hệ đối tác xem và sửa một trường tự tạo trên phiếu và trong bảng y như trường có sẵn: số viết kiểu Việt, ô tích có nhãn, liên kết bấm được, lỗi nói tiếng Việt»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 9,
+      "vi_sao": "Soát 20/10: trường tự tạo đi đường riêng (record-fields.tsx, field-columns.tsx) nên lệch trường chuẩn — ô Số không nhận «1.234,5» và báo lỗi tiếng Anh (packages/db/src/fields.ts), ô tích không có nhãn, ba tên gọi khác nhau. Luật đích ở docs/design.md mục «Trường».",
+      "hang": "T2",
+      "slug": "truong-mot-cach-cu-xu",
+      "nhom": "truong",
+      "dung_tren": [],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "ten": "Một trường, một cách cư xử",
+      "ten_ngan": "Trường đồng nhất",
+      "ghi_chu": "Dựng bảng đăng ký theo kiểu trường (hiển thị, sửa tại chỗ, ô bảng), chuyển ba phiếu và ba bảng sang dùng nó cho cả trường chuẩn lẫn tự tạo. Chạm apps/app/lib/messages (vùng bao_ve của đợt M5): đổi tên gọi là sửa dòng, gửi cham-tep."
+    },
+    {
+      "ma": "DA15",
+      "cau_giao": "«Quản trị mở Cài đặt › Trường, thấy trường chuẩn bằng tiếng Việt khớp đúng phiếu, sắp lại và ẩn được chúng, và bật «Bắt buộc» cho một trường»",
+      "vai": "Quản trị",
+      "tieu_chi": 9,
+      "vi_sao": "Cài đặt › Trường hứa «chỉ sắp lại thứ tự và ẩn» trường chuẩn (crm.ts:480) mà danh sách chỉ đọc, viết cứng tiếng Anh (standard-fields.ts) và thiếu trường so với phiếu; ô «Bắt buộc» có trong mô hình nhưng giao diện luôn gửi false (field-editor.tsx:200).",
+      "hang": "T2",
+      "slug": "truong-chuan-o-cai-dat",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA14"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "D5",
+        "D6",
+        "N2"
+      ],
+      "ten": "Trường chuẩn và «Bắt buộc» ở Cài đặt",
+      "ten_ngan": "Cài đặt trường",
+      "ghi_chu": "Lưu thứ tự và ẩn của trường chuẩn mà cần migration thì hàng lên T3 — quyết ở Cổng Phạm vi. Đọc docs/settings.md trước."
+    },
+    {
+      "ma": "DA16",
+      "cau_giao": "«Nhân viên quan hệ đối tác nhập đủ các trường cần thiết ngay lúc tạo công ty, liên hệ hay thoả thuận, không phải mở lại phiếu»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 8,
+      "vi_sao": "Form tạo và ô thêm nhanh không có trường tự tạo; API tạo không nhận `fields`. Người dùng tạo xong rồi mở phiếu bấm từng ô. Đứng trên cờ «Bắt buộc» DA15 mở cho người quản trị.",
+      "hang": "T2",
+      "slug": "nhap-truong-luc-tao",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA15"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "N1"
+      ],
+      "ten": "Nhập trường lúc tạo",
+      "ten_ngan": "Trường lúc tạo",
+      "ghi_chu": "Form tạo và ô thêm nhanh đọc từ bảng đăng ký của DA14. Câu cho Cổng Phạm vi: trường bật «Kara điền» có còn bắt buộc lúc tạo không; bản ghi cũ còn trống trường vừa thành bắt buộc thì sửa phiếu có bị chặn không."
+    },
+    {
+      "ma": "DA17",
+      "cau_giao": "«Nhân viên quan hệ đối tác sắp danh sách theo bất kỳ trường nào và thấy cột trường tự tạo ở khổ hẹp như cột có sẵn, cả trên thẻ Kanban»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 8,
+      "vi_sao": "dynamic-fields.md §7 để sort sang giai đoạn hai rồi chưa làm: SORTABLE chỉ có cột chuẩn, resolveOrderBy lặng lẽ về mặc định; cột trường tự tạo luôn ẩn dưới lg (field-columns.tsx:68); thẻ Kanban bỏ giá trị trường (deals.contracts.ts:236).",
+      "hang": "T2",
+      "slug": "sort-moi-truong",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA14"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "L1",
+        "L2"
+      ],
+      "ten": "Sort mọi trường, cột như trường chuẩn",
+      "ten_ngan": "Sort trường",
+      "ghi_chu": "Rủi ro: câu sort qua bảng fieldValue — đo thời gian trên dữ liệu mẫu đủ lớn ở S4. Song song được với DA18 khi khác tệp."
+    },
+    {
+      "ma": "DA18",
+      "cau_giao": "«Nhân viên quan hệ đối tác lọc danh sách theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 10,
+      "vi_sao": "Lọc chỉ có kiểu Chọn và Người (filterableFieldsFor); không có lựa chọn «trống»; trường chuẩn và tự tạo mã hoá trên URL hai cách (list-search-params.ts:34,53); Thoả thuận không có bộ lọc đã lưu.",
+      "hang": "T2",
+      "slug": "loc-moi-truong",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA14"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "L3",
+        "L4",
+        "L5"
+      ],
+      "ten": "Lọc mọi trường",
+      "ten_ngan": "Lọc trường",
+      "ghi_chu": "Ngày dùng mốc như Ngày chốt (closing-window.ts). Đổi cách mã hoá URL phải giữ đọc được SavedView.filters đã lưu và bộ lọc chiến dịch (campaigns-config.ts) — dữ liệu người dùng, không chép đè."
+    },
+    {
+      "ma": "DA19",
+      "cau_giao": "«Nhân viên quan hệ đối tác gắn tệp hợp đồng vào ô Tệp trên phiếu thoả thuận, công ty hay liên hệ, và lọc được bản ghi nào chưa có»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 10,
+      "vi_sao": "Bản ghi CRM chưa giữ được tệp nào, hợp đồng nằm ngoài CRM. Chủ kho chốt 20/10: thêm kiểu trường Tệp để người quản trị tự cấu hình, không dựng loại bản ghi riêng. Bộ lọc «có / chưa có» đứng trên đường lọc của DA18.",
+      "hang": "T3",
+      "slug": "truong-tep",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA18"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "F1"
+      ],
+      "ten": "Kiểu trường Tệp",
+      "ten_ngan": "Trường Tệp",
+      "ghi_chu": "Một dòng mới trong bảng đăng ký của DA14. Nhiều tệp mỗi ô; PDF, DOCX, ảnh. Blob riêng tư, tải lên ký trước như TaiLieuNguon (blob-nguon.ts, phieu-nguon.ts); thiếu khoá thì mất khả năng, không ném lỗi. Quyền tạm của hàng này: ai cũng thấy tên và số tệp, chỉ quản trị mở hay tải — quyền theo chủ bản ghi tách sang DA20 (luật 3: không chạm dữ liệu người dùng và quyền trong một hàng). Vòng đời theo vong-doi.md; purgeExpired xoá kèm Blob. Có migration."
+    },
+    {
+      "ma": "DA20",
+      "cau_giao": "«Nhân viên quan hệ đối tác mở được tệp trong bản ghi mình phụ trách, và khi đổi người phụ trách thì quyền đi theo người mới»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 7,
+      "vi_sao": "Chủ kho chốt 20/10: chỉ chủ bản ghi và quản trị mở được tệp. Đây là luật quyền theo bản ghi đầu tiên của CRM — hiện API không kiểm ownerId khi đọc.",
+      "hang": "T3",
+      "slug": "tep-theo-chu-ban-ghi",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA19"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "F2"
+      ],
+      "ten": "Tệp theo chủ bản ghi",
+      "ten_ngan": "Quyền tệp",
+      "ghi_chu": "Dưới mục tiêu cỡ có chủ ý: tách khỏi DA19 theo luật 3 (quyền là lớp khó đảo riêng). Bản ghi không có chủ thì chỉ quản trị. Kara đọc tệp với quyền hệ thống — DA23 không được đưa nội dung tệp tới người không có quyền."
+    },
+    {
+      "ma": "DA21",
+      "cau_giao": "«Nhân viên quan hệ đối tác không bao giờ mất giá trị trường đã tự gõ vì Kara ghi đè»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 8,
+      "vi_sao": "writeField (apps/agent/agent/lib/fields.ts) chỉ kiểm «đã có giá trị» trong tác vụ field-backfill; ngoài đó Kara ghi đè được giá trị người gõ, trái docs/ai-ux.md:42-54 và lời hứa ở crm.ts:551.",
+      "hang": "T2",
+      "slug": "kara-khong-ghi-de-truong",
+      "nhom": "truong",
+      "dung_tren": [],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "K0"
+      ],
+      "ten": "Kara không ghi đè trường người đã nhập",
+      "ten_ngan": "Kara không ghi đè",
+      "ghi_chu": "Đã mở 20/10 ở nhánh fix/kara-khong-ghi-de-truong, hồ sơ _acceptance/kara-khong-ghi-de-truong (8 tiêu chí), chờ Cổng Phạm vi; Hỏi-1 chọn lối A (cột xuất xứ, migration, T3) hay lối B."
+    },
+    {
+      "ma": "DA22",
+      "cau_giao": "«Lệnh nạp mẫu tạo bộ hợp đồng mẫu PDF và DOCX có nhãn và gắn vào ô Tệp của bản ghi mẫu qua đường ghi thật»",
+      "vai": "nen",
+      "tieu_chi": 6,
+      "vi_sao": "DA23 đo Kara đọc hợp đồng — dữ liệu chỉ có khi phòng ban tải hợp đồng thật lên. Máy sinh bộ mẫu từ khuôn hợp đồng hợp tác (các điều khoản bên, ngày ký, hiệu lực, giá trị), có cả bản scan để thử nhánh «cần nhập tay».",
+      "hang": "T2",
+      "slug": "hop-dong-mau",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA19"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [],
+      "ten": "Bộ hợp đồng mẫu",
+      "ten_ngan": "Hợp đồng mẫu",
+      "ghi_chu": "Nạp qua bun run db:seed hoặc lệnh mẫu riêng; từ chối chạy trên production; mỗi tệp mang nhãn mẫu. Có mẫu hợp đồng thật của OneHub thì thay khuôn, không chặn hàng.",
+      "bat_khi": "Chạy lại hai lần không nhân đôi tệp; lệnh thoát lỗi khi trỏ vào production; mỗi tệp sinh ra mang nhãn mẫu",
+      "du_lieu": "sinh-gia"
+    },
+    {
+      "ma": "DA23",
+      "cau_giao": "«Nhân viên quan hệ đối tác tải hợp đồng lên và thấy Kara đề xuất ngày ký, ngày hết hạn và giá trị vào các trường đã bật «Kara điền»»",
+      "vai": "Nhân viên quan hệ đối tác",
+      "tieu_chi": 9,
+      "vi_sao": "Chủ kho cần thuộc tính của hợp đồng để lọc và nhắc mà không nhập tay lại thứ đã nằm trong tệp. Kho tài liệu đã đọc được chữ PDF và DOCX (apps/agent/agent/lib/tai-lieu-doc-chu.ts).",
+      "hang": "T2",
+      "slug": "kara-doc-o-tep",
+      "nhom": "truong",
+      "dung_tren": [
+        "DA22",
+        "DA21"
+      ],
+      "dot": "truong-hop-dong-2010",
+      "phu": [
+        "K1"
+      ],
+      "ten": "Kara đọc ô Tệp",
+      "ten_ngan": "Kara đọc tệp",
+      "ghi_chu": "Tệp scan báo cần nhập tay (chưa có OCR). Kara đề xuất chứ không ghi thẳng, theo docs/ai-ux.md và DA21. Tiêu chí độ đúng đo trên bộ mẫu của DA22; độ đúng trên hợp đồng thật là ô bỏ qua có tên.",
+      "du_lieu": "gia"
     }
   ],
   "da_bac": [
@@ -381,6 +587,16 @@
       "cau_giao": "«Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác»",
       "ly_do": "Đứng chờ một lần đo giá trị của hàng 8a (lộ trình OKR), để không đổi thước giữa kỳ.",
       "mo_lai_khi": "Hồ sơ của hàng 8a đã có kết quả đọc số 01/12 do người ghi (observed → da-cham-boi-thuc-te)"
+    },
+    {
+      "ma": "DA24",
+      "dot": "truong-hop-dong-2010",
+      "cau_giao": "«Nhân viên quan hệ đối tác được nhắc trong Nhắc buổi sáng trước khi hợp đồng của bản ghi mình phụ trách hết hạn»",
+      "ly_do": "Số ngày nhắc trước và trường nào là «hết hạn» chỉ biết khi người dùng thật đã gắn tệp và khai ngày; dựng sớm là đoán.",
+      "phu": [
+        "K2"
+      ],
+      "mo_lai_khi": "DA19 đã lên production và có một loại bản ghi mang cả trường Tệp lẫn trường Ngày có giá trị"
     }
   ]
 }
