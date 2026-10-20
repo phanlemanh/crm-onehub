@@ -23,7 +23,7 @@ const GIU = {
 		"no-sau-luot-4-okr#E8",
 		"canh-kr-okr#E13",
 	],
-	giuDuong: ["cap-nhat-tuan-okr#E18", "no-sau-luot-4-okr#E8"],
+	giuDuong: ["no-sau-luot-4-okr#E8"],
 	tepKhongCo: "apps/khong-co/tep-nay.ts",
 	sauToiThieu: 3,
 	boTepDoi: [

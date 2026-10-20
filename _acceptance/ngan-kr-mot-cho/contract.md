@@ -142,3 +142,7 @@ chân ngành: Tability — một ngăn KR, «Create check-in» ở đầu, ‹ �
   `ngan-ban-ghi-giu-danh-tinh` và `ve-sinh-do-san-onehub` (không chạm tệp của chúng).
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/design.md`; trước S3 thêm `docs/ai-ux.md` nếu chạm lối Kara.
 - Hạng T2 (máy suy theo `t3_paths`: không chạm đường T3).
+- Known limits (chủ kho chọn lối A ở Hỏi-5, 20/10): thước màn của `cap-nhat-tuan-okr` (E18 và các eval cùng lệnh E6,
+  E7, E13, E14, E16, E19, E23, E29) đỏ sẵn trên nền merge-base `a0b110b06` ở bước E6 «5 thẻ, thẻ Cập nhật tuần», gãy từ
+  `b9be1abfb` (A3 bỏ thẻ «Cập nhật tuần») và `6c1bf4e52` (`/okr/cap-nhat-tuan` chuyển hướng). E13 in `DO-SAN-NEN` cho
+  chúng; đối chứng GIU của E13 chỉ còn `no-sau-luot-4-okr` E8. VK7 không sửa thước ấy.
