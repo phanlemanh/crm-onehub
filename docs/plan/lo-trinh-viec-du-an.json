@@ -362,7 +362,7 @@
       ],
       "ten": "Một trường, một cách cư xử",
       "ten_ngan": "Trường đồng nhất",
-      "ghi_chu": "Dựng bảng đăng ký theo kiểu trường (hiển thị, sửa tại chỗ, ô bảng), chuyển ba phiếu và ba bảng sang dùng nó cho cả trường chuẩn lẫn tự tạo. Chạm record-fields.tsx cùng vùng với kara-khong-ghi-de-truong (DA21) và record-sheet cùng vùng với VS8: xếp sau hai vòng đó, không song song. Chạm apps/app/lib/messages (vùng bao_ve của đợt M5)."
+      "ghi_chu": "Dựng bảng đăng ký theo kiểu trường (hiển thị, sửa tại chỗ, ô bảng), chuyển ba phiếu và ba bảng sang dùng nó cho cả trường chuẩn lẫn tự tạo. Chạm apps/app/lib/messages (vùng bao_ve của đợt M5): đổi tên gọi là sửa dòng, gửi cham-tep."
     },
     {
       "ma": "DA15",

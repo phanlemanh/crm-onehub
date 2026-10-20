@@ -50,9 +50,9 @@ Luật của đợt truong-hop-dong (chủ kho 20/10; lượt cắt `docs/plan/p
     `packages/db/src/fields*.ts`, `apps/app/components/crm/record-sheet/**` và các sheet tạo bản ghi. `DataTable` và
     `packages/ui` dùng chung vẫn của làn Mac Studio: DA17, DA18 cần kiểu bộ lọc mới (khoảng số, mốc ngày) ở `DataTable`
     thì gửi `cham-tep`, giám sát hỏi trên #375.
-21. **DA14 sau DA21.** DA21 (`kara-khong-ghi-de-truong`) chạy ngoài đợt ở phiên «Kara không ghi đè trường người đã nhập»,
-    nhánh `fix/kara-khong-ghi-de-truong`, đang chờ Cổng Phạm vi. Cùng `record-fields.tsx`: DA14 viết hợp đồng sau khi
-    DA21 gộp `onehub`. DA23 đứng trên DA21 qua `dung_tren`.
+21. **DA21 chạy ngoài đợt.** DA21 (`kara-khong-ghi-de-truong`) chạy ở phiên «Kara không ghi đè trường người đã nhập»,
+    nhánh `fix/kara-khong-ghi-de-truong`, Cổng Phạm vi đã ký 20/10 (lối B). Nó chỉ chạm `apps/agent` (`lib/fields.ts`,
+    `tools/set_field_value.ts`), không đụng tệp với dãy nào của đợt. DA23 đứng trên DA21 qua `dung_tren`.
 22. **Đổi tên gọi là sửa dòng.** DA14 thống nhất «trường», «trường tự tạo» theo `CONTEXT.md` — sửa dòng có sẵn ở
     `apps/app/lib/messages/*.ts` nên gửi `cham-tep` (luật 7), không sửa thẳng.
 23. **DA17 rồi DA18, cùng dãy L1.** Cả hai chạm `*.service.ts` của companies, contacts, deals và `list-search-params.ts`;
