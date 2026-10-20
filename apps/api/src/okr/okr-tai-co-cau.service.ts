@@ -1,6 +1,7 @@
 import type { Db, Prisma } from "@crm/db";
 import { dieuKienOkrMo, PHA_CHUYEN_DUOC } from "@crm/db/okr-don-vi";
 import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
+import { readTenGoc } from "@crm/db/workspace";
 import {
 	type ChuyenDonViInput,
 	type LyDoMoCoi,
@@ -60,6 +61,7 @@ type CayMoCoi = {
 	boPhan: ReadonlyMap<string, BoPhanCay>;
 	tenLuuTru: ReadonlyMap<string, string>;
 	tenNguoi: ReadonlyMap<string, string>;
+	tenGoc: string;
 };
 
 type DonViMoCoi = {
@@ -124,7 +126,7 @@ function donViMoCoi(mt: MucTieuMoCoi, cay: CayMoCoi): DonViMoCoi {
 		}
 		case "onehub":
 			return {
-				donVi: { level: mt.level, id: null, ten: OKR.tenGoc },
+				donVi: { level: mt.level, id: null, ten: cay.tenGoc },
 				luuTru: false,
 				khongAiSua: false,
 			};
@@ -382,6 +384,7 @@ export class OkrTaiCoCauService {
 				]),
 			),
 			tenNguoi: new Map([...cay.people, ...daRoi].map((p) => [p.id, p.name])),
+			tenGoc: await readTenGoc(this.db),
 		};
 	}
 }

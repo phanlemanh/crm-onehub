@@ -52,6 +52,7 @@
 		"./okr-kr": "./src/okr-kr.ts",
 		"./okr-mau": "./src/okr-mau.ts",
 		"./okr-hoi-y": "./src/okr-hoi-y.ts",
+		"./ten-cu-okr": "./src/ten-cu-okr.ts",
 		"./okr-muc-tieu": "./src/okr-muc-tieu.ts",
 		"./okr-nguon": "./src/okr-nguon.ts",
 		"./okr-tom-tat": "./src/okr-tom-tat.ts",
