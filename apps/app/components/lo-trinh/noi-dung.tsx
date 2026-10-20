@@ -4,6 +4,8 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import type { DauVaoLoTrinh } from "@/lib/lo-trinh/doc-trang";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongGioLay } from "./dong-gio-lay";
+import { DongNguonSanPham, SanPhamChuaCo } from "./dong-nguon-san-pham";
+import { KhoSanPhamProvider } from "./kho-san-pham";
 import { KhungTrong } from "./khung-trong";
 import { TrangLoTrinh } from "./trang-lo-trinh";
 
@@ -41,6 +43,14 @@ export function NoiDungLoTrinh({
 				tieuDe={m.trong.khoiHongTieuDe}
 			/>
 		);
+	if (dauVao.kieu === "san-pham-chua-co")
+		return (
+			<SanPhamChuaCo
+				quanTri={dauVao.quanTri}
+				ten={dauVao.ten}
+				trangThai={dauVao.trangThai}
+			/>
+		);
 	const trang = (
 		<TrangLoTrinh
 			canhBao={dauVao.canhBao}
@@ -48,6 +58,15 @@ export function NoiDungLoTrinh({
 			homNayCoDinh={homNayCoDinh}
 		/>
 	);
+	if (dauVao.sanPham)
+		return (
+			<KhoSanPhamProvider value={dauVao.sanPham.kho}>
+				<div className="flex flex-col gap-3">
+					<DongNguonSanPham sp={dauVao.sanPham} />
+					{trang}
+				</div>
+			</KhoSanPhamProvider>
+		);
 	if (!dauVao.nguon) return trang;
 	return (
 		<div className="flex flex-col gap-3">
