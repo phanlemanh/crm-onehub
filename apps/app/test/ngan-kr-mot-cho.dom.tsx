@@ -1,8 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { homNayVN } from "@crm/validation/ngay-vn";
+import { type KieuKr, tienDoKr } from "@crm/validation/okr-kr";
 import { useQuery } from "@tanstack/react-query";
 import { act } from "react";
 import type { CapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
+import { dienBienOutput } from "../../api/src/okr/okr-xem.contracts";
 import {
 	chiTietTu,
 	cho,
@@ -24,6 +27,10 @@ import {
 const { useCapNhatKr } = await import("@/app/(app)/[slug]/okr/cap-nhat-kr");
 const { useTRPC } = await import("@/lib/trpc/client");
 const { okrMessages } = await import("@/lib/messages/okr");
+const { congNgay } = await import(
+	"@/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan"
+);
+const { hienSo } = await import("@/app/(app)/[slug]/okr/hop-thoai-kr");
 
 const mo = okrMessages("vi");
 
@@ -74,6 +81,7 @@ describe("vk7-cap-nhat-ngan", () => {
 			"okr.moCapNhat",
 			() => new Promise<KetQuaGhi>((r) => traPhien.push(r)),
 		);
+		kho.rieng.set("okr.dienBien", () => dienBienCua(CA_TANG));
 		const mt = chiTiet();
 		const [k1, , k3] = mt.keyResults;
 		if (!k1 || !k3) throw new Error("thieu KR mau");
@@ -162,5 +170,256 @@ describe("vk7-cap-nhat-ngan", () => {
 				},
 			],
 		});
+	});
+});
+
+class QuanSatCoCo {
+	constructor(private cb: ResizeObserverCallback) {}
+	observe(el: Element) {
+		this.cb(
+			[
+				{
+					target: el,
+					contentRect: { width: 640, height: 144 } as DOMRectReadOnly,
+				} as ResizeObserverEntry,
+			],
+			this as unknown as ResizeObserver,
+		);
+	}
+	unobserve() {}
+	disconnect() {}
+}
+
+const roCu = globalThis.ResizeObserver;
+const rectCu = HTMLElement.prototype.getBoundingClientRect;
+
+function coKhungDoThi(): void {
+	globalThis.ResizeObserver = QuanSatCoCo as unknown as typeof ResizeObserver;
+	HTMLElement.prototype.getBoundingClientRect = () =>
+		({
+			width: 640,
+			height: 144,
+			top: 0,
+			left: 0,
+			right: 640,
+			bottom: 144,
+			x: 0,
+			y: 0,
+			toJSON: () => ({}),
+		}) as DOMRect;
+}
+
+function thuHaiTuanNay(): string {
+	const hom = homNayVN(new Date());
+	const thu = new Date(`${hom}T00:00:00Z`).getUTCDay();
+	return congNgay(hom, -((thu + 6) % 7));
+}
+
+type CaKieu = {
+	ten: string;
+	kieu: KieuKr;
+	khoi: number;
+	dich: number;
+	lichSu: [number, number, number];
+};
+
+const CA_TANG: CaKieu = {
+	ten: "tang-toi",
+	kieu: "tang-toi",
+	khoi: 0,
+	dich: 100,
+	lichSu: [10, 20, 30],
+};
+
+const CA_SO: CaKieu[] = [
+	CA_TANG,
+	{
+		ten: "giam-xuong",
+		kieu: "giam-xuong",
+		khoi: 100,
+		dich: 0,
+		lichSu: [90, 80, 70],
+	},
+];
+
+function dienBienCua(ca: CaKieu) {
+	const thuHai = thuHaiTuanNay();
+	const tuan = [-21, -14, -7, 0, 7].map((n) => congNgay(thuHai, n));
+	return dienBienOutput.parse({
+		kieu: ca.kieu,
+		tieuDe: `KR ${ca.ten}`,
+		khoi: ca.khoi,
+		dich: ca.dich,
+		donVi: "",
+		coCapNhat: true,
+		tuanDau: tuan[0] ?? null,
+		diem: tuan.map((t, i) => ({
+			tuan: t,
+			giaTri: ca.lichSu[i] ?? null,
+			kyVong: null,
+			tuTin: i < ca.lichSu.length ? "vua" : null,
+			ghiChu: null,
+		})),
+	});
+}
+
+function mtMotKr(id: string, doi: Parameters<typeof kr>[2]): ObjectiveOutput {
+	return chiTietTu(
+		mucTieu(
+			MT,
+			[
+				kr(id, MT, {
+					title: `KR ${id}`,
+					hienTaiQuaCapNhat: true,
+					laCuaToi: true,
+					...doi,
+				}),
+			],
+			{ canEdit: true },
+		),
+	);
+}
+
+async function moHopCua(mt: ObjectiveOutput): Promise<HTMLElement> {
+	const k = mt.keyResults[0];
+	if (!k) throw new Error("thieu KR");
+	await dung(<ThuHook docKr={k.id} />);
+	await act(async () => {
+		tay.mo?.(mt, k);
+	});
+	await cho(() => hop() !== null, "hop cap nhat");
+	const h = hop();
+	if (!h) throw new Error("khong co hop");
+	return h;
+}
+
+const diemMoi = () =>
+	[...document.querySelectorAll("[data-diem-moi]")].map((d) =>
+		d.getAttribute("data-diem-moi"),
+	);
+const soDiemLichSu = () =>
+	document.querySelectorAll(".recharts-line-dots circle:not([data-diem-moi])")
+		.length;
+const dongTienDo = () =>
+	qs("[data-xem-truoc] [data-tien-do-moi]")?.getAttribute("data-tien-do-moi") ??
+	null;
+
+async function goGiaTri(id: string, chu: string): Promise<void> {
+	const o = oGiaTri(id);
+	if (!o) throw new Error(`khong co o gia tri ${id}`);
+	const u = nguoiDung();
+	await act(async () => {
+		await u.clear(o);
+		await u.type(o, chu);
+	});
+	await nhip(3);
+}
+
+describe("vk7-xem-truoc", () => {
+	afterEach(() => {
+		globalThis.ResizeObserver = roCu;
+		HTMLElement.prototype.getBoundingClientRect = rectCu;
+	});
+
+	test("vk7-xem-truoc: ma tran ba kieu KR viet truoc — so co diem moi va tien do moi tu tienDoKr, moc chi co chu Xong / Chua xong", async () => {
+		const MA_TRAN = ["tang-toi", "giam-xuong", "moc"] as const;
+		expect(MA_TRAN.length).toBe(3);
+		const daChay: string[] = [];
+		for (const ten of MA_TRAN) {
+			datLai();
+			coKhungDoThi();
+			const ca = CA_SO.find((c) => c.ten === ten);
+			if (ca) {
+				kho.rieng.set("okr.dienBien", () => dienBienCua(ca));
+				const id = `x-${ten}`;
+				await moHopCua(
+					mtMotKr(id, {
+						kind: ca.kieu,
+						startValue: ca.khoi,
+						targetValue: ca.dich,
+						currentValue: ca.lichSu[2],
+						unit: "",
+					}),
+				);
+				await cho(
+					() => qs("[data-xem-truoc] [data-slot='target-line-chart']") !== null,
+					`do thi xem truoc ${ten}`,
+				);
+				const theoGia = [];
+				for (const so of [40, 60]) {
+					await goGiaTri(id, String(so));
+					await cho(() => diemMoi().length > 0, `thieu diem moi: ${ten} ${so}`);
+					theoGia.push({
+						diemMoi: diemMoi(),
+						lichSu: soDiemLichSu(),
+						dich: qs("[data-xem-truoc] [data-muc='dich']") !== null,
+						tienDo: dongTienDo(),
+						mong: String(tienDoKr(ca.kieu, ca.khoi, ca.dich, so)),
+					});
+				}
+				await goGiaTri(id, "abc");
+				const loi = qs(`[data-hop-cap-nhat-kr] [data-slot="field-error"]`);
+				const thucTe = {
+					theoGia,
+					sai: {
+						diemMoi: diemMoi().length,
+						tienDo: dongTienDo(),
+						loi: loi?.textContent ?? null,
+					},
+				};
+				expect(thucTe).toEqual({
+					theoGia: [40, 60].map((so) => ({
+						diemMoi: [String(so)],
+						lichSu: 3,
+						dich: true,
+						tienDo: String(tienDoKr(ca.kieu, ca.khoi, ca.dich, so)),
+						mong: String(tienDoKr(ca.kieu, ca.khoi, ca.dich, so)),
+					})),
+					sai: {
+						diemMoi: 0,
+						tienDo: null,
+						loi: mo.capNhat.loiSo(hienSo(3.5, "vi")),
+					},
+				});
+			} else {
+				const id = `x-${ten}`;
+				const h = await moHopCua(
+					mtMotKr(id, {
+						kind: "moc",
+						startValue: 0,
+						targetValue: 1,
+						currentValue: 0,
+						unit: "",
+					}),
+				);
+				const chuMoc = () =>
+					qs("[data-xem-truoc='moc'] [data-tien-do-moi]")?.textContent ?? "";
+				const truoc = {
+					chu: chuMoc().startsWith(mo.moc.chuaXong),
+					tienDo: dongTienDo(),
+				};
+				const u = nguoiDung();
+				await act(async () => {
+					await u.click(nut(mo.moc.xong, h));
+				});
+				await nhip(3);
+				const thucTe = {
+					truoc,
+					sau: { chu: chuMoc().startsWith(mo.moc.xong), tienDo: dongTienDo() },
+					doThi: document.querySelectorAll("[data-slot='target-line-chart']")
+						.length,
+					docLichSu: docCua("okr.dienBien").length,
+				};
+				expect(thucTe).toEqual({
+					truoc: { chu: true, tienDo: "0" },
+					sau: { chu: true, tienDo: "100" },
+					doThi: 0,
+					docLichSu: 1,
+				});
+			}
+			daChay.push(ten);
+			await thaoHet();
+		}
+		expect(daChay).toEqual([...MA_TRAN]);
 	});
 });
