@@ -79,23 +79,26 @@ const E11_SO_CHUA_XEP = 1;
 
 const motChuSo = (x: number) => Math.round(x * 10) / 10;
 
+export type NguoiLaE11 = { tong: number; chuaXep: number };
+
+export const KHONG_NGUOI_LA: NguoiLaE11 = { tong: 0, chuaXep: 0 };
+
 export function e11KyVong(
 	idCua: (khoa: string) => string,
-	soNguoiLaChuaXep = 0,
+	la: NguoiLaE11 = KHONG_NGUOI_LA,
 ) {
 	return E11_DON_VI.map((d) => {
 		const giaTri =
-			soNguoiLaChuaXep === 0
+			la.tong === 0
 				? d.giaTri
 				: d.loai === "goc"
 					? E11_SO_GOP_TICH_LUY.map((n) =>
-							motChuSo((100 * n) / (E11_SO_THANH_VIEN + soNguoiLaChuaXep)),
+							motChuSo((100 * n) / (E11_SO_THANH_VIEN + la.tong)),
 						)
 					: d.loai === "chua-xep"
 						? E11_SO_GOP_TICH_LUY.map(() =>
 								motChuSo(
-									(100 * E11_SO_CHUA_XEP) /
-										(E11_SO_CHUA_XEP + soNguoiLaChuaXep),
+									(100 * E11_SO_CHUA_XEP) / (E11_SO_CHUA_XEP + la.chuaXep),
 								),
 							)
 						: d.giaTri;
