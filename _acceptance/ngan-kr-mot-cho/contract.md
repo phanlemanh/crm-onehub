@@ -123,7 +123,7 @@ chân ngành: Tability — một ngăn KR, «Create check-in» ở đầu, ‹ �
 
 - Ranh giới dự kiến (S2 chốt; đăng crm #375 trước Cổng Phạm vi):
   `apps/app/components/crm/record-sheet/kr-sheet.tsx`, `objective-sheet.tsx`, `so-kr-sheet.tsx`, `dien-bien-kr.ts`
-  (**vùng làn M5**, luật 19 — yêu cầu `cham-tep` V3-2 đã gửi 20/10),
+  (**vùng làn M5**, luật 19 — `cham-tep` V3-2: M5 đồng ý trên #375 20/10 02:41Z cho bốn tệp này; ngoài `record-sheet-host.tsx`, `record-stack.ts`, `nap-san-khi-mo-ngan.tsx`),
   `apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx`, `okr/cap-nhat-tuan/cap-nhat-tuan.tsx` (`OGiaTri`, chỉ thêm
   ô xem trước và tiêu điểm), `okr/bang-kr.tsx`, `okr/theo-don-vi/bang.tsx`, `okr/khoi-tom-tat.tsx`,
   `okr/khoi-kr-cua-toi.tsx`, `okr/hop-tuan.tsx`, `apps/app/lib/messages/okr*.ts` (chỉ thêm, luật 7),
