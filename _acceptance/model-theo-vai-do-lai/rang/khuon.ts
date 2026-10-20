@@ -17,15 +17,18 @@ export const MTV = {
 	evidence: join(HO_SO, "evidence"),
 	rang: import.meta.dir,
 	chay: join(GOC, ".acceptance-runs", "model-theo-vai-do-lai"),
-	model: "zai/glm-5.3-flash",
+	cu: { ma: "glm", nhanSoan: "flash", moc: "49456c140" },
 	tran: 180,
 	lechKetXuatMs: 7 * GIO_MS,
 	urlGateway: "https://ai-gateway.vercel.sh/v1",
+	tinhNang: {
+		"tro-ly-kho": "tai-lieu.tro-ly",
+		"soan-okr": "okr.soan",
+	},
 	tep: {
 		keHoach: "ke-hoach.json",
 		keHoachTacNhan: "ke-hoach-tac-nhan.json",
 		tacNhan: "tac-nhan.jsonl",
-		doSuyLuan: "do-suy-luan.json",
 		chiPhi: "chi-phi.json",
 		bang: "bang-kien-nghi.json",
 		bangTacNhan: "bang-tac-nhan.md",
@@ -34,7 +37,7 @@ export const MTV = {
 		khoBaoCao: "do-bo-mau.md",
 		khoTungCau: "cham-tung-cau.jsonl",
 		khoTraLoi: "cham-bo-do-mau.md",
-		soan: (n: number) => `eval-soan-flash-${n}.json`,
+		khoKetXuat: "aichiphi.json",
 		docs: join(GOC, "docs", "model-theo-vai.md"),
 		nguong: join(import.meta.dir, "nguong.json"),
 	},
@@ -62,22 +65,108 @@ export const MTV = {
 	suKienChon: "model.phien-chon",
 } as const;
 
-export const khuonKeHoach = z.object({
-	nguon: z.string().min(1),
-	model: z.string().min(1),
-	tac_nhan: z.object({
-		bien_the: z.array(z.enum(["flash", "flash-low"])).min(1),
-		so_luot: z.number().int().positive(),
-	}),
-	tro_ly_kho: z.object({ so_luot: z.number().int().positive() }),
-	soan_okr: z.object({
-		so_luot: z.number().int().positive(),
-		moc: z.string().min(1),
-	}),
-	tran_usd: z.number().positive(),
-	thong_so_chua_do: z.array(z.string().min(1)),
+export const laCu = (ma: string) => ma === MTV.cu.ma;
+export const laLow = (bienThe: string) => bienThe.endsWith("-low");
+const nhanSoan = (ma: string, n: number) =>
+	`${laCu(ma) ? MTV.cu.nhanSoan : ma}-${n}`;
+
+export const DUONG = {
+	doSuyLuan: (ma: string) =>
+		laCu(ma) ? "do-suy-luan.json" : `do-suy-luan-${ma}.json`,
+	kho: (ma: string, n: number) =>
+		laCu(ma) ? `${MTV.tep.kho}/luot-${n}` : `${MTV.tep.kho}/${ma}/luot-${n}`,
+	nhanSoan,
+	soan: (ma: string, n: number) => `eval-soan-${nhanSoan(ma, n)}.json`,
+	ketXuatSoan: (ma: string, n: number) =>
+		`aichiphi-soan-${nhanSoan(ma, n)}.json`,
+	aichiphi: (bienThe: string, n: number) => `aichiphi-${bienThe}-${n}.json`,
+	suKien: (bienThe: string, n: number) => `su-kien-${bienThe}-${n}.json`,
+	nhatKy: (bienThe: string, n: number) => `luot-${bienThe}-${n}.log`,
+} as const;
+
+export const VAI_CHI = ["dao", "tac-nhan", "tro-ly-kho", "soan-okr"] as const;
+export type VaiChi = (typeof VAI_CHI)[number];
+
+export const khoaChi = (vai: VaiChi, nhan: string, n: number) =>
+	vai === "tac-nhan" || !laCu(nhan) ? `${nhan}-${n}` : String(n);
+
+const maUng = z.string().regex(/^[a-z0-9]+$/);
+const khuonGia = z.object({
+	vao: z.number().nonnegative(),
+	ra: z.number().nonnegative(),
+	doc_cache: z.number().nonnegative(),
 });
+export type Gia = z.infer<typeof khuonGia>;
+
+export const khuonKeHoach = z
+	.object({
+		nguon: z.string().min(1),
+		ung_vien: z.record(
+			maUng,
+			z.object({ model: z.string().min(1), gia: khuonGia }),
+		),
+		gia_chup: z.object({
+			nguon: z.string().min(1),
+			ngay: z.string().min(1),
+			ghi_chu: z.string(),
+		}),
+		tac_nhan: z.object({
+			so_luot: z.number().int().positive(),
+			ung_vien: z
+				.array(
+					z.object({
+						ma: maUng,
+						bien_the: z.array(z.string().regex(/^[a-z0-9]+(-low)?$/)).min(1),
+					}),
+				)
+				.min(1),
+		}),
+		do_suy_luan: z.object({ ung_vien: z.array(maUng).min(1) }),
+		tro_ly_kho: z.object({
+			so_luot: z.number().int().positive(),
+			ung_vien: z.array(maUng).min(1),
+		}),
+		soan_okr: z.object({
+			so_luot: z.number().int().positive(),
+			ung_vien: z.array(maUng).min(1),
+			moc: z.string().min(1),
+		}),
+		thu_tu: z.array(
+			z.string().regex(/^(dao|tac-nhan|tro-ly-kho|soan-okr):[a-z0-9]+$/),
+		),
+		tran_usd: z.number().positive(),
+		thong_so_chua_do: z.array(z.string().min(1)),
+	})
+	.superRefine((k, ctx) => {
+		const ma = new Set(Object.keys(k.ung_vien));
+		const dung = [
+			...k.tac_nhan.ung_vien.map((u) => u.ma),
+			...k.do_suy_luan.ung_vien,
+			...k.tro_ly_kho.ung_vien,
+			...k.soan_okr.ung_vien,
+			...k.thu_tu.map((t) => t.split(":")[1] ?? ""),
+		];
+		for (const m of dung)
+			if (!ma.has(m))
+				ctx.addIssue({ code: "custom", message: `ung vien la ${m}` });
+		const bt = k.tac_nhan.ung_vien.flatMap((u) => u.bien_the);
+		if (new Set(bt).size !== bt.length)
+			ctx.addIssue({ code: "custom", message: "bien the trung giua ung vien" });
+	});
 export type KeHoach = z.infer<typeof khuonKeHoach>;
+
+export const modelCua = (ke: KeHoach, ma: string) => {
+	const u = ke.ung_vien[ma];
+	if (!u) throw new Error(`ke-hoach.json khong co ung vien ${ma}`);
+	return u.model;
+};
+export const giaCua = (ke: KeHoach, ma: string) => {
+	const u = ke.ung_vien[ma];
+	if (!u) throw new Error(`ke-hoach.json khong co ung vien ${ma}`);
+	return u.gia;
+};
+export const ungVienCuaBienThe = (ke: KeHoach, bienThe: string) =>
+	ke.tac_nhan.ung_vien.find((u) => u.bien_the.includes(bienThe))?.ma ?? null;
 
 export const khuonNguong = z.object({
 	nguon: z.string().min(1),
@@ -106,6 +195,21 @@ export const khuonNguong = z.object({
 		ghi_chu: z.string().min(1),
 		giu: z.string().min(1),
 	}),
+	chon: z.object({
+		ap_cho: z.array(maUng).min(1),
+		luot_bi_loai: z.literal("chua-du-so"),
+		luat: z.literal("re-nhat-chi-phi-phan-ung-vien"),
+		chi_phi: z.literal("token-vao-nhan-gia-vao-cong-token-ra-nhan-gia-ra"),
+		hoa: z.tuple([
+			z.literal("diem-cao-hon"),
+			z.literal("trung-vi-giay-thap-hon"),
+		]),
+		diem: z.object({
+			"tac-nhan": z.literal("so-luot-qua"),
+			"tro-ly-kho": z.literal("tong-dung-tru-cau-loi"),
+			"soan-okr": z.literal("tong-dat-moi-luot"),
+		}),
+	}),
 });
 export type Nguong = z.infer<typeof khuonNguong>;
 
@@ -114,8 +218,16 @@ export const khuonKeHoachTacNhan = z.object({
 	bam_agent_low: z.string().length(64),
 });
 
+const khuonSoCon = z.object({
+	so_buoc: z.number().int().nonnegative(),
+	token_vao: z.number().nonnegative(),
+	token_ra: z.number().nonnegative(),
+	giay: z.number().nonnegative(),
+});
+export type SoCon = z.infer<typeof khuonSoCon>;
+
 export const khuonDongTacNhan = z.object({
-	bien_the: z.enum(["flash", "flash-low"]),
+	bien_the: z.string().min(1),
 	luot: z.number().int().positive(),
 	model: z.string(),
 	model_phien_con: z.string().nullable(),
@@ -130,6 +242,8 @@ export const khuonDongTacNhan = z.object({
 	nhat_ky: z.string(),
 	aichiphi: z.string(),
 	su_kien: z.string(),
+	ung_vien: maUng.optional(),
+	phien_con: khuonSoCon.optional(),
 });
 export type DongTacNhan = z.infer<typeof khuonDongTacNhan>;
 
@@ -138,16 +252,51 @@ export const khuonHangChiPhi = z.object({
 	at: z.string(),
 	sessionId: z.string(),
 	phienCha: z.string().nullable(),
+	tinhNang: z.string().nullable().optional(),
 	modelId: z.string().nullable(),
 	inputTokens: z.number().nullable(),
+	cacheReadTokens: z.number().nullable().optional(),
 	outputTokens: z.number().nullable(),
 	costUsd: z.number().nullable(),
 });
 export type HangChiPhi = z.infer<typeof khuonHangChiPhi>;
+export const khuonKetXuat = z.array(khuonHangChiPhi);
 
 export const khuonSuKienChon = z.array(
 	z.object({ sessionId: z.string(), modelId: z.string().min(1) }),
 );
+export type SuKienChon = z.infer<typeof khuonSuKienChon>;
+
+const tronSo = (x: number, c: number) => Number(x.toFixed(c));
+export const gioThat = (at: string) => Date.parse(at) + MTV.lechKetXuatMs;
+
+export function soCon(hang: HangChiPhi[], phien: string): SoCon {
+	const con = hang.filter((h) => h.phienCha === phien && h.sessionId !== phien);
+	const t = con.map((h) => gioThat(h.at)).sort((a, b) => a - b);
+	return {
+		so_buoc: con.length,
+		token_vao: con.reduce((s, h) => s + (h.inputTokens ?? 0), 0),
+		token_ra: con.reduce((s, h) => s + (h.outputTokens ?? 0), 0),
+		giay: t.length > 1 ? tronSo(((t.at(-1) ?? 0) - (t[0] ?? 0)) / 1000, 1) : 0,
+	};
+}
+
+export function chiPhiPhan(
+	hang: HangChiPhi[],
+	gia: Gia,
+	tinhNang: string | null,
+): number {
+	return tronSo(
+		hang
+			.filter((h) => tinhNang === null || h.tinhNang === tinhNang)
+			.reduce(
+				(s, h) =>
+					s + (h.inputTokens ?? 0) * gia.vao + (h.outputTokens ?? 0) * gia.ra,
+				0,
+			),
+		9,
+	);
+}
 
 const khuonMucSuyLuan = z.object({
 	status: z.number(),
@@ -156,6 +305,7 @@ const khuonMucSuyLuan = z.object({
 	token_suy_luan: z.number().nullable(),
 	khong_tra_suy_luan: z.boolean(),
 });
+export type MucSuyLuan = z.infer<typeof khuonMucSuyLuan>;
 export const MUC_SUY_LUAN = ["mac-dinh", "low", "high"] as const;
 export const khuonDoSuyLuan = z.object({
 	luc: z.string(),
@@ -167,7 +317,13 @@ export const khuonDoSuyLuan = z.object({
 		high: khuonMucSuyLuan.optional(),
 	}),
 	usd: z.number().nonnegative(),
+	ung_vien: maUng.optional(),
 });
+export type DoSuyLuan = z.infer<typeof khuonDoSuyLuan>;
+
+const khuonSoDu = z.object({ usd: z.number().nullable(), luc: z.string() });
+export type SoDu = z.infer<typeof khuonSoDu>;
+export const LOI_KHONG_ZDR = "không có ZDR";
 
 export const khuonKhoTom = z.object({
 	luot: z.number().int().positive(),
@@ -180,7 +336,13 @@ export const khuonKhoTom = z.object({
 	bam_sua_tam: z.string().length(64),
 	bam_commit: z.string().length(40),
 	usd: z.number().nonnegative(),
-	usd_nguon: z.literal("so-du-gateway"),
+	usd_nguon: z.enum(["so-du-gateway", "aichiphi"]),
+	ung_vien: maUng.optional(),
+	aichiphi: z.string().optional(),
+	so_du_truoc: khuonSoDu.optional(),
+	so_du_sau: khuonSoDu.optional(),
+	usd_so_du: z.number().nullable().optional(),
+	loi: z.literal(LOI_KHONG_ZDR).nullable().optional(),
 });
 export type KhoTom = z.infer<typeof khuonKhoTom>;
 
@@ -219,10 +381,17 @@ export const khuonSoanMh4 = khuonSoan.extend({
 	modelGateway: z.string().nullable(),
 	bamSuaTam: z.string().length(64),
 	bamCommit: z.string().length(40),
+	ung_vien: maUng.optional(),
+	aichiphi: z.string().optional(),
 });
 export type SoanMh4 = z.infer<typeof khuonSoanMh4>;
+export const khuonSoanTho = khuonSoanMh4.omit({
+	modelGateway: true,
+	bamSuaTam: true,
+	bamCommit: true,
+});
+export type SoanTho = z.infer<typeof khuonSoanTho>;
 
-export const VAI_CHI = ["dao", "tac-nhan", "tro-ly-kho", "soan-okr"] as const;
 export const khuonChiPhi = z.object({
 	tran_usd: z.number().positive(),
 	luot: z.array(
@@ -237,6 +406,7 @@ export const khuonChiPhi = z.object({
 	),
 });
 export type ChiPhi = z.infer<typeof khuonChiPhi>;
+export type DongChi = ChiPhi["luot"][number];
 
 export const VAI = [
 	"tac-nhan",
@@ -245,33 +415,50 @@ export const VAI = [
 	"judge-okr",
 	"may-soan-kho",
 ] as const;
+export const TRANG_THAI = ["đạt", "không đạt", "chưa đủ số"] as const;
+export type TrangThai = (typeof TRANG_THAI)[number];
+
 export const khuonSo = z.object({
 	ten: z.string().min(1),
 	gia_tri: z.union([z.number(), z.string()]),
 	tep: z.string().min(1),
 });
+export type So = z.infer<typeof khuonSo>;
+export const khuonUngVienBang = z.object({
+	ma: maUng,
+	model: z.string().min(1),
+	bien_the: z.string().nullable(),
+	so: z.array(khuonSo),
+	chi_phi_phan_ung_vien: z.number().nullable(),
+	tep_chi_phi_phan: z.array(z.string().min(1)),
+	chi_phi_that: z.number().nullable(),
+	tep_chi_phi_that: z.string().min(1),
+	trang_thai: z.enum(TRANG_THAI),
+	ly_do: z.string().min(1),
+	ngay_do: z.string().nullable(),
+	ghi_chu: z.array(z.string()),
+});
+export type UngVienBang = z.infer<typeof khuonUngVienBang>;
 export const khuonHangBang = z.object({
 	vai: z.enum(VAI),
 	ten: z.string().min(1),
 	model_dang_chay: z.string().min(1),
-	ung_vien: z.string().nullable(),
-	so_ung_vien: z.array(khuonSo),
 	so_moc: z.array(khuonSo),
-	usd_moi_luot: z.number().nullable(),
+	ngay_moc: z.string().nullable(),
+	so_do: z.array(khuonSo),
+	ung_vien: z.array(khuonUngVienBang),
 	kien_nghi: z.string().min(1),
 	ly_do: z.string().min(1),
-	ngay_do: z.string().nullable(),
-	ngay_moc: z.string().nullable(),
 	thong_so_chua_do: z.array(z.string().min(1)),
 	ghi_chu: z.array(z.string()),
 });
+export type HangBang = z.infer<typeof khuonHangBang>;
 export const khuonBang = z.object({
 	nguong: z.string().min(1),
 	ke_hoach: z.string().min(1),
 	hang: z.array(khuonHangBang),
 });
 export type Bang = z.infer<typeof khuonBang>;
-export type HangBang = z.infer<typeof khuonHangBang>;
 
 export const sha256 = (chu: string | Buffer) =>
 	new Bun.CryptoHasher("sha256").update(chu).digest("hex");

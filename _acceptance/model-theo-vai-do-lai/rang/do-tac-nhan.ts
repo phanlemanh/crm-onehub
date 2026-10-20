@@ -7,13 +7,31 @@ import {
 	readFileSync,
 	writeFileSync,
 } from "node:fs";
-import { createRequire } from "node:module";
 import { join } from "node:path";
 import { taoKho, xoaKho } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
-import { conTran, ghiLuot, keHoach } from "./chi-phi";
-import { GOC, MTV, sha256 } from "./khuon";
-
-const pg = createRequire(join(GOC, "packages/db/package.json"))("pg");
+import {
+	conTran,
+	ghiLuot,
+	keHoach,
+	ketXuatPhien,
+	ungVienChon,
+} from "./chi-phi";
+import {
+	type DongTacNhan,
+	DUONG,
+	GOC,
+	type HangChiPhi,
+	khoaChi,
+	khuonDongTacNhan,
+	khuonKetXuat,
+	khuonSuKienChon,
+	laLow,
+	MTV,
+	modelCua,
+	type SuKienChon,
+	sha256,
+	soCon,
+} from "./khuon";
 
 export const DO = {
 	tepAgent: join(GOC, MTV.suaTam.agentBuilder),
@@ -26,8 +44,7 @@ export const DO = {
 	quaTran: "aborted due to timeout",
 } as const;
 
-type BienThe = "flash" | "flash-low";
-const laLow = (b: BienThe) => b === "flash-low";
+export const banLow = (goc: string) => goc.replace(DO.moDau, DO.chenLow);
 
 function chay(
 	lenh: string[],
@@ -79,63 +96,118 @@ try {
 	return doc.id;
 }
 
-type HangPg = {
-	id: string;
-	at: Date | string;
-	sessionId: string;
-	phienCha: string | null;
-	modelId: string | null;
-	inputTokens: number | null;
-	outputTokens: number | null;
-	costUsd: string | number | null;
+export type VaoDong = {
+	ma: string;
+	bienThe: string;
+	luot: number;
+	model: string;
+	batDau: Date;
+	ketThuc: Date;
+	log: string;
+	hang: HangChiPhi[];
+	suKien: SuKienChon;
+	bamAgent: string;
 };
 
-async function ketXuat(url: string, phien: string) {
-	const c = new pg.Client({ connectionString: url });
-	await c.connect();
-	try {
-		const r = await c.query(
-			`select id, at, "sessionId", "phienCha", "modelId", "inputTokens", "outputTokens", "costUsd" from "aiChiPhi" where "sessionId" = $1 or "phienCha" = $1 order by at asc`,
-			[phien],
-		);
-		const hang = (r.rows as HangPg[]).map((h) => ({
-			...h,
-			at: h.at instanceof Date ? h.at.toISOString() : String(h.at),
-			costUsd: h.costUsd === null ? null : Number(h.costUsd),
-		}));
-		const con = [
-			...new Set(
-				hang.filter((h) => h.sessionId !== phien).map((h) => h.sessionId),
-			),
-		];
-		const sk = con.length
-			? await c.query(
-					`select "sessionId", data->>'modelId' as "modelId" from "agentEvent" where type = $1 and "sessionId" = any($2) order by "emittedAt" asc`,
-					[MTV.suKienChon, con],
-				)
-			: { rows: [] };
-		return {
-			hang,
-			suKien: (sk.rows as { sessionId: string; modelId: string | null }[])
-				.filter((x) => x.modelId)
-				.map((x) => ({ sessionId: x.sessionId, modelId: x.modelId ?? "" })),
-		};
-	} finally {
-		await c.end();
-	}
+export const phienCuaLog = (log: string) => log.match(DO.phienGoc)?.[1] ?? "";
+
+export function dongTacNhan(v: VaoDong): DongTacNhan {
+	const kq = v.log.match(DO.ketQua);
+	const qua = kq?.[1] === "✓";
+	const phien = phienCuaLog(v.log);
+	const modelCon = [...new Set(v.suKien.map((s) => s.modelId))];
+	return khuonDongTacNhan.parse({
+		bien_the: v.bienThe,
+		luot: v.luot,
+		model: v.model,
+		model_phien_con: modelCon.length === 1 ? (modelCon[0] ?? null) : null,
+		bat_dau: v.batDau.toISOString(),
+		ket_thuc: v.ketThuc.toISOString(),
+		giay: Number(
+			((v.ketThuc.getTime() - v.batDau.getTime()) / 1000).toFixed(1),
+		),
+		ket_qua: qua ? "qua" : "hong",
+		ly_do: qua
+			? null
+			: v.log.includes(DO.quaTran)
+				? "qua tran 180 giay"
+				: (kq?.[0] ?? "khong co dong ket qua"),
+		bi_cat: !qua && v.log.includes(DO.quaTran),
+		phien_goc: phien,
+		bam_agent: v.bamAgent,
+		nhat_ky: DUONG.nhatKy(v.bienThe, v.luot),
+		aichiphi: DUONG.aichiphi(v.bienThe, v.luot),
+		su_kien: DUONG.suKien(v.bienThe, v.luot),
+		ung_vien: v.ma,
+		phien_con: soCon(v.hang, phien),
+	});
 }
 
-async function motLuot(b: BienThe, luot: number, goc: string) {
-	const ten = `${b}-${luot}`;
-	const tepLog = join(MTV.evidence, `luot-${ten}.log`);
-	if (laLow(b)) writeFileSync(DO.tepAgent, goc.replace(DO.moDau, DO.chenLow));
+export function ghiBangChungTacNhan(
+	ev: string,
+	d: DongTacNhan,
+	hang: HangChiPhi[],
+	suKien: SuKienChon,
+) {
+	writeFileSync(
+		join(ev, d.aichiphi),
+		`${JSON.stringify(khuonKetXuat.parse(hang), null, 2)}\n`,
+	);
+	writeFileSync(
+		join(ev, d.su_kien),
+		`${JSON.stringify(khuonSuKienChon.parse(suKien), null, 2)}\n`,
+	);
+	ghiLuot(
+		{
+			vai: "tac-nhan",
+			luot: khoaChi("tac-nhan", d.bien_the, d.luot),
+			trang_thai: "da-chay",
+			usd: Number(hang.reduce((s, h) => s + (h.costUsd ?? 0), 0).toFixed(6)),
+			tep: d.aichiphi,
+			luc: d.ket_thuc,
+		},
+		ev,
+	);
+}
+
+export function docDong(ev: string): string[] {
+	const tep = join(ev, MTV.tep.tacNhan);
+	return existsSync(tep)
+		? readFileSync(tep, "utf8").split("\n").filter(Boolean)
+		: [];
+}
+
+export function themDong(ev: string, d: DongTacNhan) {
+	const dong = docDong(ev);
+	dong.push(JSON.stringify(d));
+	writeFileSync(join(ev, MTV.tep.tacNhan), `${dong.join("\n")}\n`);
+}
+
+export function daCoLuot(ev: string): Set<string> {
+	return new Set(
+		docDong(ev).map((d) => {
+			const x = khuonDongTacNhan.parse(JSON.parse(d));
+			return khoaChi("tac-nhan", x.bien_the, x.luot);
+		}),
+	);
+}
+
+async function motLuot(
+	ma: string,
+	b: string,
+	luot: number,
+	model: string,
+	goc: string,
+) {
+	const tepLog = join(MTV.evidence, DUONG.nhatKy(b, luot));
+	if (laLow(b)) writeFileSync(DO.tepAgent, banLow(goc));
 	const bamAgent = sha256(readFileSync(DO.tepAgent, "utf8"));
 	const kho = `mtv-${b.replace(/[^a-z0-9]/g, "")}-${luot}`;
 	let url = "";
 	const batDau = new Date();
 	try {
 		url = taoKho(kho);
-		datModel(url, MTV.model);
+		datModel(url, model);
 		await chay(
 			[
 				join(GOC, "apps/agent/node_modules/.bin/eve"),
@@ -155,107 +227,68 @@ async function motLuot(b: BienThe, luot: number, goc: string) {
 		);
 		const ketThuc = new Date();
 		const log = readFileSync(tepLog, "utf8");
-		const phien = log.match(DO.phienGoc)?.[1] ?? "";
-		const kq = log.match(DO.ketQua);
-		const qua = kq?.[1] === "✓";
+		const phien = phienCuaLog(log);
 		const { hang, suKien } = phien
-			? await ketXuat(url, phien)
+			? await ketXuatPhien(url, phien)
 			: { hang: [], suKien: [] };
-		const tepCp = `aichiphi-${ten}.json`;
-		const tepSk = `su-kien-${ten}.json`;
-		writeFileSync(
-			join(MTV.evidence, tepCp),
-			`${JSON.stringify(hang, null, 2)}\n`,
-		);
-		writeFileSync(
-			join(MTV.evidence, tepSk),
-			`${JSON.stringify(suKien, null, 2)}\n`,
-		);
-		const modelCon = [...new Set(suKien.map((s) => s.modelId))];
-		ghiLuot({
-			vai: "tac-nhan",
-			luot: ten,
-			trang_thai: "da-chay",
-			usd: Number(hang.reduce((s, h) => s + (h.costUsd ?? 0), 0).toFixed(6)),
-			tep: tepCp,
-		});
-		return {
-			bien_the: b,
+		const d = dongTacNhan({
+			ma,
+			bienThe: b,
 			luot,
-			model: MTV.model,
-			model_phien_con: modelCon.length === 1 ? (modelCon[0] ?? null) : null,
-			bat_dau: batDau.toISOString(),
-			ket_thuc: ketThuc.toISOString(),
-			giay: Number(((ketThuc.getTime() - batDau.getTime()) / 1000).toFixed(1)),
-			ket_qua: qua ? "qua" : "hong",
-			ly_do: qua
-				? null
-				: log.includes(DO.quaTran)
-					? "qua tran 180 giay"
-					: (kq?.[0] ?? "khong co dong ket qua"),
-			bi_cat: !qua && log.includes(DO.quaTran),
-			phien_goc: phien,
-			bam_agent: bamAgent,
-			nhat_ky: `luot-${ten}.log`,
-			aichiphi: tepCp,
-			su_kien: tepSk,
-		};
+			model,
+			batDau,
+			ketThuc,
+			log,
+			hang,
+			suKien,
+			bamAgent,
+		});
+		ghiBangChungTacNhan(MTV.evidence, d, hang, suKien);
+		return d;
 	} finally {
 		if (laLow(b)) writeFileSync(DO.tepAgent, goc);
 		if (url && !xoaKho(kho)) console.log(`don hong: khong xoa duoc kho ${kho}`);
 	}
 }
 
-function docDong(): string[] {
-	const tep = join(MTV.evidence, MTV.tep.tacNhan);
-	return existsSync(tep)
-		? readFileSync(tep, "utf8").split("\n").filter(Boolean)
-		: [];
-}
-
 async function main() {
 	mkdirSync(MTV.evidence, { recursive: true });
 	const ke = keHoach();
+	const chon = ungVienChon(ke.tac_nhan.ung_vien.map((u) => u.ma));
 	const goc = readFileSync(DO.tepAgent, "utf8");
 	if (!goc.includes(DO.moDau))
 		throw new Error("agent.ts khong co dong mo defineAgent de chen reasoning");
 	const bamGoc = sha256(goc);
 	writeFileSync(
 		join(MTV.evidence, MTV.tep.keHoachTacNhan),
-		`${JSON.stringify({ bam_agent_goc: bamGoc, bam_agent_low: sha256(goc.replace(DO.moDau, DO.chenLow)) }, null, 2)}\n`,
+		`${JSON.stringify({ bam_agent_goc: bamGoc, bam_agent_low: sha256(banLow(goc)) }, null, 2)}\n`,
 	);
-	const dong = docDong();
-	const daCo = new Set(
-		dong.map((d) => {
-			const x = JSON.parse(d) as { bien_the: string; luot: number };
-			return `${x.bien_the}-${x.luot}`;
-		}),
-	);
+	const daCo = daCoLuot(MTV.evidence);
 	let traLai = false;
 	try {
-		for (let luot = 1; luot <= ke.tac_nhan.so_luot; luot++) {
-			for (const b of ke.tac_nhan.bien_the) {
-				if (daCo.has(`${b}-${luot}`)) continue;
-				if (!conTran()) {
-					ghiLuot({
-						vai: "tac-nhan",
-						luot: `${b}-${luot}`,
-						trang_thai: "dung-vi-tran",
-						usd: null,
-						tep: null,
-					});
-					console.log(`${b} luot ${luot}: dung vi tran`);
-					continue;
+		for (const u of ke.tac_nhan.ung_vien.filter((x) => chon.includes(x.ma))) {
+			const model = modelCua(ke, u.ma);
+			for (let luot = 1; luot <= ke.tac_nhan.so_luot; luot++) {
+				for (const b of u.bien_the) {
+					const khoa = khoaChi("tac-nhan", b, luot);
+					if (daCo.has(khoa)) continue;
+					if (!conTran()) {
+						ghiLuot({
+							vai: "tac-nhan",
+							luot: khoa,
+							trang_thai: "dung-vi-tran",
+							usd: null,
+							tep: null,
+						});
+						console.log(`${b} luot ${luot}: dung vi tran`);
+						continue;
+					}
+					const r = await motLuot(u.ma, b, luot, model, goc);
+					console.log(
+						`${r.bien_the} luot ${luot}: ${r.ket_qua} ${r.giay}s model con ${r.model_phien_con ?? "?"} phien ${r.phien_goc || "?"}`,
+					);
+					themDong(MTV.evidence, r);
 				}
-				const r = await motLuot(b, luot, goc);
-				console.log(
-					`${r.bien_the} luot ${luot}: ${r.ket_qua} ${r.giay}s model con ${r.model_phien_con ?? "?"} phien ${r.phien_goc || "?"}`,
-				);
-				dong.push(JSON.stringify(r));
-				writeFileSync(
-					join(MTV.evidence, MTV.tep.tacNhan),
-					`${dong.join("\n")}\n`,
-				);
 			}
 		}
 	} finally {

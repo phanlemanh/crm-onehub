@@ -18,6 +18,8 @@ import {
 	demChuCu,
 	LOI_DAN_SOAN,
 } from "../../chu-may-sinh-ten-moi/rang/eval-soan-chung.mjs";
+import { ketXuatTinhNang } from "./chi-phi.ts";
+import { DUONG, khuonKetXuat, MTV } from "./khuon.ts";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const APP = join(GOC, "apps", "agent-okr");
@@ -26,23 +28,20 @@ if (!process.argv.includes("--luot") || !Number.isInteger(LUOT) || LUOT < 1) {
 	console.error("do-soan-chay: can --luot <so nguyen duong> — ma 2");
 	process.exit(2);
 }
-const NHAN = `flash-${LUOT}`;
-const BANG_CHUNG = join(
-	GOC,
-	".acceptance-runs",
-	"model-theo-vai-do-lai",
-	`eval-soan-${NHAN}`,
-);
+const MA = process.argv.includes("--ung-vien")
+	? (process.argv[process.argv.indexOf("--ung-vien") + 1] ?? "")
+	: "";
+if (!/^[a-z0-9]+$/.test(MA)) {
+	console.error("do-soan-chay: can --ung-vien <ma ung vien> — ma 2");
+	process.exit(2);
+}
+const NHAN = DUONG.nhanSoan(MA, LUOT);
+const BANG_CHUNG = join(MTV.chay, `eval-soan-${NHAN}`);
 const CHUNG_CU = join(BANG_CHUNG, "eval-soan.md");
 const KHOA_CHAM = join(BANG_CHUNG, "eval-soan-khoa.json");
-const TOM_TAT = join(
-	GOC,
-	"_acceptance",
-	"model-theo-vai-do-lai",
-	"evidence",
-	`eval-soan-${NHAN}.json`,
-);
-const TU_GOC = `_acceptance/model-theo-vai-do-lai/rang/do-soan-chay.mjs --luot ${LUOT}`;
+const TOM_TAT = join(MTV.evidence, DUONG.soan(MA, LUOT));
+const KET_XUAT = join(MTV.evidence, DUONG.ketXuatSoan(MA, LUOT));
+const TU_GOC = `_acceptance/model-theo-vai-do-lai/rang/do-soan-chay.mjs --luot ${LUOT} --ung-vien ${MA}`;
 const SO_CAP_AB_MAC_DINH = "3";
 const EVE = [
 	join(APP, "node_modules", ".bin", "eve"),
@@ -488,6 +487,11 @@ const deXuat = await db.okrDeXuat.findMany({
 	select: { cuocSoanId: true, lyDo: true, noiDung: true, sau: true },
 });
 await db.$disconnect();
+const ketXuat = khuonKetXuat.parse(
+	await ketXuatTinhNang(url, TRO_LY_OKR_SOAN.tinhNang, batDauEval),
+);
+mkdirSync(dirname(KET_XUAT), { recursive: true });
+writeFileSync(KET_XUAT, `${JSON.stringify(ketXuat, null, 2)}\n`);
 const khongNopDeXuat = deXuat.length === 0;
 if (khongNopDeXuat)
 	console.log(
@@ -548,6 +552,8 @@ writeFileSync(
 			khongNopDeXuat,
 			chuCu,
 			ketLuanThuocGoc: { ma: ketLuan.ma, cau: ketLuan.cau ?? null },
+			ung_vien: MA,
+			aichiphi: DUONG.ketXuatSoan(MA, LUOT),
 		},
 		null,
 		2,

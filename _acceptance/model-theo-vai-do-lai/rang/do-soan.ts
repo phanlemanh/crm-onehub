@@ -1,9 +1,21 @@
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { conTran, ghiLuot, keHoach, khoaGateway } from "./chi-phi";
+import { conTran, ghiLuot, keHoach, khoaGateway, ungVienChon } from "./chi-phi";
 import { bamCommit } from "./do-kho";
-import { GOC, khuonSoanMh4, MTV, type SoanMh4, sha256, z } from "./khuon";
+import {
+	DUONG,
+	GOC,
+	khoaChi,
+	khuonSoanMh4,
+	khuonSoanTho,
+	laCu,
+	MTV,
+	modelCua,
+	type SoanMh4,
+	sha256,
+	z,
+} from "./khuon";
 
 export const DS = {
 	tep: join(GOC, MTV.suaTam.agentOkr),
@@ -11,13 +23,10 @@ export const DS = {
 	lenh: join(MTV.rang, "do-soan-chay.mjs"),
 } as const;
 
-export function banSuaTam(goc: string): string {
+export function banSuaTam(goc: string, model: string): string {
 	if (!goc.includes(DS.dongModel))
 		throw new Error("config.ts cua agent-okr khong co dong MO_HINH mong doi");
-	return goc.replace(
-		DS.dongModel,
-		`const MO_HINH = ${JSON.stringify(MTV.model)};`,
-	);
+	return goc.replace(DS.dongModel, `const MO_HINH = ${JSON.stringify(model)};`);
 }
 
 const khuonTraVe = z.object({ model: z.string().optional() }).nullable();
@@ -51,13 +60,13 @@ async function modelGateway(ma: string): Promise<string | null> {
 	return t.success ? (t.data?.model ?? null) : null;
 }
 
-function chayLuot(luot: number) {
+function chayLuot(ma: string, luot: number) {
 	return new Promise<number>((xong) => {
-		const con = spawn("bun", [DS.lenh, "--luot", String(luot)], {
-			cwd: GOC,
-			stdio: "inherit",
-			env: process.env,
-		});
+		const con = spawn(
+			"bun",
+			[DS.lenh, "--luot", String(luot), "--ung-vien", ma],
+			{ cwd: GOC, stdio: "inherit", env: process.env },
+		);
 		for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"] as const)
 			process.on(tin, () => con.kill(tin));
 		con.on("error", () => xong(2));
@@ -65,44 +74,53 @@ function chayLuot(luot: number) {
 	});
 }
 
-async function motLuot(luot: number, goc: string) {
-	const sua = banSuaTam(goc);
-	const tep = join(MTV.evidence, MTV.tep.soan(luot));
-	writeFileSync(DS.tep, sua);
-	let maCauHinh: string | null = null;
-	let ma = 2;
-	try {
-		maCauHinh = modelCauHinh();
-		if (maCauHinh !== MTV.model)
-			throw new Error(
-				`model cau hinh doc lai ${maCauHinh}, khong phai ${MTV.model}`,
-			);
-		ma = await chayLuot(luot);
-	} finally {
-		writeFileSync(DS.tep, goc);
-	}
-	if (ma !== 0 || !existsSync(tep))
-		throw new Error(
-			`do-soan-chay luot ${luot} thoat ${ma}, khong co ${MTV.tep.soan(luot)}`,
-		);
-	const tom = khuonSoanMh4
-		.omit({ modelGateway: true, bamSuaTam: true, bamCommit: true })
-		.parse(JSON.parse(readFileSync(tep, "utf8")));
+export function hoanTatSoan(
+	ev: string,
+	ma: string,
+	luot: number,
+	gateway: string | null,
+	sua: string,
+): SoanMh4 {
+	const tep = join(ev, DUONG.soan(ma, luot));
+	const tom = khuonSoanTho.parse(JSON.parse(readFileSync(tep, "utf8")));
 	const ra: SoanMh4 = khuonSoanMh4.parse({
 		...tom,
-		modelGateway: await modelGateway(tom.moHinh),
+		modelGateway: gateway,
 		bamSuaTam: sha256(sua),
 		bamCommit: bamCommit(MTV.suaTam.agentOkr),
 	});
 	writeFileSync(tep, `${JSON.stringify(ra, null, 2)}\n`);
-	ghiLuot({
-		vai: "soan-okr",
-		luot: String(luot),
-		trang_thai: "da-chay",
-		usd: Number(ra.usd.toFixed(6)),
-		tep: MTV.tep.soan(luot),
-	});
+	ghiLuot(
+		{
+			vai: "soan-okr",
+			luot: khoaChi("soan-okr", ma, luot),
+			trang_thai: "da-chay",
+			usd: Number(ra.usd.toFixed(6)),
+			tep: DUONG.soan(ma, luot),
+			luc: ra.luc,
+		},
+		ev,
+	);
 	return ra;
+}
+
+async function motLuot(ma: string, luot: number, model: string, goc: string) {
+	const sua = banSuaTam(goc, model);
+	writeFileSync(DS.tep, sua);
+	let maThoat = 2;
+	try {
+		const doc = modelCauHinh();
+		if (doc !== model)
+			throw new Error(`model cau hinh doc lai ${doc}, khong phai ${model}`);
+		maThoat = await chayLuot(ma, luot);
+	} finally {
+		writeFileSync(DS.tep, goc);
+	}
+	if (maThoat !== 0 || !existsSync(join(MTV.evidence, DUONG.soan(ma, luot))))
+		throw new Error(
+			`do-soan-chay ${ma} luot ${luot} thoat ${maThoat}, khong co ${DUONG.soan(ma, luot)}`,
+		);
+	return hoanTatSoan(MTV.evidence, ma, luot, await modelGateway(model), sua);
 }
 
 async function main() {
@@ -111,23 +129,30 @@ async function main() {
 	const bamGoc = sha256(goc);
 	let traLai = false;
 	try {
-		for (let luot = 1; luot <= ke.soan_okr.so_luot; luot++) {
-			if (existsSync(join(MTV.evidence, MTV.tep.soan(luot)))) continue;
-			if (!conTran()) {
-				ghiLuot({
-					vai: "soan-okr",
-					luot: String(luot),
-					trang_thai: "dung-vi-tran",
-					usd: null,
-					tep: null,
-				});
-				console.log(`soan luot ${luot}: dung vi tran`);
-				continue;
+		for (const ma of ungVienChon(ke.soan_okr.ung_vien)) {
+			const model = modelCua(ke, ma);
+			for (let luot = 1; luot <= ke.soan_okr.so_luot; luot++) {
+				if (existsSync(join(MTV.evidence, DUONG.soan(ma, luot)))) continue;
+				if (laCu(ma)) {
+					console.log(`soan ${ma} luot ${luot}: ung vien cu khong do lai`);
+					continue;
+				}
+				if (!conTran()) {
+					ghiLuot({
+						vai: "soan-okr",
+						luot: khoaChi("soan-okr", ma, luot),
+						trang_thai: "dung-vi-tran",
+						usd: null,
+						tep: null,
+					});
+					console.log(`soan ${ma} luot ${luot}: dung vi tran`);
+					continue;
+				}
+				const r = await motLuot(ma, luot, model, goc);
+				console.log(
+					`soan ${ma} luot ${luot}: dat ${r.dat}/${r.tong} hong ${r.hong} model ${r.moHinh} gateway ${r.modelGateway ?? "?"} usd ${r.usd}`,
+				);
 			}
-			const r = await motLuot(luot, goc);
-			console.log(
-				`soan luot ${luot}: dat ${r.dat}/${r.tong} hong ${r.hong} model ${r.moHinh} gateway ${r.modelGateway ?? "?"} usd ${r.usd}`,
-			);
 		}
 	} finally {
 		if (sha256(readFileSync(DS.tep, "utf8")) !== bamGoc) {
