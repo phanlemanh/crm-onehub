@@ -186,3 +186,53 @@ nào (`NGHIA_<…>: Record<TrangThai, NghiaTrangThai>`), không khai `tone`. Vi�
 `packages/ui/test/mau-trang-thai-mot-bang.spec.ts` đỏ khi một tệp tự khai bảng hay
 hàm ánh xạ trạng thái sang màu; màu chọn tại chỗ theo một điều kiện trong JSX và
 nhãn `Badge` chưa thuộc luật này.
+
+## Trường: một trường, một cách cư xử
+
+Chủ kho chốt 20/10/2026. Người dùng không phân biệt được **trường chuẩn** với
+**trường tự tạo** ở bất kỳ màn nào. Câu thử: xoá chữ «tự tạo» khỏi Cài đặt › Trường
+rồi nhìn phiếu, form tạo, bảng, bộ lọc, thẻ Kanban — còn đoán ra trường nào thuộc
+loại nào thì màn đó lệch.
+
+Đây là **đích**. Chỗ còn lệch theo dõi ở các hàng DA14–DA17 của
+`docs/plan/lo-trinh-viec-du-an.json`, không sửa lẻ.
+
+### Một bảng đăng ký theo kiểu
+
+Mỗi kiểu trường khai **một lần** sáu mặt: hiển thị, sửa tại chỗ, ô trong form tạo,
+ô trong bảng, bộ lọc, sort. Trường chuẩn khai kiểu của nó — Ngày chốt là Ngày,
+Người phụ trách là Người, Giá trị là Tiền — và đi qua cùng bảng. Màn không tự viết
+ô cho một trường. Thêm một kiểu là thêm một dòng ở bảng, không sửa từng màn.
+
+| Kiểu | Hiển thị | Sửa và form tạo | Lọc | Sort |
+| --- | --- | --- | --- | --- |
+| Chữ, Chữ dài | chữ, cắt dòng trong bảng | `InlineField`, ô nhiều dòng cho Chữ dài | chứa, trống | A→Z |
+| Số | `Intl` theo locale, `tabular-nums` | ô số nhận «1.234,5» | khoảng, trống | theo số |
+| Tiền | `formatMoney` | `MoneyInput` | khoảng | theo tiền gốc |
+| Ngày | `LocalDay` | `DatePicker` | mốc như Ngày chốt (`closing-window.ts`), trống | theo ngày, trống cuối |
+| Chọn | nhãn lựa chọn | `InlineSelectField` | nhiều giá trị, «Không chọn» | theo thứ tự lựa chọn |
+| Người | `OwnerCell` | chọn người | nhiều người, «Chưa giao» | theo tên |
+| Ô tích | Có / Không | `Checkbox` có nhãn | Có / Không | — |
+| Liên kết, Email, Điện thoại | bấm được; số điện thoại qua `SoDienThoai` | ô đúng kiểu nhập | chứa, trống | A→Z |
+| Tệp | tên tệp và số tệp | kéo thả `NguonKeoTha` | có, chưa có | — |
+
+### Luật
+
+- **Nơi hiện.** Phiếu: mục DETAILS theo thứ tự ở Cài đặt › Trường, không tách
+  khối «trường tự tạo». Form tạo và ô thêm nhanh: trường bắt buộc và trường đang hiện
+  trên phiếu. Bảng: trường bật «Hiện trong bảng». Thẻ Kanban: như nay, cộng tối đa hai
+  trường tự tạo đầu tiên đã bật «Hiện trong bảng».
+- **Ẩn theo khổ.** Cột ẩn dưới khổ nào theo kiểu của nó, cùng luật với trường chuẩn.
+  Không có ngưỡng riêng cho trường tự tạo.
+- **Bộ lọc trên đường dẫn.** Một cách mã hoá `nuqs` cho mọi trường; không tham số
+  JSON riêng cho trường tự tạo.
+- **Kara điền.** Giá trị Kara đưa vào mang dấu theo `docs/ai-ux.md`, bất kể trường
+  chuẩn hay tự tạo.
+- **Lỗi khi lưu** nói tiếng người dùng và theo kiểu: «Ô này nhận số, ví dụ 1.234,5»,
+  không phải câu máy chủ.
+- **Cài đặt › Trường.** Trường chuẩn sắp lại và ẩn được; không xoá, không đổi kiểu.
+  Danh sách trường chuẩn dịch theo locale và khớp đúng các trường trên phiếu.
+- **Tệp.** Ai cũng thấy tên tệp và số tệp; chỉ chủ bản ghi và quản trị mở hay tải
+  được. Bản ghi không có chủ thì chỉ quản trị.
+- **Gọi tên** theo `CONTEXT.md`: «trường»; khi cần phân biệt, «trường chuẩn» và
+  «trường tự tạo». Không «tuỳ chỉnh», không «động».

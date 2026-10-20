@@ -342,6 +342,79 @@
       ],
       "ghi_chu": "Nguồn: _acceptance/va-gantt-lich-bay-ngay/decisions.jsonl d-20261020T032627Z-13, -14. Gợi ý của V1: khoá duAn trước khoá việc cha trong docDuAnNhanViec.",
       "buoc_ke": "Làn M5 · thứ 1"
+    },
+    {
+      "ma": "DA14",
+      "cau_giao": "«Một trường tôi tự tạo trông, sửa và hiện y như trường có sẵn — ở phiếu, ở bảng và ở Cài đặt › Trường»",
+      "vi_sao": "Soát 20/10: trường tự tạo đi đường riêng (record-fields.tsx, field-columns.tsx) nên lệch trường chuẩn — ô Số không nhận «1.234,5» và báo lỗi tiếng Anh, ô tích không có nhãn, Cài đặt hứa «sắp lại và ẩn» trường chuẩn mà danh sách chỉ đọc và viết cứng tiếng Anh, ba tên gọi khác nhau. Luật đích ở docs/design.md mục «Trường».",
+      "hang": "T2",
+      "slug": "truong-mot-cach-cu-xu",
+      "dung_tren": [],
+      "trang_thai": "chưa mở",
+      "ten": "Một trường, một cách cư xử",
+      "ten_ngan": "Trường đồng nhất",
+      "ghi_chu": "Phạm vi: bảng đăng ký theo kiểu trường (hiển thị, sửa tại chỗ, ô bảng) dùng cho cả trường chuẩn lẫn tự tạo trên ba phiếu và ba bảng; ô Số theo locale; nhãn ô tích; lỗi lưu tiếng người dùng; danh sách trường chuẩn dịch, khớp phiếu, sắp lại và ẩn được; một tên gọi theo CONTEXT.md. Ẩn và sắp trường chuẩn mà cần migration thì hàng thành T3. Dấu Kara điền trên trường tự tạo do nhánh fix/kara-khong-ghi-de-truong lo. Ngoài phạm vi: hoàn tác sửa tại chỗ.",
+      "buoc_ke": "Chưa xếp làn"
+    },
+    {
+      "ma": "DA15",
+      "cau_giao": "«Tôi nhập đủ các trường cần thiết ngay lúc tạo công ty, liên hệ hay thoả thuận, không phải mở lại phiếu»",
+      "vi_sao": "Form tạo và ô thêm nhanh không có trường tự tạo; API tạo không nhận `fields`; ô «Bắt buộc» có trong mô hình nhưng giao diện luôn gửi false (field-editor.tsx:200). Người dùng tạo xong rồi mở phiếu bấm từng ô.",
+      "hang": "T2",
+      "slug": "nhap-truong-luc-tao",
+      "dung_tren": [
+        "DA14"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Nhập trường lúc tạo",
+      "ten_ngan": "Trường lúc tạo",
+      "ghi_chu": "Form tạo và ô thêm nhanh hiện trường bắt buộc và trường đang hiện trên phiếu, đọc từ bảng đăng ký của DA14; ô bật «Bắt buộc» ở Cài đặt › Trường; API tạo nhận `fields` và kiểm bắt buộc. Câu cho Cổng Phạm vi: trường bật «Kara điền» có còn bắt buộc lúc tạo không; bản ghi cũ còn trống trường vừa thành bắt buộc thì sửa phiếu có bị chặn không.",
+      "buoc_ke": "Chưa xếp làn"
+    },
+    {
+      "ma": "DA16",
+      "cau_giao": "«Tôi lọc và sắp danh sách theo bất kỳ trường nào, kể cả trường tự tạo kiểu ngày hay số»",
+      "vi_sao": "Kế hoạch trường động để lọc và sort sang giai đoạn hai (dynamic-fields.md §7) rồi chưa làm: SORTABLE chỉ có cột chuẩn, lọc chỉ kiểu Chọn và Người, cột trường tự tạo ẩn dưới lg, bộ lọc trên URL hai cách mã hoá, Thoả thuận không có bộ lọc đã lưu.",
+      "hang": "T2",
+      "slug": "loc-sort-moi-truong",
+      "dung_tren": [
+        "DA14"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Lọc và sort mọi trường",
+      "ten_ngan": "Lọc, sort trường",
+      "ghi_chu": "Sort mọi trường (resolveOrderBy biết khoá field:); lọc chữ chứa, số theo khoảng, ngày theo mốc như Ngày chốt, ô tích, «trống»; một cách mã hoá nuqs; bộ lọc đã lưu cho Thoả thuận; ẩn cột theo kiểu như trường chuẩn; thẻ Kanban hiện tối đa hai trường tự tạo đầu đã bật «Hiện trong bảng». Rủi ro: câu sort qua bảng fieldValue — đo thời gian trên dữ liệu mẫu đủ lớn ở S4. Sát trần AC thì tách Kanban và bộ lọc đã lưu sang hàng sau.",
+      "buoc_ke": "Chưa xếp làn"
+    },
+    {
+      "ma": "DA17",
+      "cau_giao": "«Tôi gắn hợp đồng vào thoả thuận, công ty hay liên hệ ngay trên phiếu, và lọc được bản ghi nào chưa có»",
+      "vi_sao": "Bản ghi CRM chưa giữ được tệp nào, hợp đồng nằm ngoài CRM. Chủ kho chốt 20/10: không dựng loại bản ghi Hợp đồng riêng, mà thêm kiểu trường Tệp để người quản trị tự cấu hình như mọi trường.",
+      "hang": "T3",
+      "slug": "truong-tep",
+      "dung_tren": [
+        "DA16"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Kiểu trường Tệp",
+      "ten_ngan": "Trường Tệp",
+      "ghi_chu": "Một dòng mới trong bảng đăng ký của DA14. Nhiều tệp mỗi ô; PDF, DOCX, ảnh. Blob riêng tư, tải lên ký trước như TaiLieuNguon (blob-nguon.ts, phieu-nguon.ts); thiếu khoá thì mất khả năng chứ không ném lỗi. Quyền: ai cũng thấy tên và số tệp; chỉ chủ bản ghi và quản trị mở hay tải; bản ghi không chủ thì chỉ quản trị — luật quyền theo bản ghi đầu tiên của CRM. Vòng đời theo vong-doi.md; lượt dọn purgeExpired xoá kèm Blob. Có migration.",
+      "buoc_ke": "Chưa xếp làn"
+    },
+    {
+      "ma": "DA18",
+      "cau_giao": "«Tôi tải hợp đồng lên, Kara điền ngày ký, ngày hết hạn và giá trị vào các trường tôi đã bật «Kara điền»»",
+      "vi_sao": "Chủ kho cần thuộc tính của hợp đồng để lọc và nhắc, nhưng không muốn nhập tay lại thứ đã nằm trong tệp. Kho tài liệu đã đọc được chữ PDF và DOCX (tai-lieu-doc-chu.ts).",
+      "hang": "T2",
+      "slug": "kara-doc-o-tep",
+      "dung_tren": [
+        "DA17"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Kara đọc ô Tệp",
+      "ten_ngan": "Kara đọc tệp",
+      "ghi_chu": "Trường bật «Kara điền» đọc được chữ của tệp trong ô Tệp cùng bản ghi; tệp scan báo cần nhập tay (chưa có OCR). Kara đề xuất chứ không ghi thẳng, theo docs/ai-ux.md — đi sau khi nhánh fix/kara-khong-ghi-de-truong gộp. Bộ hợp đồng mẫu PDF và DOCX nằm trong fixture của bài kiểm.",
+      "buoc_ke": "Chưa xếp làn"
     }
   ],
   "da_bac": [
@@ -380,6 +453,15 @@
       "cau_giao": "«Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác»",
       "ly_do": "Đứng chờ một lần đo giá trị của hàng 8a (lộ trình OKR), để không đổi thước giữa kỳ.",
       "mo_lai_khi": "Hồ sơ của hàng 8a đã có kết quả đọc số 01/12 do người ghi (observed → da-cham-boi-thuc-te)"
+    },
+    {
+      "ma": "DA19",
+      "cau_giao": "«Tôi được nhắc trong Nhắc buổi sáng trước khi hợp đồng của bản ghi tôi phụ trách hết hạn»",
+      "ly_do": "Nhắc theo trường Ngày chỉ đáng dựng khi người dùng thật đã gắn tệp và khai ngày hết hạn; số ngày nhắc trước chọn theo cách họ dùng.",
+      "mo_lai_khi": "DA17 đã lên production và có một loại bản ghi mang cả trường Tệp lẫn trường Ngày có giá trị",
+      "dung_tren": [
+        "DA17"
+      ]
     }
   ]
 }
