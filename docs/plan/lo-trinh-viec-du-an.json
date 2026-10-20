@@ -48,6 +48,16 @@
         "DA12"
       ],
       "ly_do": "Làn M5: DA11 sửa gấp (lộ «Việc riêng» ở production) rồi DA12. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+    },
+    {
+      "ten": "Khoá việc con đúng thứ tự",
+      "ngay": "2026-10-22",
+      "loai": "phat-hanh",
+      "khoa": "m-1022da",
+      "hang": [
+        "DA13"
+      ],
+      "ly_do": "Làn M5, đợt viec-du-an-kho-tai-lieu: chủ kho chọn «Thêm cả hai» 20/10 (DA0c thuộc làn MacBook Pro qua F35 nên không vào mốc này). Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy; một vòng cộng chờ cổng và lô gộp → 22/10."
     }
   ],
   "hang": [
@@ -318,6 +328,20 @@
       ],
       "ghi_chu": "Gộp Ngoài-3, Ngoài-9 (bỏ hết ngày nghỉ thì T7/CN tự bật lại) và Ngoài-8 (dự án đủ 300 việc khoá cả thao tác mốc và phụ thuộc) của du-an-gantt; chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng DA4 18/10.",
       "buoc_ke": "Làn M5 · thứ 2"
+    },
+    {
+      "ma": "DA13",
+      "slug": "khoa-viec-con-dung-thu-tu",
+      "cau_giao": "«Thêm việc con vào dự án không vấp khoá với dời ngày hay sửa mốc cùng lúc»",
+      "vi_sao": "Ngoài-1 và Ngoài-2 của DA12 (va-gantt-lich-bay-ngay): taoViecCon khoá việc cha rồi mới khoá dự án, ngược thứ tự khoaDuAn/khoaMot, nên thêm việc con đúng lúc dời ngày hay sửa mốc có thể treo khoá. Chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng DA12 20/10.",
+      "trang_thai": "chưa mở",
+      "ten": "Khoá việc con đúng thứ tự",
+      "ten_ngan": "Khoá việc con",
+      "dung_tren": [
+        "DA12"
+      ],
+      "ghi_chu": "Nguồn: _acceptance/va-gantt-lich-bay-ngay/decisions.jsonl d-20261020T032627Z-13, -14. Gợi ý của V1: khoá duAn trước khoá việc cha trong docDuAnNhanViec.",
+      "buoc_ke": "Làn M5 · thứ 1"
     }
   ],
   "da_bac": [
