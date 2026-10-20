@@ -3029,6 +3029,12 @@ executors:
     cgdp_goi_dot: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-dot.mjs
     cgdp_thay_boi: bun _acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs
     cgdp_khong_do_them: bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
+    kdtg_ban_gh: bun _acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs
+    kdtg_ban_gh_nguon: bun _acceptance/khong-do-them-chay-gh/rang/ban-gh.mjs --nguon
+    kdtg_lenh_gh: bun _acceptance/khong-do-them-chay-gh/rang/lenh-gh.mjs
+    kdtg_ban_do: bun _acceptance/khong-do-them-chay-gh/rang/ban-do-that.mjs
+    kdtg_chi: bun _acceptance/khong-do-them-chay-gh/rang/chi.mjs
+    kdtg_dung_lai_cay: bun _acceptance/khong-do-them-chay-gh/rang/dung-lai-cay.mjs
     bhds_paths_song: bun _acceptance/ba-ho-so-do-san/rang/paths-song.mjs
     bhds_danh_sach: bun _acceptance/ba-ho-so-do-san/rang/danh-sach.mjs
     bhds_khai_du: bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs
