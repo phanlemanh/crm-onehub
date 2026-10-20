@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { tachLoiConsole } from "./loi-console.mjs";
 
 const TEP = fileURLToPath(import.meta.url);
 const HERE = dirname(TEP);
@@ -461,9 +462,14 @@ async function doKho(tenKho, ca) {
 			);
 			await chup("ngan");
 		}
+		const { biet, moi } = tachLoiConsole(loiConsole);
+		for (const l of new Set(biet))
+			dong.push(
+				`BIET ${tenKho}: loi console co y het tren nen merge-base — ${l}`,
+			);
 		kiem(
-			`${tenKho}: console khong loi (${loiConsole.length})${loiConsole.length ? ` — ${loiConsole[0]}` : ""}`,
-			loiConsole.length === 0,
+			`${tenKho}: console khong loi moi (${moi.length})${moi.length ? ` — ${moi[0]}` : ""}`,
+			moi.length === 0,
 		);
 		await ctx.close();
 	} finally {
