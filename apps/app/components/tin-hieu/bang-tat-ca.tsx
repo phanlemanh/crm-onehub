@@ -1,5 +1,7 @@
 "use client";
 
+import Archive from "@carbon/icons-react/es/Archive";
+import { Button } from "@crm/ui/components/button";
 import {
 	DataTable,
 	type DataTableColumn,
@@ -12,11 +14,16 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTableNote } from "@crm/ui/components/simple-table";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { TrangThai } from "@/components/tin-hieu/danh-sach-tin-hieu";
+import {
+	MenuLuuTru,
+	type ThaoTacLuuTru,
+} from "@/components/tin-hieu/menu-luu-tru";
 import { tatCaListParams } from "@/components/tin-hieu/tham-so-tat-ca";
 import { type TinHieuMessages, tinHieuMessages } from "@/lib/messages/tin-hieu";
 import {
@@ -36,7 +43,63 @@ const GIO = new Intl.DateTimeFormat("vi-VN", {
 	minute: "2-digit",
 });
 
-function cot(m: TinHieuMessages): DataTableColumn<DongTatCa>[] {
+function cotTrangThai(m: TinHieuMessages): DataTableColumn<DongTatCa> {
+	return {
+		id: "trang-thai",
+		header: m.trang.cot.trangThai,
+		width: "w-28 md:w-[24%]",
+		cellClassName: "whitespace-normal",
+		cell: (d) => <TrangThai gon trangThai={d.trangThai} />,
+	};
+}
+
+function cotLuuTru(m: TinHieuMessages): DataTableColumn<DongTatCa>[] {
+	const t = m.tatCa.luuTru;
+	return [
+		{
+			id: "luu-tru-luc",
+			header: t.cotLuc,
+			width: "w-32",
+			hideBelow: "md",
+			cell: (d) => (
+				<span className="tabular-nums" data-luu-tru-luc="">
+					{d.luuTru ? GIO.format(new Date(d.luuTru.luc)) : null}
+				</span>
+			),
+		},
+		{
+			id: "nguoi-luu-tru",
+			header: t.cotNguoi,
+			width: "w-32 md:w-36",
+			cell: (d) =>
+				d.luuTru?.nguoi ? (
+					<span className="truncate" data-nguoi-luu-tru="" translate="no">
+						{d.luuTru.nguoi.ten}
+					</span>
+				) : (
+					<span className="text-muted-foreground" data-nguoi-luu-tru="">
+						{m.tatCa.khongConTaiKhoan}
+					</span>
+				),
+		},
+	];
+}
+
+function cotThaoTac(
+	m: TinHieuMessages,
+	daLuuTru: boolean,
+	thaoTac: ThaoTacLuuTru,
+): DataTableColumn<DongTatCa> {
+	return {
+		id: "thao-tac",
+		header: <span className="sr-only">{m.trang.cot.thaoTac}</span>,
+		align: "right",
+		width: "w-12",
+		cell: (d) => <MenuLuuTru daLuuTru={daLuuTru} dong={d} thaoTac={thaoTac} />,
+	};
+}
+
+function cotChung(m: TinHieuMessages): DataTableColumn<DongTatCa>[] {
 	const t = m.tatCa;
 	return [
 		{
@@ -114,26 +177,27 @@ function cot(m: TinHieuMessages): DataTableColumn<DongTatCa>[] {
 				</div>
 			),
 		},
-		{
-			id: "trang-thai",
-			header: m.trang.cot.trangThai,
-			width: "w-28 md:w-[24%]",
-			cellClassName: "whitespace-normal",
-			cell: (d) => <TrangThai gon trangThai={d.trangThai} />,
-		},
 	];
 }
 
 export function BangTatCa({
 	dong,
 	banVeDocDuoc,
+	thaoTac,
 }: {
 	dong: DongTatCa[];
 	banVeDocDuoc: boolean;
+	thaoTac?: ThaoTacLuuTru;
 }) {
 	const m = tinHieuMessages(useLocale());
 	const t = m.tatCa;
-	const { query, input } = useTableQuery(tatCaListParams);
+	const { query, input, setArchived } = useTableQuery(tatCaListParams);
+	const daLuuTru = thaoTac !== undefined && input.archived;
+	const cot = [
+		...cotChung(m),
+		...(daLuuTru ? cotLuuTru(m) : [cotTrangThai(m)]),
+		...(thaoTac ? [cotThaoTac(m, daLuuTru, thaoTac)] : []),
+	];
 	const loc = {
 		phongBan: input.phongBan,
 		trangThaiTinHieu: input.trangThaiTinHieu,
@@ -181,12 +245,30 @@ export function BangTatCa({
 				</SimpleTableNote>
 			)}
 			<DataTable
-				columns={cot(m)}
+				actions={
+					thaoTac ? (
+						<Button
+							aria-pressed={input.archived}
+							data-nut-da-luu-tru=""
+							onClick={() => setArchived(!input.archived)}
+							size="sm"
+							variant={input.archived ? "contrast" : "outline"}
+						>
+							<Icon data-icon="inline-start" icon={Archive} />
+							{t.luuTru.nut}
+						</Button>
+					) : undefined
+				}
+				columns={cot}
 				empty={
-					<Empty>
+					<Empty data-tat-ca-rong={daLuuTru ? "da-luu-tru" : "dang-dung"}>
 						<EmptyHeader>
-							<EmptyTitle>{t.rongTieuDe}</EmptyTitle>
-							<EmptyDescription>{t.rongMoTa}</EmptyDescription>
+							<EmptyTitle>
+								{daLuuTru ? t.luuTru.rongTieuDe : t.rongTieuDe}
+							</EmptyTitle>
+							<EmptyDescription>
+								{daLuuTru ? t.luuTru.rongMoTa : t.rongMoTa}
+							</EmptyDescription>
 						</EmptyHeader>
 					</Empty>
 				}
@@ -194,7 +276,9 @@ export function BangTatCa({
 				facets={facets}
 				getRowId={(d) => d.id}
 				layout="content"
-				meta={dien(t.meta, { so: String(quaLoc.length) })}
+				meta={dien(daLuuTru ? t.luuTru.meta : t.meta, {
+					so: String(quaLoc.length),
+				})}
 				onClearFilters={() => {
 					for (const f of facets) query.setFilter(f.id, []);
 				}}

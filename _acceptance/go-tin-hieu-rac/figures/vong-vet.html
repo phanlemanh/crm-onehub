@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng lưu trữ và vết</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&subset=vietnamese&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #fafafa; color: #171717; padding: 3rem 2rem; display: flex; justify-content: center; }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow { font-family: 'Geist Mono', monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #575757; margin-bottom: 1rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình quyết định · Gỡ tín hiệu rác</p>
+
+    <svg viewBox="0 0 1200 560" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#171717" font-size="24" font-family="'Lora', serif">Mỗi lần đổi trạng thái thêm một dòng vết</text>
+      <text x="40" y="64" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Một tín hiệu đi qua lưu trữ → khôi phục → lưu trữ. Bảng vết giữ đủ ba lần; trên tín hiệu chỉ còn lần cuối.</text>
+
+      <line x1="240" y1="168" x2="1120" y2="168" stroke="#171717" stroke-width="1"/>
+      <rect x="832" y="160" width="16" height="16" fill="#fafafa"/>
+      <line x1="828" y1="176" x2="836" y2="160" stroke="#171717" stroke-width="1"/>
+      <line x1="844" y1="176" x2="852" y2="160" stroke="#171717" stroke-width="1"/>
+      <text x="520" y="192" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">+6 PHÚT</text>
+      <text x="840" y="192" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">+42 PHÚT</text>
+
+      <line x1="360" y1="172" x2="360" y2="216" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <line x1="680" y1="172" x2="680" y2="216" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <line x1="1000" y1="172" x2="1000" y2="216" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <line x1="360" y1="272" x2="360" y2="304" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <line x1="680" y1="272" x2="680" y2="304" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <line x1="1000" y1="272" x2="1000" y2="304" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+
+      <text x="360" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lưu trữ</text>
+      <text x="360" y="144" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">Quân, 09:14</text>
+      <circle cx="360" cy="168" r="5" fill="#171717"/>
+
+      <text x="680" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Khôi phục</text>
+      <text x="680" y="144" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">Lan, 09:20</text>
+      <circle cx="680" cy="168" r="5" fill="#171717"/>
+
+      <text x="1000" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lưu trữ</text>
+      <text x="1000" y="144" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">Quân, 10:02</text>
+      <circle cx="1000" cy="168" r="6" fill="#006B4F"/>
+
+      <text x="40" y="240" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BẢNG VẾT</text>
+      <text x="40" y="258" fill="#575757" font-size="11" font-family="'Geist', sans-serif">thêm một dòng mỗi lần</text>
+
+      <rect x="224" y="216" width="272" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="360" y="240" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">+ lưu trữ · Quân · 09:14</text>
+      <text x="360" y="258" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bảng có 1 dòng</text>
+
+      <rect x="544" y="216" width="272" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="680" y="240" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">+ khôi phục · Lan · 09:20</text>
+      <text x="680" y="258" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bảng có 2 dòng</text>
+
+      <rect x="864" y="216" width="272" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1000" y="240" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">+ lưu trữ · Quân · 10:02</text>
+      <text x="1000" y="258" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bảng có 3 dòng</text>
+
+      <text x="40" y="328" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">TRÊN TÍN HIỆU</text>
+      <text x="40" y="346" fill="#575757" font-size="11" font-family="'Geist', sans-serif">chỉ giữ lần cuối</text>
+
+      <rect x="224" y="304" width="272" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="360" y="328" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lưu trữ lúc 09:14, bởi Quân</text>
+      <text x="360" y="346" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bị xoá khi khôi phục</text>
+
+      <rect x="544" y="304" width="272" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="680" y="328" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đang dùng</text>
+      <text x="680" y="346" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">không còn lúc và người lưu trữ</text>
+
+      <rect x="864" y="304" width="272" height="56" rx="6" fill="rgba(0,107,79,0.06)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1000" y="328" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lưu trữ lúc 10:02, bởi Quân</text>
+      <text x="1000" y="346" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">lần 09:14 chỉ còn ở bảng vết</text>
+
+      <rect x="224" y="400" width="912" height="48" rx="6" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="680" y="429" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="middle">Lưu trữ lại khi đang lưu trữ: không đổi ngày, không thêm vết.</text>
+
+      <line x1="40" y1="492" x2="1160" y2="492" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="512" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <circle cx="52" cy="532" r="5" fill="#171717"/>
+      <text x="72" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Lần đổi trạng thái (người, lúc)</text>
+      <rect x="248" y="524" width="24" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="280" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Dòng vết thêm vào</text>
+      <rect x="408" y="524" width="24" height="16" rx="2" fill="rgba(0,107,79,0.06)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="440" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Điều tín hiệu giữ lại cuối cùng</text>
+      <rect x="616" y="524" width="24" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="648" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Ca không đổi gì</text>
+      <text x="780" y="536" fill="#575757" font-size="10" font-family="'Geist', sans-serif">· trục thời gian bị cắt, không theo tỷ lệ</text>
+      <text x="1160" y="536" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">TIÊU CHÍ AC-1 · AC-5</text>
+    </svg>
+  </div>
+</body>
+</html>
