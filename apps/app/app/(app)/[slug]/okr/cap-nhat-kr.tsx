@@ -20,6 +20,10 @@ export function coTheCapNhat(mt: ChiTiet, kr: KetQua): boolean {
 	return kr.hienTaiQuaCapNhat && mt.canEditKr.includes(kr.id);
 }
 
+export function coNutCapNhat(mt: ChiTiet, kr: KetQua): boolean {
+	return coTheCapNhat(mt, kr) && mt.kyGhiDuoc && mt.status !== "da-bo";
+}
+
 export type CapNhatKr = {
 	mo: (mt: ChiTiet, kr: KetQua) => void;
 	hop: ReactNode;
