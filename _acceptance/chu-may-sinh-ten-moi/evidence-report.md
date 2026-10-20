@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: da883542e7248732f1fb35d5d1e3ad9eea003fe2
+verified_commit: a36833cb5ada9a77c457574f4e4b276c67024a0c
 human_signoff: Phan Le Manh 2026-10-20 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 12/12 eval; vòng 1 PASS, bảy mục ngoài hợp đồng đã sửa). Ngoài-1 đến Ngoài-15 ghi Known limits; đồng ý cắt; Treo phê hết.
 ---
 
@@ -201,3 +201,7 @@ none — every multi-run eval is uniform
 
 Round 1: 17 mục trả về, không eval nào đỏ, verdict PASS; sáu finding ngoài hợp đồng đều đề xuất known-limits.
 Round 2: sau commit da883542e (siết thước theo bảy mục ngoài hợp đồng của S4 vòng 1) chạy lại E1-E4, E7-E11 và bảy lệnh suite, tất cả xanh; E5, E6, E12 carry-forward từ round 1 vì delta không chạm paths của chúng. Mốc verified_at của các eval chạy lại ở vòng 2 là mốc xấp xỉ do harness không truyền giờ chạy; run_id đối chiếu theo run-log.
+
+### Re-pin lần 1 — 2026-10-20, do gộp onehub #501 (abbdab0dc) vào VK5; E7 VK5 chỉ đếm tệp do nhánh đổi
+run_id: repin-20261020T073436Z-71719
+sha: a36833cb5ada9a77c457574f4e4b276c67024a0c · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
