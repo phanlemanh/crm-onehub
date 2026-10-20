@@ -139,6 +139,8 @@ single place that knows what is set.
 | `ZALO_WEBHOOK_SECRET` | Fallback webhook secret. Khi bot bật trên màn, tác tử sinh khoá và lưu trong `AppSetting`, giá trị đó thắng biến này; không có cả hai thì `/zalo/webhook` trả 404 — see `agent.md` |
 | `ZALO_API_URL` | Base URL of the Zalo Bot API; empty means the real one. Only for running against a fake Zalo in tests |
 | `OKR_SHEETS_TOKEN_URL`, `OKR_SHEETS_API_URL` | Google token endpoint and Sheets API root for the OKR Sheets reader; empty means the real ones (`OKR_SO.sheets`). Read only when `NODE_ENV` is not `production` — for a measuring session against a fake Google |
+| `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY` | The read-only GitHub app the agent uses to fetch each product's `LO-TRINH.html` (Settings › Products). Set both or every product shows «the server has no GitHub app» and CRM reads as before — see `agent.md` «Lấy lộ trình sản phẩm» |
+| `GITHUB_API_URL` | GitHub API root for the product roadmap fetch; empty means the real one. Read only when `NODE_ENV` is not `production` — for tests and measuring sessions against the fake GitHub |
 
 **`GOOGLE_SHEETS_EMAIL` + `GOOGLE_SHEETS_KHOA`** are the read-only service account behind
 the Google Sheets source of an OKR key result. Set both or the source is off: `okr.chiSo`

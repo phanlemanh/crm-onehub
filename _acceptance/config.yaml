@@ -83,6 +83,20 @@ executors:
     ltmh_ten: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-ten
     ltmh_doi_chieu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-doi-chieu
     ltmh_khoi_cu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-mo-hinh.spec.ts -t ltmh-khoi-cu && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-mo-hinh.dom.tsx -t ltmh-khoi-cu
+    ltsp_lay_dau: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-lay-dau"'
+    ltsp_doc_du: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx -t ltsp-doc-du
+    ltsp_nhip: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-nhip"'
+    ltsp_hong: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-hong"'
+    ltsp_cau_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx ./test/lo-trinh-san-pham.dom.tsx -t ltsp-cau-trang-thai
+    ltsp_quyen_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-quyen"'
+    ltsp_quyen_trang: cd apps/app && bun test ./test/lo-trinh-san-pham.spec.ts -t ltsp-quyen-trang && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx -t ltsp-quyen-trang
+    ltsp_danh_ba_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-danh-ba && cd ../agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-danh-ba"'
+    ltsp_danh_ba_trang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx -t ltsp-danh-ba-trang
+    ltsp_vong_doi_may_chu: 'bun run test -- "cd apps/api && bun test test/san-pham-lo-trinh.spec.ts -t ltsp-vong-doi && cd ../agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-vong-doi"'
+    ltsp_vong_doi_trang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/san-pham-lo-trinh.dom.tsx -t ltsp-vong-doi-trang
+    ltsp_khuon: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-san-pham.dom.tsx ./test/san-pham-lo-trinh.dom.tsx -t ltsp-khuon && cd ../.. && bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-khuon"'
+    ltsp_khoa: 'bun run test -- "cd apps/agent && bun test test/lo-trinh-san-pham.spec.ts -t ltsp-khoa"'
+    ltsp_do: 'bun run test -- "bun test scripts/lo-trinh-san-pham/test/do.spec.ts -t ltsp-do"'
     ldb_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-khung.dom.tsx -t khung-chung
     lhs_tom_tat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ho-so.dom.tsx -t tom-tat
     lhs_o_vang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ho-so.dom.tsx -t o-vang
@@ -3013,6 +3027,9 @@ executors:
     ldbc_do_man: 'APP_URL=${APP_URL:-http://localhost:3390} API_URL=${API_URL:-http://localhost:3391} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lo-trinh-doc-ban-chup/rang/do-man.mjs"'
     ldk_do_man: 'APP_URL=${APP_URL:-http://localhost:3394} API_URL=${API_URL:-http://localhost:3395} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/lo-trinh-hien-ngay-du-kien/rang/do-man.mjs"'
     ltmh_do_man: 'APP_URL=${APP_URL:-http://localhost:3394} API_URL=${API_URL:-http://localhost:3395} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/trang-lo-trinh-mo-hinh-hien-thi/rang/do-man.mjs"'
+    ltsp_do_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lo-trinh-nhieu-san-pham/rang/do-man.mjs"'
+    ltsp_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx" "apps/app/app/(app)/[slug]/settings/san-pham/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
+    ltsp_khoa_quet: bun _acceptance/lo-trinh-nhieu-san-pham/rang/quet-khoa.mjs
     ldbc_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx" "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     mth_khop: bun test scripts/tin-hieu/test/nguong-song-khop.test.ts
     mth_ban_dung: node _acceptance/moi-tin-hieu-cho-quan-tri/rang/ban-dung.mjs
