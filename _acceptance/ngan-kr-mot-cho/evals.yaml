@@ -108,6 +108,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.vk7_giu_ho_so
+    long_running: 240
     expected: "exit 0; script liệt mọi hồ sơ đã ký có eval test/script không khai status: not-run mà paths khớp một tệp vòng này sửa (diff so với merge-base onehub), chạy lại đúng lệnh của từng eval và so mã với expected_exit (mặc định 0). In 'GIU <hồ sơ>/<eval>' hoặc 'DO <hồ sơ>/<eval>: <mã>'. Với mỗi eval khai nghỉ: bảng ánh xạ viết trước _acceptance/ngan-kr-mot-cho/rang/anh-xa-nghi.json (eval cũ → eval của hồ sơ này đo cùng hành vi); số dòng ánh xạ === số eval nghỉ, thiếu thì in 'MAT THUOC <hồ sơ>/<eval>'. Đối chứng dương: danh sách khớp có cap-nhat-tuan-okr E18, no-sau-luot-4-okr E8, canh-kr-okr E13, và no-sau-luot-4-okr E8 in GIU khi vòng giữ mục «…»; cap-nhat-tuan-okr E18 đỏ sẵn trên nền merge-base (thước màn gãy từ b9be1abfb và 6c1bf4e52) nên in DO-SAN-NEN và nằm trong Known limits. Mỗi eval đỏ được chạy lại trên cây nền merge-base: đỏ cả trên nền in 'DO-SAN-NEN', nền xanh mà chạy lại HEAD xanh in 'CHAP-CHON', chỉ đỏ ở HEAD mới in 'DO'; eval bỏ ra có tên in 'BO RA'. Eval đỏ xử theo khuôn luật 21 chủ kho đã cho VK7 (sổ dòng gate1 gộp lối): đổi đúng chỗ hoặc khai nghỉ superseded_by, đo hai chiều, dòng sổ fix decided_by chủ kho, cham-tep."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, _acceptance/ngan-kr-mot-cho/rang/giu-ho-so.mjs]
