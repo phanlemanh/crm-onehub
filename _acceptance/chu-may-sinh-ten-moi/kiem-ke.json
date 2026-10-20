@@ -1,0 +1,362 @@
+{
+  "moc": "37dc2da8d",
+  "muc": [
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 17,
+      "khai_niem": "goc",
+      "cu": "tenGoc: \"OneHub\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 64,
+      "khai_niem": "gop-vao",
+      "cu": "\"KR này đang có mục tiêu góp vào — gỡ căn chỉnh trước khi xoá.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 276,
+      "khai_niem": "lay-y-kien",
+      "cu": "chiQuanTri: \"Chỉ quản trị mới mở hay sửa được lần hỏi ý mục tiêu.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 280,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"Người này đã góp ý trong lần hỏi ý — người chọn không góp ý, hãy chọn người khác.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 282,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"Chỉ mở hỏi ý mục tiêu khi chu kỳ đang ở pha lập kế hoạch.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 283,
+      "khai_niem": "lay-y-kien",
+      "cu": "daCoHoiY: \"Chu kỳ này đã có một lần hỏi ý mục tiêu.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 291,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"Lần hỏi ý đã qua hạn — lời mở, con số, câu hỏi và hạn chỉ sửa được khi còn mở.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 292,
+      "khai_niem": "lay-y-kien",
+      "cu": "daCongBo: \"Lần hỏi ý này đã công bố.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 293,
+      "khai_niem": "lay-y-kien",
+      "cu": "khongCoHoiY: (id: string) => `Không có lần hỏi ý nào mang mã ${id}.`,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 295,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"Lần hỏi ý đã qua hạn — không góp, sửa, gỡ ý hay bấm «Tôi cũng nghĩ vậy» được nữa.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 297,
+      "khai_niem": "lay-y-kien",
+      "cu": "nguoiChonKhongGop: \"Người chọn không góp ý trong lần hỏi ý mà mình chọn.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 304,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"Chỉ người chọn của lần hỏi ý này mới niêm phong, khai không viết trước, kết luận hay công bố được.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 309,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"Lần hỏi ý còn mở — chưa gom được, chờ tới hạn hoặc dời hạn về bây giờ.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 315,
+      "khai_niem": "lay-y-kien",
+      "cu": "yKhacHoiY: \"Ý này không thuộc lần hỏi ý của chủ đề.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 325,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"Lần hỏi ý còn mở — chưa công bố được, chờ tới hạn hoặc dời hạn về bây giờ.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 345,
+      "khai_niem": "cap",
+      "cu": "`Công bố sẽ đưa cấp OneHub lên ${sau} mục tiêu — vượt trần ${tran} của chương trình.`,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 347,
+      "khai_niem": "lay-y-kien",
+      "cu": "`Chu kỳ «${ten}» còn một lần hỏi ý mục tiêu chưa công bố — người chọn công bố rồi mới rời lập kế hoạch được. Lần hỏi ý không có ý nào vẫn công bố được: người chọn niêm phong hoặc khai không viết trước, rồi công bố không tạo mục tiêu nào. Người chọn đã hết quyền quản trị thì quản trị đổi người chọn trước.`,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 348,
+      "khai_niem": "lay-y-kien",
+      "cu": "chuaCongBo: \"Lần hỏi ý chưa công bố — chưa bấm «Tôi hiểu vì sao» được.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 355,
+      "khai_niem": "cap",
+      "cu": "\"Mục tiêu này không cần duyệt — chương trình chưa bật bước duyệt, hoặc mục tiêu cấp OneHub. Bấm «Công bố».\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 382,
+      "khai_niem": "gop-vao",
+      "cu": "`Mục tiêu còn ${n} căn chỉnh — gỡ hết căn chỉnh (góp vào và nhận góp) rồi mới đặt mức giới hạn.`,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 408,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"muc-tieu.chuDeHoiY\": \"sinh ra từ một lần hỏi ý\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 430,
+      "khai_niem": "gop-vao",
+      "cu": "cungCap: \"Chỉ căn chỉnh được vào mục tiêu hoặc KR ở cấp cao hơn.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 431,
+      "khai_niem": "gop-vao",
+      "cu": "chinhNo: \"Không căn chỉnh vào chính mình.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 432,
+      "khai_niem": "gop-vao",
+      "cu": "chuaCongBo: \"Đích căn chỉnh phải đã công bố.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 436,
+      "khai_niem": "gop-vao",
+      "cu": "khongCo: (id: string) => `Không có căn chỉnh nào mang mã ${id}.`,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-config.ts",
+      "dong": 438,
+      "khai_niem": "gop-vao",
+      "cu": "\"Mục tiêu ở mức giới hạn không căn chỉnh được: không góp vào mục tiêu khác, cũng không nhận mục tiêu nào góp vào.\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr.service.ts",
+      "dong": 1802,
+      "khai_niem": "gop-vao",
+      "cu": "throw new Error(`Căn chỉnh ${g.id} không có đích.`);",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "packages/validation/src/okr-hoi-y.ts",
+      "dong": 141,
+      "khai_niem": "lay-y-kien",
+      "cu": "throw new Error(`Con số của lần hỏi ý không đọc được: ${duongDan}`);",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/lib/tin-nhac.ts",
+      "dong": 39,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"okr-hoi-y-gop\": \"Hỏi ý mục tiêu\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/lib/tin-nhac.ts",
+      "dong": 40,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"okr-hoi-y-cong-bo\": \"Hỏi ý đã công bố\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/lib/tin-nhac.ts",
+      "dong": 129,
+      "khai_niem": "lay-y-kien",
+      "cu": "return `Công ty đang hỏi ý cho mục tiêu ${chu(v.nhan)} — hạn ${gioHan(v.hanLuc)}`;",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/lib/tin-nhac.ts",
+      "dong": 178,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"okr-hoi-y-gop\": \"mở hỏi ý\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/lib/tin-nhac.ts",
+      "dong": 179,
+      "khai_niem": "lay-y-kien",
+      "cu": "\"okr-hoi-y-cong-bo\": \"mở hỏi ý\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/subagents/tro_ly_okr/instructions.md",
+      "dong": 5,
+      "khai_niem": "gop-vao",
+      "cu": "the titles of the Mục tiêu and KR it may align to through Căn chỉnh (`dichCanChinh`), and what was",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/subagents/tro_ly_okr/instructions.md",
+      "dong": 16,
+      "khai_niem": "gop-vao",
+      "cu": "- A lower-level Mục tiêu contributes to a higher one through Căn chỉnh. It never copies a KR of the",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/subagents/tro_ly_okr/instructions.md",
+      "dong": 21,
+      "khai_niem": "gop-vao",
+      "cu": "- Use these words: Mục tiêu, Kết quả then chốt (KR), Cập nhật tuần, Người phụ trách, Căn chỉnh,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent/agent/subagents/tro_ly_okr/instructions.md",
+      "dong": 49,
+      "khai_niem": "gop-vao",
+      "cu": "- `can-chinh`: only when `phamVi` is `objective`, a Căn chỉnh to one target listed in",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent-okr/agent/lib/loi-dan-soan.ts",
+      "dong": 11,
+      "khai_niem": "gop-vao",
+      "cu": "\\`ungVienCanChinh\\` the only ids you may align to through Căn chỉnh. \\`ngangCap\\` lists the titles of",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent-okr/agent/lib/loi-dan-soan.ts",
+      "dong": 38,
+      "khai_niem": "gop-vao",
+      "cu": "- A lower-level Mục tiêu contributes to a higher one through Căn chỉnh. It never copies a KR of the",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent-okr/agent/lib/loi-dan-soan.ts",
+      "dong": 43,
+      "khai_niem": "gop-vao",
+      "cu": "- Use these words: Mục tiêu, Kết quả then chốt (KR), Cập nhật tuần, Người phụ trách, Căn chỉnh,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent-okr/agent/lib/config.ts",
+      "dong": 116,
+      "khai_niem": "gop-vao",
+      "cu": "\"Luật của sản phẩm (đúng luật thì không trừ điểm): đích của KR luôn để trống, người điền sau; khởi điểm chỉ ghi khi một nguồn đo đúng chỉ số đó cùng đơn vị đo — lời người, số chốt kỳ trước, số CRM, số hiện tại của KR cấp trên cùng chỉ số, hồ sơ công ty hay trang chiến lược — không bao giờ là một số đích, và để trống khi không nguồn nào có số đó; đơn vị không có Mục tiêu cấp trên thì tiêu chí căn chỉnh coi là đạt.\",",
+      "xu_ly": "giu"
+    },
+    {
+      "tep": "apps/agent-okr/agent/lib/config.ts",
+      "dong": 130,
+      "khai_niem": "gop-vao",
+      "cu": "\"căn chỉnh với Mục tiêu cấp trên\",",
+      "xu_ly": "giu"
+    },
+    {
+      "tep": "apps/agent-okr/agent/lib/config.ts",
+      "dong": 212,
+      "khai_niem": "goc",
+      "cu": "tenGoc: \"OneHub\",",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/agent-okr/agent/lib/hoi-doc.ts",
+      "dong": 129,
+      "khai_niem": "goc",
+      "cu": "if (r.level === \"onehub\") return TRO_LY_OKR_HOI.tenGoc;",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/don-vi.ts",
+      "dong": 17,
+      "khai_niem": "goc",
+      "cu": "return OKR.tenGoc;",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/soan.service.ts",
+      "dong": 433,
+      "khai_niem": "goc",
+      "cu": "if (c.level === \"onehub\") return OKR.tenGoc;",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-tai-co-cau.service.ts",
+      "dong": 127,
+      "khai_niem": "goc",
+      "cu": "donVi: { level: mt.level, id: null, ten: OKR.tenGoc },",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-xem.service.ts",
+      "dong": 395,
+      "khai_niem": "goc",
+      "cu": "OKR.tenGoc,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-xem.service.ts",
+      "dong": 469,
+      "khai_niem": "goc",
+      "cu": "return gopSucKhoe(cayGon(q), rieng, OKR.tenGoc);",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-xem.service.ts",
+      "dong": 477,
+      "khai_niem": "goc",
+      "cu": "tenGoc: OKR.tenGoc,",
+      "xu_ly": "doi"
+    },
+    {
+      "tep": "apps/api/src/okr/okr-hoi-y.service.ts",
+      "dong": 989,
+      "khai_niem": "goc",
+      "cu": "donVi: donViTuCay(q.cay, OKR.tenGoc),",
+      "xu_ly": "doi"
+    }
+  ]
+}
