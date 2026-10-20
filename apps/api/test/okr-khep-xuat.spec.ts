@@ -7,6 +7,7 @@ import {
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
+import { readTenGoc } from "@crm/db/workspace";
 import { COT_XUAT } from "../src/okr/okr-khep.contracts";
 import { dungCsv } from "../src/okr/okr-khep.csv";
 import {
@@ -446,11 +447,12 @@ describe("xuat-ky", () => {
 			await db.okrCycle.findUniqueOrThrow({ where: { id: f.kyKe } })
 		).name;
 
+		const tenGoc = await readTenGoc(db);
 		const VIET_TRUOC: string[][] = [
 			[
 				TEN_KY,
 				"onehub",
-				"OneHub",
+				tenGoc,
 				TEN_M4,
 				"cam-ket",
 				"cong-bo",
@@ -473,7 +475,7 @@ describe("xuat-ky", () => {
 			[
 				TEN_KY,
 				"onehub",
-				"OneHub",
+				tenGoc,
 				TEN_M2,
 				"cam-ket",
 				"da-bo",
@@ -496,7 +498,7 @@ describe("xuat-ky", () => {
 			[
 				TEN_KY,
 				"onehub",
-				"OneHub",
+				tenGoc,
 				TEN_M2,
 				"cam-ket",
 				"da-bo",
