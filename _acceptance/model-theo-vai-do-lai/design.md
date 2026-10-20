@@ -43,8 +43,9 @@ lẫn Tác nhân (15/10). Chưa có «bảng kiến nghị model» nào trong kh
     model cho phép) và trần bước/thời gian của phiên con — để chọn bộ thông số hợp model này. MH3 đã thấy GLM 5.3 với
     suy luận mặc định bị cắt ở 180 s, nên mức suy luận là thông số phải dò đầu tiên.
   - Không đo lại `zai/glm-5.2-fast`: số mốc lấy từ bằng chứng đã có (MH3 16/10, bộ 50 câu 13/10), ghi rõ cây và ngày.
-  - Soạn OKR (đang Gemini 3.8 Flash): khuyên thêm `zai/glm-5.3-flash` làm ứng viên cạnh mốc Gemini — chờ chủ kho xác nhận
-    có áp cho vai này không.
+  - Soạn OKR (đang Gemini 3.8 Flash): ĐÃ TRẢ (chủ kho, 20/10) — đo thêm `zai/glm-5.3-flash` cạnh mốc Gemini. Ở
+    `apps/agent` đổi bằng `TRO_LY_OKR_MO_HINH` (cần nới danh sách mã nhận); ở `apps/agent-okr` model là hằng, lượt đo
+    đổi hằng tạm, không commit.
 - **Hỏi-2 — judge có vào bảng không.** Khuyên: vào bảng với số «không chấm được» và «judge mù» đo được, nhưng KHÔNG đổi
   ứng viên judge ở vòng này (đổi judge làm lệch mọi số soạn OKR đã có).
 - **Hỏi-3 — máy soạn kho.** Khuyên: ghi hàng «chưa có thước» trong bảng, Out of scope; dựng thước là việc riêng.
