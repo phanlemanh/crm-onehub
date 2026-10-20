@@ -38,6 +38,12 @@ const HANG = "apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx";
 const KX = "packages/ui/src/components/khung-xuong.tsx";
 const NHAP_KHUNG = 'import { KhungDangTaiDonVi } from "./hang-cong-cu";';
 
+const KHONG_NAP_SAN = {
+	tep: PAGE,
+	cu: "\t\t\tqueryClient.prefetchQuery(\n\t\t\t\ttrpc.okr.danhSach.queryOptions({\n\t\t\t\t\tcycleId,\n\t\t\t\t\tunit,\n\t\t\t\t\tloc: locOkr(thamSo),\n\t\t\t\t}),\n\t\t\t),\n",
+	moi: "",
+};
+
 const fallbackCu = {
 	ten: "fallback-cu",
 	thay: [
@@ -102,7 +108,8 @@ const DOT_BIEN = {
 	"kcd-man": [
 		{
 			...fallbackCu,
-			ghim: /SAI AC-4: dong khung cao 36px ngoai \d+-\d+ o 1440/,
+			thay: [...fallbackCu.thay, KHONG_NAP_SAN],
+			ghim: /SAI AC-1: [2-9] hinh khung cho o \d+(?=[\s\S]*SAI AC-4: dong khung cao 36px ngoai \d+-\d+ o 1440)/,
 			trinhDuyet: true,
 		},
 		{
@@ -113,8 +120,9 @@ const DOT_BIEN = {
 					cu: '<Skeleton className="h-7 w-full sm:w-72" />',
 					moi: '<Skeleton className="h-8 w-full sm:w-72" />',
 				},
+				KHONG_NAP_SAN,
 			],
-			ghim: /SAI AC-\d.*(lech [1-9]|khac tai cung)/,
+			ghim: /SAI AC-1: dinh dau bang lech [1-9]\d*px giua cac mau o \d+/,
 			trinhDuyet: true,
 		},
 		{
