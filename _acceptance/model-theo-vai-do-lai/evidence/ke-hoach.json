@@ -1,9 +1,29 @@
 {
-  "nguon": "Hỏi-5, chủ kho duyệt theo lời khuyên ở Cổng Phạm vi 2026-10-20 (d-20261020T101858Z-12)",
-  "model": "zai/glm-5.3-flash",
-  "tac_nhan": { "bien_the": ["flash", "flash-low"], "so_luot": 5 },
-  "tro_ly_kho": { "so_luot": 1 },
-  "soan_okr": { "so_luot": 2, "moc": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json" },
-  "tran_usd": 6,
-  "thong_so_chua_do": ["trần bước phiên con", "trần thời gian phiên con", "flash-low cho Trợ lý kho", "flash-low cho Soạn OKR"]
+  "nguon": "Hỏi-5 (chủ kho duyệt 20/10, d-20261020T101858Z-12) và Hỏi-11 (chủ kho duyệt 21/10, d-20261020T224703Z-27) theo lời khuyên ở Cổng Phạm vi",
+  "ung_vien": {
+    "glm": { "model": "zai/glm-5.3-flash", "gia": { "vao": 0.00000015, "ra": 0.0000005, "doc_cache": 0.00000003 } },
+    "ds": { "model": "deepseek/deepseek-v4.1-flash-1017", "gia": { "vao": 0.000000075, "ra": 0.0000003, "doc_cache": 0.0000000015 } },
+    "gem": { "model": "google/gemini-3.8-flash", "gia": { "vao": 0.00000075, "ra": 0.00000375, "doc_cache": 0.000000075 } }
+  },
+  "gia_chup": { "nguon": "https://ai-gateway.vercel.sh/v1/models", "ngay": "2026-10-21", "ghi_chu": "giá niêm yết ngoài giờ cao điểm, USD mỗi token" },
+  "tac_nhan": {
+    "so_luot": 5,
+    "ung_vien": [
+      { "ma": "glm", "bien_the": ["flash", "flash-low"] },
+      { "ma": "ds", "bien_the": ["ds", "ds-low"] }
+    ]
+  },
+  "do_suy_luan": { "ung_vien": ["glm", "ds"] },
+  "tro_ly_kho": { "so_luot": 1, "ung_vien": ["glm", "ds", "gem"] },
+  "soan_okr": { "so_luot": 2, "ung_vien": ["glm", "ds"], "moc": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json" },
+  "thu_tu": ["dao:ds", "tac-nhan:ds", "soan-okr:ds", "tro-ly-kho:ds", "tro-ly-kho:gem"],
+  "tran_usd": 12,
+  "thong_so_chua_do": [
+    "trần bước phiên con",
+    "trần thời gian phiên con",
+    "suy luận low cho Trợ lý kho",
+    "suy luận low cho Soạn OKR",
+    "Gemini cho Tác nhân",
+    "DeepSeek ở Judge OKR và Máy soạn kho"
+  ]
 }

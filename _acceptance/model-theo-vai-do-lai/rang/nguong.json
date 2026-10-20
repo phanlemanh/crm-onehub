@@ -1,5 +1,5 @@
 {
-	"nguon": "Hỏi-6, chủ kho duyệt theo lời khuyên ở Cổng Phạm vi 2026-10-20 (d-20261020T101858Z-12)",
+	"nguon": "Hỏi-6, chủ kho duyệt theo lời khuyên ở Cổng Phạm vi 2026-10-20 (d-20261020T101858Z-12); luật chọn giữa nhiều ứng viên theo Hỏi-10, duyệt 2026-10-21 (d-20261020T224703Z-27)",
 	"tac_nhan": {
 		"luot_qua_toi_thieu": 4,
 		"tren_so_luot": 5,
@@ -19,10 +19,32 @@
 		"moi_luot": true,
 		"giu": "google/gemini-3.8-flash"
 	},
-	"judge_okr": { "kien_nghi": "giu", "giu": "zai/glm-5.2-fast" },
+	"judge_okr": {
+		"kien_nghi": "giu",
+		"giu": "zai/glm-5.2-fast"
+	},
 	"may_soan_kho": {
 		"kien_nghi": "giu",
 		"ghi_chu": "chưa có thước",
 		"giu": "zai/glm-5.2-fast"
+	},
+	"chon": {
+		"ap_cho": [
+			"glm",
+			"ds",
+			"gem"
+		],
+		"luot_bi_loai": "chua-du-so",
+		"luat": "re-nhat-chi-phi-phan-ung-vien",
+		"chi_phi": "token-vao-nhan-gia-vao-cong-token-ra-nhan-gia-ra",
+		"hoa": [
+			"diem-cao-hon",
+			"trung-vi-giay-thap-hon"
+		],
+		"diem": {
+			"tac-nhan": "so-luot-qua",
+			"tro-ly-kho": "tong-dung-tru-cau-loi",
+			"soan-okr": "tong-dat-moi-luot"
+		}
 	}
 }

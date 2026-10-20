@@ -50,3 +50,30 @@ Thứ tự: T2 → T3 (10 lượt) → T4 → T5 (2 lượt). Sau đó `so-do.ts
 xanh. Commit evidence.
 
 Phụ thuộc: T1 trước mọi tác vụ; T2–T5 độc lập với nhau; T6 cần T1 và khuôn đầu ra của T2–T5; T7 cần tất cả.
+
+## Vòng mở lại 21/10 — DeepSeek và Gemini kho
+
+Hợp đồng duyệt lại 21/10 (d-20261020T224703Z-27). `ke-hoach.json` ghim ứng viên, giá niêm yết, cỡ mẫu, thứ tự, trần 12 USD
+(Hỏi-11); `rang/nguong.json` thêm khối `chon` (Hỏi-10). Bằng chứng `glm` vòng đầu giữ nguyên byte.
+
+### T8 — Khuôn nhiều ứng viên (`rang/khuon.ts`)
+`khuonKeHoach` mới (ung_vien, gia, tac_nhan.ung_vien[].bien_the, do_suy_luan, thu_tu); `khuonNguong.chon`; dòng tác nhân có
+`ung_vien` tuỳ chọn (dòng cũ suy từ biến thể); hàng aiChiPhi có `tinhNang`, `cacheReadTokens` tuỳ chọn; tóm tắt kho thêm
+`ung_vien`, `aichiphi`, `so_du_truoc/sau`, `usd_nguon` mở rộng; tóm tắt soạn thêm `ung_vien`, `aichiphi`; bảng: mỗi hàng một
+mảng ứng viên (số, chi phí phần ứng viên, chi phí thật, trạng thái). Bỏ `MTV.model`; đường bằng chứng theo khoá ứng viên
+(`glm` giữ tên cũ). Phục vụ E1–E7.
+
+### T9 — Thước đo theo ứng viên (`rang/do-*.ts`, `do-soan-chay.mjs`)
+Mỗi thước nhận `--ung-vien <ma>` (mặc định: mọi ứng viên của vai trong `ke-hoach.json`, bỏ ứng viên đã đủ lượt); model và
+biến thể đọc từ `ke-hoach.json`; kết xuất aiChiPhi (kèm `tinhNang`, `cacheReadTokens`) cho lượt kho và soạn từ kho đo của
+phiên đo; khoá chi phí `<ma>-<n>` cho lượt mới, dòng `glm` cũ giữ khoá cũ. Phục vụ E1–E4, E6.
+
+### T10 — Bộ so và bảng (`rang/so-do.ts`)
+Kiểm E1–E6 trên mọi ứng viên; luật vai rồi luật chọn (`nguong.chon`); chi phí phần ứng viên tính lại từ kết xuất × giá;
+ứng viên đạt mà thiếu chi phí → «chưa đủ số»; ghim byte bằng chứng `glm` về 49456c140; chiều đỏ mới của E1–E6 tự chạy trên
+bản sao; dựng lại `bang-kien-nghi.json` và `docs/model-theo-vai.md`. Viết và chạy trên bằng chứng giả lập của `ds`, `gem`
+TRƯỚC lượt đo thật.
+
+### T11 — Lượt đo thật (dưới khoá s4)
+Thứ tự theo `ke-hoach.json`: dò `ds` → Tác nhân `ds`, `ds-low` (10) → soạn `ds` (2) → kho `ds` → kho `gem`. Sau đó
+`so-do.ts --ghi`, `so-do.ts` xanh, `--pham-vi` xanh. Commit evidence.
