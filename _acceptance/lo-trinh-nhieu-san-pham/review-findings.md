@@ -1,16 +1,16 @@
-# Review findings: lo-trinh-nhieu-san-pham (round 3)
+# Review findings: lo-trinh-nhieu-san-pham (round 4)
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC trong round này.
+Không có finding mới trong round này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The fetch loop can still save the old source's roadmap snapshot if the source is edited mid-run**
+- **The fetch loop can still save the old source's roadmap snapshot if the source is edited mid-run (r3)**
   Người dùng thấy gì: Neu quan tri sua kho cua mot san pham dung vao luc he thong dang lay lo trinh, trang Lo trinh co the con hien them mot ban chup cua kho cu thay vi de trong. Ban do van duoc danh dau «nguon vua doi» va tu duoc thay bang ban cua kho moi o lan lay tiep theo.
-  Căn cứ: Hau qua nhe: chi xay ra khi sua nguon trung dung vao vai phan nghin giay cua mot lan lay, khong mat hay lo du lieu, trang van hien dong bao nguon vua doi, va lan lay ke tiep tu sua; sua dat hon nhieu so voi hau qua.
+  Căn cứ: Hau qua nhe: chi xay ra khi sua nguon trung dung vai phan nghin giay cua mot lan lay, khong mat hay lo du lieu, trang van hien dong bao nguon vua doi, va lan lay ke tiep tu sua; sua dat hon nhieu so voi hau qua.
   file: `apps/agent/agent/lib/lo-trinh-san-pham.ts`
   severity: low
   Đề xuất: wont-fix
@@ -43,7 +43,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Giá trị trạng thái lấy lạ trong DB bị nuốt thành «chua-lay» thay vì báo lỗi (r1 · tệp đã đổi)**
+- **Giá trị trạng thái lấy lạ trong DB bị nuốt thành «chua-lay» thay vì báo lỗi (r1)**
   Người dùng thấy gì: Nếu dữ liệu trạng thái bị hỏng, sản phẩm hiện như «đang chờ lần lấy đầu» thay vì báo dữ liệu hỏng.
   Căn cứ: Chỉ xảy ra khi dữ liệu nội bộ bị lệch, không mất dữ liệu người dùng, chỉ che mất dấu hiệu lỗi.
   file: `packages/db/src/san-pham-lo-trinh.ts`
@@ -57,7 +57,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Số nhân 4 và hằng API GitHub đặt rải trong tệp thay vì trong cấu hình LO_TRINH_SAN_PHAM (r1 · tệp đã đổi)**
+- **Số nhân 4 và hằng API GitHub đặt rải trong tệp thay vì trong cấu hình LO_TRINH_SAN_PHAM (r1)**
   Người dùng thấy gì: Người muốn chỉnh các con số này phải biết tìm ở nhiều tệp. Người dùng không thấy khác biệt.
   Căn cứ: Chỉ là nợ gọn gàng của mã, không đổi hành vi, không mất dữ liệu.
   file: `apps/agent/agent/lib/lo-trinh-san-pham.ts`
@@ -71,21 +71,21 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Agent catch-all reports every exception as 'GitHub did not answer', keeps only the error name, and logs nothing (r1 · tệp đã đổi)**
+- **Agent catch-all reports every exception as 'GitHub did not answer', keeps only the error name, and logs nothing (r1)**
   Người dùng thấy gì: Một lỗi lâu dài ở phía CRM sẽ hiện như «GitHub chưa trả lời, thử lại sau» và cứ thử lại mãi mà không ai biết nguyên nhân thật.
   Căn cứ: Không mất dữ liệu và bản chụp cũ vẫn hiện, nhưng lỗi thật bị che nên khó phát hiện và sửa.
   file: `apps/agent/agent/lib/lo-trinh-san-pham.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **An in-flight fetch can clear a source change the admin just made, so the old repository's data stays labelled as the new source (r1 · tệp đã đổi)**
+- **An in-flight fetch can clear a source change the admin just made, so the old repository's data stays labelled as the new source (r1)**
   Người dùng thấy gì: Nếu quản trị đổi kho đúng lúc nền đang lấy dữ liệu, trang có thể hiện dữ liệu kho cũ dưới tên kho mới và mất dòng «nguồn vừa đổi».
   Căn cứ: Hiếm gặp, chỉ sai tạm thời và tự hết khi lần lấy sau kịp, nhưng trong ca xấu dữ liệu cũ có thể ở lại lâu.
   file: `packages/db/src/san-pham-lo-trinh.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Return value of ghiBanChupLoTrinh is ignored: a rejected ('cu-hon') snapshot is still recorded as da-lay and the file is downloaded again every tick (r1 · tệp đã đổi)**
+- **Return value of ghiBanChupLoTrinh is ignored: a rejected ('cu-hon') snapshot is still recorded as da-lay and the file is downloaded again every tick (r1)**
   Người dùng thấy gì: Khi nhánh bị đẩy lùi về commit cũ, trang vẫn giữ nội dung cũ mà Cài đặt ghi «đã lấy», và nền cứ tải lại tệp mỗi 5 phút mà không báo gì.
   Căn cứ: Là ca hiếm và đã khai là ngoài phạm vi, dữ liệu hiện vẫn đúng bản mới nhất đã biết, chỉ thiếu lời báo.
   file: `apps/agent/agent/lib/lo-trinh-san-pham.ts`
@@ -120,21 +120,21 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: high
   Đề xuất: known-limits
 
-- **Assertion âm-tính-một-mình (hình 4): «sản phẩm đã lưu trữ không được lấy» chỉ đếm 0 lời gọi, không có đối chứng dương (r1 · tệp đã đổi)**
+- **Assertion âm-tính-một-mình (hình 4): «sản phẩm đã lưu trữ không được lấy» chỉ đếm 0 lời gọi, không có đối chứng dương (r1)**
   Người dùng thấy gì: Bài kiểm có thể xanh chỉ vì nền không lấy gì cả, chứ không phải vì sản phẩm đã lưu trữ được bỏ qua.
   Căn cứ: Không ảnh hưởng người dùng hiện tại, chỉ làm bài kiểm kém sức bắt lỗi.
   file: `apps/agent/test/lo-trinh-san-pham.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Assertion âm-tính-một-mình (hình 4): «ghi một chiều trở lại» không chứng minh nhịp thứ ba đã thật sự kiểm nhánh (r1 · tệp đã đổi)**
+- **Assertion âm-tính-một-mình (hình 4): «ghi một chiều trở lại» không chứng minh nhịp thứ ba đã thật sự kiểm nhánh (r1)**
   Người dùng thấy gì: Bài kiểm về việc giữ bản mới hơn khi nhánh lùi có thể xanh dù nền chưa từng kiểm nhánh.
   Căn cứ: Ca nhánh lùi đã khai ngoài phạm vi và hiếm, nên rủi ro cho người dùng thấp.
   file: `apps/agent/test/lo-trinh-san-pham.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Tuyên quét LỚP nhưng chỉ có điểm-case (hình 5): rò khoá chỉ dò một cửa sổ 20 ký tự cố định (r1 · tệp đã đổi)**
+- **Tuyên quét LỚP nhưng chỉ có điểm-case (hình 5): rò khoá chỉ dò một cửa sổ 20 ký tự cố định (r1)**
   Người dùng thấy gì: Bài kiểm chỉ dò một đoạn nhỏ của khoá riêng trong nhật ký, nên một đoạn khác bị lộ sẽ không bị bắt.
   Căn cứ: Chưa có dấu hiệu khoá bị lộ, nhưng nếu lộ thì hậu quả nặng và chỉ khắc phục được bằng cách đổi khoá.
   file: `apps/agent/test/lo-trinh-san-pham.spec.ts`
@@ -197,7 +197,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **The background fetch turns every error into 'GitHub did not answer', keeps only the error name, and logs nothing (r2 · tệp đã đổi)**
+- **The background fetch turns every error into 'GitHub did not answer', keeps only the error name, and logs nothing (r2)**
   Người dùng thấy gì: Nếu khoá của ứng dụng GitHub đặt sai, sản phẩm cứ báo «GitHub chưa trả lời, sẽ thử lại» mãi và không để lại dấu vết nào cho người vận hành biết lỗi thật.
   Căn cứ: Không mất dữ liệu và lộ trình CRM vẫn chạy, nhưng người cài sẽ mất thời gian đoán lỗi; chỉ gặp một lần lúc cài đặt nên chấp nhận được tạm.
   file: `apps/agent/agent/lib/lo-trinh-san-pham.ts`
@@ -218,7 +218,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **An 'older commit' result from ghiBanChupLoTrinh is ignored, and the status still says Fetched (r2 · tệp đã đổi)**
+- **An 'older commit' result from ghiBanChupLoTrinh is ignored, and the status still says Fetched (r2)**
   Người dùng thấy gì: Khi nhánh của sản phẩm bị đưa về một commit cũ hơn, trang vẫn hiện lộ trình của commit mới hơn và báo «Đã lấy», không cho quản trị biết trang đã lệch nhánh.
   Căn cứ: Hợp đồng đã chủ động loại trường hợp này; hiếm gặp và không mất dữ liệu.
   file: `apps/agent/agent/lib/lo-trinh-san-pham.ts`
@@ -253,7 +253,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 5 (tuyên quét cả lớp nhưng chỉ có một điểm): «không chuỗi 20 ký tự nào của khoá riêng» chỉ được kiểm bằng một cửa sổ cố định (r2 · tệp đã đổi)**
+- **Hình dạng 5 (tuyên quét cả lớp nhưng chỉ có một điểm): «không chuỗi 20 ký tự nào của khoá riêng» chỉ được kiểm bằng một cửa sổ cố định (r2)**
   Người dùng thấy gì: Bài kiểm chỉ dò một đoạn của khoá riêng trong nhật ký và dữ liệu lưu, nên một phần khác của khoá bị rò thì bài kiểm sẽ không bắt được.
   Căn cứ: Khoá lộ là hậu quả nặng nếu xảy ra, nhưng hiện chưa thấy rò thật; sửa bài kiểm rẻ nên nên làm sớm.
   file: `apps/agent/test/lo-trinh-san-pham.spec.ts`
@@ -274,7 +274,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 4 (kiểm âm tính đứng một mình): sản phẩm đã lưu trữ «0 lời gọi GitHub» mà không có sản phẩm lành cùng nhịp (r2 · tệp đã đổi)**
+- **Hình dạng 4 (kiểm âm tính đứng một mình): sản phẩm đã lưu trữ «0 lời gọi GitHub» mà không có sản phẩm lành cùng nhịp (r2)**
   Người dùng thấy gì: Bài kiểm sản phẩm đã lưu trữ không có sản phẩm bình thường cùng nhịp để chứng tỏ nhịp thật sự đã chạy, nên có thể xanh dù nhịp không làm gì.
   Căn cứ: Không ảnh hưởng người dùng; các bài khác trong tệp đã chạy nhịp thật nên rủi ro bỏ sót thấp.
   file: `apps/agent/test/lo-trinh-san-pham.spec.ts`
