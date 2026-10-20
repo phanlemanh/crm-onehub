@@ -1,9 +1,8 @@
 # Thiết kế (bản phác trên giấy): model-theo-vai-do-lai (MH4)
 
-> Trạng thái: PHÁC. Giám sát đợt cho soạn S0/S1 trên giấy trong lúc chờ VK5 (`chu-may-sinh-ten-moi`) gộp `onehub`;
-> KHÔNG đo model và KHÔNG chốt phép đo trước mốc đó (luật 22 của đợt, trả lời K1-6 đã sửa). Lời dặn mới đọc từ diff
-> vk dán ở #375 (issuecomment-6282341815): chỉ đổi chữ «Căn chỉnh» → «Góp vào» và thêm một câu cấm viết «căn
-> chỉnh»/«hỏi ý» trong `apps/agent-okr/agent/lib/loi-dan-soan.ts` và `apps/agent/agent/subagents/tro_ly_okr/instructions.md`.
+> Trạng thái: CHỐT ở S1 sau khi VK5 (`chu-may-sinh-ten-moi`, #503) gộp `onehub` e290fa498 ngày 20/10. Nhánh đã gộp
+> mốc đó (961b36548). Lời dặn trên onehub khớp diff vk dán ở #375: «Căn chỉnh» → «Góp vào», thêm câu cấm viết «căn
+> chỉnh»/«hỏi ý», và dòng `can-chinh` của `tro_ly_okr` đổi chữ theo. Hợp đồng ở `contract.md`.
 
 Hàng `MH4` của lộ trình Kho tài liệu, mốc 30/10. Câu giao: «Mỗi vai (Tác nhân, Trợ lý kho, judge, soạn) có model kiến
 nghị, đo lại sau l6». Đứng trên MH3 (đã lên onehub). MH2 (`re-mo-hinh-mac-dinh`, đổi model mặc định) đứng sau MH4 và
@@ -23,7 +22,24 @@ Số đã có: MH3 (16/10) GLM 5.2 Fast 3/3, GLM 5.3 mặc định 0/3, GLM 5.3 
 kho GLM 5.2 Fast (13/10) và Gemini 3.8 Flash (16/10) đều đạt mọi tầng, 2 câu lỗi mỗi lượt; Haiku 5.5 trượt cả Trợ lý OKR
 lẫn Tác nhân (15/10). Chưa có «bảng kiến nghị model» nào trong kho.
 
-## Hướng (phác)
+## Mốc Soạn OKR do VK5 đo (20/10)
+
+VK5 chạy thước soạn của nó (`_acceptance/chu-may-sinh-ten-moi/rang/eval-soan.mjs`, 18 ca, judge `zai/glm-5.2-fast`) ba lượt
+với `google/gemini-3.8-flash`:
+
+| Lượt | Lời dặn | Đạt | Hỏng | Dưới ngưỡng | Judge hỏng | p50 ms | p90 ms | USD |
+|---|---|---|---|---|---|---|---|---|
+| `nen-lap` | cũ (939d1c…) | 15 | 0 | 3 | 0 | 10 942 | 15 911 | 0,71 |
+| `nen` | cũ (939d1c…) | 13 | 2 | 3 | 1 | 12 304 | 30 293 | 0,69 |
+| `sau` | mới (9b0510…) | 13 | 3 | 2 | 2 | 11 367 | 34 066 | 0,69 |
+
+Lượt `sau` là mốc của MH4: cùng lời dặn đang chạy, cùng thước. Không đo lại Gemini. Hai lượt trên lời dặn cũ lệch nhau
+2/18, nên GLM 5.3 Flash chạy hai lượt.
+
+Thước soạn đọc `TRO_LY_OKR_SOAN.model` của `apps/agent-okr` — đó là vai Soạn OKR của bảng. Trợ lý OKR trong
+`apps/agent` (`tro_ly_okr`, cửa `TRO_LY_OKR_MO_HINH`) không nằm trong thước này, nên ra Out of scope.
+
+## Hướng
 
 1. Dựng **bảng kiến nghị model theo vai** — một tệp dữ liệu có khuôn Zod (vai · model hiện tại · ứng viên · số đo · chi
    phí mỗi lượt · kiến nghị · ngày đo · mã lượt bằng chứng) và một trang đọc được sinh từ nó trong `docs/`. Mỗi hàng
@@ -36,7 +52,7 @@ lẫn Tác nhân (15/10). Chưa có «bảng kiến nghị model» nào trong kh
 
 ## Câu chỉ người trả lời (sẽ lên Cổng Phạm vi — đã gửi giám sát)
 
-- **Hỏi-1 — ứng viên mỗi vai. ĐÃ TRẢ (chủ kho, 20/10):** «dùng GLM 5.3 Flash bỏ GLM 5.2 Fast vì lý do chi phí tinh chỉnh
+- **Hỏi-1 (thẻ: Hỏi-1 và Hỏi-2) — ứng viên mỗi vai. ĐÃ TRẢ (chủ kho, 20/10):** «dùng GLM 5.3 Flash bỏ GLM 5.2 Fast vì lý do chi phí tinh chỉnh
   lại các thông số cho phù hợp model này». Gateway có `zai/glm-5.3-flash` (0,15/0,5 USD mỗi triệu token vào/ra, so với
   2,8/8,8 của `zai/glm-5.2-fast` — khoảng 18 lần rẻ hơn); khác `zai/glm-5.3-fast` mà MH3 đã đo. Vì vậy:
   - Tác nhân và Trợ lý kho: đo `zai/glm-5.3-flash` với các biến thể thông số — mức suy luận (mặc định · `low` · tắt khi
@@ -46,14 +62,19 @@ lẫn Tác nhân (15/10). Chưa có «bảng kiến nghị model» nào trong kh
   - Soạn OKR (đang Gemini 3.8 Flash): ĐÃ TRẢ (chủ kho, 20/10) — đo thêm `zai/glm-5.3-flash` cạnh mốc Gemini. Ở
     `apps/agent` đổi bằng `TRO_LY_OKR_MO_HINH` (cần nới danh sách mã nhận); ở `apps/agent-okr` model là hằng, lượt đo
     đổi hằng tạm, không commit.
-- **Hỏi-2 — judge có vào bảng không.** Khuyên: vào bảng với số «không chấm được» và «judge mù» đo được, nhưng KHÔNG đổi
+- **Hỏi-3 — judge có vào bảng không.** Khuyên: vào bảng với số «không chấm được» và «judge mù» đo được, nhưng KHÔNG đổi
   ứng viên judge ở vòng này (đổi judge làm lệch mọi số soạn OKR đã có).
-- **Hỏi-3 — máy soạn kho.** Khuyên: ghi hàng «chưa có thước» trong bảng, Out of scope; dựng thước là việc riêng.
-- **Hỏi-4 — trần chi và cỡ mẫu.** Khuyên: 5 lượt mỗi biến thể Tác nhân, 1 lượt bộ 50 câu mỗi biến thể kho, 1 lượt eval
-  soạn mỗi ứng viên; trần tổng 6 USD — GLM 5.3 Flash rẻ nên phần lớn chi là mốc Gemini của soạn OKR và judge; quá trần
-  thì dừng.
+- **Hỏi-4 — máy soạn kho.** Khuyên: ghi hàng «chưa có thước» trong bảng, Out of scope; dựng thước là việc riêng.
+- **Hỏi-5 — cỡ mẫu, biến thể, trần chi.** Khuyên: 5 lượt mỗi biến thể Tác nhân (`flash`, `flash-low`), 1 lượt bộ 50
+  câu, 2 lượt eval soạn; mốc Gemini lấy của VK5, không đo lại; trần bước, trần thời gian và `flash-low` cho kho, soạn để
+  hàng sau; trần tổng 6 USD, chạm trần thì dừng. Lối khác: thêm trần bước và `flash-low` cho kho, soạn — trần 12 USD.
+- **Hỏi-6 — ngưỡng để đổi một vai sang GLM 5.3 Flash** (từ gap-probe F1). Khuyên: Tác nhân ≥ 4/5 lượt qua dưới 180 giây;
+  Trợ lý kho mỗi tầng không kém mốc 13/10 quá 1 câu và câu lỗi ≤ 2; Soạn OKR mọi lượt ≥ 13/18 (bằng mốc) và hỏng ≤ 3.
+  Lối khác: Soạn OKR cho kém mốc 1 câu (12/18) vì mốc dao động 2 câu.
 
-## Việc chờ
+## Đổi model khi đo
 
-- VK5 gộp `onehub` → đọc lại hai tệp lời dặn trên onehub, chốt phép đo, viết `contract.md` + `evals.yaml`, gap-probe,
-  rồi trình Cổng Phạm vi (T2 theo đường máy suy nếu không chạm `t3_paths`).
+Sửa tạm hằng trong cây đo rồi trả lại, băm bản sửa vào bằng chứng — nếp MH3. Ba tệp: `agent_builder/agent.ts` (lượt
+`flash-low`), `tai-lieu-config.ts` (`hoi.maModel`), `apps/agent-okr/agent/lib/config.ts` (`MO_HINH`). Không thêm cửa đổi
+model vào code sản phẩm. Xin chạm tệp K1-8 gửi giám sát đợt. Tác nhân đổi bằng ô Cài đặt trong kho đo; danh mục Gateway
+có `zai/glm-5.3-flash` nên `modelTheoVai` không lùi về mặc định.

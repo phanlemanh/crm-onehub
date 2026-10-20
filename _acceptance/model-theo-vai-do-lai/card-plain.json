@@ -1,0 +1,33 @@
+{
+  "feature_plain": "Máy chạy thử GLM 5.3 Flash, rẻ hơn khoảng 18 lần, cho Tác nhân, Trợ lý kho và Soạn OKR bằng các bài đo đã có, rồi lập một bảng nói mỗi vai nên dùng model nào, mỗi con số trỏ về lượt đo của nó. Model đang chạy cho người dùng chưa đổi.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ chạy Tác nhân dựng tác tử với GLM 5.3 Flash ở hai mức suy luận (mặc định và thấp), mỗi mức nhiều lượt. Mỗi lượt ghi qua hay hỏng, có bị cắt ở 3 phút không, số bước, token, giây, và model mà Gateway thật sự trả."},
+    {"id": "AC-2", "p": "Sẽ hỏi thẳng Gateway một câu ở ba mức suy luận, để biết mức «thấp» có thật sự làm model nghĩ ít đi không."},
+    {"id": "AC-3", "p": "Sẽ cho Trợ lý kho trả lời bộ 50 câu hỏi mẫu (hỏi qua CRM và qua Zalo) bằng GLM 5.3 Flash, ghi đúng sai theo từng tầng câu hỏi và câu nào lỗi."},
+    {"id": "AC-4", "p": "Sẽ chạy bài đo soạn OKR của VK5 với GLM 5.3 Flash trên đúng lời dặn Kara mới, để đặt cạnh số của Gemini mà VK5 vừa đo."},
+    {"id": "AC-5", "p": "Sẽ lập bảng kiến nghị năm vai (Tác nhân, Trợ lý kho, Soạn OKR, judge chấm OKR, máy soạn kho) và một trang tài liệu in từ bảng đó; kiến nghị theo ngưỡng anh chốt, vai nào «giữ» thì ghi thông số nào chưa thử."}
+  ],
+  "wont_do": [
+    {"id": "AC-6", "p": "Sẽ KHÔNG chi quá trần đã chốt: chạm trần thì dừng, vai thiếu lượt ghi «chưa đủ số» chứ không kiến nghị."},
+    {"id": "AC-7", "p": "Sẽ KHÔNG đổi code chạy thật: model chỉ được sửa tạm trong lúc đo rồi trả lại, nhánh chỉ thêm hồ sơ đo và một trang tài liệu."},
+    {"id": "OOS-1", "p": "Không đổi model mặc định cho người dùng; việc đó là của MH2, đọc bảng này."},
+    {"id": "OOS-2", "p": "Không đổi model của judge chấm OKR, vì mọi số soạn OKR cũ đều chấm bằng judge hiện tại."},
+    {"id": "OOS-3", "p": "Không dựng bài đo cho máy soạn kho; để hàng riêng."},
+    {"id": "OOS-4", "p": "Không thử trần số bước, trần thời gian, hay mức suy luận thấp cho Trợ lý kho và Soạn OKR ở vòng này."},
+    {"id": "OOS-5", "p": "Không đo Trợ lý OKR trong CRM; bài đo soạn của VK5 đo bộ soạn OKR riêng."},
+    {"id": "OOS-6", "p": "Không sửa chuyện agent Zalo đi lạc; đã ghi giới hạn ở l7."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ năm vai: ba vai đo thật (AC-1, AC-3, AC-4), judge đọc số từ lượt soạn, máy soạn kho ghi «chưa có bài đo» (AC-5)."},
+    {"i": 1, "p": "Thông số của GLM 5.3 Flash: suy luận mặc định cho cả ba vai, suy luận thấp cho Tác nhân, và một phép hỏi thẳng ba mức (AC-1–AC-4)."},
+    {"i": 2, "p": "Số của model cũ lấy từ bằng chứng đã có, ghi đường tệp và ngày, không đo lại (AC-5)."},
+    {"i": 3, "p": "Chi phí từng lượt và tổng dưới trần (AC-6); nhánh không đổi code chạy thật (AC-7)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ngưỡng để bảng kiến nghị đổi một vai là máy tự đặt, chưa ai chốt. Đã đưa thành câu hỏi Hỏi-6 cho anh, máy khuyên Soạn OKR phải bằng mốc Gemini (13/18) chứ không kém."},
+    {"i": 1, "p": "Số lượt, biến thể và trần chi đã viết cứng vào tiêu chí trong khi anh chưa trả. Đã đưa thành Hỏi-5; tiêu chí và bài đo đọc số từ một tệp ghim theo câu trả lời."},
+    {"i": 2, "p": "Các thông số bị bỏ (trần bước, thời gian, suy luận thấp cho kho và soạn) không có ai quyết. Đã đưa vào Hỏi-5, và vai nào «giữ» thì bảng phải ghi thông số chưa thử."},
+    {"i": 3, "p": "Tác nhân chỉ kiểm model đã đặt, không kiểm model thật đã chạy, nên một lượt lùi về model cũ vẫn tính. Đã sửa: mỗi lượt ghi model Gateway trả, lệch thì loại."},
+    {"i": 4, "p": "Bài đo Trợ lý kho nói «lượt hai» mà tiêu chí chỉ có một lượt, và tệp số mốc chưa có đường. Đã sửa: một lượt gồm hai vòng (CRM 46 câu, Zalo 50 câu), ghi đủ ba tệp mốc."}
+  ]
+}
