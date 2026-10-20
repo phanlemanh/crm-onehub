@@ -55,13 +55,13 @@
 		"duong": "https://crm.test/onehub/okr?record=objective:ob-mau-6"
 	},
 	"okr-hoi-y-cong-bo": {
-		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nHỏi ý đã công bố\n1. Mục tiêu Ý tưởng OKR quý 1 đã công bố — xem ý của bạn đi đâu — https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
-		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Hỏi ý đã công bố*\n• Mục tiêu Ý tưởng OKR quý 1 đã công bố — xem ý của bạn đi đâu — <https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1|mở hỏi ý>",
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nLấy ý kiến đã công bố\n1. Mục tiêu Ý tưởng OKR quý 1 đã công bố — xem ý của bạn đi đâu — https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Lấy ý kiến đã công bố*\n• Mục tiêu Ý tưởng OKR quý 1 đã công bố — xem ý của bạn đi đâu — <https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1|mở Lấy ý kiến>",
 		"duong": "https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1"
 	},
 	"okr-hoi-y-gop": {
-		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nHỏi ý mục tiêu\n1. Công ty đang hỏi ý cho mục tiêu Ý tưởng OKR quý 1 — hạn 17:00 20/10 — https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
-		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Hỏi ý mục tiêu*\n• Công ty đang hỏi ý cho mục tiêu Ý tưởng OKR quý 1 — hạn 17:00 20/10 — <https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1|mở hỏi ý>",
+		"zalo": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\nLấy ý kiến\n1. Công ty đang lấy ý kiến cho mục tiêu Ý tưởng OKR quý 1 — hạn 17:00 20/10 — https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1\n\nTrả lời \"xong 2\" để đánh dấu mục 2 xong.",
+		"slack": "Chào Lan, sáng nay có 1 việc cần bạn để ý.\n\n*Lấy ý kiến*\n• Công ty đang lấy ý kiến cho mục tiêu Ý tưởng OKR quý 1 — hạn 17:00 20/10 — <https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1|mở Lấy ý kiến>",
 		"duong": "https://crm.test/onehub/okr/hoi-y?kyOkr=ky-mau-1"
 	},
 	"okr-kr-im": {

@@ -12,6 +12,7 @@ import {
 } from "@crm/db/okr-hop-tuan";
 import { kyVongTheoNgay } from "@crm/db/okr-tien-do";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
+import { readTenGoc } from "@crm/db/workspace";
 import { MUC_TU_TIN, type MucTuTin } from "@crm/validation/okr-cap-nhat";
 import { kieuKr } from "@crm/validation/okr-kr";
 import {
@@ -392,7 +393,7 @@ export class OkrXemService {
 					return x ? [x] : [];
 				}),
 			})),
-			OKR.tenGoc,
+			await readTenGoc(this.db),
 			{ tuanKy, homNay },
 		);
 	}
@@ -466,7 +467,7 @@ export class OkrXemService {
 				{ chuaNoiKenh: 1 },
 			);
 		}
-		return gopSucKhoe(cayGon(q), rieng, OKR.tenGoc);
+		return gopSucKhoe(cayGon(q), rieng, await readTenGoc(this.db));
 	}
 
 	async docDauVaoSoDo(userId: string, cycleId: string): Promise<DauVaoSoDo> {
@@ -474,7 +475,7 @@ export class OkrXemService {
 		const { mts, gioiHan } = await this.okr.mucTieuCuaCay(userId, cycleId);
 		return {
 			cay: cayGon(q),
-			tenGoc: OKR.tenGoc,
+			tenGoc: await readTenGoc(this.db),
 			truongGoc: null,
 			cycleId,
 			mts,
