@@ -70,8 +70,8 @@ chưa sửa giữ làm `--nhan nen-lap`, mẫu độ dao động. Bộ so đỏ 
 `apps/agent-okr/agent`, `apps/agent-okr/evals`, `packages/db/src` đổi ngoài `loi-dan-soan.ts`. Bản gốc của thước (`_acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs`)
 ghi đè bằng chứng của một hồ sơ đã ký, nên VK5 dùng bản sao ghi vào `.acceptance-runs/` và một tệp tóm tắt
 `evidence/eval-soan-<nhãn>.json` mang băm lời dặn và băm thước. `rang/so-eval-soan.mjs` so: cùng băm thước và
-cùng model; số ca đạt không tụt quá 2, chốt mã hỏng không tăng quá 1, trung bình mỗi tiêu chí judge không tụt
-quá 0,1 (dải là câu hỏi cho chủ kho ở Cổng Phạm vi); bản nháp Kara nộp ở lần `sau` không chứa «căn chỉnh» hay «hỏi ý».
+cùng model; số lượt chấm đạt (trên 18) không tụt quá 2, chốt mã hỏng không tăng quá 1, trung bình mỗi tiêu chí judge
+(5 ca soạn, điểm 0 hay 1, bậc 0,2) không tụt quá 0,2 (dải là câu hỏi cho chủ kho ở Cổng Phạm vi); bản nháp Kara nộp ở lần `sau` không chứa «căn chỉnh» hay «hỏi ý».
 
 ## Luật máy
 

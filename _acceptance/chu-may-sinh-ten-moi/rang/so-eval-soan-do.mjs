@@ -19,7 +19,7 @@ const doi = (sua) => {
 const CA = [
 	["lanh", lanh(), 0],
 	["bien dat tut 2", doi((c) => { c.sau.dat = 18; }), 0],
-	["bien tieu chi tut 0.1", doi((c) => { c.sau.tieuChiTrungBinh = [0.7, 0.7]; }), 0],
+	["bien tieu chi tut 0.2", doi((c) => { c.sau.tieuChiTrungBinh = [0.6, 0.7]; }), 0],
 	["thuoc lech", doi((c) => { c.sau.bam.thuoc = "u"; }), 1, "thuoc lech"],
 	["model lech", doi((c) => { c.sau.moHinh = "n"; }), 1, "mo hinh lech"],
 	["nen sai bam", doi((c) => { c.bamNen = "c".repeat(64); }), 1, "nen khong chay"],
@@ -30,7 +30,7 @@ const CA = [
 	["sau con chu cu", doi((c) => { c.sau.chuCu = [{ cum: "hỏi ý" }]; }), 1, "Kara con viet"],
 	["dat tut 3", doi((c) => { c.sau.dat = 17; }), 1, "so ca dat tut"],
 	["chot ma tang 2", doi((c) => { c.sau.chotMaHong = 5; }), 1, "chot ma hong tang"],
-	["tc2 tut 0.11", doi((c) => { c.sau.tieuChiTrungBinh = [0.8, 0.59]; }), 1, "tc2 tut"],
+	["tc2 tut 0.3", doi((c) => { c.sau.tieuChiTrungBinh = [0.8, 0.4]; }), 1, "tc2 tut"],
 ];
 const lech = [];
 for (const [ten, ca, so, chu] of CA) {

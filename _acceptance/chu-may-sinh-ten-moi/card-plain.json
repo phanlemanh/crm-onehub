@@ -1,35 +1,104 @@
 {
   "feature_plain": "Máy thôi nói tên cũ: câu báo lỗi khi thao tác OKR, tin nhắc buổi sáng và lời Kara dùng «Góp vào», «Lấy ý kiến», và đơn vị gốc mang tên công ty trên CRM.",
   "will_do": [
-    {"id": "AC-3", "p": "Sẽ viết «cấp Công ty» trong hai câu báo lỗi nói về cấp cao nhất, thay «cấp OneHub»."},
-    {"id": "AC-4", "p": "Sẽ gọi đơn vị gốc bằng tên không gian làm việc ở mọi dữ liệu máy chủ trả về (thẻ mục tiêu, Toàn cảnh, sơ đồ, độ phủ Lấy ý kiến, khép kỳ, tệp CSV, câu trả lời của Kara), và «Công ty» khi chưa đặt tên."},
-    {"id": "AC-5", "p": "Sẽ gửi tin nhắc sáng với tiêu đề «Lấy ý kiến» / «Lấy ý kiến đã công bố» và câu «Công ty đang lấy ý kiến cho mục tiêu …» trên Zalo và Slack."},
-    {"id": "AC-8", "p": "Sẽ có một bài kiểm tự đỏ khi chữ cũ quay lại trong câu báo lỗi, tin nhắc hay lời dặn Kara."}
+    {
+      "id": "AC-3",
+      "p": "Sẽ viết «cấp Công ty» trong hai câu báo lỗi nói về cấp cao nhất, thay «cấp OneHub»."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ gọi đơn vị gốc bằng tên không gian làm việc ở mọi dữ liệu máy chủ trả về (thẻ mục tiêu, Toàn cảnh, sơ đồ, độ phủ Lấy ý kiến, khép kỳ, tệp CSV, câu trả lời của Kara), và «Công ty» khi chưa đặt tên."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ gửi tin nhắc sáng với tiêu đề «Lấy ý kiến» / «Lấy ý kiến đã công bố» và câu «Công ty đang lấy ý kiến cho mục tiêu …» trên Zalo và Slack."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ có một bài kiểm tự đỏ khi chữ cũ quay lại trong câu báo lỗi, tin nhắc hay lời dặn Kara."
+    }
   ],
   "wont_do": [
-    {"id": "AC-1", "p": "Sẽ KHÔNG còn chữ «căn chỉnh» trong câu báo lỗi nào — ví dụ «Mục tiêu không góp vào chính nó được.»."},
-    {"id": "AC-2", "p": "Sẽ KHÔNG còn chữ «hỏi ý» trong câu báo lỗi; câu nói về cả lần dùng «lần lấy ý kiến»; đường dẫn trang giữ nguyên."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG dặn Kara dùng chữ «căn chỉnh» nữa; lời dặn bảo Kara nói «Góp vào» và «Lấy ý kiến» với người đọc."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG để Kara soạn OKR kém đi sau khi đổi lời dặn: bộ chấm soạn chạy trước và sau, chênh lệch nằm trong dải anh chốt."},
-    {"id": "AC-9", "p": "Sẽ KHÔNG xoá hay bỏ qua bài kiểm cũ nào; thước của hồ sơ đã ký chỉ đổi đúng câu chữ, có chữ anh cho phép."},
-    {"id": "OOS-1", "p": "Không đổi thông báo của lệnh nạp dữ liệu mẫu dành cho lập trình viên."},
-    {"id": "OOS-2", "p": "Không đổi tên sản phẩm «OneHub Center» và câu mở đầu lời dặn nói Kara giúp người ở OneHub."},
-    {"id": "OOS-3", "p": "Không đổi chữ mà máy chấm điểm đọc, để hai lần đo trước và sau cùng một thước."},
-    {"id": "OOS-4", "p": "Không đổi lời dặn của các vai Kara khác; làn M5 đo lại các vai đó sau khi lời dặn này chốt."},
-    {"id": "OOS-5", "p": "Không đổi khoá trong mã và đường dẫn /okr/hoi-y."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ KHÔNG còn chữ «căn chỉnh» trong câu báo lỗi nào — ví dụ «Mục tiêu không góp vào chính nó được.»."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ KHÔNG còn chữ «hỏi ý» trong câu báo lỗi; câu nói về cả lần dùng «lần lấy ý kiến»; đường dẫn trang giữ nguyên."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG dặn Kara dùng chữ «căn chỉnh» nữa; lời dặn bảo Kara nói «Góp vào» và «Lấy ý kiến» với người đọc."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ KHÔNG để Kara soạn OKR kém đi sau khi đổi lời dặn: bộ chấm soạn chạy trước và sau, chênh lệch nằm trong dải anh chốt."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ KHÔNG xoá hay bỏ qua bài kiểm cũ nào; thước của hồ sơ đã ký chỉ đổi đúng câu chữ, có chữ anh cho phép."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không đổi thông báo của lệnh nạp dữ liệu mẫu dành cho lập trình viên."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không đổi tên sản phẩm «OneHub Center» và câu mở đầu lời dặn nói Kara giúp người ở OneHub."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không đổi chữ mà máy chấm điểm đọc, để hai lần đo trước và sau cùng một thước."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi lời dặn của các vai Kara khác; làn M5 đo lại các vai đó sau khi lời dặn này chốt."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không đổi khoá trong mã và đường dẫn /okr/hoi-y."
+    }
   ],
   "scope_plain": "Phần để ngoài là chữ người dùng không đọc, hoặc chữ đổi sẽ làm phép đo chất lượng Kara mất so sánh.",
   "coverage_plain": [
-    {"i": 0, "p": "Ba khái niệm — Góp vào, Lấy ý kiến, cấp và tên đơn vị gốc — mỗi cái có tiêu chí riêng (AC-1…AC-4), đối chiếu với từ điển đã chốt 18/10."},
-    {"i": 1, "p": "Mọi nơi máy sinh chữ trong kiểm kê — câu báo lỗi, lỗi đọc dữ liệu, tin nhắc Zalo/Slack, lời dặn Kara, tên gốc trong dữ liệu trả về — đều có tiêu chí (AC-1…AC-6)."},
-    {"i": 2, "p": "Chất lượng Kara soạn được đo trước và sau khi đổi lời dặn (AC-7)."},
-    {"i": 3, "p": "Giữ lâu: bài kiểm tự đỏ khi chữ cũ quay lại, bài cũ không bị gỡ, bản chụp tin nhắc sinh lại từ mã, thước hồ sơ đã ký chỉ đổi chữ (AC-8, AC-9)."}
+    {
+      "i": 0,
+      "p": "Ba khái niệm — Góp vào, Lấy ý kiến, cấp và tên đơn vị gốc — mỗi cái có tiêu chí riêng (AC-1…AC-4), đối chiếu với từ điển đã chốt 18/10."
+    },
+    {
+      "i": 1,
+      "p": "Mọi nơi máy sinh chữ trong kiểm kê — câu báo lỗi, lỗi đọc dữ liệu, tin nhắc Zalo/Slack, lời dặn Kara, tên gốc trong dữ liệu trả về — đều có tiêu chí (AC-1…AC-6)."
+    },
+    {
+      "i": 2,
+      "p": "Chất lượng Kara soạn được đo trước và sau khi đổi lời dặn (AC-7)."
+    },
+    {
+      "i": 3,
+      "p": "Giữ lâu: bài kiểm tự đỏ khi chữ cũ quay lại, bài cũ không bị gỡ, bản chụp tin nhắc sinh lại từ mã, thước hồ sơ đã ký chỉ đổi chữ (AC-8, AC-9)."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Dải «không tụt» cho chất lượng Kara là máy tự chọn — đã chuyển thành câu hỏi Hỏi-2 cho anh, kèm số dao động đo được giữa hai lần chạy cùng lời dặn."},
-    {"i": 1, "p": "Lần đo trước và sau có thể khác nhau ở thứ khác ngoài lời dặn — đã xếp lại thứ tự: mọi sửa khác làm trước, lần đo nền chạy ngay trước khi đổi lời dặn, và bộ so đỏ nếu có tệp khác đổi giữa hai lần."},
-    {"i": 2, "p": "Câu dặn Kara «đừng viết căn chỉnh» lại bị chính luật cấm chữ cũ bắt — đã khai câu nguyên văn, đặt hai chữ cũ trong dấu mã để luật bỏ qua."},
-    {"i": 3, "p": "Phép quét chỉ nhìn 13 tệp đã chọn — đã nới ra cả năm vùng mã máy chủ và agent (không thấy chỗ nào sót), và mỗi bài có thêm ca cố ý đỏ."},
-    {"i": 4, "p": "Tên gốc chỉ được kiểm qua dạng mã — đã đổi thành bảng 11 chỗ, mỗi chỗ gọi thật với tên «Kho Thử Nghiệm» rồi tên trống."}
+    {
+      "i": 0,
+      "p": "Dải «không tụt» cho chất lượng Kara là máy tự chọn — đã thành câu hỏi Hỏi-2 cho anh; lượt nền đầu (15/18 đạt) cho thấy mỗi tiêu chí chỉ có 5 ca, nên dải tính theo số ca."
+    },
+    {
+      "i": 1,
+      "p": "Lần đo trước và sau có thể khác nhau ở thứ khác ngoài lời dặn — đã xếp lại thứ tự: mọi sửa khác làm trước, lần đo nền chạy ngay trước khi đổi lời dặn, và bộ so đỏ nếu có tệp khác đổi giữa hai lần."
+    },
+    {
+      "i": 2,
+      "p": "Câu dặn Kara «đừng viết căn chỉnh» lại bị chính luật cấm chữ cũ bắt — đã khai câu nguyên văn, đặt hai chữ cũ trong dấu mã để luật bỏ qua."
+    },
+    {
+      "i": 3,
+      "p": "Phép quét chỉ nhìn 13 tệp đã chọn — đã nới ra cả năm vùng mã máy chủ và agent (không thấy chỗ nào sót), và mỗi bài có thêm ca cố ý đỏ."
+    },
+    {
+      "i": 4,
+      "p": "Tên gốc chỉ được kiểm qua dạng mã — đã đổi thành bảng 11 chỗ, mỗi chỗ gọi thật với tên «Kho Thử Nghiệm» rồi tên trống."
+    }
   ]
 }

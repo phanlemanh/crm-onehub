@@ -7,7 +7,7 @@ export const LOI_DAN_SOAN = "apps/agent-okr/agent/lib/loi-dan-soan.ts";
 export const THU_MUC_THUOC = "apps/agent-okr/evals/okr-soan";
 export const VUNG_SOAN = ["apps/agent-okr/agent", "apps/agent-okr/evals", "packages/db/src"];
 export const CHU_CU_KARA = ["căn chỉnh", "hỏi ý"];
-export const NGUONG = { dat: 2, chotMa: 1, tieuChi: 0.1 };
+export const NGUONG = { dat: 2, chotMa: 1, tieuChi: 0.2 };
 
 export const bam = (chu) => createHash("sha256").update(chu).digest("hex");
 export const bamTep = (duong) => bam(readFileSync(duong));

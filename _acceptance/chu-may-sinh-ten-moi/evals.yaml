@@ -58,7 +58,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.cmst_so_eval_soan
-    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs đọc evidence/eval-soan-nen.json và eval-soan-sau.json (do rang/eval-soan.mjs ghi sau hai lần eve eval okr-soan thật). Đỏ (exit 1, in từng dòng) khi: thiếu một tệp; bam.thuoc khác nhau (bộ ca, judge, tiêu chí lệch); model hay judge khác nhau; bam.loiDan của nen khác băm loi-dan-soan.ts ở commit nen.sha; bam.loiDan của sau khác băm tệp ở HEAD; hai băm lời dặn bằng nhau; nen.sha không là tổ tiên của HEAD; git diff --name-only nen.sha HEAD dưới apps/agent-okr/agent, apps/agent-okr/evals, packages/db/src có tệp khác loi-dan-soan.ts; sau.chuCu khác rỗng; sau.dat < nen.dat − 2; sau.chotMaHong > nen.chotMaHong + 1; trung bình tiêu chí nào của sau < nen − 0,1. Chiều đỏ của hàm soSanh đo bằng rang/so-eval-soan-do.mjs (E8)."
+    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs đọc evidence/eval-soan-nen.json và eval-soan-sau.json (do rang/eval-soan.mjs ghi sau hai lần eve eval okr-soan thật). Đỏ (exit 1, in từng dòng) khi: thiếu một tệp; bam.thuoc khác nhau (bộ ca, judge, tiêu chí lệch); model hay judge khác nhau; bam.loiDan của nen khác băm loi-dan-soan.ts ở commit nen.sha; bam.loiDan của sau khác băm tệp ở HEAD; hai băm lời dặn bằng nhau; nen.sha không là tổ tiên của HEAD; git diff --name-only nen.sha HEAD dưới apps/agent-okr/agent, apps/agent-okr/evals, packages/db/src có tệp khác loi-dan-soan.ts; sau.chuCu khác rỗng; sau.dat < nen.dat − 2; sau.chotMaHong > nen.chotMaHong + 1; trung bình tiêu chí nào của sau < nen − 0,2. Kèm in độ lệch giữa eval-soan-nen-lap.json và nen nếu có. Chiều đỏ của hàm soSanh đo bằng rang/so-eval-soan-do.mjs (E8)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/agent-okr/agent/lib/loi-dan-soan.ts, apps/agent-okr/evals/okr-soan/**, _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs, _acceptance/chu-may-sinh-ten-moi/rang/eval-soan-chung.mjs, _acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-nen.json, _acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json]
 
@@ -66,7 +66,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.cmst_so_eval_soan_do
-    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan-do.mjs gọi soSanh của so-eval-soan.mjs trên cặp tóm tắt giả: một cặp lành ra 0 lỗi; mỗi cặp hỏng (thuoc lệch, model lệch, nen sai băm, sau sai băm, hai băm bằng nhau, không là tổ tiên, đổi tệp ngoài lời dặn, sau còn chữ cũ, dat tụt 3, chot ma tăng 2, tc2 tụt 0,11) ra đúng một lỗi gọi tên lý do; ca biên (dat tụt đúng 2, tiêu chí tụt đúng 0,1) ra 0 lỗi. Lệch thì in tên ca và thoát 1."
+    expected: "exit 0; node _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan-do.mjs gọi soSanh của so-eval-soan.mjs trên cặp tóm tắt giả: một cặp lành ra 0 lỗi; mỗi cặp hỏng (thuoc lệch, model lệch, nen sai băm, sau sai băm, hai băm bằng nhau, không là tổ tiên, đổi tệp ngoài lời dặn, sau còn chữ cũ, dat tụt 3, chot ma tăng 2, tc2 tụt 0,4) ra đúng một lỗi gọi tên lý do; ca biên (dat tụt đúng 2, tiêu chí tụt đúng 0,2) ra 0 lỗi. Lệch thì in tên ca và thoát 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan.mjs, _acceptance/chu-may-sinh-ten-moi/rang/so-eval-soan-do.mjs, _acceptance/chu-may-sinh-ten-moi/rang/eval-soan-chung.mjs]
 
