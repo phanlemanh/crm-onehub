@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a36833cb5ada9a77c457574f4e4b276c67024a0c
+verified_commit: 19567f1d3fc85ee36994b60051cecdd88b7b6028
 human_signoff: Phan Le Manh 2026-10-20 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 12/12 eval; vòng 1 PASS, bảy mục ngoài hợp đồng đã sửa). Ngoài-1 đến Ngoài-15 ghi Known limits; đồng ý cắt; Treo phê hết.
 ---
 
@@ -205,3 +205,7 @@ Round 2: sau commit da883542e (siết thước theo bảy mục ngoài hợp đ�
 ### Re-pin lần 1 — 2026-10-20, do gộp onehub #501 (abbdab0dc) vào VK5; E7 VK5 chỉ đếm tệp do nhánh đổi
 run_id: repin-20261020T073436Z-71719
 sha: a36833cb5ada9a77c457574f4e4b276c67024a0c · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-20, do gộp onehub #504 (b32a1495f) vào VK5
+run_id: repin-20261020T075043Z-67675
+sha: 19567f1d3fc85ee36994b60051cecdd88b7b6028 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
