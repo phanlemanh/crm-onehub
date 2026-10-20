@@ -316,22 +316,43 @@ try {
 			};
 		}, khoa);
 		await t.close();
-		const tDv = await d.moTrang(
+		const thamDv = { donOkr: khoa, kyOkr: KY };
+		const tGap = await d.moTrang(
 			TR,
 			1440,
-			`/okr/theo-don-vi?${new URLSearchParams({ donOkr: khoa, kyOkr: KY })}`,
+			`/okr/bo-okr?${new URLSearchParams(thamDv)}`,
 		);
 		await d.doi(
-			tDv,
+			tGap,
 			() => document.querySelector("[data-hang-muc-tieu]") !== null,
 		);
 		await choMs(800);
+		const moDuoc = await tGap.evaluate(() =>
+			[...document.querySelectorAll("[data-mo-dong]")].map((n) =>
+				n.getAttribute("data-mo-dong"),
+			),
+		);
+		await tGap.close();
+		const tDv = await d.moTrang(
+			TR,
+			1440,
+			`/okr/bo-okr?${new URLSearchParams({ ...thamDv, expand: moDuoc.join(",") })}`,
+		);
+		await d.doi(
+			tDv,
+			(n) =>
+				document.querySelectorAll("[data-mo-dong][aria-expanded=true]")
+					.length === n,
+			moDuoc.length,
+		);
+		await choMs(800);
+		console.log(`MO TAT CA: ${moDuoc.length} muc tieu mo duoc`);
 		const theoDonVi = await tDv.evaluate(() => {
 			const hang = [...document.querySelectorAll("[data-hang-muc-tieu]")];
 			const kr = [...document.querySelectorAll("[data-kr]")];
 			const nhip = kr.map(
 				(r) =>
-					r
+					(r.closest("tr") ?? r)
 						.querySelector("[data-tinh-trang]")
 						?.getAttribute("data-tinh-trang") ?? "",
 			);
