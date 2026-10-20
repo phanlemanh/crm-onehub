@@ -92,7 +92,7 @@ function tabHoiY(o: HTMLElement): HTMLElement {
 	const tab = o.querySelector<HTMLElement>(
 		'[role="tab"][href^="/ws/okr/hoi-y"]',
 	);
-	if (!tab) throw new Error("không thấy tab Hỏi ý");
+	if (!tab) throw new Error("không thấy tab Lấy ý kiến");
 	return tab;
 }
 
