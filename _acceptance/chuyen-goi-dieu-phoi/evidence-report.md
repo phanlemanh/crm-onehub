@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
+verified_commit: ab06bcf989df41ca5c1bae7f4bf3c1431175783e
 human_signoff: "Phan Le Manh 2026-10-12 — ký Cổng Bằng chứng trên vòng chấm 3 (10/10 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Ngoài-2, 4, 5, 7, 15, 16, 19, 20 ghi Known limits; Ngoài-3, 18 mở hợp đồng mới; Ngoài-1, 6, 8–14, 17, 21, 22 chấp nhận, không sửa; đồng ý cắt; Treo phê hết"
 ---
 
@@ -186,3 +186,7 @@ Round 3: E1 đến E10 và 7 lệnh suite đều xanh trên cây 9b8bedcee819f56
 ### Re-pin lần 1 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
 run_id: repin-20261012T222532Z-81286
 sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-19, do F26 khong-do-them-chay-gh: datNenBan, cờ --chi và sửa thước E1 (luật 23) trong rang/ của hồ sơ; gộp #396 vào scripts/kiem-cheo
+run_id: repin-20261019T224319Z-18997
+sha: ab06bcf989df41ca5c1bae7f4bf3c1431175783e · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

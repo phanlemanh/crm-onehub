@@ -1515,7 +1515,8 @@ model AppSetting {
   zaloWebhookUrl    String?
   zaloWebhookLyDo   String?
 
-  ngayNghiTuan Int[] @default([])
+  ngayNghiTuan  Int[]   @default([])
+  khongNghiTuan Boolean @default(false)
 
   updatedAt DateTime @updatedAt
 
