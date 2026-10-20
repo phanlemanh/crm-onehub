@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 63b4dcec19d614e005362ceb1e6c76c7fd0ef7cc
+verified_commit: 38db58b5ad5d0efef5a9ba4a27905b916af88846
 human_signoff: Manh Phan 2026-09-29
 ---
 
@@ -388,3 +388,7 @@ sha: 6da07b60c74da0aacad8c0c3f21dca5a43ba7671 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-10-16, do gộp onehub 4bd29def6 (#438)
 run_id: repin-20261016T062657Z-68774
 sha: 63b4dcec19d614e005362ceb1e6c76c7fd0ef7cc · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 8 — 2026-10-20, do VK5 đổi câu lỗi conCanChinh; thước E15 mở khung qua đường dẫn bản ghi (chủ kho cho, V2-10)
+run_id: repin-20261020T071400Z-50449
+sha: 38db58b5ad5d0efef5a9ba4a27905b916af88846 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
