@@ -38,13 +38,13 @@
 
 **Files:**
 - Modify: `packages/db/prisma/schema.prisma` (model `TinHieu` ~2998, model `User` ~103)
-- Create: `packages/db/prisma/migrations/20261019150000_go_tin_hieu_rac/migration.sql`
+- Create: `packages/db/prisma/migrations/20261020053000_go_tin_hieu_rac/migration.sql`
 - Create: `_acceptance/go-tin-hieu-rac/rang/migration-chi-them.mjs` (bám `_acceptance/may-soan-de-xuat/rang/migration-chi-them.mjs`)
 
 **Interfaces:**
 - Produces: `TinHieu.archivedAt DateTime?`, `TinHieu.archivedById String?` (`archivedBy User? @relation("TinHieuLuuTru", onDelete: SetNull)`); model `TinHieuVet { id cuid, tinHieuId String? (SetNull), so Int, luc DateTime @default(now()), nguoiId String? (SetNull, @relation("TinHieuVetNguoi")), loai String, @@index([tinHieuId, luc]), @@map("tinHieuVet") }`; `TinHieu.vet TinHieuVet[]`.
 
-- [ ] Step 1: Viết `rang/migration-chi-them.mjs`: tập bảng được dùng `{"tinHieuVet", "tinHieu"}`, migration của hồ sơ `["20261019150000_go_tin_hieu_rac"]`, in một dòng mỗi câu lệnh, thông điệp đỏ ghim «migration khong chi them»; kiểm luật 2 (mọi bảng/cột trỏ tới có trong migration tên xếp trước hoặc chính nó); chạy `prisma migrate diff --from-migrations <thư mục> --to-schema <schema> --exit-code` trên kho tạm như `migration-tren-ban-sao.mjs`, khác 0 → đỏ «schema troi so voi migration». Có cờ `--tu-thu` chép migration vào thư mục tạm, chèn `UPDATE "tinHieu" SET ...` và `ADD COLUMN ... NOT NULL`, khẳng định mỗi bản đỏ đúng thông điệp.
+- [ ] Step 1: Viết `rang/migration-chi-them.mjs`: tập bảng được dùng `{"tinHieuVet", "tinHieu"}`, migration của hồ sơ `["20261020053000_go_tin_hieu_rac"]`, in một dòng mỗi câu lệnh, thông điệp đỏ ghim «migration khong chi them»; kiểm luật 2 (mọi bảng/cột trỏ tới có trong migration tên xếp trước hoặc chính nó); chạy `prisma migrate diff --from-migrations <thư mục> --to-schema <schema> --exit-code` trên kho tạm như `migration-tren-ban-sao.mjs`, khác 0 → đỏ «schema troi so voi migration». Có cờ `--tu-thu` chép migration vào thư mục tạm, chèn `UPDATE "tinHieu" SET ...` và `ADD COLUMN ... NOT NULL`, khẳng định mỗi bản đỏ đúng thông điệp.
 - [ ] Step 2: `bun _acceptance/go-tin-hieu-rac/rang/migration-chi-them.mjs` → đỏ (migration chưa có).
 - [ ] Step 3: Sửa schema, sinh migration bằng `cd packages/db && bunx prisma migrate diff --from-migrations prisma/migrations --to-schema prisma/schema.prisma --script` rồi lưu vào thư mục migration trên; `bun run db:generate`.
 - [ ] Step 4: Chạy lại rang (không cờ, rồi `--tu-thu`) → xanh; `bun run check-types` ở `packages/db` xanh.
