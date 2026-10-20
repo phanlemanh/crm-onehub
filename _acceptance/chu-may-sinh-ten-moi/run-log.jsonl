@@ -27,3 +27,4 @@
 {"ts":"2026-10-20T02:58:06Z","sha":"3c5950f7a0b958e5b58e2a4ca967bc578dce333c","round":1,"kind":"baseline","evals_hash":"4a447c8aeaa1644350215acfeaba16a345817cc5482e6fe787eacd010debeac1","non_discriminating":[]}
 {"ts":"2026-10-20T02:58:06Z","sha":"3c5950f7a0b958e5b58e2a4ca967bc578dce333c","round":1,"kind":"round-tally","verdict":"PASS","expected":17,"returned":17,"blocked":0}
 {"ts":"2026-10-20T02:58:06Z","sha":"3c5950f7a0b958e5b58e2a4ca967bc578dce333c","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":19}
+{"kind":"thuoc-vat","ts":"2026-10-20T03:20:27Z","round":1,"san":"3c5950f7a0b958e5b58e2a4ca967bc578dce333c","vat":[0,0],"thuoc":[0,0],"ho_so":[0,0],"nhat":0,"lan":0,"tep_thuoc":[]}

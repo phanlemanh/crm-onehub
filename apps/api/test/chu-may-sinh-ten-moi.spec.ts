@@ -102,6 +102,10 @@ const docKiemKe = () =>
 	);
 
 describe("cmst-gop-vao", () => {
+	test("luat may soat du nam cum cam tren moi cau", () => {
+		expect(soatTenCu(LA).map(dongLoiTenCu)).toEqual([]);
+	});
+
 	test("khong cau bao loi nao con «căn chỉnh»", () => {
 		const loi = soatTenCu(LA)
 			.filter((l) => l.cum === "căn chỉnh")
@@ -178,9 +182,14 @@ describe("cmst-lay-y-kien", () => {
 			thongDiep = e instanceof Error ? e.message : String(e);
 		}
 		expect(
-			thongDiep.includes("lần lấy ý kiến") && !/hỏi ý/i.test(thongDiep)
+			thongDiep.includes("lần lấy ý kiến")
 				? []
 				: [`cmst: validation ${thongDiep}`],
+		).toEqual([]);
+		expect(
+			soatTenCu([
+				{ nguon: "validation", khoa: "parseSoLieuHoiY", chu: thongDiep },
+			]).map(dongLoiTenCu),
 		).toEqual([]);
 	});
 

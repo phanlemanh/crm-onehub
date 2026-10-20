@@ -44,7 +44,7 @@ export function daiCuaVong({ nhanhChinh = "origin/onehub" } = {}) {
 		.at(-1);
 	let dai;
 	if (gopVao && laToTien(gopVao, "HEAD")) {
-		dai = { tu: git("rev-parse", `${gopVao}^1`), den: git("rev-parse", `${gopVao}^2`), kieu: "da-gop" };
+		dai = { tu: git("merge-base", `${gopVao}^1`, `${gopVao}^2`), den: git("rev-parse", `${gopVao}^2`), kieu: "da-gop" };
 	} else {
 		dai = { tu: git("merge-base", "HEAD", nhanhChinh), den: git("rev-parse", "HEAD"), kieu: "nhanh-mo" };
 	}

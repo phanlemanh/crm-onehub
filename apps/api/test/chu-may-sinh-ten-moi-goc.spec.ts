@@ -68,7 +68,9 @@ const KIEM_KE = join(
 const NGUON_OKR = join(GOC, "apps", "api", "src", "okr");
 const TEP_HANG_CU = "okr-config.ts";
 const TEP_TEN_DON_VI = "don-vi.ts";
-const GOI_TEN_DON_VI = /tenDonVi\([^()]*,\s*tenGoc\)/g;
+const GOI_TEN_DON_VI = /\btenDonVi\(/g;
+const DINH_NGHIA_TEN_DON_VI = /function tenDonVi\(/g;
+const TEP_TEN_DON_VI_RIENG = "soan.service.ts";
 
 const TEN_THU = "Kho Thử Nghiệm";
 const TEN_TRANG = "   ";
@@ -82,10 +84,12 @@ const SEED_MS = 180_000;
 const DOC_MS = 60_000;
 
 const kiemKe = z.object({
-	muc: z.array(z.object({ tep: z.string(), khai_niem: z.string() })),
+	muc: z.array(
+		z.object({ tep: z.string(), dong: z.number(), khai_niem: z.string() }),
+	),
 });
 
-type HangGoc = { ten: string; doc: () => Promise<string> };
+type HangGoc = { ten: string; cho: string; doc: () => Promise<string> };
 
 type San = {
 	kyChay: string;
@@ -136,12 +140,14 @@ function cotCsv(noiDung: string, cot: string, capCot: string): string {
 const GOC_MOI_CHO: readonly HangGoc[] = [
 	{
 		ten: "muc-tieu.unitName",
+		cho: "tenDonVi@okr.service.ts",
 		doc: async () =>
 			(await doc<ObjectiveOutput>("okr.objective", "quan", { id: s.goc }))
 				.unitName,
 	},
 	{
 		ten: "gop-vao.alignments.unitName",
+		cho: "tenDonVi@okr.service.ts",
 		doc: async () =>
 			motHang(
 				(await doc<ObjectiveOutput>("okr.objective", "quan", { id: s.phong }))
@@ -152,6 +158,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "alignmentTargets.unitName",
+		cho: "tenDonVi@okr.service.ts",
 		doc: async () =>
 			motHang(
 				(
@@ -165,6 +172,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "capNhatTuan.unitName",
+		cho: "tenDonVi@okr-cap-nhat.service.ts",
 		doc: async () =>
 			motHang(
 				(await doc<CapNhatTuanOutput>("okr.capNhatTuan", s.cookieChuKr)).items,
@@ -174,6 +182,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "hoiYDoPhu.goc.nhan",
+		cho: "kiem-ke@apps/api/src/okr/okr-hoi-y.service.ts:989",
 		doc: async () =>
 			motHang(
 				(
@@ -187,6 +196,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "toanCanh.goc.ten",
+		cho: "kiem-ke@apps/api/src/okr/okr-xem.service.ts:395",
 		doc: async () =>
 			motHang(
 				(
@@ -200,6 +210,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "sucKhoe.goc.ten",
+		cho: "kiem-ke@apps/api/src/okr/okr-xem.service.ts:469",
 		doc: async () =>
 			motHang(
 				(
@@ -213,6 +224,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "soDoDonVi.goc.ten",
+		cho: "kiem-ke@apps/api/src/okr/okr-xem.service.ts:477",
 		doc: async () =>
 			motHang(
 				(
@@ -226,6 +238,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "soanDanhSachCuoc.tenDonVi",
+		cho: "kiem-ke@apps/api/src/okr/soan.service.ts:433",
 		doc: async () =>
 			motHang(
 				(
@@ -242,6 +255,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "moCoi.donVi.ten",
+		cho: "kiem-ke@apps/api/src/okr/okr-tai-co-cau.service.ts:127",
 		doc: async () =>
 			motHang(
 				await doc<MucMoCoi[]>("okr.moCoi", "quan", { cycleId: s.kyChay }),
@@ -251,6 +265,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "bangCham.chuaCham.goc.ten",
+		cho: "tenDonVi@khep.ts",
 		doc: async () =>
 			motHang(
 				(
@@ -264,6 +279,7 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 	{
 		ten: "xuatKy.cotDonVi",
+		cho: "tenDonVi@okr-khep.service.ts",
 		doc: async () =>
 			cotCsv(
 				(await doc<XuatKyOutput>("okr.xuatKy", "quan", { cycleId: s.kyDong }))
@@ -274,27 +290,27 @@ const GOC_MOI_CHO: readonly HangGoc[] = [
 	},
 ];
 
-function soChoDungGoc(): number {
-	const muc = kiemKe
+function choDungGoc(): string[] {
+	const tuKiemKe = kiemKe
 		.parse(JSON.parse(readFileSync(KIEM_KE, "utf8")))
 		.muc.filter(
 			(m) =>
 				m.khai_niem === "goc" &&
 				m.tep.startsWith("apps/api/src/") &&
-				!m.tep.endsWith(TEP_HANG_CU),
-		);
-	const goiTenDonVi = readdirSync(NGUON_OKR)
-		.filter((t) => t.endsWith(".ts"))
-		.reduce(
-			(n, t) =>
-				n +
-				(readFileSync(join(NGUON_OKR, t), "utf8").match(GOI_TEN_DON_VI)
-					?.length ?? 0),
-			0,
-		);
-	return (
-		muc.filter((m) => !m.tep.endsWith(TEP_TEN_DON_VI)).length + goiTenDonVi
-	);
+				!m.tep.endsWith(TEP_HANG_CU) &&
+				!m.tep.endsWith(TEP_TEN_DON_VI),
+		)
+		.map((m) => `kiem-ke@${m.tep}:${m.dong}`);
+	const tuLoiGoi = readdirSync(NGUON_OKR)
+		.filter((t) => t.endsWith(".ts") && t !== TEP_TEN_DON_VI_RIENG)
+		.flatMap((t) => {
+			const nguon = readFileSync(join(NGUON_OKR, t), "utf8");
+			const so =
+				(nguon.match(GOI_TEN_DON_VI)?.length ?? 0) -
+				(nguon.match(DINH_NGHIA_TEN_DON_VI)?.length ?? 0);
+			return Array.from({ length: so }, () => `tenDonVi@${t}`);
+		});
+	return [...tuKiemKe, ...tuLoiGoi].sort();
 }
 
 async function tenGocLa(name: string): Promise<void> {
@@ -442,15 +458,16 @@ describe("cmst-goc", () => {
 	}, SEED_MS);
 
 	test("cmst-goc: ma tran GOC_MOI_CHO khop so cho dung kiem-ke dan toi", () => {
-		const k = soChoDungGoc();
+		const cho = choDungGoc();
+		const hang = GOC_MOI_CHO.map((h) => h.cho).sort();
 		console.log(
-			`cmst-goc: ma trận ${GOC_MOI_CHO.length} hàng, kiem-ke dẫn tới ${k} chỗ dùng`,
+			`cmst-goc: ma trận ${GOC_MOI_CHO.length} hàng, kiem-ke dẫn tới ${cho.length} chỗ dùng`,
 		);
-		if (GOC_MOI_CHO.length !== k)
+		if (JSON.stringify(hang) !== JSON.stringify(cho))
 			throw new Error(
-				`cmst: ma tran goc thieu ${GOC_MOI_CHO.length} khac ${k}`,
+				`cmst: ma tran goc thieu ${GOC_MOI_CHO.length} khac ${cho.length}: hang ${hang.join(", ")} · cho ${cho.join(", ")}`,
 			);
-		expect(new Set(GOC_MOI_CHO.map((h) => h.ten)).size).toBe(k);
+		expect(new Set(GOC_MOI_CHO.map((h) => h.ten)).size).toBe(cho.length);
 	});
 
 	test(

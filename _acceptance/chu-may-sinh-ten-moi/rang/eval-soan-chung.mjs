@@ -9,6 +9,13 @@ export const VUNG_SOAN = ["apps/agent-okr/agent", "apps/agent-okr/evals", "packa
 export const CHU_CU_KARA = ["căn chỉnh", "hỏi ý"];
 export const NGUONG = { dat: 2, chotMa: 1, tieuChi: 0.2 };
 
+export function demChuCu(deXuat) {
+	return deXuat.flatMap((d) => {
+		const van = JSON.stringify([d.lyDo, d.noiDung, d.sau]).normalize("NFC").toLocaleLowerCase("vi");
+		return CHU_CU_KARA.filter((c) => van.includes(c)).map((c) => ({ cuoc: d.cuocSoanId, cum: c }));
+	});
+}
+
 export const bam = (chu) => createHash("sha256").update(chu).digest("hex");
 export const bamTep = (duong) => bam(readFileSync(duong));
 

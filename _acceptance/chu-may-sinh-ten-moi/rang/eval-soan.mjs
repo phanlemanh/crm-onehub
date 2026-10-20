@@ -12,7 +12,7 @@ import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BAM_THUOC, bamTep, CHU_CU_KARA, LOI_DAN_SOAN, NHAN_HOP_LE } from "./eval-soan-chung.mjs";
+import { BAM_THUOC, bamTep, demChuCu, LOI_DAN_SOAN, NHAN_HOP_LE } from "./eval-soan-chung.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const APP = join(GOC, "apps", "agent-okr");
@@ -471,10 +471,8 @@ const deXuat = await db.okrDeXuat.findMany({
 	select: { cuocSoanId: true, lyDo: true, noiDung: true, sau: true },
 });
 await db.$disconnect();
-const chuCu = deXuat.flatMap((d) => {
-	const van = JSON.stringify([d.lyDo, d.noiDung, d.sau]).toLowerCase();
-	return CHU_CU_KARA.filter((c) => van.includes(c)).map((c) => ({ cuoc: d.cuocSoanId, cum: c }));
-});
+if (!deXuat.length) thoat(2, "khong doc duoc de xuat nao cua lan chay — ma 2, khong ghi tom tat");
+const chuCu = demChuCu(deXuat);
 const ketLuan = ketLuanThuoc({
 	phan,
 	soLanThu: TRO_LY_OKR_SOAN.judge.soLanThu,
@@ -526,5 +524,4 @@ writeFileSync(
 	)}\n`,
 );
 console.log(`eval-soan: da ghi ${TOM_TAT}`);
-if (!deXuat.length) thoat(2, "khong doc duoc de xuat nao cua lan chay — ma 2");
 process.exit(0);
