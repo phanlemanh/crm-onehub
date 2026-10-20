@@ -1,6 +1,6 @@
 # Thiết kế (bản phác trên giấy): model-theo-vai-do-lai (MH4)
 
-> Trạng thái: CHỐT ở S1 sau khi VK5 (`chu-may-sinh-ten-moi`, #503) gộp `onehub` e290fa498 ngày 20/10. Nhánh đã gộp
+> Trạng thái: MỞ LẠI 21/10 để thêm DeepSeek và Gemini (mục «Mở rộng 21/10» cuối tệp). Bản chốt 20/10: CHỐT ở S1 sau khi VK5 (`chu-may-sinh-ten-moi`, #503) gộp `onehub` e290fa498 ngày 20/10. Nhánh đã gộp
 > mốc đó (961b36548). Lời dặn trên onehub khớp diff vk dán ở #375: «Căn chỉnh» → «Góp vào», thêm câu cấm viết «căn
 > chỉnh»/«hỏi ý», và dòng `can-chinh` của `tro_ly_okr` đổi chữ theo. Hợp đồng ở `contract.md`.
 
@@ -83,3 +83,56 @@ Sửa tạm hằng trong cây đo rồi trả lại, băm bản sửa vào bằn
 `flash-low`), `tai-lieu-config.ts` (`hoi.maModel`), `apps/agent-okr/agent/lib/config.ts` (`MO_HINH`). Không thêm cửa đổi
 model vào code sản phẩm. Xin chạm tệp K1-8 gửi giám sát đợt. Tác nhân đổi bằng ô Cài đặt trong kho đo; danh mục Gateway
 có `zai/glm-5.3-flash` nên `modelTheoVai` không lùi về mặc định.
+
+## Mở rộng 21/10 — DeepSeek V4.1 Flash 1017 và Gemini cho Trợ lý kho
+
+Chủ kho, 21/10, sau khi S3 xong và trước khi S4 ký (qua phiên K1 cũ): «Tôi muốn bổ sung một model giá rẻ hiệu năng cao là
+"deepseek v4 1 flash 1017" thực hiện đo đầy đủ với các vai cho model này, và đo gemini cho Trợ lý kho. Sau đó lập bảng
+kiến nghị cuối cùng cho tôi.» Bảng kiến nghị là sản phẩm của MH4, nên vòng mở lại thay vì mở hàng mới (d-20261020T223012Z-17).
+
+### Ứng viên
+
+| Khoá | Model Gateway | Giá vào/ra mỗi triệu token | Vai đo |
+|---|---|---|---|
+| `glm` | `zai/glm-5.3-flash` | 0,15 / 0,50 | Tác nhân, Trợ lý kho, Soạn OKR — đã đo 20/10, giữ nguyên |
+| `ds` | `deepseek/deepseek-v4.1-flash-1017` | 0,075 / 0,30 (giờ cao điểm × 2) | Tác nhân (`ds`, `ds-low`), Trợ lý kho, Soạn OKR |
+| `gem` | `google/gemini-3.8-flash` | 0,75 / 3,75 | Trợ lý kho (đang là model chạy thật của Soạn OKR) |
+
+Danh mục Gateway (`/v1/models`, đọc 21/10) có `deepseek/deepseek-v4.1-flash-1017` kiểu `language`, tag `tool-use` và
+`reasoning`, cửa sổ 1.048.576 — nên `modelTheoVai` không lùi về mặc định (`packages/validation/src/gateway-danh-muc.ts` lọc
+theo hai điều kiện ấy). Giá DeepSeek nhân đôi thứ Hai–Sáu 01:00–04:00 và 06:00–10:00 UTC; thước không mở lượt `ds` trong
+khung đó (d-20261020T223012Z-21) — sau gap-probe bỏ chặn (d-20261020T223820Z-26): luật chọn so bằng token × giá niêm yết,
+nên giờ chạy chỉ đổi tiền thật, tính vào trần.
+
+### Chỗ có thể làm lệch số (tra code 21/10)
+
+- **Tác nhân.** Biến thể `-low` chèn `reasoning: "low"` vào `defineAgent` của `agent_builder`; eve chuyển thẳng vào lời gọi
+  AI SDK, Gateway chuyển nguyên lên nhà cung cấp — không khoá theo `zai`. Gateway có dịch `low` cho DeepSeek không thì chỉ
+  lời dò AC-2 nói được. Đường Tác nhân không bật ZDR.
+- **Trợ lý kho.** `hoi.maModel` không kiểm mã; ZDR bật cứng (`tai-lieu-config.ts`), không có tuỳ chọn suy luận, trần ra 8k
+  mỗi phiên. Bảng giá `TAI_LIEU_AGENT.bangGia` chỉ có `zai/glm-5.2-fast` — model khác ghi `chiPhiUsd` 0, thước không đọc
+  trường đó (đo bằng chênh số dư Gateway).
+- **Soạn OKR.** `xuongModelZdr` ép `thinkingLevel: low` chỉ qua khoá `google`/`vertex`; DeepSeek chạy suy luận mặc định.
+  Trần ra 3.000 token mỗi lời gọi — DeepSeek suy luận dài có thể chạm. Hỏi-9 hỏi giữ mặc định hay sửa tạm thêm `low`.
+- **Thước.** `rang/khuon.ts` ghim một model (`MTV.model`), so-do.ts dùng nó khoảng 23 chỗ; đường bằng chứng ghim nhãn
+  `flash`. Vòng mở lại tham số hoá theo danh sách ứng viên trong `ke-hoach.json`, giữ tên bằng chứng `glm` cũ (d-20261020T223012Z-22);
+  khoá chi phí thêm chiều ứng viên để hai ứng viên cùng số lượt không đè nhau.
+
+### Câu chỉ người trả lời (lên Cổng Phạm vi)
+
+- **Hỏi-9 — mức suy luận ở kho và soạn.** Khuyên: mặc định — đúng thứ chạy khi MH2 chỉ đổi mã model; ghi «suy luận low»
+  vào thông số chưa dò. Lối khác: sửa tạm thêm `reasoning: low` cho DeepSeek ở kho và soạn.
+- **Hỏi-10 — nhiều ứng viên cùng đạt ngưỡng.** Khuyên: ngưỡng Hỏi-6 (20/10) áp nguyên cho `ds`, `gem`; ứng viên có lượt bị
+  loại (sai model, lời dặn lệch, dừng vì trần) là «chưa đủ số»; trong các ứng viên đạt chọn ứng viên có **chi phí phần ứng
+  viên** thấp nhất, bằng nhau thì điểm cao hơn rồi trung vị giây thấp hơn. Chi phí phần ứng viên = token các bước do model
+  ứng viên chạy (kết xuất `aiChiPhi` của kho đo — dùng-một-lần, nên không lẫn phiên khác) × giá niêm yết ghim. Không dùng
+  `usd` tóm tắt soạn (gồm judge GLM 5.2 Fast) hay chênh số dư (gồm phiên gốc và các phiên khác dùng chung số dư nhóm).
+  Lối khác: điểm cao nhất, chi phí chỉ phá hoà.
+- **Hỏi-12 — DeepSeek ở Judge OKR và Máy soạn kho.** Hai vai chưa có thước đo model ứng viên. Khuyên: để ngoài vòng, ghi
+  DeepSeek vào thông số chưa dò của hai hàng; dựng thước judge, máy soạn là hàng riêng. Lối khác: thêm thước chấm judge —
+  chạy lại judge DeepSeek trên đề xuất đã lưu của các lượt soạn và so phán với GLM 5.2 Fast (khoảng nửa ngày, 1–2 USD).
+- **Hỏi-11 — cỡ mẫu, thứ tự, trần.** Khuyên: DeepSeek cùng cỡ mẫu vòng GLM (5 lượt mỗi biến thể Tác nhân, 3 lời dò, 1 lượt
+  kho, 2 lượt soạn), Gemini 1 lượt kho; thứ tự dò → Tác nhân → soạn → kho `ds` → kho `gem`; trần tổng cả vòng 12 USD (đã chi
+  khoảng 3,1). Ước phần thêm: Tác nhân và dò dưới 0,1 USD, soạn khoảng 1,2 USD (phần lớn là judge GLM 5.2 Fast), kho `ds`
+  1–3 USD, kho `gem` 2–5 USD. Lối khác: trần 10 USD (lượt `gem` có thể dừng vì trần) hoặc 15 USD (còn khoảng 0,7 USD cho MH2
+  từ số dư 18,8 USD ngày 20/10).
