@@ -1,0 +1,9 @@
+{
+  "nguon": "Hỏi-5, chủ kho duyệt theo lời khuyên ở Cổng Phạm vi 2026-10-20 (d-20261020T101858Z-12)",
+  "model": "zai/glm-5.3-flash",
+  "tac_nhan": { "bien_the": ["flash", "flash-low"], "so_luot": 5 },
+  "tro_ly_kho": { "so_luot": 1 },
+  "soan_okr": { "so_luot": 2, "moc": "_acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json" },
+  "tran_usd": 6,
+  "thong_so_chua_do": ["trần bước phiên con", "trần thời gian phiên con", "flash-low cho Trợ lý kho", "flash-low cho Soạn OKR"]
+}
