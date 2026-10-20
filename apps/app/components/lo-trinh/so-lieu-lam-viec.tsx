@@ -12,6 +12,7 @@ import {
 } from "@/components/detail-sheet";
 import { LO_TRINH } from "@/lib/lo-trinh/cau-hinh";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
+import { useKhoSanPham } from "./kho-san-pham";
 
 export const SO_LIEU = [
 	"tieu_chi",
@@ -30,6 +31,7 @@ export type TomTatChuKho = Record<SoLieu, number | null> & {
 
 export function SoLieuLamViec({ chuKho }: { chuKho: TomTatChuKho }) {
 	const locale = useLocale();
+	const kho = useKhoSanPham();
 	const m = loTrinhMessages(locale);
 	const so = new Intl.NumberFormat(locale);
 	return (
@@ -64,7 +66,7 @@ export function SoLieuLamViec({ chuKho }: { chuKho: TomTatChuKho }) {
 							</span>
 							<CopyValue label={m.hoSo.maCommit} value={chuKho.ma} />
 							<Link
-								href={LO_TRINH.timPr(chuKho.ma)}
+								href={LO_TRINH.timPr(chuKho.ma, kho)}
 								rel="noreferrer noopener"
 								target="_blank"
 							>

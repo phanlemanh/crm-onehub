@@ -39,7 +39,7 @@ cuối».
   | --- | --- |
   | Không gian làm việc | Chung · Tiền tệ · Trường · Giai đoạn thoả thuận · Lịch làm việc |
   | Con người | Thành viên · Tổ chức · Chương trình OKR · Điều phối 30 ngày |
-  | Kết nối và dữ liệu | Kết nối · Theo dõi & phân tích |
+  | Kết nối và dữ liệu | Kết nối · Theo dõi & phân tích · Sản phẩm |
   | Bảo mật | SSO · Khoá API |
 
 - Thanh bên chỉ chứa cài đặt **của không gian làm việc**. Cài đặt của riêng một
