@@ -4,7 +4,7 @@ feature: Lệnh xoá bộ OKR mẫu dọn sạch cả dữ liệu người mẫu
 slug: okr-mau-xoa-du
 owner: phanlemanh@gmail.com
 risk_tier: T2
-surfaces: [script]
+surfaces: [cli]
 status: draft
 design_doc: docs/superpowers/specs/2026-10-20-okr-mau-xoa-du-design.md
 ---
