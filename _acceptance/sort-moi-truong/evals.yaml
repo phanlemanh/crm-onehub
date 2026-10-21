@@ -1,0 +1,121 @@
+slug: sort-moi-truong
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.smt_api_sap
+    expected: "exit 0; -t smt-api-sap của apps/api/test/sort-moi-truong.spec.ts trên kho thử của lượt. Cô lập: kho thử của lượt dùng chung giữa các tệp, nên mọi bản ghi của ca mang tiền tố tên riêng của ca và mọi lời gọi list/board mang q là tiền tố ấy; đầu ca, lời gọi với q ấy trả khác 0 hàng thì ném 'smt <ca>: lan <n>'; cuối ca lưu trữ trường đã tạo. Fixture qua đường ghi thật (caller tRPC với phiên quản trị): chín trường DEAL tự tạo, một mỗi kiểu TEXT, LONG_TEXT, NUMBER, DATE, SELECT, USER, URL, EMAIL, PHONE; SELECT có ba lựa chọn mà thứ tự position khác thứ tự chữ cái (C, A, B); USER trỏ ba thành viên tên khác nhau. Sáu thoả thuận T1..T6 tạo lần lượt (createdAt và id tăng dần), tên sau tiền tố: T1 'Bình', T2 'Cường', T3 'Dung', T4 'An', T5 'Em', T6 'Chi': với mỗi kiểu, T1, T4, T6 mang cùng một giá trị (nhóm hoà ba bản ghi), T2 giá trị nhỏ nhất, T5 giá trị lớn nhất, T3 trống. Đáp án viết tay trong test cho mỗi kiểu, không tính bằng hàm của mã: tăng = [T2, T4, T1, T6, T5, T3], giảm = [T5, T4, T1, T6, T2, T3] (nhóm hoà theo tên A→Z như sort chuẩn: An, Bình, Chi = T4, T1, T6 ở cả hai chiều — khác cả thứ tự tạo T1, T4, T6 lẫn thứ tự ngược T6, T4, T1, nên luật hoà theo id hay createdAt chiều nào cũng đỏ; trống cuối cả hai chiều); riêng SELECT tăng theo position. Gọi deals.list({q, sort: 'field:<khoa>', dir, pageSize: 25}) cho 9 kiểu × 2 chiều. Thứ tự id lệch đáp án thì ném 'smt api sap: <kieu> <dir> ra <ten>'. Số ô đã so khác 18 thì ném 'smt api sap: thieu o <n>'. Đối chứng dương cùng fixture: deals.list({sort: 'amount'}) phải trả đúng thứ tự Giá trị đã gán (T3, T5, T1, T4, T2, T6) (thước đọc được thứ tự thật), lệch thì ném 'smt api sap: doi chung amount'. Chiều đỏ trong lịch sử: trên onehub 03d4842f1, sort 'field:…' rơi về createdAt desc = [T5, T4, T3, T2, T1], ném 'smt api sap: TEXT asc ra T5,T4,T3,T2,T1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/fields-shape.ts, apps/api/src/fields/**, apps/api/src/deals/**, apps/api/src/trpc/list-input.ts, apps/api/test/sort-moi-truong.spec.ts]
+
+  - id: E1b
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.smt_api_trang
+    expected: "exit 0; -t smt-api-trang của apps/api/test/sort-moi-truong.spec.ts. Cô lập: kho thử của lượt dùng chung giữa các tệp, nên mọi bản ghi của ca mang tiền tố tên riêng của ca và mọi lời gọi list/board mang q là tiền tố ấy; đầu ca, lời gọi với q ấy trả khác 0 hàng thì ném 'smt <ca>: lan <n>'; cuối ca lưu trữ trường đã tạo. Fixture qua đường ghi thật: 23 thoả thuận, trường NUMBER tự tạo 'smt_trang' có giá trị ở 16 bản ghi (hai cặp hoà), trống ở 7. Với pageSize 5 và cả hai chiều, đi trang 1..5: số hàng mỗi trang khác [5,5,5,5,3] thì ném 'smt api trang: <dir> co trang <json>'; một id xuất hiện hai lần thì ném 'smt api trang: <dir> trung <id>'; hợp các trang khác tập 23 id thì ném 'smt api trang: <dir> sot <n>'; total khác 23 ở bất kỳ trang nào thì ném 'smt api trang: total <n>'; ghép các trang khác đáp án viết tay (sinh từ bảng giá trị gán trong test, viết sẵn thành mảng chỉ số) thì ném 'smt api trang: <dir> thu tu trang <k>'. Trang 4 phải vắt qua ranh (có cả hàng có giá trị và hàng trống) — fixture không cho vậy thì ném 'smt api trang: fixture khong vat ranh'. Bộ lọc cùng thước: gán owner B cho 9 bản ghi (4 trống), gọi với owner: [B] và q khớp tên của 6 trong 9; tập trả về khác đáp án hay total khác 6 thì ném 'smt api trang: loc <ten loc>'; archived: true với 3 bản ghi đã lưu trữ thì chỉ trả 3 bản ghi ấy theo đúng thứ tự, lệch thì ném 'smt api trang: luu tru'. Hai dạng trống: hai bản ghi trong 7 bản ghi trống được đặt giá trị rồi xoá qua deals.update thật (dạng không có hàng); thêm một trường USER 'smt_trang_nguoi' trên sáu bản ghi của ca, rồi xoá một User bằng db.user.delete để khoá ngoại SetNull thật để lại hàng userId null (dạng hàng có cột null). Đọc lại fieldValue của các bản ghi ấy: thiếu một trong hai dạng thì ném 'smt api trang: fixture trong mot dang'. Đi trang sort 'field:smt_trang_nguoi' pageSize 2 cả hai chiều: bản ghi có hàng userId null không nằm ở đoạn trống cuối, hay vắng khỏi mọi trang, thì ném 'smt api trang: <dir> sot <id>'. Chiều đỏ trong lịch sử: trên onehub thứ tự là createdAt desc, ném 'smt api trang: asc thu tu trang 1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/deals/**, apps/api/src/trpc/list-input.ts, apps/api/test/sort-moi-truong.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.smt_api_cty_lh
+    expected: "exit 0; -t smt-api-cty-lh của apps/api/test/sort-moi-truong.spec.ts. Cô lập: kho thử của lượt dùng chung giữa các tệp, nên mọi bản ghi của ca mang tiền tố tên riêng của ca và mọi lời gọi list/board mang q là tiền tố ấy; đầu ca, lời gọi với q ấy trả khác 0 hàng thì ném 'smt <ca>: lan <n>'; cuối ca lưu trữ trường đã tạo. Cùng khuôn sáu bản ghi của E1 (T2 nhỏ nhất, T1 hoà T4 hoà T6, T5 lớn nhất, T3 trống; đáp án viết tay tăng [T2,T4,T1,T6,T5,T3], giảm [T5,T4,T1,T6,T2,T3]) cho COMPANY qua companies.list và CONTACT qua contacts.list, mỗi loại ba trường tự tạo TEXT, NUMBER, DATE. Lệch thì ném 'smt api cty lh: <loai> <kieu> <dir> ra <ten>'. Số ô đã so khác 12 thì ném 'smt api cty lh: thieu o <n>'. Đi trang với pageSize 2 ở CONTACT NUMBER qua sáu bản ghi: trùng hay sót thì ném 'smt api cty lh: trang <id>'. Điện thoại chuẩn: ba liên hệ mang ba số khác nhau, ba liên hệ trống (T3 'Dung', T5 'Em', T6 'Chi') — hệ thống từ chối hai liên hệ cùng số, nên hoà chỉ có ở ô trống; contacts.list({sort: 'phone'}) tăng phải là đáp án viết tay, trống cuối và hoà theo lastName (T6, T3, T5 — khác cả thứ tự tạo lẫn thứ tự ngược); giảm trống vẫn cuối; lệch thì ném 'smt api cty lh: phone <dir> ra <ten>'. Cùng năm liên hệ mang trường PHONE tự tạo 'smt_dt' với đúng giá trị của phone chuẩn: thứ tự của 'field:smt_dt' khác thứ tự của 'phone' ở cùng chiều thì ném 'smt api cty lh: hoa lech chuan <dir>'. Chiều đỏ trong lịch sử: trên onehub 'phone' không có trong SORTABLE của contacts, ném 'smt api cty lh: phone asc ra …'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/test/sort-moi-truong.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.smt_api_khoa_chet
+    expected: "exit 0; -t smt-api-khoa-chet của apps/api/test/sort-moi-truong.spec.ts. Cô lập: kho thử của lượt dùng chung giữa các tệp, nên mọi bản ghi của ca mang tiền tố tên riêng của ca và mọi lời gọi list/board mang q là tiền tố ấy; đầu ca, lời gọi với q ấy trả khác 0 hàng thì ném 'smt <ca>: lan <n>'; cuối ca lưu trữ trường đã tạo. Fixture qua đường ghi thật: mỗi loại bản ghi năm bản ghi, tên xếp lệch thứ tự tạo (M, Z, A, Q, D) để thứ tự mặc định khác thứ tự tên; trường sống TEXT 'smt_song'; trường 'smt_luu_tru' đã lưu trữ bằng fields.update; trường CHECKBOX 'smt_tich'; trường CONTACT 'smt_lien_he' dùng ở danh sách DEAL. Sáu khoá: 'field:khong_co', 'field:smt_luu_tru', 'field:smt_tich', 'field:smt_lien_he' (ở deals), 'field:' và 'fieldxyz'. Với mỗi khoá × {deals.list, companies.list, contacts.list, deals.board}: ném lỗi thì ném 'smt api khoa chet: <khoa> <thu tuc> nem <ma>'; thứ tự id khác đúng thứ tự của cùng lời gọi với sort rỗng thì ném 'smt api khoa chet: <khoa> <thu tuc> thu tu'. Số ô đã so khác 22 (năm khoá × bốn thủ tục, cộng khoá 'field:smt_lien_he' ở hai thủ tục deals; số viết sẵn trong test) thì ném 'smt api khoa chet: thieu o <n>'. View đã lưu: savedViews.create({entity: DEAL, filters: {sort: 'field:smt_song'}}); rồi lưu trữ 'smt_song'; đọc view qua thủ tục đọc thật, phân tích bằng savedViewFilters, gọi deals.list với filters ấy: ném hay thứ tự khác mặc định thì ném 'smt api khoa chet: view da luu'. Đối chứng dương cùng fixture: trước khi lưu trữ, 'field:smt_song' phải cho thứ tự KHÁC mặc định; bằng nhau thì ném 'smt api khoa chet: thuoc mu'. Chiều đỏ: vế không ném đã đúng trên onehub — chứng bằng đột biến tay lúc dựng (cho sapTheoTruong ném BAD_REQUEST khi khoá không có) phải ném 'smt api khoa chet: field:khong_co deals.list nem BAD_REQUEST', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/src/saved-views/**, packages/validation/src/saved-view.ts, apps/api/test/sort-moi-truong.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.smt_api_board
+    expected: "exit 0; -t smt-api-board của apps/api/test/sort-moi-truong.spec.ts. Cô lập: kho thử của lượt dùng chung giữa các tệp, nên mọi bản ghi của ca mang tiền tố tên riêng của ca và mọi lời gọi list/board mang q là tiền tố ấy; đầu ca, lời gọi với q ấy trả khác 0 hàng thì ném 'smt <ca>: lan <n>'; cuối ca lưu trữ trường đã tạo. Fixture qua đường ghi thật: hai giai đoạn mở G1, G2; mỗi giai đoạn sáu thoả thuận theo khuôn của E1 với trường NUMBER 'smt_bang_so' và DATE 'smt_bang_ngay', có Giá trị. deals.board({q, sort: 'field:<khoa>', dir}) cho 2 kiểu × 2 chiều: thứ tự thẻ trong mỗi cột khác đáp án viết tay thì ném 'smt api board: <giai doan> <kieu> <dir> ra <ten>'; count, valueCents, countedCount của cột khác đúng giá trị của cùng lời gọi không sort thì ném 'smt api board: dem lech <giai doan>'. Số ô đã so khác 8 thì ném 'smt api board: thieu o <n>'. Trần thẻ: dựng G3 với DEAL_BOARD.cardsPerColumn + 3 thoả thuận (đọc hằng từ apps/api/src/deals/deal-board-config.ts), số thẻ trả khác cardsPerColumn thì ném 'smt api board: tran <n>'; ba bản ghi bị cắt phải là ba bản ghi cuối theo đáp án (trống cuối), lệch thì ném 'smt api board: cat sai'. Chiều đỏ trong lịch sử: trên onehub board dùng resolveOrderBy, ném 'smt api board: G1 NUMBER asc ra T5,T4,T3,T2,T1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/deals/**, apps/api/test/sort-moi-truong.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: unit
+    cmd: config:executors.test.smt_cot_sap
+    expected: "exit 0; -t smt-cot-sap của apps/app/test/sort-moi-truong.dom.tsx. Dựng DealsTable, CompaniesTable, ContactsTable thật trong NuqsTestingAdapter với kho tRPC giả; fields.list trả mười trường tự tạo bật showOnTable, một mỗi kiểu của FIELD_TYPES, rút qua bộ đọc đầu ra thật của apps/api/src/fields (round-trip parse). Đáp án viết tay: chín kiểu sortable, CHECKBOX không. Với mỗi bảng × mỗi kiểu: tiêu đề cột 'field:<khoa>' là nút sort (role button trong columnheader) khi đáp án sort, là chữ trơn khi không; lệch thì ném 'smt cot sap: <bang> <kieu> <co|khong>'. Số ô đã so khác 30 thì ném 'smt cot sap: thieu o <n>'. Đáp án viết tay còn phải bằng bảng sort theo kiểu export từ packages/db/src/fields-shape.ts (đọc lúc chạy); lệch thì ném 'smt cot sap: dap an lech bang chung <kieu>'. Cột chuẩn: Điện thoại của Liên hệ không là nút sort thì ném 'smt cot sap: phone khong sap'. Bấm tiêu đề cột NUMBER của DealsTable: onUrlUpdate của NuqsTestingAdapter không mang sort=field:<khoa> và dir=asc thì ném 'smt cot sap: url <qs>'; lời gọi deals.list kế không mang đúng sort, dir ấy thì ném 'smt cot sap: tai <json>'. Mở menu sort của bảng: không có mục mang nhãn trường NUMBER thì ném 'smt cot sap: menu thieu'. Chiều đỏ trong lịch sử: trên onehub cột trường tự tạo không khai sortable, ném 'smt cot sap: deals TEXT khong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/fields-shape.ts, apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/deals/deals-table.tsx", "apps/app/app/(app)/[slug]/companies/companies-table.tsx", "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", apps/app/test/sort-moi-truong.dom.tsx]
+
+  - id: E5b
+    criterion: AC-5
+    executor: script
+    layer: unit
+    cmd: config:executors.script.smt_quet
+    expected: "exit 0; bun _acceptance/sort-moi-truong/rang/quet-bang-kieu.mjs. Quét bằng TypeScript compiler API (ts.createSourceFile, không regex trên chữ) các tệp viết sẵn trong rang: field-columns.tsx, kieu-truong.tsx, ba tệp *-table.tsx, và mã sort trường ở apps/api/src/fields/. (a) Ở mã app và mã API, quyết định sort được của một kiểu phải đi qua đúng một export của packages/db/src/fields-shape.ts (tên export viết sẵn trong rang); tệp nào có so sánh với 'CHECKBOX' hay tập kiểu viết tay để quyết sortable thì ném 'smt quet: sap tu khai <tep>:<dong>'; mã app hay mã API không import export ấy thì ném 'smt quet: khong dung bang chung <phia>'. Tệp vắng thì ném 'smt quet: thieu tep <tep>'. Cặp hai chiều cùng fixture: rang chép field-columns.tsx của cây vào thư mục tạm, chèn 'sortable: field.type !== \"CHECKBOX\"', quét bản chép: không ném đúng 'sap tu khai' thì ném 'smt quet: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub 03d4842f1 kieu-truong.tsx chưa có, ném 'smt quet: thieu tep apps/app/components/crm/fields/kieu-truong.tsx'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/fields-shape.ts, apps/app/components/crm/fields/**, apps/api/src/fields/**, "apps/app/app/(app)/[slug]/deals/deals-table.tsx", "apps/app/app/(app)/[slug]/companies/companies-table.tsx", "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", _acceptance/sort-moi-truong/rang/quet-bang-kieu.mjs]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.smt_an_theo_kieu
+    expected: "exit 0; -t smt-an-theo-kieu của apps/app/test/sort-moi-truong.dom.tsx. Đáp án viết tay theo bảng «Ẩn cột theo kiểu» của design doc: MONEY sm, NUMBER sm, USER md, URL md, EMAIL md, PHONE md, TEXT lg, LONG_TEXT lg, DATE lg, SELECT lg, CHECKBOX lg. (a) Bảng đăng ký: mặt hideBelow (tên mặt viết sẵn trong test) của mười một kiểu ở kieu-truong.tsx khác đáp án thì ném 'smt an theo kieu: bang <kieu> <gia tri>'. (b) Cột tự tạo: dựng ba bảng với mười trường tự tạo như E5; hideBelow của cột 'field:<khoa>' khác đáp án theo kiểu thì ném 'smt an theo kieu: tu tao <bang> <kieu> <gia tri>'. (c) Cột chuẩn: bảng viết tay mười cột chuẩn có kiểu với giá trị hideBelow trên onehub 03d4842f1 (deals amount sm, owner md, expectedCloseDate lg; companies domain md, owner md; contacts phone md, title lg, email md, owner md; và name không hideBelow ở cả ba) — hideBelow thật của cột khác bảng ấy thì ném 'smt an theo kieu: chuan <bang> <cot> <gia tri>'. Số ô đã so khác 11 + 30 + 12 thì ném 'smt an theo kieu: thieu o <n>'. Vế 'cùng nguồn': rang quet-bang-kieu.mjs (E5b) kiểm thêm rằng ba tệp *-table.tsx không còn chữ hideBelow viết tay cho cột có kiểu, ngoại trừ có tên khai sẵn (Tên, Công ty, Giai đoạn, Ngành, contacts, deals, createdAt, lastActivity, archivedAt, enrichment); ngoại trừ không còn khớp thì ném 'smt quet: ngoai tru chet <cot>'. Chiều đỏ trong lịch sử: trên onehub mọi cột tự tạo là lg, ném 'smt an theo kieu: tu tao deals NUMBER lg'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/deals/deals-table.tsx", "apps/app/app/(app)/[slug]/companies/companies-table.tsx", "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", apps/app/test/sort-moi-truong.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.smt_api_the
+    expected: "exit 0; -t smt-api-the của apps/api/test/sort-moi-truong.spec.ts. Cô lập: kho thử của lượt dùng chung giữa các tệp, nên mọi bản ghi của ca mang tiền tố tên riêng của ca và mọi lời gọi list/board mang q là tiền tố ấy; đầu ca, lời gọi với q ấy trả khác 0 hàng thì ném 'smt <ca>: lan <n>'; cuối ca lưu trữ trường đã tạo. Trường DEAL của tệp khác có thể đang bật showOnTable, nên ca tự đưa năm trường của mình lên đầu bằng fields.reorder thật trước khi đọc. Fixture qua đường ghi thật: bốn trường DEAL tự tạo bật showOnTable theo position: 'smt_the_luu' (đứng đầu, rồi lưu trữ), 'smt_the_so' NUMBER, 'smt_the_ngay' DATE, 'smt_the_ba' TEXT; thêm 'smt_the_an' đứng trước 'smt_the_so' nhưng showOnTable false. Một thoả thuận có giá trị ở cả năm trường. Đối chứng dương: trước khi lưu trữ, sắp lại thật cho 'smt_the_luu' đứng đầu thì tập khoá phải là {smt_the_luu, smt_the_so}, lệch thì ném 'smt api the: doi chung truoc luu tru'. Sau khi lưu trữ (vẫn đứng đầu), deals.board: tập khoá trong card.fields khác đúng {smt_the_so, smt_the_ngay} thì ném 'smt api the: khoa <json>'; giá trị khác giá trị đã lưu (1234.5 và ngày ISO) thì ném 'smt api the: gia tri <khoa>'. Đầu ra của board phân tích bằng dealBoardOutput thật; hỏng thì ném 'smt api the: hop dong'. Đổi position để 'smt_the_ba' lên trước 'smt_the_ngay' (fields.update/sắp lại thật): tập khoá phải thành {smt_the_so, smt_the_ba}, lệch thì ném 'smt api the: theo thu tu'. Chiều đỏ trong lịch sử: trên onehub dealBoardCardOutput bỏ fields, ném 'smt api the: khoa undefined'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/deals/**, apps/api/test/sort-moi-truong.spec.ts]
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    layer: unit
+    cmd: config:executors.test.smt_the_kanban
+    expected: "exit 0; -t smt-the-kanban của apps/app/test/sort-moi-truong.dom.tsx. Dựng DealsBoard thật ở LocaleProvider vi với kho tRPC giả; deals.board trả một cột hai thẻ, rút qua dealBoardOutput thật (round-trip parse): thẻ A mang fields {smt_the_so: 1234.5, smt_the_ngay: '2026-11-05'}, thẻ B mang {smt_the_so: null, smt_the_ngay: '2026-11-05'}; fields.list trả ba trường bật showOnTable (so, ngay, ba) với nhãn 'Số thẻ', 'Ngày thẻ', 'Ba thẻ'. Thẻ A: không có dòng chứa nhãn 'Số thẻ' và chữ '1.234,5' trong phần tử có lớp tabular-nums thì ném 'smt the kanban: A so <chu>'; không có dòng 'Ngày thẻ' với ngày vẽ như HienThiTruong kiểu DATE vẽ cùng giá trị (dựng HienThiTruong riêng để lấy chữ đối chứng) thì ném 'smt the kanban: A ngay <chu>'; có chữ 'Ba thẻ' thì ném 'smt the kanban: truong thu ba'. Thẻ B: có nhãn 'Số thẻ' thì ném 'smt the kanban: B trong van hien'; thiếu dòng 'Ngày thẻ' thì ném 'smt the kanban: B thieu ngay'. Đối chứng dương: tên thẻ A, B có trong DOM, không thì ném 'smt the kanban: doi chung thieu the'. Chiều đỏ trong lịch sử: trên onehub thẻ không có dòng trường, ném 'smt the kanban: A so '."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/deals/deals-board.tsx", apps/app/test/sort-moi-truong.dom.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.smt_toc_do
+    expected: "exit 0; -t smt-toc-do của apps/api/test/sort-moi-truong-toc-do.spec.ts trên kho thử của lượt; tệp chỉ chạy khi SMT_TOC_DO=1 (describe.skipIf), để lượt bun run test thường không mang thêm 5.000 bản ghi; chạy mà biến vắng thì lệnh của eval là sai, ném 'smt toc do: thieu bien'. Dữ liệu mẫu qua đường ghi thật (DealsService.create của mô-đun Nest thật, từng lô 100 song song): 5.000 thoả thuận có Giá trị, trường NUMBER tự tạo 'smt_toc' có giá trị ở 4.500, trống 500. Số bản ghi tạo được khác 5.000 thì ném 'smt toc do: mau <n>'. Hâm một lượt mỗi truy vấn, rồi đo năm lượt (performance.now) cho bốn truy vấn: field trang 1, field trang vắt ranh (trang chứa hàng thứ 4.500 và 4.501 với pageSize 25), amount trang 1, amount cùng số trang. Trung vị field trang k > 3 × trung vị amount cùng trang thì ném 'smt toc do: cham <trang> <ms field> <ms amount>'; trung vị nào > 1000 ms thì ném 'smt toc do: tran <trang> <ms>'. Trang vắt ranh trả khác 25 hàng hay không có cả hàng có giá trị lẫn hàng trống thì ném 'smt toc do: fixture khong vat ranh'. In bốn trung vị ra stdout để bằng chứng ghi lại. Cuối ca dọn mọi thoả thuận và trường của ca; đếm lại theo tiền tố khác 0 thì ném 'smt toc do: don de lai <n>'. Mọi lời gọi list mang q là tiền tố của ca. Chiều đỏ: trên onehub sort field rơi về createdAt nên nhanh — eval không đỏ ở đó; chiều đỏ chứng bằng đột biến tay lúc dựng (sapTheoTruong tải hết id khớp rồi sort trong bộ nhớ, đo trên 5.000) ghi số đo vào sổ S3; nếu đột biến ấy không vượt ngưỡng thì ghi rõ ngưỡng không phân biệt được hai cách và đưa lên Cổng Bằng chứng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/deals/**, apps/api/test/sort-moi-truong-toc-do.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.smt_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/sort-moi-truong/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/sort-moi-truong/rang/do-man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này."
+      - "Đọc dòng cuối: mã 0 kèm 'smt man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'smt man: …'."
+      - "Mở sáu ảnh smt-bang-thoa-thuan-sap-1280.png, smt-bang-thoa-thuan-768.png, smt-bang-cong-ty-768.png, smt-bang-thoa-thuan-375-menu.png, smt-kanban-1280.png, smt-kanban-375.png, đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/sort-moi-truong/evidence/]
+    expected: |
+      Dữ liệu dựng qua API thật trong phiên đo: mỗi loại bản ghi ba bản ghi; mười trường tự tạo mỗi loại (một mỗi kiểu, bật «Hiện trong bảng»), có giá trị khác nhau, một bản ghi trống trường Số; thoả thuận nằm ở hai giai đoạn.
+      0. smt-bang-thoa-thuan-sap-1280 (ST-bang-sap-tang): đường dẫn mang sort=field:<khoá Số>&dir=asc; tiêu đề cột Số có mũi tên và aria-sort='ascending'; cột Số căn phải như Giá trị; hàng theo giá trị tăng, hàng trống cuối. do-man.mjs đọc DOM: aria-sort của cột Số khác 'ascending' thì thoát 1 'smt man: aria-sort <gia tri>'; mũi tên sắp (svg trong nút tiêu đề) vắng, bị một khung cắt (overflow) giữa nó và ô tiêu đề cắt mất, hay tâm của nó thuộc phần tử ngoài ô tiêu đề (elementFromPoint) thì thoát 1 'smt man: mui ten <vang|bi-cat|bi-che>'; thứ tự tên hàng khác đáp án dựng trong rang thì thoát 1 'smt man: thu tu <ten>'.
+      1. smt-bang-*-768 (ST-bang-hep): cột trường tự tạo kiểu Người, Liên kết, Email, Điện thoại, Số nhìn thấy như cột Người phụ trách; cột Chữ, Ngày, Chọn, Ô tích không thấy, như Ngày chốt. do-man.mjs đọc getComputedStyle(display) của tiêu đề mỗi cột 'field:*' ở 768: khác đáp án theo kiểu thì thoát 1 'smt man: 768 <kieu> <display>'.
+      1b. smt-bang-thoa-thuan-375-menu: mở menu sort của bảng ở 375; đáp án viết tay trong rang: chín nhãn trường tự tạo sort được có mục, nhãn Ô tích không có; thiếu thì thoát 1 'smt man: 375 menu thieu <kieu>', thừa Ô tích thì thoát 1 'smt man: 375 menu thua o tich'. Chọn trường Ngày: đường dẫn không mang sort=field:<khoá Ngày> thì thoát 1 'smt man: 375 url <qs>'; thứ tự tên hàng khác đáp án thì thoát 1 'smt man: 375 thu tu <ten>'.
+      2. smt-kanban-1280 (ST-kanban-the): thẻ có hai dòng nhãn và giá trị của hai trường tự tạo đầu tiên, Số «1.234,5», nằm dưới Ngày chốt, cùng cỡ chữ và lề với các dòng có sẵn; thẻ có trường trống không có dòng ấy; do-man.mjs kiểm thẻ Beta có mặt trước, vắng thì thoát 1 'smt man: kanban beta vang'.
+      3. smt-kanban-375: có ít nhất ba thẻ, không thì thoát 1 'smt man: 375 khong co the <n>'; không cuộn ngang; do-man.mjs đo document.documentElement.scrollWidth > 375 thì thoát 1 'smt man: 375 cuon ngang'.
+      Đối chứng bằng mắt: thẻ không vỡ chữ, dòng trường không đè Người phụ trách hay Giai đoạn.
+    evidence_required: [verdict, screenshot, observed, verified_at]
+    paths: [apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/deals/deals-table.tsx", "apps/app/app/(app)/[slug]/deals/deals-board.tsx", "apps/app/app/(app)/[slug]/companies/companies-table.tsx", "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", _acceptance/sort-moi-truong/rang/do-man.mjs]

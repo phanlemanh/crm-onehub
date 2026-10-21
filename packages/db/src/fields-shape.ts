@@ -44,6 +44,34 @@ export function columnFor(type: FieldTypeName): FieldValueColumn {
 	return COLUMNS[type];
 }
 
+export const TIEN_TO_COT_TRUONG = "field:";
+
+export type CachSapTruong = "text" | "number" | "date" | "luaChon" | "nguoi";
+
+export const SAP_THEO_KIEU = {
+	TEXT: "text",
+	LONG_TEXT: "text",
+	URL: "text",
+	EMAIL: "text",
+	PHONE: "text",
+	NUMBER: "number",
+	DATE: "date",
+	SELECT: "luaChon",
+	USER: "nguoi",
+	CHECKBOX: null,
+} as const satisfies Record<FieldTypeName, CachSapTruong | null>;
+
+export function cachSapTruong(type: FieldTypeName): CachSapTruong | null {
+	return SAP_THEO_KIEU[type];
+}
+
+export function sapDuocTheoKieu(type: string): boolean {
+	return (
+		Object.hasOwn(SAP_THEO_KIEU, type) &&
+		SAP_THEO_KIEU[type as FieldTypeName] !== null
+	);
+}
+
 export function usesOptions(type: FieldTypeName): boolean {
 	return type === "SELECT";
 }
