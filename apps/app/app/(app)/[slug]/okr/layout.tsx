@@ -6,6 +6,7 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { kyMacDinhHoiY } from "./okr-search-params";
 import { KhungTrangOkr } from "./soan/khung-trang-okr";
 import { ThanhBenMucTieu, ThanhBenMucTieuCho } from "./thanh-ben-muc-tieu";
+import { ToanManHinhProvider } from "./toan-man-hinh";
 
 export default function OkrLayout({
 	children,
@@ -13,12 +14,14 @@ export default function OkrLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<div className="flex min-h-0 min-w-0 flex-1 flex-col md:flex-row">
-			<Suspense fallback={<ThanhBenMucTieuCho />}>
-				<ThanhBenCoDuLieu />
-			</Suspense>
-			<KhungTrangOkr>{children}</KhungTrangOkr>
-		</div>
+		<ToanManHinhProvider>
+			<div className="flex min-h-0 min-w-0 flex-1 flex-col md:flex-row">
+				<Suspense fallback={<ThanhBenMucTieuCho />}>
+					<ThanhBenCoDuLieu />
+				</Suspense>
+				<KhungTrangOkr>{children}</KhungTrangOkr>
+			</div>
+		</ToanManHinhProvider>
 	);
 }
 
