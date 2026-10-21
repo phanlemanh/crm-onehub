@@ -16,6 +16,7 @@ import {
 	FieldValueError,
 	type FieldValueJson,
 	fieldKeyFromLabel,
+	locDuocTrong,
 	type RecordField,
 	readValue,
 	recordColumn,
@@ -26,8 +27,10 @@ import {
 	writeValues,
 } from "@crm/db/fields";
 import {
+	GIA_TRI_TRONG,
 	type LocTruong,
 	LocTruongError,
+	MOC_NGAY,
 	phanTichLocTruong,
 } from "@crm/validation/bo-loc-truong";
 import {
@@ -826,7 +829,82 @@ export class FieldsService {
 			bucket[group.userId] = (bucket[group.userId] ?? 0) + group._count._all;
 		}
 
+		const demThem = await Promise.all(
+			definitions.flatMap((definition) =>
+				this.demGiaTriMenu(entity, relationWhere, definition).map(
+					async ([gia, dem]) => [definition.key, gia, await dem] as const,
+				),
+			),
+		);
+
+		for (const [key, gia, dem] of demThem) {
+			const bucket = facetCounts[key] ?? {};
+			facetCounts[key] = bucket;
+			bucket[gia] = dem;
+		}
+
 		return facetCounts;
+	}
+
+	private demGiaTriMenu(
+		entity: FieldEntity,
+		relationWhere: WhereTheoLoai[FieldEntity],
+		definition: FieldDefinitionWithOptions,
+	): Array<[string, Promise<number>]> {
+		const relation = RELATIONS[entity];
+		const fieldId = definition.id;
+		const demGiaTri = (where: Prisma.FieldValueWhereInput) =>
+			this.db.fieldValue.count({
+				where: { fieldId, ...where, [relation]: relationWhere },
+			});
+		const dem: Array<[string, Promise<number>]> = [];
+
+		if (cachLocTruong(definition.type) === "moc") {
+			for (const moc of MOC_NGAY) {
+				dem.push([moc, demGiaTri({ date: khoangMoc(moc) })]);
+			}
+		}
+
+		if (cachLocTruong(definition.type) === "tich") {
+			dem.push(["yes", demGiaTri({ bool: true })]);
+			dem.push([
+				"no",
+				this.demBanGhi(entity, relationWhere, {
+					fieldValues: { none: { fieldId, bool: true } },
+				}),
+			]);
+		}
+
+		if (locDuocTrong(definition.type)) {
+			dem.push([
+				GIA_TRI_TRONG,
+				this.demBanGhi(entity, relationWhere, {
+					fieldValues: { none: coGiaTriCua(definition) },
+				}),
+			]);
+		}
+
+		return dem;
+	}
+
+	private demBanGhi(
+		entity: FieldEntity,
+		where: WhereTheoLoai[FieldEntity],
+		them: DieuKienTruong,
+	): Promise<number> {
+		if (entity === "DEAL") {
+			return this.db.deal.count({
+				where: { AND: [where as Prisma.DealWhereInput, them] },
+			});
+		}
+		if (entity === "COMPANY") {
+			return this.db.company.count({
+				where: { AND: [where as Prisma.CompanyWhereInput, them] },
+			});
+		}
+		return this.db.contact.count({
+			where: { AND: [where as Prisma.ContactWhereInput, them] },
+		});
 	}
 
 	fieldFilters(

@@ -724,3 +724,207 @@ describe("lmt-api-khoa-chet", () => {
 		expect(soO).toBe(16);
 	});
 });
+
+describe("lmt-api-cty-lh-bang", () => {
+	const tienTo = `lmtcl${RUN}`;
+	const ten = new Map<string, string>();
+	const khoa: Record<string, Record<string, string>> = {};
+	const khoaDeal = { so: "", chu: "", ngay: "", tich: "", chon: "" };
+	const giaiDoan: string[] = [];
+	const theBang = new Map<
+		string,
+		{ stage: string; amount: number; so: number }
+	>();
+
+	beforeAll(async () => {
+		setSystemTime(new Date(2026, 10, 15, 10, 0, 0));
+		await batDauCa(tienTo);
+		const companyId = await taoCongTy(`${tienTo} cong ty me`);
+		for (const entity of ["COMPANY", "CONTACT"] as const) {
+			khoa[entity] = {};
+			for (const type of ["TEXT", "NUMBER", "DATE", "CHECKBOX"] as const) {
+				const f = await taoTruong(entity, `${tienTo} ${entity} ${type}`, type);
+				(khoa[entity] as Record<string, string>)[type] = f.key;
+			}
+		}
+		const giaTri = {
+			C1: { TEXT: "Lmt dau", NUMBER: 3, DATE: "2026-11-02", CHECKBOX: true },
+			C2: { TEXT: "giua lmt", NUMBER: 7, DATE: "2026-12-02", CHECKBOX: false },
+			C3: { TEXT: "khac", NUMBER: 12, DATE: "2026-11-20", CHECKBOX: null },
+			C4: { TEXT: null, NUMBER: null, DATE: null, CHECKBOX: true },
+			C5: { TEXT: "nua", NUMBER: 20, DATE: "2027-02-01", CHECKBOX: null },
+		} as const;
+		for (const [nhan, gia] of Object.entries(giaTri)) {
+			const giaCo = (entity: "COMPANY" | "CONTACT") =>
+				Object.fromEntries(
+					Object.entries(gia)
+						.filter(([, v]) => v !== null)
+						.map(([type, v]) => [
+							(khoa[entity] as Record<string, string>)[type] ?? "",
+							v as string | number | boolean,
+						]),
+				);
+			const cty = await companies.create({ name: `${tienTo} ${nhan}` });
+			daTao.congTy.push(cty.id);
+			ten.set(cty.id, nhan);
+			await companies.update(cty.id, { fields: giaCo("COMPANY") });
+			const lh = await contacts.create({
+				firstName: nhan,
+				lastName: tienTo,
+				companyId,
+			});
+			ten.set(lh.id, nhan);
+			await contacts.update(lh.id, { fields: giaCo("CONTACT") });
+		}
+
+		const stages = await db.dealStage.findMany({
+			where: { archivedAt: null, kind: "OPEN" },
+			orderBy: { position: "asc" },
+			take: 2,
+		});
+		for (const s of stages) giaiDoan.push(s.id);
+		khoaDeal.so = (await taoTruong("DEAL", `${tienTo} bang so`, "NUMBER")).key;
+		khoaDeal.chu = (await taoTruong("DEAL", `${tienTo} dem chu`, "TEXT")).key;
+		khoaDeal.ngay = (await taoTruong("DEAL", `${tienTo} dem ngay`, "DATE")).key;
+		khoaDeal.tich = (
+			await taoTruong("DEAL", `${tienTo} dem tich`, "CHECKBOX")
+		).key;
+		const chon = await taoTruong("DEAL", `${tienTo} dem chon`, "SELECT");
+		khoaDeal.chon = chon.key;
+		const luaA = chon.options.find((o) => o.label === "A")?.id ?? "";
+		let i = 0;
+		for (const stage of giaiDoan) {
+			for (const so of [1, 5, 9, 2, 30]) {
+				i += 1;
+				const amount = 1000 * i;
+				const dealId = await taoThoaThuan(
+					tienTo,
+					companyId,
+					`G${stage}-${so}`,
+					{
+						stage,
+						amountCents: amount,
+						ownerId: i % 2 ? nguoiB : quanTri,
+					},
+				);
+				theBang.set(dealId, { stage, amount, so });
+				await deals.update(dealId, {
+					fields: {
+						[khoaDeal.so]: so,
+						...(i % 3 ? { [khoaDeal.chu]: "x" } : {}),
+						...(i % 4
+							? { [khoaDeal.ngay]: i % 2 ? "2026-11-03" : "2026-12-09" }
+							: {}),
+						...(i % 2 ? { [khoaDeal.tich]: true } : {}),
+						...(i % 5 ? { [khoaDeal.chon]: luaA } : {}),
+					},
+				});
+			}
+		}
+	});
+
+	afterAll(() => {
+		setSystemTime();
+	});
+
+	it("lmt-api-cty-lh-bang: cung luat o Cong ty, Lien he, bang cot va so dem", async () => {
+		const ca: Array<[string, string, string[], string[]]> = [
+			["TEXT", "has", ["has:lmt"], ["C1", "C2"]],
+			["NUMBER", "khoang", ["gte:5", "lte:20"], ["C2", "C3", "C5"]],
+			["NUMBER", "none", ["none"], ["C4"]],
+			["DATE", "this-month", ["this-month"], ["C1", "C3"]],
+			["CHECKBOX", "no", ["no"], ["C2", "C3", "C5"]],
+		];
+		let soO = 0;
+		for (const entity of ["COMPANY", "CONTACT"] as const) {
+			for (const [type, nhan, gia, mong] of ca) {
+				const loc = {
+					[(khoa[entity] as Record<string, string>)[type] ?? ""]: gia,
+				};
+				const rows =
+					entity === "COMPANY"
+						? (
+								await companies.list(
+									companyListInput.parse({ q: tienTo, fields: loc }),
+								)
+							).rows
+						: (
+								await contacts.list(
+									contactListInput.parse({ q: tienTo, fields: loc }),
+								)
+							).rows;
+				const ra = tenCua(
+					ten,
+					rows.map((r) => r.id).filter((id) => ten.has(id)),
+				);
+				if (ra !== mong.join(",")) {
+					throw new Error(`lmt api cty lh: ${entity} ${type} ${nhan} ra ${ra}`);
+				}
+				soO += 1;
+			}
+		}
+		if (soO !== 10) throw new Error(`lmt api cty lh: thieu o ${soO}`);
+
+		const bang = await deals.board(
+			dealBoardInput.parse({ q: tienTo, fields: { [khoaDeal.so]: ["gte:5"] } }),
+		);
+		for (const stage of giaiDoan) {
+			const cot = bang.columns.find((c) => c.stage === stage);
+			const mong = [...theBang.entries()].filter(
+				([, v]) => v.stage === stage && v.so >= 5,
+			);
+			const ra = new Set(cot?.cards.map((c) => c.id) ?? []);
+			if (!cungTap(ra, new Set(mong.map(([id]) => id)))) {
+				throw new Error(`lmt api board: ${stage} ra ${[...ra].length}`);
+			}
+			const tong = mong.reduce((n, [, v]) => n + v.amount, 0);
+			if (cot?.count !== mong.length || cot?.valueCents !== tong) {
+				throw new Error(`lmt api board: dem ${stage} ${cot?.count}`);
+			}
+		}
+
+		const goc = await deals.list(
+			dealListInput.parse({ q: tienTo, pageSize: 100 }),
+		);
+		const theoOwner = await deals.list(
+			dealListInput.parse({ q: tienTo, owner: [nguoiB], pageSize: 100 }),
+		);
+		const demCua = (out: typeof goc, k: string, gia: string) =>
+			(out.facetCounts as Record<string, Record<string, number>>)[
+				`field:${k}`
+			]?.[gia];
+		const giaTriCua: Record<string, string[]> = {
+			[khoaDeal.chu]: ["none"],
+			[khoaDeal.so]: ["none"],
+			[khoaDeal.ngay]: ["overdue", "this-month", "next-month", "later", "none"],
+			[khoaDeal.tich]: ["yes", "no"],
+			[khoaDeal.chon]: ["none"],
+		};
+		let soDem = 0;
+		for (const [k, cacGia] of Object.entries(giaTriCua)) {
+			for (const gia of cacGia) {
+				const dem = demCua(goc, k, gia);
+				if (dem === undefined)
+					throw new Error(`lmt api dem: thieu ${k} ${gia}`);
+				const loc = await deals.list(
+					dealListInput.parse({ q: tienTo, fields: { [k]: [gia] } }),
+				);
+				if (dem !== loc.total) {
+					throw new Error(`lmt api dem: ${k} ${gia} ${dem} ${loc.total}`);
+				}
+				if (demCua(theoOwner, k, gia) !== dem) {
+					throw new Error("lmt api dem: lech luat dem chuan");
+				}
+				soDem += 1;
+			}
+		}
+		if (soDem !== 10) throw new Error(`lmt api dem: thieu o ${soDem}`);
+		const ownerChuan = goc.facetCounts.owner;
+		if (
+			JSON.stringify(theoOwner.facetCounts.owner) !== JSON.stringify(ownerChuan)
+		) {
+			throw new Error("lmt api dem: doi chung luat dem chuan");
+		}
+		expect(soO).toBe(10);
+	});
+});
