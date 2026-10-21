@@ -940,7 +940,7 @@ describe("smt-api-the", () => {
 				.flatMap((c) => c.cards)
 				.find((c) => c.id === id);
 			if (!card) throw new Error("smt api the: thieu the");
-			return (card as { fields?: Record<string, unknown> }).fields;
+			return card.fields;
 		}
 
 		const fieldsThe = await docThe();
