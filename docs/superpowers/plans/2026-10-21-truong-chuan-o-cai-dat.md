@@ -26,10 +26,10 @@
 ## Review Focus
 
 - Trường tự tạo đã lưu trữ rồi khôi phục giữ `position` cũ, có thể trùng số với một trường chuẩn: thứ tự phải tất định — cùng `position` thì trường chuẩn trước, rồi theo khoá. Bài: `sapBoTri` hoà số (Task 1).
-- Danh sách cũ trên màn (người khác vừa tạo trường) gửi `fields.reorder` thiếu một mục: máy chủ từ chối, màn về thứ tự trước, báo lỗi và tải lại danh sách. Bài: ca lỗi của E2 + `onSettled` làm mới (Task 5).
+- Danh sách cũ trên màn (người khác vừa tạo trường) gửi `fields.reorder` thiếu một mục: máy chủ từ chối, màn về thứ tự trước, báo lỗi và tải lại danh sách. Bài: ca lỗi của E2 + `onSettled` làm mới (Task 4).
 - Danh mục thêm khoá chuẩn sau lần sắp đầu (khoá chưa có hàng bố trí): đứng ngay sau khoá chuẩn liền trước trong danh mục, không nhảy lên đầu. Bài: `sapBoTri` khoá mới (Task 1).
 - Máy gọi REST cũ `POST /rest/fields/reorder` với `{entity, ids}`: vẫn chạy, chỉ đổi thứ tự giữa các trường tự tạo, trường chuẩn giữ chỗ. Bài: `tcc-api-reorder-cu` (Task 2).
-- Thoả thuận ẩn Giá trị: hàng «Quy đổi» đi theo Giá trị nên cũng không vẽ; hiện lại thì đứng ngay sau hàng muộn hơn trong hai hàng Giá trị, Tiền tệ. Bài: `tcc-phieu-quy-doi` (Task 3).
+- Thoả thuận ẩn Giá trị: hàng «Quy đổi» đi theo Giá trị nên cũng không vẽ; hiện lại thì đứng ngay sau hàng muộn hơn trong hai hàng Giá trị, Tiền tệ. Bài: `tcc-phieu-quy-doi` (Task 5).
 
 ---
 
@@ -96,31 +96,31 @@
 - [ ] **Step 8: Phá-thử** từng thông điệp ghim mới (vd bỏ kiểm khoá bắt buộc trong `setStandardHidden` → `tcc api chuan bat buoc: lot`), ghi kết quả vào sổ S3, hoàn lại.
 - [ ] **Step 9: Commit** `feat(truong-chuan-o-cai-dat): API bố trí trường — đọc, sắp lại trộn, ẩn trường chuẩn`.
 
-### Task 3: Danh mục ở app và phiếu vẽ theo bố trí
+### Task 3: Danh mục ở app và móc đọc bố trí
 
-**Phục vụ:** E1 (vế phiếu), E2c, E3 (vế 3), E7b · **independent:** false (cần Task 2)
+**Phục vụ:** nền cho E1, E2c, E7b và Task 4 · **independent:** false (cần Task 2)
+
+Không chạm `apps/app/components/crm/record-sheet/**` (giám sát vk, #375 05:21Z: né vùng ấy tới khi #525 VK7 gộp).
 
 **Files:**
 - Create: `apps/app/components/crm/fields/truong-chuan.ts`
 - Create: `apps/app/components/crm/fields/use-bo-tri-truong.ts`
-- Modify: `apps/app/components/crm/record-sheet/deal-sheet.tsx`, `company-sheet.tsx`, `contact-sheet.tsx`
 - Modify: `apps/app/components/crm/fields/record-fields.tsx` (thêm `oTruongTuTao(field, …)` vẽ một trường theo khoá)
-- Modify: `apps/app/components/crm/record-sheet/record-prefetch.ts` (nạp sẵn `fields.layout`)
 - Create: `apps/app/test/truong-chuan-cai-dat.dom.tsx` (khuôn `truong-mot-cach.dom.tsx`: mock `sonner`, `khung-gop-y`)
 
 **Interfaces:**
-- Consumes: `fields.layout`, `BoTriTruong`, `parseBoTriTruong` (Task 2); `STANDARD_FIELD_KEYS` (Task 1); `truongChuanThoaThuan`, `truongChuanCongTy`, `truongChuanLienHe`, `OTruongPhieu`, `moTaTruongTuTao` (DA14, đã có)
+- Consumes: `fields.layout`, `BoTriTruong`, `parseBoTriTruong` (Task 2); `STANDARD_FIELD_KEYS`, `sapBoTri` (Task 1); `moTaTruongTuTao`, `OTruongPhieu` (DA14, đã có)
 - Produces:
   - `nhanTruongChuan(entity: FieldEntity, key: string, m: RecordSheetMessages): string`
   - `kieuTruongChuan(entity: FieldEntity, key: string): KieuTruong | "COMPANY"`
   - `useBoTriTruong(entity: FieldEntity): { muc: BoTriTruong; daTai: boolean; query }` — chưa tải hay lỗi thì `muc` là thứ tự mặc định từ `sapBoTri(entity, [], <tự tạo theo position>)`
-  - `MucChiTiet` = các mục vẽ trên phiếu sau khi bỏ `hidden` và trường tự tạo `showOnSheet: false`
+  - `oTruongTuTao(field: RecordFieldEntry, luu, dangLuu, nguoiDung): ReactNode`
 
-- [ ] **Step 1: Viết bài DOM (đỏ trước)** — `tcc-phieu-thu-tu`, `tcc-phieu-chua-tai`, vế phiếu của `tcc-danh-muc` (đọc nhãn mục Chi tiết ba phiếu ở vi, en), vế 3 của `tcc-an`, cộng `tcc-phieu-quy-doi` (Review Focus): layout ẩn `amount` → không hàng «Quy đổi»; layout đưa `currency` lên trước `amount` → «Quy đổi» ngay sau «Giá trị». Mọi fixture bố trí qua `parseBoTriTruong`; bản ghi qua bộ đọc đầu ra thật của `apps/api/src/{deals,companies,contacts}`.
-- [ ] **Step 2: Chạy** `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t "tcc-phieu|tcc-danh-muc|tcc-an"` → FAIL.
-- [ ] **Step 3: `truong-chuan.ts`, `use-bo-tri-truong.ts`**; ba phiếu thay khối mục Chi tiết bằng một vòng qua `muc`: mục chuẩn `company` vẽ `InlineCompanyField` như nay, mục chuẩn khác vẽ `OTruongPhieu` của bộ mô tả DA14 cùng khoá, mục tự tạo vẽ `oTruongTuTao`; thoả thuận chèn `ReportedValue` theo luật ở Review Focus. Mô tả và Giai đoạn giữ chỗ cũ. `standard-fields.ts` chưa gỡ ở task này: `fields-list.tsx` còn nhập nó tới Task 4.
-- [ ] **Step 4: Chạy** lệnh Step 2 → PASS (trừ vế Cài đặt của `tcc-danh-muc`, Task 4 làm xanh); `bun test` của `truong-mot-cach.dom.tsx` vẫn xanh (DA14 không lùi).
-- [ ] **Step 5: Commit** `feat(truong-chuan-o-cai-dat): phiếu vẽ mục Chi tiết theo bố trí đã đặt`.
+- [ ] **Step 1: Viết bài (đỏ trước)** `tcc-moc-bo-tri`: `useBoTriTruong` với `fields.layout` treo và lỗi trả đúng 24 khoá mặc định theo danh mục; `nhanTruongChuan` ở vi, en bằng đúng nhãn `m.<loai>.fields.*` mà phiếu dùng cho cả 24 khoá.
+- [ ] **Step 2: Chạy** `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t tcc-moc-bo-tri` → FAIL.
+- [ ] **Step 3: Viết ba tệp** theo Produces.
+- [ ] **Step 4: Chạy** lệnh Step 2 → PASS; `bun run check-types`.
+- [ ] **Step 5: Commit** `feat(truong-chuan-o-cai-dat): danh mục trường chuẩn ở app và móc đọc bố trí`.
 
 ### Task 4: Cài đặt › Trường — một danh sách, công tắc, «Bắt buộc»
 
@@ -136,7 +136,7 @@
 - Consumes: `useBoTriTruong`, `nhanTruongChuan`, `kieuTruongChuan` (Task 3); `fields.reorder` nhánh `items`, `fields.setStandardHidden` (Task 2); `truongKieu.chuaLuu` (DA14)
 - Produces: khoá messages mới dưới `fields`: `standardSummary` («Trường chuẩn» / "Standard field"), `sheetSwitch(label)` (tên truy cập công tắc), `requiredLocked` («Trường bắt buộc luôn hiện trên phiếu»), `requiredLabel` («Bắt buộc»), `requiredHelp` («Không để trống được khi sửa trên phiếu.»), `orderSaved` («Đã lưu thứ tự.»), `orderFailed` («Chưa lưu được thứ tự.»), `shown(label)`, `hidden(label)`.
 
-- [ ] **Step 1: Viết bài DOM (đỏ trước)** — `tcc-danh-muc` (vế Cài đặt), `tcc-sap-lai` (kể cả ca lỗi), `tcc-an` (vế 1, 2, 4 — vế 4 dựng `CompaniesTable` thật), `tcc-chuan-bat-buoc`, `tcc-bat-buoc-luu`, `tcc-bat-buoc-hien`, `tcc-khong-quyen`, đúng thông điệp ghim của evals.
+- [ ] **Step 1: Viết bài DOM (đỏ trước)** — vế Cài đặt của `tcc-danh-muc` (so nhãn với `nhanTruongChuan`; vế so với phiếu thật thêm ở Task 5), `tcc-sap-lai` (kể cả ca lỗi), `tcc-an` (vế 1, 2, 4 — vế 4 dựng `CompaniesTable` thật), `tcc-chuan-bat-buoc`, `tcc-bat-buoc-luu` (vế 3 dùng phiếu thật của DA14, không sửa phiếu), `tcc-bat-buoc-hien`, `tcc-khong-quyen`, đúng thông điệp ghim của evals.
 - [ ] **Step 2: Chạy** lệnh DOM đầy đủ của tệp → FAIL ở các ca mới.
 - [ ] **Step 3: `FieldsList`** — bỏ khối gập «Trường chuẩn» và tiêu đề nhóm «Trường tự tạo»; `SortableList` trên `muc` của `useBoTriTruong` (id `std:<key>` / `<field.id>`); hàng chuẩn: nhãn, huy hiệu kiểu, dòng phụ `standardSummary` (+ `required`), `Switch` «Hiện trên phiếu»; hàng tự tạo như nay + cùng `Switch` (ghi `fields.update { showOnSheet }`). Kéo: lạc quan, `fields.reorder({ entity, items })`, lỗi → khôi phục, `toast.error(orderFailed)`, `onSettled` → `cache.fields`. Công tắc lỗi → về giá trị cũ, `toast.error(truongKieu.chuaLuu(nhãn))`. Bắt buộc → `Switch` `checked disabled` và `aria-describedby` trỏ câu `requiredLocked`. Không quyền → mọi tay kéo, công tắc, nút `disabled`, dòng `canQuyen` như nay.
 - [ ] **Step 4: `FieldEditor`** — dòng `Field orientation="horizontal"` với `Switch` `requiredLabel` + `FieldDescription requiredHelp`; bật thì ô `showOnSheet` `checked` và `disabled`; `save` gửi `required: draft.required` cho cả `create` lẫn `update`, kèm `showOnSheet: true` khi bắt buộc.
@@ -144,9 +144,29 @@
 - [ ] **Step 6: Chạy** lệnh DOM đầy đủ → PASS; `bun run check-types`; `bun run lint:slop`.
 - [ ] **Step 7: Commit** `feat(truong-chuan-o-cai-dat): Cài đặt › Trường sắp, ẩn trường chuẩn và bật «Bắt buộc»`.
 
-### Task 5: Răng quét và phép đo màn
+### Task 5: Phiếu vẽ mục Chi tiết theo bố trí
 
-**Phục vụ:** E1b, E9 · **independent:** false (đọc mã của Task 3, 4)
+**Phục vụ:** E1 (vế phiếu), E2c, E3 (vế 3), E7b · **independent:** false (cần Task 3)
+
+**Chờ:** #525 (VK7) gộp onehub. Trước Step 1: gộp onehub mới vào nhánh (`sync_with_base_branch`), đọc lại ba phiếu sau VK7.
+
+**Files:**
+- Modify: `apps/app/components/crm/record-sheet/deal-sheet.tsx`, `company-sheet.tsx`, `contact-sheet.tsx`
+- Modify: `apps/app/components/crm/record-sheet/record-prefetch.ts` (nạp sẵn `fields.layout`)
+- Test: `apps/app/test/truong-chuan-cai-dat.dom.tsx`
+
+**Interfaces:**
+- Consumes: `useBoTriTruong`, `oTruongTuTao` (Task 3); `truongChuanThoaThuan`, `truongChuanCongTy`, `truongChuanLienHe`, `OTruongPhieu` (DA14)
+
+- [ ] **Step 1: Viết bài DOM (đỏ trước)** — `tcc-phieu-thu-tu`, `tcc-phieu-chua-tai`, vế phiếu của `tcc-danh-muc` (nhãn mục Chi tiết ba phiếu ở vi, en so với nhãn Cài đặt), vế 3 của `tcc-an`, cộng `tcc-phieu-quy-doi` (Review Focus): layout ẩn `amount` → không hàng «Quy đổi»; layout đưa `currency` lên trước `amount` → «Quy đổi» ngay sau «Giá trị». Mọi fixture bố trí qua `parseBoTriTruong`; bản ghi qua bộ đọc đầu ra thật của `apps/api/src/{deals,companies,contacts}`.
+- [ ] **Step 2: Chạy** `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-chuan-cai-dat.dom.tsx -t "tcc-phieu|tcc-danh-muc|tcc-an"` → FAIL.
+- [ ] **Step 3: Ba phiếu** thay khối mục Chi tiết bằng một vòng qua `muc`: mục chuẩn `company` vẽ `InlineCompanyField` như nay, mục chuẩn khác vẽ `OTruongPhieu` của bộ mô tả DA14 cùng khoá, mục tự tạo vẽ `oTruongTuTao`; thoả thuận chèn `ReportedValue` theo luật ở Review Focus. Mô tả và Giai đoạn giữ chỗ cũ.
+- [ ] **Step 4: Chạy** lệnh DOM đầy đủ → PASS; `truong-mot-cach.dom.tsx` của DA14 vẫn xanh.
+- [ ] **Step 5: Commit** `feat(truong-chuan-o-cai-dat): phiếu vẽ mục Chi tiết theo bố trí đã đặt`.
+
+### Task 6: Răng quét và phép đo màn
+
+**Phục vụ:** E1b, E9 · **independent:** false (đọc mã của Task 3, 4, 5)
 
 **Files:**
 - Create: `_acceptance/truong-chuan-o-cai-dat/rang/quet.mjs`
@@ -161,10 +181,11 @@
 - [ ] **Step 4: Chạy** `BANG_CHUNG=_acceptance/truong-chuan-o-cai-dat/evidence bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-chuan-o-cai-dat/rang/do-man.mjs"` → dòng cuối `tcc man: dat`; mở tám ảnh soát bằng mắt.
 - [ ] **Step 5: Commit** `test(truong-chuan-o-cai-dat): răng quét và phép đo màn`.
 
-### Task 6: Năm lệnh chứng minh
+### Task 7: Năm lệnh chứng minh
 
 **Phục vụ:** mọi eval · **independent:** false
 
 - [ ] **Step 1:** `bun run test` · `bun run check-types` · `bun run lint` · `bun run lint:slop` · `bun run build` ở gốc kho — đều exit 0.
-- [ ] **Step 2:** Kiểm `git fetch origin && git ls-tree --name-only origin/onehub packages/db/prisma/migrations/ | tail -3`: không migration nào mới hơn của Task 1; có thì đổi tên lại theo luật 1.
-- [ ] **Step 3:** Hợp đồng `status: implemented`, vào S4.
+- [ ] **Step 2:** `git diff --name-only origin/onehub...HEAD` không còn tệp nào ngoài danh sách Files của bảy task (lời dặn giám sát 05:21Z).
+- [ ] **Step 3:** Kiểm `git fetch origin && git ls-tree --name-only origin/onehub packages/db/prisma/migrations/ | tail -3`: không migration nào mới hơn của Task 1; có thì đổi tên lại theo luật 1.
+- [ ] **Step 4:** Hợp đồng `status: implemented`, vào S4.
