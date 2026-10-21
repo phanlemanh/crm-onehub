@@ -46,8 +46,13 @@ export function useChuKy() {
 	const currentId = hoiY
 		? giaiKyHoiY(ky, cycles.data ?? null)
 		: giaiKy(ky, cycles.data ?? null);
+	const haiMacDinhKhac =
+		cycles.data !== undefined &&
+		kyMacDinhHoiY(cycles.data) !== cycles.data.currentId;
 	const datKy = (id: string) =>
-		void datUrl({ [SEARCH_PARAM.okr.ky]: id === macDinh ? null : id });
+		void datUrl({
+			[SEARCH_PARAM.okr.ky]: id === macDinh && !haiMacDinhKhac ? null : id,
+		});
 	return { cycles, currentId, ky, datKy };
 }
 
