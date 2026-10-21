@@ -11,7 +11,7 @@ import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { dauThangSau, homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import type { QuyenKhu } from "../hanh-dong-khu";
+import { type QuyenKhu, useTenDon } from "../hanh-dong-khu";
 import type { DonChonOkr } from "../okr-search-params";
 import type { DonViSoan } from "./kieu";
 import { donViSoanCua } from "./nut-soan";
@@ -83,6 +83,7 @@ export function useDuongSoan({
 	const m = okrSoanMessages(locale);
 	const trpc = useTRPC();
 	const moBanGhi = useOpenRecord();
+	const tenDon = useTenDon(q.dich.don);
 	const moCuoc = (id: string) => moBanGhi({ kind: "soan", id });
 	const donVi = donViSoanCua(q.dich.don, q.cycleId);
 	const hoiDuoc =
@@ -113,7 +114,7 @@ export function useDuongSoan({
 		quanTri: q.quanTri,
 		canEdit: q.canEdit,
 		cauNoi,
-		tenDon: q.tenDon,
+		tenDon,
 		sanSang: sanSang.data,
 		m,
 		mo: okrMessages(locale),

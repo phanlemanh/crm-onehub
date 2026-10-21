@@ -43,7 +43,6 @@ export type QuyenKhu =
 	| {
 			kieu: "xong";
 			dich: DonDich;
-			tenDon: string;
 			duoc: boolean;
 			lyDo: string | null;
 			cycleId: string;
@@ -52,16 +51,22 @@ export type QuyenKhu =
 			canEdit: boolean;
 	  };
 
+export function useTenDon(don: DonChonOkr): string {
+	const m = okrMessages(useLocale());
+	const trpc = useTRPC();
+	const cay = useQuery(trpc.org.tree.queryOptions());
+	const tenGoc = useTenGoc();
+	return (cay.data && giaiDon(don, cay.data, tenGoc)?.ten) || m.donVi;
+}
+
 export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	const m = okrMessages(useLocale());
 	const trpc = useTRPC();
 	const [url] = useQueryStates(okrParsers);
 	const { cycles, currentId } = useChuKy();
 	const access = useQuery(trpc.okr.access.queryOptions());
-	const cay = useQuery(trpc.org.tree.queryOptions());
-	const tenGoc = useTenGoc();
 	const dich = donDich(tab, url[SEARCH_PARAM.okr.don], access.data?.headOf);
-	const ten = (cay.data && giaiDon(dich.don, cay.data, tenGoc)?.ten) || m.donVi;
+	const ten = useTenDon(dich.don);
 	const hoiDuoc = currentId !== null && access.data !== undefined;
 	const ds = useQuery(
 		trpc.okr.danhSach.queryOptions(
@@ -78,7 +83,6 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 		return {
 			kieu: "xong",
 			dich,
-			tenDon: ten,
 			duoc: false,
 			lyDo: m.khoaTao.loiQuyen,
 			cycleId: currentId ?? "",
@@ -96,7 +100,6 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	return {
 		kieu: "xong",
 		dich,
-		tenDon: ten,
 		duoc,
 		lyDo,
 		cycleId: currentId,
