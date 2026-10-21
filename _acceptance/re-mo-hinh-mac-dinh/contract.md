@@ -5,7 +5,7 @@ slug: re-mo-hinh-mac-dinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: implemented
+status: verified
 approved_by: manh
 approved_at: 2026-10-21
 design_doc: _acceptance/re-mo-hinh-mac-dinh/design.md
