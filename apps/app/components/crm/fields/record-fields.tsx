@@ -103,3 +103,28 @@ export function RecordFields({
 		</>
 	);
 }
+
+export function OTruongTuTao({
+	field,
+	saving,
+	onSave,
+	nguoiDung,
+}: {
+	field: RecordFieldEntry;
+	saving: (key: string) => boolean;
+	onSave: (values: Record<string, FieldValueJson>, khoa: string) => void;
+	nguoiDung: Owner[] | undefined;
+}) {
+	if (!field.showOnSheet) return null;
+
+	return (
+		<OTruongPhieu
+			moTa={moTaTruongTuTao(
+				field,
+				(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
+				saving,
+				nguoiDung,
+			)}
+		/>
+	);
+}
