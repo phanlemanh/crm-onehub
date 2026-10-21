@@ -236,10 +236,44 @@ const ariaSort = await trang.evaluate(
 		null,
 	NHAN.NUMBER,
 );
+const muiTen = await trang.evaluate((n) => {
+	const th = document.querySelector(`th[title="${n}"]`);
+	const svg = th?.querySelector("button svg");
+	if (!th || !svg) return "vang";
+	const r = svg.getBoundingClientRect();
+	if (r.width === 0 || r.height === 0) return "vang";
+	let el = svg.parentElement;
+	while (el && el !== th.parentElement) {
+		const cs = getComputedStyle(el);
+		if (
+			[cs.overflow, cs.overflowX, cs.overflowY].some((o) => o !== "visible")
+		) {
+			const q = el.getBoundingClientRect();
+			if (
+				r.left < q.left - 0.5 ||
+				r.right > q.right + 0.5 ||
+				r.top < q.top - 0.5 ||
+				r.bottom > q.bottom + 0.5
+			)
+				return "bi-cat";
+		}
+		el = el.parentElement;
+	}
+	const tai = document.elementFromPoint(
+		r.left + r.width / 2,
+		r.top + r.height / 2,
+	);
+	return tai && th.contains(tai) ? "thay" : "bi-che";
+}, NHAN.NUMBER);
 const thuTu = await tenHang();
 await trang.screenshot({
 	path: join(BANG_CHUNG, "smt-bang-thoa-thuan-sap-1280.png"),
 });
+bao(
+	muiTen === "thay",
+	"DUNG AC-9 1280: mui ten sap cot So nhin thay",
+	`smt man: mui ten ${muiTen}`,
+);
 bao(
 	ariaSort === "ascending",
 	"DUNG AC-9 1280: aria-sort ascending",
@@ -365,6 +399,7 @@ for (const [rong, cao, anh] of [
 		return {
 			alpha: doc_(`${tienTo} Alpha`),
 			beta: doc_(`${tienTo} Beta`),
+			soThe: document.querySelectorAll("[data-open-deal]").length,
 			tran: d.scrollWidth - d.clientWidth,
 		};
 	}, TIEN_TO);
@@ -378,11 +413,21 @@ for (const [rong, cao, anh] of [
 			`smt man: kanban alpha ${the.alpha}`,
 		);
 		bao(
-			!the.beta.includes(NHAN.NUMBER),
+			the.beta !== "",
+			"DUNG AC-9 kanban: the Beta co mat",
+			"smt man: kanban beta vang",
+		);
+		bao(
+			the.beta !== "" && !the.beta.includes(NHAN.NUMBER),
 			"DUNG AC-9 kanban: the Beta khong co dong So trong",
 			`smt man: kanban beta ${the.beta}`,
 		);
 	} else {
+		bao(
+			the.soThe >= 3,
+			`DUNG AC-9 kanban 375: ${the.soThe} the`,
+			`smt man: 375 khong co the ${the.soThe}`,
+		);
 		bao(
 			the.tran <= 0,
 			"DUNG AC-9 kanban 375: tran ngang 0",

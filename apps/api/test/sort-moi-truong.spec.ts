@@ -73,15 +73,15 @@ const savedViews = new SavedViewsService(db, {
 } as unknown as CampaignsService);
 
 const TEN = {
-	T1: "Bình",
+	T1: "An",
 	T2: "Cường",
 	T3: "Dung",
-	T4: "An",
+	T4: "Bình",
 	T5: "Em",
 } as const;
 type Nhan = keyof typeof TEN;
-const TANG: Nhan[] = ["T2", "T4", "T1", "T5", "T3"];
-const GIAM: Nhan[] = ["T5", "T4", "T1", "T2", "T3"];
+const TANG: Nhan[] = ["T2", "T1", "T4", "T5", "T3"];
+const GIAM: Nhan[] = ["T5", "T1", "T4", "T2", "T3"];
 
 type GiaTri = string | number;
 type BaGiaTri = { nho: GiaTri; hoa: GiaTri; lon: GiaTri };
@@ -615,7 +615,7 @@ describe("smt-api-cty-lh", () => {
 			T2: soCho(2),
 			T3: null,
 			T4: soCho(4),
-			T5: soCho(5),
+			T5: null,
 		} satisfies Record<Nhan, string | null>;
 		const khoaDt = (await taoTruong("CONTACT", `${tienTo} dt`, "PHONE")).key;
 		for (const id of lhIds) {
@@ -623,8 +623,8 @@ describe("smt-api-cty-lh", () => {
 			if (so)
 				await contacts.update(id, { phone: so, fields: { [khoaDt]: so } });
 		}
-		const PHONE_TANG: Nhan[] = ["T1", "T2", "T4", "T5", "T3"];
-		const PHONE_GIAM: Nhan[] = ["T5", "T4", "T2", "T1", "T3"];
+		const PHONE_TANG: Nhan[] = ["T1", "T2", "T4", "T3", "T5"];
+		const PHONE_GIAM: Nhan[] = ["T4", "T2", "T1", "T3", "T5"];
 		for (const [dir, dapAn] of [
 			["asc", PHONE_TANG],
 			["desc", PHONE_GIAM],
@@ -663,7 +663,7 @@ describe("smt-api-khoa-chet", () => {
 		await taoTruong("COMPANY", `${tienTo} cty`, "TEXT");
 
 		const companyId = await taoCongTy(`${tienTo} cong ty`);
-		const ten = ["Z", "Y", "X", "W", "V"];
+		const ten = ["M", "Z", "A", "Q", "D"];
 		for (const [i, t] of ten.entries()) {
 			const id = await taoThoaThuan(tienTo, companyId, t);
 			await deals.update(id, { fields: { [khoaSong]: `gia tri ${i}` } });
@@ -924,8 +924,15 @@ describe("smt-api-the", () => {
 				[ba.key]: "ba",
 			},
 		});
+		await datThuTu([luu, an, so, ngay, ba]);
+		const truocLuuTru = await docThe();
+		const khoaTruoc = truocLuuTru
+			? Object.keys(truocLuuTru).sort().join(",")
+			: "undefined";
+		if (khoaTruoc !== [luu.key, so.key].sort().join(",")) {
+			throw new Error(`smt api the: doi chung truoc luu tru ${khoaTruoc}`);
+		}
 		await fields.archive(quanTri, luu.id);
-		await datThuTu([an, so, ngay, ba]);
 
 		async function docThe() {
 			let board: ReturnType<typeof dealBoardOutput.parse>;
@@ -956,7 +963,7 @@ describe("smt-api-the", () => {
 			throw new Error(`smt api the: gia tri ${ngay.key}`);
 		}
 
-		await datThuTu([an, so, ba, ngay]);
+		await datThuTu([luu, an, so, ba, ngay]);
 		const sau = await docThe();
 		const khoaSau = sau ? Object.keys(sau).sort().join(",") : "undefined";
 		if (khoaSau !== [so.key, ba.key].sort().join(",")) {

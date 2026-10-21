@@ -476,6 +476,7 @@ type DongKieu = {
 	suaTaiCho: (moTa: MoTaTruong) => ReactNode;
 	oBang: (gia: GiaTriHienThi) => ReactNode;
 	anDuoi: KhoAn;
+	canh: "left" | "right";
 };
 
 const hienThi = (gia: GiaTriHienThi) => <HienThiTruong {...gia} />;
@@ -484,41 +485,49 @@ const suaChu = (moTa: MoTaTruong) => <OSuaCoKiem moTa={moTa} />;
 const suaChon = (moTa: MoTaTruong) => <OChon moTa={moTa} />;
 
 export const KIEU_TRUONG = {
-	TEXT: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "lg" },
+	TEXT: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "lg", canh: "left" },
 	LONG_TEXT: {
 		hienThi,
 		suaTaiCho: (moTa) => <OChuDai moTa={moTa} />,
 		oBang,
 		anDuoi: "lg",
+		canh: "left",
 	},
-	NUMBER: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "sm" },
+	NUMBER: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "sm", canh: "right" },
 	DATE: {
 		hienThi,
 		suaTaiCho: (moTa) => <ONgay moTa={moTa} />,
 		oBang,
 		anDuoi: "lg",
+		canh: "left",
 	},
 	CHECKBOX: {
 		hienThi,
 		suaTaiCho: (moTa) => <OTich moTa={moTa} />,
 		oBang,
 		anDuoi: "lg",
+		canh: "left",
 	},
-	SELECT: { hienThi, suaTaiCho: suaChon, oBang, anDuoi: "lg" },
-	URL: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "md" },
-	EMAIL: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "md" },
-	PHONE: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "md" },
-	USER: { hienThi, suaTaiCho: suaChon, oBang, anDuoi: "md" },
+	SELECT: { hienThi, suaTaiCho: suaChon, oBang, anDuoi: "lg", canh: "left" },
+	URL: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "md", canh: "left" },
+	EMAIL: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "md", canh: "left" },
+	PHONE: { hienThi, suaTaiCho: suaChu, oBang, anDuoi: "md", canh: "left" },
+	USER: { hienThi, suaTaiCho: suaChon, oBang, anDuoi: "md", canh: "left" },
 	MONEY: {
 		hienThi,
 		suaTaiCho: (moTa) => <OTien moTa={moTa} />,
 		oBang,
 		anDuoi: "sm",
+		canh: "right",
 	},
 } as const satisfies Record<KieuTruong, DongKieu>;
 
 export function anDuoiTheoKieu(kieu: KieuTruong): KhoAn {
 	return KIEU_TRUONG[kieu].anDuoi;
+}
+
+export function canhTheoKieu(kieu: KieuTruong): "left" | "right" {
+	return KIEU_TRUONG[kieu].canh;
 }
 
 export function OTruongPhieu({ moTa }: { moTa: MoTaTruong }) {

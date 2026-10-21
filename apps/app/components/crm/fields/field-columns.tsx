@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useTRPC } from "@/lib/trpc/client";
 import type { FieldEntity } from "./fields-entity";
-import { anDuoiTheoKieu, OTruongBang } from "./kieu-truong";
+import { anDuoiTheoKieu, canhTheoKieu, OTruongBang } from "./kieu-truong";
 
 function nhanTrongO(
 	giaTri: string | number | boolean | null,
@@ -41,6 +41,7 @@ export function useFieldColumns<Row extends WithFields>(
 				width: "w-[12%]",
 				sortable: sapDuocTheoKieu(field.type),
 				hideBelow: anDuoiTheoKieu(field.type),
+				align: canhTheoKieu(field.type),
 				cell: (row: Row) => (
 					<OTruongBang
 						kieu={field.type}
