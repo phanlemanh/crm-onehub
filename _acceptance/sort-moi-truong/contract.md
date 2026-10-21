@@ -5,7 +5,9 @@ slug: sort-moi-truong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
+approved_by: manh
+approved_at: 2026-10-21T01:22:12Z
 design_doc: docs/superpowers/specs/2026-10-21-sort-moi-truong-design.md
 ---
 
