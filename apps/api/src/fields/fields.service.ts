@@ -595,6 +595,7 @@ export class FieldsService {
 	async tableValuesFor(
 		entity: FieldEntity,
 		recordIds: string[],
+		gioiHan?: number,
 	): Promise<Map<string, Record<string, FieldValueJson>>> {
 		const byRecord = new Map<string, Record<string, FieldValueJson>>();
 
@@ -604,6 +605,7 @@ export class FieldsService {
 			where: { entity, archivedAt: null, showOnTable: true },
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
+			take: gioiHan,
 		});
 
 		if (definitions.length === 0) return byRecord;

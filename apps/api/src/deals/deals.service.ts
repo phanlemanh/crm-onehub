@@ -321,7 +321,22 @@ export class DealsService {
 			}),
 		);
 
-		return { columns, reportingCurrency: base };
+		const truongThe = await this.fields.tableValuesFor(
+			"DEAL",
+			columns.flatMap((column) => column.cards.map((card) => card.id)),
+			DEAL_BOARD.truongTrenThe,
+		);
+
+		return {
+			columns: columns.map((column) => ({
+				...column,
+				cards: column.cards.map((card) => ({
+					...card,
+					fields: truongThe.get(card.id) ?? {},
+				})),
+			})),
+			reportingCurrency: base,
+		};
 	}
 
 	async byId(id: string) {

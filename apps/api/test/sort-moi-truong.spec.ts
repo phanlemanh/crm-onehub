@@ -883,3 +883,85 @@ describe("smt-api-board", () => {
 		expect(soO).toBe(4);
 	});
 });
+
+describe("smt-api-the", () => {
+	const tienTo = `smtthe${RUN}`;
+
+	it("smt-api-the: thẻ mang hai trường tự tạo đầu đã bật hiện trong bảng", async () => {
+		await batDauCa(tienTo);
+		const luu = await taoTruong("DEAL", `${tienTo} luu`, "TEXT", {
+			showOnTable: true,
+		});
+		const an = await taoTruong("DEAL", `${tienTo} an`, "TEXT");
+		const so = await taoTruong("DEAL", `${tienTo} so`, "NUMBER", {
+			showOnTable: true,
+		});
+		const ngay = await taoTruong("DEAL", `${tienTo} ngay`, "DATE", {
+			showOnTable: true,
+		});
+		const ba = await taoTruong("DEAL", `${tienTo} ba`, "TEXT", {
+			showOnTable: true,
+		});
+		const cuaCa = [luu, an, so, ngay, ba];
+
+		async function datThuTu(dau: typeof cuaCa) {
+			const tatCa = await fields.list("DEAL", false);
+			const conLai = tatCa.filter((f) => !dau.some((d) => d.id === f.id));
+			await fields.reorder(quanTri, {
+				entity: "DEAL",
+				ids: [...dau, ...conLai].map((f) => f.id),
+			});
+		}
+
+		const companyId = await taoCongTy(`${tienTo} cong ty`);
+		const id = await taoThoaThuan(tienTo, companyId, "the");
+		await deals.update(id, {
+			fields: {
+				[luu.key]: "luu",
+				[an.key]: "an",
+				[so.key]: 1234.5,
+				[ngay.key]: "2026-11-05",
+				[ba.key]: "ba",
+			},
+		});
+		await fields.archive(quanTri, luu.id);
+		await datThuTu([an, so, ngay, ba]);
+
+		async function docThe() {
+			let board: ReturnType<typeof dealBoardOutput.parse>;
+			try {
+				board = dealBoardOutput.parse(
+					await deals.board(dealBoardInput.parse({ q: tienTo })),
+				);
+			} catch {
+				throw new Error("smt api the: hop dong");
+			}
+			const card = board.columns
+				.flatMap((c) => c.cards)
+				.find((c) => c.id === id);
+			if (!card) throw new Error("smt api the: thieu the");
+			return (card as { fields?: Record<string, unknown> }).fields;
+		}
+
+		const fieldsThe = await docThe();
+		const khoaThe = fieldsThe
+			? Object.keys(fieldsThe).sort().join(",")
+			: "undefined";
+		if (khoaThe !== [so.key, ngay.key].sort().join(",")) {
+			throw new Error(`smt api the: khoa ${khoaThe}`);
+		}
+		if (fieldsThe?.[so.key] !== 1234.5)
+			throw new Error(`smt api the: gia tri ${so.key}`);
+		if (!String(fieldsThe?.[ngay.key]).startsWith("2026-11-05")) {
+			throw new Error(`smt api the: gia tri ${ngay.key}`);
+		}
+
+		await datThuTu([an, so, ba, ngay]);
+		const sau = await docThe();
+		const khoaSau = sau ? Object.keys(sau).sort().join(",") : "undefined";
+		if (khoaSau !== [so.key, ba.key].sort().join(",")) {
+			throw new Error("smt api the: theo thu tu");
+		}
+		expect(khoaSau).toBe([so.key, ba.key].sort().join(","));
+	});
+});
