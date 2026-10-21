@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: f25b8313aae5ba4870a7ecbd0cc165e85c5e3704
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-21
 ---
 
 # Evidence Report: gon-dau-trang-lay-y-kien
