@@ -5,7 +5,7 @@ slug: truong-mot-cach-cu-xu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21T00:36:49Z
 design_doc: docs/superpowers/specs/2026-10-21-truong-mot-cach-cu-xu-design.md
@@ -166,3 +166,14 @@ Later và Never ở `coverage-scan.md`.
 - Không chạm `packages/ui` (vùng Mac Studio, luật 31). Bảng đăng ký chỉ ghép thành phần có sẵn trong `apps/app`.
 - Hai dòng đổi tên đi qua `cham-tep` (luật 7, 33).
 - Không chạm `apps/agent` (vùng DA21).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-21:
+  - Ngoài-1: Trên phiếu, một trường tự tạo kiểu Chọn hoặc Người đã đặt bắt buộc mà bản ghi cũ chưa có giá trị sẽ hiện thành ô trống trơn, không có dấu «—» hay chữ gợi ý. Người dùng vẫn bấm vào ô để chọn được, nhưng nhìn thoáng qua không biết ô đó còn trống.
+  - Ngoài-2: Không ảnh hưởng trực tiếp người dùng: tính năng vẫn báo lỗi lưu đúng câu tiếng Việt. Chỉ là một bài kiểm tự động có thể vẫn xanh dù lỗi bắn toast khi lưu chồng nhau quay lại sau này.
+  - Ngoài-3: Khi lưu một trường Chọn (kể cả Tiền tệ của thoả thuận) hoặc Người phụ trách bị hỏng vì lý do khác như mất mạng hay không đủ quyền, người dùng vẫn thấy câu nói lựa chọn bị lưu trữ hoặc người không còn trong đội. Câu này chỉ nêu sai nguyên nhân, giá trị trên màn hình vẫn về lại giá trị cũ.
+  - Ngoài-4: Người dùng không thấy khác biệt nào. Phía đội dựng, có hai bản của cùng một ô sửa và tài liệu thiết kế còn ghi tên cũ, dễ gây nhầm khi sửa về sau.
+  - Ngoài-6: Phép kiểm màn điện thoại có thể báo đạt dù phiếu chưa mở ra, nên chưa chắc đã chứng minh phiếu không bị cuộn ngang. Người dùng không thấy lỗi nào, chỉ là bằng chứng yếu hơn vẻ ngoài.
+  - Ngoài-7: Bài kiểm ngày trong bảng khá lỏng nên nếu ngày bị hiện sai kiểu mà vẫn có số 22 thì không bị bắt. Người dùng có thể thấy ngày viết lạ trong bảng mà không ai phát hiện trước.
+  - Ngoài-8: Năm kiểu trường (Ô tích, Người, Chữ dài, Email, Điện thoại) chưa được kiểm khi giá trị trống, nên có thể có ô hiện chữ khác thay vì «—» mà không ai biết. Nếu có, người dùng sẽ thấy ô trống hiện lạ.
+  - Ngoài-9: Cột trường có sẵn trong bảng chưa được kiểm độc lập với cột tự tạo, nên nếu cột có sẵn vẽ khác đi thì có thể không ai thấy. Người dùng khi đó sẽ thấy hai loại cột hơi khác nhau.
+  - Ngoài-10: Bài kiểm ô bảng dùng dữ liệu tự dựng nên có thể xanh dù bảng ghép sai nhãn lựa chọn hay ngày với dữ liệu thật. Nếu sai, người dùng sẽ thấy ô Chọn hoặc Ngày hiện không đúng.
+  - Ngoài-11: Phép quét chưa chắc bắt được trường mà ai đó vẽ ngoài đường chung, nên một trường có thể lệch cách hiện mà không bị phát hiện. Người dùng khi đó có thể lại phân biệt được trường có sẵn với trường tự tạo.

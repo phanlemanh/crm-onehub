@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 28dddaa456ba3804fd24b00614002fd5879e1f85
-human_signoff:
+human_signoff: manh 2026-10-21 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 13/13 eval máy gồm E2c, E3c, E8 mang từ vòng 1; vòng 1 REJECT đã sửa). Ngoài-5 (lỗi có lý do cụ thể của máy chủ bị thay bằng câu chung) mở hợp đồng mới; Ngoài-12, Ngoài-13 chấp nhận, không sửa; mười mục còn lại ghi Known limits. Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: truong-mot-cach-cu-xu
