@@ -52,6 +52,13 @@ export class LoiViec extends Error {
 	}
 }
 
+export class LoiChaDoiDuAn extends LoiViec {
+	constructor() {
+		super("khong-hop-le", DU_AN.thongDiep.chaDoiDuAn);
+		this.name = "LoiChaDoiDuAn";
+	}
+}
+
 export type DauGhi = {
 	viecId: string;
 	nguoiId: string;
@@ -1127,6 +1134,14 @@ export async function taoViecCon(
 	tx: DbGhi,
 	input: TaoViecConInput,
 ): Promise<{ id: string }> {
+	const goc = await tx.viec.findUnique({
+		where: { id: input.chaId },
+		select: { duAnId: true },
+	});
+	const duAnLucDau = goc?.duAnId ?? null;
+	if (duAnLucDau) {
+		await tx.$queryRaw`SELECT id FROM "duAn" WHERE id = ${duAnLucDau} FOR UPDATE`;
+	}
 	await tx.$queryRaw`SELECT id FROM viec WHERE id = ${input.chaId} FOR UPDATE`;
 	const cha = await tx.viec.findFirst({
 		where: { AND: [{ id: input.chaId }, dieuKienXemViec(input.nguoiId)] },
@@ -1144,6 +1159,7 @@ export async function taoViecCon(
 	if (cha === null) {
 		throw new LoiViec("khong-thay", VIEC.thongDiep.khongCoViec(input.chaId));
 	}
+	if (cha.duAnId !== duAnLucDau) throw new LoiChaDoiDuAn();
 	const vai = vaiCua(cha, input.nguoiId);
 	if (!vai.giao && !vai.thucHien) {
 		throw new LoiViec(
