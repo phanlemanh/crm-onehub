@@ -14,9 +14,12 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
-const THUOC = ["man-bo-okr.mjs", "man-bo-okr-chieu-do.mjs"].map((t) =>
-	join(HERE, t),
-);
+const THUOC = [
+	"man-bo-okr.mjs",
+	"man-bo-okr-du-lieu.mjs",
+	"man-bo-okr-do.mjs",
+	"man-bo-okr-chieu-do.mjs",
+].map((t) => join(HERE, t));
 const LENH =
 	'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-bo-okr/rang/man-bo-okr.mjs"';
 const TEN_CAY_SAO = "tbo-sao";

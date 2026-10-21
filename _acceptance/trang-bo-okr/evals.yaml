@@ -23,7 +23,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - "apps/api/src/okr/**"
-      - "_acceptance/trang-bo-okr/rang/man-bo-okr.mjs"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
     expected: |
       man-bo-okr.mjs trên phiên đo riêng (tien-de.mjs), bộ OKR mẫu, người xem là trưởng một phòng ban mẫu, khổ 1440.
       Mở /okr/bo-okr trần: khẳng định «DANH SACH: tieu de Bo OKR · <n> hang = <n> don vi cua cay» với tập tên hàng
@@ -58,7 +58,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - "apps/app/app/(app)/[slug]/okr/okr-search-params.ts"
-      - "_acceptance/trang-bo-okr/rang/man-bo-okr.mjs"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
     expected: |
       Cùng lần chạy E2: người xem theo dõi một mục tiêu của một bộ phận mẫu (gieo qua okr.follow). Ma trận viết trước
       3 mục lọc {tat-ca, toi-dan, theo-doi}: bấm mục → URL mang phamViBo đúng (tat-ca không mang), tập hàng bằng tập kỳ
@@ -77,7 +77,7 @@ evals:
     cmd: config:executors.script.tbo_man
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
-      - "_acceptance/trang-bo-okr/rang/man-bo-okr.mjs"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
     expected: |
       Cùng lần chạy: từ danh sách bấm tên phòng ban của người xem và bấm OneHub. Mỗi ca: URL có donOkr đúng (OneHub là
       donOkr=goc) và kyOkr của chu kỳ đang xem; tiêu đề trang bằng tên đơn vị; có liên kết «Bộ OKR» với href
@@ -109,7 +109,7 @@ evals:
     cmd: config:executors.script.tbo_man
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
-      - "_acceptance/trang-bo-okr/rang/man-bo-okr.mjs"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
     expected: |
       Cùng lần chạy: mở bộ phòng ban ở chu kỳ KHÔNG phải chu kỳ hiện tại của bộ mẫu (kyOkr tường minh), bấm lần lượt
       Họp tuần → Việc → Sơ đồ → OKR bằng chuột, rồi Quay lại ba lần. Ma trận viết trước 4 bước tiến + 3 bước lùi: mỗi
@@ -140,7 +140,7 @@ evals:
     cmd: config:executors.script.tbo_man
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
-      - "_acceptance/trang-bo-okr/rang/man-bo-okr.mjs"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
     expected: |
       Cùng lần chạy: gieo 3 việc gắn 2 KR của phòng ban người xem qua okr.themViec (một việc có người làm và hạn, một
       việc đã đánh dấu xong), mở thẻ Việc của bộ đó. Ma trận viết trước theo từng việc gieo (3 khẳng định): việc nằm
@@ -158,7 +158,7 @@ evals:
     paths:
       - "apps/app/next.config.ts"
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
-      - "_acceptance/trang-bo-okr/rang/man-bo-okr.mjs"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
     expected: |
       Cùng lần chạy: mở /okr/theo-don-vi?donOkr=pb:<id>&xemOkr=hop-tuan&kyOkr=<id> → URL cuối /okr/bo-okr giữ cả ba tham
       số, thẻ Họp tuần mở, tiêu đề là tên phòng ban; mở /okr/bo-okr?xemOkr=hop-tuan → thẻ Họp tuần của bộ OneHub (tiêu
@@ -188,7 +188,7 @@ evals:
     cmd: config:executors.script.tbo_man
     paths:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
-      - "_acceptance/trang-bo-okr/rang/man-bo-okr.mjs"
+      - "_acceptance/trang-bo-okr/rang/man-bo-okr*.mjs"
     expected: |
       Cùng lần chạy, khổ 375x812: trang danh sách không có phần tử table hiện (bảng ẩn dưới md) và có ≥1 phần tử
       data-slot="item" mỗi bộ; trang một bộ: hàng thẻ con có scrollWidth > clientWidth hoặc vừa khung, còn
