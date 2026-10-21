@@ -1,0 +1,44 @@
+{
+  "feature_plain": "Ban lãnh đạo mở Báo cáo › Sơ đồ là thấy sơ đồ góp vào chiếm trọn chỗ bên phải thanh bên, bấm Toàn màn hình để giấu thanh bên, và từ ngăn một mục tiêu bấm «Xem trên sơ đồ» để thấy sơ đồ quanh mục tiêu đó — một màn Sơ đồ thay cho ba cách vẽ cũ.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho sơ đồ cả công ty chiếm trọn chỗ bên phải thanh bên, cao hết màn, chỉ một dải công cụ mỏng ở trên thay cho đầu trang lớn."},
+    {"id": "AC-3", "p": "Sẽ cho cùng màn Sơ đồ hiện sơ đồ quanh một mục tiêu khi mở đường của mục tiêu đó, kèm nút «Về sơ đồ cả công ty»; đổi qua lại vẫn giữ toàn màn hình."},
+    {"id": "AC-4", "p": "Sẽ đổi nút trong ngăn mục tiêu thành «Xem trên sơ đồ», bấm mở sơ đồ lấy tâm mục tiêu đó mà không làm thanh bên bật lại."},
+    {"id": "AC-5", "p": "Sẽ đưa dấu trang cũ của trang Sơ đồ quanh mục tiêu và của Toàn cảnh › Sơ đồ tới đúng màn Sơ đồ mới, và bỏ cách xem Sơ đồ khỏi Sức khoẻ."},
+    {"id": "AC-6", "p": "Sẽ bỏ Cây căn chỉnh ở mọi nơi (kể cả chỗ VK2 tạm đặt nó ở Sơ đồ); dấu trang cũ của Cây mở Sơ đồ với thẻ đơn vị đang chọn mở sẵn."},
+    {"id": "AC-8", "p": "Sẽ luôn hiện dải công cụ khi đang tải, khi lỗi, khi không thấy mục tiêu hay kỳ chưa có OKR — không khung trống câm, không vòng quay cả trang."},
+    {"id": "AC-9", "p": "Sẽ có đủ chữ tiếng Việt và tiếng Anh cho nút và đường mảnh mới, giữ tên mục tiêu không bị trình duyệt dịch, và thôi dùng chữ «căn chỉnh» trên màn Sơ đồ."},
+    {"id": "AC-10", "p": "Sẽ có ảnh từng bước trên màn thật ở máy tính và điện thoại, kể cả đi qua ngăn khi đang toàn màn hình, và mọi thước đã ký đo màn cũ được chuyển hoặc khai nghỉ có tên."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Chặn Esc thoát toàn màn hình khi một ngăn, hộp thoại, menu hay thẻ đơn vị đang mở — Esc lần đầu chỉ đóng lớp ấy; không lớp nào mở thì Esc đưa thanh bên trở lại."},
+    {"id": "AC-7", "p": "Sẽ KHÔNG có nút Toàn màn hình và khung vẽ trên điện thoại — ở đó sơ đồ hiện thành danh sách, trang không cuộn ngang."},
+    {"id": "OOS-1", "p": "Không làm lại vỏ khu, thanh bên, ô chu kỳ hay bảng chuyển hướng chung của VK2; thẻ Sơ đồ trong trang một bộ OKR để cho VK3."},
+    {"id": "OOS-2", "p": "Không đổi cách vẽ sơ đồ hay dữ liệu sơ đồ trả về, không thêm đường gọi máy chủ nào."},
+    {"id": "OOS-3", "p": "Không đổi khu «Góp vào đâu», tab «Góp vào» của ngăn, số «góp vào N chỗ» hay đề xuất của Kara."},
+    {"id": "OOS-4", "p": "Không dùng toàn màn hình của trình duyệt, không giấu thanh biểu tượng hay đầu ứng dụng."}
+  ],
+  "scope_plain": "Phần cắt khỏi vòng này — mỗi dòng là một thứ người dùng sẽ KHÔNG thấy đổi:",
+  "coverage_plain": [
+    {"i": 0, "p": "Lối vào: đủ năm đường tới Sơ đồ — thanh bên, ngăn mục tiêu, ba dấu trang cũ — cộng tải lại và gửi đường dẫn."},
+    {"i": 1, "p": "Căn cứ của trục lối vào: câu giao và điều kiện xong của VK6, VK2 trong lộ trình."},
+    {"i": 2, "p": "Kiểu xem: cả công ty, quanh một mục tiêu, và lọc «Cần chú ý»."},
+    {"i": 3, "p": "Căn cứ của trục kiểu xem: hai hồ sơ sơ đồ đã ký (cả công ty theo đơn vị, quanh một mục tiêu)."},
+    {"i": 4, "p": "Khung: thường, toàn màn hình, và khổ điện thoại."},
+    {"i": 5, "p": "Căn cứ của trục khung: bản mẫu giấu thanh bên khi toàn màn hình; thanh bên thật đổi từ dọc sang ngang ở khổ máy tính bảng."},
+    {"i": 6, "p": "Dữ liệu: đang tải, lỗi, không thấy mục tiêu, kỳ rỗng, có dữ liệu — mỗi trạng thái có tiêu chí AC-8 (trạng thái tải)."},
+    {"i": 7, "p": "Căn cứ của trục dữ liệu: nếp «Chờ tải và lỗi tải» của luật thiết kế."},
+    {"i": 8, "p": "Áp cho mọi ô: máy tính và điện thoại, hai thứ tiếng, phím và Esc theo tầng, không cuộn cả trang, giữ thước của hồ sơ đã ký."},
+    {"i": 9, "p": "Mười ô lõi khớp mười tiêu chí AC-1 tới AC-10."},
+    {"i": 10, "p": "Đối chiếu ngành: Tability đặt bản đồ chiến lược trong vỏ, cho nó trọn vùng, có nút Full screen."},
+    {"i": 11, "p": "Để sau: thẻ Sơ đồ trong trang một bộ OKR (VK3), toàn màn hình của trình duyệt, lối vào từ ngăn KR (VK7), in và xuất ảnh."},
+    {"i": 12, "p": "Không bao giờ: sửa góp vào ngay trên sơ đồ, hay đổi dữ liệu sơ đồ đã ký."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bản nháp coi việc thêm cách thu vào thanh bên dùng chung là lối duy nhất, nhưng bản mẫu chỉ đơn giản không dựng thanh bên khi toàn màn hình — lối này không chạm thành phần chung và thước VK1 đã ký. Đã xử: thành câu hỏi Hỏi-1 trên thẻ cho anh chọn; hợp đồng đúng với cả hai lối."},
+    {"i": 1, "p": "Bộ giữ thước chỉ soát thước chạy bằng lệnh, bỏ sót thước chụp màn của hồ sơ cũ còn mở đường hay Cây sắp bỏ — sau gộp chúng đỏ ở PR người khác. Đã sửa: soát mọi loại thước theo danh sách chuỗi bị bỏ; thước chụp màn phải khai nghỉ hoặc ghi vì sao còn đúng."},
+    {"i": 2, "p": "Việc giữ toàn màn hình khi đi qua ngăn sang sơ đồ quanh mục tiêu chỉ được đo trong môi trường giả. Đã sửa: thêm bước trên trình duyệt thật — bấm thẻ, bấm «Xem trên sơ đồ», về cả công ty — có dấu kiểm không tải lại trang."},
+    {"i": 3, "p": "Vài thước không khai đủ tệp mình đọc, nên một thay đổi sau này ở tệp đó không đánh dấu thước cần đo lại. Đã sửa: khai thêm các tệp ấy; bộ so tự động để cho kit."},
+    {"i": 4, "p": "Phép đo «không còn bề rộng tối đa» ở máy tính 1440 không phân biệt được có hay không giới hạn, vì vùng nội dung ở khổ ấy đã hẹp hơn giới hạn. Đã sửa: đo thêm khi toàn màn hình và ở khổ 1920, có đối chứng đỏ."}
+  ]
+}
