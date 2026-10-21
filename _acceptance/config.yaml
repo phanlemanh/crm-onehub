@@ -2142,6 +2142,15 @@ executors:
     vkm_chuyen_huong: "cd apps/app && bun test ./test/vo-khu-chuyen-huong.spec.ts -t vkm-chuyen-huong"
     vkm_don_vi_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-don-vi-dan-cay.dom.tsx -t vkm-don-vi-dan"
     vkm_loi_vao_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-ba-phan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test ./test/okr-giai-ky-an.spec.ts ./test/okr-chuyen-huong-cap-nhat.spec.ts"
+    mkc_o_truot: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-o-truot"
+    mkc_duong_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-duong-dan"
+    mkc_ngan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-ngan"
+    mkc_trang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/moi-kr-ca-cong-ty.dom.tsx -t mkc-trang"
+    mkc_nguon: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-nguon"'
+    mkc_quyen: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-quyen"'
+    mkc_loc_tinh_trang: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-loc-tinh-trang"'
+    mkc_loc_don_vi: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-loc-don-vi"'
+    mkc_loc_nguoi: 'bun run test -- "cd apps/api && bun test test/okr-moi-kr.spec.ts -t mkc-loc-nguoi"'
   script:
     tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
     dtn_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dich-ten-nganh-bang-bang/rang/chup.mjs"
@@ -3282,6 +3291,7 @@ executors:
     tmc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs"'
     vkm_quet: bun _acceptance/vo-khu-muc-tieu/rang/quet-duong-cu.mjs
     vkm_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vo-khu-muc-tieu/rang/do-man.mjs"'
+    mkc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

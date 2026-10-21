@@ -1,0 +1,231 @@
+schema_version: 1
+slug: moi-kr-ca-cong-ty
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.mkc_o_truot
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx"
+      - "apps/app/app/(app)/[slug]/okr/toan-canh/o-kr-truot.tsx"
+      - "apps/app/lib/messages/okr*.ts"
+      - "apps/app/lib/search-param-keys.ts"
+      - "packages/ui/src/components/stat-card.tsx"
+      - "apps/app/test/moi-kr-ca-cong-ty.dom.tsx"
+    expected: |
+      Ca "mkc-o-truot" dung ToanCanh voi toanCanh co du lieu va okr.moiKr gia co facetCounts.tinhTrang
+      [{value:"truot",count:3},{value:"dung-nhip",count:5}]: trong [data-slot=stat-group] co dung mot ô
+      [data-o="kr-truot"], la phan tu <a>, nhan rut tu messages (khong viet tay chuoi), gia tri "3"; href =
+      "/ws/okr/moi-kr?tinhTrangKr=truot" khi duong khong kyOkr va "/ws/okr/moi-kr?kyOkr=c2&tinhTrangKr=truot"
+      khi ?kyOkr=c2. count truot vang -> o hien "0" va van la lien ket. Ma tran viet truoc 3 dong (khong ky,
+      co ky, khong co truot), 3 khang dinh href + 3 khang dinh so.
+      CHIEU DO: ban sao o bo kyOkr khoi href -> do dong "co ky" voi thong diep "o KR truot mat chu ky";
+      ban sao lay so tu tongQuan.tuTinThap thay facetCounts -> do "so o khong lay tu moiKr".
+
+  - id: E2
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.mkc_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/api/src/okr/moi-kr.ts"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/src/okr/okr.router.ts"
+      - "packages/ui/src/components/stat-card.tsx"
+      - "_acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"
+    expected: |
+      Ban do qua tien-de (phien do rieng). Bo mau ca-moi-kr nap bang duong ghi that, dat publishedAt va ky
+      chu ky TUONG DOI voi gio chay de luon sinh dung N_TRUOT KR truot (hang trong ban do, N_TRUOT lon hon
+      co trang cua DataTable). Dang nhap quan tri, mo /okr/suc-khoe, doc so tren [data-o="kr-truot"]; so-o
+      < 2 -> thoat ma 2 "khong dung duoc Given AC-1" (khong in DUNG). Goi okr.moiKr cung chu ky qua API cua
+      phien do, dem dong tinhTrang=truot; bam DUNG MOT lan vao o; cho duong doi. In "DUNG AC-1 mot-bam:
+      duong=/okr/moi-kr?...tinhTrangKr=truot, so-o=<n>, tong-bang=<n>, api=<n>, so-bam=1" khi so-o == tong
+      cua bang (so tong DataTable in o chan bang, khong dem dong cua mot trang) == api == N_TRUOT, moi dong
+      cua trang dau mang tinh trang Truot. Lech -> "SAI AC-1 <gi>", ma 1. Bi day ve /sign-in hay /onboarding
+      -> ma 2.
+      CHIEU DO (ma chua sua): "SAI AC-1 khong thay o kr-truot". Pha-thu MKC_PHA=dem-ca-nhan (ban do cong them
+      KR cua muc tieu ca nhan vao so api) -> "SAI AC-1 so-o != api"; MKC_PHA=mot-trang (dem dong trang dau
+      thay tong) -> "SAI AC-1 tong-bang != so-o".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mkc_nguon
+    paths:
+      - "apps/api/src/okr/moi-kr.ts"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/src/okr/okr-xem.contracts.ts"
+      - "apps/api/src/okr/okr.router.ts"
+      - "apps/api/scripts/okr-mau/ca-moi-kr.ts"
+      - "apps/api/test/okr-moi-kr.spec.ts"
+    expected: |
+      Ca "mkc-nguon" ghim ngay bang setSystemTime, nap ca mau ca-moi-kr qua service that (khong chen bang):
+      chu ky Q4 co muc tieu cong-bo cap onehub, bo-phan, phong-ban, ca-nhan; mot muc tieu nhap, mot da-bo,
+      mot muc tieu o chu ky khac; moi loai cam-ket, tham-vong, hoc-tap; KR so va KR moc; mot muc tieu co
+      publishedAt khac ca createdAt lan ngay dau chu ky. Goi okr.moiKr qua tRPC (quan tri, loc rong):
+      (a) tap keyResultId cua rows == tap viet truoc (ma tran 12 KR mong co, 5 KR mong vang, 17 khang dinh);
+      (b) tinhTrang moi dong == tinh trang MONG DOI viet truoc trong ma tran cho tung KR (khong tinh lai tu
+      row.expected), trong do KR cua muc tieu cong bo muon mang "dung-nhip" con neu dem tu createdAt se la
+      "truot"; khong dong nao cua tham-vong hay hoc-tap mang "truot"; KR moc -> moc-xong/moc-chua;
+      (c) doi chung cung nguoi: voi moi KR cua nguoi u2, {expected, tinhTrang} cua dong == {expected, nhip}
+      okr.khoiCuaToi tra cho u2; total == rows.length; dau ra qua moiKrOutput.parse.
+      CHIEU DO: ban sao locMoiKr bo dieu kien cap ca-nhan -> do "KR ca nhan lot vao ca cong ty" ghim id;
+      ban sao bo status cong-bo -> do "KR cua muc tieu nhap lot vao"; ban sao tinh ky vong tu createdAt ->
+      do (b) ghim keyResultId cua KR cong bo muon.
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mkc_quyen
+    paths:
+      - "apps/api/src/okr/moi-kr.ts"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/scripts/okr-mau/ca-moi-kr.ts"
+      - "apps/api/test/okr-moi-kr.spec.ts"
+    expected: |
+      Ca "mkc-quyen": ca mau co mot muc tieu phong-ban muc hien thi gioi han voi mot KR truot. Nguoi xem hep
+      (khong trong pham vi xem) goi okr.moiKr: keyResultId do vang khoi rows, facetCounts.tinhTrang truot
+      nho hon cua quan tri dung 1, facetCounts.donVi va nguoi khong mang gia tri chi do KR do sinh ra. Quan
+      tri goi cung chu ky: KR do co trong rows. Doi chung duong: mot KR truot cua OKR mo deu co o ca hai.
+      CHIEU DO: ban sao doc muc tieu bang pham "so-gop" thay { nguCanh } -> do "nguoi xem hep thay KR gioi
+      han" ghim keyResultId.
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.mkc_loc_tinh_trang
+    paths:
+      - "apps/api/src/okr/moi-kr.ts"
+      - "apps/api/test/okr-moi-kr.spec.ts"
+    expected: |
+      Ca "mkc-loc-tinh-trang" goi okr.moiKr voi ma tran loc viet truoc 6 dong: tinhTrang=[truot];
+      [cham-nhip, truot]; [moc-chua]; []; {donVi:[bp:B1], tinhTrang:[truot]}; {nguoi:[u2]}. Moi dong: tap
+      rows == loc tay tren rows khong loc theo cung dieu kien (so quan he tap keyResultId, khong dem chuoi);
+      facetCounts.tinhTrang[v] == so dong co tinh trang v trong tap da loc theo donVi va nguoi cua dong do
+      ma tran (dem tay, bo qua chinh mat tinh trang) — ca 6 dong.
+      CHIEU DO: ban sao dem mat tinh trang sau khi loc chinh no -> do dong 1 "dem dung-nhip ve 0 khi chon
+      truot"; ban sao dem mat tinh trang tren tap chua loc donVi/nguoi -> do dong 5 "so truot cua ca cong ty
+      canh danh sach B1" ghim gia tri.
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.mkc_loc_don_vi
+    paths:
+      - "apps/api/src/okr/moi-kr.ts"
+      - "apps/api/test/okr-moi-kr.spec.ts"
+    expected: |
+      Ca "mkc-loc-don-vi" voi cay mau (OneHub; bo phan B1 co phong ban P1, P2; bo phan B2 co P3): loc
+      donVi=[bp:B1] -> tap dong == KR cua B1 + P1 + P2; [pb:P1] -> chi P1; [goc] -> chi muc tieu cap onehub;
+      [bp:B1, pb:P3] -> hop cua hai. Ma tran 4 dong viet truoc, moi dong so sanh tap keyResultId.
+      CHIEU DO: ban sao so khop don vi tuyet doi (bo duyet con) -> do dong [bp:B1] "thieu KR cua phong ban con"
+      ghim id KR cua P1.
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.mkc_loc_nguoi
+    paths:
+      - "apps/api/src/okr/moi-kr.ts"
+      - "apps/api/test/okr-moi-kr.spec.ts"
+    expected: |
+      Ca "mkc-loc-nguoi": ca mau co muc tieu chu A voi KR do B phu trach. loc.nguoi=[B] -> KR do co mat;
+      loc.nguoi=[A] -> KR do vang (A khong phu trach KR nao khac cua muc tieu do). facetCounts.nguoi mang ten
+      va so dung theo nguoi phu trach KR.
+      CHIEU DO: ban sao loc theo objective.owner -> do "loc theo chu muc tieu" ghim id KR.
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.mkc_duong_dan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/moi-kr/**"
+      - "apps/app/app/(app)/[slug]/okr/okr-search-params.ts"
+      - "apps/app/lib/search-param-keys.ts"
+      - "apps/app/test/moi-kr-ca-cong-ty.dom.tsx"
+    expected: |
+      Ca "mkc-duong-dan" dung trang Mọi KR qua nuqs test adapter: mo duong
+      ?tinhTrangKr=truot&donViKr=bp:B1&nguoiKr=u2 -> input gui okr.moiKr la loc {tinhTrang:[truot],
+      donVi:["bp:B1"], nguoi:["u2"]} va bang chi dung cac dong khop; chon them "cham-nhip" o mat Tinh trang
+      -> url nhan tinhTrangKr=truot,cham-nhip (thu tu theo TINH_TRANG); doi ky c2 -> c3 qua ChonChuKy ->
+      ba tham so loc giu nguyen; duong ?tinhTrangKr=xau&donViKr= -> trang dung, loc rong, khong loi.
+      CHIEU DO: ban sao ghi loc vao state cuc bo thay nuqs -> do "tai lai mat bo loc"; ban sao parser
+      khong loc gia tri la -> do "tinhTrang xau lot vao input".
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.mkc_ngan
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/moi-kr/**"
+      - "apps/app/test/moi-kr-ca-cong-ty.dom.tsx"
+    expected: |
+      Ca "mkc-ngan": tren trang da loc ?tinhTrangKr=truot, bam dong KR k7 -> useMoNganKr duoc goi voi "k7"
+      (gian diep tren ham that cua dien-bien-kr, khong mock ca module) va url them tham so ngan cua VK7;
+      phan tu ngan KR that (role=dialog cua record-sheet) hien tren chinh trang voi tieu de KR k7;
+      dong ngan -> url quay ve dung ?tinhTrangKr=truot, so dong bang khong doi.
+      CHIEU DO: ban sao dong KR la Link sang trang muc tieu -> do "bam KR roi khoi Mọi KR".
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.mkc_trang
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/moi-kr/**"
+      - "apps/app/app/(app)/[slug]/okr/tab-okr.ts"
+      - "apps/app/app/(app)/[slug]/okr/thanh-ben-muc-tieu.tsx"
+      - "apps/app/lib/messages/okr*.ts"
+      - "apps/app/test/moi-kr-ca-cong-ty.dom.tsx"
+    expected: |
+      Ca "mkc-trang": ThanhBenMucTieu tai /ws/okr/moi-kr -> nhom "Báo cáo" co dung ba muc theo thu tu
+      [Sức khoẻ, Mọi KR, Sơ đồ] (nhan rut tu messages), href muc Mọi KR = /ws/okr/moi-kr, dung mot
+      aria-current va o muc Mọi KR. Trang: ma tran 5 trang thai viet truoc (cho, loi, chuachuky, rong,
+      khongkhop) -> moi trang thai co [data-trang-thai=ST-moikr-<ten>] va tieu de PageShellTitle "Mọi KR" van
+      co mat (5 x 2 khang dinh); trang thai loi co nut thu lai goi refetch; khongkhop co nut Bo loc xoa ca
+      ba tham so.
+      CHIEU DO: ban sao dat tieu de trong ma khach sau Suspense -> do trang thai "cho" "mat tieu de".
+
+  - id: E11
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mkc_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, nguyen van: MKC_CHEP_ANH=1 EVAL= bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs\" (ban do chi chep anh sang _acceptance/moi-kr-ca-cong-ty/evidence/ khi co MKC_CHEP_ANH=1)"
+      - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo cac anh trong _acceptance/moi-kr-ca-cong-ty/evidence/ va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/moi-kr-ca-cong-ty/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "packages/ui/src/components/stat-card.tsx"
+      - "_acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"
+    expected: |
+      Anh suc-khoe-1280, moi-kr-1280, suc-khoe-375, moi-kr-375. O 1280: o "KR trượt" nam trong hang o so
+      dau trang Suc khoe, nhin ra duoc la bam duoc (con tro, vien khi re chuot hay focus); Mọi KR co tieu
+      de, mot cau mo ta, mat loc Tinh trang dang chon "Trượt", bang cot KR · Đơn vị · Phụ trách · Tiến độ ·
+      Tình trạng, tinh trang la cham kem chu. O 375: bang khong tran ngang, cot Phụ trách va Tiến độ an,
+      cham kem chu van con. Ban do in "DUNG AC-10 moi-kr 375: tran ngang 0, cot an 2". Thieu anh -> khong dat.
+
+  - id: E12
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.mkc_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/moi-kr/**"
+      - "apps/app/lib/search-param-keys.ts"
+      - "apps/api/src/okr/moi-kr.ts"
+      - "apps/api/src/okr/okr-xem.contracts.ts"
+      - "_acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"
+    expected: |
+      Cung ban do: mo THANG (tai trang moi) /okr/moi-kr?kyOkr=<ky>&tinhTrangKr=truot,cham-nhip&donViKr=bp:<B1>
+      &nguoiKr=<u2> tren phien do; doc tap tieu de KR cua bang (moi trang, hay tong o chan bang khi nhieu
+      trang); goi okr.moiKr qua API cua phien do voi cung loc; tap phai bang nhau va khac rong. In
+      "DUNG nguong duong-dan: <n> dong khop api". Lech -> "SAI nguong duong-dan <gi>", ma 1.
+      CHIEU DO: pha-thu MKC_PHA=bo-mat-nguoi (ban do goi api bo nguoi khoi loc) -> "SAI nguong duong-dan tap
+      lech" ghim so dong hai ben.
