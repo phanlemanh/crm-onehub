@@ -1,35 +1,35 @@
-# Review findings: khung-cho-don-vi-mot-hinh (round 3)
+# Review findings: khung-cho-don-vi-mot-hinh (round 4)
 
 ## Trong hợp đồng
 
-Không có.
+Không có finding nào được map vào AC ở round này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **tep-goc-da-doi chieu do passes with zero assertions on the CI test job, because that checkout is shallow**
+- **tep-goc-da-doi chieu do passes with zero assertions on the CI test job, because that checkout is shallow (r3)**
   Người dùng thấy gì: Trang Theo đơn vị vẫn hiện đúng một khung chờ như đã hứa. Nhưng trên máy chạy kiểm tự động, một bài canh giữ hai tệp của trang này bị bỏ qua mà vẫn báo xanh, nên nếu sau này ai làm hỏng khung chờ ở đó thì máy kiểm có thể không bắt được.
   Căn cứ: Người dùng không bị ảnh hưởng ngay hôm nay, chỉ làm giảm khả năng phát hiện lỗi khung chờ trong tương lai; lỗi nếu xảy ra sẽ lộ ở các bài kiểm khác hoặc khi duyệt, và sửa sau vẫn rẻ.
   file: `apps/app/test/khung-man-chung.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (một phép kiểm chỉ có chiều âm, không có đối chứng dương): trên checkout nông, phép kiểm chiều đỏ của tep-goc-da-doi thoát ra mà không kiểm gì**
+- **Hình dạng 4 (một phép kiểm chỉ có chiều âm, không có đối chứng dương): trên checkout nông, phép kiểm chiều đỏ của tep-goc-da-doi thoát ra mà không kiểm gì (r3)**
   Người dùng thấy gì: Trên máy chạy kiểm tự động, hai phép kiểm xem khung chờ của trang Theo đơn vị có đúng hình không bị bỏ qua mà vẫn báo xanh. Người dùng vẫn thấy khung chờ đúng, nhưng một hỏng hóc về hình khung sau này có thể lọt qua.
   Căn cứ: Không gây hại ngay cho người dùng, chỉ làm lưới an toàn của máy kiểm thưa đi ở một chỗ; hỏng hóc nếu có sẽ thấy khi xem trang và sửa sau không đắt.
   file: `apps/app/test/khung-man-chung.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Ca mới tep-goc-da-doi đỏ trên checkout nông (job test của ci.yml): khi không có commit gốc, kỳ vọng [GHI_CHU_NONG] nhưng hàm không bao giờ trả dòng đó vì goc đã được thay bằng bảng (r2 · tệp đã đổi)**
+- **Ca mới tep-goc-da-doi đỏ trên checkout nông (job test của ci.yml): khi không có commit gốc, kỳ vọng [GHI_CHU_NONG] nhưng hàm không bao giờ trả dòng đó vì goc đã được thay bằng bảng (r2)**
   Người dùng thấy gì: Người dùng không thấy gì trên màn hình. Nhưng khi PR chuyển sang sẵn sàng, bước kiểm tự động trên CI có thể báo đỏ vì một bài kiểm cũ viết sai cho môi trường tải nông, nên việc gộp bị chặn.
   Căn cứ: Không ảnh hưởng người dùng cuối, chỉ có thể làm CI đỏ lúc gộp; tự phát hiện ngay khi chạy và sửa nhỏ nhưng thuộc bài kiểm của hồ sơ khác.
   file: `apps/app/test/khung-man-chung.spec.ts`
   severity: high
   Đề xuất: new-contract
 
-- **man-khung-cho.mjs: E1/E4 vẫn đạt khi cả pha chờ chỉ gồm mẫu «lạ», vì không kiểm khung là bang-hai-dong và Math.max() của mảng rỗng ra -Infinity (r2)**
+- **man-khung-cho.mjs: E1/E4 vẫn đạt khi cả pha chờ chỉ gồm mẫu «lạ», vì không kiểm khung là bang-hai-dong và Math.max() của mảng rỗng ra -Infinity (r2 · tệp đã đổi)**
   Người dùng thấy gì: Nếu sau này ai đó đổi khung chờ của trang về hình khác, phép đo trên trình duyệt vẫn có thể báo đạt, nên người dùng có thể lại thấy khung chờ sai hình mà không ai hay.
   Căn cứ: Hiện không làm hỏng gì cho người dùng và còn bài kiểm khác bắt được loại lỗi này; chỉ là lưới an toàn mỏng, sửa sau không mất dữ liệu.
   file: `_acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs`
@@ -43,7 +43,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 4 — Assertion âm-tính-một-mình: «cay toi da 0» và «vong quay 0» của AC-1 không có đối chứng dương, cũng không ghim thông điệp (r2)**
+- **Hình dạng 4 — Assertion âm-tính-một-mình: «cay toi da 0» và «vong quay 0» của AC-1 không có đối chứng dương, cũng không ghim thông điệp (r2 · tệp đã đổi)**
   Người dùng thấy gì: Nếu sau này khung chờ lại hiện cây đơn vị hoặc vòng quay toàn trang, phép đo tự động có thể không phát hiện ra, và người dùng sẽ thấy lại cảnh khung chờ lộn xộn.
   Căn cứ: Không gây hại hiện tại vì khung đang đúng; chỉ giảm khả năng bắt hồi quy sau này, và lỗi nếu xảy ra chỉ là giao diện chờ xấu, tải lại là hết.
   file: `_acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs`
@@ -64,7 +64,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **Toolbar layout class strings copy-pasted from apps/app into packages/ui (r1)**
+- **Toolbar layout class strings copy-pasted from apps/app into packages/ui (r1 · tệp đã đổi)**
   Người dùng thấy gì: Hàng công cụ lúc đang tải và lúc đã tải đang được định dạng từ hai chỗ riêng. Hôm nay hai bên khớp nhau, nhưng sau này ai sửa một bên mà quên bên kia thì khung chờ sẽ lệch khỏi trang thật mà không ai báo.
   Căn cứ: Người dùng chưa thấy gì sai ở hiện tại, chỉ có rủi ro lệch hình về sau, và sửa lúc đó chỉ là chỉnh lại cho khớp nên rẻ.
   file: `packages/ui/src/components/khung-xuong.tsx`
@@ -85,7 +85,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: high
   Đề xuất: new-contract
 
-- **man-khung-cho.mjs cho AC-1, AC-3 và AC-4 đạt khi mọi mẫu chỉ là mẫu «lạ», không có mẫu bang-hai-dong nào (r1)**
+- **man-khung-cho.mjs cho AC-1, AC-3 và AC-4 đạt khi mọi mẫu chỉ là mẫu «lạ», không có mẫu bang-hai-dong nào (r1 · tệp đã đổi)**
   Người dùng thấy gì: Phép đo tự động có thể báo đạt dù nó không bắt được khung chờ đúng hình trong một số tình huống hiếm. Trang thật hiện vẫn hiển thị đúng; rủi ro là một lần hỏng sau này lọt qua phép đo.
   Căn cứ: Người dùng không bị ảnh hưởng ngay, chỉ là lưới đo kém chặt trong tình huống hiếm, và sau này siết lại phép đo không làm mất dữ liệu của ai.
   file: `_acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs`
@@ -113,4 +113,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 2/2 lỗi rơi vào file không bộ đo nào phủ (apps/app/test/khung-man-chung.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
