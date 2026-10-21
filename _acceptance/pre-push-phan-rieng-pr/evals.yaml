@@ -158,6 +158,8 @@ evals:
       (3) Khoi ca 6 cua mang CA trong spec mong doi ra «test build» va dong «rong» k=1; dong 6 expected E1 cua
           _acceptance/pre-push-t1/evals.yaml khong con «-> rong» va nhac pre-push-phan-rieng-pr; Notes cua
           _acceptance/pre-push-t1/contract.md co muc nhac pre-push-phan-rieng-pr va ca 6.
+      (4) .githooks/gate-shape.json: moi khoa tru t1Only.vi_sao deepEqual ban o merge-base(HEAD, origin/onehub) (ref
+          vang -> ma 2 «khong co goc vong»).
       Roi chay that, moi lenh ma 0: bun test toan bo packages/ui/test/pre-push-t1.spec.ts, t1-ma-doc.spec.ts,
       push-ghim-lai-t1.spec.ts; node _acceptance/pre-push-t1/rang/mot-nguon.mjs; node _acceptance/pre-push-t1/rang/rang-cu.mjs;
       node _acceptance/pre-push-t1/rang/dot-bien.mjs. Chieu do cung luot tren ban sao tam: nhan doi chuoi «"--no-renames", »
@@ -172,9 +174,10 @@ evals:
       - ".githooks/gate-shape.json"
       - "packages/ui/test/pre-push-t1.spec.ts"
     expected: |
-      bun test -t hinh-gop: gate-shape.json that: t1Only.skip deepEqual ["test","build"]; classifier va sameRuleAs bang ban
-      origin/onehub cua gate-shape.json (doc bang git show; ref vang -> test do «khong co ban goc»); moi khoa ngoai t1Only
-      deepEqual ban origin/onehub; vi_sao khac ban origin/onehub. Nghia cua vi_sao do o E9.
+      bun test -t hinh-gop: gate-shape.json that: t1Only.skip deepEqual ["test","build"]; classifier =
+      "scripts/pre-push-t1.mjs", sameRuleAs = ".github/scripts/phan-loai.mjs"; vi_sao chua «phần PR tự thêm» va
+      «merge-base». Spec khong goi git (CI clone fetch-depth 2, va sau khi gop thi «khac ban origin/onehub» sai mai): ve
+      «moi khoa khac cua gate-shape.json giu nguyen» do o E7 ghim (4). Nghia cua vi_sao do o E9.
 
   - id: E9
     criterion: AC-8
