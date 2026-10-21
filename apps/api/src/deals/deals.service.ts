@@ -40,6 +40,7 @@ import {
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
 import { FieldsService } from "../fields/fields.service";
+import { khoangMoc } from "../fields/moc-ngay";
 import { GIAI_DOAN_API } from "../giai-doan/giai-doan-config";
 import {
 	archivedFilter,
@@ -1127,30 +1128,9 @@ export class DealsService {
 }
 
 function closingFilter(window: ClosingWindow): Prisma.DealWhereInput {
-	const now = new Date();
-	const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-	const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-	const startOfMonthAfter = new Date(now.getFullYear(), now.getMonth() + 2, 1);
-
-	switch (window) {
-		case "overdue":
-			return {
-				expectedCloseDate: { lt: now },
-				...DANG_MO,
-			};
-		case "this-month":
-			return {
-				expectedCloseDate: { gte: startOfMonth, lt: startOfNextMonth },
-			};
-		case "next-month":
-			return {
-				expectedCloseDate: { gte: startOfNextMonth, lt: startOfMonthAfter },
-			};
-		case "later":
-			return { expectedCloseDate: { gte: startOfMonthAfter } };
-		case "none":
-			return { expectedCloseDate: null };
-	}
+	if (window === "none") return { expectedCloseDate: null };
+	const khoang = { expectedCloseDate: khoangMoc(window) };
+	return window === "overdue" ? { ...khoang, ...DANG_MO } : khoang;
 }
 
 function roleOrNull(value: string | null): string | null {

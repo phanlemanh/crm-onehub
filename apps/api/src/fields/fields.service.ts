@@ -8,9 +8,11 @@ import {
 import {
 	attachValues,
 	type CachSapTruong,
+	cachLocTruong,
 	cachSapTruong,
 	columnFor,
 	type FieldDefinitionWithOptions,
+	type FieldTypeName,
 	FieldValueError,
 	type FieldValueJson,
 	fieldKeyFromLabel,
@@ -23,6 +25,11 @@ import {
 	usesOptions,
 	writeValues,
 } from "@crm/db/fields";
+import {
+	type LocTruong,
+	LocTruongError,
+	phanTichLocTruong,
+} from "@crm/validation/bo-loc-truong";
 import {
 	BadRequestException,
 	ConflictException,
@@ -39,6 +46,7 @@ import type {
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
+import { khoangMoc } from "./moc-ngay";
 
 const WITH_OPTIONS = {
 	options: { orderBy: { position: "asc" } },
@@ -49,6 +57,99 @@ const RELATIONS = {
 	CONTACT: "contact",
 	DEAL: "deal",
 } as const satisfies Record<FieldEntity, string>;
+
+export type DieuKienTruong =
+	| { fieldValues: { some: Prisma.FieldValueWhereInput } }
+	| { fieldValues: { none: Prisma.FieldValueWhereInput } }
+	| { OR: DieuKienTruong[] };
+
+function coGiaTriCua(definition: {
+	id: string;
+	type: FieldTypeName;
+}): Prisma.FieldValueWhereInput {
+	return {
+		fieldId: definition.id,
+		[columnFor(definition.type)]: { not: null },
+	};
+}
+
+function phanTich(
+	definition: FieldDefinitionWithOptions,
+	values: string[],
+): LocTruong {
+	try {
+		return phanTichLocTruong(cachLocTruong(definition.type), values);
+	} catch (error) {
+		if (error instanceof LocTruongError) {
+			throw new BadRequestException(
+				`${definition.label} (${definition.key}): ${error.message}`,
+			);
+		}
+		throw error;
+	}
+}
+
+function hoacCua(dieuKien: DieuKienTruong[]): DieuKienTruong {
+	return dieuKien.length === 1
+		? (dieuKien[0] as DieuKienTruong)
+		: { OR: dieuKien };
+}
+
+function dieuKienLoc(
+	definition: FieldDefinitionWithOptions,
+	values: string[],
+): DieuKienTruong {
+	const loc = phanTich(definition, values);
+	const fieldId = definition.id;
+	const co = (where: Prisma.FieldValueWhereInput): DieuKienTruong => ({
+		fieldValues: { some: { fieldId, ...where } },
+	});
+	const cacNhanh: DieuKienTruong[] = [];
+
+	switch (loc.cach) {
+		case "chua":
+			for (const chu of loc.chu) {
+				cacNhanh.push(co({ text: { contains: chu, mode: "insensitive" } }));
+			}
+			break;
+		case "khoang":
+			if (loc.tu !== null || loc.den !== null) {
+				cacNhanh.push(
+					co({
+						number: {
+							...(loc.tu !== null ? { gte: loc.tu } : {}),
+							...(loc.den !== null ? { lte: loc.den } : {}),
+						},
+					}),
+				);
+			}
+			break;
+		case "moc":
+			for (const moc of loc.moc) cacNhanh.push(co({ date: khoangMoc(moc) }));
+			break;
+		case "tich":
+			for (const giaTri of new Set(loc.co)) {
+				cacNhanh.push(
+					giaTri
+						? co({ bool: true })
+						: { fieldValues: { none: { fieldId, bool: true } } },
+				);
+			}
+			break;
+		case "luaChon":
+			if (loc.id.length > 0) cacNhanh.push(co({ optionId: { in: loc.id } }));
+			break;
+		case "nguoi":
+			if (loc.id.length > 0) cacNhanh.push(co({ userId: { in: loc.id } }));
+			break;
+	}
+
+	if (loc.cach !== "tich" && loc.trong) {
+		cacNhanh.push({ fieldValues: { none: coGiaTriCua(definition) } });
+	}
+
+	return hoacCua(cacNhanh);
+}
 
 const TEN_BAN_GHI = {
 	COMPANY: [{ name: "asc" }],
@@ -521,10 +622,7 @@ export class FieldsService {
 
 		const relation = RELATIONS[entity];
 		const column = recordColumn(entity);
-		const coGiaTri: Prisma.FieldValueWhereInput = {
-			fieldId: definition.id,
-			[columnFor(definition.type)]: { not: null },
-		};
+		const coGiaTri = coGiaTriCua(definition);
 		const doanCo: Prisma.FieldValueWhereInput = {
 			...coGiaTri,
 			[relation]: { is: where },
@@ -639,12 +737,6 @@ export class FieldsService {
 		return byRecord;
 	}
 
-	/**
-	 * SELECT and USER fields are the only types with a fixed, small
-	 * vocabulary a facet can count, but only the ones an admin turned on
-	 * (`showOnFilter`) actually render — same opt-in as `showOnTable`, so the
-	 * filter bar doesn't fill up with every field ever created.
-	 */
 	async filters(entity: FieldEntity): Promise<SerializedField[]> {
 		const definitions = await this.filterableFieldsFor(entity);
 		return definitions.map(serializeField);
@@ -658,7 +750,6 @@ export class FieldsService {
 				entity,
 				archivedAt: null,
 				showOnFilter: true,
-				type: { in: ["SELECT", "USER"] },
 			},
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
@@ -738,11 +829,10 @@ export class FieldsService {
 		return facetCounts;
 	}
 
-	/** Translates selected filter values (by field key) into `FieldValue` `AND` conditions. */
 	fieldFilters(
 		definitions: FieldDefinitionWithOptions[],
 		selected: Record<string, string[]>,
-	): Array<{ fieldValues: { some: Prisma.FieldValueWhereInput } }> {
+	): DieuKienTruong[] {
 		const byKey = new Map(
 			definitions.map((definition) => [definition.key, definition]),
 		);
@@ -753,16 +843,7 @@ export class FieldsService {
 				const definition = byKey.get(key);
 				if (!definition) return [];
 
-				return [
-					{
-						fieldValues: {
-							some:
-								definition.type === "USER"
-									? { fieldId: definition.id, userId: { in: values } }
-									: { fieldId: definition.id, optionId: { in: values } },
-						},
-					},
-				];
+				return [dieuKienLoc(definition, values)];
 			});
 	}
 
