@@ -73,7 +73,43 @@ function chepAnh(ten) {
 const soTruot = (o) =>
 	o.facetCounts.tinhTrang.find((d) => d.value === "truot")?.count ?? 0;
 
+async function gieoCaNhan(n) {
+	const nguoi = await db.user.findFirstOrThrow({
+		where: {
+			okrKeyResultsOwned: {
+				some: { objective: { cycleId: n.ky.hienHanh, status: "cong-bo" } },
+			},
+		},
+		orderBy: { email: "asc" },
+		select: { id: true, email: true },
+	});
+	const api = trpcCua(phienCua(nguoi.email));
+	const { id } = await api.lam("okr.createObjective", {
+		cycleId: n.ky.hienHanh,
+		unit: { level: "ca-nhan", personUserId: nguoi.id },
+		title: "Mọi KR · mục tiêu cá nhân của bàn đo",
+		kind: "cam-ket",
+		ownerUserId: nguoi.id,
+		participantIds: [],
+		whyNow: "",
+	});
+	await api.lam("okr.createKeyResult", {
+		objectiveId: id,
+		title: "Mọi KR · KR cá nhân của bàn đo",
+		kind: "tang-toi",
+		ownerUserId: nguoi.id,
+		startValue: 0,
+		targetValue: 100,
+		currentValue: 0,
+		unit: "",
+		dueOn: null,
+		weight: 1,
+	});
+	await api.lam("okr.publishObjective", { id });
+}
+
 async function batDuocGiven(n) {
+	await gieoCaNhan(n);
 	const hoi = () =>
 		n.api.quanTri.hoi("okr.moiKr", { cycleId: n.ky.hienHanh, loc: LOC_RONG });
 	const dau = await hoi();
