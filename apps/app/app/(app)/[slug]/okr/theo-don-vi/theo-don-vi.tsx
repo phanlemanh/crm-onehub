@@ -177,7 +177,7 @@ export function TheoDonVi() {
 	);
 	const coThe = (noiDung: ReactNode) => (
 		<div className="flex flex-col gap-6">
-			<div className="flex flex-col gap-3">
+			<div className="flex flex-col gap-3 pb-1">
 				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={null} />
 				{theCon}
 			</div>
@@ -309,7 +309,7 @@ export function TheoDonVi() {
 
 	than = (
 		<>
-			<div className="flex flex-col gap-3">
+			<div className="flex flex-col gap-3 pb-1">
 				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={dv.ten} />
 				{theCon}
 			</div>

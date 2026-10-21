@@ -176,7 +176,7 @@ async function doKhoang(t) {
 			.querySelector("[data-slot=page-shell-content] thead")
 			?.getBoundingClientRect();
 		const tl = document
-			.querySelector("[data-slot=page-shell] [role=tablist]")
+			.querySelector("[data-slot=page-shell] [data-the-con-bo]")
 			?.getBoundingClientRect();
 		const hd = document
 			.querySelector("[data-slot=page-shell-header]")
@@ -202,8 +202,6 @@ async function doHang(t) {
 			nut.find((b) => re.test((b.innerText ?? "").trim())) ?? null;
 		const cs = {
 			"o chon": document.querySelector("[data-chon-don-vi]"),
-			"cach xem":
-				[...document.querySelectorAll("[data-the-con-bo]")].find(hien) ?? null,
 			"o loc nhanh": theoChu(/^(Tất cả|Cần bàn|Chưa góp vào đâu)/),
 			Loc: theoChu(/^Lọc/),
 			"Sap xep": theoChu(/^Sắp xếp/),
@@ -366,7 +364,7 @@ try {
 			await choMs(500);
 			if (kho === 1440) {
 				const h = await doHang(t);
-				const motHang = h.k === 5 && h.lech !== null && h.lech <= 4;
+				const motHang = h.k === 4 && h.lech !== null && h.lech <= 4;
 				if (motHang) soHang = 1;
 				dong(
 					motHang,

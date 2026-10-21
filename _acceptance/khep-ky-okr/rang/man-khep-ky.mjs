@@ -1257,6 +1257,7 @@ const chuDiem = (d) => String(d).replace(".", ",");
 const theoThang = (d) => (K.thang === "0-100" ? Math.round(d * 100) : d);
 const duongCham = (don, xem = "&xemOkr=cham") =>
 	`/okr/theo-don-vi?kyOkr=${K.truoc}&donOkr=${don}${xem}`;
+const THE_CHAM = "[data-the-con-bo] a[data-the='cham']";
 const DONG = (k) => `[data-kr-cham='${k}']`;
 const LON = "[data-o-diem='lon']";
 const KHOI = (mt) => `[data-muc-tieu-cham='${mt}']`;
@@ -1563,30 +1564,48 @@ async function buocChamChinh() {
 		.waitForNetworkIdle({ idleTime: 500, timeout: DO.choMs })
 		.catch(() => null);
 	await coMat(t, "[data-cham-diem]", "E13 390: man cham diem");
-	const boChon = await t.evaluate(() => ({
-		nut: window.__tim("[data-view-switch='nut']").length,
-		chon: window.__tim("[data-view-switch='chon'] [data-slot='select-trigger']")
-			.length,
-	}));
+	const boChon = await t.evaluate((s) => {
+		const the = window.__tim(s);
+		const a = the[0];
+		a?.scrollIntoView({ block: "nearest", inline: "nearest" });
+		const r = a?.getBoundingClientRect();
+		const giua = r
+			? document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
+			: null;
+		return {
+			hang: window.__tim("[data-the-con-bo]").length,
+			cham: the.length,
+			bamDuoc: Boolean(
+				a &&
+					r &&
+					r.width > 0 &&
+					r.left >= 0 &&
+					r.right <= window.innerWidth &&
+					giua &&
+					a.contains(giua),
+			),
+		};
+	}, THE_CHAM);
 	e13(
-		`buoc 7: o 390 bo chon cach xem la danh sach tha xuong (thay ${JSON.stringify(boChon)})`,
-		boChon.nut === 0 && boChon.chon === 1,
+		`buoc 7: o 390 the «${CHU.cham.cachXem}» bam duoc trong hang the (thay ${JSON.stringify(boChon)})`,
+		boChon.hang === 1 && boChon.cham === 1 && boChon.bamDuoc,
 	);
 	await chup(t, "buoc-cham-390.png");
 	await t.close();
 
 	const t2 = await moTrang(cookie.truong, DO.hep, duongCham(`pb:${K.P}`, ""));
-	await coMat(
-		t2,
-		"[data-view-switch='chon'] [data-slot='select-trigger']",
-		"E13 390: bo chon tha xuong",
-	);
-	await bam(t2, "[data-view-switch='chon'] [data-slot='select-trigger']");
-	if (await coMat(t2, "[role='option']", "E13 390: danh sach cach xem mo")) {
-		await bamTheoChu(t2, "[role='option']", CHU.cham.cachXem);
-		await coMat(t2, "[data-cham-diem]", "E13 390: chon Cham diem tu danh sach");
+	if (await coMat(t2, THE_CHAM, "E13 390: the Cham diem trong hang the")) {
+		await t2.evaluate(
+			(s) =>
+				window
+					.__tim(s)[0]
+					?.scrollIntoView({ block: "nearest", inline: "nearest" }),
+			THE_CHAM,
+		);
+		await bam(t2, THE_CHAM);
+		await coMat(t2, "[data-cham-diem]", "E13 390: bam the Cham diem");
 		e13(
-			`buoc 7: o 390 chon «${CHU.cham.cachXem}» tu danh sach doi URL (thay ${t2.url()})`,
+			`buoc 7: o 390 bam the «${CHU.cham.cachXem}» doi URL (thay ${t2.url()})`,
 			new URL(t2.url()).searchParams.get("xemOkr") === "cham",
 		);
 	}
