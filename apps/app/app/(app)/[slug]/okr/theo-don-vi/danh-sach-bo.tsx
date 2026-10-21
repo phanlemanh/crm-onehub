@@ -25,6 +25,7 @@ import { PHAM_VI_BO, type PhamViBo } from "@crm/validation/okr-tham-so";
 import { skipToken, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
+import type { ReactNode } from "react";
 import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -69,8 +70,14 @@ export function DanhSachBo() {
 
 	if (cycles.data?.cycles.length === 0 || (cycles.data && currentId === null))
 		return <ChuaChuKy quanTri={access.data?.canManageProgram === true} />;
+	const khung = (noiDung: ReactNode) => (
+		<div className="flex min-w-0 flex-col gap-4" data-khung-bo="">
+			<ViTriBo ky={ky} />
+			{noiDung}
+		</div>
+	);
 	if (cycles.isError || ds.isError)
-		return (
+		return khung(
 			<VungTaiLoi
 				data-trang-thai="ST-bo-okr-loi"
 				dangTai={ds.isFetching}
@@ -80,9 +87,9 @@ export function DanhSachBo() {
 					void ds.refetch();
 				}}
 				tieuDe={m.loi.tieuDe}
-			/>
+			/>,
 		);
-	if (!ds.data) return <KhungDangTaiDonVi />;
+	if (!ds.data) return khung(<KhungDangTaiDonVi />);
 
 	const hang = ds.data.hang;
 	const dem = {
@@ -98,9 +105,8 @@ export function DanhSachBo() {
 	};
 	const veTatCa = () => void datLoc(null);
 
-	return (
+	return khung(
 		<div className="flex min-w-0 flex-col gap-4" data-danh-sach-bo="">
-			<ViTriBo ky={ky} />
 			<div className="max-w-full overflow-x-auto" data-loc-bo="">
 				<ToggleGroup
 					aria-label={m.loc.nhan}
@@ -200,6 +206,6 @@ export function DanhSachBo() {
 					</div>
 				</>
 			)}
-		</div>
+		</div>,
 	);
 }

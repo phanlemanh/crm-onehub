@@ -54,8 +54,8 @@ Source input: hàng VK3 `docs/plan/lo-trinh-okr.json`; ô cơ hội `_acceptance
   `OkrViecKr` trong cơ sở dữ liệu; bộ chưa có việc nào gắn KR thì hiện câu rỗng thay cho bảng.
 - AC-7: Given các liên kết cũ, When mở `/okr/theo-don-vi?donOkr=pb:<id>&xemOkr=hop-tuan&kyOkr=<id>` và
   `/okr/bo-okr?xemOkr=hop-tuan`, Then cái thứ nhất về `/okr/bo-okr` giữ nguyên ba tham số và mở thẻ Họp tuần của phòng
-  ban ấy, cái thứ hai mở thẻ Họp tuần của bộ OneHub; mọi liên kết trong app trỏ tới bộ OneHub (Toàn cảnh, Của tôi,
-  bản nháp Soạn) mang `donOkr=goc`.
+  ban ấy, cái thứ hai mở thẻ Họp tuần của bộ OneHub; mọi liên kết trong app trỏ tới bộ OneHub (Toàn cảnh, Đơn vị
+  con, bản nháp Soạn) mang `donOkr=goc`; nút «Sang Theo đơn vị» của Của tôi mở trang danh sách.
 - AC-8: Given khổ 375×812, When mở trang danh sách và trang một bộ, Then danh sách các bộ hiện thành danh sách mục
   (không phải bảng tràn ngang), hàng thẻ con cuộn ngang trong chính nó, và trang không cuộn ngang (`scrollWidth` của
   tài liệu ≤ bề rộng khung nhìn).
