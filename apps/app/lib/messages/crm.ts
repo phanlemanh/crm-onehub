@@ -328,6 +328,22 @@ const en = {
 		loadingPage: "Loading page…",
 		recordNotLoaded: "This record could not be loaded",
 	},
+	truongKieu: {
+		tuChoi: {
+			trong: "This field can't be empty.",
+			so: "This takes a number, like 1,234.5",
+			"locale-khac": "This takes a number, like 1,234.5",
+			email: "This takes an email, like name@company.com",
+			"lien-ket": "This takes a link, like https://onehub.vn",
+			"dien-thoai": "This takes a phone number, like 0901 234 567",
+			"lua-chon": "That option was just archived. Pick another one.",
+			nguoi: "That person is no longer on the team. Pick someone else.",
+			khac: "Try again in a moment.",
+		},
+		trong: (nhan: string) => `${nhan} can't be empty.`,
+		chuaLuu: (nhan: string) => `Couldn't save ${nhan}.`,
+		sua: (nhan: string) => `Edit ${nhan}`,
+	},
 };
 
 export type CrmMessages = typeof en;
@@ -546,7 +562,7 @@ const vi = {
 		shapesCompany: "Trường này áp cho mọi công ty trong OneHub Center.",
 		shapesContact: "Trường này áp cho mọi cá nhân trong OneHub Center.",
 		shapesDeal: "Trường này áp cho mọi thoả thuận trong OneHub Center.",
-		createHint: "Tạo trường động để Kara tra cứu và điền sẵn.",
+		createHint: "Tạo trường để Kara tra cứu và điền sẵn.",
 		retry:
 			"Trường của bạn vẫn còn. Thử lại sau một lát, trước khi tạo thêm gì mới.",
 		keyHint:
@@ -662,6 +678,22 @@ const vi = {
 		loading: "Đang tải…",
 		loadingPage: "Đang tải trang…",
 		recordNotLoaded: "Không tải được bản ghi này",
+	},
+	truongKieu: {
+		tuChoi: {
+			trong: "Ô này không được để trống.",
+			so: "Ô này nhận số, ví dụ 1.234,5",
+			"locale-khac": "Ô này nhận số, ví dụ 1.234,5",
+			email: "Ô này nhận email, ví dụ ten@congty.vn",
+			"lien-ket": "Ô này nhận liên kết, ví dụ https://onehub.vn",
+			"dien-thoai": "Ô này nhận số điện thoại, ví dụ 0901 234 567",
+			"lua-chon": "Lựa chọn này vừa bị lưu trữ. Chọn lựa chọn khác.",
+			nguoi: "Người này không còn trong đội. Chọn người khác.",
+			khac: "Thử lại sau một lát.",
+		},
+		trong: (nhan: string) => `${nhan} không được để trống.`,
+		chuaLuu: (nhan: string) => `Chưa lưu được ${nhan}.`,
+		sua: (nhan: string) => `Sửa ${nhan}`,
 	},
 } satisfies CrmMessages;
 

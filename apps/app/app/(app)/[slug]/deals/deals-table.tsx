@@ -12,8 +12,6 @@ import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
-import { formatMoney } from "@crm/ui/lib/format";
-import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { useEffect, useMemo } from "react";
@@ -21,13 +19,16 @@ import { closingOptions } from "@/components/crm/closing-window";
 import { CompanyCell } from "@/components/crm/company-cell";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
 import { useFieldFacets } from "@/components/crm/fields/field-facets";
-import { OwnerCell } from "@/components/crm/owner-cell";
+import {
+	HienThiTruong,
+	OTruongBang,
+} from "@/components/crm/fields/kieu-truong";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
-import { LocalDay, LocalRelativeTime } from "@/components/local-date-time";
+import { LocalRelativeTime } from "@/components/local-date-time";
 import { useGiaiDoan } from "@/lib/giai-doan";
 import { type DealMessages, dealMessages } from "@/lib/messages/deals";
 import { useTRPC } from "@/lib/trpc/client";
@@ -44,10 +45,7 @@ import {
 
 type DealRow = RouterOutputs["deals"]["list"]["rows"][number];
 
-function columnsFor(
-	m: DealMessages,
-	locale: Locale,
-): DataTableColumn<DealRow>[] {
+export function columnsFor(m: DealMessages): DataTableColumn<DealRow>[] {
 	return [
 		{
 			id: "name",
@@ -78,14 +76,13 @@ function columnsFor(
 			align: "right",
 			width: "w-[12%]",
 			hideBelow: "sm",
-			cell: (row) =>
-				row.amountCents === null ? (
-					<EmptyCellValue />
-				) : (
-					<span className="tabular-nums">
-						{formatMoney(row.amountCents, row.currency, locale)}
-					</span>
-				),
+			cell: (row) => (
+				<OTruongBang
+					kieu="MONEY"
+					giaTri={row.amountCents}
+					tienTe={row.currency}
+				/>
+			),
 		},
 		{
 			id: "owner",
@@ -93,7 +90,9 @@ function columnsFor(
 			sortable: true,
 			width: "w-[14%]",
 			hideBelow: "md",
-			cell: (row) => <OwnerCell owner={row.owner} />,
+			cell: (row) => (
+				<OTruongBang kieu="USER" giaTri={row.owner.id} nguoi={row.owner} />
+			),
 		},
 		{
 			id: "expectedCloseDate",
@@ -101,14 +100,7 @@ function columnsFor(
 			sortable: true,
 			width: "w-[12%]",
 			hideBelow: "lg",
-			cell: (row) =>
-				row.expectedCloseDate ? (
-					<span className="text-muted-foreground">
-						<LocalDay date={row.expectedCloseDate} />
-					</span>
-				) : (
-					<EmptyCellValue />
-				),
+			cell: (row) => <OTruongBang kieu="DATE" giaTri={row.expectedCloseDate} />,
 		},
 		{
 			id: "createdAt",
@@ -247,9 +239,9 @@ export function DealsTable() {
 	const columns = useMemo(
 		() =>
 			input.archived
-				? [...columnsFor(m, locale), archivedColumn(m), ...fieldColumns]
-				: [...columnsFor(m, locale), ...fieldColumns],
-		[fieldColumns, input.archived, m, locale],
+				? [...columnsFor(m), archivedColumn(m), ...fieldColumns]
+				: [...columnsFor(m), ...fieldColumns],
+		[fieldColumns, input.archived, m],
 	);
 
 	const viewToggle = (
@@ -343,9 +335,11 @@ export function DealsTable() {
 				input.archived || openPipelineCents === null ? undefined : (
 					<span>
 						{m.meta.count(String(deals.data?.total ?? 0))} ·{" "}
-						<span className="tabular-nums">
-							{formatMoney(openPipelineCents, reportingCurrency, locale)}
-						</span>{" "}
+						<HienThiTruong
+							kieu="MONEY"
+							giaTri={openPipelineCents}
+							tienTe={reportingCurrency}
+						/>{" "}
 						{m.meta.openPipeline}
 						{unconverted && unconverted.count > 0 ? (
 							<span className="text-muted-foreground">
