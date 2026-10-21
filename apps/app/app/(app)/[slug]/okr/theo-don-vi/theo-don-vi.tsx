@@ -307,12 +307,18 @@ export function TheoDonVi() {
 		);
 	}
 
-	return (
-		<div className="flex flex-col gap-6">
+	than = (
+		<>
 			<div className="flex flex-col gap-3">
 				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={dv.ten} />
 				{theCon}
 			</div>
+			{than}
+		</>
+	);
+
+	return (
+		<div className="flex flex-col gap-6">
 			{than}
 			<NganTaoMucTieu
 				suaDuoc={byUnit.data?.canCreate}
