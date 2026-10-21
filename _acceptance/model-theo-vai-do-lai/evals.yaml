@@ -1,0 +1,58 @@
+schema_version: 1
+feature_slug: model-theo-vai-do-lai
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.mtv_so
+    paths: [_acceptance/model-theo-vai-do-lai/rang/so-do.ts, _acceptance/model-theo-vai-do-lai/rang/do-tac-nhan.ts, _acceptance/model-theo-vai-do-lai/rang/khuon.ts, _acceptance/model-theo-vai-do-lai/evidence/**]
+    expected: "exit 0; đọc evidence/tac-nhan.jsonl và từng evidence/aichiphi-<biến thể>-<lượt>.json qua khuôn Zod. Bảng VIẾT TRƯỚC {(ứng viên, biến thể)} × số lượt đọc từ evidence/ke-hoach.json (không viết số cứng; ke-hoach.json 21/10 khai glm:{flash, flash-low} và ds:{ds, ds-low}): tập (ứng viên, biến thể, lượt) toEqual đúng bảng, trừ lượt ghi «dừng vì trần» trong chi-phi.json. Mỗi lượt: số bước, token vào, token ra, giây của phiên con agent_builder TÍNH LẠI từ aiChiPhi và toEqual số trong jsonl; lượt hỏng vì quá trần mang bi_cat true; không hai lượt chồng giờ; hai lượt liền nhau của cùng ứng viên khác biến thể; model Gateway trả cho phiên con agent_builder bằng model của ứng viên đọc từ ke-hoach.json, lượt lệch hay thiếu in «sai model tac-nhan <biến thể>-<lượt>» và vắng khỏi kết luận; chỉ lượt biến thể -low mang băm bản sửa tạm; dòng jsonl và tệp aichiphi-, su-kien-, luot- của flash, flash-low trùng từng byte bản ở 49456c140 (git show), lệch → ghim «bang chung glm doi». rang/do-tac-nhan.ts có chặn đọc lại ô model trước eval → in «doc lai model». Chiều đỏ tự chạy trên bản sao: xoá một dòng ds → ghim cặp thiếu; sửa một số bước → ghim «lech aichiphi»; hai lượt chồng giờ → ghim «chong gio»; đổi băm một lượt ds thành băm bản sửa → ghim «ro suy luan ds»; bỏ chặn đọc lại trong bản sao mã → ghim «THIEU DOC LAI MODEL»; đổi model Gateway trả của một lượt ds thành zai/glm-5.2-fast (giả lượt modelTheoVai lùi mặc định) → dòng «sai model tac-nhan ds-<lượt>» xuất hiện và hàng tac-nhan của bảng in lại không đếm lượt đó; sửa một byte dòng flash trong bản sao jsonl → ghim «bang chung glm doi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.mtv_so
+    paths: [_acceptance/model-theo-vai-do-lai/rang/so-do.ts, _acceptance/model-theo-vai-do-lai/rang/do-suy-luan.ts, _acceptance/model-theo-vai-do-lai/evidence/do-suy-luan*.json]
+    expected: "exit 0; với MỖI ứng viên Tác nhân trong ke-hoach.json có một tệp dò (glm: evidence/do-suy-luan.json giữ nguyên byte; ds: tệp dò của ds) do rang/do-suy-luan.ts ghi từ phản hồi thật của Gateway, ba mục {mac-dinh, low, high} cùng một câu, mỗi mục có model Gateway trả bằng model của ứng viên và usage gồm token ra và token suy luận, hoặc cờ khong_tra_suy_luan; bộ so in ba số cạnh nhau mỗi ứng viên, in «muc low toi nha cung cap <ứng viên>» khi token suy luận low < mac-dinh, «chua kiem duoc <ứng viên>» khi thiếu trường. Chiều đỏ trên bản sao: xoá mục low của ds → ghim «do suy luan thieu low ds»; đổi model một mục ds → ghim «sai model do suy luan ds»; xoá tệp dò của ds → ghim «thieu do suy luan ds»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.mtv_so
+    paths: [_acceptance/model-theo-vai-do-lai/rang/so-do.ts, _acceptance/model-theo-vai-do-lai/rang/do-kho.ts, _acceptance/model-theo-vai-do-lai/evidence/kho/**]
+    expected: "exit 0; cho MỖI ứng viên Trợ lý kho trong ke-hoach.json (glm: evidence/kho/luot-1 giữ nguyên byte; ds, gem: thư mục của ứng viên dưới evidence/kho/) và mỗi lượt ghim: có bảng theo tầng, theo kiểu chữ, dòng «Tổng», danh sách mã không đạt kèm nhãn, mã thoát script chấm, model Gateway trả cho kho và gốc, băm bo-mau.json, băm tai-lieu-config.ts bản sửa tạm và băm bản commit, kết xuất aiChiPhi của kho đo qua khuôn Zod và số dư Gateway trước, sau lượt. Bộ so: tập mã vòng một (CRM) toEqual tập mã câu có nhom khác «khong-phai-quy-dinh» trong bo-mau.json (46), tập mã vòng hai (Zalo) toEqual mọi mã của bo-mau.json (50); model kho Gateway trả bằng model của ứng viên; băm bo-mau.json bằng băm tệp hiện tại; băm bản sửa tạm khác băm bản commit và băm bản commit bằng git hash-object của tai-lieu-config.ts tại HEAD; lượt mang lỗi «không có ZDR» được đếm hỏng. Chiều đỏ trên bản sao: xoá một mã khỏi vòng hai của ds → ghim «thieu ma <mã>»; đổi model kho của gem thành zai/glm-5.2-fast → ghim «sai model kho gem»; đổi băm bo-mau → ghim «bo-mau lech»; đặt lượt ds lỗi «không có ZDR» → hàng tro-ly-kho in lại ds không đạt; sửa một byte tệp dưới kho/luot-1 → ghim «bang chung glm doi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.mtv_so
+    paths: [_acceptance/model-theo-vai-do-lai/rang/so-do.ts, _acceptance/model-theo-vai-do-lai/rang/do-soan.ts, _acceptance/model-theo-vai-do-lai/rang/do-soan-chay.mjs, _acceptance/model-theo-vai-do-lai/evidence/eval-soan-*.json, _acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json]
+    expected: "exit 0; cho MỖI ứng viên Soạn OKR trong ke-hoach.json đúng số tệp evidence/eval-soan-<biến thể>-<n>.json bằng số lượt soạn ghim (glm: eval-soan-flash-<n>.json giữ nguyên byte; ds: eval-soan-ds-<n>.json), mỗi tệp qua khuôn Zod cùng khoá với eval-soan-sau.json của VK5; moHinh bằng model của ứng viên và model Gateway trả khớp; judge = zai/glm-5.2-fast; bam.thuoc bằng bam.thuoc của mốc; bam.loiDan bằng mốc, lượt lệch thì bộ so in «loi dan lech moc <biến thể>-<n>» và lượt vắng khỏi so sánh; lượt khongNopDeXuat true phải có soDeXuat 0 (lệch → ghim «khong nop lech <biến thể>-<n>»), bộ so in «luot soan hong <biến thể>-<n>: khong nop de xuat» và lượt đó trượt ngưỡng; băm config.ts bản sửa tạm khác băm bản commit tại HEAD. Chiều đỏ trên bản sao: đổi bam.loiDan lượt ds-1 → dòng «loi dan lech moc ds-1» và ds của hàng soan-okr in lại mang ghi chú «lời dặn lệch mốc» và «chưa đủ số»; đổi moHinh lượt ds-2 → ghim «sai model soan ds-2»; xoá tệp lượt ds-2 → ghim «thieu luot soan ds-2»; đặt lượt ds-1 soDeXuat 0, khongNopDeXuat true, dat 18 hong 0 → dòng «luot soan hong ds-1: khong nop de xuat» và ds không đạt ở hàng soan-okr; sửa một byte eval-soan-flash-1.json → ghim «bang chung glm doi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.mtv_so
+    paths: [_acceptance/model-theo-vai-do-lai/rang/so-do.ts, _acceptance/model-theo-vai-do-lai/rang/khuon.ts, _acceptance/model-theo-vai-do-lai/rang/nguong.json, _acceptance/model-theo-vai-do-lai/evidence/**, docs/model-theo-vai.md]
+    expected: "exit 0; evidence/bang-kien-nghi.json qua khuôn Zod; tập vai toEqual đúng năm hàng VIẾT TRƯỚC {tac-nhan, tro-ly-kho, soan-okr, judge-okr, may-soan-kho}; tập ứng viên mỗi hàng toEqual tập ứng viên của vai trong ke-hoach.json (tac-nhan {glm, ds}, tro-ly-kho {glm, ds, gem}, soan-okr {glm, ds}); chi phí phần ứng viên mỗi lượt TÍNH LẠI = Σ (token vào × giá vào + đọc cache × giá cache + token ra × giá ra) trên các dòng aiChiPhi có tính năng của vai trong kết xuất của lượt, giá đọc từ ke-hoach.json, và toEqual số trong bảng (sai số 1e-6); mỗi số khác của mỗi ứng viên và của mốc tính lại từ tệp bằng chứng nó trỏ (tệp mốc: _acceptance/tac-nhan-glm-5-3-cham/evidence/bang.md, _acceptance/bo-cau-hoi-mau/evidence/cham-bo-do-mau.md, _acceptance/chu-may-sinh-ten-moi/evidence/eval-soan-sau.json) và toEqual; cờ đạt ngưỡng mỗi ứng viên bằng kết quả luật vai trong rang/nguong.json; kiến nghị mỗi hàng bằng kết quả luật chọn của rang/nguong.json áp lên các ứng viên đạt; hàng «giữ» có thong_so_chua_do không rỗng; judge-okr kiến nghị «giữ zai/glm-5.2-fast» kèm judgeHong và judgeDuoiNguong; may-soan-kho «chưa có thước»; docs/model-theo-vai.md in lại từ json trùng từng byte. Chiều đỏ trên bản sao: sửa một ô số của ds → ghim «lech so <vai> ds»; ma trận biên viết trước trên bản sao số — luật vai: Tác nhân 4/5 → đạt, 3/5 → không đạt, hai biến thể cùng 4/5 → biến thể trung vị giây thấp hơn đại diện ứng viên, 4 lượt qua và 1 lượt sai model → chưa đủ số; Trợ lý kho 2 câu lỗi → đạt, 3 → không, một tầng kém mốc 2 câu → không; Soạn OKR mọi lượt 13/18 hỏng 3 → đạt, một lượt 12/18 → không, một lượt hỏng 4 → không, một lượt 18/18 không nộp đề xuất → không; luật chọn: không ứng viên đạt → giữ model đang chạy; một ứng viên đạt → ứng viên đó; hai ứng viên đạt chi phí khác nhau → theo luật chọn ghim; hai đạt cùng chi phí → luật phá hoà ghim; giữ phần ứng viên, nhân đôi usd judge của ds trong tóm tắt soạn → kiến nghị không đổi (đối chứng: nâng token ra của ds để chi phí phần ứng viên vượt glm → kiến nghị đổi); ứng viên «chưa đủ số» không vào luật chọn dù số đã có đạt — mỗi ô đúng kiến nghị; sửa kiến nghị một hàng trái luật → ghim «kien nghi trai luat <vai>»; xoá thong_so_chua_do của một hàng giữ → ghim «thong so chua do <vai>»; xoá hàng may-soan-kho → ghim «thieu vai may-soan-kho»; xoá ứng viên gem khỏi hàng tro-ly-kho → ghim «thieu ung vien tro-ly-kho gem»; sửa một byte docs/model-theo-vai.md → ghim «docs lech»; trỏ một số vào tệp không tồn tại → ghim tên tệp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.mtv_so
+    paths: [_acceptance/model-theo-vai-do-lai/rang/so-do.ts, _acceptance/model-theo-vai-do-lai/rang/chi-phi.ts, _acceptance/model-theo-vai-do-lai/evidence/chi-phi.json, _acceptance/model-theo-vai-do-lai/evidence/ke-hoach.json, _acceptance/model-theo-vai-do-lai/evidence/aichiphi-*.json]
+    expected: "exit 0; evidence/chi-phi.json qua khuôn Zod, mỗi lượt AC-1–AC-4 của mọi ứng viên một dòng (khoá vai × ứng viên × biến thể × lượt, không hai dòng trùng khoá) có usd thật tính lại từ aiChiPhi của lượt (lượt kho: costUsd của aiChiPhi khi có, chênh số dư Gateway ghi kèm làm số đối chiếu; lượt soạn: usd tóm tắt gồm judge) và giờ bắt đầu; các dòng glm toEqual giá trị ở 49456c140 (git show, ánh xạ khoá cũ vai:luot sang khoá mới); tổng ≤ trần đọc từ ke-hoach.json; thứ tự giờ bắt đầu của các lượt mới theo thứ tự ghim trong ke-hoach.json; lượt «dừng vì trần» không có tệp bằng chứng lượt, và ứng viên có lượt như thế mang «chưa đủ số» trong bang-kien-nghi.json. Chiều đỏ trên bản sao: nâng usd một lượt để tổng vượt trần mà vẫn còn lượt sau → ghim «vuot tran van chay»; đánh dấu một lượt ds Tác nhân «dừng vì trần» mà hàng tac-nhan vẫn kiến nghị ds → ghim «thieu luot van kien nghi»; hai dòng cùng khoá → ghim «trung khoa chi phi»; sửa usd một dòng glm kho → ghim «bang chung glm doi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.mtv_pham_vi
+    paths: [_acceptance/model-theo-vai-do-lai/rang/so-do.ts]
+    expected: "exit 0; git diff --name-only <merge-base với origin/onehub> HEAD chỉ gồm tệp dưới _acceptance/model-theo-vai-do-lai/, docs/model-theo-vai.md và _acceptance/config.yaml, diff của config.yaml chỉ có dòng thêm; ba tệp sửa tạm (agent_builder/agent.ts, tai-lieu-config.ts, apps/agent-okr/agent/lib/config.ts) trong cây làm việc trùng HEAD; git diff origin/onehub -- apps/agent-okr/agent/lib/config.ts apps/agent/agent/lib/okr/config.ts rỗng (điều kiện K1-8); git lỗi thì exit 2, không xanh. Chiều đỏ trên bản sao danh sách: thêm apps/agent-okr/agent/lib/config.ts → ghim tên tệp; thêm một dòng xoá trong config.yaml → ghim «config.yaml»; bản sao diff origin/onehub có một dòng ở apps/agent-okr/agent/lib/config.ts → ghim «lech onehub apps/agent-okr/agent/lib/config.ts»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
