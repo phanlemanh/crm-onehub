@@ -1730,12 +1730,10 @@ async function buocHopTuan() {
 	await bamSel(t, `[data-mo-kr='${Kb}']`);
 	await doi(
 		t,
-		"E14 buoc 3: bam dong Kb mo ngan KR, muc tieu nam duoi",
-		(h, k) =>
-			new URL(location.href).searchParams.get("record") ===
-			`objective:${h},kr:${k}`,
+		"E14 buoc 3: bam dong Kb mo sheet muc tieu",
+		(h) =>
+			new URL(location.href).searchParams.get("record") === `objective:${h}`,
 		OKR.H.id,
-		Kb,
 	);
 	await cho(600);
 	await chup(t, "E14-buoc-hop-tuan-2.png", false);
