@@ -1085,3 +1085,159 @@ describe("tmc-lien-ket", () => {
 		expect(daSo).toBe(6);
 	});
 });
+
+const { columnsFor: cotThoaThuan } = await import(
+	"@/app/(app)/[slug]/deals/deals-table"
+);
+const { columnsFor: cotCongTy } = await import(
+	"@/app/(app)/[slug]/companies/companies-table"
+);
+const { columnsFor: cotLienHe } = await import(
+	"@/app/(app)/[slug]/contacts/contacts-table"
+);
+const { useFieldColumns } = await import(
+	"@/components/crm/fields/field-columns"
+);
+const { dealMessages } = await import("@/lib/messages/deals");
+const { companyMessages } = await import("@/lib/messages/companies");
+const { contactMessages } = await import("@/lib/messages/contacts");
+const { fieldListOutput } = await import(
+	"../../api/src/fields/fields.contracts"
+);
+
+type MocCot = {
+	id: string;
+	header: string;
+	width: string;
+	hideBelow: string | null;
+	sortable: boolean;
+};
+
+function mocCot(): Record<"deals" | "companies" | "contacts", MocCot[]> {
+	const d = dealMessages("vi").headers;
+	const c = companyMessages("vi").headers;
+	const l = contactMessages("vi").headers;
+	const cot = (
+		id: string,
+		header: string,
+		width: string,
+		hideBelow: string | null,
+		sortable = true,
+	): MocCot => ({ id, header, width, hideBelow, sortable });
+	return {
+		deals: [
+			cot("name", d.name, "w-[17%]", null),
+			cot("company", d.company, "w-[18%]", null),
+			cot("stage", d.stage, "w-[18%]", null),
+			cot("amount", d.amount, "w-[12%]", "sm"),
+			cot("owner", d.owner, "w-[14%]", "md"),
+			cot("expectedCloseDate", d.closeDate, "w-[12%]", "lg"),
+			cot("createdAt", d.created, "w-[10%]", null),
+			cot("lastActivity", d.lastActivity, "w-[19%]", "lg"),
+		],
+		companies: [
+			cot("name", c.name, "w-[18%]", null),
+			cot("domain", c.domain, "w-[12%]", "md"),
+			cot("industry", c.industry, "w-[12%]", "lg"),
+			cot("owner", c.owner, "w-[13%]", "md"),
+			cot("contacts", c.contacts, "w-[16%]", "lg"),
+			cot("deals", c.openDeals, "w-[20%]", "sm"),
+			cot("createdAt", c.created, "w-[12%]", null),
+			cot("lastActivity", c.lastActivity, "w-[18%]", "sm"),
+			cot("enrichment", c.enrichment, "w-[12%]", null, false),
+		],
+		contacts: [
+			cot("name", l.name, "w-[15%]", null),
+			cot("phone", l.phone, "w-[14%]", "md", false),
+			cot("title", l.title, "w-[20%]", "lg"),
+			cot("email", l.email, "w-[24%]", "md"),
+			cot("company", l.company, "w-[18%]", null),
+			cot("owner", l.owner, "w-[16%]", "md"),
+			cot("createdAt", l.created, "w-[10%]", null),
+			cot("lastActivity", l.lastActivity, "w-[19%]", "sm"),
+		],
+	};
+}
+
+function CotTuTao({ entity }: { entity: "DEAL" | "COMPANY" | "CONTACT" }) {
+	const cot = useFieldColumns<{ fields: Record<string, number> }>(entity);
+	const o = cot.find((c) => c.id === "field:tmc_so");
+	return (
+		<div data-cot-tu-tao>
+			{o ? o.cell({ fields: { tmc_so: 1234.5 } }) : null}
+		</div>
+	);
+}
+
+describe("tmc-o-bang", () => {
+	test("cot chuan giu nguyen, cot tu tao ve qua bang dang ky", async () => {
+		const moc = mocCot();
+		const that = {
+			deals: cotThoaThuan(dealMessages("vi")),
+			companies: cotCongTy(companyMessages("vi"), "vi"),
+			contacts: cotLienHe(contactMessages("vi")),
+		};
+		for (const bang of ["deals", "companies", "contacts"] as const) {
+			for (const m of moc[bang]) {
+				const c = that[bang].find((x) => x.id === m.id);
+				if (!c) throw new Error(`tmc o bang: cot doi ${bang} ${m.id} thieu`);
+				const ra: MocCot = {
+					id: c.id,
+					header: String(c.header),
+					width: String(c.width),
+					hideBelow: c.hideBelow ?? null,
+					sortable: c.sortable === true,
+				};
+				for (const khoa of [
+					"header",
+					"width",
+					"hideBelow",
+					"sortable",
+				] as const) {
+					if (ra[khoa] !== m[khoa]) {
+						throw new Error(`tmc o bang: cot doi ${bang} ${m.id} ${khoa}`);
+					}
+				}
+			}
+		}
+
+		const entityCua = {
+			deals: "DEAL",
+			companies: "COMPANY",
+			contacts: "CONTACT",
+		} as const;
+		for (const bang of ["deals", "companies", "contacts"] as const) {
+			dat("fields.list", () =>
+				fieldListOutput.parse([
+					{
+						id: "f-so",
+						entity: entityCua[bang],
+						key: "tmc_so",
+						label: "Số tmc",
+						type: "NUMBER",
+						agentFilled: false,
+						agentBrief: null,
+						required: false,
+						showOnSheet: true,
+						showOnTable: true,
+						showOnFilter: false,
+						position: 0,
+						archived: false,
+						options: [],
+					},
+				]),
+			);
+			await mo(<CotTuTao entity={entityCua[bang]} />);
+			await cho(
+				() => document.querySelector("[data-cot-tu-tao] *") !== null,
+				`cot tu tao ${bang}`,
+			);
+			const chu = document.querySelector(
+				"[data-cot-tu-tao] .tabular-nums",
+			)?.textContent;
+			if (chu !== "1.234,5") throw new Error(`tmc o bang: cot tu tao ${bang}`);
+			await dongHet();
+		}
+		expect(true).toBe(true);
+	});
+});

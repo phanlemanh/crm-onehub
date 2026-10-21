@@ -183,6 +183,9 @@ export function HienThiTruong(props: GiaTriHienThi) {
 
 export function OTruongBang(props: GiaTriHienThi) {
 	const locale = useLocale();
+	const trong =
+		props.kieu === "USER" ? timNguoi(props) === null : laRong(props.giaTri);
+	if (trong) return <EmptyCellValue />;
 	return (
 		<span className="block min-w-0 truncate">{veGiaTri(props, locale)}</span>
 	);
