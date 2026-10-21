@@ -45,6 +45,7 @@ export function fieldsCopy(locale: Locale) {
 		requiredLocked: m.fields.requiredLocked,
 		requiredLabel: m.fields.requiredLabel,
 		requiredHelp: m.fields.requiredHelp,
+		orderSaved: m.fields.orderSaved,
 		orderFailed: m.fields.orderFailed,
 		shownOnSheet: m.fields.shownOnSheet,
 		hiddenFromSheet: m.fields.hiddenFromSheet,

@@ -182,6 +182,7 @@ export function FieldsList({
 
 	const reorder = useMutation(
 		trpc.fields.reorder.mutationOptions({
+			onSuccess: () => toast(copy.orderSaved),
 			onError: () => toast.error(copy.orderFailed),
 			onSettled: settle,
 		}),
