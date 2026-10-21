@@ -16,10 +16,26 @@ Next.js + `@crm/ui` (`NguonKeoTha`, `Item`, `ConfirmDialog`, `KhoaLuuTru`), nuqs
 **Spec:** `docs/superpowers/specs/2026-10-21-truong-tep-design.md` · hợp đồng `_acceptance/truong-tep/contract.md` · evals
 `_acceptance/truong-tep/evals.yaml`.
 
-**Trạng thái:** soạn trên giấy theo luật 44. Ba chỗ chưa chốt được trước khi DA18 gộp, ghi rõ ở task: tên bảng lọc theo
-kiểu và bộ phân tích của DA18 (Task 6), tên cột/hàm DA17 trong `fields-shape.ts` (Task 2), tên mặt form tạo của DA16
-(Task 2, nếu DA16 gộp trước). Kế hoạch giả định khuyến nghị của cả tám câu Hỏi; câu nào chủ kho chọn lối khác thì sửa
-task ghi ở cột «Hỏi».
+**Trạng thái:** Task 0 đã chạy trên onehub `c9e4ce605` (DA18 #526 đã gộp; nhánh gộp ở `7f91e5453`). Tên thật đã đọc:
+
+- DA17 (`packages/db/src/fields-shape.ts`): `SAP_THEO_KIEU` (`Record<FieldTypeName, CachSapTruong | null>`),
+  `cachSapTruong`, `sapDuocTheoKieu`, `TIEN_TO_COT_TRUONG = "field:"`.
+- DA18 (`fields-shape.ts`): `LOC_THEO_KIEU` (`Record<FieldTypeName, CachLocTruong>`), `CachLocTruong = "chua" | "khoang"
+  | "moc" | "tich" | "luaChon" | "nguoi"`, `cachLocTruong`, `locDuocTheoKieu`, `locDuocTrong`.
+- DA18 (`packages/validation/src/bo-loc-truong.ts`): `GIA_TRI_TRONG = "none"`, `LocTruong` (hợp có nhãn `cach`),
+  `phanTichLocTruong(cach, giaTri)`, `laGiaTriHopLe`, `LocTruongError`.
+- DA18 (`apps/api/src/fields/fields.service.ts`): `DieuKienTruong` (chỉ nhánh `fieldValues` và `OR`), `coGiaTriCua`
+  (dựa `columnFor`), `dieuKienLoc`, `filterFacetCounts`, `filterableFieldsFor`, `sapTheoTruong`.
+- DA14 (`apps/app/components/crm/fields/kieu-truong.tsx`): `DongKieu = { hienThi, suaTaiCho, oBang, anDuoi, canh }`,
+  `KIEU_TRUONG satisfies Record<KieuTruong, DongKieu>`. Chưa có mặt form tạo: DA16 (#533, nháp) chưa có mã.
+- `coerceValue` ném `FieldValueError(key, message)` (`fields-shape.ts`); API dịch nó thành `BAD_REQUEST`.
+
+Va chạm đang mở: DA15 (#534, sẵn sàng) chạm `schema.prisma` (bảng `standardFieldLayout`, migration `20261021054942`),
+ba phiếu `record-sheet/*-sheet.tsx`, `fields-list.tsx`, `record-fields.tsx`, `crm.ts`, `cache.ts`. Hàng này gộp onehub
+lại trước Task 1 nếu #534 đã gộp, và luôn trước Task 7. Migration của hàng này mang giờ UTC lúc viết, nên xếp sau
+`20261021054942` (luật 2).
+
+Kế hoạch giả định khuyến nghị của cả tám câu Hỏi (chủ kho đã duyệt cả tám ở Cổng Phạm vi, `89cb431c1`).
 
 ## Global Constraints
 
@@ -69,7 +85,7 @@ task ghi ở cột «Hỏi».
 - [ ] Gộp: `git fetch origin onehub && git merge origin/onehub` (merge commit). `bun install` nếu `bun.lock` đổi (luật 4).
 - [ ] Xin lượt `duong-nen`, chạy `node "$WORKFLOWS_DIR/../scripts/duong-nen.mjs" --root . --slug truong-tep` qua lệnh bọc
   `giu-nhip`, nhả khoá. Mã 1 → gỡ thứ gỡ được, thứ chỉ người gỡ báo giám sát.
-- [ ] Đọc tên thật trên onehub mới: bảng lọc theo kiểu và bộ phân tích của DA18 (`packages/validation/src/bo-loc-truong.ts`
+- [x] Đọc tên thật trên onehub mới (xong — mục «Trạng thái» ở đầu): bảng lọc theo kiểu và bộ phân tích của DA18 (`packages/validation/src/bo-loc-truong.ts`
   hay tên khác), `SAP_THEO_KIEU` của DA17, mặt form tạo của DA16 nếu đã gộp. Khác kế hoạch thì sửa task 2, 6, 7 ở kế
   hoạch này, không sửa hợp đồng; ghi dòng sổ `fix` stage S2.
 - [ ] Kiểm khoá R3-1 đã về: `grep -c '^TEP_BAN_GHI_BLOB_TOKEN=' .env` bằng 1 (giá trị không in ra).
@@ -96,7 +112,8 @@ lanThu, fieldId?, banGhiId?, userId? }`, `CHECK (num_nonnulls("companyId","conta
 
 **Files:**
 - Modify: `packages/db/src/fields-shape.ts` — `FIELD_TYPES` thêm `"FILE"`; `COLUMNS: Record<FieldTypeName, FieldValueColumn
-  | null>` với `FILE: null`; `SAP_THEO_KIEU.FILE = null` (tên DA17, Task 0 xác nhận).
+  | null>` với `FILE: null` và `columnFor` trả `FieldValueColumn | null`; `SAP_THEO_KIEU.FILE = null`; `LOC_THEO_KIEU.FILE =
+  "coTep"` (thêm `"coTep"` vào `CachLocTruong`); `locDuocTrong("FILE")` trả `true`.
 - Modify: `packages/db/src/fields.ts` — `coerceValue` nhánh `case "FILE"` ném `BadRequest(FIELD_FILE_COPY.chiNhanTep)`
   trước `default`; `readValue` nhánh `FILE` trả `null`; `writeValues` bỏ qua `COLUMNS[type] === null`.
 - Modify: mọi `switch` theo kiểu mà rang liệt (`doc-nhap.ts`, `kieu-truong.tsx` `veGiaTri`/`kieuNhap`, `field-columns.tsx`,
@@ -106,7 +123,7 @@ lanThu, fieldId?, banGhiId?, userId? }`, `CHECK (num_nonnulls("companyId","conta
 - Test: `apps/api/test/truong-tep.spec.ts` (`ttp-ghi-chu`), `apps/agent/test/truong-tep.integration.spec.ts` (`ttp-kara`).
 
 **Interfaces — Produces:** `FIELD_FILE_COPY.chiNhanTep = "Ô Tệp chỉ nhận tệp tải lên."` (trong
-`packages/db/src/fields-copy.ts` hay tệp chữ có sẵn của `@crm/db`, Task 0 chọn chỗ có sẵn).
+ném bằng `FieldValueError(key, FIELD_FILE_COPY.chiNhanTep)`, hằng ở `packages/db/src/fields-shape.ts` cạnh `FieldValueError`).
 
 - [ ] Viết `ttp-ghi-chu` (11 ô, E9) và `ttp-kara`; chạy → đỏ «ttp ghi chu: deals.update abc nhan» (hôm nay `default` nhận chữ).
 - [ ] Viết rang `quet-kieu.mjs` (E9b); chạy trên cây chưa sửa với `FIELD_TYPES` đã thêm FILE → đỏ «switch thieu FILE
@@ -192,13 +209,17 @@ lanThu, fieldId?, banGhiId?, userId? }`, `CHECK (num_nonnulls("companyId","conta
 
 ### Task 6: Lọc «Có tệp / Chưa có tệp» trên bảng lọc của DA18
 
-`independent: false` (chung `fields.service.ts` với Task 5; tên DA18 chốt ở Task 0).
+`independent: false` (chung `fields.service.ts` với Task 5).
 
 **Files:**
-- Modify: bảng lọc theo kiểu của DA18 (`packages/db/src/fields-shape.ts`) — dòng `FILE`: giá trị `some`, `none`.
-- Modify: bộ phân tích của DA18 (`packages/validation/src/bo-loc-truong.ts`) — `{ kieu: "co-tep", co: boolean[] }`.
-- Modify: `FieldsService.fieldFilters` — `FILE`: `files: { some: { fieldId } }` / `files: { none: { fieldId } }`;
-  `filterFacetCounts` đếm `some`, `none` trong cùng `Promise.all`.
+- Modify: `packages/db/src/fields-shape.ts` — dòng `FILE` của `LOC_THEO_KIEU` đã thêm ở Task 2 (`"coTep"`); hằng
+  `GIA_TRI_CO_TEP = "some"` cạnh `GIA_TRI_TRONG` ở `bo-loc-truong.ts`.
+- Modify: `packages/validation/src/bo-loc-truong.ts` — `docMotGia` nhận `"some"` cho cách `coTep` (`none` đã là
+  `GIA_TRI_TRONG`); `LocTruong` thêm `{ cach: "coTep"; co: boolean; trong: boolean }`; giá trị khác ném `LocTruongError`.
+- Modify: `apps/api/src/fields/fields.service.ts` — `DieuKienTruong` thêm nhánh `{ files: { some | none: Prisma.FieldFileWhereInput } }`;
+  `dieuKienLoc` nhánh `coTep`; `coGiaTriCua` không gọi cho `FILE` (trống của Tệp là `files: { none: { fieldId } }`).
+- Modify: `FieldsService.filterFacetCounts` — trường `coTep` đếm `some` và `none` bằng `<relation>.count` với
+  `files: { some | none: { fieldId } }`, trong cùng `Promise.all`; `filterableFieldsFor` không đổi (đọc `LOC_THEO_KIEU`).
 - Test: `ttp-loc` (12 ô + đếm + chiến dịch + hỏng).
 
 - [ ] Viết `ttp-loc` → đỏ; hiện thực; xanh; bộ bài `loc-moi-truong.spec.ts` của DA18 xanh nguyên văn.
@@ -212,7 +233,8 @@ lanThu, fieldId?, banGhiId?, userId? }`, `CHECK (num_nonnulls("companyId","conta
 - Create: `apps/app/components/crm/fields/o-tep.tsx` (client; props `{ tep: TepTrongO[]; entity; recordId; fieldKey;
   bat: boolean; luuTru: boolean }` — kiểu tự khai ở tệp, không re-export kiểu máy chủ).
 - Modify: `kieu-truong.tsx` (dòng `FILE` của `KIEU_TRUONG`: `hienThi` số tệp, `suaTaiCho` → `OTep`, `oBang` «n tệp»/«—»,
-  mặt form tạo không có), `field-editor.tsx` (ẩn «Kara điền» và lời dặn khi `FILE`), `fields-copy.ts` (`TYPE_KEY.FILE`),
+  `anDuoi: "md"`, `canh: "left"`; `DongKieu` chưa có mặt form tạo — DA16 thêm mặt ấy thì khai `FILE` là không có,
+  theo Hỏi-6), `field-editor.tsx` (ẩn «Kara điền» và lời dặn khi `FILE`), `fields-copy.ts` (`TYPE_KEY.FILE`),
   `field-facets.tsx`, `apps/app/lib/messages/crm.ts` (chỉ thêm dòng: `type.FILE`, `typeNgan.FILE`, chữ ô Tệp, lý do khoá),
   `apps/app/lib/trpc/cache.ts` không đổi — `onSuccess` gọi `cache.deal(id)` / `cache.company(id)` / `cache.contact(id)`.
 - Test: `apps/app/test/truong-tep.dom.tsx` — `ttp-cai-dat`, `ttp-o-tep` (12 ô), `ttp-man-loc`.
