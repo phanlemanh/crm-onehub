@@ -1,0 +1,161 @@
+slug: truong-tep
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_tao_truong
+    expected: "exit 0; -t ttp-tao-truong của apps/api/test/truong-tep.spec.ts trên kho thử của lượt. Cô lập: mọi trường và bản ghi của ca mang tiền tố khoá 'ttp_<ca>_'; đầu ca fields.list có trường mang tiền tố ấy thì ném 'ttp <ca>: lan <n>'; cuối ca lưu trữ trường đã tạo. Kho Blob giả trong bộ nhớ bơm bằng overrideProvider (khuôn khoNguonGia của packages/db/test/blob-nguon-gia.ts). (a) Với mỗi entity {DEAL, COMPANY, CONTACT}: fields.create với type FILE bởi quản trị; fields.list không trả trường ấy với type 'FILE' thì ném 'ttp tao truong: <entity> khong luu'. Số ô khác 3 thì ném 'ttp tao truong: thieu o <n>'. (b) Một trường FILE của DEAL có một tệp gắn qua requestUpload → PUT kho giả → complete thật; fields.update đổi type sang TEXT: không ném CONFLICT thì ném 'ttp tao truong: doi kieu co tep'; đọc lại type khác FILE thì ném 'ttp tao truong: kieu da doi'. Đối chứng dương cùng fixture: trường FILE thứ hai chưa có tệp đổi sang TEXT được; bị chặn thì ném 'ttp tao truong: doi chung chan oan'. (c) fields.create bởi member (vai member, cùng đường đăng nhập thử của apps/api/test/fields.spec.ts): không ném FORBIDDEN thì ném 'ttp tao truong: member tao duoc'. Chiều đỏ trong lịch sử: trên onehub 110a07377 z.enum(FIELD_TYPES) không có FILE, fields.create ném BAD_REQUEST, test ném 'ttp tao truong: DEAL khong luu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/prisma/migrations/**, packages/db/src/fields-shape.ts, apps/api/src/fields/**, apps/api/test/truong-tep.spec.ts]
+
+  - id: E1b
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ttp_cai_dat
+    expected: "exit 0; -t ttp-cai-dat của apps/app/test/truong-tep.dom.tsx. Dựng FieldEditor thật (apps/app/components/crm/fields/field-editor.tsx) trong LocaleProvider vi với kho tRPC giả; trường đầu vào rút qua bộ đọc đầu ra thật của apps/api/src/fields (round-trip parse của fieldOutput). (a) Ô chọn kiểu không có mục mang nhãn «Tệp» (nhãn đọc từ bảng chữ thật apps/app/lib/messages/crm.ts) thì ném 'ttp cai dat: thieu kieu Tep'. (b) Chọn Tệp: còn ô tích «Kara điền» hay ô lời dặn Kara (nhãn từ bảng chữ thật) thì ném 'ttp cai dat: con Kara dien'; thiếu một trong ba ô «Hiện trên phiếu», «Hiện trong bảng», «Hiện trong bộ lọc» thì ném 'ttp cai dat: thieu <nhan>'. (c) Bật «Hiện trong bộ lọc» rồi Lưu: lời gọi fields.create không mang type 'FILE', showOnFilter true, agentFilled false thì ném 'ttp cai dat: luu <json>'. Đối chứng dương cùng fixture: chọn TEXT thì ô «Kara điền» có mặt; vắng thì ném 'ttp cai dat: doi chung TEXT'. Chiều đỏ trong lịch sử: trên onehub không có kiểu FILE, ném 'ttp cai dat: thieu kieu Tep'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/lib/messages/crm.ts, packages/db/src/fields-shape.ts, apps/app/test/truong-tep.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_tai_len
+    expected: "exit 0; -t ttp-tai-len của apps/api/test/truong-tep.spec.ts. Cô lập như E1; kho Blob giả như E1 giữ byte được PUT theo pathname. Fixture qua đường ghi thật: một thoả thuận, một công ty, một cá nhân (service thật); mỗi loại một trường FILE bật showOnSheet, showOnTable; thêm một thoả thuận thứ hai không có tệp. Bốn tệp mẫu sinh trong test bằng byte đầu thật của từng kiểu (PDF '%PDF-1.4', DOCX là zip có word/document.xml dựng bằng JSZip, PNG '89 50 4E 47 0D 0A 1A 0A', JPEG 'FF D8 FF E0'), mỗi tệp một nội dung khác. Với mỗi loại bản ghi × bốn tệp (12 ô cố định): requestUpload → PUT byte vào URL kho giả → complete. (a) URL của requestUpload có host là host kho giả, không phải host API; khác thì ném 'ttp tai len: url qua api <url>'. (b) Đọc db.fieldFile của bản ghi: thiếu hàng, kieu khác kiểu nhận theo byte, kichThuoc khác số byte, sha256 khác sha256 tính lại trong test, taiBoiId khác người gọi thì ném 'ttp tai len: <loai> <tep> <cot>'. Số ô đã so khác 12 thì ném 'ttp tai len: thieu o <n>'. (c) byId của từng loại: tepTheoTruong[<khoá>] không đủ bốn tệp theo đúng thứ tự tải thì ném 'ttp tai len: byId <loai> <ten>'; phần tử không parse được bằng schema TepTrongO của packages/validation/src/tep-truong.ts thì ném 'ttp tai len: khuon <loai>'. (d) deals.list, companies.list, contacts.list, deals.board: soTepTheoTruong[<khoá>] khác 4 cho bản ghi có tệp hay khác 0 cho thoả thuận thứ hai thì ném 'ttp tai len: dem <thu tuc> <n>'. Đối chứng dương: tệp PDF mẫu đặt đuôi .docx vẫn được nhận và kieu ghi PDF (kiểu theo byte); ghi DOCX thì ném 'ttp tai len: kieu theo ten'. Chiều đỏ trong lịch sử: trên onehub không có fieldFiles.requestUpload, ném 'ttp tai len: DEAL pdf thieu thu tuc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/src/blob-tep-truong.ts, packages/validation/src/kieu-tep.ts, packages/validation/src/tep-truong.ts, apps/api/src/fields/**, apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/test/truong-tep.spec.ts]
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_blob_that
+    expected: "exit 0 VÀ stdout có '0 skip' và ít nhất 3 'pass' của ttp-blob-that (bun test in số bài) — exit 0 mà có bài bị bỏ hay 0 bài chạy là không đo được, không phải đạt; -t ttp-blob-that của apps/api/test/truong-tep-blob-that.spec.ts; tệp chỉ chạy khi TTB_BLOB_THAT=1 (describe.skipIf, để bộ suite thường trên CI không có khoá bỏ qua nó); lệnh của eval đặt sẵn cờ. Cờ bật mà TEP_BAN_GHI_BLOB_TOKEN vắng hay rỗng thì ném 'ttp blob that: thieu khoa' (không bỏ qua). Cờ bật mà khoá bằng KHO_TAI_LIEU_BLOB_TOKEN hay BLOB_READ_WRITE_TOKEN thì ném 'ttp blob that: muon khoa kho khac'. Trên kho Blob riêng tư thật, qua service thật (không kho giả): một thoả thuận và trường FILE mang tiền tố ca; requestUpload → fetch PUT một PDF 8 KB sinh trong test → complete. (a) downloadUrl bởi quản trị rồi fetch: mã khác 200 hay sha256 byte tải về khác sha256 đã PUT thì ném 'ttp blob that: tai ve <ma> <sha>'. (b) fetch đường dẫn trần của Blob (URL không ký, dựng từ pathname và host kho): mã 200 thì ném 'ttp blob that: khong rieng tu'. (c) remove tệp rồi chờ lượt xoá sau commit; fetch lại URL đã ký ở (a): mã 200 thì ném 'ttp blob that: xoa con <ma>'; db.blobChoXoa còn hàng của pathname thì ném 'ttp blob that: hang cho xoa con'. Cuối ca lưu trữ rồi xoá vĩnh viễn thoả thuận, đếm lại Blob mang tiền tố ca bằng list của @vercel/blob: khác 0 thì ném 'ttp blob that: don de lai <n>'. Đối chứng dương cùng fixture: ngay sau complete, fetch URL ký trả 200; không thì ném 'ttp blob that: doi chung'. Chiều đỏ: trên onehub thủ tục không có, ném 'ttp blob that: thieu thu tuc'; vế (b) chứng bằng đột biến tay lúc dựng (đổi access sang public ở blob-tep-truong.ts trong bản sao) phải ném 'ttp blob that: khong rieng tu', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/blob-tep-truong.ts, apps/api/src/fields/**, apps/api/test/truong-tep-blob-that.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_tu_choi
+    expected: "exit 0; -t ttp-tu-choi của apps/api/test/truong-tep.spec.ts. Cô lập như E1. Fixture: thoả thuận T1 có trường FILE 'ttp_hd' với sẵn một PDF P0; thoả thuận T2 cùng trường; thoả thuận T3 đã lưu trữ; trường FILE 'ttp_luu' đã lưu trữ; trường FILE của CONTACT; trường TEXT của DEAL. Ma trận viết trước 16 ô từ chối, mỗi ô một tệp và một lời gọi requestUpload hay complete thật: byte rác đuôi .pdf; XLSX thật; 20 MB + 1 byte; 0 byte; khai 1 MB ở requestUpload rồi PUT 20 MB + 1 byte (chữ ký kho giả không chặn cỡ, để chứng complete kiểm byte thật); DOCX hợp lệ có thêm word/vbaProject.bin; ô đầy (trần đọc từ field-files-config.ts, đổ đầy bằng tệp thật trước); phiếu giả (HMAC sai một byte); phiếu của T2 dùng cho T1; phiếu hết hạn (đồng hồ setSystemTime qua 60 phút); pathname đã thuộc P0; T3 đã lưu trữ; 'ttp_luu'; trường CONTACT trên DEAL; trường TEXT; recordId không tồn tại. Với mỗi ô: không ném thì ném 'ttp tu choi: <o> nhan'; lời trả không phải tiếng Việt (không chứa một từ trong danh sách từ ghim của ô, viết sẵn trong test) thì ném 'ttp tu choi: <o> loi <msg>'; db.fieldFile của T1 khác {P0} (hay khác tập đã đổ đầy ở ô đầy) thì ném 'ttp tu choi: <o> ghi hang'; pathname đã PUT của ô (khi có) vẫn còn trong kho giả và ô không phải 'pathname đã thuộc P0' thì ném 'ttp tu choi: <o> blob con'; với ô 'pathname đã thuộc P0', Blob của P0 bị xoá thì ném 'ttp tu choi: xoa nham P0'. Số ô khác 16 thì ném 'ttp tu choi: thieu o <n>'. Ca trùng: đúng byte P0 vào T1 → complete trả trung true và tepId của P0, Blob mới bị xoá, T1 vẫn một hàng; lệch thì ném 'ttp tu choi: trung <ve>'. Cùng byte vào T2: được nhận, T2 một hàng; không thì ném 'ttp tu choi: trung khac ban ghi'. Đua: hai complete song song cùng byte vào T2 trống: số hàng khác 1 thì ném 'ttp tu choi: dua <n>'. Đối chứng dương cùng fixture: một PDF hợp lệ mới vào T1 được nhận; không thì ném 'ttp tu choi: doi chung'. Chiều đỏ: đột biến tay lúc dựng (bỏ nhận kiểu theo byte, chỉ xét đuôi) phải ném 'ttp tu choi: rac duoi pdf nhan', ghi vào sổ S3; trên onehub thủ tục không có."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/kieu-tep.ts, apps/api/src/fields/**, apps/api/test/truong-tep.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_quyen
+    expected: "exit 0; -t ttp-quyen của apps/api/test/truong-tep.spec.ts. Cô lập như E1. Fixture: thoả thuận có trường FILE với hai tệp; ba người thật ở bảng member: Q (admin), N (member), O (okr). Ma trận viết trước 3 vai × 6 thủ tục (deals.byId, fieldFiles.status, requestUpload, complete, downloadUrl, remove) = 18 ô, đáp án viết tay theo bảng mục 4 của design doc (remove theo Hỏi-2 lối đã duyệt). Với mỗi ô: kết quả khác đáp án thì ném 'ttp quyen: <vai> <thu tuc> <ket qua>'. Thêm: N gọi downloadUrl: lời trả chứa chuỗi 'http' thì ném 'ttp quyen: lo url'. Q gọi downloadUrl: URL không mang hạn, hay hạn > 300 giây sau lúc gọi (đọc tham số hạn của URL ký kho giả) thì ném 'ttp quyen: han <giay>'. O gọi deals.byId: không bị từ chối KHONG_TRONG_PHAM_VI thì ném 'ttp quyen: okr doc duoc'. Số ô khác 18 thì ném 'ttp quyen: thieu o <n>'. Cờ trong byId: với Q và N (O bị chặn trước) × 2 tệp (F1 do N tải, F2 do Q tải) = 4 ô, coTheMo và coTheXoa khác đáp án viết tay (Q: mở true, xoá true cả hai; N: mở false cả hai, xoá true cho F1, false cho F2 theo Hỏi-2 lối khuyến nghị) thì ném 'ttp quyen: co <vai> <tep> <co>'; số ô khác 4 thì ném 'ttp quyen: thieu co <n>'. Đối chứng dương cùng fixture: Q đọc byId thấy hai tệp; không thì ném 'ttp quyen: doi chung'. Chiều đỏ: đột biến tay lúc dựng (coTheMoTep trả true cho mọi vai) phải ném 'ttp quyen: member downloadUrl url', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, packages/auth/src/**, packages/validation/src/vai-workspace.ts, apps/api/test/truong-tep.spec.ts]
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ttp_o_tep
+    expected: "exit 0; -t ttp-o-tep của apps/app/test/truong-tep.dom.tsx. Dựng ô Tệp thật qua OTruongPhieu (apps/app/components/crm/fields/kieu-truong.tsx) trong LocaleProvider vi với kho tRPC giả; dữ liệu tepTheoTruong rút qua schema TepTrongO thật (round-trip). Ma trận 3 trạng thái × 4 cặp cờ: {có tệp, bản ghi đã lưu trữ, khoá tắt} × {coTheMo, coTheXoa} ∈ {true,false}² = 12 ô; hai cờ đến từ đúng trường của tệp trong byId (đầu vào rút qua schema TepTrongO thật, cờ không tính ở máy khách). Đáp án viết tay mỗi ô: nút «Mở» bật hay khoá, nút «Xoá» có hay vắng (bản ghi đã lưu trữ: luôn vắng), dòng lý do («Chỉ quản trị mở được tệp.» / «Kho tệp chưa bật trên máy chủ nên chưa tải tệp lên được.», chữ đọc từ bảng chữ thật), vùng tải bật hay khoá. Lệch thì ném 'ttp o tep: <trang thai> <quyen> <ve>'. Số ô khác 12 thì ném 'ttp o tep: thieu o <n>'. Thêm: tên tệp không mang translate=\"no\" thì ném 'ttp o tep: dich ten'; nút «Mở», «Xoá» không có aria-label chứa tên tệp thì ném 'ttp o tep: nhan nut'. Quét mã: kieu-truong.tsx và tệp ô Tệp không import vai hay so sánh role (TypeScript compiler API, tìm chuỗi 'admin', 'owner', isWorkspaceAdmin); có thì ném 'ttp o tep: quyen tu tinh <tep>:<dong>'. Đối chứng dương: ô có tệp, coTheMo true: «Mở» bật; khoá thì ném 'ttp o tep: doi chung'. Chiều đỏ trong lịch sử: trên onehub KIEU_TRUONG không có FILE, ném 'ttp o tep: co tep true thieu o'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/lib/messages/crm.ts, packages/validation/src/tep-truong.ts, apps/app/test/truong-tep.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_loc
+    expected: "exit 0; -t ttp-loc của apps/api/test/truong-tep.spec.ts. Cô lập như E1 (mọi lời gọi list mang q là tiền tố ca). Fixture qua đường ghi thật, cho mỗi loại {DEAL, COMPANY, CONTACT}: trường FILE 'ttp_loc' bật showOnFilter; bản ghi A có hai tệp; B chưa từng có tệp; C có một tệp rồi xoá qua remove thật. Đáp án viết tay: [some] → {A}; [none] → {B, C}; [some, none] → {A, B, C}. (a) Với 3 loại × 3 bộ lọc qua list thật (đầu vào qua *ListInput.parse như router) = 9 ô, cộng deals.board 3 bộ lọc = 12 ô: tập khác đáp án thì ném 'ttp loc: <thu tuc> <bo loc> ra <ten>'; total (hay count của cột) khác cỡ đáp án thì ném 'ttp loc: total <thu tuc> <bo loc> <n>'. Số ô khác 12 thì ném 'ttp loc: thieu o <n>'. (b) facetCounts của deals.list không lọc trường: số đếm some, none khác total của lời gọi lọc riêng giá trị ấy (gọi thật) thì ném 'ttp loc: dem <gia tri> <dem> <total>'; khoá đếm thiếu thì ném 'ttp loc: thieu dem <gia tri>'. (c) savedViews.create CONTACT với filters {'field:ttp_loc': ['none']} rồi campaigns.create dùng nó: memberCount khác total của contacts.list cùng filters thì ném 'ttp loc: chien dich <dem> <total>'; dòng đọc lại không parse được bằng savedViewFilters thì ném 'ttp loc: khuon luu'. (d) Giá trị hỏng ['yes'] và ['has:x'] trên 'ttp_loc': không ném BAD_REQUEST nêu nhãn hay khoá trường thì ném 'ttp loc: hong <gia tri>'. Đối chứng dương cùng fixture: lời gọi không fields trả {A, B, C}; khác thì ném 'ttp loc: doi chung'. Chiều đỏ: trên onehub và trên DA18 chưa có dòng FILE, 'some' bị coi là giá trị hỏng hay bỏ qua, ném 'ttp loc: deals.list some ra …'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/fields-shape.ts, packages/validation/src/bo-loc-truong.ts, apps/api/src/fields/**, apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/src/campaigns/**, apps/api/test/truong-tep.spec.ts]
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ttp_man_loc
+    expected: "exit 0; -t ttp-man-loc của apps/app/test/truong-tep.dom.tsx. Dựng DealsTable thật trong NuqsTestingAdapter với kho tRPC giả; fields.filters trả một trường FILE 'ttp_loc' rút qua bộ đọc đầu ra thật (round-trip). (a) Menu Bộ lọc có trường ấy với đúng hai lựa chọn mang nhãn «Có tệp», «Chưa có tệp» (đọc từ bảng chữ thật) và số đếm từ facetCounts giả; thiếu thì ném 'ttp man loc: thieu <nhan>'. (b) Chọn «Chưa có tệp»: onUrlUpdate không mang đúng 'field:ttp_loc=none' thì ném 'ttp man loc: url <qs>'; lời gọi deals.list kế không mang fields {ttp_loc: ['none']} thì ném 'ttp man loc: tai <json>'. (c) currentView rồi applyView lên bảng trống: khác nhau thì ném 'ttp man loc: vong luu'. Đối chứng dương: một trường SELECT cùng bảng vẫn ghi 'field:<khoá>=<id>' như DA18; khác thì ném 'ttp man loc: doi chung'. Chiều đỏ trong lịch sử: trước dòng FILE ở bảng lọc, menu không có trường Tệp, ném 'ttp man loc: thieu Có tệp'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/data-table/**, apps/app/components/crm/fields/**, packages/validation/src/bo-loc-truong.ts, "apps/app/app/(app)/[slug]/deals/**", apps/app/test/truong-tep.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_xoa
+    expected: "exit 0; -t ttp-xoa của apps/api/test/truong-tep.spec.ts. Cô lập như E1. Fixture: thoả thuận có trường FILE với tệp F1 do N1 (member) tải và F2 do N2 (member) tải; Q là admin. Ma trận người xoá × tệp theo Hỏi-2 lối đã duyệt (khuyến nghị: Q xoá được mọi tệp, N1 chỉ F1, N2 chỉ F2), đáp án viết tay: 3 người × 2 tệp = 6 ô, mỗi ô dựng lại fixture. Với mỗi ô: kết quả khác đáp án thì ném 'ttp xoa: <nguoi> <tep> <ket qua>'. Ô được xoá: hàng còn trong db.fieldFile thì ném 'ttp xoa: hang con'; Blob còn trong kho giả sau lượt xoá sau commit thì ném 'ttp xoa: blob con'; tệp kia đổi thì ném 'ttp xoa: xoa nham'; không có đúng một dòng log 'Field file removed' mang fieldId, id bản ghi, tepId, userId (bắt log qua logger thử của apps/api/test) thì ném 'ttp xoa: thieu vet'. Ô bị từ chối: không FORBIDDEN thì ném 'ttp xoa: <nguoi> khong bi chan'; hàng mất thì ném 'ttp xoa: chan ma mat'. Số ô khác 6 thì ném 'ttp xoa: thieu o <n>'. Thêm: thoả thuận đã lưu trữ, Q remove: không ném thì ném 'ttp xoa: luu tru xoa duoc'. Blob hỏng: kho giả ném ở xoa cho pathname của F1; Q remove F1: lời gọi ném thì ném 'ttp xoa: blob hong nem'; hàng F1 còn thì ném 'ttp xoa: blob hong hang con'; db.blobChoXoa không có pathname F1 thì ném 'ttp xoa: blob hong khong cho'; cho kho giả trả lời lại rồi gọi lượt dọn thật (ArchiveRetentionController): hàng chờ còn thì ném 'ttp xoa: don khong xoa'. Đối chứng dương: Q remove F2 khi kho lành: blobChoXoa không còn hàng F2 sau commit; còn thì ném 'ttp xoa: doi chung'. Chiều đỏ: đột biến tay lúc dựng (xoá Blob trước commit, bỏ hàng chờ) phải ném 'ttp xoa: blob hong khong cho', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/archive/**, packages/db/src/blob-cho-xoa.ts, apps/api/test/truong-tep.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_vong_doi
+    expected: "exit 0; -t ttp-vong-doi của apps/api/test/truong-tep.spec.ts. Cô lập như E1. Kho giả đếm từng pathname bị xoá. Ma trận viết trước 7 đường × đáp án: (1) lưu trữ rồi khôi phục một thoả thuận — tệp không đổi, 0 Blob xoá; (2) deals.purge tay; (3) contacts.purge tay; (4) companies.purge tay; (5) deals.bulkPurge hai thoả thuận; (6) purgeExpired qua ArchiveRetentionController thật với archivedAt lùi quá hạn đọc từ archiveRetentionDays; (7) fields.delete trường FILE có tệp trên ba bản ghi. Mỗi ô dựng fixture riêng, mỗi bản ghi hai tệp, cộng một bản ghi đối chứng có tệp không thuộc đường. Với (2)–(7): còn hàng fieldFile của bản ghi hay trường thì ném 'ttp vong doi: <duong> hang con'; tập pathname kho giả đã xoá khác đúng tập tệp của đường thì ném 'ttp vong doi: <duong> xoa <tap>'; Blob của bản ghi đối chứng bị xoá thì ném 'ttp vong doi: <duong> xoa nham'. Với (1): có Blob xoá hay tepTheoTruong đổi thì ném 'ttp vong doi: luu tru doi tep'. Số ô khác 7 thì ném 'ttp vong doi: thieu o <n>'. Giao dịch lùi: ép deals.purge ném sau khi ghi hàng chờ (spy ghiGoDoXoa ném): có Blob xoá hay blobChoXoa có hàng mới thì ném 'ttp vong doi: lui van xoa'. Blob hỏng ở (2): purge ném thì ném 'ttp vong doi: blob hong nem'; blobChoXoa thiếu pathname hay lanThu không tăng sau một lượt dọn hỏng thì ném 'ttp vong doi: blob hong cho <ve>'; kho lành lại, lượt dọn kế: còn hàng thì ném 'ttp vong doi: don lai'. Trường: fields.archive rồi fields.restore trường FILE: tepTheoTruong sau restore khác trước archive thì ném 'ttp vong doi: truong luu tru'. Tải dở: requestUpload rồi PUT vào kho giả, không complete; lượt dọn thật với đồng hồ (setSystemTime) trước hạn phiếu: Blob bị xoá thì ném 'ttp vong doi: tai do xoa som'; sau hạn phiếu: Blob còn hay hàng chờ còn thì ném 'ttp vong doi: tai do khong don'. Một tệp đã complete: còn hàng blobChoXoa của pathname thì ném 'ttp vong doi: complete con cho'. Đối chứng dương cùng fixture: trước (2), Blob của thoả thuận có trong kho giả; vắng thì ném 'ttp vong doi: doi chung'. Chiều đỏ trong lịch sử: trên onehub không đường purge nào xoá Blob — chứng bằng đột biến tay lúc dựng (bỏ ghi hàng chờ ở deals.purge) phải ném 'ttp vong doi: deals.purge xoa []', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/deals/**, apps/api/src/contacts/**, apps/api/src/companies/**, apps/api/src/fields/**, apps/api/src/archive/**, packages/db/src/blob-cho-xoa.ts, packages/db/prisma/schema.prisma, apps/api/test/truong-tep.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_khoa
+    expected: "exit 0; -t ttp-khoa của packages/db/test/blob-tep-truong.spec.ts và -t ttp-tat của apps/api/test/truong-tep.spec.ts. (a) Máy chủ giả theo hợp đồng thật của @vercel/blob (khuôn blob-nguon.spec.ts: Bun.serve đóng /signed-token và /delete, VERCEL_BLOB_API_URL trỏ vào nó), ba khoá đặt cùng lúc với ba giá trị khác nhau: mọi yêu cầu của kyPut, kyGet, xoa của kho tệp phải mang 'Bearer <khoá tệp>'; yêu cầu mang khoá Kho tài liệu hay khoá logo thì ném 'ttp khoa: muon khoa <bien>'; không yêu cầu nào tới máy chủ giả thì ném 'ttp khoa: khong goi'. Bảng hai biến 2 × 2 (khoá tệp có/vắng × khoá Kho tài liệu có/vắng): bat() khác đáp án viết tay (chỉ theo khoá tệp) thì ném 'ttp khoa: bat <o>'; khoá chỉ khoảng trắng là vắng. (b) API với TEP_BAN_GHI_BLOB_TOKEN vắng, hai khoá kia có: app khởi động được (Test.createTestingModule thật); status trả bat true thì ném 'ttp tat: status'; requestUpload, complete, downloadUrl không ném PRECONDITION_FAILED với chữ tiếng Việt (chữ ghim viết sẵn) thì ném 'ttp tat: <thu tuc>'; deals.byId của thoả thuận có hàng fieldFile sẵn (chèn bằng service ở khối có khoá rồi tắt khoá) không trả đủ tên thì ném 'ttp tat: ten mat'; remove không xoá hàng hay không để pathname trong blobChoXoa thì ném 'ttp tat: remove'. (c) .env.example không có dòng TEP_BAN_GHI_BLOB_TOKEN kèm ít nhất một dòng chú thích ngay trên, env.validation.ts không khai biến, apps/api/turbo.json không liệt biến: ném 'ttp khoa: khai <tep>'. Đối chứng dương: khoá có thì status trả bat true; không thì ném 'ttp tat: doi chung'. Chiều đỏ: đột biến tay lúc dựng (blob-tep-truong.ts lùi về KHO_TAI_LIEU_BLOB_TOKEN khi khoá tệp vắng) phải ném 'ttp khoa: bat …', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/blob-tep-truong.ts, packages/db/test/blob-tep-truong.spec.ts, apps/api/src/fields/**, apps/api/src/config/env.validation.ts, apps/api/turbo.json, .env.example, apps/api/test/truong-tep.spec.ts]
+
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_kho_tai_lieu
+    expected: "exit 0; bộ bài có sẵn của Kho tài liệu chạy nguyên văn: packages/db/test/blob-nguon.spec.ts, apps/api/test/tai-lieu-nguon.spec.ts, apps/api/test/tai-lieu-nguon-tat.spec.ts, apps/api/test/phieu-nguon.spec.ts; rồi rang _acceptance/truong-tep/rang/bai-cu-nguyen.mjs. Rang tính merge-base với origin/onehub và chạy git diff --name-only từ đó tới HEAD trên danh sách viết sẵn: bốn tệp bài trên, packages/db/src/blob-nguon.ts, apps/api/src/tai-lieu/kho-nguon.ts, apps/api/src/tai-lieu/phieu-nguon.ts, apps/api/src/tai-lieu/tai-lieu-nguon.service.ts. Theo Hỏi-7 lối khuyến nghị (viết riêng): một tệp nào đổi thì ném 'ttp kho tai lieu: sua <tep>'; lối kia nếu chủ kho chọn (dùng chung): chỉ bốn tệp bài phải nguyên, đổi thì ném 'ttp kho tai lieu: sua bai cu <tep>'. Merge-base không tính được thì thoát 2 'ttp kho tai lieu: khong co goc'. Cặp hai chiều cùng fixture: rang chạy lại trên một worktree tạm có thêm một dòng trống cuối blob-nguon.ts (commit tạm): không ném đúng 'sua packages/db/src/blob-nguon.ts' thì ném 'ttp kho tai lieu: thuoc mu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/blob-nguon.ts, apps/api/src/tai-lieu/**, packages/db/test/blob-nguon.spec.ts, _acceptance/truong-tep/rang/bai-cu-nguyen.mjs]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttp_ghi_chu
+    expected: "exit 0; -t ttp-ghi-chu của apps/api/test/truong-tep.spec.ts và -t ttp-kara của apps/agent/test/truong-tep.integration.spec.ts. Cô lập như E1. Fixture: mỗi loại bản ghi một bản ghi có trường FILE 'ttp_gc' với sẵn một tệp. Ma trận viết trước 3 lối API (companies.update, contacts.update, deals.update) × 3 giá trị ('abc', 5, null) = 9 ô, cộng 2 ô Kara (set_field_value thật của apps/agent với 'https://x.test/a.pdf' và null, trường bật agentFilled bằng db trực tiếp vì UI không cho) = 11 ô. Với mỗi ô: không ném BAD_REQUEST mang đúng chữ «Ô Tệp chỉ nhận tệp tải lên.» thì ném 'ttp ghi chu: <loi> <gia tri> nhan'; có hàng fieldValue cho 'ttp_gc' thì ném 'ttp ghi chu: <loi> <gia tri> fieldValue'; tệp của ô đổi thì ném 'ttp ghi chu: <loi> <gia tri> tep doi'. Số ô khác 11 thì ném 'ttp ghi chu: thieu o <n>'. Sort: deals.list với sort 'field:ttp_gc': ném thì ném 'ttp ghi chu: sort nem'; thứ tự khác lời gọi không sort thì ném 'ttp ghi chu: sort doi'. Đối chứng dương cùng fixture: deals.update ghi trường TEXT bên cạnh vẫn được; không thì ném 'ttp ghi chu: doi chung'. Chiều đỏ trong lịch sử: coerceValue rơi về text ở default, ghi được 'abc' thành fieldValue — chứng bằng đột biến tay lúc dựng (gỡ nhánh FILE của coerceValue) phải ném 'ttp ghi chu: deals.update abc nhan', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/fields.ts, packages/db/src/fields-shape.ts, apps/api/src/fields/**, apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/agent/agent/lib/fields.ts, apps/agent/agent/tools/set_field_value.ts, apps/api/test/truong-tep.spec.ts, apps/agent/test/truong-tep.integration.spec.ts]
+
+  - id: E9b
+    criterion: AC-9
+    executor: script
+    layer: unit
+    cmd: config:executors.script.ttp_quet
+    expected: "exit 0; bun _acceptance/truong-tep/rang/quet-kieu.mjs. Quét bằng TypeScript compiler API (ts.createSourceFile, không regex trên chữ) mọi tệp .ts, .tsx dưới apps/api/src, apps/app/components, apps/app/lib, apps/agent/agent, packages/db/src, packages/validation/src. (a) Mọi câu switch có ít nhất một case là chuỗi trong FIELD_TYPES (đọc lúc chạy từ packages/db/src/fields-shape.ts) và có default mà thiếu case 'FILE' thì ném 'ttp quet: switch thieu FILE <tep>:<dong>'. (b) Mọi object literal có satisfies Record<FieldTypeName, …> hay Record<KieuTruong, …> thiếu khoá FILE thì ném 'ttp quet: bang thieu FILE <tep>:<dong>' (tsc cũng bắt; rang đo độc lập). (c) Theo Hỏi-6 lối đã duyệt: khuyến nghị — dòng FILE của KIEU_TRUONG khai mặt form tạo là không có, khác thì ném 'ttp quet: form tao co o Tep'; lối kia — mặt form tạo có ô Tệp, vắng thì ném 'ttp quet: form tao thieu o Tep'. (d) Số câu switch đã soát in ra stdout; bằng 0 thì ném 'ttp quet: khong quet duoc'. Cặp hai chiều cùng fixture: rang chép packages/db/src/fields.ts của cây vào thư mục tạm, xoá case 'FILE' của coerceValue, quét bản chép: không ném đúng 'switch thieu FILE' thì ném 'ttp quet: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub coerceValue (packages/db/src/fields.ts:118) có default mà không có FILE — rang chạy với FIELD_TYPES đã có FILE ném 'ttp quet: switch thieu FILE packages/db/src/fields.ts:118'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/**, packages/validation/src/**, apps/api/src/**, apps/app/components/**, apps/app/lib/**, apps/agent/agent/**, _acceptance/truong-tep/rang/quet-kieu.mjs]
+
+  - id: E10
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ttp_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/truong-tep/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tep/rang/do-man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này; kho Blob là máy chủ giả theo hợp đồng của E8 (do-man.mjs dựng nó), không phải kho thật."
+      - "Đọc dòng cuối: mã 0 kèm 'ttp man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'ttp man: …'."
+      - "Mở tám ảnh ttp-rong-1280.png, ttp-dang-tai-1280.png, ttp-co-tep-1280.png, ttp-loi-tep-375.png, ttp-hoi-xoa-1280.png, ttp-khong-mo-375.png, ttp-tat-1280.png, ttp-loc-1280.png, đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/truong-tep/evidence/]
+    expected: |
+      Dữ liệu dựng qua API thật trong phiên đo: ba thoả thuận; trường DEAL kiểu Tệp «Hợp đồng» tạo bằng tay trên màn Cài đặt › Trường (do-man.mjs mở trang tạo trường, chọn «Tệp», bật «Hiện trong bảng» và «Hiện trong bộ lọc», Lưu — không thấy mục «Tệp» thì thoát 1 'ttp man: cai dat thieu kieu'). Đăng nhập bằng dev:session hai người: quản trị và một nhân viên.
+      0. ttp-rong-1280 (ST-otep-rong): phiếu thoả thuận T1 có ô «Hợp đồng» với «Chưa có tệp.» và vùng «Kéo tệp vào đây hoặc Chọn tệp».
+      1. ttp-dang-tai-1280 (ST-otep-dang-tai): do-man.mjs thả hai PDF (setInputFiles), chụp khi dòng thứ hai còn «Đang tải lên…» (máy chủ giả giữ PUT thứ hai 2 giây).
+      2. ttp-co-tep-1280 (ST-otep-co-tep): hai dòng tệp, mỗi dòng tên, cỡ, ngày, người tải, «Mở», «Xoá». db.fieldFile của T1 khác 2 hàng thì thoát 1 'ttp man: co tep hang <n>'.
+      3. ttp-loi-tep-375 (ST-otep-loi-tep): ở 375 chọn một XLSX và một PDF cùng lúc: dòng XLSX báo «Tệp này không phải PDF, DOCX hay ảnh PNG, JPG.», PDF vẫn tải xong. document.documentElement.scrollWidth > 375 thì thoát 1 'ttp man: 375 cuon ngang'.
+      4. ttp-hoi-xoa-1280 (ST-otep-hoi-xoa): bấm «Xoá» một tệp: hộp hỏi lại nêu đúng tên tệp; bấm «Huỷ» thì ô vẫn đủ tệp; xoá thật thì còn một tệp ít hơn.
+      5. ttp-khong-mo-375 (ST-otep-khong-mo): phiên nhân viên: «Mở» khoá, dòng «Chỉ quản trị mở được tệp.». Phiên quản trị bấm «Mở»: không có tab mới với URL của máy chủ giả thì thoát 1 'ttp man: mo khong ra'.
+      6. ttp-tat-1280 (ST-otep-tat): khởi động lại API của phiên đo không có TEP_BAN_GHI_BLOB_TOKEN: tên tệp còn hiện; vùng tải và «Mở» khoá kèm «Kho tệp chưa bật trên máy chủ nên chưa tải tệp lên được.».
+      7. ttp-loc-1280 (ST-loc-tep, ST-bang-tep): danh sách Thoả thuận: cột «Hợp đồng» hiện «n tệp» cho T1, «—» cho T2, T3; menu Bộ lọc › «Hợp đồng» có «Có tệp (1)», «Chưa có tệp (2)»; chọn «Chưa có tệp»: đường dẫn không mang field:<khoá>=none thì thoát 1 'ttp man: loc url <qs>'; bảng chỉ còn T2, T3.
+      Thêm: lưu trữ T1 rồi mở phiếu: ô chỉ đọc, không có vùng tải, không có «Xoá» (không chụp riêng, do-man.mjs kiểm DOM; sai thì thoát 1 'ttp man: luu tru sua duoc').
+      Đối chứng bằng mắt: tên tệp dài cắt một dòng không đè nút, dòng tệp ở 375 xuống hai hàng gọn, chữ người đặt tên tệp không bị trình duyệt dịch, nút khoá có lý do đọc được.
+    evidence_required: [verdict, screenshot, observed, verified_at]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/**, apps/app/components/data-table/**, "apps/app/app/(app)/[slug]/deals/**", packages/ui/src/components/nguon-keo-tha.tsx, _acceptance/truong-tep/rang/do-man.mjs]
