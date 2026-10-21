@@ -100,9 +100,6 @@ const en = {
 		co: "Yes",
 		khong: "No",
 		daQua: "Past",
-		chua: "Contains…",
-		tu: "From",
-		den: "To",
 	},
 	close: {
 		done: "Deal closed.",
@@ -460,9 +457,6 @@ const vi = {
 		co: "Có",
 		khong: "Không",
 		daQua: "Đã qua",
-		chua: "Chứa…",
-		tu: "Từ",
-		den: "Đến",
 	},
 	close: {
 		done: "Đã chốt thoả thuận.",
