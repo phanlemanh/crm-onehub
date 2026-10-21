@@ -92,3 +92,24 @@ export function evalsMay(root, slug) {
 	const may = new Set(LOI.machineEvalIds(text));
 	return [...may].map((id) => ({ id, paths: LOI.evalPathsOf(text, id) ?? [] }));
 }
+
+export function pinTren(slug, nhanh = "origin/onehub") {
+	const r = spawnSync("git", ["-C", GOC, "show", `${nhanh}:_acceptance/${slug}/run-log.jsonl`], { encoding: "utf8", maxBuffer: 1 << 26 });
+	if (r.status !== 0) return [];
+	const ra = [];
+	for (const l of r.stdout.split("\n")) {
+		try {
+			const j = JSON.parse(l);
+			if (j.kind === "repin" && j.sha) ra.push({ run_id: j.run_id, sha: j.sha });
+		} catch {}
+	}
+	return ra;
+}
+
+export function laHauDue(truoc, sau) {
+	return spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", truoc, sau]).status === 0;
+}
+
+export function pinTrongVong(slug, moc, layPin = pinTren) {
+	return layPin(slug).some((p) => laHauDue(moc, p.sha));
+}

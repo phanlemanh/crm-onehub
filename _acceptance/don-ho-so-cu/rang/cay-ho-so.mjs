@@ -19,7 +19,11 @@ export function tepCuaVong(base) {
 	return [...tep].sort();
 }
 
-export function kiemCay(tep, base, dong, laDaKy = (s) => DA_KY.includes(trangThaiTai(base, s))) {
+function conKhacOnehub(t) {
+	return spawnSync("git", ["-C", GOC, "diff", "--quiet", "origin/onehub", "HEAD", "--", t]).status !== 0;
+}
+
+export function kiemCay(tep, base, dong, laDaKy = (s) => DA_KY.includes(trangThaiTai(base, s)), conKhac = conKhacOnehub) {
 	const theoSlug = new Map();
 	for (const d of dong) theoSlug.set(d.slug, [...(theoSlug.get(d.slug) ?? []), d]);
 	const loi = [];
@@ -33,7 +37,7 @@ export function kiemCay(tep, base, dong, laDaKy = (s) => DA_KY.includes(trangTha
 		const ds = theoSlug.get(slug) ?? [];
 		const sua = ds.find((d) => d.cach === "sua-thuoc");
 		if (ds.length && !sua) {
-			loi.push(`cham ho so do: ${t}`);
+			if (conKhac(t)) loi.push(`cham ho so do: ${t}`);
 			continue;
 		}
 		if (duoi.length === 1 && TEP_SO.has(duoi[0])) continue;
@@ -63,7 +67,7 @@ const ca = [
 ];
 let hong = false;
 for (const [ten, them, dongGia, dau] of ca) {
-	const r = kiemCay([...tep, ...them], so.base, [...so.dong, ...dongGia]);
+	const r = kiemCay([...tep, ...them], so.base, [...so.dong, ...dongGia], undefined, (t) => them.includes(t) || conKhacOnehub(t));
 	if (r.loi.some((x) => x.startsWith(dau))) console.log(`BAT ${ten}`);
 	else {
 		console.log(`thuoc hong: ${ten}`);

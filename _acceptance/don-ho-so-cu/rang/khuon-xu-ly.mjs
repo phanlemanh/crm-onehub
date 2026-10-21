@@ -23,6 +23,12 @@ export const dongXuLy = z.discriminatedUnion("cach", [
 	z.object({ ...chung, cach: z.literal("loi-kit"), viec: z.string().regex(/^https:\/\/github\.com\/[^/]+\/acceptance-gate-kit\/issues\/\d+$/) }),
 	z.object({ ...chung, cach: z.literal("ngoai-pham-vi"), lan_chu: z.string().min(1), viec_phu: z.string().regex(/^[A-Z][A-Z0-9]*-\d+$/) }),
 	z.object({ ...chung, cach: z.literal("cho-lan-chu"), pr: z.array(pr) }),
+	z.object({
+		slug: chung.slug,
+		ly_do: chung.ly_do,
+		cach: z.literal("ghim-luoi"),
+		quyet: z.string().regex(/^d-\d{8}T\d{6}Z-\d+$/),
+	}),
 ]);
 
 export const soXuLy = z.object({ base: z.string().regex(/^[0-9a-f]{40}$/), dong: z.array(dongXuLy) });

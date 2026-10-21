@@ -100,6 +100,30 @@
           "headRefName": "fix/thu-paths-e15-giai-doan"
         }
       ]
+    },
+    {
+      "slug": "thu-haiku-tro-ly-okr",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval ngoài làn máy không khai paths (E8) nên gộp mã nào cũng làm nó cũ; lượt ghim hơn 60 phút. Ghim lười khi #439 (F31) tới lượt gộp.",
+      "quyet": "d-20261021T191250Z-17"
+    },
+    {
+      "slug": "bo-cau-hoi-mau",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval không khai paths nên gộp mã nào cũng làm nó cũ; đã ghim xanh bốn lần mà lần nào cũng cũ trước khi PR lô gộp. Ghim lười khi một PR khác chạm tới.",
+      "quyet": "d-20261021T113908Z-15"
+    },
+    {
+      "slug": "lich-su-va-luu-tru-trang",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval không khai paths nên gộp mã nào cũng làm nó cũ; đã ghim xanh bốn lần mà lần nào cũng cũ trước khi PR lô gộp. Ghim lười khi một PR khác chạm tới.",
+      "quyet": "d-20261021T113908Z-15"
+    },
+    {
+      "slug": "ngan-ho-so-trong-lo-trinh",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval không khai paths nên gộp mã nào cũng làm nó cũ; đã ghim xanh bốn lần mà lần nào cũng cũ trước khi PR lô gộp. Ghim lười khi một PR khác chạm tới.",
+      "quyet": "d-20261021T113908Z-15"
     }
   ]
 }

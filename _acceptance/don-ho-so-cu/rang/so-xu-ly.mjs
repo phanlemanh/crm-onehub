@@ -1,9 +1,20 @@
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { docJson, HO_SO } from "./chung.mjs";
 import { dongXuLy, docSoXuLy } from "./khuon-xu-ly.mjs";
 
 const THU_MUC_LAN = join(HO_SO, "lan");
+
+function docQuyet() {
+	const m = new Map();
+	for (const l of readFileSync(join(HO_SO, "decisions.jsonl"), "utf8").split("\n")) {
+		try {
+			const j = JSON.parse(l);
+			m.set(j.id, j);
+		} catch {}
+	}
+	return m;
+}
 
 function docLan(runId) {
 	const p = join(THU_MUC_LAN, `${runId}.json`);
@@ -12,9 +23,15 @@ function docLan(runId) {
 	return lan.run_id === runId ? lan : null;
 }
 
-export function kiemDong(d, i, layLan = docLan) {
+export function kiemDong(d, i, layLan = docLan, quyet = docQuyet()) {
 	const r = dongXuLy.safeParse(d);
 	if (!r.success) return [`dong ${i} ${d?.slug ?? "?"}: ${r.error.issues.map((x) => `${x.path.join(".") || "cach"} ${x.message}`).join(", ")}`];
+	if (d.cach === "ghim-luoi") {
+		const q = quyet.get(d.quyet);
+		if (!q) return [`dong ${i} ${d.slug}: quyet ${d.quyet} khong co trong decisions.jsonl`];
+		if (q.type !== "descope" || !String(q.decision).includes(d.slug)) return [`dong ${i} ${d.slug}: quyet ${d.quyet} khong phai descope goi ten ho so`];
+		return [];
+	}
 	const lan = layLan(d.run_id);
 	if (!lan) return [`dong ${i} ${d.slug}: run_id khong co tep lan ${d.run_id}`];
 	const hs = lan.slugs?.[d.slug];
@@ -34,7 +51,7 @@ if (loi.length) {
 }
 
 const tepLan = existsSync(THU_MUC_LAN) ? readdirSync(THU_MUC_LAN).filter((f) => f.endsWith(".json")) : [];
-let mau = dong[0];
+let mau = dong.find((d) => d.cach !== "ghim-luoi");
 let layLan = docLan;
 if (!mau) {
 	for (const f of tepLan) {
@@ -60,6 +77,7 @@ const ca = [
 	["cach-la", { ...mau, cach: "khac" }, docLan],
 	["run-id-ma", { ...mau, run_id: "repin-20000101T000000Z-1" }, docLan],
 	["eval-khong-do", mau, (id) => (id === mau.run_id ? { ...lanMau, slugs: { [mau.slug]: { ...lanMau.slugs[mau.slug], lech: [] } } } : null)],
+	["luoi-quyet-ma", { slug: mau.slug, cach: "ghim-luoi", ly_do: "mau", quyet: "d-20000101T000000Z-1" }, docLan],
 ];
 let hong = false;
 for (const [ten, d, lay] of ca) {
