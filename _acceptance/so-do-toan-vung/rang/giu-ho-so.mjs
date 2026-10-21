@@ -19,7 +19,7 @@ const GIU = {
 	daKy: new Set(["signed-off", "machine-cleared"]),
 	may: new Set(["test", "script"]),
 	kiemDuong: ["so-do-quanh-muc-tieu#E4", "vo-khu-muc-tieu#E4"],
-	kiemDuongChuoi: ["so-do-quanh-muc-tieu#E12"],
+	kiemDuongChuoi: ["ngan-kr-mot-cho#E12"],
 	giuDuong: [],
 	tepKhongCo: "apps/khong-co/tep-nay.ts",
 	chuoiKhongCo: "khong-co-chuoi-nay-vk6",
