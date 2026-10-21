@@ -22,7 +22,7 @@ export const TAI_LIEU_AGENT = {
 		},
 	},
 	hoi: {
-		maModel: "zai/glm-5.2-fast",
+		maModel: "deepseek/deepseek-v4.1-flash-1017",
 		bienKhoaRieng: "KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
 		gateway: { zeroDataRetention: true },
 		soKetQua: 8,
@@ -54,6 +54,7 @@ export const TAI_LIEU_AGENT = {
 	},
 	bangGia: {
 		"zai/glm-5.2-fast": { vaoMoiTrieu: 2.8, raMoiTrieu: 8.8 },
+		"deepseek/deepseek-v4.1-flash-1017": { vaoMoiTrieu: 0.3, raMoiTrieu: 1.2 },
 	} satisfies Record<string, { vaoMoiTrieu: number; raMoiTrieu: number }>,
 	lyDo: {
 		banQuet: (trang: number, tong: number) =>
