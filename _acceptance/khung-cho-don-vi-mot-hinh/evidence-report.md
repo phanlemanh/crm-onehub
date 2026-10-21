@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e6692ecc23cbecae6db7bf61c320d53378833de1
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-21 — ký lại Cổng Bằng chứng trên vòng chấm 4 (delta sau chữ ký, PASS, 9/9 eval, 7/7 suite; khung khớp hàng công cụ sau thanh bên khu theo V2-16 a; rang nhận /okr/bo-okr theo V2-15 i). Ngoài-1, 2, 6–9, 12–15 ghi Known limits; Ngoài-3, 4, 11 mở hợp đồng mới; Ngoài-5, 10 chấp nhận, không sửa; đồng ý cắt; Treo phê hết.
 ---
 
 # Evidence Report: khung-cho-don-vi-mot-hinh
