@@ -154,7 +154,22 @@ const datChan = async (t) => {
 				return;
 			}
 			if (c.che === "loi") {
-				r.abort("failed").catch(() => null);
+				const thuTuc = decodeURIComponent(
+					new URL(r.url()).pathname.split("/api/trpc/")[1] ?? "",
+				).split(",");
+				r.respond({
+					status: 200,
+					contentType: "application/json",
+					body: JSON.stringify(
+						thuTuc.map((path) => ({
+							error: {
+								message: "ldv gia loi",
+								code: -32603,
+								data: { code: "INTERNAL_SERVER_ERROR", httpStatus: 500, path },
+							},
+						})),
+					),
+				}).catch(() => null);
 				return;
 			}
 		}
