@@ -64,3 +64,7 @@ Source input: `_acceptance/gia-co-gom-tin-hieu/opportunity.md` (Cổng Đáng `b
     Claude Code đã ghim không thi hành một luật trong đó, một tín hiệu cài lời dặn vẫn có thể chạy lệnh bị cấm hay đọc
     được khoá mô hình, và không bài kiểm nào đỏ. Cũng chưa có gì chứng skill gom thật làm xong việc chỉ với các lệnh đã
     liệt: nếu skill cần một lệnh khác, lượt thật đỏ ở răng phủ và nhật ký lượt in tên công cụ bị từ chối.
+  - Phiên gom chạy cùng người dùng hệ điều hành và cùng mạng với bước lịch: không có lớp cách ly nào đứng được khi chính
+    Claude Code có lỗi phân quyền. Cách ly hệ điều hành (người dùng riêng, chặn mạng theo người dùng, nơi giữ khoá mô
+    hình tách riêng) để sau — giám sát ghi nó vào mục chờ của lộ trình OKR, mở lại lúc bật lịch gom thật, qua một PR
+    riêng sau khi hàng này gộp (yêu cầu S1-14).
