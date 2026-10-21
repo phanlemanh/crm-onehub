@@ -28,7 +28,7 @@ Source input: hàng VK3 `docs/plan/lo-trinh-okr.json`; ô cơ hội `_acceptance
 ## Criteria
 
 - AC-1: Given trưởng một phòng ban trong bộ mẫu, chu kỳ đang chạy, When bấm mục «Bộ OKR» trên thanh bên khu Mục
-  tiêu (hoặc mở `/okr/bo-okr` không kèm `donOkr` và `xemOkr`), Then trang có tiêu đề «Bộ OKR» và một hàng cho mỗi bộ đơn vị của cây tổ chức (OneHub, mỗi bộ phận, mỗi
+  tiêu (hoặc mở `/okr/bo-okr` không kèm `donOkr` và `xemOkr`), Then trang (tiêu đề «Mục tiêu» như cả khu) có dòng vị trí «Bộ OKR» và một hàng cho mỗi bộ đơn vị của cây tổ chức (OneHub, mỗi bộ phận, mỗi
   phòng ban) — không thiếu, không thừa so với cây — với cột Bộ OKR của · Trưởng · Mục tiêu · Tiến độ · KR tự tin
   thấp; số mục tiêu mỗi hàng bằng số của `okr.countByUnit` và tiến độ bằng số của `okr.toanCanh` cho cùng đơn vị.
 - AC-2: Given trang danh sách, When người xem chọn Tôi dẫn rồi Đang theo dõi, Then danh sách chỉ còn đúng các bộ
@@ -39,7 +39,7 @@ Source input: hàng VK3 `docs/plan/lo-trinh-okr.json`; ô cơ hội `_acceptance
   bỏ `phamViBo` và mọi bộ hiện lại. Trưởng một bộ phận thấy bộ phận ấy trong Tôi dẫn, không thấy các phòng ban con;
   bộ OneHub không thuộc Tôi dẫn của ai.
 - AC-3: Given trang danh sách, When người xem bấm tên một bộ, Then trình duyệt mở `/okr/bo-okr?donOkr=<đơn vị>` kèm
-  `kyOkr` của chu kỳ đang xem, trang mang tên đơn vị làm tiêu đề, có liên kết «Bộ OKR» về danh sách giữ `kyOkr`,
+  `kyOkr` của chu kỳ đang xem, dòng vị trí «Bộ OKR › <tên đơn vị>» với «Bộ OKR» là liên kết về danh sách giữ `kyOkr`,
   và bảng mục tiêu là của đúng đơn vị ấy; bộ OneHub mở bằng `donOkr=goc`.
 - AC-4: Given trang một bộ ở chu kỳ đang chạy, When trang tải xong, Then ngay dưới đầu trang có hàng thẻ con OKR ·
   Họp tuần · Việc · Sơ đồ (thêm Chấm điểm khi chu kỳ ở pha chấm điểm hoặc đã đóng, và chỉ khi đó), mỗi thẻ là một
