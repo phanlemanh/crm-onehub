@@ -1,0 +1,25 @@
+{
+  "luot": 1,
+  "luc": "2026-10-21T02:59:18.797Z",
+  "thu_muc": ".acceptance-runs/model-theo-vai-do-lai/kho/2026-10-21T02-59-18-202Z-42548",
+  "ma_do_bo_mau": 0,
+  "model_kho": "google/gemini-3.8-flash",
+  "model_goc": "zai/glm-5.2-fast",
+  "bam_bo_mau": "0b3f3f96ddddb749f0a1d78b43f4cdbe88af8648e6fae42722c9fb66b0e02ac2",
+  "bam_sua_tam": "44259be56d47bc1045ccbabe0614d8470da8c2e760c8408fe8a8ee2f93423359",
+  "bam_commit": "a1d542719d17e91e3afa3fd71e9282f12d96b755",
+  "usd": 1.867994,
+  "usd_nguon": "aichiphi",
+  "ung_vien": "gem",
+  "aichiphi": "kho/gem/luot-1/aichiphi.json",
+  "so_du_truoc": {
+    "usd": 12.110673673,
+    "luc": "2026-10-21T02:44:05.137Z"
+  },
+  "so_du_sau": {
+    "usd": 9.019228073,
+    "luc": "2026-10-21T02:59:18.754Z"
+  },
+  "usd_so_du": 3.091446,
+  "loi": null
+}

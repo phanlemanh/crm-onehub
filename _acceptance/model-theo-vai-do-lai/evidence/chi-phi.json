@@ -220,10 +220,18 @@
     {
       "vai": "tro-ly-kho",
       "luot": "ds-1",
+      "luc": "2026-10-21T01:37:21.213Z",
       "trang_thai": "da-chay",
       "usd": 0.341442,
-      "tep": "kho/ds/luot-1/tom-tat.json",
-      "luc": "2026-10-21T01:37:21.213Z"
+      "tep": "kho/ds/luot-1/tom-tat.json"
+    },
+    {
+      "vai": "tro-ly-kho",
+      "luot": "gem-1",
+      "trang_thai": "da-chay",
+      "usd": 1.867994,
+      "tep": "kho/gem/luot-1/tom-tat.json",
+      "luc": "2026-10-21T02:59:18.797Z"
     }
   ]
 }
