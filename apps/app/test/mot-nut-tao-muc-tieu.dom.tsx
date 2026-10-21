@@ -3,7 +3,13 @@ import type { Locale } from "@crm/ui/lib/locale";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import { act, type ReactElement } from "react";
+import {
+	act,
+	Children,
+	isValidElement,
+	type ReactElement,
+	type ReactNode,
+} from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { taoTuMauInput } from "../../../packages/validation/src/okr-mau";
 import {
@@ -411,9 +417,7 @@ describe("mnt-soan", () => {
 			const kq = duongSoan({ ...goc, ...o.vao } as Parameters<
 				typeof duongSoan
 			>[0]);
-			const khop = Object.entries(o.mong).every(
-				([k, v]) => (kq as Record<string, unknown>)[k] === v,
-			);
+			const khop = JSON.stringify({ ...kq, ...o.mong }) === JSON.stringify(kq);
 			s.kiem(
 				khop,
 				`mnt-soan: ${o.o} mong ${JSON.stringify(o.mong)}, nhan ${JSON.stringify(kq)}`,
@@ -523,36 +527,38 @@ describe("mnt-dau-trang", () => {
 	});
 });
 
-async function nutTrangServer(el: unknown): Promise<Element[]> {
+type PropsNut = {
+	children?: ReactNode;
+	variant?: string;
+	"data-nut"?: string;
+};
+
+async function nutTrangServer(el: ReactNode): Promise<Element[]> {
 	const ra: Element[] = [];
-	const di = async (n: unknown, trongHang: boolean): Promise<void> => {
-		if (n === null || n === undefined || typeof n !== "object") return;
-		if (Array.isArray(n)) {
-			for (const c of n) await di(c, trongHang);
-			return;
+	const di = async (n: ReactNode, trongHang: boolean): Promise<void> => {
+		for (const c of Children.toArray(n)) {
+			if (!isValidElement<PropsNut>(c)) continue;
+			const vaoHang = trongHang || c.type === PageShellActions;
+			if (vaoHang && c.type === Button) {
+				const o = document.createElement("button");
+				o.setAttribute("data-slot", "button");
+				if (c.props.variant) o.setAttribute("data-variant", c.props.variant);
+				if (c.props["data-nut"])
+					o.setAttribute("data-nut", c.props["data-nut"]);
+				ra.push(o);
+				continue;
+			}
+			if (
+				vaoHang &&
+				c.type instanceof Function &&
+				c.type.constructor.name === "AsyncFunction"
+			) {
+				const ham = c.type as (p: PropsNut) => Promise<ReactNode>;
+				await di(await ham(c.props), true);
+				continue;
+			}
+			await di(c.props.children, vaoHang);
 		}
-		const e = n as { type: unknown; props: Record<string, unknown> };
-		if (!("props" in e)) return;
-		const vaoHang = trongHang || e.type === PageShellActions;
-		if (vaoHang && e.type === Button) {
-			const o = document.createElement("button");
-			o.setAttribute("data-slot", "button");
-			const v = e.props.variant;
-			if (typeof v === "string") o.setAttribute("data-variant", v);
-			const nut = e.props["data-nut"];
-			if (typeof nut === "string") o.setAttribute("data-nut", nut);
-			ra.push(o);
-			return;
-		}
-		if (
-			vaoHang &&
-			typeof e.type === "function" &&
-			e.type.constructor.name === "AsyncFunction"
-		) {
-			await di(await (e.type as (p: unknown) => unknown)(e.props), true);
-			return;
-		}
-		await di(e.props.children, vaoHang);
 	};
 	await di(el, false);
 	return ra;
@@ -645,12 +651,8 @@ const hop = () => q("[data-hop-chon-duong]");
 const dong = (d: string) => q(`[data-hop-chon-duong] [data-duong=${d}]`);
 const THU_TU = ["tu-viet", "tu-mau", "bang-tinh", "soan"];
 
-function khoaLa(o: unknown, tien = ""): string[] {
-	if (o === null || typeof o !== "object") return [tien];
-	return Object.entries(o).flatMap(([k, v]) =>
-		khoaLa(v, tien ? `${tien}.${k}` : k),
-	);
-}
+const hinhChu = (o: ReturnType<typeof okrMessages>["chonDuong"]) =>
+	JSON.stringify(o, (_k, v) => (v instanceof Object ? v : ""));
 
 describe("mnt-hop", () => {
 	test("mnt-hop: (a) bo-okr pb:P2 — tieu de, ten don vi, bon duong dung thu tu, dau Kara", async () => {
@@ -737,11 +739,11 @@ describe("mnt-hop", () => {
 	});
 
 	test("mnt-hop: (e) moi khoa chu cua hop co o ca ban vi va en", () => {
-		const vi = khoaLa(okrMessages("vi").chonDuong).sort();
-		const en = khoaLa(okrMessages("en").chonDuong).sort();
-		if (JSON.stringify(vi) !== JSON.stringify(en))
-			throw new Error("mnt-hop: khoa thieu ban en");
-		if (vi.length < 12) throw new Error(`mnt-hop: chi ${vi.length} khoa`);
+		const vi = hinhChu(okrMessages("vi").chonDuong);
+		const en = hinhChu(okrMessages("en").chonDuong);
+		if (vi !== en) throw new Error("mnt-hop: khoa thieu ban en");
+		const so = vi.split('":""').length - 1;
+		if (so < 12) throw new Error(`mnt-hop: chi ${so} khoa`);
 	});
 
 	test("mnt-hop: (f) loi Cac cuoc da soan khi da dung cuoc", async () => {
