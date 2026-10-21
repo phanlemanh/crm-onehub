@@ -57,6 +57,7 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    gdl_gui_sai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/gon-dau-trang-lay-y-kien.dom.tsx -t gdl-gui-sai
     smt_api_sap: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-sap"'
     smt_api_trang: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-trang"'
     smt_api_cty_lh: 'bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-cty-lh"'
@@ -2153,6 +2154,8 @@ executors:
     vkm_don_vi_dan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-don-vi-dan-cay.dom.tsx -t vkm-don-vi-dan"
     vkm_loi_vao_cu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-ba-phan.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test ./test/okr-giai-ky-an.spec.ts ./test/okr-chuyen-huong-cap-nhat.spec.ts"
   script:
+    gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
+    gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
     smt_quet: bun _acceptance/sort-moi-truong/rang/quet-bang-kieu.mjs
     smt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/sort-moi-truong/rang/do-man.mjs"'
     tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
