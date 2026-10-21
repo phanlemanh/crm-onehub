@@ -83,7 +83,7 @@ const DOT_BIEN = {
 	"ldv-man": [
 		{
 			...goBang,
-			ghim: /SAI AC-1: menu Loc dong khi doi loc(?=[\s\S]*SAI AC-3: bang bi go khi doi loc)(?=[\s\S]*SAI AC-2: khung Loc thu lai khi doi loc)(?=[\s\S]*SAI AC-4: bo loc qua khung cho)/,
+			ghim: /SAI AC-1: menu Loc dong khi doi loc(?=[\s\S]*SAI AC-3: bang bi go khi doi loc)(?=[\s\S]*SAI AC-2: khung Loc thu lai khi doi loc)(?=[\s\S]*SAI AC-4: (bo loc qua khung cho|khong khop dong menu Loc))/,
 			trinhDuyet: true,
 		},
 		{
