@@ -309,30 +309,14 @@ describe("smt-api-trang", () => {
 		null,
 	];
 
+	const TRONG = [2, 6, 9, 12, 16, 19, 22];
+	const DAP_AN = {
+		asc: [1, 15, 8, 17, 3, 4, 18, 13, 14, 0, 20, 10, 21, 5, 11, 7, ...TRONG],
+		desc: [7, 11, 5, 21, 10, 20, 0, 13, 14, 18, 3, 4, 17, 8, 15, 1, ...TRONG],
+	};
+
 	function dapAn(dir: "asc" | "desc"): string[] {
-		const co = ids
-			.map((id, i) => ({
-				id,
-				v: giaTri[i],
-				ten: `${tienTo} ${String(i).padStart(2, "0")}`,
-			}))
-			.filter((x) => x.v !== null)
-			.sort((a, b) =>
-				a.v === b.v
-					? a.ten.localeCompare(b.ten)
-					: dir === "asc"
-						? (a.v ?? 0) - (b.v ?? 0)
-						: (b.v ?? 0) - (a.v ?? 0),
-			);
-		const trong = ids
-			.map((id, i) => ({
-				id,
-				v: giaTri[i],
-				ten: `${tienTo} ${String(i).padStart(2, "0")}`,
-			}))
-			.filter((x) => x.v === null)
-			.sort((a, b) => a.ten.localeCompare(b.ten));
-		return [...co, ...trong].map((x) => x.id);
+		return DAP_AN[dir].map((i) => ids[i] ?? `thieu ${i}`);
 	}
 
 	beforeAll(async () => {
