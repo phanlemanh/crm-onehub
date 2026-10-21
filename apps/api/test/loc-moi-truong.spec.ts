@@ -6,10 +6,21 @@ import {
 	it,
 	setSystemTime,
 } from "bun:test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { db, type FieldEntity } from "@crm/db";
-import { FIELD_TYPES, type FieldTypeName } from "@crm/db/fields";
+import {
+	FIELD_TYPES,
+	type FieldTypeName,
+	TIEN_TO_COT_TRUONG,
+} from "@crm/db/fields";
+import {
+	parseSavedViewFilters,
+	type SavedViewFilters,
+} from "@crm/validation/saved-view";
 import type { AgentQueueService } from "../src/agent/agent-queue.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { CampaignsService } from "../src/campaigns/campaigns.service";
 import { companyListInput } from "../src/companies/companies.contracts";
 import { CompaniesService } from "../src/companies/companies.service";
 import { CompanyDirectoryService } from "../src/companies/company-directory.service";
@@ -21,6 +32,7 @@ import { ConversionService } from "../src/currency/conversion.service";
 import { dealBoardInput, dealListInput } from "../src/deals/deals.contracts";
 import { DealsService } from "../src/deals/deals.service";
 import { FieldsService } from "../src/fields/fields.service";
+import { SavedViewsService } from "../src/saved-views/saved-views.service";
 import { withDiscardedCrmEvents } from "./agent-trigger.stub";
 import { gieoThanhVien } from "./phien-thu";
 
@@ -67,6 +79,8 @@ const contacts = new ContactsService(
 	fields,
 );
 const deals = new DealsService(db, agent, stamp, conversion, fields);
+const campaigns = new CampaignsService(db, contacts);
+const savedViews = new SavedViewsService(db, campaigns);
 
 const daTao = {
 	truong: [] as string[],
@@ -170,6 +184,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	setSystemTime();
+	await db.campaign.deleteMany({ where: { savedView: { ownerId: quanTri } } });
 	await db.savedView.deleteMany({ where: { ownerId: quanTri } });
 	await db.deal.deleteMany({ where: { companyId: { in: daTao.congTy } } });
 	await db.contact.deleteMany({ where: { companyId: { in: daTao.congTy } } });
@@ -926,5 +941,261 @@ describe("lmt-api-cty-lh-bang", () => {
 			throw new Error("lmt api dem: doi chung luat dem chuan");
 		}
 		expect(soO).toBe(10);
+	});
+});
+
+const KHUON_CU = JSON.parse(
+	readFileSync(
+		path.join(
+			import.meta.dir,
+			"../../../_acceptance/loc-moi-truong/rang/khuon-cu.json",
+		),
+		"utf8",
+	),
+) as {
+	sha: string;
+	bo: Array<{ ten: string; entity: string; filters: SavedViewFilters }>;
+};
+
+function thayCho(filters: SavedViewFilters, thay: Record<string, string>) {
+	let chu = JSON.stringify(filters);
+	for (const [k, v] of Object.entries(thay)) chu = chu.split(k).join(v);
+	return parseSavedViewFilters(JSON.parse(chu));
+}
+
+function lienHeTheoBoLoc(filters: SavedViewFilters) {
+	const fieldsLoc: Record<string, string[]> = {};
+	const mat: Record<string, string[]> = {};
+	for (const [k, v] of Object.entries(filters.filters)) {
+		if (k.startsWith(TIEN_TO_COT_TRUONG)) {
+			fieldsLoc[k.slice(TIEN_TO_COT_TRUONG.length)] = v;
+		} else mat[k] = v;
+	}
+	return contacts.list(
+		contactListInput.parse({
+			q: filters.q,
+			sort: filters.sort,
+			dir: filters.dir,
+			archived: filters.archived,
+			pageSize: 100,
+			...mat,
+			fields: fieldsLoc,
+		}),
+	);
+}
+
+describe("lmt-api-da-luu", () => {
+	const tienTo = `lmtdl${RUN}`;
+	const nguoiU = `lmt-nguoi-u-${RUN}`;
+	const ten = new Map<string, string>();
+	const thay: Record<string, string> = {};
+	let tat = { id: "", key: "" };
+	const k = { chu: "", so: "", ngay: "" };
+
+	beforeAll(async () => {
+		setSystemTime(new Date(2026, 10, 15, 10, 0, 0));
+		await batDauCa(tienTo);
+		await gieoThanhVien(nguoiU, "member");
+		daTao.nguoi.push(nguoiU);
+		const companyId = await taoCongTy(`${tienTo} cong ty`);
+		const chon = await taoTruong("CONTACT", `${tienTo} dl chon`, "SELECT", {
+			options: ["A", "B"],
+		});
+		const nguoi = await taoTruong("CONTACT", `${tienTo} dl nguoi`, "USER");
+		const tatF = await taoTruong("CONTACT", `${tienTo} dl tat`, "SELECT", {
+			options: ["A", "B"],
+		});
+		tat = { id: tatF.id, key: tatF.key };
+		k.chu = (await taoTruong("CONTACT", `${tienTo} dl chu`, "TEXT")).key;
+		k.so = (await taoTruong("CONTACT", `${tienTo} dl so`, "NUMBER")).key;
+		k.ngay = (await taoTruong("CONTACT", `${tienTo} dl ngay`, "DATE")).key;
+		const A = chon.options.find((o) => o.label === "A")?.id ?? "";
+		const B = chon.options.find((o) => o.label === "B")?.id ?? "";
+		const tatA = tatF.options.find((o) => o.label === "A")?.id ?? "";
+		Object.assign(thay, {
+			__Q__: tienTo,
+			__B__: nguoiB,
+			__CHON__: chon.key,
+			__NGUOI__: nguoi.key,
+			__A__: A,
+			__U__: nguoiU,
+			__TAT__: tatF.key,
+			__A_TAT__: tatA,
+		});
+		const hang: Array<
+			[
+				string,
+				string | null,
+				string,
+				string | null,
+				boolean,
+				Record<string, unknown>,
+			]
+		> = [
+			[
+				"L1",
+				nguoiB,
+				A,
+				nguoiU,
+				true,
+				{ [k.chu]: "co x", [k.so]: 9, [k.ngay]: "2026-11-20" },
+			],
+			["L2", null, A, nguoiU, false, { [k.chu]: "x", [k.so]: 2 }],
+			["L3", quanTri, A, nguoiU, true, { [k.ngay]: "2026-12-01" }],
+			["L4", nguoiB, B, nguoiU, false, { [k.chu]: "khong" }],
+			["L5", nguoiB, A, null, true, { [k.so]: 50 }],
+			["L6", null, A, nguoiU, false, {}],
+		];
+		for (const [nhan, owner, giaChon, giaNguoi, coTat, them] of hang) {
+			const lh = await contacts.create({
+				firstName: nhan,
+				lastName: tienTo,
+				companyId,
+				ownerId: owner,
+			});
+			ten.set(lh.id, nhan);
+			await contacts.update(lh.id, {
+				fields: {
+					[chon.key]: giaChon,
+					...(giaNguoi ? { [nguoi.key]: giaNguoi } : {}),
+					...(coTat ? { [tatF.key]: tatA } : {}),
+					...(them as Record<string, string | number>),
+				},
+			});
+		}
+	});
+
+	afterAll(() => {
+		setSystemTime();
+	});
+
+	it("lmt-api-da-luu: bo loc da luu khuon cu va chien dich giu ket qua", async () => {
+		if (!KHUON_CU.sha.startsWith("c6a718f3d") || KHUON_CU.bo.length !== 2) {
+			throw new Error("lmt api da luu: khuon cu sha");
+		}
+		for (const bo of KHUON_CU.bo) {
+			const khoa = Object.keys(bo.filters.filters);
+			if (!khoa.some((x) => x.startsWith(TIEN_TO_COT_TRUONG))) {
+				throw new Error(`lmt api da luu: khuon cu thieu tien to ${bo.ten}`);
+			}
+		}
+		const [boChon, boTat] = KHUON_CU.bo;
+		const viewChon = await savedViews.create(
+			{
+				entity: "CONTACT",
+				name: `${tienTo} chon`,
+				shared: false,
+				filters: thayCho(boChon?.filters as SavedViewFilters, thay),
+			},
+			quanTri,
+		);
+		const viewTat = await savedViews.create(
+			{
+				entity: "CONTACT",
+				name: `${tienTo} tat`,
+				shared: false,
+				filters: thayCho(boTat?.filters as SavedViewFilters, thay),
+			},
+			quanTri,
+		);
+		const chup = async () =>
+			JSON.stringify(
+				await db.savedView.findMany({
+					where: { ownerId: quanTri },
+					select: { id: true, filters: true, updatedAt: true },
+					orderBy: { id: "asc" },
+				}),
+			);
+		const truoc = await chup();
+
+		const docLai = (await savedViews.list("CONTACT", quanTri)).find(
+			(v) => v.id === viewChon.id,
+		);
+		const mongChon = "L1,L2,L6";
+		const ra = await lienHeTheoBoLoc(docLai?.filters as SavedViewFilters);
+		if (
+			tenCua(
+				ten,
+				ra.rows.map((r) => r.id),
+			) !== mongChon
+		) {
+			throw new Error(
+				`lmt api da luu: CONTACT ra ${tenCua(
+					ten,
+					ra.rows.map((r) => r.id),
+				)}`,
+			);
+		}
+
+		const chienDich = await campaigns.create(
+			{ name: `${tienTo} cd`, savedViewId: viewChon.id },
+			quanTri,
+		);
+		const tv = await campaigns.members({
+			id: chienDich.id,
+			page: 1,
+			pageSize: 50,
+			uncalledOnly: false,
+			q: "",
+		});
+		if (
+			tv.total !== 3 ||
+			tenCua(
+				ten,
+				tv.rows.map((r) => r.id),
+			) !== mongChon
+		) {
+			throw new Error(`lmt api da luu: chien dich cu ${tv.total}`);
+		}
+
+		await fields.update(quanTri, tat.id, { showOnFilter: false });
+		const demTat = await campaigns.memberCount(viewTat.filters);
+		if (demTat !== 6) throw new Error(`lmt api da luu: truong tat ${demTat}`);
+
+		const viewMoi = await savedViews.create(
+			{
+				entity: "CONTACT",
+				name: `${tienTo} moi`,
+				shared: false,
+				filters: parseSavedViewFilters({
+					q: tienTo,
+					filters: {
+						[`field:${k.chu}`]: ["has:x"],
+						[`field:${k.so}`]: ["gte:5"],
+						[`field:${k.ngay}`]: ["this-month", "none"],
+					},
+				}),
+			},
+			quanTri,
+		);
+		const moi = await campaigns.memberCount(viewMoi.filters);
+		const moiList = await lienHeTheoBoLoc(viewMoi.filters);
+		if (moi !== moiList.total || moi === 0) {
+			throw new Error(`lmt api da luu: chien dich moi ${moi} ${moiList.total}`);
+		}
+
+		const banSao = parseSavedViewFilters({
+			...docLai?.filters,
+			filters: { ...docLai?.filters.filters, owner: [] },
+		});
+		const raSao = await lienHeTheoBoLoc(banSao);
+		if (
+			tenCua(
+				ten,
+				raSao.rows.map((r) => r.id),
+			) === mongChon
+		) {
+			throw new Error("lmt api da luu: thuoc mu");
+		}
+
+		const truocCu = JSON.parse(truoc) as Array<{ id: string }>;
+		const sauDu = JSON.parse(await chup()) as Array<{ id: string }>;
+		for (const dong of truocCu) {
+			const ban = sauDu.find((x) => x.id === dong.id);
+			if (JSON.stringify(ban) !== JSON.stringify(dong)) {
+				throw new Error(`lmt api da luu: ghi de ${dong.id}`);
+			}
+		}
+		expect(truocCu.length).toBe(2);
 	});
 });
