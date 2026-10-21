@@ -2086,6 +2086,17 @@ executors:
     tbk_hoi_thoai_bam: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-bam|tbk-hoi-thoai-rong'"
     tbk_hoi_thoai_dien_thoai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-dien-thoai|tbk-hoi-thoai-ngan'"
     tbk_dang_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t tbk-dang-tai"
+    tmc_doc_so: cd apps/app && bun test ./test/truong-mot-cach.spec.ts -t tmc-doc-so
+    tmc_ten_goi: cd apps/app && bun test ./test/truong-mot-cach.spec.ts -t tmc-ten-goi
+    tmc_phieu_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-phieu-so
+    tmc_loi_nhap: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-loi-nhap
+    tmc_loi_may_chu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-loi-may-chu
+    tmc_o_tich: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-o-tich
+    tmc_lien_ket: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-lien-ket
+    tmc_truong_chuan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-truong-chuan
+    tmc_o_bang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-o-bang
+    tmc_api_so: 'bun run test -- "cd apps/api && bun test test/truong-mot-cach.spec.ts -t tmc-api-so"'
+    tmc_api_tu_choi: 'bun run test -- "cd apps/api && bun test test/truong-mot-cach.spec.ts -t tmc-api-tu-choi"'
   script:
     tthv_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tra-cuu-thuong-hieu-viet-nam/rang/chup.mjs"
     dtn_chup: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dich-ten-nganh-bang-bang/rang/chup.mjs"
@@ -3213,6 +3224,8 @@ executors:
     gtr_thiet_ke: node _acceptance/go-tin-hieu-rac/rang/khong-ghi-de.mjs
     tbk_quet: bun _acceptance/thanh-ben-khu-dung-chung/rang/quet-vo-tay.mjs
     tbk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"'
+    tmc_quet: bun _acceptance/truong-mot-cach-cu-xu/rang/quet-vo-tay.mjs
+    tmc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
