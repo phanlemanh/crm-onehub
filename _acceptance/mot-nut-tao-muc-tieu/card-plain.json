@@ -1,0 +1,36 @@
+{
+  "feature_plain": "Trưởng đơn vị tạo mục tiêu bằng một nút «Thêm mục tiêu» ở Của tôi hoặc Bộ OKR, rồi chọn một trong bốn cách trong một hộp; các màn chỉ để đọc không còn nút tạo nào.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ để đầu trang Của tôi và Bộ OKR chỉ còn «Hỏi Kara» và một nút chính «Thêm mục tiêu»; nút «…» và nút Soạn rời đầu trang; lúc quyền còn tải, chỗ nút là khung chờ."},
+    {"id": "AC-3", "p": "Sẽ mở một hộp «Thêm mục tiêu» gọi tên đơn vị đang tạo cho, liệt bốn cách theo thứ tự Tự viết · Từ mẫu · Từ bảng tính · Soạn cùng Kara, mỗi cách một câu mô tả; tải lại trang vẫn mở hộp; Esc đóng hộp."},
+    {"id": "AC-4", "p": "Sẽ mở ngăn tạo mục tiêu đúng đơn vị khi chọn Tự viết; mục tiêu lưu xong nằm trong Bộ OKR của đơn vị đó; ngăn không còn nút «Bắt đầu từ mẫu»."},
+    {"id": "AC-5", "p": "Sẽ mở thẳng danh sách mẫu của cấp đơn vị khi chọn Từ mẫu; cấp chưa có mẫu thì dòng Từ mẫu mờ đi kèm câu nói vì sao."},
+    {"id": "AC-6", "p": "Sẽ mở hộp nhập bảng tính với chu kỳ và đơn vị điền sẵn khi chọn Từ bảng tính, xem trước rồi ghi như hôm nay."},
+    {"id": "AC-7", "p": "Sẽ mở cuộc soạn cùng Kara khi chọn Soạn cùng Kara, hoặc mở lại cuộc đang soạn nếu đơn vị đã có; ngoài pha lập kế hoạch hay khi Kara bị khoá thì dòng mờ đi kèm câu lý do."},
+    {"id": "AC-8", "p": "Sẽ giữ nút «Thêm mục tiêu» khoá kèm dòng lý do cho người không sửa được đơn vị; mở thẳng đường dẫn cũng không mở được hộp nào."},
+    {"id": "AC-9", "p": "Sẽ để hộp vừa màn điện thoại, bốn dòng đọc trọn và bấm được ở mọi điểm trên dòng; có ảnh 1280 và 375 cho người xem."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG có nút tạo hay nút chính nào ở đầu trang Lấy ý kiến, Sức khoẻ và Sơ đồ, kể cả lúc đang tải."},
+    {"id": "OOS-1", "p": "KHÔNG làm trang riêng cho từng bộ OKR — việc của hàng VK3."},
+    {"id": "OOS-2", "p": "KHÔNG làm chế độ soạn cả bộ OKR như tài liệu — việc của hàng VK10; Soạn cùng Kara mở cuộc soạn hiện có."},
+    {"id": "OOS-3", "p": "KHÔNG đưa «Mang sang» vào hộp; nó ở lại màn chấm điểm."},
+    {"id": "OOS-4", "p": "KHÔNG đổi các nút trong thân trang (mở lượt Lấy ý kiến, Xuất kỳ, Mở cuộc mới trong khung soạn)."},
+    {"id": "OOS-5", "p": "KHÔNG đổi máy chủ; không thêm kết quả then chốt từ hộp."}
+  ],
+  "scope_plain": "Vòng này chỉ gom các lối tạo mục tiêu hiện có về một chỗ; không thêm lối mới, không đổi máy chủ.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ năm màn của khu: hai màn có nút tạo (AC-1, đầu trang hai màn tạo) và ba màn chỉ đọc (AC-2, màn chỉ đọc không nút)."},
+    {"i": 1, "p": "Đủ bốn cách tạo đang có, mỗi cách một tiêu chí (AC-4 đến AC-7); «Mang sang» cố ý để ngoài vì là việc khép kỳ."},
+    {"i": 2, "p": "Đủ các trạng thái của người và của từng cách: được, khoá vì quyền (AC-8), khoá vì điều kiện (AC-5, AC-7), đang có cuộc soạn (AC-7), đang tải (AC-1, AC-2)."},
+    {"i": 3, "p": "Đủ hai khổ màn: máy tính và điện thoại (AC-9, ảnh hai khổ)."},
+    {"i": 4, "p": "Áp mọi tiêu chí: hộp giữ trên đường dẫn và chữ có cả hai thứ tiếng (AC-3); bốn cách gọi đúng thủ tục máy chủ hôm nay (AC-4 đến AC-7)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Máy đã tự quyết bỏ bước dựng bản mẫu bấm được trước khi duyệt, nhưng lối dựng vẫn làm được — nên đây là việc anh quyết. Đã chuyển thành câu Hỏi-2."},
+    {"i": 1, "p": "Máy đã tự quyết hiện mờ thay vì ẩn các cách chưa dùng được, nhưng luật giao diện không quyết chỗ này và hôm nay nút Soạn đang bị ẩn — nên đây là việc anh quyết. Đã chuyển thành câu Hỏi-3."},
+    {"i": 2, "p": "Thiếu ca chọn Từ mẫu khi đứng ở Của tôi, và thiếu ca mở thẳng đường dẫn bước mẫu khi không có quyền. Đã thêm vào tiêu chí AC-5 và hai bài đo."},
+    {"i": 3, "p": "Bài đo Từ mẫu chưa kiểm mục tiêu vào đúng chu kỳ đang xem. Đã thêm khẳng định chu kỳ và chiều đỏ."},
+    {"i": 4, "p": "Chưa có tiêu chí cho lúc quyền còn đang tải. Đã thêm vào AC-1, AC-2 và hai bài đo."}
+  ]
+}
