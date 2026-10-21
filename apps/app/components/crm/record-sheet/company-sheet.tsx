@@ -32,6 +32,7 @@ import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
 import {
 	cauLoiTheoKhoa,
 	HienThiTruong,
+	khoaCuaLuot,
 	type MoTaTruong,
 	OTruongBang,
 	OTruongPhieu,
@@ -476,6 +477,11 @@ export function truongChuanCongTy(
 	];
 }
 
+const DOI_KHOA_CONG_TY = { ownerId: "owner" } as const satisfies Record<
+	string,
+	string
+>;
+
 export function CompanyOverview({ company }: { company: Company }) {
 	const locale = useLocale();
 	const m = recordSheetMessages(locale);
@@ -487,25 +493,30 @@ export function CompanyOverview({ company }: { company: Company }) {
 	const update = useMutation(
 		trpc.companies.update.mutationOptions({
 			onSuccess: () => cache.company(company.id, { settle: "record" }),
+			onError: (error, bien) => {
+				const khoa = khoaCuaLuot(
+					Object.keys(bien.data),
+					bien.data.fields ? Object.keys(bien.data.fields) : undefined,
+					DOI_KHOA_CONG_TY,
+				);
+				const ds = khoa?.tuTao ? moTaTuTao() : truongChuan;
+				toast.error(cauLoiTheoKhoa(khoa?.khoa, ds, locale) ?? error.message);
+			},
 		}),
 	);
 
 	const isSaving = savingField(update);
 	const isSavingField = savingValue(update);
 
-	const baoLoi =
-		(
-			khoa: string | undefined,
-			dsMoTa: Pick<MoTaTruong, "khoa" | "nhan" | "kieu">[],
-		) =>
-		(error: { message: string }) =>
-			toast.error(cauLoiTheoKhoa(khoa, dsMoTa, locale) ?? error.message);
+	const save = (data: Record<string, string | null>) =>
+		update.mutate({ id: company.id, data });
 
-	const save = (data: Record<string, string | null>, khoa?: string) =>
-		update.mutate(
-			{ id: company.id, data },
-			{ onError: baoLoi(khoa, truongChuan) },
-		);
+	const moTaTuTao = () =>
+		company.fields.map((field) => ({
+			khoa: field.key,
+			nhan: field.label,
+			kieu: field.type,
+		}));
 
 	const truongChuan = truongChuanCongTy(company, {
 		m,
@@ -515,20 +526,8 @@ export function CompanyOverview({ company }: { company: Company }) {
 		nguoiDung: users.data,
 	});
 
-	const saveFields = (fields: Record<string, FieldValueJson>, khoa?: string) =>
-		update.mutate(
-			{ id: company.id, data: { fields } },
-			{
-				onError: baoLoi(
-					khoa,
-					company.fields.map((field) => ({
-						khoa: field.key,
-						nhan: field.label,
-						kieu: field.type,
-					})),
-				),
-			},
-		);
+	const saveFields = (fields: Record<string, FieldValueJson>) =>
+		update.mutate({ id: company.id, data: { fields } });
 
 	return (
 		<KhoaLuuTru khoa={company.archivedAt !== null}>

@@ -7,6 +7,14 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { FieldEntity } from "./fields-entity";
 import { OTruongBang } from "./kieu-truong";
 
+function nhanTrongO(
+	giaTri: string | number | boolean | null,
+): { value: string; label: string }[] {
+	if (giaTri === null || giaTri === "") return [];
+	const nhan = String(giaTri);
+	return [{ value: nhan, label: nhan }];
+}
+
 type WithFields = { fields: Record<string, string | number | boolean | null> };
 
 export function useFieldColumns<Row extends WithFields>(
@@ -35,10 +43,7 @@ export function useFieldColumns<Row extends WithFields>(
 					<OTruongBang
 						kieu={field.type}
 						giaTri={row.fields[field.key] ?? null}
-						luaChon={field.options.map((option) => ({
-							value: option.label,
-							label: option.label,
-						}))}
+						luaChon={nhanTrongO(row.fields[field.key] ?? null)}
 						nguoiDung={members}
 					/>
 				),

@@ -524,3 +524,19 @@ export function cauLoiTheoKhoa(
 	const moTa = khoa ? dsMoTa.find((mt) => mt.khoa === khoa) : undefined;
 	return moTa ? loiLuuTruong(moTa, locale) : null;
 }
+
+export type KhoaLoi = { khoa: string; tuTao: boolean };
+
+export function khoaCuaLuot(
+	cacKhoa: string[],
+	cacKhoaTuTao: string[] | undefined,
+	doiKhoa: Readonly<Record<string, string>>,
+): KhoaLoi | null {
+	if (cacKhoaTuTao) {
+		const [khoa] = cacKhoaTuTao;
+		return cacKhoaTuTao.length === 1 && khoa ? { khoa, tuTao: true } : null;
+	}
+	const [khoa] = cacKhoa;
+	if (cacKhoa.length !== 1 || !khoa) return null;
+	return { khoa: doiKhoa[khoa] ?? khoa, tuTao: false };
+}

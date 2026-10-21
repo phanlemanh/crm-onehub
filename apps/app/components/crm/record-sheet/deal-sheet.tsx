@@ -32,6 +32,7 @@ import { DealStageIndicator } from "@/components/crm/deal-stage";
 import {
 	cauLoiTheoKhoa,
 	HienThiTruong,
+	khoaCuaLuot,
 	type MoTaTruong,
 	OTruongBang,
 	OTruongPhieu,
@@ -388,6 +389,11 @@ export function truongChuanThoaThuan(
 	];
 }
 
+const DOI_KHOA_THOA_THUAN = {
+	amountCents: "amount",
+	ownerId: "owner",
+} as const satisfies Record<string, string>;
+
 export function DealOverview({ deal }: { deal: Deal }) {
 	const locale = useLocale();
 	const m = recordSheetMessages(locale);
@@ -399,6 +405,15 @@ export function DealOverview({ deal }: { deal: Deal }) {
 	const update = useMutation(
 		trpc.deals.update.mutationOptions({
 			onSuccess: () => cache.deal(deal.id, { settle: "record" }),
+			onError: (error, bien) => {
+				const khoa = khoaCuaLuot(
+					Object.keys(bien.data),
+					bien.data.fields ? Object.keys(bien.data.fields) : undefined,
+					DOI_KHOA_THOA_THUAN,
+				);
+				const ds = khoa?.tuTao ? moTaTuTao() : truongChuan;
+				toast.error(cauLoiTheoKhoa(khoa?.khoa, ds, locale) ?? error.message);
+			},
 		}),
 	);
 
@@ -406,22 +421,15 @@ export function DealOverview({ deal }: { deal: Deal }) {
 
 	const isSaving = savingField(update);
 
-	const baoLoi =
-		(
-			khoa: string | undefined,
-			dsMoTa: Pick<MoTaTruong, "khoa" | "nhan" | "kieu">[],
-		) =>
-		(error: { message: string }) =>
-			toast.error(cauLoiTheoKhoa(khoa, dsMoTa, locale) ?? error.message);
+	const save = (data: Parameters<typeof update.mutate>[0]["data"]) =>
+		update.mutate({ id: deal.id, data });
 
-	const save = (
-		data: Parameters<typeof update.mutate>[0]["data"],
-		khoa?: string,
-	) =>
-		update.mutate(
-			{ id: deal.id, data },
-			{ onError: baoLoi(khoa, truongChuan) },
-		);
+	const moTaTuTao = () =>
+		deal.fields.map((field) => ({
+			khoa: field.key,
+			nhan: field.label,
+			kieu: field.type,
+		}));
 
 	const truongChuan = truongChuanThoaThuan(deal, {
 		m,
@@ -435,20 +443,8 @@ export function DealOverview({ deal }: { deal: Deal }) {
 		return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
 	};
 
-	const saveFields = (fields: Record<string, FieldValueJson>, khoa?: string) =>
-		update.mutate(
-			{ id: deal.id, data: { fields } },
-			{
-				onError: baoLoi(
-					khoa,
-					deal.fields.map((field) => ({
-						khoa: field.key,
-						nhan: field.label,
-						kieu: field.type,
-					})),
-				),
-			},
-		);
+	const saveFields = (fields: Record<string, FieldValueJson>) =>
+		update.mutate({ id: deal.id, data: { fields } });
 
 	return (
 		<KhoaLuuTru khoa={deal.archivedAt !== null}>

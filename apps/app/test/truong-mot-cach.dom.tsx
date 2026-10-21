@@ -292,6 +292,7 @@ function moTaTuTao(
 			label: nhan,
 			type: kieu,
 			showOnSheet: true,
+			required: false,
 			options: [],
 			value: giaTri,
 		},
@@ -1236,3 +1237,118 @@ describe("tmc-o-bang", () => {
 		expect(true).toBe(true);
 	});
 });
+
+describe("tmc-loi-may-chu", () => {
+	test("hai luot luu chong nhau: luot dau hong van bao loi", async () => {
+		toastLoi.length = 0;
+		const truong = [
+			truongTuTao("DEAL", "tmc_tich", "Tích tmc", "CHECKBOX", false),
+		];
+		dat("deals.byId", () => thoaThuanGia(truong));
+		dat("deals.update", (vao) => {
+			const duLieu = vao?.data;
+			const laTen =
+				duLieu !== null &&
+				duLieu !== undefined &&
+				!Array.isArray(duLieu) &&
+				duLieu instanceof Object &&
+				"name" in duLieu;
+			return laTen
+				? new Promise((_, tuChoi) =>
+						setTimeout(() => tuChoi(new Error("Name is taken.")), 30),
+					)
+				: { id: "d-1", name: "ok" };
+		});
+		await moPhieu("deal");
+		const hangTen = hangTheoNhan(document.body, r.deal.fields.name);
+		const nutTen = hangTen?.querySelector("button");
+		if (!hangTen || !nutTen) throw new Error("thieu hang Ten");
+		await bam(nutTen);
+		const oTen = hangTen.querySelector("input");
+		await go(oTen, "Tên chồng tmc");
+		await phim(oTen, "Enter");
+		const hangTich = hangTheoNhan(document.body, "Tích tmc");
+		const nhanTich = hangTich?.querySelector("label");
+		if (!nhanTich) throw new Error("thieu hang Tich");
+		await bam(nhanTich);
+		await cho(() => toastLoi.length > 0, "toast luot chong");
+		const mong = `${mVi.truongKieu.chuaLuu(r.deal.fields.name)} ${mVi.truongKieu.tuChoi.khac}`;
+		if (toastLoi[0] !== mong) {
+			throw new Error(`tmc loi may chu: luot chong ${toastLoi[0]}`);
+		}
+		expect(toastLoi[0]).toBe(mong);
+	});
+});
+
+describe("tmc-loi-nhap", () => {
+	test("truong tu tao bat buoc chan o trong o phia khach", async () => {
+		const mt = moTaTruongTuTao(
+			{
+				id: "f-bb",
+				key: "tmc_bb",
+				label: "Bắt buộc tmc",
+				type: "TEXT",
+				showOnSheet: true,
+				required: true,
+				options: [],
+				value: "có",
+			},
+			() => {},
+			() => false,
+			NGUOI,
+		);
+		if (mt.batBuoc !== true) throw new Error("tmc loi nhap: tu tao bat buoc");
+		const goc = await mo(<OTruongPhieu moTa={mt} />);
+		await moSuaVaGo(goc, "Bắt buộc tmc", "");
+		const input = goc.querySelector("input");
+		const loiId = input?.getAttribute("aria-describedby");
+		const cau = loiId ? document.getElementById(loiId)?.textContent : null;
+		if (cau?.trim() !== mVi.truongKieu.trong("Bắt buộc tmc")) {
+			throw new Error(`tmc loi nhap: tu tao bat buoc cau ${cau}`);
+		}
+		expect(cau?.trim()).toBe(mVi.truongKieu.trong("Bắt buộc tmc"));
+	});
+});
+
+describe("tmc-o-bang", () => {
+	test("cot Chon giu nhan cua lua chon da luu tru", async () => {
+		dat("fields.list", () =>
+			fieldListOutput.parse([
+				{
+					id: "f-chon",
+					entity: "DEAL",
+					key: "tmc_so",
+					label: "Chọn tmc",
+					type: "SELECT",
+					agentFilled: false,
+					agentBrief: null,
+					required: false,
+					showOnSheet: true,
+					showOnTable: true,
+					showOnFilter: false,
+					position: 0,
+					archived: false,
+					options: [{ id: "o-con", label: "Còn", position: 0 }],
+				},
+			]),
+		);
+		await mo(<CotTuTaoChu />);
+		await cho(
+			() => document.querySelector("[data-cot-tu-tao] *") !== null,
+			"cot chon",
+		);
+		const chu = document.querySelector("[data-cot-tu-tao]")?.textContent;
+		if (chu !== "Đã gỡ") throw new Error(`tmc o bang: chon luu tru ${chu}`);
+		expect(chu).toBe("Đã gỡ");
+	});
+});
+
+function CotTuTaoChu() {
+	const cot = useFieldColumns<{ fields: Record<string, string> }>("DEAL");
+	const o = cot.find((c) => c.id === "field:tmc_so");
+	return (
+		<div data-cot-tu-tao>
+			{o ? o.cell({ fields: { tmc_so: "Đã gỡ" } }) : null}
+		</div>
+	);
+}

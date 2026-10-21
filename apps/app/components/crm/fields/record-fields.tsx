@@ -28,6 +28,7 @@ export type RecordFieldEntry = {
 	label: string;
 	type: FieldTypeName;
 	showOnSheet: boolean;
+	required: boolean;
 	options: RecordFieldOption[];
 	value: FieldValueJson;
 };
@@ -61,6 +62,7 @@ export function moTaTruongTuTao(
 		nhan: field.label,
 		kieu: field.type,
 		giaTri: field.value,
+		batBuoc: field.required,
 		luaChon: field.options.map((option) => ({
 			value: option.id,
 			label: option.label,

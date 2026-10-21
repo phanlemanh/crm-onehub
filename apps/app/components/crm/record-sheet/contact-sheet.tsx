@@ -40,6 +40,7 @@ import {
 import {
 	cauLoiTheoKhoa,
 	HienThiTruong,
+	khoaCuaLuot,
 	type MoTaTruong,
 	OTruongBang,
 	OTruongPhieu,
@@ -407,6 +408,13 @@ export function truongChuanLienHe(
 	];
 }
 
+const DOI_KHOA_LIEN_HE = {
+	ownerId: "owner",
+	linkedinUrl: "linkedin",
+	twitterUrl: "x",
+	githubUrl: "github",
+} as const satisfies Record<string, string>;
+
 export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 	const locale = useLocale();
 	const m = recordSheetMessages(locale);
@@ -452,6 +460,15 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 	const update = useMutation(
 		trpc.contacts.update.mutationOptions({
 			onSuccess: () => cache.contact(contact.id, { settle: "record" }),
+			onError: (error, bien) => {
+				const khoa = khoaCuaLuot(
+					Object.keys(bien.data),
+					bien.data.fields ? Object.keys(bien.data.fields) : undefined,
+					DOI_KHOA_LIEN_HE,
+				);
+				const ds = khoa?.tuTao ? moTaTuTao() : truongChuan;
+				toast.error(cauLoiTheoKhoa(khoa?.khoa, ds, locale) ?? error.message);
+			},
 		}),
 	);
 
@@ -459,19 +476,15 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 
 	const isSaving = savingField(update);
 
-	const baoLoi =
-		(
-			khoa: string | undefined,
-			dsMoTa: Pick<MoTaTruong, "khoa" | "nhan" | "kieu">[],
-		) =>
-		(error: { message: string }) =>
-			toast.error(cauLoiTheoKhoa(khoa, dsMoTa, locale) ?? error.message);
+	const save = (data: Record<string, string | null>) =>
+		update.mutate({ id: contact.id, data });
 
-	const save = (data: Record<string, string | null>, khoa?: string) =>
-		update.mutate(
-			{ id: contact.id, data },
-			{ onError: baoLoi(khoa, truongChuan) },
-		);
+	const moTaTuTao = () =>
+		contact.fields.map((field) => ({
+			khoa: field.key,
+			nhan: field.label,
+			kieu: field.type,
+		}));
 
 	const truongChuan = truongChuanLienHe(contact, {
 		m,
@@ -489,20 +502,8 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 		return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
 	};
 
-	const saveFields = (fields: Record<string, FieldValueJson>, khoa?: string) =>
-		update.mutate(
-			{ id: contact.id, data: { fields } },
-			{
-				onError: baoLoi(
-					khoa,
-					contact.fields.map((field) => ({
-						khoa: field.key,
-						nhan: field.label,
-						kieu: field.type,
-					})),
-				),
-			},
-		);
+	const saveFields = (fields: Record<string, FieldValueJson>) =>
+		update.mutate({ id: contact.id, data: { fields } });
 
 	return (
 		<KhoaLuuTru khoa={contact.archivedAt !== null}>
