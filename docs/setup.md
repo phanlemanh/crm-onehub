@@ -397,6 +397,46 @@ ngày mà chưa có chỗ sau gom (đọc từ `LO-TRINH.html` ở gốc kho). C
 (skill `gom-tin-hieu` của bộ kit). Lượt lấy về đánh dấu tín hiệu là «đã lấy về» — từ đó người gửi
 không xoá được nữa.
 
+## Lịch gom tín hiệu
+
+Tệp lịch `.github/workflows/tin-hieu-gom.yml` tự gom tín hiệu chưa có chỗ thành nhóm và đề xuất hàng
+cho lộ trình — thay cho việc mở phiên máy rồi gõ hai skill `gom-tin-hieu` và `cat-luot` của bộ kit.
+Lịch chạy mỗi khi tín hiệu mới lên `onehub` (PR «Tín hiệu kéo về» vừa gộp), thêm một lượt lúc 11:00
+UTC mỗi ngày, và chạy tay được ở tab Actions. Không có tín hiệu nào chưa có chỗ thì lượt dừng ngay mà
+không gọi mô hình.
+
+Mỗi lượt có việc giao đúng một PR nháp «Đợt tín hiệu» vào `onehub`, trên nhánh `tin-hieu/gom`: một
+bản gom mới, các hàng đề xuất trong tệp lộ trình, và trang lộ trình vẽ lại. Lượt chỉ giao khi răng
+phủ, kiểm câu cho người gửi và răng cắt lượt đều xanh, và phiên gom không chạm tệp nào ngoài ba chỗ
+đó; hỏng thì lượt đỏ và gọi tên chỗ hỏng. Lịch không bao giờ gộp, không chuyển PR sang sẵn sàng.
+
+Chủ kho làm một trong ba việc với PR đề xuất:
+
+- **Sửa** — sửa bản gom hay hàng đề xuất ngay trên nhánh của PR. Khi nhánh đã có commit của người,
+  lượt máy sau không đụng tới nó nữa; tín hiệu mới tới lúc đó vào đề xuất kế, sau khi PR này gộp hay
+  đóng.
+- **Phủ quyết** — đóng PR. Máy không đề xuất lại đúng các tín hiệu ấy; khi có tín hiệu mới, đề xuất
+  mới gồm cả tín hiệu cũ và lời dặn phiên gom tránh cách gom đã bị phủ quyết.
+- **Gộp** — chủ nhóm của tệp lộ trình gộp khi đồng ý.
+
+Thân PR mang các khối chú thích máy đọc (dấu tập tín hiệu, nhóm máy đề xuất, giờ đề xuất). Đừng xoá
+chúng khi sửa thân PR: lượt sau và lệnh đo đọc từ đó.
+
+Đo hai ngưỡng của việc này — mỗi tín hiệu có chỗ trong đề xuất trong vòng 2 ngày, và chủ kho sửa ít
+hơn một nhóm trên năm:
+
+```bash
+bun run tin-hieu:do-gom
+```
+
+Việc cài một lần trước lượt thật đầu tiên:
+
+1. Đặt bí mật kho `ANTHROPIC_API_KEY` — một khoá API riêng cho lịch gom, có trần chi tiêu tháng đặt
+   ở bảng điều khiển của nhà cung cấp mô hình. Nội dung tín hiệu đi tới nhà cung cấp mô hình từ đây.
+2. Cấp cho bí mật `TIN_HIEU_TOKEN` (đã có từ lịch kéo về) quyền đọc kho `phanlemanh/acceptance-gate-kit`
+   — lịch cài gói kit từ đó.
+3. Chạy tay lịch «Tín hiệu gom» một lần ở tab Actions và mở PR nó tạo.
+
 ## Secrets hygiene
 
 `.gitignore` ignores `.env` and `.env.*` with one negation for `.env.example`, so

@@ -11,6 +11,7 @@ export const DU_AN = {
 	phuThuocToiDa: 600,
 	ngayLeToiDa: 200,
 	tenNgayLeToiDa: 80,
+	thuLaiViecCon: 3,
 	thongDiep: {
 		khongCoDuAn: (id: string) => `Không có dự án nào mang mã ${id}.`,
 		daDong: "Dự án đã đóng.",
@@ -31,6 +32,7 @@ export const DU_AN = {
 		viecToiDa: "Một dự án chứa tối đa 300 việc.",
 		ngayLeTrung: "Ngày này đã là ngày lễ.",
 		tenTrong: "Tên không được để trống.",
+		chaDoiDuAn: "Việc cha vừa đổi dự án. Hãy thử lại.",
 	},
 } as const;
 

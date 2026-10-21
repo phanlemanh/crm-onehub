@@ -1,0 +1,85 @@
+slug: khoa-viec-con-dung-thu-tu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vck_doi_thu
+    expected: "exit 0; -t vck-doi-thu của apps/api/test/viec-con-khoa.spec.ts, caller tRPC thật cho bên thêm việc con. Ma trận viết sẵn tám dòng trước khi chạy: them-moc, sua-moc, xoa-moc, them-phu-thuoc, go-phu-thuoc, sua-du-an, doi-ngay, chuyen-vao. Mỗi dòng dựng dự án mở P riêng có việc cha C (người giao vck-a) và việc phụ X, Y. Bên B mở db.$transaction với timeout 30000, lấy pg_backend_pid(), khoá hàng duAn của P bằng SELECT … FOR UPDATE; bên A gọi viec.taoCon({chaId: C}) bằng vck-a; máy đọc pg_stat_activity tới khi có tiến trình với datname = current_database() mà pg_blocking_pids(pid) chứa pid B, in pid đó ra output; quá 10 giây thì ném 'vck doi thu: A khong cho khoa <thaoTac>'; rồi B gọi hàm ghi thật của thao tác trong cùng giao dịch và commit. A khác status 200 hoặc B ném lỗi thì ném 'vck doi thu: <thaoTac> ra <json>'. Sau đó: việc con mới không có chaId C và duAnId P thì ném 'vck doi thu: con lech <thaoTac> <json>'; kết quả của B đọc lại qua Prisma (mốc mới có/đổi tên/mất, phụ thuộc X→Y có/mất, tên dự án đổi, hạn X đổi, việc chuyển vào có duAnId P) sai thì ném 'vck doi thu: B lech <thaoTac> <json>'. Số dòng đã so khác 8 thì ném 'vck doi thu: ma tran thieu <n>'. Đối chứng dương cùng fixture ngay trong bài: sau dòng cuối, thêm việc con khi không ai giữ khoá trả 200, không thì ném 'vck doi thu: doi chung hong <json>'. Chiều đỏ ở E6 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an-ghi.ts, packages/db/src/du-an.ts, apps/api/src/viec/**, apps/api/test/viec-con-khoa.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vck_dong
+    expected: "exit 0; -t vck-dong của apps/api/test/viec-con-khoa.spec.ts. Cùng khung xen kẽ với E1, B gọi dongDuAn(P). Đọc lại: duAn.dongLuc của P là null thì ném 'vck dong: dong khong an <json>'; A khác 400 hoặc message khác đúng chuỗi 'Dự án đã đóng.' thì ném 'vck dong: A ra <json>'; số việc có chaId C khác 0 thì ném 'vck dong: sinh con <n>'. Điều kiện chờ như E1 (datname = current_database() và pg_blocking_pids chứa pid B, timeout giao dịch B 30000); A không tới chỗ chờ trong 10 giây thì ném 'vck dong: A khong cho khoa'. Đối chứng dương cùng fixture trước khi đóng: một lần thêm việc con khi không ai giữ khoá trả 200, không thì ném 'vck dong: doi chung hong <json>'. Chiều đỏ ở E6 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an-ghi.ts, packages/db/src/du-an.ts, apps/api/src/viec/**, apps/api/test/viec-con-khoa.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vck_chuyen_cha
+    expected: "exit 0; -t vck-chuyen-cha của apps/api/test/viec-con-khoa.spec.ts, tầng người dùng thấy. Ma trận viết sẵn ba dòng {tu, den}: P→Q, P→ngoai, ngoai→P. Mỗi dòng: B mở db.$transaction với timeout 30000, gọi doiDuAn(C, den) thật, rồi chờ tới khi pg_stat_activity có tiến trình với datname = current_database() mà pg_blocking_pids(pid) chứa pid B sau khi A gọi viec.taoCon({chaId: C}); quá 10 giây thì ném 'vck chuyen cha: A khong cho khoa <tu>-<den>'; B commit. A khác 200 thì ném 'vck chuyen cha: <tu>-<den> ra <json>'; việc con mới (chaId C) không đúng một hàng hoặc duAnId khác dự án hiện tại của C (đọc lại qua Prisma) thì ném 'vck chuyen cha: con lech <tu>-<den> <json>'. Số dòng đã so khác 3 thì ném 'vck chuyen cha: ma tran thieu <n>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an.ts, apps/api/src/viec/**, apps/api/test/viec-con-khoa.spec.ts]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vck_chuyen_cha
+    expected: "exit 0; cùng -t vck-chuyen-cha, tầng một lượt. Ba dòng {tu, den} như E3, cùng khung xen kẽ và cùng điều kiện chờ, nhưng A là db.$transaction((tx) => taoViecCon(tx, {chaId: C, …})) gọi thẳng. A không ném hoặc lỗi không phải instanceof LoiChaDoiDuAn với message đúng chuỗi 'Việc cha vừa đổi dự án. Hãy thử lại.' thì ném 'vck chuyen cha: mot luot <tu>-<den> ra <json>'; số việc có chaId C sau lượt đó khác 0 thì ném 'vck chuyen cha: mot luot sinh con <tu>-<den> <n>'. Đối chứng dương cùng fixture: gọi thẳng lại lần nữa khi không ai giữ khoá thì thành công, không thì ném 'vck chuyen cha: doi chung hong <tu>-<den> <json>'. Chiều đỏ ở E6b."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an.ts, apps/api/test/viec-con-khoa.spec.ts]
+
+  - id: E4a
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.kv_con
+    expected: "exit 0; bài đã ký apps/api/test/viec-con.spec.ts -t kv-con-tao chạy nguyên văn: tạo việc con, việc con kế thừa gắn và người theo dõi, lời từ chối một tầng và việc cha đã khép giữ nguyên chuỗi đã ký."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, apps/api/src/viec/**, apps/api/test/viec-con.spec.ts]
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.kv_con_quyen
+    expected: "exit 0; bài đã ký apps/api/test/viec-con.spec.ts -t kv-con-quyen chạy nguyên văn: người không phải người giao hay người thực hiện của việc cha nhận lời quyền như trước."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, apps/api/src/viec/**, apps/api/test/viec-con.spec.ts]
+
+  - id: E4c
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vg_tran_viec
+    expected: "exit 0; bài đã ký apps/api/test/du-an-tran-viec.spec.ts chạy nguyên văn: hàng viec-con của ma trận 27 dòng giữ 'Một dự án chứa tối đa 300 việc.' ở P300, thành công ở P299 và 'Dự án đã đóng.' ở PD; lời 'vg tran: <thaoTac> <duAn> ra <json> ky vong <ket>' nếu lệch."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/du-an-ghi.ts, apps/api/test/du-an-tran-viec.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: judgment
+    inputs: [docs/api.md]
+    question: "Mục «Dự án» của docs/api.md có nói đủ ba vế không: (1) các đường ghi qua khoaMot, khoaDuAn và thêm việc con (viec.taoCon) khoá hàng duAn trước khi khoá một việc; (2) thêm việc con tự chạy lại trong giao dịch mới khi việc cha vừa đổi dự án lúc chờ khoá, và hết lượt thì trả 400 «Việc cha vừa đổi dự án. Hãy thử lại.»; (3) các đường ghi việc lẻ khác chưa được rà thứ tự khoá — tệp không được tuyên rằng mọi đường ghi đều đã khoá đúng thứ tự. Trả PASS chỉ khi cả ba vế có mặt, đúng nghĩa và dùng đúng tên hàm, router như phần còn lại của mục."
+    evidence_required: [run_id, verdict, judges]
+    paths: [docs/api.md]
+
+  - id: E6
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.vck_dot_bien
+    expected: "exit 0; _acceptance/khoa-viec-con-dung-thu-tu/rang/dot-bien.mjs dựng bản sao từ HEAD, cấy từng đột biến, chạy lệnh của eval bị nhắm, rồi trả lại. Cặp khai sẵn: (a) taoViecCon khoá việc cha bằng SELECT … FOR UPDATE trước khoaDuAn (thứ tự cũ) → lệnh vck-doi-thu exit khác 0 và có dòng error: chứa 'vck doi thu', lệnh vck-dong exit khác 0 và có dòng error: chứa 'vck dong'; (b) bỏ lời so duAnId của việc cha sau khi khoá → lệnh vck-chuyen-cha exit khác 0 và có dòng error: chứa 'vck chuyen cha: mot luot'. Bản sao lành chạy xanh từng lệnh trước khi cấy, không thì in 'vck dot bien: ban sao lanh do <cmd>' và exit 1. Đột biến nào còn sống (exit 0 hoặc thiếu lời ghim) thì in '<ten> song' và exit 1; số cặp đã chạy khác 2 thì exit 1 với 'vck dot bien: chay <n> cap'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, apps/api/test/viec-con-khoa.spec.ts, _acceptance/khoa-viec-con-dung-thu-tu/rang/**]
+
+  - id: E6b
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.vck_dot_bien
+    expected: "exit 0; cùng lượt răng với E6: cặp (b) bỏ lời so duAnId của việc cha sau khi khoá → lệnh vck-chuyen-cha exit khác 0 và có dòng error: chứa 'vck chuyen cha: mot luot'; còn sống thì in 'b song' và exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, apps/api/test/viec-con-khoa.spec.ts, _acceptance/khoa-viec-con-dung-thu-tu/rang/**]

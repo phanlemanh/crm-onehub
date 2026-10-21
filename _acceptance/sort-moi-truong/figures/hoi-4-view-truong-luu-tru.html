@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hỏi-4 · View, trường lưu trữ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #fafafa; color: #171717; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1100px; width: 100%; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <svg viewBox="0 0 1000 648" xmlns="http://www.w3.org/2000/svg" font-family="'Geist', sans-serif">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="36" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.18em">SORT-MOI-TRUONG · CỔNG PHẠM VI · HỎI-4</text>
+      <text x="40" y="68" fill="#171717" font-size="24" font-family="'Lora', serif">View sắp theo trường đã lưu trữ: im lặng hay báo một dòng</text>
+
+      <line x1="280" y1="132" x2="378" y2="132" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="620" y1="132" x2="718" y2="132" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M816 168 L816 216 Q816 224 808 224 L268 224 Q260 224 260 232 L260 286" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M864 168 L864 240 Q864 248 856 248 L748 248 Q740 248 740 256 L740 286" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="40" y="96" width="240" height="72" rx="6" fill="#fafafa"/>
+      <rect x="40" y="96" width="240" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="116" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.14em" text-anchor="middle">BƯỚC 1</text>
+      <text x="160" y="138" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">Người lưu view</text>
+      <text x="160" y="156" fill="#575757" font-size="11" text-anchor="middle">«Sắp theo Hoa hồng»</text>
+      <rect x="380" y="96" width="240" height="72" rx="6" fill="#fafafa"/>
+      <rect x="380" y="96" width="240" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="116" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.14em" text-anchor="middle">BƯỚC 2</text>
+      <text x="500" y="138" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">Quản trị lưu trữ trường</text>
+      <text x="500" y="156" fill="#575757" font-size="11" text-anchor="middle">Hoa hồng</text>
+      <rect x="720" y="96" width="240" height="72" rx="6" fill="#fafafa"/>
+      <rect x="720" y="96" width="240" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="840" y="116" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.14em" text-anchor="middle">BƯỚC 3</text>
+      <text x="840" y="138" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">Người mở lại view</text>
+      <text x="840" y="156" fill="#575757" font-size="11" text-anchor="middle">«Sắp theo Hoa hồng»</text>
+
+      <rect x="40" y="288" width="440" height="232" rx="8" fill="#fafafa"/>
+      <rect x="40" y="288" width="440" height="232" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="56" y="312" font-size="13"><tspan fill="#006B4F" font-weight="600">Lối A (máy khuyên)</tspan><tspan dx="8" fill="#575757">im lặng</tspan></text>
+      <rect x="56" y="328" width="180" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="68" y="344" fill="#666666" font-size="11">Tìm thoả thuận</text>
+      <rect x="56" y="368" width="408" height="24" rx="2" fill="#f2f2f2"/>
+      <text x="72" y="384" fill="#575757" font-size="11" font-weight="600">Tên</text>
+      <text x="256" y="384" fill="#575757" font-size="11" font-weight="600">Giá trị</text>
+      <text x="360" y="384" fill="#575757" font-size="11" font-weight="600">Ngày chốt</text>
+      <rect x="72" y="402" width="120" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="256" y="402" width="64" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="360" y="402" width="56" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <line x1="56" y1="420" x2="464" y2="420" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="72" y="430" width="104" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="256" y="430" width="64" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="360" y="430" width="56" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <line x1="56" y1="448" x2="464" y2="448" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="72" y="458" width="132" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="256" y="458" width="64" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="360" y="458" width="56" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <line x1="56" y1="476" x2="464" y2="476" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="520" y="288" width="440" height="232" rx="8" fill="#fafafa"/>
+      <rect x="520" y="288" width="440" height="232" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="536" y="312" font-size="13"><tspan fill="#171717" font-weight="600">Lối B</tspan><tspan dx="8" fill="#575757">báo một dòng</tspan></text>
+      <rect x="536" y="328" width="180" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="548" y="344" fill="#666666" font-size="11">Tìm thoả thuận</text>
+      <rect x="536" y="360" width="408" height="24" rx="4" fill="rgba(23,23,23,0.05)"/>
+      <text x="548" y="376" fill="#171717" font-size="11">Trường Hoa hồng đã lưu trữ — bảng về thứ tự mặc định</text>
+      <rect x="536" y="392" width="408" height="24" rx="2" fill="#f2f2f2"/>
+      <text x="552" y="408" fill="#575757" font-size="11" font-weight="600">Tên</text>
+      <text x="736" y="408" fill="#575757" font-size="11" font-weight="600">Giá trị</text>
+      <text x="840" y="408" fill="#575757" font-size="11" font-weight="600">Ngày chốt</text>
+      <rect x="552" y="426" width="120" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="736" y="426" width="64" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="840" y="426" width="56" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <line x1="536" y1="444" x2="944" y2="444" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="552" y="454" width="104" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="736" y="454" width="64" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="840" y="454" width="56" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <line x1="536" y1="472" x2="944" y2="472" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="552" y="482" width="132" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="736" y="482" width="64" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <rect x="840" y="482" width="56" height="8" rx="2" fill="rgba(23,23,23,0.12)"/>
+      <line x1="536" y1="500" x2="944" y2="500" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <text x="40" y="548" fill="#575757" font-size="11">Thứ tự mặc định · cột Hoa hồng không còn</text>
+      <text x="40" y="566" fill="#575757" font-size="11">Không tiêu đề nào có mũi tên · không chữ báo</text>
+      <text x="520" y="548" fill="#575757" font-size="11">Như A, thêm một dòng dưới thanh công cụ</text>
+
+      <line x1="40" y1="596" x2="960" y2="596" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="624" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <line x1="120" y1="620" x2="152" y2="620" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="160" y="624" fill="#575757" font-size="11">nhánh máy khuyên</text>
+      <line x1="288" y1="620" x2="320" y2="620" stroke="#575757" stroke-width="1"/>
+      <text x="328" y="624" fill="#575757" font-size="11">bước, nhánh còn lại</text>
+      <text x="960" y="624" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC liên quan: AC-3</text>
+    </svg>
+  </div>
+</body>
+</html>

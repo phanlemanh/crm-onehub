@@ -1434,8 +1434,8 @@ async function buocMoThang() {
 	);
 	await doi(
 		tl,
-		"E11 buoc 8: record=kr:<khong ton tai> -> trang thai loi",
-		() => window.__tim("[data-trang-thai='ST-khungkr-loi']").length > 0,
+		"E11 buoc 8: record=kr:<khong ton tai> -> ngan KR khong thay",
+		() => window.__tim("[data-trang-thai='ST-ngan-kr-khong-thay']").length > 0,
 	);
 	const ve = await chuSel(tl, "[data-nut='ve-muc-tieu']");
 	kiem(
@@ -1616,17 +1616,17 @@ async function buocTrangThai() {
 	);
 	await doi(
 		tc,
-		"E11 buoc 10: chan canhKr -> Empty loi",
-		() => window.__tim("[data-trang-thai='ST-khungkr-loi']").length > 0,
+		"E11 buoc 10: chan canhKr -> ngan KR loi tai",
+		() => window.__tim("[data-trang-thai='ST-ngan-kr-loi']").length > 0,
 	);
-	const thuLai = await chuSel(tc, "[data-nut='thu-lai']");
+	const thuLai = await chuSel(tc, "[data-vung-tai-loi] [data-slot='kara-retry']");
 	kiem(
 		`E11 buoc 10: loi co nut «${CHU.khung.loi.thuLai}» (thay «${thuLai}»)`,
 		thuLai === CHU.khung.loi.thuLai,
 	);
 	await chup(tc, "buoc-loi.png");
 	trang.chan = false;
-	await bam(tc, "[data-nut='thu-lai']");
+	await bam(tc, "[data-vung-tai-loi] [data-slot='kara-retry']");
 	await doi(
 		tc,
 		"E11 buoc 10: bo chan, bam Thu lai -> tai duoc",

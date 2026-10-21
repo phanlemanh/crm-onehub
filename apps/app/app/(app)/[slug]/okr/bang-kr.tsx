@@ -29,6 +29,10 @@ import { kiemOkr } from "@crm/validation/okr-kiem";
 import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
 import { Fragment, type ReactNode } from "react";
 import { OwnerCell } from "@/components/crm/owner-cell";
+import {
+	TAB_SO_NGUON,
+	useMoNganKr,
+} from "@/components/crm/record-sheet/dien-bien-kr";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
@@ -92,7 +96,7 @@ function SoCuaKr({
 	const neo = (ten: string, gia: string) => (moc ? { [ten]: gia } : {});
 	const locale = useLocale();
 	const s = okrSoMessages(locale);
-	const moSo = useOpenRecord();
+	const moNganKr = useMoNganKr();
 	const coMay = kr.source !== "tay" || kr.doCanh;
 	const dich = giaTri(kr, kr.targetValue, locale);
 
@@ -136,7 +140,7 @@ function SoCuaKr({
 									{...neo("data-so-kr", kr.id)}
 									onClick={(e) => {
 										e.stopPropagation();
-										moSo({ kind: "so-kr", id: kr.id });
+										moNganKr(kr.id, TAB_SO_NGUON);
 									}}
 								>
 									{hienSo}
