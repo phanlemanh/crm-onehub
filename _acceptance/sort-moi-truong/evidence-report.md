@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: sort-moi-truong
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b9569c0f520f58e880ce62c8760cc5306e71dc92
+verified_commit: 708bf425d47d5bec8e6b10b17b5cad79f7d8505e
 human_signoff:
 ---
 
 # Evidence Report: sort-moi-truong
-
-Vòng 2. Mọi eval máy đều xanh trên cây đã ghim, nhưng vòng bị REJECT vì hai phát hiện trong hợp đồng (AC-1, AC-2): phép đo luật hoà theo tên không tách được luật ấy khỏi thứ tự id. Chi tiết ở review-findings.md và mục Iterations.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -27,100 +25,96 @@ Vòng 2. Mọi eval máy đều xanh trên cây đã ghim, nhưng vòng bị REJ
 | E6 | AC-6 | test | PASS |
 | E7 | AC-7 | test | PASS |
 | E7b | AC-7 | test | PASS |
-| E8 | AC-8 | test | PASS (carry-forward từ vòng 1) |
+| E8 | AC-8 | test | PASS |
 | E9 | AC-9 | ui-check | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: mvhp5pislonx
+  run_id: minted-sort-moi-truong-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.smt_api_sap
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
   output: |
-    test-run: dropped crm_mvhp5pislonx_test
+    test-run: dropped crm_mvhqac6qykly_test
 
 - eval: E1b
-  run_id: minted-sort-moi-truong-E1b-r2
+  run_id: minted-sort-moi-truong-E1b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.smt_api_trang
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
   output: |
-    test-run: dropped crm_mvhp5r45z07b_test
+    test-run: dropped crm_mvhqacyzbygm_test
 
 - eval: E2
-  run_id: minted-sort-moi-truong-E2-r2
+  run_id: minted-sort-moi-truong-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.smt_api_cty_lh
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
   output: |
-    test-run: dropped crm_mvhp5qea7032_test
+    test-run: dropped crm_mvhqactx73am_test
 
 - eval: E3
-  run_id: minted-sort-moi-truong-E3-r2
+  run_id: minted-sort-moi-truong-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.smt_api_khoa_chet
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
   output: |
-    test-run: dropped crm_mvhp5r1l0rvs_test
+    test-run: dropped crm_mvhqacmxy697_test
 
 - eval: E4
-  run_id: minted-sort-moi-truong-E4-r2
+  run_id: minted-sort-moi-truong-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.smt_api_board
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
   output: |
-    test-run: dropped crm_mvhp5q8fm29j_test
+    test-run: dropped crm_mvhqaceabqzb_test
+
+- eval: E7
+  run_id: mvhqaclv1r2x
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.smt_api_the
+  verified_at: 2026-10-21T06:25:30Z
+  output: |
+    test-run: dropped crm_mvhqaclv1r2x_test
 
 - eval: E5
   run_id: minted-sort-moi-truong-E5-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.smt_cot_sap
   verified_at: 2026-10-21T05:53:22Z
-  output: |
-    Ran 1 test across 1 file. [1169.00ms]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E5b
   run_id: minted-sort-moi-truong-E5b-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.script.smt_quet
   verified_at: 2026-10-21T05:53:22Z
-  output: |
-    smt quet: dat 6 tep
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E6
   run_id: minted-sort-moi-truong-E6-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.smt_an_theo_kieu
   verified_at: 2026-10-21T05:53:22Z
-  output: |
-    Ran 1 test across 1 file. [992.00ms]
-
-- eval: E7
-  run_id: mvhp5racut8p
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.smt_api_the
-  verified_at: 2026-10-21T05:53:22Z
-  output: |
-    test-run: dropped crm_mvhp5racut8p_test
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E7b
   run_id: minted-sort-moi-truong-E7b-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.smt_the_kanban
   verified_at: 2026-10-21T05:53:22Z
-  output: |
-    Ran 1 test across 1 file. [846.00ms]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E8
   run_id: minted-sort-moi-truong-E8-r1
@@ -133,9 +127,10 @@ Vòng 2. Mọi eval máy đều xanh trên cây đã ghim, nhưng vòng bị REJ
 - eval: E9
   run_id: minted-sort-moi-truong-E9-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.script.smt_man
   verified_at: 2026-10-21T05:53:22Z
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
   screenshot: evidence/E9-step1.png
   observed: |
     Đã mở cả sáu ảnh bằng Read.
@@ -150,39 +145,39 @@ Vòng 2. Mọi eval máy đều xanh trên cây đã ghim, nhưng vòng bị REJ
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-sort-moi-truong-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-sort-moi-truong-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-sort-moi-truong-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
 
 - cmd: bun run lint:slop
-  run_id: minted-sort-moi-truong-SUITE-bun_run_lint_slop-r2
+  run_id: minted-sort-moi-truong-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-sort-moi-truong-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-sort-moi-truong-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-21T05:53:22Z
+  verified_at: 2026-10-21T06:25:30Z
 
 ## Known limits
 
@@ -199,11 +194,7 @@ none — moi eval feature deu red tren baseline (co phan biet)
 - bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-cty-lh": bo qua baseline: tep apps/api/test/sort-moi-truong.spec.ts co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-khoa-chet": bo qua baseline: tep apps/api/test/sort-moi-truong.spec.ts co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-board": bo qua baseline: tep apps/api/test/sort-moi-truong.spec.ts co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sort-moi-truong.dom.tsx -t smt-cot-sap: bo qua baseline: tep apps/app/test/sort-moi-truong.dom.tsx co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/sort-moi-truong/rang/quet-bang-kieu.mjs: bo qua baseline: tep _acceptance/sort-moi-truong/rang/quet-bang-kieu.mjs co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sort-moi-truong.dom.tsx -t smt-an-theo-kieu: bo qua baseline: tep apps/app/test/sort-moi-truong.dom.tsx co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
 - bun run test -- "cd apps/api && bun test test/sort-moi-truong.spec.ts -t smt-api-the": bo qua baseline: tep apps/api/test/sort-moi-truong.spec.ts co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/sort-moi-truong.dom.tsx -t smt-the-kanban: bo qua baseline: tep apps/app/test/sort-moi-truong.dom.tsx co o cay dang kiem nhung chua co o merge-base c6a718f3df93677e6f8a90423e111e48960ddc7a — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
@@ -211,5 +202,6 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E9 failed — mũi tên sắp của cột Số bị cắt ở 1280 và năm phép đo không đỏ được trên mã lỗi. Returned to implementation.
-Round 2: mọi eval máy xanh trên cây đã ghim (E8 mang từ vòng 1, delta không chạm paths của nó); REJECT vì hai phát hiện trong hợp đồng, đều thuộc hình dạng 3 của phép đo: AC-1 (luật hoà theo tên không tách được khỏi thứ tự id vì T1 'An' tạo trước T4 'Bình') và AC-2 (hoà theo lastName của sort phone trùng thứ tự tạo). Returned to implementation.
+Round 1: E9 failed (mũi tên sắp bị cắt ở cột Số) và năm phép đo không đỏ được trên mã lỗi. Returned to implementation.
+Round 2: REJECT — fixture luật hoà cùng lớp lỗi với round 1 (hoà theo tên trùng thứ tự id); dừng vá, đổi khuôn đo sang nhóm hoà ba bản ghi (commit 708bf425d). Returned to implementation.
+Round 3: PASS — E1, E1b, E2, E3, E4, E7 và bảy lệnh suite chạy lại trên 708bf425d; E5, E5b, E6, E7b, E9 carry-forward từ round 2, E8 carry-forward từ round 1. Mốc verified_at của lượt r3 là mốc soạn hồ sơ; dòng run-log r3 do main loop append trước khi ghi hồ sơ.

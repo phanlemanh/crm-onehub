@@ -1,26 +1,28 @@
+# Review findings: sort-moi-truong (round 3)
+
 ## Trong hợp đồng
 
-- **Hình dạng 3 (khẳng định chuỗi trong khi lời hứa là QUAN HỆ): đổi tên ở round 1 làm luật hoà-theo-tên trùng đúng thứ tự id asc mà mã đang dùng làm khoá cuối**
-  file: `apps/api/test/sort-moi-truong.spec.ts:76`
-  severity: high
-  AC: AC-1
-  source: measurement
-  detail: Round 1 đổi TEN thành T1 'An', T4 'Bình' (dòng 76-79) và đáp án thành TANG = [T2,T1,T4,T5,T3], GIAM = [T5,T1,T4,T2,T3] (dòng 83-84). T1 được tạo trước T4, mà Deal/Contact/Company dùng @default(cuid()) (packages/db/prisma/schema.prisma:1042, 459), tức id tăng theo thời gian tạo. Trong FieldsService.sapTheoTruong, khoá cuối của orderBy là `{ [column]: "asc" }` (apps/api/src/fields/fields.service.ts:540), nghĩa là id asc. Vì vậy khi hoà, cả 'tên A→Z' lẫn 'id asc / createdAt asc' đều cho T1 trước T4, ở cả hai chiều. Nếu bỏ phần TEN_BAN_GHI khỏi orderBy thì các phép so `ra.join(",") !== dapAn.join(",")` ở smt-api-sap (dòng 265, 18 ô), smt-api-cty-lh (12 ô trường tự tạo) và smt-api-board (dòng 841) vẫn xanh. Lời hứa trong evals.yaml E1/E3 là 'hoà theo tên A→Z như sort chuẩn', một quan hệ giữa tên và thứ tự, nhưng bộ dữ liệu không còn tách được quan hệ đó khỏi thứ tự tạo. Round 0 (T4 'An' tạo sau) tách được id asc. Round 1 chỉ đổi sang tách được createdAt desc, đúng như evals ghi 'một luật hoà theo createdAt giảm dần sẽ đỏ'. Còn chính khoá cuối mà mã đang có thì không phép đo nào bắt được nữa.
-  lý do vào hợp đồng: AC-1 hứa «hoà giá trị thì theo tên bản ghi A→Z rồi id», nhưng bộ dữ liệu thử không tách được luật theo tên khỏi thứ tự id nên vế này của AC-1 (và AC-2 cho Công ty, Liên hệ) không được đo thật.
-
-- **Hình dạng 3: hoà ở ô trống của sort 'phone' theo lastName trùng thứ tự tạo, và evals ghi sai là 'ngược thứ tự tạo'**
-  file: `apps/api/test/sort-moi-truong.spec.ts:626`
-  severity: medium
-  AC: AC-2
-  source: measurement
-  detail: Round 1 đặt T3 'Dung' và T5 'Em' cùng trống phone (SO, dòng 614-620), đáp án PHONE_TANG/PHONE_GIAM đều kết thúc bằng [T3, T5] (dòng 626-627). Các liên hệ được tạo theo vòng T1..T5 nên T3 tạo trước T5: T3-trước-T5 chính là thứ tự tạo và thứ tự id. Evals.yaml E3 lại ghi '(T3 trước T5, ngược thứ tự tạo)', điều này sai. SORTABLE.phone trong contacts.service.ts là [{phone nulls last}, {lastName asc}]. Nếu bỏ {lastName: 'asc'} thì Postgres trả các hàng hoà theo thứ tự vật lý, thường là thứ tự chèn, nên vẫn ra T3,T5 và phép so `raChuan.join(",") !== dapAn.join(",")` vẫn xanh. Phép đối chứng 'hoa lech chuan' chỉ so thứ tự của field:smt_dt với thứ tự của 'phone'. Phía trường tự tạo cũng kết thúc bằng id asc (banGhiTrong, fields.service.ts:589), nên hai bên vẫn khớp nhau mà không cần đến luật hoà theo lastName. Như vậy quan hệ 'hoà theo lastName' được tuyên trong evals nhưng không phép đo nào đo được.
-  lý do vào hợp đồng: AC-2 nêu rõ `sort=phone` phải «hoà theo `lastName`», nhưng dữ liệu thử cho kết quả giống nhau dù có hay không luật hoà theo `lastName`, nên vế này của AC-2 không được đo.
+Không có.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Changing a deal field definition does not refresh the Kanban board, so card fields go stale**
+- **evals.yaml vẫn tả khuôn năm bản ghi ở vài chỗ, dù test đã lên sáu bản ghi**
+  Người dùng thấy gì: Một vài câu trong tệp mô tả phép kiểm vẫn nói bộ dữ liệu thử có năm bản ghi, trong khi thực tế đã là sáu. Người dùng cuối không thấy gì khác; chỉ người đọc hồ sơ nghiệm thu có thể thấy lời mô tả lệch với lỗi đỏ thật.
+  Căn cứ: Hậu quả nhẹ: không mất dữ liệu, không ảnh hưởng người dùng, chỉ làm người ký đọc hồ sơ phải đối chiếu thêm, và có thể chỉnh lại câu chữ bất cứ lúc nào với chi phí rất thấp.
+  file: `_acceptance/sort-moi-truong/evals.yaml`
+  severity: low
+  Đề xuất: known-limits
+
+- **Lời expected của E1/E2/E4 vẫn ghi chuỗi đỏ và số bản ghi của khuôn năm bản ghi cũ**
+  Người dùng thấy gì: Phần mô tả kết quả đỏ mong đợi của ba phép kiểm vẫn ghi theo bộ dữ liệu cũ, nên không khớp từng chữ với câu lỗi thật. Sản phẩm chạy đúng như cũ; chỉ hồ sơ nghiệm thu hơi lệch chữ.
+  Căn cứ: Hậu quả nhẹ và không động tới người dùng hay dữ liệu: màu xanh đỏ của phép kiểm không đổi, người ký chỉ cần đọc kỹ hơn, và có thể sửa câu chữ sau mà không cần dựng lại gì.
+  file: `_acceptance/sort-moi-truong/evals.yaml`
+  severity: low
+  Đề xuất: known-limits
+
+- **Changing a deal field definition does not refresh the Kanban board, so card fields go stale (r2)**
   Người dùng thấy gì: Sau khi đổi thứ tự, lưu trữ hoặc bật «Hiện trong bảng» cho một trường thoả thuận, thẻ trên bảng Kanban có thể còn hiện các trường cũ trong khoảng nửa phút. Mở lại hoặc tải lại trang là thấy đúng.
   Căn cứ: Chỉ lệch tạm thời vài chục giây, không mất hay sai dữ liệu, và người dùng tự khỏi bằng cách tải lại trang.
   file: `apps/app/lib/trpc/cache.ts`
@@ -55,4 +57,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+⚠ Cụm ngoài vùng phủ: 2/2 lỗi rơi vào file không bộ đo nào phủ (_acceptance/sort-moi-truong/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
