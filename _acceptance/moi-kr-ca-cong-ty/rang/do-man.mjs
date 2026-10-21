@@ -30,7 +30,8 @@ const BANG_CHUNG = join(GOC, ".acceptance-runs", HO_SO, "evidence");
 const BANG_CHUNG_HO_SO = join(GOC, "_acceptance", HO_SO, "evidence");
 const LOC_RONG = { tinhTrang: [], donVi: [], nguoi: [] };
 const O_TRUOT = "[data-o='kr-truot']";
-const DONG = "[data-slot='table-body'] [data-slot='table-row']";
+const DONG =
+	"[data-trang-thai='ST-moikr-codulieu'] [data-slot='table-body'] [data-slot='table-row']";
 const CHON = new Set(
 	(process.env.EVAL ?? "")
 		.split(",")
@@ -165,6 +166,13 @@ async function e2(n) {
 		t.trang.waitForNavigation({ timeout: DO.cho.taiMs }).catch(() => null),
 		t.trang.click(O_TRUOT),
 	]);
+	await t.trang
+		.waitForFunction(
+			(duong) => location.pathname === duong,
+			{ timeout: DO.cho.taiMs },
+			n.w("/okr/moi-kr"),
+		)
+		.catch(() => null);
 	await choThay(t.trang, DONG);
 	await nghi(DO.cho.hydrateMs);
 	const url = new URL(t.trang.url());
@@ -178,7 +186,7 @@ async function e2(n) {
 	if (soO !== soApi) lech.push("so-o != api");
 	if (tongBang !== soO) lech.push("tong-bang != so-o");
 	if (bang.tinhTrang.some((v) => v !== "truot"))
-		lech.push("co dong khong Truot");
+		lech.push(`co dong khong Truot [${bang.tinhTrang.join(",")}]`);
 	if (t.dieuHuong.length - moc > 2) lech.push("hon mot buoc chuyen");
 	bao(
 		lech.length === 0,
