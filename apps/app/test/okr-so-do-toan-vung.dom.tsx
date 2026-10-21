@@ -666,6 +666,76 @@ describe("vk6-trang-thai", () => {
 	});
 });
 
+describe("vk6-chu", () => {
+	const KHOA_MOI = [
+		"soDoGopVao",
+		"toanManHinh",
+		"thoatToanManHinh",
+		"veCaCongTy",
+		"daiCongCu",
+	] as const;
+
+	test("vk6-chu: chữ hai thứ tiếng, tên không dịch, vòng tiêu điểm, không còn căn chỉnh", async () => {
+		const sai: string[] = [];
+		const vi = okrVoKhuMessages("vi").soDo;
+		const en = okrVoKhuMessages("en").soDo;
+		const coVi = KHOA_MOI.filter((k) => k in vi);
+		if (coVi.length !== KHOA_MOI.length) sai.push("thieu khoa vi");
+		for (const k of KHOA_MOI)
+			if (!vi[k] || !en[k] || vi[k] === en[k]) sai.push(`khoa ${k} vi === en`);
+		for (const tam of [null, TAM]) {
+			await dung(
+				<Vo>
+					<ManSoDo tam={tam} />
+				</Vo>,
+				tam ? `/ws/okr/so-do/muc-tieu/${tam}` : "/ws/okr/so-do",
+			);
+			await cho(() => q("[data-flow-map]") !== null, `khung ${tam}`);
+			await cho(
+				() =>
+					q("[data-slot=breadcrumb-page] span, [data-slot=breadcrumb-page]") !==
+					null,
+				"duong manh",
+			);
+			const chu = (document.body.textContent ?? "").toLowerCase();
+			if (chu.includes("căn chỉnh"))
+				sai.push(`chu cu: căn chỉnh (${tam ?? "ca cong ty"})`);
+			if (!nutToanMan()?.className.includes("focus-visible"))
+				sai.push("nut thieu focus-visible");
+			if (tam) {
+				const ten = q("[data-slot=breadcrumb-page] [translate=no]");
+				if (!ten) sai.push("ten tam tren duong manh khong translate=no");
+				if (
+					qa("[data-quanh-the] [data-ten]").some(
+						(e) => e.getAttribute("translate") !== "no",
+					)
+				)
+					sai.push("ten tren the quanh bi dich");
+			} else if (qa("[data-so-do-the]").length === 0)
+				sai.push("khong co the don vi");
+			for (const s of dangMo) await act(async () => s.root.unmount());
+			dangMo = [];
+			document.body.innerHTML = "";
+		}
+		expect(sai).toEqual([]);
+	});
+
+	test("vk6-chu: đối chứng dương — chữ «Căn chỉnh» chèn vào bị bắt", async () => {
+		await dung(
+			<Vo>
+				<ManSoDo tam={null} />
+				<button type="button">Căn chỉnh</button>
+			</Vo>,
+			"/ws/okr/so-do",
+		);
+		await cho(() => q("[data-flow-map]") !== null, "khung");
+		const chu = (document.body.textContent ?? "").toLowerCase();
+		expect(chu.includes("căn chỉnh") ? "chu cu: căn chỉnh" : "sach").toBe(
+			"chu cu: căn chỉnh",
+		);
+	});
+});
+
 describe("vk6-bo-cay", () => {
 	test("vk6-bo-cay: không còn Cây, Sơ đồ mở sẵn thẻ đơn vị", async () => {
 		const sai: string[] = [];
