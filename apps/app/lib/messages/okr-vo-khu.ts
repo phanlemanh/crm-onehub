@@ -42,7 +42,6 @@ const vi = {
 			tieuDe: "Không tải được danh sách Bộ OKR",
 			moTa: "Máy chủ không trả danh sách. Thử lại sau giây lát.",
 		},
-		dangTai: "Đang tải danh sách Bộ OKR",
 		viTri: "Bộ OKR",
 		the: {
 			nhan: "Phần của bộ OKR",
@@ -117,7 +116,6 @@ const en: OkrVoKhuMessages = {
 			tieuDe: "Couldn't load OKR sets",
 			moTa: "The server didn't return the list. Try again in a moment.",
 		},
-		dangTai: "Loading OKR sets",
 		viTri: "OKR sets",
 		the: {
 			nhan: "Parts of the OKR set",

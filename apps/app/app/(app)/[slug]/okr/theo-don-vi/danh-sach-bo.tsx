@@ -16,7 +16,6 @@ import {
 	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
@@ -34,6 +33,7 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "../chon-chu-ky";
 import { parseAsPhamViBo } from "../okr-search-params";
 import { ChuaChuKy } from "../trang-thai-okr";
+import { KhungDangTaiDonVi } from "./hang-cong-cu";
 
 type HangBo = RouterOutputs["okr"]["danhSachBo"]["hang"][number];
 
@@ -81,7 +81,7 @@ export function DanhSachBo() {
 				tieuDe={m.loi.tieuDe}
 			/>
 		);
-	if (!ds.data) return <KhungXuong hinh="bang" nhan={m.dangTai} />;
+	if (!ds.data) return <KhungDangTaiDonVi />;
 
 	const hang = ds.data.hang;
 	const dem = {

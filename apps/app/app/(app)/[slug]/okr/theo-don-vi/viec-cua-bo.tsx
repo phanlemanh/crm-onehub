@@ -15,7 +15,6 @@ import {
 	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
-import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SectionHeading } from "@crm/ui/components/section-heading";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
@@ -27,6 +26,7 @@ import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import type { DonChonOkr } from "../okr-search-params";
+import { KhungDangTaiDonVi } from "./hang-cong-cu";
 
 type ViecBo = RouterOutputs["okr"]["viecCuaBo"]["nhom"][number]["viec"][number];
 
@@ -68,7 +68,7 @@ export function ViecCuaBo({
 				tieuDe={m.loi.tieuDe}
 			/>
 		);
-	if (!ds.data) return <KhungXuong hinh="danh-sach" />;
+	if (!ds.data) return <KhungDangTaiDonVi />;
 	if (ds.data.nhom.length === 0)
 		return (
 			<Empty data-trang-thai="ST-bo-viec-rong">

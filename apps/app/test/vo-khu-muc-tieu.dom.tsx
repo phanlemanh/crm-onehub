@@ -544,8 +544,8 @@ describe("vkm-mot-lop", () => {
 			"/ws/okr/bo-okr",
 		);
 		await cho(
-			() => q("[data-view-switch=nut]") !== null,
-			"chuyen kieu xem trang don vi",
+			() => q("[data-the-con-bo]") !== null,
+			"the con trang don vi",
 		);
 		const lop = demThanhThe() + qa("[data-view-switch=nut]").length;
 		if (lop !== 1)

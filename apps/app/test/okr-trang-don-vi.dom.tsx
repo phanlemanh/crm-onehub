@@ -353,6 +353,7 @@ const { TheoDonVi } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
 );
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
+const { okrVoKhuMessages } = await import("@/lib/messages/okr-vo-khu");
 const { ThanhTabOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
 
@@ -360,6 +361,7 @@ const m = okrMessages("vi");
 const b = m.donViBang;
 const thuoc = (duong: string) => `${b.thuoc} ${duong}`;
 const mtc = okrToanCanhMessages("vi");
+const theBo = okrVoKhuMessages("vi").boOkr.the;
 
 type San = { o: HTMLElement; root: Root; url: () => URLSearchParams };
 let dangMo: San[] = [];
@@ -1703,8 +1705,8 @@ describe("dvb-trang-thai", () => {
 			(x) => x.textContent === m.khongThay.action,
 		);
 		await act(async () => ve?.click());
-		await cho(() => s.url().get("donOkr") === null, "url bo donOkr");
-		expect(s.url().get("donOkr")).toBeNull();
+		await cho(() => s.url().get("donOkr") === "goc", "url ve donOkr=goc");
+		expect(s.url().get("donOkr")).toBe("goc");
 	});
 
 	test("chua-chu-ky: ChuaChuKy", async () => {
@@ -1859,10 +1861,10 @@ describe("dvb-giu-xem", () => {
 		const s = await ve(<TheoDonVi />, cuoi);
 		await cho(() => s.o.querySelector("[data-chon-don-vi]") !== null, "trang");
 		expect({
-			xem: s.o.querySelector('[data-view-switch="nut"] [data-state="on"]')
+			xem: s.o.querySelector('[data-the-con-bo] [aria-current="page"]')
 				?.textContent,
 			don: s.o.querySelector("[data-chon-don-vi]")?.textContent,
-		}).toEqual({ xem: mtc.hopTuan.cachXem, don: CAY.P2.name });
+		}).toEqual({ xem: theBo["hop-tuan"], don: CAY.P2.name });
 	});
 
 	test("chu ky ngoai pha cham + xemOkr=cham -> Danh sach", async () => {
@@ -1874,9 +1876,9 @@ describe("dvb-giu-xem", () => {
 		await choBang(s);
 		expect({
 			bang: s.o.querySelector("table") !== null,
-			xem: s.o.querySelector('[data-view-switch="nut"] [data-state="on"]')
+			xem: s.o.querySelector('[data-the-con-bo] [aria-current="page"]')
 				?.textContent,
-		}).toEqual({ bang: true, xem: m.danhSach });
+		}).toEqual({ bang: true, xem: theBo["danh-sach"] });
 	});
 
 	test("hop dong DH1 co dong Notes tro trang-don-vi-mot-bang AC-13", () => {
