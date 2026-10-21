@@ -153,42 +153,41 @@ export class ContactsService {
 		const where = this.buildWhere(input, filterableFields, search);
 		const { skip, take } = paginate(input);
 
-		const theoTruong = await this.fields.sapTheoTruong(
-			"CONTACT",
-			input,
-			where,
-			{ skip, take },
-		);
-
-		const [hang, total, facetCounts] = await Promise.all([
-			this.db.contact.findMany({
-				...timTrang(
-					theoTruong,
-					where,
-					{ skip, take },
-					resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+		const [rows, total, facetCounts] = await Promise.all([
+			this.fields
+				.sapTheoTruong("CONTACT", input, where, { skip, take })
+				.then(async (theoTruong) =>
+					xepTheoId(
+						await this.db.contact.findMany({
+							...timTrang(
+								theoTruong,
+								where,
+								{ skip, take },
+								resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+							),
+							select: {
+								id: true,
+								firstName: true,
+								lastName: true,
+								email: true,
+								phone: true,
+								title: true,
+								imageUrl: true,
+								source: true,
+								company: { select: COMPANY_SELECT },
+								owner: { select: OWNER_SELECT },
+								lastActivityAt: true,
+								createdAt: true,
+								archivedAt: true,
+							},
+						}),
+						theoTruong,
+					),
 				),
-				select: {
-					id: true,
-					firstName: true,
-					lastName: true,
-					email: true,
-					phone: true,
-					title: true,
-					imageUrl: true,
-					source: true,
-					company: { select: COMPANY_SELECT },
-					owner: { select: OWNER_SELECT },
-					lastActivityAt: true,
-					createdAt: true,
-					archivedAt: true,
-				},
-			}),
 			this.db.contact.count({ where }),
 			this.facetCounts(input, filterableFields, search),
 		]);
 
-		const rows = xepTheoId(hang, theoTruong);
 		const tableFields = await this.fields.tableValuesFor(
 			"CONTACT",
 			rows.map((row) => row.id),

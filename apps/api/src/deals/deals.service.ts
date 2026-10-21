@@ -137,36 +137,39 @@ export class DealsService {
 
 		const openWhere: Prisma.DealWhereInput = { AND: [where, DANG_MO] };
 		const base = await this.conversion.reportingCurrency();
-		const theoTruong = await this.fields.sapTheoTruong("DEAL", input, where, {
-			skip,
-			take,
-		});
 
-		const [hang, total, facetCounts, openValue, unconverted] =
+		const [rows, total, facetCounts, openValue, unconverted] =
 			await Promise.all([
-				this.db.deal.findMany({
-					...timTrang(
-						theoTruong,
-						where,
-						{ skip, take },
-						resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+				this.fields
+					.sapTheoTruong("DEAL", input, where, { skip, take })
+					.then(async (theoTruong) =>
+						xepTheoId(
+							await this.db.deal.findMany({
+								...timTrang(
+									theoTruong,
+									where,
+									{ skip, take },
+									resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+								),
+								select: {
+									id: true,
+									name: true,
+									stage: true,
+									amount: true,
+									currency: true,
+									baseAmount: true,
+									expectedCloseDate: true,
+									closedAt: true,
+									company: { select: COMPANY_SELECT },
+									owner: { select: OWNER_SELECT },
+									lastActivityAt: true,
+									createdAt: true,
+									archivedAt: true,
+								},
+							}),
+							theoTruong,
+						),
 					),
-					select: {
-						id: true,
-						name: true,
-						stage: true,
-						amount: true,
-						currency: true,
-						baseAmount: true,
-						expectedCloseDate: true,
-						closedAt: true,
-						company: { select: COMPANY_SELECT },
-						owner: { select: OWNER_SELECT },
-						lastActivityAt: true,
-						createdAt: true,
-						archivedAt: true,
-					},
-				}),
 				this.db.deal.count({ where }),
 				this.facetCounts(input, filterableFields),
 				this.db.deal.aggregate({
@@ -176,7 +179,6 @@ export class DealsService {
 				this.conversion.unconverted(openWhere),
 			]);
 
-		const rows = xepTheoId(hang, theoTruong);
 		const tableFields = await this.fields.tableValuesFor(
 			"DEAL",
 			rows.map((row) => row.id),
