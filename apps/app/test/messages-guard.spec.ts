@@ -1025,6 +1025,7 @@ const GHIM = {
 	],
 	"okr:capNhat.gui": ["Gửi 1 cập nhật", "Gửi 12 cập nhật"],
 	"okr:capNhat.guiLai": ["Gửi lại 1 cập nhật", "Gửi lại 12 cập nhật"],
+	"okr:capNhat.tienDoMoi": ["Tiến độ mới 1%", "Tiến độ mới 12%"],
 	"okr:capNhat.daGui.title": [
 		"Đã gửi 1 cập nhật lúc A · mất B giây",
 		"Đã gửi 12 cập nhật lúc A · mất B giây",
