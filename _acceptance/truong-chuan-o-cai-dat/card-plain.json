@@ -1,0 +1,51 @@
+{
+  "feature_plain": "Quản trị đặt được mục Chi tiết của phiếu ở Cài đặt › Trường: thấy đủ trường chuẩn bằng tiếng Việt, kéo đổi chỗ trộn với trường tự tạo, ẩn trường chuẩn, và bắt buộc một trường tự tạo.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ liệt đúng các trường của mục Chi tiết trên phiếu (6 cho Thoả thuận, 8 cho Công ty, 10 cho Liên hệ), tên giống hệt trên phiếu ở cả tiếng Việt lẫn tiếng Anh."},
+    {"id": "AC-2", "p": "Sẽ cho kéo một trường tự tạo lên giữa các trường chuẩn (bằng chuột hay bàn phím), lưu lại, và phiếu hiện đúng thứ tự ấy; lưu lỗi thì danh sách về như cũ kèm câu «Chưa lưu được thứ tự.»."},
+    {"id": "AC-3", "p": "Sẽ cho tắt «Hiện trên phiếu» của một trường chuẩn như Thành phố: phiếu thôi hiện hàng ấy, giá trị và cột trên bảng còn nguyên, bật lại thì hàng về đúng chỗ cũ."},
+    {"id": "AC-4", "p": "Sẽ khoá công tắc ẩn của trường chuẩn bắt buộc (Tên, Tiền tệ, Công ty, Người phụ trách của thoả thuận…), nói vì sao, và máy chủ cũng từ chối ẩn chúng."},
+    {"id": "AC-5", "p": "Sẽ có công tắc «Bắt buộc» trong ô sửa trường tự tạo; bật rồi thì trên phiếu không xoá trống được trường ấy."},
+    {"id": "AC-6", "p": "Sẽ giữ trường bắt buộc luôn hiện trên phiếu: bật «Bắt buộc» thì «Hiện trên phiếu» bật và khoá, máy chủ từ chối cặp «bắt buộc mà ẩn»."},
+    {"id": "AC-7", "p": "Sẽ giữ nguyên phiếu như hôm nay cho tới lần sắp đầu tiên; trường tự tạo mới đứng cuối; bố trí chưa tải hay tải lỗi thì phiếu vẫn đủ trường theo thứ tự mặc định."},
+    {"id": "AC-8", "p": "Sẽ khoá mọi tay kéo và công tắc với người không phải quản trị, kèm một dòng nói vì sao; máy chủ cũng từ chối họ, nhưng họ vẫn xem phiếu đúng bố trí."},
+    {"id": "AC-9", "p": "Sẽ cho người nhìn ảnh thật ở khổ máy tính và điện thoại thấy một danh sách duy nhất, hàng trường chuẩn và hàng tự tạo cùng khuôn, phiếu theo đúng thứ tự, không cuộn ngang."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG đổi form tạo và ô thêm nhanh theo thứ tự, ẩn, bắt buộc — việc của DA16 (nhập trường lúc tạo)."},
+    {"id": "OOS-2", "p": "KHÔNG đổi thứ tự cột trên bảng hay thẻ Kanban — việc của DA17; ẩn khỏi phiếu không ẩn cột."},
+    {"id": "OOS-3", "p": "KHÔNG đổi các ô số ở đầu phiếu; ẩn chỉ áp cho mục Chi tiết (Hỏi-6)."},
+    {"id": "OOS-4", "p": "KHÔNG cho bật «Bắt buộc» cho trường chuẩn như Ngày chốt (Hỏi-2)."},
+    {"id": "OOS-5", "p": "KHÔNG cho ẩn trường bắt buộc khỏi phiếu (Hỏi-4)."},
+    {"id": "OOS-6", "p": "KHÔNG đưa Mô tả và Giai đoạn của thoả thuận vào danh sách — chúng là mục riêng của phiếu (Hỏi-5)."},
+    {"id": "OOS-7", "p": "KHÔNG có bố trí riêng từng người; thứ tự và ẩn áp cho cả đội."},
+    {"id": "OOS-8", "p": "KHÔNG chặn Kara đọc hay điền trường đã ẩn (Hỏi-6)."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ cả ba loại bản ghi: Thoả thuận, Công ty, Liên hệ."},
+    {"i": 1, "p": "Phủ ba loại trường: trường chuẩn, trường chuẩn bắt buộc, trường tự tạo."},
+    {"i": 2, "p": "Phủ bốn thao tác: xem danh sách, sắp lại, ẩn và hiện lại, bật và tắt «Bắt buộc»."},
+    {"i": 3, "p": "Xét bảy nơi thấy kết quả; vòng này đo Cài đặt, phiếu và máy chủ, còn bảng, form tạo, Kanban, Kara để hàng sau."},
+    {"i": 4, "p": "Thước một: luật «một trường, một cách cư xử» trong tài liệu thiết kế."},
+    {"i": 5, "p": "Thước hai: các hàng đang có trong mục Chi tiết của ba phiếu."},
+    {"i": 6, "p": "Thước ba: các cột không được để trống trong mô hình dữ liệu."},
+    {"i": 7, "p": "Thước bốn: luật lưu và luật thiếu quyền của trang Cài đặt."},
+    {"i": 8, "p": "Thước ngành: HubSpot và Salesforce đều cho sắp lại, ẩn trường mặc định và đặt trường bắt buộc — ứng viên chờ anh gật."},
+    {"i": 9, "p": "Danh sách khớp phiếu, tên theo ngôn ngữ → AC-1 (khớp phiếu)."},
+    {"i": 10, "p": "Sắp lại thấy ở Cài đặt, máy chủ và phiếu → AC-2 (thứ tự trộn)."},
+    {"i": 11, "p": "Ẩn và hiện lại trường chuẩn → AC-3 (ẩn giữ giá trị)."},
+    {"i": 12, "p": "Trường chuẩn bắt buộc không ẩn được → AC-4 (khoá có lý do)."},
+    {"i": 13, "p": "«Bắt buộc» cho trường tự tạo → AC-5 (không để trống)."},
+    {"i": 14, "p": "Bắt buộc thì luôn hiện → AC-6 (không ẩn mất)."},
+    {"i": 15, "p": "Chưa sắp lần nào, trường mới, bố trí chưa tải → AC-7 (mặc định giữ nguyên)."},
+    {"i": 16, "p": "Quyền quản trị → AC-8 (người thường bị khoá)."},
+    {"i": 17, "p": "Mắt người trên ảnh thật → AC-9 (một danh sách, cùng khuôn)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phản biện chỉ ra luật «trường bắt buộc luôn hiện» không phải đường duy nhất — tài liệu thiết kế có tính tới trường bắt buộc chỉ điền ở form tạo. Đã chuyển thành câu hỏi Hỏi-4 cho anh."},
+    {"i": 1, "p": "Hai ranh giới máy tự quyết (Mô tả và Giai đoạn ngoài danh sách; ẩn không chạm đầu phiếu và Kara) trích câu không đủ quyết. Đã chuyển thành Hỏi-5, Hỏi-6; thêm căn cứ cho «không có bố trí riêng từng người»."},
+    {"i": 2, "p": "Chưa đo ca lưu lỗi khi kéo và câu báo lỗi của công tắc. Đã thêm: kéo lỗi thì danh sách về như cũ kèm câu «Chưa lưu được thứ tự.», công tắc lỗi thì báo «Chưa lưu được Thành phố.»."},
+    {"i": 3, "p": "Chưa đo «ẩn trên phiếu vẫn còn cột trên bảng». Đã thêm vế dựng bảng Công ty thật và kiểm cột Thành phố còn đó."},
+    {"i": 4, "p": "Dữ liệu giả của vài bài kiểm dựng tay, bốn tiêu chí thiếu nhãn xuyên lớp, chưa đo kéo bằng chuột và phiếu trên điện thoại. Đã sửa cả ba: một khuôn dữ liệu chung, gắn nhãn, phép đo màn kéo bằng chuột thật và chụp phiếu khổ 375."}
+  ]
+}
