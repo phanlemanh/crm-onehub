@@ -197,6 +197,7 @@
         "LT1f",
         "TH5",
         "TH2",
+        "TH2b",
         "TH3",
         "TB2",
         "TH6b",
@@ -1926,6 +1927,24 @@
         "N5"
       ],
       "buoc_ke": "Làn MacBook Pro · thứ 3"
+    },
+    {
+      "ma": "TH2b",
+      "slug": "gia-co-gom-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 444.5,
+      "dung_tren": [
+        "TH2"
+      ],
+      "ten": "Gia cố lịch gom tín hiệu",
+      "ten_ngan": "Gia cố gom",
+      "ngay": "2026-10-21",
+      "cau_giao": "«Một tín hiệu cài lời dặn không lấy được khoá nào của lịch gom và không đẩy được gì ngoài PR đề xuất»",
+      "vai": "Chủ kho",
+      "vi_sao": "Lịch gom (TH2) đưa nội dung tín hiệu người ngoài nhập vào lời dặn của phiên gom, trong khi phiên đó được chạy lệnh tuỳ ý và biến môi trường của nó có token ghi kho cùng khoá mô hình; bước hậu kiểm chỉ soi tệp bị đổi nên không thấy kiểu lạm dụng này.",
+      "ghi_chu": "Từ TH2 Ngoài-1, chủ kho chọn mở hợp đồng mới 20/10 (Cổng Bằng chứng TH2, yêu cầu S1-11). Gợi ý: giới hạn công cụ của phiên gom đúng ba lệnh kit theo đường tuyệt đối; bỏ GH_TOKEN/TIN_HIEU_TOKEN khỏi env của lời gọi claude; gỡ url.insteadOf mang token khỏi gitconfig toàn cục sau bước cài gói; chặn ghi vào .git/. Chưa đặt bí mật ANTHROPIC_API_KEY cho lịch gom tới khi hàng này gộp.",
+      "buoc_ke": "Làn MacBook Pro · sau TH2"
     },
     {
       "ma": "TH3",
