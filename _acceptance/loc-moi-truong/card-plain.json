@@ -1,0 +1,53 @@
+{
+  "feature_plain": "Nhân viên quan hệ đối tác lọc được Thoả thuận, Công ty, Liên hệ theo mọi trường tự tạo — chữ chứa gì, số trong khoảng nào, ngày ở mốc nào, ô tích có hay không, hay còn trống — và lưu bộ lọc ấy cả ở Thoả thuận.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ lọc trường chữ (Chữ, Chữ dài, Liên kết, Email, Điện thoại) theo «chứa», không phân biệt hoa thường, kèm lựa chọn «Trống»."},
+    {"id": "AC-2", "p": "Sẽ lọc trường Số theo khoảng «Từ – Đến» gồm cả hai đầu, cho phép chỉ một đầu, kèm «Trống»."},
+    {"id": "AC-3", "p": "Sẽ lọc trường Ngày theo bốn mốc như Ngày chốt (trước hôm nay, tháng này, tháng sau, sau đó) và ô tích theo Có / Không, «Không» gồm cả bản ghi chưa đánh dấu."},
+    {"id": "AC-4", "p": "Sẽ cho lựa chọn «Trống» bắt đúng mọi bản ghi người thấy trống — kể cả bản ghi mà lựa chọn hay người được chọn đã bị xoá."},
+    {"id": "AC-5", "p": "Sẽ lọc như nhau ở Công ty, Liên hệ và bảng cột Thoả thuận, mỗi lựa chọn trong menu có số đếm đúng, và danh sách 5.000 thoả thuận vẫn mở trong dưới 1 giây."},
+    {"id": "AC-7", "p": "Sẽ giữ mọi bộ lọc đã lưu và mọi chiến dịch cho đúng các bản ghi như hôm nay — không dòng đã lưu nào bị ghi lại."},
+    {"id": "AC-8", "p": "Sẽ ghi bộ lọc trường tự tạo lên đường dẫn cùng một cách như bộ lọc có sẵn; gửi đường dẫn là đồng nghiệp mở ra đúng bộ lọc, kể cả đường dẫn kiểu cũ."},
+    {"id": "AC-9", "p": "Sẽ có menu «Bộ lọc đã lưu» ở Thoả thuận, cả ở bảng lẫn bảng cột: lưu, chia sẻ, áp lại, xoá như ở Liên hệ và Công ty."},
+    {"id": "AC-10", "p": "Sẽ có trong menu Bộ lọc ô «Chứa…», ô «Từ / Đến» nhận «1.234,5» và báo lỗi bằng tiếng người dùng, ở máy tính và điện thoại, không cuộn ngang."}
+  ],
+  "wont_do": [
+    {"id": "AC-6", "p": "Chặn lỗi khi bộ lọc trỏ trường đã lưu trữ hay không còn: danh sách vẫn mở, bộ lọc ấy bị bỏ qua; giá trị sai kiểu thì báo rõ tên trường. Quản trị bật được «Hiện trong bộ lọc» cho mọi kiểu ở Cài đặt › Trường."},
+    {"id": "OOS-1", "p": "KHÔNG thêm bộ lọc chữ, số cho các trường có sẵn chưa lọc được hôm nay (Tên miền, Điện thoại, Chức danh, Giá trị)."},
+    {"id": "OOS-2", "p": "KHÔNG lọc Giá trị theo khoảng tiền — còn phải chọn tiền gốc hay quy đổi."},
+    {"id": "OOS-3", "p": "KHÔNG lọc «có tệp / chưa có tệp» — thuộc hàng Trường Tệp (DA19)."},
+    {"id": "OOS-4", "p": "KHÔNG bỏ dấu khi lọc «chứa» (xem Hỏi-3)."},
+    {"id": "OOS-5", "p": "KHÔNG có «hoặc» giữa hai trường hay nhóm điều kiện lồng nhau."},
+    {"id": "OOS-6", "p": "KHÔNG đổi cách lưu bộ lọc, KHÔNG chép lại bộ lọc đã lưu, KHÔNG đổi cơ sở dữ liệu."},
+    {"id": "OOS-7", "p": "KHÔNG có số đếm cho ô gõ chữ và ô khoảng số — chỉ lựa chọn «Trống» có số."},
+    {"id": "OOS-8", "p": "KHÔNG cho chiến dịch dùng bộ lọc Thoả thuận hay Công ty làm nhóm gửi."}
+  ],
+  "scope_plain": "Phần cắt ra để giữ mốc 22/10 và để hàng không phải đổi cơ sở dữ liệu:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã phủ mười kiểu trường tự tạo; Tiền (chỉ có ở Giá trị) và Tệp (DA19) để ngoài có ghi lý do."},
+    {"i": 1, "p": "Đã phủ sáu cách lọc: chứa, khoảng, mốc, Có/Không, lựa chọn, trống — mỗi kiểu một cách chính cộng «trống»."},
+    {"i": 2, "p": "Đã phủ mọi chỗ bộ lọc đi qua: danh sách, bảng cột, số đếm, đường dẫn, bộ lọc đã lưu, chiến dịch, Cài đặt › Trường, menu trên màn."},
+    {"i": 3, "p": "Đã phủ các trạng thái dữ liệu dễ sót: hai dạng trống, đúng biên khoảng và ranh tháng, giá trị hỏng, trường đã lưu trữ hay đang tắt, bộ lọc lưu từ trước, đường dẫn cũ."},
+    {"i": 4, "p": "Thước «đủ» cho bảng lọc: luật «một trường, một cách cư xử» của kho."},
+    {"i": 5, "p": "Thước «đủ» cho danh sách kiểu: danh sách kiểu trường tự tạo trong mã."},
+    {"i": 6, "p": "Thước «đủ» cho bộ lọc đã lưu: khuôn lưu đang chạy."},
+    {"i": 7, "p": "Thước «đủ» cho chiến dịch: cách chiến dịch đọc bộ lọc hôm nay."},
+    {"i": 8, "p": "Thước «đủ» cho mốc ngày: cách Ngày chốt chia mốc hôm nay."},
+    {"i": 9, "p": "Thước «đủ» cho «trống»: hai dạng trống hàng sort (DA17) đã đo."},
+    {"i": 10, "p": "Đối chiếu ngoài: HubSpot CRM và Attio lọc thuộc tính tự tạo theo kiểu và lưu thành view."},
+    {"i": 11, "p": "Chữ ở AC-1, Số ở AC-2, Ngày và ô tích ở AC-3, «trống» ở AC-4."},
+    {"i": 12, "p": "Công ty, Liên hệ, bảng cột, số đếm và tốc độ ở AC-5."},
+    {"i": 13, "p": "Bộ lọc trỏ trường không còn, giá trị hỏng, Cài đặt › Trường ở AC-6."},
+    {"i": 14, "p": "Bộ lọc đã lưu và chiến dịch giữ nguyên kết quả ở AC-7."},
+    {"i": 15, "p": "Đường dẫn ở AC-8."},
+    {"i": 16, "p": "Bộ lọc đã lưu của Thoả thuận ở AC-9."},
+    {"i": 17, "p": "Mắt người trên màn thật ở AC-10."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Máy từng tự quyết «trường đang tắt khỏi menu Bộ lọc vẫn lọc» — việc ấy có thể đổi số người trong chiến dịch đang chạy ngay khi lên. Đã chuyển thành Hỏi-5 cho anh, hợp đồng viết theo lối khuyên «giữ như hôm nay»."},
+    {"i": 1, "p": "Máy từng ghi «bỏ bước dựng bản bấm thử» là không còn lối nào khác, trong khi còn lối chờ DA17 gộp rồi dựng. Đã chuyển thành Hỏi-6."},
+    {"i": 2, "p": "Bài kiểm bộ lọc đã lưu từng tự viết tay khuôn cũ. Đã sửa: khuôn cũ và đáp án lấy từ chính bản đang chạy hôm nay."},
+    {"i": 3, "p": "Bài kiểm «trống» chưa liệt trước mọi ca, thiếu ca chữ bị xoá thành chuỗi rỗng. Đã sửa: 25 ca viết trước."},
+    {"i": 4, "p": "Chưa có bài kiểm màn Cài đặt › Trường thật sự cho bật bộ lọc ở mọi kiểu. Đã thêm bài kiểm dựng màn sửa trường cho từng kiểu, và bước đo màn bật một trường bằng tay."}
+  ]
+}
