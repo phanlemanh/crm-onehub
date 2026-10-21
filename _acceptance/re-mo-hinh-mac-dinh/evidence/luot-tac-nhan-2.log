@@ -1,0 +1,644 @@
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (55%)
+  - eve-authored-relative-extension-resolver (26%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (56%)
+  - eve-authored-relative-extension-resolver (23%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (68%)
+  - eve-authored-asset-import (28%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (34%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (35%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (65%)
+  - eve-authored-asset-import (33%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (35%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[eve:dev] 2 active local Workflow run(s) reference development generations that no longer exist (mvhbfqyl-bd2057ca-ee90-4fcd-8ea5-d5cfaf8dabe2, mvhb8da9-36fe0e46-a9c9-472b-8aaa-27db75025964). Their deliveries are quarantined; remove ".eve/.workflow-data" to discard the app's active local Workflow runs.
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AM',
+  runId: 'wrun_01M5E1F40F7M21C2852649YZ77',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AN',
+  runId: 'wrun_01M5E1F40C567KX4T5T8P8CF33',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AP',
+  runId: 'wrun_01M5E1F409TS7GAFCWVRZSPP8Z',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AQ',
+  runId: 'wrun_01M5E1BARPCQXMGC3GY9VRWBB5',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AR',
+  runId: 'wrun_01M5E1BARMTRAEZ1ZHDF9D6WWR',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AS',
+  runId: 'wrun_01M5E1BAR4YM92925S4Y9WPQ6G',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AT',
+  runId: 'wrun_01M5E1BAQXKS574BGNV8BT1PNM',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AV',
+  runId: 'wrun_01M5E1BAQ05DDA8MD81PFXQVZX',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AW',
+  runId: 'wrun_01M5E1BAPSFK39QXJPGK9T62MX',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AX',
+  runId: 'wrun_01M5E1BAJXA6RQ5KZ7S9MXJWS8',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AY',
+  runId: 'wrun_01M5E1BAJW4KHJHXADBW70T5FY',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99AZ',
+  runId: 'wrun_01M5E1BAJW4KHJHXADBW70T5FX',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B0',
+  runId: 'wrun_01M5E1BAJW4KHJHXADBW70T5FW',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B1',
+  runId: 'wrun_01M5E1BAJVCVJ9RENDM0KFCA1N',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B2',
+  runId: 'wrun_01M5E1BAJVCVJ9RENDM0KFCA1M',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B3',
+  runId: 'wrun_01M5E16HTZZ6V5P23DND70BRGF',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B4',
+  runId: 'wrun_01M5E16HSQTVDY87W1G232ZKTY',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B5',
+  runId: 'wrun_01M5E16HSH0RB6RM8A42286BR0',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B6',
+  runId: 'wrun_01M5E16HSH0RB6RM8A42286BQZ',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B7',
+  runId: 'wrun_01M5E16HSG0XQVVYHP7G1M1VG3',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B8',
+  runId: 'wrun_01M5E16HSED3EBYQRY18PYT7HT',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99B9',
+  runId: 'wrun_01M5E16HPAWKNTM53YTPDBJ7QW',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99BA',
+  runId: 'wrun_01M5E16HP5MR1GNTYW5HW8ZMRW',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99BB',
+  runId: 'wrun_01M5E16HP40VREX7P5PN74NDTB',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99BC',
+  runId: 'wrun_01M5E16HP323C1XZCWT69DR62K',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGCTW84HJDFQR5N99BD',
+  runId: 'wrun_01M5E16HP25CJNCAH6KN1WPGD9',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9F',
+  runId: 'wrun_01M5E16HP1W3GR0CD53HCE78RQ',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9G',
+  runId: 'wrun_01M5E148GJEA3ZXB7VRZVJ2E60',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9H',
+  runId: 'wrun_01M5E148F3WK5RHDZ13QXJAMQC',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9J',
+  runId: 'wrun_01M5E148F1NFJA9F946D1CJPS8',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9K',
+  runId: 'wrun_01M5E148F1NFJA9F946D1CJPS7',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9M',
+  runId: 'wrun_01M5E148F0GQX84CG0Z7BMZV5Z',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9N',
+  runId: 'wrun_01M5E148EY8X5BT7C0H2C9FCCS',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9P',
+  runId: 'wrun_01M5E148BSAT1W095YPPAKGR1M',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9Q',
+  runId: 'wrun_01M5E148BSAT1W095YPPAKGR1K',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9R',
+  runId: 'wrun_01M5E148BSAT1W095YPPAKGR1J',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9S',
+  runId: 'wrun_01M5E148BSAT1W095YPPAKGR1H',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9T',
+  runId: 'wrun_01M5E148BRN72Q2B2SK45H2XFR',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9V',
+  runId: 'wrun_01M5E148BRN72Q2B2SK45H2XFQ',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9W',
+  runId: 'wrun_01M5E0VZBTJ4XN2D2T52HE7C1H',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9X',
+  runId: 'wrun_01M5E0VZBQJ7WH433SFYAMVA0D',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9Y',
+  runId: 'wrun_01M5E0VZADDAFAPBXRPMC73CWR',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8P9Z',
+  runId: 'wrun_01M5E0VZA6P5BFW4Z3SVM0YP9S',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8PA0',
+  runId: 'wrun_01M5E0VZA6P5BFW4Z3SVM0YP9R',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8PA1',
+  runId: 'wrun_01M5E0VZA5JARTTMWS8XJN2FYY',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8PA2',
+  runId: 'wrun_01M5E0VZ6V54XYDWZRM2W3KSXC',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8PA3',
+  runId: 'wrun_01M5E0VZ6T7RW7GZA932P9WF9S',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8PA4',
+  runId: 'wrun_01M5E0VZ6T7RW7GZA932P9WF9R',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGD8S2BGZV6ACDV8PA5',
+  runId: 'wrun_01M5E0VZ6T7RW7GZA932P9WF9Q',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TP',
+  runId: 'wrun_01M5E0VZ6ST5QA4RZE2B893JGN',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TQ',
+  runId: 'wrun_01M5E0VZ6R25H1REPSTWJRCPG7',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TS',
+  runId: 'wrun_01M5E0TXZ342PB22CPNE89W851',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TT',
+  runId: 'wrun_01M5E0TXYPMNRZVNRS3NBPTZX1',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TV',
+  runId: 'wrun_01M5E0TXYG44TYV3Q14DQ7KZAT',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TW',
+  runId: 'wrun_01M5E0TXYF04THMCCQDJX1K6QZ',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TX',
+  runId: 'wrun_01M5E0TXY5JEBAMFEV4RYT0E9A',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TY',
+  runId: 'wrun_01M5E0TXSX6RXZCVW47XDBYYE6',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1TZ',
+  runId: 'wrun_01M5E0TXSVXBJEWNGZF975PC4B',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V0',
+  runId: 'wrun_01M5E0TXST8N172HB34A72017J',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V1',
+  runId: 'wrun_01M5E0TXST8N172HB34A72017H',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V2',
+  runId: 'wrun_01M5E0TXSSPZHCZ9QX2W4N5J7C',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V3',
+  runId: 'wrun_01M5E0TXSSPZHCZ9QX2W4N5J7B',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V4',
+  runId: 'wrun_01M5E0MMNZDVTA3FSRS3E76V7A',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V5',
+  runId: 'wrun_01M5E0MMNYPW2XDD5A6CNGCYN7',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V6',
+  runId: 'wrun_01M5E0MMNTXWJHAES4BR1K8S9D',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V7',
+  runId: 'wrun_01M5E0MMNRQRFX7N31VQHGBENM',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V8',
+  runId: 'wrun_01M5E0MMN9F913CGC05RX3EP87',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1V9',
+  runId: 'wrun_01M5E0MMMAPG8SQB3T35VXR6H0',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1VA',
+  runId: 'wrun_01M5E0MMEV6PC7B8ZRB3EEG60K',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGED2RWNT6REMFEW1VB',
+  runId: 'wrun_01M5E0MMEQDYGBT588428F2027',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMGFQ1R4899MNKS96KWB',
+  runId: 'wrun_01M5E0MMEPTB6QDWRYA5WT7S97',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMHF3EG762YCKYJ7QK7W',
+  runId: 'wrun_01M5DTEQG8KAFSPDE1E98YJB79',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMHF3EG762YCKYJ7QK7X',
+  runId: 'wrun_01M5DT9PF5TKTXP670KV8HZXEA',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMHF3EG762YCKYJ7QK7Y',
+  runId: 'wrun_01M5DT9PE5SETK59D3C175C3FZ',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMHF3EG762YCKYJ7QK7Z',
+  runId: 'wrun_01M5DT789V830EV8VREG2W4TPA',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMHF3EG762YCKYJ7QK80',
+  runId: 'wrun_01M5DT788BRAGSWTD6QNCMB66V',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMHG3C2F3XS939XFP8B4',
+  runId: 'wrun_01M5DT48Z9ZE67QNPWEC3Y0JJB',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMHG3C2F3XS939XFP8B5',
+  runId: 'wrun_01M5DT48Y7W2Q1QHQTP8S5WS5J',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMHG3C2F3XS939XFP8B6',
+  runId: 'wrun_01M5DT04KX155NT2QHFQKK246Y',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue delivery failed at the transport (loop 1), retrying {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMHG3C2F3XS939XFP8B7',
+  runId: 'wrun_01M5DT04HMV85XNE71Q86D3FST',
+  error: 'TypeError: fetch failed'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMG481YXZ80PHJX9MJY4',
+  runId: 'wrun_01M5E7W9BYA4ANACSV42ZPZ5JY',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMG5BHBTZSM93VWBZJSJ',
+  runId: 'wrun_01M5E6BVYKSHNV788B0Q09207P',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMG5BHBTZSM93VWBZJSK',
+  runId: 'wrun_01M5E68GCRQVK70B2ABEYDKWBJ',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMG5BHBTZSM93VWBZJSM',
+  runId: 'wrun_01M5E68GCQJANVRCKJTZTQKT7X',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMG6VTN1PQEANWRAPQDP',
+  runId: 'wrun_01M5E68GCER4EB2J7ZPBQJ6D23',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//sessionTimeoutWorkflow',
+  messageId: 'msg_01M5EYBMG6VTN1PQEANWRAPQDQ',
+  runId: 'wrun_01M5E68G8XZPP2VK29N61Z16P6',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMG6VTN1PQEANWRAPQDR',
+  runId: 'wrun_01M5E68FZA8BWW56HDSDFPXM7P',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMG6VTN1PQEANWRAPQDS',
+  runId: 'wrun_01M5E68FZBR7K86Y242A444B1A',
+  handlerError: '"TypeError: fetch failed"'
+}
+[world-local] Queue message failed (attempt 1, HTTP 500) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYBMG6VTN1PQEANWRAPQDT',
+  runId: 'wrun_01M5E68FZBR7K86Y242A444B19',
+  handlerError: '"TypeError: fetch failed"'
+}
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+
+EVALS 1
+target http://127.0.0.1:55016/
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+[agent] ▸ session wrun_01M5EYBPQH553GJE0TXBHW0JY5 on channel:crm
+[agent] » Submission id: cmvhxvzjd0001lb8g8401tk2k
+
+Build me an agent that gives me a snapshot of our CRM accounts.
+[agent] → set_chat_title title=Build CRM account snapshot agent
+[agent] ✓ set_chat_title 0.0s
+[agent] · step 0 tool-calls  in 11.0k out 220 $0.0018
+[agent] → subagent agent_builder message=Build (or revise) a team agent for this CRM wor…
+[agent] · step 1 tool-calls  in 11.3k out 465 $0.0019
+[agent] ✓ subagent agent_builder 22.9s
+[agent] ◂ Your agent draft is ready for review — it hasn't been deployed yet.
+
+**CRM Account Snapshot** (version 1, READY for review)
+- **Trigger:** One manual run — "Run account snapshot"
+- **Data scope:** Read-only access to all companies in the workspace, including their associated deals, contacts, and an…
+[agent] · step 1 stop  in 12.0k out 250 $0.0019
+✓  agent-builder  gates 10/10
+
+Results: 1 passed (1 total)
+Gates: 10 passed
+
+Completed in 34.3s
+
+[world-local] Queue message failed (attempt 1, HTTP 503) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//turnWorkflow',
+  messageId: 'msg_01M5EYCNCDBP0AYBCPK5SSZQY3',
+  runId: 'wrun_01M5EYBPWEXWG0G6ZN3PB2TYR8',
+  handlerError: '{"error":"socket hang up"}'
+}
+[world-local] Queue message failed (attempt 1, HTTP 503) {
+  queueName: '__eve6167656e74_wkf_workflow_workflow//eve//workflowEntry',
+  messageId: 'msg_01M5EYCR53TWZZ0KSJP6TPDF89',
+  runId: 'wrun_01M5EYBPQH553GJE0TXBHW0JY5',
+  handlerError: '{"error":"socket hang up"}'
+}

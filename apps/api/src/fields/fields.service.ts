@@ -7,6 +7,9 @@ import {
 } from "@crm/db";
 import {
 	attachValues,
+	type CachSapTruong,
+	cachSapTruong,
+	columnFor,
 	type FieldDefinitionWithOptions,
 	FieldValueError,
 	type FieldValueJson,
@@ -16,6 +19,7 @@ import {
 	recordColumn,
 	type SerializedField,
 	serializeField,
+	TIEN_TO_COT_TRUONG,
 	usesOptions,
 	writeValues,
 } from "@crm/db/fields";
@@ -36,6 +40,7 @@ import {
 } from "@nestjs/common";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { Page, SortDirection } from "../trpc/list-input";
 import type {
 	FieldCreateInput,
 	FieldReorderInput,
@@ -53,6 +58,27 @@ const RELATIONS = {
 	CONTACT: "contact",
 	DEAL: "deal",
 } as const satisfies Record<FieldEntity, string>;
+
+const TEN_BAN_GHI = {
+	COMPANY: [{ name: "asc" }],
+	CONTACT: [{ lastName: "asc" }, { firstName: "asc" }],
+	DEAL: [{ name: "asc" }],
+} as const satisfies Record<FieldEntity, readonly object[]>;
+
+export type WhereTheoLoai = {
+	COMPANY: Prisma.CompanyWhereInput;
+	CONTACT: Prisma.ContactWhereInput;
+	DEAL: Prisma.DealWhereInput;
+};
+
+function thuTuGiaTri(
+	cach: CachSapTruong,
+	dir: SortDirection,
+): Prisma.FieldValueOrderByWithRelationInput {
+	if (cach === "luaChon") return { option: { position: dir } };
+	if (cach === "nguoi") return { user: { name: dir } };
+	return { [cach]: dir };
+}
 
 @Injectable()
 export class FieldsService {
@@ -649,9 +675,103 @@ export class FieldsService {
 		return attachValues(definitions, rows);
 	}
 
+	async sapTheoTruong<E extends FieldEntity>(
+		entity: E,
+		sapXep: { sort?: string; dir: SortDirection },
+		where: WhereTheoLoai[E],
+		trang: Page,
+	): Promise<string[] | null> {
+		if (!sapXep.sort?.startsWith(TIEN_TO_COT_TRUONG)) return null;
+
+		const key = sapXep.sort.slice(TIEN_TO_COT_TRUONG.length);
+		if (!key) return null;
+
+		const definition = await this.db.fieldDefinition.findFirst({
+			where: { entity, key, archivedAt: null },
+			select: { id: true, type: true },
+		});
+		if (!definition) return null;
+
+		const cach = cachSapTruong(definition.type);
+		if (!cach) return null;
+
+		const relation = RELATIONS[entity];
+		const column = recordColumn(entity);
+		const coGiaTri: Prisma.FieldValueWhereInput = {
+			fieldId: definition.id,
+			[columnFor(definition.type)]: { not: null },
+		};
+		const doanCo: Prisma.FieldValueWhereInput = {
+			...coGiaTri,
+			[relation]: { is: where },
+		};
+
+		const [soCo, hangCo] = await Promise.all([
+			this.db.fieldValue.count({ where: doanCo }),
+			this.db.fieldValue.findMany({
+				where: doanCo,
+				orderBy: [
+					thuTuGiaTri(cach, sapXep.dir),
+					...TEN_BAN_GHI[entity].map((thuTu) => ({ [relation]: thuTu })),
+					{ [column]: "asc" },
+				],
+				skip: trang.skip,
+				take: trang.take,
+				select: { [column]: true },
+			}),
+		]);
+
+		const ids = hangCo.flatMap((hang) => {
+			const id = hang[column];
+			return id ? [id] : [];
+		});
+
+		const conLai = trang.take - ids.length;
+		if (conLai <= 0) return ids;
+
+		const trong = await this.banGhiTrong(entity, where, coGiaTri, {
+			skip: Math.max(0, trang.skip - soCo),
+			take: conLai,
+		});
+
+		return [...ids, ...trong];
+	}
+
+	private async banGhiTrong<E extends FieldEntity>(
+		entity: E,
+		where: WhereTheoLoai[E],
+		coGiaTri: Prisma.FieldValueWhereInput,
+		trang: Page,
+	): Promise<string[]> {
+		const khongGiaTri = { fieldValues: { none: coGiaTri } };
+		const chon = { ...trang, select: { id: true } } as const;
+
+		const hang =
+			entity === "DEAL"
+				? await this.db.deal.findMany({
+						...chon,
+						where: { AND: [where as Prisma.DealWhereInput, khongGiaTri] },
+						orderBy: [...TEN_BAN_GHI.DEAL, { id: "asc" }],
+					})
+				: entity === "COMPANY"
+					? await this.db.company.findMany({
+							...chon,
+							where: { AND: [where as Prisma.CompanyWhereInput, khongGiaTri] },
+							orderBy: [...TEN_BAN_GHI.COMPANY, { id: "asc" }],
+						})
+					: await this.db.contact.findMany({
+							...chon,
+							where: { AND: [where as Prisma.ContactWhereInput, khongGiaTri] },
+							orderBy: [...TEN_BAN_GHI.CONTACT, { id: "asc" }],
+						});
+
+		return hang.map((dong) => dong.id);
+	}
+
 	async tableValuesFor(
 		entity: FieldEntity,
 		recordIds: string[],
+		gioiHan?: number,
 	): Promise<Map<string, Record<string, FieldValueJson>>> {
 		const byRecord = new Map<string, Record<string, FieldValueJson>>();
 
@@ -661,6 +781,7 @@ export class FieldsService {
 			where: { entity, archivedAt: null, showOnTable: true },
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
+			take: gioiHan,
 		});
 
 		if (definitions.length === 0) return byRecord;

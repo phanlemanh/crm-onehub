@@ -3409,6 +3409,26 @@
       "buoc_ke": "Làn Mac Studio · thứ 10"
     },
     {
+      "ma": "VK13",
+      "slug": "gon-dau-trang-lay-y-kien",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.7,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Gọn đầu trang Lấy ý kiến",
+      "ten_ngan": "Gọn đầu Lấy ý kiến",
+      "ngay": "2026-10-20",
+      "vai": "Thành viên góp ý",
+      "cau_giao": "«Trên điện thoại 390×812, người góp ý mở Lấy ý kiến và thấy nút Gửi ngay trong màn đầu, không phải cuộn»",
+      "vi_sao": "Nút «Gửi» của Lấy ý kiến ở 390×812 nằm 927px trên onehub (941px sau VK2) — quá màn đầu 812px; hồ sơ đã ký dot-hoi-y-tuong-okr E12 bước 5 đỏ sẵn trên nền. Chủ kho chọn (a) cho V1-4 ngày 20/10: ghi đỏ sẵn trên thẻ VK2 và tách việc riêng.",
+      "bat_khi": "Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác",
+      "ghi_chu": "Tách từ V1-4 của VK2 (đợt vo-khu-muc-tieu, 20/10). Chủ kho gõ «gon-dau-trang-lay-y-kien: build» ở phiên giám sát vk.",
+      "dot": "okr-vo-khu-1810",
+      "buoc_ke": "Làn Mac Studio · sau VK2"
+    },
+    {
       "ma": "NS1",
       "slug": "sheets-lay-so-linh-hoat",
       "hang": "T3",
