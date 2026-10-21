@@ -665,6 +665,8 @@ const vi = {
 		},
 		daGuiMotPhan: (x: number, y: number) => `Đã gửi ${x}/${y} KR tuần này`,
 		nhanDaGui: "Đã gửi tuần này",
+		xemTruoc: "Xem trước điểm mới so với đích",
+		tienDoMoi: (n: number) => `Tiến độ mới ${n}%`,
 	},
 	traoDoi: {
 		danhSach: "Bình luận và ghi nhận",
@@ -1421,6 +1423,8 @@ const en: OkrMessages = {
 		daGuiMotPhan: (x: number, y: number) =>
 			`Sent ${x}/${y} key results this week`,
 		nhanDaGui: "Sent this week",
+		xemTruoc: "Preview of the new point against the target",
+		tienDoMoi: (n: number) => `New progress ${n}%`,
 	},
 	traoDoi: {
 		danhSach: "Comments and recognitions",
