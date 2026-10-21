@@ -1,17 +1,19 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { GOM } from "../gom-cau-hinh.ts";
 import { type chayGom as ChayGom, chayGom } from "../gom-lich.ts";
 import { dauTap, docKhoiMay } from "../gom-than-pr.ts";
 import {
+	banTiem,
 	type ClaudeGia,
 	claudeGia,
 	commitNguoi,
 	donTam,
 	dungKhoGom,
 	type GhGia,
+	GOC_TEST,
 	g,
 	ghGia,
 	giaiKit,
@@ -22,8 +24,6 @@ import {
 	TEP_LO_TRINH,
 	themTinHieu,
 	thuMuc,
-	banTiem,
-	GOC_TEST,
 } from "./gom-kho-tam.ts";
 
 const AG = giaiKit();

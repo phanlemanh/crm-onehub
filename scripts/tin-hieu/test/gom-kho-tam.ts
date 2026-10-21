@@ -536,4 +536,3 @@ export async function banTiem(sua: Tiem[]): Promise<typeof chayGom> {
 	};
 	return m.chayGom;
 }
-

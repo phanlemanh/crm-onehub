@@ -252,11 +252,7 @@ function lechBam(
 		.sort();
 }
 
-export function duongBanGom(
-	goc: string,
-	thuMuc: string,
-	now: Date,
-): string {
+export function duongBanGom(goc: string, thuMuc: string, now: Date): string {
 	const ngay = now.toLocaleDateString("sv-SE", {
 		timeZone: "Asia/Ho_Chi_Minh",
 	});
@@ -283,31 +279,13 @@ export function gocKit(
 	return r.ma === 0 && g && kiem(g) ? g : null;
 }
 
-export async function chayGom(o: {
-	goc: string;
-	env: Record<string, string | undefined>;
-	gh: string;
-	claude: string;
-	now: Date;
-	tranMs?: number;
-}): Promise<KetQuaGom> {
-	const nguon: Env = { ...process.env, ...o.env };
+function moiTruongLuot(nguon: Env) {
 	const khoa = GOM.khoaMoHinh
 		.map((k) => nguon[k])
 		.filter((v): v is string => Boolean(v));
 	const token =
-		GOM.tokenKho.map((k) => nguon[k]).find((v) => Boolean(v)) ??
-		nguon.GH_TOKEN;
+		GOM.tokenKho.map((k) => nguon[k]).find((v) => Boolean(v)) ?? nguon.GH_TOKEN;
 	const biMat = [...khoa, ...(token ? [token] : [])];
-	const che = (s: string): string =>
-		biMat
-			.flatMap(dangKhoa)
-			.reduce((t, k) => t.split(k).join("***"), s);
-	const them: string[] = [];
-	const do1 = (dong: string[]): KetQuaGom => ({
-		ma: 1,
-		dong: [...dong, ...them].map(che),
-	});
 	const envChay: NodeJS.ProcessEnv = { ...nguon };
 	for (const k of GOM.khoaBo) delete envChay[k];
 	Object.assign(envChay, DANH_TINH, gitCauHinh(GOM.gitLenh));
@@ -324,6 +302,36 @@ export async function chayGom(o: {
 		...envChay,
 		...(token ? { GH_TOKEN: token } : {}),
 	};
+	return { khoa, token, biMat, envChay, envMang, envGh };
+}
+
+function dongTuChoi(ra: string): string | null {
+	try {
+		const kq = ketQuaPhien.parse(JSON.parse(ra));
+		const ten = [...new Set(kq.permission_denials.map((d) => d.tool_name))];
+		return `${GOM.thongDiep.biTuChoi} ${kq.permission_denials.length} lời gọi${ten.length ? `: ${ten.join(", ")}` : ""}`;
+	} catch {
+		return null;
+	}
+}
+
+export async function chayGom(o: {
+	goc: string;
+	env: Record<string, string | undefined>;
+	gh: string;
+	claude: string;
+	now: Date;
+	tranMs?: number;
+}): Promise<KetQuaGom> {
+	const nguon: Env = { ...process.env, ...o.env };
+	const { khoa, token, biMat, envChay, envMang, envGh } = moiTruongLuot(nguon);
+	const che = (s: string): string =>
+		biMat.flatMap(dangKhoa).reduce((t, k) => t.split(k).join("***"), s);
+	const them: string[] = [];
+	const do1 = (dong: string[]): KetQuaGom => ({
+		ma: 1,
+		dong: [...dong, ...them].map(che),
+	});
 	const git = (...thamSo: string[]) => chay("git", thamSo, o.goc, envChay);
 	const gitPhai = (...thamSo: string[]): string => {
 		const r = git(...thamSo);
@@ -421,10 +429,7 @@ export async function chayGom(o: {
 
 	if (!khoa.length) return do1([GOM.thongDiep.thieuKhoa]);
 	const nha = nguon.HOME;
-	const trenDia = quetDia(
-		[o.goc, ...(nha ? [nha] : [])],
-		token ? [token] : [],
-	);
+	const trenDia = quetDia([o.goc, ...(nha ? [nha] : [])], token ? [token] : []);
 	if (trenDia.length) return do1([GOM.thongDiep.tokenTrenDia, ...trenDia]);
 
 	let ch: CauHinhGom;
@@ -464,15 +469,8 @@ export async function chayGom(o: {
 	const lech = lechBam(bamTruoc, bamSieuDuLieu(dirGit), o.goc);
 	rmSync(thuMucTam, { recursive: true, force: true });
 	if (lech.length) return do1([GOM.thongDiep.sieuDuLieu, ...lech]);
-	try {
-		const kq = ketQuaPhien.parse(JSON.parse(ph.ra));
-		const tenCongCu = [
-			...new Set(kq.permission_denials.map((d) => d.tool_name)),
-		];
-		them.push(
-			`${GOM.thongDiep.biTuChoi} ${kq.permission_denials.length} lời gọi${tenCongCu.length ? `: ${tenCongCu.join(", ")}` : ""}`,
-		);
-	} catch {}
+	const tuChoi = dongTuChoi(ph.ra);
+	if (tuChoi) them.push(tuChoi);
 	if (ph.ma_loi === "ENOENT" || ph.ma_loi === "EACCES")
 		return do1([GOM.thongDiep.thieuLenh]);
 	if (ph.ma_loi === "ETIMEDOUT" || ph.ma_loi === "SIGKILL")

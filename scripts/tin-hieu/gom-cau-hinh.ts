@@ -114,7 +114,7 @@ export const GOM = {
 			[
 				"Chạy skill /acceptance-gate:gom-tin-hieu cho mọi tín hiệu chưa có chỗ, rồi skill /acceptance-gate:cat-luot với chính bản gom vừa ghi làm bản phạm vi.",
 				`Ghi bản gom vào đúng tệp ${o.banGom} (lượt đã tạo sẵn tệp rỗng và đưa nó vào index, răng phủ chạy được ngay), ghi hàng đề xuất vào tệp lộ trình. Không commit, không đẩy, không mở PR, không sửa tệp nào khác — lượt lịch tự commit, kiểm và giao.`,
-				"Lệnh chỉ được chạy đúng nguyên văn một trong các dòng dưới — không biến, không nháy, không nối lệnh; skill viết `AG=… && node \"$AG/…\"` thì chạy dòng tương ứng ở đây:",
+				'Lệnh chỉ được chạy đúng nguyên văn một trong các dòng dưới — không biến, không nháy, không nối lệnh; skill viết `AG=… && node "$AG/…"` thì chạy dòng tương ứng ở đây:',
 				...o.lenh.map((l) => `- ${l}`),
 				DU_LIEU,
 				"Không có người để hỏi: câu nào skill bảo hỏi người thì chọn theo khuyến nghị của skill và ghi lý do vào tên nhóm hay lý do lẻ.",

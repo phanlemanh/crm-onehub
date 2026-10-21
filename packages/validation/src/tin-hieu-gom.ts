@@ -67,8 +67,6 @@ export const cauHinhGom = z.object({
 export type CauHinhGom = z.infer<typeof cauHinhGom>;
 
 export const ketQuaPhien = z.object({
-	permission_denials: z
-		.array(z.object({ tool_name: z.string() }))
-		.default([]),
+	permission_denials: z.array(z.object({ tool_name: z.string() })).default([]),
 });
 export type KetQuaPhien = z.infer<typeof ketQuaPhien>;
