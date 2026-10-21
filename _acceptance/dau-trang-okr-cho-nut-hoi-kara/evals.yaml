@@ -31,7 +31,8 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "_acceptance/dau-trang-okr-cho-nut-hoi-kara/rang/khong-sua.mjs"
     expected: |
-      exit 0. khong-sua.mjs: (1) không commit nào của vòng (git log --no-merges --grep=dau-trang-okr-cho-nut-hoi-kara) chạm
+      exit 0. khong-sua.mjs: (1) không commit nào của vòng (git log --no-merges --grep=dau-trang-okr-cho-nut-hoi-kara, từ cha đầu
+      của commit gộp đưa evidence-report.md vào origin/onehub tới HEAD; chưa gộp thì --first-parent) chạm
       apps/app/test/okr-dau-trang-khu.dom.tsx hay apps/app/test/nut-hoi-kara-thay-khung.dom.tsx — in «khong-sua: <n>
       commit cua vong, 0 cham»; (2) chạy hai tệp đó bằng bun test (preload setup-dom, TZ Asia/Ho_Chi_Minh) đều mã 0.
       CHIỀU ĐỎ (khong-sua.mjs --kiem-do-do, bản sao): commit một sửa nhỏ vào nut-hoi-kara-thay-khung.dom.tsx mang tên vòng
@@ -49,8 +50,9 @@ evals:
     expected: |
       exit 0. go-mo-coi.mjs: (a) không có apps/app/app/(app)/[slug]/okr/dau-trang-okr-cho.tsx và
       apps/app/test/dau-trang-okr-cho.dom.tsx trong git ls-files; (b) không tệp nào dưới apps/app nhập «./dau-trang-okr-cho»
-      hay «okr/dau-trang-okr-cho»; (c) _acceptance/config.yaml không còn khoá nào tên dto_; (d) git diff --name-only
-      merge-base(HEAD, origin/onehub)..HEAD -- apps/app chỉ có apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx và
+      hay «okr/dau-trang-okr-cho»; (c) _acceptance/config.yaml không còn khoá nào tên dto_; (d) tệp đổi của vòng dưới apps/app —
+      khi đã gộp: diff của commit gộp đưa evidence-report.md vào origin/onehub (M^1..M) hợp với tệp mà commit mang
+      tên hồ sơ sau M chạm; chưa gộp: git diff --name-only merge-base(HEAD, origin/onehub)..HEAD — chỉ có apps/app/app/(app)/[slug]/okr/dau-trang-okr.tsx và
       apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx (hai tệp mồ côi chỉ có trên nhánh nên không hiện). In
       «mo-coi: 0 tep cu · 0 nhap · 0 khoa dto · ma doi 1 tep». Vi phạm: «CON_TEP <tệp>», «CON_NHAP <tệp>», «CON_KHOA
       <khoá>», «DOI_NGOAI <tệp>», mã 1.
