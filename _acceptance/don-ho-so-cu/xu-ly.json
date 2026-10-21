@@ -70,6 +70,54 @@
           "headRefName": "fix/thu-paths-e15-giai-doan"
         }
       ]
+    },
+    {
+      "slug": "vai-chi-okr",
+      "eval": "E13",
+      "cach": "ngoai-pham-vi",
+      "run_id": "repin-20261020T233201Z-68220",
+      "ly_do": "Thanh bên của người dùng chỉ-OKR hiện 5 liên kết thay vì 3, của quản trị 12 thay vì 9 — sản phẩm đã đổi; chưa rõ là thêm mục có chủ đích hay lộ chỗ người chỉ-OKR không được thấy.",
+      "lan_chu": "Mac Studio · thanh bên khu",
+      "viec_phu": "F1-16"
+    },
+    {
+      "slug": "ba-ho-so-do-san",
+      "eval": "E2",
+      "cach": "cho-lan-chu",
+      "run_id": "repin-20261020T233201Z-68220",
+      "ly_do": "Thước đọc tệp kiểm chéo tạm .acceptance-runs/kiem-cheo/2026-10-11.json, không nằm trong kho và đã mất. PR #439 (F31) đang chạm hồ sơ này nên F35 không chạm.",
+      "pr": [
+        {
+          "number": 439,
+          "headRefName": "fix/thu-paths-e15-giai-doan"
+        }
+      ]
+    },
+    {
+      "slug": "ba-ho-so-do-san",
+      "eval": "E3",
+      "cach": "cho-lan-chu",
+      "run_id": "repin-20261020T233201Z-68220",
+      "ly_do": "Thước đếm LO-TRINH.html và PRODUCT-MAP.md (máy vẽ) là tệp đổi chưa khai. PR #439 (F31) đang chạm hồ sơ này nên F35 không chạm.",
+      "pr": [
+        {
+          "number": 439,
+          "headRefName": "fix/thu-paths-e15-giai-doan"
+        }
+      ]
+    },
+    {
+      "slug": "ba-ho-so-do-san",
+      "eval": "E7",
+      "cach": "cho-lan-chu",
+      "run_id": "repin-20261020T233201Z-68220",
+      "ly_do": "Cùng gốc E2: tệp kiểm chéo tạm 11/10 đã mất. PR #439 (F31) đang chạm hồ sơ này nên F35 không chạm.",
+      "pr": [
+        {
+          "number": 439,
+          "headRefName": "fix/thu-paths-e15-giai-doan"
+        }
+      ]
     }
   ]
 }
