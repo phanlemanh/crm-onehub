@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -9,6 +8,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
+import { chuyenSoDoCu } from "../so-do/chuyen-so-do-cu";
 import { duongSoDoTuBoOkr } from "../so-do/duong-so-do";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { KhungDangTaiDonVi } from "./hang-cong-cu";
@@ -52,10 +52,7 @@ async function ChuyenSoDoCu({
 	params: Params;
 	searchParams: SearchParams;
 }): Promise<null> {
-	const [{ slug }, thamSo] = await Promise.all([params, searchParams]);
-	const dich = duongSoDoTuBoOkr(slug, thamSo);
-	if (dich) redirect(dich);
-	return null;
+	return chuyenSoDoCu(params, searchParams, duongSoDoTuBoOkr);
 }
 
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {

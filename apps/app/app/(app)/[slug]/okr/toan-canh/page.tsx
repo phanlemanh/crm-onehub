@@ -1,7 +1,6 @@
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { SectionHeading } from "@crm/ui/components/section-heading";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -12,6 +11,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
+import { chuyenSoDoCu } from "../so-do/chuyen-so-do-cu";
 import { duongSoDoTuSucKhoe } from "../so-do/duong-so-do";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { CuonToiNeo } from "./cuon-toi-neo";
@@ -54,10 +54,7 @@ async function ChuyenSoDoCu({
 	params: Params;
 	searchParams: SearchParams;
 }): Promise<null> {
-	const [{ slug }, thamSo] = await Promise.all([params, searchParams]);
-	const dich = duongSoDoTuSucKhoe(slug, thamSo);
-	if (dich) redirect(dich);
-	return null;
+	return chuyenSoDoCu(params, searchParams, duongSoDoTuSucKhoe);
 }
 
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {

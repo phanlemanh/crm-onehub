@@ -5,6 +5,7 @@ import { parse } from "node:querystring";
 import { getPathMatch } from "next/dist/shared/lib/router/utils/path-match";
 import { prepareDestination } from "next/dist/shared/lib/router/utils/prepare-destination";
 import { isValidElement, type ReactElement, type ReactNode } from "react";
+import { z } from "zod";
 
 mock.module("@/lib/locale/server", () => ({ getLocale: async () => "vi" }));
 mock.module("@/lib/session", () => ({ requireSession: async () => null }));
@@ -84,7 +85,7 @@ function timThanhPhan(nut: ReactNode, ten: string): NutCay | null {
 	}
 	if (!isValidElement(nut)) return null;
 	const e = nut as NutCay;
-	if (typeof e.type === "function" && e.type.name === ten) return e;
+	if ((e.type as { name?: string }).name === ten) return e;
 	return timThanhPhan(e.props.children, ten);
 }
 
@@ -98,13 +99,22 @@ async function dichCuaTrangSucKhoe(
 	const chuyen = timThanhPhan(cay, "ChuyenSoDoCu");
 	if (!chuyen) return "khong co lop chuyen";
 	try {
-		await (chuyen.type as (p: unknown) => Promise<null>)(chuyen.props);
+		await (chuyen.type as (p: NutCay["props"]) => Promise<null>)(chuyen.props);
 		return null;
 	} catch (e) {
-		const digest = (e as { digest?: string }).digest ?? "";
-		if (!digest.startsWith("NEXT_REDIRECT")) throw e;
-		return digest.split(";")[2] ?? null;
+		const loi = loiChuyen.safeParse(e);
+		if (!loi.success) throw e;
+		return dichChuyen(loi.data);
 	}
+}
+
+const loiChuyen = z.union([
+	z.object({ digest: z.string().startsWith("NEXT_REDIRECT") }),
+	z.object({ dich: z.string() }),
+]);
+
+function dichChuyen(loi: z.infer<typeof loiChuyen>): string | null {
+	return "digest" in loi ? (loi.digest.split(";")[2] ?? null) : loi.dich;
 }
 
 function git(...lenh: string[]): string {
@@ -134,12 +144,14 @@ describe("vk6-bo-cay", () => {
 			const chuyen = timThanhPhan(cay, "ChuyenSoDoCu");
 			if (!chuyen) return "khong co lop chuyen";
 			try {
-				await (chuyen.type as (p: unknown) => Promise<null>)(chuyen.props);
+				await (chuyen.type as (p: NutCay["props"]) => Promise<null>)(
+					chuyen.props,
+				);
 				return null;
 			} catch (e) {
-				const digest = (e as { digest?: string }).digest ?? "";
-				if (!digest.startsWith("NEXT_REDIRECT")) throw e;
-				return digest.split(";")[2] ?? null;
+				const loi = loiChuyen.safeParse(e);
+				if (!loi.success) throw e;
+				return dichChuyen(loi.data);
 			}
 		};
 		const CA: [Record<string, string>, string | null][] = [
