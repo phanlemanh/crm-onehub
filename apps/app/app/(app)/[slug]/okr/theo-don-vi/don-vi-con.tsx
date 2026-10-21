@@ -32,7 +32,7 @@ export function DonViCon({
 	const lienKet = (khoa: string) => {
 		const q = new URLSearchParams({ [SEARCH_PARAM.okr.don]: khoa });
 		if (ky) q.set(SEARCH_PARAM.okr.ky, ky);
-		return `${url("/okr/theo-don-vi")}?${q}`;
+		return `${url("/okr/bo-okr")}?${q}`;
 	};
 	return (
 		<section className="flex flex-col gap-3" data-don-vi-con>
