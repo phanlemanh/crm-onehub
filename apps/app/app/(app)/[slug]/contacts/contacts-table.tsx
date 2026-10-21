@@ -19,10 +19,9 @@ import { CompanyCell } from "@/components/crm/company-cell";
 import { contactName } from "@/components/crm/contact-name";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
 import { useFieldFacets } from "@/components/crm/fields/field-facets";
-import { OwnerCell } from "@/components/crm/owner-cell";
+import { OTruongBang } from "@/components/crm/fields/kieu-truong";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
-import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { ListSearch } from "@/components/data-table/list-search";
 import { SavedViewsMenu } from "@/components/data-table/saved-views-menu";
 import { useTableQuery } from "@/components/data-table/use-table-query";
@@ -61,8 +60,7 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			header: m.headers.phone,
 			width: "w-[14%]",
 			hideBelow: "md",
-			cell: (row) =>
-				row.phone ? <SoDienThoai so={row.phone} /> : <EmptyCellValue />,
+			cell: (row) => <OTruongBang kieu="PHONE" giaTri={row.phone} />,
 		},
 		{
 			id: "title",
@@ -70,12 +68,7 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			sortable: true,
 			width: "w-[20%]",
 			hideBelow: "lg",
-			cell: (row) =>
-				row.title ? (
-					<span className="truncate">{row.title}</span>
-				) : (
-					<EmptyCellValue />
-				),
+			cell: (row) => <OTruongBang kieu="TEXT" giaTri={row.title} />,
 		},
 		{
 			id: "email",
@@ -83,12 +76,7 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			sortable: true,
 			width: "w-[24%]",
 			hideBelow: "md",
-			cell: (row) =>
-				row.email ? (
-					<span className="truncate text-muted-foreground">{row.email}</span>
-				) : (
-					<EmptyCellValue />
-				),
+			cell: (row) => <OTruongBang kieu="EMAIL" giaTri={row.email} />,
 		},
 		{
 			id: "company",
@@ -103,7 +91,13 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			sortable: true,
 			width: "w-[16%]",
 			hideBelow: "md",
-			cell: (row) => <OwnerCell owner={row.owner} />,
+			cell: (row) => (
+				<OTruongBang
+					kieu="USER"
+					giaTri={row.owner?.id ?? null}
+					nguoi={row.owner}
+				/>
+			),
 		},
 		{
 			id: "createdAt",

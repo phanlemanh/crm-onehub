@@ -260,6 +260,7 @@ describe("ghi-that", () => {
 			recordId: C.id,
 			key: KHOA_HTH,
 			value: "truoc",
+			unattended: false,
 		});
 		expect(dau.written, "gieo gia tri truoc").toBe(true);
 		const R = {
@@ -287,7 +288,13 @@ describe("ghi-that", () => {
 		const web = ctxMucDich({});
 		await trongNguCanhEve(() =>
 			sfv.execute(
-				{ entity: "CONTACT", recordId: C.id, key: KHOA_HTH, value: "web" },
+				{
+					entity: "CONTACT",
+					recordId: C.id,
+					key: KHOA_HTH,
+					value: "web",
+					replace: true,
+				},
 				web,
 			),
 		);
