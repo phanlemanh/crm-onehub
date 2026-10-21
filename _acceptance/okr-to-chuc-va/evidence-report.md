@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 17b55bd1536d842b98b87c5086a4d669a21e2b80
+verified_commit: 603c4f8fe81a9b0b35dffef5173b82fae3160d39
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (23/23 eval đạt, 0 phát hiện trong hợp đồng). Mười một mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 3, 4, 5, 7 ghi Known limits; Ngoài-6, 8, 9, 10, 11 chấp nhận không sửa. Hai phát hiện round 1 rơi khỏi thẻ (bài so-kr chỉ kiểm URL record, bài nut-them chỉ kiểm khoá URL) ghi Known limits. Phạm vi cắt/hoãn đồng ý cắt; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -330,3 +330,7 @@ sha: a0124b2dba7fd0f324ebb62c0a560e6b83425141 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-21, do bài tổ chức lưu trữ đơn vị nó tạo sau khi chạy (V2-13, chủ kho cho) để ca do-phu E11 không đỏ theo thứ tự tệp
 run_id: repin-20261021T001341Z-53010
 sha: 17b55bd1536d842b98b87c5086a4d669a21e2b80 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E3, E11, E13, E18, E20 · diff chạm vật đo ngoài làn máy: E11, E13, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-21, do ghim lại bằng làn eval
+run_id: repin-20261021T082654Z-54523
+sha: 603c4f8fe81a9b0b35dffef5173b82fae3160d39 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E3, E11, E13, E18, E20 · diff chạm vật đo ngoài làn máy: E11, E13, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
