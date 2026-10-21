@@ -28,13 +28,40 @@ function git(goc, args) {
 	return r.stdout.trim();
 }
 
+function mocGop(goc) {
+	const r = spawnSync(
+		"git",
+		[
+			"log",
+			"--first-parent",
+			"--merges",
+			"--format=%H",
+			"origin/onehub",
+			"--",
+			`_acceptance/${SLUG}/evidence-report.md`,
+		],
+		{ cwd: goc, encoding: "utf8" },
+	);
+	const m =
+		r.status === 0
+			? r.stdout.trim().split("\n").filter(Boolean).at(-1)
+			: undefined;
+	if (!m) return null;
+	const laTo = spawnSync("git", ["merge-base", "--is-ancestor", m, "HEAD"], {
+		cwd: goc,
+	});
+	return laTo.status === 0 ? m : null;
+}
+
 function soCay(goc) {
+	const m = mocGop(goc);
 	const commit = git(goc, [
 		"log",
-		"--first-parent",
+		...(m ? [] : ["--first-parent"]),
 		"--no-merges",
 		"--format=%H",
 		`--grep=${SLUG}`,
+		...(m ? [`${m}^1..HEAD`] : []),
 	])
 		.split("\n")
 		.filter(Boolean);
@@ -60,8 +87,7 @@ function inKet({ soCommit, cham }) {
 		console.log(`khong-sua: ${soCommit} commit cua vong, 0 cham`);
 		return true;
 	}
-	for (const tep of cham)
-		console.log(`CHAM ${tep}`);
+	for (const tep of cham) console.log(`CHAM ${tep}`);
 	return false;
 }
 

@@ -82,7 +82,7 @@ const KHONG_BAT: string[] = [
 	"/ws/okr/cap-nhat-tuan-x",
 	"/ws/okr/cap-nhat-tuan/x",
 	"/ws/okr",
-	"/ws/okr/theo-don-vi",
+	"/ws/okr/bo-okr",
 ];
 
 describe("ctbp-chuyen-huong", () => {
