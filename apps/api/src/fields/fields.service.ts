@@ -305,9 +305,9 @@ export class FieldsService {
 	): Promise<SerializedField[]> {
 		await this.requireManager(actingUserId);
 
-		if ("ids" in input) {
+		if (input.ids) {
 			await this.reorderCustom(input.entity, input.ids);
-		} else {
+		} else if (input.items) {
 			await this.reorderMixed(input.entity, input.items);
 		}
 

@@ -155,20 +155,23 @@ function datGia(duong: string, lay: (vao: BienGhi) => unknown) {
 	duLieu.set(duong, lay);
 }
 
-const MAC_DINH: Record<string, (vao: BienGhi) => unknown> = {
-	"fields.access": () => ({ canManage: kho.quyen }),
-	"fields.list": (vao) => dsTruong(vao.entity ?? "DEAL"),
-	"fields.layout": () => {
-		if (kho.cheDoBoTri === "treo") return new Promise(() => {});
-		if (kho.cheDoBoTri === "loi") throw new LoiGia("layout failed");
-		return kho.boTri;
-	},
-	"fields.coverage": () => ({ filled: 0, total: 0 }),
-	"users.list": () => [],
-};
+const MAC_DINH = new Map<string, (vao: BienGhi) => unknown>([
+	["fields.access", () => ({ canManage: kho.quyen })],
+	["fields.list", (vao) => dsTruong(vao.entity ?? "DEAL")],
+	[
+		"fields.layout",
+		() => {
+			if (kho.cheDoBoTri === "treo") return new Promise(() => {});
+			if (kho.cheDoBoTri === "loi") throw new LoiGia("layout failed");
+			return kho.boTri;
+		},
+	],
+	["fields.coverage", () => ({ filled: 0, total: 0 })],
+	["users.list", () => []],
+]);
 
 function docGia(duong: string, vao: BienGhi): unknown {
-	const lay = duLieu.get(duong) ?? MAC_DINH[duong];
+	const lay = duLieu.get(duong) ?? MAC_DINH.get(duong);
 	return lay ? lay(vao) : null;
 }
 

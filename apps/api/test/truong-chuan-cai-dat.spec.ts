@@ -8,14 +8,15 @@ import {
 	parseBoTriTruong,
 } from "@crm/validation/bo-tri-truong";
 import type { INestApplication } from "@nestjs/common";
-import { Test, type TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { companyDetailOutput } from "../src/companies/companies.contracts";
+import { createApp } from "../src/create-app";
 import { dealDetailOutput } from "../src/deals/deals.contracts";
 import {
 	fieldListOutput,
 	serializedFieldOutput,
 } from "../src/fields/fields.contracts";
+import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 const TIEN_TO = "tcc";
@@ -154,12 +155,7 @@ async function xoaBoTri() {
 }
 
 beforeAll(async () => {
-	const { AppModule } = await import("../src/app.module");
-	const modul: TestingModule = await Test.createTestingModule({
-		imports: [AppModule],
-	}).compile();
-	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	app = await createApp();
 
 	chuId = ma("chu");
 	await gieoThanhVien(chuId, "owner");
@@ -331,6 +327,31 @@ describe("tcc-api-reorder-cu", () => {
 		const iA = sau.findIndex((m) => m.key === a.key);
 		const iB = sau.findIndex((m) => m.key === b.key);
 		if (!(iB < iA)) throw new Error("tcc api reorder cu: khong doi cho");
+
+		const rest = await request(app.getHttpServer())
+			.post(`${REST_BRIDGE_PATH}/fields/reorder`)
+			.set("cookie", cookie.quanTri)
+			.set("content-type", "application/json")
+			.send(JSON.stringify({ entity: "DEAL", ids: [a.id, b.id] }));
+		if (rest.status !== 200)
+			throw new Error(`tcc api reorder cu: rest ${rest.status}`);
+		const quaRest = await boTri("DEAL");
+		if (
+			!(
+				quaRest.findIndex((m) => m.key === a.key) <
+				quaRest.findIndex((m) => m.key === b.key)
+			)
+		)
+			throw new Error("tcc api reorder cu: rest khong doi cho");
+		const tai = await request(app.getHttpServer()).get("/openapi.json");
+		const duong = Object.keys(tai.body?.paths ?? {});
+		for (const can of [
+			"/fields/reorder",
+			"/fields/{entity}/layout",
+			"/fields/{entity}/standard/{key}/hidden",
+		])
+			if (!duong.includes(can))
+				throw new Error(`tcc api reorder cu: openapi thieu ${can}`);
 		expect(iB).toBeLessThan(iA);
 	});
 });

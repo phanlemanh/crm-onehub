@@ -61,16 +61,18 @@ export const fieldUpdateArgs = z.object({
 
 export const fieldIdInput = z.object({ id: z.string() });
 
-export const fieldReorderInput = z.union([
-	z.object({
+export const fieldReorderInput = z
+	.object({
 		entity: fieldEntity,
-		ids: z.array(z.string()).min(1),
-	}),
-	z.object({
-		entity: fieldEntity,
-		items: z.array(mucSapLai).min(1),
-	}),
-]);
+		ids: z.array(z.string()).min(1).optional(),
+		items: z.array(mucSapLai).min(1).optional(),
+	})
+	.refine(
+		(input) => (input.ids === undefined) !== (input.items === undefined),
+		{
+			message: "Send either ids or items, not both.",
+		},
+	);
 
 export type FieldReorderInput = z.infer<typeof fieldReorderInput>;
 
