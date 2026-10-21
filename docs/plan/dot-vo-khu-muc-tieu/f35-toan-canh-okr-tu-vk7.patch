@@ -1,0 +1,20 @@
+diff --git a/_acceptance/toan-canh-okr/rang/man-toan-canh.mjs b/_acceptance/toan-canh-okr/rang/man-toan-canh.mjs
+index a22110f39..6c45d070a 100644
+--- a/_acceptance/toan-canh-okr/rang/man-toan-canh.mjs
++++ b/_acceptance/toan-canh-okr/rang/man-toan-canh.mjs
+@@ -1730,10 +1730,12 @@ async function buocHopTuan() {
+ 	await bamSel(t, `[data-mo-kr='${Kb}']`);
+ 	await doi(
+ 		t,
+-		"E14 buoc 3: bam dong Kb mo sheet muc tieu",
+-		(h) =>
+-			new URL(location.href).searchParams.get("record") === `objective:${h}`,
++		"E14 buoc 3: bam dong Kb mo ngan KR, muc tieu nam duoi",
++		(h, k) =>
++			new URL(location.href).searchParams.get("record") ===
++			`objective:${h},kr:${k}`,
+ 		OKR.H.id,
++		Kb,
+ 	);
+ 	await cho(600);
+ 	await chup(t, "E14-buoc-hop-tuan-2.png", false);

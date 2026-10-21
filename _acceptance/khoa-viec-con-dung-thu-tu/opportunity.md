@@ -3,10 +3,10 @@ schema_version: 1
 slug: khoa-viec-con-dung-thu-tu
 feature: Thêm việc con vào dự án không vấp khoá với dời ngày hay sửa mốc cùng lúc
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-21T06:19:17Z # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive

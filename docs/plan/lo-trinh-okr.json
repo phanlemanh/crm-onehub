@@ -197,6 +197,7 @@
         "LT1f",
         "TH5",
         "TH2",
+        "TH2b",
         "TH3",
         "TB2",
         "TH6b",
@@ -1928,6 +1929,24 @@
       "buoc_ke": "Làn MacBook Pro · thứ 3"
     },
     {
+      "ma": "TH2b",
+      "slug": "gia-co-gom-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 444.5,
+      "dung_tren": [
+        "TH2"
+      ],
+      "ten": "Gia cố lịch gom tín hiệu",
+      "ten_ngan": "Gia cố gom",
+      "ngay": "2026-10-21",
+      "cau_giao": "«Một tín hiệu cài lời dặn không lấy được khoá nào của lịch gom và không đẩy được gì ngoài PR đề xuất»",
+      "vai": "Chủ kho",
+      "vi_sao": "Lịch gom (TH2) đưa nội dung tín hiệu người ngoài nhập vào lời dặn của phiên gom, trong khi phiên đó được chạy lệnh tuỳ ý và biến môi trường của nó có token ghi kho cùng khoá mô hình; bước hậu kiểm chỉ soi tệp bị đổi nên không thấy kiểu lạm dụng này.",
+      "ghi_chu": "Từ TH2 Ngoài-1, chủ kho chọn mở hợp đồng mới 20/10 (Cổng Bằng chứng TH2, yêu cầu S1-11). Gợi ý: giới hạn công cụ của phiên gom đúng ba lệnh kit theo đường tuyệt đối; bỏ GH_TOKEN/TIN_HIEU_TOKEN khỏi env của lời gọi claude; gỡ url.insteadOf mang token khỏi gitconfig toàn cục sau bước cài gói; chặn ghi vào .git/. Chưa đặt bí mật ANTHROPIC_API_KEY cho lịch gom tới khi hàng này gộp.",
+      "buoc_ke": "Làn MacBook Pro · sau TH2"
+    },
+    {
       "ma": "TH3",
       "slug": "trang-thai-tin-hieu-song",
       "hang": "T2",
@@ -3388,6 +3407,143 @@
       ],
       "tieu_chi": 8,
       "buoc_ke": "Làn Mac Studio · thứ 10"
+    },
+    {
+      "ma": "VK13",
+      "slug": "gon-dau-trang-lay-y-kien",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.7,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Gọn đầu trang Lấy ý kiến",
+      "ten_ngan": "Gọn đầu Lấy ý kiến",
+      "ngay": "2026-10-20",
+      "vai": "Thành viên góp ý",
+      "cau_giao": "«Trên điện thoại 390×812, người góp ý mở Lấy ý kiến và thấy nút Gửi ngay trong màn đầu, không phải cuộn»",
+      "vi_sao": "Nút «Gửi» của Lấy ý kiến ở 390×812 nằm 927px trên onehub (941px sau VK2) — quá màn đầu 812px; hồ sơ đã ký dot-hoi-y-tuong-okr E12 bước 5 đỏ sẵn trên nền. Chủ kho chọn (a) cho V1-4 ngày 20/10: ghi đỏ sẵn trên thẻ VK2 và tách việc riêng.",
+      "bat_khi": "Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác",
+      "ghi_chu": "Tách từ V1-4 của VK2 (đợt vo-khu-muc-tieu, 20/10). Chủ kho gõ «gon-dau-trang-lay-y-kien: build» ở phiên giám sát vk.",
+      "dot": "okr-vo-khu-1810",
+      "buoc_ke": "Làn Mac Studio · sau VK2"
+    },
+    {
+      "ma": "NS1",
+      "slug": "sheets-lay-so-linh-hoat",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502,
+      "ten": "Google Sheets lấy số linh hoạt",
+      "ten_ngan": "Sheets linh hoạt",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR dán đường dẫn bảng tính, chọn trang từ danh sách, chọn lấy ô cố định, giá trị cuối hàng hay cuối cột, và thấy máy đọc được số nào ở ô nào»",
+      "vi_sao": "Bảng tính vận hành thêm dòng mỗi tuần chứ không ghi đè một ô; ba trên tám công cụ OKR chỉ lấy một ô cố định và Weekdone ghi rõ nó gãy khi dời ô hay đổi tên trang (hồ sơ C2).",
+      "bat_khi": "Bảng tính thêm một dòng mỗi tuần: KR tự lấy số của dòng mới nhất mà không ai sửa nguồn; đổi tên trang không làm nguồn gãy",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Lưu trang theo sheetId số của Google, cấu hình riêng của bảng tính vào cột có khuôn (hồ sơ 4.2–4.3); hàng cũ chuyển bằng migration dữ liệu. Sheets giả theo hợp đồng Sheets API v4 thật qua OKR_SHEETS_API_URL.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "S1"
+      ],
+      "tieu_chi": 9
+    },
+    {
+      "ma": "NS2",
+      "slug": "sheets-dia-chi-doc-rieng",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.1,
+      "ten": "Mỗi workspace một địa chỉ đọc Google",
+      "ten_ngan": "Địa chỉ đọc riêng",
+      "vai": "Quản trị viên",
+      "cau_giao": "«Quản trị viên thấy địa chỉ đọc Google riêng của workspace mình ở Kết nối › Google Sheets, và bảng tính chỉ chia sẻ cho workspace khác thì KR ở đây không đọc được»",
+      "vi_sao": "Hôm nay cả kho đọc bảng tính bằng một service account chung trong .env, nên ai biết mã bảng tính là đọc vòng qua quyền chia sẻ của Google; rủi ro lớn dần theo số loại người dùng và workspace.",
+      "bat_khi": "Hai workspace mẫu: bảng tính chỉ chia sẻ cho địa chỉ của B, KR của A báo «chưa chia sẻ»; KR cũ vẫn đọc được trong thời gian chuyển",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Cách B ở hồ sơ 4.3. Trần service account mỗi dự án Google Cloud và cách tạo bằng IAM API chưa kiểm trên tài liệu Google — kiểm ở Cổng Phạm vi; không khả thi thì đổi sang cách A (workspace dán khoá của mình). Thiếu quyền tạo thì mất khả năng, không ném.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "S2"
+      ],
+      "tieu_chi": 8
+    },
+    {
+      "ma": "NS3",
+      "slug": "webhook-vao-kr",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.2,
+      "ten": "Webhook vào riêng từng KR",
+      "ten_ngan": "Webhook vào",
+      "vai": "Người làm tự động hoá",
+      "cau_giao": "«Người làm tự động hoá mở cửa nhận số cho một KR, chép đường dẫn và lệnh mẫu vào n8n hay Apps Script, gửi một số và thấy số ấy trên KR mà không cần khoá API cá nhân»",
+      "vi_sao": "Hệ thống không có tài khoản OneHub (máy bán hàng, kịch bản của phòng khác) không gửi số được; khoá API hiện có mở mọi thứ người giữ khoá làm được. Không công cụ OKR nào trong tám công cụ đã xét có cửa này (hồ sơ C3).",
+      "bat_khi": "Một kịch bản không có tài khoản OneHub gửi số qua đường dẫn của KR và số hiện trên KR; thu hồi xong thì cùng lời gọi bị từ chối",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Token lưu băm theo mẫu conversation-share-token, hiện một lần; quyền ghi mượn từ người mở cửa, kiểm lại mỗi lần. Trường kieu bắt buộc ngay từ đầu, hàng này chỉ nhận dat để NS4 thêm cong không làm gãy người gọi. Một giao dịch: bản chụp nguồn webhook + dòng vết ghi-so-webhook. Hạn mức theo token.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "W1"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "NS4",
+      "slug": "cong-don-chong-lap",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.3,
+      "dung_tren": [
+        "NS3"
+      ],
+      "ten": "Cộng dồn có mã chống lặp",
+      "ten_ngan": "Cộng dồn",
+      "vai": "nen",
+      "cau_giao": "«Một sự kiện gửi lặp chỉ được cộng vào số của KR một lần, dù qua webhook vào hay API»",
+      "vi_sao": "Đếm sự kiện rời rạc (mỗi đơn +1) cần cộng dồn; Tability cộng dồn không có khoá chống lặp nên gửi lại là số tăng hai lần.",
+      "bat_khi": "Gửi cùng một mã sự kiện mười lần, kể cả đồng thời, số của KR tăng đúng một lần; người gọi API cũ không khai kiểu vẫn ghi như trước",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Đứng trên cửa vào của NS3. Dùng lockIdempotencyKey của @crm/db/idempotency. API thêm kieu tuỳ chọn, vắng là dat. Mã lỗi máy đọc được: khong-nhan-api, ky-chua-toi, ky-da-qua, khong-hop-kieu. Ghi lùi ngày trong chu kỳ. KR mốc và phần trăm từ chối cong.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "W2"
+      ],
+      "tieu_chi": 9
+    },
+    {
+      "ma": "NS5",
+      "slug": "nhip-doc-va-lan-cuoi",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.4,
+      "ten": "Nhịp đọc và lần đọc cuối",
+      "ten_ngan": "Nhịp đọc",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR chọn đọc số mỗi ngày hay mỗi tuần, và trên bảng KR thấy lần đọc cuối hoặc lý do đọc hỏng mà không phải mở hộp thoại nguồn số»",
+      "vi_sao": "Hộp thoại nguồn số đã hiện «Đọc được X lúc Y», nhưng nguồn hỏng chỉ lộ ra khi có người mở hộp thoại; nhịp ngày hoặc tuần là mức các công cụ khác cho (hồ sơ C7).",
+      "bat_khi": "Một bảng tính bị bỏ chia sẻ: lý do hiện trên bảng KR ngay sau lần đọc kế, không ai phải mở hộp thoại",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. trangThaiDoc trong nguon-so-luat.ts đã có cho hộp thoại; hàng này đưa trạng thái ra bảng KR và thêm nhịp tuần (migration). 7 tiêu chí, dưới mục tiêu: gộp vào NS1 thì thành 16, quá ngưỡng tách.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "D1"
+      ],
+      "tieu_chi": 7
+    },
+    {
+      "ma": "NS6",
+      "slug": "webhook-ra",
+      "hang": "T3",
+      "nhom": "okr",
+      "thu_tu": 502.5,
+      "ten": "Webhook ra",
+      "ten_ngan": "Webhook ra",
+      "vai": "Quản trị viên",
+      "cau_giao": "«Quản trị viên đăng ký một đường dẫn nhận ở Kết nối › Webhook, gửi thử thấy kết quả, và từ đó mỗi số mới của KR và mỗi cập nhật tuần tới hệ thống của mình kèm chữ ký kiểm được»",
+      "vi_sao": "Báo cáo BI, kênh chat và hệ thống lương thưởng cần nhận số mà không hỏi lại OneHub; mẫu đáng học là Workpath (vỏ có mã sự kiện, ký thân, gửi lại cùng mã — hồ sơ C5).",
+      "bat_khi": "Phía nhận sập hai giờ rồi sống lại: mọi sự kiện tới đủ, không trùng mã sự kiện; quá ngưỡng thử lại thì webhook treo và màn nói vì sao",
+      "ghi_chu": "Hồ sơ docs/findings/2026-10-20-tability-nguon-du-lieu-kr.md (PR #520), bản phạm vi docs/plan/pham-vi-okr-nguon-so-2110.md. Tác tử gửi từ AgentTask mà API xếp cùng giao dịch với lần ghi. Ký HMAC-SHA256, chặn địa chỉ nội bộ, chỉ https trên production. 11 tiêu chí (mức cho phép): gửi thử, ký, thử lại, treo và chặn địa chỉ nội bộ cùng là một lời hứa «gửi ra an toàn», tách ra thì hàng đầu giao một cửa ra không an toàn.",
+      "dot": "okr-nguon-so-2110",
+      "phu": [
+        "W3"
+      ],
+      "tieu_chi": 11
     }
   ],
   "chan_troi": [
@@ -3480,6 +3636,36 @@
         "C2"
       ],
       "mo_lai_khi": "Chủ kho quyết Của tôi có liệt kê người chưa cập nhật hay không, và sửa mục Họp tuần của từ điển nếu có"
+    },
+    {
+      "ma": "NS-C1",
+      "dot": "okr-nguon-so-2110",
+      "cau_giao": "«Người phụ trách KR chọn tệp bằng tài khoản Google của mình khi tệp không chia sẻ được cho địa chỉ đọc của workspace»",
+      "ly_do": "Địa chỉ đọc riêng (NS2) phủ phần lớn trường hợp; kết nối Google cá nhân gãy khi người nối rời đi, và không tài liệu nào của tám công cụ đã xét nói cách xử lý (hồ sơ C1).",
+      "phu": [
+        "G1"
+      ],
+      "mo_lai_khi": "Có người dùng thật không chia sẻ được bảng tính cho địa chỉ đọc của workspace, vd chính sách cấm chia sẻ ra ngoài miền công ty"
+    },
+    {
+      "ma": "NS-C2",
+      "dot": "okr-nguon-so-2110",
+      "cau_giao": "«Trưởng đơn vị theo dõi một chỉ số dài hạn ngoài chu kỳ OKR, số tự cập nhật như KR»",
+      "ly_do": "OneHub chưa có khái niệm chỉ số dài hạn ngoài chu kỳ; Tability dùng chung cơ chế nguồn số cho KPI.",
+      "phu": [
+        "K1"
+      ],
+      "mo_lai_khi": "Có hàng lộ trình dựng chỉ số dài hạn (KPI) ngoài chu kỳ OKR"
+    },
+    {
+      "ma": "NS-C3",
+      "dot": "okr-nguon-so-2110",
+      "cau_giao": "«Người phụ trách KR chọn HubSpot, một câu SQL hay một báo cáo BI làm nguồn số»",
+      "ly_do": "Webhook vào (NS3) và Sheets phủ được các hệ thống này qua n8n, Make hay Apps Script; mở cổng vào cơ sở dữ liệu của phòng ban là rủi ro lớn hơn giá trị (hồ sơ 4.9).",
+      "phu": [
+        "N1"
+      ],
+      "mo_lai_khi": "Một nguồn cụ thể có người cần thật mà webhook vào không thay được"
     }
   ],
   "da_bac": [
