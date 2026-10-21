@@ -815,7 +815,9 @@ function nen(k: Kho): string {
 	return git(k.goc, "merge-base", "HEAD", "refs/remotes/origin/onehub");
 }
 
-function khoG1(): { k: Kho; cu: string } {
+type KhoGop = { k: Kho; cu: string };
+
+function khoG1(): KhoGop {
 	const k = dungKho([], {});
 	const cu = nhanhX(k);
 	onehubThem(k, B_TS);
@@ -1048,7 +1050,7 @@ const CA_GOP: Ca[] = [
 	},
 ];
 
-function khoDongGop(sua: Sua): { k: Kho; cu: string } {
+function khoDongGop(sua: Sua): KhoGop {
 	const k = dungKho([], sua);
 	const cu = nhanhX(k);
 	onehubThem(k, B_TS, ["packages/env/x.ts", "export const x = 1;\n"]);
