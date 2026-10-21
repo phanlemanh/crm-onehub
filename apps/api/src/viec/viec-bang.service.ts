@@ -1,4 +1,5 @@
 import { type Db, type Prisma, TrangThaiViec } from "@crm/db";
+import { DU_AN } from "@crm/db/du-an";
 import { DAY_MS } from "@crm/db/onboarding-nhac";
 import {
 	CHON_VIEC,
@@ -10,7 +11,7 @@ import {
 	VIEC,
 	vaiCua,
 } from "@crm/db/viec";
-import { keoViec, taoViecCon } from "@crm/db/viec-ghi";
+import { keoViec, LoiChaDoiDuAn, taoViecCon } from "@crm/db/viec-ghi";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
@@ -162,17 +163,30 @@ export class ViecBangService {
 		return { ok: true };
 	}
 
-	taoCon(input: ViecTaoConInput, userId: string): Promise<{ id: string }> {
-		return this.ghi((tx) =>
-			taoViecCon(tx, {
-				chaId: input.chaId,
-				nguoiId: userId,
-				tieuDe: input.tieuDe,
-				nguoiThucHienId: input.nguoiThucHienId,
-				hanNgay: input.hanNgay ?? null,
-				now: new Date(),
-			}),
-		);
+	async taoCon(
+		input: ViecTaoConInput,
+		userId: string,
+	): Promise<{ id: string }> {
+		for (let luot = 1; ; luot += 1) {
+			try {
+				return await this.db.$transaction((tx) =>
+					taoViecCon(tx, {
+						chaId: input.chaId,
+						nguoiId: userId,
+						tieuDe: input.tieuDe,
+						nguoiThucHienId: input.nguoiThucHienId,
+						hanNgay: input.hanNgay ?? null,
+						now: new Date(),
+					}),
+				);
+			} catch (loi) {
+				if (!(loi instanceof Error)) throw loi;
+				if (loi instanceof LoiChaDoiDuAn && luot < DU_AN.thuLaiViecCon) {
+					continue;
+				}
+				dichLoi(loi);
+			}
+		}
 	}
 
 	async con(id: string, userId: string): Promise<ViecConOutput> {
