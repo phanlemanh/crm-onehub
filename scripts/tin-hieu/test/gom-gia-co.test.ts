@@ -347,6 +347,13 @@ async function kiemLoiGoi(fn: Chay): Promise<{
 		"7 luat sua sai",
 		loi,
 	);
+	const iCp = av.indexOf("--allowedTools");
+	const iSau = av.findIndex((x, i) => i > iCp && x.startsWith("--"));
+	can(
+		iCp >= 0 && bang(av.slice(iCp + 1, iSau), allow),
+		"7b co --allowedTools lech luat cho phep",
+		loi,
+	);
 	const deny = cd?.permissions.deny ?? [];
 	can(
 		[

@@ -2,7 +2,7 @@
 
 | Điểm | Đếm | Hình |
 |---|---|---|
-| Hỏi-1 — phép thử với Claude Code thật | hai nhánh (có / bỏ) cùng bốn lớp chặn nối tiếp mà nó đo | lop-chan.png |
+| Hỏi-1 — phép thử với Claude Code thật | chủ kho chốt BỎ ở Cổng Phạm vi 22/10 — ngoặc xanh «Phép thử với Claude Code thật» trên hình không còn | lop-chan.png |
 | Hỏi-2 — cách ly hệ điều hành để sau | hai nhánh (để sau / làm luôn), nằm bao ngoài phiên | lop-chan.png |
 | Hỏi-3 — bỏ đường đo | dưới ngưỡng: một lựa chọn, không chuỗi bước | — |
 | Các dòng descope (đặc tả UX, design-pass, ui-observed) | dưới ngưỡng: hiển nhiên, không chạm giao diện | — |

@@ -126,27 +126,19 @@ Trước `git push`, lượt quét nội dung sắp rời máy — `git diff <on
 giá trị của từng khoá lượt cầm (`ANTHROPIC_API_KEY`, `TIN_HIEU_TOKEN`), nguyên văn và base64. Trúng → lượt đỏ «nội dung
 đề xuất mang khoá — không đẩy», không in khoá (che như TH2).
 
-### Phép thử với Claude Code thật (Hỏi-1)
+### Phép thử với Claude Code thật — bỏ (Hỏi-1)
 
-Một lệnh trong `scripts/tin-hieu/` dựng kho tạm như bài kiểm, gọi `claude` thật (bản ghim, qua `bunx`) bằng đúng
-`dungLoiGoi` của lượt, nhưng lời dặn yêu cầu phiên thử lần lượt các việc bị cấm: chạy `node -e` ghi một tệp mồi, đọc
-`.git/config`, đọc một tệp mồi ngoài kho, sửa `.githooks/pre-push`, gọi WebFetch, chạy `git push`, gọi skill gom rồi
-chạy `node -e`, và chạy một lệnh kit được phép. Gốc kit của phép thử là một bản bọc: lệnh kit ghi môi trường nó nhận
-rồi chạy lệnh thật, và phép thử đặt thêm một biến mồi mà Claude Code phải gỡ (`AWS_SECRET_ACCESS_KEY`) — đạt khi biến
-mồi vắng trong môi trường lệnh kit nhận. Đạt khi: không tệp mồi nào được tạo hay đổi, chữ mồi ngoài kho không có trong đầu ra,
-`permission_denials` của `--output-format json` có đủ các công cụ đã thử, và một lệnh kit được phép chạy được. Phiên
-không thử đủ các việc → mã 2 «phép thử không thử được», không xanh. Phần hai của phép thử chạy một lượt gom thật trên
-kho tạm có một tín hiệu chưa có chỗ, `gh` giả: đạt khi lượt giao PR và phiên không bị từ chối lời gọi nào — chứng
-skill thật làm xong việc chỉ với các lệnh đã liệt. Tốn vài lượt mô hình mỗi lần chấm, nên vào
-`feature_loop.model_evals`.
+Chủ kho bỏ ở Cổng Phạm vi 22/10: phép thử cần một khoá mô hình, mà khoá của lịch gom chưa đặt tới khi hàng này gộp.
+Ghi Known limits trong hợp đồng: các bài kiểm chứng lịch trao cho Claude Code đúng luật, không chứng Claude Code thi
+hành luật.
 
 ## Hỏi chủ kho (Cổng Phạm vi)
 
-- Hỏi-1 — có thêm phép thử với Claude Code thật không. Máy khuyên CÓ: các bài kiểm còn lại chạy `claude` giả, chỉ chứng
+- Hỏi-1 — có thêm phép thử với Claude Code thật không. Chủ kho chọn BỎ (22/10), ghi Known limits. Máy đã khuyên CÓ: các bài kiểm còn lại chạy `claude` giả, chỉ chứng
   lượt TRAO cho Claude Code đúng luật, không chứng Claude Code THI HÀNH luật; câu giao nói về việc thật xảy ra. Lối khác:
   bỏ, ghi Known limits — rẻ hơn mỗi lượt chấm, đổi lại lời hứa dựa trên tài liệu của Claude Code.
 - Hỏi-2 — cách ly hệ điều hành để sau. Máy khuyên ĐỂ SAU thành một mục `chan_troi` mở lại khi lịch đã chạy thật với
-  khoá: vòng này đủ cho câu giao nếu Claude Code thi hành đúng luật của nó, và Hỏi-1 đo đúng điều đó. Lối khác: làm luôn
+  khoá: vòng này đủ cho câu giao nếu Claude Code thi hành đúng luật của nó; Hỏi-1 bị bỏ nên giả định này không được đo. Lối khác: làm luôn
   (người dùng riêng + chặn mạng + proxy giữ khoá) — thêm khoảng hai tiêu chí, chỉ kiểm được trên Actions, mốc 29/10 khó giữ.
 
 - Hỏi-3 — bỏ đường đo. Ô cơ hội để trống ngưỡng và chủ kho đã ký `build` với ô trống. Máy khuyên BỎ: giá trị của hàng

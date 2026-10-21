@@ -111,15 +111,16 @@ export function dungLoiGoi(o: {
 	lenh: string[];
 } {
 	const lenh = lenhKit(o.ag, o.banGom, o.loTrinh);
+	const choPhep = [
+		...GOM.moHinh.docDuoc,
+		...GOM.moHinh.skill.map((s) => `Skill(${s})`),
+		`Edit(./${o.banGom})`,
+		...o.loTrinh.map((lt) => `Edit(./${lt})`),
+		...lenh.map((l) => `Bash(${l})`),
+	];
 	const caiDat = {
 		permissions: {
-			allow: [
-				...GOM.moHinh.docDuoc,
-				...GOM.moHinh.skill.map((s) => `Skill(${s})`),
-				`Edit(./${o.banGom})`,
-				...o.loTrinh.map((lt) => `Edit(./${lt})`),
-				...lenh.map((l) => `Bash(${l})`),
-			],
+			allow: choPhep,
 			deny: [...GOM.moHinh.cam],
 			blockReadsOutsideWorkingDirectories: true,
 		},
@@ -150,6 +151,8 @@ export function dungLoiGoi(o: {
 		"dontAsk",
 		"--tools",
 		GOM.moHinh.congCu.join(","),
+		"--allowedTools",
+		...choPhep,
 		"--disallowedTools",
 		GOM.moHinh.camCongCu.join(","),
 		"--strict-mcp-config",

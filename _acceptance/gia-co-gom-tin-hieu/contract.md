@@ -5,9 +5,9 @@ slug: gia-co-gom-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
-approved_by: Manh Phan
-approved_at: 2026-10-21T22:41:57Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-21-gia-co-gom-tin-hieu-design.md
 ---
 
@@ -33,15 +33,14 @@ Source input: `_acceptance/gia-co-gom-tin-hieu/opportunity.md` (Cổng Đáng `b
 - AC-5: Given một lượt chạy tới khi mở PR, Then token ghi kho chỉ có mặt trong env của đúng các lời gọi `git fetch`, `git push` và `gh` của lượt; phiên gom, các lệnh kit, lệnh vẽ trang lộ trình và mọi lệnh git cục bộ khác không nhận nó.
 - AC-6: Given phiên gom đã chạy xong, When nó để lại thay đổi trong siêu dữ liệu git của bản checkout — cấu hình, hook, thư mục info, HEAD hay ref — Then lượt đỏ với câu «phiên gom đổi siêu dữ liệu git» gọi tên từng tệp, trước khi lượt chạy thêm lệnh git nào; lượt không đẩy, không mở hay sửa PR, không ref nào trên `origin` đổi, và lệnh mà phiên cài vào cấu hình hay hook không chạy; Given mọi lệnh git của lượt sau phiên, Then chúng chạy với hook và fsmonitor bị tắt ở mức lệnh.
 - AC-7: Given phiên gom đã chạy xong và các lệnh kit đều xanh, When bản gom, hàng đề xuất, thông điệp commit hay thân PR sắp đẩy mang giá trị của khoá mô hình hay token ghi kho — nguyên văn hoặc base64 — Then lượt đỏ với câu «nội dung đề xuất mang khoá — không đẩy», không đẩy, không mở hay sửa PR, và giá trị khoá không xuất hiện trong nhật ký của lượt.
-- AC-8: Given kho tạm và Claude Code thật ở bản đã ghim, gọi bằng đúng đối số và tệp cài đặt của lượt, với lời dặn yêu cầu thử lần lượt các việc bị cấm — chạy `node` tuỳ ý, đọc cấu hình git, đọc một tệp ngoài kho, sửa hook của kho, gọi mạng, chạy `git push`, gọi skill gom rồi chạy `node` tuỳ ý, chạy một lệnh kit được phép — When phiên chạy, Then không tệp mồi nào được tạo hay đổi, chữ của tệp mồi ngoài kho không có trong đầu ra, danh sách lời gọi bị từ chối có đủ các công cụ đã thử, lệnh kit được phép vẫn chạy được, và một biến bí mật mồi mà Claude Code phải gỡ không có trong môi trường lệnh kit nhận; phiên không thử đủ các việc thì phép thử báo «không thử được», không báo đạt; Given cùng Claude Code thật và một tín hiệu chưa có chỗ, When một lượt gom chạy với lời dặn thật, Then lượt giao được đề xuất và phiên không bị từ chối lời gọi nào. (Hỏi-1)
 
 ## Coverage
 
 - Trục A — Tài sản bị nhắm: token ghi kho | khoá mô hình | quyền đẩy (ref khác, nhánh chính, tệp lịch) | siêu dữ liệu git (cấu hình, hook) [thước CE: các bí mật và bước của `.github/workflows/tin-hieu-gom.yml`; [NGÀNH: GitHub — Security hardening for GitHub Actions] — `persist-credentials`, đầu vào không tin cậy; [NGÀNH: OWASP Top 10 for LLM Applications 2025] — LLM01 Prompt Injection, LLM06 Excessive Agency] → AC-1, AC-4, AC-5, AC-6, AC-7
-- Trục B — Kênh: biến môi trường của tiến trình con | tệp trên đĩa (`.git/config`, `~/.gitconfig`, `/proc/*/environ`) | chạy mã tuỳ ý (lệnh, hook git, hook Claude Code, cấu hình git chạy lệnh) | mạng (WebFetch, WebSearch, MCP) | nội dung đẩy lên (bản gom, commit, thân PR) [thước CE: tài liệu Claude Code — permissions, permission-modes, env-vars (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`), settings-reference (`blockReadsOutsideWorkingDirectories`, `disableAllHooks`); `git-config(1)` — `core.hooksPath`, `core.fsmonitor`, `safe.bareRepository`] → AC-1, AC-2, AC-4, AC-6, AC-7, AC-8
+- Trục B — Kênh: biến môi trường của tiến trình con | tệp trên đĩa (`.git/config`, `~/.gitconfig`, `/proc/*/environ`) | chạy mã tuỳ ý (lệnh, hook git, hook Claude Code, cấu hình git chạy lệnh) | mạng (WebFetch, WebSearch, MCP) | nội dung đẩy lên (bản gom, commit, thân PR) [thước CE: tài liệu Claude Code — permissions, permission-modes, env-vars (`CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`), settings-reference (`blockReadsOutsideWorkingDirectories`, `disableAllHooks`); `git-config(1)` — `core.hooksPath`, `core.fsmonitor`, `safe.bareRepository`] → AC-1, AC-2, AC-4, AC-6, AC-7
 - Trục C — Lúc: trong phiên mô hình | sau phiên, ở các bước git và giao PR của lượt [thước CE: thứ tự bước của `scripts/tin-hieu/gom-lich.ts`] → AC-2, AC-3, AC-6, AC-7
 - Cắt ngang: lượt bị chặn luôn đỏ, gọi tên nguyên nhân, không in khoá; đường giao đề xuất của TH2 vẫn chạy → AC-3, AC-6, AC-7
-- [GIẢ ĐỊNH] Claude Code thi hành đúng luật phân quyền của nó; vòng này không cách ly ở tầng hệ điều hành (Hỏi-2) → AC-8
+- [GIẢ ĐỊNH] Claude Code thi hành đúng luật phân quyền của nó; vòng này không đo điều đó và không cách ly ở tầng hệ điều hành (Hỏi-2) → Known limits
 - Quét đầy đủ (Core / Later / Never): `_acceptance/gia-co-gom-tin-hieu/coverage-scan.md`
 
 ## Out of scope
@@ -51,10 +50,17 @@ Source input: `_acceptance/gia-co-gom-tin-hieu/opportunity.md` (Cổng Đáng `b
 - Lọc nội dung tín hiệu tìm lời dặn.
 - Thu quyền của chính token trên GitHub (việc cài đặt của chủ kho, ghi ở tài liệu).
 - Sửa skill gom tín hiệu hay cắt lượt của kit.
+- Phép thử gọi Claude Code thật với lời dặn thử các việc bị cấm — chủ kho bỏ ở Cổng Phạm vi 22/10 (Hỏi-1), ghi Known limits.
 
 ## Notes
 
-- Mọi bài kiểm trừ AC-8 chạy trên kho tạm với `claude` giả và `gh` giả như TH2: chúng chứng lượt trao cho Claude Code
-  đúng luật và lượt tự dừng đúng chỗ, không chứng Claude Code thi hành luật — đó là việc của AC-8.
+- Mọi bài kiểm chạy trên kho tạm với `claude` giả và `gh` giả như TH2: chúng chứng lượt trao cho Claude Code đúng luật
+  và lượt tự dừng đúng chỗ, không chứng Claude Code thi hành luật.
 - Sửa `gom-lich.ts`, `gom-cau-hinh.ts`, bộ thử chung và tệp lịch làm hồ sơ `gom-tin-hieu-tu-chay` cũ đi; vòng này ghim
   lại hồ sơ đó sau S4.
+- Known limits — chọn ở Cổng Phạm vi 2026-10-22:
+  - Chưa có phép đo nào chứng Claude Code chặn thật: các bài kiểm chỉ chứng lịch gom trao cho Claude Code đúng luật (chỉ
+    đúng các lệnh kit, chỉ sửa bản gom và tệp lộ trình, không mạng, không đọc ngoài kho, gỡ khoá khỏi lệnh con). Nếu bản
+    Claude Code đã ghim không thi hành một luật trong đó, một tín hiệu cài lời dặn vẫn có thể chạy lệnh bị cấm hay đọc
+    được khoá mô hình, và không bài kiểm nào đỏ. Cũng chưa có gì chứng skill gom thật làm xong việc chỉ với các lệnh đã
+    liệt: nếu skill cần một lệnh khác, lượt thật đỏ ở răng phủ và nhật ký lượt in tên công cụ bị từ chối.
