@@ -22,7 +22,7 @@ import { useMemo } from "react";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
 import { useFieldFacets } from "@/components/crm/fields/field-facets";
-import { OwnerCell } from "@/components/crm/owner-cell";
+import { OTruongBang } from "@/components/crm/fields/kieu-truong";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
@@ -47,7 +47,7 @@ import { companiesSearchParams } from "./companies-search-params";
 
 type CompanyRow = RouterOutputs["companies"]["list"]["rows"][number];
 
-function columnsFor(
+export function columnsFor(
 	m: CompanyMessages,
 	locale: Locale,
 ): DataTableColumn<CompanyRow>[] {
@@ -79,12 +79,7 @@ function columnsFor(
 			sortable: true,
 			width: "w-[12%]",
 			hideBelow: "md",
-			cell: (row) =>
-				row.domain ? (
-					<span className="truncate text-muted-foreground">{row.domain}</span>
-				) : (
-					<EmptyCellValue />
-				),
+			cell: (row) => <OTruongBang kieu="TEXT" giaTri={row.domain} />,
 		},
 		{
 			id: "industry",
@@ -112,7 +107,13 @@ function columnsFor(
 			sortable: true,
 			width: "w-[13%]",
 			hideBelow: "md",
-			cell: (row) => <OwnerCell owner={row.owner} />,
+			cell: (row) => (
+				<OTruongBang
+					kieu="USER"
+					giaTri={row.owner?.id ?? null}
+					nguoi={row.owner}
+				/>
+			),
 		},
 		{
 			id: "contacts",
