@@ -1,0 +1,210 @@
+schema_version: 1
+slug: pre-push-phan-rieng-pr
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ppr_gop
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t gop-onehub. Kho git tam cua spec pre-push-t1 (remote tran, nhanh onehub da day, CHEP tep that), goi CLI bo
+      phan loai bang dong stdin khuon githooks(5). Ma tran 16 ca viet truoc, so test = 16 (lech -> do «so ca lech»).
+      «nhanh x» = nhanh tach tu onehub, mot commit docs/a.md, da day. «onehub mang ma» = onehub them apps/api/b.ts roi day.
+      Moi ca day dinh x len tren sha tu xa cua x tru khi ghi khac. Dong «rong», «chi T1», «nang» theo khuon AC-2.
+       G1  gop onehub mang ma -> stdout «test build»; dong «rong» k=1. Doi chung duong: diff sha tu xa..dinh = apps/api/b.ts;
+           diff merge-base(dinh,origin/onehub)..dinh = docs/a.md
+       G2  nhu G1, commit gop them docs/c.md -> «test build»; dong «chi T1» n=1 k=1
+       G3  nhu G1, commit gop sua apps/api/a.ts -> stdout rong; dong «nang» n=1 k=1 «tệp ngoài T1 (apps/api/a.ts)»
+       G4  x sua apps/api/a.ts (da day), onehub sua a.ts, gop ghep hai ban -> rong; «nang» goi ten apps/api/a.ts
+       G5  x sua apps/api/a.ts (da day), onehub sua a.ts, gop lay ban onehub (-X theirs) -> rong; «nang» goi ten
+           apps/api/a.ts (ve riêng_truoc). Doi chung duong: a.ts nam trong diff sha tu xa..dinh va KHONG trong diff
+           merge-base..dinh
+       G6  gop onehub mang ma, SAU DO onehub them commit sua apps/api/b.ts lan nua va day (refs/remotes/origin/onehub di
+           tiep) -> «test build»; dong «rong» k=1 (nen la merge-base, khong phai dau onehub)
+       G7  gop mot nhanh y tach tu onehub goc (khong mang onehub moi), y them apps/api/c.ts -> rong; stderr rong (luat cu)
+       G8  gop onehub mang ma roi them commit docs/d.md, day mot lan -> «test build»; dong «chi T1» n=1 k=1
+       G9  ref moi (sha tu xa toan 0), dinh la gop onehub mang ma vao x -> «test build»; stderr dung dong cu
+           «pre-push: chỉ tệp T1 (1 tệp) — bỏ test, build; CI phân loại PR theo cùng luật.»
+       G10 x sua LO-TRINH.html (da day), onehub mang ma va sua LO-TRINH.html, commit gop ghi ban thu ba khac ca hai ->
+           rong; «nang» n=1 k=1 «tệp T1 mà mã đọc (LO-TRINH.html)». Doi chung duong: LO-TRINH.html nam trong ca diff sha
+           tu xa..dinh lan diff merge-base..dinh
+       G11 nhu G1 nhung xoa refs/remotes/origin/onehub truoc khi phan loai -> rong; stderr rong (luat cu, khong loi)
+       G12 hai dong: dong G1 + ref moi z chi docs/e.md -> «test build»; dong «chi T1» n=1 k=1
+       G13 hai dong: dong G1 + ref moi w tu onehub sua apps/api/b.ts -> rong; b.ts thuoc tap xet cua dong w nen khong con
+           la tep cua onehub o dong G1, k=0 -> stderr rong (khuon cu)
+       G14 nhu G1, commit gop sua .github/workflows/ci.yml -> rong; «nang» goi ten .github/workflows/ci.yml
+       G15 day lai dinh gop G1 khi sha tu xa = dinh -> rong; stderr rong
+       G16 x co commit cuc bo CHUA day them apps/api/c.ts, roi gop onehub mang ma, day mot lan (sha tu xa = dau x cu) ->
+           rong; «nang» n=1 k=1 «tệp ngoài T1 (apps/api/c.ts)»
+      Moi ca: ma thoat 0. Chieu do: E10.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ppr_dong
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t dong-gop. Bon ca viet truoc, so khop CA DONG stderr bang toEqual (khong toContain):
+      (a) rong: «pre-push: lần đẩy chỉ mang phần của onehub (2 tệp), PR không tự thêm tệp nào — bỏ test, build; CI phân loại PR theo cùng luật.»
+          (onehub mang apps/api/b.ts va packages/env/x.ts)
+      (b) chi T1: «pre-push: chỉ tệp T1 trong phần PR tự thêm (2 tệp; 1 tệp của onehub không tính) — bỏ test, build; CI phân loại PR theo cùng luật.»
+      (c) nang, bon tep ngoai T1 do commit gop them: «pre-push: phần PR tự thêm (4 tệp; 1 tệp của onehub không tính) có tệp ngoài T1 (apps/api/m1.ts, apps/api/m2.ts, apps/api/m3.ts +1) — chạy đủ năm bước.»
+      (d) gate-shape.json ban chep sua t1Only.skip = ["build"], ca (a) -> stdout «build», dong «… — bỏ build; CI …» (danh
+          sach bo rut tu khai, khong viet tay).
+      Chieu do: E10 ca «tap-rong-la-nang» lam do (a).
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ppt_phan_loai
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      Bang 18 ca cua pre-push-t1 E1 (bun test -t phan-loai): 17 ca khac ca 6 xanh voi expected KHONG sua (git diff
+      origin/onehub cua packages/ui/test/pre-push-t1.spec.ts chi doi khoi ca 6 trong mang CA va them cac describe moi);
+      ca 6 xanh voi loi hua moi (AC-7). So ca van 18. Cac ca G7, G8, G9, G11 cua E1 chung phan luat cu tren dinh gop.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ppr_day_gop
+    paths:
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t day-gop, kho tam va bun gia nhu day-t1 cua pre-push-t1 (git push that, core.hooksPath .githooks). Ba ca:
+      (a) nhanh x chi docs da day, onehub mang apps/api/b.ts, gop roi git push -> ma 0; co dung dong «rong» k=1; so bun gia =
+          [check-types, lint, lint:slop]; khong «pre-push: bun run test|build»; co «pre-push: gate matches its shape»; co
+          dong bat dau «  skipped: test, build».
+      (b) nhu (a) nhung commit gop them apps/api/a.ts -> ma 0; so bun gia = [check-types, lint, lint:slop, test, build].
+      (c) nhu (b) voi bun gia thoat 1 cho test -> ma khac 0, «`bun run test` failed».
+      Chieu do: E10 ca «khong-giao».
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.ppr_day_that
+    paths:
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "scripts/pre-push-t1.mjs"
+      - "scripts/verify-gate-shape.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/day-gop-that.mjs"
+    expected: |
+      node rang/day-gop-that.mjs tren cay that (goc suy tu vi tri script). Commit treo bang GIT_INDEX_FILE rieng +
+      write-tree + commit-tree: X = origin/onehub~5 + docs/pre-push-gop-<pid>.md (cha origin/onehub~5); M = cay
+      origin/onehub + cung tep (cha X, origin/onehub); M2 = cay M + packages/env/src/pre-push-gop-<pid>.ts (cha X,
+      origin/onehub). Doi chung duong: diff X..M co >= 1 tep duoi apps/ hoac packages/, va khong co tep docs cua X.
+      Chay bash .githooks/pre-push origin <url> voi stdin «refs/heads/thu M refs/heads/thu X»: ma 0; dung dong «rong» voi k =
+      so tep cua diff X..M; dung ba dong «pre-push: bun run check-types|lint|lint:slop»; khong «… test|build»;
+      «pre-push: gate matches its shape»; dong bat dau «  skipped: test, build». CLI bo phan loai voi stdin M2: stdout rong,
+      stderr dung dong «nang» n=1, k = so tep cua diff X..M, «tệp ngoài T1 (packages/env/src/pre-push-gop-<pid>.ts)».
+      git status --porcelain truoc = sau. In «dat day-gop-that».
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ppr_lich_su
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/config.yaml"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs"
+    expected: |
+      node rang/lich-su.mjs tren cay that.
+      (1) #523: CLI bo phan loai, stdin «refs/heads/pr 1ddf125b3… refs/heads/pr <1ddf125b3^1>» (sha day du) -> stdout rong,
+          stderr dung «pre-push: phần PR tự thêm (1 tệp; 23 tệp của onehub không tính) có tệp T1 mà mã đọc (LO-TRINH.html) — chạy đủ năm bước.»
+      (2) Moi commit gop trong «git log --merges --since=2026-10-14 1f6757ba0» co tieu de gop origin/onehub (hoac onehub)
+          va cha thu hai la to tien origin/onehub, day len tren cha thu nhat: phep do TU TINH S bang lenh git (nen =
+          merge-base(commit, origin/onehub), hai ve rieng nhu contract; khong goi ham cua bo phan loai), tu tinh ket qua mong doi (S rong va tang khac rong -> bo; con lai quyetDinh cua phan-loai.mjs tren S), roi
+          so voi stdout CLI bo phan loai -> lech o commit nao -> ma 1 «lech <sha>». Khong commit nao luat cu (quyetDinh tren
+          tang) cho nhe ma luat moi cho nang -> neu co: ma 1 «nang len <sha>». Doi chung: so commit duoc xet >= 300 (do 21/10: 351).
+          In «nhe theo luat cu: <a> / nhe theo luat moi: <b> / tren <n> lan gop»; ky vong a = 6, b = 36, n = 351 (do 21/10).
+      In «dat lich-su».
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ppr_ho_so_cu
+    paths:
+      - ".githooks/pre-push"
+      - "scripts/pre-push-t1.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "packages/ui/test/t1-ma-doc.spec.ts"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+      - "_acceptance/pre-push-t1/**"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/ho-so-cu.mjs"
+    expected: |
+      node rang/ho-so-cu.mjs. Ghim, in «dat <ghim>»:
+      (1) .githooks/pre-push giong tung byte «git show origin/onehub:.githooks/pre-push» (ref vang -> ma 2).
+      (2) Moi chuoi «tu» trong mang CA cua _acceptance/pre-push-t1/rang/dot-bien.mjs co tep scripts/pre-push-t1.mjs
+          (rut bang import dong cua chinh tep do khong duoc vi no chay ngay — rut bang regex tren van ban «tu: "..."» /
+          «tu: '...'») xuat hien DUNG MOT lan trong scripts/pre-push-t1.mjs; chuoi «const SHA_RONG» xuat hien dung mot lan.
+      (3) Khoi ca 6 cua mang CA trong spec mong doi ra «test build» va dong «rong» k=1; dong 6 expected E1 cua
+          _acceptance/pre-push-t1/evals.yaml khong con «-> rong» va nhac pre-push-phan-rieng-pr; Notes cua
+          _acceptance/pre-push-t1/contract.md co muc nhac pre-push-phan-rieng-pr va ca 6.
+      Roi chay that, moi lenh ma 0: bun test toan bo packages/ui/test/pre-push-t1.spec.ts, t1-ma-doc.spec.ts,
+      push-ghim-lai-t1.spec.ts; node _acceptance/pre-push-t1/rang/mot-nguon.mjs; node _acceptance/pre-push-t1/rang/rang-cu.mjs;
+      node _acceptance/pre-push-t1/rang/dot-bien.mjs. Chieu do cung luot tren ban sao tam: nhan doi chuoi «"--no-renames", »
+      trong ban sao bo phan loai -> ghim (2) do; them mot byte vao ban sao hook -> ghim (1) do. Khong do -> ma 1 «thuoc
+      hong». E9 va E10 cua pre-push-t1 (hook that tren cay that, ep chay du nam) chung o luot ghim lai cua ho so do.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ppr_hinh
+    paths:
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t hinh-gop: gate-shape.json that: t1Only.skip deepEqual ["test","build"]; classifier va sameRuleAs bang ban
+      origin/onehub cua gate-shape.json (doc bang git show; ref vang -> test do «khong co ban goc»); moi khoa ngoai t1Only
+      deepEqual ban origin/onehub; vi_sao khac ban origin/onehub. Nghia cua vi_sao do o E9.
+
+  - id: E9
+    criterion: AC-8
+    executor: judgment
+    paths:
+      - ".githooks/gate-shape.json"
+    inputs:
+      - ".githooks/gate-shape.json"
+      - "docs/superpowers/specs/2026-10-21-pre-push-phan-rieng-pr-design.md"
+    question: |
+      Cau vi_sao cua khoi t1Only trong gate-shape.json co noi dung luat cua design doc muc «Luat moi» khong: (1) lan day mang
+      commit moi cua onehub thi chi xet phan PR tu them, tep cua onehub khong tinh; (2) tap xet rong thi bo; (3) tep
+      t1_ma_doc, .github va tep ma trong phan PR tu them van chay du; va co cau nao trong vi_sao NOI SAI so voi design doc
+      khong (vi du con noi moi lan day co tep ma deu chay du)? PASS khi ca ba y co va khong cau nao sai.
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.ppr_dot_bien
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/dot-bien.mjs"
+    expected: |
+      node rang/dot-bien.mjs: chieu do cua E1, E2, E4. Ban sao tep nguon trong .acceptance-runs/pre-push-phan-rieng-pr/
+      dot-bien/<ca>/, chay spec voi PRE_PUSH_T1_NGUON tro ban sao. Doi chung duong: ban sao khong dot bien -> spec loc
+      «gop-onehub|dong-gop|day-gop» xanh. Sau dot bien viet truoc, moi ca lam DO dung test da ghim:
+      khong-giao (tap xet = tang) -> «day-gop (a)»; bo-rieng-truoc (bo ve riêng_truoc) -> «gop-onehub: G5»;
+      nen-dau-onehub (nen = refs/remotes/origin/onehub thay merge-base) -> «gop-onehub: G6»; truoc-so-voi-nen (riêng_truoc
+      = diff(nen, sha tu xa) thay merge-base(nen, sha tu xa)) -> «gop-onehub: G1»; tap-rong-la-nang (bo ca rong rieng) ->
+      «dong-gop (a)»; tang-tu-cha-dau (tang = diff(dinh^1, dinh)) -> «gop-onehub: G16».
+      In «BAT <ca>: <ten test do>» moi ca; ca khong do hoac do sai test -> ma 1 «thuoc hong: <ca>». Ma 0 khi doi chung xanh
+      va sau ca deu bi bat.

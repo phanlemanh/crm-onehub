@@ -1,0 +1,40 @@
+{
+  "feature_plain": "Lần đẩy ngay sau khi gộp nhánh chính onehub vào nhánh PR chỉ xét phần PR tự thêm; nếu phần đó rỗng hoặc chỉ là tài liệu thì bỏ hai bước dài (test, build) — khoảng 30 phút — mà vẫn chạy ba bước kiểm nhanh.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ tách lần đẩy thành phần PR tự thêm và phần mang về từ onehub, rồi chỉ quyết nhẹ/nặng trên phần PR tự thêm (16 ca viết trước)."},
+    {"id": "AC-2", "p": "Sẽ in một dòng nói rõ phần PR tự thêm có mấy tệp, mấy tệp của onehub không tính, và vì sao bỏ hay chạy đủ."},
+    {"id": "AC-4", "p": "Sẽ chứng trên một lần đẩy thật trong kho tạm: chỉ gộp onehub thì chạy ba bước; commit gộp có mã của PR thì chạy đủ năm bước."},
+    {"id": "AC-5", "p": "Sẽ chứng trên cây thật của kho: lần đẩy chỉ gộp onehub đi nhẹ với bộ soát hình cổng thật; thêm một tệp mã của PR thì thành nặng."},
+    {"id": "AC-6", "p": "Sẽ chạy trên lần gộp thật của #523 (vẫn nặng vì bản lộ trình là tệp mã đọc) và trên 351 lần gộp thật từ 14/10 (đối chiếu từng lần với một phép tính độc lập)."},
+    {"id": "AC-7", "p": "Sẽ giữ hồ sơ đã ký của đường nhẹ cũ (pre-push-t1) xanh, chỉ đổi đúng ca 6 theo câu Hỏi-1 và ghim lại hồ sơ đó."},
+    {"id": "AC-8", "p": "Sẽ sửa câu giải thích trong bản khai hình cổng cho đúng luật mới; danh sách bước được bỏ giữ nguyên."},
+    {"id": "AC-9", "p": "Sẽ cấy sáu lỗi cố ý vào bản sao bộ phân loại và chứng mỗi lỗi bị một bài kiểm đã ghim bắt."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG đổi gì với lần đẩy không mang commit mới của onehub, ref mới, hay khi máy thiếu nhánh onehub cục bộ — ra y như hôm nay."},
+    {"id": "OOS-1", "p": "KHÔNG chạy riêng các bài đọc bản lộ trình, KHÔNG đổi vòng lặp của hook hay bộ soát hình cổng."},
+    {"id": "OOS-2", "p": "KHÔNG đổi bộ phân loại của CI, danh sách tệp tài liệu, hay việc bản lộ trình kéo nặng ở CI."},
+    {"id": "OOS-3", "p": "KHÔNG đụng lệ bỏ hook của đợt, khoá máy của điều phối, hay chuyện tệp sinh gây xung đột (việc của kit)."},
+    {"id": "OOS-4", "p": "KHÔNG gọi mạng trong hook để kiểm PR nháp hay CI."}
+  ],
+  "scope_plain": "Bốn thứ cố ý để ngoài vòng:",
+  "coverage_plain": [
+    {"i": 0, "p": "Hình lần đẩy: đỉnh là commit gộp, gộp rồi sửa thêm, commit chưa đẩy rồi gộp, gộp nhánh khác, ref mới, đẩy lại — mỗi hình có ca ở AC-1."},
+    {"i": 1, "p": "Phần PR tự thêm: rỗng, chỉ tài liệu, có bản lộ trình, có mã do commit gộp, có mã do giải xung đột, tệp PR từng sửa bị trả về bản onehub, có .github — mỗi loại một ca."},
+    {"i": 2, "p": "Trạng thái nhánh onehub cục bộ: có, vắng, đã đi tiếp sau lần gộp — ba ca."},
+    {"i": 3, "p": "Lần đẩy nhiều nhánh một lúc: một nhánh gộp cộng một nhánh tài liệu, và một nhánh sửa đúng tệp mà nhánh kia mang về từ onehub."},
+    {"i": 4, "p": "Lời hứa đã ký của đường nhẹ cũ → AC-7; hook và cây thật → AC-4, AC-5; dữ liệu thật → AC-6."},
+    {"i": 5, "p": "Bảng nối trục → tiêu chí; để sau: chạy riêng bài đọc bản lộ trình (Hỏi-2), hàm dùng chung với CI ở kit; không bao giờ: hook tự kéo mạng."},
+    {"i": 6, "p": "Thước ngoài: khuôn dòng stdin của git pre-push và cách CI của GitHub so PR với nhánh nền."},
+    {"i": 7, "p": "Giả định: mã mang về từ onehub đã qua CI của PR đưa nó vào; tổ hợp mã PR với mã onehub mới do CI thử."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Sổ ghi «chỉ một lối» cho việc bỏ chạy riêng bài đọc bản lộ trình, mà lối kia làm được — đã đổi thành câu Hỏi-2 cho anh, và ghi rõ ca #523 không được giải."},
+    {"i": 1, "p": "Sổ khoá phạm vi «đỉnh là commit gộp» bằng một câu sai — đã đổi thiết kế sang luật chung theo điểm rẽ với onehub, và đưa thành câu Hỏi-3."},
+    {"i": 2, "p": "Ca bản lộ trình (G10) viết kỳ vọng không thể đúng — đã sửa thành gộp ra bản thứ ba, kèm đối chứng."},
+    {"i": 3, "p": "Thiếu ca «commit chưa đẩy rồi mới gộp» — đã thêm ca G16 và một lỗi cố ý bắt nó."},
+    {"i": 4, "p": "Con số có thể tính bằng công thức cũ — đã tính lại: #523 vẫn 1 tệp của PR, 23 của onehub; lịch sử 6 → 36 lần nhẹ trên 351."},
+    {"i": 5, "p": "Câu chấm theo phán xét chưa khai tệp nó soi — đã khai."},
+    {"i": 6, "p": "Tiêu chí AC-9 trỏ nhầm mã bài chấm — đã sửa."}
+  ]
+}
