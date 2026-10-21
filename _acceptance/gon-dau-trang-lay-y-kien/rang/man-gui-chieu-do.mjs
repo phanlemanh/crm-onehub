@@ -47,9 +47,9 @@ const VET = {
 	"le-o": {
 		eval: "E4B",
 		tep: GOP,
-		cu: 'khoiY.current?.scrollIntoView({ block: "nearest" });',
+		cu: 'khoiY.current?.scrollIntoView({ block: "nearest" });\n\t\t\toY.current?.focus({ preventScroll: true });',
 		moi: "",
-		ghim: /SAI AC-4: GUI SAI \d+ da-cuon: .*day loi/,
+		ghim: /SAI AC-4: GUI SAI \d+ da-cuon/,
 	},
 };
 

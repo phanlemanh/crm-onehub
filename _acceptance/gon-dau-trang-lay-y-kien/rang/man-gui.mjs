@@ -45,6 +45,7 @@ const AN_CONG_CU_DEV =
 const NHIP_MS = 250;
 const LECH_MAY_TINH_PX = 1;
 const LO_CHAM_PX = 12;
+const LO_KHUAT_PX = 40;
 const NGHI_SAU_GO_MS = 300;
 const CHO_ON_DINH_MS = 1200;
 const CHON = {
@@ -315,11 +316,13 @@ async function e2va7(ck, slug) {
 		const { t } = await moTrang(ck.gop, slug, "390", toi);
 		await cho(t, CHON.gui);
 		if (!toi) {
-			await t.evaluate((c) => {
+			await t.evaluate(() => {
 				const k = window.__vungCuon();
-				if (k) k.scrollTop = k.scrollHeight;
-				window.scrollTo(0, document.body.scrollHeight);
-			}, CHON.cuon);
+				const s = document.querySelector("[data-khoi='o-soan']");
+				if (k && s)
+					k.scrollTop +=
+						s.getBoundingClientRect().bottom - (window.innerHeight - 20);
+			});
 			await new Promise((x) => setTimeout(x, 400));
 			const hang = await hop(t, CHON.hang);
 			const o = await Promise.all(O.map((x) => hopO(t, x.nhan)));
@@ -455,21 +458,21 @@ async function e4b(ck, slug) {
 			await lenDau(t);
 			if (viTri === "da-cuon")
 				await t.evaluate(
-					(c, n, cHang) => {
+					(n, lo) => {
 						const k = window.__vungCuon();
 						const l = [
 							...document.querySelectorAll("[data-khoi='o-soan'] label"),
 						].find((y) => y.textContent?.trim() === n);
 						const o = document.getElementById(l?.getAttribute("for") ?? "");
-						const hang = document.querySelector(cHang);
-						if (!k || !o || !hang) return;
-						k.scrollTop +=
-							o.getBoundingClientRect().bottom -
-							(hang.getBoundingClientRect().top + 20);
+						if (!k || !o) return;
+						const dinhVung =
+							k === document.scrollingElement
+								? 0
+								: k.getBoundingClientRect().top;
+						k.scrollTop += o.getBoundingClientRect().top - (dinhVung - lo);
 					},
-					CHON.cuon,
 					O[0].nhan,
-					CHON.hang,
+					LO_KHUAT_PX,
 				);
 			await new Promise((r) => setTimeout(r, 400));
 			await goVaGui(t, "ngắn");
@@ -478,16 +481,23 @@ async function e4b(ck, slug) {
 			const o = await hopO(t, O[0].nhan);
 			const loi = await hop(t, CHON.loi);
 			const hang = await hop(t, CHON.hang);
+			const dinhVung = await t.evaluate(() => {
+				const k = window.__vungCuon();
+				return k === document.scrollingElement
+					? 0
+					: Math.round(k.getBoundingClientRect().top);
+			});
 			const dat =
 				o?.dangTro === true &&
 				hang !== null &&
 				loi !== null &&
+				o.tren >= dinhVung &&
 				o.duoi <= hang.tren &&
 				loi.duoi <= hang.tren &&
 				goiGop.length === 0;
 			dong(
 				dat,
-				`${dat ? "" : "AC-4: "}GUI SAI ${kho} ${viTri}: ${o?.dangTro ? "tieu diem o Y" : "TIEU DIEM LECH"} · day o Y ${o?.duoi}px <= dinh hang ${hang?.tren}px · day loi ${loi?.duoi}px <= dinh hang ${hang?.tren}px · ${goiGop.length} yeu cau gopY`,
+				`${dat ? "" : "AC-4: "}GUI SAI ${kho} ${viTri}: ${o?.dangTro ? "tieu diem o Y" : "TIEU DIEM LECH"} · dinh o Y ${o?.tren}px >= dinh vung ${dinhVung}px · day o Y ${o?.duoi}px <= dinh hang ${hang?.tren}px · day loi ${loi?.duoi}px <= dinh hang ${hang?.tren}px · ${goiGop.length} yeu cau gopY`,
 			);
 			await t.close();
 		}
