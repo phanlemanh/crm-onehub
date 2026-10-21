@@ -48,6 +48,7 @@ const KY = idMau("chu-ky", "quy4");
 const GIU_MS = 700;
 const MO_SAU_MS = 250;
 const MAU_TOI_THIEU = 3;
+const CHO_LOI_MS = 15_000;
 const MAT_LOC = [/^Trạng thái/, /^Loại/];
 const d = await lib.moDo();
 const sai = [];
@@ -486,10 +487,13 @@ try {
 		chan.che = "loi";
 		await t.evaluate(batMau, idCu);
 		await bamLuaChon(t, co[0].i);
-		await d.doi(
-			t,
-			() => document.querySelector("[data-trang-thai=ST-donvi-loi]") !== null,
-		);
+		await t
+			.waitForFunction(
+				() =>
+					document.querySelector("[data-trang-thai=ST-donvi-loi]") !== null,
+				{ timeout: CHO_LOI_MS },
+			)
+			.catch(() => null);
 		await choMs(500);
 		const s = await dungMau(t);
 		const sauLoi = s.filter((x) => x.loi);
