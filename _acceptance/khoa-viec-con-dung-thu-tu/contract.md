@@ -5,7 +5,7 @@ slug: khoa-viec-con-dung-thu-tu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-21T07:08:51Z
 design_doc: docs/superpowers/specs/2026-10-21-khoa-viec-con-dung-thu-tu-design.md

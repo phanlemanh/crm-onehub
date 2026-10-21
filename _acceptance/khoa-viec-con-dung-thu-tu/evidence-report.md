@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 37d1295c857c6331694ce4a30dc98703d0cedba0
-human_signoff:
+human_signoff: manh 2026-10-21 — ký Cổng Bằng chứng trên vòng chấm 1 (PASS, 10/10 eval, 7/7 lệnh suite, hội đồng E5 đạt, 0 phát hiện trong và ngoài hợp đồng); đồng ý cắt.
 ---
 
 # Evidence Report: khoa-viec-con-dung-thu-tu
