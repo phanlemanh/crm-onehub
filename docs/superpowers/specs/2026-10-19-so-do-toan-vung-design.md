@@ -91,7 +91,9 @@ không vẽ lại. Không đổi `FlowMap`, `flow-layout`, đầu ra của ba th
 - **Giữ `PageShellHeader` đầy đủ (tiêu đề lớn và câu mô tả).** Đúng cái `vi_sao` gọi là lỗi («một đầu trang lớn»).
   Cách thay chờ Hỏi-2.
 
-## Câu chỉ người có — còn chờ (Cổng Phạm vi)
+## Câu chỉ người có — trả lời ở Cổng Phạm vi
+
+Chủ kho duyệt 21/10 («duyệt» — nhận khuyến nghị; sổ d-20261021T074335Z-25): vỏ khu thôi dựng `AreaSidebar`.
 
 - **Hỏi-5 — thu thanh bên bằng cách nào?** (sổ thay d-…-18, do phản biện 21/10 chỉ ra lối chết của d-…-18 không
   thật chết.) Máy khuyên: vỏ khu Mục tiêu thôi dựng `AreaSidebar` khi đang toàn màn hình, đúng như `anThanhBen` của

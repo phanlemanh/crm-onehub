@@ -5,9 +5,9 @@ slug: so-do-toan-vung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-21
 design_doc: docs/superpowers/specs/2026-10-19-so-do-toan-vung-design.md
 ---
 
@@ -154,8 +154,8 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 19/10; 
 - Hồ sơ VK2 `vo-khu-muc-tieu` (ký 21/10) có hai chỗ đo Cây: E4 «`/okr/so-do`: sơ đồ góp vào (CayCanChinh) có ít nhất
   một nút» và AC-3 kể «cây» trong kiểu xem `xemOkr`. Cả hai thuộc «cách xem Cây» của Hỏi-3 (sổ d-…-14) và đi khuôn
   luật 21 như DH4, DH5, L3.
-- Câu còn chờ ở Cổng Phạm vi: Hỏi-5 (thu thanh bên bằng cách nào — sổ thay d-…-18 sau phản biện 21/10). Hợp đồng
-  không đổi theo câu trả lời.
+- Hỏi-5 (thu thanh bên bằng cách nào) trả lời ở Cổng Phạm vi 21/10: vỏ khu thôi dựng `AreaSidebar`, không chạm
+  `packages/ui` (sổ d-20261021T074335Z-25).
 - Bốn câu chỉ người có ở design doc đã được chủ kho trả lời trước Cổng Phạm vi (19/10, «Theo khuyến nghị cả bốn»; sổ
   d-…-12 tới d-…-16): bỏ Cây ở VK6 (AC-6); dải công cụ thay `PageShellHeader` và thêm ngoại lệ «màn toàn vùng» (AC-1);
   cho chuyển thước hồ sơ đã ký theo khuôn luật 21 (AC-4, AC-5, AC-10, E11); toàn màn hình là chế độ tạm của vỏ (AC-2).
