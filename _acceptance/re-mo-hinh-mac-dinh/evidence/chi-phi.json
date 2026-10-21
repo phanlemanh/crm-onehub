@@ -45,6 +45,15 @@
       "usd": 0.007924,
       "usd_vai": 0.007924,
       "tep": "aichiphi-tac-nhan-5.json"
+    },
+    {
+      "vai": "tro-ly-kho",
+      "luot": "1",
+      "luc": "2026-10-21T10:13:11.421Z",
+      "trang_thai": "da-chay",
+      "usd": 0.326405,
+      "usd_vai": 0.243832,
+      "tep": "kho/luot-1/tom-tat.json"
     }
   ]
 }
