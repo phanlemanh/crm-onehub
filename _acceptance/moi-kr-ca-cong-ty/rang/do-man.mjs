@@ -14,7 +14,9 @@ import {
 	GOC,
 	mo,
 	nghi,
+	phienCua,
 	tongKet,
+	trpcCua,
 } from "../../vo-khu-muc-tieu/rang/do-man-lib.mjs";
 import { taoNguCanh } from "../../vo-khu-muc-tieu/rang/do-man-ngu-canh.mjs";
 
@@ -71,21 +73,46 @@ const soTruot = (o) =>
 	o.facetCounts.tinhTrang.find((d) => d.value === "truot")?.count ?? 0;
 
 async function batDuocGiven(n) {
-	const hoi = (loc = LOC_RONG) =>
-		n.api.quanTri.hoi("okr.moiKr", { cycleId: n.ky.hienHanh, loc });
-	if (soTruot(await hoi()) >= N_TRUOT) return;
-	const mt = await n.api.truong.hoi("okr.objective", { id: n.mucTieu.id });
-	if (mt.kind !== "cam-ket")
-		await khongDo(`KHONG DO DUOC: muc tieu mau ${mt.id} khong phai cam-ket`);
-	for (const k of mt.keyResults.filter((x) => x.kind !== "moc"))
-		await n.api.truong.lam("okr.updateKeyResult", {
-			id: k.id,
-			currentValue: k.startValue,
+	const hoi = () =>
+		n.api.quanTri.hoi("okr.moiKr", { cycleId: n.ky.hienHanh, loc: LOC_RONG });
+	const dau = await hoi();
+	console.log(`given: bo mau co ${soTruot(dau)} KR truot`);
+	if (soTruot(dau) >= N_TRUOT) return;
+	const conLai = dau.rows.filter(
+		(d) => d.tinhTrang === "dung-nhip" || d.tinhTrang === "cham-nhip",
+	);
+	const kr = await db.okrKeyResult.findMany({
+		where: {
+			id: { in: conLai.map((d) => d.keyResultId) },
+			source: "tay",
+			objective: { kind: "cam-ket" },
+		},
+		select: {
+			id: true,
+			startValue: true,
+			owner: { select: { email: true } },
+		},
+	});
+	for (const k of kr.slice(0, N_TRUOT - soTruot(dau))) {
+		const api = trpcCua(phienCua(k.owner.email));
+		const { sessionId } = await api.lam("okr.moCapNhat", { entry: "tab" });
+		await api.lam("okr.guiCapNhat", {
+			sessionId,
+			items: [
+				{
+					keyResultId: k.id,
+					value: k.startValue.toNumber(),
+					confidence: "vua",
+					note: "",
+				},
+			],
 		});
+	}
 	const sau = soTruot(await hoi());
+	console.log(`given: sau cap nhat tuan co ${sau} KR truot`);
 	if (sau < 2)
 		await khongDo(
-			`KHONG DO DUOC: khong dung duoc Given AC-1 — chi ${sau} KR truot sau khi ha so`,
+			`KHONG DO DUOC: khong dung duoc Given AC-1 — chi ${sau} KR truot sau khi cap nhat`,
 		);
 }
 
