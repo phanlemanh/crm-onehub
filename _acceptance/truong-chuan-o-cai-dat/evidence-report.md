@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0dc533ccf69e76319d6112703f5cdc8f14f19b35
+verified_commit: 7b003ebd1f3ea4a7fc4128bc89f29fe2d3f8dcd3
 human_signoff: manh 2026-10-22
 ---
 
@@ -302,3 +302,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: không eval nào hỏng — 19 eval và 7 lệnh suite xanh; không có mục cần người chấm, không có lệnh hỏng ngoài eval.
+
+### Re-pin lần 1 — 2026-10-21, do gộp onehub 33ddf1b02 trước khi báo sẵn gộp
+run_id: repin-20261021T224039Z-47072
+sha: 7b003ebd1f3ea4a7fc4128bc89f29fe2d3f8dcd3 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
