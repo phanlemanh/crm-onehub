@@ -22,12 +22,30 @@ type TruongGia = {
 	archived?: boolean;
 };
 
+type BienGhi = {
+	entity?: string;
+	key?: string;
+	hidden?: boolean;
+	id?: string;
+	ids?: string[];
+	items?: ({ standard: string } | { custom: string })[];
+	required?: boolean;
+	label?: string;
+	data?: { required?: boolean; showOnSheet?: boolean };
+};
+
+type TuyChonGhi = {
+	onError?: () => void;
+	onSuccess?: () => void;
+	onSettled?: () => Promise<void> | void;
+};
+
 const kho = {
 	cheDoBoTri: "tra" as CheDo,
 	boTri: [] as unknown[],
 	truong: [] as TruongGia[],
 	quyen: true,
-	daGoi: [] as { ten: string; bien: unknown }[],
+	daGoi: [] as { ten: string; bien: BienGhi }[],
 	loiGhi: new Map<string, string>(),
 };
 
@@ -91,10 +109,10 @@ function thuTuc<TVao>(ten: string, doc: (dauVao: TVao) => unknown) {
 			queryFn: async () => doc(dauVao),
 			retry: false,
 		}),
-		mutationOptions: (tuyChon: Record<string, unknown> = {}) => ({
+		mutationOptions: (tuyChon: TuyChonGhi = {}) => ({
 			...tuyChon,
 			mutationKey: [ten],
-			mutationFn: async (bien: unknown) => {
+			mutationFn: async (bien: BienGhi) => {
 				kho.daGoi.push({ ten, bien });
 				const loi = kho.loiGhi.get(ten);
 				if (loi) throw new LoiGia(loi);
@@ -160,9 +178,9 @@ const { FieldEditor } = await import("@/components/crm/fields/field-editor");
 const { crmMessages } = await import("@/lib/messages/crm");
 const { messages: uiMessages } = await import("@crm/ui/lib/messages");
 
-const goc: { root: Root | null; el: HTMLElement | null } = {
-	root: null,
-	el: null,
+const goc = {
+	root: null as Root | null,
+	el: null as HTMLElement | null,
 };
 
 async function ve(phan: ReactElement, locale: "vi" | "en" = "vi") {

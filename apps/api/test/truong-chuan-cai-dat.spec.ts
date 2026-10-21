@@ -92,8 +92,9 @@ async function boTri(entity: Entity): Promise<BoTriTruong> {
 const ten = (muc: BoTriTruong[number]) => muc.key;
 
 function sapLaiTu(dsMuc: BoTriTruong): DauVao[] {
-	return dsMuc.map((muc) =>
-		muc.kind === "standard" ? { standard: muc.key } : { custom: muc.id },
+	return dsMuc.map(
+		(muc): DauVao =>
+			muc.kind === "standard" ? { standard: muc.key } : { custom: muc.id },
 	);
 }
 
@@ -385,17 +386,17 @@ const CAP_BAT_BUOC: [Entity, string][] = [
 	["CONTACT", "firstName"],
 ];
 
-const COT_CUA_KHOA: Record<string, string> = {
-	company: "companyId",
-	owner: "ownerId",
-	amount: "amount",
-};
+function cotCua(key: string): string {
+	if (key === "company") return "companyId";
+	if (key === "owner") return "ownerId";
+	return key;
+}
 
-const MO_HINH: Record<Entity, string> = {
+const MO_HINH = {
 	DEAL: "Deal",
 	COMPANY: "Company",
 	CONTACT: "Contact",
-};
+} as const satisfies Record<Entity, string>;
 
 function cotKhongNull(moHinh: string): Set<string> {
 	const schema = readFileSync(
@@ -447,7 +448,7 @@ describe("tcc-api-chuan-bat-buoc", () => {
 				CAP_BAT_BUOC.filter(([e]) => e === entity).map(([, k]) => k),
 			);
 			for (const key of STANDARD_FIELD_KEYS[entity]) {
-				const khongNull = cot.has(COT_CUA_KHOA[key] ?? key);
+				const khongNull = cot.has(cotCua(key));
 				if (khongNull !== batBuoc.has(key))
 					throw new Error(`tcc api chuan bat buoc: lech mo hinh ${key}`);
 			}
