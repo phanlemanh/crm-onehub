@@ -3,10 +3,12 @@ import {
 	type StandardFieldKey,
 } from "@crm/db/fields-chuan";
 import type { Locale } from "@crm/ui/lib/locale";
+import type { MucBoTriTruong } from "@crm/validation/bo-tri-truong";
 import { crmMessages } from "@/lib/messages/crm";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
 import type { KieuTruong } from "./doc-nhap";
 import type { FieldEntity } from "./fields-entity";
+import type { RecordFieldEntry } from "./record-fields";
 
 export type KieuChuan = KieuTruong | "COMPANY";
 
@@ -78,4 +80,42 @@ export function kieuTruongChuan(
 
 export function khoaTruongChuan(entity: FieldEntity): readonly string[] {
 	return STANDARD_FIELD_KEYS[entity];
+}
+
+export type MucChiTiet =
+	| { kind: "standard"; key: string }
+	| { kind: "custom"; field: RecordFieldEntry };
+
+export function mucChiTiet(
+	muc: readonly MucBoTriTruong[],
+	tuTao: readonly RecordFieldEntry[],
+): MucChiTiet[] {
+	const theoId = new Map(tuTao.map((field) => [field.id, field]));
+	const daDung = new Set<string>();
+	const ra: MucChiTiet[] = [];
+
+	for (const m of muc) {
+		if (m.kind === "standard") {
+			if (!m.hidden) ra.push({ kind: "standard", key: m.key });
+			continue;
+		}
+		const field = theoId.get(m.id);
+		if (!field) continue;
+		daDung.add(field.id);
+		if (field.showOnSheet) ra.push({ kind: "custom", field });
+	}
+
+	for (const field of tuTao) {
+		if (!daDung.has(field.id) && field.showOnSheet)
+			ra.push({ kind: "custom", field });
+	}
+
+	return ra;
+}
+
+export function khoaSauQuyDoi(chiTiet: readonly MucChiTiet[]): string | null {
+	const khoa = chiTiet.map((m) => (m.kind === "standard" ? m.key : ""));
+	const giaTri = khoa.indexOf("amount");
+	if (giaTri < 0) return null;
+	return khoa.indexOf("currency") > giaTri ? "currency" : "amount";
 }

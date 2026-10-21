@@ -71,6 +71,26 @@ const toastGia = Object.assign(
 );
 mock.module("sonner", () => ({ ...sonnerThat, toast: toastGia }));
 
+const eveThat = await import("eve/react");
+mock.module("eve/react", () => ({
+	...eveThat,
+	useEveAgent: () => ({
+		status: "ready",
+		error: undefined,
+		data: { messages: [] },
+		session: null,
+		send: async () => {},
+	}),
+}));
+
+const phienThat = await import("@/lib/agent-session");
+mock.module("@/lib/agent-session", () => ({
+	...phienThat,
+	loadThread: () => new Promise(() => {}),
+}));
+
+globalThis.FormData = window.FormData;
+
 function quaJson<T>(giaTri: T): unknown {
 	return JSON.parse(JSON.stringify(giaTri));
 }
@@ -104,6 +124,12 @@ function thuTuc<TVao>(ten: string, doc: (dauVao: TVao) => unknown) {
 	return {
 		queryKey: (dauVao?: TVao) => (dauVao === undefined ? [ten] : [ten, dauVao]),
 		pathKey: () => [ten],
+		infiniteQueryOptions: (dauVao: TVao) => ({
+			queryKey: [ten, dauVao ?? null, "vo-han"],
+			queryFn: async () => doc(dauVao),
+			initialPageParam: null,
+			getNextPageParam: () => undefined,
+		}),
 		queryOptions: (dauVao: TVao) => ({
 			queryKey: dauVao === undefined ? [ten] : [ten, dauVao],
 			queryFn: async () => doc(dauVao),
@@ -116,36 +142,53 @@ function thuTuc<TVao>(ten: string, doc: (dauVao: TVao) => unknown) {
 				kho.daGoi.push({ ten, bien });
 				const loi = kho.loiGhi.get(ten);
 				if (loi) throw new LoiGia(loi);
-				return ten === "fields.setStandardHidden" ? kho.boTri : [];
+				if (ten === "fields.setStandardHidden") return kho.boTri;
+				return doc(bien as TVao) ?? { id: "ok" };
 			},
 		}),
 	};
 }
 
-mock.module("@/lib/trpc/client", () => ({
-	useTRPC: () => ({
-		fields: {
-			access: thuTuc("fields.access", () => ({ canManage: kho.quyen })),
-			list: thuTuc("fields.list", (vao: { entity: string }) =>
-				dsTruong(vao.entity),
+const duLieu = new Map<string, (vao: BienGhi) => unknown>();
+
+function datGia(duong: string, lay: (vao: BienGhi) => unknown) {
+	duLieu.set(duong, lay);
+}
+
+const MAC_DINH: Record<string, (vao: BienGhi) => unknown> = {
+	"fields.access": () => ({ canManage: kho.quyen }),
+	"fields.list": (vao) => dsTruong(vao.entity ?? "DEAL"),
+	"fields.layout": () => {
+		if (kho.cheDoBoTri === "treo") return new Promise(() => {});
+		if (kho.cheDoBoTri === "loi") throw new LoiGia("layout failed");
+		return kho.boTri;
+	},
+	"fields.coverage": () => ({ filled: 0, total: 0 }),
+	"users.list": () => [],
+};
+
+function docGia(duong: string, vao: BienGhi): unknown {
+	const lay = duLieu.get(duong) ?? MAC_DINH[duong];
+	return lay ? lay(vao) : null;
+}
+
+const trpcGia = new Proxy(
+	{},
+	{
+		get: (_goc, khong: string) =>
+			new Proxy(
+				{},
+				{
+					get: (_g, ten: string) =>
+						thuTuc(`${khong}.${ten}`, (vao: BienGhi) =>
+							docGia(`${khong}.${ten}`, vao),
+						),
+				},
 			),
-			layout: thuTuc("fields.layout", () => {
-				if (kho.cheDoBoTri === "treo") return new Promise(() => {});
-				if (kho.cheDoBoTri === "loi") throw new LoiGia("layout failed");
-				return kho.boTri;
-			}),
-			coverage: thuTuc("fields.coverage", () => ({ filled: 0, total: 0 })),
-			create: thuTuc("fields.create", () => ({})),
-			update: thuTuc("fields.update", () => ({})),
-			reorder: thuTuc("fields.reorder", () => []),
-			setStandardHidden: thuTuc("fields.setStandardHidden", () => []),
-			archive: thuTuc("fields.archive", () => ({})),
-			restore: thuTuc("fields.restore", () => ({})),
-			backfill: thuTuc("fields.backfill", () => ({})),
-		},
-		users: { list: thuTuc("users.list", () => []) },
-	}),
-}));
+	},
+);
+
+mock.module("@/lib/trpc/client", () => ({ useTRPC: () => trpcGia }));
 mock.module("@/lib/trpc/cache", () => ({
 	useCrmCache: () => ({ fields: async () => {} }),
 }));
@@ -223,6 +266,7 @@ afterEach(async () => {
 	kho.quyen = true;
 	kho.daGoi = [];
 	kho.loiGhi.clear();
+	duLieu.clear();
 	toastLoi.length = 0;
 	toastDung.length = 0;
 });
@@ -782,5 +826,546 @@ describe("tcc-khong-quyen", () => {
 		].some((s) => !s.disabled);
 		if (!mo) throw new Error("tcc khong quyen: doi chung");
 		expect(mo).toBe(true);
+	});
+});
+
+const { dealDetailOutput } = await import(
+	"../../api/src/deals/deals.contracts"
+);
+const { companyDetailOutput } = await import(
+	"../../api/src/companies/companies.contracts"
+);
+const { contactByIdOutput } = await import(
+	"../../api/src/contacts/contacts.contracts"
+);
+const { DetailSheet } = await import("@/components/detail-sheet");
+const { DealSheet } = await import("@/components/crm/record-sheet/deal-sheet");
+const { CompanySheet } = await import(
+	"@/components/crm/record-sheet/company-sheet"
+);
+const { ContactSheet } = await import(
+	"@/components/crm/record-sheet/contact-sheet"
+);
+const { recordSheetMessages } = await import("@/lib/messages/record-sheet");
+
+const NGUOI_PHIEU = [
+	{ id: "u-an", name: "An Trần", email: "an@onehub.vn", image: null },
+];
+const CHU = NGUOI_PHIEU[0];
+
+type TruongPhieu = {
+	key: string;
+	label: string;
+	value: string | number | boolean | null;
+	required?: boolean;
+	showOnSheet?: boolean;
+};
+
+function truongPhieu(entity: Loai, t: TruongPhieu) {
+	return {
+		id: `f-${t.key}`,
+		entity,
+		key: t.key,
+		label: t.label,
+		type: "TEXT",
+		agentFilled: false,
+		agentBrief: null,
+		required: t.required ?? false,
+		showOnSheet: t.showOnSheet ?? true,
+		showOnTable: true,
+		showOnFilter: false,
+		position: 0,
+		archived: false,
+		options: [],
+		value: t.value,
+	};
+}
+
+function thoaThuanGia(fields: TruongPhieu[], currency = "VND") {
+	return quaJson(
+		dealDetailOutput.parse({
+			id: "d-1",
+			name: "Thoả thuận tcc",
+			description: "Mô tả tcc",
+			stage: "lead",
+			currency,
+			closedReason: null,
+			company: {
+				id: "co-1",
+				name: "Công ty tcc",
+				domain: "tcc.vn",
+				iconUrl: null,
+				iconDarkUrl: null,
+				iconTone: null,
+				logoUrl: null,
+				industry: null,
+			},
+			owner: CHU,
+			fields: fields.map((t) => truongPhieu("DEAL", t)),
+			amountCents: 123450,
+			baseAmountCents: 3000000000,
+			reportingCurrency: "VND",
+			fxRate: null,
+			fxRateAt: null,
+			stageChangedAt: "2026-10-01T00:00:00.000Z",
+			expectedCloseDate: "2026-10-22T00:00:00.000Z",
+			closedAt: null,
+			createdAt: "2026-10-01T00:00:00.000Z",
+			archivedAt: null,
+			contacts: [],
+			archivedContacts: [],
+		}),
+	);
+}
+
+function congTyGia(fields: TruongPhieu[] = []) {
+	return quaJson(
+		companyDetailOutput.parse({
+			id: "co-1",
+			name: "Công ty tcc",
+			domain: "tcc.vn",
+			website: "tcc.vn",
+			description: null,
+			logoUrl: null,
+			logoDarkUrl: null,
+			iconUrl: null,
+			iconDarkUrl: null,
+			iconTone: null,
+			brandColor: null,
+			industry: null,
+			subIndustry: null,
+			city: "Đà Nẵng",
+			stateCode: null,
+			country: null,
+			countryCode: null,
+			phone: "0901 234 567",
+			email: "lienhe@tcc.vn",
+			linkedinUrl: null,
+			twitterUrl: null,
+			githubUrl: null,
+			pricingUrl: null,
+			careersUrl: null,
+			enrichmentStatus: "COMPLETE",
+			enrichmentError: null,
+			source: "MANUAL",
+			owner: CHU,
+			contacts: [],
+			fields: fields.map((t) => truongPhieu("COMPANY", t)),
+			queued: false,
+			createdAt: "2026-09-01T00:00:00.000Z",
+			archivedAt: null,
+			enrichedAt: null,
+			primaryContactId: null,
+			primaryContact: null,
+			reportingCurrency: "VND",
+			soKeHoach: 0,
+			xuongCoKhuon: false,
+			deals: [],
+			archivedContacts: [],
+			archivedDeals: [],
+		}),
+	);
+}
+
+function lienHeGia() {
+	return quaJson(
+		contactByIdOutput.parse({
+			id: "ct-1",
+			firstName: "Lan",
+			lastName: "Phạm",
+			email: "lan@tcc.vn",
+			phone: "0901 234 567",
+			title: "Giám đốc",
+			linkedinUrl: "linkedin.com/in/lan",
+			twitterUrl: null,
+			githubUrl: null,
+			imageUrl: null,
+			enrichmentStatus: "COMPLETE",
+			enrichmentError: null,
+			owner: CHU,
+			company: null,
+			fields: [],
+			queued: false,
+			createdAt: "2026-09-01T00:00:00.000Z",
+			archivedAt: null,
+			brief: null,
+			facts: [],
+			relationship: {
+				emails: 0,
+				threads: 0,
+				lastReplyAt: null,
+				meetings: 0,
+				nextMeeting: null,
+				colleagues: [],
+			},
+			isPrimaryContact: false,
+			deals: [],
+			archivedDeals: [],
+		}),
+	);
+}
+
+function datNenPhieu() {
+	datGia("users.list", () => NGUOI_PHIEU);
+	datGia("onboarding.listTemplates", () => []);
+	datGia("onboarding.listSteps", () => ({ steps: [], phases: [] }));
+	datGia("onboarding.listEnrollments", () => []);
+	datGia("onboarding.listDepartments", () => []);
+	datGia("onboarding.access", () => ({ canManage: true }));
+	datGia("onboarding.plansOfCompany", () => []);
+	datGia("conversations.list", () => []);
+	datGia("conversations.events", () => []);
+}
+
+const LOAI_PHIEU = {
+	DEAL: "deal",
+	COMPANY: "company",
+	CONTACT: "contact",
+} as const;
+const ID_PHIEU = { DEAL: "d-1", COMPANY: "co-1", CONTACT: "ct-1" } as const;
+
+async function moPhieu(entity: Loai, locale: "vi" | "en" = "vi") {
+	datNenPhieu();
+	const ngan =
+		entity === "DEAL" ? (
+			<DealSheet dealId="d-1" />
+		) : entity === "COMPANY" ? (
+			<CompanySheet companyId="co-1" />
+		) : (
+			<ContactSheet contactId="ct-1" />
+		);
+	const el = document.createElement("div");
+	document.body.appendChild(el);
+	const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+	const root = createRoot(el);
+	await act(async () => {
+		root.render(
+			<NuqsTestingAdapter
+				searchParams={`record=${LOAI_PHIEU[entity]}:${ID_PHIEU[entity]}`}
+				hasMemory
+			>
+				<QueryClientProvider client={qc}>
+					<LocaleProvider locale={locale}>
+						<TooltipProvider>
+							<DetailSheet open onOpenChange={() => {}}>
+								{ngan}
+							</DetailSheet>
+						</TooltipProvider>
+					</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
+		);
+	});
+	goc.root = root;
+	goc.el = el;
+	await choDen(
+		() => document.querySelectorAll("label").length > 3,
+		`phieu ${entity}`,
+	);
+	await cho(30);
+}
+
+async function dongPhieu() {
+	await act(async () => goc.root?.unmount());
+	goc.el?.remove();
+	document.body.innerHTML = "";
+}
+
+function nhanChiTiet(entity: Loai, locale: "vi" | "en" = "vi"): string[] {
+	const r = recordSheetMessages(locale);
+	const tieuDe =
+		entity === "DEAL"
+			? r.deal.details
+			: entity === "COMPANY"
+				? r.company.details
+				: r.contact.details;
+	const muc = [...document.body.querySelectorAll("section, [data-slot]")].find(
+		(x) =>
+			[...x.querySelectorAll("h2, h3, h4, [data-slot=card-title]")].some(
+				(h) => h.textContent?.trim() === tieuDe,
+			) && x.querySelectorAll("label").length > 0,
+	);
+	const goc_ = muc ?? document.body;
+	return [...goc_.querySelectorAll("label")]
+		.filter((l) => l.parentElement?.firstElementChild === l)
+		.map((l) => l.textContent?.trim() ?? "");
+}
+
+function hangPhieu(nhan: string): HTMLElement | null {
+	const l = [...document.body.querySelectorAll("label")].find(
+		(x) => x.textContent?.trim() === nhan,
+	);
+	return (l?.parentElement as HTMLElement | null) ?? null;
+}
+
+const rVi = recordSheetMessages("vi");
+
+describe("tcc-danh-muc", () => {
+	test("nhan muc Chi tiet ba phieu khop nhan o Cai dat, hai locale", async () => {
+		let cap = 0;
+		for (const locale of ["vi", "en"] as const) {
+			for (const entity of ["DEAL", "COMPANY", "CONTACT"] as const) {
+				kho.boTri = boTriGia(entity) as unknown[];
+				datGia("deals.byId", () => thoaThuanGia([]));
+				datGia("companies.byId", () => congTyGia());
+				datGia("contacts.byId", () => lienHeGia());
+				await moPhieu(entity, locale);
+				const phieu = nhanChiTiet(entity, locale);
+				const caiDat = STANDARD_FIELD_KEYS[entity].map((k) =>
+					nhanTruongChuan(entity, k, locale),
+				);
+				if (JSON.stringify(phieu) !== JSON.stringify(caiDat))
+					throw new Error(
+						`tcc danh muc: lech ${locale} ${entity} cai-dat=${JSON.stringify(caiDat)} phieu=${JSON.stringify(phieu)}`,
+					);
+				const banChep = phieu.slice(0, -1);
+				if (JSON.stringify(banChep) === JSON.stringify(caiDat))
+					throw new Error("tcc danh muc: thuoc mu");
+				cap += 1;
+				await dongPhieu();
+			}
+		}
+		if (cap !== 6) throw new Error(`tcc danh muc: thieu cap ${cap}`);
+		expect(cap).toBe(6);
+	});
+});
+
+describe("tcc-phieu-thu-tu", () => {
+	test("phieu Thoa thuan ve muc Chi tiet theo bo tri", async () => {
+		const tuTao = [{ id: "f-hang_doi_tac", key: "hang_doi_tac" }];
+		datGia("deals.byId", () =>
+			thoaThuanGia([
+				{ key: "hang_doi_tac", label: "Hạng đối tác", value: "Vàng" },
+			]),
+		);
+		const r = rVi;
+		const mong = [
+			r.deal.fields.name,
+			r.deal.fields.amount,
+			r.deal.fields.currency,
+			"Hạng đối tác",
+			r.deal.fields.closeDate,
+			crmMessages("vi").standard.company,
+			r.deal.fields.owner,
+		];
+		kho.boTri = boTriGia("DEAL", {
+			tuTao,
+			thuTu: [
+				"name",
+				"amount",
+				"currency",
+				"hang_doi_tac",
+				"expectedCloseDate",
+				"company",
+				"owner",
+			],
+		}) as unknown[];
+		await moPhieu("DEAL");
+		const thuTu = nhanChiTiet("DEAL");
+		if (JSON.stringify(thuTu) !== JSON.stringify(mong))
+			throw new Error(`tcc phieu thu tu: ${JSON.stringify(thuTu)}`);
+		await dongPhieu();
+
+		kho.boTri = boTriGia("DEAL", { tuTao }) as unknown[];
+		await moPhieu("DEAL");
+		const macDinh = nhanChiTiet("DEAL");
+		if (macDinh.at(-1) !== "Hạng đối tác")
+			throw new Error(`tcc phieu thu tu: doi chung ${JSON.stringify(macDinh)}`);
+		expect(thuTu).toEqual(mong);
+	});
+});
+
+describe("tcc-phieu-chua-tai", () => {
+	test("bo tri treo hay loi thi phieu Lien he van du truong mac dinh", async () => {
+		const mong = STANDARD_FIELD_KEYS.CONTACT.map((k) =>
+			nhanTruongChuan("CONTACT", k, "vi"),
+		);
+		datGia("contacts.byId", () => lienHeGia());
+		let soCa = 0;
+		for (const cheDo of ["treo", "loi"] as const) {
+			kho.cheDoBoTri = cheDo;
+			await moPhieu("CONTACT");
+			const nhan = nhanChiTiet("CONTACT");
+			if (JSON.stringify(nhan) !== JSON.stringify(mong))
+				throw new Error(`tcc phieu chua tai: ${cheDo} ${JSON.stringify(nhan)}`);
+			soCa += 1;
+			await dongPhieu();
+		}
+		kho.cheDoBoTri = "tra";
+		kho.boTri = boTriGia("CONTACT", { an: ["title"] }) as unknown[];
+		await moPhieu("CONTACT");
+		if (nhanChiTiet("CONTACT").includes(rVi.contact.fields.title))
+			throw new Error("tcc phieu chua tai: doi chung");
+		if (soCa !== 2) throw new Error(`tcc phieu chua tai: thieu ${soCa}`);
+		expect(soCa).toBe(2);
+	});
+});
+
+describe("tcc-an", () => {
+	test("phieu Cong ty bo hang Thanh pho khi an, hien lai dung cho", async () => {
+		datGia("companies.byId", () => congTyGia());
+		const thanhPho = rVi.company.fields.city;
+		kho.boTri = boTriGia("COMPANY", { an: ["city"] }) as unknown[];
+		await moPhieu("COMPANY");
+		if (nhanChiTiet("COMPANY").includes(thanhPho))
+			throw new Error("tcc an: phieu con hang");
+		await dongPhieu();
+		kho.boTri = boTriGia("COMPANY") as unknown[];
+		await moPhieu("COMPANY");
+		const i = nhanChiTiet("COMPANY").indexOf(thanhPho);
+		if (i !== 5) throw new Error(`tcc an: hien lai sai cho ${i}`);
+		expect(i).toBe(5);
+	});
+});
+
+describe("tcc-phieu-quy-doi", () => {
+	test("Quy doi theo Gia tri: an Gia tri thi khong ve, dao Tien te len truoc thi ngay sau Gia tri", async () => {
+		datGia("deals.byId", () => thoaThuanGia([], "USD"));
+		const quyDoi = rVi.deal.inCurrency("VND");
+		const viTri = (chu: string) =>
+			[...document.body.querySelectorAll("*")].findIndex(
+				(x) => x.childElementCount === 0 && x.textContent?.trim() === chu,
+			);
+
+		kho.boTri = boTriGia("DEAL") as unknown[];
+		await moPhieu("DEAL");
+		if (viTri(quyDoi) < 0)
+			throw new Error("tcc phieu quy doi: doi chung thieu");
+		await dongPhieu();
+
+		kho.boTri = boTriGia("DEAL", {
+			thuTu: [
+				"name",
+				"currency",
+				"amount",
+				"expectedCloseDate",
+				"company",
+				"owner",
+			],
+		}) as unknown[];
+		await moPhieu("DEAL");
+		const iGiaTri = viTri(rVi.deal.fields.amount);
+		const iQuyDoi = viTri(quyDoi);
+		const iNgay = viTri(rVi.deal.fields.closeDate);
+		if (!(iGiaTri < iQuyDoi && iQuyDoi < iNgay))
+			throw new Error(
+				`tcc phieu quy doi: sai cho ${iGiaTri} ${iQuyDoi} ${iNgay}`,
+			);
+		await dongPhieu();
+
+		kho.boTri = boTriGia("DEAL", { an: ["amount"] }) as unknown[];
+		await moPhieu("DEAL");
+		if (viTri(quyDoi) >= 0) throw new Error("tcc phieu quy doi: con khi an");
+		expect(true).toBe(true);
+	});
+});
+
+describe("tcc-bat-buoc-luu", () => {
+	test("phieu that: xoa trong truong bat buoc thi bao, khong luu", async () => {
+		const tuTao = [{ id: "f-ma_ho_so", key: "ma_ho_so" }];
+		kho.boTri = boTriGia("DEAL", { tuTao }) as unknown[];
+		for (const batBuoc of [true, false]) {
+			kho.daGoi = [];
+			datGia("deals.byId", () =>
+				thoaThuanGia([
+					{
+						key: "ma_ho_so",
+						label: "Mã hồ sơ",
+						value: "HS-1",
+						required: batBuoc,
+					},
+				]),
+			);
+			await moPhieu("DEAL");
+			const hang = hangPhieu("Mã hồ sơ");
+			const nutSua = hang?.querySelector("button");
+			if (!nutSua) throw new Error("tcc bat buoc: phieu thieu hang");
+			await act(async () => nutSua.click());
+			await cho(20);
+			const o = hang?.querySelector("input");
+			if (!o) throw new Error("tcc bat buoc: phieu thieu o nhap");
+			await act(async () => {
+				const dat = Object.getOwnPropertyDescriptor(
+					HTMLInputElement.prototype,
+					"value",
+				)?.set;
+				dat?.call(o, "");
+				o.dispatchEvent(new Event("input", { bubbles: true }));
+			});
+			await phim(o, "Enter");
+			await cho(30);
+			const luu = kho.daGoi.filter((g) => g.ten === "deals.update");
+			if (batBuoc) {
+				if (luu.length > 0) throw new Error("tcc bat buoc: phieu van luu");
+				const cau = mVi.truongKieu.trong("Mã hồ sơ");
+				if (!hang?.textContent?.includes(cau))
+					throw new Error(`tcc bat buoc: phieu cau ${hang?.textContent}`);
+			} else if (
+				JSON.stringify(luu[0]?.bien) !==
+				JSON.stringify({ id: "d-1", data: { fields: { ma_ho_so: null } } })
+			) {
+				throw new Error(`tcc bat buoc: doi chung ${JSON.stringify(luu)}`);
+			}
+			await dongPhieu();
+		}
+		expect(true).toBe(true);
+	});
+});
+
+const { CompaniesTable } = await import(
+	"@/app/(app)/[slug]/companies/companies-table"
+);
+const { companyMessages } = await import("@/lib/messages/companies");
+
+function dongBangGia() {
+	return {
+		id: "co-1",
+		name: "Công ty tcc bảng",
+		domain: "tcc-bang.vn",
+		iconUrl: null,
+		iconDarkUrl: null,
+		iconTone: null,
+		logoUrl: null,
+		brandColor: null,
+		industry: null,
+		enrichmentStatus: "COMPLETE",
+		queued: false,
+		source: "MANUAL",
+		owner: null,
+		contactCount: 0,
+		openDealCount: 0,
+		lastActivityAt: null,
+		createdAt: "2026-09-01T00:00:00.000Z",
+		archivedAt: null,
+		fields: {},
+	};
+}
+
+describe("tcc-an", () => {
+	test("an truong chuan khoi ho so khong an cot tren bang Cong ty", async () => {
+		datGia("fields.filters", () => []);
+		datGia("savedViews.list", () => []);
+		datGia("companies.list", () => ({
+			rows: [dongBangGia()],
+			total: 1,
+			facetCounts: { industry: {} },
+		}));
+		kho.boTri = boTriGia("COMPANY", { an: ["domain"] }) as unknown[];
+		await ve(<CompaniesTable />);
+		await choDen(
+			() => document.body.textContent?.includes("Công ty tcc bảng") === true,
+			"bang cong ty",
+		);
+		const h = companyMessages("vi").headers;
+		const tieuDe = [...document.body.querySelectorAll("th")].map(
+			(x) => x.textContent?.trim() ?? "",
+		);
+		if (!tieuDe.includes(h.name)) throw new Error("tcc an: bang doi chung");
+		if (
+			!tieuDe.includes(h.domain) ||
+			!document.body.textContent?.includes("tcc-bang.vn")
+		)
+			throw new Error("tcc an: bang mat cot");
+		expect(tieuDe).toContain(h.domain);
 	});
 });

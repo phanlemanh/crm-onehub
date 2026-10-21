@@ -63,9 +63,7 @@ function nhap(duong) {
 }
 
 const docDanhMuc = (ten) =>
-	ten.endsWith("truong-chuan") ||
-	ten.endsWith("use-bo-tri-truong") ||
-	ten === "@crm/db/fields-chuan";
+	ten.endsWith("truong-chuan") || ten === "@crm/db/fields-chuan";
 
 function quetNhapCu(duong) {
 	for (const n of nhap(duong)) {
