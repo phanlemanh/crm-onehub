@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>153 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>158 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>159 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -52,7 +52,6 @@ flowchart TD
 
 ## Đang làm
 
-- Đo zai/glm-5.3-flash, deepseek/deepseek-v4.1-flash-1017 và (riêng Trợ lý kho) google/gemini-3.8-flash cho Tác nhân, Trợ lý kho và Soạn OKR bằng thước đã có, rồi dựng bảng kiến nghị model theo vai trỏ từng lượt đo (`model-theo-vai-do-lai`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -153,6 +152,7 @@ flowchart TD
 - Máy soạn bản đề xuất — tải tệp quy định đang có (Word, PDF có chữ) lên kho tài liệu, máy soạn thành bản đề xuất có trích đoạn nguồn, chủ trang đọc nguồn cạnh nhau rồi duyệt (`may-soan-de-xuat`)
 - «Menu con của bộ lọc mở được trên điện thoại — không còn nằm ngoài màn ở khổ 375» (`menu-con-loc-dien-thoai`)
 - Mở lại một kế hoạch đã đóng hay bỏ «xong» một bước không trả việc về người đã sang vai «chỉ OKR» (`mo-lai-khong-tra-viec-chi-okr`)
+- Đo zai/glm-5.3-flash, deepseek/deepseek-v4.1-flash-1017 và (riêng Trợ lý kho) google/gemini-3.8-flash cho Tác nhân, Trợ lý kho và Soạn OKR bằng thước đã có, rồi dựng bảng kiến nghị model theo vai trỏ từng lượt đo (`model-theo-vai-do-lai`)
 - Kế hoạch hiện ra ở mọi chỗ người đã đứng — tab 30 ngày đầu ở sheet Công ty, mục 30 ngày đầu ở sheet Cá nhân, bước giao cho tôi trong thẻ Tasks, lọc và chia cột theo người được giao, chuyển việc 30 ngày khi một người nghỉ (`moi-phia-deu-thay-ke-hoach`)
 - «Quản trị mở thẻ Tất cả của trang Tín hiệu và thấy ai đã gửi, phòng ban nào, từ màn nào, đang ở đâu, cùng ba con số của ngưỡng sống» (`moi-tin-hieu-cho-quan-tri`)
 - Nền giao diện của Kara trong packages/ui — dấu tia sáng, nhãn Kara có ô «vì sao», ProposedChange hai độ dày (inline không viền, card), dòng biên nhận có Hoàn tác, phản hồi chung — để mọi màn AI sau đó dựng trên một bộ (`nen-kara`)

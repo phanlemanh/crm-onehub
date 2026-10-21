@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 0e927311990f9045dbd66674e9e0d69a6f552621
-human_signoff:
+human_signoff: manh 2026-10-21 — ký Cổng Bằng chứng trên vòng chấm 2 (7/7 eval máy đạt; vòng 1 REJECT vì công thức chi phí bỏ phần đọc cache, đã sửa). Ngoài-1, Ngoài-2, Ngoài-3 ghi Known limits — gồm lệch giá DeepSeek gấp 4 lần giá niêm yết ở hàng Tác nhân; Ngoài-4 chấp nhận không sửa; đồng ý phần cắt; phê hết các dòng treo.
 ---
 
 # Evidence Report: model-theo-vai-do-lai

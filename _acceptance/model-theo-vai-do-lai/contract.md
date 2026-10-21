@@ -5,7 +5,7 @@ slug: model-theo-vai-do-lai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21
 design_doc: _acceptance/model-theo-vai-do-lai/design.md
@@ -98,3 +98,7 @@ Tác nhân. Bảng in các thông số chưa dò ở mỗi hàng «giữ» (AC-5
   không đổi kết luận; lượt rơi vào giờ cao điểm chỉ tốn thêm tiền thật, tính vào trần.
 - Lượt soạn 2 của `glm` (20/10) chạy lại một lần bằng thước đã sửa theo Hỏi-8; GLM 5.3 Flash không nộp đề xuất, lượt hỏng.
 - Mốc Gemini của VK5 dao động giữa hai lượt trên lời dặn cũ (15/18 và 13/18); vì vậy mỗi ứng viên soạn chạy hai lượt.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-21:
+  - Ngoài-1: Lượt đo sau mà kết xuất chi phí thiếu cột đọc cache thì bảng tính như không có cache mà không báo lỗi, kiến nghị có thể lệch.
+  - Ngoài-2: Gateway tính tiền DeepSeek gấp 4 lần giá niêm yết đã ghim; theo tiền thật mỗi lượt Tác nhân, GLM 5.3 Flash (khoảng 0,008 USD) rẻ hơn DeepSeek (khoảng 0,014 USD), nên kiến nghị DeepSeek cho Tác nhân chỉ đúng theo giá niêm yết.
+  - Ngoài-3: Bộ so chưa có ô kiểm riêng cho phần tiền đọc cache, nên công thức này bị sửa sai sau này thì bảng vẫn xanh.
