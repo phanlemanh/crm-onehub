@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lượt lịch gom</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+  .frame { max-width: 1360px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1100px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+  <svg viewBox="0 0 1360 456" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Một lượt của lịch gom, trái sang phải: Đọc tín hiệu chưa có chỗ. Không có thì dừng, không gọi mô hình. Có thì tính dấu tập, rồi xét PR đề xuất đang có. Ở bước xét PR rẽ bốn: mở có sửa của người thì đứng yên (Hỏi-5); mở của máy cùng dấu thì dừng; đóng không gộp cùng dấu thì dừng, đã bị phủ quyết; còn lại thì gọi phiên gom. Sau phiên gom là hậu kiểm: răng phủ, kiểm câu, răng cắt lượt, vùng tệp. Đỏ thì không giao. Xanh thì đẩy nhánh, rồi mở PR nháp hoặc sửa thân PR của máy.">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+      </marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+      </marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+      </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <text x="32" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">HỎI-5 · PR CÓ SỬA CỦA NGƯỜI THÌ LÀM GÌ · AC-1…AC-7</text>
+    <text x="32" y="80" fill="#171717" font-size="24" font-family="'Lora', Georgia, serif">Một lượt của lịch gom</text>
+
+    <line x1="176" y1="168" x2="222" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="368" y1="168" x2="414" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="560" y1="168" x2="606" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="752" y1="168" x2="798" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="944" y1="168" x2="990" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="1136" y1="168" x2="1182" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <line x1="104" y1="208" x2="104" y2="350" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M452 208 V248 A8 8 0 0 1 444 256 H304 A8 8 0 0 0 296 264 V350" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <line x1="488" y1="208" x2="488" y2="350" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M524 208 V248 A8 8 0 0 0 532 256 H672 A8 8 0 0 1 680 264 V350" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="872" y1="208" x2="872" y2="350" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <rect x="188" y="144" width="24" height="16" rx="2" fill="#fafafa"/>
+    <text x="200" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">có</text>
+    <rect x="562" y="144" width="44" height="16" rx="2" fill="#fafafa"/>
+    <text x="584" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">còn lại</text>
+    <rect x="952" y="144" width="32" height="16" rx="2" fill="#fafafa"/>
+    <text x="968" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">xanh</text>
+
+    <rect x="112" y="272" width="56" height="16" rx="2" fill="#fafafa"/>
+    <text x="116" y="284" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">không có</text>
+    <rect x="316" y="232" width="116" height="16" rx="2" fill="#fafafa"/>
+    <text x="374" y="244" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">mở có sửa của người</text>
+    <rect x="496" y="288" width="116" height="16" rx="2" fill="#fafafa"/>
+    <text x="500" y="300" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">mở của máy cùng dấu</text>
+    <rect x="536" y="232" width="132" height="16" rx="2" fill="#fafafa"/>
+    <text x="602" y="244" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">đóng không gộp cùng dấu</text>
+    <rect x="880" y="272" width="24" height="16" rx="2" fill="#fafafa"/>
+    <text x="884" y="284" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">đỏ</text>
+
+    <rect x="32" y="128" width="144" height="80" rx="6" fill="#fafafa"/>
+    <rect x="32" y="128" width="144" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="104" y="164" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đọc tín hiệu</text>
+    <text x="104" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chưa có chỗ</text>
+
+    <rect x="224" y="128" width="144" height="80" rx="6" fill="#fafafa"/>
+    <rect x="224" y="128" width="144" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="296" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tính dấu tập</text>
+
+    <rect x="416" y="128" width="144" height="80" rx="6" fill="#fafafa"/>
+    <rect x="416" y="128" width="144" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="488" y="164" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xét PR đề xuất</text>
+    <text x="488" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đang có</text>
+
+    <rect x="608" y="128" width="144" height="80" rx="6" fill="#fafafa"/>
+    <rect x="608" y="128" width="144" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="680" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gọi phiên gom</text>
+
+    <rect x="800" y="128" width="144" height="80" rx="6" fill="#fafafa"/>
+    <rect x="800" y="128" width="144" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="872" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hậu kiểm</text>
+    <text x="872" y="176" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">răng phủ · kiểm câu</text>
+    <text x="872" y="192" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">răng cắt lượt · vùng tệp</text>
+
+    <rect x="992" y="128" width="144" height="80" rx="6" fill="#fafafa"/>
+    <rect x="992" y="128" width="144" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="1064" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đẩy nhánh</text>
+
+    <rect x="1184" y="128" width="144" height="80" rx="20" fill="#fafafa"/>
+    <rect x="1184" y="128" width="144" height="80" rx="20" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="1256" y="164" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mở PR nháp hoặc</text>
+    <text x="1256" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">sửa thân PR của máy</text>
+
+    <rect x="24" y="352" width="160" height="56" rx="20" fill="#fafafa"/>
+    <rect x="24" y="352" width="160" height="56" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+    <text x="104" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Dừng</text>
+    <text x="104" y="394" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">không gọi mô hình</text>
+
+    <rect x="216" y="352" width="160" height="56" rx="20" fill="#fafafa"/>
+    <rect x="216" y="352" width="160" height="56" rx="20" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="296" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đứng yên</text>
+    <text x="296" y="394" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">«Hỏi-5»</text>
+
+    <rect x="408" y="352" width="160" height="56" rx="20" fill="#fafafa"/>
+    <rect x="408" y="352" width="160" height="56" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+    <text x="488" y="384" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Dừng</text>
+
+    <rect x="600" y="352" width="160" height="56" rx="20" fill="#fafafa"/>
+    <rect x="600" y="352" width="160" height="56" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+    <text x="680" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Dừng</text>
+    <text x="680" y="394" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">đã bị phủ quyết</text>
+
+    <rect x="792" y="352" width="160" height="56" rx="20" fill="#fafafa"/>
+    <rect x="792" y="352" width="160" height="56" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+    <text x="872" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đỏ</text>
+    <text x="872" y="394" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">không giao</text>
+  </svg>
+  </div>
+</div>
+</body>
+</html>
