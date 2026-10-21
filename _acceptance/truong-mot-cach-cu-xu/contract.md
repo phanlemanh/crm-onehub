@@ -5,7 +5,7 @@ slug: truong-mot-cach-cu-xu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: verified
 approved_by: manh
 approved_at: 2026-10-21T00:36:49Z
 design_doc: docs/superpowers/specs/2026-10-21-truong-mot-cach-cu-xu-design.md
