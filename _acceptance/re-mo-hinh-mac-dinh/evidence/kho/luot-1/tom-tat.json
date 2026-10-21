@@ -1,17 +1,24 @@
 {
   "luot": 1,
-  "luc": "2026-10-21T10:13:11.421Z",
-  "thu_muc": ".acceptance-runs/re-mo-hinh-mac-dinh/kho/2026-10-21T10-13-11-269Z-55916",
+  "luc": "2026-10-21T11:05:39.518Z",
+  "thu_muc": ".acceptance-runs/re-mo-hinh-mac-dinh/kho/2026-10-21T11-05-39-429Z-39318",
   "ma_do": 0,
   "ma_ghi": 0,
-  "ma_cham": 2,
+  "ma_cham": 0,
   "model_kho": "deepseek/deepseek-v4.1-flash-1017",
   "model_goc": "zai/glm-5.3-flash",
   "o_cai_dat": null,
   "bam_bo_mau": "0b3f3f96ddddb749f0a1d78b43f4cdbe88af8648e6fae42722c9fb66b0e02ac2",
   "bam_nguon": "87493b3b39b246e6bde60c8edd7fbb80626d96d75dfdd82a122bee9cd0daca68",
-  "usd": 0.326405,
-  "usd_vai": 0.243832,
+  "usd": 0.304002,
+  "usd_vai": 0.239714,
   "aichiphi": "kho/luot-1/aichiphi.json",
-  "aichiphi_goc": "kho/luot-1/aichiphi-goc.json"
+  "aichiphi_goc": "kho/luot-1/aichiphi-goc.json",
+  "su_kien": "kho/luot-1/su-kien.json",
+  "so_phien": {
+    "kho": 144,
+    "goc": 50,
+    "kho_co_su_kien": 144,
+    "goc_co_su_kien": 50
+  }
 }

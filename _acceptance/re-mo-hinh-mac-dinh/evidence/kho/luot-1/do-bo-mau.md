@@ -2,14 +2,18 @@
 
 bam bo-mau: 0b3f3f96ddddb749f0a1d78b43f4cdbe88af8648e6fae42722c9fb66b0e02ac2
 bam tro-ly: fbfe4042b3df7d6f234ce386d20cc752010de4bddd2cd266108dc7e6ffeff089
-ma thoat cham-bo-do: 2
-thu muc luot cham-bo-do: .acceptance-runs/tro-ly-doc-kho/cham-bo-do/2026-10-21T10-02-56-295Z-55919
+ma thoat cham-bo-do: 0
+thu muc luot cham-bo-do: .acceptance-runs/tro-ly-doc-kho/cham-bo-do/2026-10-21T11-01-09-711Z-39320
 luot 1: 46 ma
 luot 2: 50 ma
 
 ## Tổng của script chấm
 
-- KHONG DO DUOC: 1 cau loi (m19)
+- dungTrang: 100.0% (38/38, nguong >= 80.0%) dat
+- tuChoiDung: 100.0% (8/8, nguong >= 80.0%) dat
+- chuyenQuyDinh: 100.0% (46/46, nguong >= 90.0%) dat
+- chuyenNham: 0.0% (0/4, nguong <= 10.0%) dat
+- tra loi co trich khong qua kiem: 0
 - demHoiKho cua cua so chay: traLoi 77, tuChoi 15, loi 0, tiLe 83.7%
 
 ## Bảng
@@ -41,7 +45,7 @@ luot 2: 50 ma
 | ô | đạt | đếm | tỉ lệ | lỗi |
 | --- | --- | --- | --- | --- |
 | S1 | 15 | 15 | 100.0% | 0 |
-| S2 | 4 | 4 | 100.0% | 1 |
+| S2 | 5 | 5 | 100.0% | 0 |
 | S3 | 8 | 8 | 100.0% | 0 |
 | S6-gan | 4 | 4 | 100.0% | 0 |
 | S6-ngoai | 4 | 4 | 100.0% | 0 |
@@ -50,7 +54,7 @@ luot 2: 50 ma
 
 ### Không đạt
 
-- m19 (luot 2: loi)
+- (không có)
 
 <!-- bang-do -->
 ```json
@@ -126,9 +130,9 @@ luot 2: 50 ma
       "loi": 0
     },
     "S2": {
-      "k": 4,
-      "n": 4,
-      "loi": 1
+      "k": 5,
+      "n": 5,
+      "loi": 0
     },
     "S3": {
       "k": 8,
@@ -156,9 +160,7 @@ luot 2: 50 ma
       "loi": 0
     }
   },
-  "khongDat": [
-    "m19 (luot 2: loi)"
-  ]
+  "khongDat": []
 }
 ```
 <!-- /bang-do -->
