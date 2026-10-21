@@ -18,3 +18,11 @@ export function khoangMoc(moc: MocNgay, now: Date = new Date()): KhoangNgay {
 			return { gte: dauThangKe };
 	}
 }
+
+export function khoangMocTruong(
+	moc: MocNgay,
+	now: Date = new Date(),
+): KhoangNgay {
+	if (moc !== "overdue") return khoangMoc(moc, now);
+	return { lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()) };
+}

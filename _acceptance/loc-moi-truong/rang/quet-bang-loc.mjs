@@ -16,35 +16,76 @@ const EXPORT_BANG = new Set([
 	"locDuocTrong",
 	"CachLocTruong",
 ]);
+const DICH_VU = "apps/api/src/fields/fields.service.ts";
+const SUA_TRUONG = "apps/app/components/crm/fields/field-editor.tsx";
 const TEP = [
 	{
-		tep: "apps/api/src/fields/fields.service.ts",
+		tep: DICH_VU,
 		ham: [
 			"filterableFieldsFor",
 			"fieldFilters",
 			"dieuKienLoc",
 			"demGiaTriMenu",
+			"filterFacetCounts",
+			"coGiaTriCua",
+			"phanTich",
 		],
 	},
 	{ tep: "apps/app/components/crm/fields/field-facets.tsx", ham: null },
-	{
-		tep: "apps/app/components/crm/fields/field-editor.tsx",
-		ham: ["filterable"],
-	},
+	{ tep: SUA_TRUONG, ham: ["filterable"] },
 	{ tep: "packages/validation/src/bo-loc-truong.ts", ham: null },
 ];
 
-function docFieldTypes() {
+const DANG = [
+	{ ten: "so-sanh", bieu: (v) => `${v} === "SELECT"` },
+	{
+		ten: "case",
+		bieu: (v) =>
+			`(() => { switch (${v}) { case "SELECT": return true; default: return false; } })()`,
+	},
+	{ ten: "set-mot", bieu: (v) => `new Set(["SELECT"]).has(${v})` },
+	{
+		ten: "doi-tuong",
+		bieu: (v) =>
+			`(({ SELECT: true, USER: true }) as Record<string, boolean>)[${v}] === true`,
+	},
+	{ ten: "includes", bieu: (v) => `["SELECT"].includes(${v})` },
+];
+const CHO = [
+	{
+		tep: SUA_TRUONG,
+		ham: ["filterable"],
+		thay: (chu, bieu) =>
+			chu.replace(
+				/const filterable = [^;]+;/,
+				`const filterable = ${bieu("draft.type")};`,
+			),
+	},
+	{
+		tep: DICH_VU,
+		ham: ["filterFacetCounts"],
+		thay: (chu, bieu) =>
+			chu.replace(
+				'cachLocTruong(definition.type) === "luaChon"',
+				bieu("definition.type"),
+			),
+	},
+];
+
+function docKhoi(duong, ten) {
 	const nguon = ts.createSourceFile(
-		BANG,
-		fs.readFileSync(path.join(GOC, BANG), "utf8"),
+		duong,
+		fs.readFileSync(path.join(GOC, duong), "utf8"),
 		ts.ScriptTarget.Latest,
 		true,
 	);
-	let kieu = [];
-	let bang = [];
+	let gia = null;
 	nguon.forEachChild(function di(nut) {
-		if (ts.isVariableDeclaration(nut) && ts.isIdentifier(nut.name)) {
+		if (
+			ts.isVariableDeclaration(nut) &&
+			ts.isIdentifier(nut.name) &&
+			nut.name.text === ten
+		) {
 			let khoiTao = nut.initializer;
 			while (
 				khoiTao &&
@@ -52,36 +93,88 @@ function docFieldTypes() {
 			) {
 				khoiTao = khoiTao.expression;
 			}
-			if (
-				nut.name.text === "FIELD_TYPES" &&
-				khoiTao &&
-				ts.isArrayLiteralExpression(khoiTao)
-			) {
-				kieu = khoiTao.elements.filter(ts.isStringLiteral).map((e) => e.text);
-			}
-			if (
-				nut.name.text === "LOC_THEO_KIEU" &&
-				khoiTao &&
-				ts.isObjectLiteralExpression(khoiTao)
-			) {
-				bang = khoiTao.properties
-					.filter(ts.isPropertyAssignment)
-					.map((p) =>
-						ts.isIdentifier(p.name) ? p.name.text : p.name.getText(),
-					);
-			}
+			gia = khoiTao ?? null;
 		}
 		ts.forEachChild(nut, di);
 	});
-	return { kieu, bang };
+	return gia;
+}
+
+function docFieldTypes() {
+	const mang = docKhoi(BANG, "FIELD_TYPES");
+	const bang = docKhoi(BANG, "LOC_THEO_KIEU");
+	const kieu =
+		mang && ts.isArrayLiteralExpression(mang)
+			? mang.elements.filter(ts.isStringLiteral).map((e) => e.text)
+			: [];
+	const dong =
+		bang && ts.isObjectLiteralExpression(bang)
+			? bang.properties
+					.filter(ts.isPropertyAssignment)
+					.map((p) =>
+						ts.isIdentifier(p.name) ? p.name.text : p.name.getText(),
+					)
+			: [];
+	return { kieu, dong };
+}
+
+function tenCua(nut) {
+	if (
+		(ts.isMethodDeclaration(nut) || ts.isFunctionDeclaration(nut)) &&
+		nut.name &&
+		ts.isIdentifier(nut.name)
+	)
+		return nut.name.text;
+	if (ts.isVariableDeclaration(nut) && ts.isIdentifier(nut.name))
+		return nut.name.text;
+	return null;
+}
+
+function laTenKieu(nut, tenKieu) {
+	return ts.isStringLiteral(nut) && tenKieu.has(nut.text);
+}
+
+function tuKhai(nut, tenKieu) {
+	if (
+		ts.isBinaryExpression(nut) &&
+		[
+			ts.SyntaxKind.EqualsEqualsEqualsToken,
+			ts.SyntaxKind.ExclamationEqualsEqualsToken,
+			ts.SyntaxKind.EqualsEqualsToken,
+			ts.SyntaxKind.ExclamationEqualsToken,
+		].includes(nut.operatorToken.kind) &&
+		(laTenKieu(nut.left, tenKieu) || laTenKieu(nut.right, tenKieu))
+	)
+		return true;
+	if (ts.isCaseClause(nut) && laTenKieu(nut.expression, tenKieu)) return true;
+	if (
+		ts.isArrayLiteralExpression(nut) &&
+		nut.elements.some((e) => laTenKieu(e, tenKieu))
+	)
+		return true;
+	if (ts.isObjectLiteralExpression(nut)) {
+		const khoa = nut.properties.filter(
+			(p) =>
+				ts.isPropertyAssignment(p) &&
+				((ts.isIdentifier(p.name) && tenKieu.has(p.name.text)) ||
+					laTenKieu(p.name, tenKieu)),
+		);
+		if (khoa.length >= 2) return true;
+	}
+	if (
+		ts.isCallExpression(nut) &&
+		nut.arguments.some((a) => laTenKieu(a, tenKieu))
+	)
+		return true;
+	return false;
 }
 
 export function quet(goc = GOC, tep = TEP) {
-	const { kieu, bang } = docFieldTypes();
+	const { kieu, dong } = docFieldTypes();
 	if (kieu.length === 0)
 		throw new Error("lmt quet: khong doc duoc FIELD_TYPES");
 	for (const k of kieu) {
-		if (!bang.includes(k)) throw new Error(`lmt quet: bang thieu ${k}`);
+		if (!dong.includes(k)) throw new Error(`lmt quet: bang thieu ${k}`);
 	}
 	const tenKieu = new Set(kieu);
 
@@ -94,9 +187,9 @@ export function quet(goc = GOC, tep = TEP) {
 			ts.ScriptTarget.Latest,
 			true,
 		);
-
 		let dungBang = false;
 		const vung = [];
+		const thay = new Set();
 		nguon.forEachChild(function di(nut) {
 			if (
 				ts.isImportDeclaration(nut) &&
@@ -113,51 +206,26 @@ export function quet(goc = GOC, tep = TEP) {
 					dungBang = true;
 				}
 			}
-			const ten =
-				(ts.isMethodDeclaration(nut) || ts.isFunctionDeclaration(nut)) &&
-				nut.name &&
-				ts.isIdentifier(nut.name)
-					? nut.name.text
-					: ts.isVariableDeclaration(nut) && ts.isIdentifier(nut.name)
-						? nut.name.text
-						: null;
-			if (
-				ham === null ? nut === nguon.statements[0] : ten && ham.includes(ten)
-			) {
-				vung.push(ham === null ? nguon : nut);
+			const ten = tenCua(nut);
+			if (ham !== null && ten && ham.includes(ten)) {
+				vung.push(nut);
+				thay.add(ten);
 			}
 			ts.forEachChild(nut, di);
 		});
+		if (ham === null) vung.push(nguon);
+		else {
+			for (const h of ham) {
+				if (!thay.has(h)) throw new Error(`lmt quet: thieu ham ${duong} ${h}`);
+			}
+		}
 		if (!dungBang) throw new Error(`lmt quet: khong dung bang chung ${duong}`);
 
 		for (const goc2 of vung) {
 			(function soi(nut) {
-				if (
-					ts.isBinaryExpression(nut) &&
-					[
-						ts.SyntaxKind.EqualsEqualsEqualsToken,
-						ts.SyntaxKind.ExclamationEqualsEqualsToken,
-					].includes(nut.operatorToken.kind)
-				) {
-					for (const ve of [nut.left, nut.right]) {
-						if (ts.isStringLiteral(ve) && tenKieu.has(ve.text)) {
-							const { line } = nguon.getLineAndCharacterOfPosition(
-								nut.getStart(),
-							);
-							throw new Error(`lmt quet: loc tu khai ${duong}:${line + 1}`);
-						}
-					}
-				}
-				if (ts.isArrayLiteralExpression(nut)) {
-					const chu = nut.elements
-						.filter(ts.isStringLiteral)
-						.map((e) => e.text);
-					if (chu.length >= 2 && chu.every((c) => tenKieu.has(c))) {
-						const { line } = nguon.getLineAndCharacterOfPosition(
-							nut.getStart(),
-						);
-						throw new Error(`lmt quet: loc tu khai ${duong}:${line + 1}`);
-					}
+				if (tuKhai(nut, tenKieu)) {
+					const { line } = nguon.getLineAndCharacterOfPosition(nut.getStart());
+					throw new Error(`lmt quet: loc tu khai ${duong}:${line + 1}`);
 				}
 				ts.forEachChild(nut, soi);
 			})(goc2);
@@ -167,29 +235,43 @@ export function quet(goc = GOC, tep = TEP) {
 }
 
 function phaThu() {
-	const tam = fs.mkdtempSync(path.join(os.tmpdir(), "lmt-quet-"));
-	try {
-		const duong = "apps/app/components/crm/fields/field-editor.tsx";
-		fs.mkdirSync(path.join(tam, path.dirname(duong)), { recursive: true });
-		const chu = fs
-			.readFileSync(path.join(GOC, duong), "utf8")
-			.replace(
-				/const filterable = [^;]+;/,
-				'const filterable = draft.type === "SELECT";',
-			);
-		fs.writeFileSync(path.join(tam, duong), chu);
-		try {
-			quet(tam, [{ tep: duong, ham: ["filterable"] }]);
-		} catch (error) {
-			if (String(error.message).startsWith("lmt quet: loc tu khai")) return;
-			throw error;
+	let soO = 0;
+	for (const cho of CHO) {
+		for (const dang of DANG) {
+			const tam = fs.mkdtempSync(path.join(os.tmpdir(), "lmt-quet-"));
+			try {
+				fs.mkdirSync(path.join(tam, path.dirname(cho.tep)), {
+					recursive: true,
+				});
+				const goc = fs.readFileSync(path.join(GOC, cho.tep), "utf8");
+				const chu = cho.thay(goc, dang.bieu);
+				if (chu === goc) {
+					throw new Error(
+						`lmt quet: pha thu khong chen duoc ${cho.tep} ${dang.ten}`,
+					);
+				}
+				fs.writeFileSync(path.join(tam, cho.tep), chu);
+				let bat = false;
+				try {
+					quet(tam, [{ tep: cho.tep, ham: cho.ham }]);
+				} catch (error) {
+					if (!String(error.message).startsWith("lmt quet: loc tu khai"))
+						throw error;
+					bat = true;
+				}
+				if (!bat) throw new Error(`lmt quet: thuoc mu ${cho.tep} ${dang.ten}`);
+				soO += 1;
+			} finally {
+				fs.rmSync(tam, { recursive: true, force: true });
+			}
 		}
-		throw new Error("lmt quet: thuoc mu");
-	} finally {
-		fs.rmSync(tam, { recursive: true, force: true });
 	}
+	if (soO !== CHO.length * DANG.length || soO !== 10) {
+		throw new Error(`lmt quet: thieu o pha thu ${soO}`);
+	}
+	return soO;
 }
 
-phaThu();
 const n = quet();
-console.log(`lmt quet: dat ${n} tep`);
+const nPha = phaThu();
+console.log(`lmt quet: dat ${n} tep, pha thu ${nPha} o`);

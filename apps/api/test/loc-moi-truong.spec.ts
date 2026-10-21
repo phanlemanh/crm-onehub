@@ -362,6 +362,7 @@ describe("lmt-api-ngay-tich", () => {
 		const chot = await db.dealStage.findFirst({ where: { kind: "WON" } });
 		giaiDoanChot = chot?.id ?? "";
 		const ngay: Array<[string, string | null, string | undefined]> = [
+			["homnay", new Date(2026, 10, 15, 0, 30).toISOString(), undefined],
 			["homqua", ngayDia("2026-11-14"), undefined],
 			["homqua-chot", ngayDia("2026-11-14"), giaiDoanChot],
 			["dau-thang", ngayDia("2026-11-01"), undefined],
@@ -400,6 +401,7 @@ describe("lmt-api-ngay-tich", () => {
 		if (!giaiDoanChot)
 			throw new Error("lmt api ngay tich: thieu giai doan WON");
 		const NGAY = [
+			"homnay",
 			"homqua",
 			"homqua-chot",
 			"dau-thang",
@@ -420,7 +422,7 @@ describe("lmt-api-ngay-tich", () => {
 				khoaNgay,
 				"this-month",
 				["this-month"],
-				["cuoi-thang", "dau-thang", "homqua", "homqua-chot"],
+				["cuoi-thang", "homnay", "dau-thang", "homqua", "homqua-chot"],
 			],
 			[
 				khoaNgay,
@@ -596,8 +598,19 @@ describe("lmt-api-trong", () => {
 
 describe("lmt-api-khoa-chet", () => {
 	const tienTo = `lmtkc${RUN}`;
-	const k = { song: "", tat: "", luu: "", lh: "", so: "", ngay: "", tich: "" };
+	const k = {
+		song: "",
+		tat: "",
+		luu: "",
+		lh: "",
+		cty: "",
+		so: "",
+		ngay: "",
+		tich: "",
+	};
 	const dapAnTat = new Set<string>();
+	const lhX = new Set<string>();
+	const ctyX = new Set<string>();
 
 	beforeAll(async () => {
 		await batDauCa(tienTo);
@@ -614,14 +627,31 @@ describe("lmt-api-khoa-chet", () => {
 		k.so = (await taoTruong("DEAL", `${tienTo} so`, "NUMBER")).key;
 		k.ngay = (await taoTruong("DEAL", `${tienTo} ngay`, "DATE")).key;
 		k.tich = (await taoTruong("DEAL", `${tienTo} tich`, "CHECKBOX")).key;
+		k.cty = (await taoTruong("COMPANY", `${tienTo} cty`, "TEXT")).key;
 		for (const i of [1, 2, 3, 4, 5]) {
 			const dealId = await taoThoaThuan(tienTo, companyId, `B${i}`);
 			await deals.update(dealId, {
-				fields: { [k.song]: i % 2 ? "x" : "y", [k.tat]: i, [k.luu]: "x" },
+				fields: {
+					[k.song]: i % 2 ? "x" : "y",
+					[k.tat]: i,
+					[k.luu]: i <= 2 ? "x" : "y",
+				},
 			});
 			if (i >= 5) dapAnTat.add(dealId);
 		}
 		await fields.archive(quanTri, luu.id);
+		for (const i of [1, 2, 3]) {
+			const lh = await contacts.create({
+				firstName: `C${i}`,
+				lastName: tienTo,
+				companyId,
+			});
+			await contacts.update(lh.id, { fields: { [k.lh]: i === 1 ? "x" : "y" } });
+			if (i === 1) lhX.add(lh.id);
+		}
+		await companies.update(companyId, { fields: { [k.cty]: "x" } });
+		ctyX.add(companyId);
+		await taoCongTy(`${tienTo} cong ty hai`);
 	});
 
 	it("lmt-api-khoa-chet: khoa chet bo qua, truong tat theo Hoi-5, gia tri hong nem", async () => {
@@ -630,73 +660,85 @@ describe("lmt-api-khoa-chet", () => {
 		const idsBang = (b: typeof gocBang) =>
 			new Set(b.columns.flatMap((c) => c.cards.map((card) => card.id)));
 
-		let soO = 0;
-		for (const khoa of ["khong_co", k.luu, k.lh, ""]) {
-			const loc = { [khoa]: ["has:x"] };
-			const thuTuc: Array<[string, () => Promise<Set<string>>, Set<string>]> = [
-				[
-					"deals.list",
-					async () => (await locThoaThuan(tienTo, loc)).ids,
-					goc.ids,
-				],
-				[
-					"deals.board",
-					async () =>
-						idsBang(
-							await deals.board(
-								dealBoardInput.parse({ q: tienTo, fields: loc }),
-							),
-						),
-					idsBang(gocBang),
-				],
-				[
-					"companies.list",
-					async () =>
-						new Set(
-							(
-								await companies.list(
-									companyListInput.parse({ q: tienTo, fields: loc }),
-								)
-							).rows.map((r) => r.id),
-						),
-					new Set(
-						(
-							await companies.list(companyListInput.parse({ q: tienTo }))
-						).rows.map((r) => r.id),
-					),
-				],
-				[
-					"contacts.list",
-					async () =>
-						new Set(
-							(
-								await contacts.list(
-									contactListInput.parse({ q: tienTo, fields: loc }),
-								)
-							).rows.map((r) => r.id),
-						),
-					new Set(
-						(
-							await contacts.list(contactListInput.parse({ q: tienTo }))
-						).rows.map((r) => r.id),
-					),
-				],
-			];
-			for (const [ten, goi, mong] of thuTuc) {
-				let ra: Set<string>;
-				try {
-					ra = await goi();
-				} catch (error) {
-					throw new Error(
-						`lmt api khoa chet: ${khoa} ${ten} nem ${(error as Error).name}`,
-					);
-				}
-				if (!cungTap(ra, mong))
-					throw new Error(`lmt api khoa chet: ${khoa} ${ten} tap`);
-				soO += 1;
+		const idsCty = async (loc: Record<string, string[]>) =>
+			new Set(
+				(
+					await companies.list(
+						companyListInput.parse({ q: tienTo, fields: loc }),
+					)
+				).rows.map((r) => r.id),
+			);
+		const idsLh = async (loc: Record<string, string[]>) =>
+			new Set(
+				(
+					await contacts.list(
+						contactListInput.parse({ q: tienTo, fields: loc }),
+					)
+				).rows.map((r) => r.id),
+			);
+		const thuTuc = {
+			"deals.list": async (loc) => (await locThoaThuan(tienTo, loc)).ids,
+			"deals.board": async (loc) =>
+				idsBang(
+					await deals.board(dealBoardInput.parse({ q: tienTo, fields: loc })),
+				),
+			"companies.list": idsCty,
+			"contacts.list": idsLh,
+		} satisfies Record<
+			string,
+			(loc: Record<string, string[]>) => Promise<Set<string>>
+		>;
+		const goc4: Record<string, Set<string>> = {};
+		for (const [ten, goi] of Object.entries(thuTuc)) {
+			goc4[ten] = await goi({});
+			if ((goc4[ten]?.size ?? 0) < 2) {
+				throw new Error(`lmt api khoa chet: fixture ${ten} it hon hai`);
 			}
 		}
+		const MA_TRAN: Array<[string, string, Set<string> | null]> = [];
+		for (const khoa of ["khong_co", k.luu, k.lh, ""]) {
+			for (const ten of Object.keys(thuTuc)) {
+				MA_TRAN.push([
+					khoa,
+					ten,
+					khoa === k.lh && ten === "contacts.list" ? lhX : null,
+				]);
+			}
+		}
+		let soO = 0;
+		for (const [khoa, ten, mongLoc] of MA_TRAN) {
+			const goi = thuTuc[ten as keyof typeof thuTuc];
+			if (!goi) throw new Error(`lmt api khoa chet: thieu thu tuc ${ten}`);
+			let ra: Set<string>;
+			try {
+				ra = await goi({ [khoa]: ["has:x"] });
+			} catch (error) {
+				throw new Error(
+					`lmt api khoa chet: ${khoa} ${ten} nem ${(error as Error).name}`,
+				);
+			}
+			const mong = mongLoc ?? goc4[ten] ?? new Set<string>();
+			if (!cungTap(ra, mong)) {
+				throw new Error(`lmt api khoa chet: ${khoa} ${ten} tap`);
+			}
+			soO += 1;
+		}
 		if (soO !== 16) throw new Error(`lmt api khoa chet: thieu o ${soO}`);
+		for (const [ten, khoa, mong] of [
+			["deals.list", k.song, null],
+			["deals.board", k.song, null],
+			["companies.list", k.cty, ctyX],
+			["contacts.list", k.lh, lhX],
+		] as const) {
+			const ra = await thuTuc[ten]({ [khoa]: ["has:x"] });
+			if (
+				!ra ||
+				cungTap(ra, goc4[ten] ?? new Set()) ||
+				(mong && !cungTap(ra, mong))
+			) {
+				throw new Error(`lmt api khoa chet: thuoc mu ${ten}`);
+			}
+		}
 
 		const tat = await locThoaThuan(tienTo, { [k.tat]: ["gte:5"] });
 		if (!cungTap(tat.ids, goc.ids)) {
@@ -726,6 +768,10 @@ describe("lmt-api-khoa-chet", () => {
 		if (cungTap(song.ids, goc.ids))
 			throw new Error("lmt api khoa chet: thuoc mu");
 
+		expect(soO).toBe(16);
+	});
+
+	it("lmt-api-khoa-chet: fields.filters tra moi kieu bat Hien trong bo loc", async () => {
 		for (const entity of ["DEAL", "COMPANY", "CONTACT"] as const) {
 			for (const type of FIELD_TYPES) {
 				await taoTruong(entity, `${tienTo} loc ${entity} ${type}`, type);
@@ -742,7 +788,7 @@ describe("lmt-api-khoa-chet", () => {
 				}
 			}
 		}
-		expect(soO).toBe(16);
+		expect(FIELD_TYPES.length).toBeGreaterThan(0);
 	});
 });
 

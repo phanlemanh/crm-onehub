@@ -49,7 +49,7 @@ import type {
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
-import { khoangMoc } from "./moc-ngay";
+import { khoangMocTruong } from "./moc-ngay";
 
 const WITH_OPTIONS = {
 	options: { orderBy: { position: "asc" } },
@@ -126,7 +126,8 @@ function dieuKienLoc(
 			break;
 		}
 		case "moc":
-			for (const moc of loc.moc) cacNhanh.push(co({ date: khoangMoc(moc) }));
+			for (const moc of loc.moc)
+				cacNhanh.push(co({ date: khoangMocTruong(moc) }));
 			break;
 		case "tich":
 			for (const giaTri of new Set(loc.co)) {
@@ -779,10 +780,10 @@ export class FieldsService {
 			definitions.map((definition) => [definition.id, definition]),
 		);
 		const selectIds = definitions
-			.filter((definition) => definition.type === "SELECT")
+			.filter((definition) => cachLocTruong(definition.type) === "luaChon")
 			.map((definition) => definition.id);
 		const userIds = definitions
-			.filter((definition) => definition.type === "USER")
+			.filter((definition) => cachLocTruong(definition.type) === "nguoi")
 			.map((definition) => definition.id);
 
 		const [selectGroups, userGroups] = await Promise.all([
@@ -859,7 +860,7 @@ export class FieldsService {
 
 		if (cachLocTruong(definition.type) === "moc") {
 			for (const moc of MOC_NGAY) {
-				dem.push([moc, demGiaTri({ date: khoangMoc(moc) })]);
+				dem.push([moc, demGiaTri({ date: khoangMocTruong(moc) })]);
 			}
 		}
 

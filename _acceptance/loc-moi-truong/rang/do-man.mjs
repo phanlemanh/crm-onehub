@@ -133,10 +133,9 @@ const ngayThangNay = new Date(nay.getFullYear(), nay.getMonth(), 20)
 const congTy = await tao("companies.create", { name: `${TIEN_TO} Công ty` });
 const BAN_GHI = [
 	{ ten: "An", chu: "hop dong mau", so: 1500, ngay: ngayThangNay, tich: true },
-	{ ten: "Binh", chu: null, so: 900, ngay: null, tich: false },
 	{ ten: "Chi", chu: "hop dong lon", so: 2400, ngay: ngayThangNay, tich: true },
-	{ ten: "Dung", chu: "khac", so: null, ngay: "2020-01-01", tich: null },
-	{ ten: "Em", chu: null, so: 1234.5, ngay: ngayThangNay, tich: false },
+	{ ten: "Dung", chu: "khac", so: 1200, ngay: ngayThangNay, tich: true },
+	{ ten: "Em", chu: "hop dong em", so: 500, ngay: ngayThangNay, tich: true },
 	{
 		ten: "Giang",
 		chu: "hop dong nho",
@@ -144,6 +143,9 @@ const BAN_GHI = [
 		ngay: "2099-01-01",
 		tich: true,
 	},
+	{ ten: "Binh", chu: "hop dong b", so: 1100, ngay: ngayThangNay, tich: false },
+	{ ten: "Hoa", chu: null, so: null, ngay: null, tich: null },
+	{ ten: "Khanh", chu: null, so: 800, ngay: "2020-01-01", tich: null },
 ];
 for (const b of BAN_GHI) {
 	const d = await tao("deals.create", {
@@ -160,7 +162,7 @@ for (const b of BAN_GHI) {
 	if (b.tich !== null) fields[truong.CHECKBOX.key] = b.tich;
 	await tao("deals.update", { id: d.id, data: { fields } });
 }
-console.log("gieo sau thoa thuan, muoi truong tu tao qua API that");
+console.log("gieo tam thoa thuan, muoi truong tu tao qua API that");
 
 mkdirSync(BANG_CHUNG, { recursive: true });
 const trinhDuyet = await puppeteer.launch({
@@ -415,14 +417,29 @@ const tran = await trang.evaluate(
 );
 bao(tran <= 0, "DUNG AC-10 3: 375 khong cuon ngang", "lmt man: 375 cuon ngang");
 
-const bonBoLoc = [
-	`field:${truong.TEXT.key}=has:hop dong`,
-	`field:${truong.NUMBER.key}=gte:1000`,
-	`field:${truong.DATE.key}=this-month`,
-	`field:${truong.CHECKBOX.key}=yes`,
-]
-	.map((x) => x.replace(" ", "%20"))
-	.join("&");
+const BON = [
+	{
+		ten: "chu",
+		url: `field:${truong.TEXT.key}=has:hop%20dong`,
+		dk: (b) => (b.chu ?? "").includes("hop dong"),
+	},
+	{
+		ten: "so",
+		url: `field:${truong.NUMBER.key}=gte:1000`,
+		dk: (b) => (b.so ?? -1) >= 1000,
+	},
+	{
+		ten: "ngay",
+		url: `field:${truong.DATE.key}=this-month`,
+		dk: (b) => b.ngay === ngayThangNay,
+	},
+	{
+		ten: "tich",
+		url: `field:${truong.CHECKBOX.key}=yes`,
+		dk: (b) => b.tich === true,
+	},
+];
+const bonBoLoc = BON.map((b) => b.url).join("&");
 await mo(`${goc}&${bonBoLoc}`, TIEN_TO, DO.rong.lon, DO.cao.lon);
 await trang.keyboard.press("Escape");
 const nutLoc = await trang.evaluate(
@@ -434,13 +451,7 @@ const nutLoc = await trang.evaluate(
 );
 const hangBon = await soHang();
 await trang.screenshot({ path: join(BANG_CHUNG, "lmt-dang-bat-1280.png") });
-const mongBon = tong(
-	(b) =>
-		(b.chu ?? "").includes("hop dong") &&
-		(b.so ?? -1) >= 1000 &&
-		b.ngay === ngayThangNay &&
-		b.tich === true,
-);
+const mongBon = tong((b) => BON.every((f) => f.dk(b)));
 bao(
 	nutLoc.includes("(4)"),
 	`DUNG AC-10 4: nut ${nutLoc}`,
@@ -451,6 +462,23 @@ bao(
 	`DUNG AC-10 4: ${hangBon} hang`,
 	`lmt man: dang bat hang ${hangBon}`,
 );
+for (const bo of BON) {
+	const conLai = BON.filter((f) => f !== bo);
+	const mong = tong((b) => conLai.every((f) => f.dk(b)));
+	await mo(
+		`${goc}&${conLai.map((f) => f.url).join("&")}`,
+		TIEN_TO,
+		DO.rong.lon,
+		DO.cao.lon,
+	);
+	const hang = await soHang();
+	bao(
+		hang === mong && mong > mongBon,
+		`DUNG AC-10 4: bo loc ${bo.ten} doi ket qua (${mongBon} → ${hang})`,
+		`lmt man: dang bat ${bo.ten} khong tac dong ${hang} ${mong}`,
+	);
+}
+await mo(`${goc}&${bonBoLoc}`, TIEN_TO, DO.rong.lon, DO.cao.lon);
 
 await trang.setViewport({ width: DO.rong.hep, height: DO.cao.hep });
 await ngu(DO.choMenuMs);

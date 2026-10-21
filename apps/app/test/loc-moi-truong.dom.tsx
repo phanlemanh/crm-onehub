@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { z } from "zod";
 import { fieldListOutput } from "../../api/src/fields/fields.contracts";
 
 type Json =
@@ -262,6 +263,9 @@ const { useTableQuery } = await import(
 	"@/components/data-table/use-table-query"
 );
 const { savedViewFilters } = await import("@crm/validation/saved-view");
+const { CreateCampaignSheet } = await import(
+	"@/app/(app)/[slug]/campaigns/create-campaign-sheet"
+);
 
 const GIAI_DOAN = [
 	{ id: "g1", label: "Tiep can", kind: "OPEN", color: null, position: 0 },
@@ -339,8 +343,21 @@ describe("lmt-duong-dan", () => {
 		const qs =
 			"?field:lmt_number=gte:5&field:lmt_number=lte:20&field:lmt_select=o-a";
 		const mayChu = dealsSearchParams.toInput(
-			await dealsSearchParams.load(new URLSearchParams(qs)),
+			await dealsSearchParams.load(new URLSearchParams(qs), truong),
 		).fields;
+		const mayChuHong = dealsSearchParams.toInput(
+			await dealsSearchParams.load(
+				new URLSearchParams(
+					"?field:lmt_number=gte:abc&field:lmt_checkbox=maybe&field:lmt_date=this-month",
+				),
+				truong,
+			),
+		).fields;
+		if (!Bun.deepEquals(mayChuHong, { lmt_date: ["this-month"] })) {
+			throw new Error(
+				`lmt duong dan: may chu gui hong ${JSON.stringify(mayChuHong)}`,
+			);
+		}
 		for (const s of roots) {
 			await act(async () => s.root.unmount());
 			s.o.remove();
@@ -424,6 +441,7 @@ describe("lmt-duong-dan", () => {
 			SELECT: ["o-a", "none"],
 			USER: ["u-1", "none"],
 		} satisfies Record<FieldTypeName, string[]>;
+		let soVong = 0;
 		for (const { key, type } of truong) {
 			for (const s of roots) {
 				await act(async () => s.root.unmount());
@@ -437,6 +455,9 @@ describe("lmt-duong-dan", () => {
 			);
 			await nhip(2);
 			const view = hienTai?.currentView;
+			if (!Bun.deepEquals(view?.filters[`field:${key}`], GIA[type])) {
+				throw new Error(`lmt duong dan: khong vao khuon luu ${type}`);
+			}
 			if (!savedViewFilters.safeParse(view).success) {
 				throw new Error("lmt duong dan: khuon luu");
 			}
@@ -452,8 +473,10 @@ describe("lmt-duong-dan", () => {
 			if (JSON.stringify(hienTai?.currentView) !== JSON.stringify(view)) {
 				throw new Error(`lmt duong dan: vong luu ${type}`);
 			}
+			soVong += 1;
 		}
-		expect(truong.length).toBe(FIELD_TYPES.length);
+		if (soVong !== 10) throw new Error(`lmt duong dan: thieu o ${soVong}`);
+		expect(soVong).toBe(FIELD_TYPES.length);
 	});
 });
 
@@ -604,19 +627,43 @@ describe("lmt-luu-thoa-thuan", () => {
 			await dongHet();
 		}
 
-		const nguon = await Bun.file(
-			new URL(
-				"../app/(app)/[slug]/campaigns/create-campaign-sheet.tsx",
-				import.meta.url,
-			),
-		).text();
-		if (
-			!/savedViews\.list\.queryOptions\(\{\s*entity:\s*"CONTACT"\s*\}\)/.test(
-				nguon,
-			)
-		) {
+		datChung();
+		const BANG_XEM_KHO = [
+			{ id: "sv-deal", entity: "DEAL", name: "Lmt cho ky" },
+			{ id: "sv-lh", entity: "CONTACT", name: "Lmt lien he" },
+		];
+		duLieu.set("savedViews.list", (vao) => {
+			const entity = z.object({ entity: z.string() }).safeParse(vao)
+				.data?.entity;
+			return BANG_XEM_KHO.filter((v) => v.entity === entity).map((v) => ({
+				...v,
+				shared: true,
+				filters: mongLuu,
+				size: null,
+				mine: true,
+				usedBy: [],
+				createdAt: "2026-10-22T00:00:00.000Z",
+				updatedAt: "2026-10-22T00:00:00.000Z",
+			}));
+		});
+		goi = [];
+		await mo(<CreateCampaignSheet />, "?new=true");
+		await nhip(3);
+		const nutChon = document.body.querySelector('[role="combobox"]');
+		await bamTro(nutChon, "o chon doan");
+		await nhip(2);
+		const mucDoan = [...document.body.querySelectorAll('[role="option"]')].map(
+			(o) => (o.textContent ?? "").trim(),
+		);
+		if (!mucDoan.some((t) => t.startsWith("Lmt lien he"))) {
+			throw new Error(
+				`lmt luu thoa thuan: doi chung doan ${mucDoan.join("|")}`,
+			);
+		}
+		if (mucDoan.some((t) => t.startsWith("Lmt cho ky"))) {
 			throw new Error("lmt luu thoa thuan: lot vao chien dich");
 		}
+		await dongHet();
 		expect(daLuu.filters).toEqual(mongLuu);
 	});
 });

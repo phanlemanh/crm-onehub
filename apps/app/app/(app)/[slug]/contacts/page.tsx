@@ -54,7 +54,12 @@ async function Contacts({
 }: Pick<PageProps<"/[slug]/contacts">, "searchParams">) {
 	const [, values] = await Promise.all([
 		requireSession(),
-		contactsSearchParams.load(searchParams),
+		getServerQueryClient()
+			.fetchQuery(
+				getServerTrpc().fields.filters.queryOptions({ entity: "CONTACT" }),
+			)
+			.catch(() => [])
+			.then((truong) => contactsSearchParams.load(searchParams, truong)),
 	]);
 
 	const trpc = getServerTrpc();

@@ -136,6 +136,7 @@ export type ListSearchParams<TTab extends string, TFacet extends string> = {
 	parsers: ListParsers<TTab, TFacet>;
 	load: (
 		searchParams: NguonDuongDan | Promise<NguonDuongDan>,
+		truong?: TruongLoc[],
 	) => Promise<ListSearchValues<TTab, TFacet>>;
 	toInput: (values: ListSearchValues<TTab, TFacet>) => ListInput<TTab, TFacet>;
 	defaultInput: () => ListInput<TTab, TFacet>;
@@ -206,10 +207,13 @@ export function createListSearchParams<
 
 	const docTinh: LoaderFunction<ListParsers<TTab, TFacet>> =
 		createLoader(parsers);
-	const load = async (searchParams: NguonDuongDan | Promise<NguonDuongDan>) => {
+	const load = async (
+		searchParams: NguonDuongDan | Promise<NguonDuongDan>,
+		truong: TruongLoc[] = [],
+	) => {
 		const nguon = await searchParams;
 		const values = docTinh(nguon) as ListSearchValues<TTab, TFacet>;
-		return { ...values, fields: docLocTruong(nguon, values.fields) };
+		return { ...values, fields: docLocTruong(nguon, values.fields, truong) };
 	};
 
 	return {
