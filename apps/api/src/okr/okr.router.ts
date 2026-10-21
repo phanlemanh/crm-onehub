@@ -1321,7 +1321,7 @@ export class OkrRouter {
 	@Query({
 		input: moiKrInput,
 		output: moiKrOutput,
-		meta: restMeta("GET", "/okr/key-results/all", TAG),
+		meta: restMeta("POST", "/okr/key-results/list", TAG),
 	})
 	moiKr(
 		@Ctx() ctx: AuthedTrpcContext,
