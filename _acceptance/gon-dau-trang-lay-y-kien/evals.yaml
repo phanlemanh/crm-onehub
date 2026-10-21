@@ -25,7 +25,7 @@ evals:
       - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
       - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
     expected: |
-      Cùng lần chạy E1, khổ 390x812: cuộn vùng cuộn trang tới khi đáy khung soạn vào màn; khẳng định «DONG CHAY: hang
+      Cùng lần chạy E1, khổ 390x812: cuộn vùng cuộn thật của trang tới khi đáy khung soạn cách đáy màn 20px; khẳng định «DONG CHAY: hang
       <px> >= day o Do bang gi <px>» và hàng không giao hình chữ nhật với ô nào của khung soạn. In «SAI AC-2: …», mã 1.
       CHIEU DO (--chieu-do bam-co-dinh, bản sao): hàng dùng fixed thay sticky → hàng che ô Đo bằng gì khi cuộn cuối →
       «SAI AC-2: hang che o» (ghim /SAI AC-2: hang che o/), mã 1.
@@ -69,12 +69,13 @@ evals:
       - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
       - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
     expected: |
-      Cùng lần chạy E1, ma trận viết trước 2 khổ {390x812, 375x812} x 2 vị trí {chưa cuộn, đã cuộn để đáy ô Ý nằm dưới
-      đỉnh hàng bám} = 4 ca: gõ «ngắn» vào ô Ý, bấm Gửi → «GUI SAI <kho> <vi tri>: tieu diem o Y · day o Y <px> <= dinh
+      Cùng lần chạy E1, ma trận viết trước 2 khổ {390x812, 375x812} x 2 vị trí {chưa cuộn, đã cuộn để ô Ý khuất 40px phía
+      trên mép vùng cuộn} = 4 ca: gõ «ngắn» vào ô Ý, bấm Gửi → «GUI SAI <kho> <vi tri>: tieu diem o Y · dinh o Y <px> >=
+      dinh vung <px> · day o Y <px> <= dinh
       hang <px> · day loi <px> <= dinh hang <px> · 0 yeu cau gopY». Đối chứng dương cùng bộ đếm, cùng lần chạy (trước
       bốn ca): gửi một ý hợp lệ 12 ký tự → «GUI DUNG: 1 yeu cau gopY»; thiếu dòng này → KHONG DO DUOC, mã 2. In «SAI
-      AC-4: …», mã 1. CHIEU DO (--chieu-do le-o, bản sao): scroll-mb đặt trên ô thay vì khối Field → câu lỗi nằm dưới
-      hàng ở ca đã cuộn → ghim /SAI AC-4: day loi/, mã 1.
+      AC-4: …», mã 1. CHIEU DO (--chieu-do le-o, bản sao): gỡ bước cuộn khối Field và chuyển tiêu điểm khi gửi sai →
+      ô Ý còn khuất ở ca đã cuộn → ghim /SAI AC-4: GUI SAI \d+ da-cuon/, mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
