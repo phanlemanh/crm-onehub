@@ -1,0 +1,972 @@
+[
+  {
+    "sessionId": "wrun_01M5F1Z1X58C43T7XD9YCPXTR6",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1X6DZZ8W82FH0VNCACV",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1XFSSGSNT2XNDZG36PG",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1X58C43T7XD9YCPXTR7",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1XFSSGSNT2XNDZG36PJ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1X6DZZ8W82FH0VNCACW",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1X6DZZ8W82FH0VNCACX",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1X3A6ETYNN1EA1NMDBQ",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1XGFDZZ02Z60T641DYH",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1XGFDZZ02Z60T641DYG",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1XFSSGSNT2XNDZG36PH",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z1XGFDZZ02Z60T641DYJ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FN8T4W36H91WAVTR6Q",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FN8T4W36H91WAVTR6P",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FPWXMCAW5E1R3T2TNQ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FMERYGDPAWGVR2GXHW",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FQJW30JGNR9AH49VGD",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FRPJPKMZC22DSNYN8A",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7GB7DJYW0EHH39GRFNV",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FRPJPKMZC22DSNYN89",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z7FSMCMWZ5QV92ZGVCGX",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1Z9DQT3ZY2ZNJV405GKME",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZC7TK499GF0ZME1WEJWG",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZCBRX7MNN7K4RSRYBCTJ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZP70T7JMQXZHQ7A6ESDT",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZP70T7JMQXZHQ7A6ESDS",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZP7171T8QX9GBGZ3RZSS",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZP7PFS28ASY05V9XNQ4J",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZP7VYJ54J2370YRSNWTH",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZP7QVE4F1Y2AZ7RDSN1Q",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZS3BEZ7WWVDRPW8SXWNK",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZSNCYCWCMRA51X59M5B9",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZSM1ZS2B7M47CST4F17H",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZT220H9T6E14R77HRK3K",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZTE9J5K7P4X0EKC1F9T5",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F1ZTMHP2DVFKYH53NE3240",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2085PEXT8WBECNZFN1TDS",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2085Q2F6CMMGVQ39V8XSZ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20868K66ARDDZ0H52DEKB",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20868K66ARDDZ0H52DEKC",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20868K66ARDDZ0H52DEKA",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20869KCQH2X9EK9VJNVRD",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20ASWEC8504MZ8ZFFF3H8",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20BC2NN8FQ66JNMPEW0CZ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20BS2Y00SXRG6687220G2",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20BY8S1SCTBYDE3EYH9XB",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20BYWT31KS9YK1W9SYEPK",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20CCK58WY4G6XX0S6NGTR",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20D2EF95VCR4M8SK1KYWV",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F20D2FBB4KN4V4J8CZ6XWE",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F20D2EF95VCR4M8SK1KYWW",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F20D2G9RR9DPSWMVCCQWG6",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F20D2FBB4KN4V4J8CZ6XWF",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F20D2G9RR9DPSWMVCCQWG5",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F20F4N0RBHT6DYGM999S6F",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20FDX0WBM85QQ8BKKNXEM",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20FD0TRJWKKCAE0296FHE",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20FJ77DE1Z0A18AA3449Q",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20FJ8GB8PZMM8YPXJ3RZJ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20FKH5A06ZSY7TK8N10MB",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20T7JWVV1NNZYE73BEE5B",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20VTZBA4WJVYHWMV8D8G9",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20VYBDP8RWT4315N693C6",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20VTZBA4WJVYHWMV8D8GA",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20VYCJZY9HV0V75WHYV0E",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20VTZBA4WJVYHWMV8D8GB",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20VYCJZY9HV0V75WHYV0F",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20YNRAX5T8TZVNV9C195T",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20YQ5QS6X86Q25GHF9S5R",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20YTXC5FSXMKH7V8WCX2R",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20Z8A3W9D9F9DK72T92EJ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F20ZJM6NCAGKFF1MYE2PCV",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F210JP8M6M607K1BJWSGF4",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21EX1ZSD5GPJCYF52P551",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F21EX0Q1HP1PP9PN4934NF",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F21EX1ZSD5GPJCYF52P553",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F21EX1ZSD5GPJCYF52P552",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F21EZK73GSJ5VQQJ4ECA9S",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F21EXD3896QD1EH0VMJF61",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F21GDH7X97YZ9TNA009WAM",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21GDJ8X1S676VTD62ZSMG",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21GDN4MBH7SVD28GTRMGP",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21GDH7X97YZ9TNA009WAN",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21GDH7X97YZ9TNA009WAQ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21GDH7X97YZ9TNA009WAP",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21HS3Z9AGAP52ZYJQB2KH",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21HMZW4QDD0ZQKRWS59KP",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21HS55HCEAM97V834VWXX",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21HS4CG11RD43NVXMEVET",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21J56XR4RB0RMAAZV2AVQ",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21JY91RFVX5RWWJC2M5DF",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21MAR0QJCY3JMQ1BN0Z88",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21MDHD8K6FX6M6FP4ADXY",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21MG76YQKFHHG97VDKG36",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21MTCNPS82CR1ABWHSW9G",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21N6HN832ZJT78ZH8EXR3",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21NEKV6HJ3QPMK4CMMWE6",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F21Y43AS9T2QZVKZEGQNGX",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F220G89S6RBMWAX3MCNAMK",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F223PP5908DP93GQ97N43A",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F223PNWBGD7BCZZK3YVD5Y",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F223PNWBGD7BCZZK3YVD5X",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F223PTBN9NP429ZPG40ZG3",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F223Q8MKDZ68AAE9VYS47K",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F223Q2VNJPH85RNVWWXE0Z",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F226CZQ444680DGH864RDY",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F226Y7WZ2K2PSEGKTV3J02",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2271MYW0YC57AR8FBJCBV",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2272F1F77KGAK4EVWBTN8",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F227TA4F4EHVVNC7AT47GW",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F229THQDC96MN7VE2AMFYX",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F229YXSQNNAN8DR2MM1T8T",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F229YQ2EN943MF2FFYZGMQ",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F229YWVN660M1VAK5BCPPK",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F229YXSQNNAN8DR2MM1T8V",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F229YXSQNNAN8DR2MM1T8W",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F229YWVN660M1VAK5BCPPJ",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F22CK6P7PNDDERDK432A6Z",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22CKVW222WPC0KATJC557",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22CSCG4AXCWBBA032CFQ8",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22D09BH9E978DQAN9G7WP",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22DE4T6Q1FRDQ2V9SH9SN",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22DVWZ189DTDQCB87EF1N",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22WJ055J3RN5A9RQ2WZ3V",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22WHV3MFF12EW43P0PHFE",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22WJ055J3RN5A9RQ2WZ3W",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22WJ19Y3SB71KP7VBYPA4",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22WJ055J3RN5A9RQ2WZ3X",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22WJ3YN3FR3HEWQTHRM0T",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22ZF9KA5MX6VG7CA6HXS7",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F22ZTQP6DNJSWHT0V1KVZN",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23037M0D1FNS71BNQCB28",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2308RAA6MT0MQC166P30Y",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F230RQS8QQYW98DDETVH4C",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F230V41JHF1E5364W5FST2",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F235ECD3J04GH22FX3HY44",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F235ED3HATH46TJJN76VKA",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F235ECD3J04GH22FX3HY45",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F235ECD3J04GH22FX3HY46",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F235ED3HATH46TJJN76VKB",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F235ECD3J04GH22FX3HY47",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F237QPJZDRF41NTMWFSCWT",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F237ZGCBBGW2CA53YCWRR9",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F237ZHJTEBC7DMMXWVCS7Q",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F237ZGCBBGW2CA53YCWRR8",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2385XP3NNRE2Z922PG07X",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F238A55WGY9Y0B6TP4BSPT",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23DR2J2DPZPTC7ZGVNVP6",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23DR15009WJ32F9526QJV",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23DR15009WJ32F9526QJT",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23DR2J2DPZPTC7ZGVNVP7",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23GBGBJAFK7T102MYMV6Z",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23GSMTVZG9G1EC0TF91FT",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23H6BCG3NMGASPETZ7PYN",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23K1ARPY67FA94TK1X15G",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23K7NXXPBAB0B7BYR8NEX",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23XF19DCX4AFM07BH1GNV",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F23XF2B0Q2W6SZ110NY6RZ",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F23XFBTGWEJ1BFA4HK25V5",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F23XF2B0Q2W6SZ110NY6S0",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F23XFBTGWEJ1BFA4HK25V6",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F23XFBTGWEJ1BFA4HK25V4",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F23ZNVDWNYX5MMHTETHN6X",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23ZNXT8Z351AD6A2TGRH0",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23ZXVAJZ1XVP7B7ZN0RDK",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F23ZXVAJZ1XVP7B7ZN0RDM",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2404AQCGVVZ4QTX01FMGS",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F2404AQCGVVZ4QTX01FMGT",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F24NGV5ASVZK61WASZYEG3",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F24NH3SHV1MMBAZA3RV7SS",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F24NGWAVKNMFH951JDTF2K",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F24NH46YJ538D937QNYW5N",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F24NH3SHV1MMBAZA3RV7ST",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F24NH46YJ538D937QNYW5M",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F24QXDCHYC34P8G14DA3WE",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F24R1F21KJXV2QSNCDFNW3",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F24R4RV8VB2EGZQGTCXNGV",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F24R84G0KDCN58E1VGFDER",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F24R8SPWW93ANH0DVCGZ7N",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F24RKGCGG56H3TKX77N3RP",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F251JQ0VARXDMN9QB66JZC",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F252GPT6BWTGJ1NNXJMG48",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F25WTV37CFB3RW2FEWBW9H",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F25WTWJ41S6K30HA6KEVW7",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F25WTWJ41S6K30HA6KEVW8",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F25WTV37CFB3RW2FEWBW9J",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F25WTWJ41S6K30HA6KEVW6",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F25WTWJ41S6K30HA6KEVW9",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F25ZAF2B8S7D4YGW99EZ3F",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F25ZAACGYVX2QFXNTEZVRM",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F25ZPHZH0TVZS5JR5SFSRA",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F25ZX0MVGSDX74ZVD5BAER",
+    "modelId": "deepseek/deepseek-v4.1-flash-1017",
+    "tinhNang": "tai-lieu.tro-ly"
+  },
+  {
+    "sessionId": "wrun_01M5F26JCM056WSSSSV62TC9CA",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  },
+  {
+    "sessionId": "wrun_01M5F26JCK38BGG38MBQJQ18F9",
+    "modelId": "zai/glm-5.3-flash",
+    "tinhNang": "zalo.hoi-crm"
+  }
+]
