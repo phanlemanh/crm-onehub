@@ -37,10 +37,19 @@ const TEP_CUA_HO_SO = {
 	"apps/app/test/okr-dau-trang-khu.dom.tsx": "dieu-huong-khu-muc-tieu",
 	"apps/app/test/khung-okr-truoc-r1.dom.tsx": "khung-okr-truoc-r1",
 	"apps/app/test/okr-to-chuc-va.dom.tsx": "okr-to-chuc-va",
+	"_acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs":
+		"trang-don-vi-mot-bang",
+	"_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs":
+		"trang-don-vi-mot-bang",
+	"_acceptance/khep-ky-okr/rang/man-khep-ky.mjs": "khep-ky-okr",
+	"_acceptance/vo-khu-muc-tieu/rang/do-man-dieu-huong.mjs": "vo-khu-muc-tieu",
 };
-const VIET_LAI_V1_20 = new Set(["apps/app/test/okr-trang-don-vi.dom.tsx"]);
+const VIET_LAI_V1_20 = new Set([
+	"apps/app/test/okr-trang-don-vi.dom.tsx",
+	"_acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs",
+]);
 const KHUON_DOI_CHUOI =
-	/donOkr|data-the-con-bo|data-view-switch|aria-current|theBo|okrVoKhuMessages|SO_NUT_HANG_CONG_CU|coCham|doiXem|xem=|the con trang don vi|chuyen kieu xem trang don vi/;
+	/donOkr|data-the-con-bo|data-view-switch|aria-current|theBo|okrVoKhuMessages|SO_NUT_HANG_CONG_CU|coCham|doiXem|xem=|the con trang don vi|chuyen kieu xem trang don vi|bo-okr|data-the|view-switch/;
 const TRAN_LENH_MS = 15 * 60_000;
 const MA_DO = 1;
 const MA_KHONG_DO = 2;

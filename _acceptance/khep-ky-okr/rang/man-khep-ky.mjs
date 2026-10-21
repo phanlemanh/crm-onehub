@@ -1363,8 +1363,8 @@ const e14 = (nhan, dat) => (chon(["E14"]) ? kiem(`E14 ${nhan}`, dat) : dat);
 
 async function buocChamChinh() {
 	const t = await moTrang(cookie.truong, DO.rong, duongCham(`pb:${K.P}`, ""));
-	await coMat(t, "[data-view-switch='nut']", "E13: bo chon cach xem o 1440");
-	await bamTheoChu(t, "[data-view-switch='nut'] button", CHU.cham.cachXem);
+	await coMat(t, "[data-the-con-bo]", "E13: bo chon cach xem o 1440");
+	await bamTheoChu(t, "[data-the-con-bo] a[data-the]", CHU.cham.cachXem);
 	const coBang = await coMat(t, "[data-cham-diem]", "E13: man cham diem");
 	e13(
 		`buoc 2: URL giu cach xem (thay ${t.url()})`,

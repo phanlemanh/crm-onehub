@@ -48,9 +48,12 @@ const { okrToanCanhMessages } = await import(
 const { okrKhepMessages } = await import(
 	join(GOC, "apps/app/lib/messages/okr-khep.ts")
 );
+const { okrVoKhuMessages } = await import(
+	join(GOC, "apps/app/lib/messages/okr-vo-khu.ts")
+);
 const M = okrMessages("vi");
 const NHAN_XEM = {
-	"danh-sach": M.danhSach,
+	"danh-sach": okrVoKhuMessages("vi").boOkr.the["danh-sach"],
 	cay: M.cayCanChinh,
 	"hop-tuan": okrToanCanhMessages("vi").hopTuan.cachXem,
 	cham: okrKhepMessages("vi").cham.cachXem,
@@ -200,7 +203,7 @@ async function doHang(t) {
 		const cs = {
 			"o chon": document.querySelector("[data-chon-don-vi]"),
 			"cach xem":
-				[...document.querySelectorAll("[data-view-switch]")].find(hien) ?? null,
+				[...document.querySelectorAll("[data-the-con-bo]")].find(hien) ?? null,
 			"o loc nhanh": theoChu(/^(Tất cả|Cần bàn|Chưa góp vào đâu)/),
 			Loc: theoChu(/^Lọc/),
 			"Sap xep": theoChu(/^Sắp xếp/),
@@ -237,23 +240,18 @@ async function doThan(t) {
 	}));
 }
 
-/* Vị trí ô chọn và cách xem đang hiện (ToggleGroup ≥ md, Select < md). */
 async function viTri(t) {
 	return t.evaluate(() => {
 		const hien = (e) => Boolean(e) && e.offsetParent !== null;
 		const o = [...document.querySelectorAll("[data-chon-don-vi]")].find(hien);
-		const x = [...document.querySelectorAll("[data-view-switch]")].find(hien);
+		const x = [...document.querySelectorAll("[data-the-con-bo]")].find(hien);
 		const r = (e) => {
 			if (!e) return null;
 			const b = e.getBoundingClientRect();
 			return { top: Math.round(b.top), left: Math.round(b.left) };
 		};
 		const dangXem = x
-			? x.getAttribute("data-view-switch") === "nut"
-				? (x.querySelector("[data-state=on]")?.textContent ?? "").trim()
-				: (
-						x.querySelector("[data-slot=select-value]")?.textContent ?? ""
-					).trim()
+			? (x.querySelector("a[aria-current=page]")?.textContent ?? "").trim()
 			: "";
 		return {
 			o: r(o),
