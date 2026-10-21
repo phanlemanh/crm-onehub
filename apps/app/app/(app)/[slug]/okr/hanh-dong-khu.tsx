@@ -43,6 +43,7 @@ export type QuyenKhu =
 	| {
 			kieu: "xong";
 			dich: DonDich;
+			tenDon: string;
 			duoc: boolean;
 			lyDo: string | null;
 			cycleId: string;
@@ -60,6 +61,7 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const tenGoc = useTenGoc();
 	const dich = donDich(tab, url[SEARCH_PARAM.okr.don], access.data?.headOf);
+	const ten = (cay.data && giaiDon(dich.don, cay.data, tenGoc)?.ten) || m.donVi;
 	const hoiDuoc = currentId !== null && access.data !== undefined;
 	const ds = useQuery(
 		trpc.okr.danhSach.queryOptions(
@@ -76,6 +78,7 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 		return {
 			kieu: "xong",
 			dich,
+			tenDon: ten,
 			duoc: false,
 			lyDo: m.khoaTao.loiQuyen,
 			cycleId: currentId ?? "",
@@ -85,7 +88,6 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 		};
 	if (currentId === null || !ds.data) return { kieu: "cho" };
 	const duoc = ds.data.canCreate === true;
-	const ten = (cay.data && giaiDon(dich.don, cay.data, tenGoc)?.ten) || m.donVi;
 	const lyDo = duoc
 		? null
 		: dich.nguon === "goc"
@@ -94,6 +96,7 @@ export function useQuyenKhu(tab: TabOkr): QuyenKhu {
 	return {
 		kieu: "xong",
 		dich,
+		tenDon: ten,
 		duoc,
 		lyDo,
 		cycleId: currentId,
