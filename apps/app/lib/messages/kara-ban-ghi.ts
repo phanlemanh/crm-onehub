@@ -222,7 +222,7 @@ const vi: KaraBanGhiMessages = {
 			list_outstanding_work: "Tìm việc còn dang dở",
 			set_chat_title: "Đặt tên cuộc trò chuyện",
 			list_fields: "Đọc những trường mình đang theo dõi",
-			set_field_value: "Điền một trường tuỳ chỉnh",
+			set_field_value: "Điền một trường",
 			manage_fields: "Đổi những trường OneHub Center theo dõi",
 			archive_field: "Đề nghị lưu trữ một trường",
 			load_skill: "Đọc hướng dẫn cho việc này",
