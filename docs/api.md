@@ -953,7 +953,13 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   objectives contributing one step down, each objective or KR once — built by the pure
   `quanh-muc-tieu.ts` over the same `mucTieuCuaCay` set the tree reads (so the same
   visibility; a target outside that set is dropped, never named), and `okr.sucKhoe` is admin-only
-  (`ForbiddenException` otherwise). `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
+  (`ForbiddenException` otherwise). `okr.danhSachBo` (GET `/okr/units/sets`) lists one row per unit OKR set of the
+  org tree (OneHub, divisions, departments — no personal sets) with the objective count of
+  `countByUnit`, the progress and low-confidence count of `toanCanh`, and two viewer flags: `toiDan`
+  (the viewer is that division's or department's head; nobody leads OneHub) and `dangTheoDoi` (the
+  viewer follows at least one objective of that set in the cycle). `okr.viecCuaBo` (POST
+  `/okr/units/viec`) returns the `OkrViecKr` tasks of one set's KRs in a cycle, grouped by KR, KRs
+  without tasks omitted; both are pure reads built in `bo-okr.ts`. `danhSach`, `toanCanh`, `sucKhoe` and `hopTuan` run a fixed
   number of queries whatever the unit count; `apps/api/test/okr-toan-canh-hieu-nang.spec.ts`
   pins that at 50 departments × 2000 KRs. The pure roll-ups (`danh-sach.ts`, `toan-canh.ts`) take
   plain data and are tested without a database. Caps and the admin message live in
