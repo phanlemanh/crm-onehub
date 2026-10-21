@@ -1,5 +1,5 @@
 {
-  "feature_plain": "Một nhóm nhỏ việc đã ký có bằng chứng cũ được chạy lại ngay — những việc đang chặn PR đang mở, và nhóm có Hỏi ý OKR — còn lại để PR nào chạm tới thì tự chạy lại; việc nào phép đo gãy thì sửa phép đo, không sửa được thì gọi tên vì sao.",
+  "feature_plain": "Một nhóm nhỏ việc đã ký có bằng chứng cũ được chạy lại một lượt; việc nào phép đo gãy thì ghi rõ chờ ai, việc nào cứ cũ lại sau mỗi lần gộp thì để PR chạm tới tự chạy lại — sửa lời hứa đo cho khớp điều đo được.",
   "will_do": [
     {
       "id": "AC-1",
@@ -11,11 +11,11 @@
     },
     {
       "id": "AC-3",
-      "p": "Sẽ đối chiếu ở cuối vòng: mọi việc trong danh sách hoặc đã tươi lại, hoặc có một dòng ghi rõ cách xử; việc đã sửa phép đo thì phải tươi thật."
+      "p": "Sẽ đối chiếu ở cuối vòng: mỗi việc trong tập chạy lại hoặc đã có một lượt chạy lại xanh vào onehub trong lúc vòng chạy, hoặc có một dòng ghi rõ cách xử — sửa đổi so với lần ký trước: không còn đòi «vẫn tươi tới lúc gộp vòng», vì làn khác gộp liên tục làm việc cũ lại trong vài giờ."
     },
     {
       "id": "AC-4",
-      "p": "Sẽ ghi mỗi việc chạy lại bị đỏ vào sổ xử lý với một trong bốn cách — sửa phép đo, lỗi bộ công cụ, lỗi sản phẩm của làn khác, chờ làn chủ — kèm lượt chạy đỏ làm bằng."
+      "p": "Sẽ ghi mỗi việc chưa chạy lại xanh vào sổ xử lý với một trong năm cách — sửa phép đo, lỗi bộ công cụ, lỗi sản phẩm của làn khác, chờ làn chủ, hoặc «chạy lại khi có PR chạm tới» (mới) — kèm lượt chạy đỏ hay dòng quyết định làm bằng."
     },
     {
       "id": "AC-5",
@@ -23,7 +23,7 @@
     },
     {
       "id": "AC-6",
-      "p": "Sẽ chỉ chạm sổ chạy, báo cáo bằng chứng và sổ quyết định của các việc đã ký; việc còn đỏ mà không sửa thì không bị chạm tệp nào."
+      "p": "Sẽ chỉ chạm sổ chạy, báo cáo bằng chứng và sổ quyết định của các việc đã ký; việc không được chạy lại thì cuối vòng không khác onehub ở tệp nào."
     },
     {
       "id": "AC-8",
@@ -32,13 +32,13 @@
     {
       "id": "AC-9",
       "p": "Sẽ cho PR của vòng và PR của từng lô qua được cổng gộp đúng như CI chạy."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ xử xong hai việc của K6a: một đã chạy lại xanh, một chạy lại khi có PR chạm tới — và PR #411 đã đóng, trỏ về vòng này."
     }
   ],
   "wont_do": [
-    {
-      "id": "AC-7",
-      "p": "Chặn việc K6a bị bỏ dở: hai việc của nó phải tươi lại, và PR #411 được đóng trỏ về vòng này."
-    },
     {
       "id": "OOS-1",
       "p": "KHÔNG chạy lại 77 việc cũ vì phép đo không khai phạm vi tệp — Hỏi-1, hàng riêng."
