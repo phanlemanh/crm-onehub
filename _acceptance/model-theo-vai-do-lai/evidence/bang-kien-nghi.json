@@ -64,37 +64,43 @@
           "so": [
             {
               "ten": "ds: lượt qua dưới 180 giây",
-              "gia_tri": "0/0",
+              "gia_tri": "5/5",
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/tac-nhan.jsonl"
             },
             {
               "ten": "ds: trung vị giây phiên con",
-              "gia_tri": "—",
+              "gia_tri": 39.9,
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/bang-tac-nhan.md"
             },
             {
               "ten": "ds-low: lượt qua dưới 180 giây",
-              "gia_tri": "0/0",
+              "gia_tri": "3/5",
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/tac-nhan.jsonl"
             },
             {
               "ten": "ds-low: trung vị giây phiên con",
-              "gia_tri": "—",
+              "gia_tri": 25.2,
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/bang-tac-nhan.md"
             }
           ],
-          "chi_phi_phan_ung_vien": null,
-          "tep_chi_phi_phan": [],
-          "chi_phi_that": null,
+          "chi_phi_phan_ung_vien": 0.008131155,
+          "tep_chi_phi_phan": [
+            "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-ds-1.json",
+            "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-ds-2.json",
+            "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-ds-3.json",
+            "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-ds-4.json",
+            "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-ds-5.json"
+          ],
+          "chi_phi_that": 0.016356,
           "tep_chi_phi_that": "_acceptance/model-theo-vai-do-lai/evidence/chi-phi.json",
-          "trang_thai": "chưa đủ số",
-          "ly_do": "có biến thể thiếu lượt hợp lệ",
-          "ngay_do": null,
+          "trang_thai": "đạt",
+          "ly_do": "ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5",
+          "ngay_do": "2026-10-20",
           "ghi_chu": []
         }
       ],
-      "kien_nghi": "zai/glm-5.3-flash (flash-low)",
-      "ly_do": "glm có chi phí phần ứng viên thấp nhất (0.00897543 USD mỗi lượt) trong 1 ứng viên đạt; flash-low qua 5/5 lượt dưới 180 giây; ngưỡng 4/5",
+      "kien_nghi": "deepseek/deepseek-v4.1-flash-1017 (ds)",
+      "ly_do": "ds có chi phí phần ứng viên thấp nhất (0.008131155 USD mỗi lượt) trong 2 ứng viên đạt; ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5",
       "thong_so_chua_do": [
         "trần bước phiên con",
         "trần thời gian phiên con",
@@ -272,33 +278,179 @@
           "ma": "ds",
           "model": "deepseek/deepseek-v4.1-flash-1017",
           "bien_the": null,
-          "so": [],
-          "chi_phi_phan_ung_vien": null,
-          "tep_chi_phi_phan": [],
-          "chi_phi_that": null,
+          "so": [
+            {
+              "ten": "lượt 1 mot.S1 đúng",
+              "gia_tri": 15,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S2 đúng",
+              "gia_tri": 5,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S3 đúng",
+              "gia_tri": 8,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S6-gan đúng",
+              "gia_tri": 3,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S6-ngoai đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S7 đúng",
+              "gia_tri": 10,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S1 đúng",
+              "gia_tri": 15,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S2 đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S3 đúng",
+              "gia_tri": 8,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S6-gan đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S6-ngoai đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S7 đúng",
+              "gia_tri": 10,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.ngoai-kho đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 câu lỗi",
+              "gia_tri": 1,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
+            }
+          ],
+          "chi_phi_phan_ung_vien": 0.188970375,
+          "tep_chi_phi_phan": [
+            "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/aichiphi.json"
+          ],
+          "chi_phi_that": 0.341442,
           "tep_chi_phi_that": "_acceptance/model-theo-vai-do-lai/evidence/chi-phi.json",
-          "trang_thai": "chưa đủ số",
-          "ly_do": "thiếu lượt hợp lệ",
-          "ngay_do": null,
+          "trang_thai": "đạt",
+          "ly_do": "mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2",
+          "ngay_do": "2026-10-21",
           "ghi_chu": []
         },
         {
           "ma": "gem",
           "model": "google/gemini-3.8-flash",
           "bien_the": null,
-          "so": [],
-          "chi_phi_phan_ung_vien": null,
-          "tep_chi_phi_phan": [],
-          "chi_phi_that": null,
+          "so": [
+            {
+              "ten": "lượt 1 mot.S1 đúng",
+              "gia_tri": 15,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S2 đúng",
+              "gia_tri": 5,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S3 đúng",
+              "gia_tri": 7,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S6-gan đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S6-ngoai đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 mot.S7 đúng",
+              "gia_tri": 10,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S1 đúng",
+              "gia_tri": 15,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S2 đúng",
+              "gia_tri": 5,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S3 đúng",
+              "gia_tri": 7,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S6-gan đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S6-ngoai đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.S7 đúng",
+              "gia_tri": 9,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 hai.ngoai-kho đúng",
+              "gia_tri": 4,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            },
+            {
+              "ten": "lượt 1 câu lỗi",
+              "gia_tri": 3,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
+            }
+          ],
+          "chi_phi_phan_ung_vien": 1.98789075,
+          "tep_chi_phi_phan": [
+            "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/aichiphi.json"
+          ],
+          "chi_phi_that": 1.867994,
           "tep_chi_phi_that": "_acceptance/model-theo-vai-do-lai/evidence/chi-phi.json",
-          "trang_thai": "chưa đủ số",
-          "ly_do": "thiếu lượt hợp lệ",
-          "ngay_do": null,
+          "trang_thai": "không đạt",
+          "ly_do": "3 câu lỗi, trần 2",
+          "ngay_do": "2026-10-21",
           "ghi_chu": []
         }
       ],
-      "kien_nghi": "giữ zai/glm-5.2-fast",
-      "ly_do": "không ứng viên nào đạt và đủ số — glm không đạt: tầng mot.S6-ngoai đúng 2, mốc 4; ds chưa đủ số: thiếu lượt hợp lệ; gem chưa đủ số: thiếu lượt hợp lệ",
+      "kien_nghi": "deepseek/deepseek-v4.1-flash-1017",
+      "ly_do": "ds có chi phí phần ứng viên thấp nhất (0.188970375 USD mỗi lượt) trong 1 ứng viên đạt; mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2",
       "thong_so_chua_do": [
         "suy luận low cho Trợ lý kho"
       ],
@@ -380,19 +532,53 @@
           "ma": "ds",
           "model": "deepseek/deepseek-v4.1-flash-1017",
           "bien_the": null,
-          "so": [],
-          "chi_phi_phan_ung_vien": null,
-          "tep_chi_phi_phan": [],
-          "chi_phi_that": null,
+          "so": [
+            {
+              "ten": "lượt 1 đạt",
+              "gia_tri": "10/18",
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-1.json"
+            },
+            {
+              "ten": "lượt 1 hỏng",
+              "gia_tri": 7,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-1.json"
+            },
+            {
+              "ten": "lượt 1 p90 ms",
+              "gia_tri": 42516,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-1.json"
+            },
+            {
+              "ten": "lượt 2 đạt",
+              "gia_tri": "10/18",
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-2.json"
+            },
+            {
+              "ten": "lượt 2 hỏng",
+              "gia_tri": 7,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-2.json"
+            },
+            {
+              "ten": "lượt 2 p90 ms",
+              "gia_tri": 45320,
+              "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-2.json"
+            }
+          ],
+          "chi_phi_phan_ung_vien": 0.0787815,
+          "tep_chi_phi_phan": [
+            "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-soan-ds-1.json",
+            "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-soan-ds-2.json"
+          ],
+          "chi_phi_that": 0.10884,
           "tep_chi_phi_that": "_acceptance/model-theo-vai-do-lai/evidence/chi-phi.json",
-          "trang_thai": "chưa đủ số",
-          "ly_do": "thiếu lượt hợp lệ",
-          "ngay_do": null,
+          "trang_thai": "không đạt",
+          "ly_do": "một lượt đạt 10/18, hỏng 7; ngưỡng ≥ 13/18, hỏng ≤ 3",
+          "ngay_do": "2026-10-21",
           "ghi_chu": []
         }
       ],
       "kien_nghi": "giữ google/gemini-3.8-flash",
-      "ly_do": "không ứng viên nào đạt và đủ số — glm không đạt: một lượt không nộp được đề xuất nào (đạt 8/18) — lượt hỏng; ds chưa đủ số: thiếu lượt hợp lệ",
+      "ly_do": "không ứng viên nào đạt và đủ số — glm không đạt: một lượt không nộp được đề xuất nào (đạt 8/18) — lượt hỏng; ds không đạt: một lượt đạt 10/18, hỏng 7; ngưỡng ≥ 13/18, hỏng ≤ 3",
       "thong_so_chua_do": [
         "suy luận low cho Soạn OKR"
       ],
@@ -437,6 +623,26 @@
           "ten": "flash-2 judge dưới ngưỡng",
           "gia_tri": 0,
           "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-flash-2.json"
+        },
+        {
+          "ten": "ds-1 judge hỏng",
+          "gia_tri": 1,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-1.json"
+        },
+        {
+          "ten": "ds-1 judge dưới ngưỡng",
+          "gia_tri": 1,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-1.json"
+        },
+        {
+          "ten": "ds-2 judge hỏng",
+          "gia_tri": 0,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-2.json"
+        },
+        {
+          "ten": "ds-2 judge dưới ngưỡng",
+          "gia_tri": 1,
+          "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-2.json"
         }
       ],
       "ung_vien": [],
