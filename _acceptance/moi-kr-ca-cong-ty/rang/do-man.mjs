@@ -306,16 +306,22 @@ async function e11(n) {
 				const cham = [...document.querySelectorAll("[data-tinh-trang]")].every(
 					(c) => (c.textContent ?? "").trim().length > 0,
 				);
+				const hang = document.querySelector("[data-hang-chip]");
+				const chip =
+					hang !== null &&
+					(hang.scrollWidth <= hang.clientWidth ||
+						["auto", "scroll"].includes(getComputedStyle(hang).overflowX));
 				return {
 					tran: document.documentElement.scrollWidth - window.innerWidth,
 					an,
 					cham,
+					chip,
 				};
 			});
 			bao(
-				do_.tran <= 0 && do_.an >= 2 && do_.cham,
+				do_.tran <= 0 && do_.an >= 2 && do_.cham && do_.chip,
 				`DUNG AC-10 moi-kr 375: tran ngang ${Math.max(0, do_.tran)}, cot an ${do_.an}`,
-				`SAI AC-10 moi-kr 375: tran ngang ${do_.tran}, cot an ${do_.an}, cham kem chu ${do_.cham}`,
+				`SAI AC-10 moi-kr 375: tran ngang ${do_.tran}, cot an ${do_.an}, cham kem chu ${do_.cham}, chip voi toi ${do_.chip}`,
 			);
 		}
 	}

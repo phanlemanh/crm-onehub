@@ -59,6 +59,7 @@ function useCot(): DataTableColumn<Dong>[] {
 		{
 			id: "kr",
 			header: t.cot.kr,
+			width: "w-[40%]",
 			cell: (d) => (
 				<span className="flex min-w-0 flex-col gap-0.5 whitespace-normal">
 					<span className="font-medium" translate="no">
@@ -243,11 +244,13 @@ function BangMoiKr({ cycleId }: { cycleId: string }) {
 			className="flex flex-col gap-3"
 			data-trang-thai={rows.length > 0 ? "ST-moikr-codulieu" : undefined}
 		>
-			<ChipTinhTrang
-				chon={tinhTrang}
-				dem={ds.data.facetCounts.tinhTrang}
-				doi={(v) => void datLoc({ [P.tinhTrangKr]: v.length > 0 ? v : null })}
-			/>
+			<div className="max-w-full overflow-x-auto" data-hang-chip="">
+				<ChipTinhTrang
+					chon={tinhTrang}
+					dem={ds.data.facetCounts.tinhTrang}
+					doi={(v) => void datLoc({ [P.tinhTrangKr]: v.length > 0 ? v : null })}
+				/>
+			</div>
 			{rong ?? (
 				<DataTable
 					columns={cot}
