@@ -48,6 +48,8 @@ import {
 	ownerFilter,
 	paginate,
 	resolveOrderBy,
+	timTrang,
+	xepTheoId,
 } from "../trpc/list-input";
 import type {
 	CompanyBulkOwnerInput,
@@ -105,14 +107,21 @@ export class CompaniesService {
 		const where = this.buildWhere(input, filterableFields);
 		const { skip, take } = paginate(input);
 
-		const [rows, total, facetCounts] = await Promise.all([
+		const theoTruong = await this.fields.sapTheoTruong(
+			"COMPANY",
+			input,
+			where,
+			{ skip, take },
+		);
+
+		const [hang, total, facetCounts] = await Promise.all([
 			this.db.company.findMany({
-				where,
-				skip,
-				take,
-				orderBy: resolveOrderBy(input, SORTABLE, {
-					createdAt: "desc",
-				}),
+				...timTrang(
+					theoTruong,
+					where,
+					{ skip, take },
+					resolveOrderBy(input, SORTABLE, { createdAt: "desc" }),
+				),
 				select: {
 					id: true,
 					name: true,
@@ -141,6 +150,7 @@ export class CompaniesService {
 			this.facetCounts(input, filterableFields),
 		]);
 
+		const rows = xepTheoId(hang, theoTruong);
 		const ids = rows.map((row) => row.id);
 		const [queued, tableFields] = await Promise.all([
 			this.queue.queuedCompanies(ids),

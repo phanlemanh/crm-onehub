@@ -54,6 +54,8 @@ import {
 	paginate,
 	resolveOrderBy,
 	splitSentinel,
+	timTrang,
+	xepTheoId,
 } from "../trpc/list-input";
 import type {
 	ContactBulkCompanyInput,
@@ -120,6 +122,10 @@ function chuanTen(value: string): string {
 const SORTABLE: OrderByColumns<Prisma.ContactOrderByWithRelationInput[]> = {
 	name: (dir) => [{ lastName: dir }, { firstName: dir }],
 	email: (dir) => [{ email: dir }],
+	phone: (dir) => [
+		{ phone: { sort: dir, nulls: "last" } },
+		{ lastName: "asc" },
+	],
 	title: (dir) => [{ title: dir }, { lastName: "asc" }],
 	company: (dir) => [{ company: { name: dir } }, { lastName: "asc" }],
 	createdAt: (dir) => [{ createdAt: dir }],
@@ -147,12 +153,21 @@ export class ContactsService {
 		const where = this.buildWhere(input, filterableFields, search);
 		const { skip, take } = paginate(input);
 
-		const [rows, total, facetCounts] = await Promise.all([
+		const theoTruong = await this.fields.sapTheoTruong(
+			"CONTACT",
+			input,
+			where,
+			{ skip, take },
+		);
+
+		const [hang, total, facetCounts] = await Promise.all([
 			this.db.contact.findMany({
-				where,
-				skip,
-				take,
-				orderBy: resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+				...timTrang(
+					theoTruong,
+					where,
+					{ skip, take },
+					resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+				),
 				select: {
 					id: true,
 					firstName: true,
@@ -173,6 +188,7 @@ export class ContactsService {
 			this.facetCounts(input, filterableFields, search),
 		]);
 
+		const rows = xepTheoId(hang, theoTruong);
 		const tableFields = await this.fields.tableValuesFor(
 			"CONTACT",
 			rows.map((row) => row.id),
