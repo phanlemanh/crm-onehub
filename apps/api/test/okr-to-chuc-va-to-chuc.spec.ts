@@ -23,6 +23,32 @@ import {
 
 dungSan();
 
+const daTao = { department: new Set<string>(), division: new Set<string>() };
+
+const pbCuaTep = async (ten: string, divisionId: string | null = null) => {
+	const id = await pbMoi(ten, divisionId);
+	daTao.department.add(id);
+	return id;
+};
+
+const bpCuaTep = async (ten: string) => {
+	const id = await bpMoi(ten);
+	daTao.division.add(id);
+	return id;
+};
+
+afterAll(async () => {
+	const luc = new Date();
+	await db.department.updateMany({
+		where: { id: { in: [...daTao.department] }, archivedAt: null },
+		data: { archivedAt: luc },
+	});
+	await db.division.updateMany({
+		where: { id: { in: [...daTao.division] }, archivedAt: null },
+		data: { archivedAt: luc },
+	});
+});
+
 const CHO_MS = 120_000;
 const T = TO_CHUC.thongDiep;
 
@@ -41,7 +67,7 @@ describe("ly-do", () => {
 	let pb = "";
 	beforeAll(async () => {
 		ok(await goi("okr.setProgram", CHUONG_TRINH_RONG), "dat chuong trinh");
-		pb = await pbMoi("r1d-ly-do");
+		pb = await pbCuaTep("r1d-ly-do");
 		for (const ten of ["r1d-ld-1", "r1d-ld-2"])
 			ok(await datViTri(await nguoiMoi(ten), pb), `xep ${ten}`);
 		await db.onboardingTemplate.create({
@@ -116,14 +142,14 @@ describe("khoi-phuc", () => {
 		"khoi-phuc: phong ban duoi bo phan da luu tru bi chan, khong doi du lieu; khoi phuc bo phan truoc thi ve dung cho",
 		async () => {
 			let soCa = 0;
-			const bp = await bpMoi("r1d-kp-bp");
+			const bp = await bpCuaTep("r1d-kp-bp");
 			const tenBp = (
 				await db.division.findUniqueOrThrow({
 					where: { id: bp },
 					select: { name: true },
 				})
 			).name;
-			const pb = await pbMoi("r1d-kp-pb", bp);
+			const pb = await pbCuaTep("r1d-kp-pb", bp);
 			await luuTru("org.archiveDepartment", pb);
 			await luuTru("org.archiveDivision", bp);
 			const a = await khoiPhuc("org.restoreDepartment", pb);
@@ -157,7 +183,7 @@ describe("khoi-phuc", () => {
 				divisionId: bp,
 			});
 			soCa += 1;
-			const leLoi = await pbMoi("r1d-kp-le");
+			const leLoi = await pbCuaTep("r1d-kp-le");
 			await luuTru("org.archiveDepartment", leLoi);
 			expect(
 				await khoiPhuc("org.restoreDepartment", leLoi),
@@ -166,8 +192,8 @@ describe("khoi-phuc", () => {
 				id: leLoi,
 			});
 			soCa += 1;
-			const bpSong = await bpMoi("r1d-kp-bp-song");
-			const pbSong = await pbMoi("r1d-kp-pb-song", bpSong);
+			const bpSong = await bpCuaTep("r1d-kp-bp-song");
+			const pbSong = await pbCuaTep("r1d-kp-pb-song", bpSong);
 			await luuTru("org.archiveDepartment", pbSong);
 			expect(
 				await khoiPhuc("org.restoreDepartment", pbSong),
@@ -196,14 +222,17 @@ describe("trung-ten", () => {
 		},
 	] as const;
 
-	const taoTen = async (tao: string, name: string) =>
-		ok<{ id: string }>(
+	const taoTen = async (tao: string, name: string) => {
+		const id = ok<{ id: string }>(
 			await goi(
 				tao,
 				tao === "org.createDepartment" ? { name, divisionId: null } : { name },
 			),
 			`tao ${name}`,
 		).id;
+		daTao[tao === "org.createDepartment" ? "department" : "division"].add(id);
+		return id;
+	};
 
 	const demSong = (bang: "department" | "division", ten: string) =>
 		bang === "department"
