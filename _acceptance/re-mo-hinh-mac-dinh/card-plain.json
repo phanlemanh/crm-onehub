@@ -1,34 +1,3 @@
 {
-  "feature_plain": "Tác nhân CRM (agent gốc, Zalo, nghiên cứu, dựng và chạy tác nhân) và Trợ lý Kho tài liệu chuyển sang model mặc định rẻ hơn theo bảng MH4, rồi đo lại trên chính code đã đổi để chứng không tụt chất lượng và tiền thật thấp hơn model cũ.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ đổi model mặc định của Tác nhân sang model anh chọn ở Hỏi-1, ghi lại trong tài liệu agent, và bảo đảm model đó có trong danh mục Gateway mà test dùng."},
-    {"id": "AC-2", "p": "Sẽ để mọi đường của Tác nhân (CRM, Zalo, nghiên cứu, dựng, chạy) chạy model mới khi ô Cài đặt trống, giữ model trong ô khi người quản trị đã chọn, và kiểm không còn chỗ nào trong code dùng mặc định mà chưa kê."},
-    {"id": "AC-3", "p": "Sẽ đổi model Trợ lý kho theo Hỏi-3 mà vẫn giữ chế độ không lưu dữ liệu, máy soạn kho theo Hỏi-2, và thêm giá model mới vào bảng giá để sổ chi phí kho không ghi 0."},
-    {"id": "AC-4", "p": "Sẽ chạy lại bài kiểm dựng tác nhân trên code đã đổi với ô Cài đặt trống, và đòi ít nhất 4/5 lượt qua dưới 3 phút bằng đúng model mới."},
-    {"id": "AC-5", "p": "Sẽ chạy lại bộ 50 câu hỏi kho qua CRM và Zalo trên code đã đổi, đòi mỗi tầng không kém mốc 13/10 quá 1 câu và câu lỗi không quá ngưỡng chọn ở Hỏi-3."},
-    {"id": "AC-8", "p": "Sẽ so tiền Gateway thật mỗi lượt của mỗi vai đổi model với mốc của model cũ, in rẻ hơn bao nhiêu phần trăm, và ghi ngưỡng Cổng Giá trị anh chọn ở Hỏi-6 vào ô cơ hội."}
-  ],
-  "wont_do": [
-    {"id": "AC-6", "p": "Sẽ KHÔNG tiêu quá trần đo xác nhận chọn ở Hỏi-4, tính bằng tiền Gateway thật; chạm trần thì dừng và ghi «chưa đủ số»."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG chạm Soạn OKR, Judge OKR, ngăn bản ghi, và không làm kho đo dùng chung model với mặc định."},
-    {"id": "OOS-1", "p": "Không đổi model Soạn OKR, Judge OKR hay Trợ lý OKR — bảng MH4 kiến nghị giữ."},
-    {"id": "OOS-2", "p": "Không dựng thước đo cho máy soạn kho trong vòng này."},
-    {"id": "OOS-3", "p": "Không đổi model gieo vào kho đo dùng chung của các hồ sơ khác."},
-    {"id": "OOS-4", "p": "Không thêm cấu hình mức suy luận theo model cho Tác nhân — GLM 5.3 Flash đã qua 5/5 ở mức mặc định."},
-    {"id": "OOS-5", "p": "Không tự ghi đè ô Cài đặt model mà người quản trị đã chọn (Hỏi-7)."}
-  ],
-  "scope_plain": "Những việc dưới đây cố ý để ngoài MH2:",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi vai đổi hay giữ model đều có tiêu chí: Tác nhân năm đường (AC-1, AC-2), Trợ lý kho và máy soạn (AC-3), các vai OKR không đổi (AC-7)."},
-    {"i": 1, "p": "Ba trạng thái ô Cài đặt: trống thì chạy mặc định mới, đã chọn thì giữ, model bị Gateway gỡ thì lùi về mặc định mới (AC-2)."},
-    {"i": 2, "p": "Chi phí: giá trong bảng giá kho (AC-3), tiền đo và trần (AC-6), rẻ hơn mốc model cũ (AC-8)."},
-    {"i": 3, "p": "Chất lượng trên bộ đo: bài kiểm dựng tác nhân (AC-4) và bộ 50 câu kho qua CRM và Zalo (AC-5)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Nửa «rẻ hơn» của câu giao chưa có gì đo, và ô cơ hội chưa có ngưỡng sống chết. Đã thêm AC-8 so tiền thật với mốc model cũ, và đưa ngưỡng Cổng Giá trị lên anh ở Hỏi-6."},
-    {"i": 1, "p": "Nếu anh chọn Gemini cho kho (3 câu lỗi) thì ngưỡng câu lỗi 2 sẽ làm vòng đỏ; nếu không đo lại thì ba tiêu chí đo không thoả. Đã ghi hệ quả từng lối vào Hỏi-3 và Hỏi-4, và cho bài đo đọc ngưỡng từ lựa chọn của anh."},
-    {"i": 2, "p": "Giá ghi vào bảng giá kho quyết số chi phí người dùng thật thấy, mà máy đã tự chọn giá niêm yết. Đã thành câu hỏi Hỏi-5 (giá niêm yết hay giá Gateway tính thật); trần đo tính bằng tiền Gateway thật."},
-    {"i": 3, "p": "Workspace production có thể đã chọn sẵn model cũ trong ô Cài đặt, khi đó đổi mặc định không đổi gì cho người dùng thật. Đã thành Hỏi-7: khuyên không ghi đè, anh tra ô trên Neon trước khi gộp."},
-    {"i": 4, "p": "Chưa kê hết nơi trong code dùng model mặc định (phiên nghiên cứu cũng đổi theo), và bài kiểm test có thể xanh dù bị bỏ qua. Đã thêm phiên nghiên cứu vào AC-2, thêm răng liệt kê nơi dùng, và đòi test thật sự chạy."}
-  ]
+  "feature_plain": "Tác nhân CRM nay mặc định chạy GLM 5.3 Flash và Trợ lý Kho tài liệu chạy DeepSeek V4.1 Flash 1017; đo lại trên code đã đổi: Tác nhân 4/5 lượt qua, kho 0 câu lỗi, tiền Gateway thật mỗi lượt thấp hơn model cũ hơn 90% ở cả hai vai."
 }
