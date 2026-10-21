@@ -1,0 +1,59 @@
+{
+  "tran_usd": 3,
+  "luot": [
+    {
+      "vai": "tac-nhan",
+      "luot": "1",
+      "luc": "2026-10-21T09:57:51.049Z",
+      "trang_thai": "da-chay",
+      "usd": 0.008985,
+      "usd_vai": 0.008985,
+      "tep": "aichiphi-tac-nhan-1.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "2",
+      "luc": "2026-10-21T09:59:01.758Z",
+      "trang_thai": "da-chay",
+      "usd": 0.011222,
+      "usd_vai": 0.011222,
+      "tep": "aichiphi-tac-nhan-2.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "3",
+      "luc": "2026-10-21T09:59:49.485Z",
+      "trang_thai": "da-chay",
+      "usd": 0.003306,
+      "usd_vai": 0.003306,
+      "tep": "aichiphi-tac-nhan-3.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "4",
+      "luc": "2026-10-21T10:01:12.833Z",
+      "trang_thai": "da-chay",
+      "usd": 0.00914,
+      "usd_vai": 0.00914,
+      "tep": "aichiphi-tac-nhan-4.json"
+    },
+    {
+      "vai": "tac-nhan",
+      "luot": "5",
+      "luc": "2026-10-21T10:02:27.439Z",
+      "trang_thai": "da-chay",
+      "usd": 0.007924,
+      "usd_vai": 0.007924,
+      "tep": "aichiphi-tac-nhan-5.json"
+    },
+    {
+      "vai": "tro-ly-kho",
+      "luot": "1",
+      "luc": "2026-10-21T11:05:39.518Z",
+      "trang_thai": "da-chay",
+      "usd": 0.304002,
+      "usd_vai": 0.239714,
+      "tep": "kho/luot-1/tom-tat.json"
+    }
+  ]
+}

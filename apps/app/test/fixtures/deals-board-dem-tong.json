@@ -11,23 +11,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmuev1vh30002oxcfu1hf1ms2",
-					"name": "A1 kbtokmuev1u5x4dld",
+					"id": "cmvhfwder0002uq8gqqz562k8",
+					"name": "A1 kbtokmvhfwc6nhdi0",
 					"stage": "DEMO_BOOKED",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvhfwdem0000uq8gp6asgigk",
+						"name": "Board Co mvhfwc6nhdi0",
+						"domain": "deals-board-mvhfwc6nhdi0.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-muev1u5x4dld",
-						"name": "user-board-a-muev1u5x4dld",
-						"email": "user-board-a-muev1u5x4dld@example.test",
+						"id": "user-board-a-mvhfwc6nhdi0",
+						"name": "user-board-a-mvhfwc6nhdi0",
+						"email": "user-board-a-mvhfwc6nhdi0@example.test",
 						"image": null
 					},
 					"amountCents": 10000,
@@ -37,26 +37,27 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:00.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {}
 				},
 				{
-					"id": "cmuev1vha0004oxcf5ovsmans",
+					"id": "cmvhfwdex0004uq8gx1l4flgb",
 					"name": "A2",
 					"stage": "DEMO_BOOKED",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvhfwdem0000uq8gp6asgigk",
+						"name": "Board Co mvhfwc6nhdi0",
+						"domain": "deals-board-mvhfwc6nhdi0.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-muev1u5x4dld",
-						"name": "user-board-a-muev1u5x4dld",
-						"email": "user-board-a-muev1u5x4dld@example.test",
+						"id": "user-board-a-mvhfwc6nhdi0",
+						"name": "user-board-a-mvhfwc6nhdi0",
+						"email": "user-board-a-mvhfwc6nhdi0@example.test",
 						"image": null
 					},
 					"amountCents": 25000,
@@ -66,26 +67,27 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:01.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {}
 				},
 				{
-					"id": "cmuev1vhc0005oxcfa9rfwf40",
+					"id": "cmvhfwdf00005uq8g76sj6zwu",
 					"name": "A3",
 					"stage": "DEMO_BOOKED",
 					"currency": "EUR",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvhfwdem0000uq8gp6asgigk",
+						"name": "Board Co mvhfwc6nhdi0",
+						"domain": "deals-board-mvhfwc6nhdi0.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-muev1u5x4dld",
-						"name": "user-board-a-muev1u5x4dld",
-						"email": "user-board-a-muev1u5x4dld@example.test",
+						"id": "user-board-a-mvhfwc6nhdi0",
+						"name": "user-board-a-mvhfwc6nhdi0",
+						"email": "user-board-a-mvhfwc6nhdi0@example.test",
 						"image": null
 					},
 					"amountCents": 90000,
@@ -95,7 +97,8 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:02.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {}
 				}
 			]
 		},
@@ -110,23 +113,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmuev1vhg0007oxcfa1e5hk3w",
-					"name": "A5 kbtokmuev1u5x4dld",
+					"id": "cmvhfwdf30007uq8g7stw7zlb",
+					"name": "A5 kbtokmvhfwc6nhdi0",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvhfwdem0000uq8gp6asgigk",
+						"name": "Board Co mvhfwc6nhdi0",
+						"domain": "deals-board-mvhfwc6nhdi0.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-muev1u5x4dld",
-						"name": "user-board-a-muev1u5x4dld",
-						"email": "user-board-a-muev1u5x4dld@example.test",
+						"id": "user-board-a-mvhfwc6nhdi0",
+						"name": "user-board-a-mvhfwc6nhdi0",
+						"email": "user-board-a-mvhfwc6nhdi0@example.test",
 						"image": null
 					},
 					"amountCents": null,
@@ -136,7 +139,8 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:04.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {}
 				}
 			]
 		},
@@ -162,23 +166,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmuev1vhi0008oxcfe1pw3upg",
+					"id": "cmvhfwdf40008uq8g80zgzkg5",
 					"name": "A6",
 					"stage": "CONTRACT_SENT",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvhfwdem0000uq8gp6asgigk",
+						"name": "Board Co mvhfwc6nhdi0",
+						"domain": "deals-board-mvhfwc6nhdi0.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-muev1u5x4dld",
-						"name": "user-board-a-muev1u5x4dld",
-						"email": "user-board-a-muev1u5x4dld@example.test",
+						"id": "user-board-a-mvhfwc6nhdi0",
+						"name": "user-board-a-mvhfwc6nhdi0",
+						"email": "user-board-a-mvhfwc6nhdi0@example.test",
 						"image": null
 					},
 					"amountCents": 100000,
@@ -188,7 +192,8 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:05.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {}
 				}
 			]
 		},
@@ -203,23 +208,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmuev1vhl000aoxcf21snghk9",
+					"id": "cmvhfwdf6000auq8gb3fyvbaq",
 					"name": "A8",
 					"stage": "CLOSED_WON",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvhfwdem0000uq8gp6asgigk",
+						"name": "Board Co mvhfwc6nhdi0",
+						"domain": "deals-board-mvhfwc6nhdi0.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-muev1u5x4dld",
-						"name": "user-board-a-muev1u5x4dld",
-						"email": "user-board-a-muev1u5x4dld@example.test",
+						"id": "user-board-a-mvhfwc6nhdi0",
+						"name": "user-board-a-mvhfwc6nhdi0",
+						"email": "user-board-a-mvhfwc6nhdi0@example.test",
 						"image": null
 					},
 					"amountCents": 300000,
@@ -229,7 +234,8 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:07.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {}
 				}
 			]
 		},
@@ -244,23 +250,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmuev1vhp000coxcf6pim39sh",
+					"id": "cmvhfwdf8000cuq8gi04c02mf",
 					"name": "A9",
 					"stage": "CLOSED_LOST",
 					"currency": "USD",
 					"company": {
-						"id": "cmuev1vgy0000oxcfgpitlgr5",
-						"name": "Board Co muev1u5x4dld",
-						"domain": "deals-board-muev1u5x4dld.test",
+						"id": "cmvhfwdem0000uq8gp6asgigk",
+						"name": "Board Co mvhfwc6nhdi0",
+						"domain": "deals-board-mvhfwc6nhdi0.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-muev1u5x4dld",
-						"name": "user-board-a-muev1u5x4dld",
-						"email": "user-board-a-muev1u5x4dld@example.test",
+						"id": "user-board-a-mvhfwc6nhdi0",
+						"name": "user-board-a-mvhfwc6nhdi0",
+						"email": "user-board-a-mvhfwc6nhdi0@example.test",
 						"image": null
 					},
 					"amountCents": 4000,
@@ -270,7 +276,8 @@
 					"closedAt": null,
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:08.000Z",
-					"archivedAt": null
+					"archivedAt": null,
+					"fields": {}
 				}
 			]
 		},
