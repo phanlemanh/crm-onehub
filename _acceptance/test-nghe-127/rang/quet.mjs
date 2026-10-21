@@ -4,10 +4,12 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const VUNG = /^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|scripts\/.+\/test\/).+\.(ts|tsx|mjs|js)$/;
+const VUNG =
+	/^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|scripts\/.+\/test\/).+\.(ts|tsx|mjs|js)$/;
 const HOST = '"127.0.0.1"';
 const TAM_NGHE = 600;
-const DUNG_APP = /(?:const |let )?(\w+) = (?:await )?(?:createApp\(\)|\w+\.createNestApplication\()/g;
+const DUNG_APP =
+	/(?:const |let )?(\w+) = (?:await )?(?:createApp\(\)|\w+\.createNestApplication\()/g;
 const DAU_DUNG_APP = /createApp\(\)|\.createNestApplication\(/g;
 
 const KHAI_BUN_SERVE = {
@@ -75,7 +77,13 @@ const KHAI_DUNG_APP = {
 	"apps/api/test/zalo-goi-thu-hong.spec.ts": 1,
 };
 
-const MONG_DO_GOC = { bunServe: 15, dangLa: 0, listen: 2, taoApp: 49, localhost: 6 };
+const MONG_DO_GOC = {
+	bunServe: 15,
+	dangLa: 0,
+	listen: 2,
+	taoApp: 49,
+	localhost: 6,
+};
 
 function khoiNgoac(s, i, mo, dong) {
 	let sau = 0;
@@ -94,7 +102,13 @@ function dong(s, i) {
 }
 
 function quetTep(t, s) {
-	const vi = { bunServe: [], dangLa: [], listen: [], taoApp: [], localhost: [] };
+	const vi = {
+		bunServe: [],
+		dangLa: [],
+		listen: [],
+		taoApp: [],
+		localhost: [],
+	};
 	let soBunServe = 0;
 	for (const m of s.matchAll(/\bBun\.serve\b/g)) {
 		soBunServe += 1;
@@ -105,7 +119,8 @@ function quetTep(t, s) {
 			continue;
 		}
 		const khoi = khoiNgoac(sau, mo[0].length - 1, "{", "}");
-		if (!/hostname:\s*"127\.0\.0\.1"/.test(khoi)) vi.bunServe.push(`${t}:${dong(s, m.index)}`);
+		if (!/hostname:\s*"127\.0\.0\.1"/.test(khoi))
+			vi.bunServe.push(`${t}:${dong(s, m.index)}`);
 	}
 	for (const m of s.matchAll(/\bserve\(\s*\{/g)) {
 		if (!/Bun\.$/.test(s.slice(Math.max(0, m.index - 4), m.index))) {
@@ -176,9 +191,14 @@ const TU_THU = [
 const loi = [];
 for (const c of TU_THU) {
 	const { vi } = quetTep(c.t, c.s);
-	const dem = Object.fromEntries(Object.entries(vi).map(([k, v]) => [k, v.length]));
+	const dem = Object.fromEntries(
+		Object.entries(vi).map(([k, v]) => [k, v.length]),
+	);
 	for (const k of Object.keys(dem)) {
-		if (dem[k] !== (c.bat[k] ?? 0)) loi.push(`quet: tu thu ${c.ten} ${k} bat ${dem[k]} ky vong ${c.bat[k] ?? 0}`);
+		if (dem[k] !== (c.bat[k] ?? 0))
+			loi.push(
+				`quet: tu thu ${c.ten} ${k} bat ${dem[k]} ky vong ${c.bat[k] ?? 0}`,
+			);
 	}
 }
 
@@ -187,7 +207,11 @@ const ref = args.includes("--ref") ? args[args.indexOf("--ref") + 1] : null;
 const mongDo = args.includes("--mong-do");
 
 function git(...a) {
-	return execFileSync("git", a, { cwd: GOC, encoding: "utf8", maxBuffer: 64 << 20 });
+	return execFileSync("git", a, {
+		cwd: GOC,
+		encoding: "utf8",
+		maxBuffer: 64 << 20,
+	});
 }
 
 const tep = (ref ? git("ls-tree", "-r", "--name-only", ref) : git("ls-files"))
@@ -198,7 +222,9 @@ const vi = { bunServe: [], dangLa: [], listen: [], taoApp: [], localhost: [] };
 const demBun = {};
 const demApp = {};
 for (const t of tep) {
-	const s = ref ? git("show", `${ref}:${t}`) : readFileSync(join(GOC, t), "utf8");
+	const s = ref
+		? git("show", `${ref}:${t}`)
+		: readFileSync(join(GOC, t), "utf8");
 	const k = quetTep(t, s);
 	for (const [loai, v] of Object.entries(k.vi)) vi[loai].push(...v);
 	if (k.soBunServe) demBun[t] = k.soBunServe;
@@ -208,23 +234,29 @@ for (const t of tep) {
 function soMaTran(ten, khai, thuc) {
 	for (const t of new Set([...Object.keys(khai), ...Object.keys(thuc)])) {
 		if ((khai[t] ?? 0) !== (thuc[t] ?? 0)) {
-			loi.push(`quet: ma tran ${ten} lech ${t} khai ${khai[t] ?? 0} thuc ${thuc[t] ?? 0}`);
+			loi.push(
+				`quet: ma tran ${ten} lech ${t} khai ${khai[t] ?? 0} thuc ${thuc[t] ?? 0}`,
+			);
 		}
 	}
 }
 soMaTran("Bun.serve", KHAI_BUN_SERVE, demBun);
 soMaTran("dung app", KHAI_DUNG_APP, demApp);
 
-const tom = Object.fromEntries(Object.entries(vi).map(([k, v]) => [k, v.length]));
+const tom = Object.fromEntries(
+	Object.entries(vi).map(([k, v]) => [k, v.length]),
+);
 const tong = (o) => Object.values(o).reduce((a, b) => a + b, 0);
 console.log(
 	`quet ${ref ?? "cay"}: ${tep.length} tep, Bun.serve ${tong(demBun)}, dung app api ${tong(demApp)}, tu thu ${TU_THU.length} ca, vi pham ${JSON.stringify(tom)}`,
 );
-for (const [k, v] of Object.entries(vi)) for (const d of v) console.log(`  ${k}: ${d}`);
+for (const [k, v] of Object.entries(vi))
+	for (const d of v) console.log(`  ${k}: ${d}`);
 
 if (mongDo) {
 	for (const [k, n] of Object.entries(MONG_DO_GOC)) {
-		if (tom[k] !== n) loi.push(`quet goc: ${k} bat ${tom[k]} vi pham, ky vong ${n}`);
+		if (tom[k] !== n)
+			loi.push(`quet goc: ${k} bat ${tom[k]} vi pham, ky vong ${n}`);
 	}
 } else {
 	for (const [k, n] of Object.entries(tom)) {

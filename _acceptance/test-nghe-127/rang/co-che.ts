@@ -1,5 +1,5 @@
 import { createServer as taoMayHttp } from "node:http";
-import { createServer, type Server } from "node:net";
+import { type AddressInfo, createServer, type Server } from "node:net";
 
 const LOI_GIA = "SSH-2.0-limactl\r\n";
 
@@ -8,11 +8,7 @@ type Ket = { ten: string; nghe: boolean; fetch: string };
 async function giuCong(): Promise<{ chiem: Server; cong: number }> {
 	const chiem = createServer((s) => s.end(LOI_GIA));
 	await new Promise<void>((ok) => chiem.listen(0, "127.0.0.1", ok));
-	const dc = chiem.address();
-	if (dc === null || typeof dc === "string") {
-		throw new Error("co che: khong doc duoc cong bi giu");
-	}
-	return { chiem, cong: dc.port };
+	return { chiem, cong: (chiem.address() as AddressInfo).port };
 }
 
 async function goi(cong: number): Promise<string> {
@@ -27,11 +23,10 @@ async function goi(cong: number): Promise<string> {
 async function thuBun(ten: string, cong: number, host?: string): Promise<Ket> {
 	let sv: ReturnType<typeof Bun.serve>;
 	try {
-		sv = Bun.serve({
-			port: cong,
-			...(host ? { hostname: host } : {}),
-			fetch: () => new Response("ok"),
-		});
+		const fetch = () => new Response("ok");
+		sv = host
+			? Bun.serve({ port: cong, hostname: host, fetch })
+			: Bun.serve({ port: cong, fetch });
 	} catch {
 		return { ten, nghe: false, fetch: "" };
 	}
@@ -65,8 +60,7 @@ chiem.close();
 const doiChung = await new Promise<string>((ok) => {
 	const sv = taoMayHttp((_q, r) => r.end("ok"));
 	sv.listen(0, "127.0.0.1", async () => {
-		const dc = sv.address();
-		const f = dc && typeof dc !== "string" ? await goi(dc.port) : "khong cong";
+		const f = await goi((sv.address() as AddressInfo).port);
 		sv.close(() => ok(f));
 	});
 });
@@ -82,8 +76,10 @@ for (const k of ket.slice(0, 2)) {
 	}
 }
 for (const k of ket.slice(2)) {
-	if (k.nghe) loi.push(`co che: ${k.ten} van nghe duoc cong bi giu ${JSON.stringify(k)}`);
+	if (k.nghe)
+		loi.push(`co che: ${k.ten} van nghe duoc cong bi giu ${JSON.stringify(k)}`);
 }
-if (doiChung !== "200 ok") loi.push(`co che: doi chung 127 cong 0 hong ${doiChung}`);
+if (doiChung !== "200 ok")
+	loi.push(`co che: doi chung 127 cong 0 hong ${doiChung}`);
 for (const l of loi) console.error(`error: ${l}`);
 process.exit(loi.length === 0 ? 0 : 1);

@@ -64,6 +64,7 @@ async function goiTrpc(
 beforeAll(async () => {
 	setSystemTime(BAY_GIO);
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	spyOn(app.get(BackfillService), "auto").mockResolvedValue({ started: false });
 	spyOn(app.get(AgentTriggerService), "canReachAgent").mockReturnValue(true);
 	await gieoThanhVien(nguoi.quan, "admin");

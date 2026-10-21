@@ -3,7 +3,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const VUNG = /^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|scripts\/.+\/test\/).+\.(ts|tsx|mjs|js)$/;
+const VUNG =
+	/^(apps\/[^/]+\/test\/|packages\/[^/]+\/test\/|scripts\/.+\/test\/).+\.(ts|tsx|mjs|js)$/;
 const NGHE = '.listen(0, "127.0.0.1")';
 const KHANG_DINH = /\bexpect\(|\.toBe\(|\.toEqual\(|\.toContain\(|\.toMatch\(/;
 
@@ -14,14 +15,25 @@ const THEM_MOT_MINH = [
 const BO_MOT_MINH = [/^\s*await [\w.]+\.listen\(0\);$/];
 const DOI_DONG = [
 	(x) => x.replace(/\.listen\(0\)/, NGHE),
-	(x) => (KHANG_DINH.test(x) ? x : x.replaceAll("http://localhost:${", "http://127.0.0.1:${")),
-	(x) => x.replace(/Bun\.serve\(\{ port: (\w+),/, 'Bun.serve({ port: $1, hostname: "127.0.0.1",'),
+	(x) =>
+		KHANG_DINH.test(x)
+			? x
+			: x.replaceAll("http://localhost:${", "http://127.0.0.1:${"),
+	(x) =>
+		x.replace(
+			/Bun\.serve\(\{ port: (\w+),/,
+			'Bun.serve({ port: $1, hostname: "127.0.0.1",',
+		),
 	(x) => x.replace(/(\w+)\.init\(\)/, `$1${NGHE}`),
 	(x) => x.replace(`await app${NGHE}`, "app.getHttpServer()"),
 ];
 
 function git(...a) {
-	return execFileSync("git", a, { cwd: GOC, encoding: "utf8", maxBuffer: 64 << 20 });
+	return execFileSync("git", a, {
+		cwd: GOC,
+		encoding: "utf8",
+		maxBuffer: 64 << 20,
+	});
 }
 
 function xet(tep, hunk) {
@@ -29,16 +41,21 @@ function xet(tep, hunk) {
 	const daDung = new Set();
 	for (const x of hunk.bo) {
 		const j = hunk.them.findIndex(
-			(y, k) => !daDung.has(k) && DOI_DONG.some((f) => f(x) !== x && f(x) === y),
+			(y, k) =>
+				!daDung.has(k) && DOI_DONG.some((f) => f(x) !== x && f(x) === y),
 		);
 		if (j >= 0) daDung.add(j);
 		else if (!BO_MOT_MINH.some((r) => r.test(x))) {
-			loi.push(`khang dinh: ${tep}:${hunk.dong} bo dong ngoai nam dang «${x.trim()}»`);
+			loi.push(
+				`khang dinh: ${tep}:${hunk.dong} bo dong ngoai nam dang «${x.trim()}»`,
+			);
 		}
 	}
 	hunk.them.forEach((y, k) => {
 		if (!daDung.has(k) && !THEM_MOT_MINH.some((r) => r.test(y))) {
-			loi.push(`khang dinh: ${tep}:${hunk.dong} them dong ngoai nam dang «${y.trim()}»`);
+			loi.push(
+				`khang dinh: ${tep}:${hunk.dong} them dong ngoai nam dang «${y.trim()}»`,
+			);
 		}
 	});
 	return loi;
@@ -54,8 +71,10 @@ function tachHunk(diff) {
 			const m = /\+(\d+)/.exec(d);
 			cur = { tep, dong: m ? Number(m[1]) : 0, bo: [], them: [] };
 			ra.push(cur);
-		} else if (cur && d.startsWith("-") && !d.startsWith("---")) cur.bo.push(d.slice(1));
-		else if (cur && d.startsWith("+") && !d.startsWith("+++")) cur.them.push(d.slice(1));
+		} else if (cur && d.startsWith("-") && !d.startsWith("---"))
+			cur.bo.push(d.slice(1));
+		else if (cur && d.startsWith("+") && !d.startsWith("+++"))
+			cur.them.push(d.slice(1));
 	}
 	return ra;
 }
@@ -66,7 +85,11 @@ const tuThu = [
 		hunk: {
 			dong: 1,
 			bo: ["\tawait app.init();", "\t\turl: `http://localhost:${sv.port}`,"],
-			them: ['\t\thostname: "127.0.0.1",', `\tawait app${NGHE};`, "\t\turl: `http://127.0.0.1:${sv.port}`,"],
+			them: [
+				'\t\thostname: "127.0.0.1",',
+				`\tawait app${NGHE};`,
+				"\t\turl: `http://127.0.0.1:${sv.port}`,",
+			],
 		},
 		dat: true,
 	},
@@ -93,7 +116,9 @@ const tuThu = [
 		hunk: {
 			dong: 1,
 			bo: ["\tconst sv = Bun.serve({ port: 0, fetch });"],
-			them: ['\tconst sv = Bun.serve({ port: 0, hostname: "127.0.0.1", fetch });'],
+			them: [
+				'\tconst sv = Bun.serve({ port: 0, hostname: "127.0.0.1", fetch });',
+			],
 		},
 		dat: true,
 	},
@@ -107,7 +132,8 @@ const tuThu = [
 const loiTuThu = [];
 for (const c of tuThu) {
 	const ok = xet("tu-thu", c.hunk).length === 0;
-	if (ok !== c.dat) loiTuThu.push(`khang dinh: tu thu ${c.ten} ra ${ok} ky vong ${c.dat}`);
+	if (ok !== c.dat)
+		loiTuThu.push(`khang dinh: tu thu ${c.ten} ra ${ok} ky vong ${c.dat}`);
 }
 
 const tepDoi = new Set();
@@ -122,7 +148,13 @@ if (tepNhanh.length) {
 	for (const t of tepNhanh) tepDoi.add(t);
 	diff = git("diff", "-U0", `${base}...HEAD`, "--", ...tepNhanh);
 } else {
-	const commit = git("log", "--no-merges", "--grep", "test-nghe-127", "--format=%H")
+	const commit = git(
+		"log",
+		"--no-merges",
+		"--grep",
+		"test-nghe-127",
+		"--format=%H",
+	)
 		.split("\n")
 		.filter(Boolean);
 	nguon = `${commit.length} commit test-nghe-127 (nhanh da gop)`;
@@ -136,8 +168,11 @@ if (tepNhanh.length) {
 }
 const hunks = tachHunk(diff);
 const loi = [...loiTuThu, ...hunks.flatMap((h) => xet(h.tep, h))];
-if (tepDoi.size === 0) loi.push("khang dinh: khong commit nao cua test-nghe-127 doi tep test");
+if (tepDoi.size === 0)
+	loi.push("khang dinh: khong commit nao cua test-nghe-127 doi tep test");
 
-console.log(`khang dinh: ${nguon} · ${tepDoi.size} tep test doi · ${hunks.length} khuc · tu thu ${tuThu.length} ca`);
+console.log(
+	`khang dinh: ${nguon} · ${tepDoi.size} tep test doi · ${hunks.length} khuc · tu thu ${tuThu.length} ca`,
+);
 for (const l of loi) console.error(`error: ${l}`);
 process.exit(loi.length === 0 ? 0 : 1);
