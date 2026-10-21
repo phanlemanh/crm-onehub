@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -8,23 +9,32 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
+import { duongSoDoTuBoOkr } from "../so-do/duong-so-do";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { KhungDangTaiDonVi } from "./hang-cong-cu";
 import { TheoDonVi } from "./theo-don-vi";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: tieuDeTrinhDuyet(await getLocale(), "theo-don-vi") };
 }
 
 export default function TheoDonViPage({
+	params,
 	searchParams,
 }: {
+	params?: Params;
 	searchParams: SearchParams;
 }) {
 	return (
 		<>
+			{params ? (
+				<Suspense fallback={null}>
+					<ChuyenSoDoCu params={params} searchParams={searchParams} />
+				</Suspense>
+			) : null}
 			<DauTrangOkrTrang searchParams={searchParams} tab="theo-don-vi" />
 			<PageShellContent>
 				<Suspense fallback={<KhungDangTaiDonVi />}>
@@ -33,6 +43,19 @@ export default function TheoDonViPage({
 			</PageShellContent>
 		</>
 	);
+}
+
+async function ChuyenSoDoCu({
+	params,
+	searchParams,
+}: {
+	params: Params;
+	searchParams: SearchParams;
+}): Promise<null> {
+	const [{ slug }, thamSo] = await Promise.all([params, searchParams]);
+	const dich = duongSoDoTuBoOkr(slug, thamSo);
+	if (dich) redirect(dich);
+	return null;
 }
 
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
@@ -59,11 +82,6 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 					loc: locOkr(thamSo),
 				}),
 			),
-			thamSo[SEARCH_PARAM.okr.xem] === "cay"
-				? queryClient.prefetchQuery(
-						trpc.okr.cayCanChinh.queryOptions({ cycleId }),
-					)
-				: Promise.resolve(),
 		]);
 	}
 

@@ -666,6 +666,47 @@ describe("vk6-trang-thai", () => {
 	});
 });
 
+describe("vk6-bo-cay", () => {
+	test("vk6-bo-cay: không còn Cây, Sơ đồ mở sẵn thẻ đơn vị", async () => {
+		const sai: string[] = [];
+		const { CACH_XEM_OKR } = await import("@crm/validation/okr-tham-so");
+		if ((CACH_XEM_OKR as readonly string[]).includes("cay"))
+			sai.push("CACH_XEM_OKR con cay");
+		const cskh = KHOA_CA.A1;
+		await dung(
+			<Vo>
+				<ManSoDo tam={null} />
+			</Vo>,
+			`/ws/okr/so-do?moDonVi=${encodeURIComponent(cskh)}`,
+		);
+		await cho(() => q(`[data-so-do-the="${cskh}"]`) !== null, "the don vi");
+		if (q("[role=tree]")) sai.push("so do con role=tree");
+		if (q("[data-so-do-gop-vao]")) sai.push("so do con XemCay");
+		const the = q(`[data-so-do-the="${cskh}"]`);
+		if (the?.getAttribute("data-dang-mo") === "false")
+			sai.push("the don vi khong mo san");
+		const conDung = quetTinh(join(GOC_KHO, "apps/app")).filter((t) =>
+			/(?:from|import\()\s*["'][^"']*\/cay-can-chinh["']/.test(
+				readFileSync(t, "utf8"),
+			),
+		);
+		for (const t of conDung)
+			sai.push(`con dung cay: ${t.slice(GOC_KHO.length)}`);
+		expect(sai).toEqual([]);
+	});
+});
+
+function quetTinh(thuMuc: string): string[] {
+	const { readdirSync, statSync } =
+		require("node:fs") as typeof import("node:fs");
+	return readdirSync(thuMuc).flatMap((t) => {
+		if (t === "node_modules" || t === ".next" || t.startsWith(".")) return [];
+		const p = join(thuMuc, t);
+		if (statSync(p).isDirectory()) return quetTinh(p);
+		return /\.(ts|tsx)$/.test(t) ? [p] : [];
+	});
+}
+
 type NutMayChu = ReactElement<{ children?: ReactNode }>;
 const HAM_BAT_DONG_BO = (async () => null).constructor;
 

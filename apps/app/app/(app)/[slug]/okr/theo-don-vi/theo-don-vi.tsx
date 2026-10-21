@@ -6,7 +6,6 @@ import { parseAsBoolean, useQueryState, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
-import { CayCanChinh } from "../cay-can-chinh";
 import { ChamDiem } from "../cham-diem";
 import { useChuKy } from "../chon-chu-ky";
 import { GOC, giaiDon } from "../don-dich";
@@ -26,7 +25,7 @@ import {
 } from "../okr-search-params";
 import { useChuyenLinkCuSoan } from "../soan/chuyen-link-cu";
 import { useTenGoc } from "../ten-goc";
-import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
+import { ChuaChuKy, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 import { BangDonVi } from "./bang";
 import { conTrucTiep, duongCha } from "./bang-don-vi";
 import { ChanBang } from "./chan-bang";
@@ -74,34 +73,6 @@ function viTriNguoi(cay: CayDuLieu, id: string) {
 		...cay.chuaXep,
 	].find((x) => x.id === p?.primaryDepartmentId);
 	return { phongBan: pb?.name ?? null, quanLy: p?.manager?.name ?? null };
-}
-
-export function XemCay({
-	cycleId,
-	tenGoc,
-	tenKy,
-}: {
-	cycleId: string;
-	tenGoc: string;
-	tenKy: string;
-}) {
-	const trpc = useTRPC();
-	const cay = useQuery(trpc.okr.cayCanChinh.queryOptions({ cycleId }));
-	if (cay.isPending) return <DangTai />;
-	if (cay.isError) return <Loi thuLai={() => void cay.refetch()} />;
-	if (cay.data.roots.length === 0 && cay.data.chuaCanChinh.length === 0)
-		return (
-			<Rong tenDon={tenGoc} tenKy={tenKy} chuaTruong={false} quanTri={false} />
-		);
-	return (
-		<div data-trang-thai="ST-donvi-caycanchinh">
-			<CayCanChinh
-				roots={cay.data.roots}
-				chuaCanChinh={cay.data.chuaCanChinh}
-				canh={cay.data.canh}
-			/>
-		</div>
-	);
 }
 
 function KhungCachXem({
@@ -226,12 +197,6 @@ export function TheoDonVi() {
 		than = (
 			<KhungCachXem hang={hang}>
 				<HopTuan cycleId={currentId} key={khoa} unit={don} />
-			</KhungCachXem>
-		);
-	} else if (xem === "cay") {
-		than = (
-			<KhungCachXem hang={hang}>
-				<XemCay cycleId={currentId} tenGoc={tenGoc} tenKy={tenKy} />
 			</KhungCachXem>
 		);
 	} else if (byUnit.isPending || byUnit.isPlaceholderData) {

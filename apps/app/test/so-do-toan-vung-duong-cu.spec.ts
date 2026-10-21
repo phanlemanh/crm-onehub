@@ -121,6 +121,44 @@ function tepDuoi(thuMuc: string): string[] {
 	});
 }
 
+describe("vk6-bo-cay", () => {
+	test("vk6-bo-cay: trang Bộ OKR chuyển ?xemOkr=cay tới Sơ đồ", async () => {
+		const { default: TrangBoOkr } = await import(
+			"@/app/(app)/[slug]/okr/theo-don-vi/page"
+		);
+		const dich = async (thamSo: Record<string, string>) => {
+			const cay = TrangBoOkr({
+				params: Promise.resolve({ slug: "ws" }),
+				searchParams: Promise.resolve(thamSo),
+			});
+			const chuyen = timThanhPhan(cay, "ChuyenSoDoCu");
+			if (!chuyen) return "khong co lop chuyen";
+			try {
+				await (chuyen.type as (p: unknown) => Promise<null>)(chuyen.props);
+				return null;
+			} catch (e) {
+				const digest = (e as { digest?: string }).digest ?? "";
+				if (!digest.startsWith("NEXT_REDIRECT")) throw e;
+				return digest.split(";")[2] ?? null;
+			}
+		};
+		const CA: [Record<string, string>, string | null][] = [
+			[{ xemOkr: "cay", donOkr: "pb:cskh" }, "/ws/okr/so-do?moDonVi=pb%3Acskh"],
+			[{ xemOkr: "cay" }, "/ws/okr/so-do"],
+			[{ xemOkr: "cay", donOkr: "goc" }, "/ws/okr/so-do"],
+			[{ xemOkr: "danh-sach", donOkr: "pb:cskh" }, null],
+		];
+		const ket: string[] = [];
+		for (const [vao, mong] of CA) {
+			const ra = await dich(vao);
+			ket.push(
+				`${JSON.stringify(vao)} → ${ra}${ra === mong ? "" : ` (mong ${mong})`}`,
+			);
+		}
+		expect(ket.filter((k) => k.includes("(mong"))).toEqual([]);
+	});
+});
+
 describe("vk6-duong-cu", () => {
 	test("vk6-duong-cu: năm ca qua lớp chuyển thật", async () => {
 		const ket: string[] = [];

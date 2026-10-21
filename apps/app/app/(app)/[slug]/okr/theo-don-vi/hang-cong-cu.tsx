@@ -35,7 +35,6 @@ export function HangCongCuDonVi({
 			<ViewSwitch
 				items={[
 					{ value: "danh-sach", label: m.danhSach },
-					{ value: "cay", label: m.cayCanChinh },
 					{ value: "hop-tuan", label: mt.hopTuan.cachXem },
 					...(coCham ? [{ value: "cham", label: mk.cham.cachXem }] : []),
 				]}

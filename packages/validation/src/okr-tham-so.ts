@@ -6,7 +6,7 @@ export const THAM_SO_OKR = {
 	xem: "xemOkr",
 } as const;
 
-export const CACH_XEM_OKR = ["danh-sach", "cay", "hop-tuan", "cham"] as const;
+export const CACH_XEM_OKR = ["danh-sach", "hop-tuan", "cham"] as const;
 
 export type CachXemOkr = (typeof CACH_XEM_OKR)[number];
 
