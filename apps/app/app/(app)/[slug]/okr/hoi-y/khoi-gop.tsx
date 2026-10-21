@@ -41,6 +41,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "@crm/ui/components/field";
+import { HangHanhDongBamDay } from "@crm/ui/components/hang-hanh-dong-bam-day";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import {
@@ -56,7 +57,15 @@ import { StatCard } from "@crm/ui/components/stat-card";
 import { Textarea } from "@crm/ui/components/textarea";
 import { gopYInput, OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { useMutation } from "@tanstack/react-query";
-import { type FormEvent, type ReactNode, useId, useState } from "react";
+import {
+	type FormEvent,
+	type ReactNode,
+	type RefObject,
+	useId,
+	useRef,
+	useState,
+} from "react";
+import { flushSync } from "react-dom";
 import { toast } from "sonner";
 import {
 	type OkrHoiYMessages,
@@ -144,20 +153,25 @@ function TruongY({
 	gia,
 	onDoi,
 	loi,
+	khoiY,
+	oY,
 }: {
 	gia: NoiDungY;
 	onDoi: (moi: NoiDungY) => void;
 	loi: string | null;
+	khoiY?: RefObject<HTMLDivElement | null>;
+	oY?: RefObject<HTMLTextAreaElement | null>;
 }) {
 	const m = okrHoiYMessages(useLocale()).gop;
 	const id = useId();
 	return (
 		<>
-			<Field data-invalid={loi ? true : undefined}>
+			<Field data-invalid={loi ? true : undefined} ref={khoiY}>
 				<FieldLabel htmlFor={`${id}-y`}>{m.y}</FieldLabel>
 				<Textarea
 					aria-invalid={loi ? true : undefined}
 					id={`${id}-y`}
+					ref={oY}
 					maxLength={OKR_HOI_Y.noiDung.max}
 					onChange={(e) => onDoi({ ...gia, noiDung: e.target.value })}
 					placeholder={m.yGoiY}
@@ -228,6 +242,8 @@ export function OSoanY({ h }: { h: HoiY }) {
 	const cache = useCrmCache();
 	const [gia, setGia] = useState<NoiDungY>(Y_TRONG);
 	const [loi, setLoi] = useState<string | null>(null);
+	const khoiY = useRef<HTMLDivElement>(null);
+	const oY = useRef<HTMLTextAreaElement>(null);
 	const conLai = OKR_HOI_Y.yMoiNguoi - h.cuaToi.y.length;
 	const gop = useMutation(
 		trpc.okr.gopY.mutationOptions({
@@ -243,8 +259,12 @@ export function OSoanY({ h }: { h: HoiY }) {
 	const gui = (e: FormEvent) => {
 		e.preventDefault();
 		const sai = loiNoiDung(gia.noiDung, t);
-		setLoi(sai);
-		if (sai) return;
+		flushSync(() => setLoi(sai));
+		if (sai) {
+			khoiY.current?.scrollIntoView({ block: "nearest" });
+			oY.current?.focus({ preventScroll: true });
+			return;
+		}
 		gop.mutate({
 			hoiYId: h.hoiY.id,
 			noiDung: gia.noiDung.trim(),
@@ -260,13 +280,15 @@ export function OSoanY({ h }: { h: HoiY }) {
 					<FieldGroup>
 						<TruongY
 							gia={gia}
+							khoiY={khoiY}
 							loi={loi}
+							oY={oY}
 							onDoi={(moi) => {
 								setGia(moi);
 								if (loi) setLoi(loiNoiDung(moi.noiDung, t));
 							}}
 						/>
-						<Field orientation="horizontal">
+						<HangHanhDongBamDay>
 							<FieldDescription>
 								{demSo(m.conDuoc.mot, m.conDuoc.nhieu, conLai)}
 							</FieldDescription>
@@ -274,7 +296,7 @@ export function OSoanY({ h }: { h: HoiY }) {
 								{gop.isPending ? <Spinner data-icon="inline-start" /> : null}
 								{m.gui}
 							</Button>
-						</Field>
+						</HangHanhDongBamDay>
 					</FieldGroup>
 				</form>
 			</CardContent>

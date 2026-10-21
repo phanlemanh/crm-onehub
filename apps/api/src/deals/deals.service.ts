@@ -40,6 +40,7 @@ import {
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
 import { FieldsService } from "../fields/fields.service";
+import { khoangMoc } from "../fields/moc-ngay";
 import { GIAI_DOAN_API } from "../giai-doan/giai-doan-config";
 import {
 	archivedFilter,
@@ -50,6 +51,8 @@ import {
 	ownerFilter,
 	paginate,
 	resolveOrderBy,
+	timTrang,
+	xepTheoId,
 } from "../trpc/list-input";
 import { DEAL_BOARD } from "./deal-board-config";
 import type {
@@ -138,27 +141,36 @@ export class DealsService {
 
 		const [rows, total, facetCounts, openValue, unconverted] =
 			await Promise.all([
-				this.db.deal.findMany({
-					where,
-					skip,
-					take,
-					orderBy: resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
-					select: {
-						id: true,
-						name: true,
-						stage: true,
-						amount: true,
-						currency: true,
-						baseAmount: true,
-						expectedCloseDate: true,
-						closedAt: true,
-						company: { select: COMPANY_SELECT },
-						owner: { select: OWNER_SELECT },
-						lastActivityAt: true,
-						createdAt: true,
-						archivedAt: true,
-					},
-				}),
+				this.fields
+					.sapTheoTruong("DEAL", input, where, { skip, take })
+					.then(async (theoTruong) =>
+						xepTheoId(
+							await this.db.deal.findMany({
+								...timTrang(
+									theoTruong,
+									where,
+									{ skip, take },
+									resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+								),
+								select: {
+									id: true,
+									name: true,
+									stage: true,
+									amount: true,
+									currency: true,
+									baseAmount: true,
+									expectedCloseDate: true,
+									closedAt: true,
+									company: { select: COMPANY_SELECT },
+									owner: { select: OWNER_SELECT },
+									lastActivityAt: true,
+									createdAt: true,
+									archivedAt: true,
+								},
+							}),
+							theoTruong,
+						),
+					),
 				this.db.deal.count({ where }),
 				this.facetCounts(input, filterableFields),
 				this.db.deal.aggregate({
@@ -241,27 +253,40 @@ export class DealsService {
 						_count: { _all: true },
 					}),
 					this.conversion.unconverted(stageWhere),
-					this.db.deal.findMany({
-						where: stageWhere,
-						take: DEAL_BOARD.cardsPerColumn,
-						orderBy,
-						select: {
-							id: true,
-							name: true,
-							stage: true,
-							amount: true,
-							currency: true,
-							baseAmount: true,
-							baseCurrency: true,
-							expectedCloseDate: true,
-							closedAt: true,
-							company: { select: COMPANY_SELECT },
-							owner: { select: OWNER_SELECT },
-							lastActivityAt: true,
-							createdAt: true,
-							archivedAt: true,
-						},
-					}),
+					this.fields
+						.sapTheoTruong("DEAL", input, stageWhere, {
+							skip: 0,
+							take: DEAL_BOARD.cardsPerColumn,
+						})
+						.then(async (theoTruong) =>
+							xepTheoId(
+								await this.db.deal.findMany({
+									...timTrang(
+										theoTruong,
+										stageWhere,
+										{ skip: 0, take: DEAL_BOARD.cardsPerColumn },
+										orderBy,
+									),
+									select: {
+										id: true,
+										name: true,
+										stage: true,
+										amount: true,
+										currency: true,
+										baseAmount: true,
+										baseCurrency: true,
+										expectedCloseDate: true,
+										closedAt: true,
+										company: { select: COMPANY_SELECT },
+										owner: { select: OWNER_SELECT },
+										lastActivityAt: true,
+										createdAt: true,
+										archivedAt: true,
+									},
+								}),
+								theoTruong,
+							),
+						),
 				]);
 				return {
 					stage,
@@ -299,7 +324,22 @@ export class DealsService {
 			}),
 		);
 
-		return { columns, reportingCurrency: base };
+		const truongThe = await this.fields.tableValuesFor(
+			"DEAL",
+			columns.flatMap((column) => column.cards.map((card) => card.id)),
+			DEAL_BOARD.truongTrenThe,
+		);
+
+		return {
+			columns: columns.map((column) => ({
+				...column,
+				cards: column.cards.map((card) => ({
+					...card,
+					fields: truongThe.get(card.id) ?? {},
+				})),
+			})),
+			reportingCurrency: base,
+		};
 	}
 
 	async byId(id: string) {
@@ -1088,30 +1128,9 @@ export class DealsService {
 }
 
 function closingFilter(window: ClosingWindow): Prisma.DealWhereInput {
-	const now = new Date();
-	const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-	const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-	const startOfMonthAfter = new Date(now.getFullYear(), now.getMonth() + 2, 1);
-
-	switch (window) {
-		case "overdue":
-			return {
-				expectedCloseDate: { lt: now },
-				...DANG_MO,
-			};
-		case "this-month":
-			return {
-				expectedCloseDate: { gte: startOfMonth, lt: startOfNextMonth },
-			};
-		case "next-month":
-			return {
-				expectedCloseDate: { gte: startOfNextMonth, lt: startOfMonthAfter },
-			};
-		case "later":
-			return { expectedCloseDate: { gte: startOfMonthAfter } };
-		case "none":
-			return { expectedCloseDate: null };
-	}
+	if (window === "none") return { expectedCloseDate: null };
+	const khoang = { expectedCloseDate: khoangMoc(window) };
+	return window === "overdue" ? { ...khoang, ...DANG_MO } : khoang;
 }
 
 function roleOrNull(value: string | null): string | null {

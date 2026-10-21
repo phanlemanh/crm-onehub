@@ -1,0 +1,24 @@
+{
+  "feature_plain": "Nhân viên bấm tiêu đề bất kỳ cột trường nào, kể cả trường tự tạo, để sắp danh sách; cột trường tự tạo ẩn hiện theo khổ màn như cột có sẵn cùng kiểu; thẻ Kanban hiện hai trường tự tạo đầu tiên.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ sắp danh sách Thoả thuận theo mọi trường tự tạo sắp được (chữ, số, ngày, lựa chọn theo thứ tự đã đặt, người theo tên), ô trống luôn nằm cuối, đi hết các trang không trùng không sót."},
+    {"id": "AC-2", "p": "Sẽ sắp được Công ty và Liên hệ theo trường tự tạo cùng luật; cột Điện thoại của Liên hệ cũng sắp được."},
+    {"id": "AC-4", "p": "Sẽ giữ thứ tự sắp khi chuyển sang bảng Kanban: thẻ trong mỗi giai đoạn theo cùng thứ tự, số đếm và tổng tiền của cột không đổi."},
+    {"id": "AC-5", "p": "Sẽ cho bấm tiêu đề để sắp ở mọi cột trường có kiểu sắp được, chuẩn hay tự tạo; trên điện thoại chọn qua menu sắp."},
+    {"id": "AC-6", "p": "Sẽ ẩn cột trường tự tạo ở khổ hẹp theo kiểu của nó, đúng như cột có sẵn cùng kiểu; cột có sẵn trông y như hôm nay."},
+    {"id": "AC-7", "p": "Sẽ hiện trên thẻ Kanban tối đa hai trường tự tạo đầu tiên đã bật «Hiện trong bảng», trường trống thì không có dòng."},
+    {"id": "AC-8", "p": "Sẽ sắp theo trường tự tạo nhanh gần bằng sắp theo Giá trị trên 5.000 thoả thuận mẫu."},
+    {"id": "AC-9", "p": "Sẽ có ảnh chụp bảng ở 1280, 768 và 375, và Kanban ở 1280 và 375, để anh nhìn tận mắt."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG báo lỗi khi đường dẫn hay view đã lưu sắp theo một trường đã lưu trữ hoặc không sắp được: bảng về thứ tự mặc định (theo Hỏi-4)."},
+    {"id": "OOS-1", "p": "KHÔNG làm lọc theo trường — để DA18."},
+    {"id": "OOS-2", "p": "KHÔNG sắp theo trường Tệp — để DA19."},
+    {"id": "OOS-3", "p": "KHÔNG sắp nhiều cột một lúc."},
+    {"id": "OOS-4", "p": "KHÔNG đổi bảng dùng chung, menu sắp hay mũi tên sắp (vùng của làn Mac Studio)."},
+    {"id": "OOS-5", "p": "KHÔNG đổi chỗ, bề rộng hay khổ ẩn của cột có sẵn."},
+    {"id": "OOS-6", "p": "KHÔNG cho chọn riêng trường nào lên thẻ Kanban — thẻ theo thứ tự ở Cài đặt › Trường."},
+    {"id": "OOS-7", "p": "KHÔNG sắp theo trường tự tạo ở danh sách khác ba bảng (ô chọn bản ghi, tìm nhanh, chiến dịch)."}
+  ],
+  "scope_plain": "Những việc dời sang hàng sau hoặc cố ý không làm:"
+}

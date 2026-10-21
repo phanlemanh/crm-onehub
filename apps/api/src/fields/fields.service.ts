@@ -7,18 +7,32 @@ import {
 } from "@crm/db";
 import {
 	attachValues,
+	type CachSapTruong,
+	cachLocTruong,
+	cachSapTruong,
+	columnFor,
 	type FieldDefinitionWithOptions,
+	type FieldTypeName,
 	FieldValueError,
 	type FieldValueJson,
 	fieldKeyFromLabel,
+	locDuocTrong,
 	type RecordField,
 	readValue,
 	recordColumn,
 	type SerializedField,
 	serializeField,
+	TIEN_TO_COT_TRUONG,
 	usesOptions,
 	writeValues,
 } from "@crm/db/fields";
+import {
+	GIA_TRI_TRONG,
+	type LocTruong,
+	LocTruongError,
+	MOC_NGAY,
+	phanTichLocTruong,
+} from "@crm/validation/bo-loc-truong";
 import {
 	BadRequestException,
 	ConflictException,
@@ -28,12 +42,14 @@ import {
 } from "@nestjs/common";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { Page, SortDirection } from "../trpc/list-input";
 import type {
 	FieldCreateInput,
 	FieldReorderInput,
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
+import { khoangMocTruong } from "./moc-ngay";
 
 const WITH_OPTIONS = {
 	options: { orderBy: { position: "asc" } },
@@ -44,6 +60,119 @@ const RELATIONS = {
 	CONTACT: "contact",
 	DEAL: "deal",
 } as const satisfies Record<FieldEntity, string>;
+
+export type DieuKienTruong =
+	| { fieldValues: { some: Prisma.FieldValueWhereInput } }
+	| { fieldValues: { none: Prisma.FieldValueWhereInput } }
+	| { OR: DieuKienTruong[] };
+
+function coGiaTriCua(definition: {
+	id: string;
+	type: FieldTypeName;
+}): Prisma.FieldValueWhereInput {
+	return {
+		fieldId: definition.id,
+		[columnFor(definition.type)]: { not: null },
+	};
+}
+
+function phanTich(
+	definition: FieldDefinitionWithOptions,
+	values: string[],
+): LocTruong {
+	try {
+		return phanTichLocTruong(cachLocTruong(definition.type), values);
+	} catch (error) {
+		if (error instanceof LocTruongError) {
+			throw new BadRequestException(
+				`${definition.label} (${definition.key}): ${error.message}`,
+			);
+		}
+		throw error;
+	}
+}
+
+function hoacCua(dieuKien: DieuKienTruong[]): DieuKienTruong {
+	return dieuKien.length === 1
+		? (dieuKien[0] as DieuKienTruong)
+		: { OR: dieuKien };
+}
+
+function dieuKienLoc(
+	definition: FieldDefinitionWithOptions,
+	values: string[],
+): DieuKienTruong {
+	const loc = phanTich(definition, values);
+	const fieldId = definition.id;
+	const co = (where: Prisma.FieldValueWhereInput): DieuKienTruong => ({
+		fieldValues: { some: { fieldId, ...where } },
+	});
+	const cacNhanh: DieuKienTruong[] = [];
+
+	switch (loc.cach) {
+		case "chua":
+			for (const chu of loc.chu) {
+				cacNhanh.push(co({ text: { contains: chu, mode: "insensitive" } }));
+			}
+			break;
+		case "khoang": {
+			if (loc.tu !== null || loc.den !== null) {
+				cacNhanh.push(
+					co({
+						number: { gte: loc.tu ?? undefined, lte: loc.den ?? undefined },
+					}),
+				);
+			}
+			break;
+		}
+		case "moc":
+			for (const moc of loc.moc)
+				cacNhanh.push(co({ date: khoangMocTruong(moc) }));
+			break;
+		case "tich":
+			for (const giaTri of new Set(loc.co)) {
+				cacNhanh.push(
+					giaTri
+						? co({ bool: true })
+						: { fieldValues: { none: { fieldId, bool: true } } },
+				);
+			}
+			break;
+		case "luaChon":
+			if (loc.id.length > 0) cacNhanh.push(co({ optionId: { in: loc.id } }));
+			break;
+		case "nguoi":
+			if (loc.id.length > 0) cacNhanh.push(co({ userId: { in: loc.id } }));
+			break;
+	}
+
+	if (loc.cach !== "tich" && loc.trong) {
+		cacNhanh.push({ fieldValues: { none: coGiaTriCua(definition) } });
+	}
+
+	return hoacCua(cacNhanh);
+}
+
+const TEN_BAN_GHI = {
+	COMPANY: [{ name: "asc" }],
+	CONTACT: [{ lastName: "asc" }, { firstName: "asc" }],
+	DEAL: [{ name: "asc" }],
+} as const satisfies Record<FieldEntity, readonly object[]>;
+
+export type WhereTheoLoai = {
+	COMPANY: Prisma.CompanyWhereInput;
+	CONTACT: Prisma.ContactWhereInput;
+	DEAL: Prisma.DealWhereInput;
+};
+
+function thuTuGiaTri(
+	cach: CachSapTruong,
+	dir: SortDirection,
+): Prisma.FieldValueOrderByWithRelationInput {
+	if (cach === "luaChon") return { option: { position: dir } };
+	if (cach === "nguoi") return { user: { name: dir } };
+	return { [cach]: dir };
+}
 
 @Injectable()
 export class FieldsService {
@@ -473,9 +602,100 @@ export class FieldsService {
 		return attachValues(definitions, rows);
 	}
 
+	async sapTheoTruong<E extends FieldEntity>(
+		entity: E,
+		sapXep: { sort?: string; dir: SortDirection },
+		where: WhereTheoLoai[E],
+		trang: Page,
+	): Promise<string[] | null> {
+		if (!sapXep.sort?.startsWith(TIEN_TO_COT_TRUONG)) return null;
+
+		const key = sapXep.sort.slice(TIEN_TO_COT_TRUONG.length);
+		if (!key) return null;
+
+		const definition = await this.db.fieldDefinition.findFirst({
+			where: { entity, key, archivedAt: null },
+			select: { id: true, type: true },
+		});
+		if (!definition) return null;
+
+		const cach = cachSapTruong(definition.type);
+		if (!cach) return null;
+
+		const relation = RELATIONS[entity];
+		const column = recordColumn(entity);
+		const coGiaTri = coGiaTriCua(definition);
+		const doanCo: Prisma.FieldValueWhereInput = {
+			...coGiaTri,
+			[relation]: { is: where },
+		};
+
+		const [soCo, hangCo] = await Promise.all([
+			this.db.fieldValue.count({ where: doanCo }),
+			this.db.fieldValue.findMany({
+				where: doanCo,
+				orderBy: [
+					thuTuGiaTri(cach, sapXep.dir),
+					...TEN_BAN_GHI[entity].map((thuTu) => ({ [relation]: thuTu })),
+					{ [column]: "asc" },
+				],
+				skip: trang.skip,
+				take: trang.take,
+				select: { [column]: true },
+			}),
+		]);
+
+		const ids = hangCo.flatMap((hang) => {
+			const id = hang[column];
+			return id ? [id] : [];
+		});
+
+		const conLai = trang.take - ids.length;
+		if (conLai <= 0) return ids;
+
+		const trong = await this.banGhiTrong(entity, where, coGiaTri, {
+			skip: Math.max(0, trang.skip - soCo),
+			take: conLai,
+		});
+
+		return [...ids, ...trong];
+	}
+
+	private async banGhiTrong<E extends FieldEntity>(
+		entity: E,
+		where: WhereTheoLoai[E],
+		coGiaTri: Prisma.FieldValueWhereInput,
+		trang: Page,
+	): Promise<string[]> {
+		const khongGiaTri = { fieldValues: { none: coGiaTri } };
+		const chon = { ...trang, select: { id: true } } as const;
+
+		const hang =
+			entity === "DEAL"
+				? await this.db.deal.findMany({
+						...chon,
+						where: { AND: [where as Prisma.DealWhereInput, khongGiaTri] },
+						orderBy: [...TEN_BAN_GHI.DEAL, { id: "asc" }],
+					})
+				: entity === "COMPANY"
+					? await this.db.company.findMany({
+							...chon,
+							where: { AND: [where as Prisma.CompanyWhereInput, khongGiaTri] },
+							orderBy: [...TEN_BAN_GHI.COMPANY, { id: "asc" }],
+						})
+					: await this.db.contact.findMany({
+							...chon,
+							where: { AND: [where as Prisma.ContactWhereInput, khongGiaTri] },
+							orderBy: [...TEN_BAN_GHI.CONTACT, { id: "asc" }],
+						});
+
+		return hang.map((dong) => dong.id);
+	}
+
 	async tableValuesFor(
 		entity: FieldEntity,
 		recordIds: string[],
+		gioiHan?: number,
 	): Promise<Map<string, Record<string, FieldValueJson>>> {
 		const byRecord = new Map<string, Record<string, FieldValueJson>>();
 
@@ -485,6 +705,7 @@ export class FieldsService {
 			where: { entity, archivedAt: null, showOnTable: true },
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
+			take: gioiHan,
 		});
 
 		if (definitions.length === 0) return byRecord;
@@ -518,12 +739,6 @@ export class FieldsService {
 		return byRecord;
 	}
 
-	/**
-	 * SELECT and USER fields are the only types with a fixed, small
-	 * vocabulary a facet can count, but only the ones an admin turned on
-	 * (`showOnFilter`) actually render — same opt-in as `showOnTable`, so the
-	 * filter bar doesn't fill up with every field ever created.
-	 */
 	async filters(entity: FieldEntity): Promise<SerializedField[]> {
 		const definitions = await this.filterableFieldsFor(entity);
 		return definitions.map(serializeField);
@@ -537,7 +752,6 @@ export class FieldsService {
 				entity,
 				archivedAt: null,
 				showOnFilter: true,
-				type: { in: ["SELECT", "USER"] },
 			},
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
@@ -566,10 +780,10 @@ export class FieldsService {
 			definitions.map((definition) => [definition.id, definition]),
 		);
 		const selectIds = definitions
-			.filter((definition) => definition.type === "SELECT")
+			.filter((definition) => cachLocTruong(definition.type) === "luaChon")
 			.map((definition) => definition.id);
 		const userIds = definitions
-			.filter((definition) => definition.type === "USER")
+			.filter((definition) => cachLocTruong(definition.type) === "nguoi")
 			.map((definition) => definition.id);
 
 		const [selectGroups, userGroups] = await Promise.all([
@@ -614,14 +828,88 @@ export class FieldsService {
 			bucket[group.userId] = (bucket[group.userId] ?? 0) + group._count._all;
 		}
 
+		const demThem = await Promise.all(
+			definitions.flatMap((definition) =>
+				this.demGiaTriMenu(entity, relationWhere, definition).map(
+					async ([gia, dem]) => [definition.key, gia, await dem] as const,
+				),
+			),
+		);
+
+		for (const [key, gia, dem] of demThem) {
+			const bucket = facetCounts[key] ?? {};
+			facetCounts[key] = bucket;
+			bucket[gia] = dem;
+		}
+
 		return facetCounts;
 	}
 
-	/** Translates selected filter values (by field key) into `FieldValue` `AND` conditions. */
+	private demGiaTriMenu(
+		entity: FieldEntity,
+		relationWhere: WhereTheoLoai[FieldEntity],
+		definition: FieldDefinitionWithOptions,
+	): Array<[string, Promise<number>]> {
+		const relation = RELATIONS[entity];
+		const fieldId = definition.id;
+		const demGiaTri = (where: Prisma.FieldValueWhereInput) =>
+			this.db.fieldValue.count({
+				where: { fieldId, ...where, [relation]: relationWhere },
+			});
+		const dem: Array<[string, Promise<number>]> = [];
+
+		if (cachLocTruong(definition.type) === "moc") {
+			for (const moc of MOC_NGAY) {
+				dem.push([moc, demGiaTri({ date: khoangMocTruong(moc) })]);
+			}
+		}
+
+		if (cachLocTruong(definition.type) === "tich") {
+			dem.push(["yes", demGiaTri({ bool: true })]);
+			dem.push([
+				"no",
+				this.demBanGhi(entity, relationWhere, {
+					fieldValues: { none: { fieldId, bool: true } },
+				}),
+			]);
+		}
+
+		if (locDuocTrong(definition.type)) {
+			dem.push([
+				GIA_TRI_TRONG,
+				this.demBanGhi(entity, relationWhere, {
+					fieldValues: { none: coGiaTriCua(definition) },
+				}),
+			]);
+		}
+
+		return dem;
+	}
+
+	private demBanGhi(
+		entity: FieldEntity,
+		where: WhereTheoLoai[FieldEntity],
+		them: DieuKienTruong,
+	): Promise<number> {
+		if (entity === "DEAL") {
+			return this.db.deal.count({
+				where: { AND: [where as Prisma.DealWhereInput, them] },
+			});
+		}
+		if (entity === "COMPANY") {
+			return this.db.company.count({
+				where: { AND: [where as Prisma.CompanyWhereInput, them] },
+			});
+		}
+		return this.db.contact.count({
+			where: { AND: [where as Prisma.ContactWhereInput, them] },
+		});
+	}
+
 	fieldFilters(
 		definitions: FieldDefinitionWithOptions[],
 		selected: Record<string, string[]>,
-	): Array<{ fieldValues: { some: Prisma.FieldValueWhereInput } }> {
+	): DieuKienTruong[] {
 		const byKey = new Map(
 			definitions.map((definition) => [definition.key, definition]),
 		);
@@ -632,16 +920,7 @@ export class FieldsService {
 				const definition = byKey.get(key);
 				if (!definition) return [];
 
-				return [
-					{
-						fieldValues: {
-							some:
-								definition.type === "USER"
-									? { fieldId: definition.id, userId: { in: values } }
-									: { fieldId: definition.id, optionId: { in: values } },
-						},
-					},
-				];
+				return [dieuKienLoc(definition, values)];
 			});
 	}
 
