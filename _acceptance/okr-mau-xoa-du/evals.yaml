@@ -1,0 +1,59 @@
+slug: okr-mau-xoa-du
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.okx_viec
+    expected: "exit 0; apps/api/test/okr-mau.spec.ts -t okx-viec: kho kiểm thật, nạp bộ mẫu, người mẫu gọi viec.create qua API (phiên dev-session) tạo một việc có một việc con và một người theo dõi; đếm trước: viec có hàng taoBoiId là người mẫu; chạy okr:mau --xoa → mã 0; viec, viecTheoDoi của các việc ấy = 0; demThamChieu(người mẫu) — đọc catalog Postgres pg_constraint, không đọc sổ khoá — toEqual {}; nạp lại → mã 0. Chiều đỏ ghim: trên bản sao bỏ bước dọn viec trong xoaTrong thì okr:mau --xoa thoát 5 và ca đỏ với thông điệp 'okx-viec: xoa thoat 5'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.okx_tin_hieu
+    expected: "exit 0; -t okx-tin-hieu: một tinHieu nguoiGuiId = người mẫu và một tinHieu nguoiGuiId = người ngoài, archivedById = người mẫu; okr:mau --xoa → mã 0; hàng thứ nhất không còn; hàng thứ hai còn, mọi cột khác giống hệt trước, archivedById = null. Chiều đỏ: bỏ bước dọn tinHieu thì hàng thứ nhất còn và ca đỏ 'okx-tin-hieu: con tin hieu cua nguoi mau'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.okx_ngoai_giu
+    expected: "exit 0; -t okx-ngoai-giu: một viec do người ngoài tạo, nguoiThucHienId = người mẫu; vanTayKho trước; okr:mau --xoa → mã 5 (OKR_MAU.ma.dangGiu); thông điệp chứa 'viec.nguoiThucHienId'; vanTayKho sau toEqual trước. Đối chứng dương cùng fixture: đổi nguoiThucHienId về người ngoài thì okr:mau --xoa → mã 0. Ca thứ hai -t okx-ngoai-giu-con: việc do người mẫu tạo có một việc con do người ngoài tạo → mã 5, thông điệp chứa 'viec.chaId', vanTayKho không đổi; ca thứ ba: phụ thuộc nối việc người mẫu với việc người ngoài → mã 5, thông điệp chứa 'viecPhuThuoc', không đổi gì."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.okx_ten_giu
+    expected: "exit 0; -t okx-ten-giu: tách thông điệp thành tập dòng '<bảng>.<cột> (n)' rồi so toEqual tập mong đợi: ca deal.ownerId = người mẫu → {'deal.ownerId (1)'}; ca viec.nguoiThucHienId → {'viec.nguoiThucHienId (1)'}; ca hai khoá cùng giữ → đúng hai dòng ấy; mọi ca không chứa chuỗi '(User)'. Ca đỏ của nhãn dán sai: trên bản sao, bỏ bước dọn viec trong xoaTrong mà sổ vẫn khai Viec.taoBoi là don, gieo một việc người mẫu tạo → mã 5 và tập đúng bằng {'viec.taoBoiId (1)', 'viec.nguoiGiaoId (1)', 'viec.nguoiThucHienId (1)'}. Ca đã ký 'dữ liệu ngoài bộ mẫu đang giữ người mẫu' vẫn đọc được chữ 'deal'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.okx_luoi
+    expected: "exit 0; apps/api/test/okr-mau-khoa-nguoi.spec.ts -t okx-luoi: đọc packages/db/prisma/schema.prisma (đường suy từ vị trí tệp kiểm), liệt mọi trường quan hệ tới User có onDelete Restrict, NoAction hoặc vắng; tập đó === tập khoá của sổ khoá (so cả hai chiều). Ma trận đỏ viết trước trên bản sao lược đồ trong bộ nhớ: thêm model 'ThuMoi' có khoá chặn tới User → đỏ gọi tên 'ThuMoi.nguoi'; xoá trường Viec.taoBoi khỏi bản sao → đỏ 'so khoa thua: Viec.taoBoi'; đổi Viec.taoBoi sang Cascade → đỏ 'so khoa thua'. Khoá sổ dùng khuôn Prisma '<Model>.<trường>'; một bài phụ đối chiếu mỗi khoá sổ với đúng một ràng buộc có thật trong pg_constraint của kho kiểm (qua @@map/@map) và ngược lại."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, packages/db/prisma/schema.prisma, apps/api/test/okr-mau-khoa-nguoi.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.okx_man_canh_kr
+    expected: "exit 0; một phiên đo riêng (tien-de.mjs), EVAL=E12,E15,E17 của _acceptance/canh-kr-okr/rang/man-canh-kr.mjs chạy trọn; dòng tổng kết man-canh-kr có '0 hong'; không dòng nào chứa 'don dep'. Chiều đỏ đã đo ở S1 trên e6c0296a4 (EVAL=E12): cùng lệnh thoát 1 với 'HONG: don dep: okr:mau --xoa thoat 5'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, _acceptance/canh-kr-okr/rang/man-canh-kr.mjs, scripts/lan-do/tien-de.mjs]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.okx_da_ky
+    expected: "exit 0; apps/api/test/okr-mau.spec.ts -t xoa-mau: ba ca đã ký (dùng rồi mới xoá, dữ liệu ngoài đang giữ dừng mã 5 không đổi gì, kho không có bộ mẫu) đều pass, không sửa assert nào của chúng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts]
