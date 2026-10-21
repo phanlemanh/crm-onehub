@@ -2,7 +2,11 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import Close from "@carbon/icons-react/es/Close";
-import { FIELD_TYPES, fieldKeyFromLabel } from "@crm/db/fields-shape";
+import {
+	FIELD_TYPES,
+	fieldKeyFromLabel,
+	locDuocTheoKieu,
+} from "@crm/db/fields-shape";
 import { Button } from "@crm/ui/components/button";
 import { Checkbox } from "@crm/ui/components/checkbox";
 import {
@@ -178,7 +182,7 @@ export function FieldEditor({
 
 	const key = field?.key ?? fieldKeyFromLabel(draft.label);
 	const saving = create.isPending || update.isPending;
-	const filterable = draft.type === "SELECT" || draft.type === "USER";
+	const filterable = locDuocTheoKieu(draft.type);
 
 	const save = () => {
 		const payload = {
