@@ -87,7 +87,8 @@
 		"./san-pham-lo-trinh": "./src/san-pham-lo-trinh.ts",
 		"./doc-du-lieu-lo-trinh": "./src/doc-du-lieu-lo-trinh.js",
 		"./tin-hieu": "./src/tin-hieu.ts",
-		"./thong-bao": "./src/thong-bao.ts"
+		"./thong-bao": "./src/thong-bao.ts",
+		"./bo-loc-truong": "./src/bo-loc-truong.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",

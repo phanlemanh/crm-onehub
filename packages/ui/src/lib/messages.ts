@@ -24,6 +24,12 @@ const en = {
 		searchFacet: (label: string) => `Search ${label}…`,
 		facetOptions: "Options",
 		facetEmpty: "Nothing matches.",
+		facetContains: "Contains…",
+		facetContainsLabel: (label: string) => `${label} contains`,
+		facetFrom: "From",
+		facetTo: "To",
+		facetRangeLabel: (label: string, end: string) =>
+			`${label} ${end.toLowerCase()}`,
 		noResults: "No results found.",
 		noMatch: "Nothing matches these filters",
 		noMatchDescription:
@@ -340,6 +346,11 @@ const vi = {
 		searchFacet: (label: string) => `Tìm ${label}…`,
 		facetOptions: "Các lựa chọn",
 		facetEmpty: "Không có gì khớp.",
+		facetContains: "Chứa…",
+		facetContainsLabel: (label: string) => `${label} chứa`,
+		facetFrom: "Từ",
+		facetTo: "Đến",
+		facetRangeLabel: (label: string, end: string) => `${end} ${label}`,
 		noResults: "Không tìm thấy kết quả nào.",
 		noMatch: "Không có kết quả nào khớp bộ lọc",
 		noMatchDescription:

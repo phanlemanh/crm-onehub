@@ -439,7 +439,7 @@ function maTranSo0(): O[] {
 	const d = dealMessages("vi");
 	const t = thanhVienMessages("vi");
 	const k1 = TRUONG[0]?.label ?? "";
-	const soTruong = TRUONG[0]?.options.length ?? 0;
+	const soTruong = (TRUONG[0]?.options.length ?? 0) + 1;
 	return [
 		{
 			bang: "ca-nhan",
