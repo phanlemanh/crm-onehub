@@ -197,7 +197,7 @@ export function duongTheoDonVi(slug: string, dv: DonViSoan): string {
 		[SEARCH_PARAM.okr.ky]: dv.cycleId,
 		[SEARCH_PARAM.okr.don]: khoaDonCua(dv),
 	});
-	return `/${slug}/okr/theo-don-vi?${q.toString()}`;
+	return `/${slug}/okr/bo-okr?${q.toString()}`;
 }
 
 export function duongMoCuoc(
@@ -214,7 +214,7 @@ export function duongMoCuoc(
 			: {},
 	);
 	q.set(SEARCH_PARAM.record.stack, `soan:${cuocSoanId}`);
-	return `/${slug}/okr/theo-don-vi?${q.toString()}`;
+	return `/${slug}/okr/bo-okr?${q.toString()}`;
 }
 
 export function duongTrangSoan(slug: string, cuocSoanId: string): string {

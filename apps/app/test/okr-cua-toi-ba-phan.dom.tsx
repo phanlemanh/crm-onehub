@@ -489,7 +489,7 @@ describe("ctbp-don-vi-dan", () => {
 						?.getAttribute("href");
 					const khoa = t.getAttribute("data-don-vi-dan") ?? "";
 					expect(href).toBe(
-						`/ws/okr/theo-don-vi?${new URLSearchParams({ donOkr: khoa, kyOkr: "q4" })}`,
+						`/ws/okr/bo-okr?${new URLSearchParams({ donOkr: khoa, kyOkr: "q4" })}`,
 					);
 					if (!coMucTieu) {
 						expect(t.textContent).toContain(m.donViRong("Quý 4/2026"));
@@ -972,7 +972,7 @@ const { TAB } = await import("@/app/(app)/[slug]/okr/tab-okr");
 
 describe("ctbp-bon-the", () => {
 	const KY_VONG = {
-		vi: ["Của tôi", "Theo đơn vị", "Toàn cảnh", "Hỏi ý"],
+		vi: ["Của tôi", "Theo đơn vị", "Toàn cảnh", "Lấy ý kiến"],
 		en: ["Mine", "By unit", "Overview", "Call for ideas"],
 	} as const;
 	for (const locale of ["vi", "en"] as const)

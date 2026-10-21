@@ -1,10 +1,12 @@
 import type {
 	DuLieuChoXem,
 	HangChoXem,
+	LoTrinhChoXem,
 	MocLoTrinh,
 	NhomTrangThai,
 } from "@crm/validation/lo-trinh-du-lieu";
 import { type DuKienMoc, duKienMoc } from "@/lib/lo-trinh/du-kien";
+import { type DemMoc, moHinhCua, tenViec } from "@/lib/lo-trinh/mo-hinh";
 import { soNgay, soSanhMoc, viecTre } from "@/lib/lo-trinh/ngay";
 import type { BoLoc, VongDoi } from "./tham-so";
 
@@ -29,6 +31,8 @@ export type Viec = HangChoXem & {
 	loTep: string;
 	loTen: string;
 	moc: MocLoTrinh | null;
+	ten: string;
+	chuaHen: boolean;
 	tre: boolean;
 	conNgay: number | null;
 	duKien: DuKienMoc | null;
@@ -41,17 +45,17 @@ export type TuyChonLoc = Record<BoLoc, string[]>;
 
 export function phangViec(duLieu: DuLieuChoXem, homNay: string | null): Viec[] {
 	return duLieu.lo_trinh.flatMap((lo) => {
-		const theoMoc = new Map<string, MocLoTrinh>();
-		for (const m of lo.moc)
-			for (const ma of m.hang) if (!theoMoc.has(ma)) theoMoc.set(ma, m);
+		const mh = moHinhCua(lo);
 		const tre = new Set(homNay === null ? [] : viecTre(lo, homNay));
 		return lo.hang.map((h) => {
-			const moc = theoMoc.get(h.ma) ?? null;
+			const moc = mh.mocCuaMa.get(h.ma) ?? null;
 			return {
 				...h,
 				loTep: lo.tep,
 				loTen: lo.ten ?? lo.tep,
 				moc,
+				ten: tenViec(h),
+				chuaHen: mh.chuaHen.has(h.ma),
 				tre: tre.has(h.ma),
 				conNgay:
 					homNay !== null && moc?.ngayHopLe
@@ -69,6 +73,27 @@ export function phangViec(duLieu: DuLieuChoXem, homNay: string | null): Viec[] {
 
 export function khoaMocCua(tep: string, moc: MocLoTrinh): string {
 	return `${tep}@${moc.ngay}@${moc.ten}`;
+}
+
+export type MocHien = {
+	khoa: string;
+	moc: MocLoTrinh;
+	loTrinh: LoTrinhChoXem;
+	dem: DemMoc | null;
+};
+
+export function mocHienCua(duLieu: DuLieuChoXem): MocHien[] {
+	return duLieu.lo_trinh.flatMap((lo) => {
+		const mh = moHinhCua(lo);
+		return lo.moc
+			.filter((m) => mh.mocHien.has(m))
+			.map((m) => ({
+				khoa: khoaMocCua(lo.tep, m),
+				moc: m,
+				loTrinh: lo,
+				dem: mh.dem.get(m) ?? null,
+			}));
+	});
 }
 
 export function khoaMoc(v: Viec): string {
@@ -94,6 +119,7 @@ export function hopTim(v: Viec, q: string): boolean {
 	return (
 		tim === "" ||
 		v.cau_giao.toLowerCase().includes(tim) ||
+		v.ten.toLowerCase().includes(tim) ||
 		v.ma.toLowerCase().includes(tim)
 	);
 }
@@ -109,9 +135,7 @@ export function thuocVongDoi(v: Viec, vongDoi: VongDoi): boolean {
 
 export function tuyChonLoc(duLieu: DuLieuChoXem, viec: Viec[]): TuyChonLoc {
 	const nhom = [...new Set(viec.map((v) => v.nhom))].filter(Boolean);
-	const moc = duLieu.lo_trinh.flatMap((lo) =>
-		lo.moc.filter((m) => m.hang.length > 0).map((m) => khoaMocCua(lo.tep, m)),
-	);
+	const moc = mocHienCua(duLieu).map((x) => x.khoa);
 	return {
 		loTrinh: duLieu.lo_trinh.map((l) => l.tep),
 		nhom: [...nhom, KHONG_NHOM],

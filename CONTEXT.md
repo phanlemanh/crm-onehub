@@ -263,6 +263,7 @@ Vì sao: người dùng nói «B phải chờ A»; «liên kết» đã là ch�
 **Lịch làm việc**: ngày nào cả công ty nghỉ — các thứ nghỉ trong tuần (mặc định Thứ Bảy, Chủ nhật) và
 ngày lễ do chủ hay quản trị thêm ở Cài đặt. Tự dời và luật phụ thuộc bỏ qua ngày nghỉ; đổi lịch không
 dời việc đã có ngày, chỉ lần ghi sau mới tính theo lịch mới. Đặt 2026-10-16 (hàng DA4).
+Quản trị bỏ chọn hết thì không nghỉ ngày nào trong tuần (hàng DA12).
 _Avoid_: lịch nghỉ, calendar, working calendar
 Vì sao: «Lịch» trần lẫn với lịch hẹn của Google, Microsoft.
 
@@ -1283,6 +1284,15 @@ Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sa
 lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
 được nhận làm, còn tín hiệu chưa hứa gì.
 
+**Lưu trữ tín hiệu**: chủ hoặc quản trị CRM cất một tín hiệu rác (thử, trùng, gửi nhầm) khỏi thẻ «Tất cả» trước khi
+đội sản phẩm lấy về; lượt lấy về bỏ qua nó. Có «Hoàn tác» ngay sau khi bấm và «Khôi phục» ở «Đã lưu trữ»; mỗi lần lưu
+trữ hay khôi phục ghi lại ai làm. Tín hiệu đội sản phẩm đã lấy về thì không lưu trữ được nữa. Người gửi vẫn thấy tín
+hiệu của mình, nhãn «Đã lưu trữ», và vẫn tự xoá được. Không có xoá vĩnh viễn. Chốt 2026-10-19 tại Cổng Phạm vi của
+`go-tin-hieu-rac`.
+_Avoid_: gỡ (khi ý là lưu trữ), ẩn, xoá, đánh dấu rác
+Vì sao: «gỡ» và «ẩn» trong từ điển là chữ của quyền, liên kết và chu kỳ; «xoá» là mất thật — tín hiệu lưu trữ thì lấy
+lại được.
+
 **Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
 của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè
 bản cũ, không giữ lịch sử. Trang Lộ trình đọc bản chụp khi nó mới hơn bản CRM đang chạy, và
@@ -1291,6 +1301,15 @@ bản cũ, không giữ lịch sử. Trang Lộ trình đọc bản chụp khi n
 _Avoid_: bản sao, cache, snapshot
 Vì sao: «bản sao» gợi một bản người tự chép tay; «cache» là chuyện kỹ thuật của trang, không
 nói bản này đến từ đâu và lấy lúc nào.
+
+**Sản phẩm** (trên trang Lộ trình): một kho phần mềm của OneHub có lộ trình riêng mà trang Lộ trình
+đọc được — CRM, kho kit nghiệm thu, OneHub Platform. CRM khai sẵn trong mã và luôn có; sản phẩm
+khác do chủ hay quản trị khai ở Cài đặt › Sản phẩm (tên, kho GitHub, nhánh, đường tệp) và chọn
+người xem. Chủ và quản trị luôn thấy mọi sản phẩm. Đề xuất 2026-10-20 (LT3 `lo-trinh-nhieu-san-pham`),
+chốt tại Cổng Phạm vi.
+_Avoid_: dự án, repo, kho (khi nói với người dùng)
+Vì sao: «dự án» đã là một loại bản ghi của khu Việc và Dự án; «repo» và «kho» là chỗ lộ trình
+nằm, không phải thứ người đọc đang chọn.
 
 **Khoá chỉ kéo tín hiệu**: một khoá API chỉ làm được đúng một việc — kéo tín hiệu về kho
 cho lịch chạy hằng ngày. Khoá không đăng nhập được ở đâu, không đọc bản ghi, không tạo hay

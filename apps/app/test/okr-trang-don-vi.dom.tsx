@@ -1437,7 +1437,7 @@ describe("dvb-loc-nhanh", () => {
 		expect(s2.url().get("locNhanhOkr")).toBeNull();
 	});
 
-	test("en: All, Needs discussion, Not aligned (rut tu messages)", async () => {
+	test("en: All, Needs discussion, Not contributing (rut tu messages)", async () => {
 		const en = okrMessages("en").donViBang.locNhanh;
 		datDon("pb:P1", maTranLocNhanh());
 		const s = await moTrang("pb:P1", {}, "en");
@@ -1448,7 +1448,7 @@ describe("dvb-loc-nhanh", () => {
 		expect(nhan).toEqual([en.tatCa, en["can-ban"], en["chua-gop"]]);
 		expect([en["can-ban"], en["chua-gop"]]).toEqual([
 			"Needs discussion",
-			"Not aligned",
+			"Not contributing",
 		]);
 	});
 
@@ -1804,9 +1804,9 @@ async function lienKetThe(tham: string, tab: (typeof TAB)[number]) {
 
 const DUONG_THE = {
 	"cua-toi": "/ws/okr",
-	"theo-don-vi": "/ws/okr/theo-don-vi",
-	"toan-canh": "/ws/okr/toan-canh",
-	"hoi-y": "/ws/okr/hoi-y",
+	"theo-don-vi": "/ws/okr/bo-okr",
+	"toan-canh": "/ws/okr/suc-khoe",
+	"hoi-y": "/ws/okr/lay-y-kien",
 } satisfies Record<(typeof TAB)[number], string>;
 
 describe("dvb-giu-xem", () => {

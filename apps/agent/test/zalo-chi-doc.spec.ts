@@ -138,6 +138,7 @@ describe("chi-doc", () => {
 			recordId: contactId,
 			key: KHOA,
 			value: "web-ghi",
+			unattended: false,
 		});
 		expect(ket.written, "duong ghi that van song").toBe(true);
 		expect(await giaTri()).toBe("web-ghi");

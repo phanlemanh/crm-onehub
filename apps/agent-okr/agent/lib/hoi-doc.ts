@@ -7,6 +7,7 @@ import {
 } from "@crm/db/okr-tien-do";
 import { MUC_TU_TIN } from "@crm/db/okr-tro-ly-danh-muc";
 import { ngayVN } from "@crm/db/onboarding-nhac";
+import { readTenGoc } from "@crm/db/workspace";
 import { kieuKr, tienDoKr } from "@crm/validation/okr-kr";
 import {
 	LOAI_MUC_TIEU,
@@ -125,8 +126,8 @@ type HangMucTieu = Awaited<
 	ReturnType<typeof db.okrObjective.findMany<{ select: typeof chonMucTieu }>>
 >[number];
 
-function tenDonVi(r: HangMucTieu): string {
-	if (r.level === "onehub") return TRO_LY_OKR_HOI.tenGoc;
+function tenDonVi(r: HangMucTieu, tenGoc: string): string {
+	if (r.level === "onehub") return tenGoc;
 	return r.division?.name ?? r.department?.name ?? r.person?.name ?? "";
 }
 
@@ -143,6 +144,7 @@ function dungMucTieu(
 	trongSo: boolean,
 	homNay: Date,
 	userId: string,
+	tenGoc: string,
 ): MucTieuDay {
 	const kr = r.keyResults.map((k) => {
 		const kieu = kieuKr.parse(k.kind);
@@ -177,7 +179,7 @@ function dungMucTieu(
 	return {
 		id: r.id,
 		ten: r.title,
-		donVi: tenDonVi(r),
+		donVi: tenDonVi(r, tenGoc),
 		loai: loaiMt,
 		chuKy: r.cycle.name,
 		chuKyId: r.cycleId,
@@ -291,8 +293,9 @@ export async function timOkr(
 		select: chonMucTieu,
 	});
 	const trongSo = await coTrongSo();
+	const tenGoc = await readTenGoc(db);
 	const khop = hang
-		.map((r) => dungMucTieu(r, trongSo, homNay, userId))
+		.map((r) => dungMucTieu(r, trongSo, homNay, userId, tenGoc))
 		.filter((m) => !loc.tinhTrang || m.tinhTrang === loc.tinhTrang);
 	const tran = TRO_LY_OKR_HOI.tranKetQua.mucTieu;
 	const mucTieu = khop.slice(0, tran).map(({ capNhat: _bo, ...m }) => m);
@@ -327,6 +330,12 @@ export async function docOkr(
 	if (!hang) return { ok: false, reason: TU_CHOI.khongThay };
 	return {
 		ok: true,
-		mucTieu: dungMucTieu(hang, await coTrongSo(), homNay, userId),
+		mucTieu: dungMucTieu(
+			hang,
+			await coTrongSo(),
+			homNay,
+			userId,
+			await readTenGoc(db),
+		),
 	};
 }

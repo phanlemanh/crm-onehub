@@ -15,6 +15,7 @@ import { DuAnGanttMau } from "./_modules/du-an-gantt";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
+import { GoTinHieuRacMau } from "./_modules/go-tin-hieu-rac";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
 import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
 import { HopThongBaoMau } from "./_modules/hop-thong-bao-tren-web";
@@ -30,6 +31,7 @@ import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { LichSuVaLuuTruTrangMau } from "./_modules/lich-su-va-luu-tru-trang";
 import { LoTrinhDocBanChupMau } from "./_modules/lo-trinh-doc-ban-chup";
 import { LoTrinhHienNgayDuKienMau } from "./_modules/lo-trinh-hien-ngay-du-kien";
+import { LoTrinhNhieuSanPhamMau } from "./_modules/lo-trinh-nhieu-san-pham";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
 import { MoiTinHieuChoQuanTriMau } from "./_modules/moi-tin-hieu-cho-quan-tri";
@@ -88,6 +90,7 @@ const BANG_GHEP = {
 	"to-chuc-danh-sach-chi-tiet": ToChucDanhSachChiTietMau,
 	"toan-canh-okr": ToanCanhOkrMau,
 	"lo-trinh-doc-ban-chup": LoTrinhDocBanChupMau,
+	"lo-trinh-nhieu-san-pham": LoTrinhNhieuSanPhamMau,
 	"lo-trinh-hien-ngay-du-kien": LoTrinhHienNgayDuKienMau,
 	"ngan-ho-so-trong-lo-trinh": NganHoSoMau,
 	"trang-lo-trinh-trong-crm": TrangLoTrinhMau,
@@ -114,6 +117,7 @@ const BANG_GHEP = {
 	"gui-tin-hieu-trong-crm": GuiTinHieuMau,
 	"hop-thong-bao-tren-web": HopThongBaoMau,
 	"moi-tin-hieu-cho-quan-tri": MoiTinHieuChoQuanTriMau,
+	"go-tin-hieu-rac": GoTinHieuRacMau,
 	"tin-hieu-tu-ve-kho": TinHieuTuVeKhoMau,
 	"du-an-gantt": DuAnGanttMau,
 	"kanban-viec": KanbanViecMau,

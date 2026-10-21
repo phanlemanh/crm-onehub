@@ -218,6 +218,17 @@
         "F34"
       ],
       "ly_do": "Làn MacBook Pro, dùng giu-tuoi của kit 2.33 (K-A). Tồn đọng 262 hồ sơ ngày 19/10. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+    },
+    {
+      "ten": "Ngăn bản ghi trượt mượt — cùng đợt sửa record-sheet với l5",
+      "ngay": "2026-10-22",
+      "loai": "phat-hanh",
+      "khoa": "m-1022vs",
+      "hang": [
+        "VS8"
+      ],
+      "ly_do": "Làn M5 (đề xuất M5 #375 13:52Z): VS8 đi ngay sau l5 «Sửa một đợt» (lộ trình Kho tài liệu, 22/10) vì cùng vùng apps/app/components/crm/record-sheet; mốc riêng vì mốc không gom hàng của hai tệp lộ trình. VK7 của làn Mac Studio đứng sau. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng.",
+      "that": "2026-10-19"
     }
   ],
   "hang": [
@@ -2599,12 +2610,12 @@
       "ten": "Giai đoạn bỏ mặc định",
       "ten_ngan": "Bỏ mặc định",
       "cau_giao": "«Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu»",
-      "ghi_chu": "Lối A tách khỏi E4 (#345). Chỉ mở khi tro-ly-okr-nen và bo-okr-mau đã gỡ kẹt; khi đó check-types bắt mọi đường tạo thiếu stage.",
+      "ghi_chu": "Lối A tách khỏi E4 (#345). Chỉ mở khi tro-ly-okr-nen và bo-okr-mau đã gỡ kẹt; khi đó check-types bắt mọi đường tạo thiếu stage. Chủ kho giao lại từ làn M5 sang làn Mac Studio ngày 20/10 («Giao lại các hạng mục OKR của M5 cho Mac Studio»).",
       "dung_tren": [
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Làn M5 · thứ 2"
+      "buoc_ke": "Làn Mac Studio"
     },
     {
       "ma": "E6b",
@@ -2920,7 +2931,7 @@
       "ma": "F34",
       "slug": "cham-bo-do-chiu-cau-loi",
       "nhom": "ve-sinh",
-      "thu_tu": 501.0,
+      "thu_tu": 501,
       "ngay": "2026-10-16",
       "ten": "Chấm bộ đo chịu câu lỗi",
       "ten_ngan": "Bộ đo chịu lỗi",
@@ -2998,9 +3009,9 @@
       "ten": "Ngăn bản ghi không dựng lại khi mở, đóng",
       "ten_ngan": "Ngăn bản ghi trượt mượt",
       "cau_giao": "«Mở hay đóng ngăn bản ghi thì ngăn trượt ra, vào như cũ, không biến mất rồi hiện lại, mà vẫn chỉ nạp sẵn đúng các khoá của #469»",
-      "ghi_chu": "Ngoài-8 của ve-sinh-do-san-onehub (Known limit ở Cổng 2). Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx: HydrationBoundary chỉ bọc khi stack.length > 0 nên RecordSheetHost bị dựng lại. Chứng minh: bài kiểm DOM về danh tính RecordSheetHost qua mở, đóng; ca đối chứng apps/app/test/ngan-ban-ghi-nap-san.dom.tsx giữ xanh. T2, M5 ước 3–4 giờ máy. Đi sau khi #469 gộp.",
+      "ghi_chu": "Ngoài-8 của ve-sinh-do-san-onehub (Known limit ở Cổng 2). Chủ kho chọn «thêm» ở phiên Mac Studio 17/10 (đề xuất của M5 15:48Z, đề bài #375 15:50Z). Tệp gốc apps/app/components/crm/record-sheet/nap-san-khi-mo-ngan.tsx: HydrationBoundary chỉ bọc khi stack.length > 0 nên RecordSheetHost bị dựng lại. Chứng minh: bài kiểm DOM về danh tính RecordSheetHost qua mở, đóng; ca đối chứng apps/app/test/ngan-ban-ghi-nap-san.dom.tsx giữ xanh. T2, M5 ước 3–4 giờ máy. Đi sau khi #469 gộp. Gộp qua #498 (c689ed957) ngày 19/10.",
       "dung_tren": [],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "buoc_ke": "Làn M5 · thứ 1"
     },
     {
@@ -3075,8 +3086,8 @@
       "cau_giao": "«Lần đẩy chỉ chạm tệp đọc được phân loại đúng T1»",
       "ghi_chu": "Làn M5. Cổng Đáng và Cổng Phạm vi đã ký, S3 xong, chờ làn.",
       "dung_tren": [],
-      "trang_thai": "đang dựng",
-      "buoc_ke": "Làn M5 sau DA4"
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Đã gộp #480 (96a1cb64a) 18/10"
     },
     {
       "ma": "C-1c",
@@ -3091,8 +3102,8 @@
       "dung_tren": [
         "C-1b"
       ],
-      "trang_thai": "chưa mở",
-      "buoc_ke": "Chờ Cổng Đáng; làn M5 sau C-1b (chính sách chủ kho 17/10: ship nhanh mà vẫn tin được)"
+      "trang_thai": "đã lên onehub",
+      "buoc_ke": "Đã gộp #481 (0c71e76c3) 18/10"
     },
     {
       "ma": "VK1",

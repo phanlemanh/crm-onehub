@@ -209,7 +209,6 @@ export const TRO_LY_OKR_HOI = {
 	purpose: OKR_PHIEN_HOI.purpose,
 	tinhNang: OKR_HOI_TRAN.tinhNang satisfies TinhNang,
 	tran: OKR_HOI_TRAN,
-	tenGoc: "OneHub",
 	tranKetQua: { mucTieu: 30, kr: 60, capNhat: 4, quet: 300 },
 	tuChoi: {
 		saiMucDich: "Công cụ này chỉ dùng trong cuộc hỏi OKR.",

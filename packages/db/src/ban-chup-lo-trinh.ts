@@ -28,6 +28,7 @@ export async function ghiBanChupLoTrinh(
 	db: Db,
 	vao: GhiBanChup,
 	now: Date,
+	tuyChon: { thayHan?: boolean } = {},
 ): Promise<KetQuaGhiBanChup> {
 	const commitLuc = new Date(vao.commitLuc);
 	const moi = {
@@ -37,6 +38,14 @@ export async function ghiBanChupLoTrinh(
 		duLieu: vao.duLieu,
 		canhBao: vao.canhBao,
 	};
+	if (tuyChon.thayHan) {
+		await db.banChupLoTrinh.upsert({
+			where: { nguon: vao.nguon },
+			create: { nguon: vao.nguon, ...moi },
+			update: moi,
+		});
+		return "nhan";
+	}
 	const doi = await db.banChupLoTrinh.updateMany({
 		where: { nguon: vao.nguon, commitLuc: { lt: commitLuc } },
 		data: moi,

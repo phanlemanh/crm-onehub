@@ -1,11 +1,9 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { keepPreviousData, skipToken, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
-import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { CayCanChinh } from "../cay-can-chinh";
@@ -27,6 +25,7 @@ import {
 	okrParsers,
 } from "../okr-search-params";
 import { useChuyenLinkCuSoan } from "../soan/chuyen-link-cu";
+import { useTenGoc } from "../ten-goc";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 import { BangDonVi } from "./bang";
 import { conTrucTiep, duongCha } from "./bang-don-vi";
@@ -77,7 +76,7 @@ function viTriNguoi(cay: CayDuLieu, id: string) {
 	return { phongBan: pb?.name ?? null, quanLy: p?.manager?.name ?? null };
 }
 
-function XemCay({
+export function XemCay({
 	cycleId,
 	tenGoc,
 	tenKy,
@@ -122,7 +121,6 @@ function KhungCachXem({
 
 export function TheoDonVi() {
 	useChuyenLinkCuSoan();
-	const m = okrMessages(useLocale());
 	const trpc = useTRPC();
 	const [url, datUrl] = useQueryStates(okrParsers);
 	const loc: LocOkrGiaTri = locOkr(url);
@@ -152,7 +150,7 @@ export function TheoDonVi() {
 	const xem: CachXem = xinXem === "cham" && !coCham ? "danh-sach" : xinXem;
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const access = useQuery(trpc.okr.access.queryOptions());
-	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const tenGoc = useTenGoc();
 	const dem = useQuery(
 		trpc.okr.countByUnit.queryOptions(
 			currentId === null ? skipToken : { cycleId: currentId },
@@ -179,7 +177,6 @@ export function TheoDonVi() {
 	if (cycles.isError || cay.isError) return <Loi thuLai={thuLai} />;
 	if (currentId === null) return <ChuaChuKy quanTri={quanTri} />;
 
-	const tenGoc = workspace.data?.name || m.goc;
 	const tenKy = cycles.data.cycles.find((c) => c.id === currentId)?.name ?? "";
 	const dv = giaiDon(don, cay.data, tenGoc);
 	const chonDon = (d: DonChonOkr) =>

@@ -14,6 +14,7 @@ import type { BoOkrMau, KrMau, MucTieuMau } from "./khuon";
 import { type DemCanhKr, napCanhKr, xoaCanhKr } from "./nap-canh-kr";
 import { type DemHoiY, napHoiYMau, xoaHoiY } from "./nap-hoi-y";
 import { napTaiLieuMau } from "./nap-tai-lieu";
+import { chanKeoNgoai, khoaConGiu, xoaViecVaTinHieu } from "./xoa-viec";
 
 export { idMau };
 
@@ -192,6 +193,8 @@ export async function xoaTrong(
 		});
 	const canhKr = await xoaCanhKr(tx, t);
 	const hoiY = await xoaHoiY(tx, t);
+	await chanKeoNgoai(tx, t.nguoi);
+	await xoaViecVaTinHieu(tx, t.nguoi);
 	const phien = await tx.okrCheckInSession.findMany({
 		where: { userId: U },
 		select: { id: true },
@@ -266,6 +269,9 @@ export async function xoaTrong(
 	const boPhan = await tx.division.deleteMany({
 		where: { id: { in: t.boPhan } },
 	});
+	const giu = await khoaConGiu(tx, t.nguoi);
+	if (giu.length > 0)
+		throw new LoiBoMau(OKR_MAU.ma.dangGiu, OKR_MAU.thongDiep.dangGiu(giu));
 	const nguoi = await tx.user.deleteMany({ where: { id: U } });
 	return {
 		nguoi: nguoi.count,

@@ -2,13 +2,14 @@ import { spawnSync } from "node:child_process";
 import { copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { cloneDocLap, diffVong, docSau, git, GOC, Ket, khongDoDuoc, moiTruongSach, NEO, SLUG, thuMucRa } from "./chung.mjs";
+import { cloneDocLap, datNenBan, diffVong, docSau, git, GOC, Ket, khongDoDuoc, moiTruongSach, NEO, SLUG, thuMucRa } from "./chung.mjs";
 import { BIEN, giaiGoi } from "./goi.mjs";
 
 const require = createRequire(import.meta.url);
 const ey = require(join(GOC, "lib", "eval-yaml.cjs"));
 const ec = require(join(GOC, "lib", "evidence-core.cjs"));
 const CHI_RUT = process.argv.includes("--chi-rut");
+const CHI = docChi(process.argv);
 const DA_KY = ["signed-off", "machine-cleared"];
 const NHAC = /scripts\/dieu-phoi\/|test:dieu-phoi|scripts\/kiem-cheo\//;
 const BO = {
@@ -26,6 +27,17 @@ const LY_DO_PRE_PUSH = "chay pre-push that nhieu luot (>=13 phut/luot); dong von
 const MOT_LENH_PHUT = 15;
 const ket = new Ket();
 const goi = giaiGoi();
+
+function docChi(argv) {
+	const i = argv.indexOf("--chi");
+	if (i < 0) return null;
+	const ds = String(argv[i + 1] ?? "")
+		.split(",")
+		.map((k) => k.trim())
+		.filter(Boolean);
+	if (ds.length === 0 || argv[i + 1].startsWith("--")) khongDoDuoc("--chi can danh sach khoa, vd --chi gpct_nen_gop,gpct_luot_that");
+	return ds;
+}
 
 function docExecutor() {
 	const ra = {};
@@ -82,13 +94,15 @@ if (tap.size === 0) {
 	process.exit(2);
 }
 ket.kiem(tap.has("kcs_don_vi") && tap.has("lkv_ci"), "doi-chung-duong tap chua kcs_don_vi va lkv_ci", `tap: ${[...tap.keys()].join(",")}`);
+for (const k of CHI ?? []) if (!tap.has(k)) khongDoDuoc(`--chi ${k} khong co trong tap`);
+const chayTap = CHI ? new Map([...tap].filter(([k]) => CHI.includes(k))) : tap;
+console.log(`chay: ${[...chayTap.keys()].join(",")}`);
 if (CHI_RUT) ket.ket();
 
 const nhatKy = thuMucRa("khong-do-them");
 function dungBan(sha, ten) {
 	const b = cloneDocLap(sha, ten);
-	git(b.goc, "update-ref", "refs/remotes/origin/onehub", sha);
-	git(b.goc, "branch", "-f", "onehub", sha);
+	datNenBan(b.goc, sha);
 	copyFileSync(join(GOC, ".env"), join(b.goc, ".env"));
 	for (const lenh of ["bun install --frozen-lockfile", "bun run db:generate"]) {
 		const r = spawnSync("bash", ["-c", lenh], { cwd: b.goc, encoding: "utf8", env: moiTruongSach(), maxBuffer: 256 * 1024 * 1024 });
@@ -140,7 +154,7 @@ process.on("SIGTERM", () => {
 	process.exit(143);
 });
 try {
-	for (const [k, v] of tap) {
+	for (const [k, v] of chayTap) {
 		if (BO[k] || HO_PRE_PUSH.test(v.lenh)) {
 			console.log(`bo ${k}: ${BO[k] ?? LY_DO_PRE_PUSH}`);
 			continue;

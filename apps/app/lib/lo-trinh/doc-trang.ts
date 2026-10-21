@@ -7,6 +7,7 @@ import {
 	type DuLieuChoXem,
 	phanTichLoTrinh,
 } from "@crm/validation/lo-trinh-du-lieu";
+import type { TrangThaiLay } from "@crm/validation/san-pham-lo-trinh";
 import type { WorkspaceRole } from "@crm/validation/vai-workspace";
 import { LO_TRINH } from "./cau-hinh";
 import { choVaiXem } from "./cho-vai";
@@ -18,11 +19,28 @@ export type DauVaoLoTrinh =
 	| { kieu: "chua-co-khoi"; cauMay: string }
 	| { kieu: "khoi-hong"; cauMay: string }
 	| {
+			kieu: "san-pham-chua-co";
+			ten: string;
+			trangThai: TrangThaiLay;
+			quanTri: boolean;
+	  }
+	| {
 			kieu: "co-du-lieu";
 			duLieu: DuLieuChoXem;
 			canhBao: string[];
 			nguon?: NguonLoTrinh;
+			sanPham?: NguonSanPhamTrang;
 	  };
+
+export type NguonSanPhamTrang = {
+	ten: string;
+	kho: string;
+	nhanh: string;
+	layLuc: string;
+	layHong: TrangThaiLay | null;
+	nguonDoi: boolean;
+	khuon: { phienBan: number; moiHon: boolean } | null;
+};
 
 export type KetQuaDocBanChup =
 	| { kieu: "co"; banChup: BanChupDoc }
@@ -30,9 +48,13 @@ export type KetQuaDocBanChup =
 	| { kieu: "loi"; lyDo: string }
 	| { kieu: "hong"; lyDo: string };
 
-function canhBaoChoTrang(phienBan: number, canhBao: string[]): string[] {
+export function canhBaoChoTrang(phienBan: number, canhBao: string[]): string[] {
 	if (phienBan === 1) return [];
-	return canhBao.filter((c) => !c.includes(LO_TRINH.canhBaoThieuGioMay));
+	return canhBao.filter(
+		(c) =>
+			!c.includes(LO_TRINH.canhBaoThieuGioMay) &&
+			!c.includes(LO_TRINH.canhBaoThieuMoHinh),
+	);
 }
 
 export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {

@@ -245,7 +245,7 @@ export async function taoViec(
 	}
 	const ganDung: BanGhiVet[] = [];
 	for (const b of input.gan) ganDung.push(await docBanGhi(tx, b));
-	const duAn = input.duAnId ? await docDuAnMo(tx, input.duAnId) : null;
+	const duAn = input.duAnId ? await docDuAnNhanViec(tx, input.duAnId) : null;
 	const batDau = sangNgay(input.batDauNgay ?? null);
 	const han = sangNgay(input.hanNgay ?? null);
 	if (batDau && han && batDau > han) {
@@ -420,7 +420,6 @@ export async function docDuAnMo(
 			id: true,
 			ten: true,
 			dongLuc: true,
-			_count: { select: { viec: true } },
 		},
 	});
 	if (da === null) {
@@ -429,10 +428,20 @@ export async function docDuAnMo(
 	if (da.dongLuc !== null) {
 		throw new LoiViec("khong-hop-le", DU_AN.thongDiep.daDong);
 	}
-	if (da._count.viec >= DU_AN.viecToiDa) {
+	return { id: da.id, ten: da.ten };
+}
+
+export async function docDuAnNhanViec(
+	tx: DbGhi,
+	duAnId: string,
+): Promise<{ id: string; ten: string }> {
+	await tx.$queryRaw`SELECT id FROM "duAn" WHERE id = ${duAnId} FOR UPDATE`;
+	const da = await docDuAnMo(tx, duAnId);
+	const soViec = await tx.viec.count({ where: { duAnId } });
+	if (soViec >= DU_AN.viecToiDa) {
 		throw new LoiViec("khong-hop-le", DU_AN.thongDiep.viecToiDa);
 	}
-	return { id: da.id, ten: da.ten };
+	return da;
 }
 
 export async function ghiVetDuAn(
@@ -628,7 +637,7 @@ export async function doiDuAn(tx: DbGhi, input: DoiDuAnInput): Promise<void> {
 			})
 		: null;
 	if (cu?.dongLuc) throw new LoiViec("khong-hop-le", DU_AN.thongDiep.daDong);
-	const moi = input.duAnId ? await docDuAnMo(tx, input.duAnId) : null;
+	const moi = input.duAnId ? await docDuAnNhanViec(tx, input.duAnId) : null;
 	if (moi) await kiemNguoiNhanViec(tx, viec.nguoiThucHienId);
 	if (cu) {
 		const canh = await tx.viecPhuThuoc.findMany({

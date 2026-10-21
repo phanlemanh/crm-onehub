@@ -51,6 +51,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"nhom.okr",
 	"dong.soKr",
 	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
@@ -413,10 +414,44 @@ const GHIM_LO_TRINH = {
 	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
 	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
 	"lo-trinh:moc.lechKeHoach": ["1 chỗ lệch kế hoạch", "12 chỗ lệch kế hoạch"],
+	"lo-trinh:moc.conLai": ["còn 1/A việc", "còn 12/A việc"],
+	"lo-trinh:moc.daGiaoThem": [" · 1 đã giao", " · 12 đã giao"],
+	"lo-trinh:moc.giaoDu": ["đã giao đủ 1 việc", "đã giao đủ 12 việc"],
 	"lo-trinh:tre.tieuDe": [
 		"1 việc đã qua mốc mà chưa giao",
 		"12 việc đã qua mốc mà chưa giao",
 	],
+	"lo-trinh:sanPham.luc": ["lúc 1", "lúc 12"],
+	"lo-trinh:sanPham.layHong": [
+		"Lần lấy gần nhất hỏng: 1. Trang đang hiện bản lấy trước đó.",
+		"Lần lấy gần nhất hỏng: 12. Trang đang hiện bản lấy trước đó.",
+	],
+	"lo-trinh:sanPham.khuonCu": [
+		"1 đang ở khuôn lộ trình bản A — vài phần hiện theo luật cũ.",
+		"12 đang ở khuôn lộ trình bản A — vài phần hiện theo luật cũ.",
+	],
+	"lo-trinh:sanPham.khuonMoi": [
+		"1 đang ở khuôn lộ trình bản A, mới hơn trang — vài phần chưa hiện.",
+		"12 đang ở khuôn lộ trình bản A, mới hơn trang — vài phần chưa hiện.",
+	],
+	"lo-trinh:sanPham.chuaCoTieuDe": [
+		"Chưa có lộ trình của 1",
+		"Chưa có lộ trình của 12",
+	],
+	"san-pham:the.khuon": ["khuôn bản 1", "khuôn bản 12"],
+	"san-pham:the.layLuc": ["lấy lúc 1", "lấy lúc 12"],
+	"san-pham:the.thaoTac": ["Thao tác với 1", "Thao tác với 12"],
+	"san-pham:bao.daTao": [
+		"Đã thêm 1 — lộ trình được lấy trong vòng 5 phút.",
+		"Đã thêm 12 — lộ trình được lấy trong vòng 5 phút.",
+	],
+	"san-pham:bao.daLuuTru": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+	"san-pham:bao.daKhoiPhuc": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+	"san-pham:bao.daXoa": ["Đã xoá 1.", "Đã xoá 12."],
+	"san-pham:hoiXoa.tieuDe": ["Xoá 1?", "Xoá 12?"],
+	"san-pham:hoiXoaVinhVien.tieuDe": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+	"san-pham:sheet.suaTieuDe": ["Sửa 1", "Sửa 12"],
+	"san-pham:nguoiXem.tieuDe": ["Người xem 1", "Người xem 12"],
 } satisfies Record<string, [string, string]>;
 
 const GHIM = {
@@ -426,6 +461,9 @@ const GHIM = {
 	...GHIM_LO_TRINH,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
+	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],
+	"crm:truongKieu.chuaLuu": ["Chưa lưu được 1.", "Chưa lưu được 12."],
+	"crm:truongKieu.sua": ["Sửa 1", "Sửa 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 	"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
 	"auth:datMatKhau.description": [
@@ -935,8 +973,8 @@ const GHIM = {
 	],
 	"okr:caiDat.chuKy.go.tieuDe": ["Gỡ 1?", "Gỡ 12?"],
 	"okr:caiDat.chuKy.go.than": [
-		"1 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
-		"12 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"1 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"12 chưa có mục tiêu, lần lấy ý kiến hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
 	],
 	"okr:caiDat.chuKy.go.xong": ["Đã gỡ 1.", "Đã gỡ 12."],
 	"okr:caiDat.chuKy.an.tieuDe": ["Ẩn 1?", "Ẩn 12?"],
