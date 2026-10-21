@@ -20,12 +20,38 @@ const DUOC_DOI = [`${KHUNG}/dau-trang-okr.tsx`, `${KHUNG}/hanh-dong-khu.tsx`];
 const NHAP = /["'](?:\.\/|[^"']*okr\/)dau-trang-okr-cho["']/;
 const KHOA_DTO = /^\s+(dto_[a-z_]+):/gm;
 const NEN = "origin/onehub";
+const SLUG = "dau-trang-okr-cho-nut-hoi-kara";
 
 function git(goc, args) {
 	const r = spawnSync("git", args, { cwd: goc, encoding: "utf8" });
 	if (r.status !== 0)
 		throw new KhongDo(`git ${args.join(" ")}: ${r.stderr.trim()}`);
 	return r.stdout.trim();
+}
+
+function mocGop(goc) {
+	const r = spawnSync(
+		"git",
+		[
+			"log",
+			"--first-parent",
+			"--merges",
+			"--format=%H",
+			NEN,
+			"--",
+			`_acceptance/${SLUG}/evidence-report.md`,
+		],
+		{ cwd: goc, encoding: "utf8" },
+	);
+	const m =
+		r.status === 0
+			? r.stdout.trim().split("\n").filter(Boolean).at(-1)
+			: undefined;
+	if (!m) return null;
+	const laTo = spawnSync("git", ["merge-base", "--is-ancestor", m, "HEAD"], {
+		cwd: goc,
+	});
+	return laTo.status === 0 ? m : null;
 }
 
 function dong(chu) {
@@ -40,10 +66,36 @@ function soat(goc) {
 		.filter((t) => NHAP.test(readFileSync(join(goc, t), "utf8")));
 	const cauHinh = readFileSync(join(goc, "_acceptance/config.yaml"), "utf8");
 	const conKhoa = [...cauHinh.matchAll(KHOA_DTO)].map((m) => m[1]);
-	const moc = git(goc, ["merge-base", "HEAD", NEN]);
-	const doi = dong(
-		git(goc, ["diff", "--name-only", `${moc}..HEAD`, "--", "apps/app"]),
-	);
+	const m = mocGop(goc);
+	const doi = m
+		? [
+				...new Set([
+					...dong(
+						git(goc, ["diff", "--name-only", `${m}^1`, m, "--", "apps/app"]),
+					),
+					...dong(
+						git(goc, [
+							"log",
+							"--no-merges",
+							"--format=",
+							"--name-only",
+							`--grep=${SLUG}`,
+							`${m}..HEAD`,
+							"--",
+							"apps/app",
+						]),
+					),
+				]),
+			]
+		: dong(
+				git(goc, [
+					"diff",
+					"--name-only",
+					`${git(goc, ["merge-base", "HEAD", NEN])}..HEAD`,
+					"--",
+					"apps/app",
+				]),
+			);
 	const doiNgoai = doi.filter((t) => !DUOC_DOI.includes(t));
 	return { conTep, conNhap, conKhoa, doi, doiNgoai };
 }
@@ -117,7 +169,7 @@ function tuKiem() {
 		const dich = dungBanSao(`nm5-mo-coi-${CA_DO.indexOf(ca)}`);
 		try {
 			ca.lam(dich);
-			commitTam(dich, ca.commit, `test(nm5): chieu do ${ca.ten}`);
+			commitTam(dich, ca.commit, `test(${SLUG}): chieu do ${ca.ten}`);
 			const kq = soat(dich);
 			const bat = inKet(kq) === false;
 			const dungNhan =

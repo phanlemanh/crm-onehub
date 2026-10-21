@@ -24,6 +24,14 @@ export const OKR_MAU = {
 	},
 	co: { moc: "--moc", xoa: "--xoa", tep: "--tep" },
 	ma: { chan: 2, okrThat: 3, sai: 4, dangGiu: 5 },
+	thongDiep: {
+		dangGiu: (giu: readonly string[]): string =>
+			[
+				"Không xoá được bộ mẫu: dữ liệu ngoài bộ mẫu còn giữ người hoặc việc mẫu:",
+				...giu.map((g) => `  ${g}`),
+				"Gỡ liên kết đó rồi chạy lại; không hàng nào đã đổi.",
+			].join("\n"),
+	},
 	lenh: "bun run okr:mau",
 	caQuy4: {
 		tienTo: "ca-",

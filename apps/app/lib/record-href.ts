@@ -6,7 +6,7 @@ type DanhSachBanGhi =
 	| "/deals"
 	| "/onboarding"
 	| "/viec"
-	| "/okr/theo-don-vi";
+	| "/okr/bo-okr";
 
 export function recordHref(
 	slug: string,

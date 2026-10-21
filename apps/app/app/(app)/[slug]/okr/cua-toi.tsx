@@ -107,7 +107,7 @@ function RongCuaToi({
 	nhomSau: React.ReactNode;
 }) {
 	const m = okrMessages(useLocale());
-	const sang = url("/okr/theo-don-vi");
+	const sang = url("/okr/bo-okr");
 	return (
 		<section className="flex flex-col gap-3" data-phan="kr-phu-trach">
 			<SectionHeading level={2}>{m.baPhan.phan3}</SectionHeading>
