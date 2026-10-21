@@ -10,6 +10,7 @@ import { useMemo } from "react";
 import type { TruongLoc } from "@/components/data-table/list-search-params";
 import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
+import { docSoNhap } from "./doc-nhap";
 import type { FieldEntity } from "./fields-entity";
 
 type LuaChon = { value: string; label: string };
@@ -43,6 +44,33 @@ function luaChonTheoCach(
 		default:
 			return [trong(m.locTruong.trong)];
 	}
+}
+
+const KIEU_FACET = {
+	chua: "chu",
+	khoang: "khoang",
+} as const satisfies Partial<
+	Record<CachLocTruong, NonNullable<DataTableFacet["kieu"]>>
+>;
+
+function oNhapTheoCach(
+	cach: CachLocTruong,
+	locale: Locale,
+): Pick<DataTableFacet, "kieu" | "docSo" | "loiSo" | "hienSo"> {
+	if (cach === "chua") return { kieu: KIEU_FACET.chua };
+	if (cach !== "khoang") return { kieu: "luaChon" };
+	const dinhDang = new Intl.NumberFormat(locale, {
+		maximumFractionDigits: 20,
+	});
+	return {
+		kieu: KIEU_FACET.khoang,
+		docSo: (chu) => {
+			const doc = docSoNhap(chu, locale);
+			return doc.kind === "ok" ? doc.giaTri : null;
+		},
+		loiSo: crmMessages(locale).truongKieu.tuChoi.so,
+		hienSo: (so) => dinhDang.format(so),
+	};
 }
 
 export function useTruongLoc(entity: FieldEntity): TruongLoc[] {
@@ -80,6 +108,7 @@ export function useFieldFacets(entity: FieldEntity): DataTableFacet[] {
 				id: `field:${field.key}`,
 				label: field.label,
 				options: luaChonTheoCach(cach, locale, rieng),
+				...oNhapTheoCach(cach, locale),
 			};
 		});
 	}, [fields.data, users.data, locale]);

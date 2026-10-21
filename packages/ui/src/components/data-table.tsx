@@ -38,6 +38,8 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { FieldError } from "@crm/ui/components/field";
+import { Input } from "@crm/ui/components/input";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TablePagination } from "@crm/ui/components/table-pagination";
 import {
@@ -53,6 +55,7 @@ import {
 	TableRow,
 } from "@crm/ui/components/table";
 import { useMessages } from "@crm/ui/components/locale-provider";
+import { useSearchInput } from "@crm/ui/hooks/use-search-input";
 import type { TableSelection } from "@crm/ui/hooks/use-table-selection";
 import { ROW_ACCENT, ROW_ACCENT_EXPANDABLE } from "@crm/ui/lib/row-accent";
 import type { TableQueryState } from "@crm/ui/lib/table-query";
@@ -91,6 +94,10 @@ export type DataTableFacet = {
 	onSearchChange?: (search: string) => void;
 	stale?: boolean;
 	empty?: ReactNode;
+	kieu?: "luaChon" | "chu" | "khoang";
+	docSo?: (chu: string) => number | null;
+	loiSo?: string;
+	hienSo?: (so: number) => string;
 };
 
 export type DataTableTabs = {
@@ -262,6 +269,133 @@ function FacetCount({ count }: { count: number | undefined }) {
 	);
 }
 
+const TIEN_TO_FACET = { chu: "has:", tu: "gte:", den: "lte:" } as const;
+
+function thayTienTo(selected: string[], tienTo: string, moi: string | null) {
+	const giu = selected.filter((value) => !value.startsWith(tienTo));
+	return moi === null ? giu : [...giu, `${tienTo}${moi}`];
+}
+
+function giaTheoTienTo(selected: string[], tienTo: string): string {
+	return (
+		selected.find((value) => value.startsWith(tienTo))?.slice(tienTo.length) ??
+		""
+	);
+}
+
+function chanPhimMenu(event: React.KeyboardEvent) {
+	if (event.key !== "Escape") event.stopPropagation();
+}
+
+function FacetChu({
+	facet,
+	selected,
+	onChange,
+}: {
+	facet: DataTableFacet;
+	selected: string[];
+	onChange: (values: string[]) => void;
+}) {
+	const msg = useMessages();
+	const [value, change] = useSearchInput(
+		giaTheoTienTo(selected, TIEN_TO_FACET.chu),
+		(next) =>
+			onChange(thayTienTo(selected, TIEN_TO_FACET.chu, next.trim() || null)),
+	);
+	return (
+		<div data-slot="facet-chu" className="p-1">
+			<Input
+				aria-label={msg.table.facetContainsLabel(facet.label)}
+				placeholder={msg.table.facetContains}
+				value={value}
+				onChange={(event) => change(event.target.value)}
+				onKeyDown={chanPhimMenu}
+				spellCheck={false}
+				autoComplete="off"
+				translate="no"
+			/>
+		</div>
+	);
+}
+
+function OSoFacet({
+	facet,
+	nhan,
+	committed,
+	commit,
+}: {
+	facet: DataTableFacet;
+	nhan: string;
+	committed: string;
+	commit: (so: number | null) => void;
+}) {
+	const msg = useMessages();
+	const docSo = facet.docSo ?? ((chu: string) => {
+		const so = Number(chu);
+		return Number.isFinite(so) ? so : null;
+	});
+	const [value, change] = useSearchInput(committed, (next) => {
+		if (next.trim() === "") commit(null);
+		else {
+			const so = docSo(next);
+			if (so !== null) commit(so);
+		}
+	});
+	const hong = value.trim() !== "" && docSo(value) === null;
+	return (
+		<div className="flex min-w-0 flex-1 flex-col gap-1">
+			<Input
+				aria-label={msg.table.facetRangeLabel(facet.label, nhan)}
+				aria-invalid={hong}
+				placeholder={nhan}
+				inputMode="decimal"
+				value={value}
+				onChange={(event) => change(event.target.value)}
+				onKeyDown={chanPhimMenu}
+				autoComplete="off"
+			/>
+			{hong && facet.loiSo ? <FieldError>{facet.loiSo}</FieldError> : null}
+		</div>
+	);
+}
+
+function FacetKhoang({
+	facet,
+	selected,
+	onChange,
+}: {
+	facet: DataTableFacet;
+	selected: string[];
+	onChange: (values: string[]) => void;
+}) {
+	const msg = useMessages();
+	const hienSo = facet.hienSo ?? String;
+	const hien = (tienTo: string) => {
+		const goc = giaTheoTienTo(selected, tienTo);
+		return goc === "" ? "" : hienSo(Number(goc));
+	};
+	const ghi = (dau: "tu" | "den") => (so: number | null) =>
+		onChange(
+			thayTienTo(selected, TIEN_TO_FACET[dau], so === null ? null : String(so)),
+		);
+	return (
+		<div data-slot="facet-khoang" className="flex gap-1 p-1">
+			<OSoFacet
+				facet={facet}
+				nhan={msg.table.facetFrom}
+				committed={hien(TIEN_TO_FACET.tu)}
+				commit={ghi("tu")}
+			/>
+			<OSoFacet
+				facet={facet}
+				nhan={msg.table.facetTo}
+				committed={hien(TIEN_TO_FACET.den)}
+				commit={ghi("den")}
+			/>
+		</div>
+	);
+}
+
 function FacetSubmenu({
 	facet,
 	selected,
@@ -335,6 +469,16 @@ function FacetSubmenu({
 					</Command>
 				) : (
 					<div className="max-h-72 overflow-y-auto">
+						{facet.kieu === "chu" && (
+							<FacetChu facet={facet} selected={selected} onChange={onChange} />
+						)}
+						{facet.kieu === "khoang" && (
+							<FacetKhoang
+								facet={facet}
+								selected={selected}
+								onChange={onChange}
+							/>
+						)}
 						{selected.length > 0 && (
 							<>
 								<DropdownMenuItem
