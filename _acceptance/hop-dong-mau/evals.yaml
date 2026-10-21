@@ -1,0 +1,73 @@
+slug: hop-dong-mau
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdm_bo_mau
+    expected: "exit 0; -t hdm-bo-mau của apps/agent/test/hop-dong-mau.spec.ts. Đọc bộ mẫu bằng boHopDongMau() (packages/db/src/hop-dong-mau.ts), không đọc thư mục bằng tay. Bảng ca viết tay trong test, sáu dòng HD1..HD6, mỗi dòng: kiểu (pdf, pdf, docx, docx, pdf, pdf), coChu (true, true, true, true, false, true), thuộc tính nào null (chỉ giaTri của HD4; ngayHetHan của HD6). Đáp án phân tích qua khuôn Zod của packages/validation/src/hop-dong-mau.ts; số dòng khác 6 hay mã khác bảng ca thì ném 'hdm bo mau: dap an <n>'; kiểu, coChu hay thuộc tính null lệch bảng ca thì ném 'hdm bo mau: <ma> lech <khoa>'. sha256 của byte trên đĩa khác đáp án thì ném 'hdm bo mau: sha <ma>'. Nhãn ba chỗ: tên tệp không mở đầu 'MAU-' thì ném 'hdm bo mau: nhan <ma> ten'; siêu dữ liệu (PDF đọc bằng pdf-lib getTitle/getSubject; DOCX đọc dc:title, dc:subject trong docProps/core.xml) không chứa 'Bản mẫu — không phải hợp đồng thật' thì ném 'hdm bo mau: nhan <ma> sieu du lieu'; tệp coChu true mà dòng chữ đầu (đọc qua bộ đọc của E2) khác 'BẢN MẪU — KHÔNG PHẢI HỢP ĐỒNG THẬT' thì ném 'hdm bo mau: nhan <ma> dong dau'. Số ô nhãn đã so khác 17 (6 tên + 6 siêu dữ liệu + 5 dòng đầu) thì ném 'hdm bo mau: thieu o <n>'. Đối chứng dương và chiều đỏ trên cùng fixture: chép bộ mẫu vào thư mục tạm, đổi một byte cuối của HD3 — phép kiểm sha phải ném 'hdm bo mau: sha HD3'; xoá Title của HD1 bằng pdf-lib trong bản chép — phép kiểm nhãn phải ném 'hdm bo mau: nhan HD1 sieu du lieu'; bản lành vẫn xanh. Chiều đỏ trong lịch sử: trên onehub 33ddf1b02 boHopDongMau không có, import ném."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/mau/hop-dong/**, packages/db/src/hop-dong-mau.ts, packages/validation/src/hop-dong-mau.ts, apps/agent/test/hop-dong-mau.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdm_doc_chu
+    expected: "exit 0; -t hdm-doc-chu của apps/agent/test/hop-dong-mau.spec.ts. Đọc chữ từng tệp bằng hàm đọc chữ của apps/agent/agent/lib/tai-lieu-doc-chu.ts (đúng hàm DA23 dùng; nạp byte qua kho Blob giả trong bộ nhớ khoNguonGia như tai-lieu-doc-chu.spec.ts nếu hàm chỉ nhận đường dẫn kho), không viết bộ đọc riêng. Năm tệp coChu true phải ra kết quả có chữ, khác thì ném 'hdm doc chu: <ma> khong ra chu <ket qua>'; chữ không chứa nguyên văn đoạn viết (trường doan của đáp án) của mỗi thuộc tính khác null thì ném 'hdm doc chu: <ma> thieu <thuoc tinh>'. Đáp án đúng giá trị: bảng giá trị viết tay trong test, chép từ design doc mục 1 (HD1 2026-03-05 · 2027-03-04 · 1250000000; HD2 2026-04-12 · 2027-04-11 · 860000000; HD3 2026-06-20 · 2028-06-19 · 2300000000; HD4 2026-07-15 · 2026-12-31 · null; HD5 2026-08-01 · 2027-07-31 · 480000000; HD6 2026-09-10 · null · 1400000000), không đọc từ dap-an.json; một giá trị của đáp án lệch bảng thì ném 'hdm doc chu: <ma> dap an <thuoc tinh>'; hết hạn HD2 khác ngày ký + 12 tháng − 1 ngày (tính trong test) thì ném 'hdm doc chu: HD2 suy het han'. Rò rỉ null: chữ HD4 chứa đoạn viết giaTri của bất kỳ tệp nào khác thì ném 'hdm doc chu: HD4 lo giaTri <ma khac>'; chữ HD6 chứa đoạn viết ngayHetHan của bất kỳ tệp nào khác thì ném 'hdm doc chu: HD6 lo ngayHetHan <ma khac>'. HD5 phải ra can-go-tay, khác thì ném 'hdm doc chu: HD5 <ket qua>'. Lệch nhau: hai tệp cùng ngayKy, cùng ngayHetHan hay cùng giaTri (khác null) thì ném 'hdm doc chu: trung <thuoc tinh> <ma> <ma>'. Số ô đã so (đoạn viết khác null + 18 ô giá trị đáp án + 1 ô HD5 + 2 ô rò rỉ null) đếm từ bảng ca viết tay; khác số viết sẵn thì ném 'hdm doc chu: thieu o <n>'. Đối chứng dương trên cùng fixture: đưa byte của HD1 vào ô của HD5 — phép kiểm can-go-tay phải ném 'hdm doc chu: HD5 …'; đưa byte HD2 vào ô HD1 — phép kiểm đoạn viết phải ném 'hdm doc chu: HD1 thieu ngayKy' (thước đọc được nội dung thật, không chỉ có-chữ); trong bản chép đáp án, đảo ngày và tháng ngayKy của HD2 (2026-12-04) — phép kiểm đáp án phải ném 'hdm doc chu: HD2 dap an ngayKy'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/mau/hop-dong/**, packages/db/src/hop-dong-mau.ts, apps/agent/agent/lib/tai-lieu-doc-chu.ts, apps/agent/test/hop-dong-mau.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdm_nap
+    expected: "exit 0; -t hdm-nap của apps/api/test/hop-dong-mau.spec.ts trên kho thử của lượt. Fixture: workspace dựng bằng khuôn okr-mau-san.ts, TEP_BAN_GHI_BLOB_TOKEN đặt cho kho Blob giả HTTP theo hợp đồng thật của DA19 (máy chủ Bun.serve bài DA19 dùng; giữ byte đã PUT theo pathname, đếm lượt xoá). Chạy chayLenh([]) của apps/api/scripts/hop-dong-mau/lenh.ts. Mã thoát khác 0 thì ném 'hdm nap: ma <n>'. Đọc lại qua service thật, không qua bảng: số công ty tên chứa ' · mẫu' của lệnh khác 1, số thoả thuận mẫu khác 7 thì ném 'hdm nap: ban ghi <loai> <n>'; fields.list(DEAL) không có trường khoá hop-dong kiểu FILE với agentFilled false thì ném 'hdm nap: truong'; với mỗi HD1..HD6, deals.byId(thoả thuận đích theo đáp án).tepTheoTruong['hop-dong'] khác đúng một tệp tên đáp án thì ném 'hdm nap: <ma> tep <n>'; hàng FieldFile của tệp có sha256 khác đáp án thì ném 'hdm nap: <ma> sha'; thoả thuận thứ bảy có tệp thì ném 'hdm nap: khong tep co <n>'. Kho giả: số Blob giữ khác 6 hay byte của một pathname khác byte của tệp đáp án thì ném 'hdm nap: blob <n>'; số lượt PUT tới kho giả nhỏ hơn 6 thì ném 'hdm nap: khong qua put'. Bộ lọc: deals.list({q: 'HĐ mẫu', fields: {'hop-dong': ['none']}}) khác đúng thoả thuận thứ bảy thì ném 'hdm nap: loc chua co'. Dòng in: thiếu một dòng của sáu mã thì ném 'hdm nap: in <ma>'. Chiều đỏ trên cùng fixture: đột biến tay lúc dựng (bỏ bước PUT, gọi complete thẳng) phải ném 'hdm nap: khong qua put' hay 'hdm nap: <ma> tep 0', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/hop-dong-mau/**, apps/api/scripts/hop-dong-mau.ts, apps/api/src/fields/**, packages/db/src/hop-dong-mau.ts, packages/db/mau/hop-dong/**, apps/api/test/hop-dong-mau.spec.ts]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdm_khong_ghi_thang
+    expected: "exit 0; -t hdm-khong-ghi-thang của apps/api/test/hop-dong-mau.spec.ts. Quét AST (TypeScript compiler API, như okr-mau-chan.spec.ts) mọi tệp .ts dưới apps/api/scripts/hop-dong-mau/ và apps/api/scripts/hop-dong-mau.ts: một lời gọi <x>.<bảng>.<create|createMany|upsert|update|updateMany|delete|deleteMany> hay $executeRaw/$queryRaw với bảng thuộc {fieldFile, blobChoXoa, deal, company, fieldDefinition, fieldValue} thì ném 'hdm khong ghi thang: <tep>:<dong> <bang>.<ham>'; ghi user, member ngoài đúng một hàm người-làm của Hỏi-1 thì ném 'hdm khong ghi thang: nguoi ngoai ham <tep>:<dong>'. Số tệp đã quét bằng 0 thì ném 'hdm khong ghi thang: khong quet tep nao'. Đối chứng dương trên cùng fixture: chạy cùng bộ quét trên một chuỗi nguồn viết tay trong test chứa 'tx.fieldFile.create({ data })' — phải trả đúng một vi phạm, khác thì ném 'hdm khong ghi thang: thuoc mu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/hop-dong-mau/**, apps/api/scripts/hop-dong-mau.ts, apps/api/test/hop-dong-mau.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdm_chay_lai
+    expected: "exit 0; -t hdm-chay-lai của apps/api/test/hop-dong-mau.spec.ts, cùng fixture kho giả của E3. Trước lần chạy đầu, tạo qua service một công ty, một thoả thuận và gắn một PDF ngoài bộ mẫu vào ô Tệp của thoả thuận ấy (người dùng ngoài); chụp lại công ty, thoả thuận và tepTheoTruong của nó. Chạy chayLenh ba lần. Sau mỗi lần, đếm qua service: công ty mẫu, thoả thuận mẫu, trường hop-dong, tổng tệp trên bảy thoả thuận mẫu; khác số của lần một (1, 7, 1, 6) thì ném 'hdm chay lai: lan <k> <thu> <n>'. Lần hai và ba: dòng in khác 'đã có' ở một mã thì ném 'hdm chay lai: lan <k> <ma> <trang thai>'. Sau lần ba, chạy lượt dọn BlobChoXoa của DA19 với đồng hồ qua hạn phiếu: số Blob kho giả giữ khác 7 (6 mẫu + 1 ngoài) thì ném 'hdm chay lai: blob <n>'. Bản ghi ngoài khác ảnh chụp thì ném 'hdm chay lai: ngoai doi <khoa>'. Chạy dở, hai ca, mỗi ca kho rỗng mới: (i) kho giả trả lỗi 503 ở PUT thứ tư; (ii) kho giả nhận PUT thứ tư rồi lệnh ném trước complete của tệp ấy (tiêm lỗi qua hàm complete bọc trong test). Mỗi ca: chayLenh thoát khác 0; rồi kho giả lành, chayLenh lần nữa; tổng tệp khác 6 hay một mã có hai tệp thì ném 'hdm chay lai: chay do <ca> <ma> <n>'; rồi chạy lượt dọn BlobChoXoa của DA19 với đồng hồ qua hạn phiếu, số Blob kho giả giữ khác 6 thì ném 'hdm chay lai: chay do <ca> blob <n>'. Chiều đỏ trên cùng fixture: đột biến tay lúc dựng (thêm ngày giờ vào siêu dữ liệu trước khi tải, byte đổi mỗi lần) phải ném 'hdm chay lai: lan 2 tep 12', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/hop-dong-mau/**, apps/api/scripts/hop-dong-mau.ts, apps/api/src/fields/**, packages/db/src/hop-dong-mau.ts, packages/db/mau/hop-dong/**, apps/api/test/hop-dong-mau.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdm_chan
+    expected: "exit 0; -t hdm-chan của apps/api/test/hop-dong-mau.spec.ts. Bảng ca viết tay trước: từ chối — DATABASE_URL trỏ ep-x.us-east-2.aws.neon.tech, db.example.com, [2001:db8::1]; localhost với NODE_ENV=production; localhost với VERCEL_ENV=production và preview; localhost?host=db.example.com; localhost?hostaddr=10.0.0.5; thiếu URL; mỗi ca từ chối chạy hai lần, có và không ALLOW_REMOTE_DB=1. Cho chạy — localhost, 127.0.0.1, [::1], VERCEL_ENV=development. Mỗi ca chạy tiến trình con 'bun scripts/hop-dong-mau.ts' với môi trường của ca (VERCEL_BLOB_API_URL trỏ kho giả đếm yêu cầu). Ca từ chối: mã thoát khác mã chan của apps/api/scripts/hop-dong-mau/cau-hinh.ts thì ném 'hdm chan: <ca> ma <n>'; stderr không có câu tiếng Việt mở đầu 'Từ chối nạp bộ hợp đồng mẫu' thì ném 'hdm chan: <ca> cau'; stderr chứa ECONNREFUSED, ENOTFOUND hay P1001 thì ném 'hdm chan: <ca> da ket noi'; kho giả nhận yêu cầu thì ném 'hdm chan: <ca> goi blob'; quá 5 giây thì ném 'hdm chan: <ca> cham'. Ca cho chạy: chạy cùng tiến trình con, DATABASE_URL trỏ máy cục bộ ở một cổng không có kho (kết nối hỏng sau bộ chặn là đúng); mã thoát bằng mã chan, hay stderr có 'Từ chối nạp', thì ném 'hdm chan: <ca> bi chan'. Số ca đã so khác số viết sẵn thì ném 'hdm chan: thieu o <n>'. Thứ tự nạp: quét AST tệp vào, lời gọi kiemDuocNap phải đứng trước mọi import động của phần nạp, lệch thì ném 'hdm chan: chan sau nap'. Đồ thị import tĩnh tính từ tệp vào (đi theo đường tương đối và gói @crm/* qua exports của package.json của gói ấy, kể cả @crm/env/load): chạm @crm/db, @prisma/client, @vercel/blob hay bất kỳ tệp nào dưới apps/api/src/ thì ném 'hdm chan: nap truoc chan <duong import>'; số tệp đã đi trong đồ thị bằng 1 (chỉ tệp vào) thì ném 'hdm chan: do thi rong'. Đối chứng dương của đồ thị: chạy cùng bộ đi trên một tệp nguồn viết tay trong thư mục tạm có dòng import db từ gói @crm/db qua một tệp trung gian — phải ném 'hdm chan: nap truoc chan'. Đối chứng dương: một bộ chặn viết tay trong test nghe ALLOW_REMOTE_DB phải làm ca 'neon + ALLOW_REMOTE_DB' ném 'hdm chan: … ma …'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/hop-dong-mau.ts, apps/api/scripts/hop-dong-mau/**, apps/api/scripts/okr-mau/chan.ts, apps/api/test/hop-dong-mau.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hdm_thoat
+    expected: "exit 0; -t hdm-thoat của apps/api/test/hop-dong-mau.spec.ts. Ba ca trên kho thử cục bộ, mỗi ca kho rỗng mới: (a) TEP_BAN_GHI_BLOB_TOKEN vắng, rồi chỉ có khoảng trắng; (b) không có hàng workspace; (c) đã có trường DEAL khoá hop-dong kiểu TEXT tạo qua FieldsService.create. Mỗi ca chayLenh([]): mã khác mã có tên của ca trong cau-hinh.ts (khoTat, sai, sai) thì ném 'hdm thoat: <ca> ma <n>'; câu lỗi không nêu cách sửa ('TEP_BAN_GHI_BLOB_TOKEN' cho a, 'dev:session' cho b, 'hop-dong' cho c) thì ném 'hdm thoat: <ca> cau'; sau lệnh, số công ty mẫu, thoả thuận mẫu, trường mới, FieldFile, Blob kho giả, hay hàng user và member của người mẫu (đếm theo id người mẫu của cau-hinh.ts) khác 0 thì ném 'hdm thoat: <ca> da ghi <bang> <n>'; lệnh ném lỗi chưa bắt thì ném 'hdm thoat: <ca> nem'. Đối chứng dương trên cùng fixture: ca (a) với khoá đặt lại phải thoát 0 và tạo 6 tệp (thước thấy được lần ghi thật). Chiều đỏ: đột biến tay lúc dựng (kiểm kho tệp sau khi tạo bản ghi mẫu) phải ném 'hdm thoat: khoTat da ghi deal 7'; đột biến tay thứ hai (tạo người mẫu trước bước kiểm) phải ném 'hdm thoat: khoTat da ghi user 1'; cả hai ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/scripts/hop-dong-mau/**, apps/api/scripts/hop-dong-mau.ts, apps/api/test/hop-dong-mau.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: judgment
+    inputs: [docs/setup.md]
+    question: "Một người mới chỉ đọc docs/setup.md. Đọc xong mục dữ liệu mẫu, họ có trả lời đúng năm câu này không: lệnh bun run hop-dong:mau làm gì; cần gì trước khi chạy (workspace, biến TEP_BAN_GHI_BLOB_TOKEN, ô Tệp của DA19); chạy lại có nhân đôi gì không; lệnh có chạy được trên production hay kho xa không; đáp án ngày ký, ngày hết hạn, giá trị của bộ mẫu nằm ở tệp nào. Câu nào tệp không trả lời, hay trả lời mơ hồ, thì nêu câu đó."
+    expected: "PASS khi tệp trả lời đủ năm câu bằng chữ thường; thiếu hay mơ hồ một câu là FAIL kèm tên câu."
+    evidence_required: [judged_by, verdict, rationale]
+    paths: [docs/setup.md]
