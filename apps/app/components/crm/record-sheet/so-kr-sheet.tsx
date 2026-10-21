@@ -357,12 +357,8 @@ function BangLichSu({
 	);
 }
 
-export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
-	const locale = useLocale();
-	const s = okrSoMessages(locale);
-	const t = s.trangThai.so;
+function useSoKr(keyResultId: string) {
 	const trpc = useTRPC();
-	const { stack, close } = useRecordStack();
 	const { ngay: ngayUrl, chon } = useNgaySo();
 	const ngay = ngayUrl && NGAY.test(ngayUrl) ? ngayUrl : undefined;
 	const [trang, setTrang] = useState({ ngay, so: 1 });
@@ -384,8 +380,6 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 	const dl = dau?.data;
 	const loi = dau?.error ?? lichSu.error;
 	const dangTai = trangs.some((q) => q.isFetching);
-	const dong = trangs.flatMap((q) => q.data?.dong ?? []);
-	const lanGhi = trangs.flatMap((q) => q.data?.lanGhi ?? []);
 	const sau = trangs.slice(1);
 	const trangThem = (con: boolean): TrangThem => ({
 		con,
@@ -409,92 +403,144 @@ export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
 				? "ST-so-api"
 				: "ST-so-co";
 
+	return {
+		dl,
+		loi,
+		ngay,
+		chon,
+		dangTai,
+		dangCho: !dl || lichSu.isPending,
+		dong: trangs.flatMap((q) => q.data?.dong ?? []),
+		lanGhi: trangs.flatMap((q) => q.data?.lanGhi ?? []),
+		lichSu: lichSu.data?.dong ?? [],
+		trangThem,
+		thuLai,
+		trangThai,
+	};
+}
+
+type SoKr = ReturnType<typeof useSoKr>;
+
+function ThanSoKr({ so }: { so: SoKr }) {
+	const locale = useLocale();
+	const s = okrSoMessages(locale);
+	const t = s.trangThai.so;
+	const { dl, loi } = so;
+
+	if (loi)
+		return (
+			<DetailSheetEmpty
+				icon={ChartLine}
+				title={t.loi}
+				description={loi.message}
+				action={
+					<Button variant="outline" data-nut="thu-lai" onClick={so.thuLai}>
+						<Icon data-icon="inline-start" icon={Renew} />
+						{s.thuLai}
+					</Button>
+				}
+			/>
+		);
+	if (!dl || so.dangCho)
+		return (
+			<DetailSheetBody>
+				<DetailSheetSection>
+					<div aria-busy="true" className="flex flex-col gap-3">
+						<span className="sr-only" role="status">
+							{t.dangTai}
+						</span>
+						{KHUNG_TAI.map((id) => (
+							<div className="flex flex-col gap-2" key={id}>
+								<Skeleton className="h-4 w-1/3" />
+								<Skeleton className="h-8 w-full" />
+							</div>
+						))}
+					</div>
+				</DetailSheetSection>
+			</DetailSheetBody>
+		);
+	return (
+		<>
+			<SoDaChup dl={dl} />
+			<DetailSheetBody>
+				{dl.lech && dl.soDaChup !== null && dl.soTinhLai !== null ? (
+					<DetailSheetSection>
+						<Alert
+							variant="warning"
+							data-trang-thai="ST-so-lech"
+							data-so-tinh-lai={dl.soTinhLai}
+						>
+							<AlertDescription>
+								{t.lech(
+									chuSo(dl.soDaChup, locale),
+									chuSo(dl.soTinhLai, locale),
+								)}
+							</AlertDescription>
+						</Alert>
+					</DetailSheetSection>
+				) : null}
+				{dl.loai === "api" ? (
+					<BangLanGhi
+						lanGhi={so.lanGhi}
+						trang={so.trangThem(so.lanGhi.length < dl.tong)}
+					/>
+				) : (
+					<>
+						{dl.dinhNghia ? (
+							<BangBanGhi
+								dl={dl}
+								dong={so.dong}
+								trang={so.trangThem(so.dong.length < dl.tong)}
+							/>
+						) : null}
+						<BangLichSu
+							dong={so.lichSu}
+							dangChon={so.ngay ?? dl.ngay}
+							chon={so.chon}
+							dn={dl.dinhNghia}
+						/>
+					</>
+				)}
+			</DetailSheetBody>
+		</>
+	);
+}
+
+export function NoiDungSoKr({ keyResultId }: { keyResultId: string }) {
+	const so = useSoKr(keyResultId);
+	return (
+		<div
+			className="contents"
+			data-so-kr-noi-dung={keyResultId}
+			data-trang-thai={so.trangThai}
+			data-ngay-so={so.ngay}
+			data-dang-tai={so.dangTai ? "" : undefined}
+		>
+			<ThanSoKr so={so} />
+		</div>
+	);
+}
+
+export function SoKrSheet({ keyResultId }: { keyResultId: string }) {
+	const t = okrSoMessages(useLocale()).trangThai.so;
+	const { stack, close } = useRecordStack();
+	const so = useSoKr(keyResultId);
+	const { dl } = so;
+
 	return (
 		<div
 			className="contents"
 			data-so-kr-sheet={keyResultId}
-			data-trang-thai={trangThai}
-			data-ngay-so={ngay}
-			data-dang-tai={dangTai ? "" : undefined}
+			data-trang-thai={so.trangThai}
+			data-ngay-so={so.ngay}
+			data-dang-tai={so.dangTai ? "" : undefined}
 		>
 			<DetailSheetHeader
 				title={dl ? <span translate="no">{dl.tenKr}</span> : t.tieuDe}
 				description={dl ? <DinhNghia dl={dl} /> : undefined}
 				onBack={stack.length > 1 ? close : undefined}
 			/>
-			{loi ? (
-				<DetailSheetEmpty
-					icon={ChartLine}
-					title={t.loi}
-					description={loi.message}
-					action={
-						<Button variant="outline" data-nut="thu-lai" onClick={thuLai}>
-							<Icon data-icon="inline-start" icon={Renew} />
-							{s.thuLai}
-						</Button>
-					}
-				/>
-			) : !dl || lichSu.isPending ? (
-				<DetailSheetBody>
-					<DetailSheetSection>
-						<div aria-busy="true" className="flex flex-col gap-3">
-							<span className="sr-only" role="status">
-								{t.dangTai}
-							</span>
-							{KHUNG_TAI.map((id) => (
-								<div className="flex flex-col gap-2" key={id}>
-									<Skeleton className="h-4 w-1/3" />
-									<Skeleton className="h-8 w-full" />
-								</div>
-							))}
-						</div>
-					</DetailSheetSection>
-				</DetailSheetBody>
-			) : (
-				<>
-					<SoDaChup dl={dl} />
-					<DetailSheetBody>
-						{dl.lech && dl.soDaChup !== null && dl.soTinhLai !== null ? (
-							<DetailSheetSection>
-								<Alert
-									variant="warning"
-									data-trang-thai="ST-so-lech"
-									data-so-tinh-lai={dl.soTinhLai}
-								>
-									<AlertDescription>
-										{t.lech(
-											chuSo(dl.soDaChup, locale),
-											chuSo(dl.soTinhLai, locale),
-										)}
-									</AlertDescription>
-								</Alert>
-							</DetailSheetSection>
-						) : null}
-						{dl.loai === "api" ? (
-							<BangLanGhi
-								lanGhi={lanGhi}
-								trang={trangThem(lanGhi.length < dl.tong)}
-							/>
-						) : (
-							<>
-								{dl.dinhNghia ? (
-									<BangBanGhi
-										dl={dl}
-										dong={dong}
-										trang={trangThem(dong.length < dl.tong)}
-									/>
-								) : null}
-								<BangLichSu
-									dong={lichSu.data?.dong ?? []}
-									dangChon={ngay ?? dl.ngay}
-									chon={chon}
-									dn={dl.dinhNghia}
-								/>
-							</>
-						)}
-					</DetailSheetBody>
-				</>
-			)}
+			<ThanSoKr so={so} />
 		</div>
 	);
 }

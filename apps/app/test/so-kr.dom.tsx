@@ -409,7 +409,7 @@ describe("bang-kr-nguon", () => {
 		if (!nut) throw new Error("khong thay nut so cua KR crm");
 		await bam(nut);
 		await cho(() => san.url().get("record") !== null, "url co record");
-		expect(san.url().get("record")).toBe("so-kr:kr-crm");
+		expect(san.url().get("record")).toBe("kr:kr-crm");
 	});
 
 	test("bang-kr-nguon: vai chi OKR thay so tran, khong nut, khong href", async () => {
