@@ -49,6 +49,7 @@ const GIU_MS = 700;
 const MO_SAU_MS = 250;
 const MAU_TOI_THIEU = 3;
 const CHO_LOI_MS = 15_000;
+const HET_MO_MS = 400;
 const MAT_LOC = [/^Trạng thái/, /^Loại/];
 const d = await lib.moDo();
 const sai = [];
@@ -191,13 +192,15 @@ const choBang = (t) =>
 			document.querySelector("[data-slot=page-shell-content] thead") !== null,
 	);
 const choHetBan = (t) =>
-	d.doi(
-		t,
-		() =>
-			document.querySelector(
-				"[data-slot=page-shell-content] [aria-busy=true]",
-			) === null,
-	);
+	t
+		.waitForFunction(
+			() =>
+				document.querySelector(
+					"[data-slot=page-shell-content] [aria-busy=true]",
+				) === null,
+			{ timeout: CHO_LOI_MS },
+		)
+		.catch(() => null);
 
 const timNut = (t, s, chu) =>
 	t.evaluateHandle(
@@ -332,7 +335,7 @@ try {
 		await t.screenshot({ path: join(BANG_CHUNG, "E8-cho-1440.png") });
 		chan.thaRa();
 		await choHetBan(t);
-		await choMs(150);
+		await choMs(HET_MO_MS);
 		const s = await dungMau(t);
 		const tich1 = await daTich(o1);
 		await t.screenshot({ path: join(BANG_CHUNG, "E8-xong-1440.png") });
@@ -359,15 +362,20 @@ try {
 		const sb = demNeu(luc, (x) => !x.banDung);
 		const m = demNeu(luc, (x) => x.congCuMo);
 		const om = demNeu(luc, (x) => x.luc - lucBam >= MO_SAU_MS && !(x.mo < 1));
-		const v = s.at(-1)?.ban ?? 0;
+		const cuoi = s.at(-1);
+		const v = cuoi?.ban ?? 0;
+		const dongMoi = cuoi?.hang ?? -1;
+		const hetMo = cuoi?.mo === 1;
 		console.log(
-			`AC-3 1440: ${k} mau · bang go ${g} · khung cho ${c} · ban sai ${sb} · cong cu mo ${m} · chua mo ${om} · sau khi ve ban ${v}`,
+			`AC-3 1440: ${k} mau · bang go ${g} · khung cho ${c} · ban sai ${sb} · cong cu mo ${m} · chua mo ${om} · sau khi ve ban ${v} · dong moi ${dongMoi}/${co[0].so} · het mo ${hetMo ? "co" : "khong"}`,
 		);
 		if (g > 0 || c > 0) dong(false, "AC-3: bang bi go khi doi loc");
 		else if (sb > 0 || om > 0)
 			dong(false, "AC-3: vung bang khong ban khi doi loc");
 		if (m > 0) dong(false, "AC-3: cong cu nam trong vung mo");
 		if (v > 0) dong(false, "AC-3: con ban sau khi danh sach ve");
+		if (dongMoi !== co[0].so || !hetMo)
+			dong(false, "AC-3: dong moi khong thay dong cu sau khi danh sach ve");
 		await t.close();
 	}
 
@@ -408,8 +416,8 @@ try {
 		const s = await dungMau(t);
 		const tich = await daTich(o).catch(() => false);
 		const k = demNeu(s, (x) => x.luc <= GIU_MS);
-		const a = demNeu(s, (x) => x.khungHien === false);
-		const b = demNeu(s, (x) => x.khungMo === false);
+		const a = demNeu(s, (x) => x.khungHien !== true);
+		const b = demNeu(s, (x) => x.khungMo !== true);
 		const giu = chan.so > 0;
 		console.log(
 			`AC-2 390: ${k} mau · khung thu ${a} · aria-expanded sai ${b} · da tich ${tich ? "co" : "khong"}`,
@@ -444,31 +452,48 @@ try {
 				(e) => e.getClientRects().length > 0,
 			).length,
 		}));
-		await t.keyboard.press("Escape");
-		await t.keyboard.press("Escape");
-		await d.doi(t, () => document.querySelector("[role=menu]") === null);
-		chan.che = "giu";
-		await t.evaluate(batMau, null);
+		const duongKhongKhop = await t.evaluate(
+			() => `${location.pathname}${location.search}`,
+		);
+		await t.close();
+		const t2 = await d.moTrang(
+			QT,
+			1440,
+			duongKhongKhop.replace(/^\/[^/]+/, ""),
+		);
+		await d.doi(
+			t2,
+			() =>
+				document.querySelector("[data-trang-thai=ST-donvi-loc-khongkhop]") !==
+				null,
+		);
+		const chan2 = await datChan(t2);
+		const truoc = chan2.so;
+		chan2.che = "giu";
+		await t2.evaluate(batMau, null);
 		const nut = await timNut(
-			t,
+			t2,
 			"[data-trang-thai=ST-donvi-loc-khongkhop] button",
 			"",
 		);
 		await nut.click();
 		await choMs(GIU_MS);
-		chan.thaRa();
-		await choBang(t);
-		const s = await dungMau(t);
+		const giu = chan2.so - truoc;
+		chan2.thaRa();
+		await choBang(t2);
+		const s = await dungMau(t2);
 		const k = demNeu(s, (x) => x.luc <= GIU_MS);
+		const banLuc = demNeu(s, (x) => x.luc <= GIU_MS && x.ban > 0);
 		const c = demNeu(s, (x) => x.khung > 0);
 		console.log(
-			`AC-4 1440: khong khop ${kq.khop ? "co" : "khong"} · menu mo ${kq.menu >= 1 ? "co" : "khong"} · ${k} mau · khung cho khi bo loc ${c}`,
+			`AC-4 1440: khong khop ${kq.khop ? "co" : "khong"} · menu mo ${kq.menu >= 1 ? "co" : "khong"} · ${k} mau · giu ${giu} · ban ${banLuc} · khung cho khi bo loc ${c}`,
 		);
-		if (k < MAU_TOI_THIEU) await khongDo("khong bat duoc luc cho khi bo loc");
+		if (k < MAU_TOI_THIEU || giu < 1 || banLuc < 1)
+			await khongDo("khong bat duoc luc cho khi bo loc");
 		if (!kq.khop || kq.menu < 1)
 			dong(false, "AC-4: khong khop dong menu Loc");
 		if (c > 0) dong(false, "AC-4: bo loc qua khung cho");
-		await t.close();
+		await t2.close();
 	}
 
 	console.log("== loc loi 1440");

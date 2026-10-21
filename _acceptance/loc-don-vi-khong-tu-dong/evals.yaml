@@ -33,7 +33,9 @@ evals:
       - _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs
     expected: |
       390: bấm nút mở khung Lọc, mở «Lọc», tích một giá trị, giữ okr.danhSach, lấy mẫu tới khi dòng mới hiện. In
-      "AC-2 390: <k> mau · khung thu <a> · aria-expanded sai <b>". DUNG khi k >= 3, a = 0, b = 0.
+      "AC-2 390: <k> mau · khung thu <a> · aria-expanded sai <b> · da tich <t>". a, b đếm mọi mẫu không thấy khung hay nút
+      đã đánh dấu còn mở (kể cả khi nút cũ rời DOM). DUNG khi k >= 3, a = 0, b = 0, t = co; k < 3 hay không giữ được truy
+      vấn nào là KHONG DO DUOC mã 2.
       CHIEU DO (LDV_PHA=go-bang) -> "SAI AC-2: khung Loc thu lai khi doi loc", mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E3
@@ -50,8 +52,10 @@ evals:
       Cùng lượt với E1 ở 1440. Mỗi mẫu trong lúc giữ đọc: số [data-hang-muc-tieu], có [data-khung-xuong] không, phần tử
       [aria-busy=true] nào bọc [data-slot=table-container], hàng công cụ và nút Lọc có nằm trong [data-dang-tai] không,
       opacity tính được của vùng bảng. In "AC-3 1440: <k> mau · bang go <g> · khung cho <c> · ban sai <s> · cong cu mo
-      <m> · chua mo <o> · sau khi ve ban <v>". DUNG khi g = 0, c = 0, s = 0, m = 0, v = 0 và o = 0 (o = số mẫu sau 250 ms
-      đầu của lúc giữ mà opacity vùng bảng chưa dưới 1 — chuyển tiếp mờ dài 200 ms).
+      <m> · chua mo <o> · sau khi ve ban <v> · dong moi <n>/<so> · het mo <h>". Mẫu tính từ lúc bấm. DUNG khi g = 0, c = 0,
+      s = 0, m = 0, v = 0, o = 0 (o = số mẫu sau 250 ms đầu của lúc giữ mà opacity vùng bảng chưa dưới 1 — chuyển tiếp mờ
+      dài 200 ms), n = so (số đếm của giá trị vừa tích) và h = co (opacity vùng bảng về 1 sau khi danh sách về). Chờ hết
+      bận có hạn 15 s, không ném lỗi, để v > 0 in được SAI.
       CHIEU DO (LDV_PHA=khong-mo: bang.tsx bỏ refreshing) -> "SAI AC-3: vung bang khong ban khi doi loc", mã 1;
       (LDV_PHA=go-bang) -> "SAI AC-3: bang bi go khi doi loc", mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -65,9 +69,10 @@ evals:
       - packages/ui/src/components/data-table.tsx
       - _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs
     expected: |
-      1440: chọn tổ hợp lọc không khớp mục tiêu nào trong bộ OKR mẫu; sau khi danh sách về đọc khung không khớp và menu;
-      rồi bấm nút bỏ lọc trong khung, giữ okr.danhSach và lấy mẫu tới khi thả và dòng hiện lại. In "AC-4 1440: khong khop
-      <a> · menu mo <b> · <k> mau · khung cho khi bo loc <c>". DUNG khi a = co, b = co, k >= 3, c = 0; k < 3 là
+      1440: chọn một giá trị lọc 0 dòng; sau khi danh sách về đọc khung không khớp và menu. Rồi mở đường dẫn đang không
+      khớp ở một trang mới (bộ nhớ đệm trống, để khoá «không lọc» chưa có sẵn), giữ okr.danhSach, bấm nút bỏ lọc trong
+      khung, lấy mẫu tới khi thả và dòng hiện lại. In "AC-4 1440: khong khop <a> · menu mo <b> · <k> mau · giu <g> · ban
+      <n> · khung cho khi bo loc <c>". DUNG khi a = co, b = co, k >= 3, g >= 1, n >= 1, c = 0; k < 3, g = 0 hay n = 0 là
       "KHONG DO DUOC: khong bat duoc luc cho khi bo loc" mã 2.
       CHIEU DO (LDV_PHA=go-bang) -> "SAI AC-4: bo loc qua khung cho" hoặc, khi menu đã đóng ngay lúc chọn lọc không khớp,
       "SAI AC-4: khong khop dong menu Loc", mã 1.
@@ -139,7 +144,8 @@ evals:
       [data-slot=vung-dang-tai] mang aria-busy="true" và data-dang-tai, chứa [data-slot=table-container], không chứa nút
       Lọc, ô tìm hay phân trang; false: có vùng, không aria-busy, không data-dang-tai; không truyền: không vùng nào.
       CHIEU DO (LDV_PHA=boc-ca-goc: vùng bọc cả gốc DataTable) -> "ldv-bang: nut Loc nam trong vung mo"; (LDV_PHA=luon-boc)
-      -> "ldv-bang: khong truyen van co vung".
+      -> "ldv-bang: khong truyen van co vung"; (LDV_PHA=khong-ve-tim: DataTable thôi vẽ search) -> "ldv-bang: o tim khong
+      duoc ve".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E8
     criterion: AC-1, AC-2, AC-3

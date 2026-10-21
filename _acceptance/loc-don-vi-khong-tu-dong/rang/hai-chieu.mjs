@@ -69,6 +69,11 @@ const DOT_BIEN = {
 			ghim: /ldv-bang: nut Loc nam trong vung mo/,
 		},
 		{
+			ten: "khong-ve-tim",
+			thay: [{ tep: DT, cu: "\t\t\t\t{search}\n", moi: "" }],
+			ghim: /ldv-bang: o tim khong duoc ve/,
+		},
+		{
 			ten: "giu-luon",
 			thay: [
 				{

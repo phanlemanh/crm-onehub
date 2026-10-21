@@ -1,0 +1,25 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: chờ phiên khác của cây này (crm_suspicious_matsumoto_c64c22_do) dọn xong
+phien-do: kho crm_suspicious_matsumoto_c64c22_do · app http://localhost:4491 · api http://localhost:4622
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts le-hai-dang@mau.onehub.test
+don: pb:mau-okr-pb-phap-che · mat loc: ^Lo\u1EA1i
+== tich loc 1440
+AC-1 1440: 12 mau · menu dong 0 · menu con dong 0 · da tich co · tich lan hai co
+AC-3 1440: 12 mau · bang go 0 · khung cho 0 · ban sai 0 · cong cu mo 0 · chua mo 0 · sau khi ve ban 0
+== tich loc 390
+AC-2 390: 14 mau · khung thu 0 · aria-expanded sai 0 · da tich co
+== khong khop roi bo loc 1440
+AC-4 1440: khong khop co · menu mo co · 14 mau · khung cho khi bo loc 0
+== loc loi 1440
+AC-5 1440: 11 mau · khung loi co · dong cu treo 0 · ban con 0 · goi lai 1
+== doi chu ky 1440
+AC-6 chu ky: 13 mau · dong cu 0 · khung bang-hai-dong 13/13
+KET LUAN: dat
+man-loc: dat
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0

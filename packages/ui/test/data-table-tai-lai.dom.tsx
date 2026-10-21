@@ -109,6 +109,14 @@ describe("ldv-bang", () => {
 		phai(nut !== undefined, "ldv-bang: khong thay nut Loc");
 		phai(!v.contains(nut ?? null), "ldv-bang: nut Loc nam trong vung mo");
 		phai(
+			o.querySelector("[data-o-tim]") !== null,
+			"ldv-bang: o tim khong duoc ve",
+		);
+		phai(
+			o.querySelector("[data-meta-bang]") !== null,
+			"ldv-bang: phan trang khong duoc ve",
+		);
+		phai(
 			v.querySelector("[data-o-tim]") === null,
 			"ldv-bang: o tim nam trong vung mo",
 		);
