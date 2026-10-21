@@ -129,12 +129,12 @@ evals:
       node rang/lich-su.mjs tren cay that.
       (1) #523: CLI bo phan loai, stdin «refs/heads/pr 1ddf125b3… refs/heads/pr <1ddf125b3^1>» (sha day du) -> stdout rong,
           stderr dung «pre-push: phần PR tự thêm (1 tệp; 23 tệp của onehub không tính) có tệp T1 mà mã đọc (LO-TRINH.html) — chạy đủ năm bước.»
-      (2) Moi commit gop trong «git log --merges --since=2026-10-14 1f6757ba0» co tieu de gop origin/onehub (hoac onehub)
+      (2) Moi commit gop trong «git log --merges --since=2026-10-14T00:00:00+07:00 1f6757ba0» co tieu de gop origin/onehub (hoac onehub)
           va cha thu hai la to tien origin/onehub, day len tren cha thu nhat: phep do TU TINH S bang lenh git (nen =
           merge-base(commit, origin/onehub), hai ve rieng nhu contract; khong goi ham cua bo phan loai), tu tinh ket qua mong doi (S rong va tang khac rong -> bo; con lai quyetDinh cua phan-loai.mjs tren S), roi
           so voi stdout CLI bo phan loai -> lech o commit nao -> ma 1 «lech <sha>». Khong commit nao luat cu (quyetDinh tren
-          tang) cho nhe ma luat moi cho nang -> neu co: ma 1 «nang len <sha>». Doi chung: so commit duoc xet >= 300 (do 21/10: 351).
-          In «nhe theo luat cu: <a> / nhe theo luat moi: <b> / tren <n> lan gop»; ky vong a = 6, b = 36, n = 351 (do 21/10).
+          tang) cho nhe ma luat moi cho nang -> neu co: ma 1 «nang len <sha>». Doi chung: so commit duoc xet >= 400.
+          In «nhe theo luat cu: <a> / nhe theo luat moi: <b> / tren <n> lan gop»; ky vong a = 6, b = 38, n = 412 (do 21/10, sau khi co dinh moc gio).
       In «dat lich-su».
 
   - id: E7

@@ -106,7 +106,7 @@ phải ngưỡng nghiệm thu.
 
 - **Ca #523 (`1ddf125b3`) không được giải** theo khuyến nghị Hỏi-2: phần PR tự thêm chỉ có `LO-TRINH.html`, mà tệp đó là
   `t1_ma_doc`, nên vẫn chạy đủ năm bước. Vòng này đổi ở ca đó dòng stderr (gọi tên tệp, đếm 23 tệp của onehub), không
-  đổi kết cục. Số đo lịch sử (design doc): 6 → 36 trên 351 lần gộp.
+  đổi kết cục. Số đo lịch sử (design doc): 6 → 38 trên 412 lần gộp.
 - Phạm vi theo khuyến nghị Hỏi-3: luật áp cho mọi lần đẩy mang commit mới của onehub, không chỉ đỉnh là commit gộp như
   câu giao. Lối kia thêm điều kiện «đỉnh hai cha, cha thứ hai thuộc onehub»: ca gộp rồi sửa thêm (G8) đi nặng như hôm nay.
 - Lời hứa của hồ sơ đã ký đổi theo vòng này (bản đối ở Notes của `pre-push-t1`): ca 6 của E1 `pre-push-t1` — nhánh chỉ

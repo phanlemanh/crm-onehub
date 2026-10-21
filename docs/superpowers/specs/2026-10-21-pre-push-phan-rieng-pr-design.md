@@ -15,19 +15,22 @@ cùng luật nhưng khác gốc so.
 Ca thật: commit `1ddf125b3` (gộp `origin/onehub` vào nhánh #523). Phần tăng 24 tệp, 4 tệp mã của người khác. Phần PR tự
 thêm trong lần đẩy chỉ có `LO-TRINH.html`.
 
-Đo trên lịch sử: mọi commit gộp `origin/onehub` vào nhánh PR mà `1f6757ba0` với tới, từ 14/10 — 351 lần —, phân loại
-bằng `quyetDinh` thật (lệnh ở `_acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs`, E6):
+Đo trên lịch sử: mọi commit gộp `origin/onehub` vào nhánh PR mà `1f6757ba0` với tới, từ 00:00 ngày 14/10 (giờ Việt
+Nam) — 412 lần —, phân loại bằng `quyetDinh` thật (`_acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs`, E6):
 
 | Luật | Lần đi nhẹ |
 | --- | --- |
 | Cũ: cả phần tăng | 6 |
-| Phép giao trần của bản phân tích (`tăng ∩ diff(cha thứ hai, đỉnh)`) | 67 |
-| Vòng này: phép giao đủ hai vế (dưới) | 36 |
+| Phép giao trần của bản phân tích (`tăng ∩ diff(cha thứ hai, đỉnh)`) | 72 |
+| Vòng này: phép giao đủ hai vế (dưới) | 38 |
 
-Không lần nào luật cũ cho nhẹ mà luật mới cho nặng. 31 lần chênh giữa hai dòng dưới là do vế `riêng_trước`: 99 lượt tệp
-kéo vào là `LO-TRINH.html`, 20 là `PRODUCT-MAP.md` — tệp sinh mà PR từng vẽ lại, rồi lần gộp trả về bản onehub, nên có
+Không lần nào luật cũ cho nhẹ mà luật mới cho nặng. 34 lần chênh giữa hai dòng dưới là do vế `riêng_trước`; tệp nó kéo
+vào phần lớn là `LO-TRINH.html` và `PRODUCT-MAP.md` — tệp sinh mà PR từng vẽ lại, rồi lần gộp trả về bản onehub, nên có
 thể lệch với nguồn của PR. Phần còn nặng hầu hết vì `_acceptance/config.yaml` (PR nào cũng thêm khoá, bản gộp là bản ghép
 tay) và `LO-TRINH.html` (tệp T1 mà mã đọc).
+
+Mốc giờ phải ghi đủ: `git log --since=2026-10-14` hiểu là ngày đó lúc giờ hiện tại, nên cửa sổ co lại theo giờ chạy (lần
+đo lúc thiết kế ra 351 rồi 347 trên cùng lịch sử).
 
 ## Luật mới
 
