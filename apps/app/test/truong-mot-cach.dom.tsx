@@ -1,7 +1,42 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import type { ReactElement } from "react";
+
+const toastLoi: string[] = [];
+const sonnerThat = await import("sonner");
+const toastGia = Object.assign(
+	(...vao: Parameters<typeof sonnerThat.toast>) => sonnerThat.toast(...vao),
+	sonnerThat.toast,
+	{
+		error: (thongDiep: string) => {
+			toastLoi.push(thongDiep);
+			return "loi";
+		},
+	},
+);
+mock.module("sonner", () => ({ ...sonnerThat, toast: toastGia }));
+
+const eveThat = await import("eve/react");
+mock.module("eve/react", () => ({
+	...eveThat,
+	useEveAgent: () => ({
+		status: "ready",
+		error: undefined,
+		data: { messages: [] },
+		session: null,
+		send: async () => {},
+	}),
+}));
+
+const phienThat = await import("@/lib/agent-session");
+mock.module("@/lib/agent-session", () => ({
+	...phienThat,
+	loadThread: () => new Promise(() => {}),
+}));
+
+globalThis.FormData = window.FormData;
+
+const khung = await import("./khung-gop-y");
+const { bam, cho, dat, dongHet, go, phim, trangThai } = khung;
 
 type Nguoi = { id: string; name: string; email: string; image: string | null };
 
@@ -10,47 +45,7 @@ const NGUOI: Nguoi[] = [
 	{ id: "u-binh", name: "Bình Lê", email: "binh@onehub.vn", image: null },
 ];
 
-type GoiLuu = { thuTuc: string; bien: unknown };
-let daLuu: GoiLuu[] = [];
-let loiLuu: Error | null = null;
-let toastLoi: string[] = [];
-
-function thuTuc<TVao>(ten: string, doc: (dauVao: TVao) => unknown) {
-	return {
-		queryKey: (dauVao?: TVao) => (dauVao === undefined ? [ten] : [ten, dauVao]),
-		pathKey: () => [ten],
-		queryOptions: (dauVao: TVao) => ({
-			queryKey: dauVao === undefined ? [ten] : [ten, dauVao],
-			queryFn: async () => doc(dauVao),
-		}),
-		mutationOptions: (tuyChon?: Record<string, unknown>) => ({
-			...tuyChon,
-			mutationKey: [ten],
-			mutationFn: async (bien: unknown) => {
-				daLuu.push({ thuTuc: ten, bien });
-				if (loiLuu) throw loiLuu;
-				return {};
-			},
-		}),
-	};
-}
-
-const trpcGia = {
-	users: { list: thuTuc("users.list", () => NGUOI) },
-};
-
-mock.module("@/lib/trpc/client", () => ({ useTRPC: () => trpcGia }));
-mock.module("sonner", () => ({
-	toast: {
-		error: (chu: string) => {
-			toastLoi.push(chu);
-		},
-		success: () => {},
-	},
-}));
-
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
-const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { crmMessages } = await import("@/lib/messages/crm");
 const { OTruongPhieu, OTruongBang, HienThiTruong } = await import(
 	"@/components/crm/fields/kieu-truong"
@@ -67,76 +62,21 @@ type RecordFieldEntry =
 
 const mVi = crmMessages("vi");
 
-type San = { o: HTMLElement; root: Root };
-let dangMo: San[] = [];
-
-afterEach(() => {
-	for (const san of dangMo) {
-		act(() => san.root.unmount());
-		san.o.remove();
-	}
-	dangMo = [];
-	daLuu = [];
-	loiLuu = null;
-	toastLoi = [];
+afterEach(async () => {
+	await dongHet();
+	trangThai.daGoi.length = 0;
+	toastLoi.length = 0;
 });
 
 async function mo(
 	man: ReactElement,
 	locale: "vi" | "en" = "vi",
 ): Promise<HTMLElement> {
-	const o = document.createElement("div");
-	document.body.appendChild(o);
-	const root = createRoot(o);
-	const client = new QueryClient({
-		defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
-	});
-	await act(async () => {
-		root.render(
-			<QueryClientProvider client={client}>
-				<LocaleProvider locale={locale}>
-					<TooltipProvider>{man}</TooltipProvider>
-				</LocaleProvider>
-			</QueryClientProvider>,
-		);
-	});
-	dangMo.push({ o, root });
+	dat("users.list", () => NGUOI);
+	await khung.mo(<LocaleProvider locale={locale}>{man}</LocaleProvider>);
+	const o = document.body.lastElementChild;
+	if (!(o instanceof HTMLElement)) throw new Error("khong mo duoc");
 	return o;
-}
-
-async function cho(xong: () => boolean, moTa: string): Promise<void> {
-	for (let vong = 0; vong < 120; vong += 1) {
-		if (xong()) return;
-		await act(async () => {
-			await new Promise((r) => setTimeout(r, 0));
-		});
-	}
-	throw new Error(
-		`khong toi ${moTa}: ${document.body.textContent?.slice(0, 300)}`,
-	);
-}
-
-async function bam(phanTu: Element): Promise<void> {
-	await act(async () => {
-		(phanTu as HTMLElement).click();
-	});
-}
-
-async function go(o: HTMLInputElement, chu: string): Promise<void> {
-	const dat = Object.getOwnPropertyDescriptor(
-		window.HTMLInputElement.prototype,
-		"value",
-	)?.set;
-	await act(async () => {
-		dat?.call(o, chu);
-		o.dispatchEvent(new Event("input", { bubbles: true }));
-	});
-}
-
-async function phim(o: HTMLElement, key: string): Promise<void> {
-	await act(async () => {
-		o.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
-	});
 }
 
 function hangTheoNhan(goc: ParentNode, nhan: string): HTMLElement | null {
@@ -558,5 +498,583 @@ describe("tmc-o-bang", () => {
 		}
 		if (daSo !== 12) throw new Error(`tmc o bang: thieu o ${daSo}`);
 		expect(daSo).toBe(12);
+	});
+});
+
+const { dealDetailOutput } = await import(
+	"../../api/src/deals/deals.contracts"
+);
+const { companyDetailOutput } = await import(
+	"../../api/src/companies/companies.contracts"
+);
+const { contactByIdOutput } = await import(
+	"../../api/src/contacts/contacts.contracts"
+);
+const { DetailSheet } = await import("@/components/detail-sheet");
+const { DealSheet, truongChuanThoaThuan } = await import(
+	"@/components/crm/record-sheet/deal-sheet"
+);
+const { CompanySheet, truongChuanCongTy } = await import(
+	"@/components/crm/record-sheet/company-sheet"
+);
+const { ContactSheet, truongChuanLienHe } = await import(
+	"@/components/crm/record-sheet/contact-sheet"
+);
+const { recordSheetMessages } = await import("@/lib/messages/record-sheet");
+
+const r = recordSheetMessages("vi");
+
+type KieuTuTao = RecordFieldEntry["type"];
+type GiaTriTuTao = RecordFieldEntry["value"];
+
+function truongTuTao(
+	entity: "DEAL" | "COMPANY" | "CONTACT",
+	key: string,
+	label: string,
+	type: KieuTuTao,
+	value: GiaTriTuTao,
+	options: { id: string; label: string; position: number }[] = [],
+) {
+	return {
+		id: `f-${key}`,
+		entity,
+		key,
+		label,
+		type,
+		agentFilled: false,
+		agentBrief: null,
+		required: false,
+		showOnSheet: true,
+		showOnTable: true,
+		showOnFilter: false,
+		position: 0,
+		archived: false,
+		options,
+		value,
+	};
+}
+
+const CHU_SO_HUU = NGUOI[0];
+
+function thoaThuanGia(fields: ReturnType<typeof truongTuTao>[]) {
+	return dealDetailOutput.parse({
+		id: "d-1",
+		name: "Thoả thuận tmc",
+		description: "Mô tả tmc",
+		stage: "lead",
+		currency: "VND",
+		closedReason: null,
+		company: {
+			id: "co-1",
+			name: "Công ty tmc",
+			domain: "tmc.vn",
+			iconUrl: null,
+			iconDarkUrl: null,
+			iconTone: null,
+			logoUrl: null,
+			industry: null,
+		},
+		owner: CHU_SO_HUU,
+		fields,
+		amountCents: 123450,
+		baseAmountCents: 123450,
+		reportingCurrency: "VND",
+		fxRate: null,
+		fxRateAt: null,
+		stageChangedAt: "2026-10-01T00:00:00.000Z",
+		expectedCloseDate: "2026-10-22T00:00:00.000Z",
+		closedAt: null,
+		createdAt: "2026-10-01T00:00:00.000Z",
+		archivedAt: null,
+		contacts: [],
+		archivedContacts: [],
+	});
+}
+
+function congTyGia(fields: ReturnType<typeof truongTuTao>[]) {
+	return companyDetailOutput.parse({
+		id: "co-1",
+		name: "Công ty tmc",
+		domain: "tmc.vn",
+		website: "tmc.vn",
+		description: null,
+		logoUrl: null,
+		logoDarkUrl: null,
+		iconUrl: null,
+		iconDarkUrl: null,
+		iconTone: null,
+		brandColor: null,
+		industry: null,
+		subIndustry: null,
+		city: "Hà Nội",
+		stateCode: null,
+		country: null,
+		countryCode: null,
+		phone: "0901 234 567",
+		email: "lienhe@tmc.vn",
+		linkedinUrl: null,
+		twitterUrl: null,
+		githubUrl: null,
+		pricingUrl: null,
+		careersUrl: null,
+		enrichmentStatus: "COMPLETE",
+		enrichmentError: null,
+		source: "MANUAL",
+		owner: CHU_SO_HUU,
+		contacts: [],
+		fields,
+		queued: false,
+		createdAt: "2026-09-01T00:00:00.000Z",
+		archivedAt: null,
+		enrichedAt: null,
+		primaryContactId: null,
+		primaryContact: null,
+		reportingCurrency: "VND",
+		soKeHoach: 0,
+		xuongCoKhuon: false,
+		deals: [],
+		archivedContacts: [],
+		archivedDeals: [],
+	});
+}
+
+function lienHeGia() {
+	return contactByIdOutput.parse({
+		id: "ct-1",
+		firstName: "Lan",
+		lastName: "Phạm",
+		email: "lan@tmc.vn",
+		phone: "0901 234 567",
+		title: "Giám đốc",
+		linkedinUrl: "linkedin.com/in/lan",
+		twitterUrl: null,
+		githubUrl: null,
+		imageUrl: null,
+		enrichmentStatus: "COMPLETE",
+		enrichmentError: null,
+		owner: CHU_SO_HUU,
+		company: null,
+		fields: [],
+		queued: false,
+		createdAt: "2026-09-01T00:00:00.000Z",
+		archivedAt: null,
+		brief: null,
+		facts: [],
+		relationship: {
+			emails: 0,
+			threads: 0,
+			lastReplyAt: null,
+			meetings: 0,
+			nextMeeting: null,
+			colleagues: [],
+		},
+		isPrimaryContact: false,
+		deals: [],
+		archivedDeals: [],
+	});
+}
+
+function datNenPhieu() {
+	dat("users.list", () => NGUOI);
+	dat("onboarding.listTemplates", () => []);
+	dat("onboarding.listSteps", () => ({ steps: [], phases: [] }));
+	dat("onboarding.listEnrollments", () => []);
+	dat("onboarding.listDepartments", () => []);
+	dat("onboarding.access", () => ({ canManage: true }));
+	dat("onboarding.plansOfCompany", () => []);
+	dat("conversations.list", () => []);
+	dat("conversations.events", () => []);
+}
+
+async function moPhieu(
+	loai: "deal" | "company" | "contact",
+	locale: "vi" | "en" = "vi",
+): Promise<void> {
+	datNenPhieu();
+	const ngan =
+		loai === "deal" ? (
+			<DealSheet dealId="d-1" />
+		) : loai === "company" ? (
+			<CompanySheet companyId="co-1" />
+		) : (
+			<ContactSheet contactId="ct-1" />
+		);
+	const id = loai === "deal" ? "d-1" : loai === "company" ? "co-1" : "ct-1";
+	await khung.mo(
+		<DetailSheet open onOpenChange={() => {}}>
+			<LocaleProvider locale={locale}>{ngan}</LocaleProvider>
+		</DetailSheet>,
+		{ searchParams: `record=${loai}:${id}` },
+	);
+	await cho(
+		() => document.querySelectorAll("label").length > 3,
+		`ngan ${loai}`,
+	);
+}
+
+const goiCua = (duong: string) =>
+	trangThai.daGoi.filter((g) => g.duong === duong);
+
+describe("tmc-phieu-so", () => {
+	test("o So tren phieu Thoa thuan doc theo locale va gui number", async () => {
+		dat("deals.byId", () =>
+			thoaThuanGia([
+				truongTuTao("DEAL", "tmc_so", "Số đo tmc", "NUMBER", null),
+			]),
+		);
+		await moPhieu("deal");
+		const hang = hangTheoNhan(document.body, "Số đo tmc");
+		if (!hang) throw new Error("tmc phieu so: doi chung thieu hang");
+		const nutSua = hang.querySelector("button");
+		if (!nutSua) throw new Error("tmc phieu so: doi chung thieu hang");
+		await bam(nutSua);
+		const o = hang.querySelector("input");
+		await go(o, "1.234,5");
+		await phim(o, "Enter");
+		const luu = goiCua("deals.update");
+		if (luu.length !== 1) throw new Error("tmc phieu so: khong luu");
+		const gui = JSON.stringify(luu[0]?.dauVao?.data);
+		if (gui !== JSON.stringify({ fields: { tmc_so: 1234.5 } })) {
+			throw new Error(`tmc phieu so: gui ${gui}`);
+		}
+		await dongHet();
+
+		for (const [locale, chu] of [
+			["vi", "1.234,5"],
+			["en", "1,234.5"],
+		] as const) {
+			dat("deals.byId", () =>
+				thoaThuanGia([
+					truongTuTao("DEAL", "tmc_so", "Số đo tmc", "NUMBER", 1234.5),
+				]),
+			);
+			await moPhieu("deal", locale);
+			const h = hangTheoNhan(document.body, "Số đo tmc");
+			const so = h?.querySelector(".tabular-nums");
+			if (so?.textContent !== chu) {
+				throw new Error(
+					`tmc phieu so: hien${locale === "en" ? " en" : ""} ${so?.textContent ?? h?.textContent}`,
+				);
+			}
+			await dongHet();
+		}
+		expect(luu.length).toBe(1);
+	});
+});
+
+async function chonLuaChon(hang: HTMLElement, nhan: string): Promise<void> {
+	const oChon = hang.querySelector('[role="combobox"]');
+	if (!oChon) throw new Error("khong co o chon");
+	await bam(oChon);
+	await cho(
+		() => document.body.querySelectorAll('[role="option"]').length > 0,
+		"mo o chon",
+	);
+	const muc = [...document.body.querySelectorAll('[role="option"]')].find(
+		(o) => o.textContent?.trim() === nhan,
+	);
+	if (!muc) throw new Error(`khong co lua chon ${nhan}`);
+	await phim(muc, "Enter");
+}
+
+describe("tmc-loi-may-chu", () => {
+	test("may chu tu choi: cau theo kieu, khong in cau may chu", async () => {
+		const truong = [
+			truongTuTao("DEAL", "tmc_chon", "Chọn tmc", "SELECT", "o-a", [
+				{ id: "o-a", label: "Vàng", position: 0 },
+				{ id: "o-b", label: "Bạc", position: 1 },
+			]),
+			truongTuTao("DEAL", "tmc_nguoi", "Người tmc", "USER", "u-an"),
+		];
+		const ca = [
+			{
+				ten: "Chọn tmc",
+				chon: "Bạc",
+				loi: 'Chọn tmc has no option "x".',
+				ma: "lua-chon",
+				cu: "Vàng",
+			},
+			{
+				ten: "Người tmc",
+				chon: "Bình Lê",
+				loi: "Người tmc takes someone who works here.",
+				ma: "nguoi",
+				cu: "An Trần",
+			},
+		] as const;
+		let daSo = 0;
+		for (const o of ca) {
+			toastLoi.length = 0;
+			dat("deals.byId", () => thoaThuanGia(truong));
+			dat("deals.update", () => {
+				throw new Error(o.loi);
+			});
+			await moPhieu("deal");
+			const hang = hangTheoNhan(document.body, o.ten);
+			if (!hang) throw new Error(`thieu hang ${o.ten}`);
+			await chonLuaChon(hang, o.chon);
+			await cho(() => toastLoi.length > 0, "toast");
+			if (toastLoi.length !== 1) throw new Error("tmc loi may chu: khong bao");
+			const chu = toastLoi[0] ?? "";
+			if (/has no option|takes someone/.test(chu)) {
+				throw new Error("tmc loi may chu: in cau may chu");
+			}
+			const mong = `${mVi.truongKieu.chuaLuu(o.ten)} ${mVi.truongKieu.tuChoi[o.ma]}`;
+			if (chu !== mong) throw new Error(`tmc loi may chu: cau ${chu}`);
+			const sau = hangTheoNhan(document.body, o.ten);
+			if (!sau?.textContent?.includes(o.cu)) {
+				throw new Error("tmc loi may chu: khong ve gia tri cu");
+			}
+			await dongHet();
+			daSo += 1;
+		}
+
+		toastLoi.length = 0;
+		dat("deals.byId", () => thoaThuanGia(truong));
+		dat("deals.update", () => {
+			throw new Error("Name is taken by another deal.");
+		});
+		await moPhieu("deal");
+		const hangTen = hangTheoNhan(document.body, r.deal.fields.name);
+		const nutTen = hangTen?.querySelector("button");
+		if (!hangTen || !nutTen) throw new Error("thieu hang Ten");
+		await bam(nutTen);
+		const oTen = hangTen.querySelector("input");
+		await go(oTen, "Tên mới tmc");
+		await phim(oTen, "Enter");
+		await cho(() => toastLoi.length > 0, "toast ten");
+		const mongTen = `${mVi.truongKieu.chuaLuu(r.deal.fields.name)} ${mVi.truongKieu.tuChoi.khac}`;
+		if (toastLoi[0] !== mongTen) {
+			throw new Error(`tmc loi may chu: chuan ten ${toastLoi[0]}`);
+		}
+		daSo += 1;
+		if (daSo !== 3) throw new Error(`tmc loi may chu: thieu ca ${daSo}`);
+		expect(daSo).toBe(3);
+	});
+});
+
+const DAP_AN_TRUONG_CHUAN: {
+	phieu: "deal" | "company" | "contact";
+	khoa: string;
+	kieu: string;
+	batBuoc?: true;
+}[] = [
+	{ phieu: "deal", khoa: "name", kieu: "TEXT", batBuoc: true },
+	{ phieu: "deal", khoa: "amount", kieu: "MONEY" },
+	{ phieu: "deal", khoa: "currency", kieu: "SELECT" },
+	{ phieu: "deal", khoa: "expectedCloseDate", kieu: "DATE" },
+	{ phieu: "deal", khoa: "owner", kieu: "USER" },
+	{ phieu: "deal", khoa: "description", kieu: "LONG_TEXT" },
+	{ phieu: "company", khoa: "name", kieu: "TEXT", batBuoc: true },
+	{ phieu: "company", khoa: "domain", kieu: "TEXT" },
+	{ phieu: "company", khoa: "website", kieu: "URL" },
+	{ phieu: "company", khoa: "phone", kieu: "PHONE" },
+	{ phieu: "company", khoa: "email", kieu: "EMAIL" },
+	{ phieu: "company", khoa: "city", kieu: "TEXT" },
+	{ phieu: "company", khoa: "country", kieu: "TEXT" },
+	{ phieu: "company", khoa: "owner", kieu: "USER" },
+	{ phieu: "contact", khoa: "firstName", kieu: "TEXT" },
+	{ phieu: "contact", khoa: "lastName", kieu: "TEXT" },
+	{ phieu: "contact", khoa: "title", kieu: "TEXT" },
+	{ phieu: "contact", khoa: "email", kieu: "EMAIL" },
+	{ phieu: "contact", khoa: "phone", kieu: "PHONE" },
+	{ phieu: "contact", khoa: "linkedin", kieu: "URL" },
+	{ phieu: "contact", khoa: "x", kieu: "URL" },
+	{ phieu: "contact", khoa: "github", kieu: "URL" },
+	{ phieu: "contact", khoa: "owner", kieu: "USER" },
+];
+
+function boMoTaChuan(): Record<"deal" | "company" | "contact", MoTaTruong[]> {
+	const ngu = {
+		m: r,
+		locale: "vi" as const,
+		luu: () => {},
+		dangLuu: () => false,
+		nguoiDung: NGUOI,
+	};
+	return {
+		deal: truongChuanThoaThuan(thoaThuanGia([]), ngu),
+		company: truongChuanCongTy(congTyGia([]), ngu),
+		contact: truongChuanLienHe(lienHeGia(), ngu),
+	};
+}
+
+function khungDom(el: Element): string {
+	const vai = el.getAttribute("role") ?? "";
+	const lop = (el.getAttribute("class") ?? "").split(/\s+/).sort().join(".");
+	const con = [...el.children].map(khungDom).join(",");
+	return `${el.tagName.toLowerCase()}[${vai}](${lop}){${con}}`;
+}
+
+describe("tmc-truong-chuan", () => {
+	test("kieu cua truong chuan dung bang, khong thua", () => {
+		const bo = boMoTaChuan();
+		let daSo = 0;
+		for (const dong of DAP_AN_TRUONG_CHUAN) {
+			const mt = bo[dong.phieu].find((x) => x.khoa === dong.khoa);
+			if (!mt || mt.kieu !== dong.kieu) {
+				throw new Error(
+					`tmc truong chuan: ${dong.phieu} ${dong.khoa} ${mt?.kieu ?? "thieu"}`,
+				);
+			}
+			if (dong.batBuoc && !mt.batBuoc) {
+				throw new Error(
+					`tmc truong chuan: ${dong.phieu} ${dong.khoa} bat buoc`,
+				);
+			}
+			daSo += 1;
+		}
+		for (const phieu of ["deal", "company", "contact"] as const) {
+			for (const mt of bo[phieu]) {
+				if (
+					!DAP_AN_TRUONG_CHUAN.some(
+						(d) => d.phieu === phieu && d.khoa === mt.khoa,
+					)
+				) {
+					throw new Error(`tmc truong chuan: thua ${phieu} ${mt.khoa}`);
+				}
+			}
+		}
+		if (daSo !== 23) throw new Error(`tmc truong chuan: thieu ${daSo}`);
+		expect(daSo).toBe(23);
+	});
+
+	test("hang chuan va hang tu tao cung kieu cung khung tren phieu that", async () => {
+		const cap: {
+			phieu: "deal" | "company";
+			chuan: string;
+			tuTao: string;
+			kieu: KieuTuTao;
+			giaTri: GiaTriTuTao;
+		}[] = [
+			{
+				phieu: "deal",
+				chuan: r.deal.fields.closeDate,
+				tuTao: "Ngày tmc",
+				kieu: "DATE",
+				giaTri: "2026-10-23T00:00:00.000Z",
+			},
+			{
+				phieu: "deal",
+				chuan: r.deal.fields.owner,
+				tuTao: "Người tmc",
+				kieu: "USER",
+				giaTri: "u-binh",
+			},
+			{
+				phieu: "company",
+				chuan: r.company.fields.website,
+				tuTao: "Web tmc",
+				kieu: "URL",
+				giaTri: "tmc2.vn",
+			},
+			{
+				phieu: "company",
+				chuan: r.company.fields.phone,
+				tuTao: "Máy tmc",
+				kieu: "PHONE",
+				giaTri: "0912 345 678",
+			},
+			{
+				phieu: "company",
+				chuan: r.company.fields.email,
+				tuTao: "Thư tmc",
+				kieu: "EMAIL",
+				giaTri: "a@tmc.vn",
+			},
+			{
+				phieu: "company",
+				chuan: r.company.fields.city,
+				tuTao: "Chữ tmc",
+				kieu: "TEXT",
+				giaTri: "Đà Nẵng",
+			},
+		];
+		const theoPhieu = (phieu: "deal" | "company") =>
+			cap
+				.filter((c) => c.phieu === phieu)
+				.map((c, i) =>
+					truongTuTao(
+						phieu === "deal" ? "DEAL" : "COMPANY",
+						`tmc_${i}`,
+						c.tuTao,
+						c.kieu,
+						c.giaTri,
+					),
+				);
+		dat("deals.byId", () => thoaThuanGia(theoPhieu("deal")));
+		dat("companies.byId", () => congTyGia(theoPhieu("company")));
+		let daSo = 0;
+		for (const phieu of ["deal", "company"] as const) {
+			await moPhieu(phieu);
+			for (const c of cap.filter((x) => x.phieu === phieu)) {
+				const hangChuan = hangTheoNhan(document.body, c.chuan);
+				const hangTuTao = hangTheoNhan(document.body, c.tuTao);
+				if (!hangChuan)
+					throw new Error(`tmc truong chuan: thieu hang ${phieu} ${c.chuan}`);
+				if (!hangTuTao)
+					throw new Error(`tmc truong chuan: thieu hang ${phieu} ${c.tuTao}`);
+				const a = khungDom(hangChuan);
+				const b = khungDom(hangTuTao);
+				if (a !== b) {
+					throw new Error(`tmc truong chuan: cap lech ${c.kieu} ${a} != ${b}`);
+				}
+				const ban = hangTuTao.cloneNode(true) as HTMLElement;
+				const dau = ban.querySelector("[class]") ?? ban;
+				dau.setAttribute(
+					"class",
+					`${dau.getAttribute("class") ?? ""} lech-thu`,
+				);
+				if (khungDom(ban) === a) throw new Error("tmc truong chuan: thuoc mu");
+				daSo += 1;
+			}
+			await dongHet();
+		}
+		if (daSo !== 6) throw new Error(`tmc truong chuan: thieu ${daSo}`);
+		expect(daSo).toBe(6);
+	});
+});
+
+describe("tmc-lien-ket", () => {
+	test("truong chuan cua Cong ty: phieu va bang bam duoc nhu tu tao", async () => {
+		const bo = boMoTaChuan().company;
+		const ca = [
+			{
+				khoa: "website",
+				o: { kieu: "URL", giaTri: "tmc.vn", href: "https://tmc.vn", moi: true },
+			},
+			{
+				khoa: "email",
+				o: {
+					kieu: "EMAIL",
+					giaTri: "lienhe@tmc.vn",
+					href: "mailto:lienhe@tmc.vn",
+					moi: false,
+				},
+			},
+			{
+				khoa: "phone",
+				o: {
+					kieu: "PHONE",
+					giaTri: "0901 234 567",
+					href: "tel:+84901234567",
+					moi: false,
+				},
+			},
+		] as const;
+		let daSo = 0;
+		for (const { khoa, o } of ca) {
+			const mt = bo.find((x) => x.khoa === khoa);
+			if (!mt) throw new Error(`thieu mo ta ${khoa}`);
+			await kiemLienKet("phieu", "chuan", <OTruongPhieu moTa={mt} />, o);
+			await kiemLienKet(
+				"bang",
+				"chuan",
+				<OTruongBang kieu={o.kieu} giaTri={o.giaTri} />,
+				o,
+			);
+			daSo += 2;
+		}
+		expect(daSo).toBe(6);
 	});
 });

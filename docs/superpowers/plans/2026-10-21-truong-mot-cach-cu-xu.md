@@ -123,7 +123,7 @@ Phục vụ E3, E4, E5, E7. `independent: false`.
 **Interfaces — Produces:**
 - `export function truongChuanThoaThuan(deal: Deal, ctx: NguCanhTruong): MoTaTruong[]` ở `deal-sheet.tsx`. `truongChuanCongTy` và `truongChuanLienHe` cùng khuôn.
 - `NguCanhTruong = { m: RecordSheetMessages; locale: Locale; luu: (data) => void; dangLuu: (khoa) => boolean; nguoiDung: Owner[] }`.
-- Khoá của bộ mô tả bằng khoá dữ liệu API (`name`, `amountCents`, `expectedCloseDate`, `ownerId`→khoá `owner`…), khớp 22 dòng của E6.
+- Khoá của bộ mô tả bằng khoá dữ liệu API (`name`, `amountCents`, `expectedCloseDate`, `ownerId`→khoá `owner`…), khớp 23 dòng của E6.
 - `export function DealOverview`, `CompanyOverview`, `ContactOverview` (thêm `export`, để test dựng).
 - `onError` của ba mutation `update` dùng `loiLuuTruongTuBien(variables, moTaTheoKhoa, locale)`. Lượt lưu có đúng một khoá trong `data` (hay trong `data.fields`) khớp một bộ mô tả → câu `loiLuuTruong`; ngoài ra → `error.message` như cũ.
 - Đầu phiếu (`DetailSheetStat`) vẽ giá trị trường bằng `HienThiTruong`. Các danh sách lồng (liên hệ trong thoả thuận, thoả thuận trong công ty…) vẽ ô trường bằng `OTruongBang`.
@@ -131,7 +131,7 @@ Phục vụ E3, E4, E5, E7. `independent: false`.
   - `ReportedValue` (giá trị quy đổi), tổng ở đầu phiếu công ty, `nextClose` — số tổng hợp, không phải một trường;
   - `InlineCompanyField`, `StageStepper`/`DealStageMenu`, `InlineTextCell` vai trò (Hỏi-1).
 
-- [ ] Step 1: Viết bốn describe theo E2b, E3b (ba ca), E6 (22 dòng + sáu cặp trên Overview thật + đối chứng thước mù), E5 (sáu ô chuẩn của Công ty). Bản ghi giả rút qua bộ đọc đầu ra thật: `dealGetOutput` / `companyGetOutput` / `contactGetOutput` trong `apps/api/src/*/*.contracts.ts`; dùng đúng tên xuất có thật.
+- [ ] Step 1: Viết bốn describe theo E2b, E3b (ba ca), E6 (23 dòng + sáu cặp trên Overview thật + đối chứng thước mù), E5 (sáu ô chuẩn của Công ty). Bản ghi giả rút qua bộ đọc đầu ra thật: `dealGetOutput` / `companyGetOutput` / `contactGetOutput` trong `apps/api/src/*/*.contracts.ts`; dùng đúng tên xuất có thật.
 - [ ] Step 2: FAIL.
 - [ ] Step 3: Chuyển ba phiếu sang bộ mô tả.
 - [ ] Step 4: PASS. Chạy thêm `cd apps/app && bun test ./test/messages-guard.spec.ts` và các `*.dom.tsx` đang chạm ba phiếu (`grep -l "deal-sheet\|company-sheet\|contact-sheet" apps/app/test`) → xanh.
