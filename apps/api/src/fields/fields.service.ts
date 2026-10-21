@@ -501,11 +501,11 @@ export class FieldsService {
 
 	async sapTheoTruong<E extends FieldEntity>(
 		entity: E,
-		sapXep: { sort: string; dir: SortDirection },
+		sapXep: { sort?: string; dir: SortDirection },
 		where: WhereTheoLoai[E],
 		trang: Page,
 	): Promise<string[] | null> {
-		if (!sapXep.sort.startsWith(TIEN_TO_COT_TRUONG)) return null;
+		if (!sapXep.sort?.startsWith(TIEN_TO_COT_TRUONG)) return null;
 
 		const key = sapXep.sort.slice(TIEN_TO_COT_TRUONG.length);
 		if (!key) return null;
