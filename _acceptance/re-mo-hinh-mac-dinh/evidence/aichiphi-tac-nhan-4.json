@@ -1,0 +1,110 @@
+[
+  {
+    "id": "evt_01M5EYFDYCDSHG1BJMPJJJ7RZP",
+    "at": "2026-10-21T03:00:29.388Z",
+    "sessionId": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "phienCha": null,
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 11043,
+    "cacheReadTokens": 0,
+    "outputTokens": 52,
+    "costUsd": 0.001682
+  },
+  {
+    "id": "evt_01M5EYFJ2HX8ZTQ3S21VZXBZC0",
+    "at": "2026-10-21T03:00:33.617Z",
+    "sessionId": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "phienCha": null,
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 11112,
+    "cacheReadTokens": 11008,
+    "outputTokens": 307,
+    "costUsd": 0.000499
+  },
+  {
+    "id": "evt_01M5EYFK4ER67FV6PJ668NB985",
+    "at": "2026-10-21T03:00:34.702Z",
+    "sessionId": "wrun_01M5EYFJ43QY4RGHZJNF0H1PG1",
+    "phienCha": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 3952,
+    "cacheReadTokens": 256,
+    "outputTokens": 11,
+    "costUsd": 0.000568
+  },
+  {
+    "id": "evt_01M5EYFQZN21FVRYFVGF8SSAKC",
+    "at": "2026-10-21T03:00:39.669Z",
+    "sessionId": "wrun_01M5EYFJ43QY4RGHZJNF0H1PG1",
+    "phienCha": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 4215,
+    "cacheReadTokens": 256,
+    "outputTokens": 684,
+    "costUsd": 0.000944
+  },
+  {
+    "id": "evt_01M5EYFSNC0G4CV4Z0Y7X1B48D",
+    "at": "2026-10-21T03:00:41.388Z",
+    "sessionId": "wrun_01M5EYFJ43QY4RGHZJNF0H1PG1",
+    "phienCha": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 4929,
+    "cacheReadTokens": 0,
+    "outputTokens": 209,
+    "costUsd": 0.000844
+  },
+  {
+    "id": "evt_01M5EYFW17RE91CX7873AHBRZX",
+    "at": "2026-10-21T03:00:43.815Z",
+    "sessionId": "wrun_01M5EYFJ43QY4RGHZJNF0H1PG1",
+    "phienCha": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 5170,
+    "cacheReadTokens": 3584,
+    "outputTokens": 308,
+    "costUsd": 0.000499
+  },
+  {
+    "id": "evt_01M5EYG8S6M0D4E4VF1DM1S0ZC",
+    "at": "2026-10-21T03:00:56.870Z",
+    "sessionId": "wrun_01M5EYFJ43QY4RGHZJNF0H1PG1",
+    "phienCha": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 5509,
+    "cacheReadTokens": 0,
+    "outputTokens": 680,
+    "costUsd": 0.001166
+  },
+  {
+    "id": "evt_01M5EYGAT90AJDAEA9V9KA81V8",
+    "at": "2026-10-21T03:00:58.953Z",
+    "sessionId": "wrun_01M5EYFJ43QY4RGHZJNF0H1PG1",
+    "phienCha": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 6245,
+    "cacheReadTokens": 0,
+    "outputTokens": 253,
+    "costUsd": 0.001063
+  },
+  {
+    "id": "evt_01M5EYGR1616A8BHNZF444X84B",
+    "at": "2026-10-21T03:01:12.486Z",
+    "sessionId": "wrun_01M5EYFC58KW9QAB5C5FYQSFJK",
+    "phienCha": null,
+    "tinhNang": "crm.dung-tac-nhan",
+    "modelId": null,
+    "inputTokens": 11604,
+    "cacheReadTokens": 0,
+    "outputTokens": 269,
+    "costUsd": 0.001875
+  }
+]

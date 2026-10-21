@@ -211,6 +211,14 @@
 	*::-webkit-scrollbar-corner {
 		background: transparent;
 	}
+
+	@media (width < 48rem) {
+		[data-slot="field"]:has(~ [data-slot="hang-hanh-dong-bam-day"]),
+		[data-slot="field"]:has(~ [data-slot="hang-hanh-dong-bam-day"])
+			:is(input, textarea, select) {
+			scroll-margin-bottom: 4.5rem;
+		}
+	}
 }
 
 @layer utilities {
