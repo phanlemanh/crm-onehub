@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vòng đời đề xuất</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+  .frame { max-width: 1120px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 960px; display: block; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+  <svg viewBox="0 0 1120 568" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vòng đời của một đề xuất. Bốn trạng thái: Mở (của máy), Mở (có sửa của người), Gộp, Đóng không gộp (phủ quyết). Máy dựng lại khi có tín hiệu mới: Mở của máy về chính nó. Chủ kho commit: Mở của máy sang Mở có sửa của người. Từ cả hai trạng thái mở: chủ nhóm gộp sang Gộp, chủ kho đóng sang Đóng không gộp. Có tín hiệu mới sau phủ quyết thì thành đề xuất MỚI, một PR khác, ở Mở của máy. Dải thời gian bên dưới: gửi tín hiệu, lên nhánh hàng chờ bằng lịch kéo, lên onehub khi PR kéo về gộp, PR gom mở. Đồng hồ bắt đầu ở lúc lên onehub (Hỏi-3).">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+      </marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+      </marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+      </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <text x="48" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">HỎI-2 · NGHĨA CỦA PHỦ QUYẾT VÀ VÒNG ĐỜI ĐỀ XUẤT · HỎI-3 · ĐỒNG HỒ BẮT ĐẦU Ở ĐÂU · AC-5 · AC-6 · AC-8</text>
+    <text x="48" y="80" fill="#171717" font-size="24" font-family="'Lora', Georgia, serif">Vòng đời của một đề xuất</text>
+
+    <rect x="48" y="112" width="536" height="224" rx="8" fill="#f3f3f3" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+    <text x="64" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">MỞ</text>
+
+    <path d="M140 208 V184 A8 8 0 0 1 148 176 H196 A8 8 0 0 1 204 184 V206" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="264" y1="248" x2="366" y2="248" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="584" y1="168" x2="718" y2="168" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="584" y1="304" x2="718" y2="304" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M820 344 V376 A8 8 0 0 1 812 384 H204 A8 8 0 0 1 196 376 V290" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+    <rect x="80" y="152" width="184" height="16" rx="2" fill="#f3f3f3"/>
+    <text x="172" y="164" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">máy dựng lại khi có tín hiệu mới</text>
+    <rect x="272" y="224" width="88" height="16" rx="2" fill="#f3f3f3"/>
+    <text x="316" y="236" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">chủ kho commit</text>
+    <rect x="612" y="144" width="80" height="16" rx="2" fill="#fafafa"/>
+    <text x="652" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">chủ nhóm gộp</text>
+    <rect x="612" y="280" width="80" height="16" rx="2" fill="#fafafa"/>
+    <text x="652" y="292" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">chủ kho đóng</text>
+    <rect x="344" y="360" width="328" height="16" rx="2" fill="#fafafa"/>
+    <text x="508" y="372" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">có tín hiệu mới sau phủ quyết → đề xuất MỚI (PR khác)</text>
+
+    <rect x="80" y="208" width="184" height="80" rx="8" fill="#fafafa"/>
+    <rect x="80" y="208" width="184" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="172" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mở</text>
+    <text x="172" y="262" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">(của máy)</text>
+
+    <rect x="368" y="208" width="184" height="80" rx="8" fill="#fafafa"/>
+    <rect x="368" y="208" width="184" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="460" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mở</text>
+    <text x="460" y="262" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">(có sửa của người)</text>
+
+    <rect x="720" y="128" width="160" height="80" rx="8" fill="#fafafa"/>
+    <rect x="720" y="128" width="160" height="80" rx="8" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+    <text x="800" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gộp</text>
+
+    <rect x="720" y="264" width="200" height="80" rx="8" fill="#fafafa"/>
+    <rect x="720" y="264" width="200" height="80" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="820" y="300" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đóng không gộp</text>
+    <text x="820" y="318" fill="#006B4F" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">(phủ quyết)</text>
+
+    <line x1="48" y1="496" x2="1070" y2="496" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="680" y1="444" x2="680" y2="508" stroke="#006B4F" stroke-width="1.4"/>
+
+    <rect x="228" y="472" width="64" height="16" rx="2" fill="#fafafa"/>
+    <text x="260" y="484" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">(lịch kéo)</text>
+    <rect x="496" y="472" width="88" height="16" rx="2" fill="#fafafa"/>
+    <text x="540" y="484" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">(PR kéo về gộp)</text>
+    <rect x="576" y="420" width="208" height="16" rx="2" fill="#fafafa"/>
+    <text x="680" y="432" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">đồng hồ bắt đầu ở đây (Hỏi-3)</text>
+
+    <circle cx="120" cy="496" r="4" fill="#171717"/>
+    <circle cx="400" cy="496" r="4" fill="#171717"/>
+    <circle cx="680" cy="496" r="5" fill="#006B4F"/>
+    <circle cx="960" cy="496" r="4" fill="#171717"/>
+
+    <text x="120" y="528" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">gửi tín hiệu</text>
+    <text x="400" y="528" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lên nhánh hàng chờ</text>
+    <text x="680" y="528" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lên onehub</text>
+    <text x="960" y="528" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">PR gom mở</text>
+  </svg>
+  </div>
+</div>
+</body>
+</html>
