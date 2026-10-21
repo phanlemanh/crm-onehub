@@ -310,18 +310,18 @@ describe("luat-ban-nhap", () => {
 	test("duongTheoDonVi dựng đường Theo đơn vị cho ba cấp", () => {
 		const goc = { cycleId: "q1", divisionId: null, departmentId: null };
 		expect(duongTheoDonVi("ws", { ...goc, level: "onehub" })).toBe(
-			"/ws/okr/theo-don-vi?kyOkr=q1&donOkr=goc",
+			"/ws/okr/bo-okr?kyOkr=q1&donOkr=goc",
 		);
 		expect(
 			duongTheoDonVi("ws", { ...goc, level: "bo-phan", divisionId: "bp-1" }),
-		).toBe("/ws/okr/theo-don-vi?kyOkr=q1&donOkr=bp%3Abp-1");
+		).toBe("/ws/okr/bo-okr?kyOkr=q1&donOkr=bp%3Abp-1");
 		expect(
 			duongTheoDonVi("ws", {
 				...goc,
 				level: "phong-ban",
 				departmentId: "pb-1",
 			}),
-		).toBe("/ws/okr/theo-don-vi?kyOkr=q1&donOkr=pb%3Apb-1");
+		).toBe("/ws/okr/bo-okr?kyOkr=q1&donOkr=pb%3Apb-1");
 	});
 });
 

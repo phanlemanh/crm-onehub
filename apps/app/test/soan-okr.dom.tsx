@@ -999,7 +999,7 @@ const CA = {
 			m.banNhap.daTao("1"),
 		);
 		expect(q('[data-nut="xem-theo-don-vi"]')?.getAttribute("href")).toBe(
-			"/ws/okr/theo-don-vi?kyOkr=q1&donOkr=pb%3Apb-1",
+			"/ws/okr/bo-okr?kyOkr=q1&donOkr=pb%3Apb-1",
 		);
 		expect(q("[data-hanh-dong]")).toBeNull();
 		expect(q('[data-nut="dua-vao"]')).toBeNull();

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 210610a1ccae9f8d3ed8622a10299579ee39bba1
+verified_commit: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660
 human_signoff: Phan Le Manh 2026-10-17 — ký Cổng 2 trên S4 lượt 2 (5/5 eval đạt); Ngoài-1…Ngoài-5 ghi Known limits, Ngoài-6 chấp nhận không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -139,3 +139,7 @@ Round 2: E1–E5 đạt cùng bảy lệnh suite; run_id ghi theo hậu tố -r2
 ### Re-pin lần 1 — 2026-10-17, do gộp onehub 2875871b4 chạm khu OKR (the-quanh.tsx)
 run_id: repin-20261017T021943Z-66419
 sha: 210610a1ccae9f8d3ed8622a10299579ee39bba1 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 · diff chạm vật đo ngoài làn máy: E4 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T130437Z-49516
+sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 · diff chạm vật đo ngoài làn máy: E4 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-4 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -453,7 +453,7 @@ describe("dh5-trang-thai", () => {
 		expect(document.body.textContent).toContain(vi.khongThay);
 		expect(document.body.textContent).not.toContain(vi.loiTieuDe);
 		const lk = document.body.querySelector("[data-quanh-khong-thay] a");
-		expect(lk?.getAttribute("href")).toBe("/ws/okr/toan-canh");
+		expect(lk?.getAttribute("href")).toBe("/ws/okr/so-do");
 
 		const jsx = await TrangQuanh({
 			params: Promise.resolve({ slug: "ws", objectiveId: "x" }),

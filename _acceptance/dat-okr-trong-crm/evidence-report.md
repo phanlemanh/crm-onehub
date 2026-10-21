@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7cdfb7bc7c078a173bc27686c43c00befe3867ca
+verified_commit: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -492,6 +492,6 @@ sha: a36833cb5ada9a77c457574f4e4b276c67024a0c · suites: 7 lệnh exit 0 · eval
 run_id: repin-20261020T075043Z-67675
 sha: 19567f1d3fc85ee36994b60051cecdd88b7b6028 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
 
-### Re-pin lần 24 — 2026-10-20, do F35 don-ho-so-cu lô 2 (dọn hồ sơ cũ, có dot-hoi-y-tuong-okr)
-run_id: repin-20261020T230558Z-65599
-sha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+### Re-pin lần 24 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T130437Z-49516
+sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

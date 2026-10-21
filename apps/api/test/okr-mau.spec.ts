@@ -2310,3 +2310,218 @@ describe("gioi-han-duyet-mau", () => {
 		CHO,
 	);
 });
+
+describe("okx", () => {
+	const linh = () => nguoiMau("an-khanh-linh");
+	const khoa = () => nguoiMau("do-minh-khoa");
+	const lan = () => nguoiMau("nguyen-thi-lan");
+	const NGOAI = "ngoai-mau-nguoi";
+	const dongGiu = (loi: string) =>
+		loi
+			.split("\n")
+			.map((d) => d.trim())
+			.filter((d) => /^\S+\.\S+ \(\d+\)$/.test(d))
+			.sort();
+
+	async function viecMauQuaApi(tieuDe: string): Promise<string> {
+		const r = await goi(
+			"viec.create",
+			{ tieuDe, nguoiThucHienId: khoa(), nguoiTheoDoiIds: [lan()] },
+			await phienCua(khoa()),
+		);
+		expect(r.status, r.loi).toBe(200);
+		return (r.data as { id: string }).id;
+	}
+
+	async function viecNgoai(data: {
+		nguoiThucHienId?: string;
+		chaId?: string;
+	}): Promise<string> {
+		const v = await db.viec.create({
+			data: {
+				tieuDe: "Việc của người ngoài",
+				nguoiGiaoId: NGOAI,
+				nguoiThucHienId: data.nguoiThucHienId ?? NGOAI,
+				taoBoiId: NGOAI,
+				chaId: data.chaId,
+			},
+		});
+		return v.id;
+	}
+
+	async function donViecNgoai() {
+		await db.viecPhuThuoc.deleteMany({ where: { taoBoiId: NGOAI } });
+		await db.viec.deleteMany({
+			where: { taoBoiId: NGOAI, chaId: { not: null } },
+		});
+		await db.viec.deleteMany({ where: { taoBoiId: NGOAI } });
+		await db.tinHieu.deleteMany({ where: { nguoiGuiId: NGOAI } });
+	}
+
+	async function moi() {
+		await lamSachOkr();
+		await donViecNgoai();
+		await xoaBoOkrMau(db);
+		await hangNgoai();
+		await napMau(new Date());
+	}
+
+	afterAll(async () => {
+		await donViecNgoai();
+		await donNgoai();
+	}, CHO);
+
+	test(
+		"okx-viec: việc chung do người mẫu tạo qua API, kèm việc con của người mẫu, được dọn và nạp lại được",
+		async () => {
+			await moi();
+			const cha = await viecMauQuaApi("Việc mẫu okx");
+			const con = await viecMauQuaApi("Việc con mẫu okx");
+			await db.viec.update({ where: { id: con }, data: { chaId: cha } });
+			expect(
+				await db.viec.count({ where: { taoBoiId: { in: [linh(), khoa()] } } }),
+			).toBe(2);
+			const ids = await tapIdMau();
+			const r = chayLenh([OKR_MAU.co.xoa]);
+			expect(r.ma, `okx-viec: xoa thoat ${r.ma} ${r.loi}`).toBe(0);
+			expect(await db.viec.count({ where: { id: { in: [cha, con] } } })).toBe(
+				0,
+			);
+			expect(
+				await db.viecTheoDoi.count({ where: { viecId: { in: [cha, con] } } }),
+			).toBe(0);
+			expect(await demThamChieu(ids)).toEqual({});
+			const lai = chayLenh([]);
+			expect(lai.ma, lai.loi).toBe(0);
+		},
+		CHO,
+	);
+
+	test(
+		"okx-tin-hieu: tín hiệu người mẫu gửi bị xoá, tín hiệu người ngoài giữ nguyên trừ cột lưu trữ",
+		async () => {
+			await moi();
+			const cua = { muonLam: "a", daXayRa: "b", tieuDe: "c", man: "/okr" };
+			const mau = await db.tinHieu.create({
+				data: { ...cua, nguoiGuiId: linh() },
+			});
+			const ngoai = await db.tinHieu.create({
+				data: { ...cua, nguoiGuiId: NGOAI, archivedById: khoa() },
+			});
+			const r = chayLenh([OKR_MAU.co.xoa]);
+			expect(r.ma, r.loi).toBe(0);
+			expect(
+				await db.tinHieu.findUnique({ where: { id: mau.id } }),
+				"okx-tin-hieu: con tin hieu cua nguoi mau",
+			).toBeNull();
+			const sau = await db.tinHieu.findUnique({ where: { id: ngoai.id } });
+			expect(sau).toEqual({ ...ngoai, archivedById: null });
+			await donViecNgoai();
+		},
+		CHO,
+	);
+
+	test(
+		"okx-ngoai-giu: việc người ngoài giao cho người mẫu → mã 5, nêu viec.nguoiThucHienId, không đổi gì; đối chứng dương",
+		async () => {
+			await moi();
+			const v = await viecNgoai({ nguoiThucHienId: linh() });
+			const truoc = await vanTayKho();
+			const r = chayLenh([OKR_MAU.co.xoa]);
+			expect(r.ma, r.loi).toBe(OKR_MAU.ma.dangGiu);
+			expect(r.loi).toContain("viec.nguoiThucHienId");
+			expect(await vanTayKho()).toEqual(truoc);
+			await db.viec.update({
+				where: { id: v },
+				data: { nguoiThucHienId: NGOAI },
+			});
+			const lai = chayLenh([OKR_MAU.co.xoa]);
+			expect(lai.ma, lai.loi).toBe(0);
+			await donViecNgoai();
+		},
+		CHO,
+	);
+
+	test(
+		"okx-ngoai-giu-con: việc con của người ngoài dưới việc người mẫu → mã 5, nêu viec.chaId, không đổi gì",
+		async () => {
+			await moi();
+			const cha = await viecMauQuaApi("Việc mẫu có con ngoài");
+			await viecNgoai({ chaId: cha });
+			const truoc = await vanTayKho();
+			const r = chayLenh([OKR_MAU.co.xoa]);
+			expect(r.ma, r.loi).toBe(OKR_MAU.ma.dangGiu);
+			expect(r.loi).toContain("viec.chaId");
+			expect(await vanTayKho()).toEqual(truoc);
+			await donViecNgoai();
+		},
+		CHO,
+	);
+
+	test(
+		"okx-ngoai-giu-phu-thuoc: phụ thuộc nối việc người mẫu với việc người ngoài → mã 5, nêu viecPhuThuoc, không đổi gì",
+		async () => {
+			await moi();
+			const mau = await viecMauQuaApi("Việc mẫu có phụ thuộc ngoài");
+			const ngoai = await viecNgoai({});
+			await db.viecPhuThuoc.create({
+				data: { truocId: mau, sauId: ngoai, taoBoiId: NGOAI },
+			});
+			const truoc = await vanTayKho();
+			const r = chayLenh([OKR_MAU.co.xoa]);
+			expect(r.ma, r.loi).toBe(OKR_MAU.ma.dangGiu);
+			expect(r.loi).toContain("viecPhuThuoc");
+			expect(await vanTayKho()).toEqual(truoc);
+			await donViecNgoai();
+		},
+		CHO,
+	);
+
+	test(
+		"okx-ngoai-giu-phu-thuoc-trong: phụ thuộc do người ngoài tạo giữa hai việc người mẫu → mã 5, nêu viecPhuThuoc.taoBoiId, không đổi gì",
+		async () => {
+			await moi();
+			const a = await viecMauQuaApi("Việc mẫu A");
+			const b = await viecMauQuaApi("Việc mẫu B");
+			await db.viecPhuThuoc.create({
+				data: { truocId: a, sauId: b, taoBoiId: NGOAI },
+			});
+			const truoc = await vanTayKho();
+			const r = chayLenh([OKR_MAU.co.xoa]);
+			expect(r.ma, r.loi).toBe(OKR_MAU.ma.dangGiu);
+			expect(r.loi).toContain("viecPhuThuoc.taoBoiId");
+			expect(await vanTayKho()).toEqual(truoc);
+			await donViecNgoai();
+		},
+		CHO,
+	);
+
+	test(
+		"okx-ten-giu: thông điệp liệt đúng tập khoá đang giữ, không in (User) trần",
+		async () => {
+			await moi();
+			await db.deal.update({
+				where: { id: "ngoai-mau-deal" },
+				data: { ownerId: khoa() },
+			});
+			const motDeal = chayLenh([OKR_MAU.co.xoa]);
+			expect(motDeal.ma, motDeal.loi).toBe(OKR_MAU.ma.dangGiu);
+			expect(dongGiu(motDeal.loi)).toEqual(["deal.ownerId (1)"]);
+			expect(motDeal.loi).not.toContain("(User)");
+			await viecNgoai({ nguoiThucHienId: linh() });
+			const hai = chayLenh([OKR_MAU.co.xoa]);
+			expect(dongGiu(hai.loi)).toEqual([
+				"deal.ownerId (1)",
+				"viec.nguoiThucHienId (1)",
+			]);
+			await db.deal.update({
+				where: { id: "ngoai-mau-deal" },
+				data: { ownerId: NGOAI },
+			});
+			const motViec = chayLenh([OKR_MAU.co.xoa]);
+			expect(dongGiu(motViec.loi)).toEqual(["viec.nguoiThucHienId (1)"]);
+			await donViecNgoai();
+		},
+		CHO,
+	);
+});

@@ -190,12 +190,12 @@ describe("sk-duong", () => {
 
 	test("đường cũ chuyển về Theo đơn vị của cuộc, kèm record", () => {
 		const co = new URL(duongMoCuoc("ws", "cuoc-1", donViCua(CUOC)), "http://x");
-		expect(co.pathname).toBe("/ws/okr/theo-don-vi");
+		expect(co.pathname).toBe("/ws/okr/bo-okr");
 		expect(co.searchParams.get(SEARCH_PARAM.okr.ky)).toBe("q1");
 		expect(co.searchParams.get(SEARCH_PARAM.okr.don)).toBe("pb:pb-1");
 		expect(co.searchParams.get("record")).toBe("soan:cuoc-1");
 		const khong = new URL(duongMoCuoc("ws", "cuoc-x", null), "http://x");
-		expect(khong.pathname).toBe("/ws/okr/theo-don-vi");
+		expect(khong.pathname).toBe("/ws/okr/bo-okr");
 		expect([...khong.searchParams.keys()]).toEqual(["record"]);
 	});
 
@@ -236,10 +236,10 @@ describe("sk-record", () => {
 
 	test("recordHref của soan mở được khung soạn khi dùng làm địa chỉ", async () => {
 		const u = new URL(
-			recordHref("ws", "/okr/theo-don-vi", "soan", CUOC.id),
+			recordHref("ws", "/okr/bo-okr", "soan", CUOC.id),
 			"http://x",
 		);
-		expect(u.pathname).toBe("/ws/okr/theo-don-vi");
+		expect(u.pathname).toBe("/ws/okr/bo-okr");
 		await moKhungBanGhi(u.search.slice(1));
 		await cho(() => q("[data-slot=sheet-header]") !== null, "dau khung");
 		expect(q("[data-slot=sheet-content]")?.getAttribute("data-size")).toBe(
