@@ -366,7 +366,9 @@ describe("mkc-trang", () => {
 			chuanBi();
 			const san = await dung(<MoiKr />, thamSo);
 			await cho(
-				() => qs(`[data-trang-thai=ST-moikr-${ten}]`) !== null,
+				() =>
+					qs(`[data-trang-thai=ST-moikr-${ten}]`) !== null &&
+					(ten === "chuachuky" || docCua("okr.moiKr").length > 0),
 				`trang thai ${ten}`,
 			);
 			thay.push(ten);
