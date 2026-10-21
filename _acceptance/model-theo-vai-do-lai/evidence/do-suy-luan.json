@@ -1,0 +1,29 @@
+{
+  "luc": "2026-10-20T10:33:01.047Z",
+  "model": "zai/glm-5.3-flash",
+  "cau": "A team wants a weekly digest of deals closing this month grouped by owner. List the three data fields you need and one risk. Answer in four short lines.",
+  "muc": {
+    "mac-dinh": {
+      "status": 200,
+      "model": "zai/glm-5.3-flash",
+      "token_ra": 84,
+      "token_suy_luan": 19,
+      "khong_tra_suy_luan": false
+    },
+    "low": {
+      "status": 200,
+      "model": "zai/glm-5.3-flash",
+      "token_ra": 43,
+      "token_suy_luan": 0,
+      "khong_tra_suy_luan": false
+    },
+    "high": {
+      "status": 200,
+      "model": "zai/glm-5.3-flash",
+      "token_ra": 90,
+      "token_suy_luan": 30,
+      "khong_tra_suy_luan": false
+    }
+  },
+  "usd": 0.000129
+}
