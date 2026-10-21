@@ -37,7 +37,6 @@ const CHU = {
 	chuaTruong: "Gán trưởng ở Cài đặt › Tổ chức",
 	rongBody: "Trưởng đơn vị thêm từng mục tiêu",
 	cuaToiRong: "Bạn chưa phụ trách mục tiêu hay KR nào",
-	cayCanChinh: "Sơ đồ góp vào",
 	danhSach: "Danh sách",
 	quayLai: "Quay lại",
 	nhap: "Nháp",
@@ -858,31 +857,6 @@ async function buocE11() {
 	kiem(`E11 buoc 2: thead bang KR phai 4 cot, thay ${cot}`, cot === 4);
 	await chup(t, "E11-step2.png", true);
 
-	await bamChu(t, "[role='radio']", CHU.cayCanChinh);
-	if (await hienSel(t, "[data-trang-thai='ST-donvi-caycanchinh']")) {
-		const dong = await t.evaluate(() =>
-			[...document.querySelectorAll("[data-nut-can-chinh]")].map((r) => ({
-				cap:
-					Number(
-						r.closest("[role='treeitem']")?.getAttribute("aria-level") ?? 0,
-					) - 1,
-				chu: r.textContent ?? "",
-				le: r.getBoundingClientRect().left,
-			})),
-		);
-		const goc = dong.find((d) => d.cap === 0 && d.chu.includes(TEN.o1));
-		const thut = dong.find((d) => d.cap >= 1 && d.chu.includes(TEN.o2));
-		kiem("E11 buoc 3: cay khong co dong muc tieu OneHub o cap 0", Boolean(goc));
-		kiem(
-			"E11 buoc 3: cay khong co dong thut le cho muc tieu bo phan",
-			Boolean(goc && thut && thut.le > goc.le),
-		);
-		kiem(
-			`E11 buoc 3: URL phai co xemOkr=cay, thay ${thamSo(t, "xemOkr")}`,
-			thamSo(t, "xemOkr") === "cay",
-		);
-	}
-	await chup(t, "E11-step3.png", true);
 	await bamChu(t, "[role='radio']", CHU.danhSach);
 	await hienSel(t, `[data-muc-tieu='${OKR.o3.id}']`);
 

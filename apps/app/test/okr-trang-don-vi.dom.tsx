@@ -929,10 +929,10 @@ describe("dvb-hang-cong-cu", () => {
 		);
 		expect(
 			khac.o.querySelectorAll('[data-view-switch="nut"] button').length,
-		).toBe(4);
+		).toBe(3);
 		expect(
 			bang.o.querySelectorAll('[data-view-switch="nut"] button').length,
-		).toBe(3);
+		).toBe(2);
 	});
 });
 
@@ -1813,7 +1813,7 @@ describe("dvb-giu-xem", () => {
 	test("20 lien ket the: tap tham so = giao {kyOkr, donOkr, xemOkr} voi duong dan dang dung", async () => {
 		const DUONG_DAN = [
 			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan",
-			"?kyOkr=q4&xemOkr=cay",
+			"?kyOkr=q4&xemOkr=hop-tuan",
 			"?xemOkr=cham",
 			"?kyOkr=q4&donOkr=pb:P2",
 			"?kyOkr=q4&donOkr=pb:P2&xemOkr=hop-tuan&phuTrachOkr=U2&expand=M1",

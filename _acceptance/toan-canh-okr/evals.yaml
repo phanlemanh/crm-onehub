@@ -49,6 +49,8 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.tco_man_chrome
+    status: not-run
+    superseded_by: so-do-toan-vung#AC-6
     steps:
       - "Cùng lần chạy với E2; gieo thêm OneHub có KR K1, B1 góp vào K1 và vào mục tiêu OneHub (hai chỗ)"
       - "Mở theo-don-vi?xemOkr=cay ở 1440/vi → ảnh buoc-cay-1: phần tử role=tree, có treeitem aria-level 1"
