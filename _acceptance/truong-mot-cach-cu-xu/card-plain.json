@@ -1,0 +1,53 @@
+{
+  "feature_plain": "Trường do quản trị tự tạo hiện và sửa y như trường có sẵn trên phiếu và trong bảng: số viết kiểu Việt, ô tích có nhãn, liên kết bấm được, lỗi nói tiếng Việt.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ vẽ mọi trường có kiểu trên ba phiếu và ba bảng bằng một bảng cách cư xử theo kiểu, cho cả trường chuẩn lẫn trường tự tạo (trừ ô Công ty, Giai đoạn, vai trò liên hệ)."},
+    {"id": "AC-2", "p": "Sẽ nhận «1.234,5» ở tiếng Việt và «1,234.5» ở tiếng Anh trong ô Số, lưu đúng 1234,5 và hiện lại đúng cách viết của người dùng."},
+    {"id": "AC-3", "p": "Sẽ chặn chữ gõ sai ngay dưới ô bằng câu tiếng Việt theo kiểu, ví dụ «Ô này nhận số, ví dụ 1.234,5»; khi máy chủ từ chối thì báo «Chưa lưu được <tên trường>.» thay vì câu tiếng Anh."},
+    {"id": "AC-4", "p": "Sẽ gắn nhãn cho ô tích: đọc màn hình đọc được tên, bấm vào nhãn là đổi giá trị; bảng hiện «Có» hay «Không»."},
+    {"id": "AC-5", "p": "Sẽ cho Liên kết, Email, Điện thoại bấm được ở phiếu và bảng (mở trang, gửi thư, gọi), kèm một nút bút chì để sửa — theo lối máy khuyên ở Hỏi-2."},
+    {"id": "AC-6", "p": "Sẽ cho mỗi trường chuẩn đúng kiểu đã chốt (Ngày chốt là Ngày, Người phụ trách là Người, Giá trị là Tiền…), và hàng chuẩn với hàng tự tạo cùng kiểu trên phiếu giống hệt nhau."},
+    {"id": "AC-7", "p": "Sẽ cho ô bảng của mỗi kiểu hiện cùng cách như trên phiếu, cột chuẩn và cột tự tạo cùng kiểu giống nhau; tiêu đề, bề rộng và chỗ ẩn cột giữ nguyên."},
+    {"id": "AC-9", "p": "Sẽ chụp ba phiếu ở khổ máy tính và điện thoại, ba bảng ở khổ máy tính, để người nhìn thấy che nhãn đi thì không phân biệt được trường chuẩn với trường tự tạo cùng kiểu."}
+  ],
+  "wont_do": [
+    {"id": "AC-8", "p": "Sẽ KHÔNG còn chữ «tuỳ chỉnh» hay «trường động» ở giao diện tiếng Việt — chỉ «trường» và «trường tự tạo»."},
+    {"id": "OOS-1", "p": "KHÔNG làm ô trường trong form tạo và ô thêm nhanh — hàng DA16."},
+    {"id": "OOS-2", "p": "KHÔNG làm sắp theo trường, ẩn cột theo kiểu ở khổ hẹp, trường trên thẻ Kanban — hàng DA17; cột giữ chỗ ẩn như nay."},
+    {"id": "OOS-3", "p": "KHÔNG làm lọc theo trường — hàng DA18."},
+    {"id": "OOS-4", "p": "KHÔNG đụng Cài đặt › Trường (tên trường chuẩn theo ngôn ngữ, sắp lại, ẩn, bắt buộc) — hàng DA15."},
+    {"id": "OOS-5", "p": "KHÔNG làm kiểu Tệp — hàng DA19, DA20."},
+    {"id": "OOS-6", "p": "KHÔNG thêm kiểu Tiền cho trường tự tạo — cần đổi cấu trúc dữ liệu."},
+    {"id": "OOS-7", "p": "KHÔNG dịch câu lỗi mà máy chủ trả cho Kara và khoá API — đó là lời giữa hai máy, màn hình không đọc nữa."},
+    {"id": "OOS-8", "p": "KHÔNG đưa ô Công ty, Giai đoạn, vai trò liên hệ vào bảng kiểu — xem Hỏi-1."},
+    {"id": "OOS-9", "p": "KHÔNG xen trường tự tạo vào giữa trường chuẩn: chúng đứng sau Người phụ trách tới khi DA15 cho sắp lại."}
+  ],
+  "scope_plain": "Năm mặt còn lại của «một trường, một cách cư xử» đã có hàng riêng trong cùng đợt; DA14 dựng bảng mà các hàng đó dùng tiếp.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã xét mười hai kiểu trường, Tệp để DA19."},
+    {"i": 1, "p": "Đã xét cả trường chuẩn lẫn trường tự tạo."},
+    {"i": 2, "p": "Đã xét mọi chỗ hiện giá trị; ba mặt form tạo, lọc, sắp để hàng sau."},
+    {"i": 3, "p": "Đã xét tiếng Việt và tiếng Anh."},
+    {"i": 4, "p": "Đã xét ô trống, có giá trị, gõ sai, máy chủ từ chối, đang lưu."},
+    {"i": 5, "p": "Thước đối chiếu: bảng sáu mặt theo kiểu trong luật giao diện của kho."},
+    {"i": 6, "p": "Thước đối chiếu: danh sách kiểu trường thật của cơ sở dữ liệu."},
+    {"i": 7, "p": "Thước đối chiếu: danh sách trường chuẩn mà Cài đặt đang hiện."},
+    {"i": 8, "p": "Thước đối chiếu: cách ô Giá trị đang đọc tiền theo ngôn ngữ."},
+    {"i": 9, "p": "AC-1 (một bảng cho mọi trường) phủ trục kiểu × loại trường."},
+    {"i": 10, "p": "AC-2 (đọc số theo ngôn ngữ) phủ Số × tiếng Việt, tiếng Anh."},
+    {"i": 11, "p": "AC-3 (câu lỗi theo kiểu) phủ mọi ca gõ sai và máy chủ từ chối."},
+    {"i": 12, "p": "AC-4 (ô tích có nhãn) phủ Ô tích ở phiếu, bảng, đầu phiếu."},
+    {"i": 13, "p": "AC-5 (liên kết bấm được) phủ ba kiểu liên kết × chuẩn, tự tạo × phiếu, bảng."},
+    {"i": 14, "p": "AC-6 (kiểu của trường chuẩn) phủ từng trường chuẩn của ba phiếu."},
+    {"i": 15, "p": "AC-7 (ô bảng) phủ mọi kiểu trong bảng, cả ô trống."},
+    {"i": 16, "p": "AC-8 (một tên gọi) phủ chữ trên giao diện."},
+    {"i": 17, "p": "AC-9 (ảnh chụp) phủ mắt người trên ba phiếu và ba bảng."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bản đầu để lỗi máy chủ của trường chuẩn vẫn in câu tiếng Anh, nên người dùng phân biệt được hai loại trường. Đã sửa: mọi trường đều báo «Chưa lưu được <tên>.» kèm câu tiếng Việt; thêm câu cho Chọn và Người."},
+    {"i": 1, "p": "Cách bấm Liên kết có hai lối đều dùng được mà bản đầu ghi như chỉ có một. Đã chuyển thành câu hỏi Hỏi-2 cho anh."},
+    {"i": 2, "p": "Bản đầu cắt số ở 6 chữ số thập phân, trái với lời hứa không làm tròn. Đã sửa: hiện đủ chữ số, thêm ca 0,0000001 vào phép đo."},
+    {"i": 3, "p": "Phép đo cũ so hai hàng vẽ bằng cùng một ô nên hiển nhiên giống nhau. Đã sửa: so trên ba phiếu thật và kiểm mỗi trường chuẩn thật sự đi qua bảng."},
+    {"i": 4, "p": "Tiêu chí ảnh chụp không phán được vì Số và Ô tích chỉ có ở trường tự tạo. Đã sửa: phán theo cặp cùng kiểu, và khai rõ trường tự tạo đứng sau Người phụ trách."}
+  ]
+}
