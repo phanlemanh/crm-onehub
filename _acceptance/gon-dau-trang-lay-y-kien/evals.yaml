@@ -40,9 +40,10 @@ evals:
       - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
       - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
     expected: |
-      Cùng lần chạy E1, 390x812, ma trận viết trước 3 ô x 2 cách vào {Tab từ ô trước, focus() như chạm} = 6 khẳng định
-      «TIEU DIEM <o> <cach>: day o <px> <= dinh hang <px>». In «SAI AC-3: …», mã 1.
-      CHIEU DO (--chieu-do bo-le, bản sao): gỡ scroll-mb của ba ô → ít nhất một ô bị che → «SAI AC-3: TIEU DIEM»
+      Cùng lần chạy E1, 390x812, ma trận viết trước 3 ô x 2 cách vào {Tab từ ô trước, chạm chuột vào phần ô ló 12px trên
+      mép hàng bám} = 6 khẳng định
+      «TIEU DIEM <o> <cach>: day o <px> <= dinh hang <px>» đo sau 1200ms. In «SAI AC-3: …», mã 1.
+      CHIEU DO (--chieu-do bo-le, bản sao): gỡ phần cuộn ô lên của HangHanhDongBamDay → ít nhất một ô bị che → «SAI AC-3: TIEU DIEM»
       (ghim /SAI AC-3: TIEU DIEM \S+/), mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
