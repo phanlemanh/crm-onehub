@@ -34,6 +34,7 @@ export const MH2 = {
 		khoBaoCao: "do-bo-mau.md",
 		khoTungCau: "cham-tung-cau.jsonl",
 		khoTraLoi: "cham-bo-do-mau.md",
+		khoSuKien: "su-kien.json",
 	},
 	nguon: {
 		settings: "packages/db/src/settings.ts",
@@ -209,6 +210,15 @@ export const khuonKhoTom = z.object({
 	usd_vai: z.number().nonnegative(),
 	aichiphi: z.string().min(1),
 	aichiphi_goc: z.string().min(1),
+	su_kien: z.string().min(1).optional(),
+	so_phien: z
+		.object({
+			kho: z.number().int().nonnegative(),
+			goc: z.number().int().nonnegative(),
+			kho_co_su_kien: z.number().int().nonnegative(),
+			goc_co_su_kien: z.number().int().nonnegative(),
+		})
+		.optional(),
 });
 export type KhoTom = z.infer<typeof khuonKhoTom>;
 
@@ -267,6 +277,24 @@ export function ghiChi(ev: string, muc: DongChi) {
 	if (i >= 0) c.luot[i] = muc;
 	else c.luot.push(muc);
 	c.luot.sort((a, b) => a.luc.localeCompare(b.luc));
+	writeFileSync(join(ev, MH2.tep.chiPhi), `${JSON.stringify(c, null, 2)}\n`);
+}
+
+export const TINH_NANG_KHO = [MH2.tinhNang.kho, MH2.tinhNang.gocZalo] as const;
+
+export const khuonSuKienKho = z.array(
+	z.object({
+		sessionId: z.string().min(1),
+		modelId: z.string().min(1),
+		tinhNang: z.enum(TINH_NANG_KHO),
+	}),
+);
+export type SuKienKho = z.infer<typeof khuonSuKienKho>;
+
+export function boDongChi(ev: string, vai: Vai, luot: number) {
+	const c = docChiPhi(ev);
+	if (!c) return;
+	c.luot = c.luot.filter((l) => !(l.vai === vai && l.luot === String(luot)));
 	writeFileSync(join(ev, MH2.tep.chiPhi), `${JSON.stringify(c, null, 2)}\n`);
 }
 

@@ -10,7 +10,7 @@ import { phienCuaLog } from "../../model-theo-vai-do-lai/rang/do-tac-nhan";
 import { khuonNguong } from "../../model-theo-vai-do-lai/rang/khuon";
 import { soKho } from "../../model-theo-vai-do-lai/rang/so-do";
 import { docTungCau } from "../../tro-ly-doc-kho/rang/quyet-do";
-import { modelGocTu, modelKhoTu } from "./do-kho";
+import { modelGocTu, modelKhoTu, soPhien } from "./do-kho";
 import { docDong, ketQuaLog } from "./do-tac-nhan";
 import {
 	bamNguon,
@@ -20,12 +20,14 @@ import {
 	docTho,
 	GOC,
 	type KeHoach,
+	type KhoTom,
 	khoaChi,
 	khuonDongTacNhan,
 	khuonKeHoachMh4,
 	khuonKetXuat,
 	khuonKhoTom,
 	khuonSuKienChon,
+	khuonSuKienKho,
 	MH2,
 	tongCost,
 	type Vai,
@@ -348,6 +350,100 @@ function soMa(ten: string, can: string[], co: string[]): string[] {
 	];
 }
 
+const TOI_DA_IN = 5;
+
+function inGon(tin: string, ds: string[]): string[] {
+	if (ds.length <= TOI_DA_IN) return ds.map((x) => `${tin} ${x}`);
+	return [
+		...ds.slice(0, TOI_DA_IN).map((x) => `${tin} ${x}`),
+		`${tin}: con ${ds.length - TOI_DA_IN} phien nua`,
+	];
+}
+
+type KetSuKien = Ket & { kho: string; goc: string };
+
+function kiemSuKienKho(
+	n: Nguon,
+	tom: KhoTom,
+	rel: string,
+	ke: KeHoach,
+): KetSuKien {
+	const hong: string[] = [];
+	const tepSk = tom.su_kien ?? `${rel}/${MH2.tep.khoSuKien}`;
+	const nguon = [
+		{
+			tep: tom.aichiphi,
+			tn: MH2.tinhNang.kho,
+			model: ke.tro_ly_kho.model,
+			tin: "sai model kho",
+		},
+		{
+			tep: tom.aichiphi_goc,
+			tn: MH2.tinhNang.gocZalo,
+			model: ke.tac_nhan.model,
+			tin: "sai model goc zalo",
+		},
+	] as const;
+	const phien = new Map<string, Set<string>>();
+	for (const x of nguon) {
+		if (!existsSync(join(n.ev, x.tep))) {
+			hong.push(`thieu ket xuat ${x.tep}`);
+			continue;
+		}
+		const hang = khuonKetXuat.parse(JSON.parse(docTho(join(n.ev, x.tep))));
+		if (hang.some((h) => h.tinhNang !== x.tn))
+			hong.push(`ket xuat sai tinh nang ${x.tep}`);
+		phien.set(x.tn, new Set(hang.map((h) => h.sessionId)));
+	}
+	if (!tom.su_kien || !existsSync(join(n.ev, tepSk)))
+		return { hong: [...hong, `thieu ${tepSk}`], dong: [], kho: "?", goc: "?" };
+	const sk = khuonSuKienKho.parse(JSON.parse(docTho(join(n.ev, tepSk))));
+	const tatCa = new Set([...phien.values()].flatMap((t) => [...t]));
+	hong.push(
+		...inGon("su kien la phien", [
+			...new Set(
+				sk.filter((e) => !tatCa.has(e.sessionId)).map((e) => e.sessionId),
+			),
+		]),
+	);
+	const model: Record<string, string> = {};
+	for (const x of nguon) {
+		const tap = phien.get(x.tn) ?? new Set<string>();
+		const cua = sk.filter((e) => tap.has(e.sessionId));
+		hong.push(
+			...inGon("su kien sai tinh nang", [
+				...new Set(
+					cua.filter((e) => e.tinhNang !== x.tn).map((e) => e.sessionId),
+				),
+			]),
+		);
+		const co = new Set(cua.map((e) => e.sessionId));
+		hong.push(
+			...inGon(
+				"thieu su kien model",
+				[...tap].filter((p) => !co.has(p)),
+			),
+		);
+		const ds = [...new Set(cua.map((e) => e.modelId))].sort();
+		model[x.tn] = ds.join(", ") || "khong co";
+		if (ds.length !== 1 || ds[0] !== x.model)
+			hong.push(`${x.tin} (${model[x.tn]}; phai ${x.model})`);
+	}
+	const so = soPhien(
+		khuonKetXuat.parse(JSON.parse(docTho(join(n.ev, tom.aichiphi)))),
+		khuonKetXuat.parse(JSON.parse(docTho(join(n.ev, tom.aichiphi_goc)))),
+		sk,
+	);
+	if (JSON.stringify(so) !== JSON.stringify(tom.so_phien))
+		hong.push(`tom tat lech ${MH2.tep.khoSuKien} ${rel}`);
+	return {
+		hong,
+		dong: [],
+		kho: model[MH2.tinhNang.kho] ?? "?",
+		goc: model[MH2.tinhNang.gocZalo] ?? "?",
+	};
+}
+
 export function kiemE5(n: Nguon, ke: KeHoach): Ket {
 	const hong: string[] = [];
 	const dong: string[] = [];
@@ -382,28 +478,11 @@ export function kiemE5(n: Nguon, ke: KeHoach): Ket {
 		const traLoi = docTho(join(thu, MH2.tep.khoTraLoi));
 		if (tom.o_cai_dat !== null)
 			hong.push(`o cai dat khong trong kho luot ${l} (${tom.o_cai_dat})`);
-		const mk = modelKhoTu(traLoi);
-		const mg = modelGocTu(traLoi);
-		if (tom.model_kho !== mk || tom.model_goc !== mg)
-			hong.push(`tom tat lech ${MH2.tep.khoTraLoi} kho luot ${l}`);
-		if (mk !== kh.model) hong.push(`sai model kho (${mk ?? "khong doc duoc"})`);
-		if (mg !== ke.tac_nhan.model)
-			hong.push(`sai model goc zalo (${mg ?? "khong doc duoc"})`);
+		const sk = kiemSuKienKho(n, tom, rel, ke);
+		hong.push(...sk.hong);
 		if (tom.bam_bo_mau !== bam(boTho))
 			hong.push(`bo-mau doi sau luot kho ${l}`);
 		if (tom.bam_nguon !== bamNguon()) hong.push(`nguon doi sau luot kho ${l}`);
-		for (const [f, tn] of [
-			[tom.aichiphi, MH2.tinhNang.kho],
-			[tom.aichiphi_goc, MH2.tinhNang.gocZalo],
-		] as const) {
-			if (!existsSync(join(n.ev, f))) {
-				hong.push(`thieu ket xuat ${f}`);
-				continue;
-			}
-			const hang = khuonKetXuat.parse(JSON.parse(docTho(join(n.ev, f))));
-			if (hang.some((h) => h.tinhNang !== tn))
-				hong.push(`ket xuat sai tinh nang ${f}`);
-		}
 		let dongCau: { luot: number; id: string }[] = [];
 		try {
 			dongCau = docTungCau(jsonl);
@@ -437,7 +516,8 @@ export function kiemE5(n: Nguon, ke: KeHoach): Ket {
 		for (const [t, o] of Object.entries(k.bang.zalo))
 			dong.push(`kho luot ${l} hai.${t}: ${o.k}/${o.n} loi ${o.loi}`);
 		dong.push(
-			`kho luot ${l}: model kho ${mk} · goc ${mg} · o cai dat null · ma cham ${k.maCham} · khong dat [${k.bang.khongDat.join("; ")}]`,
+			`kho luot ${l}: model kho ${sk.kho} · goc ${sk.goc} (su kien phien that) · o cai dat null · ma cham ${k.maCham} · khong dat [${k.bang.khongDat.join("; ")}]`,
+			`kho luot ${l}: probe cham-bo-do (khong lam can cu): kho ${modelKhoTu(traLoi) ?? "?"}, goc ${modelGocTu(traLoi) ?? "?"}`,
 		);
 		const lyDo: string[] = [];
 		for (const [t, m] of Object.entries(moc.tang)) {

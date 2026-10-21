@@ -7,7 +7,7 @@ import {
 	type DongTungCau,
 	docTungCau,
 } from "../../tro-ly-doc-kho/rang/quyet-do";
-import { ghiLuotKho, tomTatKho } from "./do-kho";
+import { ghiLuotKho, suKienKho, tomTatKho } from "./do-kho";
 import { docDong, dongTacNhan, ghiLuotTacNhan } from "./do-tac-nhan";
 import {
 	bamNguon,
@@ -34,6 +34,7 @@ export const GL = {
 	},
 	kho: { soBuoc: 6, vao: 60_000, ra: 2_400 },
 	goc: { soBuoc: 3, vao: 8_000, ra: 300 },
+	soPhien: 2,
 	thuMuc: "gia-lap",
 } as const;
 
@@ -208,7 +209,7 @@ function khoGia(ev: string, dong: Dong, bamNg: string): string[] {
 			hang({
 				id: `${phien}-${i}`,
 				ms: bat + 1000 * (i + 1),
-				phien,
+				phien: `${phien}P${i % GL.soPhien}`,
 				cha: null,
 				tinhNang: MH2.tinhNang.kho,
 				gia: giaKho,
@@ -220,7 +221,7 @@ function khoGia(ev: string, dong: Dong, bamNg: string): string[] {
 			hang({
 				id: `${phien}GOC-${i}`,
 				ms: bat + 1000 * (GL.kho.soBuoc + i + 1),
-				phien: `${phien}GOC`,
+				phien: `${phien}GOC${i % GL.soPhien}`,
 				cha: null,
 				tinhNang: MH2.tinhNang.gocZalo,
 				gia: GL.tacNhan.gia,
@@ -228,6 +229,15 @@ function khoGia(ev: string, dong: Dong, bamNg: string): string[] {
 				ra: GL.goc.ra,
 			}),
 		);
+		const chon = (hang: HangChiPhi[], modelId: string) =>
+			[...new Set(hang.map((h) => h.sessionId))].map((sessionId) => ({
+				sessionId,
+				modelId,
+			}));
+		const suKien = suKienKho(hangKho, hangGoc, [
+			...chon(hangKho, ke.tro_ly_kho.model),
+			...chon(hangGoc, ke.tac_nhan.model),
+		]);
 		const tom = tomTatKho({
 			luot: n,
 			nhan: MH2.nhanGiaLap,
@@ -242,8 +252,9 @@ function khoGia(ev: string, dong: Dong, bamNg: string): string[] {
 			bamNguon: bamNg,
 			hangKho,
 			hangGoc,
+			suKien,
 		});
-		ghiLuotKho(ev, tom, hangKho, hangGoc);
+		ghiLuotKho(ev, tom, hangKho, hangGoc, suKien);
 		ra.push(`tro-ly-kho:${n}`);
 	}
 	return ra;

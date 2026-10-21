@@ -1,5 +1,6 @@
 import {
 	cpSync,
+	existsSync,
 	mkdirSync,
 	mkdtempSync,
 	readFileSync,
@@ -19,6 +20,7 @@ import { doKho } from "./do-kho";
 import { doTacNhan } from "./do-tac-nhan";
 import { giaLap, vietBaoCao } from "./gia-lap";
 import {
+	boDongChi,
 	DUONG,
 	docKeHoach,
 	docTho,
@@ -29,7 +31,9 @@ import {
 	khuonKeHoach,
 	khuonKetXuat,
 	khuonKhoTom,
+	khuonSuKienKho,
 	MH2,
+	type SuKienKho,
 	tongCost,
 	z,
 } from "./khuon";
@@ -98,11 +102,25 @@ function moTam(): string {
 	return t;
 }
 
+function boKhoCuKhuon(ev: string) {
+	for (let l = 1; l <= docKeHoach(ev).tro_ly_kho.so_luot; l++) {
+		const thu = join(ev, DUONG.kho(l));
+		if (
+			existsSync(join(thu, MH2.tep.khoTom)) &&
+			!existsSync(join(thu, MH2.tep.khoSuKien))
+		) {
+			rmSync(thu, { recursive: true, force: true });
+			boDongChi(ev, "tro-ly-kho", l);
+		}
+	}
+}
+
 function banSao(): Nguon {
 	const t = moTam();
 	const that = nguonThat();
 	const ev = join(t, "evidence");
 	cpSync(MH2.evidence, ev, { recursive: true });
+	boKhoCuKhuon(ev);
 	daBu = giaLap(ev);
 	const chep = (nguon: string, ten: string) => {
 		const dich = join(t, ten);
@@ -195,6 +213,23 @@ function congCost(n: Nguon, luot: number, them: number) {
 }
 
 const khoThu = (n: Nguon) => tepEv(n, DUONG.kho(1));
+
+function suaSuKien(
+	n: Nguon,
+	tinhNang: SuKienKho[number]["tinhNang"],
+	doi: (e: SuKienKho[number]) => SuKienKho[number] | null,
+) {
+	const tep = join(khoThu(n), MH2.tep.khoSuKien);
+	const ds = khuonSuKienKho.parse(JSON.parse(docTho(tep)));
+	const i = ds.findIndex((e) => e.tinhNang === tinhNang);
+	const e = ds[i];
+	if (!e) throw new Error(`ban sao khong co su kien ${tinhNang}`);
+	const moi = doi(e);
+	const sau = moi
+		? ds.map((x, j) => (j === i ? moi : x))
+		: ds.filter((_, j) => j !== i);
+	writeFileSync(tep, `${JSON.stringify(sau, null, 2)}\n`);
+}
 
 function dauBaoCao(md: string) {
 	const tongMo = md.indexOf("## Tổng của script chấm");
@@ -448,18 +483,42 @@ const CHIEU_DO: readonly ChieuDo[] = [
 	},
 	{
 		eval: "E5",
-		ten: "doi model goc Zalo thanh model khac",
+		ten: "ban sao su-kien.json doi model mot phien goc Zalo",
 		mong: "do",
 		phaiCo: ["sai model goc zalo"],
+		khongCo: ["sai model kho"],
 		chay: () => {
 			const n = banSao();
-			const goc = ke(n).tac_nhan.model;
-			sua(join(khoThu(n), MH2.tep.khoTraLoi), (s) =>
-				s.replace(`gốc \`${goc}\``, `gốc \`${MH2.doi.oCaiDatLa}\``),
-			);
-			suaJson(join(khoThu(n), MH2.tep.khoTom), khuonKhoTom, (t) => {
-				t.model_goc = MH2.doi.oCaiDatLa;
-			});
+			suaSuKien(n, MH2.tinhNang.gocZalo, (e) => ({
+				...e,
+				modelId: MH2.doi.oCaiDatLa,
+			}));
+			return kiemNhieu(["E5"], n);
+		},
+	},
+	{
+		eval: "E5",
+		ten: "ban sao su-kien.json doi model mot phien kho",
+		mong: "do",
+		phaiCo: ["sai model kho"],
+		khongCo: ["sai model goc zalo"],
+		chay: () => {
+			const n = banSao();
+			suaSuKien(n, MH2.tinhNang.kho, (e) => ({
+				...e,
+				modelId: MH2.doi.modelCu,
+			}));
+			return kiemNhieu(["E5"], n);
+		},
+	},
+	{
+		eval: "E5",
+		ten: "ban sao su-kien.json xoa su kien mot phien kho",
+		mong: "do",
+		phaiCo: ["thieu su kien model"],
+		chay: () => {
+			const n = banSao();
+			suaSuKien(n, MH2.tinhNang.kho, () => null);
 			return kiemNhieu(["E5"], n);
 		},
 	},
@@ -792,7 +851,7 @@ if (import.meta.main) {
 			process.exit(0);
 		}
 		if (doiSo.includes("--do-kho")) {
-			await doKho();
+			await doKho(doiSo.includes("--do-lai"));
 			process.exit(0);
 		}
 		const ok = doiSo.includes("--pham-vi")
