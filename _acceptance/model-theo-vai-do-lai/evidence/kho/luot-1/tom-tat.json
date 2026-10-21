@@ -1,0 +1,13 @@
+{
+  "luot": 1,
+  "luc": "2026-10-20T11:15:39.292Z",
+  "thu_muc": ".acceptance-runs/model-theo-vai-do-lai/kho/2026-10-20T11-15-38-754Z-73549",
+  "ma_do_bo_mau": 0,
+  "model_kho": "zai/glm-5.3-flash",
+  "model_goc": "zai/glm-5.2-fast",
+  "bam_bo_mau": "0b3f3f96ddddb749f0a1d78b43f4cdbe88af8648e6fae42722c9fb66b0e02ac2",
+  "bam_sua_tam": "41beb10ba45ee0c58a1e6d5b0cdfe4ea6fc59bf3833bcb5440527538efcaa995",
+  "bam_commit": "a1d542719d17e91e3afa3fd71e9282f12d96b755",
+  "usd": 2.749777,
+  "usd_nguon": "so-du-gateway"
+}

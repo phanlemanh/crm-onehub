@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader } from "@crm/ui/components/card";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import type { ReactNode } from "react";
 
 const KHUNG_XUONG = {
 	bang: { hang: 8 },
@@ -10,14 +11,21 @@ const KHUNG_XUONG = {
 	the: { the: 2, hang: 3 },
 	tongQuan: { oSo: 4, hang: 5 },
 	chiTiet: { doan: 3 },
+	bangHaiDong: { hang: 5 },
 } as const;
+
+const LOP_HANG_CONG_CU =
+	"flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between";
+
+const LOP_KHOI_TRAI = "flex flex-col gap-2 sm:flex-row sm:items-center";
 
 export type HinhKhungXuong =
 	| "bang"
 	| "danh-sach"
 	| "the"
 	| "tong-quan"
-	| "chi-tiet";
+	| "chi-tiet"
+	| "bang-hai-dong";
 
 const day = (so: number, tien: string) =>
 	Array.from({ length: so }, (_, i) => `${tien}-${i}`);
@@ -130,6 +138,107 @@ function ChiTiet() {
 	);
 }
 
+function XuongPhaiHang() {
+	return (
+		<>
+			<Skeleton className="hidden h-7 w-75 sm:block" />
+			<div className="hidden gap-2 sm:flex lg:ml-auto">
+				<Skeleton className="h-7 w-14" />
+				<Skeleton className="h-7 w-20" />
+				<Skeleton className="h-7 w-20" />
+			</div>
+			<Skeleton className="h-7 w-full sm:hidden" />
+		</>
+	);
+}
+
+function HangCongCuHaiDong({ thanhCongCu }: { thanhCongCu?: ReactNode }) {
+	if (thanhCongCu)
+		return (
+			<div className={LOP_HANG_CONG_CU} data-khung-hang="thanh-cong-cu">
+				{thanhCongCu}
+				<div aria-hidden="true" className="contents">
+					<XuongPhaiHang />
+				</div>
+			</div>
+		);
+	return (
+		<div aria-hidden="true">
+			<div className={LOP_HANG_CONG_CU} data-khung-hang="thanh-cong-cu">
+				<div className={LOP_KHOI_TRAI} data-hang-cong-cu-don-vi-khung>
+					<Skeleton className="h-7 w-full sm:w-72" />
+					<Skeleton className="h-7 w-32 md:w-68" />
+				</div>
+				<XuongPhaiHang />
+			</div>
+		</div>
+	);
+}
+
+function ThanBangHaiDong() {
+	return (
+		<div
+			aria-hidden="true"
+			className="flex flex-col overflow-hidden rounded-lg border bg-card"
+		>
+			<Skeleton className="h-11 w-full rounded-none" data-khung-hang="dau-bang" />
+			{day(KHUNG_XUONG.bangHaiDong.hang, "hang").map((k) => (
+				<div
+					className="flex items-center gap-4 border-b px-4 py-3"
+					data-khung-hang="hang"
+					key={k}
+				>
+					<div className="flex min-w-0 flex-1 flex-col gap-1">
+						<div className="flex flex-col gap-1 md:h-5 md:flex-row md:items-center md:gap-2">
+							<div className="flex h-4 items-center">
+								<Skeleton className="h-4 w-2/3 md:w-64" />
+							</div>
+							<div className="flex h-5 items-center gap-2">
+								<Skeleton className="h-5 w-14" />
+								<Skeleton className="h-5 w-20" />
+							</div>
+						</div>
+						<div className="flex h-4 items-center">
+							<Skeleton className="h-3 w-1/2" />
+						</div>
+						<div className="pt-1 md:hidden">
+							<div className="flex h-14 flex-col justify-center gap-2">
+								<Skeleton className="h-3 w-24" />
+								<Skeleton className="h-2 w-full" />
+							</div>
+						</div>
+					</div>
+					<Skeleton className="hidden h-3 w-56 md:block" />
+					<Skeleton className="hidden h-4 w-28 md:block" />
+					<Skeleton className="hidden h-4 w-36 lg:block" />
+				</div>
+			))}
+		</div>
+	);
+}
+
+function BangHaiDong({
+	coTieuDe,
+	thanhCongCu,
+}: {
+	coTieuDe: boolean;
+	thanhCongCu?: ReactNode;
+}) {
+	return (
+		<div className="flex flex-col gap-6">
+			{coTieuDe ? (
+				<div aria-hidden="true">
+					<TieuDeGiuCho />
+				</div>
+			) : null}
+			<div className="flex flex-col gap-3">
+				<HangCongCuHaiDong thanhCongCu={thanhCongCu} />
+				<ThanBangHaiDong />
+			</div>
+		</div>
+	);
+}
+
 function Than({ hinh, cot }: { hinh: HinhKhungXuong; cot: 1 | 2 }) {
 	if (hinh === "bang") return <Bang />;
 	if (hinh === "danh-sach") return <DanhSach />;
@@ -142,20 +251,34 @@ export function KhungXuong({
 	hinh,
 	cot = 1,
 	coTieuDe = false,
+	thanhCongCu,
+	nhan,
 }: {
-	hinh: HinhKhungXuong;
+	hinh: Exclude<HinhKhungXuong, "bang-hai-dong">;
 	cot?: 1 | 2;
 	coTieuDe?: boolean;
+	thanhCongCu?: never;
+	nhan?: string;
+} | {
+	hinh: "bang-hai-dong";
+	cot?: never;
+	coTieuDe?: boolean;
+	thanhCongCu?: ReactNode;
+	nhan?: string;
 }) {
 	const msg = useMessages();
 	return (
 		<div data-khung-xuong={hinh} aria-busy="true" className="min-w-0">
-			<div aria-hidden="true" className="flex flex-col gap-6">
-				{coTieuDe && hinh !== "chi-tiet" ? <TieuDeGiuCho /> : null}
-				<Than cot={cot} hinh={hinh} />
-			</div>
+			{hinh === "bang-hai-dong" ? (
+				<BangHaiDong coTieuDe={coTieuDe} thanhCongCu={thanhCongCu} />
+			) : (
+				<div aria-hidden="true" className="flex flex-col gap-6">
+					{coTieuDe && hinh !== "chi-tiet" ? <TieuDeGiuCho /> : null}
+					<Than cot={cot ?? 1} hinh={hinh} />
+				</div>
+			)}
 			<span role="status" aria-live="polite" className="sr-only">
-				{msg.khungXuong.dangTai}
+				{nhan ?? msg.khungXuong.dangTai}
 			</span>
 		</div>
 	);

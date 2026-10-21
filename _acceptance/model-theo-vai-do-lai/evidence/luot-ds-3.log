@@ -1,0 +1,102 @@
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (55%)
+  - eve-authored-relative-extension-resolver (22%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (61%)
+  - eve-authored-relative-extension-resolver (21%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (68%)
+  - eve-authored-asset-import (28%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (35%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (68%)
+  - eve-authored-asset-import (27%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (66%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (33%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (64%)
+  - eve-authored-asset-import (33%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+
+EVALS 1
+target http://127.0.0.1:51569/
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+[agent] ▸ session wrun_01M5DT9PE5SETK59D3C175C3FZ on channel:crm
+[agent] » Submission id: cmvhbdhnk0001va8g348b9n09
+
+Build me an agent that gives me a snapshot of our CRM accounts.
+[agent] → set_chat_title title=Agent for CRM account snapshots
+[agent] → subagent agent_builder message=User request (verbatim): "Build me an agent tha…
+[agent] ✓ set_chat_title 0.0s
+[agent] · step 0 tool-calls  in 11.5k out 471 cached 11.3k $0.0007
+[agent] ✓ subagent agent_builder 63.8s
+[agent] ◂ The draft is ready for review — not deployed yet.
+
+**CRM Account Snapshot** (version 1, status READY)
+
+- **Trigger:** manual only — no schedule, no CRM events.
+- **Scope:** reads companies across the workspace, plus the contacts and deals linked to them. No records were pinned as selected resources…
+[agent] · step 0 stop  in 12.2k out 267 cached 11.3k $0.0007
+✓  agent-builder  gates 10/10
+
+Results: 1 passed (1 total)
+Gates: 10 passed
+
+Completed in 1m 11s
+
