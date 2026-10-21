@@ -1,0 +1,82 @@
+[
+  {
+    "id": "evt_01M5CEEW876ETA8PHZNSM33XJ4",
+    "at": "2026-10-20T03:42:05.191Z",
+    "sessionId": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 10932,
+    "outputTokens": 430,
+    "costUsd": 0.001855
+  },
+  {
+    "id": "evt_01M5CEEXC2EG5HEEWEZPR78ZVF",
+    "at": "2026-10-20T03:42:06.338Z",
+    "sessionId": "wrun_01M5CEEW9D9E02G1QMHTZ4SZMF",
+    "phienCha": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "modelId": null,
+    "inputTokens": 3894,
+    "outputTokens": 11,
+    "costUsd": 0.00059
+  },
+  {
+    "id": "evt_01M5CEF7VXHFVEZ8HKW082VTNG",
+    "at": "2026-10-20T03:42:17.085Z",
+    "sessionId": "wrun_01M5CEEW9D9E02G1QMHTZ4SZMF",
+    "phienCha": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "modelId": null,
+    "inputTokens": 4159,
+    "outputTokens": 790,
+    "costUsd": 0.001019
+  },
+  {
+    "id": "evt_01M5CEFAHX9T88STW209NNZMK3",
+    "at": "2026-10-20T03:42:19.837Z",
+    "sessionId": "wrun_01M5CEEW9D9E02G1QMHTZ4SZMF",
+    "phienCha": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "modelId": null,
+    "inputTokens": 4982,
+    "outputTokens": 228,
+    "costUsd": 0.000861
+  },
+  {
+    "id": "evt_01M5CEFE6JMRZYEBAA31EVMYT1",
+    "at": "2026-10-20T03:42:23.570Z",
+    "sessionId": "wrun_01M5CEEW9D9E02G1QMHTZ4SZMF",
+    "phienCha": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "modelId": null,
+    "inputTokens": 5243,
+    "outputTokens": 288,
+    "costUsd": 0.00093
+  },
+  {
+    "id": "evt_01M5CEFK15ZNE8CYYRPKEN41K2",
+    "at": "2026-10-20T03:42:28.517Z",
+    "sessionId": "wrun_01M5CEEW9D9E02G1QMHTZ4SZMF",
+    "phienCha": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "modelId": null,
+    "inputTokens": 5564,
+    "outputTokens": 570,
+    "costUsd": 0.000659
+  },
+  {
+    "id": "evt_01M5CEFPWTN2TB0N0FYM6ZXWD8",
+    "at": "2026-10-20T03:42:32.474Z",
+    "sessionId": "wrun_01M5CEEW9D9E02G1QMHTZ4SZMF",
+    "phienCha": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "modelId": null,
+    "inputTokens": 6193,
+    "outputTokens": 273,
+    "costUsd": 0.001065
+  },
+  {
+    "id": "evt_01M5CEFV7W0HKGTHA4BPZPYR72",
+    "at": "2026-10-20T03:42:36.924Z",
+    "sessionId": "wrun_01M5CEEH78WME628JFFX9GT5MD",
+    "phienCha": null,
+    "modelId": null,
+    "inputTokens": 11642,
+    "outputTokens": 273,
+    "costUsd": 0.001883
+  }
+]

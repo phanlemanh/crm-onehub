@@ -1,0 +1,30 @@
+{
+  "luc": "2026-10-20T23:22:16.706Z",
+  "model": "deepseek/deepseek-v4.1-flash-1017",
+  "cau": "A team wants a weekly digest of deals closing this month grouped by owner. List the three data fields you need and one risk. Answer in four short lines.",
+  "muc": {
+    "mac-dinh": {
+      "status": 200,
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "token_ra": 442,
+      "token_suy_luan": 391,
+      "khong_tra_suy_luan": false
+    },
+    "low": {
+      "status": 200,
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "token_ra": 256,
+      "token_suy_luan": 203,
+      "khong_tra_suy_luan": false
+    },
+    "high": {
+      "status": 200,
+      "model": "deepseek/deepseek-v4.1-flash-1017",
+      "token_ra": 279,
+      "token_suy_luan": 231,
+      "khong_tra_suy_luan": false
+    }
+  },
+  "usd": 0.001228,
+  "ung_vien": "ds"
+}
