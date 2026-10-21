@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cbdb55b7814e84568ea676a063f14af66064c884
+verified_commit: 186ade2443bf9771f627d8917ff106a077278c95
 human_signoff: Phan Le Manh 2026-10-21 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 10 eval, 7 suite xanh; vòng 1 REJECT vì thước, đã sửa)
 ---
 
@@ -182,3 +182,7 @@ none — every multi-run eval is uniform
 Round 1: REJECT — thước AC-2, AC-3, AC-4, AC-7 thiếu đối chứng dương (mẫu không thấy phần tử vẫn tính là đạt). Returned to implementation; thước và hồ sơ eval sửa ở f33105acb.
 Round 2: PASS — E1-E5, E6s, E7, E8 chạy lại trên thước đã sửa; E6, E6m mang sang từ round 1 vì delta không chạm paths của chúng.
 
+
+### Re-pin lần 1 — 2026-10-21, do hoá cũ sau gộp onehub #525 (bang.tsx)
+run_id: repin-20261021T141122Z-68890
+sha: 186ade2443bf9771f627d8917ff106a077278c95 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
