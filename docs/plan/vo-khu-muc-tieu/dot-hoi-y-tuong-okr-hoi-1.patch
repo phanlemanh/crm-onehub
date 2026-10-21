@@ -1,0 +1,126 @@
+diff --git a/_acceptance/dot-hoi-y-tuong-okr/decisions.jsonl b/_acceptance/dot-hoi-y-tuong-okr/decisions.jsonl
+index a437cfe06..59bdee16b 100644
+--- a/_acceptance/dot-hoi-y-tuong-okr/decisions.jsonl
++++ b/_acceptance/dot-hoi-y-tuong-okr/decisions.jsonl
+@@ -43,3 +43,5 @@
+ {"id":"d-20261004T081103Z-43","type":"revisit","stage":"gate2-sau","at":"2026-10-04T08:11:03Z","decision":"Sửa thước E19 (rang/migration-chi-them.mjs) và E20 (rang/soi-ma.mjs --ca thiet-ke): sau khi lượt gộp vào onehub, hai thước so với origin/onehub không còn gì để đo (E19 thoát 1 «khong co migration moi», E20 thoát 2 «diff khong co tep nao de soi»). E19 theo cách #211: nền là cha thứ nhất của commit gộp thêm 20261008010000_okr_hoi_y, migration và schema đọc tại commit gộp. E20: khi contract.md của lượt đã nằm trên onehub, thước dựng một worktree tạm tại commit gộp của lượt (#218) và đo ở đó với nền là cha thứ nhất, nên chỉ chấm đúng phần lượt đã giao; lượt chưa gộp thì giữ hành vi cũ. Luật, ngưỡng, chiều đỏ và kỳ vọng giữ nguyên. Ghim lại bằng làn ghim lại trong cùng PR","impact":"được: hồ sơ ghim lại được sau khi lượt đã gộp, thước đo đúng phần lượt đã giao thay vì thoát 2 vì không còn diff · rủi ro: thước không còn soi mã của lượt sau chạm cùng vùng; việc đó là của hồ sơ lượt sau"}
+ {"id":"d-20261004T081135Z-44","type":"revisit","stage":"gate2-sau","at":"2026-10-04T08:11:35Z","decision":"Khai paths cho E12, E15, E21 (chỉ thêm khoá paths vào evals.yaml; cmd, expected, verdict và chữ ký giữ nguyên) để hồ sơ đủ điều kiện cho bộ lọc hoá cũ theo paths của kit 2.21.0. Eval lệnh chạy toàn kho (check-types, lint, lint:slop, build, cả bộ test, cả cổng trước-đẩy) khai đúng các tệp hồ sơ này đã sửa, theo quy ước đã có ở hydrat-giai-doan-deals, hydrat-thanh-bieu-tuong, auto-pr-thoi-do-o-ban-re. Ghim lại bằng làn ghim lại trong cùng PR","impact":"tiết kiệm: khi kho bật risk_tiers.stale_scope: paths, hồ sơ chỉ hoá cũ khi thay đổi chạm tệp đã khai · rủi ro: hồi quy ở phần còn lại của kho không làm hồ sơ này hoá cũ; nó vẫn bị suite chung chặn ở mọi làn ghim lại và mọi PR"}
+ {"id":"d-20261004T122850Z-45","type":"revisit","stage":"gate2-sau","at":"2026-10-04T12:28:50Z","decision":"Sửa thước E13/E16 (rang/man-hoi-y.mjs) theo thay đổi có chủ ý của man-okr-truoc-r1 (#250, ed8e4fe15): thanh công bố ở màn Hồi ý nay thu gọn mặc định, danh sách điều thiếu chỉ hiện khi bấm «Xem danh sách». Thước bấm «Xem danh sách» khi danh sách đang thu gọn rồi mới đo liên kết điều thiếu đầu tiên (B2 ở 390 và 1440) và trước khi bấm liên kết tới thẻ chủ đề (E15 bước 4); bước bấm «Ẩn danh sách» khi thanh che nút Lưu chỉ chạy khi nút đó có. Phép kiểm nút Lưu của thẻ cuối nằm trọn trên thanh vẫn chạy ở trạng thái mặc định như người dùng thấy. Khẳng định, ngưỡng, đột biến và chiều đỏ giữ nguyên. Ghim lại bằng làn ghim lại trong cùng PR","impact":"được: hồ sơ ghim lại được sau #250 mà vẫn đo đúng điều đã hứa (liên kết điều thiếu bấm trúng và cuộn tới thẻ) · rủi ro: thước không còn bắt trường hợp danh sách mở sẵn che nội dung; việc đó nay là hành vi cố ý của man-okr-truoc-r1 và do hồ sơ đó đo"}
++{"id":"d-20261019T221814Z-46","type":"fix","stage":"gate2","at":"2026-10-19T22:18:14Z","decision":"Gỡ các khẳng định đo [data-khung-tab] trong rang/man-hoi-y.mjs: huy hiệu Mới của thẻ Hỏi ý (E12 bước 5, 6), thẻ đang đứng nằm trọn chiều ngang (E12 bước 5), số chủ đề chưa kết luận trên thẻ (E15 bước 4, 5) và thẻ hết huy hiệu (E15 bước 5); giữ khẳng định mục lục của E15 bước 5.","why":"Chủ kho cho gỡ ca đo thanh thẻ ngang khi khu Mục tiêu chuyển sang thanh bên (VK2, sổ vo-khu-muc-tieu d-20261019T214912Z-13).","cost_if_wrong":"Nếu số ý kiến cần góp trên lối vào Lấy ý kiến sai thì bàn đo này không bắt; việc ấy nay do vkm-thanh-ben và E14 của vo-khu-muc-tieu đo trên thanh bên.","decided_by":"Phan Le Manh"}
++{"id":"d-20261019T224952Z-47","type":"fix","stage":"gate2","at":"2026-10-19T22:49:52Z","decision":"apps/app/test/okr-hoi-y.dom.tsx: hai ca «Hỏi ý — huy hiệu tab» (đổi tên thành «huy hiệu mục Lấy ý kiến») dựng ThanhBenMucTieu thay DauTrangOkrHoiY và đọc huy hiệu ở a[href^=/ws/okr/lay-y-kien] thay [role=tab][href^=/ws/okr/hoi-y]; khẳng định Mới, 2 và rỗng giữ nguyên.","why":"Chủ kho cho đổi đúng chuỗi đường cũ thành đường mới khi khu Mục tiêu đổi đường (VK2, sổ vo-khu-muc-tieu d-20261019T224000Z-16).","cost_if_wrong":"Nếu sai, bài đã ký mất chốt đo phần thanh thẻ đã rời đi mà không có ca tương ứng ở thanh bên, và một hồi quy chọn mục theo đường lọt qua.","decided_by":"Phan Le Manh"}
+diff --git a/_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs b/_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs
+index f79e7f268..5dc8878f6 100644
+--- a/_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs
++++ b/_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs
+@@ -831,14 +831,6 @@ const cuonToi = (trang, sel) =>
+ 		window.__tim(s)[0]?.scrollIntoView({ block: "start" });
+ 	}, sel);
+ 
+-const huyHieuTab = (trang) =>
+-	trang.evaluate(
+-		() =>
+-			window
+-				.__tim("[data-khung-tab] a[href*='/okr/hoi-y'] [data-slot='badge']")[0]
+-				?.innerText.trim() ?? null,
+-	);
+-
+ async function xoaHoiYTren(cycleIds) {
+ 	const hoiY = await db.okrHoiY.findMany({
+ 		where: { cycleId: { in: cycleIds } },
+@@ -1155,15 +1147,6 @@ async function nhomE12() {
+ 	nhom = "E12 buoc 5";
+ 	const t = await moTrang("A", DO.hep, duongHoiY(NAM_KE));
+ 	await choTrangThai(t, "gop", "E12 buoc 5");
+-	await doi(
+-		t,
+-		`E12 buoc 5: tab Hoi y mang huy hieu «${CHU_OKR.nhanHoiYMoi}»`,
+-		(c) =>
+-			window
+-				.__tim("[data-khung-tab] a[href*='/okr/hoi-y'] [data-slot='badge']")[0]
+-				?.innerText.trim() === c,
+-		CHU_OKR.nhanHoiYMoi,
+-	);
+ 	await t.evaluate(() => {
+ 		const k = document.querySelector("[data-slot='page-shell-scroll']");
+ 		if (k) k.scrollTop = 0;
+@@ -1186,8 +1169,6 @@ async function nhomE12() {
+ 		const clamp = window.__tim("[data-khoi='loi-mo'] p.line-clamp-3")[0];
+ 		const oSoan = window.__tim("[data-khoi='o-soan'] textarea")[0];
+ 		const gui = window.__tim("[data-khoi='o-soan'] button[type='submit']")[0];
+-		const tab = window.__tim("[data-khung-tab] a[aria-current='page']")[0];
+-		const r = tab?.getBoundingClientRect();
+ 		return {
+ 			moc,
+ 			the,
+@@ -1204,7 +1185,6 @@ async function nhomE12() {
+ 				: null,
+ 			oSoanTop: oSoan ? Math.round(oSoan.getBoundingClientRect().top) : null,
+ 			guiDay: gui ? Math.round(gui.getBoundingClientRect().bottom) : null,
+-			tab: r ? { trai: r.left, phai: r.right } : null,
+ 			rong: window.innerWidth,
+ 		};
+ 	});
+@@ -1260,10 +1240,6 @@ async function nhomE12() {
+ 		`E12 buoc 5: nut «${CHU.gop.gui}» nam tron trong man dau, day ${dau.guiDay}px <= ${DO.cao[DO.hep]}`,
+ 		dau.guiDay !== null && dau.guiDay <= DO.cao[DO.hep],
+ 	);
+-	kiem(
+-		`E12 buoc 5: tab Hoi y dang dung nam tron [0, ${dau.rong}] (thay ${JSON.stringify(dau.tab)})`,
+-		dau.tab !== null && dau.tab.trai >= 0 && dau.tab.phai <= dau.rong,
+-	);
+ 	await chup(t, "buoc-man-dau.png");
+ 	await bamChu(t, "[data-khoi='loi-mo'] button", CHU.moDau.docThem);
+ 	await doi(
+@@ -1421,13 +1397,6 @@ async function nhomE12() {
+ 		`E12 buoc 6: y mang translate=no (thay ${JSON.stringify(khongDich)})`,
+ 		khongDich.so > 0 && khongDich.lech === 0,
+ 	);
+-	await doi(
+-		g,
+-		"E12 buoc 6: tab Hoi y mat huy hieu Moi sau khi gui",
+-		() =>
+-			window.__tim("[data-khung-tab] a[href*='/okr/hoi-y'] [data-slot='badge']")
+-				.length === 0,
+-	);
+ 	const dongY = await db.okrYDongY.findMany({
+ 		where: { yId: yDau ?? "", userId: id.A },
+ 		select: { yId: true, userId: true },
+@@ -2123,14 +2092,6 @@ async function nhomE15() {
+ 		if (k) k.scrollTop = 0;
+ 	});
+ 	await cho(600);
+-	const chuaKl = () =>
+-		db.okrChuDe.count({ where: { hoiYId: h.id, ketLuan: null } });
+-	const soTab = await huyHieuTab(c);
+-	const mongTab = String(await chuaKl());
+-	kiem(
+-		`E15 buoc 4: tab Hoi y mang so chu de chua ket luan ${mongTab} (thay «${soTab}»)`,
+-		soTab === mongTab,
+-	);
+ 	const chuDeNay = await db.okrChuDe.findMany({
+ 		where: { hoiYId: h.id },
+ 		orderBy: [{ viTri: "asc" }, { id: "asc" }],
+@@ -2316,13 +2277,10 @@ async function nhomE15() {
+ 	];
+ 	for (const kl of ketLuan) {
+ 		await ketLuanMot(c, kl);
+-		const conChua = await chuaKl();
+-		const tab = await huyHieuTab(c);
+ 		const mlSau = await trangThaiMucLuc(c);
+ 		kiem(
+-			`E15 buoc 5: sau «${kl.ten}» tab mang ${conChua || "khong huy hieu"} (thay «${tab}»), dau muc luc doi`,
+-			(conChua === 0 ? tab === null : tab === String(conChua)) &&
+-				mlSau.find((m) => m.id === kl.id)?.da === true,
++			`E15 buoc 5: sau «${kl.ten}» dau muc luc doi`,
++			mlSau.find((m) => m.id === kl.id)?.da === true,
+ 		);
+ 	}
+ 	kiem(
+@@ -2349,7 +2307,6 @@ async function nhomE15() {
+ 		},
+ 		sanSang,
+ 	);
+-	kiem("E15 buoc 5: tab het huy hieu", (await huyHieuTab(c)) === null);
+ 	await chup(c, "buoc-du.png");
+ 	const dbKl = await db.okrChuDe.findMany({
+ 		where: { id: { in: ketLuan.map((x) => x.id) } },

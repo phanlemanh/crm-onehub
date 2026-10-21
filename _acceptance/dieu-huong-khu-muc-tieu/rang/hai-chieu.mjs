@@ -62,7 +62,7 @@ const DOT_BIEN = {
 			tep: `${OKR}/hanh-dong-khu.tsx`,
 			cu: "	const hoiKara = <NutHoiKara />;\n",
 			moi: '	const hoiKara = <span data-nut-gia="" />;\n',
-			ghim: "dhk-hanh-dong: theo-don-vi lap-ke-hoach co 5 phan tu, mong 4",
+			ghim: "dhk-hanh-dong: theo-don-vi lap-ke-hoach co 4 phan tu, mong 3",
 		},
 	],
 	"dhk-don-dich": [
