@@ -3,6 +3,9 @@
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import Link from "next/link";
+import { okrMessages } from "@/lib/messages/okr";
+import { okrKhepMessages } from "@/lib/messages/okr-khep";
+import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -42,7 +45,15 @@ export function TheConBo({
 	xem: CachXem;
 	coCham: boolean;
 }) {
-	const m = okrVoKhuMessages(useLocale()).boOkr.the;
+	const locale = useLocale();
+	const m = okrVoKhuMessages(locale).boOkr.the;
+	const nhan = {
+		"danh-sach": m["danh-sach"],
+		"hop-tuan": okrToanCanhMessages(locale).hopTuan.cachXem,
+		viec: m.viec,
+		cay: okrMessages(locale).cayCanChinh,
+		cham: okrKhepMessages(locale).cham.cachXem,
+	} satisfies Record<CachXem, string>;
 	const goc = useWorkspaceUrl()("/okr/bo-okr");
 	return (
 		<Tabs value={xem}>
@@ -55,7 +66,7 @@ export function TheConBo({
 								data-the={the}
 								href={hrefThe({ goc, don, ky, the })}
 							>
-								{m[the]}
+								{nhan[the]}
 							</Link>
 						</TabsTrigger>
 					))}

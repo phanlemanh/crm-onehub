@@ -52,6 +52,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 
 const KHONG_DAU = new Set([
 	"nhom.okr",
+	"the.danh-sach",
 	"dong.soKr",
 	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
@@ -459,6 +460,10 @@ const GHIM = {
 	...GHIM_OKR_GOP_Y,
 	...GHIM_OKR_SOAN,
 	...GHIM_LO_TRINH,
+	"okr-vo-khu:boOkr.rongLoc.tieuDe": [
+		"Không có bộ OKR nào trong «1»",
+		"Không có bộ OKR nào trong «12»",
+	],
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],

@@ -1861,7 +1861,7 @@ describe("dvb-giu-xem", () => {
 			xem: s.o.querySelector('[data-the-con-bo] [aria-current="page"]')
 				?.textContent,
 			don: s.o.querySelector("[data-chon-don-vi]")?.textContent,
-		}).toEqual({ xem: theBo["hop-tuan"], don: CAY.P2.name });
+		}).toEqual({ xem: mtc.hopTuan.cachXem, don: CAY.P2.name });
 	});
 
 	test("chu ky ngoai pha cham + xemOkr=cham -> Danh sach", async () => {

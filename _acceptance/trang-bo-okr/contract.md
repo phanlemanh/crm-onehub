@@ -42,7 +42,7 @@ Source input: hàng VK3 `docs/plan/lo-trinh-okr.json`; ô cơ hội `_acceptance
   `kyOkr` của chu kỳ đang xem, dòng vị trí «Bộ OKR › <tên đơn vị>» với «Bộ OKR» là liên kết về danh sách giữ `kyOkr`,
   và bảng mục tiêu là của đúng đơn vị ấy; bộ OneHub mở bằng `donOkr=goc`.
 - AC-4: Given trang một bộ ở chu kỳ đang chạy, When trang tải xong, Then ngay dưới đầu trang có hàng thẻ con OKR ·
-  Họp tuần · Việc · Sơ đồ (thêm Chấm điểm khi chu kỳ ở pha chấm điểm hoặc đã đóng, và chỉ khi đó), mỗi thẻ là một
+  Họp tuần · Việc · Sơ đồ góp vào (thêm Chấm điểm khi chu kỳ ở pha chấm điểm hoặc đã đóng, và chỉ khi đó), mỗi thẻ là một
   liên kết có `href` riêng, đúng một thẻ mang `aria-current="page"`; không còn ô chuyển kiểu xem `ViewSwitch` trên
   trang.
 - AC-5: Given trang một bộ của một phòng ban ở một chu kỳ không phải chu kỳ hiện tại, When người xem bấm lần lượt

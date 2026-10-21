@@ -57,8 +57,8 @@ màn hiện nay. Trang một bộ có liên kết «Bộ OKR» về danh sách �
 
 - Hàng thẻ con theo luật «Thẻ con của trang»: `Tabs` + `TabsList variant="line"`, mỗi `TabsTrigger asChild` bọc
   một `Link`, `aria-current="page"` ở thẻ đang mở, nằm ngay dưới đầu trang. Thẻ: OKR (`danh-sach`, bỏ khỏi URL),
-  Họp tuần (`hop-tuan`), Việc (`viec`, mới), Sơ đồ (`cay` — giữ giá trị tham số cũ để liên kết cũ còn đúng; nhãn
-  đổi thành «Sơ đồ»), Chấm điểm (`cham`, chỉ khi chu kỳ ở pha chấm điểm hoặc đã đóng, như luật hiện nay).
+  Họp tuần (`hop-tuan`), Việc (`viec`, mới), Sơ đồ góp vào (`cay` — giữ giá trị tham số cũ để liên kết cũ còn đúng; nhãn
+  là khoá có sẵn `okr.cayCanChinh`), Chấm điểm (`cham`, chỉ khi chu kỳ ở pha chấm điểm hoặc đã đóng, như luật hiện nay).
 - `href` của thẻ giữ đúng `kyOkr` và `donOkr` (kể cả `goc`); bộ lọc chip của thẻ OKR không đi theo sang thẻ khác.
 - `ViewSwitch` rời khỏi hàng công cụ; `ChonDonVi` ở lại như lối tắt sang đường dẫn của bộ khác.
 - Thẻ Việc: thủ tục đọc mới `okr.viecCuaBo({ cycleId, unit })` trả việc gắn KR (`OkrViecKr`) của các mục tiêu thuộc

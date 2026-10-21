@@ -45,17 +45,14 @@ const vi = {
 		the: {
 			nhan: "Phần của bộ OKR",
 			"danh-sach": "OKR",
-			"hop-tuan": "Họp tuần",
 			viec: "Việc",
-			cay: "Sơ đồ",
-			cham: "Chấm điểm",
 		},
 		viec: {
 			cot: {
 				tieuDe: "Việc",
 				nguoiLam: "Người làm",
 				han: "Hạn",
-				xong: "Xong",
+				xong: "Trạng thái",
 			},
 			daXong: "Đã xong",
 			chuaXong: "Chưa xong",
@@ -118,17 +115,14 @@ const en: OkrVoKhuMessages = {
 		the: {
 			nhan: "Parts of the OKR set",
 			"danh-sach": "OKR",
-			"hop-tuan": "Weekly meeting",
 			viec: "Tasks",
-			cay: "Map",
-			cham: "Scoring",
 		},
 		viec: {
 			cot: {
 				tieuDe: "Task",
 				nguoiLam: "Assignee",
 				han: "Due",
-				xong: "Done",
+				xong: "Status",
 			},
 			daXong: "Done",
 			chuaXong: "Open",

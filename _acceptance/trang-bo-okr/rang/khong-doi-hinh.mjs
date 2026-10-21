@@ -40,7 +40,7 @@ const TEP_CUA_HO_SO = {
 };
 const VIET_LAI_V1_20 = new Set(["apps/app/test/okr-trang-don-vi.dom.tsx"]);
 const KHUON_DOI_CHUOI =
-	/donOkr|data-the-con-bo|data-view-switch|aria-current|theBo|okrVoKhuMessages|SO_NUT_HANG_CONG_CU|coCham|doiXem|xem=|the con trang don vi|chuyen kieu xem trang don vi|^\s*[{}()[\],;]*\s*$/;
+	/donOkr|data-the-con-bo|data-view-switch|aria-current|theBo|okrVoKhuMessages|SO_NUT_HANG_CONG_CU|coCham|doiXem|xem=|the con trang don vi|chuyen kieu xem trang don vi/;
 const TRAN_LENH_MS = 15 * 60_000;
 const MA_DO = 1;
 const MA_KHONG_DO = 2;
@@ -145,15 +145,25 @@ function soatDoiThuoc(cwd) {
 			);
 			continue;
 		}
-		const dong = diff
-			.split("\n")
-			.filter((d) => /^[+-]/.test(d) && !/^(\+\+\+|---)/.test(d));
-		const lech = dong.filter((d) => !KHUON_DOI_CHUOI.test(d.slice(1)));
-		for (const d of lech)
-			sai.push(`SAI AC-11: DOI LOGIC ${tep}:${d.slice(0, 80)}`);
+		const khoi = diff
+			.split(/\n(?=@@)/)
+			.filter((k) => k.startsWith("@@"))
+			.map((k) =>
+				k
+					.split("\n")
+					.slice(1)
+					.filter((d) => /^[+-]/.test(d))
+					.map((d) => d.slice(1))
+					.join("\n"),
+			);
+		const lech = khoi.filter((k) => !KHUON_DOI_CHUOI.test(k));
+		for (const k of lech)
+			sai.push(
+				`SAI AC-11: DOI LOGIC ${tep}:${k.split("\n")[0].trim().slice(0, 80)}`,
+			);
 		if (lech.length === 0)
 			console.log(
-				`DOI THUOC ${tep}: ${dong.length} dong doi chuoi, so ${slug} co dong fix`,
+				`DOI THUOC ${tep}: ${khoi.length} khoi doi chuoi, so ${slug} co dong fix`,
 			);
 	}
 	return sai;

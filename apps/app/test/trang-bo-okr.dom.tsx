@@ -364,7 +364,7 @@ const BON_THE = [
 	["danh-sach", "OKR"],
 	["hop-tuan", "Họp tuần"],
 	["viec", "Việc"],
-	["cay", "Sơ đồ"],
+	["cay", "Sơ đồ góp vào"],
 ] as const;
 const NAM_THE = [...BON_THE, ["cham", "Chấm điểm"]] as const;
 const MO_KHONG_CHAM = {
