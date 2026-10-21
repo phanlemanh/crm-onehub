@@ -73,15 +73,17 @@ const savedViews = new SavedViewsService(db, {
 } as unknown as CampaignsService);
 
 const TEN = {
-	T1: "An",
+	T1: "Bình",
 	T2: "Cường",
 	T3: "Dung",
-	T4: "Bình",
+	T4: "An",
 	T5: "Em",
+	T6: "Chi",
 } as const;
 type Nhan = keyof typeof TEN;
-const TANG: Nhan[] = ["T2", "T1", "T4", "T5", "T3"];
-const GIAM: Nhan[] = ["T5", "T1", "T4", "T2", "T3"];
+const TANG: Nhan[] = ["T2", "T4", "T1", "T6", "T5", "T3"];
+const GIAM: Nhan[] = ["T5", "T4", "T1", "T6", "T2", "T3"];
+const MOI_BAN_GHI: Nhan[] = ["T1", "T2", "T3", "T4", "T5", "T6"];
 
 type GiaTri = string | number;
 type BaGiaTri = { nho: GiaTri; hoa: GiaTri; lon: GiaTri };
@@ -109,7 +111,7 @@ const KIEU_SAP = Object.keys(GIA_TRI) as (keyof typeof GIA_TRI)[];
 function giaTriCho(kieu: keyof typeof GIA_TRI, nhan: Nhan): GiaTri | null {
 	const ba = GIA_TRI[kieu];
 	if (nhan === "T2") return ba.nho;
-	if (nhan === "T1" || nhan === "T4") return ba.hoa;
+	if (nhan === "T1" || nhan === "T4" || nhan === "T6") return ba.hoa;
 	if (nhan === "T5") return ba.lon;
 	return null;
 }
@@ -227,8 +229,9 @@ describe("smt-api-sap", () => {
 			T3: 100,
 			T4: 400,
 			T5: 200,
+			T6: 600,
 		} satisfies Record<Nhan, number>;
-		for (const nhan of ["T1", "T2", "T3", "T4", "T5"] as Nhan[]) {
+		for (const nhan of MOI_BAN_GHI) {
 			const id = await taoThoaThuan(tienTo, companyId, TEN[nhan], {
 				amountCents: amount[nhan],
 			});
@@ -243,7 +246,7 @@ describe("smt-api-sap", () => {
 			dealListInput.parse({ q: tienTo, sort: "amount", dir: "asc" }),
 		);
 		const ranAmount = amount.rows.map((r) => nhanTheoId.get(r.id));
-		if (ranAmount.join(",") !== "T3,T5,T1,T4,T2") {
+		if (ranAmount.join(",") !== "T3,T5,T1,T4,T2,T6") {
 			throw new Error("smt api sap: doi chung amount");
 		}
 
@@ -526,7 +529,7 @@ describe("smt-api-cty-lh", () => {
 		}
 
 		const ctyTheoId = new Map<string, Nhan>();
-		for (const nhan of ["T1", "T2", "T3", "T4", "T5"] as Nhan[]) {
+		for (const nhan of MOI_BAN_GHI) {
 			const id = await taoCongTy(`${tienTo} ${TEN[nhan]}`);
 			ctyTheoId.set(id, nhan);
 			const values = giaTriTheoKhoa(KIEU_BA, khoaCty, nhan);
@@ -536,7 +539,7 @@ describe("smt-api-cty-lh", () => {
 		const chua = await taoCongTy(`${tienTo} chua lien he`);
 		const lhTheoId = new Map<string, Nhan>();
 		const lhIds: string[] = [];
-		for (const nhan of ["T1", "T2", "T3", "T4", "T5"] as Nhan[]) {
+		for (const nhan of MOI_BAN_GHI) {
 			const c = await contacts.create({
 				firstName: "Lien he",
 				lastName: TEN[nhan],
@@ -586,7 +589,7 @@ describe("smt-api-cty-lh", () => {
 		if (soO !== 12) throw new Error(`smt api cty lh: thieu o ${soO}`);
 
 		const gop: string[] = [];
-		for (let page = 1; page <= 3; page++) {
+		for (let page = 1; page <= 4; page++) {
 			const out = await contacts.list(
 				contactListInput.parse({
 					q: tienTo,
@@ -602,7 +605,7 @@ describe("smt-api-cty-lh", () => {
 				gop.push(r.id);
 			}
 		}
-		if (gop.length !== 5)
+		if (gop.length !== MOI_BAN_GHI.length)
 			throw new Error(`smt api cty lh: trang ${gop.length}`);
 
 		const goc =
@@ -616,6 +619,7 @@ describe("smt-api-cty-lh", () => {
 			T3: null,
 			T4: soCho(4),
 			T5: null,
+			T6: null,
 		} satisfies Record<Nhan, string | null>;
 		const khoaDt = (await taoTruong("CONTACT", `${tienTo} dt`, "PHONE")).key;
 		for (const id of lhIds) {
@@ -623,8 +627,8 @@ describe("smt-api-cty-lh", () => {
 			if (so)
 				await contacts.update(id, { phone: so, fields: { [khoaDt]: so } });
 		}
-		const PHONE_TANG: Nhan[] = ["T1", "T2", "T4", "T3", "T5"];
-		const PHONE_GIAM: Nhan[] = ["T4", "T2", "T1", "T3", "T5"];
+		const PHONE_TANG: Nhan[] = ["T1", "T2", "T4", "T6", "T3", "T5"];
+		const PHONE_GIAM: Nhan[] = ["T4", "T2", "T1", "T6", "T3", "T5"];
 		for (const [dir, dapAn] of [
 			["asc", PHONE_TANG],
 			["desc", PHONE_GIAM],
@@ -798,7 +802,7 @@ describe("smt-api-board", () => {
 
 		const nhanTheoId = new Map<string, Nhan>();
 		for (const stage of [g1, g2]) {
-			for (const nhan of ["T1", "T2", "T3", "T4", "T5"] as Nhan[]) {
+			for (const nhan of MOI_BAN_GHI) {
 				const id = await taoThoaThuan(tienTo, companyId, TEN[nhan], {
 					amountCents: 1000,
 					stage,
