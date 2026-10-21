@@ -20,6 +20,7 @@ import { CompanyCell } from "@/components/crm/company-cell";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
 import { useFieldFacets } from "@/components/crm/fields/field-facets";
 import {
+	anDuoiTheoKieu,
 	HienThiTruong,
 	OTruongBang,
 } from "@/components/crm/fields/kieu-truong";
@@ -75,7 +76,7 @@ export function columnsFor(m: DealMessages): DataTableColumn<DealRow>[] {
 			sortable: true,
 			align: "right",
 			width: "w-[12%]",
-			hideBelow: "sm",
+			hideBelow: anDuoiTheoKieu("MONEY"),
 			cell: (row) => (
 				<OTruongBang
 					kieu="MONEY"
@@ -89,7 +90,7 @@ export function columnsFor(m: DealMessages): DataTableColumn<DealRow>[] {
 			header: m.headers.owner,
 			sortable: true,
 			width: "w-[14%]",
-			hideBelow: "md",
+			hideBelow: anDuoiTheoKieu("USER"),
 			cell: (row) => (
 				<OTruongBang kieu="USER" giaTri={row.owner.id} nguoi={row.owner} />
 			),
@@ -99,7 +100,7 @@ export function columnsFor(m: DealMessages): DataTableColumn<DealRow>[] {
 			header: m.headers.closeDate,
 			sortable: true,
 			width: "w-[12%]",
-			hideBelow: "lg",
+			hideBelow: anDuoiTheoKieu("DATE"),
 			cell: (row) => <OTruongBang kieu="DATE" giaTri={row.expectedCloseDate} />,
 		},
 		{
