@@ -5,7 +5,7 @@ slug: loc-don-vi-khong-tu-dong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -78,3 +78,10 @@ Quét bằng skill morphological-scan, preset test-matrix — bản đầy đủ
 
 - Chạm `apps/app/app/(app)/[slug]/okr/theo-don-vi/**` và `packages/ui/src/components/data-table.tsx`: các hồ sơ đã ký
   canh hai chỗ này được giữ tươi ở bước ghim lại trước khi gộp.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-21:
+  - Ngoài-2: bài đo AC-3 có thể báo đỏ giả nếu dữ liệu mẫu có mục tiêu đã bỏ cùng loại với giá trị vừa tích.
+  - Ngoài-3: bài đo khung Lọc trên điện thoại có thể đạt khi cú tích lọc không sinh truy vấn nào bị giữ.
+  - Ngoài-4: màn nào sau này dùng bảng kiểu lấp đầy và bật làm mờ khi tải lại thì bảng có thể mất thanh cuộn riêng.
+  - Ngoài-5: thêm một loại đơn vị mới mà quên bản chép schema đơn vị thì lỗi menu Lọc tự đóng quay lại.
+  - Ngoài-6: như Ngoài-4, ghi ở lượt chấm 1.
+  - Ngoài-7: bài kiểm nhỏ của hàm giữ dữ liệu dùng khoá truy vấn viết tay; bài trên trình duyệt vẫn bắt lỗi gắn sai.
