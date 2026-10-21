@@ -1,36 +1,3 @@
 {
-  "feature_plain": "Bảng kiến nghị model cho từng vai của Kara (Tác nhân, Trợ lý kho, Soạn OKR, judge, máy soạn) nay so thêm DeepSeek V4.1 Flash 1017 ở ba vai và Gemini 3.8 Flash ở Trợ lý kho, bên cạnh GLM 5.3 Flash đã đo, rồi chọn model cho mỗi vai theo luật đã ghim; chưa đổi model nào trong sản phẩm.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ chạy bài kiểm dựng tác tử 5 lượt cho DeepSeek ở suy luận mặc định và 5 lượt ở mức low, ghi từng lượt qua hay hỏng, số bước, token, giây, và model mà Gateway thật sự trả; lượt chạy nhầm model không được tính."},
-    {"id": "AC-2", "p": "Sẽ hỏi thẳng DeepSeek một câu ở ba mức suy luận để biết mức low có thật giảm token suy nghĩ không."},
-    {"id": "AC-3", "p": "Sẽ cho Trợ lý kho trả lời bộ 50 câu mẫu qua CRM và Zalo với DeepSeek và với Gemini, mỗi model một lượt, giữ chế độ không lưu dữ liệu như bản chạy thật, ghi điểm theo tầng, câu lỗi và token của từng bước."},
-    {"id": "AC-4", "p": "Sẽ chạy bài soạn OKR 18 ca hai lượt với DeepSeek trên đúng lời dặn Kara đang chạy, cùng thước với mốc Gemini; lượt không nộp đề xuất nào tính là hỏng."},
-    {"id": "AC-5", "p": "Sẽ dựng bảng kiến nghị năm vai, mỗi vai liệt mọi model đã đo kèm điểm, giá chạy vai (chỉ phần của model ấy) và trạng thái, rồi chọn model rẻ nhất trong số đạt ngưỡng; mọi số trỏ được về tệp đo của nó."}
-  ],
-  "wont_do": [
-    {"id": "AC-6", "p": "Sẽ KHÔNG vượt trần chi đã duyệt: chạm trần thì dừng các lượt còn lại, và model thiếu lượt ghi «chưa đủ số» chứ không được chọn."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG đổi tệp nào của sản phẩm: mọi đổi model trong lúc đo là tạm và trả lại trước khi lưu, hai tệp khai model OKR phải trùng bản trên onehub."},
-    {"id": "OOS-1", "p": "Không đổi model mặc định nào trong sản phẩm — đó là việc của hàng MH2, đọc bảng này."},
-    {"id": "OOS-2", "p": "Không đổi model judge: mọi điểm soạn OKR đã có đều do GLM 5.2 Fast chấm; DeepSeek ở vai judge và máy soạn chờ câu hỏi về hai vai chưa có thước."},
-    {"id": "OOS-3", "p": "Không đo lại GLM 5.3 Flash hay GLM 5.2 Fast — dùng số đã có."},
-    {"id": "OOS-4", "p": "Không dựng thước cho máy soạn kho trong vòng này."},
-    {"id": "OOS-5", "p": "Không thử trần bước, trần thời gian, mức low ở Trợ lý kho và Soạn OKR, hay Gemini cho Tác nhân."},
-    {"id": "OOS-6", "p": "Không đo Trợ lý OKR trong ứng dụng agent chính — thước soạn chỉ đo ứng dụng OKR riêng."},
-    {"id": "OOS-7", "p": "Không sửa chuyện agent gốc trên Zalo đi lạc — đã ghi là giới hạn của l7."}
-  ],
-  "scope_plain": "Những việc dưới đây cố ý để ngoài vòng mở lại này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Mỗi vai có đủ model cần so: Tác nhân GLM và DeepSeek (AC-1, AC-2), Trợ lý kho GLM, DeepSeek, Gemini (AC-3), Soạn OKR GLM và DeepSeek (AC-4); judge và máy soạn ghi mốc và «chưa có thước» (AC-5)."},
-    {"i": 1, "p": "Mức suy luận: mặc định ở cả ba vai, thêm mức low ở Tác nhân, và đo token từng mức (AC-1–AC-4)."},
-    {"i": 2, "p": "Cách chọn: qua ngưỡng từng vai trước, rồi luật chọn khi có nhiều model đạt (AC-5)."},
-    {"i": 3, "p": "Mốc so là số đã có, ghi tệp và ngày, không đo lại; tệp đo GLM của vòng đầu giữ nguyên từng byte (AC-1–AC-5)."},
-    {"i": 4, "p": "Chi phí: giá chạy vai cho luật chọn (AC-5), tiền thật từng lượt và trần (AC-6), và không tệp sản phẩm nào đổi (AC-7)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Chủ kho muốn đo DeepSeek ở mọi vai, nhưng bản nháp tự bỏ vai judge mà không hỏi. Đã tách thành câu hỏi riêng về judge và máy soạn (khuyên để ngoài vòng), và dòng ghi lời chủ kho không còn thu hẹp vai."},
-    {"i": 1, "p": "Luật «chọn model rẻ nhất» lẽ ra so cả tiền judge và phiên gốc, làm DeepSeek trông đắt oan. Đã đổi: chỉ tính token của các bước model ấy chạy nhân giá niêm yết, và bài kiểm có ô nhân đôi tiền judge mà kiến nghị không đổi."},
-    {"i": 2, "p": "Tiền của lượt Trợ lý kho trước đây ước theo số dư chung của nhóm, dễ lẫn tiền phiên khác. Đã đổi: lấy từ sổ chi phí của kho đo riêng, số dư chỉ để đối chiếu; số GLM vòng đầu được ghim không đổi."},
-    {"i": 3, "p": "Chặn giờ cao điểm theo giờ bắt đầu không giữ được lượt dài khỏi khung giá gấp đôi. Đã bỏ chặn: luật chọn dùng giá niêm yết nên giờ chạy không đổi kết luận, chỉ đổi tiền thật tính vào trần."},
-    {"i": 4, "p": "Chưa có luật cho lượt bị loại (chạy nhầm model, lời dặn lệch), và ngưỡng cũ bị dòng mới đè mất. Đã ghi: ngưỡng cũ áp nguyên cho DeepSeek và Gemini, model có lượt bị loại mang «chưa đủ số»; bài kiểm có ô 4 lượt qua + 1 lượt nhầm model."}
-  ]
+  "feature_plain": "Bảng kiến nghị model cho năm vai của Kara đã đo xong với GLM 5.3 Flash, DeepSeek V4.1 Flash 1017 và (riêng Trợ lý kho) Gemini 3.8 Flash: Tác nhân và Trợ lý kho kiến nghị DeepSeek theo giá niêm yết, Soạn OKR, Judge và Máy soạn giữ model cũ; chưa đổi model nào trong sản phẩm."
 }
