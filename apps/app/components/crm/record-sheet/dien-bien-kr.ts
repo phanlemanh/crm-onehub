@@ -4,7 +4,7 @@ import { parseAsString, useQueryStates } from "nuqs";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useOpenRecord } from "./record-stack";
 
-export const TAB_DIEN_BIEN = "dien-bien";
+export const TAB_SO_NGUON = "so-nguon";
 
 const thamSo = {
 	[SEARCH_PARAM.record.tab]: parseAsString,
@@ -19,14 +19,16 @@ export function useKrDienBien() {
 	};
 }
 
-export function useMoDienBien() {
+export function useMoNganKr() {
 	const openRecord = useOpenRecord();
 	const [, dat] = useQueryStates(thamSo);
-	return (objectiveId: string, keyResultId: string) => {
-		openRecord({ kind: "objective", id: objectiveId });
-		void dat({
-			[SEARCH_PARAM.record.tab]: TAB_DIEN_BIEN,
-			[SEARCH_PARAM.okr.kr]: keyResultId,
-		});
+	return (keyResultId: string, tab: string | null = null) => {
+		openRecord({ kind: "kr", id: keyResultId });
+		if (tab !== null) void dat({ [SEARCH_PARAM.record.tab]: tab });
 	};
+}
+
+export function useMoDienBien() {
+	const moNganKr = useMoNganKr();
+	return (_objectiveId: string, keyResultId: string) => moNganKr(keyResultId);
 }
