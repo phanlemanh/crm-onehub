@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: model-theo-vai-do-lai
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ea3193a431a3a2f7bc097c23f2b28ab243fcac37
+verified_commit: 0e927311990f9045dbd66674e9e0d69a6f552621
 human_signoff:
 ---
 
@@ -26,104 +26,111 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-model-theo-vai-do-lai-E1-r1
+  run_id: minted-model-theo-vai-do-lai-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtv_so
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
   output: |
+    bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts
     dat: bang kien nghi tinh lai khop bang chung, moi chieu do ghim dung
 
 - eval: E2
-  run_id: minted-model-theo-vai-do-lai-E2-r1
+  run_id: minted-model-theo-vai-do-lai-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtv_so
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
   output: |
+    bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts
     dat: bang kien nghi tinh lai khop bang chung, moi chieu do ghim dung
 
 - eval: E3
-  run_id: minted-model-theo-vai-do-lai-E3-r1
+  run_id: minted-model-theo-vai-do-lai-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtv_so
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
   output: |
+    bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts
     dat: bang kien nghi tinh lai khop bang chung, moi chieu do ghim dung
 
 - eval: E4
-  run_id: minted-model-theo-vai-do-lai-E4-r1
+  run_id: minted-model-theo-vai-do-lai-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtv_so
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
   output: |
+    bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts
     dat: bang kien nghi tinh lai khop bang chung, moi chieu do ghim dung
 
 - eval: E5
-  run_id: minted-model-theo-vai-do-lai-E5-r1
+  run_id: minted-model-theo-vai-do-lai-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtv_so
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
   output: |
+    bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts
     dat: bang kien nghi tinh lai khop bang chung, moi chieu do ghim dung
 
 - eval: E6
-  run_id: minted-model-theo-vai-do-lai-E6-r1
+  run_id: minted-model-theo-vai-do-lai-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtv_so
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
   output: |
+    bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts
     dat: bang kien nghi tinh lai khop bang chung, moi chieu do ghim dung
 
 - eval: E7
-  run_id: minted-model-theo-vai-do-lai-E7-r1
+  run_id: minted-model-theo-vai-do-lai-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtv_pham_vi
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
   output: |
+    bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts --pham-vi
     pham vi: chi ho so, docs/model-theo-vai.md va dong them config.yaml; sua tam da tra; hai tep khai model OKR khong lech origin/onehub
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-model-theo-vai-do-lai-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-model-theo-vai-do-lai-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
 
 - cmd: bun run lint:slop
-  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_lint_slop-r1
+  run_id: minted-model-theo-vai-do-lai-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-model-theo-vai-do-lai-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-model-theo-vai-do-lai-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-21T03:01:29Z
+  verified_at: 2026-10-21T03:32:37Z
 
 ## Known limits
 
@@ -131,7 +138,7 @@ human_signoff:
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+none — không eval feature nào được đo là xanh ở cả hai phía; cả hai lệnh feature (E1–E6 và E7) đều baseline n-a vì là eval mới, xem mục dưới.
 
 Baseline khong do
 - bun _acceptance/model-theo-vai-do-lai/rang/so-do.ts: bo qua baseline: tep _acceptance/model-theo-vai-do-lai/rang/so-do.ts co o cay dang kiem nhung chua co o merge-base 9d4ab4c09dd1ca7d8a7a34ab822ed34983d09a8a — eval moi, chay tren code cu khong phan biet gi
@@ -143,5 +150,6 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: moi eval may va lenh suite deu chay xanh, nhung scope-triage xac nhan hai finding trong hop dong o AC-5 (rang/khuon.ts:284, ham chiPhiPhan bo so hang doc cache nhan gia cache so voi cong thuc da ky trong AC-5 va expected cua E5), nen verdict la REJECT. Chi tiet trong review-findings.md. Returned to implementation.
+Round 1: REJECT — chi phi phan ung vien bo so hang doc cache nen lech AC-5; sua o commit 0e9273119.
+Round 2: PASS — E1 đến E7 và bảy lệnh suite đều xanh trên 0e927311990f9045dbd66674e9e0d69a6f552621.
 
