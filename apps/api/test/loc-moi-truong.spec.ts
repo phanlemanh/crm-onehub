@@ -174,6 +174,11 @@ function tenCua(map: Map<string, string>, ids: Iterable<string>) {
 		.join(",");
 }
 
+function ngayDia(chu: string): string {
+	const [y, m, d] = chu.split("-").map(Number);
+	return new Date(y ?? 0, (m ?? 1) - 1, d ?? 1, 12).toISOString();
+}
+
 function cungTap(a: Set<string>, b: Set<string>) {
 	return a.size === b.size && [...a].every((x) => b.has(x));
 }
@@ -357,13 +362,13 @@ describe("lmt-api-ngay-tich", () => {
 		const chot = await db.dealStage.findFirst({ where: { kind: "WON" } });
 		giaiDoanChot = chot?.id ?? "";
 		const ngay: Array<[string, string | null, string | undefined]> = [
-			["homqua", "2026-11-14", undefined],
-			["homqua-chot", "2026-11-14", giaiDoanChot],
-			["dau-thang", "2026-11-01", undefined],
-			["cuoi-thang", "2026-11-30", undefined],
-			["dau-thang-sau", "2026-12-01", undefined],
-			["cuoi-thang-sau", "2026-12-31", undefined],
-			["thang-ke", "2027-01-01", undefined],
+			["homqua", ngayDia("2026-11-14"), undefined],
+			["homqua-chot", ngayDia("2026-11-14"), giaiDoanChot],
+			["dau-thang", ngayDia("2026-11-01"), undefined],
+			["cuoi-thang", ngayDia("2026-11-30"), undefined],
+			["dau-thang-sau", ngayDia("2026-12-01"), undefined],
+			["cuoi-thang-sau", ngayDia("2026-12-31"), undefined],
+			["thang-ke", ngayDia("2027-01-01"), undefined],
 			["trong", null, undefined],
 		];
 		for (const [nhan, gia, stage] of ngay) {
@@ -764,11 +769,31 @@ describe("lmt-api-cty-lh-bang", () => {
 			}
 		}
 		const giaTri = {
-			C1: { TEXT: "Lmt dau", NUMBER: 3, DATE: "2026-11-02", CHECKBOX: true },
-			C2: { TEXT: "giua lmt", NUMBER: 7, DATE: "2026-12-02", CHECKBOX: false },
-			C3: { TEXT: "khac", NUMBER: 12, DATE: "2026-11-20", CHECKBOX: null },
+			C1: {
+				TEXT: "Lmt dau",
+				NUMBER: 3,
+				DATE: ngayDia("2026-11-02"),
+				CHECKBOX: true,
+			},
+			C2: {
+				TEXT: "giua lmt",
+				NUMBER: 7,
+				DATE: ngayDia("2026-12-02"),
+				CHECKBOX: false,
+			},
+			C3: {
+				TEXT: "khac",
+				NUMBER: 12,
+				DATE: ngayDia("2026-11-20"),
+				CHECKBOX: null,
+			},
 			C4: { TEXT: null, NUMBER: null, DATE: null, CHECKBOX: true },
-			C5: { TEXT: "nua", NUMBER: 20, DATE: "2027-02-01", CHECKBOX: null },
+			C5: {
+				TEXT: "nua",
+				NUMBER: 20,
+				DATE: ngayDia("2027-02-01"),
+				CHECKBOX: null,
+			},
 		} as const;
 		for (const [nhan, gia] of Object.entries(giaTri)) {
 			const giaCo = (entity: "COMPANY" | "CONTACT") =>
@@ -829,7 +854,10 @@ describe("lmt-api-cty-lh-bang", () => {
 				]);
 				if (i % 3) giaTruong.set(khoaDeal.chu, "x");
 				if (i % 4)
-					giaTruong.set(khoaDeal.ngay, i % 2 ? "2026-11-03" : "2026-12-09");
+					giaTruong.set(
+						khoaDeal.ngay,
+						i % 2 ? ngayDia("2026-11-03") : ngayDia("2026-12-09"),
+					);
 				if (i % 2) giaTruong.set(khoaDeal.tich, true);
 				if (i % 5) giaTruong.set(khoaDeal.chon, luaA);
 				await deals.update(dealId, { fields: Object.fromEntries(giaTruong) });
@@ -1040,7 +1068,7 @@ describe("lmt-api-da-luu", () => {
 				new Map<string, string | number>([
 					[k.chu, "co x"],
 					[k.so, 9],
-					[k.ngay, "2026-11-20"],
+					[k.ngay, ngayDia("2026-11-20")],
 				]),
 			],
 			[
@@ -1054,7 +1082,14 @@ describe("lmt-api-da-luu", () => {
 					[k.so, 2],
 				]),
 			],
-			["L3", quanTri, A, nguoiU, true, new Map([[k.ngay, "2026-12-01"]])],
+			[
+				"L3",
+				quanTri,
+				A,
+				nguoiU,
+				true,
+				new Map([[k.ngay, ngayDia("2026-12-01")]]),
+			],
 			["L4", nguoiB, B, nguoiU, false, new Map([[k.chu, "khong"]])],
 			["L5", nguoiB, A, null, true, new Map([[k.so, 50]])],
 			["L6", null, A, nguoiU, false, new Map()],
