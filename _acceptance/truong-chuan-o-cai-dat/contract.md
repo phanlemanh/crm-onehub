@@ -5,7 +5,7 @@ slug: truong-chuan-o-cai-dat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
+status: verified
 approved_by: manh
 approved_at: 2026-10-21T01:20:58Z
 design_doc: docs/superpowers/specs/2026-10-21-truong-chuan-o-cai-dat-design.md
