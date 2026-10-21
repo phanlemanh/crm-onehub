@@ -828,8 +828,12 @@ const CA_GOP: Ca[] = [
 		ten: "G1 gop onehub mang ma",
 		chay: () => {
 			const { k, cu } = khoG1();
-			expect(git(k.goc, "diff", "--name-only", cu, "HEAD")).toBe("apps/api/b.ts");
-			expect(git(k.goc, "diff", "--name-only", nen(k), "HEAD")).toBe("docs/a.md");
+			expect(git(k.goc, "diff", "--name-only", cu, "HEAD")).toBe(
+				"apps/api/b.ts",
+			);
+			expect(git(k.goc, "diff", "--name-only", nen(k), "HEAD")).toBe(
+				"docs/a.md",
+			);
 			expect(phanLoai(k, dongX(k, cu))).toEqual({
 				ma: 0,
 				ra: BO,
@@ -882,9 +886,9 @@ const CA_GOP: Ca[] = [
 			const cu = nhanhX(k, ["apps/api/a.ts", "export const a = 2;\n"]);
 			onehubThem(k, ["apps/api/a.ts", "export const a = 3;\n"], B_TS);
 			gop(k, "-X", "theirs");
-			expect(git(k.goc, "diff", "--name-only", cu, "HEAD").split("\n")).toContain(
-				"apps/api/a.ts",
-			);
+			expect(
+				git(k.goc, "diff", "--name-only", cu, "HEAD").split("\n"),
+			).toContain("apps/api/a.ts");
 			expect(
 				git(k.goc, "diff", "--name-only", nen(k), "HEAD").split("\n"),
 			).not.toContain("apps/api/a.ts");
@@ -954,12 +958,12 @@ const CA_GOP: Ca[] = [
 			const cu = nhanhX(k, ["LO-TRINH.html", "x\n"]);
 			onehubThem(k, ["LO-TRINH.html", "o\n"], B_TS);
 			gopXungDot(k, ["LO-TRINH.html", "z\n"]);
-			expect(git(k.goc, "diff", "--name-only", cu, "HEAD").split("\n")).toContain(
-				"LO-TRINH.html",
-			);
-			expect(git(k.goc, "diff", "--name-only", nen(k), "HEAD").split("\n")).toContain(
-				"LO-TRINH.html",
-			);
+			expect(
+				git(k.goc, "diff", "--name-only", cu, "HEAD").split("\n"),
+			).toContain("LO-TRINH.html");
+			expect(
+				git(k.goc, "diff", "--name-only", nen(k), "HEAD").split("\n"),
+			).toContain("LO-TRINH.html");
 			expect(phanLoai(k, dongX(k, cu))).toEqual({
 				ma: 0,
 				ra: "",
@@ -996,7 +1000,11 @@ const CA_GOP: Ca[] = [
 			const x = dongX(k, cu);
 			git(k.goc, "checkout", "-q", "-b", "w", "onehub");
 			commit(k.goc, ["apps/api/b.ts", "export const b = 7;\n"]);
-			expect(phanLoai(k, x, dongMoi(k, "w"))).toEqual({ ma: 0, ra: "", loi: "" });
+			expect(phanLoai(k, x, dongMoi(k, "w"))).toEqual({
+				ma: 0,
+				ra: "",
+				loi: "",
+			});
 		},
 	},
 	{

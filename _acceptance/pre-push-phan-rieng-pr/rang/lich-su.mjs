@@ -1,9 +1,20 @@
 import { spawnSync } from "node:child_process";
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+	copyFileSync,
+	mkdirSync,
+	mkdtempSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { docGlobT1, quyetDinh, tachT1 } from "../../../.github/scripts/phan-loai.mjs";
+import {
+	docGlobT1,
+	quyetDinh,
+	tachT1,
+} from "../../../.github/scripts/phan-loai.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const DINH = "1f6757ba03dd84779cf51d2755161b1e25fd4768";
@@ -38,7 +49,10 @@ function gitPhai(cwd, ...a) {
 	return r.ra;
 }
 
-const ten = (cwd, a, b) => gitPhai(cwd, "diff", "--name-only", "--no-renames", a, b).split("\n").filter(Boolean);
+const ten = (cwd, a, b) =>
+	gitPhai(cwd, "diff", "--name-only", "--no-renames", a, b)
+		.split("\n")
+		.filter(Boolean);
 
 function dungKhoTam() {
 	const d = mkdtempSync(join(tmpdir(), "lich-su-"));
@@ -53,11 +67,15 @@ function dungKhoTam() {
 
 function phanLoai(kho, m, p1, p2) {
 	gitPhai(kho, "update-ref", "refs/remotes/origin/onehub", p2);
-	const r = spawnSync("node", ["scripts/pre-push-t1.mjs", "--remote", "origin"], {
-		cwd: kho,
-		encoding: "utf8",
-		input: `refs/heads/pr ${m} refs/heads/pr ${p1}\n`,
-	});
+	const r = spawnSync(
+		"node",
+		["scripts/pre-push-t1.mjs", "--remote", "origin"],
+		{
+			cwd: kho,
+			encoding: "utf8",
+			input: `refs/heads/pr ${m} refs/heads/pr ${p1}\n`,
+		},
+	);
 	return { ma: r.status, nhe: r.stdout.trim() !== "", loi: r.stderr.trim() };
 }
 
@@ -65,7 +83,13 @@ const globs = docGlobT1(GOC);
 const nhe = (tep) => {
 	if (tep.length === 0) return false;
 	const { t1, maDoc } = tachT1(globs, tep);
-	return !quyetDinh({ suKien: "pull_request", nhap: "false", tep, laT1: (t) => t1.has(t), laMaDoc: (t) => maDoc.has(t) }).nang;
+	return !quyetDinh({
+		suKien: "pull_request",
+		nhap: "false",
+		tep,
+		laT1: (t) => t1.has(t),
+		laMaDoc: (t) => maDoc.has(t),
+	}).nang;
 };
 
 function tinhTay(m, p1, p2) {
@@ -78,48 +102,81 @@ function tinhTay(m, p1, p2) {
 }
 
 function danhSach() {
-	return gitPhai(GOC, "log", "--merges", `--since=${TU_NGAY}`, "--format=%H %P %s", DINH)
+	return gitPhai(
+		GOC,
+		"log",
+		"--merges",
+		`--since=${TU_NGAY}`,
+		"--format=%H %P %s",
+		DINH,
+	)
 		.split("\n")
 		.map((d) => {
 			const [m, p1, p2, ...s] = d.split(" ");
 			return { m, p1, p2, tieuDe: s.join(" ") };
 		})
-		.filter((c) => c.p2 && TIEU_DE.test(c.tieuDe) && git(GOC, "merge-base", "--is-ancestor", c.p2, DINH).ok);
+		.filter(
+			(c) =>
+				c.p2 &&
+				TIEU_DE.test(c.tieuDe) &&
+				git(GOC, "merge-base", "--is-ancestor", c.p2, DINH).ok,
+		);
 }
 
 const loi = [];
 const { d, kho } = dungKhoTam();
 try {
 	const m523 = gitPhai(GOC, "rev-parse", CA_523);
-	const r523 = phanLoai(kho, m523, gitPhai(GOC, "rev-parse", `${m523}^1`), gitPhai(GOC, "rev-parse", `${m523}^2`));
-	if (r523.ma !== 0 || r523.nhe || r523.loi !== DONG_523) loi.push(`ca 523: ma ${r523.ma} nhe ${r523.nhe} «${r523.loi}»`);
+	const r523 = phanLoai(
+		kho,
+		m523,
+		gitPhai(GOC, "rev-parse", `${m523}^1`),
+		gitPhai(GOC, "rev-parse", `${m523}^2`),
+	);
+	if (r523.ma !== 0 || r523.nhe || r523.loi !== DONG_523)
+		loi.push(`ca 523: ma ${r523.ma} nhe ${r523.nhe} «${r523.loi}»`);
 	else console.log("dat ca-523");
 
 	const ds = danhSach();
-	if (ds.length < IT_NHAT) loi.push(`doi chung: chi co ${ds.length} lan gop (< ${IT_NHAT})`);
+	if (ds.length < IT_NHAT)
+		loi.push(`doi chung: chi co ${ds.length} lan gop (< ${IT_NHAT})`);
 	let cu = 0;
 	let moi = 0;
 	const lechMoi = [];
 	for (const c of ds) {
 		const tay = tinhTay(c.m, c.p1, c.p2);
 		const may = phanLoai(kho, c.m, c.p1, c.p2);
-		if (may.ma !== 0 || may.nhe !== tay.moi) loi.push(`lech ${c.m.slice(0, 9)}: bo phan loai ${may.nhe ? "nhe" : "nang"}, tinh tay ${tay.moi ? "nhe" : "nang"}`);
+		if (may.ma !== 0 || may.nhe !== tay.moi)
+			loi.push(
+				`lech ${c.m.slice(0, 9)}: bo phan loai ${may.nhe ? "nhe" : "nang"}, tinh tay ${tay.moi ? "nhe" : "nang"}`,
+			);
 		if (tay.cu && !tay.moi) loi.push(`nang len ${c.m.slice(0, 9)}`);
 		if (tay.cu !== tay.moi) lechMoi.push(c);
 		cu += tay.cu;
 		moi += tay.moi;
 	}
-	console.log(`nhe theo luat cu: ${cu} / nhe theo luat moi: ${moi} / tren ${ds.length} lan gop`);
+	console.log(
+		`nhe theo luat cu: ${cu} / nhe theo luat moi: ${moi} / tren ${ds.length} lan gop`,
+	);
 	if (cu !== KY_VONG.cu || moi !== KY_VONG.moi || ds.length !== KY_VONG.n)
-		loi.push(`so dem lech ky vong ${JSON.stringify(KY_VONG)}: cu ${cu}, moi ${moi}, n ${ds.length}`);
+		loi.push(
+			`so dem lech ky vong ${JSON.stringify(KY_VONG)}: cu ${cu}, moi ${moi}, n ${ds.length}`,
+		);
 
 	const p = join(kho, "scripts/pre-push-t1.mjs");
 	const chu = readFileSync(p, "utf8");
-	if (chu.split(DONG_GIAO).length !== 2) loi.push("thuoc hong: khong thay dung mot cho cay dot bien bo-giao");
+	if (chu.split(DONG_GIAO).length !== 2)
+		loi.push("thuoc hong: khong thay dung mot cho cay dot bien bo-giao");
 	else {
 		writeFileSync(p, chu.replace(DONG_GIAO, "tep.add(t);"));
-		const bat = lechMoi.slice(0, SO_CA_PHA).some((c) => phanLoai(kho, c.m, c.p1, c.p2).nhe !== tinhTay(c.m, c.p1, c.p2).moi);
-		if (bat) console.log("BAT bo-giao: phep doi chieu bao lech tren ban sao dot bien");
+		const bat = lechMoi
+			.slice(0, SO_CA_PHA)
+			.some(
+				(c) =>
+					phanLoai(kho, c.m, c.p1, c.p2).nhe !== tinhTay(c.m, c.p1, c.p2).moi,
+			);
+		if (bat)
+			console.log("BAT bo-giao: phep doi chieu bao lech tren ban sao dot bien");
 		else loi.push("thuoc hong: dot bien bo-giao khong lam lech lan gop nao");
 	}
 } finally {

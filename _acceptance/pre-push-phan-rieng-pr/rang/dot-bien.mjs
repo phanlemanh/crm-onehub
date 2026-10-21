@@ -1,5 +1,13 @@
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+	copyFileSync,
+	existsSync,
+	mkdirSync,
+	readdirSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -57,7 +65,7 @@ const CA = [
 	{
 		ca: "tang-tu-cha-dau",
 		tu: "const ds = tepDiff(goc, goc0, dong.localSha);",
-		thanh: "const ds = tepDiff(goc, `${dong.localSha}^`, dong.localSha);",
+		thanh: 'const ds = tepDiff(goc, dong.localSha + "^", dong.localSha);',
 		test: "gop-onehub: G16 ",
 	},
 ];
@@ -97,8 +105,15 @@ function chaySpec(nguon, loc) {
 
 const lanh = chaySpec(banSao("lanh"), LOC_LANH);
 if (lanh.ma !== 0 || !/\b0 fail\b/.test(lanh.ra)) {
-	console.log("thuoc hong: doi chung duong — ban sao khong dot bien ma spec do");
-	console.log(lanh.ra.split("\n").filter((d) => d.startsWith("(fail)")).join("\n"));
+	console.log(
+		"thuoc hong: doi chung duong — ban sao khong dot bien ma spec do",
+	);
+	console.log(
+		lanh.ra
+			.split("\n")
+			.filter((d) => d.startsWith("(fail)"))
+			.join("\n"),
+	);
 	process.exit(1);
 }
 console.log("dat doi-chung-duong: ban sao lanh, spec xanh");
@@ -115,7 +130,9 @@ for (const c of CA) {
 	}
 	writeFileSync(p, chu.replace(c.tu, c.thanh));
 	const r = chaySpec(d, thoat(c.test));
-	const doDung = r.ma !== 0 && r.ra.split("\n").some((l) => l.startsWith("(fail)") && l.includes(c.test));
+	const doDung =
+		r.ma !== 0 &&
+		r.ra.split("\n").some((l) => l.startsWith("(fail)") && l.includes(c.test));
 	if (doDung) console.log(`BAT ${c.ca}: ${c.test.trim()}`);
 	else {
 		console.log(`thuoc hong: ${c.ca} — test «${c.test.trim()}» khong do`);
