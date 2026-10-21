@@ -36,7 +36,10 @@ const GIU = {
 	lenhMan: /scripts\/lan-do\/tien-de\.mjs|rang\/mot-luot\.sh/,
 	hetGioMs: 40 * PHUT_MS,
 	maHoan: 3,
-	boRa: {},
+	boRa: {
+		"kara-mot-ten#E12":
+			"AC-6 gỡ bài Cây có chủ đích (cay-can-chinh-ly-do.dom.tsx, ca theo-don-vi-cay); chủ kho V3-18 lối 1, E12 giữ nguyên cho vòng khác",
+	},
 	cayNen: ".acceptance-runs/so-do-toan-vung/goc",
 };
 const ANH_XA = join(HERE, "anh-xa-nghi.json");
