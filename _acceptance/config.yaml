@@ -12,6 +12,8 @@ feature_loop:
   repin_cost_cmd: node scripts/lan-do/chi-phi-gateway.mjs
   repin_ci_blank_env: [AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN]
   model_evals:
+    - gia-co-gom-tin-hieu/E8
+    - gia-co-gom-tin-hieu/E8b
     - chan-uy-thac-sai-luot/E6
     - khung-tao-okr-nhu-deal/E6
     - may-soan-de-xuat/E15a
