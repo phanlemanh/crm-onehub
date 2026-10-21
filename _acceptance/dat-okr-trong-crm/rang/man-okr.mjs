@@ -1030,7 +1030,7 @@ async function buocE11() {
 							"[data-trang-thai='ST-cuatoi-rong'] a",
 						),
 					].some((a) =>
-						a.getAttribute("href")?.startsWith(`/${s}/okr/theo-don-vi`),
+						a.getAttribute("href")?.startsWith(`/${s}/okr/bo-okr`),
 					),
 				slug,
 			),

@@ -17,7 +17,6 @@ const vi = {
 	loiTieuDe: "Không tải được sơ đồ",
 	loiMoTa: "Kết nối hoặc máy chủ đang trục trặc. Thử lại sau giây lát.",
 	khongThay: "Không tìm thấy mục tiêu này, hoặc bạn không có quyền xem.",
-	veToanCanh: "Về Toàn cảnh",
 	nhom: {
 		gopVao: "Góp vào",
 		tam: "Mục tiêu này",
@@ -47,7 +46,6 @@ const en: OkrQuanhMessages = {
 	loiTieuDe: "Couldn't load the map",
 	loiMoTa: "The connection or server is having trouble. Try again in a moment.",
 	khongThay: "This objective doesn't exist, or you don't have access to it.",
-	veToanCanh: "Back to Overview",
 	nhom: {
 		gopVao: "Contributes to",
 		tam: "This objective",

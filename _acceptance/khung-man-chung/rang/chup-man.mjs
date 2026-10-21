@@ -321,7 +321,7 @@ const MAN = [
 	{ ma: "lienhe", nut: true, duong: "/contacts", bang: "contact", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="table-container"], [data-slot="empty"]') !== null },
 	{ ma: "truong", duong: "/settings/fields", bang: "fieldDefinition", xong: () => document.querySelector("[data-khung-xuong]") === null },
 	{ ma: "caidat", duong: "/settings/onboarding", bang: "onboardingTemplate", xong: () => document.querySelector("[data-khung-xuong]") === null },
-	{ ma: "toancanh", duong: "/okr/toan-canh", bang: "okrCycle", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="tabs-list"]') !== null },
+	{ ma: "toancanh", duong: "/okr/toan-canh", bang: "okrCycle", xong: () => document.querySelector("[data-khung-xuong]") === null },
 	{ ma: "chiendich", nut: true, motDau: true, duong: null, bang: "campaign", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="page-shell-title"]') !== null },
 	{ ma: "tailieu", nut: true, duong: "/tai-lieu", bang: "taiLieuTrang", xong: () => document.querySelector("[data-khung-xuong]") === null },
 ];
@@ -370,7 +370,6 @@ try {
 					return {
 						moTa: h('[data-slot="page-shell-description"]'),
 						tabs: h('[data-slot="tabs-list"]'),
-						khungTab: h("[data-khung-tab]"),
 						chonKy: h('[data-slot="select-trigger"], [data-slot="period-select"] button, [data-slot="popover-trigger"]'),
 						noiDung: h('[data-slot="page-shell-content"]'),
 					};

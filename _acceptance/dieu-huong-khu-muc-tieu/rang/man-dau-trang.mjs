@@ -3,7 +3,7 @@
  * Đo đầu trang khu Mục tiêu trên trình duyệt thật (hồ sơ dieu-huong-khu-muc-tieu).
  *
  *   bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dieu-huong-khu-muc-tieu/rang/man-dau-trang.mjs"
- *   EVAL=E2|AC8|E5|E15|E16 (vắng = chạy cả năm; TAI, SOAN chỉ chạy khi gọi tên) · --chieu-do <nut-giua-than|khung-cao|dich-goc|an-nut|nhap-sai-don>
+ *   EVAL=E2|AC8|E5|E15|E16 (vắng = chạy cả năm; TAI, SOAN chỉ chạy khi gọi tên) · --chieu-do <le-phai|nut-giua-than|khung-cao|dich-goc|an-nut|nhap-sai-don>
  * Mọi dòng SAI đổ vào sổ lỗi của man-lib nên mã thoát khác 0 (trước 15/10 chỉ in, mã vẫn 0).
  *
  * Phiên đo riêng (kho _do + API + app của CÂY ĐANG XÉT), nạp bộ OKR mẫu, đăng nhập
@@ -44,6 +44,19 @@ const CHIEU_DO = {
 		dauVet: '<Skeleton className="h-8 w-56" data-hang-cho="" />',
 		ghim: /SAI AC-8: dau trang nhay \d+: dinh thanh the \d+px luc cho -> \d+px sau khi tai/,
 	},
+	"le-phai": {
+		nhan: "ban sao thu khung trang Muc tieu ve be rong page",
+		tenCay: "dhk-chieu-do-le-phai",
+		chiBuoc: "E2",
+		tep: `${OKR}/soan/khung-trang-okr.tsx`,
+		cam: (s) =>
+			s.replace(
+				"return <PageShell>{children}</PageShell>;",
+				'return <PageShell width="page">{children}</PageShell>;',
+			),
+		dauVet: 'return <PageShell width="page">{children}</PageShell>;',
+		ghim: /SAI AC-2: cua-toi 1440: phai \d+px \(Cai dat to chuc \d+px\)/,
+	},
 	"nut-giua-than": {
 		nhan: "ban sao dua nut Them muc tieu ve hang nut trong than Theo don vi",
 		tenCay: "dhk-chieu-do-than",
@@ -55,7 +68,7 @@ const CHIEU_DO = {
 				'<div className="flex flex-wrap items-center gap-2" data-hang-nut><button data-nut="them-muc-tieu" type="button">Thêm mục tiêu</button>',
 			),
 		dauVet: 'data-hang-nut><button data-nut="them-muc-tieu"',
-		ghim: /SAI AC-2: theo-don-vi 1440 — phai \d+px \(Thoa thuan \d+px\)|SAI AC-2: THAN theo-don-vi: [1-9]/,
+		ghim: /SAI AC-2: theo-don-vi 1440: phai \d+px \(Cai dat to chuc \d+px\)|SAI AC-2: THAN theo-don-vi: [1-9]/,
 	},
 	"dich-goc": {
 		nhan: "ban sao giai don vi dich luon tra cap cong ty",
@@ -263,6 +276,29 @@ try {
 				path: join(BANG_CHUNG, `dau-trang-deals-${kho}.png`),
 			});
 			await tD.close();
+			let caiDat = null;
+			if (kho === 1440) {
+				const tC = await d.moTrang(QT, kho, "/settings/organization");
+				await d.doi(
+					tC,
+					() =>
+						document.querySelector(
+							"[data-slot=page-shell-actions] button, [data-slot=page-shell-actions] a",
+						) !== null,
+				);
+				caiDat = await doDau(tC);
+				const coThanhBen = await tC.evaluate(
+					() => document.querySelector("[data-slot=area-sidebar]") !== null,
+				);
+				dong(
+					caiDat.phai !== null && coThanhBen,
+					`DOI CHUNG cai-dat ${kho}: nut chinh Cai dat to chuc phai ${caiDat.phai}px · thanh ben khu ${coThanhBen ? "co" : "KHONG"}`,
+				);
+				await tC.screenshot({
+					path: join(BANG_CHUNG, `dau-trang-cai-dat-${kho}.png`),
+				});
+				await tC.close();
+			}
 			for (const [the, duong] of TRANG) {
 				const t = await d.moTrang(QT, kho, `${duong}?kyOkr=${kyLap}`);
 				await d.doi(
@@ -271,12 +307,12 @@ try {
 				);
 				await choMs(600);
 				const x = await doDau(t);
-				const lech = Math.abs((x.phai ?? 9999) - (deals.phai ?? 0));
 				let dung = x.tran <= 0;
 				let ly = `tran ngang ${x.tran}px`;
 				if (kho === 1440) {
-					dung = dung && lech <= 1 && x.dinhNut < x.dinhThe;
-					ly = `phai ${x.phai}px (Thoa thuan ${deals.phai}px) · dinh nut ${x.dinhNut} < dinh thanh the ${x.dinhThe} · ${ly}`;
+					const lech = Math.abs((x.phai ?? 9999) - (caiDat?.phai ?? 0));
+					dung = dung && lech <= 1;
+					ly = `phai ${x.phai}px (Cai dat to chuc ${caiDat?.phai}px) · ${ly}`;
 				} else {
 					dung = dung && thuTu(x) === thuTu(deals) && x.h1 < x.hang;
 					ly = `thu tu ${thuTu(x)} (Thoa thuan ${thuTu(deals)}) · ${ly}`;
@@ -335,6 +371,7 @@ try {
 				"hoi-y",
 			].flatMap((t) => [1440, 390].map((k) => `dau-trang-${t}-${k}.png`)),
 			"dau-trang-deals-1440.png",
+			"dau-trang-cai-dat-1440.png",
 			"dau-trang-deals-390.png",
 			"khoa-ly-do-1440.png",
 			"khoa-ly-do-390.png",
@@ -570,7 +607,7 @@ try {
 		await d.bamSel(t, "[data-nut=them-muc-tieu]");
 		let moNgan = true;
 		try {
-			await d.choDuong(t, "/okr/theo-don-vi");
+			await d.choDuong(t, "/okr/bo-okr");
 			await d.doi(t, () => document.querySelector("[id$='-ten']") !== null);
 		} catch {
 			moNgan = false;
@@ -621,9 +658,12 @@ try {
 			1440,
 			`/okr/theo-don-vi?donOkr=pb:${P2_ID}`,
 		);
-		await d.doi(t2, () => document.querySelector("[role=tab]") !== null);
+		await d.doi(
+			t2,
+			() => document.querySelector("[data-slot=area-sidebar] a") !== null,
+		);
 		await t2.evaluate(() =>
-			[...document.querySelectorAll("[role=tab]")]
+			[...document.querySelectorAll("[data-slot=area-sidebar] a")]
 				.find((x) => new URL(x.href).pathname.endsWith("/okr"))
 				?.click(),
 		);
@@ -757,7 +797,7 @@ try {
 		);
 		await d.bamSel(t, "[data-nut=them-cach]");
 		await d.bamSel(t, "[data-nut=nhap-bang-tinh]");
-		await d.choDuong(t, "/okr/theo-don-vi");
+		await d.choDuong(t, "/okr/bo-okr");
 		await d.doi(
 			t,
 			() => document.querySelector("[role=dialog] textarea") !== null,
