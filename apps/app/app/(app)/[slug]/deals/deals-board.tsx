@@ -14,7 +14,8 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
-import { OwnerCell } from "@/components/crm/owner-cell";
+import { HienThiTruong } from "@/components/crm/fields/kieu-truong";
+import { type Owner, OwnerCell } from "@/components/crm/owner-cell";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { DealStageMenu } from "@/components/crm/stage-change";
@@ -22,6 +23,7 @@ import { LocalDay } from "@/components/local-date-time";
 import { useGiaiDoan } from "@/lib/giai-doan";
 import { type DealMessages, dealMessages } from "@/lib/messages/deals";
 import { useTRPC } from "@/lib/trpc/client";
+import type { RouterOutputs } from "@/lib/trpc/types";
 import type { DealBoardQueryInput } from "./deals-search-params";
 import {
 	type DealBoardColumn,
@@ -30,6 +32,8 @@ import {
 } from "./use-deal-board-move";
 
 type DealCard = DealBoardColumn["cards"][number];
+
+type TruongThe = RouterOutputs["fields"]["list"][number];
 
 function columnSummary(
 	column: DealBoardColumn,
@@ -57,6 +61,11 @@ export function DealsBoard({ input }: { input: DealBoardQueryInput }) {
 	});
 	const { columns, move, pendingIds } = useDealBoardMove(board.data);
 	const giaiDoan = useGiaiDoan();
+	const truong = useQuery(
+		trpc.fields.list.queryOptions({ entity: "DEAL", includeArchived: false }),
+	);
+	const nguoi = useQuery(trpc.users.list.queryOptions());
+	const truongThe = (truong.data ?? []).filter((field) => field.showOnTable);
 
 	if (board.isError) {
 		return (
@@ -111,7 +120,9 @@ export function DealsBoard({ input }: { input: DealBoardQueryInput }) {
 
 	const renderCard = (card: { id: string }) => {
 		const deal = byId.get(card.id);
-		return deal ? <DealBoardCard card={deal} /> : null;
+		return deal ? (
+			<DealBoardCard card={deal} truongThe={truongThe} nguoiDung={nguoi.data} />
+		) : null;
 	};
 
 	return (
@@ -141,7 +152,15 @@ export function DealsBoard({ input }: { input: DealBoardQueryInput }) {
 	);
 }
 
-function DealBoardCard({ card }: { card: DealCard }) {
+function DealBoardCard({
+	card,
+	truongThe,
+	nguoiDung,
+}: {
+	card: DealCard;
+	truongThe: TruongThe[];
+	nguoiDung?: Owner[];
+}) {
 	const locale = useLocale();
 	const openRecord = useOpenRecord();
 	const prefetchRecord = usePrefetchRecord();
@@ -176,6 +195,29 @@ function DealBoardCard({ card }: { card: DealCard }) {
 					</span>
 				) : null}
 			</span>
+			{truongThe.map((field) => {
+				const giaTri = card.fields[field.key];
+				if (giaTri === undefined || giaTri === null || giaTri === "")
+					return null;
+				return (
+					<span
+						key={field.key}
+						className="flex min-w-0 items-baseline gap-1.5 text-xs"
+					>
+						<span className="shrink-0 text-muted-foreground">
+							{field.label}
+						</span>
+						<span className="min-w-0 truncate" translate="no">
+							<HienThiTruong
+								kieu={field.type}
+								giaTri={giaTri}
+								luaChon={[{ value: String(giaTri), label: String(giaTri) }]}
+								nguoiDung={nguoiDung}
+							/>
+						</span>
+					</span>
+				);
+			})}
 			<span className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
 				<OwnerCell owner={card.owner} />
 				<DealStageMenu dealId={card.id} stage={card.stage} wrapLabel />

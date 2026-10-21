@@ -1144,7 +1144,7 @@ function mocCot() {
 		],
 		contacts: [
 			cot("name", l.name, "w-[15%]", null),
-			cot("phone", l.phone, "w-[14%]", "md", false),
+			cot("phone", l.phone, "w-[14%]", "md"),
 			cot("title", l.title, "w-[20%]", "lg"),
 			cot("email", l.email, "w-[24%]", "md"),
 			cot("company", l.company, "w-[18%]", null),

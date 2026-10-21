@@ -268,6 +268,17 @@ mock.module("@/lib/trpc/client", () => ({
 				() => null,
 				() => ({ written: 1, seconds: 12 }),
 			),
+			canhKr: thuTuc("okr.canhKr"),
+			dienBien: thuTuc("okr.dienBien", () => ({
+				kieu: "tang-toi",
+				tieuDe: "KR kr-1",
+				khoi: 0,
+				dich: 50,
+				donVi: "khách",
+				coCapNhat: false,
+				tuanDau: null,
+				diem: [],
+			})),
 			troLySanSang: thuTuc("okr.troLySanSang", () => ({
 				bat: false,
 				lyDo: "tat",

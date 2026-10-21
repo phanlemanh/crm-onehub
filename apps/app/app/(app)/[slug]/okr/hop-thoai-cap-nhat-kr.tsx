@@ -24,15 +24,20 @@ import {
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
+import { TargetLineChart } from "@crm/ui/components/target-line-chart";
+import { homNayVN } from "@crm/validation/ngay-vn";
 import { bangChungVao } from "@crm/validation/okr-canh-kr";
-import { mucCapNhat } from "@crm/validation/okr-cap-nhat";
-import { useMutation } from "@tanstack/react-query";
+import { type GuiCapNhatInput, mucCapNhat } from "@crm/validation/okr-cap-nhat";
+import { SO_KR_MOC, tienDoKr } from "@crm/validation/okr-kr";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { loiDuongDan } from "@/components/crm/record-sheet/kr-bang-chung";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
+import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -48,6 +53,97 @@ import {
 import type { KetQua, KrCapNhat } from "./kieu";
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
+type DienBien = RouterOutputs["okr"]["dienBien"];
+type O = ReturnType<typeof oBanDau>;
+type MucGui = GuiCapNhatInput["items"][number];
+
+export function mucGui(kr: KrCapNhat, o: O, bangChung: string): MucGui | null {
+	const so = docGiaTri(kr, o.giaTri);
+	if (so === null || loiSo(kr, so) !== null || o.tuTin === null) return null;
+	const coBangChung = kr.kind === "moc" && so === 1;
+	if (coBangChung && loiDuongDan(bangChung)) return null;
+	const bangChungGui = coBangChung
+		? bangChungVao.safeParse({ url: bangChung, ghiChu: "" })
+		: null;
+	return {
+		keyResultId: kr.keyResultId,
+		value: so,
+		confidence: o.tuTin,
+		note: o.ghiChu.trim(),
+		bangChung: bangChungGui?.success ? bangChungGui.data : undefined,
+	};
+}
+
+const XEM_TRUOC = { chieuCao: 144 } as const;
+
+const nhanTuan = (ngay: string) => `${ngay.slice(8, 10)}/${ngay.slice(5, 7)}`;
+
+function tuanCuaDiemMoi(diem: DienBien["diem"], homNay: string): string {
+	return diem.reduce<string>(
+		(cu, d) => (d.tuan <= homNay ? d.tuan : cu),
+		homNay,
+	);
+}
+
+function XemTruocMoc({ so }: { so: number }) {
+	const t = okrMessages(useLocale());
+	const tienDo = tienDoKr(
+		"moc",
+		SO_KR_MOC.startValue,
+		SO_KR_MOC.targetValue,
+		so,
+	);
+	return (
+		<Field data-o="xem-truoc" data-xem-truoc="moc">
+			<FieldDescription data-tien-do-moi={tienDo}>
+				{so >= SO_KR_MOC.targetValue ? t.moc.xong : t.moc.chuaXong} ·{" "}
+				{t.capNhat.dich} {t.moc.xong.toLowerCase()} ·{" "}
+				{t.capNhat.tienDoMoi(tienDo)}
+			</FieldDescription>
+		</Field>
+	);
+}
+
+function XemTruocSo({ kr, so }: { kr: KrCapNhat; so: number | null }) {
+	const locale = useLocale();
+	const m = okrMessages(locale).capNhat;
+	const mt = okrToanCanhMessages(locale);
+	const trpc = useTRPC();
+	const db = useQuery(
+		trpc.okr.dienBien.queryOptions({ keyResultId: kr.keyResultId }),
+	);
+	if (db.isPending)
+		return <Skeleton className="h-36 w-full" data-o="xem-truoc" />;
+	if (db.isError) return null;
+	const d = db.data;
+	const tuan = tuanCuaDiemMoi(d.diem, homNayVN(new Date()));
+	const tienDo = so === null ? null : tienDoKr(d.kieu, d.khoi, d.dich, so);
+	return (
+		<Field data-o="xem-truoc" data-xem-truoc="so">
+			<TargetLineChart
+				data={d.diem.map((p) => ({
+					x: nhanTuan(p.tuan),
+					value: p.giaTri,
+					expected: p.kyVong,
+				}))}
+				height={XEM_TRUOC.chieuCao}
+				label={m.xemTruoc}
+				previewPoint={
+					so === null ? undefined : { x: nhanTuan(tuan), value: so }
+				}
+				target={d.dich}
+				targetLabel={mt.dienBien.dich(
+					d.donVi === "%" ? `${d.dich}%` : `${d.dich} ${d.donVi}`.trim(),
+				)}
+			/>
+			{tienDo === null ? null : (
+				<FieldDescription className="tabular-nums" data-tien-do-moi={tienDo}>
+					{m.tienDoMoi(tienDo)}
+				</FieldDescription>
+			)}
+		</Field>
+	);
+}
 
 export function krCapNhatTuSheet(mt: ChiTiet, kr: KetQua): KrCapNhat {
 	const lanCuoi = mt.trail
@@ -100,6 +196,7 @@ export function HopThoaiCapNhatKr({
 	const m = t.hopCapNhat;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const queryClient = useQueryClient();
 	const ma = useId();
 	const mc = okrCanhKrMessages(locale);
 	const [o, setO] = useState(() => oBanDau(kr, locale));
@@ -108,7 +205,18 @@ export function HopThoaiCapNhatKr({
 		trpc.okr.guiCapNhat.mutationOptions({
 			onSuccess: async () => {
 				toast.success(m.daGui);
-				await cache.okr(kr.objectiveId, { settle: "record" });
+				const theoKr = { keyResultId: kr.keyResultId };
+				await Promise.all([
+					cache.okr(kr.objectiveId, { settle: "record" }),
+					queryClient.invalidateQueries(
+						{ queryKey: trpc.okr.canhKr.queryKey(theoKr) },
+						{ cancelRefetch: false },
+					),
+					queryClient.invalidateQueries(
+						{ queryKey: trpc.okr.dienBien.queryKey(theoKr) },
+						{ cancelRefetch: false },
+					),
+				]);
 				dong();
 			},
 		}),
@@ -118,44 +226,19 @@ export function HopThoaiCapNhatKr({
 	const loi = loiSo(kr, so);
 	const hienBangChung = kr.kind === "moc" && so === 1;
 	const saiBangChung = hienBangChung && loiDuongDan(bangChung);
-	const bangChungGui = hienBangChung
-		? bangChungVao.safeParse({ url: bangChung, ghiChu: "" })
-		: null;
+	const muc = mucGui(kr, o, bangChung);
 	const lan: LanTruoc | null = kr.lastAt === null ? null : "lan-truoc";
 	const khoa = gui.isPending;
 	const dangMo = sessionId === null && !loiMo;
-	const sanSang =
-		sessionId !== null &&
-		o.tuTin !== null &&
-		so !== null &&
-		loi === null &&
-		!saiBangChung;
+	const sanSang = sessionId !== null && muc !== null;
 	const loiMayChu =
 		gui.error?.data?.httpStatus !== undefined && gui.error.data.httpStatus < 500
 			? gui.error.message
 			: t.capNhat.loiGui.mayChu;
 
 	const guiDi = () => {
-		if (
-			!sanSang ||
-			khoa ||
-			sessionId === null ||
-			o.tuTin === null ||
-			so === null
-		)
-			return;
-		gui.mutate({
-			sessionId,
-			items: [
-				{
-					keyResultId: kr.keyResultId,
-					value: so,
-					confidence: o.tuTin,
-					note: o.ghiChu.trim(),
-					bangChung: bangChungGui?.success ? bangChungGui.data : undefined,
-				},
-			],
-		});
+		if (khoa || sessionId === null || muc === null) return;
+		gui.mutate({ sessionId, items: [muc] });
 	};
 
 	return (
@@ -215,8 +298,14 @@ export function HopThoaiCapNhatKr({
 							lan={lan}
 							loi={loi}
 							so={so}
+							tuDongFocus
 							value={o.giaTri}
 						/>
+						{kr.kind === "moc" ? (
+							<XemTruocMoc so={so ?? SO_KR_MOC.startValue} />
+						) : (
+							<XemTruocSo kr={kr} so={loi === null ? so : null} />
+						)}
 						{hienBangChung ? (
 							<Field
 								data-o="bang-chung"

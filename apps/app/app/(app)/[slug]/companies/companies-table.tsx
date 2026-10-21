@@ -22,7 +22,10 @@ import { useMemo } from "react";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
 import { useFieldFacets } from "@/components/crm/fields/field-facets";
-import { OTruongBang } from "@/components/crm/fields/kieu-truong";
+import {
+	anDuoiTheoKieu,
+	OTruongBang,
+} from "@/components/crm/fields/kieu-truong";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
@@ -78,7 +81,7 @@ export function columnsFor(
 			header: m.headers.domain,
 			sortable: true,
 			width: "w-[12%]",
-			hideBelow: "md",
+			hideBelow: anDuoiTheoKieu("URL"),
 			cell: (row) => <OTruongBang kieu="TEXT" giaTri={row.domain} />,
 		},
 		{
@@ -106,7 +109,7 @@ export function columnsFor(
 			header: m.headers.owner,
 			sortable: true,
 			width: "w-[13%]",
-			hideBelow: "md",
+			hideBelow: anDuoiTheoKieu("USER"),
 			cell: (row) => (
 				<OTruongBang
 					kieu="USER"
