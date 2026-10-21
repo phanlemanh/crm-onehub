@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@crm/ui/components/badge";
+import { Button } from "@crm/ui/components/button";
 import {
 	DataTable,
 	type DataTableColumn,
@@ -9,14 +10,19 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PaceIndicator } from "@crm/ui/components/okr-status";
 import type { TableQueryState } from "@crm/ui/lib/table-query";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsStringLiteral, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { OwnerCell } from "@/components/crm/owner-cell";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { useTRPC } from "@/lib/trpc/client";
 import { giaTri, TienDoKrCoSo } from "../bang-kr";
+import { type CapNhatKr, coNutCapNhat, useCapNhatKr } from "../cap-nhat-kr";
 import { ChipGopY } from "../chip-gop-y";
 import { type KetQua, type MucTieu, nhanKr } from "../kieu";
 import {
@@ -238,7 +244,46 @@ function useCot(): DataTableColumn<MucTieu>[] {
 	];
 }
 
-function TenKr({ kr, mt }: { kr: KetQua; mt: MucTieu }) {
+function NutCapNhatDong({
+	objectiveId,
+	kr,
+	mo,
+}: {
+	objectiveId: string;
+	kr: KetQua;
+	mo: CapNhatKr["mo"];
+}) {
+	const m = okrCanhKrMessages(useLocale()).khung;
+	const trpc = useTRPC();
+	const q = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
+	const mt = q.data;
+	const krMt = mt?.keyResults.find((k) => k.id === kr.id);
+	if (!mt || !krMt || !coNutCapNhat(mt, krMt)) return null;
+	return (
+		<Button
+			aria-label={dien(m.capNhatDong, { ten: kr.title })}
+			data-nut="cap-nhat-dong-kr"
+			onClick={(e) => {
+				e.stopPropagation();
+				mo(mt, krMt);
+			}}
+			size="sm"
+			variant="outline"
+		>
+			{m.capNhat}
+		</Button>
+	);
+}
+
+function TenKr({
+	kr,
+	mt,
+	mo,
+}: {
+	kr: KetQua;
+	mt: MucTieu;
+	mo: CapNhatKr["mo"];
+}) {
 	const locale = useLocale();
 	const laMoc = kr.kind === "moc";
 	return (
@@ -265,15 +310,23 @@ function TenKr({ kr, mt }: { kr: KetQua; mt: MucTieu }) {
 					/>
 				</span>
 			</span>
+			<span className="shrink-0 self-start">
+				<NutCapNhatDong kr={kr} mo={mo} objectiveId={mt.id} />
+			</span>
 		</span>
 	);
 }
 
-function oKr(kr: KetQua, cot: string, mt: MucTieu): ReactNode {
+function oKr(
+	kr: KetQua,
+	cot: string,
+	mt: MucTieu,
+	mo: CapNhatKr["mo"],
+): ReactNode {
 	const laMoc = kr.kind === "moc";
 	switch (cot) {
 		case "ten":
-			return <TenKr kr={kr} mt={mt} />;
+			return <TenKr kr={kr} mo={mo} mt={mt} />;
 		case "tien-do":
 			return <TienDoKrCoSo expected={mt.expected} kind={mt.kind} kr={kr} />;
 		case "tinh-trang":
@@ -301,6 +354,7 @@ export function BangDonVi({
 	loc,
 	doiLoc,
 	boLocMay,
+	dangTaiLai,
 	dem,
 	tenNguoi,
 	hangCongCu,
@@ -311,6 +365,7 @@ export function BangDonVi({
 	loc: LocOkrGiaTri;
 	doiLoc: (thay: Partial<LocOkrGiaTri>) => void;
 	boLocMay: () => void;
+	dangTaiLai: boolean;
 	dem: DemMatLoc | undefined;
 	tenNguoi: ReadonlyMap<string, string>;
 	hangCongCu: ReactNode;
@@ -319,6 +374,7 @@ export function BangDonVi({
 }) {
 	const b = okrMessages(useLocale()).donViBang;
 	const openRecord = useOpenRecord();
+	const capNhat = useCapNhatKr();
 	const { query, tab, cot, chieu } = useTruyVanBang(loc, doiLoc);
 	const facets = useMatLocOkr(dem, loc, tenNguoi);
 	const cotBang = useCot();
@@ -331,7 +387,7 @@ export function BangDonVi({
 		isExpandable: (mt) => mt.keyResults.length > 0 && !laDaBo(mt),
 		getSubRows: (mt) => mt.keyResults,
 		getSubRowId: (kr) => kr.id,
-		renderSubCell: oKr,
+		renderSubCell: (kr, cotKr, mt) => oKr(kr, cotKr, mt, capNhat.mo),
 		onSubRowClick: (kr) => openRecord({ kind: "kr", id: kr.id }),
 		rowLabel: (mt) => mt.title,
 	};
@@ -349,6 +405,7 @@ export function BangDonVi({
 				meta={chanBang}
 				onClearFilters={boLoc}
 				query={query}
+				refreshing={dangTaiLai}
 				rows={hien}
 				search={hangCongCu}
 				tabs={{
@@ -362,6 +419,7 @@ export function BangDonVi({
 				}}
 				total={hien.length}
 			/>
+			{capNhat.hop}
 		</div>
 	);
 }
