@@ -97,6 +97,10 @@ export function cachLocTruong(type: FieldTypeName): CachLocTruong {
 	return LOC_THEO_KIEU[type];
 }
 
+export function locDuocTheoKieu(type: string): boolean {
+	return Object.hasOwn(LOC_THEO_KIEU, type);
+}
+
 export function locDuocTrong(type: FieldTypeName): boolean {
 	return LOC_THEO_KIEU[type] !== "tich";
 }
