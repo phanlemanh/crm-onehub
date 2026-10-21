@@ -1,18 +1,21 @@
 ---
 slug: so-do-toan-vung
-at: 2026-10-19T12:10:00Z
+at: 2026-10-21T07:20:00Z
 verdict: findings
 p0: 1
-p1: 4
-p2: 0
+p1: 3
+p2: 1
 ---
+
+Lượt hai, chạy lại trên bộ hồ sơ đã đối chiếu VK2 thật (21/10). Lượt một (19/10, 1 P0 · 4 P1, đã xử hết) nằm trong
+lịch sử git của tệp này.
 
 ## Findings
 
 | Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
 |---|---|---|---|---|---|
-| P0 | design (sổ d-20261019T112738Z-4) | Dòng d-4 ghi `mot-loi` chung cho tâm và toàn màn hình. Lối «state cục bộ» chỉ chết với tâm; với toàn màn hình nó vẫn sống, và nếp nuqs nói về giá trị lọc chứ không quyết trạng thái trình bày | Cổng Phạm vi duyệt vế «tải lại vẫn toàn màn hình» tưởng là luật kho, trong khi chủ kho muốn đó là chế độ tạm; người nhận đường dẫn mở ra mất thanh bên | Tách d-4: tâm giữ `mot-loi`, toàn màn hình thành câu chỉ người có | fixed: hai dòng sổ mới `supersedes` d-4 — tâm `mot-loi`, toàn màn hình thành Hỏi-4 `chi-nguoi`; AC-2 và E2 bước (3) mang «chờ Hỏi-4» theo lối máy khuyên (chế độ tạm của vỏ) |
-| P1 | contract | AC-3 hứa đổi kiểu xem giữ toàn màn hình, AC-4 lại nói nút ngăn mở «ở khung thường», E4 so href tuyệt đối; chiều cả công ty › ngăn › Sơ đồ quanh mục tiêu không có thước | Đang trình chiếu toàn màn hình, bấm «Xem trên sơ đồ» thì thanh bên bật lại mà E3, E4 vẫn xanh | Chốt một chiều; E3 thêm ô đi qua ngăn | fixed: toàn màn hình sống trong vỏ khu nên đi qua ngăn vẫn giữ; AC-4 «giữ khung đang có», href chỉ mang khoá tâm; E3 thêm ô (d) |
-| P1 | evals | Hành vi dời từ DH4, DH5 (bấm thẻ mở ngăn, rê chuột, «Đang xem quanh», lọc Cần chú ý, thẻ đơn vị có lý do) không có thước ở hồ sơ này, trong khi eval đã ký có thể khai nghỉ trỏ sang đây; E2 chỉ thử Esc với Sheet | Bấm thẻ không mở ngăn sau khi dời, eval cũ nghỉ trỏ AC-3, E11 vẫn in GIU; Esc với thẻ đơn vị mở thoát luôn toàn màn hình | E3 thêm các ô dời; E2 ma trận bốn lớp; E11 đòi bảng ánh xạ eval nghỉ | fixed: E3 ô (e)–(i), E2 ma trận bốn lớp có đối chứng dương, E11 đòi `rang/anh-xa-nghi.json` và in «MAT THUOC» khi thiếu |
-| P1 | contract | AC-1 cấm `PageShellDescription` mà không ghi «chờ Hỏi-2»; lối khác của Hỏi-3 lật vế của AC-4, AC-5; dòng ngoại lệ trong `docs/design.md` không có AC | Chủ kho chọn giữ đầu trang, E1 đỏ trên bản dựng đúng quyết định; hoặc không ai thêm dòng ngoại lệ và `khung-man-chung` đỏ sau gộp | Gắn nhãn chờ cho từng vế; thêm vế dòng ngoại lệ; E11 có `khung-man-chung` | fixed: AC-1, E1 mang «chờ Hỏi-2» và vế dòng ngoại lệ; AC-4, AC-5, E4, E5 mang «chờ Hỏi-3»; Notes kể vế theo từng câu hỏi; E11 đối chứng dương có `khung-man-chung` |
-| P1 | evals | Ba thước không đỏ được: chiều cao và cuộn ngang ở 1440 không đo; «không còn chữ căn chỉnh» đọc `innerText` trong DOM giả; sàn thiết kế tĩnh tự khai không đo được | Khung vẽ dời nguyên cao 600 px, dưới còn 300 px trống mà E10 in DUNG; chữ «Căn chỉnh» còn trên nút mà E9 xanh | E10 đo đáy khung vẽ và `scrollWidth`; E9 dùng `textContent` có đối chứng dương; sàn tĩnh thành Known limit | fixed: E10 đo đáy và `scrollWidth` có đối chứng 600 px; E1 thêm «không style height cố định»; E9 `textContent` + đối chứng dương; eval sàn tĩnh bỏ, Known limit có tên ở Notes; design ghi rõ 600 px do nơi gọi đặt, `FlowMap` không đổi |
+| P0 | design (sổ d-20261019T171123Z-18) | d-18 ghi `mot-loi` cho prop thu trong `packages/ui`, nhưng lối chết chỉ nói ai làm prop; lối «vỏ khu thôi dựng `AreaSidebar`» (như `anThanhBen` của bản mẫu) vẫn sống, không chạm `packages/ui` | Cổng Phạm vi duyệt luôn một thay đổi trên thành phần chung mà hồ sơ đã ký VK1 đo; ở S3 eval VK1 đỏ, trễ một lượt | Dòng sổ mới thay d-18 nêu hai lối và giá, hoặc đổi nguồn thành chi-nguoi | human-gate1: dòng sổ mới thay d-18 thành Hỏi-5 `chi-nguoi` (khuyên bỏ dựng thanh bên như bản mẫu); design, Notes soạn theo lối khuyên; AC-2 đúng với cả hai lối nên hợp đồng không đổi theo câu trả lời |
+| P1 | evals | E11 chỉ quét eval `test`/`script`; eval `ui-check` của hồ sơ đã ký mở đường cũ hay đọc `role=tree` lọt; AC-10 và E11 khác phạm vi | Một eval `ui-check` DH5 hay L3 còn khai sống, đỏ ở lượt ghim của PR khác sau gộp, không cửa bypass | E11 quét mọi executor theo chuỗi bỏ; đối chứng dương có ui-check DH5; AC-10 cùng phạm vi | fixed: E11 thêm vế (b) quét mọi executor theo `rang/chuoi-bo.json`, ui-check/judgment phải khai nghỉ hoặc có dòng `rang/giu-ui.json`, thiếu in «MAT THUOC»; đối chứng dương có ui-check DH5; AC-10 viết lại cùng phạm vi |
+| P1 | evals | Giữ toàn màn hình qua đổi kiểu xem chỉ đo ở jsdom bằng cách dựng lại cùng cây vỏ; E10 không đo điều hướng thật qua ngăn | Trên trình duyệt thật vỏ dựng lại khi đi qua đường rewrite hay nút là `<a>` thường; thanh bên bật lại mà E2, E3, E10 xanh | Bước E10 có biến dấu trên window, bấm thẻ › ngăn › «Xem trên sơ đồ» › «Về sơ đồ cả công ty» | fixed: E10 thêm bước điều hướng thật với `window.__vk6Dau`, hai ca, đối chứng đỏ `<a>` thường; AC-10 thêm vế ấy |
+| P1 | evals | `paths` thiếu tệp eval đọc: E2 thiếu `area-sidebar.tsx`, E1 thiếu `docs/design.md`, E5 thiếu `okr-tham-so.ts`, E3 thiếu `objective-sheet.tsx` | PR khác đổi tệp ấy sau gộp, bộ lọc hoá cũ không đánh dấu eval cũ | Mỗi eval khai đủ tệp; script so bao đóng import | fixed: thêm đủ các tệp đã nêu, cộng `page-shell.tsx` (E1), `okr-quanh.ts` (E3), `okr-vo-khu.ts` (E9). deferred: script so bao đóng import — việc của kit, không riêng hồ sơ này |
+| P2 | evals | E10 đo bề rộng ở 1440 khung thường, nơi vùng nội dung đã hẹp hơn `max-w-7xl`; bộ chọn vùng nội dung chưa gọi tên | Còn `PageShell` mặc định mà ảnh khung thường vẫn DUNG | Gọi tên bộ chọn; đo ở toàn màn hình hay 1920 với đối chứng đỏ | fixed: vùng nội dung = `main[data-slot=page-shell-scroll]`; đo thêm ở toàn màn hình và 1920, đối chứng đỏ bọc `PageShell` mặc định in «khung con be rong toi da» |
