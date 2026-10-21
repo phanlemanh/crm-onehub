@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 708bf425d47d5bec8e6b10b17b5cad79f7d8505e
-human_signoff:
+human_signoff: manh 2026-10-21
 ---
 
 # Evidence Report: sort-moi-truong

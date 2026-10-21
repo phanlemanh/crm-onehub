@@ -5,7 +5,7 @@ slug: sort-moi-truong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21T01:22:12Z
 design_doc: docs/superpowers/specs/2026-10-21-sort-moi-truong-design.md
@@ -165,3 +165,10 @@ Later và Never ở `coverage-scan.md`.
 - Không chạm `packages/ui` và `DataTable` (luật 31). Không chạm schema Prisma.
 - `*.service.ts` của ba loại bản ghi và `list-search-params.ts` dùng chung với DA18 (luật 34): DA17 gộp trước.
 - AC-5, AC-6, AC-7 vế thẻ, AC-9 chỉ viết mã sau khi DA14 gộp onehub.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-21:
+  - Ngoài-1: Lời mô tả fixture trong evals.yaml còn chỗ ghi năm bản ghi, bài kiểm thật dùng sáu.
+  - Ngoài-2: Lời mô tả chiều đỏ của E1, E2, E4 ghi chuỗi lỗi theo bộ dữ liệu cũ; màu xanh đỏ không đổi.
+  - Ngoài-3: Sau khi đổi Cài đặt › Trường, thẻ Kanban có thể hiện trường cũ tới khoảng 30 giây, tải lại là đúng.
+  - Ngoài-5: Cột Tên miền của Công ty ẩn theo khổ như Liên kết nhưng hiện như chữ thường, không bấm được.
+  - Ngoài-6: Nhãn trường trên thẻ Kanban chưa đánh dấu không dịch, trình duyệt có thể tự dịch.
+  - Ngoài-7: Dữ liệu thử của bài kiểm giao diện viết tay rồi phân tích, không rút từ bộ ghi thật.
