@@ -439,3 +439,192 @@ describe("lmt-duong-dan", () => {
 		expect(truong.length).toBe(FIELD_TYPES.length);
 	});
 });
+
+async function bamTro(el: Element | null | undefined, moTa: string) {
+	if (!(el instanceof HTMLElement)) throw new Error(`khong co ${moTa}`);
+	await act(async () => {
+		for (const loai of ["pointerdown", "mousedown", "pointerup", "click"]) {
+			el.dispatchEvent(
+				new window.PointerEvent(loai, {
+					bubbles: true,
+					cancelable: true,
+					button: 0,
+					pointerType: "mouse",
+				}),
+			);
+		}
+	});
+	await nhip(2);
+}
+
+function nutTheoChu(chu: string) {
+	return [...document.body.querySelectorAll("button, [role='menuitem']")].find(
+		(b) => (b.textContent ?? "").trim().startsWith(chu),
+	);
+}
+
+async function dongHet() {
+	for (const s of roots) {
+		await act(async () => s.root.unmount());
+		s.o.remove();
+	}
+	roots = [];
+	document.body.innerHTML = "";
+}
+
+function khuon(x: unknown) {
+	const sap = (v: unknown): unknown =>
+		Array.isArray(v)
+			? v.map(sap)
+			: v && typeof v === "object"
+				? Object.fromEntries(
+						Object.entries(v as Record<string, unknown>)
+							.sort(([a], [b]) => a.localeCompare(b))
+							.map(([k, w]) => [k, sap(w)]),
+					)
+				: v;
+	return JSON.stringify(sap(x));
+}
+
+describe("lmt-luu-thoa-thuan", () => {
+	test("lmt-luu-thoa-thuan: menu bo loc da luu o bang va bang cot, luu, ap, giu kieu xem", async () => {
+		const v = crmMessages("vi").views;
+		for (const view of ["table", "board"] as const) {
+			datChung();
+			duLieu.set("deals.board", () => ({
+				columns: [],
+				reportingCurrency: "VND",
+			}));
+			await mo(<DealsTable />, view === "board" ? "?view=board" : "");
+			await nhip(3);
+			if (!nutTheoChu(v.button)) {
+				throw new Error(`lmt luu thoa thuan: thieu menu ${view}`);
+			}
+			await dongHet();
+		}
+
+		datChung();
+		const qs =
+			"?status=open&owner=u-1&closing=this-month&field:lmt_number=gte:5&field:lmt_select=o-a";
+		await mo(<DealsTable />, qs);
+		await nhip(3);
+		await bamTro(nutTheoChu(v.button), "nut menu");
+		await bamTro(nutTheoChu(v.saveCurrent), "muc luu");
+		const o = document.getElementById(
+			"saved-view-name",
+		) as HTMLInputElement | null;
+		if (!o) throw new Error("lmt luu thoa thuan: khong mo hop luu");
+		await act(async () => {
+			const dat = Object.getOwnPropertyDescriptor(
+				window.HTMLInputElement.prototype,
+				"value",
+			)?.set;
+			dat?.call(o, "Lmt cho ky");
+			o.dispatchEvent(new window.Event("input", { bubbles: true }));
+		});
+		duLieu.set("savedViews.create", (vao) => vao);
+		const nutLuu = [...document.body.querySelectorAll("button")].find(
+			(b) => b.textContent?.trim() === v.save,
+		);
+		await bamTro(nutLuu, "nut luu");
+		await cho(() => goi.some((g) => g.ten === "savedViews.create"), "luu");
+		const daLuu = goi.find((g) => g.ten === "savedViews.create")?.vao as {
+			entity: string;
+			filters: unknown;
+		};
+		const mongLuu = {
+			q: "",
+			sort: "createdAt",
+			dir: "desc",
+			archived: false,
+			filters: {
+				status: ["open"],
+				owner: ["u-1"],
+				stage: [],
+				closing: ["this-month"],
+				"field:lmt_number": ["gte:5"],
+				"field:lmt_select": ["o-a"],
+			},
+		};
+		if (daLuu?.entity !== "DEAL" || khuon(daLuu.filters) !== khuon(mongLuu)) {
+			throw new Error(`lmt luu thoa thuan: luu ${JSON.stringify(daLuu)}`);
+		}
+		if ("view" in (daLuu.filters as object)) {
+			throw new Error("lmt luu thoa thuan: kieu xem");
+		}
+		await dongHet();
+
+		for (const view of ["table", "board"] as const) {
+			datChung();
+			duLieu.set("deals.board", () => ({
+				columns: [],
+				reportingCurrency: "VND",
+			}));
+			duLieu.set("savedViews.list", () => [
+				{
+					id: "sv-1",
+					entity: "DEAL",
+					name: "Lmt cho ky",
+					shared: false,
+					filters: mongLuu,
+					size: null,
+					mine: true,
+					usedBy: [],
+					createdAt: "2026-10-22T00:00:00.000Z",
+					updatedAt: "2026-10-22T00:00:00.000Z",
+				},
+			]);
+			goi = [];
+			urls = [];
+			await mo(<DealsTable />, view === "board" ? "?view=board" : "");
+			await nhip(3);
+			await bamTro(nutTheoChu(v.button), "nut menu");
+			await bamTro(nutTheoChu("Lmt cho ky"), "muc bo loc");
+			await nhip(3);
+			const u = urlCuoi();
+			if (
+				u.get("field:lmt_number") !== "gte:5" ||
+				u.get("closing") !== "this-month" ||
+				u.get("owner") !== "u-1"
+			) {
+				throw new Error(`lmt luu thoa thuan: ap url ${view} ${u.toString()}`);
+			}
+			if (view === "board" && u.get("view") !== "board") {
+				throw new Error("lmt luu thoa thuan: kieu xem");
+			}
+			const thuTuc = view === "board" ? "deals.board" : "deals.list";
+			await cho(
+				() =>
+					(
+						goi.filter((g) => g.ten === thuTuc).at(-1)?.vao as {
+							fields?: object;
+						}
+					)?.fields !== undefined &&
+					khuon(
+						(
+							goi.filter((g) => g.ten === thuTuc).at(-1)?.vao as {
+								fields: object;
+							}
+						).fields,
+					) === khuon({ lmt_number: ["gte:5"], lmt_select: ["o-a"] }),
+				`ap tai ${view}`,
+			);
+			await dongHet();
+		}
+
+		const nguon = await Bun.file(
+			new URL(
+				"../app/(app)/[slug]/campaigns/create-campaign-sheet.tsx",
+				import.meta.url,
+			),
+		).text();
+		if (
+			!/savedViews\.list\.queryOptions\(\{\s*entity:\s*"CONTACT"\s*\}\)/.test(
+				nguon,
+			)
+		) {
+			throw new Error("lmt luu thoa thuan: lot vao chien dich");
+		}
+		expect(khuon(daLuu.filters)).toBe(khuon(mongLuu));
+	});
+});
