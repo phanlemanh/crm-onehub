@@ -5,7 +5,7 @@ slug: loc-moi-truong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21T09:34:22Z
 design_doc: docs/superpowers/specs/2026-10-21-loc-moi-truong-design.md
@@ -182,6 +182,11 @@ Later và Never ở `coverage-scan.md`.
 
 ## Notes
 
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: lấy danh sách trường lọc đang lỗi thì trang danh sách có thể tải chậm hay báo lỗi tạm; tải lại trang là hết.
+  - Ngoài-2: bài kiểm menu bộ lọc đã lưu của Thoả thuận dùng dữ liệu giả gõ tay, không đi qua khuôn đầu ra thật của máy chủ.
+  - Ngoài-3: tiền tố has:/gte:/lte: được khai hai nơi (menu Bộ lọc và bộ phân tích giá trị lọc); đổi một nơi thì phải đổi nơi kia.
+  - Ngoài-4: tên các mốc ngày và Có/Không gõ tay ở vài nơi; thêm hay đổi tên mốc phải sửa đủ các nơi ấy.
 - Không chạm schema Prisma, không migration.
 - `packages/ui/src/components/data-table.tsx` (dạng ô chữ và khoảng số của menu Bộ lọc) là vùng Mac Studio: gửi
   `cham-tep` (luật 31) trước S3.
