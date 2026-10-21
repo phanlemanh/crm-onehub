@@ -37,14 +37,17 @@ import {
 	FactProvenance,
 	FactSuggestion,
 } from "@/components/crm/facts";
-import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
 import {
-	InlineField,
-	InlineSelectField,
-	savingValue,
-} from "@/components/crm/inline-field";
-import { OwnerCell } from "@/components/crm/owner-cell";
-import { SoDienThoai } from "@/components/crm/so-dien-thoai";
+	cauLoiTheoKhoa,
+	HienThiTruong,
+	khoaCuaLuot,
+	type MoTaTruong,
+	OTruongBang,
+	OTruongPhieu,
+} from "@/components/crm/fields/kieu-truong";
+import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
+import { savingValue } from "@/components/crm/inline-field";
+import type { Owner } from "@/components/crm/owner-cell";
 import { ContactSocials } from "@/components/crm/social-links";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -271,26 +274,17 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 								)}
 							</DetailSheetStat>
 							<DetailSheetStat label={m.contact.fields.email}>
-								{contact.email ? (
-									<a
-										href={`mailto:${contact.email}`}
-										className="underline-offset-2 hover:underline"
-									>
-										{contact.email}
-									</a>
-								) : (
-									<EmptyCellValue />
-								)}
+								<HienThiTruong kieu="EMAIL" giaTri={contact.email} />
 							</DetailSheetStat>
 							<DetailSheetStat label={m.contact.fields.phone}>
-								{contact.phone ? (
-									<SoDienThoai so={contact.phone} goi />
-								) : (
-									<EmptyCellValue />
-								)}
+								<HienThiTruong kieu="PHONE" giaTri={contact.phone} />
 							</DetailSheetStat>
 							<DetailSheetStat label={m.contact.fields.owner}>
-								<OwnerCell owner={contact.owner} />
+								<HienThiTruong
+									kieu="USER"
+									giaTri={contact.owner?.id ?? null}
+									nguoi={contact.owner}
+								/>
 							</DetailSheetStat>
 						</DetailSheetStats>
 					</>
@@ -335,8 +329,95 @@ const AGENT_FIELDS = [
 	"githubUrl",
 ] as const;
 
-function ContactOverview({ contact: banDau }: { contact: Contact }) {
-	const m = recordSheetMessages(useLocale());
+type LuuLienHe = (data: Record<string, string | null>, khoa: string) => void;
+
+type KhoaChuLienHe =
+	| "firstName"
+	| "lastName"
+	| "title"
+	| "email"
+	| "phone"
+	| "linkedinUrl"
+	| "twitterUrl"
+	| "githubUrl";
+
+export function truongChuanLienHe(
+	contact: Contact,
+	{
+		m,
+		luu,
+		dangLuu,
+		nguoiDung,
+		kara,
+	}: {
+		m: RecordSheetMessages;
+		luu: LuuLienHe;
+		dangLuu: (khoa: string) => boolean;
+		nguoiDung: Owner[] | undefined;
+		kara?: (khoa: string) => Pick<MoTaTruong, "nguon" | "deXuat">;
+	},
+): MoTaTruong[] {
+	const chu = (giaTri: string | number | boolean | null) =>
+		giaTri === null ? null : String(giaTri);
+	const truong = (
+		khoa: string,
+		khoaDuLieu: KhoaChuLienHe,
+		nhan: string,
+		kieu: MoTaTruong["kieu"],
+		them: Partial<MoTaTruong> = {},
+	): MoTaTruong => ({
+		khoa,
+		nhan,
+		kieu,
+		giaTri: contact[khoaDuLieu],
+		luu: (giaTri) => luu({ [khoaDuLieu]: chu(giaTri) }, khoa),
+		dangLuu: dangLuu(khoaDuLieu),
+		...them,
+	});
+	return [
+		truong("firstName", "firstName", m.contact.fields.firstName, "TEXT", {
+			batBuoc: true,
+		}),
+		truong("lastName", "lastName", m.contact.fields.lastName, "TEXT"),
+		truong("title", "title", m.contact.fields.title, "TEXT", {
+			goiY: m.contact.fields.titlePlaceholder,
+			...kara?.("title"),
+		}),
+		truong("email", "email", m.contact.fields.email, "EMAIL"),
+		truong("phone", "phone", m.contact.fields.phone, "PHONE"),
+		truong("linkedin", "linkedinUrl", m.contact.fields.linkedin, "URL", {
+			...kara?.("linkedinUrl"),
+		}),
+		truong("x", "twitterUrl", m.contact.fields.x, "URL", {
+			...kara?.("twitterUrl"),
+		}),
+		truong("github", "githubUrl", m.contact.fields.github, "URL", {
+			...kara?.("githubUrl"),
+		}),
+		{
+			khoa: "owner",
+			nhan: m.contact.fields.owner,
+			kieu: "USER",
+			giaTri: contact.owner?.id ?? null,
+			nguoi: contact.owner,
+			nhanRong: m.contact.fields.unassigned,
+			nguoiDung,
+			luu: (giaTri) => luu({ ownerId: chu(giaTri) }, "owner"),
+			dangLuu: dangLuu("ownerId"),
+		},
+	];
+}
+
+const DOI_KHOA_LIEN_HE = {
+	ownerId: "owner",
+	linkedinUrl: "linkedin",
+	twitterUrl: "x",
+	githubUrl: "github",
+} as const satisfies Record<string, string>;
+
+export function ContactOverview({ contact: banDau }: { contact: Contact }) {
+	const locale = useLocale();
+	const m = recordSheetMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -379,19 +460,50 @@ function ContactOverview({ contact: banDau }: { contact: Contact }) {
 	const update = useMutation(
 		trpc.contacts.update.mutationOptions({
 			onSuccess: () => cache.contact(contact.id, { settle: "record" }),
-			onError: (error) => toast.error(error.message),
+			onError: (error, bien) => {
+				const khoa = khoaCuaLuot(
+					Object.keys(bien.data),
+					bien.data.fields ? Object.keys(bien.data.fields) : undefined,
+					DOI_KHOA_LIEN_HE,
+				);
+				const ds = khoa?.tuTao ? moTaTuTao() : truongChuan;
+				toast.error(cauLoiTheoKhoa(khoa?.khoa, ds, locale) ?? error.message);
+			},
 		}),
 	);
 
-	const saveFields = (fields: Record<string, FieldValueJson>) =>
-		update.mutate({ id: contact.id, data: { fields } });
-
 	const isSavingField = savingValue(update);
+
+	const isSaving = savingField(update);
 
 	const save = (data: Record<string, string | null>) =>
 		update.mutate({ id: contact.id, data });
 
-	const isSaving = savingField(update);
+	const moTaTuTao = () =>
+		contact.fields.map((field) => ({
+			khoa: field.key,
+			nhan: field.label,
+			kieu: field.type,
+		}));
+
+	const truongChuan = truongChuanLienHe(contact, {
+		m,
+		luu: save,
+		dangLuu: isSaving,
+		nguoiDung: users.data,
+		kara: (khoa) => {
+			const { provenance, suggestion } = agentProps(khoa);
+			return { nguon: provenance, deXuat: suggestion };
+		},
+	});
+	const truongTheoKhoa = new Map(truongChuan.map((mt) => [mt.khoa, mt]));
+	const oChuan = (khoa: string) => {
+		const mt = truongTheoKhoa.get(khoa);
+		return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
+	};
+
+	const saveFields = (fields: Record<string, FieldValueJson>) =>
+		update.mutate({ id: contact.id, data: { fields } });
 
 	return (
 		<KhoaLuuTru khoa={contact.archivedAt !== null}>
@@ -406,65 +518,16 @@ function ContactOverview({ contact: banDau }: { contact: Contact }) {
 					}
 				>
 					<DetailSheetProperties>
-						<InlineField
-							label={m.contact.fields.firstName}
-							value={contact.firstName}
-							saving={isSaving("firstName")}
-							onSave={(firstName) => firstName && save({ firstName })}
-						/>
-						<InlineField
-							label={m.contact.fields.lastName}
-							value={contact.lastName}
-							saving={isSaving("lastName")}
-							onSave={(lastName) => save({ lastName })}
-						/>
-						<InlineField
-							label={m.contact.fields.title}
-							value={contact.title}
-							placeholder={m.contact.fields.titlePlaceholder}
-							saving={isSaving("title")}
-							onSave={(title) => save({ title })}
-							{...agentProps("title")}
-						/>
-						<InlineField
-							label={m.contact.fields.email}
-							value={contact.email}
-							type="email"
-							saving={isSaving("email")}
-							onSave={(email) => save({ email })}
-						/>
-						<InlineField
-							label={m.contact.fields.phone}
-							value={contact.phone}
-							type="tel"
-							render={(phone) => <SoDienThoai so={phone} />}
-							saving={isSaving("phone")}
-							onSave={(phone) => save({ phone })}
-						/>
-						<InlineField
-							label={m.contact.fields.linkedin}
-							value={contact.linkedinUrl}
-							type="url"
-							saving={isSaving("linkedinUrl")}
-							onSave={(linkedinUrl) => save({ linkedinUrl })}
-							{...agentProps("linkedinUrl")}
-						/>
-						<InlineField
-							label={m.contact.fields.x}
-							value={contact.twitterUrl}
-							type="url"
-							saving={isSaving("twitterUrl")}
-							onSave={(twitterUrl) => save({ twitterUrl })}
-							{...agentProps("twitterUrl")}
-						/>
-						<InlineField
-							label={m.contact.fields.github}
-							value={contact.githubUrl}
-							type="url"
-							saving={isSaving("githubUrl")}
-							onSave={(githubUrl) => save({ githubUrl })}
-							{...agentProps("githubUrl")}
-						/>
+						{[
+							"firstName",
+							"lastName",
+							"title",
+							"email",
+							"phone",
+							"linkedin",
+							"x",
+							"github",
+						].map(oChuan)}
 						<InlineCompanyField
 							value={contact.company?.id ?? NONE}
 							company={contact.company}
@@ -474,20 +537,7 @@ function ContactOverview({ contact: banDau }: { contact: Contact }) {
 								save({ companyId: companyId === NONE ? null : companyId })
 							}
 						/>
-						<InlineSelectField
-							label={m.contact.fields.owner}
-							value={contact.owner?.id ?? NONE}
-							options={[
-								{ value: NONE, label: m.contact.fields.unassigned },
-								...(users.data ?? []).map((user) => ({
-									value: user.id,
-									label: user.name,
-								})),
-							]}
-							onSave={(ownerId) =>
-								save({ ownerId: ownerId === NONE ? null : ownerId })
-							}
-						/>
+						{oChuan("owner")}
 						<RecordFields
 							fields={contact.fields}
 							saving={isSavingField}
@@ -728,7 +778,11 @@ function ContactDeals({ contact }: { contact: Contact }) {
 						/>
 					</TableCell>
 					<TableCell className="px-3 py-2.5">
-						<OwnerCell owner={deal.owner} />
+						<OTruongBang
+							kieu="USER"
+							giaTri={deal.owner?.id ?? null}
+							nguoi={deal.owner}
+						/>
 					</TableCell>
 				</SimpleTableRow>
 			))}
