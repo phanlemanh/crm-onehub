@@ -122,7 +122,7 @@ const lapMau = (idDich) => {
 		const hangMt = tat("[data-hang-muc-tieu]").filter(
 			(e) => !dich || dich.has(e.getAttribute("data-hang-muc-tieu")),
 		);
-		const trang = location.pathname.includes("/okr/theo-don-vi");
+		const trang = /\/okr\/(theo-don-vi|bo-okr)(\/|$)/.test(location.pathname);
 		window.__mau.push({
 			trang,
 			xong:
@@ -404,7 +404,7 @@ try {
 			() =>
 				[
 					...document.querySelectorAll(
-						"[role=tablist] a[href*='/okr/theo-don-vi']",
+						"[data-slot=nav-item][href*='/okr/bo-okr'], [data-slot=nav-item] a[href*='/okr/bo-okr'], [role=tablist] a[href*='/okr/theo-don-vi']",
 					),
 				].find((e) => e.getClientRects().length > 0) ?? null,
 		);

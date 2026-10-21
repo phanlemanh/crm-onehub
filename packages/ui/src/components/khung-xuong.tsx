@@ -141,10 +141,10 @@ function ChiTiet() {
 function XuongPhaiHang() {
 	return (
 		<>
-			<Skeleton className="hidden h-7 w-44 sm:block" />
+			<Skeleton className="hidden h-7 w-75 sm:block" />
 			<div className="hidden gap-2 sm:flex lg:ml-auto">
-				<Skeleton className="h-7 w-16" />
-				<Skeleton className="h-7 w-24" />
+				<Skeleton className="h-7 w-14" />
+				<Skeleton className="h-7 w-20" />
 				<Skeleton className="h-7 w-20" />
 			</div>
 			<Skeleton className="h-7 w-full sm:hidden" />
@@ -167,7 +167,7 @@ function HangCongCuHaiDong({ thanhCongCu }: { thanhCongCu?: ReactNode }) {
 			<div className={LOP_HANG_CONG_CU} data-khung-hang="thanh-cong-cu">
 				<div className={LOP_KHOI_TRAI} data-hang-cong-cu-don-vi-khung>
 					<Skeleton className="h-7 w-full sm:w-72" />
-					<Skeleton className="h-7 w-32 md:w-92" />
+					<Skeleton className="h-7 w-32 md:w-68" />
 				</div>
 				<XuongPhaiHang />
 			</div>
