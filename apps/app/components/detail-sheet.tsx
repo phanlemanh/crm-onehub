@@ -414,7 +414,7 @@ export function DetailSheetProperty({
 	children: ReactNode;
 }) {
 	return (
-		<div className={cn(PROPERTY_ROW, "items-start", wide && "sm:col-span-2")}>
+		<div className={cn(PROPERTY_ROW, "items-start", wide && "col-span-full")}>
 			<span className={cn(PROPERTY_LABEL, PROPERTY_CELL, "text-xs/5")}>
 				{label}
 			</span>
