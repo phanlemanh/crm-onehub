@@ -36,7 +36,11 @@ const TRUY_VAN: TableQueryState = {
 };
 
 const FACETS: DataTableFacet[] = [
-	{ id: "owner", label: "Người phụ trách", options: [{ value: "u1", label: "An" }] },
+	{
+		id: "owner",
+		label: "Người phụ trách",
+		options: [{ value: "u1", label: "An" }],
+	},
 ];
 
 const DONG: Dong[] = [
@@ -92,7 +96,10 @@ describe("ldv-bang", () => {
 		const vung = vungCua(o);
 		phai(vung.length === 1, `ldv-bang: can dung mot vung, co ${vung.length}`);
 		const v = vung[0] as HTMLElement;
-		phai(v.getAttribute("aria-busy") === "true", "ldv-bang: vung khong aria-busy");
+		phai(
+			v.getAttribute("aria-busy") === "true",
+			"ldv-bang: vung khong aria-busy",
+		);
 		phai(v.hasAttribute("data-dang-tai"), "ldv-bang: vung khong data-dang-tai");
 		phai(
 			v.querySelector('[data-slot="table-container"]') !== null,
