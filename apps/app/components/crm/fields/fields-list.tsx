@@ -32,7 +32,12 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SortableItem, SortableList } from "@crm/ui/components/sortable-list";
 import { Spinner } from "@crm/ui/components/spinner";
+import { Switch } from "@crm/ui/components/switch";
 import type { Locale } from "@crm/ui/lib/locale";
+import type {
+	BoTriTruong,
+	MucBoTriTruong,
+} from "@crm/validation/bo-tri-truong";
 import { FIELD_TEMPLATES } from "@crm/validation/field-templates";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -48,7 +53,8 @@ import {
 	TYPE_KEY,
 } from "./fields-copy";
 import { type FieldEntity, kindOf } from "./fields-entity";
-import { STANDARD_FIELDS } from "./standard-fields";
+import { kieuTruongChuan, nhanTruongChuan } from "./truong-chuan";
+import { useBoTriTruong } from "./use-bo-tri-truong";
 import type { TruongLuuTru } from "./use-luu-tru-truong";
 
 type Field = RouterOutputs["fields"]["list"][number];
@@ -77,18 +83,29 @@ function summaryOf(field: Field, locale: Locale): string {
 	return parts.join(" · ");
 }
 
-function reordered(fields: Field[], ids: string[]): Field[] {
-	const live = fields.filter((field) => !field.archived);
-	const byId = new Map(live.map((field) => [field.id, field]));
-	const queue = ids
-		.map((id) => byId.get(id))
-		.filter((field): field is Field => field !== undefined);
+const STD = "std:";
 
-	if (queue.length !== live.length) return fields;
+function maHang(muc: MucBoTriTruong): string {
+	return muc.kind === "standard" ? `${STD}${muc.key}` : muc.id;
+}
 
-	return fields.map((field) =>
-		field.archived ? field : (queue.shift() ?? field),
-	);
+function sapTheo(muc: BoTriTruong, ids: string[]): BoTriTruong {
+	const theoMa = new Map(muc.map((m) => [maHang(m), m]));
+	return ids
+		.map((id) => theoMa.get(id))
+		.filter((m): m is MucBoTriTruong => m !== undefined);
+}
+
+function nhanKieuChuan(
+	entity: FieldEntity,
+	key: string,
+	locale: Locale,
+): string {
+	const kieu = kieuTruongChuan(entity, key);
+	const m = crmMessages(locale).fields;
+	if (kieu === "MONEY") return m.moneyNgan;
+	if (kieu === "COMPANY") return m.companyNgan;
+	return kieu ? fieldTypeNgan(TYPE_KEY[kieu], locale) : "";
 }
 
 function DisclosureRow({
@@ -140,31 +157,42 @@ export function FieldsList({
 	const queryClient = useQueryClient();
 	const locale = useLocale();
 	const copy = fieldsCopy(locale);
+	const m = crmMessages(locale);
 
 	const listKey = trpc.fields.list.queryKey({ entity, includeArchived: true });
+	const layoutKey = trpc.fields.layout.queryKey({ entity });
 
 	const query = useQuery(
 		trpc.fields.list.queryOptions({ entity, includeArchived: true }),
 	);
 
+	const all = query.data ?? [];
+	const live = all.filter((field) => !field.archived);
+	const archived = all.filter((field) => field.archived);
+	const byId = new Map(live.map((field) => [field.id, field]));
+	const boTri = useBoTriTruong(
+		entity,
+		live.map((field) => ({ id: field.id, key: field.key })),
+	);
+	const rows = boTri.muc.filter(
+		(muc) => muc.kind === "standard" || byId.has(muc.id),
+	);
+
+	const settle = () => cache.fields(kindOf(entity));
+
 	const reorder = useMutation(
 		trpc.fields.reorder.mutationOptions({
-			onMutate: async (input) => {
-				await queryClient.cancelQueries({ queryKey: listKey });
-				const previous = queryClient.getQueryData(listKey);
-				if (previous && "ids" in input) {
-					queryClient.setQueryData(listKey, reordered(previous, input.ids));
-				}
-				return { previous };
-			},
-			onError: (error, _input, context) => {
-				if (context?.previous) {
-					queryClient.setQueryData(listKey, context.previous);
-				}
-				toast.error(error.message);
-			},
-			onSettled: () => cache.fields(kindOf(entity)),
+			onError: () => toast.error(copy.orderFailed),
+			onSettled: settle,
 		}),
+	);
+
+	const setHidden = useMutation(
+		trpc.fields.setStandardHidden.mutationOptions({ onSettled: settle }),
+	);
+
+	const showCustom = useMutation(
+		trpc.fields.update.mutationOptions({ onSettled: settle }),
 	);
 
 	const restore = useMutation(
@@ -181,10 +209,74 @@ export function FieldsList({
 		}),
 	);
 
-	const all = query.data ?? [];
-	const live = all.filter((field) => !field.archived);
-	const archived = all.filter((field) => field.archived);
-	const standard = STANDARD_FIELDS[entity];
+	const onReorder = (ids: string[]) => {
+		const truoc = queryClient.getQueryData(layoutKey);
+		const moi = sapTheo(rows, ids);
+		if (moi.length !== rows.length) return;
+		queryClient.setQueryData(layoutKey, moi);
+		reorder.mutate(
+			{
+				entity,
+				items: moi.map((muc) =>
+					muc.kind === "standard" ? { standard: muc.key } : { custom: muc.id },
+				),
+			},
+			{
+				onError: () => queryClient.setQueryData(layoutKey, truoc),
+			},
+		);
+	};
+
+	const onToggle = (muc: MucBoTriTruong, nhan: string, hien: boolean) => {
+		const bao = {
+			onSuccess: () =>
+				toast(hien ? copy.shownOnSheet(nhan) : copy.hiddenFromSheet(nhan)),
+			onError: () => toast.error(m.truongKieu.chuaLuu(nhan)),
+		};
+
+		if (muc.kind === "standard") {
+			const truoc = queryClient.getQueryData(layoutKey);
+			queryClient.setQueryData(
+				layoutKey,
+				rows.map((r) =>
+					r.kind === "standard" && r.key === muc.key
+						? { ...r, hidden: !hien }
+						: r,
+				),
+			);
+			setHidden.mutate(
+				{ entity, key: muc.key, hidden: !hien },
+				{
+					...bao,
+					onError: () => {
+						queryClient.setQueryData(layoutKey, truoc);
+						bao.onError();
+					},
+				},
+			);
+			return;
+		}
+
+		const truoc = queryClient.getQueryData(listKey);
+		if (truoc) {
+			queryClient.setQueryData(
+				listKey,
+				truoc.map((field) =>
+					field.id === muc.id ? { ...field, showOnSheet: hien } : field,
+				),
+			);
+		}
+		showCustom.mutate(
+			{ id: muc.id, data: { showOnSheet: hien } },
+			{
+				...bao,
+				onError: () => {
+					queryClient.setQueryData(listKey, truoc);
+					bao.onError();
+				},
+			},
+		);
+	};
 
 	const existingKeys = new Set(all.map((field) => field.key));
 	const suggestions = FIELD_TEMPLATES[entity].filter(
@@ -202,21 +294,6 @@ export function FieldsList({
 						{copy.canQuyen}
 					</p>
 				) : null}
-				<DisclosureRow
-					title={copy.standardRow}
-					note={`${standard.length} · ${copy.standardNote}`}
-				>
-					<ul className="border-b bg-muted/40 py-1">
-						{standard.map((field) => (
-							<li
-								key={field}
-								className="px-5 py-1 text-muted-foreground text-xs"
-							>
-								{field}
-							</li>
-						))}
-					</ul>
-				</DisclosureRow>
 
 				{suggestions.length > 0 && (
 					<DisclosureRow
@@ -292,6 +369,122 @@ export function FieldsList({
 					</Empty>
 				) : (
 					<>
+						<div className="flex items-center justify-end gap-3 px-5 pt-3.5 pb-2">
+							<span className="text-muted-foreground text-xs">
+								{copy.dragNote}
+							</span>
+						</div>
+
+						<SortableList ids={rows.map(maHang)} onReorder={onReorder}>
+							{rows.map((muc) => {
+								const field = muc.kind === "custom" ? byId.get(muc.id) : null;
+								const nhan = field
+									? field.label
+									: nhanTruongChuan(entity, muc.key, locale);
+								const batBuoc =
+									muc.kind === "standard" ? muc.required : !!field?.required;
+								const hien =
+									muc.kind === "standard" ? !muc.hidden : !!field?.showOnSheet;
+								const lyDoId = `${maHang(muc)}-ly-do`;
+
+								return (
+									<SortableItem
+										key={maHang(muc)}
+										id={maHang(muc)}
+										label={nhan}
+										className={ROW}
+										disabled={khoa}
+									>
+										{field ? (
+											<button
+												type="button"
+												disabled={khoa}
+												onClick={() => onEdit(field.key)}
+												className="flex min-w-0 flex-1 flex-col gap-px text-left"
+												data-muc-keo={maHang(muc)}
+											>
+												<span className="w-full truncate font-medium text-foreground text-xs">
+													{nhan}
+												</span>
+												<span className="w-full truncate text-muted-foreground text-xs">
+													{summaryOf(field, locale)}
+												</span>
+											</button>
+										) : (
+											<div
+												className="flex min-w-0 flex-1 flex-col gap-px"
+												data-muc-keo={maHang(muc)}
+											>
+												<span className="w-full truncate font-medium text-foreground text-xs">
+													{nhan}
+												</span>
+												<span className="w-full truncate text-muted-foreground text-xs">
+													{batBuoc
+														? `${copy.standardSummary} · ${m.fields.required}`
+														: copy.standardSummary}
+												</span>
+											</div>
+										)}
+
+										<Badge
+											variant="mono"
+											className="min-w-18 shrink-0 justify-center"
+											data-nhan-kieu={
+												field ? field.type : kieuTruongChuan(entity, muc.key)
+											}
+										>
+											{field
+												? fieldTypeNgan(TYPE_KEY[field.type], locale)
+												: nhanKieuChuan(entity, muc.key, locale)}
+										</Badge>
+
+										<Switch
+											checked={batBuoc || hien}
+											disabled={khoa || batBuoc}
+											aria-label={copy.sheetSwitch(nhan)}
+											aria-describedby={batBuoc ? lyDoId : undefined}
+											onCheckedChange={(checked) =>
+												onToggle(muc, nhan, checked)
+											}
+										/>
+										{batBuoc ? (
+											<span id={lyDoId} className="sr-only">
+												{copy.requiredLocked}
+											</span>
+										) : null}
+
+										{field ? (
+											<DropdownMenu>
+												<DropdownMenuTrigger asChild>
+													<Button
+														variant="ghost"
+														size="icon-xs"
+														disabled={khoa}
+													>
+														<Icon icon={OverflowMenuVertical} />
+														<span className="sr-only">
+															{copy.moreFor(nhan)}
+														</span>
+													</Button>
+												</DropdownMenuTrigger>
+												<DropdownMenuContent align="end">
+													<DropdownMenuItem onSelect={() => onEdit(field.key)}>
+														{copy.edit}
+													</DropdownMenuItem>
+													<DropdownMenuSeparator />
+													<DropdownMenuItem onSelect={() => onArchive(field)}>
+														{copy.archive}
+													</DropdownMenuItem>
+												</DropdownMenuContent>
+											</DropdownMenu>
+										) : (
+											<span aria-hidden className="size-6 shrink-0" />
+										)}
+									</SortableItem>
+								);
+							})}
+						</SortableList>
+
 						{live.length === 0 ? (
 							<Empty className="flex-1">
 								<EmptyHeader>
@@ -308,79 +501,7 @@ export function FieldsList({
 									</Button>
 								</EmptyContent>
 							</Empty>
-						) : (
-							<>
-								<div className="flex items-center justify-between gap-3 px-5 pt-3.5 pb-2">
-									<span className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
-										{copy.customGroup}
-									</span>
-									<span className="text-muted-foreground text-xs">
-										{copy.dragNote}
-									</span>
-								</div>
-
-								<SortableList
-									ids={live.map((field) => field.id)}
-									onReorder={(ids) => reorder.mutate({ entity, ids })}
-								>
-									{live.map((field) => (
-										<SortableItem
-											key={field.id}
-											id={field.id}
-											label={field.label}
-											className={ROW}
-											disabled={khoa}
-										>
-											<button
-												type="button"
-												disabled={khoa}
-												onClick={() => onEdit(field.key)}
-												className="flex min-w-0 flex-1 flex-col gap-px text-left"
-											>
-												<span className="w-full truncate font-medium text-foreground text-xs">
-													{field.label}
-												</span>
-												<span className="w-full truncate text-muted-foreground text-xs">
-													{summaryOf(field, locale)}
-												</span>
-											</button>
-
-											<Badge
-												variant="mono"
-												className="min-w-18 shrink-0 justify-center"
-												data-nhan-kieu={field.type}
-											>
-												{fieldTypeNgan(TYPE_KEY[field.type], locale)}
-											</Badge>
-
-											<DropdownMenu>
-												<DropdownMenuTrigger asChild>
-													<Button
-														variant="ghost"
-														size="icon-xs"
-														disabled={khoa}
-													>
-														<Icon icon={OverflowMenuVertical} />
-														<span className="sr-only">
-															{copy.moreFor(field.label)}
-														</span>
-													</Button>
-												</DropdownMenuTrigger>
-												<DropdownMenuContent align="end">
-													<DropdownMenuItem onSelect={() => onEdit(field.key)}>
-														{copy.edit}
-													</DropdownMenuItem>
-													<DropdownMenuSeparator />
-													<DropdownMenuItem onSelect={() => onArchive(field)}>
-														{copy.archive}
-													</DropdownMenuItem>
-												</DropdownMenuContent>
-											</DropdownMenu>
-										</SortableItem>
-									))}
-								</SortableList>
-							</>
-						)}
+						) : null}
 
 						{archived.length > 0 ? (
 							<DisclosureRow
