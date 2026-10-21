@@ -5,7 +5,7 @@ slug: re-mo-hinh-mac-dinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21
 design_doc: _acceptance/re-mo-hinh-mac-dinh/design.md
@@ -64,3 +64,10 @@ Không gian khép kín, liệt kê tay — dòng sổ `descope` «bỏ coverage-
 - Gateway tính tiền DeepSeek gấp 4 lần giá niêm yết (Known limits Ngoài-2 của MH4); sổ chi phí kho tính theo `bangGia`
   nên sẽ ghi thấp hơn tiền thật nếu chọn DeepSeek cho kho.
 - Mọi lượt gọi model chạy dưới khoá s4 của đợt, trên kho đo dùng-một-lần.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-21:
+  - Ngoài-2: Bộ kiểm tóm tắt lượt kho chấp nhận thiếu trường sự kiện và số phiên, nên một tóm tắt cũ thiếu trường có thể lọt qua thay vì báo lỗi ngay.
+  - Ngoài-3: Khi thiếu tệp chi phí của lượt kho, thước báo lỗi đọc tệp thay vì liệt kê đủ chỗ hỏng; kết quả vẫn là không đạt.
+  - Ngoài-4: Cùng lỗi với Ngoài-3, phát hiện ở một lượt soi khác.
+  - Ngoài-5: Mốc chi phí Trợ lý kho không trừ phần đọc cache, nên «rẻ hơn 96,4%» cao hơn thật; tính đúng khoảng 91,7%, vẫn vượt ngưỡng 50%.
+  - Ngoài-6: Bài tự kiểm của bộ so chưa phân biệt «rẻ hơn» với «không rẻ hơn» ở vai kho.
+  - Ngoài-7: Bộ so chưa buộc sự kiện chọn model vào đúng phiên con của lượt Tác nhân; bằng chứng hiện tại đúng vì bên ghi đã lọc theo phiên.

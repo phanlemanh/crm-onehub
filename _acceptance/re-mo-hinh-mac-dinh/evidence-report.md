@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: eaf92b6b29058a49368d65779991717a9eadef53
-human_signoff:
+human_signoff: manh 2026-10-21 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval máy đạt; vòng 1 hạ về REJECT vì E5 đọc model gốc Zalo từ lời gọi thăm dò, đã sửa và đo lại lượt kho). Ngoài-1 chấp nhận không sửa; Ngoài-2..7 ghi Known limits, gồm mốc chi phí kho chưa trừ đọc cache; đồng ý phần cắt; phê hết các dòng treo.
 ---
 
 # Evidence Report: re-mo-hinh-mac-dinh
