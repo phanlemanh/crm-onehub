@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ba pha tải, một khung</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 52rem;
+      margin-bottom: 1.5rem;
+    }
+    code { font-family: var(--font-mono); font-size: 0.8em; }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng trước / sau · khung-cho-don-vi-mot-hinh · d-20261020T091146Z-3</p>
+    <h1>Ba pha tải, một khung</h1>
+    <p class="sub">Hôm nay mở trang Theo đơn vị có thể thấy hai khung chờ khác hình nối nhau trước khi bảng hiện. Sau vòng này cả ba pha tải — máy chủ chưa xong, trình duyệt chờ kỳ · quyền · cây, chờ danh sách — vẽ cùng một khung <code>bang-hai-dong</code> của <code>packages/ui</code>, có hay không có hàng công cụ thật. AC-1 · AC-3 · AC-5.</p>
+
+    <svg viewBox="0 0 1200 592" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- Lane headers + divider -->
+      <text x="40" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HÔM NAY</text>
+      <line x1="40" y1="240" x2="1160" y2="240" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="272" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SAU VÒNG NÀY</text>
+
+      <!-- ARROWS (before boxes) -->
+      <!-- Hôm nay -->
+      <path d="M184 144 H238" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M520 144 H574" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M856 144 H910" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- Sau vòng này -->
+      <path d="M184 388 H200 Q208 388 208 380 V332 Q208 324 216 324 H238" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M184 412 H212 Q220 412 220 420 V460 Q220 468 228 468 H238" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M520 324 H532 Q540 324 540 332 V368 Q540 376 548 376 H574" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M520 468 H544 Q552 468 552 460 V432 Q552 424 560 424 H574" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M856 400 H910" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- Arrow label: B → C -->
+      <rect x="524" y="120" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="548" y="132" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">NỐI NHAU</text>
+
+      <!-- Bracket: hai hình khác nhau -->
+      <path d="M240 72 V64 H856 V72" fill="none" stroke="#9a9a9a" stroke-width="0.8"/>
+      <rect x="472" y="52" width="152" height="20" rx="2" fill="#fafafa"/>
+      <text x="548" y="66" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">HAI HÌNH KHÁC NHAU</text>
+
+      <!-- Bracket: một hình -->
+      <path d="M576 328 V320 H856 V328" fill="none" stroke="#006B4F" stroke-width="0.8"/>
+      <rect x="676" y="308" width="80" height="20" rx="2" fill="#fafafa"/>
+      <text x="716" y="322" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">MỘT HÌNH</text>
+
+      <!-- ============ HÔM NAY ============ -->
+
+      <!-- A · Mở trang -->
+      <rect x="40" y="116" width="144" height="56" rx="20" fill="#fafafa"/>
+      <rect x="40" y="116" width="144" height="56" rx="20" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="112" y="148" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mở trang</text>
+
+      <!-- B · Máy chủ chưa xong — KhungXuong bang -->
+      <rect x="240" y="80" width="280" height="128" rx="6" fill="#fafafa"/>
+      <rect x="240" y="80" width="280" height="128" rx="6" fill="rgba(31,79,122,0.06)" stroke="#1f4f7a" stroke-width="1"/>
+      <text x="264" y="100" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Máy chủ chưa xong</text>
+      <text x="264" y="116" fill="#1f4f7a" font-size="9" font-family="'Geist Mono', monospace">KhungXuong hinh="bang"</text>
+      <g fill="rgba(31,79,122,0.32)">
+        <rect x="264" y="128" width="56" height="4" rx="1"/>
+        <rect x="328" y="128" width="56" height="4" rx="1"/>
+        <rect x="392" y="128" width="56" height="4" rx="1"/>
+      </g>
+      <rect x="264" y="136" width="232" height="4" rx="1" fill="rgba(31,79,122,0.18)"/>
+      <g fill="rgba(31,79,122,0.32)">
+        <rect x="264" y="144" width="232" height="2" rx="1"/>
+        <rect x="264" y="148" width="232" height="2" rx="1"/>
+        <rect x="264" y="152" width="232" height="2" rx="1"/>
+        <rect x="264" y="156" width="232" height="2" rx="1"/>
+        <rect x="264" y="160" width="232" height="2" rx="1"/>
+        <rect x="264" y="164" width="232" height="2" rx="1"/>
+        <rect x="264" y="168" width="232" height="2" rx="1"/>
+        <rect x="264" y="172" width="232" height="2" rx="1"/>
+      </g>
+      <text x="264" y="196" fill="#575757" font-size="9" font-family="'Geist', sans-serif">8 dòng mỏng, một vạch · hình chung của danh sách</text>
+
+      <!-- C · Trình duyệt chờ danh sách — KhungDangTaiDonVi vẽ tay -->
+      <rect x="576" y="80" width="280" height="128" rx="6" fill="#fafafa"/>
+      <rect x="576" y="80" width="280" height="128" rx="6" fill="rgba(184,145,90,0.10)" stroke="#9c7440" stroke-width="1"/>
+      <text x="600" y="100" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trình duyệt chờ danh sách</text>
+      <text x="600" y="116" fill="#7a5a2e" font-size="9" font-family="'Geist Mono', monospace">KhungDangTaiDonVi vẽ tay</text>
+      <g fill="rgba(156,116,64,0.40)">
+        <rect x="600" y="128" width="64" height="4" rx="1"/>
+        <rect x="672" y="128" width="32" height="4" rx="1"/>
+        <rect x="784" y="128" width="48" height="4" rx="1"/>
+      </g>
+      <rect x="600" y="136" width="232" height="4" rx="1" fill="rgba(156,116,64,0.20)"/>
+      <g fill="rgba(156,116,64,0.40)">
+        <rect x="600" y="144" width="96" height="3" rx="1"/><rect x="600" y="148" width="64" height="2" rx="1"/><rect x="712" y="145" width="32" height="3" rx="1"/><rect x="776" y="145" width="56" height="3" rx="1"/>
+        <rect x="600" y="152" width="96" height="3" rx="1"/><rect x="600" y="156" width="64" height="2" rx="1"/><rect x="712" y="153" width="32" height="3" rx="1"/><rect x="776" y="153" width="56" height="3" rx="1"/>
+        <rect x="600" y="160" width="96" height="3" rx="1"/><rect x="600" y="164" width="64" height="2" rx="1"/><rect x="712" y="161" width="32" height="3" rx="1"/><rect x="776" y="161" width="56" height="3" rx="1"/>
+        <rect x="600" y="168" width="96" height="3" rx="1"/><rect x="600" y="172" width="64" height="2" rx="1"/><rect x="712" y="169" width="32" height="3" rx="1"/><rect x="776" y="169" width="56" height="3" rx="1"/>
+        <rect x="600" y="176" width="96" height="3" rx="1"/><rect x="600" y="180" width="64" height="2" rx="1"/><rect x="712" y="177" width="32" height="3" rx="1"/><rect x="776" y="177" width="56" height="3" rx="1"/>
+      </g>
+      <text x="600" y="196" fill="#575757" font-size="9" font-family="'Geist', sans-serif">5 dòng hai tầng · dựng trong apps/app</text>
+
+      <!-- D · Bảng mục tiêu -->
+      <rect x="912" y="116" width="240" height="56" rx="20" fill="#fafafa"/>
+      <rect x="912" y="116" width="240" height="56" rx="20" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1032" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bảng mục tiêu</text>
+      <text x="1032" y="156" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">dòng mục tiêu đầu tiên</text>
+
+      <!-- ============ SAU VÒNG NÀY ============ -->
+
+      <!-- A' · Mở trang -->
+      <rect x="40" y="372" width="144" height="56" rx="20" fill="#fafafa"/>
+      <rect x="40" y="372" width="144" height="56" rx="20" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="112" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mở trang</text>
+      <text x="112" y="412" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">hoặc đổi đơn vị</text>
+
+      <!-- S1 · Máy chủ chưa xong -->
+      <rect x="240" y="296" width="280" height="56" rx="6" fill="#fafafa"/>
+      <rect x="240" y="296" width="280" height="56" rx="6" fill="rgba(87,87,87,0.06)" stroke="#666666" stroke-width="1"/>
+      <text x="264" y="320" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Máy chủ chưa xong</text>
+      <text x="264" y="336" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">fallback của Suspense · page.tsx</text>
+
+      <!-- S2 · Trình duyệt chờ -->
+      <rect x="240" y="432" width="280" height="72" rx="6" fill="#fafafa"/>
+      <rect x="240" y="432" width="280" height="72" rx="6" fill="rgba(87,87,87,0.06)" stroke="#666666" stroke-width="1"/>
+      <text x="264" y="456" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trình duyệt chờ</text>
+      <text x="264" y="472" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">kỳ · quyền · cây · danh sách</text>
+      <text x="264" y="488" fill="#575757" font-size="9" font-family="'Geist', sans-serif">có hoặc không hàng công cụ thật · AC-3</text>
+
+      <!-- K · KhungXuong bang-hai-dong (focal) -->
+      <rect x="576" y="336" width="280" height="128" rx="6" fill="#fafafa"/>
+      <rect x="576" y="336" width="280" height="128" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="600" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">KhungXuong bang-hai-dong</text>
+      <text x="600" y="372" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace">packages/ui</text>
+      <g fill="rgba(0,107,79,0.34)">
+        <rect x="600" y="384" width="64" height="4" rx="1"/>
+        <rect x="672" y="384" width="32" height="4" rx="1"/>
+        <rect x="784" y="384" width="48" height="4" rx="1"/>
+      </g>
+      <rect x="600" y="392" width="232" height="4" rx="1" fill="rgba(0,107,79,0.18)"/>
+      <g fill="rgba(0,107,79,0.34)">
+        <rect x="600" y="400" width="96" height="3" rx="1"/><rect x="600" y="404" width="64" height="2" rx="1"/><rect x="712" y="401" width="32" height="3" rx="1"/><rect x="776" y="401" width="56" height="3" rx="1"/>
+        <rect x="600" y="408" width="96" height="3" rx="1"/><rect x="600" y="412" width="64" height="2" rx="1"/><rect x="712" y="409" width="32" height="3" rx="1"/><rect x="776" y="409" width="56" height="3" rx="1"/>
+        <rect x="600" y="416" width="96" height="3" rx="1"/><rect x="600" y="420" width="64" height="2" rx="1"/><rect x="712" y="417" width="32" height="3" rx="1"/><rect x="776" y="417" width="56" height="3" rx="1"/>
+        <rect x="600" y="424" width="96" height="3" rx="1"/><rect x="600" y="428" width="64" height="2" rx="1"/><rect x="712" y="425" width="32" height="3" rx="1"/><rect x="776" y="425" width="56" height="3" rx="1"/>
+        <rect x="600" y="432" width="96" height="3" rx="1"/><rect x="600" y="436" width="64" height="2" rx="1"/><rect x="712" y="433" width="32" height="3" rx="1"/><rect x="776" y="433" width="56" height="3" rx="1"/>
+      </g>
+      <text x="600" y="452" fill="#575757" font-size="9" font-family="'Geist', sans-serif">cùng chữ ký thân bảng ở cả ba pha · AC-1 · AC-5</text>
+
+      <!-- D' · Bảng mục tiêu -->
+      <rect x="912" y="372" width="240" height="56" rx="20" fill="#fafafa"/>
+      <rect x="912" y="372" width="240" height="56" rx="20" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1032" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bảng mục tiêu</text>
+      <text x="1032" y="412" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">thay đúng chỗ khung</text>
+
+      <!-- Legend -->
+      <line x1="40" y1="536" x2="1160" y2="536" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="568" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="136" y="556" width="16" height="16" rx="2" fill="rgba(31,79,122,0.06)" stroke="#1f4f7a" stroke-width="1"/>
+      <text x="160" y="568" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Khung chung hình bang</text>
+
+      <rect x="376" y="556" width="16" height="16" rx="2" fill="rgba(184,145,90,0.10)" stroke="#9c7440" stroke-width="1"/>
+      <text x="400" y="568" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Khung vẽ tay ở trang</text>
+
+      <rect x="600" y="556" width="16" height="16" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="624" y="568" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Khung chung bang-hai-dong, dùng ở mọi pha</text>
+
+      <rect x="936" y="556" width="16" height="16" rx="2" fill="rgba(87,87,87,0.06)" stroke="#666666" stroke-width="1"/>
+      <text x="960" y="568" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Pha tải, không tự vẽ</text>
+    </svg>
+  </div>
+</body>
+</html>
