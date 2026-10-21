@@ -4,6 +4,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
+import { useRef } from "react";
 import { toast } from "sonner";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
@@ -53,8 +54,7 @@ function lyDoTat(
 
 export function duongSoan(v: DauVaoDuongSoan): DuongSoan {
 	const donVi = donViSoanCua(v.don, v.cycleId);
-	if (donVi === null)
-		return { loai: "khoa", lyDo: v.mo.chonDuong.khoa.caNhan };
+	if (donVi === null) return { loai: "khoa", lyDo: v.mo.chonDuong.khoa.caNhan };
 	if (v.phaKy !== PHA_SOAN)
 		return { loai: "khoa", lyDo: v.mo.chonDuong.khoa.ngoaiPha };
 	if (!v.canEdit && !v.quanTri)
@@ -84,6 +84,7 @@ export function useDuongSoan({
 	const trpc = useTRPC();
 	const moBanGhi = useOpenRecord();
 	const tenDon = useTenDon(q.dich.don);
+	const dangGui = useRef(false);
 	const moCuoc = (id: string) => moBanGhi({ kind: "soan", id });
 	const donVi = donViSoanCua(q.dich.don, q.cycleId);
 	const hoiDuoc =
@@ -92,9 +93,7 @@ export function useDuongSoan({
 		q.phaKy === PHA_SOAN &&
 		(q.canEdit || q.quanTri);
 	const sanSang = useQuery({
-		...trpc.okr.soanSanSang.queryOptions(
-			hoiDuoc && donVi ? donVi : skipToken,
-		),
+		...trpc.okr.soanSanSang.queryOptions(hoiDuoc && donVi ? donVi : skipToken),
 		retry: false,
 	});
 	const mo = useMutation(
@@ -105,6 +104,9 @@ export function useDuongSoan({
 				else void sanSang.refetch();
 			},
 			onError: (loi) => toast.error(loi.message || m.nut.loiMo),
+			onSettled: () => {
+				dangGui.current = false;
+			},
 		}),
 	);
 	const duong = duongSoan({
@@ -128,9 +130,12 @@ export function useDuongSoan({
 		tranCuoc: s?.bat ? s.tranCuoc : TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy,
 		donVi,
 		chon: () => {
-			if (mo.isPending) return;
+			if (dangGui.current || mo.isPending) return;
 			if (duong.loai === "tiep") moCuoc(duong.cuocId);
-			else if (duong.loai === "mo") mo.mutate(duong.donVi);
+			else if (duong.loai === "mo") {
+				dangGui.current = true;
+				mo.mutate(duong.donVi);
+			}
 		},
 	};
 }

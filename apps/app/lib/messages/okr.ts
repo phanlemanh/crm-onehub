@@ -77,7 +77,8 @@ const vi = {
 			caNhan:
 				"Soạn cùng Kara chỉ mở cho bộ phận, phòng ban và OneHub. Với mục tiêu cá nhân, chọn Tự viết.",
 		},
-		cuocDaSoan: (da: string, tran: string) => `Các cuộc đã soạn (${da}/${tran})`,
+		cuocDaSoan: (da: string, tran: string) =>
+			`Các cuộc đã soạn (${da}/${tran})`,
 	},
 	phuTrach: "Phụ trách",
 	gopVao: (n: number) => `góp vào ${n} chỗ`,
