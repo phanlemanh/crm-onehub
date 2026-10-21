@@ -1,0 +1,91 @@
+# Bốn hồ sơ rút khỏi PR VK2 theo V1-14 A (chủ kho, 20/10). Lượt ghim repin-20261020T141937Z-90923.
+# okr-soat-anh-luot-3 E11 đỏ sẵn (#504, Cài đặt 21 trang) · so-do-quanh-muc-tieu E14 đỏ sẵn · viec-chung E16 đỏ sẵn (#501 đổi viec-ghi.ts)
+# trang-don-vi-mot-bang E3/E4/E5/E17 do VK2: ở 1440 hàng Lọc · Sắp xếp · Cột của Bộ OKR rơi dòng hai (thanh bên 224px); E12/E16 thước gãy (thiếu nhánh feat/dieu-huong-khu-muc-tieu)
+diff --git a/_acceptance/okr-soat-anh-luot-3/decisions.jsonl b/_acceptance/okr-soat-anh-luot-3/decisions.jsonl
+index 247e0b0f5..ab2581ad7 100644
+--- a/_acceptance/okr-soat-anh-luot-3/decisions.jsonl
++++ b/_acceptance/okr-soat-anh-luot-3/decisions.jsonl
+@@ -24,3 +24,5 @@
+ {"id":"d-20260925T203117Z-24","type":"revisit","stage":"gate2","at":"2026-09-25T20:31:17Z","decision":"Treo: phê hết","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Manh Phan","decided_at":"2026-09-25T20:31:17Z"}
+ {"id":"d-20260925T203117Z-25","type":"revisit","stage":"gate2","at":"2026-09-25T20:31:17Z","decision":"ký hay trả: ký","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Manh Phan","decided_at":"2026-09-25T20:31:17Z"}
+ {"id": "d-20261017T053134Z-26", "type": "fix", "stage": "gate2-sau", "decision": "do-man.mjs (E1): Nhập từ bảng tính mở qua menu «…» ở hàng hành động đầu trang (AC-4 DH1), mục phải không data-disabled.", "why": "Sau #437 nút Nhập rời thân trang Theo đơn vị; thước cũ đỏ «khong thay nut Nhập từ bảng tính». Chứng 17/10: 50/50 DUNG; gỡ mục khỏi menu → đỏ đúng câu cũ.", "cost_if_wrong": "Mốc [data-nut=them-cach] đổi thì thước phải theo.", "at": "2026-10-17T05:31:34Z"}
++{"id":"d-20261020T061405Z-27","type":"fix","stage":"gate2","at":"2026-10-20T06:20:00Z","decision":"Phép khung-dung-nav-strip của rang/soi-ma.mjs (E13) thôi dò chữ NavStrip trong settings-sidebar.tsx, nay đòi settings-sidebar.tsx dựng AreaSidebar, packages/ui/src/components/area-sidebar.tsx dựng NavStrip, và trang không tự vẽ <nav overflow-x-auto>; E13 thêm area-sidebar.tsx vào paths.","why":"VK1 (thanh-ben-khu-dung-chung, #489) dời NavStrip vào AreaSidebar nên hồ sơ đỏ trên onehub từ 42060835e; đo hai chiều: cây 13 DUNG 0 SAI, area-sidebar bỏ NavStrip → SAI, trang tự vẽ nav overflow-x-auto → SAI.","cost_if_wrong":"Nếu AreaSidebar thôi dùng NavStrip dưới md mà vẫn giữ hàng cuộn ngang, phép này đỏ dù màn Cài đặt trên điện thoại vẫn đúng.","decided_by":"Phan Le Manh","decided_at":"2026-10-20","target":"thuoc"}
++{"id":"d-20261020T072807Z-28","type":"fix","stage":"gate2","at":"2026-10-20T08:20:00Z","decision":"_acceptance/dat-okr-trong-crm/rang/man-okr.mjs bước E11 buoc 11: khẳng định liên kết trong ST-cuatoi-rong đổi tiền tố /<slug>/okr/theo-don-vi thành /<slug>/okr/bo-okr; không đổi gì khác của thước.","why":"Chủ kho cho đổi đúng chuỗi đường cũ thành đường mới trong khẳng định bài đã ký của khu Mục tiêu (VK2, Hỏi-2, sổ vo-khu-muc-tieu d-20261019T224000Z-16); okr-soat-anh-luot-3 E10 chạy thước này và đỏ «E11 buoc 11: thieu lien ket sang Theo don vi»; đo hai chiều: cây 208 khẳng định 0 hỏng mã 0, đột biến cua-toi.tsx cho liên kết trỏ /okr/so-do làm 1 hỏng đúng câu đó, mã 1.","cost_if_wrong":"Nếu câu rỗng của Của tôi trỏ một trang con khác dưới /okr/bo-okr thì bước này vẫn xanh.","decided_by":"Phan Le Manh","decided_at":"2026-10-20","target":"thuoc"}
+diff --git a/_acceptance/okr-soat-anh-luot-3/evals.yaml b/_acceptance/okr-soat-anh-luot-3/evals.yaml
+index 4447264ee..96619b6eb 100644
+--- a/_acceptance/okr-soat-anh-luot-3/evals.yaml
++++ b/_acceptance/okr-soat-anh-luot-3/evals.yaml
+@@ -240,13 +240,14 @@ evals:
+       - "packages/ui/src/components/dialog.tsx"
+       - "packages/ui/src/components/simple-table.tsx"
+       - "packages/ui/src/components/nav-item.tsx"
++      - "packages/ui/src/components/area-sidebar.tsx"
+       - "_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs"
+     expected: |
+       soi-ma.mjs --ca thanh-phan: "DUNG dialog-co-table" (dialog.tsx nhan size "table"),
+       "DUNG hang-invalid" (SimpleTableRow nhan prop invalid), "DUNG nav-strip-xuat" (nav-item.tsx
+       xuat NavStrip), "DUNG hop-nhap-dung-table" (hop-thoai-nhap.tsx: DialogContent size="table",
+       SimpleTableRow invalid=..., StatusIndicator), "DUNG khung-dung-nav-strip"
+-      (settings-sidebar.tsx dung NavStrip, khong con <nav ... overflow-x-auto>). Ma tran
++      (settings-sidebar.tsx dung AreaSidebar, area-sidebar.tsx dung NavStrip, khong con <nav ... overflow-x-auto>). Ma tran
+       "lop-o-cho-goi": tap tep rut tu diff cap gop nhu E12 (chi *.tsx duoi apps/app; moc co dinh F8
+       B = 100847e8a, D = 679432a0f; soi ban D cua tep), moi tep lay tap ten
+       nhap tu "@crm/ui/..."; MOI phan tu JSX mang mot trong cac ten do ma cham dong doi cua diff
+diff --git a/_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs b/_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs
+index cadcf79e7..c23bdfa7f 100644
+--- a/_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs
++++ b/_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs
+@@ -38,6 +38,7 @@ const TEP = {
+ 	navItem: "packages/ui/src/components/nav-item.tsx",
+ 	hopNhap: "apps/app/app/(app)/[slug]/okr/hop-thoai-nhap.tsx",
+ 	sidebar: "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx",
++	areaSidebar: "packages/ui/src/components/area-sidebar.tsx",
+ };
+ 
+ const LOP_CAM =
+@@ -337,14 +338,16 @@ function caThanhPhan() {
+ 	);
+ 
+ 	const sb = cay(TEP.sidebar);
+-	const dungStrip = the(sb, "NavStrip").length >= 1;
++	const dungKhu = the(sb, "AreaSidebar").length >= 1;
++	const khuDungStrip = the(cay(TEP.areaSidebar), "NavStrip").length >= 1;
++	const dungStrip = dungKhu && khuDungStrip;
+ 	const navTay = the(sb, "nav").filter((n) =>
+ 		lopTrong(thuocTinh(n, "className") ?? n).lop.includes("overflow-x-auto"),
+ 	).length;
+ 	ghi(
+ 		"khung-dung-nav-strip",
+ 		dungStrip && navTay === 0,
+-		`settings-sidebar dung NavStrip ${dungStrip}, nav tu ve overflow-x-auto ${navTay}`,
++		`settings-sidebar dung AreaSidebar ${dungKhu}, area-sidebar dung NavStrip ${khuDungStrip}, nav tu ve overflow-x-auto ${navTay}`,
+ 	);
+ 
+ 	const tep = tepDiff();
+diff --git a/_acceptance/so-do-quanh-muc-tieu/decisions.jsonl b/_acceptance/so-do-quanh-muc-tieu/decisions.jsonl
+index 8eefe29d4..abc898641 100644
+--- a/_acceptance/so-do-quanh-muc-tieu/decisions.jsonl
++++ b/_acceptance/so-do-quanh-muc-tieu/decisions.jsonl
+@@ -37,3 +37,4 @@
+ {"id": "d-20261015T141029Z-37", "type": "revisit", "stage": "gate2", "at": "2026-10-15T14:10:29Z", "decision": "cắt/hoãn: đồng ý cắt", "why": "người xác nhận phạm vi cắt/hoãn đã khai (Out of scope, E13 không chạy ở vòng này).", "cost_if_wrong": "Phép giữ hồ sơ đã ký chạy ở làn ghim lại lúc gộp thay vì ở vòng này.", "decided_by": "manh"}
+ {"id": "d-20261015T141029Z-38", "type": "revisit", "stage": "gate2", "at": "2026-10-15T14:10:29Z", "decision": "Treo: phê hết", "why": "người phê mọi quyết định ghi sau Cổng Phạm vi (fix S3, S4-r1, S4-r2; descope E13).", "cost_if_wrong": "Một quyết định máy ghi sau Cổng Phạm vi được coi là đã duyệt.", "decided_by": "manh"}
+ {"id":"d-20261015T142032Z-39","type":"revisit","stage":"gate2","at":"2026-10-15T14:20:32Z","decision":"Gỡ nhãn (cross-layer) khỏi AC-11 — phía máy chủ do E1 đo trên cùng bộ mẫu.","why":"người chọn ở Cổng Bằng chứng: «Gỡ nhãn cross-layer khỏi AC-11 — phía máy chủ do E1 đo trên cùng bộ mẫu. manh»; pre-merge-check chặn vì eval duy nhất của AC-11 (E12) khai layer ui-observed, còn dòng góp lên công ty của ca sd-a1-1 → n1-k1 do E1 (AC-1, layer backend-effect) đo thẳng ở API trên cùng bộ gieo ca-so-do.ts và đạt ở S4 lượt 3 — tiền lệ AC-12 của DH4 (d-20261015T083136Z-54).","cost_if_wrong":"Nếu màn và API lệch nhau ở phần chỉ AC-11 phủ thì không có bài máy chủ riêng nào bắt; E12 vẫn đọc màn thật.","decided_by":"manh"}
++{"id":"d-20261019T224952Z-40","type":"fix","stage":"gate2","at":"2026-10-19T22:49:52Z","decision":"apps/app/test/okr-quanh-muc-tieu.dom.tsx ca dh5-trang-thai: liên kết của khối không tìm thấy mong đợi /ws/okr/toan-canh đổi thành /ws/okr/so-do. apps/app/test/okr-quanh-loi-vao.dom.tsx ca dh5-loi-vao: href liên kết Xem quanh mục tiêu mong đợi /ws/okr/quanh-muc-tieu/<id> đổi thành /ws/okr/so-do/muc-tieu/<id>.","why":"Chủ kho cho đổi đúng chuỗi đường cũ thành đường mới khi khu Mục tiêu đổi đường (VK2, sổ vo-khu-muc-tieu d-20261019T224000Z-16).","cost_if_wrong":"Nếu sai, bài đã ký khẳng định một đường mà người dùng không còn tới, hoặc bỏ lọt một liên kết khu Mục tiêu trỏ nhầm mà vẫn xanh.","decided_by":"Phan Le Manh"}
+diff --git a/_acceptance/trang-don-vi-mot-bang/decisions.jsonl b/_acceptance/trang-don-vi-mot-bang/decisions.jsonl
+index 9632165db..bb89b5ce7 100644
+--- a/_acceptance/trang-don-vi-mot-bang/decisions.jsonl
++++ b/_acceptance/trang-don-vi-mot-bang/decisions.jsonl
+@@ -55,3 +55,4 @@
+ {"id":"d-20261017T223120Z-55","type":"revisit","stage":"gate2","at":"2026-10-17T22:31:00Z","decision":"Treo: phê hết","why":"Chủ kho phê mọi quyết định máy ghi sau Cổng Phạm vi, gồm hai lần đổi định nghĩa E16 và các dòng Notes lời hứa đổi ở bốn hồ sơ đã ký (Treo-27).","cost_if_wrong":"Nếu một quyết định đã phê hoá ra sai, đảo bằng một dòng sổ mới và vòng sửa riêng; lối dự phòng của E16 là ghim lại vệ sinh cùng bốn hồ sơ (~100′)."}
+ {"id":"d-20261017T223322Z-56","type":"revisit","stage":"gate2","at":"2026-10-17T22:45:00Z","decision":"Ngoài-1: mở hợp đồng mới — Gốc: _acceptance/trang-don-vi-mot-bang (chữ ký Cổng 2 của chủ kho 2026-10-17); Điều phối M5 chuyển Mac Studio thành hàng lộ trình","why":"Neo ngoài cho hàng mới là chữ ký Cổng Bằng chứng của chủ kho trên hồ sơ này, ghi cùng dòng để người đọc lần được trong mười giây.","cost_if_wrong":"Nếu hàng lộ trình không được thêm, mục này chỉ còn ở dòng sổ và Notes của hợp đồng, người dùng vẫn gặp hiện tượng đã mô tả.","tieu_de":"Khung xương đang tải của bảng đơn vị vẽ tay trong apps/app, lệch với KhungXuong \"bang\" mà page.tsx dùng làm fallback","tep":"apps/app/app/(app)/[slug]/okr/theo-don-vi/hang-cong-cu.tsx"}
+ {"id":"d-20261017T223322Z-57","type":"revisit","stage":"gate2","at":"2026-10-17T22:45:00Z","decision":"Ngoài-3: mở hợp đồng mới — Gốc: _acceptance/trang-don-vi-mot-bang (chữ ký Cổng 2 của chủ kho 2026-10-17); Điều phối M5 chuyển Mac Studio thành hàng lộ trình","why":"Neo ngoài cho hàng mới là chữ ký Cổng Bằng chứng của chủ kho trên hồ sơ này, ghi cùng dòng để người đọc lần được trong mười giây.","cost_if_wrong":"Nếu hàng lộ trình không được thêm, mục này chỉ còn ở dòng sổ và Notes của hợp đồng, người dùng vẫn gặp hiện tượng đã mô tả.","tieu_de":"Moi lan chon gia tri trong menu Bo loc, ca bang bi go ra nen menu chon-nhieu tu dong lai (va khung loc tren mobile thu lai)","tep":"apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"}
++{"id":"d-20261019T224952Z-58","type":"fix","stage":"gate2","at":"2026-10-19T22:49:52Z","decision":"apps/app/test/okr-trang-don-vi.dom.tsx dvb-giu-xem: DUONG_THE đổi /ws/okr/theo-don-vi, /ws/okr/toan-canh, /ws/okr/hoi-y thành /ws/okr/bo-okr, /ws/okr/suc-khoe, /ws/okr/lay-y-kien; tập tham số giữ và vòng đi-về giữ nguyên.","why":"Chủ kho cho đổi đúng chuỗi đường cũ thành đường mới khi khu Mục tiêu đổi đường (VK2, sổ vo-khu-muc-tieu d-20261019T224000Z-16).","cost_if_wrong":"Nếu sai, bài đã ký khẳng định một đường mà người dùng không còn tới, hoặc bỏ lọt một liên kết khu Mục tiêu trỏ nhầm mà vẫn xanh.","decided_by":"Phan Le Manh"}
+diff --git a/_acceptance/viec-chung/decisions.jsonl b/_acceptance/viec-chung/decisions.jsonl
+index 3eca3fa07..1bcfd57f7 100644
+--- a/_acceptance/viec-chung/decisions.jsonl
++++ b/_acceptance/viec-chung/decisions.jsonl
+@@ -78,3 +78,4 @@
+ {"id":"d-20261013T064402Z-78","type":"scope","stage":"gate2","at":"2026-10-13T06:44:02Z","decision":"cắt/hoãn: đồng ý cắt — phạm vi Out of scope đã duyệt ở Cổng Phạm vi giữ nguyên","impact":"Không kéo mục nào vào lượt này","decided_by":"Mạnh","decided_at":"2026-10-13T06:44:02Z"}
+ {"id":"d-20261013T064402Z-79","type":"scope","stage":"gate2","at":"2026-10-13T06:44:02Z","decision":"Treo: phê hết — gồm các quyết định ghi sau Cổng Phạm vi, các ruling S3 và năm dòng S4-r1 (bốn lần máy tự sửa kèm căn cứ, một dòng hoãn Ngoài-14)","impact":"Phê chuẩn khối CHƯA duyệt trên thẻ lượt 2","decided_by":"Mạnh","decided_at":"2026-10-13T06:44:02Z"}
+ {"id":"d-20261015T132215Z-80","type":"revisit","stage":"gate2-sau","at":"2026-10-15T13:25:00Z","decision":"Treo: E16 neo đột biến khớp 2 chỗ sau #405 (8f24bd532); sửa neo, không đổi mã sản phẩm. Đột biến (a) ở rang/dot-bien.mjs nay neo vào chuỗi nhiều dòng của vòng ganDung trong hàm tạo việc, kết thúc bằng «for (const n of nguoiTheoDoi) {», thay thế vẫn là «for (const b of [])». Phần sửa đã commit ở effdc8c5c TRƯỚC đơn cham-tep P4-11; giám sát r2 duyệt đơn muộn, chờ chủ kho phê.","why":"Làn ghim #418 (repin-20261015T125326Z-78323) đỏ E16 mã 2 «KHONG DO DUOC: moc trong packages/db/src/viec-ghi.ts xuat hien 2 lan, can 1»: vòng ganDung thứ hai ở dòng 679 do chep-viec-can-lam-cu thêm. Sau khi sửa, dot-bien.mjs in «a bo hang ViecGan khi tao xanh=0 do=1 ghim=ok «vc: gan sai»», 14/14 cặp đạt; làn repin-20261015T130914Z-83813 xanh.","cost_if_wrong":"Nếu chủ kho không phê, phải trả neo về một dòng và đột biến (a) lại thoát mã 2 cho tới khi có cách neo khác; mã sản phẩm không đổi trong cả hai lối."}
++{"id":"d-20261019T224952Z-81","type":"fix","stage":"gate2","at":"2026-10-19T22:49:52Z","decision":"apps/app/lib/record-href.ts: kiểu literal danh sách «/okr/theo-don-vi» đổi thành «/okr/bo-okr» (chỗ gọi duy nhất ở soan-okr-trong-khung.dom.tsx đổi theo).","why":"Chủ kho cho đổi đúng chuỗi đường cũ thành đường mới khi khu Mục tiêu đổi đường (VK2, sổ vo-khu-muc-tieu d-20261019T224000Z-16).","cost_if_wrong":"Nếu sai, bài đã ký khẳng định một đường mà người dùng không còn tới, hoặc bỏ lọt một liên kết khu Mục tiêu trỏ nhầm mà vẫn xanh.","decided_by":"Phan Le Manh"}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gỡ ca đo thanh thẻ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 52rem;
+      margin-bottom: 1.5rem;
+    }
+    .scroll { overflow-x: auto; }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hỏi-1 · vo-khu-muc-tieu · Cổng Phạm vi · d-20261019T170009Z-8</p>
+    <h1>Trang Bộ OKR: hai lớp thẻ ngang thành một</h1>
+    <p class="sub">Hôm nay trang đơn vị chồng thanh thẻ của khu lên hàng kiểu xem. Sau VK2 thanh thẻ nhường chỗ cho thanh bên trái, ô chu kỳ lên đầu thanh. Đạt ngưỡng «một lớp» cần gỡ ca đo thanh thẻ ở 6 chỗ của hồ sơ đã ký.</p>
+
+    <div class="scroll">
+    <svg viewBox="0 0 1200 740" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HÔM NAY</text>
+      <text x="640" y="36" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SAU VK2</text>
+      <line x1="600" y1="24" x2="600" y2="404" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <path d="M520 504 V520 Q520 528 512 528 H288 Q280 528 280 536 V556" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M680 504 V520 Q680 528 688 528 H912 Q920 528 920 536 V556" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="368" y="508" width="64" height="12" rx="2" fill="#fafafa"/>
+      <text x="400" y="517" fill="#006B4F" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHO GỠ</text>
+      <rect x="760" y="508" width="80" height="12" rx="2" fill="#fafafa"/>
+      <text x="800" y="517" fill="#666666" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHÔNG CHO</text>
+
+      <rect x="40" y="56" width="520" height="320" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <path d="M40 76 V62 Q40 56 46 56 H554 Q560 56 560 62 V76 Z" fill="#f2f2f2"/>
+      <line x1="40" y1="76" x2="560" y2="76" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="52" y="70" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Mục tiêu · trang đơn vị</text>
+      <text x="548" y="70" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">/okr/theo-don-vi</text>
+
+      <rect x="56" y="96" width="96" height="8" rx="2" fill="rgba(23,23,23,0.16)"/>
+
+      <rect x="256" y="88" width="72" height="24" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="292" y="104" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Hỏi Kara</text>
+      <rect x="336" y="88" width="80" height="24" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="376" y="104" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ô chu kỳ ▾</text>
+      <rect x="424" y="88" width="56" height="24" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="452" y="104" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Thêm</text>
+      <rect x="488" y="88" width="56" height="24" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="516" y="104" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Soạn</text>
+
+      <line x1="56" y1="152" x2="376" y2="152" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="56" y="144" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Của tôi</text>
+      <text x="124" y="144" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Theo đơn vị</text>
+      <line x1="124" y1="152" x2="196" y2="152" stroke="#171717" stroke-width="2"/>
+      <text x="220" y="144" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Toàn cảnh</text>
+      <text x="300" y="144" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Hỏi ý</text>
+
+      <rect x="56" y="168" width="280" height="24" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <rect x="56" y="168" width="80" height="24" rx="4" fill="rgba(23,23,23,0.06)" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <line x1="184" y1="168" x2="184" y2="192" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <line x1="256" y1="168" x2="256" y2="192" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="96" y="184" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Danh sách</text>
+      <text x="160" y="184" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Cây</text>
+      <text x="220" y="184" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Họp tuần</text>
+      <text x="296" y="184" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Chấm điểm</text>
+
+      <path d="M392 128 H400 V192 H392" fill="none" stroke="#171717" stroke-width="1.2"/>
+      <text x="412" y="160" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">2 lớp thẻ ngang</text>
+      <text x="412" y="176" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ThanhTabOkr + ViewSwitch</text>
+
+      <rect x="56" y="216" width="488" height="140" rx="4" fill="none" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <rect x="72" y="236" width="200" height="8" rx="2" fill="rgba(23,23,23,0.10)"/>
+      <rect x="72" y="260" width="400" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <rect x="72" y="284" width="344" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <rect x="72" y="308" width="376" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <rect x="72" y="332" width="240" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+
+      <text x="40" y="400" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Ô chu kỳ lẫn giữa các nút hành động.</text>
+
+      <rect x="640" y="56" width="520" height="320" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <path d="M640 76 V62 Q640 56 646 56 H1154 Q1160 56 1160 62 V76 Z" fill="#f2f2f2"/>
+      <line x1="640" y1="76" x2="1160" y2="76" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="652" y="70" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Mục tiêu · Bộ OKR</text>
+      <text x="1148" y="70" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">/okr/bo-okr</text>
+
+      <line x1="800" y1="76" x2="800" y2="376" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+
+      <rect x="652" y="88" width="136" height="24" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="664" y="104" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">ô chu kỳ</text>
+      <text x="776" y="104" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="end">▾</text>
+
+      <text x="664" y="140" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Của tôi</text>
+
+      <text x="664" y="168" fill="#666666" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">OKR</text>
+      <rect x="652" y="176" width="136" height="24" rx="4" fill="rgba(23,23,23,0.06)"/>
+      <text x="664" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Bộ OKR</text>
+      <text x="664" y="220" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lấy ý kiến</text>
+
+      <text x="664" y="248" fill="#666666" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BÁO CÁO</text>
+      <text x="664" y="272" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Sức khoẻ</text>
+      <text x="664" y="300" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Sơ đồ</text>
+
+      <line x1="652" y1="332" x2="788" y2="332" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="664" y="356" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Chương trình OKR</text>
+
+      <rect x="816" y="96" width="96" height="8" rx="2" fill="rgba(23,23,23,0.16)"/>
+      <rect x="944" y="88" width="72" height="24" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="980" y="104" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Hỏi Kara</text>
+      <rect x="1024" y="88" width="56" height="24" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="1052" y="104" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Thêm</text>
+      <rect x="1088" y="88" width="56" height="24" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="1116" y="104" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Soạn</text>
+
+      <rect x="816" y="128" width="280" height="24" rx="4" fill="rgba(0,107,79,0.04)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="816" y="128" width="80" height="24" rx="4" fill="rgba(0,107,79,0.12)" stroke="#006B4F" stroke-width="1.4"/>
+      <line x1="944" y1="128" x2="944" y2="152" stroke="rgba(0,107,79,0.40)" stroke-width="1"/>
+      <line x1="1016" y1="128" x2="1016" y2="152" stroke="rgba(0,107,79,0.40)" stroke-width="1"/>
+      <text x="856" y="144" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Danh sách</text>
+      <text x="920" y="144" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Cây</text>
+      <text x="980" y="144" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Họp tuần</text>
+      <text x="1056" y="144" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Chấm điểm</text>
+
+      <text x="816" y="176" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif">1 lớp thẻ ngang</text>
+      <text x="924" y="176" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">chỉ ViewSwitch xemOkr</text>
+
+      <rect x="816" y="196" width="328" height="160" rx="4" fill="none" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <rect x="832" y="216" width="160" height="8" rx="2" fill="rgba(23,23,23,0.10)"/>
+      <rect x="832" y="240" width="280" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <rect x="832" y="264" width="240" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <rect x="832" y="288" width="264" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <rect x="832" y="312" width="200" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+      <rect x="832" y="336" width="232" height="8" rx="2" fill="rgba(23,23,23,0.06)"/>
+
+      <text x="640" y="400" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Ô chu kỳ chọn một lần ở đầu thanh bên.</text>
+
+      <line x1="40" y1="420" x2="1160" y2="420" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="440" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">QUYẾT ĐỊNH · HỎI-1</text>
+
+      <rect x="360" y="448" width="480" height="56" rx="6" fill="#fafafa"/>
+      <rect x="360" y="448" width="480" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="600" y="472" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gỡ ca đo thanh thẻ ngang khỏi bài kiểm và thước của hồ sơ đã ký?</text>
+      <text x="600" y="490" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-3 · đường đo của ngưỡng</text>
+
+      <rect x="40" y="560" width="480" height="104" rx="6" fill="#fafafa"/>
+      <rect x="40" y="560" width="480" height="104" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="56" y="584" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Cho gỡ ca đo thanh thẻ ở 6 chỗ của hồ sơ đã ký (khuyên)</text>
+      <text x="56" y="604" fill="#006B4F" font-size="12" font-weight="500" font-family="'Geist', sans-serif">→ đạt ngưỡng, ghim lại chung</text>
+      <text x="56" y="628" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">okr-thanh-tab · okr-dau-trang-khu · khung-okr-truoc-r1</text>
+      <text x="56" y="644" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">soan-okr-song-lai · dot-hoi-y-tuong-okr · khung-man-chung</text>
+
+      <rect x="680" y="560" width="480" height="104" rx="6" fill="#fafafa"/>
+      <rect x="680" y="560" width="480" height="104" rx="6" fill="#ffffff" stroke="#666666" stroke-width="1"/>
+      <text x="696" y="584" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Không cho</text>
+      <text x="696" y="604" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif">→ giữ thanh thẻ, không đạt ngưỡng «một lớp»</text>
+      <text x="696" y="628" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">trang Bộ OKR vẫn 2 lớp thẻ ngang · AC-3 không đạt</text>
+
+      <line x1="40" y1="688" x2="1160" y2="688" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="160" y="704" width="16" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="184" y="716" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Ô chu kỳ — đổi chỗ</text>
+
+      <rect x="360" y="704" width="16" height="16" rx="2" fill="rgba(23,23,23,0.06)" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="384" y="716" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Mục, thẻ đang mở</text>
+
+      <rect x="560" y="704" width="16" height="16" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="584" y="716" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Một lớp thẻ ngang · lối khuyên</text>
+    </svg>
+    </div>
+  </div>
+</body>
+</html>

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 468a79b5feefdf2ac856bb05df8943d99b65b845
+verified_commit: cdc762c63018535345b2e142f23e81aa94dc9943
 human_signoff: manh 2026-10-15
 ---
 
@@ -255,3 +255,7 @@ sha: 0784b1e8c29062b23855ef1aa6fc9152d5bf2744 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-18, do làn đêm C-2 17/10, phần đổi: hoá cũ lại vì #471 gộp (onehub 30d982d22→b22c0a329)
 run_id: repin-20261018T031621Z-30260
 sha: 468a79b5feefdf2ac856bb05df8943d99b65b845 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T141937Z-90923
+sha: cdc762c63018535345b2e142f23e81aa94dc9943 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

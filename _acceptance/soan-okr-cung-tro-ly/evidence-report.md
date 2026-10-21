@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3bacbd6bf1695a5b1ecf072e968d0f278836ee6b
+verified_commit: cdc762c63018535345b2e142f23e81aa94dc9943
 human_signoff: Manh Phan 2026-10-02
 ---
 
@@ -415,3 +415,7 @@ sha: 221c98a8faee6a66a4b19b56faf0aa062807132d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 12 — 2026-10-09, do gộp onehub e86cf730 vào nhánh E1c
 run_id: repin-20261009T021828Z-69719
 sha: 3bacbd6bf1695a5b1ecf072e968d0f278836ee6b · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · diff chạm vật đo ngoài làn máy: E29 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 13 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T141937Z-90923
+sha: cdc762c63018535345b2e142f23e81aa94dc9943 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · diff chạm vật đo ngoài làn máy: E13, E24, E29 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
