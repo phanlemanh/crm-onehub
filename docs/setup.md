@@ -429,12 +429,28 @@ hơn một nhóm trên năm:
 bun run tin-hieu:do-gom
 ```
 
-Việc cài một lần trước lượt thật đầu tiên:
+Phiên gom đọc chữ người ngoài nhập, nên nó chỉ được làm đúng việc gom (`scripts/tin-hieu/gom-cau-hinh.ts`, khối
+`GOM.moHinh`):
+
+- môi trường của phiên chỉ có khoá mô hình, và Claude Code gỡ cả khoá đó khỏi mọi lệnh con; không token GitHub nào;
+- phiên chỉ chạy được đúng các lệnh kit liệt trong lời dặn, chỉ sửa bản gom lượt đã định và các tệp lộ trình, không
+  git, không mạng, không MCP, không hook, không đọc tệp ngoài kho và gói kit;
+- trước khi gọi phiên, lượt quét bản checkout và thư mục nhà tìm token; thấy thì đỏ «token nằm trên đĩa»;
+- phiên đổi cấu hình, hook hay ref của git thì lượt đỏ «phiên gom đổi siêu dữ liệu git» trước lệnh git kế tiếp;
+- trước khi đẩy, lượt quét nội dung đề xuất tìm khoá (nguyên văn và base64); thấy thì đỏ và không đẩy;
+- token chỉ đi tới lời gọi `git fetch`, `git push` và `gh` của lượt.
+
+Nhật ký mỗi lượt có dòng «phiên gom bị từ chối N lời gọi» kèm tên công cụ: số khác 0 nghĩa là skill cần một lệnh
+chưa liệt, hoặc một tín hiệu đã dặn phiên làm việc bị cấm — đọc tín hiệu của lượt đó trước khi chạy lại. Vòng này chưa
+có phép đo Claude Code chặn thật và chưa cách ly ở tầng hệ điều hành (Known limits của `gia-co-gom-tin-hieu`).
+
+Việc cài một lần trước lượt thật đầu tiên (sau khi `gia-co-gom-tin-hieu` gộp):
 
 1. Đặt bí mật kho `ANTHROPIC_API_KEY` — một khoá API riêng cho lịch gom, có trần chi tiêu tháng đặt
    ở bảng điều khiển của nhà cung cấp mô hình. Nội dung tín hiệu đi tới nhà cung cấp mô hình từ đây.
 2. Cấp cho bí mật `TIN_HIEU_TOKEN` (đã có từ lịch kéo về) quyền đọc kho `phanlemanh/acceptance-gate-kit`
-   — lịch cài gói kit từ đó.
+   — lịch cài gói kit từ đó. Token chỉ cần ghi nội dung và PR của `phanlemanh/crm-onehub` cộng đọc kho kit — một token
+   fine-grained hai kho, không quyền `workflow`.
 3. Chạy tay lịch «Tín hiệu gom» một lần ở tab Actions và mở PR nó tạo.
 
 ## Secrets hygiene
