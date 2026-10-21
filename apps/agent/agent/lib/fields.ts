@@ -14,7 +14,6 @@ import {
 	writeValues,
 } from "@crm/db/fields";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
-import { currentFocus } from "./focus";
 
 const WITH_OPTIONS = { options: { orderBy: { position: "asc" } } } as const;
 
@@ -60,6 +59,8 @@ export async function writeField(input: {
 	recordId: string;
 	key: string;
 	value: unknown;
+	replace?: boolean;
+	unattended: boolean;
 }): Promise<WriteResult> {
 	const definitions = await definitionsFor(input.entity);
 	const definition = definitions.find((entry) => entry.key === input.key);
@@ -78,27 +79,36 @@ export async function writeField(input: {
 		};
 	}
 
-	const isBackfill = currentFocus().taskKind === "field-backfill";
-
 	try {
 		return await db.$transaction(async (tx) => {
-			if (isBackfill) {
-				const column = recordColumn(input.entity);
-				await lockIdempotencyKey(
-					tx,
-					`field-value:${definition.id}:${input.recordId}`,
-				);
+			const column = recordColumn(input.entity);
+			await lockIdempotencyKey(
+				tx,
+				`field-value:${definition.id}:${input.recordId}`,
+			);
 
-				const row = await tx.fieldValue.findFirst({
-					where: { fieldId: definition.id, [column]: input.recordId },
-				});
+			const row = await tx.fieldValue.findFirst({
+				where: { fieldId: definition.id, [column]: input.recordId },
+			});
+			const current = readValue(definition, row ?? undefined);
 
-				if (readValue(definition, row ?? undefined) !== null) {
-					return {
-						written: false,
-						reason: `"${input.key}" already has a value on this record. Someone filled it since this task was queued — leave it as is.`,
-					};
-				}
+			if (current !== null && input.unattended) {
+				return {
+					written: false,
+					reason: `"${input.key}" already has a value on this record. A background run never replaces one — leave it as is.`,
+				};
+			}
+
+			if (current !== null && !input.replace) {
+				const shown =
+					definition.type === "SELECT"
+						? (definition.options.find((option) => option.id === current)
+								?.label ?? current)
+						: current;
+				return {
+					written: false,
+					reason: `"${input.key}" already has a value on this record: ${JSON.stringify(shown)}. Leave it. Replace it only if the rep asked you to in this conversation to change this value — then call again with replace: true.`,
+				};
 			}
 
 			await writeValues(tx, input.entity, input.recordId, definitions, {
