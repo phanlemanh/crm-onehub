@@ -5,7 +5,7 @@ slug: truong-chuan-o-cai-dat
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21T01:20:58Z
 design_doc: docs/superpowers/specs/2026-10-21-truong-chuan-o-cai-dat-design.md
@@ -155,3 +155,12 @@ Later và Never ở `coverage-scan.md`.
 - Không chạm `packages/ui` (vùng Mac Studio, luật 31) và `apps/agent` (vùng DA21).
 - `apps/app/lib/messages/*.ts` chỉ thêm dòng; các dòng cũ không còn dùng để nguyên (luật 7).
 - Tên hàm DA14 (`OTruongPhieu`, hàm khai trường chuẩn của phiếu) đọc lại sau khi DA14 gộp; khác thì sửa kế hoạch.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Kiểu bố trí trường viết tay ở hai nơi (gói db và gói validation); đổi một nơi mà quên nơi kia thì Cài đặt và hồ sơ có thể lệch mà không ai được báo.
+  - Ngoài-2: Bật tắt trường hay kéo đổi thứ tự áp cho cả đội nhưng thông báo chưa có nút «Hoàn tác»; quản trị tự làm ngược lại bằng tay.
+  - Ngoài-4: Phép đo màn kiểm hồ sơ Công ty đã ẩn «Thành phố» chưa có đối chứng rằng hồ sơ thật sự đã mở.
+  - Ngoài-5: Đối chứng của bài so nhãn Cài đặt với hồ sơ không bao giờ đỏ; bài không chứng được nó thấy mục Chi tiết.
+  - Ngoài-6: Bài kiểm nhãn «bắt buộc» ở dòng phụ có thể xanh nhờ câu lý do ẩn; mất nhãn sẽ không bị bắt.
+  - Ngoài-7: Bài kéo sắp lại chỉ kiểm vị trí của trường vừa kéo, chưa kiểm toàn bộ thứ tự.
+  - Ngoài-8: Bài kiểm người không quản trị chưa canh nút sửa và nút menu của hàng trường tự tạo.
+  - Ngoài-10: Đáp án nhãn trong bài so danh mục lấy từ chính mã đang kiểm; nhãn gán nhầm ở cả hai nơi sẽ không bị bắt.

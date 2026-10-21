@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 0dc533ccf69e76319d6112703f5cdc8f14f19b35
-human_signoff:
+human_signoff: manh 2026-10-22
 ---
 
 # Evidence Report: truong-chuan-o-cai-dat
