@@ -1,5 +1,15 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import {
+	existsSync,
+	mkdtempSync,
+	readdirSync,
+	readFileSync,
+	rmSync,
+	statSync,
+	writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import {
@@ -9,6 +19,7 @@ import {
 	cauHinhGom,
 	chuaGomRa,
 	type HangLoTrinh,
+	ketQuaPhien,
 	type PrDeXuat,
 	prDeXuat,
 	tepLoTrinh,
@@ -17,6 +28,7 @@ import { GOM } from "./gom-cau-hinh.ts";
 import { dauTap, docKhoiMay, dungThan } from "./gom-than-pr.ts";
 
 type Lenh = { ma: number; ra: string; loi: string; ma_loi?: string };
+type Env = Record<string, string | undefined>;
 
 function chay(
 	lenh: string,
@@ -41,7 +53,7 @@ function chay(
 	};
 }
 
-const DANH_TINH = {
+export const DANH_TINH = {
 	GIT_AUTHOR_NAME: GOM.tacGia.ten,
 	GIT_AUTHOR_EMAIL: GOM.tacGia.thu,
 	GIT_COMMITTER_NAME: GOM.tacGia.ten,
@@ -56,6 +68,203 @@ const cacDong = (s: string): string[] =>
 		.filter(Boolean);
 
 export type KetQuaGom = { ma: 0 | 1 | 2; dong: string[] };
+
+export function gitCauHinh(
+	cap: readonly (readonly [string, string])[],
+): Record<string, string> {
+	const r: Record<string, string> = { GIT_CONFIG_COUNT: String(cap.length) };
+	cap.forEach(([k, v], i) => {
+		r[`GIT_CONFIG_KEY_${i}`] = k;
+		r[`GIT_CONFIG_VALUE_${i}`] = v;
+	});
+	return r;
+}
+
+export function lenhKit(
+	ag: string,
+	banGomTep: string,
+	loTrinh: readonly string[],
+): string[] {
+	const tinHieu = path.join(ag, GOM.kit.tinHieu);
+	const catLuot = path.join(ag, GOM.kit.catLuot);
+	return [
+		...GOM.moHinh.lenhTinHieu.map((c) => `node ${tinHieu} --root . ${c}`),
+		...GOM.moHinh.lenhCatLuot.map((c) => `node ${catLuot} --root . ${c}`),
+		...loTrinh.map(
+			(lt) =>
+				`node ${catLuot} --root . --pham-vi ${banGomTep} --lo-trinh ${lt}`,
+		),
+	];
+}
+
+export function dungLoiGoi(o: {
+	ag: string;
+	banGom: string;
+	loTrinh: readonly string[];
+	phuQuyet: string[];
+	nguon: Env;
+	thuMucTam: string;
+}): {
+	thamSo: string[];
+	env: NodeJS.ProcessEnv;
+	tepCaiDat: string;
+	lenh: string[];
+} {
+	const lenh = lenhKit(o.ag, o.banGom, o.loTrinh);
+	const caiDat = {
+		permissions: {
+			allow: [
+				...GOM.moHinh.docDuoc,
+				...GOM.moHinh.skill.map((s) => `Skill(${s})`),
+				`Edit(./${o.banGom})`,
+				...o.loTrinh.map((lt) => `Edit(./${lt})`),
+				...lenh.map((l) => `Bash(${l})`),
+			],
+			deny: [...GOM.moHinh.cam],
+			blockReadsOutsideWorkingDirectories: true,
+		},
+		disableAllHooks: true,
+	};
+	const tepCaiDat = path.join(o.thuMucTam, "cai-dat.json");
+	writeFileSync(tepCaiDat, `${JSON.stringify(caiDat, null, 2)}\n`);
+	const env: NodeJS.ProcessEnv = {};
+	for (const k of GOM.moHinh.moiTruong) {
+		const v = o.nguon[k];
+		if (v !== undefined) env[k] = v;
+	}
+	Object.assign(
+		env,
+		GOM.moHinh.hangMoiTruong,
+		gitCauHinh(GOM.gitLenh),
+		DANH_TINH,
+		{ AG: o.ag, [GOM.moHinh.bienBanGom]: o.banGom },
+	);
+	const thamSo = [
+		"-p",
+		GOM.moHinh.loiDan(o.phuQuyet, { banGom: o.banGom, lenh }),
+		"--model",
+		GOM.moHinh.ten,
+		"--max-turns",
+		String(GOM.moHinh.tranLuot),
+		"--permission-mode",
+		"dontAsk",
+		"--tools",
+		GOM.moHinh.congCu.join(","),
+		"--disallowedTools",
+		GOM.moHinh.camCongCu.join(","),
+		"--strict-mcp-config",
+		"--setting-sources",
+		"user",
+		"--settings",
+		tepCaiDat,
+		"--add-dir",
+		o.ag,
+		"--output-format",
+		"json",
+	];
+	return { thamSo, env, tepCaiDat, lenh };
+}
+
+export function dangKhoa(v: string): string[] {
+	const ra = new Set([v]);
+	for (const k of [0, 1, 2]) {
+		const s = Buffer.from("\0".repeat(k) + v)
+			.toString("base64")
+			.replace(/=+$/, "");
+		const loi = s.slice(k === 0 ? 0 : 4, s.length - 4);
+		if (loi.length >= 8) {
+			ra.add(loi);
+			ra.add(loi.replaceAll("+", "-").replaceAll("/", "_"));
+		}
+	}
+	return [...ra];
+}
+
+export function quetDia(
+	thuMuc: readonly string[],
+	giaTri: readonly string[],
+): string[] {
+	const coThat = thuMuc.filter((d) => existsSync(d));
+	if (!giaTri.length || !coThat.length) return [];
+	const r = spawnSync(
+		"grep",
+		[
+			"-rlsF",
+			"-f",
+			"-",
+			...GOM.quetDia.boQua.map((d) => `--exclude-dir=${d}`),
+			"--",
+			...coThat,
+		],
+		{ input: giaTri.join("\n"), encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+	);
+	return [...new Set(cacDong(r.stdout ?? ""))].sort();
+}
+
+export function thuMucGit(goc: string, env: NodeJS.ProcessEnv): string[] {
+	const ra: string[] = [];
+	for (const co of ["--absolute-git-dir", "--git-common-dir"]) {
+		const r = spawnSync("git", ["rev-parse", co], {
+			cwd: goc,
+			encoding: "utf8",
+			env,
+		});
+		const d = r.stdout?.trim();
+		if (r.status === 0 && d) ra.push(path.resolve(goc, d));
+	}
+	return [...new Set(ra)];
+}
+
+function bamCay(goc: string, rel: string, ra: Map<string, string>): void {
+	const p = path.join(goc, rel);
+	if (!existsSync(p)) return;
+	const st = statSync(p);
+	if (st.isDirectory()) {
+		for (const con of readdirSync(p).sort())
+			bamCay(goc, path.join(rel, con), ra);
+		return;
+	}
+	ra.set(
+		rel,
+		`${st.mode}:${createHash("sha256").update(readFileSync(p)).digest("hex")}`,
+	);
+}
+
+export function bamSieuDuLieu(thuMuc: readonly string[]): Map<string, string> {
+	const ra = new Map<string, string>();
+	for (const d of thuMuc) {
+		const m = new Map<string, string>();
+		for (const t of GOM.sieuDuLieu) bamCay(d, t, m);
+		for (const [k, v] of m) ra.set(path.join(d, k), v);
+	}
+	return ra;
+}
+
+function lechBam(
+	truoc: Map<string, string>,
+	sau: Map<string, string>,
+	goc: string,
+): string[] {
+	const ten = new Set([...truoc.keys(), ...sau.keys()]);
+	return [...ten]
+		.filter((k) => truoc.get(k) !== sau.get(k))
+		.map((k) => path.relative(goc, k))
+		.sort();
+}
+
+export function duongBanGom(
+	goc: string,
+	thuMuc: string,
+	now: Date,
+): string {
+	const ngay = now.toLocaleDateString("sv-SE", {
+		timeZone: "Asia/Ho_Chi_Minh",
+	});
+	for (let i = 1; ; i++) {
+		const t = `${thuMuc}/${ngay}${i === 1 ? "" : `-${i}`}.md`;
+		if (!existsSync(path.join(goc, t))) return t;
+	}
+}
 
 export function gocKit(
 	goc: string,
@@ -82,13 +291,39 @@ export async function chayGom(o: {
 	now: Date;
 	tranMs?: number;
 }): Promise<KetQuaGom> {
+	const nguon: Env = { ...process.env, ...o.env };
 	const khoa = GOM.khoaMoHinh
-		.map((k) => o.env[k])
+		.map((k) => nguon[k])
 		.filter((v): v is string => Boolean(v));
+	const token =
+		GOM.tokenKho.map((k) => nguon[k]).find((v) => Boolean(v)) ??
+		nguon.GH_TOKEN;
+	const biMat = [...khoa, ...(token ? [token] : [])];
 	const che = (s: string): string =>
-		khoa.reduce((t, k) => t.split(k).join("***"), s);
-	const do1 = (dong: string[]): KetQuaGom => ({ ma: 1, dong: dong.map(che) });
-	const envChay: NodeJS.ProcessEnv = { ...process.env, ...o.env, ...DANH_TINH };
+		biMat
+			.flatMap(dangKhoa)
+			.reduce((t, k) => t.split(k).join("***"), s);
+	const them: string[] = [];
+	const do1 = (dong: string[]): KetQuaGom => ({
+		ma: 1,
+		dong: [...dong, ...them].map(che),
+	});
+	const envChay: NodeJS.ProcessEnv = { ...nguon };
+	for (const k of GOM.khoaBo) delete envChay[k];
+	Object.assign(envChay, DANH_TINH, gitCauHinh(GOM.gitLenh));
+	const envMang: NodeJS.ProcessEnv = {
+		...envChay,
+		...gitCauHinh([
+			...GOM.gitLenh,
+			...(token
+				? ([[GOM.xacThuc.khoa, GOM.xacThuc.giaTri(token)]] as const)
+				: []),
+		]),
+	};
+	const envGh: NodeJS.ProcessEnv = {
+		...envChay,
+		...(token ? { GH_TOKEN: token } : {}),
+	};
 	const git = (...thamSo: string[]) => chay("git", thamSo, o.goc, envChay);
 	const gitPhai = (...thamSo: string[]): string => {
 		const r = git(...thamSo);
@@ -98,16 +333,27 @@ export async function chayGom(o: {
 	const chinh = `origin/${GOM.nhanhChinh}`;
 	const deXuat = `origin/${GOM.nhanhDeXuat}`;
 
-	gitPhai("fetch", "--quiet", "origin", GOM.nhanhChinh);
-	git(
-		"fetch",
-		"--quiet",
-		"origin",
-		`+${GOM.nhanhDeXuat}:refs/remotes/${deXuat}`,
+	const fetch = chay(
+		"git",
+		["fetch", "--quiet", "origin", GOM.nhanhChinh],
+		o.goc,
+		envMang,
+	);
+	if (fetch.ma !== 0) throw new Error(`git fetch hỏng: ${dauDong(fetch.loi)}`);
+	chay(
+		"git",
+		[
+			"fetch",
+			"--quiet",
+			"origin",
+			`+${GOM.nhanhDeXuat}:refs/remotes/${deXuat}`,
+		],
+		o.goc,
+		envMang,
 	);
 	gitPhai("switch", "--quiet", "--detach", chinh);
 
-	const ag = gocKit(o.goc, o.env);
+	const ag = gocKit(o.goc, nguon);
 	if (!ag) return do1([GOM.thongDiep.thieuKit]);
 	const kit = (tep: string, ...thamSo: string[]) =>
 		chay("node", [path.join(ag, tep), "--root", o.goc, ...thamSo], o.goc, {
@@ -143,7 +389,7 @@ export async function chayGom(o: {
 			"number,state,body,mergedAt",
 		],
 		o.goc,
-		envChay,
+		envGh,
 	);
 	let prs: PrDeXuat;
 	try {
@@ -174,32 +420,12 @@ export async function chayGom(o: {
 	}
 
 	if (!khoa.length) return do1([GOM.thongDiep.thieuKhoa]);
-	const ph = chay(
-		o.claude,
-		[
-			"-p",
-			GOM.moHinh.loiDan(phuQuyet),
-			"--model",
-			GOM.moHinh.ten,
-			"--max-turns",
-			String(GOM.moHinh.tranLuot),
-			"--allowedTools",
-			GOM.moHinh.congCu,
-			"--permission-mode",
-			"acceptEdits",
-		],
-		o.goc,
-		{ ...envChay, AG: ag },
-		o.tranMs ?? GOM.moHinh.tranMs,
+	const nha = nguon.HOME;
+	const trenDia = quetDia(
+		[o.goc, ...(nha ? [nha] : [])],
+		token ? [token] : [],
 	);
-	if (ph.ma_loi === "ENOENT" || ph.ma_loi === "EACCES")
-		return do1([GOM.thongDiep.thieuLenh]);
-	if (ph.ma_loi === "ETIMEDOUT" || ph.ma_loi === "SIGKILL")
-		return do1([GOM.thongDiep.quaTran]);
-	if (ph.ma !== 0)
-		return do1(
-			[GOM.thongDiep.moHinhHong, dauDong(ph.loi || ph.ra)].filter(Boolean),
-		);
+	if (trenDia.length) return do1([GOM.thongDiep.tokenTrenDia, ...trenDia]);
 
 	let ch: CauHinhGom;
 	try {
@@ -213,6 +439,55 @@ export async function chayGom(o: {
 	}
 	const thuMucGom = ch.tin_hieu.gom.replace(/\/+$/, "");
 	const loTrinh = [ch.lo_trinh.tep].flat();
+	const tepBanGomDinh = duongBanGom(o.goc, thuMucGom, o.now);
+	writeFileSync(path.join(o.goc, tepBanGomDinh), "");
+	gitPhai("add", "--intent-to-add", "--", tepBanGomDinh);
+
+	const thuMucTam = mkdtempSync(path.join(tmpdir(), "gom-phien-"));
+	const loiGoi = dungLoiGoi({
+		ag,
+		banGom: tepBanGomDinh,
+		loTrinh,
+		phuQuyet,
+		nguon,
+		thuMucTam,
+	});
+	const dirGit = thuMucGit(o.goc, envChay);
+	const bamTruoc = bamSieuDuLieu(dirGit);
+	const ph = chay(
+		o.claude,
+		loiGoi.thamSo,
+		o.goc,
+		loiGoi.env,
+		o.tranMs ?? GOM.moHinh.tranMs,
+	);
+	const lech = lechBam(bamTruoc, bamSieuDuLieu(dirGit), o.goc);
+	rmSync(thuMucTam, { recursive: true, force: true });
+	if (lech.length) return do1([GOM.thongDiep.sieuDuLieu, ...lech]);
+	try {
+		const kq = ketQuaPhien.parse(JSON.parse(ph.ra));
+		const tenCongCu = [
+			...new Set(kq.permission_denials.map((d) => d.tool_name)),
+		];
+		them.push(
+			`${GOM.thongDiep.biTuChoi} ${kq.permission_denials.length} lời gọi${tenCongCu.length ? `: ${tenCongCu.join(", ")}` : ""}`,
+		);
+	} catch {}
+	if (ph.ma_loi === "ENOENT" || ph.ma_loi === "EACCES")
+		return do1([GOM.thongDiep.thieuLenh]);
+	if (ph.ma_loi === "ETIMEDOUT" || ph.ma_loi === "SIGKILL")
+		return do1([GOM.thongDiep.quaTran]);
+	if (ph.ma !== 0)
+		return do1(
+			[GOM.thongDiep.moHinhHong, dauDong(ph.loi || ph.ra)].filter(Boolean),
+		);
+
+	const tepDinh = path.join(o.goc, tepBanGomDinh);
+	if (existsSync(tepDinh) && statSync(tepDinh).size === 0) {
+		git("rm", "--cached", "--quiet", "--", tepBanGomDinh);
+		rmSync(tepDinh, { force: true });
+	}
+
 	const trongGom = (t: string) =>
 		t.startsWith(`${thuMucGom}/`) &&
 		t.endsWith(".md") &&
@@ -303,6 +578,16 @@ export async function chayGom(o: {
 		dau,
 		gioDeXuat: gio,
 	});
+	const tieuDe = GOM.tieuDe(o.now);
+
+	const sapDi = [
+		git("diff", chinh, "HEAD").ra,
+		git("log", "--format=%B", `${chinh}..HEAD`).ra,
+		tieuDe,
+		than,
+	].join("\n");
+	if (biMat.flatMap(dangKhoa).some((k) => sapDi.includes(k)))
+		return do1([GOM.thongDiep.lotKhoa]);
 
 	const day = chay(
 		"git",
@@ -314,17 +599,16 @@ export async function chayGom(o: {
 			`HEAD:refs/heads/${GOM.nhanhDeXuat}`,
 		],
 		o.goc,
-		{ ...envChay, ...GOM.boHookTruocDay },
+		{ ...envMang, ...GOM.boHookTruocDay },
 	);
 	if (day.ma !== 0)
 		return do1([`${GOM.thongDiep.dayHong}: ${dauDong(day.loi)}`]);
-	const tieuDe = GOM.tieuDe(o.now);
 	const giao = mo
 		? chay(
 				o.gh,
 				["pr", "edit", String(mo.number), "--title", tieuDe, "--body", than],
 				o.goc,
-				envChay,
+				envGh,
 			)
 		: chay(
 				o.gh,
@@ -342,7 +626,7 @@ export async function chayGom(o: {
 					than,
 				],
 				o.goc,
-				envChay,
+				envGh,
 			);
 	if (giao.ma !== 0)
 		return do1([`${GOM.thongDiep.moPrHong}: ${dauDong(giao.loi)}`]);
@@ -351,6 +635,7 @@ export async function chayGom(o: {
 		dong: [
 			`${ids.length} tín hiệu vào ${bg.nhom.length} nhóm`,
 			mo ? `đã dựng lại đề xuất #${mo.number}` : dauDong(giao.ra),
+			...them,
 		].map(che),
 	};
 }

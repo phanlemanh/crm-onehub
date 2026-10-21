@@ -22,6 +22,8 @@ import {
 	TEP_LO_TRINH,
 	themTinHieu,
 	thuMuc,
+	banTiem,
+	GOC_TEST,
 } from "./gom-kho-tam.ts";
 
 const AG = giaiKit();
@@ -47,44 +49,6 @@ const chayVoi = (
 		now: new Date(),
 		...(o.tranMs ? { tranMs: o.tranMs } : {}),
 	});
-
-const GOC_TEST = path.resolve(import.meta.dir, "..");
-const VALIDATION = path.resolve(
-	GOC_TEST,
-	"..",
-	"..",
-	"packages",
-	"validation",
-	"src",
-	"tin-hieu-gom.ts",
-);
-
-type Tiem = {
-	tep: "gom-lich.ts" | "gom-than-pr.ts";
-	tu: string;
-	thanh: string;
-};
-
-async function banTiem(sua: Tiem[]): Promise<Chay> {
-	const d = thuMuc("tiem");
-	for (const t of ["gom-lich.ts", "gom-than-pr.ts", "gom-cau-hinh.ts"]) {
-		let s = readFileSync(path.join(GOC_TEST, t), "utf8").replaceAll(
-			"../../packages/validation/src/tin-hieu-gom.ts",
-			VALIDATION,
-		);
-		for (const x of sua.filter((y) => y.tep === t)) {
-			const so = s.split(x.tu).length - 1;
-			if (so !== 1)
-				throw new Error(`nhát tiêm không khớp đúng một chỗ (${so}): ${x.tu}`);
-			s = s.replace(x.tu, x.thanh);
-		}
-		writeFileSync(path.join(d, t), s);
-	}
-	const m = (await import(path.join(d, "gom-lich.ts"))) as {
-		chayGom: Chay;
-	};
-	return m.chayGom;
-}
 
 function can(dung: boolean, thongDiep: string, loi: string[]): void {
 	if (!dung) loi.push(thongDiep);
@@ -125,6 +89,8 @@ function gomThangVaoChinh(kho: KhoGom): void {
 		},
 	});
 	if (r.status !== 0) throw new Error(r.stderr);
+	g(kho.seed, ["add", "--", "tin-hieu/gom", TEP_LO_TRINH]);
+	g(kho.seed, ["commit", "--quiet", "-m", "gom"]);
 	g(kho.seed, ["push", "--quiet", "origin", GOM.nhanhChinh]);
 }
 
@@ -273,7 +239,7 @@ async function kiemDeXuat(fn: Chay): Promise<string[]> {
 		av.includes("-p") &&
 			lay(av, "--model") === GOM.moHinh.ten &&
 			lay(av, "--max-turns") === String(GOM.moHinh.tranLuot) &&
-			lay(av, "--allowedTools") === GOM.moHinh.congCu,
+			lay(av, "--tools") === GOM.moHinh.congCu.join(","),
 		"8 loi goi mo hinh sai co",
 		loi,
 	);
