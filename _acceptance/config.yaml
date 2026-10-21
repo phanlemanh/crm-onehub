@@ -2101,6 +2101,8 @@ executors:
     tbk_hoi_thoai_bam: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-bam|tbk-hoi-thoai-rong'"
     tbk_hoi_thoai_dien_thoai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t 'tbk-hoi-thoai-dien-thoai|tbk-hoi-thoai-ngan'"
     tbk_dang_tai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-ben-khu.dom.tsx -t tbk-dang-tai"
+    kcd_cau_truc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-cau-truc"
+    kcd_a11y: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-cho-don-vi.dom.tsx -t kcd-a11y"
     tmc_doc_so: cd apps/app && bun test ./test/truong-mot-cach.spec.ts -t tmc-doc-so
     tmc_ten_goi: cd apps/app && bun test ./test/truong-mot-cach.spec.ts -t tmc-ten-goi
     tmc_phieu_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-mot-cach.dom.tsx -t tmc-phieu-so
@@ -3257,6 +3259,8 @@ executors:
     dhc_ca_goi_ten: bun _acceptance/don-ho-so-cu/rang/ca-goi-ten.mjs
     dhc_lan_chu: bun _acceptance/don-ho-so-cu/rang/sua-thuoc.mjs --lan-chu
     dhc_cong_gop: bun _acceptance/don-ho-so-cu/rang/cong-gop.mjs
+    kcd_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs"'
+    kcd_trang_khac: node _acceptance/khung-cho-don-vi-mot-hinh/rang/trang-khac.mjs
     tmc_quet: bun _acceptance/truong-mot-cach-cu-xu/rang/quet-vo-tay.mjs
     tmc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs"'
     vkm_quet: bun _acceptance/vo-khu-muc-tieu/rang/quet-duong-cu.mjs
