@@ -9,6 +9,7 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
+import { DanhSachBo } from "./danh-sach-bo";
 import { KhungDangTaiDonVi } from "./hang-cong-cu";
 import { TheoDonVi } from "./theo-don-vi";
 
@@ -39,6 +40,9 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	await requireSession();
 
 	const thamSo = await loadOkrSearchParams(searchParams);
+	const laDanhSach =
+		thamSo[SEARCH_PARAM.okr.don] === null &&
+		thamSo[SEARCH_PARAM.okr.xem] === null;
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 	const [cycles] = await Promise.all([
@@ -48,6 +52,16 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		queryClient.prefetchQuery(trpc.workspace.get.queryOptions()),
 	]);
 	const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);
+	if (cycleId && laDanhSach) {
+		await queryClient.prefetchQuery(
+			trpc.okr.danhSachBo.queryOptions({ cycleId }),
+		);
+		return (
+			<HydrateClient>
+				<DanhSachBo />
+			</HydrateClient>
+		);
+	}
 	if (cycleId) {
 		const unit = thamSo[SEARCH_PARAM.okr.don] ?? { loai: "goc" as const };
 		await Promise.all([
@@ -68,8 +82,6 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	}
 
 	return (
-		<HydrateClient>
-			<TheoDonVi />
-		</HydrateClient>
+		<HydrateClient>{laDanhSach ? <DanhSachBo /> : <TheoDonVi />}</HydrateClient>
 	);
 }

@@ -211,6 +211,7 @@ import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import {
 	cayCanChinhOutput,
 	cycleOnlyInput,
+	danhSachBoOutput,
 	danhSachInput,
 	danhSachOutput,
 	dienBienInput,
@@ -225,6 +226,8 @@ import {
 	soDoDonViOutput,
 	sucKhoeOutput,
 	toanCanhOutput,
+	viecCuaBoInput,
+	viecCuaBoOutput,
 } from "./okr-xem.contracts";
 import { OkrXemService } from "./okr-xem.service";
 import { SoanService } from "./soan.service";
@@ -1301,6 +1304,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.toanCanh(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: cycleOnlyInput,
+		output: danhSachBoOutput,
+		meta: restMeta("GET", "/okr/units/sets", TAG),
+	})
+	danhSachBo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleOnlyInput>,
+	) {
+		return this.xem.danhSachBo(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: viecCuaBoInput,
+		output: viecCuaBoOutput,
+		meta: restMeta("POST", "/okr/units/viec", TAG),
+	})
+	viecCuaBo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof viecCuaBoInput>,
+	) {
+		return this.xem.viecCuaBo(ctx.user.id, input);
 	}
 
 	@Query({

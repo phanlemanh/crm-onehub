@@ -470,6 +470,9 @@ const THU_TUC_OKR_LUOT_TOM_TAT = [
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_SO_DO = ["soDoDonVi"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_QUANH = ["quanhMucTieu"].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_TRANG_BO = ["danhSachBo", "viecCuaBo"].map(
+	(t) => `okr.${t}`,
+);
 const THU_TUC_OKR_LUOT_HOI_DAP = [
 	"hoiMo",
 	"hoiPhanHoi",
@@ -1618,6 +1621,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_UX_8D,
 				...THU_TUC_OKR_LUOT_SO_DO,
 				...THU_TUC_OKR_LUOT_QUANH,
+				...THU_TUC_OKR_LUOT_TRANG_BO,
 				...THU_TUC_OKR_LUOT_HOI_DAP,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
@@ -2047,6 +2051,7 @@ const THU_TU_DOC_OKR = {
 	},
 	"okr.countByUnit": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.cycles": { vao: () => undefined, K: "vang", khac: 200 },
+	"okr.danhSachBo": { vao: cuaKy, K: "vang", khac: 200 },
 	"okr.danhSach": {
 		vao: (s) => ({
 			cycleId: s.ky,
@@ -2196,6 +2201,12 @@ const THU_TU_DOC_OKR = {
 		K: "vang",
 		khac: 200,
 		chiQuanTri: OKR_XEM.thongDiep.chiQuanTri,
+	},
+	"okr.viecCuaBo": {
+		vao: (s) => ({ cycleId: s.ky, unit: { loai: "pb", id: s.pb } }),
+		K: "chua-G",
+		dau: "tieuDeG",
+		khac: 200,
 	},
 	"okr.viecCuaToi": {
 		vao: () => undefined,
