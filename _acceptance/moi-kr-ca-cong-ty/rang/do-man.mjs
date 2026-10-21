@@ -83,6 +83,7 @@ async function gieoCaNhan(n) {
 		orderBy: { email: "asc" },
 		select: { id: true, email: true },
 	});
+	await n.api.quanTri.lam("okr.setProgram", { personalOn: true });
 	const api = trpcCua(phienCua(nguoi.email));
 	const { id } = await api.lam("okr.createObjective", {
 		cycleId: n.ky.hienHanh,
