@@ -248,6 +248,13 @@ evals:
       - "_acceptance/khung-man-chung/evidence/kmc-onboarding-khoa-375.png"
       - "_acceptance/khung-man-chung/evidence/kmc-tailieu-dautrang-375.png"
       - "docs/superpowers/specs/2026-10-13-khung-man-chung-design.md"
+    paths:
+      - "apps/app/app/**"
+      - "apps/app/components/page-shell.tsx"
+      - "packages/ui/src/components/khung-xuong.tsx"
+      - "packages/ui/src/components/vung-tai-loi.tsx"
+      - "_acceptance/khung-man-chung/rang/chup-man.mjs"
+      - "docs/superpowers/specs/2026-10-13-khung-man-chung-design.md"
     question: "Trên các ảnh này: (1) mỗi ảnh đang tải có chữ cho biết đang ở màn nào (tiêu đề, hoặc breadcrumb ở chi tiết chiến dịch) không; (2) với năm cặp đang tải/tải xong (Liên hệ, Cài đặt › Trường, Cài đặt › Điều phối 30 ngày, Toàn cảnh, chiến dịch), khung xương có cùng hình với nội dung khi xong (bảng ra bảng, dòng ra dòng, thẻ ra thẻ — kể cả hai cột ra hai cột, ô số ra ô số) không; (3) hai ảnh lỗi có cùng một hình (tiêu đề, một câu, nút Thử lại) không; (4) ảnh Onboarding khoá có dòng lý do ngay dưới tiêu đề và gần nút tắt không; (5) ở hai ảnh 375 (Onboarding khoá, Tài liệu), câu mô tả có đứng trên các nút không? Trả PASS chỉ khi cả năm đều có, đối chiếu bảng trạng thái và mục «Hành vi» của design doc."
 
   - id: E13
