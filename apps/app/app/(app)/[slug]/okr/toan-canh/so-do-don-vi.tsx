@@ -356,7 +356,14 @@ export default function SoDoDonVi({
 					{m.khongChuY}
 				</p>
 			) : hep ? (
-				<div className="flex flex-col gap-2" data-so-do-danh-sach>
+				<div
+					className={
+						toanVung
+							? "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto"
+							: "flex flex-col gap-2"
+					}
+					data-so-do-danh-sach
+				>
 					{ve.nut.map((n) => (
 						<div
 							data-cap={n.data.cap}

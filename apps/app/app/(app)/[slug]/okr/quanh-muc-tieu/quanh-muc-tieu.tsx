@@ -220,7 +220,14 @@ export function QuanhMucTieuNoiDung({
 			</p>
 			<DongGopLen q={q.data} />
 			{hep ? (
-				<div className="flex flex-col gap-4" data-quanh-danh-sach>
+				<div
+					className={
+						toanVung
+							? "flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto"
+							: "flex flex-col gap-4"
+					}
+					data-quanh-danh-sach
+				>
 					{nhomDanhSach(q.data)
 						.filter((g) => g.nut.length > 0)
 						.map((g) => (

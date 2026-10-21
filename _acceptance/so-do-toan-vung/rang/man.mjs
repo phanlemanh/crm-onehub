@@ -29,6 +29,8 @@ const MAN = {
 	soAnh: 6,
 	lePx: { rong: 48, day: 24, thanhBen: 2 },
 	rongChen: "4000px",
+	cuonLan: 40,
+	cuonBuoc: 600,
 };
 const CA = JSON.parse(
 	readFileSync(
@@ -87,6 +89,34 @@ function doTran(rongChen) {
 	const doiChung = tran();
 	rong.remove();
 	return { truoc, doiChung };
+}
+
+async function cuonToiCuoi(p, chon) {
+	const tam = await p.evaluate((c) => {
+		const r = document.querySelector(c)?.getBoundingClientRect();
+		if (!r) return null;
+		return {
+			x: Math.round(innerWidth / 2),
+			y: Math.round(Math.min(Math.max(r.top + 40, 40), innerHeight - 40)),
+		};
+	}, chon);
+	if (!tam) return null;
+	await p.mouse.move(tam.x, tam.y);
+	for (let i = 0; i < MAN.cuonLan; i += 1) {
+		await p.mouse.wheel({ deltaY: MAN.cuonBuoc });
+		await new Promise((r) => setTimeout(r, 40));
+	}
+	return p.evaluate((c) => {
+		const ds = document.querySelector(c);
+		const cuoi = ds?.lastElementChild?.getBoundingClientRect();
+		if (!ds || !cuoi) return null;
+		return {
+			so: ds.children.length,
+			tren: Math.round(cuoi.top),
+			day: Math.round(cuoi.bottom),
+			cao: innerHeight,
+		};
+	}, chon);
 }
 
 function doKhung() {
@@ -303,6 +333,11 @@ async function doKho(tenKho) {
 				kiem(
 					`${ten} 390: doi chung do — chen khoi rong thi bao tran`,
 					t.doiChung === true,
+				);
+				const c = await cuonToiCuoi(p, chon);
+				kiem(
+					`${ten} 390: lan con lan toi muc cuoi (${c ? `${c.so} muc, day ${c.day}/${c.cao}` : "khong thay danh sach"})`,
+					c !== null && c.tren >= 0 && c.day <= c.cao + 1,
 				);
 				await chup(ten);
 			}
