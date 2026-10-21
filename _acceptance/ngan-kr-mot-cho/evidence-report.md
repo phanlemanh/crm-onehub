@@ -7,11 +7,13 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7ec85392c3bcba56fe4c2261d0d935318290becb
-human_signoff: Phan Le Manh 2026-10-20
+verified_commit: 81a0533b008b0c74df3934f955c5946c73383a8f
+human_signoff:
 ---
 
 # Evidence Report: ngan-kr-mot-cho
+
+Round 3 (chấm delta sau #516). E1, E6, E8, E10, E11, E12, E13 chạy lại ở round này; E2, E3, E4, E5, E7, E9 mang từ round 1 vì delta không chạm paths của chúng.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,14 +34,13 @@ human_signoff: Phan Le Manh 2026-10-20
 ## Evidence
 
 - eval: E1
-  run_id: minted-ngan-kr-mot-cho-E1-r1
+  run_id: minted-ngan-kr-mot-cho-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk7_moi_loi
-  verified_at: 2026-10-20T10:39:19Z
-  carried_from_round: 1
+  verified_at: 2026-10-21T02:12:49Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    DUNG
 
 - eval: E2
   run_id: minted-ngan-kr-mot-cho-E2-r1
@@ -82,14 +83,13 @@ human_signoff: Phan Le Manh 2026-10-20
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-ngan-kr-mot-cho-E6-r1
+  run_id: minted-ngan-kr-mot-cho-E6-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk7_tren_dong
-  verified_at: 2026-10-20T10:39:19Z
-  carried_from_round: 1
+  verified_at: 2026-10-21T02:12:49Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 1 test across 1 file. [2.58s]
 
 - eval: E7
   run_id: minted-ngan-kr-mot-cho-E7-r1
@@ -102,14 +102,13 @@ human_signoff: Phan Le Manh 2026-10-20
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E8
-  run_id: minted-ngan-kr-mot-cho-E8-r1
+  run_id: minted-ngan-kr-mot-cho-E8-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk7_ba_bam
-  verified_at: 2026-10-20T10:39:19Z
-  carried_from_round: 1
+  verified_at: 2026-10-21T02:12:49Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    (đuôi đầu ra của lệnh chỉ có dòng báo mã thoát 0, không có dòng tóm tắt của bun test)
 
 - eval: E9
   run_id: minted-ngan-kr-mot-cho-E9-r1
@@ -122,106 +121,110 @@ human_signoff: Phan Le Manh 2026-10-20
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E10
-  run_id: minted-ngan-kr-mot-cho-E10-r1
+  run_id: minted-ngan-kr-mot-cho-E10-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk7_hep
-  verified_at: 2026-10-20T10:39:19Z
-  carried_from_round: 1
+  verified_at: 2026-10-21T02:12:49Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 2 tests across 1 file. [2.13s]
 
 - eval: E11
-  run_id: minted-ngan-kr-mot-cho-E11-r1
+  run_id: minted-ngan-kr-mot-cho-E11-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk7_trang_thai
-  verified_at: 2026-10-20T10:39:19Z
-  carried_from_round: 1
+  verified_at: 2026-10-21T02:12:49Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 170 tests across 1 file. [862.00ms]
 
 - eval: E12
-  run_id: minted-ngan-kr-mot-cho-E12-r1
+  run_id: minted-ngan-kr-mot-cho-E12-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk7_man
-  verified_at: 2026-10-20T10:39:19Z
-  carried_from_round: 1
+  verified_at: 2026-10-21T02:12:49Z
   screenshot: evidence/hop-dong-1440.png
   observed: |
-    hop-dong-1440.png: hộp thoại giữa màn tối "Cập nhật KR – Đối tác hàng lạnh mới đạt 10", Giá trị 12 đối tác, dòng "Hiện tại 11 đối tác · đích 10 · +1", biểu đồ có điểm mới rỗng ở 12, "Tiến độ mới 100%", Mức tự tin chọn "Thấp" (viền sáng), nút "Gửi cập nhật". Khớp bước 2 (hộp có điểm mới trước khi gửi, tự tin thấp). ngan-kr-1440.png: ngăn bên phải URL KR k1 "Đối tác hàng lạnh mới đạt 10", Hiện tại 12 đối tác, Tiến độ 100%, đầu ngăn có 1/4, ‹ ›, nút Cập nhật, ✕; lịch sử 6 dòng, dòng đầu 19 thg 10 "12 đối tác" tự tin thấp; toast "Đã gửi cập nhật". ngan-sau-cap-nhat-1440.png: cùng ngăn k1 vẫn mở, Hiện tại đổi thành 13 đối tác, dòng đầu 19 thg 10 "13 đối tác" tự tin cao, vẫn 6 dòng lịch sử (thay vì +1, do gom tuần). kr-ke-1440.png: ngăn chuyển sang "Thoả thuận mới hàng lạnh đạt 25", 2/4, Hiện tại 12,1, tooltip "KR kế" — khớp bấm KR kế. so-do-1440.png và cua-toi-1440.png: ảnh giống hệt nhau, ngăn KR k1 với Hiện tại 13, nút Cập nhật, 1/4; không thấy sơ đồ hay trang Của tôi (nền trái đen). hop-dong-390.png: hộp thoại khổ điện thoại, Giá trị 14, "Lần trước 13 · +1 so với lần trước", Mức tự tin chọn "Vừa", nút "Gửi cập nhật" và "Huỷ" xếp dọc, không tràn ngang. ngan-390.png: Drawer đáy có tay nắm, tiêu đề "Đối tác hàng lạnh mới đạt 10", 1/4, ‹ ›, nút Cập nhật, Hiện tại 14 đối tác, lịch sử dòng đầu "14 đối tác · Tự tin vừa", toast "Đã gửi cập nhật"; không có thanh cuộn ngang. Tất cả khớp Expected (8 ảnh, mọi kiểm DUNG, console 0 lỗi), kèm ba lưu ý ở output.
+    Đã mở từng ảnh bằng Read.
+    1) hop-dong-1440.png: hộp «Cập nhật KR» (Đối tác hàng lạnh mới đạt 10), ô Giá trị gõ 12 «đối tác», dòng «Hiện tại 11 đối tác · đích 10 · +1 so với hiện tại», biểu đồ có điểm mới (vòng rỗng) ở cuối đường liền, «Tiến độ mới 100%», mức tự tin Cao/Vừa/Thấp với Thấp được chọn, nút Huỷ và «Gửi cập nhật». Khớp: hộp có điểm mới trước khi gửi, giá trị 12, mức Thấp. Nền đen phía sau là lớp phủ của hộp thoại (ảnh chụp chỉ hộp).
+    2) ngan-kr-1440.png: ngăn bên phải mở trên KR «Đối tác hàng lạnh mới đạt 10», 1/4, nút Cập nhật ở đầu ngăn cùng ‹ ›; Hiện tại 12 đối tác, Tiến độ 100%, lịch sử 6 dòng, dòng mới nhất «19 thg 10, 2026 12 đối tác · Tự tin thấp»; toast «Đã gửi cập nhật». Khớp bước gửi từ dòng (12, thấp).
+    3) ngan-sau-cap-nhat-1440.png: cùng ngăn vẫn mở sau khi gửi từ đầu ngăn; Hiện tại đổi 12 -> 13 đối tác, dòng mới nhất «13 đối tác · Tự tin cao», vẫn 6 dòng (gom theo tuần) và biểu đồ có điểm 13; toast «Đã gửi cập nhật». Khớp.
+    4) kr-ke-1440.png: sau bấm KR kế, ngăn đổi sang «Thoả thuận mới hàng lạnh đạt 25» 2/4, Hiện tại 12,1 thoả thuận, tooltip «KR kế», ngăn vẫn mở. Khớp (đường dẫn đổi sang ...-k2 theo kiểm DUNG của script).
+    5) so-do-1440.png: ngăn mở trên KR K (13 đối tác, 1/4) sau khi bấm thẻ K trong sơ đồ (record=kr:K theo script). Khớp.
+    6) cua-toi-1440.png: giống so-do (cùng ngăn KR K, 13 đối tác, 1/4) sau khi bấm khối KR ở Của tôi; kích thước tệp giống hệt so-do là hợp lý vì cùng đích. Khớp.
+    7) hop-dong-390.png: hộp «Cập nhật KR» ở khổ 390, giá trị 14, «Lần trước 13 · +1 so với lần trước», điểm mới trên biểu đồ, mức Vừa được chọn, nút «Gửi cập nhật» và Huỷ xếp dọc, không tràn ngang. Khớp.
+    8) ngan-390.png: ngăn KR dạng Drawer từ đáy (có tay nắm kéo), Hiện tại 14 đối tác, 1/4, nút Cập nhật và ‹ › ở đầu, dòng mới nhất «14 đối tác · Tự tin vừa», toast «Đã gửi cập nhật», không thấy cuộn ngang. Khớp.
+    Không có frame nào mâu thuẫn Expected. Hạn chế nhỏ: ảnh chỉ cho thấy phần KR của ngăn; việc ngăn M vẫn ở dưới được chứng minh bằng kiểm đường dẫn record=objective:M,kr:K của script (DUNG), không thấy trong ảnh.
   network_observed: n-a (driver)
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ảnh đã lưu (do chính lệnh eval ghi, 8 tệp, trong _acceptance/ngan-kr-mot-cho/evidence/): hop-dong-1440.png, ngan-kr-1440.png, ngan-sau-cap-nhat-1440.png, kr-ke-1440.png, so-do-1440.png, cua-toi-1440.png, hop-dong-390.png, ngan-390.png. Tên do eval đặt là đường chứng cứ (không đổi sang E12-stepN.png vì lượt chấm không được tạo tệp trong kho ngoài ảnh do lệnh eval tự ghi).
+    Network: driver là script Playwright chạy trong man.mjs, không phải browser tool có read_network_requests; script tự kiểm console (0 lỗi mới ở cả hai khổ). Không có E12-network.txt vì không có dữ liệu mạng thô để dump.
 
 - eval: E13
-  run_id: minted-ngan-kr-mot-cho-E13-r1
+  run_id: minted-ngan-kr-mot-cho-E13-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk7_giu_ho_so
-  verified_at: 2026-10-20T10:39:19Z
-  carried_from_round: 1
+  verified_at: 2026-10-21T02:12:49Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    KET LUAN: 315 GIU, 0 DO, 58 DO-SAN-NEN, 1 CHAP-CHON, 0 HOAN, 3 BO RA, 0 loi nghi, 267 lenh
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-20T12:25:15Z
+  verified_at: 2026-10-21T02:12:49Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-20T12:25:15Z
+  verified_at: 2026-10-21T02:12:49Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-20T12:25:15Z
+  verified_at: 2026-10-21T02:12:49Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-20T12:25:15Z
+  verified_at: 2026-10-21T02:12:49Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-ngan-kr-mot-cho-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-ngan-kr-mot-cho-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-20T12:25:15Z
+  verified_at: 2026-10-21T02:12:49Z
 
 - cmd: bun run lint:slop
-  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_lint_slop-r2
+  run_id: minted-ngan-kr-mot-cho-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-20T12:25:15Z
+  verified_at: 2026-10-21T02:12:49Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-ngan-kr-mot-cho-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-ngan-kr-mot-cho-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-20T12:25:15Z
+  verified_at: 2026-10-21T02:12:49Z
 
 ## Known limits
+
+- E13 báo 58 eval của hồ sơ đã ký khác đỏ sẵn trên nền merge-base (DO-SAN-NEN), trong đó có cap-nhat-tuan-okr E18 mà đề E13 nêu tên; 0 eval đỏ chỉ ở HEAD. Không phải hồi quy của vòng này, ghi để người đọc ở Cổng 2 biết.
 
 ## Ngoài hợp đồng
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay
+carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi, round 1). Baseline khong do: moi block eval ghi baseline n-a vi round nay khong do lai.
 
-Eval khong-phan-biet (xanh ca tren HEAD lan baseline): none. Round nay khong do baseline nen moi eval ghi baseline n-a; lenh suite xanh ca hai phia la regression-guard binh thuong, khong liet ke.
+Eval không-phân-biệt (xanh cả HEAD lẫn baseline): none.
 
 ## Variance
 
-none — every multi-run eval is uniform
-
-## Judge panels
-
-Khong co judgment item nao trong hop dong nay: 13 eval deu la test, ui-check hoac script. Khong co panel de ghi.
+none — every multi-run eval is uniform (mọi eval chạy một lần, xác định)
 
 ## Iterations
 
-Round 1: lenh suite app va @crm/ui do vi mot ca suite chap chon nam ngoai vong (S4 round 1 tra ve REJECT). Quay lai de chay lai suite.
-Round 2: 13 eval giu nguyen tu round 1 vi delta khong cham paths cua eval; 7 lenh suite chay lai va xanh het. Gio verified_at cua lenh suite lay theo ngay chay, gio chinh xac nam trong run-log.
-
+Round 1: lệnh suite app/@crm/ui đỏ trong log, tally REJECT. Trả về triển khai.
+Round 2: bảy lệnh suite xanh, tally PASS; E2–E11, E13 mang từ round 1.
+Round 3: chấm delta sau #516 ở commit 81a0533b0; E1, E6, E8, E10, E11, E12, E13 chạy lại, E2–E5, E7, E9 mang từ round 1; bảy lệnh suite xanh. Verdict PASS.
