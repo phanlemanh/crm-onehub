@@ -62,6 +62,7 @@ Mọi tệp mã nguồn (không tính test) đọc `DEFAULT_AGENT_MODEL` hoặc 
 <!-- <<<MH2-TIEU-THU -->
 packages/db/src/settings.ts
 apps/agent/agent/lib/model.ts
+apps/agent/agent/lib/tai-lieu-model.ts
 apps/agent/agent/subagents/agent_builder/agent.ts
 apps/agent/agent/subagents/agent_runner/agent.ts
 apps/api/src/settings/settings.service.ts
@@ -72,9 +73,11 @@ builder
 team-agent
 research
 zalo
+may-soan
+okr-soan
 <!-- MH2-PURPOSE>>> -->
 
-Danh sách trên viết theo lần tra 21/10; răng là bên quyết — tệp nào răng thấy mà danh sách thiếu thì sửa danh sách trước S4
+Bổ sung sau răng 21/10: `tai-lieu-model.ts` chỉ đọc `DEFAULT_AGENT_MODEL.contextWindowTokens` cho cửa sổ ngữ cảnh kho; phiên gốc `may-soan` lùi về mặc định (phiên con máy soạn vẫn dùng `soan.maModel`); `okr-soan` có trong danh sách purpose nhưng phiên đó chạy ở `apps/agent-okr`. Danh sách trên viết theo lần tra 21/10; răng là bên quyết — tệp nào răng thấy mà danh sách thiếu thì sửa danh sách trước S4
 và ghi một dòng sổ `fix`.
 
 ## Đo xác nhận
