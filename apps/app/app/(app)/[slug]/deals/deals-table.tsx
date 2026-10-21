@@ -18,7 +18,10 @@ import { useEffect, useMemo } from "react";
 import { closingOptions } from "@/components/crm/closing-window";
 import { CompanyCell } from "@/components/crm/company-cell";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
-import { useFieldFacets } from "@/components/crm/fields/field-facets";
+import {
+	useFieldFacets,
+	useTruongLoc,
+} from "@/components/crm/fields/field-facets";
 import {
 	anDuoiTheoKieu,
 	HienThiTruong,
@@ -28,6 +31,7 @@ import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { ListSearch } from "@/components/data-table/list-search";
+import { SavedViewsMenu } from "@/components/data-table/saved-views-menu";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import { useGiaiDoan } from "@/lib/giai-doan";
@@ -163,8 +167,10 @@ export function DealsTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const { query, input, setArchived, currentView, applyView } =
-		useTableQuery(dealsSearchParams);
+	const table = useTableQuery(dealsSearchParams, {
+		truongLoc: useTruongLoc("DEAL"),
+	});
+	const { query, input, setArchived, currentView, applyView } = table;
 	const [{ view }, setView] = useQueryStates(dealsViewParsers);
 	const board = showsBoard(view, input.archived);
 
@@ -283,6 +289,7 @@ export function DealsTable() {
 						counts={facetCounts}
 					/>
 					<div className="flex gap-2 sm:ml-auto">
+						<SavedViewsMenu entity="DEAL" table={table} />
 						{archivedButton}
 						{viewToggle}
 					</div>
@@ -297,7 +304,12 @@ export function DealsTable() {
 			query={query}
 			search={<ListSearch placeholder={m.search} />}
 			leadingActions={viewToggle}
-			actions={archivedButton}
+			actions={
+				<>
+					<SavedViewsMenu entity="DEAL" table={table} />
+					{archivedButton}
+				</>
+			}
 			columns={columns}
 			rows={rows}
 			total={deals.data?.total ?? 0}

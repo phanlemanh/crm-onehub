@@ -1,0 +1,47 @@
+{
+	"sha": "c6a718f3df93677e6f8a90423e111e48960ddc7a",
+	"nguon": "useTableQuery(contactsSearchParams).currentView",
+	"bo": [
+		{
+			"ten": "lien-he-chon-nguoi-owner",
+			"entity": "CONTACT",
+			"url": "?q=__Q__&owner=unassigned&owner=__B__&fields={\"__CHON__\":[\"__A__\"],\"__NGUOI__\":[\"__U__\"]}",
+			"filters": {
+				"q": "__Q__",
+				"sort": "createdAt",
+				"dir": "desc",
+				"archived": false,
+				"filters": {
+					"owner": ["unassigned", "__B__"],
+					"company": [],
+					"title": [],
+					"seniority": [],
+					"persona": [],
+					"activity": [],
+					"field:__CHON__": ["__A__"],
+					"field:__NGUOI__": ["__U__"]
+				}
+			}
+		},
+		{
+			"ten": "lien-he-truong-tat",
+			"entity": "CONTACT",
+			"url": "?q=__Q__&fields={\"__TAT__\":[\"__A_TAT__\"]}",
+			"filters": {
+				"q": "__Q__",
+				"sort": "createdAt",
+				"dir": "desc",
+				"archived": false,
+				"filters": {
+					"owner": [],
+					"company": [],
+					"title": [],
+					"seniority": [],
+					"persona": [],
+					"activity": [],
+					"field:__TAT__": ["__A_TAT__"]
+				}
+			}
+		}
+	]
+}
