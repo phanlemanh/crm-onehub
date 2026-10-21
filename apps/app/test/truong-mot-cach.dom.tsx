@@ -306,7 +306,14 @@ function moTaTuTao(
 	);
 }
 
-const MA_TRAN_LIEN_KET = [
+type OLienKet = {
+	kieu: "URL" | "EMAIL" | "PHONE";
+	giaTri: string;
+	href: string;
+	moi: boolean;
+};
+
+const MA_TRAN_LIEN_KET: readonly OLienKet[] = [
 	{ kieu: "URL", giaTri: "onehub.vn", href: "https://onehub.vn", moi: true },
 	{ kieu: "URL", giaTri: "http://a.vn/x", href: "http://a.vn/x", moi: true },
 	{
@@ -327,7 +334,7 @@ async function kiemLienKet(
 	mat: string,
 	loai: string,
 	el: ReactElement,
-	o: (typeof MA_TRAN_LIEN_KET)[number],
+	o: OLienKet,
 ): Promise<void> {
 	const g = await mo(el);
 	const a = g.querySelector("a");
