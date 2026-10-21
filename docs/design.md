@@ -99,6 +99,10 @@ mục này ở những gì nó nói riêng.
 - Bề rộng: màn danh sách và tổng quan để mặc định của `PageShell`. Trang một cột
   chữ hay form (Nhắc buổi sáng) dùng `width="page"` theo bảng của
   `docs/settings.md`.
+- Ngoại lệ **màn toàn vùng**: màn mà một mặt vẽ chiếm trọn vùng nội dung (Sơ đồ
+  của khu Mục tiêu) thay `PageShellHeader` bằng một dải công cụ một dòng có đường
+  mảnh làm tiêu đề, không `PageShellDescription`, khung `PageShell width="full"
+  contained`. Dải công cụ dựng cả lúc chờ tải và lúc lỗi. Không dùng cho màn khác.
 
 ### Chờ tải và lỗi tải
 

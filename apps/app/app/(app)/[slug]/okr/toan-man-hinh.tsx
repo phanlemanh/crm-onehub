@@ -19,7 +19,9 @@ const ToanManHinhContext = createContext<ToanManHinh>({
 });
 
 export function ToanManHinhProvider({ children }: { children: ReactNode }) {
-	const duocBat = laDuongSoDo(usePathname() ?? "") && !useIsMobile();
+	const duong = usePathname() ?? "";
+	const hep = useIsMobile();
+	const duocBat = laDuongSoDo(duong) && !hep;
 	const [xin, datXin] = useState(false);
 	if (xin && !duocBat) datXin(false);
 	const bat = xin && duocBat;

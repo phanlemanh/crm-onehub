@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import {
-	PageShellContent,
-	PageShellDescription,
-	PageShellFallback,
-	PageShellHeader,
-	PageShellHeading,
-	PageShellTitle,
-} from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -16,7 +8,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
-import { SoDo } from "./so-do";
+import { ManSoDo, ManSoDoCho } from "./man-so-do";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -27,26 +19,15 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-export default async function SoDoPage({
+export default function SoDoPage({
 	searchParams,
 }: {
 	searchParams: SearchParams;
 }) {
-	const t = okrVoKhuMessages(await getLocale());
 	return (
-		<>
-			<PageShellHeader>
-				<PageShellHeading>
-					<PageShellTitle>{t.soDo.tieuDe}</PageShellTitle>
-					<PageShellDescription>{t.soDo.moTa}</PageShellDescription>
-				</PageShellHeading>
-			</PageShellHeader>
-			<PageShellContent>
-				<Suspense fallback={<PageShellFallback />}>
-					<NoiDung searchParams={searchParams} />
-				</Suspense>
-			</PageShellContent>
-		</>
+		<Suspense fallback={<ManSoDoCho coTam={false} />}>
+			<NoiDung searchParams={searchParams} />
+		</Suspense>
 	);
 }
 
@@ -58,17 +39,16 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	const [cycles] = await Promise.all([
 		queryClient.fetchQuery(trpc.okr.cycles.queryOptions()).catch(() => null),
 		queryClient.prefetchQuery(trpc.okr.access.queryOptions()),
-		queryClient.prefetchQuery(trpc.workspace.get.queryOptions()),
 	]);
 	const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);
 	if (cycleId)
 		await queryClient.prefetchQuery(
-			trpc.okr.cayCanChinh.queryOptions({ cycleId }),
+			trpc.okr.soDoDonVi.queryOptions({ cycleId }),
 		);
 
 	return (
 		<HydrateClient>
-			<SoDo />
+			<ManSoDo tam={null} />
 		</HydrateClient>
 	);
 }
