@@ -5,7 +5,7 @@ slug: test-nghe-127
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, docs]
-status: implemented
+status: verified
 veto_state: mo
 veto_opened_at: 2026-10-21T23:23:04Z
 design_doc: docs/superpowers/specs/2026-10-22-test-nghe-127-design.md
