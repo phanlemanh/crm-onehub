@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3bffafc71a5487af79a925f58be5f942456dd96c
+verified_commit: 00f4a1f755a2f38a246ad935d2858ed41bfcc40a
 human_signoff: manh 2026-10-21 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval máy đạt; vòng 1 hạ về REJECT vì E5 đọc model gốc Zalo từ lời gọi thăm dò, đã sửa và đo lại lượt kho). Ngoài-1 chấp nhận không sửa; Ngoài-2..7 ghi Known limits, gồm mốc chi phí kho chưa trừ đọc cache; đồng ý phần cắt; phê hết các dòng treo.
 ---
 
@@ -171,3 +171,7 @@ Round 2: E1 E3 E4 E5 E6 E7 E8 E9 chạy lại và đạt trên eaf92b6b2 (E5 nay
 ### Re-pin lần 1 — 2026-10-21, do hoá cũ do gộp onehub sau chữ ký (package.json)
 run_id: repin-20261021T123009Z-15573
 sha: 3bffafc71a5487af79a925f58be5f942456dd96c · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-21, do hoá cũ do gộp onehub 110a07377 (#525)
+run_id: repin-20261021T140953Z-71808
+sha: 00f4a1f755a2f38a246ad935d2858ed41bfcc40a · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
