@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Trưởng đơn vị bấm vào một KR ở bất kỳ màn nào đều mở cùng một ngăn KR; cập nhật được ngay ở đầu ngăn hoặc trên dòng KR của trang đơn vị, thấy trước điểm mới nằm đâu so với đích, rồi sang KR kế mà không phải đóng ngăn.",
+  "scope_plain": "Vòng này không đụng tới phần khung chồng ngăn đã ký, không đổi đường ghi cập nhật ở máy chủ, không làm trang bộ OKR hay vỏ khu, và không đổi lối KR trong tin nhắc buổi sáng."
+}
