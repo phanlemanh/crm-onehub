@@ -106,7 +106,7 @@ function DongSucKhoe({ h }: { h: HangSucKhoe }) {
 	);
 }
 
-export function SucKhoe() {
+export function SucKhoe({ duongDan = true }: { duongDan?: boolean }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
@@ -126,7 +126,7 @@ export function SucKhoe() {
 	const giu = new URLSearchParams();
 	if (ky) giu.set(SEARCH_PARAM.okr.ky, ky);
 	if (don) giu.set(SEARCH_PARAM.okr.don, khoaDon(don));
-	const veToanCanh = `${url("/okr/toan-canh")}${giu.size > 0 ? `?${giu}` : ""}`;
+	const veToanCanh = `${url("/okr/suc-khoe")}${giu.size > 0 ? `?${giu}` : ""}`;
 
 	const dau = (
 		<Breadcrumb>
@@ -239,7 +239,7 @@ export function SucKhoe() {
 
 	return (
 		<div className="flex flex-col gap-6">
-			{dau}
+			{duongDan ? dau : null}
 			{than}
 			{quanTri && currentId !== null ? (
 				<TomTatQuanTri cycleId={currentId} key={currentId} />

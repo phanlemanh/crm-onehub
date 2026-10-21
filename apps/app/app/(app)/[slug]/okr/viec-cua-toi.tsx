@@ -182,7 +182,7 @@ function DichViec({ viec }: { viec: ViecOkr }) {
 		const thamSo = new URLSearchParams({ [SEARCH_PARAM.okr.ky]: viec.cycleId });
 		return (
 			<Button asChild size="sm" variant="outline">
-				<Link href={`${url("/okr/hoi-y")}?${thamSo}`}>{m.moHoiY}</Link>
+				<Link href={`${url("/okr/lay-y-kien")}?${thamSo}`}>{m.moHoiY}</Link>
 			</Button>
 		);
 	}
