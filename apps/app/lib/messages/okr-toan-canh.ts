@@ -1,13 +1,6 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
-	cay: {
-		canChinh: "Sơ đồ góp vào cả công ty",
-		chuaCanChinh: "Chưa góp vào đâu",
-		cungHien: "cũng hiện ở chỗ góp kia",
-		locTatCa: "Tất cả",
-		locRong: "Không có mục tiêu nào ở mức này trong chu kỳ.",
-	},
 	loc: {
 		phuTrach: "Người phụ trách",
 		loai: "Loại",
@@ -244,13 +237,6 @@ const vi = {
 export type OkrToanCanhMessages = typeof vi;
 
 const en: OkrToanCanhMessages = {
-	cay: {
-		canChinh: "Company-wide contribution map",
-		chuaCanChinh: "Not contributing anywhere",
-		cungHien: "also shown where it contributes",
-		locTatCa: "All",
-		locRong: "No objectives at this level in the cycle.",
-	},
 	loc: {
 		phuTrach: "Owner",
 		loai: "Type",
