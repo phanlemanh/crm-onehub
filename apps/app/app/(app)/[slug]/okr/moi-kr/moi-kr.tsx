@@ -41,7 +41,7 @@ const P = SEARCH_PARAM.okr;
 const MAT = { donVi: P.donViKr, nguoi: P.nguoiKr } as const;
 const laMat = (id: string): id is keyof typeof MAT => Object.hasOwn(MAT, id);
 
-function useNhanTinhTrang(): Record<TinhTrangKr, string> {
+function useNhanTinhTrang() {
 	const msg = useMessages();
 	return {
 		truot: msg.okr.truot,
@@ -50,7 +50,7 @@ function useNhanTinhTrang(): Record<TinhTrangKr, string> {
 		"chua-co-ky-vong": msg.okr.chuaCoKyVong,
 		"moc-chua": msg.okr.mocChua,
 		"moc-xong": msg.okr.mocXong,
-	};
+	} satisfies Record<TinhTrangKr, string>;
 }
 
 function useCot(): DataTableColumn<Dong>[] {
@@ -256,8 +256,11 @@ function BangMoiKr({ cycleId }: { cycleId: string }) {
 					getRowId={(d) => d.keyResultId}
 					layout="content"
 					meta={
-						<span className="text-muted-foreground text-sm tabular-nums" data-tong-kr="">
-							{t.tong(String(ds.data.total))}
+						<span
+							className="text-muted-foreground text-sm tabular-nums"
+							data-tong-kr=""
+						>
+							{t.tong}: {ds.data.total}
 						</span>
 					}
 					onClearFilters={boLoc}

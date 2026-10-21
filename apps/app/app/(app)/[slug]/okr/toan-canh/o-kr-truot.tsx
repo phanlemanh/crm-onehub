@@ -22,8 +22,7 @@ export function OKrTruot({ cycleId }: { cycleId: string }) {
 		trpc.okr.moiKr.queryOptions({ cycleId, loc: LOC_MOI_KR_RONG }),
 	);
 	const so =
-		ds.data?.facetCounts.tinhTrang.find((d) => d.value === "truot")?.count ??
-		0;
+		ds.data?.facetCounts.tinhTrang.find((d) => d.value === "truot")?.count ?? 0;
 	return (
 		<StatCard
 			asChild

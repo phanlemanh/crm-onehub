@@ -15,8 +15,8 @@ import {
 	chiTietTu,
 	cho,
 	datLai,
-	dung,
 	docCua,
+	dung,
 	kho,
 	kr,
 	LoiTrpc,
@@ -121,11 +121,14 @@ function traMoiKr(ds: DongMoiKr[], loc: LocMoiKr) {
 
 function datMoiKr(ds: DongMoiKr[] = DONG) {
 	kho.rieng.set("okr.moiKr", (vao) =>
-		traMoiKr(ds, (vao as { loc: LocMoiKr } | undefined)?.loc ?? {
-			tinhTrang: [],
-			donVi: [],
-			nguoi: [],
-		}),
+		traMoiKr(
+			ds,
+			(vao as { loc: LocMoiKr } | undefined)?.loc ?? {
+				tinhTrang: [],
+				donVi: [],
+				nguoi: [],
+			},
+		),
 	);
 }
 
@@ -162,7 +165,12 @@ afterEach(thaoHet);
 describe("mkc-o-truot", () => {
 	test("mkc-o-truot: ô KR trượt là liên kết mang số từ okr.moiKr và giữ chu kỳ", async () => {
 		const MA_TRAN = [
-			{ thamSo: "", ds: DONG, href: "/ws/okr/moi-kr?tinhTrangKr=truot", so: "2" },
+			{
+				thamSo: "",
+				ds: DONG,
+				href: "/ws/okr/moi-kr?tinhTrangKr=truot",
+				so: "2",
+			},
 			{
 				thamSo: "?kyOkr=c2",
 				ds: DONG,
@@ -298,7 +306,8 @@ describe("mkc-ngan", () => {
 			(b) => b.getAttribute("data-slot") === "sheet-close",
 		);
 		if (dong_) await bamChuot(dong_);
-		else document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+		else
+			document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
 		await cho(() => qs("[data-than-ngan-kr]") === null, "ngan dong");
 		expect({
 			record: san.url().get("record"),
@@ -312,7 +321,9 @@ describe("mkc-trang", () => {
 	test("mkc-trang: nhóm Báo cáo có Sức khoẻ · Mọi KR · Sơ đồ, Mọi KR sáng", async () => {
 		await dung(<ThanhBenMucTieu />, "");
 		await cho(
-			() => qsa("aside[data-slot=area-sidebar] nav [data-slot=nav-item]").length > 0,
+			() =>
+				qsa("aside[data-slot=area-sidebar] nav [data-slot=nav-item]").length >
+				0,
 			"thanh ben",
 		);
 		const aside = qs("aside[data-slot=area-sidebar]");
@@ -320,9 +331,7 @@ describe("mkc-trang", () => {
 			...(aside?.querySelectorAll("[data-slot=nav-group]") ?? []),
 		].find((g) => g.textContent?.includes(tk.nhom.baoCao));
 		const muc = [...(nhom?.querySelectorAll("[data-slot=nav-item]") ?? [])];
-		const sang = [
-			...(aside?.querySelectorAll("[aria-current=page]") ?? []),
-		];
+		const sang = [...(aside?.querySelectorAll("[aria-current=page]") ?? [])];
 		expect({
 			nhan: muc.map((m) => m.textContent?.trim()),
 			hrefMoiKr: muc[1]?.getAttribute("href"),

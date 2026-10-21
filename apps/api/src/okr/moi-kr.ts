@@ -1,4 +1,5 @@
 import { tinhTrang } from "@crm/validation/okr-muc-tieu";
+import type { TreeOutput } from "../to-chuc/to-chuc.contracts";
 import type { MucTieuOutput } from "./okr.contracts";
 import {
 	type DongMoiKr,
@@ -8,7 +9,6 @@ import {
 	type TinhTrangKr,
 } from "./okr-moi-kr.contracts";
 import { khoaCuaMucTieu } from "./toan-canh";
-import type { TreeOutput } from "../to-chuc/to-chuc.contracts";
 
 export const CAP_CONG_TY = ["onehub", "bo-phan", "phong-ban"] as const;
 

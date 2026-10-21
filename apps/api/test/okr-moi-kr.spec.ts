@@ -17,13 +17,13 @@ import {
 	NGUOI_MOI_KR,
 	type NguoiMoiKr,
 } from "../scripts/okr-mau/ca-moi-kr";
-import type { KhoiCuaToiOutput } from "../src/okr/okr-xem.contracts";
 import {
 	type LocMoiKr,
 	type MoiKrOutput,
 	moiKrOutput,
 	TINH_TRANG_KR,
 } from "../src/okr/okr-moi-kr.contracts";
+import type { KhoiCuaToiOutput } from "../src/okr/okr-xem.contracts";
 import { donSanKhep } from "./okr-khep-san";
 import {
 	type AiHoacCookie,
@@ -110,7 +110,10 @@ const TRUONG_MOI_KR = { B1: "A", B2: "B" } as const;
 function nguoiGhi(m: MucTieuMoiKr, s: San): AiHoacCookie {
 	if (m.donVi === "goc") return "quan";
 	if (m.donVi === "ca-nhan") return s.cookie[m.chu];
-	const bp = m.donVi in TRUONG_MOI_KR ? m.donVi : CHA_MOI_KR[m.donVi as keyof typeof CHA_MOI_KR];
+	const bp =
+		m.donVi in TRUONG_MOI_KR
+			? m.donVi
+			: CHA_MOI_KR[m.donVi as keyof typeof CHA_MOI_KR];
 	return s.cookie[TRUONG_MOI_KR[bp as keyof typeof TRUONG_MOI_KR]];
 }
 
@@ -240,7 +243,8 @@ async function moiKr(
 
 const maCua = (id: string) =>
 	[...san.kr.entries()].find(([, v]) => v === id)?.[0] ?? `la:${id}`;
-const tapMa = (o: MoiKrOutput) => o.rows.map((r) => maCua(r.keyResultId)).sort();
+const tapMa = (o: MoiKrOutput) =>
+	o.rows.map((r) => maCua(r.keyResultId)).sort();
 const CO_MAT = KR_MOI_KR.filter((k) => k.mong !== "vang");
 
 const khoaCuaKr = (k: (typeof KR_MOI_KR)[number]): string[] => {
@@ -261,9 +265,7 @@ function khopTay(
 	const ng = loc.nguoi ?? [];
 	return (
 		k.mong !== "vang" &&
-		(bo === "tinhTrang" ||
-			tt.length === 0 ||
-			tt.some((v) => v === k.mong)) &&
+		(bo === "tinhTrang" || tt.length === 0 || tt.some((v) => v === k.mong)) &&
 		(dv.length === 0 || khoaCuaKr(k).some((x) => dv.includes(x))) &&
 		(ng.length === 0 || ng.includes(san.nguoi[k.chu]))
 	);
@@ -274,7 +276,10 @@ describe("mkc-nguon", () => {
 		const o = await moiKr();
 		const coMat = new Set(o.rows.map((r) => r.keyResultId));
 		expect(
-			KR_MOI_KR.map((k) => ({ ma: k.ma, co: coMat.has(san.kr.get(k.ma) ?? "") })),
+			KR_MOI_KR.map((k) => ({
+				ma: k.ma,
+				co: coMat.has(san.kr.get(k.ma) ?? ""),
+			})),
 		).toEqual(KR_MOI_KR.map((k) => ({ ma: k.ma, co: k.mong !== "vang" })));
 		expect(tapMa(o)).toEqual(CO_MAT.map((k) => k.ma).sort());
 		expect(
@@ -286,8 +291,8 @@ describe("mkc-nguon", () => {
 			o.rows.filter(
 				(r) =>
 					r.tinhTrang === "truot" &&
-					KR_MOI_KR.find((k) => k.ma === maCua(r.keyResultId))?.mucTieu
-						.loai !== "cam-ket",
+					KR_MOI_KR.find((k) => k.ma === maCua(r.keyResultId))?.mucTieu.loai !==
+						"cam-ket",
 			),
 		).toEqual([]);
 		expect(o.total).toBe(o.rows.length);

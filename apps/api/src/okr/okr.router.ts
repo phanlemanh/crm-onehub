@@ -192,6 +192,8 @@ import {
 } from "./okr-khep.contracts";
 import { OkrKhepService } from "./okr-khep.service";
 import { OkrMauService } from "./okr-mau.service";
+import { moiKrInput, moiKrOutput } from "./okr-moi-kr.contracts";
+import { OkrMoiKrService } from "./okr-moi-kr.service";
 import {
 	banGhiChiSoInput,
 	banGhiChiSoOutput,
@@ -205,8 +207,6 @@ import {
 	xemTruocChiSoInput,
 	xemTruocChiSoOutput,
 } from "./okr-so.contracts";
-import { moiKrInput, moiKrOutput } from "./okr-moi-kr.contracts";
-import { OkrMoiKrService } from "./okr-moi-kr.service";
 import { OkrSoService } from "./okr-so.service";
 import { OkrTaiCoCauService } from "./okr-tai-co-cau.service";
 import { OkrTraoDoiService } from "./okr-trao-doi.service";

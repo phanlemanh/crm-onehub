@@ -155,7 +155,10 @@ export const CA_MOI_KR: readonly MucTieuMoiKr[] = [
 		loai: "cam-ket",
 		chu: "u2",
 		congBo: "som",
-		krs: [so("ca-nhan-k1", 5, "u2", "vang"), so("ca-nhan-k2", 30, "u2", "vang")],
+		krs: [
+			so("ca-nhan-k1", 5, "u2", "vang"),
+			so("ca-nhan-k2", 30, "u2", "vang"),
+		],
 	},
 	{
 		ma: "ky-khac",
