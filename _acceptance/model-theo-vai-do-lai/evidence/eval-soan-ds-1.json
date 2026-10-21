@@ -1,0 +1,44 @@
+{
+  "nhan": "ds-1",
+  "luc": "2026-10-21T00:11:38.870Z",
+  "sha": "accbd5b85cff8a35f4225e60fe8ef2ed620f7240",
+  "bam": {
+    "loiDan": "9b05103352327f9824b64e113028127231a602451868267493900ba174e790e5",
+    "thuoc": "72f9a984ffa4dffbc2b72a80bb729649840c957d172d1b9e4631ee00ddc6ed82"
+  },
+  "moHinh": "deepseek/deepseek-v4.1-flash-1017",
+  "judge": "zai/glm-5.2-fast",
+  "lanChay": "2026-10-21T00-11-38",
+  "maEve": 1,
+  "tong": 18,
+  "dat": 10,
+  "hong": 7,
+  "duoiNguong": 1,
+  "boQua": 0,
+  "chotMaHong": 7,
+  "judgeHong": 1,
+  "judgeDuoiNguong": 1,
+  "tieuChiTrungBinh": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    0.5
+  ],
+  "p50": 38909.25977100001,
+  "p90": 42515.5672583,
+  "usd": 0.103753,
+  "soDeXuat": 41,
+  "chuCu": [],
+  "ketLuanThuocGoc": {
+    "ma": 1,
+    "cau": "chot ma hong 7: okr-soan/soan-boi-canh/0001 satisfies(co ban nhap); okr-soan/soan-boi-canh/0002 satisfies(co ban nhap); okr-soan/soan-do-tre/0009 satisfies(p50 <= 12000 ms); okr-soan/soan-do-tre/0009 satisfies(p90 <= 20000 ms); okr-soan/soan/0001 satisfies(da nop ban nhap); okr-soan/soan/0002 satisfies(da nop ban nhap); okr-soan/soan/0003 satisfies(da nop ban nhap)"
+  },
+  "khongNopDeXuat": false,
+  "modelGateway": "deepseek/deepseek-v4.1-flash-1017",
+  "bamSuaTam": "2c06cb0a7716f21cc45be94404925155ec0cd84d95073b8e45d6d2d433a09683",
+  "bamCommit": "f5c766efd4b205afb1cf4d2d60559e0c7a648460",
+  "ung_vien": "ds",
+  "aichiphi": "aichiphi-soan-ds-1.json"
+}
