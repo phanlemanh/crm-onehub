@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b557fca3b24cb5d3684006a748adf2735af0f24b
+verified_commit: 739aad15ede2acaad131b47e532e6b2bc7b5203c
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -306,3 +306,7 @@ sha: 97a2eb9d7c24cc0cb7c6308c3bd47bd5211a3b02 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-06, do sửa thước đỏ lô 2-4 (a)
 run_id: repin-20261006T100303Z-21340
 sha: b557fca3b24cb5d3684006a748adf2735af0f24b · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E15, E21 · diff chạm vật đo ngoài làn máy: E12, E15 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 5 — 2026-10-21, do VK13 vá thước man-hoi-y (Hỏi-1) và đổi màn Lấy ý kiến
+run_id: repin-20261021T090934Z-30407
+sha: 739aad15ede2acaad131b47e532e6b2bc7b5203c · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E15, E21 · diff chạm vật đo ngoài làn máy: E12, E15 — chưa chứng lại, đi vòng S4 delta · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 2/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
