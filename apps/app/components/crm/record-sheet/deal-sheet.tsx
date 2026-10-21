@@ -29,18 +29,17 @@ import { AgentPanel } from "@/components/crm/agent-panel";
 import { InlineCompanyField } from "@/components/crm/company-picker";
 import { contactName } from "@/components/crm/contact-name";
 import { DealStageIndicator } from "@/components/crm/deal-stage";
-import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
 import {
-	InlineDateField,
-	InlineField,
-	InlineMoneyField,
-	InlineSelectField,
-	InlineTextArea,
-	InlineTextCell,
-	savingValue,
-} from "@/components/crm/inline-field";
-import { OwnerCell } from "@/components/crm/owner-cell";
-import { SoDienThoai } from "@/components/crm/so-dien-thoai";
+	cauLoiTheoKhoa,
+	HienThiTruong,
+	khoaCuaLuot,
+	type MoTaTruong,
+	OTruongBang,
+	OTruongPhieu,
+} from "@/components/crm/fields/kieu-truong";
+import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
+import { InlineTextCell, savingValue } from "@/components/crm/inline-field";
+import type { Owner } from "@/components/crm/owner-cell";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { StageStepper } from "@/components/crm/stage-stepper";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -54,11 +53,7 @@ import {
 	DetailSheetStats,
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
-import {
-	LocalDateTime,
-	LocalDay,
-	LocalRelativeTime,
-} from "@/components/local-date-time";
+import { LocalDateTime, LocalRelativeTime } from "@/components/local-date-time";
 import { lyDoLoi } from "@/lib/ly-do-loi";
 import {
 	type RecordSheetMessages,
@@ -142,7 +137,6 @@ const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
 };
 
 export function DealSheet({ dealId }: { dealId: string }) {
-	const locale = useLocale();
 	const m = recordSheetMessages(useLocale());
 	const trpc = useTRPC();
 	const openRecord = useOpenRecord();
@@ -263,30 +257,25 @@ export function DealSheet({ dealId }: { dealId: string }) {
 						)}
 						<DetailSheetStats>
 							<DetailSheetStat label={m.deal.fields.amount}>
-								{deal.amountCents === null ? (
-									<EmptyCellValue />
-								) : (
-									<span className="tabular-nums">
-										{formatMoney(
-											deal.amountCents,
-											dealCurrency(deal.currency),
-											locale,
-										)}
-									</span>
-								)}
+								<HienThiTruong
+									kieu="MONEY"
+									giaTri={deal.amountCents}
+									tienTe={dealCurrency(deal.currency)}
+								/>
 							</DetailSheetStat>
 							<DetailSheetStat label={m.deal.expectedClose}>
-								{deal.expectedCloseDate ? (
-									<LocalDay date={deal.expectedCloseDate} />
-								) : (
-									<EmptyCellValue />
-								)}
+								<HienThiTruong kieu="DATE" giaTri={deal.expectedCloseDate} />
 							</DetailSheetStat>
 							<DetailSheetStat label={m.deal.inStage}>
 								<LocalRelativeTime date={deal.stageChangedAt} />
 							</DetailSheetStat>
 							<DetailSheetStat label={m.deal.fields.owner}>
-								<OwnerCell owner={deal.owner} xuongDongDienThoai />
+								<HienThiTruong
+									kieu="USER"
+									giaTri={deal.owner.id}
+									nguoi={deal.owner}
+									xuongDongDienThoai
+								/>
 							</DetailSheetStat>
 						</DetailSheetStats>
 					</>
@@ -299,7 +288,113 @@ export function DealSheet({ dealId }: { dealId: string }) {
 	);
 }
 
-function DealOverview({ deal }: { deal: Deal }) {
+type LuuThoaThuan = (
+	data: {
+		name?: string;
+		amountCents?: number | null;
+		currency?: string;
+		expectedCloseDate?: string | null;
+		ownerId?: string;
+		description?: string | null;
+	},
+	khoa: string,
+) => void;
+
+export function truongChuanThoaThuan(
+	deal: Deal,
+	{
+		m,
+		luu,
+		dangLuu,
+		nguoiDung,
+	}: {
+		m: RecordSheetMessages;
+		luu: LuuThoaThuan;
+		dangLuu: (khoa: string) => boolean;
+		nguoiDung: Owner[] | undefined;
+	},
+): MoTaTruong[] {
+	const currency = dealCurrency(deal.currency);
+	return [
+		{
+			khoa: "name",
+			nhan: m.deal.fields.name,
+			kieu: "TEXT",
+			giaTri: deal.name,
+			batBuoc: true,
+			luu: (giaTri) => luu({ name: String(giaTri) }, "name"),
+			dangLuu: dangLuu("name"),
+		},
+		{
+			khoa: "amount",
+			nhan: m.deal.fields.amount,
+			kieu: "MONEY",
+			giaTri: deal.amountCents,
+			tienTe: currency,
+			luu: (giaTri) =>
+				luu({ amountCents: giaTri === null ? null : Number(giaTri) }, "amount"),
+			dangLuu: dangLuu("amountCents"),
+		},
+		{
+			khoa: "currency",
+			nhan: m.deal.fields.currency,
+			kieu: "SELECT",
+			giaTri: currency,
+			batBuoc: true,
+			luaChon: currencyOptions(currency, m),
+			luu: (giaTri) => luu({ currency: String(giaTri) }, "currency"),
+			dangLuu: dangLuu("currency"),
+		},
+		{
+			khoa: "expectedCloseDate",
+			nhan: m.deal.fields.closeDate,
+			kieu: "DATE",
+			giaTri: deal.expectedCloseDate,
+			luu: (giaTri) =>
+				luu(
+					{ expectedCloseDate: giaTri === null ? null : String(giaTri) },
+					"expectedCloseDate",
+				),
+			dangLuu: dangLuu("expectedCloseDate"),
+		},
+		{
+			khoa: "owner",
+			nhan: m.deal.fields.owner,
+			kieu: "USER",
+			giaTri: deal.owner.id,
+			nguoi: deal.owner,
+			batBuoc: true,
+			nguoiDung,
+			luu: (giaTri) => {
+				if (giaTri !== null) luu({ ownerId: String(giaTri) }, "owner");
+			},
+			dangLuu: dangLuu("ownerId"),
+		},
+		{
+			khoa: "description",
+			nhan: m.deal.description,
+			kieu: "LONG_TEXT",
+			giaTri: deal.description,
+			khongNhan: true,
+			goiY: deal.archivedAt
+				? undefined
+				: m.deal.descriptionHint(deal.company.name),
+			luu: (giaTri) =>
+				luu(
+					{ description: giaTri === null ? null : String(giaTri) },
+					"description",
+				),
+			dangLuu: dangLuu("description"),
+		},
+	];
+}
+
+const DOI_KHOA_THOA_THUAN = {
+	amountCents: "amount",
+	ownerId: "owner",
+} as const satisfies Record<string, string>;
+
+export function DealOverview({ deal }: { deal: Deal }) {
 	const locale = useLocale();
 	const m = recordSheetMessages(locale);
 	const trpc = useTRPC();
@@ -310,21 +405,46 @@ function DealOverview({ deal }: { deal: Deal }) {
 	const update = useMutation(
 		trpc.deals.update.mutationOptions({
 			onSuccess: () => cache.deal(deal.id, { settle: "record" }),
-			onError: (error) => toast.error(error.message),
+			onError: (error, bien) => {
+				const khoa = khoaCuaLuot(
+					Object.keys(bien.data),
+					bien.data.fields ? Object.keys(bien.data.fields) : undefined,
+					DOI_KHOA_THOA_THUAN,
+				);
+				const ds = khoa?.tuTao ? moTaTuTao() : truongChuan;
+				toast.error(cauLoiTheoKhoa(khoa?.khoa, ds, locale) ?? error.message);
+			},
 		}),
 	);
 
-	const saveFields = (fields: Record<string, FieldValueJson>) =>
-		update.mutate({ id: deal.id, data: { fields } });
-
 	const isSavingField = savingValue(update);
+
+	const isSaving = savingField(update);
 
 	const save = (data: Parameters<typeof update.mutate>[0]["data"]) =>
 		update.mutate({ id: deal.id, data });
 
-	const currency = dealCurrency(deal.currency);
+	const moTaTuTao = () =>
+		deal.fields.map((field) => ({
+			khoa: field.key,
+			nhan: field.label,
+			kieu: field.type,
+		}));
 
-	const isSaving = savingField(update);
+	const truongChuan = truongChuanThoaThuan(deal, {
+		m,
+		luu: save,
+		dangLuu: isSaving,
+		nguoiDung: users.data,
+	});
+	const truongTheoKhoa = new Map(truongChuan.map((mt) => [mt.khoa, mt]));
+	const oChuan = (khoa: string) => {
+		const mt = truongTheoKhoa.get(khoa);
+		return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
+	};
+
+	const saveFields = (fields: Record<string, FieldValueJson>) =>
+		update.mutate({ id: deal.id, data: { fields } });
 
 	return (
 		<KhoaLuuTru khoa={deal.archivedAt !== null}>
@@ -353,47 +473,18 @@ function DealOverview({ deal }: { deal: Deal }) {
 					action={deal.archivedAt ? undefined : <FieldsCog kind="deal" />}
 				>
 					<DetailSheetProperties>
-						<InlineField
-							label={m.deal.fields.name}
-							value={deal.name}
-							saving={isSaving("name")}
-							onSave={(name) => name && save({ name })}
-						/>
-						<InlineMoneyField
-							label={m.deal.fields.amount}
-							cents={deal.amountCents}
-							currency={currency}
-							saving={isSaving("amountCents")}
-							onSave={(amountCents) => save({ amountCents })}
-						/>
-						<InlineSelectField
-							label={m.deal.fields.currency}
-							value={currency}
-							options={currencyOptions(currency, m)}
-							onSave={(currency) => save({ currency })}
-						/>
+						{oChuan("name")}
+						{oChuan("amount")}
+						{oChuan("currency")}
 						<ReportedValue deal={deal} />
-						<InlineDateField
-							label={m.deal.fields.closeDate}
-							value={deal.expectedCloseDate}
-							saving={isSaving("expectedCloseDate")}
-							onSave={(next) => save({ expectedCloseDate: next || null })}
-						/>
+						{oChuan("expectedCloseDate")}
 						<InlineCompanyField
 							value={deal.company.id}
 							company={deal.company}
 							saving={isSaving("companyId")}
 							onSave={(companyId) => save({ companyId })}
 						/>
-						<InlineSelectField
-							label={m.deal.fields.owner}
-							value={deal.owner.id}
-							options={(users.data ?? []).map((user) => ({
-								value: user.id,
-								label: user.name,
-							}))}
-							onSave={(ownerId) => save({ ownerId })}
-						/>
+						{oChuan("owner")}
 						<RecordFields
 							fields={deal.fields}
 							saving={isSavingField}
@@ -403,17 +494,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 				</DetailSheetSection>
 
 				<DetailSheetSection title={m.deal.description}>
-					<InlineTextArea
-						label={m.deal.description}
-						value={deal.description}
-						placeholder={
-							deal.archivedAt
-								? undefined
-								: m.deal.descriptionHint(deal.company.name)
-						}
-						saving={isSaving("description")}
-						onSave={(description) => save({ description })}
-					/>
+					{oChuan("description")}
 				</DetailSheetSection>
 
 				<WhereItStands deal={deal} />
@@ -574,11 +655,7 @@ function DealContacts({
 							</span>
 						</TableCell>
 						<TableCell className="px-3 py-2.5">
-							{contact.phone ? (
-								<SoDienThoai so={contact.phone} />
-							) : (
-								<EmptyCellValue />
-							)}
+							<OTruongBang kieu="PHONE" giaTri={contact.phone} />
 						</TableCell>
 						<TableCell className="truncate px-1 py-2.5">
 							<InlineTextCell

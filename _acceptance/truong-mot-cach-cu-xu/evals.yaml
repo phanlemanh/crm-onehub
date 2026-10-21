@@ -1,0 +1,128 @@
+slug: truong-mot-cach-cu-xu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: unit
+    cmd: config:executors.script.tmc_quet
+    expected: "exit 0; bun _acceptance/truong-mot-cach-cu-xu/rang/quet-vo-tay.mjs. Danh sách tệp viết sẵn trong rang (mười tệp): ba phiếu record-sheet/{deal,company,contact}-sheet.tsx, ba bảng app/(app)/[slug]/{deals,companies,contacts}/*-table.tsx, fields/record-fields.tsx, fields/field-columns.tsx, cùng kieu-truong.tsx và doc-nhap.ts. Tệp vắng thì ném 'tmc quet: thieu tep <tep>' (tệp cũ đã gỡ thì khai trong rang là 'da-go' và kiểm vắng thật). Với tám tệp màn, quét bằng TypeScript compiler API (ts.createSourceFile, không regex trên chữ): (a) so sánh nhị phân hay switch mà một vế là chuỗi thuộc FIELD_TYPES hay 'MONEY' thì ném 'tmc quet: re nhanh kieu <tep>:<dong>'; (b) JSX hay lời gọi tới InlineField, InlineDateField, InlineSelectField, InlineMoneyField, InlineTextArea, formatMoney, formatDay, LocalDay, OwnerCell, SoDienThoai thì ném 'tmc quet: o tu ve <ten> <tep>:<dong>' — ngoại trừ có tên khai sẵn trong rang (ô Giai đoạn, ô Công ty, vai trò liên hệ, cột createdAt và lastActivity không phải trường, mỗi ngoại trừ một cặp tep+ten+ly do; ngoại trừ không còn khớp chỗ nào thì ném 'tmc quet: ngoai tru chet <ten>'). Với kieu-truong.tsx: đọc khoá của bảng đăng ký, thiếu một trong mười một kiểu (FIELD_TYPES đọc từ packages/db/src/fields-shape.ts lúc chạy, cộng MONEY) hay một kiểu thiếu một trong ba mặt hienThi, suaTaiCho, oBang thì ném 'tmc quet: bang thieu <kieu> <mat>'. Vế dương cùng thước: ở mỗi phiếu, tập khoá trường chuẩn mà phiếu đưa vào OTruongPhieu hay HienThiTruong (đọc qua AST các phần tử JSX và các mảng bộ mô tả truyền vào chúng) phải bằng đúng tập khoá của phiếu đó trong 23 dòng đáp án của E6 (chép sẵn trong rang); thiếu hay thừa thì ném 'tmc quet: truong chuan khong qua bang <phieu> <khoa>'. Số tệp đã quét khác 10 thì ném 'tmc quet: thieu tep <n>'. Cặp hai chiều cùng fixture: rang tự chép deal-sheet.tsx của cây vào thư mục tạm, chèn một '<InlineField label=\"x\" value={null} onSave={() => {}} />' và một 'if (field.type === \"NUMBER\")', quét bản chép: không ném đúng hai lời 'o tu ve InlineField' và 're nhanh kieu' thì ném 'tmc quet: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub 37e7bf27c, tệp kieu-truong.tsx chưa có, ném 'tmc quet: thieu tep apps/app/components/crm/fields/kieu-truong.tsx'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/components/crm/record-sheet/contact-sheet.tsx, "apps/app/app/(app)/[slug]/deals/deals-table.tsx", "apps/app/app/(app)/[slug]/companies/companies-table.tsx", "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", _acceptance/truong-mot-cach-cu-xu/rang/quet-vo-tay.mjs]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_doc_so
+    expected: "exit 0; -t tmc-doc-so của apps/app/test/truong-mot-cach.spec.ts. Ma trận viết sẵn mười hai ô {locale, chuoi, ket} gọi docSoNhap thật của apps/app/components/crm/fields/doc-nhap.ts: vi '1.234,5'→1234.5, vi '1234,5'→1234.5, vi '-2,75'→-2.75, vi '1.234.567'→1234567, vi '0,000123'→0.000123, vi ''→rong, vi 'abc'→tu-choi so, vi '1234.5'→tu-choi locale-khac, vi '1,234.5'→tu-choi locale-khac, en '1,234.5'→1234.5, en '1.234,5'→tu-choi locale-khac, en '-3'→-3. Ô nào lệch thì ném 'tmc doc so: <locale> <chuoi> ra <json>'. Số ô đã so khác 12 thì ném 'tmc doc so: thieu o <n>'. Vế hiển thị cùng tệp: hienThiSo(1234.5,'vi') khác '1.234,5', hienThiSo(1234.5,'en') khác '1,234.5', hienThiSo(0.000123,'vi') khác '0,000123', hienThiSo(0.0000001,'vi') khác '0,0000001' thì ném 'tmc hien so: <locale> <gia tri> ra <chuoi>'. Chiều đỏ trong lịch sử: trên onehub doc-nhap.ts chưa có, import hỏng, bun test thoát khác 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/doc-nhap.ts, apps/app/components/crm/fields/kieu-truong.tsx, apps/app/test/truong-mot-cach.spec.ts]
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_phieu_so
+    expected: "exit 0; -t tmc-phieu-so của apps/app/test/truong-mot-cach.dom.tsx. Dựng DealOverview thật với kho tRPC giả theo mẫu chi-quan-tri-truong.dom.tsx; bản ghi deals.get rút qua bộ đọc đầu ra thật của apps/api/src/deals (round-trip parse, không dựng tay) và mang một trường tự tạo NUMBER khoá 'tmc_so' nhãn 'Số đo tmc' giá trị null. Ở LocaleProvider vi: bấm ô 'Số đo tmc', gõ '1.234,5', Enter. deals.update không được gọi đúng một lần thì ném 'tmc phieu so: khong luu'; variables.data.fields khác đúng {tmc_so: 1234.5} (typeof number) thì ném 'tmc phieu so: gui <json>'. Kho giả trả bản ghi đã cập nhật (giá trị 1234.5); hàng 'Số đo tmc' không hiện '1.234,5' hay phần tử giá trị thiếu lớp tabular-nums thì ném 'tmc phieu so: hien <chu>'. Lặp ở locale en với '1,234.5': không hiện '1,234.5' thì ném 'tmc phieu so: hien en <chu>'. Đối chứng dương trước khi gõ: hàng 'Số đo tmc' không có trong DOM thì ném 'tmc phieu so: doi chung thieu hang'. Chiều đỏ trong lịch sử: trên onehub ô Số là InlineField chữ, variables gửi chuỗi '1.234,5', ném 'tmc phieu so: gui {\"tmc_so\":\"1.234,5\"}'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/test/truong-mot-cach.dom.tsx]
+
+  - id: E2c
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tmc_api_so
+    expected: "exit 0; -t tmc-api-so của apps/api/test/truong-mot-cach.spec.ts trên kho thử riêng của lượt. Fixture qua đường ghi thật (caller tRPC với phiên quản trị): fields.create trường DEAL kiểu NUMBER khoá 'tmc_api_so', deals.create một thoả thuận. deals.update({id, data: {fields: {tmc_api_so: 1234.5}}}) rồi deals.get: fields của 'tmc_api_so' khác 1234.5 thì ném 'tmc api so: doc lai <gia tri>'. Đối chứng cùng fixture: deals.update với chuỗi '1.234,5' phải bị từ chối mã BAD_REQUEST; không ném hay mã khác thì ném 'tmc api so: chuoi viet lot' — đó là lý do ô phải đọc theo locale trước khi gửi. Chiều đỏ: vế đọc lại đã đúng trên onehub (bài kiểm giữ) — chứng bằng đột biến tay lúc dựng (readValue trả Number(row.number)+1 phải ném 'tmc api so: doc lai'), ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/fields.ts, apps/api/src/fields/**, apps/api/src/deals/**, apps/api/test/truong-mot-cach.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_loi_nhap
+    expected: "exit 0; -t tmc-loi-nhap của apps/app/test/truong-mot-cach.dom.tsx. Dựng OTruongPhieu thật ở LocaleProvider vi với sáu bộ mô tả viết sẵn {kieu, batBuoc, chuoi}: NUMBER 'abc', NUMBER '1234.5', EMAIL 'an@', URL 'khong co cham', PHONE '12ab', TEXT bắt buộc ''. Câu mong đợi đọc từ crmMessages('vi') theo mã (không viết lại chữ trong test). Ghim khuôn trước khi so: câu của năm mã so, email, lien-ket, dien-thoai, locale-khac phải bắt đầu bằng 'Ô này nhận' và chứa chữ 'ví dụ'; câu của so phải chứa '1.234,5'; câu của trong phải chứa nhãn trường; lệch thì ném 'tmc loi nhap: khuon cau <ma>'. Mỗi ô: bấm ô, gõ chuỗi, Enter. onSave được gọi thì ném 'tmc loi nhap: <kieu> van luu'; ô nhập biến mất (rời chế độ sửa) thì ném 'tmc loi nhap: <kieu> dong o'; câu dưới ô khác câu mong đợi, hay ô nhập thiếu aria-invalid='true' hoặc aria-describedby không trỏ tới câu đó thì ném 'tmc loi nhap: <kieu> cau <chu>'; câu có chữ Latin không dấu của máy chủ ('takes', 'cannot') thì ném 'tmc loi nhap: <kieu> cau may chu'. Số ô đã so khác 6 thì ném 'tmc loi nhap: thieu o <n>'. Đối chứng dương cùng fixture: NUMBER '1.234,5' phải gọi onSave(1234.5); không gọi thì ném 'tmc loi nhap: doi chung khong luu'. Chiều đỏ trong lịch sử: trên onehub OTruongPhieu chưa có, import hỏng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/lib/messages/crm.ts, apps/app/test/truong-mot-cach.dom.tsx]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_loi_may_chu
+    expected: "exit 0; -t tmc-loi-may-chu của apps/app/test/truong-mot-cach.dom.tsx. Dựng DealOverview thật ở vi với kho tRPC giả; bản ghi mang trường tự tạo SELECT 'tmc_chon' nhãn 'Chọn tmc' có hai lựa chọn. deals.update giả ném TRPCClientError mã BAD_REQUEST với message tiếng Anh 'Chọn tmc has no option \"x\".' (đúng câu packages/db/src/fields.ts sinh). Chọn một lựa chọn. Toast (bắt qua mock của sonner) không gọi đúng một lần thì ném 'tmc loi may chu: khong bao'; nội dung chứa 'has no option' thì ném 'tmc loi may chu: in cau may chu'; nội dung khác đúng chuỗi ghép từ crmMessages('vi'): câu «Chưa lưu được Chọn tmc.» nối một dấu cách với câu của mã lua-chon thì ném 'tmc loi may chu: cau <chu>'; hàng 'Chọn tmc' sau khi chờ không hiện lại nhãn lựa chọn cũ thì ném 'tmc loi may chu: khong ve gia tri cu'. Lặp cùng thước cho trường tự tạo USER 'Người tmc' với message 'Người tmc takes someone who works here.' và mã nguoi. Lặp cho trường chuẩn Tên (lượt lưu mang data.name, máy chủ trả message tiếng Anh bất kỳ): toast phải đúng «Chưa lưu được Tên.» nối câu của mã khac, không chứa message máy chủ; lệch thì ném 'tmc loi may chu: chuan ten <chu>'. Số ca đã so khác 3 thì ném 'tmc loi may chu: thieu ca <n>'. Chiều đỏ trong lịch sử: trên onehub toast in error.message, ném 'tmc loi may chu: in cau may chu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/lib/messages/crm.ts, apps/app/test/truong-mot-cach.dom.tsx]
+
+  - id: E3c
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tmc_api_tu_choi
+    expected: "exit 0; -t tmc-api-tu-choi của apps/api/test/truong-mot-cach.spec.ts trên kho thử riêng. Fixture qua đường ghi thật: trường DEAL kiểu SELECT 'tmc_api_chon' có lựa chọn A, B; lưu trữ B bằng fields.update. deals.update với giá trị là id của B phải ném TRPCError mã BAD_REQUEST — mã khác hay không ném thì ném 'tmc api tu choi: ma <ma>'. Đây là mã mà phiếu dựa vào để đổi sang câu theo kiểu (E3b). Đối chứng dương: lưu A thành công, không thì ném 'tmc api tu choi: doi chung A'. Chiều đỏ: hành vi đã có trên onehub (bài kiểm giữ) — chứng bằng đột biến tay (bỏ dòng throw BadRequestException ở applyValues để lỗi rơi xuống INTERNAL_SERVER_ERROR) phải ném 'tmc api tu choi: ma INTERNAL_SERVER_ERROR', ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/fields.ts, apps/api/src/fields/**, apps/api/src/deals/**, apps/api/test/truong-mot-cach.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_o_tich
+    expected: "exit 0; -t tmc-o-tich của apps/app/test/truong-mot-cach.dom.tsx. Phiếu: OTruongPhieu kiểu CHECKBOX nhãn 'Đã ký tmc' giá trị false. Phần tử role checkbox có tên truy cập (thuộc tính aria-labelledby trỏ nhãn, hay label[for=id]) khác 'Đã ký tmc' thì ném 'tmc o tich: ten <ten>'. Bấm vào phần tử nhãn (không bấm ô): onSave không được gọi đúng một lần với true thì ném 'tmc o tich: bam nhan <json>'. Bảng và đầu phiếu: OTruongBang và HienThiTruong với true và false ở vi; chữ khác crmMessages('vi').misc.yes / misc.no thì ném 'tmc o tich: hien <mat> <gia tri> <chu>'. Số ô đã so khác 5 thì ném 'tmc o tich: thieu o <n>'. Chiều đỏ trong lịch sử: trên onehub nhãn là span, ô tích không có tên, ném 'tmc o tich: ten '."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/test/truong-mot-cach.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_lien_ket
+    expected: "exit 0; -t tmc-lien-ket của apps/app/test/truong-mot-cach.dom.tsx. Ma trận viết sẵn mười hai ô = ba kiểu × {phiếu (OTruongPhieu), bảng (OTruongBang)} × {chuẩn, tự tạo}: URL 'onehub.vn' → href 'https://onehub.vn' + target _blank + rel chứa noopener; URL 'http://a.vn/x' → href giữ nguyên; EMAIL 'an@onehub.vn' → 'mailto:an@onehub.vn'; PHONE '0901 234 567' → 'tel:+84901234567' (đáp án viết tay, đối chiếu docSoDienThoai thật một lần ở đầu: lệch thì ném 'tmc lien ket: dap an phone lech'). Bộ mô tả 'chuẩn' lấy từ hàm khai trường chuẩn thật của company-sheet (Trang web, Email, Điện thoại), 'tự tạo' từ hàm đổi RecordFieldEntry thật. Ô nào không có thẻ a, href hay rel lệch thì ném 'tmc lien ket: <mat> <loai> <kieu> <thuoc tinh> <gia tri>'. Ở phiếu: nút có aria-label crmMessages('vi') sửa theo nhãn không có thì ném 'tmc lien ket: thieu nut sua <kieu>'; bấm nút không mở ô nhập thì ném 'tmc lien ket: nut sua khong mo'. Giá trị null: có thẻ a thì ném 'tmc lien ket: rong co a <kieu>'. Số ô đã so khác 12 thì ném 'tmc lien ket: thieu o <n>'. Chiều đỏ trong lịch sử: trên onehub ô tự tạo là chữ trơn, ném 'tmc lien ket: phieu tu-tao URL a'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/components/crm/so-dien-thoai.tsx, apps/app/test/truong-mot-cach.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_truong_chuan
+    expected: "exit 0; -t tmc-truong-chuan của apps/app/test/truong-mot-cach.dom.tsx. Đáp án viết sẵn trong test, chép từ bảng «Trường chuẩn → kiểu» của design doc: 23 dòng {phieu, khoa, kieu} (Thoả thuận: name TEXT bắt buộc, amount MONEY, currency SELECT, expectedCloseDate DATE, owner USER, description LONG_TEXT; Công ty: name TEXT bắt buộc, domain TEXT, website URL, phone PHONE, email EMAIL, city TEXT, country TEXT, owner USER; Liên hệ: firstName TEXT, lastName TEXT, title TEXT, email EMAIL, phone PHONE, linkedin URL, x URL, github URL, owner USER). Gọi ba hàm khai trường chuẩn thật mà ba phiếu dùng, với bản ghi rút qua bộ đọc đầu ra thật của API. Dòng nào thiếu hay kiểu lệch thì ném 'tmc truong chuan: <phieu> <khoa> <kieu>'; bộ mô tả có khoá ngoài đáp án thì ném 'tmc truong chuan: thua <phieu> <khoa>'. Vế quan hệ trên phiếu thật: dựng DealOverview, CompanyOverview, ContactOverview thật với kho tRPC giả; bản ghi rút qua bộ đọc đầu ra thật của API và mang trường tự tạo cùng kiểu với trường chuẩn của phiếu. Sáu cặp viết sẵn — Thoả thuận: Ngày chốt/DATE, Người phụ trách/USER; Công ty: Trang web/URL, Điện thoại/PHONE, Email/EMAIL, Thành phố/TEXT. Tìm hai hàng theo chữ nhãn trên chính DOM phiếu; thiếu hàng thì ném 'tmc truong chuan: thieu hang <phieu> <nhan>'. So khung hai hàng sau khi thay chữ nhãn và giá trị bằng một dấu chung (tên thẻ, role, lớp của mọi phần tử): khác thì ném 'tmc truong chuan: cap lech <kieu> <duong dan phan tu>'. Đối chứng của thước: test tự đổi lớp của một phần tử trong bản chép khung hàng tự tạo rồi so; không ném 'cap lech' thì ném 'tmc truong chuan: thuoc mu'. Số dòng đã so khác 23 hay số cặp khác 6 thì ném 'tmc truong chuan: thieu <n>'. Chiều đỏ trong lịch sử: trên onehub chưa có hàm khai, import hỏng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/components/crm/record-sheet/contact-sheet.tsx, apps/app/test/truong-mot-cach.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_o_bang
+    expected: "exit 0; -t tmc-o-bang của apps/app/test/truong-mot-cach.dom.tsx. Ma trận viết sẵn mười hai ô OTruongBang ở vi: NUMBER 1234.5 → '1.234,5' có tabular-nums; MONEY 123450 VND → đúng chuỗi formatMoney(123450,'VND','vi'); DATE '2026-10-22' → chữ của LocalDay cùng ngày; USER id có trong users giả → tên người qua OwnerCell; USER id không có → '—'; CHECKBOX true → misc.yes; SELECT id → nhãn lựa chọn; TEXT 'abc' → 'abc'; LONG_TEXT dài → một dòng truncate; URL, EMAIL, PHONE → có thẻ a như E5 (chỉ kiểm có href); null mọi kiểu → EmptyCellValue. Ô lệch thì ném 'tmc o bang: <kieu> <gia tri> ra <chu>'. Số ô khác 12 thì ném 'tmc o bang: thieu o <n>'. Vế cột: dựng cột của ba bảng thật (hàm cột xuất từ deals-table, companies-table, contacts-table với useFieldColumns có kho tRPC giả mang một trường tự tạo NUMBER bật showOnTable); bảng mốc viết sẵn các cột chuẩn {id, header, width, hideBelow, sortable} chép từ onehub 37e7bf27c — cột nào lệch thì ném 'tmc o bang: cot doi <bang> <id> <khoa>'; cột tự tạo không vẽ '1.234,5' thì ném 'tmc o bang: cot tu tao <bang>'. Chiều đỏ trong lịch sử: trên onehub cột tự tạo NUMBER in String(value) '1234.5', ném 'tmc o bang: cot tu tao deals'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/deals/deals-table.tsx", "apps/app/app/(app)/[slug]/companies/companies-table.tsx", "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", apps/app/test/truong-mot-cach.dom.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tmc_ten_goi
+    expected: "exit 0; -t tmc-ten-goi của apps/app/test/truong-mot-cach.spec.ts. Duyệt mọi tệp apps/app/lib/messages/*.ts (đọc thư mục lúc chạy, không danh sách tay), import từng tệp, đi đệ quy mọi chuỗi và mọi hàm trả chuỗi (gọi hàm với đối số mẫu theo arity) của nhánh 'vi'. Chuỗi nào khớp /tu[ỳỷ] chỉnh|t[uù]y chỉnh|tùy chỉnh|tuỳ chỉnh|trường động/i thì ném 'tmc ten goi: <tep> <duong dan> <chu>'. Số tệp đã duyệt nhỏ hơn số tệp .ts trong thư mục thì ném 'tmc ten goi: bo sot tep'. Vế dương cùng thước: crmMessages('vi').fieldsSheet.createHint (hay đường tương đương sau sửa) phải chứa 'trường' và không chứa 'động'; kara-ban-ghi vi set_field_value phải là 'Điền một trường'; lệch thì ném 'tmc ten goi: dong sua <khoa>'. Cặp hai chiều cùng fixture: test gọi chính hàm quét với một đối tượng thử {vi: {a: 'Điền một trường tuỳ chỉnh'}}; không ném thì ném 'tmc ten goi: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub ném 'tmc ten goi: crm.ts ... Tạo trường động để Kara tra cứu và điền sẵn.'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/**, apps/app/test/truong-mot-cach.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tmc_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/truong-mot-cach-cu-xu/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này."
+      - "Đọc dòng cuối: mã 0 kèm 'tmc man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'tmc man: …'."
+      - "Mở chín ảnh tmc-phieu-{thoa-thuan,cong-ty,lien-he}-{1280,375}.png và tmc-bang-{thoa-thuan,cong-ty,lien-he}-1280.png, đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/truong-mot-cach-cu-xu/evidence/]
+    expected: |
+      Dữ liệu dựng qua API thật trong phiên đo: mỗi loại bản ghi một bản ghi, có trường chuẩn đủ giá trị; mười trường tự tạo (một mỗi kiểu của FIELD_TYPES, bật «Hiện trên phiếu» và «Hiện trong bảng») đều có giá trị — Số 1234.5, Ô tích true, Liên kết 'onehub.vn', Email, Điện thoại '0901234567', Ngày, Chọn, Người, Chữ, Chữ dài. Phép phán theo cặp: chỉ các kiểu có cả trường chuẩn lẫn tự tạo trên cùng phiếu (Thoả thuận: Ngày, Người, Chữ, Chữ dài, Chọn; Công ty: Liên kết, Điện thoại, Email, Chữ, Người; Liên hệ: Chữ, Email, Điện thoại, Liên kết, Người). Kiểu chỉ có ở trường tự tạo (Số, Ô tích…) không vào phép che nhãn.
+      0. tmc-phieu-*-1280 (ST-phieu-doc): các hàng trường tự tạo xếp trong cùng lưới với trường chuẩn, cùng cột nhãn, cùng cỡ chữ, không tiêu đề nhóm hay nhãn phụ nào tách chúng; Số hiện «1.234,5»; Ô tích có nhãn bên trái như mọi hàng; Liên kết, Email, Điện thoại tự tạo hiện như liên kết giống Trang web, Email, Điện thoại chuẩn. do-man.mjs đọc DOM: hàng 'Số tmc' không có '1.234,5' thì thoát 1 'tmc man: so <chu>'; số thẻ a trong ba hàng Liên kết/Email/Điện thoại tự tạo khác 3 thì thoát 1 'tmc man: lien ket <n>'; mọi hàng tự tạo và hàng chuẩn của thẻ Tổng quan không cùng một phần tử cha, hay giữa chúng có phần tử tiêu đề (h1–h6, role heading) hoặc phân cách (hr, role separator) thì thoát 1 'tmc man: khoi rieng <phieu>'.
+      1. tmc-phieu-*-375: cùng phiếu ở khổ 375; do-man.mjs đo document.documentElement.scrollWidth > 375 thì thoát 1 'tmc man: 375 cuon ngang <phieu>'.
+      2. tmc-bang-*-1280 (ST-bang-o): cột trường tự tạo hiện giá trị cùng cách cột chuẩn cùng kiểu (số căn chữ số, liên kết, «Có»), ô trống «—».
+      Đối chứng bằng mắt: che chữ nhãn đi thì không chỉ ra được hàng nào tự tạo. Ngoại trừ có tên: ô Công ty, ô Giai đoạn giữ cách vẽ riêng (Hỏi-1).
+    evidence_required: [verdict, screenshot, observed, verified_at]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/components/crm/record-sheet/contact-sheet.tsx, "apps/app/app/(app)/[slug]/deals/deals-table.tsx", "apps/app/app/(app)/[slug]/companies/companies-table.tsx", "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", _acceptance/truong-mot-cach-cu-xu/rang/do-man.mjs]
