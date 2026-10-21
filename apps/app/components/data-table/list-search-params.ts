@@ -1,4 +1,11 @@
+import {
+	cachLocTruong,
+	type FieldTypeName,
+	LOC_THEO_KIEU,
+	TIEN_TO_COT_TRUONG,
+} from "@crm/db/fields-shape";
 import type { SortDirection } from "@crm/ui/lib/table-query";
+import { laGiaTriHopLe } from "@crm/validation/bo-loc-truong";
 import {
 	createLoader,
 	type GenericParserBuilder,
@@ -25,6 +32,52 @@ type ArrayParser = GenericParserBuilder<string[]> & { defaultValue: string[] };
 const fieldFiltersSchema = z.record(z.string(), z.array(z.string()));
 
 export type FieldFilters = z.infer<typeof fieldFiltersSchema>;
+
+export type TruongLoc = { key: string; type: FieldTypeName };
+
+type NguonDuongDan =
+	| URLSearchParams
+	| Record<string, string | string[] | undefined>;
+
+const CACH_LOC = [...new Set(Object.values(LOC_THEO_KIEU))];
+
+function hopLe(gia: string, type?: FieldTypeName): boolean {
+	if (type) return laGiaTriHopLe(cachLocTruong(type), gia);
+	return CACH_LOC.some((cach) => laGiaTriHopLe(cach, gia));
+}
+
+export function locGiaTriHopLe(
+	fields: FieldFilters,
+	truong: TruongLoc[] = [],
+): FieldFilters {
+	const kieu = new Map(truong.map((t) => [t.key, t.type]));
+	const ra: FieldFilters = {};
+	for (const [key, gia] of Object.entries(fields)) {
+		const sach = gia.filter((g) => hopLe(g, kieu.get(key)));
+		if (sach.length > 0) ra[key] = sach;
+	}
+	return ra;
+}
+
+export function docLocTruong(
+	nguon: NguonDuongDan,
+	cu: FieldFilters = {},
+	truong: TruongLoc[] = [],
+): FieldFilters {
+	const moi: FieldFilters = {};
+	const cap =
+		nguon instanceof URLSearchParams
+			? [...new Set(nguon.keys())].map((k) => [k, nguon.getAll(k)] as const)
+			: Object.entries(nguon).map(
+					([k, v]) => [k, v === undefined ? [] : [v].flat()] as const,
+				);
+	for (const [k, gia] of cap) {
+		if (!k.startsWith(TIEN_TO_COT_TRUONG)) continue;
+		const key = k.slice(TIEN_TO_COT_TRUONG.length);
+		if (key) moi[key] = [...(moi[key] ?? []), ...gia];
+	}
+	return locGiaTriHopLe({ ...cu, ...moi }, truong);
+}
 
 export const searchParsers = {
 	[SEARCH_PARAM.list.q]: parseAsString.withDefault(""),
@@ -81,7 +134,9 @@ export type ListSearchParams<TTab extends string, TFacet extends string> = {
 		pageSize: number;
 	};
 	parsers: ListParsers<TTab, TFacet>;
-	load: LoaderFunction<ListParsers<TTab, TFacet>>;
+	load: (
+		searchParams: NguonDuongDan | Promise<NguonDuongDan>,
+	) => Promise<ListSearchValues<TTab, TFacet>>;
 	toInput: (values: ListSearchValues<TTab, TFacet>) => ListInput<TTab, TFacet>;
 	defaultInput: () => ListInput<TTab, TFacet>;
 };
@@ -149,10 +204,18 @@ export function createListSearchParams<
 		} as ListInput<TTab, TFacet>;
 	};
 
+	const docTinh: LoaderFunction<ListParsers<TTab, TFacet>> =
+		createLoader(parsers);
+	const load = async (searchParams: NguonDuongDan | Promise<NguonDuongDan>) => {
+		const nguon = await searchParams;
+		const values = docTinh(nguon) as ListSearchValues<TTab, TFacet>;
+		return { ...values, fields: docLocTruong(nguon, values.fields) };
+	};
+
 	return {
 		config: { ...config, defaultSort, defaultDir, pageSize },
 		parsers,
-		load: createLoader(parsers),
+		load,
 		toInput,
 		defaultInput: () => toInput(defaults),
 	};

@@ -230,3 +230,212 @@ describe("lmt-cai-dat", () => {
 		expect(Object.keys(kq).length).toBe(FIELD_TYPES.length);
 	});
 });
+
+const { DealsTable } = await import("@/app/(app)/[slug]/deals/deals-table");
+const { CompaniesTable } = await import(
+	"@/app/(app)/[slug]/companies/companies-table"
+);
+const { ContactsTable } = await import(
+	"@/app/(app)/[slug]/contacts/contacts-table"
+);
+const { dealsSearchParams } = await import(
+	"@/app/(app)/[slug]/deals/deals-search-params"
+);
+const { useTableQuery } = await import(
+	"@/components/data-table/use-table-query"
+);
+const { savedViewFilters } = await import("@crm/validation/saved-view");
+
+const GIAI_DOAN = [
+	{ id: "g1", label: "Tiep can", kind: "OPEN", color: null, position: 0 },
+	{ id: "g2", label: "Thang", kind: "WON", color: null, position: 1 },
+];
+
+function datChung() {
+	const truong = dsTruong().map((f) => ({ ...f, showOnFilter: true }));
+	duLieu.set("fields.filters", () => truong);
+	duLieu.set("fields.list", () => []);
+	duLieu.set("users.list", () => []);
+	duLieu.set("savedViews.list", () => []);
+	duLieu.set("companies.options", () => []);
+	duLieu.set("giaiDoan.list", () => ({
+		stages: GIAI_DOAN,
+		canManage: false,
+		tran: 0,
+	}));
+	for (const ten of ["contacts.list", "companies.list", "deals.list"]) {
+		duLieu.set(ten, () => ({ rows: [], total: 0, facetCounts: {} }));
+	}
+	return truong;
+}
+
+function urlCuoi() {
+	return new URLSearchParams(urls.at(-1)?.queryString ?? "");
+}
+
+type Bang = { ten: string; thuTuc: string; man: () => ReactElement };
+const BANG: Bang[] = [
+	{ ten: "deals", thuTuc: "deals.list", man: () => <DealsTable /> },
+	{ ten: "companies", thuTuc: "companies.list", man: () => <CompaniesTable /> },
+	{ ten: "contacts", thuTuc: "contacts.list", man: () => <ContactsTable /> },
+];
+
+function lanTaiCuoi(thuTuc: string) {
+	return goi.filter((g) => g.ten === thuTuc).at(-1)?.vao as
+		| { fields: Record<string, string[]> }
+		| undefined;
+}
+
+let hienTai: ReturnType<typeof useTableQuery> | null = null;
+function Moc({
+	truong,
+}: {
+	truong: Array<{ key: string; type: FieldTypeName }>;
+}) {
+	hienTai = useTableQuery(dealsSearchParams, { truongLoc: truong }) as never;
+	return null;
+}
+
+describe("lmt-duong-dan", () => {
+	test("lmt-duong-dan: khoa lap field:<khoa>, may chu bang may khach, duong dan cu, gia tri hong, vong luu", async () => {
+		const truong = datChung().map(({ key, type }) => ({ key, type }));
+		await mo(<Moc truong={truong} />);
+		await nhip(3);
+		await act(async () => {
+			hienTai?.query.setFilter("field:lmt_number", ["gte:5", "lte:20"]);
+		});
+		await nhip(2);
+		await act(async () => {
+			hienTai?.query.setFilter("field:lmt_select", ["o-a"]);
+			hienTai?.query.setFilter("stage", ["g1"]);
+		});
+		await nhip(2);
+		const u = urlCuoi();
+		if (u.getAll("field:lmt_number").join(",") !== "gte:5,lte:20") {
+			throw new Error(`lmt duong dan: ghi ${u.toString()}`);
+		}
+		if (u.has("fields")) throw new Error("lmt duong dan: con json");
+		if (u.getAll("stage").join(",") !== "g1") {
+			throw new Error(`lmt duong dan: chuan doi ${u.toString()}`);
+		}
+
+		const qs =
+			"?field:lmt_number=gte:5&field:lmt_number=lte:20&field:lmt_select=o-a";
+		const mayChu = dealsSearchParams.toInput(
+			await dealsSearchParams.load(new URLSearchParams(qs)),
+		).fields;
+		for (const s of roots) {
+			await act(async () => s.root.unmount());
+			s.o.remove();
+		}
+		roots = [];
+		urls = [];
+		await mo(<Moc truong={truong} />, qs);
+		await nhip(3);
+		const mayKhach = hienTai?.input.fields;
+		const mong = { lmt_number: ["gte:5", "lte:20"], lmt_select: ["o-a"] };
+		if (
+			JSON.stringify(mayChu) !== JSON.stringify(mong) ||
+			JSON.stringify(mayKhach) !== JSON.stringify(mong)
+		) {
+			throw new Error(
+				`lmt duong dan: may chu lech may khach ${JSON.stringify({ mayChu, mayKhach })}`,
+			);
+		}
+
+		for (const bang of BANG) {
+			for (const s of roots) {
+				await act(async () => s.root.unmount());
+				s.o.remove();
+			}
+			roots = [];
+			goi = [];
+			urls = [];
+			datChung();
+			await mo(bang.man(), '?fields={"lmt_select":["o-a"]}');
+			await cho(
+				() => !!lanTaiCuoi(bang.thuTuc)?.fields?.lmt_select,
+				`${bang.ten} cu`,
+			);
+			if (
+				JSON.stringify(lanTaiCuoi(bang.thuTuc)?.fields) !==
+				JSON.stringify({ lmt_select: ["o-a"] })
+			) {
+				throw new Error("lmt duong dan: cu doc sai");
+			}
+			await cho(
+				() => urlCuoi().get("field:lmt_select") === "o-a",
+				`${bang.ten} ghi lai`,
+			);
+			if (urlCuoi().has("fields"))
+				throw new Error("lmt duong dan: cu khong ghi lai");
+
+			for (const s of roots) {
+				await act(async () => s.root.unmount());
+				s.o.remove();
+			}
+			roots = [];
+			goi = [];
+			datChung();
+			await mo(
+				bang.man(),
+				"?field:lmt_number=gte:abc&field:lmt_checkbox=maybe&field:lmt_date=this-month",
+			);
+			await cho(
+				() => !!lanTaiCuoi(bang.thuTuc)?.fields?.lmt_date,
+				`${bang.ten} hong`,
+			);
+			for (const g of goi.filter((x) => x.ten === bang.thuTuc)) {
+				const f = (g.vao as { fields: Record<string, string[]> }).fields;
+				for (const gia of ["gte:abc", "maybe"]) {
+					if (JSON.stringify(f).includes(gia)) {
+						throw new Error(`lmt duong dan: gui hong ${gia}`);
+					}
+				}
+			}
+		}
+
+		const GIA: Record<FieldTypeName, string[]> = {
+			TEXT: ["has:lmt", "none"],
+			LONG_TEXT: ["has:dai"],
+			URL: ["none"],
+			EMAIL: ["has:@x.vn"],
+			PHONE: ["has:0903"],
+			NUMBER: ["gte:1.5", "lte:20"],
+			DATE: ["overdue", "later", "none"],
+			CHECKBOX: ["yes", "no"],
+			SELECT: ["o-a", "none"],
+			USER: ["u-1", "none"],
+		};
+		for (const { key, type } of truong) {
+			for (const s of roots) {
+				await act(async () => s.root.unmount());
+				s.o.remove();
+			}
+			roots = [];
+			await mo(<Moc truong={truong} />);
+			await nhip(2);
+			await act(async () =>
+				hienTai?.query.setFilter(`field:${key}`, GIA[type]),
+			);
+			await nhip(2);
+			const view = hienTai?.currentView;
+			if (!savedViewFilters.safeParse(view).success) {
+				throw new Error("lmt duong dan: khuon luu");
+			}
+			for (const s of roots) {
+				await act(async () => s.root.unmount());
+				s.o.remove();
+			}
+			roots = [];
+			await mo(<Moc truong={truong} />);
+			await nhip(2);
+			await act(async () => hienTai?.applyView(savedViewFilters.parse(view)));
+			await nhip(2);
+			if (JSON.stringify(hienTai?.currentView) !== JSON.stringify(view)) {
+				throw new Error(`lmt duong dan: vong luu ${type}`);
+			}
+		}
+		expect(truong.length).toBe(FIELD_TYPES.length);
+	});
+});

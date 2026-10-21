@@ -7,6 +7,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 import { GIA_TRI_TRONG } from "@crm/validation/bo-loc-truong";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
+import type { TruongLoc } from "@/components/data-table/list-search-params";
 import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 import type { FieldEntity } from "./fields-entity";
@@ -42,6 +43,15 @@ function luaChonTheoCach(
 		default:
 			return [trong(m.locTruong.trong)];
 	}
+}
+
+export function useTruongLoc(entity: FieldEntity): TruongLoc[] {
+	const trpc = useTRPC();
+	const fields = useQuery(trpc.fields.filters.queryOptions({ entity }));
+	return useMemo(
+		() => (fields.data ?? []).map(({ key, type }) => ({ key, type })),
+		[fields.data],
+	);
 }
 
 export function useFieldFacets(entity: FieldEntity): DataTableFacet[] {

@@ -64,6 +64,9 @@ async function Companies({
 			trpc.companies.list.queryOptions(companiesSearchParams.toInput(values)),
 		),
 		queryClient.prefetchQuery(trpc.users.list.queryOptions()),
+		queryClient.prefetchQuery(
+			trpc.fields.filters.queryOptions({ entity: "COMPANY" }),
+		),
 	]);
 
 	return (

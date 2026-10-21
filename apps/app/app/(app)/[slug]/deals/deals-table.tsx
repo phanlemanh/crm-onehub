@@ -18,7 +18,10 @@ import { useEffect, useMemo } from "react";
 import { closingOptions } from "@/components/crm/closing-window";
 import { CompanyCell } from "@/components/crm/company-cell";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
-import { useFieldFacets } from "@/components/crm/fields/field-facets";
+import {
+	useFieldFacets,
+	useTruongLoc,
+} from "@/components/crm/fields/field-facets";
 import {
 	anDuoiTheoKieu,
 	HienThiTruong,
@@ -163,8 +166,12 @@ export function DealsTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const { query, input, setArchived, currentView, applyView } =
-		useTableQuery(dealsSearchParams);
+	const { query, input, setArchived, currentView, applyView } = useTableQuery(
+		dealsSearchParams,
+		{
+			truongLoc: useTruongLoc("DEAL"),
+		},
+	);
 	const [{ view }, setView] = useQueryStates(dealsViewParsers);
 	const board = showsBoard(view, input.archived);
 
