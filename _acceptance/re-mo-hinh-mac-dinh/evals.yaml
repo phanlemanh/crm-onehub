@@ -1,0 +1,74 @@
+schema_version: 1
+feature_slug: re-mo-hinh-mac-dinh
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.mh2_so
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, packages/db/src/settings.ts, apps/agent/test/fixtures/gateway-models-*.json, docs/agent.md, _acceptance/re-mo-hinh-mac-dinh/evidence/ke-hoach.json]
+    expected: "exit 0; DEFAULT_AGENT_MODEL đọc bằng import thật của packages/db/src/settings.ts có id bằng model Tác nhân mới ghim trong evidence/ke-hoach.json (Hỏi-1) và contextWindowTokens 1000000; id có trong fixture danh mục Gateway mà apps/agent/test/model-lui-mac-dinh.integration.spec.ts nạp (đọc đường fixture từ chính tệp test, không viết cứng); dòng «Default» ở mục Model của docs/agent.md nêu đúng id đó. Chiều đỏ trên bản sao: đổi id trong bản sao settings.ts thành zai/glm-5.2-fast → ghim «mac dinh tac nhan lech»; xoá id khỏi bản sao fixture → ghim «thieu trong danh muc»; để docs/agent.md bản sao còn zai/glm-5.2-fast → ghim «docs agent lech»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.suite_agent_db
+    paths: [apps/agent/agent/lib/model.ts, apps/agent/agent/subagents/agent_builder/agent.ts, apps/agent/agent/subagents/agent_runner/agent.ts, apps/agent/agent/agent.ts, apps/agent/test/model*.spec.ts, packages/db/src/settings.ts]
+    expected: "exit 0; trong bộ test agent, model.integration.spec.ts, model-theo-vai.integration.spec.ts và model-lui-mac-dinh.integration.spec.ts xanh: ô Cài đặt trống → modelTheoVai trả null và fallback của agent gốc, agent_builder, agent_runner là DEFAULT_AGENT_MODEL.id (model Tác nhân mới); ô mang model khác → trả model trong ô; model trong ô vắng khỏi danh mục → trả null, ghi model.bi-go-lui và lùi về DEFAULT_AGENT_MODEL.id. Phiên gốc Zalo đi qua modelTheoVai(\"tro-ly\") cùng fallback. Bộ test đã có cặp đỏ cho từng nhánh (ô có giá trị, ô trống, bị gỡ). Đầu ra của lệnh cho ba spec nêu tên có số test chạy > 0 và số skip 0 — spec bị skip không tính là xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.mh2_so
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, apps/agent/agent/lib/tai-lieu-config.ts, apps/agent/agent/lib/tai-lieu-nop.ts, _acceptance/model-theo-vai-do-lai/evidence/ke-hoach.json]
+    expected: "exit 0; TAI_LIEU_AGENT đọc bằng import thật: hoi.maModel bằng model kho mới (Hỏi-3), hoi.gateway.zeroDataRetention true; soan.maModel bằng giá trị ghim theo Hỏi-2 trong evidence/ke-hoach.json; với MỌI maModel đang dùng (hoi, soan) bangGia có dòng và giá vào/ra mỗi triệu token bằng giá chọn theo Hỏi-5 ghim trong evidence/ke-hoach.json (niêm yết hay Gateway tính thật, kèm hệ số), quy đổi đơn vị, sai số 1e-9; chiPhiUsd của tai-lieu-nop.ts với model kho mới và 1000 token vào, 100 token ra trả số dương bằng công thức giá. Chiều đỏ trên bản sao: xoá dòng giá model kho mới → ghim «thieu gia <model>»; đổi zeroDataRetention thành false → ghim «mat zdr kho»; đổi giá vào lệch giá chụp → ghim «gia lech <model>»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.mh2_so
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, _acceptance/re-mo-hinh-mac-dinh/evidence/**]
+    expected: "exit 0; evidence/tac-nhan.jsonl có đúng số lượt ghim trong evidence/ke-hoach.json (Hỏi-4, không viết số cứng), mỗi dòng qua khuôn Zod, có kết quả, giây, bi_cat, model Gateway trả cho phiên con agent_builder, tệp kết xuất aiChiPhi tồn tại; o_cai_dat của kho đo đọc lại là null trước eval; model Gateway trả bằng model Tác nhân mới ở mọi lượt; số lượt qua dưới 180 giây so với ngưỡng nguong.json của MH4 (đọc tệp, không viết số) và bộ so in «tac nhan dat <qua>/<so>» hoặc «tac nhan khong dat». Chiều đỏ trên bản sao: đổi model Gateway trả một lượt thành zai/glm-5.2-fast → ghim «sai model tac-nhan <lượt>»; đặt o_cai_dat một lượt thành google/gemini-3.8-flash → ghim «o cai dat khong trong <lượt>»; xoá một dòng → ghim «thieu luot tac-nhan <lượt>»; đặt hai lượt thành hỏng → in «tac nhan khong dat»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.mh2_so
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, _acceptance/re-mo-hinh-mac-dinh/evidence/**, _acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md]
+    expected: "exit 0; evidence/kho/ có bảng theo tầng, dòng «Tổng», mã không đạt kèm nhãn, model Gateway trả cho kho và gốc, o_cai_dat đọc lại null trước lượt, kết xuất aiChiPhi qua khuôn; tập mã vòng một toEqual 46 mã có nhom khác «khong-phai-quy-dinh» của bo-mau.json, tập vòng hai toEqual 50 mã; model kho bằng model kho mới, model gốc bằng model Tác nhân mới; đọc bằng kiemBangChung của _acceptance/bo-cau-hoi-mau/rang/bang-do.ts, mỗi tầng so mốc 13/10 không kém quá 1 câu và câu lỗi không quá ngưỡng ghim trong evidence/ke-hoach.json theo Hỏi-3 (đọc tệp, không viết số), bộ so in «kho dat» hoặc «kho khong dat: <lý do>». Chiều đỏ trên bản sao: đổi model gốc thành google/gemini-3.8-flash → ghim «sai model goc zalo»; xoá một mã vòng hai → ghim «thieu ma <mã>»; ke-hoach ghim ngưỡng 2 và bản sao 3 câu lỗi → in «kho khong dat»; đối chứng: ke-hoach ghim 3 và bản sao 3 câu lỗi → in «kho dat»; đặt o_cai_dat thành giá trị → ghim «o cai dat khong trong kho»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.mh2_so
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, _acceptance/re-mo-hinh-mac-dinh/evidence/**]
+    expected: "exit 0; evidence/chi-phi.json qua khuôn, mỗi lượt AC-4, AC-5 một dòng có usd tính lại từ costUsd Gateway trả trong kết xuất aiChiPhi của lượt (toEqual, sai số 1e-6), không từ bangGia, không hai dòng trùng khoá; tổng ≤ tran_usd đọc từ evidence/ke-hoach.json; lượt «dừng vì trần» không có tệp bằng chứng và vai thiếu lượt được in «chua du so». Chiều đỏ trên bản sao: nâng usd một lượt để tổng vượt trần mà còn lượt sau → ghim «vuot tran van chay»; sửa usd một dòng lệch kết xuất → ghim «lech usd <khoá>»; hai dòng cùng khoá → ghim «trung khoa chi phi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.mh2_pham_vi
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**]
+    expected: "exit 0; git diff --name-only origin/onehub HEAD không có tệp dưới apps/agent-okr/, apps/agent/agent/lib/okr/, apps/app/components/crm/record-sheet/; MO_HINH_JUDGE và MO_HINH (Soạn OKR) đọc bằng import thật trùng giá trị ở origin/onehub (git show); packages/db/test/measure-db-model.spec.ts không đổi so với origin/onehub và MEASURE_DATABASE.agentModel.id khác DEFAULT_AGENT_MODEL.id; git lỗi thì exit 2. Chiều đỏ trên bản sao danh sách: thêm apps/agent/agent/lib/okr/config.ts → ghim tên tệp; bản sao giá trị judge khác onehub → ghim «judge doi»; bản sao MEASURE_DATABASE.agentModel bằng mặc định → ghim «kho do trung mac dinh»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.mh2_so
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, _acceptance/re-mo-hinh-mac-dinh/evidence/**, _acceptance/re-mo-hinh-mac-dinh/opportunity.md, _acceptance/tac-nhan-glm-5-3-cham/evidence/aichiphi-moc-*.json]
+    expected: "exit 0; mốc mỗi vai đọc từ đường ghim trong evidence/ke-hoach.json theo Hỏi-6 (Tác nhân: trung bình tổng costUsd của các tệp aichiphi-moc-*.json của MH3, tính lại; kho: theo cách ghim); tiền Gateway thật trung bình mỗi lượt của AC-4, AC-5 tính lại từ chi-phi.json; với MỖI vai đổi model (tập vai đọc từ ke-hoach.json) bộ so in «re hon <vai> <phần trăm>» khi thấp hơn mốc, «khong re hon <vai>» khi không; ngưỡng sống/chết theo Hỏi-6 có trong phần ngưỡng của opportunity.md và bốn trường stage, decision, decided_by, decided_at trùng bản ở origin/onehub. Chiều đỏ trên bản sao: nâng costUsd lượt Tác nhân vượt mốc → in «khong re hon tac-nhan»; đối chứng giữ nguyên → in «re hon tac-nhan»; đổi decided_by trong bản sao opportunity.md → ghim «o co hoi bi sua»; xoá dòng ngưỡng sống → ghim «thieu nguong song»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.mh2_so
+    paths: [_acceptance/re-mo-hinh-mac-dinh/rang/**, _acceptance/re-mo-hinh-mac-dinh/design.md, apps/**/*.ts, packages/**/*.ts]
+    expected: "exit 0; răng tiêu thụ: liệt kê mọi tệp .ts dưới apps/ và packages/ (trừ test, node_modules, generated, .output) có DEFAULT_AGENT_MODEL hoặc gọi modelTheoVai; tập tệp toEqual danh sách ghim trong mục «Nơi tiêu thụ model mặc định» của design.md (rút bằng marker, không viết lại trong răng); tập purpose lùi về vai tro-ly, tac-nhan đọc từ lib/model.ts toEqual danh sách ghim. Chiều đỏ trên bản sao cây: thêm một tệp tham chiếu DEFAULT_AGENT_MODEL → ghim «tieu thu chua ke <tệp>»; bỏ một tệp khỏi danh sách design → ghim «tieu thu chua ke <tệp>»; đối chứng: cây nguyên → xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
