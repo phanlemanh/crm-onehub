@@ -1,4 +1,4 @@
-# Review findings: ngan-kr-mot-cho (round 3)
+# Review findings: ngan-kr-mot-cho (round 4)
 
 ## Trong hợp đồng
 
@@ -8,16 +8,16 @@ Không có finding mới ở round này.
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-Không có mục mới ở round này (các mục mang từ round trước do máy tự chèn, nhãn r<N>).
+Không có mục mới ở round này (18 mục carried từ các round trước do máy tự chèn).
 
-- **Ảnh ngan-sau-cap-nhat-1440 trái với bước E12 «số dòng lịch sử trong ngăn tăng 1» (r2)**
+- **Ảnh ngan-sau-cap-nhat-1440 trái với bước E12 «số dòng lịch sử trong ngăn tăng 1» (r2 · tệp đã đổi)**
   Người dùng thấy gì: Cập nhật một KR hai lần trong cùng một tuần thì lịch sử chỉ hiện một dòng với giá trị mới nhất, không thêm dòng thứ hai. Người dùng vẫn thấy đúng số vừa gửi, nhưng không thấy lần cập nhật trước của tuần đó.
   Căn cứ: Nhẹ: số vừa gửi hiện đúng và không mất dữ liệu mới, chỉ là lịch sử gom theo tuần; chỉ cần ghi rõ cách gom này là đủ.
   file: `_acceptance/ngan-kr-mot-cho/evidence/ngan-sau-cap-nhat-1440.png`
   severity: medium
   Đề xuất: known-limits
 
-- **Ảnh so-do-1440 và cua-toi-1440 trùng nhau từng byte, nên không cho thấy hai lối vào khác nhau (r2)**
+- **Ảnh so-do-1440 và cua-toi-1440 trùng nhau từng byte, nên không cho thấy hai lối vào khác nhau (r2 · tệp đã đổi)**
   Người dùng thấy gì: Hai ảnh minh hoạ lối mở KR từ sơ đồ và từ Của tôi giống hệt nhau vì ngăn phủ kín màn hình. Người ký chỉ có nhật ký chứ không có ảnh để thấy hai lối đều mở đúng ngăn.
   Căn cứ: Nhẹ: chỉ ảnh minh hoạ yếu, người dùng cuối không bị ảnh hưởng và việc mở đúng ngăn đã có nhật ký chứng minh; sửa sau rẻ nhưng không cấp thiết.
   file: `_acceptance/ngan-kr-mot-cho/evidence/so-do-1440.png`
@@ -135,5 +135,9 @@ Không có mục mới ở round này (các mục mang từ round trước do m�
   file: `apps/app/test/ngan-kr-mot-cho.dom.tsx`
   severity: low
   Đề xuất: wont-fix
+
+## Chưa adversarial-verify (refuter chết)
+
+Không có.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
