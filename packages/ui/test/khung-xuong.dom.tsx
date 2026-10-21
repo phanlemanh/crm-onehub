@@ -15,6 +15,7 @@ const MA_TRAN: readonly [HinhKhungXuong, Record<string, number>][] = [
 	["the", { the: 2, hang: 6 }],
 	["tong-quan", { "o-so": 4, hang: 5 }],
 	["chi-tiet", { "tieu-de": 1, doan: 3 }],
+	["bang-hai-dong", { "thanh-cong-cu": 1, "dau-bang": 1, hang: 5 }],
 ];
 
 const TABBABLE =
@@ -68,7 +69,11 @@ function kiemKhungXuong(
 		phai(thuc === so, `kmc-xuong: ${hinh} co ${thuc} ${loai}, bang ghi ${so}`);
 	}
 	phai(
-		(khung?.querySelectorAll(TABBABLE).length ?? 0) === 0,
+		(khung?.querySelectorAll(
+			TABBABLE.split(", ")
+				.map((s) => `[aria-hidden="true"] ${s}`)
+				.join(", "),
+		).length ?? 0) === 0,
 		"kmc-xuong: vach nhan tieu diem",
 	);
 }
@@ -105,6 +110,95 @@ describe("khung-xuong", () => {
 		expect(() => kiemKhungXuong(o, "the", { the: 2, hang: 6 })).toThrow(
 			"kmc-xuong: thieu dong Đang tải…",
 		);
+	});
+});
+
+describe("bang-hai-dong", () => {
+	function kiemHaiTang(o: HTMLElement) {
+		const dong = [
+			...o.querySelectorAll<HTMLElement>(
+				'[data-khung-xuong="bang-hai-dong"] [data-khung-hang="hang"]',
+			),
+		];
+		for (const d of dong)
+			phai(
+				d.querySelectorAll('[data-slot="skeleton"]').length >= 2,
+				"kmc-xuong: bang-hai-dong co dong it hon hai vach",
+			);
+	}
+
+	test("moi dong co it nhat hai vach", () => {
+		kiemHaiTang(ve(<KhungXuong hinh="bang-hai-dong" />));
+	});
+
+	test("chieu do: bot mot dong thi bai kiem bat", () => {
+		const o = ve(<KhungXuong hinh="bang-hai-dong" />);
+		o.querySelector('[data-khung-hang="hang"]')?.remove();
+		expect(() =>
+			kiemKhungXuong(o, "bang-hai-dong", {
+				"thanh-cong-cu": 1,
+				"dau-bang": 1,
+				hang: 5,
+			}),
+		).toThrow("kmc-xuong: bang-hai-dong co 4 hang, bang ghi 5");
+	});
+
+	test("nhan thay cau trang thai", () => {
+		const o = ve(<KhungXuong hinh="bang-hai-dong" nhan="Đang tải OKR…" />);
+		const trangThai = o.querySelectorAll('[role="status"]');
+		phai(
+			trangThai.length === 1 && trangThai[0]?.textContent === "Đang tải OKR…",
+			"kmc-xuong: nhan khong thay cau trang thai",
+		);
+	});
+
+	test("thanhCongCu nam ngoai phan an va nhan tieu diem", () => {
+		const o = ve(
+			<KhungXuong
+				hinh="bang-hai-dong"
+				thanhCongCu={
+					<button data-thu type="button">
+						Chọn
+					</button>
+				}
+			/>,
+		);
+		const nut = o.querySelector<HTMLButtonElement>("[data-thu]");
+		phai(nut !== null, "kmc-xuong: thieu khe thanhCongCu");
+		phai(
+			nut?.closest('[aria-hidden="true"]') === null,
+			"kmc-xuong: thanhCongCu nam trong phan an",
+		);
+		act(() => nut?.focus());
+		phai(
+			document.activeElement === nut,
+			"kmc-xuong: thanhCongCu khong nhan tieu diem",
+		);
+		phai(
+			o.querySelectorAll('[data-khung-hang="thanh-cong-cu"]').length === 1,
+			"kmc-xuong: thanhCongCu khong thay hang cong cu",
+		);
+		kiemHaiTang(o);
+		kiemKhungXuong(o, "bang-hai-dong", { "dau-bang": 1, hang: 5 });
+	});
+
+	test("chieu do: thanhCongCu trong phan an thi bai kiem bat", () => {
+		const o = ve(
+			<KhungXuong
+				hinh="bang-hai-dong"
+				thanhCongCu={
+					<button data-thu type="button">
+						Chọn
+					</button>
+				}
+			/>,
+		);
+		const an = o.querySelector('[aria-hidden="true"]');
+		const nut = o.querySelector("[data-thu]");
+		if (an && nut) act(() => an.appendChild(nut));
+		expect(() =>
+			kiemKhungXuong(o, "bang-hai-dong", { "dau-bang": 1, hang: 5 }),
+		).toThrow("kmc-xuong: vach nhan tieu diem");
 	});
 });
 
