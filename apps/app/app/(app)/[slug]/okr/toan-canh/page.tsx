@@ -12,6 +12,7 @@ import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
+import { LOC_MOI_KR_RONG } from "../moi-kr/tham-so";
 import { CuonToiNeo } from "./cuon-toi-neo";
 import { SucKhoe } from "./suc-khoe/suc-khoe";
 import { ToanCanh } from "./toan-canh";
@@ -59,6 +60,11 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 			? queryClient.prefetchQuery(trpc.okr.sucKhoe.queryOptions({ cycleId }))
 			: null,
 		quanTri ? queryClient.prefetchQuery(trpc.okr.moCoi.queryOptions({})) : null,
+		cycleId
+			? queryClient.prefetchQuery(
+					trpc.okr.moiKr.queryOptions({ cycleId, loc: LOC_MOI_KR_RONG }),
+				)
+			: null,
 	]);
 
 	return (
