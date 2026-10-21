@@ -39,6 +39,7 @@ import {
 } from "./hang-cong-cu";
 import { TheConBo } from "./the-con";
 import { ViecCuaBo } from "./viec-cua-bo";
+import { ViTriBo } from "./vi-tri-bo";
 
 const PHA_CO_CHAM: readonly PhaChuKy[] = ["cham-diem", "da-dong"];
 
@@ -176,7 +177,10 @@ export function TheoDonVi() {
 	);
 	const coThe = (noiDung: ReactNode) => (
 		<div className="flex flex-col gap-6">
-			{theCon}
+			<div className="flex flex-col gap-3">
+				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={null} />
+				{theCon}
+			</div>
 			{noiDung}
 		</div>
 	);
@@ -305,7 +309,10 @@ export function TheoDonVi() {
 
 	return (
 		<div className="flex flex-col gap-6">
-			{theCon}
+			<div className="flex flex-col gap-3">
+				<ViTriBo ky={url[SEARCH_PARAM.okr.ky]} tenBo={dv.ten} />
+				{theCon}
+			</div>
 			{than}
 			<NganTaoMucTieu
 				suaDuoc={byUnit.data?.canCreate}

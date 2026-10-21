@@ -34,6 +34,7 @@ import { useChuKy } from "../chon-chu-ky";
 import { parseAsPhamViBo } from "../okr-search-params";
 import { ChuaChuKy } from "../trang-thai-okr";
 import { KhungDangTaiDonVi } from "./hang-cong-cu";
+import { ViTriBo } from "./vi-tri-bo";
 
 type HangBo = RouterOutputs["okr"]["danhSachBo"]["hang"][number];
 
@@ -99,6 +100,7 @@ export function DanhSachBo() {
 
 	return (
 		<div className="flex min-w-0 flex-col gap-4" data-danh-sach-bo="">
+			<ViTriBo ky={ky} />
 			<div className="max-w-full overflow-x-auto" data-loc-bo="">
 				<ToggleGroup
 					aria-label={m.loc.nhan}

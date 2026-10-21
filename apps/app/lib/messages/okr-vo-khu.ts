@@ -19,7 +19,6 @@ const vi = {
 	},
 	veSoDo: "Về Sơ đồ",
 	boOkr: {
-		moTa: "Mỗi đơn vị một bộ OKR trong chu kỳ.",
 		loc: {
 			nhan: "Phạm vi",
 			"tat-ca": "Tất cả",
@@ -93,7 +92,6 @@ const en: OkrVoKhuMessages = {
 	},
 	veSoDo: "Back to Map",
 	boOkr: {
-		moTa: "One OKR set per unit in the cycle.",
 		loc: {
 			nhan: "Scope",
 			"tat-ca": "All",
