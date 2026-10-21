@@ -102,10 +102,10 @@ function maTranAc4(n) {
 			nhan: "/okr/so-do",
 			duong: "/okr/so-do",
 			t: tq,
-			cho: "[data-so-do-gop-vao] [data-cay-khoa]",
+			cho: "[data-man-so-do] [data-so-do-the]",
 			kiem: async (t) => {
 				const so = await t.trang.$$eval(
-					"[data-so-do-gop-vao] [data-cay-khoa]",
+					"[data-man-so-do] [data-so-do-the]",
 					(e) => e.length,
 				);
 				return { dat: so > 0, dau: `so do gop vao ${so} nut` };
@@ -121,7 +121,7 @@ function maTranAc4(n) {
 					quanh: !!document.querySelector("[data-quanh]"),
 					ve:
 						document
-							.querySelector("[data-nut='ve-so-do']")
+							.querySelector("[data-nut='ve-ca-cong-ty']")
 							?.getAttribute("href") ?? null,
 				}));
 				const ve = r.ve === null ? null : n.boSlug(new URL(r.ve, APP).pathname);
