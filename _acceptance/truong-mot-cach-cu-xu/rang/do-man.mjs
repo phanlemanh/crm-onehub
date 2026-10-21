@@ -2,7 +2,9 @@ import { mkdirSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { db } from "../../../packages/db/src/index.ts";
 import { isMeasureDatabase } from "../../../packages/db/src/measure-database.ts";
+import { WORKSPACE_ID } from "../../../packages/db/src/workspace.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 import {
 	API,
@@ -14,6 +16,7 @@ import {
 	ket,
 	khongDo,
 	mu,
+	NGUOI,
 	phien,
 	suySlug,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
@@ -26,6 +29,7 @@ const BANG_CHUNG = (() => {
 })();
 const DO = {
 	choHydrateMs: 1500,
+	oToiThieu: 120,
 	kho: [
 		{ rong: 1280, cao: 900 },
 		{ rong: 375, cao: 812 },
@@ -48,6 +52,23 @@ const cay = await canhCay();
 if (cay.ket !== "dung-cay") await khongDo(...cay.dong);
 
 const cookie = phien();
+const quanTri = await db.user.findUniqueOrThrow({
+	where: { email: NGUOI },
+	select: { id: true },
+});
+await db.member.upsert({
+	where: {
+		organizationId_userId: { organizationId: WORKSPACE_ID, userId: quanTri.id },
+	},
+	create: {
+		id: `member-${quanTri.id}`,
+		organizationId: WORKSPACE_ID,
+		userId: quanTri.id,
+		role: "admin",
+		createdAt: new Date(),
+	},
+	update: { role: "admin" },
+});
 const slug = await suySlug(cookie);
 
 async function tao(duong, vao) {
@@ -218,9 +239,12 @@ const PHIEU = [
 async function docPhieu(nhan) {
 	return trang.evaluate((N) => {
 		const hang = (chu) => {
-			const l = [...document.querySelectorAll("label")].find(
-				(x) => x.textContent?.trim() === chu,
-			);
+			const dung = (x) =>
+				x.textContent?.trim() === chu &&
+				x.parentElement?.firstElementChild === x;
+			const l =
+				[...document.querySelectorAll("[role=dialog] label")].find(dung) ??
+				[...document.querySelectorAll("[role=dialog] span")].find(dung);
 			return l?.parentElement ?? null;
 		};
 		const so = hang(N.NUMBER);
@@ -244,8 +268,15 @@ async function docPhieu(nhan) {
 					ngan = true;
 			}
 		}
+		const nhanTatCa = [
+			...document.querySelectorAll("[role=dialog] label"),
+		].filter((x) => x.parentElement?.firstElementChild === x);
+		const rongO = nhanTatCa
+			.map((x) => x.parentElement?.children[1]?.getBoundingClientRect().width ?? 0)
+			.filter((w) => w > 0);
 		const doc_ = document.documentElement;
 		return {
+			oHepNhat: rongO.length ? Math.min(...rongO) : 0,
 			so: so?.innerText ?? null,
 			lienKet,
 			soTuTao: tuTao.length,
@@ -265,6 +296,11 @@ for (const p of PHIEU) {
 		await trang.screenshot({ path: join(BANG_CHUNG, anh), fullPage: false });
 		const nhan = `${p.ten} ${kho.rong}`;
 		if (kho.rong >= 768) {
+			bao(
+				d.oHepNhat >= DO.oToiThieu,
+				`DUNG AC-9 ${nhan}: o gia tri hep nhat ${Math.round(d.oHepNhat)}px`,
+				`tmc man: o gia tri hep ${p.ten} ${Math.round(d.oHepNhat)}px`,
+			);
 			bao(
 				d.so?.includes("1.234,5") === true,
 				`DUNG AC-9 ${nhan}: Số tmc hien 1.234,5`,
