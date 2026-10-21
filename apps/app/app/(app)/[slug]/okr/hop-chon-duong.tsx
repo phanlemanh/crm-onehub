@@ -111,7 +111,7 @@ function DongDuong({
 				<ItemMedia variant="icon">{icon}</ItemMedia>
 				<ItemContent>
 					<ItemTitle>{ten}</ItemTitle>
-					<ItemDescription>{moTa}</ItemDescription>
+					<ItemDescription unclamped>{moTa}</ItemDescription>
 				</ItemContent>
 				{phu ? <ItemActions>{phu}</ItemActions> : null}
 			</button>
