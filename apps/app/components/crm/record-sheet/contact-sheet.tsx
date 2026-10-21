@@ -342,7 +342,13 @@ type KhoaChuLienHe =
 
 export function truongChuanLienHe(
 	contact: Contact,
-	ngu: {
+	{
+		m,
+		luu,
+		dangLuu,
+		nguoiDung,
+		kara,
+	}: {
 		m: RecordSheetMessages;
 		luu: LuuLienHe;
 		dangLuu: (khoa: string) => boolean;
@@ -350,7 +356,6 @@ export function truongChuanLienHe(
 		kara?: (khoa: string) => Pick<MoTaTruong, "nguon" | "deXuat">;
 	},
 ): MoTaTruong[] {
-	const { m, luu, dangLuu, nguoiDung, kara } = ngu;
 	const chu = (giaTri: string | number | boolean | null) =>
 		giaTri === null ? null : String(giaTri);
 	const truong = (

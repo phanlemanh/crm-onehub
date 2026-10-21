@@ -460,6 +460,9 @@ const GHIM = {
 	...GHIM_LO_TRINH,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
+	"crm:truongKieu.trong": ["1 không được để trống.", "12 không được để trống."],
+	"crm:truongKieu.chuaLuu": ["Chưa lưu được 1.", "Chưa lưu được 12."],
+	"crm:truongKieu.sua": ["Sửa 1", "Sửa 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 	"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
 	"auth:datMatKhau.description": [

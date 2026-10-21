@@ -379,7 +379,13 @@ type LuuCongTy = (data: Record<string, string | null>) => void;
 
 export function truongChuanCongTy(
 	company: Company,
-	ngu: {
+	{
+		m,
+		locale,
+		luu,
+		dangLuu,
+		nguoiDung,
+	}: {
 		m: RecordSheetMessages;
 		locale: Locale;
 		luu: LuuCongTy;
@@ -387,7 +393,6 @@ export function truongChuanCongTy(
 		nguoiDung: Owner[] | undefined;
 	},
 ): MoTaTruong[] {
-	const { m, locale, luu, dangLuu, nguoiDung } = ngu;
 	const chu = (giaTri: string | number | boolean | null) =>
 		giaTri === null ? null : String(giaTri);
 	const truongChu = (

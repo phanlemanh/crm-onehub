@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import path from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
 import {
 	type DocNhap,
@@ -75,5 +76,87 @@ describe("tmc-doc-so", () => {
 			daSo += 1;
 		}
 		expect(daSo).toBe(4);
+	});
+});
+
+const TU_CAM = /t[uù]y chỉnh|tuỳ chỉnh|tùy chỉnh|trường động/i;
+
+type Vet = { duong: string; chu: string };
+
+function quetChu(giaTri: unknown, duong: string, ra: Vet[], da: Set<unknown>): void {
+	if (typeof giaTri === "string") {
+		if (TU_CAM.test(giaTri)) ra.push({ duong, chu: giaTri });
+		return;
+	}
+	if (typeof giaTri === "function") {
+		const doiSo = Array.from({ length: giaTri.length }, () => "x");
+		try {
+			quetChu(giaTri(...doiSo), `${duong}()`, ra, da);
+		} catch {}
+		return;
+	}
+	if (giaTri && typeof giaTri === "object") {
+		if (da.has(giaTri)) return;
+		da.add(giaTri);
+		for (const [khoa, con] of Object.entries(giaTri)) {
+			quetChu(con, `${duong}.${khoa}`, ra, da);
+		}
+	}
+}
+
+function nhanhViet(mod: Record<string, unknown>): unknown[] {
+	const ra: unknown[] = [];
+	for (const giaTri of Object.values(mod)) {
+		if (typeof giaTri === "function" && giaTri.length === 1) {
+			try {
+				ra.push(giaTri("vi"));
+			} catch {}
+		} else if (giaTri && typeof giaTri === "object" && "vi" in giaTri) {
+			ra.push((giaTri as { vi: unknown }).vi);
+		}
+	}
+	return ra;
+}
+
+describe("tmc-ten-goi", () => {
+	test("chu tieng Viet cua app khong con tuy chinh, truong dong", async () => {
+		const { readdirSync } = await import("node:fs");
+		const thuMuc = path.join(import.meta.dir, "..", "lib", "messages");
+		const tep = readdirSync(thuMuc).filter((t) => t.endsWith(".ts"));
+		let daDuyet = 0;
+		const vet: Vet[] = [];
+		for (const t of tep) {
+			const mod = (await import(path.join(thuMuc, t))) as Record<
+				string,
+				unknown
+			>;
+			for (const nhanh of nhanhViet(mod)) {
+				quetChu(nhanh, t, vet, new Set());
+			}
+			daDuyet += 1;
+		}
+		if (daDuyet < tep.length) throw new Error("tmc ten goi: bo sot tep");
+		if (vet[0]) {
+			throw new Error(`tmc ten goi: ${vet[0].duong} ${vet[0].chu}`);
+		}
+
+		const { crmMessages } = await import("../lib/messages/crm");
+		const goiY = crmMessages("vi").fields.createHint;
+		if (!goiY.includes("trường") || goiY.includes("động")) {
+			throw new Error("tmc ten goi: dong sua createHint");
+		}
+		const karaMod = (await import("../lib/messages/kara-ban-ghi")) as Record<
+			string,
+			unknown
+		>;
+		const coDong = JSON.stringify(nhanhViet(karaMod)).includes(
+			'"set_field_value":"Điền một trường"',
+		);
+		if (!coDong) throw new Error("tmc ten goi: dong sua set_field_value");
+
+		const thu: Vet[] = [];
+		quetChu({ a: "Điền một trường tuỳ chỉnh" }, "thu", thu, new Set());
+		if (thu.length !== 1) throw new Error("tmc ten goi: thuoc mu");
+		expect(daDuyet).toBe(tep.length);
 	});
 });

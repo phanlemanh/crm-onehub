@@ -298,14 +298,18 @@ type LuuThoaThuan = (data: {
 
 export function truongChuanThoaThuan(
 	deal: Deal,
-	ngu: {
+	{
+		m,
+		luu,
+		dangLuu,
+		nguoiDung,
+	}: {
 		m: RecordSheetMessages;
 		luu: LuuThoaThuan;
 		dangLuu: (khoa: string) => boolean;
 		nguoiDung: Owner[] | undefined;
 	},
 ): MoTaTruong[] {
-	const { m, luu, dangLuu, nguoiDung } = ngu;
 	const currency = dealCurrency(deal.currency);
 	return [
 		{

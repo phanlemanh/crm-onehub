@@ -562,7 +562,7 @@ const vi = {
 		shapesCompany: "Trường này áp cho mọi công ty trong OneHub Center.",
 		shapesContact: "Trường này áp cho mọi cá nhân trong OneHub Center.",
 		shapesDeal: "Trường này áp cho mọi thoả thuận trong OneHub Center.",
-		createHint: "Tạo trường động để Kara tra cứu và điền sẵn.",
+		createHint: "Tạo trường để Kara tra cứu và điền sẵn.",
 		retry:
 			"Trường của bạn vẫn còn. Thử lại sau một lát, trước khi tạo thêm gì mới.",
 		keyHint:
