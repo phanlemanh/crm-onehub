@@ -48,7 +48,7 @@ const KY = idMau("chu-ky", "quy4");
 const GIU_MS = 700;
 const MO_SAU_MS = 250;
 const MAU_TOI_THIEU = 3;
-const MAT_LOC = /^Trạng thái/;
+const MAT_LOC = [/^Trạng thái/, /^Loại/];
 const d = await lib.moDo();
 const sai = [];
 const dong = (dung, cau) => {
@@ -94,6 +94,7 @@ const batMau = (idCu) => {
 		getComputedStyle(e).visibility !== "hidden";
 	const tat = (s, goc = document) => [...goc.querySelectorAll(s)].filter(hien);
 	const batDau = performance.now();
+	window.__ldvBatDau = batDau;
 	const lay = () => {
 		const vung = tat("[data-slot=vung-dang-tai]")[0] ?? null;
 		const bang = tat("[data-slot=table-container]")[0] ?? null;
@@ -194,23 +195,23 @@ const timNut = (t, s, chu) =>
 		chu,
 	);
 
-async function moMatLoc(t) {
+async function moMatLoc(t, mat = MAT_LOC[0]) {
 	const nut = await timNut(t, "button[aria-haspopup=menu]", "Lọc");
 	if (!(await nut.evaluate((e) => e !== null)))
 		await khongDo("khong thay nut Loc");
 	await nut.click();
 	await d.doi(t, () => document.querySelector("[role=menu]") !== null);
-	const mat = await t.evaluateHandle(
+	const muc = await t.evaluateHandle(
 		(nguon) =>
 			[...document.querySelectorAll("[role=menu] [role=menuitem]")].find((e) =>
 				new RegExp(nguon).test((e.textContent ?? "").trim()),
 			) ?? null,
-		MAT_LOC.source,
+		mat.source,
 	);
-	if (!(await mat.evaluate((e) => e !== null)))
-		await khongDo("menu Loc khong co mat Trang thai");
-	await mat.hover();
-	await mat.click();
+	if (!(await muc.evaluate((e) => e !== null)))
+		await khongDo(`menu Loc khong co mat ${mat.source}`);
+	await muc.evaluate((e) => e.focus());
+	await t.keyboard.press("ArrowRight");
 	await d.doi(
 		t,
 		() =>
@@ -239,8 +240,32 @@ async function bamLuaChon(t, i) {
 			)[i] ?? null,
 		i,
 	);
-	await o.click();
+	await o.evaluate((e) => e.focus());
+	await t.keyboard.press("Enter");
 	return o;
+}
+
+async function dongMenu(t) {
+	for (let i = 0; i < 3; i += 1) {
+		const con = await t.evaluate(
+			() => document.querySelector("[role=menu]") !== null,
+		);
+		if (!con) return;
+		await t.keyboard.press("Escape");
+		await choMs(150);
+	}
+}
+
+async function chonMat(t) {
+	for (const mat of MAT_LOC) {
+		await moMatLoc(t, mat);
+		const ds = await luaChon(t);
+		await dongMenu(t);
+		const coDong = ds.filter((x) => x.so > 0).length;
+		const rong = ds.some((x) => x.so === 0);
+		if (coDong >= 2 && rong) return mat;
+	}
+	return null;
 }
 
 const daTich = (o) => o.evaluate((e) => e.getAttribute("aria-checked") === "true");
@@ -254,7 +279,21 @@ try {
 	if (!quanTriMa || !P_DS) await khongDo("bo mau thieu quan tri hoac phap-che");
 	const QT = phienCua(`${quanTriMa}@${MIEN}`);
 	await d.batTrinhDuyet(QT);
-	const DON = `pb:${idMau("pb", P_DS.ma)}`;
+	let DON = `pb:${idMau("pb", P_DS.ma)}`;
+	let MAT = null;
+	for (const don of [DON, null]) {
+		const t = await d.moTrang(QT, 1440, duongDon(don));
+		await choBang(t);
+		MAT = await chonMat(t);
+		await t.close();
+		if (MAT) {
+			DON = don;
+			break;
+		}
+	}
+	if (!MAT)
+		await khongDo("khong don vi nao co mat Loc >= 2 gia tri co dong va 1 gia tri rong");
+	console.log(`don: ${DON ?? "goc"} · mat loc: ${MAT.source}`);
 	const tichDuoc = (ds) => ds.filter((x) => x.so > 0);
 
 	console.log("== tich loc 1440");
@@ -262,14 +301,17 @@ try {
 		const t = await d.moTrang(QT, 1440, duongDon(DON));
 		await choBang(t);
 		const chan = await datChan(t);
-		await moMatLoc(t);
+		await moMatLoc(t, MAT);
 		const ds = await luaChon(t);
 		const co = tichDuoc(ds);
 		if (co.length < 2)
-			await khongDo(`mat Trang thai can >= 2 gia tri co dong, co ${co.length}`);
+			await khongDo(`mat loc can >= 2 gia tri co dong, co ${co.length}`);
 		chan.che = "giu";
 		await t.evaluate(batMau, null);
 		const o1 = await bamLuaChon(t, co[0].i);
+		const lucBam = await t.evaluate(() =>
+			Math.round(performance.now() - window.__ldvBatDau),
+		);
 		await choMs(GIU_MS);
 		await t.screenshot({ path: join(BANG_CHUNG, "E8-cho-1440.png") });
 		chan.thaRa();
@@ -286,7 +328,7 @@ try {
 		);
 		let tich2 = false;
 		if (menuTruoc >= 2) tich2 = await daTich(await bamLuaChon(t, co[1].i));
-		const luc = s.filter((x) => x.luc <= GIU_MS);
+		const luc = s.filter((x) => x.luc >= lucBam && x.luc <= GIU_MS);
 		const k = luc.length;
 		const a = demNeu(s, (x) => x.menu < 1);
 		const b = demNeu(s, (x) => x.menu < 2);
@@ -300,7 +342,7 @@ try {
 		const c = demNeu(luc, (x) => x.khung > 0);
 		const sb = demNeu(luc, (x) => !x.banDung);
 		const m = demNeu(luc, (x) => x.congCuMo);
-		const om = demNeu(luc, (x) => x.luc >= MO_SAU_MS && !(x.mo < 1));
+		const om = demNeu(luc, (x) => x.luc - lucBam >= MO_SAU_MS && !(x.mo < 1));
 		const v = s.at(-1)?.ban ?? 0;
 		console.log(
 			`AC-3 1440: ${k} mau · bang go ${g} · khung cho ${c} · ban sai ${sb} · cong cu mo ${m} · chua mo ${om} · sau khi ve ban ${v}`,
@@ -337,23 +379,29 @@ try {
 				document.querySelector("[data-ldv-nut-khung]")?.getAttribute("aria-expanded") ===
 				"true",
 		);
-		await moMatLoc(t);
+		await moMatLoc(t, MAT);
 		const co = tichDuoc(await luaChon(t));
-		if (co.length < 1) await khongDo("mat Trang thai o 390 khong co gia tri");
+		if (co.length < 1) await khongDo("mat loc o 390 khong co gia tri");
 		chan.che = "giu";
 		await t.evaluate(batMau, null);
-		await bamLuaChon(t, co[0].i);
+		const o = await bamLuaChon(t, co[0].i);
 		await choMs(GIU_MS);
 		await t.screenshot({ path: join(BANG_CHUNG, "E8-cho-390.png") });
 		chan.thaRa();
 		await choHetBan(t);
 		const s = await dungMau(t);
+		const tich = await daTich(o).catch(() => false);
 		const k = demNeu(s, (x) => x.luc <= GIU_MS);
 		const a = demNeu(s, (x) => x.khungHien === false);
 		const b = demNeu(s, (x) => x.khungMo === false);
-		console.log(`AC-2 390: ${k} mau · khung thu ${a} · aria-expanded sai ${b}`);
-		if (k < MAU_TOI_THIEU) await khongDo("khong bat duoc luc cho o 390");
-		if (a > 0 || b > 0) dong(false, "AC-2: khung Loc thu lai khi doi loc");
+		const giu = chan.so > 0;
+		console.log(
+			`AC-2 390: ${k} mau · khung thu ${a} · aria-expanded sai ${b} · da tich ${tich ? "co" : "khong"}`,
+		);
+		if (k < MAU_TOI_THIEU || !giu)
+			await khongDo("khong bat duoc luc cho o 390");
+		if (a > 0 || b > 0 || !tich)
+			dong(false, "AC-2: khung Loc thu lai khi doi loc");
 		await t.close();
 	}
 
@@ -362,9 +410,9 @@ try {
 		const t = await d.moTrang(QT, 1440, duongDon(DON));
 		await choBang(t);
 		const chan = await datChan(t);
-		await moMatLoc(t);
+		await moMatLoc(t, MAT);
 		const rong = (await luaChon(t)).find((x) => x.so === 0);
-		if (!rong) await khongDo("mat Trang thai khong co gia tri 0 dong");
+		if (!rong) await khongDo("mat loc khong co gia tri 0 dong");
 		await bamLuaChon(t, rong.i);
 		await d.doi(
 			t,
@@ -417,9 +465,9 @@ try {
 			),
 		);
 		const chan = await datChan(t);
-		await moMatLoc(t);
+		await moMatLoc(t, MAT);
 		const co = tichDuoc(await luaChon(t));
-		if (co.length < 1) await khongDo("mat Trang thai khong co gia tri de loi");
+		if (co.length < 1) await khongDo("mat loc khong co gia tri de loi");
 		chan.che = "loi";
 		await t.evaluate(batMau, idCu);
 		await bamLuaChon(t, co[0].i);
