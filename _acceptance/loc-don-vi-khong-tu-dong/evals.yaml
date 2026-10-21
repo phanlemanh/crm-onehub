@@ -50,8 +50,9 @@ evals:
       Cùng lượt với E1 ở 1440. Mỗi mẫu trong lúc giữ đọc: số [data-hang-muc-tieu], có [data-khung-xuong] không, phần tử
       [aria-busy=true] nào bọc [data-slot=table-container], hàng công cụ và nút Lọc có nằm trong [data-dang-tai] không,
       opacity tính được của vùng bảng. In "AC-3 1440: <k> mau · bang go <g> · khung cho <c> · ban sai <s> · cong cu mo
-      <m> · sau khi ve ban <v>". DUNG khi g = 0, c = 0, s = 0, m = 0, v = 0 và mọi mẫu lúc giữ có opacity vùng bảng < 1.
-      CHIEU DO (LDV_PHA=khong-mo: DataTable bỏ VungDangTai) -> "SAI AC-3: vung bang khong ban khi doi loc", mã 1;
+      <m> · chua mo <o> · sau khi ve ban <v>". DUNG khi g = 0, c = 0, s = 0, m = 0, v = 0 và o = 0 (o = số mẫu sau 250 ms
+      đầu của lúc giữ mà opacity vùng bảng chưa dưới 1 — chuyển tiếp mờ dài 200 ms).
+      CHIEU DO (LDV_PHA=khong-mo: bang.tsx bỏ refreshing) -> "SAI AC-3: vung bang khong ban khi doi loc", mã 1;
       (LDV_PHA=go-bang) -> "SAI AC-3: bang bi go khi doi loc", mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E4
@@ -82,7 +83,7 @@ evals:
       1440: đổi lọc, giữ okr.danhSach rồi trả 500; lấy mẫu từ lúc thả tới khi khung lỗi hiện và thêm 500 ms; bấm «Thử lại»
       và đếm lượt gọi okr.danhSach. In "AC-5 1440: <k> mau · khung loi <a> · dong cu treo <b> · ban con <c> · goi lai <n>".
       DUNG khi k >= 3, a = co, b = 0, c = 0, n >= 1; k < 3 là "KHONG DO DUOC: khong bat duoc sau loi" mã 2.
-      CHIEU DO (LDV_PHA=loi-treo: nhánh isError đứng sau nhánh giữ bảng) -> "SAI AC-5: loi doi loc treo bang cu", mã 1.
+      CHIEU DO (LDV_PHA=loi-treo: bỏ nhánh isError) -> "SAI AC-5: doi loc loi khong hien khung loi", mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E6
     criterion: AC-6
@@ -94,7 +95,8 @@ evals:
     expected: |
       Bài kiểm của hàm giữ dữ liệu (giuKhiChiDoiLoc), ma trận viết trước bốn ca: cùng chu kỳ, cùng đơn vị, khác lọc →
       trả dữ liệu cũ; khác đơn vị → undefined; khác chu kỳ → undefined; chưa có truy vấn trước → undefined. Bốn assert.
-      CHIEU DO (hàm luôn trả dữ liệu cũ) -> ca "khac don vi" đỏ với thông điệp ldv-giu: doi don vi giu bang cu.
+      CHIEU DO (LDV_PHA=giu-luon: hàm luôn trả dữ liệu cũ, nhóm ldv-dom của rang/hai-chieu.mjs) -> ca "khac don vi" đỏ với
+      thông điệp ldv-giu: doi don vi giu bang cu.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E6m
     criterion: AC-6
@@ -135,8 +137,8 @@ evals:
       Bài DOM dựng DataTable ba lần (refreshing true, false, không truyền) cùng cột, dòng, mặt lọc. true: đúng một
       [data-slot=vung-dang-tai] mang aria-busy="true" và data-dang-tai, chứa [data-slot=table-container], không chứa nút
       Lọc, ô tìm hay phân trang; false: có vùng, không aria-busy, không data-dang-tai; không truyền: không vùng nào.
-      CHIEU DO (vùng bọc cả gốc DataTable) -> "ldv-bang: nut Loc nam trong vung mo"; (luôn bọc) -> "ldv-bang: khong truyen
-      van co vung".
+      CHIEU DO (LDV_PHA=boc-ca-goc: vùng bọc cả gốc DataTable) -> "ldv-bang: nut Loc nam trong vung mo"; (LDV_PHA=luon-boc)
+      -> "ldv-bang: khong truyen van co vung".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E8
     criterion: AC-1, AC-2, AC-3
