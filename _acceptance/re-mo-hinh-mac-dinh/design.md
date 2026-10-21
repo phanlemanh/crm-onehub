@@ -56,11 +56,26 @@ dưới 180 giây; Trợ lý kho mỗi tầng không kém mốc 13/10 quá 1 câ
 
 ## Nơi tiêu thụ model mặc định (răng của AC-2)
 
-`packages/db/src/settings.ts` (khai) · `apps/agent/agent/lib/model.ts` (`MODEL_GOC`, `modelTheoVai` lùi về mặc định cho vai
-`tro-ly` và `tac-nhan`: agent gốc CRM, phiên gốc Zalo, phiên `research`, `builder`, `team-agent`; `modelChoLuot`) ·
-`apps/agent/agent/subagents/agent_builder/agent.ts` · `apps/agent/agent/subagents/agent_runner/agent.ts` ·
-`apps/api/src/settings/settings.service.ts` (`defaultId` cho màn Cài đặt). Răng `rang/so-mh2.ts --tieu-thu` grep mã nguồn và
-so đúng danh sách này.
+Mọi tệp mã nguồn (không tính test) đọc `DEFAULT_AGENT_MODEL` hoặc gọi `modelTheoVai`, và các purpose lùi về vai `tro-ly`,
+`tac-nhan`. Răng `rang/so-mh2.ts` rút đúng hai khối dưới bằng marker rồi so `toEqual` với mã nguồn.
+
+<!-- <<<MH2-TIEU-THU -->
+packages/db/src/settings.ts
+apps/agent/agent/lib/model.ts
+apps/agent/agent/subagents/agent_builder/agent.ts
+apps/agent/agent/subagents/agent_runner/agent.ts
+apps/api/src/settings/settings.service.ts
+<!-- MH2-TIEU-THU>>> -->
+
+<!-- <<<MH2-PURPOSE -->
+builder
+team-agent
+research
+zalo
+<!-- MH2-PURPOSE>>> -->
+
+Danh sách trên viết theo lần tra 21/10; răng là bên quyết — tệp nào răng thấy mà danh sách thiếu thì sửa danh sách trước S4
+và ghi một dòng sổ `fix`.
 
 ## Đo xác nhận
 
