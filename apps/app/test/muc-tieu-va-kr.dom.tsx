@@ -2209,7 +2209,7 @@ const CA_TRANG_THAI = {
 			{
 				dau: "ST-cuatoi-rong",
 				tieuDe: true,
-				lienKet: "/ws/okr/theo-don-vi",
+				lienKet: "/ws/okr/bo-okr",
 				khoi: 0,
 			},
 			(truong) => `ST-cuatoi-rong sai: ${truong}`,

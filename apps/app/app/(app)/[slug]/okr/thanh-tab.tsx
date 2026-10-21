@@ -70,12 +70,9 @@ export function ThanhTabOkr({
 }
 
 export function DauTrangOkr({
-	chonChuKy,
-	nhanHoiY = null,
 	cauNoi = false,
 }: {
-	chonChuKy: ReactNode;
-	nhanHoiY?: NhanHoiY;
+	chonChuKy?: ReactNode;
 	cauNoi?: boolean;
 }) {
 	const locale = useLocale();
@@ -87,11 +84,8 @@ export function DauTrangOkr({
 	return (
 		<LuoiDauTrangOkr
 			ghiChu={<DongLyDoKhu q={q} />}
-			hanhDong={
-				<HanhDongKhu cauNoi={cauNoi} chonChuKy={chonChuKy} q={q} tab={tab} />
-			}
+			hanhDong={<HanhDongKhu cauNoi={cauNoi} q={q} tab={tab} />}
 			moTa={m.moTa[tab]}
-			thanhTab={<ThanhTabOkr nhanHoiY={nhanHoiY} tab={tab} />}
 			tieuDe={tieuDeKhu(locale)}
 		/>
 	);

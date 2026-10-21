@@ -664,7 +664,7 @@ describe("theo-don-vi-bien", () => {
 });
 
 describe("thanh-tab", () => {
-	test("thanh-tab: tab dang chon theo duong, nam lien ket giu kyOkr va donOkr, tieu de khu", async () => {
+	test("thanh-tab: dau trang mang tieu de khu", async () => {
 		const o = document.createElement("div");
 		document.body.appendChild(o);
 		const root = createRoot(o);
@@ -680,20 +680,10 @@ describe("thanh-tab", () => {
 			);
 		});
 		dangMo.push({ o, root });
-		const tab = [...o.querySelectorAll('[role="tab"]')];
 		expect({
 			tieuDe: o.querySelector("h1")?.textContent,
-			lienKet: tab.map((t) => t.getAttribute("href")),
-			dangChon: tab.map((t) => t.getAttribute("aria-selected")),
 		}).toEqual({
 			tieuDe: khungUngDungMessages("vi").rail.okr,
-			lienKet: [
-				"/ws/okr?kyOkr=q3&donOkr=pb%3Apb-1",
-				"/ws/okr/theo-don-vi?kyOkr=q3&donOkr=pb%3Apb-1",
-				"/ws/okr/toan-canh?kyOkr=q3&donOkr=pb%3Apb-1",
-				"/ws/okr/hoi-y?kyOkr=q3&donOkr=pb%3Apb-1",
-			],
-			dangChon: ["false", "true", "false", "false"],
 		});
 	});
 });

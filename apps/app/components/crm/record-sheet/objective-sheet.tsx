@@ -1106,7 +1106,7 @@ function NutXemQuanh({ id }: { id: string }) {
 	const url = useWorkspaceUrl();
 	return (
 		<Button asChild size="sm" variant="outline">
-			<NextLink href={url(`/okr/quanh-muc-tieu/${id}`)}>
+			<NextLink href={url(`/okr/so-do/muc-tieu/${id}`)}>
 				<Icon data-icon="inline-start" icon={ChartNetwork} />
 				{m.nutXemQuanh}
 			</NextLink>

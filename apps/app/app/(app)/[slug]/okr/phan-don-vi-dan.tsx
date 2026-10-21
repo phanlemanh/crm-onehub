@@ -118,6 +118,18 @@ export function PhanDonViDan({
 		);
 	const dan = thuTuDan(access.data.headOf, cay.data);
 	if (dan.length === 0) return null;
+	if (cay.isPending)
+		return (
+			<VoPhan tieuDe={m.phan2}>
+				<Skeleton className="h-24 w-full" data-khung-xuong="" />
+			</VoPhan>
+		);
+	if (cay.isError)
+		return (
+			<VoPhan tieuDe={m.phan2}>
+				<LoiPhan thuLai={() => void cay.refetch()} />
+			</VoPhan>
+		);
 	return (
 		<VoPhan tieuDe={m.phan2}>
 			<div className="grid gap-3 md:grid-cols-2">
@@ -144,7 +156,7 @@ function TheDonVi({
 	ky,
 }: {
 	don: DonChonOkr;
-	cay: CayDuLieu | undefined;
+	cay: CayDuLieu;
 	cycleId: string | null;
 	tenKy: string;
 	ky: string | null;
@@ -163,7 +175,7 @@ function TheDonVi({
 					},
 		),
 	);
-	const ten = (cay && giaiDon(don, cay, "")?.ten) || "";
+	const ten = giaiDon(don, cay, "")?.ten || "";
 	const thamSo = new URLSearchParams({
 		[SEARCH_PARAM.okr.don]: khoaDonOkr(don),
 	});
@@ -186,10 +198,7 @@ function TheDonVi({
 				</CardDescription>
 				<CardAction>
 					<Button asChild size="sm" variant="outline">
-						<Link
-							data-nut="mo-don-vi"
-							href={`${url("/okr/theo-don-vi")}?${thamSo}`}
-						>
+						<Link data-nut="mo-don-vi" href={`${url("/okr/bo-okr")}?${thamSo}`}>
 							{m.moDonVi}
 						</Link>
 					</Button>

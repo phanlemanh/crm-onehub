@@ -59,7 +59,7 @@ describe("dh5-loi-vao", () => {
 		const nut = nutQuanh();
 		expect(nut.length).toBe(1);
 		expect(nut[0]?.getAttribute("href")).toBe(
-			`/ws/okr/quanh-muc-tieu/${MT_ID}`,
+			`/ws/okr/so-do/muc-tieu/${MT_ID}`,
 		);
 		const khu = qs("[data-khu=gop-vao]");
 		if (!khu) throw new Error("mat khu duong ly do");

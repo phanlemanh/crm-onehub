@@ -76,7 +76,7 @@ function viTriNguoi(cay: CayDuLieu, id: string) {
 	return { phongBan: pb?.name ?? null, quanLy: p?.manager?.name ?? null };
 }
 
-function XemCay({
+export function XemCay({
 	cycleId,
 	tenGoc,
 	tenKy,
