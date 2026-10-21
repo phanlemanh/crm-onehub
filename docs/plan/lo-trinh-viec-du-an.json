@@ -47,7 +47,8 @@
         "DA11",
         "DA12"
       ],
-      "ly_do": "Làn M5: DA11 sửa gấp (lộ «Việc riêng» ở production) rồi DA12. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+      "ly_do": "Làn M5: DA11 sửa gấp (lộ «Việc riêng» ở production) rồi DA12. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z.",
+      "that": "2026-10-20"
     },
     {
       "ten": "Khoá việc con đúng thứ tự",
@@ -320,14 +321,14 @@
       "ma": "DA12",
       "slug": "va-gantt-lich-bay-ngay",
       "cau_giao": "«Lịch làm việc chọn đủ bảy ngày vẫn giữ đúng như chọn, và dự án đủ 300 việc vẫn sửa được mốc và phụ thuộc»",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "ten": "Vá Gantt: lịch bảy ngày, dự án 300 việc",
       "ten_ngan": "Vá Gantt",
       "dung_tren": [
         "DA4"
       ],
       "ghi_chu": "Gộp Ngoài-3, Ngoài-9 (bỏ hết ngày nghỉ thì T7/CN tự bật lại) và Ngoài-8 (dự án đủ 300 việc khoá cả thao tác mốc và phụ thuộc) của du-an-gantt; chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng DA4 18/10.",
-      "buoc_ke": "Làn M5 · thứ 2"
+      "buoc_ke": "Đã gộp #501 (abbdab0dc) 20/10"
     },
     {
       "ma": "DA13",
