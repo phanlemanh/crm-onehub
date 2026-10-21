@@ -1,11 +1,12 @@
 "use client";
 
+import { sapDuocTheoKieu, TIEN_TO_COT_TRUONG } from "@crm/db/fields-shape";
 import type { DataTableColumn } from "@crm/ui/components/data-table";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useTRPC } from "@/lib/trpc/client";
 import type { FieldEntity } from "./fields-entity";
-import { OTruongBang } from "./kieu-truong";
+import { anDuoiTheoKieu, canhTheoKieu, OTruongBang } from "./kieu-truong";
 
 function nhanTrongO(
 	giaTri: string | number | boolean | null,
@@ -35,10 +36,12 @@ export function useFieldColumns<Row extends WithFields>(
 		return fields
 			.filter((field) => field.showOnTable)
 			.map((field) => ({
-				id: `field:${field.key}`,
+				id: `${TIEN_TO_COT_TRUONG}${field.key}`,
 				header: field.label,
 				width: "w-[12%]",
-				hideBelow: "lg" as const,
+				sortable: sapDuocTheoKieu(field.type),
+				hideBelow: anDuoiTheoKieu(field.type),
+				align: canhTheoKieu(field.type),
 				cell: (row: Row) => (
 					<OTruongBang
 						kieu={field.type}
