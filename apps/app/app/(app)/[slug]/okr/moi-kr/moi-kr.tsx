@@ -121,9 +121,13 @@ function ChipTinhTrang({
 			variant="outline"
 		>
 			{TINH_TRANG_KR.map((v) => (
-				<ToggleGroupItem data-tinh-trang-chip={v} key={v} value={v}>
+				<ToggleGroupItem
+					count={so(v)}
+					data-tinh-trang-chip={v}
+					key={v}
+					value={v}
+				>
 					{nhan[v]}
-					<span className="text-muted-foreground tabular-nums">{so(v)}</span>
 				</ToggleGroupItem>
 			))}
 		</ToggleGroup>
