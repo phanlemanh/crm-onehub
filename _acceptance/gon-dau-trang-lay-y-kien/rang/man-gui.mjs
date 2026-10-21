@@ -169,6 +169,11 @@ async function dungDuLieu() {
 	const q = await api.gop.hoi("okr.hoiY", { cycleId: keHoach });
 	if (!q.quyen.gopDuoc)
 		await khongDo(`KHONG DO DUOC: ${ma.gop} khong gop duoc (${q.trangThai})`);
+	for (const ca of ["du", "quanTri"]) {
+		const r = await api[ca].hoi("okr.hoiY", { cycleId: keHoach });
+		if (r.quyen.gopDuoc)
+			await khongDo(`KHONG DO DUOC: ${ma[ca]} van gop duoc (${r.trangThai})`);
+	}
 	console.log(
 		`du lieu: lay y kien ${h.hoiY.id} tren ${keHoach} · gop ${ma.gop} · du ${ma.du} · khong quyen ${ma.quanTri}`,
 	);
@@ -326,6 +331,10 @@ async function e2va7(ck, slug) {
 			await new Promise((x) => setTimeout(x, 400));
 			const hang = await hop(t, CHON.hang);
 			const o = await Promise.all(O.map((x) => hopO(t, x.nhan)));
+			if (!o.every(Boolean))
+				await khongDo(
+					`KHONG DO DUOC: E2 chi do duoc ${o.filter(Boolean).length}/${O.length} o cua khung soan`,
+				);
 			const doBang = o[2];
 			const che = o.filter(
 				(x) => x && hang && x.duoi > hang.tren && x.tren < hang.duoi,
@@ -334,7 +343,7 @@ async function e2va7(ck, slug) {
 				hang !== null && doBang !== null && hang.tren >= doBang.duoi;
 			dong(
 				datDong && che === 0,
-				`${datDong && che === 0 ? "" : "AC-2: "}DONG CHAY: hang ${hang?.tren}px >= day o Do bang gi ${doBang?.duoi}px · ${che === 0 ? "khong che o nao" : `hang che o ${che}`}`,
+				`${datDong && che === 0 ? "" : "AC-2: "}${che === 0 ? "khong che o nao" : `hang che o ${che}`} · DONG CHAY: hang ${hang?.tren}px >= day o Do bang gi ${doBang?.duoi}px`,
 			);
 			await lenDau(t);
 		}
@@ -357,6 +366,19 @@ async function e3(ck, slug) {
 		for (const cach of ["tab", "cham"]) {
 			await lenDau(t);
 			if (cach === "cham") {
+				await t.evaluate(() => {
+					if (document.activeElement instanceof HTMLElement)
+						document.activeElement.blur();
+					window.__vaoMoi = false;
+					document.addEventListener(
+						"focusin",
+						() => {
+							window.__vaoMoi = true;
+						},
+						{ once: true },
+					);
+				});
+				await new Promise((r) => setTimeout(r, CHO_ON_DINH_MS));
 				const diem = await t.evaluate(
 					(n, cCuon, cHang, lo) => {
 						const l = [
@@ -404,10 +426,13 @@ async function e3(ck, slug) {
 			await new Promise((r) => setTimeout(r, CHO_ON_DINH_MS));
 			const o = await hopO(t, x.nhan);
 			const hang = await hop(t, CHON.hang);
-			const dat = o?.dangTro === true && hang !== null && o.duoi <= hang.tren;
+			const vaoMoi =
+				cach === "tab" || (await t.evaluate(() => window.__vaoMoi === true));
+			const dat =
+				vaoMoi && o?.dangTro === true && hang !== null && o.duoi <= hang.tren;
 			dong(
 				dat,
-				`${dat ? "" : "AC-3: "}TIEU DIEM ${x.ten} ${cach}: ${o?.dangTro ? "dang tro" : "KHONG tro"} · day o ${o?.duoi}px <= dinh hang ${hang?.tren}px`,
+				`${dat ? "" : "AC-3: "}TIEU DIEM ${x.ten} ${cach}: ${o?.dangTro ? "dang tro" : "KHONG tro"}${cach === "cham" ? ` · ${vaoMoi ? "focusin moi" : "KHONG focusin moi"}` : ""} · day o ${o?.duoi}px <= dinh hang ${hang?.tren}px`,
 			);
 		}
 	await t.close();
@@ -558,24 +583,34 @@ async function e6(ck, slug) {
 			);
 		console.log("CO BAM gop: 1 [data-slot=hang-hanh-dong-bam-day]");
 	}
+	const MOC = { du: "[data-khoi='du-y']", quanTri: "[data-khoi='dai-moc']" };
 	for (const ca of ["du", "quanTri"]) {
 		const { t } = await moTrang(ck[ca], slug, "390");
-		await t
+		const ten = ca === "du" ? "du-3-y" : "khong-quyen";
+		const thay = await t
 			.waitForFunction(
-				() =>
-					document.querySelector(
-						"[data-khoi='du-y'], [data-khoi='dai-moc']",
-					) !== null,
-				{ timeout: CHO_MS, polling: NHIP_MS },
+				(c) => document.querySelector(c) !== null,
+				{
+					timeout: CHO_MS,
+					polling: NHIP_MS,
+				},
+				MOC[ca],
 			)
-			.catch(() => {});
+			.then(
+				() => true,
+				() => false,
+			);
+		if (!thay)
+			await khongDo(
+				`KHONG DO DUOC: trang ${ten} khong hien ${MOC[ca]} sau ${CHO_MS}ms`,
+			);
+		console.log(`MOC ${ten}: ${MOC[ca]}`);
 		await new Promise((r) => setTimeout(r, 800));
 		const n = await t.evaluate(
 			(c) => document.querySelectorAll(c).length,
 			CHON.hang,
 		);
 		await t.close();
-		const ten = ca === "du" ? "du-3-y" : "khong-quyen";
 		dong(
 			n === 0,
 			`${n === 0 ? "" : "AC-6: "}KHONG BAM ${ten}: ${n} [data-slot=hang-hanh-dong-bam-day]`,

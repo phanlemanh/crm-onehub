@@ -35,7 +35,7 @@ const VET = {
 		tep: BAM,
 		cu: "max-md:sticky max-md:bottom-0",
 		moi: "max-md:fixed max-md:inset-x-0 max-md:bottom-0",
-		ghim: /SAI AC-2: .*hang che o/,
+		ghim: /SAI AC-2: hang che o/,
 	},
 	"bo-le": {
 		eval: "E3",
