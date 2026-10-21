@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Người thêm việc con vào một dự án không còn gặp lỗi chung chung khi đúng lúc đó người khác đang sửa mốc, đổi ngày hay đổi phụ thuộc của cùng dự án.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho cả hai người cùng xong khi một người thêm việc con lúc người kia đang sửa mốc, phụ thuộc, tên dự án, đổi ngày hay chuyển việc vào dự án (tám thao tác)."},
+    {"id": "AC-2", "p": "Sẽ báo đúng «Dự án đã đóng.» cho người thêm việc con nếu người kia vừa đóng dự án, không sinh việc con."},
+    {"id": "AC-3", "p": "Sẽ vẫn tạo được việc con, nằm đúng dự án mới, khi việc cha vừa bị chuyển dự án trong lúc chờ; máy tự làm lại tối đa ba lần."},
+    {"id": "AC-4", "p": "Sẽ giữ nguyên mọi lời từ chối đã có khi thêm việc con: quyền, một tầng, việc cha đã xong, trần 300 việc, dự án đã đóng."},
+    {"id": "AC-5", "p": "Sẽ ghi vào tài liệu API thứ tự khoá của dự án, cách thêm việc con tự làm lại, và phần chưa rà."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Không đo ca mở lại hay xoá dự án đúng lúc thêm việc con — hai ca này không dựng được."},
+    {"id": "OOS-2", "p": "Không che lỗi khoá bằng cách tự thử lại mọi lỗi chờ nhau; chỉ sửa thứ tự khoá."},
+    {"id": "OOS-3", "p": "Không rà các thao tác sửa từng việc lẻ khác có chạm dự án."},
+    {"id": "OOS-4", "p": "Không đổi màn nào; lời báo mới chỉ hiện khi đã làm lại đủ ba lần mà vẫn hỏng."},
+    {"id": "OOS-5", "p": "Không đo ca việc cha bị chuyển dự án ba lần liền."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi thao tác của người khác có khoá cả dự án đều được liệt từ mã: tám ca thành công (AC-1), đóng dự án (AC-2); mở lại và xoá không dựng được nên ghi ở phần không làm."},
+    {"i": 1, "p": "Việc cha đổi dự án trong lúc chờ: từ dự án này sang dự án khác, ra ngoài, và từ ngoài vào (AC-3)."},
+    {"i": 2, "p": "Việc cha có dự án (AC-1, AC-2) và không có dự án (AC-3, AC-4)."},
+    {"i": 3, "p": "Ca chuyển dự án đo ở hai tầng: người dùng thấy thành công, và một lượt bên trong thật sự dừng để làm lại (AC-3)."}
+  ]
+}
