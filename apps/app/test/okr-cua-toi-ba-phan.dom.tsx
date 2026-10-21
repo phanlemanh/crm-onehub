@@ -489,7 +489,7 @@ describe("ctbp-don-vi-dan", () => {
 						?.getAttribute("href");
 					const khoa = t.getAttribute("data-don-vi-dan") ?? "";
 					expect(href).toBe(
-						`/ws/okr/theo-don-vi?${new URLSearchParams({ donOkr: khoa, kyOkr: "q4" })}`,
+						`/ws/okr/bo-okr?${new URLSearchParams({ donOkr: khoa, kyOkr: "q4" })}`,
 					);
 					if (!coMucTieu) {
 						expect(t.textContent).toContain(m.donViRong("Quý 4/2026"));

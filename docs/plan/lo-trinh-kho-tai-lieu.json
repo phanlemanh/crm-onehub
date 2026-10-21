@@ -58,7 +58,8 @@
         "l5"
       ],
       "nghia": "Góp ý đã gom được sửa trong một lượt",
-      "ly_do": "Làn M5 sau DA11, DA12: #410 gộp onehub, S4 phần đổi, ký lại. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z."
+      "ly_do": "Làn M5 sau DA11, DA12: #410 gộp onehub, S4 phần đổi, ký lại. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng, ≈1 ngày lịch mỗi vòng trên một dãy, vài dãy song song khi không phụ thuộc. Chia ba làn: chủ kho 19/10 (phiên Mac Studio), gom rà làn #375 09:20Z.",
+      "that": "2026-10-19"
     },
     {
       "ten": "Kho tài liệu qua Zalo và model theo vai",
@@ -188,10 +189,10 @@
         "cb"
       ],
       "slug": "sua-sau-chay-that",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "dong": 8,
       "ten": "Lượt 5",
-      "buoc_ke": "Làn M5 · thứ 1",
+      "buoc_ke": "Đã gộp #410 (e0213f2d8) 19/10",
       "du_lieu": "gia",
       "pr": [
         410
@@ -330,13 +331,13 @@
       "dung_tren": [
         "l6"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "cong_dang": {
         "decision": "build",
         "decided_by": "Phan Le Manh",
         "decided_at": "2026-10-16T15:08:22Z"
       },
-      "buoc_ke": "Làn M5 · thứ 2",
+      "buoc_ke": "Đã gộp #500 (a0b110b06) 20/10",
       "hang": "T3"
     }
   ],
