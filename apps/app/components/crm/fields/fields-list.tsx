@@ -149,11 +149,11 @@ export function FieldsList({
 
 	const reorder = useMutation(
 		trpc.fields.reorder.mutationOptions({
-			onMutate: async ({ ids }) => {
+			onMutate: async (input) => {
 				await queryClient.cancelQueries({ queryKey: listKey });
 				const previous = queryClient.getQueryData(listKey);
-				if (previous) {
-					queryClient.setQueryData(listKey, reordered(previous, ids));
+				if (previous && "ids" in input) {
+					queryClient.setQueryData(listKey, reordered(previous, input.ids));
 				}
 				return { previous };
 			},

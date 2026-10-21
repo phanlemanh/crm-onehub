@@ -1,4 +1,5 @@
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
+import { boTriTruong, mucSapLai } from "@crm/validation/bo-tri-truong";
 import { z } from "zod";
 
 export const fieldEntity = z.enum(FIELD_ENTITIES);
@@ -60,10 +61,16 @@ export const fieldUpdateArgs = z.object({
 
 export const fieldIdInput = z.object({ id: z.string() });
 
-export const fieldReorderInput = z.object({
-	entity: fieldEntity,
-	ids: z.array(z.string()).min(1),
-});
+export const fieldReorderInput = z.union([
+	z.object({
+		entity: fieldEntity,
+		ids: z.array(z.string()).min(1),
+	}),
+	z.object({
+		entity: fieldEntity,
+		items: z.array(mucSapLai).min(1),
+	}),
+]);
 
 export type FieldReorderInput = z.infer<typeof fieldReorderInput>;
 
@@ -113,3 +120,13 @@ export const fieldDeleteOutput = z.object({ id: z.string() });
 export const fieldBackfillOutput = z.object({ queued: z.boolean() });
 
 export const fieldAccessOutput = z.object({ canManage: z.boolean() });
+
+export const fieldLayoutOutput = boTriTruong;
+
+export const fieldStandardHiddenInput = z.object({
+	entity: fieldEntity,
+	key: z.string().trim().min(1),
+	hidden: z.boolean(),
+});
+
+export type FieldStandardHiddenInput = z.infer<typeof fieldStandardHiddenInput>;

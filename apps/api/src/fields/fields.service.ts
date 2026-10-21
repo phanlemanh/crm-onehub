@@ -20,6 +20,14 @@ import {
 	writeValues,
 } from "@crm/db/fields";
 import {
+	isRequiredStandardKey,
+	isStandardFieldKey,
+	type MucBoTri,
+	STANDARD_FIELD_KEYS,
+	sapBoTri,
+	viTriChuan,
+} from "@crm/db/fields-chuan";
+import {
 	BadRequestException,
 	ConflictException,
 	ForbiddenException,
@@ -31,6 +39,7 @@ import { InjectDatabase } from "../database/database.constants";
 import type {
 	FieldCreateInput,
 	FieldReorderInput,
+	FieldStandardHiddenInput,
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
@@ -111,11 +120,11 @@ export class FieldsService {
 			throw new BadRequestException("A select needs at least one option.");
 		}
 
-		const last = await this.db.fieldDefinition.findFirst({
-			where: { entity: input.entity },
-			orderBy: { position: "desc" },
-			select: { position: true },
-		});
+		if (input.required && !input.showOnSheet) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.requiredShown);
+		}
+
+		const next = await this.nextPosition(input.entity);
 
 		const definition = await this.db.fieldDefinition.create({
 			data: {
@@ -129,7 +138,7 @@ export class FieldsService {
 				showOnSheet: input.showOnSheet,
 				showOnTable: input.showOnTable,
 				showOnFilter: input.showOnFilter,
-				position: (last?.position ?? -1) + 1,
+				position: next,
 				options: usesOptions(input.type)
 					? {
 							create: input.options.map((option, index) => ({
@@ -172,6 +181,15 @@ export class FieldsService {
 		});
 
 		if (!existing) throw new NotFoundException("That field does not exist.");
+
+		if ((data.required ?? existing.required) && data.showOnSheet === false) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.requiredShown);
+		}
+
+		const showOnSheet =
+			data.required === true && data.showOnSheet === undefined
+				? true
+				: data.showOnSheet;
 
 		const type = data.type ?? existing.type;
 
@@ -231,7 +249,7 @@ export class FieldsService {
 					agentFilled: data.agentFilled,
 					agentBrief: data.agentBrief,
 					required: data.required,
-					showOnSheet: data.showOnSheet,
+					showOnSheet,
 					showOnTable: data.showOnTable,
 					showOnFilter: data.showOnFilter,
 				},
@@ -262,33 +280,191 @@ export class FieldsService {
 		return serializeField(definition);
 	}
 
+	async layout(entity: FieldEntity): Promise<MucBoTri[]> {
+		const [hangChuan, tuTao] = await Promise.all([
+			this.db.standardFieldLayout.findMany({
+				where: { entity },
+				select: { key: true, position: true, hidden: true },
+			}),
+			this.db.fieldDefinition.findMany({
+				where: { entity, archivedAt: null },
+				select: { id: true, key: true, position: true },
+			}),
+		]);
+
+		return sapBoTri(
+			entity,
+			hangChuan.filter((hang) => isStandardFieldKey(entity, hang.key)),
+			tuTao,
+		);
+	}
+
 	async reorder(
 		actingUserId: string,
 		input: FieldReorderInput,
 	): Promise<SerializedField[]> {
 		await this.requireManager(actingUserId);
 
+		if ("ids" in input) {
+			await this.reorderCustom(input.entity, input.ids);
+		} else {
+			await this.reorderMixed(input.entity, input.items);
+		}
+
+		return this.list(input.entity, false);
+	}
+
+	private async reorderCustom(entity: FieldEntity, ids: string[]) {
 		const owned = await this.db.fieldDefinition.findMany({
-			where: { id: { in: input.ids }, entity: input.entity },
-			select: { id: true },
+			where: { id: { in: ids }, entity },
+			select: { id: true, position: true },
 		});
 
-		if (owned.length !== input.ids.length) {
+		if (owned.length !== ids.length || new Set(ids).size !== ids.length) {
 			throw new BadRequestException(
 				"That order names a field which is not on this record type.",
 			);
 		}
 
+		const slots = owned.map((field) => field.position).sort((a, b) => a - b);
+
 		await this.db.$transaction(
-			input.ids.map((id, index) =>
+			ids.map((id, index) =>
 				this.db.fieldDefinition.update({
 					where: { id },
-					data: { position: index },
+					data: { position: slots[index] },
 				}),
 			),
 		);
+	}
 
-		return this.list(input.entity, false);
+	private async reorderMixed(
+		entity: FieldEntity,
+		items: ({ standard: string } | { custom: string })[],
+	) {
+		const live = await this.db.fieldDefinition.findMany({
+			where: { entity, archivedAt: null },
+			select: { id: true },
+		});
+		const standardKeys: readonly string[] = STANDARD_FIELD_KEYS[entity];
+		const named = items.map((item) =>
+			"standard" in item ? `s:${item.standard}` : `c:${item.custom}`,
+		);
+		const expected = new Set([
+			...standardKeys.map((key) => `s:${key}`),
+			...live.map((field) => `c:${field.id}`),
+		]);
+
+		if (
+			named.length !== expected.size ||
+			new Set(named).size !== named.length ||
+			named.some((name) => !expected.has(name))
+		) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.orderMismatch);
+		}
+
+		const hidden = new Map(
+			(
+				await this.db.standardFieldLayout.findMany({
+					where: { entity },
+					select: { key: true, hidden: true },
+				})
+			).map((row) => [row.key, row.hidden]),
+		);
+
+		await this.db.$transaction(
+			items.map((item, position) =>
+				"standard" in item
+					? this.db.standardFieldLayout.upsert({
+							where: { entity_key: { entity, key: item.standard } },
+							create: {
+								entity,
+								key: item.standard,
+								position,
+								hidden: hidden.get(item.standard) ?? false,
+							},
+							update: { position },
+						})
+					: this.db.fieldDefinition.update({
+							where: { id: item.custom },
+							data: { position },
+						}),
+			),
+		);
+	}
+
+	async setStandardHidden(
+		actingUserId: string,
+		input: FieldStandardHiddenInput,
+	): Promise<MucBoTri[]> {
+		await this.requireManager(actingUserId);
+
+		const { entity, key, hidden } = input;
+
+		if (!isStandardFieldKey(entity, key)) {
+			throw new BadRequestException(FIELDS_CONFIG.messages.notStandard);
+		}
+
+		if (hidden && isRequiredStandardKey(entity, key)) {
+			throw new BadRequestException(
+				FIELDS_CONFIG.messages.requiredStandardShown,
+			);
+		}
+
+		const rows = await this.db.standardFieldLayout.findMany({
+			where: { entity },
+			select: { key: true, position: true, hidden: true },
+		});
+		const missing = viTriChuan(entity, rows).filter(
+			(row) => !rows.some((existing) => existing.key === row.key),
+		);
+
+		if (missing.length > 0) {
+			await this.ensureStandardRows(entity);
+		}
+
+		await this.db.standardFieldLayout.update({
+			where: { entity_key: { entity, key } },
+			data: { hidden },
+		});
+
+		return this.layout(entity);
+	}
+
+	private async ensureStandardRows(entity: FieldEntity) {
+		const order = await this.layout(entity);
+
+		await this.db.$transaction(
+			order.map((item, position) =>
+				item.kind === "standard"
+					? this.db.standardFieldLayout.upsert({
+							where: { entity_key: { entity, key: item.key } },
+							create: { entity, key: item.key, position, hidden: item.hidden },
+							update: { position },
+						})
+					: this.db.fieldDefinition.update({
+							where: { id: item.id },
+							data: { position },
+						}),
+			),
+		);
+	}
+
+	private async nextPosition(entity: FieldEntity): Promise<number> {
+		const [custom, standard] = await Promise.all([
+			this.db.fieldDefinition.aggregate({
+				where: { entity },
+				_max: { position: true },
+			}),
+			this.db.standardFieldLayout.aggregate({
+				where: { entity },
+				_max: { position: true },
+			}),
+		]);
+
+		return (
+			Math.max(custom._max.position ?? -1, standard._max.position ?? -1) + 1
+		);
 	}
 
 	async archive(actingUserId: string, id: string): Promise<SerializedField> {

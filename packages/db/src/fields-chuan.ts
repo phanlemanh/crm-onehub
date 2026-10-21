@@ -85,7 +85,7 @@ export function viTriChuan(
 			truoc = hang.position;
 			continue;
 		}
-		const position = truoc === null ? nhoNhat - 1 : truoc + 1 / 1024;
+		const position: number = truoc === null ? nhoNhat - 1 : truoc + 1 / 1024;
 		ketQua.push({ key, position, hidden: false });
 		truoc = position;
 	}
