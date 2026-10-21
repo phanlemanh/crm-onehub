@@ -25,12 +25,18 @@ const HO_SO = [
 	"vo-khu-muc-tieu",
 	"khung-cho-don-vi-mot-hinh",
 	"khung-man-chung",
+	"dieu-huong-khu-muc-tieu",
+	"khung-okr-truoc-r1",
+	"okr-to-chuc-va",
 ];
 const TEP_CUA_HO_SO = {
 	"apps/app/test/okr-trang-don-vi.dom.tsx": "trang-don-vi-mot-bang",
 	"apps/app/test/okr-theo-don-vi.dom.tsx": "ux-lai-thu-8c-okr",
 	"apps/app/test/vo-khu-muc-tieu.dom.tsx": "vo-khu-muc-tieu",
 	"apps/app/test/khung-cho-don-vi.dom.tsx": "khung-cho-don-vi-mot-hinh",
+	"apps/app/test/okr-dau-trang-khu.dom.tsx": "dieu-huong-khu-muc-tieu",
+	"apps/app/test/khung-okr-truoc-r1.dom.tsx": "khung-okr-truoc-r1",
+	"apps/app/test/okr-to-chuc-va.dom.tsx": "okr-to-chuc-va",
 };
 const VIET_LAI_V1_20 = new Set(["apps/app/test/okr-trang-don-vi.dom.tsx"]);
 const KHUON_DOI_CHUOI =

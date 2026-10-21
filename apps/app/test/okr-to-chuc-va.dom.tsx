@@ -479,6 +479,7 @@ describe("nut-them", () => {
 					<DauTrangOkr cauNoi={false} chonChuKy={null} />
 					<TheoDonVi />
 				</>,
+				{ thamSo: "?donOkr=goc" },
 			);
 			await cho(() => q("[data-chon-don-vi]", san.o) !== null, "thanh don vi");
 			await cho(

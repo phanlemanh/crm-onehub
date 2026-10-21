@@ -598,7 +598,13 @@ describe("dhk-hanh-dong", () => {
 		for (const t of TAB) {
 			for (const pha of ["lap-ke-hoach", "dang-chay"] as const) {
 				soO += 1;
-				await dauTrang(t, { pha }, "", "vi", t === "theo-don-vi");
+				await dauTrang(
+					t,
+					{ pha },
+					t === "theo-don-vi" ? "?donOkr=goc" : "",
+					"vi",
+					t === "theo-don-vi",
+				);
 				await cho(() => nutThem() !== null, `nut them ${t}`);
 				await nhip(6);
 				const h = hang();

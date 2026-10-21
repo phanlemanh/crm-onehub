@@ -100,7 +100,8 @@ export function DanhSachBo() {
 	const boLoc = hang.filter((h) => hopLoc(h, loc));
 	const href = (don: string) => {
 		const q = new URLSearchParams({ [SEARCH_PARAM.okr.don]: don });
-		if (ky) q.set(SEARCH_PARAM.okr.ky, ky);
+		const kyMo = ky ?? currentId;
+		if (kyMo) q.set(SEARCH_PARAM.okr.ky, kyMo);
 		return `${url("/okr/bo-okr")}?${q.toString()}`;
 	};
 	const veTatCa = () => void datLoc(null);

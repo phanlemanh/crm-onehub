@@ -11,6 +11,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { DongLyDoKhu, HanhDongKhu, useQuyenKhu } from "./hanh-dong-khu";
+import { NutHoiKara } from "./hoi/nut-hoi-kara";
 import { LuoiDauTrangOkr } from "./luoi-dau-trang";
 import { khoaDon, okrParsers } from "./okr-search-params";
 import { laTrangSoan } from "./soan/luat-ban-nhap";
@@ -80,11 +81,22 @@ export function DauTrangOkr({
 	const duong = usePathname();
 	const tab = tabTuDuong(duong);
 	const q = useQuyenKhu(tab);
+	const [thamSo] = useQueryStates(okrParsers);
 	if (laTrangSoan(duong ?? "")) return null;
+	const laDanhSachBo =
+		tab === "theo-don-vi" &&
+		thamSo[SEARCH_PARAM.okr.don] === null &&
+		thamSo[SEARCH_PARAM.okr.xem] === null;
 	return (
 		<LuoiDauTrangOkr
-			ghiChu={<DongLyDoKhu q={q} />}
-			hanhDong={<HanhDongKhu cauNoi={cauNoi} q={q} tab={tab} />}
+			ghiChu={laDanhSachBo ? null : <DongLyDoKhu q={q} />}
+			hanhDong={
+				laDanhSachBo ? (
+					<NutHoiKara />
+				) : (
+					<HanhDongKhu cauNoi={cauNoi} q={q} tab={tab} />
+				)
+			}
 			moTa={m.moTa[tab]}
 			tieuDe={tieuDeKhu(locale)}
 		/>
