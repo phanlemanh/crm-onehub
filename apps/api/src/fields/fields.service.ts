@@ -115,18 +115,16 @@ function dieuKienLoc(
 				cacNhanh.push(co({ text: { contains: chu, mode: "insensitive" } }));
 			}
 			break;
-		case "khoang":
+		case "khoang": {
 			if (loc.tu !== null || loc.den !== null) {
 				cacNhanh.push(
 					co({
-						number: {
-							...(loc.tu !== null ? { gte: loc.tu } : {}),
-							...(loc.den !== null ? { lte: loc.den } : {}),
-						},
+						number: { gte: loc.tu ?? undefined, lte: loc.den ?? undefined },
 					}),
 				);
 			}
 			break;
+		}
 		case "moc":
 			for (const moc of loc.moc) cacNhanh.push(co({ date: khoangMoc(moc) }));
 			break;

@@ -6,17 +6,25 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { fieldListOutput } from "../../api/src/fields/fields.contracts";
 
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| Json[]
+	| { [khoa: string]: Json };
+type DauVao = Json | undefined;
 type TuyChonGhi = {
-	onSuccess?: (kq: unknown, vao: unknown) => unknown;
-	onError?: (e: Error) => unknown;
+	onSuccess?: (kq: Json, vao: DauVao) => void;
+	onError?: (e: Error) => void;
 };
 
-const duLieu = new Map<string, (vao: unknown) => unknown>();
-let goi: Array<{ ten: string; vao: unknown }> = [];
+const duLieu = new Map<string, (vao: DauVao) => Json>();
+let goi: Array<{ ten: string; vao: DauVao }> = [];
 
 function thuTuc(ten: string) {
-	const khoa = (vao?: unknown) => (vao === undefined ? [ten] : [ten, vao]);
-	const doc = (vao: unknown) => {
+	const khoa = (vao?: DauVao) => (vao === undefined ? [ten] : [ten, vao]);
+	const doc = (vao: DauVao): Json => {
 		goi.push({ ten, vao });
 		const f = duLieu.get(ten);
 		return f ? f(vao) : null;
@@ -25,43 +33,52 @@ function thuTuc(ten: string) {
 		queryKey: khoa,
 		pathKey: () => [ten],
 		queryFilter: () => ({ queryKey: [ten] }),
-		infiniteQueryOptions: (vao?: unknown) => ({
+		infiniteQueryOptions: (vao?: DauVao) => ({
 			queryKey: khoa(vao),
 			queryFn: async () => doc(vao),
 			initialPageParam: 0,
 			getNextPageParam: () => undefined,
 		}),
-		queryOptions: (vao?: unknown) => ({
+		queryOptions: (vao?: DauVao) => ({
 			queryKey: khoa(vao),
 			queryFn: async () => doc(vao),
 		}),
 		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [ten],
-			mutationFn: async (vao: unknown) => doc(vao),
+			mutationFn: async (vao: DauVao) => doc(vao),
 		}),
 	};
 }
 
-function nhanh(duong: string[]): unknown {
-	return new Proxy(() => {}, {
-		get(_t, ten: string) {
-			if (
-				[
-					"queryKey",
-					"pathKey",
-					"queryFilter",
-					"queryOptions",
-					"mutationOptions",
-					"infiniteQueryOptions",
-				].includes(ten) &&
-				duong.length >= 2
-			) {
-				return (thuTuc(duong.join(".")) as Record<string, unknown>)[ten];
-			}
-			return nhanh([...duong, ten]);
+type ThuTuc = ReturnType<typeof thuTuc>;
+type TrpcGia = { [ten: string]: TrpcGia } & Partial<ThuTuc>;
+
+const MAT_THU_TUC = new Set<string>([
+	"queryKey",
+	"pathKey",
+	"queryFilter",
+	"queryOptions",
+	"mutationOptions",
+	"infiniteQueryOptions",
+]);
+
+function laMatThuTuc(ten: string): ten is keyof ThuTuc {
+	return MAT_THU_TUC.has(ten);
+}
+
+function nhanh(duong: string[]): TrpcGia {
+	return new Proxy<TrpcGia>(
+		{},
+		{
+			get(_t, ten: string) {
+				if (laMatThuTuc(ten) && duong.length >= 2) {
+					return thuTuc(duong.join("."))[ten];
+				}
+				return nhanh([...duong, ten]);
+			},
 		},
-	});
+	);
 }
 
 mock.module("@/lib/trpc/client", () => ({
@@ -182,7 +199,7 @@ describe("lmt-cai-dat", () => {
 		const kq: Record<string, boolean> = {};
 		for (const f of truong) {
 			goi = [];
-			duLieu.set("fields.update", (vao) => vao);
+			duLieu.set("fields.update", (vao) => vao ?? null);
 			const o = await mo(
 				<FieldEditor
 					entity="DEAL"
@@ -395,7 +412,7 @@ describe("lmt-duong-dan", () => {
 			}
 		}
 
-		const GIA: Record<FieldTypeName, string[]> = {
+		const GIA = {
 			TEXT: ["has:lmt", "none"],
 			LONG_TEXT: ["has:dai"],
 			URL: ["none"],
@@ -406,7 +423,7 @@ describe("lmt-duong-dan", () => {
 			CHECKBOX: ["yes", "no"],
 			SELECT: ["o-a", "none"],
 			USER: ["u-1", "none"],
-		};
+		} satisfies Record<FieldTypeName, string[]>;
 		for (const { key, type } of truong) {
 			for (const s of roots) {
 				await act(async () => s.root.unmount());
@@ -472,20 +489,6 @@ async function dongHet() {
 	document.body.innerHTML = "";
 }
 
-function khuon(x: unknown) {
-	const sap = (v: unknown): unknown =>
-		Array.isArray(v)
-			? v.map(sap)
-			: v && typeof v === "object"
-				? Object.fromEntries(
-						Object.entries(v as Record<string, unknown>)
-							.sort(([a], [b]) => a.localeCompare(b))
-							.map(([k, w]) => [k, sap(w)]),
-					)
-				: v;
-	return JSON.stringify(sap(x));
-}
-
 describe("lmt-luu-thoa-thuan", () => {
 	test("lmt-luu-thoa-thuan: menu bo loc da luu o bang va bang cot, luu, ap, giu kieu xem", async () => {
 		const v = crmMessages("vi").views;
@@ -522,7 +525,7 @@ describe("lmt-luu-thoa-thuan", () => {
 			dat?.call(o, "Lmt cho ky");
 			o.dispatchEvent(new window.Event("input", { bubbles: true }));
 		});
-		duLieu.set("savedViews.create", (vao) => vao);
+		duLieu.set("savedViews.create", (vao) => vao ?? null);
 		const nutLuu = [...document.body.querySelectorAll("button")].find(
 			(b) => b.textContent?.trim() === v.save,
 		);
@@ -546,7 +549,7 @@ describe("lmt-luu-thoa-thuan", () => {
 				"field:lmt_select": ["o-a"],
 			},
 		};
-		if (daLuu?.entity !== "DEAL" || khuon(daLuu.filters) !== khuon(mongLuu)) {
+		if (daLuu?.entity !== "DEAL" || !Bun.deepEquals(daLuu.filters, mongLuu)) {
 			throw new Error(`lmt luu thoa thuan: luu ${JSON.stringify(daLuu)}`);
 		}
 		if ("view" in (daLuu.filters as object)) {
@@ -593,20 +596,9 @@ describe("lmt-luu-thoa-thuan", () => {
 				throw new Error("lmt luu thoa thuan: kieu xem");
 			}
 			const thuTuc = view === "board" ? "deals.board" : "deals.list";
+			const mongTai = { lmt_number: ["gte:5"], lmt_select: ["o-a"] };
 			await cho(
-				() =>
-					(
-						goi.filter((g) => g.ten === thuTuc).at(-1)?.vao as {
-							fields?: object;
-						}
-					)?.fields !== undefined &&
-					khuon(
-						(
-							goi.filter((g) => g.ten === thuTuc).at(-1)?.vao as {
-								fields: object;
-							}
-						).fields,
-					) === khuon({ lmt_number: ["gte:5"], lmt_select: ["o-a"] }),
+				() => Bun.deepEquals(lanTaiCuoi(thuTuc)?.fields, mongTai),
 				`ap tai ${view}`,
 			);
 			await dongHet();
@@ -625,6 +617,6 @@ describe("lmt-luu-thoa-thuan", () => {
 		) {
 			throw new Error("lmt luu thoa thuan: lot vao chien dich");
 		}
-		expect(khuon(daLuu.filters)).toBe(khuon(mongLuu));
+		expect(daLuu.filters).toEqual(mongLuu);
 	});
 });

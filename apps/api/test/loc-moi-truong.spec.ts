@@ -18,6 +18,7 @@ import {
 	parseSavedViewFilters,
 	type SavedViewFilters,
 } from "@crm/validation/saved-view";
+import type { z } from "zod";
 import type { AgentQueueService } from "../src/agent/agent-queue.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { CampaignsService } from "../src/campaigns/campaigns.service";
@@ -153,7 +154,7 @@ async function batDauCa(tienTo: string) {
 async function locThoaThuan(
 	tienTo: string,
 	fieldsLoc: Record<string, string[]>,
-	them: Record<string, unknown> = {},
+	them: Partial<z.input<typeof dealListInput>> = {},
 ) {
 	const out = await deals.list(
 		dealListInput.parse({
@@ -467,7 +468,7 @@ describe("lmt-api-trong", () => {
 		"USER",
 	] as const;
 	const nguoiXoa = `lmt-nguoi-xoa-${RUN}`;
-	const giaCo: Record<(typeof KIEU)[number], string | number> = {
+	const giaCo = {
 		TEXT: "co",
 		LONG_TEXT: "co dai",
 		URL: "co.vn",
@@ -477,7 +478,7 @@ describe("lmt-api-trong", () => {
 		DATE: "2026-05-05",
 		SELECT: "",
 		USER: quanTri,
-	};
+	} satisfies Record<(typeof KIEU)[number], string | number>;
 	const khoa = new Map<string, string>();
 	const lua = new Map<string, string>();
 	const o: Array<{ kieu: string; dang: string; dealId: string }> = [];
@@ -823,17 +824,15 @@ describe("lmt-api-cty-lh-bang", () => {
 					},
 				);
 				theBang.set(dealId, { stage, amount, so });
-				await deals.update(dealId, {
-					fields: {
-						[khoaDeal.so]: so,
-						...(i % 3 ? { [khoaDeal.chu]: "x" } : {}),
-						...(i % 4
-							? { [khoaDeal.ngay]: i % 2 ? "2026-11-03" : "2026-12-09" }
-							: {}),
-						...(i % 2 ? { [khoaDeal.tich]: true } : {}),
-						...(i % 5 ? { [khoaDeal.chon]: luaA } : {}),
-					},
-				});
+				const giaTruong = new Map<string, string | number | boolean>([
+					[khoaDeal.so, so],
+				]);
+				if (i % 3) giaTruong.set(khoaDeal.chu, "x");
+				if (i % 4)
+					giaTruong.set(khoaDeal.ngay, i % 2 ? "2026-11-03" : "2026-12-09");
+				if (i % 2) giaTruong.set(khoaDeal.tich, true);
+				if (i % 5) giaTruong.set(khoaDeal.chon, luaA);
+				await deals.update(dealId, { fields: Object.fromEntries(giaTruong) });
 			}
 		}
 	});
@@ -908,7 +907,7 @@ describe("lmt-api-cty-lh-bang", () => {
 			(out.facetCounts as Record<string, Record<string, number>>)[
 				`field:${k}`
 			]?.[gia];
-		const giaTriCua: Record<string, string[]> = {
+		const giaTriCua = {
 			[khoaDeal.chu]: ["none"],
 			[khoaDeal.so]: ["none"],
 			[khoaDeal.ngay]: ["overdue", "this-month", "next-month", "later", "none"],
@@ -1029,7 +1028,7 @@ describe("lmt-api-da-luu", () => {
 				string,
 				string | null,
 				boolean,
-				Record<string, unknown>,
+				Map<string, string | number>,
 			]
 		> = [
 			[
@@ -1038,13 +1037,27 @@ describe("lmt-api-da-luu", () => {
 				A,
 				nguoiU,
 				true,
-				{ [k.chu]: "co x", [k.so]: 9, [k.ngay]: "2026-11-20" },
+				new Map<string, string | number>([
+					[k.chu, "co x"],
+					[k.so, 9],
+					[k.ngay, "2026-11-20"],
+				]),
 			],
-			["L2", null, A, nguoiU, false, { [k.chu]: "x", [k.so]: 2 }],
-			["L3", quanTri, A, nguoiU, true, { [k.ngay]: "2026-12-01" }],
-			["L4", nguoiB, B, nguoiU, false, { [k.chu]: "khong" }],
-			["L5", nguoiB, A, null, true, { [k.so]: 50 }],
-			["L6", null, A, nguoiU, false, {}],
+			[
+				"L2",
+				null,
+				A,
+				nguoiU,
+				false,
+				new Map<string, string | number>([
+					[k.chu, "x"],
+					[k.so, 2],
+				]),
+			],
+			["L3", quanTri, A, nguoiU, true, new Map([[k.ngay, "2026-12-01"]])],
+			["L4", nguoiB, B, nguoiU, false, new Map([[k.chu, "khong"]])],
+			["L5", nguoiB, A, null, true, new Map([[k.so, 50]])],
+			["L6", null, A, nguoiU, false, new Map()],
 		];
 		for (const [nhan, owner, giaChon, giaNguoi, coTat, them] of hang) {
 			const lh = await contacts.create({
@@ -1054,14 +1067,11 @@ describe("lmt-api-da-luu", () => {
 				ownerId: owner,
 			});
 			ten.set(lh.id, nhan);
-			await contacts.update(lh.id, {
-				fields: {
-					[chon.key]: giaChon,
-					...(giaNguoi ? { [nguoi.key]: giaNguoi } : {}),
-					...(coTat ? { [tatF.key]: tatA } : {}),
-					...(them as Record<string, string | number>),
-				},
-			});
+			const gia = new Map<string, string | number>(them);
+			gia.set(chon.key, giaChon);
+			if (giaNguoi) gia.set(nguoi.key, giaNguoi);
+			if (coTat) gia.set(tatF.key, tatA);
+			await contacts.update(lh.id, { fields: Object.fromEntries(gia) });
 		}
 	});
 
