@@ -83,7 +83,7 @@
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/bang-tac-nhan.md"
             }
           ],
-          "chi_phi_phan_ung_vien": 0.008131155,
+          "chi_phi_phan_ung_vien": 0.004089008,
           "tep_chi_phi_phan": [
             "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-ds-1.json",
             "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-ds-2.json",
@@ -100,7 +100,7 @@
         }
       ],
       "kien_nghi": "deepseek/deepseek-v4.1-flash-1017 (ds)",
-      "ly_do": "ds có chi phí phần ứng viên thấp nhất (0.008131155 USD mỗi lượt) trong 2 ứng viên đạt; ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5",
+      "ly_do": "ds có chi phí phần ứng viên thấp nhất (0.004089008 USD mỗi lượt) trong 2 ứng viên đạt; ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5",
       "thong_so_chua_do": [
         "trần bước phiên con",
         "trần thời gian phiên con",
@@ -350,7 +350,7 @@
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/do-bo-mau.md"
             }
           ],
-          "chi_phi_phan_ung_vien": 0.188970375,
+          "chi_phi_phan_ung_vien": 0.085362129,
           "tep_chi_phi_phan": [
             "_acceptance/model-theo-vai-do-lai/evidence/kho/ds/luot-1/aichiphi.json"
           ],
@@ -437,7 +437,7 @@
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/do-bo-mau.md"
             }
           ],
-          "chi_phi_phan_ung_vien": 1.98789075,
+          "chi_phi_phan_ung_vien": 1.867926375,
           "tep_chi_phi_phan": [
             "_acceptance/model-theo-vai-do-lai/evidence/kho/gem/luot-1/aichiphi.json"
           ],
@@ -450,7 +450,7 @@
         }
       ],
       "kien_nghi": "deepseek/deepseek-v4.1-flash-1017",
-      "ly_do": "ds có chi phí phần ứng viên thấp nhất (0.188970375 USD mỗi lượt) trong 1 ứng viên đạt; mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2",
+      "ly_do": "ds có chi phí phần ứng viên thấp nhất (0.085362129 USD mỗi lượt) trong 1 ứng viên đạt; mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2",
       "thong_so_chua_do": [
         "suy luận low cho Trợ lý kho"
       ],
@@ -564,7 +564,7 @@
               "tep": "_acceptance/model-theo-vai-do-lai/evidence/eval-soan-ds-2.json"
             }
           ],
-          "chi_phi_phan_ung_vien": 0.0787815,
+          "chi_phi_phan_ung_vien": 0.038381564,
           "tep_chi_phi_phan": [
             "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-soan-ds-1.json",
             "_acceptance/model-theo-vai-do-lai/evidence/aichiphi-soan-ds-2.json"

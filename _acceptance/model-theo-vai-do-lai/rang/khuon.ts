@@ -199,7 +199,7 @@ export const khuonNguong = z.object({
 		ap_cho: z.array(maUng).min(1),
 		luot_bi_loai: z.literal("chua-du-so"),
 		luat: z.literal("re-nhat-chi-phi-phan-ung-vien"),
-		chi_phi: z.literal("token-vao-nhan-gia-vao-cong-token-ra-nhan-gia-ra"),
+		chi_phi: z.literal("token-vao-khong-cache-nhan-gia-vao-cong-doc-cache-nhan-gia-cache-cong-token-ra-nhan-gia-ra"),
 		hoa: z.tuple([
 			z.literal("diem-cao-hon"),
 			z.literal("trung-vi-giay-thap-hon"),
@@ -290,8 +290,15 @@ export function chiPhiPhan(
 		hang
 			.filter((h) => tinhNang === null || h.tinhNang === tinhNang)
 			.reduce(
-				(s, h) =>
-					s + (h.inputTokens ?? 0) * gia.vao + (h.outputTokens ?? 0) * gia.ra,
+				(s, h) => {
+					const cache = h.cacheReadTokens ?? 0;
+					return (
+						s +
+						Math.max(0, (h.inputTokens ?? 0) - cache) * gia.vao +
+						cache * gia.doc_cache +
+						(h.outputTokens ?? 0) * gia.ra
+					);
+				},
 				0,
 			),
 		9,

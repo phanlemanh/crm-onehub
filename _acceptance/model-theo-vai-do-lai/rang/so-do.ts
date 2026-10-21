@@ -1429,7 +1429,7 @@ export function inDocs(b: Bang): string {
 		"",
 		`Bảng kiến nghị model cho từng vai AI của CRM, dựng bởi \`_acceptance/${MTV.slug}/rang/so-do.ts --ghi\` từ các lượt đo của hàng MH4. Không sửa tay: sửa bằng chứng rồi dựng lại. Ngưỡng và luật chọn: \`${b.nguong}\`. Ứng viên, giá, cỡ mẫu, trần: \`${b.ke_hoach}\`. Model chạy thật chưa đổi — đổi mặc định là hàng MH2.`,
 		"",
-		"Mỗi ứng viên đạt hay không theo ngưỡng của vai; ứng viên có lượt bị loại (sai model, lời dặn lệch mốc, dừng vì trần) hay thiếu kết xuất aiChiPhi là «chưa đủ số» và không vào luật chọn. Trong các ứng viên đạt, kiến nghị ứng viên có chi phí phần ứng viên mỗi lượt thấp nhất, bằng nhau thì điểm cao hơn rồi trung vị giây thấp hơn. Chi phí phần ứng viên = token vào × giá vào + token ra × giá ra trên các bước của vai trong kết xuất aiChiPhi của lượt, giá niêm yết ghim trong kế hoạch, không trừ đọc cache.",
+		"Mỗi ứng viên đạt hay không theo ngưỡng của vai; ứng viên có lượt bị loại (sai model, lời dặn lệch mốc, dừng vì trần) hay thiếu kết xuất aiChiPhi là «chưa đủ số» và không vào luật chọn. Trong các ứng viên đạt, kiến nghị ứng viên có chi phí phần ứng viên mỗi lượt thấp nhất, bằng nhau thì điểm cao hơn rồi trung vị giây thấp hơn. Chi phí phần ứng viên = token vào không qua cache × giá vào + token đọc cache × giá đọc cache + token ra × giá ra trên các bước của vai trong kết xuất aiChiPhi của lượt, giá niêm yết ghim trong kế hoạch; kết xuất vòng đầu của glm không có cột đọc cache nên tính như không đọc cache.",
 		"",
 		"| Vai | Đang chạy | Ứng viên | Kiến nghị | Vì sao |",
 		"| --- | --- | --- | --- | --- |",

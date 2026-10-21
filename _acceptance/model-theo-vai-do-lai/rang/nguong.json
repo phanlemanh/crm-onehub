@@ -36,7 +36,7 @@
 		],
 		"luot_bi_loai": "chua-du-so",
 		"luat": "re-nhat-chi-phi-phan-ung-vien",
-		"chi_phi": "token-vao-nhan-gia-vao-cong-token-ra-nhan-gia-ra",
+		"chi_phi": "token-vao-khong-cache-nhan-gia-vao-cong-doc-cache-nhan-gia-cache-cong-token-ra-nhan-gia-ra",
 		"hoa": [
 			"diem-cao-hon",
 			"trung-vi-giay-thap-hon"

@@ -2,24 +2,24 @@
 
 Bảng kiến nghị model cho từng vai AI của CRM, dựng bởi `_acceptance/model-theo-vai-do-lai/rang/so-do.ts --ghi` từ các lượt đo của hàng MH4. Không sửa tay: sửa bằng chứng rồi dựng lại. Ngưỡng và luật chọn: `_acceptance/model-theo-vai-do-lai/rang/nguong.json`. Ứng viên, giá, cỡ mẫu, trần: `_acceptance/model-theo-vai-do-lai/evidence/ke-hoach.json`. Model chạy thật chưa đổi — đổi mặc định là hàng MH2.
 
-Mỗi ứng viên đạt hay không theo ngưỡng của vai; ứng viên có lượt bị loại (sai model, lời dặn lệch mốc, dừng vì trần) hay thiếu kết xuất aiChiPhi là «chưa đủ số» và không vào luật chọn. Trong các ứng viên đạt, kiến nghị ứng viên có chi phí phần ứng viên mỗi lượt thấp nhất, bằng nhau thì điểm cao hơn rồi trung vị giây thấp hơn. Chi phí phần ứng viên = token vào × giá vào + token ra × giá ra trên các bước của vai trong kết xuất aiChiPhi của lượt, giá niêm yết ghim trong kế hoạch, không trừ đọc cache.
+Mỗi ứng viên đạt hay không theo ngưỡng của vai; ứng viên có lượt bị loại (sai model, lời dặn lệch mốc, dừng vì trần) hay thiếu kết xuất aiChiPhi là «chưa đủ số» và không vào luật chọn. Trong các ứng viên đạt, kiến nghị ứng viên có chi phí phần ứng viên mỗi lượt thấp nhất, bằng nhau thì điểm cao hơn rồi trung vị giây thấp hơn. Chi phí phần ứng viên = token vào không qua cache × giá vào + token đọc cache × giá đọc cache + token ra × giá ra trên các bước của vai trong kết xuất aiChiPhi của lượt, giá niêm yết ghim trong kế hoạch; kết xuất vòng đầu của glm không có cột đọc cache nên tính như không đọc cache.
 
 | Vai | Đang chạy | Ứng viên | Kiến nghị | Vì sao |
 | --- | --- | --- | --- | --- |
-| Tác nhân | `zai/glm-5.2-fast` | glm đạt, ds đạt | deepseek/deepseek-v4.1-flash-1017 (ds) | ds có chi phí phần ứng viên thấp nhất (0.008131155 USD mỗi lượt) trong 2 ứng viên đạt; ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5 |
-| Trợ lý kho | `zai/glm-5.2-fast` | glm không đạt, ds đạt, gem không đạt | deepseek/deepseek-v4.1-flash-1017 | ds có chi phí phần ứng viên thấp nhất (0.188970375 USD mỗi lượt) trong 1 ứng viên đạt; mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2 |
+| Tác nhân | `zai/glm-5.2-fast` | glm đạt, ds đạt | deepseek/deepseek-v4.1-flash-1017 (ds) | ds có chi phí phần ứng viên thấp nhất (0.004089008 USD mỗi lượt) trong 2 ứng viên đạt; ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5 |
+| Trợ lý kho | `zai/glm-5.2-fast` | glm không đạt, ds đạt, gem không đạt | deepseek/deepseek-v4.1-flash-1017 | ds có chi phí phần ứng viên thấp nhất (0.085362129 USD mỗi lượt) trong 1 ứng viên đạt; mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2 |
 | Soạn OKR | `google/gemini-3.8-flash` | glm không đạt, ds không đạt | giữ google/gemini-3.8-flash | không ứng viên nào đạt và đủ số — glm không đạt: một lượt không nộp được đề xuất nào (đạt 8/18) — lượt hỏng; ds không đạt: một lượt đạt 10/18, hỏng 7; ngưỡng ≥ 13/18, hỏng ≤ 3 |
 | Judge OKR | `zai/glm-5.2-fast` | — | giữ zai/glm-5.2-fast | Hỏi-3: không đổi judge ở vòng này, mọi số soạn OKR chấm bằng judge hiện tại |
 | Máy soạn kho | `zai/glm-5.2-fast` | — | giữ zai/glm-5.2-fast | Hỏi-4: chưa có thước |
 
 ## Tác nhân
 
-Kiến nghị: deepseek/deepseek-v4.1-flash-1017 (ds). ds có chi phí phần ứng viên thấp nhất (0.008131155 USD mỗi lượt) trong 2 ứng viên đạt; ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5.
+Kiến nghị: deepseek/deepseek-v4.1-flash-1017 (ds). ds có chi phí phần ứng viên thấp nhất (0.004089008 USD mỗi lượt) trong 2 ứng viên đạt; ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5.
 
 | Ứng viên | Model | Trạng thái | Chi phí phần ứng viên mỗi lượt (USD) | Chi phí thật mỗi lượt (USD) | Ngày đo | Vì sao |
 | --- | --- | --- | --- | --- | --- | --- |
 | glm (flash-low) | `zai/glm-5.3-flash` | đạt | 0.00897543 | 0.006961 | 2026-10-20 | flash-low qua 5/5 lượt dưới 180 giây; ngưỡng 4/5 |
-| ds (ds) | `deepseek/deepseek-v4.1-flash-1017` | đạt | 0.008131155 | 0.016356 | 2026-10-20 | ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5 |
+| ds (ds) | `deepseek/deepseek-v4.1-flash-1017` | đạt | 0.004089008 | 0.016356 | 2026-10-20 | ds qua 5/5 lượt dưới 180 giây; ngưỡng 4/5 |
 
 | Số | Giá trị | Tệp |
 | --- | --- | --- |
@@ -43,13 +43,13 @@ Thông số chưa dò: trần bước phiên con; trần thời gian phiên con;
 
 ## Trợ lý kho
 
-Kiến nghị: deepseek/deepseek-v4.1-flash-1017. ds có chi phí phần ứng viên thấp nhất (0.188970375 USD mỗi lượt) trong 1 ứng viên đạt; mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2.
+Kiến nghị: deepseek/deepseek-v4.1-flash-1017. ds có chi phí phần ứng viên thấp nhất (0.085362129 USD mỗi lượt) trong 1 ứng viên đạt; mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2.
 
 | Ứng viên | Model | Trạng thái | Chi phí phần ứng viên mỗi lượt (USD) | Chi phí thật mỗi lượt (USD) | Ngày đo | Vì sao |
 | --- | --- | --- | --- | --- | --- | --- |
 | glm | `zai/glm-5.3-flash` | không đạt | — | 2.749777 | 2026-10-20 | tầng mot.S6-ngoai đúng 2, mốc 4 |
-| ds | `deepseek/deepseek-v4.1-flash-1017` | đạt | 0.188970375 | 0.341442 | 2026-10-21 | mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2 |
-| gem | `google/gemini-3.8-flash` | không đạt | 1.98789075 | 1.867994 | 2026-10-21 | 3 câu lỗi, trần 2 |
+| ds | `deepseek/deepseek-v4.1-flash-1017` | đạt | 0.085362129 | 0.341442 | 2026-10-21 | mỗi tầng không kém mốc quá 1 câu, câu lỗi ≤ 2 |
+| gem | `google/gemini-3.8-flash` | không đạt | 1.867926375 | 1.867994 | 2026-10-21 | 3 câu lỗi, trần 2 |
 
 | Số | Giá trị | Tệp |
 | --- | --- | --- |
@@ -126,7 +126,7 @@ Kiến nghị: giữ google/gemini-3.8-flash. không ứng viên nào đạt và
 | Ứng viên | Model | Trạng thái | Chi phí phần ứng viên mỗi lượt (USD) | Chi phí thật mỗi lượt (USD) | Ngày đo | Vì sao |
 | --- | --- | --- | --- | --- | --- | --- |
 | glm | `zai/glm-5.3-flash` | không đạt | — | 0.126621 | 2026-10-20 | một lượt không nộp được đề xuất nào (đạt 8/18) — lượt hỏng |
-| ds | `deepseek/deepseek-v4.1-flash-1017` | không đạt | 0.0787815 | 0.10884 | 2026-10-21 | một lượt đạt 10/18, hỏng 7; ngưỡng ≥ 13/18, hỏng ≤ 3 |
+| ds | `deepseek/deepseek-v4.1-flash-1017` | không đạt | 0.038381564 | 0.10884 | 2026-10-21 | một lượt đạt 10/18, hỏng 7; ngưỡng ≥ 13/18, hỏng ≤ 3 |
 
 | Số | Giá trị | Tệp |
 | --- | --- | --- |
