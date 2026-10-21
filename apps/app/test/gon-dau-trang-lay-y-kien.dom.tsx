@@ -11,6 +11,10 @@ type VaoGop = {
 	viSao: string;
 	doBangGi: string;
 };
+type TuyChonGop = {
+	onSuccess?: (kq: { id: string }, vao: VaoGop) => void;
+	onError?: (e: Error) => void;
+};
 
 const GIO = 3_600_000;
 const BAY_GIO = Date.now();
@@ -30,7 +34,7 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		okr: {
 			gopY: {
-				mutationOptions: (chon?: object) => ({
+				mutationOptions: (chon?: TuyChonGop) => ({
 					...chon,
 					mutationKey: ["gopY"],
 					mutationFn: async (vao: VaoGop) => {

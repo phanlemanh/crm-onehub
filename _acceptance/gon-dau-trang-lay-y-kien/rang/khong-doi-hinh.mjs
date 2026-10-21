@@ -53,10 +53,10 @@ function danhSach() {
 			const ref = String(e.cmd ?? "")
 				.trim()
 				.replace(/^config:/, "");
-			const lenh = resolveConfigKey(cauHinh, ref);
-			if (typeof lenh !== "string" || lenh.trim() === "")
+			const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
+			if (lenh === "")
 				throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
-			ds.push({ ten: `${slug}#${e.id}`, lenh: lenh.trim() });
+			ds.push({ ten: `${slug}#${e.id}`, lenh });
 		}
 	}
 	ds.push({ ten: "okr-hoi-y.dom.tsx", lenh: LENH_BAI });
