@@ -78,7 +78,7 @@ export function RecordFields({
 }: {
 	fields: RecordFieldEntry[];
 	saving: (key: string) => boolean;
-	onSave: (values: Record<string, FieldValueJson>) => void;
+	onSave: (values: Record<string, FieldValueJson>, khoa: string) => void;
 }) {
 	const trpc = useTRPC();
 	const users = useQuery(trpc.users.list.queryOptions());
@@ -92,7 +92,7 @@ export function RecordFields({
 						key={field.id}
 						moTa={moTaTruongTuTao(
 							field,
-							(khoa, giaTri) => onSave({ [khoa]: giaTri }),
+							(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
 							saving,
 							users.data,
 						)}

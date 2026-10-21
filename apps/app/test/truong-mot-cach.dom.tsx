@@ -86,23 +86,18 @@ function hangTheoNhan(goc: ParentNode, nhan: string): HTMLElement | null {
 	return (label?.parentElement as HTMLElement | null) ?? null;
 }
 
-function moTa(goc: Partial<MoTaTruong> & Pick<MoTaTruong, "kieu" | "nhan">): {
-	moTa: MoTaTruong;
-	daGoi: unknown[];
-} {
-	const daGoi: unknown[] = [];
-	return {
-		daGoi,
-		moTa: {
-			khoa: goc.nhan,
-			giaTri: null,
-			nguoiDung: NGUOI,
-			luu: (giaTri) => {
-				daGoi.push(giaTri);
-			},
-			...goc,
+function moTa(goc: Partial<MoTaTruong> & Pick<MoTaTruong, "kieu" | "nhan">) {
+	const daGoi: MoTaTruong["giaTri"][] = [];
+	const mt: MoTaTruong = {
+		khoa: goc.nhan,
+		giaTri: null,
+		nguoiDung: NGUOI,
+		luu: (giaTri) => {
+			daGoi.push(giaTri);
 		},
+		...goc,
 	};
+	return { moTa: mt, daGoi };
 }
 
 async function moSuaVaGo(
@@ -891,7 +886,7 @@ const DAP_AN_TRUONG_CHUAN: {
 	{ phieu: "contact", khoa: "owner", kieu: "USER" },
 ];
 
-function boMoTaChuan(): Record<"deal" | "company" | "contact", MoTaTruong[]> {
+function boMoTaChuan() {
 	const ngu = {
 		m: r,
 		locale: "vi" as const,
@@ -1113,7 +1108,7 @@ type MocCot = {
 	sortable: boolean;
 };
 
-function mocCot(): Record<"deals" | "companies" | "contacts", MocCot[]> {
+function mocCot() {
 	const d = dealMessages("vi").headers;
 	const c = companyMessages("vi").headers;
 	const l = contactMessages("vi").headers;

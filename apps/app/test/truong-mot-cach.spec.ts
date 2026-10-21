@@ -81,81 +81,72 @@ describe("tmc-doc-so", () => {
 
 const TU_CAM = /t[uù]y chỉnh|tuỳ chỉnh|tùy chỉnh|trường động/i;
 
+type GiaTri = string | ((...doiSo: string[]) => string);
+type Nhanh = { readonly [khoa: string]: GiaTri | Nhanh };
 type Vet = { duong: string; chu: string };
 
-function quetChu(giaTri: unknown, duong: string, ra: Vet[], da: Set<unknown>): void {
-	if (typeof giaTri === "string") {
-		if (TU_CAM.test(giaTri)) ra.push({ duong, chu: giaTri });
-		return;
-	}
-	if (typeof giaTri === "function") {
-		const doiSo = Array.from({ length: giaTri.length }, () => "x");
-		try {
-			quetChu(giaTri(...doiSo), `${duong}()`, ra, da);
-		} catch {}
-		return;
-	}
-	if (giaTri && typeof giaTri === "object") {
-		if (da.has(giaTri)) return;
-		da.add(giaTri);
-		for (const [khoa, con] of Object.entries(giaTri)) {
-			quetChu(con, `${duong}.${khoa}`, ra, da);
-		}
-	}
+function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
+	return Object.entries(o).flatMap(([k, v]): [string, GiaTri][] =>
+		v instanceof Function
+			? [[`${tien}${k}`, v]]
+			: v instanceof Map
+				? phang(Object.fromEntries(v) as Nhanh, `${tien}${k}.`)
+				: v instanceof Object
+					? phang(v, `${tien}${k}.`)
+					: [[`${tien}${k}`, v]],
+	);
 }
 
-function nhanhViet(mod: Record<string, unknown>): unknown[] {
-	const ra: unknown[] = [];
-	for (const giaTri of Object.values(mod)) {
-		if (typeof giaTri === "function" && giaTri.length === 1) {
-			try {
-				ra.push(giaTri("vi"));
-			} catch {}
-		} else if (giaTri && typeof giaTri === "object" && "vi" in giaTri) {
-			ra.push((giaTri as { vi: unknown }).vi);
-		}
-	}
-	return ra;
+function chuCua(v: GiaTri): string {
+	return v instanceof Function
+		? v(...Array.from({ length: v.length }, () => "x"))
+		: v;
 }
+
+function quetNhanh(nhanh: Nhanh, tep: string): Vet[] {
+	return phang(nhanh)
+		.map(([duong, v]) => ({ duong: `${tep}.${duong}`, chu: chuCua(v) }))
+		.filter((vet) => TU_CAM.test(vet.chu));
+}
+
+async function layNhanhViet(tep: string): Promise<Nhanh> {
+	const ns: unknown = await import(path.join(THU_MUC_KHO, tep));
+	const lay = Object.values(ns as object).find(
+		(v): v is (locale: Locale) => Nhanh => v instanceof Function,
+	);
+	if (!lay) throw new Error(`tmc ten goi: ${tep} khong xuat ham lay`);
+	return lay("vi");
+}
+
+const THU_MUC_KHO = path.join(import.meta.dir, "..", "lib", "messages");
 
 describe("tmc-ten-goi", () => {
 	test("chu tieng Viet cua app khong con tuy chinh, truong dong", async () => {
 		const { readdirSync } = await import("node:fs");
-		const thuMuc = path.join(import.meta.dir, "..", "lib", "messages");
-		const tep = readdirSync(thuMuc).filter((t) => t.endsWith(".ts"));
+		const tep = readdirSync(THU_MUC_KHO).filter((t) => t.endsWith(".ts"));
 		let daDuyet = 0;
 		const vet: Vet[] = [];
 		for (const t of tep) {
-			const mod = (await import(path.join(thuMuc, t))) as Record<
-				string,
-				unknown
-			>;
-			for (const nhanh of nhanhViet(mod)) {
-				quetChu(nhanh, t, vet, new Set());
-			}
+			vet.push(...quetNhanh(await layNhanhViet(t), t));
 			daDuyet += 1;
 		}
 		if (daDuyet < tep.length) throw new Error("tmc ten goi: bo sot tep");
-		if (vet[0]) {
-			throw new Error(`tmc ten goi: ${vet[0].duong} ${vet[0].chu}`);
-		}
+		if (vet[0]) throw new Error(`tmc ten goi: ${vet[0].duong} ${vet[0].chu}`);
 
-		const { crmMessages } = await import("../lib/messages/crm");
-		const goiY = crmMessages("vi").fields.createHint;
-		if (!goiY.includes("trường") || goiY.includes("động")) {
+		const crm = phang(await layNhanhViet("crm.ts"));
+		const goiY = crm.find(([k]) => k === "fields.createHint")?.[1];
+		const chuGoiY = goiY === undefined ? "" : chuCua(goiY);
+		if (!chuGoiY.includes("trường") || chuGoiY.includes("động")) {
 			throw new Error("tmc ten goi: dong sua createHint");
 		}
-		const karaMod = (await import("../lib/messages/kara-ban-ghi")) as Record<
-			string,
-			unknown
-		>;
-		const coDong = JSON.stringify(nhanhViet(karaMod)).includes(
-			'"set_field_value":"Điền một trường"',
+		const kara = phang(await layNhanhViet("kara-ban-ghi.ts"));
+		const coDong = kara.some(
+			([k, v]) =>
+				k.endsWith(".set_field_value") && chuCua(v) === "Điền một trường",
 		);
 		if (!coDong) throw new Error("tmc ten goi: dong sua set_field_value");
 
-		const thu: Vet[] = [];
-		quetChu({ a: "Điền một trường tuỳ chỉnh" }, "thu", thu, new Set());
+		const thu = quetNhanh({ a: "Điền một trường tuỳ chỉnh" }, "thu");
 		if (thu.length !== 1) throw new Error("tmc ten goi: thuoc mu");
 		expect(daDuyet).toBe(tep.length);
 	});

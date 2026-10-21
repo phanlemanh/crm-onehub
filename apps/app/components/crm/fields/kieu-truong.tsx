@@ -57,7 +57,6 @@ export type MoTaTruong = {
 	trinhBay?: (giaTri: string) => ReactNode;
 	goiY?: string;
 	khongNhan?: boolean;
-	khoaDuLieu?: string;
 	nguon?: ReactNode;
 	deXuat?: ReactNode;
 	luu: (giaTri: GiaTriTruong) => void;
@@ -86,8 +85,9 @@ function laRong(giaTri: GiaTriTruong): boolean {
 
 function timNguoi(gia: GiaTriHienThi): Owner | null {
 	if (gia.nguoi !== undefined) return gia.nguoi;
-	if (typeof gia.giaTri !== "string") return null;
-	return gia.nguoiDung?.find((nguoi) => nguoi.id === gia.giaTri) ?? null;
+	if (laRong(gia.giaTri)) return null;
+	const id = String(gia.giaTri);
+	return gia.nguoiDung?.find((nguoi) => nguoi.id === id) ?? null;
 }
 
 function chanLan(event: { stopPropagation: () => void }) {
@@ -391,7 +391,7 @@ function luaChonNguoi(moTa: MoTaTruong, locale: Locale): LuaChonTruong[] {
 			: [{ value: RONG, label: moTa.nhanRong ?? m.owner.unassigned }]),
 		...nguoiDung.map((nguoi) => ({ value: nguoi.id, label: nguoi.name })),
 	];
-	const hienTai = typeof moTa.giaTri === "string" ? moTa.giaTri : null;
+	const hienTai = laRong(moTa.giaTri) ? null : String(moTa.giaTri);
 	if (hienTai && moTa.nguoiDung && !ds.some((muc) => muc.value === hienTai)) {
 		ds.push({
 			value: hienTai,
@@ -413,8 +413,7 @@ function OChon({ moTa }: { moTa: MoTaTruong }) {
 						: [{ value: RONG, label: moTa.nhanRong ?? m.fieldValue.none }]),
 					...(moTa.luaChon ?? []),
 				];
-	const giaTri =
-		typeof moTa.giaTri === "string" && moTa.giaTri !== "" ? moTa.giaTri : RONG;
+	const giaTri = laRong(moTa.giaTri) ? RONG : String(moTa.giaTri);
 
 	return (
 		<InlineSelectField
@@ -499,36 +498,29 @@ export function OTruongPhieu({ moTa }: { moTa: MoTaTruong }) {
 	return <>{KIEU_TRUONG[moTa.kieu].suaTaiCho(moTa)}</>;
 }
 
-const MA_LOI_MAY_CHU: Partial<Record<KieuTruong, MaTuChoi>> = {
+const MA_LOI_MAY_CHU = {
 	SELECT: "lua-chon",
 	USER: "nguoi",
-};
+} as const satisfies Partial<Record<KieuTruong, MaTuChoi>>;
+
+function maLoiMayChu(kieu: KieuTruong): MaTuChoi {
+	if (kieu === "SELECT" || kieu === "USER") return MA_LOI_MAY_CHU[kieu];
+	return "khac";
+}
 
 export function loiLuuTruong(
 	moTa: Pick<MoTaTruong, "nhan" | "kieu">,
 	locale: Locale,
 ): string {
 	const m = crmMessages(locale).truongKieu;
-	const ma = MA_LOI_MAY_CHU[moTa.kieu] ?? "khac";
-	return `${m.chuaLuu(moTa.nhan)} ${m.tuChoi[ma]}`;
+	return `${m.chuaLuu(moTa.nhan)} ${m.tuChoi[maLoiMayChu(moTa.kieu)]}`;
 }
 
-export function khoaDangLuu(duLieu: object | undefined): string | null {
-	if (!duLieu) return null;
-	const truongTuTao = "fields" in duLieu ? duLieu.fields : undefined;
-	const khoa =
-		truongTuTao && typeof truongTuTao === "object"
-			? Object.keys(truongTuTao)
-			: Object.keys(duLieu);
-	return khoa.length === 1 ? (khoa[0] ?? null) : null;
-}
-
-export function cauLoiLuu(
-	duLieu: object | undefined,
-	dsMoTa: Pick<MoTaTruong, "khoa" | "khoaDuLieu" | "nhan" | "kieu">[],
+export function cauLoiTheoKhoa(
+	khoa: string | undefined,
+	dsMoTa: Pick<MoTaTruong, "khoa" | "nhan" | "kieu">[],
 	locale: Locale,
 ): string | null {
-	const khoa = khoaDangLuu(duLieu);
-	const moTa = dsMoTa.find((mt) => (mt.khoaDuLieu ?? mt.khoa) === khoa);
+	const moTa = khoa ? dsMoTa.find((mt) => mt.khoa === khoa) : undefined;
 	return moTa ? loiLuuTruong(moTa, locale) : null;
 }

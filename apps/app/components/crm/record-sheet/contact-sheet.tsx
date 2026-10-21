@@ -38,7 +38,7 @@ import {
 	FactSuggestion,
 } from "@/components/crm/facts";
 import {
-	cauLoiLuu,
+	cauLoiTheoKhoa,
 	HienThiTruong,
 	type MoTaTruong,
 	OTruongBang,
@@ -328,7 +328,7 @@ const AGENT_FIELDS = [
 	"githubUrl",
 ] as const;
 
-type LuuLienHe = (data: Record<string, string | null>) => void;
+type LuuLienHe = (data: Record<string, string | null>, khoa: string) => void;
 
 type KhoaChuLienHe =
 	| "firstName"
@@ -366,11 +366,10 @@ export function truongChuanLienHe(
 		them: Partial<MoTaTruong> = {},
 	): MoTaTruong => ({
 		khoa,
-		khoaDuLieu,
 		nhan,
 		kieu,
 		giaTri: contact[khoaDuLieu],
-		luu: (giaTri) => luu({ [khoaDuLieu]: chu(giaTri) }),
+		luu: (giaTri) => luu({ [khoaDuLieu]: chu(giaTri) }, khoa),
 		dangLuu: dangLuu(khoaDuLieu),
 		...them,
 	});
@@ -396,14 +395,13 @@ export function truongChuanLienHe(
 		}),
 		{
 			khoa: "owner",
-			khoaDuLieu: "ownerId",
 			nhan: m.contact.fields.owner,
 			kieu: "USER",
 			giaTri: contact.owner?.id ?? null,
 			nguoi: contact.owner,
 			nhanRong: m.contact.fields.unassigned,
 			nguoiDung,
-			luu: (giaTri) => luu({ ownerId: chu(giaTri) }),
+			luu: (giaTri) => luu({ ownerId: chu(giaTri) }, "owner"),
 			dangLuu: dangLuu("ownerId"),
 		},
 	];
@@ -462,13 +460,17 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 	const isSaving = savingField(update);
 
 	const baoLoi =
-		(data: object, dsMoTa: MoTaTruong[]) => (error: { message: string }) =>
-			toast.error(cauLoiLuu(data, dsMoTa, locale) ?? error.message);
+		(
+			khoa: string | undefined,
+			dsMoTa: Pick<MoTaTruong, "khoa" | "nhan" | "kieu">[],
+		) =>
+		(error: { message: string }) =>
+			toast.error(cauLoiTheoKhoa(khoa, dsMoTa, locale) ?? error.message);
 
-	const save = (data: Record<string, string | null>) =>
+	const save = (data: Record<string, string | null>, khoa?: string) =>
 		update.mutate(
 			{ id: contact.id, data },
-			{ onError: baoLoi(data, truongChuan) },
+			{ onError: baoLoi(khoa, truongChuan) },
 		);
 
 	const truongChuan = truongChuanLienHe(contact, {
@@ -487,18 +489,16 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 		return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
 	};
 
-	const saveFields = (fields: Record<string, FieldValueJson>) =>
+	const saveFields = (fields: Record<string, FieldValueJson>, khoa?: string) =>
 		update.mutate(
 			{ id: contact.id, data: { fields } },
 			{
 				onError: baoLoi(
-					{ fields },
+					khoa,
 					contact.fields.map((field) => ({
 						khoa: field.key,
 						nhan: field.label,
 						kieu: field.type,
-						giaTri: field.value,
-						luu: () => {},
 					})),
 				),
 			},

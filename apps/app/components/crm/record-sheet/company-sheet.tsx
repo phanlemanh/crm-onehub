@@ -30,7 +30,7 @@ import { AgentPanel } from "@/components/crm/agent-panel";
 import { EnrichmentActions } from "@/components/crm/enrichment-actions";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
 import {
-	cauLoiLuu,
+	cauLoiTheoKhoa,
 	HienThiTruong,
 	type MoTaTruong,
 	OTruongBang,
@@ -375,7 +375,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 	);
 }
 
-type LuuCongTy = (data: Record<string, string | null>) => void;
+type LuuCongTy = (data: Record<string, string | null>, khoa: string) => void;
 
 export function truongChuanCongTy(
 	company: Company,
@@ -406,7 +406,7 @@ export function truongChuanCongTy(
 		kieu,
 		giaTri: company[khoa],
 		goiY,
-		luu: (giaTri) => luu({ [khoa]: chu(giaTri) }),
+		luu: (giaTri) => luu({ [khoa]: chu(giaTri) }, khoa),
 		dangLuu: dangLuu(khoa),
 	});
 	return [
@@ -416,7 +416,7 @@ export function truongChuanCongTy(
 			kieu: "TEXT",
 			giaTri: company.name,
 			batBuoc: true,
-			luu: (giaTri) => luu({ name: String(giaTri) }),
+			luu: (giaTri) => luu({ name: String(giaTri) }, "name"),
 			dangLuu: dangLuu("name"),
 		},
 		{
@@ -432,7 +432,7 @@ export function truongChuanCongTy(
 					toast.error(companyMessages(locale).nenTang(nenTang.ten));
 					return;
 				}
-				luu({ domain });
+				luu({ domain }, "domain");
 			},
 			dangLuu: dangLuu("domain"),
 		},
@@ -459,19 +459,18 @@ export function truongChuanCongTy(
 					<span translate="no">{quocGia.ten}</span>
 				);
 			},
-			luu: (giaTri) => luu({ country: chu(giaTri) }),
+			luu: (giaTri) => luu({ country: chu(giaTri) }, "country"),
 			dangLuu: dangLuu("country"),
 		},
 		{
 			khoa: "owner",
-			khoaDuLieu: "ownerId",
 			nhan: m.company.fields.owner,
 			kieu: "USER",
 			giaTri: company.owner?.id ?? null,
 			nguoi: company.owner,
 			nhanRong: m.company.fields.unassigned,
 			nguoiDung,
-			luu: (giaTri) => luu({ ownerId: chu(giaTri) }),
+			luu: (giaTri) => luu({ ownerId: chu(giaTri) }, "owner"),
 			dangLuu: dangLuu("ownerId"),
 		},
 	];
@@ -495,13 +494,17 @@ export function CompanyOverview({ company }: { company: Company }) {
 	const isSavingField = savingValue(update);
 
 	const baoLoi =
-		(data: object, dsMoTa: MoTaTruong[]) => (error: { message: string }) =>
-			toast.error(cauLoiLuu(data, dsMoTa, locale) ?? error.message);
+		(
+			khoa: string | undefined,
+			dsMoTa: Pick<MoTaTruong, "khoa" | "nhan" | "kieu">[],
+		) =>
+		(error: { message: string }) =>
+			toast.error(cauLoiTheoKhoa(khoa, dsMoTa, locale) ?? error.message);
 
-	const save = (data: Record<string, string | null>) =>
+	const save = (data: Record<string, string | null>, khoa?: string) =>
 		update.mutate(
 			{ id: company.id, data },
-			{ onError: baoLoi(data, truongChuan) },
+			{ onError: baoLoi(khoa, truongChuan) },
 		);
 
 	const truongChuan = truongChuanCongTy(company, {
@@ -512,18 +515,16 @@ export function CompanyOverview({ company }: { company: Company }) {
 		nguoiDung: users.data,
 	});
 
-	const saveFields = (fields: Record<string, FieldValueJson>) =>
+	const saveFields = (fields: Record<string, FieldValueJson>, khoa?: string) =>
 		update.mutate(
 			{ id: company.id, data: { fields } },
 			{
 				onError: baoLoi(
-					{ fields },
+					khoa,
 					company.fields.map((field) => ({
 						khoa: field.key,
 						nhan: field.label,
 						kieu: field.type,
-						giaTri: field.value,
-						luu: () => {},
 					})),
 				),
 			},

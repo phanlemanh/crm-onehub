@@ -30,7 +30,7 @@ import { InlineCompanyField } from "@/components/crm/company-picker";
 import { contactName } from "@/components/crm/contact-name";
 import { DealStageIndicator } from "@/components/crm/deal-stage";
 import {
-	cauLoiLuu,
+	cauLoiTheoKhoa,
 	HienThiTruong,
 	type MoTaTruong,
 	OTruongBang,
@@ -287,14 +287,17 @@ export function DealSheet({ dealId }: { dealId: string }) {
 	);
 }
 
-type LuuThoaThuan = (data: {
-	name?: string;
-	amountCents?: number | null;
-	currency?: string;
-	expectedCloseDate?: string | null;
-	ownerId?: string;
-	description?: string | null;
-}) => void;
+type LuuThoaThuan = (
+	data: {
+		name?: string;
+		amountCents?: number | null;
+		currency?: string;
+		expectedCloseDate?: string | null;
+		ownerId?: string;
+		description?: string | null;
+	},
+	khoa: string,
+) => void;
 
 export function truongChuanThoaThuan(
 	deal: Deal,
@@ -318,18 +321,17 @@ export function truongChuanThoaThuan(
 			kieu: "TEXT",
 			giaTri: deal.name,
 			batBuoc: true,
-			luu: (giaTri) => luu({ name: String(giaTri) }),
+			luu: (giaTri) => luu({ name: String(giaTri) }, "name"),
 			dangLuu: dangLuu("name"),
 		},
 		{
 			khoa: "amount",
-			khoaDuLieu: "amountCents",
 			nhan: m.deal.fields.amount,
 			kieu: "MONEY",
 			giaTri: deal.amountCents,
 			tienTe: currency,
 			luu: (giaTri) =>
-				luu({ amountCents: giaTri === null ? null : Number(giaTri) }),
+				luu({ amountCents: giaTri === null ? null : Number(giaTri) }, "amount"),
 			dangLuu: dangLuu("amountCents"),
 		},
 		{
@@ -339,7 +341,7 @@ export function truongChuanThoaThuan(
 			giaTri: currency,
 			batBuoc: true,
 			luaChon: currencyOptions(currency, m),
-			luu: (giaTri) => luu({ currency: String(giaTri) }),
+			luu: (giaTri) => luu({ currency: String(giaTri) }, "currency"),
 			dangLuu: dangLuu("currency"),
 		},
 		{
@@ -348,12 +350,14 @@ export function truongChuanThoaThuan(
 			kieu: "DATE",
 			giaTri: deal.expectedCloseDate,
 			luu: (giaTri) =>
-				luu({ expectedCloseDate: giaTri === null ? null : String(giaTri) }),
+				luu(
+					{ expectedCloseDate: giaTri === null ? null : String(giaTri) },
+					"expectedCloseDate",
+				),
 			dangLuu: dangLuu("expectedCloseDate"),
 		},
 		{
 			khoa: "owner",
-			khoaDuLieu: "ownerId",
 			nhan: m.deal.fields.owner,
 			kieu: "USER",
 			giaTri: deal.owner.id,
@@ -361,7 +365,7 @@ export function truongChuanThoaThuan(
 			batBuoc: true,
 			nguoiDung,
 			luu: (giaTri) => {
-				if (typeof giaTri === "string") luu({ ownerId: giaTri });
+				if (giaTri !== null) luu({ ownerId: String(giaTri) }, "owner");
 			},
 			dangLuu: dangLuu("ownerId"),
 		},
@@ -375,7 +379,10 @@ export function truongChuanThoaThuan(
 				? undefined
 				: m.deal.descriptionHint(deal.company.name),
 			luu: (giaTri) =>
-				luu({ description: giaTri === null ? null : String(giaTri) }),
+				luu(
+					{ description: giaTri === null ? null : String(giaTri) },
+					"description",
+				),
 			dangLuu: dangLuu("description"),
 		},
 	];
@@ -400,13 +407,20 @@ export function DealOverview({ deal }: { deal: Deal }) {
 	const isSaving = savingField(update);
 
 	const baoLoi =
-		(data: object, dsMoTa: MoTaTruong[]) => (error: { message: string }) =>
-			toast.error(cauLoiLuu(data, dsMoTa, locale) ?? error.message);
+		(
+			khoa: string | undefined,
+			dsMoTa: Pick<MoTaTruong, "khoa" | "nhan" | "kieu">[],
+		) =>
+		(error: { message: string }) =>
+			toast.error(cauLoiTheoKhoa(khoa, dsMoTa, locale) ?? error.message);
 
-	const save = (data: Parameters<typeof update.mutate>[0]["data"]) =>
+	const save = (
+		data: Parameters<typeof update.mutate>[0]["data"],
+		khoa?: string,
+	) =>
 		update.mutate(
 			{ id: deal.id, data },
-			{ onError: baoLoi(data, truongChuan) },
+			{ onError: baoLoi(khoa, truongChuan) },
 		);
 
 	const truongChuan = truongChuanThoaThuan(deal, {
@@ -421,18 +435,16 @@ export function DealOverview({ deal }: { deal: Deal }) {
 		return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
 	};
 
-	const saveFields = (fields: Record<string, FieldValueJson>) =>
+	const saveFields = (fields: Record<string, FieldValueJson>, khoa?: string) =>
 		update.mutate(
 			{ id: deal.id, data: { fields } },
 			{
 				onError: baoLoi(
-					{ fields },
+					khoa,
 					deal.fields.map((field) => ({
 						khoa: field.key,
 						nhan: field.label,
 						kieu: field.type,
-						giaTri: field.value,
-						luu: () => {},
 					})),
 				),
 			},
