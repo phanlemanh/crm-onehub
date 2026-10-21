@@ -1,5 +1,6 @@
 "use client";
 
+import { Card, CardContent } from "@crm/ui/components/card";
 import {
 	FlowMap,
 	type FlowMapEdge,
@@ -174,25 +175,25 @@ export type LopSoDo = "trang" | "toan-vung";
 
 function KhungSoDo({ nhan, lop }: { nhan: string; lop: LopSoDo }) {
 	return (
-		<div
+		<Card
 			aria-busy="true"
 			aria-live="polite"
-			className={
-				lop === "toan-vung"
-					? "flex min-h-0 flex-1 flex-col items-center gap-16 rounded-lg border p-8"
-					: "flex flex-col items-center gap-16 rounded-lg border p-8"
-			}
+			className={lop === "toan-vung" ? "min-h-0 flex-1" : undefined}
 			data-so-do-dang-tai
 			style={lop === "toan-vung" ? undefined : { height: SO_DO.khung.caoPx }}
 		>
-			<span className="sr-only">{nhan}</span>
-			<Skeleton className="h-28 w-64" />
-			<div className="flex gap-10">
-				<Skeleton className="h-28 w-64" />
-				<Skeleton className="h-28 w-64" />
-				<Skeleton className="h-28 w-64" />
-			</div>
-		</div>
+			<CardContent>
+				<div className="flex flex-col items-center gap-16">
+					<span className="sr-only">{nhan}</span>
+					<Skeleton className="h-28 w-64" />
+					<div className="flex gap-10">
+						<Skeleton className="h-28 w-64" />
+						<Skeleton className="h-28 w-64" />
+						<Skeleton className="h-28 w-64" />
+					</div>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
 

@@ -1,11 +1,13 @@
 "use client";
 
+import { Card, CardContent } from "@crm/ui/components/card";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { escTuXuLy } from "@crm/ui/lib/tu-xu-ly-esc";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
-import { useEffect } from "react";
+import { useRef } from "react";
 import { okrQuanhMessages } from "@/lib/messages/okr-quanh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -22,39 +24,41 @@ function useEscToanManHinh(tam: string | null) {
 	const { bat, dat } = useToanManHinh();
 	const [thamSo, datThamSo] = useQueryStates(soDoParsers);
 	const theDonViMo = tam === null && thamSo[SEARCH_PARAM.okr.moDonVi] !== null;
-	useEffect(() => {
-		if (!bat) return;
+	const moiNhat = useRef({ bat, dat, datThamSo, theDonViMo });
+	moiNhat.current = { bat, dat, datThamSo, theDonViMo };
+	useMountEffect(() => {
 		const nghe = (e: KeyboardEvent) => {
-			if (e.key !== "Escape") return;
+			const h = moiNhat.current;
+			if (!h.bat || e.key !== "Escape") return;
 			const buoc = buocEsc({
 				tuXuLy: escTuXuLy(e.target),
 				lopMo: lopDangMo(document),
-				theDonViMo,
+				theDonViMo: h.theDonViMo,
 			});
 			if (buoc === "dong-the")
-				void datThamSo({ [SEARCH_PARAM.okr.moDonVi]: null });
-			if (buoc === "thoat") dat(false);
+				void h.datThamSo({ [SEARCH_PARAM.okr.moDonVi]: null });
+			if (buoc === "thoat") h.dat(false);
 		};
 		document.addEventListener("keydown", nghe, true);
 		return () => document.removeEventListener("keydown", nghe, true);
-	}, [bat, dat, datThamSo, theDonViMo]);
+	});
 }
 
 export function KhungSoDoCho() {
 	const m = okrQuanhMessages(useLocale());
 	return (
-		<div
-			aria-busy="true"
-			className="flex min-h-0 flex-1 flex-col items-center gap-10 rounded-lg border p-8"
-			data-so-do-cho
-		>
-			<span className="sr-only">{m.dangTai}</span>
-			<Skeleton className="h-24 w-64" />
-			<div className="flex gap-8">
-				<Skeleton className="h-20 w-56" />
-				<Skeleton className="h-20 w-56" />
-			</div>
-		</div>
+		<Card aria-busy="true" className="min-h-0 flex-1" data-so-do-cho>
+			<CardContent>
+				<div className="flex flex-col items-center gap-10">
+					<span className="sr-only">{m.dangTai}</span>
+					<Skeleton className="h-24 w-64" />
+					<div className="flex gap-8">
+						<Skeleton className="h-20 w-56" />
+						<Skeleton className="h-20 w-56" />
+					</div>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
 
