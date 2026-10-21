@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>10 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>11 việc"]
+  GD --> B["Sắp mở vòng<br/>14 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>152 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>157 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>158 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -38,12 +38,15 @@ flowchart TD
 
 ## Sắp mở vòng
 
+- Trưởng đơn vị mở Cập nhật gần đây trước buổi họp tuần, đọc mọi lần cập nhật của bộ OKR mình dẫn, mới nhất trước, và trả lời ngay dưới từng lần (`cap-nhat-gan-day`)
 - E15 của tro-ly-doc-kho coi lượt đủ mã là đã đo, ghi câu lỗi model vào cột riêng, có trần (`cham-bo-do-chiu-cau-loi`)
 - Chú thích của t1_skip_globs nói đúng: **/*.md khớp cả tệp .md ở gốc kho (`chu-thich-glob-md`)
 - Hồ sơ đã ký hoá cũ oan được ghim lại hoặc sửa thước một lượt, sau khi kit có K-A (`don-ho-so-cu`)
 - Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu (`giai-doan-bo-mac-dinh`)
 - Chủ kho nhận trong ngày một đợt gom đề xuất sẵn nhóm và hàng mỗi khi có tín hiệu mới, và chỉ cần sửa hay phủ quyết (`gom-tin-hieu-tu-chay`)
 - Các hồ sơ đã ký mà kiểm chéo gọi tên đỏ được đo lại, mỗi thước hỏng được sửa hoặc ghi lại có lý do (`ho-so-do-kiem-cheo`)
+- Ban lãnh đạo bấm ô Trượt ở Báo cáo › Sức khoẻ và đọc mọi KR đang trượt của cả công ty trong một danh sách lọc được theo đơn vị và người (`moi-kr-ca-cong-ty`)
+- Trưởng đơn vị bấm Thêm mục tiêu và chọn một đường trong một hộp: tự viết, từ mẫu, từ bảng tính hay soạn cùng Kara; ở Báo cáo không có nút tạo nào (`mot-nut-tao-muc-tieu`)
 - Người dùng CRM thấy thông báo nhận qua Zalo cũng nằm trong chuông, và tự chọn loại nào được đẩy qua kênh nào (`thong-bao-mot-nguon-nhieu-kenh`)
 - Đổi một tệp chữ khác không kéo hồ sơ giai-doan-thoa-thuan vào ghim lại: E15 chỉ theo dõi tệp chữ của màn giai đoạn (`thu-paths-e15-giai-doan`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
