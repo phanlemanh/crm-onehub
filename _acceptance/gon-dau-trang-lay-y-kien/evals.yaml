@@ -1,0 +1,155 @@
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.gdl_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
+      - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
+      - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
+    expected: |
+      Một lần chạy man-gui.mjs trên phiên đo riêng (tien-de.mjs), bộ OKR mẫu, mở một Lấy ý kiến pha góp cho thành viên
+      thường. Ma trận viết trước 2 khổ {390x812, 375x812}: mỗi khổ một khẳng định «GUI <kho>: day <px> <= <cao> · dinh
+      <px> >= 0 · tam nut la nut Gui». DUNG khi mép dưới nút Gửi <= chiều cao khung nhìn, mép trên >= 0 và
+      document.elementFromPoint(tâm nút) nằm trong nút. In «SAI AC-1: GUI <kho> …» và mã 1 khi lệch.
+      CHIEU DO (man-gui.mjs --chieu-do bo-bam, bản sao): gỡ lớp bám đáy khỏi HangHanhDongBamDay → «SAI AC-1: GUI 390 day
+      9xxpx» (ghim /SAI AC-1: GUI 390 day \d+px/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.gdl_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
+      - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
+      - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
+    expected: |
+      Cùng lần chạy E1, khổ 390x812: cuộn vùng cuộn thật của trang tới khi đáy khung soạn cách đáy màn 20px; khẳng định «DONG CHAY: hang
+      <px> >= day o Do bang gi <px>» và hàng không giao hình chữ nhật với ô nào của khung soạn. In «SAI AC-2: …», mã 1.
+      CHIEU DO (--chieu-do bam-co-dinh, bản sao): hàng dùng fixed thay sticky → hàng che ô Đo bằng gì khi cuộn cuối →
+      «SAI AC-2: hang che o» (ghim /SAI AC-2: hang che o/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.gdl_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-gop.tsx"
+      - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
+      - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
+    expected: |
+      Cùng lần chạy E1, 390x812, ma trận viết trước 3 ô x 2 cách vào {Tab từ ô trước, chạm chuột vào phần ô ló 12px trên
+      mép hàng bám} = 6 khẳng định
+      «TIEU DIEM <o> <cach>: day o <px> <= dinh hang <px>» đo sau 1200ms. In «SAI AC-3: …», mã 1.
+      CHIEU DO (--chieu-do bo-le, bản sao): gỡ phần cuộn ô lên của HangHanhDongBamDay → ít nhất một ô bị che → «SAI AC-3: TIEU DIEM»
+      (ghim /SAI AC-3: TIEU DIEM \S+/), mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.gdl_gui_sai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-gop.tsx"
+      - "apps/app/test/gon-dau-trang-lay-y-kien.dom.tsx"
+    expected: |
+      Ca "gdl-gui-sai" (jsdom): ô Ý 5 ký tự, bấm Gửi → FieldError với câu loiNgan ghim, document.activeElement là ô Ý,
+      gopY không được gọi. Đối chứng dương cùng tệp: ý 12 ký tự → gopY gọi đúng một lần, không FieldError.
+      CHIEU DO (GDL_PHA=bo-focus, bản sao không chuyển tiêu điểm) → "gdl-gui-sai: tieu diem khong ve o Y".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4b
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.gdl_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-gop.tsx"
+      - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
+      - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
+    expected: |
+      Cùng lần chạy E1, ma trận viết trước 2 khổ {390x812, 375x812} x 2 vị trí {chưa cuộn, đã cuộn để ô Ý khuất 40px phía
+      trên mép vùng cuộn} = 4 ca: gõ «ngắn» vào ô Ý, bấm Gửi → «GUI SAI <kho> <vi tri>: tieu diem o Y · dinh o Y <px> >=
+      dinh vung <px> · day o Y <px> <= dinh
+      hang <px> · day loi <px> <= dinh hang <px> · 0 yeu cau gopY». Đối chứng dương cùng bộ đếm, cùng lần chạy (trước
+      bốn ca): gửi một ý hợp lệ 12 ký tự → «GUI DUNG: 1 yeu cau gopY»; thiếu dòng này → KHONG DO DUOC, mã 2. In «SAI
+      AC-4: …», mã 1. CHIEU DO (--chieu-do le-o, bản sao): gỡ bước cuộn khối Field và chuyển tiêu điểm khi gửi sai →
+      ô Ý còn khuất ở ca đã cuộn → ghim /SAI AC-4: GUI SAI \d+ da-cuon/, mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.gdl_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
+      - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
+      - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
+    expected: |
+      Cùng lần chạy E1, 1280x800: «MAY TINH: dinh Gui <px> (goc <px>) · lech <= 1 · position hang <gia tri> != sticky ·
+      border-top-width 0 · khung soan tron trong man». Số gốc là
+      mép trên nút Gửi đo trên cây tạm tách ở origin/onehub cùng phiên đo, cùng dữ liệu (git worktree, dọn sau). In
+      «SAI AC-5: …», mã 1. Không đo được cây gốc → KHONG DO DUOC, mã 2.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.gdl_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
+      - "_acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"
+    expected: |
+      Cùng lần chạy E1, 390x812: đối chứng dương trước — ca góp in «CO BAM gop: 1 [data-slot=hang-hanh-dong-bam-day]»
+      (thiếu dòng này → KHONG DO DUOC, mã 2); rồi hai ca viết trước: thành viên đã góp đủ 3 ý; người không có quyền góp.
+      Mỗi ca «KHONG BAM <ca>: 0 [data-slot=hang-hanh-dong-bam-day]». In «SAI AC-6: …», mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.gdl_man
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-gop.tsx"
+      - "packages/ui/src/components/hang-hanh-dong-bam-day.tsx"
+    steps:
+      - "Chạy đúng lệnh của eval (tien-de.mjs + man-gui.mjs); không gọi thẳng script con"
+      - "Mở ảnh _acceptance/gon-dau-trang-lay-y-kien/evidence/gdl-390-sang.png và gdl-390-toi.png (khung soạn còn khuất, hàng bám ở đáy)"
+      - "Mở ảnh gdl-390-cuon-sang.png và gdl-390-cuon-toi.png (nội dung khung soạn cuộn dưới hàng bám)"
+    expected: "Ở cả sáng và tối, hàng «còn được N ý · Gửi» có nền đặc cùng màu nền trang và một viền trên; chữ của ô phía dưới không lộ qua hàng; nút Gửi là nút chính màu thương hiệu, không bị cắt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.hy_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs"
+    expected: |
+      Thước đã ký của dot-hoi-y-tuong-okr (sau bản vá Hỏi-1) chạy trọn: mọi dòng kiem đạt, gồm «E12 buoc 5: nut «Gửi» nam
+      tron trong man dau, day <px> <= 812», mã 0. Bản vá chỉ gỡ đúng các dòng đo thanh thẻ ngang: danh sách dòng gỡ in
+      ở sổ S3 (diff của bản vá), không dòng nào khác. CHIEU DO: CHÍNH thước đã vá chạy trên cây tạm tách ở origin/onehub
+      (chưa có vòng này) chỉ HONG đúng một dòng «E12 buoc 5: nut «Gửi» nam tron trong man dau, day 9xxpx <= 812» — đo một
+      lần ở S3, ghi vào sổ.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.gdl_khong_doi_hinh
+    paths:
+      - "apps/app/**"
+      - "packages/ui/**"
+      - "_acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs"
+    expected: |
+      khong-doi-hinh.mjs: (1) git diff --name-only origin/onehub...HEAD không chạm _acceptance/dau-trang-okr-cho-nut-hoi-kara,
+      _acceptance/duong-ly-do-muc-tieu, _acceptance/khung-man-chung, apps/app/test/okr-hoi-y.dom.tsx — vi phạm in
+      «DA SUA <tep>»; (2) danh sách viết trước = mọi eval test/script (trừ not-run) của ba hồ sơ ấy rút bằng bộ đọc
+      eval-yaml của kit, cộng «bun test okr-hoi-y.dom.tsx»; chạy cùng danh sách trên cây vòng và trên cây tạm tách ở
+      origin/onehub (cùng phiên đo); mỗi mục «HO SO <slug>#<E>: nen <ma> · cay <ma>»; SAI AC-9 chỉ khi cây xấu hơn nền
+      (nền 0, cây khác 0); nền khác 0 → «DO SAN TREN NEN <slug>#<E>»; mã 1 khi có SAI. CHIEU DO (--chieu-do, bản sao): sửa một ký tự trong okr-hoi-y.dom.tsx rồi commit tạm →
+      «DA SUA apps/app/test/okr-hoi-y.dom.tsx», mã 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
