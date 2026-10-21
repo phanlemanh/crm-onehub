@@ -2099,6 +2099,13 @@ executors:
     pglt_sau: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-sau"
     pglt_doc: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-doc"
     pglt_job: "cd packages/ui && bun test --timeout 120000 ./test/push-ghim-lai-t1.spec.ts -t pglt-job"
+    tcb_luat: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-luat"'
+    tcb_ham: 'bun run test -- "cd packages/auth && bun test test/quyen-tep.spec.ts -t tcb-ham"'
+    tcb_doi_chu: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-doi-chu"'
+    tcb_pham_vi: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-pham-vi"'
+    tcb_xoa: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-xoa"'
+    tcb_o_tep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tep-theo-chu.dom.tsx -t tcb-o-tep
+    tcb_vet: 'bun run test -- "cd apps/api && bun test test/tep-theo-chu.spec.ts -t tcb-vet"'
     tlkp_khoi_phuc: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t khoi-phuc:.de.xuat.khoi.phuc.duoc.duyet"'
     tlkp_luu_tru: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t duyet-luu-tru:.ma.tran.nguoi.viet.truoc"'
     tlkp_dem: 'bun run test -- "cd apps/api && bun test test/tai-lieu-luu-tru.spec.ts -t tlkp-dem"'
@@ -3289,6 +3296,7 @@ executors:
     pglt_cong: bun _acceptance/push-ghim-lai-t1/rang/cong-van-do.mjs
     pglt_dot_bien: node _acceptance/push-ghim-lai-t1/rang/dot-bien.mjs
     gtr_do_man: 'APP_URL=${APP_URL:-http://localhost:3392} API_URL=${API_URL:-http://localhost:3393} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/go-tin-hieu-rac/rang/do-man.mjs"'
+    tcb_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tep-theo-chu-ban-ghi/rang/do-man.mjs"'
     gtr_migration: bun _acceptance/go-tin-hieu-rac/rang/migration-chi-them.mjs
     gtr_thiet_ke: node _acceptance/go-tin-hieu-rac/rang/khong-ghi-de.mjs
     tbk_quet: bun _acceptance/thanh-ben-khu-dung-chung/rang/quet-vo-tay.mjs
