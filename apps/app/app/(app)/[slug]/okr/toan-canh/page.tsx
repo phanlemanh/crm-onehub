@@ -1,6 +1,7 @@
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { SectionHeading } from "@crm/ui/components/section-heading";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -11,24 +12,31 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
+import { duongSoDoTuSucKhoe } from "../so-do/duong-so-do";
 import { tieuDeTrinhDuyet } from "../tieu-de-khu";
 import { CuonToiNeo } from "./cuon-toi-neo";
 import { SucKhoe } from "./suc-khoe/suc-khoe";
 import { ToanCanh } from "./toan-canh";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: tieuDeTrinhDuyet(await getLocale(), "toan-canh") };
 }
 
 export default function ToanCanhPage({
+	params,
 	searchParams,
 }: {
+	params: Params;
 	searchParams: SearchParams;
 }) {
 	return (
 		<>
+			<Suspense fallback={null}>
+				<ChuyenSoDoCu params={params} searchParams={searchParams} />
+			</Suspense>
 			<DauTrangOkrTrang tab="toan-canh" />
 			<PageShellContent>
 				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
@@ -37,6 +45,19 @@ export default function ToanCanhPage({
 			</PageShellContent>
 		</>
 	);
+}
+
+async function ChuyenSoDoCu({
+	params,
+	searchParams,
+}: {
+	params: Params;
+	searchParams: SearchParams;
+}): Promise<null> {
+	const [{ slug }, thamSo] = await Promise.all([params, searchParams]);
+	const dich = duongSoDoTuSucKhoe(slug, thamSo);
+	if (dich) redirect(dich);
+	return null;
 }
 
 async function NoiDung({ searchParams }: { searchParams: SearchParams }) {

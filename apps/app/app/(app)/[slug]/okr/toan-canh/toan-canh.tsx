@@ -6,7 +6,6 @@ import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardAction,
-	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
@@ -29,7 +28,6 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { TableCell } from "@crm/ui/components/table";
-import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { cn } from "@crm/ui/lib/utils";
 import {
@@ -38,7 +36,6 @@ import {
 	useQuery,
 	useQueryClient,
 } from "@tanstack/react-query";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { toast } from "sonner";
@@ -49,16 +46,11 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { useChuKy } from "../chon-chu-ky";
-import { okrParsers, soDoParsers } from "../okr-search-params";
+import { okrParsers } from "../okr-search-params";
 import { kyVongCo, ThanhTienDo } from "../tien-do-kr";
 import { ChuaChuKy, DangTai } from "../trang-thai-okr";
 
 type HangToanCanh = RouterOutputs["okr"]["toanCanh"]["hang"][number];
-
-const SoDoDonVi = dynamic(() => import("./so-do-don-vi"), {
-	ssr: false,
-	loading: () => <DangTai />,
-});
 
 const nhanTuan = (tuan: string) => `${tuan.slice(8, 10)}/${tuan.slice(5, 7)}`;
 
@@ -211,8 +203,6 @@ export function ToanCanh() {
 	const trpc = useTRPC();
 	const url = useWorkspaceUrl();
 	const [thamSo] = useQueryStates(okrParsers);
-	const [cachXem, datCachXem] = useQueryStates(soDoParsers);
-	const xem = cachXem[SEARCH_PARAM.okr.xemToanCanh];
 	const ky = thamSo[SEARCH_PARAM.okr.ky];
 	const { cycles, currentId } = useChuKy();
 	const access = useQuery(trpc.okr.access.queryOptions());
@@ -336,20 +326,6 @@ export function ToanCanh() {
 						<CardTitle>{mt.toanCanh.theoDonVi}</CardTitle>
 						<CardDescription>{mt.toanCanh.theoDonViMoTa}</CardDescription>
 						<CardAction className="flex flex-wrap items-center gap-2">
-							<div data-cach-xem-toan-canh>
-								<ViewSwitch
-									items={[
-										{ value: "bang", label: mt.soDo.bang },
-										{ value: "so-do", label: mt.soDo.soDo },
-									]}
-									label={mt.soDo.cachXem}
-									onValueChange={(v) => {
-										if (v === "bang" || v === "so-do")
-											void datCachXem({ [SEARCH_PARAM.okr.xemToanCanh]: v });
-									}}
-									value={xem}
-								/>
-							</div>
 							{quanTri ? (
 								<Button asChild size="sm" variant="outline">
 									<Link
@@ -363,21 +339,15 @@ export function ToanCanh() {
 							) : null}
 						</CardAction>
 					</CardHeader>
-					{xem === "so-do" ? (
-						<CardContent>
-							<SoDoDonVi cycleId={currentId} />
-						</CardContent>
-					) : (
-						<SimpleTable columns={cot} surface="page">
-							{hang.map((h) => (
-								<DongDonVi
-									h={h}
-									key={h.key}
-									toi={`${url("/okr/bo-okr")}${kem(h.key === "goc" ? {} : { [SEARCH_PARAM.okr.don]: h.key })}`}
-								/>
-							))}
-						</SimpleTable>
-					)}
+					<SimpleTable columns={cot} surface="page">
+						{hang.map((h) => (
+							<DongDonVi
+								h={h}
+								key={h.key}
+								toi={`${url("/okr/bo-okr")}${kem(h.key === "goc" ? {} : { [SEARCH_PARAM.okr.don]: h.key })}`}
+							/>
+						))}
+					</SimpleTable>
 				</Card>
 			)}
 			{tuanDau ? null : (
