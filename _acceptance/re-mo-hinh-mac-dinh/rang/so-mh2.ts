@@ -440,7 +440,7 @@ const CHIEU_DO: readonly ChieuDo[] = [
 					ly_do: "✗ agent-builder (gia lap)",
 				}));
 				sua(tepEv(n, DUONG.nhatKy(l)), (s) =>
-					s.replace("✓ agent-builder", "✗ agent-builder"),
+					s.replace(/✓(\s+)agent-builder/u, "✗$1agent-builder"),
 				);
 			}
 			return kiemNhieu(["E4"], n);
