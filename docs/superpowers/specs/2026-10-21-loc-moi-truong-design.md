@@ -70,14 +70,15 @@ app và chiến dịch dùng chung nó (`AGENTS.md`: khuôn vượt ranh gói s�
   DA17 (Hỏi-4 của DA17), vì bộ lọc đã lưu phải mở được sau khi trường bị lưu trữ.
 - Trường còn sống mà giá trị sai cú pháp với kiểu của nó (`gte:abc` cho Số, `has:` cho Ngày): API trả `BAD_REQUEST`
   nêu tên trường. App không gửi giá trị như vậy: bộ đọc đường dẫn bỏ giá trị hỏng trước khi gọi API.
-- Bộ lọc áp cho mọi trường còn sống của loại bản ghi, không chỉ trường bật «Hiện trong bộ lọc». «Hiện trong bộ lọc»
-  quyết trường có trong menu Bộ lọc hay không, không quyết bộ lọc đã lưu còn hiệu lực hay không — luật 34 đòi bộ lọc
-  đã lưu và bộ lọc chiến dịch đọc được như lúc lưu.
+- Trường tắt «Hiện trong bộ lọc» không lọc, như hôm nay (theo khuyến nghị Hỏi-5): bộ lọc đã lưu mang trường ấy cho
+  đúng kết quả nó cho hôm nay, nên không chiến dịch nào đổi thành viên khi hàng này lên production. Lối kia (áp lại bộ
+  lọc cho mọi trường còn sống) sửa được lỗi cũ «tắt một ô ở Cài đặt là lặng lẽ đổi bộ lọc đã lưu», nhưng đổi thành viên
+  chiến dịch ngay khi lên — việc khó đảo, nên là câu của người.
 
 ### 3. Lọc ở API: `FieldsService.fieldFilters` biết mọi kiểu
 
-`fieldFilters(definitions, selected)` nhận danh sách trường còn sống của loại bản ghi (thay cho
-`filterableFieldsFor`), đọc bảng ở mục 1 và dựng `AND` của từng trường:
+`fieldFilters(definitions, selected)` nhận danh sách của `filterableFieldsFor`, nay mở cho mọi kiểu có dòng ở bảng
+mục 1 (theo Hỏi-5; lối kia thì nhận mọi trường còn sống), đọc bảng ở mục 1 và dựng `AND` của từng trường:
 
 - chứa: `fieldValues.some({fieldId, text: {contains, mode: "insensitive"}})`;
 - khoảng: `fieldValues.some({fieldId, number: {gte, lte}})`;
@@ -86,8 +87,8 @@ app và chiến dịch dùng chung nó (`AGENTS.md`: khuôn vượt ranh gói s�
 - trống: `fieldValues.none({fieldId, <cột của kiểu>: {not: null}})` — cùng điều kiện «có giá trị» mà `sapTheoTruong`
   của DA17 dùng (`coGiaTri`), nên sort và lọc đồng ý với nhau thế nào là trống.
 
-Ba service (`companies`, `contacts`, `deals`) và `deals.board` đã gọi `fieldFilters` trong `where`; chỗ gọi chỉ đổi
-nguồn danh sách trường. Đầu vào `fields: Record<string, string[]>` của ba `*ListInput` và `dealBoardInput` giữ nguyên
+Ba service (`companies`, `contacts`, `deals`) và `deals.board` đã gọi `fieldFilters` trong `where` với danh sách
+`filterableFieldsFor`; chỗ gọi không đổi. Đầu vào `fields: Record<string, string[]>` của ba `*ListInput` và `dealBoardInput` giữ nguyên
 khuôn, nên hợp đồng tRPC không đổi hình.
 
 **Số đếm.** `filterFacetCounts` thêm đếm cho mọi giá trị có trong menu: `yes`/`no` của Ô tích, bốn mốc của Ngày, và
@@ -217,6 +218,13 @@ Căn cứ: luồng hiển nhiên — hàng thêm cách lọc vào danh sách có
 - **Hỏi-4.** Ngưỡng của Đường đo (ô Cổng Đáng để trống ngưỡng). Máy đề xuất: ở phiên nghiệm thu, ít nhất bốn trên năm
   người lọc được thoả thuận theo một trường Số trong khoảng và lưu thành bộ lọc mà không hỏi; dấu CHẾT là một chiến dịch
   đổi số thành viên sau khi hàng lên production mà không ai sửa bộ lọc của nó.
+- **Hỏi-5.** Bộ lọc đã lưu mang một trường đang tắt «Hiện trong bộ lọc». Máy khuyên giữ kết quả hôm nay (trường ấy
+  không lọc): không chiến dịch nào đổi thành viên khi lên production. Lối khác: áp lại bộ lọc cho mọi trường còn sống —
+  đúng ý lúc lưu và gỡ lỗi «tắt một ô là đổi bộ lọc đã lưu», giá là chiến dịch có thể đổi thành viên ngay khi lên, không
+  ai sửa gì. Việc khó đảo.
+- **Hỏi-6.** Bỏ design-pass để giữ mốc. Máy khuyên bỏ: hai ô mới (Chứa…, Từ/Đến) ghép vào menu con có sẵn của
+  `DataTable`, E10 đo mắt người ở S4. Lối khác: design-pass ngay sau #521 gộp, trước Cổng Phạm vi — nhìn bản bấm được
+  trước khi duyệt, giá là Cổng Phạm vi và S3 lùi theo #521, sát mốc 22/10.
 
 ## Không làm trong hàng này
 

@@ -570,6 +570,7 @@ executors:
     lmt_toc_do: 'bun run test -- "cd apps/api && LMT_TOC_DO=1 bun test --timeout 600000 test/loc-moi-truong-toc-do.spec.ts -t lmt-toc-do"'
     lmt_duong_dan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-moi-truong.dom.tsx -t lmt-duong-dan
     lmt_luu_thoa_thuan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-moi-truong.dom.tsx -t lmt-luu-thoa-thuan
+    lmt_cai_dat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/loc-moi-truong.dom.tsx -t lmt-cai-dat
     ghd_mo_coi: 'bun run test -- "cd apps/api && bun test test/okr-tai-co-cau.spec.ts -t mo-coi"'
     ghd_khung_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-gioi-han-duyet.dom.tsx"
     ghd_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t gioi-han-duyet"'

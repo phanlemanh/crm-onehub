@@ -25,7 +25,7 @@ Hôm nay trên onehub `c6a718f3d`:
 - Trường tự tạo và mặt lọc chuẩn mã hoá trên đường dẫn hai cách: khoá lặp (`?stage=a`) và một khoá JSON
   (`?fields={…}`).
 - Bộ lọc đã lưu (`SavedView.filters`) giữ trường tự tạo dưới khoá `field:<khoá>`; chiến dịch đọc đúng khuôn ấy.
-- Tắt «Hiện trong bộ lọc» của một trường làm bộ lọc đã lưu mang trường ấy lặng lẽ thôi lọc.
+- Tắt «Hiện trong bộ lọc» của một trường làm bộ lọc đã lưu mang trường ấy lặng lẽ thôi lọc (Hỏi-5 quyết giữ hay gỡ).
 - Thoả thuận không có bộ lọc đã lưu.
 
 Bảng lọc theo kiểu (design doc mục 1, theo `docs/design.md` mục «Trường»):
@@ -78,21 +78,23 @@ mục «Trường» · hợp đồng và sổ DA17 · LUAT.md của đợt (lu�
     lọc», mỗi số bằng `total` khi lọc riêng giá trị ấy cùng các bộ lọc khác;
   - trên kho thử 5.000 thoả thuận với sáu trường bật «Hiện trong bộ lọc», trung vị năm lượt `deals.list` có ba bộ lọc
     trường không quá 1 giây (cùng trần chủ kho đã duyệt cho sort ở AC-8 của DA17).
-- AC-6: Given bộ lọc mang khoá không có, trường đã lưu trữ, trường của loại bản ghi khác, trường tắt «Hiện trong bộ
+- AC-6 (cross-layer): Given bộ lọc mang khoá không có, trường đã lưu trữ, trường của loại bản ghi khác, trường tắt «Hiện trong bộ
   lọc», và giá trị sai cú pháp với kiểu của trường (`gte:abc` cho Số, `has:x` cho Ngày, `maybe` cho Ô tích), When gọi
   `list` của ba loại bản ghi, `deals.board`, và mở Cài đặt › Trường, Then:
   - khoá không có, trường đã lưu trữ, trường khác loại: bộ lọc ấy bị bỏ qua, không lỗi, kết quả bằng khi không có nó;
-  - trường tắt «Hiện trong bộ lọc» vẫn lọc;
+  - trường tắt «Hiện trong bộ lọc» theo Hỏi-5: khuyến nghị — không lọc, kết quả bằng khi không có nó, như hôm nay;
   - giá trị sai cú pháp trên trường còn sống: `BAD_REQUEST` nêu tên trường;
-  - `fields.filters` trả mọi trường còn sống bật «Hiện trong bộ lọc», mọi kiểu trong `FIELD_TYPES`, và ô «Hiện trong bộ
-    lọc» của Cài đặt › Trường có mặt cho mọi kiểu ấy;
+  - `fields.filters` trả mọi trường còn sống bật «Hiện trong bộ lọc», mọi kiểu trong `FIELD_TYPES`;
+  - ở Cài đặt › Trường, ô «Hiện trong bộ lọc» có mặt khi sửa trường của mọi kiểu ấy, và bật nó thì lượt lưu mang
+    `showOnFilter: true`;
   - quyết định kiểu nào lọc thế nào đọc từ một bảng dùng chung cho API, app và bộ phân tích giá trị.
-- AC-7 (cross-layer): Given bộ lọc đã lưu tạo theo khuôn hôm nay qua `savedViews.create` (Chọn và Người dưới
-  `field:<khoá>`, `owner` với `unassigned`, `stage`, thẻ `status`), một chiến dịch dùng bộ lọc Liên hệ ấy làm đoạn, và
+- AC-7 (cross-layer): Given bộ lọc đã lưu do bên ghi của onehub `c6a718f3d` (`currentView`) sinh rồi lưu qua
+  `savedViews.create` (Chọn và Người dưới `field:<khoá>`, `owner` với `unassigned`, thẻ trạng thái), một chiến dịch dùng bộ lọc Liên hệ ấy làm đoạn, và
   một bộ lọc Liên hệ mới mang `has:`, `gte:`, mốc và `none`, When đọc danh sách theo từng bộ lọc đã lưu và đọc thành
   viên, số thành viên của chiến dịch, Then:
-  - bộ lọc khuôn cũ cho đúng các bản ghi như trước khi hàng này gộp (đáp án viết tay);
-  - `memberCount` và trang thành viên của chiến dịch dùng bộ lọc khuôn cũ bằng đáp án ấy;
+  - bộ lọc khuôn cũ cho đúng các bản ghi mà cùng bộ lọc cho trên onehub `c6a718f3d` với cùng dữ liệu;
+  - `memberCount` và trang thành viên của chiến dịch dùng bộ lọc khuôn cũ bằng đáp án ấy, kể cả bộ lọc mang một trường
+    Chọn đã tắt «Hiện trong bộ lọc» (theo Hỏi-5);
   - chiến dịch dùng bộ lọc mới có số thành viên bằng `total` của `contacts.list` cùng bộ lọc;
   - không dòng `SavedView` nào bị ghi lại (`filters` và `updatedAt` của mọi dòng không đổi sau khi đọc).
 - AC-8: Given ba danh sách ở `apps/app`, When người đổi bộ lọc trường tự tạo, mở đường dẫn mới, mở đường dẫn cũ mang
@@ -159,8 +161,9 @@ Later và Never ở `coverage-scan.md`.
   bộ lọc mà không hỏi · số từ: phiên nghiệm thu sau khi lên production (đếm tay) · bảo đảm bởi: AC-2, AC-9, AC-10
 - Thước: lọc được bản ghi còn trống một trường để đi bổ sung · số từ: phiên nghiệm thu (đếm tay) · bảo đảm bởi: AC-4,
   AC-10
-- Thước: không chiến dịch nào đổi số thành viên vì hàng này (dấu CHẾT) · số từ: so `memberCount` của mọi chiến dịch
-  trước và sau khi lên production · bảo đảm bởi: AC-7
+- Thước: không chiến dịch nào đổi số thành viên vì hàng này (dấu CHẾT) · số từ: trên cùng một bản chụp dữ liệu
+  production, tập thành viên mỗi chiến dịch theo logic onehub `c6a718f3d` so với logic mới; khác 0 là CHẾT · bảo đảm bởi:
+  AC-7
 
 ## Out of scope
 
