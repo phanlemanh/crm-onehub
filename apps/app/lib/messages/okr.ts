@@ -77,8 +77,7 @@ const vi = {
 			caNhan:
 				"Soạn cùng Kara chỉ mở cho bộ phận, phòng ban và OneHub. Với mục tiêu cá nhân, chọn Tự viết.",
 		},
-		cuocDaSoan: (da: string, tran: string) =>
-			`Các cuộc đã soạn (${da}/${tran})`,
+		cuocDaSoan: "Các cuộc đã soạn ({da}/{tran})",
 	},
 	phuTrach: "Phụ trách",
 	gopVao: (n: number) => `góp vào ${n} chỗ`,
@@ -861,7 +860,7 @@ const en: OkrMessages = {
 			caNhan:
 				"Draft with Kara is for divisions, departments and OneHub. For a personal objective, write it yourself.",
 		},
-		cuocDaSoan: (da: string, tran: string) => `Past drafts (${da}/${tran})`,
+		cuocDaSoan: "Past drafts ({da}/{tran})",
 	},
 	phuTrach: "Owner",
 	gopVao: (n: number) =>

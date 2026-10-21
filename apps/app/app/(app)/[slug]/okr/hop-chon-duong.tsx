@@ -28,6 +28,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { parseAsBoolean, parseAsString, useQueryStates } from "nuqs";
 import type { ReactNode, RefObject } from "react";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -213,7 +214,7 @@ function NoiDungHop({
 						size="sm"
 						variant="ghost"
 					>
-						{c.cuocDaSoan(String(soan.soCuocDaDung), String(soan.tranCuoc))}
+						{dien(c.cuocDaSoan, { da: soan.soCuocDaDung, tran: soan.tranCuoc })}
 					</Button>
 				</div>
 			) : null}
