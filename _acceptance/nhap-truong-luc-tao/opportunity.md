@@ -25,7 +25,7 @@ Vì sao: Form tạo và ô thêm nhanh không có trường tự tạo; API tạ
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: nhân viên quan hệ đối tác có tạo xong một công ty, liên hệ hay thoả thuận với đủ các trường đội cần trong một lượt, không phải mở lại phiếu để điền tiếp không.
+- Câu hỏi phép đo trả lời: nhân viên quan hệ đối tác có tạo xong một công ty, cá nhân hay thoả thuận với đủ các trường đội cần trong một lượt, không phải mở lại phiếu để điền tiếp không.
 - Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, giao năm nhân viên ba việc — tạo một thoả thuận có trường tự tạo bắt buộc, thêm nhanh một cá nhân từ phiếu công ty, tạo một công ty có trường tự tạo kiểu Chọn — thì ít nhất bốn trên năm người làm xong cả ba mà không mở lại phiếu để điền trường; và trong 14 ngày đầu sau khi lên production, ít nhất 80% bản ghi người tạo (`source = MANUAL`) có giá trị cho mọi trường tự tạo đang hiện trên phiếu ngay lượt tạo.
 - Kết quả nào là CHẾT: [đề xuất] đa số người vẫn tạo xong rồi mở phiếu điền từng ô, hoặc bỏ dở lượt tạo vì form chặn ở một trường họ chưa có giá trị.
 - Timebox: [đề xuất] phiên nghiệm thu đầu tiên sau khi DA16 lên production, gộp chung buổi đọc số của gói truong-hop-dong.

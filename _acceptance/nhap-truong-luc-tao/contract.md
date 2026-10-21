@@ -54,14 +54,14 @@ như DA14: ô Giai đoạn của thoả thuận đứng ngay sau Công ty.
   - không form nào tự gọi `Input`, `Checkbox`, `Select`, `DatePicker`, `MoneyInput` cho một trường hay rẽ nhánh theo
     kiểu trường;
   - ngoại trừ có tên: ô Công ty và ô Giai đoạn.
-- AC-3 (cross-layer): Given loại Thoả thuận có trường tự tạo kiểu Số, Ngày, Chọn, Người, Ô tích và Chữ (đều hiện trên
-  phiếu), When người điền cả sáu trong sheet «Tạo thoả thuận» ở tiếng Việt (Số gõ «1.234,5») rồi bấm Tạo, Then:
-  - đúng một lượt `deals.create` mang `fields` có sáu giá trị đúng kiểu (Số là `1234.5`);
+- AC-3 (cross-layer): Given loại Thoả thuận có một trường tự tạo cho mỗi kiểu trong mười kiểu (Chữ, Chữ dài, Số, Ngày,
+  Ô tích, Chọn, Liên kết, Email, Điện thoại, Người), đều hiện trên phiếu, When người điền cả mười trong sheet «Tạo
+  thoả thuận» ở tiếng Việt (Số gõ «1.234,5») rồi bấm Tạo, Then:
+  - đúng một lượt `deals.create` mang `fields` có mười giá trị đúng kiểu (Số là `1234.5`);
   - không có lượt `deals.update` nào;
-  - đọc lại `deals.get` qua API thì đủ sáu giá trị;
-  - phiếu thoả thuận mở ra hiện đủ sáu giá trị;
-  - một trường không bắt buộc để trống thì không có khoá trong `fields`; ô tích không ai tích là để trống (Hỏi-4);
-  - đủ mười loại trường tự tạo đi trọn lượt tạo: gõ, gửi, đọc lại.
+  - đọc lại `deals.get` qua API thì đủ mười giá trị;
+  - phiếu thoả thuận mở ra hiện đủ mười giá trị;
+  - một trường không bắt buộc để trống thì không có khoá trong `fields`; ô tích không ai tích là để trống (Hỏi-4).
 
   Và When cùng cách với một trường tự tạo ở sheet «Tạo công ty» và «Tạo cá nhân», Then `companies.get`, `contacts.get`
   đọc lại đúng giá trị.
