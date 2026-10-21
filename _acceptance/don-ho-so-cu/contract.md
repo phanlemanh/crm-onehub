@@ -5,7 +5,7 @@ slug: don-ho-so-cu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-10-21T22:41:23Z
 design_doc: _acceptance/don-ho-so-cu/design.md
