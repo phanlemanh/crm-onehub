@@ -119,3 +119,41 @@ wall: 6711s
 - **claude-haiku-5-5**: 13 agent · 89 calls · out 12,845 · in 178 · cache_read 6,399,094 · cache_create 754,243
 - **claude-opus-5-5**: 3 agent · 46 calls · out 653 · in 92 · cache_read 3,527,081 · cache_create 274,428
 
+### S4 round 5 — wf_31d7427b-7d2 (18 agent, 31,504 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 8 | 8,871 | 16 | 526,850 | 81 |
+| ui:E12 | claude-sonnet-5-5 | 10 | 4,376 | 20 | 1,068,586 | 114 |
+| machine:bun test _acceptance/ngan-kr-mot-cho/ran | claude-haiku-5-5 | 70 | 4,081 | 140 | 6,366,149 | 7171 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 3,279 | 4 | 47,338 | 34 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 1,865 | 4 | 47,365 | 291 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 1,859 | 4 | 47,395 | 78 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 1,643 | 4 | 3,034 | 342 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,587 | 4 | 6,068 | 450 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,298 | 4 | 47,340 | 12 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 914 | 4 | 47,444 | 21 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 423 | 4 | 47,327 | 14 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 342 | 4 | 47,327 | 13 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-5-5 | 2 | 229 | 4 | 47,324 | 12 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 218 | 4 | 47,334 | 9 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 150 | 4 | 43,097 | 14 |
+| review:bugs | claude-opus-5-5 | 9 | 131 | 18 | 513,198 | 48 |
+| review:conventions | claude-opus-5-5 | 6 | 123 | 12 | 299,423 | 34 |
+| review:measurement | claude-opus-5-5 | 7 | 115 | 14 | 378,215 | 37 |
+
+
+wall: 7271s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 12 | 17,738 | 6,801,445 | 7173 | 09:50:42 | 11:50:15 |
+| ui | 1 | 4,376 | 1,068,586 | 115 | 09:50:42 | 09:52:37 |
+| review | 3 | 369 | 1,190,836 | 49 | 09:50:42 | 09:51:31 |
+| capture | 1 | 150 | 43,097 | 14 | 11:50:17 | 11:50:31 |
+| synthesize | 1 | 8,871 | 526,850 | 82 | 11:50:32 | 11:51:53 |
+
+- **claude-sonnet-5-5**: 3 agent · 20 calls · out 13,397 · in 40 · cache_read 1,638,533 · cache_create 266,992
+- **claude-haiku-5-5**: 12 agent · 92 calls · out 17,738 · in 184 · cache_read 6,801,445 · cache_create 747,780
+- **claude-opus-5-5**: 3 agent · 22 calls · out 369 · in 44 · cache_read 1,190,836 · cache_create 202,608
+
