@@ -72,6 +72,39 @@ export function sapDuocTheoKieu(type: string): boolean {
 	);
 }
 
+export type CachLocTruong =
+	| "chua"
+	| "khoang"
+	| "moc"
+	| "tich"
+	| "luaChon"
+	| "nguoi";
+
+export const LOC_THEO_KIEU = {
+	TEXT: "chua",
+	LONG_TEXT: "chua",
+	URL: "chua",
+	EMAIL: "chua",
+	PHONE: "chua",
+	NUMBER: "khoang",
+	DATE: "moc",
+	CHECKBOX: "tich",
+	SELECT: "luaChon",
+	USER: "nguoi",
+} as const satisfies Record<FieldTypeName, CachLocTruong>;
+
+export function cachLocTruong(type: FieldTypeName): CachLocTruong {
+	return LOC_THEO_KIEU[type];
+}
+
+export function locDuocTheoKieu(type: string): boolean {
+	return Object.hasOwn(LOC_THEO_KIEU, type);
+}
+
+export function locDuocTrong(type: FieldTypeName): boolean {
+	return LOC_THEO_KIEU[type] !== "tich";
+}
+
 export function usesOptions(type: FieldTypeName): boolean {
 	return type === "SELECT";
 }

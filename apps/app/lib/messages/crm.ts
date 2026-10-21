@@ -93,6 +93,14 @@ const en = {
 		later: "Later",
 		none: "No close date",
 	},
+	locTruong: {
+		trong: "Empty",
+		khongChon: "None selected",
+		chuaGiao: "Unassigned",
+		co: "Yes",
+		khong: "No",
+		daQua: "Past",
+	},
 	close: {
 		done: "Deal closed.",
 		asLost: "Close as lost",
@@ -441,6 +449,14 @@ const vi = {
 		nextMonth: "Tháng sau",
 		later: "Muộn hơn",
 		none: "Chưa có ngày chốt",
+	},
+	locTruong: {
+		trong: "Trống",
+		khongChon: "Không chọn",
+		chuaGiao: "Chưa giao",
+		co: "Có",
+		khong: "Không",
+		daQua: "Đã qua",
 	},
 	close: {
 		done: "Đã chốt thoả thuận.",
