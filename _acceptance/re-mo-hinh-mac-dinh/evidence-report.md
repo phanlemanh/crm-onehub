@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: eaf92b6b29058a49368d65779991717a9eadef53
+verified_commit: 3bffafc71a5487af79a925f58be5f942456dd96c
 human_signoff: manh 2026-10-21 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval máy đạt; vòng 1 hạ về REJECT vì E5 đọc model gốc Zalo từ lời gọi thăm dò, đã sửa và đo lại lượt kho). Ngoài-1 chấp nhận không sửa; Ngoài-2..7 ghi Known limits, gồm mốc chi phí kho chưa trừ đọc cache; đồng ý phần cắt; phê hết các dòng treo.
 ---
 
@@ -167,3 +167,7 @@ none — every multi-run eval is uniform
 Round 1: E1 E2 E3 E4 E5 E6 E7 E8 E9 xanh nhưng bị hạ về REJECT vì một finding trong hợp đồng (AC-5: E5 đọc model gốc Zalo từ lời gọi thăm dò, không từ phiên thật). Returned to implementation.
 Round 2: E1 E3 E4 E5 E6 E7 E8 E9 chạy lại và đạt trên eaf92b6b2 (E5 nay đọc sự kiện model.phien-chon của từng phiên); E2 carry-forward từ round 1 vì delta không chạm paths của eval; bảy lệnh suite xanh; không còn finding trong hợp đồng.
 
+
+### Re-pin lần 1 — 2026-10-21, do hoá cũ do gộp onehub sau chữ ký (package.json)
+run_id: repin-20261021T123009Z-15573
+sha: 3bffafc71a5487af79a925f58be5f942456dd96c · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
