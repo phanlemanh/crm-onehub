@@ -5,9 +5,9 @@ slug: gia-co-gom-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-10-21T23:23:58Z
 design_doc: docs/superpowers/specs/2026-10-21-gia-co-gom-tin-hieu-design.md
 ---
 
