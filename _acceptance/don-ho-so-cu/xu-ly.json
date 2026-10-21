@@ -2,24 +2,6 @@
   "base": "b32a1495f4accacd69df646b359976a84ea6d930",
   "dong": [
     {
-      "slug": "dot-hoi-y-tuong-okr",
-      "eval": "E13",
-      "cach": "ngoai-pham-vi",
-      "run_id": "repin-20261020T230558Z-65599",
-      "ly_do": "Nút Gửi của màn Hỏi ý cao 957px, vượt 812px mà tiêu chí cho phép — đỏ do mã sản phẩm, chủ kho đã chọn giữ đỏ; việc sửa là VK13 của làn vk.",
-      "lan_chu": "vk (Mac Studio) · VK13",
-      "viec_phu": "F1-14"
-    },
-    {
-      "slug": "dot-hoi-y-tuong-okr",
-      "eval": "E16",
-      "cach": "ngoai-pham-vi",
-      "run_id": "repin-20261020T230558Z-65599",
-      "ly_do": "Nút Gửi của màn Hỏi ý cao 957px, vượt 812px mà tiêu chí cho phép — đỏ do mã sản phẩm, chủ kho đã chọn giữ đỏ; việc sửa là VK13 của làn vk.",
-      "lan_chu": "vk (Mac Studio) · VK13",
-      "viec_phu": "F1-14"
-    },
-    {
       "slug": "tat-preview-agent-okr",
       "eval": "E5",
       "cach": "cho-lan-chu",
