@@ -354,7 +354,7 @@ export function ToanCanh() {
 								<Button asChild size="sm" variant="outline">
 									<Link
 										data-nut="suc-khoe"
-										href={`${url("/okr/toan-canh/suc-khoe")}${kem({})}`}
+										href={`${url("/okr/suc-khoe")}${kem({})}#chuong-trinh`}
 									>
 										<Icon icon={ChartLine} data-icon="inline-start" />
 										{mt.toanCanh.suKhoe}
@@ -373,7 +373,7 @@ export function ToanCanh() {
 								<DongDonVi
 									h={h}
 									key={h.key}
-									toi={`${url("/okr/theo-don-vi")}${kem(h.key === "goc" ? {} : { [SEARCH_PARAM.okr.don]: h.key })}`}
+									toi={`${url("/okr/bo-okr")}${kem(h.key === "goc" ? {} : { [SEARCH_PARAM.okr.don]: h.key })}`}
 								/>
 							))}
 						</SimpleTable>

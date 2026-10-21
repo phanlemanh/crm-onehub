@@ -1,0 +1,37 @@
+{
+  "feature_plain": "Khu Mục tiêu đi bằng một thanh bên — Của tôi, Bộ OKR, Lấy ý kiến, Sức khoẻ, Sơ đồ — với ô chu kỳ ở đầu thanh, và mọi đường dẫn cũ vẫn mở đúng chỗ mới.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ có thanh bên khu ba nhóm, đúng một mục sáng theo trang, số ý kiến cần góp cạnh Lấy ý kiến (lấy từ dữ liệu thật), và «Chương trình OKR» ở chân chỉ cho người quản lý."},
+    {"id": "AC-2", "p": "Sẽ đưa ô chu kỳ lên đầu thanh; chọn một lần là bấm sang mục khác vẫn xem cùng chu kỳ."},
+    {"id": "AC-3", "p": "Sẽ để trang Bộ OKR chỉ còn một hàng chuyển kiểu xem; thanh thẻ Của tôi · Theo đơn vị · Toàn cảnh · Hỏi ý không còn ở đâu."},
+    {"id": "AC-4", "p": "Sẽ có năm đường mới: Bộ OKR, Lấy ý kiến, Sức khoẻ (gồm phần quản trị cho người quản lý), Sơ đồ góp vào, và sơ đồ quanh một mục tiêu nằm dưới Sơ đồ."},
+    {"id": "AC-5", "p": "Sẽ khai đủ quy tắc chuyển hướng từ mọi đường cũ sang đường mới, không quy tắc nào chuyển hai bước."},
+    {"id": "AC-6", "p": "Sẽ thử tám liên kết cũ thật — gồm liên kết trong email, Zalo — mỗi cái dừng đúng màn mới, giữ chu kỳ và đơn vị, nhiều nhất một lần chuyển."},
+    {"id": "AC-8", "p": "Sẽ sửa khối «Đơn vị bạn dẫn» ở Của tôi: cây tổ chức đang tải thì có khung chờ, lỗi thì báo và có Thử lại (DH11)."},
+    {"id": "AC-10", "p": "Sẽ giữ các lối vào sẵn có: liên kết nhắc cập nhật tuần, ngăn mục tiêu, chu kỳ mặc định của Lấy ý kiến, vai chỉ OKR."}
+  ],
+  "wont_do": [
+    {"id": "AC-7", "p": "Chặn liên kết trong ứng dụng đi qua chuyển hướng — mọi liên kết trỏ thẳng đường mới."},
+    {"id": "AC-9", "p": "Sẽ KHÔNG để điện thoại tràn ngang: thanh thành một hàng cuộn có ô chu kỳ ở trên, kèm ảnh."},
+    {"id": "OOS-1", "p": "KHÔNG làm Mọi KR và Cập nhật gần đây — chưa có màn, hai hàng VK11, VK12 thêm mục."},
+    {"id": "OOS-2", "p": "KHÔNG làm mỗi bộ OKR một trang và bộ lọc Tôi dẫn — hàng VK3."},
+    {"id": "OOS-3", "p": "KHÔNG làm khung toàn vùng và Toàn màn hình của Sơ đồ — hàng VK6."},
+    {"id": "OOS-4", "p": "KHÔNG đổi chữ trên màn hay chữ trong tin nhắc — hàng VK4, VK5."},
+    {"id": "OOS-5", "p": "KHÔNG đổi đường dẫn trong tin nhắc email, Zalo, Slack — chúng đi qua chuyển hướng."},
+    {"id": "OOS-6", "p": "KHÔNG làm ngăn KR duy nhất — hàng VK7."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Nơi đến: năm mục có màn đều có tiêu chí (AC-1, AC-4); Mọi KR, Cập nhật gần đây để VK11, VK12."},
+    {"i": 1, "p": "Lối vào: thanh bên, liên kết trong app, tin nhắc, ngăn bản ghi, gõ đường cũ đều được thử (AC-5, AC-6, AC-7, AC-10)."},
+    {"i": 2, "p": "Khổ: máy tính và điện thoại đều đo trên bản chạy, kèm ảnh (AC-9, AC-3)."},
+    {"i": 3, "p": "Vai và trạng thái: quản lý, trưởng đơn vị, chỉ OKR; đang tải, lỗi, có ý kiến cần góp (AC-1, AC-8, AC-10)."},
+    {"i": 4, "p": "Cắt ngang: chu kỳ đi theo khi đổi nơi và đường cũ giữ tham số (AC-2, AC-5, AC-6)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa có phép đếm «một lớp thẻ» trên bản chạy — đã thêm, đo ở hai khổ."},
+    {"i": 1, "p": "Phép quét liên kết cũ sẽ tự đỏ vì cấu hình chuyển hướng, và chỉ đo chuỗi — đã miễn đúng cấu hình và thêm phép so liên kết thật trên màn."},
+    {"i": 2, "p": "Chưa đo chu kỳ thật sự đi theo khi bấm sang mục khác — đã thêm phép bấm thật hai chiều."},
+    {"i": 3, "p": "Tám liên kết cũ chưa có đích viết trước — đã viết ma trận tám dòng có đích chính xác."},
+    {"i": 4, "p": "Số ý kiến cần góp chỉ đo bằng dữ liệu giả — đã thêm phép so với dữ liệu thật của máy chủ."}
+  ]
+}

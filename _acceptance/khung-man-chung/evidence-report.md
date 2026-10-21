@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 703904f55ccdc2ce02cbc8357aca1a5905b01746
+verified_commit: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660
 human_signoff: Phan Le Manh 2026-10-13
 ---
 
@@ -332,6 +332,10 @@ sha: f92354b32c8d43587d275e1e87cfc734a42e6c00 · suites: 7 lệnh exit 0 · eval
 run_id: repin-20261014T025435Z-56897
 sha: 7eb58ff55581dd237397aa99549405ea4470993a · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j (E12j không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
 
-### Re-pin lần 5 — 2026-10-20, do DH12 dời khung chờ Theo đơn vị sang hang-cong-cu.tsx; bảng hình và spec khung-man-chung sửa theo V2-11 (chủ kho cho)
+### Re-pin lần 5 — 2026-10-20, do ghim lại chung sau VK2 (Hỏi-1..5) và gộp onehub fb58ef972
+run_id: repin-20261020T130437Z-49516
+sha: dec1d667e3d2dd9c745d2aad72ce7e86ab8c0660 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-20, do DH12 dời khung chờ Theo đơn vị sang hang-cong-cu.tsx; bảng hình và spec khung-man-chung sửa theo V2-11 (chủ kho cho)
 run_id: repin-20261020T171611Z-39124
 sha: 703904f55ccdc2ce02cbc8357aca1a5905b01746 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
