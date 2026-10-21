@@ -1,0 +1,96 @@
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugin `eve-authored-asset-import`. See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-asset-import (51%)
+  - eve-package-tsconfig-paths (23%)
+  - eve-authored-relative-extension-resolver (22%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (65%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (67%)
+  - eve-authored-asset-import (30%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (34%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (62%)
+  - eve-authored-asset-import (34%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (64%)
+  - eve-authored-asset-import (31%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[33m[PLUGIN_TIMINGS] [0mYour build spent significant time in plugins. Here is a breakdown:
+  - eve-authored-relative-extension-resolver (63%)
+  - eve-authored-asset-import (34%)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+
+EVALS 1
+target http://127.0.0.1:51911/
+
+[agent] off  Web research (PERPLEXITY_API_KEY)
+[agent] off  Company brand data (Settings → General)
+[agent] off  LinkedIn (Settings → General)
+[agent] off  Picture storage (BLOB_READ_WRITE_TOKEN)
+[agent] off  Document sources (KHO_TAI_LIEU_BLOB_TOKEN)
+[agent] off  Document library key (KHO_TAI_LIEU_AI_GATEWAY_API_KEY)
+[agent] off  Zalo reminders (Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN)
+[agent] on   AI model (AI_GATEWAY_API_KEY or Vercel OIDC)
+[agent] off  Google Sheets (GOOGLE_SHEETS_EMAIL + GOOGLE_SHEETS_KHOA)
+[agent] off  Product roadmaps (GITHUB_APP_ID + GITHUB_APP_PRIVATE_KEY)
+[agent] ▸ session wrun_01M5CECCXJ4MEAC71ZKTWCG8KX on channel:crm
+[agent] » Submission id: cmvgjyi5l0001gr8g4d5rkqa2
+
+Build me an agent that gives me a snapshot of our CRM accounts.
+[agent] → set_chat_title title=CRM accounts snapshot agent build
+[agent] ✓ set_chat_title 0.0s
+[agent] · step 0 tool-calls  in 10.9k out 17 cached 10.8k $0.0004
+[agent] → subagent agent_builder message=The user wants to create a new CRM agent (via t…
+[agent] · step 1 tool-calls  in 11.0k out 250 cached 10.8k $0.0005
+[agent] ✓ subagent agent_builder 23.4s
+[agent] ◂ Your **Accounts Snapshot** agent has been built and saved as a draft (version 1), ready for your review — it's not deployed yet.
+
+Here's what it does:
+
+- **Trigger:** Manual only — you run it when you want a snapshot.
+- **Scope:** Workspace-wide, per your "our CRM accounts" wording — it reads all c…
+[agent] · step 1 stop  in 11.4k out 258 $0.0018
+✓  agent-builder  gates 10/10
+
+Results: 1 passed (1 total)
+Gates: 10 passed
+
+Completed in 36.6s
+

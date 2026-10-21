@@ -1,0 +1,20 @@
+{
+	"nguoiXem": "truong-bao-ngoc",
+	"chuMucTieu": "ly-thanh-tam",
+	"mucTieu": "q4-kd-nam-1",
+	"kr": "q4-kd-nam-1-k1",
+	"phongBan": "kd-nam",
+	"chuKy": "quy4",
+	"soKr": 4,
+	"krThem": {
+		"title": "Tuyến lạnh mới mở đạt 4",
+		"kind": "tang-toi",
+		"startValue": 0,
+		"targetValue": 4,
+		"currentValue": 0,
+		"unit": "tuyến",
+		"dueOn": null,
+		"weight": 1
+	},
+	"tuTin": { "dong": "thap", "ngan": "cao", "hep": "vua" }
+}
