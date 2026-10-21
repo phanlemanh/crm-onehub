@@ -1,0 +1,50 @@
+{
+	"nguon": "Hỏi-6, chủ kho duyệt theo lời khuyên ở Cổng Phạm vi 2026-10-20 (d-20261020T101858Z-12); luật chọn giữa nhiều ứng viên theo Hỏi-10, duyệt 2026-10-21 (d-20261020T224703Z-27)",
+	"tac_nhan": {
+		"luot_qua_toi_thieu": 4,
+		"tren_so_luot": 5,
+		"tran_giay": 180,
+		"hoa": "trung-vi-giay-thap-hon",
+		"giu": "zai/glm-5.2-fast"
+	},
+	"tro_ly_kho": {
+		"kem_moc_toi_da_moi_tang": 1,
+		"cau_loi_toi_da": 2,
+		"giu": "zai/glm-5.2-fast"
+	},
+	"soan_okr": {
+		"dat_toi_thieu": 13,
+		"tren_tong": 18,
+		"hong_toi_da": 3,
+		"moi_luot": true,
+		"giu": "google/gemini-3.8-flash"
+	},
+	"judge_okr": {
+		"kien_nghi": "giu",
+		"giu": "zai/glm-5.2-fast"
+	},
+	"may_soan_kho": {
+		"kien_nghi": "giu",
+		"ghi_chu": "chưa có thước",
+		"giu": "zai/glm-5.2-fast"
+	},
+	"chon": {
+		"ap_cho": [
+			"glm",
+			"ds",
+			"gem"
+		],
+		"luot_bi_loai": "chua-du-so",
+		"luat": "re-nhat-chi-phi-phan-ung-vien",
+		"chi_phi": "token-vao-khong-cache-nhan-gia-vao-cong-doc-cache-nhan-gia-cache-cong-token-ra-nhan-gia-ra",
+		"hoa": [
+			"diem-cao-hon",
+			"trung-vi-giay-thap-hon"
+		],
+		"diem": {
+			"tac-nhan": "so-luot-qua",
+			"tro-ly-kho": "tong-dung-tru-cau-loi",
+			"soan-okr": "tong-dat-moi-luot"
+		}
+	}
+}
