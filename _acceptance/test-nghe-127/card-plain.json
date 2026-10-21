@@ -1,0 +1,20 @@
+{
+  "feature_plain": "Bộ kiểm của kho thôi đỏ thất thường với lỗi «Malformed_HTTP_Response» trên máy có Colima: mọi máy chủ tạm mà bài kiểm tự mở chỉ nghe ở 127.0.0.1.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho mọi máy chủ Bun tạm trong bài kiểm nghe đúng 127.0.0.1, và bài gọi nó qua 127.0.0.1 chứ không qua localhost."},
+    {"id": "AC-2", "p": "Sẽ cho mọi app API dựng trong bài kiểm (49 chỗ) nghe 127.0.0.1 ngay lúc dựng, trước khi bài gọi tới, và không còn lời mở cổng nào thiếu địa chỉ."},
+    {"id": "AC-3", "p": "Sẽ chứng lại cơ chế lỗi: cổng bị Colima giữ làm máy chủ không địa chỉ nhận rác, còn máy chủ chỉ nghe 127.0.0.1 không bao giờ được cấp cổng đó."},
+    {"id": "AC-4", "p": "Sẽ chỉ đổi dòng mở máy chủ và URL của nó trong các bài kiểm — không khẳng định, lời báo hay dữ liệu nào đổi — và mọi bài đã đổi vẫn xanh."},
+    {"id": "AC-5", "p": "Sẽ ghi vào tài liệu cài đặt rằng máy chủ tạm trong bài kiểm phải nghe 127.0.0.1, và vì sao."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Không sửa răng đo của các hồ sơ đã ký."},
+    {"id": "OOS-2", "p": "Không thêm luật lint chặn vĩnh viễn ở vòng này — đề xuất việc riêng."},
+    {"id": "OOS-3", "p": "Không đổi Colima, dải cổng của máy hay mã sản phẩm."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ bốn cách bài kiểm mở máy chủ: máy chủ Bun, app API, máy chủ tạm của công cụ gọi API, máy chủ Node (AC-1, AC-2)."},
+    {"i": 1, "p": "Đủ sáu nơi chứa bài kiểm có máy chủ tạm: API, tác nhân, tác nhân OKR, cơ sở dữ liệu, bản chụp lộ trình, tín hiệu."},
+    {"i": 2, "p": "Đủ bốn cách bài gọi tới máy chủ: URL 127.0.0.1, URL localhost, địa chỉ máy chủ tự báo, địa chỉ app tự báo."}
+  ]
+}
