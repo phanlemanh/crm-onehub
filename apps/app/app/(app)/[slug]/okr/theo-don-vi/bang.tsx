@@ -301,6 +301,7 @@ export function BangDonVi({
 	loc,
 	doiLoc,
 	boLocMay,
+	dangTaiLai,
 	dem,
 	tenNguoi,
 	hangCongCu,
@@ -311,6 +312,7 @@ export function BangDonVi({
 	loc: LocOkrGiaTri;
 	doiLoc: (thay: Partial<LocOkrGiaTri>) => void;
 	boLocMay: () => void;
+	dangTaiLai: boolean;
 	dem: DemMatLoc | undefined;
 	tenNguoi: ReadonlyMap<string, string>;
 	hangCongCu: ReactNode;
@@ -349,6 +351,7 @@ export function BangDonVi({
 				meta={chanBang}
 				onClearFilters={boLoc}
 				query={query}
+				refreshing={dangTaiLai}
 				rows={hien}
 				search={hangCongCu}
 				tabs={{

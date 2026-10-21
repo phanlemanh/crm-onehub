@@ -48,9 +48,6 @@ describe("ldv-giu", () => {
 
 	test("ldv-giu: chua co truy van truoc thi khong giu", () => {
 		const giu = giuKhiChiDoiLoc<DuLieu>({ cycleId: "ky-1", don: PB });
-		phai(
-			giu(undefined, undefined) === undefined,
-			"ldv-giu: lan dau van giu",
-		);
+		phai(giu(undefined, undefined) === undefined, "ldv-giu: lan dau van giu");
 	});
 });
