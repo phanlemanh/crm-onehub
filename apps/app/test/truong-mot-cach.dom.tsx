@@ -60,7 +60,8 @@ const { moTaTruongTuTao } = await import(
 );
 
 type MoTaTruong = import("@/components/crm/fields/kieu-truong").MoTaTruong;
-type GiaTriHienThi = import("@/components/crm/fields/kieu-truong").GiaTriHienThi;
+type GiaTriHienThi =
+	import("@/components/crm/fields/kieu-truong").GiaTriHienThi;
 type RecordFieldEntry =
 	import("@/components/crm/fields/record-fields").RecordFieldEntry;
 
@@ -110,7 +111,9 @@ async function cho(xong: () => boolean, moTa: string): Promise<void> {
 			await new Promise((r) => setTimeout(r, 0));
 		});
 	}
-	throw new Error(`khong toi ${moTa}: ${document.body.textContent?.slice(0, 300)}`);
+	throw new Error(
+		`khong toi ${moTa}: ${document.body.textContent?.slice(0, 300)}`,
+	);
 }
 
 async function bam(phanTu: Element): Promise<void> {
@@ -181,7 +184,13 @@ async function moSuaVaGo(
 
 describe("tmc-loi-nhap", () => {
 	test("go sai kieu: giu o, cau theo kieu, khong luu", async () => {
-		const khuonNhan = ["so", "email", "lien-ket", "dien-thoai", "locale-khac"] as const;
+		const khuonNhan = [
+			"so",
+			"email",
+			"lien-ket",
+			"dien-thoai",
+			"locale-khac",
+		] as const;
 		for (const ma of khuonNhan) {
 			const cau = mVi.truongKieu.tuChoi[ma];
 			if (!cau.startsWith("Ô này nhận") || !cau.includes("ví dụ")) {
@@ -197,10 +206,22 @@ describe("tmc-loi-nhap", () => {
 
 		const maTran = [
 			{ kieu: "NUMBER", chuoi: "abc", cau: mVi.truongKieu.tuChoi.so },
-			{ kieu: "NUMBER", chuoi: "1234.5", cau: mVi.truongKieu.tuChoi["locale-khac"] },
+			{
+				kieu: "NUMBER",
+				chuoi: "1234.5",
+				cau: mVi.truongKieu.tuChoi["locale-khac"],
+			},
 			{ kieu: "EMAIL", chuoi: "an@", cau: mVi.truongKieu.tuChoi.email },
-			{ kieu: "URL", chuoi: "khong co cham", cau: mVi.truongKieu.tuChoi["lien-ket"] },
-			{ kieu: "PHONE", chuoi: "12ab", cau: mVi.truongKieu.tuChoi["dien-thoai"] },
+			{
+				kieu: "URL",
+				chuoi: "khong co cham",
+				cau: mVi.truongKieu.tuChoi["lien-ket"],
+			},
+			{
+				kieu: "PHONE",
+				chuoi: "12ab",
+				cau: mVi.truongKieu.tuChoi["dien-thoai"],
+			},
 			{
 				kieu: "TEXT",
 				chuoi: "",
@@ -239,7 +260,10 @@ describe("tmc-loi-nhap", () => {
 		}
 		if (daSo !== 6) throw new Error(`tmc loi nhap: thieu o ${daSo}`);
 
-		const { moTa: dc, daGoi: dcGoi } = moTa({ kieu: "NUMBER", nhan: "Đối chứng tmc" });
+		const { moTa: dc, daGoi: dcGoi } = moTa({
+			kieu: "NUMBER",
+			nhan: "Đối chứng tmc",
+		});
 		const gocDc = await mo(<OTruongPhieu moTa={dc} />);
 		await moSuaVaGo(gocDc, "Đối chứng tmc", "1.234,5");
 		if (JSON.stringify(dcGoi) !== "[1234.5]") {
@@ -249,23 +273,34 @@ describe("tmc-loi-nhap", () => {
 	});
 
 	test("Esc sau khi go sai tra gia tri cu", async () => {
-		const { moTa: mt, daGoi } = moTa({ kieu: "NUMBER", nhan: "Esc tmc", giaTri: 7 });
+		const { moTa: mt, daGoi } = moTa({
+			kieu: "NUMBER",
+			nhan: "Esc tmc",
+			giaTri: 7,
+		});
 		const goc = await mo(<OTruongPhieu moTa={mt} />);
 		const input = await moSuaVaGo(goc, "Esc tmc", "abc");
 		await phim(input, "Escape");
-		if (goc.querySelector("input")) throw new Error("tmc loi nhap: esc khong dong");
-		if (!goc.textContent?.includes("7")) throw new Error("tmc loi nhap: esc mat gia tri");
+		if (goc.querySelector("input"))
+			throw new Error("tmc loi nhap: esc khong dong");
+		if (!goc.textContent?.includes("7"))
+			throw new Error("tmc loi nhap: esc mat gia tri");
 		expect(daGoi.length).toBe(0);
 	});
 });
 
 describe("tmc-o-tich", () => {
 	test("o tich co nhan, bam nhan doi gia tri, bang hien Co/Khong", async () => {
-		const { moTa: mt, daGoi } = moTa({ kieu: "CHECKBOX", nhan: "Đã ký tmc", giaTri: false });
+		const { moTa: mt, daGoi } = moTa({
+			kieu: "CHECKBOX",
+			nhan: "Đã ký tmc",
+			giaTri: false,
+		});
 		const goc = await mo(<OTruongPhieu moTa={mt} />);
 		const o = goc.querySelector<HTMLElement>("[role=checkbox]");
 		const label = o?.id ? goc.querySelector(`label[for="${o.id}"]`) : null;
-		const ten = label?.textContent?.trim() ?? o?.getAttribute("aria-label") ?? "";
+		const ten =
+			label?.textContent?.trim() ?? o?.getAttribute("aria-label") ?? "";
 		if (ten !== "Đã ký tmc") throw new Error(`tmc o tich: ten ${ten}`);
 		if (!label) throw new Error("tmc o tich: ten ");
 		await bam(label);
@@ -274,16 +309,34 @@ describe("tmc-o-tich", () => {
 		}
 
 		const maTran: { mat: string; el: ReactElement; chu: string }[] = [
-			{ mat: "bang", el: <OTruongBang kieu="CHECKBOX" giaTri={true} />, chu: mVi.misc.yes },
-			{ mat: "bang", el: <OTruongBang kieu="CHECKBOX" giaTri={false} />, chu: mVi.misc.no },
-			{ mat: "dau", el: <HienThiTruong kieu="CHECKBOX" giaTri={true} />, chu: mVi.misc.yes },
-			{ mat: "dau", el: <HienThiTruong kieu="CHECKBOX" giaTri={false} />, chu: mVi.misc.no },
+			{
+				mat: "bang",
+				el: <OTruongBang kieu="CHECKBOX" giaTri={true} />,
+				chu: mVi.misc.yes,
+			},
+			{
+				mat: "bang",
+				el: <OTruongBang kieu="CHECKBOX" giaTri={false} />,
+				chu: mVi.misc.no,
+			},
+			{
+				mat: "dau",
+				el: <HienThiTruong kieu="CHECKBOX" giaTri={true} />,
+				chu: mVi.misc.yes,
+			},
+			{
+				mat: "dau",
+				el: <HienThiTruong kieu="CHECKBOX" giaTri={false} />,
+				chu: mVi.misc.no,
+			},
 		];
 		let daSo = 1;
 		for (const muc of maTran) {
 			const g = await mo(muc.el);
 			if (g.textContent?.trim() !== muc.chu) {
-				throw new Error(`tmc o tich: hien ${muc.mat} ${muc.chu} ${g.textContent}`);
+				throw new Error(
+					`tmc o tich: hien ${muc.mat} ${muc.chu} ${g.textContent}`,
+				);
 			}
 			daSo += 1;
 		}
@@ -316,8 +369,18 @@ function moTaTuTao(
 const MA_TRAN_LIEN_KET = [
 	{ kieu: "URL", giaTri: "onehub.vn", href: "https://onehub.vn", moi: true },
 	{ kieu: "URL", giaTri: "http://a.vn/x", href: "http://a.vn/x", moi: true },
-	{ kieu: "EMAIL", giaTri: "an@onehub.vn", href: "mailto:an@onehub.vn", moi: false },
-	{ kieu: "PHONE", giaTri: "0901 234 567", href: "tel:+84901234567", moi: false },
+	{
+		kieu: "EMAIL",
+		giaTri: "an@onehub.vn",
+		href: "mailto:an@onehub.vn",
+		moi: false,
+	},
+	{
+		kieu: "PHONE",
+		giaTri: "0901 234 567",
+		href: "tel:+84901234567",
+		moi: false,
+	},
 ] as const;
 
 async function kiemLienKet(
@@ -330,11 +393,18 @@ async function kiemLienKet(
 	const a = g.querySelector("a");
 	if (!a) throw new Error(`tmc lien ket: ${mat} ${loai} ${o.kieu} a`);
 	if (a.getAttribute("href") !== o.href) {
-		throw new Error(`tmc lien ket: ${mat} ${loai} ${o.kieu} href ${a.getAttribute("href")}`);
+		throw new Error(
+			`tmc lien ket: ${mat} ${loai} ${o.kieu} href ${a.getAttribute("href")}`,
+		);
 	}
 	if (o.moi) {
-		if (a.getAttribute("target") !== "_blank" || !a.getAttribute("rel")?.includes("noopener")) {
-			throw new Error(`tmc lien ket: ${mat} ${loai} ${o.kieu} rel ${a.getAttribute("rel")}`);
+		if (
+			a.getAttribute("target") !== "_blank" ||
+			!a.getAttribute("rel")?.includes("noopener")
+		) {
+			throw new Error(
+				`tmc lien ket: ${mat} ${loai} ${o.kieu} rel ${a.getAttribute("rel")}`,
+			);
 		}
 	}
 }
@@ -349,8 +419,18 @@ describe("tmc-lien-ket", () => {
 		let daSo = 0;
 		for (const o of MA_TRAN_LIEN_KET) {
 			const nhan = `${o.kieu} tmc`;
-			await kiemLienKet("phieu", "tu-tao", <OTruongPhieu moTa={moTaTuTao(o.kieu, nhan, o.giaTri)} />, o);
-			await kiemLienKet("bang", "tu-tao", <OTruongBang kieu={o.kieu} giaTri={o.giaTri} />, o);
+			await kiemLienKet(
+				"phieu",
+				"tu-tao",
+				<OTruongPhieu moTa={moTaTuTao(o.kieu, nhan, o.giaTri)} />,
+				o,
+			);
+			await kiemLienKet(
+				"bang",
+				"tu-tao",
+				<OTruongBang kieu={o.kieu} giaTri={o.giaTri} />,
+				o,
+			);
 			daSo += 2;
 		}
 		expect(daSo).toBe(8);
@@ -359,17 +439,26 @@ describe("tmc-lien-ket", () => {
 	test("nut Sua mo o nhap, gia tri rong khong co a, giao thuc la khong thanh href", async () => {
 		const mt = moTaTuTao("URL", "Trang tmc", "onehub.vn");
 		const g = await mo(<OTruongPhieu moTa={mt} />);
-		const nut = g.querySelector(`button[aria-label="${mVi.truongKieu.sua("Trang tmc")}"]`);
+		const nut = g.querySelector(
+			`button[aria-label="${mVi.truongKieu.sua("Trang tmc")}"]`,
+		);
 		if (!nut) throw new Error("tmc lien ket: thieu nut sua URL");
 		await bam(nut);
-		if (!g.querySelector("input")) throw new Error("tmc lien ket: nut sua khong mo");
+		if (!g.querySelector("input"))
+			throw new Error("tmc lien ket: nut sua khong mo");
 
 		for (const kieu of ["URL", "EMAIL", "PHONE"] as const) {
-			const r = await mo(<OTruongPhieu moTa={moTaTuTao(kieu, `${kieu} rong`, null)} />);
-			if (r.querySelector("a")) throw new Error(`tmc lien ket: rong co a ${kieu}`);
+			const r = await mo(
+				<OTruongPhieu moTa={moTaTuTao(kieu, `${kieu} rong`, null)} />,
+			);
+			if (r.querySelector("a"))
+				throw new Error(`tmc lien ket: rong co a ${kieu}`);
 		}
-		const xau = await mo(<OTruongBang kieu="URL" giaTri="javascript:alert(1)" />);
-		if (xau.querySelector("a")) throw new Error("tmc lien ket: giao thuc la thanh href");
+		const xau = await mo(
+			<OTruongBang kieu="URL" giaTri="javascript:alert(1)" />,
+		);
+		if (xau.querySelector("a"))
+			throw new Error("tmc lien ket: giao thuc la thanh href");
 		expect(true).toBe(true);
 	});
 });
@@ -377,11 +466,16 @@ describe("tmc-lien-ket", () => {
 describe("tmc-o-bang", () => {
 	test("ma tran o bang theo kieu", async () => {
 		const { formatMoney } = await import("@crm/ui/lib/format");
-		const maTran: { ten: string; gia: GiaTriHienThi; kiem: (g: HTMLElement) => boolean }[] = [
+		const maTran: {
+			ten: string;
+			gia: GiaTriHienThi;
+			kiem: (g: HTMLElement) => boolean;
+		}[] = [
 			{
 				ten: "NUMBER 1234.5",
 				gia: { kieu: "NUMBER", giaTri: 1234.5 },
-				kiem: (g) => g.querySelector(".tabular-nums")?.textContent === "1.234,5",
+				kiem: (g) =>
+					g.querySelector(".tabular-nums")?.textContent === "1.234,5",
 			},
 			{
 				ten: "MONEY 123450 VND",
@@ -410,7 +504,11 @@ describe("tmc-o-bang", () => {
 			},
 			{
 				ten: "SELECT",
-				gia: { kieu: "SELECT", giaTri: "o-1", luaChon: [{ value: "o-1", label: "Vàng" }] },
+				gia: {
+					kieu: "SELECT",
+					giaTri: "o-1",
+					luaChon: [{ value: "o-1", label: "Vàng" }],
+				},
 				kiem: (g) => g.textContent === "Vàng",
 			},
 			{
@@ -442,15 +540,23 @@ describe("tmc-o-bang", () => {
 		let daSo = 0;
 		for (const o of maTran) {
 			const g = await mo(<OTruongBang {...o.gia} />);
-			if (!o.kiem(g)) throw new Error(`tmc o bang: ${o.ten} ra ${g.textContent}`);
+			if (!o.kiem(g))
+				throw new Error(`tmc o bang: ${o.ten} ra ${g.textContent}`);
 			daSo += 1;
 		}
-		for (const kieu of ["TEXT", "NUMBER", "DATE", "SELECT", "URL", "MONEY"] as const) {
+		for (const kieu of [
+			"TEXT",
+			"NUMBER",
+			"DATE",
+			"SELECT",
+			"URL",
+			"MONEY",
+		] as const) {
 			const g = await mo(<OTruongBang kieu={kieu} giaTri={null} />);
-			if (g.textContent?.trim() !== "—") throw new Error(`tmc o bang: ${kieu} null ra ${g.textContent}`);
+			if (g.textContent?.trim() !== "—")
+				throw new Error(`tmc o bang: ${kieu} null ra ${g.textContent}`);
 		}
 		if (daSo !== 12) throw new Error(`tmc o bang: thieu o ${daSo}`);
 		expect(daSo).toBe(12);
 	});
 });
-

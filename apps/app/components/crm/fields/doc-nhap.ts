@@ -57,8 +57,7 @@ export function docSoNhap(chuoi: string, locale: Locale): DocNhap<number> {
 	const docDuocTheoLocaleKhac = LOCALES.filter((khac) => khac !== locale)
 		.map(moneySeparators)
 		.filter(
-			(dau) =>
-				dau.group !== cuaMinh.group || dau.decimal !== cuaMinh.decimal,
+			(dau) => dau.group !== cuaMinh.group || dau.decimal !== cuaMinh.decimal,
 		)
 		.some((dau) => docTheoDau(gon, dau) !== null);
 

@@ -92,7 +92,7 @@ Kiểu của trường chuẩn (theo bảng ở `docs/design.md`):
 | Phiếu | Trường chuẩn → kiểu |
 |---|---|
 | Thoả thuận | Tên → Chữ (bắt buộc) · Giá trị → Tiền · Tiền tệ → Chọn · Ngày chốt → Ngày · Người phụ trách → Người · Mô tả → Chữ dài |
-| Công ty | Tên → Chữ (bắt buộc) · Tên miền → Liên kết · Trang web → Liên kết · Điện thoại → Điện thoại · Email → Email · Thành phố → Chữ · Quốc gia → Chữ · Người phụ trách → Người |
+| Công ty | Tên → Chữ (bắt buộc) · Tên miền → Chữ · Trang web → Liên kết · Điện thoại → Điện thoại · Email → Email · Thành phố → Chữ · Quốc gia → Chữ · Người phụ trách → Người |
 | Liên hệ | Tên, Họ → Chữ · Chức danh → Chữ · Email → Email · Điện thoại → Điện thoại · LinkedIn, X, GitHub → Liên kết · Người phụ trách → Người |
 
 Công ty của thoả thuận và liên hệ (ô chọn bản ghi), cùng Giai đoạn của thoả thuận (menu giai đoạn), không có dòng trong

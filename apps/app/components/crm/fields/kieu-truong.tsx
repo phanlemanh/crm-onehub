@@ -22,7 +22,11 @@ import {
 } from "@/components/crm/inline-field";
 import { type Owner, OwnerCell } from "@/components/crm/owner-cell";
 import { SoDienThoai } from "@/components/crm/so-dien-thoai";
-import { DetailSheetProperty, PROPERTY_LABEL, PROPERTY_ROW } from "@/components/detail-sheet";
+import {
+	DetailSheetProperty,
+	PROPERTY_LABEL,
+	PROPERTY_ROW,
+} from "@/components/detail-sheet";
 import { LocalDay } from "@/components/local-date-time";
 import { crmMessages } from "@/lib/messages/crm";
 import {
@@ -53,6 +57,7 @@ export type MoTaTruong = {
 	trinhBay?: (giaTri: string) => ReactNode;
 	goiY?: string;
 	khongNhan?: boolean;
+	khoaDuLieu?: string;
 	nguon?: ReactNode;
 	deXuat?: ReactNode;
 	luu: (giaTri: GiaTriTruong) => void;
@@ -67,6 +72,7 @@ export type GiaTriHienThi = {
 	nguoiDung?: Owner[];
 	nguoi?: Owner | null;
 	trinhBay?: (giaTri: string) => ReactNode;
+	xuongDongDienThoai?: boolean;
 };
 
 const RONG = "__none__";
@@ -84,6 +90,10 @@ function timNguoi(gia: GiaTriHienThi): Owner | null {
 	return gia.nguoiDung?.find((nguoi) => nguoi.id === gia.giaTri) ?? null;
 }
 
+function chanLan(event: { stopPropagation: () => void }) {
+	event.stopPropagation();
+}
+
 function HienThiLienKet({
 	kieu,
 	chuoi,
@@ -95,7 +105,12 @@ function HienThiLienKet({
 }) {
 	const href = hrefLienKet(kieu, chuoi);
 	if (kieu === "PHONE") {
-		return <SoDienThoai so={chuoi} goi={href !== null} />;
+		if (!href) return <SoDienThoai so={chuoi} />;
+		return (
+			<span className="contents" onClickCapture={chanLan}>
+				<SoDienThoai so={chuoi} goi />
+			</span>
+		);
 	}
 	const chu = trinhBay ? trinhBay(chuoi) : chuoi;
 	if (!href) return <span className="truncate">{chu}</span>;
@@ -104,6 +119,7 @@ function HienThiLienKet({
 			href={href}
 			className="truncate underline-offset-2 hover:underline"
 			translate="no"
+			onClick={chanLan}
 			{...(kieu === "URL"
 				? { target: "_blank", rel: "noreferrer noopener" }
 				: {})}
@@ -118,7 +134,11 @@ function veGiaTri(gia: GiaTriHienThi, locale: Locale): ReactNode {
 
 	if (gia.kieu === "USER") {
 		const nguoi = timNguoi(gia);
-		return nguoi ? <OwnerCell owner={nguoi} /> : <EmptyCellValue />;
+		return nguoi ? (
+			<OwnerCell owner={nguoi} xuongDongDienThoai={gia.xuongDongDienThoai} />
+		) : (
+			<EmptyCellValue />
+		);
 	}
 
 	if (laRong(gia.giaTri)) return <EmptyCellValue />;
@@ -391,9 +411,7 @@ function OChon({ moTa }: { moTa: MoTaTruong }) {
 					...(moTa.luaChon ?? []),
 				];
 	const giaTri =
-		typeof moTa.giaTri === "string" && moTa.giaTri !== ""
-			? moTa.giaTri
-			: RONG;
+		typeof moTa.giaTri === "string" && moTa.giaTri !== "" ? moTa.giaTri : RONG;
 
 	return (
 		<InlineSelectField
@@ -504,10 +522,10 @@ export function khoaDangLuu(duLieu: object | undefined): string | null {
 
 export function cauLoiLuu(
 	duLieu: object | undefined,
-	moTaTheoKhoa: Map<string, Pick<MoTaTruong, "nhan" | "kieu">>,
+	dsMoTa: Pick<MoTaTruong, "khoa" | "khoaDuLieu" | "nhan" | "kieu">[],
 	locale: Locale,
 ): string | null {
 	const khoa = khoaDangLuu(duLieu);
-	const moTa = khoa ? moTaTheoKhoa.get(khoa) : undefined;
+	const moTa = dsMoTa.find((mt) => (mt.khoaDuLieu ?? mt.khoa) === khoa);
 	return moTa ? loiLuuTruong(moTa, locale) : null;
 }

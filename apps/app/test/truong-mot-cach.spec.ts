@@ -20,7 +20,11 @@ const MA_TRAN_DOC_SO: ODocSo[] = [
 	{ locale: "vi", chuoi: "0,000123", ket: { kind: "ok", giaTri: 0.000123 } },
 	{ locale: "vi", chuoi: "", ket: { kind: "rong" } },
 	{ locale: "vi", chuoi: "abc", ket: { kind: "tu-choi", ma: "so" } },
-	{ locale: "vi", chuoi: "1234.5", ket: { kind: "tu-choi", ma: "locale-khac" } },
+	{
+		locale: "vi",
+		chuoi: "1234.5",
+		ket: { kind: "tu-choi", ma: "locale-khac" },
+	},
 	{
 		locale: "vi",
 		chuoi: "1,234.5",
