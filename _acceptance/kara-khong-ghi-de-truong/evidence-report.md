@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6a24cd1cb909a3d869d5b1fd9cd94774fb847409
+verified_commit: 984a708206c5292932c6ca9f18e2d732b186043b
 human_signoff: manh 2026-10-20 — ký Cổng Bằng chứng trên S4 vòng 2 PASS (9/9 eval, 7/7 suite); Ngoài-1 ghi Known limits; đồng ý phạm vi đã cắt
 ---
 
@@ -178,3 +178,7 @@ none — every multi-run eval is uniform
 Round 1: bài OKR bập bênh làm một lệnh suite đỏ dù 9/9 eval đạt. Quay lại chạy lại.
 Round 2: mọi lệnh suite xanh; tám eval máy carry-forward từ round 1 (delta không chạm paths của eval); E8 do panel chấm PASS.
 
+
+### Re-pin lần 1 — 2026-10-21, do hoá cũ do gộp onehub 898503a8b
+run_id: repin-20261021T044755Z-59279
+sha: 984a708206c5292932c6ca9f18e2d732b186043b · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E8 (E8 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
