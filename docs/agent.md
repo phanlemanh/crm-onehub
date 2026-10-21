@@ -787,6 +787,26 @@ wrong in the direction that looks useful.
 - **A new fact field goes in `FIELDS` (`lib/facts.ts`) *and* `FACT_COLUMNS`**
   (`apps/api/src/contacts/contacts.service.ts`).
 
+### Custom field values are never overwritten
+
+`writeField` (`lib/fields.ts`) is the only path Kara writes a custom field value through, and
+`set_field_value` is the only tool that calls it. It locks the cell and reads it in the same
+transaction, then:
+
+- **An empty cell is filled**, in any session.
+- **A background session never replaces a value** — a dispatched task, a team-agent run, with
+  or without `replace`. "Background" is `isAutomated(ctx.session)` (`lib/approval.ts`), computed
+  by the tool, never taken from the model's input.
+- **A session with a person in it replaces only with `replace: true`**, which the tool
+  describes as "only if the rep asked you to in this conversation". Without it the refusal
+  names the value already there and says the same thing, so Kara asks rather than retries.
+- **Clearing (`null`) a filled cell is a replace**, under the same rule.
+- **A manual-only field (`agentFilled: false`) refuses first**, whatever `replace` says.
+
+`FieldValue` has no provenance column, so Kara cannot refresh a value it filled itself in an
+earlier background run. That waits for the proposals of `tac-tu-xin-duyet`
+(`docs/ai-ux.md` §4). Tests: `test/kara-khong-ghi-de-truong.integration.spec.ts`.
+
 ## Optional by default
 
 `lib/capabilities.ts` is the single place that knows what is set: prints it at boot,
