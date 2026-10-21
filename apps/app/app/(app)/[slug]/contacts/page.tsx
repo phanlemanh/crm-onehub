@@ -54,7 +54,12 @@ async function Contacts({
 }: Pick<PageProps<"/[slug]/contacts">, "searchParams">) {
 	const [, values] = await Promise.all([
 		requireSession(),
-		contactsSearchParams.load(searchParams),
+		getServerQueryClient()
+			.fetchQuery(
+				getServerTrpc().fields.filters.queryOptions({ entity: "CONTACT" }),
+			)
+			.catch(() => [])
+			.then((truong) => contactsSearchParams.load(searchParams, truong)),
 	]);
 
 	const trpc = getServerTrpc();
@@ -64,6 +69,9 @@ async function Contacts({
 			trpc.contacts.list.queryOptions(contactsSearchParams.toInput(values)),
 		),
 		queryClient.prefetchQuery(trpc.users.list.queryOptions()),
+		queryClient.prefetchQuery(
+			trpc.fields.filters.queryOptions({ entity: "CONTACT" }),
+		),
 		queryClient.prefetchQuery(trpc.companies.options.queryOptions({ q: "" })),
 	]);
 
