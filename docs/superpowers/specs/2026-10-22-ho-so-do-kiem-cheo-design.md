@@ -101,7 +101,8 @@ Mốc nền là sha cố định, không dùng `merge-base` hay `HEAD` — chín
 ## Câu hỏi cho người (lên thẻ Cổng Phạm vi)
 
 - **Hỏi-1 · bốn lỗi sản phẩm thật.** Khuyên: vòng này không sửa sản phẩm. Ba hồ sơ dính (`bo-dung-chung-nhan-chuoi`,
-  `cai-dat-con-lai-noi-tieng-viet`, `tong-quan-va-khung-noi-tieng-viet`) vào mục `hoan_lai`, không chạm tệp nào; gửi bốn
+  `cai-dat-con-lai-noi-tieng-viet`, `tong-quan-va-khung-noi-tieng-viet` — 29 ô đỏ: 4 lỗi sản phẩm, 25 thước hỏng) vào
+  mục `hoan_lai`, không chạm tệp nào, nên vòng sửa 44/73 ô; gửi bốn
   tín hiệu cho làn chủ của màn (Cài đặt › Trường, Tổng quan, bài test DOM); phần sửa răng đã tra cho ba hồ sơ ghi sẵn
   trong danh sách để hàng sửa sản phẩm mang theo. Lối khác: sửa luôn sản phẩm trong vòng — giá: chạm `apps/app` thuộc
   vùng của làn khác, vòng thành chạm giao diện (thêm eval nhìn thấy và nghi thức thiết kế), to thêm khoảng một phần ba;
