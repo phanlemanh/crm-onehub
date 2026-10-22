@@ -232,6 +232,7 @@ describe("chay-that", () => {
 		const nhan: unknown[] = [];
 		const mayThat = Bun.serve({
 			port: 0,
+			hostname: "127.0.0.1",
 			fetch: async (req) => {
 				nhan.push(await req.json());
 				return Response.json(banChupRa.parse({ ketQua: "nhan" }));
@@ -341,6 +342,7 @@ describe("dcn-onehub", () => {
 			const nhan: unknown[] = [];
 			const mayThat = Bun.serve({
 				port: 0,
+				hostname: "127.0.0.1",
 				fetch: async (req) => {
 					nhan.push(await req.json());
 					return Response.json(banChupRa.parse({ ketQua: "nhan" }));

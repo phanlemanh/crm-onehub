@@ -1,0 +1,32 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_dreamy_gauss_653377_do · app http://localhost:4378 · api http://localhost:4641
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+gieo sau thoa thuan, muoi truong tu tao qua API that
+DUNG AC-10: bat Hien trong bo loc cho truong So qua man Cai dat
+DUNG AC-10 0: Trong co so dem 2
+DUNG AC-10 0: url ?q=lmtman&field:ghi_chu_lmt=has:hop+dong
+DUNG AC-10 0: 3 hang
+DUNG AC-10 1: url ?q=lmtman&field:so_can_lmt=gte:1234.5
+DUNG AC-10 2: co dong loi so
+DUNG AC-10 2: duong dan khong doi
+DUNG AC-10 3: moc Đã qua
+DUNG AC-10 3: moc Trong tháng này
+DUNG AC-10 3: moc Tháng sau
+DUNG AC-10 3: moc Muộn hơn
+DUNG AC-10 3: moc Trống
+DUNG AC-10 3: o tich Có
+DUNG AC-10 3: o tich Không
+DUNG AC-10 3: 375 khong cuon ngang
+DUNG AC-10 4: nut Lọc(4)
+DUNG AC-10 4: 2 hang
+DUNG AC-10 5: ap lai ?q=lmtman&field:ghi_chu_lmt=has:hop+dong&field:so_can_lmt=gte:1000&field:ngay_ky_lmt=this-month&field:da_ky_lmt=yes
+anh: /Users/manhphan/dev/crm-onehub/.claude/worktrees/dreamy-gauss-653377/_acceptance/loc-moi-truong/evidence
+KET LUAN AC-10: 18 DUNG, 0 SAI
+lmt man: dat
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0

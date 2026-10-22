@@ -1,0 +1,183 @@
+slug: truong-chuan-o-cai-dat
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_danh_muc
+    expected: "exit 0; -t tcc-danh-muc của apps/app/test/truong-chuan-cai-dat.dom.tsx. Đáp án viết sẵn trong test, chép từ danh mục của hợp đồng: 24 khoá theo thứ tự (Thoả thuận 6: name, amount, currency, expectedCloseDate, company, owner; Công ty 8: name, domain, website, phone, email, city, country, owner; Liên hệ 10: firstName, lastName, title, email, phone, linkedin, x, github, company, owner). Với mỗi locale trong {vi, en} và mỗi loại: (1) dựng FieldsSettings thật với kho tRPC giả (fields.list rỗng, fields.layout rút qua bộ đọc đầu ra thật của apps/api/src/fields — round-trip parse, không dựng tay), đọc nhãn các hàng trường chuẩn theo thứ tự DOM; (2) dựng DealOverview, CompanyOverview, ContactOverview thật với bản ghi rút qua bộ đọc đầu ra thật của API, đọc nhãn các hàng của mục Chi tiết theo thứ tự DOM, bỏ hàng Quy đổi của thoả thuận. Hai dãy nhãn khác nhau thì ném 'tcc danh muc: lech <locale> <loai> cai-dat=<json> phieu=<json>'. Số hàng chuẩn ở Cài đặt khác 6/8/10 thì ném 'tcc danh muc: so hang <loai> <n>'. Nhãn nào ở vi là chuỗi tiếng Anh của standard-fields.ts cũ ('Close date', 'Owner', 'First name', 'Stage') thì ném 'tcc danh muc: con tieng anh <chu>'. Cài đặt có hàng 'Mô tả', 'Giai đoạn' hay 'Quy đổi' thì ném 'tcc danh muc: thua <nhan>'. Số cặp đã so khác 6 (2 locale × 3 loại) thì ném 'tcc danh muc: thieu cap <n>'. Đối chứng của thước, cùng fixture: test bỏ phần tử cuối của dãy phiếu trong bản chép rồi so; không ném 'lech' thì ném 'tcc danh muc: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub 03d4842f1 danh sách đọc standard-fields.ts, ở vi hiện 'Close date', ném 'tcc danh muc: con tieng anh Close date' (hoặc thiếu fields.layout trong router, import hỏng)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/components/crm/record-sheet/contact-sheet.tsx, "apps/app/app/(app)/[slug]/settings/fields/**", apps/app/lib/messages/crm.ts, packages/db/src/fields-chuan.ts, apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E1b
+    criterion: AC-1
+    executor: script
+    layer: unit
+    cmd: config:executors.script.tcc_quet
+    expected: "exit 0; bun _acceptance/truong-chuan-o-cai-dat/rang/quet.mjs. Quét bằng TypeScript compiler API (ts.createSourceFile, không regex trên chữ) mọi tệp .ts/.tsx dưới apps/app và apps/api/src: (a) tệp apps/app/components/crm/fields/standard-fields.ts còn trên đĩa thì ném 'tcc quet: con standard-fields.ts'; (b) khai báo import nào có specifier kết thúc bằng 'standard-fields' thì ném 'tcc quet: con nhap standard-fields <tep>:<dong>'; (c) fields-list.tsx và ba phiếu record-sheet/{deal,company,contact}-sheet.tsx không nhập danh mục trường chuẩn (specifier kết thúc bằng 'truong-chuan' hay bằng '@crm/db/fields-chuan') thì ném 'tcc quet: khong doc danh muc <tep>'; (d) apps/api/src/fields/*.ts không nhập '@crm/db/fields-chuan' (hay đường tương đương trong packages/db) thì ném 'tcc quet: may chu khong doc danh muc'. Danh sách tệp ở (c), (d) viết sẵn trong rang; tệp vắng thì ném 'tcc quet: thieu tep <tep>'. Cặp hai chiều cùng fixture: rang chép fields-list.tsx của cây vào thư mục tạm, chèn dòng 'import { STANDARD_FIELDS } from \"./standard-fields\";', quét bản chép: không ném đúng 'con nhap standard-fields' thì ném 'tcc quet: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub 03d4842f1 ném 'tcc quet: con standard-fields.ts'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/company-sheet.tsx, apps/app/components/crm/record-sheet/contact-sheet.tsx, apps/api/src/fields/**, packages/db/src/fields-chuan.ts, _acceptance/truong-chuan-o-cai-dat/rang/quet.mjs]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_sap_lai
+    expected: "exit 0; -t tcc-sap-lai của apps/app/test/truong-chuan-cai-dat.dom.tsx. Dựng FieldsSettings thật ở vi, thẻ Thoả thuận, quyền quản trị, kho tRPC giả: fields.list có trường tự tạo TEXT khoá 'hang_doi_tac' nhãn 'Hạng đối tác'; fields.layout (round-trip qua bộ đọc đầu ra thật) theo thứ tự mặc định: name, amount, currency, expectedCloseDate, company, owner, hang_doi_tac. Đối chứng dương trước khi kéo: hàng 'Hạng đối tác' không có tay kéo có tên truy cập thì ném 'tcc sap lai: doi chung thieu tay keo'. Kéo bằng bàn phím trên tay kéo của 'Hạng đối tác': focus, Space, ArrowUp ba lần, Space (KeyboardSensor của SortableList). fields.reorder không được gọi đúng một lần thì ném 'tcc sap lai: khong luu'; variables khác đúng {entity:'DEAL', items:[{standard:'name'},{standard:'amount'},{standard:'currency'},{custom:<id của hang_doi_tac>},{standard:'expectedCloseDate'},{standard:'company'},{standard:'owner'}]} thì ném 'tcc sap lai: gui <json>'. Ngay sau khi thả (trước khi kho giả trả lời), thứ tự nhãn trên DOM khác thứ tự vừa gửi thì ném 'tcc sap lai: dom <json>'. Ca lỗi cùng fixture: fields.reorder giả ném TRPCClientError BAD_REQUEST message tiếng Anh 'That order names a field which is not on this record type.'; kéo như trên; sau khi chờ, thứ tự nhãn DOM khác dãy trước khi kéo thì ném 'tcc sap lai: loi khong ve <json>'; toast.error (mock sonner) không được gọi đúng một lần với câu crmMessages('vi') 'Chưa lưu được thứ tự.' thì ném 'tcc sap lai: khong bao loi'; nội dung toast chứa 'That order' thì ném 'tcc sap lai: in cau may chu'. Chiều đỏ trong lịch sử: trên onehub trường chuẩn không có hàng trong danh sách sắp được, ném 'tcc sap lai: doi chung thieu tay keo' (hoặc gửi {entity, ids:[...]} hình dạng cũ)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/settings/fields/**", apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcc_api_sap_lai
+    expected: "exit 0; -t tcc-api-sap-lai của apps/api/test/truong-chuan-cai-dat.spec.ts trên kho thử riêng của lượt. Fixture qua đường ghi thật (caller tRPC với phiên quản trị): fields.create trường DEAL TEXT 'Hạng đối tác'. fields.reorder với danh sách trộn đưa trường ấy lên ngay trên expectedCloseDate; rồi fields.layout({entity:'DEAL'}): dãy (kind, key) khác đúng [name, amount, currency, hang_doi_tac, expectedCloseDate, company, owner] thì ném 'tcc api sap lai: doc lai <json>'. Ba ca từ chối viết sẵn trên cùng fixture, mỗi ca gọi fields.reorder rồi đọc lại layout: (1) thiếu {standard:'owner'}; (2) lặp {standard:'name'}; (3) thừa {standard:'stage'} — khoá ngoài danh mục. Ca nào không ném TRPCError mã BAD_REQUEST thì ném 'tcc api sap lai: lot <ca>'; ca nào làm layout đọc lại khác thứ tự đã lưu ở bước trước thì ném 'tcc api sap lai: doi thu tu <ca>'. Số ca đã chạy khác 3 thì ném 'tcc api sap lai: thieu ca <n>'. Chiều đỏ trong lịch sử: trên onehub fields.layout không có, caller ném 'No procedure found' — test thoát khác 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, packages/db/src/fields*.ts, packages/db/prisma/schema.prisma, apps/api/test/truong-chuan-cai-dat.spec.ts]
+
+  - id: E2c
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_phieu_thu_tu
+    expected: "exit 0; -t tcc-phieu-thu-tu của apps/app/test/truong-chuan-cai-dat.dom.tsx. Dựng DealOverview thật ở vi với kho tRPC giả; bản ghi deals.get rút qua bộ đọc đầu ra thật của apps/api/src/deals và mang trường tự tạo 'hang_doi_tac' nhãn 'Hạng đối tác' có giá trị; fields.layout trả (round-trip qua bộ đọc đầu ra thật) thứ tự [name, amount, currency, hang_doi_tac, expectedCloseDate, company, owner]. Đọc nhãn các hàng mục Chi tiết theo thứ tự DOM, bỏ hàng Quy đổi: dãy khác đúng ['Tên', 'Giá trị', 'Tiền tệ', 'Hạng đối tác', 'Ngày chốt', 'Công ty', 'Người phụ trách'] (nhãn đọc từ crmMessages('vi'), không viết lại chữ trong test) thì ném 'tcc phieu thu tu: <json>'. Đối chứng cùng fixture: layout trả thứ tự mặc định thì 'Hạng đối tác' phải đứng cuối; không thì ném 'tcc phieu thu tu: doi chung <json>'. Chiều đỏ trong lịch sử: trên onehub phiếu không đọc fields.layout, 'Hạng đối tác' đứng sau 'Người phụ trách', ném 'tcc phieu thu tu: [...]'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_an
+    expected: "exit 0; -t tcc-an của apps/app/test/truong-chuan-cai-dat.dom.tsx. (1) Dựng FieldsSettings thật ở vi, thẻ Công ty, quyền quản trị. Công tắc của hàng 'Thành phố' tìm theo role switch và tên truy cập chứa 'Thành phố'; không có thì ném 'tcc an: thieu cong tac'. Bấm tắt: fields.setStandardHidden không được gọi đúng một lần với {entity:'COMPANY', key:'city', hidden:true} thì ném 'tcc an: gui <json>'; toast thành công (mock sonner) không gọi thì ném 'tcc an: khong bao'. (2) Ca lỗi cùng fixture: setStandardHidden giả ném TRPCClientError BAD_REQUEST message tiếng Anh 'Hidden failed.'; sau khi chờ công tắc không về aria-checked='true' thì ném 'tcc an: khong ve gia tri cu'; toast.error không được gọi đúng một lần với câu ghép từ crmMessages('vi') cho «Chưa lưu được Thành phố.» thì ném 'tcc an: khong bao loi'; toast chứa 'Hidden failed' thì ném 'tcc an: in cau may chu'. (3) Dựng CompanyOverview thật với bản ghi rút qua bộ đọc đầu ra thật có city 'Đà Nẵng'; fields.layout có city hidden (mọi fixture bố trí đi qua parse của schema @crm/validation/bo-tri-truong): hàng 'Thành phố' còn trong mục Chi tiết thì ném 'tcc an: phieu con hang'; đổi layout giả sang city không ẩn và vẽ lại: hàng 'Thành phố' không đứng đúng chỉ số 5 (sau 'Email') thì ném 'tcc an: hien lai sai cho <i>'. (4) Cùng fixture city hidden, dựng bảng Công ty thật (bảng của trang companies) với một hàng có city 'Đà Nẵng': tiêu đề cột 'Thành phố' vắng hay ô của hàng không có 'Đà Nẵng' thì ném 'tcc an: bang mat cot'; đối chứng dương cùng bảng: cột 'Tên' vắng thì ném 'tcc an: bang doi chung'. Chiều đỏ trong lịch sử: trên onehub trường chuẩn không có công tắc, ném 'tcc an: thieu cong tac'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/company-sheet.tsx, "apps/app/app/(app)/[slug]/settings/fields/**", "apps/app/app/(app)/[slug]/companies/**", apps/app/lib/messages/crm.ts, packages/validation/src/bo-tri-truong.ts, apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcc_api_an
+    expected: "exit 0; -t tcc-api-an của apps/api/test/truong-chuan-cai-dat.spec.ts trên kho thử riêng của lượt. Fixture qua đường ghi thật (phiên quản trị): companies.create một công ty có city 'Đà Nẵng'. fields.setStandardHidden({entity:'COMPANY', key:'city', hidden:true}); rồi: companies.get trả city khác 'Đà Nẵng' thì ném 'tcc api an: mat gia tri <gia tri>'; fields.layout mục city không có hidden true thì ném 'tcc api an: khong an'. Ghi chỉ số của city trong layout trước khi ẩn; setStandardHidden hidden:false rồi đọc lại: chỉ số khác chỉ số cũ thì ném 'tcc api an: doi cho <truoc> <sau>'. Chiều đỏ trong lịch sử: trên onehub fields.setStandardHidden không có — test thoát khác 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/companies/**, packages/db/src/fields*.ts, packages/db/prisma/schema.prisma, apps/api/test/truong-chuan-cai-dat.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_chuan_bat_buoc
+    expected: "exit 0; -t tcc-chuan-bat-buoc của apps/app/test/truong-chuan-cai-dat.dom.tsx. Đáp án viết sẵn sáu cặp {loai, khoa}: DEAL name, DEAL currency, DEAL company, DEAL owner, COMPANY name, CONTACT firstName. Với mỗi loại, dựng FieldsSettings thật ở vi, quyền quản trị, layout round-trip qua bộ đọc đầu ra thật. Với mỗi cặp: công tắc của hàng không có aria-checked='true' và disabled thì ném 'tcc chuan bat buoc: <loai> <khoa> khong khoa'; tên truy cập (hoặc aria-describedby) của công tắc không chứa đúng câu crmMessages('vi') cho lý do bắt buộc thì ném 'tcc chuan bat buoc: <loai> <khoa> thieu ly do'; dòng phụ của hàng không chứa crmMessages('vi').fields.required thì ném 'tcc chuan bat buoc: <loai> <khoa> thieu nhan'. Đối chứng cùng fixture: mọi hàng chuẩn KHÔNG trong sáu cặp có công tắc bật được (không disabled); có hàng disabled thì ném 'tcc chuan bat buoc: khoa thua <loai> <khoa>'. Số cặp đã so khác 6 thì ném 'tcc chuan bat buoc: thieu <n>'. Vế máy chủ ở E4b. Chiều đỏ trong lịch sử: trên onehub không có công tắc."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, packages/db/src/fields-chuan.ts, apps/app/lib/messages/crm.ts, apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcc_api_chuan_bat_buoc
+    expected: "exit 0; -t tcc-api-chuan-bat-buoc của apps/api/test/truong-chuan-cai-dat.spec.ts. Phiên quản trị gọi fields.setStandardHidden hidden:true lần lượt cho sáu cặp bắt buộc viết sẵn (như E4). Ca nào không ném TRPCError BAD_REQUEST thì ném 'tcc api chuan bat buoc: lot <loai> <khoa>'; layout đọc lại có mục ấy hidden thì ném 'tcc api chuan bat buoc: da an <loai> <khoa>'. Đối chứng cùng fixture: setStandardHidden cho COMPANY city hidden:true phải thành công; ném thì ném 'tcc api chuan bat buoc: doi chung'. Số ca khác 6 thì ném 'tcc api chuan bat buoc: thieu <n>'. Tập khoá bắt buộc của test so với cột không null của Deal/Company/Contact đọc từ Prisma DMMF lúc chạy (Prisma.dmmf): một khoá trong sáu cặp mà cột tương ứng nullable, hay một cột không null thuộc danh mục mà vắng trong sáu cặp, thì ném 'tcc api chuan bat buoc: lech mo hinh <khoa>' — bảng ánh xạ khoá danh mục sang cột (company→companyId, owner→ownerId) viết sẵn trong test. Chiều đỏ trong lịch sử: trên onehub thủ tục chưa có."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, packages/db/src/fields-chuan.ts, packages/db/prisma/schema.prisma, apps/api/test/truong-chuan-cai-dat.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_bat_buoc
+    expected: "exit 0; -t tcc-bat-buoc-luu của apps/app/test/truong-chuan-cai-dat.dom.tsx. (1) Dựng FieldEditor thật ở vi cho trường mới (field undefined, entity DEAL): nhập nhãn 'Mã hồ sơ', bật công tắc role switch tên 'Bắt buộc' (nhãn đọc từ crmMessages('vi')), bấm Lưu: fields.create không được gọi với required true thì ném 'tcc bat buoc: tao gui <json>'. (2) FieldEditor cho trường có sẵn required false: bật 'Bắt buộc', Lưu: fields.update variables.data.required khác true thì ném 'tcc bat buoc: sua gui <json>'; tắt lại, Lưu: khác false thì ném 'tcc bat buoc: tat gui <json>'. (3) Dựng DealOverview thật với bản ghi rút qua bộ đọc đầu ra thật mang trường tự tạo TEXT 'ma_ho_so' required true giá trị 'HS-1': bấm ô, xoá trống, Enter; deals.update được gọi thì ném 'tcc bat buoc: phieu van luu'; câu dưới ô khác câu mã 'trong' của DA14 (đọc từ crmMessages('vi')) thì ném 'tcc bat buoc: phieu cau <chu>'. Đối chứng cùng fixture: cùng trường với required false, xoá trống, Enter phải gọi deals.update với fields {ma_ho_so: null}; không thì ném 'tcc bat buoc: doi chung'. Chiều đỏ trong lịch sử: trên onehub ô sửa không có công tắc 'Bắt buộc', ném 'tcc bat buoc: tao gui {...required:false}' hoặc không tìm thấy công tắc."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/lib/messages/crm.ts, apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcc_api_bat_buoc
+    expected: "exit 0; -t tcc-api-bat-buoc-luu của apps/api/test/truong-chuan-cai-dat.spec.ts trên kho thử riêng. Phiên quản trị: fields.create DEAL TEXT 'Mã hồ sơ' required true; fields.list mục ấy required khác true thì ném 'tcc api bat buoc: doc lai <gia tri>'. deals.create một thoả thuận, deals.update fields {ma_ho_so:'HS-1'} rồi {ma_ho_so:null}: lượt sau không ném BAD_REQUEST thì ném 'tcc api bat buoc: de trong lot'; deals.get giá trị khác 'HS-1' thì ném 'tcc api bat buoc: mat gia tri'. fields.update required false; deals.update {ma_ho_so:null} ném thì ném 'tcc api bat buoc: tat khong an'. Chiều đỏ: vế máy chủ đã đúng trên onehub (bài kiểm giữ) — chứng bằng đột biến tay lúc dựng (bỏ nhánh definition.required trong coerceValue phải ném 'tcc api bat buoc: de trong lot'), ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, packages/db/src/fields.ts, apps/api/src/deals/**, apps/api/test/truong-chuan-cai-dat.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_bat_buoc_hien
+    expected: "exit 0; -t tcc-bat-buoc-hien của apps/app/test/truong-chuan-cai-dat.dom.tsx. (1) FieldEditor thật ở vi cho trường có sẵn showOnSheet false, required false: bật 'Bắt buộc'; ô tích 'Hiện trên phiếu' (nhãn sheetPlacement) không checked và disabled thì ném 'tcc bat buoc hien: o sua khong khoa'; Lưu: variables.data khác {required:true, showOnSheet:true} ở hai khoá ấy thì ném 'tcc bat buoc hien: gui <json>'. (2) FieldsSettings thật, fields.list có trường tự tạo required true: công tắc của hàng ấy không aria-checked='true' và disabled thì ném 'tcc bat buoc hien: danh sach khong khoa'. Đối chứng cùng fixture: trường required false có công tắc bật tắt được; disabled thì ném 'tcc bat buoc hien: doi chung'. Chiều đỏ trong lịch sử: trên onehub không có công tắc 'Bắt buộc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E6b
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcc_api_bat_buoc_hien
+    expected: "exit 0; -t tcc-api-bat-buoc-hien của apps/api/test/truong-chuan-cai-dat.spec.ts. Phiên quản trị, ba ca viết sẵn: (1) fields.create required true showOnSheet false; (2) fields.update một trường có sẵn với {required:true, showOnSheet:false}; (3) fields.update {required:true} (không gửi showOnSheet) cho trường đang showOnSheet false. Ca 1 và 2 không ném BAD_REQUEST thì ném 'tcc api bat buoc hien: lot <ca>'; ca 2 làm fields.list đọc lại đổi giá trị thì ném 'tcc api bat buoc hien: doi gia tri <ca>'. Ca 3 phải thành công và fields.list đọc lại có required true, showOnSheet true; khác thì ném 'tcc api bat buoc hien: khong bat hien <json>'. Số ca khác 3 thì ném 'tcc api bat buoc hien: thieu <n>'. Chiều đỏ trong lịch sử: trên onehub ca 1 được tạo, ném 'tcc api bat buoc hien: lot 1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/test/truong-chuan-cai-dat.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcc_api_mac_dinh
+    expected: "exit 0; -t tcc-api-mac-dinh của apps/api/test/truong-chuan-cai-dat.spec.ts trên kho thử riêng (chưa hàng bố trí nào). Phiên quản trị: fields.create CONTACT hai trường 'Sở thích' rồi 'Kênh ưa dùng'. fields.layout({entity:'CONTACT'}): dãy khoá khác đúng [firstName, lastName, title, email, phone, linkedin, x, github, company, owner, so_thich, kenh_ua_dung] thì ném 'tcc api mac dinh: thu tu <json>'; mục chuẩn nào hidden true thì ném 'tcc api mac dinh: an <khoa>'. Rồi fields.reorder đưa 'Sở thích' lên đầu; fields.create 'Ghi chú riêng'; layout đọc lại có 'ghi_chu_rieng' không ở cuối thì ném 'tcc api mac dinh: truong moi khong cuoi <json>'. Đối chứng của thước: test tính đáp án thứ tự mặc định bằng cách đọc thứ tự khoá chuẩn từ danh mục thật của packages/db/src/fields-chuan.ts và so với dãy viết sẵn trên; lệch thì ném 'tcc api mac dinh: dap an lech danh muc'. Chiều đỏ trong lịch sử: trên onehub fields.layout không có."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, packages/db/src/fields*.ts, packages/db/prisma/schema.prisma, apps/api/test/truong-chuan-cai-dat.spec.ts]
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_phieu_chua_tai
+    expected: "exit 0; -t tcc-phieu-chua-tai của apps/app/test/truong-chuan-cai-dat.dom.tsx. Dựng ContactOverview thật ở vi với bản ghi rút qua bộ đọc đầu ra thật. Hai ca trên cùng fixture: (1) fields.layout giả không bao giờ trả (promise treo); (2) fields.layout giả ném lỗi. Fixture bố trí của vế đối chứng đi qua parse của schema @crm/validation/bo-tri-truong. Ở mỗi ca, nhãn các hàng chuẩn của mục Chi tiết theo thứ tự DOM khác đúng mười nhãn mặc định của Liên hệ (đọc từ crmMessages('vi')) thì ném 'tcc phieu chua tai: <ca> <json>'. Đối chứng cùng fixture: layout trả title hidden thì hàng 'Chức danh' phải vắng; còn thì ném 'tcc phieu chua tai: doi chung'. Số ca khác 2 thì ném 'tcc phieu chua tai: thieu <n>'. Chiều đỏ trong lịch sử: trên onehub phiếu không đọc bố trí — vế đối chứng ném 'tcc phieu chua tai: doi chung'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/contact-sheet.tsx, apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E7c
+    criterion: AC-7
+    executor: script
+    layer: unit
+    cmd: config:executors.script.tcc_migration
+    expected: "exit 0; bun _acceptance/truong-chuan-o-cai-dat/rang/migration-chi-them.mjs. Tìm các thư mục migration dưới packages/db/prisma/migrations có trong HEAD mà không có trong merge-base với origin/onehub; số thư mục khác 1 thì ném 'tcc migration: so thu muc <n>'. Tên thư mục không bắt đầu bằng 14 chữ số, hay mốc ấy nhỏ hơn hoặc bằng mốc migration lớn nhất trên origin/onehub, thì ném 'tcc migration: ten <ten>' (luật 1). Đọc migration.sql, tách câu theo ';' bỏ chú thích: câu nào không thuộc CREATE TABLE, CREATE INDEX, CREATE UNIQUE INDEX, ALTER TABLE <bảng mới> ADD CONSTRAINT thì ném 'tcc migration: khong chi them <cau>'; câu ALTER TABLE nhắm bảng có sẵn thì ném 'tcc migration: doi bang cu <bang>'; tham chiếu REFERENCES tới bảng không có trong các migration xếp trước thì ném 'tcc migration: tro bang sau <bang>' (luật 2). Cặp hai chiều cùng fixture: rang chép migration.sql vào thư mục tạm, chèn 'ALTER TABLE \"fieldDefinition\" DROP COLUMN \"required\";', quét bản chép: không ném 'doi bang cu' thì ném 'tcc migration: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub chưa có thư mục mới, ném 'tcc migration: so thu muc 0'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/**, _acceptance/truong-chuan-o-cai-dat/rang/migration-chi-them.mjs]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcc_api_quyen
+    expected: "exit 0; -t tcc-api-quyen của apps/api/test/truong-chuan-cai-dat.spec.ts. Fixture qua đường ghi thật: phiên quản trị tạo trường DEAL 'Hạng đối tác'; một người dùng thường (không quản trị). Với người thường: fields.reorder (danh sách trộn hợp lệ) và fields.setStandardHidden COMPANY city — ca nào không ném TRPCError FORBIDDEN thì ném 'tcc api quyen: lot <thu tuc>'; layout đọc lại bằng phiên quản trị đổi so với trước thì ném 'tcc api quyen: doi bo tri <thu tuc>'. Người thường gọi fields.layout DEAL phải thành công; ném thì ném 'tcc api quyen: khong doc duoc'. Đối chứng cùng fixture: cùng hai lệnh bằng phiên quản trị phải thành công; ném thì ném 'tcc api quyen: doi chung <thu tuc>'. Chiều đỏ trong lịch sử: trên onehub hai thủ tục mới chưa có."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/test/truong-chuan-cai-dat.spec.ts]
+
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    layer: unit
+    cmd: config:executors.test.tcc_khong_quyen
+    expected: "exit 0; -t tcc-khong-quyen của apps/app/test/truong-chuan-cai-dat.dom.tsx. Dựng FieldsSettings thật ở vi, fields.access trả canManage false, layout (qua parse của schema @crm/validation/bo-tri-truong) và list có cả trường chuẩn lẫn tự tạo. Mọi tay kéo, mọi công tắc 'Hiện trên phiếu' và mọi nút trong danh sách: phần tử nào không disabled thì ném 'tcc khong quyen: mo <vai> <nhan>'; dòng crmMessages('vi').fields.canQuyen không có trong DOM thì ném 'tcc khong quyen: thieu ly do'. Số tay kéo đã so khác số hàng thì ném 'tcc khong quyen: thieu tay keo <n>'. Đối chứng cùng fixture: canManage true thì có ít nhất một công tắc không disabled; không thì ném 'tcc khong quyen: doi chung'. Chiều đỏ trong lịch sử: trên onehub hàng trường chuẩn không có trong danh sách sắp được, ném 'tcc khong quyen: thieu tay keo'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/settings/fields/**", apps/app/test/truong-chuan-cai-dat.dom.tsx]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tcc_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/truong-chuan-o-cai-dat/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-chuan-o-cai-dat/rang/do-man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này."
+      - "Đọc dòng cuối: mã 0 kèm 'tcc man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'tcc man: …'."
+      - "Mở tám ảnh tcc-cai-dat-{thoa-thuan,cong-ty}-{1280,375}.png và tcc-phieu-{thoa-thuan,cong-ty}-{1280,375}.png, đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/truong-chuan-o-cai-dat/evidence/]
+    expected: |
+      Dữ liệu dựng qua API thật trong phiên đo (phiên quản trị): một thoả thuận và một công ty đủ giá trị; trường tự tạo DEAL 'Hạng đối tác'. Hai thao tác làm bằng CHUỘT trên màn thật (Playwright page.mouse, không gọi API): kéo tay kéo của 'Hạng đối tác' thả lên trên 'Ngày chốt' ở thẻ Thoả thuận; bấm công tắc của 'Thành phố' ở thẻ Công ty. Sau đó do-man.mjs đọc fields.layout qua API: 'Hạng đối tác' không đứng ngay trên expectedCloseDate thì thoát 1 'tcc man: chuot khong luu thu tu'; city không hidden thì thoát 1 'tcc man: chuot khong luu an'.
+      0. tcc-cai-dat-*-1280 (ST-cai-dat-danh-sach): một danh sách duy nhất; hàng trường chuẩn và hàng trường tự tạo cùng khuôn — tay kéo, nhãn, huy hiệu kiểu, dòng phụ, công tắc; không tiêu đề nhóm, không khối gập «Trường chuẩn». do-man.mjs đọc DOM: số phần tử danh sách sắp được (SortableList) khác 1 thì thoát 1 'tcc man: so danh sach <n>'; có phần tử [data-state] của Collapsible bọc hàng trường chuẩn thì thoát 1 'tcc man: khoi gap'; hàng 'Thành phố' của Công ty có công tắc aria-checked khác 'false' thì thoát 1 'tcc man: an khong luu'.
+      1. tcc-cai-dat-*-375: cùng màn ở 375; document.documentElement.scrollWidth > 375 thì thoát 1 'tcc man: 375 cuon ngang <the>'.
+      2. tcc-phieu-{thoa-thuan,cong-ty}-375: scrollWidth > 375 thì thoát 1 'tcc man: 375 cuon ngang phieu <loai>'.
+      3. tcc-phieu-thoa-thuan-1280 (ST-phieu-theo-bo-tri): 'Hạng đối tác' ngay trên 'Ngày chốt'; do-man.mjs đọc nhãn mục Chi tiết, chỉ số lệch thì thoát 1 'tcc man: thu tu <json>'. tcc-phieu-cong-ty-1280: không có hàng 'Thành phố'; còn thì thoát 1 'tcc man: phieu con thanh pho'.
+      Đối chứng bằng mắt: nhìn ảnh Cài đặt mà che huy hiệu và dòng phụ thì hàng chuẩn và hàng tự tạo cao bằng nhau, thẳng cột, cùng vị trí công tắc.
+    evidence_required: [verdict, screenshot, observed, verified_at]
+    paths: [apps/app/components/crm/fields/**, "apps/app/app/(app)/[slug]/settings/fields/**", apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/record-sheet/company-sheet.tsx, _acceptance/truong-chuan-o-cai-dat/rang/do-man.mjs]

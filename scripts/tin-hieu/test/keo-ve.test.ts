@@ -63,12 +63,13 @@ function danhSach(ds: Mau[]): KeoVeOutput["tep"] {
 function mayChu(ds: KeoVeOutput["tep"]) {
 	const sv = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: (req) =>
 			req.headers.get("x-api-key") === "khoa-thu"
 				? Response.json(bocPhanHoiKeoVe(ds))
 				: new Response("{}", { status: 401 }),
 	});
-	return { url: `http://localhost:${sv.port}`, dung: () => sv.stop(true) };
+	return { url: `http://127.0.0.1:${sv.port}`, dung: () => sv.stop(true) };
 }
 
 function anh(r: string): Record<string, string> {

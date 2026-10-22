@@ -18,7 +18,10 @@ import { useEffect, useMemo, useState } from "react";
 import { CompanyCell } from "@/components/crm/company-cell";
 import { contactName } from "@/components/crm/contact-name";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
-import { useFieldFacets } from "@/components/crm/fields/field-facets";
+import {
+	useFieldFacets,
+	useTruongLoc,
+} from "@/components/crm/fields/field-facets";
 import {
 	anDuoiTheoKieu,
 	OTruongBang,
@@ -163,7 +166,9 @@ export function ContactsTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const table = useTableQuery(contactsSearchParams);
+	const table = useTableQuery(contactsSearchParams, {
+		truongLoc: useTruongLoc("CONTACT"),
+	});
 	const { query, input, setArchived, currentView, applyView } = table;
 
 	const contacts = useQuery({

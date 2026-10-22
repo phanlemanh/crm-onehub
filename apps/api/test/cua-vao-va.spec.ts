@@ -35,6 +35,7 @@ beforeAll(async () => {
 	await gieoThanhVien(NGUOI, "admin");
 	cookie = (await mintPhien(NGUOI)).cookie;
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 });
 
 afterAll(async () => {

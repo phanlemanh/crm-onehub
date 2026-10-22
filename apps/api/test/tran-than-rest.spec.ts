@@ -67,6 +67,7 @@ const don = () => db.banChupLoTrinh.deleteMany({ where: { nguon: NGUON } });
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	await gieoThanhVien(CHU, "owner");
 	cookie = (await mintPhien(CHU)).cookie;
 	const r = await request(app.getHttpServer())

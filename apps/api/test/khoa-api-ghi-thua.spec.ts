@@ -57,6 +57,7 @@ async function maLoi(khoa: string): Promise<string | undefined> {
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	spyOn(app.get(BackfillService), "auto").mockResolvedValue({
 		started: false,
 	});
