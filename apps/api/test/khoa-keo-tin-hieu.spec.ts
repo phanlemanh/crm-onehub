@@ -164,6 +164,7 @@ async function don() {
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	for (const n of NGUOI) {
 		await gieoThanhVien(uid(n), VAI[n]);
 		cookie[n] = (await mintPhien(uid(n))).cookie;

@@ -151,7 +151,7 @@ beforeAll(async () => {
 		imports: [AppModule],
 	}).compile();
 	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	await app.listen(0, "127.0.0.1");
 
 	const id = ma("admin");
 	await gieoThanhVien(id, "admin");
