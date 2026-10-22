@@ -5,7 +5,9 @@ slug: tep-theo-chu-ban-ghi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: draft
+status: approved
+approved_by: manh
+approved_at: 2026-10-22T01:00:24Z
 design_doc: docs/superpowers/specs/2026-10-22-tep-theo-chu-ban-ghi-design.md
 ---
 
