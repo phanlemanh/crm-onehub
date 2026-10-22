@@ -11,6 +11,8 @@ import {
 import { cuaSoSuKien } from "./okr-nhac";
 import { cauHinhAiLuc } from "./okr-tro-ly";
 import {
+	GIO_MS,
+	MINUTE_MS,
 	MUC_TU_TIN,
 	type MucTuTin,
 	motTrong,
@@ -19,13 +21,45 @@ import {
 	nacCuaDonVi,
 	OKR_TOM_TAT,
 	TRO_LY_OKR_TRAN,
+	TUAN_MS,
 	type TrangThaiQuanTriTomTat,
 } from "./okr-tro-ly-danh-muc";
 import { KIEU_KR, type KieuKr } from "./okr-xu-huong";
-import { ngayVN } from "./onboarding-nhac";
+import { dauNgayVN, ngayVN, thuTrongTuan } from "./onboarding-nhac";
 import { WORKSPACE_ID } from "./workspace";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
+
+export function gioXepCua(luc: Date): Date {
+	return new Date(
+		dauNgayVN(luc).getTime() +
+			OKR_TOM_TAT.gioXep.gio * GIO_MS +
+			OKR_TOM_TAT.gioXep.phut * MINUTE_MS,
+	);
+}
+
+export function thuCapNhatCuaNgayXep(ngayXep: Date): number {
+	return thuTrongTuan(new Date(dauNgayVN(ngayXep).getTime() - 1));
+}
+
+export function lanXepTomTatKe(now: Date, updateWeekday: number): Date {
+	const dau = dauNgayVN(now).getTime();
+	for (let lech = 0; lech <= TUAN_MS; lech += NGAY_MS) {
+		const gio = gioXepCua(new Date(dau + lech));
+		if (gio > now && thuCapNhatCuaNgayXep(gio) === updateWeekday) return gio;
+	}
+	throw new Error(`ngay cap nhat cua chu ky khong doc duoc: ${updateWeekday}`);
+}
+
+export function lanXepTomTatHomNay(
+	now: Date,
+	updateWeekday: number,
+): Date | null {
+	const gio = gioXepCua(now);
+	return gio <= now && thuCapNhatCuaNgayXep(gio) === updateWeekday
+		? gio
+		: null;
+}
 
 export type ChenhTuTin = -2 | -1 | 0 | 1 | 2;
 
