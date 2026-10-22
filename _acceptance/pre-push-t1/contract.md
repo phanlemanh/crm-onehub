@@ -114,3 +114,7 @@ Không có ngưỡng: Cổng Đáng khai «Không đo được — việc nội 
   `mot-nguon (a)` của E2 thêm glob vào `t1_skip_globs` rồi đẩy một tệp mã — nay mọi tệp dưới `apps/**` thuộc
   `risk_tiers.t1_ma_doc` nên luôn nặng, fixture của ca đổi từ `apps/x/**` sang `scripts/x/**` (commit 091ee7a8e).
   Lời hứa của AC-2 («thêm một glob vào `t1_skip_globs` đổi kết quả mà không sửa tệp nào khác») giữ nguyên.
+- Lời hứa của hồ sơ đã ký đổi theo `pre-push-phan-rieng-pr` (Hỏi-1, chủ kho duyệt 21/10; bản đối ở Notes của
+  `pre-push-phan-rieng-pr`): lần đẩy mang commit mới của onehub chỉ xét phần PR tự thêm, nên AC-1 «tập tệp là hợp của
+  `git diff` gốc..local» thôi đúng với dòng ấy — tệp của onehub không tính. Ca 6 của E1 (nhánh chỉ docs gộp onehub mang
+  mã) đổi từ «chạy đủ» sang «bỏ test, build»; 17 ca còn lại không đổi.
