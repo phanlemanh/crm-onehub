@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cbb8da9a5b2f21af07a434a6a73044b0cffc0bc0
+verified_commit: f28f4ba412ec6e954970c6eccbf75eb5e909a72e
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -349,3 +349,7 @@ sha: fd8d5a1caaf073c6c0ea13be214c48aaf38cb073 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-21, do VK7 ngan-kr-mot-cho: ghim lại sau gộp onehub 0c9356779 (#528 đổi packages/validation)
 run_id: repin-20261021T132744Z-25812
 sha: cbb8da9a5b2f21af07a434a6a73044b0cffc0bc0 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 9 — 2026-10-22, do VK9 mot-nut-tao-muc-tieu: khai superseded_by cho eval DOM gãy, bàn đo màn qua hộp Thêm mục tiêu (V2-20 b2)
+run_id: repin-20261022T224734Z-81705
+sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · diff chạm vật đo ngoài làn máy: E11, E14, E16 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

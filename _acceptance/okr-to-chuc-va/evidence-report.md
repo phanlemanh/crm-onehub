@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 603c4f8fe81a9b0b35dffef5173b82fae3160d39
+verified_commit: f28f4ba412ec6e954970c6eccbf75eb5e909a72e
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (23/23 eval đạt, 0 phát hiện trong hợp đồng). Mười một mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 3, 4, 5, 7 ghi Known limits; Ngoài-6, 8, 9, 10, 11 chấp nhận không sửa. Hai phát hiện round 1 rơi khỏi thẻ (bài so-kr chỉ kiểm URL record, bài nut-them chỉ kiểm khoá URL) ghi Known limits. Phạm vi cắt/hoãn đồng ý cắt; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -334,3 +334,7 @@ sha: 17b55bd1536d842b98b87c5086a4d669a21e2b80 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-21, do ghim lại bằng làn eval
 run_id: repin-20261021T082654Z-54523
 sha: 603c4f8fe81a9b0b35dffef5173b82fae3160d39 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E3, E11, E13, E18, E20 · diff chạm vật đo ngoài làn máy: E11, E13, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-22, do VK9 mot-nut-tao-muc-tieu: khai superseded_by cho eval DOM gãy, bàn đo màn qua hộp Thêm mục tiêu (V2-20 b2)
+run_id: repin-20261022T224734Z-81705
+sha: f28f4ba412ec6e954970c6eccbf75eb5e909a72e · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E10 · thay bởi hồ sơ đã ký: E10→mot-nut-tao-muc-tieu#AC-8 · ngoài làn máy: E3, E11, E13, E18, E20 · diff chạm vật đo ngoài làn máy: E3, E11, E13, E18 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
