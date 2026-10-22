@@ -33,13 +33,13 @@ evals:
       - "packages/validation/src/okr-tom-tat.ts"
       - "apps/api/test/tom-tat-tuan-dang-cho.spec.ts"
     expected: |
-      Ca "ttdc-api-cho" tren CSDL thu: chu ky pha dang-chay updateWeekday=1 (thu Hai), mot phong bat bang
-      okr.setProgram that, hai lan Cap nhat tuan qua duong ghi that (service cap nhat KR) trong cua so 7 ngay, khong
-      OkrTomTat va khong viec okr-tom-tat-tuan nao. Goi TroLyService.troLyTomTat that cua truong phong voi now =
-      2026-10-21T03:00:00Z (10:00 thu Tu 21/10 gio VN, luot xep thu Ba 20/10 da dong) -> ket qua parse bang
-      troLyTomTatOutput, ban null, dangSoan false, chuaCapNhat false, choBan = {kieu:"toi-luc",
-      luc:"2026-10-26T23:00:00.000Z"} (06:00 thu Ba 27/10). Cung phong voi now = 2026-10-19T10:00:00Z (17:00 thu
-      Hai 19/10) -> luc "2026-10-19T23:00:00.000Z".
+      Ca "ttdc-api-cho" tren CSDL thu voi bo OKR mau (MOC_MAU 12/11/2026 15:00 gio VN, thu Nam; chu ky quy 4 pha
+      dang-chay, updateWeekday=1; bo mau co Cap nhat tuan thu Hai 09/11). Mot phong co cap nhat duoc bat bang
+      okr.setProgram that, khong OkrTomTat va khong viec okr-tom-tat-tuan nao. Goi okr.troLyTomTat that (tRPC) cua
+      truong phong, ket qua parse bang troLyTomTatOutput: now = 2026-11-12T09:00:00Z (16:00 thu Nam, luot xep thu Ba
+      10/11 da qua) -> ban null, dangSoan false, chuaCapNhat false, choBan {kieu:"toi-luc",
+      luc:"2026-11-16T23:00:00.000Z"} (06:00 thu Ba 17/11); now = 2026-11-09T22:00:00Z (05:00 thu Ba 10/11, truoc gio
+      xep) -> luc "2026-11-09T23:00:00.000Z".
       CHIEU DO: ban sao bo loi goi choBanDauTomTat trong troLyTomTat -> do "ttdc-api-cho: thieu choBan o phong bat
       chua co ban".
 
@@ -57,10 +57,11 @@ evals:
       28 o; moi o so voi gia tri ISO viet tay trong bang (khong tinh bang chinh ham). So assert = 28 (dem va in).
       Lenh chay hai lan voi TZ=UTC va TZ=America/Los_Angeles, ca hai cung ket qua; moi lan ca tu assert
       Intl.DateTimeFormat().resolvedOptions().timeZone bang dung TZ da dat (khong thi do "ttdc-luat-gio: TZ khong ap").
-      Ca con kiem thuCapNhatCuaNgayXep(D) = thu cua D-1 cho du 7 ngay, va lich-tom-tat.ts cua tac tu import hai ham
-      nay tu @crm/db/okr-tom-tat (khong tu khai gioXepCua rieng).
-      CHIEU DO: ban sao doi "ngay sau ngay cap nhat" thanh "chinh ngay cap nhat" -> do "ttdc-luat-gio: lech o
-      <thu>/<vi tri>"; ban sao dung gio may (new Date().setHours) thay dauNgayVN -> do o lan chay TZ=America/Los_Angeles.
+      Ca con kiem thuCapNhatCuaNgayXep(D) = thu cua D-1 cho du 7 ngay, lanXepTomTatHomNay chi tra gio xep khi hom nay
+      la ngay xep cua chu ky va da qua gio, va lich-tom-tat.ts cua tac tu import gioXepCua tu @crm/db/okr-tom-tat
+      (khong tu khai gioXepCua rieng).
+      CHIEU DO: ban sao doi thuCapNhatCuaNgayXep thanh thu cua chinh ngay xep -> do "ttdc-luat-gio: lech o
+      1/05:59-ngay-xep"; ban sao dung gio may (Date#setHours) thay gioXepCua -> do o lan chay TZ=America/Los_Angeles.
 
   - id: E4
     criterion: AC-3
@@ -70,18 +71,18 @@ evals:
     paths:
       - "packages/db/src/okr-tom-tat.ts"
       - "apps/agent/agent/lib/okr/lich-tom-tat.ts"
-      - "apps/agent/test/tom-tat-tuan-dang-cho.integration.spec.ts"
+      - "apps/api/test/tom-tat-tuan-dang-cho.spec.ts"
     expected: |
-      Ca "ttdc-mot-luat" tren CSDL thu, voi tung updateWeekday trong {1, 4, 7}: dung phong bat co cap nhat trong cua
-      so, doc luc = choBanDauTomTat(...).luc tai now = thu cua ngay cap nhat 12:00 gio VN. Chay chayXepTomTat that cua
-      tac tu voi task {dueAt: luc} va now = luc -> dung 1 agentTask kind okr-tom-tat-tuan co payload.departmentId =
-      phong, nac "bat". Tren CSDL sach cung du lieu, chay voi dueAt = now = luc - 1 ngay -> 0 viec cho phong.
-      Nhanh tuan sau (updateWeekday=1): cap nhat thu Hai 19/10 qua duong ghi that, doc luc tai 10:00 thu Tu 21/10 gio
-      VN voi viec xep thu Ba da dong -> luc = 2026-10-26T23:00:00Z; (i) them mot cap nhat thu Hai 26/10 qua duong ghi
-      that roi chay chayXepTomTat o luc -> dung 1 viec; (ii) khong cap nhat moi -> 0 viec. So o = 3 thu x 2 + 2 = 8,
-      dem va in.
-      CHIEU DO: ban sao doi lanXepTomTatKe sang ngay cap nhat (khong +1 ngay) -> do "ttdc-mot-luat: luot xep tai luc
-      da bao khong xep viec (thu <n>)".
+      Ca "ttdc-mot-luat" tren CSDL thu voi bo OKR mau, voi tung updateWeekday trong {1, 4, 7} (doc luc tai 12:00 gio VN
+      cua ngay cap nhat: thu Hai 09/11, thu Nam 12/11, Chu nhat 15/11): phong bat co cap nhat trong cua so, luc =
+      choBanDauTomTat(...).luc. Chay chayXepTomTat that cua tac tu voi task {dueAt: luc} va now = luc -> dung 1
+      agentTask kind okr-tom-tat-tuan co payload.departmentId = phong, nac "bat". Sau khi don viec, chay voi dueAt =
+      now = luc - 1 ngay -> 0 viec cho phong. Nhanh tuan sau (updateWeekday=1): doc tai 10:00 thu Tu 18/11 gio VN ->
+      luc = 2026-11-23T23:00:00Z; (ii) khong cap nhat moi roi chay chayXepTomTat o luc -> 0 viec; (i) them mot cap nhat
+      thu Hai 23/11 qua okr.moCapNhat + okr.guiCapNhat that cua chu KR roi chay o luc -> dung 1 viec. So o = 3 thu x 2 +
+      2 = 8, dem va in.
+      CHIEU DO: ban sao doi lanXepTomTatKe so thu cua chinh ngay xep (khong lui mot ngay) -> do "ttdc-mot-luat: luot
+      xep tai luc da bao khong xep viec (thu 1)".
 
   - id: E5
     criterion: AC-4
@@ -95,15 +96,15 @@ evals:
       - "apps/api/test/tom-tat-tuan-dang-cho.spec.ts"
       - "apps/app/test/tom-tat-tuan-dang-cho.dom.tsx"
     expected: |
-      Ca API "ttdc-dang-xep": phong bat chua co ban, updateWeekday=1, now = 2026-10-19T23:05:00Z (06:05 thu Ba 20/10 gio VN). (a) co agentTask
-      okr-tom-tat-xep dueAt = 2026-10-19T23:00:00Z, finishedAt null -> choBan {kieu:"dang-xep"}; (b) cung task da dong
-      (finishedAt dat) -> choBan {kieu:"toi-luc", luc:"2026-10-26T23:00:00.000Z"}; (c) khong co task nao -> toi-luc tuan
-      sau; (d) ngay khong khop: now = 2026-10-20T23:05:00Z (06:05 thu Tu 21/10), viec okr-tom-tat-xep dueAt
-      2026-10-20T23:00:00Z chua dong -> {kieu:"toi-luc", luc:"2026-10-26T23:00:00.000Z"}. Ca DOM con: dang-xep thi tRPC
-      gia duoc goi lai sau hoiLaiMs va dung sau tranChoMs (dong ho gia). Ca DOM "ttdc-dang-xep": choBan dang-xep -> [data-trang-thai="ST-tomtat-dang-xep"] voi dung chuoi "Kara đang
-      xếp bản tóm tắt đầu tiên — thường có trong vài phút."
-      CHIEU DO: ban sao bo kiem viec xep chua dong -> do "ttdc-dang-xep: (a) ra toi-luc tuan sau, can dang-xep"; ban sao
-      bo kiem thu cua ngay -> do "ttdc-dang-xep: (d) ra dang-xep o ngay khong khop".
+      Ca API "ttdc-dang-xep": phong bat chua co ban, updateWeekday=1, bo OKR mau. (a) now = 2026-11-09T23:05:00Z
+      (06:05 thu Ba 10/11 gio VN), co agentTask okr-tom-tat-xep dueAt = 2026-11-09T23:00:00Z, finishedAt null ->
+      choBan {kieu:"dang-xep"}; (b) cung task da dong -> choBan {kieu:"toi-luc", luc:"2026-11-16T23:00:00.000Z"}; (c)
+      khong co task nao -> cung toi-luc do; (d) ngay khong khop: now = 2026-11-10T23:05:00Z (06:05 thu Tu 11/11), viec
+      okr-tom-tat-xep dueAt 2026-11-10T23:00:00Z chua dong -> {kieu:"toi-luc", luc:"2026-11-16T23:00:00.000Z"}. Ca DOM
+      "ttdc-dang-xep": choBan dang-xep -> [data-trang-thai="ST-tomtat-dang-xep"] voi dung chuoi "Kara đang xếp bản tóm
+      tắt đầu tiên — thường có trong vài phút."; tRPC gia duoc goi lai sau hoiLaiMs va dung sau tranChoMs (dong ho gia).
+      CHIEU DO: ban sao bo kiem viec xep chua dong -> do "ttdc-dang-xep: (a) ra toi-luc, can dang-xep"; ban sao bo kiem
+      thu cua ngay -> do "ttdc-dang-xep: (d) ra dang-xep o ngay khong khop".
 
   - id: E6
     criterion: AC-5
@@ -117,12 +118,13 @@ evals:
       - "apps/api/test/tom-tat-tuan-dang-cho.spec.ts"
       - "apps/app/test/tom-tat-tuan-dang-cho.dom.tsx"
     expected: |
-      Ca API "ttdc-tam-dung" (trang thai dua vao qua duong that: chi phi thang ghi bang so chi phi that cho vuot tran;
-      ket qua kiem san sang "chua-co-khoa-mo-hinh" ghi bang ham ghi that): (a) het tran, now 22/10 voi updateWeekday=1, luc 27/10 cung
-      thang -> {kieu:"tam-dung", lyDo:"het-tran-thang", moLai:"2026-11-01"}; (b) het tran, now 29/10 12:00 gio VN voi
-      updateWeekday=6 -> luc "2026-10-31T23:00:00.000Z" (01/11 gio VN, thang sau) -> toi-luc; (c) chua co khoa -> {kieu:"tam-dung",
+      Ca API "ttdc-tam-dung" (het tran dua vao bang okr.setProgram that voi aiTranThangUsd = 0; "chua-co-khoa-mo-hinh"
+      ghi bang completeTask that cua tac tu tren mot viec okr-kiem-san-sang): (a) het tran, now 12/11 voi
+      updateWeekday=1, luc 17/11 cung thang -> {kieu:"tam-dung", lyDo:"het-tran-thang", moLai:"2026-12-01"}; (b) het
+      tran, choBanDauTomTat tai now = 2026-11-30T05:00:00Z (12:00 thu Hai 30/11) -> luc "2026-11-30T23:00:00.000Z"
+      (06:00 thu Ba 01/12 gio VN, thang sau) -> toi-luc; (c) chua co khoa -> {kieu:"tam-dung",
       lyDo:"chua-co-khoa-mo-hinh", moLai:null}. Ca DOM "ttdc-tam-dung": [data-trang-thai="ST-tomtat-tam-dung"] chua
-      [data-kara-state="off"], chuoi dung "Kara tạm nghỉ tóm tắt tuần tới 01/11." va "Kara chưa tóm tắt được: quản
+      [data-kara-state="off"], chuoi dung "Kara tạm nghỉ tóm tắt tuần tới 01/12." va "Kara chưa tóm tắt được: quản
       trị chưa nối mô hình AI."; khong chuoi nao khop mau gio /\d\d:\d\d/ hay mau so tien
       /\d[\d.,]*\s*(₫|đ\b|USD)/ va /\$\s*\d/. Doi chung duong cua mau: "1.200.000 đ", "5 USD", "$5" bi bat; hai chuoi
       dung cua AC-5 lot.
@@ -139,11 +141,12 @@ evals:
       - "apps/api/test/tom-tat-tuan-dang-cho.spec.ts"
       - "apps/app/test/tom-tat-tuan-dang-cho.dom.tsx"
     expected: |
-      Ca API "ttdc-khong-doi" ma tran viet truoc 9 o, moi o mot phong tren CSDL thu: nac tat (aiOn false), viec tat,
-      don vi chua bat, che do an, ban nac bat dang hien, ban nac bat bi giu (can-xem), ban nac bat qua 8 ngay, chu ky
-      pha khac dang-chay, phong chua cap nhat. Moi o: Object.keys(ket qua) khong chua "choBan"; bon o dau ket qua
-      toEqual dung {ban:null, dangSoan:false, chuaCapNhat:false}. So assert = 9 (dem va in). Doi chung duong: phong
-      bat chua co ban cung CSDL co choBan. Ca DOM "ttdc-khong-doi": fixture khong choBan -> khoi null; fixture
+      Ca API "ttdc-khong-doi" ma tran viet truoc 9 o tren CSDL thu, cung mot phong doi cau hinh qua okr.setProgram that
+      giua cac o: nac tat (aiOn false), viec tat, don vi chua bat, che do an, ban nac bat dang hien, ban nac bat bi giu
+      (can-xem), ban nac bat qua 8 ngay, chu ky pha khac dang-chay (quy 3, da-dong), phong chua cap nhat (doc tai
+      28/12). Moi o: Object.keys(ket qua) khong chua "choBan"; bon o dau ket qua dung {ban:null, dangSoan:false,
+      chuaCapNhat:false}. So o = 9 (dem va in). Doi chung duong: phong bat chua co ban cung CSDL co choBan toi-luc;
+      phong tung co ban nac an roi bat van co choBan toi-luc. Ca DOM "ttdc-khong-doi": fixture khong choBan -> khoi null; fixture
       dangSoan va chuaCapNhat -> dung data-trang-thai cu ST-tomtat-dang-soan, ST-tomtat-chua-cap-nhat.
       CHIEU DO: ban sao bo dieu kien "chua tung co ban nac bat" -> do "ttdc-khong-doi: o ban-bi-giu co choBan"; ban sao
       bo dieu kien pha chu ky -> do "ttdc-khong-doi: o chu-ky-khac-pha co choBan".
