@@ -36,6 +36,7 @@ import {
 import { blankToNull, toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { NguoiGoiTep } from "../fields/field-files-quyen";
 import { FieldsService } from "../fields/fields.service";
 import {
 	activityFacetCounts,
@@ -151,9 +152,10 @@ export class CompaniesService {
 		]);
 
 		const ids = rows.map((row) => row.id);
-		const [queued, tableFields] = await Promise.all([
+		const [queued, tableFields, soTep] = await Promise.all([
 			this.queue.queuedCompanies(ids),
 			this.fields.tableValuesFor("COMPANY", ids),
+			this.fields.soTepTheoBanGhi("COMPANY", ids),
 		]);
 
 		return {
@@ -177,13 +179,14 @@ export class CompaniesService {
 				createdAt: row.createdAt.toISOString(),
 				archivedAt: row.archivedAt?.toISOString() ?? null,
 				fields: tableFields.get(row.id) ?? {},
+				soTepTheoTruong: soTep.get(row.id) ?? {},
 			})),
 			total,
 			facetCounts,
 		};
 	}
 
-	async byId(id: string) {
+	async byId(id: string, nguoiGoi?: NguoiGoiTep) {
 		const company = await this.db.company.findUnique({
 			where: { id },
 			select: {
@@ -289,6 +292,7 @@ export class CompaniesService {
 			})),
 			archivedContacts: nguoi.daLuuTru.map(caNhanDaLuuTru),
 			fields: await this.fields.valuesFor("COMPANY", id),
+			tepTheoTruong: await this.fields.tepTheoBanGhi("COMPANY", id, nguoiGoi),
 			queued: await this.queue.isQueued({ companyId: id }),
 			createdAt: createdAt.toISOString(),
 			archivedAt: archivedAt?.toISOString() ?? null,

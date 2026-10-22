@@ -39,6 +39,7 @@ import {
 } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { NguoiGoiTep } from "../fields/field-files-quyen";
 import { FieldsService } from "../fields/fields.service";
 import { khoangMoc } from "../fields/moc-ngay";
 import { GIAI_DOAN_API } from "../giai-doan/giai-doan-config";
@@ -184,6 +185,10 @@ export class DealsService {
 			"DEAL",
 			rows.map((row) => row.id),
 		);
+		const soTep = await this.fields.soTepTheoBanGhi(
+			"DEAL",
+			rows.map((row) => row.id),
+		);
 
 		return {
 			rows: rows.map(
@@ -206,6 +211,7 @@ export class DealsService {
 					createdAt: createdAt.toISOString(),
 					archivedAt: archivedAt?.toISOString() ?? null,
 					fields: tableFields.get(row.id) ?? {},
+					soTepTheoTruong: soTep.get(row.id) ?? {},
 				}),
 			),
 			total,
@@ -329,6 +335,10 @@ export class DealsService {
 			columns.flatMap((column) => column.cards.map((card) => card.id)),
 			DEAL_BOARD.truongTrenThe,
 		);
+		const soTepThe = await this.fields.soTepTheoBanGhi(
+			"DEAL",
+			columns.flatMap((column) => column.cards.map((card) => card.id)),
+		);
 
 		return {
 			columns: columns.map((column) => ({
@@ -336,13 +346,14 @@ export class DealsService {
 				cards: column.cards.map((card) => ({
 					...card,
 					fields: truongThe.get(card.id) ?? {},
+					soTepTheoTruong: soTepThe.get(card.id) ?? {},
 				})),
 			})),
 			reportingCurrency: base,
 		};
 	}
 
-	async byId(id: string) {
+	async byId(id: string, nguoiGoi?: NguoiGoiTep) {
 		const deal = await this.db.deal.findUnique({
 			where: { id },
 			select: {
@@ -393,6 +404,7 @@ export class DealsService {
 		return {
 			...rest,
 			fields: await this.fields.valuesFor("DEAL", id),
+			tepTheoTruong: await this.fields.tepTheoBanGhi("DEAL", id, nguoiGoi),
 			amountCents: toCents(amount),
 			baseAmountCents: toCents(baseAmount),
 			reportingCurrency: await this.conversion.reportingCurrency(),

@@ -1,3 +1,7 @@
+export const CAC_KIEU_TEP = ["pdf", "docx", "png", "jpeg"] as const;
+
+export type KieuTep = (typeof CAC_KIEU_TEP)[number];
+
 export const KIEU_TEP = {
 	pdf: { mime: "application/pdf", duoi: [".pdf"] },
 	docx: {
@@ -6,11 +10,7 @@ export const KIEU_TEP = {
 	},
 	png: { mime: "image/png", duoi: [".png"] },
 	jpeg: { mime: "image/jpeg", duoi: [".jpg", ".jpeg"] },
-} as const;
-
-export type KieuTep = keyof typeof KIEU_TEP;
-
-export const CAC_KIEU_TEP = Object.keys(KIEU_TEP) as KieuTep[];
+} as const satisfies Record<KieuTep, { mime: string; duoi: readonly string[] }>;
 
 export type NhanKieuTep = { kieu: KieuTep } | { loi: "khong-nhan" | "macro" };
 

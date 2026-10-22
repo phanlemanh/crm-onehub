@@ -43,6 +43,10 @@ import {
 	phanTichLocTruong,
 } from "@crm/validation/bo-loc-truong";
 import {
+	tepTrongO,
+	type TepTheoTruong,
+} from "@crm/validation/tep-truong";
+import {
 	BadRequestException,
 	ConflictException,
 	ForbiddenException,
@@ -59,6 +63,7 @@ import type {
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
+import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
 import { khoangMocTruong } from "./moc-ngay";
 
 const WITH_OPTIONS = {
@@ -338,11 +343,12 @@ export class FieldsService {
 		const type = data.type ?? existing.type;
 
 		if (data.type && data.type !== existing.type) {
-			const values = await this.db.fieldValue.count({
-				where: { fieldId: id },
-			});
+			const [values, tep] = await Promise.all([
+				this.db.fieldValue.count({ where: { fieldId: id } }),
+				this.db.fieldFile.count({ where: { fieldId: id } }),
+			]);
 
-			if (values > 0) {
+			if (values + tep > 0) {
 				throw new ConflictException(
 					"This field already holds values, so its type cannot change. Archive it and make a new one.",
 				);
@@ -777,6 +783,81 @@ export class FieldsService {
 			include: WITH_OPTIONS,
 			orderBy: { position: "asc" },
 		});
+	}
+
+	async tepTheoBanGhi(
+		entity: FieldEntity,
+		recordId: string,
+		nguoi?: NguoiGoiTep,
+	): Promise<TepTheoTruong> {
+		const cot = recordColumn(entity);
+		const hang = await this.db.fieldFile.findMany({
+			where: { [cot]: recordId, field: { entity, archivedAt: null } },
+			orderBy: [{ taiLuc: "asc" }, { id: "asc" }],
+			select: {
+				id: true,
+				tenTep: true,
+				kieu: true,
+				kichThuoc: true,
+				taiLuc: true,
+				taiBoiId: true,
+				taiBoi: { select: { id: true, name: true } },
+				field: { select: { key: true } },
+			},
+		});
+		const ket: TepTheoTruong = {};
+		for (const dong of hang) {
+			const tep = tepTrongO.parse({
+				id: dong.id,
+				tenTep: dong.tenTep,
+				kieu: dong.kieu,
+				kichThuoc: dong.kichThuoc,
+				taiLuc: dong.taiLuc.toISOString(),
+				taiBoi: dong.taiBoi
+					? { id: dong.taiBoi.id, ten: dong.taiBoi.name ?? null }
+					: null,
+				coTheMo: nguoi ? coTheMoTep(nguoi) : false,
+				coTheXoa: nguoi ? coTheXoaTep(nguoi, dong) : false,
+			});
+			const danhSach = ket[dong.field.key] ?? [];
+			danhSach.push(tep);
+			ket[dong.field.key] = danhSach;
+		}
+		return ket;
+	}
+
+	async soTepTheoBanGhi(
+		entity: FieldEntity,
+		recordIds: string[],
+	): Promise<Map<string, Record<string, number>>> {
+		const ket = new Map<string, Record<string, number>>();
+		if (recordIds.length === 0) return ket;
+		const truong = await this.db.fieldDefinition.findMany({
+			where: { entity, type: "FILE", archivedAt: null, showOnTable: true },
+			select: { id: true, key: true },
+		});
+		if (truong.length === 0) return ket;
+		for (const id of recordIds) {
+			ket.set(id, Object.fromEntries(truong.map((t) => [t.key, 0])));
+		}
+		const cot = recordColumn(entity);
+		const khoaTheoId = new Map(truong.map((t) => [t.id, t.key]));
+		const nhom = await this.db.fieldFile.groupBy({
+			by: ["fieldId", cot],
+			where: {
+				fieldId: { in: truong.map((t) => t.id) },
+				[cot]: { in: recordIds },
+			} as Prisma.FieldFileWhereInput,
+			_count: { _all: true },
+		});
+		for (const dong of nhom) {
+			const recordId = (dong as Record<string, unknown>)[cot];
+			const khoa = khoaTheoId.get(dong.fieldId);
+			if (typeof recordId !== "string" || !khoa) continue;
+			const muc = ket.get(recordId);
+			if (muc) muc[khoa] = dong._count._all;
+		}
+		return ket;
 	}
 
 	async valuesFor(

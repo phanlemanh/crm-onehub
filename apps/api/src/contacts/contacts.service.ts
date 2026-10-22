@@ -41,6 +41,7 @@ import {
 import { tachDaLuuTru, thoaThuanDaLuuTru } from "../crm/da-luu-tru";
 import { blankToNull, normalizeEmail, toCents } from "../crm/values";
 import { InjectDatabase } from "../database/database.constants";
+import type { NguoiGoiTep } from "../fields/field-files-quyen";
 import { FieldsService } from "../fields/fields.service";
 import {
 	activityFacetCounts,
@@ -192,6 +193,10 @@ export class ContactsService {
 			"CONTACT",
 			rows.map((row) => row.id),
 		);
+		const soTep = await this.fields.soTepTheoBanGhi(
+			"CONTACT",
+			rows.map((row) => row.id),
+		);
 
 		return {
 			rows: rows.map((row) => ({
@@ -200,6 +205,7 @@ export class ContactsService {
 				createdAt: row.createdAt.toISOString(),
 				archivedAt: row.archivedAt?.toISOString() ?? null,
 				fields: tableFields.get(row.id) ?? {},
+				soTepTheoTruong: soTep.get(row.id) ?? {},
 			})),
 			total,
 			facetCounts,
@@ -216,7 +222,7 @@ export class ContactsService {
 		});
 	}
 
-	async byId(id: string) {
+	async byId(id: string, nguoiGoi?: NguoiGoiTep) {
 		const contact = await this.db.contact.findUnique({
 			where: { id },
 			select: {
@@ -302,6 +308,7 @@ export class ContactsService {
 			...rest,
 			company,
 			fields: await this.fields.valuesFor("CONTACT", id),
+			tepTheoTruong: await this.fields.tepTheoBanGhi("CONTACT", id, nguoiGoi),
 			queued: await this.queue.isQueued({ contactId: id }),
 			createdAt: createdAt.toISOString(),
 			archivedAt: archivedAt?.toISOString() ?? null,
