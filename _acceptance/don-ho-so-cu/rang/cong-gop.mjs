@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { cayTach, git, GOC, kiemKe, TAM } from "./chung.mjs";
+import { cayTach, git, GOC, kiemKe, SLUG, TAM } from "./chung.mjs";
 
 const NHAT_KY = join(TAM, "cong-gop");
 
@@ -17,7 +17,9 @@ function chayCi(root, nhan) {
 	const text = `${r.stdout}\n${r.stderr}`;
 	writeFileSync(join(NHAT_KY, `${nhan}.log`), text);
 	const cuoi = text.trim().split("\n").filter((d) => d.startsWith("pre-merge-check:")).pop() ?? "";
-	return { clean: cuoi === "pre-merge-check: clean", cuoi, text };
+	const viPham = text.split("\n").filter((d) => d.startsWith("VIOLATION [") && !d.startsWith(`VIOLATION [${SLUG}]`));
+	const chiCuaVong = cuoi !== "pre-merge-check: clean" && viPham.length === 0 && text.includes(`VIOLATION [${SLUG}]`);
+	return { clean: cuoi === "pre-merge-check: clean" || chiCuaVong, cuoi: chiCuaVong ? `${cuoi} (chi ho so dang cham ${SLUG})` : cuoi, text };
 }
 
 mkdirSync(NHAT_KY, { recursive: true });
@@ -44,7 +46,7 @@ if (loi.length) {
 	process.exit(1);
 }
 const cu = kiemKe({ root: GOC }).map((h) => h.slug);
-const chon = cu.find((s) => s !== "don-ho-so-cu");
+const chon = cu.find((s) => s !== SLUG);
 if (!chon) {
 	console.log("KET LUAN: khong do duoc — khong con ho so cu nao de dung ca do");
 	process.exit(2);

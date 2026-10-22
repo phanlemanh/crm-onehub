@@ -4,20 +4,20 @@ import { docJson, GOC, HO_SO, laHauDue, pinTren } from "./chung.mjs";
 import { docSoXuLy } from "./khuon-xu-ly.mjs";
 
 export function doiChieu(slugs, base, dong, layPin = pinTren) {
-	const theo = new Map(dong.map((d) => [d.slug, d]));
+	const theo = new Map();
+	for (const d of dong) theo.set(d.slug, [...(theo.get(d.slug) ?? []), d]);
 	const loi = [];
 	let ghim = 0;
 	let trongSo = 0;
 	for (const s of slugs) {
-		const d = theo.get(s);
+		const ds = theo.get(s) ?? [];
 		const pins = layPin(s);
-		const moc = d?.cach === "sua-thuoc" ? d.commit_sua : base;
-		const coPin = pins.some((p) => laHauDue(moc, p.sha));
-		if (d?.cach === "sua-thuoc") {
-			if (coPin) ghim++;
+		const sua = ds.filter((d) => d.cach === "sua-thuoc");
+		if (sua.length) {
+			if (sua.every((d) => pins.some((p) => laHauDue(d.commit_sua, p.sha)))) ghim++;
 			else loi.push(`sua-thuoc chua ghim: ${s}`);
-		} else if (coPin) ghim++;
-		else if (d) trongSo++;
+		} else if (pins.some((p) => laHauDue(base, p.sha))) ghim++;
+		else if (ds.length) trongSo++;
 		else loi.push(`chua xu: ${s}`);
 	}
 	return { loi, ghim, trongSo };
@@ -40,6 +40,11 @@ const ca = [
 	[
 		"sua-thuoc-chua-ghim",
 		doiChieu(slugs, so.base, [...so.dong.filter((d) => d.slug !== coPin), { slug: coPin, cach: "sua-thuoc", commit_sua: "HEAD" }]),
+		"sua-thuoc chua ghim:",
+	],
+	[
+		"sua-thuoc-sau-dong-khac",
+		doiChieu(slugs, so.base, [...so.dong.filter((d) => d.slug !== coPin), { slug: coPin, cach: "sua-thuoc", commit_sua: "HEAD" }, { slug: coPin, cach: "ngoai-pham-vi" }]),
 		"sua-thuoc chua ghim:",
 	],
 ];

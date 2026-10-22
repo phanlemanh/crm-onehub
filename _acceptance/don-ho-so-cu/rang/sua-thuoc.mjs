@@ -17,8 +17,17 @@ function khoaLenhCua(root, slug, sha) {
 	return new Set([...text.matchAll(/cmd:\s*config:executors\.\w+\.(\w+)/g)].map((m) => m[1]));
 }
 
-function dongAc(text) {
-	return text.split("\n").filter((d) => /^- AC-\d+:/.test(d)).join("\n");
+export function dongAc(text) {
+	const ra = [];
+	let cur = null;
+	for (const d of text.split("\n")) {
+		if (/^- AC-\d+:/.test(d)) {
+			cur = [d];
+			ra.push(cur);
+		} else if (cur && /^\s+\S/.test(d)) cur.push(d);
+		else cur = null;
+	}
+	return ra.map((k) => k.join("\n")).join("\n");
 }
 
 export function kiemSuaThuoc(d, base, { root = GOC, docTep = (p) => readFileSync(join(root, p), "utf8") } = {}) {
@@ -148,6 +157,11 @@ function caDoSuaThuoc(base) {
 		return p.endsWith("contract.md") ? t.replace(/^- AC-1: /m, "- AC-1: (doi) ") : t;
 	};
 	hong = bao("doi-loi-ac", kiemSuaThuoc(goc, base, { docTep: docGia }), "doi-loi-ac") || hong;
+	const docGiaDong2 = (p) => {
+		const t = readFileSync(join(GOC, p), "utf8");
+		return p.endsWith("contract.md") ? t.replace(/^(- AC-1:.*\n\s+)(\S)/m, "$1(doi) $2") : t;
+	};
+	hong = bao("doi-loi-ac-dong-sau", kiemSuaThuoc(goc, base, { docTep: docGiaDong2 }), "doi-loi-ac") || hong;
 	return hong;
 }
 

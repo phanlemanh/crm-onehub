@@ -1,16 +1,15 @@
-import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { hoSoChan } from "./chan-pr.mjs";
 import { docJson, HO_SO, KHONG_DUNG } from "./chung.mjs";
 import { tapGhim } from "./lo.mjs";
 import { tranLan } from "./uoc.mjs";
 
-export function kiemLo({ kk, loGoc, chanPr, lo, xuLy, tran }) {
+export function kiemLo({ kk, loGoc, chanPr, lo, tran }) {
 	const loi = [];
 	const cu = new Set(kk.ho_so.map((h) => h.slug));
 	const chanTinhLai = hoSoChan(chanPr.pr_mo, cu);
 	if (JSON.stringify(chanTinhLai) !== JSON.stringify(chanPr.chan)) loi.push("chan-pr: danh sach chan khong khop pr_mo da chup");
-	const mong = new Set(tapGhim(loGoc, chanTinhLai, xuLy));
+	const mong = new Set(tapGhim(loGoc, chanTinhLai));
 	const dem = new Map();
 	for (const l of lo) {
 		if (l.uoc_phut > tran) loi.push(`vuot-tran: lo ${l.so} uoc ${l.uoc_phut}′ > ${tran}′`);
@@ -27,7 +26,6 @@ const dl = {
 	loGoc: docJson(join(HO_SO, "lo-goc.json")).lo,
 	chanPr: docJson(join(HO_SO, "chan-pr.json")),
 	lo: docJson(join(HO_SO, "lo.json")).lo,
-	xuLy: existsSync(join(HO_SO, "xu-ly.json")) ? docJson(join(HO_SO, "xu-ly.json")).dong : [],
 	tran: tranLan(),
 };
 for (const l of dl.lo) console.log(`lo ${l.so}: ${l.ho_so.length} ho so, uoc ${l.uoc_phut}′`);
