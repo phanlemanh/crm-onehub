@@ -361,6 +361,11 @@ const en = {
 		},
 		trong: (nhan: string) => `${nhan} can't be empty.`,
 		chuaLuu: (nhan: string) => `Couldn't save ${nhan}.`,
+		chuaTao: {
+			DEAL: "Couldn't create the deal.",
+			COMPANY: "Couldn't create the company.",
+			CONTACT: "Couldn't create the person.",
+		},
 		sua: (nhan: string) => `Edit ${nhan}`,
 	},
 };
@@ -731,6 +736,11 @@ const vi = {
 		},
 		trong: (nhan: string) => `${nhan} không được để trống.`,
 		chuaLuu: (nhan: string) => `Chưa lưu được ${nhan}.`,
+		chuaTao: {
+			DEAL: "Chưa tạo được thoả thuận.",
+			COMPANY: "Chưa tạo được công ty.",
+			CONTACT: "Chưa tạo được cá nhân.",
+		},
 		sua: (nhan: string) => `Sửa ${nhan}`,
 	},
 } satisfies CrmMessages;

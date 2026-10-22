@@ -24,7 +24,13 @@ export type CompanyListInput = z.infer<typeof companyListInput>;
 export const companyCreateInput = z.object({
 	name: z.string().trim().min(1, "A company needs a name."),
 	domain: z.string().trim().optional(),
+	website: z.string().optional(),
+	phone: z.string().optional(),
+	email: z.string().optional(),
+	city: z.string().optional(),
+	country: z.string().optional(),
 	ownerId: z.string().nullable().optional(),
+	fields: recordFieldValues.optional(),
 });
 
 export type CompanyCreateInput = z.infer<typeof companyCreateInput>;
