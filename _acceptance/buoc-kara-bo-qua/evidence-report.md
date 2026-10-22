@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a692e5e2791c44e54c032eef62a17fd7d7b9633f
+verified_commit: 7cdfb7bc7c078a173bc27686c43c00befe3867ca
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -158,3 +158,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: tất cả eval xanh, không eval nào hỏng. Không có vòng trả về triển khai.
+
+### Re-pin lần 1 — 2026-10-21, do F35 don-ho-so-cu lô 1 (dọn hồ sơ cũ)
+run_id: repin-20261020T233201Z-68220
+sha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

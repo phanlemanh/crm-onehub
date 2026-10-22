@@ -103,6 +103,8 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		fields: {
 			list: thuTuc("fields.list", dsTruong),
+			layout: thuTuc("fields.layout", () => new Promise(() => {})),
+			setStandardHidden: thuTuc("fields.setStandardHidden", khongDoc),
 			coverage: thuTuc("fields.coverage", () => ({ filled: 0, total: 0 })),
 			create: thuTuc("fields.create", khongDoc),
 			update: thuTuc("fields.update", khongDoc),

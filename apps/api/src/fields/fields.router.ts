@@ -21,10 +21,12 @@ import {
 	fieldEntityInput,
 	fieldFiltersOutput,
 	fieldIdInput,
+	fieldLayoutOutput,
 	fieldListInput,
 	fieldListOutput,
 	fieldReorderInput,
 	fieldReorderOutput,
+	fieldStandardHiddenInput,
 	fieldUpdateArgs,
 	serializedFieldOutput,
 } from "./fields.contracts";
@@ -71,6 +73,15 @@ export class FieldsRouter {
 	}
 
 	@Query({
+		input: fieldEntityInput,
+		output: fieldLayoutOutput,
+		meta: restMeta("GET", "/fields/{entity}/layout", ["Fields"]),
+	})
+	async layout(@Input() input: z.infer<typeof fieldEntityInput>) {
+		return this.fields.layout(input.entity);
+	}
+
+	@Query({
 		input: fieldIdInput,
 		output: fieldCoverageOutput,
 		meta: restMeta("GET", "/fields/{id}/coverage", ["Fields"]),
@@ -113,6 +124,20 @@ export class FieldsRouter {
 		@Input() input: z.infer<typeof fieldReorderInput>,
 	) {
 		return this.fields.reorder(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: fieldStandardHiddenInput,
+		output: fieldLayoutOutput,
+		meta: restMeta("POST", "/fields/{entity}/standard/{key}/hidden", [
+			"Fields",
+		]),
+	})
+	async setStandardHidden(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof fieldStandardHiddenInput>,
+	) {
+		return this.fields.setStandardHidden(ctx.user.id, input);
 	}
 
 	@Mutation({
