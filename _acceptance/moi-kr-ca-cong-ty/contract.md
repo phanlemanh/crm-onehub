@@ -5,7 +5,7 @@ slug: moi-kr-ca-cong-ty
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-21T14:43:53Z
 design_doc: docs/superpowers/specs/2026-10-21-moi-kr-ca-cong-ty-design.md
@@ -75,3 +75,8 @@ Quét bằng `morphological-scan` (preset entity-feature, chân ngành `[NGÀNH:
 - Lệch bản mẫu duy nhất: Đơn vị và Người là mặt lọc của `DataTable` (bản mẫu chỉ có chip tình trạng); chip Tình trạng giữ như bản mẫu nhưng chọn được nhiều.
 - `StatCard` chưa có dạng liên kết — biến thể mới trong `packages/ui` (bậc 5 của «Vẽ tay là bậc cuối»), không bọc `Link` tô tay ở chỗ gọi như bản mẫu.
 - Phiên làm S1–S3 không thuộc dãy nào của đợt vo-khu-muc-tieu: đường nền hạ tầng CHƯA chạy, dãy V2 chạy nó trước S4; S4, Cổng Bằng chứng và PR do dãy V2 làm.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-3: bài kiểm không đỏ nếu vạch kỳ vọng của một KR ngoài khối «KR của tôi» bị rơi thành rỗng.
+  - Ngoài-4: vạch kỳ vọng tính từ ngày công bố chưa có giá trị viết trước để so; đổi sang ngày tạo có thể lọt bài kiểm.
+  - Ngoài-5: khi tải số KR trượt bị lỗi, ô «KR trượt» ở Sức khoẻ hiện 0 như số thật.
+  - Ngoài-8: như Ngoài-5 — lúc lỗi ô vẫn bấm sang danh sách, không báo lỗi hay cho thử lại.
