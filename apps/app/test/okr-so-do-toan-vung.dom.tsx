@@ -8,6 +8,7 @@ import { createRoot, type Root } from "react-dom/client";
 import {
 	dauVaoThuan,
 	KHOA_CA,
+	LY_DO_SO_DO,
 	mtSoDo,
 } from "../../api/scripts/okr-mau/ca-so-do";
 import { cyclesOutput, okrAccessOutput } from "../../api/src/okr/okr.contracts";
@@ -81,6 +82,7 @@ const {
 	DropdownMenuTrigger,
 } = await import("@crm/ui/components/dropdown-menu");
 const { TU_XU_LY_ESC } = await import("@crm/ui/lib/tu-xu-ly-esc");
+const { pathAround } = await import("@crm/ui/lib/flow-layout");
 const { okrVoKhuMessages } = await import("@/lib/messages/okr-vo-khu");
 const { okrQuanhMessages } = await import("@/lib/messages/okr-quanh");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
@@ -479,76 +481,225 @@ describe("vk6-hai-kieu", () => {
 	const soThe = () =>
 		qa("[data-flow-map] [data-quanh-the], [data-flow-map] [data-so-do-the]")
 			.length;
+	const theQuanh = (id: string) => q(`[data-quanh-the="${id}"]`);
+	const khungNut = (id: string) => q(`.react-flow__node[data-id="${id}"]`);
+	const moNut = (id: string) => khungNut(id)?.style.opacity === "0.35";
+	const DICH_XEM_TREN_SO_DO = (() => {
+		const nguon = readFileSync(
+			join(GOC_KHO, "apps/app/components/crm/record-sheet/objective-sheet.tsx"),
+			"utf8",
+		);
+		const ham = nguon.split("function NutXemQuanh")[1] ?? "";
+		const m = ham.match(/url\(`([^`]+)`\)/);
+		const nhan = ham.includes("m.nutXemQuanh");
+		return { mau: m?.[1] ?? null, nhan };
+	})();
 
-	test("vk6-hai-kieu: tâm qua trang đích rewrite, cả công ty, đổi qua lại", async () => {
-		const sai: string[] = [];
-		const kq = quanh(TAM);
+	async function trangTam() {
 		const trang = await TrangQuanh({
 			params: Promise.resolve({ slug: "ws", objectiveId: TAM }),
 		});
-		const ra = await giaiMayChu(trang);
-		await dung(<Vo>{ra}</Vo>, `/ws/okr/so-do/muc-tieu/${TAM}`);
+		return giaiMayChu(trang);
+	}
+
+	async function veKieu(san: San, tam: string | null) {
+		dinhVi.duong =
+			tam === null ? "/ws/okr/so-do" : `/ws/okr/so-do/muc-tieu/${tam}`;
+		await act(async () =>
+			san.doi(
+				<Vo>
+					<ManSoDo tam={tam} />
+				</Vo>,
+			),
+		);
+		await nhip(10);
+	}
+
+	test("vk6-hai-kieu: ma trận chín ô (a)–(i), mỗi ô một assert", async () => {
+		const o: Record<string, string[]> = {};
+		const s = soDo();
+		const kq = quanh(TAM);
+
+		o.a = [];
+		const san = await dung(
+			<Vo>{await trangTam()}</Vo>,
+			`/ws/okr/so-do/muc-tieu/${TAM}`,
+		);
 		await cho(() => q("[data-flow-map]") !== null, "khung quanh");
 		if (goiCua("okr.soDoDonVi").length > 0)
-			sai.push("goi nham thu tuc soDoDonVi");
-		if (!goiCua("okr.quanhMucTieu").every((g) => g.dauVao?.objectiveId === TAM))
-			sai.push("goi quanhMucTieu sai tam");
+			o.a.push("goi nham thu tuc soDoDonVi");
+		if (
+			goiCua("okr.quanhMucTieu").length === 0 ||
+			!goiCua("okr.quanhMucTieu").every((g) => g.dauVao?.objectiveId === TAM)
+		)
+			o.a.push("goi quanhMucTieu sai tam");
 		if (soThe() !== kq.nut.length)
-			sai.push(`so the ${soThe()} ≠ ${kq.nut.length}`);
-		if (!q(`[data-quanh-the][data-active=true]`))
-			sai.push("the tam khong chon");
+			o.a.push(`so the ${soThe()} != ${kq.nut.length}`);
+		if (!q("[data-quanh-the][data-active=true]"))
+			o.a.push("the tam khong chon");
 		const tenTam = kq.nut.find((n) => n.id === kq.tamId)?.tieuDe ?? "";
 		if (!q("[data-slot=breadcrumb-page]")?.textContent?.includes(tenTam))
-			sai.push("duong manh thieu ten tam");
+			o.a.push("duong manh thieu ten tam");
 		if (q("[data-dai-cong-cu] [data-loc-so-do]"))
-			sai.push("loc don vi con o tam");
+			o.a.push("loc don vi con o tam");
 		if (q("[data-slot=page-shell-header]"))
-			sai.push("trang cu DH5 con dau trang");
+			o.a.push("trang cu DH5 con dau trang");
 		if (q("[data-nut=ve-ca-cong-ty]")?.getAttribute("href") !== "/ws/okr/so-do")
-			sai.push("lien ket ve ca cong ty");
-		if (!q("[data-gop-len-cong-ty]")) sai.push("thieu dong gop len cong ty");
-		if (!document.body.textContent?.includes(mq.dangXemQuanh))
-			sai.push("thieu dang xem quanh");
-		await bam(q("[data-quanh-the]:not([data-active=true])"), "the khac");
-		if (moBanGhi.length !== 1 || moBanGhi[0]?.kind === undefined)
-			sai.push("bam the khong mo ngan");
-		expect(sai).toEqual([]);
-	});
+			o.a.push("lien ket ve ca cong ty");
 
-	test("vk6-hai-kieu: cả công ty và lọc Cần chú ý", async () => {
-		const s = soDo();
-		await dung(
-			<Vo>
-				<ManSoDo tam={null} />
-			</Vo>,
-			"/ws/okr/so-do",
+		o.g = [];
+		if (!q("[data-gop-len-cong-ty]")) o.g.push("thieu dong gop len cong ty");
+		if (
+			!q("[data-quanh]")?.textContent?.includes(`${mq.dangXemQuanh} ${tenTam}`)
+		)
+			o.g.push("thieu 'Dang xem quanh' kem ten tam");
+
+		o.e = [];
+		const khac = kq.nut.find((n) => n.id !== kq.tamId && n.loai === "muc-tieu");
+		if (!khac) o.e.push("du lieu thieu the muc tieu ngoai tam");
+		else
+			for (const cach of ["bam", "Enter"] as const) {
+				moBanGhi.length = 0;
+				const the = theQuanh(khac.id);
+				await act(async () => {
+					if (cach === "bam") the?.click();
+					else
+						the?.dispatchEvent(
+							new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+						);
+				});
+				if (
+					moBanGhi.length !== 1 ||
+					moBanGhi[0]?.kind !== "objective" ||
+					moBanGhi[0]?.id !== khac.id
+				)
+					o.e.push(`${cach}: openRecord ${JSON.stringify(moBanGhi)}`);
+			}
+
+		o.f = [];
+		const canh = kq.canh.map((c) => ({
+			id: `${c.tu}->${c.den}`,
+			source: c.tu,
+			target: c.den,
+		}));
+		const sangDau = pathAround(canh, kq.tamId);
+		const truoc = kq.nut.filter((n) => moNut(n.id)).length;
+		const ngoai = kq.nut.find((n) => !sangDau.has(n.id)) ?? kq.nut.at(-1);
+		const nutRe = ngoai ? khungNut(ngoai.id) : null;
+		if (!ngoai || !nutRe) o.f.push("khong co the de re chuot");
+		else {
+			await act(async () => {
+				nutRe.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+				nutRe.dispatchEvent(new MouseEvent("mouseenter", { bubbles: false }));
+			});
+			await nhip(5);
+			const sang = pathAround(canh, ngoai.id);
+			const sau = kq.nut.filter((n) => moNut(n.id));
+			for (const n of kq.nut)
+				if (moNut(n.id) !== !sang.has(n.id))
+					o.f.push(
+						`the ${n.id}: mo ${moNut(n.id)} ngoai duong ${!sang.has(n.id)}`,
+					);
+			if (sau.length === truoc)
+				o.f.push(`doi chung duong: so the mo khong doi (${truoc})`);
+		}
+
+		o.c = [];
+		await bam(nutToanMan(), "nut toan man hinh");
+		if (thanhBen()) o.c.push("bat toan man hinh khong an thanh ben");
+		const veCaCongTy = q("[data-nut=ve-ca-cong-ty]");
+		if (veCaCongTy?.textContent?.trim() !== t.soDo.veCaCongTy)
+			o.c.push(`chu nut ${veCaCongTy?.textContent}`);
+		await veKieu(san, null);
+		await cho(() => q("[data-so-do-the]") !== null, "ca cong ty sau ve");
+		if (thanhBen()) o.c.push("ve ca cong ty mat toan man hinh");
+
+		o.b = [];
+		const goiQuanhTruoc = goiCua("okr.quanhMucTieu").length;
+		if (goiCua("okr.soDoDonVi").length === 0) o.b.push("khong goi soDoDonVi");
+		if (soThe() !== s.nut.length)
+			o.b.push(`so the ${soThe()} != ${s.nut.length}`);
+
+		o.d = [];
+		await bam(q(`[data-so-do-the="${KHOA_CA.A3}"] [data-mo-the]`), "mo the A3");
+		const mtA3 = s.nut.find((n) => n.khoa === KHOA_CA.A3)?.mucTieu[0];
+		moBanGhi.length = 0;
+		await bam(
+			q(`[data-so-do-the="${KHOA_CA.A3}"] [data-ten-muc-tieu]`),
+			"ten muc tieu trong the",
 		);
-		await cho(() => q("[data-flow-map]") !== null, "khung ca cong ty");
-		expect(goiCua("okr.quanhMucTieu")).toHaveLength(0);
-		const moi = soThe();
-		expect(moi).toBe(s.nut.length);
-		const sang = () =>
+		if (moBanGhi[0]?.kind !== "objective" || moBanGhi[0]?.id !== mtA3?.id)
+			o.d.push(`mo ngan ${JSON.stringify(moBanGhi)} != ${mtA3?.id}`);
+		if (
+			!DICH_XEM_TREN_SO_DO.nhan ||
+			DICH_XEM_TREN_SO_DO.mau !== "/okr/so-do/muc-tieu/${id}"
+		)
+			o.d.push(`nut xemTrenSoDo cua ngan tro ${DICH_XEM_TREN_SO_DO.mau}`);
+		if (mtA3) {
+			await veKieu(san, mtA3.id);
+			await cho(
+				() => q("[data-quanh]") !== null,
+				"kieu quanh sau xem tren so do",
+			);
+			if (thanhBen()) o.d.push("xem tren so do mat toan man hinh");
+			if (goiCua("okr.quanhMucTieu").length === goiQuanhTruoc)
+				o.d.push("khong sang kieu quanh muc tieu");
+		}
+		await bam(nutToanMan(), "thoat toan man hinh");
+
+		o.h = [];
+		await veKieu(san, null);
+		await cho(() => q("[data-loc-so-do=chu-y]") !== null, "loc chu y");
+		const sangSoDo = () =>
 			qa("[data-flow-map] [data-so-do-the]:not([data-chim])").length;
-		expect(sang()).toBe(moi);
+		const truocLoc = sangSoDo();
 		await bam(q("[data-loc-so-do=chu-y]"), "loc chu y");
 		await nhip(10);
 		const soCoCo = s.nut.filter((n) => n.canChuY).length;
-		expect(urlGhi.at(-1)).toContain("locSoDo=chu-y");
-		expect(sang()).toBe(soCoCo);
-		expect(sang()).not.toBe(moi);
-	});
+		if (!urlGhi.at(-1)?.includes("locSoDo=chu-y"))
+			o.h.push("locSoDo khong len url");
+		if (sangSoDo() !== soCoCo) o.h.push(`sang ${sangSoDo()} != ${soCoCo}`);
+		if (sangSoDo() === truocLoc)
+			o.h.push("doi chung duong: loc khong doi so sang");
 
-	test("vk6-hai-kieu: moDonVi mở thẻ đơn vị có lý do góp vào", async () => {
+		o.i = [];
 		await dung(
 			<Vo>
 				<ManSoDo tam={null} />
 			</Vo>,
-			`/ws/okr/so-do?moDonVi=${encodeURIComponent(KHOA_CA.A1)}`,
+			`/ws/okr/so-do?moDonVi=${encodeURIComponent(KHOA_CA.A3)}`,
 		);
-		await cho(() => q(`[data-so-do-the="${KHOA_CA.A1}"]`) !== null, "the A1");
-		const the = q(`[data-so-do-the="${KHOA_CA.A1}"]`);
-		expect(the?.getAttribute("data-dang-mo")).not.toBe("false");
-		expect(the?.textContent?.length ?? 0).toBeGreaterThan(0);
+		await cho(() => q(`[data-so-do-the="${KHOA_CA.A3}"]`) !== null, "the A3");
+		const theA3 = q(`[data-so-do-the="${KHOA_CA.A3}"]`);
+		if (theA3?.getAttribute("data-dang-mo") !== "true")
+			o.i.push(`the A3 data-dang-mo=${theA3?.getAttribute("data-dang-mo")}`);
+		const dongGop = qa("[data-dong-gop]", theA3 ?? document);
+		if (dongGop.length === 0) o.i.push("the mo khong co dong gop vao");
+		if (!theA3?.textContent?.includes(LY_DO_SO_DO.coSoLieu))
+			o.i.push("doi chung duong: thieu ly do gieo coSoLieu");
+
+		expect(Object.keys(o).sort()).toEqual([
+			"a",
+			"b",
+			"c",
+			"d",
+			"e",
+			"f",
+			"g",
+			"h",
+			"i",
+		]);
+		expect(o).toEqual({
+			a: [],
+			b: [],
+			c: [],
+			d: [],
+			e: [],
+			f: [],
+			g: [],
+			h: [],
+			i: [],
+		});
 	});
 });
 
@@ -742,7 +893,7 @@ describe("vk6-bo-cay", () => {
 		const { CACH_XEM_OKR } = await import("@crm/validation/okr-tham-so");
 		if ((CACH_XEM_OKR as readonly string[]).includes("cay"))
 			sai.push("CACH_XEM_OKR con cay");
-		const cskh = KHOA_CA.A1;
+		const cskh = KHOA_CA.A3;
 		await dung(
 			<Vo>
 				<ManSoDo tam={null} />
@@ -753,8 +904,14 @@ describe("vk6-bo-cay", () => {
 		if (q("[role=tree]")) sai.push("so do con role=tree");
 		if (q("[data-so-do-gop-vao]")) sai.push("so do con XemCay");
 		const the = q(`[data-so-do-the="${cskh}"]`);
-		if (the?.getAttribute("data-dang-mo") === "false")
-			sai.push("the don vi khong mo san");
+		if (the?.getAttribute("data-dang-mo") !== "true")
+			sai.push(
+				`the don vi khong mo san (data-dang-mo=${the?.getAttribute("data-dang-mo")})`,
+			);
+		if (qa("[data-dong-gop]", the ?? document).length === 0)
+			sai.push("the mo khong co dong gop vao");
+		if (!the?.textContent?.includes(LY_DO_SO_DO.coSoLieu))
+			sai.push("doi chung duong: thieu ly do gieo coSoLieu");
 		const conDung = quetTinh(join(GOC_KHO, "apps/app")).filter((t) =>
 			/(?:from|import\()\s*["'][^"']*\/cay-can-chinh["']/.test(
 				readFileSync(t, "utf8"),
