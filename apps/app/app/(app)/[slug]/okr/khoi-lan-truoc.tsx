@@ -39,7 +39,7 @@ export function KhoiLanTruoc({ kr, lan }: { kr: KrCapNhat; lan: LanTruocKr }) {
 		<Item data-lan-truoc size="sm" variant="outline">
 			<ItemContent>
 				<ItemTitle>
-					{m.tieuDe} · {m.luc(ngay, gio)}
+					{m.tieuDe} · {ngay}, {gio}
 				</ItemTitle>
 				<ItemDescription className="flex flex-wrap items-center gap-x-2">
 					{lan.giaTri === null ? null : (

@@ -2,7 +2,6 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
 	tieuDe: "Lần cập nhật trước",
-	luc: (ngay: string, gio: string) => `${ngay}, ${gio}`,
 	loiGhiChu: "Không tải được ghi chú lần trước.",
 	thuLai: "Thử lại",
 	goiY: [
@@ -16,7 +15,6 @@ export type OkrLanTruocMessages = typeof vi;
 
 const en: OkrLanTruocMessages = {
 	tieuDe: "Previous update",
-	luc: (ngay: string, gio: string) => `${ngay}, ${gio}`,
 	loiGhiChu: "Couldn't load the previous note.",
 	thuLai: "Try again",
 	goiY: [
