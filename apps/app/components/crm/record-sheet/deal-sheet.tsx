@@ -24,6 +24,7 @@ import {
 } from "@crm/ui/components/tooltip";
 import { formatMoney } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Fragment } from "react";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
 import { InlineCompanyField } from "@/components/crm/company-picker";
@@ -37,7 +38,12 @@ import {
 	OTruongBang,
 	OTruongPhieu,
 } from "@/components/crm/fields/kieu-truong";
-import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
+import { FieldsCog, OTruongTuTao } from "@/components/crm/fields/record-fields";
+import {
+	khoaSauQuyDoi,
+	mucChiTiet,
+} from "@/components/crm/fields/truong-chuan";
+import { useBoTriTruong } from "@/components/crm/fields/use-bo-tri-truong";
 import { InlineTextCell, savingValue } from "@/components/crm/inline-field";
 import type { Owner } from "@/components/crm/owner-cell";
 import { DealStageMenu } from "@/components/crm/stage-change";
@@ -446,6 +452,10 @@ export function DealOverview({ deal }: { deal: Deal }) {
 	const saveFields = (fields: Record<string, FieldValueJson>) =>
 		update.mutate({ id: deal.id, data: { fields } });
 
+	const boTri = useBoTriTruong("DEAL", deal.fields);
+	const chiTiet = mucChiTiet(boTri.muc, deal.fields);
+	const sauQuyDoi = khoaSauQuyDoi(chiTiet);
+
 	return (
 		<KhoaLuuTru khoa={deal.archivedAt !== null}>
 			<DetailSheetBody>
@@ -473,23 +483,31 @@ export function DealOverview({ deal }: { deal: Deal }) {
 					action={deal.archivedAt ? undefined : <FieldsCog kind="deal" />}
 				>
 					<DetailSheetProperties>
-						{oChuan("name")}
-						{oChuan("amount")}
-						{oChuan("currency")}
-						<ReportedValue deal={deal} />
-						{oChuan("expectedCloseDate")}
-						<InlineCompanyField
-							value={deal.company.id}
-							company={deal.company}
-							saving={isSaving("companyId")}
-							onSave={(companyId) => save({ companyId })}
-						/>
-						{oChuan("owner")}
-						<RecordFields
-							fields={deal.fields}
-							saving={isSavingField}
-							onSave={saveFields}
-						/>
+						{chiTiet.map((muc) =>
+							muc.kind === "custom" ? (
+								<OTruongTuTao
+									key={muc.field.id}
+									field={muc.field}
+									saving={isSavingField}
+									onSave={saveFields}
+									nguoiDung={users.data}
+								/>
+							) : (
+								<Fragment key={muc.key}>
+									{muc.key === "company" ? (
+										<InlineCompanyField
+											value={deal.company.id}
+											company={deal.company}
+											saving={isSaving("companyId")}
+											onSave={(companyId) => save({ companyId })}
+										/>
+									) : (
+										oChuan(muc.key)
+									)}
+									{muc.key === sauQuyDoi ? <ReportedValue deal={deal} /> : null}
+								</Fragment>
+							),
+						)}
 					</DetailSheetProperties>
 				</DetailSheetSection>
 
