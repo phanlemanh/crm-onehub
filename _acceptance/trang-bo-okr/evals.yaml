@@ -175,11 +175,19 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/**"
       - "apps/app/test/trang-bo-okr.dom.tsx"
     expected: |
-      Ca «tbo-lien-ket»: danh sách viết trước mọi chỗ dựng liên kết /okr/bo-okr trong apps/app (lập bằng grep trong
-      chính ca, so với danh sách viết tay — lệch là đỏ «tbo-lien-ket: cho moi <tep>»): Toàn cảnh, Của tôi, Đơn vị con,
-      Đơn vị bạn dẫn, bản nháp Soạn. Gọi từng hàm dựng với bộ OneHub → href mang donOkr=goc; với phòng ban → donOkr=pb:<id>.
-      Ghim «tbo-lien-ket: <tep> thieu donOkr=goc».
-      CHIEU DO (ca «tbo-lien-ket-do»): serialize parseAsDonOkr bản cũ (bỏ goc) → khẳng định của Toàn cảnh đỏ.
+      Ca «tbo-lien-ket»: danh sách viết trước mọi chỗ dựng liên kết tới bộ OKR trong apps/app, lập THEO ĐÍCH chứ không
+      theo chuỗi: mọi tệp dưới apps/app/app chứa chuỗi "/okr/bo-okr", hay dùng hằng DUONG[…] (gồm DUONG["theo-don-vi"])
+      hay DUONG_MUC[…] của tab-okr.ts (riêng tab-okr.ts, nơi khai hằng, loại ra), so với danh sách viết tay — lệch là đỏ
+      «tbo-lien-ket: cho moi <tep>» / «cho mat <tep>». Danh sách viết tay chia hai vai: «co-don» (Toàn cảnh, Đơn vị con,
+      Đơn vị bạn dẫn, bản nháp Soạn, danh sách bộ, thẻ con, nút Thêm mục tiêu và Nhập bảng tính của hanh-dong-khu.tsx)
+      và «danh-sach» (Của tôi, vị trí bộ, thanh thẻ thanh-tab.tsx, thanh bên thanh-ben-muc-tieu.tsx — đích là trang
+      danh sách). Mỗi tệp «co-don» có đúng một hàm dựng trong ca; gọi với bộ OneHub → href mang donOkr=goc, với phòng ban
+      → donOkr=pb:<id>. Riêng hanh-dong-khu.tsx: dựng HanhDongKhu (q.dich.don = goc, rồi pb:P1, tab Của tôi, được tạo) và
+      đọc href của liên kết «Thêm mục tiêu». Ghim «tbo-lien-ket: <tên tệp> thieu donOkr=goc».
+      CHIEU DO (ca «tbo-lien-ket-do»): serialize parseAsDonOkr bản cũ (bỏ goc) → khẳng định của Toàn cảnh đỏ
+      «tbo-lien-ket: toan-canh.tsx thieu donOkr=goc». Chiều đỏ tay đã đo: đặt lại điều kiện `if (don.loai !== "goc")`
+      trước q.set(donOkr) trong useDuongTheoDonVi của hanh-dong-khu.tsx → ca hanh-dong-khu đỏ
+      «tbo-lien-ket: hanh-dong-khu.tsx thieu donOkr=goc».
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E12
@@ -230,15 +238,25 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.tbo_khong_doi_hinh
+    long_running: 240
     paths:
       - "_acceptance/*/rang/**"
       - "apps/app/test/**"
     expected: |
       khong-doi-hinh.mjs: danh sách viết trước các hồ sơ đã ký có thước hay bài kiểm chạm /okr/bo-okr, theo-don-vi hay
-      ViewSwitch của khu Mục tiêu (lập lúc S3 bằng lệnh quét, ghi trong tệp). (1) Chạy eval test/script không not-run của
-      từng hồ sơ trên cây vòng và trên worktree origin/onehub; SAI khi nền 0 mà cây khác 0, «DO SAN TREN NEN» khi nền đỏ.
-      (2) Với mỗi tệp thước của hồ sơ đã ký mà vòng sửa: diff chỉ gồm dòng đổi chuỗi đường dẫn/bộ chọn (khớp khuôn viết
-      trước) và sổ của hồ sơ có dòng fix decided_by chủ kho; dòng đổi khác khuôn → «SAI AC-11: DOI LOGIC <tep>:<dong>».
-      CHIEU DO (--chieu-do, bản sao): thêm một dòng logic vào thước một hồ sơ đã ký → «SAI AC-11: DOI LOGIC» (ghim
-      /SAI AC-11: DOI LOGIC \S+/), mã 1.
+      ViewSwitch của khu Mục tiêu (lập lúc S3 bằng lệnh quét, ghi trong tệp; gồm cả khep-ky-okr). (1) Mọi eval executor
+      test VÀ script, không not-run, của từng hồ sơ; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval một lần chạy riêng
+      với EVAL=<id>. Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
+      worktree origin/onehub, in «HO SO <slug>#<E>: cay <ma> · nen <ma>»; SAI AC-11 khi nền 0 mà cây khác 0, «DO SAN TREN
+      NEN <slug>#<E>» khi nền đỏ. (2) Với mỗi tệp thước của hồ sơ đã ký mà vòng sửa: sổ của hồ sơ có dòng fix decided_by
+      chủ kho nhắc tệp (thiếu → «SAI AC-11: THIEU SO»); rồi xét QUAN HỆ từng khối diff -U0: dòng bỏ R và dòng thêm A,
+      mỗi bên nối dòng, bỏ mọi khoảng trắng và dấu phẩy đuôi trước ) ] }, thay mọi chuỗi '…' "…" `…` bằng một chỗ giữ
+      (biểu thức trong ${…} của chuỗi mẫu giữ lại để so) — khối chỉ đổi chuỗi khi hai bên bằng nhau; khác → «SAI AC-11:
+      DOI LOGIC <tep>:<dòng đầu> <mẫu>». Tệp có phép viết lại (VIET_LAI: V1-20, V1-21, he-qua-donOkr cho
+      do-man-dieu-huong.mjs, đòi dòng fix nhắc «h.nhan») không SAI nhưng vẫn qua luật quan hệ và in «VIET LAI <tep>
+      (<phep>): <n> khoi doi logic» kèm từng khối, để thẻ thấy phép đã phủ gì.
+      CHIEU DO (bản sao HEAD, ghim /SAI AC-11: DOI LOGIC \S+/ đúng tệp và dòng bị chèn, mã 1, in «CHIEU DO <kieu>: bat
+      duoc <tep>:<dong>»): «--chieu-do» thêm dòng `export const doiLogicThu = 1 + 1;` cuối vo-khu-muc-tieu.dom.tsx;
+      «--chieu-do tron» trộn trong CÙNG một dòng của khối đang chỉ đổi chuỗi (vkm-mot-lop, dòng chờ [data-the-con-bo])
+      một đổi chuỗi bộ chọn và `&& true` vào điều kiện → vẫn «SAI AC-11: DOI LOGIC <tep>:<dong>» dù khối có token được phép.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

@@ -25,6 +25,7 @@ import {
 	type ReactNode,
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import type { DonChonOkr } from "@/app/(app)/[slug]/okr/okr-search-params";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import type { ChuKyOutput } from "../../api/src/okr/okr.contracts";
 import type { ToanCanhOutput } from "../../api/src/okr/okr-xem.contracts";
@@ -186,6 +187,7 @@ function thuTuc<TRa>(ten: string, doc: () => TRa | Promise<TRa>) {
 				? { queryKey: [ten, "skip"], queryFn: skipToken }
 				: { queryKey: [ten, vao ?? null], queryFn: async () => doc() },
 		mutationOptions: () => ({ mutationFn: async () => null }),
+		mutationKey: () => [ten],
 	};
 }
 
@@ -263,6 +265,7 @@ const { duongTheoDonVi, duongMoCuoc } = await import(
 	"@/app/(app)/[slug]/okr/soan/luat-ban-nhap"
 );
 const { khoaDon } = await import("@/app/(app)/[slug]/okr/okr-search-params");
+const { HanhDongKhu } = await import("@/app/(app)/[slug]/okr/hanh-dong-khu");
 const { okrVoKhuMessages } = await import("@/lib/messages/okr-vo-khu");
 
 const boOkr = okrVoKhuMessages("vi").boOkr;
@@ -507,9 +510,11 @@ type VaiLienKet = "co-don" | "danh-sach";
 
 const CHO_LIEN_KET = {
 	"(app)/[slug]/okr/cua-toi.tsx": "danh-sach",
+	"(app)/[slug]/okr/hanh-dong-khu.tsx": "co-don",
 	"(app)/[slug]/okr/phan-don-vi-dan.tsx": "co-don",
 	"(app)/[slug]/okr/soan/luat-ban-nhap.ts": "co-don",
-	"(app)/[slug]/okr/tab-okr.ts": "danh-sach",
+	"(app)/[slug]/okr/thanh-ben-muc-tieu.tsx": "danh-sach",
+	"(app)/[slug]/okr/thanh-tab.tsx": "danh-sach",
 	"(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx": "co-don",
 	"(app)/[slug]/okr/theo-don-vi/don-vi-con.tsx": "co-don",
 	"(app)/[slug]/okr/theo-don-vi/the-con.tsx": "co-don",
@@ -517,25 +522,33 @@ const CHO_LIEN_KET = {
 	"(app)/[slug]/okr/toan-canh/toan-canh.tsx": "co-don",
 } satisfies Record<string, VaiLienKet>;
 
+const TEP_HANG_DUONG = "(app)/[slug]/okr/tab-okr.ts";
+
+const DICH_BO_OKR = [/\/okr\/bo-okr/, /\bDUONG\[/, /\bDUONG_MUC\[/];
+
 function choDungLienKet(): string[] {
 	return readdirSync(DUONG_APP, { recursive: true, encoding: "utf8" })
 		.filter((tep) => /\.tsx?$/.test(tep))
-		.filter((tep) =>
-			readFileSync(join(DUONG_APP, tep), "utf8").includes("/okr/bo-okr"),
-		)
 		.map((tep) => tep.split("\\").join("/"))
+		.filter((tep) => tep !== TEP_HANG_DUONG)
+		.filter((tep) => {
+			const ma = readFileSync(join(DUONG_APP, tep), "utf8");
+			return DICH_BO_OKR.some((k) => k.test(ma));
+		})
 		.sort();
 }
+
+const tenTep = (tep: string) => tep.split("/").at(-1) ?? tep;
 
 function phaiCoDon(tep: string, href: string, don: string) {
 	const u = new URL(href, "http://x");
 	phai(
 		u.pathname === "/ws/okr/bo-okr",
-		`tbo-lien-ket: ${tep} sai duong ${u.pathname}`,
+		`tbo-lien-ket: ${tenTep(tep)} sai duong ${u.pathname}`,
 	);
 	phai(
 		u.searchParams.get("donOkr") === don,
-		`tbo-lien-ket: ${tep} thieu donOkr=${don} — ${href}`,
+		`tbo-lien-ket: ${tenTep(tep)} thieu donOkr=${don} — ${href}`,
 	);
 }
 
@@ -625,9 +638,43 @@ function hrefTheCon() {
 	return { goc: cua({ loai: "goc" }), "pb:P1": cua({ loai: "pb", id: "P1" }) };
 }
 
+async function hrefHanhDongKhu(): Promise<HrefTheoDon> {
+	const nut = async (don: DonChonOkr) => {
+		const s = await ve(
+			<HanhDongKhu
+				cauNoi={false}
+				q={{
+					kieu: "xong",
+					dich: { don, nguon: don.loai === "goc" ? "goc" : "dan" },
+					duoc: true,
+					lyDo: null,
+					cycleId: "q4",
+					phaKy: "dang-chay",
+					quanTri: true,
+					canEdit: true,
+				}}
+				tab="cua-toi"
+			/>,
+			new URLSearchParams({ kyOkr: "q4" }),
+		);
+		await cho(
+			() => s.o.querySelector('a[data-nut="them-muc-tieu"]') !== null,
+			"tbo-lien-ket: hanh dong khu co nut Them muc tieu",
+		);
+		const href = hrefTrong(s.o, '[data-nut="them-muc-tieu"]');
+		await go(s);
+		return href;
+	};
+	return {
+		goc: await nut({ loai: "goc" }),
+		"pb:P1": await nut({ loai: "pb", id: "P1" }),
+	};
+}
+
 type HrefTheoDon = Record<string, string[]>;
 
 const DUNG_LIEN_KET = {
+	"(app)/[slug]/okr/hanh-dong-khu.tsx": hrefHanhDongKhu,
 	"(app)/[slug]/okr/phan-don-vi-dan.tsx": hrefPhanDonViDan,
 	"(app)/[slug]/okr/soan/luat-ban-nhap.ts": hrefBanNhap,
 	"(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx": hrefDanhSachBo,
@@ -638,13 +685,16 @@ const DUNG_LIEN_KET = {
 
 function kiemHref(tep: string, theoDon: HrefTheoDon) {
 	for (const [don, ds] of Object.entries(theoDon)) {
-		phai(ds.length > 0, `tbo-lien-ket: ${tep} khong dung lien ket cho ${don}`);
+		phai(
+			ds.length > 0,
+			`tbo-lien-ket: ${tenTep(tep)} khong dung lien ket cho ${don}`,
+		);
 		for (const href of ds) phaiCoDon(tep, href, don);
 	}
 }
 
 describe("tbo-lien-ket", () => {
-	test("danh sach viet tay khop moi tep dung lien ket /okr/bo-okr trong apps/app/app", () => {
+	test("danh sach viet tay khop moi tep dung lien ket toi bo OKR (chuoi /okr/bo-okr, DUONG[…], DUONG_MUC[…]) trong apps/app/app", () => {
 		const thay = choDungLienKet();
 		for (const tep of thay)
 			phai(tep in CHO_LIEN_KET, `tbo-lien-ket: cho moi ${tep}`);
@@ -675,7 +725,7 @@ describe("tbo-lien-ket-do", () => {
 		};
 		const tep = "(app)/[slug]/okr/toan-canh/toan-canh.tsx";
 		expect(() => kiemHref(tep, { goc: [hrefCu({ loai: "goc" })] })).toThrow(
-			"tbo-lien-ket: (app)/[slug]/okr/toan-canh/toan-canh.tsx thieu donOkr=goc",
+			"tbo-lien-ket: toan-canh.tsx thieu donOkr=goc",
 		);
 		expect(() =>
 			kiemHref(tep, { "pb:P1": [hrefCu({ loai: "pb", id: "P1" })] }),
