@@ -2,9 +2,16 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { tepTuBanGhi, vietTep } from "@crm/validation/tin-hieu";
-import { docDuLieu } from "../../lib/lo-trinh/doc-du-lieu.js";
 
 export const GOC_KHO = path.resolve(import.meta.dir, "../../../..");
+
+type DocDuLieu = (html: string) => {
+	duLieu: Record<string, unknown> | null;
+	canhBao: string[];
+};
+const { docDuLieu } = (await import(
+	path.join(GOC_KHO, "apps/app/lib/lo-trinh/doc-du-lieu.js")
+)) as { docDuLieu: DocDuLieu };
 
 export type TrangThaiHangMau = "chua-bat-dau" | "dang-lam" | "da-giao";
 

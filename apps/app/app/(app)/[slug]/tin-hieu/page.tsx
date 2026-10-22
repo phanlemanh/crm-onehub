@@ -14,10 +14,10 @@ import {
 	PageShellTitle,
 } from "@/components/page-shell";
 import { ThanhTheTinHieu } from "@/components/tin-hieu/thanh-the-tin-hieu";
-import { docTepLoTrinh } from "@/lib/lo-trinh/doc-tep";
 import { getLocale } from "@/lib/locale/server";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { requireSession } from "@/lib/session";
+import { docNguonTinHieuTrang } from "@/lib/tin-hieu/doc-nguon";
 import { docTrangThaiTinHieu } from "@/lib/tin-hieu/trang-thai";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import {
@@ -34,11 +34,6 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: tinHieuMessages(await getLocale()).trang.tieuDe };
 }
 
-async function docBanVe(): Promise<string | null> {
-	"use cache";
-	return docTepLoTrinh();
-}
-
 async function NoiDung() {
 	await requireSession();
 	const m = tinHieuMessages(await getLocale());
@@ -47,7 +42,7 @@ async function NoiDung() {
 		getServerTrpc().tinHieu.cuaToi.queryOptions(),
 	);
 	const { banVe, trangThai } = docTrangThaiTinHieu(
-		await docBanVe(),
+		(await docNguonTinHieuTrang()).dauVao,
 		cuaToi.rows.map((r) => ({
 			ma: r.ma,
 			daKeoVe: r.daKeoVe,
