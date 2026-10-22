@@ -203,15 +203,25 @@ function bao(dat, dongDung, dongSai) {
 }
 
 async function bamChu(chu) {
-	const ok = await trang.evaluate((c) => {
-		const nut = [...document.querySelectorAll("button, [role=tab]")].find(
-			(b) => (b.innerText ?? "").trim().split("\n")[0]?.trim() === c,
-		);
-		nut?.click();
-		return Boolean(nut);
-	}, chu);
-	if (!ok) await khongDo(`KHONG DO DUOC: khong thay nut «${chu}»`);
-	await new Promise((r) => setTimeout(r, 400));
+	let nut = null;
+	for (let lan = 0; lan < 20 && !nut; lan += 1) {
+		const tay = await trang.evaluateHandle((c) => {
+			const dong = (b) => (b.innerText ?? "").trim().split("\n")[0]?.trim();
+			return (
+				[
+					...document.querySelectorAll(
+						"[role=dialog] button, [role=dialog] [role=tab]",
+					),
+				].find((b) => dong(b) === c && b.getBoundingClientRect().width > 0) ??
+				null
+			);
+		}, chu);
+		nut = tay.asElement();
+		if (!nut) await new Promise((r) => setTimeout(r, 250));
+	}
+	if (!nut) await khongDo(`KHONG DO DUOC: khong thay nut «${chu}»`);
+	await nut.click();
+	await new Promise((r) => setTimeout(r, 500));
 }
 
 async function moForm(f) {
@@ -283,7 +293,16 @@ async function docForm(f) {
 				const rb = b.getBoundingClientRect();
 				const fa = getComputedStyle(a).fontSize;
 				const fb = getComputedStyle(b).fontSize;
-				if (Math.abs(ra.left - rb.left) > 0.5 || fa !== fb)
+				const cot = [...form.querySelectorAll("[data-slot=field]")].map((o) =>
+					Math.round(o.getBoundingClientRect().left),
+				);
+				const trongLuoi = cot.some((x) => Math.abs(x - rb.left) <= 1);
+				if (
+					Math.abs(ra.width - rb.width) > 0.5 ||
+					Math.abs(ra.height - rb.height) > 0.5 ||
+					fa !== fb ||
+					!trongLuoi
+				)
 					lech.push(`${chuan}|${tuTao}`);
 			}
 			const oBb = oCua(batBuoc);

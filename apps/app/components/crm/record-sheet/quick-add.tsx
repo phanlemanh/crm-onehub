@@ -359,8 +359,6 @@ export function QuickAddDeal({
 				})),
 				tuDongFocus: dau,
 			});
-		if (key === "expectedCloseDate")
-			return form.moTaChuan(key, { goiY: m.noDate, tuDongFocus: dau });
 		if (key === "owner")
 			return form.moTaChuan(key, {
 				giaTri: owner ?? "",

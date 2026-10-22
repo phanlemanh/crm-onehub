@@ -153,8 +153,6 @@ function CreateDealBody({
 					label: entry.code,
 				})),
 			});
-		if (key === "expectedCloseDate")
-			return form.moTaChuan(key, { goiY: m.create.noDate });
 		if (key === "owner")
 			return form.moTaChuan(key, {
 				giaTri: resolvedOwner,
