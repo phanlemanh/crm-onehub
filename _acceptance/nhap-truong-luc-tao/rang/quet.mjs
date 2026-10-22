@@ -98,7 +98,8 @@ function quetBang(duong) {
 		throw new Error("ntl quet: thieu bang KIEU_TRUONG");
 	for (const kieu of MUOI_MOT_KIEU) {
 		const dong = bang.properties.find((p) => tenThuocTinh(p) === kieu);
-		const than = dong && ts.isPropertyAssignment(dong) ? boBoc(dong.initializer) : null;
+		const than =
+			dong && ts.isPropertyAssignment(dong) ? boBoc(dong.initializer) : null;
 		const coMat =
 			than &&
 			ts.isObjectLiteralExpression(than) &&
@@ -157,7 +158,8 @@ function quetForm(duong, ham, tenHienThi) {
 		if (!goc) throw new Error(`ntl quet: thieu tep ${tenHienThi}#${ham}`);
 	}
 
-	const dong = (n) => nguon.getLineAndCharacterOfPosition(n.getStart()).line + 1;
+	const dong = (n) =>
+		nguon.getLineAndCharacterOfPosition(n.getStart()).line + 1;
 	const di = (n) => {
 		if (ts.isJsxElement(n) || ts.isJsxSelfClosingElement(n)) {
 			const mo = ts.isJsxElement(n) ? n.openingElement : n;
