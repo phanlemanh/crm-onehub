@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 87439b570e2071dcbddb728d50d2cedbe6eebb2f
-human_signoff:
+human_signoff: manh 2026-10-23 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval máy đạt, gồm E5b thêm sau lưới trước gộp; vòng 1 REJECT vì năm lỗ đo, đã sửa) và lượt ghim lại sau gộp onehub ee42c149e. Ngoài-1, 2, 3, 4, 7, 8 ghi Known limits; Ngoài-5 chấp nhận không sửa; Ngoài-6 mở hợp đồng mới; đồng ý phần cắt; phê hết các dòng treo.
 ---
 
 # Evidence Report: tep-theo-chu-ban-ghi

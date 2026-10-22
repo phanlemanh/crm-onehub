@@ -5,7 +5,7 @@ slug: tep-theo-chu-ban-ghi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-22T01:00:24Z
 design_doc: docs/superpowers/specs/2026-10-22-tep-theo-chu-ban-ghi-design.md
@@ -155,3 +155,10 @@ duyệt — câu hỏi phép đo, SỐNG, CHẾT, timebox — bốn trường qu
   chỉ thêm dòng (luật 7). `fields/**` và `record-sheet/**` là vùng của đợt (luật 31).
 - Bài cũ của DA19 (`ttp-quyen`, `ttp-o-tep`) giữ xanh: fixture của chúng do quản trị phụ trách, và chữ lý do đọc từ bảng
   chữ. Bước đối chiếu bằng mắt của E10 DA19 nêu câu «Chỉ quản trị mở được tệp.» — kế hoạch S2 đổi bước ấy theo câu mới.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: Lời «chưa có người phụ trách» trên ô Tệp chỉ được bài kiểm màn chứng bằng công ty và cá nhân; hai ô của thoả thuận kiểm một tình huống không có thật.
+  - Ngoài-2: Khi mở tệp bị từ chối, màn có thể tải lại thừa dữ liệu của loại bản ghi khác mà bài kiểm màn không phát hiện.
+  - Ngoài-3: Bài kiểm màn tự dựng lý do khoá thay vì lấy từ máy chủ, nên máy chủ đổi cách báo lý do thì bài màn vẫn xanh.
+  - Ngoài-4: Khai báo dữ liệu tệp coi lý do khoá là không bắt buộc, nên một chỗ quên gửi lý do sẽ không báo lỗi.
+  - Ngoài-7: Bấm «Mở» khi tệp vừa bị xoá, kho tệp tắt hay mất mạng thì không có lời báo nào.
+  - Ngoài-8: Câu đếm đủ ô của bài kiểm xoá không bao giờ đỏ, nên thiếu một ô trong ma trận thì phần đếm không báo.
