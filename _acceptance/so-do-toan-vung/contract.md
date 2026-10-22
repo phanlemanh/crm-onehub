@@ -5,7 +5,7 @@ slug: so-do-toan-vung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-21
 design_doc: docs/superpowers/specs/2026-10-19-so-do-toan-vung-design.md
@@ -170,3 +170,18 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 19/10; 
     không chạy xong trong trần 240 phút của S4; sau chữ ký, lưới trước-gộp bắt hồ sơ đã ký nào hoá cũ thì làn ghim lại
     chạy lại eval máy của từng hồ sơ đó. Vế (b) — eval giao diện đã ký còn nhắc đường hay chuỗi đã bỏ — không có lượt
     máy nào chứng lại ở vòng này; lượt đo màn trước S4 (106 eval, 0 DO, sha c4fe9b15f) là lần chạy cuối.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Ai mở một đường dẫn cũ đã lưu có trỏ tới một người, rồi bấm Toàn màn hình, sẽ phải nhấn Esc hai lần mới thoát. Lần đầu không thấy gì xảy ra vì không có thẻ nào đang mở.
+  - Ngoài-2: Người dùng không thấy gì khác: màn Sơ đồ vẫn chạy đúng. Chỉ là sau này khi sửa bộ lọc, một bản chép không còn dùng có thể bị bỏ quên và lệch.
+  - Ngoài-3: Hôm nay màn Sơ đồ vẫn dựng đúng khung và nút Toàn màn hình. Nếu sau này đổi địa chỉ trang Sơ đồ mà quên sửa chỗ thứ hai, khung toàn vùng và nút sẽ lặng lẽ biến mất.
+  - Ngoài-4: Người dùng không thấy gì; vài dòng chữ không còn được dùng nằm thừa trong tệp chữ.
+  - Ngoài-6: Khi mục tiêu bị xoá, không có quyền xem, hoặc mạng lỗi, phần thân màn báo đúng nhưng tên mục tiêu trên đường dẫn phía trên cứ nhấp nháy như đang tải mãi.
+  - Ngoài-7: Bài kiểm tự động chỉ đọc chữ trong mã chứ chưa bấm thật nút «Xem trên sơ đồ», nên nếu nút hỏng khi bấm thì bài kiểm vẫn xanh. Người dùng chỉ phát hiện được khi xem màn thật.
+  - Ngoài-8: Bài kiểm công cụ rà hồ sơ không thử đường ghi kết quả thật, nên nếu hai bên lệch khuôn thì lượt kiểm sau mới đỏ chứ không báo trước. Người dùng cuối không bị ảnh hưởng.
+  - Ngoài-9: Công cụ rà hồ sơ cũ thiếu một ca tự thử, nên nếu nó bỏ sót một loại hồ sơ thì không tự báo. Người dùng cuối không thấy ảnh hưởng.
+  - Ngoài-11: Bài kiểm tự động trên màn hẹp không bắt được trường hợp danh sách thiếu một trong bốn nhóm. Nếu sau này thiếu nhóm, người dùng điện thoại sẽ thấy danh sách thiếu mà bài kiểm vẫn xanh.
+  - Ngoài-12: Bài kiểm chữ song ngữ không kiểm nút «Xem trên sơ đồ» trong ngăn, nên nếu chữ tiếng Anh của nút đó bị trùng hoặc sai thì không ai được báo trước. Chữ hiện hành chưa được chứng minh sai.
+  - Ngoài-13: Bài kiểm chỉ xác nhận cách xem Sơ đồ đã biến khỏi trang Sức khoẻ, chưa xác nhận trang Sức khoẻ vẫn hiện nội dung. Nếu trang đó trống thì bài kiểm này không báo.
+  - Ngoài-14: Hồ sơ cũ về thẻ OKR còn hứa đo ca có hai người xem nhưng bài kiểm không còn ca đó. Nếu chữ «N người xem» sai ở số nhiều thì không bài nào bắt.
+  - Ngoài-15: Công cụ đo màn thật vẫn báo lỗi khi khung vẽ lệch, chỉ là câu báo khác với câu hồ sơ đã hứa. Người dùng cuối không thấy ảnh hưởng.
+  - Ngoài-16: Bài kiểm không chứng minh được chế độ toàn màn hình không lọt vào địa chỉ trang và mất khi tải lại. Nếu hỏng, người dùng gửi link sẽ mở thẳng ở toàn màn hình, nhưng chưa có bằng chứng nó hỏng.
