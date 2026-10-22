@@ -37,7 +37,9 @@ import {
 	OTruongBang,
 	OTruongPhieu,
 } from "@/components/crm/fields/kieu-truong";
-import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
+import { FieldsCog, OTruongTuTao } from "@/components/crm/fields/record-fields";
+import { mucChiTiet } from "@/components/crm/fields/truong-chuan";
+import { useBoTriTruong } from "@/components/crm/fields/use-bo-tri-truong";
 import { savingValue } from "@/components/crm/inline-field";
 import type { Owner } from "@/components/crm/owner-cell";
 import { CompanySocials } from "@/components/crm/social-links";
@@ -529,6 +531,10 @@ export function CompanyOverview({ company }: { company: Company }) {
 	const saveFields = (fields: Record<string, FieldValueJson>) =>
 		update.mutate({ id: company.id, data: { fields } });
 
+	const truongTheoKhoa = new Map(truongChuan.map((mt) => [mt.khoa, mt]));
+	const boTri = useBoTriTruong("COMPANY", company.fields);
+	const chiTiet = mucChiTiet(boTri.muc, company.fields);
+
 	return (
 		<KhoaLuuTru khoa={company.archivedAt !== null}>
 			<DetailSheetBody>
@@ -550,14 +556,20 @@ export function CompanyOverview({ company }: { company: Company }) {
 							}
 						>
 							<DetailSheetProperties columns={1}>
-								{truongChuan.map((mt) => (
-									<OTruongPhieu key={mt.khoa} moTa={mt} />
-								))}
-								<RecordFields
-									fields={company.fields}
-									saving={isSavingField}
-									onSave={saveFields}
-								/>
+								{chiTiet.map((muc) => {
+									if (muc.kind === "custom")
+										return (
+											<OTruongTuTao
+												key={muc.field.id}
+												field={muc.field}
+												saving={isSavingField}
+												onSave={saveFields}
+												nguoiDung={users.data}
+											/>
+										);
+									const mt = truongTheoKhoa.get(muc.key);
+									return mt ? <OTruongPhieu key={mt.khoa} moTa={mt} /> : null;
+								})}
 							</DetailSheetProperties>
 						</DetailSheetSection>
 
