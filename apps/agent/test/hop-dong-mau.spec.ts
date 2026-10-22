@@ -46,7 +46,7 @@ const BANG_GIA_TRI = {
 >;
 
 const SO_O_NHAN = 17;
-const SO_O_DOC_CHU = 34;
+const SO_O_DOC_CHU = 47;
 
 function sha(byte: Uint8Array): string {
 	return createHash("sha256").update(byte).digest("hex");
@@ -129,6 +129,19 @@ function congThang(ngay: string, thang: number, ngayThem: number): string {
 	return d.toISOString().slice(0, 10);
 }
 
+const NGAY_CHU = /ngày (\d{2}) tháng (\d{2}) năm (\d{4})/;
+const NGAY_SO = /(\d{2})\/(\d{2})\/(\d{4})/;
+const TIEN = /(\d{1,3}(?:\.\d{3})+) đồng/;
+
+function giaTriCuaDoan(k: ThuocTinh, doan: string): string | number | null {
+	if (k === "giaTri") {
+		const m = doan.match(TIEN);
+		return m?.[1] ? Number(m[1].replaceAll(".", "")) : null;
+	}
+	const m = doan.match(NGAY_CHU) ?? doan.match(NGAY_SO);
+	return m ? `${m[3]}-${m[2]}-${m[1]}` : null;
+}
+
 function moTa(kq: KetQuaDocChu): string {
 	return kq.loai === "chu" ? "chu" : `${kq.loai} ${kq.lyDo}`;
 }
@@ -162,7 +175,14 @@ async function kiemDocChu(bo: TepHopDongMau[]): Promise<number> {
 		for (const k of THUOC_TINH) {
 			const doan = t.doan[k];
 			if (t[k] === null) continue;
-			o += 1;
+			o += 2;
+			const giaTri = doan ? giaTriCuaDoan(k, doan) : null;
+			if (giaTri === null && !(k === "ngayHetHan" && t.suyTu)) {
+				throw new Error(`hdm doc chu: ${t.ma} doan khong doc ${k}`);
+			}
+			if (giaTri !== null && giaTri !== t[k]) {
+				throw new Error(`hdm doc chu: ${t.ma} doan lech ${k}`);
+			}
 			if (!doan || !kq.chu.includes(doan)) {
 				throw new Error(`hdm doc chu: ${t.ma} thieu ${k}`);
 			}
@@ -269,5 +289,21 @@ describe("hdm-doc-chu", () => {
 		await expect(
 			kiemDocChu(doiTep(bo, "HD2", { ngayKy: "2026-12-04" })),
 		).rejects.toThrow("hdm doc chu: HD2 dap an ngayKy");
+		const hd1 = bo.find((t) => t.ma === "HD1");
+		if (!hd1) throw new Error("hdm doc chu: thieu HD1");
+		await expect(
+			kiemDocChu(
+				doiTep(bo, "HD1", {
+					doan: { ...hd1.doan, ngayKy: "ngày 06 tháng 03 năm 2026" },
+				}),
+			),
+		).rejects.toThrow("hdm doc chu: HD1 doan lech ngayKy");
+		await expect(
+			kiemDocChu(
+				doiTep(bo, "HD1", {
+					doan: { ...hd1.doan, giaTri: "1.520.000.000 đồng" },
+				}),
+			),
+		).rejects.toThrow("hdm doc chu: HD1 doan lech giaTri");
 	});
 });

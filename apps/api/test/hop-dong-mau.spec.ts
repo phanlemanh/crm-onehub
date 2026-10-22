@@ -287,6 +287,26 @@ async function anhChup(dealId: string, congTyId: string) {
 	}
 }
 
+async function kiemBlobKhopHang(
+	kho: ReturnType<typeof khoGiaHttp>,
+	them: string[],
+	nhan: string,
+): Promise<void> {
+	const ids = await idMau();
+	const hang = await db.fieldFile.findMany({
+		where: { dealId: { in: ids.thoaThuan } },
+		select: { blobPathname: true },
+	});
+	if (hang.length !== BO.length) throw new Error(`${nhan} hang ${hang.length}`);
+	const ky = new Set([...hang.map((h) => h.blobPathname), ...them]);
+	const co = new Set(kho.daPut.keys());
+	const thua = [...co].filter((p) => !ky.has(p));
+	const thieu = [...ky].filter((p) => !co.has(p));
+	if (thua.length > 0 || thieu.length > 0) {
+		throw new Error(`${nhan} thua ${thua.length} thieu ${thieu.length}`);
+	}
+}
+
 describe("hdm-chay-lai", () => {
 	test(
 		"hdm-chay-lai: chạy ba lần không nhân đôi, dữ liệu ngoài bộ mẫu không đổi",
@@ -380,8 +400,17 @@ describe("hdm-chay-lai", () => {
 					}
 				}
 				await donHangCho(kho);
-				if (kho.daPut.size !== BO.length + 1)
-					throw new Error(`hdm chay lai: blob ${kho.daPut.size}`);
+				const tepNgoai = await db.fieldFile.findMany({
+					where: { dealId: ngoai.deal },
+					select: { blobPathname: true },
+				});
+				if (tepNgoai.length !== 1)
+					throw new Error(`hdm chay lai: ngoai tep ${tepNgoai.length}`);
+				await kiemBlobKhopHang(
+					kho,
+					tepNgoai.map((t) => t.blobPathname),
+					"hdm chay lai: blob",
+				);
 				const sau = await anhChup(ngoai.deal, ngoai.cty);
 				for (const k of Object.keys(truoc) as (keyof typeof truoc)[]) {
 					if (JSON.stringify(sau[k]) !== JSON.stringify(truoc[k]))
@@ -426,6 +455,28 @@ describe("hdm-chay-lai", () => {
 					});
 					if (r1.ma === 0)
 						throw new Error(`hdm chay lai: chay do ${ca} khong do`);
+					const loiNgat = r1.loi.join(" | ");
+					const dauNgat =
+						ca === "put-503" ? "HTTP 503" : "hdm thu: ngat truoc complete";
+					if (!loiNgat.includes(dauNgat))
+						throw new Error(`hdm chay lai: chay do ${ca} ngat sai ${loiNgat}`);
+					if (kho.soPut() !== 4)
+						throw new Error(
+							`hdm chay lai: chay do ${ca} so put ${kho.soPut()}`,
+						);
+					const idsNgat = await idMau();
+					const daGan = await db.fieldFile.count({
+						where: { dealId: { in: idsNgat.thoaThuan } },
+					});
+					if (daGan !== 3)
+						throw new Error(
+							`hdm chay lai: chay do ${ca} tep sau ngat ${daGan}`,
+						);
+					const blobDo = ca === "put-503" ? 3 : 4;
+					if (kho.daPut.size !== blobDo)
+						throw new Error(
+							`hdm chay lai: chay do ${ca} blob sau ngat ${kho.daPut.size}`,
+						);
 					kho.loiPutThu = null;
 					const r2 = await chay(kho);
 					if (r2.ma !== 0)
@@ -443,10 +494,7 @@ describe("hdm-chay-lai", () => {
 							throw new Error(`hdm chay lai: chay do ${ca} ${t.ma} ${n}`);
 					}
 					await donHangCho(kho);
-					if (kho.daPut.size !== BO.length)
-						throw new Error(
-							`hdm chay lai: chay do ${ca} blob ${kho.daPut.size}`,
-						);
+					await kiemBlobKhopHang(kho, [], `hdm chay lai: chay do ${ca} blob`);
 				} finally {
 					kho.dong();
 					await donMau();
@@ -570,6 +618,35 @@ function giaiGoi(duong: string): string | null {
 
 const CAM_NAP = [/^@crm\/db(\/|$)/, /^@prisma\/client/, /^@vercel\/blob/];
 
+function kiemThuTuChan(ten: string, nguon: string): string | null {
+	const tep = ts.createSourceFile(ten, nguon, ts.ScriptTarget.Latest, true);
+	let chan = -1;
+	const dong: { vi: number; duong: string }[] = [];
+	const di = (n: ts.Node) => {
+		if (ts.isCallExpression(n)) {
+			if (n.expression.kind === ts.SyntaxKind.ImportKeyword) {
+				const a = n.arguments[0];
+				dong.push({
+					vi: n.getStart(),
+					duong: a && ts.isStringLiteral(a) ? a.text : "?",
+				});
+			} else if (
+				ts.isIdentifier(n.expression) &&
+				n.expression.text === "kiemDuocNapHopDong" &&
+				chan < 0
+			) {
+				chan = n.getStart();
+			}
+		}
+		ts.forEachChild(n, di);
+	};
+	di(tep);
+	if (chan < 0) return "hdm chan: khong thay chan";
+	if (dong.length === 0) return "hdm chan: khong co import dong";
+	const truoc = dong.find((d) => d.vi < chan);
+	return truoc ? `hdm chan: nap dong truoc chan ${truoc.duong}` : null;
+}
+
 type KetQuaDoThi = { tep: number; cham: string | null };
 
 function diDoThi(vao: string, gocApi: string): KetQuaDoThi {
@@ -648,12 +725,23 @@ describe("hdm-chan", () => {
 	test("hdm-chan: chặn đứng trước phần nạp, đồ thị import tĩnh không chạm kho hay kho tệp", () => {
 		const vao = join(GOC_API, "scripts", "hop-dong-mau.ts");
 		const nguon = readFileSync(vao, "utf8");
-		const chan = nguon.indexOf("kiemDuocNapHopDong(process.env)");
-		const nap = nguon.indexOf('await import("./hop-dong-mau/lenh")');
-		if (chan < 0 || nap < chan) throw new Error("hdm chan: chan sau nap");
+		const thuTu = kiemThuTuChan("hop-dong-mau.ts", nguon);
+		if (thuTu) throw new Error(thuTu);
 		const kq = diDoThi(vao, GOC_API);
 		if (kq.cham) throw new Error(`hdm chan: nap truoc chan ${kq.cham}`);
 		if (kq.tep <= 1) throw new Error("hdm chan: do thi rong");
+	});
+
+	test("hdm-chan: đối chứng dương — import động đứng trước bộ chặn thì bị bắt", () => {
+		const nguon = [
+			'import "@crm/env/load";',
+			'const { db } = await import("@crm/db");',
+			"const chan = kiemDuocNapHopDong(process.env);",
+			'await import("./hop-dong-mau/lenh");',
+		].join("\n");
+		expect(kiemThuTuChan("tay.ts", nguon)).toBe(
+			"hdm chan: nap dong truoc chan @crm/db",
+		);
 	});
 
 	test("hdm-chan: đối chứng dương — đồ thị đi qua tệp trung gian tới @crm/db thì bị bắt", () => {
