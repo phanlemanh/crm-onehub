@@ -67,6 +67,7 @@ const TRANG_QUANH = await import(
 
 const mVi = okrMessages("vi");
 const sVi = okrSoanMessages("vi");
+const { dauThangSau, homNayVn } = await import("@/lib/okr-chu-ky-nhan");
 const TRAN = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
 
 const nguoi = (id: string, name: string) => ({
@@ -118,9 +119,33 @@ export const CAY = orgTreeOutput.parse({
 });
 
 export type Pha = "lap-ke-hoach" | "dang-chay" | "cham-diem" | "da-dong";
-export const chuKy = (pha: Pha) =>
+const KY_SAU = {
+	id: "n27",
+	kind: "quy",
+	name: "Quý 1/2027",
+	parentId: null,
+	startsOn: "2027-01-01",
+	endsOn: "2027-03-31",
+	phase: "lap-ke-hoach",
+	breakStartsOn: null,
+	breakEndsOn: null,
+	updateWeekday: 1,
+	cuaSoRa: null,
+	anLuc: null,
+	anLyDo: null,
+	quyConHien: 0,
+	viec: {
+		suaMoiO: false,
+		suaTen: false,
+		go: false,
+		an: false,
+		hienLai: false,
+	},
+};
+export const chuKy = (pha: Pha, haiKy = false) =>
 	cyclesOutput.parse({
 		cycles: [
+			...(haiKy ? [KY_SAU] : []),
 			{
 				id: "q4",
 				kind: "quy",
@@ -168,6 +193,11 @@ export const TP2: NguoiXem = {
 	quanTri: false,
 	headOf: { divisions: [], departments: ["P2"] },
 };
+export const TP23: NguoiXem = {
+	ten: "truong-hai-pb",
+	quanTri: false,
+	headOf: { divisions: [], departments: ["P2", "P3"] },
+};
 export const TV: NguoiXem = {
 	ten: "thanh-vien",
 	quanTri: false,
@@ -190,6 +220,9 @@ export type Nen = {
 	sanSang?: unknown;
 	treoQuyen?: boolean;
 	mau?: unknown[];
+	haiKy?: boolean;
+	suaDuoc?: boolean;
+	cauNoi?: boolean;
 };
 
 export function datNen({
@@ -199,8 +232,10 @@ export function datNen({
 	sanSang = BAT,
 	treoQuyen = false,
 	mau = [],
+	haiKy = false,
+	suaDuoc = duoc,
 }: Nen) {
-	dat("okr.cycles", () => chuKy(pha));
+	dat("okr.cycles", () => chuKy(pha, haiKy));
 	dat("okr.access", () => {
 		if (treoQuyen) return new Promise(() => {});
 		return okrAccessOutput.parse({
@@ -224,7 +259,7 @@ export function datNen({
 				tuTin: [],
 				gopY: [],
 			},
-			canEdit: duoc,
+			canEdit: suaDuoc,
 			canCreate: duoc,
 		});
 	});
@@ -446,7 +481,7 @@ async function dauTrang(
 	datNen(nen);
 	return dung(
 		<>
-			<DauTrangOkr cauNoi />
+			<DauTrangOkr cauNoi={nen.cauNoi ?? true} />
 			{kemThan ? <TheoDonVi /> : null}
 		</>,
 		{ duong: DUONG_MAN[man], thamSo, locale },
@@ -576,7 +611,7 @@ async function dauTrangServer(man: "so-do" | "quanh"): Promise<Element[]> {
 }
 
 describe("mnt-man-doc", () => {
-	test("mnt-man-doc: 12 o — Lay y kien, Suc khoe, So do, quanh muc tieu khong nut chinh, khong nut tao; 4 o dang tai; doi chung duong", async () => {
+	test("mnt-man-doc: 6 o client x vai, 2 o trang server tinh, 2 o dang tai — khong nut chinh, khong nut tao; doi chung duong", async () => {
 		const s = soSai();
 		let soO = 0;
 		for (const xem of [QT, TB1, TV]) {
@@ -590,16 +625,16 @@ describe("mnt-man-doc", () => {
 				);
 				await don();
 			}
-			for (const man of ["so-do", "quanh"] as const) {
-				soO += 1;
-				datNen({ xem });
-				const nut = await dauTrangServer(man);
-				s.kiem(
-					nut.filter(laNutChinh).length === 0 &&
-						nut.filter((e) => CHON_TAO.some((c) => e.matches(c))).length === 0,
-					`mnt-man-doc: ${man}/${xem.ten} co nut chinh`,
-				);
-			}
+		}
+		for (const man of ["so-do", "quanh"] as const) {
+			soO += 1;
+			datNen({ xem: TB1 });
+			const nut = await dauTrangServer(man);
+			s.kiem(
+				nut.filter(laNutChinh).length === 0 &&
+					nut.filter((e) => CHON_TAO.some((c) => e.matches(c))).length === 0,
+				`mnt-man-doc: ${man} co nut chinh`,
+			);
 		}
 		for (const man of ["lay-y-kien", "suc-khoe"] as const) {
 			soO += 1;
@@ -611,15 +646,6 @@ describe("mnt-man-doc", () => {
 				`mnt-man-doc: ${man}/dang-tai co khung cho nut chinh`,
 			);
 			await don();
-		}
-		for (const man of ["so-do", "quanh"] as const) {
-			soO += 1;
-			datNen({ xem: TB1, treoQuyen: true });
-			const nut = await dauTrangServer(man);
-			s.kiem(
-				nut.filter(laNutChinh).length === 0,
-				`mnt-man-doc: ${man}/dang-tai co nut chinh`,
-			);
 		}
 		soO += 1;
 		datNen({ xem: TB1 });
@@ -636,7 +662,7 @@ describe("mnt-man-doc", () => {
 		);
 		await don();
 		s.xong("mnt-man-doc", soO);
-		expect(soO).toBe(18);
+		expect(soO).toBe(12);
 	});
 });
 
@@ -788,6 +814,21 @@ describe("mnt-soan", () => {
 			o: "chua-bat",
 			nen: { sanSang: tat("don-vi-chua-bat") },
 			ly: sVi.lyDo["don-vi-chua-bat"],
+		},
+		{
+			o: "het-tran",
+			nen: { sanSang: tat("het-tran-thang") },
+			ly: sVi.nut.tamNghi(dauThangSau(homNayVn(new Date()))),
+		},
+		{
+			o: "chua-cau-hinh",
+			nen: { cauNoi: false },
+			ly: sVi.nut.chuaCauHinh,
+		},
+		{
+			o: "khong-quyen",
+			nen: { suaDuoc: false },
+			ly: mVi.khoaTao.khongSua.replace("{ten}", "Kinh doanh vùng 1"),
 		},
 	];
 	test("mnt-soan: chon dong — mo cuoc moi goi soanMo mot lan, tiep cuoc khong goi, dong khoa khong goi", async () => {
@@ -1004,16 +1045,12 @@ describe("mnt-khoa", () => {
 				true,
 			);
 			s.kiem(
-				qa("[role=dialog]").length === 0,
+				qa("[role=dialog]").length === 0 && GHI.every((g) => soLanGoi(g) === 0),
 				`mnt-khoa: ${u.o} hop mo khi khong quyen`,
 			);
 			s.kiem(
 				u.khoa.every((k) => !san.url().get(k)),
 				`mnt-khoa: ${u.o} tham so khong bi go`,
-			);
-			s.kiem(
-				GHI.every((g) => soLanGoi(g) === 0),
-				`mnt-khoa: ${u.o} goi thu tuc ghi`,
 			);
 			await don();
 			await dauTrang("bo-okr", { xem: TP2 }, `?donOkr=pb:P2&${u.tham}`, true);
@@ -1023,7 +1060,15 @@ describe("mnt-khoa", () => {
 			);
 			await don();
 		}
-		s.xong("mnt-khoa", VAI.length + URL.length * 4);
+		await dauTrang("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
+		await bam(q("[data-nut=them-muc-tieu]"), "nut them");
+		await bam(dong("soan"), "dong soan");
+		s.kiem(
+			soLanGoi("okr.soanMo") === 1,
+			"mnt-khoa: doi chung bo dem ghi khong thay soanMo khi co quyen",
+		);
+		await don();
+		s.xong("mnt-khoa", VAI.length + URL.length * 3 + 1);
 	});
 });
 
@@ -1049,6 +1094,7 @@ const M1 = {
 		],
 	},
 };
+const M1_P3 = { ...M1, id: "m1p3", donViIds: ["P3"] };
 const M1_BP = { ...M1, id: "m1bp", cap: "bo-phan", donViIds: ["B1"] };
 
 async function moHop(man: ManDau, nen: Nen, thamSo = "") {
@@ -1061,7 +1107,11 @@ const duongCuoi = () => new URL(`http://x${diTrang.at(-1)?.duong ?? ""}`);
 
 describe("mnt-tu-viet", () => {
 	test("mnt-tu-viet: (a) bo-okr — ngan tao dung don vi, khong nut chen, luu goi createObjective", async () => {
-		await moHop("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
+		await moHop(
+			"bo-okr",
+			{ xem: TP23, haiKy: true },
+			"?donOkr=pb:P3&kyOkr=n27",
+		);
 		await bam(dong("tu-viet"), "tu-viet");
 		await cho(() => q("[data-hop-thoai-muc-tieu=moi]") !== null, "ngan tao mo");
 		if (hop()) throw new Error("mnt-tu-viet: hop chon khong dong");
@@ -1069,7 +1119,7 @@ describe("mnt-tu-viet", () => {
 		const oDon = (ngan ?? document).querySelector<HTMLInputElement>(
 			'input[id$="-don-vi"]',
 		);
-		if (oDon?.value !== "Kinh doanh vùng 1")
+		if (oDon?.value !== "Kinh doanh vùng 2")
 			throw new Error("mnt-tu-viet: unitId lech (o don vi)");
 		if (q("[data-nut=bat-dau-tu-mau]"))
 			throw new Error("mnt-tu-viet: ngan con bat-dau-tu-mau");
@@ -1083,10 +1133,11 @@ describe("mnt-tu-viet", () => {
 		if (
 			vao.unit.level !== "phong-ban" ||
 			!("departmentId" in vao.unit) ||
-			vao.unit.departmentId !== "P2" ||
-			vao.cycleId !== "q4"
+			vao.unit.departmentId !== "P3"
 		)
 			throw new Error(`mnt-tu-viet: unitId lech ${JSON.stringify(vao.unit)}`);
+		if (vao.cycleId !== "n27")
+			throw new Error(`mnt-tu-viet: cycleId lech ${vao.cycleId}`);
 	});
 
 	test("mnt-tu-viet: (b) cua-toi — sang Bo OKR cua don vi dich voi ngan tao mo, khong mang hop chon", async () => {
@@ -1109,17 +1160,21 @@ describe("mnt-tu-viet", () => {
 
 describe("mnt-tu-mau", () => {
 	test("mnt-tu-mau: (a) co mau — ngan mo thang buoc chon mau, luu goi taoTuMau dung mau, don vi, chu ky", async () => {
-		await moHop("bo-okr", { xem: TP2, mau: [M1] }, "?donOkr=pb:P2");
+		await moHop(
+			"bo-okr",
+			{ xem: TP23, mau: [M1_P3], haiKy: true },
+			"?donOkr=pb:P3&kyOkr=n27",
+		);
 		await cho(
 			() => dong("tu-mau")?.getAttribute("aria-disabled") !== "true",
 			"dong tu-mau mo",
 		);
 		await bam(dong("tu-mau"), "tu-mau");
 		await cho(
-			() => q("[data-chon-mau=m1]") !== null,
+			() => q("[data-chon-mau=m1p3]") !== null,
 			"mnt-tu-mau: khong vao buoc chon mau",
 		);
-		await bam(q("[data-chon-mau=m1]"), "chon m1");
+		await bam(q("[data-chon-mau=m1p3]"), "chon m1p3");
 		await cho(() => q("[data-form-tu-mau]") !== null, "form tu mau");
 		if (q("[data-nut=viet-tay]"))
 			throw new Error("mnt-tu-mau: con nut Viet muc tieu tay");
@@ -1131,12 +1186,12 @@ describe("mnt-tu-mau", () => {
 		if (g.length !== 1) throw new Error(`mnt-tu-mau: taoTuMau ${g.length} lan`);
 		const vao = taoTuMauInput.parse(g[0]?.dauVao);
 		if (
-			vao.mauId !== "m1" ||
+			vao.mauId !== "m1p3" ||
 			!("departmentId" in vao.unit) ||
-			vao.unit.departmentId !== "P2"
+			vao.unit.departmentId !== "P3"
 		)
 			throw new Error(`mnt-tu-mau: dau vao lech ${JSON.stringify(vao)}`);
-		if (vao.cycleId !== "q4") throw new Error("mnt-tu-mau: cycleId lech");
+		if (vao.cycleId !== "n27") throw new Error("mnt-tu-mau: cycleId lech");
 	});
 
 	test("mnt-tu-mau: (b) khong co mau — dong khoa kem ly do, bam khong mo ngan", async () => {
@@ -1176,7 +1231,11 @@ describe("mnt-tu-mau", () => {
 
 describe("mnt-bang-tinh", () => {
 	test("mnt-bang-tinh: (a) bo-okr — hop nhap mo dung don vi, xem truoc roi ghi", async () => {
-		await moHop("bo-okr", { xem: TP2 }, "?donOkr=pb:P2");
+		await moHop(
+			"bo-okr",
+			{ xem: TP23, haiKy: true },
+			"?donOkr=pb:P3&kyOkr=n27",
+		);
 		await bam(dong("bang-tinh"), "bang-tinh");
 		await cho(
 			() => q("[data-buoc-nhap='1']") !== null,
@@ -1215,8 +1274,10 @@ describe("mnt-bang-tinh", () => {
 		if (xem.length !== 1)
 			throw new Error(`mnt-bang-tinh: previewImport ${xem.length} lan`);
 		const vao = okrImportInput.parse(xem[0]?.dauVao);
-		if (vao.unit.loai !== "pb" || vao.unit.id !== "P2" || vao.cycleId !== "q4")
+		if (vao.unit.loai !== "pb" || vao.unit.id !== "P3")
 			throw new Error(`mnt-bang-tinh: don vi lech ${JSON.stringify(vao.unit)}`);
+		if (vao.cycleId !== "n27")
+			throw new Error(`mnt-bang-tinh: cycleId lech ${vao.cycleId}`);
 		await cho(() => q("[data-nut=ghi-lo]") !== null, "nut ghi");
 		await bam(q("[data-nut=ghi-lo]"), "ghi lo");
 		const ghi = goiCua("okr.applyImport");

@@ -32,6 +32,7 @@ const MAN = {
 	"so-do": { duong: "/okr/so-do", tao: false },
 };
 const HANG = "[data-slot=page-shell-actions]";
+const DAU = "[data-slot=page-shell-header]";
 const HOP = "[data-hop-chon-duong]";
 const DUONG_TAO = ["tu-viet", "tu-mau", "bang-tinh", "soan"];
 
@@ -56,14 +57,14 @@ function chepAnh(ten) {
 }
 
 async function demNutChinh(trang) {
-	return trang.evaluate((hang) => {
-		const goc = document.querySelector(hang);
-		if (!goc) return 0;
+	return trang.evaluate((dau) => {
+		const goc = document.querySelector(dau);
+		if (!goc) return -1;
 		return [...goc.querySelectorAll("[data-slot=button]")].filter((e) => {
 			const v = e.getAttribute("data-variant");
 			return (v === null || v === "default") && e.getClientRects().length > 0;
 		}).length;
-	}, HANG);
+	}, DAU);
 }
 
 function duongCua(n, man) {
@@ -73,14 +74,24 @@ function duongCua(n, man) {
 }
 
 async function moMan(t, n, man) {
-	await mo(t, duongCua(n, man), `${HANG} [data-nut=hoi-kara]`);
-	if (MAN[man].tao) await choThay(t.trang, `${HANG} [data-nut=them-muc-tieu]`);
+	const kq = await mo(
+		t,
+		duongCua(n, man),
+		`${DAU} [data-slot=page-shell-title]`,
+	);
+	if (!kq.thay)
+		await khongDo(
+			`KHONG DO DUOC: khong mo duoc man ${man} (status ${kq.status}, khong thay tieu de dau trang)`,
+		);
+	if (
+		MAN[man].tao &&
+		!(await choThay(t.trang, `${HANG} [data-nut=them-muc-tieu]`))
+	)
+		await khongDo(`KHONG DO DUOC: ${man} khong dung nut Them muc tieu`);
 	await nghi(DO.cho.langMs);
 }
 
 async function e3(n) {
-	const truoc = await demNutChinh(n.may.truong.trang).catch(() => -1);
-	if (truoc < 0) await khongDo("KHONG DO DUOC: trang chua mo");
 	await moMan(n.may.truong, n, "bo-okr");
 	if ((await demNutChinh(n.may.truong.trang)) < 1)
 		await khongDo(
@@ -98,6 +109,8 @@ async function e3(n) {
 					document.querySelector(hang)?.append(nut);
 				}, HANG);
 			const so = await demNutChinh(t.trang);
+			if (so < 0)
+				await khongDo(`KHONG DO DUOC: ${man} khong co dau trang de dem`);
 			const mong = MAN[man].tao ? 1 : 0;
 			const nhan = vai === "truong" ? "truong" : "quan-tri";
 			bao(

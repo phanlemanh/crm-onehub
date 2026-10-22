@@ -40,11 +40,13 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/quanh-muc-tieu/**"
       - "apps/app/test/mot-nut-tao-muc-tieu.dom.tsx"
     expected: |
-      Ca "mnt-man-doc" dung dau trang cua bon man doc (lay-y-kien, suc-khoe, so-do, quanh-muc-tieu) x 3 vai
-      (quan tri, truong don vi, thanh vien thuong) = 12 o, ma tran viet truoc. Moi o: trong page-shell-actions
+      Ca "mnt-man-doc" dung dau trang cua hai man doc phia client (lay-y-kien, suc-khoe) x 3 vai (quan tri,
+      truong don vi, thanh vien thuong) = 6 o, cong hai trang server so-do va quanh-muc-tieu moi trang 1 o
+      tinh (trang server khong doc vai hay quyen, nen truc vai khong ap; ghi o S4 vong 1), ma tran viet truoc.
+      Moi o: trong page-shell-actions
       0 nut chinh (button[data-slot=button] data-variant vang hoac "default"), 0 [data-nut=them-muc-tieu], 0
-      [data-nut=them-cach], 0 [data-nut=nhap-bang-tinh], 0 [data-nhom-soan]. Them 4 o "quyen dang tai" (bon man
-      doc, vai truong, okr.access va okr.danhSach treo): 0 khung cho trong page-shell-actions o cho nut chinh cu,
+      [data-nut=them-cach], 0 [data-nut=nhap-bang-tinh], 0 [data-nhom-soan]. Them 2 o "quyen dang tai" (hai man
+      doc phia client, vai truong, okr.access va okr.danhSach treo): 0 khung cho trong page-shell-actions o cho nut chinh cu,
       0 nut chinh. Doi chung duong cung ca: o
       bo-okr/truong co dung 1 nut chinh (chung minh bo dem thay nut chinh khi no co).
       CHIEU DO: ban sao de HanhDongKhu dung nut Them muc tieu cho tab toan-canh -> do "mnt-man-doc: suc-khoe/
