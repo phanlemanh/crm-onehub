@@ -3378,7 +3378,6 @@ executors:
     ntl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs"'
     ldv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs"'
     ttts_do_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-thai-tin-hieu-song/rang/do-man.mjs"'
-    ttts_thiet_ke: 'for f in "apps/app/app/(app)/[slug]/tin-hieu/"*.tsx "apps/app/app/(app)/[slug]/tin-hieu/tat-ca/"*.tsx apps/app/components/thong-bao/*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

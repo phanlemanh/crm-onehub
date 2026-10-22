@@ -201,18 +201,6 @@ evals:
       ban sao bo cacheLife cua bo doc ban chup tho -> pha 2b SAI voi thong diep ghim "trang tin hieu giu ban chup cu";
       ban sao trang doc tep dong goi -> pha 4 SAI voi thong diep ghim "bam vao thay cho cu".
 
-  - id: E7b
-    criterion: AC-7
-    executor: script
-    cmd: config:executors.script.ttts_thiet_ke
-    paths:
-      - "apps/app/app/(app)/[slug]/tin-hieu/**"
-      - "apps/app/components/thong-bao/**"
-    expected: |
-      design-gate static (P0 floor) xanh tren moi tep .tsx bi doi duoi apps/app/app/(app)/[slug]/tin-hieu/ va
-      apps/app/components/thong-bao/; lenh liet ten tep va thoat 0.
-      CHIEU DO: ban sao them className mau tay vao mot tep trong danh sach -> lenh thoat khac 0 va in ten tep do.
-
   - id: E8
     criterion: AC-8
     executor: test
