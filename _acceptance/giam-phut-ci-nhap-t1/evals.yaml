@@ -61,8 +61,6 @@ evals:
     criterion: AC-3
     executor: script
     cmd: config:executors.script.gpct_hinh_ci
-    status: not-run
-    superseded_by: tran-test-ci-30#AC-2
     paths:
       - ".github/workflows/ci.yml"
       - "_acceptance/giam-phut-ci-nhap-t1/rang/hinh.mjs"

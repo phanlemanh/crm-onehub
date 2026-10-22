@@ -18,7 +18,7 @@ Số đo lại 22/10 bằng `gh api` (40 lượt CI gần nhất, 21/10 11:15 t�
 | `test (api)` | 33 — trung vị 17,0′, chậm nhất 19,8′, 16 lượt từ 17′ | 2 — cùng 20,3′ | 2 — 18,1′ và 20,0′ | 3 | 40 |
 | `test (app-ui)` | 37 — trung vị 18,4′, chậm nhất 19,9′, 26 lượt từ 17′ | 0 | 0 | 3 | 40 |
 | `test (con-lai)` | 40 — trung vị 9,2′, chậm nhất 11,9′ | 0 | 0 | 0 | 40 |
-| `check` (đối chiếu) | 21 — trung vị 4,0′, chậm nhất 6,6′ | 0 | 1 | 5 (cộng 13 lượt nhảy qua vì PR nháp) | 40 |
+| `check` (đối chiếu) | 21 — trung vị 4,0′, chậm nhất 6,6′ | 0 | 1 | 5 | 27 (13 lượt còn lại nhảy qua vì PR nháp) |
 
 Ô `app-ui` sát trần hơn ô `api`: hai ô cùng hưởng trần mới.
 
@@ -51,12 +51,15 @@ job `check` và `test` thành hai mục riêng, rồi gom mọi khoá còn lại
 `strategy`, `services`, `env`, `steps`) vào một mục `<job>.con-lai`. `timeout-minutes` là khoá cấp job, chung cho ba
 ô ma trận, nên nó chỉ làm đỏ đúng mục `test.con-lai`.
 
-| Eval cũ | Tiêu chí thay | Vì sao |
+| Eval cũ | Tiêu chí thay sẵn | Vì sao |
 | --- | --- | --- |
 | giam-phut-ci-nhap-t1/E3 | tran-test-ci-30#AC-2 | AC-2 chạy lại chính răng của E3 và đòi nó chỉ sai đúng ô `timeout-minutes`, mọi ô khác đạt, mọi ca đột biến bị bắt |
 
-Theo luật «eval thay bởi» của kit (2.24): E3 khai `status: not-run` kèm `superseded_by: tran-test-ci-30#AC-2`, và hồ
-sơ này phải có chữ ký người (`signed-off`) thì con trỏ mới hợp lệ.
+Vòng này KHÔNG khai E3 là thay bởi (Cổng Phạm vi duyệt lại 22/10, lối A). Lượt chấm 1 cho thấy khai sẵn làm gãy con
+trỏ đã ký `ci-ma-tran-ba-o/E3 → giam-phut-ci-nhap-t1#AC-3` (AC-3 của hồ sơ ấy chỉ có E3), và sửa `evals.yaml` của
+`giam-phut-ci-nhap-t1` kéo hồ sơ ấy vào lưới trước gộp với bằng chứng đã cũ. AC-2 là đích sẵn sàng: ở lượt ghim lại kế
+của `giam-phut-ci-nhap-t1`, E3 đỏ thì khai `superseded_by: tran-test-ci-30#AC-2` (hồ sơ này có chữ ký người), và nối
+lại con trỏ của `ci-ma-tran-ba-o/E3` cùng lượt.
 
 Các eval khác đọc `ci.yml`: 18 eval đang sống của hồ sơ khác có `paths` khớp `.github/workflows/ci.yml` theo glob (kể
 cả `.github/**` và `**`, đếm 22/10). Vòng này không chạy lại chúng trên hai cây: giám sát đợt chốt phép đo tương xứng
@@ -76,8 +79,6 @@ trong lịch sử `ci.yml` commit đổi trần job `test` từ 20 thành 30, v�
 - `e3-cu`: bung `ci.yml` và `rang/` của `giam-phut-ci-nhap-t1` ở nền ra một thư mục tạm (`git archive`), chạy
   `rang/hinh.mjs ci` thật trên nền và trên cây. Đòi quan hệ: cùng một tập mục kiểm; nền đạt hết; cây chỉ khác nền ở mục
   `test.con-lai` với lý do `timeout-minutes`; cùng một tập ca đột biến bị bắt.
-- `thay-boi`: so `evals.yaml` của `giam-phut-ci-nhap-t1` ở cây với nền — đúng hai dòng thêm sau `cmd` của E3, không đổi
-  gì khác; hồ sơ này nêu thẻ của eval cũ đứng riêng.
 
 Chiều đỏ trên vật thật: cây nền (trần 20, lịch sử chưa có commit đổi) cho `mot-khoa` mã 1 với «sai khong tim thay
 commit doi tran job test tu 20 len 30 trong lich su ci.yml».

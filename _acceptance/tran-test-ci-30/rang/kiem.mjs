@@ -5,11 +5,8 @@ import { join, resolve } from "node:path";
 const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const SLUG = "tran-test-ci-30";
 const WF = ".github/workflows/ci.yml";
-const EVALS_CU = "_acceptance/giam-phut-ci-nhap-t1/evals.yaml";
 const RANG_CU = "_acceptance/giam-phut-ci-nhap-t1/rang";
 const KHOA = "jobs.test.timeout-minutes";
-const CON_TRO = `${SLUG}#AC-2`;
-const THE_THAY = "giam-phut-ci-nhap-t1/E3";
 const O_DOI = "test.con-lai";
 const LY_DOI = "khac ban ghim o timeout-minutes";
 const CHAY = join(GOC, ".acceptance-runs", SLUG);
@@ -122,27 +119,6 @@ function kiemE3(nen, cay) {
 	return loi;
 }
 
-function kiemThayBoi(chuNen, chuMoi, chuThe) {
-	const loi = [];
-	const n = Bun.YAML.parse(chuNen);
-	const m = Bun.YAML.parse(chuMoi);
-	const e3n = n.evals.find((e) => e.id === "E3");
-	const e3m = m.evals.find((e) => e.id === "E3");
-	if (e3m?.status !== "not-run") loi.push(`E3 status = ${e3m?.status}, mong not-run`);
-	if (e3m?.superseded_by !== CON_TRO) loi.push(`E3 superseded_by = ${e3m?.superseded_by}, mong ${CON_TRO}`);
-	const { status: _s, superseded_by: _t, ...e3conLai } = e3m ?? {};
-	if (!Bun.deepEquals(e3conLai, e3n)) loi.push(`E3 doi khoa khac: ${lech(e3n, e3conLai).join(", ")}`);
-	const khacE3 = (y) => ({ ...y, evals: y.evals.filter((e) => e.id !== "E3") });
-	const l = lech(khacE3(n), khacE3(m));
-	if (l.length) loi.push(`doi ngoai E3: ${l.join(", ")}`);
-	const a = chuNen.split("\n");
-	const i = a.indexOf("    cmd: config:executors.script.gpct_hinh_ci");
-	const mong = [...a.slice(0, i + 1), "    status: not-run", `    superseded_by: ${CON_TRO}`, ...a.slice(i + 1)].join("\n");
-	if (i < 0 || mong !== chuMoi) loi.push(`chu tep khac dung hai dong them sau cmd cua E3: ${JSON.stringify(dongKhac(mong, chuMoi))}`);
-	if (!chuThe.split(/[\s`|]+/).includes(THE_THAY)) loi.push(`ho so moi khong neu the ${THE_THAY} dung rieng`);
-	return loi;
-}
-
 const BAO = [];
 function caDo(ten, loi, mongChua) {
 	const bat = loi.some((l) => l.includes(mongChua));
@@ -188,17 +164,7 @@ if (che === "mot-khoa") {
 	caDo("e3-chua-doi", kiemE3(kNen, kNen), "tren cay thoat 0");
 	rmSync(goNen, { recursive: true, force: true });
 	xong(kiemE3(kNen, kCay), "e3-cu");
-} else if (che === "thay-boi") {
-	const { nen } = timNen();
-	const chuNen = docTai(nen, EVALS_CU);
-	const moi = docGoc(EVALS_CU);
-	const the = `${docGoc(`_acceptance/${SLUG}/contract.md`)}\n${docGoc(`docs/superpowers/specs/2026-10-22-${SLUG}-design.md`)}`;
-	caDo("tro-sai-ac", kiemThayBoi(chuNen, moi.replace(CON_TRO, `${SLUG}#AC-9`), the), "superseded_by");
-	caDo("doi-them-e4", kiemThayBoi(chuNen, moi.replace("cmd: config:executors.script.gpct_ci_ok", "cmd: config:executors.script.khac"), the), "doi ngoai E3");
-	caDo("bo-status", kiemThayBoi(chuNen, moi.replace(/^ {4}status: not-run\n(?= {4}superseded_by: tran-test-ci-30)/m, ""), the), "status");
-	caDo("khong-nhan-the", kiemThayBoi(chuNen, moi, the.replaceAll(THE_THAY, "giam-phut/E3")), "khong neu the");
-	xong(kiemThayBoi(chuNen, moi, the), "thay-boi");
 } else {
-	console.log("dung: bun kiem.mjs mot-khoa|e3-cu|thay-boi");
+	console.log("dung: bun kiem.mjs mot-khoa|e3-cu");
 	process.exit(2);
 }
