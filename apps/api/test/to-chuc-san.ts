@@ -115,7 +115,7 @@ export function dungSan(): void {
 			imports: [AppModule],
 		}).compile();
 		app = modul.createNestApplication({ bodyParser: false });
-		await app.init();
+		await app.listen(0, "127.0.0.1");
 		for (const [khoa, vai] of [
 			["quan", "admin"],
 			["thuong", "member"],

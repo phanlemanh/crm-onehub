@@ -156,6 +156,7 @@ async function xoaBoTri() {
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 
 	chuId = ma("chu");
 	await gieoThanhVien(chuId, "owner");
@@ -480,10 +481,10 @@ describe("tcc-api-chuan-bat-buoc", () => {
 
 describe("tcc-api-bat-buoc-luu", () => {
 	test("bat buoc chan de trong; tat thi de trong duoc", async () => {
+		const id = await taoThoaThuan();
 		const truong = await taoTruong("DEAL", "Ma ho so", { required: true });
 		if (!(await docTruong("DEAL", truong.id)).required)
 			throw new Error("tcc api bat buoc: doc lai false");
-		const id = await taoThoaThuan();
 		ok(
 			await goi("deals.update", {
 				id,
@@ -557,6 +558,10 @@ describe("tcc-api-bat-buoc-hien", () => {
 				`tcc api bat buoc hien: khong bat hien ${JSON.stringify({ required: baSau.required, showOnSheet: baSau.showOnSheet })}`,
 			);
 		soCa += 1;
+		ok(
+			await goi("fields.update", { id: ba.id, data: { required: false } }),
+			"tra ba ve khong bat buoc",
+		);
 		if (soCa !== 3) throw new Error(`tcc api bat buoc hien: thieu ${soCa}`);
 		expect(soCa).toBe(3);
 	});

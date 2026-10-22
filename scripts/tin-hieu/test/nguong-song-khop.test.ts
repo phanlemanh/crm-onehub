@@ -67,12 +67,13 @@ function tepKeoVe(ds: Mau[]) {
 function mayChu(ds: Mau[]) {
 	const sv = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: (req) =>
 			req.headers.get("x-api-key") === "khoa-thu"
 				? Response.json(tepKeoVe(ds))
 				: new Response("{}", { status: 401 }),
 	});
-	return { url: `http://localhost:${sv.port}`, dung: () => sv.stop(true) };
+	return { url: `http://127.0.0.1:${sv.port}`, dung: () => sv.stop(true) };
 }
 
 async function baSoCuaLenh(ds: Mau[], coBanVe: boolean) {

@@ -331,6 +331,8 @@ export class ContactsService {
 	}
 
 	async create(input: ContactCreateInput) {
+		const truong = input.fields ?? {};
+		await this.fields.kiemBatBuocLucTao(this.db, "CONTACT", truong);
 		const email = normalizeEmail(input.email ?? "");
 		const phone = phoneOf(input.phone);
 		if (phone) await this.refuseTakenPhone(phone);
@@ -368,6 +370,9 @@ export class ContactsService {
 					email,
 					phone,
 					title: blankToNull(input.title ?? ""),
+					linkedinUrl: blankToNull(input.linkedinUrl ?? ""),
+					twitterUrl: blankToNull(input.twitterUrl ?? ""),
+					githubUrl: blankToNull(input.githubUrl ?? ""),
 					companyId,
 					ownerId: input.ownerId ?? null,
 				},
@@ -380,6 +385,7 @@ export class ContactsService {
 					createdAt: true,
 				},
 			});
+			await this.fields.ghiTruongLucTao(tx, "CONTACT", created.id, truong);
 			await emit({
 				type: "contact.created",
 				record: { kind: "contact", id: created.id },
@@ -401,7 +407,7 @@ export class ContactsService {
 			"Added by a rep, with nothing on the record yet",
 		);
 		this.fields
-			.queueBackfillForNewRecord("CONTACT", contact.id)
+			.queueBackfillForNewRecord("CONTACT", contact.id, truong)
 			.catch((error: Error) => {
 				this.logger.error(
 					{

@@ -662,6 +662,7 @@ const duongCua = (location: string | null) =>
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	spyOn(app.get(BackfillService), "auto").mockResolvedValue({ started: false });
 	workspace = new WorkspaceService(db, {
 		workspaceChanged: async () => undefined,
@@ -1193,7 +1194,7 @@ describe("vai-chi-okr", () => {
 			const cookieMember = await dangNhap(member.email);
 			const khoaTruoc = await readContextDevKey(db);
 			await writeContextDevKey(db, "lan-do-khong-phai-khoa-that");
-			const server = await app.listen(0, "127.0.0.1");
+			const server = app.getHttpServer();
 			const { port } = server.address() as AddressInfo;
 			const apiUrl = `http://127.0.0.1:${port}`;
 			for (const p of [

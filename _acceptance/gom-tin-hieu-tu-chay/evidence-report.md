@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2cd7aa8ef7ea78060a30a0a267ae87f768ab6f3f
+verified_commit: c5761ebed7df598af10192d787f79c3db38b3be0
 human_signoff: Manh Phan 2026-10-21 — ký Cổng Bằng chứng trên S4 vòng 2 (PASS, 10/10 eval, 0 mục trong hợp đồng). Ngoài-3 mở hợp đồng mới; Ngoài-1, 2, 4–12 ghi Known limits; cắt/hoãn đồng ý cắt.
 ---
 
@@ -199,3 +199,7 @@ none — every multi-run eval is uniform
 
 Round 1: PASS với một mục trong hợp đồng mức vừa (AC-7): câu báo thiếu khoá và danh sách khoá còn nhắc phương án CLAUDE_CODE_OAUTH_TOKEN mà tệp lịch không truyền. Trả về implementation; mười mục ngoài hợp đồng chờ người quyết.
 Round 2: sửa câu báo và danh sách khoá cho khớp Hỏi-1 (chỉ ANTHROPIC_API_KEY); chạy lại E1b–E7 và bảy lệnh suite, E1 và E8 mang sang từ vòng 1; Ngoài-2 đến Ngoài-10 ghi Known limits, Ngoài-1 mở hợp đồng mới.
+
+### Re-pin lần 1 — 2026-10-22, do TH2b gia-co-gom-tin-hieu sửa bộ chạy lịch gom và bộ thử dùng chung
+run_id: repin-20261022T013104Z-49420
+sha: c5761ebed7df598af10192d787f79c3db38b3be0 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E7b · diff chạm vật đo ngoài làn máy: E7b — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

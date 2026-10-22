@@ -138,6 +138,7 @@ function tacTuGia(
 	const nhan: Nhan[] = [];
 	const mayChu = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: async (req) => {
 			const than = thanCau.parse(await req.json().catch(() => null));
 			const duong = new URL(req.url).pathname;
@@ -178,7 +179,7 @@ beforeAll(async () => {
 		imports: [AppModule],
 	}).compile();
 	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	await app.listen(0, "127.0.0.1");
 });
 
 afterEach(async () => {
