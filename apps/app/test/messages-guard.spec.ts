@@ -651,6 +651,12 @@ const GHIM = {
 	"crm:sheet.deletedForever": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
 	"crm:web.views": ["1 lượt xem", "12 lượt xem"],
 	"crm:fields.removeOption": ["Bỏ 1", "Bỏ 12"],
+	"crm:fields.sheetSwitch": ["Hiện 1 trên hồ sơ", "Hiện 12 trên hồ sơ"],
+	"crm:fields.shownOnSheet": [
+		"1 đã hiện trên hồ sơ.",
+		"12 đã hiện trên hồ sơ.",
+	],
+	"crm:fields.hiddenFromSheet": ["Đã ẩn 1 khỏi hồ sơ.", "Đã ẩn 12 khỏi hồ sơ."],
 	"crm:fields.moreFor": ["Thêm hành động cho 1", "Thêm hành động cho 12"],
 	"crm:fields.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
 	"crm:fields.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],

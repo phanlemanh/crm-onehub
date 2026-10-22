@@ -1179,6 +1179,18 @@ model FieldOption {
   @@map("fieldOption")
 }
 
+model StandardFieldLayout {
+  entity   FieldEntity
+  key      String
+  position Int
+  hidden   Boolean     @default(false)
+
+  updatedAt DateTime @updatedAt
+
+  @@id([entity, key])
+  @@map("standardFieldLayout")
+}
+
 model FieldValue {
   id      String          @id @default(cuid())
   fieldId String
