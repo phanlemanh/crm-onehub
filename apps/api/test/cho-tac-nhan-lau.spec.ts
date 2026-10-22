@@ -78,6 +78,7 @@ async function docLuc(conversationId: string): Promise<Date | null> {
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	await gieoThanhVien(NGUOI, "member");
 	cookie = (await mintPhien(NGUOI)).cookie;
 	const agent = await db.agentDefinition.create({

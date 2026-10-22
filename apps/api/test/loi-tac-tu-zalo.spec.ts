@@ -117,6 +117,7 @@ async function goi(
 function tacTuGia(traLoi: (duong: string) => Response): void {
 	const mayChu = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: (req) => traLoi(new URL(req.url).pathname),
 	});
 	datBien("AGENT_URL", `http://127.0.0.1:${mayChu.port}`);
@@ -148,6 +149,7 @@ async function chuoiThat(chon: ChonZaloGia | "chet") {
 	if (chon === "chet") await chacBiTuChoi();
 	const tacTu = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: async (req) => {
 			const duong = new URL(req.url).pathname;
 			const traLoi = await routeCua(duong).handler(
@@ -303,7 +305,7 @@ beforeAll(async () => {
 		imports: [AppModule],
 	}).compile();
 	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	await app.listen(0, "127.0.0.1");
 });
 
 afterEach(async () => {

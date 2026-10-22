@@ -330,6 +330,7 @@ describe("ten-mien ba-vai qua router that", () => {
 		await don();
 		await datCot(null);
 		app = await createApp();
+		await app.listen(0, "127.0.0.1");
 		for (const vai of ["admin", "member", "okr"] as const) {
 			cookie[vai] = (
 				await mintPhien(await dungNguoi(`vai-${vai}`, vai))
@@ -606,6 +607,7 @@ describe("cho-phep khong-quyen qua router that", () => {
 	beforeAll(async () => {
 		await don();
 		app = await createApp();
+		await app.listen(0, "127.0.0.1");
 		cookieThuong = (await mintPhien(await dungNguoi("kq-thuong", "member")))
 			.cookie;
 		cookieQuan = (await mintPhien(await dungNguoi("kq-quan", "admin"))).cookie;

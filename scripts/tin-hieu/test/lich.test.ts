@@ -134,6 +134,7 @@ function mayChu(maLoi?: number): MayChu {
 	let ds: KeoVeOutput["tep"] = [];
 	const sv = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: (req) => {
 			if (req.headers.get("x-api-key") !== KHOA)
 				return new Response("{}", { status: 401 });
@@ -143,7 +144,7 @@ function mayChu(maLoi?: number): MayChu {
 		},
 	});
 	return {
-		url: `http://localhost:${sv.port}`,
+		url: `http://127.0.0.1:${sv.port}`,
 		dat: (so) => {
 			ds = so.map(TIN);
 		},

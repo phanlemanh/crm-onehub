@@ -436,6 +436,7 @@ describe("vlr-viec-cua-toi", () => {
 
 	beforeAll(async () => {
 		app = await createApp();
+		await app.listen(0, "127.0.0.1");
 		spyOn(app.get(BackfillService), "auto").mockResolvedValue({
 			started: false,
 		});
