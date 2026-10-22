@@ -2,23 +2,9 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
-import {
-	Field,
-	FieldDescription,
-	FieldError,
-	FieldGroup,
-	FieldLabel,
-} from "@crm/ui/components/field";
+import { FieldDescription, FieldGroup } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
-import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@crm/ui/components/select";
 import {
 	Sheet,
 	SheetClose,
@@ -34,15 +20,15 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { type ComponentProps, Suspense, useId, useRef, useState } from "react";
+import { type ComponentProps, Suspense } from "react";
 import { toast } from "sonner";
+import { useFormTao } from "@/components/crm/fields/form-tao";
+import { type MoTaTao, OTruongTao } from "@/components/crm/fields/kieu-truong";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { companyMessages } from "@/lib/messages/companies";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-
-const UNASSIGNED = "unassigned";
 
 function AddButton(props: ComponentProps<typeof Button>) {
 	const m = companyMessages(useLocale());
@@ -72,17 +58,38 @@ function CreateCompanyForm() {
 		SEARCH_PARAM.dialog.create,
 		parseAsBoolean.withDefault(false),
 	);
-	const [name, setName] = useState("");
-	const [domain, setDomain] = useState("");
-	const [loiTenMien, setLoiTenMien] = useState<string | null>(null);
-	const oTenMien = useRef<HTMLInputElement>(null);
-	const [ownerId, setOwnerId] = useState(UNASSIGNED);
-
-	const nameId = useId();
-	const domainId = useId();
-	const loiTenMienId = useId();
-
+	const form = useFormTao("COMPANY", open);
 	const users = useQuery(trpc.users.list.queryOptions());
+	const nguoiDung = users.data ?? [];
+
+	const moTaChuan = (key: string): MoTaTao => {
+		if (key === "name")
+			return form.moTaChuan(key, {
+				goiY: m.create.namePlaceholder,
+				tuDongFocus: true,
+			});
+		if (key === "domain")
+			return form.moTaChuan(key, {
+				goiY: m.create.domainPlaceholder,
+				moTaPhu: <FieldDescription>{m.create.domainHint}</FieldDescription>,
+				kiemRieng: (chuoi) => {
+					const nenTang = nenTangCuaTenMien(chuoi);
+					return nenTang ? m.nenTang(nenTang.ten) : null;
+				},
+			});
+		if (key === "owner")
+			return form.moTaChuan(key, {
+				nguoiDung,
+				nhanRong: m.create.unassigned,
+			});
+		return form.moTaChuan(key);
+	};
+
+	const dsMoTa = form.muc.map((muc) =>
+		muc.kind === "standard"
+			? moTaChuan(muc.key)
+			: form.moTaTuTao(muc.field, nguoiDung),
+	);
 
 	const create = useMutation(
 		trpc.companies.create.mutationOptions({
@@ -90,14 +97,17 @@ function CreateCompanyForm() {
 				await cache.company(company.id);
 				toast.success(m.created(company.name));
 				await setOpen(null);
-				setName("");
-				setDomain("");
-				setOwnerId(UNASSIGNED);
+				form.xoa();
 				openRecord({ kind: "company", id: company.id });
 			},
-			onError: (error) => toast.error(error.message),
+			onError: (error) => {
+				const loi = form.docLoi(error, dsMoTa);
+				toast.error(loi ? loi.toast : error.message);
+			},
 		}),
 	);
+
+	const tuy = (key: string) => form.chuoiChuan(key) || undefined;
 
 	return (
 		<Sheet open={open} onOpenChange={(next) => setOpen(next || null)}>
@@ -113,76 +123,29 @@ function CreateCompanyForm() {
 				<form
 					id="create-company"
 					className="flex-1 overflow-y-auto px-4"
+					aria-busy={form.dangTai || undefined}
+					noValidate
 					onSubmit={(event) => {
 						event.preventDefault();
-						const nenTang = nenTangCuaTenMien(domain);
-						if (nenTang) {
-							setLoiTenMien(m.nenTang(nenTang.ten));
-							oTenMien.current?.focus();
-							return;
-						}
+						const ket = form.kiem(dsMoTa);
+						if (!ket.hopLe) return;
 						create.mutate({
-							name,
-							domain: domain || undefined,
-							ownerId: ownerId === UNASSIGNED ? null : ownerId,
+							name: form.chuoiChuan("name"),
+							domain: tuy("domain"),
+							website: tuy("website"),
+							phone: tuy("phone"),
+							email: tuy("email"),
+							city: tuy("city"),
+							country: tuy("country"),
+							ownerId: form.chuoiChuan("owner") || null,
+							fields: ket.fields,
 						});
 					}}
 				>
 					<FieldGroup>
-						<Field>
-							<FieldLabel htmlFor={nameId}>{m.create.name}</FieldLabel>
-							<Input
-								id={nameId}
-								value={name}
-								onChange={(event) => setName(event.target.value)}
-								placeholder={m.create.namePlaceholder}
-								autoComplete="off"
-								required
-							/>
-						</Field>
-
-						<Field>
-							<FieldLabel htmlFor={domainId}>{m.create.domain}</FieldLabel>
-							<Input
-								ref={oTenMien}
-								id={domainId}
-								value={domain}
-								onChange={(event) => {
-									setDomain(event.target.value);
-									setLoiTenMien(null);
-								}}
-								placeholder={m.create.domainPlaceholder}
-								autoComplete="off"
-								inputMode="url"
-								aria-invalid={loiTenMien ? true : undefined}
-								aria-describedby={loiTenMien ? loiTenMienId : undefined}
-							/>
-							{loiTenMien ? (
-								<FieldError id={loiTenMienId}>{loiTenMien}</FieldError>
-							) : null}
-							<FieldDescription>{m.create.domainHint}</FieldDescription>
-						</Field>
-
-						<Field>
-							<FieldLabel htmlFor="create-company-owner">
-								{m.create.owner}
-							</FieldLabel>
-							<Select value={ownerId} onValueChange={setOwnerId}>
-								<SelectTrigger id="create-company-owner">
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value={UNASSIGNED}>
-										{m.create.unassigned}
-									</SelectItem>
-									{(users.data ?? []).map((user) => (
-										<SelectItem key={user.id} value={user.id}>
-											{user.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</Field>
+						{dsMoTa.map((moTa) => (
+							<OTruongTao key={moTa.khoa} moTa={moTa} />
+						))}
 					</FieldGroup>
 				</form>
 
@@ -193,7 +156,9 @@ function CreateCompanyForm() {
 					<Button
 						type="submit"
 						form="create-company"
-						disabled={create.isPending || name.trim() === ""}
+						disabled={
+							create.isPending || form.dangTai || form.chuoiChuan("name") === ""
+						}
 					>
 						{create.isPending ? <Spinner /> : null}
 						{m.create.submit}

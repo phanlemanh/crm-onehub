@@ -200,6 +200,23 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.stage",
 	"okr.sheet.tabVet",
 	"okr.sheet.tienDoTu",
+	"companies.create.domain",
+	"companies.create.owner",
+	"contacts.create.company",
+	"contacts.create.email",
+	"contacts.create.firstName",
+	"contacts.create.jobTitle",
+	"contacts.create.lastName",
+	"contacts.create.owner",
+	"contacts.create.phone",
+	"deals.create.amount",
+	"deals.create.closeDate",
+	"deals.create.company",
+	"deals.create.noDate",
+	"deals.create.owner",
+	"record-sheet.contact.firstName",
+	"record-sheet.contact.lastName",
+	"record-sheet.deal.noDate",
 ];
 
 const GHIM_TRO_LY_OKR = {

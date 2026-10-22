@@ -426,6 +426,8 @@ export class DealsService {
 
 	async create(input: DealCreateInput) {
 		const now = new Date();
+		const truong = input.fields ?? {};
+		await this.fields.kiemBatBuocLucTao(this.db, "DEAL", truong);
 
 		const currency = normalizeCurrency(
 			input.currency ?? (await this.conversion.reportingCurrency()),
@@ -458,6 +460,7 @@ export class DealsService {
 					},
 					select: { id: true, name: true, companyId: true, stage: true },
 				});
+				await this.fields.ghiTruongLucTao(tx, "DEAL", created.id, truong);
 				await sinhGoiYKeHoach(tx, {
 					dealId: created.id,
 					tuLoai: null,
@@ -487,7 +490,7 @@ export class DealsService {
 				stage: deal.stage,
 			});
 
-			void this.fields.queueBackfillForNewRecord("DEAL", deal.id);
+			void this.fields.queueBackfillForNewRecord("DEAL", deal.id, truong);
 
 			return deal;
 		} catch (error) {

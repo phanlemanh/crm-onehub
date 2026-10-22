@@ -119,3 +119,37 @@ export function khoaSauQuyDoi(chiTiet: readonly MucChiTiet[]): string | null {
 	if (giaTri < 0) return null;
 	return khoa.indexOf("currency") > giaTri ? "currency" : "amount";
 }
+
+export type TruongTao = Omit<RecordFieldEntry, "value">;
+
+export type MucFormTao =
+	| { kind: "standard"; key: string; required: boolean }
+	| { kind: "custom"; field: TruongTao };
+
+export function mucFormTao(
+	muc: readonly MucBoTriTruong[],
+	tuTao: readonly TruongTao[],
+): MucFormTao[] {
+	const theoId = new Map(tuTao.map((field) => [field.id, field]));
+	const daDung = new Set<string>();
+	const vao = (field: TruongTao) => field.required || field.showOnSheet;
+	const ra: MucFormTao[] = [];
+
+	for (const m of muc) {
+		if (m.kind === "standard") {
+			if (!m.hidden || m.required)
+				ra.push({ kind: "standard", key: m.key, required: m.required });
+			continue;
+		}
+		const field = theoId.get(m.id);
+		if (!field) continue;
+		daDung.add(field.id);
+		if (vao(field)) ra.push({ kind: "custom", field });
+	}
+
+	for (const field of tuTao) {
+		if (!daDung.has(field.id) && vao(field)) ra.push({ kind: "custom", field });
+	}
+
+	return ra;
+}
