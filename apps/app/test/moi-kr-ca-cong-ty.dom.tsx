@@ -489,16 +489,14 @@ describe("mkc-trang", () => {
 	});
 });
 
-type NutCay = { type?: unknown; props?: { children?: unknown } };
-
 function timTieuDe(
-	nut: unknown,
+	nut: ReactNode,
 	trongSuspense: boolean,
-): { chu: unknown; trongSuspense: boolean }[] {
+): { chu: ReactNode; trongSuspense: boolean }[] {
 	if (Array.isArray(nut))
 		return nut.flatMap((n) => timTieuDe(n, trongSuspense));
-	if (!isValidElement(nut)) return [];
-	const { type, props } = nut as NutCay;
-	if (type === PageShellTitle) return [{ chu: props?.children, trongSuspense }];
-	return timTieuDe(props?.children, trongSuspense || type === Suspense);
+	if (!isValidElement<{ children?: ReactNode }>(nut)) return [];
+	if (nut.type === PageShellTitle)
+		return [{ chu: nut.props.children, trongSuspense }];
+	return timTieuDe(nut.props.children, trongSuspense || nut.type === Suspense);
 }
