@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 81a104d29f3a61094004de390dbcae164d24aa42
+verified_commit: bc7ab3fee267b74f163451bfe5645bfd0b781bc3
 human_signoff:
 ---
 
@@ -159,3 +159,7 @@ none — every multi-run eval is uniform
 Round 1: REJECT — bo suite app+ui do va cac finding trong hop dong o AC-2, AC-7, AC-8 (lenh do bo sot commit, E2 khong qua bo doc that, do man bam tu trang dich). Returned to implementation (commit 474fc669f).
 Round 2: PASS — E1, E2, E7, E8 chay lai tren 474fc669f; E3, E4, E5, E6 carry-forward tu round 1 (delta khong cham paths cua eval); 7 lenh suite xanh. Moc verified_at cua cac khoi chay lai o round 2 la moc lam tron, run_id chep tu run-log.
 Round 3: PASS — E8 chay lai tren 81a104d29 (lenh do doc gio commit cua chinh sha moi thong bao); E1, E2, E7 carry-forward tu round 2, E3, E4, E5, E6 carry-forward tu round 1 (delta khong cham paths cua eval); 7 lenh suite xanh. Moc verified_at cua cac khoi chay lai o round 3 la moc lam tron, run_id chep tu run-log.
+
+### Re-pin lần 1 — 2026-10-22, do gộp onehub ee42c149e (#532, #546) sau S4 vòng 3
+run_id: repin-20261022T162912Z-38787
+sha: bc7ab3fee267b74f163451bfe5645bfd0b781bc3 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
