@@ -98,3 +98,6 @@ DOM test (AC-2).
 
 - Ranh giới với VK10: VK8 giữ hàng số giữa thẻ con và bảng, và biến thể mở sẵn của `DataTable`; VK10 giữ chế độ Soạn,
   nút Soạn, chip góp ý ở ngăn theo dõi. Hai hàng cùng thêm dòng vào `theo-don-vi.tsx` và `okr-vo-khu.ts` ở chỗ khác nhau.
+  Giám sát đã xác nhận ranh giới này (22/10).
+- `packages/ui/src/components/data-table.tsx`: làn M5 có DA18 (#526) đang sửa cùng tệp; tới S3 xin `cham-tep` lại để
+  giám sát hỏi trên #375 trước khi chạm.
