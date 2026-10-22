@@ -20,6 +20,20 @@ Màn chỉ vẽ dòng lý do từ `lyDoKhongMo`.
 chữ «Chỉ quản trị mở được tệp.») là tên trong kế hoạch DA19 (`origin/feat/truong-tep:docs/superpowers/plans/2026-10-21-truong-tep.md`,
 Task 4). Task 0 đọc lại tên thật sau khi DA19 gộp; tên khác thì sửa kế hoạch này một lượt trước Task 1, hợp đồng không đổi.
 
+## Tên thật sau khi DA19 gộp (Task 0, 22/10, onehub `830d82e1f`)
+
+| Kế hoạch gọi | Mã thật |
+|---|---|
+| hàm luật mở / xoá của DA19 | `coTheMoTep(nguoi)`, `coTheXoaTep(nguoi, tep)` trong `apps/api/src/fields/field-files-quyen.ts`, kiểu `NguoiGoiTep = { id; role }` |
+| bộ dựng `tepTheoTruong` | `FieldsService.tepTheoBanGhi(entity, recordId, nguoi?)` trong `apps/api/src/fields/fields.service.ts` |
+| `downloadUrl`, `remove` | `FieldFilesService.downloadUrl(nguoi, tepId)`, `.remove(nguoi, tepId)` |
+| chữ lý do của máy chủ | `TEP_TRUONG.thongDiep.khongMo`, `.khongXoa` trong `packages/validation/src/tep-truong.ts` |
+| ô Tệp | `OTep` trong `apps/app/components/crm/fields/o-tep.tsx`; ngữ cảnh `DichOTep` / `NguCanhTep` truyền từ ba phiếu |
+| chữ lý do của màn | `crmMessages(locale).tepTruong.khongMo` (`apps/app/lib/messages/crm.ts:387, 798`) |
+| sân thử | `dungSan` của `apps/api/test/truong-tep-san.ts` (người `quanTri`, `nv1`, `nv2`, `okr`), kho giả `khoTepTruongGia` |
+
+Task 5 truyền tên người phụ trách vào ô qua trường mới `phuTrach: string | null` của `DichOTep`.
+
 ## Global Constraints
 
 - Luật 45: không task nào chạy trước khi DA19 #532 gộp onehub và nhánh này gộp onehub.
