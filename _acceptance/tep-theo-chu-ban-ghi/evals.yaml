@@ -54,6 +54,15 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/**, apps/app/lib/messages/crm.ts, packages/validation/src/tep-truong.ts, apps/app/test/tep-theo-chu.dom.tsx]
 
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcb_luat
+    expected: "exit 0; cùng lệnh và cùng fixture với E1 (-t tcb-luat của apps/api/test/tep-theo-chu.spec.ts) — vế máy chủ của AC-5: ô Tệp trên ba loại phiếu vẽ dòng lý do từ lyDoKhongMo mà byId của đúng loại ấy trả. Với A và B trên bảy bản ghi của ba loại (thoả thuận, công ty, cá nhân), byId thật trả lyDoKhongMo khác đáp án viết tay (khong-phu-trach khi có người phụ trách khác, chua-co-phu-trach ở công ty và cá nhân không có ai, null khi mở được) thì ném 'tcb luat: ly do <nguoi> <ban ghi> <gia tri>'; phần tử không parse được bằng schema TepTrongO thật thì ném 'tcb luat: khuon'. Chiều đỏ: như E1 — trước hàng này byId không trả lyDoKhongMo, ô A × dQ ném 'tcb luat: A dQ FORBIDDEN' hay 'tcb luat: ly do'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/**, packages/validation/src/tep-truong.ts, apps/api/src/fields/**, apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/test/tep-theo-chu.spec.ts]
+
   - id: E6
     criterion: AC-6
     executor: test
