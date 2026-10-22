@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 1b2696ef57712e9f25704b066787a4a68bb1a324
-human_signoff: manh 2026-10-22 — ký Cổng 2 trên S4 vòng 3 (wf_406402c0-67c, PASS 16/16 eval, verified_commit d6269cc25). Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
+human_signoff: manh 2026-10-22 — ký lại Cổng 2 trên ghim lại repin-20261022T081919Z-20140 (verified_commit 1b2696ef5, 7 suite và 15/15 eval máy xanh; E10 giữ từ S4 vòng 3 wf_406402c0-67c). Diff từ chữ ký trước chỉ là dọn dữ liệu trong test truong-tep-san.ts. Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: truong-tep
