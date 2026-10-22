@@ -217,7 +217,9 @@ describe("NguonKeoTha — nhiều tệp", () => {
 
 	test("nhieu: thả nhiều tệp nhận đủ, thả lại tệp cũ ở lượt sau vẫn nhận", () => {
 		const nhan: string[] = [];
-		const goc = ve(<NguonKeoTha {...VUNG} nhieu onChon={(f) => nhan.push(f.name)} />);
+		const goc = ve(
+			<NguonKeoTha {...VUNG} nhieu onChon={(f) => nhan.push(f.name)} />,
+		);
 		const a = new File(["a"], "a.pdf", { type: "application/pdf" });
 		const b = new File(["b"], "b.pdf", { type: "application/pdf" });
 		tha(vung(goc), [a, b]);
