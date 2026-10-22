@@ -5,7 +5,7 @@ slug: o-tep-dien-thoai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-22T15:00:40Z
 design_doc: docs/superpowers/specs/2026-10-22-o-tep-dien-thoai-design.md
