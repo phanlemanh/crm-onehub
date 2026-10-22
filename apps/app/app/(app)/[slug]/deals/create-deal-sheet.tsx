@@ -42,6 +42,7 @@ import {
 	type MoTaTao,
 	OTruongTao,
 } from "@/components/crm/fields/kieu-truong";
+import { nhanTruongChuan } from "@/components/crm/fields/truong-chuan";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { useGiaiDoan } from "@/lib/giai-doan";
 import { dealMessages } from "@/lib/messages/deals";
@@ -247,7 +248,7 @@ function CreateDealBody({
 							<Fragment key="company">
 								<Field>
 									<FieldLabel htmlFor="create-deal-company">
-										{m.create.company}
+										{nhanTruongChuan("DEAL", "company", locale)}
 									</FieldLabel>
 									<CompanyPicker
 										id="create-deal-company"

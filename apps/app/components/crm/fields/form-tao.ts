@@ -51,18 +51,20 @@ export function useFormTao(entity: FieldEntity, mo = true) {
 
 	const tuTao = useMemo<TruongTao[]>(
 		() =>
-			(ds.data ?? []).map((field) => ({
-				id: field.id,
-				key: field.key,
-				label: field.label,
-				type: field.type,
-				showOnSheet: field.showOnSheet,
-				required: field.required,
-				options: field.options.map((option) => ({
-					id: option.id,
-					label: option.label,
+			(ds.data ?? [])
+				.filter((field) => !field.archived)
+				.map((field) => ({
+					id: field.id,
+					key: field.key,
+					label: field.label,
+					type: field.type,
+					showOnSheet: field.showOnSheet,
+					required: field.required,
+					options: field.options.map((option) => ({
+						id: option.id,
+						label: option.label,
+					})),
 				})),
-			})),
 		[ds.data],
 	);
 

@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useFormTao } from "@/components/crm/fields/form-tao";
 import { type MoTaTao, OTruongTao } from "@/components/crm/fields/kieu-truong";
+import { nhanTruongChuan } from "@/components/crm/fields/truong-chuan";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { contactMessages } from "@/lib/messages/contacts";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -52,7 +53,8 @@ export function CreateContactSheet({ companyId }: { companyId?: string }) {
 }
 
 function CreateContactForm({ companyId }: { companyId?: string }) {
-	const m = contactMessages(useLocale());
+	const locale = useLocale();
+	const m = contactMessages(locale);
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -156,7 +158,7 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 							) : (
 								<Field key="company">
 									<FieldLabel htmlFor="create-contact-company">
-										{m.create.company}
+										{nhanTruongChuan("CONTACT", "company", locale)}
 									</FieldLabel>
 									<CompanyPicker
 										id="create-contact-company"
