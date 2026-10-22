@@ -195,6 +195,26 @@ Căn cứ: luồng hiển nhiên, không tra thêm — bản mẫu `KhungToanVun
 lượt rà Tability 18/10 (`vi_sao` của VK6) ghi Strategy map đặt trong vỏ, trọn vùng, có Full screen.
 <!-- UX-SPEC-TEMPLATE>>> -->
 
+## Eval cũ thay bởi hồ sơ này
+
+Mười hai ô của hồ sơ đã ký khai `status: not-run` kèm `superseded_by` trỏ về đây; vòng này nhận việc thay (cùng
+ánh xạ với `_acceptance/so-do-toan-vung/rang/anh-xa-nghi.json`).
+
+| Eval cũ | AC mới | Eval mới chứng |
+|---|---|---|
+| cay-can-chinh-co-ly-do/E3 | AC-6 | E6 |
+| cay-can-chinh-co-ly-do/E4 | AC-6 | E6 |
+| cay-can-chinh-co-ly-do/E5 | AC-6 | E6 |
+| cay-can-chinh-co-ly-do/E6 | AC-6 | E6 |
+| cay-can-chinh-co-ly-do/E7 | AC-6 | E6 |
+| cay-can-chinh-co-ly-do/E8 | AC-6 | E6 |
+| cay-can-chinh-co-ly-do/E10 | AC-6 | E10 |
+| cay-can-chinh-co-ly-do/E11 | AC-6 | E6 |
+| doi-nhan-khu-muc-tieu/E12 | AC-6 | E6 |
+| toan-canh-okr/E5 | AC-6 | E6 |
+| so-do-can-chinh-don-vi/E12 | AC-10 | E10 |
+| so-do-quanh-muc-tieu/E12 | AC-10 | E10 |
+
 ## Đường đo
 
 `opportunity.md` hỏi: đã đạt «Sơ đồ không còn bề rộng tối đa của trang; một màn Sơ đồ thay cho Cây căn chỉnh và trang
