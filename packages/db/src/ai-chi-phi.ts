@@ -44,7 +44,7 @@ export function thangVN(at: Date): string {
 	return ngayVN(at).slice(0, 7);
 }
 
-function thangSau(thang: string): string {
+export function thangSau(thang: string): string {
 	const [nam, t] = thang.split("-").map(Number) as [number, number];
 	return t === 12
 		? `${nam + 1}-01`
