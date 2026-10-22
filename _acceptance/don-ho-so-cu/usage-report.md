@@ -95,3 +95,47 @@ wall: 1317s
 - **claude-haiku-5-5**: 13 agent · 29 calls · out 7,875 · in 58 · cache_read 478,212 · cache_create 616,704
 - **claude-opus-5-5**: 3 agent · 64 calls · out 5,777 · in 128 · cache_read 4,275,886 · cache_create 269,201
 
+### S4 round 3 — wf_1db30a7c-4d3 (23 agent, 30,255 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 6 | 10,320 | 12 | 334,535 | 73 |
+| review:measurement | claude-opus-5-5 | 17 | 4,513 | 34 | 1,335,787 | 229 |
+| triage | claude-sonnet-5-5 | 2 | 4,061 | 4 | 40,709 | 30 |
+| review:bugs | claude-opus-5-5 | 21 | 2,739 | 42 | 1,638,189 | 212 |
+| review:conventions | claude-opus-5-5 | 22 | 2,088 | 44 | 1,604,819 | 147 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,251 | 4 | 38,497 | 11 |
+| machine:bun _acceptance/don-ho-so-cu/rang/cong-g | claude-haiku-5-5 | 10 | 492 | 20 | 391,565 | 1037 |
+| baseline:diffBase | claude-sonnet-5-5 | 2 | 479 | 4 | 41,953 | 41 |
+| machine:bun _acceptance/don-ho-so-cu/rang/kiem-k | claude-haiku-5-5 | 8 | 474 | 16 | 264,708 | 862 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 470 | 4 | 5,946 | 482 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 359 | 4 | 38,522 | 295 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 302 | 4 | 38,552 | 73 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 297 | 4 | 35,524 | 295 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 288 | 4 | 38,495 | 25 |
+| machine:bun _acceptance/don-ho-so-cu/rang/doi-ch | claude-haiku-5-5 | 2 | 284 | 4 | 38,532 | 22 |
+| machine:bun _acceptance/don-ho-so-cu/rang/ca-goi | claude-haiku-5-5 | 2 | 263 | 4 | 38,534 | 11 |
+| machine:bun _acceptance/don-ho-so-cu/rang/kiem-l | claude-haiku-5-5 | 2 | 258 | 4 | 38,532 | 7 |
+| machine:bun _acceptance/don-ho-so-cu/rang/so-xu- | claude-haiku-5-5 | 2 | 251 | 4 | 38,533 | 6 |
+| machine:bun _acceptance/don-ho-so-cu/rang/sua-th | claude-haiku-5-5 | 2 | 245 | 4 | 38,538 | 8 |
+| machine:bun _acceptance/don-ho-so-cu/rang/sua-th | claude-haiku-5-5 | 2 | 226 | 4 | 38,532 | 9 |
+| machine:bun _acceptance/don-ho-so-cu/rang/cay-ho | claude-haiku-5-5 | 2 | 224 | 4 | 38,533 | 9 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 218 | 4 | 38,491 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 153 | 4 | 34,310 | 6 |
+
+
+wall: 1321s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 479 | 41,953 | 41 | 03:06:45 | 03:07:26 |
+| machine | 16 | 5,902 | 1,160,034 | 1203 | 03:06:45 | 03:26:48 |
+| review | 3 | 9,340 | 4,578,795 | 240 | 03:06:45 | 03:10:45 |
+| triage | 1 | 4,061 | 40,709 | 30 | 03:26:51 | 03:27:21 |
+| capture | 1 | 153 | 34,310 | 6 | 03:27:24 | 03:27:30 |
+| synthesize | 1 | 10,320 | 334,535 | 73 | 03:27:33 | 03:28:46 |
+
+- **claude-sonnet-5-5**: 4 agent · 12 calls · out 15,013 · in 24 · cache_read 451,507 · cache_create 211,623
+- **claude-opus-5-5**: 3 agent · 60 calls · out 9,340 · in 120 · cache_read 4,578,795 · cache_create 303,419
+- **claude-haiku-5-5**: 16 agent · 46 calls · out 5,902 · in 92 · cache_read 1,160,034 · cache_create 715,872
+
