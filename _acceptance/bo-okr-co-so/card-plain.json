@@ -1,0 +1,35 @@
+{
+  "feature_plain": "Trưởng đơn vị mở bộ OKR của đơn vị mình và thấy ngay bốn con số của đội ở đầu thẻ OKR, bảng mục tiêu bên dưới đã mở sẵn mọi KR.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ hiện bốn ô số giữa hàng thẻ con và bảng mục tiêu — Ngày còn lại · Tiến độ (kèm mức lẽ ra) · KR đã cập nhật tuần này · KR tự tin thấp — cùng số mà Toàn cảnh và danh sách Bộ OKR đang in cho đơn vị đó, ở bộ OneHub, bộ phận và phòng ban."},
+    {"id": "AC-2", "p": "Sẽ nói đúng ở các ca biên: chu kỳ chưa bắt đầu, ngày cuối, đã kết thúc, chưa có mức lẽ ra, bộ chưa công bố mục tiêu nào — không bao giờ in số âm hay chữ lỗi."},
+    {"id": "AC-3", "p": "Sẽ chỉ hiện hàng số ở thẻ OKR, giữ nguyên số khi người xem lọc hay sắp xếp bảng; bộ cá nhân và đơn vị không tìm thấy không có hàng số."},
+    {"id": "AC-4", "p": "Sẽ mở sẵn mọi mục tiêu có KR khi vào thẻ OKR; bấm mũi tên của một dòng thì chỉ dòng đó gập."},
+    {"id": "AC-5", "p": "Sẽ có một nút Gập tất cả / Mở tất cả trên hàng công cụ của bảng, trạng thái gập nằm trên đường dẫn nên tải lại hay gửi đường dẫn vẫn giữ; dùng được bằng bàn phím."},
+    {"id": "AC-6", "p": "Sẽ để nguyên mọi bảng khác có dòng mở rộng trong app: vẫn gập mặc định, không có nút mới."},
+    {"id": "AC-7", "p": "Sẽ hiện bốn ô xương khi số đang tải, và một vùng lỗi có nút Thử lại khi số không tải được — bảng mục tiêu vẫn dùng được."},
+    {"id": "AC-8", "p": "Sẽ trông cùng nếp hàng số Toàn cảnh: một hàng ở máy tính, lưới hai cột hai hàng ở điện thoại, không cắt chữ, không chìm màu ở chế độ tối."},
+    {"id": "AC-9", "p": "Sẽ không làm xấu đi phép đo nào của các việc đã ký trên trang đơn vị; chỗ nào phải sửa phép đo thì chỉ trong ba lớp anh cho phép ở Hỏi-1, mỗi chỗ có dòng ghi tên anh."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG làm ô bấm được dẫn tới bảng đã lọc (vd bấm «KR tự tin thấp» lọc sẵn) — để vòng sau."},
+    {"id": "OOS-2", "p": "KHÔNG hiện số tuần trước hay xu hướng trong ô."},
+    {"id": "OOS-3", "p": "KHÔNG có hàng số cho bộ cá nhân, cũng không trên trang danh sách Bộ OKR."},
+    {"id": "OOS-4", "p": "KHÔNG nhớ trạng thái mở/gập theo từng người — chỉ nằm trên đường dẫn."},
+    {"id": "OOS-5", "p": "KHÔNG đụng chế độ Soạn, nút Soạn hay khối góp ý Kara — đó là việc VK10 (chế độ Soạn bộ OKR)."},
+    {"id": "OOS-6", "p": "KHÔNG đổi cách Toàn cảnh tính số (chỉ mục tiêu đã công bố, tuần theo giờ Việt Nam)."}
+  ],
+  "scope_plain": "Những thứ cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã quét đủ sáu phần tử (bốn ô, mở sẵn, nút) × năm loại bộ × bốn pha chu kỳ × năm trạng thái dữ liệu × hai khổ × hai chủ đề."},
+    {"i": 1, "p": "Mỗi trục có tiêu chí đo: số ở ba loại bộ (AC-1), ca biên (AC-2), chỉ thẻ OKR và lọc (AC-3), mở sẵn và nút (AC-4, AC-5), bảng khác không đổi (AC-6), tải và lỗi (AC-7), nhìn (AC-8), phép đo đã ký (AC-9). Bộ mẫu chỉ có chu kỳ đang chạy nên ba pha còn lại chỉ đo bằng bài kiểm giả lập — chưa có dữ liệu thật để chứng."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Cách đếm ngày cuối (hiện 1 hay 0) và cách hiện chu kỳ chưa bắt đầu bị máy tự quyết dù là chuyện nghĩa người đọc thấy. Đã tách thành câu hỏi Hỏi-4 cho anh (cách đếm ngày)."},
+    {"i": 1, "p": "Hàng số và nút mới còn chạm phép đo bố cục đã ký (số nút hàng công cụ, khoảng dưới hàng thẻ con), không chỉ bước bấm mở. Đã mở rộng tiêu chí phép đo đã ký và lệnh quét, Hỏi-1 nêu thêm lớp bố cục."},
+    {"i": 2, "p": "Câu hỏi về phép đo đã ký chưa nói chọn «không cho» thì cắt gì, và chưa ai biết có phép đo nào khẳng định thẳng «bảng gập sẵn». Đã quét ngay: một bài kiểm bàn phím sẽ đảo thứ tự mở/gập; Hỏi-1 ghi rõ giá của lối khác."},
+    {"i": 3, "p": "Bước nhìn ảnh bắt so «cùng nếp Toàn cảnh» mà không có ảnh Toàn cảnh. Đã thêm ảnh Toàn cảnh chụp cùng lượt để đặt cạnh nhau."},
+    {"i": 4, "p": "Phép đo mở sẵn chưa gieo mục đã bỏ và mục không KR, ma trận ca biên đếm sai số ca. Đã thêm hai mục gieo kèm chiều đỏ, sửa số ca thành 12."}
+  ],
+  "decisions_plain": []
+}
