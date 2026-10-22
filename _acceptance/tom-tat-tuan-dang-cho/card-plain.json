@@ -1,0 +1,33 @@
+{
+  "feature_plain": "Trưởng phòng mở Họp tuần của phòng vừa bật Tóm tắt tuần sẽ thấy một dòng nói bản tóm tắt đầu tiên tới lúc nào, thay vì một khoảng trống.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ hiện thẻ «Tóm tắt tuần của Kara» với một dòng: «Kara gửi bản tóm tắt đầu tiên vào khoảng 06:00 thứ Ba, 27/10 — sáng hôm sau ngày cập nhật thứ Hai», và tự tải lại đúng giờ ấy nếu trang còn mở."},
+    {"id": "AC-2", "p": "Sẽ nêu đúng giờ: 06:00 sáng hôm sau ngày cập nhật của chu kỳ, lần gần nhất còn ở phía trước."},
+    {"id": "AC-3", "p": "Sẽ dùng chung một luật giờ với lịch xếp thật của Kara — bài kiểm chạy lượt xếp thật ở đúng giờ đã nói, kể cả khi phòng không cập nhật thì không có bản."},
+    {"id": "AC-4", "p": "Sẽ nói «Kara đang xếp, thường có trong vài phút» trong mấy phút ngay sau 06:00 của ngày xếp, và tự hỏi lại tới khi bản tới."},
+    {"id": "AC-5", "p": "Sẽ nói Kara tạm nghỉ tới ngày 01 tháng sau khi hết ngân sách tháng, hoặc chưa nối mô hình AI — không nêu giờ sai, không nêu số tiền."},
+    {"id": "AC-6", "p": "Sẽ giữ nguyên mọi trường hợp cũ: phòng chưa bật hay ở chế độ ẩn vẫn không thấy gì; phòng đã có bản thì như trước."},
+    {"id": "AC-7", "p": "Sẽ hiện giờ Việt Nam bất kể máy người xem đặt múi giờ nào, có bản tiếng Anh, và nhìn thấy trọn ở màn điện thoại lẫn máy tính."}
+  ],
+  "scope_plain": "Bốn việc gần đó cố ý để lại:",
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG nói «bản kế tiếp tới lúc nào» cho phòng đã từng có bản mà tuần này bị giữ lại hay quá hạn."},
+    {"id": "OOS-2", "p": "KHÔNG báo qua tin nhắc buổi sáng hay Zalo rằng phòng vừa bật Tóm tắt tuần."},
+    {"id": "OOS-3", "p": "KHÔNG đổi giờ hay ngày Kara xếp bản — chỉ dời luật sẵn có về một chỗ dùng chung."},
+    {"id": "OOS-4", "p": "KHÔNG đụng phần còn lại của màn Họp tuần (việc của hàng HT1 và VK3)."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi nấc bật/tắt của phòng đều đã xét: chỉ nấc bật mới có dòng chờ (AC-1), bốn nấc còn lại giữ như cũ (AC-6)."},
+    {"i": 1, "p": "Mọi lịch sử bản trong chu kỳ đã xét: chỉ phòng chưa từng có bản mới có dòng chờ (AC-1); có bản, bản bị giữ hay quá hạn giữ như cũ (AC-6)."},
+    {"i": 2, "p": "Mọi thời điểm mở so với giờ xếp đã xét: trước giờ, đúng lúc đang xếp, sau khi đã xếp mà phòng lỡ lượt, và lúc đang soạn (AC-2, AC-3, AC-4, AC-6)."},
+    {"i": 3, "p": "Cả hai lý do Kara không chạy được đều có câu riêng (AC-5)."},
+    {"i": 4, "p": "Múi giờ, ngôn ngữ và khổ màn đều đo (AC-7); sản phẩm đối chiếu là Linear Pulse, có lịch tóm tắt cố định nhưng không có dòng «bản tới lúc nào»."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Lựa chọn «hai luật giờ, canh nhau bằng bài kiểm» bị ghi như tài liệu kho đã quyết, trong khi thật ra còn lối «một luật dùng chung». Đã chuyển thành câu hỏi Hỏi-2 cho anh, bản nháp theo lối một luật."},
+    {"i": 1, "p": "Bỏ việc tự tải lại với lý do sai — vẫn có cách rẻ (hỏi lại đúng một lần lúc tới giờ). Đã làm luôn, để người mở màn lúc 06:00 không kẹt ở «đang xếp»."},
+    {"i": 2, "p": "Phép kiểm «không nêu số tiền» cấm chữ «đ», trong khi câu đúng có chữ «được». Đã sửa thành phép đo số tiền thật, kèm đối chứng."},
+    {"i": 3, "p": "Chưa thử trường hợp phòng bật sau giờ xếp — bản tuần sau chỉ tới nếu phòng cập nhật thứ Hai. Đã thêm điều kiện vào tiêu chí, thêm hai ô kiểm, và dòng chờ nói rõ «sáng hôm sau ngày cập nhật thứ Hai»."},
+    {"i": 4, "p": "«Đang xếp» có thể hiện nhầm vào ngày không phải ngày xếp của chu kỳ. Đã thêm điều kiện và một ô kiểm âm."}
+  ]
+}
