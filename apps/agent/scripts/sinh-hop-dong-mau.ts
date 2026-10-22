@@ -13,7 +13,6 @@ import {
 } from "@crm/validation/hop-dong-mau";
 import fontkit from "@pdf-lib/fontkit";
 import { PDFDocument, rgb } from "pdf-lib";
-import { zipLuu } from "../../api/test/tai-lieu-nguon-mau.ts";
 
 const BO_DUNG = {
 	phong:
@@ -315,6 +314,73 @@ const PHONG_DIEM = new Map(
 		" ": ["00000", "00000", "00000", "00000", "00000", "00000", "00000"],
 	}),
 );
+
+function u16(n: number): number[] {
+	return [n & 0xff, (n >>> 8) & 0xff];
+}
+
+function u32(n: number): number[] {
+	return [n & 0xff, (n >>> 8) & 0xff, (n >>> 16) & 0xff, (n >>> 24) & 0xff];
+}
+
+function zipLuu(tep: readonly [string, string][]): Uint8Array {
+	const phan: number[] = [];
+	const trungTam: number[] = [];
+	for (const [ten, noiDung] of tep) {
+		const tenB = MA_HOA.encode(ten);
+		const dl = MA_HOA.encode(noiDung);
+		const crc = crc32(dl);
+		const viTri = phan.length;
+		phan.push(
+			...u32(0x04034b50),
+			...u16(20),
+			...u16(0),
+			...u16(0),
+			...u16(0),
+			...u16(0),
+			...u32(crc),
+			...u32(dl.length),
+			...u32(dl.length),
+			...u16(tenB.length),
+			...u16(0),
+			...tenB,
+			...dl,
+		);
+		trungTam.push(
+			...u32(0x02014b50),
+			...u16(20),
+			...u16(20),
+			...u16(0),
+			...u16(0),
+			...u16(0),
+			...u16(0),
+			...u32(crc),
+			...u32(dl.length),
+			...u32(dl.length),
+			...u16(tenB.length),
+			...u16(0),
+			...u16(0),
+			...u16(0),
+			...u16(0),
+			...u32(0),
+			...u32(viTri),
+			...tenB,
+		);
+	}
+	const batDauTT = phan.length;
+	return new Uint8Array([
+		...phan,
+		...trungTam,
+		...u32(0x06054b50),
+		...u16(0),
+		...u16(0),
+		...u16(tep.length),
+		...u16(tep.length),
+		...u32(trungTam.length),
+		...u32(batDauTT),
+		...u16(0),
+	]);
+}
 
 function crc32(byte: Uint8Array): number {
 	let crc = 0xffffffff;
