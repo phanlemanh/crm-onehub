@@ -1,0 +1,309 @@
+{
+  "luc": "2026-10-20T13:59:08.584Z",
+  "pr_mo": [
+    {
+      "number": 510,
+      "headRefName": "docs/cap-nhat-lo-trinh-m5",
+      "files": [
+        {
+          "path": "LO-TRINH.html"
+        },
+        {
+          "path": "docs/plan/lo-trinh-kho-tai-lieu.json"
+        },
+        {
+          "path": "docs/plan/lo-trinh-viec-du-an.json"
+        }
+      ]
+    },
+    {
+      "number": 509,
+      "headRefName": "feat/chi-phi-ads",
+      "files": [
+        {
+          "path": "apps/api/src/app.module.ts"
+        },
+        {
+          "path": "apps/api/src/chi-phi-ads/chi-phi-ads.contracts.ts"
+        },
+        {
+          "path": "apps/api/src/chi-phi-ads/chi-phi-ads.module.ts"
+        },
+        {
+          "path": "apps/api/src/chi-phi-ads/chi-phi-ads.router.ts"
+        },
+        {
+          "path": "apps/api/src/chi-phi-ads/chi-phi-ads.service.ts"
+        },
+        {
+          "path": "apps/api/src/generated/server.ts"
+        },
+        {
+          "path": "packages/db/prisma/migrations/20261020150000_chi_phi_ads/migration.sql"
+        },
+        {
+          "path": "packages/db/prisma/schema.prisma"
+        }
+      ]
+    },
+    {
+      "number": 508,
+      "headRefName": "chore/nhan-kit-2-33-1",
+      "files": [
+        {
+          "path": "lib/evidence-core.cjs"
+        }
+      ]
+    },
+    {
+      "number": 507,
+      "headRefName": "docs/chu-thich-glob-md",
+      "files": [
+        {
+          "path": "_acceptance/config.yaml"
+        }
+      ]
+    },
+    {
+      "number": 505,
+      "headRefName": "fix/do-phu-khong-gia-dinh-cay-trong",
+      "files": [
+        {
+          "path": "_acceptance/dot-hoi-y-tuong-okr/run-log.jsonl"
+        },
+        {
+          "path": "apps/api/test/okr-hoi-y-do-phu-mau.ts"
+        },
+        {
+          "path": "apps/api/test/okr-hoi-y.spec.ts"
+        }
+      ]
+    },
+    {
+      "number": 499,
+      "headRefName": "chore/giu-tuoi-sau-489",
+      "files": [
+        {
+          "path": "LO-TRINH.html"
+        },
+        {
+          "path": "_acceptance/chen-lien-ket-khong-lac/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/chen-lien-ket-khong-lac/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/dich-ten-nganh-bang-bang/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/dich-ten-nganh-bang-bang/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/ngan-ho-so-trong-lo-trinh/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/ngan-ho-so-trong-lo-trinh/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/okr-soat-anh-luot-3/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/sua-sau-chay-that/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/sua-sau-chay-that/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/tai-lieu-loc-giu-lich-su/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/tai-lieu-loc-giu-lich-su/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/tro-ly-kho-dung-phien/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/tro-ly-kho-dung-phien/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/viec-rieng-chi-nguoi-trong-cuoc/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/viec-rieng-chi-nguoi-trong-cuoc/run-log.jsonl"
+        }
+      ]
+    },
+    {
+      "number": 486,
+      "headRefName": "docs/hat-giong-thuoc-giam-phut-ci-nhap-t1",
+      "files": [
+        {
+          "path": "docs/plan/2026-10-19-hat-giong-thuoc-giam-phut-ci-nhap-t1.md"
+        }
+      ]
+    },
+    {
+      "number": 439,
+      "headRefName": "fix/thu-paths-e15-giai-doan",
+      "files": [
+        {
+          "path": "_acceptance/ba-ho-so-do-san/evals.yaml"
+        },
+        {
+          "path": "_acceptance/bo-cau-hoi-mau/evals.yaml"
+        },
+        {
+          "path": "_acceptance/config.yaml"
+        },
+        {
+          "path": "_acceptance/giai-doan-thoa-thuan/evals.yaml"
+        },
+        {
+          "path": "_acceptance/ngan-ho-so-trong-lo-trinh/evals.yaml"
+        },
+        {
+          "path": "_acceptance/tat-preview-agent-okr/evals.yaml"
+        },
+        {
+          "path": "_acceptance/thu-haiku-tro-ly-okr/evals.yaml"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/card-plain.json"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/card.html"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/contract.md"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/danh-sach.txt"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/decisions.jsonl"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/duong-nen.md"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/evals.yaml"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/evidence-page.html"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/figures/hoi-1-gioi-han.html"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/figures/hoi-1-gioi-han.png"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/figures/hoi-2-pham-vi-paths.html"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/figures/hoi-2-pham-vi-paths.png"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/figures/index.md"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/gap-probe.md"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/opportunity.md"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/rang/chi-them-paths.mjs"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/rang/dot-bien.mjs"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/rang/hoa-cu-theo-paths.mjs"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/rang/pmc-truoc-sau.mjs"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/rang/them-paths.mjs"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/review-findings.md"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/thu-paths-e15-giai-doan/usage-report.md"
+        },
+        {
+          "path": "_acceptance/thuoc-cua-lat-3a-co-rang/evals.yaml"
+        },
+        {
+          "path": "docs/superpowers/plans/2026-10-16-thu-paths-e15-giai-doan.md"
+        },
+        {
+          "path": "docs/superpowers/specs/2026-10-16-thu-paths-e15-giai-doan-design.md"
+        }
+      ]
+    },
+    {
+      "number": 411,
+      "headRefName": "chore/ghim-sau-kara-mot-ten",
+      "files": [
+        {
+          "path": "LO-TRINH.html"
+        },
+        {
+          "path": "_acceptance/khung-khong-con-dung-chu/contract.md"
+        },
+        {
+          "path": "_acceptance/khung-khong-con-dung-chu/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/khung-khong-con-dung-chu/run-log.jsonl"
+        },
+        {
+          "path": "_acceptance/lich-su-va-luu-tru-trang/contract.md"
+        },
+        {
+          "path": "_acceptance/lich-su-va-luu-tru-trang/evidence-report.md"
+        },
+        {
+          "path": "_acceptance/lich-su-va-luu-tru-trang/run-log.jsonl"
+        }
+      ]
+    }
+  ],
+  "chan": [
+    {
+      "number": 505,
+      "headRefName": "fix/do-phu-khong-gia-dinh-cay-trong",
+      "ho_so": [
+        "dot-hoi-y-tuong-okr"
+      ]
+    },
+    {
+      "number": 499,
+      "headRefName": "chore/giu-tuoi-sau-489",
+      "ho_so": [
+        "okr-soat-anh-luot-3"
+      ]
+    },
+    {
+      "number": 439,
+      "headRefName": "fix/thu-paths-e15-giai-doan",
+      "ho_so": [
+        "ba-ho-so-do-san",
+        "bo-cau-hoi-mau",
+        "giai-doan-thoa-thuan",
+        "ngan-ho-so-trong-lo-trinh",
+        "tat-preview-agent-okr",
+        "thu-haiku-tro-ly-okr"
+      ]
+    }
+  ]
+}

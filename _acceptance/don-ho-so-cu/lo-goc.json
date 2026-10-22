@@ -1,0 +1,318 @@
+{
+  "sha_goc": "b32a1495f4accacd69df646b359976a84ea6d930",
+  "tran_phut": 80,
+  "lo": [
+    {
+      "so": 1,
+      "ho_so": [
+        "dieu-phoi-va-bien",
+        "man-xin-quyen-co-rang",
+        "mau-trang-thai-chung"
+      ],
+      "uoc_phut": 79.8
+    },
+    {
+      "so": 2,
+      "ho_so": [
+        "giai-doan-thoa-thuan",
+        "sua-an-chu-ky-okr",
+        "truong-tu-tao-o-cai-dat"
+      ],
+      "uoc_phut": 80
+    },
+    {
+      "so": 3,
+      "ho_so": [
+        "bo-ca-mau-quy-4",
+        "thu-haiku-tro-ly-okr",
+        "tro-ly-okr-bo-final-output"
+      ],
+      "uoc_phut": 79.9
+    },
+    {
+      "so": 4,
+      "ho_so": [
+        "dau-trang-okr-cho-nut-hoi-kara",
+        "man-cai-dat-noi-tieng-viet",
+        "tro-ly-okr-de-xuat"
+      ],
+      "uoc_phut": 80
+    },
+    {
+      "so": 5,
+      "ho_so": [
+        "agent-builder-noi-tieng-viet",
+        "so-do-quanh-muc-tieu",
+        "tiep-thi-tuyen-doi-tac"
+      ],
+      "uoc_phut": 79.8
+    },
+    {
+      "so": 6,
+      "ho_so": [
+        "canh-kr-okr",
+        "khep-ky-okr",
+        "tro-ly-kho-dung-phien"
+      ],
+      "uoc_phut": 80
+    },
+    {
+      "so": 7,
+      "ho_so": [
+        "cap-nhat-tuan-okr",
+        "dien-thoai-o-deal-cong-ty",
+        "ve-sinh-do-san-onehub",
+        "zalo-hoi-okr-khong-chet"
+      ],
+      "uoc_phut": 79.7
+    },
+    {
+      "so": 8,
+      "ho_so": [
+        "buoc-kara-bo-qua",
+        "dat-okr-trong-crm",
+        "dot-hoi-y-tuong-okr",
+        "vai-chi-okr"
+      ],
+      "uoc_phut": 79.9
+    },
+    {
+      "so": 9,
+      "ho_so": [
+        "chuyen-goi-dieu-phoi",
+        "do-man-tren-kho-rieng",
+        "duong-proto-cho-design-pass",
+        "onboarding-giong-deals",
+        "thuoc-o-soan-don-dep"
+      ],
+      "uoc_phut": 79.8
+    },
+    {
+      "so": 10,
+      "ho_so": [
+        "cau-truc-to-chuc",
+        "dieu-huong-khu-muc-tieu",
+        "kho-tai-lieu",
+        "khung-khong-con-dung-chu",
+        "may-soan-de-xuat",
+        "noi-zalo-cho-nguoi-moi",
+        "sua-luu-tru-dieu-phoi",
+        "thanh-vien-vao-dung",
+        "trang-don-vi-mot-bang"
+      ],
+      "uoc_phut": 79.9
+    },
+    {
+      "so": 11,
+      "ho_so": [
+        "bo-cuc-hep-ngan-va-kanban",
+        "gan-tay-va-kara-co-ly-do",
+        "hoi-crm-qua-zalo",
+        "ke-hoach-la-mot-ban-ghi",
+        "keo-tha-thoa-thuan",
+        "lo-trinh-doc-ban-chup",
+        "moi-phia-deu-thay-ke-hoach",
+        "nhac-qua-zalo",
+        "quen-mat-khau",
+        "thanh-vien-hai-khoi-cung-khuon",
+        "tim-va-dieu-huong-kho",
+        "tro-ly-okr-tom-tat"
+      ],
+      "uoc_phut": 79.8
+    },
+    {
+      "so": 12,
+      "ho_so": [
+        "cua-vao-va",
+        "doi-nhan-khu-muc-tieu",
+        "doi-ten-onehub-center",
+        "hop-thoai-giu-cho-dang-nhap",
+        "khoa-api-ghi-thua",
+        "may-nhac-truoc-nguoi",
+        "muc-tieu-va-kr",
+        "nguon-keo-tha-reui",
+        "no-sau-luot-4-okr",
+        "okr-soat-anh-luot-3",
+        "sua-sau-chay-that",
+        "tai-lieu-loc-giu-lich-su",
+        "tran-uy-thac-chiu-chay-lai",
+        "ux-lai-thu-8c-okr",
+        "vao-bang-email-va-mat-khau"
+      ],
+      "uoc_phut": 79.8
+    },
+    {
+      "so": 13,
+      "ho_so": [
+        "bo-dung-chung-nhan-chuoi",
+        "bo-dung-khong-ket",
+        "chan-lai-component-ra-man",
+        "chat-an-toan-truoc-r1",
+        "claimdue-chi-thay-dong-cua-minh",
+        "datatable-loc-ro",
+        "hoan-thien-hoi-crm-qua-zalo",
+        "khoa-eve-khong-tranh",
+        "khoa-lo-giu-tran",
+        "khung-trang-cai-dat",
+        "logo-onehub",
+        "ly-do-can-chinh-tu-soan",
+        "mot-duong-ghi-phong-ban",
+        "okr-cua-toi-tach-theo-doi",
+        "ro-slack-tac-nhan",
+        "soan-okr-khong-tru-luot",
+        "sua-test-do-thu-tu-nap",
+        "va-lo-ro-vai-chi-okr",
+        "zalo-goi-thu-hong-hien-dung-bot"
+      ],
+      "uoc_phut": 79.9
+    },
+    {
+      "so": 14,
+      "ho_so": [
+        "ca-chap-chon-cach-ly",
+        "cai-dat-chung-chi-quan-tri",
+        "dem-dau-cot-khi-dang-luu",
+        "go-la-cat-quyen-that",
+        "hydrat-giai-doan-deals",
+        "khang-dinh-microsoft-co-rang",
+        "khoa-cu-khong-mo-khoa-moi",
+        "khung-tao-okr-nhu-deal",
+        "lenh-dung-do-khong-ai-thay",
+        "loi-moi-da-huy-van-cho-vao",
+        "loi-tac-tu-zalo-noi-dung-nguyen-nhan",
+        "nen-kara",
+        "neo-dan-so-khong-cung",
+        "ngay-gieo-theo-gio-vn",
+        "no-sau-luot-5-okr",
+        "o-cam-chay-duoc-that",
+        "o-so-tien-doc-theo-tieng",
+        "phien-chet-ve-dang-nhap",
+        "pre-push-t1",
+        "slack-thieu-quyen-email",
+        "tien-te-chua-tai-khong-doan",
+        "va-tro-ly-okr-sau-thu"
+      ],
+      "uoc_phut": 79.9
+    },
+    {
+      "so": 15,
+      "ho_so": [
+        "bang-thanh-vien-giu-hang",
+        "bo-chu-lap-keo-tha",
+        "chan-uy-thac-sai-luot",
+        "chi-quan-tri-sua-duoc-truong",
+        "ci-ma-tran-ba-o",
+        "cron-theo-ban-khai",
+        "cua-toi-ba-phan",
+        "deal-va",
+        "dich-ten-nganh-bang-bang",
+        "do-quyen-luot-bang-hanh-vi",
+        "giam-phut-ci-nhap-t1",
+        "ha-tran-thang-hoi-zalo",
+        "han-viec-theo-ngay",
+        "hinh-cua-luoi",
+        "hoan-tac-loat-dung-id",
+        "khong-re-theo-ten-thanh-luat-kho",
+        "ly-do-tu-choi-nop-theo-locale",
+        "mo-lai-khong-tra-viec-chi-okr",
+        "okr-mau-xoa-cuoc-soan",
+        "quyet-gop-y-noi-dung-ly-do",
+        "tac-nhan-model-rieng",
+        "tac-nhan-va",
+        "tai-lieu-diff-bo-myers-vo-ich",
+        "tieu-de-cot-doc-tron",
+        "tran-mot-lan-uy-thac",
+        "trang-chua-de-xuat-mo-duoc",
+        "zalo-va"
+      ],
+      "uoc_phut": 80
+    },
+    {
+      "so": 16,
+      "ho_so": [
+        "ban-gieo-gop-y-sau-nop",
+        "bang-cot-loi-va-nhan",
+        "chen-lien-ket-khong-lac",
+        "da-luu-tru-tai-loi",
+        "dong-thoi-gian-loi-dung-luot",
+        "giai-doan-mac-dinh",
+        "gieo-rai-deu-danh-ba",
+        "gioi-han-tep-dom",
+        "go-thanh-vien-phai-giu-duoc",
+        "hd-theo-danh-sach",
+        "hydrat-thanh-bieu-tuong",
+        "kara-mot-ten",
+        "kho-nguon-khoa-rieng",
+        "khoa-con-bat-xa-tran",
+        "khoa-rieng-dien-node",
+        "khung-soan-chan-lien-ket",
+        "khuon-mat-bo-phan",
+        "lai-ra-man-tran-gio",
+        "lam-moi-goi-y-ke-hoach",
+        "lo-trinh-ten-va-build",
+        "luat-kho-vong-doi",
+        "luoi-day-do-that",
+        "ma-tran-phai-co-chieu-song",
+        "man-chu-theo-khoa-kho-nguon",
+        "menu-con-loc-dien-thoai",
+        "moi-bai-kiem-dom-deu-chay",
+        "ngay-lich-test-tao-ke-hoach",
+        "ngoai-le-telemetry-giai-doan",
+        "nguoi-huy-khong-lac",
+        "o-soan-va-ly-do-loi",
+        "okr-mau-xoa-cau-hinh",
+        "quyen-luot-mang-theo",
+        "sua-paths-e5-soan-okr",
+        "ten-dong-tien-bao-cao",
+        "thanh-ben-khu-dung-chung",
+        "trang-lo-trinh-mo-hinh-hien-thi",
+        "vung-cuon-la-khoi-chua",
+        "zalo-bom-gio",
+        "zalo-qua-webhook",
+        "zalo-tro-ly-kho-chi-dan",
+        "zalo-va-cach-ly",
+        "zalo-webhook-doc-khuon-that"
+      ],
+      "uoc_phut": 80
+    },
+    {
+      "so": 17,
+      "ho_so": [
+        "agent-test-khong-nhap-app",
+        "bo-okr-mau",
+        "ca-chap-chon-con-lai",
+        "cay-can-chinh-co-ly-do",
+        "cho-phep-ai-vao-o-man-hinh",
+        "cua-vao-dang-nhap",
+        "da-gui-dem-dung-kr-cho",
+        "dien-thoai-ca-nhan",
+        "dieu-phoi-truoc-mo-dot",
+        "duong-ly-do-muc-tieu",
+        "gioi-han-duyet-cay-okr",
+        "go-khoa-goc-nhin",
+        "gop-y-dung-cho",
+        "heap-lenh-dung",
+        "kho-nguon-khong-ket",
+        "kiem-cheo-chay-quang-lang",
+        "kiem-cheo-sau-gop",
+        "lam-moi-chuyen-viec-qua-loi-chung",
+        "lich-su-va-luu-tru-trang",
+        "noi-bon-nut-dieu-phoi",
+        "so-do-can-chinh-don-vi",
+        "soan-okr-cung-tro-ly",
+        "soan-okr-khong-lac",
+        "soan-okr-song-lai",
+        "tac-nhan-glm-5-3-cham",
+        "the-gop-y-okr",
+        "them-buoc-bao-dung",
+        "thu-lai-sau-45-giay",
+        "to-chuc-chi-tiet-cho-url",
+        "tra-loi-tin-nhac",
+        "tran-cho-app-rieng",
+        "viec-cha-khong-lo-tieu-de",
+        "zalo-gio-theo-mui-gio-xuong"
+      ],
+      "uoc_phut": 20.5
+    }
+  ]
+}
