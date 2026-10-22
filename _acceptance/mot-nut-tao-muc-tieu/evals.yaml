@@ -157,8 +157,12 @@ evals:
       Phan "tu-viet" cua ban do man: vai truong bo phan mo /okr/bo-okr?donOkr=<bo phan cua minh>, bam Them muc
       tieu, chon Tu viet, go ten "VK9-<nonce cua luot>", luu, tai lai trang; doc danh sach Bo OKR -> co dung mot
       muc tieu mang ten do (du lieu tu may chu, sau tai lai). In "DUNG TU VIET <nonce>"; khong thay -> "SAI TU
-      VIET <nonce>" thoat 1. Muc tieu tao tren kho do rieng cua cay, khong vao kho chung.
-      CHIEU DO: EVAL=chieu-do bo buoc luu -> "SAI TU VIET" thoat 1.
+      VIET <nonce>" thoat 1. Muc tieu tao tren kho do rieng cua cay, khong vao kho chung. Them buoc tu Cua
+      toi (them sau khi ky 22/10, vi loi cua-toi dung yen o /okr lot qua bai DOM dung router gia): mo /okr, bam
+      Them muc tieu, chon Tu viet -> trang sang /okr/bo-okr voi ngan tao mo, in "DUNG TU VIET CUA TOI ..."; dung
+      yen -> "SAI TU VIET CUA TOI dung o <duong>" thoat 1.
+      CHIEU DO: EVAL=chieu-do bo buoc luu -> "SAI TU VIET" thoat 1; ban sao hop-chon-duong.tsx ghi URL tai cho
+      (nuqs) cung luc router.push -> "SAI TU VIET CUA TOI dung o .../okr" thoat 1.
 
   - id: E9
     criterion: AC-5

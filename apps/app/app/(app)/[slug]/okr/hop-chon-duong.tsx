@@ -147,7 +147,6 @@ function NoiDungHop({
 			});
 			return;
 		}
-		void dat({ [SEARCH_PARAM.okr.chonDuong]: null });
 		router.push(toi(q.dich.don, khoa));
 	};
 

@@ -1105,6 +1105,19 @@ async function moHop(man: ManDau, nen: Nen, thamSo = "") {
 
 const duongCuoi = () => new URL(`http://x${diTrang.at(-1)?.duong ?? ""}`);
 
+async function chonDiTrang(san: San, duong: string, ten: string) {
+	const ghiTruoc = san.lichSu().length;
+	const diTruoc = diTrang.length;
+	await bam(dong(duong), duong);
+	await nhip(6);
+	const ghi = san.lichSu().length - ghiTruoc;
+	const di = diTrang.length - diTruoc;
+	if (di !== 1 || ghi !== 0)
+		throw new Error(
+			`${ten}: cua-toi chuyen trang ${di} lan, ghi URL tai cho ${ghi} lan — lan ghi tai cho de mat lan chuyen trang`,
+		);
+}
+
 describe("mnt-tu-viet", () => {
 	test("mnt-tu-viet: (a) bo-okr — ngan tao dung don vi, khong nut chen, luu goi createObjective", async () => {
 		await moHop(
@@ -1141,8 +1154,8 @@ describe("mnt-tu-viet", () => {
 	});
 
 	test("mnt-tu-viet: (b) cua-toi — sang Bo OKR cua don vi dich voi ngan tao mo, khong mang hop chon", async () => {
-		await moHop("cua-toi", { xem: TB1 });
-		await bam(dong("tu-viet"), "tu-viet");
+		const san = await moHop("cua-toi", { xem: TB1 });
+		await chonDiTrang(san, "tu-viet", "mnt-tu-viet");
 		const u = duongCuoi();
 		if (
 			!u.pathname.endsWith("/okr/bo-okr") ||
@@ -1211,12 +1224,12 @@ describe("mnt-tu-mau", () => {
 	});
 
 	test("mnt-tu-mau: (c) cua-toi — sang Bo OKR voi ngan o buoc chon mau, khong goi ghi", async () => {
-		await moHop("cua-toi", { xem: TB1, mau: [M1_BP] });
+		const san = await moHop("cua-toi", { xem: TB1, mau: [M1_BP] });
 		await cho(
 			() => dong("tu-mau")?.getAttribute("aria-disabled") !== "true",
 			"dong tu-mau mo",
 		);
-		await bam(dong("tu-mau"), "tu-mau");
+		await chonDiTrang(san, "tu-mau", "mnt-tu-mau");
 		const u = duongCuoi();
 		if (
 			u.searchParams.get("donOkr") !== "bp:B1" ||
@@ -1287,8 +1300,8 @@ describe("mnt-bang-tinh", () => {
 	});
 
 	test("mnt-bang-tinh: (b) cua-toi — sang Bo OKR voi hop nhap mo", async () => {
-		await moHop("cua-toi", { xem: TB1 });
-		await bam(dong("bang-tinh"), "bang-tinh");
+		const san = await moHop("cua-toi", { xem: TB1 });
+		await chonDiTrang(san, "bang-tinh", "mnt-bang-tinh");
 		const u = duongCuoi();
 		if (
 			u.searchParams.get("donOkr") !== "bp:B1" ||

@@ -154,6 +154,25 @@ async function e8(n) {
 			.catch(() => false),
 	);
 	bao(thay, `DUNG TU VIET ${nonce}`, `SAI TU VIET ${nonce}`);
+	await moMan(t, n, "cua-toi");
+	await t.trang.click(`${HANG} [data-nut=them-muc-tieu]`);
+	await choThay(t.trang, `${HOP} [data-duong=tu-viet]`);
+	await t.trang.click(`${HOP} [data-duong=tu-viet]`);
+	const sang = await t.trang
+		.waitForFunction(
+			() =>
+				location.pathname.endsWith("/okr/bo-okr") &&
+				document.querySelector("[data-hop-thoai-muc-tieu=moi]") !== null,
+			{ timeout: DO.cho.dauHieuMs, polling: DO.cho.nhipMs },
+		)
+		.then(() => true)
+		.catch(() => false);
+	const den = new URL(t.trang.url()).pathname;
+	bao(
+		sang,
+		"DUNG TU VIET CUA TOI sang bo-okr voi ngan tao",
+		`SAI TU VIET CUA TOI dung o ${den}, ngan tao khong mo`,
+	);
 }
 
 async function doDong(trang) {
