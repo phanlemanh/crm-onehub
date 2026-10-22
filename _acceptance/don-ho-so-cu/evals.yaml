@@ -60,14 +60,15 @@ evals:
       - "_acceptance/don-ho-so-cu/xu-ly.json"
     expected: |
       bun rang/doi-chieu.mjs. git fetch origin onehub. Voi moi slug trong lo.json: pins = moi dong kind repin trong
-      origin/onehub:_acceptance/<slug>/run-log.jsonl (ham pinTren cua chung.mjs). Xet MOI dong xu-ly cua slug (mot slug co the
-      nhieu dong). Co dong cach sua-thuoc -> dat khi voi moi dong sua-thuoc co pin
-      co sha la hau due cua commit_sua (git merge-base --is-ancestor); khong co dong hoac cach khac -> dat khi co pin co sha la
-      hau due cua base (goc vong trong xu-ly.json), hoac co dong cach khac sua-thuoc. Sai -> ma 1 «chua xu: <slug>» hoac
-      «sua-thuoc chua ghim: <slug>» (liet het). In «doi-chieu: <x> co luot ghim xanh tren onehub trong vong, <y> trong so xu ly,
+      origin/onehub:_acceptance/<slug>/run-log.jsonl (ham pinTren cua chung.mjs), chi giu pin xanh: evals_exit khong rong va
+      moi ma bang 0 (ham pinXanh). Xet MOI dong xu-ly cua slug. Co dong cach sua-thuoc -> dat khi voi moi dong sua-thuoc co
+      pin xanh co sha la hau due cua commit_sua (git merge-base --is-ancestor); khong co dong sua-thuoc -> dat khi co pin xanh
+      co sha la hau due cua base (goc vong trong xu-ly.json), hoac co DUNG MOT dong trong so. Sai -> ma 1 «chua xu: <slug>»,
+      «sua-thuoc chua ghim: <slug>» hoac «nhieu dong: <slug> co <n> dong trong so xu ly» (liet het). In «doi-chieu: <x> co luot ghim xanh tren onehub trong vong, <y> trong so xu ly,
       <z> chua xu». Chieu do cung du lieu: bo pin cua mot slug dang co pin va khong co dong -> «BAT bo-pin»; gia lap dong
-      sua-thuoc voi commit_sua = HEAD cho slug do -> «BAT sua-thuoc-chua-ghim». Them dong sua-thuoc truoc mot dong cach khac cua cung slug -> van phai «BAT sua-thuoc-sau-dong-khac». Ca nao khong
-      bat -> ma 1 «thuoc hong: <ca>». Ma 0 khi z = 0 va ba ca BAT.
+      sua-thuoc voi commit_sua = HEAD cho slug do -> «BAT sua-thuoc-chua-ghim». Them dong sua-thuoc truoc mot dong cach khac cua cung slug -> van phai «BAT sua-thuoc-sau-dong-khac». Doi
+      pin cua slug do thanh co mot eval thoat 1 -> «BAT pin-do»; nhan doi mot dong trong so -> «BAT hai-dong». Ca nao khong
+      bat -> ma 1 «thuoc hong: <ca>». Ma 0 khi z = 0 va nam ca BAT.
 
   - id: E4
     criterion: AC-4
@@ -81,14 +82,16 @@ evals:
       - "_acceptance/don-ho-so-cu/lan/**"
     expected: |
       bun rang/so-xu-ly.mjs. Doc xu-ly.json qua khuon zod cua khuon-xu-ly.mjs (mot khuon). Nam cach: sua-thuoc, loi-kit,
-      ngoai-pham-vi, cho-lan-chu mang slug, eval, run_id, ly_do — kiem tren dia: tep _acceptance/don-ho-so-cu/lan/<run_id>.json
-      ton tai, la dau ra JSON nguyen van cua repin-lane.mjs (run_id cua tep bang ten tep), va trong do slug nay co eval nay
-      trong lech (thoat khac ky vong). ngoai-pham-vi co lan_chu va viec_phu (ma <day>-<so>); loi-kit co viec (URL issue kho
+      ngoai-pham-vi, cho-lan-chu mang slug, evals (danh sach eval, mot dong cho mot ho so), run_id, ly_do — kiem tren dia: tep
+      _acceptance/don-ho-so-cu/lan/<run_id>.json ton tai, la dau ra JSON nguyen van cua repin-lane.mjs (run_id cua tep bang ten
+      tep), va tap evals cua dong bang dung tap eval cua slug nay trong lech (thoat khac ky vong): eval xanh -> «eval <id> khong
+      do trong lan»; eval do khong ghi -> «sot eval do». ngoai-pham-vi co lan_chu va viec_phu (ma <day>-<so>); loi-kit co viec (URL issue kho
       kit); cho-lan-chu co pr. Cach ghim-luoi mang slug, ly_do, quyet — kiem: quyet la id mot dong type descope trong
       _acceptance/don-ho-so-cu/decisions.jsonl va decision cua dong do goi ten slug. Dong sai -> ma 1 «dong <i> <slug>: ...».
       Chieu do tren ban chep trong bo nho: xoa run_id mot dong -> «BAT thieu-run-id»; doi cach thanh «khac» -> «BAT cach-la»;
-      run_id khong co tep lan -> «BAT run-id-ma»; eval xanh trong tep lan -> «BAT eval-khong-do»; dong ghim-luoi voi quyet khong
-      co trong so -> «BAT luoi-quyet-ma». Ma 0 khi moi dong dat va nam ca BAT.
+      run_id khong co tep lan -> «BAT run-id-ma»; eval xanh trong tep lan -> «BAT eval-khong-do»; bo mot eval do khoi dong
+      -> «BAT sot-eval-do»; dong ghim-luoi voi quyet khong co trong so -> «BAT luoi-quyet-ma». Ma 0 khi moi dong dat va sau
+      ca BAT.
 
   - id: E5
     criterion: AC-5
@@ -136,7 +139,7 @@ evals:
       - "_acceptance/don-ho-so-cu/rang/chung.mjs"
     expected: |
       bun rang/ca-goi-ten.mjs. Hai ho so K6A cua chung.mjs. Moi ho so dat khi co pin xanh tren origin/onehub co sha la hau
-      due cua base (ham pinTrongVong cua chung.mjs), hoac co dong ghim-luoi trong xu-ly.json. gh pr view 411 --json
+      due cua base va moi eval may dat (ham pinTrongVong cua chung.mjs), hoac co dong ghim-luoi trong xu-ly.json. gh pr view 411 --json
       state,comments: state CLOSED va mot binh luan chua «#<so PR cua vong>» (so doc tu gh pr view feat/don-ho-so-cu --json
       number). gh khong chay duoc -> ma 2. Chieu do tren du lieu trong bo nho: khong ho so nao co pin va khong dong nao -> «BAT
       k6a-khong-ghim»; PR 411 OPEN -> «BAT pr-411-mo»; PR 411 dong voi binh luan khong tro so PR vong -> «BAT khong-tro». Ma 0
@@ -171,11 +174,13 @@ evals:
       - "scripts/pre-merge-check.sh"
       - "lib/evidence-core.cjs"
     expected: |
-      bun rang/cong-gop.mjs. Chay bash scripts/pre-merge-check.sh . --base origin/onehub tren HEAD (dung lenh CI cua
-      .github/workflows/acceptance.yml, giai tu tep workflow, khong chep tay); dat khi dong cuoi la «pre-merge-check: clean», hoac moi dong VIOLATION deu la cua chinh ho so don-ho-so-cu
-      (ho so dang cham chua co bao cao bang chung luc S4 chay).
-      Voi moi nhanh lo da day (git branch -r --list origin/chore/don-ho-so-cu-lo-*) chua gop: chay cung lenh trong worktree
-      tach o dau nhanh do, dat khi clean. Nhat ky ra .acceptance-runs/don-ho-so-cu/cong-gop/. Chieu do: worktree tach o HEAD,
+      bun rang/cong-gop.mjs. Worktree tach o HEAD, git rm -r _acceptance/don-ho-so-cu va commit (chinh ho so dang cham la vat
+      cua Cong Bang chung, khong phai cua luoi); commit go phai chi cham tep duoi _acceptance/don-ho-so-cu/, cham tep khac -> ma 1
+      «go ho so vong cham tep khac». Chay bash scripts/pre-merge-check.sh . --base origin/onehub trong cay do (dung lenh CI cua
+      .github/workflows/acceptance.yml, giai tu tep workflow, khong chep tay); dat chi khi dong cuoi la «pre-merge-check:
+      clean» — khong loc dong VIOLATION nao. Voi moi nhanh lo da day (git branch -r --list origin/chore/don-ho-so-cu-lo-*)
+      chua gop: chay cung lenh trong worktree tach o dau nhanh do, khong go gi, dat khi clean. Nhat ky ra .acceptance-runs/don-ho-so-cu/cong-gop/. Chieu do: worktree tach o HEAD,
       chon mot ho so dang cu tren HEAD (tu kiemKe), them mot dong vao run-log.jsonl cua no va commit trong worktree; chay
       lai lenh -> phai co dong «VIOLATION [<slug>]: evidence is stale» -> «BAT cham-ho-so-cu»; khong bat -> ma 1 «thuoc hong:
-      cham-ho-so-cu». Ma 0 khi moi cay clean va ca do BAT.
+      cham-ho-so-cu». Ham loc tep cua commit go gap mot tep ngoai ho so vong -> «BAT go-them-tep-khac». Ma 0 khi moi
+      cay clean va hai ca BAT.

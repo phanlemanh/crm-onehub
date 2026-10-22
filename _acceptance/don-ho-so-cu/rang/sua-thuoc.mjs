@@ -139,7 +139,7 @@ function caDoSuaThuoc(base) {
 	const slug = "khong-do-them-chay-gh";
 	const goc = {
 		slug,
-		eval: "E1",
+		evals: ["E1"],
 		cach: "sua-thuoc",
 		run_id: "repin-20000101T000000Z-1",
 		ly_do: "mau",
@@ -166,7 +166,7 @@ function caDoSuaThuoc(base) {
 }
 
 function caDoLanChu() {
-	const mau = { slug: "x", eval: "E1", cach: "sua-thuoc", vong_ky_cho_gop: [{ number: 1 }] };
+	const mau = { slug: "x", evals: ["E1"], cach: "sua-thuoc", vong_ky_cho_gop: [{ number: 1 }] };
 	let hong = false;
 	hong = bao("chua-hoi-lan-chu", kiemLanChu(mau), "chua hoi lan chu") || hong;
 	hong = bao("cho-khong-pr", kiemLanChu({ slug: "x", cach: "cho-lan-chu", pr: [] }), "cho-khong-pr") || hong;

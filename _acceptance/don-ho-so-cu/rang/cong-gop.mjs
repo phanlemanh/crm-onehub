@@ -17,17 +17,32 @@ function chayCi(root, nhan) {
 	const text = `${r.stdout}\n${r.stderr}`;
 	writeFileSync(join(NHAT_KY, `${nhan}.log`), text);
 	const cuoi = text.trim().split("\n").filter((d) => d.startsWith("pre-merge-check:")).pop() ?? "";
-	const viPham = text.split("\n").filter((d) => d.startsWith("VIOLATION [") && !d.startsWith(`VIOLATION [${SLUG}]`));
-	const chiCuaVong = cuoi !== "pre-merge-check: clean" && viPham.length === 0 && text.includes(`VIOLATION [${SLUG}]`);
-	return { clean: cuoi === "pre-merge-check: clean" || chiCuaVong, cuoi: chiCuaVong ? `${cuoi} (chi ho so dang cham ${SLUG})` : cuoi, text };
+	return { clean: cuoi === "pre-merge-check: clean", cuoi, text };
+}
+
+export function ngoaiHoSoVong(doi) {
+	return doi.filter((t) => !t.startsWith(`_acceptance/${SLUG}/`));
+}
+
+function goHoSoVong(goc) {
+	git(goc, "rm", "-r", "-q", join("_acceptance", SLUG));
+	git(goc, "-c", "user.name=cong-gop", "-c", "user.email=cong-gop@local", "commit", "-q", "-m", "go ho so vong");
+	return ngoaiHoSoVong(git(goc, "diff", "--name-only", "HEAD~1", "HEAD").split("\n").filter(Boolean));
 }
 
 mkdirSync(NHAT_KY, { recursive: true });
 git(GOC, "fetch", "-q", "origin");
 const loi = [];
-const dau = chayCi(GOC, "head");
-console.log(`HEAD: ${dau.cuoi}`);
-if (!dau.clean) loi.push(`HEAD khong clean: ${dau.cuoi}`);
+const cayDau = cayTach("HEAD", "cong-gop-head");
+try {
+	const ngoai = goHoSoVong(cayDau.goc);
+	if (ngoai.length) loi.push(`go ho so vong cham tep khac: ${ngoai.join(", ")}`);
+	const dau = chayCi(cayDau.goc, "head");
+	console.log(`HEAD (bo ${SLUG}): ${dau.cuoi}`);
+	if (!dau.clean) loi.push(`HEAD khong clean: ${dau.cuoi}`);
+} finally {
+	cayDau.don();
+}
 const daGop = new Set(git(GOC, "branch", "-r", "--merged", "origin/onehub", "--list", "origin/chore/don-ho-so-cu-lo-*").split("\n").map((s) => s.trim()).filter(Boolean));
 for (const nhanh of git(GOC, "branch", "-r", "--list", "origin/chore/don-ho-so-cu-lo-*").split("\n").map((s) => s.trim()).filter(Boolean)) {
 	if (daGop.has(nhanh)) continue;
@@ -64,4 +79,9 @@ try {
 } finally {
 	cay.don();
 }
+if (ngoaiHoSoVong([`_acceptance/${SLUG}/evals.yaml`, `_acceptance/${chon}/run-log.jsonl`]).length !== 1) {
+	console.log("KET LUAN: do — thuoc hong: go-them-tep-khac");
+	process.exit(1);
+}
+console.log("BAT go-them-tep-khac");
 console.log("KET LUAN: xanh");

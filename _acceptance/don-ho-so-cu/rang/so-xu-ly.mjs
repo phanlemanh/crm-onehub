@@ -36,8 +36,11 @@ export function kiemDong(d, i, layLan = docLan, quyet = docQuyet()) {
 	if (!lan) return [`dong ${i} ${d.slug}: run_id khong co tep lan ${d.run_id}`];
 	const hs = lan.slugs?.[d.slug];
 	if (!hs) return [`dong ${i} ${d.slug}: tep lan ${d.run_id} khong co ho so nay`];
-	if (!(hs.lech ?? []).some((e) => e.id === d.eval)) return [`dong ${i} ${d.slug}: eval ${d.eval} khong do trong lan ${d.run_id}`];
-	return [];
+	const lech = new Set((hs.lech ?? []).map((e) => e.id));
+	const loi = d.evals.filter((e) => !lech.has(e)).map((e) => `dong ${i} ${d.slug}: eval ${e} khong do trong lan ${d.run_id}`);
+	const sot = [...lech].filter((e) => !d.evals.includes(e));
+	if (sot.length) loi.push(`dong ${i} ${d.slug}: sot eval do ${sot.join(", ")} cua lan ${d.run_id}`);
+	return loi;
 }
 
 const pSo = join(HO_SO, "xu-ly.json");
@@ -58,7 +61,7 @@ if (!mau) {
 		const lan = docJson(join(THU_MUC_LAN, f));
 		const slug = Object.keys(lan.slugs ?? {}).find((s) => (lan.slugs[s].lech ?? []).length);
 		if (slug) {
-			mau = { slug, eval: lan.slugs[slug].lech[0].id, cach: "ngoai-pham-vi", run_id: lan.run_id, ly_do: "mau", lan_chu: "mau", viec_phu: "F1-1" };
+			mau = { slug, evals: lan.slugs[slug].lech.map((e) => e.id), cach: "ngoai-pham-vi", run_id: lan.run_id, ly_do: "mau", lan_chu: "mau", viec_phu: "F1-1" };
 			break;
 		}
 	}
@@ -77,6 +80,7 @@ const ca = [
 	["cach-la", { ...mau, cach: "khac" }, docLan],
 	["run-id-ma", { ...mau, run_id: "repin-20000101T000000Z-1" }, docLan],
 	["eval-khong-do", mau, (id) => (id === mau.run_id ? { ...lanMau, slugs: { [mau.slug]: { ...lanMau.slugs[mau.slug], lech: [] } } } : null)],
+	["sot-eval-do", { ...mau, evals: mau.evals.slice(1) }, (id) => (id === mau.run_id ? { ...lanMau, slugs: { [mau.slug]: { ...lanMau.slugs[mau.slug], lech: [...mau.evals.map((e) => ({ id: e })), { id: "E999" }] } } } : null)],
 	["luoi-quyet-ma", { slug: mau.slug, cach: "ghim-luoi", ly_do: "mau", quyet: "d-20000101T000000Z-1" }, docLan],
 ];
 let hong = false;

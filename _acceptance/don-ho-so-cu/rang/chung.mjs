@@ -100,7 +100,7 @@ export function pinTren(slug, nhanh = "origin/onehub") {
 	for (const l of r.stdout.split("\n")) {
 		try {
 			const j = JSON.parse(l);
-			if (j.kind === "repin" && j.sha) ra.push({ run_id: j.run_id, sha: j.sha });
+			if (j.kind === "repin" && j.sha) ra.push({ run_id: j.run_id, sha: j.sha, evals_exit: j.evals_exit ?? {} });
 		} catch {}
 	}
 	return ra;
@@ -110,6 +110,11 @@ export function laHauDue(truoc, sau) {
 	return spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", truoc, sau]).status === 0;
 }
 
+export function pinXanh(p) {
+	const ma = Object.values(p.evals_exit ?? {});
+	return ma.length > 0 && ma.every((m) => m === 0);
+}
+
 export function pinTrongVong(slug, moc, layPin = pinTren) {
-	return layPin(slug).some((p) => laHauDue(moc, p.sha));
+	return layPin(slug).some((p) => pinXanh(p) && laHauDue(moc, p.sha));
 }

@@ -2,7 +2,7 @@ import { z } from "../../../packages/validation/node_modules/zod/index.js";
 
 const chung = {
 	slug: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
-	eval: z.string().regex(/^E\d+[a-z]?$/),
+	evals: z.array(z.string().regex(/^E\d+[a-z]?$/)).min(1),
 	run_id: z.string().regex(/^repin-\d{8}T\d{6}Z-\d+$/),
 	ly_do: z.string().trim().min(1),
 };
