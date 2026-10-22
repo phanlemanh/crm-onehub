@@ -54,7 +54,12 @@ async function Companies({
 }: Pick<PageProps<"/[slug]/companies">, "searchParams">) {
 	const [, values] = await Promise.all([
 		requireSession(),
-		companiesSearchParams.load(searchParams),
+		getServerQueryClient()
+			.fetchQuery(
+				getServerTrpc().fields.filters.queryOptions({ entity: "COMPANY" }),
+			)
+			.catch(() => [])
+			.then((truong) => companiesSearchParams.load(searchParams, truong)),
 	]);
 
 	const trpc = getServerTrpc();
@@ -64,6 +69,9 @@ async function Companies({
 			trpc.companies.list.queryOptions(companiesSearchParams.toInput(values)),
 		),
 		queryClient.prefetchQuery(trpc.users.list.queryOptions()),
+		queryClient.prefetchQuery(
+			trpc.fields.filters.queryOptions({ entity: "COMPANY" }),
+		),
 	]);
 
 	return (

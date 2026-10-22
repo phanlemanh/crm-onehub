@@ -1,0 +1,1 @@
+driver: puppeteer trong do-man.mjs, khong co read_network_requests
