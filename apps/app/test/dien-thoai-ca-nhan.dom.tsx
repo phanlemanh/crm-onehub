@@ -77,7 +77,7 @@ function loiGoiTao() {
 describe("gui-so", () => {
 	test("gui-so: QuickAddContact thu tu o va gui phone", async () => {
 		await moForm("QuickAddContact");
-		expect(nhanCacO().join(",")).toBe("Tên,Họ,Điện thoại,Email,Chức danh");
+		expect(nhanCacO().join(",")).toBe("Tên,Họ,Chức danh,Email,Điện thoại");
 		expect(oTheoNhan("Điện thoại").type).toBe("tel");
 		await go(oTheoNhan("Tên"), "Lan");
 		await go(oTheoNhan("Điện thoại"), "0901 234 567");
@@ -88,7 +88,7 @@ describe("gui-so", () => {
 
 	test("tao-sheet: thieu phone trong contacts.create", async () => {
 		await moForm("CreateContactSheet");
-		expect(nhanCacO().slice(0, 4).join(",")).toBe("Tên,Họ,Điện thoại,Email");
+		expect(nhanCacO().slice(0, 4).join(",")).toBe("Tên,Họ,Chức danh,Email");
 		await go(oTheoNhan("Tên"), "Lan");
 		await go(oTheoNhan("Điện thoại"), "+84 28 3812 3456");
 		await bam(nutGui("CreateContactSheet"));

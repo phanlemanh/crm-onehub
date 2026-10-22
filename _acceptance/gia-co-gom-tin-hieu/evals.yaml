@@ -1,0 +1,188 @@
+schema_version: 1
+slug: gia-co-gom-tin-hieu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.gcg_moi_truong
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/gom-cau-hinh.ts"
+      - "scripts/tin-hieu/test/gom-gia-co.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-gia-co.test.ts describe "gcg-moi-truong" tren kho tam co tin hieu chua co cho. env cua luot gom them
+      TIN_HIEU_TOKEN, GH_TOKEN, GITHUB_TOKEN, ANTHROPIC_API_KEY va BI_MAT_KHAC, moi bien mot gia tri moi rieng.
+      claude gia ghi nguyen env no nhan vao tep. Ma tran viet truoc, moi dong mot assert:
+        1 tap khoa env cua phien == GOM.moHinh.moiTruong (doc tu cau hinh, khong viet tay) + khoa cua cac hang
+        2 khong gia tri nao trong env cua phien bang gia tri cua TIN_HIEU_TOKEN, GH_TOKEN, GITHUB_TOKEN, BI_MAT_KHAC
+        3 ANTHROPIC_API_KEY co mat va dung gia tri
+        4 CLAUDE_CODE_SUBPROCESS_ENV_SCRUB == "1"
+        5 cau hinh git muc lenh (GIT_CONFIG_COUNT/KEY_n/VALUE_n) co core.hooksPath=/dev/null, core.fsmonitor=false,
+          safe.bareRepository=explicit; GIT_CONFIG_GLOBAL=/dev/null; GIT_CONFIG_NOSYSTEM=1
+        6 khong khoa nao bat dau bang GITHUB_
+      DOI CHUNG DUONG: ban that -> 6 dong xanh. CHIEU DO: ban sao cua luot truyen nguyen process.env cho phien -> dong 2
+      do voi thong diep ghim "phien gom thay token ghi kho".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.gcg_loi_goi
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/gom-cau-hinh.ts"
+      - "scripts/tin-hieu/test/gom-gia-co.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-gia-co.test.ts describe "gcg-loi-goi" chay mot luot that tren kho tam; claude gia ghi argv va chep tep --settings
+      no nhan. Ma tran viet truoc, moi dong mot assert tren argv/tep THAT cua luot (khong goi ham dung loi goi rieng):
+        1 --permission-mode dontAsk
+        2 --tools dung tap {Read, Glob, Grep, Edit, Write, Skill, Bash}
+        3 --disallowedTools chua WebFetch, WebSearch, mcp__*; co --strict-mcp-config
+        4 --setting-sources user; --add-dir <goc kit>
+        5 tep --settings nam NGOAI goc kho
+        6 permissions.allow phan Bash == dung danh sach lenh kit dung tu GOM.moHinh va goc kit + duong ban gom + moi tep
+          lo_trinh.tep, moi dong bat dau "node <goc kit tuyet doi>/scripts/", khong dong nao chua "*", "$", "&&", ";", "|"
+        7 permissions.allow phan Edit == Edit(./<ban gom>) + Edit(./<moi tep lo trinh>), khong gi khac
+        8 permissions.deny chua Edit(**/.git/**), Edit(./.githooks/**), Edit(./.github/**), Read(//proc/**)
+        9 permissions.blockReadsOutsideWorkingDirectories == true; disableAllHooks == true
+        10 loi dan (doi so -p) chua NGUYEN VAN tung dong lenh Bash cua dong 6, chua duong ban gom, va cau noi noi dung
+           tin hieu la du lieu (GOM.moHinh.duLieu doc tu cau hinh)
+        11 permissions.allow phan Skill == {Skill(acceptance-gate:gom-tin-hieu), Skill(acceptance-gate:cat-luot)};
+           khong dong "Skill" tran
+        12 phan dau (frontmatter YAML, bo doc that) cua skills/gom-tin-hieu/SKILL.md va skills/cat-luot/SKILL.md trong goc
+           kit THAT da giai: khoa allowed-tools vang, hoac moi muc cua no nam trong permissions.allow
+        13 moi khoi lenh `node "$AG/scripts/<x>.mjs" <doi so>` trong hai SKILL.md that, sau khi thay $AG bang goc kit va
+           <ban pham vi>/<tep lo trinh> bang duong ban gom/tung tep lo trinh, co trong permissions.allow
+      DOI CHUNG DUONG: ban that -> 13 dong xanh. CHIEU DO (ban sao trong thu muc tam, cung kho tam): them "Bash(node:*)"
+      vao danh sach cho phep -> dong 6 do voi thong diep ghim "phien gom chay duoc lenh tuy y"; bo disableAllHooks ->
+      dong 9 do voi thong diep ghim "phien gom chay hook"; ban sao kit co skill gom khai "allowed-tools: Bash(node:*)" ->
+      dong 12 do voi thong diep ghim "skill tu cap quyen ngoai danh sach"; ban sao kit them mot khoi lenh "--moi" vao
+      skill gom -> dong 13 do voi thong diep ghim "skill bao chay lenh chua duoc phep".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gcg_chi_viec_gom
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/gom-cau-hinh.ts"
+      - "scripts/tin-hieu/test/gom-gia-co.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-gia-co.test.ts describe "gcg-chi-viec-gom". claude gia o che do "chi-duoc-phep": chi chay cac dong lenh co trong
+      permissions.allow cua tep --settings no nhan (chay dung nguyen van, khong lenh git nao), chi ghi vao duong ban gom
+      (bien moi truong cua phien) va tep lo trinh. Sau luot: ma 0; origin/tin-hieu/gom ton tai, chua dung mot ban gom moi
+      o duong luot da dinh (tin-hieu/gom/<YYYY-MM-DD>.md theo gio Viet Nam), hang de xuat va LO-TRINH.html ve lai; gh gia
+      nhan dung mot "pr create --draft"; moi ref khac tren origin (onehub, the, nhanh khac) giu nguyen sha so voi truoc
+      luot. Ca hai: claude gia o che do "khong-gom" (khong ghi gi) -> ma 1, dong in chua GOM.thongDiep.soBanGom, khong
+      ref nao tren origin doi, ban gom rong khong con trong cay. Ca ba: claude gia in JSON dung khuon --output-format json
+      voi permission_denials hai muc (Bash voi doi so chua chu moi DOI-SO-MOI, WebFetch) -> nhat ky luot co dong
+      GOM.thongDiep.biTuChoi voi "2" va ten hai cong cu, khong chua DOI-SO-MOI; permission_denials rong -> dong do in "0".
+      DOI CHUNG DUONG: ban that -> ca hai ca dung. CHIEU DO: ban sao bo buoc dat ban gom vao index truoc phien -> ca mot
+      do voi thong diep ghim "rang phu khong chay duoc khi phien khong co git".
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.gcg_tep_lich
+    paths:
+      - ".github/workflows/tin-hieu-gom.yml"
+      - "_acceptance/gia-co-gom-tin-hieu/rang/tep-lich.mjs"
+    expected: |
+      rang/tep-lich.mjs doc .github/workflows/tin-hieu-gom.yml bang bo doc YAML that va kiem ma tran viet truoc 5 dong:
+        1 buoc actions/checkout co with.persist-credentials == false
+        2 khong buoc run nao chua "git config --global" hay "git config --system"
+        3 buoc cai goi kit dua token qua env GIT_CONFIG_COUNT/KEY_0/VALUE_0 cua chinh buoc do (url.*.insteadOf)
+        4 buoc chay gom-lich.ts khong co GH_TOKEN trong env; co TIN_HIEU_TOKEN va ANTHROPIC_API_KEY
+        5 lenh cai Claude Code ghim mot ban >= 2.1.302 (so sanh theo so, khong theo chu)
+      Ma 0 chi khi ca 5 dong DUNG. DOI CHUNG DUONG: tep that -> 5 DUNG. CHIEU DO: --tu-kiem chay lai cung ma tran tren ba
+      ban sao tiem trong thu muc tam: bo persist-credentials -> dong 1 SAI, thong diep ghim "checkout luu token";
+      them buoc "git config --global url..." -> dong 2 SAI, thong diep ghim "token vao cau hinh git toan cuc";
+      ghim 2.1.281 -> dong 5 SAI, thong diep ghim "Claude Code cu hon 2.1.302". --tu-kiem ma 0 chi khi ban that xanh va
+      ba ban tiem do dung dong, dung thong diep.
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.gcg_khong_tren_dia
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-gia-co.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-gia-co.test.ts describe "gcg-khong-tren-dia": luot that tren kho tam voi TIN_HIEU_TOKEN mot gia tri moi va HOME
+      tro mot thu muc tam rieng. Sau luot ma 0: quet tung tep (doc nhi phan) duoi ban checkout ke ca .git/ va duoi HOME ->
+      khong tep nao chua gia tri token. DOI CHUNG DUONG: cung phep quet tim thay token khi test tu ghi token vao
+      .git/config cua mot ban sao (quet khong mu). CHIEU DO: ban sao cua luot ghi token vao cau hinh remote truoc khi
+      fetch -> do voi thong diep ghim "token nam tren dia: .git/config". Ca chot truoc phien: test dat gia tri token vao
+      HOME/.claude/plugins/marketplaces/kit/.git/config (mot tep), roi chay luot -> ma 1, dong in chua
+      GOM.thongDiep.tokenTrenDia va duong tep do, claude gia KHONG duoc goi; doi chung: cung HOME khong tep do -> claude
+      gia duoc goi.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.gcg_token
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-gia-co.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-gia-co.test.ts describe "gcg-token": PATH cua luot dat truoc mot thu muc vo boc git, node, bun ghi (argv[0..2],
+      co/khong co gia tri token o bat ky bien env nao) roi chay lenh that; claude gia va gh gia cung ghi nhu vay. Luot
+      that toi khi mo PR, ma 0. Ma tran viet truoc tren nhat ky:
+        1 moi loi goi git fetch va git push mang token (qua GIT_CONFIG_* extraheader)
+        2 moi loi goi gh mang token o GH_TOKEN
+        3 loi goi claude khong mang token
+        4 moi loi goi node toi goc kit va toi scripts/product-map.mjs khong mang token
+        5 moi loi goi git khac (switch, status, add, commit, diff, log, rev-parse) khong mang token
+        6 so loi goi git fetch >= 1, git push == 1, gh >= 2 (khong de ma tran rong)
+      DOI CHUNG DUONG: ban that -> 6 dong xanh. CHIEU DO: ban sao dua token vao env chung cua moi lenh git -> dong 5 do
+      voi thong diep ghim "token toi lenh git cuc bo".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gcg_sieu_du_lieu
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/gom-cau-hinh.ts"
+      - "scripts/tin-hieu/test/gom-gia-co.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-gia-co.test.ts describe "gcg-sieu-du-lieu", ma tran viet truoc 5 che do claude gia, moi che do lam xong viec gom
+      dung roi them mot thay doi:
+        a ghi "[core]\n\tfsmonitor = <lenh tao tep moi A>" vao .git/config
+        b ghi .git/hooks/pre-push (chmod +x) tao tep moi B
+        c ghi alias/remote moi vao .git/config ([remote "ra"] url = <origin tam thu hai>)
+        d tao ref .git/refs/heads/ngoai tro HEAD
+        e ghi .git/info/attributes
+      Moi che do: ma 1; dong in chua GOM.thongDiep.sieuDuLieu va ten tep bi doi; gh gia khong nhan pr create/edit; moi
+      ref tren ca hai origin giu nguyen sha; tep moi A, B khong ton tai. Ca rieng: luot that khong che do tan cong -> moi
+      loi goi git sau phien (vo boc git ghi argv+env) mang core.hooksPath=/dev/null va core.fsmonitor=false o muc lenh.
+      DOI CHUNG DUONG: ban that -> 5 che do do dung, ca rieng xanh. CHIEU DO: ban sao bo kiem bam sieu du lieu -> che do a
+      tao tep moi A hoac day, do voi thong diep ghim "luot chay thu phien de lai".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.gcg_lot_khoa
+    paths:
+      - "scripts/tin-hieu/gom-lich.ts"
+      - "scripts/tin-hieu/test/gom-gia-co.test.ts"
+      - "scripts/tin-hieu/test/gom-kho-tam.ts"
+    expected: |
+      gom-gia-co.test.ts describe "gcg-lot-khoa", ma tran viet truoc 4 che do claude gia, moi che do lam viec gom dung roi
+      dat mot gia tri vao noi dung, rang phu va kiem cau van xanh:
+        a ANTHROPIC_API_KEY nguyen van trong ten mot nhom cua ban gom
+        b base64 cua TIN_HIEU_TOKEN trong cau_giao cua mot hang de xuat
+        c ANTHROPIC_API_KEY nguyen van trong ly do cua mot tin hieu le (vao than PR)
+        d base64 cua ANTHROPIC_API_KEY trong mot tep moi cua ban gom
+      Moi che do: ma 1; dong in chua GOM.thongDiep.lotKhoa; origin/tin-hieu/gom khong ton tai; gh gia khong nhan pr
+      create/edit; noi stdout+stderr cua luot khong chua gia tri khoa nao (nguyen van va base64).
+      DOI CHUNG DUONG: luot dung khong lot -> ma 0, PR mo. CHIEU DO: ban sao chi quet nguyen van -> che do b do voi
+      thong diep ghim "khoa base64 lot qua quet".

@@ -1,0 +1,108 @@
+{
+  "feature_plain": "Lịch gom tín hiệu được bật khoá mô hình mà một tín hiệu có lời dặn cài sẵn không lấy được khoá nào, cũng không đẩy được gì ra ngoài PR đề xuất.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ chỉ trao cho phiên gom khoá mô hình, không token ghi kho nào; Claude Code gỡ cả khoá mô hình khỏi mọi lệnh con."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ cho phiên gom đúng việc gom: chỉ chạy các lệnh kit đã liệt, chỉ sửa bản gom và tệp lộ trình, không mạng, không hook, không đọc ngoài kho."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ không để token nào nằm trên đĩa máy chạy, và dừng lượt trước khi gọi phiên nếu thấy token trên đĩa."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ chỉ đưa token cho đúng các bước lấy mã, đẩy nhánh đề xuất và mở PR."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ dừng lượt, không đẩy gì, khi phiên gom để lại thay đổi trong cấu hình hay hook git của kho."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG làm hỏng đường giao đề xuất của lịch gom: phiên chỉ làm đúng việc được phép vẫn ra PR nháp như cũ, và chỉ nhánh đề xuất đổi."
+    },
+    {
+      "id": "AC-7",
+      "p": "Chặn đẩy khi bản gom, hàng đề xuất hay thân PR mang khoá, kể cả khoá đã mã hoá base64."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG cách ly ở tầng hệ điều hành ở vòng này: người dùng riêng cho phiên, chặn mạng theo người dùng, nơi giữ khoá mô hình tách riêng (Hỏi-2)."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG dùng hộp cát dựng sẵn của Claude Code trên máy Actions."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG lọc chữ của tín hiệu để tìm lời dặn: đổi chữ là lọt."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG thu quyền của chính token trên GitHub: đó là việc cài đặt của chủ kho, sẽ ghi vào tài liệu."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG sửa skill gom tín hiệu hay skill cắt lượt của kit."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG có phép thử gọi Claude Code thật ở vòng này — anh đã bỏ ở Cổng Phạm vi, ghi vào hạn chế đã biết."
+    }
+  ],
+  "scope_plain": "Sáu việc để ngoài vòng này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đủ bốn thứ có thể bị nhắm: token ghi kho, khoá mô hình, quyền đẩy, cấu hình git; đối chiếu hướng dẫn bảo mật Actions của GitHub và danh sách rủi ro mô hình ngôn ngữ của OWASP (AC-1, AC-4–AC-7)."
+    },
+    {
+      "i": 1,
+      "p": "Đủ năm đường lọt: biến môi trường của lệnh con, tệp trên đĩa, chạy mã tuỳ ý, gọi mạng, nội dung bị đẩy lên; đối chiếu tài liệu phân quyền của Claude Code (AC-1, AC-2, AC-4, AC-6, AC-7)."
+    },
+    {
+      "i": 2,
+      "p": "Đủ hai lúc: trong phiên gom và sau phiên, ở các bước git và mở PR của lịch (AC-2, AC-3, AC-6, AC-7)."
+    },
+    {
+      "i": 3,
+      "p": "Mọi chặn đều đỏ, gọi tên nguyên nhân, không in khoá, và đường giao đề xuất cũ vẫn chạy (AC-3, AC-6, AC-7)."
+    },
+    {
+      "i": 4,
+      "p": "Giả định anh nhận: Claude Code thi hành đúng luật phân quyền của nó. Vòng này không đo giả định đó; nó nằm trong hạn chế đã biết."
+    },
+    {
+      "i": 5,
+      "p": "Bảng quét đầy đủ các ô làm ngay, để sau, không làm."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Phiên gom được gọi mọi skill, mà một skill có thể tự cấp thêm quyền chạy lệnh. Đã khoá lại chỉ hai skill gom và cắt lượt, kèm phép kiểm rằng hai skill đó không tự cấp quyền và không bảo chạy lệnh ngoài danh sách."
+    },
+    {
+      "i": 1,
+      "p": "Việc bỏ phần đo giá trị bị ghi như máy chắc chắn, trong khi anh vẫn có thể khai ngưỡng. Đã chuyển thành câu hỏi cho anh (Hỏi-3)."
+    },
+    {
+      "i": 2,
+      "p": "Phép thử thật chưa đo việc Claude Code gỡ khoá khỏi lệnh con. Đã thêm vào phép thử thật, rồi anh bỏ cả phép thử ở Cổng Phạm vi — nay nằm trong hạn chế đã biết."
+    },
+    {
+      "i": 3,
+      "p": "Chưa có gì chứng skill gom thật làm xong việc chỉ với các lệnh được phép. Phần chạy thật đã bỏ cùng phép thử; còn lại phép kiểm tĩnh mọi lệnh hai skill nêu đều được phép, và lượt thật trên Actions in số lời gọi bị từ chối."
+    },
+    {
+      "i": 4,
+      "p": "Bước cài gói kit trên Actions có thể lỡ lưu token xuống đĩa mà bài kiểm không chạy bước đó. Đã thêm chốt: lượt tự quét đĩa tìm token trước khi gọi phiên, chạy ngay trên máy Actions."
+    }
+  ]
+}

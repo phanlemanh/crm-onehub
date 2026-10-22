@@ -4,6 +4,7 @@ import {
 	type Prisma,
 	Prisma as PrismaNamespace,
 } from "@crm/db";
+import { ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
 import { normalizeCurrency } from "@crm/db/currency";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { type LoaiGiaiDoan, laDaDong, laThua } from "@crm/db/giai-doan";
@@ -39,7 +40,9 @@ import {
 } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { NguoiGoiTep } from "../fields/field-files-quyen";
 import { FieldsService } from "../fields/fields.service";
+import { khoangMoc } from "../fields/moc-ngay";
 import { GIAI_DOAN_API } from "../giai-doan/giai-doan-config";
 import {
 	archivedFilter,
@@ -183,6 +186,10 @@ export class DealsService {
 			"DEAL",
 			rows.map((row) => row.id),
 		);
+		const soTep = await this.fields.soTepTheoBanGhi(
+			"DEAL",
+			rows.map((row) => row.id),
+		);
 
 		return {
 			rows: rows.map(
@@ -205,6 +212,7 @@ export class DealsService {
 					createdAt: createdAt.toISOString(),
 					archivedAt: archivedAt?.toISOString() ?? null,
 					fields: tableFields.get(row.id) ?? {},
+					soTepTheoTruong: soTep.get(row.id) ?? {},
 				}),
 			),
 			total,
@@ -328,6 +336,10 @@ export class DealsService {
 			columns.flatMap((column) => column.cards.map((card) => card.id)),
 			DEAL_BOARD.truongTrenThe,
 		);
+		const soTepThe = await this.fields.soTepTheoBanGhi(
+			"DEAL",
+			columns.flatMap((column) => column.cards.map((card) => card.id)),
+		);
 
 		return {
 			columns: columns.map((column) => ({
@@ -335,13 +347,14 @@ export class DealsService {
 				cards: column.cards.map((card) => ({
 					...card,
 					fields: truongThe.get(card.id) ?? {},
+					soTepTheoTruong: soTepThe.get(card.id) ?? {},
 				})),
 			})),
 			reportingCurrency: base,
 		};
 	}
 
-	async byId(id: string) {
+	async byId(id: string, nguoiGoi?: NguoiGoiTep) {
 		const deal = await this.db.deal.findUnique({
 			where: { id },
 			select: {
@@ -392,6 +405,7 @@ export class DealsService {
 		return {
 			...rest,
 			fields: await this.fields.valuesFor("DEAL", id),
+			tepTheoTruong: await this.fields.tepTheoBanGhi("DEAL", id, nguoiGoi),
 			amountCents: toCents(amount),
 			baseAmountCents: toCents(baseAmount),
 			reportingCurrency: await this.conversion.reportingCurrency(),
@@ -412,6 +426,8 @@ export class DealsService {
 
 	async create(input: DealCreateInput) {
 		const now = new Date();
+		const truong = input.fields ?? {};
+		await this.fields.kiemBatBuocLucTao(this.db, "DEAL", truong);
 
 		const currency = normalizeCurrency(
 			input.currency ?? (await this.conversion.reportingCurrency()),
@@ -444,6 +460,7 @@ export class DealsService {
 					},
 					select: { id: true, name: true, companyId: true, stage: true },
 				});
+				await this.fields.ghiTruongLucTao(tx, "DEAL", created.id, truong);
 				await sinhGoiYKeHoach(tx, {
 					dealId: created.id,
 					tuLoai: null,
@@ -473,7 +490,7 @@ export class DealsService {
 				stage: deal.stage,
 			});
 
-			void this.fields.queueBackfillForNewRecord("DEAL", deal.id);
+			void this.fields.queueBackfillForNewRecord("DEAL", deal.id, truong);
 
 			return deal;
 		} catch (error) {
@@ -588,7 +605,11 @@ export class DealsService {
 		id: string,
 		guard?: { archivedBefore: Date },
 	): Promise<{ id: string; name: string } | null> {
-		let deleted: { targets: StampTargets; name: string } | null;
+		let deleted: {
+			targets: StampTargets;
+			name: string;
+			tepXoa: string[];
+		} | null;
 
 		try {
 			deleted = await this.db.$transaction(async (tx) => {
@@ -613,13 +634,14 @@ export class DealsService {
 				await tx.agentTask.deleteMany({ where: { dealId: id } });
 
 				await ghiGoDoXoa(tx, { dealId: id }, new Date());
+				const tepXoa = await ghiChoXoaTheoTep(tx, { dealId: id });
 
 				const deal = await tx.deal.delete({
 					where: { id },
 					select: { name: true },
 				});
 
-				return { targets, name: deal.name };
+				return { targets, name: deal.name, tepXoa };
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -627,6 +649,7 @@ export class DealsService {
 
 		if (!deleted) return null;
 
+		await this.fields.donTepNgay(deleted.tepXoa);
 		await this.stamp.recomputeAfterDelete(deleted.targets, { dealId: id });
 
 		this.logger.log({
@@ -1127,30 +1150,9 @@ export class DealsService {
 }
 
 function closingFilter(window: ClosingWindow): Prisma.DealWhereInput {
-	const now = new Date();
-	const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-	const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-	const startOfMonthAfter = new Date(now.getFullYear(), now.getMonth() + 2, 1);
-
-	switch (window) {
-		case "overdue":
-			return {
-				expectedCloseDate: { lt: now },
-				...DANG_MO,
-			};
-		case "this-month":
-			return {
-				expectedCloseDate: { gte: startOfMonth, lt: startOfNextMonth },
-			};
-		case "next-month":
-			return {
-				expectedCloseDate: { gte: startOfNextMonth, lt: startOfMonthAfter },
-			};
-		case "later":
-			return { expectedCloseDate: { gte: startOfMonthAfter } };
-		case "none":
-			return { expectedCloseDate: null };
-	}
+	if (window === "none") return { expectedCloseDate: null };
+	const khoang = { expectedCloseDate: khoangMoc(window) };
+	return window === "overdue" ? { ...khoang, ...DANG_MO } : khoang;
 }
 
 function roleOrNull(value: string | null): string | null {

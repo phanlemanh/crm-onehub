@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hỏi-2 · Cách gộp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Cổng Phạm vi · don-ho-so-cu · AC-6, AC-9</p>
+    <h1>Hỏi-2: mỗi lô một PR hay một PR cuối vòng</h1>
+
+    <svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="40" y1="40" x2="1160" y2="40" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <line x1="40" y1="196" x2="1160" y2="196" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <line x1="40" y1="352" x2="1160" y2="352" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+
+      <text x="40" y="68" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">A · Mỗi lô một PR (khuyên)</text>
+      <text x="40" y="224" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">B · Một PR cuối vòng</text>
+
+      <line x1="136" y1="112" x2="216" y2="112" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="344" y1="112" x2="424" y2="112" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="520" y1="112" x2="600" y2="112" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="728" y1="112" x2="808" y2="112" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="872" y1="112" x2="960" y2="112" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <line x1="656" y1="268" x2="696" y2="268" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="912" y1="268" x2="960" y2="268" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <line x1="40" y1="380" x2="1160" y2="380" stroke="#575757" stroke-width="0.8" marker-end="url(#arrow)"/>
+
+      <rect x="40" y="84" width="96" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="88" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lô 1 ghim</text>
+
+      <rect x="216" y="84" width="128" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="280" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">PR lô 1 gộp</text>
+
+      <rect x="424" y="84" width="96" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="472" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lô 2 ghim</text>
+
+      <rect x="600" y="84" width="128" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="664" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">PR lô 2 gộp</text>
+
+      <rect x="808" y="84" width="64" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.32)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="840" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">…</text>
+
+      <rect x="960" y="84" width="200" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1060" y="108" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">PR vòng</text>
+      <text x="1060" y="126" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">(sổ xử lý, thước)</text>
+
+      <text x="40" y="172" fill="#575757" font-size="12" font-family="'Geist', sans-serif">hồ sơ tươi trên onehub từng đợt   ·   CI nhẹ (chỉ tệp T1)   ·   ~10 lượt gộp vk</text>
+
+      <rect x="40" y="240" width="616" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="348" y="272" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lô 1 … lô n ghim trên một nhánh</text>
+
+      <rect x="696" y="240" width="216" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="804" y="264" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">giu-tuoi ghim lại phần</text>
+      <text x="804" y="282" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bị gộp khác làm cũ</text>
+
+      <rect x="960" y="240" width="200" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1060" y="272" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">một PR gộp</text>
+
+      <text x="40" y="328" fill="#575757" font-size="12" font-family="'Geist', sans-serif">1 lượt gộp vk   ·   ~200 hồ sơ cũ trên onehub tới cuối vòng   ·   sổ chạy dễ va</text>
+
+      <text x="1160" y="404" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em" text-anchor="end">THỜI GIAN</text>
+    </svg>
+  </div>
+</body>
+</html>

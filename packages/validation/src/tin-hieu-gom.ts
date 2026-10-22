@@ -65,3 +65,8 @@ export const cauHinhGom = z.object({
 	lo_trinh: z.object({ tep: z.union([z.string(), z.array(z.string())]) }),
 });
 export type CauHinhGom = z.infer<typeof cauHinhGom>;
+
+export const ketQuaPhien = z.object({
+	permission_denials: z.array(z.object({ tool_name: z.string() })).default([]),
+});
+export type KetQuaPhien = z.infer<typeof ketQuaPhien>;

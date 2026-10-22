@@ -21,7 +21,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
-import { useFieldFacets } from "@/components/crm/fields/field-facets";
+import {
+	useFieldFacets,
+	useTruongLoc,
+} from "@/components/crm/fields/field-facets";
 import {
 	anDuoiTheoKieu,
 	OTruongBang,
@@ -209,7 +212,9 @@ export function CompaniesTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const table = useTableQuery(companiesSearchParams);
+	const table = useTableQuery(companiesSearchParams, {
+		truongLoc: useTruongLoc("COMPANY"),
+	});
 	const { query, input, setArchived, currentView, applyView } = table;
 
 	const companies = useQuery({

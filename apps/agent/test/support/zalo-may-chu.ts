@@ -4,6 +4,7 @@ export function zaloMayChu(chon: ChonZaloGia = {}) {
 	const gia = zaloGia(chon);
 	const mayChu = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: async (req) =>
 			gia.fetcher(req.url, { method: "POST", body: await req.text() }),
 	});

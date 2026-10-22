@@ -25,7 +25,8 @@ import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dash
 import { dealListInput, dealListOutput, dealBoardInput, dealBoardOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
 import { duAnListInput, duAnListOutput, duAnIdInput, duAnDong, duAnLichOutput, duAnTaoInput, duAnTaoOutput, duAnSuaInput, duAnOkOutput, duAnMocTaoInput, duAnMocSuaInput, duAnPhuThuocInput, duAnDaDoiOutput } from "../du-an/du-an.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
-import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
+import { fieldFileStatusOutput, fieldFileRequestUploadInput, fieldFileRequestUploadOutput, fieldFileCompleteInput, fieldFileCompleteOutput, fieldFileIdInput, fieldFileDownloadOutput, fieldFileRemoveOutput } from "../fields/field-files.contracts";
+import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldLayoutOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldStandardHiddenInput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { giaiDoanListOutput, giaiDoanCreateInput, giaiDoanWriteOutput, giaiDoanRenameInput, giaiDoanReorderInput, giaiDoanArchiveInput, giaiDoanArchivedOutput, giaiDoanRestoreInput } from "../giai-doan/giai-doan.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
@@ -44,6 +45,7 @@ import { hoiYGhiOutput, hoiYDocOutput, hoiYNhanOutput, hoiYDoPhuOutput, congBoOu
 import { bangChamInput, bangChamOutput, xuatKyOutput, mangSangOutput } from "../okr/okr-khep.contracts";
 import { datHienThiInput, traLaiInput, chuyenDonViInput, moCoiInput } from "@crm/validation/okr-hien-thi";
 import { danhSachInput, danhSachOutput, cycleOnlyInput, toanCanhOutput, sucKhoeOutput, cayCanChinhOutput, soDoDonViOutput, quanhMucTieuInput, quanhMucTieuOutput, hopTuanInput, hopTuanOutput, moHopTuanOutput, dienBienInput, dienBienOutput, khoiCuaToiInput, khoiCuaToiOutput } from "../okr/okr-xem.contracts";
+import { moiKrInput, moiKrOutput } from "../okr/okr-moi-kr.contracts";
 import { moCapNhatInput, guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { commentsInput, addCommentInput, followInput, transferOkrPreviewInput, transferOkrInput } from "@crm/validation/okr-trao-doi";
 import { canhKrInput, canhKrOutput, idOutput, goViecInput, goBangChungInput, goGhiNhanInput } from "../okr/okr-canh-kr.contracts";
@@ -604,6 +606,27 @@ const appRouter = t.router({
 }))
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
+  fieldFiles: t.router({
+    status: publicProcedure
+      .output(fieldFileStatusOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    requestUpload: publicProcedure
+      .input(fieldFileRequestUploadInput)
+      .output(fieldFileRequestUploadOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    complete: publicProcedure
+      .input(fieldFileCompleteInput)
+      .output(fieldFileCompleteOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    downloadUrl: publicProcedure
+      .input(fieldFileIdInput)
+      .output(fieldFileDownloadOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    remove: publicProcedure
+      .input(fieldFileIdInput)
+      .output(fieldFileRemoveOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
   fields: t.router({
     access: publicProcedure
       .output(fieldAccessOutput)
@@ -620,6 +643,10 @@ const appRouter = t.router({
       .input(fieldEntityInput)
       .output(fieldFiltersOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    layout: publicProcedure
+      .input(fieldEntityInput)
+      .output(fieldLayoutOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     coverage: publicProcedure
       .input(fieldIdInput)
       .output(fieldCoverageOutput)
@@ -635,6 +662,10 @@ const appRouter = t.router({
     reorder: publicProcedure
       .input(fieldReorderInput)
       .output(fieldReorderOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    setStandardHidden: publicProcedure
+      .input(fieldStandardHiddenInput)
+      .output(fieldLayoutOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     archive: publicProcedure
       .input(fieldIdInput)
@@ -1148,6 +1179,10 @@ const appRouter = t.router({
     sucKhoe: publicProcedure
       .input(cycleOnlyInput)
       .output(sucKhoeOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    moiKr: publicProcedure
+      .input(moiKrInput)
+      .output(moiKrOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     cayCanChinh: publicProcedure
       .input(cycleOnlyInput)

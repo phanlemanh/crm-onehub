@@ -45,7 +45,9 @@ import {
 	OTruongBang,
 	OTruongPhieu,
 } from "@/components/crm/fields/kieu-truong";
-import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
+import { FieldsCog, OTruongTuTao } from "@/components/crm/fields/record-fields";
+import { mucChiTiet } from "@/components/crm/fields/truong-chuan";
+import { useBoTriTruong } from "@/components/crm/fields/use-bo-tri-truong";
 import { savingValue } from "@/components/crm/inline-field";
 import type { Owner } from "@/components/crm/owner-cell";
 import { ContactSocials } from "@/components/crm/social-links";
@@ -505,6 +507,9 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 	const saveFields = (fields: Record<string, FieldValueJson>) =>
 		update.mutate({ id: contact.id, data: { fields } });
 
+	const boTri = useBoTriTruong("CONTACT", contact.fields);
+	const chiTiet = mucChiTiet(boTri.muc, contact.fields);
+
 	return (
 		<KhoaLuuTru khoa={contact.archivedAt !== null}>
 			<DetailSheetBody>
@@ -518,31 +523,36 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 					}
 				>
 					<DetailSheetProperties>
-						{[
-							"firstName",
-							"lastName",
-							"title",
-							"email",
-							"phone",
-							"linkedin",
-							"x",
-							"github",
-						].map(oChuan)}
-						<InlineCompanyField
-							value={contact.company?.id ?? NONE}
-							company={contact.company}
-							saving={isSaving("companyId")}
-							none={{ value: NONE, label: m.contact.fields.noCompany }}
-							onSave={(companyId) =>
-								save({ companyId: companyId === NONE ? null : companyId })
-							}
-						/>
-						{oChuan("owner")}
-						<RecordFields
-							fields={contact.fields}
-							saving={isSavingField}
-							onSave={saveFields}
-						/>
+						{chiTiet.map((muc) =>
+							muc.kind === "custom" ? (
+								<OTruongTuTao
+									key={muc.field.id}
+									field={muc.field}
+									saving={isSavingField}
+									onSave={saveFields}
+									nguoiDung={users.data}
+									nguCanhTep={{
+										entity: "CONTACT",
+										recordId: contact.id,
+										luuTru: contact.archivedAt !== null,
+										tep: contact.tepTheoTruong,
+									}}
+								/>
+							) : muc.key === "company" ? (
+								<InlineCompanyField
+									key="company"
+									value={contact.company?.id ?? NONE}
+									company={contact.company}
+									saving={isSaving("companyId")}
+									none={{ value: NONE, label: m.contact.fields.noCompany }}
+									onSave={(companyId) =>
+										save({ companyId: companyId === NONE ? null : companyId })
+									}
+								/>
+							) : (
+								oChuan(muc.key)
+							),
+						)}
 					</DetailSheetProperties>
 				</DetailSheetSection>
 

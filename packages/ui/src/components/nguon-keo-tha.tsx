@@ -14,7 +14,7 @@ import {
 } from "@crm/ui/hooks/use-file-upload";
 import { cn } from "@crm/ui/lib/utils";
 import { cva } from "class-variance-authority";
-import { useId } from "react";
+import { useEffect, useId } from "react";
 
 export type LyDoTuChoi = "loai" | "co";
 
@@ -25,6 +25,7 @@ export type NguonKeoThaProps = {
 	chapNhan: string;
 	toiDaByte: number;
 	tat?: { lyDo: string };
+	nhieu?: boolean;
 	onChon: (tep: File) => void;
 	onTuChoi?: (tep: File, lyDo: LyDoTuChoi) => void;
 	loi?: string;
@@ -80,6 +81,7 @@ export function NguonKeoTha({
 	chapNhan,
 	toiDaByte,
 	tat,
+	nhieu = false,
 	onChon,
 	onTuChoi,
 	loi,
@@ -91,15 +93,18 @@ export function NguonKeoTha({
 	const biTat = tat !== undefined;
 
 	const nhanTep = (them: FileWithPreview[]) => {
-		const tep = them[0]?.file;
-		if (!(tep instanceof File)) return;
-		const lyDo = lyDoTuChoiTep(tep, chapNhan, toiDaByte);
-		if (lyDo) onTuChoi?.(tep, lyDo);
-		else onChon(tep);
+		const cacTep = (nhieu ? them : them.slice(0, 1))
+			.map((muc) => muc.file)
+			.filter((tep): tep is File => tep instanceof File);
+		for (const tep of cacTep) {
+			const lyDo = lyDoTuChoiTep(tep, chapNhan, toiDaByte);
+			if (lyDo) onTuChoi?.(tep, lyDo);
+			else onChon(tep);
+		}
 	};
 
 	const [
-		{ isDragging },
+		{ isDragging, files },
 		{
 			handleDragEnter,
 			handleDragLeave,
@@ -107,8 +112,13 @@ export function NguonKeoTha({
 			handleDrop,
 			openFileDialog,
 			getInputProps,
+			clearFiles,
 		},
-	] = useFileUpload({ onFilesAdded: nhanTep });
+	] = useFileUpload({ onFilesAdded: nhanTep, multiple: nhieu });
+
+	useEffect(() => {
+		if (files.length > 0) clearFiles();
+	}, [files, clearFiles]);
 
 	const moTaBoi = [idMoTa, biTat ? idTat : null, loi ? idLoi : null]
 		.filter(Boolean)
@@ -129,7 +139,7 @@ export function NguonKeoTha({
 				onDrop={handleDrop}
 			>
 				<input
-					{...getInputProps({ accept: chapNhan })}
+					{...getInputProps({ accept: chapNhan, multiple: nhieu })}
 					aria-describedby={moTaBoi}
 					aria-invalid={loi ? true : undefined}
 					aria-label={nutChon}
