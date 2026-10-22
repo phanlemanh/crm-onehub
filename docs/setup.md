@@ -521,6 +521,26 @@ two reasons fired. Force one with `bun run db:test --reset`. Nothing else in the
 repo may drop a database, and this may only because the `_test` suffix is checked
 first.
 
+### A test's own server listens on 127.0.0.1
+
+Every HTTP server a test opens for itself listens on `127.0.0.1`, never on every
+address: `Bun.serve({ port: 0, hostname: "127.0.0.1", … })`, and a Nest app built in
+a test calls `app.listen(0, "127.0.0.1")` right where it is built, before
+`supertest` or `fetch` reaches it. The test then calls `http://127.0.0.1:<port>`,
+not `localhost`.
+
+The reason is Colima. Its `limactl` holds a port on `127.0.0.1` inside the
+ephemeral range (49333 one week, 51536 the next). A server that asks for port 0
+without a hostname binds every address, and macOS can still hand it that exact
+port, because the two binds are on different addresses. The test's request to
+`127.0.0.1:<port>` then lands on `limactl`, which answers with something that is
+not HTTP, and Bun fails with `Malformed_HTTP_Response` — at random, on whichever
+test drew the port. A server that binds `127.0.0.1` is refused that port, so port 0
+never hands it out. `supertest` opens its own server without a hostname, once per
+request, whenever the app it is given is not listening yet; that is why every Nest
+app listens as soon as it is built. `_acceptance/test-nghe-127/rang/quet.mjs`
+checks the test tree for all three.
+
 ### Screen measurements get a database of their own
 
 A screen measurement (`_acceptance/*/rang/*.mjs` run through

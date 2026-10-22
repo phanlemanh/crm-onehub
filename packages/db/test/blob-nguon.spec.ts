@@ -191,6 +191,7 @@ describe("token-gui-di", () => {
 			Buffer.from(JSON.stringify(o)).toString("base64url");
 		const may = Bun.serve({
 			port: 0,
+			hostname: "127.0.0.1",
 			async fetch(req) {
 				const u = new URL(req.url);
 				ghi.push(
@@ -208,7 +209,7 @@ describe("token-gui-di", () => {
 			},
 		});
 		try {
-			process.env[API_GIA] = `http://localhost:${may.port}`;
+			process.env[API_GIA] = `http://127.0.0.1:${may.port}`;
 			process.env[KHOA] = KHOA_NGUON_GIA;
 			process.env[LOGO] = KHOA_LOGO_GIA;
 			const kho = khoNguonVercel();

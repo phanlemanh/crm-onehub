@@ -150,7 +150,7 @@ beforeAll(async () => {
 		imports: [AppModule],
 	}).compile();
 	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	await app.listen(0, "127.0.0.1");
 	nguoi = `${ma}-admin`;
 	await gieoThanhVien(nguoi, "admin");
 	const phien = await mintPhien(nguoi);

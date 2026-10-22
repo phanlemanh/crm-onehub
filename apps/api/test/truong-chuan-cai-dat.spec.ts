@@ -156,6 +156,7 @@ async function xoaBoTri() {
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 
 	chuId = ma("chu");
 	await gieoThanhVien(chuId, "owner");
