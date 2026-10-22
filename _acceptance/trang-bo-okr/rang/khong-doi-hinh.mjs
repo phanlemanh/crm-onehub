@@ -23,8 +23,9 @@ const CHU_KHO = "Phan Le Manh";
 const MAU_DUONG = /okr\/bo-okr|okr\/theo-don-vi|data-view-switch|ViewSwitch/;
 const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
 const NGUONG_TEP_CHUNG = 5;
+const LA_THUOC = /^_acceptance\/|\/test\//;
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
-const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:mjs|cjs|js|ts|tsx)/g;
+const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:tsx|ts|mjs|cjs|js)\b/g;
 const TEP_TAY = {
 	"apps/app/test/okr-trang-don-vi.dom.tsx": "trang-don-vi-mot-bang",
 	"apps/app/test/okr-theo-don-vi.dom.tsx": "ux-lai-thu-8c-okr",
@@ -135,22 +136,31 @@ function quetLop() {
 			chamCache.set(t, MAU_DUONG.test(readFileSync(join(GOC, t), "utf8")));
 		return chamCache.get(t);
 	};
-	const muc = [];
+	const coSo = git(["merge-base", "HEAD", NHANH_GOC]);
+	const doi = new Set(
+		git(["diff", "--name-only", `${coSo}...HEAD`])
+			.split("\n")
+			.filter(Boolean),
+	);
 	const tepCua = new Map(Object.entries(TEP_TAY).map(([t, s]) => [t, [s]]));
 	const hoSo = hoSoDaKy();
-	for (const slug of hoSo)
-		for (const e of evalMayCua(slug, cauHinh)) {
-			for (const t of e.tep)
-				tepCua.set(t, [...new Set([...(tepCua.get(t) ?? []), slug])]);
-			if (!e.tep.some(cham)) continue;
+	const tatCa = hoSo.flatMap((slug) => evalMayCua(slug, cauHinh));
+	for (const e of tatCa)
+		for (const t of e.tep)
+			tepCua.set(t, [...new Set([...(tepCua.get(t) ?? []), e.slug])]);
+	const doiRieng = (t) =>
+		doi.has(t) && (tepCua.get(t)?.length ?? 0) < NGUONG_TEP_CHUNG;
+	const muc = tatCa
+		.filter((e) => e.tep.some((t) => doiRieng(t) || cham(t)))
+		.map((e) => {
 			const evalRieng = /\bEVAL=/.test(e.lenh) ? e.id : null;
-			muc.push({
-				ten: `${slug}#${e.id}`,
+			return {
+				ten: `${e.slug}#${e.id}`,
 				lenh: e.lenh,
 				evalRieng,
 				khoa: evalRieng ? `${e.lenh}\u0000EVAL=${evalRieng}` : e.lenh,
-			});
-		}
+			};
+		});
 	lopDaQuet = { hoSo, muc, tepCua };
 	return lopDaQuet;
 }
@@ -318,6 +328,7 @@ function soatDoiThuoc(cwd) {
 	const coSo = git(["merge-base", "HEAD", NHANH_GOC], cwd);
 	const sai = [];
 	for (const [tep, cacHoSo] of quetLop().tepCua) {
+		if (!LA_THUOC.test(tep)) continue;
 		const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
 		if (diff === "") continue;
 		const viet = VIET_LAI[tep] ?? null;
@@ -455,7 +466,7 @@ try {
 	const lop = quetLop();
 	const hoSoCham = new Set(ds.map((m) => m.ten.split("#")[0]));
 	console.log(
-		`quet lop: ${lop.hoSo.length} ho so da ky, ${hoSoCham.size} ho so co thuoc cham /okr/bo-okr, theo-don-vi hay o chuyen kieu xem, ${ds.length} eval may cham, ${lenhRieng} lan chay rieng`,
+		`quet lop: ${lop.hoSo.length} ho so da ky, ${hoSoCham.size} ho so co thuoc cham /okr/bo-okr, theo-don-vi, o chuyen kieu xem hay bi vong sua, ${ds.length} eval may cham, ${lenhRieng} lan chay rieng`,
 	);
 	if (process.argv.includes("--chi-quet")) {
 		for (const m of ds) console.log(`MUC ${m.ten}`);
