@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: nhap-truong-luc-tao
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: fd27b797a95dc5f0eb5c8012cedf151dcd0145ae
+verified_commit: 0d6a656e631559d6666e093f6adf48fffc83b65c
 human_signoff:
 ---
 
 # Evidence Report: nhap-truong-luc-tao
 
-Round 1. Mọi lệnh của eval thoát sạch, nhưng verdict tổng là REJECT vì năm phát hiện trong hợp đồng (chi tiết ở review-findings.md) cho thấy thước đo của AC-1, AC-3 và AC-9 chưa chứng được lời hứa. Không eval nào đỏ nên failed_evals rỗng.
+Vòng 2. Nội dung thay toàn bộ vòng cũ; lịch sử các vòng nằm ở mục Iterations. E1c và E2 là carry-forward từ vòng 1 (delta không chạm paths của hai eval này).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -36,34 +36,31 @@ Round 1. Mọi lệnh của eval thoát sạch, nhưng verdict tổng là REJECT
 ## Evidence
 
 - eval: E1
-  run_id: minted-nhap-truong-luc-tao-E1-r1
+  run_id: minted-nhap-truong-luc-tao-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_bo_truong
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    Ran 1 test across 1 file. [1.79s]
-    __EXIT=0
+    Ran 1 test across 1 file. [1.61s]
 
 - eval: E1b
-  run_id: minted-nhap-truong-luc-tao-E1b-r1
+  run_id: minted-nhap-truong-luc-tao-E1b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_chua_tai
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    Ran 1 test across 1 file. [1.51s]
-    __EXIT=0
+    Ran 1 test across 1 file. [1356.00ms]
 
 - eval: E1c
   run_id: minted-nhap-truong-luc-tao-E1c-r1
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.ntl_giu_luat_cu
   verified_at: 2026-10-22T02:06:33Z
-  output: |
-    Ran 7 tests across 1 file. [864.00ms]
-    __EXIT=0
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-nhap-truong-luc-tao-E2-r1
@@ -71,169 +68,155 @@ Round 1. Mọi lệnh của eval thoát sạch, nhưng verdict tổng là REJECT
   baseline: n-a
   verifier: config:executors.script.ntl_quet
   verified_at: 2026-10-22T02:06:33Z
-  output: |
-    ntl quet: dat
-    __EXIT=0
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
-  run_id: minted-nhap-truong-luc-tao-E3-r1
+  run_id: minted-nhap-truong-luc-tao-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_gui_gia_tri
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    Ran 1 test across 1 file. [1.92s]
-    __EXIT=0
+    Ran 1 test across 1 file. [1.90s]
 
 - eval: E3b
-  run_id: minted-nhap-truong-luc-tao-E3b-r1
+  run_id: minted-nhap-truong-luc-tao-E3b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_api_tao_co_truong
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    test-run: dropped crm_mviwhkux3n3m_test
-    __EXIT=0
+    test-run: dropped crm_mvixinu27xok_test
 
 - eval: E4
-  run_id: minted-nhap-truong-luc-tao-E4-r1
+  run_id: minted-nhap-truong-luc-tao-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_bat_buoc
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    Ran 1 test across 1 file. [1298.00ms]
-    __EXIT=0
+    Ran 1 test across 1 file. [1261.00ms]
 
 - eval: E4b
-  run_id: minted-nhap-truong-luc-tao-E4b-r1
+  run_id: minted-nhap-truong-luc-tao-E4b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_api_bat_buoc
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    test-run: dropped crm_mviwhl97irze_test
-    __EXIT=0
+    test-run: dropped crm_mvixio3k2626_test
 
 - eval: E5
-  run_id: minted-nhap-truong-luc-tao-E5-r1
+  run_id: minted-nhap-truong-luc-tao-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_loi_may_chu
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    Ran 1 test across 1 file. [1.62s]
-    __EXIT=0
+    Ran 1 test across 1 file. [1472.00ms]
 
 - eval: E5b
-  run_id: minted-nhap-truong-luc-tao-E5b-r1
+  run_id: minted-nhap-truong-luc-tao-E5b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_api_tu_choi
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    test-run: dropped crm_mviwhm7jc21b_test
-    __EXIT=0
+    test-run: dropped crm_mvixioyy7ax5_test
 
 - eval: E6
-  run_id: minted-nhap-truong-luc-tao-E6-r1
+  run_id: minted-nhap-truong-luc-tao-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_them_nhanh
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    Ran 1 test across 1 file. [1.74s]
-    __EXIT=0
+    Ran 1 test across 1 file. [1496.00ms]
 
 - eval: E7
-  run_id: minted-nhap-truong-luc-tao-E7-r1
+  run_id: minted-nhap-truong-luc-tao-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_api_kara_dien
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    test-run: dropped crm_mviwhks0ehoq_test
-    __EXIT=0
+    test-run: dropped crm_mvixiodlzfwc_test
 
 - eval: E8
-  run_id: minted-nhap-truong-luc-tao-E8-r1
+  run_id: minted-nhap-truong-luc-tao-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_api_ban_ghi_cu
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    test-run: dropped crm_mviwhm8xaiiv_test
-    __EXIT=0
+    test-run: dropped crm_mvixioropi0h_test
 
 - eval: E8b
-  run_id: minted-nhap-truong-luc-tao-E8b-r1
+  run_id: minted-nhap-truong-luc-tao-E8b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.ntl_ban_ghi_cu
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   output: |
-    Ran 1 test across 1 file. [1297.00ms]
-    __EXIT=0
+    Ran 1 test across 1 file. [1263.00ms]
 
 - eval: E9
-  run_id: minted-nhap-truong-luc-tao-E9-r1
+  run_id: minted-nhap-truong-luc-tao-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ntl_man
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
   screenshot: evidence/ntl-tao-thoa-thuan-moi-1280.png
   observed: |
-    Da mo tung 20 frame bang Read.
-    - tao-thoa-thuan-moi-1280: sheet 'Thoả thuận mới' mot cot; nhan tren o, o cung cao (~32px) cung co chu: Tên, Giá trị, Tiền tệ, Ngày chốt, Công ty, Giai đoạn, Phụ trách, roi 'Chữ ntl' (o tu tao) cung cot, cung nhan tren o, khong tieu de/duong ke tach. Cac truong tu tao con lai nam duoi nếp gap sheet cuon, khong thay trong anh. -thieu-1280: loi do 'Tên không được để trống.' ngay duoi o Tên; 'Chữ ntl' bi cat o mep duoi.
-    - tao-thoa-thuan-moi/thieu-375: mot cot day chieu rong, khong cuon ngang, 'Chữ ntl' o mep duoi bi cat; loi 'Tên không được để trống.' sat duoi o Tên.
-    - tao-cong-ty-moi/thieu-1280 va 375: mot cot, o chuan deu nhau (Tên, Tên miền, Website, Điện thoại, Email, Thành phố, Quốc gia, Phụ trách); KHONG co truong tu tao nao trong khung chup (nam duoi nếp gap); loi 'Tên không được để trống.' duoi Tên.
-    - tao-ca-nhan-moi/thieu-1280 va 375: mot cot (Tên, Họ, Chức danh, Email, Điện thoại, LinkedIn, X, GitHub, Công ty), khong thay truong tu tao; loi duoi Tên dung cho; o 1280 co huy hieu do Next.js '1 Issue' goc trai duoi.
-    - them-ca-nhan-moi-1280: hai cot; o tu tao 'Chữ ntl', 'Ngày ntl', 'Người ntl', 'Liên kết ntl', 'Số ntl', 'Bắt buộc ntl' xep xen trong cung luoi hai cot voi o chuan (Tên, Họ, Chức danh, Email, Điện thoại, LinkedIn, X, GitHub, Phụ trách), cung nhan tren o, cung cao, cung co chu, khong tieu de/phan cach/nhan phu. -thieu-1280: loi 'Tên không được để trống.' duoi Tên; o 'Bắt buộc ntl' vien do nhung cau loi duoi no nam duoi nếp gap.
-    - them-thoa-thuan-moi-1280: hai cot; chuan (Tên, Giá trị, Tiền tệ, Ngày chốt, Phụ trách) va tu tao (Chữ ntl, Ngày ntl, Người ntl, Liên kết ntl, Số ntl, Bắt buộc ntl) cung luoi, dong deu; Ngày chốt va Ngày ntl cung kieu DatePicker 'Chọn ngày'. -thieu-1280: 'Tên không được để trống.' duoi Tên va 'Bắt buộc ntl không được để trống.' ngay duoi o Bắt buộc ntl (khoang cach nho), khop Expected.
-    - them-ca-nhan va them-thoa-thuan -375: sheet day, mot cot day chieu rong, khong cuon ngang; khung chup chi toi Điện thoại/Phụ trách (truong tu tao nam duoi), loi duoi Tên ngay sat.
-    Doi chieu Expected: khong frame nao mau thuan Expected; noi thay duoc (tat ca khung them-* 1280, cac o chuan) deu khop; phan khong thay (tu tao trong khung tao-* va 375) chi duoc dam bao bang do DOM 36/36 DUNG.
+    tao-thoa-thuan-moi-1280: sheet một cột; Tên, Giá trị, Tiền tệ, Ngày chốt, Công ty, Giai đoạn, Phụ trách rồi Chữ ntl (trường tự tạo) cùng nhãn trên ô, cùng chiều cao và cỡ chữ, không tiêu đề nhóm hay đường phân cách; các trường tự tạo còn lại nằm dưới mép cuộn.
+    tao-thoa-thuan-thieu-1280: Tên đỏ, câu 'Tên không được để trống.' ngay dưới ô, bố cục giữ nguyên.
+    -375 (moi và thieu): một cột đầy chiều rộng, không cuộn ngang, nút Thêm/Huỷ xếp dọc, câu lỗi ngay dưới ô Tên.
+    tao-cong-ty và tao-ca-nhan (moi/thieu, 1280 và 375): một cột đồng nhất (Tên, Tên miền, Website, Điện thoại... / Tên, Họ, Chức danh, Email, ... GitHub); câu lỗi 'Tên không được để trống.' ngay dưới ô Tên; trường tự tạo không hiện trong khung vì nằm dưới mép cuộn (không mâu thuẫn Expected, nhưng không kiểm được bằng mắt).
+    them-ca-nhan-moi-1280: lưới hai cột, ô tự tạo Chữ ntl, Ngày ntl, Người ntl, Liên kết ntl, Số ntl, Bắt buộc ntl xếp liền sau Phụ trách, cùng cột (mép trái 431 và 853) và cùng nhãn trên ô, cùng chiều cao, cùng cỡ chữ với ô chuẩn; không tiêu đề, không phân cách.
+    them-ca-nhan-thieu-1280: Tên đỏ kèm câu lỗi ngay dưới; ô 'Bắt buộc ntl' viền đỏ, nhưng câu lỗi của nó nằm dưới mép khung nên không thấy trong ảnh.
+    them-thoa-thuan-moi-1280: cùng lưới hai cột, sáu ô tự tạo lẫn ô chuẩn, đồng nhất.
+    them-thoa-thuan-thieu-1280: Tên và Bắt buộc ntl đều đỏ, câu 'Bắt buộc ntl không được để trống.' ngay dưới ô (khoảng 8px), thấy rõ.
+    them-*-375: một cột đầy chiều rộng, không cuộn ngang, nhãn trên ô đồng nhất; chỉ thấy các ô đầu form, trường tự tạo nằm dưới khung; câu lỗi 'Tên không được để trống.' ngay dưới ô Tên ở các ảnh thieu.
+    Không có khung nào mâu thuẫn Expected.
   network_observed: n-a (driver)
-  output: |
-    LUU Y 2 (bang chung thi giac yeu): anh chi chup viewport; ben trong sheet cuon nen nhieu truong tu tao nam duoi nếp gap. Chi 4/20 anh (them-ca-nhan va them-thoa-thuan, 1280) thay du cac truong tu tao. Cac anh tao-* (1280) khong thay cau loi duoi o 'Bắt buộc ntl' (chi thay loi duoi 'Tên'); tat ca 10 anh 375 chua tu tao nao trong khung chup. Phan nay chi duoc xac nhan bang DO DOM (36 DUNG), khong bang mat.
-    LUU Y 3: anh tao-ca-nhan-moi/thieu-1280 co huy hieu Next.js dev '1 Issue' (do) o goc trai duoi; driver puppeteer khong thu console/network nen khong ro nguyen nhan. Khong co read_network_requests nen khong ghi E9-network.txt.
-    Khong sua code.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-nhap-truong-luc-tao-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-nhap-truong-luc-tao-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
 
 - cmd: bun run lint:slop
-  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_lint_slop-r1
+  run_id: minted-nhap-truong-luc-tao-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-nhap-truong-luc-tao-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-nhap-truong-luc-tao-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-22T02:06:33Z
+  verified_at: 2026-10-22T02:35:31Z
 
 ## Known limits
 
@@ -241,30 +224,20 @@ Round 1. Mọi lệnh của eval thoát sạch, nhưng verdict tổng là REJECT
 
 ## Analyst
 
-Eval xanh trên cả HEAD lẫn baseline (không phân biệt, chứng harness hơn là tính năng):
+carried tu round 1 — baseline khong do lai round nay.
 
-- E1c: ba tệp có sẵn trên onehub (tra-cuu-thuong-hieu-viet-nam, dien-thoai-ca-nhan, deals-giai-doan-hydrat) chạy xanh cả hai phía. Đây là bài giữ luật cũ có chủ ý (regression-guard theo đúng lời của eval), không phải bài chứng hành vi mới.
+Baseline khong do: moi eval o vong nay ghi baseline n-a, vi evals.yaml khong doi tu lan do baseline cuoi (round 1) nen vong nay khong do lai.
 
-Baseline khong do:
+Eval xanh ca hai phia (khong phan biet), da biet va co chu y:
+- E1c: lenh chay nguyen ba tep co san tren onehub (tra-cuu-thuong-hieu-viet-nam, dien-thoai-ca-nhan, deals-giai-doan-hydrat). Day la regression-guard co chu y, giu luat cu cua Tao cong ty, Tao ca nhan, Tao thoa thuan; khong phai bai do hanh vi moi. Carry-forward tu round 1.
 
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-bo-truong: bo qua baseline: tep apps/app/test/nhap-truong-luc-tao.dom.tsx co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-chua-tai: bo qua baseline: tep apps/app/test/nhap-truong-luc-tao.dom.tsx co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/nhap-truong-luc-tao/rang/quet.mjs: bo qua baseline: tep _acceptance/nhap-truong-luc-tao/rang/quet.mjs co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-gui-gia-tri: bo qua baseline: tep apps/app/test/nhap-truong-luc-tao.dom.tsx co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-tao-co-truong": bo qua baseline: tep apps/api/test/nhap-truong-luc-tao.spec.ts co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-bat-buoc: bo qua baseline: tep apps/app/test/nhap-truong-luc-tao.dom.tsx co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-bat-buoc": bo qua baseline: tep apps/api/test/nhap-truong-luc-tao.spec.ts co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-loi-may-chu: bo qua baseline: tep apps/app/test/nhap-truong-luc-tao.dom.tsx co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-tu-choi": bo qua baseline: tep apps/api/test/nhap-truong-luc-tao.spec.ts co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-them-nhanh: bo qua baseline: tep apps/app/test/nhap-truong-luc-tao.dom.tsx co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-kara-dien": bo qua baseline: tep apps/api/test/nhap-truong-luc-tao.spec.ts co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/nhap-truong-luc-tao.spec.ts -t ntl-api-ban-ghi-cu": bo qua baseline: tep apps/api/test/nhap-truong-luc-tao.spec.ts co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nhap-truong-luc-tao.dom.tsx -t ntl-ban-ghi-cu: bo qua baseline: tep apps/app/test/nhap-truong-luc-tao.dom.tsx co o cay dang kiem nhung chua co o merge-base 95a71d21985c61c9254db01bdeb445985b07518b — eval moi, chay tren code cu khong phan biet gi
+Lenh suite xanh ca hai phia la regression-guard binh thuong, khong liet ke.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — every multi-run eval is uniform (moi eval chay mot lan, khong co phuong sai)
 
 ## Iterations
 
-Round 1: không eval nào đỏ; verdict REJECT vì năm phát hiện trong hợp đồng (E9 phép đo cùng cột lưới, E3 thước phiếu mù, E3 dò mảnh chuỗi, E3 fixture Ngày sai khuôn, E1 dấu bắt buộc không có mốc dương) cho thấy thước đo chưa chứng được AC-9, AC-3, AC-1. Returned to implementation.
+Round 1: cac thuoc trong hop dong bi bac (năm thước trong hợp đồng, xem sổ S4-r1 và commit bằng chứng vòng 1). Returned to implementation; S4-r1 siết năm thước.
+Round 2: tat ca eval PASS; E1c va E2 carry-forward tu round 1 vi delta khong cham paths cua hai eval nay. Moc verified_at cua vong 2 lay theo thoi diem commit da ghim (verified_commit); gio that cua tung lan chay nam trong run-log.jsonl.
