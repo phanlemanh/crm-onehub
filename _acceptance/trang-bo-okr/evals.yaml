@@ -263,16 +263,19 @@ evals:
       - "_acceptance/*/rang/**"
       - "apps/app/test/**"
     expected: |
-      khong-doi-hinh.mjs: danh sách viết trước các hồ sơ đã ký có thước hay bài kiểm chạm /okr/bo-okr, theo-don-vi hay
-      ViewSwitch của khu Mục tiêu (lập lúc S3 bằng lệnh quét, ghi trong tệp; gồm cả khep-ky-okr). (1) Mọi eval executor
-      test VÀ script, không not-run, của từng hồ sơ; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval một lần chạy riêng
-      với EVAL=<id>. Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
+      khong-doi-hinh.mjs QUÉT LỚP LÚC CHẠY, không danh sách viết tay: mọi hồ sơ _acceptance/* status signed-off hay
+      machine-cleared; với mỗi eval executor test VÀ script, không not-run, lấy các tệp có trong lệnh đã giải (kể cả mọi
+      tệp mã cùng thư mục rang của tệp thước) — eval thuộc lớp khi một tệp ấy chứa okr/bo-okr, okr/theo-don-vi,
+      data-view-switch hay ViewSwitch, hoặc bị vòng sửa (diff merge-base…HEAD) mà không phải tệp dùng chung từ 5 hồ sơ
+      trở lên. In «quet lop: <n> ho so da ky, <m> ho so …, <k> eval may cham, <r> lan chay rieng»; cờ --chi-quet in
+      từng «MUC <slug>#<E>» rồi dừng. (1) Chạy các eval thuộc lớp; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval
+      một lần chạy riêng với EVAL=<id>; lần đầu trả mã 2 (không đo được) thì chạy lại một lần, in «THU LAI». Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
       worktree origin/onehub, in «HO SO <slug>#<E>: cay <ma> · nen <ma>»; SAI AC-11 khi nền 0 mà cây khác 0, «DO SAN TREN
-      NEN <slug>#<E>» khi nền đỏ. (2) Với mỗi tệp thước của hồ sơ đã ký mà vòng sửa: sổ của hồ sơ có dòng fix decided_by
+      NEN <slug>#<E>» khi nền đỏ. (2) Với mỗi tệp thước hay bài kiểm (dưới _acceptance/ hoặc thư mục test/) của hồ sơ đã ký mà vòng sửa — bản đồ tệp → hồ sơ lập bằng chính lần quét; tệp dùng chung từ 5 hồ sơ mà vòng chỉ THÊM dòng in «THEM DANG KY <tep>:<dong>» và không đòi sổ; còn lại: sổ của hồ sơ có dòng fix decided_by
       chủ kho nhắc tệp (thiếu → «SAI AC-11: THIEU SO»); rồi xét QUAN HỆ từng khối diff -U0: dòng bỏ R và dòng thêm A,
       mỗi bên nối dòng, bỏ mọi khoảng trắng và dấu phẩy đuôi trước ) ] }, thay mọi chuỗi '…' "…" `…` bằng một chỗ giữ
       (biểu thức trong ${…} của chuỗi mẫu giữ lại để so) — khối chỉ đổi chuỗi khi hai bên bằng nhau; khác → «SAI AC-11:
-      DOI LOGIC <tep>:<dòng đầu> <mẫu>». Tệp có phép viết lại (VIET_LAI: V1-20, V1-21, he-qua-donOkr cho
+      DOI LOGIC <tep>:<dòng đầu> <mẫu>». Tệp có phép viết lại (VIET_LAI: V1-20, V1-21, V1-22, he-qua-donOkr cho
       do-man-dieu-huong.mjs, đòi dòng fix nhắc «h.nhan») không SAI nhưng vẫn qua luật quan hệ và in «VIET LAI <tep>
       (<phep>): <n> khoi doi logic» kèm từng khối, để thẻ thấy phép đã phủ gì.
       CHIEU DO (bản sao HEAD, ghim /SAI AC-11: DOI LOGIC \S+/ đúng tệp và dòng bị chèn, mã 1, in «CHIEU DO <kieu>: bat
