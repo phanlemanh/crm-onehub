@@ -174,11 +174,12 @@ describe("ttdc-luat-gio", () => {
 	test("ttdc-luat-gio: TZ dat tu ngoai co ap", () => {
 		const tz = process.env.TZ;
 		if (!tz) throw new Error("ttdc-luat-gio: TZ khong ap (chua dat TZ)");
-		expect(
-			Intl.DateTimeFormat().resolvedOptions().timeZone === tz
-				? "ap"
-				: "ttdc-luat-gio: TZ khong ap",
-		).toBe("ap");
+		const MOC = [Date.UTC(2026, 0, 15, 12), Date.UTC(2026, 6, 15, 12)];
+		const dang = (timeZone?: string) =>
+			MOC.map((t) =>
+				new Intl.DateTimeFormat("en-GB", { timeZone, dateStyle: "short", timeStyle: "short" }).format(t),
+			).join("|");
+		expect(dang() === dang(tz) ? "ap" : "ttdc-luat-gio: TZ khong ap").toBe("ap");
 	});
 
 	test("ttdc-luat-gio: ma tran 7 thu x 4 vi tri viet truoc", () => {

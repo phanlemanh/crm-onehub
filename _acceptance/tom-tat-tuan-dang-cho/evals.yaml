@@ -126,7 +126,7 @@ evals:
       lyDo:"chua-co-khoa-mo-hinh", moLai:null}. Ca DOM "ttdc-tam-dung": [data-trang-thai="ST-tomtat-tam-dung"] chua
       [data-kara-state="off"], chuoi dung "Kara tạm nghỉ tóm tắt tuần tới 01/12." va "Kara chưa tóm tắt được: quản
       trị chưa nối mô hình AI."; khong chuoi nao khop mau gio /\d\d:\d\d/ hay mau so tien
-      /\d[\d.,]*\s*(₫|đ\b|USD)/ va /\$\s*\d/. Doi chung duong cua mau: "1.200.000 đ", "5 USD", "$5" bi bat; hai chuoi
+      /\d[\d.,]*\s*(₫|đ(?![\p{L}\p{N}])|USD)/u va /\$\s*\d/. Doi chung duong cua mau: "1.200.000 đ", "5 USD", "$5" bi bat; hai chuoi
       dung cua AC-5 lot.
       CHIEU DO: ban sao bo nhanh tam-dung -> do "ttdc-tam-dung: (a) ra toi-luc khi het tran".
 
