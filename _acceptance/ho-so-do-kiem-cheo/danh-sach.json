@@ -1,0 +1,725 @@
+{
+	"moc_nen": "6be0bb688900ecd8843989bd8f8b3095548b604f",
+	"ghi_chu": "Danh sách đóng của F28. Mỗi dòng một (hồ sơ, eval) đỏ ở mốc nền hoặc một evals.yaml không chuẩn; hoan_lai là ba hồ sơ dính lỗi sản phẩm thật (Hỏi-1, duyệt 23/10).",
+	"dong": [
+		{
+			"ho_so": "ban-gieo-gop-y-sau-nop",
+			"eval": "E4",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "rev-list ghép --first-parent --ancestry-path ra rỗng; neo cặp gộp PR #365",
+			"can_cu": "e7afcb8b782566381cb119e514415c5bea12047b",
+			"sua": "rang/ranh-gioi.mjs chonNeo: GOP=e7afcb8b7, tu=merge-base(GOP^1,GOP^2), toi=GOP^2; expected E4",
+			"dot_bien_de_xuat": "--them apps/app/lib/x.ts → mã 1 ngoai-ranh-gioi; GOP sai → mã 2"
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E1",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E2",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E5",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E6",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+		},
+		{
+			"ho_so": "bang-thanh-vien-giu-hang",
+			"eval": "E7",
+			"xu_ly": "sua-rang",
+			"ly_do": "datatable-loc-ro (AC-1, AC-3) thay câu rỗng khi lọc bằng table.noMatch + Bỏ lọc",
+			"can_cu": "fb486420a",
+			"sua": "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs:261-276 messages(vi).table.noMatch + resetFilters",
+			"dot_bien_de_xuat": "DB-1 filteredEmpty; DB-2 lớp phủ ngoài container"
+		},
+		{
+			"ho_so": "bo-dung-khong-ket",
+			"eval": "E9",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "merge-base trượt 0 điều ở HEAD=onehub; neo PR #178",
+			"can_cu": "8176bb2ef4086be290bbe8ed8df75ce9b845b6ad",
+			"sua": "rang/tai-lieu.mjs merge-base → 13477d5f8f8b75555120f438a5095e8f2940935c; tapTepRe diff tới ac6a3ab36239260dac1773e33c86e5d3843e32b4",
+			"dot_bien_de_xuat": "bo-outputSchema; bo-tep-re"
+		},
+		{
+			"ho_so": "bo-xuong-kara",
+			"eval": "E10",
+			"xu_ly": "sua-rang",
+			"ly_do": "K2 gỡ miễn trừ artifact/task (SONG qua kara/); vân tay confirmation đổi do ai-elements@latest",
+			"can_cu": "fc691046d",
+			"sua": "rang/ai-elements.mjs vế (d) nhận SONG; ghim phiên bản ai-elements thay @latest",
+			"dot_bien_de_xuat": "bo-cau-kara"
+		},
+		{
+			"ho_so": "ca-chap-chon-cach-ly",
+			"eval": "E5",
+			"xu_ly": "sua-rang",
+			"ly_do": "khoa-eve-khong-tranh dời lời gọi dungMoCoi vào gianhKhoaCu (AC-3)",
+			"can_cu": "f47a7002b",
+			"sua": "rang/mo-coi.mjs:14 MOC_DON='\\tawait dungMoCoi(daGianh);\\n'",
+			"dot_bien_de_xuat": "go-don-moi"
+		},
+		{
+			"ho_so": "ca-chap-chon-cach-ly",
+			"eval": "E7",
+			"xu_ly": "sua-rang",
+			"ly_do": "cùng gốc E5",
+			"can_cu": "f47a7002b",
+			"sua": "rang/dot-bien.mjs:20 cặp a mo-coi mốc mới",
+			"dot_bien_de_xuat": "a mo-coi trên mốc mới"
+		},
+		{
+			"ho_so": "ca-chap-chon-con-lai",
+			"eval": "E6",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "merge-base(onehub,HEAD)=HEAD nên diff rỗng; neo cặp gộp PR #340",
+			"can_cu": "2d7c489816ae6452b4f73322b4db1401902bb20c",
+			"sua": "rang/pham-vi.mjs coSo=a9e8bc75a04f04a9a250eb2ff7fc4fadbe0f4747, TOI=16e80f31d62a56195253f1566b38284f8e0b4e66 thay HEAD",
+			"dot_bien_de_xuat": "đối chứng tasks.ts/tien to gieo có sẵn; TOI sai → mã 2"
+		},
+		{
+			"ho_so": "cai-dat-chung-chi-quan-tri",
+			"eval": "E8",
+			"xu_ly": "sua-rang",
+			"ly_do": "phien-chet-ve-dang-nhap (#184 AC-4) thêm hetPhien:false vào khẳng định cũ",
+			"can_cu": "c895e5bff",
+			"sua": "rang/khang-dinh-cu-nguyen-ven.mjs:9 NEO=c895e5bff; expected E8",
+			"dot_bien_de_xuat": "bo-het-phien"
+		},
+		{
+			"ho_so": "cap-nhat-tuan-okr",
+			"eval": "E7",
+			"xu_ly": "khai-not-run",
+			"ly_do": "cua-toi-ba-phan AC-2 lật lời hứa phiên mở lúc tải màn entry=tab",
+			"can_cu": "_acceptance/cua-toi-ba-phan/contract.md:31",
+			"sua": "status not-run"
+		},
+		{
+			"ho_so": "cap-nhat-tuan-okr",
+			"eval": "E14",
+			"xu_ly": "sua-rang",
+			"ly_do": "/okr/cap-nhat-tuan về /okr (cua-toi-ba-phan AC-3/4, vo-khu-muc-tieu AC-3); một try bao cả lượt",
+			"can_cu": "9203b9ca2",
+			"sua": "rang/man-cap-nhat.mjs: try từng bước; đường /okr?tu=viec-cua-toi",
+			"dot_bien_de_xuat": "CN-1"
+		},
+		{
+			"ho_so": "cap-nhat-tuan-okr",
+			"eval": "E19",
+			"xu_ly": "sua-rang",
+			"ly_do": "kéo theo E7; chưa từng chạy",
+			"can_cu": "9203b9ca2",
+			"sua": "cùng E14, chạy lại xem",
+			"dot_bien_de_xuat": "mentionUserIds"
+		},
+		{
+			"ho_so": "chan-lai-component-ra-man",
+			"eval": "E1",
+			"xu_ly": "sua-rang",
+			"ly_do": "neo mac_dinh 129→132: 4 mục kỹ thuật thêm (#489 #344 #306 #333), 1 mất; nhóm người đọc vẫn 0",
+			"can_cu": "c1d11fd4b",
+			"sua": "rang/lai-ra-man.mjs:9 mac_dinh 132; expected E1 E2",
+			"dot_bien_de_xuat": "neo-lech-mot label=Save"
+		},
+		{
+			"ho_so": "chan-lai-component-ra-man",
+			"eval": "E2",
+			"xu_ly": "sua-rang",
+			"ly_do": "cùng gốc E1",
+			"can_cu": "c1d11fd4b",
+			"sua": "cùng",
+			"dot_bien_de_xuat": "mount-mot-trang-thai"
+		},
+		{
+			"ho_so": "chan-lai-component-ra-man",
+			"eval": "E7",
+			"xu_ly": "sua-rang",
+			"ly_do": "cùng gốc E1",
+			"can_cu": "c1d11fd4b",
+			"sua": "cùng",
+			"dot_bien_de_xuat": "neo-lech-mot"
+		},
+		{
+			"ho_so": "chan-trung-khoa-ban-nhap",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "okr-loai-hoc-tap thêm import ./okr-muc-tieu; răng chỉ vá một import tương đối",
+			"can_cu": "020b2ec69",
+			"sua": "rang/pha-thu.mjs dungBanSao: viết lại mọi from \"./x\"",
+			"dot_bien_de_xuat": "chan-khoa-luon-qua"
+		},
+		{
+			"ho_so": "chan-trung-khoa-ban-nhap",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "cùng gốc E3",
+			"can_cu": "020b2ec69",
+			"sua": "cùng sửa E3",
+			"dot_bien_de_xuat": "gỡ superRefine"
+		},
+		{
+			"ho_so": "chu-cuoi-cung-tien-de",
+			"eval": "E5",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "diff 058bb75f...HEAD trôi; neo PR #89",
+			"can_cu": "46a52ade5",
+			"sua": "rang/chu-la.mjs PHAM_VI tu=5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b toi=2aff077d0cb4966a90d014a9a70c91a45d5c8f6a; dòng 363, 369; expected E5 (KHÔNG sửa contract)",
+			"dot_bien_de_xuat": "PV-tu-goc-cu → 6 tệp ngoài phạm vi, exit 1"
+		},
+		{
+			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "neo đếm 76·37·21 → 120·43·39 do hồ sơ ký sau thêm component; 6 bọc mới không để chuỗi mặc định lên màn",
+			"can_cu": "3f99c7055",
+			"can_cu_them": [
+				"(neo",
+				"06/09);",
+				"c74dfc452",
+				"7b9511288",
+				"584e6caae"
+			],
+			"sua": "rang/khai-sinh.mjs:6 NEO {120,43,39}; expected E3",
+			"dot_bien_de_xuat": "them-component-boc-gia → LECH, exit 2"
+		},
+		{
+			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "progress nay đọc kho; radio-group, markdown-reader, context-menu mới, không chuỗi mặc định",
+			"can_cu": "4a4bea376",
+			"can_cu_them": [
+				"6d4703002",
+				"7371f8c86",
+				"29a101a4c"
+			],
+			"sua": "rang/boc-ma-khong-doc.json bỏ progress, thêm 3 dòng (bản dựng sẵn scratchpad/tra-cmd/boc-ma-khong-doc.sua.json)",
+			"dot_bien_de_xuat": "khai-nguyen-ban-sai-radio-group → HONG exit 1; tra-progress-vao-bang → THUA exit 2"
+		},
+		{
+			"ho_so": "chu-mac-dinh-thu-vien-ngoai",
+			"eval": "E9",
+			"xu_ly": "sua-rang",
+			"ly_do": "context-menu mới thuộc nhóm chỉ hiện sau khi bấm",
+			"can_cu": "29a101a4c",
+			"sua": "rang/gioi-han-bam-moi-hien.json thêm context-menu (scratchpad/tra-cmd/gioi-han-bam-moi-hien.sua.json); KÉO THEO chan-lai-component-ra-man: mo-nguyen-ban.mjs:9 NEO_DONG 9→10, lai-ra-man.mjs:9 dong_bang_cu 9→10, da_do.ket_qua thêm context-menu từ bộ mở nguyên bản thật",
+			"dot_bien_de_xuat": "go-context-menu-khoi-bang → THIEU exit 2"
+		},
+		{
+			"ho_so": "cron-theo-ban-khai",
+			"eval": "E8",
+			"xu_ly": "khai-not-run",
+			"ly_do": "cần bản triển khai production READY dựng từ đúng sha HEAD + token Vercel CLI; nhánh vòng không bao giờ lên production",
+			"can_cu": "_acceptance/cron-theo-ban-khai/contract.md:119",
+			"sua": "status not-run"
+		},
+		{
+			"ho_so": "cron-theo-ban-khai",
+			"eval": "E7",
+			"xu_ly": "sua-rang",
+			"ly_do": "spawnSync ENOBUFS; sau sửa còn ghim lint 3 vs 36 (HỎI)",
+			"can_cu": "_acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs:16",
+			"sua": "stdio inherit + maxBuffer",
+			"dot_bien_de_xuat": "test-hong; canh-bao-them"
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "E13",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "diff merge-base rỗng ở HEAD=onehub; neo PR #311",
+			"can_cu": "45d4fde524b049b17b6887292b641585a914b754",
+			"sua": "rang/san-thiet-ke.mjs tepTrongDiff: diff 591bc8fb63a6505a888f80ccde43fc498e4eed2a..a33a0d62424150945bf2dc482d050dfbaaeccb6e",
+			"dot_bien_de_xuat": "--tu-thu gia-xam-tren-mau có sẵn"
+		},
+		{
+			"ho_so": "to-chuc-danh-sach-chi-tiet",
+			"eval": "E21",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "diff merge-base rỗng; neo PR #128",
+			"can_cu": "472e888085bd07c2ef47f02ecd946e7693785027",
+			"sua": "rang/san-thiet-ke.mjs moc=36f6bdb8e61cbaf23254a7fd92c34a01fe097e53, TOI=a7808bfbefc77a9bbe07468cc5b8e3b8081e7792; bỏ diff cây làm việc/untracked",
+			"dot_bien_de_xuat": "className-tren-Button trên chi-tiet-goc.tsx → mã 1"
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E3",
+			"xu_ly": "sua-rang",
+			"ly_do": "ngan-kr-mot-cho AC-1 (ngăn kr:), vo-khu-muc-tieu AC-2..5 (thanh bên Sức khoẻ, #chuong-trinh); lượt chạy mọi nhóm vì EVAL rỗng",
+			"can_cu": "5b6be6129",
+			"can_cu_them": [
+				"07ea52a34"
+			],
+			"sua": "rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh",
+			"dot_bien_de_xuat": "TC-1 TC-2 TC-3"
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E28",
+			"xu_ly": "sua-rang",
+			"ly_do": "ngan-kr-mot-cho AC-1 (ngăn kr:), vo-khu-muc-tieu AC-2..5 (thanh bên Sức khoẻ, #chuong-trinh); lượt chạy mọi nhóm vì EVAL rỗng",
+			"can_cu": "5b6be6129",
+			"can_cu_them": [
+				"07ea52a34"
+			],
+			"sua": "rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh",
+			"dot_bien_de_xuat": "TC-1 TC-2 TC-3"
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E29",
+			"xu_ly": "sua-rang",
+			"ly_do": "ngan-kr-mot-cho AC-1 (ngăn kr:), vo-khu-muc-tieu AC-2..5 (thanh bên Sức khoẻ, #chuong-trinh); lượt chạy mọi nhóm vì EVAL rỗng",
+			"can_cu": "5b6be6129",
+			"can_cu_them": [
+				"07ea52a34"
+			],
+			"sua": "rang/man-toan-canh.mjs (a)-(d); E29 đòi ≥1 lời gọi toanCanh",
+			"dot_bien_de_xuat": "TC-1 TC-2 TC-3"
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E4",
+			"xu_ly": "sua-rang",
+			"ly_do": "phụ thuộc thứ tự: đòi tổng kết E9",
+			"can_cu": "_acceptance/tro-ly-okr-nen/rang/doi-soat-that.mjs:16",
+			"sua": "cach-ly-dau-cuoi ghi sha; doi-soat tự chạy E9 khi thiếu/khác sha",
+			"dot_bien_de_xuat": "tong-ket-cu"
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E17",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "migration mới tính theo merge-base; model mới không cuối schema vì du-an-gantt d429e39b2, goi-y-mo-ke-hoach 34a010430 thêm sau",
+			"can_cu": "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
+			"sua": "rang/migration-chi-them.mjs NEN=e3dd799ad GOP=1bb45ac78; diff schema NEN..GOP; liền khối 6 model thay cuối tệp",
+			"dot_bien_de_xuat": "DROP COLUMN; @@index AgentTask; tach-khoi"
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E22",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "git show merge-base:tien-do.ts — tệp đã dời ở HEAD",
+			"can_cu": "1bb45ac78acc9f113cec4ccc5d2d95e4189e57a9",
+			"sua": "rang/tien-do-da-doi.mjs nen=c1e37b730548a6faa9c2dbac1e0a652a32934753",
+			"dot_bien_de_xuat": "nhap-duong-cu; doi-than-ky-vong"
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E23",
+			"xu_ly": "sua-rang",
+			"ly_do": "CONTEXT.md mục Tóm tắt tuần (#226 AC-15) và Trợ lý OKR (#230 Kara) đổi theo hồ sơ ký sau",
+			"can_cu": "e5c369cc6",
+			"can_cu_them": [
+				"923f57173"
+			],
+			"sua": "rang/tu-dien-luat.mjs: hai mục so với git show <sha>:CONTEXT.md",
+			"dot_bien_de_xuat": "sua-tom-tat"
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E25",
+			"xu_ly": "sua-rang",
+			"ly_do": "tro-ly-okr-tom-tat: phiên con chưa có việc vào okr.chuyen-tiep",
+			"can_cu": "853f07bd2",
+			"sua": "rang/so-phien-con-that.mjs:8 con_tro_ly=okr.chuyen-tiep",
+			"dot_bien_de_xuat": "tro-ly-ve-de-xuat"
+		},
+		{
+			"ho_so": "so-okr-tu-chay",
+			"eval": "E8",
+			"xu_ly": "sua-rang",
+			"ly_do": "18 vi phạm trong .eve snapshots (gitignore); 2 ở okr-mau/nap.ts do bo-okr-mau AC-3/AC-8 đòi",
+			"can_cu": "_acceptance/bo-okr-mau/contract.md:37",
+			"sua": "rang/soi-ma.mjs: lấy tệp từ git ls-files; miễn trừ có tên nap.ts",
+			"dot_bien_de_xuat": "xoa-ngoai-mau"
+		},
+		{
+			"ho_so": "so-okr-tu-chay",
+			"eval": "E12",
+			"xu_ly": "sua-rang",
+			"ly_do": "ngan-kr-mot-cho: so-kr → kr:, mục so-nguon",
+			"can_cu": "5b6be6129",
+			"sua": "rang/man-so-tu-chay.mjs record kr:, [data-muc-ngan=so-nguon] [data-so-kr-noi-dung]",
+			"dot_bien_de_xuat": "banGhiChiSo không kèm ngày"
+		},
+		{
+			"ho_so": "so-okr-tu-chay",
+			"eval": "E14",
+			"xu_ly": "sua-rang",
+			"ly_do": "/okr/cap-nhat-tuan về /okr; moHopSua không chờ nút menu",
+			"can_cu": "9203b9ca2",
+			"sua": "man-so-tu-chay.mjs:1879,1892 /okr?tu=viec-cua-toi; chờ nút trước bam dòng 1290",
+			"dot_bien_de_xuat": "SO-1 bỏ disabled"
+		},
+		{
+			"ho_so": "so-okr-tu-chay",
+			"eval": "E23",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "origin/onehub...HEAD rỗng; áp vao-f28-so-okr-tu-chay.patch (chủ kho F8: b1)",
+			"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87",
+			"sua": "git apply _acceptance/neo-thuoc-het-han/vao-f28-so-okr-tu-chay.patch",
+			"dot_bien_de_xuat": "dinh-co-table; sha-khong-giai → mã 2"
+		},
+		{
+			"ho_so": "so-okr-tu-chay",
+			"eval": "E25",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "không migration mới so onehub; cùng bản vá",
+			"can_cu": "f2acca7f1ae619abdadbb09e3db29be65841ce87",
+			"sua": "cùng bản vá",
+			"dot_bien_de_xuat": "ADD COLUMN / DROP INDEX / model giữa tệp"
+		},
+		{
+			"ho_so": "zalo-gui-hong-ghi-ly-do",
+			"eval": "E7",
+			"xu_ly": "neo-co-dinh",
+			"ly_do": "rang/pham-vi.mjs lấy diff merge-base với origin/onehub; ở nhánh chính diff rỗng nên mã 2. Neo cặp gộp PR #324.",
+			"can_cu": "0b62cebb90f12b700681cafae45f35a66816667f",
+			"sua": "rang/pham-vi.mjs: tu=0422d7976508e31d81923db5f8609fe5464d695d, toi=1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed thay merge-base…HEAD"
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/danh-sach-keo-chung/evals.yaml"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/dieu-phoi-hai-tang/evals.yaml"
+		},
+		{
+			"ho_so": "lich-su-va-luu-tru-trang",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/lich-su-va-luu-tru-trang/evals.yaml"
+		},
+		{
+			"ho_so": "no-sau-luot-5-okr",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/no-sau-luot-5-okr/evals.yaml"
+		},
+		{
+			"ho_so": "zalo-gui-hong-ghi-ly-do",
+			"eval": "evals.yaml",
+			"xu_ly": "sua-cu-phap",
+			"ly_do": "evals.yaml không đọc được bằng bộ đọc YAML chuẩn ở mốc nền; sửa cú pháp, không đổi nghĩa.",
+			"can_cu": "_acceptance/zalo-gui-hong-ghi-ly-do/evals.yaml"
+		}
+	],
+	"hoan_lai": [
+		{
+			"ho_so": "bo-dung-chung-nhan-chuoi",
+			"eval_do": [
+				"E4"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E4",
+					"ly_do": "8 bài DOM khai lại type Locale",
+					"can_cu": ""
+				}
+			],
+			"tin_hieu": {
+				"ma": "",
+				"tieu_de": "",
+				"noi_dung": ""
+			},
+			"sua_san": []
+		},
+		{
+			"ho_so": "cai-dat-con-lai-noi-tieng-viet",
+			"eval_do": [
+				"E1",
+				"E3",
+				"E6",
+				"E8",
+				"E10",
+				"E11",
+				"E12",
+				"E13",
+				"E14",
+				"E15",
+				"E17"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E8",
+					"ly_do": "nhãn trường tự tạo ở /settings/fields không translate=no (fields-list.tsx:407-409, 519)",
+					"can_cu": "6634d64c1"
+				},
+				{
+					"eval": "E13",
+					"ly_do": "/settings/fields 360px: Điện thoại 57/56px, Trường chuẩn 75/56px bị cắt ở vi, en vừa (fields-list.tsx:407-424)",
+					"can_cu": "6634d64c1"
+				}
+			],
+			"tin_hieu": {
+				"ma": "",
+				"tieu_de": "",
+				"noi_dung": ""
+			},
+			"sua_san": [
+				{
+					"eval": "E1",
+					"xu_ly": "sua-rang",
+					"sua": "khong-dich-cua-lat.json mien_dau Chung; dòng Zalo CRM Email URL Website; câu Slack mới; dungBoi thêm giaiDoan.list, fields.list, tên miền, cấu hình repo; route_khong_dung_duoc /settings/notifications; xem lại vẽ 1 /settings/api-keys",
+					"dot_bien": null,
+					"can_cu": "bfb313301"
+				},
+				{
+					"eval": "E3",
+					"xu_ly": "sua-rang",
+					"sua": "toast-cua-lat.json dời/thêm dòng; chu-ngoai-jsx.mjs tháo dien(<kho>.<khoá>)",
+					"dot_bien": null,
+					"can_cu": "d93d78670"
+				},
+				{
+					"eval": "E6",
+					"xu_ly": "sua-rang",
+					"sua": "man-that.mjs KHO ui table.noMatch",
+					"dot_bien": null,
+					"can_cu": "fb486420a"
+				},
+				{
+					"eval": "E10",
+					"xu_ly": "sua-rang",
+					"sua": "như E15 + E3",
+					"dot_bien": null,
+					"can_cu": "E15,E3"
+				},
+				{
+					"eval": "E11",
+					"xu_ly": "sua-rang",
+					"sua": "như E3",
+					"dot_bien": null,
+					"can_cu": "d93d78670"
+				},
+				{
+					"eval": "E12",
+					"xu_ly": "sua-rang",
+					"sua": "lat-cai-dat-2.json neo.file 36→44, file_quyen 11→13",
+					"dot_bien": null,
+					"can_cu": "7c451de7b"
+				},
+				{
+					"eval": "E14",
+					"xu_ly": "sua-rang",
+					"sua": "cd2_be_rong_do bọc tien-de; be-rong-do-lib.sh đếm tràn của chính vết",
+					"dot_bien": null,
+					"can_cu": "d1e3fdd4b"
+				},
+				{
+					"eval": "E15",
+					"xu_ly": "sua-rang",
+					"sua": "khong-phai-chu-nguoi-doc.json thêm data-slot,hinh,layout,aria-haspopup,cellClassName; giu_nguyen toan-quyen,keo-tin-hieu,day-lo-trinh,khung-1..3,ten-mien-noi-bo,sso-khoa-them,'px-3 py-2.5 align-middle'",
+					"dot_bien": null,
+					"can_cu": "f24c0be77"
+				},
+				{
+					"eval": "E17",
+					"xu_ly": "sua-rang",
+					"sua": "man-cai-dat-noi-tieng-viet/rang/tieu-de-cua-lat.json so_o 18→20",
+					"dot_bien": null,
+					"can_cu": "9e8461e9a"
+				}
+			]
+		},
+		{
+			"ho_so": "tong-quan-va-khung-noi-tieng-viet",
+			"eval_do": [
+				"E1",
+				"E2",
+				"E3",
+				"E4",
+				"E7",
+				"E8",
+				"E10",
+				"E11",
+				"E12",
+				"E13",
+				"E14",
+				"E15",
+				"E21",
+				"E22",
+				"E23",
+				"E24",
+				"E25"
+			],
+			"san_pham_hong": [
+				{
+					"eval": "E7",
+					"ly_do": "sau khi sửa răng như E1: sales-dashboard.tsx:204-209 bọc nhãn giai đoạn ForeignText lang=en không translate=no, trái giai-doan-thoa-thuan AC-13",
+					"can_cu": "ecb9448b4"
+				}
+			],
+			"tin_hieu": {
+				"ma": "",
+				"tieu_de": "",
+				"noi_dung": ""
+			},
+			"sua_san": [
+				{
+					"eval": "E1",
+					"xu_ly": "sua-rang",
+					"sua": "man-that.mjs:52-53 bỏ nhập apps/app/lib/deal-stage.ts; bangKhongDich lấy giai đoạn từ API giaiDoan.list; khong-dich-cua-lat.json:34 nguon api:giaiDoan.list",
+					"dot_bien": "ghim khoá deals khung-ung-dung.ts về Deals → vẽ 2 đỏ",
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E2",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 rồi chạy tq_lan_noi_tiep trên cây sạch; selector nav /chat có thể lệch (59b8ba897)",
+					"dot_bien": "ghim tiêu đề ⌘K về Search",
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E3",
+					"xu_ly": "tu-het",
+					"sua": "chạy tq_lan_noi_tiep (chân bên trong xanh)",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E4",
+					"xu_ly": "sua-rang",
+					"sua": "khong-phai-chu-nguoi-doc.json: gỡ giữ nguyên primary/error; thêm thuoc_jsx_ky_thuat data-khoi,data-can-de-y,data-cap-loi,hinh,noi,khiHien,placement; giu_nguyen viec,viecChung,buoc,keHoach,taiLieu,ke-hoach-im,moc-ngay,member,companies,khong-quyen,dangChay,hong,Sign out failed",
+					"dot_bien": "Closed won trong TREND_CONFIG",
+					"can_cu": "bf91a6a5d"
+				},
+				{
+					"eval": "E8",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E10",
+					"xu_ly": "sua-rang",
+					"sua": "như E4 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "bf91a6a5d"
+				},
+				{
+					"eval": "E11",
+					"xu_ly": "sua-rang",
+					"sua": "dot-bien.mjs:96 regex m.tasks.pastDue(formatCount(...)); bọc tq_dot_bien qua tien-de.mjs; kèm E1, E4",
+					"dot_bien": null,
+					"can_cu": "a5530063c"
+				},
+				{
+					"eval": "E12",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E13",
+					"xu_ly": "sua-rang",
+					"sua": "bọc tq_be_rong_do qua tien-de.mjs; kèm E1; đếm tràn của chính vết",
+					"dot_bien": null,
+					"can_cu": "d1e3fdd4b"
+				},
+				{
+					"eval": "E14",
+					"xu_ly": "sua-rang",
+					"sua": "như E1",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E15",
+					"xu_ly": "sua-rang",
+					"sua": "bọc tq_mot_bo_thuoc qua tien-de; thay ghim cứng goc-thuoc.json bằng so sống lib a242858d0 vs hiện tại",
+					"dot_bien": null,
+					"can_cu": "31804c08c"
+				},
+				{
+					"eval": "E21",
+					"xu_ly": "sua-rang",
+					"sua": "như E1 + chạy làn",
+					"dot_bien": null,
+					"can_cu": "ecb9448b4"
+				},
+				{
+					"eval": "E22",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E23",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E24",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				},
+				{
+					"eval": "E25",
+					"xu_ly": "tu-het",
+					"sua": "chạy làn",
+					"dot_bien": null,
+					"can_cu": ""
+				}
+			]
+		}
+	]
+}

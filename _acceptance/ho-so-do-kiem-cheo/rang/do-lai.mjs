@@ -64,7 +64,9 @@ export function duoiDo(text) {
 		.map((l) => l.slice(0, DO_DAI_DONG));
 }
 
-function chay(slugs, thuMucLog) {
+export const DAU_LENH_CAN_MAY_CHU = ["tien-de.mjs", "mot-luot.sh", "APP_URL"];
+
+function chay(slugs, thuMucLog, boMayChu) {
 	const configText = fs.readFileSync(path.join(GOC, "_acceptance/config.yaml"), "utf8");
 	const sha = execFileSync("git", ["-C", GOC, "rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 	fs.mkdirSync(thuMucLog, { recursive: true });
@@ -76,6 +78,10 @@ function chay(slugs, thuMucLog) {
 		for (const e of ds.may) {
 			if (!e.cmd) {
 				dong.eval.push({ id: e.id, exit: "khong-giai", ky_vong: e.kyVong });
+				continue;
+			}
+			if (boMayChu && DAU_LENH_CAN_MAY_CHU.some((d) => e.cmd.includes(d))) {
+				dong.eval.push({ id: e.id, bo: "may-chu", ky_vong: e.kyVong });
 				continue;
 			}
 			const t0 = Date.now();
@@ -103,11 +109,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 		process.exit(2);
 	}
 	const lg = thamSo.indexOf("--log");
+	const bo = thamSo.indexOf("--bo-may-chu");
 	const thuMucLog = lg >= 0 ? thamSo[lg + 1] : fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "do-lai-"));
-	const slugs = thamSo.filter((_, i) => ![ra, ra + 1, lg, lg + 1].includes(i));
-	const kq = chay(slugs, thuMucLog);
+	const slugs = thamSo.filter((_, i) => ![ra, ra + 1, lg, lg + 1, bo].includes(i));
+	const kq = chay(slugs, thuMucLog, bo >= 0);
 	fs.writeFileSync(thamSo[ra + 1], `${JSON.stringify(kq, null, "\t")}\n`);
-	const tong = kq.ho_so.flatMap((h) => h.eval);
+	const tong = kq.ho_so.flatMap((h) => h.eval).filter((e) => !e.bo);
 	const soDo = tong.filter((e) => e.exit !== e.ky_vong).length;
 	process.stdout.write(`do-lai: ${kq.ho_so.length} ho so, ${tong.length} eval may, ${soDo} do · log ${thuMucLog}\n`);
 }
