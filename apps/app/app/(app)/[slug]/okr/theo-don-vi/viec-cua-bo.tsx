@@ -1,5 +1,6 @@
 "use client";
 
+import Locked from "@carbon/icons-react/es/Locked";
 import { Badge } from "@crm/ui/components/badge";
 import {
 	Empty,
@@ -8,6 +9,7 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
+import { Icon } from "@crm/ui/components/icon";
 import {
 	Item,
 	ItemContent,
@@ -21,7 +23,9 @@ import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useQuery } from "@tanstack/react-query";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { LocalDay } from "@/components/local-date-time";
+import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -45,6 +49,24 @@ function TrangThaiViec({
 			{v.xong ? m.daXong : m.chuaXong}
 		</Badge>
 	);
+}
+
+function TenViec({ v }: { v: ViecBo }) {
+	const m = okrCanhKrMessages(useLocale()).sangKien;
+	const lk = v.lienKet;
+	if (lk && !lk.coQuyen)
+		return (
+			<span
+				className="inline-flex items-center gap-1"
+				data-viec-an="khong-quyen"
+			>
+				{dien(m.khongQuyen, { loai: m.loai[lk.loai] })}
+				<Icon aria-hidden="true" icon={Locked} />
+			</span>
+		);
+	if (lk && lk.ten === null)
+		return <span data-viec-an="da-xoa">{m.daXoa[lk.loai]}</span>;
+	return <span translate="no">{v.tieuDe}</span>;
 }
 
 export function ViecCuaBo({
@@ -105,7 +127,9 @@ export function ViecCuaBo({
 						>
 							{n.viec.map((v) => (
 								<SimpleTableRow data-viec={v.id} key={v.id}>
-									<TableCell translate="no">{v.tieuDe}</TableCell>
+									<TableCell>
+										<TenViec v={v} />
+									</TableCell>
 									<TableCell data-nguoi-lam="" translate="no">
 										{v.nguoiLam?.name ?? <EmptyCellValue />}
 									</TableCell>
@@ -128,7 +152,9 @@ export function ViecCuaBo({
 							{n.viec.map((v) => (
 								<Item data-viec={v.id} key={v.id} variant="outline">
 									<ItemContent>
-										<ItemTitle translate="no">{v.tieuDe}</ItemTitle>
+										<ItemTitle>
+											<TenViec v={v} />
+										</ItemTitle>
 										<ItemDescription>
 											{v.nguoiLam ? (
 												<span translate="no">{v.nguoiLam.name} · </span>

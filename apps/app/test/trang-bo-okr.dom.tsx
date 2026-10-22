@@ -173,6 +173,8 @@ let hangDs: HangBo[];
 let goiBo: number;
 type QuyenDan = RouterOutputs["okr"]["access"]["headOf"];
 let headOf: QuyenDan;
+type ViecCuaBoRa = RouterOutputs["okr"]["viecCuaBo"];
+let viecDs: ViecCuaBoRa | null;
 
 const TREO_MAI = () => new Promise<never>(() => {});
 
@@ -206,6 +208,7 @@ const OKR_GIA = {
 	countByUnit: thuTuc("countByUnit", () => ({})),
 	danhSachBo: thuTuc("danhSachBo", docBo),
 	toanCanh: thuTuc("toanCanh", () => TOAN_CANH),
+	viecCuaBo: thuTuc("viecCuaBo", () => viecDs ?? TREO_MAI()),
 	soanSanSang: thuTuc("soanSanSang", () => ({
 		bat: false,
 		lyDo: "don-vi-chua-bat",
@@ -266,6 +269,10 @@ const { duongTheoDonVi, duongMoCuoc } = await import(
 );
 const { khoaDon } = await import("@/app/(app)/[slug]/okr/okr-search-params");
 const { HanhDongKhu } = await import("@/app/(app)/[slug]/okr/hanh-dong-khu");
+const { ViecCuaBo } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/viec-cua-bo"
+);
+const { okrCanhKrMessages } = await import("@/lib/messages/okr-canh-kr");
 const { okrVoKhuMessages } = await import("@/lib/messages/okr-vo-khu");
 
 const boOkr = okrVoKhuMessages("vi").boOkr;
@@ -284,6 +291,7 @@ beforeEach(() => {
 	hangDs = [];
 	goiBo = 0;
 	headOf = { divisions: [], departments: [] };
+	viecDs = null;
 });
 
 afterEach(async () => {
@@ -808,5 +816,91 @@ describe("tbo-rong-loc", () => {
 			"tbo-rong-loc: het cau rong sau Về Tất cả",
 		);
 		expect(s.url().get("kyOkr")).toBe("q4");
+	});
+});
+
+function viecMau(): ViecCuaBoRa {
+	const viec = {
+		nguoiLam: null,
+		hanNgay: null,
+		xong: false,
+	};
+	return {
+		nhom: [
+			{
+				kr: {
+					id: "kr1",
+					ten: "Tăng khách",
+					mucTieu: { id: "m1", ten: "Mở rộng" },
+				},
+				viec: [
+					{
+						...viec,
+						id: "v1",
+						loai: "viec",
+						tieuDe: "Gọi khách",
+						lienKet: null,
+					},
+					{
+						...viec,
+						id: "v2",
+						loai: "chien-dich",
+						tieuDe: "",
+						lienKet: {
+							loai: "chien-dich",
+							coQuyen: true,
+							id: null,
+							ten: null,
+							trangThai: "da-xoa",
+						},
+					},
+					{
+						...viec,
+						id: "v3",
+						loai: "ke-hoach",
+						tieuDe: "",
+						lienKet: { loai: "ke-hoach", coQuyen: false },
+					},
+				],
+			},
+		],
+	};
+}
+
+describe("tbo-viec-ten", () => {
+	test("viec lien ket da xoa hay khong co quyen van co tieu de: nhan da xoa, nhan khong quyen; viec thuong giu ten", async () => {
+		viecDs = viecMau();
+		const { o } = await ve(<ViecCuaBo cycleId="q4" unit={{ loai: "goc" }} />);
+		await cho(
+			() => o.querySelector('[data-trang-thai="ST-bo-viec"]') !== null,
+			"the Viec dung xong",
+		);
+		const m = okrCanhKrMessages("vi").sangKien;
+		const tieuDe = (id: string) =>
+			[...o.querySelectorAll(`[data-viec="${id}"]`)].map((e) =>
+				(
+					e.querySelector("td, [data-slot=item-title]")?.textContent ?? ""
+				).trim(),
+			);
+		const ky = {
+			v1: tieuDe("v1"),
+			v2: tieuDe("v2"),
+			v3: tieuDe("v3"),
+		};
+		const khongQuyen = m.khongQuyen.replace("{loai}", m.loai["ke-hoach"]);
+		expect(ky).toEqual({
+			v1: ["Gọi khách", "Gọi khách"],
+			v2: [m.daXoa["chien-dich"], m.daXoa["chien-dich"]],
+			v3: [khongQuyen, khongQuyen],
+		});
+		for (const v of Object.values(ky).flat())
+			phai(v !== "", "tbo-viec-ten: con o tieu de rong");
+	});
+
+	test("doi chung duong: ban cu chi in tieuDe thi o tieu de rong va bai bat", () => {
+		const cu = viecMau().nhom[0]?.viec.map((v) => v.tieuDe) ?? [];
+		expect(() => {
+			for (const v of cu) phai(v !== "", "tbo-viec-ten: con o tieu de rong");
+		}).toThrow("tbo-viec-ten: con o tieu de rong");
 	});
 });

@@ -134,6 +134,23 @@ evals:
       CHIEU DO (ca «tbo-viec-do»): bộ không có việc → mảng rỗng; và đối chứng dương việc của B xuất hiện khi gọi unit B.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
+  - id: E16
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tbo_dom_viec
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/theo-don-vi/viec-cua-bo.tsx"
+      - "apps/api/src/okr/bo-okr.ts"
+      - "apps/app/test/trang-bo-okr.dom.tsx"
+    expected: |
+      Ca «tbo-viec-ten»: ViecCuaBo dựng ba việc của một KR — việc thường «Gọi khách», chiến dịch đã xoá (lienKet
+      coQuyen true, ten null, trangThai da-xoa), kế hoạch không đủ quyền (lienKet coQuyen false). Ô tiêu đề ở bảng (md+)
+      và ItemTitle ở danh sách (<md) lần lượt là «Gọi khách», m.sangKien.daXoa["chien-dich"], m.sangKien.khongQuyen với
+      {loai} = m.sangKien.loai["ke-hoach"] — không ô nào rỗng. Ca API «tbo-viec-lien-ket» (E8) chứng viecBoTu mang
+      lienKet theo vai (admin thấy da-xoa, vai okr coQuyen false). Ghim «tbo-viec-ten: con o tieu de rong».
+      CHIEU DO: bản ViecCuaBo cũ chỉ in v.tieuDe → ô v2, v3 rỗng, ca đỏ; đối chứng «doi chung duong» trong tệp.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
   - id: E9
     criterion: AC-6
     executor: script
