@@ -10,6 +10,7 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DauTrangOkrTrang } from "../dau-trang-okr";
+import { LOC_MOI_KR_RONG } from "../moi-kr/tham-so";
 import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
 import { chuyenSoDoCu } from "../so-do/chuyen-so-do-cu";
 import { duongSoDoTuSucKhoe } from "../so-do/duong-so-do";
@@ -77,6 +78,11 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 			? queryClient.prefetchQuery(trpc.okr.sucKhoe.queryOptions({ cycleId }))
 			: null,
 		quanTri ? queryClient.prefetchQuery(trpc.okr.moCoi.queryOptions({})) : null,
+		cycleId
+			? queryClient.prefetchQuery(
+					trpc.okr.moiKr.queryOptions({ cycleId, loc: LOC_MOI_KR_RONG }),
+				)
+			: null,
 	]);
 
 	return (

@@ -16,6 +16,7 @@ import { usePathname } from "next/navigation";
 import { useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrMoiKrMessages } from "@/lib/messages/okr-moi-kr";
 import { okrVoKhuMessages } from "@/lib/messages/okr-vo-khu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -55,6 +56,7 @@ function useNhan() {
 		"bo-okr": t.muc.boOkr,
 		"lay-y-kien": t.muc.layYKien,
 		"suc-khoe": t.muc.sucKhoe,
+		"moi-kr": okrMoiKrMessages(useLocale()).muc,
 		"so-do": t.muc.soDo,
 	} satisfies Record<MucThanhBen, string>;
 	return { nhom, muc, chuongTrinh: t.chuongTrinh };

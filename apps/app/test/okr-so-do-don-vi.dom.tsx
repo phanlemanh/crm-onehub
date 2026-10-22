@@ -85,6 +85,11 @@ mock.module("@/lib/trpc/client", () => ({
 				headOf: { divisions: [], departments: [] },
 			})),
 			toanCanh: thuTuc("okr.toanCanh", () => tcDuLieu),
+			moiKr: thuTuc("okr.moiKr", () => ({
+				rows: [],
+				total: 0,
+				facetCounts: { tinhTrang: [], donVi: [], nguoi: [] },
+			})),
 			xuatKy: thuTuc("okr.xuatKy", () => null),
 			soDoDonVi: {
 				queryOptions: () => ({

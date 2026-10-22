@@ -49,6 +49,7 @@ import { useChuKy } from "../chon-chu-ky";
 import { okrParsers } from "../okr-search-params";
 import { kyVongCo, ThanhTienDo } from "../tien-do-kr";
 import { ChuaChuKy, DangTai } from "../trang-thai-okr";
+import { OKrTruot } from "./o-kr-truot";
 
 type HangToanCanh = RouterOutputs["okr"]["toanCanh"]["hang"][number];
 
@@ -312,6 +313,7 @@ export function ToanCanh() {
 					label={mt.toanCanh.tuTinThap}
 					value={String(tongQuan.tuTinThap)}
 				/>
+				<OKrTruot cycleId={currentId} />
 			</StatGroup>
 			{tuanDau ? (
 				<Empty>
