@@ -3271,6 +3271,9 @@ executors:
     t127_quet_goc: node _acceptance/test-nghe-127/rang/quet.mjs --ref 33ddf1b0294399ddf581318b71bb9b7e48f4de84 --mong-do
     t127_co_che: bun _acceptance/test-nghe-127/rang/co-che.ts
     t127_khang_dinh: node _acceptance/test-nghe-127/rang/khong-doi-khang-dinh.mjs
+    ttc30_mot_khoa: bun _acceptance/tran-test-ci-30/rang/kiem.mjs mot-khoa
+    ttc30_e3_cu: bun _acceptance/tran-test-ci-30/rang/kiem.mjs e3-cu
+    ttc30_thay_boi: bun _acceptance/tran-test-ci-30/rang/kiem.mjs thay-boi
     vrc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs"'
     gymk_san_thiet_ke: node _acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs
     gymk_dot_bien: node _acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs

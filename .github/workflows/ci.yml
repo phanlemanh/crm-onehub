@@ -77,7 +77,7 @@ jobs:
     needs: phan-loai
     if: ${{ !cancelled() && needs.phan-loai.outputs.nang != 'false' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
