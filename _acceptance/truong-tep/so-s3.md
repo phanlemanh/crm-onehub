@@ -13,3 +13,6 @@ eval, rồi trả tệp về nguyên (so `diff` với bản chép trước khi p
 | E9 | gỡ chặn `FILE` ở đầu `coerceValue` và nhánh `case "FILE"` | `bun test test/truong-tep.spec.ts -t ttp-ghi-chu` | đỏ: `ttp ghi chu: deals.update abc nhan`. Tệp đã về nguyên. |
 | E6 | `remove` xoá Blob trước, xoá hàng ngoài giao dịch, bỏ hàng chờ | `bun test test/truong-tep.spec.ts -t ttp-xoa` | đỏ: `ttp xoa: blob hong khong cho`. Tệp đã về nguyên. |
 | E7 | `deals.purge` không ghi hàng chờ (`tepXoa = []`) | `bun test test/truong-tep.spec.ts -t ttp-vong-doi` | đỏ: `ttp vong doi: deals.purge xoa []`. Tệp đã về nguyên. |
+| E1b | `KARA_DIEN_THEO_KIEU.FILE` thành `true` (`fields-shape.ts`) | `bun test ./test/truong-tep.dom.tsx -t ttp-cai-dat` | đỏ: `ttp cai dat: con Kara dien`. Tệp đã về nguyên. |
+| E4b | nút «Mở» bỏ điều kiện `coTheMo` (`o-tep.tsx`) | `bun test ./test/truong-tep.dom.tsx -t ttp-o-tep` | đỏ: `ttp o tep: co tep khong-mo/xoa mo`. Tệp đã về nguyên. |
+| E5b | bỏ lựa chọn «Có tệp» khỏi menu lọc (`field-facets.tsx`) | `bun test ./test/truong-tep.dom.tsx -t ttp-man-loc` | đỏ: `ttp man loc: thieu Có tệp`. Tệp đã về nguyên. |

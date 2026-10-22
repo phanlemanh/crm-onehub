@@ -176,3 +176,45 @@ describe("NguonKeoTha — đang kéo", () => {
 		ghim(v.getAttribute("data-keo") === "false", "vung tat van bat data-keo");
 	});
 });
+
+function chonNhieu(goc: HTMLElement, cacTep: File[]): void {
+	const o = oTep(goc);
+	Object.defineProperty(o, "files", { value: cacTep, configurable: true });
+	act(() => {
+		o.dispatchEvent(new Event("change", { bubbles: true }));
+	});
+}
+
+describe("NguonKeoTha — nhiều tệp", () => {
+	test("nhieu: bật thì mỗi tệp hợp lệ một lần onChon, tệp sai một lần onTuChoi", () => {
+		const nhan: string[] = [];
+		const tuChoi: string[] = [];
+		const goc = ve(
+			<NguonKeoTha
+				{...VUNG}
+				nhieu
+				onChon={(f) => nhan.push(f.name)}
+				onTuChoi={(f, lyDo) => tuChoi.push(`${f.name}:${lyDo}`)}
+			/>,
+		);
+		ghim(oTep(goc).multiple === true, "nhieu: o tep khong multiple");
+		chonNhieu(goc, [
+			new File(["a"], "a.pdf", { type: "application/pdf" }),
+			new File(["b"], "b.docx"),
+			new File(["c"], "c.xlsx"),
+		]);
+		ghim(nhan.join() === "a.pdf,b.docx", `nhieu: onChon ${nhan.join()}`);
+		ghim(tuChoi.join() === "c.xlsx:loai", `nhieu: onTuChoi ${tuChoi.join()}`);
+	});
+
+	test("nhieu: vắng prop thì vẫn chỉ nhận tệp đầu như cũ", () => {
+		const nhan: string[] = [];
+		const goc = ve(<NguonKeoTha {...VUNG} onChon={(f) => nhan.push(f.name)} />);
+		ghim(oTep(goc).multiple === false, "mac dinh: o tep multiple");
+		chonNhieu(goc, [
+			new File(["a"], "a.pdf", { type: "application/pdf" }),
+			new File(["b"], "b.pdf", { type: "application/pdf" }),
+		]);
+		ghim(nhan.join() === "a.pdf", `mac dinh: onChon ${nhan.join()}`);
+	});
+});

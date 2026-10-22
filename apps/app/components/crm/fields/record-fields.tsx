@@ -19,6 +19,7 @@ import {
 import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 import { type MoTaTruong, OTruongPhieu } from "./kieu-truong";
+import type { DichOTep, TepOTep } from "./o-tep";
 
 type RecordFieldOption = { id: string; label: string };
 
@@ -51,11 +52,14 @@ export function FieldsCog({ kind }: { kind: EntityKind }) {
 	);
 }
 
+export type NguCanhTep = DichOTep & { tep: Record<string, TepOTep[]> };
+
 export function moTaTruongTuTao(
 	field: RecordFieldEntry,
 	luu: (khoa: string, giaTri: FieldValueJson) => void,
 	dangLuu: (khoa: string) => boolean,
 	nguoiDung: Owner[] | undefined,
+	nguCanhTep?: NguCanhTep,
 ): MoTaTruong {
 	return {
 		khoa: field.key,
@@ -70,6 +74,16 @@ export function moTaTruongTuTao(
 		nguoiDung,
 		luu: (giaTri) => luu(field.key, giaTri),
 		dangLuu: dangLuu(field.key),
+		...(nguCanhTep
+			? {
+					tep: nguCanhTep.tep[field.key] ?? [],
+					dichTep: {
+						entity: nguCanhTep.entity,
+						recordId: nguCanhTep.recordId,
+						luuTru: nguCanhTep.luuTru,
+					},
+				}
+			: {}),
 	};
 }
 
@@ -78,11 +92,13 @@ export function OTruongTuTao({
 	saving,
 	onSave,
 	nguoiDung,
+	nguCanhTep,
 }: {
 	field: RecordFieldEntry;
 	saving: (key: string) => boolean;
 	onSave: (values: Record<string, FieldValueJson>, khoa: string) => void;
 	nguoiDung: Owner[] | undefined;
+	nguCanhTep?: NguCanhTep;
 }) {
 	if (!field.showOnSheet) return null;
 
@@ -93,6 +109,7 @@ export function OTruongTuTao({
 				(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
 				saving,
 				nguoiDung,
+				nguCanhTep,
 			)}
 		/>
 	);

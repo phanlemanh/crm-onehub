@@ -110,6 +110,24 @@ export function locDuocTrong(type: FieldTypeName): boolean {
 	return LOC_THEO_KIEU[type] !== "tich";
 }
 
+export const KARA_DIEN_THEO_KIEU = {
+	TEXT: true,
+	LONG_TEXT: true,
+	NUMBER: true,
+	DATE: true,
+	CHECKBOX: true,
+	SELECT: true,
+	URL: true,
+	EMAIL: true,
+	PHONE: true,
+	USER: true,
+	FILE: false,
+} as const satisfies Record<FieldTypeName, boolean>;
+
+export function karaDienDuoc(type: FieldTypeName): boolean {
+	return KARA_DIEN_THEO_KIEU[type];
+}
+
 export function usesOptions(type: FieldTypeName): boolean {
 	return type === "SELECT";
 }

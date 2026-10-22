@@ -565,6 +565,12 @@ export function CompanyOverview({ company }: { company: Company }) {
 												saving={isSavingField}
 												onSave={saveFields}
 												nguoiDung={users.data}
+												nguCanhTep={{
+													entity: "COMPANY",
+													recordId: company.id,
+													luuTru: company.archivedAt !== null,
+													tep: company.tepTheoTruong,
+												}}
 											/>
 										);
 									const mt = truongTheoKhoa.get(muc.key);
