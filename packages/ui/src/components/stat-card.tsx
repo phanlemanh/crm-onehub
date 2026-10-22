@@ -1,4 +1,5 @@
 import { cn } from "@crm/ui/lib/utils";
+import { Slot } from "radix-ui";
 import type * as React from "react";
 
 type TrendDirection = "up" | "down" | "neutral";
@@ -55,6 +56,10 @@ function StatDeltaText({
 	);
 }
 
+const KHUNG = "flex flex-col gap-2.5 p-4 md:p-6";
+const LIEN_KET =
+	"outline-none transition-colors hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset";
+
 function StatCard({
 	label,
 	value,
@@ -62,19 +67,17 @@ function StatCard({
 	description,
 	className,
 	children,
+	asChild = false,
 	...props
 }: Omit<React.ComponentProps<"div">, "title"> & {
 	label?: React.ReactNode;
 	value: React.ReactNode;
 	delta?: StatDelta;
 	description?: React.ReactNode;
+	asChild?: boolean;
 }) {
-	return (
-		<div
-			data-slot="stat-card"
-			className={cn("flex flex-col gap-2.5 p-4 md:p-6", className)}
-			{...props}
-		>
+	const noiDung = (
+		<>
 			{label != null ? (
 				<span className="text-pretty text-sm font-medium text-muted-foreground @2xl/stats:truncate">
 					{label}
@@ -91,6 +94,22 @@ function StatCard({
 					{description}
 				</p>
 			) : null}
+		</>
+	);
+	if (asChild)
+		return (
+			<Slot.Root
+				data-slot="stat-card"
+				className={cn(KHUNG, LIEN_KET, className)}
+				{...props}
+			>
+				<Slot.Slottable>{children}</Slot.Slottable>
+				{noiDung}
+			</Slot.Root>
+		);
+	return (
+		<div data-slot="stat-card" className={cn(KHUNG, className)} {...props}>
+			{noiDung}
 			{children}
 		</div>
 	);
