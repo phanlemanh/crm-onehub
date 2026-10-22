@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: a2ee2fb6ba336afa9a28b3139da5b68fe7fd423e
-human_signoff:
+human_signoff: Manh Phan 2026-10-22 — ký Cổng 2 trên S4 lượt 3 (9/9 eval máy PASS, 0 phát hiện trong hợp đồng). Ngoài-1 tới Ngoài-11 và Ngoài-13 tới Ngoài-17 ghi Known limits; Ngoài-12 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: don-ho-so-cu

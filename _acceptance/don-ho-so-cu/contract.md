@@ -5,7 +5,7 @@ slug: don-ho-so-cu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-21T22:41:23Z
 design_doc: _acceptance/don-ho-so-cu/design.md
@@ -112,3 +112,20 @@ nằm sẵn trong `kiem-ke.json` của gốc vòng và của HEAD.
   - tat-preview-agent-okr và ba-ho-so-do-san: thước gãy, chờ PR #439 (F31) đang sửa chính thước của chúng.
   - vai-chi-okr E13: thước đếm cũ (thanh điều hướng 3→5, 9→12 đổi có chủ đích), việc phụ F1-16 cho làn chủ.
   - Hồ sơ đã ghim xanh trong vòng vẫn có thể cũ lại sau các lần gộp kế — giữ tươi là việc của lệnh giữ tươi (ngoài phạm vi).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Nếu sau này ai sửa sổ xử lý hoặc khuôn đọc sổ, kết quả cũ của phép đo tên gọi vẫn được coi là còn mới. Có thể có một kết quả xanh đã lỗi thời mà không ai biết.
+  - Ngoài-2: Phép đo kiểm tra lưới gộp có thể vẫn báo xanh cũ dù công cụ dùng chung hoặc lệnh CI đã đổi. Người ký có thể tin một kết quả đã lỗi thời.
+  - Ngoài-3: Công cụ đối chiếu có thể coi một lượt ghim hợp lệ là đỏ, hoặc coi lượt ghim thiếu là xanh, nên báo sai về hồ sơ chưa xử lý. Hiện chưa hồ sơ nào bị ảnh hưởng.
+  - Ngoài-4: Kết quả kiểm tra lưới gộp có thể vẫn được coi là còn mới dù công cụ nền hoặc lệnh CI đã đổi. Người ký có thể tin một kết quả đã cũ.
+  - Ngoài-5: Nếu ai xoá hoặc sửa dòng ghim-lười trong sổ xử lý, kết quả đã ký của phép đo tên gọi và phép đo cây hồ sơ vẫn được coi là mới. Kết quả có thể đã sai mà không ai thấy.
+  - Ngoài-6: Khi hồ sơ có phép đo vốn được phép kết thúc với mã khác 0, công cụ đối chiếu sẽ báo hồ sơ chưa xử lý trong khi lưới của kit chấp nhận. Người xem thấy đỏ giả.
+  - Ngoài-7: Một dòng tự kiểm báo đạt nhưng không thật sự thử được việc dọn hồ sơ có lỡ chạm thêm tệp khác. Nếu sau này bước dọn chạm nhầm tệp, dòng đó vẫn báo đạt.
+  - Ngoài-8: Hai ca thử việc phát hiện lời tiêu chí bị sửa có thể báo đạt vì lý do khác, như lỗi lấy bản gốc, nên chưa chắc chứng minh được điều chúng nói.
+  - Ngoài-9: Nếu lỡ bỏ điều kiện chỉ tính lượt ghim xanh, phép đo hai hồ sơ K6a vẫn báo đạt, nên có thể coi một lượt ghim đỏ là đã ghim.
+  - Ngoài-10: Khi sổ xử lý hoặc cấu hình đổi, bằng chứng của vòng dọn hồ sơ cũ không tự bị đánh dấu cũ, nên người đọc có thể tin một kết quả đã lệch với dữ liệu hiện tại.
+  - Ngoài-11: Nếu một dòng trong sổ xử lý sai hình dạng, một số bài kiểm âm thầm tính ra kết quả sai thay vì báo lỗi rõ ràng.
+  - Ngoài-13: Bài kiểm sửa thước mới chỉ thử các ca phải bị từ chối, nên có thể nó từ chối cả những bản sửa đúng mà vẫn báo xanh.
+  - Ngoài-14: Kết quả lượt đối chứng của một bản sửa thước có thể do người ghi tay mà vẫn được chấp nhận, không được đối chiếu với nhật ký thật.
+  - Ngoài-15: Danh sách các vòng đã ký đang chờ gộp được tin theo lời khai trong sổ, có thể ghi rỗng để bỏ qua bước hỏi làn chủ.
+  - Ngoài-16: Bài kiểm cổng gộp chạy một lệnh viết sẵn, nên nếu cách CI chạy đổi trong tương lai thì bài kiểm vẫn báo như thể giống CI.
+  - Ngoài-17: Bài kiểm sổ xử lý coi một ca là bị bắt khi có lỗi bất kỳ, nên có thể ca bị bắt vì lý do khác với điều tên ca nói.
