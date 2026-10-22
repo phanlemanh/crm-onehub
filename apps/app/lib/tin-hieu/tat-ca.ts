@@ -1,7 +1,11 @@
 import { demNguongSong, dongDemTuTatCa, idTep } from "@crm/validation/tin-hieu";
 import type { TinHieuMessages } from "@/lib/messages/tin-hieu";
 import type { BaSo } from "@/lib/tin-hieu/loc-tat-ca";
-import { docTrangThaiDu, type TrangThaiDu } from "@/lib/tin-hieu/trang-thai";
+import {
+	docTrangThaiDu,
+	type NguonTrangThai,
+	type TrangThaiDu,
+} from "@/lib/tin-hieu/trang-thai";
 
 export type HangTatCa = {
 	so: number;
@@ -28,7 +32,7 @@ export function docNenTatCa({
 	m,
 }: {
 	rows: HangTatCa[];
-	html: string | null;
+	html: NguonTrangThai;
 	m: TinHieuMessages;
 }): NenTatCa {
 	const du = docTrangThaiDu(
@@ -75,7 +79,7 @@ export function ghepTatCa({
 	m,
 }: {
 	rows: HangTatCa[];
-	html: string | null;
+	html: NguonTrangThai;
 	now: Date;
 	m: TinHieuMessages;
 }): KetQuaTatCa {
