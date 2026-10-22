@@ -1,0 +1,101 @@
+{
+  "run_id": "repin-20261021T093900Z-59499",
+  "sha": "aa337f61ba3501ac5be6f35f865163c4bbdf8e27",
+  "ts": "2026-10-21T09:47:48Z",
+  "suites": [
+    {
+      "cmd": "bun run test -- --filter=api",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run test -- --filter=app --filter=@crm/ui",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation",
+      "exit": 0
+    },
+    {
+      "cmd": "bunx turbo run lint --force",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run lint:slop",
+      "exit": 0
+    },
+    {
+      "cmd": "bunx turbo run build --force",
+      "exit": 0
+    }
+  ],
+  "slugs": {
+    "bo-cau-hoi-mau": {
+      "evals_exit": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 0,
+        "E6": 0,
+        "E7": 0,
+        "E8": 0,
+        "E10": 0
+      },
+      "line": "{\"ts\":\"2026-10-21T09:47:48Z\",\"kind\":\"repin\",\"run_id\":\"repin-20261021T093900Z-59499\",\"sha\":\"aa337f61ba3501ac5be6f35f865163c4bbdf8e27\",\"suites_exit\":[0,0,0,0,0,0,0],\"evals_exit\":{\"E1\":0,\"E2\":0,\"E3\":0,\"E4\":0,\"E5\":0,\"E6\":0,\"E7\":0,\"E8\":0,\"E10\":0},\"wall_s\":527.4,\"so_lenh\":38,\"evals_not_machine\":[\"E9j\"],\"suites_env\":\"ci\",\"tong_ket\":{\"ket_cuc\":\"xanh\",\"phut\":8.8,\"so_lenh\":38,\"model_goi\":0,\"model_carry\":0,\"chap_chon\":0,\"chi_phi\":0}}",
+      "section": "### Re-pin lần 6 — 2026-10-21, do F35 don-ho-so-cu lô 2 ghim lại sau gộp onehub aa95d059a\nrun_id: repin-20261021T093900Z-59499\nsha: aa337f61ba3501ac5be6f35f865163c4bbdf8e27 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9j (E9j không khai paths) · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)\n",
+      "lech": [],
+      "ket_cuc": "ghim"
+    },
+    "lich-su-va-luu-tru-trang": {
+      "evals_exit": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 0,
+        "E6": 0,
+        "E7": 0,
+        "E7a": 0,
+        "E8": 0,
+        "E8m": 0,
+        "E9": 0,
+        "E10m": 0,
+        "E11m": 0
+      },
+      "line": "{\"ts\":\"2026-10-21T09:47:48Z\",\"kind\":\"repin\",\"run_id\":\"repin-20261021T093900Z-59499\",\"sha\":\"aa337f61ba3501ac5be6f35f865163c4bbdf8e27\",\"suites_exit\":[0,0,0,0,0,0,0],\"evals_exit\":{\"E1\":0,\"E2\":0,\"E3\":0,\"E4\":0,\"E5\":0,\"E6\":0,\"E7\":0,\"E7a\":0,\"E8\":0,\"E8m\":0,\"E9\":0,\"E10m\":0,\"E11m\":0},\"wall_s\":527.4,\"so_lenh\":38,\"evals_not_machine\":[\"E8u\",\"E10\",\"E11\",\"E12\",\"E13j\"],\"evals_not_machine_touched\":[\"E10\",\"E11\",\"E12\"],\"suites_env\":\"ci\",\"tong_ket\":{\"ket_cuc\":\"xanh\",\"phut\":8.8,\"so_lenh\":38,\"model_goi\":0,\"model_carry\":0,\"chap_chon\":0,\"chi_phi\":0}}",
+      "section": "### Re-pin lần 5 — 2026-10-21, do F35 don-ho-so-cu lô 2 ghim lại sau gộp onehub aa95d059a\nrun_id: repin-20261021T093900Z-59499\nsha: aa337f61ba3501ac5be6f35f865163c4bbdf8e27 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E8u, E10, E11, E12, E13j (E13j không khai paths) · diff chạm vật đo ngoài làn máy: E10, E11, E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)\n",
+      "lech": [],
+      "ket_cuc": "ghim"
+    },
+    "ngan-ho-so-trong-lo-trinh": {
+      "evals_exit": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 0,
+        "E6": 0,
+        "E7": 0,
+        "E8": 0,
+        "E11": 0
+      },
+      "line": "{\"ts\":\"2026-10-21T09:47:48Z\",\"kind\":\"repin\",\"run_id\":\"repin-20261021T093900Z-59499\",\"sha\":\"aa337f61ba3501ac5be6f35f865163c4bbdf8e27\",\"suites_exit\":[0,0,0,0,0,0,0],\"evals_exit\":{\"E1\":0,\"E2\":0,\"E3\":0,\"E4\":0,\"E5\":0,\"E6\":0,\"E7\":0,\"E8\":0,\"E11\":0},\"wall_s\":527.4,\"so_lenh\":38,\"evals_not_machine\":[\"E9\",\"E10\"],\"suites_env\":\"ci\",\"tong_ket\":{\"ket_cuc\":\"xanh\",\"phut\":8.8,\"so_lenh\":38,\"model_goi\":0,\"model_carry\":0,\"chap_chon\":0,\"chi_phi\":0}}",
+      "section": "### Re-pin lần 12 — 2026-10-21, do F35 don-ho-so-cu lô 2 ghim lại sau gộp onehub aa95d059a\nrun_id: repin-20261021T093900Z-59499\nsha: aa337f61ba3501ac5be6f35f865163c4bbdf8e27 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · giới hạn đã khai không còn: E7 (khai 2) · ngoài làn máy: E9, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)\n",
+      "lech": [],
+      "ket_cuc": "ghim"
+    }
+  },
+  "tong_ket": {
+    "ket_cuc": "xanh",
+    "phut": 8.8,
+    "so_lenh": 38,
+    "model_goi": 0,
+    "model_carry": 0,
+    "chap_chon": 0,
+    "chi_phi": 0
+  }
+}

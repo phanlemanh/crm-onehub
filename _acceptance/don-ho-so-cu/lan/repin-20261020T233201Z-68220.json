@@ -1,0 +1,140 @@
+{
+  "run_id": "repin-20261020T233201Z-68220",
+  "sha": "7cdfb7bc7c078a173bc27686c43c00befe3867ca",
+  "ts": "2026-10-21T00:33:27Z",
+  "suites": [
+    {
+      "cmd": "bun run test -- --filter=api",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run test -- --filter=app --filter=@crm/ui",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation",
+      "exit": 0
+    },
+    {
+      "cmd": "bunx turbo run lint --force",
+      "exit": 0
+    },
+    {
+      "cmd": "bun run lint:slop",
+      "exit": 0
+    },
+    {
+      "cmd": "bunx turbo run build --force",
+      "exit": 0
+    }
+  ],
+  "slugs": {
+    "ba-ho-so-do-san": {
+      "evals_exit": {
+        "E1": 0,
+        "E2": 2,
+        "E3": 1,
+        "E4": 0,
+        "E7": 2,
+        "E8": 0
+      },
+      "line": "{\"ts\":\"2026-10-21T00:33:27Z\",\"kind\":\"repin\",\"run_id\":\"repin-20261020T233201Z-68220\",\"sha\":\"7cdfb7bc7c078a173bc27686c43c00befe3867ca\",\"suites_exit\":[0,0,0,0,0,0,0],\"evals_exit\":{\"E1\":0,\"E2\":2,\"E3\":1,\"E4\":0,\"E7\":2,\"E8\":0},\"wall_s\":3686,\"so_lenh\":39,\"evals_not_machine\":[\"E5\"],\"suites_env\":\"ci\",\"tong_ket\":{\"ket_cuc\":\"mot-phan\",\"phut\":61.5,\"so_lenh\":39,\"model_goi\":1,\"model_carry\":0,\"chap_chon\":0,\"chi_phi\":2.9841}}",
+      "section": "### Re-pin lần 2 — 2026-10-21, do F35 don-ho-so-cu lô 1 (dọn hồ sơ cũ)\nrun_id: repin-20261020T233201Z-68220\nsha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 3/6 eval máy đạt kỳ vọng · ngoài làn máy: E5 (E5 không khai paths) · AC không có chốt máy: AC-5 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)\n",
+      "lech": [
+        {
+          "id": "E2",
+          "cmd": "bun _acceptance/ba-ho-so-do-san/rang/danh-sach.mjs",
+          "expected": 0,
+          "exit": 2
+        },
+        {
+          "id": "E3",
+          "cmd": "bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs",
+          "expected": 0,
+          "exit": 1
+        },
+        {
+          "id": "E7",
+          "cmd": "bun _acceptance/ba-ho-so-do-san/rang/danh-sach.mjs",
+          "expected": 0,
+          "exit": 2
+        }
+      ],
+      "ket_cuc": "do"
+    },
+    "buoc-kara-bo-qua": {
+      "evals_exit": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 0,
+        "E6": 0,
+        "E7": 0,
+        "E2b": 0
+      },
+      "line": "{\"ts\":\"2026-10-21T00:33:27Z\",\"kind\":\"repin\",\"run_id\":\"repin-20261020T233201Z-68220\",\"sha\":\"7cdfb7bc7c078a173bc27686c43c00befe3867ca\",\"suites_exit\":[0,0,0,0,0,0,0],\"evals_exit\":{\"E1\":0,\"E2\":0,\"E3\":0,\"E4\":0,\"E5\":0,\"E6\":0,\"E7\":0,\"E2b\":0},\"wall_s\":3686,\"so_lenh\":39,\"suites_env\":\"ci\",\"tong_ket\":{\"ket_cuc\":\"mot-phan\",\"phut\":61.5,\"so_lenh\":39,\"model_goi\":1,\"model_carry\":0,\"chap_chon\":0,\"chi_phi\":2.9841}}",
+      "section": "### Re-pin lần 1 — 2026-10-21, do F35 don-ho-so-cu lô 1 (dọn hồ sơ cũ)\nrun_id: repin-20261020T233201Z-68220\nsha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)\n",
+      "lech": [],
+      "ket_cuc": "ghim"
+    },
+    "thu-haiku-tro-ly-okr": {
+      "evals_exit": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 0,
+        "E6": 0,
+        "E7": 0
+      },
+      "line": "{\"ts\":\"2026-10-21T00:33:27Z\",\"kind\":\"repin\",\"run_id\":\"repin-20261020T233201Z-68220\",\"sha\":\"7cdfb7bc7c078a173bc27686c43c00befe3867ca\",\"suites_exit\":[0,0,0,0,0,0,0],\"evals_exit\":{\"E1\":0,\"E2\":0,\"E3\":0,\"E4\":0,\"E5\":0,\"E6\":0,\"E7\":0},\"wall_s\":3686,\"so_lenh\":39,\"evals_not_machine\":[\"E8\"],\"suites_env\":\"ci\",\"tong_ket\":{\"ket_cuc\":\"mot-phan\",\"phut\":61.5,\"so_lenh\":39,\"model_goi\":1,\"model_carry\":0,\"chap_chon\":0,\"chi_phi\":2.9841}}",
+      "section": "### Re-pin lần 3 — 2026-10-21, do F35 don-ho-so-cu lô 1 (dọn hồ sơ cũ)\nrun_id: repin-20261020T233201Z-68220\nsha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 (E8 không khai paths) · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)\n",
+      "lech": [],
+      "ket_cuc": "ghim"
+    },
+    "vai-chi-okr": {
+      "evals_exit": {
+        "E1": 0,
+        "E2": 0,
+        "E3": 0,
+        "E4": 0,
+        "E5": 0,
+        "E6": 0,
+        "E7": 0,
+        "E8": 0,
+        "E9": 0,
+        "E9b": 0,
+        "E10": 0,
+        "E13": 1,
+        "E14": 0,
+        "E15": 0,
+        "E16": 0
+      },
+      "line": "{\"ts\":\"2026-10-21T00:33:27Z\",\"kind\":\"repin\",\"run_id\":\"repin-20261020T233201Z-68220\",\"sha\":\"7cdfb7bc7c078a173bc27686c43c00befe3867ca\",\"suites_exit\":[0,0,0,0,0,0,0],\"evals_exit\":{\"E1\":0,\"E2\":0,\"E3\":0,\"E4\":0,\"E5\":0,\"E6\":0,\"E7\":0,\"E8\":0,\"E9\":0,\"E9b\":0,\"E10\":0,\"E13\":1,\"E14\":0,\"E15\":0,\"E16\":0},\"wall_s\":3686,\"so_lenh\":39,\"evals_not_machine\":[\"E11\",\"E12\"],\"evals_not_machine_touched\":[\"E11\",\"E12\"],\"suites_env\":\"ci\",\"tong_ket\":{\"ket_cuc\":\"mot-phan\",\"phut\":61.5,\"so_lenh\":39,\"model_goi\":1,\"model_carry\":0,\"chap_chon\":0,\"chi_phi\":2.9841}}",
+      "section": "### Re-pin lần 7 — 2026-10-21, do F35 don-ho-so-cu lô 1 (dọn hồ sơ cũ)\nrun_id: repin-20261020T233201Z-68220\nsha: 7cdfb7bc7c078a173bc27686c43c00befe3867ca · suites: 7 lệnh exit 0 · evals: 14/15 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 · diff chạm vật đo ngoài làn máy: E11, E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)\n",
+      "lech": [
+        {
+          "id": "E13",
+          "cmd": "APP_URL=${APP_URL:-http://localhost:3810} API_URL=${API_URL:-http://localhost:3811} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/vai-chi-okr/rang/man-chi-okr.mjs\"",
+          "expected": 0,
+          "exit": 1
+        }
+      ],
+      "ket_cuc": "do"
+    }
+  },
+  "tong_ket": {
+    "ket_cuc": "mot-phan",
+    "phut": 61.5,
+    "so_lenh": 39,
+    "model_goi": 1,
+    "model_carry": 0,
+    "chap_chon": 0,
+    "chi_phi": 2.9841
+  }
+}
