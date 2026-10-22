@@ -7,20 +7,20 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e22bcd60bda7b1cf47bfbaf26052492784e39fe9
+verified_commit: 35201e23ced83dc70a70061603dc8e2b782f60b5
 human_signoff:
 ---
 
 # Evidence Report: tran-test-ci-30
 
-Vòng 1. Cả ba eval máy (E1, E2, E3) đều đạt, nhưng một lệnh suite không gắn eval nào (`bun run test -- --filter=app --filter=@crm/ui`) thoát khác 0 với bốn bài kiểm đỏ, nên báo cáo là REJECT. `failed_evals` để trống vì lệnh đỏ không thuộc eval nào.
+Round 2. Verdict REJECT do một lệnh suite đỏ không gắn eval nào: `bun run test -- --filter=app --filter=@crm/ui` (xem mục «Lệnh suite (hồi quy)»). Mọi eval có khai (E1, E2, E3) đều mang từ round 1, E4 là judgment. `failed_evals` để rỗng vì lệnh đỏ không thuộc eval nào.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
-| E1 | AC-1 | script | PASS |
-| E2 | AC-2 | script | PASS |
-| E3 | AC-3 | script | PASS |
-| E4 | AC-4 | judgment | PASS (hội đồng đề xuất, chờ người chốt ở human_override) |
+| E1 | AC-1 | script | PASS (carry-forward từ round 1) |
+| E2 | AC-2 | script | PASS (carry-forward từ round 1) |
+| E3 | AC-3 | script | PASS (carry-forward từ round 1) |
+| E4 | AC-4 | judgment | PASS (đề xuất của hội đồng, chờ human_override) |
 
 ## Evidence
 
@@ -30,8 +30,9 @@ Vòng 1. Cả ba eval máy (E1, E2, E3) đều đạt, nhưng một lệnh suite
   baseline: n-a
   verifier: config:executors.script.ttc30_mot_khoa
   verified_at: 2026-10-22T13:17:57Z
+  carried_from_round: 1
   output: |
-    KET mot-khoa: dat, moi ca do bi bat
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-tran-test-ci-30-E2-r1
@@ -39,8 +40,9 @@ Vòng 1. Cả ba eval máy (E1, E2, E3) đều đạt, nhưng một lệnh suite
   baseline: n-a
   verifier: config:executors.script.ttc30_e3_cu
   verified_at: 2026-10-22T13:17:57Z
+  carried_from_round: 1
   output: |
-    KET e3-cu: dat, moi ca do bi bat
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-tran-test-ci-30-E3-r1
@@ -48,60 +50,60 @@ Vòng 1. Cả ba eval máy (E1, E2, E3) đều đạt, nhưng một lệnh suite
   baseline: n-a
   verifier: config:executors.script.ttc30_thay_boi
   verified_at: 2026-10-22T13:17:57Z
+  carried_from_round: 1
   output: |
-    KET thay-boi: dat, moi ca do bi bat
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E4
-  judged_by: judge panel (fresh context), đề xuất — chờ người
-  proposal: PASS
+  judged_by: hội đồng judge (fresh context), panel đề xuất ba lens: domain-correctness, operational-feasibility, spec-alignment
+  verdict: PASS
   votes:
-    - domain-correctness: PASS — Hạt giống ghi rõ điều kiện mở lại «trung vị các lượt xanh của test (api) > 22 phút» và lý do chưa tách (khoảng 3 phút cài đặt cho mọi lượt chạy). Cả bốn hàng bảng 40 lượt trong design doc cộng đủ 40: api 33+2+2+3, app-ui 37+0+0+3, con-lai 40, check 21+1+5+13 (13 lượt nhảy qua vì PR nháp nằm trong ngoặc ở cột huỷ). Hai tệp khớp nhau về số M5 (15 xanh, 7 lượt 17–19′, 6 lượt sát trần, app-ui ~18′), về mức tăng trần và về lý do không tách ô.
-    - operational-feasibility: PASS — Hạt giống ghi rõ điều kiện mở lại «trung vị các lượt xanh của test (api) > 22 phút» và lý do chưa tách (khoảng 3 phút cài đặt cho mọi lượt chạy). Bảng của design doc chia nhóm rời nhau và mỗi hàng cộng đủ 40: api 33+2+2+3, app-ui 37+0+0+3, con-lai 40. Hàng check là 21+0+1+5 và 13 lượt nhảy qua vì PR nháp, tổng 40. Hai tệp khớp nhau ở 3 phút, trần 30 phút, mức tăng tối đa 10 phút, số đo M5 và con trỏ qua lại. Số đo M5 lúc gieo (15 xanh) khác số đo lại 22/10 (33 xanh), nhưng design doc ghi rõ đó là hai phép đo riêng nên không trái nhau.
-    - spec-alignment: PASS — Hạt giống ghi điều kiện mở lại «trung vị các lượt xanh của test (api) > 22 phút» và lý do chưa tách (khoảng 3 phút cài đặt mỗi ô mới cho mọi lượt chạy), và design doc nhắc lại đúng lý do đó. Bảng 40 lượt cộng đủ 40 ở cả bốn dòng: api 33+2+2+3, app-ui 37+0+0+3, con-lai 40, check 21+0+1+5+13. Dòng check hơi khó đọc vì 13 lượt nhảy qua nằm trong ngoặc của một ô, nhưng không làm sai tổng. Hai tệp không nói trái nhau: số đo của M5 và số đo lại 22/10 là hai lần đo khác nhau và design doc nêu rõ cả hai, còn ngưỡng 22 phút nằm trên trung vị 17,0 phút.
+    - domain-correctness: PASS — Hạt giống ghi điều kiện mở lại «trung vị các lượt xanh của test (api) lớn hơn 22 phút» và lý do chưa tách (mỗi ô mới tốn khoảng 3 phút cài đặt cho mọi lượt chạy, còn nâng trần thì lượt xanh không tốn thêm). Bảng đo của design doc có bốn nhóm rời nhau, và cả bốn dòng cộng đủ 40: api 33+2+2+3, app-ui 37+0+0+3, con-lai 40. Dòng check chỉ đủ 40 khi tính thêm 13 lượt nhảy qua vì PR nháp (21+0+1+5+13), mà số 13 chỉ nằm trong ngoặc chứ không có cột riêng. Hai tệp không nói trái nhau: số đo của M5 (15 xanh, 6 bị cắt, app-ui khoảng 18 phút), mức 3 phút cài đặt và mức tối đa 10 phút thêm cho lượt treo đều khớp.
+    - operational-feasibility: PASS — Hạt giống ghi điều kiện mở lại là «trung vị các lượt xanh của test (api) > 22 phút». Nó cũng nêu lý do chưa tách: mỗi ô mới tốn khoảng 3 phút cài đặt cho mọi lượt chạy, và design doc nhắc lại đúng lý do này. Bảng 40 lượt của design doc chia thành bốn nhóm rời nhau và mọi hàng cộng đủ 40. `api` là 33+2+2+3, `app-ui` là 37+0+0+3, `con-lai` là 40, `check` là 21+0+1+(5 cộng 13)=40. Số đo lúc gieo (15 xanh, 6 bị cắt, `app-ui` khoảng 18 phút) khớp giữa hai tệp, và số đo lại 22/10 được ghi riêng với phạm vi khác nên hai tệp không trái nhau.
+    - spec-alignment: PASS — Hạt giống ghi rõ điều kiện mở lại «trung vị các lượt xanh của test (api) > 22 phút» và lý do chưa tách (khoảng 3 phút cài đặt cho mọi lượt chạy). Bảng trong design doc chia 40 lượt thành các nhóm rời nhau, và hàng nào cũng cộng đủ 40: api 33+2+2+3, app-ui 37+0+0+3, con-lai 40, check 21+0+1+5+13 (13 lượt nhảy qua vì PR nháp). Hai tệp khớp nhau: cùng đổi trần 20 sang 30, cùng con số 3 phút và 10 phút, hạt giống nhắc lại số đo M5 còn design thêm số đo lại ngày 22/10 và nói rõ đó là hai phép đo khác nhau.
+  rationale: Đề xuất PASS (ba lens cùng PASS). Hạt giống nêu đúng điều kiện mở lại và lý do chưa tách; bảng 40 lượt của design doc cộng đủ ở mọi hàng.
+  required_evidence:
+    - (judge không nêu bằng-chứng-thiếu)
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-22T13:17:57Z
+  verified_at: 2026-10-22T13:39:52Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 1
-  verified_at: 2026-10-22T13:17:57Z
-  note: lệnh này không gắn eval nào. Bốn bài kiểm đỏ trong gói app, 940 đạt và 4 hỏng trên 944 bài ở 96 tệp. Gói app#test là gói duy nhất đỏ (Tasks 3 successful, 4 total).
-  failed_tests: |
-    ltmh-viec-moc: moc cua viec theo viec_hien khi khoa lech luat cu
-    ltmh-viec-moc: doi chung — khoi chua sua, luat cu va khoa trung nhau
-    ltmh-viec-moc: pha-thu — ban sao dung luat moc dau tien thi do
-    ltmh-khoi-cu: ban chup moi qua cot Json giu nam khoa
+  verified_at: 2026-10-22T13:39:52Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-22T13:17:57Z
+  verified_at: 2026-10-22T13:39:52Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-tran-test-ci-30-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-22T13:17:57Z
+  verified_at: 2026-10-22T13:39:52Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tran-test-ci-30-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tran-test-ci-30-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-22T13:17:57Z
+  verified_at: 2026-10-22T13:39:52Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tran-test-ci-30-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tran-test-ci-30-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-22T13:17:57Z
+  verified_at: 2026-10-22T13:39:52Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tran-test-ci-30-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tran-test-ci-30-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-22T13:17:57Z
+  verified_at: 2026-10-22T13:39:52Z
+
+Ghi chú về lệnh suite đỏ (không gắn eval nào): `bun run test -- --filter=app --filter=@crm/ui` chạy trọn 8 phút 16 giây. Ba trên bốn tác vụ turbo xanh. Tác vụ `app#test` đỏ ở script `test:dom`: tệp `test/truong-mot-cach.dom.tsx` xanh 15 trên 15, rồi `chay-dom` gọi tiếp `test/truong-tep.dom.tsx` và bun báo `Test filter "./test/truong-tep.dom.tsx" had no matches`, nên script thoát lỗi và kéo `test` đỏ theo. Đây là suite hồi quy của `app`, không phải eval khai trong hợp đồng; cần người xem tệp `truong-tep.dom.tsx` có tồn tại ở cây này không (hoặc bộ chạy `chay-dom` còn trỏ vào tệp đã đổi tên) trước khi chạy lại.
 
 ## Known limits
 
@@ -109,18 +111,16 @@ Vòng 1. Cả ba eval máy (E1, E2, E3) đều đạt, nhưng một lệnh suite
 
 ## Analyst
 
-none — mọi eval feature đều chưa có baseline để so (cả ba eval máy mang baseline n-a), nên chưa có eval nào được xác nhận là không-phân-biệt.
+carried tu round 1 — baseline khong do lai round nay
 
-Baseline khong do
-- bun _acceptance/tran-test-ci-30/rang/kiem.mjs mot-khoa: bo qua baseline: tep _acceptance/tran-test-ci-30/rang/kiem.mjs co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/tran-test-ci-30/rang/kiem.mjs e3-cu: bo qua baseline: tep _acceptance/tran-test-ci-30/rang/kiem.mjs co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/tran-test-ci-30/rang/kiem.mjs thay-boi: bo qua baseline: tep _acceptance/tran-test-ci-30/rang/kiem.mjs co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
+Eval không-phân-biệt (xanh cả trên HEAD lẫn baseline): không có eval nào để liệt kê. Field `baseline` của từng block eval ghi n-a vì round này không đo lại. Các lệnh suite xanh cả hai phía là regression-guard bình thường, không liệt kê.
 
 ## Variance
 
-none — mọi eval nhiều lần chạy đều đồng nhất (cả ba eval máy chạy một lần, xác định).
+none — every multi-run eval is uniform (mọi eval chạy một lượt, xác định; không eval nào có pass_rate lẫn)
 
 ## Iterations
 
-Round 1: không eval nào hỏng, nhưng lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở bốn bài kiểm của gói app (ltmh-viec-moc ba bài, ltmh-khoi-cu một bài), không gắn eval nào. Trả về bước triển khai.
+Round 1: REJECT — suite app-ui đỏ (gói bằng chứng S4 lượt 1). Returned to implementation.
+Round 2: REJECT — E1, E2, E3 mang từ round 1 (delta không chạm paths của eval); E4 hội đồng đề xuất PASS; lệnh suite `bun run test -- --filter=app --filter=@crm/ui` còn đỏ ở `app#test` (`test:dom`, tệp `test/truong-tep.dom.tsx` không khớp bộ lọc của bun), sáu lệnh suite còn lại xanh. Returned to implementation.
 
