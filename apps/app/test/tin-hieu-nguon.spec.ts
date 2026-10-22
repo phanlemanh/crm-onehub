@@ -4,7 +4,10 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { Prisma } from "@crm/db";
 import { db } from "@crm/db";
-import { ghiBanChupLoTrinh } from "@crm/db/ban-chup-lo-trinh";
+import {
+	docBanChupLoTrinh,
+	ghiBanChupLoTrinh,
+} from "@crm/db/ban-chup-lo-trinh";
 import { type BanDung, chonNguon } from "@/lib/lo-trinh/chon-nguon";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import {
@@ -13,7 +16,11 @@ import {
 	docNguonTinHieu,
 } from "@/lib/tin-hieu/nguon";
 import { docNenTatCa } from "@/lib/tin-hieu/tat-ca";
-import { docTrangThaiTuNguon, nguonTuHtml } from "@/lib/tin-hieu/trang-thai";
+import {
+	docTrangThaiTuNguon,
+	nguonTuHtml,
+	theoCrm,
+} from "@/lib/tin-hieu/trang-thai";
 import { dungKhoiMau, GOC_KHO } from "./support/khoi-tin-hieu-mau";
 
 const RUN = (process.env.TEST_RUN_ID ?? `${Date.now()}`).slice(0, 8);
@@ -23,7 +30,10 @@ const TEN_NHOM = `TTTS-NHOM-${RUN}`;
 const GIO_DUNG = "2026-10-22T02:00:00.000Z";
 const m = tinHieuMessages("vi");
 
-const CU = dungKhoiMau({ tinHieu: [{ ma: MA }] });
+const CU = dungKhoiMau({
+	tinHieu: [{ ma: MA }],
+	le: [{ ma: MA, lyDo: "trùng một tín hiệu khác" }],
+});
 const MOI = dungKhoiMau({
 	tinHieu: [{ ma: MA }],
 	nhom: [{ ma: "g1", ten: TEN_NHOM, tinHieu: [MA] }],
@@ -54,7 +64,7 @@ describe("ttts-doc-ban-chup", () => {
 				moiTruong: "production",
 			};
 			const nguon = await docNguonTinHieu({
-				docBanChup: () => docBanChupTho(db, NGUON),
+				docBanChup: () => docBanChupTho(() => docBanChupLoTrinh(db, NGUON)),
 				docBanDung: async () => nguonTuHtml(tepDongGoi()),
 				banDung,
 				ghiCanhBao: () => {},
@@ -166,14 +176,22 @@ function dauVaoCa(ca: Ca): DauVaoCa {
 			return { doc: async () => ({ kieu: "khong" }), banDung };
 		case "kho-loi":
 			return {
-				doc: async () => {
-					throw new Error("kho du lieu khong tra loi");
-				},
+				doc: () =>
+					docBanChupTho(() =>
+						Promise.reject(new Error("kho du lieu khong tra loi")),
+					),
 				banDung,
 			};
 		case "hang-hong":
 			return {
-				doc: async () => ({ kieu: "hong", lyDo: "lo_trinh: sai khuon" }),
+				doc: () =>
+					docBanChupTho(async () => ({
+						sha: "d".repeat(40),
+						commitLuc: new Date("2026-10-22T03:00:00.000Z"),
+						layLuc: new Date("2026-10-22T04:00:00.000Z"),
+						duLieu: { tin_hieu: MOI.tin_hieu },
+						canhBao: [],
+					})),
 				banDung,
 			};
 	}
@@ -194,6 +212,10 @@ describe("ttts-khong-lui", () => {
 			m,
 		).trangThai[MA]?.khoa;
 		expect(choCu).not.toBe(choMoi);
+		expect(
+			choCu,
+			"o ban dung khong phan biet duoc voi du phong cua CRM",
+		).not.toBe(theoCrm(true, m).khoa);
 		for (const ca of CA) {
 			const { doc, banDung } = dauVaoCa(ca);
 			const canhBao: string[] = [];

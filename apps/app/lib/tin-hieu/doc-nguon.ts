@@ -1,4 +1,5 @@
 import { db } from "@crm/db";
+import { docBanChupLoTrinh } from "@crm/db/ban-chup-lo-trinh";
 import { cacheLife } from "next/cache";
 import { LO_TRINH } from "@/lib/lo-trinh/cau-hinh";
 import { banDungHienTai } from "@/lib/lo-trinh/chon-nguon";
@@ -9,7 +10,7 @@ import { type NguonTrangThai, nguonTuHtml } from "./trang-thai";
 async function docBanChupThoCrm(): Promise<BanChupTho> {
 	"use cache";
 	cacheLife({ revalidate: LO_TRINH.nhipLamMoiMs / 1000 });
-	return docBanChupTho(db, LO_TRINH.nguonCrm);
+	return docBanChupTho(() => docBanChupLoTrinh(db, LO_TRINH.nguonCrm));
 }
 
 async function docBanVe(): Promise<string | null> {

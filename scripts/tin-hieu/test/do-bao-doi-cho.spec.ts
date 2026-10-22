@@ -48,7 +48,7 @@ function git(kho: string, thamSo: string[], luc?: number) {
 	return r.stdout.trim();
 }
 
-function trangThai(trongNhom: Ca[]): DauVaoKit {
+function trangThai(trongNhom: Ca[], them = false): DauVaoKit {
 	return {
 		tinHieu: CA.map((c) => ({ ma: ma[c] })),
 		nhom: trongNhom.map((c, i) => ({
@@ -56,26 +56,41 @@ function trangThai(trongNhom: Ca[]): DauVaoKit {
 			ten: `Nhóm ${c}`,
 			tinHieu: [ma[c]],
 		})),
+		hang: them
+			? [
+					{
+						ma: "RX",
+						cauGiao: "«Việc khác»",
+						phu: [],
+						trangThai: "chua-bat-dau",
+					},
+				]
+			: [],
 	};
 }
 
-const BUOC: { luc: number; nhom: Ca[]; day: number | null }[] = [
+type Buoc = { luc: number; nhom: Ca[]; them?: boolean; day: number | null };
+
+const BUOC: Buoc[] = [
 	{ luc: T - 24 * GIO, nhom: [], day: T - 24 * GIO + 5 * PHUT_MS },
 	{ luc: T, nhom: ["da-bao", "luu-tru"], day: T + 5 * PHUT_MS },
 	{ luc: T + GIO, nhom: ["da-bao", "luu-tru", "bi-the-cho"], day: null },
 	{
 		luc: T + 2 * GIO,
-		nhom: ["da-bao", "bi-the-cho"],
+		nhom: ["da-bao", "luu-tru", "bi-the-cho"],
+		them: true,
 		day: T + 2 * GIO + 5 * PHUT_MS,
 	},
 	{
 		luc: T + 3 * GIO,
-		nhom: ["da-bao", "bi-the-cho", "tre"],
+		nhom: ["da-bao", "luu-tru", "bi-the-cho", "tre"],
+		them: true,
 		day: T + 3 * GIO + 26 * GIO,
 	},
 	{
 		luc: T + 4 * GIO,
-		nhom: ["da-bao", "bi-the-cho", "tre", "thieu"],
+		nhom: ["da-bao", "luu-tru", "bi-the-cho", "tre", "thieu"],
+		them: true,
 		day: null,
 	},
 ];
@@ -88,7 +103,7 @@ function dungKho(soBuoc: number): string {
 	for (const b of BUOC.slice(0, soBuoc)) {
 		writeFileSync(
 			path.join(kho, BAO_DOI_CHO_DO.tep),
-			dungTepMau(trangThai(b.nhom)),
+			dungTepMau(trangThai(b.nhom, b.them)),
 		);
 		git(kho, ["add", "-A"]);
 		git(kho, ["commit", "-qm", `buoc ${b.luc}`], b.luc);
@@ -149,7 +164,7 @@ beforeAll(async () => {
 	]).split("\n");
 	for (const [i, b] of BUOC.entries()) {
 		if (b.day === null) continue;
-		const { duLieu } = docDuLieu(dungTepMau(trangThai(b.nhom)));
+		const { duLieu } = docDuLieu(dungTepMau(trangThai(b.nhom, b.them)));
 		if (!duLieu) throw new Error("khoi mau hong");
 		await ghiBanChupVaBaoTinHieu(
 			db,
@@ -191,14 +206,54 @@ describe("ttts-do", () => {
 			expect(dongCua(c).length, c).toBe(1);
 		expect(dongCua("luu-tru").length).toBe(0);
 		expect(dongCua("khong-doi").length).toBe(0);
-		expect(dongCua("da-bao")[0]).toContain("trễ 5 phút");
-		expect(
-			dongCua("bi-the-cho")[0],
-			"lan bi the cho tinh la thieu",
-		).not.toContain(BAO_DOI_CHO_DO.thieu);
-		expect(dongCua("thieu")[0]).toContain(BAO_DOI_CHO_DO.thieu);
-		expect(dongCua("tre")[0], "tre qua mot ngay khong bi co").toContain(
-			BAO_DOI_CHO_DO.quaMotNgay,
+		const commitLuc = git(KHO, [
+			"log",
+			"--reverse",
+			"--format=%cI",
+			BAO_DOI_CHO_DO.nhanh,
+		])
+			.split("\n")
+			.map((x) => new Date(x).toISOString());
+		const KY_VONG = {
+			"da-bao": { buoc: 1, co: [] },
+			"bi-the-cho": { buoc: 2, co: [] },
+			tre: { buoc: 4, co: [BAO_DOI_CHO_DO.quaMotNgay] },
+			thieu: { buoc: 5, co: [BAO_DOI_CHO_DO.thieu] },
+		} as const;
+		const THONG_DIEP = {
+			"da-bao": "lan da bao sai cot",
+			"bi-the-cho": "lan bi the cho tinh la thieu",
+			tre: "tre qua mot ngay khong bi co",
+			thieu: "lan thieu khong bi co",
+		} as const;
+		for (const c of ["da-bao", "bi-the-cho", "tre", "thieu"] as const) {
+			const commit = commitLuc[KY_VONG[c].buoc] ?? "";
+			const tb = await db.thongBao.findFirst({
+				where: { nguoiNhanId: `${TIEN_TO}-${c}` },
+				orderBy: { taoLuc: "asc" },
+			});
+			const tre = tb ? tb.taoLuc.getTime() - Date.parse(commit) : null;
+			const kyVong = [
+				ma[c],
+				"nhom-chua-cat",
+				`commit ${commit}`,
+				`thông báo ${tb ? tb.taoLuc.toISOString() : "—"}`,
+				`trễ ${tre === null ? "—" : `${Math.round(tre / PHUT_MS)} phút`}`,
+				...KY_VONG[c].co,
+			].join(" · ");
+			expect(dongCua(c)[0], THONG_DIEP[c]).toBe(kyVong);
+		}
+		const bao = await db.thongBao.findFirst({
+			where: { nguoiNhanId: `${TIEN_TO}-bi-the-cho` },
+		});
+		const shaBuoc3 = git(KHO, [
+			"log",
+			"--reverse",
+			"--format=%H",
+			BAO_DOI_CHO_DO.nhanh,
+		]).split("\n")[3];
+		expect(bao?.khoa, "lan bi the cho tinh la thieu").toBe(
+			`${BAO_DOI_CHO_DO.loai}:${ma["bi-the-cho"]}:${shaBuoc3}`,
 		);
 		expect(kq.chu).toContain(`KẾT LUẬN: ${BAO_DOI_CHO_DO.khongDat}`);
 		expect(kq.dat).toBe(false);

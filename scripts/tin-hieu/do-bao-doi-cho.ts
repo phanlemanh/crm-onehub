@@ -42,7 +42,13 @@ function choTaiCommit(kho: string, rev: string): KetQuaCho {
 	return duLieu ? choTinHieu(duLieu) : { kieu: "khong-co" };
 }
 
-export function lanDoiTuGit(kho: string, nhanh: string, tu: string): LanDoi[] {
+export type CommitDo = { sha: string; commitLuc: string };
+
+export function lanDoiTuGit(
+	kho: string,
+	nhanh: string,
+	tu: string,
+): { lanDoi: LanDoi[]; commit: CommitDo[] } {
 	const dong = chayGit(kho, [
 		"log",
 		"--first-parent",
@@ -74,16 +80,17 @@ export function lanDoiTuGit(kho: string, nhanh: string, tu: string): LanDoi[] {
 				});
 		truoc = nay;
 	}
-	return ra;
+	return { lanDoi: ra, commit: dong };
 }
 
 export function ghepLanDoi(
 	lanDoi: LanDoi[],
 	thongBao: ThongBaoDo[],
 	coNguoiNhan: ReadonlySet<string>,
+	commit: CommitDo[],
 ): DongDoiCho[] {
 	const lucCommit = new Map(
-		lanDoi.map((l) => [l.sha, Date.parse(l.commitLuc)]),
+		commit.map((c) => [c.sha, Date.parse(c.commitLuc)]),
 	);
 	return lanDoi
 		.filter((l) => coNguoiNhan.has(l.ma))
@@ -167,9 +174,9 @@ export async function doBaoDoiCho(o: {
 	nhanh: string;
 	tu: string;
 }): Promise<{ chu: string; dat: boolean }> {
-	const lanDoi = lanDoiTuGit(o.kho, o.nhanh, o.tu);
+	const { lanDoi, commit } = lanDoiTuGit(o.kho, o.nhanh, o.tu);
 	const { thongBao, coNguoiNhan } = await docTuKho(o.db, o.tu);
-	return inBang(ghepLanDoi(lanDoi, thongBao, coNguoiNhan));
+	return inBang(ghepLanDoi(lanDoi, thongBao, coNguoiNhan, commit));
 }
 
 if (import.meta.main) {

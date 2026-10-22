@@ -327,7 +327,8 @@ async function chay() {
 		);
 		const { ctx, p } = await trang(gui, kho, lang);
 		try {
-			await mo(p, `${APP}/${slug}/tin-hieu`);
+			await mo(p, `${APP}/${slug}/lo-trinh`);
+			const truoc = new URL(p.url()).pathname;
 			await p.waitForSelector("[data-slot=chuong-thong-bao]", {
 				visible: true,
 				timeout: DO.choMs,
@@ -365,8 +366,15 @@ async function chay() {
 				tieuDe,
 			);
 			const box = await link.asElement()?.boundingBox();
-			if (box)
-				await p.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+			if (!box) {
+				kiem(
+					`bam-${kho}-${lang}`,
+					`khong thay dong thong bao cua ${ma} de bam (dang o ${truoc})`,
+					false,
+				);
+				continue;
+			}
+			await p.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 			await p
 				.waitForFunction(() => location.pathname.endsWith("/tin-hieu"), {
 					timeout: DO.choMs,
@@ -379,8 +387,9 @@ async function chay() {
 			const url = new URL(p.url()).pathname;
 			kiem(
 				`bam-${kho}-${lang}`,
-				`toi ${url}, dong ${ma} mang «${m.nhan.daVaoNhom}» (${sau.includes(m.nhan.daVaoNhom)}) va ten nhom (${sau.includes(TEN_NHOM)})`,
-				url.endsWith("/tin-hieu") &&
+				`tu ${truoc} toi ${url}, dong ${ma} mang «${m.nhan.daVaoNhom}» (${sau.includes(m.nhan.daVaoNhom)}) va ten nhom (${sau.includes(TEN_NHOM)})`,
+				!truoc.endsWith("/tin-hieu") &&
+					url.endsWith("/tin-hieu") &&
 					sau.includes(m.nhan.daVaoNhom) &&
 					sau.includes(TEN_NHOM),
 			);

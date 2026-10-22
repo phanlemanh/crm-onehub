@@ -1,6 +1,7 @@
-import type { Db } from "@crm/db";
-import { docBanChupLoTrinh } from "@crm/db/ban-chup-lo-trinh";
-import { phanTichBanChupLuu } from "@crm/validation/ban-chup-lo-trinh";
+import {
+	type HangBanChupLuu,
+	phanTichBanChupLuu,
+} from "@crm/validation/ban-chup-lo-trinh";
 import {
 	type KhoiLoTrinhTho,
 	khoiLoTrinhTho,
@@ -30,11 +31,10 @@ export type NguonTinHieu = {
 };
 
 export async function docBanChupTho(
-	db: Db,
-	nguon: string,
+	docHang: () => Promise<HangBanChupLuu | null>,
 ): Promise<BanChupTho> {
 	try {
-		const hang = await docBanChupLoTrinh(db, nguon);
+		const hang = await docHang();
 		if (hang === null) return { kieu: "khong" };
 		const kq = phanTichBanChupLuu(hang);
 		if (!kq.ok)

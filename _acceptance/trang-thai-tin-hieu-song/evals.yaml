@@ -195,7 +195,8 @@ evals:
              <= LO_TRINH.nhipLamMoiMs (doc tu tep that) + 30 s
         pha 3 — moi o 1280|375 x vi|en: mo chuong, chup; dong thong bao mang cau dung dongTuRa tinh cho o do (do-man
           tinh ky vong bang ham that), tieu de co translate="no"; scrollWidth <= clientWidth cua trang
-        pha 4 — bam dong thong bao bang chuot that, cho URL ket thuc "/tin-hieu"; dong cua ma do hien nhan
+        pha 4 — mo chuong tu trang Lo trinh (khong phai trang dich), bam dong thong bao bang chuot that, cho URL ket
+          thuc "/tin-hieu"; khong thay dong de bam la SAI; dong cua ma do hien nhan
           tinHieuMessages(locale).nhan.daVaoNhom va cau chua "TTTS-NHOM-<run>"; chup
       CHIEU DO: ban sao khong goi ghi thong bao -> pha 2a SAI voi thong diep ghim "doi cho khong len chuong";
       ban sao bo cacheLife cua bo doc ban chup tho -> pha 2b SAI voi thong diep ghim "trang tin hieu giu ban chup cu";
