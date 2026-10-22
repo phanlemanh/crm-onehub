@@ -20,6 +20,7 @@ import {
 	tepTrongO,
 } from "@crm/validation/tep-truong";
 import { Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import request from "supertest";
 import {
 	GOC_KHO_GIA,
@@ -969,10 +970,18 @@ describe("ttp-ghi-chu", () => {
 	});
 });
 
+function khoaCron(): string {
+	return (
+		san.app().get(ConfigService).get<string>("CRON_SECRET") ??
+		process.env.CRON_SECRET ??
+		""
+	);
+}
+
 async function donLich(): Promise<void> {
 	const res = await request(san.app().getHttpServer())
 		.get("/internal/archive/prune")
-		.set("authorization", `Bearer ${CRON}`);
+		.set("authorization", `Bearer ${khoaCron()}`);
 	if (res.status !== 200) throw new Error(`ttp don: ${res.status}`);
 }
 

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a31dd592b66086559e1ccac7a363b99493e79b4e
+verified_commit: 4cac88bdcb7a5e415772d885c8c001af4b231d4e
 human_signoff: manh 2026-10-22 — ký lần bốn Cổng 2 trên ghim lại repin-20261022T111247Z-76139 (verified_commit a31dd592b sau gộp onehub 05e3f7743; CI GitHub xanh trọn trên đỉnh 8a5d1052f; E10 giữ từ S4 vòng 3 wf_406402c0-67c). Diff từ chữ ký lần ba: bài Blob thật gọi @vercel/blob qua packages/db, thời hạn bài API một phút, dòng miễn trừ vong-doi trong scripts/luat-kho/cau-hinh.mjs (commit riêng b9c9a4ee3), gộp onehub. Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -265,3 +265,7 @@ sha: 331df95a2df726b09a2c1ff3821a2c16e971f6a3 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-22, do gop onehub 05e3f7743 (#541) cung ban sua CI
 run_id: repin-20261022T111247Z-76139
 sha: a31dd592b66086559e1ccac7a363b99493e79b4e · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-22, do F-130: bài truong-tep lấy khoá cron từ cấu hình API đã nạp
+run_id: repin-20261022T153122Z-72673
+sha: 4cac88bdcb7a5e415772d885c8c001af4b231d4e · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
