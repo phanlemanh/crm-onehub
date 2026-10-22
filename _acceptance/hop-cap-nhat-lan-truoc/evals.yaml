@@ -63,10 +63,12 @@ evals:
       (55, "thap", "C"); KR moc M nhan hai lan (0, "vua", "X") roi (1, "cao", "Y"). Doc okr.objective va okr.dienBien
       (parse bang objectiveOutput, dienBienOutput that), dua qua lanTruocTuVet + ghiChuLanTruoc cua lan-truoc-kr.ts.
       Voi K va M, ket qua khop tung truong voi hang OkrCheckIn moi nhat doc thang tu CSDL (orderBy createdAt desc, id
-      desc): giaTri, tuTin, ghiChu ("" thanh null), va luc bang session.submittedAt cua hang do. Doi chung duong: sau
-      lan thu hai cua K (truoc lan ghi ho) ket qua la (50, "vua", null). O bien tuan (truc G): KR so B nhan mot lan
-      ghi qua OkrCapNhatService.moCapNhat/guiCapNhat voi now = 2026-10-18T17:30:00Z (thu Hai 00:30 gio VN), ghi chu
-      "Bien"; ket qua co ghiChu "Bien" va hang OkrCheckIn co weekStart 2026-10-19.
+      desc): giaTri, tuTin, ghiChu ("" thanh null), va luc cach session.submittedAt cua hang do khong qua 5 giay (vet
+      lay gio cua CSDL, cung giao dich). Doi chung duong: sau lan thu hai cua K (truoc lan ghi ho) ket qua la
+      (50, "vua", null). O bien tuan (truc G): ma tran viet truoc 6 thoi diem quanh nua dem thu Hai gio VN —
+      2026-10-18T16:59:59Z, 2026-10-18T17:00:00Z, 2026-10-18T17:30:00Z, 2026-10-19T16:59:59Z, 2026-10-25T17:00:00Z,
+      2026-10-12T00:00:00Z — tuanVN(luc) cua lan-truoc-kr.ts bang dauTuanVN(new Date(luc)) cua may chu
+      (@crm/db/onboarding-nhac) o ca 6; so o da chay = 6.
       CHIEU DO: ban sao lay dong vet dau tien thay vi moi nhat -> do "hct-moi-nhat: K lech (gia tri 40, can 55)";
       ban sao ghep ghi chu theo diem cuoi co ghi chu thay vi theo tuan cua luc -> do "hct-moi-nhat: K ghi chu lech";
       ban sao tinh tuan cua luc theo UTC -> do "hct-moi-nhat: B mat ghi chu o bien tuan".
