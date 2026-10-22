@@ -77,21 +77,18 @@ const BIEU_TUONG = {
 	docx: DocumentWordProcessor,
 	png: ImageIcon,
 	jpeg: ImageIcon,
-} as const satisfies Record<KieuTep, unknown>;
+} as const satisfies Record<KieuTep, typeof DocumentPdf>;
 
-const LOI_THEO_CAU_MAY_CHU = {
-	[TEP_TRUONG.thongDiep.saiKieu]: "saiKieu",
-	[TEP_TRUONG.thongDiep.macro]: "macro",
-	[TEP_TRUONG.thongDiep.quaCo]: "quaCo",
-	[TEP_TRUONG.thongDiep.rong]: "rong",
-} as const satisfies Record<string, LoiTep>;
+const LOI_THEO_CAU_MAY_CHU = new Map<string, LoiTep>([
+	[TEP_TRUONG.thongDiep.saiKieu, "saiKieu"],
+	[TEP_TRUONG.thongDiep.macro, "macro"],
+	[TEP_TRUONG.thongDiep.quaCo, "quaCo"],
+	[TEP_TRUONG.thongDiep.rong, "rong"],
+]);
 
-function loiTuMayChu(loi: unknown): LoiTep {
-	if (loi instanceof TRPCClientError) {
-		const ma = (LOI_THEO_CAU_MAY_CHU as Record<string, LoiTep>)[loi.message];
-		if (ma) return ma;
-	}
-	return "khongXong";
+function loiTuMayChu(loi: Error): LoiTep {
+	if (!(loi instanceof TRPCClientError)) return "khongXong";
+	return LOI_THEO_CAU_MAY_CHU.get(loi.message) ?? "khongXong";
 }
 
 function loiTruocKhiTai(tep: File): LoiTep | null {
@@ -170,7 +167,10 @@ export function OTep({
 			}
 			await lamMoi();
 		} catch (loi) {
-			datDong(dong.ma, { trangThai: "loi", loi: loiTuMayChu(loi) });
+			datDong(dong.ma, {
+				trangThai: "loi",
+				loi: loi instanceof Error ? loiTuMayChu(loi) : "khongXong",
+			});
 		}
 	};
 

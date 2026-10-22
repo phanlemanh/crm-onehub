@@ -6,6 +6,7 @@ import {
 	canData,
 	donBanGhi,
 	dungSan,
+	type Json,
 	noi,
 	type OTep,
 	TIEN_TO,
@@ -101,11 +102,8 @@ function canSan() {
 	return san;
 }
 
-async function goi(
-	thuTuc: string,
-	vao: Record<string, unknown>,
-): Promise<TraLoi> {
-	return canSan().goi("quanTri", thuTuc, vao as never);
+async function goi(thuTuc: string, vao: Json): Promise<TraLoi> {
+	return canSan().goi("quanTri", thuTuc, vao);
 }
 
 async function taiLen(
@@ -141,19 +139,21 @@ async function taiLen(
 	return { pathname: xin.pathname, tepId };
 }
 
+type NguCanhBlob = {
+	token: string;
+	deal: string;
+	o: OTep;
+	pathname: string;
+	tepId: string;
+	url: string;
+	byte: Uint8Array;
+};
+
 describe.skipIf(!BAT)("ttp-blob-that", () => {
 	afterAll(() => {
 		console.log(`ttp-blob-that: ${daChay} chay, ${SO_BAI - daChay} skip`);
 	});
-	const ctx: {
-		token: string;
-		deal: string;
-		o: OTep;
-		pathname: string;
-		tepId: string;
-		url: string;
-		byte: Uint8Array;
-	} = {
+	const ctx: NguCanhBlob = {
 		token: "",
 		deal: "",
 		o: { entity: "DEAL", recordId: "", fieldKey: "" },

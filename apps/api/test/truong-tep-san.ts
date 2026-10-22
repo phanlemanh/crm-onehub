@@ -142,7 +142,7 @@ export function zipLuu(tep: Record<string, string | Uint8Array>): Uint8Array {
 	let viTri = 0;
 	for (const [ten, noiDung] of Object.entries(tep)) {
 		const tenByte = ma.encode(ten);
-		const du = typeof noiDung === "string" ? ma.encode(noiDung) : noiDung;
+		const du = noiDung instanceof Uint8Array ? noiDung : ma.encode(noiDung);
 		const crc = crc32(du);
 		const dau = new DataView(new ArrayBuffer(30));
 		dau.setUint32(0, 0x04034b50, true);
@@ -200,8 +200,12 @@ export const MAU_TEP = {
 			"word/vbaProject.bin": "macro",
 		}),
 	png: (nhan: string) =>
-		noi(new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chu(nhan)),
-	jpeg: (nhan: string) => noi(new Uint8Array([0xff, 0xd8, 0xff, 0xe0]), chu(nhan)),
+		noi(
+			new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+			chu(nhan),
+		),
+	jpeg: (nhan: string) =>
+		noi(new Uint8Array([0xff, 0xd8, 0xff, 0xe0]), chu(nhan)),
 	xlsx: (nhan: string) =>
 		zipLuu({ "[Content_Types].xml": "<Types/>", "xl/workbook.xml": nhan }),
 } as const;
@@ -213,7 +217,11 @@ export const KIEU_MAU = {
 	jpeg: { ten: "Anh ky.jpg", kieu: "jpeg" },
 } as const;
 
-export type OTep = { entity: FieldEntityName; recordId: string; fieldKey: string };
+export type OTep = {
+	entity: FieldEntityName;
+	recordId: string;
+	fieldKey: string;
+};
 
 export async function donBanGhi(ids: {
 	deal?: string[];
@@ -224,6 +232,10 @@ export async function donBanGhi(ids: {
 	await db.deal.deleteMany({ where: { id: { in: ids.deal ?? [] } } });
 	await db.contact.deleteMany({ where: { id: { in: ids.contact ?? [] } } });
 	await db.company.deleteMany({ where: { id: { in: ids.company ?? [] } } });
-	await db.fieldDefinition.deleteMany({ where: { id: { in: ids.field ?? [] } } });
-	await db.blobChoXoa.deleteMany({ where: { fieldId: { in: ids.field ?? [] } } });
+	await db.fieldDefinition.deleteMany({
+		where: { id: { in: ids.field ?? [] } },
+	});
+	await db.blobChoXoa.deleteMany({
+		where: { fieldId: { in: ids.field ?? [] } },
+	});
 }

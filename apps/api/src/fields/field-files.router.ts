@@ -22,8 +22,8 @@ import {
 	fieldFileRequestUploadOutput,
 	fieldFileStatusOutput,
 } from "./field-files.contracts";
-import type { NguoiGoiTep } from "./field-files-quyen";
 import { FieldFilesService } from "./field-files.service";
+import type { NguoiGoiTep } from "./field-files-quyen";
 
 const TAG = ["Field files"];
 

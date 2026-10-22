@@ -22,11 +22,11 @@ import { ConfigService } from "@nestjs/config";
 import type { EnvironmentVariables } from "../config/env.validation";
 import { InjectDatabase } from "../database/database.constants";
 import { kiemPhieu, kyPhieu } from "../tai-lieu/phieu-nguon";
-import { FIELD_FILES_CONFIG } from "./field-files-config";
 import type {
 	FieldFileCompleteInput,
 	FieldFileRequestUploadInput,
 } from "./field-files.contracts";
+import { FIELD_FILES_CONFIG } from "./field-files-config";
 import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
 import { KHO_TEP } from "./kho-tep";
 
@@ -74,7 +74,7 @@ export class FieldFilesService {
 		private readonly config: ConfigService<EnvironmentVariables, true>,
 	) {}
 
-	status(): { bat: boolean } {
+	status() {
 		return { bat: this.kho.bat() };
 	}
 
@@ -120,7 +120,9 @@ export class FieldFilesService {
 		if (input.kichThuoc > TEP_TRUONG.toiDaByte) {
 			throw new BadRequestException(T.quaCo);
 		}
-		if ((await this.demTep(this.db, o, input.recordId)) >= TEP_TRUONG.toiDaTepMoiO) {
+		if (
+			(await this.demTep(this.db, o, input.recordId)) >= TEP_TRUONG.toiDaTepMoiO
+		) {
 			throw new BadRequestException(T.day);
 		}
 		const pathname = PATHNAME_TEP(randomUUID());

@@ -37,12 +37,20 @@ async function goi(value: string | null) {
 		},
 	};
 	const execute = setFieldValue.execute as unknown as (
-		input: { entity: FieldEntity; recordId: string; key: string; value: string | null },
-		ctx: unknown,
+		input: {
+			entity: FieldEntity;
+			recordId: string;
+			key: string;
+			value: string | null;
+		},
+		ctx: typeof ctx,
 	) => Promise<unknown>;
 	return trongNguCanhEve(async () =>
 		ketQua.parse(
-			await execute({ entity: "CONTACT", recordId: lienHe, key: khoa, value }, ctx),
+			await execute(
+				{ entity: "CONTACT", recordId: lienHe, key: khoa, value },
+				ctx,
+			),
 		),
 	);
 }
@@ -113,7 +121,10 @@ describe("ttp-kara", () => {
 			const fv = await db.fieldValue.count({ where: { fieldId } });
 			phai(fv === 0, `ttp ghi chu: kara ${gia} fieldValue`);
 			const tep = await db.fieldFile.findMany({ where: { fieldId } });
-			phai(tep.map((t) => t.id).join() === tepId, `ttp ghi chu: kara ${gia} tep doi`);
+			phai(
+				tep.map((t) => t.id).join() === tepId,
+				`ttp ghi chu: kara ${gia} tep doi`,
+			);
 			so += 1;
 		}
 		phai(so === 2, `ttp ghi chu: thieu o ${so}`);

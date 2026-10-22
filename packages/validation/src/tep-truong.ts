@@ -23,8 +23,7 @@ export const TEP_TRUONG = {
 		khongCoBanGhi: "Không tìm thấy bản ghi.",
 		khongCoTep: "Không tìm thấy tệp.",
 		khongMo: "Chỉ quản trị mở được tệp.",
-		khongXoa:
-			"Chỉ quản trị hoặc người đã tải tệp lên mới xoá được tệp này.",
+		khongXoa: "Chỉ quản trị hoặc người đã tải tệp lên mới xoá được tệp này.",
 	},
 } as const;
 

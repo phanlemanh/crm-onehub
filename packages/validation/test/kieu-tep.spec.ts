@@ -35,7 +35,11 @@ const BANG = [
 		vao: noi(ZIP, chu("word/document.xml..word/vbaProject.bin")),
 		ra: { loi: "macro" },
 	},
-	{ o: "zip khong phai docx", vao: noi(ZIP, chu("xl/workbook.xml")), ra: { loi: "khong-nhan" } },
+	{
+		o: "zip khong phai docx",
+		vao: noi(ZIP, chu("xl/workbook.xml")),
+		ra: { loi: "khong-nhan" },
+	},
 	{ o: "rac", vao: chu("khong phai tep"), ra: { loi: "khong-nhan" } },
 	{ o: "rong", vao: byte(), ra: { loi: "khong-nhan" } },
 	{ o: "png cat ngan", vao: byte(0x89, 0x50, 0x4e), ra: { loi: "khong-nhan" } },

@@ -1,12 +1,12 @@
 import { canManageFields, workspaceRoleOf } from "@crm/auth";
-import { donChoXoa, ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
-import type { KhoTepTruong } from "@crm/db/blob-tep-truong";
 import {
 	type Db,
 	type FieldEntity,
 	type Prisma,
 	Prisma as PrismaNamespace,
 } from "@crm/db";
+import { donChoXoa, ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
+import type { KhoTepTruong } from "@crm/db/blob-tep-truong";
 import {
 	attachValues,
 	type CachSapTruong,
@@ -44,10 +44,7 @@ import {
 	MOC_NGAY,
 	phanTichLocTruong,
 } from "@crm/validation/bo-loc-truong";
-import {
-	tepTrongO,
-	type TepTheoTruong,
-} from "@crm/validation/tep-truong";
+import { type TepTheoTruong, tepTrongO } from "@crm/validation/tep-truong";
 import {
 	BadRequestException,
 	ConflictException,
@@ -61,6 +58,8 @@ import {
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import type { Page, SortDirection } from "../trpc/list-input";
+import { FIELD_FILES_CONFIG } from "./field-files-config";
+import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
 import type {
 	FieldCreateInput,
 	FieldReorderInput,
@@ -68,8 +67,6 @@ import type {
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
-import { FIELD_FILES_CONFIG } from "./field-files-config";
-import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
 import { KHO_TEP } from "./kho-tep";
 import { khoangMocTruong } from "./moc-ngay";
 

@@ -70,7 +70,7 @@ export async function donChoXoa(
 		where: {
 			kho: BLOB_TEP_TRUONG.ten,
 			xoaSau: { lte: bayGio },
-			...(opts.pathnames ? { pathname: { in: opts.pathnames } } : {}),
+			pathname: opts.pathnames ? { in: opts.pathnames } : undefined,
 		},
 		orderBy: { xoaSau: "asc" },
 		take: opts.toiDa,

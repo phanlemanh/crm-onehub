@@ -61,7 +61,7 @@ export function moTaTruongTuTao(
 	nguoiDung: Owner[] | undefined,
 	nguCanhTep?: NguCanhTep,
 ): MoTaTruong {
-	return {
+	const moTa: MoTaTruong = {
 		khoa: field.key,
 		nhan: field.label,
 		kieu: field.type,
@@ -74,17 +74,15 @@ export function moTaTruongTuTao(
 		nguoiDung,
 		luu: (giaTri) => luu(field.key, giaTri),
 		dangLuu: dangLuu(field.key),
-		...(nguCanhTep
-			? {
-					tep: nguCanhTep.tep[field.key] ?? [],
-					dichTep: {
-						entity: nguCanhTep.entity,
-						recordId: nguCanhTep.recordId,
-						luuTru: nguCanhTep.luuTru,
-					},
-				}
-			: {}),
 	};
+	if (!nguCanhTep) return moTa;
+	moTa.tep = nguCanhTep.tep[field.key] ?? [];
+	moTa.dichTep = {
+		entity: nguCanhTep.entity,
+		recordId: nguCanhTep.recordId,
+		luuTru: nguCanhTep.luuTru,
+	};
+	return moTa;
 }
 
 export function OTruongTuTao({

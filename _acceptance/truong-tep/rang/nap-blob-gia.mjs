@@ -7,18 +7,15 @@ if (GOC) {
 	const require = createRequire(import.meta.url);
 	const undici = require("undici");
 	const doi = (vao) => {
-		const chuoi =
-			typeof vao === "string" || vao instanceof URL ? String(vao) : vao?.url;
-		if (!chuoi) return null;
-		const u = new URL(chuoi);
+		const u = new URL(vao instanceof Request ? vao.url : String(vao));
 		if (!u.hostname.endsWith(DUOI_HOST)) return null;
 		return `${GOC}/__blob${u.pathname}${u.search}`;
 	};
 	const boc = (goc) => (vao, init) => {
 		const moi = doi(vao);
 		if (moi === null) return goc(vao, init);
-		if (typeof vao === "string" || vao instanceof URL) return goc(moi, init);
-		return goc(new Request(moi, vao), init);
+		if (vao instanceof Request) return goc(new Request(moi, vao), init);
+		return goc(moi, init);
 	};
 	undici.fetch = boc(undici.fetch);
 	globalThis.fetch = boc(globalThis.fetch);
