@@ -1,0 +1,128 @@
+{
+ "feature_plain": "Trưởng đơn vị mở một khung «Soạn bộ OKR», gõ mục tiêu và KR liền mạch như viết tài liệu, thấy điểm chất lượng và góp ý của Kara ở cột bên, rồi công bố cả bộ từ chính khung đó; ngăn theo dõi mục tiêu chỉ còn một chip góp ý.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ mở khung Soạn của đúng bộ OKR (đơn vị · chu kỳ) từ hộp Thêm mục tiêu hay từ bộ trống, liệt mọi mục tiêu chưa bỏ của bộ, tải lại vẫn mở đúng bộ."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ cho gõ một mục tiêu và ba KR chỉ bằng bàn phím (Enter, Tab); dòng đủ chữ tự lưu thành mục tiêu nháp, người phụ trách mặc định là trưởng đơn vị của bộ."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ lưu khi sửa chữ, xoá được dòng KR trống và mục tiêu nháp chưa có lịch sử; mục tiêu đã công bố sửa chữ được nhưng số khoá."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ cho nhờ Kara đọc cả bộ, hiện góp ý ở cột bên; nhận một góp ý thì dòng đổi ngay và có Hoàn tác."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ công bố các mục tiêu nháp được tích trong một hộp hỏi lại (mặc định tích hết), gửi duyệt khi chương trình đòi duyệt, và gọi tên mục tiêu nào chưa công bố được."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ giữ tiêu đề khi đang tải, có nút Thử lại khi tải hỏng, và giữ nguyên chữ đã gõ khi lưu một dòng hỏng."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ trông như bản mẫu ở máy tính và điện thoại, sáng và tối; điện thoại thành hai thẻ, không tràn ngang."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ giữ 12 hồ sơ đã ký liên quan không xấu hơn; chỗ đo khối Kara cũ chuyển sang tiêu chí ngăn một chip, mỗi hồ sơ có dòng sổ do chủ kho quyết."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-4",
+   "p": "Sẽ KHÔNG khoá nút công bố vì điểm chất lượng thấp — điểm «N trên M» chỉ ra chỗ nên sửa, máy chấm ngay khi gõ, không mang dấu Kara."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ KHÔNG còn khối Kara và góp ý neo trên ngăn theo dõi mục tiêu — chỉ một chip «Kara · N góp ý», bấm thì mở khung Soạn ở đúng mục tiêu."
+  },
+  {
+   "id": "AC-8",
+   "p": "Chặn người không sửa được bộ và chu kỳ đã đóng: không lối vào, mở đường dẫn thì chỉ xem; đóng khung khi còn dòng chưa lưu phải hỏi lại."
+  },
+  {
+   "id": "OOS-1",
+   "p": "Kara chưa viết nháp ngay trong cột bên; cuộc soạn cũ còn là lối «Nhờ Kara soạn nháp» khi bộ trống."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Chưa sửa số (khởi điểm, đích, hiện tại) của mục tiêu đã công bố trong tài liệu — vẫn sửa ở ngăn KR."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Chưa có kéo thả đổi thứ tự, dán nhiều dòng một lần, hay gắn «Góp vào» ngay trên dòng tài liệu."
+  },
+  {
+   "id": "OOS-4",
+   "p": "Điểm chất lượng chưa hiện ở Bộ OKR, Sức khoẻ hay ngăn theo dõi."
+  },
+  {
+   "id": "OOS-5",
+   "p": "Không đổi lời dặn Kara (theo khuyến nghị Hỏi-5)."
+  }
+ ],
+ "scope_plain": "Những việc dưới đây cố ý để vòng sau, mỗi việc có dòng sổ nói vì sao.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Vai người dùng: người soạn (trưởng đơn vị, quản trị) và thành viên không sửa được — phủ ở AC-1 (mở khung) và AC-8 (chặn, chỉ xem)."
+  },
+  {
+   "i": 1,
+   "p": "Trạng thái mục tiêu: nháp, chờ duyệt, đã công bố, đã bỏ — AC-3 (sửa, khoá, ẩn đã bỏ) và AC-6 (công bố)."
+  },
+  {
+   "i": 2,
+   "p": "Thao tác trên dòng: gõ mới, sửa, xoá, nhận góp ý, hoàn tác, công bố — AC-2, AC-3, AC-5, AC-6, mỗi thao tác đọc lại dữ liệu thật."
+  },
+  {
+   "i": 3,
+   "p": "Trạng thái Kara: đang đọc, có góp ý, không có gì, tắt, hết lượt, lỗi — AC-5."
+  },
+  {
+   "i": 4,
+   "p": "Thiết lập chương trình: có hay không «công bố cần duyệt», chu kỳ còn ghi hay đã đóng — AC-6 và AC-8."
+  },
+  {
+   "i": 5,
+   "p": "Trạng thái màn: đang tải, lỗi tải, bộ trống, có dữ liệu, lưu hỏng — AC-9 (bộ trống ở AC-1)."
+  },
+  {
+   "i": 6,
+   "p": "Khổ và màu: máy tính và điện thoại, sáng và tối — AC-10 bằng mười ảnh và một lượt nhìn so bản mẫu."
+  },
+  {
+   "i": 7,
+   "p": "Đường vào: hộp Thêm mục tiêu, bộ trống, chip ở ngăn theo dõi, đường dẫn thẳng — AC-1, AC-7, AC-8."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Thiếu: công bố tất cả không chọn được thì khoá nhầm mục tiêu nháp dở của người khác; và hai lựa chọn máy tự quyết (tự lưu nháp thật, người phụ trách là người soạn) thật ra còn lối khác sống. Đã xử: đưa thành hai câu hỏi mới cho anh — Hỏi-7 (tự lưu + hộp công bố có ô tích) và Hỏi-8 (người phụ trách mặc định là trưởng đơn vị)."
+  },
+  {
+   "i": 1,
+   "p": "Thiếu: sửa, xoá chỉ được đo trên dữ liệu giả, không đọc lại máy chủ thật. Đã xử: thêm một phép đo trên bản chạy thật đọc lại dữ liệu sau khi xoá và sửa."
+  },
+  {
+   "i": 2,
+   "p": "Thiếu: «N trên M điểm» chưa ai khai M đếm gì. Đã xử: hợp đồng khai công thức kèm ví dụ «12 trên 12», bài kiểm ghim số cho từng bộ mẫu."
+  },
+  {
+   "i": 3,
+   "p": "Thiếu: danh sách hồ sơ đã ký cần giữ lập muộn và sót hai hồ sơ (hộp Thêm mục tiêu, trang Bộ OKR). Đã xử: viết trước 12 hồ sơ, máy quét đối chiếu đủ số."
+  },
+  {
+   "i": 4,
+   "p": "Thiếu: chỉ một ảnh nền tối, người chấm không được đưa danh sách chỗ lệch cho phép. Đã xử: mười ảnh kể cả tối và điện thoại; danh sách năm chỗ lệch đánh số trong hợp đồng và người chấm phải đọc nó."
+  }
+ ]
+}
