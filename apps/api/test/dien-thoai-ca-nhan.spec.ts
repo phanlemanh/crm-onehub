@@ -144,6 +144,7 @@ describe("so-sai", () => {
 		let app: NestExpressApplication | null = null;
 		try {
 			app = await createApp();
+			await app.listen(0, "127.0.0.1");
 			spyOn(app.get(BackfillService), "auto").mockResolvedValue({
 				started: false,
 			});
