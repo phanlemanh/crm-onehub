@@ -5,6 +5,7 @@ import {
 	readFileSync,
 	rmSync,
 	symlinkSync,
+	writeFileSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -368,6 +369,45 @@ export function phanXu(ds, ma, chayNen, chayLai) {
 	});
 }
 
+const ketQuaMan = z.object({
+	sha: z.string().regex(/^[0-9a-f]{40}$/),
+	ketQua: z.array(
+		z.object({
+			khoa: z.string().min(1),
+			loai: z.enum(["GIU", "DO", "DO-SAN-NEN", "CHAP-CHON"]),
+			chu: z.string().optional(),
+		}),
+	),
+});
+
+export function ketQuaManTuTep(noiDung, sha, khoaMan) {
+	let tho;
+	try {
+		tho = JSON.parse(noiDung);
+	} catch {
+		return { kq: [], loi: ["KET QUA MAN HONG: khong phai JSON"] };
+	}
+	const r = ketQuaMan.safeParse(tho);
+	if (!r.success)
+		return { kq: [], loi: [`KET QUA MAN HONG: ${r.error.issues[0]?.message}`] };
+	if (r.data.sha !== sha)
+		return {
+			kq: [],
+			loi: [
+				`KET QUA MAN LECH SHA ${r.data.sha.slice(0, 9)} != HEAD ${sha.slice(0, 9)}`,
+			],
+		};
+	const theoKhoa = new Map(r.data.ketQua.map((k) => [k.khoa, k]));
+	const kq = [];
+	const loi = [];
+	for (const k of khoaMan) {
+		const co = theoKhoa.get(k);
+		if (co) kq.push(co);
+		else loi.push(`THIEU KET QUA MAN ${ten(k)}`);
+	}
+	return { kq, loi };
+}
+
 const dongKetQua = (k) =>
 	k.loai === "GIU"
 		? `GIU ${ten(khoa(k.e))}`
@@ -470,6 +510,12 @@ function chay() {
 		process.exit(0);
 	}
 	const truoc = tepHoSoDaKy(hoSo);
+	const sha = git("rev-parse", "HEAD").trim();
+	const iGhi = process.argv.indexOf("--ghi-man");
+	const tepGhi = iGhi < 0 ? null : process.argv[iGhi + 1];
+	const iDoc = process.argv.indexOf("--doc-man");
+	const tepDoc = iDoc < 0 ? null : process.argv[iDoc + 1];
+	const daGhi = [];
 	const dong = [];
 	const dem = { GIU: 0, DO: 0, "DO-SAN-NEN": 0, "CHAP-CHON": 0, HOAN: 0 };
 	const traLai = [];
@@ -479,6 +525,22 @@ function chay() {
 				`[${thu + 1}/${nhom.length}] ${ds.map(khoa).join(", ")} :: ${lenh}`,
 			);
 			const lyDo = hoan(lenh, ds);
+			if (lyDo === "phien do man" && tepDoc) {
+				const docDuoc = existsSync(tepDoc)
+					? ketQuaManTuTep(readFileSync(tepDoc, "utf8"), sha, ds.map(khoa))
+					: { kq: [], loi: [`THIEU TEP KET QUA MAN ${tepDoc}`] };
+				loi.push(...docDuoc.loi);
+				for (const k of docDuoc.kq) {
+					dem[k.loai] += 1;
+					const d =
+						k.loai === "GIU"
+							? `GIU ${ten(k.khoa)} (doc tu ket qua man)`
+							: `${k.loai} ${ten(k.khoa)}: ${k.chu ?? ""} (doc tu ket qua man)`;
+					dong.push(d);
+					console.log(d);
+				}
+				continue;
+			}
 			if (lyDo) {
 				for (const e of ds) dong.push(`HOAN ${ten(khoa(e))} (${lyDo})`);
 				dem.HOAN += ds.length;
@@ -496,6 +558,9 @@ function chay() {
 					return lai;
 				},
 			);
+			if (tepGhi && GIU.lenhMan.test(lenh))
+				for (const k of kq)
+					daGhi.push({ khoa: khoa(k.e), loai: k.loai, chu: k.chu });
 			for (const k of kq) {
 				dem[k.loai] += 1;
 				dong.push(dongKetQua(k));
@@ -504,6 +569,15 @@ function chay() {
 		}
 	} finally {
 		goCayNen();
+	}
+	if (tepGhi) {
+		writeFileSync(
+			tepGhi,
+			`${JSON.stringify({ sha, ketQua: daGhi }, null, 2)}\n`,
+		);
+		console.log(
+			`GHI KET QUA MAN ${daGhi.length} eval -> ${tepGhi} (sha ${sha.slice(0, 9)})`,
+		);
 	}
 	console.log("---- ket qua ----");
 	for (const e of daBo) console.log(`BO RA ${ten(khoa(e))}`);

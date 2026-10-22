@@ -3312,6 +3312,8 @@ executors:
     vkm_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vo-khu-muc-tieu/rang/do-man.mjs"'
     vk6_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/so-do-toan-vung/rang/man.mjs"'
     vk6_giu_ho_so: bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs
+    vk6_giu_ho_so_man: bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs --chi-man --ghi-man .acceptance-runs/so-do-toan-vung/man-ket-qua.json
+    vk6_giu_ho_so_s4: bun test _acceptance/so-do-toan-vung/rang/giu-ho-so.test.mjs && bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs --bo-man --doc-man .acceptance-runs/so-do-toan-vung/man-ket-qua.json
     ldv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
