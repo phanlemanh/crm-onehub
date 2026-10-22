@@ -543,10 +543,7 @@ describe("vkm-mot-lop", () => {
 			</>,
 			"/ws/okr/bo-okr",
 		);
-		await cho(
-			() => q("[data-the-con-bo]") !== null,
-			"the con trang don vi",
-		);
+		await cho(() => q("[data-the-con-bo]") !== null, "the con trang don vi");
 		const lop = demThanhThe() + qa("[data-view-switch=nut]").length;
 		if (lop !== 1)
 			sai.push(`vkm-mot-lop: trang don vi con thanh the khu, dem = ${lop}`);

@@ -38,8 +38,8 @@ import {
 	KhungHangCongCu,
 } from "./hang-cong-cu";
 import { TheConBo } from "./the-con";
-import { ViecCuaBo } from "./viec-cua-bo";
 import { ViTriBo } from "./vi-tri-bo";
+import { ViecCuaBo } from "./viec-cua-bo";
 
 const PHA_CO_CHAM: readonly PhaChuKy[] = ["cham-diem", "da-dong"];
 

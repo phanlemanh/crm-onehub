@@ -44,10 +44,12 @@ const TEP_CUA_HO_SO = {
 	"_acceptance/khep-ky-okr/rang/man-khep-ky.mjs": "khep-ky-okr",
 	"_acceptance/vo-khu-muc-tieu/rang/do-man-dieu-huong.mjs": "vo-khu-muc-tieu",
 };
-const VIET_LAI_V1_20 = new Set([
-	"apps/app/test/okr-trang-don-vi.dom.tsx",
-	"_acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs",
-]);
+const VIET_LAI = {
+	"apps/app/test/okr-trang-don-vi.dom.tsx": "V1-20",
+	"_acceptance/trang-don-vi-mot-bang/rang/hai-chieu.mjs": "V1-20",
+	"_acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs": "V1-21",
+	"_acceptance/khep-ky-okr/rang/man-khep-ky.mjs": "V1-21",
+};
 const KHUON_DOI_CHUOI =
 	/donOkr|data-the-con-bo|data-view-switch|aria-current|theBo|okrVoKhuMessages|SO_NUT_HANG_CONG_CU|coCham|doiXem|xem=|the con trang don vi|chuyen kieu xem trang don vi|bo-okr|data-the|view-switch/;
 const TRAN_LENH_MS = 15 * 60_000;
@@ -143,14 +145,14 @@ function soatDoiThuoc(cwd) {
 	for (const [tep, slug] of Object.entries(TEP_CUA_HO_SO)) {
 		const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
 		if (diff === "") continue;
-		const vietLai = VIET_LAI_V1_20.has(tep);
-		if (!soCoDongFix(slug, tep, vietLai ? "V1-20" : null)) {
+		const phep = VIET_LAI[tep] ?? null;
+		if (!soCoDongFix(slug, tep, phep)) {
 			sai.push(`SAI AC-11: THIEU SO ${slug}: ${tep}`);
 			continue;
 		}
-		if (vietLai) {
+		if (phep) {
 			console.log(
-				`DOI THUOC ${tep}: viet lai theo V1-20, so ${slug} co dong fix`,
+				`DOI THUOC ${tep}: viet lai theo ${phep}, so ${slug} co dong fix`,
 			);
 			continue;
 		}
