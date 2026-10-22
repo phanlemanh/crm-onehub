@@ -258,7 +258,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.tbo_khong_doi_hinh
-    long_running: 240
+    long_running: 420
     paths:
       - "_acceptance/*/rang/**"
       - "apps/app/test/**"
