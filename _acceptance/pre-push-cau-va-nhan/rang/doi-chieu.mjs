@@ -49,7 +49,7 @@ const CA = [
 		thanh:
 			"kq.lyDo === LY_DO_GITHUB && !ngoai.some((t) => !t.startsWith(THU_MUC_GITHUB))",
 		test: "gop-onehub: G14 ",
-		ghim: "tệp ngoài T1 (.github/workflows/ci.yml, apps/api/a.ts)",
+		ghim: "có tệp ngoài T1 (apps/api/a.ts)",
 	},
 	{
 		ca: "ds-ngoai-t1",
@@ -110,7 +110,7 @@ function chaySpec(nguon, loc) {
 }
 
 const lanh = chaySpec(banSao("lanh"), LOC_LANH);
-const soQua = (lanh.ra.match(/^\(pass\)/gm) ?? []).length;
+const soQua = Number(lanh.ra.match(/^\s*(\d+) pass$/m)?.[1] ?? 0);
 if (lanh.ma !== 0 || !/\b0 fail\b/.test(lanh.ra) || soQua < 3) {
 	console.log(
 		`thuoc hong: doi chung duong — ban sao lanh ma spec do hoac khong chay (pass ${soQua})`,

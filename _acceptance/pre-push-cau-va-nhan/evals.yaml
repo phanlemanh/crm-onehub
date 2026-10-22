@@ -75,7 +75,7 @@ evals:
           in «BAT nhan-cu: gop-onehub: G14».
       (b) cau-cu: ban sao co .githooks/gate-shape.json lay tu d6267b1d4 -> do dung «hinh-gop (b)», in «BAT cau-cu: …».
       (c) ma-truoc-github (dot bien viet truoc: nhan .github/ chi khi moi tep ngoai T1 deu duoi .github/) -> do dung
-          «gop-onehub: G14» va dau ra co «tệp ngoài T1 (.github/workflows/ci.yml, apps/api/a.ts)» (do o bien the iii).
+          «gop-onehub: G14» va dau ra co «có tệp ngoài T1 (apps/api/a.ts)» (do o bien the iii; ci.yml khop T1 nen khong vao danh sach ngoai T1).
       (d) ds-ngoai-t1 (dot bien: danh sach = tep khong T1, rong thi ca tap xet) -> do dung «gop-onehub: G14» va dau ra
           co «.github/ghi-chu.md, docs/c.md» (do o bien the ii).
       Ca khong do, do sai test, hay thieu chuoi ghim -> ma 1 «thuoc hong: <ca>»; cho cay dot bien khong thay dung mot lan
