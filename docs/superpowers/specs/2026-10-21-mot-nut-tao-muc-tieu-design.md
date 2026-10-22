@@ -143,3 +143,34 @@ Căn cứ: một điểm vào (hộp chọn) toả ra bốn đường độc l�
 chọn đường» của Tability ở `vi_sao` hàng VK9. Không tra mẫu thị trường thêm: khuôn hiển nhiên từ câu giao; wizard
 bị loại vì không có bước chung giữa bốn đường.
 <!-- UX-SPEC-TEMPLATE>>> -->
+
+## Eval cũ thay bởi vòng này
+
+Chủ kho duyệt Hỏi-1 ở Cổng Phạm vi (21/10) và chốt lối (a) ngày 22/10: xoá ca đo hành vi vòng này gỡ khi đã có ca
+`mnt-*` thay; ca chỉ hỏng vì đổi tên thì sửa chỗ gọi, giữ ý. Eval mà mọi ca của nó đã xoá khai `status: not-run`
+và trỏ AC dưới đây.
+
+| Eval cũ | Đo gì | AC thay | Ca thay |
+| --- | --- | --- | --- |
+| khung-okr-truoc-r1/E2 | tám dạng nhóm soạn ở hàng hành động đầu trang | AC-7 | `mnt-soan` ma trận 12 ô |
+| khung-okr-truoc-r1/E4 | «i» mở popover chữ phụ của nhóm soạn | AC-7 | `mnt-soan` ma trận 12 ô, `mnt-hop` (f) |
+| khung-okr-truoc-r1/E5 | nút soạn khoá khi Kara chưa cấu hình | AC-7 | `mnt-soan` ô chưa cấu hình |
+| okr-to-chuc-va/E10 | ba vai bấm hay thấy «Thêm mục tiêu» khoá | AC-8 | `mnt-khoa` |
+| dieu-huong-khu-muc-tieu/E3 | hàng hành động đầu trang 5 thẻ × 2 pha | AC-1 | `mnt-dau-trang`, `mnt-man-doc` |
+| dieu-huong-khu-muc-tieu/E6 | menu «…» chỉ có Nhập, hộp nhập cho đơn vị đích | AC-6 | `mnt-bang-tinh` |
+| dieu-huong-khu-muc-tieu/E7 | 12 ô khoá kèm một dòng lý do | AC-8 | `mnt-khoa` |
+| soan-okr-song-lai/E1 | `NutSoan` khi Kara chưa cấu hình, 22 ô | AC-7 | `mnt-soan` ô chưa cấu hình |
+| soan-okr-song-lai/E7 | số cuộc trên nút danh sách cuộc | AC-7 | `mnt-hop` (f) |
+
+Eval vẫn chạy, chỉ bớt ca đo hành vi đã gỡ (không khai `not-run`, vì phần còn lại của chúng vẫn đo đúng lời hứa):
+
+- canh-kr-okr/E13: bỏ năm ca «Bắt đầu từ mẫu» trong ngăn → AC-5 (`mnt-tu-mau`).
+- soan-okr-trong-khung/E1: bỏ ô (a) Soạn khi chưa có cuộc và (b) Tiếp tục → AC-7 (`mnt-soan` chọn dòng); ca đếm ô
+  đổi 5 → 3.
+- dieu-huong-khu-muc-tieu/E4: bỏ ca nút ở Của tôi dẫn sang Theo đơn vị → AC-4 (`mnt-tu-viet` (b)), và bỏ mũi
+  phá thử `ky-hoi-y` của `rang/hai-chieu.mjs`: kỳ chỉ khác kỳ đang chạy trên Lấy ý kiến, nơi vòng này gỡ nút tạo,
+  nên mũi đó không còn tạo khác biệt trên đường nào đi được.
+- soan-okr-cung-tro-ly/E12 và soan-okr-song-lai/E8 (cùng chạy `soan-okr.dom.tsx`): bỏ ca nút soạn và năm trạng
+  thái `ST-soan-nut*` (bảng thiết kế cũ ghi chú đã gỡ) → AC-7; ba nhánh xử lý phản hồi `soanMo` chuyển sang ca
+  `mnt-soan: phan hoi soanMo`; ca «cuộc mở từ URL khi hết trần» giữ ý đường dẫn, bỏ dòng đòi nút hết trần.
+- soan-okr-song-lai/E2: `cau-noi-server` đổi chỗ nhận cờ từ `<NutSoan` sang `<HopChonDuong`, giữ ý.

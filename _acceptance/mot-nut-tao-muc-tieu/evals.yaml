@@ -236,8 +236,14 @@ evals:
       (6) chua-khoa; (7) chua-cau-hinh; (8) khong-quyen -> moi o (3)-(8) dong soan mang aria-disabled="true",
       ItemDescription bang dung chu messages cua ly do khoa do (rut tu messages, khong viet tay), bam -> 0 lan
       goi okr.soanMo.
+      (9) phan hoi soanMo, ba o qua hop chon o Bo OKR pb:P2: soanMo tra {ok:false, cuocDang} -> dau vao
+      soanMo level phong-ban, departmentId P2, khung ban ghi mo dung cuocDang; tra {ok:false, cuocDang:null}
+      -> okr.soanSanSang hoi lai dung 1 lan, khong mo ban ghi; nem loi -> khong mo ban ghi, mo lai hop va
+      bam dong Soan thi soanMo duoc goi lan hai.
       CHIEU DO: ban sao an dong soan ngoai pha lap-ke-hoach -> do "mnt-soan: dang-chay dong vang"; ban sao goi
-      soanMo khi co cuoc dang mo -> do "mnt-soan: mo cuoc moi khi dang co cuoc".
+      soanMo khi co cuoc dang mo -> do "mnt-soan: mo cuoc moi khi dang co cuoc"; ban sao bo nhanh cuocDang
+      trong duong-soan.ts -> do "mnt-soan: con cuoc dang khong mo cuoc-cu"; bo refetch -> do "mnt-soan: tu
+      choi khong doc lai san sang"; loi mo ban ghi -> do "mnt-soan: loi van mo ban ghi".
 
   - id: E14
     criterion: AC-7
