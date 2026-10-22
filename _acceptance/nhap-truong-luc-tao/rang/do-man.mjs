@@ -281,29 +281,44 @@ async function docForm(f) {
 				);
 				return l?.htmlFor ? document.getElementById(l.htmlFor) : null;
 			};
-			const lech = [];
-			for (const [chuan, tuTao] of cap) {
-				const a = oCua(chuan);
-				const b = oCua(tuTao);
-				if (!a || !b) {
-					lech.push(`${chuan}|${tuTao} vang`);
-					continue;
+			const cotChuan = () =>
+				[...form.querySelectorAll("[data-slot=field]")]
+					.filter(
+						(o) =>
+							!(o.querySelector("label")?.textContent ?? "").includes("ntl"),
+					)
+					.map((o) => o.getBoundingClientRect().left);
+			const doLech = () => {
+				const ra_ = [];
+				const cot = cotChuan();
+				for (const [chuan, tuTao] of cap) {
+					const a = oCua(chuan);
+					const b = oCua(tuTao);
+					if (!a || !b) {
+						ra_.push(`${chuan}|${tuTao} vang`);
+						continue;
+					}
+					const ra = a.getBoundingClientRect();
+					const rb = b.getBoundingClientRect();
+					const trongLuoi = cot.some((x) => Math.abs(x - rb.left) <= 1);
+					if (
+						Math.abs(ra.width - rb.width) > 0.5 ||
+						Math.abs(ra.height - rb.height) > 0.5 ||
+						getComputedStyle(a).fontSize !== getComputedStyle(b).fontSize ||
+						!trongLuoi
+					)
+						ra_.push(`${chuan}|${tuTao}`);
 				}
-				const ra = a.getBoundingClientRect();
-				const rb = b.getBoundingClientRect();
-				const fa = getComputedStyle(a).fontSize;
-				const fb = getComputedStyle(b).fontSize;
-				const cot = [...form.querySelectorAll("[data-slot=field]")].map((o) =>
-					Math.round(o.getBoundingClientRect().left),
-				);
-				const trongLuoi = cot.some((x) => Math.abs(x - rb.left) <= 1);
-				if (
-					Math.abs(ra.width - rb.width) > 0.5 ||
-					Math.abs(ra.height - rb.height) > 0.5 ||
-					fa !== fb ||
-					!trongLuoi
-				)
-					lech.push(`${chuan}|${tuTao}`);
+				return ra_;
+			};
+			const lech = doLech();
+			const thuDich = oCua(cap[0][1]);
+			let thuocLechMu = true;
+			if (thuDich) {
+				const cu = thuDich.style.translate;
+				thuDich.style.translate = "37px 0";
+				thuocLechMu = doLech().length === 0;
+				thuDich.style.translate = cu;
 			}
 			const oBb = oCua(batBuoc);
 			const loiId = oBb?.getAttribute("aria-describedby");
@@ -322,7 +337,7 @@ async function docForm(f) {
 				coForm: true,
 				lech,
 				nhom: kiem(form),
-				thuocMu: !kiem(ban),
+				thuocMu: !kiem(ban) || thuocLechMu,
 				loiCach,
 				tran: doc_.scrollWidth - doc_.clientWidth,
 			};

@@ -23,6 +23,7 @@ import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 const TIEN_TO = "ntl";
+const NGAY_MAY_CHU_TRA = "2027-03-31T00:00:00.000Z";
 const THU_MUC_FIXTURE = join(import.meta.dir, "../../app/test/fixtures");
 const GHI_FIXTURE = process.env.GHI_FIXTURE_LOI_TAO === "1";
 
@@ -349,6 +350,10 @@ describe("ntl-api-tao-co-truong", () => {
 			if (!khop)
 				throw new Error(
 					`ntl api tao co truong: doc lai ${dong.kieu} ${JSON.stringify(gia)}`,
+				);
+			if (dong.kieu === "DATE" && gia !== NGAY_MAY_CHU_TRA)
+				throw new Error(
+					`ntl api tao co truong: dang ngay ${JSON.stringify(gia)}`,
 				);
 			daSo += 1;
 		}

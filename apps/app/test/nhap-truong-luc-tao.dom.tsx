@@ -414,8 +414,10 @@ describe("ntl-bo-truong", () => {
 					form,
 				);
 				const batBuoc = oTheoNhan("Bắt buộc ntl", form);
-				if (ten.hasAttribute("required") !== batBuoc.hasAttribute("required"))
+				if (!ten.hasAttribute("required") || !batBuoc.hasAttribute("required"))
 					throw new Error(`ntl bo truong: thieu dau bat buoc ${loai}`);
+				if (oTheoNhan("Hiện ntl", form).hasAttribute("required"))
+					throw new Error(`ntl bo truong: dau bat buoc thua ${loai}`);
 				soCap += 1;
 				const doiChung = dap.slice(0, -1);
 				if (JSON.stringify(nhan) === JSON.stringify(doiChung))
@@ -534,6 +536,16 @@ const DAP_AN_MUOI = new Map<string, string | number | boolean>(
 	}),
 );
 
+const NGAY_MAY_CHU = "2027-03-31T00:00:00.000Z";
+
+function giaTriMayChu(
+	kieu: Kieu,
+	giaTri: string | number | boolean | undefined,
+): string | number | boolean | null {
+	if (giaTri === undefined) return null;
+	return kieu === "DATE" ? NGAY_MAY_CHU : giaTri;
+}
+
 async function dienMuoi() {
 	await go(oTheoNhan("Chữ ntl"), "HS-1");
 	const chuDai = oTheoNhan("Chữ dài ntl");
@@ -584,7 +596,7 @@ function thoaThuanCo(coGiaTri: boolean) {
 					position: i,
 					archived: false,
 					options: (t.options ?? []).map((o, j) => ({ ...o, position: j })),
-					value: coGiaTri ? (DAP_AN_MUOI.get(t.key) ?? null) : null,
+					value: coGiaTri ? giaTriMayChu(t.type, DAP_AN_MUOI.get(t.key)) : null,
 				})),
 				amountCents: null,
 				baseAmountCents: null,
@@ -603,6 +615,27 @@ function thoaThuanCo(coGiaTri: boolean) {
 	);
 }
 
+const PHIEU_DAP_AN = {
+	TEXT: (o) => o.chu === "HS-1",
+	LONG_TEXT: (o) => o.chu.includes("Dòng một") && o.chu.includes("Dòng hai"),
+	NUMBER: (o) => o.chu === "1.234,5",
+	DATE: (o) => o.oNhap.includes("2027-03-31"),
+	CHECKBOX: (o) => o.tich,
+	SELECT: (o) => o.dangChon === "lc-2",
+	URL: (o) => o.chu === "onehub.vn",
+	EMAIL: (o) => o.chu === "an@onehub.vn",
+	PHONE: (o) => o.chu.replace(/\s/g, "") === "0901234567",
+	USER: (o) => o.dangChon === "u-1",
+} as const satisfies Record<
+	Kieu,
+	(o: {
+		chu: string;
+		oNhap: string[];
+		tich: boolean;
+		dangChon: string;
+	}) => boolean
+>;
+
 function phieuThieu(): string[] {
 	const thieu: string[] = [];
 	for (const t of MUOI_KIEU) {
@@ -610,28 +643,20 @@ function phieuThieu(): string[] {
 			(l) => l.childElementCount === 0 && l.textContent?.trim() === t.label,
 		);
 		const hang = nhan?.parentElement;
-		const chu = [
-			hang?.textContent?.replace(t.label, "").trim() ?? "",
-			...[...(hang?.querySelectorAll("input") ?? [])].map((o) => o.value),
-		].join(" ");
-		if (t.type === "CHECKBOX") {
-			const o = hang?.querySelector('[role="checkbox"]');
-			if (o?.getAttribute("aria-checked") !== "true") thieu.push(t.key);
-			continue;
-		}
-		const can = {
-			TEXT: "HS-1",
-			LONG_TEXT: "Dòng một",
-			NUMBER: "1.234,5",
-			DATE: "2027",
-			CHECKBOX: "",
-			SELECT: "Bạc",
-			URL: "onehub.vn",
-			EMAIL: "an@onehub.vn",
-			PHONE: "0901",
-			USER: "Người A",
-		} as const satisfies Record<Kieu, string>;
-		if (!chu.includes(can[t.type])) thieu.push(t.key);
+		const o = {
+			chu: (hang?.textContent ?? "")
+				.replace(t.label, "")
+				.replace(/\s+/g, " ")
+				.trim(),
+			oNhap: [...(hang?.querySelectorAll("input") ?? [])].map((x) => x.value),
+			dangChon:
+				hang?.querySelector("[data-select-trigger]")?.textContent?.trim() ?? "",
+			tich:
+				hang
+					?.querySelector('[role="checkbox"]')
+					?.getAttribute("aria-checked") === "true",
+		};
+		if (!PHIEU_DAP_AN[t.type](o)) thieu.push(t.key);
 	}
 	return thieu;
 }
@@ -696,8 +721,11 @@ describe("ntl-gui-gia-tri", () => {
 			() => document.body.textContent?.includes("Chữ ntl") === true,
 			"phieu doi chung",
 		);
-		if (phieuThieu().length === 0)
-			throw new Error("ntl gui gia tri: thuoc phieu mu");
+		const muDoiChung = phieuThieu();
+		if (muDoiChung.length !== MUOI_KIEU.length)
+			throw new Error(
+				`ntl gui gia tri: thuoc phieu mu ${MUOI_KIEU.length - muDoiChung.length}`,
+			);
 		await dongHet();
 
 		trangThai.daGoi = [];
