@@ -23,6 +23,10 @@ const CHU_KHO = "Phan Le Manh";
 const MAU_DUONG = /okr\/bo-okr|okr\/theo-don-vi|data-view-switch|ViewSwitch/;
 const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
 const NGUONG_TEP_CHUNG = 5;
+const THUOC_THEO_VONG = {
+	"ve-sinh-do-san-onehub#E17":
+		"soat diff merge-base..HEAD cua nhanh dang chay theo nhan vong ve-sinh-do-san-onehub (V1-25)",
+};
 const LA_THUOC = /^_acceptance\/|\/test\//;
 const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
 const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:tsx|ts|mjs|cjs|js)\b/g;
@@ -150,8 +154,14 @@ function quetLop() {
 			tepCua.set(t, [...new Set([...(tepCua.get(t) ?? []), e.slug])]);
 	const doiRieng = (t) =>
 		doi.has(t) && (tepCua.get(t)?.length ?? 0) < NGUONG_TEP_CHUNG;
+	const loai = [];
 	const muc = tatCa
 		.filter((e) => e.tep.some((t) => doiRieng(t) || cham(t)))
+		.filter((e) => {
+			const lyDo = THUOC_THEO_VONG[`${e.slug}#${e.id}`];
+			if (lyDo) loai.push(`THUOC THEO VONG ${e.slug}#${e.id}: ${lyDo}`);
+			return !lyDo;
+		})
 		.map((e) => {
 			const evalRieng = /\bEVAL=/.test(e.lenh) ? e.id : null;
 			return {
@@ -161,7 +171,7 @@ function quetLop() {
 				khoa: evalRieng ? `${e.lenh}\u0000EVAL=${evalRieng}` : e.lenh,
 			};
 		});
-	lopDaQuet = { hoSo, muc, tepCua };
+	lopDaQuet = { hoSo, muc, tepCua, loai };
 	return lopDaQuet;
 }
 
@@ -464,6 +474,7 @@ try {
 	const ds = danhSach();
 	const lenhRieng = new Set(ds.map((m) => m.khoa)).size;
 	const lop = quetLop();
+	for (const l of lop.loai) console.log(l);
 	const hoSoCham = new Set(ds.map((m) => m.ten.split("#")[0]));
 	console.log(
 		`quet lop: ${lop.hoSo.length} ho so da ky, ${hoSoCham.size} ho so co thuoc cham /okr/bo-okr, theo-don-vi, o chuyen kieu xem hay bi vong sua, ${ds.length} eval may cham, ${lenhRieng} lan chay rieng`,

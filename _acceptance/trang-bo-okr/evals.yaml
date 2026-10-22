@@ -269,7 +269,8 @@ evals:
       data-view-switch hay ViewSwitch, hoặc bị vòng sửa (diff merge-base…HEAD) mà không phải tệp dùng chung từ 5 hồ sơ
       trở lên. In «quet lop: <n> ho so da ky, <m> ho so …, <k> eval may cham, <r> lan chay rieng»; cờ --chi-quet in
       từng «MUC <slug>#<E>» rồi dừng. (1) Chạy các eval thuộc lớp; gộp theo lệnh, trừ lệnh mang EVAL= thì mỗi eval
-      một lần chạy riêng với EVAL=<id>; lần đầu trả mã 2 (không đo được) thì chạy lại một lần, in «THU LAI». Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
+      một lần chạy riêng với EVAL=<id>; lần đầu trả mã 2 (không đo được) thì chạy lại một lần, in «THU LAI». Khai tay đúng một eval loại khỏi lớp có lý do (V1-25): ve-sinh-do-san-onehub#E17 —
+      thước theo vòng, soát diff của nhánh đang chạy theo nhãn vòng ấy; in «THUOC THEO VONG <slug>#<E>: <lý do>». Chạy trên cây vòng trước, in «HO SO <slug>#<E>: cay <ma>»; chỉ mục đỏ trên cây mới chạy lại trên
       worktree origin/onehub, in «HO SO <slug>#<E>: cay <ma> · nen <ma>»; SAI AC-11 khi nền 0 mà cây khác 0, «DO SAN TREN
       NEN <slug>#<E>» khi nền đỏ. (2) Với mỗi tệp thước hay bài kiểm (dưới _acceptance/ hoặc thư mục test/) của hồ sơ đã ký mà vòng sửa — bản đồ tệp → hồ sơ lập bằng chính lần quét; tệp dùng chung từ 5 hồ sơ mà vòng chỉ THÊM dòng in «THEM DANG KY <tep>:<dong>» và không đòi sổ; còn lại: sổ của hồ sơ có dòng fix decided_by
       chủ kho nhắc tệp (thiếu → «SAI AC-11: THIEU SO»); rồi xét QUAN HỆ từng khối diff -U0: dòng bỏ R và dòng thêm A,
