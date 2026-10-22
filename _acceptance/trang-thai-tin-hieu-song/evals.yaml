@@ -22,13 +22,13 @@ evals:
       tin-hieu/gom, docs/plan va _acceptance/config.yaml cua cay vao thu muc tam, them mot ban gom dat ma vao nhom
       "TTTS-NHOM-<run>", chay scripts/product-map.mjs --root <tam> roi docDuLieu(LO-TRINH.html sinh ra)); ban "cu" co ma
       o cho kit "chua-gom" (khoa CRM "cho-gom"), ban "moi" o "nhom-chua-cat"; ghi qua chinh ghiBanChupLoTrinh (@crm/db, ben viet hang that),
-      commitLuc sau gio dung tiem vao banDung. Mot TinHieu that tao qua TinHieuService.gui cua nguoi gui, danh dau keo ve.
+      commitLuc sau gio dung tiem vao banDung; danh sach "cua toi" la mot dong {ma, daKeoVe: true} nhu tinHieu.cuaToi tra.
         1 docNguonTinHieu (ham may chu cua hai trang) tra kieu "ban-chup" va du lieu co tin_hieu cua ban moi
         2 trang "cua toi": docTrangThaiDu cho ma do tra khoa "nhom-chua-cat", nhan == tinHieuMessages(vi).nhan.daVaoNhom,
           cau chua "TTTS-NHOM-<run>"
         3 the "Tat ca": docNenTatCa cho cung ma tra cung khoa va cung cau
         4 tep dong goi tren dia KHONG doi trong luot (doc lai bang hash truoc-sau) — ket qua den tu ban chup
-      CHIEU DO: ban sao nguon.ts tra thang docTepLoTrinh() -> dong 2 do voi thong diep ghim
+      CHIEU DO: ban sao nguon.ts luon tra ban dung -> dong 1 do voi thong diep ghim
       "trang tin hieu khong doc ban chup"; ban sao doc qua phanTichLoTrinh (lot tin_hieu) -> dong 1 do voi thong diep ghim
       "ban chup mat danh sach tin hieu khi doc".
 

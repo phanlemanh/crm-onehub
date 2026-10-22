@@ -59,7 +59,7 @@ describe("ttts-doc-ban-chup", () => {
 				banDung,
 				ghiCanhBao: () => {},
 			});
-			expect(nguon.kieu, "ban chup mat danh sach tin hieu khi doc").toBe(
+			expect(nguon.kieu, "trang tin hieu khong doc ban chup").toBe(
 				"ban-chup",
 			);
 			expect(
