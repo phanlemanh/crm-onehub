@@ -107,7 +107,7 @@ function vietLoTrinh(goc: string, vao: DauVaoKit): void {
 	}
 }
 
-export function dungKhoiMau(vao: DauVaoKit): Record<string, unknown> {
+export function dungTepMau(vao: DauVaoKit): string {
 	const goc = mkdtempSync(path.join(tmpdir(), "khoi-tin-hieu-mau-"));
 	for (const d of ["_acceptance", "docs/plan", "tin-hieu/crm", "tin-hieu/gom"])
 		mkdirSync(path.join(goc, d), { recursive: true });
@@ -146,9 +146,11 @@ export function dungKhoiMau(vao: DauVaoKit): Record<string, unknown> {
 		["node", path.join(GOC_KHO, "scripts/product-map.mjs"), "--root", goc],
 		GOC_KHO,
 	);
-	const { duLieu, canhBao } = docDuLieu(
-		readFileSync(path.join(goc, "LO-TRINH.html"), "utf8"),
-	);
+	return readFileSync(path.join(goc, "LO-TRINH.html"), "utf8");
+}
+
+export function dungKhoiMau(vao: DauVaoKit): Record<string, unknown> {
+	const { duLieu, canhBao } = docDuLieu(dungTepMau(vao));
 	if (!duLieu)
 		throw new Error(
 			`khối mẫu: kit không vẽ được khối — ${canhBao.join(" · ")}`,

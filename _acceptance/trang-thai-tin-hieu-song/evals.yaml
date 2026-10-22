@@ -222,8 +222,8 @@ evals:
       - "scripts/tin-hieu/test/do-bao-doi-cho.spec.ts"
       - "packages/validation/src/tin-hieu-cho.ts"
     expected: |
-      scripts/tin-hieu/test/do-bao-doi-cho.spec.ts describe "ttts-do". Kho git tam dung bang lenh git that: 5 commit
-      first-parent doi LO-TRINH.html, khoi moi commit rut tu LO-TRINH.html that cua cay roi doi tin_hieu cua 4 ma;
+      scripts/tin-hieu/test/do-bao-doi-cho.spec.ts describe "ttts-do". Kho git tam dung bang lenh git that: 6 commit
+      first-parent doi LO-TRINH.html (commit dau truoc --tu), moi tep do bo ve that cua kit sinh (dungTepMau);
       thong bao doc tu kho thu cua luot, ghi qua chinh ghiBanChupVaBaoTinHieu cho cac commit "da day" (khong chen thang
       bang). Ma tran viet truoc 6 lan doi:
         da-bao-dung-sha (tre 5 phut) · bi-the-cho (commit 3 khong day, commit 4 day trong 2 gio -> phu) · thieu (khong
