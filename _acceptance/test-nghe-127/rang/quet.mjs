@@ -70,6 +70,7 @@ const KHAI_DUNG_APP = {
 	"apps/api/test/tro-ly-okr-chi-tieu.spec.ts": 1,
 	"apps/api/test/tro-ly-okr-nguon-khoa.spec.ts": 1,
 	"apps/api/test/tro-ly-okr-san.ts": 1,
+	"apps/api/test/truong-chuan-cai-dat.spec.ts": 1,
 	"apps/api/test/truong-mot-cach.spec.ts": 1,
 	"apps/api/test/vai-chi-okr-ke-hoach.spec.ts": 1,
 	"apps/api/test/vai-chi-okr.spec.ts": 1,
