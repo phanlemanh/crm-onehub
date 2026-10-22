@@ -5,7 +5,7 @@ slug: tran-test-ci-30
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, docs]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-22T14:37:00Z
 design_doc: docs/superpowers/specs/2026-10-22-tran-test-ci-30-design.md
