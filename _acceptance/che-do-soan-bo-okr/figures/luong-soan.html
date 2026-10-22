@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luồng soạn bộ OKR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; overflow-x: auto; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1040px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · luong-soan · che-do-soan-bo-okr</p>
+    <h1>Luồng soạn bộ OKR</h1>
+
+    <svg viewBox="0 48 1288 512" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect x="0" y="48" width="1288" height="512" fill="#fafafa"/>
+
+      <rect x="40" y="88" width="240" height="288" rx="8" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="56" y="112" font-family="'Geist', sans-serif"><tspan fill="#171717" font-size="12" font-weight="600">Bộ OKR</tspan><tspan fill="#575757" font-size="10" dx="6">(trang một bộ)</tspan></text>
+
+      <path d="M264 156 L472 156 A8 8 0 0 1 480 164 L480 196 A8 8 0 0 0 488 204 L520 204" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="264" y1="240" x2="520" y2="240" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M264 324 L472 324 A8 8 0 0 0 480 316 L480 284 A8 8 0 0 1 488 276 L520 276" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="160" y1="356" x2="160" y2="456" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <line x1="744" y1="240" x2="872" y2="240" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1032" y1="240" x2="1104" y2="240" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="600" y1="300" x2="600" y2="400" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="680" y1="432" x2="744" y2="432" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="904" y1="432" x2="968" y2="432" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M1048 400 L1048 360 A8 8 0 0 0 1040 352 L712 352 A8 8 0 0 1 704 344 L704 300" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="332" y="132" width="80" height="16" rx="2" fill="#fafafa"/>
+      <text x="372" y="144" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">Soạn cả bộ</text>
+
+      <rect x="328" y="216" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="372" y="228" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">Soạn bộ OKR</text>
+
+      <rect x="284" y="300" width="176" height="16" rx="2" fill="#fafafa"/>
+      <text x="372" y="312" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">bấm chip (Hỏi-4: máy khuyên)</text>
+
+      <rect x="168" y="408" width="168" height="16" rx="2" fill="#fafafa"/>
+      <text x="172" y="420" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">mở tại chỗ (lối khác Hỏi-4)</text>
+
+      <rect x="752" y="216" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="808" y="228" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">Công bố N mục tiêu</text>
+
+      <rect x="1040" y="216" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="1068" y="228" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">xác nhận</text>
+
+      <rect x="56" y="124" width="208" height="64" rx="6" fill="#fafafa"/>
+      <rect x="56" y="124" width="208" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="160" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hộp Thêm mục tiêu</text>
+
+      <rect x="56" y="208" width="208" height="64" rx="6" fill="#fafafa"/>
+      <rect x="56" y="208" width="208" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Câu rỗng của bộ trống</text>
+
+      <rect x="56" y="292" width="208" height="64" rx="6" fill="#fafafa"/>
+      <rect x="56" y="292" width="208" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="320" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Ngăn theo dõi</text>
+      <text x="160" y="338" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chip Kara · N góp ý</text>
+
+      <rect x="56" y="456" width="208" height="64" rx="6" fill="#fafafa"/>
+      <rect x="56" y="456" width="208" height="64" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="160" y="492" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Góp ý tại ngăn</text>
+
+      <rect x="520" y="180" width="224" height="120" rx="6" fill="#fafafa"/>
+      <rect x="520" y="180" width="224" height="120" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="632" y="224" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chế độ Soạn</text>
+      <text x="632" y="248" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">tài liệu trái ·</text>
+      <text x="632" y="264" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">Chất lượng + góp ý Kara phải</text>
+
+      <rect x="872" y="208" width="160" height="64" rx="6" fill="#fafafa"/>
+      <rect x="872" y="208" width="160" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="952" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hỏi lại</text>
+      <text x="952" y="252" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Công bố N mục tiêu</text>
+
+      <rect x="1104" y="208" width="144" height="64" rx="32" fill="#fafafa"/>
+      <rect x="1104" y="208" width="144" height="64" rx="32" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1176" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màn theo dõi</text>
+      <text x="1176" y="252" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">của Bộ OKR</text>
+
+      <rect x="520" y="400" width="160" height="64" rx="6" fill="#fafafa"/>
+      <rect x="520" y="400" width="160" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="600" y="428" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nhờ Kara soạn nháp</text>
+      <text x="600" y="446" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chỉ khi bộ trống</text>
+
+      <rect x="744" y="400" width="160" height="64" rx="6" fill="#fafafa"/>
+      <rect x="744" y="400" width="160" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="824" y="436" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cuộc soạn cũ</text>
+
+      <rect x="968" y="400" width="160" height="64" rx="6" fill="#fafafa"/>
+      <rect x="968" y="400" width="160" height="64" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1048" y="436" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đưa vào bộ OKR</text>
+    </svg>
+
+    <footer>Hình luong-soan · che-do-soan-bo-okr · AC-1 · AC-6 · AC-7 · Hỏi-2 · Hỏi-4 · Cổng Phạm vi · 2026-10-22</footer>
+  </div>
+</body>
+</html>

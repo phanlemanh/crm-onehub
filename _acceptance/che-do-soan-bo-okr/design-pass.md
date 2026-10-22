@@ -8,12 +8,12 @@ context_scenes: []
 reaction: nac-1 (gói ảnh gửi chủ kho qua phiên giám sát, kèm thẻ Cổng Phạm vi; bản bấm được chạy ở cổng 3412 trên Mac Studio cho ai muốn bấm)
 options: http://localhost:3412/proto/che-do-soan-bo-okr?state=ST-ngan-mot-chip và ?state=ST-ngan-chip-mo-tai-cho (Hỏi-4, lời khuyên ghim trên trạng thái thứ hai)
 divergence: opened
-ds_skill: web-design-guidelines
+ds_skill: repo-tokens
 states: [ST-soan-co-gop-y, ST-soan-trong, ST-soan-dang-go, ST-soan-kara-dang-doc, ST-soan-da-nhan-gop-y, ST-soan-co-muc-da-cong-bo, ST-soan-kara-tat, ST-soan-hoi-cong-bo, ST-soan-da-cong-bo, ST-soan-chi-xem, ST-soan-dang-tai, ST-soan-loi-tai, ST-soan-dien-thoai, ST-ngan-mot-chip, ST-ngan-chip-mo-tai-cho]
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
 patched: 8
-deferred: 3
+deferred: 4
 ---
 # design-pass — che-do-soan-bo-okr
 
@@ -23,7 +23,9 @@ ghép từ component thật của `@crm/ui` (`KaraDock`, `KaraProposal`, `KaraPr
 cỡ `kara` của app — dữ liệu giả của bộ OKR mẫu (Hải Đăng Logistics, «Phòng Kinh doanh miền Bắc», quý 4/2026), không
 đường ghi. Máy chủ dev riêng ở cổng 3412, không đụng 3000/3001 của chủ kho (luật 8). Chụp bằng Chrome không giao
 diện qua CDP (chờ khung bản ghi hiện rồi mới chụp), giả lập sáng/tối bằng `prefers-color-scheme`. Luật nạp:
-`docs/design.md`, `docs/ai-ux.md` (mục 3, 5, 7, 11), `docs/proto.md`, chuẩn `web-design-guidelines`.
+`docs/design.md`, `docs/ai-ux.md` (mục 3, 5, 7, 11), `docs/proto.md` và từ vựng token của `packages/ui`. Skill
+`web-design-guidelines` mà `_acceptance/config.yaml` khai không có trong phiên này — phiên chạy trên nấc «từ vựng
+token của kho» (finding Nhóm 2 cuối sổ).
 
 Bản mẫu là ý định, không phải bản chạy: Enter/Tab giữa các ô, tự lưu, chấm lại khi gõ và nhận góp ý không chạy thật —
 mỗi trạng thái là một khung tĩnh. Phần chuyển động ấy đo ở S4 trên bản thật.
@@ -92,6 +94,7 @@ Một quyết định có hai hướng khả dĩ: bấm chip góp ý ở ngăn t
 
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)
 
+- Kho khai `design_pass.ds_skill: web-design-guidelines` nhưng skill ấy không có trong phiên này — phiên chạy trên `repo-tokens` (`docs/design.md` + `packages/ui`); quyết nhận nấc này làm chuẩn hay cài lại skill.
 - Dòng tài liệu chưa có thang chữ: tên mục tiêu và dòng KR cùng cỡ chữ (`Textarea` `composer` chỉ có một cỡ) — đề xuất biến thể «dòng tài liệu» trong `packages/ui` với hai cỡ (tiêu đề mục tiêu, dòng KR), không viền, tự cao theo chữ (bậc 5 của `docs/design.md`).
 - Khung vật phẩm trung tính chưa có: `KaraArtifact` luôn gắn nhãn Kara — đề xuất một ô «docked» không nhãn (hay tách phần đầu khỏi nhãn) trong `packages/ui/src/components/kara/`; bản mẫu tạm dùng `KaraDock` + `KaraDockHeader`.
 - Hộp hỏi lại khi công bố phủ kín khung (lớp phủ của `ConfirmDialog`), người không còn thấy bộ mình sắp công bố — đề xuất thân hộp liệt tên các mục tiêu sẽ công bố (đưa vào AC công bố), không đổi `ConfirmDialog`.
