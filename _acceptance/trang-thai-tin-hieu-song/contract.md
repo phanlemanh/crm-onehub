@@ -5,7 +5,7 @@ slug: trang-thai-tin-hieu-song
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-22T05:36:00Z
 design_doc: docs/superpowers/specs/2026-10-22-trang-thai-tin-hieu-song-design.md
@@ -72,6 +72,16 @@ Source input: hàng TH3 `docs/plan/lo-trinh-okr.json` · `_acceptance/trang-thai
 
 ## Notes
 
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-23:
+  - Ngoài-1: Lệnh đo của chủ kho chạy trên bản kho tải thiếu lịch sử có thể báo nhầm «thiếu thông báo» và kết luận «không đạt».
+  - Ngoài-4: Thông báo đến từ một lần đẩy muộn hơn một ngày có thể bị ghi lý do «thiếu thông báo» thay vì «trễ».
+  - Ngoài-5: Mô tả ca kiểm E8 trong hồ sơ ghi sáu commit đổi tệp lộ trình, bài thật có năm.
+  - Ngoài-6: Bài kiểm chưa so việc chọn nguồn của trang tín hiệu với chính bộ đọc của trang Lộ trình; hai trang có thể chọn khác nguồn khi bản chụp hỏng một phần.
+  - Ngoài-7: Trang bằng chứng của hồ sơ gom tín hiệu từng bị gom nhầm vào nhánh (đã gỡ ở vòng sửa 1).
+  - Ngoài-8: Hai đường cùng ghi bản chụp lộ trình và tài liệu «Bản chụp lộ trình» còn tả cách ghi cũ.
+  - Ngoài-9: Lệnh đo đưa dữ liệu từ lịch sử git vào mà không kiểm khuôn, nên dữ liệu sai khuôn làm nó dừng với lỗi khó hiểu.
+  - Ngoài-10: Lệnh đo có thể báo «đạt» khi không đọc được lịch sử lộ trình, thay vì báo hỏng.
+  - Ngoài-11: Ô «Khác» trong bài kiểm câu thông báo so hàm với chính nó, chưa đo thật.
 - Ba câu vòng đời (`docs/vong-doi.md`): thông báo loại mới theo vòng đời thông báo của TB1 (dọn sau 90 ngày, không
   xoá tay); không thêm bản ghi hay nút xoá nào.
 - API lần đầu ghi `ThongBao` (trước nay chỉ tác nhân ghi): luật tất định trong giao dịch, cùng nếp `sinhGoiYKeHoach`
