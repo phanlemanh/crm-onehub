@@ -29,6 +29,7 @@ jobs:
           ref: onehub
           fetch-depth: 0
           token: ${{ secrets.TIN_HIEU_TOKEN }}
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:
@@ -44,15 +45,16 @@ jobs:
 
       - name: Cài Claude Code và gói acceptance-gate
         env:
-          TIN_HIEU_TOKEN: ${{ secrets.TIN_HIEU_TOKEN }}
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: url.https://x-access-token:${{ secrets.TIN_HIEU_TOKEN }}@github.com/.insteadOf
+          GIT_CONFIG_VALUE_0: https://github.com/
         run: |
-          npm install -g @anthropic-ai/claude-code@2.1.281
-          git config --global url."https://x-access-token:${TIN_HIEU_TOKEN}@github.com/".insteadOf "https://github.com/"
+          npm install -g @anthropic-ai/claude-code@2.1.304
           claude plugin marketplace add phanlemanh/acceptance-gate-kit
           claude plugin install acceptance-gate@acceptance-gate-kit
 
       - name: Gom tín hiệu chưa có chỗ, mở hay dựng lại PR đề xuất
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GH_TOKEN: ${{ secrets.TIN_HIEU_TOKEN }}
+          TIN_HIEU_TOKEN: ${{ secrets.TIN_HIEU_TOKEN }}
         run: bun scripts/tin-hieu/gom-lich.ts

@@ -12,8 +12,8 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>153 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>168 việc"] --> GG{"Cổng Giá trị"}
+  GB --> DG["Đã giao<br/>155 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>171 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -100,6 +100,7 @@ flowchart TD
 - Eval model thật của Kho tài liệu (E15) chỉ gọi model khi đầu vào đổi, tách lỗi hạ tầng khỏi lỗi model, giữ nhật ký theo lượt, và hỏi lại một lần khi sát ngưỡng thay vì đỏ cứng (`eval-model-that-dung-luc`)
 - Căn chỉnh gắn bằng tay và căn chỉnh Kara đề xuất đều mang lý do — hộp thoại gắn có ô lý do và căn cứ, sửa được lý do sau khi gắn, đề xuất căn chỉnh của Kara mang lý do và căn cứ khi nhận (`gan-tay-va-kara-co-ly-do`)
 - Thước «mọi lời đọc OKR có điều kiện xem» xanh lại và chạy ở CI trên từng PR (`ghim-thuoc-soi-xem-okr`)
+- Một tín hiệu cài lời dặn không lấy được khoá nào của lịch gom và không đẩy được gì ngoài PR đề xuất (`gia-co-gom-tin-hieu`)
 - «Thoả thuận mới không rơi vào giai đoạn đã lưu trữ» (`giai-doan-mac-dinh`)
 - Workflow Acceptance thôi chạy test tác nhân OKR khi push lên onehub, huỷ lượt cũ khi PR đẩy chồng, và gộp ba job nhỏ thành một — giảm phút GitHub Actions mà không bỏ phép kiểm nào ở PR (`giam-phut-acceptance`)
 - PR nháp và PR chỉ chạm tệp T1 không chạy job nặng của ci.yml và acceptance.yml; ci-ok xanh khi bỏ qua hợp lệ; push giữ nguyên; luật PR nháp trong CLAUDE.md (`giam-phut-ci-nhap-t1`)
@@ -165,6 +166,7 @@ flowchart TD
 - «Tôi bấm một việc đã giao trong trang Lộ trình và đọc trong một phút: vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì, ai quyết» (`ngan-ho-so-trong-lo-trinh`)
 - Trưởng đơn vị bấm một KR ở bất kỳ đâu và mở cùng một ngăn KR, bấm Cập nhật ở đầu ngăn hay ngay trên dòng KR, thấy điểm mới nằm đâu so với đích, rồi sang KR kế mà không đóng ngăn (`ngan-kr-mot-cho`)
 - «Ngoại lệ telemetry của bảy mã giai đoạn gốc được khai trong tài liệu và có thước canh» (`ngoai-le-telemetry-giai-doan`)
+- Nhân viên quan hệ đối tác nhập đủ các trường cần thiết ngay lúc tạo công ty, liên hệ hay thoả thuận, không phải mở lại phiếu (`nhap-truong-luc-tao`)
 - Tách «Đang theo dõi» khỏi tab «Của tôi» của OKR (`okr-cua-toi-tach-theo-doi`)
 - Loại mục tiêu thứ ba «Học tập» cho OKR (`okr-loai-hoc-tap`)
 - OKR và tổ chức vá — dựng cây và đặt OKR không vấp (R1d) (`okr-to-chuc-va`)
@@ -204,6 +206,7 @@ flowchart TD
 - Góp ý khi bấm — người sửa được một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý» trong hộp thoại sửa, nhận vài đề xuất (câu cũ cạnh câu mới, câu hỏi chất lượng, chỗ Căn chỉnh) rồi nhận, sửa hay bác từng dòng; dòng xu hướng tính bằng mã cạnh ô đích; quản trị bật theo ba nấc tắt · chế độ ẩn · bật cho từng việc và từng đơn vị; dựng và đo trên bộ OKR mẫu, dữ liệu thật là điều kiện bật (`tro-ly-okr-de-xuat`)
 - Nền Trợ lý OKR — quản trị thấy tháng này AI tiêu bao nhiêu cho từng việc và bật tắt được Trợ lý OKR theo việc và theo đơn vị; subagent tro_ly_okr cách ly với bốn chốt, sổ chi phí AI cho mọi phiên, trần tháng kiểm trước khi xếp việc, bảng và cột cho 9b và 9c; người dùng chưa thấy gì (`tro-ly-okr-nen`)
 - Tóm tắt tuần — sáng hôm sau ngày cập nhật, Trợ lý OKR tóm tắt các lần Cập nhật tuần của một phòng ban; khối tóm tắt ở đầu bảng họp tuần, câu nào cũng bấm ra lần cập nhật gốc, máy kiểm lại mọi con số lúc ghi và lúc hiện; Trưởng phòng ban nhận một dòng trong nhắc buổi sáng và tắt được dòng đó; quản trị bật theo ba nấc tắt · chế độ ẩn · bật và thấy mọi bản ở màn Sức khoẻ; dựng và đo trên bộ OKR mẫu, dữ liệu thật là điều kiện bật (`tro-ly-okr-tom-tat`)
+- Quản trị mở Cài đặt › Trường, thấy trường chuẩn bằng tiếng Việt khớp đúng phiếu, sắp lại và ẩn được chúng, và bật «Bắt buộc» cho một trường (`truong-chuan-o-cai-dat`)
 - Nhân viên quan hệ đối tác xem và sửa một trường tự tạo trên phiếu và trong bảng y như trường có sẵn: số viết kiểu Việt, ô tích có nhãn, liên kết bấm được, lỗi nói tiếng Việt (`truong-mot-cach-cu-xu`)
 - Người quản trị tìm thấy trường tự tạo ở Cài đặt và được gợi ý bộ trường của môi giới Việt (`truong-tu-tao-o-cai-dat`)
 - Lịch làm việc chọn đủ bảy ngày vẫn giữ đúng như chọn, và dự án đủ 300 việc vẫn sửa được mốc và phụ thuộc (`va-gantt-lich-bay-ngay`)
@@ -331,6 +334,7 @@ flowchart TD
 - Soát ảnh OKR lượt 3 — hộp Nhập thấy đủ bảy cột và đánh dấu dòng hỏng ở 1440; hàng thẻ Cài đặt ở 390 tự đưa thẻ đang mở vào tầm nhìn; bộ chọn chu kỳ bỏ nhãn loại lặp; gợi ý tên chu kỳ theo năm hiện tại tính ở server (`okr-soat-anh-luot-3`)
 - Trang 30 ngày đầu theo khuôn trang danh sách của deals (`onboarding-giong-deals`)
 - Phiên chết về trang đăng nhập — người mang cookie phiên đã hết không còn thấy landing của hãng ở / hay trang «không còn trong không gian làm việc»; proxy tách 401 của workspace.get khỏi «không biết», trang / và /het-quyen tự kiểm phiên (`phien-chet-ve-dang-nhap`)
+- pre-push xét phần PR tự thêm khi lần đẩy mang commit mới của onehub, nên lần đẩy chỉ mang mã của người khác không chạy lại test và build (`pre-push-phan-rieng-pr`)
 - pre-push bỏ test và build khi mọi tệp của lần đẩy là tệp T1; vẫn chạy check-types, lint, lint:slop; verify-gate-shape chấp nhận nhánh này qua một khối khai có lý do trong gate-shape.json (`pre-push-t1`) — đã giao — không đo, khai ở Cổng Đáng
 - Lần đẩy và PR chỉ ghim lại (run-log, decisions, báo cáo bằng chứng) được CI và pre-push tính là nhẹ, mà cổng nghiệm thu vẫn chạy và vẫn đỏ được (`push-ghim-lai-t1`) — đã giao — không đo, khai ở Cổng Đáng
 - Người điều phối lọc, sắp, tìm và xem theo bảng cột trên danh mục 30 ngày đầu — và bộ lọc ra không kết quả không còn đẩy họ vào ngõ cụt (`quan-ly-danh-muc-30-ngay`) — đã chấm bởi thực tế
@@ -352,6 +356,7 @@ flowchart TD
 - Tắt hẳn Preview của project Vercel agent-okr bằng apps/agent-okr/vercel.json, giữ Production của onehub (`tat-preview-agent-okr`)
 - Một tên cho đồng tiền báo cáo ở mọi câu người dùng thấy, có mục trong từ điển sản phẩm (`ten-dong-tien-bao-cao`)
 - Test api không để lại dòng AgentTask vô chủ cho gói agent (`test-api-khong-de-viec-vo-chu`) — đã giao — máy thông, cửa veto còn mở
+- Mọi máy chủ tạm cổng 0 trong test nghe 127.0.0.1 (`test-nghe-127`)
 - Trang Cài đặt › Thành viên — hai khối «Đã vào» và «Được phép vào» dùng chung khuôn section Card → CardHeader → bảng; nút «Cho phép một địa chỉ» lên đầu trang; «Rút» vào menu «…» (`thanh-vien-hai-khoi-cung-khuon`)
 - «Thử lại» sau khi Trợ lý im quá 45 giây phải gửi lại thật hoặc nói vì sao không (`thu-lai-sau-45-giay`)
 - Thước cache hết đối tượng — gỡ hai tiêu chí không còn vật để đo, gỡ một bản khai vô tác dụng, và thay bằng một bất biến sống sót cả hai cách vá (`thuoc-cache-het-doi-tuong`)

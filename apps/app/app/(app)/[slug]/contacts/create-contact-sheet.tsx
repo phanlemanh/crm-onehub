@@ -2,22 +2,9 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
-import {
-	Field,
-	FieldError,
-	FieldGroup,
-	FieldLabel,
-} from "@crm/ui/components/field";
+import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
-import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@crm/ui/components/select";
 import {
 	Sheet,
 	SheetClose,
@@ -33,9 +20,12 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { type ComponentProps, Suspense, useId, useRef, useState } from "react";
+import { type ComponentProps, Suspense, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
+import { useFormTao } from "@/components/crm/fields/form-tao";
+import { type MoTaTao, OTruongTao } from "@/components/crm/fields/kieu-truong";
+import { nhanTruongChuan } from "@/components/crm/fields/truong-chuan";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { contactMessages } from "@/lib/messages/contacts";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -63,7 +53,8 @@ export function CreateContactSheet({ companyId }: { companyId?: string }) {
 }
 
 function CreateContactForm({ companyId }: { companyId?: string }) {
-	const m = contactMessages(useLocale());
+	const locale = useLocale();
+	const m = contactMessages(locale);
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -72,23 +63,36 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 		SEARCH_PARAM.dialog.create,
 		parseAsBoolean.withDefault(false),
 	);
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [phone, setPhone] = useState("");
-	const [phoneInvalid, setPhoneInvalid] = useState(false);
-	const phoneRef = useRef<HTMLInputElement>(null);
-	const [email, setEmail] = useState("");
-	const [title, setTitle] = useState("");
+	const form = useFormTao("CONTACT", open);
 	const [company, setCompany] = useState(companyId ?? NONE);
-	const [ownerId, setOwnerId] = useState(NONE);
-
-	const firstNameId = useId();
-	const lastNameId = useId();
-	const phoneId = useId();
-	const emailId = useId();
-	const titleId = useId();
-
 	const users = useQuery(trpc.users.list.queryOptions());
+	const nguoiDung = users.data ?? [];
+
+	const moTaChuan = (key: string): MoTaTao => {
+		if (key === "phone")
+			return form.moTaChuan(key, {
+				goiY: m.create.phonePlaceholder,
+				kiemRieng: (chuoi) =>
+					docSoDienThoai(chuoi).kind === "sai" ? m.create.phoneInvalid : null,
+			});
+		if (key === "title")
+			return form.moTaChuan(key, { goiY: m.create.titlePlaceholder });
+		if (key === "owner")
+			return form.moTaChuan(key, {
+				nguoiDung,
+				nhanRong: m.create.unassigned,
+			});
+		return form.moTaChuan(key);
+	};
+
+	const hang = form.muc.map((muc) =>
+		muc.kind === "standard"
+			? muc.key === "company"
+				? ({ kind: "congTy" } as const)
+				: ({ kind: "o", moTa: moTaChuan(muc.key) } as const)
+			: ({ kind: "o", moTa: form.moTaTuTao(muc.field, nguoiDung) } as const),
+	);
+	const dsMoTa = hang.flatMap((h) => (h.kind === "o" ? [h.moTa] : []));
 
 	const create = useMutation(
 		trpc.contacts.create.mutationOptions({
@@ -100,16 +104,17 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 					),
 				);
 				await setOpen(null);
-				setFirstName("");
-				setLastName("");
-				setPhone("");
-				setEmail("");
-				setTitle("");
+				form.xoa();
 				openRecord({ kind: "contact", id: contact.id });
 			},
-			onError: (error) => toast.error(error.message),
+			onError: (error) => {
+				const loi = form.docLoi(error, dsMoTa);
+				toast.error(loi ? loi.toast : error.message);
+			},
 		}),
 	);
+
+	const tuy = (key: string) => form.chuoiChuan(key) || undefined;
 
 	return (
 		<Sheet open={open} onOpenChange={(next) => setOpen(next || null)}>
@@ -125,121 +130,45 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 				<form
 					id="create-contact"
 					className="flex-1 overflow-y-auto px-4"
+					aria-busy={form.dangTai || undefined}
+					noValidate
 					onSubmit={(event) => {
 						event.preventDefault();
-						if (docSoDienThoai(phone).kind === "sai") {
-							setPhoneInvalid(true);
-							phoneRef.current?.focus();
-							return;
-						}
+						const ket = form.kiem(dsMoTa);
+						if (!ket.hopLe) return;
 						create.mutate({
-							firstName,
-							lastName: lastName || undefined,
-							phone: phone || undefined,
-							email: email || undefined,
-							title: title || undefined,
+							firstName: form.chuoiChuan("firstName"),
+							lastName: tuy("lastName"),
+							phone: tuy("phone"),
+							email: tuy("email"),
+							title: tuy("title"),
+							linkedinUrl: tuy("linkedin"),
+							twitterUrl: tuy("x"),
+							githubUrl: tuy("github"),
 							companyId: company === NONE ? null : company,
-							ownerId: ownerId === NONE ? null : ownerId,
+							ownerId: form.chuoiChuan("owner") || null,
+							fields: ket.fields,
 						});
 					}}
 				>
 					<FieldGroup>
-						<Field>
-							<FieldLabel htmlFor={firstNameId}>
-								{m.create.firstName}
-							</FieldLabel>
-							<Input
-								id={firstNameId}
-								value={firstName}
-								onChange={(event) => setFirstName(event.target.value)}
-								autoComplete="off"
-								required
-							/>
-						</Field>
-
-						<Field>
-							<FieldLabel htmlFor={lastNameId}>{m.create.lastName}</FieldLabel>
-							<Input
-								id={lastNameId}
-								value={lastName}
-								onChange={(event) => setLastName(event.target.value)}
-								autoComplete="off"
-							/>
-						</Field>
-
-						<Field data-invalid={phoneInvalid || undefined}>
-							<FieldLabel htmlFor={phoneId}>{m.create.phone}</FieldLabel>
-							<Input
-								id={phoneId}
-								ref={phoneRef}
-								type="tel"
-								inputMode="tel"
-								value={phone}
-								onChange={(event) => {
-									setPhoneInvalid(false);
-									setPhone(event.target.value);
-								}}
-								placeholder={m.create.phonePlaceholder}
-								aria-invalid={phoneInvalid || undefined}
-								autoComplete="off"
-							/>
-							{phoneInvalid ? (
-								<FieldError>{m.create.phoneInvalid}</FieldError>
-							) : null}
-						</Field>
-
-						<Field>
-							<FieldLabel htmlFor={emailId}>{m.create.email}</FieldLabel>
-							<Input
-								id={emailId}
-								type="email"
-								value={email}
-								onChange={(event) => setEmail(event.target.value)}
-								autoComplete="off"
-							/>
-						</Field>
-
-						<Field>
-							<FieldLabel htmlFor={titleId}>{m.create.jobTitle}</FieldLabel>
-							<Input
-								id={titleId}
-								value={title}
-								onChange={(event) => setTitle(event.target.value)}
-								placeholder={m.create.titlePlaceholder}
-								autoComplete="off"
-							/>
-						</Field>
-
-						<Field>
-							<FieldLabel htmlFor="create-contact-company">
-								{m.create.company}
-							</FieldLabel>
-							<CompanyPicker
-								id="create-contact-company"
-								value={company}
-								onValueChange={setCompany}
-								none={{ value: NONE, label: m.create.noCompany }}
-							/>
-						</Field>
-
-						<Field>
-							<FieldLabel htmlFor="create-contact-owner">
-								{m.create.owner}
-							</FieldLabel>
-							<Select value={ownerId} onValueChange={setOwnerId}>
-								<SelectTrigger id="create-contact-owner">
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value={NONE}>{m.create.unassigned}</SelectItem>
-									{(users.data ?? []).map((user) => (
-										<SelectItem key={user.id} value={user.id}>
-											{user.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</Field>
+						{hang.map((h) =>
+							h.kind === "o" ? (
+								<OTruongTao key={h.moTa.khoa} moTa={h.moTa} />
+							) : (
+								<Field key="company">
+									<FieldLabel htmlFor="create-contact-company">
+										{nhanTruongChuan("CONTACT", "company", locale)}
+									</FieldLabel>
+									<CompanyPicker
+										id="create-contact-company"
+										value={company}
+										onValueChange={setCompany}
+										none={{ value: NONE, label: m.create.noCompany }}
+									/>
+								</Field>
+							),
+						)}
 					</FieldGroup>
 				</form>
 
@@ -250,7 +179,11 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 					<Button
 						type="submit"
 						form="create-contact"
-						disabled={create.isPending || firstName.trim() === ""}
+						disabled={
+							create.isPending ||
+							form.dangTai ||
+							form.chuoiChuan("firstName") === ""
+						}
 					>
 						{create.isPending ? <Spinner /> : null}
 						{m.create.submit}

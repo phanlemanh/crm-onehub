@@ -163,6 +163,9 @@ export function useCrmCache(): CrmCache {
 					entity
 						? trpc.fields.filters.queryKey({ entity: ENTITY_FOR[entity] })
 						: trpc.fields.filters.queryKey(),
+					entity
+						? trpc.fields.layout.queryKey({ entity: ENTITY_FOR[entity] })
+						: trpc.fields.layout.queryKey(),
 				],
 				entity
 					? [RECORD_BY_ID[entity](), RECORD_LIST[entity]()]
