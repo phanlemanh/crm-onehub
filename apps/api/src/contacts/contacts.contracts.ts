@@ -35,8 +35,12 @@ export const contactCreateInput = z.object({
 	email: z.email("That is not an email address.").optional().or(z.literal("")),
 	phone: phoneInput.optional(),
 	title: z.string().trim().optional(),
+	linkedinUrl: z.string().optional(),
+	twitterUrl: z.string().optional(),
+	githubUrl: z.string().optional(),
 	companyId: z.string().nullable().optional(),
 	ownerId: z.string().nullable().optional(),
+	fields: recordFieldValues.optional(),
 });
 
 export type ContactCreateInput = z.infer<typeof contactCreateInput>;
