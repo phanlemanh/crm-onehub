@@ -5,9 +5,9 @@ slug: hop-dong-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: manh
+approved_at: 2026-10-22T01:00:15Z
 design_doc: docs/superpowers/specs/2026-10-22-hop-dong-mau-design.md
 ---
 
