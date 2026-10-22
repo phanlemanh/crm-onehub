@@ -7,6 +7,7 @@ import {
 	spyOn,
 	test,
 } from "bun:test";
+import { sapBoTri } from "@crm/db/fields-chuan";
 import {
 	type DehydratedState,
 	dehydrate,
@@ -102,6 +103,10 @@ mock.module("@/lib/trpc/client", () => ({
 				reportingCurrency: "VND",
 				currencies: [],
 			})),
+		},
+		fields: {
+			list: thuTuc("fields.list", () => []),
+			layout: thuTuc("fields.layout", () => sapBoTri("DEAL", [], [])),
 		},
 		deals: {
 			create: thuTuc(
