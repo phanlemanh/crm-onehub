@@ -11,7 +11,7 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>3 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>153 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>168 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -50,7 +50,9 @@ flowchart TD
 
 ## Đang làm
 
+- Trưởng đơn vị bấm Soạn OKR và viết cả bộ như một tài liệu — mục tiêu, KR liền mạch — với góp ý của Kara và điểm chất lượng ở cột bên, rồi công bố (`che-do-soan-bo-okr`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
+- Trưởng đơn vị mở Bộ OKR, lọc Tôi dẫn, mở bộ OKR của đơn vị mình và đi giữa OKR · Họp tuần · Việc · Sơ đồ · Chấm điểm bằng thẻ con có đường dẫn riêng (`trang-bo-okr`)
 
 ## Đã giao — chờ phiên nghiệm thu
 
