@@ -1,0 +1,165 @@
+schema_version: 1
+slug: pre-push-cau-va-nhan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: judgment
+    paths:
+      - ".githooks/gate-shape.json"
+    inputs:
+      - ".githooks/gate-shape.json"
+      - "docs/superpowers/specs/2026-10-21-pre-push-phan-rieng-pr-design.md"
+    question: |
+      Cau vi_sao cua khoi t1Only trong gate-shape.json co noi dung luat cua design doc muc «Luat moi» khong: (1) lan day mang
+      commit moi cua onehub thi chi xet phan PR tu them, tep cua onehub khong tinh; (2) tap xet rong thi bo; (3) tep
+      t1_ma_doc, .github va tep ma trong phan PR tu them van chay du; (4) ve so o dau nhanh tu xa la
+      diff(merge-base(nen, sha tu xa), sha tu xa) — so voi ban onehub ma dau tu xa dung tren, KHONG so voi nen hay
+      merge-base(dinh, <remote>/onehub); va co cau nao trong vi_sao NOI SAI so voi design doc khong? PASS khi ca bon y co
+      va khong cau nao sai.
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.pcn_hinh
+    paths:
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t hinh-gop. Hai test xanh: «hinh-gop: khoi t1Only khai luat gop» (khong sua) va «hinh-gop (b): vi_sao ta ve
+      dau tu xa» doc gate-shape.json cua PRE_PUSH_T1_NGUON (mac dinh goc kho): vi_sao chua «merge-base(nền, sha từ xa)»
+      va KHONG chua «không khác bản onehub tại merge-base(đỉnh». Chieu do: E5 (b).
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ppr_gop
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t gop-onehub, 16 ca + ca dem (so ca van 16). Ca G14 ba kho, moi kho la G1 roi sua commit gop:
+        (i)   them .github/workflows/ci.yml -> stdout rong; stderr toEqual
+              «pre-push: phần PR tự thêm (1 tệp; 1 tệp của onehub không tính) có tệp dưới .github/ (.github/workflows/ci.yml) — chạy đủ năm bước.»
+        (ii)  them .github/ghi-chu.md (tep T1) va docs/c.md -> rong; stderr toEqual
+              «pre-push: phần PR tự thêm (2 tệp; 1 tệp của onehub không tính) có tệp dưới .github/ (.github/ghi-chu.md) — chạy đủ năm bước.»
+        (iii) them .github/workflows/ci.yml va apps/api/a.ts -> rong; stderr toEqual
+              «pre-push: phần PR tự thêm (2 tệp; 1 tệp của onehub không tính) có tệp dưới .github/ (.github/workflows/ci.yml) — chạy đủ năm bước.»
+      G3, G4, G5, G16 van «tệp ngoài T1», G10 van «tệp T1 mà mã đọc», khong sua expected. Chieu do: E5 (a).
+
+  - id: E4
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ppr_dong
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+    expected: |
+      bun test -t dong-gop: bon ca cua pre-push-phan-rieng-pr E2 xanh khong sua — dong «rong», «chi T1», «nang» bon tep ma
+      voi nhan «tệp ngoài T1», va khai chi bo build. Doi chung: nhan cu cua dong «nang» khong doi o ca co-tep-nang.
+
+  - id: E5
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.pcn_doi_chieu
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "_acceptance/pre-push-cau-va-nhan/rang/doi-chieu.mjs"
+    expected: |
+      node rang/doi-chieu.mjs: ban sao tep nguon nhu dot-bien.mjs cua pre-push-phan-rieng-pr, chay spec voi
+      PRE_PUSH_T1_NGUON tro ban sao. Doi chung duong: ban sao lanh -> spec loc «G14|hinh-gop» xanh, in «dat doi-chung».
+      (a) nhan-cu: ban sao co scripts/pre-push-t1.mjs lay tu commit d6267b1d4 (truoc vong) -> do dung «gop-onehub: G14»,
+          in «BAT nhan-cu: gop-onehub: G14».
+      (b) cau-cu: ban sao co .githooks/gate-shape.json lay tu d6267b1d4 -> do dung «hinh-gop (b)», in «BAT cau-cu: …».
+      (c) ma-truoc-github (dot bien viet truoc: nhan .github/ chi khi moi tep ngoai T1 deu duoi .github/) -> do dung
+          «gop-onehub: G14» va dau ra co «tệp ngoài T1 (.github/workflows/ci.yml, apps/api/a.ts)» (do o bien the iii).
+      (d) ds-ngoai-t1 (dot bien: danh sach = tep khong T1, rong thi ca tap xet) -> do dung «gop-onehub: G14» va dau ra
+          co «.github/ghi-chu.md, docs/c.md» (do o bien the ii).
+      Ca khong do, do sai test, hay thieu chuoi ghim -> ma 1 «thuoc hong: <ca>»; cho cay dot bien khong thay dung mot lan
+      -> «thuoc hong: <ca> — khong thay dung mot cho cay». Ma 0 khi doi chung xanh va bon ca deu bi bat.
+
+  - id: E6
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.pcn_lich_su_sap
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs"
+      - "_acceptance/pre-push-cau-va-nhan/rang/lich-su-sap.mjs"
+    expected: |
+      node rang/lich-su-sap.mjs: dung goc tam (clone --shared --no-checkout cua kho that, cung lich su), chep cac tep ma
+      lich-su.mjs doc va chinh lich-su.mjs vao dung duong cua no. Bo phan loai trong goc tam la BAN THAT cay mot dot bien
+      viet truoc: dau phanLoaiDay nem loi khi mot dong stdin day 1ddf125b3 (ca #523 — lan gop ma phep tinh tay ra NANG),
+      nen cau sap va ma thoat lay tu khoi catch that («pre-push: không phân loại được lần đẩy (gia sap) — chạy đủ năm
+      bước.», ma 0); moi lan gop khac di duong that. Cho cay khong thay dung mot lan -> ma 1 «thuoc hong: cho cay».
+      Ban hien tai: ma 1; dong bat dau «sap » co DUNG MOT, la «sap 1ddf125b3: <cau sap that>»; khong dong «lech »;
+      in «BAT sap: 1ddf125b3».
+      Chieu do cung luot: ban lich-su.mjs lay tu d6267b1d4 (truoc vong) cung goc tam -> khong dong «sap » nao va khong
+      dong nao ngoai «ca 523: …» goi ten 1ddf125b3 (ca sap o lan gop nang bi dem la khop — dung loi Ngoai-3), in «dat
+      chieu-do: ban cu dem ca sap la khop»; trai lai -> ma 1 «thuoc hong: ban cu da tach». Goc tam xoa khi xong. In «dat
+      lich-su-sap».
+
+  - id: E7
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.ppr_lich_su
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - ".github/scripts/phan-loai.mjs"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs"
+    expected: |
+      node _acceptance/pre-push-phan-rieng-pr/rang/lich-su.mjs tren cay that, bo phan loai that: «dat ca-523»,
+      «nhe theo luat cu: 6 / nhe theo luat moi: 38 / tren 412 lan gop», «BAT bo-giao …», «dat lich-su», ma 0; khong dong
+      «sap ».
+
+  - id: E8
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ppr_ho_so_cu
+    paths:
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "scripts/pre-push-t1.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "packages/ui/test/t1-ma-doc.spec.ts"
+      - "packages/ui/test/push-ghim-lai-t1.spec.ts"
+      - "_acceptance/pre-push-t1/**"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/ho-so-cu.mjs"
+    expected: |
+      node _acceptance/pre-push-phan-rieng-pr/rang/ho-so-cu.mjs, ma 0: ghim (1) hook giong tung byte origin/onehub; (2) moi
+      chuoi «tu» cua dot-bien.mjs pre-push-t1 dung mot lan trong bo phan loai, «const SHA_RONG» dung mot lan; (3) ca 6;
+      (4) moi khoa gate-shape.json tru t1Only.vi_sao giu nguyen; roi chay that ca spec pre-push-t1, t1-ma-doc,
+      push-ghim-lai-t1, mot-nguon.mjs, rang-cu.mjs, dot-bien.mjs cua pre-push-t1 — moi lenh ma 0; chieu do cung luot
+      cua chinh rang nay.
+
+  - id: E9
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ppr_dot_bien
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - "packages/ui/test/pre-push-t1.spec.ts"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/dot-bien.mjs"
+    expected: |
+      node _acceptance/pre-push-phan-rieng-pr/rang/dot-bien.mjs: «dat doi-chung-duong», sau dong «BAT <ca>» cho khong-giao,
+      bo-rieng-truoc, nen-dau-onehub, truoc-so-voi-nen, tap-rong-la-nang, tang-tu-cha-dau; khong «thuoc hong»; ma 0.
+
+  - id: E10
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.pcn_neo
+    paths:
+      - "scripts/pre-push-t1.mjs"
+      - "_acceptance/pre-push-t1/rang/dot-bien.mjs"
+      - "_acceptance/pre-push-phan-rieng-pr/rang/dot-bien.mjs"
+      - "_acceptance/pre-push-cau-va-nhan/rang/neo.mjs"
+    expected: |
+      node rang/neo.mjs: rut moi chuoi «tu» cua mang CA co tep scripts/pre-push-t1.mjs (pre-push-t1, khai «tep») va moi
+      chuoi «tu» cua dot-bien.mjs pre-push-phan-rieng-pr (mot tep) bang regex tren van ban «tu: "…"» / «tu: '…'» (khong
+      import vi tep chay ngay); so chuoi rut duoc = 5 va 6 (lech -> ma 1 «thuoc hong: rut duoc <n>»). Moi chuoi xuat hien
+      DUNG MOT lan trong scripts/pre-push-t1.mjs that, in «dat neo: 11». Chieu do cung luot tren chuoi van ban: nhan doi
+      chuoi dau cua pre-push-phan-rieng-pr trong ban chep cua bo phan loai -> bo dem bao «neo lap: <chuoi>»; khong bao ->
+      ma 1 «thuoc hong: chieu do».
