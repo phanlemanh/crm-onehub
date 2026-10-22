@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: a31dd592b66086559e1ccac7a363b99493e79b4e
-human_signoff: manh 2026-10-22 — ký lần ba Cổng 2 trên ghim lại repin-20261022T090048Z-29284 (verified_commit 331df95a2 sau gộp onehub eaa31c55d, 7 suite và 15/15 eval máy xanh; E10 giữ từ S4 vòng 3 wf_406402c0-67c, chạy tay lại trên 331df95a2 ra «ttp man: dat»). Diff từ chữ ký lần hai là mã DA16 gộp vào cộng ba chỗ nối form tạo với trường Tệp. Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
+human_signoff: manh 2026-10-22 — ký lần bốn Cổng 2 trên ghim lại repin-20261022T111247Z-76139 (verified_commit a31dd592b sau gộp onehub 05e3f7743; CI GitHub xanh trọn trên đỉnh 8a5d1052f; E10 giữ từ S4 vòng 3 wf_406402c0-67c). Diff từ chữ ký lần ba: bài Blob thật gọi @vercel/blob qua packages/db, thời hạn bài API một phút, dòng miễn trừ vong-doi trong scripts/luat-kho/cau-hinh.mjs (commit riêng b9c9a4ee3), gộp onehub. Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: truong-tep
