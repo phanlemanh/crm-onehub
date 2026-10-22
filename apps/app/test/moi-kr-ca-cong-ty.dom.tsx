@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { TINH_TRANG_KR, type TinhTrangKr } from "@crm/validation/okr-muc-tieu";
+import { isValidElement, type ReactNode, Suspense } from "react";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
 import {
 	type DongMoiKr,
@@ -42,8 +43,26 @@ mock.module("@/components/crm/stage-change", () => ({
 mock.module("@/components/crm/fields/fields-sheet", () => ({
 	FieldsSheetHost: () => null,
 }));
+mock.module("@/lib/locale/server", () => ({ getLocale: async () => "vi" }));
+mock.module("@/lib/session", () => ({ requireSession: async () => null }));
+mock.module("@/lib/trpc/hydrate", () => ({
+	HydrateClient: ({ children }: { children: unknown }) => children,
+}));
+mock.module("server-only", () => ({}));
+mock.module("@/components/page-transition", () => ({
+	PageTransition: ({ children }: { children: ReactNode }) => children,
+}));
+mock.module("@/lib/trpc/server", () => ({
+	getServerTrpc: () => ({}),
+	getServerQueryClient: () => ({}),
+	getServerTrpcClient: () => ({}),
+}));
 
 const { MoiKr } = await import("@/app/(app)/[slug]/okr/moi-kr/moi-kr");
+const { default: MoiKrPage } = await import(
+	"@/app/(app)/[slug]/okr/moi-kr/page"
+);
+const { PageShellTitle } = await import("@/components/page-shell");
 const { ToanCanh } = await import("@/app/(app)/[slug]/okr/toan-canh/toan-canh");
 const { ThanhBenMucTieu } = await import(
 	"@/app/(app)/[slug]/okr/thanh-ben-muc-tieu"
@@ -269,7 +288,7 @@ describe("mkc-duong-dan", () => {
 		);
 		if (!mucQ3) throw new Error("mkc-duong-dan: khong co chu ky Quý 3/2026");
 		await bamChuot(mucQ3);
-		await cho(() => doiKy.url().get("kyOkr") === "q3", "doi sang q3");
+		await nhip(20);
 		expect(
 			{
 				ky: doiKy.url().get("kyOkr"),
@@ -410,7 +429,11 @@ describe("mkc-trang", () => {
 				"",
 			],
 			["rong", () => datMoiKr([]), ""],
-			["khongkhop", () => datMoiKr([]), "?nguoiKr=u9"],
+			[
+				"khongkhop",
+				() => datMoiKr([]),
+				"?tinhTrangKr=truot&donViKr=bp:B9&nguoiKr=u9",
+			],
 		];
 		const thay: string[] = [];
 		for (const [ten, chuanBi, thamSo] of MA_TRAN) {
@@ -424,16 +447,58 @@ describe("mkc-trang", () => {
 				`trang thai ${ten}`,
 			);
 			thay.push(ten);
+			if (ten === "loi") {
+				const truoc = docCua("okr.moiKr").length;
+				const thuLai = [...document.querySelectorAll("button")].find((b) =>
+					b.textContent?.includes("Thử lại"),
+				);
+				if (!thuLai) throw new Error("mkc-trang: loi khong co nut Thu lai");
+				await bamChuot(thuLai);
+				await nhip(5);
+				expect(
+					docCua("okr.moiKr").length,
+					"mkc-trang: Thu lai khong goi lai danh sach",
+				).toBeGreaterThan(truoc);
+			}
 			if (ten === "khongkhop") {
 				const bo = [...document.querySelectorAll("button")].find(
 					(b) => b.textContent === t.boLoc,
 				);
 				if (bo) await bamChuot(bo);
 				await nhip(5);
-				expect(san.url().get("nguoiKr")).toBeNull();
+				expect(
+					{
+						tinhTrang: san.url().get("tinhTrangKr"),
+						donVi: san.url().get("donViKr"),
+						nguoi: san.url().get("nguoiKr"),
+					},
+					"mkc-trang: Bo loc khong xoa du ba tham so",
+				).toEqual({ tinhTrang: null, donVi: null, nguoi: null });
 			}
 			await thaoHet();
 		}
 		expect(thay).toEqual(["cho", "loi", "chuachuky", "rong", "khongkhop"]);
+		const tieuDe = timTieuDe(
+			await MoiKrPage({ searchParams: Promise.resolve({}) }),
+			false,
+		);
+		expect(
+			tieuDe,
+			"mkc-trang: tieu de trang khong nam ngoai Suspense o page.tsx",
+		).toEqual([{ chu: t.tieuDe, trongSuspense: false }]);
 	});
 });
+
+type NutCay = { type?: unknown; props?: { children?: unknown } };
+
+function timTieuDe(
+	nut: unknown,
+	trongSuspense: boolean,
+): { chu: unknown; trongSuspense: boolean }[] {
+	if (Array.isArray(nut))
+		return nut.flatMap((n) => timTieuDe(n, trongSuspense));
+	if (!isValidElement(nut)) return [];
+	const { type, props } = nut as NutCay;
+	if (type === PageShellTitle) return [{ chu: props?.children, trongSuspense }];
+	return timTieuDe(props?.children, trongSuspense || type === Suspense);
+}
