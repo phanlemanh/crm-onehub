@@ -464,8 +464,8 @@
 			"san_pham_hong": [
 				{
 					"eval": "E4",
-					"ly_do": "8 bài DOM khai lại type Locale",
-					"can_cu": ""
+					"ly_do": "8 bài test DOM mới tự khai lại type Locale thay vì nhập từ @crm/ui/lib/locale, trái AC-4 «kiểu Locale chỉ một định nghĩa» (7e65298a6 497205b20 cc777b342 0b09b2d1b 8cb5ceac1 7c61ff1e3 c697c8887 084799008).",
+					"can_cu": "_acceptance/bo-dung-chung-nhan-chuoi/contract.md:53"
 				}
 			],
 			"tin_hieu": [
