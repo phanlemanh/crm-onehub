@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { BanMauOkrMau } from "./_modules/ban-mau-okr";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
+import { CheDoSoanBoOkrMau } from "./_modules/che-do-soan-bo-okr";
 import { ChoTacNhanLauMau } from "./_modules/cho-tac-nhan-lau";
 import { CuaToiBaPhanMau } from "./_modules/cua-toi-ba-phan";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
@@ -123,6 +124,7 @@ const BANG_GHEP = {
 	"du-an-gantt": DuAnGanttMau,
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
+	"che-do-soan-bo-okr": CheDoSoanBoOkrMau,
 	"cho-tac-nhan-lau": ChoTacNhanLauMau,
 	"ngan-kr-mot-cho": NganKrMotChoMau,
 } satisfies Record<string, ProtoComponent>;

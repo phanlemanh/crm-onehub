@@ -1551,6 +1551,45 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "che-do-soan-bo-okr",
+		ten: "Chế độ Soạn bộ OKR — viết cả bộ như tài liệu, chất lượng và góp ý Kara ở cột bên",
+		states: [
+			{
+				id: "ST-soan-co-gop-y",
+				nhan: "Đang soạn — Kara đã đặt hai góp ý ở cột bên",
+			},
+			{ id: "ST-soan-trong", nhan: "Bộ trống — gõ mục tiêu đầu tiên" },
+			{
+				id: "ST-soan-dang-go",
+				nhan: "Đang gõ — một KR chưa có đích, chưa lưu",
+			},
+			{ id: "ST-soan-kara-dang-doc", nhan: "Kara đang đọc bộ" },
+			{
+				id: "ST-soan-da-nhan-gop-y",
+				nhan: "Đã nhận một góp ý — có Hoàn tác",
+			},
+			{
+				id: "ST-soan-co-muc-da-cong-bo",
+				nhan: "Bộ có mục tiêu đã công bố — số khoá",
+			},
+			{
+				id: "ST-soan-kara-tat",
+				nhan: "Kara chưa bật — điểm chất lượng vẫn chấm",
+			},
+			{ id: "ST-soan-hoi-cong-bo", nhan: "Bấm Công bố — hỏi lại một lần" },
+			{ id: "ST-soan-da-cong-bo", nhan: "Đã công bố" },
+			{ id: "ST-soan-chi-xem", nhan: "Người không sửa được bộ — chỉ xem" },
+			{ id: "ST-soan-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-soan-loi-tai", nhan: "Lỗi tải" },
+			{ id: "ST-soan-dien-thoai", nhan: "Điện thoại — thẻ Chất lượng và Kara" },
+			{ id: "ST-ngan-mot-chip", nhan: "Ngăn theo dõi — một chip góp ý" },
+			{
+				id: "ST-ngan-chip-mo-tai-cho",
+				nhan: "Ngăn theo dõi — góp ý mở tại chỗ",
+			},
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
