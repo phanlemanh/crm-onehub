@@ -9,7 +9,7 @@ import request from "supertest";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 const PHUT_MS = 60_000;
-export const TTP_SAN = { hookMs: 2 * PHUT_MS } as const;
+export const TTP_SAN = { hookMs: 2 * PHUT_MS, baiMs: PHUT_MS } as const;
 
 export const RUN = (process.env.TEST_RUN_ID ?? "local")
 	.replace(/[^a-z0-9]/gi, "")

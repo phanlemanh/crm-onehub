@@ -4,6 +4,7 @@ import {
 	describe,
 	expect,
 	it,
+	setDefaultTimeout,
 	setSystemTime,
 	spyOn,
 } from "bun:test";
@@ -35,7 +36,10 @@ import {
 	type OTep,
 	TIEN_TO,
 	type TraLoi,
+	TTP_SAN,
 } from "./truong-tep-san";
+
+setDefaultTimeout(TTP_SAN.baiMs);
 
 const T = TEP_TRUONG.thongDiep;
 const CRON = `${TIEN_TO}-cron-bi-mat`;
