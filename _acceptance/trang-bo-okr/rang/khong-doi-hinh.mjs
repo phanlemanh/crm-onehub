@@ -63,6 +63,10 @@ const VIET_LAI = {
 		phep: "he-qua-donOkr",
 		so: "h.nhan",
 	},
+	"apps/app/test/okr-theo-don-vi.dom.tsx": { phep: "V1-22", so: "V1-22" },
+	"apps/app/test/khung-cho-don-vi.dom.tsx": { phep: "V1-22", so: "V1-22" },
+	"apps/app/test/okr-dau-trang-khu.dom.tsx": { phep: "V1-22", so: "V1-22" },
+	"apps/app/test/okr-to-chuc-va.dom.tsx": { phep: "V1-22", so: "V1-22" },
 };
 const EXECUTOR_MAY = new Set(["test", "script"]);
 const CHO_CHUOI = "\u00abS\u00bb";
