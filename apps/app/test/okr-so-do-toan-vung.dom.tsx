@@ -515,68 +515,71 @@ describe("vk6-hai-kieu", () => {
 		await nhip(10);
 	}
 
-	test("vk6-hai-kieu: ma trận chín ô (a)–(i), mỗi ô một assert", async () => {
-		const o: Record<string, string[]> = {};
-		const s = soDo();
-		const kq = quanh(TAM);
+	type Ngu = { san: San; s: SoDoDonViOutput; kq: QuanhMucTieuOutput };
+	const tenTamCua = (kq: QuanhMucTieuOutput) =>
+		kq.nut.find((n) => n.id === kq.tamId)?.tieuDe ?? "";
 
-		o.a = [];
-		const san = await dung(
-			<Vo>{await trangTam()}</Vo>,
-			`/ws/okr/so-do/muc-tieu/${TAM}`,
-		);
-		await cho(() => q("[data-flow-map]") !== null, "khung quanh");
+	function oA({ kq }: Ngu): string[] {
+		const sai: string[] = [];
+		const goiQuanh = goiCua("okr.quanhMucTieu");
 		if (goiCua("okr.soDoDonVi").length > 0)
-			o.a.push("goi nham thu tuc soDoDonVi");
+			sai.push("goi nham thu tuc soDoDonVi");
 		if (
-			goiCua("okr.quanhMucTieu").length === 0 ||
-			!goiCua("okr.quanhMucTieu").every((g) => g.dauVao?.objectiveId === TAM)
+			goiQuanh.length === 0 ||
+			!goiQuanh.every((g) => g.dauVao?.objectiveId === TAM)
 		)
-			o.a.push("goi quanhMucTieu sai tam");
+			sai.push("goi quanhMucTieu sai tam");
 		if (soThe() !== kq.nut.length)
-			o.a.push(`so the ${soThe()} != ${kq.nut.length}`);
+			sai.push(`so the ${soThe()} != ${kq.nut.length}`);
 		if (!q("[data-quanh-the][data-active=true]"))
-			o.a.push("the tam khong chon");
-		const tenTam = kq.nut.find((n) => n.id === kq.tamId)?.tieuDe ?? "";
-		if (!q("[data-slot=breadcrumb-page]")?.textContent?.includes(tenTam))
-			o.a.push("duong manh thieu ten tam");
+			sai.push("the tam khong chon");
+		if (!q("[data-slot=breadcrumb-page]")?.textContent?.includes(tenTamCua(kq)))
+			sai.push("duong manh thieu ten tam");
 		if (q("[data-dai-cong-cu] [data-loc-so-do]"))
-			o.a.push("loc don vi con o tam");
+			sai.push("loc don vi con o tam");
 		if (q("[data-slot=page-shell-header]"))
-			o.a.push("trang cu DH5 con dau trang");
+			sai.push("trang cu DH5 con dau trang");
 		if (q("[data-nut=ve-ca-cong-ty]")?.getAttribute("href") !== "/ws/okr/so-do")
-			o.a.push("lien ket ve ca cong ty");
+			sai.push("lien ket ve ca cong ty");
+		return sai;
+	}
 
-		o.g = [];
-		if (!q("[data-gop-len-cong-ty]")) o.g.push("thieu dong gop len cong ty");
+	function oG({ kq }: Ngu): string[] {
+		const sai: string[] = [];
+		if (!q("[data-gop-len-cong-ty]")) sai.push("thieu dong gop len cong ty");
 		if (
-			!q("[data-quanh]")?.textContent?.includes(`${mq.dangXemQuanh} ${tenTam}`)
+			!q("[data-quanh]")?.textContent?.includes(
+				`${mq.dangXemQuanh} ${tenTamCua(kq)}`,
+			)
 		)
-			o.g.push("thieu 'Dang xem quanh' kem ten tam");
+			sai.push("thieu 'Dang xem quanh' kem ten tam");
+		return sai;
+	}
 
-		o.e = [];
+	async function oE({ kq }: Ngu): Promise<string[]> {
 		const khac = kq.nut.find((n) => n.id !== kq.tamId && n.loai === "muc-tieu");
-		if (!khac) o.e.push("du lieu thieu the muc tieu ngoai tam");
-		else
-			for (const cach of ["bam", "Enter"] as const) {
-				moBanGhi.length = 0;
-				const the = theQuanh(khac.id);
-				await act(async () => {
-					if (cach === "bam") the?.click();
-					else
-						the?.dispatchEvent(
-							new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
-						);
-				});
-				if (
-					moBanGhi.length !== 1 ||
-					moBanGhi[0]?.kind !== "objective" ||
-					moBanGhi[0]?.id !== khac.id
-				)
-					o.e.push(`${cach}: openRecord ${JSON.stringify(moBanGhi)}`);
-			}
+		if (!khac) return ["du lieu thieu the muc tieu ngoai tam"];
+		const sai: string[] = [];
+		for (const cach of ["bam", "Enter"] as const) {
+			moBanGhi.length = 0;
+			const the = theQuanh(khac.id);
+			await act(async () => {
+				if (cach === "bam") the?.click();
+				else
+					the?.dispatchEvent(
+						new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+					);
+			});
+			const dung =
+				moBanGhi.length === 1 &&
+				moBanGhi[0]?.kind === "objective" &&
+				moBanGhi[0]?.id === khac.id;
+			if (!dung) sai.push(`${cach}: openRecord ${JSON.stringify(moBanGhi)}`);
+		}
+		return sai;
+	}
 
-		o.f = [];
+	async function oF({ kq }: Ngu): Promise<string[]> {
 		const canh = kq.canh.map((c) => ({
 			id: `${c.tu}->${c.den}`,
 			source: c.tu,
@@ -586,41 +589,47 @@ describe("vk6-hai-kieu", () => {
 		const truoc = kq.nut.filter((n) => moNut(n.id)).length;
 		const ngoai = kq.nut.find((n) => !sangDau.has(n.id)) ?? kq.nut.at(-1);
 		const nutRe = ngoai ? khungNut(ngoai.id) : null;
-		if (!ngoai || !nutRe) o.f.push("khong co the de re chuot");
-		else {
-			await act(async () => {
-				nutRe.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
-				nutRe.dispatchEvent(new MouseEvent("mouseenter", { bubbles: false }));
-			});
-			await nhip(5);
-			const sang = pathAround(canh, ngoai.id);
-			const sau = kq.nut.filter((n) => moNut(n.id));
-			for (const n of kq.nut)
-				if (moNut(n.id) !== !sang.has(n.id))
-					o.f.push(
-						`the ${n.id}: mo ${moNut(n.id)} ngoai duong ${!sang.has(n.id)}`,
-					);
-			if (sau.length === truoc)
-				o.f.push(`doi chung duong: so the mo khong doi (${truoc})`);
-		}
+		if (!ngoai || !nutRe) return ["khong co the de re chuot"];
+		await act(async () => {
+			nutRe.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+			nutRe.dispatchEvent(new MouseEvent("mouseenter", { bubbles: false }));
+		});
+		await nhip(5);
+		const sang = pathAround(canh, ngoai.id);
+		const sai = kq.nut
+			.filter((n) => moNut(n.id) !== !sang.has(n.id))
+			.map(
+				(n) => `the ${n.id}: mo ${moNut(n.id)} ngoai duong ${!sang.has(n.id)}`,
+			);
+		if (kq.nut.filter((n) => moNut(n.id)).length === truoc)
+			sai.push(`doi chung duong: so the mo khong doi (${truoc})`);
+		return sai;
+	}
 
-		o.c = [];
+	async function oC({ san }: Ngu): Promise<string[]> {
+		const sai: string[] = [];
 		await bam(nutToanMan(), "nut toan man hinh");
-		if (thanhBen()) o.c.push("bat toan man hinh khong an thanh ben");
+		if (thanhBen()) sai.push("bat toan man hinh khong an thanh ben");
 		const veCaCongTy = q("[data-nut=ve-ca-cong-ty]");
 		if (veCaCongTy?.textContent?.trim() !== t.soDo.veCaCongTy)
-			o.c.push(`chu nut ${veCaCongTy?.textContent}`);
+			sai.push(`chu nut ${veCaCongTy?.textContent}`);
 		await veKieu(san, null);
 		await cho(() => q("[data-so-do-the]") !== null, "ca cong ty sau ve");
-		if (thanhBen()) o.c.push("ve ca cong ty mat toan man hinh");
+		if (thanhBen()) sai.push("ve ca cong ty mat toan man hinh");
+		return sai;
+	}
 
-		o.b = [];
-		const goiQuanhTruoc = goiCua("okr.quanhMucTieu").length;
-		if (goiCua("okr.soDoDonVi").length === 0) o.b.push("khong goi soDoDonVi");
+	function oB({ s }: Ngu): string[] {
+		const sai: string[] = [];
+		if (goiCua("okr.soDoDonVi").length === 0) sai.push("khong goi soDoDonVi");
 		if (soThe() !== s.nut.length)
-			o.b.push(`so the ${soThe()} != ${s.nut.length}`);
+			sai.push(`so the ${soThe()} != ${s.nut.length}`);
+		return sai;
+	}
 
-		o.d = [];
+	async function oD({ san, s }: Ngu): Promise<string[]> {
+		const sai: string[] = [];
+		const goiQuanhTruoc = goiCua("okr.quanhMucTieu").length;
 		await bam(q(`[data-so-do-the="${KHOA_CA.A3}"] [data-mo-the]`), "mo the A3");
 		const mtA3 = s.nut.find((n) => n.khoa === KHOA_CA.A3)?.mucTieu[0];
 		moBanGhi.length = 0;
@@ -629,25 +638,27 @@ describe("vk6-hai-kieu", () => {
 			"ten muc tieu trong the",
 		);
 		if (moBanGhi[0]?.kind !== "objective" || moBanGhi[0]?.id !== mtA3?.id)
-			o.d.push(`mo ngan ${JSON.stringify(moBanGhi)} != ${mtA3?.id}`);
+			sai.push(`mo ngan ${JSON.stringify(moBanGhi)} != ${mtA3?.id}`);
 		if (
 			!DICH_XEM_TREN_SO_DO.nhan ||
 			DICH_XEM_TREN_SO_DO.mau !== "/okr/so-do/muc-tieu/${id}"
 		)
-			o.d.push(`nut xemTrenSoDo cua ngan tro ${DICH_XEM_TREN_SO_DO.mau}`);
-		if (mtA3) {
-			await veKieu(san, mtA3.id);
-			await cho(
-				() => q("[data-quanh]") !== null,
-				"kieu quanh sau xem tren so do",
-			);
-			if (thanhBen()) o.d.push("xem tren so do mat toan man hinh");
-			if (goiCua("okr.quanhMucTieu").length === goiQuanhTruoc)
-				o.d.push("khong sang kieu quanh muc tieu");
-		}
+			sai.push(`nut xemTrenSoDo cua ngan tro ${DICH_XEM_TREN_SO_DO.mau}`);
+		if (!mtA3) return [...sai, "du lieu thieu muc tieu A3"];
+		await veKieu(san, mtA3.id);
+		await cho(
+			() => q("[data-quanh]") !== null,
+			"kieu quanh sau xem tren so do",
+		);
+		if (thanhBen()) sai.push("xem tren so do mat toan man hinh");
+		if (goiCua("okr.quanhMucTieu").length === goiQuanhTruoc)
+			sai.push("khong sang kieu quanh muc tieu");
 		await bam(nutToanMan(), "thoat toan man hinh");
+		return sai;
+	}
 
-		o.h = [];
+	async function oH({ san, s }: Ngu): Promise<string[]> {
+		const sai: string[] = [];
 		await veKieu(san, null);
 		await cho(() => q("[data-loc-so-do=chu-y]") !== null, "loc chu y");
 		const sangSoDo = () =>
@@ -657,12 +668,15 @@ describe("vk6-hai-kieu", () => {
 		await nhip(10);
 		const soCoCo = s.nut.filter((n) => n.canChuY).length;
 		if (!urlGhi.at(-1)?.includes("locSoDo=chu-y"))
-			o.h.push("locSoDo khong len url");
-		if (sangSoDo() !== soCoCo) o.h.push(`sang ${sangSoDo()} != ${soCoCo}`);
+			sai.push("locSoDo khong len url");
+		if (sangSoDo() !== soCoCo) sai.push(`sang ${sangSoDo()} != ${soCoCo}`);
 		if (sangSoDo() === truocLoc)
-			o.h.push("doi chung duong: loc khong doi so sang");
+			sai.push("doi chung duong: loc khong doi so sang");
+		return sai;
+	}
 
-		o.i = [];
+	async function oI(): Promise<string[]> {
+		const sai: string[] = [];
 		await dung(
 			<Vo>
 				<ManSoDo tam={null} />
@@ -672,12 +686,31 @@ describe("vk6-hai-kieu", () => {
 		await cho(() => q(`[data-so-do-the="${KHOA_CA.A3}"]`) !== null, "the A3");
 		const theA3 = q(`[data-so-do-the="${KHOA_CA.A3}"]`);
 		if (theA3?.getAttribute("data-dang-mo") !== "true")
-			o.i.push(`the A3 data-dang-mo=${theA3?.getAttribute("data-dang-mo")}`);
-		const dongGop = qa("[data-dong-gop]", theA3 ?? document);
-		if (dongGop.length === 0) o.i.push("the mo khong co dong gop vao");
+			sai.push(`the A3 data-dang-mo=${theA3?.getAttribute("data-dang-mo")}`);
+		if (qa("[data-dong-gop]", theA3 ?? document).length === 0)
+			sai.push("the mo khong co dong gop vao");
 		if (!theA3?.textContent?.includes(LY_DO_SO_DO.coSoLieu))
-			o.i.push("doi chung duong: thieu ly do gieo coSoLieu");
+			sai.push("doi chung duong: thieu ly do gieo coSoLieu");
+		return sai;
+	}
 
+	test("vk6-hai-kieu: ma trận chín ô (a)–(i), mỗi ô một assert", async () => {
+		const san = await dung(
+			<Vo>{await trangTam()}</Vo>,
+			`/ws/okr/so-do/muc-tieu/${TAM}`,
+		);
+		await cho(() => q("[data-flow-map]") !== null, "khung quanh");
+		const ngu: Ngu = { san, s: soDo(), kq: quanh(TAM) };
+		const o: Record<string, string[]> = {};
+		o.a = oA(ngu);
+		o.g = oG(ngu);
+		o.e = await oE(ngu);
+		o.f = await oF(ngu);
+		o.c = await oC(ngu);
+		o.b = oB(ngu);
+		o.d = await oD(ngu);
+		o.h = await oH(ngu);
+		o.i = await oI();
 		expect(Object.keys(o).sort()).toEqual([
 			"a",
 			"b",
