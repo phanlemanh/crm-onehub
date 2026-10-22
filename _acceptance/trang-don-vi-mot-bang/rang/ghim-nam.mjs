@@ -381,9 +381,19 @@ const notesCua = (slug) => {
 };
 for (const slug of KHAI) {
 	const duong = `_acceptance/${slug}/rang`;
-	const cacDiff = khung
-		? [git("diff", base, khung.dinh, "--", duong), git("diff", "HEAD", "--", duong)]
-		: [git("diff", base, "--", duong)];
+	const doiSauLuot = khung
+		? git("diff", "--name-only", khung.dinh, "HEAD", "--", duong).split("\n").filter(Boolean)
+		: [];
+	const cacDiff =
+		doiSauLuot.length === 0
+			? [git("diff", base, "--", duong)]
+			: [
+					git("diff", base, "--", duong, ...doiSauLuot.map((t) => `:(exclude)${t}`)),
+					...doiSauLuot.flatMap((t) => [
+						git("diff", base, khung.dinh, "--", t),
+						git("diff", "HEAD", "--", t),
+					]),
+				];
 	let ngoai = 0;
 	const khongKhai = [];
 	const khaiTaiCho = [];

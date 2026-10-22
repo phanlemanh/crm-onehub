@@ -243,9 +243,28 @@ function kiemNghi(hoSo) {
 	return { nghi, loi };
 }
 
+function khungDaGop() {
+	const gop = git(
+		"log",
+		GIU.nhanhNen,
+		"--first-parent",
+		"--merges",
+		"--format=%H %P%x09%s",
+		"--grep",
+		`/feat/${SLUG}`,
+	)
+		.split("\n")
+		.map((d) => d.split("\t"))
+		.find(([, s]) => s?.endsWith(`/feat/${SLUG}`))?.[0];
+	if (!gop) return null;
+	const [, cha1, cha2] = gop.split(" ");
+	return { nen: git("merge-base", cha1, cha2).trim(), den: cha2 };
+}
+
 function tepDoiCuaVong() {
-	const nen = git("merge-base", "HEAD", GIU.nhanhNen).trim();
-	const tep = git("diff", "--name-only", nen)
+	const khung = khungDaGop();
+	const nen = khung?.nen ?? git("merge-base", "HEAD", GIU.nhanhNen).trim();
+	const tep = git("diff", "--name-only", nen, ...(khung ? [khung.den] : []))
 		.split("\n")
 		.filter((t) => t && !GIU.boTepDoi.some((r) => r.test(t)));
 	return { nen, tep };

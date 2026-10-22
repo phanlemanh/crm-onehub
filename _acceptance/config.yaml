@@ -2791,6 +2791,7 @@ executors:
     dok_san_thiet_ke: "bun _acceptance/dat-okr-trong-crm/rang/san-thiet-ke.mjs"
     dok_migration_chi_them: "node _acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs"
     tco_man_chrome: 'PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
+    tco_man_chrome_may: 'PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} EVAL=E3,E28,E29 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
     tco_soi_ma: "bun _acceptance/toan-canh-okr/rang/soi-ma.mjs"
     sot_soi_chi_them: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca chi-them"
     sot_san_thiet_ke: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca thiet-ke"

@@ -31,7 +31,7 @@ evals:
     criterion: AC-2
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.tco_man_chrome
+    cmd: config:executors.script.tco_man_chrome_may
     paths: [apps/api/src/okr/**, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
     expected: "Cùng lần chạy với E2: ghi mọi request tRPC của trang; sau mỗi đổi lọc có đúng một lời gọi okr.danhSach mang loc khớp lựa chọn (đọc input từ URL request), và tập data-muc-tieu trên màn bằng tập id API trả — màn không lọc thêm trong trình duyệt. CHIỀU ĐỎ: bản sao màn gọi danhSach không kèm loc rồi lọc ở client → khẳng định «input.loc.phuTrach chứa k» đỏ, script in input thật."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -300,7 +300,7 @@ evals:
     criterion: AC-8
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.tco_man_chrome
+    cmd: config:executors.script.tco_man_chrome_may
     paths: [apps/api/src/okr/**, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
     expected: "Cùng lần chạy với E14 (nhịp 2): sau khi trưởng mở cách xem Họp tuần trên trình duyệt thật, script đọc bảng vết bằng Prisma của chính cây (theo cycleId gieo) → đúng 1 dòng action mo-hop-tuan, actorUserId là trưởng, objectiveId và keyResultId null, after.donVi = pb:<P>, after.tuan = thứ Hai tuần hiện tại theo giờ Việt Nam (chuỗi); đổi một bộ lọc, bấm làm mới, tải lại trang → vẫn 1 dòng; chuyển sang cách xem Danh sách rồi trở lại Họp tuần trong cùng trang → vẫn 1 dòng (trong cửa gộp). CHIỀU ĐỎ: bản sao màn gọi hopTuan không qua phiên trưởng (ví dụ prefetch bằng phiên máy) → 0 dòng, script in đếm."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -309,7 +309,7 @@ evals:
     criterion: AC-12
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.tco_man_chrome
+    cmd: config:executors.script.tco_man_chrome_may
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
     expected: "Cùng lần chạy với E23: ghi mọi request tRPC của ba tab sau khi chọn Quý 3; mọi lời gọi okr.danhSach, okr.hopTuan, okr.toanCanh mang input.cycleId bằng id Quý 3 (đọc từ URL request, kể cả lời gọi phía máy chủ ghi trong nhật ký dev của api 3931 nếu trang dựng ở máy chủ). CHIỀU ĐỎ: bản sao Toàn cảnh gọi toanCanh với currentId → khẳng định cycleId đỏ, script in cycleId thật."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

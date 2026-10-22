@@ -1567,9 +1567,9 @@ const MA_TRAN_LOI: OLoi[] = [
 			return dung(<BangMoiKr cycleId="q4" />);
 		},
 		bam: () =>
-			Array.from(document.querySelectorAll<HTMLTableRowElement>("tbody tr")).find((tr) =>
-				tr.textContent?.includes(krLoi().k.title),
-			) ?? null,
+			Array.from(
+				document.querySelectorAll<HTMLTableRowElement>("tbody tr"),
+			).find((tr) => tr.textContent?.includes(krLoi().k.title)) ?? null,
 		tab: null,
 	},
 	{
