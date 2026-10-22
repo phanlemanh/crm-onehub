@@ -57,7 +57,7 @@ export function KhoiLanTruoc({ kr, lan }: { kr: KrCapNhat; lan: LanTruocKr }) {
 				{db.isPending ? (
 					<Skeleton className="h-4 w-full" data-ghi-chu-truoc-cho />
 				) : db.isError ? (
-					<ItemDescription data-ghi-chu-truoc-loi>
+					<ItemDescription aria-live="polite" data-ghi-chu-truoc-loi>
 						{m.loiGhiChu}
 					</ItemDescription>
 				) : ghiChu === null ? null : (
@@ -69,6 +69,7 @@ export function KhoiLanTruoc({ kr, lan }: { kr: KrCapNhat; lan: LanTruocKr }) {
 			{db.isError ? (
 				<ItemActions>
 					<Button
+						disabled={db.isFetching}
 						onClick={() => void db.refetch()}
 						size="sm"
 						type="button"
