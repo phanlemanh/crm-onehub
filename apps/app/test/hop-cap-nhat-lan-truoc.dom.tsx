@@ -241,11 +241,10 @@ describe("hct-khoi", () => {
 				mtCua(id, ca, [vet("v1", id, LUC, ca.so, ca.tuTin)]),
 			);
 			await cho(
-				() =>
-					qs("[data-ghi-chu-truoc]") !== null ||
-					qs("[data-ghi-chu-truoc-loi]") !== null,
-				`ghi chu ${ca.ten}`,
+				() => docCua("okr.dienBien").length > 0,
+				`doc dien bien ${ca.ten}`,
 			);
+			await nhip(3);
 			const h = hop();
 			const b = khoi();
 			if (!h || !b) {
@@ -392,7 +391,7 @@ describe("hct-tai", () => {
 
 		kho.rieng.set("okr.dienBien", () => new Promise<object>(() => {}));
 		await moHop(mtCua("k-cho", ca, [vet("v1", "k-cho", LUC, 1234.5, "vua")]));
-		await cho(() => khoi() !== null, "khoi dang tai");
+		await nhip(3);
 		const b = khoi();
 		const coDu =
 			(b?.textContent?.includes("15/10, 09:30") ?? false) &&
