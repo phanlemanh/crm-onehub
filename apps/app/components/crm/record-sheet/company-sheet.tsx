@@ -569,6 +569,7 @@ export function CompanyOverview({ company }: { company: Company }) {
 													entity: "COMPANY",
 													recordId: company.id,
 													luuTru: company.archivedAt !== null,
+													phuTrach: company.owner?.name ?? null,
 													tep: company.tepTheoTruong,
 												}}
 											/>

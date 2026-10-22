@@ -535,6 +535,7 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 										entity: "CONTACT",
 										recordId: contact.id,
 										luuTru: contact.archivedAt !== null,
+										phuTrach: contact.owner?.name ?? null,
 										tep: contact.tepTheoTruong,
 									}}
 								/>

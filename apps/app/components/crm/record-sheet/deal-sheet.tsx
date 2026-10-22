@@ -495,6 +495,7 @@ export function DealOverview({ deal }: { deal: Deal }) {
 										entity: "DEAL",
 										recordId: deal.id,
 										luuTru: deal.archivedAt !== null,
+										phuTrach: deal.owner?.name ?? null,
 										tep: deal.tepTheoTruong,
 									}}
 								/>
