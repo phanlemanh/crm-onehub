@@ -37,6 +37,7 @@ import { toast } from "sonner";
 import { loiDuongDan } from "@/components/crm/record-sheet/kr-bang-chung";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
+import { okrLanTruocMessages } from "@/lib/messages/okr-lan-truoc";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -349,6 +350,7 @@ export function HopThoaiCapNhatKr({
 						/>
 						<OGhiChu
 							datGhiChu={(ghiChu) => setO({ ...o, ghiChu })}
+							goiY={okrLanTruocMessages(locale).goiY}
 							id={kr.keyResultId}
 							khoa={khoa}
 							value={o.ghiChu}
