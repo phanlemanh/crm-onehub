@@ -1,0 +1,149 @@
+schema_version: 1
+slug: hop-cap-nhat-lan-truoc
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.hct_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/khoi-lan-truoc.tsx"
+      - "apps/app/app/(app)/[slug]/okr/lan-truoc-kr.ts"
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-kr.tsx"
+      - "apps/app/lib/messages/okr-lan-truoc.ts"
+      - "apps/app/test/hop-cap-nhat-lan-truoc.dom.tsx"
+    expected: |
+      Ca "hct-khoi" dung useCapNhatKr that (khung khung-gop-y-dung-cho, tRPC gia; okr.dienBien parse bang
+      dienBienOutput that). Ma tran viet truoc 3 kieu KR = 3 o: tang-toi don vi "khách" (vet after.currentValue 1234,5,
+      confidence "vua", luc 2026-10-15T02:30:00Z, ghi chu "Chốt xong 2 hợp đồng, chờ pháp chế"), phan-tram (45, "cao"),
+      moc (1, "thap"). Moi o: dung mot [data-lan-truoc] trong [data-hop-cap-nhat-kr], dung TRUOC o [data-o="gia-tri"]
+      theo thu tu DOM; textContent chua "15/10, 09:30"; [data-lan-truoc-so] bang giaTri(kr, so, "vi") cua bang-kr
+      ("1.234,5 khách" / "45%" / "Xong"); [data-lan-truoc] [data-slot="status-indicator"] co tone bang
+      toneTheoNghia(NGHIA_TU_TIN[muc]) va nhan okrMessages("vi").capNhat.mucTuTin[muc]; [data-ghi-chu-truoc] bang
+      nguyen van ghi chu va nam trong phan tu co translate="no". So o da chay = 3. O thu tu (truc F): KR tang-toi
+      currentValue 70 khac vet after.currentValue 55 -> [data-lan-truoc-so] la "55 khách"; chu phu cua
+      [data-o="gia-tri"] chua okrMessages("vi").capNhat.hienTai va "70 khách", va textContent cua hop khong chua
+      "<lanTruoc['lan-truoc']> 70" (doi chung: chuoi do co mat khi dung OGiaTri voi lan "lan-truoc" ngoai hop).
+      CHIEU DO: ban sao bo dong ghi chu khoi khoi -> do "hct-khoi: thieu ghi chu lan truoc (tang-toi)"; ban sao doi
+      mui gio sang UTC -> do "hct-khoi: ngay gio lech (02:30, can 09:30)"; ban sao tra lai nhan "Lan truoc" o o gia
+      tri -> do "hct-khoi: hai so cung nhan lan truoc (55, 70)".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.hct_rong
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/khoi-lan-truoc.tsx"
+      - "apps/app/app/(app)/[slug]/okr/lan-truoc-kr.ts"
+      - "apps/app/test/hop-cap-nhat-lan-truoc.dom.tsx"
+    expected: |
+      Ca "hct-rong", ba o viet truoc: (a) KR khong co dong vet cap-nhat-tuan -> 0 [data-lan-truoc] va hop khong chua
+      chuoi okrLanTruocMessages("vi").tieuDe; (b) lan truoc co diem tuan cung tuan voi luc nhung ghiChu null -> 1
+      [data-lan-truoc], co [data-lan-truoc-so], 0 [data-ghi-chu-truoc]; (c) doi chung duong: lan truoc co ghi chu ->
+      1 [data-ghi-chu-truoc]. Ca o (a) hop van mo va o gia tri co tieu diem.
+      CHIEU DO: ban sao bo nhanh "lan truoc null thi khong ve" -> do "hct-rong: co khoi khi chua co lan nao"; ban sao
+      ve dong ghi chu ca khi null -> do "hct-rong: co dong ghi chu khi lan truoc khong ghi chu".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hct_api_moi_nhat
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/lan-truoc-kr.ts"
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "apps/api/src/okr/okr-xem.service.ts"
+      - "apps/api/src/okr/dien-bien.ts"
+      - "apps/api/test/hop-cap-nhat-lan-truoc.spec.ts"
+    expected: |
+      Ca "hct-moi-nhat" tren CSDL thu, ghi qua okr.moCapNhat/okr.guiCapNhat that: KR so K (chu la nguoi P) nhan ba lan
+      trong cung mot tuan theo thu tu — P gui (40, "cao", "A"), P gui (50, "vua", ""), truong phong cua P ghi ho
+      (55, "thap", "C"); KR moc M nhan hai lan (0, "vua", "X") roi (1, "cao", "Y"). Doc okr.objective va okr.dienBien
+      (parse bang objectiveOutput, dienBienOutput that), dua qua lanTruocTuVet + ghiChuLanTruoc cua lan-truoc-kr.ts.
+      Voi K va M, ket qua khop tung truong voi hang OkrCheckIn moi nhat doc thang tu CSDL (orderBy createdAt desc, id
+      desc): giaTri, tuTin, ghiChu ("" thanh null), va luc bang session.submittedAt cua hang do. Doi chung duong: sau
+      lan thu hai cua K (truoc lan ghi ho) ket qua la (50, "vua", null). O bien tuan (truc G): KR so B nhan mot lan
+      ghi qua OkrCapNhatService.moCapNhat/guiCapNhat voi now = 2026-10-18T17:30:00Z (thu Hai 00:30 gio VN), ghi chu
+      "Bien"; ket qua co ghiChu "Bien" va hang OkrCheckIn co weekStart 2026-10-19.
+      CHIEU DO: ban sao lay dong vet dau tien thay vi moi nhat -> do "hct-moi-nhat: K lech (gia tri 40, can 55)";
+      ban sao ghep ghi chu theo diem cuoi co ghi chu thay vi theo tuan cua luc -> do "hct-moi-nhat: K ghi chu lech";
+      ban sao tinh tuan cua luc theo UTC -> do "hct-moi-nhat: B mat ghi chu o bien tuan".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hct_sau_gui
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/khoi-lan-truoc.tsx"
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-kr.tsx"
+      - "apps/app/test/hop-cap-nhat-lan-truoc.dom.tsx"
+    expected: |
+      Ca "hct-sau-gui": mo hop cua KR co lan truoc (40, "cao", "A"); nhap 60, chon "Thấp", ghi chu "Moi"; bam Gui.
+      tRPC gia ghi guiCapNhat (dau vao parse bang guiCapNhatInput that) va sau khi ghi tra objective co dong vet moi
+      (60, "thap") va dienBien co diem tuan nay ghiChu "Moi". Sau khi hop dong: so lan doc okr.dienBien cua KR va
+      okr.objective tang (lam moi that, khong chi danh dau). Mo lai hop cua cung KR tu objective moi -> [data-lan-truoc-so]
+      la giaTri cua 60, nhan muc tu tin "Thấp", [data-ghi-chu-truoc] = "Moi".
+      CHIEU DO: ban sao bo invalidate okr.dienBien trong onSuccess -> do "hct-sau-gui: ghi chu cu sau khi gui (A)".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.hct_goi_y
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx"
+      - "apps/app/lib/messages/okr-lan-truoc.ts"
+      - "apps/app/test/hop-cap-nhat-lan-truoc.dom.tsx"
+    expected: |
+      Ca "hct-goi-y": trong hop, [data-o="ghi-chu"] [data-goi-y-ghi-chu] chua dung ba cau okrLanTruocMessages("vi").goiY
+      theo thu tu; locale "en": ba cau khong rong va khac ban vi; o ghi chu la <input> (khong phai textarea) co
+      maxLength = GHI_CHU_TOI_DA (200). Dung BangCapNhat that cua trang Cap nhat tuan voi mot KR: o ghi chu co
+      [data-o="ghi-chu"] va 0 [data-goi-y-ghi-chu] (doi chung: trang khong doi).
+      CHIEU DO: ban sao bo prop goiY o hop -> do "hct-goi-y: thieu cau hoi goi y trong hop"; ban sao truyen goiY o
+      BangCapNhat -> do "hct-goi-y: trang Cap nhat tuan co cau goi y".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.hct_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/khoi-lan-truoc.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/lib/messages/okr-lan-truoc.ts"
+      - "apps/app/test/hop-cap-nhat-lan-truoc.dom.tsx"
+    expected: |
+      Ca "hct-tai", hai o viet truoc. (a) okr.dienBien khong bao gio xong: [data-lan-truoc] co ngay gio,
+      [data-lan-truoc-so] va status-indicator; co [data-ghi-chu-truoc-cho] (Skeleton); sau khi moCapNhat tra sessionId,
+      nut [data-nut="gui-cap-nhat-kr"] khong disabled. (b) okr.dienBien nem loi lan dau: khoi chua
+      okrLanTruocMessages("vi").loiGhiChu va mot nut ten okrLanTruocMessages("vi").thuLai; nut gui khong disabled; bam
+      Thu lai -> so lan doc okr.dienBien cua KR tang 1 va [data-ghi-chu-truoc] = ghi chu tra ve lan hai.
+      CHIEU DO: ban sao an ca khoi khi dienBien chua xong -> do "hct-tai: thieu ngay so tu tin khi dang tai ghi chu";
+      ban sao bo nut Thu lai -> do "hct-tai: thieu nut thu lai khi loi".
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.hct_man
+    steps:
+      - "Phien do rieng qua mot-luot.sh (tien-de.mjs dung api va app cua CAY DANG XET tren cong tu do, kho crm_<cay>_do); khong dung cong 3000/3001"
+      - "Ban do tu gieo bo OKR mau (okr:mau) roi ghi mot lan cap nhat that qua okr.guiCapNhat cho mot KR so cua nguoi dang nhap, ghi chu dai 200 ky tu khong khoang trang o 40 ky tu dau"
+      - "Kho 1440 roi 375: mo ngan KR do, bam Cap nhat, cho [data-lan-truoc] va [data-ghi-chu-truoc]; do tran ngang cua trang va cua [data-hop-cap-nhat-kr] (scrollWidth <= clientWidth + 1, doi chung bang mot khoi rong 4000px phai lam tran); nut [data-nut='gui-cap-nhat-kr'] nam trong khung nhin sau khi cuon hop; chup hct-1440.png, hct-375.png vao evidence/"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 1 = co dong SAI; ma 2 = khong do duoc"
+      - "Mo hai anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/hop-cap-nhat-lan-truoc/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/app/(app)/[slug]/okr/khoi-lan-truoc.tsx"
+      - "_acceptance/hop-cap-nhat-lan-truoc/rang/man.mjs"
+    expected: |
+      Hai anh hct-1440.png va hct-375.png. Moi anh: hop cap nhat mo, khoi «Lần cập nhật trước» o dau than hop co ngay
+      gio, so, cham va nhan muc tu tin, ghi chu 200 ky tu xuong dong tron trong khoi (khong bi cat, khong tran ra ngoai
+      vien hop); o ghi chu va ba cau goi y ngay duoi; nut «Gửi cập nhật» thay duoc. Ban do in DUNG cho: khong tran
+      ngang trang, khong tran ngang hop, doi chung tran bat duoc, nut gui trong khung nhin — o ca hai kho. Thieu anh
+      nao -> khong dat.
