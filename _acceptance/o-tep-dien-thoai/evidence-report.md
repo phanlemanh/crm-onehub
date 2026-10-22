@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: ff483289ad8e6140ba13e2b500f2da48c20af62c
-human_signoff:
+human_signoff: manh 2026-10-22 — ký Cổng Bằng chứng trên S4 vòng 1 PASS (wf_14873b26-b74, verified_commit ff483289a; 6/6 eval, 7/7 suite, 0 phát hiện trong hợp đồng). Ngoài-1, 2, 3 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: o-tep-dien-thoai

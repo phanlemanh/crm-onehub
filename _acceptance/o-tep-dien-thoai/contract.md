@@ -5,7 +5,7 @@ slug: o-tep-dien-thoai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-22T15:00:40Z
 design_doc: docs/superpowers/specs/2026-10-22-o-tep-dien-thoai-design.md
@@ -55,3 +55,8 @@ nên giữ bằng bài DOM (AC-6).
 - Chữ, kiểu tệp nhận, giới hạn cỡ và quyền mở tệp của ô Tệp.
 
 ## Notes
+
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: răng đo chặn số đo hỏng chưa chặt — ở hộp tải nguồn khổ 375, phép «mô tả ≤ 2 dòng» có thể đạt mà không ai biết.
+  - Ngoài-2: lệnh kiểm «bài DOM cũ không bị sửa» không chặn khi thiếu nhánh onehub để so, và bỏ sót bài sửa chưa commit.
+  - Ngoài-3: phép đối chứng ở khổ 1280 đạt luôn khi không tìm thấy nhãn của hàng Tệp.
