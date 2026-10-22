@@ -44,6 +44,8 @@ const TEP_CUA_HO_SO = {
 		"trang-don-vi-mot-bang",
 	"_acceptance/khep-ky-okr/rang/man-khep-ky.mjs": "khep-ky-okr",
 	"_acceptance/vo-khu-muc-tieu/rang/do-man-dieu-huong.mjs": "vo-khu-muc-tieu",
+	"_acceptance/khung-cho-don-vi-mot-hinh/rang/man-khung-cho.mjs":
+		"khung-cho-don-vi-mot-hinh",
 };
 const VIET_LAI = {
 	"apps/app/test/okr-trang-don-vi.dom.tsx": { phep: "V1-20", so: "V1-20" },
