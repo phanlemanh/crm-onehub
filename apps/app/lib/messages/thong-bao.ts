@@ -58,6 +58,7 @@ const en = {
 		"tac-nhan-xong": "Kara finished building «{ten}» — open it to review",
 		"tac-nhan-can-tra-loi": "Kara needs your answer to keep building «{ten}»",
 		"tac-nhan-hong": "Kara could not build «{ten}»",
+		"tin-hieu-doi-cho": "Your signal «{tieuDe}»: {nhan}",
 	} satisfies Record<LoaiThongBao, string>,
 };
 
@@ -120,6 +121,7 @@ const vi: ThongBaoMessages = {
 		"tac-nhan-xong": "Kara đã dựng xong «{ten}» — mở để duyệt",
 		"tac-nhan-can-tra-loi": "Kara cần bạn trả lời để dựng tiếp «{ten}»",
 		"tac-nhan-hong": "Kara chưa dựng được «{ten}»",
+		"tin-hieu-doi-cho": "Tín hiệu «{tieuDe}» của bạn: {nhan}",
 	},
 };
 

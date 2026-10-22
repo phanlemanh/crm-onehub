@@ -27,12 +27,13 @@ export class LoTrinhBanChupRouter {
 		meta: restMeta("POST", BAN_CHUP_LO_TRINH.duongRest, ["Roadmap"]),
 	})
 	async day(@Ctx() ctx: KhoaDayLoTrinhContext, @Input() input: BanChupVao) {
-		const ketQua = await this.banChup.ghi(input);
+		const { ketQua, soThongBao } = await this.banChup.ghi(input);
 		this.logger.log({
 			message: "lo-trinh.ban-chup",
 			apiKeyId: ctx.khoaDayLoTrinh.apiKeyId,
 			sha: input.sha,
 			ketQua,
+			soThongBao,
 		});
 		return { ketQua };
 	}
