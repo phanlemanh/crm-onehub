@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9dbd0eb5b46bfed9c7f795ea427588fa763dc284
+verified_commit: 87439b570e2071dcbddb728d50d2cedbe6eebb2f
 human_signoff:
 ---
 
@@ -170,3 +170,7 @@ none — mọi eval chạy một lần, xác định, không có eval nhiều l�
 Round 1: không eval máy nào đỏ (failed_evals rỗng). Kết luận REJECT do workflow tính từ năm finding trong hợp đồng chưa xử lý: E3 (đếm tệp list/board chỉ kiểm chuỗi có mặt), E5 (tên người phụ trách truyền thẳng vào ô; ca mất quyền đếm lời gọi trên bản giả của cache), E6 (quét laPhuTrach bằng regex; bộ dò lộ URL không có đối chứng dương). Returned to implementation.
 Round 2: tám eval và bảy lệnh suite đều xanh trên commit 9dbd0eb5b46bfed9c7f795ea427588fa763dc284 (sau S4 vòng 1: đếm số tệp thật, ngữ cảnh ô Tệp qua một hàm, cache thật, quét log có đối chứng). Không còn finding trong hợp đồng; chi tiết ngoài hợp đồng ở review-findings.md.
 
+
+### Re-pin lần 1 — 2026-10-22, do gộp onehub ee42c149e và thêm E5b cho AC-5
+run_id: repin-20261022T172926Z-14754
+sha: 87439b570e2071dcbddb728d50d2cedbe6eebb2f · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
