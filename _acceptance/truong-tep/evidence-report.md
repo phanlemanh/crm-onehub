@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d6269cc2543442cc6850c86f43efea2fe685c76e
+verified_commit: 1b2696ef57712e9f25704b066787a4a68bb1a324
 human_signoff: manh 2026-10-22 — ký Cổng 2 trên S4 vòng 3 (wf_406402c0-67c, PASS 16/16 eval, verified_commit d6269cc25). Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -253,3 +253,7 @@ Round 1: E10 failed — tên tệp dài ở 375 xuống nhiều dòng thay vì c
 Round 2: 16 eval đạt kể cả E10 (tên dài cắt một dòng ở 375 sau commit bdafae523); REJECT vì lệnh suite `bunx turbo run lint --force` hỏng ở `@crm/ui#lint`, không gắn eval nào. Returned to implementation.
 Round 3: 16 eval đạt và cả 7 lệnh suite đạt trên cây d6269cc25 (sau commit định dạng bài nguon-keo-tha theo biome); lệnh lint đã xanh. Verdict PASS.
 
+
+### Re-pin lần 1 — 2026-10-22, do chu ky Cong 2 dung truoc commit sua don du lieu trong test (F-128)
+run_id: repin-20261022T081919Z-20140
+sha: 1b2696ef57712e9f25704b066787a4a68bb1a324 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
