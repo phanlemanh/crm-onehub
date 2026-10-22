@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thứ tự trộn</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1100px; display: block; }
+  footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+  <svg viewBox="0 0 1280 592" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng trái sang phải. Cài đặt › Trường là một danh sách trộn. Lối khuyên T3, bảng mới: fields.reorder nhận danh sách trộn standard key hoặc custom id, ghi vào hai kho: StandardFieldLayout, bảng mới với migration chỉ thêm, và FieldDefinition.position. fields.layout đọc lại danh sách trộn đã sắp, phiếu vẽ mục Chi tiết theo thứ tự và bỏ hàng ẩn. Lối khác T2, không lưu: sắp lại và ẩn sang hàng mới, vòng dừng ở Cài đặt chỉ đọc. Trục position chung: chưa sắp lần nào thì trường chuẩn mang position âm, đứng trước, trường tự tạo từ 0 trở lên.">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+      </marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+      </marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+      </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <text x="32" y="32" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CỔNG PHẠM VI · HỎI-1 · LƯU BỐ TRÍ · THỨ TỰ TRỘN (D-4) · AC-2 · AC-3 · AC-7</text>
+    <text x="32" y="64" fill="#171717" font-size="24" font-family="'Lora', Georgia, serif">Một danh sách trộn, một trục position, hai kho</text>
+    <text x="32" y="88" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lối khuyên lưu bố trí trường chuẩn vào một bảng mới (T3). Lối khác không lưu gì và để Cài đặt chỉ đọc (T2).</text>
+
+    <line x1="216" y1="244" x2="286" y2="244" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <rect x="216" y="220" width="72" height="12" rx="2" fill="#fafafa"/>
+    <text x="252" y="229" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.04em">T3 · BẢNG MỚI</text>
+
+    <path d="M504,228 H520 Q528,228 528,220 V184 Q528,176 536,176 H550" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M504,260 H520 Q528,260 528,268 V288 Q528,296 536,296 H550" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M792,176 H808 Q816,176 816,184 V220 Q816,228 824,228 H838" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M792,296 H808 Q816,296 816,288 V268 Q816,260 824,260 H838" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="1016" y1="244" x2="1062" y2="244" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <line x1="124" y1="288" x2="124" y2="398" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <line x1="216" y1="440" x2="286" y2="440" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+    <rect x="32" y="200" width="184" height="88" rx="6" fill="#fafafa"/>
+    <rect x="32" y="200" width="184" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="40" y="206" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="56" y="215" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-2</text>
+    <text x="124" y="240" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cài đặt › Trường</text>
+    <text x="124" y="258" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">một danh sách trộn</text>
+    <text x="124" y="274" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">kéo · bật tắt hiện</text>
+
+    <rect x="288" y="200" width="216" height="88" rx="6" fill="#fafafa"/>
+    <rect x="288" y="200" width="216" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="296" y="206" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="312" y="215" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-2</text>
+    <text x="396" y="240" fill="#171717" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">fields.reorder</text>
+    <text x="396" y="258" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">{standard:key} | {custom:id}</text>
+    <text x="396" y="274" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">phủ mỗi trường một lần</text>
+
+    <rect x="552" y="132" width="240" height="88" rx="6" fill="#fafafa"/>
+    <rect x="552" y="132" width="240" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="560" y="138" width="48" height="12" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+    <text x="584" y="147" fill="#006B4F" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MỚI · T3</text>
+    <text x="672" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">StandardFieldLayout</text>
+    <text x="672" y="190" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trường chuẩn · migration chỉ thêm</text>
+    <text x="672" y="206" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">position · hidden</text>
+
+    <rect x="552" y="252" width="240" height="88" rx="6" fill="#fafafa"/>
+    <rect x="552" y="252" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="560" y="258" width="36" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="578" y="267" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐÃ CÓ</text>
+    <text x="672" y="292" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">FieldDefinition.position</text>
+    <text x="672" y="310" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trường tự tạo</text>
+    <text x="672" y="326" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">cùng giao dịch với bảng mới</text>
+
+    <rect x="840" y="200" width="176" height="88" rx="6" fill="#fafafa"/>
+    <rect x="840" y="200" width="176" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="848" y="206" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="864" y="215" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-7</text>
+    <text x="928" y="240" fill="#171717" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">fields.layout</text>
+    <text x="928" y="258" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">danh sách trộn đã sắp</text>
+    <text x="928" y="274" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ai đăng nhập cũng đọc</text>
+
+    <rect x="1064" y="200" width="184" height="88" rx="6" fill="#fafafa"/>
+    <rect x="1064" y="200" width="184" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="1072" y="206" width="60" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="1102" y="215" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-2 · AC-3</text>
+    <text x="1156" y="240" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phiếu: mục Chi tiết</text>
+    <text x="1156" y="258" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">theo thứ tự đã sắp</text>
+    <text x="1156" y="274" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bỏ hàng ẩn</text>
+
+    <rect x="32" y="400" width="184" height="80" rx="6" fill="#fafafa"/>
+    <rect x="32" y="400" width="184" height="80" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+    <rect x="40" y="406" width="72" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="76" y="415" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỐI KHÁC · T2</text>
+    <text x="124" y="440" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không lưu bố trí</text>
+    <text x="124" y="458" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">sắp lại, ẩn → hàng mới</text>
+
+    <rect x="288" y="400" width="216" height="80" rx="6" fill="#fafafa"/>
+    <rect x="288" y="400" width="216" height="80" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+    <text x="396" y="436" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cài đặt › Trường chỉ đọc</text>
+    <text x="396" y="454" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">vòng dừng ở đây</text>
+    <text x="396" y="470" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">phiếu giữ thứ tự cũ</text>
+
+    <rect x="552" y="376" width="696" height="112" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+    <text x="568" y="396" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">TRỤC POSITION CHUNG · THOẢ THUẬN CHƯA SẮP LẦN NÀO</text>
+    <line x1="576" y1="440" x2="1224" y2="440" stroke="#575757" stroke-width="1"/>
+    <line x1="1084" y1="408" x2="1084" y2="480" stroke="#575757" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+    <line x1="600" y1="436" x2="600" y2="444" stroke="#575757" stroke-width="1"/>
+    <line x1="688" y1="436" x2="688" y2="444" stroke="#575757" stroke-width="1"/>
+    <line x1="776" y1="436" x2="776" y2="444" stroke="#575757" stroke-width="1"/>
+    <line x1="864" y1="436" x2="864" y2="444" stroke="#575757" stroke-width="1"/>
+    <line x1="952" y1="436" x2="952" y2="444" stroke="#575757" stroke-width="1"/>
+    <line x1="1040" y1="436" x2="1040" y2="444" stroke="#575757" stroke-width="1"/>
+    <line x1="1128" y1="436" x2="1128" y2="444" stroke="#006B4F" stroke-width="1"/>
+
+    <text x="600" y="428" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">−6</text>
+    <text x="688" y="428" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">−5</text>
+    <text x="776" y="428" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">−4</text>
+    <text x="864" y="428" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">−3</text>
+    <text x="952" y="428" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">−2</text>
+    <text x="1040" y="428" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">−1</text>
+    <text x="1128" y="428" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">0</text>
+
+    <text x="600" y="456" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">name</text>
+    <text x="688" y="456" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">amount</text>
+    <text x="776" y="456" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">currency</text>
+    <text x="864" y="456" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">expectedCloseDate</text>
+    <text x="952" y="456" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">company</text>
+    <text x="1040" y="456" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">owner</text>
+    <text x="1128" y="456" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">Hạng đối tác</text>
+
+    <text x="820" y="476" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">trường chuẩn: chỉ số − 6, âm nên đứng trước</text>
+    <text x="1164" y="476" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">trường tự tạo ≥ 0</text>
+
+    <text x="32" y="524" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">Lượt sắp đầu tiên ghi position = chỉ số cho mọi mục, ở cả hai kho, trong một giao dịch; trường tự tạo mới lấy số lớn nhất + 1.</text>
+
+    <line x1="32" y1="544" x2="1248" y2="544" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="32" y="568" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+    <rect x="112" y="558" width="28" height="14" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="148" y="569" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bước, kho</text>
+    <rect x="216" y="558" width="28" height="14" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="252" y="569" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bảng mới, lý do lên T3</text>
+    <line x1="376" y1="565" x2="408" y2="565" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <text x="420" y="569" fill="#575757" font-size="9" font-family="'Geist', sans-serif">lối khuyên</text>
+    <line x1="488" y1="565" x2="520" y2="565" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <text x="532" y="569" fill="#575757" font-size="9" font-family="'Geist', sans-serif">lối khác</text>
+    <text x="1248" y="569" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="end">AC-2, AC-3, AC-7: tiêu chí trong contract.md</text>
+  </svg>
+  </div>
+
+  <footer>Điểm quyết định d-4 và Hỏi-1 tại Cổng Phạm vi · hồ sơ truong-chuan-o-cai-dat · nguồn: figures/index.md đề bài thu-tu-tron; docs/superpowers/specs/2026-10-21-truong-chuan-o-cai-dat-design.md mục Lưu bố trí, API, Phiếu; contract.md AC-2, AC-3, AC-7</footer>
+</div>
+</body>
+</html>
