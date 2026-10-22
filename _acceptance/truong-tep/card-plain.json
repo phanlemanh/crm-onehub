@@ -1,46 +1,4 @@
 {
-  "feature_plain": "Nhân viên gắn được tệp hợp đồng (PDF, Word, ảnh) vào một ô Tệp trên phiếu thoả thuận, công ty hay cá nhân, và lọc ra bản ghi nào còn chưa có tệp.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho quản trị viên tạo trường kiểu «Tệp» ở Cài đặt › Trường cho cả ba loại bản ghi; trường đã có tệp thì không đổi kiểu được."},
-    {"id": "AC-2", "p": "Sẽ cho nhân viên kéo thả nhiều tệp vào ô; mỗi tệp hiện tên, cỡ, ngày, người tải, và bảng hiện «n tệp» — thử cả trên kho lưu trữ riêng tư thật."},
-    {"id": "AC-4", "p": "Sẽ cho mọi người làm việc với đối tác thấy tên và số tệp, nhưng chỉ quản trị viên mở được tệp (tạm thời, tới khi có quyền theo chủ bản ghi)."},
-    {"id": "AC-5", "p": "Sẽ lọc được «Có tệp» và «Chưa có tệp» ở ba danh sách và bảng cột, lưu được thành bộ lọc, và dùng được làm đoạn chiến dịch."},
-    {"id": "AC-6", "p": "Sẽ cho xoá một tệp sau một hộp hỏi lại nêu tên tệp; người không được xoá không thấy nút Xoá."},
-    {"id": "AC-7", "p": "Sẽ xoá hẳn tệp khỏi kho lưu trữ khi bản ghi bị xoá vĩnh viễn hay trường bị xoá, thử lại mỗi ngày nếu kho lỗi, và dọn tệp tải dở bị bỏ."},
-    {"id": "AC-8", "p": "Sẽ vẫn chạy khi máy chủ chưa có khoá kho tệp: tên tệp vẫn hiện, nút tải lên và Mở khoá kèm lý do, Kho tài liệu không bị ảnh hưởng."},
-    {"id": "AC-9", "p": "Sẽ chặn mọi lối ghi chữ vào ô Tệp, kể cả Kara, bằng câu «Ô Tệp chỉ nhận tệp tải lên.»."},
-    {"id": "AC-10", "p": "Sẽ được người chấm nhìn trên màn thật ở máy tính và điện thoại: tải, lỗi, xoá, khoá nút, lọc."}
-  ],
-  "wont_do": [
-    {"id": "AC-3", "p": "Chặn tệp sai kiểu (xét theo nội dung, không theo đuôi), quá 20 MB, rỗng, Word có macro, ô đã đầy, phiếu giả, bản ghi hay trường đã lưu trữ; tệp trùng trong cùng ô không nhân đôi."},
-    {"id": "OOS-1", "p": "Sẽ KHÔNG mở tệp theo chủ bản ghi ở việc này — đó là việc DA20 (quyền tệp theo chủ bản ghi)."},
-    {"id": "OOS-2", "p": "Sẽ KHÔNG cho Kara đọc tệp hay tạo trường Tệp — đó là việc DA23 (Kara đọc ô Tệp)."},
-    {"id": "OOS-3", "p": "Sẽ KHÔNG làm bộ hợp đồng mẫu — DA22 làm, đi đúng đường tải lên của việc này."},
-    {"id": "OOS-4", "p": "Sẽ KHÔNG xem trước PDF ngay trên phiếu và chưa quét mã độc (Hỏi-8)."},
-    {"id": "OOS-5", "p": "Sẽ KHÔNG có ô Tệp trong form tạo bản ghi và chưa bật «Bắt buộc» cho trường Tệp (Hỏi-6)."},
-    {"id": "OOS-6", "p": "Sẽ KHÔNG đổi tên tệp, sắp lại tệp trong ô, hay sắp danh sách theo số tệp."},
-    {"id": "OOS-7", "p": "Sẽ KHÔNG nhận ảnh HEIC của iPhone, Excel hay tệp nén."},
-    {"id": "OOS-8", "p": "Sẽ KHÔNG có mục «Đã lưu trữ» cho tệp đã xoá — xoá là mất hẳn (Hỏi-1)."}
-  ],
-  "scope_plain": "Phần cắt ra hoặc để cho hàng sau, mỗi mục có một dòng lý do trong sổ quyết định:",
-  "coverage_plain": [
-    {"i": 0, "p": "Vòng đời tệp — tải một, tải nhiều, trùng, bị từ chối, xem, mở, xoá, bản ghi lưu trữ, xoá vĩnh viễn, trường lưu trữ, trường xoá — mỗi bước có tiêu chí (AC-2 tới AC-7)."},
-    {"i": 1, "p": "Người và quyền — quản trị viên, nhân viên, vai «chỉ OKR», người cầm đường dẫn lọt, Kara, lệnh nạp mẫu — đều có ô trong bảng quyền (AC-4, AC-6, AC-9)."},
-    {"i": 2, "p": "Mọi chỗ trường xuất hiện — Cài đặt, phiếu, bảng, thẻ bảng cột, form tạo, bộ lọc, bộ lọc đã lưu, chiến dịch, sắp xếp — được xét theo bảng kiểu trường (AC-1, AC-5, AC-9)."},
-    {"i": 3, "p": "Hạ tầng kho lưu trữ — có khoá, thiếu khoá, kho lỗi khi xoá, kho giả và kho thật — có tiêu chí riêng (AC-2, AC-7, AC-8)."},
-    {"i": 4, "p": "Thước đối chiếu: bảng sáu mặt của mỗi kiểu trường trong luật thiết kế của kho."},
-    {"i": 5, "p": "Thước đối chiếu: ghi chú của hàng lộ trình (nhiều tệp, PDF Word ảnh, quyền tạm, xoá kèm tệp)."},
-    {"i": 6, "p": "Thước đối chiếu: đường tải lên và luật thiếu khoá đang chạy ở Kho tài liệu."},
-    {"i": 7, "p": "Thước đối chiếu: luật vòng đời bản ghi của kho (lưu trữ trước, xoá vĩnh viễn sau)."},
-    {"i": 8, "p": "Thước đối chiếu: bốn vai người dùng của kho."},
-    {"i": 9, "p": "Thước đối chiếu: cách ghi bộ lọc lên đường dẫn mà việc lọc mọi trường (DA18) đã chốt."},
-    {"i": 10, "p": "Thước ngoài ngành: HubSpot có kiểu thuộc tính Tệp, tối đa 10 tệp mỗi thuộc tính."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Máy đã tự bỏ ô Tệp khỏi form tạo, trái luật thiết kế «một trường, một cách cư xử» — đã chuyển thành câu hỏi cho anh (Hỏi-6)."},
-    {"i": 1, "p": "Máy đã định sửa mã tải lên của Kho tài liệu đang chạy để dùng chung — đã chuyển thành câu hỏi cho anh (Hỏi-7), khuyên không sửa Kho tài liệu."},
-    {"i": 2, "p": "Các mục cắt ra chưa có lý do trong sổ, và rủi ro không quét mã độc chưa ai quyết — đã thêm lý do từng mục, quét mã độc thành Hỏi-8, chặn ngay Word có macro."},
-    {"i": 3, "p": "Màn có thể tự đoán ai được mở hay xoá tệp — nay máy chủ trả sẵn hai cờ «mở được», «xoá được», và bài kiểm đo cả hai cờ lẫn nút trên màn."},
-    {"i": 4, "p": "Bài đo trên kho lưu trữ thật có thể bị bỏ qua mà vẫn xanh — nay bị bỏ qua là «không đo được», không phải đạt."}
-  ]
+  "feature_plain": "Nhân viên gắn được tệp hợp đồng, bản quét hay ảnh vào ô Tệp trên phiếu thoả thuận, công ty, liên hệ; ai thấy bản ghi cũng thấy tên và số tệp, chỉ quản trị mở được tệp, và bảng lọc được bản ghi nào chưa có tệp.",
+  "scope_plain": "Những phần dưới đây cố ý để ngoài vòng này, đã duyệt ở Cổng Phạm vi:"
 }

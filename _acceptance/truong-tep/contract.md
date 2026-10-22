@@ -5,7 +5,7 @@ slug: truong-tep
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21T22:32:36Z
 design_doc: docs/superpowers/specs/2026-10-21-truong-tep-design.md
@@ -203,3 +203,14 @@ Lệnh nạp mẫu (DA22) đi đường của AC-2 và AC-3 (tệp trùng trả 
   `fields/**` và `record-sheet/**` là vùng của đợt (luật 31). DA15 (Cài đặt › Trường) và DA16 (form tạo) chạy song song
   ở V1 và V3: hàng nào gộp sau thì gộp onehub và giữ dòng của cả hai.
 - Không `cham-tep` mới cho `DataTable`: «Có tệp», «Chưa có tệp» dùng mặt lọc danh sách lựa chọn có sẵn.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: trường Tệp tạo bằng đường khác ngoài màn Cài đặt vẫn bật được «Kara điền»; Kara xếp việc rồi bị từ chối khi ghi, chỉ tốn lượt chạy.
+  - Ngoài-8: nhiều lượt tải lên cùng lúc vào một ô có thể vượt trần 10 tệp.
+  - Ngoài-9: trường Tệp bật «Kara điền» qua API làm Kara xếp việc điền cho mọi bản ghi mà không ghi được gì.
+  - Ngoài-12: bài kiểm quyền vai OKR đọc thoả thuận có một vế không bao giờ đỏ được.
+  - Ngoài-13: bài kiểm vòng đời chỉ kiểm tệp mong đợi có trong tập đã xoá, không kiểm tập ấy đúng bằng.
+  - Ngoài-14: bài kiểm lưu bộ lọc có thể xanh trên một bảng xem rỗng.
+  - Ngoài-16: bài kiểm kho thật chỉ kiểm đường trần không trả 200, chưa từng thấy đỏ thật.
+  - Ngoài-18: đối chứng dương của bài «kho tắt» chạy trên kho giả, không qua đường đọc khoá thật.
+  - Ngoài-20: tệp DOCX mẫu của bài nhận kiểu là chuỗi chứa đúng chuỗi con bộ nhận tìm, không phải tệp zip thật.
+  - t9 (trong hợp đồng, AC-3): tệp đặt đuôi lệch byte nhưng byte thuộc bốn kiểu vẫn được nhận và ghi kiểu theo byte; kho giữ kiểu khai theo tên nên «Mở» có thể hỏng với tệp như vậy.
