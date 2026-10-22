@@ -1,0 +1,186 @@
+schema_version: 1
+slug: don-ho-so-cu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.dhc_kiem_ke
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/kiem-ke.mjs"
+      - "_acceptance/don-ho-so-cu/rang/chung.mjs"
+      - "scripts/pre-merge-check.sh"
+      - "lib/evidence-core.cjs"
+    expected: |
+      bun rang/kiem-ke.mjs --tu-kiem (goc kho suy tu vi tri script). Buoc 1: chay ham kiemKe(sha=HEAD) cua chinh kiem-ke.mjs
+      (ham chay scripts/pre-merge-check.sh khong --base, doc stdout+stderr). Doi chieu doc lap tren CUNG dau ra luoi: tap
+      slug trong kiem-ke = tap slug cua moi dong «VIOLATION [<slug>]: evidence is stale» (so bang, khong chi so dem); nhom
+      cua moi slug = «thieu-paths:<ly do>» khi luoi in «NOTE [<slug>]: bo loc paths khong ap (<ly do>)», con lai «loc-ap».
+      In «kiem-ke: <n> ho so cu (<a> loc-ap, <b> thieu-paths)». Chieu do tren ban sao: worktree tach o HEAD; chon mot ho so
+      da ky KHONG cu trong kiem-ke (nhom loc-ap ap duoc) co eval may khai paths la tep that; them mot dong vao tep do, commit
+      trong worktree; chay kiemKe tren worktree voi --slug <ho so do> -> phai thay ho so trong ket qua -> «BAT lam-cu-<slug>»;
+      khong thay -> ma 1 «thuoc hong: kiem-ke khong thay ho so vua lam cu <slug>». Khong co ho so tuoi nao de lam cu -> ma 2
+      «khong dung duoc ca do». Ma 0 khi doi chieu khop va ca do BAT; worktree tam o .acceptance-runs/don-ho-so-cu/, don khi
+      xong.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.dhc_lo
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/lo.mjs"
+      - "_acceptance/don-ho-so-cu/rang/kiem-lo.mjs"
+      - "_acceptance/don-ho-so-cu/rang/chan-pr.mjs"
+      - "_acceptance/don-ho-so-cu/rang/chung.mjs"
+      - "_acceptance/don-ho-so-cu/rang/uoc.mjs"
+      - "_acceptance/don-ho-so-cu/kiem-ke-goc.json"
+      - "_acceptance/don-ho-so-cu/lo-goc.json"
+      - "_acceptance/don-ho-so-cu/chan-pr.json"
+      - "_acceptance/don-ho-so-cu/lo.json"
+    expected: |
+      bun rang/kiem-lo.mjs. Doc kiem-ke-goc.json, lo-goc.json, chan-pr.json (pr_mo = danh sach PR mo da chup nguyen van, chan =
+      ho so bi chan) va lo.json. Dat khi: (a) tinh lai danh sach chan tu pr_mo bang ham hoSoChan cua chan-pr.mjs (PR khong
+      phai nhanh vong, cham _acceptance/<slug>/ cua ho so cu trong kiem-ke-goc, khong cham evidence-report.md cua slug do)
+      ra dung chan da ghi; (b) tap slug trong lo.json = (lo 8 cua lo-goc) hop (moi slug trong chan) hop (K6A) tru
+      okr-soat-anh-luot-3 — so bang (tap ghim la tap da chay; dong cho-lan-chu ghi sau khi lo chay khong rut ho so ra khoi tap); (c) moi slug dung mot lan; (d) moi lo co uoc_phut <=
+      feature_loop.repin_budget_min doc tu _acceptance/config.yaml. In mot dong moi lo. Chieu do, cung du lieu, nam ban pha
+      trong bo nho: nhan doi mot slug -> «BAT trung»; bo mot slug -> «BAT thieu»; them okr-soat-anh-luot-3 -> «BAT
+      khong-dung»; uoc_phut lo dau = tran+1 -> «BAT vuot-tran»; bo PR chan dau tien khoi pr_mo -> «BAT bo-pr-chan». Ban pha
+      nao khong bat -> ma 1 «thuoc hong: <ten ca>». Ma 0 khi dat va ca nam ca BAT.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.dhc_doi_chieu
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/doi-chieu.mjs"
+      - "_acceptance/don-ho-so-cu/rang/chung.mjs"
+      - "_acceptance/don-ho-so-cu/rang/khuon-xu-ly.mjs"
+      - "_acceptance/don-ho-so-cu/lo.json"
+      - "_acceptance/don-ho-so-cu/xu-ly.json"
+    expected: |
+      bun rang/doi-chieu.mjs. git fetch origin onehub. Voi moi slug trong lo.json: pins = moi dong kind repin trong
+      origin/onehub:_acceptance/<slug>/run-log.jsonl (ham pinTren cua chung.mjs), chi giu pin xanh: evals_exit khong rong va
+      moi ma bang 0 (ham pinXanh). Xet MOI dong xu-ly cua slug. Co dong cach sua-thuoc -> dat khi voi moi dong sua-thuoc co
+      pin xanh co sha la hau due cua commit_sua (git merge-base --is-ancestor); khong co dong sua-thuoc -> dat khi co pin xanh
+      co sha la hau due cua base (goc vong trong xu-ly.json), hoac co DUNG MOT dong trong so. Sai -> ma 1 «chua xu: <slug>»,
+      «sua-thuoc chua ghim: <slug>» hoac «nhieu dong: <slug> co <n> dong trong so xu ly» (liet het). In «doi-chieu: <x> co luot ghim xanh tren onehub trong vong, <y> trong so xu ly,
+      <z> chua xu». Chieu do cung du lieu: bo pin cua mot slug dang co pin va khong co dong -> «BAT bo-pin»; gia lap dong
+      sua-thuoc voi commit_sua = HEAD cho slug do -> «BAT sua-thuoc-chua-ghim». Them dong sua-thuoc truoc mot dong cach khac cua cung slug -> van phai «BAT sua-thuoc-sau-dong-khac». Doi
+      pin cua slug do thanh co mot eval thoat 1 -> «BAT pin-do»; nhan doi mot dong trong so -> «BAT hai-dong». Ca nao khong
+      bat -> ma 1 «thuoc hong: <ca>». Ma 0 khi z = 0 va nam ca BAT.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.dhc_so_xu_ly
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/khuon-xu-ly.mjs"
+      - "_acceptance/don-ho-so-cu/rang/so-xu-ly.mjs"
+      - "_acceptance/don-ho-so-cu/xu-ly.json"
+      - "_acceptance/don-ho-so-cu/decisions.jsonl"
+      - "_acceptance/don-ho-so-cu/lan/**"
+    expected: |
+      bun rang/so-xu-ly.mjs. Doc xu-ly.json qua khuon zod cua khuon-xu-ly.mjs (mot khuon). Nam cach: sua-thuoc, loi-kit,
+      ngoai-pham-vi, cho-lan-chu mang slug, evals (danh sach eval, mot dong cho mot ho so), run_id, ly_do — kiem tren dia: tep
+      _acceptance/don-ho-so-cu/lan/<run_id>.json ton tai, la dau ra JSON nguyen van cua repin-lane.mjs (run_id cua tep bang ten
+      tep), va tap evals cua dong bang dung tap eval cua slug nay trong lech (thoat khac ky vong): eval xanh -> «eval <id> khong
+      do trong lan»; eval do khong ghi -> «sot eval do». ngoai-pham-vi co lan_chu va viec_phu (ma <day>-<so>); loi-kit co viec (URL issue kho
+      kit); cho-lan-chu co pr. Cach ghim-luoi mang slug, ly_do, quyet — kiem: quyet la id mot dong type descope trong
+      _acceptance/don-ho-so-cu/decisions.jsonl va decision cua dong do goi ten slug. Dong sai -> ma 1 «dong <i> <slug>: ...».
+      Chieu do tren ban chep trong bo nho: xoa run_id mot dong -> «BAT thieu-run-id»; doi cach thanh «khac» -> «BAT cach-la»;
+      run_id khong co tep lan -> «BAT run-id-ma»; eval xanh trong tep lan -> «BAT eval-khong-do»; bo mot eval do khoi dong
+      -> «BAT sot-eval-do»; dong ghim-luoi voi quyet khong co trong so -> «BAT luoi-quyet-ma». Ma 0 khi moi dong dat va sau
+      ca BAT.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.dhc_sua_thuoc
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/sua-thuoc.mjs"
+      - "_acceptance/don-ho-so-cu/rang/khuon-xu-ly.mjs"
+      - "_acceptance/don-ho-so-cu/xu-ly.json"
+    expected: |
+      bun rang/sua-thuoc.mjs. Voi moi dong sua-thuoc cua xu-ly.json: (1) commit_sua ton tai, va git show --name-only chi co
+      tep thuoc cua chinh slug (_acceptance/<slug>/rang/**, _acceptance/<slug>/evals.yaml, _acceptance/config.yaml) — tep
+      khac -> «commit cham ngoai thuoc: <tep>»; voi config.yaml, moi dong doi phai la khoa lenh ma evals.yaml cua slug tham
+      chieu; (2) duong_tinh: duong nhat ky co that, ma 0; (3) tiem_do: duong nhat ky co that, ma != 0 va nhat ky chua nguyen
+      van chuoi thong_diep cua dong; (4) decisions.jsonl cua slug co dong type fix, decided_by chua «Phan Le Manh»; (5) moi
+      khoi AC (dong «- AC-n:» cung moi dong thut le noi tiep) trong contract.md cua slug o HEAD giong het o goc vong (base trong xu-ly.json). Dong sai -> ma 1 goi ten
+      slug va dieu kien. Chieu do: ban chep xu-ly trong bo nho voi commit_sua tro commit cham apps/** -> «BAT ngoai-thuoc»;
+      tiem_do mang thong_diep khong co trong nhat ky -> «BAT sai-thong-diep»; ban contract tam doi mot chu o dong dau AC-1 -> «BAT
+      doi-loi-ac»; doi mot chu o dong noi tiep thu hai cua AC-1 -> «BAT doi-loi-ac-dong-sau». Khong co dong sua-thuoc nao -> van chay ba ca do tren fixture dung tu mot commit that cua kho. Ma 0 khi
+      dat va ba ca BAT.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.dhc_cay_ho_so
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/cay-ho-so.mjs"
+      - "_acceptance/don-ho-so-cu/xu-ly.json"
+    expected: |
+      bun rang/cay-ho-so.mjs. Tep cua vong = moi tep duoi _acceptance/ ma commit khong-gop co tieu de chua «don-ho-so-cu»
+      trong <base cua xu-ly.json>..HEAD cham (git log --grep). Voi moi tep thuoc ho so da ky o base (status signed-off hoac
+      machine-cleared o base): slug co dong cach khac sua-thuoc -> vi pham «cham ho so do: <tep>» chi khi tep o HEAD con khac
+      origin/onehub (git diff --quiet origin/onehub HEAD -- <tep>); con lai dat khi ten tep la run-log.jsonl, evidence-report.md
+      hoac decisions.jsonl, hoac slug co dong sua-thuoc va tep nam trong tep_thuoc; tep khac -> «cham ngoai so: <tep>». Bo qua
+      _acceptance/don-ho-so-cu/**. In «cay-ho-so: <n> ho so cham, <m> tep». Chieu do: them gia contract.md cua mot ho so da ky ->
+      «BAT cham-contract»; them evidence/x.png -> «BAT cham-evidence»; them run-log.jsonl gia (coi la con khac onehub) cua mot
+      slug kem dong ngoai-pham-vi -> «BAT cham-ho-so-do». Ma 0 khi dat va ba ca BAT.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.dhc_ca_goi_ten
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/ca-goi-ten.mjs"
+      - "_acceptance/don-ho-so-cu/rang/chung.mjs"
+    expected: |
+      bun rang/ca-goi-ten.mjs. Hai ho so K6A cua chung.mjs. Moi ho so dat khi co pin xanh tren origin/onehub co sha la hau
+      due cua base va moi eval may dat (ham pinTrongVong cua chung.mjs), hoac co dong ghim-luoi trong xu-ly.json. gh pr view 411 --json
+      state,comments: state CLOSED va mot binh luan chua «#<so PR cua vong>» (so doc tu gh pr view feat/don-ho-so-cu --json
+      number). gh khong chay duoc -> ma 2. Chieu do tren du lieu trong bo nho: khong ho so nao co pin va khong dong nao -> «BAT
+      k6a-khong-ghim»; PR 411 OPEN -> «BAT pr-411-mo»; PR 411 dong voi binh luan khong tro so PR vong -> «BAT khong-tro». Ma 0
+      khi dat va ba ca BAT.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.dhc_lan_chu
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/sua-thuoc.mjs"
+      - "_acceptance/don-ho-so-cu/rang/khuon-xu-ly.mjs"
+      - "_acceptance/don-ho-so-cu/xu-ly.json"
+    expected: |
+      bun rang/sua-thuoc.mjs --lan-chu. Moi dong sua-thuoc mang vong_ky_cho_gop: anh chup do «sua-thuoc.mjs --ghi» lay ngay
+      truoc commit sua — moi PR mo (tru PR cua vong va PR lo) ma diff co mot _acceptance/*/contract.md voi status signed-off
+      hoac machine-cleared o dau nhanh PR (doc bang gh pr list --json number,headRefName,files roi git show
+      <headRefOid>:<tep>). Dat khi anh chup rong; hoac khi khong rong va dong mang hoi_375 {url, tra_loi} voi url la binh luan
+      cua issue 375 va tra_loi khong rong. Anh chup khong rong ma thieu hoi_375 -> ma 1 «sua-thuoc khi co vong da ky cho gop
+      ma chua hoi lan chu: <slug> PR #<n>». Moi dong cho-lan-chu phai mang pr khong rong. Chieu do: ban chep dong sua-thuoc
+      voi vong_ky_cho_gop = [{number:1}] va khong hoi_375 -> «BAT chua-hoi-lan-chu»; dong cho-lan-chu voi pr rong -> «BAT
+      cho-khong-pr»; ham chup tren mot PR gia lap co contract signed-off ngoai thu muc ho so dang sua van phai dua PR vao anh
+      chup -> «BAT lan-chu-khac-slug». Ma 0 khi dat va ba ca BAT.
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.dhc_cong_gop
+    paths:
+      - "_acceptance/don-ho-so-cu/rang/cong-gop.mjs"
+      - "_acceptance/don-ho-so-cu/xu-ly.json"
+      - "scripts/pre-merge-check.sh"
+      - "lib/evidence-core.cjs"
+    expected: |
+      bun rang/cong-gop.mjs. Worktree tach o HEAD, git rm -r _acceptance/don-ho-so-cu va commit (chinh ho so dang cham la vat
+      cua Cong Bang chung, khong phai cua luoi); commit go phai chi cham tep duoi _acceptance/don-ho-so-cu/, cham tep khac -> ma 1
+      «go ho so vong cham tep khac». Chay bash scripts/pre-merge-check.sh . --base origin/onehub trong cay do (dung lenh CI cua
+      .github/workflows/acceptance.yml, giai tu tep workflow, khong chep tay); dat chi khi dong cuoi la «pre-merge-check:
+      clean» — khong loc dong VIOLATION nao. Voi moi nhanh lo da day (git branch -r --list origin/chore/don-ho-so-cu-lo-*)
+      chua gop: chay cung lenh trong worktree tach o dau nhanh do, khong go gi, dat khi clean. Nhat ky ra .acceptance-runs/don-ho-so-cu/cong-gop/. Chieu do: worktree tach o HEAD,
+      chon mot ho so dang cu tren HEAD (tu kiemKe), them mot dong vao run-log.jsonl cua no va commit trong worktree; chay
+      lai lenh -> phai co dong «VIOLATION [<slug>]: evidence is stale» -> «BAT cham-ho-so-cu»; khong bat -> ma 1 «thuoc hong:
+      cham-ho-so-cu». Ham loc tep cua commit go gap mot tep ngoai ho so vong -> «BAT go-them-tep-khac». Ma 0 khi moi
+      cay clean va hai ca BAT.

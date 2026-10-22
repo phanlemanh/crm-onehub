@@ -3364,6 +3364,15 @@ executors:
     gtr_thiet_ke: node _acceptance/go-tin-hieu-rac/rang/khong-ghi-de.mjs
     tbk_quet: bun _acceptance/thanh-ben-khu-dung-chung/rang/quet-vo-tay.mjs
     tbk_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/thanh-ben-khu-dung-chung/rang/do-man.mjs"'
+    dhc_kiem_ke: bun _acceptance/don-ho-so-cu/rang/kiem-ke.mjs --tu-kiem
+    dhc_lo: bun _acceptance/don-ho-so-cu/rang/kiem-lo.mjs
+    dhc_doi_chieu: bun _acceptance/don-ho-so-cu/rang/doi-chieu.mjs
+    dhc_so_xu_ly: bun _acceptance/don-ho-so-cu/rang/so-xu-ly.mjs
+    dhc_sua_thuoc: bun _acceptance/don-ho-so-cu/rang/sua-thuoc.mjs
+    dhc_cay_ho_so: bun _acceptance/don-ho-so-cu/rang/cay-ho-so.mjs
+    dhc_ca_goi_ten: bun _acceptance/don-ho-so-cu/rang/ca-goi-ten.mjs
+    dhc_lan_chu: bun _acceptance/don-ho-so-cu/rang/sua-thuoc.mjs --lan-chu
+    dhc_cong_gop: bun _acceptance/don-ho-so-cu/rang/cong-gop.mjs
     tcc_quet: bun _acceptance/truong-chuan-o-cai-dat/rang/quet.mjs
     tcc_migration: bun _acceptance/truong-chuan-o-cai-dat/rang/migration-chi-them.mjs
     tcc_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-chuan-o-cai-dat/rang/do-man.mjs"'
