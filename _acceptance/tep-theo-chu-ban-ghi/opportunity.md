@@ -25,7 +25,11 @@ Vì sao: Chủ kho chốt 20/10: chỉ chủ bản ghi và quản trị mở đ�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: …
-- Kết quả nào là SỐNG: …
-- Kết quả nào là CHẾT: …
-- Timebox: …
+- Câu hỏi phép đo trả lời: nhân viên có tự mở được hợp đồng của bản ghi mình phụ trách mà không cần quản trị không.
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, ít nhất bốn trên năm nhân viên mở được hợp đồng của thoả thuận mình phụ trách
+  mà không hỏi, và sau một lần đổi người phụ trách người mới mở được ngay.
+- Kết quả nào là CHẾT: có một dòng log `Field file opened` với `laPhuTrach=false` mà `role` không phải `owner`, `admin`
+  — một lần mở bởi người không phải quản trị, không phụ trách bản ghi lúc mở.
+- Timebox: đọc 14 ngày sau khi lên production.
+
+Chép từ Hỏi-5 đã duyệt ở Cổng Phạm vi (manh, 22/10).
