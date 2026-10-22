@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 331df95a2df726b09a2c1ff3821a2c16e971f6a3
-human_signoff: manh 2026-10-22 — ký lại Cổng 2 trên ghim lại repin-20261022T081919Z-20140 (verified_commit 1b2696ef5, 7 suite và 15/15 eval máy xanh; E10 giữ từ S4 vòng 3 wf_406402c0-67c). Diff từ chữ ký trước chỉ là dọn dữ liệu trong test truong-tep-san.ts. Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
+human_signoff: manh 2026-10-22 — ký lần ba Cổng 2 trên ghim lại repin-20261022T090048Z-29284 (verified_commit 331df95a2 sau gộp onehub eaa31c55d, 7 suite và 15/15 eval máy xanh; E10 giữ từ S4 vòng 3 wf_406402c0-67c, chạy tay lại trên 331df95a2 ra «ttp man: dat»). Diff từ chữ ký lần hai là mã DA16 gộp vào cộng ba chỗ nối form tạo với trường Tệp. Ngoài-1, 8, 9, 12, 13, 14, 16, 18, 20 ghi Known limits; Ngoài-3, 10, 11 mở hợp đồng mới; Ngoài-2, 4, 5, 6, 7, 15, 17, 19 chấp nhận, không sửa; t9 giữ cách hiểu «byte thắng tên»; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: truong-tep
