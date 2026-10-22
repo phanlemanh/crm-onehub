@@ -391,6 +391,15 @@ await cho(
 await chup(qt, "ttp-loi-tep-375");
 const tran = await qt.evaluate(() => document.documentElement.scrollWidth);
 if (tran > DO.hep.width) await hong("ttp man: 375 cuon ngang");
+const tenNhieuDong = await qt.evaluate(() =>
+	[...document.querySelectorAll('[data-slot="o-tep"] [data-tep] [data-slot="item-title"]')]
+		.filter((x) => {
+			const cao = Number.parseFloat(getComputedStyle(x).lineHeight) || 20;
+			return x.getBoundingClientRect().height > cao * 1.5;
+		})
+		.map((x) => x.textContent),
+);
+if (tenNhieuDong.length > 0) await hong(`ttp man: ten khong cat ${tenNhieuDong.length}`);
 
 await mo(qt, phieu(deal.T1.id), CHU.nutMo);
 const bamXoa = (ten) =>

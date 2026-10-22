@@ -215,7 +215,7 @@ export function OTep({
 							</ItemMedia>
 							<ItemContent>
 								<ItemTitle title={t.tenTep} translate="no">
-									{t.tenTep}
+									<span className="min-w-0 truncate">{t.tenTep}</span>
 								</ItemTitle>
 								<ItemDescription>
 									{formatBytes(t.kichThuoc, 1)} · <LocalDay date={t.taiLuc} />
@@ -256,7 +256,7 @@ export function OTep({
 						>
 							<ItemContent>
 								<ItemTitle title={d.tep.name} translate="no">
-									{d.tep.name}
+									<span className="min-w-0 truncate">{d.tep.name}</span>
 								</ItemTitle>
 								<ItemDescription aria-live="polite">
 									{d.trangThai === "dang"

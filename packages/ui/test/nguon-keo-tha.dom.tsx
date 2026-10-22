@@ -177,6 +177,14 @@ describe("NguonKeoTha — đang kéo", () => {
 	});
 });
 
+function tha(el: Element, cacTep: File[]): void {
+	const su = new Event("drop", { bubbles: true, cancelable: true });
+	Object.defineProperty(su, "dataTransfer", { value: { files: cacTep } });
+	act(() => {
+		el.dispatchEvent(su);
+	});
+}
+
 function chonNhieu(goc: HTMLElement, cacTep: File[]): void {
 	const o = oTep(goc);
 	Object.defineProperty(o, "files", { value: cacTep, configurable: true });
@@ -205,6 +213,17 @@ describe("NguonKeoTha — nhiều tệp", () => {
 		]);
 		ghim(nhan.join() === "a.pdf,b.docx", `nhieu: onChon ${nhan.join()}`);
 		ghim(tuChoi.join() === "c.xlsx:loai", `nhieu: onTuChoi ${tuChoi.join()}`);
+	});
+
+	test("nhieu: thả nhiều tệp nhận đủ, thả lại tệp cũ ở lượt sau vẫn nhận", () => {
+		const nhan: string[] = [];
+		const goc = ve(<NguonKeoTha {...VUNG} nhieu onChon={(f) => nhan.push(f.name)} />);
+		const a = new File(["a"], "a.pdf", { type: "application/pdf" });
+		const b = new File(["b"], "b.pdf", { type: "application/pdf" });
+		tha(vung(goc), [a, b]);
+		ghim(nhan.join() === "a.pdf,b.pdf", `nhieu: tha ${nhan.join()}`);
+		tha(vung(goc), [a]);
+		ghim(nhan.join() === "a.pdf,b.pdf,a.pdf", `nhieu: tha lai ${nhan.join()}`);
 	});
 
 	test("nhieu: vắng prop thì vẫn chỉ nhận tệp đầu như cũ", () => {

@@ -14,7 +14,7 @@ import {
 } from "@crm/ui/hooks/use-file-upload";
 import { cn } from "@crm/ui/lib/utils";
 import { cva } from "class-variance-authority";
-import { useId } from "react";
+import { useEffect, useId } from "react";
 
 export type LyDoTuChoi = "loai" | "co";
 
@@ -104,7 +104,7 @@ export function NguonKeoTha({
 	};
 
 	const [
-		{ isDragging },
+		{ isDragging, files },
 		{
 			handleDragEnter,
 			handleDragLeave,
@@ -112,8 +112,13 @@ export function NguonKeoTha({
 			handleDrop,
 			openFileDialog,
 			getInputProps,
+			clearFiles,
 		},
-	] = useFileUpload({ onFilesAdded: nhanTep });
+	] = useFileUpload({ onFilesAdded: nhanTep, multiple: nhieu });
+
+	useEffect(() => {
+		if (files.length > 0) clearFiles();
+	}, [files, clearFiles]);
 
 	const moTaBoi = [idMoTa, biTat ? idTat : null, loi ? idLoi : null]
 		.filter(Boolean)
