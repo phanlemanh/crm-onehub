@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bc7ab3fee267b74f163451bfe5645bfd0b781bc3
+verified_commit: dfe14fe184fd6e7d73602f45b7eb92672300af67
 human_signoff: Manh Phan 2026-10-23
 ---
 
@@ -163,3 +163,7 @@ Round 3: PASS — E8 chay lai tren 81a104d29 (lenh do doc gio commit cua chinh s
 ### Re-pin lần 1 — 2026-10-22, do gộp onehub ee42c149e (#532, #546) sau S4 vòng 3
 run_id: repin-20261022T162912Z-38787
 sha: bc7ab3fee267b74f163451bfe5645bfd0b781bc3 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-22, do khai E7c (chiều máy chủ của AC-7) sau chữ ký
+run_id: repin-20261022T222652Z-81796
+sha: dfe14fe184fd6e7d73602f45b7eb92672300af67 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
