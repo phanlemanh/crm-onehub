@@ -54,6 +54,24 @@ function traLoi(res: request.Response): TraLoi {
 	};
 }
 
+async function mocDb(): Promise<Date> {
+	const [dong] = await db.$queryRaw<
+		{ bayGio: Date }[]
+	>`SELECT now() AS "bayGio"`;
+	return dong?.bayGio ?? new Date();
+}
+
+export async function viecMoCoi(tu: Date): Promise<number> {
+	const [dong] = await db.$queryRaw<{ so: bigint }[]>`
+		SELECT count(*) AS so FROM "agentTask" t
+		WHERE t."createdAt" >= ${tu} AND t."finishedAt" IS NULL AND (
+			(t."dealId" IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "deal" d WHERE d.id = t."dealId"))
+			OR (t."companyId" IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "company" c WHERE c.id = t."companyId"))
+			OR (t."contactId" IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "contact" k WHERE k.id = t."contactId"))
+		)`;
+	return Number(dong?.so ?? 0);
+}
+
 export function dungSan(opts: {
 	kho?: KhoTepTruong;
 	ten: string;
@@ -64,7 +82,10 @@ export function dungSan(opts: {
 		AI.map((a) => [a, { nguoi: "", cookie: "" }]),
 	) as Record<Ai, Phien>;
 
+	let batDau = new Date();
+
 	beforeAll(async () => {
+		batDau = await mocDb();
 		const { AppModule } = await import("../src/app.module");
 		const { KHO_TEP } = await import("../src/fields/kho-tep");
 		const dung = Test.createTestingModule({ imports: [AppModule] });
@@ -84,6 +105,8 @@ export function dungSan(opts: {
 	afterAll(async () => {
 		await app.close();
 		await opts.don?.();
+		const con = await viecMoCoi(batDau);
+		if (con > 0) throw new Error(`ttp don: con ${con} viec mo coi`);
 		const nguoi = AI.map((ai) => phien[ai].nguoi).filter(Boolean);
 		await db.session.deleteMany({ where: { userId: { in: nguoi } } });
 		await db.member.deleteMany({ where: { userId: { in: nguoi } } });
