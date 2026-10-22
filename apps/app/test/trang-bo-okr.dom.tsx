@@ -209,6 +209,7 @@ const OKR_GIA = {
 	danhSachBo: thuTuc("danhSachBo", docBo),
 	toanCanh: thuTuc("toanCanh", () => TOAN_CANH),
 	viecCuaBo: thuTuc("viecCuaBo", () => viecDs ?? TREO_MAI()),
+	mine: thuTuc("mine", () => ({ dangTheoDoi: [], objectives: [], daBo: [] })),
 	soanSanSang: thuTuc("soanSanSang", () => ({
 		bat: false,
 		lyDo: "don-vi-chua-bat",
@@ -269,6 +270,14 @@ const { duongTheoDonVi, duongMoCuoc } = await import(
 );
 const { khoaDon } = await import("@/app/(app)/[slug]/okr/okr-search-params");
 const { HanhDongKhu } = await import("@/app/(app)/[slug]/okr/hanh-dong-khu");
+const { CuaToi } = await import("@/app/(app)/[slug]/okr/cua-toi");
+const { ThanhBenMucTieu } = await import(
+	"@/app/(app)/[slug]/okr/thanh-ben-muc-tieu"
+);
+const { ThanhTabOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
+const { ViTriBo } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/vi-tri-bo"
+);
 const { ViecCuaBo } = await import(
 	"@/app/(app)/[slug]/okr/theo-don-vi/viec-cua-bo"
 );
@@ -719,6 +728,80 @@ describe("tbo-lien-ket", () => {
 			kiemHref(tep, await dung());
 		});
 	}
+});
+
+async function hrefMo(cay: ReactNode, chon: string, moTa: string) {
+	const s = await ve(cay, new URLSearchParams({ kyOkr: "q4" }));
+	await cho(() => s.o.querySelector(chon) !== null, moTa);
+	const href = hrefTrong(s.o, chon);
+	await go(s);
+	return href;
+}
+
+const DUNG_DANH_SACH = {
+	"(app)/[slug]/okr/cua-toi.tsx": () =>
+		hrefMo(
+			<CuaToi />,
+			'[data-trang-thai="ST-cuatoi-rong"] a[href]',
+			"tbo-lien-ket: Cua toi rong co nut Sang Theo don vi",
+		),
+	"(app)/[slug]/okr/thanh-ben-muc-tieu.tsx": () =>
+		hrefMo(
+			<ThanhBenMucTieu />,
+			'a[href*="/okr/bo-okr"]',
+			"tbo-lien-ket: thanh ben co muc Bo OKR",
+		),
+	"(app)/[slug]/okr/thanh-tab.tsx": () =>
+		hrefMo(
+			<ThanhTabOkr tab="cua-toi" />,
+			'a[href*="/okr/bo-okr"]',
+			"tbo-lien-ket: thanh the co the Bo OKR",
+		),
+	"(app)/[slug]/okr/theo-don-vi/vi-tri-bo.tsx": () =>
+		hrefMo(
+			<ViTriBo ky="q4" tenBo="Phòng Kế toán" />,
+			"a[data-ve-bo-okr]",
+			"tbo-lien-ket: vi tri co lien ket Bo OKR",
+		),
+} satisfies Record<string, () => Promise<string[]>>;
+
+function phaiDanhSach(tep: string, ds: string[]) {
+	phai(ds.length > 0, `tbo-lien-ket: ${tenTep(tep)} khong dung lien ket`);
+	for (const href of ds) {
+		const u = new URL(href, "http://x");
+		phai(
+			u.pathname === "/ws/okr/bo-okr",
+			`tbo-lien-ket: ${tenTep(tep)} sai duong ${u.pathname}`,
+		);
+		phai(
+			!u.searchParams.has("donOkr") && !u.searchParams.has("xemOkr"),
+			`tbo-lien-ket: ${tenTep(tep)} khong mo trang danh sach — ${href}`,
+		);
+		phai(
+			u.searchParams.get("kyOkr") === "q4",
+			`tbo-lien-ket: ${tenTep(tep)} mat kyOkr — ${href}`,
+		);
+	}
+}
+
+describe("tbo-lien-ket-danh-sach", () => {
+	test("vai danh-sach trong cho khop dung bon ham dung lien ket", () => {
+		const danhSach = Object.entries(CHO_LIEN_KET)
+			.filter(([, vai]) => vai === "danh-sach")
+			.map(([tep]) => tep)
+			.sort();
+		expect(Object.keys(DUNG_DANH_SACH).sort()).toEqual(danhSach);
+	});
+	for (const [tep, dung] of Object.entries(DUNG_DANH_SACH)) {
+		test(`${tep}: href da dung mo trang danh sach /okr/bo-okr, khong donOkr, giu kyOkr`, async () => {
+			phaiDanhSach(tep, await dung());
+		});
+	}
+	test("doi chung duong: lien ket mang donOkr thi khang dinh do", () => {
+		expect(() =>
+			phaiDanhSach("cua-toi.tsx", ["/ws/okr/bo-okr?kyOkr=q4&donOkr=goc"]),
+		).toThrow("tbo-lien-ket: cua-toi.tsx khong mo trang danh sach");
+	});
 });
 
 describe("tbo-lien-ket-do", () => {

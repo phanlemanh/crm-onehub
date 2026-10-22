@@ -201,6 +201,9 @@ evals:
       danh sách). Mỗi tệp «co-don» có đúng một hàm dựng trong ca; gọi với bộ OneHub → href mang donOkr=goc, với phòng ban
       → donOkr=pb:<id>. Riêng hanh-dong-khu.tsx: dựng HanhDongKhu (q.dich.don = goc, rồi pb:P1, tab Của tôi, được tạo) và
       đọc href của liên kết «Thêm mục tiêu». Ghim «tbo-lien-ket: <tên tệp> thieu donOkr=goc».
+      Ca «tbo-lien-ket-danh-sach»: mỗi tệp «danh-sach» có đúng một hàm dựng (CuaToi khi mine rỗng, ThanhBenMucTieu,
+      ThanhTabOkr tab Của tôi, ViTriBo một bộ) — dựng trong DOM với kyOkr=q4 rồi đọc href thật: đường /ws/okr/bo-okr,
+      không donOkr, không xemOkr, giữ kyOkr=q4. Ghim «tbo-lien-ket: <tên tệp> khong mo trang danh sach».
       CHIEU DO (ca «tbo-lien-ket-do»): serialize parseAsDonOkr bản cũ (bỏ goc) → khẳng định của Toàn cảnh đỏ
       «tbo-lien-ket: toan-canh.tsx thieu donOkr=goc». Chiều đỏ tay đã đo: đặt lại điều kiện `if (don.loai !== "goc")`
       trước q.set(donOkr) trong useDuongTheoDonVi của hanh-dong-khu.tsx → ca hanh-dong-khu đỏ
