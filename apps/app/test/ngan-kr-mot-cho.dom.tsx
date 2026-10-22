@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { homNayVN } from "@crm/validation/ngay-vn";
 import { guiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { type KieuKr, tienDoKr } from "@crm/validation/okr-kr";
+import { TINH_TRANG_KR } from "@crm/validation/okr-muc-tieu";
 import { troLyTomTatOutput } from "@crm/validation/okr-tom-tat";
 import { hoiPhienOutput, ketQuaNopTraLoi } from "@crm/validation/okr-tra-loi";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +14,7 @@ import { z } from "zod";
 import type { CapNhatKr } from "@/app/(app)/[slug]/okr/cap-nhat-kr";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
 import { canhKrOutput } from "../../api/src/okr/okr-canh-kr.contracts";
+import { moiKrOutput } from "../../api/src/okr/okr-moi-kr.contracts";
 import {
 	banGhiChiSoOutput,
 	lichSuSoOutput,
@@ -1231,6 +1233,7 @@ const { TheQuanh } = await import(
 const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
 const { KhoiKrCuaToi } = await import("@/app/(app)/[slug]/okr/khoi-kr-cua-toi");
 const { HopTuan } = await import("@/app/(app)/[slug]/okr/hop-tuan");
+const { BangMoiKr } = await import("@/app/(app)/[slug]/okr/moi-kr/moi-kr");
 
 const { CUA_OKR_HOI } = await import("@/lib/cua-okr-config");
 const CUOC_HOI = "cuoc-hoi-loi";
@@ -1539,6 +1542,37 @@ const MA_TRAN_LOI: OLoi[] = [
 		tab: null,
 	},
 	{
+		o: "moi-kr",
+		dung: () => {
+			const { m, k } = krLoi();
+			kho.rieng.set("okr.moiKr", () =>
+				moiKrOutput.parse({
+					rows: [
+						{
+							keyResultId: k.id,
+							tieuDe: k.title,
+							objectiveId: m.id,
+							mucTieu: m.title,
+							donVi: { khoa: "bp:bp-1", ten: "Phòng một" },
+							nguoi: { id: "u-moi-kr", name: "Người một" },
+							progress: 0.5,
+							expected: null,
+							tinhTrang: TINH_TRANG_KR[0],
+						},
+					],
+					total: 1,
+					facetCounts: { tinhTrang: [], donVi: [], nguoi: [] },
+				}),
+			);
+			return dung(<BangMoiKr cycleId="q4" />);
+		},
+		bam: () =>
+			Array.from(document.querySelectorAll<HTMLTableRowElement>("tbody tr")).find((tr) =>
+				tr.textContent?.includes(krLoi().k.title),
+			) ?? null,
+		tab: null,
+	},
+	{
 		o: "hoi-kara",
 		dung: async () => {
 			kho.rieng.set("okr.hoiPhien", () =>
@@ -1556,8 +1590,8 @@ const MA_TRAN_LOI: OLoi[] = [
 ];
 
 describe("vk7-moi-loi", () => {
-	test("vk7-moi-loi: ma tran tam loi viet truoc — moi loi goi dung mot lan mo {kind: kr, id: K}, khong so-kr, khong tab dien-bien; loi con so mang tab so-nguon", async () => {
-		expect(MA_TRAN_LOI.length).toBe(8);
+	test("vk7-moi-loi: ma tran chin loi viet truoc — moi loi goi dung mot lan mo {kind: kr, id: K}, khong so-kr, khong tab dien-bien; loi con so mang tab so-nguon", async () => {
+		expect(MA_TRAN_LOI.length).toBe(9);
 		const thucTe: Record<string, Json> = {};
 		for (const o of MA_TRAN_LOI) {
 			datLai();

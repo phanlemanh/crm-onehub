@@ -85,6 +85,7 @@ const CHU = {
 	hienTai: "hiện tại",
 	daDong: "đã đóng",
 	toanCanhTab: "Toàn cảnh",
+	sucKhoeMuc: "Sức khoẻ",
 };
 
 const CHON = new Set(
@@ -1575,10 +1576,9 @@ async function buocHopTuan() {
 	await bamSel(t, `[data-mo-kr='${Kb}']`);
 	await doi(
 		t,
-		"E14 buoc 3: bam dong Kb mo sheet muc tieu",
-		(h) =>
-			new URL(location.href).searchParams.get("record") === `objective:${h}`,
-		OKR.H.id,
+		"E14 buoc 3: bam dong Kb mo ngan KR (ngan-kr-mot-cho)",
+		(k) => new URL(location.href).searchParams.get("record") === `kr:${k}`,
+		Kb,
 	);
 	await cho(600);
 	await chup(t, "E14-buoc-hop-tuan-2.png", false);
@@ -2022,7 +2022,7 @@ async function buocChuKy() {
 	);
 	await chup(t, "E23-buoc-chon-ky-3.png");
 
-	await bamChu(t, "a", CHU.toanCanhTab);
+	await bamChu(t, "[data-slot='area-sidebar'] a", CHU.sucKhoeMuc);
 	await hienSel(t, "[data-hang-toan-canh]");
 	await cho(800);
 	const hangPK = await t.evaluate(
