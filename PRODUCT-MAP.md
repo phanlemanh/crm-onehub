@@ -12,8 +12,8 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>153 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>167 việc"] --> GG{"Cổng Giá trị"}
+  GB --> DG["Đã giao<br/>154 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>169 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -145,6 +145,7 @@ flowchart TD
 - Chủ kho chọn OneHub Platform hay một sản phẩm khác ngay trên trang Lộ trình của OneHub Center và đọc lộ trình, tiến độ, hồ sơ của sản phẩm đó như của CRM (`lo-trinh-nhieu-san-pham`)
 - «Trang lộ trình đúng tên OneHub Center và không làm vỡ bản dựng» (`lo-trinh-ten-va-build`)
 - Chọn một mục trong Lọc ở trang Theo đơn vị thì menu Lọc vẫn mở, khung Lọc trên điện thoại không tự thu lại (`loc-don-vi-khong-tu-dong`)
+- Nhân viên quan hệ đối tác lọc danh sách theo trường chữ, số, ngày, ô tích hay ô trống, và lưu bộ lọc ấy cho cả Thoả thuận (`loc-moi-truong`)
 - Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc (`loc-va-kieu-xem-chung`)
 - Luật thứ bảy «vong-doi» của scripts/luat-kho — máy bắt mô hình có hai cột cất, thủ tục list lẫn bản đã cất, và xoá vĩnh viễn không kiểm bản đã lưu trữ — và cả bộ luật kho chạy ở CI Acceptance (`luat-kho-vong-doi`)
 - Lưu trữ một trường thôi hỏi lại và có «Hoàn tác» như mọi chỗ lưu trữ khác (`luu-tru-truong-khong-hoi`)
@@ -204,6 +205,7 @@ flowchart TD
 - Góp ý khi bấm — người sửa được một Mục tiêu hay KR bấm «Nhờ Trợ lý OKR góp ý» trong hộp thoại sửa, nhận vài đề xuất (câu cũ cạnh câu mới, câu hỏi chất lượng, chỗ Căn chỉnh) rồi nhận, sửa hay bác từng dòng; dòng xu hướng tính bằng mã cạnh ô đích; quản trị bật theo ba nấc tắt · chế độ ẩn · bật cho từng việc và từng đơn vị; dựng và đo trên bộ OKR mẫu, dữ liệu thật là điều kiện bật (`tro-ly-okr-de-xuat`)
 - Nền Trợ lý OKR — quản trị thấy tháng này AI tiêu bao nhiêu cho từng việc và bật tắt được Trợ lý OKR theo việc và theo đơn vị; subagent tro_ly_okr cách ly với bốn chốt, sổ chi phí AI cho mọi phiên, trần tháng kiểm trước khi xếp việc, bảng và cột cho 9b và 9c; người dùng chưa thấy gì (`tro-ly-okr-nen`)
 - Tóm tắt tuần — sáng hôm sau ngày cập nhật, Trợ lý OKR tóm tắt các lần Cập nhật tuần của một phòng ban; khối tóm tắt ở đầu bảng họp tuần, câu nào cũng bấm ra lần cập nhật gốc, máy kiểm lại mọi con số lúc ghi và lúc hiện; Trưởng phòng ban nhận một dòng trong nhắc buổi sáng và tắt được dòng đó; quản trị bật theo ba nấc tắt · chế độ ẩn · bật và thấy mọi bản ở màn Sức khoẻ; dựng và đo trên bộ OKR mẫu, dữ liệu thật là điều kiện bật (`tro-ly-okr-tom-tat`)
+- Quản trị mở Cài đặt › Trường, thấy trường chuẩn bằng tiếng Việt khớp đúng phiếu, sắp lại và ẩn được chúng, và bật «Bắt buộc» cho một trường (`truong-chuan-o-cai-dat`)
 - Nhân viên quan hệ đối tác xem và sửa một trường tự tạo trên phiếu và trong bảng y như trường có sẵn: số viết kiểu Việt, ô tích có nhãn, liên kết bấm được, lỗi nói tiếng Việt (`truong-mot-cach-cu-xu`)
 - Người quản trị tìm thấy trường tự tạo ở Cài đặt và được gợi ý bộ trường của môi giới Việt (`truong-tu-tao-o-cai-dat`)
 - Lịch làm việc chọn đủ bảy ngày vẫn giữ đúng như chọn, và dự án đủ 300 việc vẫn sửa được mốc và phụ thuộc (`va-gantt-lich-bay-ngay`)
@@ -331,6 +333,7 @@ flowchart TD
 - Soát ảnh OKR lượt 3 — hộp Nhập thấy đủ bảy cột và đánh dấu dòng hỏng ở 1440; hàng thẻ Cài đặt ở 390 tự đưa thẻ đang mở vào tầm nhìn; bộ chọn chu kỳ bỏ nhãn loại lặp; gợi ý tên chu kỳ theo năm hiện tại tính ở server (`okr-soat-anh-luot-3`)
 - Trang 30 ngày đầu theo khuôn trang danh sách của deals (`onboarding-giong-deals`)
 - Phiên chết về trang đăng nhập — người mang cookie phiên đã hết không còn thấy landing của hãng ở / hay trang «không còn trong không gian làm việc»; proxy tách 401 của workspace.get khỏi «không biết», trang / và /het-quyen tự kiểm phiên (`phien-chet-ve-dang-nhap`)
+- pre-push xét phần PR tự thêm khi lần đẩy mang commit mới của onehub, nên lần đẩy chỉ mang mã của người khác không chạy lại test và build (`pre-push-phan-rieng-pr`)
 - pre-push bỏ test và build khi mọi tệp của lần đẩy là tệp T1; vẫn chạy check-types, lint, lint:slop; verify-gate-shape chấp nhận nhánh này qua một khối khai có lý do trong gate-shape.json (`pre-push-t1`) — đã giao — không đo, khai ở Cổng Đáng
 - Lần đẩy và PR chỉ ghim lại (run-log, decisions, báo cáo bằng chứng) được CI và pre-push tính là nhẹ, mà cổng nghiệm thu vẫn chạy và vẫn đỏ được (`push-ghim-lai-t1`) — đã giao — không đo, khai ở Cổng Đáng
 - Người điều phối lọc, sắp, tìm và xem theo bảng cột trên danh mục 30 ngày đầu — và bộ lọc ra không kết quả không còn đẩy họ vào ngõ cụt (`quan-ly-danh-muc-30-ngay`) — đã chấm bởi thực tế
