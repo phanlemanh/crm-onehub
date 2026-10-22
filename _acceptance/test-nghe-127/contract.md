@@ -5,7 +5,7 @@ slug: test-nghe-127
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, docs]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-10-21T23:23:04Z
 design_doc: docs/superpowers/specs/2026-10-22-test-nghe-127-design.md
@@ -72,3 +72,10 @@ Bỏ quét bằng skill (sổ quyết định, dòng «bỏ coverage-scan»); tr
 ## Notes
 
 - Tái tạo cơ chế không cần Colima: một socket giữ `127.0.0.1:P` trả chữ không phải HTTP (`rang/co-che.ts`).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Mô tả eval E2 còn ghi 49 chỗ dựng app trên 46 tệp, thực tế đã là 50 chỗ trên 47 tệp; máy quét vẫn kiểm từng tệp.
+  - Ngoài-2: Mô tả eval E1, E2 nêu vài câu báo lỗi mà máy quét không in ra đúng chữ; chiều xanh vẫn đúng.
+  - Ngoài-3: Mô tả eval E1, E2 hứa vài lời ném theo khuôn cũ của máy quét; người đối chiếu đầu ra đỏ sẽ không thấy câu khớp.
+  - Ngoài-4: Bài thử cơ chế coi mọi lỗi mở cổng ở 127.0.0.1 là bị từ chối, chưa ghim đúng lỗi cổng đang bị giữ.
+  - Ngoài-5: Máy quét chỉ kiểm lời nghe cổng nằm gần chỗ dựng app, chưa kiểm nó đứng trước lời gọi test đầu tiên.
+  - Ngoài-6: Ca tự thử của răng khẳng định viết tay đúng khuôn bên đọc và không chặn khi đọc ra 0 khúc diff.

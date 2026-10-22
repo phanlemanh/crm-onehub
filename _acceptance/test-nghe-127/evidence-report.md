@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 23155a6aaf8512515b9acb53cab5e96dffc2e547
-human_signoff:
+human_signoff: manh 2026-10-22 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 7/7 eval, 7/7 lệnh suite, hội đồng E5 đạt; vòng 1 PASS hoá cũ sau gộp onehub). Ngoài-1 đến Ngoài-6 ghi Known limits; đồng ý cắt; Treo phê hết.
 ---
 
 # Evidence Report: test-nghe-127
