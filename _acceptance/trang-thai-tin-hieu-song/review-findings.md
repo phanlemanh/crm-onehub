@@ -1,26 +1,56 @@
-# Review findings: trang-thai-tin-hieu-song (round 2)
+# Review findings: trang-thai-tin-hieu-song (round 3)
 
 ## Trong hợp đồng
 
-- **Lệnh đo bỏ sót thông báo khi bản chụp mang sha của commit không chạm LO-TRINH.html, rồi báo nhầm là «thiếu»**
-  file: `scripts/tin-hieu/do-bao-doi-cho.ts:92`
-  severity: medium
-  AC: AC-8
-  source: bugs
-  detail: Vòng này `ghepLanDoi` lấy giờ commit cho `lucCommit` từ danh sách `commit`. Danh sách đó là kết quả `git log --first-parent ... -- LO-TRINH.html`, nên chỉ chứa commit chạm vào tệp lộ trình. Nhưng sha nằm trong khoá thông báo là `vao.sha` của bản chụp, và bản chụp lấy `git rev-parse HEAD` ở scripts/ban-chup-lo-trinh/day.ts:126. Workflow .github/workflows/ban-chup-lo-trinh.yml chạy khi một lần push lên onehub có chạm LO-TRINH.html, và chạy cả qua `workflow_dispatch`. Có hai trường hợp HEAD không chạm tệp đó: (1) một lần push gồm nhiều commit mà commit cuối không sửa LO-TRINH.html; (2) chạy lại bằng tay qua workflow_dispatch sau khi lần đẩy trước hỏng, đúng đường cứu thường dùng. Khi đó `lucCommit.get(t.sha)` trả về undefined và `t.sha !== l.sha`, nên thông báo đã gửi thật bị loại khỏi `phu`. Lần đổi chỗ bị gắn cờ `BAO_DOI_CHO_DO.thieu`, và KẾT LUẬN ra «không đạt» dù người gửi đã nhận thông báo. Cách sửa: dựng `lucCommit` từ mọi commit first-parent của nhánh kể từ `tu`, bỏ pathspec, hoặc đọc giờ commit của từng `t.sha` bằng `git show -s --format=%cI`.
+Không có mục nào.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 3 (lời hứa là quan hệ giữa hai giá trị, nhưng bài so một giá trị với chính nó): ở E2, phép so «trang Tín hiệu chọn nguồn giống trang Lộ trình» không bao giờ gọi bộ đọc của trang Lộ trình**
+- **lucCommitCuaSha nuốt lỗi git, biến lỗi tra cứu thành «thiếu thông báo»**
+  Người dùng thấy gì: Khi chủ kho chạy lệnh đo trên một bản kho tải thiếu lịch sử, kết quả có thể báo nhầm là có tín hiệu đổi chỗ mà không được thông báo và kết luận «không đạt», dù thông báo vẫn đến người gửi bình thường.
+  Căn cứ: Chỉ ảnh hưởng con số đo của chủ kho, không ảnh hưởng người gửi tín hiệu; chạy lại trên bản kho đầy đủ là ra kết quả đúng, và sai lệch lộ ra là kết luận «không đạt» nên dễ bị nghi ngờ.
+  file: `scripts/tin-hieu/do-bao-doi-cho.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Lệnh đo tự tách chuỗi khoa để lấy ma/sha thay vì phân tích noiDung bằng schema có sẵn**
+  Người dùng thấy gì: Người dùng không thấy gì khác hôm nay. Nếu sau này cách đặt khoá của thông báo đổi, lệnh đo của chủ kho có thể lặng lẽ bỏ sót một số dòng thay vì báo lỗi.
+  Căn cứ: Không ảnh hưởng người gửi tín hiệu và chỉ phát sinh khi có người đổi khuôn khoá trong tương lai; sửa rẻ khi đó, nên không đáng mở việc riêng.
+  file: `scripts/tin-hieu/do-bao-doi-cho.ts`
+  severity: medium
+  Đề xuất: wont-fix
+
+- **Giá trị trả về `commit` và kiểu `CommitDo` của lanDoiTuGit thành mã chết sau lần sửa**
+  Người dùng thấy gì: Không ảnh hưởng người dùng; chỉ là một phần mã trong công cụ đo của chủ kho không còn ai dùng.
+  Căn cứ: Không đổi hành vi nào người dùng hay chủ kho thấy; để lại không gây hại và dọn được bất cứ lúc nào khi chạm lại tệp này.
+  file: `scripts/tin-hieu/do-bao-doi-cho.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **A late notification gets labelled 'thiếu thông báo' instead of 'quá một ngày'**
+  Người dùng thấy gì: Trong một tình huống hiếm (lượt đẩy của commit đổi chỗ không bao giờ chạy, thông báo đến từ lần đẩy muộn hơn một ngày), báo cáo đo ghi lý do là «thiếu thông báo» thay vì «trễ», và không hiện giờ thông báo thật.
+  Căn cứ: Chỉ sai lý do ghi trên một dòng của báo cáo đo, kết luận cuối vẫn là «không đạt» và người gửi không bị ảnh hưởng; chủ kho tự đối chiếu được từ lịch sử.
+  file: `scripts/tin-hieu/do-bao-doi-cho.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Eval E8 text still says 6 commits change LO-TRINH.html; the test now has 5**
+  Người dùng thấy gì: Không ảnh hưởng người dùng; mô tả của một ca kiểm trong hồ sơ nói sáu commit trong khi bài test thật có năm, có thể làm người đối chiếu hồ sơ bối rối.
+  Căn cứ: Chỉ là chữ trong hồ sơ nghiệm thu, không đổi hành vi sản phẩm; sửa một dòng, nhưng chữ lệch dễ bị người chấm sau để ý nên nên ghi lại.
+  file: `_acceptance/trang-thai-tin-hieu-song/evals.yaml`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (lời hứa là quan hệ giữa hai giá trị, nhưng bài so một giá trị với chính nó): ở E2, phép so «trang Tín hiệu chọn nguồn giống trang Lộ trình» không bao giờ gọi bộ đọc của trang Lộ trình (r2)**
   Người dùng thấy gì: Hai trang tín hiệu và trang Lộ trình có thể chọn khác nguồn dữ liệu trong một trường hợp hiếm là bản chụp lưu bị hỏng một phần, và bài kiểm tự động hiện không bắt được chỗ lệch này. Người dùng có thể thấy chỗ cũ của tín hiệu ở trang này nhưng chỗ mới ở trang kia.
   Căn cứ: Chỉ xảy ra khi dữ liệu bản chụp hỏng một phần, hiếm; hậu quả nhẹ (chỗ hiển thị cũ hơn một nhịp, tự hết khi có bản chụp kế tiếp), không mất dữ liệu, và bổ sung bài kiểm sau này rẻ.
   file: `apps/app/test/tin-hieu-nguon.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Nhánh này thêm một trang bằng chứng vào hồ sơ đã ký của tính năng khác (gom-tin-hieu-tu-chay) (r1 · tệp đã đổi)**
+- **Nhánh này thêm một trang bằng chứng vào hồ sơ đã ký của tính năng khác (gom-tin-hieu-tu-chay) (r1)**
   Người dùng thấy gì: Bản giao mang theo một trang bằng chứng của tính năng gom tín hiệu đã ký mà người ký chưa từng xem. Người dùng không thấy gì khác đi, nhưng hồ sơ đã ký kia có thể bị coi là lệch.
   Căn cứ: Không ảnh hưởng người dùng cuối và không mất dữ liệu; gỡ tệp khỏi nhánh là việc rẻ nhưng thuộc dọn nhánh, không thuộc tính năng này.
   file: `_acceptance/gom-tin-hieu-tu-chay/evidence-page.html`

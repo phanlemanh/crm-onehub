@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 474fc669f69baa1fdfd8c10b051e45804296d4c3
+verified_commit: 81a104d29f3a61094004de390dbcae164d24aa42
 human_signoff:
 ---
 
@@ -29,22 +29,18 @@ human_signoff:
 - eval: E1
   run_id: mvj6hn02sk2m
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.ttts_doc_ban_chup
   verified_at: 2026-10-22T06:46:41Z
-  output: |
-    bun run test -- "cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-doc-ban-chup"
-    test-run: dropped crm_mvj6hn02sk2m_test
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-trang-thai-tin-hieu-song-E2-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.ttts_khong_lui
   verified_at: 2026-10-22T06:46:41Z
-  output: |
-    cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-khong-lui
-    Ran 1 test across 1 file. [268.00ms]
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-trang-thai-tin-hieu-song-E3-r1
@@ -81,9 +77,10 @@ human_signoff:
 - eval: E7
   run_id: minted-trang-thai-tin-hieu-song-E7-r2
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.script.ttts_do_man
   verified_at: 2026-10-22T06:46:41Z
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
   screenshot: evidence/E7-cua-toi-1280-vi.png
   observed: |
     Da mo tung anh bang Read.
@@ -97,51 +94,51 @@ human_signoff:
   network_observed: n-a (driver)
 
 - eval: E8
-  run_id: mvj6hmz7n0jy
+  run_id: mvjk7inzri65
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ttts_do
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
   output: |
     bun run test -- "bun test scripts/tin-hieu/test/do-bao-doi-cho.spec.ts -t ttts-do"
-    test-run: dropped crm_mvj6hmz7n0jy_test
+    test-run: dropped crm_mvjk7inzri65_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-trang-thai-tin-hieu-song-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-trang-thai-tin-hieu-song-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
 
 - cmd: bun run lint:slop
-  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_lint_slop-r2
+  run_id: minted-trang-thai-tin-hieu-song-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-trang-thai-tin-hieu-song-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-trang-thai-tin-hieu-song-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-22T06:46:41Z
+  verified_at: 2026-10-22T13:10:44Z
 
 ## Known limits
 
@@ -151,10 +148,7 @@ human_signoff:
 
 none — moi eval feature deu red tren baseline (co phan biet)
 
-### Baseline khong do
-
-- bun run test -- "cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-doc-ban-chup": bo qua baseline: tep apps/app/test/tin-hieu-nguon.spec.ts co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && bun test ./test/tin-hieu-nguon.spec.ts -t ttts-khong-lui: bo qua baseline: tep apps/app/test/tin-hieu-nguon.spec.ts co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+Round 3 do baseline cho E8: red. E1 den E7 la carry-forward, khong do lai o round nay.
 
 ## Variance
 
@@ -164,3 +158,4 @@ none — every multi-run eval is uniform
 
 Round 1: REJECT — bo suite app+ui do va cac finding trong hop dong o AC-2, AC-7, AC-8 (lenh do bo sot commit, E2 khong qua bo doc that, do man bam tu trang dich). Returned to implementation (commit 474fc669f).
 Round 2: PASS — E1, E2, E7, E8 chay lai tren 474fc669f; E3, E4, E5, E6 carry-forward tu round 1 (delta khong cham paths cua eval); 7 lenh suite xanh. Moc verified_at cua cac khoi chay lai o round 2 la moc lam tron, run_id chep tu run-log.
+Round 3: PASS — E8 chay lai tren 81a104d29 (lenh do doc gio commit cua chinh sha moi thong bao); E1, E2, E7 carry-forward tu round 2, E3, E4, E5, E6 carry-forward tu round 1 (delta khong cham paths cua eval); 7 lenh suite xanh. Moc verified_at cua cac khoi chay lai o round 3 la moc lam tron, run_id chep tu run-log.
