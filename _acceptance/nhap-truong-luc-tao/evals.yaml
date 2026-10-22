@@ -1,0 +1,147 @@
+slug: nhap-truong-luc-tao
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_bo_truong
+    expected: "exit 0; -t ntl-bo-truong của apps/app/test/nhap-truong-luc-tao.dom.tsx. Với mỗi locale trong {vi, en} và mỗi loại trong {DEAL, COMPANY, CONTACT}: kho tRPC giả trả fields.list có bốn trường tự tạo viết sẵn (bat_buoc required true showOnSheet true; hien showOnSheet true; khong_hien showOnSheet false; da_luu_tru archivedAt khác null — fields.list rút qua bộ đọc đầu ra thật của apps/api/src/fields, round-trip parse, không dựng tay) và fields.layout (round-trip qua parseBoTriTruong) đưa 'hien' lên ngay trên trường chuẩn thứ hai của danh mục, ẩn một trường chuẩn không bắt buộc viết sẵn (DEAL expectedCloseDate, COMPANY city, CONTACT title). Dựng sheet Tạo thật của loại (CreateDealSheet, CreateCompanySheet, CreateContactSheet với ?new=true), đọc nhãn các ô theo thứ tự DOM. Đáp án mỗi loại TÍNH bằng một hàm viết trong test từ danh mục khoá của hợp đồng (không gọi mucFormTao của app): trường chuẩn không ẩn theo thứ tự layout, cộng bat_buoc, hien; với DEAL thêm Giai đoạn ngay sau Công ty. Dãy khác đáp án thì ném 'ntl bo truong: lech <locale> <loai> form=<json> dap=<json>'. Có nhãn của khong_hien, da_luu_tru hay của trường chuẩn đã ẩn thì ném 'ntl bo truong: thua <loai> <nhan>'. Nhãn ô của mỗi khoá chuẩn đọc qua nhanTruongChuan — đúng danh mục mà ba phiếu vẽ mục Chi tiết (DA15 E1 đã chứng danh mục khớp phiếu ở hai locale); lệch thì rơi vào 'lech'. Ô bat_buoc không có dấu bắt buộc như ô Tên (cùng thuộc tính/aria-required với ô Tên trong cùng DOM) thì ném 'ntl bo truong: thieu dau bat buoc <loai>'. Số cặp (locale, loại) đã so khác 6 thì ném 'ntl bo truong: thieu cap <n>'. Ca tiền tệ cùng tệp: currency.settings giả có tiền báo cáo 'VND'; CreateDealSheet vừa mở thì ô Tiền tệ khác 'VND' thì ném 'ntl bo truong: tien te mac dinh <gia tri>'; đối chứng cùng ca, đổi tiền báo cáo sang 'USD' và dựng lại: ô không đổi theo thì ném 'ntl bo truong: tien te dung yen'. Đối chứng của thước, cùng fixture: test bỏ phần tử cuối của dãy đáp án trong bản chép rồi so; không ném 'lech' thì ném 'ntl bo truong: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub sau khi DA15 gộp, form tạo không có trường tự tạo nào, ném 'ntl bo truong: lech vi DEAL ...'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/companies/create-company-sheet.tsx", "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/fields/**, apps/app/lib/messages/crm.ts, apps/app/test/nhap-truong-luc-tao.dom.tsx]
+
+  - id: E1b
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_chua_tai
+    expected: "exit 0; -t ntl-chua-tai của apps/app/test/nhap-truong-luc-tao.dom.tsx. Dựng CreateDealSheet thật ở vi, ?new=true. Ca 1: fields.list giả là một promise chưa trả: dãy nhãn ô khác đúng trường chuẩn của danh mục DEAL theo thứ tự mặc định (cộng Giai đoạn) thì ném 'ntl chua tai: dang tai <json>'; nút Tạo không disabled thì ném 'ntl chua tai: nut mo khi dang tai'. Ca 2 cùng fixture: fields.list giả ném TRPCClientError INTERNAL_SERVER_ERROR: nút Tạo disabled thì ném 'ntl chua tai: nut khoa khi loi'; điền Tên, Công ty rồi bấm Tạo: deals.create không được gọi đúng một lần thì ném 'ntl chua tai: khong tao khi loi'. Đối chứng cùng fixture: ca 3 fields.list trả một trường hien showOnSheet true: ô của nó vắng thì ném 'ntl chua tai: doi chung'. Chiều đỏ trong lịch sử: trên onehub sau khi DA15 gộp, form không đọc fields.list nên nút Tạo không bao giờ khoá, ném 'ntl chua tai: nut mo khi dang tai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/fields/**, apps/app/test/nhap-truong-luc-tao.dom.tsx]
+
+  - id: E1c
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_giu_luat_cu
+    expected: "exit 0; chạy nguyên ba tệp có sẵn trên onehub: apps/app/test/tra-cuu-thuong-hieu-viet-nam.dom.tsx (chặn tên miền nền tảng ở Tạo công ty), apps/app/test/dien-thoai-ca-nhan.dom.tsx (chuẩn hoá số điện thoại ở Tạo cá nhân và thêm nhanh cá nhân), apps/app/test/deals-giai-doan-hydrat.dom.tsx (giai đoạn mở đầu ở Tạo thoả thuận). Không sửa đáp án của ba tệp này, trừ đáp án thứ tự ô mà AC-1 thay (dòng sổ fix S3); sửa fixture chỉ khi thêm fields.list/fields.layout vào kho giả, và mọi fixture thêm rút qua bộ sinh thật (sapBoTri). Một tệp đỏ thì lệnh thoát khác 0 với tên ca đỏ. Đối chứng: lệnh in số ca đã chạy của từng tệp; số ca của một tệp bằng 0 thì ném 'ntl giu luat cu: khong chay <tep>'. Chiều đỏ: đột biến tay lúc dựng — bỏ nenTangCuaTenMien khỏi bộ mô tả ô Tên miền phải làm tra-cuu-thuong-hieu-viet-nam đỏ — ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/companies/create-company-sheet.tsx", "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/record-sheet/quick-add.tsx, apps/app/components/crm/fields/**, apps/app/test/tra-cuu-thuong-hieu-viet-nam.dom.tsx, apps/app/test/dien-thoai-ca-nhan.dom.tsx, apps/app/test/deals-giai-doan-hydrat.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: unit
+    cmd: config:executors.script.ntl_quet
+    expected: "exit 0; bun _acceptance/nhap-truong-luc-tao/rang/quet.mjs. Quét bằng TypeScript compiler API (ts.createSourceFile, không regex trên chữ): (a) trong apps/app/components/crm/fields/kieu-truong.tsx, khởi tạo của KIEU_TRUONG phải có thuộc tính mặt form tạo (tên mặt viết sẵn trong rang, đọc từ kế hoạch S2) ở đủ mười một khoá viết sẵn (TEXT, LONG_TEXT, NUMBER, DATE, CHECKBOX, SELECT, URL, EMAIL, PHONE, USER, MONEY); thiếu thì ném 'ntl quet: thieu mat tao <kieu>'. (b) Với năm tệp viết sẵn (ba create-*-sheet.tsx, quick-add.tsx cho QuickAddContact và QuickAddDeal): phần tử JSX Input, Checkbox, Select, DatePicker, MoneyInput, Textarea trong thân form thì ném 'ntl quet: ve tay <tep>:<dong> <the>', trừ phần tử nằm trong một danh sách ngoại lệ viết sẵn (CompanyPicker, ô Giai đoạn); biểu thức switch hay so sánh trên '.kieu' hoặc '.type' của một trường thì ném 'ntl quet: re nhanh kieu <tep>:<dong>'; tệp không nhập kieu-truong thì ném 'ntl quet: khong doc bang <tep>'. Tệp vắng thì ném 'ntl quet: thieu tep <tep>'. Cặp hai chiều cùng fixture: rang chép create-company-sheet.tsx của cây vào thư mục tạm, chèn '<Input id=\"x\" />' vào thân form, quét bản chép: không ném đúng 've tay' thì ném 'ntl quet: thuoc mu'. Chiều đỏ trong lịch sử: trên onehub sau khi DA15 gộp, ném 'ntl quet: thieu mat tao TEXT'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/fields/kieu-truong.tsx, "apps/app/app/(app)/[slug]/companies/create-company-sheet.tsx", "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/record-sheet/quick-add.tsx, _acceptance/nhap-truong-luc-tao/rang/quet.mjs]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_gui_gia_tri
+    expected: "exit 0; -t ntl-gui-gia-tri của apps/app/test/nhap-truong-luc-tao.dom.tsx. Ma trận viết sẵn đủ mười kiểu của FIELD_TYPES, mỗi kiểu một trường tự tạo DEAL showOnSheet true và một thao tác + giá trị đáp án: TEXT gõ 'HS-1' → 'HS-1'; LONG_TEXT gõ hai dòng → chuỗi hai dòng; NUMBER gõ '1.234,5' → 1234.5; DATE chọn ngày trong DatePicker → 'YYYY-MM-DD' của ngày ấy; CHECKBOX bấm nhãn → true; SELECT chọn lựa chọn thứ hai → id lựa chọn 2; URL gõ 'onehub.vn' → 'onehub.vn'; EMAIL gõ 'an@onehub.vn'; PHONE gõ '0901234567' → '0901234567' (đúng chuỗi gõ, cùng luật docNhapTheoKieu với ô sửa trên phiếu); USER chọn người thứ nhất → id người 1. Cộng hai trường không bắt buộc để trống: ghi_chu_tuy TEXT và da_ky CHECKBOX không tích. fields.list rút qua bộ đọc đầu ra thật của apps/api/src/fields (round-trip parse). Dựng CreateDealSheet thật ở vi, ?new=true, điền Tên, Công ty và mười ô bằng thao tác người dùng, bấm Tạo. deals.create không được gọi đúng một lần thì ném 'ntl gui gia tri: so lan <n>'; với mỗi kiểu, variables.fields[khoá] khác đáp án thì ném 'ntl gui gia tri: <kieu> gui <json>'; số kiểu đã so khác 10 thì ném 'ntl gui gia tri: thieu kieu <n>'; có khoá ghi_chu_tuy hay da_ky thì ném 'ntl gui gia tri: gui khoa trong <khoa>'; deals.update được gọi thì ném 'ntl gui gia tri: con cap nhat'. Vế phiếu: dựng DealSheet thật với deals.byId giả trả bản ghi rút qua bộ đọc đầu ra thật của apps/api/src/deals (dealDetailOutput) mang đúng mười giá trị mà E3b chứng máy chủ lưu; hàng nào của mười trường không hiện giá trị đáp án thì ném 'ntl gui gia tri: phieu thieu <khoa>'; đối chứng cùng fixture, deals.get trả bản ghi không giá trị thì hàm kiểm phải trả 'phieu thieu', không thì ném 'ntl gui gia tri: thuoc phieu mu'. Ca công ty và cá nhân: CreateCompanySheet với một trường TEXT, CreateContactSheet với một trường SELECT; companies.create/contacts.create không mang fields đúng giá trị thì ném 'ntl gui gia tri: <loai> gui <json>'. Đối chứng cùng fixture: gõ 'abc' vào ô NUMBER rồi bấm Tạo: deals.create được gọi thì ném 'ntl gui gia tri: doi chung sai kieu van gui'. Chiều đỏ trong lịch sử: trên onehub sau khi DA15 gộp, form không có ô trường tự tạo, ném khi tìm ô TEXT."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/companies/create-company-sheet.tsx", "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/fields/**, apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/test/nhap-truong-luc-tao.dom.tsx]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ntl_api_tao_co_truong
+    expected: "exit 0; -t ntl-api-tao-co-truong của apps/api/test/nhap-truong-luc-tao.spec.ts trên kho thử riêng của lượt. Fixture qua đường ghi thật (caller tRPC với phiên quản trị): fields.create mười trường DEAL, một mỗi kiểu của FIELD_TYPES (ma trận viết sẵn như E3, đều showOnSheet true), một trường COMPANY TEXT, một trường CONTACT SELECT. deals.create với fields mang mười giá trị đáp án của ma trận; rồi deals.get: mỗi khoá có giá trị khác giá trị gửi (Số so bằng Number, Ngày so chuỗi YYYY-MM-DD, Chọn so id, Điện thoại so đúng chuỗi gửi) thì ném 'ntl api tao co truong: doc lai <kieu> <gia tri>'; số kiểu đã so khác 10 thì ném 'ntl api tao co truong: thieu kieu <n>'. Số FieldValue của thoả thuận mới (db.fieldValue.count where dealId) khác 10 thì ném 'ntl api tao co truong: so hang <n>'. companies.create và contacts.create cùng cách: đọc lại khác thì ném 'ntl api tao co truong: <loai> <json>'. Đối chứng cùng fixture: deals.create không có fields tạo được và count = 0; khác thì ném 'ntl api tao co truong: doi chung <n>'. Chiều đỏ trong lịch sử: trên onehub dealCreateInput không có fields — zod bỏ khoá lạ, deals.get không có so_luong, ném 'ntl api tao co truong: doc lai so_luong undefined'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/src/fields/**, packages/db/src/fields.ts, apps/api/test/nhap-truong-luc-tao.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_bat_buoc
+    expected: "exit 0; -t ntl-bat-buoc của apps/app/test/nhap-truong-luc-tao.dom.tsx. Dựng CreateDealSheet thật ở vi; fields.list (round-trip) có ma_ho_so TEXT required true và hang_doi_tac SELECT required true, cả hai showOnSheet true. Điền Tên, Công ty, để trống hai ô, bấm Tạo. deals.create được gọi thì ném 'ntl bat buoc: van gui'. Câu dưới ô Mã hồ sơ (FieldError của ô ấy, tìm theo aria-describedby của ô) khác crmMessages('vi').truongKieu.trong('Mã hồ sơ') thì ném 'ntl bat buoc: cau <chu>'; tương tự Hạng đối tác. document.activeElement không phải ô Mã hồ sơ thì ném 'ntl bat buoc: con tro <id>'. Mở ô Chọn Hạng đối tác: có lựa chọn mang nhãn 'Không có' (đọc từ messages) thì ném 'ntl bat buoc: chon co khong co'. Đối chứng cùng fixture: điền cả hai rồi bấm Tạo: deals.create không được gọi đúng một lần với cả hai khoá thì ném 'ntl bat buoc: doi chung'. Chiều đỏ trong lịch sử: trên onehub sau khi DA15 gộp, form không có ô Mã hồ sơ, deals.create được gọi, ném 'ntl bat buoc: van gui'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/fields/**, apps/app/lib/messages/crm.ts, apps/app/test/nhap-truong-luc-tao.dom.tsx]
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ntl_api_bat_buoc
+    expected: "exit 0; -t ntl-api-bat-buoc của apps/api/test/nhap-truong-luc-tao.spec.ts trên kho thử riêng, ứng dụng dựng bằng createApp (như vai-chi-okr.spec.ts) để gọi cả tRPC lẫn REST. Fixture qua đường ghi thật: mỗi loại DEAL, COMPANY, CONTACT một trường tự tạo TEXT 'ma_ho_so' required true agentFilled true. Ma trận viết sẵn 3 loại × 2 đường (caller tRPC phiên quản trị · POST /rest/<deals|companies|contacts> với x-api-key) × 2 cách thiếu (không có khoá ma_ho_so · ma_ho_so là null) = 12 ca. Mỗi ca: đếm bản ghi của loại trước; gọi create; lượt không bị từ chối BAD_REQUEST (tRPC) hay 400 (REST) thì ném 'ntl api bat buoc: lot <loai> <duong> <cach>'; số bản ghi sau khác trước thì ném 'ntl api bat buoc: con ban ghi <loai> <duong> <cach>'. Số ca đã chạy khác 12 thì ném 'ntl api bat buoc: thieu ca <n>'. Cùng fixture, mỗi loại thêm trường cu_bat_buoc TEXT required true rồi lưu trữ bằng thủ tục thật (archivedAt khác null): mỗi loại × đường, tạo với ma_ho_so 'HS-1' mà không có khoá cu_bat_buoc phải thành công; bị từ chối thì ném 'ntl api bat buoc: chan truong luu tru <loai> <duong>'. Ca Ô tích (Hỏi-4): trường DEAL CHECKBOX nda required true; deals.create không có khoá nda bị từ chối, có nda:true tạo được; lệch thì ném 'ntl api bat buoc: o tich <ca>'. Lượt bị từ chối vì thiếu trường ghi lỗi (đọc qua bộ định dạng lỗi thật) ra apps/app/test/fixtures/loi-tao-thieu-bat-buoc.json khi GHI_FIXTURE_LOI_TAO=1; không có cờ thì so lỗi vừa sinh với tệp đã commit, khác thì ném 'ntl api bat buoc: fixture loi cu'. Đối chứng cùng fixture, mỗi loại × đường: gửi ma_ho_so 'HS-1' thì tạo được; không thì ném 'ntl api bat buoc: doi chung <loai> <duong>'. Ca agentFilled: ma_ho_so có agentFilled true nên ma trận trên đã chứng Hỏi-1; test tự kiểm fixture có agentFilled true, không thì ném 'ntl api bat buoc: fixture khong kara dien'. Chiều đỏ trong lịch sử: trên onehub create không kiểm trường bắt buộc, ném 'ntl api bat buoc: lot DEAL trpc khong-khoa'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/src/fields/**, packages/db/src/fields.ts, apps/api/test/nhap-truong-luc-tao.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_loi_may_chu
+    expected: "exit 0; -t ntl-loi-may-chu của apps/app/test/nhap-truong-luc-tao.dom.tsx. Dựng CreateDealSheet thật ở vi; fields.list có hang_doi_tac SELECT. Điền Tên, Công ty, chọn lựa chọn của Hạng đối tác, gõ một trường TEXT khác. deals.create giả ném TRPCClientError BAD_REQUEST message tiếng Anh 'Hạng đối tác has no option \"x\".' — fixture lỗi nạp từ apps/app/test/fixtures/loi-tao-lua-chon.json, tệp do E5b sinh từ lượt deals.create bị từ chối thật (GHI_FIXTURE_LOI_TAO=1), không dựng tay. Bấm Tạo, chờ. toast.error (mock sonner) không được gọi đúng một lần với crmMessages('vi') ghép «Chưa tạo được thoả thuận.» + câu tuChoi['lua-chon'] thì ném 'ntl loi may chu: toast <chu>'; toast chứa 'has no option' thì ném 'ntl loi may chu: in cau may chu'; câu dưới ô Hạng đối tác khác câu tuChoi['lua-chon'] thì ném 'ntl loi may chu: duoi o <chu>'; giá trị của Tên, ô TEXT và lựa chọn đã chọn đổi thì ném 'ntl loi may chu: mat gia tri <khoa>'; sheet đóng thì ném 'ntl loi may chu: dong form'. Đối chứng cùng fixture: deals.create giả trả thành công: toast.success không gọi thì ném 'ntl loi may chu: doi chung'. Ca thiếu bắt buộc khi danh sách trường lỗi: fields.list giả ném; deals.create giả ném lỗi nạp từ apps/app/test/fixtures/loi-tao-thieu-bat-buoc.json (do E4b sinh, khoá ma_ho_so, nhãn 'Mã hồ sơ' đọc từ fields.list của fixture lỗi); toast khác «Chưa tạo được thoả thuận.» nối crmMessages('vi').truongKieu.trong('Mã hồ sơ') thì ném 'ntl loi may chu: thieu bat buoc <chu>'; toast chứa câu tiếng Anh của máy chủ thì ném 'ntl loi may chu: in cau may chu thieu'. Chiều đỏ trong lịch sử: trên onehub onError gọi toast.error(error.message), ném 'ntl loi may chu: in cau may chu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/fields/**, apps/app/lib/messages/crm.ts, apps/api/src/trpc/error-formatter.ts, apps/app/test/nhap-truong-luc-tao.dom.tsx]
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ntl_api_tu_choi
+    expected: "exit 0; -t ntl-api-tu-choi của apps/api/test/nhap-truong-luc-tao.spec.ts trên kho thử riêng. Fixture qua đường ghi thật: trường DEAL SELECT hang_doi_tac hai lựa chọn; lưu trữ lựa chọn thứ hai bằng thủ tục thật. Ba ca viết sẵn, mỗi ca deals.create kèm một trường TEXT hợp lệ và một giá trị sai: (1) hang_doi_tac = id lựa chọn đã lưu trữ; (2) một trường NUMBER nhận 'abc'; (3) một trường USER nhận id không có trong đội. Mỗi ca: không bị từ chối BAD_REQUEST thì ném 'ntl api tu choi: lot <ca>'; số Deal (db.deal.count) đổi thì ném 'ntl api tu choi: con deal <ca>'; số FieldValue đổi thì ném 'ntl api tu choi: con gia tri <ca>'; lỗi trả về (đọc qua bộ định dạng lỗi thật, như app nhận) không có khoá của trường sai ở đúng đường dẫn mà hằng dùng chung của packages/validation khai (đọc giá trị tại đường dẫn ấy, không tìm chuỗi trong message) thì ném 'ntl api tu choi: khong noi khoa <ca> <json>'; đối chứng cùng ca, message của lỗi có chứa khoá mà đường dẫn rỗng thì hàm kiểm phải trả 'khong noi khoa', không thì ném 'ntl api tu choi: thuoc mu'. Ca 1 ghi lỗi ra apps/app/test/fixtures/loi-tao-lua-chon.json khi GHI_FIXTURE_LOI_TAO=1; không có cờ thì so với tệp đã commit, khác thì ném 'ntl api tu choi: fixture loi cu'. Số ca khác 3 thì ném 'ntl api tu choi: thieu <n>'. Đối chứng cùng fixture: deals.create với lựa chọn thứ nhất tạo được. Chiều đỏ trong lịch sử: trên onehub create không nhận fields nên cả ba ca tạo được, ném 'ntl api tu choi: lot 1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/deals/**, apps/api/src/fields/**, apps/api/src/trpc/error-formatter.ts, packages/db/src/fields.ts, apps/api/test/nhap-truong-luc-tao.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_them_nhanh
+    expected: "exit 0; -t ntl-them-nhanh của apps/app/test/nhap-truong-luc-tao.dom.tsx. Dựng QuickAddContact và QuickAddDeal thật ở vi với công ty viết sẵn (id 'cty-1', ownerId 'u-1'); fields.list có cho mỗi loại một trường bắt buộc và một trường hiện trên phiếu; fields.layout round-trip. Với mỗi ô thêm nhanh: dãy nhãn khác «trường của form» của loại (tính như E1) trừ Công ty thì ném 'ntl them nhanh: lech <loai> <json>'; có ô Công ty thì ném 'ntl them nhanh: thua cong ty <loai>'; Người phụ trách không điền sẵn 'u-1' thì ném 'ntl them nhanh: chu khong san <loai>'. Để trống trường bắt buộc, bấm Thêm: create được gọi thì ném 'ntl them nhanh: van gui <loai>'. Điền đủ, bấm Thêm: create không gọi đúng một lần với fields đủ hai khoá và companyId 'cty-1' thì ném 'ntl them nhanh: gui <loai> <json>'. Bộ giữ thay đổi: mở lại ô, chỉ gõ vào trường tự tạo, bấm Huỷ: ConfirmDialog bỏ thay đổi không hiện thì ném 'ntl them nhanh: khong hoi <loai>'. Đối chứng cùng fixture: mở ô, không gõ gì, bấm Huỷ: hộp hiện thì ném 'ntl them nhanh: hoi thua <loai>'. Chiều đỏ trong lịch sử: trên onehub ô thêm nhanh không có trường tự tạo, ném 'ntl them nhanh: lech CONTACT ...'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/quick-add.tsx, apps/app/components/crm/fields/**, apps/app/test/nhap-truong-luc-tao.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ntl_api_kara_dien
+    expected: "exit 0; -t ntl-api-kara-dien của apps/api/test/nhap-truong-luc-tao.spec.ts. Dựng dịch vụ như apps/api/test/fields.spec.ts (stub AgentTriggerService ghi các lượt fieldBackfillRecords vào mảng). Fixture qua đường ghi thật: hai trường COMPANY TEXT nganh, quy_mo, đều agentFilled true. companies.create với fields {nganh:'Ngân hàng'}. Hàng chờ của công ty mới (các khoá mà stub nhận cho id ấy) không có quy_mo thì ném 'ntl api kara dien: thieu quy_mo'; có nganh thì ném 'ntl api kara dien: xep nganh'; companies.get nganh khác 'Ngân hàng' thì ném 'ntl api kara dien: doi gia tri'. Đối chứng cùng fixture: companies.create không có fields: hàng chờ phải có cả hai khoá; thiếu thì ném 'ntl api kara dien: doi chung <json>'. Ca Ô tích (Hỏi-4): trường COMPANY CHECKBOX da_ky agentFilled true; companies.create không có khoá da_ky (form không gửi ô chưa tích): hàng chờ không có da_ky thì ném 'ntl api kara dien: o tich khong xep'. Chiều đỏ trong lịch sử: trên onehub queueBackfillForNewRecord xếp mọi trường Kara điền, ném 'ntl api kara dien: xep nganh' (sau khi create nhận fields)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/fields/**, apps/api/src/companies/**, apps/api/test/nhap-truong-luc-tao.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ntl_api_ban_ghi_cu
+    expected: "exit 0; -t ntl-api-ban-ghi-cu của apps/api/test/nhap-truong-luc-tao.spec.ts. Fixture qua đường ghi thật: fields.create DEAL TEXT ma_ho_so required false; deals.create không có ma_ho_so; rồi fields.update required true. deals.update data {name:'Tên mới'}: ném thì ném 'ntl api ban ghi cu: chan sua'; deals.get name khác 'Tên mới' thì ném 'ntl api ban ghi cu: khong luu'. Cùng fixture, vế giữ của DA15: một thoả thuận khác có ma_ho_so 'HS-1'; deals.update fields {ma_ho_so:null} không ném BAD_REQUEST thì ném 'ntl api ban ghi cu: xoa trong lot'. Chiều đỏ: vế này đã đúng trên onehub (bài kiểm giữ) — chứng bằng đột biến tay lúc dựng (thêm kiểm 'mọi trường bắt buộc phải có giá trị' vào deals.update phải ném 'chan sua'), ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/deals/**, apps/api/src/fields/**, packages/db/src/fields.ts, apps/api/test/nhap-truong-luc-tao.spec.ts]
+
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ntl_ban_ghi_cu
+    expected: "exit 0; -t ntl-ban-ghi-cu của apps/app/test/nhap-truong-luc-tao.dom.tsx. DealOverview thật ở vi với bản ghi rút qua bộ đọc đầu ra thật của apps/api/src/deals, mang ma_ho_so required true giá trị null. Sửa Tên trên phiếu rồi Enter: deals.update không được gọi đúng một lần thì ném 'ntl ban ghi cu: khong luu'; variables.data có khoá fields chứa ma_ho_so thì ném 'ntl ban ghi cu: gui khoa trong'. Đối chứng cùng fixture: bấm ô Mã hồ sơ, Enter khi trống: deals.update được gọi thì ném 'ntl ban ghi cu: doi chung'. Chiều đỏ: vế này đúng trên onehub (bài kiểm giữ) — chứng bằng đột biến tay lúc dựng (gửi kèm mọi trường tự tạo trong lượt lưu Tên phải ném 'gui khoa trong'), ghi vào sổ S3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/deal-sheet.tsx, apps/app/components/crm/fields/**, apps/app/test/nhap-truong-luc-tao.dom.tsx]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ntl_man
+    steps:
+      - "Chạy ở thư mục gốc kho: BANG_CHUNG=_acceptance/nhap-truong-luc-tao/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs\" — phiên đo tự dựng kho riêng, API và app của cây này (luật 8)."
+      - "Đọc dòng cuối: mã 0 kèm 'ntl man: dat' = đạt; mã 2 = không đo được (nêu lý do); mã 1 = lỗi bước có lời 'ntl man: …'."
+      - "Mở hai mươi ảnh ntl-{tao-thoa-thuan,tao-cong-ty,tao-lien-he,them-lien-he,them-thoa-thuan}-{moi,thieu}-{1280,375}.png, đối chiếu bằng mắt với Expected."
+    inputs: [_acceptance/nhap-truong-luc-tao/evidence/]
+    expected: |
+      Dữ liệu dựng qua API thật trong phiên đo (fields.create): mỗi loại một trường tự tạo mỗi kiểu Chữ, Ngày, Người, Liên kết, Số, đều bật «Hiện trên phiếu»; mỗi loại thêm một trường Chữ bắt buộc; một công ty mẫu để mở hai ô thêm nhanh. Mỗi form chụp hai trạng thái: mới mở (ST-formtao-sansang) và sau khi bấm Tạo với trường bắt buộc trống (ST-formtao-thieubatbuoc), ở 1280×800 và 375×812 — 20 ảnh.
+      0. *-moi-1280: ô trường tự tạo xếp trong cùng cột với ô trường chuẩn, cùng nhãn trên ô, cùng chiều cao ô, cùng cỡ chữ; không tiêu đề nhóm, nhãn phụ hay đường phân cách tách chúng. do-man.mjs đọc DOM: với mỗi cặp (ô chuẩn, ô tự tạo) cùng kiểu viết sẵn, hộp ô khác bề rộng hay chiều cao, computed font-size khác nhau, hay mép trái của ô tự tạo không trùng một cột của lưới ô trong form (ô thêm nhanh vốn hai cột) thì thoát 1 'ntl man: lech <form> <khoa chuan> <khoa tu tao>'; có phần tử tiêu đề (h1–h6, role heading) hay phân cách (hr, role separator) nằm giữa ô đầu và ô cuối của form thì thoát 1 'ntl man: nhom rieng <form>'.
+      1. *-thieu-*: câu «<nhãn> không được để trống.» ngay dưới ô bắt buộc; do-man.mjs đo top của câu lỗi nhỏ hơn bottom của ô hay lớn hơn bottom + 24px thì thoát 1 'ntl man: loi xa o <form>'.
+      2. *-375: mỗi ô một hàng đầy chiều rộng; do-man.mjs đo document.documentElement.scrollWidth > clientWidth thì thoát 1 'ntl man: 375 cuon ngang <form>'.
+      Số ảnh khác 20 thì thoát 1 'ntl man: thieu anh <n>'. Đối chứng của thước, cùng phiên: do-man.mjs bơm một thẻ h3 giữa hai ô của form đầu tiên trong một bản sao DOM tách rời; hàm kiểm không trả 'nhom rieng' thì thoát 1 'ntl man: thuoc mu'.
+      Đối chứng bằng mắt: che chữ nhãn đi thì không chỉ ra được ô nào là trường tự tạo. Ngoại trừ có tên: ô Công ty, ô Giai đoạn giữ cách vẽ riêng.
+    evidence_required: [verdict, screenshot, observed, verified_at]
+    paths: ["apps/app/app/(app)/[slug]/companies/create-company-sheet.tsx", "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx", "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx", apps/app/components/crm/record-sheet/quick-add.tsx, apps/app/components/crm/fields/**, _acceptance/nhap-truong-luc-tao/rang/do-man.mjs]

@@ -58,6 +58,7 @@ import type {
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
+import { LoiGiaTriTruong, laGiaTriRong } from "./loi-gia-tri-truong";
 import { khoangMocTruong } from "./moc-ngay";
 
 const WITH_OPTIONS = {
@@ -684,20 +685,55 @@ export class FieldsService {
 	async queueBackfillForNewRecord(
 		entity: FieldEntity,
 		recordId: string,
+		values: Record<string, unknown> = {},
 	): Promise<void> {
 		const definitions = await this.db.fieldDefinition.findMany({
 			where: { entity, archivedAt: null, agentFilled: true },
 			select: { key: true },
 		});
+		const conTrong = definitions
+			.map((definition) => definition.key)
+			.filter((key) => laGiaTriRong(values[key]));
 
-		if (definitions.length === 0) return;
+		if (conTrong.length === 0) return;
 
 		await this.agent.fieldBackfillRecords(
 			entity,
-			definitions.map((definition) => definition.key),
+			conTrong,
 			[recordId],
 			"New record",
 		);
+	}
+
+	async kiemBatBuocLucTao(
+		client: Prisma.TransactionClient,
+		entity: FieldEntity,
+		values: Record<string, unknown>,
+	): Promise<void> {
+		const batBuoc = await client.fieldDefinition.findMany({
+			where: { entity, archivedAt: null, required: true },
+			select: { key: true, label: true },
+			orderBy: { position: "asc" },
+		});
+		const thieu = batBuoc.find((definition) =>
+			laGiaTriRong(values[definition.key]),
+		);
+		if (thieu) {
+			throw new LoiGiaTriTruong(
+				{ khoa: thieu.key, nhan: thieu.label, lyDo: "thieu" },
+				`${thieu.label} is required.`,
+			);
+		}
+	}
+
+	async ghiTruongLucTao(
+		tx: Prisma.TransactionClient,
+		entity: FieldEntity,
+		recordId: string,
+		values: Record<string, unknown>,
+	): Promise<void> {
+		await this.kiemBatBuocLucTao(tx, entity, values);
+		await this.applyValues(tx, entity, recordId, values);
 	}
 
 	private async missingRecordIds(
@@ -1114,7 +1150,15 @@ export class FieldsService {
 			await writeValues(tx, entity, recordId, definitions, values);
 		} catch (error) {
 			if (error instanceof FieldValueError) {
-				throw new BadRequestException(error.message);
+				throw new LoiGiaTriTruong(
+					{
+						khoa: error.key,
+						nhan:
+							definitions.find((d) => d.key === error.key)?.label ?? error.key,
+						lyDo: laGiaTriRong(values[error.key]) ? "thieu" : "gia-tri",
+					},
+					error.message,
+				);
 			}
 
 			throw error;

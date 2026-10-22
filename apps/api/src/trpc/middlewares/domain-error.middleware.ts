@@ -53,6 +53,7 @@ export class DomainErrorMiddleware implements TRPCMiddleware {
 			throw new TRPCError({
 				code: statusToTrpcCode(cause.getStatus()),
 				message: cause.message,
+				cause,
 			});
 		}
 
