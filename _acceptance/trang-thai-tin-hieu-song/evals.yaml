@@ -202,6 +202,23 @@ evals:
       ban sao bo cacheLife cua bo doc ban chup tho -> pha 2b SAI voi thong diep ghim "trang tin hieu giu ban chup cu";
       ban sao trang doc tep dong goi -> pha 4 SAI voi thong diep ghim "bam vao thay cho cu".
 
+  - id: E7c
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttts_bao
+    paths:
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
+      - "packages/validation/src/tin-hieu-cho.ts"
+      - "packages/validation/src/thong-bao.ts"
+      - "apps/api/src/lo-trinh/**"
+      - "apps/api/test/tin-hieu-doi-cho.spec.ts"
+    expected: |
+      Chieu may chu cua AC-7, cung lenh voi E3 (chay mot lan): khi CRM nhan mot ban chup doi cho qua cau REST that
+      POST /rest/lo-trinh/ban-chup, hang ThongBao loai tin-hieu-doi-cho duoc ghi cho dung nguoi gui, duongDan
+      "/tin-hieu", noiDung qua noiDungThongBao.parse — chinh du lieu ma chuong va trang Thong bao cua E7 doc. Ma tran,
+      doi chung va chieu do nhu E3.
+
   - id: E8
     criterion: AC-8
     executor: test
