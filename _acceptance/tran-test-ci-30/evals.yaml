@@ -1,0 +1,59 @@
+schema_version: 1
+slug: tran-test-ci-30
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ttc30_mot_khoa
+    paths:
+      - ".github/workflows/ci.yml"
+      - "_acceptance/tran-test-ci-30/rang/kiem.mjs"
+    expected: |
+      bun rang/kiem.mjs mot-khoa (goc kho tu import.meta.dirname): tim trong git log cua ci.yml commit doi tran job test 20 ->
+      30, nen = cha cua no (cay dang sua chua commit thi nen = HEAD); doc ci.yml o nen va o commit doi (git show) bang
+      Bun.YAML, so sau: lech dung mot duong jobs.test.timeout-minutes, nen 20, doi 30; so tung dong: cung so dong, khac
+      dung mot dong «    timeout-minutes: 20» -> «    timeout-minutes: 30»; ci.yml cua cay hien tai co tran 30. In
+      «dat mot-khoa», ma 0.
+      Chieu do cung luot tren ban sao chu cua ban doi: doi tran job check thanh 30 -> «jobs.check.timeout-minutes»; doi
+      tran job test thanh 25 -> «mong 30»; bo o api cua ma tran -> «jobs.test.strategy»; dua chinh ban nen -> «khong khoa
+      nao»; cay hien tai mang tran 20 -> «cay jobs.test.timeout-minutes». Moi ca «BAT <ca>»; mot ca khong bat ->
+      «thuoc hong: <ca>», ma 1.
+      Chieu do tren vat that (do 22/10): cay nen, ci.yml tran 20 va lich su khong co commit doi -> ma 1 «sai khong tim thay
+      commit doi tran job test tu 20 len 30 trong lich su ci.yml».
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ttc30_e3_cu
+    paths:
+      - ".github/workflows/ci.yml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/**"
+      - "_acceptance/tran-test-ci-30/rang/kiem.mjs"
+    expected: |
+      bun rang/kiem.mjs e3-cu: nen tim nhu E1; bung ci.yml va rang/ cua giam-phut-ci-nhap-t1 o nen ra
+      .acceptance-runs/tran-test-ci-30/nen-<sha> (git archive), chay that «bun <goc>/_acceptance/giam-phut-ci-nhap-t1/rang/
+      hinh.mjs ci» tren nen va tren cay (GIT_DIR la git-common-dir). Dat khi: nen thoat 0, cay thoat 1; tap muc kiem (dong
+      «dat X» va «sai X: ...») cua nen bang cua cay, it nhat 10 muc; nen dat moi muc; cay dat moi muc tru test.con-lai voi
+      ly do dung «khac ban ghim o timeout-minutes»; tap ca dot bien «BAT» cua nen bang cua cay, it nhat 5; khong dong
+      «thuoc hong:». Ma 0.
+      Chieu do cung luot, rut tu dau ra that cua cay (khong viet tay): them dong «sai check.if» -> «cay o check.if»; xoa moi
+      dong dat -> «thieu o»; doi mot dong BAT thanh «thuoc hong» -> «khong bat»; dua dau ra nen vao cho cay -> «tren cay
+      thoat 0». Moi ca «BAT <ca>».
+
+  - id: E4
+    criterion: AC-4
+    executor: judgment
+    inputs:
+      - docs/plan/2026-10-22-hat-giong-tach-o-api.md
+      - docs/superpowers/specs/2026-10-22-tran-test-ci-30-design.md
+    question: |
+      Hat giong co noi dieu kien mo lai «trung vi test (api) > 22 phut» va vi sao chua tach o (khoang 3 phut cai dat cho moi
+      luot chay) khong? Design doc co bang so do 40 luot CI, chia cac nhom roi nhau (xanh, bi huy o tran, do, huy vi luot
+      moi de len) va moi hang o test (api, app-ui, con-lai) cong du 40 khong? Hai tep co noi trai nhau khong? Tra PASS chi khi du ca ba ve va khong
+      ve nao trai nhau.
+    evidence_required: [run_id, verdict, judges]
+    paths:
+      - docs/plan/2026-10-22-hat-giong-tach-o-api.md
+      - docs/superpowers/specs/2026-10-22-tran-test-ci-30-design.md
+
