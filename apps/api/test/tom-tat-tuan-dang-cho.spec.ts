@@ -15,6 +15,7 @@ import {
 	type TroLyTomTatOutput,
 	troLyTomTatOutput,
 } from "@crm/validation/okr-tom-tat";
+import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { chayXepTomTat } from "../../agent/agent/lib/okr/lich-tom-tat";
 import { completeTask } from "../../agent/agent/lib/tasks";
@@ -332,8 +333,12 @@ async function soViecCuaPhong(luc: Date): Promise<number> {
 		select: { payload: true },
 	});
 	return viec.filter((v) => {
-		const p = v.payload as { departmentId?: unknown; nac?: unknown } | null;
-		return p?.departmentId === pb(phong) && p.nac === "bat";
+		const p = okrTroLyViec.parse(v.payload);
+		return (
+			p.viec === "tom-tat-tuan" &&
+			p.departmentId === pb(phong) &&
+			p.nac === "bat"
+		);
 	}).length;
 }
 
@@ -396,14 +401,13 @@ describe("ttdc-csdl", () => {
 		async () => {
 			await lamSach();
 			await datCauHinh(cauHinhBat());
-			const ra: Record<string, unknown> = {};
 			datDongHo(new Date("2026-11-09T23:05:00.000Z"));
 			const viec = await taoViecXep(
 				new Date("2026-11-09T23:00:00.000Z"),
 				false,
 			);
 			const a = (await doc()).choBan;
-			ra.a =
+			const raA =
 				a?.kieu === "dang-xep"
 					? a
 					: `ttdc-dang-xep: (a) ra ${a?.kieu ?? "khong co"}, can dang-xep`;
@@ -414,18 +418,21 @@ describe("ttdc-csdl", () => {
 					outcome: "da-xep:0",
 				},
 			});
-			ra.b = (await doc()).choBan;
+			const raB = (await doc()).choBan;
 			await db.agentTask.delete({ where: { id: viec.id } });
-			ra.c = (await doc()).choBan;
+			const raC = (await doc()).choBan;
 			datDongHo(new Date("2026-11-10T23:05:00.000Z"));
 			await taoViecXep(new Date("2026-11-10T23:00:00.000Z"), false);
 			const d = (await doc()).choBan;
-			ra.d =
+			const raD =
 				d?.kieu === "dang-xep"
 					? "ttdc-dang-xep: (d) ra dang-xep o ngay khong khop"
 					: d;
-			const tuanSau = { kieu: "toi-luc", luc: "2026-11-16T23:00:00.000Z" };
-			expect(ra).toEqual({
+			const tuanSau = {
+				kieu: "toi-luc",
+				luc: "2026-11-16T23:00:00.000Z",
+			} as const;
+			expect({ a: raA, b: raB, c: raC, d: raD }).toEqual({
 				a: { kieu: "dang-xep" },
 				b: tuanSau,
 				c: tuanSau,
@@ -583,19 +590,19 @@ describe("ttdc-csdl", () => {
 		async () => {
 			const lech: string[] = [];
 			let soO = 0;
-			const DOC_THEO_THU: Record<number, string> = {
-				1: "2026-11-09T05:00:00.000Z",
-				4: "2026-11-12T05:00:00.000Z",
-				7: "2026-11-15T05:00:00.000Z",
-			};
-			for (const thu of [1, 4, 7]) {
+			const DOC_THEO_THU = [
+				[1, "2026-11-09T05:00:00.000Z"],
+				[4, "2026-11-12T05:00:00.000Z"],
+				[7, "2026-11-15T05:00:00.000Z"],
+			] as const;
+			for (const [thu, docLucIso] of DOC_THEO_THU) {
 				await lamSach();
 				await db.okrCycle.update({
 					where: { id: KY },
 					data: { updateWeekday: thu },
 				});
 				await datCauHinh(cauHinhBat());
-				const docLuc = new Date(DOC_THEO_THU[thu] ?? "");
+				const docLuc = new Date(docLucIso);
 				const cho = await choBanDauTomTat(db, {
 					cycleId: KY,
 					departmentId: pb(phong),
