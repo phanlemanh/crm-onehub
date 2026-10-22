@@ -192,6 +192,8 @@ import {
 } from "./okr-khep.contracts";
 import { OkrKhepService } from "./okr-khep.service";
 import { OkrMauService } from "./okr-mau.service";
+import { moiKrInput, moiKrOutput } from "./okr-moi-kr.contracts";
+import { OkrMoiKrService } from "./okr-moi-kr.service";
 import {
 	banGhiChiSoInput,
 	banGhiChiSoOutput,
@@ -252,6 +254,7 @@ export class OkrRouter {
 		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
 		@Inject(OkrTaiCoCauService) private readonly taiCoCau: OkrTaiCoCauService,
 		@Inject(OkrChuKyService) private readonly chuKy: OkrChuKyService,
+		@Inject(OkrMoiKrService) private readonly moiKrDv: OkrMoiKrService,
 	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
@@ -1313,6 +1316,18 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.sucKhoe(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: moiKrInput,
+		output: moiKrOutput,
+		meta: restMeta("POST", "/okr/key-results/list", TAG),
+	})
+	moiKr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof moiKrInput>,
+	) {
+		return this.moiKrDv.moiKr(ctx.user.id, input);
 	}
 
 	@Query({
