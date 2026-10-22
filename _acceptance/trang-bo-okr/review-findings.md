@@ -1,88 +1,63 @@
+# Review findings — trang-bo-okr (round 2)
+
 ## Trong hợp đồng
 
-- **Nút 'Thêm mục tiêu' và 'Nhập bảng tính' cho bộ OneHub ở các thẻ khác giờ dẫn tới trang danh sách, và hộp thoại không mở**
-  file: `apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx:125`
-  severity: high
-  AC: AC-7
-  source: bugs
-  detail: Lượt này đổi nghĩa của `/okr/bo-okr` khi URL không có `donOkr`. Trước đây URL thiếu `donOkr` mở bộ gốc (goc). Nay page.tsx:43 xét `don === null && xem === null` thì hiện `<DanhSachBo/>` thay cho `<TheoDonVi/>`. Diff đã sửa toan-canh.tsx và chonDon để luôn ghi `donOkr=goc`, nhưng còn sót `useDuongTheoDonVi` trong hanh-dong-khu.tsx. Chỗ đó vẫn bỏ tham số khi đơn vị là goc: `if (don.loai !== "goc") q.set(SEARCH_PARAM.okr.don, khoaDon(don));`. Ở thẻ Của tôi và Toàn cảnh, `NutThem` và `MenuThem` dựng `<Link href={toi(q.dich.don, SEARCH_PARAM.dialog.create / okr.nhap)}>`. Người xem không dẫn bộ nào thì có `donDich` là `{don: GOC, nguon: "goc"}`. Trường hợp này gặp ở quản trị chương trình, người có `canCreate` ở gốc. Liên kết khi đó thành `/okr/bo-okr?new=true` hoặc `?nhapOkr=true` và rơi vào DanhSachBo. Chỉ TheoDonVi mới gắn `NganTaoMucTieu` và hộp thoại nhập, còn DanhSachBo không gắn cả hai. Bấm nút thì trang đổi sang danh sách bộ, hộp thoại tạo hay nhập không mở, và không có báo lỗi nào. Bài okr-dau-trang-khu.dom.tsx (~dòng 717) vẫn coi thiếu `donOkr` là 'goc' (`u.searchParams.get("donOkr") ?? "goc"`), nên bài kiểm không bắt được hồi quy này.
-  rationale: AC-7 đòi mọi liên kết trong app trỏ tới bộ OneHub phải mang donOkr=goc; liên kết dựng ở hanh-dong-khu bỏ tham số này nên rơi vào trang danh sách.
-
-- **Hình dạng 5 (tuyên quét lớp, chỉ có điểm-case): tbo-lien-ket lập danh sách «mọi chỗ dựng liên kết /okr/bo-okr» bằng grep chuỗi nguyên văn, sót chỗ dựng qua hằng DUONG**
-  file: `apps/app/test/trang-bo-okr.dom.tsx:520`
-  severity: high
-  AC: AC-7
-  source: measurement
-  detail: choDungLienKet() (dòng 520-528) chỉ lấy tệp có chuỗi nguyên văn "/okr/bo-okr" trong apps/app/app. E11 hứa «mọi chỗ dựng liên kết /okr/bo-okr trong apps/app». Cách lập danh sách này bỏ sót mọi chỗ dựng đường qua hằng DUONG["theo-don-vi"] (tab-okr.ts:6). Một chỗ bị sót: apps/app/app/(app)/[slug]/okr/hanh-dong-khu.tsx:115-128 useDuongTheoDonVi dựng `${url(DUONG["theo-don-vi"])}?${q}`, và với đơn vị gốc thì bỏ hẳn donOkr (`if (don.loai !== "goc") q.set(SEARCH_PARAM.okr.don, ...)`). Theo page.tsx của vòng này, không có donOkr và không có xemOkr nghĩa là vào trang danh sách. Vì vậy nút «Thêm mục tiêu» và mục «Nhập bảng tính» ở các tab khác (người xem không dẫn đơn vị nào, donDich trả GOC) mở trang danh sách: `?create`/`?nhap` không còn tác dụng, vì DanhSachBo không đọc hai tham số đó. Tập so khớp «viết tay ↔ grep» chỉ tự xác nhận chính khuôn grep, nên ca thiếu này không bao giờ đỏ. Muốn phủ đủ lớp thì phải liệt kê theo đích (mọi chỗ dùng DUONG/DUONG_MUC trỏ theo-don-vi), không phải theo chuỗi nguyên văn.
-  rationale: Bài quét hứa phủ mọi liên kết trong app trỏ tới bộ OneHub (AC-7) nhưng sót lớp dựng qua hằng đường dẫn, để lọt đúng liên kết thiếu donOkr=goc.
-
-- **Hình dạng 5 (tuyên quét lớp, chỉ có điểm-case): E15 khong-doi-hinh chỉ chạy eval executor test, bỏ hết eval script của các hồ sơ đã ký có thước bị sửa trong vòng**
-  file: `_acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs:71`
-  severity: high
-  AC: AC-11
-  source: measurement
-  detail: evals.yaml E15 hứa «Chạy eval test/script không not-run của từng hồ sơ trên cây vòng và trên worktree origin/onehub». Nhưng danhSach() bỏ mọi eval không phải test: `if (String(e.executor).trim() !== "test") continue;` (dòng 71). Như vậy các eval script đo chính những thước mà vòng này sửa đều không được chạy để so cây với nền: trang-don-vi-mot-bang E3/E4/E5/E17 (dvb_man, đọc man-don-vi.mjs), vo-khu-muc-tieu E4/E6/E10/E12-14 (vkm_man, đọc do-man-dieu-huong.mjs), khung-cho-don-vi-mot-hinh E1-E4 (kcd_man). Riêng khep-ky-okr (kko_man_chrome, đọc man-khep-ky.mjs) còn vắng hẳn khỏi HO_SO (dòng 22-31), dù TEP_CUA_HO_SO có ánh xạ man-khep-ky.mjs về hồ sơ này. Lời hứa AC-11 «mọi mục không xấu hơn trên nền» vì thế chưa được đo cho đúng những thước đã đổi. Dòng «danh sach viet truoc: N muc test» trông như một phép quét toàn phần, nhưng chỉ phủ phần test.
-  rationale: AC-11 đòi chạy eval máy của mọi hồ sơ đã ký có thước chạm trang này và mọi mục không xấu hơn nền; thước bỏ qua eval dạng script nên chưa đo đủ.
-
-- **Hình dạng 3 (assert «chuỗi có mặt» khi lời hứa là quan hệ): E15 coi cả khối diff là «đổi chuỗi» chỉ cần khối đó chứa một token được phép**
-  file: `_acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs:170`
+- **Tab Việc leaves the task title blank for hidden or deleted linked items, unlike the existing pattern**
+  AC: AC-6
+  file: apps/api/src/okr/bo-okr.ts:107
   severity: medium
+  source: conventions
+  detail: `tieuDeViec` turns every non-`viec` row into an empty string when the viewer has no permission (`lk.coQuyen === false`, for example the OKR-only role). It also returns an empty string when the linked campaign or plan was deleted (`lk.ten === null`). The output schema `viecBo` keeps only `loai` and a flat `tieuDe`, and drops `coQuyen` and `trangThai`. `viec-cua-bo.tsx:108` and `:131` render `{v.tieuDe}` directly, so these rows show an empty title cell or item title. The existing pattern for the same data (`LienKet` from `lienKetChoVai`, rendered in `apps/app/components/crm/record-sheet/kr-viec.tsx:389-427`) shows `m.sangKien.khongQuyen` («Một {loai} — bạn không có quyền xem») with a lock icon, and `m.sangKien.daXoa[loai]` for a deleted link. The new API endpoint and screen discard that signal instead of reusing the `LienKet` shape. As a result, users with limited permission see a row of tasks with no name and no explanation.
+  rationale: AC-6 đòi mỗi việc trong thẻ Việc có tiêu đề; hàng việc loại chiến dịch/kế hoạch bị xoá hay bị ẩn quyền ra tiêu đề rỗng nên không đạt chữ của AC.
+
+- **Việc liên kết (chiến dịch / kế hoạch) bị xoá hoặc bị ẩn thì hiện thành hàng có tiêu đề rỗng, không có nhãn nào**
+  AC: AC-6
+  file: apps/api/src/okr/bo-okr.ts:141
+  severity: medium
+  source: bugs
+  detail: `tieuDeViec` trả `lk.coQuyen ? (lk.ten ?? "") : ""`. Hàng `OkrViecKr` loại chien-dich/ke-hoach được tạo với `tieuDe: ""` (okr-canh-kr.service.ts:297), nên tên của nó chỉ lấy được từ `lienKetChoVai`. Có hai trường hợp `tieuDeViec` ra chuỗi rỗng: (1) chiến dịch hay kế hoạch nguồn đã bị xoá (`campaign`/`plan` là null, nên `ten: null`, trạng thái `da-xoa`); (2) người xem không có phạm vi `doi-tac` (vai chi-okr, `coQuyen: false`). Schema `viecBo` trong okr-xem.contracts.ts không có cờ nào cho biết đã xoá hay không đủ quyền, vì vậy `ViecCuaBo` (viec-cua-bo.tsx: `<TableCell translate="no">{v.tieuDe}</TableCell>` và `<ItemTitle>{v.tieuDe}</ItemTitle>`) vẽ ra một hàng có ô tiêu đề trắng mà không giải thích gì. Ở chỗ khác, KR sheet (apps/app/components/crm/record-sheet/kr-viec.tsx `NoiDungSangKien`) xử lý đúng hai trường hợp này bằng nhãn `m.sangKien.khongQuyen` (kèm biểu tượng khoá) và `m.sangKien.daXoa[loai]`. Thông tin trạng thái đó bị mất ở biên API mà không có lỗi nào báo ra, trái với AC «mỗi việc có tiêu đề». Bài kiểm tbo-viec (apps/api/test/okr-danh-sach-bo.spec.ts) chỉ gieo việc loại `viec`, nên không phát hiện được.
+  rationale: Finding nêu thẳng AC-6 «mỗi việc có tiêu đề»: hàng việc liên kết bị xoá hay không đủ quyền hiện ô tiêu đề trắng.
+
+- **Hình dạng 5 (tuyên quét LỚP nhưng chỉ có điểm-case): danh sách HO_SO của E15 bỏ sót các hồ sơ đã ký có thước chạm /okr/theo-don-vi, /okr/bo-okr**
   AC: AC-11
+  file: _acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs:22
+  severity: high
   source: measurement
-  detail: AC-11 hứa mọi thay đổi trong thước của hồ sơ đã ký chỉ là đổi chuỗi đường dẫn hay bộ chọn. Đó là quan hệ giữa dòng cũ và dòng mới: mỗi dòng đổi chỉ khác ở chuỗi literal. Thước lại làm `khoi.filter((k) => !KHUON_DOI_CHUOI.test(k))` (dòng 170) trên cả khối +/- đã nối lại. KHUON_DOI_CHUOI (dòng 53) gồm các token như donOkr, aria-current, bo-okr, xem=, data-the. Chỉ cần một dòng của khối chứa một token là cả khối qua, kể cả khi khối thêm hay đổi logic. Có ví dụ thật ngay trong diff: do-man-dieu-huong.mjs đổi điều kiện `h.duong === ...` thành `h.nhan === ...` và đổi biểu thức dựng đường, khối đó vẫn qua vì có chuỗi "/okr/bo-okr". Chiều đỏ (dòng 192) chèn `export const doiLogicThu = 1 + 1;`, một dòng không chứa token nào, nên nó chỉ chứng minh trường hợp dễ và không chứng minh thước bắt được logic trộn chung khối với chuỗi được phép. Sổ d-17 đã tự ghi nhận chỗ hở này.
-  rationale: AC-11 hứa mọi thay đổi trong thước của hồ sơ đã ký chỉ là đổi chuỗi đường dẫn hay bộ chọn; thước hiện cho qua cả khối có đổi logic nếu lẫn một token được phép.
+  detail: E15 hứa chạy «các hồ sơ đã ký có thước hay bài kiểm chạm /okr/bo-okr, theo-don-vi hay ViewSwitch của khu Mục tiêu (lập lúc S3 bằng lệnh quét)». Nhưng `HO_SO` (dòng 22–32) chỉ là 9 slug viết tay, và lúc chạy không có bước quét nào đối chiếu danh sách đó với kho. Grep `okr/bo-okr|okr/theo-don-vi|data-view-switch` trên `_acceptance/*/rang` cho ra khoảng 30 hồ sơ `status: signed-off` khác mà danh sách không có. Ví dụ cụ thể là `_acceptance/okr-cua-toi-tach-theo-doi/rang/man-theo-doi.mjs:302`. Hồ sơ này đã ký, eval là `ctt_man`, và bước 4 mở `/okr/theo-don-vi?kyOkr=${san.quy}` không kèm donOkr rồi bấm `[data-mo-muc-tieu=M5]`. Sau vòng này, đúng URL đó (không donOkr, không xemOkr) là trang danh sách Bộ OKR. Tương tự, `_acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs:67` mở theo-don-vi không donOkr khi `don` rỗng. Ngoài ra `apps/app/test/loc-va-kieu-xem.dom.tsx` và `okr-so-do-don-vi.dom.tsx` đọc `[data-view-switch]`. E15 không chạy hồ sơ nào trong số này, nên «KET LUAN khong-doi-hinh: dat» chỉ phủ 9 điểm chứ không phủ cả lớp mà AC-11 hứa. Số hồ sơ được chạy nhỏ hơn số hồ sơ thuộc lớp.
+  rationale: AC-11 đòi chạy eval của mọi hồ sơ đã ký có thước chạm các trang này; danh sách 9 hồ sơ viết tay bỏ sót nhiều hồ sơ thuộc lớp.
+
+- **Hình dạng 3 (assert chuỗi có mặt trong khi lời hứa là QUAN HỆ): tệp vai «danh-sach» của tbo-lien-ket chỉ được kiểm là có chứa chuỗi đường dẫn**
+  AC: AC-7
+  file: apps/app/test/trang-bo-okr.dom.tsx:697
+  severity: medium
+  source: measurement
+  detail: `CHO_LIEN_KET` gán vai «danh-sach» (đích là trang danh sách, không mang donOkr) cho cua-toi.tsx, thanh-ben-muc-tieu.tsx, thanh-tab.tsx và vi-tri-bo.tsx. Ở test dòng 697–708, các tệp này chỉ qua phép `choDungLienKet()`: `DICH_BO_OKR.some((k) => k.test(ma))` khớp chuỗi `/okr/bo-okr`, `DUONG[` hoặc `DUONG_MUC[` trong mã nguồn. `DUNG_LIEN_KET` không có hàm dựng nào cho vai này, và không có assert nào đọc href đã dựng ra để xác nhận nó trỏ tới `/okr/bo-okr` mà không có donOkr. Lời hứa ở AC-7 «nút «Sang Theo đơn vị» của Của tôi mở trang danh sách» là quan hệ giữa href và trang đích, cụ thể là href của `RongCuaToi` ở `cua-toi.tsx:110`. Nếu liên kết đó mang thêm `donOkr=...` hoặc trỏ sai trang, file vẫn chứa chuỗi `/okr/bo-okr` và ca vẫn xanh. Riêng vi-tri-bo có E5 (`veDung`) đo gián tiếp; cua-toi, thanh-tab và thanh-ben thì không eval nào đo href.
+  rationale: AC-7 hứa nút «Sang Theo đơn vị» của Của tôi mở trang danh sách; bài kiểm chỉ khớp chuỗi nên không chứng minh được lời hứa này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **viecCuaBo gộp dòng chiến dịch hoặc kế hoạch không có quyền hay đã xoá thành tieuDe rỗng, nên giao diện vẽ một dòng việc trắng**
-  Người dùng thấy gì: Ở thẻ Việc của một bộ, nếu việc gắn với chiến dịch hay kế hoạch đã bị xoá, hoặc người xem không có quyền đọc, thì hàng việc hiện ra với ô tên trống. Người xem không biết đó là việc gì và vì sao trống.
-  Căn cứ: Chỉ ảnh hưởng vài hàng ở ca hiếm (bản ghi đã xoá hoặc vai không đủ quyền), không mất dữ liệu, người dùng vẫn đọc được các hàng còn lại; sửa sau rẻ.
-  file: `apps/api/src/okr/bo-okr.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Người làm của việc lấy thẳng quan hệ User, bỏ qua lớp lọc thành viên đã rời mà canhKr đang dùng**
-  Người dùng thấy gì: Ở thẻ Việc, người đã rời workspace vẫn hiện như người làm bình thường, trong khi ở cạnh KR của cùng việc đó họ được đánh dấu là đã rời. Hai nơi cho thông tin hơi lệch nhau.
-  Căn cứ: Chỉ là lệch nhỏ về cách hiển thị, không mất dữ liệu và không chặn việc nào; người dùng vẫn thấy tên người làm đúng.
-  file: `apps/api/src/okr/bo-okr.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **chonViecBo chép lại phần select campaign và plan của chonHangCanh thay vì dùng chung**
-  Người dùng thấy gì: Người dùng không thấy gì khác đi hôm nay. Rủi ro chỉ là sau này hai nơi lấy dữ liệu có thể lệch nhau khi một nơi được sửa mà nơi kia không.
-  Căn cứ: Không có hậu quả nào cho người dùng ở thời điểm này; việc dọn lại chỉ đáng làm khi đụng tới phần này lần sau.
-  file: `apps/api/src/okr/bo-okr.ts`
-  severity: low
-  Đề xuất: wont-fix
-
-- **Thụt cấp bằng cách đè padding của TableCell qua className tại chỗ gọi**
-  Người dùng thấy gì: Cách thụt dòng của các bộ con trong danh sách bộ OKR không theo đúng quy ước giao diện chung của kho. Người dùng nhìn vào vẫn thấy thụt cấp đúng.
-  Căn cứ: Chỉ là lệch quy ước nội bộ, giao diện hiển thị bình thường, không ảnh hưởng thao tác của ai; sửa sau rẻ khi dọn giao diện.
-  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Liên kết soạn cũ `?cuocSoan=` không mang `donOkr` không còn được chuyển hướng**
-  Người dùng thấy gì: Một liên kết soạn cũ đã lưu hay đã gửi từ trước (dạng cuộc soạn không kèm đơn vị) giờ mở ra danh sách bộ OKR thay vì khung soạn, và không có thông báo nào.
-  Căn cứ: Chỉ ảnh hưởng liên kết cũ đã lưu, người dùng tự quay về đúng bản nháp qua màn Soạn được, không mất dữ liệu; sửa sau rẻ.
+- **The Bộ OKR table uses raw `TableCell` and adds padding and alignment through className instead of `SimpleTableCell`**
+  Người dùng thấy gì: Trong bảng các Bộ OKR và bảng Việc, chữ ở các cột lệch vài điểm ảnh so với tiêu đề cột của nó. Dữ liệu và thao tác vẫn đúng, chỉ là nhìn chưa thật thẳng hàng.
+  Căn cứ: Chỉ lệch thẩm mỹ rất nhỏ, không mất dữ liệu hay chặn việc nào, và sửa sau không tốn kém.
   file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/danh-sach-bo.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Việc loại chiến dịch hoặc kế hoạch trả tiêu đề rỗng khi không có quyền hoặc khi bản ghi đã xoá**
-  Người dùng thấy gì: Ở thẻ Việc, việc thuộc chiến dịch hoặc kế hoạch đã xoá hay không đủ quyền hiện thành một hàng không có tên, không nói rõ là bị xoá hay thiếu quyền.
-  Căn cứ: Ca hiếm, chỉ làm hàng đó khó hiểu, không mất dữ liệu và không chặn thao tác khác; sửa sau rẻ.
-  file: `apps/api/src/okr/bo-okr.ts`
+- **The Việc tab loading skeleton duplicates the toolbar row and does not match the content's shape**
+  Người dùng thấy gì: Khi thẻ Việc đang tải, màn hiện thêm một hàng thanh công cụ giả nên nhảy bố cục nhẹ lúc nội dung đến. Vài giây sau màn tự về đúng.
+  Căn cứ: Chỉ là hiệu ứng chờ tải thoáng qua, người dùng không phải làm gì, tự hết khi tải xong.
+  file: `apps/app/app/(app)/[slug]/okr/theo-don-vi/viec-cua-bo.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo lời khai thay vì đầu ra): bốn tệp thước trong VIET_LAI được tính đạt nhờ sổ có dòng fix, diff của chúng không được soát**
-  Người dùng thấy gì: Với bốn bài kiểm của hồ sơ cũ đã được chủ kho cho viết lại, thẻ nghiệm thu chỉ dựa vào ghi chú trong sổ mà không soát lại nội dung thay đổi. Nếu sau đó có sửa thêm ngoài phạm vi đã cho, thẻ vẫn báo đạt.
-  Căn cứ: Rủi ro chỉ có nếu có người sửa vượt phạm vi, không ảnh hưởng người dùng cuối, và người ký vẫn xem được sổ ghi chú; thêm bước soát sau rẻ.
-  file: `_acceptance/trang-bo-okr/rang/khong-doi-hinh.mjs`
+- **Hình dạng 2 (fixture VIẾT TAY đúng khuôn bên đọc): chiều đỏ tbo-lien-ket-do tự dựng href rồi đưa vào bộ so, không đi qua Toàn cảnh hay parseAsDonOkr**
+  Người dùng thấy gì: Bài kiểm tự động có thể không bắt được nếu sau này liên kết sang bộ OneHub ở Toàn cảnh mất tham số đơn vị gốc. Sản phẩm hiện giờ vẫn chạy đúng.
+  Căn cứ: Không ảnh hưởng người dùng hôm nay, chỉ làm lưới an toàn cho lần sửa sau yếu hơn, và củng cố lại không tốn nhiều.
+  file: `apps/app/test/trang-bo-okr.dom.tsx`
   severity: low
   Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+
