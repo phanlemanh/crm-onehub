@@ -3,6 +3,11 @@ import { createHash } from "node:crypto";
 import { db } from "@crm/db";
 import { BLOB_TEP_TRUONG, khoTepTruongVercel } from "@crm/db/blob-tep-truong";
 import {
+	blobConLai,
+	urlTranBlob,
+	xoaBlob,
+} from "../../../packages/db/test/blob-tep-truong-that";
+import {
 	canData,
 	donBanGhi,
 	dungSan,
@@ -39,32 +44,14 @@ function khoaTep(): string {
 	return khoa;
 }
 
-async function blob() {
-	return import("@vercel/blob");
-}
-
 async function conLai(token: string): Promise<string[]> {
-	const { list } = await blob();
-	const con: string[] = [];
-	let cursor: string | undefined;
-	do {
-		const trang = await list({
-			token,
-			prefix: `${BLOB_TEP_TRUONG.thuMuc}/`,
-			cursor,
-		});
-		for (const b of trang.blobs)
-			if (daPut.has(b.pathname)) con.push(b.pathname);
-		cursor = trang.hasMore ? trang.cursor : undefined;
-	} while (cursor);
-	return con;
+	return blobConLai(token, daPut);
 }
 
 async function donBlob(): Promise<void> {
 	const token = process.env[BLOB_TEP_TRUONG.bienKhoa]?.trim();
 	if (!token || daPut.size === 0) return;
-	const { del } = await blob();
-	await del([...daPut], { token }).catch(() => {});
+	await xoaBlob(token, [...daPut]).catch(() => {});
 }
 
 async function choDen(dieu: () => Promise<boolean>): Promise<boolean> {
@@ -223,10 +210,7 @@ describe.skipIf(!BAT)("ttp-blob-that", () => {
 
 	it("ttp-blob-that: đường trần của Blob không mở được", async () => {
 		daChay += 1;
-		const { head } = await blob();
-		const dau = await head(ctx.pathname, { token: ctx.token });
-		const tran = new URL(dau.url);
-		tran.search = "";
+		const tran = await urlTranBlob(ctx.token, ctx.pathname);
 		const ma = (await fetch(tran)).status;
 		if (ma === 200) throw new Error("ttp blob that: khong rieng tu");
 	});
