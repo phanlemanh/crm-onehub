@@ -1,35 +1,37 @@
-# Review findings: moi-kr-ca-cong-ty (vòng 2)
+# Review findings: moi-kr-ca-cong-ty (round 3)
 
 ## Trong hợp đồng
 
-Không có.
+Không có finding nào ở vòng này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Kiểu trả về của okr.objective viết tay thay vì lấy từ contract z.infer**
+Không có mục mới ở vòng này.
+
+- **Kiểu trả về của okr.objective viết tay thay vì lấy từ contract z.infer (r2)**
   Người dùng thấy gì: Người dùng không thấy gì khác đi. Chỉ là một bài kiểm nội bộ khai kiểu dữ liệu theo cách dễ lệch nếu sau này đổi tên một trường.
   Căn cứ: Không ảnh hưởng tới người dùng và không mất dữ liệu; chỉ là nợ gọn gàng trong bài kiểm, sửa lúc nào cũng rẻ nên không cần mở việc riêng.
   file: `apps/api/test/okr-moi-kr.spec.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **docBang vẫn đọc nhãn tổng [data-tong-kr] nhưng sau vòng này không còn chỗ nào dùng**
+- **docBang vẫn đọc nhãn tổng [data-tong-kr] nhưng sau vòng này không còn chỗ nào dùng (r2)**
   Người dùng thấy gì: Người dùng không thấy gì khác đi. Công cụ đo màn còn đọc một con số nhãn tổng mà không dùng tới, có thể làm người bảo trì tưởng nó vẫn được đối chiếu.
   Căn cứ: Không tác động tới người dùng cuối hay dữ liệu; chỉ gây hiểu nhầm nhẹ cho người bảo trì và gỡ đi rất rẻ bất cứ lúc nào.
   file: `_acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Phép đối chiếu vạch của KR ngoài khối «của tôi» tự đúng khi okr.moiKr trả expected=null**
+- **Phép đối chiếu vạch của KR ngoài khối «của tôi» tự đúng khi okr.moiKr trả expected=null (r2)**
   Người dùng thấy gì: Nếu sau này danh sách Mọi KR làm mất vạch kỳ vọng của một số KR nằm ngoài mục «KR của tôi», bài kiểm hiện tại có thể không báo đỏ. Hiện chưa có bằng chứng số liệu đang sai.
   Căn cứ: Hôm nay người dùng không bị ảnh hưởng, rủi ro chỉ là một lỗi tương lai lọt qua kiểm tra; ghi lại để biết thước này còn lỏng, sửa lúc nào cũng được.
   file: `apps/api/test/okr-moi-kr.spec.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 3 (lời hứa là quan hệ giữa các giá trị, nhưng assert so vạch của KR ngoài khối «KR của tôi» với chính giá trị cùng nguồn): muon-k1 vẫn không có vạch nào bị ghim**
+- **Hình dạng 3 (lời hứa là quan hệ giữa các giá trị, nhưng assert so vạch của KR ngoài khối «KR của tôi» với chính giá trị cùng nguồn): muon-k1 vẫn không có vạch nào bị ghim (r2)**
   Người dùng thấy gì: Vạch kỳ vọng tính từ ngày công bố của một số KR chưa có giá trị viết trước để so, nên nếu cách tính bị đổi sang ngày tạo thì bài kiểm này có thể vẫn xanh. Hôm nay chưa thấy số nào sai trên màn.
   Căn cứ: Không làm người dùng thấy số sai ngay bây giờ, chỉ làm lưới an toàn mỏng ở một chỗ; có thể ghi vào hạn chế đã biết và bổ sung giá trị đối chiếu khi có dịp.
   file: `apps/api/test/okr-moi-kr.spec.ts`
@@ -63,6 +65,10 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/app/app/(app)/[slug]/okr/toan-canh/o-kr-truot.tsx`
   severity: medium
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
+
+Không có mục nào.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
 
