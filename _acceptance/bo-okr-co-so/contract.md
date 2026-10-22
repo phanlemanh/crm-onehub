@@ -36,7 +36,8 @@ sau khi VK3 gộp `onehub`.
   Việt Nam từ hôm nay tới ngày kết thúc của chu kỳ đang xem, tính cả hai đầu. (cross-layer)
 - AC-2: Given hàm dựng ô và trang một bộ, When chu kỳ chưa tới ngày bắt đầu, hôm nay là ngày kết thúc, đã qua ngày kết
   thúc, kỳ vọng của hàng là null hay 0, hoặc bộ chưa công bố mục tiêu nào (không có hàng hay `soKr` 0), Then ô Ngày còn lại
-  lần lượt là «—» với «Bắt đầu <ngày>», «1», «0» với «Đã kết thúc <ngày>»; mô tả Tiến độ là «chưa có vạch» hay «vừa
+  lần lượt là «—» với «Bắt đầu <ngày>», «1», «0» với «Đã kết thúc <ngày>» (đếm cả ngày cuối và «—» trước ngày bắt đầu
+  theo khuyến nghị Hỏi-4); mô tả Tiến độ là «chưa có vạch» hay «vừa
   công bố» như Toàn cảnh; bộ chưa công bố hiện Tiến độ «—», cập nhật «0/0», tự tin thấp «0»; không ô nào in `NaN`,
   `undefined` hay số âm.
 - AC-3: Given trang một bộ của một phòng ban, When người xem bấm lần lượt thẻ Họp tuần, Việc, Sơ đồ góp vào (và Chấm
@@ -61,10 +62,13 @@ sau khi VK3 gộp `onehub`.
   bốn ô nằm một hàng, ở 375 lưới hai cột hai hàng, trang không cuộn ngang, không nhãn ô nào bị cắt mất chữ, nút Mở tất
   cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng, hàng số cùng nếp với Toàn cảnh OKR và không chữ hay viền nào chìm
   vào nền. (judgment)
-- AC-9: Given vòng này đã làm, When chạy eval máy của các hồ sơ đã ký có thước bấm mở dòng trên bảng trang đơn vị, Then
-  mọi mục không xấu hơn trên nền `origin/onehub` (mục đỏ sẵn trên nền in «đỏ sẵn trên nền»), và mọi thay đổi trong thước
-  của các hồ sơ ấy chỉ là bỏ hay đổi bước bấm mở dòng (hoặc chờ dòng KR đã mở) — mỗi hồ sơ có một dòng sổ `fix` mang
-  `decided_by` chủ kho và cặp đo hai chiều.
+- AC-9: Given vòng này đã làm, When chạy eval máy của mọi hồ sơ đã ký có thước hay bài kiểm đo bảng mục tiêu hoặc khung
+  trang của trang đơn vị và trang một bộ (bước bấm mở dòng, tham số `expand`, hàng công cụ của bảng, khoảng giữa hàng
+  thẻ con và bảng), Then mọi mục không xấu hơn trên nền `origin/onehub` (mục đỏ sẵn trên nền in «đỏ sẵn trên nền»), và
+  mọi thay đổi trong thước của các hồ sơ ấy chỉ thuộc ba lớp Hỏi-1 cho phép: bỏ hay đổi bước bấm mở dòng (hoặc chờ dòng
+  KR đã mở, đổi `expand` thành `gap`); thêm nút Mở/Gập tất cả và hàng số vào khẳng định bố cục (số mục hàng công cụ,
+  khoảng dưới hàng thẻ con); đảo thứ tự mở/gập trong khẳng định bàn phím của một dòng — mỗi hồ sơ có một dòng sổ `fix`
+  mang `decided_by` chủ kho và cặp đo hai chiều.
 
 ## Coverage
 

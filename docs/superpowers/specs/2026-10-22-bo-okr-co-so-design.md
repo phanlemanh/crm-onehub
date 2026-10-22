@@ -38,7 +38,7 @@ VK3 đổi thẻ OKR, bản này đọc lại trước S2.
   `okr.toanCanh` đã nằm trong cache khi người dùng đi từ Toàn cảnh hay danh sách sang.
 - Ô **không** theo bộ lọc hay sắp xếp của bảng bên dưới: chúng tả cả đội, bảng là chỗ đào xuống.
 - Biên của ô Ngày còn lại: chu kỳ chưa tới `startsOn` → giá trị «—», mô tả «Bắt đầu <ngày>»; đã qua `endsOn` → «0»,
-  mô tả «Đã kết thúc <ngày>»; hôm nay là `endsOn` → «1». Bộ chưa công bố mục tiêu nào → Tiến độ «—», cập nhật «0/0»,
+  mô tả «Đã kết thúc <ngày>»; hôm nay là `endsOn` → «1» (đếm cả ngày cuối và «—» trước ngày bắt đầu: Hỏi-4). Bộ chưa công bố mục tiêu nào → Tiến độ «—», cập nhật «0/0»,
   tự tin «0».
 - Hàm thuần `oSoBo(hang, chuKy, homNay)` trong `theo-don-vi/` dựng bốn ô (giá trị + mô tả) — thành phần chỉ vẽ. Chữ
   thêm vào `apps/app/lib/messages/okr-vo-khu.ts` (chỉ thêm dòng, luật 7 của đợt); các nhãn trùng Toàn cảnh dùng lại khoá
@@ -61,11 +61,18 @@ VK3 đổi thẻ OKR, bản này đọc lại trước S2.
 
 ### Thước của hồ sơ đã ký
 
-Mở sẵn đảo nghĩa của bước «bấm nút mở dòng để thấy KR» trong các thước đã ký đo bảng trang đơn vị (quét sơ bộ: khoảng
-mười bảy tệp dưới `apps/app/test` và `_acceptance/*/rang` có bấm `aria-expanded` trên màn đơn vị). Các thước ấy sẽ đổi
-đúng bước bấm mở (bỏ bước, hoặc chờ dòng KR đã mở), không đổi khẳng định nào — nếu chủ kho cho (Hỏi-1), như phép
-V1-17 đã cho VK3. Danh sách lập ở S3 bằng lệnh quét; mỗi hồ sơ một dòng sổ `fix` mang `decided_by` chủ kho, đo hai
-chiều.
+Hàng này chạm thước đã ký ở ba lớp (quét 22/10 bằng grep, danh sách đầy đủ lập lại ở S3 bằng `thuoc-da-ky.mjs`):
+
+1. **Bước bấm mở dòng** hay tham số `expand` — khoảng hai mươi bốn tệp dưới `apps/app/test` và `_acceptance/*/rang`.
+   Mở sẵn làm bước «bấm để thấy KR» thành «bấm để gập».
+2. **Khẳng định bố cục** — số mục hàng công cụ của bảng (nút Mở/Gập tất cả thêm một mục) và khoảng dưới hàng thẻ con
+   (hàng số chen giữa thẻ con và bảng): `trang-don-vi-mot-bang` (`man-don-vi.mjs` E2), khoảng 69px của VK3.
+3. **Một khẳng định đổi giá trị** — `apps/app/test/okr-trang-don-vi.dom.tsx`: Enter mở rồi Space gập một dòng sẽ đảo
+   thành gập rồi mở.
+
+Đổi đúng ba lớp ấy, không đổi khẳng định nào khác — nếu chủ kho cho (Hỏi-1), như phép V1-17 đã cho VK3. Mỗi hồ sơ một
+dòng sổ `fix` mang `decided_by` chủ kho, đo hai chiều. Không cho thì cắt mở sẵn mặc định: AC-4, E5, E6, AC-9, E13 rời
+hợp đồng và AC-5 bắt đầu từ trạng thái gập.
 
 ### Ranh giới với VK10 `che-do-soan-bo-okr`
 

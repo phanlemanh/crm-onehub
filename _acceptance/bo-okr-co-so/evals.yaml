@@ -48,7 +48,7 @@ evals:
       - "apps/app/app/(app)/[slug]/okr/theo-don-vi/**"
       - "apps/app/test/bo-okr-co-so.dom.tsx"
     expected: |
-      Ca «bco-bien»: hàm thuần oSoBo(hang, chuKy, homNay). Ma trận viết trước 9 ô: {trước startsOn 1 ngày, đúng
+      Ca «bco-bien»: hàm thuần oSoBo(hang, chuKy, homNay). Ma trận viết trước 12 khẳng định (5 + 3 + 2 + 2 biên giờ): {trước startsOn 1 ngày, đúng
       startsOn, giữa chu kỳ, đúng endsOn, sau endsOn 1 ngày} × ngày còn lại kỳ vọng {—/Bắt đầu, n, n, 1, 0/Đã kết thúc}
       + {kyVong null → «chưa có vạch», kyVong 0 → «vừa công bố», kyVong 70 → «lẽ ra 70%»} + {không có hàng, soKr 0} →
       {«—», «0/0», «0»}. Mỗi ô một khẳng định; thêm khẳng định chung: chuỗi bốn ô không chứa NaN, undefined, «-<số>».
@@ -99,11 +99,14 @@ evals:
       - "packages/ui/src/components/data-table.tsx"
       - "_acceptance/bo-okr-co-so/rang/man-bo-okr-co-so*.mjs"
     expected: |
-      Cùng lần chạy E1, bộ pb của người xem: đếm dòng KR hiện ([data-kr]) ngay khi bảng tải xong, so với tổng số KR của
-      các mục tiêu chưa bỏ đọc qua okr.danhSach trong cùng phiên; số nút mở có aria-expanded=true bằng số mục tiêu chưa
-      bỏ có KR. In «DUNG AC-4 mo-san: <n>/<n> KR» hoặc «SAI AC-4 mo-san: man=<x> api=<y>», mã 1.
+      Cùng lần chạy E1, bộ pb của người xem. Gieo trước qua đường ghi thật (service okr, không chèn bảng): một mục tiêu
+      có hai KR rồi bỏ nó, và một mục tiêu không KR. Đếm dòng KR hiện ([data-kr]) ngay khi bảng tải xong, so với tổng số
+      KR của các mục tiêu chưa bỏ đọc qua okr.danhSach trong cùng phiên; số nút mở có aria-expanded=true bằng số mục tiêu
+      chưa bỏ có KR; hai mục vừa gieo không có nút mở. In «DUNG AC-4 mo-san: <n>/<n> KR · da-bo khong nut · khong-kr khong
+      nut» hoặc «SAI AC-4 <ca>: man=<x> api=<y>», mã 1.
       CHIEU DO (--chieu-do khong-mo-san, bản sao): BangDonVi bỏ moSan → «SAI AC-4 mo-san: man=0» (ghim /SAI AC-4
-      mo-san/), mã 1.
+      mo-san/), mã 1; (--chieu-do mo-moi-dong, bản sao): isExpandable của BangDonVi luôn true → «SAI AC-4 da-bo» (ghim
+      /SAI AC-4 da-bo/), mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -186,7 +189,8 @@ evals:
       Cùng lần chạy E1, bộ pb, hai khổ. 1440: bốn [data-slot=stat-card] cùng offsetTop. 375 (phiên riêng của khổ):
       offsetTop tạo đúng 2 hàng × 2 ô; document.scrollingElement.scrollWidth ≤ innerWidth; mỗi nhãn ô có
       scrollWidth ≤ clientWidth (không cắt chữ); nút «Gập tất cả» có getBoundingClientRect trong khung nhìn sau khi cuộn
-      tới. In «DUNG AC-8 <kho>: …» hoặc «SAI AC-8 <kho>: …», mã 1. Chụp bco-1440-sang, bco-1440-toi, bco-375-sang, bco-375-toi vào
+      tới. In «DUNG AC-8 <kho>: …» hoặc «SAI AC-8 <kho>: …», mã 1. Chụp bco-1440-sang, bco-1440-toi, bco-375-sang, bco-375-toi,
+      cùng hàng số Toàn cảnh OKR trong cùng phiên (bco-toan-canh-1440-sang, bco-toan-canh-375-sang) vào
       .acceptance-runs/bo-okr-co-so/evidence/ (chép vào hồ sơ chỉ khi BCO_CHEP_ANH=1).
       CHIEU DO (--chieu-do nhan-cat, bản sao): nhãn ô thêm truncate → «SAI AC-8 375: nhan cat» (ghim /SAI AC-8 375:
       nhan cat/), mã 1.
@@ -204,7 +208,8 @@ evals:
     steps:
       - "Chạy đúng lệnh của eval với BCO_CHEP_ANH=1 (tien-de.mjs + man-bo-okr-co-so.mjs); không gọi thẳng script con"
       - "Mở ảnh _acceptance/bo-okr-co-so/evidence/bco-1440-sang.png, bco-1440-toi.png, bco-375-sang.png, bco-375-toi.png"
-    expected: "Thẻ OKR của một phòng ban: bốn ô số ngay dưới hàng thẻ con, trên bảng mục tiêu, cùng nếp hàng số Toàn cảnh OKR (một khối viền, ô chia đều, nhãn trên giá trị); bảng bên dưới đã mở sẵn các KR. Ở 1440 bốn ô một hàng; ở 375 hai cột hai hàng, không nhãn nào bị cắt mất chữ, trang không tràn ngang. Nút Mở tất cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng. Ở cả sáng và tối, chữ và viền không chìm vào nền."
+      - "Mở ảnh đối chiếu _acceptance/bo-okr-co-so/evidence/bco-toan-canh-1440-sang.png, bco-toan-canh-375-sang.png (hàng số Toàn cảnh OKR cùng phiên)"
+    expected: "Thẻ OKR của một phòng ban: bốn ô số ngay dưới hàng thẻ con, trên bảng mục tiêu, cùng nếp hàng số Toàn cảnh OKR trong ảnh đối chiếu — cùng khối viền ngoài, cùng đường chia ô, cùng cỡ và màu nhãn, cùng cỡ giá trị, cùng đệm trong ô; bảng bên dưới đã mở sẵn các KR. Ở 1440 bốn ô một hàng; ở 375 hai cột hai hàng, không nhãn nào bị cắt mất chữ, trang không tràn ngang. Nút Mở tất cả / Gập tất cả nhìn thấy trên hàng công cụ của bảng. Ở cả sáng và tối, chữ và viền không chìm vào nền."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E13
@@ -219,13 +224,17 @@ evals:
       - "_acceptance/bo-okr-co-so/rang/thuoc-da-ky.mjs"
     expected: |
       thuoc-da-ky.mjs: (1) quét mọi tệp thước của hồ sơ có contract status signed-off/machine-cleared, cùng
-      apps/app/test/*.dom.tsx, tìm bước bấm mở dòng trên bảng trang đơn vị (aria-expanded, expandRow, nhãn «Mở <tên>»
-      trên màn theo-don-vi/bo-okr); danh sách viết tay ở S3 phải khớp kết quả quét. (2) với mỗi tệp trong danh sách:
-      `git diff origin/onehub...HEAD` của tệp chỉ đổi dòng thuộc bước bấm mở (khớp mẫu khai trong script); có dòng đổi
-      khác → «SAI AC-9 <tep>: doi ngoai buoc mo». (3) mỗi hồ sơ chủ tệp có dòng sổ fix mang decided_by chủ kho trỏ tệp ấy.
-      (4) chạy eval máy của các hồ sơ ấy trên cây vòng và trên worktree origin/onehub: mục xanh trên nền mà đỏ trên cây →
-      «SAI AC-9 <ho so>/<E>: xau hon nen»; mục đỏ cả hai → «do san tren nen». In «DUNG AC-9: <n> ho so, <k> do san tren
-      nen», mã 0; còn lại mã 1.
+      apps/app/test/*.dom.tsx, tìm tệp đo bảng mục tiêu hay khung trang của trang đơn vị và trang một bộ theo bốn mẫu khai
+      trong script: bấm mở dòng (aria-expanded, expandRow, nhãn «Mở <tên>», data-mo-dong), tham số URL expand, hàng công cụ
+      của bảng (số mục, một hàng), khoảng dưới [data-the-con-bo]. Danh sách viết tay ở S3 khớp kết quả quét. Đối chứng
+      dương của quét: _acceptance/trang-don-vi-mot-bang/rang/man-don-vi.mjs và apps/app/test/okr-trang-don-vi.dom.tsx
+      phải có trong kết quả, thiếu → «SAI AC-9 quet: thieu <tep>».
+      (2) với mỗi tệp trong danh sách: `git diff origin/onehub...HEAD` của tệp chỉ đổi dòng thuộc ba lớp Hỏi-1 cho phép
+      (bước mở, expand→gap; số mục hàng công cụ và khoảng dưới thẻ con; thứ tự mở/gập của khẳng định bàn phím), khớp mẫu
+      khai trong script; có dòng đổi khác → «SAI AC-9 <tep>: doi ngoai lop cho phep». (3) mỗi hồ sơ chủ tệp có dòng sổ
+      fix mang decided_by chủ kho trỏ tệp ấy. (4) chạy eval máy của các hồ sơ ấy trên cây vòng và trên worktree
+      origin/onehub: mục xanh trên nền mà đỏ trên cây → «SAI AC-9 <ho so>/<E>: xau hon nen»; mục đỏ cả hai → «do san tren
+      nen». In «DUNG AC-9: <n> ho so, <k> do san tren nen», mã 0; còn lại mã 1.
       CHIEU DO (--chieu-do doi-khang-dinh, bản sao): sửa thêm một khẳng định số trong một thước của danh sách →
-      «SAI AC-9 <tep>: doi ngoai buoc mo» (ghim /SAI AC-9 \S+: doi ngoai buoc mo/), mã 1.
+      «SAI AC-9 <tep>: doi ngoai lop cho phep» (ghim /SAI AC-9 \S+: doi ngoai lop cho phep/), mã 1.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
