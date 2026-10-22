@@ -375,6 +375,7 @@ const caNhanGia = () => ({
 	enrichmentError: null,
 	owner: null,
 	company: null,
+	tepTheoTruong: {},
 	fields: [],
 	queued: false,
 	createdAt: "2026-09-01T00:00:00.000Z",
@@ -424,6 +425,7 @@ const congTyGia = () => ({
 	source: "MANUAL",
 	owner: null,
 	contacts: [],
+	tepTheoTruong: {},
 	fields: [],
 	queued: false,
 	createdAt: "2026-09-01T00:00:00.000Z",
@@ -453,6 +455,7 @@ const thoaThuanGia = () => ({
 		email: "hai@onehub.vn",
 		image: null,
 	},
+	tepTheoTruong: {},
 	fields: [],
 	amountCents: null,
 	baseAmountCents: null,
@@ -795,6 +798,7 @@ describe("vong-doi-mot-cach-cat", () => {
 				let conCat = daCat;
 				dat(n.duong, () => ({
 					...n.lay(),
+					tepTheoTruong: {},
 					fields: [TRUONG],
 					archivedAt: conCat ? NGAY_CAT : null,
 				}));
@@ -878,6 +882,7 @@ describe("vong-doi-mot-cach-cat", () => {
 		for (const n of NGAN) {
 			dat(n.duong, () => ({
 				...n.lay(),
+				tepTheoTruong: {},
 				fields: [TRUONG],
 				archivedAt: NGAY_CAT,
 			}));

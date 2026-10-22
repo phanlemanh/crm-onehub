@@ -5,6 +5,7 @@ import Close from "@carbon/icons-react/es/Close";
 import {
 	FIELD_TYPES,
 	fieldKeyFromLabel,
+	karaDienDuoc,
 	locDuocTheoKieu,
 } from "@crm/db/fields-shape";
 import { Button } from "@crm/ui/components/button";
@@ -186,14 +187,15 @@ export function FieldEditor({
 	const key = field?.key ?? fieldKeyFromLabel(draft.label);
 	const saving = create.isPending || update.isPending;
 	const filterable = locDuocTheoKieu(draft.type);
+	const karaDien = karaDienDuoc(draft.type);
 
 	const save = () => {
 		const payload = {
 			label: draft.label,
 			type: draft.type,
 			options: draft.options.filter((option) => option.label.trim() !== ""),
-			agentFilled: draft.agentFilled,
-			agentBrief: draft.agentBrief.trim() || null,
+			agentFilled: karaDien && draft.agentFilled,
+			agentBrief: karaDien ? draft.agentBrief.trim() || null : null,
 			required: draft.required,
 			showOnSheet: draft.required || draft.showOnSheet,
 			showOnTable: draft.showOnTable,
@@ -232,30 +234,32 @@ export function FieldEditor({
 					</Field>
 				</div>
 
-				<div className={SECTION}>
-					<Field orientation="horizontal">
-						<div className="flex min-w-0 flex-1 flex-col gap-0.5">
-							<FieldLabel htmlFor={agentId}>{copy.agentLabel}</FieldLabel>
-							<FieldDescription>{copy.agentHelp}</FieldDescription>
-						</div>
-						<Switch
-							id={agentId}
-							checked={draft.agentFilled}
-							onCheckedChange={(agentFilled) => patch({ agentFilled })}
-						/>
-					</Field>
+				{karaDien ? (
+					<div className={SECTION}>
+						<Field orientation="horizontal">
+							<div className="flex min-w-0 flex-1 flex-col gap-0.5">
+								<FieldLabel htmlFor={agentId}>{copy.agentLabel}</FieldLabel>
+								<FieldDescription>{copy.agentHelp}</FieldDescription>
+							</div>
+							<Switch
+								id={agentId}
+								checked={draft.agentFilled}
+								onCheckedChange={(agentFilled) => patch({ agentFilled })}
+							/>
+						</Field>
 
-					<Field>
-						<FieldLabel htmlFor={briefId}>{copy.briefLabel}</FieldLabel>
-						<Textarea
-							id={briefId}
-							rows={3}
-							value={draft.agentBrief}
-							onChange={(event) => patch({ agentBrief: event.target.value })}
-						/>
-						<FieldDescription>{copy.briefHelp}</FieldDescription>
-					</Field>
-				</div>
+						<Field>
+							<FieldLabel htmlFor={briefId}>{copy.briefLabel}</FieldLabel>
+							<Textarea
+								id={briefId}
+								rows={3}
+								value={draft.agentBrief}
+								onChange={(event) => patch({ agentBrief: event.target.value })}
+							/>
+							<FieldDescription>{copy.briefHelp}</FieldDescription>
+						</Field>
+					</div>
+				) : null}
 
 				<div className={SECTION}>
 					<Field>

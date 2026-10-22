@@ -11,23 +11,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmvhfwder0002uq8gqqz562k8",
-					"name": "A1 kbtokmvhfwc6nhdi0",
+					"id": "cmvixdlh30002sq8grky3w1jw",
+					"name": "A1 kbtokttp",
 					"stage": "DEMO_BOOKED",
 					"currency": "USD",
 					"company": {
-						"id": "cmvhfwdem0000uq8gp6asgigk",
-						"name": "Board Co mvhfwc6nhdi0",
-						"domain": "deals-board-mvhfwc6nhdi0.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-mvhfwc6nhdi0",
-						"name": "user-board-a-mvhfwc6nhdi0",
-						"email": "user-board-a-mvhfwc6nhdi0@example.test",
+						"id": "user-board-a-ttp",
+						"name": "user-board-a-ttp",
+						"email": "user-board-a-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 10000,
@@ -38,26 +38,27 @@
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:00.000Z",
 					"archivedAt": null,
-					"fields": {}
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmvhfwdex0004uq8gx1l4flgb",
+					"id": "cmvixdlh70004sq8g2oh69z5d",
 					"name": "A2",
 					"stage": "DEMO_BOOKED",
 					"currency": "USD",
 					"company": {
-						"id": "cmvhfwdem0000uq8gp6asgigk",
-						"name": "Board Co mvhfwc6nhdi0",
-						"domain": "deals-board-mvhfwc6nhdi0.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-mvhfwc6nhdi0",
-						"name": "user-board-a-mvhfwc6nhdi0",
-						"email": "user-board-a-mvhfwc6nhdi0@example.test",
+						"id": "user-board-a-ttp",
+						"name": "user-board-a-ttp",
+						"email": "user-board-a-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 25000,
@@ -68,26 +69,27 @@
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:01.000Z",
 					"archivedAt": null,
-					"fields": {}
+					"fields": {},
+					"soTepTheoTruong": {}
 				},
 				{
-					"id": "cmvhfwdf00005uq8g76sj6zwu",
+					"id": "cmvixdlh90005sq8g3clr7d4l",
 					"name": "A3",
 					"stage": "DEMO_BOOKED",
 					"currency": "EUR",
 					"company": {
-						"id": "cmvhfwdem0000uq8gp6asgigk",
-						"name": "Board Co mvhfwc6nhdi0",
-						"domain": "deals-board-mvhfwc6nhdi0.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-mvhfwc6nhdi0",
-						"name": "user-board-a-mvhfwc6nhdi0",
-						"email": "user-board-a-mvhfwc6nhdi0@example.test",
+						"id": "user-board-a-ttp",
+						"name": "user-board-a-ttp",
+						"email": "user-board-a-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 90000,
@@ -98,7 +100,8 @@
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:02.000Z",
 					"archivedAt": null,
-					"fields": {}
+					"fields": {},
+					"soTepTheoTruong": {}
 				}
 			]
 		},
@@ -113,23 +116,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmvhfwdf30007uq8g7stw7zlb",
-					"name": "A5 kbtokmvhfwc6nhdi0",
+					"id": "cmvixdlhc0007sq8gaoj43ec6",
+					"name": "A5 kbtokttp",
 					"stage": "QUALIFIED_TO_BUY",
 					"currency": "USD",
 					"company": {
-						"id": "cmvhfwdem0000uq8gp6asgigk",
-						"name": "Board Co mvhfwc6nhdi0",
-						"domain": "deals-board-mvhfwc6nhdi0.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-mvhfwc6nhdi0",
-						"name": "user-board-a-mvhfwc6nhdi0",
-						"email": "user-board-a-mvhfwc6nhdi0@example.test",
+						"id": "user-board-a-ttp",
+						"name": "user-board-a-ttp",
+						"email": "user-board-a-ttp@example.test",
 						"image": null
 					},
 					"amountCents": null,
@@ -140,7 +143,8 @@
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:04.000Z",
 					"archivedAt": null,
-					"fields": {}
+					"fields": {},
+					"soTepTheoTruong": {}
 				}
 			]
 		},
@@ -166,23 +170,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmvhfwdf40008uq8g80zgzkg5",
+					"id": "cmvixdlhd0008sq8gp5n9q3my",
 					"name": "A6",
 					"stage": "CONTRACT_SENT",
 					"currency": "USD",
 					"company": {
-						"id": "cmvhfwdem0000uq8gp6asgigk",
-						"name": "Board Co mvhfwc6nhdi0",
-						"domain": "deals-board-mvhfwc6nhdi0.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-mvhfwc6nhdi0",
-						"name": "user-board-a-mvhfwc6nhdi0",
-						"email": "user-board-a-mvhfwc6nhdi0@example.test",
+						"id": "user-board-a-ttp",
+						"name": "user-board-a-ttp",
+						"email": "user-board-a-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 100000,
@@ -193,7 +197,8 @@
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:05.000Z",
 					"archivedAt": null,
-					"fields": {}
+					"fields": {},
+					"soTepTheoTruong": {}
 				}
 			]
 		},
@@ -208,23 +213,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmvhfwdf6000auq8gb3fyvbaq",
+					"id": "cmvixdlhf000asq8gxwihxpcu",
 					"name": "A8",
 					"stage": "CLOSED_WON",
 					"currency": "USD",
 					"company": {
-						"id": "cmvhfwdem0000uq8gp6asgigk",
-						"name": "Board Co mvhfwc6nhdi0",
-						"domain": "deals-board-mvhfwc6nhdi0.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-mvhfwc6nhdi0",
-						"name": "user-board-a-mvhfwc6nhdi0",
-						"email": "user-board-a-mvhfwc6nhdi0@example.test",
+						"id": "user-board-a-ttp",
+						"name": "user-board-a-ttp",
+						"email": "user-board-a-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 300000,
@@ -235,7 +240,8 @@
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:07.000Z",
 					"archivedAt": null,
-					"fields": {}
+					"fields": {},
+					"soTepTheoTruong": {}
 				}
 			]
 		},
@@ -250,23 +256,23 @@
 			},
 			"cards": [
 				{
-					"id": "cmvhfwdf8000cuq8gi04c02mf",
+					"id": "cmvixdlhg000csq8gwp37076j",
 					"name": "A9",
 					"stage": "CLOSED_LOST",
 					"currency": "USD",
 					"company": {
-						"id": "cmvhfwdem0000uq8gp6asgigk",
-						"name": "Board Co mvhfwc6nhdi0",
-						"domain": "deals-board-mvhfwc6nhdi0.test",
+						"id": "cmvixdlgz0000sq8g2og2kdwt",
+						"name": "Board Co ttp",
+						"domain": "deals-board-ttp.test",
 						"iconUrl": null,
 						"iconDarkUrl": null,
 						"iconTone": null,
 						"logoUrl": null
 					},
 					"owner": {
-						"id": "user-board-a-mvhfwc6nhdi0",
-						"name": "user-board-a-mvhfwc6nhdi0",
-						"email": "user-board-a-mvhfwc6nhdi0@example.test",
+						"id": "user-board-a-ttp",
+						"name": "user-board-a-ttp",
+						"email": "user-board-a-ttp@example.test",
 						"image": null
 					},
 					"amountCents": 4000,
@@ -277,7 +283,8 @@
 					"lastActivityAt": null,
 					"createdAt": "2026-01-01T00:00:08.000Z",
 					"archivedAt": null,
-					"fields": {}
+					"fields": {},
+					"soTepTheoTruong": {}
 				}
 			]
 		},
