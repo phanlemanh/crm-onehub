@@ -229,6 +229,15 @@ export async function donBanGhi(ids: {
 	contact?: string[];
 	field?: string[];
 }): Promise<void> {
+	await db.agentTask.deleteMany({
+		where: {
+			OR: [
+				{ dealId: { in: ids.deal ?? [] } },
+				{ contactId: { in: ids.contact ?? [] } },
+				{ companyId: { in: ids.company ?? [] } },
+			],
+		},
+	});
 	await db.deal.deleteMany({ where: { id: { in: ids.deal ?? [] } } });
 	await db.contact.deleteMany({ where: { id: { in: ids.contact ?? [] } } });
 	await db.company.deleteMany({ where: { id: { in: ids.company ?? [] } } });
