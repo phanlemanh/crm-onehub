@@ -638,7 +638,7 @@ function congTyDichVu(): CompaniesService {
 		{ backfill: async () => undefined } as unknown as FaviconService,
 		stamp,
 		{} as unknown as ConversionService,
-		{} as unknown as FieldsService,
+		{ donTepNgay: async () => {} } as unknown as FieldsService,
 	);
 }
 

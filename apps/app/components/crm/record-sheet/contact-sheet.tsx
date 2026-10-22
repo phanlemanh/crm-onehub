@@ -531,6 +531,12 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 									saving={isSavingField}
 									onSave={saveFields}
 									nguoiDung={users.data}
+									nguCanhTep={{
+										entity: "CONTACT",
+										recordId: contact.id,
+										luuTru: contact.archivedAt !== null,
+										tep: contact.tepTheoTruong,
+									}}
 								/>
 							) : muc.key === "company" ? (
 								<InlineCompanyField

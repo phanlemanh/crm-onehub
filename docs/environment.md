@@ -128,6 +128,7 @@ single place that knows what is set.
 | `GITHUB_TOKEN` | Raises the GitHub rate limit from 60/hour |
 | `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into a public Blob store |
 | `KHO_TAI_LIEU_BLOB_TOKEN` | Keeps the Word and PDF sources of the document library in a private Blob store and reads them back for drafting. Without it nothing can be uploaded to the library |
+| `TEP_BAN_GHI_BLOB_TOKEN` | Keeps the files of `FILE` fields (contracts, scans, photos on a deal, company or contact) in their own private Blob store. Without it names and counts still show but nothing can be uploaded or opened. Read by the API only, through `packages/db/src/blob-tep-truong.ts`; no fallback to the two tokens around it |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
 | `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document library — the drafting machine (`may_soan`) and the AI assistant that answers from approved pages (`tro_ly_kho`) — so their spend is billed apart. Without it both run on the key above |
 | `OKR_AI_GATEWAY_API_KEY` | A separate AI Gateway key used only by Trợ lý OKR (suggestions, weekly summaries and the drafting chat in `apps/agent-okr`), so its spend is billed apart and the key can carry its own monthly budget. Without it Trợ lý OKR runs on `AI_GATEWAY_API_KEY`, or on Vercel OIDC |

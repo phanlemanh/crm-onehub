@@ -5,6 +5,7 @@ import {
 	Prisma as PrismaNamespace,
 	type RecordSource,
 } from "@crm/db";
+import { ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { ghiGoDoXoa } from "@crm/db/viec-ghi";
 import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
@@ -36,6 +37,7 @@ import {
 import { blankToNull, toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
+import type { NguoiGoiTep } from "../fields/field-files-quyen";
 import { FieldsService } from "../fields/fields.service";
 import {
 	activityFacetCounts,
@@ -151,9 +153,10 @@ export class CompaniesService {
 		]);
 
 		const ids = rows.map((row) => row.id);
-		const [queued, tableFields] = await Promise.all([
+		const [queued, tableFields, soTep] = await Promise.all([
 			this.queue.queuedCompanies(ids),
 			this.fields.tableValuesFor("COMPANY", ids),
+			this.fields.soTepTheoBanGhi("COMPANY", ids),
 		]);
 
 		return {
@@ -177,13 +180,14 @@ export class CompaniesService {
 				createdAt: row.createdAt.toISOString(),
 				archivedAt: row.archivedAt?.toISOString() ?? null,
 				fields: tableFields.get(row.id) ?? {},
+				soTepTheoTruong: soTep.get(row.id) ?? {},
 			})),
 			total,
 			facetCounts,
 		};
 	}
 
-	async byId(id: string) {
+	async byId(id: string, nguoiGoi?: NguoiGoiTep) {
 		const company = await this.db.company.findUnique({
 			where: { id },
 			select: {
@@ -289,6 +293,7 @@ export class CompaniesService {
 			})),
 			archivedContacts: nguoi.daLuuTru.map(caNhanDaLuuTru),
 			fields: await this.fields.valuesFor("COMPANY", id),
+			tepTheoTruong: await this.fields.tepTheoBanGhi("COMPANY", id, nguoiGoi),
 			queued: await this.queue.isQueued({ companyId: id }),
 			createdAt: createdAt.toISOString(),
 			archivedAt: archivedAt?.toISOString() ?? null,
@@ -500,7 +505,11 @@ export class CompaniesService {
 		id: string,
 		guard?: { archivedBefore: Date },
 	): Promise<{ id: string; name: string } | null> {
-		let deleted: { targets: StampTargets; name: string } | null;
+		let deleted: {
+			targets: StampTargets;
+			name: string;
+			tepXoa: string[];
+		} | null;
 
 		try {
 			deleted = await this.db.$transaction(async (tx) => {
@@ -551,13 +560,16 @@ export class CompaniesService {
 					},
 					new Date(),
 				);
+				const tepXoa = await ghiChoXoaTheoTep(tx, {
+					OR: [{ companyId: id }, { deal: { companyId: id } }],
+				});
 
 				const company = await tx.company.delete({
 					where: { id },
 					select: { name: true },
 				});
 
-				return { targets, name: company.name };
+				return { targets, name: company.name, tepXoa };
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -565,6 +577,7 @@ export class CompaniesService {
 
 		if (!deleted) return null;
 
+		await this.fields.donTepNgay(deleted.tepXoa);
 		await this.stamp.recomputeAfterDelete(deleted.targets, { companyId: id });
 
 		this.logger.log({

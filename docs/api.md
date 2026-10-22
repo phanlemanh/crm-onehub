@@ -1567,6 +1567,33 @@ luận, Kho ý). Mọi thủ tục nằm trong `OkrHoiYService`
   a person or the machine, is written by `taoDeXuatTaiLieu` in
   `packages/db/src/tai-lieu-de-xuat.ts`.
 
+## Trường Tệp: tải lên, quyền tạm, hàng chờ xoá
+
+`apps/api/src/fields/field-files.*` owns the `fieldFiles.*` router: `status`,
+`requestUpload`, `complete`, `downloadUrl`, `remove`. A `FILE` field stores no value in
+`fieldValue`; its files are `FieldFile` rows, one per file, pointing at exactly one
+company, contact or deal (`CHECK fieldFile_mot_ban_ghi`).
+
+- **Same upload path as the document library.** `requestUpload` signs a PUT on the private
+  store of `packages/db/src/blob-tep-truong.ts` and returns a `phieu` from `phieu-nguon.ts`;
+  `complete` checks it, takes an advisory lock, reads the bytes back, recognises the kind from
+  magic bytes (`@crm/validation/kieu-tep`, a DOCX with `vbaProject.bin` is refused), checks
+  the real size and writes the row. Ten files per cell, 20 MB each, same bytes once per cell.
+- **No `TEP_BAN_GHI_BLOB_TOKEN` switches files off, never throws.** `status` answers
+  `{ bat: false }`; `requestUpload`, `complete` and `downloadUrl` answer
+  `PRECONDITION_FAILED`; names and counts still show. There is no fallback to
+  `KHO_TAI_LIEU_BLOB_TOKEN` or `BLOB_READ_WRITE_TOKEN`.
+- **Interim permission lives in one file** (`field-files-quyen.ts`): workspace admins open
+  files; admins and the uploader delete them. Every row in `tepTheoTruong` carries
+  `coTheMo` and `coTheXoa`, so the screen never compares roles.
+- **A Blob is deleted after the row, through a queue.** `requestUpload` writes a
+  `BlobChoXoa` row that expires with the ticket and `complete` removes it. `remove`,
+  `fields.delete` and every `purge` write the row inside their transaction
+  (`ghiChoXoaTheoTep`) and delete the Blob after commit; a failed delete stays queued and
+  the daily archive-retention sweep (`FieldsService.donHangCho`) retries it.
+- **Filters.** `field:<key>=some|none` on lists, boards, saved views and campaigns;
+  `facetCounts` counts both. Kara never fills a `FILE` field (`karaDienDuoc`).
+
 ## Deal stages are rows, and code reads their kind
 
 `apps/api/src/giai-doan` owns the `giaiDoan.*` router. A deal stage is a row in
