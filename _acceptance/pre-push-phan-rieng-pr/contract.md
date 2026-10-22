@@ -5,7 +5,7 @@ slug: pre-push-phan-rieng-pr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-21T13:26:49Z
 design_doc: docs/superpowers/specs/2026-10-21-pre-push-phan-rieng-pr-design.md
@@ -111,3 +111,9 @@ phải ngưỡng nghiệm thu.
   câu giao. Lối kia thêm điều kiện «đỉnh hai cha, cha thứ hai thuộc onehub»: ca gộp rồi sửa thêm (G8) đi nặng như hôm nay.
 - Lời hứa của hồ sơ đã ký đổi theo vòng này (bản đối ở Notes của `pre-push-t1`): ca 6 của E1 `pre-push-t1` — nhánh chỉ
   docs gộp onehub mang mã — từ «chạy đủ năm bước» sang «bỏ `test, build`». Đây là đúng hành vi đề bài xin.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Câu giải thích của khối t1Only trong bản khai cổng tả lệch cách so ở đầu nhánh từ xa (so với điểm rẽ của nền, không phải với nền); hook vẫn chạy đúng luật.
+  - Ngoài-2: Khi phần PR tự thêm chỉ có tài liệu dưới .github/, dòng báo của hook gọi chúng là «tệp ngoài T1» và không nói lý do thật là thư mục .github; quyết định chạy đủ vẫn đúng.
+  - Ngoài-3: Phép đo lịch sử chưa tách ca bộ phân loại sập khỏi ca nó cho nặng đúng; lượt đo 21/10 không có ca nào sập.
+  - Ngoài-4: Cùng chỗ với Ngoài-1 — câu giải thích tả sai vế so ở đầu nhánh từ xa, có thể làm người đọc hiểu nhầm.
+  - Ngoài-5: Răng hồ sơ cũ chỉ kiểm dòng 6 của E1 cũ không còn ghi «chạy đủ», chưa ghim nội dung lời hứa mới; hành vi ca 6 vẫn được bài kiểm chạy thật.
