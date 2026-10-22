@@ -81,6 +81,7 @@ export function moTaTruongTuTao(
 		entity: nguCanhTep.entity,
 		recordId: nguCanhTep.recordId,
 		luuTru: nguCanhTep.luuTru,
+		phuTrach: nguCanhTep.phuTrach ?? null,
 	};
 	return moTa;
 }
