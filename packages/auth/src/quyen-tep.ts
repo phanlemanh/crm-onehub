@@ -1,7 +1,10 @@
 import { docDuocDoiTac } from "@crm/validation/vai-workspace";
 import { isWorkspaceAdmin, type WorkspaceRole } from "./roles";
 
-export const LY_DO_KHONG_MO_TEP = ["khong-phu-trach", "chua-co-phu-trach"] as const;
+export const LY_DO_KHONG_MO_TEP = [
+	"khong-phu-trach",
+	"chua-co-phu-trach",
+] as const;
 
 export type LyDoKhongMoTep = (typeof LY_DO_KHONG_MO_TEP)[number];
 

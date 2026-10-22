@@ -238,15 +238,15 @@ async function dungBay(tienTo: string): Promise<Record<string, BanGhi>> {
 }
 
 const NGUOI_LUAT = ["quanTri", "nv1", "nv2", "okr"] as const;
-const PHU_TRACH_BAN: Record<string, "Q" | "A" | "O" | null> = {
-	dA: "A",
-	dQ: "Q",
-	dO: "O",
-	cA: "A",
-	c0: null,
-	pA: "A",
-	p0: null,
-};
+const PHU_TRACH_BAN = new Map<string, "Q" | "A" | "O" | null>([
+	["dA", "A"],
+	["dQ", "Q"],
+	["dO", "O"],
+	["cA", "A"],
+	["c0", null],
+	["pA", "A"],
+	["p0", null],
+]);
 const TEN_NGUOI = { quanTri: "Q", nv1: "A", nv2: "B", okr: "O" } as const;
 const BAN_LUAT = ["dA", "dQ", "dO", "cA", "c0", "pA", "p0"] as const;
 
@@ -697,7 +697,7 @@ type MaTranXoa = Record<
 	Record<"Q" | "A" | "B", Record<"fA" | "fB" | "fQ", boolean>>
 >;
 const BA = { fA: true, fB: true, fQ: true };
-const MA_TRAN_XOA: Record<"khuyen" | "a" | "b", MaTranXoa> = {
+const MA_TRAN_XOA = {
 	khuyen: {
 		truoc: { Q: BA, A: BA, B: { fA: false, fB: true, fQ: false } },
 		sau: { Q: BA, A: { fA: true, fB: false, fQ: false }, B: BA },
@@ -718,7 +718,7 @@ const MA_TRAN_XOA: Record<"khuyen" | "a" | "b", MaTranXoa> = {
 		truoc: { Q: BA, A: BA, B: { fA: false, fB: false, fQ: false } },
 		sau: { Q: BA, A: { fA: false, fB: false, fQ: false }, B: BA },
 	},
-};
+} satisfies Record<"khuyen" | "a" | "b", MaTranXoa>;
 
 function loiHoi2(): "khuyen" | "a" | "b" {
 	const duong = join(
@@ -882,6 +882,14 @@ type DongLog = {
 	lyDo?: string;
 };
 
+const VAI_AI = {
+	quanTri: "admin",
+	nv1: "member",
+	nv2: "member",
+	okr: "okr",
+} as const;
+const fieldIdCua = new Map<string, string>();
+
 function demChet(dong: DongLog[]): number {
 	return dong.filter(
 		(d) =>
@@ -907,7 +915,14 @@ describe("tcb-vet", () => {
 					const { ket } = await moTep(ai, ban.tepId);
 					so += 1;
 					if (ai === "okr") continue;
-					const laPhuTrach = PHU_TRACH_BAN[b] === n;
+					const laPhuTrach = PHU_TRACH_BAN.get(b) === n;
+					if (!fieldIdCua.has(ban.tepId)) {
+						const hang = await db.fieldFile.findUnique({
+							where: { id: ban.tepId },
+							select: { fieldId: true },
+						});
+						fieldIdCua.set(ban.tepId, hang?.fieldId ?? "");
+					}
 					const msg =
 						ket === "url" ? "Field file opened" : "Field file open refused";
 					const dong = dongCua().filter((d) => d?.message === msg);
@@ -917,8 +932,8 @@ describe("tcb-vet", () => {
 						d?.tepId === ban.tepId &&
 						d.recordId === ban.o.recordId &&
 						d.userId === id(ai) &&
-						typeof d.fieldId === "string" &&
-						typeof d.role === "string" &&
+						d.fieldId === fieldIdCua.get(ban.tepId) &&
+						d.role === VAI_AI[ai] &&
 						d.laPhuTrach === laPhuTrach &&
 						(ket === "url" || d.lyDo === DAP_AN_LY_DO[`${n} ${b}`]);
 					if (!dungKhoa) {

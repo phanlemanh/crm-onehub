@@ -25,56 +25,56 @@ type QuanHe = "chinh-minh" | "nguoi-khac" | "chua-co";
 const VAI: Vai[] = ["owner", "admin", "member", "okr", null];
 const QUAN_HE: QuanHe[] = ["chinh-minh", "nguoi-khac", "chua-co"];
 
-const DAP_AN_MO: Record<string, string> = {
-	"owner chinh-minh": "mo",
-	"owner nguoi-khac": "mo",
-	"owner chua-co": "mo",
-	"admin chinh-minh": "mo",
-	"admin nguoi-khac": "mo",
-	"admin chua-co": "mo",
-	"member chinh-minh": "mo",
-	"member nguoi-khac": "khong-phu-trach",
-	"member chua-co": "chua-co-phu-trach",
-	"okr chinh-minh": "ngoai-pham-vi",
-	"okr nguoi-khac": "ngoai-pham-vi",
-	"okr chua-co": "ngoai-pham-vi",
-	"null chinh-minh": "ngoai-pham-vi",
-	"null nguoi-khac": "ngoai-pham-vi",
-	"null chua-co": "ngoai-pham-vi",
-};
+const DAP_AN_MO = new Map<string, string>([
+	["owner chinh-minh", "mo"],
+	["owner nguoi-khac", "mo"],
+	["owner chua-co", "mo"],
+	["admin chinh-minh", "mo"],
+	["admin nguoi-khac", "mo"],
+	["admin chua-co", "mo"],
+	["member chinh-minh", "mo"],
+	["member nguoi-khac", "khong-phu-trach"],
+	["member chua-co", "chua-co-phu-trach"],
+	["okr chinh-minh", "ngoai-pham-vi"],
+	["okr nguoi-khac", "ngoai-pham-vi"],
+	["okr chua-co", "ngoai-pham-vi"],
+	["null chinh-minh", "ngoai-pham-vi"],
+	["null nguoi-khac", "ngoai-pham-vi"],
+	["null chua-co", "ngoai-pham-vi"],
+]);
 
-const DAP_AN_XOA: Record<string, boolean> = {
-	"owner chinh-minh toi": true,
-	"owner chinh-minh khac": true,
-	"owner nguoi-khac toi": true,
-	"owner nguoi-khac khac": true,
-	"owner chua-co toi": true,
-	"owner chua-co khac": true,
-	"admin chinh-minh toi": true,
-	"admin chinh-minh khac": true,
-	"admin nguoi-khac toi": true,
-	"admin nguoi-khac khac": true,
-	"admin chua-co toi": true,
-	"admin chua-co khac": true,
-	"member chinh-minh toi": true,
-	"member chinh-minh khac": true,
-	"member nguoi-khac toi": true,
-	"member nguoi-khac khac": false,
-	"member chua-co toi": true,
-	"member chua-co khac": false,
-	"okr chinh-minh toi": false,
-	"okr chinh-minh khac": false,
-	"okr nguoi-khac toi": false,
-	"okr nguoi-khac khac": false,
-	"okr chua-co toi": false,
-	"okr chua-co khac": false,
-	"null chinh-minh toi": false,
-	"null chinh-minh khac": false,
-	"null nguoi-khac toi": false,
-	"null nguoi-khac khac": false,
-	"null chua-co toi": false,
-	"null chua-co khac": false,
-};
+const DAP_AN_XOA = new Map<string, boolean>([
+	["owner chinh-minh toi", true],
+	["owner chinh-minh khac", true],
+	["owner nguoi-khac toi", true],
+	["owner nguoi-khac khac", true],
+	["owner chua-co toi", true],
+	["owner chua-co khac", true],
+	["admin chinh-minh toi", true],
+	["admin chinh-minh khac", true],
+	["admin nguoi-khac toi", true],
+	["admin nguoi-khac khac", true],
+	["admin chua-co toi", true],
+	["admin chua-co khac", true],
+	["member chinh-minh toi", true],
+	["member chinh-minh khac", true],
+	["member nguoi-khac toi", true],
+	["member nguoi-khac khac", false],
+	["member chua-co toi", true],
+	["member chua-co khac", false],
+	["okr chinh-minh toi", false],
+	["okr chinh-minh khac", false],
+	["okr nguoi-khac toi", false],
+	["okr nguoi-khac khac", false],
+	["okr chua-co toi", false],
+	["okr chua-co khac", false],
+	["null chinh-minh toi", false],
+	["null chinh-minh khac", false],
+	["null nguoi-khac toi", false],
+	["null nguoi-khac khac", false],
+	["null chua-co toi", false],
+	["null chua-co khac", false],
+]);
 
 const TOI = "nguoi-goi";
 const phuTrachTheo = (q: QuanHe) =>
@@ -170,7 +170,7 @@ describe("tcb-ham", () => {
 					phuTrachId: phuTrachTheo(q),
 				});
 				const thay = kq.coTheMo ? "mo" : kq.lyDo;
-				if (thay !== DAP_AN_MO[o]) {
+				if (thay !== DAP_AN_MO.get(o)) {
 					throw new Error(`tcb ham: ${vai} ${q} ${thay}`);
 				}
 				soMo += 1;
@@ -189,7 +189,7 @@ describe("tcb-ham", () => {
 						phuTrachId: phuTrachTheo(q),
 						taiBoiId: tai === "toi" ? TOI : "nguoi-tai-khac",
 					});
-					if (kq !== DAP_AN_XOA[o]) {
+					if (kq !== DAP_AN_XOA.get(o)) {
 						throw new Error(`tcb ham: xoa ${o} ${kq}`);
 					}
 					soXoa += 1;
@@ -203,10 +203,7 @@ describe("tcb-ham", () => {
 		const tep = tepTrongVung();
 		expect(tep.length).toBeGreaterThan(0);
 		for (const duong of tep) {
-			const loi = luatThuHai(
-				relative(GOC, duong),
-				readFileSync(duong, "utf8"),
-			);
+			const loi = luatThuHai(relative(GOC, duong), readFileSync(duong, "utf8"));
 			if (loi.length > 0) throw new Error(`tcb ham: luat thu hai ${loi[0]}`);
 		}
 		for (const { tep: t, ham } of PHAI_GOI) {

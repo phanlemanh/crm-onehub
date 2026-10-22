@@ -23,8 +23,7 @@ export const TEP_TRUONG = {
 		khongCoBanGhi: "Không tìm thấy bản ghi.",
 		khongCoTep: "Không tìm thấy tệp.",
 		khongMo: "Chỉ quản trị mở được tệp.",
-		khongPhuTrach:
-			"Bạn không phụ trách bản ghi này nên không mở được tệp.",
+		khongPhuTrach: "Bạn không phụ trách bản ghi này nên không mở được tệp.",
 		chuaPhuTrach:
 			"Bản ghi chưa có người phụ trách nên chỉ quản trị mở được tệp.",
 		khongXoa:
