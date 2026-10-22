@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import { objectiveOutput } from "../src/okr/okr.contracts";
+import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import { dienBienOutput } from "../src/okr/okr-xem.contracts";
 import {
 	bpMoi,
@@ -18,6 +19,7 @@ import {
 	pbMoi,
 	phienCua,
 	truongMoi,
+	ungDung,
 } from "./okr-san";
 
 type LanTruoc = {
@@ -36,6 +38,7 @@ const DUONG = `${import.meta.dir}/../../app/app/(app)/[slug]/okr/lan-truoc-kr.ts
 const lanTruocKr: LanTruocKr = await import(DUONG);
 
 const CHO_MS = 60_000;
+const TUAN_TRUOC = new Date("2026-10-14T03:00:00Z");
 const LECH_TOI_DA_MS = 5_000;
 
 const BIEN_TUAN = [
@@ -57,7 +60,12 @@ const moPhien = async (cookie: string) =>
 
 async function gui(
 	cookie: string,
-	items: { keyResultId: string; value: number; confidence: string; note: string }[],
+	items: {
+		keyResultId: string;
+		value: number;
+		confidence: string;
+		note: string;
+	}[],
 	nhan: string,
 ) {
 	ok(
@@ -70,7 +78,11 @@ async function gui(
 	);
 }
 
-async function docLanTruoc(objectiveId: string, keyResultId: string, cookie: string) {
+async function docLanTruoc(
+	objectiveId: string,
+	keyResultId: string,
+	cookie: string,
+) {
 	const mt = objectiveOutput.parse(
 		await doc("okr.objective", cookie, { id: objectiveId }),
 	);
@@ -96,7 +108,8 @@ async function moiNhatTrongCsdl(keyResultId: string) {
 			session: { select: { submittedAt: true } },
 		},
 	});
-	if (!r?.session.submittedAt) throw new Error(`khong co lan cap nhat cua ${keyResultId}`);
+	if (!r?.session.submittedAt)
+		throw new Error(`khong co lan cap nhat cua ${keyResultId}`);
 	return {
 		giaTri: r.value.toNumber(),
 		tuTin: r.confidence,
@@ -113,11 +126,17 @@ function soVoiCsdl(
 	if (!lan) return [`hct-moi-nhat: ${ten} khong co lan truoc`];
 	const loi: string[] = [];
 	if (lan.giaTri !== csdl.giaTri)
-		loi.push(`hct-moi-nhat: ${ten} lech (gia tri ${lan.giaTri}, can ${csdl.giaTri})`);
+		loi.push(
+			`hct-moi-nhat: ${ten} lech (gia tri ${lan.giaTri}, can ${csdl.giaTri})`,
+		);
 	if (lan.tuTin !== csdl.tuTin)
-		loi.push(`hct-moi-nhat: ${ten} tu tin lech (${lan.tuTin}, can ${csdl.tuTin})`);
+		loi.push(
+			`hct-moi-nhat: ${ten} tu tin lech (${lan.tuTin}, can ${csdl.tuTin})`,
+		);
 	if (lan.ghiChu !== csdl.ghiChu)
-		loi.push(`hct-moi-nhat: ${ten} ghi chu lech (${lan.ghiChu}, can ${csdl.ghiChu})`);
+		loi.push(
+			`hct-moi-nhat: ${ten} ghi chu lech (${lan.ghiChu}, can ${csdl.ghiChu})`,
+		);
 	const lech = Math.abs(Date.parse(lan.luc) - csdl.luc);
 	if (lech > LECH_TOI_DA_MS)
 		loi.push(`hct-moi-nhat: ${ten} luc lech ${lech} ms`);
@@ -174,9 +193,30 @@ describe("hct-moi-nhat", () => {
 				).id;
 			const k = await taoKr("tang-toi", 100, "khách");
 			const m = await taoKr("moc", 1, "");
+			const d = await taoKr("tang-toi", 100, "khách");
 			ok(
 				await goi("okr.publishObjective", { id: objectiveId }, tp.cookie),
 				"cong bo",
+			);
+
+			const svc = ungDung().get(OkrCapNhatService);
+			const { sessionId } = await svc.moCapNhat(
+				chu,
+				{ entry: "tab" },
+				TUAN_TRUOC,
+			);
+			await svc.guiCapNhat(
+				chu,
+				{
+					sessionId,
+					items: [{ keyResultId: d, value: 20, confidence: "cao", note: "Cu" }],
+				},
+				TUAN_TRUOC,
+			);
+			await gui(
+				cookieChu,
+				[{ keyResultId: d, value: 30, confidence: "vua", note: "" }],
+				"d tuan nay",
 			);
 
 			await gui(
@@ -193,11 +233,14 @@ describe("hct-moi-nhat", () => {
 				"lan 2",
 			);
 			const doiChung = await docLanTruoc(objectiveId, k, cookieChu);
-			expect({
-				giaTri: doiChung?.giaTri,
-				tuTin: doiChung?.tuTin,
-				ghiChu: doiChung?.ghiChu,
-			}).toEqual({ giaTri: 50, tuTin: "vua", ghiChu: null });
+			const loiDoiChung =
+				doiChung?.giaTri === 50 &&
+				doiChung.tuTin === "vua" &&
+				doiChung.ghiChu === null
+					? []
+					: [
+							`hct-moi-nhat: doi chung K lech (${doiChung?.giaTri}, ${doiChung?.tuTin}, ${doiChung?.ghiChu})`,
+						];
 
 			await gui(
 				tp.cookie,
@@ -214,15 +257,30 @@ describe("hct-moi-nhat", () => {
 			});
 
 			const loi = [
-				...soVoiCsdl("K", await docLanTruoc(objectiveId, k, cookieChu), await moiNhatTrongCsdl(k)),
-				...soVoiCsdl("M", await docLanTruoc(objectiveId, m, cookieChu), await moiNhatTrongCsdl(m)),
+				...loiDoiChung,
+				...soVoiCsdl(
+					"K",
+					await docLanTruoc(objectiveId, k, cookieChu),
+					await moiNhatTrongCsdl(k),
+				),
+				...soVoiCsdl(
+					"M",
+					await docLanTruoc(objectiveId, m, cookieChu),
+					await moiNhatTrongCsdl(m),
+				),
+				...soVoiCsdl(
+					"D",
+					await docLanTruoc(objectiveId, d, cookieChu),
+					await moiNhatTrongCsdl(d),
+				),
 			];
 			const bien = BIEN_TUAN.map((luc) => ({
 				luc,
 				ok: lanTruocKr.tuanVN(luc) === dauTuanVN(new Date(luc)),
 			}));
 			for (const o of bien)
-				if (!o.ok) loi.push(`hct-moi-nhat: B mat ghi chu o bien tuan (${o.luc})`);
+				if (!o.ok)
+					loi.push(`hct-moi-nhat: B mat ghi chu o bien tuan (${o.luc})`);
 			expect({ loi, ghiHo, soO: bien.length }).toEqual({
 				loi: [],
 				ghiHo: 1,
