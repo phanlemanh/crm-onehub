@@ -1,52 +1,172 @@
 {
-  "feature_plain": "Nhân viên quan hệ đối tác tạo công ty, cá nhân hay thoả thuận với đủ các trường đội cần ngay trong form tạo, không phải mở phiếu điền lại từng ô.",
+  "feature_plain": "Nhân viên quan hệ đối tác tạo công ty, cá nhân hay thoả thuận với đủ các trường đội cần ngay trong form tạo và ô thêm nhanh; máy chủ chặn thiếu trường bắt buộc, kể cả lượt tạo qua khoá API.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ hiện trong form tạo đúng các trường bắt buộc và các trường đang hiện trên phiếu, theo thứ tự quản trị đặt ở Cài đặt › Trường, cùng nhãn với phiếu."},
-    {"id": "AC-2", "p": "Sẽ vẽ mọi ô của form tạo theo một bảng chung cho từng kiểu trường, nên ô trường tự tạo trông và cư xử như ô trường chuẩn."},
-    {"id": "AC-3", "p": "Sẽ lưu mọi giá trị người điền trong form ngay lượt tạo, đủ mười kiểu trường, và phiếu mở ra đã có sẵn chúng."},
-    {"id": "AC-4", "p": "Sẽ chặn lượt tạo khi trường bắt buộc còn trống — ở form có câu nhắc dưới ô, ở máy chủ cũng chặn cả lượt tạo qua khoá API."},
-    {"id": "AC-5", "p": "Sẽ báo lỗi bằng tiếng Việt, chỉ đúng ô sai, giữ nguyên mọi giá trị đã điền và không tạo nửa bản ghi khi máy chủ từ chối."},
-    {"id": "AC-6", "p": "Sẽ cho ô thêm nhanh trong phiếu công ty có cùng các trường như form tạo, trừ ô Công ty vì đã biết là công ty đang mở."},
-    {"id": "AC-7", "p": "Sẽ chỉ để Kara điền những trường người còn để trống lúc tạo."},
-    {"id": "AC-8", "p": "Sẽ vẫn cho sửa bản ghi cũ còn trống một trường vừa thành bắt buộc."},
-    {"id": "AC-9", "p": "Sẽ cho năm form trông gọn ở máy tính lẫn điện thoại: không nhóm riêng trường tự tạo, câu lỗi nằm ngay dưới ô, không cuộn ngang."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ hiện trong form tạo đúng các trường bắt buộc và các trường đang hiện trên phiếu, theo thứ tự quản trị đặt ở Cài đặt › Trường, cùng nhãn với phiếu."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ vẽ mọi ô của form tạo theo một bảng chung cho từng kiểu trường, nên ô trường tự tạo trông và cư xử như ô trường chuẩn."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ lưu mọi giá trị người điền trong form ngay lượt tạo, đủ mười kiểu trường, và phiếu mở ra đã có sẵn chúng."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ chặn lượt tạo khi trường bắt buộc còn trống — ở form có câu nhắc dưới ô, ở máy chủ cũng chặn cả lượt tạo qua khoá API."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ báo lỗi bằng tiếng Việt, chỉ đúng ô sai, giữ nguyên mọi giá trị đã điền và không tạo nửa bản ghi khi máy chủ từ chối."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ cho ô thêm nhanh trong phiếu công ty có cùng các trường như form tạo, trừ ô Công ty vì đã biết là công ty đang mở."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chỉ để Kara điền những trường người còn để trống lúc tạo."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ vẫn cho sửa bản ghi cũ còn trống một trường vừa thành bắt buộc."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ cho năm form trông gọn ở máy tính lẫn điện thoại: không nhóm riêng trường tự tạo, câu lỗi nằm ngay dưới ô, không cuộn ngang."
+    }
   ],
   "scope_plain": "Những việc dưới đây cố ý để lại cho hàng khác hoặc giữ như nay:",
   "wont_do": [
-    {"id": "OOS-1", "p": "Sẽ KHÔNG cho bật «Bắt buộc» trên trường chuẩn như Ngày chốt hay Giá trị — Cài đặt (DA15) đã dời việc này sang hàng riêng."},
-    {"id": "OOS-2", "p": "Sẽ KHÔNG đổi các bản ghi máy tự tạo từ Gmail, Lịch, form theo dõi hay tin đăng — chúng không có người nhập nên không bị chặn."},
-    {"id": "OOS-3", "p": "Sẽ KHÔNG nhắc trên phiếu rằng bản ghi cũ còn thiếu trường bắt buộc."},
-    {"id": "OOS-4", "p": "Sẽ KHÔNG đổi cách báo lỗi trùng email hay số điện thoại khi tạo cá nhân."},
-    {"id": "OOS-5", "p": "Sẽ KHÔNG thêm ô thêm nhanh cho Công ty, cũng không làm nhập CSV."},
-    {"id": "OOS-6", "p": "Sẽ KHÔNG đổi thứ tự cột bảng, thẻ Kanban, bộ lọc hay kiểu Tệp — các hàng DA17, DA18, DA19 làm."}
+    {
+      "id": "OOS-1",
+      "p": "Sẽ KHÔNG cho bật «Bắt buộc» trên trường chuẩn như Ngày chốt hay Giá trị — Cài đặt (DA15) đã dời việc này sang hàng riêng."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Sẽ KHÔNG đổi các bản ghi máy tự tạo từ Gmail, Lịch, form theo dõi hay tin đăng — chúng không có người nhập nên không bị chặn."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Sẽ KHÔNG nhắc trên phiếu rằng bản ghi cũ còn thiếu trường bắt buộc."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Sẽ KHÔNG đổi cách báo lỗi trùng email hay số điện thoại khi tạo cá nhân."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Sẽ KHÔNG thêm ô thêm nhanh cho Công ty, cũng không làm nhập CSV."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Sẽ KHÔNG đổi thứ tự cột bảng, thẻ Kanban, bộ lọc hay kiểu Tệp — các hàng DA17, DA18, DA19 làm."
+    }
   ],
   "coverage_plain": [
-    {"i": 0, "p": "Phủ cả ba loại bản ghi: Thoả thuận, Công ty, Cá nhân."},
-    {"i": 1, "p": "Phủ bốn chỗ bản ghi được tạo: form Tạo mới, ô thêm nhanh, khoá API — và gọi tên chỗ thứ tư (máy tự tạo) là ngoài phạm vi."},
-    {"i": 2, "p": "Phủ tám loại trường, từ trường chuẩn bắt buộc tới trường tự tạo đã lưu trữ hay để Kara điền."},
-    {"i": 3, "p": "Phủ năm kết cục của một lượt tạo: thành công, để trống được, bị chặn vì thiếu, máy chủ từ chối, Kara điền sau."},
-    {"i": 4, "p": "Thước đối chiếu: luật «một trường, một cách cư xử» của kho."},
-    {"i": 5, "p": "Thước đối chiếu: năm chỗ tạo bản ghi trong app hôm nay."},
-    {"i": 6, "p": "Thước đối chiếu: bốn đường máy tự tạo bản ghi, đều nằm ngoài vòng này."},
-    {"i": 7, "p": "Thước đối chiếu: các cờ «Bắt buộc», «Hiện trên phiếu», «Kara điền» đang có của một trường."},
-    {"i": 8, "p": "Thước đối chiếu: thứ tự, ẩn và bắt buộc của trường chuẩn mà Cài đặt (DA15) dựng."},
-    {"i": 9, "p": "Đối chiếu ngành: HubSpot và Salesforce cũng cho quản trị chọn trường trên form tạo, và trường bắt buộc chặn lưu bản ghi mới."},
-    {"i": 10, "p": "Form có trường nào và theo thứ tự nào → AC-1 (tập trường của form)."},
-    {"i": 11, "p": "Ô vẽ theo bảng chung → AC-2 (một bảng cho mọi kiểu)."},
-    {"i": 12, "p": "Lưu cùng lượt tạo → AC-3 (đủ mười kiểu)."},
-    {"i": 13, "p": "Chặn trường bắt buộc ở form và máy chủ → AC-4."},
-    {"i": 14, "p": "Máy chủ từ chối một giá trị → AC-5 (lỗi tiếng Việt, đúng ô)."},
-    {"i": 15, "p": "Ô thêm nhanh → AC-6."},
-    {"i": 16, "p": "Kara điền phần còn trống → AC-7."},
-    {"i": 17, "p": "Bản ghi cũ không bị chặn → AC-8."},
-    {"i": 18, "p": "Người nhìn ảnh năm form ở hai khổ → AC-9."}
+    {
+      "i": 0,
+      "p": "Phủ cả ba loại bản ghi: Thoả thuận, Công ty, Cá nhân."
+    },
+    {
+      "i": 1,
+      "p": "Phủ bốn chỗ bản ghi được tạo: form Tạo mới, ô thêm nhanh, khoá API — và gọi tên chỗ thứ tư (máy tự tạo) là ngoài phạm vi."
+    },
+    {
+      "i": 2,
+      "p": "Phủ tám loại trường, từ trường chuẩn bắt buộc tới trường tự tạo đã lưu trữ hay để Kara điền."
+    },
+    {
+      "i": 3,
+      "p": "Phủ năm kết cục của một lượt tạo: thành công, để trống được, bị chặn vì thiếu, máy chủ từ chối, Kara điền sau."
+    },
+    {
+      "i": 4,
+      "p": "Thước đối chiếu: luật «một trường, một cách cư xử» của kho."
+    },
+    {
+      "i": 5,
+      "p": "Thước đối chiếu: năm chỗ tạo bản ghi trong app hôm nay."
+    },
+    {
+      "i": 6,
+      "p": "Thước đối chiếu: bốn đường máy tự tạo bản ghi, đều nằm ngoài vòng này."
+    },
+    {
+      "i": 7,
+      "p": "Thước đối chiếu: các cờ «Bắt buộc», «Hiện trên phiếu», «Kara điền» đang có của một trường."
+    },
+    {
+      "i": 8,
+      "p": "Thước đối chiếu: thứ tự, ẩn và bắt buộc của trường chuẩn mà Cài đặt (DA15) dựng."
+    },
+    {
+      "i": 9,
+      "p": "Đối chiếu ngành: HubSpot và Salesforce cũng cho quản trị chọn trường trên form tạo, và trường bắt buộc chặn lưu bản ghi mới."
+    },
+    {
+      "i": 10,
+      "p": "Form có trường nào và theo thứ tự nào → AC-1 (tập trường của form)."
+    },
+    {
+      "i": 11,
+      "p": "Ô vẽ theo bảng chung → AC-2 (một bảng cho mọi kiểu)."
+    },
+    {
+      "i": 12,
+      "p": "Lưu cùng lượt tạo → AC-3 (đủ mười kiểu)."
+    },
+    {
+      "i": 13,
+      "p": "Chặn trường bắt buộc ở form và máy chủ → AC-4."
+    },
+    {
+      "i": 14,
+      "p": "Máy chủ từ chối một giá trị → AC-5 (lỗi tiếng Việt, đúng ô)."
+    },
+    {
+      "i": 15,
+      "p": "Ô thêm nhanh → AC-6."
+    },
+    {
+      "i": 16,
+      "p": "Kara điền phần còn trống → AC-7."
+    },
+    {
+      "i": 17,
+      "p": "Bản ghi cũ không bị chặn → AC-8."
+    },
+    {
+      "i": 18,
+      "p": "Người nhìn ảnh năm form ở hai khổ → AC-9."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Thiết kế đã tự quyết nghĩa của ô tích lúc tạo mà không hỏi: ô chưa tích là «chưa trả lời» hay «Không», và «Bắt buộc» trên ô tích nghĩa là gì. Đã đưa thành Hỏi-4 cho anh, hồ sơ viết nháp theo khuyến nghị «chưa tích là để trống, bắt buộc là phải tích»."},
-    {"i": 1, "p": "Không phép đo nào xem phiếu mở ra sau khi tạo có thật hiện đủ giá trị. Đã thêm vào phép đo E3, kèm một ca đối chứng."},
-    {"i": 2, "p": "Lỗi giả của bài kiểm app tự dựng tay, và không ai đo lỗi «thiếu trường bắt buộc» hiện ra sao khi form không tải được danh sách trường. Đã đổi sang lỗi rút từ lượt từ chối thật của máy chủ, và thêm vế ấy vào AC-5."},
-    {"i": 3, "p": "Hợp đồng chưa nói trường bắt buộc đã lưu trữ thì không được chặn — sai chỗ này là cả đội không tạo được bản ghi nào. Đã thêm vào AC-4 và phép đo E4b."},
-    {"i": 4, "p": "Chỉ sáu trong mười kiểu trường đi trọn lượt tạo, và tiền tệ mặc định của thoả thuận không ai đo. Đã mở phép đo ra đủ mười kiểu và thêm ca tiền tệ."},
-    {"i": 5, "p": "Thước 80% của Cổng Giá trị đếm lẫn bản ghi máy tự tạo. Đã đổi chỉ đếm bản ghi người tạo."}
+    {
+      "i": 0,
+      "p": "Thiết kế đã tự quyết nghĩa của ô tích lúc tạo mà không hỏi: ô chưa tích là «chưa trả lời» hay «Không», và «Bắt buộc» trên ô tích nghĩa là gì. Đã đưa thành Hỏi-4 cho anh, hồ sơ viết nháp theo khuyến nghị «chưa tích là để trống, bắt buộc là phải tích»."
+    },
+    {
+      "i": 1,
+      "p": "Không phép đo nào xem phiếu mở ra sau khi tạo có thật hiện đủ giá trị. Đã thêm vào phép đo E3, kèm một ca đối chứng."
+    },
+    {
+      "i": 2,
+      "p": "Lỗi giả của bài kiểm app tự dựng tay, và không ai đo lỗi «thiếu trường bắt buộc» hiện ra sao khi form không tải được danh sách trường. Đã đổi sang lỗi rút từ lượt từ chối thật của máy chủ, và thêm vế ấy vào AC-5."
+    },
+    {
+      "i": 3,
+      "p": "Hợp đồng chưa nói trường bắt buộc đã lưu trữ thì không được chặn — sai chỗ này là cả đội không tạo được bản ghi nào. Đã thêm vào AC-4 và phép đo E4b."
+    },
+    {
+      "i": 4,
+      "p": "Chỉ sáu trong mười kiểu trường đi trọn lượt tạo, và tiền tệ mặc định của thoả thuận không ai đo. Đã mở phép đo ra đủ mười kiểu và thêm ca tiền tệ."
+    },
+    {
+      "i": 5,
+      "p": "Thước 80% của Cổng Giá trị đếm lẫn bản ghi máy tự tạo. Đã đổi chỉ đếm bản ghi người tạo."
+    }
   ]
 }
