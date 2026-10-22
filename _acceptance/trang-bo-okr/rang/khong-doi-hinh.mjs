@@ -2,6 +2,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import {
 	existsSync,
 	mkdtempSync,
+	readdirSync,
 	readFileSync,
 	rmSync,
 	symlinkSync,
@@ -19,18 +20,12 @@ const { resolveConfigKey } = require(join(GOC, "lib", "evidence-core.cjs"));
 
 const NHANH_GOC = "origin/onehub";
 const CHU_KHO = "Phan Le Manh";
-const HO_SO = [
-	"trang-don-vi-mot-bang",
-	"ux-lai-thu-8c-okr",
-	"vo-khu-muc-tieu",
-	"khung-cho-don-vi-mot-hinh",
-	"khung-man-chung",
-	"dieu-huong-khu-muc-tieu",
-	"khung-okr-truoc-r1",
-	"okr-to-chuc-va",
-	"khep-ky-okr",
-];
-const TEP_CUA_HO_SO = {
+const MAU_DUONG = /okr\/bo-okr|okr\/theo-don-vi|data-view-switch|ViewSwitch/;
+const TRANG_THAI_DA_KY = new Set(["signed-off", "machine-cleared"]);
+const NGUONG_TEP_CHUNG = 5;
+const DUOI_MA = /\.(?:mjs|cjs|js|ts|tsx)$/;
+const TEP_TRONG_LENH = /[\w@./()[\]-]+\.(?:mjs|cjs|js|ts|tsx)/g;
+const TEP_TAY = {
 	"apps/app/test/okr-trang-don-vi.dom.tsx": "trang-don-vi-mot-bang",
 	"apps/app/test/okr-theo-don-vi.dom.tsx": "ux-lai-thu-8c-okr",
 	"apps/app/test/vo-khu-muc-tieu.dom.tsx": "vo-khu-muc-tieu",
@@ -79,33 +74,89 @@ const MA_KHONG_DO = 2;
 const git = (args, cwd = GOC) =>
 	execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
 
-function danhSach() {
-	const cauHinh = readFileSync(join(GOC, "_acceptance", "config.yaml"), "utf8");
-	const ds = [];
-	for (const slug of HO_SO) {
-		const evals = parseEvals(
-			readFileSync(join(GOC, "_acceptance", slug, "evals.yaml"), "utf8"),
-			["executor", "cmd", "status"],
+function hoSoDaKy() {
+	const goc = join(GOC, "_acceptance");
+	return readdirSync(goc, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name)
+		.filter((slug) => {
+			const hd = join(goc, slug, "contract.md");
+			if (!existsSync(hd) || !existsSync(join(goc, slug, "evals.yaml")))
+				return false;
+			const tt = /^status:\s*(\S+)/m.exec(readFileSync(hd, "utf8"))?.[1];
+			return TRANG_THAI_DA_KY.has(tt ?? "");
+		})
+		.sort();
+}
+
+function tepCuaLenh(lenh) {
+	const tep = new Set();
+	for (const m of lenh.matchAll(TEP_TRONG_LENH)) {
+		const t = m[0].replace(/^\.\//, "");
+		const ung = [t, join("apps/app", t), join("apps/api", t)].find((x) =>
+			existsSync(join(GOC, x)),
 		);
-		for (const e of evals) {
-			if (!EXECUTOR_MAY.has(String(e.executor).trim())) continue;
-			if (String(e.status ?? "").trim() === "not-run") continue;
-			const ref = String(e.cmd ?? "")
-				.trim()
-				.replace(/^config:/, "");
-			const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
-			if (lenh === "")
-				throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
-			const evalRieng = /\bEVAL=/.test(lenh) ? e.id : null;
-			ds.push({
+		if (!ung) continue;
+		tep.add(ung);
+		if (!ung.includes("/rang/")) continue;
+		const thuMuc = dirname(ung);
+		for (const f of readdirSync(join(GOC, thuMuc)))
+			if (DUOI_MA.test(f)) tep.add(join(thuMuc, f));
+	}
+	return [...tep];
+}
+
+function evalMayCua(slug, cauHinh) {
+	const evals = parseEvals(
+		readFileSync(join(GOC, "_acceptance", slug, "evals.yaml"), "utf8"),
+		["executor", "cmd", "status"],
+	);
+	return evals.flatMap((e) => {
+		if (!EXECUTOR_MAY.has(String(e.executor).trim())) return [];
+		if (String(e.status ?? "").trim() === "not-run") return [];
+		const ref = String(e.cmd ?? "")
+			.trim()
+			.replace(/^config:/, "");
+		const lenh = String(resolveConfigKey(cauHinh, ref) ?? "").trim();
+		if (lenh === "")
+			throw new Error(`khong giai duoc ${slug}#${e.id} (${ref})`);
+		return [{ slug, id: e.id, lenh, tep: tepCuaLenh(lenh) }];
+	});
+}
+
+let lopDaQuet = null;
+
+function quetLop() {
+	if (lopDaQuet) return lopDaQuet;
+	const cauHinh = readFileSync(join(GOC, "_acceptance", "config.yaml"), "utf8");
+	const chamCache = new Map();
+	const cham = (t) => {
+		if (!chamCache.has(t))
+			chamCache.set(t, MAU_DUONG.test(readFileSync(join(GOC, t), "utf8")));
+		return chamCache.get(t);
+	};
+	const muc = [];
+	const tepCua = new Map(Object.entries(TEP_TAY).map(([t, s]) => [t, [s]]));
+	const hoSo = hoSoDaKy();
+	for (const slug of hoSo)
+		for (const e of evalMayCua(slug, cauHinh)) {
+			for (const t of e.tep)
+				tepCua.set(t, [...new Set([...(tepCua.get(t) ?? []), slug])]);
+			if (!e.tep.some(cham)) continue;
+			const evalRieng = /\bEVAL=/.test(e.lenh) ? e.id : null;
+			muc.push({
 				ten: `${slug}#${e.id}`,
-				lenh,
+				lenh: e.lenh,
 				evalRieng,
-				khoa: evalRieng ? `${lenh}\u0000EVAL=${evalRieng}` : lenh,
+				khoa: evalRieng ? `${e.lenh}\u0000EVAL=${evalRieng}` : e.lenh,
 			});
 		}
-	}
-	return ds;
+	lopDaQuet = { hoSo, muc, tepCua };
+	return lopDaQuet;
+}
+
+function danhSach() {
+	return quetLop().muc;
 }
 
 function chayMotLan(muc, cwd) {
@@ -266,15 +317,26 @@ const chiDoiChuoi = (k) =>
 function soatDoiThuoc(cwd) {
 	const coSo = git(["merge-base", "HEAD", NHANH_GOC], cwd);
 	const sai = [];
-	for (const [tep, slug] of Object.entries(TEP_CUA_HO_SO)) {
+	for (const [tep, cacHoSo] of quetLop().tepCua) {
 		const diff = git(["diff", "-U0", `${coSo}...HEAD`, "--", tep], cwd);
 		if (diff === "") continue;
 		const viet = VIET_LAI[tep] ?? null;
-		if (!soCoDongFix(slug, tep, viet?.so ?? null)) {
-			sai.push(`SAI AC-11: THIEU SO ${slug}: ${tep}`);
+		const tatCa = khoiDiff(diff);
+		if (
+			!viet &&
+			cacHoSo.length >= NGUONG_TEP_CHUNG &&
+			tatCa.every((k) => k.bo.length === 0)
+		) {
+			for (const k of tatCa)
+				console.log(`THEM DANG KY ${tep}:${k.dong} ${k.mau}`);
 			continue;
 		}
-		const khoi = khoiDiff(diff);
+		const slug = cacHoSo.find((h) => soCoDongFix(h, tep, viet?.so ?? null));
+		if (!slug) {
+			sai.push(`SAI AC-11: THIEU SO ${cacHoSo.join(",")}: ${tep}`);
+			continue;
+		}
+		const khoi = tatCa;
 		const lech = khoi.filter((k) => !chiDoiChuoi(k));
 		if (viet) {
 			console.log(
@@ -390,9 +452,15 @@ try {
 	let sai = saiSo.length;
 	const ds = danhSach();
 	const lenhRieng = new Set(ds.map((m) => m.khoa)).size;
+	const lop = quetLop();
+	const hoSoCham = new Set(ds.map((m) => m.ten.split("#")[0]));
 	console.log(
-		`danh sach viet truoc: ${ds.length} muc test/script cua ${HO_SO.length} ho so, ${lenhRieng} lan chay rieng`,
+		`quet lop: ${lop.hoSo.length} ho so da ky, ${hoSoCham.size} ho so co thuoc cham /okr/bo-okr, theo-don-vi hay o chuyen kieu xem, ${ds.length} eval may cham, ${lenhRieng} lan chay rieng`,
 	);
+	if (process.argv.includes("--chi-quet")) {
+		for (const m of ds) console.log(`MUC ${m.ten}`);
+		process.exit(sai === 0 ? 0 : MA_DO);
+	}
 	const daChayCay = new Map();
 	const hong = [];
 	for (const m of ds) {
