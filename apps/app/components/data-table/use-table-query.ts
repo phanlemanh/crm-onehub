@@ -1,15 +1,19 @@
 "use client";
 
+import { TIEN_TO_COT_TRUONG } from "@crm/db/fields-shape";
 import type { SortDirection, TableQueryState } from "@crm/ui/lib/table-query";
 import type { SavedViewFilters } from "@crm/validation/saved-view";
 import type { Nullable, Values } from "nuqs";
-import { useQueryStates } from "nuqs";
+import { parseAsNativeArrayOf, parseAsString, useQueryStates } from "nuqs";
+import { useEffect, useMemo } from "react";
 import { z } from "zod";
-import type {
-	FieldFilters,
-	ListInput,
-	ListSearchParams,
-	ListSearchValues,
+import {
+	type FieldFilters,
+	type ListInput,
+	type ListSearchParams,
+	type ListSearchValues,
+	locGiaTriHopLe,
+	type TruongLoc,
 } from "./list-search-params";
 
 export type TableQuery<TTab extends string, TFacet extends string = never> = {
@@ -20,7 +24,9 @@ export type TableQuery<TTab extends string, TFacet extends string = never> = {
 	applyView: (view: SavedViewFilters) => void;
 };
 
-const FIELD_FILTER_PREFIX = "field:";
+const FIELD_FILTER_PREFIX = TIEN_TO_COT_TRUONG;
+
+const mangChu = () => parseAsNativeArrayOf(parseAsString).withDefault([]);
 
 const fieldFiltersValueSchema = z.record(z.string(), z.array(z.string()));
 
@@ -63,17 +69,33 @@ function asStringArray(value: QueryValue): string[] {
 
 export function useTableQuery<TTab extends string, TFacet extends string>(
 	searchParams: ListSearchParams<TTab, TFacet>,
+	{ truongLoc = [] }: { truongLoc?: TruongLoc[] } = {},
 ): TableQuery<TTab, TFacet> {
-	const { parsers, config, toInput } = searchParams;
+	const { parsers: parsersTinh, config, toInput } = searchParams;
 	const { defaultDir, pageSize, tabId, facetIds } = config;
+
+	const khoaTruong = truongLoc.map((t) => t.key).join(",");
+	const parsers = useMemo(() => {
+		const them: Record<string, ReturnType<typeof mangChu>> = {};
+		for (const key of khoaTruong ? khoaTruong.split(",") : []) {
+			them[`${FIELD_FILTER_PREFIX}${key}`] = mangChu();
+		}
+		return { ...parsersTinh, ...them } as typeof parsersTinh;
+	}, [parsersTinh, khoaTruong]);
 
 	const [rawState, rawSetState] = useQueryStates(parsers);
 	const values = rawValuesSchema.parse(rawState);
 
 	type NuqsValues = Partial<Nullable<Values<typeof parsers>>>;
 
-	function setValues(update: Partial<RawUpdate>): Promise<void> {
-		return rawSetState(update as NuqsValues).then(() => undefined);
+	function setValues(
+		update: Partial<RawUpdate>,
+		history?: "push" | "replace",
+	): Promise<void> {
+		return rawSetState(
+			update as NuqsValues,
+			history ? { history } : undefined,
+		).then(() => undefined);
 	}
 
 	const q = values.q;
@@ -81,8 +103,25 @@ export function useTableQuery<TTab extends string, TFacet extends string>(
 	const dir = values.dir === "desc" ? "desc" : "asc";
 	const rawPage = values.page;
 	const page = rawPage > 0 ? rawPage : 1;
-	const fields = values.fields;
+	const cu = values.fields;
+	const moi: FieldFilters = {};
+	for (const { key } of truongLoc) {
+		const gia = asStringArray(values[`${FIELD_FILTER_PREFIX}${key}`] ?? null);
+		if (gia.length > 0) moi[key] = gia;
+	}
+	const fields = locGiaTriHopLe({ ...cu, ...moi }, truongLoc);
 	const archived = values.archived;
+	const cuChu = JSON.stringify(cu);
+
+	useEffect(() => {
+		const doc: FieldFilters = JSON.parse(cuChu);
+		if (Object.keys(doc).length === 0 || !khoaTruong) return;
+		const update: RawUpdate = { fields: null };
+		for (const key of khoaTruong.split(",")) {
+			if (doc[key]?.length) update[`${FIELD_FILTER_PREFIX}${key}`] = doc[key];
+		}
+		void rawSetState(update as NuqsValues, { history: "replace" });
+	}, [cuChu, khoaTruong, rawSetState]);
 	const tab = tabId ? asString(values[tabId]) : "all";
 
 	const filters: Record<string, string[]> = {};
@@ -121,11 +160,11 @@ export function useTableQuery<TTab extends string, TFacet extends string>(
 		},
 		setFilter: (id, selected) => {
 			if (id.startsWith(FIELD_FILTER_PREFIX)) {
-				const key = id.slice(FIELD_FILTER_PREFIX.length);
-				const nextFields: FieldFilters = { ...fields };
-				if (selected.length === 0) delete nextFields[key];
-				else nextFields[key] = selected;
-				setValues({ fields: nextFields, page: 1 });
+				setValues({
+					[id]: selected.length === 0 ? null : selected,
+					fields: null,
+					page: 1,
+				});
 				return;
 			}
 
@@ -163,18 +202,23 @@ export function useTableQuery<TTab extends string, TFacet extends string>(
 		};
 
 		for (const id of facetIds ?? []) update[id] = [];
+		for (const { key } of truongLoc) {
+			update[`${FIELD_FILTER_PREFIX}${key}`] = null;
+		}
 
-		const nextFields: FieldFilters = {};
+		const ngoai: FieldFilters = {};
 		for (const [key, selected] of Object.entries(view.filters)) {
 			if (key.startsWith(FIELD_FILTER_PREFIX)) {
-				nextFields[key.slice(FIELD_FILTER_PREFIX.length)] = selected;
+				const khoa = key.slice(FIELD_FILTER_PREFIX.length);
+				if (truongLoc.some((t) => t.key === khoa)) update[key] = selected;
+				else ngoai[khoa] = selected;
 			} else if (key === tabId) {
 				update[key] = selected[0] ?? "all";
 			} else {
 				update[key] = selected;
 			}
 		}
-		update.fields = nextFields;
+		update.fields = Object.keys(ngoai).length > 0 ? ngoai : null;
 
 		setValues(update);
 	};

@@ -49,6 +49,7 @@ function mayChu(phanHoi: KeoVeOutput) {
 	const than = keoVeOutput.parse(JSON.parse(JSON.stringify(phanHoi)));
 	const sv = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: (req) => {
 			nhan.push({
 				duong: new URL(req.url).pathname,
@@ -58,7 +59,7 @@ function mayChu(phanHoi: KeoVeOutput) {
 		},
 	});
 	return {
-		url: `http://localhost:${sv.port}`,
+		url: `http://127.0.0.1:${sv.port}`,
 		nhan,
 		dung: () => sv.stop(true),
 	};
@@ -146,11 +147,12 @@ describe("tvk-lenh", () => {
 	test("tvk-lenh: CRM tra loi thi loi khong mang khoa", async () => {
 		const sv = Bun.serve({
 			port: 0,
+			hostname: "127.0.0.1",
 			fetch: () => new Response("{}", { status: 500 }),
 		});
 		const kq = await chayKeoVe({
 			root: khoTam(),
-			url: `http://localhost:${sv.port}`,
+			url: `http://127.0.0.1:${sv.port}`,
 			key: KHOA_TAY,
 			khoaLich: KHOA_LICH,
 			now: DAU,

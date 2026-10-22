@@ -163,6 +163,9 @@ export function useCrmCache(): CrmCache {
 					entity
 						? trpc.fields.filters.queryKey({ entity: ENTITY_FOR[entity] })
 						: trpc.fields.filters.queryKey(),
+					entity
+						? trpc.fields.layout.queryKey({ entity: ENTITY_FOR[entity] })
+						: trpc.fields.layout.queryKey(),
 				],
 				entity
 					? [RECORD_BY_ID[entity](), RECORD_LIST[entity]()]
@@ -305,6 +308,7 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.quanhMucTieu.queryKey(),
 					trpc.okr.toanCanh.queryKey(),
 					trpc.okr.sucKhoe.queryKey(),
+					trpc.okr.moiKr.queryKey(),
 					trpc.okr.hopTuan.queryKey(),
 					trpc.okr.dienBien.queryKey(),
 					trpc.okr.khoiCuaToi.queryKey(),

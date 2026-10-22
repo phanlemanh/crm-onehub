@@ -13,6 +13,7 @@ export const FIELD_TYPES = [
 	"EMAIL",
 	"PHONE",
 	"USER",
+	"FILE",
 ] as const;
 
 export type FieldTypeName = (typeof FIELD_TYPES)[number];
@@ -38,9 +39,10 @@ const COLUMNS = {
 	CHECKBOX: "bool",
 	SELECT: "optionId",
 	USER: "userId",
-} as const satisfies Record<FieldTypeName, FieldValueColumn>;
+	FILE: null,
+} as const satisfies Record<FieldTypeName, FieldValueColumn | null>;
 
-export function columnFor(type: FieldTypeName): FieldValueColumn {
+export function columnFor(type: FieldTypeName): FieldValueColumn | null {
 	return COLUMNS[type];
 }
 
@@ -59,6 +61,7 @@ export const SAP_THEO_KIEU = {
 	SELECT: "luaChon",
 	USER: "nguoi",
 	CHECKBOX: null,
+	FILE: null,
 } as const satisfies Record<FieldTypeName, CachSapTruong | null>;
 
 export function cachSapTruong(type: FieldTypeName): CachSapTruong | null {
@@ -70,6 +73,59 @@ export function sapDuocTheoKieu(type: string): boolean {
 		Object.hasOwn(SAP_THEO_KIEU, type) &&
 		SAP_THEO_KIEU[type as FieldTypeName] !== null
 	);
+}
+
+export type CachLocTruong =
+	| "chua"
+	| "khoang"
+	| "moc"
+	| "tich"
+	| "luaChon"
+	| "nguoi"
+	| "coTep";
+
+export const LOC_THEO_KIEU = {
+	TEXT: "chua",
+	LONG_TEXT: "chua",
+	URL: "chua",
+	EMAIL: "chua",
+	PHONE: "chua",
+	NUMBER: "khoang",
+	DATE: "moc",
+	CHECKBOX: "tich",
+	SELECT: "luaChon",
+	USER: "nguoi",
+	FILE: "coTep",
+} as const satisfies Record<FieldTypeName, CachLocTruong>;
+
+export function cachLocTruong(type: FieldTypeName): CachLocTruong {
+	return LOC_THEO_KIEU[type];
+}
+
+export function locDuocTheoKieu(type: string): boolean {
+	return Object.hasOwn(LOC_THEO_KIEU, type);
+}
+
+export function locDuocTrong(type: FieldTypeName): boolean {
+	return LOC_THEO_KIEU[type] !== "tich";
+}
+
+export const KARA_DIEN_THEO_KIEU = {
+	TEXT: true,
+	LONG_TEXT: true,
+	NUMBER: true,
+	DATE: true,
+	CHECKBOX: true,
+	SELECT: true,
+	URL: true,
+	EMAIL: true,
+	PHONE: true,
+	USER: true,
+	FILE: false,
+} as const satisfies Record<FieldTypeName, boolean>;
+
+export function karaDienDuoc(type: FieldTypeName): boolean {
+	return KARA_DIEN_THEO_KIEU[type];
 }
 
 export function usesOptions(type: FieldTypeName): boolean {
@@ -129,3 +185,7 @@ export class FieldValueError extends Error {
 }
 
 export type FieldValueJson = string | number | boolean | null;
+
+export const FIELD_FILE_COPY = {
+	chiNhanTep: "Ô Tệp chỉ nhận tệp tải lên.",
+} as const;

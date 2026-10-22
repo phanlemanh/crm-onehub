@@ -63,6 +63,7 @@ const thoaThuanGia = () => ({
 		email: "hai@onehub.vn",
 		image: null,
 	},
+	tepTheoTruong: {},
 	fields: [],
 	amountCents: null,
 	baseAmountCents: null,

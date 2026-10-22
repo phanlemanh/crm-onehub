@@ -136,7 +136,12 @@ mock.module("@/lib/trpc/client", () => ({
 			list: thuTuc("fields.list", rong),
 			filters: thuTuc("fields.filters", rong),
 		},
-		savedViews: { list: thuTuc("savedViews.list", rong) },
+		savedViews: {
+			list: thuTuc("savedViews.list", rong),
+			create: thuTuc("savedViews.create", rong),
+			update: thuTuc("savedViews.update", rong),
+			delete: thuTuc("savedViews.delete", rong),
+		},
 	}),
 }));
 
