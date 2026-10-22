@@ -7,6 +7,7 @@ import {
 	Prisma as PrismaNamespace,
 	type RecordSource,
 } from "@crm/db";
+import { ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { caNhanCoSo, caNhanTrungSo } from "@crm/db/so-dien-thoai";
 import { ghiGoDoXoa } from "@crm/db/viec-ghi";
@@ -474,6 +475,7 @@ export class ContactsService {
 			targets: StampTargets;
 			name: string;
 			suppressed: boolean;
+			tepXoa: string[];
 		} | null;
 
 		try {
@@ -501,6 +503,7 @@ export class ContactsService {
 				await tx.agentEvent.deleteMany({ where: { contactId: id } });
 
 				await ghiGoDoXoa(tx, { contactId: id }, new Date());
+				const tepXoa = await ghiChoXoaTheoTep(tx, { contactId: id });
 
 				const contact = await tx.contact.delete({
 					where: { id },
@@ -521,7 +524,7 @@ export class ContactsService {
 					});
 				}
 
-				return { targets, name, suppressed: suppress !== null };
+				return { targets, name, suppressed: suppress !== null, tepXoa };
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -529,6 +532,7 @@ export class ContactsService {
 
 		if (!deleted) return null;
 
+		await this.fields.donTepNgay(deleted.tepXoa);
 		await this.stamp.recomputeAfterDelete(deleted.targets, { contactId: id });
 
 		this.logger.log({

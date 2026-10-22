@@ -4,6 +4,7 @@ import {
 	type Prisma,
 	Prisma as PrismaNamespace,
 } from "@crm/db";
+import { ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
 import { normalizeCurrency } from "@crm/db/currency";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { type LoaiGiaiDoan, laDaDong, laThua } from "@crm/db/giai-doan";
@@ -601,7 +602,11 @@ export class DealsService {
 		id: string,
 		guard?: { archivedBefore: Date },
 	): Promise<{ id: string; name: string } | null> {
-		let deleted: { targets: StampTargets; name: string } | null;
+		let deleted: {
+			targets: StampTargets;
+			name: string;
+			tepXoa: string[];
+		} | null;
 
 		try {
 			deleted = await this.db.$transaction(async (tx) => {
@@ -626,13 +631,14 @@ export class DealsService {
 				await tx.agentTask.deleteMany({ where: { dealId: id } });
 
 				await ghiGoDoXoa(tx, { dealId: id }, new Date());
+				const tepXoa = await ghiChoXoaTheoTep(tx, { dealId: id });
 
 				const deal = await tx.deal.delete({
 					where: { id },
 					select: { name: true },
 				});
 
-				return { targets, name: deal.name };
+				return { targets, name: deal.name, tepXoa };
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -640,6 +646,7 @@ export class DealsService {
 
 		if (!deleted) return null;
 
+		await this.fields.donTepNgay(deleted.tepXoa);
 		await this.stamp.recomputeAfterDelete(deleted.targets, { dealId: id });
 
 		this.logger.log({

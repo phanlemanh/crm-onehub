@@ -11,3 +11,5 @@ eval, rồi trả tệp về nguyên (so `diff` với bản chép trước khi p
 | E3 | `complete` nhận kiểu theo đuôi tên thay cho byte | `bun test test/truong-tep.spec.ts -t ttp-tu-choi` | đỏ: `ttp tu choi: rac duoi pdf nhan`. Tệp đã về nguyên. |
 | E4 | `coTheMoTep` trả `true` cho mọi vai | `bun test test/truong-tep.spec.ts -t ttp-quyen` | đỏ: `ttp quyen: member downloadUrl url`. Tệp đã về nguyên. |
 | E9 | gỡ chặn `FILE` ở đầu `coerceValue` và nhánh `case "FILE"` | `bun test test/truong-tep.spec.ts -t ttp-ghi-chu` | đỏ: `ttp ghi chu: deals.update abc nhan`. Tệp đã về nguyên. |
+| E6 | `remove` xoá Blob trước, xoá hàng ngoài giao dịch, bỏ hàng chờ | `bun test test/truong-tep.spec.ts -t ttp-xoa` | đỏ: `ttp xoa: blob hong khong cho`. Tệp đã về nguyên. |
+| E7 | `deals.purge` không ghi hàng chờ (`tepXoa = []`) | `bun test test/truong-tep.spec.ts -t ttp-vong-doi` | đỏ: `ttp vong doi: deals.purge xoa []`. Tệp đã về nguyên. |

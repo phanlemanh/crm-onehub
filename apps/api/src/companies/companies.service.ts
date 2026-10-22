@@ -5,6 +5,7 @@ import {
 	Prisma as PrismaNamespace,
 	type RecordSource,
 } from "@crm/db";
+import { ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { ghiGoDoXoa } from "@crm/db/viec-ghi";
 import { nenTangCuaTenMien } from "@crm/validation/ten-mien-nen-tang";
@@ -495,7 +496,11 @@ export class CompaniesService {
 		id: string,
 		guard?: { archivedBefore: Date },
 	): Promise<{ id: string; name: string } | null> {
-		let deleted: { targets: StampTargets; name: string } | null;
+		let deleted: {
+			targets: StampTargets;
+			name: string;
+			tepXoa: string[];
+		} | null;
 
 		try {
 			deleted = await this.db.$transaction(async (tx) => {
@@ -546,13 +551,16 @@ export class CompaniesService {
 					},
 					new Date(),
 				);
+				const tepXoa = await ghiChoXoaTheoTep(tx, {
+					OR: [{ companyId: id }, { deal: { companyId: id } }],
+				});
 
 				const company = await tx.company.delete({
 					where: { id },
 					select: { name: true },
 				});
 
-				return { targets, name: company.name };
+				return { targets, name: company.name, tepXoa };
 			});
 		} catch (error) {
 			throw this.translate(error, id);
@@ -560,6 +568,7 @@ export class CompaniesService {
 
 		if (!deleted) return null;
 
+		await this.fields.donTepNgay(deleted.tepXoa);
 		await this.stamp.recomputeAfterDelete(deleted.targets, { companyId: id });
 
 		this.logger.log({

@@ -1,4 +1,6 @@
 import { canManageFields, workspaceRoleOf } from "@crm/auth";
+import { donChoXoa, ghiChoXoaTheoTep } from "@crm/db/blob-cho-xoa";
+import type { KhoTepTruong } from "@crm/db/blob-tep-truong";
 import {
 	type Db,
 	type FieldEntity,
@@ -50,8 +52,11 @@ import {
 	BadRequestException,
 	ConflictException,
 	ForbiddenException,
+	Inject,
 	Injectable,
+	Logger,
 	NotFoundException,
+	Optional,
 } from "@nestjs/common";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
@@ -63,7 +68,9 @@ import type {
 	FieldUpdateData,
 } from "./fields.contracts";
 import { FIELDS_CONFIG } from "./fields-config";
+import { FIELD_FILES_CONFIG } from "./field-files-config";
 import { coTheMoTep, coTheXoaTep, type NguoiGoiTep } from "./field-files-quyen";
+import { KHO_TEP } from "./kho-tep";
 import { khoangMocTruong } from "./moc-ngay";
 
 const WITH_OPTIONS = {
@@ -205,10 +212,45 @@ function thuTuGiaTri(
 
 @Injectable()
 export class FieldsService {
+	private readonly logger = new Logger(FieldsService.name);
+
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		private readonly agent: AgentTriggerService,
+		@Optional() @Inject(KHO_TEP) private readonly kho?: KhoTepTruong,
 	) {}
+
+	async donTepNgay(pathnames: string[]): Promise<void> {
+		if (pathnames.length === 0 || !this.kho?.bat()) return;
+		try {
+			const kq = await donChoXoa(this.db, this.kho, {
+				toiDa: pathnames.length,
+				pathnames,
+			});
+			if (kq.hong.length > 0) {
+				this.logger.warn({
+					message: "Field file blobs not deleted, left for the daily sweep",
+					hong: kq.hong.length,
+				});
+			}
+		} catch (error) {
+			this.logger.error({
+				message: "Field file blob cleanup failed, left for the daily sweep",
+				error: error instanceof Error ? error.message : String(error),
+			});
+		}
+	}
+
+	async donHangCho(
+		bayGio: Date = new Date(),
+	): Promise<{ daXoa: number; hong: number }> {
+		if (!this.kho?.bat()) return { daXoa: 0, hong: 0 };
+		const kq = await donChoXoa(this.db, this.kho, {
+			bayGio,
+			toiDa: FIELD_FILES_CONFIG.don.toiDa,
+		});
+		return { daXoa: kq.daXoa.length, hong: kq.hong.length };
+	}
 
 	async list(
 		entity: FieldEntity,
@@ -652,12 +694,18 @@ export class FieldsService {
 	async delete(actingUserId: string, id: string): Promise<{ id: string }> {
 		await this.requireManager(actingUserId);
 
+		let tepXoa: string[];
 		try {
-			await this.db.fieldDefinition.delete({ where: { id } });
+			tepXoa = await this.db.$transaction(async (tx) => {
+				const pathnames = await ghiChoXoaTheoTep(tx, { fieldId: id });
+				await tx.fieldDefinition.delete({ where: { id } });
+				return pathnames;
+			});
 		} catch (error) {
 			throw this.translate(error);
 		}
 
+		await this.donTepNgay(tepXoa);
 		return { id };
 	}
 

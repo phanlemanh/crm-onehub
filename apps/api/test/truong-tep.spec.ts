@@ -8,11 +8,14 @@ import {
 	spyOn,
 } from "bun:test";
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { db } from "@crm/db";
 import type { FieldEntityName } from "@crm/db/fields";
 import { FIELD_FILE_COPY } from "@crm/db/fields";
 import { TEP_TRUONG, tepTrongO, type TepTrongO } from "@crm/validation/tep-truong";
+import { savedViewFilters } from "@crm/validation/saved-view";
 import { Logger } from "@nestjs/common";
+import request from "supertest";
 import {
 	GOC_KHO_GIA,
 	khoTepTruongGia,
@@ -21,6 +24,7 @@ import {
 	type Ai,
 	canData,
 	donBanGhi,
+	type Json,
 	KIEU_MAU,
 	MAU_TEP,
 	type OTep,
@@ -30,6 +34,8 @@ import {
 } from "./truong-tep-san";
 
 const T = TEP_TRUONG.thongDiep;
+const CRON = `${TIEN_TO}-cron-bi-mat`;
+process.env.CRON_SECRET = CRON;
 const kho = khoTepTruongGia();
 const daTao = {
 	deal: [] as string[],
@@ -281,7 +287,7 @@ describe("ttp-tai-len", () => {
 		}
 		if (so !== 12) throw new Error(`ttp tai len: thieu o ${so}`);
 
-		const dem = async (thuTuc: string, vao: object, id: string, khoa: string) => {
+		const dem = async (thuTuc: string, vao: Json, id: string, khoa: string) => {
 			const kq = canData<{ rows?: { id: string; soTepTheoTruong: Record<string, number> }[]; columns?: { cards: { id: string; soTepTheoTruong: Record<string, number> }[] }[] }>(
 				await san.hoi("quanTri", thuTuc, vao),
 				thuTuc,
@@ -624,5 +630,392 @@ describe("ttp-ghi-chu", () => {
 			data: { fields: { [chuDeal.key]: "duoc" } },
 		});
 		if (doiChung.status !== 200) throw new Error("ttp ghi chu: doi chung");
+	});
+});
+
+async function donLich(): Promise<void> {
+	const res = await request(san.app().getHttpServer())
+		.get("/internal/archive/prune")
+		.set("authorization", `Bearer ${CRON}`);
+	if (res.status !== 200) throw new Error(`ttp don: ${res.status}`);
+}
+
+describe("ttp-xoa", () => {
+	const tienTo = `${TIEN_TO}xoa`;
+
+	it("ttp-xoa: ai xoá được tệp nào, vết xoá, bản ghi lưu trữ, Blob hỏng rồi lượt dọn", async () => {
+		const congTy = await taoCongTy(`${tienTo} cong ty`);
+		const f = await taoTruong("DEAL", `${tienTo} hd`);
+		const dungO = async (ten: string) => {
+			const deal = await taoThoaThuan(`${tienTo} ${ten}`, congTy);
+			const o: OTep = { entity: "DEAL", recordId: deal, fieldKey: f.key };
+			const f1 = await canGan("nv1", o, "f1.pdf", "pdf", MAU_TEP.pdf(`${tienTo}${ten}f1`));
+			const f2 = await canGan("nv2", o, "f2.pdf", "pdf", MAU_TEP.pdf(`${tienTo}${ten}f2`));
+			return { deal, o, f1, f2 };
+		};
+		const DAP_AN = [
+			{ ai: "quanTri", tep: "f1", dung: true },
+			{ ai: "quanTri", tep: "f2", dung: true },
+			{ ai: "nv1", tep: "f1", dung: true },
+			{ ai: "nv1", tep: "f2", dung: false },
+			{ ai: "nv2", tep: "f1", dung: false },
+			{ ai: "nv2", tep: "f2", dung: true },
+		] as const;
+		const ghiLog = spyOn(Logger.prototype, "log");
+		let so = 0;
+		try {
+			for (const c of DAP_AN) {
+				const o = await dungO(`${c.ai}${c.tep}`);
+				const tepId = o[c.tep];
+				const kia = c.tep === "f1" ? o.f2 : o.f1;
+				const pathname = (await db.fieldFile.findUnique({ where: { id: tepId } }))?.blobPathname as string;
+				ghiLog.mockClear();
+				const tl = await san.goi(c.ai, "fieldFiles.remove", { tepId });
+				if (c.dung) {
+					if (tl.status !== 200) throw new Error(`ttp xoa: ${c.ai} ${c.tep} ${tl.ma}`);
+					if (await db.fieldFile.findUnique({ where: { id: tepId } })) throw new Error("ttp xoa: hang con");
+					if (kho.daPut.has(pathname)) throw new Error("ttp xoa: blob con");
+					if (!(await db.fieldFile.findUnique({ where: { id: kia } }))) throw new Error("ttp xoa: xoa nham");
+					const vet = ghiLog.mock.calls.filter((goi) => {
+						const m = goi[0] as { message?: string; fieldId?: string; recordId?: string; tepId?: string; userId?: string };
+						return m?.message === "Field file removed" && m.fieldId === f.id && m.recordId === o.deal && m.tepId === tepId && m.userId === san.phien[c.ai].nguoi;
+					});
+					if (vet.length !== 1) throw new Error("ttp xoa: thieu vet");
+				} else {
+					if (tl.ma !== "FORBIDDEN") throw new Error(`ttp xoa: ${c.ai} khong bi chan`);
+					if (!(await db.fieldFile.findUnique({ where: { id: tepId } }))) throw new Error("ttp xoa: chan ma mat");
+				}
+				so += 1;
+			}
+		} finally {
+			ghiLog.mockRestore();
+		}
+		if (so !== 6) throw new Error(`ttp xoa: thieu o ${so}`);
+
+		const luu = await dungO("luu");
+		canData(await san.goi("quanTri", "deals.archive", { id: luu.deal }), "archive");
+		const tlLuu = await san.goi("quanTri", "fieldFiles.remove", { tepId: luu.f1 });
+		if (tlLuu.status === 200) throw new Error("ttp xoa: luu tru xoa duoc");
+
+		const hong = await dungO("hong");
+		const pathHong = (await db.fieldFile.findUnique({ where: { id: hong.f1 } }))?.blobPathname as string;
+		kho.xoaHong.add(pathHong);
+		try {
+			const tlHong = await san.goi("quanTri", "fieldFiles.remove", { tepId: hong.f1 });
+			if (tlHong.status !== 200) throw new Error("ttp xoa: blob hong nem");
+			if (await db.fieldFile.findUnique({ where: { id: hong.f1 } })) throw new Error("ttp xoa: blob hong hang con");
+			if (!(await db.blobChoXoa.findUnique({ where: { pathname: pathHong } }))) {
+				throw new Error("ttp xoa: blob hong khong cho");
+			}
+		} finally {
+			kho.xoaHong.delete(pathHong);
+		}
+		await donLich();
+		if (await db.blobChoXoa.findUnique({ where: { pathname: pathHong } })) throw new Error("ttp xoa: don khong xoa");
+
+		const pathF2 = (await db.fieldFile.findUnique({ where: { id: hong.f2 } }))?.blobPathname as string;
+		canData(await san.goi("quanTri", "fieldFiles.remove", { tepId: hong.f2 }), "doi chung");
+		if (await db.blobChoXoa.findUnique({ where: { pathname: pathF2 } })) throw new Error("ttp xoa: doi chung");
+	});
+});
+
+describe("ttp-vong-doi", () => {
+	const tienTo = `${TIEN_TO}vd`;
+
+	it("ttp-vong-doi: 7 đường, lùi giao dịch, Blob hỏng, trường lưu trữ, tải dở", async () => {
+		const dung = async (ten: string) => {
+			const congTy = await taoCongTy(`${tienTo} ${ten} cong ty`);
+			const fDeal = await taoTruong("DEAL", `${tienTo} ${ten} d`);
+			const fCty = await taoTruong("COMPANY", `${tienTo} ${ten} c`);
+			const fLh = await taoTruong("CONTACT", `${tienTo} ${ten} l`);
+			const deal = await taoThoaThuan(`${tienTo} ${ten} T1`, congTy);
+			const deal2 = await taoThoaThuan(`${tienTo} ${ten} T2`, congTy);
+			const lh = await taoCaNhan(`${tienTo} ${ten} L1`, congTy);
+			const ganHai = async (o: OTep, nhan: string) => [
+				await canGan("nv1", o, `${nhan}a.pdf`, "pdf", MAU_TEP.pdf(`${tienTo}${ten}${nhan}a`)),
+				await canGan("nv1", o, `${nhan}b.pdf`, "pdf", MAU_TEP.pdf(`${tienTo}${ten}${nhan}b`)),
+			];
+			const tep = {
+				deal: await ganHai({ entity: "DEAL", recordId: deal, fieldKey: fDeal.key }, "d"),
+				deal2: await ganHai({ entity: "DEAL", recordId: deal2, fieldKey: fDeal.key }, "e"),
+				cty: await ganHai({ entity: "COMPANY", recordId: congTy, fieldKey: fCty.key }, "c"),
+				lh: await ganHai({ entity: "CONTACT", recordId: lh, fieldKey: fLh.key }, "l"),
+			};
+			const doiChungCty = await taoCongTy(`${tienTo} ${ten} doi chung`);
+			const dealDoiChung = await taoThoaThuan(`${tienTo} ${ten} DC`, doiChungCty);
+			const tepDoiChung = await canGan("nv1", { entity: "DEAL", recordId: dealDoiChung, fieldKey: fDeal.key }, "dc.pdf", "pdf", MAU_TEP.pdf(`${tienTo}${ten}dc`));
+			return { congTy, deal, deal2, lh, fDeal, fCty, fLh, tep, tepDoiChung };
+		};
+		const path = async (ids: string[]) =>
+			(await db.fieldFile.findMany({ where: { id: { in: ids } }, select: { blobPathname: true } })).map((t) => t.blobPathname).sort();
+		const DUONG = [
+			{ ten: "deals.purge", chay: async (x: Awaited<ReturnType<typeof dung>>) => { canData(await san.goi("quanTri", "deals.archive", { id: x.deal }), "a"); canData(await san.goi("quanTri", "deals.purge", { id: x.deal }), "p"); }, tep: (x: Awaited<ReturnType<typeof dung>>) => x.tep.deal },
+			{ ten: "contacts.purge", chay: async (x: Awaited<ReturnType<typeof dung>>) => { canData(await san.goi("quanTri", "contacts.archive", { id: x.lh }), "a"); canData(await san.goi("quanTri", "contacts.purge", { id: x.lh }), "p"); }, tep: (x: Awaited<ReturnType<typeof dung>>) => x.tep.lh },
+			{ ten: "companies.purge", chay: async (x: Awaited<ReturnType<typeof dung>>) => { canData(await san.goi("quanTri", "companies.archive", { id: x.congTy }), "a"); canData(await san.goi("quanTri", "companies.purge", { id: x.congTy }), "p"); }, tep: (x: Awaited<ReturnType<typeof dung>>) => [...x.tep.cty, ...x.tep.deal, ...x.tep.deal2] },
+			{ ten: "deals.bulkPurge", chay: async (x: Awaited<ReturnType<typeof dung>>) => { canData(await san.goi("quanTri", "deals.bulkArchive", { ids: [x.deal, x.deal2] }), "a"); canData(await san.goi("quanTri", "deals.bulkPurge", { ids: [x.deal, x.deal2] }), "p"); }, tep: (x: Awaited<ReturnType<typeof dung>>) => [...x.tep.deal, ...x.tep.deal2] },
+			{ ten: "purgeExpired", chay: async (x: Awaited<ReturnType<typeof dung>>) => { canData(await san.goi("quanTri", "deals.archive", { id: x.deal }), "a"); await db.deal.update({ where: { id: x.deal }, data: { archivedAt: new Date(Date.now() - 400 * 86_400_000) } }); await donLich(); }, tep: (x: Awaited<ReturnType<typeof dung>>) => x.tep.deal },
+			{ ten: "fields.delete", chay: async (x: Awaited<ReturnType<typeof dung>>) => { canData(await san.goi("quanTri", "fields.delete", { id: x.fCty.id }), "xoa truong"); }, tep: (x: Awaited<ReturnType<typeof dung>>) => x.tep.cty },
+		] as const;
+
+		const luu = await dung("luu");
+		const truocLuu = canData<{ tepTheoTruong: Record<string, TepTrongO[]> }>(await san.hoi("quanTri", "deals.byId", { id: luu.deal }), "byId");
+		const xoaTruoc = kho.daXoa.length;
+		canData(await san.goi("quanTri", "deals.archive", { id: luu.deal }), "a");
+		canData(await san.goi("quanTri", "deals.restore", { id: luu.deal }), "r");
+		const sauLuu = canData<{ tepTheoTruong: Record<string, TepTrongO[]> }>(await san.hoi("quanTri", "deals.byId", { id: luu.deal }), "byId");
+		if (kho.daXoa.length !== xoaTruoc || JSON.stringify(sauLuu.tepTheoTruong) !== JSON.stringify(truocLuu.tepTheoTruong)) {
+			throw new Error("ttp vong doi: luu tru doi tep");
+		}
+		let so = 1;
+
+		for (const d of DUONG) {
+			const x = await dung(d.ten.replace(/\W/g, ""));
+			const mong = await path(d.tep(x));
+			const pathDC = await path([x.tepDoiChung]);
+			const truoc = kho.daXoa.length;
+			if (!mong.every((p) => kho.daPut.has(p))) throw new Error("ttp vong doi: doi chung");
+			await d.chay(x);
+			if ((await db.fieldFile.count({ where: { id: { in: d.tep(x) } } })) > 0) {
+				throw new Error(`ttp vong doi: ${d.ten} hang con`);
+			}
+			const daXoa = kho.daXoa.slice(truoc).filter((p) => p.startsWith("truong-tep/")).sort();
+			const cuaDuong = daXoa.filter((p) => mong.includes(p) || pathDC.includes(p));
+			if (JSON.stringify(cuaDuong.filter((p) => mong.includes(p))) !== JSON.stringify(mong)) {
+				throw new Error(`ttp vong doi: ${d.ten} xoa ${JSON.stringify(cuaDuong)}`);
+			}
+			if (cuaDuong.some((p) => pathDC.includes(p))) throw new Error(`ttp vong doi: ${d.ten} xoa nham`);
+			so += 1;
+		}
+		if (so !== 7) throw new Error(`ttp vong doi: thieu o ${so}`);
+
+		const lui = await dung("lui");
+		const pathLui = await path(lui.tep.deal);
+		canData(await san.goi("quanTri", "deals.archive", { id: lui.deal }), "a");
+		const ham = `ttp_lui_${TIEN_TO}`;
+		await db.$executeRawUnsafe(`CREATE OR REPLACE FUNCTION ${ham}() RETURNS trigger AS $$ BEGIN RAISE EXCEPTION 'ttp lui'; END $$ LANGUAGE plpgsql`);
+		await db.$executeRawUnsafe(`CREATE TRIGGER ${ham} BEFORE DELETE ON deal FOR EACH ROW WHEN (OLD.id = '${lui.deal}') EXECUTE FUNCTION ${ham}()`);
+		const xoaTruocLui = kho.daXoa.length;
+		try {
+			await san.goi("quanTri", "deals.purge", { id: lui.deal });
+		} finally {
+			await db.$executeRawUnsafe(`DROP TRIGGER IF EXISTS ${ham} ON deal`);
+			await db.$executeRawUnsafe(`DROP FUNCTION IF EXISTS ${ham}()`);
+		}
+		const choLui = await db.blobChoXoa.count({ where: { pathname: { in: pathLui } } });
+		if (kho.daXoa.length !== xoaTruocLui || choLui > 0) throw new Error("ttp vong doi: lui van xoa");
+
+		const hong = await dung("hong");
+		const pathHong = await path(hong.tep.deal);
+		for (const p of pathHong) kho.xoaHong.add(p);
+		try {
+			canData(await san.goi("quanTri", "deals.archive", { id: hong.deal }), "a");
+			const tl = await san.goi("quanTri", "deals.purge", { id: hong.deal });
+			if (tl.status !== 200) throw new Error("ttp vong doi: blob hong nem");
+			const cho1 = await db.blobChoXoa.findMany({ where: { pathname: { in: pathHong } } });
+			if (cho1.length !== pathHong.length) throw new Error("ttp vong doi: blob hong cho thieu");
+			await donLich();
+			const cho2 = await db.blobChoXoa.findMany({ where: { pathname: { in: pathHong } } });
+			const tang = cho2.every((h) => h.lanThu > (cho1.find((c) => c.pathname === h.pathname)?.lanThu ?? 0));
+			if (cho2.length !== pathHong.length || !tang) throw new Error("ttp vong doi: blob hong cho lanThu");
+		} finally {
+			for (const p of pathHong) kho.xoaHong.delete(p);
+		}
+		await donLich();
+		if ((await db.blobChoXoa.count({ where: { pathname: { in: pathHong } } })) > 0) {
+			throw new Error("ttp vong doi: don lai");
+		}
+
+		const truong = await dung("truong");
+		const truocTruong = canData<{ tepTheoTruong: Record<string, TepTrongO[]> }>(await san.hoi("quanTri", "deals.byId", { id: truong.deal }), "byId");
+		canData(await san.goi("quanTri", "fields.archive", { id: truong.fDeal.id }), "archive truong");
+		canData(await san.goi("quanTri", "fields.restore", { id: truong.fDeal.id }), "restore truong");
+		const sauTruong = canData<{ tepTheoTruong: Record<string, TepTrongO[]> }>(await san.hoi("quanTri", "deals.byId", { id: truong.deal }), "byId");
+		if (JSON.stringify(sauTruong.tepTheoTruong) !== JSON.stringify(truocTruong.tepTheoTruong)) {
+			throw new Error("ttp vong doi: truong luu tru");
+		}
+
+		const o: OTep = { entity: "DEAL", recordId: truong.deal, fieldKey: truong.fDeal.key };
+		const xin = (await xinCho("nv1", o, "do.pdf", "pdf", 10)).data as Xin;
+		kho.put(xin.pathname, MAU_TEP.pdf(`${tienTo}do`));
+		await donLich();
+		if (!kho.daPut.has(xin.pathname)) throw new Error("ttp vong doi: tai do xoa som");
+		setSystemTime(new Date(Date.now() + 61 * 60_000));
+		try {
+			await donLich();
+		} finally {
+			setSystemTime();
+		}
+		if (kho.daPut.has(xin.pathname) || (await db.blobChoXoa.findUnique({ where: { pathname: xin.pathname } }))) {
+			throw new Error("ttp vong doi: tai do khong don");
+		}
+		const daNhan = await db.fieldFile.findUnique({ where: { id: truong.tep.deal[0] } });
+		if (daNhan && (await db.blobChoXoa.findUnique({ where: { pathname: daNhan.blobPathname } }))) {
+			throw new Error("ttp vong doi: complete con cho");
+		}
+	});
+});
+
+describe("ttp-loc", () => {
+	const tienTo = `${TIEN_TO}loc`;
+
+	it("ttp-loc: Có tệp / Chưa có tệp ở ba danh sách, bảng cột, số đếm, bộ lọc đã lưu, chiến dịch", async () => {
+		const congTy = await taoCongTy(`${TIEN_TO}nenloc cong ty`);
+		const LIST = { DEAL: "deals.list", COMPANY: "companies.list", CONTACT: "contacts.list" } as const;
+		const truong = {} as Record<FieldEntityName, TruongTao>;
+		const ten = {} as Record<FieldEntityName, Map<string, string>>;
+		for (const entity of ["DEAL", "COMPANY", "CONTACT"] as const) {
+			truong[entity] = await taoTruong(entity, `${tienTo} loc ${entity}`, { showOnFilter: true });
+			ten[entity] = new Map();
+			for (const nhan of ["A", "B", "C"] as const) {
+				const id =
+					entity === "DEAL"
+						? await taoThoaThuan(`${tienTo} ${nhan}`, congTy)
+						: entity === "COMPANY"
+							? await taoCongTy(`${tienTo} ${nhan}`)
+							: await taoCaNhan(`${tienTo} ${nhan}`, congTy);
+				ten[entity].set(id, nhan);
+				const o: OTep = { entity, recordId: id, fieldKey: truong[entity].key };
+				if (nhan === "A") {
+					await canGan("nv1", o, "a1.pdf", "pdf", MAU_TEP.pdf(`${tienTo}${entity}a1`));
+					await canGan("nv1", o, "a2.pdf", "pdf", MAU_TEP.pdf(`${tienTo}${entity}a2`));
+				}
+				if (nhan === "C") {
+					const c = await canGan("nv1", o, "c.pdf", "pdf", MAU_TEP.pdf(`${tienTo}${entity}c`));
+					canData(await san.goi("quanTri", "fieldFiles.remove", { tepId: c }), "remove C");
+				}
+			}
+		}
+		const DAP_AN = { some: "A", none: "B,C", "some,none": "A,B,C" } as const;
+		const loc = async (thuTuc: string, entity: FieldEntityName, gia: string[]) => {
+			const vao = { q: tienTo, pageSize: 50, fields: { [truong[entity].key]: gia } };
+			const tl = await san.hoi("quanTri", thuTuc, thuTuc === "deals.board" ? { q: tienTo, fields: vao.fields } : vao);
+			const kq = canData<{ rows?: { id: string }[]; total?: number; facetCounts?: Record<string, Record<string, number>>; columns?: { count: number; cards: { id: string }[] }[] }>(tl, thuTuc);
+			const ids = kq.rows?.map((r) => r.id) ?? kq.columns?.flatMap((c) => c.cards.map((x) => x.id)) ?? [];
+			const tong = kq.total ?? kq.columns?.reduce((t, c) => t + c.count, 0) ?? -1;
+			return { ids, tong, kq };
+		};
+		let so = 0;
+		for (const [thuTuc, entity] of [["deals.list", "DEAL"], ["companies.list", "COMPANY"], ["contacts.list", "CONTACT"], ["deals.board", "DEAL"]] as const) {
+			for (const [boLoc, mong] of Object.entries(DAP_AN)) {
+				const { ids, tong } = await loc(thuTuc, entity, boLoc.split(","));
+				const ra = ids.map((id) => ten[entity].get(id)).filter(Boolean).sort().join(",");
+				if (ra !== mong) throw new Error(`ttp loc: ${thuTuc} ${boLoc} ra ${ra}`);
+				if (tong !== mong.split(",").length) throw new Error(`ttp loc: total ${thuTuc} ${boLoc} ${tong}`);
+				so += 1;
+			}
+		}
+		if (so !== 12) throw new Error(`ttp loc: thieu o ${so}`);
+
+		const khoa = truong.DEAL.key;
+		const goc = await san.hoi("quanTri", "deals.list", { q: tienTo, pageSize: 50 });
+		const dem = canData<{ facetCounts: Record<string, Record<string, number>> }>(goc, "dem").facetCounts[`field:${khoa}`] ?? {};
+		for (const gia of ["some", "none"]) {
+			if (dem[gia] === undefined) throw new Error(`ttp loc: thieu dem ${gia}`);
+			const { tong } = await loc("deals.list", "DEAL", [gia]);
+			if (dem[gia] !== tong) throw new Error(`ttp loc: dem ${gia} ${dem[gia]} ${tong}`);
+		}
+
+		const khoaLh = truong.CONTACT.key;
+		const view = canData<{ id: string; filters: unknown }>(
+			await san.goi("quanTri", "savedViews.create", {
+				entity: "CONTACT",
+				name: `${tienTo} chua co hop dong`,
+				filters: { q: tienTo, filters: { [`field:${khoaLh}`]: ["none"] } },
+			}),
+			"savedViews.create",
+		);
+		const ds = canData<{ id: string; filters: unknown }[]>(await san.hoi("quanTri", "savedViews.list", { entity: "CONTACT" }), "savedViews.list");
+		const docLai = ds.find((v) => v.id === view.id);
+		if (!docLai || !savedViewFilters.safeParse(docLai.filters).success) throw new Error("ttp loc: khuon luu");
+		const camp = canData<{ id: string }>(
+			await san.goi("quanTri", "campaigns.create", { name: `${tienTo} chien dich`, savedViewId: view.id }),
+			"campaigns.create",
+		);
+		const chiTiet = canData<{ stats: { members: number } }>(await san.hoi("quanTri", "campaigns.byId", { id: camp.id }), "campaigns.byId");
+		const { tong: tongLh } = await loc("contacts.list", "CONTACT", ["none"]);
+		if (chiTiet.stats.members !== tongLh) throw new Error(`ttp loc: chien dich ${chiTiet.stats.members} ${tongLh}`);
+		await db.campaign.deleteMany({ where: { id: camp.id } });
+		await db.savedView.deleteMany({ where: { id: view.id } });
+
+		for (const gia of ["yes", "has:x"]) {
+			const tl = await san.hoi("quanTri", "deals.list", { q: tienTo, fields: { [khoa]: [gia] } });
+			if (tl.ma !== "BAD_REQUEST" || !(tl.loi.includes(khoa) || tl.loi.includes(`${tienTo} loc DEAL`))) {
+				throw new Error(`ttp loc: hong ${gia}`);
+			}
+		}
+		const { ids: tatCa } = await loc("deals.list", "DEAL", []);
+		if (tatCa.map((id) => ten.DEAL.get(id)).filter(Boolean).sort().join(",") !== "A,B,C") {
+			throw new Error("ttp loc: doi chung");
+		}
+	});
+});
+
+describe("ttp-tat", () => {
+	const tienTo = `${TIEN_TO}tat`;
+	const sanTat = dungSan({ ten: "tat" });
+	const GIU = ["TEP_BAN_GHI_BLOB_TOKEN", "KHO_TAI_LIEU_BLOB_TOKEN", "BLOB_READ_WRITE_TOKEN"] as const;
+	const truoc: Record<string, string | undefined> = {};
+
+	beforeAll(() => {
+		for (const ten of GIU) truoc[ten] = process.env[ten];
+		process.env.TEP_BAN_GHI_BLOB_TOKEN = "";
+		process.env.KHO_TAI_LIEU_BLOB_TOKEN = "vercel_blob_rw_kho_gia";
+		process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_logo_gia";
+	});
+
+	afterAll(() => {
+		for (const ten of GIU) {
+			if (truoc[ten] === undefined) delete process.env[ten];
+			else process.env[ten] = truoc[ten];
+		}
+	});
+
+	it("ttp-tat: thiếu khoá tệp thì mất khả năng, tên tệp vẫn đọc, remove để Blob trong hàng chờ", async () => {
+		const congTy = await taoCongTy(`${tienTo} cong ty`);
+		const f = await taoTruong("DEAL", `${tienTo} hd`);
+		const deal = await taoThoaThuan(`${tienTo} T1`, congTy);
+		const o: OTep = { entity: "DEAL", recordId: deal, fieldKey: f.key };
+		const tepId = await canGan("nv1", o, "con.pdf", "pdf", MAU_TEP.pdf(`${tienTo}con`));
+		const tepHai = await canGan("nv1", o, "hai.pdf", "pdf", MAU_TEP.pdf(`${tienTo}hai`));
+
+		const trangThai = canData<{ bat: boolean }>(await sanTat.hoi("nv1", "fieldFiles.status"), "status");
+		if (trangThai.bat) throw new Error("ttp tat: status");
+		const THU_TUC = [
+			["fieldFiles.requestUpload", { ...o, tenTep: "a.pdf", kieu: "pdf", kichThuoc: 10 }],
+			["fieldFiles.complete", { ...o, tenTep: "a.pdf", pathname: "truong-tep/x", phieu: "1.x" }],
+			["fieldFiles.downloadUrl", { tepId }],
+		] as const;
+		for (const [thuTuc, vao] of THU_TUC) {
+			const ai = thuTuc === "fieldFiles.downloadUrl" ? "quanTri" : "nv1";
+			const tl = await sanTat.goi(ai, thuTuc, vao);
+			if (tl.ma !== "PRECONDITION_FAILED" || !tl.loi.includes(T.tat)) {
+				throw new Error(`ttp tat: ${thuTuc}`);
+			}
+		}
+		const ct = canData<{ tepTheoTruong: Record<string, TepTrongO[]> }>(await sanTat.hoi("quanTri", "deals.byId", { id: deal }), "byId");
+		if ((ct.tepTheoTruong[f.key] ?? []).map((t) => t.tenTep).join() !== "con.pdf,hai.pdf") {
+			throw new Error("ttp tat: ten mat");
+		}
+		const pathHai = (await db.fieldFile.findUnique({ where: { id: tepHai } }))?.blobPathname as string;
+		const xoa = await sanTat.goi("quanTri", "fieldFiles.remove", { tepId: tepHai });
+		if (xoa.status !== 200 || (await db.fieldFile.findUnique({ where: { id: tepHai } })) || !(await db.blobChoXoa.findUnique({ where: { pathname: pathHai } }))) {
+			throw new Error("ttp tat: remove");
+		}
+		const coTep = canData<{ bat: boolean }>(await san.hoi("nv1", "fieldFiles.status"), "status chinh");
+		if (!coTep.bat) throw new Error("ttp tat: doi chung");
+	});
+
+	it("ttp-tat: biến khoá có ở .env.example, env.validation.ts, turbo.json của API", () => {
+		const goc = `${import.meta.dir}/../../..`;
+		const doc = (tep: string) => readFileSync(`${goc}/${tep}`, "utf8");
+		const vd = doc(".env.example").split("\n");
+		const i = vd.findIndex((d) => d.startsWith("# TEP_BAN_GHI_BLOB_TOKEN="));
+		if (i < 1 || !vd[i - 1]?.startsWith("#")) throw new Error("ttp khoa: khai .env.example");
+		if (!doc("apps/api/src/config/env.validation.ts").includes("TEP_BAN_GHI_BLOB_TOKEN?: string;")) {
+			throw new Error("ttp khoa: khai apps/api/src/config/env.validation.ts");
+		}
+		if (!doc("apps/api/turbo.json").includes('"TEP_BAN_GHI_BLOB_TOKEN"')) {
+			throw new Error("ttp khoa: khai apps/api/turbo.json");
+		}
 	});
 });
