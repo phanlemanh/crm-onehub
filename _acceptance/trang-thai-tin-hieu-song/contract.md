@@ -5,7 +5,7 @@ slug: trang-thai-tin-hieu-song
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: approved
+status: implemented
 veto_state: mo
 veto_opened_at: 2026-10-22T05:36:00Z
 design_doc: docs/superpowers/specs/2026-10-22-trang-thai-tin-hieu-song-design.md
