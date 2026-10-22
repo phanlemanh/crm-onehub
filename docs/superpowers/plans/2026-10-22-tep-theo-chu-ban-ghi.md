@@ -14,6 +14,8 @@ Màn chỉ vẽ dòng lý do từ `lyDoKhongMo`.
 **Spec:** `docs/superpowers/specs/2026-10-22-tep-theo-chu-ban-ghi-design.md` · hợp đồng
 `_acceptance/tep-theo-chu-ban-ghi/contract.md` · evals `_acceptance/tep-theo-chu-ban-ghi/evals.yaml`.
 
+**Cổng 1.5:** chủ kho (manh) duyệt 22/10.
+
 **Đứng trên DA19.** Mọi tên của ô Tệp (`FieldFilesService`, `coTheMoTep`, `coTheXoaTep`, `TepTrongO`, `KHO_TEP`, `OTruongPhieu`,
 chữ «Chỉ quản trị mở được tệp.») là tên trong kế hoạch DA19 (`origin/feat/truong-tep:docs/superpowers/plans/2026-10-21-truong-tep.md`,
 Task 4). Task 0 đọc lại tên thật sau khi DA19 gộp; tên khác thì sửa kế hoạch này một lượt trước Task 1, hợp đồng không đổi.
