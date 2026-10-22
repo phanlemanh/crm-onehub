@@ -272,7 +272,7 @@ export function dungSan(thayKho?: KhoNguon): void {
 			: dung
 		).compile();
 		app = modul.createNestApplication({ bodyParser: false });
-		await app.init();
+		await app.listen(0, "127.0.0.1");
 		for (const ai of AI) {
 			const id = ma(ai);
 			await gieoThanhVien(id, VAI[ai]);

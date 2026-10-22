@@ -9,7 +9,7 @@ describe("Tracking collector", () => {
 		const { createApp } = await import("../src/create-app");
 
 		app = await createApp();
-		await app.init();
+		await app.listen(0, "127.0.0.1");
 	});
 
 	afterAll(async () => {
