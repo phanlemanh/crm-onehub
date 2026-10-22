@@ -108,8 +108,7 @@ function danhSach() {
 	return ds;
 }
 
-function chay(muc, cwd, daChay) {
-	if (daChay.has(muc.khoa)) return daChay.get(muc.khoa);
+function chayMotLan(muc, cwd) {
 	const r = spawnSync("bash", ["-c", muc.lenh], {
 		cwd,
 		encoding: "utf8",
@@ -117,7 +116,18 @@ function chay(muc, cwd, daChay) {
 		maxBuffer: 64 * 1024 * 1024,
 		env: muc.evalRieng ? { ...process.env, EVAL: muc.evalRieng } : process.env,
 	});
-	const ma = r.status ?? MA_KHONG_DO;
+	return r.status ?? MA_KHONG_DO;
+}
+
+function chay(muc, cwd, daChay) {
+	if (daChay.has(muc.khoa)) return daChay.get(muc.khoa);
+	let ma = chayMotLan(muc, cwd);
+	if (ma === MA_KHONG_DO) {
+		console.log(
+			`THU LAI ${muc.khoa}: lan dau ma ${MA_KHONG_DO} (khong do duoc)`,
+		);
+		ma = chayMotLan(muc, cwd);
+	}
 	daChay.set(muc.khoa, ma);
 	return ma;
 }
