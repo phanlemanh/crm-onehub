@@ -1,28 +1,3 @@
 {
-  "feature_plain": "Bộ test trên CI được chạy tới 30 phút thay vì 20, nên lượt chậm mà không hỏng không còn bị cắt ngang, người làm không phải bấm chạy lại PR.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ đổi đúng một chỗ trong cấu hình CI: trần thời gian của bước test lên 30 phút; mọi bước khác, ba ô test và các trần khác giữ nguyên."},
-    {"id": "AC-2", "p": "Sẽ giữ nguyên mọi bảo đảm của bài kiểm cũ chụp hình dạng CI (giam-phut-ci-nhap-t1/E3): chạy lại chính nó trên bản cũ và bản mới, chỉ được khác đúng ở trần thời gian."},
-    {"id": "AC-3", "p": "Sẽ khai bài kiểm cũ ấy là đã được thay bởi AC-2 của việc này, thêm đúng hai dòng, không đụng bài kiểm nào khác."},
-    {"id": "AC-4", "p": "Sẽ ghi lại vì sao chưa tách ô test api, khi nào mở lại (trung vị vượt 22 phút), cùng bảng số đo 40 lượt CI cộng đủ."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "KHÔNG tách ô test api thành nhiều ô lúc này — để thành hạt giống, mở lại khi trung vị vượt 22 phút."},
-    {"id": "OOS-2", "p": "KHÔNG đổi trần của các bước CI khác — bước kiểm kiểu chậm nhất chỉ 6,6 phút."},
-    {"id": "OOS-3", "p": "KHÔNG làm bộ test api chạy nhanh hơn trong vòng này."},
-    {"id": "OOS-4", "p": "KHÔNG sửa một bài kiểm cũ khác vốn đã đỏ từ trước vòng này (giam-phut-ci-nhap-t1/E2)."},
-    {"id": "OOS-5", "p": "KHÔNG chạy lại 18 bài kiểm cũ khác có đọc cấu hình CI trên hai bản — dựa vào AC-2 và một lượt CI thật xanh trọn trước gộp."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Chỗ đổi trong cấu hình CI: chỉ trần bước test đổi, mọi chỗ khác giữ nguyên (AC-1, so cả cấu trúc lẫn từng dòng)."},
-    {"i": 1, "p": "Bài kiểm cũ có đọc cấu hình CI: bài duyệt bị đổi màu được thay và giữ bảo đảm (AC-2, AC-3); các bài còn lại không chạy lại trong vòng này (Hỏi-3)."},
-    {"i": 2, "p": "Lý do và số đo được ghi lại cho lần mở lại sau (AC-4)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Sổ ghi «không tách ô» như điều máy chắc, trong khi đó là đánh đổi người phải chọn; ba mục bỏ ngoài thiếu lý do. Đã sửa: thành câu hỏi cho anh, thêm lý do cho từng mục bỏ ngoài."},
-    {"i": 1, "p": "Căn cứ bỏ quét độ phủ tự mâu thuẫn, và các bài kiểm cũ khác chỉ được soát tay. Đã sửa căn cứ; đo máy đủ 18 bài đã dựng rồi bỏ vì một bài mất 20 phút — phần này thành câu hỏi Hỏi-3."},
-    {"i": 2, "p": "Bài kiểm của việc này ghim một mốc cố định nên sẽ gãy khi cấu hình CI đổi chính đáng. Đã sửa: mốc so lấy từ chính lần đổi trần trong lịch sử, không đổi theo thời gian."},
-    {"i": 3, "p": "Bài giữ bảo đảm của bài kiểm cũ chỉ đếm dòng, không so với bản cũ. Đã sửa: chạy nó trên bản cũ và bản mới, đòi cùng tập mục kiểm và chỉ khác đúng chỗ trần."},
-    {"i": 4, "p": "Bảng số đo không cộng đủ 40 lượt. Đã sửa: đo lại 40 lượt CI thật, chia nhóm rời cộng đủ cho từng bước."}
-  ]
+  "feature_plain": "Bộ test trên CI được chạy tới 30 phút thay vì 20, nên lượt chậm mà không hỏng không còn bị cắt ngang, người làm không phải bấm chạy lại PR."
 }
