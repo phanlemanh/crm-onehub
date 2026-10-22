@@ -165,3 +165,8 @@ Quét bằng `morphological-scan` (preset entity-feature + test-matrix), 19/10; 
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/design.md`; trước S3 thêm `docs/reui.md` (bậc 3–4 cho khung
   trang toàn vùng).
 - Hạng T2 (máy suy theo `t3_paths`: không chạm đường T3).
+- Known limits — chủ kho chọn ở V3-23 (22/10), lối C:
+  - AC-10: chứng ở bước ghim lại, không ở S4. E11 khai không chạy (`status: not-run`) vì phần test/script 304 lệnh
+    không chạy xong trong trần 240 phút của S4; sau chữ ký, lưới trước-gộp bắt hồ sơ đã ký nào hoá cũ thì làn ghim lại
+    chạy lại eval máy của từng hồ sơ đó. Vế (b) — eval giao diện đã ký còn nhắc đường hay chuỗi đã bỏ — không có lượt
+    máy nào chứng lại ở vòng này; lượt đo màn trước S4 (106 eval, 0 DO, sha c4fe9b15f) là lần chạy cuối.
