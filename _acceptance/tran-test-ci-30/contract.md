@@ -5,7 +5,7 @@ slug: tran-test-ci-30
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-22T14:37:00Z
 design_doc: docs/superpowers/specs/2026-10-22-tran-test-ci-30-design.md
@@ -71,3 +71,11 @@ Bỏ quét bằng skill (sổ quyết định, dòng «bỏ coverage-scan» mớ
     con trỏ đã ký `ci-ma-tran-ba-o/E3 → giam-phut-ci-nhap-t1#AC-3` và kéo hồ sơ ấy vào lưới trước gộp.
 - Lượt CI GitHub thật trên PR (ba ô `test`, `check`, `ci-ok`) phải xanh trọn trước gộp; đó là cổng gộp của kho, không
   phải eval của hồ sơ.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Thẻ Cổng Phạm vi lưu trong hồ sơ và kế hoạch thi công còn ghi AC-3 đã bỏ ở lần duyệt lại theo lối A.
+  - Ngoài-2: Hạt giống từng mang số đo thô của M5; đã thay bằng số đo lại 22/10 trước khi ký.
+  - Ngoài-3: Hàng đối chiếu `check` của bảng số đo từng gộp nhóm sai cột; đã ghi lại cộng 27 cùng 13 lượt nhảy qua.
+  - Ngoài-4: Hạt giống từng ghi số đo không cộng đủ 40 lượt; đã thay bằng số đo lại 22/10.
+  - Ngoài-6: Trên cây mới, một ca đột biến của bài kiểm cũ (test-strategy) được tính là bắt được dù mục ấy đã đỏ sẵn, nên bằng chứng phần đó yếu hơn mức nó in.
+  - Ngoài-8: Số đo trong hạt giống từng trái với bảng của design doc; đã sửa trước khi ký.
+  - Ngoài-10: Cùng gốc Ngoài-6: một ca đột biến bị che trên cây, chỉ vế lý do `timeout-minutes` của AC-2 giữ bảo đảm job test không trôi.

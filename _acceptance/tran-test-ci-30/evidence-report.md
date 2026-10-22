@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5ddcee19441f70595f5d28d5bcd73bfccc829d21
-human_signoff:
+human_signoff: manh 2026-10-22 — ký Cổng Bằng chứng trên vòng chấm 3 (PASS, 3/3 eval, 7/7 lệnh suite, hội đồng E4 đạt; vòng 1–2 REJECT đã sửa; CI GitHub #548 xanh ba ô test). Ngoài-1, 2, 3, 4, 6, 8, 10 ghi Known limits; Ngoài-5, 7, 9 mở hợp đồng mới; đồng ý cắt; Treo phê hết.
 ---
 
 # Evidence Report: tran-test-ci-30
