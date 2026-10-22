@@ -5,7 +5,7 @@ slug: mot-nut-tao-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-21T07:42:33Z
 design_doc: docs/superpowers/specs/2026-10-21-mot-nut-tao-muc-tieu-design.md
