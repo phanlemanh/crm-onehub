@@ -2,6 +2,7 @@ import type { LOAI_VIEC_OKR } from "./agent-tasks";
 import { thangSau, thangVN } from "./ai-chi-phi";
 import type { Db } from "./client";
 import { Prisma } from "./generated/prisma/client";
+import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 import { boGioiHan, dieuKienXemMucTieu, nguCanhXemOkr } from "./okr-hien-thi";
 import {
 	type KrSo,
@@ -9,7 +10,6 @@ import {
 	type LyDoHop,
 	lyDoCua,
 } from "./okr-hop-tuan";
-import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 import { cuaSoSuKien } from "./okr-nhac";
 import { cauHinhAiLuc, quaTranChung } from "./okr-tro-ly";
 import {
@@ -26,8 +26,8 @@ import {
 	nacCuaDonVi,
 	OKR_TOM_TAT,
 	TRO_LY_OKR_TRAN,
-	TUAN_MS,
 	type TrangThaiQuanTriTomTat,
+	TUAN_MS,
 } from "./okr-tro-ly-danh-muc";
 import { KIEU_KR, type KieuKr } from "./okr-xu-huong";
 import { dauNgayVN, ngayVN, thuTrongTuan } from "./onboarding-nhac";
@@ -61,9 +61,7 @@ export function lanXepTomTatHomNay(
 	updateWeekday: number,
 ): Date | null {
 	const gio = gioXepCua(now);
-	return gio <= now && thuCapNhatCuaNgayXep(gio) === updateWeekday
-		? gio
-		: null;
+	return gio <= now && thuCapNhatCuaNgayXep(gio) === updateWeekday ? gio : null;
 }
 
 export type ChenhTuTin = -2 | -1 | 0 | 1 | 2;

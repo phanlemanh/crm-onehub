@@ -21,7 +21,8 @@ const CHU_VI =
 	"Kara gửi bản tóm tắt đầu tiên vào khoảng 06:00 thứ Ba, 27/10 — sáng hôm sau ngày cập nhật thứ Hai.";
 const CHU_EN =
 	"Kara sends the first summary around 06:00 on Tuesday, 27/10 — the morning after the Monday update.";
-const CHU_DANG_XEP = "Kara đang xếp bản tóm tắt đầu tiên — thường có trong vài phút.";
+const CHU_DANG_XEP =
+	"Kara đang xếp bản tóm tắt đầu tiên — thường có trong vài phút.";
 const CHU_HET_TRAN = "Kara tạm nghỉ tóm tắt tuần tới 01/12.";
 const CHU_CHUA_KHOA = "Kara chưa tóm tắt được: quản trị chưa nối mô hình AI.";
 const MAU_GIO = /\d\d:\d\d/;
@@ -96,13 +97,17 @@ async function cho(xong: () => boolean, moTa: string): Promise<void> {
 		if (xong()) return;
 		await nhip();
 	}
-	throw new Error(`khong toi: ${moTa} — ${document.body.textContent?.slice(0, 400)}`);
+	throw new Error(
+		`khong toi: ${moTa} — ${document.body.textContent?.slice(0, 400)}`,
+	);
 }
 
 const trangThai = (id: string) =>
 	document.body.querySelector<HTMLElement>(`[data-trang-thai="${id}"]`);
-const khoi = () => document.body.querySelector<HTMLElement>('[data-khoi="tom-tat"]');
-const chu = (o: Element | null) => (o?.textContent ?? "").replace(/\s+/g, " ").trim();
+const khoi = () =>
+	document.body.querySelector<HTMLElement>('[data-khoi="tom-tat"]');
+const chu = (o: Element | null) =>
+	(o?.textContent ?? "").replace(/\s+/g, " ").trim();
 const soGoi = () => goiCua("okr.troLyTomTat").length;
 
 afterEach(async () => {
@@ -127,7 +132,9 @@ describe("ttdc-khoi-cho", () => {
 		expect({
 			tieuDe: chu(khoi()?.querySelector("[data-slot=card-title]") ?? null),
 			soDong: o?.querySelectorAll("[data-cho-ban]").length ?? 0,
-			dong: chu(o?.querySelector("[data-cho-ban]") ?? null) || "ttdc-khoi-cho: khong co dong cho ban dau",
+			dong:
+				chu(o?.querySelector("[data-cho-ban]") ?? null) ||
+				"ttdc-khoi-cho: khong co dong cho ban dau",
 		}).toEqual({ tieuDe: "Tóm tắt tuần của Kara", soDong: 1, dong: CHU_VI });
 	});
 
@@ -151,7 +158,10 @@ describe("ttdc-khoi-cho", () => {
 		const sauToiLuc = soGoi();
 		await troi(10 * 60_000);
 		expect({
-			themKhiToiLuc: sauToiLuc - truoc === 1 ? 1 : "ttdc-khoi-cho: khong hoi lai khi toi luc",
+			themKhiToiLuc:
+				sauToiLuc - truoc === 1
+					? 1
+					: "ttdc-khoi-cho: khong hoi lai khi toi luc",
 			themSauDo: soGoi() - sauToiLuc,
 		}).toEqual({ themKhiToiLuc: 1, themSauDo: 0 });
 	}, 60_000);
@@ -176,7 +186,12 @@ describe("ttdc-dang-xep", () => {
 		datTomTat(() => tomTat({ choBan: { kieu: "dang-xep" } }));
 		await mo();
 		await cho(() => trangThai("ST-tomtat-dang-xep") !== null, "dang xep");
-		expect(chu(trangThai("ST-tomtat-dang-xep")?.querySelector("[data-cho-ban]") ?? null)).toBe(CHU_DANG_XEP);
+		expect(
+			chu(
+				trangThai("ST-tomtat-dang-xep")?.querySelector("[data-cho-ban]") ??
+					null,
+			),
+		).toBe(CHU_DANG_XEP);
 		expect(soGoi()).toBe(1);
 		await troi(OKR_TOM_TAT.hoiLaiMs + 250);
 		expect(soGoi()).toBe(2);
@@ -198,8 +213,16 @@ describe("ttdc-tam-dung", () => {
 	});
 
 	for (const [ten, cho_, chuoi] of [
-		["het-tran", { kieu: "tam-dung", lyDo: "het-tran-thang", moLai: "2026-12-01" }, CHU_HET_TRAN],
-		["chua-khoa", { kieu: "tam-dung", lyDo: "chua-co-khoa-mo-hinh", moLai: null }, CHU_CHUA_KHOA],
+		[
+			"het-tran",
+			{ kieu: "tam-dung", lyDo: "het-tran-thang", moLai: "2026-12-01" },
+			CHU_HET_TRAN,
+		],
+		[
+			"chua-khoa",
+			{ kieu: "tam-dung", lyDo: "chua-co-khoa-mo-hinh", moLai: null },
+			CHU_CHUA_KHOA,
+		],
 	] as const) {
 		test(`ttdc-tam-dung: ${ten} hien Kara tat, khong gio, khong tien`, async () => {
 			datTomTat(() => tomTat({ choBan: cho_ }));
@@ -208,7 +231,9 @@ describe("ttdc-tam-dung", () => {
 			const o = trangThai("ST-tomtat-tam-dung");
 			const s = chu(o);
 			expect({
-				off: o?.querySelector("[data-kara-state=off]") ? "co" : "ttdc-tam-dung: (a) ra toi-luc khi het tran",
+				off: o?.querySelector("[data-kara-state=off]")
+					? "co"
+					: "ttdc-tam-dung: (a) ra toi-luc khi het tran",
 				chu: s,
 				gio: MAU_GIO.test(s),
 				tien: MAU_TIEN.some((m) => m.test(s)),
@@ -229,7 +254,10 @@ describe("ttdc-khong-doi", () => {
 		dangMo = [];
 		datTomTat(() => tomTat({ chuaCapNhat: true }));
 		await mo();
-		await cho(() => trangThai("ST-tomtat-chua-cap-nhat") !== null, "chua cap nhat");
+		await cho(
+			() => trangThai("ST-tomtat-chua-cap-nhat") !== null,
+			"chua cap nhat",
+		);
 		expect(document.body.querySelector("[data-cho-ban]")).toBeNull();
 	});
 });
@@ -240,9 +268,15 @@ describe("ttdc-mui-gio", () => {
 		const MOC = [Date.UTC(2026, 0, 15, 12), Date.UTC(2026, 6, 15, 12)];
 		const dang = (timeZone?: string) =>
 			MOC.map((t) =>
-				new Intl.DateTimeFormat("en-GB", { timeZone, dateStyle: "short", timeStyle: "short" }).format(t),
+				new Intl.DateTimeFormat("en-GB", {
+					timeZone,
+					dateStyle: "short",
+					timeStyle: "short",
+				}).format(t),
 			).join("|");
-		expect(tz && dang() === dang(tz) ? "ap" : "ttdc-mui-gio: TZ khong ap").toBe("ap");
+		expect(tz && dang() === dang(tz) ? "ap" : "ttdc-mui-gio: TZ khong ap").toBe(
+			"ap",
+		);
 	});
 
 	for (const [locale, mong] of [

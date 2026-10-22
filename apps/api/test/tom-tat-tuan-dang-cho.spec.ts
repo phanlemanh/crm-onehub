@@ -18,6 +18,7 @@ import {
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { chayXepTomTat } from "../../agent/agent/lib/okr/lich-tom-tat";
 import { completeTask } from "../../agent/agent/lib/tasks";
+import { OkrCapNhatService } from "../src/okr/okr-cap-nhat.service";
 import {
 	batDauMau,
 	CHO_DB,
@@ -26,6 +27,7 @@ import {
 	ghiCauHinh,
 	goi,
 	ketThucMau,
+	nguoi,
 	ok,
 } from "./tro-ly-okr-san";
 import {
@@ -33,11 +35,9 @@ import {
 	cookieCua,
 	donTomTat,
 	ghiBan,
-	goiCua,
 	KY,
 	KY_KHAC,
 	LUC,
-	maCua,
 	motNguonMoiKr,
 	PHONG_UNG_VIEN,
 	pb,
@@ -46,7 +46,12 @@ import {
 	truongCua,
 } from "./tro-ly-okr-tom-tat-san";
 
-const VI_TRI = ["05:59-ngay-xep", "06:00-ngay-xep", "06:01-ngay-xep", "12:00-ngay-cap-nhat"] as const;
+const VI_TRI = [
+	"05:59-ngay-xep",
+	"06:00-ngay-xep",
+	"06:01-ngay-xep",
+	"12:00-ngay-cap-nhat",
+] as const;
 
 const MA_TRAN: readonly {
 	thu: number;
@@ -177,9 +182,15 @@ describe("ttdc-luat-gio", () => {
 		const MOC = [Date.UTC(2026, 0, 15, 12), Date.UTC(2026, 6, 15, 12)];
 		const dang = (timeZone?: string) =>
 			MOC.map((t) =>
-				new Intl.DateTimeFormat("en-GB", { timeZone, dateStyle: "short", timeStyle: "short" }).format(t),
+				new Intl.DateTimeFormat("en-GB", {
+					timeZone,
+					dateStyle: "short",
+					timeStyle: "short",
+				}).format(t),
 			).join("|");
-		expect(dang() === dang(tz) ? "ap" : "ttdc-luat-gio: TZ khong ap").toBe("ap");
+		expect(dang() === dang(tz) ? "ap" : "ttdc-luat-gio: TZ khong ap").toBe(
+			"ap",
+		);
 	});
 
 	test("ttdc-luat-gio: ma tran 7 thu x 4 vi tri viet truoc", () => {
@@ -188,9 +199,14 @@ describe("ttdc-luat-gio", () => {
 		for (const dong of MA_TRAN)
 			for (const vt of VI_TRI) {
 				soAssert += 1;
-				const thuc = lanXepTomTatKe(new Date(dong.now[vt]), dong.thu).toISOString();
+				const thuc = lanXepTomTatKe(
+					new Date(dong.now[vt]),
+					dong.thu,
+				).toISOString();
 				if (thuc !== dong.luc[vt])
-					lech.push(`ttdc-luat-gio: lech o ${dong.thu}/${vt} (${thuc}, can ${dong.luc[vt]})`);
+					lech.push(
+						`ttdc-luat-gio: lech o ${dong.thu}/${vt} (${thuc}, can ${dong.luc[vt]})`,
+					);
 			}
 		console.log(`ttdc-luat-gio: ${soAssert} o`);
 		expect(soAssert).toBe(28);
@@ -211,7 +227,11 @@ describe("ttdc-luat-gio", () => {
 
 	test("ttdc-luat-gio: lan xep hom nay chi o ngay xep cua chu ky va sau gio xep", () => {
 		expect({
-			dungNgay: lanXepTomTatHomNay(new Date("2026-10-19T23:05:00.000Z"), 1)?.toISOString() ?? null,
+			dungNgay:
+				lanXepTomTatHomNay(
+					new Date("2026-10-19T23:05:00.000Z"),
+					1,
+				)?.toISOString() ?? null,
 			truocGio: lanXepTomTatHomNay(new Date("2026-10-19T22:59:00.000Z"), 1),
 			khacNgay: lanXepTomTatHomNay(new Date("2026-10-20T23:05:00.000Z"), 1),
 		}).toEqual({
@@ -228,7 +248,10 @@ describe("ttdc-luat-gio", () => {
 		);
 		expect({
 			khaiRieng: /function gioXepCua\b/.test(nguon),
-			importChung: /import\s*\{[^}]*\bgioXepCua\b[^}]*\}\s*from\s*"@crm\/db\/okr-tom-tat"/.test(nguon),
+			importChung:
+				/import\s*\{[^}]*\bgioXepCua\b[^}]*\}\s*from\s*"@crm\/db\/okr-tom-tat"/.test(
+					nguon,
+				),
 		}).toEqual({ khaiRieng: false, importChung: true });
 	});
 });
@@ -284,7 +307,10 @@ async function lamSach(): Promise<void> {
 	datDongHo(LUC);
 }
 
-async function taoViecXep(dueAt: Date, xong: boolean): Promise<{ id: string; dueAt: Date }> {
+async function taoViecXep(
+	dueAt: Date,
+	xong: boolean,
+): Promise<{ id: string; dueAt: Date }> {
 	return db.agentTask.create({
 		data: {
 			kind: "okr-tom-tat-xep",
@@ -349,8 +375,12 @@ describe("ttdc-csdl", () => {
 			datDongHo(new Date("2026-11-09T22:00:00.000Z"));
 			const truocGioXep = await doc();
 			expect({
-				sauGioXep: sauGioXep.choBan ?? "ttdc-api-cho: thieu choBan o phong bat chua co ban",
-				truocGioXep: truocGioXep.choBan ?? "ttdc-api-cho: thieu choBan o phong bat chua co ban",
+				sauGioXep:
+					sauGioXep.choBan ??
+					"ttdc-api-cho: thieu choBan o phong bat chua co ban",
+				truocGioXep:
+					truocGioXep.choBan ??
+					"ttdc-api-cho: thieu choBan o phong bat chua co ban",
 				banCu: [sauGioXep.ban, sauGioXep.dangSoan, sauGioXep.chuaCapNhat],
 			}).toEqual({
 				sauGioXep: { kieu: "toi-luc", luc: "2026-11-16T23:00:00.000Z" },
@@ -368,12 +398,21 @@ describe("ttdc-csdl", () => {
 			await datCauHinh(cauHinhBat());
 			const ra: Record<string, unknown> = {};
 			datDongHo(new Date("2026-11-09T23:05:00.000Z"));
-			const viec = await taoViecXep(new Date("2026-11-09T23:00:00.000Z"), false);
+			const viec = await taoViecXep(
+				new Date("2026-11-09T23:00:00.000Z"),
+				false,
+			);
 			const a = (await doc()).choBan;
-			ra.a = a?.kieu === "dang-xep" ? a : `ttdc-dang-xep: (a) ra ${a?.kieu ?? "khong co"}, can dang-xep`;
+			ra.a =
+				a?.kieu === "dang-xep"
+					? a
+					: `ttdc-dang-xep: (a) ra ${a?.kieu ?? "khong co"}, can dang-xep`;
 			await db.agentTask.update({
 				where: { id: viec.id },
-				data: { finishedAt: new Date("2026-11-09T23:01:00.000Z"), outcome: "da-xep:0" },
+				data: {
+					finishedAt: new Date("2026-11-09T23:01:00.000Z"),
+					outcome: "da-xep:0",
+				},
 			});
 			ra.b = (await doc()).choBan;
 			await db.agentTask.delete({ where: { id: viec.id } });
@@ -381,9 +420,17 @@ describe("ttdc-csdl", () => {
 			datDongHo(new Date("2026-11-10T23:05:00.000Z"));
 			await taoViecXep(new Date("2026-11-10T23:00:00.000Z"), false);
 			const d = (await doc()).choBan;
-			ra.d = d?.kieu === "dang-xep" ? "ttdc-dang-xep: (d) ra dang-xep o ngay khong khop" : d;
+			ra.d =
+				d?.kieu === "dang-xep"
+					? "ttdc-dang-xep: (d) ra dang-xep o ngay khong khop"
+					: d;
 			const tuanSau = { kieu: "toi-luc", luc: "2026-11-16T23:00:00.000Z" };
-			expect(ra).toEqual({ a: { kieu: "dang-xep" }, b: tuanSau, c: tuanSau, d: tuanSau });
+			expect(ra).toEqual({
+				a: { kieu: "dang-xep" },
+				b: tuanSau,
+				c: tuanSau,
+				d: tuanSau,
+			});
 		},
 		CHO_DB,
 	);
@@ -412,7 +459,10 @@ describe("ttdc-csdl", () => {
 			await completeTask(kiem.id, "chua-co-khoa-mo-hinh");
 			const c = (await doc()).choBan;
 			expect({
-				a: a?.kieu === "tam-dung" ? a : `ttdc-tam-dung: (a) ra ${a?.kieu ?? "khong co"} khi het tran`,
+				a:
+					a?.kieu === "tam-dung"
+						? a
+						: `ttdc-tam-dung: (a) ra ${a?.kieu ?? "khong co"} khi het tran`,
 				b,
 				c,
 			}).toEqual({
@@ -431,15 +481,30 @@ describe("ttdc-csdl", () => {
 			let soO = 0;
 			const kiemO = (ten: string, kq: TroLyTomTatOutput, baKhoa: boolean) => {
 				soO += 1;
-				if (Object.keys(kq).includes("choBan")) lech.push(`ttdc-khong-doi: o ${ten} co choBan`);
-				if (baKhoa && JSON.stringify(kq) !== JSON.stringify({ ban: null, dangSoan: false, chuaCapNhat: false }))
-					lech.push(`ttdc-khong-doi: o ${ten} lech ba khoa ${JSON.stringify(kq)}`);
+				if (Object.keys(kq).includes("choBan"))
+					lech.push(`ttdc-khong-doi: o ${ten} co choBan`);
+				if (
+					baKhoa &&
+					JSON.stringify(kq) !==
+						JSON.stringify({ ban: null, dangSoan: false, chuaCapNhat: false })
+				)
+					lech.push(
+						`ttdc-khong-doi: o ${ten} lech ba khoa ${JSON.stringify(kq)}`,
+					);
 			};
 			const nacKhac: [string, OkrProgramSua][] = [
 				["nac-tat", { aiOn: false }],
 				["viec-tat", cauHinhBat({ aiTomTatPhamVi: "tat", aiTomTatDonVi: [] })],
 				["don-vi-chua-bat", cauHinhBat({ aiTomTatDonVi: [pb(phongKhac)] })],
-				["che-do-an", cauHinhBat({ aiTomTatPhamVi: "tat", aiTomTatDonVi: [], aiTomTatAnPhamVi: "danh-sach", aiTomTatAnDonVi: [pb(phong)] })],
+				[
+					"che-do-an",
+					cauHinhBat({
+						aiTomTatPhamVi: "tat",
+						aiTomTatDonVi: [],
+						aiTomTatAnPhamVi: "danh-sach",
+						aiTomTatAnDonVi: [pb(phong)],
+					}),
+				],
 			];
 			for (const [ten, sua] of nacKhac) {
 				await lamSach();
@@ -447,7 +512,12 @@ describe("ttdc-csdl", () => {
 				kiemO(ten, await doc(), true);
 			}
 			const banBat = async (ma: string, nac: "an" | "bat" = "bat") =>
-				ghiBan({ ma, departmentId: pb(phong), nac, cau: [cauLanh(0, nguonId)] });
+				ghiBan({
+					ma,
+					departmentId: pb(phong),
+					nac,
+					cau: [cauLanh(0, nguonId)],
+				});
 			await lamSach();
 			await datCauHinh(cauHinhBat());
 			await banBat("ttdc-hien");
@@ -455,7 +525,10 @@ describe("ttdc-csdl", () => {
 			await lamSach();
 			await datCauHinh(cauHinhBat());
 			await banBat("ttdc-giu");
-			await db.okrTomTat.updateMany({ where: { departmentId: pb(phong) }, data: { trangThai: "can-xem" } });
+			await db.okrTomTat.updateMany({
+				where: { departmentId: pb(phong) },
+				data: { trangThai: "can-xem" },
+			});
 			kiemO("ban-bi-giu", await doc(), false);
 			await lamSach();
 			await datCauHinh(cauHinhBat());
@@ -466,8 +539,13 @@ describe("ttdc-csdl", () => {
 			await lamSach();
 			await datCauHinh(cauHinhBat());
 			soO += 1;
-			const khacPha = await choBanDauTomTat(db, { cycleId: KY_KHAC, departmentId: pb(phong), now: LUC });
-			if (khacPha !== null) lech.push("ttdc-khong-doi: o chu-ky-khac-pha co choBan");
+			const khacPha = await choBanDauTomTat(db, {
+				cycleId: KY_KHAC,
+				departmentId: pb(phong),
+				now: LUC,
+			});
+			if (khacPha !== null)
+				lech.push("ttdc-khong-doi: o chu-ky-khac-pha co choBan");
 			datDongHo(new Date("2026-12-28T05:00:00.000Z"));
 			kiemO("chua-cap-nhat", await doc(), false);
 			console.log(`ttdc-khong-doi: ${soO} o`);
@@ -481,8 +559,21 @@ describe("ttdc-csdl", () => {
 				lech,
 				doiChung: doiChung.choBan?.kieu ?? "khong co",
 				tungAn: tungAn.choBan?.kieu ?? "khong co",
-				cungKyChay: (await choBanDauTomTat(db, { cycleId: KY, departmentId: pb(phong), now: LUC }))?.kieu ?? "khong co",
-			}).toEqual({ soO: 9, lech: [], doiChung: "toi-luc", tungAn: "toi-luc", cungKyChay: "toi-luc" });
+				cungKyChay:
+					(
+						await choBanDauTomTat(db, {
+							cycleId: KY,
+							departmentId: pb(phong),
+							now: LUC,
+						})
+					)?.kieu ?? "khong co",
+			}).toEqual({
+				soO: 9,
+				lech: [],
+				doiChung: "toi-luc",
+				tungAn: "toi-luc",
+				cungKyChay: "toi-luc",
+			});
 		},
 		CHO_DB,
 	);
@@ -499,10 +590,17 @@ describe("ttdc-csdl", () => {
 			};
 			for (const thu of [1, 4, 7]) {
 				await lamSach();
-				await db.okrCycle.update({ where: { id: KY }, data: { updateWeekday: thu } });
+				await db.okrCycle.update({
+					where: { id: KY },
+					data: { updateWeekday: thu },
+				});
 				await datCauHinh(cauHinhBat());
 				const docLuc = new Date(DOC_THEO_THU[thu] ?? "");
-				const cho = await choBanDauTomTat(db, { cycleId: KY, departmentId: pb(phong), now: docLuc });
+				const cho = await choBanDauTomTat(db, {
+					cycleId: KY,
+					departmentId: pb(phong),
+					now: docLuc,
+				});
 				if (cho?.kieu !== "toi-luc") {
 					lech.push(`ttdc-mot-luat: thu ${thu} khong co toi-luc`);
 					continue;
@@ -510,16 +608,24 @@ describe("ttdc-csdl", () => {
 				const luc = new Date(cho.luc);
 				soO += 1;
 				if ((await chayXepLuc(luc)) !== 1)
-					lech.push(`ttdc-mot-luat: luot xep tai luc da bao khong xep viec (thu ${thu})`);
+					lech.push(
+						`ttdc-mot-luat: luot xep tai luc da bao khong xep viec (thu ${thu})`,
+					);
 				await donTomTat();
 				soO += 1;
 				if ((await chayXepLuc(new Date(luc.getTime() - NGAY_MS))) !== 0)
-					lech.push(`ttdc-mot-luat: luot xep truoc luc mot ngay van xep viec (thu ${thu})`);
+					lech.push(
+						`ttdc-mot-luat: luot xep truoc luc mot ngay van xep viec (thu ${thu})`,
+					);
 			}
 			await lamSach();
 			await datCauHinh(cauHinhBat());
 			datDongHo(new Date("2026-11-18T03:00:00.000Z"));
-			const cho = await choBanDauTomTat(db, { cycleId: KY, departmentId: pb(phong), now: new Date() });
+			const cho = await choBanDauTomTat(db, {
+				cycleId: KY,
+				departmentId: pb(phong),
+				now: new Date(),
+			});
 			const luc = new Date(cho?.kieu === "toi-luc" ? cho.luc : 0);
 			if (luc.toISOString() !== "2026-11-23T23:00:00.000Z")
 				lech.push(`ttdc-mot-luat: tuan sau ra ${luc.toISOString()}`);
@@ -532,23 +638,23 @@ describe("ttdc-csdl", () => {
 				where: { id: krNguon.id },
 				select: { ownerUserId: true },
 			});
-			const chu = await cookieCua(kr.ownerUserId ? maCua(kr.ownerUserId) : truongCua(phong));
-			const phien = ok<{ sessionId: string }>(
-				await goi(app, "okr.moCapNhat", "mutation", { entry: "tab" }, chu),
-				"mo cap nhat",
-			);
-			ok(
-				await goi(
-					app,
-					"okr.guiCapNhat",
-					"mutation",
-					{
-						sessionId: phien.sessionId,
-						items: [{ keyResultId: krNguon.id, value: krNguon.giaTri, confidence: "vua", note: "ttdc" }],
-					},
-					chu,
-				),
-				"gui cap nhat thu Hai",
+			const chu = kr.ownerUserId ?? nguoi(truongCua(phong));
+			const capNhat = app.get(OkrCapNhatService);
+			const phien = await capNhat.moCapNhat(chu, { entry: "tab" }, new Date());
+			await capNhat.guiCapNhat(
+				chu,
+				{
+					sessionId: phien.sessionId,
+					items: [
+						{
+							keyResultId: krNguon.id,
+							value: krNguon.giaTri,
+							confidence: "vua",
+							note: "ttdc",
+						},
+					],
+				},
+				new Date(),
 			);
 			soO += 1;
 			if ((await chayXepLuc(luc)) !== 1)

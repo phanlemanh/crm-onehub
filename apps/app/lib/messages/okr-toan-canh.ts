@@ -385,7 +385,8 @@ const en: OkrToanCanhMessages = {
 			`Kara sends the first summary around ${gio} on ${thu}, ${ngay} — the morning after the ${thuCapNhat} update.`,
 		dangXep:
 			"Kara is queuing the first summary — it usually arrives within a few minutes.",
-		tamNghiDen: (ngay: string) => `Kara has paused weekly summaries until ${ngay}.`,
+		tamNghiDen: (ngay: string) =>
+			`Kara has paused weekly summaries until ${ngay}.`,
 		chuaNoiMoHinh:
 			"Kara can't summarise yet: an admin hasn't connected an AI model.",
 		tenThu: [
