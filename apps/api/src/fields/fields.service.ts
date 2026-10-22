@@ -35,6 +35,7 @@ import {
 	viTriChuan,
 } from "@crm/db/fields-chuan";
 import {
+	GIA_TRI_CO_TEP,
 	GIA_TRI_TRONG,
 	type LocTruong,
 	LocTruongError,
@@ -73,16 +74,27 @@ const RELATIONS = {
 export type DieuKienTruong =
 	| { fieldValues: { some: Prisma.FieldValueWhereInput } }
 	| { fieldValues: { none: Prisma.FieldValueWhereInput } }
+	| { fieldFiles: { some: Prisma.FieldFileWhereInput } }
+	| { fieldFiles: { none: Prisma.FieldFileWhereInput } }
 	| { OR: DieuKienTruong[] };
 
 function coGiaTriCua(definition: {
 	id: string;
 	type: FieldTypeName;
 }): Prisma.FieldValueWhereInput {
-	return {
-		fieldId: definition.id,
-		[columnFor(definition.type)]: { not: null },
-	};
+	const cot = columnFor(definition.type);
+	return cot
+		? { fieldId: definition.id, [cot]: { not: null } }
+		: { fieldId: definition.id };
+}
+
+function trongCua(definition: {
+	id: string;
+	type: FieldTypeName;
+}): DieuKienTruong {
+	return cachLocTruong(definition.type) === "coTep"
+		? { fieldFiles: { none: { fieldId: definition.id } } }
+		: { fieldValues: { none: coGiaTriCua(definition) } };
 }
 
 function phanTich(
@@ -153,10 +165,13 @@ function dieuKienLoc(
 		case "nguoi":
 			if (loc.id.length > 0) cacNhanh.push(co({ userId: { in: loc.id } }));
 			break;
+		case "coTep":
+			if (loc.co) cacNhanh.push({ fieldFiles: { some: { fieldId } } });
+			break;
 	}
 
 	if (loc.cach !== "tich" && loc.trong) {
-		cacNhanh.push({ fieldValues: { none: coGiaTriCua(definition) } });
+		cacNhanh.push(trongCua(definition));
 	}
 
 	return hoacCua(cacNhanh);
@@ -1050,12 +1065,19 @@ export class FieldsService {
 			]);
 		}
 
+		if (cachLocTruong(definition.type) === "coTep") {
+			dem.push([
+				GIA_TRI_CO_TEP,
+				this.demBanGhi(entity, relationWhere, {
+					fieldFiles: { some: { fieldId } },
+				}),
+			]);
+		}
+
 		if (locDuocTrong(definition.type)) {
 			dem.push([
 				GIA_TRI_TRONG,
-				this.demBanGhi(entity, relationWhere, {
-					fieldValues: { none: coGiaTriCua(definition) },
-				}),
+				this.demBanGhi(entity, relationWhere, trongCua(definition)),
 			]);
 		}
 

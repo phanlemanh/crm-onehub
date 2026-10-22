@@ -13,6 +13,7 @@ export const FIELD_TYPES = [
 	"EMAIL",
 	"PHONE",
 	"USER",
+	"FILE",
 ] as const;
 
 export type FieldTypeName = (typeof FIELD_TYPES)[number];
@@ -38,9 +39,10 @@ const COLUMNS = {
 	CHECKBOX: "bool",
 	SELECT: "optionId",
 	USER: "userId",
-} as const satisfies Record<FieldTypeName, FieldValueColumn>;
+	FILE: null,
+} as const satisfies Record<FieldTypeName, FieldValueColumn | null>;
 
-export function columnFor(type: FieldTypeName): FieldValueColumn {
+export function columnFor(type: FieldTypeName): FieldValueColumn | null {
 	return COLUMNS[type];
 }
 
@@ -59,6 +61,7 @@ export const SAP_THEO_KIEU = {
 	SELECT: "luaChon",
 	USER: "nguoi",
 	CHECKBOX: null,
+	FILE: null,
 } as const satisfies Record<FieldTypeName, CachSapTruong | null>;
 
 export function cachSapTruong(type: FieldTypeName): CachSapTruong | null {
@@ -78,7 +81,8 @@ export type CachLocTruong =
 	| "moc"
 	| "tich"
 	| "luaChon"
-	| "nguoi";
+	| "nguoi"
+	| "coTep";
 
 export const LOC_THEO_KIEU = {
 	TEXT: "chua",
@@ -91,6 +95,7 @@ export const LOC_THEO_KIEU = {
 	CHECKBOX: "tich",
 	SELECT: "luaChon",
 	USER: "nguoi",
+	FILE: "coTep",
 } as const satisfies Record<FieldTypeName, CachLocTruong>;
 
 export function cachLocTruong(type: FieldTypeName): CachLocTruong {
@@ -162,3 +167,7 @@ export class FieldValueError extends Error {
 }
 
 export type FieldValueJson = string | number | boolean | null;
+
+export const FIELD_FILE_COPY = {
+	chiNhanTep: "Ô Tệp chỉ nhận tệp tải lên.",
+} as const;
