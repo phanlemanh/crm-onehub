@@ -37,17 +37,17 @@ evals:
       - "_acceptance/moi-kr-ca-cong-ty/rang/do-man.mjs"
     expected: |
       Ban do qua tien-de (phien do rieng). Bo mau ca-moi-kr nap bang duong ghi that, dat publishedAt va ky
-      chu ky TUONG DOI voi gio chay de luon sinh dung N_TRUOT KR truot (hang trong ban do, N_TRUOT lon hon
-      co trang cua DataTable). Dang nhap quan tri, mo /okr/suc-khoe, doc so tren [data-o="kr-truot"]; so-o
+      chu ky TUONG DOI voi gio chay de luon sinh dung N_TRUOT KR truot (hang trong ban do; trang Moi KR khong
+      phan trang, moi dong hien tren mot trang). Dang nhap quan tri, mo /okr/suc-khoe, doc so tren [data-o="kr-truot"]; so-o
       < 2 -> thoat ma 2 "khong dung duoc Given AC-1" (khong in DUNG). Goi okr.moiKr cung chu ky qua API cua
       phien do, dem dong tinhTrang=truot; bam DUNG MOT lan vao o; cho duong doi. In "DUNG AC-1 mot-bam:
-      duong=/okr/moi-kr?...tinhTrangKr=truot, so-o=<n>, tong-bang=<n>, api=<n>, so-bam=1" khi so-o == tong
-      cua bang (so tong DataTable in o chan bang, khong dem dong cua mot trang) == api == N_TRUOT, moi dong
-      cua trang dau mang tinh trang Truot. Lech -> "SAI AC-1 <gi>", ma 1. Bi day ve /sign-in hay /onboarding
+      duong=/okr/moi-kr?...tinhTrangKr=truot, so-o=<n>, tong-bang=<n>, api=<n>, so-bam=1" khi so-o == so dong
+      bang DEM tren man (dong DataTable hien ra, khong doc nhan tong) == api == N_TRUOT, moi dong mang tinh
+      trang Truot. Lech -> "SAI AC-1 <gi>", ma 1. Bi day ve /sign-in hay /onboarding
       -> ma 2.
       CHIEU DO (ma chua sua): "SAI AC-1 khong thay o kr-truot". Pha-thu MKC_PHA=dem-ca-nhan (ban do cong them
-      KR cua muc tieu ca nhan vao so api) -> "SAI AC-1 so-o != api"; MKC_PHA=mot-trang (dem dong trang dau
-      thay tong) -> "SAI AC-1 tong-bang != so-o".
+      KR cua muc tieu ca nhan vao so api) -> "SAI AC-1 so-o != api"; MKC_PHA=mot-trang (xoa moi dong tru dong
+      dau tren man truoc khi dem) -> "SAI AC-1 tong-bang != so-o".
 
   - id: E3
     criterion: AC-2

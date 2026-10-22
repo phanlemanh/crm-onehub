@@ -213,8 +213,12 @@ async function e2(n) {
 	await choThay(t.trang, DONG);
 	await nghi(DO.cho.hydrateMs);
 	const url = new URL(t.trang.url());
+	if (PHA === "mot-trang")
+		await t.trang.evaluate((chon) => {
+			for (const r of [...document.querySelectorAll(chon)].slice(1)) r.remove();
+		}, DONG);
 	const bang = await docBang(t.trang);
-	const tongBang = PHA === "mot-trang" ? Math.min(bang.tong, 1) : bang.tong;
+	const tongBang = bang.tieuDe.length;
 	const soBam = 1;
 	const lech = [];
 	if (url.pathname !== n.w("/okr/moi-kr")) lech.push(`duong ${url.pathname}`);

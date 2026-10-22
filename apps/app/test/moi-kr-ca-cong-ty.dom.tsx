@@ -17,6 +17,7 @@ import {
 	datLai,
 	docCua,
 	dung,
+	KY,
 	kho,
 	kr,
 	LoiTrpc,
@@ -236,6 +237,48 @@ describe("mkc-duong-dan", () => {
 		await nhip(5);
 		expect(san.url().get("tinhTrangKr")).toBe("truot,cham-nhip");
 		expect(san.url().get("donViKr")).toBe("bp:B1");
+		await thaoHet();
+
+		datLai();
+		datMoiKr();
+		const q3 = { ...KY.cycles[0], id: "q3", name: "Quý 3/2026" };
+		kho.rieng.set("okr.cycles", () => ({
+			cycles: [...KY.cycles, q3],
+			currentId: "q4",
+		}));
+		const doiKy = await dung(
+			<>
+				<ThanhBenMucTieu />
+				<MoiKr />
+			</>,
+			"?kyOkr=q4&tinhTrangKr=truot&donViKr=bp:B1&nguoiKr=u2",
+		);
+		await cho(() => dongBang().length > 0, "bang truoc doi ky");
+		const oKy = qs("[data-chon-chu-ky]");
+		if (!oKy) throw new Error("mkc-duong-dan: khong thay o chu ky");
+		await bamChuot(oKy);
+		await cho(
+			() =>
+				qsa('[role="option"]').some((o) =>
+					o.textContent?.includes("Quý 3/2026"),
+				),
+			"o chu ky mo",
+		);
+		const mucQ3 = qsa('[role="option"]').find((o) =>
+			o.textContent?.includes("Quý 3/2026"),
+		);
+		if (!mucQ3) throw new Error("mkc-duong-dan: khong co chu ky Quý 3/2026");
+		await bamChuot(mucQ3);
+		await cho(() => doiKy.url().get("kyOkr") === "q3", "doi sang q3");
+		expect(
+			{
+				ky: doiKy.url().get("kyOkr"),
+				tinhTrang: doiKy.url().get("tinhTrangKr"),
+				donVi: doiKy.url().get("donViKr"),
+				nguoi: doiKy.url().get("nguoiKr"),
+			},
+			"mkc-duong-dan: doi chu ky lam mat bo loc",
+		).toEqual({ ky: "q3", tinhTrang: "truot", donVi: "bp:B1", nguoi: "u2" });
 		await thaoHet();
 
 		datLai();

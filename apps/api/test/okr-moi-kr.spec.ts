@@ -317,6 +317,39 @@ describe("mkc-nguon", () => {
 		expect(doiChieu.map((d) => ({ ma: d.ma, ...d.moiKr }))).toEqual(
 			doiChieu.map((d) => ({ ma: d.ma, ...d.cuaToi })),
 		);
+		const daSo = new Set(doiChieu.map((d) => d.ma));
+		const ngoaiKhoi = await Promise.all(
+			cuaU2
+				.filter((r) => !daSo.has(maCua(r.keyResultId)))
+				.map(async (r) => {
+					const mt = await doc<{ expected: number | null }>(
+						"okr.objective",
+						san.cookie.u2,
+						{ id: r.objectiveId },
+					);
+					return {
+						ma: maCua(r.keyResultId),
+						moiKr: r.expected,
+						mucTieu: r.expected === null ? null : mt.expected,
+					};
+				}),
+		);
+		expect(
+			[...daSo, ...ngoaiKhoi.map((x) => x.ma)].sort(),
+			"mkc-nguon: co KR cua u2 khong duoc doi chieu vach",
+		).toEqual(
+			CO_MAT.filter((k) => k.chu === "u2")
+				.map((k) => k.ma)
+				.sort(),
+		);
+		expect(
+			ngoaiKhoi.map((x) => ({ ma: x.ma, expected: x.moiKr })),
+			"mkc-nguon: vach KR ngoai khoi cua toi lech vach muc tieu",
+		).toEqual(ngoaiKhoi.map((x) => ({ ma: x.ma, expected: x.mucTieu })));
+		expect(
+			[...daSo, ...ngoaiKhoi.map((x) => x.ma)],
+			"mkc-nguon: KR cong bo muon khong duoc doi chieu",
+		).toContain("muon-k1");
 	});
 });
 
