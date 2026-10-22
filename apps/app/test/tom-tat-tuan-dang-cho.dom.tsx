@@ -127,7 +127,8 @@ describe("ttdc-khoi-cho", () => {
 	test("ttdc-khoi-cho: phong bat chua co ban thay mot dong gio ban dau tien", async () => {
 		datTomTat(() => tomTat({ choBan: { kieu: "toi-luc", luc: LUC } }));
 		await mo();
-		await cho(() => trangThai("ST-tomtat-cho-ban-dau") !== null, "dong cho");
+		await cho(() => soGoi() > 0, "goi tom tat");
+		await nhip(5);
 		const o = trangThai("ST-tomtat-cho-ban-dau");
 		expect({
 			tieuDe: chu(khoi()?.querySelector("[data-slot=card-title]") ?? null),
