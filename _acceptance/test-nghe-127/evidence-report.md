@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 23155a6aaf8512515b9acb53cab5e96dffc2e547
+verified_commit: 86880fc1272f1c91049feec4978f1312494a9a82
 human_signoff: manh 2026-10-22 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 7/7 eval, 7/7 lệnh suite, hội đồng E5 đạt; vòng 1 PASS hoá cũ sau gộp onehub). Ngoài-1 đến Ngoài-6 ghi Known limits; đồng ý cắt; Treo phê hết.
 ---
 
@@ -151,3 +151,7 @@ none — every multi-run eval is uniform
 
 Round 1: moi eval may (E1, E1b, E2, E3, E4, E4b) va bay lenh suite deu xanh; panel E5 de xuat PASS, human_override de trong cho Cong 2. Khong eval nao fail.
 Round 2: chay lai delta sau khi gop onehub (E1, E1b, E2, E4 va bay lenh suite) deu xanh; E3 va E4b giu tu round 1 vi delta khong cham paths cua chung; panel E5 de xuat PASS, human_override de trong cho Cong 2. Khong eval nao fail.
+
+### Re-pin lần 1 — 2026-10-22, do gộp onehub 21fe020eb (#536) chạm packages/ui/test/pre-push-t1.spec.ts trong paths của E1/E4
+run_id: repin-20261022T015423Z-48899
+sha: 86880fc1272f1c91049feec4978f1312494a9a82 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E5 · AC không có chốt máy: AC-5 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
