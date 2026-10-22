@@ -1797,6 +1797,13 @@ executors:
     gtc_phu_quyet: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-phu-quyet
     gtc_hong: bun test scripts/tin-hieu/test/gom-lich.test.ts -t gtc-hong
     gtc_do: bun test scripts/tin-hieu/test/do-gom.test.ts -t gtc-do
+    gcg_moi_truong: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-moi-truong
+    gcg_loi_goi: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-loi-goi
+    gcg_chi_viec_gom: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-chi-viec-gom
+    gcg_khong_tren_dia: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-khong-tren-dia
+    gcg_token: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-token
+    gcg_sieu_du_lieu: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-sieu-du-lieu
+    gcg_lot_khoa: bun test scripts/tin-hieu/test/gom-gia-co.test.ts -t gcg-lot-khoa
     gth_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts"'
     ldbc_day: 'bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldbc-day"'
     ldbc_khoa: 'bun run test -- "cd apps/api && bun test test/ban-chup-lo-trinh.spec.ts -t ldbc-khoa"'
@@ -3151,6 +3158,7 @@ executors:
     gth_ban_dung: node _acceptance/gui-tin-hieu-trong-crm/rang/ban-dung.mjs
     tvk_tep_lich: bun _acceptance/tin-hieu-tu-ve-kho/rang/tep-lich.mjs
     gtc_tep_lich: bun _acceptance/gom-tin-hieu-tu-chay/rang/tep-lich.mjs --tu-kiem
+    gcg_tep_lich: bun _acceptance/gia-co-gom-tin-hieu/rang/tep-lich.mjs --tu-kiem
     tvk_t1: node _acceptance/tin-hieu-tu-ve-kho/rang/t1.mjs
     tvk_duong_doc_khoa: bun _acceptance/tin-hieu-tu-ve-kho/rang/duong-doc-khoa.mjs
     tvk_thiet_ke: 'for f in "apps/app/app/(app)/[slug]/settings/api-keys/"*.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
