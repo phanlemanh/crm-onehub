@@ -18,7 +18,6 @@ const vi = {
 		chuaDan:
 			"Bạn chưa dẫn đơn vị nào nên chưa thêm được mục tiêu: mục tiêu thuộc về đơn vị và do trưởng đơn vị đặt.",
 		loiQuyen: "Chưa tải được quyền của bạn — tải lại trang để thử lại.",
-		themCach: "Thêm cách tạo mục tiêu",
 	},
 	moTa: {
 		"cua-toi":
@@ -47,7 +46,6 @@ const vi = {
 	danhSach: "Danh sách",
 	cayCanChinh: "Sơ đồ góp vào",
 	themMucTieu: "Thêm mục tiêu",
-	nhapBangTinh: "Nhập từ bảng tính",
 	chonDuong: {
 		moTa: "Mục tiêu mới của {ten}. Chọn cách bắt đầu.",
 		duong: {
@@ -798,7 +796,6 @@ const en: OkrMessages = {
 		chuaDan:
 			"You don't lead a unit yet, so you can't add objectives: objectives belong to a unit and its head sets them.",
 		loiQuyen: "Couldn't load your permissions — reload the page to try again.",
-		themCach: "More ways to add objectives",
 	},
 	moTa: {
 		"cua-toi":
@@ -830,7 +827,6 @@ const en: OkrMessages = {
 	danhSach: "List",
 	cayCanChinh: "Contribution map",
 	themMucTieu: "Add objective",
-	nhapBangTinh: "Import from spreadsheet",
 	chonDuong: {
 		moTa: "New objective for {ten}. Choose how to start.",
 		duong: {
