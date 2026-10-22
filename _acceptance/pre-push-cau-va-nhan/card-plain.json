@@ -1,25 +1,3 @@
 {
-  "feature_plain": "Người đẩy mã thấy lời giải thích và dòng báo của bước kiểm trước khi đẩy nói đúng luật hook đang chạy; phép đo lịch sử thôi lẫn ca bộ phân loại hỏng với ca nó cho chạy đủ.",
-  "will_do": [
-    { "id": "AC-1", "p": "Sẽ viết lại lời giải thích của đường nhẹ (bản khai cổng) cho khớp luật đã cài: ở đầu nhánh trên máy chủ, so với bản onehub mà đầu đó đang đứng trên, không so với điểm rẽ của nhánh." },
-    { "id": "AC-2", "p": "Sẽ cho dòng báo «chạy đủ năm bước» nói đúng lý do khi PR có tệp trong thư mục cấu hình CI (.github): gọi tên đúng các tệp đó, kể cả khi chúng chỉ là tài liệu." },
-    { "id": "AC-3", "p": "Sẽ cho phép đo trên lịch sử gộp nhánh báo riêng lần nào bộ phân loại bị hỏng, thay vì đếm nó là một lần cho chạy đủ đúng." },
-    { "id": "AC-4", "p": "Sẽ giữ nguyên mọi thứ hai hồ sơ đã ký đang canh: hook không đổi một byte, các chỗ răng đột biến cấy vào vẫn đúng một lần, các bộ kiểm cũ vẫn xanh." }
-  ],
-  "wont_do": [
-    { "id": "OOS-1", "p": "KHÔNG dọn Ngoài-5 (răng hồ sơ cũ chưa ghim nội dung lời hứa mới) — theo khuyến nghị ở câu hỏi phạm vi." },
-    { "id": "OOS-2", "p": "KHÔNG đổi luật của hook: lần đẩy nào hôm nay chạy đủ hay đi nhẹ thì sau vòng này vẫn y vậy." },
-    { "id": "OOS-3", "p": "KHÔNG giải ca PR chỉ đổi trang Lộ trình (#523) — vẫn để vòng sau." }
-  ],
-  "scope_plain": "Vòng này chỉ sửa chữ và một phép đo; hành vi đẩy mã không đổi.",
-  "coverage_plain": [
-    { "i": 0, "p": "Không quét không gian tiêu chí: bốn mục đã có tên từ Cổng Bằng chứng 22/10. Trục đáng kể duy nhất là ba lý do khiến một lần đẩy phải chạy đủ (có tệp .github · có tệp tài liệu mà mã đọc · có tệp mã), mỗi lý do có ca kiểm ở AC-2 (nhãn dòng nặng)." }
-  ],
-  "gap_probe_plain": [
-    { "i": 0, "p": "Sổ ghi cách xử ô chấm câu khai cũ là «chỉ một lối» trong khi còn lối chấm lại hồ sơ cũ — đã đổi thành câu hỏi cho anh (Hỏi-1)." },
-    { "i": 1, "p": "Hai lựa chọn máy ghi «theo mục tiêu» nhưng câu trích không thật sự quyết: phạm vi bốn trong năm mục nay là câu hỏi cho anh (Hỏi-2); nhãn theo lý do nay trích đúng câu của mục giới hạn đã nhận." },
-    { "i": 2, "p": "Phép đo ca sập dùng bộ giả hỏng mọi lần nên không bắt được bản sửa nửa vời — đã đổi sang làm hỏng bộ phân loại thật ở đúng một lần gộp phải chạy đủ, và ghim đúng một dòng báo sập." },
-    { "i": 3, "p": "Hai biến thể mới của ca .github chỉ ghi tắt và không có đột biến chứng chúng tự phân biệt — đã ghim nguyên dòng cả ba và thêm hai đột biến viết trước." },
-    { "i": 4, "p": "Lời hứa «chỗ răng đột biến cấy vào vẫn đúng một lần» thiếu thước cho răng của hồ sơ #536 — đã thêm một phép đếm có chiều đỏ." }
-  ]
+  "feature_plain": "Người đẩy mã thấy lời giải thích và dòng báo của bước kiểm trước khi đẩy nói đúng luật hook đang chạy; phép đo lịch sử báo riêng lần bộ phân loại hỏng. Hành vi đẩy mã không đổi."
 }
