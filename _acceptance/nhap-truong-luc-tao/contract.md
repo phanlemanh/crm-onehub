@@ -5,7 +5,7 @@ slug: nhap-truong-luc-tao
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-21T14:46:29Z
 design_doc: docs/superpowers/specs/2026-10-21-nhap-truong-luc-tao-design.md
@@ -186,3 +186,10 @@ Later và Never ở `coverage-scan.md`.
 - Tên hàm DA15 (`useBoTriTruong`, `mucChiTiet`, `nhanTruongChuan`, `fields.layout`) đọc lại sau khi DA15 gộp; khác thì
   sửa kế hoạch.
 - Đường nền hạ tầng chưa chạy (luật 44 cấm xin `duong-nen` trước khi DA15 gộp); chạy ngay sau khi gộp onehub, trước S3.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Bài kiểm giao diện giữ dạng ngày máy chủ trả bằng một hằng chép tay; nếu máy chủ đổi dạng ngày, bài ấy có thể vẫn xanh.
+  - Ngoài-2: Người gọi API có thể thấy hai câu báo lỗi khác nhau cho cùng một trường bắt buộc để trống (thiếu khoá hay gửi rỗng).
+  - Ngoài-4: Kho chữ của app còn 17 câu của form tạo cũ không màn nào dùng; chúng được khai trong danh sách chưa nối.
+  - Ngoài-5: Tạo cá nhân hỏng ở một giá trị trường tự tạo hiếm vẫn để lại công ty suy từ email và việc làm giàu của Kara.
+  - Ngoài-6: Khi danh sách trường tải lỗi, form tạo không hiện trường tự tạo và không có nút thử lại; trường bắt buộc chỉ báo sau khi bấm Tạo.
+  - Ngoài-8: Bài kiểm DOM dựng bố trí trường bằng tay, không qua bộ sinh thật; một lệch giữa bố trí thật và form có thể lọt khỏi bài ấy.

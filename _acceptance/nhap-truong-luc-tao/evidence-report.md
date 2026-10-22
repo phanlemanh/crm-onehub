@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 0d6a656e631559d6666e093f6adf48fffc83b65c
-human_signoff:
+human_signoff: manh 2026-10-22 — ký Cổng Bằng chứng trên vòng chấm 2 (0 eval trượt, 7/7 suite); Ngoài-1,2,4,5,6,8 ghi Known limits, Ngoài-3,7 chấp nhận không sửa; đồng ý cắt; phê hết Treo
 ---
 
 # Evidence Report: nhap-truong-luc-tao
