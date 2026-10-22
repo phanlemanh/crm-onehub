@@ -468,11 +468,13 @@
 					"can_cu": ""
 				}
 			],
-			"tin_hieu": {
-				"ma": "",
-				"tieu_de": "",
-				"noi_dung": ""
-			},
+			"tin_hieu": [
+				{
+					"ma": "F1-25",
+					"tieu_de": "bo-dung-chung-nhan-chuoi E4: 8 bài test DOM tự khai lại type Locale thay vì nhập @crm/ui/lib/locale",
+					"noi_dung": "apps/app/test/{bang-crm-loc-ro,chu-man-tieng-viet,hoan-tac-loat-dung-id,lien-quan-loc-ban-da-cat,vong-doi-mot-cach-cat,luu-tru-truong-khong-hoi,dich-ten-nganh-bang-bang,tra-cuu-thuong-hieu-viet-nam}.dom.tsx — thay dòng type Locale bằng import type { Locale } from \"@crm/ui/lib/locale\"."
+				}
+			],
 			"sua_san": []
 		},
 		{
@@ -502,11 +504,18 @@
 					"can_cu": "6634d64c1"
 				}
 			],
-			"tin_hieu": {
-				"ma": "",
-				"tieu_de": "",
-				"noi_dung": ""
-			},
+			"tin_hieu": [
+				{
+					"ma": "F1-26",
+					"tieu_de": "cai-dat-con-lai-noi-tieng-viet E8: nhãn trường tự tạo ở Cài đặt › Trường thiếu translate=no",
+					"noi_dung": "apps/app/components/crm/fields/fields-list.tsx:407-409 và :519 vẽ tên trường tự tạo không đánh dấu không dịch; từ 6634d64c1."
+				},
+				{
+					"ma": "F1-27",
+					"tieu_de": "cai-dat-con-lai-noi-tieng-viet E13: chữ Việt bị cắt ở khổ 360px trên Cài đặt › Trường",
+					"noi_dung": "apps/app/components/crm/fields/fields-list.tsx:407-424 dùng truncate cho cột nhãn; «Điện thoại» 57/56px, «Trường chuẩn» 75/56px ở vi; từ 6634d64c1."
+				}
+			],
 			"sua_san": [
 				{
 					"eval": "E1",
@@ -601,11 +610,13 @@
 					"can_cu": "ecb9448b4"
 				}
 			],
-			"tin_hieu": {
-				"ma": "",
-				"tieu_de": "",
-				"noi_dung": ""
-			},
+			"tin_hieu": [
+				{
+					"ma": "F1-28",
+					"tieu_de": "tong-quan-va-khung-noi-tieng-viet E7: nhãn giai đoạn ở Tổng quan bọc lang=en mà không translate=no",
+					"noi_dung": "apps/app/app/(app)/[slug]/sales-dashboard.tsx:204-209 bọc nhãn giai đoạn bằng ForeignText lang=en, không translate=no; giai đoạn là dữ liệu workspace từ ecb9448b4."
+				}
+			],
 			"sua_san": [
 				{
 					"eval": "E1",
