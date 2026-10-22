@@ -5,7 +5,7 @@ slug: truong-tep
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: approved
+status: implemented
 approved_by: manh
 approved_at: 2026-10-21T22:32:36Z
 design_doc: docs/superpowers/specs/2026-10-21-truong-tep-design.md
