@@ -165,6 +165,12 @@ const { DetailSheet } = await import("@/components/detail-sheet");
 const { DealSheet } = await import("@/components/crm/record-sheet/deal-sheet");
 
 type Loai = "DEAL" | "COMPANY" | "CONTACT";
+
+const giaTriGui = z.record(
+	z.string(),
+	z.union([z.string(), z.number(), z.boolean(), z.null()]),
+);
+const duLieuSua = z.object({ fields: giaTriGui.optional() });
 type Kieu =
 	| "TEXT"
 	| "LONG_TEXT"
@@ -264,11 +270,11 @@ function datNen(loai: Loai, tuTao: TruongGia[], doi: DoiBoTri = {}) {
 	);
 }
 
-const FORM_ID: Record<Loai, string> = {
+const FORM_ID = {
 	DEAL: "create-deal",
 	COMPANY: "create-company",
 	CONTACT: "create-contact",
-};
+} as const satisfies Record<Loai, string>;
 
 async function moSheet(loai: Loai, locale: Locale = "vi") {
 	const man =
@@ -356,11 +362,11 @@ function dapAnNhan(
 	return ra;
 }
 
-const AN_THEO_LOAI: Record<Loai, string> = {
+const AN_THEO_LOAI = {
 	DEAL: "expectedCloseDate",
 	COMPANY: "city",
 	CONTACT: "title",
-};
+} as const satisfies Record<Loai, string>;
 
 beforeEach(() => {
 	trangThai.daGoi = [];
@@ -513,18 +519,20 @@ const MUOI_KIEU: (TruongGia & { type: Kieu })[] = [
 	{ key: "nguoi_gioi_thieu", label: "Người ntl", type: "USER" },
 ];
 
-const DAP_AN_MUOI: Record<string, string | number | boolean> = {
-	chu: "HS-1",
-	chu_dai: "Dòng một\nDòng hai",
-	so_luong: 1234.5,
-	ngay_ky: "2027-03-31",
-	da_xac_minh: true,
-	hang: "lc-2",
-	web: "onehub.vn",
-	thu: "an@onehub.vn",
-	dt: "0901234567",
-	nguoi_gioi_thieu: "u-1",
-};
+const DAP_AN_MUOI = new Map<string, string | number | boolean>(
+	Object.entries({
+		chu: "HS-1",
+		chu_dai: "Dòng một\nDòng hai",
+		so_luong: 1234.5,
+		ngay_ky: "2027-03-31",
+		da_xac_minh: true,
+		hang: "lc-2",
+		web: "onehub.vn",
+		thu: "an@onehub.vn",
+		dt: "0901234567",
+		nguoi_gioi_thieu: "u-1",
+	}),
+);
 
 async function dienMuoi() {
 	await go(oTheoNhan("Chữ ntl"), "HS-1");
@@ -538,14 +546,6 @@ async function dienMuoi() {
 	await go(oTheoNhan("Email ntl"), "an@onehub.vn");
 	await go(oTheoNhan("Điện thoại ntl"), "0901234567");
 	await chon(oTheoNhan("Người ntl"), "u-1");
-}
-
-function giaTriPhieu(kieu: Kieu): {
-	key: string;
-	value: string | number | boolean;
-} {
-	const t = MUOI_KIEU.find((x) => x.type === kieu);
-	return { key: t?.key ?? "", value: DAP_AN_MUOI[t?.key ?? ""] ?? "" };
 }
 
 function thoaThuanCo(coGiaTri: boolean) {
@@ -584,7 +584,7 @@ function thoaThuanCo(coGiaTri: boolean) {
 					position: i,
 					archived: false,
 					options: (t.options ?? []).map((o, j) => ({ ...o, position: j })),
-					value: coGiaTri ? (DAP_AN_MUOI[t.key] ?? null) : null,
+					value: coGiaTri ? (DAP_AN_MUOI.get(t.key) ?? null) : null,
 				})),
 				amountCents: null,
 				baseAmountCents: null,
@@ -619,7 +619,7 @@ function phieuThieu(): string[] {
 			if (o?.getAttribute("aria-checked") !== "true") thieu.push(t.key);
 			continue;
 		}
-		const can: Record<Kieu, string> = {
+		const can = {
 			TEXT: "HS-1",
 			LONG_TEXT: "Dòng một",
 			NUMBER: "1.234,5",
@@ -630,7 +630,7 @@ function phieuThieu(): string[] {
 			EMAIL: "an@onehub.vn",
 			PHONE: "0901",
 			USER: "Người A",
-		};
+		} as const satisfies Record<Kieu, string>;
 		if (!chu.includes(can[t.type])) thieu.push(t.key);
 	}
 	return thieu;
@@ -652,10 +652,10 @@ describe("ntl-gui-gia-tri", () => {
 		const lan = goiCua("deals.create");
 		if (lan.length !== 1)
 			throw new Error(`ntl gui gia tri: so lan ${lan.length}`);
-		const gui = (lan[0]?.dauVao?.fields ?? {}) as Record<string, unknown>;
+		const gui = giaTriGui.parse(lan[0]?.dauVao?.fields ?? {});
 		let soKieu = 0;
 		for (const t of MUOI_KIEU) {
-			if (JSON.stringify(gui[t.key]) !== JSON.stringify(DAP_AN_MUOI[t.key]))
+			if (JSON.stringify(gui[t.key]) !== JSON.stringify(DAP_AN_MUOI.get(t.key)))
 				throw new Error(
 					`ntl gui gia tri: ${t.type} gui ${JSON.stringify(gui[t.key])}`,
 				);
@@ -1024,9 +1024,7 @@ describe("ntl-ban-ghi-cu", () => {
 		await cho(() => goiCua("deals.update").length > 0, "deals.update");
 		const lan = goiCua("deals.update");
 		if (lan.length !== 1) throw new Error("ntl ban ghi cu: khong luu");
-		const data = lan[0]?.dauVao?.data as
-			| { fields?: Record<string, unknown> }
-			| undefined;
+		const data = duLieuSua.parse(lan[0]?.dauVao?.data ?? {});
 		if (data?.fields && "ma_ho_so" in data.fields)
 			throw new Error("ntl ban ghi cu: gui khoa trong");
 
