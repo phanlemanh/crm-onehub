@@ -2223,6 +2223,20 @@ executors:
     ttts_giao_dich: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/tin-hieu-doi-cho.spec.ts -t ttts-giao-dich"'
     ttts_cau: cd apps/app && bun test ./test/thong-bao-cau.spec.ts
     ttts_do: 'bun run test -- "bun test scripts/tin-hieu/test/do-bao-doi-cho.spec.ts -t ttts-do"'
+    ttp_tao_truong: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tao-truong"'
+    ttp_cai_dat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx -t ttp-cai-dat
+    ttp_tai_len: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tai-len"'
+    ttp_blob_that: 'bun run test -- "cd apps/api && TTB_BLOB_THAT=1 bun test --timeout 120000 test/truong-tep-blob-that.spec.ts -t ttp-blob-that"'
+    ttp_tu_choi: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-tu-choi"'
+    ttp_quyen: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-quyen"'
+    ttp_o_tep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx -t ttp-o-tep
+    ttp_loc: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-loc"'
+    ttp_man_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/truong-tep.dom.tsx -t ttp-man-loc
+    ttp_xoa: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-xoa"'
+    ttp_vong_doi: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-vong-doi"'
+    ttp_khoa: 'bun run test -- "cd packages/db && bun test test/blob-tep-truong.spec.ts -t ttp-khoa && cd ../../apps/api && bun test test/truong-tep.spec.ts -t ttp-tat"'
+    ttp_kho_tai_lieu: 'bun run test -- "cd packages/db && bun test test/blob-nguon.spec.ts && cd ../../apps/api && bun test test/tai-lieu-nguon.spec.ts test/tai-lieu-nguon-tat.spec.ts test/phieu-nguon.spec.ts" && bun _acceptance/truong-tep/rang/bai-cu-nguyen.mjs'
+    ttp_ghi_chu: 'bun run test -- "cd apps/api && bun test test/truong-tep.spec.ts -t ttp-ghi-chu && cd ../agent && CRM_TELEMETRY_DISABLED=1 bun test test/truong-tep.integration.spec.ts -t ttp-kara"'
   script:
     gdl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/gon-dau-trang-lay-y-kien/rang/man-gui.mjs"'
     gdl_khong_doi_hinh: bun _acceptance/gon-dau-trang-lay-y-kien/rang/khong-doi-hinh.mjs
@@ -3397,6 +3411,8 @@ executors:
     ntl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs"'
     ldv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs"'
     ttts_do_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/trang-thai-tin-hieu-song/rang/do-man.mjs"'
+    ttp_quet: bun _acceptance/truong-tep/rang/quet-kieu.mjs
+    ttp_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tep/rang/do-man.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

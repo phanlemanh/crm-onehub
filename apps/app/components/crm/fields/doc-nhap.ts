@@ -118,6 +118,8 @@ export function docNhapTheoKieu(
 			return docSoDienThoai(gon).kind === "ok"
 				? { kind: "ok", giaTri: gon }
 				: { kind: "tu-choi", ma: "dien-thoai" };
+		case "FILE":
+			return { kind: "tu-choi", ma: "khac" };
 		default:
 			return { kind: "ok", giaTri: gon };
 	}

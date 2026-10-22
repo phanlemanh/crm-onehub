@@ -476,6 +476,14 @@ Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự t�
 tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
 hoặc nửa Việt nửa Anh.
 
+**Tệp** (kiểu trường): kiểu trường giữ tệp tải lên — hợp đồng, bản quét, ảnh —
+gắn vào một thoả thuận, công ty hay liên hệ. Một ô Tệp giữ tối đa 10 tệp PDF, DOCX,
+PNG hay JPG. Ai thấy bản ghi cũng thấy tên và số tệp; mở hay tải tệp là việc của
+quản trị. Chốt 2026-10-21.
+_Avoid_: tệp đính kèm, attachment, file, tài liệu
+Vì sao: «tài liệu» đã là trang của Kho tài liệu; «đính kèm» gợi một thư gửi đi,
+còn ô này nằm trên bản ghi như mọi trường khác.
+
 **Bộ phận**: cấp trên của cây tổ chức OneHub; một bộ phận chứa nhiều phòng ban.
 Cây có đúng hai cấp cố định dưới gốc OneHub — bộ phận, rồi phòng ban — và là cây
 dùng chung cho cả CRM: Điều phối 30 ngày, OKR, báo cáo và bộ lọc cùng đọc một

@@ -12,6 +12,8 @@
 		"./attribution": "./src/attribution.ts",
 		"./blob": "./src/blob.ts",
 		"./blob-nguon": "./src/blob-nguon.ts",
+		"./blob-tep-truong": "./src/blob-tep-truong.ts",
+		"./blob-cho-xoa": "./src/blob-cho-xoa.ts",
 		"./client": "./src/client.ts",
 		"./currency": "./src/currency.ts",
 		"./crm-events": "./src/crm-events.ts",
