@@ -1,16 +1,18 @@
 ---
 schema_version: 2
 feature_slug: hop-dong-mau
-verdict: PASS
+verdict: REJECT
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ab72f2310e1751eaccd0b3f4a7cd0270c1e9ff0e
+verified_commit: 5560d1fd5a32fc835fcb3e84bfa423efd8164db0
 human_signoff:
 ---
 
 # Evidence Report: hop-dong-mau
+
+Vòng 3. Verdict REJECT vì một lệnh suite đỏ không gắn eval nào: `bun run test -- --filter=app --filter=@crm/ui` (xem mục «Lệnh suite đỏ không gắn eval» dưới Evidence). Cả bảy eval của hợp đồng (E1-E6 máy, E7 judgment) đều không đỏ, nên `failed_evals` để trống.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -27,127 +29,134 @@ human_signoff:
 
 carried tu round 1 — baseline khong do lai round nay
 
-none — khong eval nao bi liet ke la khong-phan-biet; moi eval carry-forward mang baseline n-a vi round nay khong do lai, cac lenh suite xanh o ca hai phia la regression-guard binh thuong.
+none — khong eval nao bi liet ke la khong-phan-biet. Moi eval may mang baseline n-a vi round nay khong do lai; cac lenh suite xanh o ca hai phia la regression-guard binh thuong.
 
 ## Evidence
 
 - eval: E1
-  run_id: mvjmw38d8qh2
+  run_id: mvjsmhs81cl9
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdm_bo_mau
-  verified_at: 2026-10-22T14:25:42Z
-  carried_from_round: 1
+  verified_at: 2026-10-22T17:06:28Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mvjsmhs81cl9_test
 
 - eval: E2
-  run_id: mvjmw43se9ew
+  run_id: mvjsmhhlhyxi
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdm_doc_chu
-  verified_at: 2026-10-22T14:25:42Z
-  carried_from_round: 1
+  verified_at: 2026-10-22T17:06:28Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mvjsmhhlhyxi_test
 
 - eval: E3
-  run_id: mvjmw3ghzme8
+  run_id: mvjsmhsy8i0i
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdm_nap
-  verified_at: 2026-10-22T14:25:42Z
-  carried_from_round: 1
+  verified_at: 2026-10-22T17:06:28Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mvjsmhsy8i0i_test
 
 - eval: E3b
-  run_id: mvjmw4b09xzj
+  run_id: mvjsmhibm0kl
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdm_khong_ghi_thang
-  verified_at: 2026-10-22T14:25:42Z
-  carried_from_round: 1
+  verified_at: 2026-10-22T17:06:28Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mvjsmhibm0kl_test
 
 - eval: E4
-  run_id: mvjmw4uq0lm3
+  run_id: mvjsmhkbcx5o
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdm_chay_lai
-  verified_at: 2026-10-22T14:25:42Z
-  carried_from_round: 1
+  verified_at: 2026-10-22T17:06:28Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mvjsmhkbcx5o_test
 
 - eval: E5
-  run_id: mvjmw3ktqiig
+  run_id: mvjsmids2584
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdm_chan
-  verified_at: 2026-10-22T14:25:42Z
-  carried_from_round: 1
+  verified_at: 2026-10-22T17:06:28Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mvjsmids2584_test
 
 - eval: E6
-  run_id: mvjmw4g5yrf4
+  run_id: mvjsmh9r08ki
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.hdm_thoat
-  verified_at: 2026-10-22T14:25:42Z
-  carried_from_round: 1
+  verified_at: 2026-10-22T17:06:28Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mvjsmh9r08ki_test
 
 - eval: E7
   judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment), fresh context
   verdict: PASS
-  rationale: Mục «Bộ hợp đồng mẫu» của docs/setup.md (dòng 175-208) trả lời đủ cả năm câu bằng chữ thường. Lệnh làm gì, cần gì trước, chạy lại có an toàn không, bị chặn ở đâu, và đáp án nằm ở đâu đều có chữ rõ ràng.
+  rationale: panel giu nguyen tu round 2 — inputs khong doi, khong cham lai; rationale xem round do
   panel_proposal: PASS
   panel:
-    - domain-correctness: PASS — Mục «Bộ hợp đồng mẫu» trong docs/setup.md (dòng 175-208) trả lời đủ cả năm câu. Lệnh gắn sáu hợp đồng mẫu vào ô Tệp «Hợp đồng» và tạo công ty, bảy thoả thuận, trường và người dùng mẫu. Điều kiện cần là workspace, TEP_BAN_GHI_BLOB_TOKEN và kiểu trường Tệp (`bun run db:migrate`), kèm mã thoát 6 và 4 khi thiếu. Chạy lại không nhân đôi tệp, bản ghi hay trường. Lệnh bị chặn với mã 2 trên production, preview hay cơ sở dữ liệu không ở máy cục bộ. Đáp án nằm ở `packages/db/mau/hop-dong/dap-an.json`, gồm ngày ký, ngày hết hạn và giá trị.
-    - operational-feasibility: PASS — Mục «Bộ hợp đồng mẫu» của docs/setup.md (dòng 175-208) trả lời đủ cả năm câu. Lệnh làm gì: gắn sáu hợp đồng mẫu vào ô Tệp «Hợp đồng», tạo công ty, bảy thoả thuận, trường và người dùng mẫu. Cần trước: workspace (kèm cách tạo bằng dev:session), TEP_BAN_GHI_BLOB_TOKEN trong .env, kiểu trường Tệp qua bun run db:migrate; thiếu thì dừng mã 6 hoặc 4 và không ghi gì. Chạy lại không nhân đôi tệp, bản ghi hay trường. Production và kho xa bị chặn với mã 2, không cờ nào vượt được. Đáp án ngày ký, ngày hết hạn, giá trị nằm ở packages/db/mau/hop-dong/dap-an.json, đọc bằng boHopDongMau(). Mục này không nhắc tên «DA19», nhưng gọi đúng thứ cần có là kiểu trường Tệp, nên người mới vẫn hiểu.
-    - spec-alignment: PASS — Mục «Bộ hợp đồng mẫu» của docs/setup.md (dòng 175-208) trả lời rõ cả năm câu. (1) Lệnh gắn sáu hợp đồng mẫu vào ô Tệp «Hợp đồng», tạo công ty mẫu, bảy thoả thuận, trường Tệp và người dùng mẫu. (2) «Cần trước» liệt kê workspace, `TEP_BAN_GHI_BLOB_TOKEN` và kiểu trường Tệp qua `bun run db:migrate`, kèm mã thoát khi thiếu. (3) «Chạy lại an toàn» nói không nhân đôi tệp, bản ghi hay trường. (4) «Không bao giờ chạy trên production» nêu rõ các điều kiện bị từ chối và nói không cờ nào vượt được, gồm cả cơ sở dữ liệu không ở máy cục bộ. (5) Đáp án nằm ở `packages/db/mau/hop-dong/dap-an.json`. Chỗ duy nhất hơi lệch là tệp không gọi tên «DA19», nhưng ý «kho đã có kiểu trường Tệp» thì rõ.
+    - domain-correctness: PASS (r2)
+    - operational-feasibility: PASS (r2)
+    - spec-alignment: PASS (r2)
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-22T15:45:08Z
+  verified_at: 2026-10-22T17:06:28Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
-  exit_code: 0
-  verified_at: 2026-10-22T15:45:08Z
+  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
+  exit_code: 1
+  verified_at: 2026-10-22T17:06:28Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-22T15:45:08Z
+  verified_at: 2026-10-22T17:06:28Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-hop-dong-mau-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-22T15:45:08Z
+  verified_at: 2026-10-22T17:06:28Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-hop-dong-mau-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-hop-dong-mau-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-22T15:45:08Z
+  verified_at: 2026-10-22T17:06:28Z
 
 - cmd: bun run lint:slop
-  run_id: minted-hop-dong-mau-SUITE-bun_run_lint_slop-r2
+  run_id: minted-hop-dong-mau-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-22T15:45:08Z
+  verified_at: 2026-10-22T17:06:28Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-hop-dong-mau-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-hop-dong-mau-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-22T15:45:08Z
+  verified_at: 2026-10-22T17:06:28Z
+
+### Lệnh suite đỏ không gắn eval
+
+Lệnh `bun run test -- --filter=app --filter=@crm/ui` (run_id `minted-hop-dong-mau-SUITE-bun_run_test_filter_app_filter_crm_ui-r3`) thoát khác 0, không gắn eval nào, nên không vào `failed_evals`. Phần đuôi kết quả cho thấy `app#test` đỏ ở tệp `test/truong-mot-cach.dom.tsx`: tệp dom đó dừng chỉ sau 0.2 giây và chưa in ra ca nào. Tệp dom đứng ngay trước nó, `test/truong-chuan-cai-dat.dom.tsx`, xanh 16 ca. Turbo báo ba nhiệm vụ thành công trên bốn, `Failed: app#test`. Tệp đỏ nằm ngoài vùng của hop-dong-mau (apps/api, apps/agent, packages/db, packages/validation) và chưa điều tra nguyên nhân. Cùng lệnh này xanh ở vòng 2 trên cây ab72f2310, và theo thông điệp commit thì thay đổi từ đó tới 5560d1fd5 chỉ sửa bài kiểm của hop-dong-mau. Nghi do môi trường hay bài chập chờn, nhưng chưa có bằng chứng để khẳng định. Cần người chạy lại lệnh này riêng, hoặc đọc lỗi của `truong-mot-cach.dom.tsx`, trước khi tin màu đỏ hay màu xanh.
+
+Phần đuôi kết quả đã lưu:
+
+    app:test: chay-dom: test/truong-mot-cach.dom.tsx
+    app:test: bun test v1.3.12 (700fc117)
+    app:test: test/truong-mot-cach.dom.tsx:
+    app:test: chay-dom: test/truong-mot-cach.dom.tsx đỏ (mã 1) sau 0.2 s
+    app#test ERROR command exited (1)
+    Tasks: 3 successful, 4 total
+    Failed: app#test
 
 ## Known limits
 
@@ -161,3 +170,4 @@ none — every multi-run eval is uniform
 
 Round 1: lệnh suite `bun run test -- --filter=api` đỏ chập chờn, không gắn eval nào; các eval E1-E6 đều xanh. Trả về để chạy lại.
 Round 2: toàn bộ bảy lệnh suite xanh trên cây ab72f2310; E1-E6 carry-forward từ round 1 vì delta không chạm paths của eval; E7 giữ đề xuất PASS, để trống human_override cho người quyết ở Cổng 2.
+Round 3: E1-E6 chạy lại xanh trên cây 5560d1fd5 (bốn thước yếu của S4 vòng 2 đã sửa); E7 panel giữ nguyên từ round 2; sáu lệnh suite xanh, riêng `bun run test -- --filter=app --filter=@crm/ui` đỏ ở `test/truong-mot-cach.dom.tsx`, không gắn eval. Verdict REJECT, quá ba vòng nên chuyển người quyết.
