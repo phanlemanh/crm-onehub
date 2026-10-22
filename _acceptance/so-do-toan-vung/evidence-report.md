@@ -3,17 +3,17 @@ schema_version: 2
 feature_slug: so-do-toan-vung
 verdict: BLOCKED
 failed_evals: []
-reason: "E11 (bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs) vuot thoi luong khai (long_running): lenh cho tra __QUA_HAN, chua co dong __EXIT= nen khong co ma thoat de doc. Cach go: chay lai lenh nay voi Bash timeout dai hon (xem tool-kill-rule.md), khong phai sua code."
+reason: "E11 (lệnh «bun test _acceptance/so-do-toan-vung/rang/giu-ho-so.test.mjs && bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs --bo-man --doc-man .acceptance-runs/so-do-toan-vung/man-ket-qua.json»): lệnh kết thúc bằng SIGTERM (143) sau 201 phút, không đến dòng tổng kết của bộ kiểm. Nhật ký dừng ở bước [182/329] o-cam-chay-duoc-that#E7; trước đó có lỗi «Cannot find module .../feature-loop/2.8.0/scripts/resolve-plugin.mjs» trong chung.mjs. Không có tệp .qua-han, nên không phải do vòng chờ 240 phút của tôi giết; công cụ cũng không báo timeout. Nguồn SIGTERM chưa rõ. Không suy PASS/FAIL từ phần đã chạy. Lệnh chạy nền (run_in_background) đã báo failed với exit code 143."
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 016c181998ea3a0c7fc84aeee8d7196a0c698897
+verified_commit: c4fe9b15f68395e1c5120ccefa487e3539a81fea
 human_signoff:
 ---
 
 # Evidence Report: so-do-toan-vung
 
-Round 2. Mười eval máy (E1–E10) cho kết quả xanh; E11 bị chặn vì lệnh vượt thời lượng khai và chưa trả dòng mã thoát. Verdict tổng là BLOCKED, không phải lỗi mã.
+Round 3. Mười eval E1–E10 cho kết quả xanh. E11 không chạy đến dòng tổng kết: lệnh bị SIGTERM sau 201 phút, nguồn chưa rõ, nên không suy ra xanh hay đỏ từ phần đã chạy. Verdict tổng là BLOCKED (hạ tầng), không phải lỗi mã của tính năng. Trong bảy lệnh suite, `bunx turbo run lint --force` đỏ và không gắn eval nào (xem mục «Lệnh suite (hồi quy)»).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,159 +32,165 @@ Round 2. Mười eval máy (E1–E10) cho kết quả xanh; E11 bị chặn vì 
 ## Evidence
 
 - eval: E1
-  run_id: minted-so-do-toan-vung-E1-r2
+  run_id: minted-so-do-toan-vung-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_khung
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-khung
-    Ran 1 test across 1 file. [2.27s]
+    Ran 1 test across 1 file. [1.58s]
+    __EXIT=0
 
 - eval: E2
-  run_id: minted-so-do-toan-vung-E2-r2
+  run_id: minted-so-do-toan-vung-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_toan_man
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    cd apps/app && ... okr-so-do-toan-vung.dom.tsx -t vk6-toan-man && bun test ./test/okr-toan-man-hinh.spec.ts
-    Ran 2 tests across 1 file. [13.00ms]
+    Ran 2 tests across 1 file. [6.00ms]
+    __EXIT=0
 
 - eval: E3
-  run_id: minted-so-do-toan-vung-E3-r2
+  run_id: minted-so-do-toan-vung-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_hai_kieu
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    cd apps/app && ... okr-so-do-toan-vung.dom.tsx -t vk6-hai-kieu
-    Ran 3 tests across 1 file. [2.69s]
+    Ran 1 test across 1 file. [2.00s]
+    __EXIT=0
 
 - eval: E4
-  run_id: minted-so-do-toan-vung-E4-r2
+  run_id: minted-so-do-toan-vung-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_loi_vao
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    cd apps/app && ... okr-so-do-loi-vao.dom.tsx -t vk6-loi-vao
-    Ran 2 tests across 1 file. [2.43s]
+    Ran 2 tests across 1 file. [1.53s]
+    __EXIT=0
 
 - eval: E5
-  run_id: minted-so-do-toan-vung-E5-r2
+  run_id: minted-so-do-toan-vung-E5-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_duong_cu
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    cd apps/app && bun test ./test/so-do-toan-vung-duong-cu.spec.ts -t vk6-duong-cu
-    Ran 3 tests across 1 file. [554.00ms]
+    Ran 3 tests across 1 file. [318.00ms]
+    __EXIT=0
 
 - eval: E6
-  run_id: minted-so-do-toan-vung-E6-r2
+  run_id: minted-so-do-toan-vung-E6-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_bo_cay
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    okr-so-do-toan-vung.dom.tsx -t vk6-bo-cay && so-do-toan-vung-duong-cu.spec.ts -t vk6-bo-cay
-    (lenh thoat bang ma 0; khong co dong tom tat "Ran N tests" trong phan duoi dau ra)
+    (đuôi nhật ký chỉ còn dòng mã thoát)
+    __EXIT=0
 
 - eval: E7
-  run_id: minted-so-do-toan-vung-E7-r2
+  run_id: minted-so-do-toan-vung-E7-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_hep
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    cd apps/app && ... okr-so-do-toan-vung.dom.tsx -t vk6-hep
-    Ran 1 test across 1 file. [2.27s]
+    Ran 1 test across 1 file. [1.77s]
+    __EXIT=0
 
 - eval: E8
-  run_id: minted-so-do-toan-vung-E8-r2
+  run_id: minted-so-do-toan-vung-E8-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_trang_thai
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    cd apps/app && ... okr-so-do-toan-vung.dom.tsx -t vk6-trang-thai
-    Ran 1 test across 1 file. [2.84s]
+    Ran 1 test across 1 file. [1.91s]
+    __EXIT=0
 
 - eval: E9
-  run_id: minted-so-do-toan-vung-E9-r2
+  run_id: minted-so-do-toan-vung-E9-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.vk6_chu
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    okr-so-do-toan-vung.dom.tsx -t vk6-chu && bun test ./test/messages-guard.spec.ts
-    Ran 170 tests across 1 file. [1.62s]
+    Ran 170 tests across 1 file. [1068.00ms]
+    __EXIT=0
 
 - eval: E10
-  run_id: minted-so-do-toan-vung-E10-r2
+  run_id: s4-r3-e10
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vk6_man
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
   screenshot: /Users/manh-macmini/dev/crm/.claude/worktrees/dazzling-bohr-10e829/.acceptance-runs/so-do-toan-vung/man/thuong-1440.png
   observed: |
-    Đã mở từng ảnh bằng Read. thuong-1440: thanh bên khu rộng khoảng 224px (Sơ đồ đang chọn), dải công cụ Báo cáo › Sơ đồ góp vào cùng chip lọc và nút «Toàn màn hình»; khung vẽ phủ gần hết vùng nội dung, không thanh cuộn trang, cây công ty zoom 49% có chú giải nét liền/nét đứt.
-    toan-man-1440: thanh bên vắng, khung vẽ rộng khoảng 1336px, nút thành «Thoát toàn màn hình»; sau-esc-1440: thanh bên và nút «Toàn màn hình» trở lại. quanh-1440: breadcrumb Báo cáo › Sơ đồ › tên tâm, liên kết «Về sơ đồ cả công ty», dòng «Đang xem quanh», dòng góp lên công ty qua một KR, thẻ tâm viền xanh 50%, hai KR con và một thẻ cha (thẻ trên cùng bị cắt nhẹ ở mép trên khung ở zoom 100%).
-    hep-ca-cong-ty-390: thanh tab ngang, danh sách thẻ đơn vị dọc, không khung vẽ, không nút toàn màn hình, không cuộn ngang; hep-quanh-390: dạng danh sách có hộp «Góp lên công ty…», nhóm «Mục tiêu này» và «KR của nó», không khung vẽ, không cuộn ngang. Cả sáu ảnh khớp expected.
+    Đã mở từng ảnh bằng Read; mỗi ảnh khớp expected.
+    thuong-1440.png (1440×1000, khung thường): đầu ứng dụng ở trên. Thanh bên khu rộng khoảng 224 px với «Quý 4 · mẫu», OKR (Bộ OKR, Lấy ý kiến 3), BÁO CÁO (Sức khoẻ, Sơ đồ đang chọn). Vùng nội dung có breadcrumb «Báo cáo > Sơ đồ góp vào», chip «Mọi đơn vị 23» và «Cần chú ý 5», nút «Toàn màn hình». Khung vẽ phủ gần hết vùng nội dung và chạm tới đáy cửa sổ. Trong khung có sơ đồ cả công ty: tâm OneHub Center, các khối Kinh doanh, Vận hành, Hỗ trợ, Sơ đồ-Khối A/B/X, và B1–B3 dưới. Có chú giải nét liền/nét đứt và điều khiển zoom 49%. Không thấy thanh cuộn.
+    toan-man-1440.png (sau khi bấm «Toàn màn hình»): thanh bên khu vắng. Khung vẽ rộng ra sang trái, sơ đồ dời sang trái theo. Nút đổi thành «Thoát toàn màn hình». Khung vẽ vẫn phủ vùng nội dung đến đáy.
+    sau-esc-1440.png (sau Esc): thanh bên khu trở lại, nút lại là «Toàn màn hình», bố cục như ảnh thường.
+    quanh-1440.png (Sơ đồ lấy tâm sau khi bấm «Xem trên sơ đồ» từ ngăn của sd-a1-1): breadcrumb «Báo cáo > Sơ đồ > Sơ đồ · A1 góp mục tiêu khối A»; liên kết «Về sơ đồ cả công ty»; dòng «Đang xem quanh: Sơ đồ · A1 góp mục tiêu khối A». Có hàng «Góp lên công ty qua KR «Doanh thu hợp đồng mới đạt 48 tỷ đồng» của mục tiêu «Trở thành đối tác logistics…»». Thẻ tâm được viền xanh, phía trên là «A góp KR doanh thu năm», phía dưới là hai KR 1 và KR 2.
+    hep-ca-cong-ty-390.png (390×844): danh sách Item theo đơn vị, thấy B1, B2, B3, X. Không có khung vẽ và không có nút «Toàn màn hình». Không thấy cuộn ngang.
+    hep-quanh-390.png (390×844): danh sách theo nhóm «Mục tiêu này» và «KR của nó». Không có khung vẽ, không cuộn ngang.
+    Chưa ghi E10-step*.png vào _acceptance/so-do-toan-vung/evidence/ vì rào của lượt chấm cấm tạo tệp trong kho; sáu ảnh nằm ở .acceptance-runs/so-do-toan-vung/man/.
+    Quan sát phụ, không do lượt này gây ra: git status sau lượt chạy có các ảnh _acceptance/gop-y-dung-cho/evidence/*.png đổi mtime lúc 14:00:29 giờ máy (07:00:29Z), trùng giờ lượt 1. man.mjs và tien-de.mjs không nhắc đường đó. Có phiên đo khác (man-khung.mjs của khung-okr-truoc-r1) đang chạy trong cùng cây, nhiều khả năng là nguồn ghi. Người giám sát nên kiểm.
   network_observed: n-a (driver)
-  output: |
-    Sáu ảnh do chính lệnh eval ghi tại .acceptance-runs/so-do-toan-vung/man/: thuong-1440.png, toan-man-1440.png, sau-esc-1440.png, quanh-1440.png, hep-ca-cong-ty-390.png, hep-quanh-390.png.
-    Theo rào của lượt chấm, ảnh không được chép sang _acceptance/so-do-toan-vung/evidence/. Driver là puppeteer trong tiến trình con nên không có E10-network.txt; console không lỗi theo chính script.
 
 - eval: E11
-  run_id: minted-so-do-toan-vung-E11-r2
-  exit_code: không có (BLOCKED: lệnh vượt thời lượng khai, chưa có dòng mã thoát)
+  run_id: minted-so-do-toan-vung-E11-r3
+  exit_code: 1
   baseline: n-a
-  verifier: config:executors.script.vk6_giu_ho_so
-  verified_at: 2026-10-21T22:50:53Z
+  verifier: config:executors.script.vk6_giu_ho_so_s4
+  verified_at: 2026-10-22T06:12:25Z
   output: |
-    DO: chan cua ho so DA KY van khong chay duoc:
-      _acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs
-    config.yaml tai sha ghim parse duoc bang YAML: KHONG
-    __QUA_HAN (cho tra, khong co dong ma thoat; tien trinh con bi tool cat)
+    TRẠNG THÁI: BLOCKED (không chạy đến dòng tổng kết), không phải đỏ của tính năng.
+    Lệnh bị SIGTERM sau 201 phút; dòng mã thoát cuối nhật ký ghi 143. Nhật ký dừng ở bước [182/329] o-cam-chay-duoc-that#E7.
+    Trước đó trong chung.mjs: Error: Cannot find module '/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/feature-loop/2.8.0/scripts/resolve-plugin.mjs' (MODULE_NOT_FOUND), tại napHamKit (.acceptance-runs/so-do-toan-vung/goc/_acceptance/o-cam-chay-duoc-that/rang/chung.mjs:63).
+    Các dòng gần cuối: «DO-SAN-NEN o-cam-chay-duoc-that/E6: HEAD 1 · nen 1», «[182/329] o-cam-chay-duoc-that#E7 :: bun _acceptance/o-cam-chay-duoc-that/rang/chan-ho-so-da-ky-chay-lai.mjs», «config.yaml tai sha ghim parse duoc bang YAML: KHONG», «DO ba-noi-deu-chay.mjs · ma 2», «ok o-cam-ep-chay-lai.mjs · ma 0».
+    Không có tệp .qua-han; công cụ không báo timeout; nguồn SIGTERM chưa rõ.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-so-do-toan-vung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-so-do-toan-vung-SUITE-bunx_turbo_run_lint_force-r2
-  exit_code: 0
-  verified_at: 2026-10-21T22:50:53Z
+  run_id: minted-so-do-toan-vung-SUITE-bunx_turbo_run_lint_force-r3
+  exit_code: 1
+  verified_at: 2026-10-22T06:12:25Z
 
 - cmd: bun run lint:slop
-  run_id: minted-so-do-toan-vung-SUITE-bun_run_lint_slop-r2
+  run_id: minted-so-do-toan-vung-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-so-do-toan-vung-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-so-do-toan-vung-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-21T22:50:53Z
+  verified_at: 2026-10-22T06:12:25Z
+
+Lệnh suite đỏ, không gắn eval nào: `bunx turbo run lint --force`. Đuôi nhật ký: task `app#lint` dừng với mã 1; tổng kết của linter là «Found 1 error. Found 36 warnings. Found 21 infos»; 10 trong 11 task thành công. Đuôi nhật ký có một gợi ý «Change to an optional chain» ở dòng 345 của một tệp kiểm thử (tệp không được nêu tên trong phần đuôi, và đuôi không cho biết gợi ý này là lỗi duy nhất hay chỉ là cảnh báo). Chưa rõ dòng nào là «1 error»; cần đọc nhật ký đầy đủ `.acceptance-runs/so-do-toan-vung/s4-r3-*.log` để định danh. Bốn lệnh test, `lint:slop` và `build` xanh.
 
 ## Known limits
 
@@ -192,17 +198,27 @@ Round 2. Mười eval máy (E1–E10) cho kết quả xanh; E11 bị chặn vì 
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi, round 1). Moi block eval ghi baseline: n-a. Lenh suite xanh o ca hai phia la regression-guard binh thuong, khong liet ke.
+none — không eval tính năng nào xanh trên cả HEAD lẫn baseline. Mọi eval có baseline n-a (eval mới, tệp chưa có ở merge-base), nên chưa có bằng chứng chúng phân biệt được trên mã cũ; xem «Baseline khong do».
 
-Eval khong-phan-biet: none
+### Baseline khong do
 
-Judge panels: khong co eval judgment nao trong hop dong nay, nen khong co panel va khong co muc cho human_override.
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-khung: bo qua baseline: tep apps/app/test/okr-so-do-toan-vung.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-toan-man && bun test ./test/okr-toan-man-hinh.spec.ts: bo qua baseline: tep apps/app/test/okr-so-do-toan-vung.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-hai-kieu: bo qua baseline: tep apps/app/test/okr-so-do-toan-vung.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-loi-vao.dom.tsx -t vk6-loi-vao: bo qua baseline: tep apps/app/test/okr-so-do-loi-vao.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && bun test ./test/so-do-toan-vung-duong-cu.spec.ts -t vk6-duong-cu: bo qua baseline: tep apps/app/test/so-do-toan-vung-duong-cu.spec.ts co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-bo-cay && bun test ./test/so-do-toan-vung-duong-cu.spec.ts -t vk6-bo-cay: bo qua baseline: tep apps/app/test/okr-so-do-toan-vung.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-hep: bo qua baseline: tep apps/app/test/okr-so-do-toan-vung.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-trang-thai: bo qua baseline: tep apps/app/test/okr-so-do-toan-vung.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/okr-so-do-toan-vung.dom.tsx -t vk6-chu && bun test ./test/messages-guard.spec.ts: bo qua baseline: tep apps/app/test/okr-so-do-toan-vung.dom.tsx co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
+- bun test _acceptance/so-do-toan-vung/rang/giu-ho-so.test.mjs && bun _acceptance/so-do-toan-vung/rang/giu-ho-so.mjs --bo-man --doc-man .acceptance-runs/so-do-toan-vung/man-ket-qua.json: bo qua baseline: tep _acceptance/so-do-toan-vung/rang/giu-ho-so.test.mjs co o cay dang kiem nhung chua co o merge-base f2eab4d5caa1b1f69204e71565dec7a02e98e348 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
-none — moi eval chay mot lan, deterministic, khong co pass_rate hon hop.
+none — mọi eval chạy một lần (deterministic), không eval nào có pass_rate lẫn.
 
 ## Iterations
 
 Round 1: lich su chi tiet nam o ban round truoc, khong chep lai o day.
 Round 2: E1–E10 xanh, 7 lenh suite xanh; E11 BLOCKED vi giu-ho-so.mjs vuot thoi luong khai (long_running) va chua tra dong ma thoat. Cach go: chay lai E11 voi tool timeout dai hon, khong can sua code.
+Round 3: E1–E10 xanh; 6 trong 7 lenh suite xanh, `bunx turbo run lint --force` do (khong gan eval); E11 BLOCKED lan nua vi lenh bi SIGTERM sau 201 phut, nguon chua ro (co loi thieu module resolve-plugin.mjs cua feature-loop 2.8.0 trong chung.mjs truoc do). Can nguoi quyet cach chay lai E11 va xem nhat ky lint day du.
