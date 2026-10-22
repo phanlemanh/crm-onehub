@@ -35,6 +35,11 @@ export type KetQuaCho =
 
 export type DoiCho = { ma: string; cho: ChoNguoiGui };
 
+export const khoiLoTrinhTho = z.record(z.string(), z.json());
+export type KhoiLoTrinhTho = z.infer<typeof khoiLoTrinhTho>;
+
+const coTinHieu = z.object({ tin_hieu: z.json().optional() });
+
 const tenViecKhoi = z.object({
 	lo_trinh: z.array(
 		z.object({
@@ -76,12 +81,8 @@ export function khoaTheoKit(
 	}
 }
 
-export function choTinHieu(duLieu: unknown): KetQuaCho {
-	const tinHieu =
-		duLieu !== null && typeof duLieu === "object" && "tin_hieu" in duLieu
-			? duLieu.tin_hieu
-			: undefined;
-	const duong = parseDuongTinHieu(tinHieu);
+export function choTinHieu(duLieu: KhoiLoTrinhTho): KetQuaCho {
+	const duong = parseDuongTinHieu(coTinHieu.parse(duLieu).tin_hieu);
 	if (duong.kieu === "khong-co") return { kieu: "khong-co" };
 	if (duong.kieu === "hong") return { kieu: "hong", loi: duong.loi };
 	const nhom = docNhomHang(duLieu);

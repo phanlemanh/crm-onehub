@@ -11,7 +11,7 @@ import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { cauThongBao } from "@/lib/thong-bao/cau";
 import { dongTuRa } from "@/lib/thong-bao/dong";
 import { nhanCuaCho } from "@/lib/tin-hieu/nhan";
-import { docTrangThaiDu } from "@/lib/tin-hieu/trang-thai";
+import { docTrangThaiTuNguon } from "@/lib/tin-hieu/trang-thai";
 import { MUC_MAU } from "../../agent/test/support/muc-mau";
 import { MUC_MAU_TAC_NHAN } from "../../agent/test/support/muc-mau-tac-nhan";
 import { MUC_MAU_TIN_HIEU } from "../../agent/test/support/muc-mau-tin-hieu";
@@ -37,7 +37,7 @@ describe("cau", () => {
 	});
 });
 
-const MA_THEO_KHOA: Record<Exclude<KhoaChoTinHieu, "hang-khac">, string> = {
+const MA_THEO_KHOA = {
 	"cho-gom": "crm-8",
 	le: "crm-6",
 	"da-phu": "crm-7",
@@ -46,7 +46,7 @@ const MA_THEO_KHOA: Record<Exclude<KhoaChoTinHieu, "hang-khac">, string> = {
 	"chua-bat-dau": "crm-1",
 	"dang-lam": "crm-2",
 	"da-giao": "crm-3",
-};
+} as const satisfies Record<Exclude<KhoaChoTinHieu, "hang-khac">, string>;
 
 const KHOI_TTTS = dungKhoiMau({
 	tinHieu: Object.values(MA_THEO_KHOA).map((ma) => ({ ma })),
@@ -79,7 +79,7 @@ describe("ttts-cau", () => {
 		expect(o).toBe(18);
 		for (const locale of LOCALES) {
 			const mTin = tinHieuMessages(locale);
-			const trang = docTrangThaiDu(
+			const trang = docTrangThaiTuNguon(
 				{ duLieu: KHOI_TTTS },
 				Object.values(MA_THEO_KHOA).map((ma) => ({ ma, daKeoVe: true })),
 				mTin,

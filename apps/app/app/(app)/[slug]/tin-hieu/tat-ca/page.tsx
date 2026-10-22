@@ -43,7 +43,7 @@ async function NoiDung() {
 	);
 	const nen = docNenTatCa({
 		rows: tatCa.rows,
-		html: (await docNguonTinHieuTrang()).dauVao,
+		nguon: (await docNguonTinHieuTrang()).dauVao,
 		m,
 	});
 	return (

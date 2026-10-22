@@ -2,8 +2,9 @@ import { demNguongSong, dongDemTuTatCa, idTep } from "@crm/validation/tin-hieu";
 import type { TinHieuMessages } from "@/lib/messages/tin-hieu";
 import type { BaSo } from "@/lib/tin-hieu/loc-tat-ca";
 import {
-	docTrangThaiDu,
+	docTrangThaiTuNguon,
 	type NguonTrangThai,
+	nguonTuHtml,
 	type TrangThaiDu,
 } from "@/lib/tin-hieu/trang-thai";
 
@@ -26,17 +27,15 @@ export type NenTatCa = {
 	coCho: string[];
 };
 
-export function docNenTatCa({
-	rows,
-	html,
-	m,
-}: {
-	rows: HangTatCa[];
-	html: NguonTrangThai;
-	m: TinHieuMessages;
-}): NenTatCa {
-	const du = docTrangThaiDu(
-		html,
+export function docNenTatCa(
+	vao: { rows: HangTatCa[]; m: TinHieuMessages } & (
+		| { html: string | null }
+		| { nguon: NguonTrangThai }
+	),
+): NenTatCa {
+	const { rows, m } = vao;
+	const du = docTrangThaiTuNguon(
+		"nguon" in vao ? vao.nguon : nguonTuHtml(vao.html),
 		rows.map((r) => ({ ma: idTep(r.so), daKeoVe: r.daKeoVe })),
 		m,
 	);
@@ -79,7 +78,7 @@ export function ghepTatCa({
 	m,
 }: {
 	rows: HangTatCa[];
-	html: NguonTrangThai;
+	html: string | null;
 	now: Date;
 	m: TinHieuMessages;
 }): KetQuaTatCa {

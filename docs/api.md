@@ -1744,6 +1744,20 @@ hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn
   14/10 (`_acceptance/moi-tin-hieu-cho-quan-tri/`). Mở lại khi số tín hiệu vượt vài trăm.
 - Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
   phán nào ở API.
+- **Trạng thái sống (TH3).** Hai trang tín hiệu đọc chỗ của tín hiệu từ bản chụp lộ trình theo đúng
+  `chonNguon` của trang Lộ trình (`apps/app/lib/tin-hieu/nguon.ts`); bộ đọc thô giữ khoá `tin_hieu` mà
+  `phanTichLoTrinh` lột đi. Khoá chỗ người gửi thấy (`cho-gom` … `da-giao`) tính ở một hàm
+  `choTinHieu` (`@crm/validation/tin-hieu-cho`) cho cả app lẫn API.
+- **Báo người gửi khi đổi chỗ — chỗ thứ hai API ghi `ThongBao`.** `loTrinhBanChup.day` ghi bản chụp
+  qua `ghiBanChupVaBaoTinHieu` (`apps/api/src/lo-trinh/tin-hieu-doi-cho.ts`): một giao dịch khoá hàng
+  của nguồn (`FOR UPDATE`), quyết `nhan/trung/cu-hon` như LT1c, và khi `nhan` với nguồn `crm` và đã có
+  bản trước thì `doiCho(cũ, mới)` → một `ThongBao` loại `tin-hieu-doi-cho` cho người gửi của mỗi tín
+  hiệu đổi chỗ (khoá gộp `tin-hieu-doi-cho:<mã>:<sha>`, đường `/tin-hieu`). Bỏ tín hiệu đã lưu trữ,
+  không còn người gửi, người gửi không còn là thành viên; bản chụp đầu tiên không báo. Danh sách tín
+  hiệu vắng hay hỏng ở bản cũ hoặc bản mới thì không báo gì, bản chụp vẫn nhận, nhật ký ghi
+  `lo-trinh.ban-chup.tin-hieu-khong-doc-duoc` — phần so không ném vì dữ liệu, nên chỉ lỗi kho dữ liệu
+  làm lượt đỏ, và khi đó bản chụp cũng không đổi. Luật tất định trong giao dịch như
+  `sinhGoiYKeHoach`; không `AgentTask`. Lệnh đo: `bun run tin-hieu:do-bao --tu <ngày>`.
 
 ## Bản chụp lộ trình: Actions đẩy, CRM giữ bản mới nhất
 
@@ -1764,8 +1778,9 @@ Trang Lộ trình đọc bản chụp lộ trình của nhánh chính khi nó m�
   khoá ngoài khuôn của trang (danh sách tín hiệu) để TH3 đọc. Đọc ra thì phân tích lại.
 - **Không bao giờ lùi**: ghi bằng một câu `UPDATE … WHERE commitLuc < $moi`; cùng sha trả
   `trung`, cũ hơn trả `cu-hon`, không đổi gì. Hai lượt chạy đua tạo hàng đầu bắt `P2002`.
-- Nhật ký ghi mã khoá, sha và kết quả, không ghi nội dung khối. Không `AgentTask`: không có việc
-  phán nào ở API.
+- Nhật ký ghi mã khoá, sha, kết quả và số thông báo đổi chỗ, không ghi nội dung khối. Không
+  `AgentTask`: không có việc phán nào ở API. Ghi bản chụp `crm` đi qua `ghiBanChupVaBaoTinHieu`
+  (mục «Tín hiệu», TH3).
 - **Trần thân 2 MB chỉ áp riêng đường bản chụp.** `createApp` dựng hai cầu REST trên cùng router:
   `POST /rest/lo-trinh/ban-chup` (khớp đúng đường, `BAN_CHUP_LO_TRINH.duongRest`) đọc thân tới
   `tranThanByte`; mọi đường khác của `/rest` đọc tới `REST_BRIDGE_BODY_LIMIT_BYTES` (100 000 byte,

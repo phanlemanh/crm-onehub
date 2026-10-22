@@ -13,7 +13,7 @@ import {
 	docNguonTinHieu,
 } from "@/lib/tin-hieu/nguon";
 import { docNenTatCa } from "@/lib/tin-hieu/tat-ca";
-import { docTrangThaiDu } from "@/lib/tin-hieu/trang-thai";
+import { docTrangThaiTuNguon, nguonTuHtml } from "@/lib/tin-hieu/trang-thai";
 import { dungKhoiMau, GOC_KHO } from "./support/khoi-tin-hieu-mau";
 
 const RUN = (process.env.TEST_RUN_ID ?? `${Date.now()}`).slice(0, 8);
@@ -55,23 +55,17 @@ describe("ttts-doc-ban-chup", () => {
 			};
 			const nguon = await docNguonTinHieu({
 				docBanChup: () => docBanChupTho(db, NGUON),
-				docBanDung: async () => tepDongGoi(),
+				docBanDung: async () => nguonTuHtml(tepDongGoi()),
 				banDung,
 				ghiCanhBao: () => {},
 			});
-			expect(nguon.kieu, "trang tin hieu khong doc ban chup").toBe(
-				"ban-chup",
-			);
+			expect(nguon.kieu, "trang tin hieu khong doc ban chup").toBe("ban-chup");
 			expect(
-				typeof nguon.dauVao === "object" &&
-					nguon.dauVao !== null &&
-					"duLieu" in nguon.dauVao
-					? (nguon.dauVao.duLieu as { tin_hieu?: unknown }).tin_hieu
-					: undefined,
+				"duLieu" in nguon.dauVao ? nguon.dauVao.duLieu.tin_hieu : undefined,
 				"ban chup mat danh sach tin hieu khi doc",
-			).toEqual((MOI as { tin_hieu?: unknown }).tin_hieu);
+			).toEqual(MOI.tin_hieu);
 
-			const cuaToi = docTrangThaiDu(
+			const cuaToi = docTrangThaiTuNguon(
 				nguon.dauVao,
 				[{ ma: MA, daKeoVe: true }],
 				m,
@@ -92,7 +86,7 @@ describe("ttts-doc-ban-chup", () => {
 						phongBan: null,
 					},
 				],
-				html: nguon.dauVao,
+				nguon: nguon.dauVao,
 				m,
 			});
 			expect(tatCa.trangThai[MA]?.khoa).toBe(tt?.khoa);
@@ -115,7 +109,7 @@ const CA = [
 	"hang-hong",
 ] as const;
 type Ca = (typeof CA)[number];
-const KY_VONG: Record<Ca, "ban-chup" | "ban-dung"> = {
+const KY_VONG = {
 	"cung-sha": "ban-chup",
 	"sau-gio-dung": "ban-chup",
 	"cu-hon": "ban-dung",
@@ -124,7 +118,7 @@ const KY_VONG: Record<Ca, "ban-chup" | "ban-dung"> = {
 	"chua-co": "ban-dung",
 	"kho-loi": "ban-dung",
 	"hang-hong": "ban-dung",
-};
+} as const satisfies Record<Ca, "ban-chup" | "ban-dung">;
 const SHA_DUNG = "c".repeat(40);
 const banChupCo = (sha: string, commitLuc: string): BanChupTho => ({
 	kieu: "co",
@@ -134,10 +128,9 @@ const banChupCo = (sha: string, commitLuc: string): BanChupTho => ({
 	duLieu: MOI,
 });
 
-function dauVaoCa(ca: Ca): {
-	doc: () => Promise<BanChupTho>;
-	banDung: BanDung;
-} {
+type DauVaoCa = { doc: () => Promise<BanChupTho>; banDung: BanDung };
+
+function dauVaoCa(ca: Ca): DauVaoCa {
 	const banDung: BanDung = {
 		sha: SHA_DUNG,
 		dungLuc: GIO_DUNG,
@@ -190,9 +183,12 @@ describe("ttts-khong-lui", () => {
 	test("ttts-khong-lui: 8 ca x 2 trang, trang tin hieu chon nguon dung nhu trang Lo trinh", async () => {
 		const sai: string[] = [];
 		console.log(`ttts-khong-lui: ${CA.length * 2} o`);
-		const choCu = docTrangThaiDu({ duLieu: CU }, [{ ma: MA, daKeoVe: true }], m)
-			.trangThai[MA]?.khoa;
-		const choMoi = docTrangThaiDu(
+		const choCu = docTrangThaiTuNguon(
+			{ duLieu: CU },
+			[{ ma: MA, daKeoVe: true }],
+			m,
+		).trangThai[MA]?.khoa;
+		const choMoi = docTrangThaiTuNguon(
 			{ duLieu: MOI },
 			[{ ma: MA, daKeoVe: true }],
 			m,
@@ -224,7 +220,7 @@ describe("ttts-khong-lui", () => {
 			for (const trang of ["cua-toi", "tat-ca"] as const) {
 				const khoa =
 					trang === "cua-toi"
-						? docTrangThaiDu(kq.dauVao, [{ ma: MA, daKeoVe: true }], m)
+						? docTrangThaiTuNguon(kq.dauVao, [{ ma: MA, daKeoVe: true }], m)
 								.trangThai[MA]?.khoa
 						: docNenTatCa({
 								rows: [
@@ -235,7 +231,7 @@ describe("ttts-khong-lui", () => {
 										phongBan: null,
 									},
 								],
-								html: kq.dauVao,
+								nguon: kq.dauVao,
 								m,
 							}).trangThai[MA]?.khoa;
 				const kyVong = KY_VONG[ca] === "ban-chup" ? choMoi : choCu;

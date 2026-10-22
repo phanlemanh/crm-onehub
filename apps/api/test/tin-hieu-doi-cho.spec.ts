@@ -7,7 +7,12 @@ import {
 } from "@crm/validation/ban-chup-lo-trinh";
 import { noiDungThongBao } from "@crm/validation/thong-bao";
 import { idTep } from "@crm/validation/tin-hieu";
-import { choTinHieu, type KhoaChoTinHieu } from "@crm/validation/tin-hieu-cho";
+import {
+	choTinHieu,
+	type KhoaChoTinHieu,
+	type KhoiLoTrinhTho,
+	khoiLoTrinhTho,
+} from "@crm/validation/tin-hieu-cho";
 import { Logger } from "@nestjs/common";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
@@ -85,7 +90,7 @@ async function keoVe(): Promise<void> {
 	expect(r.status).toBe(200);
 }
 
-const day = (duLieu: Record<string, unknown>, s: string, luc: number) =>
+const day = (duLieu: KhoiLoTrinhTho, s: string, luc: number) =>
 	request(app.getHttpServer())
 		.post(`${REST_BRIDGE_PATH}/lo-trinh/ban-chup`)
 		.set(API_KEY_HEADER, khoaDay)
@@ -100,11 +105,7 @@ const day = (duLieu: Record<string, unknown>, s: string, luc: number) =>
 			}),
 		);
 
-async function dayNhan(
-	duLieu: Record<string, unknown>,
-	s: string,
-	luc: number,
-) {
+async function dayNhan(duLieu: KhoiLoTrinhTho, s: string, luc: number) {
 	const r = await day(duLieu, s, luc);
 	expect(r.status, JSON.stringify(r.body)).toBe(200);
 	return ketQuaRa.parse(r.body).ketQua;
@@ -121,10 +122,7 @@ const demCua = async (nguoi: string) => (await thongBaoCua(nguoi)).length;
 
 const don = () => db.banChupLoTrinh.deleteMany({ where: { nguon: NGUON } });
 
-function kit(
-	tinHieu: Gieo[],
-	vao: Omit<DauVaoKit, "tinHieu">,
-): Record<string, unknown> {
+function kit(tinHieu: Gieo[], vao: Omit<DauVaoKit, "tinHieu">): KhoiLoTrinhTho {
 	return dungKhoiMau({ tinHieu: tinHieu.map((t) => ({ ma: t.ma })), ...vao });
 }
 
@@ -299,7 +297,7 @@ describe("ttts-bao", () => {
 				],
 				chanTroi: [{ ma: "C4", lyDo: "chờ quý sau", phu: ["g4"] }],
 			});
-			const KY_VONG: Record<(typeof O_BAO)[number], KhoaChoTinHieu> = {
+			const KY_VONG = {
 				"cho-gom->nhom-chua-cat": "nhom-chua-cat",
 				"cho-gom->le": "le",
 				"cho-gom->da-phu": "da-phu",
@@ -309,7 +307,7 @@ describe("ttts-bao", () => {
 				"chua-bat-dau->dang-lam": "dang-lam",
 				"dang-lam->da-giao": "da-giao",
 				"hang A->hang B": "chua-bat-dau",
-			};
+			} as const satisfies Record<(typeof O_BAO)[number], KhoaChoTinHieu>;
 			const choMoi = choTinHieu(moi);
 			if (choMoi.kieu !== "co") throw new Error("khoi moi khong doc duoc");
 			for (const ten of O_BAO)
@@ -460,24 +458,16 @@ describe("ttts-khong-bao", () => {
 			});
 
 			for (const [ten, sua, ban] of [
-				[
-					"cu-vang",
-					(d: Record<string, unknown>) => ({ ...d, tin_hieu: undefined }),
-					"cu",
-				],
+				["cu-vang", ({ tin_hieu: _bo, ...d }: KhoiLoTrinhTho) => d, "cu"],
 				[
 					"cu-hong",
-					(d: Record<string, unknown>) => ({ ...d, tin_hieu: [{ id: 1 }] }),
+					(d: KhoiLoTrinhTho) => ({ ...d, tin_hieu: [{ id: 1 }] }),
 					"cu",
 				],
-				[
-					"moi-vang",
-					(d: Record<string, unknown>) => ({ ...d, tin_hieu: undefined }),
-					"moi",
-				],
+				["moi-vang", ({ tin_hieu: _bo, ...d }: KhoiLoTrinhTho) => d, "moi"],
 				[
 					"moi-hong",
-					(d: Record<string, unknown>) => ({ ...d, tin_hieu: [{ id: 1 }] }),
+					(d: KhoiLoTrinhTho) => ({ ...d, tin_hieu: [{ id: 1 }] }),
 					"moi",
 				],
 			] as const) {
@@ -505,14 +495,15 @@ describe("ttts-khong-bao", () => {
 						sai.push(`${ten}: ban chup khong doi sang ban moi`);
 					const canh = warn.mock.calls.filter(
 						([o]) =>
-							typeof o === "object" &&
-							o !== null &&
-							"message" in o &&
-							o.message === "lo-trinh.ban-chup.tin-hieu-khong-doc-duoc" &&
-							"sha" in o &&
-							o.sha === s &&
-							"nguon" in o &&
-							o.nguon === NGUON,
+							z
+								.object({
+									message: z.literal(
+										"lo-trinh.ban-chup.tin-hieu-khong-doc-duoc",
+									),
+									sha: z.literal(s),
+									nguon: z.literal(NGUON),
+								})
+								.safeParse(o).success,
 					);
 					if (canh.length !== 1)
 						sai.push(`${ten}: ${canh.length} dong canh bao`);
@@ -563,25 +554,24 @@ describe("ttts-giao-dich", () => {
 				duLieu: c.moi() as BanChupVao["duLieu"],
 				canhBao: [],
 			};
-			let loi: unknown = null;
-			try {
-				await banChup.ghi(vao, {
+			const loi = await banChup
+				.ghi(vao, {
 					ghiThongBao: async () => {
 						throw new Error("TTTS-LOI");
 					},
-				});
-			} catch (e) {
-				loi = e;
-			}
-			expect(
-				loi instanceof Error && loi.message === "TTTS-LOI",
-				"loi ghi thong bao bi nuot, luot Actions xanh",
-			).toBe(true);
+				})
+				.then(
+					() => "khong loi",
+					(e) => (e instanceof Error ? e.message : String(e)),
+				);
+			expect(loi, "loi ghi thong bao bi nuot, luot Actions xanh").toBe(
+				"TTTS-LOI",
+			);
 			const hang = await db.banChupLoTrinh.findUnique({
 				where: { nguon: NGUON },
 			});
 			expect(hang?.sha, "ban chup doi ma thong bao mat").toBe(s1);
-			expect(hang?.duLieu as unknown).toEqual(c.cu());
+			expect(khoiLoTrinhTho.parse(hang?.duLieu)).toEqual(c.cu());
 			expect(await demCua(c.t.nguoi)).toBe(0);
 			const lai = await banChup.ghi(vao);
 			expect(lai.ketQua).toBe("nhan");

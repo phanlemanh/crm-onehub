@@ -2,6 +2,10 @@ import type { Db } from "@crm/db";
 import { docBanChupLoTrinh } from "@crm/db/ban-chup-lo-trinh";
 import { phanTichBanChupLuu } from "@crm/validation/ban-chup-lo-trinh";
 import {
+	type KhoiLoTrinhTho,
+	khoiLoTrinhTho,
+} from "@crm/validation/tin-hieu-cho";
+import {
 	type BanDung,
 	chonNguon,
 	type NguonLoTrinh,
@@ -14,7 +18,7 @@ export type BanChupTho =
 			sha: string;
 			commitLuc: string;
 			layLuc: string;
-			duLieu: unknown;
+			duLieu: KhoiLoTrinhTho;
 	  }
 	| { kieu: "khong" }
 	| { kieu: "loi"; lyDo: string }
@@ -35,12 +39,14 @@ export async function docBanChupTho(
 		const kq = phanTichBanChupLuu(hang);
 		if (!kq.ok)
 			return { kieu: "hong", lyDo: `${kq.duongKhoa}: ${kq.thongDiep}` };
+		const tho = khoiLoTrinhTho.safeParse(hang.duLieu);
+		if (!tho.success) return { kieu: "hong", lyDo: tho.error.message };
 		return {
 			kieu: "co",
 			sha: kq.banChup.sha,
 			commitLuc: kq.banChup.commitLuc,
 			layLuc: kq.banChup.layLuc,
-			duLieu: hang.duLieu,
+			duLieu: tho.data,
 		};
 	} catch (loi) {
 		return {

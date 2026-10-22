@@ -209,8 +209,8 @@ async function chay() {
 	const slug = await suySlug(qt);
 	const gui = await nguoiGui();
 	const tin = await goi(gui, "tinHieu.gui", {
-		muonLam: TIEU,
-		daXayRa: "Bảng tràn ngang",
+		muonLam: "Lọc được theo phòng ban",
+		daXayRa: TIEU,
 		man: "/tin-hieu",
 	});
 	const so = (await db.tinHieu.findUniqueOrThrow({ where: { id: tin.id } })).so;
@@ -328,6 +328,10 @@ async function chay() {
 		const { ctx, p } = await trang(gui, kho, lang);
 		try {
 			await mo(p, `${APP}/${slug}/tin-hieu`);
+			await p.waitForSelector("[data-slot=chuong-thong-bao]", {
+				visible: true,
+				timeout: DO.choMs,
+			});
 			await p.click("[data-slot=chuong-thong-bao]");
 			await p.waitForSelector("[data-slot=danh-sach-thong-bao]", {
 				timeout: DO.choMs,

@@ -1293,6 +1293,13 @@ _Avoid_: gỡ (khi ý là lưu trữ), ẩn, xoá, đánh dấu rác
 Vì sao: «gỡ» và «ẩn» trong từ điển là chữ của quyền, liên kết và chu kỳ; «xoá» là mất thật — tín hiệu lưu trữ thì lấy
 lại được.
 
+**Đổi chỗ (tín hiệu)**: điều trang «Tín hiệu đã gửi» hiện cho một tín hiệu đổi khác — vào nhóm, đổi nhóm, thành việc,
+việc đổi trạng thái (chưa bắt đầu, đang làm, đã giao), để riêng, để sau, đã có việc lo. Lần đầu tín hiệu hiện ở «Đang
+xem xét» không phải đổi chỗ. Mỗi lần đổi chỗ người gửi nhận một thông báo trong chuông. Chốt 2026-10-22 tại bước thiết
+kế của `trang-thai-tin-hieu-song`.
+_Avoid_: đổi trạng thái (khi ý là cả nhóm lẫn việc), cập nhật tín hiệu
+Vì sao: «trạng thái» của một tín hiệu dễ đọc thành chỉ nhãn; «chỗ» gồm cả nhóm và việc mà người gửi theo dõi.
+
 **Bản chụp lộ trình**: bản lộ trình mới nhất của một sản phẩm mà CRM giữ, lấy từ nhánh chính
 của kho sản phẩm mỗi khi lộ trình ở đó đổi, kèm giờ lấy. Mỗi sản phẩm một bản; bản mới ghi đè
 bản cũ, không giữ lịch sử. Trang Lộ trình đọc bản chụp khi nó mới hơn bản CRM đang chạy, và

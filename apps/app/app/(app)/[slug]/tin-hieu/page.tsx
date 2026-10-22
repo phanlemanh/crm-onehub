@@ -18,7 +18,7 @@ import { getLocale } from "@/lib/locale/server";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { requireSession } from "@/lib/session";
 import { docNguonTinHieuTrang } from "@/lib/tin-hieu/doc-nguon";
-import { docTrangThaiTinHieu } from "@/lib/tin-hieu/trang-thai";
+import { docTrangThaiTinHieuTuNguon } from "@/lib/tin-hieu/trang-thai";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import {
 	getServerQueryClient,
@@ -41,7 +41,7 @@ async function NoiDung() {
 	const cuaToi = await queryClient.fetchQuery(
 		getServerTrpc().tinHieu.cuaToi.queryOptions(),
 	);
-	const { banVe, trangThai } = docTrangThaiTinHieu(
+	const { banVe, trangThai } = docTrangThaiTinHieuTuNguon(
 		(await docNguonTinHieuTrang()).dauVao,
 		cuaToi.rows.map((r) => ({
 			ma: r.ma,

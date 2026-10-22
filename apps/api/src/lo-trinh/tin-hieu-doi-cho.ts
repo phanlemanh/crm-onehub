@@ -1,4 +1,4 @@
-import type { Db, Prisma } from "@crm/db";
+import { type Db, Prisma } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
 	BAN_CHUP_LO_TRINH,
@@ -16,6 +16,7 @@ import {
 	type DoiCho,
 	doiCho,
 	type KetQuaCho,
+	khoiLoTrinhTho,
 } from "@crm/validation/tin-hieu-cho";
 
 type Tx = Prisma.TransactionClient;
@@ -46,15 +47,6 @@ const MA_TIN_HIEU = new RegExp(`^${TIN_HIEU.phien}-(\\d+)$`);
 
 const ghiMacDinh: GhiThongBaoDoiCho = async (tx, data) =>
 	(await tx.thongBao.createMany({ data, skipDuplicates: true })).count;
-
-function laTrungKhoa(loi: unknown): boolean {
-	return (
-		typeof loi === "object" &&
-		loi !== null &&
-		"code" in loi &&
-		loi.code === "P2002"
-	);
-}
 
 function soCuaMa(ma: string): number | null {
 	const khop = MA_TIN_HIEU.exec(ma);
@@ -154,7 +146,10 @@ async function motLuot(
 		await tx.banChupLoTrinh.update({ where: { nguon: vao.nguon }, data: moi });
 		if (vao.nguon !== BAN_CHUP_LO_TRINH.nguonCrm)
 			return { ketQua: "nhan", soThongBao: 0 };
-		const choCu = choTinHieu(cu.duLieu);
+		const khoiCu = khoiLoTrinhTho.safeParse(cu.duLieu);
+		const choCu = khoiCu.success
+			? choTinHieu(khoiCu.data)
+			: { kieu: "hong" as const, loi: khoiCu.error.message };
 		const choMoi = choTinHieu(vao.duLieu);
 		baoNeuKhongDoc(choCu, "cu", vao, tuyChon.canhBao);
 		baoNeuKhongDoc(choMoi, "moi", vao, tuyChon.canhBao);
@@ -181,7 +176,13 @@ export async function ghiBanChupVaBaoTinHieu(
 	try {
 		return await motLuot(db, vao, now, tuyChon);
 	} catch (loi) {
-		if (!laTrungKhoa(loi)) throw loi;
+		if (
+			!(
+				loi instanceof Prisma.PrismaClientKnownRequestError &&
+				loi.code === "P2002"
+			)
+		)
+			throw loi;
 		return motLuot(db, vao, now, tuyChon);
 	}
 }

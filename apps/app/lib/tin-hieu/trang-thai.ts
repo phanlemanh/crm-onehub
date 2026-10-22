@@ -4,13 +4,15 @@ import {
 	type ChoNguoiGui,
 	choTinHieu,
 	type KhoaChoTinHieu,
+	type KhoiLoTrinhTho,
+	khoiLoTrinhTho,
 } from "@crm/validation/tin-hieu-cho";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { docDuLieu } from "@/lib/lo-trinh/doc-du-lieu";
 import type { TinHieuMessages } from "@/lib/messages/tin-hieu";
 import { nhanCuaCho } from "@/lib/tin-hieu/nhan";
 
-const NGHIA_CHO: Record<KhoaChoTinHieu, NghiaTrangThai> = {
+const NGHIA_CHO = {
 	"cho-gom": "nhap",
 	le: "nhap",
 	"da-phu": "xong",
@@ -20,7 +22,7 @@ const NGHIA_CHO: Record<KhoaChoTinHieu, NghiaTrangThai> = {
 	"dang-lam": "dangChay",
 	"da-giao": "xong",
 	"hang-khac": "nhap",
-};
+} as const satisfies Record<KhoaChoTinHieu, NghiaTrangThai>;
 
 function cauSauGom(
 	b: DuongTinHieu,
@@ -66,7 +68,7 @@ export type KetQuaTrangThai = {
 	banVe: BanVe;
 	trangThai: Record<string, TrangThaiTinHieu>;
 };
-export type NguonTrangThai = string | null | { duLieu: unknown };
+export type NguonTrangThai = { duLieu: KhoiLoTrinhTho } | { banVe: BanVe };
 
 function theoKit(c: ChoNguoiGui, m: TinHieuMessages): TrangThaiDu {
 	const b = c.banGhi;
@@ -112,13 +114,11 @@ export type KetQuaTrangThaiDu = {
 	coCho: Set<string>;
 };
 
-function duLieuTuNguon(
-	nguon: NguonTrangThai,
-): { duLieu: unknown } | { banVe: BanVe } {
-	if (nguon === null) return { banVe: "vang" };
-	if (typeof nguon !== "string") return { duLieu: nguon.duLieu };
-	const { duLieu, canhBao } = docDuLieu(nguon);
-	if (duLieu) return { duLieu };
+export function nguonTuHtml(html: string | null): NguonTrangThai {
+	if (html === null) return { banVe: "vang" };
+	const { duLieu, canhBao } = docDuLieu(html);
+	const kq = khoiLoTrinhTho.safeParse(duLieu);
+	if (kq.success) return { duLieu: kq.data };
 	return {
 		banVe: canhBao.some((c: string) => c.includes("chưa mang dữ liệu"))
 			? "khong-co-danh-sach"
@@ -127,7 +127,15 @@ function duLieuTuNguon(
 }
 
 export function docTrangThaiDu(
-	nguon: NguonTrangThai,
+	html: string | null,
+	ds: CuaToiTom[],
+	m: TinHieuMessages,
+): KetQuaTrangThaiDu {
+	return docTrangThaiTuNguon(nguonTuHtml(html), ds, m);
+}
+
+export function docTrangThaiTuNguon(
+	vao: NguonTrangThai,
 	ds: CuaToiTom[],
 	m: TinHieuMessages,
 ): KetQuaTrangThaiDu {
@@ -136,7 +144,6 @@ export function docTrangThaiDu(
 		trangThai: Object.fromEntries(ds.map((t) => [t.ma, theoTom(t, m)])),
 		coCho: new Set(),
 	});
-	const vao = duLieuTuNguon(nguon);
 	if ("banVe" in vao) return traCrm(vao.banVe);
 	const kq = choTinHieu(vao.duLieu);
 	if (kq.kieu === "khong-co") return traCrm("khong-co-danh-sach");
@@ -154,11 +161,19 @@ export function docTrangThaiDu(
 }
 
 export function docTrangThaiTinHieu(
+	html: string | null,
+	cuaToi: CuaToiTom[],
+	m: TinHieuMessages,
+): KetQuaTrangThai {
+	return docTrangThaiTinHieuTuNguon(nguonTuHtml(html), cuaToi, m);
+}
+
+export function docTrangThaiTinHieuTuNguon(
 	nguon: NguonTrangThai,
 	cuaToi: CuaToiTom[],
 	m: TinHieuMessages,
 ): KetQuaTrangThai {
-	const du = docTrangThaiDu(nguon, cuaToi, m);
+	const du = docTrangThaiTuNguon(nguon, cuaToi, m);
 	return {
 		banVe: du.banVe,
 		trangThai: Object.fromEntries(

@@ -82,7 +82,8 @@ describe("tin-hieu-cho", () => {
 
 	test("bản cũ hay bản mới không đọc được thì không có lần đổi nào", () => {
 		const moi = choTinHieu(KHOI);
-		const vang = choTinHieu({ ...KHOI, tin_hieu: undefined });
+		const { tin_hieu: _bo, ...khongTinHieu } = KHOI;
+		const vang = choTinHieu(khongTinHieu);
 		const hong = choTinHieu({ ...KHOI, tin_hieu: [{ id: 1 }] });
 		expect(vang.kieu).toBe("khong-co");
 		expect(hong.kieu).toBe("hong");

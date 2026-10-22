@@ -2,11 +2,15 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { tepTuBanGhi, vietTep } from "@crm/validation/tin-hieu";
+import {
+	type KhoiLoTrinhTho,
+	khoiLoTrinhTho,
+} from "@crm/validation/tin-hieu-cho";
 
 export const GOC_KHO = path.resolve(import.meta.dir, "../../../..");
 
 type DocDuLieu = (html: string) => {
-	duLieu: Record<string, unknown> | null;
+	duLieu: object | null;
 	canhBao: string[];
 };
 const { docDuLieu } = (await import(
@@ -31,11 +35,11 @@ export type DauVaoKit = {
 
 const DOT_MAU = "dot-mau";
 const TEP_LO_TRINH_MAU = "docs/plan/lo-trinh-mau.json";
-const TRANG_THAI_HO_SO: Record<TrangThaiHangMau, string | null> = {
+const TRANG_THAI_HO_SO = {
 	"chua-bat-dau": null,
 	"dang-lam": "implemented",
 	"da-giao": "signed-off",
-};
+} as const satisfies Record<TrangThaiHangMau, string | null>;
 
 function chay(lenh: string[], cwd: string): string {
 	const kq = Bun.spawnSync(lenh, { cwd, stdout: "pipe", stderr: "pipe" });
@@ -149,11 +153,11 @@ export function dungTepMau(vao: DauVaoKit): string {
 	return readFileSync(path.join(goc, "LO-TRINH.html"), "utf8");
 }
 
-export function dungKhoiMau(vao: DauVaoKit): Record<string, unknown> {
+export function dungKhoiMau(vao: DauVaoKit): KhoiLoTrinhTho {
 	const { duLieu, canhBao } = docDuLieu(dungTepMau(vao));
 	if (!duLieu)
 		throw new Error(
 			`khối mẫu: kit không vẽ được khối — ${canhBao.join(" · ")}`,
 		);
-	return duLieu;
+	return khoiLoTrinhTho.parse(duLieu);
 }
