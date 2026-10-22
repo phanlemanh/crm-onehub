@@ -44,6 +44,67 @@ export function columnFor(type: FieldTypeName): FieldValueColumn {
 	return COLUMNS[type];
 }
 
+export const TIEN_TO_COT_TRUONG = "field:";
+
+export type CachSapTruong = "text" | "number" | "date" | "luaChon" | "nguoi";
+
+export const SAP_THEO_KIEU = {
+	TEXT: "text",
+	LONG_TEXT: "text",
+	URL: "text",
+	EMAIL: "text",
+	PHONE: "text",
+	NUMBER: "number",
+	DATE: "date",
+	SELECT: "luaChon",
+	USER: "nguoi",
+	CHECKBOX: null,
+} as const satisfies Record<FieldTypeName, CachSapTruong | null>;
+
+export function cachSapTruong(type: FieldTypeName): CachSapTruong | null {
+	return SAP_THEO_KIEU[type];
+}
+
+export function sapDuocTheoKieu(type: string): boolean {
+	return (
+		Object.hasOwn(SAP_THEO_KIEU, type) &&
+		SAP_THEO_KIEU[type as FieldTypeName] !== null
+	);
+}
+
+export type CachLocTruong =
+	| "chua"
+	| "khoang"
+	| "moc"
+	| "tich"
+	| "luaChon"
+	| "nguoi";
+
+export const LOC_THEO_KIEU = {
+	TEXT: "chua",
+	LONG_TEXT: "chua",
+	URL: "chua",
+	EMAIL: "chua",
+	PHONE: "chua",
+	NUMBER: "khoang",
+	DATE: "moc",
+	CHECKBOX: "tich",
+	SELECT: "luaChon",
+	USER: "nguoi",
+} as const satisfies Record<FieldTypeName, CachLocTruong>;
+
+export function cachLocTruong(type: FieldTypeName): CachLocTruong {
+	return LOC_THEO_KIEU[type];
+}
+
+export function locDuocTheoKieu(type: string): boolean {
+	return Object.hasOwn(LOC_THEO_KIEU, type);
+}
+
+export function locDuocTrong(type: FieldTypeName): boolean {
+	return LOC_THEO_KIEU[type] !== "tich";
+}
+
 export function usesOptions(type: FieldTypeName): boolean {
 	return type === "SELECT";
 }

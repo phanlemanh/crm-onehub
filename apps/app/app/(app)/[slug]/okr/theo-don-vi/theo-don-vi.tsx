@@ -1,7 +1,7 @@
 "use client";
 
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
-import { keepPreviousData, skipToken, useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState, useQueryStates } from "nuqs";
 import type { ReactNode } from "react";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -32,6 +32,7 @@ import { conTrucTiep, duongCha } from "./bang-don-vi";
 import { ChanBang } from "./chan-bang";
 import { ChonDonVi } from "./chon-don-vi";
 import { DonViCon } from "./don-vi-con";
+import { giuKhiChiDoiLoc } from "./giu-bang";
 import {
 	HangCongCuDonVi,
 	KhungDangTaiDonVi,
@@ -163,7 +164,10 @@ export function TheoDonVi() {
 		...trpc.okr.danhSach.queryOptions(
 			currentId === null ? skipToken : { cycleId: currentId, unit: don, loc },
 		),
-		placeholderData: keepPreviousData,
+		placeholderData:
+			currentId === null
+				? undefined
+				: giuKhiChiDoiLoc({ cycleId: currentId, don }),
 	});
 
 	const quanTri = access.data?.canManageProgram === true;
@@ -253,19 +257,20 @@ export function TheoDonVi() {
 				<XemCay cycleId={currentId} tenGoc={tenGoc} tenKy={tenKy} />
 			</KhungCachXem>
 		);
-	} else if (byUnit.isPending || byUnit.isPlaceholderData) {
-		than = <KhungDangTaiDonVi hang={hang} />;
 	} else if (byUnit.isError) {
 		than = (
 			<KhungCachXem hang={hang}>
 				<Loi thuLai={thuLai} />
 			</KhungCachXem>
 		);
+	} else if (byUnit.isPending) {
+		than = <KhungDangTaiDonVi hang={hang} />;
 	} else {
 		than = (
 			<>
 				<BangDonVi
 					boLocMay={boLoc}
+					dangTaiLai={byUnit.isPlaceholderData}
 					chanBang={
 						<ChanBang
 							dem={{ mucTieu: objectives.length, kr: soKr }}

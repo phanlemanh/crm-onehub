@@ -197,6 +197,7 @@
         "LT1f",
         "TH5",
         "TH2",
+        "TH2b",
         "TH3",
         "TB2",
         "TH6b",
@@ -1928,6 +1929,24 @@
       "buoc_ke": "Làn MacBook Pro · thứ 3"
     },
     {
+      "ma": "TH2b",
+      "slug": "gia-co-gom-tin-hieu",
+      "hang": "T2",
+      "nhom": "crm-chung",
+      "thu_tu": 444.5,
+      "dung_tren": [
+        "TH2"
+      ],
+      "ten": "Gia cố lịch gom tín hiệu",
+      "ten_ngan": "Gia cố gom",
+      "ngay": "2026-10-21",
+      "cau_giao": "«Một tín hiệu cài lời dặn không lấy được khoá nào của lịch gom và không đẩy được gì ngoài PR đề xuất»",
+      "vai": "Chủ kho",
+      "vi_sao": "Lịch gom (TH2) đưa nội dung tín hiệu người ngoài nhập vào lời dặn của phiên gom, trong khi phiên đó được chạy lệnh tuỳ ý và biến môi trường của nó có token ghi kho cùng khoá mô hình; bước hậu kiểm chỉ soi tệp bị đổi nên không thấy kiểu lạm dụng này.",
+      "ghi_chu": "Từ TH2 Ngoài-1, chủ kho chọn mở hợp đồng mới 20/10 (Cổng Bằng chứng TH2, yêu cầu S1-11). Gợi ý: giới hạn công cụ của phiên gom đúng ba lệnh kit theo đường tuyệt đối; bỏ GH_TOKEN/TIN_HIEU_TOKEN khỏi env của lời gọi claude; gỡ url.insteadOf mang token khỏi gitconfig toàn cục sau bước cài gói; chặn ghi vào .git/. Chưa đặt bí mật ANTHROPIC_API_KEY cho lịch gom tới khi hàng này gộp.",
+      "buoc_ke": "Làn MacBook Pro · sau TH2"
+    },
+    {
       "ma": "TH3",
       "slug": "trang-thai-tin-hieu-song",
       "hang": "T2",
@@ -3388,6 +3407,26 @@
       ],
       "tieu_chi": 8,
       "buoc_ke": "Làn Mac Studio · thứ 10"
+    },
+    {
+      "ma": "VK13",
+      "slug": "gon-dau-trang-lay-y-kien",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.7,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Gọn đầu trang Lấy ý kiến",
+      "ten_ngan": "Gọn đầu Lấy ý kiến",
+      "ngay": "2026-10-20",
+      "vai": "Thành viên góp ý",
+      "cau_giao": "«Trên điện thoại 390×812, người góp ý mở Lấy ý kiến và thấy nút Gửi ngay trong màn đầu, không phải cuộn»",
+      "vi_sao": "Nút «Gửi» của Lấy ý kiến ở 390×812 nằm 927px trên onehub (941px sau VK2) — quá màn đầu 812px; hồ sơ đã ký dot-hoi-y-tuong-okr E12 bước 5 đỏ sẵn trên nền. Chủ kho chọn (a) cho V1-4 ngày 20/10: ghi đỏ sẵn trên thẻ VK2 và tách việc riêng.",
+      "bat_khi": "Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác",
+      "ghi_chu": "Tách từ V1-4 của VK2 (đợt vo-khu-muc-tieu, 20/10). Chủ kho gõ «gon-dau-trang-lay-y-kien: build» ở phiên giám sát vk.",
+      "dot": "okr-vo-khu-1810",
+      "buoc_ke": "Làn Mac Studio · sau VK2"
     },
     {
       "ma": "NS1",

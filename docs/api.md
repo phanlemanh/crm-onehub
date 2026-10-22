@@ -662,6 +662,13 @@ lệnh ghi ở `@crm/db/du-an-ghi` và `@crm/db/viec-ghi`; ngày làm việc ở
   án, `viec.doiDuAn` chuyển vào. Lời kiểm `docDuAnNhanViec` khoá hàng `duAn` rồi đếm, nên hai người cùng thêm
   việc thứ 300 thì người sau nhận 400 «Một dự án chứa tối đa 300 việc.». Mốc, phụ thuộc và đổi ngày dùng
   `docDuAnMo`, chỉ chặn khi dự án đã đóng.
+- **Thứ tự khoá.** Các đường ghi qua `khoaMot` (sửa, đóng, mở lại, xoá dự án; mốc; phụ thuộc) và `khoaDuAn` (đổi ngày,
+  `viec.doiDuAn`) khoá hàng `duAn` rồi mọi việc của dự án theo `id`. Thêm việc con (`viec.taoCon`) đọc dự án của
+  việc cha không khoá, khoá hàng `duAn` của dự án đó, rồi mới khoá việc cha — nên thêm việc con đúng lúc người khác
+  sửa mốc hay đổi ngày cùng dự án thì một bên chờ bên kia, không bên nào nhận lỗi. Việc cha đổi dự án trong lúc chờ
+  thì lượt đó dừng (`LoiChaDoiDuAn`) trước khi khoá dự án mới, và `viec.taoCon` chạy lại trong giao dịch mới, tối đa
+  `DU_AN.thuLaiViecCon` lượt; hết lượt mới trả 400 «Việc cha vừa đổi dự án. Hãy thử lại.». Các đường ghi việc lẻ
+  khác (`docViecGhi`: đổi trạng thái, sửa nội dung, gắn bản ghi…) chưa được rà thứ tự khoá với dự án.
 - **Lịch làm việc.** Router `lichLamViec` (`PhamViDoiTacMiddleware`, như `duAn`): `get` (ai đọc được phạm vi đối tác), `datNgayNghiTuan`,
   `themNgayLe`, `xoaNgayLe` (chủ, quản trị). Lịch chưa từng đặt nghỉ Thứ Bảy, Chủ nhật
   (`LICH_LAM_VIEC.ngayNghiTuanMacDinh`). Quản trị bỏ chọn hết thì `datNgayNghiTuan([])` bật

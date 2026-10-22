@@ -48,6 +48,8 @@ import {
 	ownerFilter,
 	paginate,
 	resolveOrderBy,
+	timTrang,
+	xepTheoId,
 } from "../trpc/list-input";
 import type {
 	CompanyBulkOwnerInput,
@@ -106,37 +108,44 @@ export class CompaniesService {
 		const { skip, take } = paginate(input);
 
 		const [rows, total, facetCounts] = await Promise.all([
-			this.db.company.findMany({
-				where,
-				skip,
-				take,
-				orderBy: resolveOrderBy(input, SORTABLE, {
-					createdAt: "desc",
-				}),
-				select: {
-					id: true,
-					name: true,
-					domain: true,
-					iconUrl: true,
-					iconDarkUrl: true,
-					iconTone: true,
-					logoUrl: true,
-					brandColor: true,
-					industry: true,
-					enrichmentStatus: true,
-					source: true,
-					owner: { select: OWNER_SELECT },
-					_count: {
-						select: {
-							contacts: true,
-							deals: { where: { giaiDoan: { kind: "OPEN" } } },
-						},
-					},
-					lastActivityAt: true,
-					createdAt: true,
-					archivedAt: true,
-				},
-			}),
+			this.fields
+				.sapTheoTruong("COMPANY", input, where, { skip, take })
+				.then(async (theoTruong) =>
+					xepTheoId(
+						await this.db.company.findMany({
+							...timTrang(
+								theoTruong,
+								where,
+								{ skip, take },
+								resolveOrderBy(input, SORTABLE, { createdAt: "desc" }),
+							),
+							select: {
+								id: true,
+								name: true,
+								domain: true,
+								iconUrl: true,
+								iconDarkUrl: true,
+								iconTone: true,
+								logoUrl: true,
+								brandColor: true,
+								industry: true,
+								enrichmentStatus: true,
+								source: true,
+								owner: { select: OWNER_SELECT },
+								_count: {
+									select: {
+										contacts: true,
+										deals: { where: { giaiDoan: { kind: "OPEN" } } },
+									},
+								},
+								lastActivityAt: true,
+								createdAt: true,
+								archivedAt: true,
+							},
+						}),
+						theoTruong,
+					),
+				),
 			this.db.company.count({ where }),
 			this.facetCounts(input, filterableFields),
 		]);
