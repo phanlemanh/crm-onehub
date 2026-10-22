@@ -38,7 +38,11 @@ import {
 	OTruongBang,
 	OTruongPhieu,
 } from "@/components/crm/fields/kieu-truong";
-import { FieldsCog, OTruongTuTao } from "@/components/crm/fields/record-fields";
+import {
+	FieldsCog,
+	nguCanhTepCua,
+	OTruongTuTao,
+} from "@/components/crm/fields/record-fields";
 import {
 	khoaSauQuyDoi,
 	mucChiTiet,
@@ -491,13 +495,7 @@ export function DealOverview({ deal }: { deal: Deal }) {
 									saving={isSavingField}
 									onSave={saveFields}
 									nguoiDung={users.data}
-									nguCanhTep={{
-										entity: "DEAL",
-										recordId: deal.id,
-										luuTru: deal.archivedAt !== null,
-										phuTrach: deal.owner?.name ?? null,
-										tep: deal.tepTheoTruong,
-									}}
+									nguCanhTep={nguCanhTepCua("DEAL", deal)}
 								/>
 							) : (
 								<Fragment key={muc.key}>

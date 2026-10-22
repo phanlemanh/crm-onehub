@@ -13,7 +13,11 @@ import { AppRouterHost } from "nestjs-trpc";
 import request from "supertest";
 import { createOpenApiExpressMiddleware } from "trpc-to-openapi";
 import ts from "typescript";
-import { khoTepTruongGia } from "../../../packages/db/test/blob-tep-truong-gia";
+import {
+	GOC_KHO_GIA,
+	khoTepTruongGia,
+} from "../../../packages/db/test/blob-tep-truong-gia";
+import { dealBoardOutput, dealListOutput } from "../src/deals/deals.contracts";
 import type { LuatTep } from "../src/fields/luat-tep";
 import {
 	REST_BRIDGE_BODY_LIMIT_BYTES,
@@ -605,14 +609,24 @@ describe("tcb-pham-vi", () => {
 
 		const xem = await tepTrongById("nv1", oQ);
 		if (xem.tep.length !== 2) throw new Error("tcb pham vi: an ten");
-		for (const [thuTuc, vao] of [
-			["deals.list", {}],
-			["deals.board", {}],
+		const danhSach = dealListOutput.parse(
+			canData(
+				await san.hoi("nv1", "deals.list", { q: tienTo, pageSize: 50 }),
+				"deals.list",
+			),
+		);
+		const bang = dealBoardOutput.parse(
+			canData(
+				await san.hoi("nv1", "deals.board", { q: tienTo }),
+				"deals.board",
+			),
+		);
+		for (const [thuTuc, hang] of [
+			["deals.list", danhSach.rows],
+			["deals.board", bang.columns.flatMap((c) => c.cards)],
 		] as const) {
-			const tl = await san.hoi("nv1", thuTuc, vao);
-			const chu = JSON.stringify(tl.data ?? "");
-			if (tl.status !== 200 || !chu.includes(dQ))
-				throw new Error(`tcb pham vi: dem ${thuTuc}`);
+			const n = hang.find((h) => h.id === dQ)?.soTepTheoTruong[fD.key];
+			if (n !== 2) throw new Error(`tcb pham vi: dem ${thuTuc} ${n}`);
 		}
 
 		const moi = await gan("nv1", oQ, "cua-A.pdf", `${tienTo}cuaA`);
@@ -890,6 +904,67 @@ const VAI_AI = {
 } as const;
 const fieldIdCua = new Map<string, string>();
 
+function loUrl(loiGoi: unknown[][]): boolean {
+	return loiGoi.some((thamSo) =>
+		thamSo.some((x) => {
+			const chu = JSON.stringify(x ?? "");
+			return (
+				chu.includes(new URL(GOC_KHO_GIA).host) || /han=\d|signature/.test(chu)
+			);
+		}),
+	);
+}
+
+function laPhuTrachSoOwnerId(sf: ts.SourceFile): boolean {
+	let ham: ts.MethodDeclaration | null = null;
+	const timHam = (n: ts.Node) => {
+		if (
+			ts.isMethodDeclaration(n) &&
+			ts.isIdentifier(n.name) &&
+			n.name.text === "downloadUrl"
+		)
+			ham = n;
+		ts.forEachChild(n, timHam);
+	};
+	timHam(sf);
+	if (!ham) return false;
+	let bienPhuTrachTuOwnerId = false;
+	let laPhuTrachDung = false;
+	const xem = (n: ts.Node) => {
+		if (
+			ts.isVariableDeclaration(n) &&
+			ts.isIdentifier(n.name) &&
+			n.name.text === "phuTrachId" &&
+			n.initializer
+		) {
+			bienPhuTrachTuOwnerId = /\.ownerId\b/.test(n.initializer.getText(sf));
+		}
+		if (
+			ts.isPropertyAssignment(n) &&
+			ts.isIdentifier(n.name) &&
+			n.name.text === "laPhuTrach"
+		) {
+			const coSo = (m: ts.Node): boolean => {
+				if (
+					ts.isBinaryExpression(m) &&
+					m.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken &&
+					[m.left.getText(sf), m.right.getText(sf)].sort().join("|") ===
+						"nguoi.id|phuTrachId"
+				) {
+					return true;
+				}
+				return ts.forEachChild(m, coSo) ?? false;
+			};
+			laPhuTrachDung =
+				coSo(n.initializer) &&
+				!/coTheMo|quyen|role|vai/.test(n.initializer.getText(sf));
+		}
+		ts.forEachChild(n, xem);
+	};
+	xem(ham);
+	return bienPhuTrachTuOwnerId && laPhuTrachDung;
+}
+
 function demChet(dong: DongLog[]): number {
 	return dong.filter(
 		(d) =>
@@ -904,7 +979,14 @@ describe("tcb-vet", () => {
 	it("tcb-vet: một dòng mở hay từ chối mỗi lần, không URL, thước CHẾT bắt được luật hỏng", async () => {
 		const bay = await dungBay(`${TCB}ve`);
 		const ghiLog = spyOn(Logger.prototype, "log");
+		const moiNgo = (["warn", "error", "debug", "verbose"] as const).map((m) =>
+			spyOn(Logger.prototype, m),
+		);
 		const dongCua = () => ghiLog.mock.calls.map((g) => g[0] as DongLog);
+		const moiLoiGoi = () => [
+			...ghiLog.mock.calls,
+			...moiNgo.flatMap((s) => s.mock.calls),
+		];
 		try {
 			let so = 0;
 			for (const ai of NGUOI_LUAT) {
@@ -941,18 +1023,16 @@ describe("tcb-vet", () => {
 							`tcb vet: ${ket === "url" ? "mo" : "tu choi"} ${n} ${b} message`,
 						);
 					}
-					if (
-						dongCua().some((x) =>
-							JSON.stringify(x ?? "").includes("blob-tep-gia.test"),
-						)
-					) {
-						throw new Error("tcb vet: lo url");
-					}
+					if (loUrl(moiLoiGoi())) throw new Error("tcb vet: lo url");
 				}
 			}
 			if (so !== 28) throw new Error(`tcb vet: thieu o ${so}`);
 		} finally {
 			ghiLog.mockRestore();
+			for (const s of moiNgo) s.mockRestore();
+		}
+		if (!loUrl([[{ message: "x" }, `${GOC_KHO_GIA}/get/a?han=1`]])) {
+			throw new Error("tcb vet: do url mu");
 		}
 
 		const gia: DongLog[] = [
@@ -970,22 +1050,7 @@ describe("tcb-vet", () => {
 			ts.ScriptTarget.Latest,
 			true,
 		);
-		let dungSo = false;
-		const xem = (nut: ts.Node) => {
-			if (
-				ts.isPropertyAssignment(nut) &&
-				ts.isIdentifier(nut.name) &&
-				nut.name.text === "laPhuTrach"
-			) {
-				const chu = nut.initializer.getText(sf);
-				dungSo =
-					/phuTrachId/.test(chu) &&
-					/nguoi\.id/.test(chu) &&
-					!/coTheMo|role|vai/.test(chu);
-			}
-			ts.forEachChild(nut, xem);
-		};
-		xem(sf);
+		const dungSo = laPhuTrachSoOwnerId(sf);
 		if (!dungSo) throw new Error("tcb vet: la phu trach suy tu luat");
 	});
 

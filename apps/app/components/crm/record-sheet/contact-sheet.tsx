@@ -45,7 +45,11 @@ import {
 	OTruongBang,
 	OTruongPhieu,
 } from "@/components/crm/fields/kieu-truong";
-import { FieldsCog, OTruongTuTao } from "@/components/crm/fields/record-fields";
+import {
+	FieldsCog,
+	nguCanhTepCua,
+	OTruongTuTao,
+} from "@/components/crm/fields/record-fields";
 import { mucChiTiet } from "@/components/crm/fields/truong-chuan";
 import { useBoTriTruong } from "@/components/crm/fields/use-bo-tri-truong";
 import { savingValue } from "@/components/crm/inline-field";
@@ -531,13 +535,7 @@ export function ContactOverview({ contact: banDau }: { contact: Contact }) {
 									saving={isSavingField}
 									onSave={saveFields}
 									nguoiDung={users.data}
-									nguCanhTep={{
-										entity: "CONTACT",
-										recordId: contact.id,
-										luuTru: contact.archivedAt !== null,
-										phuTrach: contact.owner?.name ?? null,
-										tep: contact.tepTheoTruong,
-									}}
+									nguCanhTep={nguCanhTepCua("CONTACT", contact)}
 								/>
 							) : muc.key === "company" ? (
 								<InlineCompanyField

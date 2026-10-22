@@ -76,19 +76,6 @@ function nhanh(duong: string[]): TrpcGia {
 }
 
 mock.module("@/lib/trpc/client", () => ({ useTRPC: () => nhanh([]) }));
-mock.module("@/lib/trpc/cache", () => ({
-	useCrmCache: () =>
-		new Proxy(
-			{},
-			{
-				get:
-					(_t, loai: string) =>
-					async (...vao: unknown[]) => {
-						lamMoi.push(`${loai}:${String(vao[0])}`);
-					},
-			},
-		),
-}));
 mock.module("sonner", () => ({
 	toast: {
 		error: (chu: string) => toastLoi.push(chu),
@@ -102,7 +89,19 @@ mock.module("next/navigation", () => ({
 	useSearchParams: () => new URLSearchParams(),
 }));
 
-const { OTruongPhieu } = await import("@/components/crm/fields/kieu-truong");
+const { OTruongTuTao, nguCanhTepCua } = await import(
+	"@/components/crm/fields/record-fields"
+);
+const { dealDetailOutput } = await import(
+	"../../api/src/deals/deals.contracts"
+);
+const { companyDetailOutput } = await import(
+	"../../api/src/companies/companies.contracts"
+);
+const { contactByIdOutput } = await import(
+	"../../api/src/contacts/contacts.contracts"
+);
+const { quyenMoTep } = await import("../../../packages/auth/src/quyen-tep");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { crmMessages } = await import("@/lib/messages/crm");
@@ -110,9 +109,9 @@ const { crmMessages } = await import("@/lib/messages/crm");
 const PHU_TRACH = "Ngô Thị Lan";
 const TEN_TEP = "Hợp đồng ký.pdf";
 const LOAI = [
-	{ entity: "DEAL", cache: "deal" },
-	{ entity: "COMPANY", cache: "company" },
-	{ entity: "CONTACT", cache: "contact" },
+	{ entity: "DEAL" },
+	{ entity: "COMPANY" },
+	{ entity: "CONTACT" },
 ] as const;
 const LY_DO = ["khong-phu-trach", "chua-co-phu-trach", null] as const;
 const NGON_NGU = ["vi", "en"] as const;
@@ -155,6 +154,11 @@ async function dung(phan: ReactElement, ngonNgu: "vi" | "en") {
 	const qc = new QueryClient({
 		defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
 	});
+	const goc = qc.invalidateQueries.bind(qc);
+	qc.invalidateQueries = ((bo?: { queryKey?: unknown[] }) => {
+		lamMoi.push(JSON.stringify(bo?.queryKey ?? []));
+		return goc(bo);
+	}) as typeof qc.invalidateQueries;
 	await act(async () => {
 		root.render(
 			<QueryClientProvider client={qc}>
@@ -169,18 +173,76 @@ async function dung(phan: ReactElement, ngonNgu: "vi" | "en") {
 	return o;
 }
 
-function tep(lyDo: (typeof LY_DO)[number]) {
-	return tepTrongO.parse({
-		id: "t1",
-		tenTep: TEN_TEP,
-		kieu: "pdf",
-		kichThuoc: 2048,
-		taiLuc: "2026-10-22T03:00:00.000Z",
-		taiBoi: { id: "u1", ten: "An" },
-		coTheMo: lyDo === null,
-		coTheXoa: false,
-		lyDoKhongMo: lyDo,
-	});
+const DOC_BY_ID = {
+	DEAL: dealDetailOutput.pick({
+		id: true,
+		archivedAt: true,
+		owner: true,
+		tepTheoTruong: true,
+	}),
+	COMPANY: companyDetailOutput.pick({
+		id: true,
+		archivedAt: true,
+		owner: true,
+		tepTheoTruong: true,
+	}),
+	CONTACT: contactByIdOutput.pick({
+		id: true,
+		archivedAt: true,
+		owner: true,
+		tepTheoTruong: true,
+	}),
+} as const;
+const BY_ID = {
+	DEAL: "deals.byId",
+	COMPANY: "companies.byId",
+	CONTACT: "contacts.byId",
+} as const;
+const NGUOI_PHU_TRACH = {
+	id: "u-lan",
+	name: PHU_TRACH,
+	email: "lan@onehub.test",
+	image: null,
+};
+
+function banGhi(
+	entity: (typeof LOAI)[number]["entity"],
+	lyDo: (typeof LY_DO)[number],
+) {
+	const phuTrachId =
+		lyDo === "khong-phu-trach"
+			? NGUOI_PHU_TRACH.id
+			: lyDo === null
+				? "u-toi"
+				: null;
+	const quyen = quyenMoTep({ vai: "member", userId: "u-toi", phuTrachId });
+	const coChu = entity === "DEAL" || lyDo !== "chua-co-phu-trach";
+	const tho = {
+		id: "r1",
+		archivedAt: null,
+		owner: coChu
+			? lyDo === null
+				? { ...NGUOI_PHU_TRACH, id: "u-toi", name: "Tôi" }
+				: NGUOI_PHU_TRACH
+			: null,
+		tepTheoTruong: {
+			hop_dong: [
+				{
+					id: "t1",
+					tenTep: TEN_TEP,
+					kieu: "pdf",
+					kichThuoc: 2048,
+					taiLuc: "2026-10-22T03:00:00.000Z",
+					taiBoi: { id: "u1", ten: "An" },
+					coTheMo: quyen.coTheMo,
+					coTheXoa: false,
+					lyDoKhongMo:
+						quyen.coTheMo || quyen.lyDo === "ngoai-pham-vi" ? null : quyen.lyDo,
+				},
+			],
+		},
+	};
+	return DOC_BY_ID[entity].parse(tho);
 }
 
 function oPhieu(
@@ -188,21 +250,21 @@ function oPhieu(
 	lyDo: (typeof LY_DO)[number],
 ) {
 	return (
-		<OTruongPhieu
-			moTa={{
-				khoa: "hop_dong",
-				nhan: "Hợp đồng",
-				kieu: "FILE",
-				giaTri: null,
-				luu: () => {},
-				tep: [tep(lyDo)],
-				dichTep: {
-					entity,
-					recordId: "r1",
-					luuTru: false,
-					phuTrach: lyDo === "chua-co-phu-trach" ? null : PHU_TRACH,
-				},
+		<OTruongTuTao
+			field={{
+				id: "f1",
+				key: "hop_dong",
+				label: "Hợp đồng",
+				type: "FILE",
+				showOnSheet: true,
+				required: false,
+				options: [],
+				value: null,
 			}}
+			saving={() => false}
+			onSave={() => {}}
+			nguoiDung={[]}
+			nguCanhTep={nguCanhTepCua(entity, banGhi(entity, lyDo))}
 		/>
 	);
 }
@@ -326,9 +388,13 @@ describe("tcb-o-tep", () => {
 			await nhip(5);
 			if (!toastLoi.includes(m.matQuyen))
 				throw new Error(`tcb o tep: mat quyen khong bao ${loai.entity}`);
+			const dungKhoa = JSON.stringify([BY_ID[loai.entity], { id: "r1" }]);
+			const khacLoai = Object.values(BY_ID)
+				.filter((ten) => ten !== BY_ID[loai.entity])
+				.map((ten) => JSON.stringify([ten, { id: "r1" }]));
 			if (
-				!lamMoi.includes(`${loai.cache}:r1`) ||
-				lamMoi.some((x) => !x.startsWith(`${loai.cache}:`))
+				!lamMoi.includes(dungKhoa) ||
+				lamMoi.some((k) => khacLoai.includes(k))
 			) {
 				throw new Error(`tcb o tep: khong tai lai ${loai.entity}`);
 			}
