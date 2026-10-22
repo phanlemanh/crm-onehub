@@ -13,7 +13,7 @@ evals:
       - "apps/app/app/(app)/[slug]/tin-hieu/**"
       - "packages/validation/src/tin-hieu-cho.ts"
       - "packages/db/src/ban-chup-lo-trinh.ts"
-      - "packages/db/src/tin-hieu-doi-cho.ts"
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
       - "apps/app/test/tin-hieu-nguon.spec.ts"
       - "apps/app/test/support/khoi-tin-hieu-mau.ts"
     expected: |
@@ -21,7 +21,7 @@ evals:
       sinh bang bo ve that cua kit (dungKhoiMau trong apps/app/test/support/khoi-tin-hieu-mau.ts chep tin-hieu/crm,
       tin-hieu/gom, docs/plan va _acceptance/config.yaml cua cay vao thu muc tam, them mot ban gom dat ma vao nhom
       "TTTS-NHOM-<run>", chay scripts/product-map.mjs --root <tam> roi docDuLieu(LO-TRINH.html sinh ra)); ban "cu" co ma
-      o cho kit "chua-gom" (khoa CRM "cho-gom"), ban "moi" o "nhom-chua-cat"; ghi qua chinh ghiBanChupVaBaoTinHieu (ben viet that),
+      o cho kit "chua-gom" (khoa CRM "cho-gom"), ban "moi" o "nhom-chua-cat"; ghi qua chinh ghiBanChupLoTrinh (@crm/db, ben viet hang that),
       commitLuc sau gio dung tiem vao banDung. Mot TinHieu that tao qua TinHieuService.gui cua nguoi gui, danh dau keo ve.
         1 docNguonTinHieu (ham may chu cua hai trang) tra kieu "ban-chup" va du lieu co tin_hieu cua ban moi
         2 trang "cua toi": docTrangThaiDu cho ma do tra khoa "nhom-chua-cat", nhan == tinHieuMessages(vi).nhan.daVaoNhom,
@@ -59,7 +59,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.ttts_bao
     paths:
-      - "packages/db/src/tin-hieu-doi-cho.ts"
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
       - "packages/db/src/ban-chup-lo-trinh.ts"
       - "packages/validation/src/tin-hieu-cho.ts"
       - "packages/validation/src/thong-bao.ts"
@@ -95,7 +95,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.ttts_khong_bao
     paths:
-      - "packages/db/src/tin-hieu-doi-cho.ts"
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
       - "packages/db/src/ban-chup-lo-trinh.ts"
       - "apps/api/src/lo-trinh/**"
       - "apps/api/test/tin-hieu-doi-cho.spec.ts"
@@ -124,7 +124,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.ttts_giao_dich
     paths:
-      - "packages/db/src/tin-hieu-doi-cho.ts"
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
       - "apps/api/src/lo-trinh/**"
       - "apps/api/test/tin-hieu-doi-cho.spec.ts"
       - "apps/app/test/support/khoi-tin-hieu-mau.ts"
@@ -180,7 +180,7 @@ evals:
       - "apps/app/lib/messages/thong-bao.ts"
       - "apps/app/app/(app)/[slug]/tin-hieu/**"
       - "apps/app/lib/tin-hieu/**"
-      - "packages/db/src/tin-hieu-doi-cho.ts"
+      - "apps/api/src/lo-trinh/tin-hieu-doi-cho.ts"
       - "_acceptance/trang-thai-tin-hieu-song/rang/do-man.mjs"
     expected: |
       Kho do rieng (tien-de), nguoi gui la nguoi do. THU TU CO DINH, du lieu mau vao qua duong ghi that:

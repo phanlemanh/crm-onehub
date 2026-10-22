@@ -61,7 +61,7 @@ Mới: `packages/validation/src/tin-hieu-cho.ts` (`@crm/validation/tin-hieu-cho`
 
 ### 3. Báo — lúc CRM nhận bản chụp mới
 
-- Mới `packages/db/src/tin-hieu-doi-cho.ts`: `ghiBanChupVaBaoTinHieu(db, vao, now)` thay `ghiBanChupLoTrinh` ở
+- Mới `apps/api/src/lo-trinh/tin-hieu-doi-cho.ts` (gói `@crm/db` không nhập được `@crm/validation` — chiều ngược đã có): `ghiBanChupVaBaoTinHieu(db, vao, now)` thay `ghiBanChupLoTrinh` ở
   `LoTrinhBanChupService.ghi`. Một `$transaction`: `SELECT … FOR UPDATE` hàng của nguồn → quyết `nhan / trung /
   cu-hon` đúng luật một chiều của LT1c → ghi bản chụp → khi `nhan`, nguồn `crm` và **có hàng cũ**: `doiCho(cũ,
   mới)` → đọc `TinHieu` theo `so` của từng mã → bỏ tín hiệu đã lưu trữ, không có người gửi, người gửi không còn
