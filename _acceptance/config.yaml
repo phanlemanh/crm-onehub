@@ -3379,6 +3379,12 @@ executors:
     ntl_quet: bun _acceptance/nhap-truong-luc-tao/rang/quet.mjs
     ntl_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/nhap-truong-luc-tao/rang/do-man.mjs"'
     ldv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/loc-don-vi-khong-tu-dong/rang/man-loc.mjs"'
+    hsdk_danh_sach: bun _acceptance/ho-so-do-kiem-cheo/rang/danh-sach.mjs
+    hsdk_khai_du: bun _acceptance/ho-so-do-kiem-cheo/rang/khai-du.mjs
+    hsdk_chieu_do: bun _acceptance/ho-so-do-kiem-cheo/rang/chieu-do.mjs
+    hsdk_ghim_xanh: bun _acceptance/ho-so-do-kiem-cheo/rang/ghim-xanh.mjs
+    hsdk_yaml_chuan: bun _acceptance/ho-so-do-kiem-cheo/rang/yaml-chuan.mjs
+    hsdk_loi_ra: bun _acceptance/ho-so-do-kiem-cheo/rang/loi-ra.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

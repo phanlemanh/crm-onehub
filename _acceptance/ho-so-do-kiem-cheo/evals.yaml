@@ -1,0 +1,82 @@
+schema_version: 1
+slug: ho-so-do-kiem-cheo
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.hsdk_danh_sach
+    paths:
+      - "_acceptance/ho-so-do-kiem-cheo/rang/**"
+      - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
+      - "_acceptance/ho-so-do-kiem-cheo/do-lai-nen.json"
+    expected: 'exit 0; in «danh-sach: <h> hồ sơ đầu vào · <e> eval máy · <n> dòng + <m> eval hoàn lại = <k> đỏ ở mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f» và số h, e, k phải bằng số ở Context của contract.md (27, 345, 73 — đọc từ contract, lệch → «SO_LECH_CONTEXT»). Tập đầu vào suy từ nguồn, không khai cứng: mục ngoai_vong.ho_so và hoan_lai.ho_so (hang F28) của git show <mốc nền>:_acceptance/ba-ho-so-do-san/danh-sach.json, cộng so-okr-tu-chay, cộng mọi hồ sơ signed-off/machine-cleared mà evals.yaml ở mốc nền không đọc được bằng YAML.parseDocument của gói yaml trong kho. Tập eval kỳ vọng = evalMay (parseEvals + isRepinMachineEval của kit) trên evals.yaml ở mốc nền; do-lai-nen.json thiếu hồ sơ hay eval nào → «THIEU_DO <khoá>», thừa → «THUA_DO <khoá>»; mang sha khác mốc nền → mã 2. Tập đỏ = mọi (hồ sơ, eval) trong do-lai-nen.json có exit khác ky_vong; tập khai = dòng của mục dong cộng eval khai trong mục hoan_lai; so BẰNG theo khoá <hồ sơ>:<eval>: thiếu → «THIEU <khoá>», thừa → «THUA <khoá>», exit 1. xu_ly ngoài bảy giá trị → «XU_LY_LA <khoá>». Hồ sơ YAML hỏng không có đúng một dòng sua-cu-phap → «THIEU_SUA_CU_PHAP <hồ sơ>». Đối chứng hai chiều trên cùng tệp: lượt tự kiểm bỏ một dòng khỏi bản sao danh sách → phải in THIEU đúng khoá; thêm một dòng bịa → THUA; bỏ một eval khỏi bản sao do-lai-nen → THIEU_DO. Tái lập (--tai-lap, chạy trong lượt chấm): dựng cây tạm tách ở mốc nền (git worktree add --detach, nối .env và node_modules bằng symlink), chạy rang/do-lai.mjs trên MỌI hồ sơ đầu vào với các eval mà lệnh không đi qua tien-de.mjs, mot-luot.sh hay cổng APP_URL; đòi tập đỏ của nhóm ấy bằng tập đỏ của do-lai-nen.json cùng nhóm — lệch → «DO_LAI_LECH <khoá>»; in «tai-lap: <a> eval tái lập · <b> eval cần máy chủ không tái lập (khai)».'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.hsdk_khai_du
+    paths:
+      - "_acceptance/ho-so-do-kiem-cheo/rang/**"
+      - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
+      - "_acceptance/**"
+    expected: 'exit 0; in «khai-du: <k> tệp đổi ngoài hồ sơ này, <m> eval đổi, mọi thay đổi có dòng danh sách». Tập thay đổi của vòng = các commit không phải merge có «(ho-so-do-kiem-cheo)» trong thông điệp, từ mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f tới HEAD (không neo merge-base); mọi commit không phải merge trong khoảng ấy mà không là tổ tiên của origin/onehub (đã fetch) phải mang nhãn đó, không mang → «COMMIT_KHONG_NHAN <sha>»; tệp đổi = hợp tệp các commit mang nhãn trừ _acceptance/ho-so-do-kiem-cheo/** và docs/**. bang-truoc-sau.md phải bằng từng byte bản do rang/bang.mjs sinh lại từ danh-sach.json, diff và do-lai-nen.json → lệch «BANG_LECH». Luật: tệp của hồ sơ không có dòng → «NGOAI_DANH_SACH <tệp>»; tệp của hồ sơ ở hoan_lai đổi ròng → «HOAN_LAI_CON_DOI <tệp>»; contract.md của hồ sơ khác đổi → «DOI_LOI_AC <tệp>»; eval đổi status/cmd/expected/paths (parse bằng eval-yaml của kit, bản trước commit đầu vs bản sau commit cuối chạm tệp) mà không có dòng (hồ sơ, eval) với xu_ly khớp → «KHONG_KHAI <hồ sơ>:<eval>»; tệp đổi ngoài evals.yaml/run-log.jsonl/evidence-report.md không được dòng sua-rang/neo-co-dinh nêu ở trường tep → «TEP_KHONG_KHAI <tệp>»; dòng khai-not-run/sua-rang/neo-co-dinh thiếu ly_do hay can_cu hỏng (git cat-file -e, hoặc tệp:dòng không có ở HEAD) → «CAN_CU_HONG <khoá>»; dòng config vòng đổi (so từng khoá bản cha với bản của commit) không thuộc khoá mà evals.yaml của một hồ sơ có dòng trỏ tới → «CONFIG_NGOAI <khoá>»; khoá có ở bản cha đổi giá trị mà không phải khoá đó → «CONFIG_DOI_GIA_TRI <khoá>»; tệp ngoài _acceptance/** và docs/** → «NGOAI_KHO_HO_SO <tệp>». Đối chứng hai chiều, mỗi luật một cặp trên bản sao: eval đổi sang not-run không dòng → KHONG_KHAI đúng khoá; can_cu sha bịa → CAN_CU_HONG; sửa một chữ contract.md của hồ sơ có dòng → DOI_LOI_AC; đổi giá trị một khoá config của hồ sơ không có dòng → CONFIG_NGOAI; thêm một tệp apps/** vào tập đổi → NGOAI_KHO_HO_SO; một commit không nhãn (trên nhánh tạm trong bản sao kho) đổi status một eval → COMMIT_KHONG_NHAN đúng sha; sửa một chữ trong bản sao bang-truoc-sau.md → BANG_LECH.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.hsdk_chieu_do
+    paths:
+      - "_acceptance/ho-so-do-kiem-cheo/rang/**"
+      - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
+      - "_acceptance/ho-so-do-kiem-cheo/dot-bien/**"
+      - "_acceptance/*/rang/**"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    expected: 'exit 0; in một dòng mỗi dòng danh sách sua-rang/neo-co-dinh «<hồ sơ>:<eval> nguyên vẹn <mã> · đột biến <tên> <mã> · thông điệp có» và dòng tổng «chieu-do: <n> đột biến, <n> bắt đúng». Mỗi dòng khai dot_bien {ten, ban_va, thong_diep}; ban_va là tệp dưới _acceptance/ho-so-do-kiem-cheo/dot-bien/. Bộ chạy dựng MỘT cây tạm tách ở HEAD (git worktree add --detach trong tmpdir, nối .env và node_modules bằng symlink), với mỗi dòng: chạy lệnh của eval (giải config: bằng resolveConfigKey của kit, lệnh đo màn qua tien-de.mjs như khai) trên cây nguyên vẹn → phải trả đúng mã kỳ vọng, lệch → «NGUYEN_VEN_DO <khoá>»; git apply ban_va → không áp được → «BAN_VA_HONG <khoá>»; chạy lại → mã bằng kỳ vọng → «DOT_BIEN_LOT <khoá>», đầu ra không chứa thong_diep → «SAI_THONG_DIEP <khoá>»; git checkout trả cây nguyên vẹn trước dòng kế; dọn cây tạm ở mọi lối thoát (kể cả SIGINT). Dòng neo-co-dinh khai thêm dot_bien_neo (bản vá đổi sha neo thành một sha không có) → phải trả mã 2, không phải 0 → «NEO_SAI_XANH <khoá>». Dòng sua-rang/neo-co-dinh thiếu dot_bien → «THIEU_DOT_BIEN <khoá>». --chi <hồ sơ> chỉ chạy dòng của hồ sơ đó (dùng khi sửa từng răng, không thay lượt đầy đủ). Đối chứng của chính bộ chạy trên cùng cây: một dòng giả có ban_va rỗng phải ra DOT_BIEN_LOT, một dòng giả có thong_diep bịa phải ra SAI_THONG_DIEP.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.hsdk_ghim_xanh
+    paths:
+      - "_acceptance/ho-so-do-kiem-cheo/rang/**"
+      - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
+      - "_acceptance/*/run-log.jsonl"
+      - "_acceptance/*/evidence-report.md"
+    expected: 'exit 0; in một dòng mỗi hồ sơ cần ghim «<hồ sơ>: repin <run_id> sha <sha7> · suites <k>/<k> · evals <m>/<m> · recheck sạch» và dòng tổng. Hồ sơ cần ghim = hồ sơ có ít nhất một dòng khác tu-het và san-pham-hong (đọc danh-sach.json, không khai cứng). Với mỗi hồ sơ: dòng kind repin cuối trong run-log.jsonl có ts mới hơn ngày commit mốc nền → không có thì «CHUA_GHIM <hồ sơ>»; suites_exit có phần tử khác 0 hay evals_exit có mã khác kỳ vọng (expectedExits của kit) → «GHIM_DO <hồ sơ>:<eval>»; verified_commit của evidence-report.md khác sha dòng ấy → «LECH_SHA <hồ sơ>»; commit cuối chạm _acceptance/<hồ sơ>/ (trừ run-log.jsonl, evidence-report.md) không phải tổ tiên của sha ấy (git merge-base --is-ancestor) → «GHIM_TRUOC_SUA <hồ sơ>»; node <gói acceptance-gate>/scripts/recheck-evidence.cjs --slug <hồ sơ> in VIOLATION → «RECHECK <hồ sơ>». Đối chứng hai chiều trên cùng run-log: lượt tự kiểm chép run-log của một hồ sơ vào tmpdir, đổi một phần tử suites_exit thành 1 → GHIM_DO; đổi sha → LECH_SHA.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.hsdk_yaml_chuan
+    paths:
+      - "_acceptance/ho-so-do-kiem-cheo/rang/**"
+      - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
+      - "_acceptance/*/evals.yaml"
+    expected: 'exit 0; in một dòng mỗi hồ sơ có dòng sua-cu-phap «<hồ sơ>: yaml chuẩn đọc được · <n> eval, bản ghi kit giống mốc nền» và dòng tổng. Đọc evals.yaml ở HEAD bằng gói yaml của kho (YAML.parseDocument, errors rỗng) — lỗi → «YAML_HONG <hồ sơ>:<dòng>:<cột>»; so bản ghi của parseEvals(text, [executor, cmd, status, criterion, expected, paths]) và expectedExits của kit giữa HEAD và git show <mốc nền 6be0bb688900ecd8843989bd8f8b3095548b604f>:<tệp> theo từng id — khác → «NGHIA_DOI <hồ sơ>:<eval>:<trường>». Đối chứng hai chiều trên cùng tệp: lượt tự kiểm chép evals.yaml của một hồ sơ đã sửa vào tmpdir, cấy lại đoạn lỗi cú pháp của bản mốc nền → YAML_HONG gọi đúng tệp; đổi một chữ trong expected → NGHIA_DOI.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: judgment
+    inputs:
+      - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
+      - "_acceptance/ho-so-do-kiem-cheo/bang-truoc-sau.md"
+    question: 'Với từng dòng khai-not-run, sua-rang, neo-co-dinh và san-pham-hong trong danh-sach.json (đối chiếu khối tương ứng của bang-truoc-sau.md — khối mang đuôi đầu ra đỏ ở mốc nền, nguyên văn câu căn cứ, eval trước/sau và đầu ra đột biến; chỉ xét điều đọc được trong hai tệp này): lý do có thuộc một trong bốn loại — (a) vật đổi có chủ đích theo một hồ sơ đã ký sau, với căn cứ trích được (AC hay dòng sổ của hồ sơ đó); (b) «vòng này» tính theo nhánh trôi nên ở nhánh chính phạm vi rỗng; (c) lỗi của chính răng; (d) ô cần thứ máy đo không bao giờ có — không? Có dòng nào hạ một ô (khai-not-run, nới neo, đổi kỳ vọng) trong khi đầu ra trước/sau cho thấy sản phẩm hỏng thật không? Mỗi dòng san-pham-hong có nói đúng chỗ hỏng của sản phẩm (tệp, hành vi) và vì sao không quyết định đã ký nào cho phép không? Trả lời từng dòng có vấn đề, kèm khoá <hồ sơ>:<eval>.'
+    expected: 'PASS khi mọi dòng thuộc một trong bốn loại, không dòng nào hạ một ô vì sản phẩm hỏng, và mọi dòng san-pham-hong nêu đúng chỗ hỏng; FAIL gọi tên từng dòng sai.'
+    evidence_required: [run_id, verdicts, verified_at]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.hsdk_loi_ra
+    paths:
+      - "_acceptance/ho-so-do-kiem-cheo/rang/**"
+      - "_acceptance/ho-so-do-kiem-cheo/danh-sach.json"
+    expected: 'exit 0; in một dòng mỗi hồ sơ hoàn lại «<hồ sơ>: <n> eval đỏ · tín hiệu <mã> · <k> ô có sửa răng ghi sẵn» và dòng tổng. Với mỗi dòng san-pham-hong: hồ sơ của nó phải ở hoan_lai → không có thì «SAN_PHAM_HONG_NGOAI_HOAN_LAI <khoá>»; hoan_lai của hồ sơ đó phải mang tin_hieu {ma, tieu_de, noi_dung} với ma đúng khuôn mã yêu cầu của lõi đợt (^F1-[0-9]+$), tieu_de gọi tên hồ sơ và mọi eval san-pham-hong của nó, noi_dung nêu tệp sản phẩm hỏng → thiếu hay lệch «TIN_HIEU_VANG <hồ sơ>» (giới hạn khai: tệp tín hiệu nằm ở cửa tín hiệu ngoài cây đang xét, bộ kéo về của kho đổi tên khi đưa vào git, nên phép đo không đọc tệp ấy); mọi eval đỏ khác của hồ sơ đó ở mốc nền phải có mục sua_san (xu_ly đề xuất + tệp + đột biến) → thiếu «CHUA_TRA <hồ sơ>:<eval>». Đối chứng hai chiều trên cùng tệp: bản sao danh sách bỏ ma_tin_hieu của một hồ sơ → TIN_HIEU_VANG; bỏ một mục sua_san → CHUA_TRA.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
