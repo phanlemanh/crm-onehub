@@ -1,0 +1,75 @@
+{
+  "base": "b32a1495f4accacd69df646b359976a84ea6d930",
+  "dong": [
+    {
+      "slug": "tat-preview-agent-okr",
+      "evals": [
+        "E5",
+        "E6",
+        "E8",
+        "E10"
+      ],
+      "cach": "cho-lan-chu",
+      "run_id": "repin-20261020T230558Z-65599",
+      "ly_do": "E5: Thước gắn nhánh gốc: tìm commit không-gộp chạm apps/agent-okr theo --first-parent trên onehub — lịch sử chính chỉ có commit gộp nên luôn «không có commit». PR #439 (F31) đang sửa evals.yaml của hồ sơ này nên F35 không chạm. E6, E8, E10: Thước gọi đường cứng /opt/homebrew/bin/vercel, máy chạy làn không có Vercel CLI. PR #439 (F31) đang sửa evals.yaml của hồ sơ này nên F35 không chạm.",
+      "pr": [
+        {
+          "number": 439,
+          "headRefName": "fix/thu-paths-e15-giai-doan"
+        }
+      ]
+    },
+    {
+      "slug": "vai-chi-okr",
+      "evals": [
+        "E13"
+      ],
+      "cach": "ngoai-pham-vi",
+      "run_id": "repin-20261020T233201Z-68220",
+      "ly_do": "Thước đếm cũ, cần cập nhật số kỳ vọng 3→5 (người chỉ-OKR) và 9→12 (quản trị): thanh điều hướng đổi có chủ đích — Tài liệu (2198dd003), Lộ trình (b11b15430), Việc (43e03f9e6); không phải lộ quyền. Việc sửa thước thuộc làn chủ hồ sơ vai-chi-okr.",
+      "lan_chu": "làn chủ hồ sơ vai-chi-okr",
+      "viec_phu": "F1-16"
+    },
+    {
+      "slug": "ba-ho-so-do-san",
+      "evals": [
+        "E2",
+        "E3",
+        "E7"
+      ],
+      "cach": "cho-lan-chu",
+      "run_id": "repin-20261020T233201Z-68220",
+      "ly_do": "E2: Thước đọc tệp kiểm chéo tạm .acceptance-runs/kiem-cheo/2026-10-11.json, không nằm trong kho và đã mất. PR #439 (F31) đang chạm hồ sơ này nên F35 không chạm. E3: Thước đếm LO-TRINH.html và PRODUCT-MAP.md (máy vẽ) là tệp đổi chưa khai. PR #439 (F31) đang chạm hồ sơ này nên F35 không chạm. E7: Cùng gốc E2: tệp kiểm chéo tạm 11/10 đã mất. PR #439 (F31) đang chạm hồ sơ này nên F35 không chạm.",
+      "pr": [
+        {
+          "number": 439,
+          "headRefName": "fix/thu-paths-e15-giai-doan"
+        }
+      ]
+    },
+    {
+      "slug": "thu-haiku-tro-ly-okr",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval ngoài làn máy không khai paths (E8) nên gộp mã nào cũng làm nó cũ; lượt ghim hơn 60 phút. Ghim lười khi #439 (F31) tới lượt gộp.",
+      "quyet": "d-20261021T191250Z-17"
+    },
+    {
+      "slug": "bo-cau-hoi-mau",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval không khai paths nên gộp mã nào cũng làm nó cũ; đã ghim xanh bốn lần mà lần nào cũng cũ trước khi PR lô gộp. Ghim lười khi một PR khác chạm tới.",
+      "quyet": "d-20261021T113908Z-15"
+    },
+    {
+      "slug": "lich-su-va-luu-tru-trang",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval không khai paths nên gộp mã nào cũng làm nó cũ; đã ghim xanh bốn lần mà lần nào cũng cũ trước khi PR lô gộp. Ghim lười khi một PR khác chạm tới.",
+      "quyet": "d-20261021T113908Z-15"
+    },
+    {
+      "slug": "ngan-ho-so-trong-lo-trinh",
+      "cach": "ghim-luoi",
+      "ly_do": "Có eval không khai paths nên gộp mã nào cũng làm nó cũ; đã ghim xanh bốn lần mà lần nào cũng cũ trước khi PR lô gộp. Ghim lười khi một PR khác chạm tới.",
+      "quyet": "d-20261021T113908Z-15"
+    }
+  ]
+}
