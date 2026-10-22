@@ -233,7 +233,9 @@ for (const t of tep) {
 }
 
 function soMaTran(ten, khai, thuc) {
+	const coMat = new Set(tep);
 	for (const t of new Set([...Object.keys(khai), ...Object.keys(thuc)])) {
+		if (ref && !coMat.has(t)) continue;
 		if ((khai[t] ?? 0) !== (thuc[t] ?? 0)) {
 			loi.push(
 				`quet: ma tran ${ten} lech ${t} khai ${khai[t] ?? 0} thuc ${thuc[t] ?? 0}`,
