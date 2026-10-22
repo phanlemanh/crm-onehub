@@ -14,6 +14,7 @@ import {
 	ItemActions,
 	ItemContent,
 	ItemDescription,
+	ItemFooter,
 	ItemGroup,
 	ItemMedia,
 	ItemTitle,
@@ -22,6 +23,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { NguonKeoTha } from "@crm/ui/components/nguon-keo-tha";
 import { Spinner } from "@crm/ui/components/spinner";
 import { formatBytes } from "@crm/ui/hooks/use-file-upload";
+import { useIsMobile } from "@crm/ui/hooks/use-mobile";
 import {
 	CAC_KIEU_TEP,
 	KIEU_TEP,
@@ -121,6 +123,7 @@ export function OTep({
 	const xoaTep = useMutation(trpc.fieldFiles.remove.mutationOptions());
 	const [dongTai, setDongTai] = useState<DongTai[]>([]);
 	const [hoiXoa, setHoiXoa] = useState<TepOTep | null>(null);
+	const HangNut = useIsMobile() ? ItemFooter : ItemActions;
 
 	const bat = trangThai.data?.bat !== false;
 	const dangTai = dongTai.filter((d) => d.trangThai === "dang").length;
@@ -219,7 +222,7 @@ export function OTep({
 									{t.taiBoi?.ten ? ` · ${m.taiBoi(t.taiBoi.ten)}` : null}
 								</ItemDescription>
 							</ItemContent>
-							<ItemActions>
+							<HangNut>
 								<Button
 									variant="ghost"
 									size="sm"
@@ -241,7 +244,7 @@ export function OTep({
 										{m.nutXoa}
 									</Button>
 								) : null}
-							</ItemActions>
+							</HangNut>
 						</Item>
 					))}
 					{dongTai.map((d) => (
@@ -261,7 +264,7 @@ export function OTep({
 										: m.loi[d.loi ?? "khongXong"]}
 								</ItemDescription>
 							</ItemContent>
-							<ItemActions>
+							<HangNut>
 								{d.trangThai === "dang" ? <Spinner /> : null}
 								{d.trangThai === "loi" && d.loi === "khongXong" ? (
 									<Button
@@ -281,7 +284,7 @@ export function OTep({
 										{m.bo}
 									</Button>
 								) : null}
-							</ItemActions>
+							</HangNut>
 						</Item>
 					))}
 				</ItemGroup>
