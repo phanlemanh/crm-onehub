@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e6c2463394dc2a596bf6983ae119ba934d98b68f
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-22 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 16 eval, 7 suite xanh; vòng 1 REJECT vì năm chỗ yếu thước, đã sửa); Ngoài-3 và Ngoài-9 mở hợp đồng mới, 11 mục ghi Known limits
 ---
 
 # Evidence Report: mot-nut-tao-muc-tieu

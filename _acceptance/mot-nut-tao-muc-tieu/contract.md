@@ -5,7 +5,7 @@ slug: mot-nut-tao-muc-tieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-21T07:42:33Z
 design_doc: docs/superpowers/specs/2026-10-21-mot-nut-tao-muc-tieu-design.md
@@ -70,3 +70,15 @@ Ngưỡng của `opportunity.md`: «Đầu trang khu chỉ còn một nút chín
 
 - 11 hồ sơ đã ký có thước đọc hàng nút cũ hay bấm đường cũ (danh sách ở design doc, mục «Rủi ro đã thấy»); cách xử lý là câu Hỏi-1 ở Cổng Phạm vi.
 - AC-5 và AC-7 viết theo khuyến nghị của Hỏi-3 (đường không đi được hiện khoá kèm lý do). Chủ kho chọn ẩn thì câu «dòng khoá…» của hai AC đổi thành «dòng không hiện», E9 ô (b) và E13 ô (3)–(8) đổi theo, trước khi duyệt.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: khi người không có quyền mở thẳng đường dẫn tạo mục tiêu, bài kiểm chỉ chứng minh hộp không mở, chưa bắt được nếu sau này có lần ghi dữ liệu lọt qua.
+  - Ngoài-2: nếu sau này có nút tạo lọt lại vào đầu trang Sơ đồ hay sơ đồ quanh mục tiêu qua một thành phần dựng ở trình duyệt, bài kiểm có thể không phát hiện.
+  - Ngoài-4: trong mã còn nút Soạn cũ không hiện ở màn nào, nên hai bản logic soạn có thể lệch nhau về sau.
+  - Ngoài-5: mở liên kết cũ dẫn thẳng vào bước chọn mẫu cho đơn vị chưa có mẫu thì thấy hộp trống và chỉ còn cách đóng lại.
+  - Ngoài-6: lúc danh sách mẫu còn đang tải hoặc tải lỗi, dòng «Từ mẫu» có thể báo sai là chưa có mẫu cho cấp này.
+  - Ngoài-7: người chỉ được xem có thể mở liên kết để thấy danh sách cuộc soạn của đơn vị dù không có quyền soạn.
+  - Ngoài-8: dòng bị khoá trong hộp «Thêm mục tiêu» bị làm mờ nên câu lý do khoá hơi khó đọc, nhất là với người nhìn kém.
+  - Ngoài-10: hiếm khi, bấm «Soạn cùng Kara» đúng lúc vừa hết lượt thì hộp đóng mà không báo vì sao.
+  - Ngoài-11: mở lại liên kết đang ở bước chọn mẫu khi đơn vị không còn mẫu thì ngăn chỉ còn danh sách trống và nút Huỷ.
+  - Ngoài-12: dòng bị khoá trong hộp có thể vẫn đổi nền khi rê chuột như bấm được, và bài kiểm hiện tại không bắt lỗi này.
+  - Ngoài-13: bàn đo màn không phát hiện nếu một lần bấm lưu sinh ra hai mục tiêu trùng tên.
