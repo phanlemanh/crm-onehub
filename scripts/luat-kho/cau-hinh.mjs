@@ -183,7 +183,7 @@ export const LUAT_KHO_CAY = {
 				"const rows = await this.db.agentDefinition.findMany({",
 			],
 			"apps/api/src/fields/fields.service.ts": [
-				"await this.db.fieldDefinition.delete({ where: { id } });",
+				"await tx.fieldDefinition.delete({ where: { id } });",
 			],
 		},
 		"hang-so-o-cau-hinh": {

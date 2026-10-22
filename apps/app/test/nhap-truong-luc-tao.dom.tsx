@@ -610,6 +610,7 @@ function thoaThuanCo(coGiaTri: boolean) {
 				archivedAt: null,
 				contacts: [],
 				archivedContacts: [],
+				tepTheoTruong: {},
 			}),
 		),
 	);
