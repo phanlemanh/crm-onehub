@@ -8,6 +8,7 @@ import {
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { docDuLieu } from "@/lib/lo-trinh/doc-du-lieu";
 import type { TinHieuMessages } from "@/lib/messages/tin-hieu";
+import { nhanCuaCho } from "@/lib/tin-hieu/nhan";
 
 const NGHIA_CHO: Record<KhoaChoTinHieu, NghiaTrangThai> = {
 	"cho-gom": "nhap",
@@ -20,30 +21,6 @@ const NGHIA_CHO: Record<KhoaChoTinHieu, NghiaTrangThai> = {
 	"da-giao": "xong",
 	"hang-khac": "nhap",
 };
-
-export function nhanCuaCho(khoa: KhoaChoTinHieu, m: TinHieuMessages): string {
-	const n = m.nhan;
-	switch (khoa) {
-		case "cho-gom":
-			return n.choGom;
-		case "le":
-			return n.le;
-		case "da-phu":
-			return n.daCoViec;
-		case "nhom-chua-cat":
-			return n.daVaoNhom;
-		case "chan-troi":
-			return n.deSau;
-		case "chua-bat-dau":
-			return n.chuaBatDau;
-		case "dang-lam":
-			return n.dangLam;
-		case "da-giao":
-			return n.daGiao;
-		case "hang-khac":
-			return n.khac;
-	}
-}
 
 function cauSauGom(
 	b: DuongTinHieu,
