@@ -720,7 +720,7 @@ export class FieldsService {
 		);
 		if (thieu) {
 			throw new LoiGiaTriTruong(
-				{ khoa: thieu.key, lyDo: "thieu" },
+				{ khoa: thieu.key, nhan: thieu.label, lyDo: "thieu" },
 				`${thieu.label} is required.`,
 			);
 		}
@@ -1153,6 +1153,8 @@ export class FieldsService {
 				throw new LoiGiaTriTruong(
 					{
 						khoa: error.key,
+						nhan:
+							definitions.find((d) => d.key === error.key)?.label ?? error.key,
 						lyDo: laGiaTriRong(values[error.key]) ? "thieu" : "gia-tri",
 					},
 					error.message,

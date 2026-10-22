@@ -10,9 +10,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { FIELD_TYPES } from "@crm/db/fields";
-import { docLoiTruong } from "@crm/validation/loi-truong";
+import { docLoiTruong, loiTruong } from "@crm/validation/loi-truong";
 import type { INestApplication } from "@nestjs/common";
 import request from "supertest";
+import { z } from "zod";
 import { createApp } from "../src/create-app";
 import {
 	fieldListOutput,
@@ -39,7 +40,24 @@ type GiaJson =
 	| GiaJson[]
 	| { [khoa: string]: GiaJson };
 type DauVao = { [khoa: string]: GiaJson };
-type TraLoi = { status: number; data: unknown; ma: string; loi: unknown };
+const loiTrpc = z
+	.object({
+		message: z.string(),
+		code: z.number(),
+		data: z.object({
+			code: z.string(),
+			httpStatus: z.number(),
+			stack: z.string().optional(),
+			path: z.string().optional(),
+			truong: loiTruong.optional(),
+		}),
+	})
+	.nullable()
+	.catch(null);
+
+type LoiTrpc = z.infer<typeof loiTrpc>;
+
+type TraLoi = { status: number; data: unknown; ma: string; loi: LoiTrpc };
 type Entity = "DEAL" | "COMPANY" | "CONTACT";
 type Duong = "trpc" | "rest";
 
@@ -65,7 +83,7 @@ async function goi(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
 		status: res.status,
 		data: res.body?.result?.data,
 		ma: String(res.body?.error?.data?.code ?? ""),
-		loi: res.body?.error,
+		loi: loiTrpc.parse(res.body?.error ?? null),
 	};
 }
 
@@ -79,7 +97,7 @@ async function doc(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
 		status: res.status,
 		data: res.body?.result?.data,
 		ma: String(res.body?.error?.data?.code ?? ""),
-		loi: res.body?.error,
+		loi: loiTrpc.parse(res.body?.error ?? null),
 	};
 }
 
@@ -93,7 +111,7 @@ async function quaRest(duongDan: string, dauVao: DauVao): Promise<TraLoi> {
 		status: res.status,
 		data: res.body?.result?.data ?? res.body,
 		ma: res.status === 400 ? "BAD_REQUEST" : String(res.status),
-		loi: res.body,
+		loi: loiTrpc.parse(null),
 	};
 }
 
@@ -103,17 +121,17 @@ function ok(tra: TraLoi, nhan: string): unknown {
 	return tra.data;
 }
 
-const THU_TUC_TAO: Record<Entity, string> = {
+const THU_TUC_TAO = {
 	DEAL: "deals",
 	COMPANY: "companies",
 	CONTACT: "contacts",
-};
+} as const satisfies Record<Entity, string>;
 
-const DEM_BAN_GHI: Record<Entity, () => Promise<number>> = {
+const DEM_BAN_GHI = {
 	DEAL: () => db.deal.count(),
 	COMPANY: () => db.company.count(),
 	CONTACT: () => db.contact.count(),
-};
+} as const satisfies Record<Entity, () => Promise<number>>;
 
 async function taoTruong(
 	entity: Entity,
@@ -184,21 +202,19 @@ async function giaTriCua(entity: Entity, id: string): Promise<GiaTriDoc[]> {
 }
 
 function loiDocDuoc(tra: TraLoi) {
-	const loi = tra.loi as { data?: unknown } | undefined;
-	return docLoiTruong(loi?.data);
+	return tra.loi?.data.truong ?? null;
 }
 
 type ThayThe = [string, string][];
 
-function chuanHoaLoi(loi: unknown, thay: ThayThe): string {
-	const ban = structuredClone(loi) as { data?: { stack?: unknown } };
-	if (ban.data) delete ban.data.stack;
+function chuanHoaLoi(loi: LoiTrpc, thay: ThayThe): string {
+	const ban = loi ? { ...loi, data: { ...loi.data, stack: undefined } } : null;
 	let chuoi = JSON.stringify(ban, null, "\t");
 	for (const [cu, moi] of thay) chuoi = chuoi.replaceAll(cu, moi);
 	return `${chuoi}\n`;
 }
 
-function ghiHaySo(tep: string, loi: unknown, thay: ThayThe, nhanLoi: string) {
+function ghiHaySo(tep: string, loi: LoiTrpc, thay: ThayThe, nhanLoi: string) {
 	const duong = join(THU_MUC_FIXTURE, tep);
 	const noiDung = chuanHoaLoi(loi, thay);
 	if (GHI_FIXTURE) {
@@ -235,9 +251,14 @@ beforeAll(async () => {
 	congTyNen = nen.id;
 	daTao.congTy.push(nen.id);
 	khoaApi = String(
-		(ok(await goi("apiKeys.create", { name: ma("khoa"), expiresInDays: null }), "tao khoa api") as {
-			key: string;
-		}).key,
+		(
+			ok(
+				await goi("apiKeys.create", { name: ma("khoa"), expiresInDays: null }),
+				"tao khoa api",
+			) as {
+				key: string;
+			}
+		).key,
 	);
 });
 
@@ -412,9 +433,7 @@ describe("ntl-api-bat-buoc", () => {
 						duong,
 					);
 					if (tra.status !== 400)
-						throw new Error(
-							`ntl api bat buoc: lot ${entity} ${duong} ${cach}`,
-						);
+						throw new Error(`ntl api bat buoc: lot ${entity} ${duong} ${cach}`);
 					const sau = await DEM_BAN_GHI[entity]();
 					if (sau !== truoc)
 						throw new Error(
@@ -577,8 +596,9 @@ describe("ntl-api-kara-dien", () => {
 describe("ntl-api-ban-ghi-cu", () => {
 	test("ban ghi cu trong truong vua bat buoc van sua duoc", async () => {
 		const maHoSo = await taoTruong("DEAL", "Ma ho so cu", "TEXT");
-		const cu = (ok(await tao("DEAL", {}), "tao thoa thuan cu") as { id: string })
-			.id;
+		const cu = (
+			ok(await tao("DEAL", {}), "tao thoa thuan cu") as { id: string }
+		).id;
 		const coGiaTri = (
 			ok(
 				await tao("DEAL", { fields: { [maHoSo.key]: "HS-1" } }),
@@ -598,7 +618,10 @@ describe("ntl-api-ban-ghi-cu", () => {
 			data: { name: "Tên mới" },
 		});
 		if (sua.status !== 200) throw new Error("ntl api ban ghi cu: chan sua");
-		const banGhi = ok(await doc("deals.byId", { id: cu }), "doc ban ghi cu") as {
+		const banGhi = ok(
+			await doc("deals.byId", { id: cu }),
+			"doc ban ghi cu",
+		) as {
 			name: string;
 		};
 		if (banGhi.name !== "Tên mới")

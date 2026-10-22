@@ -4,6 +4,7 @@ export const LY_DO_LOI_TRUONG = ["thieu", "gia-tri"] as const;
 
 export const loiTruong = z.object({
 	khoa: z.string().min(1),
+	nhan: z.string().min(1),
 	lyDo: z.enum(LY_DO_LOI_TRUONG),
 });
 
