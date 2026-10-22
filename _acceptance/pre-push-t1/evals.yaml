@@ -22,7 +22,8 @@ evals:
        3 ref moi chi .github/workflows/ci.yml -> rong
        4 doi ten apps/api/a.ts -> docs/a2.md -> rong
        5 remote co san (da day ma), day them commit docs -> «test build», «(1 tệp)»
-       6 remote co san, gop onehub mang tep ma vao roi day -> rong
+       6 remote co san, gop onehub mang tep ma vao roi day -> «test build», dong «lần đẩy chỉ mang phần của onehub (1 tệp)…»
+         (doi 21/10 theo pre-push-phan-rieng-pr, Hoi-1; truoc do -> rong)
        7 ref moi, commit 1 ma + commit 2 docs -> rong (goc la merge-base, khong phai commit cuoi)
        8 sha remote = sha local -> rong
        9 chi dong xoa (sha local toan 0) -> rong
