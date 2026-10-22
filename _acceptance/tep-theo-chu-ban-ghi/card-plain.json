@@ -1,41 +1,4 @@
 {
-  "feature_plain": "Nhân viên mở được hợp đồng trong thoả thuận, công ty hay cá nhân mình phụ trách; đổi người phụ trách thì người mới mở được ngay, người cũ thì không.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho người phụ trách và quản trị mở tệp; nhân viên khác, bản ghi chưa có người phụ trách và vai chỉ OKR thì bị từ chối, và nút «Mở» khoá đúng theo câu trả lời của máy chủ."},
-    {"id": "AC-2", "p": "Sẽ chuyển quyền mở sang người mới ngay lần bấm kế sau mỗi cách đổi người phụ trách — sửa trên phiếu, gán hàng loạt, gỡ về trống — mà không lưu quyền ở chỗ nào riêng."},
-    {"id": "AC-4", "p": "Sẽ cho xoá tệp theo luật anh chọn ở Hỏi-2, và quyền xoá đi theo người phụ trách mới nếu luật ấy tính người phụ trách."},
-    {"id": "AC-5", "p": "Sẽ hiện dưới danh sách tệp một dòng nói vì sao «Mở» bị khoá và ai mở được; người vừa mất quyền bấm «Mở» thì nhận lời báo và phiếu tải lại, trên cả ba loại phiếu."},
-    {"id": "AC-6", "p": "Sẽ ghi một dòng nhật ký cho mỗi lần mở và mỗi lần bị từ chối, đủ để đếm có ai mở sai người không."},
-    {"id": "AC-7", "p": "Sẽ chạy thật trên phiếu ở máy tính và điện thoại: đổi người phụ trách trên phiếu xong, người cũ bị khoá, người mới mở được."}
-  ],
-  "wont_do": [
-    {"id": "AC-3", "p": "Sẽ KHÔNG đổi gì khác: ai cũng vẫn thấy tên và số tệp, vẫn tải lên được; người tải lên không tự nhiên mở được; người phụ trách công ty không mở được tệp của thoả thuận hay cá nhân do người khác phụ trách; người đã rời nhóm bị chặn."},
-    {"id": "OOS-1", "p": "Không giới hạn xem hay sửa bản ghi theo người phụ trách — luật mới chỉ là mở và xoá tệp."},
-    {"id": "OOS-2", "p": "Không có đội cùng phụ trách, người theo dõi, hay chia sẻ một tệp cho một người."},
-    {"id": "OOS-3", "p": "Cá nhân và thoả thuận không lấy người phụ trách của công ty."},
-    {"id": "OOS-4", "p": "Không thu hồi được đường tải đã cấp trước lúc đổi người phụ trách; nó hết hạn sau năm phút."},
-    {"id": "OOS-5", "p": "Chưa có câu riêng khi người phụ trách đã rời nhóm; dòng lý do vẫn nêu tên họ."},
-    {"id": "OOS-6", "p": "Kara chưa đọc tệp theo quyền người đang chat — việc của DA23."}
-  ],
-  "scope_plain": "Phần cắt hay hoãn của hàng này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Đã xét đủ người gọi: quản trị, nhân viên phụ trách, nhân viên khác, người tải tệp mà không phụ trách, vai chỉ OKR, người đã rời nhóm, khoá API (AC-1, AC-3)."},
-    {"i": 1, "p": "Đã xét người phụ trách là chính mình, là người khác, chưa có, vừa đổi, vừa gỡ về trống (AC-1, AC-2)."},
-    {"i": 2, "p": "Đã xét mọi việc trên tệp: thấy, mở, cờ trên phiếu, xoá, tải lên, đường tải đã cấp (AC-1 đến AC-5)."},
-    {"i": 3, "p": "Đã soát mã mọi cách đổi người phụ trách hôm nay: sửa trên phiếu, gán hàng loạt; tự tạo từ hộp thư, Kara và gỡ thành viên không đổi người phụ trách (AC-2)."},
-    {"i": 4, "p": "Bốn vai lấy từ danh sách vai thật của sản phẩm."},
-    {"i": 5, "p": "Người phụ trách của ba loại bản ghi lấy từ cấu trúc dữ liệu thật: thoả thuận luôn có, công ty và cá nhân có thể trống."},
-    {"i": 6, "p": "«Bản ghi không có chủ thì chỉ quản trị» là chữ của lộ trình và luật thiết kế."},
-    {"i": 7, "p": "«Quyền đến từ một chỗ, nút và lời từ chối không cãi nhau» là luật API của kho."},
-    {"i": 8, "p": "Danh sách đường đổi người phụ trách lấy từ lần soát mã hôm nay."},
-    {"i": 9, "p": "Đối chiếu ngành: Salesforce để quyền tệp đi theo bản ghi, không chép riêng."},
-    {"i": 10, "p": "Đối chiếu ngành: HubSpot giới hạn theo chủ bản ghi và để riêng nhóm bản ghi chưa có chủ."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Bài đo xoá chỉ có đáp án cho lối máy khuyên — đã sửa: bài đọc lối anh chọn ở Hỏi-2 và giữ sẵn đáp án cho cả ba lối."},
-    {"i": 1, "p": "Thước «có ai mở sai người không» chưa từng được thử với một luật hỏng — đã sửa: bài đo làm hỏng luật trong lúc chạy và thước phải đếm đúng số lần mở sai."},
-    {"i": 2, "p": "Chưa đo «người tải tệp mà không phụ trách xin mở» — đã sửa: thêm vào tiêu chí phạm vi, người tải không mở được tệp của bản ghi người khác."},
-    {"i": 3, "p": "Bài đo màn chỉ đo phiếu thoả thuận — đã sửa: đo cả phiếu công ty và cá nhân, và lần tải lại sau khi mất quyền phải đúng loại phiếu."},
-    {"i": 4, "p": "Ngưỡng thiếu ngày đọc — đã sửa: Hỏi-5 thêm câu hỏi phép đo và đọc sau 14 ngày; ngưỡng duyệt xong chép vào ô cơ hội."}
-  ]
+  "feature_plain": "Nhân viên mở được hợp đồng trong bản ghi mình phụ trách; đổi người phụ trách thì người mới mở được ngay, người cũ bị khoá và được báo vì sao.",
+  "analyst_plain": "Mọi phép đo của vòng này đều là phép đo mới, chưa có trên code cũ, nên không so được với nền."
 }
