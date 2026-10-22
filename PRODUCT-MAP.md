@@ -11,9 +11,9 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>153 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>168 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>169 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -50,7 +50,6 @@ flowchart TD
 
 ## Đang làm
 
-- Một tín hiệu cài lời dặn không lấy được khoá nào của lịch gom và không đẩy được gì ngoài PR đề xuất (`gia-co-gom-tin-hieu`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -101,6 +100,7 @@ flowchart TD
 - Eval model thật của Kho tài liệu (E15) chỉ gọi model khi đầu vào đổi, tách lỗi hạ tầng khỏi lỗi model, giữ nhật ký theo lượt, và hỏi lại một lần khi sát ngưỡng thay vì đỏ cứng (`eval-model-that-dung-luc`)
 - Căn chỉnh gắn bằng tay và căn chỉnh Kara đề xuất đều mang lý do — hộp thoại gắn có ô lý do và căn cứ, sửa được lý do sau khi gắn, đề xuất căn chỉnh của Kara mang lý do và căn cứ khi nhận (`gan-tay-va-kara-co-ly-do`)
 - Thước «mọi lời đọc OKR có điều kiện xem» xanh lại và chạy ở CI trên từng PR (`ghim-thuoc-soi-xem-okr`)
+- Một tín hiệu cài lời dặn không lấy được khoá nào của lịch gom và không đẩy được gì ngoài PR đề xuất (`gia-co-gom-tin-hieu`)
 - «Thoả thuận mới không rơi vào giai đoạn đã lưu trữ» (`giai-doan-mac-dinh`)
 - Workflow Acceptance thôi chạy test tác nhân OKR khi push lên onehub, huỷ lượt cũ khi PR đẩy chồng, và gộp ba job nhỏ thành một — giảm phút GitHub Actions mà không bỏ phép kiểm nào ở PR (`giam-phut-acceptance`)
 - PR nháp và PR chỉ chạm tệp T1 không chạy job nặng của ci.yml và acceptance.yml; ci-ok xanh khi bỏ qua hợp lệ; push giữ nguyên; luật PR nháp trong CLAUDE.md (`giam-phut-ci-nhap-t1`)

@@ -5,7 +5,7 @@ slug: gia-co-gom-tin-hieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-21T23:23:58Z
 design_doc: docs/superpowers/specs/2026-10-21-gia-co-gom-tin-hieu-design.md
@@ -68,3 +68,11 @@ Source input: `_acceptance/gia-co-gom-tin-hieu/opportunity.md` (Cổng Đáng `b
     Claude Code có lỗi phân quyền. Cách ly hệ điều hành (người dùng riêng, chặn mạng theo người dùng, nơi giữ khoá mô
     hình tách riêng) để sau — giám sát ghi nó vào mục chờ của lộ trình OKR, mở lại lúc bật lịch gom thật, qua một PR
     riêng sau khi hàng này gộp (yêu cầu S1-14).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-22:
+  - Ngoài-1: Nếu kết quả của phiên gom đổi định dạng và không đọc được, nhật ký sẽ không báo gì về các thao tác bị từ chối, trông y như lượt không có thao tác nào bị chặn. Lượt vẫn giao đề xuất bình thường, chỉ mất một dòng cảnh báo giúp chẩn đoán.
+  - Ngoài-4: Bước kiểm xem token có nằm sẵn trên đĩa trước khi chạy phiên gom chỉ tìm token ở dạng chữ gốc, nên sẽ bỏ sót trường hợp token được lưu dưới dạng mã hoá trong cấu hình git. Khi đó lượt vẫn chạy dù token nằm trên đĩa trong tầm với của phiên.
+  - Ngoài-5: Nếu công cụ tìm chữ trên đĩa không chạy được hoặc bị ngắt giữa chừng, bước kiểm token coi như đĩa sạch và vẫn cho phiên gom chạy. Kiểm an toàn này sẽ im lặng bỏ qua thay vì dừng lượt.
+  - Ngoài-6: Một bài kiểm có thể báo đỏ vì lý do khác với lý do nó định chứng, nên khi nó đỏ người đọc không chắc nguyên nhân thật. Sản phẩm giao cho người dùng không đổi.
+  - Ngoài-7: Bài kiểm khẳng định lệnh do phiên cài vào cấu hình git không chạy chưa từng được thấy đỏ khi lệnh đó thật sự chạy, nên chưa chắc nó bắt được lỗi này. Hành vi thật của lượt không bị chứng minh là sai.
+  - Ngoài-8: Bài kiểm nhật ký không lộ khoá dùng cùng cách che với mã thật nên không bắt được lỗi nếu cách che đó bỏ sót một dạng mã hoá. Việc nhật ký có thật sự sạch khoá chưa được chứng độc lập.
+  - Ngoài-9: Bài kiểm quyền hạn của các skill gom có thể xanh dù không đọc được gì nếu skill đổi cách viết khai báo. Khi đó một thay đổi về quyền của skill có thể lọt qua mà không ai biết.

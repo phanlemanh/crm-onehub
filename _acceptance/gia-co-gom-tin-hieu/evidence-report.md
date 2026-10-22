@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: cf8db0a81fa04bdf9a3cdc836adeeb4950df5f6d
-human_signoff:
+human_signoff: Manh Phan 2026-10-22 — ký Cổng Bằng chứng trên S4 vòng 1 (PASS, 8/8 eval, 0 mục trong hợp đồng). Ngoài-1, 4–9 ghi Known limits; Ngoài-2, 3, 10 chấp nhận không sửa; cắt/hoãn đồng ý cắt; Treo phê hết.
 ---
 
 # Evidence Report: gia-co-gom-tin-hieu
