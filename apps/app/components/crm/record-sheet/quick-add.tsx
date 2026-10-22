@@ -1,13 +1,12 @@
 "use client";
 
+import { CURRENCIES } from "@crm/db/currency";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
-import { DatePicker } from "@crm/ui/components/date-picker";
-import { Field, FieldError, FieldLabel } from "@crm/ui/components/field";
+import { Field, FieldLabel } from "@crm/ui/components/field";
 import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { Input } from "@crm/ui/components/input";
 import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
-import { MoneyInput } from "@crm/ui/components/money-input";
 import {
 	Select,
 	SelectContent,
@@ -19,9 +18,15 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { parseMoneyInput } from "@crm/ui/lib/money-input";
 import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { toast } from "sonner";
 import { contactName } from "@/components/crm/contact-name";
+import { useFormTao } from "@/components/crm/fields/form-tao";
+import {
+	idOTao,
+	type MoTaTao,
+	OTruongTao,
+} from "@/components/crm/fields/kieu-truong";
 import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { crmMessages } from "@/lib/messages/crm";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
@@ -65,6 +70,7 @@ function QuickAddForm({
 		<form
 			className="flex shrink-0 flex-col gap-4 border-b px-5 py-4"
 			action={onSubmit}
+			noValidate
 		>
 			<div className="grid gap-4 sm:grid-cols-2">{children}</div>
 			<div className="flex items-center justify-end gap-2">
@@ -100,6 +106,14 @@ function QuickAddForm({
 	);
 }
 
+function useKhaiForm(ban: boolean) {
+	const khai = useKhaiThayDoi();
+	useEffect(() => {
+		khai(ban);
+	}, [khai, ban]);
+	return () => khai(false);
+}
+
 export function QuickAddContact({
 	companyId,
 	ownerId,
@@ -113,23 +127,35 @@ export function QuickAddContact({
 	const cache = useCrmCache();
 	const sheet = recordSheetMessages(useLocale());
 	const m = sheet.contact;
+	const form = useFormTao("CONTACT");
+	const xong = useKhaiForm(form.banTatCa);
+	const users = useQuery(trpc.users.list.queryOptions());
+	const nguoiDung = users.data ?? [];
+	const chuDangChon = form.chuan("owner");
+	const chu = chuDangChon === undefined ? (ownerId ?? "") : String(chuDangChon);
 
-	const { nhap, doi, ban, xong } = useNhap({
-		firstName: "",
-		lastName: "",
-		phone: "",
-		email: "",
-		title: "",
-	});
-	const { firstName, lastName, phone, email, title } = nhap;
-	const [soSai, datSoSai] = useState(false);
-	const phoneRef = useRef<HTMLInputElement>(null);
+	const moTaChuan = (key: string, dau: boolean): MoTaTao => {
+		if (key === "phone")
+			return form.moTaChuan(key, {
+				goiY: m.phonePlaceholder,
+				kiemRieng: (chuoi) =>
+					docSoDienThoai(chuoi).kind === "sai" ? m.phoneInvalid : null,
+				tuDongFocus: dau,
+			});
+		if (key === "title")
+			return form.moTaChuan(key, { goiY: m.rolePlaceholder, tuDongFocus: dau });
+		if (key === "owner")
+			return form.moTaChuan(key, { giaTri: chu, nguoiDung, tuDongFocus: dau });
+		return form.moTaChuan(key, { tuDongFocus: dau });
+	};
 
-	const firstNameId = useId();
-	const lastNameId = useId();
-	const phoneId = useId();
-	const emailId = useId();
-	const titleId = useId();
+	const dsMoTa = form.muc
+		.filter((muc) => !(muc.kind === "standard" && muc.key === "company"))
+		.map((muc, i) =>
+			muc.kind === "standard"
+				? moTaChuan(muc.key, i === 0)
+				: form.moTaTuTao(muc.field, nguoiDung),
+		);
 
 	const create = useMutation(
 		trpc.contacts.create.mutationOptions({
@@ -139,91 +165,43 @@ export function QuickAddContact({
 				xong();
 				onDone();
 			},
-			onError: (error) => toast.error(error.message),
+			onError: (error) => {
+				const loi = form.docLoi(error, dsMoTa);
+				toast.error(loi ? loi.toast : error.message);
+			},
 		}),
 	);
+
+	const tuy = (key: string) => form.chuoiChuan(key) || undefined;
 
 	return (
 		<QuickAddForm
 			submitLabel={sheet.company.addContact}
 			pending={create.isPending}
-			ready={firstName.trim() !== ""}
-			dirty={ban}
+			ready={!form.dangTai && form.chuoiChuan("firstName") !== ""}
+			dirty={form.banTatCa}
 			onCancel={onDone}
 			onSubmit={() => {
-				if (docSoDienThoai(phone).kind === "sai") {
-					datSoSai(true);
-					phoneRef.current?.focus();
-					return;
-				}
+				const ket = form.kiem(dsMoTa);
+				if (!ket.hopLe) return;
 				create.mutate({
-					firstName,
-					lastName: lastName || undefined,
-					phone: phone || undefined,
-					email: email || undefined,
-					title: title || undefined,
+					firstName: form.chuoiChuan("firstName"),
+					lastName: tuy("lastName"),
+					phone: tuy("phone"),
+					email: tuy("email"),
+					title: tuy("title"),
+					linkedinUrl: tuy("linkedin"),
+					twitterUrl: tuy("x"),
+					githubUrl: tuy("github"),
 					companyId,
-					ownerId,
+					ownerId: chu.trim() || null,
+					fields: ket.fields,
 				});
 			}}
 		>
-			<Field>
-				<FieldLabel htmlFor={firstNameId}>{m.firstName}</FieldLabel>
-				<Input
-					id={firstNameId}
-					autoFocus
-					value={firstName}
-					onChange={(event) => doi({ firstName: event.target.value })}
-					autoComplete="off"
-				/>
-			</Field>
-			<Field>
-				<FieldLabel htmlFor={lastNameId}>{m.lastName}</FieldLabel>
-				<Input
-					id={lastNameId}
-					value={lastName}
-					onChange={(event) => doi({ lastName: event.target.value })}
-					autoComplete="off"
-				/>
-			</Field>
-			<Field data-invalid={soSai || undefined}>
-				<FieldLabel htmlFor={phoneId}>{m.fields.phone}</FieldLabel>
-				<Input
-					id={phoneId}
-					ref={phoneRef}
-					type="tel"
-					inputMode="tel"
-					value={phone}
-					onChange={(event) => {
-						datSoSai(false);
-						doi({ phone: event.target.value });
-					}}
-					placeholder={m.phonePlaceholder}
-					aria-invalid={soSai || undefined}
-					autoComplete="off"
-				/>
-				{soSai ? <FieldError>{m.phoneInvalid}</FieldError> : null}
-			</Field>
-			<Field>
-				<FieldLabel htmlFor={emailId}>{m.fields.email}</FieldLabel>
-				<Input
-					id={emailId}
-					type="email"
-					value={email}
-					onChange={(event) => doi({ email: event.target.value })}
-					autoComplete="off"
-				/>
-			</Field>
-			<Field>
-				<FieldLabel htmlFor={titleId}>{m.fields.title}</FieldLabel>
-				<Input
-					id={titleId}
-					value={title}
-					onChange={(event) => doi({ title: event.target.value })}
-					placeholder={m.rolePlaceholder}
-					autoComplete="off"
-				/>
-			</Field>
+			{dsMoTa.map((moTa) => (
+				<OTruongTao key={moTa.khoa} moTa={moTa} />
+			))}
 		</QuickAddForm>
 	);
 }
@@ -339,24 +317,64 @@ export function QuickAddDeal({
 	const cache = useCrmCache();
 	const locale = useLocale();
 	const m = recordSheetMessages(locale).deal;
+	const form = useFormTao("DEAL");
+	const xong = useKhaiForm(form.banTatCa);
 
-	const { nhap, doi, ban, xong } = useNhap({
-		name: "",
-		amount: "",
-		closeDate: "",
-	});
-	const { name, amount, closeDate } = nhap;
-
-	const nameId = useId();
-	const amountId = useId();
-	const closeId = useId();
-
+	const users = useQuery(trpc.users.list.queryOptions());
 	const me = useQuery(trpc.users.me.queryOptions());
 	const settings = useQuery(trpc.currency.settings.queryOptions());
-	const owner = ownerId ?? me.data?.id ?? null;
-	const currency = settings.data?.reportingCurrency ?? null;
+	const nguoiDung = users.data ?? [];
+	const owner = form.chuoiChuan("owner") || ownerId || me.data?.id || null;
+	const currency =
+		form.chuoiChuan("currency") || settings.data?.reportingCurrency || null;
 	const currencyFailed = currency === null && settings.isError;
-	const amountRef = useRef<HTMLInputElement>(null);
+
+	const moTaChuan = (key: string, dau: boolean): MoTaTao => {
+		if (key === "name")
+			return form.moTaChuan(key, {
+				goiY: m.namePlaceholder(companyName),
+				tuDongFocus: dau,
+			});
+		if (key === "amount")
+			return form.moTaChuan(key, {
+				tienTe: currency,
+				thieuTienTe: currencyFailed ? m.currencyLoadFailed : m.currencyLoading,
+				cuoi: currencyFailed ? (
+					<Button
+						type="button"
+						variant="outline"
+						onClick={() => void settings.refetch()}
+					>
+						{m.retry}
+					</Button>
+				) : undefined,
+				tuDongFocus: dau,
+			});
+		if (key === "currency")
+			return form.moTaChuan(key, {
+				giaTri: currency ?? "",
+				luaChon: CURRENCIES.map((entry) => ({
+					value: entry.code,
+					label: entry.code,
+				})),
+				tuDongFocus: dau,
+			});
+		if (key === "owner")
+			return form.moTaChuan(key, {
+				giaTri: owner ?? "",
+				nguoiDung,
+				tuDongFocus: dau,
+			});
+		return form.moTaChuan(key, { tuDongFocus: dau });
+	};
+
+	const dsMoTa = form.muc
+		.filter((muc) => !(muc.kind === "standard" && muc.key === "company"))
+		.map((muc, i) =>
+			muc.kind === "standard"
+				? moTaChuan(muc.key, i === 0)
+				: form.moTaTuTao(muc.field, nguoiDung),
+		);
 
 	const create = useMutation(
 		trpc.deals.create.mutationOptions({
@@ -366,35 +384,47 @@ export function QuickAddDeal({
 				xong();
 				onDone();
 			},
-			onError: (error) => toast.error(error.message),
+			onError: (error) => {
+				const loi = form.docLoi(error, dsMoTa);
+				toast.error(loi ? loi.toast : error.message);
+			},
 		}),
 	);
+
+	const focusO = (key: string) =>
+		document.getElementById(idOTao(form.khoaChuan(key)))?.focus();
 
 	const submit = () => {
 		if (!owner) {
 			toast.error(m.noOwner);
 			return;
 		}
+		const ket = form.kiem(
+			dsMoTa.filter((moTa) => moTa.khoa !== form.khoaChuan("currency")),
+		);
+		if (!ket.hopLe) return;
 
-		if (currency === null && amount.trim() !== "") {
-			amountRef.current?.focus();
+		const amount = form.chuoiChuan("amount");
+		if (currency === null && amount !== "") {
+			focusO("amount");
 			return;
 		}
 
 		const reading =
 			currency === null ? null : parseMoneyInput(amount, { locale, currency });
 		if (reading?.kind === "invalid") {
-			amountRef.current?.focus();
+			focusO("amount");
 			return;
 		}
 
 		create.mutate({
-			name,
+			name: form.chuoiChuan("name"),
 			companyId,
 			ownerId: owner,
 			amountCents: reading?.kind === "ok" ? reading.cents : null,
 			currency: currency ?? undefined,
-			expectedCloseDate: closeDate || null,
+			expectedCloseDate: form.chuoiChuan("expectedCloseDate") || null,
+			fields: ket.fields,
 		});
 	};
 
@@ -402,55 +432,18 @@ export function QuickAddDeal({
 		<QuickAddForm
 			submitLabel={m.create}
 			pending={create.isPending}
-			ready={name.trim() !== "" && (currency !== null || currencyFailed)}
-			dirty={ban}
+			ready={
+				!form.dangTai &&
+				form.chuoiChuan("name") !== "" &&
+				(currency !== null || currencyFailed)
+			}
+			dirty={form.banTatCa}
 			onCancel={onDone}
 			onSubmit={submit}
 		>
-			<Field className="sm:col-span-2">
-				<FieldLabel htmlFor={nameId}>{m.contactColumns.name}</FieldLabel>
-				<Input
-					id={nameId}
-					autoFocus
-					value={name}
-					onChange={(event) => doi({ name: event.target.value })}
-					placeholder={m.namePlaceholder(companyName)}
-					autoComplete="off"
-				/>
-			</Field>
-			<Field>
-				<FieldLabel htmlFor={amountId}>{m.fields.amount}</FieldLabel>
-				<MoneyInput
-					id={amountId}
-					ref={amountRef}
-					value={amount}
-					onValueChange={(amount) => doi({ amount })}
-					currency={currency}
-					missingCurrency={
-						currencyFailed ? m.currencyLoadFailed : m.currencyLoading
-					}
-					end={
-						currencyFailed ? (
-							<Button
-								type="button"
-								variant="outline"
-								onClick={() => void settings.refetch()}
-							>
-								{m.retry}
-							</Button>
-						) : undefined
-					}
-				/>
-			</Field>
-			<Field>
-				<FieldLabel htmlFor={closeId}>{m.expectedClose}</FieldLabel>
-				<DatePicker
-					id={closeId}
-					value={closeDate}
-					onChange={(closeDate) => doi({ closeDate })}
-					placeholder={m.noDate}
-				/>
-			</Field>
+			{dsMoTa.map((moTa) => (
+				<OTruongTao key={moTa.khoa} moTa={moTa} />
+			))}
 		</QuickAddForm>
 	);
 }

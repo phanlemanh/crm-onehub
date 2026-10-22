@@ -1,3 +1,4 @@
+import { KHOA_LOI_TRUONG, loiTruong } from "@crm/validation/loi-truong";
 import type { TRPCDefaultErrorShape, TRPCErrorFormatter } from "@trpc/server";
 import { z } from "zod";
 
@@ -61,11 +62,18 @@ export function readableInputError(
 	return sentences.length > 0 ? sentences.join(" ") : message;
 }
 
+const coLoiTruong = z.object({ loiTruong }).nullable().catch(null);
+
 export const formatTrpcError: TRPCErrorFormatter<
 	object,
 	TRPCDefaultErrorShape
 > = ({ shape, error }) => {
 	const readable = readableInputError(shape.message, error.cause);
+	const truong = coLoiTruong.parse(error.cause)?.loiTruong;
+	const message = readable ?? shape.message;
+	const data = truong
+		? { ...shape.data, [KHOA_LOI_TRUONG]: truong }
+		: shape.data;
 
-	return readable ? { ...shape, message: readable } : shape;
+	return { ...shape, message, data };
 };

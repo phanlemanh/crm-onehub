@@ -11,6 +11,7 @@
 		"./ly-do-can-chinh": "./src/ly-do-can-chinh.ts",
 		"./agent-manifest": "./src/agent-manifest.ts",
 		"./bo-tri-truong": "./src/bo-tri-truong.ts",
+		"./loi-truong": "./src/loi-truong.ts",
 		"./du-an-lich": "./src/du-an-lich.ts",
 		"./agent-transcript": "./src/agent-transcript.ts",
 		"./brand-raw": "./src/brand-raw.ts",
