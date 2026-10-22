@@ -230,6 +230,19 @@
       ],
       "ly_do": "Làn M5 (đề xuất M5 #375 13:52Z): VS8 đi ngay sau l5 «Sửa một đợt» (lộ trình Kho tài liệu, 22/10) vì cùng vùng apps/app/components/crm/record-sheet; mốc riêng vì mốc không gom hàng của hai tệp lộ trình. VK7 của làn Mac Studio đứng sau. Hệ số chủ kho chốt 19/10: 10 giờ máy mỗi vòng.",
       "that": "2026-10-19"
+    },
+    {
+      "ten": "Hạn: Quý 4 trên CRM, mọi phòng ban cập nhật và họp tuần hằng tuần — Họp tuần phải mở đúng bộ và họp được trên bảng",
+      "ngay": "2026-10-26",
+      "loai": "han",
+      "khoa": "m-1026ht",
+      "hang": [
+        "HT1",
+        "HT2",
+        "HT3",
+        "HT4"
+      ],
+      "ly_do": "Sự kiện của người: «Quý 4 trên CRM, mọi phòng ban» từ 26/10 (docs/plan/lo-trinh-okr.md:17). Công cụ trễ thì các phòng vẫn họp bằng đường cũ, nên là han, không phải han-cung. HT1 đứng sau VK3 (mốc m-1026vk), HT2 sau HT1 trên cùng dãy vì cùng tệp hop-tuan.tsx; HT3, HT4 song song. HT5 không gắn mốc này."
     }
   ],
   "hang": [
@@ -3409,6 +3422,26 @@
       "buoc_ke": "Làn Mac Studio · thứ 10"
     },
     {
+      "ma": "VK13",
+      "slug": "gon-dau-trang-lay-y-kien",
+      "hang": "T2",
+      "nhom": "okr",
+      "thu_tu": 104.7,
+      "dung_tren": [
+        "VK2"
+      ],
+      "ten": "Gọn đầu trang Lấy ý kiến",
+      "ten_ngan": "Gọn đầu Lấy ý kiến",
+      "ngay": "2026-10-20",
+      "vai": "Thành viên góp ý",
+      "cau_giao": "«Trên điện thoại 390×812, người góp ý mở Lấy ý kiến và thấy nút Gửi ngay trong màn đầu, không phải cuộn»",
+      "vi_sao": "Nút «Gửi» của Lấy ý kiến ở 390×812 nằm 927px trên onehub (941px sau VK2) — quá màn đầu 812px; hồ sơ đã ký dot-hoi-y-tuong-okr E12 bước 5 đỏ sẵn trên nền. Chủ kho chọn (a) cho V1-4 ngày 20/10: ghi đỏ sẵn trên thẻ VK2 và tách việc riêng.",
+      "bat_khi": "Ở 390×812 nút «Gửi» của Lấy ý kiến nằm trọn trong màn đầu; dot-hoi-y-tuong-okr E12 bước 5 xanh lại mà không đổi hình đã ký của hồ sơ khác",
+      "ghi_chu": "Tách từ V1-4 của VK2 (đợt vo-khu-muc-tieu, 20/10). Chủ kho gõ «gon-dau-trang-lay-y-kien: build» ở phiên giám sát vk.",
+      "dot": "okr-vo-khu-1810",
+      "buoc_ke": "Làn Mac Studio · sau VK2"
+    },
+    {
       "ma": "NS1",
       "slug": "sheets-lay-so-linh-hoat",
       "hang": "T3",
@@ -3524,6 +3557,120 @@
         "W3"
       ],
       "tieu_chi": 11
+    },
+    {
+      "ma": "HT1",
+      "slug": "hop-tuan-mo-dung-bo",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.71,
+      "dung_tren": [
+        "VK3"
+      ],
+      "ten": "Họp tuần mở đúng bộ",
+      "ten_ngan": "Họp tuần mở đúng bộ",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị bấm Họp tuần và vào thẳng bảng của bộ OKR mình dẫn, thấy hàng số của tuần ở đầu; bộ chưa có KR công bố hay chu kỳ chưa chạy thì màn nói đúng lý do và chỉ sang đơn vị có KR»",
+      "vi_sao": "Production 22/10: bấm Họp tuần không kèm đơn vị thì bảng là của OneHub, cấp này không có KR công bố nên màn hiện «0/0 KR» và câu «Chưa có lần cập nhật nào để bàn» trong khi phòng của người xem đã cập nhật đủ (okr-xem.service.ts:160-161, :586). VK3 AC-7 vẫn giữ «xemOkr trần mở bộ OneHub»; VK8 AC-3 đặt hàng số chỉ ở thẻ OKR. Tability mở đúng plan của đội và có bốn ô số ở đầu plan.",
+      "bat_khi": "Trưởng phòng mở Họp tuần từ thanh bên, từ thẻ con hay từ liên kết không kèm đơn vị đều tới bộ mình dẫn; không còn màn «0/0 KR» với câu «chưa có lần cập nhật» khi bộ của người xem đã có cập nhật",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi luật AC-7 đã duyệt của VK3 (xemOkr trần → OneHub): chủ kho chốt ở Cổng Phạm vi của hàng này. Thước của VK3 đo thẻ Họp tuần; sửa sau khi VK3 ký có thể phải ghim lại hồ sơ trang-bo-okr.",
+      "phu": [
+        "H1",
+        "H2",
+        "H4"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "HT2",
+      "slug": "hop-tuan-tren-bang",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.72,
+      "dung_tren": [
+        "VK7"
+      ],
+      "ten": "Đi họp ngay trên bảng Họp tuần",
+      "ten_ngan": "Họp trên bảng",
+      "vai": "Trưởng đơn vị",
+      "cau_giao": "«Trưởng đơn vị đi họp ngay trên bảng Họp tuần: mỗi KR hiện ghi chú mới nhất và mức đổi so với lần trước ở mọi khổ màn, cập nhật được ngay từ dòng, và ngăn KR mở từ bảng đi ‹ › theo thứ tự đáng bàn»",
+      "vi_sao": "Dưới 1024px cột «Ghi chú mới nhất» biến mất (hop-tuan.tsx:137, :162); phần «Còn lại» không có ghi chú; dòng bảng chỉ mở ngăn KR, và ‹ › của ngăn đi trong một mục tiêu (kr-sheet.tsx:400-401). Tability: trình chiếu hiện câu phân tích mới nhất cho mọi KR kèm mức đổi, ngăn KR đi ‹ › qua mọi KR của plan, nút Create check-in ở ngăn và ở từng trang trình chiếu.",
+      "bat_khi": "Ở 375, 768 và 1440 mọi dòng Họp tuần có ghi chú mới nhất; cập nhật một KR từ bảng không phải rời bảng; ‹ › trong ngăn mở từ bảng đi đúng thứ tự của bảng",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Đổi AC-2 đã ký của VK7 (thứ tự ‹ › theo position của mục tiêu) chỉ khi ngăn mở từ Họp tuần — xét thước ngan-kr-mot-cho theo luật tạm «không tự sửa thước hồ sơ đã ký». Cùng tệp hop-tuan.tsx với HT1: đi sau HT1 trên cùng dãy.",
+      "phu": [
+        "H3",
+        "H5"
+      ],
+      "tieu_chi": 10
+    },
+    {
+      "ma": "HT3",
+      "slug": "hop-cap-nhat-lan-truoc",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.73,
+      "dung_tren": [],
+      "ten": "Hộp cập nhật hiện lần trước",
+      "ten_ngan": "Cập nhật thấy lần trước",
+      "vai": "Người phụ trách KR",
+      "cau_giao": "«Người phụ trách KR mở hộp cập nhật và thấy lần cập nhật trước — ngày, số, mức tự tin, ghi chú — cùng câu hỏi gợi ý cho ô ghi chú, trước khi gửi»",
+      "vi_sao": "Hộp cập nhật đã có đồ thị xem trước và điền sẵn mức tự tin lần trước (VK7), nhưng không hiện ghi chú lần trước, nên người viết không biết tuần trước đã hứa gì. Form check-in của Tability đặt «Previous check-in» cạnh form và gợi ba câu hỏi cho ô phân tích.",
+      "bat_khi": "Mở hộp cập nhật của một KR đã có lần cập nhật thì thấy ghi chú lần trước mà không bấm thêm; KR chưa có lần nào thì không có khối trống",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Không chạm tệp của HT1, HT2; chạy song song được.",
+      "phu": [
+        "H6"
+      ],
+      "tieu_chi": 6
+    },
+    {
+      "ma": "HT4",
+      "slug": "tom-tat-tuan-dang-cho",
+      "hang": "T2",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.74,
+      "dung_tren": [],
+      "ten": "Tóm tắt tuần có trạng thái chờ",
+      "ten_ngan": "Tóm tắt tuần đang chờ",
+      "vai": "Trưởng phòng ban",
+      "cau_giao": "«Trưởng phòng ban mở Họp tuần của phòng đã bật Tóm tắt tuần nhưng chưa có bản, và thấy bản đầu tiên tới lúc nào»",
+      "vi_sao": "Đo 22/10 trên phiên đo: bật nấc «bật» cho một phòng bằng okr.setProgram thì okr.troLyTomTat vẫn trả ban: null, dangSoan: false, chuaCapNhat: false và khối trả null (khoi-tom-tat.tsx:346) — trưởng phòng không biết tính năng đã bật.",
+      "bat_khi": "Phòng ở nấc bật mà chưa có bản thì Họp tuần hiện một dòng nêu ngày giờ bản đầu tiên; nấc tắt và chế độ ẩn vẫn không hiện gì",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). Chỉ chạm khoi-tom-tat.tsx và đường đọc tóm tắt; chạy song song được.",
+      "phu": [
+        "H7"
+      ],
+      "tieu_chi": 5
+    },
+    {
+      "ma": "HT5",
+      "slug": "cam-xuc-tren-cap-nhat",
+      "hang": "T3",
+      "nhom": "okr",
+      "ngay": "2026-10-22",
+      "dot": "okr-hop-tuan-2210",
+      "thu_tu": 104.75,
+      "dung_tren": [
+        "VK12"
+      ],
+      "ten": "Thả cảm xúc trên lần cập nhật",
+      "ten_ngan": "Cảm xúc trên cập nhật",
+      "vai": "Thành viên",
+      "cau_giao": "«Thành viên thả cảm xúc lên một lần cập nhật tuần ở Cập nhật gần đây, Họp tuần và ngăn KR, và người cập nhật thấy ai đã thả»",
+      "vi_sao": "VK12 mang trả lời dưới từng lần cập nhật; chưa có cách ghi nhận nhẹ hơn một câu trả lời. Tability có Reply và Like trên từng check-in ở ba chỗ: Recent updates, ngăn KR, trình chiếu.",
+      "bat_khi": "Một lần thả hiện ở cả ba chỗ trong cùng phiên; thả lại thì gỡ; người ngoài quyền xem mục tiêu không thấy",
+      "ghi_chu": "Chủ kho báo 22/10 «bấm Họp tuần không thấy gì» khi bộ OKR quý 4 đang chạy (đợt «okr-hop-tuan-2210», bản phạm vi docs/plan/pham-vi-okr-hop-tuan-2210.md, báo cáo https://claude.ai/artifact/AqQLbpZtPYUUoj1TiUKKui). T3: thêm bảng ở packages/db/prisma. Đứng trên dòng tin của VK12.",
+      "phu": [
+        "H8"
+      ],
+      "tieu_chi": 8
     }
   ],
   "chan_troi": [
@@ -3646,6 +3793,16 @@
         "N1"
       ],
       "mo_lai_khi": "Một nguồn cụ thể có người cần thật mà webhook vào không thay được"
+    },
+    {
+      "ma": "HT-C1",
+      "dot": "okr-hop-tuan-2210",
+      "cau_giao": "«Trưởng đơn vị chiếu buổi họp tuần ở một chế độ riêng: trang tổng quan rồi mỗi KR một trang, cập nhật và trả lời ngay trên trang»",
+      "ly_do": "HT1 và HT2 biến chính bảng Họp tuần thành chỗ họp (ghi chú mọi KR, hàng số, cập nhật từ dòng). Chưa biết các phòng còn cần màn chiếu riêng như Presentation mode của Tability hay không.",
+      "phu": [
+        "H9"
+      ],
+      "mo_lai_khi": "Phiên nghiệm thu Họp tuần (Cổng Giá trị của lượt 5) cho thấy trưởng đơn vị vẫn chiếu bằng công cụ khác sau khi HT1, HT2 đã giao"
     }
   ],
   "da_bac": [

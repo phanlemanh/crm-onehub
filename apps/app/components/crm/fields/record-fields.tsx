@@ -73,33 +73,27 @@ export function moTaTruongTuTao(
 	};
 }
 
-export function RecordFields({
-	fields,
+export function OTruongTuTao({
+	field,
 	saving,
 	onSave,
+	nguoiDung,
 }: {
-	fields: RecordFieldEntry[];
+	field: RecordFieldEntry;
 	saving: (key: string) => boolean;
 	onSave: (values: Record<string, FieldValueJson>, khoa: string) => void;
+	nguoiDung: Owner[] | undefined;
 }) {
-	const trpc = useTRPC();
-	const users = useQuery(trpc.users.list.queryOptions());
+	if (!field.showOnSheet) return null;
 
 	return (
-		<>
-			{fields
-				.filter((field) => field.showOnSheet)
-				.map((field) => (
-					<OTruongPhieu
-						key={field.id}
-						moTa={moTaTruongTuTao(
-							field,
-							(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
-							saving,
-							users.data,
-						)}
-					/>
-				))}
-		</>
+		<OTruongPhieu
+			moTa={moTaTruongTuTao(
+				field,
+				(khoa, giaTri) => onSave({ [khoa]: giaTri }, khoa),
+				saving,
+				nguoiDung,
+			)}
+		/>
 	);
 }

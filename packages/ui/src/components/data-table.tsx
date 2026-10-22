@@ -38,8 +38,11 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { FieldError } from "@crm/ui/components/field";
+import { Input } from "@crm/ui/components/input";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TablePagination } from "@crm/ui/components/table-pagination";
+import { VungDangTai } from "@crm/ui/components/vung-dang-tai";
 import {
 	ToggleGroup,
 	ToggleGroupItem,
@@ -53,6 +56,7 @@ import {
 	TableRow,
 } from "@crm/ui/components/table";
 import { useMessages } from "@crm/ui/components/locale-provider";
+import { useSearchInput } from "@crm/ui/hooks/use-search-input";
 import type { TableSelection } from "@crm/ui/hooks/use-table-selection";
 import { ROW_ACCENT, ROW_ACCENT_EXPANDABLE } from "@crm/ui/lib/row-accent";
 import type { TableQueryState } from "@crm/ui/lib/table-query";
@@ -91,6 +95,10 @@ export type DataTableFacet = {
 	onSearchChange?: (search: string) => void;
 	stale?: boolean;
 	empty?: ReactNode;
+	kieu?: "luaChon" | "chu" | "khoang";
+	docSo?: (chu: string) => number | null;
+	loiSo?: string;
+	hienSo?: (so: number) => string;
 };
 
 export type DataTableTabs = {
@@ -124,6 +132,7 @@ export type DataTableProps<TRow, TSub> = {
 	total: number;
 	facetCounts?: Record<string, Record<string, number>>;
 	loading?: boolean;
+	refreshing?: boolean;
 	facets?: DataTableFacet[];
 	tabs?: DataTableTabs;
 	onRowClick?: (row: TRow) => void;
@@ -262,6 +271,133 @@ function FacetCount({ count }: { count: number | undefined }) {
 	);
 }
 
+const TIEN_TO_FACET = { chu: "has:", tu: "gte:", den: "lte:" } as const;
+
+function thayTienTo(selected: string[], tienTo: string, moi: string | null) {
+	const giu = selected.filter((value) => !value.startsWith(tienTo));
+	return moi === null ? giu : [...giu, `${tienTo}${moi}`];
+}
+
+function giaTheoTienTo(selected: string[], tienTo: string): string {
+	return (
+		selected.find((value) => value.startsWith(tienTo))?.slice(tienTo.length) ??
+		""
+	);
+}
+
+function chanPhimMenu(event: React.KeyboardEvent) {
+	if (event.key !== "Escape") event.stopPropagation();
+}
+
+function FacetChu({
+	facet,
+	selected,
+	onChange,
+}: {
+	facet: DataTableFacet;
+	selected: string[];
+	onChange: (values: string[]) => void;
+}) {
+	const msg = useMessages();
+	const [value, change] = useSearchInput(
+		giaTheoTienTo(selected, TIEN_TO_FACET.chu),
+		(next) =>
+			onChange(thayTienTo(selected, TIEN_TO_FACET.chu, next.trim() || null)),
+	);
+	return (
+		<div data-slot="facet-chu" className="p-1">
+			<Input
+				aria-label={msg.table.facetContainsLabel(facet.label)}
+				placeholder={msg.table.facetContains}
+				value={value}
+				onChange={(event) => change(event.target.value)}
+				onKeyDown={chanPhimMenu}
+				spellCheck={false}
+				autoComplete="off"
+				translate="no"
+			/>
+		</div>
+	);
+}
+
+function OSoFacet({
+	facet,
+	nhan,
+	committed,
+	commit,
+}: {
+	facet: DataTableFacet;
+	nhan: string;
+	committed: string;
+	commit: (so: number | null) => void;
+}) {
+	const msg = useMessages();
+	const docSo = facet.docSo ?? ((chu: string) => {
+		const so = Number(chu);
+		return Number.isFinite(so) ? so : null;
+	});
+	const [value, change] = useSearchInput(committed, (next) => {
+		if (next.trim() === "") commit(null);
+		else {
+			const so = docSo(next);
+			if (so !== null) commit(so);
+		}
+	});
+	const hong = value.trim() !== "" && docSo(value) === null;
+	return (
+		<div className="flex min-w-0 flex-1 flex-col gap-1">
+			<Input
+				aria-label={msg.table.facetRangeLabel(facet.label, nhan)}
+				aria-invalid={hong}
+				placeholder={nhan}
+				inputMode="decimal"
+				value={value}
+				onChange={(event) => change(event.target.value)}
+				onKeyDown={chanPhimMenu}
+				autoComplete="off"
+			/>
+			{hong && facet.loiSo ? <FieldError>{facet.loiSo}</FieldError> : null}
+		</div>
+	);
+}
+
+function FacetKhoang({
+	facet,
+	selected,
+	onChange,
+}: {
+	facet: DataTableFacet;
+	selected: string[];
+	onChange: (values: string[]) => void;
+}) {
+	const msg = useMessages();
+	const hienSo = facet.hienSo ?? String;
+	const hien = (tienTo: string) => {
+		const goc = giaTheoTienTo(selected, tienTo);
+		return goc === "" ? "" : hienSo(Number(goc));
+	};
+	const ghi = (dau: "tu" | "den") => (so: number | null) =>
+		onChange(
+			thayTienTo(selected, TIEN_TO_FACET[dau], so === null ? null : String(so)),
+		);
+	return (
+		<div data-slot="facet-khoang" className="flex gap-1 p-1">
+			<OSoFacet
+				facet={facet}
+				nhan={msg.table.facetFrom}
+				committed={hien(TIEN_TO_FACET.tu)}
+				commit={ghi("tu")}
+			/>
+			<OSoFacet
+				facet={facet}
+				nhan={msg.table.facetTo}
+				committed={hien(TIEN_TO_FACET.den)}
+				commit={ghi("den")}
+			/>
+		</div>
+	);
+}
+
 function FacetSubmenu({
 	facet,
 	selected,
@@ -335,6 +471,16 @@ function FacetSubmenu({
 					</Command>
 				) : (
 					<div className="max-h-72 overflow-y-auto">
+						{facet.kieu === "chu" && (
+							<FacetChu facet={facet} selected={selected} onChange={onChange} />
+						)}
+						{facet.kieu === "khoang" && (
+							<FacetKhoang
+								facet={facet}
+								selected={selected}
+								onChange={onChange}
+							/>
+						)}
 						{selected.length > 0 && (
 							<>
 								<DropdownMenuItem
@@ -426,6 +572,7 @@ export function DataTable<TRow, TSub = unknown>({
 	total,
 	facetCounts,
 	loading,
+	refreshing,
 	facets,
 	tabs,
 	onRowClick,
@@ -445,6 +592,12 @@ export function DataTable<TRow, TSub = unknown>({
 	layout = "fill",
 }: DataTableProps<TRow, TSub>) {
 	const msg = useMessages();
+	const bocVungBang = (bang: ReactNode) =>
+		refreshing === undefined ? (
+			bang
+		) : (
+			<VungDangTai dangTai={refreshing}>{bang}</VungDangTai>
+		);
 	const [expandedIds, setExpandedIds] = useQueryState(
 		"expand",
 		parseAsArrayOf(parseAsString).withDefault([]),
@@ -712,280 +865,282 @@ export function DataTable<TRow, TSub = unknown>({
 				</div>
 			</div>
 
-			<Table
-				className={cn(
-					"[&_td]:max-w-0 [&_td:first-child]:pl-4 [&_th:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:last-child]:pr-4",
-					tableClassName,
-				)}
-				containerClassName={cn(
-					LAYOUT_CLASS[layout].container,
-					deferredRows.length === 0 && LAYOUT_CLASS[layout].emptyContainer,
-				)}
-				overlay={
-					deferredRows.length === 0 ? (
-						<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
-							{loading ? (
-								<Spinner />
-							) : filterActive && filteredEmpty != null ? (
-								filteredEmpty
-							) : filterActive ? (
-								<Empty>
-									<EmptyHeader>
-										<EmptyTitle>{msg.table.noMatch}</EmptyTitle>
-										<EmptyDescription>
-											{msg.table.noMatchDescription}
-										</EmptyDescription>
-									</EmptyHeader>
-									{onClearFilters && (
-										<EmptyContent>
-											<Button
-												variant="outline"
-												size="sm"
-												onClick={onClearFilters}
-											>
-												{msg.table.resetFilters}
-											</Button>
-										</EmptyContent>
-									)}
-								</Empty>
-							) : (
-								(empty ?? msg.table.noResults)
-							)}
-						</div>
-					) : null
-				}
-			>
-				<TableHeader className="sticky top-0 z-10 bg-muted [&_th]:bg-muted [&_tr]:border-0 [&_tr]:shadow-[inset_0_-1px_0_var(--border)]">
-					<TableRow>
-						{selection && (
-							<TableHead
-								className={cn("h-11 px-3", FIXED_COLUMN, HIDE_BELOW_CLASS.sm)}
-							>
-								<Checkbox
-									checked={
-										selection.state.allSelected
-											? true
-											: selection.state.someSelected
-												? "indeterminate"
-												: false
-									}
-									onCheckedChange={(checked) =>
-										selection.state.toggleAll(checked === true)
-									}
-									disabled={deferredRows.length === 0}
-									aria-label={msg.table.selectAllRows}
-								/>
-							</TableHead>
-						)}
-						{anyExpandable && (
-							<TableHead className={cn("h-11 px-3", FIXED_COLUMN)}>
-								<span className="sr-only">{msg.table.detailColumn}</span>
-							</TableHead>
-						)}
-						{visibleColumns.map((column) => {
-							const isActive = query.sort === column.id;
-							return (
+			{bocVungBang(
+				<Table
+					className={cn(
+						"[&_td]:max-w-0 [&_td:first-child]:pl-4 [&_th:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:last-child]:pr-4",
+						tableClassName,
+					)}
+					containerClassName={cn(
+						LAYOUT_CLASS[layout].container,
+						deferredRows.length === 0 && LAYOUT_CLASS[layout].emptyContainer,
+					)}
+					overlay={
+						deferredRows.length === 0 ? (
+							<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
+								{loading ? (
+									<Spinner />
+								) : filterActive && filteredEmpty != null ? (
+									filteredEmpty
+								) : filterActive ? (
+									<Empty>
+										<EmptyHeader>
+											<EmptyTitle>{msg.table.noMatch}</EmptyTitle>
+											<EmptyDescription>
+												{msg.table.noMatchDescription}
+											</EmptyDescription>
+										</EmptyHeader>
+										{onClearFilters && (
+											<EmptyContent>
+												<Button
+													variant="outline"
+													size="sm"
+													onClick={onClearFilters}
+												>
+													{msg.table.resetFilters}
+												</Button>
+											</EmptyContent>
+										)}
+									</Empty>
+								) : (
+									(empty ?? msg.table.noResults)
+								)}
+							</div>
+						) : null
+					}
+				>
+					<TableHeader className="sticky top-0 z-10 bg-muted [&_th]:bg-muted [&_tr]:border-0 [&_tr]:shadow-[inset_0_-1px_0_var(--border)]">
+						<TableRow>
+							{selection && (
 								<TableHead
-									key={column.id}
-									title={columnLabel(column)}
-									className={cn(
-										"h-11 overflow-hidden px-3 font-normal text-muted-foreground",
-										column.width,
-										ALIGN_CLASS[column.align ?? "left"],
-										column.hideBelow && HIDE_BELOW_CLASS[column.hideBelow],
-										column.headClassName,
-									)}
-									aria-sort={
-										isActive
-											? query.dir === "asc"
-												? "ascending"
-												: "descending"
-											: undefined
-									}
+									className={cn("h-11 px-3", FIXED_COLUMN, HIDE_BELOW_CLASS.sm)}
 								>
-									{column.sortable ? (
-										<Button
-											variant="ghost"
-											size="xs-wrap"
-											onClick={() => query.toggleSort(column.id)}
-											className={cn(
-												"-ml-2 min-w-0 max-w-[calc(100%+0.5rem)] font-normal text-muted-foreground hover:text-foreground",
-												column.align === "right" && "-mr-2 ml-0 text-right",
-												column.align === "center" && "mx-auto",
-											)}
-										>
+									<Checkbox
+										checked={
+											selection.state.allSelected
+												? true
+												: selection.state.someSelected
+													? "indeterminate"
+													: false
+										}
+										onCheckedChange={(checked) =>
+											selection.state.toggleAll(checked === true)
+										}
+										disabled={deferredRows.length === 0}
+										aria-label={msg.table.selectAllRows}
+									/>
+								</TableHead>
+							)}
+							{anyExpandable && (
+								<TableHead className={cn("h-11 px-3", FIXED_COLUMN)}>
+									<span className="sr-only">{msg.table.detailColumn}</span>
+								</TableHead>
+							)}
+							{visibleColumns.map((column) => {
+								const isActive = query.sort === column.id;
+								return (
+									<TableHead
+										key={column.id}
+										title={columnLabel(column)}
+										className={cn(
+											"h-11 overflow-hidden px-3 font-normal text-muted-foreground",
+											column.width,
+											ALIGN_CLASS[column.align ?? "left"],
+											column.hideBelow && HIDE_BELOW_CLASS[column.hideBelow],
+											column.headClassName,
+										)}
+										aria-sort={
+											isActive
+												? query.dir === "asc"
+													? "ascending"
+													: "descending"
+												: undefined
+										}
+									>
+										{column.sortable ? (
+											<Button
+												variant="ghost"
+												size="xs-wrap"
+												onClick={() => query.toggleSort(column.id)}
+												className={cn(
+													"-ml-2 min-w-0 max-w-[calc(100%+0.5rem)] font-normal text-muted-foreground hover:text-foreground",
+													column.align === "right" && "-mr-2 ml-0 text-right",
+													column.align === "center" && "mx-auto",
+												)}
+											>
+												<span
+													data-slot="table-head-label"
+													style={headLabelStyle(column)}
+													className={HEAD_LABEL_CLAMP}
+												>
+													{column.align === "right" && (
+														<SortIndicator
+															active={isActive}
+															dir={query.dir}
+															className="mr-1"
+														/>
+													)}
+													{column.header}
+													{column.align !== "right" && (
+														<SortIndicator
+															active={isActive}
+															dir={query.dir}
+															className="ml-1"
+														/>
+													)}
+												</span>
+											</Button>
+										) : (
 											<span
 												data-slot="table-head-label"
 												style={headLabelStyle(column)}
-												className={HEAD_LABEL_CLAMP}
+												className={cn(HEAD_LABEL_CLAMP, "whitespace-normal")}
 											>
-												{column.align === "right" && (
-													<SortIndicator
-														active={isActive}
-														dir={query.dir}
-														className="mr-1"
-													/>
-												)}
 												{column.header}
-												{column.align !== "right" && (
-													<SortIndicator
-														active={isActive}
-														dir={query.dir}
-														className="ml-1"
+											</span>
+										)}
+									</TableHead>
+								);
+							})}
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{deferredRows.map((row) => {
+							const id = getRowId(row);
+							const canExpand = expandable?.isExpandable(row) ?? false;
+							const isOpen = canExpand && expanded.has(id);
+							const isSelected = selection?.state.has(id) ?? false;
+							const clickable = canExpand || !!onRowClick;
+							const handleClick = () => {
+								if (canExpand) {
+									setExpandedIds((prev) => {
+										const set = new Set(prev ?? []);
+										if (set.has(id)) set.delete(id);
+										else set.add(id);
+										const next = [...set];
+										return next.length > 0 ? next : null;
+									});
+								} else {
+									onRowClick?.(row);
+								}
+							};
+							return (
+								<Fragment key={id}>
+									<TableRow
+										data-state={isSelected ? "selected" : undefined}
+										onClick={clickable ? handleClick : undefined}
+										onMouseEnter={onRowHover ? () => onRowHover(row) : undefined}
+										onFocus={onRowHover ? () => onRowHover(row) : undefined}
+										className={
+											clickable
+												? anyExpandable
+													? ROW_ACCENT_EXPANDABLE
+													: ROW_ACCENT
+												: undefined
+										}
+									>
+										{selection && (
+											<TableCell
+												className={cn("w-10 px-3 py-3", HIDE_BELOW_CLASS.sm)}
+												onClick={(event) => event.stopPropagation()}
+											>
+												<Checkbox
+													checked={isSelected}
+													onCheckedChange={(checked) =>
+														selection.state.toggle(id, checked === true)
+													}
+													aria-label={
+														selection.rowLabel
+															? msg.table.selectRow(selection.rowLabel(row))
+															: msg.table.selectRowFallback
+													}
+												/>
+											</TableCell>
+										)}
+										{anyExpandable && (
+											<TableCell className="w-10 px-3 py-3 text-center text-muted-foreground">
+												{canExpand && (
+													<ExpandRowButton
+														label={
+															expandable?.rowLabel?.(row) ??
+															msg.table.rowFallback
+														}
+														open={isOpen}
+														rowId={id}
+														onToggle={handleClick}
 													/>
 												)}
-											</span>
-										</Button>
-									) : (
-										<span
-											data-slot="table-head-label"
-											style={headLabelStyle(column)}
-											className={cn(HEAD_LABEL_CLAMP, "whitespace-normal")}
-										>
-											{column.header}
-										</span>
-									)}
-								</TableHead>
+											</TableCell>
+										)}
+										{visibleColumns.map((column) => (
+											<TableCell
+												key={column.id}
+												className={cn(
+													"overflow-hidden px-3 py-3",
+													column.width,
+													ALIGN_CLASS[column.align ?? "left"],
+													column.hideBelow && HIDE_BELOW_CLASS[column.hideBelow],
+													column.cellClassName,
+												)}
+											>
+												{column.cell(row)}
+											</TableCell>
+										))}
+									</TableRow>
+									{isOpen &&
+										expandable?.getSubRows(row).map((sub) => {
+											const subClickable = !!expandable.onSubRowClick;
+											return (
+												<TableRow
+													key={expandable.getSubRowId(sub, row)}
+													onClick={
+														subClickable
+															? () => expandable.onSubRowClick?.(sub, row)
+															: undefined
+													}
+													className={cn(
+														"bg-muted/30",
+														subClickable &&
+															(anyExpandable
+																? ROW_ACCENT_EXPANDABLE
+																: ROW_ACCENT),
+													)}
+												>
+													{selection && (
+														<TableCell
+															className={cn(
+																"w-10 px-3 py-2.5",
+																HIDE_BELOW_CLASS.sm,
+															)}
+														/>
+													)}
+													{anyExpandable && (
+														<TableCell className="w-10 px-3 py-2.5" />
+													)}
+													{visibleColumns.map((column) => (
+														<TableCell
+															key={column.id}
+															className={cn(
+																"overflow-hidden px-3 py-2.5 align-top",
+																column.width,
+																ALIGN_CLASS[column.align ?? "left"],
+																column.hideBelow &&
+																	HIDE_BELOW_CLASS[column.hideBelow],
+																column.cellClassName,
+															)}
+														>
+															{expandable.renderSubCell(sub, column.id, row)}
+														</TableCell>
+													))}
+												</TableRow>
+											);
+										})}
+								</Fragment>
 							);
 						})}
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{deferredRows.map((row) => {
-						const id = getRowId(row);
-						const canExpand = expandable?.isExpandable(row) ?? false;
-						const isOpen = canExpand && expanded.has(id);
-						const isSelected = selection?.state.has(id) ?? false;
-						const clickable = canExpand || !!onRowClick;
-						const handleClick = () => {
-							if (canExpand) {
-								setExpandedIds((prev) => {
-									const set = new Set(prev ?? []);
-									if (set.has(id)) set.delete(id);
-									else set.add(id);
-									const next = [...set];
-									return next.length > 0 ? next : null;
-								});
-							} else {
-								onRowClick?.(row);
-							}
-						};
-						return (
-							<Fragment key={id}>
-								<TableRow
-									data-state={isSelected ? "selected" : undefined}
-									onClick={clickable ? handleClick : undefined}
-									onMouseEnter={onRowHover ? () => onRowHover(row) : undefined}
-									onFocus={onRowHover ? () => onRowHover(row) : undefined}
-									className={
-										clickable
-											? anyExpandable
-												? ROW_ACCENT_EXPANDABLE
-												: ROW_ACCENT
-											: undefined
-									}
-								>
-									{selection && (
-										<TableCell
-											className={cn("w-10 px-3 py-3", HIDE_BELOW_CLASS.sm)}
-											onClick={(event) => event.stopPropagation()}
-										>
-											<Checkbox
-												checked={isSelected}
-												onCheckedChange={(checked) =>
-													selection.state.toggle(id, checked === true)
-												}
-												aria-label={
-													selection.rowLabel
-														? msg.table.selectRow(selection.rowLabel(row))
-														: msg.table.selectRowFallback
-												}
-											/>
-										</TableCell>
-									)}
-									{anyExpandable && (
-										<TableCell className="w-10 px-3 py-3 text-center text-muted-foreground">
-											{canExpand && (
-												<ExpandRowButton
-													label={
-														expandable?.rowLabel?.(row) ??
-														msg.table.rowFallback
-													}
-													open={isOpen}
-													rowId={id}
-													onToggle={handleClick}
-												/>
-											)}
-										</TableCell>
-									)}
-									{visibleColumns.map((column) => (
-										<TableCell
-											key={column.id}
-											className={cn(
-												"overflow-hidden px-3 py-3",
-												column.width,
-												ALIGN_CLASS[column.align ?? "left"],
-												column.hideBelow && HIDE_BELOW_CLASS[column.hideBelow],
-												column.cellClassName,
-											)}
-										>
-											{column.cell(row)}
-										</TableCell>
-									))}
-								</TableRow>
-								{isOpen &&
-									expandable?.getSubRows(row).map((sub) => {
-										const subClickable = !!expandable.onSubRowClick;
-										return (
-											<TableRow
-												key={expandable.getSubRowId(sub, row)}
-												onClick={
-													subClickable
-														? () => expandable.onSubRowClick?.(sub, row)
-														: undefined
-												}
-												className={cn(
-													"bg-muted/30",
-													subClickable &&
-														(anyExpandable
-															? ROW_ACCENT_EXPANDABLE
-															: ROW_ACCENT),
-												)}
-											>
-												{selection && (
-													<TableCell
-														className={cn(
-															"w-10 px-3 py-2.5",
-															HIDE_BELOW_CLASS.sm,
-														)}
-													/>
-												)}
-												{anyExpandable && (
-													<TableCell className="w-10 px-3 py-2.5" />
-												)}
-												{visibleColumns.map((column) => (
-													<TableCell
-														key={column.id}
-														className={cn(
-															"overflow-hidden px-3 py-2.5 align-top",
-															column.width,
-															ALIGN_CLASS[column.align ?? "left"],
-															column.hideBelow &&
-																HIDE_BELOW_CLASS[column.hideBelow],
-															column.cellClassName,
-														)}
-													>
-														{expandable.renderSubCell(sub, column.id, row)}
-													</TableCell>
-												))}
-											</TableRow>
-										);
-									})}
-							</Fragment>
-						);
-					})}
-				</TableBody>
-			</Table>
+					</TableBody>
+				</Table>,
+			)}
 
 			<TablePagination
 				page={query.page}

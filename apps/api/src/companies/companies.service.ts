@@ -48,6 +48,8 @@ import {
 	ownerFilter,
 	paginate,
 	resolveOrderBy,
+	timTrang,
+	xepTheoId,
 } from "../trpc/list-input";
 import type {
 	CompanyBulkOwnerInput,
@@ -106,37 +108,44 @@ export class CompaniesService {
 		const { skip, take } = paginate(input);
 
 		const [rows, total, facetCounts] = await Promise.all([
-			this.db.company.findMany({
-				where,
-				skip,
-				take,
-				orderBy: resolveOrderBy(input, SORTABLE, {
-					createdAt: "desc",
-				}),
-				select: {
-					id: true,
-					name: true,
-					domain: true,
-					iconUrl: true,
-					iconDarkUrl: true,
-					iconTone: true,
-					logoUrl: true,
-					brandColor: true,
-					industry: true,
-					enrichmentStatus: true,
-					source: true,
-					owner: { select: OWNER_SELECT },
-					_count: {
-						select: {
-							contacts: true,
-							deals: { where: { giaiDoan: { kind: "OPEN" } } },
-						},
-					},
-					lastActivityAt: true,
-					createdAt: true,
-					archivedAt: true,
-				},
-			}),
+			this.fields
+				.sapTheoTruong("COMPANY", input, where, { skip, take })
+				.then(async (theoTruong) =>
+					xepTheoId(
+						await this.db.company.findMany({
+							...timTrang(
+								theoTruong,
+								where,
+								{ skip, take },
+								resolveOrderBy(input, SORTABLE, { createdAt: "desc" }),
+							),
+							select: {
+								id: true,
+								name: true,
+								domain: true,
+								iconUrl: true,
+								iconDarkUrl: true,
+								iconTone: true,
+								logoUrl: true,
+								brandColor: true,
+								industry: true,
+								enrichmentStatus: true,
+								source: true,
+								owner: { select: OWNER_SELECT },
+								_count: {
+									select: {
+										contacts: true,
+										deals: { where: { giaiDoan: { kind: "OPEN" } } },
+									},
+								},
+								lastActivityAt: true,
+								createdAt: true,
+								archivedAt: true,
+							},
+						}),
+						theoTruong,
+					),
+				),
 			this.db.company.count({ where }),
 			this.facetCounts(input, filterableFields),
 		]);
@@ -315,6 +324,8 @@ export class CompaniesService {
 	}
 
 	async create(input: CompanyCreateInput) {
+		const truong = input.fields ?? {};
+		await this.fields.kiemBatBuocLucTao(this.db, "COMPANY", truong);
 		tuChoiNenTang(input.domain);
 		const domain = normalizeDomain(input.domain);
 
@@ -335,11 +346,18 @@ export class CompaniesService {
 				data: {
 					name: input.name.trim(),
 					domain,
-					website: domain ? `https://${domain}` : null,
+					website:
+						blankToNull(input.website ?? "") ??
+						(domain ? `https://${domain}` : null),
+					phone: blankToNull(input.phone ?? ""),
+					email: blankToNull(input.email ?? ""),
+					city: blankToNull(input.city ?? ""),
+					country: blankToNull(input.country ?? ""),
 					ownerId: input.ownerId ?? null,
 				},
 				select: { id: true, name: true, domain: true, createdAt: true },
 			});
+			await this.fields.ghiTruongLucTao(tx, "COMPANY", created.id, truong);
 			await emit({
 				type: "company.created",
 				record: { kind: "company", id: created.id },
@@ -358,7 +376,7 @@ export class CompaniesService {
 		await this.agent.companyCreated(company.id);
 
 		void this.favicon.backfill(company.id, company.domain);
-		void this.fields.queueBackfillForNewRecord("COMPANY", company.id);
+		void this.fields.queueBackfillForNewRecord("COMPANY", company.id, truong);
 
 		return { id: company.id, name: company.name, domain: company.domain };
 	}

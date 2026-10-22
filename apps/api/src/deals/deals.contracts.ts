@@ -47,6 +47,7 @@ export const dealCreateInput = z.object({
 	amountCents,
 	currency: currencyCode.optional(),
 	expectedCloseDate: z.string().nullable().optional(),
+	fields: recordFieldValues.optional(),
 });
 
 export type DealCreateInput = z.infer<typeof dealCreateInput>;
@@ -233,9 +234,9 @@ export const dealBoardInput = dealListInput.pick({
 
 export type DealBoardInput = z.infer<typeof dealBoardInput>;
 
-export const dealBoardCardOutput = dealListRowOutput
-	.omit({ fields: true })
-	.extend({ counted: z.boolean() });
+export const dealBoardCardOutput = dealListRowOutput.extend({
+	counted: z.boolean(),
+});
 
 export const dealBoardOutput = z.object({
 	columns: z.array(

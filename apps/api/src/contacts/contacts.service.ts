@@ -54,6 +54,8 @@ import {
 	paginate,
 	resolveOrderBy,
 	splitSentinel,
+	timTrang,
+	xepTheoId,
 } from "../trpc/list-input";
 import type {
 	ContactBulkCompanyInput,
@@ -120,6 +122,10 @@ function chuanTen(value: string): string {
 const SORTABLE: OrderByColumns<Prisma.ContactOrderByWithRelationInput[]> = {
 	name: (dir) => [{ lastName: dir }, { firstName: dir }],
 	email: (dir) => [{ email: dir }],
+	phone: (dir) => [
+		{ phone: { sort: dir, nulls: "last" } },
+		{ lastName: "asc" },
+	],
 	title: (dir) => [{ title: dir }, { lastName: "asc" }],
 	company: (dir) => [{ company: { name: dir } }, { lastName: "asc" }],
 	createdAt: (dir) => [{ createdAt: dir }],
@@ -148,27 +154,36 @@ export class ContactsService {
 		const { skip, take } = paginate(input);
 
 		const [rows, total, facetCounts] = await Promise.all([
-			this.db.contact.findMany({
-				where,
-				skip,
-				take,
-				orderBy: resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
-				select: {
-					id: true,
-					firstName: true,
-					lastName: true,
-					email: true,
-					phone: true,
-					title: true,
-					imageUrl: true,
-					source: true,
-					company: { select: COMPANY_SELECT },
-					owner: { select: OWNER_SELECT },
-					lastActivityAt: true,
-					createdAt: true,
-					archivedAt: true,
-				},
-			}),
+			this.fields
+				.sapTheoTruong("CONTACT", input, where, { skip, take })
+				.then(async (theoTruong) =>
+					xepTheoId(
+						await this.db.contact.findMany({
+							...timTrang(
+								theoTruong,
+								where,
+								{ skip, take },
+								resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]),
+							),
+							select: {
+								id: true,
+								firstName: true,
+								lastName: true,
+								email: true,
+								phone: true,
+								title: true,
+								imageUrl: true,
+								source: true,
+								company: { select: COMPANY_SELECT },
+								owner: { select: OWNER_SELECT },
+								lastActivityAt: true,
+								createdAt: true,
+								archivedAt: true,
+							},
+						}),
+						theoTruong,
+					),
+				),
 			this.db.contact.count({ where }),
 			this.facetCounts(input, filterableFields, search),
 		]);
@@ -316,6 +331,8 @@ export class ContactsService {
 	}
 
 	async create(input: ContactCreateInput) {
+		const truong = input.fields ?? {};
+		await this.fields.kiemBatBuocLucTao(this.db, "CONTACT", truong);
 		const email = normalizeEmail(input.email ?? "");
 		const phone = phoneOf(input.phone);
 		if (phone) await this.refuseTakenPhone(phone);
@@ -353,6 +370,9 @@ export class ContactsService {
 					email,
 					phone,
 					title: blankToNull(input.title ?? ""),
+					linkedinUrl: blankToNull(input.linkedinUrl ?? ""),
+					twitterUrl: blankToNull(input.twitterUrl ?? ""),
+					githubUrl: blankToNull(input.githubUrl ?? ""),
 					companyId,
 					ownerId: input.ownerId ?? null,
 				},
@@ -365,6 +385,7 @@ export class ContactsService {
 					createdAt: true,
 				},
 			});
+			await this.fields.ghiTruongLucTao(tx, "CONTACT", created.id, truong);
 			await emit({
 				type: "contact.created",
 				record: { kind: "contact", id: created.id },
@@ -386,7 +407,7 @@ export class ContactsService {
 			"Added by a rep, with nothing on the record yet",
 		);
 		this.fields
-			.queueBackfillForNewRecord("CONTACT", contact.id)
+			.queueBackfillForNewRecord("CONTACT", contact.id, truong)
 			.catch((error: Error) => {
 				this.logger.error(
 					{

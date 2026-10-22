@@ -1,0 +1,21 @@
+{
+  "nguon": "Cổng Phạm vi MH2, chủ kho duyệt theo lời khuyên 2026-10-21 (d-20261021T093400Z-16)",
+  "tac_nhan": { "model": "zai/glm-5.3-flash", "so_luot": 5, "tran_giay": 180, "luot_qua_toi_thieu": 4 },
+  "tro_ly_kho": { "model": "deepseek/deepseek-v4.1-flash-1017", "so_luot": 1, "cau_loi_toi_da": 2, "kem_moc_toi_da_moi_tang": 1, "moc": "_acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md" },
+  "may_soan_kho": { "model": "zai/glm-5.2-fast" },
+  "gia_kho": {
+    "cach": "gateway-tinh-that",
+    "nguon": "_acceptance/model-theo-vai-do-lai/evidence/ke-hoach.json (giá niêm yết 21/10) × hệ số Gateway đo ở MH4 (Known limits Ngoài-2)",
+    "he_so": { "deepseek/deepseek-v4.1-flash-1017": 4 },
+    "vao_moi_trieu": { "deepseek/deepseek-v4.1-flash-1017": 0.3, "zai/glm-5.2-fast": 2.8 },
+    "ra_moi_trieu": { "deepseek/deepseek-v4.1-flash-1017": 1.2, "zai/glm-5.2-fast": 8.8 }
+  },
+  "tran_usd": 3,
+  "vai_doi": ["tac-nhan", "tro-ly-kho"],
+  "moc_chi_phi": {
+    "tac-nhan": { "cach": "aichiphi-that", "tep": "_acceptance/tac-nhan-glm-5-3-cham/evidence/aichiphi-moc-*.json", "model": "zai/glm-5.2-fast" },
+    "tro-ly-kho": { "cach": "token-luot-xac-nhan-nhan-gia-model-cu", "model": "zai/glm-5.2-fast", "vao_moi_trieu": 2.8, "ra_moi_trieu": 8.8 }
+  },
+  "nguong_gia_tri": { "re_hon_toi_thieu_phan_tram": 50, "ngay_doc": "2026-10-30" },
+  "o_cai_dat_production": "khong-ghi-de"
+}

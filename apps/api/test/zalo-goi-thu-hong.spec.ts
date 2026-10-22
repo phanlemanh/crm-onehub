@@ -69,6 +69,7 @@ function dungMang(chon: ChonZaloGia) {
 	const handler = route().handler;
 	const tacTu = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: async (req) => {
 			const traLoi = await handler(
 				new Request(`${GOC_TAC_TU}${new URL(req.url).pathname}`, req),
@@ -142,7 +143,7 @@ beforeAll(async () => {
 		imports: [AppModule],
 	}).compile();
 	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	await app.listen(0, "127.0.0.1");
 });
 
 afterEach(async () => {

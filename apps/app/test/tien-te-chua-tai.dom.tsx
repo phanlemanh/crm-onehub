@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { sapBoTri } from "@crm/db/fields-chuan";
 import { formatMoney } from "@crm/ui/lib/format";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
@@ -82,6 +83,10 @@ mock.module("@/lib/trpc/client", () => ({
 			me: thuTuc("users.me", () => ({ id: "u1", name: "Người A" })),
 		},
 		currency: { settings: thuTuc("currency.settings", docThietLap) },
+		fields: {
+			list: thuTuc("fields.list", () => []),
+			layout: thuTuc("fields.layout", () => sapBoTri("DEAL", [], [])),
+		},
 		deals: {
 			create: thuTuc(
 				"deals.create",

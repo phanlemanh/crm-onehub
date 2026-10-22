@@ -3,16 +3,27 @@
 import Edit from "@carbon/icons-react/es/Edit";
 import { Button } from "@crm/ui/components/button";
 import { Checkbox } from "@crm/ui/components/checkbox";
+import { DatePicker } from "@crm/ui/components/date-picker";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
-import { FieldError } from "@crm/ui/components/field";
+import { Field, FieldError, FieldLabel } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { MoneyInput } from "@crm/ui/components/money-input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@crm/ui/components/select";
 import { SOURCED_VALUE, SourcedValue } from "@crm/ui/components/sourced-value";
 import { Spinner } from "@crm/ui/components/spinner";
+import { Textarea } from "@crm/ui/components/textarea";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { cn } from "@crm/ui/lib/utils";
+import type { LoiTruong } from "@crm/validation/loi-truong";
 import { type ReactNode, useId, useState } from "react";
 import {
 	InlineDateField,
@@ -469,33 +480,365 @@ function OTien({ moTa }: { moTa: MoTaTruong }) {
 	);
 }
 
+export type GiaTriNhap = string;
+
+export const DA_TICH = "true";
+
+export type MoTaTao = {
+	khoa: string;
+	nhan: string;
+	kieu: KieuTruong;
+	giaTri: GiaTriNhap;
+	doi: (giaTri: GiaTriNhap) => void;
+	loi?: string | null;
+	batBuoc?: boolean;
+	luaChon?: LuaChonTruong[];
+	nhanRong?: string;
+	nguoiDung?: Owner[];
+	tienTe?: string | null;
+	thieuTienTe?: string;
+	cuoi?: ReactNode;
+	goiY?: string;
+	moTaPhu?: ReactNode;
+	tuDongFocus?: boolean;
+	kiemRieng?: (chuoi: string) => string | null;
+};
+
+export function idOTao(khoa: string): string {
+	return `form-tao-${khoa}`;
+}
+
+const idLoiTao = (khoa: string) => `${idOTao(khoa)}-loi`;
+
+function loiCuaO(moTa: MoTaTao) {
+	return {
+		"aria-invalid": moTa.loi ? true : undefined,
+		"aria-describedby": moTa.loi ? idLoiTao(moTa.khoa) : undefined,
+	};
+}
+
+function KhungOTao({ moTa, children }: { moTa: MoTaTao; children: ReactNode }) {
+	return (
+		<Field data-invalid={moTa.loi ? true : undefined} data-o-tao={moTa.khoa}>
+			<FieldLabel htmlFor={idOTao(moTa.khoa)}>{moTa.nhan}</FieldLabel>
+			{children}
+			{moTa.moTaPhu}
+			{moTa.loi ? (
+				<FieldError id={idLoiTao(moTa.khoa)}>{moTa.loi}</FieldError>
+			) : null}
+		</Field>
+	);
+}
+
+function cheDoNhap(kieu: KieuTruong) {
+	if (kieu === "NUMBER") return "decimal";
+	if (kieu === "URL") return "url";
+	if (kieu === "PHONE") return "tel";
+	if (kieu === "EMAIL") return "email";
+	return undefined;
+}
+
+function ONhapTao({ moTa }: { moTa: MoTaTao }) {
+	return (
+		<KhungOTao moTa={moTa}>
+			<Input
+				id={idOTao(moTa.khoa)}
+				type={kieuNhap(moTa.kieu)}
+				inputMode={cheDoNhap(moTa.kieu)}
+				value={moTa.giaTri}
+				onChange={(event) => moTa.doi(event.target.value)}
+				placeholder={moTa.goiY}
+				required={moTa.batBuoc}
+				autoFocus={moTa.tuDongFocus}
+				autoComplete="off"
+				{...loiCuaO(moTa)}
+			/>
+		</KhungOTao>
+	);
+}
+
+function OChuDaiTao({ moTa }: { moTa: MoTaTao }) {
+	return (
+		<KhungOTao moTa={moTa}>
+			<Textarea
+				id={idOTao(moTa.khoa)}
+				value={moTa.giaTri}
+				onChange={(event) => moTa.doi(event.target.value)}
+				placeholder={moTa.goiY}
+				required={moTa.batBuoc}
+				{...loiCuaO(moTa)}
+			/>
+		</KhungOTao>
+	);
+}
+
+function ONgayTao({ moTa }: { moTa: MoTaTao }) {
+	return (
+		<KhungOTao moTa={moTa}>
+			<DatePicker
+				id={idOTao(moTa.khoa)}
+				value={moTa.giaTri}
+				onChange={(ngay) => moTa.doi(ngay)}
+				placeholder={moTa.goiY}
+			/>
+		</KhungOTao>
+	);
+}
+
+function OTichTao({ moTa }: { moTa: MoTaTao }) {
+	return (
+		<Field
+			orientation="horizontal"
+			data-invalid={moTa.loi ? true : undefined}
+			data-o-tao={moTa.khoa}
+		>
+			<Checkbox
+				id={idOTao(moTa.khoa)}
+				checked={moTa.giaTri === DA_TICH}
+				onCheckedChange={(checked) => moTa.doi(checked === true ? DA_TICH : "")}
+				aria-required={moTa.batBuoc || undefined}
+				{...loiCuaO(moTa)}
+			/>
+			<FieldLabel htmlFor={idOTao(moTa.khoa)}>{moTa.nhan}</FieldLabel>
+			{moTa.loi ? (
+				<FieldError id={idLoiTao(moTa.khoa)}>{moTa.loi}</FieldError>
+			) : null}
+		</Field>
+	);
+}
+
+function luaChonTao(moTa: MoTaTao, locale: Locale): LuaChonTruong[] {
+	const m = crmMessages(locale);
+	const rong = moTa.batBuoc
+		? []
+		: [
+				{
+					value: RONG,
+					label:
+						moTa.nhanRong ??
+						(moTa.kieu === "USER" ? m.owner.unassigned : m.fieldValue.none),
+				},
+			];
+	const ds =
+		moTa.kieu === "USER"
+			? (moTa.nguoiDung ?? []).map((nguoi) => ({
+					value: nguoi.id,
+					label: nguoi.name,
+				}))
+			: (moTa.luaChon ?? []);
+	return [...rong, ...ds];
+}
+
+function OChonTao({ moTa }: { moTa: MoTaTao }) {
+	const locale = useLocale();
+	const giaTri = moTa.giaTri;
+	return (
+		<KhungOTao moTa={moTa}>
+			<Select
+				value={giaTri === "" && !moTa.batBuoc ? RONG : giaTri}
+				onValueChange={(chon) => moTa.doi(chon === RONG ? "" : chon)}
+			>
+				<SelectTrigger
+					id={idOTao(moTa.khoa)}
+					aria-label={moTa.nhan}
+					aria-required={moTa.batBuoc || undefined}
+					{...loiCuaO(moTa)}
+				>
+					<SelectValue placeholder={moTa.goiY} />
+				</SelectTrigger>
+				<SelectContent>
+					{luaChonTao(moTa, locale).map((muc) => (
+						<SelectItem key={muc.value} value={muc.value}>
+							<span translate="no">{muc.label}</span>
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
+		</KhungOTao>
+	);
+}
+
+function OTienTao({ moTa }: { moTa: MoTaTao }) {
+	return (
+		<KhungOTao moTa={moTa}>
+			<MoneyInput
+				id={idOTao(moTa.khoa)}
+				value={moTa.giaTri}
+				onValueChange={(chu) => moTa.doi(chu)}
+				currency={moTa.tienTe ?? null}
+				missingCurrency={moTa.thieuTienTe}
+				end={moTa.cuoi}
+			/>
+		</KhungOTao>
+	);
+}
+
+export type DocTao =
+	| { kind: "rong" }
+	| { kind: "ok"; giaTri: string | number | boolean }
+	| { kind: "loi"; cau: string };
+
+const KIEU_GIU_CHUOI = new Set<KieuTruong>([
+	"SELECT",
+	"USER",
+	"DATE",
+	"LONG_TEXT",
+	"MONEY",
+]);
+
+export function docGiaTriTao(
+	moTa: Pick<MoTaTao, "kieu" | "nhan" | "batBuoc" | "giaTri" | "kiemRieng">,
+	locale: Locale,
+): DocTao {
+	const trong: DocTao = moTa.batBuoc
+		? { kind: "loi", cau: cauTuChoi("trong", moTa.nhan, locale) }
+		: { kind: "rong" };
+
+	if (moTa.kieu === "CHECKBOX")
+		return moTa.giaTri === DA_TICH ? { kind: "ok", giaTri: true } : trong;
+
+	const chuoi = moTa.giaTri;
+	if (chuoi.trim() === "") return trong;
+
+	const rieng = moTa.kiemRieng?.(chuoi);
+	if (rieng) return { kind: "loi", cau: rieng };
+
+	if (KIEU_GIU_CHUOI.has(moTa.kieu))
+		return {
+			kind: "ok",
+			giaTri: moTa.kieu === "LONG_TEXT" ? chuoi : chuoi.trim(),
+		};
+
+	const doc = docNhapTheoKieu(moTa.kieu, chuoi, locale);
+	if (doc.kind === "ok") return { kind: "ok", giaTri: doc.giaTri };
+	if (doc.kind === "tu-choi")
+		return { kind: "loi", cau: cauTuChoi(doc.ma, moTa.nhan, locale) };
+	return trong;
+}
+
+export type KhoAn = "sm" | "md" | "lg";
+
 type DongKieu = {
 	hienThi: (gia: GiaTriHienThi) => ReactNode;
 	suaTaiCho: (moTa: MoTaTruong) => ReactNode;
 	oBang: (gia: GiaTriHienThi) => ReactNode;
+	anDuoi: KhoAn;
+	canh: "left" | "right";
+	oTao: (moTa: MoTaTao) => ReactNode;
 };
 
 const hienThi = (gia: GiaTriHienThi) => <HienThiTruong {...gia} />;
 const oBang = (gia: GiaTriHienThi) => <OTruongBang {...gia} />;
 const suaChu = (moTa: MoTaTruong) => <OSuaCoKiem moTa={moTa} />;
 const suaChon = (moTa: MoTaTruong) => <OChon moTa={moTa} />;
+const taoNhap = (moTa: MoTaTao) => <ONhapTao moTa={moTa} />;
+const taoChon = (moTa: MoTaTao) => <OChonTao moTa={moTa} />;
 
 export const KIEU_TRUONG = {
-	TEXT: { hienThi, suaTaiCho: suaChu, oBang },
-	LONG_TEXT: { hienThi, suaTaiCho: (moTa) => <OChuDai moTa={moTa} />, oBang },
-	NUMBER: { hienThi, suaTaiCho: suaChu, oBang },
-	DATE: { hienThi, suaTaiCho: (moTa) => <ONgay moTa={moTa} />, oBang },
-	CHECKBOX: { hienThi, suaTaiCho: (moTa) => <OTich moTa={moTa} />, oBang },
-	SELECT: { hienThi, suaTaiCho: suaChon, oBang },
-	URL: { hienThi, suaTaiCho: suaChu, oBang },
-	EMAIL: { hienThi, suaTaiCho: suaChu, oBang },
-	PHONE: { hienThi, suaTaiCho: suaChu, oBang },
-	USER: { hienThi, suaTaiCho: suaChon, oBang },
-	MONEY: { hienThi, suaTaiCho: (moTa) => <OTien moTa={moTa} />, oBang },
+	TEXT: {
+		hienThi,
+		suaTaiCho: suaChu,
+		oBang,
+		anDuoi: "lg",
+		canh: "left",
+		oTao: taoNhap,
+	},
+	LONG_TEXT: {
+		hienThi,
+		suaTaiCho: (moTa) => <OChuDai moTa={moTa} />,
+		oBang,
+		anDuoi: "lg",
+		canh: "left",
+		oTao: (moTa) => <OChuDaiTao moTa={moTa} />,
+	},
+	NUMBER: {
+		hienThi,
+		suaTaiCho: suaChu,
+		oBang,
+		anDuoi: "sm",
+		canh: "right",
+		oTao: taoNhap,
+	},
+	DATE: {
+		hienThi,
+		suaTaiCho: (moTa) => <ONgay moTa={moTa} />,
+		oBang,
+		anDuoi: "lg",
+		canh: "left",
+		oTao: (moTa) => <ONgayTao moTa={moTa} />,
+	},
+	CHECKBOX: {
+		hienThi,
+		suaTaiCho: (moTa) => <OTich moTa={moTa} />,
+		oBang,
+		anDuoi: "lg",
+		canh: "left",
+		oTao: (moTa) => <OTichTao moTa={moTa} />,
+	},
+	SELECT: {
+		hienThi,
+		suaTaiCho: suaChon,
+		oBang,
+		anDuoi: "lg",
+		canh: "left",
+		oTao: taoChon,
+	},
+	URL: {
+		hienThi,
+		suaTaiCho: suaChu,
+		oBang,
+		anDuoi: "md",
+		canh: "left",
+		oTao: taoNhap,
+	},
+	EMAIL: {
+		hienThi,
+		suaTaiCho: suaChu,
+		oBang,
+		anDuoi: "md",
+		canh: "left",
+		oTao: taoNhap,
+	},
+	PHONE: {
+		hienThi,
+		suaTaiCho: suaChu,
+		oBang,
+		anDuoi: "md",
+		canh: "left",
+		oTao: taoNhap,
+	},
+	USER: {
+		hienThi,
+		suaTaiCho: suaChon,
+		oBang,
+		anDuoi: "md",
+		canh: "left",
+		oTao: taoChon,
+	},
+	MONEY: {
+		hienThi,
+		suaTaiCho: (moTa) => <OTien moTa={moTa} />,
+		oBang,
+		anDuoi: "sm",
+		canh: "right",
+		oTao: (moTa) => <OTienTao moTa={moTa} />,
+	},
 } as const satisfies Record<KieuTruong, DongKieu>;
+
+export function anDuoiTheoKieu(kieu: KieuTruong): KhoAn {
+	return KIEU_TRUONG[kieu].anDuoi;
+}
+
+export function canhTheoKieu(kieu: KieuTruong): "left" | "right" {
+	return KIEU_TRUONG[kieu].canh;
+}
 
 export function OTruongPhieu({ moTa }: { moTa: MoTaTruong }) {
 	return <>{KIEU_TRUONG[moTa.kieu].suaTaiCho(moTa)}</>;
+}
+
+export function OTruongTao({ moTa }: { moTa: MoTaTao }) {
+	return <>{KIEU_TRUONG[moTa.kieu].oTao(moTa)}</>;
 }
 
 const MA_LOI_MAY_CHU = {
@@ -506,6 +849,15 @@ const MA_LOI_MAY_CHU = {
 function maLoiMayChu(kieu: KieuTruong): MaTuChoi {
 	if (kieu === "SELECT" || kieu === "USER") return MA_LOI_MAY_CHU[kieu];
 	return "khac";
+}
+
+export function cauLoiMayChuTao(
+	moTa: Pick<MoTaTao, "kieu" | "nhan">,
+	loi: LoiTruong,
+	locale: Locale,
+): string {
+	if (loi.lyDo === "thieu") return cauTuChoi("trong", moTa.nhan, locale);
+	return crmMessages(locale).truongKieu.tuChoi[maLoiMayChu(moTa.kieu)];
 }
 
 export function loiLuuTruong(

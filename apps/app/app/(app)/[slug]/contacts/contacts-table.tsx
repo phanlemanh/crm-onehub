@@ -18,8 +18,14 @@ import { useEffect, useMemo, useState } from "react";
 import { CompanyCell } from "@/components/crm/company-cell";
 import { contactName } from "@/components/crm/contact-name";
 import { useFieldColumns } from "@/components/crm/fields/field-columns";
-import { useFieldFacets } from "@/components/crm/fields/field-facets";
-import { OTruongBang } from "@/components/crm/fields/kieu-truong";
+import {
+	useFieldFacets,
+	useTruongLoc,
+} from "@/components/crm/fields/field-facets";
+import {
+	anDuoiTheoKieu,
+	OTruongBang,
+} from "@/components/crm/fields/kieu-truong";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
@@ -58,8 +64,9 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 		{
 			id: "phone",
 			header: m.headers.phone,
+			sortable: true,
 			width: "w-[14%]",
-			hideBelow: "md",
+			hideBelow: anDuoiTheoKieu("PHONE"),
 			cell: (row) => <OTruongBang kieu="PHONE" giaTri={row.phone} />,
 		},
 		{
@@ -67,7 +74,7 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			header: m.headers.title,
 			sortable: true,
 			width: "w-[20%]",
-			hideBelow: "lg",
+			hideBelow: anDuoiTheoKieu("TEXT"),
 			cell: (row) => <OTruongBang kieu="TEXT" giaTri={row.title} />,
 		},
 		{
@@ -75,7 +82,7 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			header: m.headers.email,
 			sortable: true,
 			width: "w-[24%]",
-			hideBelow: "md",
+			hideBelow: anDuoiTheoKieu("EMAIL"),
 			cell: (row) => <OTruongBang kieu="EMAIL" giaTri={row.email} />,
 		},
 		{
@@ -90,7 +97,7 @@ export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			header: m.headers.owner,
 			sortable: true,
 			width: "w-[16%]",
-			hideBelow: "md",
+			hideBelow: anDuoiTheoKieu("USER"),
 			cell: (row) => (
 				<OTruongBang
 					kieu="USER"
@@ -159,7 +166,9 @@ export function ContactsTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const table = useTableQuery(contactsSearchParams);
+	const table = useTableQuery(contactsSearchParams, {
+		truongLoc: useTruongLoc("CONTACT"),
+	});
 	const { query, input, setArchived, currentView, applyView } = table;
 
 	const contacts = useQuery({
