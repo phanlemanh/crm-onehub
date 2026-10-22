@@ -23,7 +23,9 @@ export function lanTruocTuVet(
 	keyResultId: string,
 ): LanTruocKr | null {
 	const cuoi = trail
-		.filter((v) => v.action === "cap-nhat-tuan" && v.keyResultId === keyResultId)
+		.filter(
+			(v) => v.action === "cap-nhat-tuan" && v.keyResultId === keyResultId,
+		)
 		.reduce<VetDong | null>(
 			(moi, v) => (moi === null || v.at >= moi.at ? v : moi),
 			null,

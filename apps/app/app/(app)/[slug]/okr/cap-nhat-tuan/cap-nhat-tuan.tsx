@@ -131,7 +131,7 @@ function lucGuiMoiNhat(items: KrCapNhat[]): string | null {
 	);
 }
 
-function ngayGioVN(luc: string, locale: Locale) {
+export function ngayGioVN(luc: string, locale: Locale) {
 	return {
 		ngay: ngayThang(ngayVN(luc)),
 		gio: new Date(luc).toLocaleTimeString(DINH_DANG[locale], {
