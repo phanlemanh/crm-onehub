@@ -230,8 +230,8 @@ evals:
           khi luu tru (in ca hai day)
         da-luu-tru-375: kho 375, sau khi luu tru giai doan rieng, mo "Đã lưu trữ (n)": hop muc gap va nut "Khôi phục"
           co left >= 0, right <= 375; khong tran ngang trang (scrollWidth <= 375)
-      Anh: hang cuoi the Dang mo la giai doan vua khoi phuc; o 375 nut "Khôi phục" thay tron.
-      Don: giai doan tao trong lan do bi cat lai sau khi do.
+        Anh: hang cuoi the Dang mo la giai doan vua khoi phuc; o 375 nut "Khôi phục" thay tron.
+        Don: giai doan tao trong lan do bi cat lai sau khi do.
 
   - id: E12
     criterion: AC-12

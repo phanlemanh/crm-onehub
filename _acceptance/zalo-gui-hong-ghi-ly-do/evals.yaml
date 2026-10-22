@@ -94,7 +94,11 @@ evals:
     criterion: AC-10
     executor: test
     cmd: config:executors.test.zghl_can_noi_lai
-    paths: [apps/api/src/zalo/zalo.service.ts, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx, apps/api/test/zalo-doi-bot.spec.ts]
+    paths: [
+        "apps/api/src/zalo/zalo.service.ts",
+        "apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx",
+        "apps/api/test/zalo-doi-bot.spec.ts"
+      ]
     expected: "exit 0; kho thử: người A có NotificationPreference.channel = ZALO và không zaloLink; người B chưa từng chọn (không có NotificationPreference); người C có ZALO và còn zaloLink. Gọi zalo.cuaToi THẬT qua router của API cho từng người: A → canNoiLai = true; B → false; C → false. CHIỀU ĐỎ: cặp (k) bản sao cho canNoiLai luôn false → dòng A đỏ «A khong duoc bao noi lai»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -109,7 +113,10 @@ evals:
       - "Kết nối › Zalo ở 1440 và 390: dán token bot khác vào ô token, bấm Lưu → ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot» và Huỷ → ảnh evidence/E13-doi-bot-<rộng>.png"
       - "«Thông báo của bạn» của người A ở 1440 và 390 → dòng báo cần nối lại cạnh «Nối Zalo» → ảnh evidence/E13-can-noi-lai-<rộng>.png"
       - "Đọc dòng «E13 …» trong output; mọi dòng kiểm phải đạt, rồi mở từng ảnh E13-*.png để chấm"
-    paths: [apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx]
+    paths: [
+        "apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx",
+        "apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx"
+      ]
     expected: "Trên bàn đo (do:man, kho dùng-một-lần, agent giả trả can-xac-nhan-doi-bot cho Lưu bot), chụp ở 1440 và 390: (1) Kết nối › Zalo sau khi bấm Lưu với token bot khác — ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot», nút Huỷ; (2) «Thông báo của bạn» của người A ở E12 — dòng báo cần nối lại cạnh «Nối Zalo»; Ảnh lưu ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E13-*.png; người chấm nhìn ảnh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
@@ -126,7 +133,10 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.zghl_doi_bot_dom
-    paths: [apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx, apps/app/test/zalo-doi-bot.dom.tsx]
+    paths: [
+        "apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx",
+        "apps/app/test/zalo-doi-bot.dom.tsx"
+      ]
     expected: "exit 0; bài DOM dựng o-token.tsx THẬT với mutation luuBot giả đếm lời gọi: lần gọi đầu trả can-xac-nhan-doi-bot → ConfirmDialog mở và chữ của chính hộp (phần tử role alertdialog/dialog) chứa nguyên câu doiBotThan(«Bot Mới», soLienKet mutation trả) — sai thì ném «hop xac nhan khong neu dung ten bot va so lien ket»; (1) bấm Huỷ → hộp đóng, tổng số lời gọi vẫn là 1; (2) mở lại, bấm «Gỡ liên kết và đổi bot» → đúng một lời gọi mới với xacNhanDoiBot: true. Chỉ so giá trị nguyên thuỷ (chuỗi, số, boolean), không đưa phần tử DOM vào toEqual (luật 35). CHIỀU ĐỎ: cặp (n) bản sao cho nút xác nhận gọi luuBot không cờ → đỏ «xac nhan khong gui co»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
