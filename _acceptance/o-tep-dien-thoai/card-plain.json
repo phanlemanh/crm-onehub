@@ -1,0 +1,27 @@
+{
+  "feature_plain": "Trên điện thoại, ô Tệp của phiếu thoả thuận đọc được: vùng kéo thả không còn bóp chữ xuống từng từ và tên trường hiện trọn.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ xếp nút «Chọn tệp» lên trên dòng «Kéo tệp vào đây» khi ô hẹp, để chữ nằm gọn trên một hai dòng ở khổ 375."},
+    {"id": "AC-2", "p": "Sẽ hiện trọn tên trường Tệp trên một dòng riêng phía trên ô ở khổ điện thoại, không cắt thành «Hợp đồng (thử D…»."},
+    {"id": "AC-4", "p": "Sẽ giữ phiếu ở khổ máy tính y như hôm nay: tên trường cột trái, nút cạnh chữ."},
+    {"id": "AC-5", "p": "Sẽ cho hộp tải nguồn của Kho tài liệu hưởng cùng cách xếp — gọn ở 375, như cũ ở 1280."},
+    {"id": "AC-6", "p": "Sẽ giữ nguyên cách chọn, thả, từ chối và khoá tệp — các bài kiểm cũ chạy nguyên, không sửa bài nào."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG để phiếu cuộn ngang ở khổ 375, kể cả khi ô đã có tệp tên dài."},
+    {"id": "OOS-1", "p": "KHÔNG sửa chuyện cắt chữ tên trường ở các hàng khác của phiếu — cột tên hẹp là nếp chung của phiếu."},
+    {"id": "OOS-2", "p": "KHÔNG đổi các hàng rộng khác (lý do thua, cuộc hẹn kế, «Cũng ở đây») — trừ khi anh chọn nhánh B ở Hỏi-1."},
+    {"id": "OOS-3", "p": "KHÔNG đổi chữ, loại tệp nhận, giới hạn cỡ hay quyền mở tệp của ô Tệp."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đã quét hai nơi dùng vùng kéo thả (phiếu, hộp tải nguồn) × hai khổ (375, 1280); bốn ô quan trọng thành AC-1 đến AC-5 (ảnh chụp màn thật), các trạng thái tắt, lỗi, đang kéo chỉ đổi màu nên giữ bằng bài kiểm cũ (AC-6). Thước «đủ» là danh sách nơi dùng thành phần và chuẩn WCAG không cuộn ngang ở màn hẹp."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chuyện chỉ hàng Tệp xếp dọc hay mọi hàng rộng cùng xếp dọc là nếp nhìn của phiếu, người phải chọn — đã chuyển thành Hỏi-1, bản nháp theo khuyến nghị «chỉ hàng Tệp»."},
+    {"i": 1, "p": "Có một cách đơn giản hơn để chữ rớt xuống dưới nút (cho khối chữ một bề rộng tối thiểu) — đã đổi sang cách ấy."},
+    {"i": 2, "p": "Phản biện đề nghị hỏi một ngưỡng đo giá trị — không nhận: đây là sửa lỗi bố cục của tính năng Tệp đã giao, không phải việc mới cần đo hiệu quả."},
+    {"i": 3, "p": "Lời hứa «không sửa bài kiểm cũ» chưa được đo — nay lệnh kiểm đỏ ngay nếu một bài cũ bị sửa."},
+    {"i": 4, "p": "Phép đo cuộn ngang chỉ nhìn cả trang, bỏ sót vùng cuộn riêng của phiếu — nay đo cả vùng cuộn, thêm tệp tên dài và chiều đỏ."}
+  ],
+  "decisions_plain": []
+}
