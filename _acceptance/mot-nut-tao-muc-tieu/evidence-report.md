@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e6c2463394dc2a596bf6983ae119ba934d98b68f
-human_signoff: Phan Le Manh 2026-10-22 — ký Cổng Bằng chứng trên vòng chấm 2 (PASS, 16 eval, 7 suite xanh; vòng 1 REJECT vì năm chỗ yếu thước, đã sửa); Ngoài-3 và Ngoài-9 mở hợp đồng mới, 11 mục ghi Known limits
+verified_commit: 091fe8c15de653fb8a15580241b2a25cfdc53fed
+human_signoff:
 ---
 
 # Evidence Report: mot-nut-tao-muc-tieu
@@ -32,55 +32,114 @@ human_signoff: Phan Le Manh 2026-10-22 — ký Cổng Bằng chứng trên vòng
 | E15 | AC-8 | test | PASS |
 | E16 | AC-9 | ui-check | PASS |
 
-Vòng 2 chạy lại E1, E2, E3, E4, E6, E8, E9, E11, E13, E15, E16 và bảy lệnh suite. E7, E10, E12, E14 mang từ vòng 1 (delta không chạm paths của chúng). E5 là mục judgment: đề xuất của panel là PASS, người chốt ở Cổng 2.
-
 ## Evidence
 
 - eval: E1
-  run_id: minted-mot-nut-tao-muc-tieu-E1-r2
+  run_id: minted-mot-nut-tao-muc-tieu-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mnt_dau_trang
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
   output: |
-    Ran 1 test across 1 file. [3.16s]
+    Ran 1 test across 1 file. [3.47s]
 
 - eval: E2
-  run_id: minted-mot-nut-tao-muc-tieu-E2-r2
+  run_id: minted-mot-nut-tao-muc-tieu-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mnt_man_doc
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
   output: |
-    Ran 1 test across 1 file. [2.43s]
+    Ran 1 test across 1 file. [2.55s]
 
 - eval: E3
-  run_id: minted-mot-nut-tao-muc-tieu-E3-r2
+  run_id: minted-mot-nut-tao-muc-tieu-E3-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.mnt_man
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
   output: |
     phien-do: xong — mã 0
-    (một lần chạy bàn đo màn chung cho E3 và E8)
 
 - eval: E4
-  run_id: minted-mot-nut-tao-muc-tieu-E4-r2
+  run_id: minted-mot-nut-tao-muc-tieu-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mnt_hop
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
   output: |
-    Ran 5 tests across 1 file. [3.22s]
+    Ran 5 tests across 1 file. [2.83s]
 
 - eval: E6
-  run_id: minted-mot-nut-tao-muc-tieu-E6-r2
+  run_id: minted-mot-nut-tao-muc-tieu-E6-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mnt_tu_viet
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
   output: |
-    Ran 2 tests across 1 file. [2.74s]
+    Ran 2 tests across 1 file. [3.15s]
+
+- eval: E8
+  run_id: minted-mot-nut-tao-muc-tieu-E8-r3
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.mnt_man
+  verified_at: 2026-10-22T15:45:11Z
+  output: |
+    phien-do: xong — mã 0
+
+- eval: E9
+  run_id: minted-mot-nut-tao-muc-tieu-E9-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.mnt_tu_mau
+  verified_at: 2026-10-22T15:45:11Z
+  output: |
+    Ran 3 tests across 1 file. [2.77s]
+
+- eval: E11
+  run_id: minted-mot-nut-tao-muc-tieu-E11-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.mnt_bang_tinh
+  verified_at: 2026-10-22T15:45:11Z
+  output: |
+    Ran 2 tests across 1 file. [2.95s]
+
+- eval: E13
+  run_id: minted-mot-nut-tao-muc-tieu-E13-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.mnt_soan
+  verified_at: 2026-10-22T15:45:11Z
+  output: |
+    Ran 4 tests across 1 file. [3.99s]
+
+- eval: E15
+  run_id: minted-mot-nut-tao-muc-tieu-E15-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.mnt_khoa
+  verified_at: 2026-10-22T15:45:11Z
+  output: |
+    Ran 1 test across 1 file. [3.86s]
+
+- eval: E16
+  run_id: minted-mot-nut-tao-muc-tieu-E16-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.mnt_man
+  verified_at: 2026-10-22T15:45:11Z
+  screenshot: evidence/E16-step1.png
+  observed: |
+    Da mo tung anh moi (22:46) bang Read.
+    (1) cua-toi-dau-trang-1280 (E16-step1.png): tieu de "Muc tieu"; goc phai co dung hai nut "Hoi Kara" va "Them muc tieu" (xanh); khong co nut "…", khong co nhom "Soan" nao.
+    (2) bo-okr-hop-1280 (E16-step2.png): hop "Them muc tieu" nam giua man hinh, cau goi "Muc tieu moi cua Kinh doanh mien Bac. Chon cach bat dau."; bon dong theo thu tu Tu viet · Tu mau · Tu bang tinh · Soan cung Kara; dong Soan cung Kara hien o dang lam mo (chua mo khi chu ky dang lap ke hoach) va co bieu tuong tia sang AI "Kara" ben phai.
+    (3) suc-khoe-dau-trang-1280 (E16-step3.png): dau trang chi co "Hoi Kara", khong co nut to mau; khong co nut Them muc tieu.
+    (4) cua-toi-hop-375 (E16-step4.png): hop vua be ngang man hinh 375 (le trai/phai ~16px), bon dong doc tron, chu xuong dong khong bi cat, khong tran ngang.
+    (5) bo-okr-hop-375 (E16-step5.png): giong het (hai anh 375 giong het tung byte vi nen sau hop la lop phu den; log do ghi rieng "CUA TOI sang bo-okr voi ngan tao" nen day la hanh vi dung, chi la ghi chu).
+    Ban do in DUNG AC-9 cho ca ba anh hop (bo-okr-hop-1280, cua-toi-hop-375, bo-okr-hop-375): tran ngang 0, dong bi cat 0, vung bam tron 4/4. Du 5 anh theo Expected.
+  network_observed: n-a (driver)
 
 - eval: E7
   run_id: minted-mot-nut-tao-muc-tieu-E7-r1
@@ -88,27 +147,7 @@ Vòng 2 chạy lại E1, E2, E3, E4, E6, E8, E9, E11, E13, E15, E16 và bảy l�
   verifier: config:executors.test.mnt_api_muc_tieu
   verified_at: 2026-10-22T12:07:09Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
-
-- eval: E8
-  run_id: minted-mot-nut-tao-muc-tieu-E8-r2
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.mnt_man
-  verified_at: 2026-10-22T12:41:31Z
-  output: |
-    phien-do: xong — mã 0
-    (cùng một lần chạy bàn đo màn với E3)
-
-- eval: E9
-  run_id: minted-mot-nut-tao-muc-tieu-E9-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.mnt_tu_mau
-  verified_at: 2026-10-22T12:41:31Z
-  output: |
-    Ran 3 tests across 1 file. [2.54s]
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E10
   run_id: minted-mot-nut-tao-muc-tieu-E10-r1
@@ -116,17 +155,7 @@ Vòng 2 chạy lại E1, E2, E3, E4, E6, E8, E9, E11, E13, E15, E16 và bảy l�
   verifier: config:executors.test.mnt_api_tu_mau
   verified_at: 2026-10-22T12:07:09Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
-
-- eval: E11
-  run_id: minted-mot-nut-tao-muc-tieu-E11-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.mnt_bang_tinh
-  verified_at: 2026-10-22T12:41:31Z
-  output: |
-    Ran 2 tests across 1 file. [1.98s]
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E12
   run_id: minted-mot-nut-tao-muc-tieu-E12-r1
@@ -134,17 +163,7 @@ Vòng 2 chạy lại E1, E2, E3, E4, E6, E8, E9, E11, E13, E15, E16 và bảy l�
   verifier: config:executors.test.mnt_api_nhap
   verified_at: 2026-10-22T12:07:09Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
-
-- eval: E13
-  run_id: minted-mot-nut-tao-muc-tieu-E13-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.mnt_soan
-  verified_at: 2026-10-22T12:41:31Z
-  output: |
-    Ran 4 tests across 1 file. [2.87s]
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E14
   run_id: minted-mot-nut-tao-muc-tieu-E14-r1
@@ -152,90 +171,56 @@ Vòng 2 chạy lại E1, E2, E3, E4, E6, E8, E9, E11, E13, E15, E16 và bảy l�
   verifier: config:executors.test.mnt_api_soan
   verified_at: 2026-10-22T12:07:09Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
-- eval: E15
-  run_id: minted-mot-nut-tao-muc-tieu-E15-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.mnt_khoa
-  verified_at: 2026-10-22T12:41:31Z
-  output: |
-    Ran 1 test across 1 file. [3.42s]
-
-- eval: E16
-  run_id: minted-mot-nut-tao-muc-tieu-E16-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.mnt_man
-  verified_at: 2026-10-22T12:41:31Z
-  screenshot: evidence/cua-toi-dau-trang-1280.png
-  observed: |
-    Da mo tung anh bang Read.
-    1) cua-toi-dau-trang-1280: tieu de "Muc tieu"; goc phai dau trang co dung hai nut "Hoi Kara" (ve Kara AI) va nut xanh "+ Them muc tieu"; khong co nut "…", khong co nhom "Soan". Phan duoi co "Can cap nhat tuan nay", "Don vi ban dan - Kinh doanh mien Bac", "KR ban phu trach". Dat.
-    2) bo-okr-hop-1280: hop "Them muc tieu" nam giua man; phu de "Muc tieu moi cua Kinh doanh mien Bac. Chon cach bat dau." (goi ten don vi); bon dong theo thu tu Tu viet, Tu mau, Tu bang tinh, Soan cung Kara; dong Soan co bieu tuong dau tia sang "AI" kem nhan Kara o goc phai; dong Soan mo di va ghi "Chi mo khi chu ky dang lap ke hoach..." vi chu ky Quy 4 dang chay (trang thai khoa dung nghiep vu). Dat.
-    3) suc-khoe-dau-trang-1280: dau trang Suc khoe chi co nut "Hoi Kara" (nen toi/xam), khong co nut to mau xanh, khong co "Them muc tieu". Dat.
-    4) cua-toi-hop-375: hop vua be ngang man (le ~16px moi ben), tieu de + phu de xuong dong gon, bon dong Tu viet / Tu mau / Tu bang tinh / Soan cung Kara doc tron, khong cat chu, dong Soan co bieu tuong Kara; khong tran ngang. Dat.
-    5) bo-okr-hop-375: giong het anh 4 (cung hop tren cung don vi): hop vua man, bon dong tron chu, khong tran ngang. Dat.
-    Doi chieu Expected: khong mau thuan; ban do xac nhan so do tran ngang 0, dong cat 0, vung bam 4/4 cho ca ba anh hop.
-  network_observed: n-a (driver)
-  output: |
-    - DUNG AC-9 cua-toi-hop-375: tran ngang 0, dong bi cat 0, vung bam tron 4/4
-    - DUNG AC-9 bo-okr-hop-375: tran ngang 0, dong bi cat 0, vung bam tron 4/4
-    Du 5 anh trong evidence/: cua-toi-dau-trang-1280.png, bo-okr-hop-1280.png, suc-khoe-dau-trang-1280.png, cua-toi-hop-375.png, bo-okr-hop-375.png. Ban sao theo buoc: E16-step1..5.png. Network: driver la script bun, khong doc duoc network -> n-a (driver), ghi E16-network.txt.
-    Luu y: cua-toi-hop-375 va bo-okr-hop-375 trung md5 vi hop o 375 phu kin man den va cung noi dung, khong phai loi.
+### Judgment (đề xuất của hội đồng, chưa có người chốt)
 
 - eval: E5
-  judged_by: judge-panel (3 lens, fresh context) — de xuat, nguoi chot o Cong 2
+  judged_by: judge-subagent (fresh context) — panel đề xuất: domain-correctness, operational-feasibility, spec-alignment
   verdict: PASS
-  rationale: Panel de xuat PASS. Bon cau mo ta cua bon duong, dong "Tiep cuoc dang soan" va ba cau ly do khoa co mat o ca ban vi va en trong apps/app/lib/messages/okr.ts (dong 48-79 ban vi, 829-860 ban en), goi AI la Kara, khong chu ky thuat. Hai lens PASS (operational-feasibility, spec-alignment). Mot lens chua ket luan duoc (domain-correctness), xem tung phieu ben duoi.
+  rationale: Cả ba góc nhìn cùng đề xuất PASS; bốn câu mô tả đường và các câu lý do khoá có mặt ở cả bản Việt lẫn bản Anh, nói việc người làm, gọi AI là Kara, có lối đi tiếp.
   votes:
-    - domain-correctness: UNCERTAIN — Cac cau mo ta noi ro nguoi lam gi, khong co ten ky thuat, goi AI la «Kara», ban EN giu cung nghia. Hai cho chua ket luan duoc tu ba tep duoc phep doc. Mot la loi chi dan «Cài đặt › OKR» trong cau khoa Tu mau (dong 72 va 853) khong khop ten khu «Cài đặt › Chương trình OKR» o dong 137 va 919, nen chua ro nguoi dung co tim dung cho them mau khong. Hai la dong «Tiếp cuộc đang soạn» (EN «Continue the open draft») khong co cau mo ta; chu «cuộc» va «draft» co the bi hieu nham voi trang thai «Nháp» cua muc tieu.
-    - operational-feasibility: PASS — Tieu de, cau don vi dich, bon cau mo ta duong, «Tiếp cuộc đang soạn» va ba cau ly do khoa deu dung loi nguoi dung, AI goi la Kara. Cau khoa cua Tu mau va cau ly do pha cua Soan noi ro khi nao mo hoac nen lam gi thay. Ban EN giu cung nghia. Hai diem nho khong du de chan: «của bạn» trong cau Tu mau gan nhu thua; cau pha goi y «Từ mẫu» du duong do co the cung dang khoa.
-    - spec-alignment: PASS — Bon cau mo ta noi ro nguoi lam gi o moi duong: go cau muc tieu, chon mau roi dien so, dan roi xem truoc roi ghi, tro chuyen voi Kara. Ba cau ly do khoa noi khi nao mo lai hoac nen chon duong nao thay. Ban EN giu cung nghia, «Tiếp cuộc đang soạn» ung voi «Continue the open draft».
-  required_evidence:
-    - Ten nhan that cua trang cai dat noi quan tri them mau OKR (nhan thanh ben Cai dat hoac tieu de trang mau OKR). Ban ghi bao cao tra thay messages/settings.ts dat nhan muc la «Chương trình OKR» (EN «OKR program»); chua xac nhan trang mau OKR nam duoi nhan nao. Neu trang mau nam duoi nhan do thi loi chi dan «Cài đặt › OKR» o dong 72 va 853 cua okr.ts can doi cho khop.
-    - Tu dien CONTEXT.md co muc «cuộc soạn» (hoac tuong duong) va ban tieng Anh tuong ung, de go nghi van ve chu «cuộc» va «draft».
-    - Anh hop «Thêm mục tiêu» o trang thai co cuoc soan dang mo (ban do man 1280x800), cho thay dong «Tiếp cuộc đang soạn» hien cung cau mo ta nao.
+    - domain-correctness: PASS — Trong `okr.ts` (dòng 48–79 và 829–860), bốn câu mô tả nói rõ người dùng sẽ làm gì ở mỗi đường, gọi AI là «Kara», không có tên kỹ thuật và không có chữ nào thừa. «KR» và «bộ OKR» là thuật ngữ của chính màn OKR. Câu khoá «Từ mẫu» (chuaCoMau) nói ai thêm mẫu và ở đâu, rồi bảo chọn Tự viết. Câu khoá pha của «Soạn» (ngoaiPha) nói khi nào mở (lúc chu kỳ đang lập kế hoạch) và bảo chọn Tự viết hay Từ mẫu. Bản tiếng Anh giữ cùng nghĩa ở mọi khoá, và «Tiếp cuộc đang soạn» khớp «Continue the open draft».
+    - operational-feasibility: PASS — Trong `okr.ts` (khối `chonDuong`, dòng 48-79 bản Việt và 829-860 bản Anh), bốn mô tả đường nói rõ người làm gì, bằng lời thường. Đó là "Gõ câu mục tiêu, chọn loại và người phụ trách", "Chọn một mẫu… rồi điền số", "Dán nhiều mục tiêu và KR… xem trước rồi ghi" và "Trò chuyện với Kara để soạn…". Không có tên kỹ thuật, không có chữ "AI", và Kara được gọi đúng tên. Ba câu khoá đều nói nên làm gì thay: `chuaCoMau` nói quản trị thêm mẫu ở Cài đặt › OKR, trong lúc đó chọn Tự viết; `ngoaiPha` nói chỉ mở khi chu kỳ đang lập kế hoạch, trong lúc đó chọn Tự viết hay Từ mẫu; `caNhan` nói với mục tiêu cá nhân chọn Tự viết. Bản Anh cùng nghĩa ở cả sáu chuỗi, kể cả "Continue the open draft" và "Past drafts ({da}/{tran})". Phép thử "xoá một chữ" mang tính chủ quan. Vài chữ như "của bạn" hay "câu" có thể coi là thừa, nhưng không chữ nào xoá đi mà nghĩa vẫn đúng như cũ.
+    - spec-alignment: PASS — Trong `okr.ts` (dòng 48–78, bản Anh 829–859), tiêu đề, câu đơn vị đích `{ten}`, bốn cặp tiêu đề và mô tả, «Tiếp cuộc đang soạn» và các câu khoá đều là lời người dùng. Không có tên kỹ thuật hay «AI», và AI luôn được gọi là «Kara». Mỗi mô tả nói người làm gì ở đường đó và không có chữ thừa. Hai câu khoá của Từ mẫu và pha của Soạn đều nói khi nào mở lại (quản trị thêm mẫu; chu kỳ vào lập kế hoạch) và đường thay thế (chọn Tự viết hay Từ mẫu). Bản tiếng Anh cùng nghĩa với bản Việt ở từng khoá.
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
 
 - cmd: bun run lint:slop
-  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_lint_slop-r2
+  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-mot-nut-tao-muc-tieu-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-22T12:41:31Z
+  verified_at: 2026-10-22T15:45:11Z
 
 ## Known limits
 
@@ -243,20 +228,18 @@ Vòng 2 chạy lại E1, E2, E3, E4, E6, E8, E9, E11, E13, E15, E16 và bảy l�
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
-
-Ghi chú: E3 và E8 là hai eval có baseline phân biệt được (red). Các eval DOM còn lại là eval mới nên baseline không đo (xem mục dưới). E7, E10, E12, E14 là bài API có sẵn mang từ vòng 1, đúng như `expected` của chúng khai: «Không phải phép đo mới», giữ vai trò bảo vệ hồi quy cho đường ghi, nên không liệt kê.
+none — moi eval feature deu red tren baseline (co phan biet) o nhung eval baseline do duoc (E3, E8); phan con lai xem muc «Baseline khong do» ben duoi.
 
 ### Baseline khong do
 
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-dau-trang: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-man-doc: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-hop: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-viet: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-mau: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-bang-tinh: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-soan: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
-- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-khoa: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 05e3f7743ec5c9b70bc98dc838fa4b8b1cd25467 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-dau-trang: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-man-doc: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-hop: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-viet: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-tu-mau: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-bang-tinh: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-soan: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
+- cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/mot-nut-tao-muc-tieu.dom.tsx -t mnt-khoa: bo qua baseline: tep apps/app/test/mot-nut-tao-muc-tieu.dom.tsx co o cay dang kiem nhung chua co o merge-base 830d82e1ffdf64bb1a5a244fd8e048926ce13f26 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
@@ -264,6 +247,7 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: REJECT — năm phát hiện trong hợp đồng về độ yếu của thước đo (AC-2, AC-4, AC-7, AC-8). Trả về sửa thước ở commit 18ca9ae0d.
-Round 2: các eval chạy lại đều PASS trên commit e6c2463394dc2a596bf6983ae119ba934d98b68f; E7, E10, E12, E14 mang từ vòng 1. Mốc verified_at của các khối vòng 2 là mốc ghi báo cáo, sau lần ghi sổ cuối 2026-10-22T12:33:19Z.
+Round 1: các phát hiện trong hợp đồng về hình dạng bài đo (bàn đo E3, ma trận mnt-man-doc, ô đường dẫn mnt-khoa) — tổng kết REJECT. Returned to implementation.
+Round 2: 17/17 eval máy đạt sau khi sửa thước; sau đó có lỗi sau chữ ký (chọn đường ở Của tôi bị lần ghi URL tại chỗ đè mất), hạ về implemented để chấm lại.
+Round 3: chấm lại trên commit 091fe8c15; các eval chạm paths chạy lại, E7, E10, E12, E14 mang từ round 1; verified_at của round 3 lấy theo giờ mở ảnh 22:46 giờ VN.
 

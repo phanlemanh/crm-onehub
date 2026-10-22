@@ -1,21 +1,21 @@
-# Review findings: mot-nut-tao-muc-tieu (round 2)
+# Review findings: mot-nut-tao-muc-tieu (round 3)
 
 ## Trong hợp đồng
 
-Không có.
+Không có phát hiện nào trong vòng này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 4 (assert âm tính một mình): «0 lần gọi thủ tục ghi» ở bốn ô đường dẫn của mnt-khoa vẫn không có hành động nào có thể làm nó sai; đối chứng dương mới đặt ở đường khác**
+- **Hình dạng 4 (assert âm tính một mình): «0 lần gọi thủ tục ghi» ở bốn ô đường dẫn của mnt-khoa vẫn không có hành động nào có thể làm nó sai; đối chứng dương mới đặt ở đường khác (r2 · tệp đã đổi)**
   Người dùng thấy gì: Khi người không có quyền mở thẳng đường dẫn tạo mục tiêu, bài kiểm tự động chỉ chứng minh chắc chắn là hộp không mở. Việc «không ghi gì vào dữ liệu» chưa có bài kiểm nào bắt được nếu sau này bị hỏng. Hiện sản phẩm không có lỗi nhìn thấy được.
   Căn cứ: Hậu quả nhẹ vì không phát hiện lỗi nào đang xảy ra với người dùng, chỉ là lưới an toàn cho thay đổi sau này hơi lỏng; không mất dữ liệu, và có thể siết bài kiểm sau với chi phí thấp.
   file: `apps/app/test/mot-nut-tao-muc-tieu.dom.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4 (assert âm tính một mình): ô trang server so-do và quanh của mnt-man-doc mù với thành phần client đặt trong PageShellActions; đối chứng dương chỉ phủ Button viết thẳng**
+- **Hình dạng 4 (assert âm tính một mình): ô trang server so-do và quanh của mnt-man-doc mù với thành phần client đặt trong PageShellActions; đối chứng dương chỉ phủ Button viết thẳng (r2 · tệp đã đổi)**
   Người dùng thấy gì: Nếu sau này ai đó thêm lại một nút tạo vào đầu trang Sơ đồ hay sơ đồ quanh một mục tiêu bằng một thành phần dựng ở phía trình duyệt, bài kiểm tự động có thể không phát hiện. Hiện tại hai màn này đúng là không có nút tạo nào.
   Căn cứ: Người dùng hiện không gặp lỗi gì, rủi ro chỉ là nút tạo lọt trở lại ở hai màn chỉ đọc mà không ai báo; nếu lọt thì người dùng thấy ngay và sửa sau được, không mất dữ liệu.
   file: `apps/app/test/mot-nut-tao-muc-tieu.dom.tsx`
@@ -43,7 +43,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **useCoMau gộp lúc đang tải và lúc lỗi vào lý do khoá «Chưa có mẫu cho cấp này» (r1)**
+- **useCoMau gộp lúc đang tải và lúc lỗi vào lý do khoá «Chưa có mẫu cho cấp này» (r1 · tệp đã đổi)**
   Người dùng thấy gì: Trong lúc danh sách mẫu còn đang tải hoặc tải lỗi, dòng «Từ mẫu» có thể báo sai là chưa có mẫu cho cấp này.
   Căn cứ: Chỉ là thông báo sai thoáng qua, người dùng tải lại là hết và không mất dữ liệu.
   file: `apps/app/app/(app)/[slug]/okr/hop-chon-duong.tsx`
