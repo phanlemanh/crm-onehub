@@ -234,7 +234,7 @@ export function dungSan(
 					void cau(req, res);
 				},
 			);
-		await app.init();
+		await app.listen(0, "127.0.0.1");
 		if (tuy.rest)
 			cau = createOpenApiExpressMiddleware({
 				router: app.get(AppRouterHost).appRouter,

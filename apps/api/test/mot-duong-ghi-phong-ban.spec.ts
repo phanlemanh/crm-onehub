@@ -190,6 +190,7 @@ async function conHang(id: string) {
 
 beforeAll(async () => {
 	app = await createApp();
+	await app.listen(0, "127.0.0.1");
 	for (const [khoa, vai] of [
 		["quan", "admin"],
 		["thuong", "member"],

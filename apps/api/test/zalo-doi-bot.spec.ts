@@ -43,6 +43,7 @@ function tacTuGia(traLoi: DatBotPhanHoi[]) {
 	const hang = [...traLoi];
 	const mayChu = Bun.serve({
 		port: 0,
+		hostname: "127.0.0.1",
 		fetch: async (req) => {
 			than.push(await req.text());
 			return Response.json(
@@ -96,7 +97,7 @@ beforeAll(async () => {
 		imports: [AppModule],
 	}).compile();
 	app = modul.createNestApplication({ bodyParser: false });
-	await app.init();
+	await app.listen(0, "127.0.0.1");
 });
 
 afterEach(async () => {

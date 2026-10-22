@@ -1981,6 +1981,7 @@ executors:
     vck_doi_thu: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --timeout 120000 test/viec-con-khoa.spec.ts -t vck-doi-thu"'
     vck_dong: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --timeout 120000 test/viec-con-khoa.spec.ts -t vck-dong"'
     vck_chuyen_cha: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test --timeout 120000 test/viec-con-khoa.spec.ts -t vck-chuyen-cha"'
+    t127_scripts: bun test scripts/tin-hieu/test scripts/ban-chup-lo-trinh/test
     kh_man_tao: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/tao-ke-hoach-nguoi.dom.tsx"
     gymk_sinh: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-sinh"'
     gymk_chan: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/goi-y-mo-ke-hoach.spec.ts -t gy-chan"'
@@ -3236,6 +3237,10 @@ executors:
     vg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/va-gantt-lich-bay-ngay/rang/man.mjs"'
     vg_dot_bien: node _acceptance/va-gantt-lich-bay-ngay/rang/dot-bien.mjs
     vck_dot_bien: node _acceptance/khoa-viec-con-dung-thu-tu/rang/dot-bien.mjs
+    t127_quet: node _acceptance/test-nghe-127/rang/quet.mjs
+    t127_quet_goc: node _acceptance/test-nghe-127/rang/quet.mjs --ref 33ddf1b0294399ddf581318b71bb9b7e48f4de84 --mong-do
+    t127_co_che: bun _acceptance/test-nghe-127/rang/co-che.ts
+    t127_khang_dinh: node _acceptance/test-nghe-127/rang/khong-doi-khang-dinh.mjs
     vrc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-rieng-chi-nguoi-trong-cuoc/rang/man.mjs"'
     gymk_san_thiet_ke: node _acceptance/goi-y-mo-ke-hoach/rang/san-thiet-ke.mjs
     gymk_dot_bien: node _acceptance/goi-y-mo-ke-hoach/rang/dot-bien.mjs
