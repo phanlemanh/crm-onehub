@@ -87,11 +87,8 @@ export function ghepLanDoi(
 	lanDoi: LanDoi[],
 	thongBao: ThongBaoDo[],
 	coNguoiNhan: ReadonlySet<string>,
-	commit: CommitDo[],
+	lucCommit: ReadonlyMap<string, number>,
 ): DongDoiCho[] {
-	const lucCommit = new Map(
-		commit.map((c) => [c.sha, Date.parse(c.commitLuc)]),
-	);
 	return lanDoi
 		.filter((l) => coNguoiNhan.has(l.ma))
 		.map((l) => {
@@ -168,15 +165,34 @@ export async function docTuKho(
 	};
 }
 
+export function lucCommitCuaSha(
+	kho: string,
+	sha: Iterable<string>,
+): Map<string, number> {
+	const ra = new Map<string, number>();
+	for (const s of new Set(sha)) {
+		const r = spawnSync("git", ["-C", kho, "show", "-s", "--format=%cI", s], {
+			encoding: "utf8",
+		});
+		const luc = Date.parse(r.stdout.trim());
+		if (r.status === 0 && !Number.isNaN(luc)) ra.set(s, luc);
+	}
+	return ra;
+}
+
 export async function doBaoDoiCho(o: {
 	db: Db;
 	kho: string;
 	nhanh: string;
 	tu: string;
 }): Promise<{ chu: string; dat: boolean }> {
-	const { lanDoi, commit } = lanDoiTuGit(o.kho, o.nhanh, o.tu);
+	const { lanDoi } = lanDoiTuGit(o.kho, o.nhanh, o.tu);
 	const { thongBao, coNguoiNhan } = await docTuKho(o.db, o.tu);
-	return inBang(ghepLanDoi(lanDoi, thongBao, coNguoiNhan, commit));
+	const lucCommit = lucCommitCuaSha(
+		o.kho,
+		thongBao.map((t) => t.sha),
+	);
+	return inBang(ghepLanDoi(lanDoi, thongBao, coNguoiNhan, lucCommit));
 }
 
 if (import.meta.main) {

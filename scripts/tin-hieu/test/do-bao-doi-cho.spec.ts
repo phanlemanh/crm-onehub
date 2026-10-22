@@ -69,7 +69,13 @@ function trangThai(trongNhom: Ca[], them = false): DauVaoKit {
 	};
 }
 
-type Buoc = { luc: number; nhom: Ca[]; them?: boolean; day: number | null };
+type Buoc = {
+	luc: number;
+	nhom: Ca[];
+	them?: boolean;
+	khacTep?: boolean;
+	day: number | null;
+};
 
 const BUOC: Buoc[] = [
 	{ luc: T - 24 * GIO, nhom: [], day: T - 24 * GIO + 5 * PHUT_MS },
@@ -78,7 +84,7 @@ const BUOC: Buoc[] = [
 	{
 		luc: T + 2 * GIO,
 		nhom: ["da-bao", "luu-tru", "bi-the-cho"],
-		them: true,
+		khacTep: true,
 		day: T + 2 * GIO + 5 * PHUT_MS,
 	},
 	{
@@ -101,10 +107,13 @@ function dungKho(soBuoc: number): string {
 	git(kho, ["config", "user.email", "do@crm.test"]);
 	git(kho, ["config", "user.name", "do"]);
 	for (const b of BUOC.slice(0, soBuoc)) {
-		writeFileSync(
-			path.join(kho, BAO_DOI_CHO_DO.tep),
-			dungTepMau(trangThai(b.nhom, b.them)),
-		);
+		if (b.khacTep)
+			writeFileSync(path.join(kho, "ghi-chu.txt"), `buoc ${b.luc}\n`);
+		else
+			writeFileSync(
+				path.join(kho, BAO_DOI_CHO_DO.tep),
+				dungTepMau(trangThai(b.nhom, b.them)),
+			);
 		git(kho, ["add", "-A"]);
 		git(kho, ["commit", "-qm", `buoc ${b.luc}`], b.luc);
 	}
@@ -252,6 +261,10 @@ describe("ttts-do", () => {
 			"--format=%H",
 			BAO_DOI_CHO_DO.nhanh,
 		]).split("\n")[3];
+		expect(
+			git(KHO, ["show", "--name-only", "--format=", shaBuoc3 ?? ""]),
+			"luot day buoc 3 phai la commit khong cham tep lo trinh",
+		).toBe("ghi-chu.txt");
 		expect(bao?.khoa, "lan bi the cho tinh la thieu").toBe(
 			`${BAO_DOI_CHO_DO.loai}:${ma["bi-the-cho"]}:${shaBuoc3}`,
 		);

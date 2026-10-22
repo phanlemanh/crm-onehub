@@ -215,7 +215,8 @@ evals:
       first-parent doi LO-TRINH.html (commit dau truoc --tu), moi tep do bo ve that cua kit sinh (dungTepMau);
       thong bao doc tu kho thu cua luot, ghi qua chinh ghiBanChupVaBaoTinHieu cho cac commit "da day" (khong chen thang
       bang). Ma tran viet truoc 6 lan doi:
-        da-bao-dung-sha (tre 5 phut) · bi-the-cho (commit 3 khong day, commit 4 day trong 2 gio -> phu) · thieu (khong
+        da-bao-dung-sha (tre 5 phut) · bi-the-cho (commit doi cho khong day; lan day ke tiep mang sha cua mot commit
+        CHI cham tep khac, khong cham LO-TRINH.html — nhu chay lai tay hay push nhieu commit — trong 2 gio -> phu) · thieu (khong
         thong bao) · tre (thong bao 26 gio sau) · luu-tru (khong in dong) · khong-doi (khong in dong)
       Mong doi: dung 4 dong lan doi, moi dong mang ma, cho moi, gio commit, gio thong bao, tre; co "thieu" o dong thieu,
       co "qua mot ngay" o dong tre; dong ket luan "khong dat" va ma thoat 1. Bo ban thu hai chi co hai lan da-bao va
