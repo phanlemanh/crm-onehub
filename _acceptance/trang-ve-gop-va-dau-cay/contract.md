@@ -5,7 +5,7 @@ slug: trang-ve-gop-va-dau-cay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-10-23T09:40:32Z
 design_doc: docs/superpowers/specs/2026-10-23-trang-ve-gop-va-dau-cay-design.md
