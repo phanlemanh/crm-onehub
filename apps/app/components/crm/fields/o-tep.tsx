@@ -33,7 +33,8 @@ import {
 import { TEP_TRUONG } from "@crm/validation/tep-truong";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/client";
-import { useState } from "react";
+import { type ReactNode, useId, useState } from "react";
+import { toast } from "sonner";
 import { DetailSheetProperty } from "@/components/detail-sheet";
 import { LocalDay } from "@/components/local-date-time";
 import { type CrmMessages, crmMessages } from "@/lib/messages/crm";
@@ -50,12 +51,14 @@ export type TepOTep = {
 	taiBoi: { id: string; ten: string | null } | null;
 	coTheMo: boolean;
 	coTheXoa: boolean;
+	lyDoKhongMo?: "khong-phu-trach" | "chua-co-phu-trach" | null;
 };
 
 export type DichOTep = {
 	entity: FieldEntity;
 	recordId: string;
 	luuTru: boolean;
+	phuTrach?: string | null;
 };
 
 type LoiTep = keyof CrmMessages["tepTruong"]["loi"];
@@ -187,8 +190,17 @@ export function OTep({
 	};
 
 	const mo = async (t: TepOTep) => {
-		const ky = await moTep.mutateAsync({ tepId: t.id });
-		window.open(ky.url, "_blank", "noopener,noreferrer");
+		try {
+			const ky = await moTep.mutateAsync({ tepId: t.id });
+			window.open(ky.url, "_blank", "noopener,noreferrer");
+		} catch (loi) {
+			if (loi instanceof TRPCClientError && loi.data?.code === "FORBIDDEN") {
+				toast.error(m.matQuyen);
+				await lamMoi();
+				return;
+			}
+			throw loi;
+		}
 	};
 
 	const xoa = async () => {
@@ -200,6 +212,22 @@ export function OTep({
 
 	const lyDoKhoa = !bat ? m.tat : day ? m.day : undefined;
 	const coTheMoBatKy = tep.some((t) => t.coTheMo);
+	const idLyDo = useId();
+	const lyDoKhongMo = tep.find((t) => !t.coTheMo)?.lyDoKhongMo ?? null;
+	const dongLyDo: ReactNode =
+		tep.length > 0 && !coTheMoBatKy && bat
+			? lyDoKhongMo === "khong-phu-trach" && dich.phuTrach
+				? [
+						m.khongPhuTrach.truoc,
+						<span key="ten" translate="no">
+							{dich.phuTrach}
+						</span>,
+						m.khongPhuTrach.sau,
+					]
+				: lyDoKhongMo === "chua-co-phu-trach"
+					? m.chuaPhuTrach
+					: m.khongMo
+			: null;
 
 	return (
 		<DetailSheetProperty label={nhan} wide stackBelowMd>
@@ -228,6 +256,7 @@ export function OTep({
 									size="sm"
 									aria-label={m.mo(t.tenTep)}
 									disabled={!t.coTheMo || !bat || moTep.isPending}
+									aria-describedby={!t.coTheMo && dongLyDo ? idLyDo : undefined}
 									onClick={() => void mo(t)}
 								>
 									<Icon icon={Launch} aria-hidden="true" />
@@ -288,8 +317,8 @@ export function OTep({
 						</Item>
 					))}
 				</ItemGroup>
-				{tep.length > 0 && !coTheMoBatKy && bat ? (
-					<FieldDescription>{m.khongMo}</FieldDescription>
+				{dongLyDo ? (
+					<FieldDescription id={idLyDo}>{dongLyDo}</FieldDescription>
 				) : null}
 				{dich.luuTru ? null : (
 					<NguonKeoTha
