@@ -175,6 +175,7 @@ type QuyenDan = RouterOutputs["okr"]["access"]["headOf"];
 let headOf: QuyenDan;
 type ViecCuaBoRa = RouterOutputs["okr"]["viecCuaBo"];
 let viecDs: ViecCuaBoRa | null;
+const dayRouter: string[] = [];
 
 const TREO_MAI = () => new Promise<never>(() => {});
 
@@ -210,6 +211,11 @@ const OKR_GIA = {
 	toanCanh: thuTuc("toanCanh", () => TOAN_CANH),
 	viecCuaBo: thuTuc("viecCuaBo", () => viecDs ?? TREO_MAI()),
 	mine: thuTuc("mine", () => ({ dangTheoDoi: [], objectives: [], daBo: [] })),
+	moiKr: thuTuc("moiKr", () => ({
+		rows: [],
+		total: 0,
+		facetCounts: { tinhTrang: [], donVi: [], nguoi: [] },
+	})),
 	soanSanSang: thuTuc("soanSanSang", () => ({
 		bat: false,
 		lyDo: "don-vi-chua-bat",
@@ -230,7 +236,13 @@ mock.module("@/components/page-transition", () => ({
 	PageTransition: ({ children }: { children: ReactNode }) => children,
 }));
 mock.module("next/navigation", () => ({
-	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
+	useRouter: () => ({
+		push: (u: string) => {
+			dayRouter.push(u);
+		},
+		replace: () => {},
+		prefetch: () => {},
+	}),
 	useParams: () => ({ slug: "ws" }),
 	usePathname: () => "/ws/okr/bo-okr",
 	useSearchParams: () => new URLSearchParams(),
@@ -271,6 +283,7 @@ const { duongTheoDonVi, duongMoCuoc } = await import(
 const { khoaDon } = await import("@/app/(app)/[slug]/okr/okr-search-params");
 const { HanhDongKhu } = await import("@/app/(app)/[slug]/okr/hanh-dong-khu");
 const { CuaToi } = await import("@/app/(app)/[slug]/okr/cua-toi");
+const { MoiKr } = await import("@/app/(app)/[slug]/okr/moi-kr/moi-kr");
 const { ThanhBenMucTieu } = await import(
 	"@/app/(app)/[slug]/okr/thanh-ben-muc-tieu"
 );
@@ -527,6 +540,7 @@ type VaiLienKet = "co-don" | "danh-sach";
 
 const CHO_LIEN_KET = {
 	"(app)/[slug]/okr/cua-toi.tsx": "danh-sach",
+	"(app)/[slug]/okr/moi-kr/moi-kr.tsx": "danh-sach",
 	"(app)/[slug]/okr/hanh-dong-khu.tsx": "co-don",
 	"(app)/[slug]/okr/phan-don-vi-dan.tsx": "co-don",
 	"(app)/[slug]/okr/soan/luat-ban-nhap.ts": "co-don",
@@ -541,7 +555,12 @@ const CHO_LIEN_KET = {
 
 const TEP_HANG_DUONG = "(app)/[slug]/okr/tab-okr.ts";
 
-const DICH_BO_OKR = [/\/okr\/bo-okr/, /\bDUONG\[/, /\bDUONG_MUC\[/];
+const KHOA_KHAC = String.raw`"(?!bo-okr"|theo-don-vi")[^"]+"\]`;
+const DICH_BO_OKR = [
+	/\/okr\/bo-okr/,
+	new RegExp(String.raw`\bDUONG\[(?!${KHOA_KHAC})`),
+	new RegExp(String.raw`\bDUONG_MUC\[(?!${KHOA_KHAC})`),
+];
 
 function choDungLienKet(): string[] {
 	return readdirSync(DUONG_APP, { recursive: true, encoding: "utf8" })
@@ -656,7 +675,7 @@ function hrefTheCon() {
 }
 
 async function hrefHanhDongKhu(): Promise<HrefTheoDon> {
-	const nut = async (don: DonChonOkr) => {
+	const duongTao = async (don: DonChonOkr, duong: "tu-viet" | "bang-tinh") => {
 		const s = await ve(
 			<HanhDongKhu
 				cauNoi={false}
@@ -675,16 +694,31 @@ async function hrefHanhDongKhu(): Promise<HrefTheoDon> {
 			new URLSearchParams({ kyOkr: "q4" }),
 		);
 		await cho(
-			() => s.o.querySelector('a[data-nut="them-muc-tieu"]') !== null,
+			() => s.o.querySelector('button[data-nut="them-muc-tieu"]') !== null,
 			"tbo-lien-ket: hanh dong khu co nut Them muc tieu",
 		);
-		const href = hrefTrong(s.o, '[data-nut="them-muc-tieu"]');
+		await bam(s.o.querySelector('button[data-nut="them-muc-tieu"]') as Element);
+		const chon = `[data-hop-chon-duong] [data-duong="${duong}"]`;
+		await cho(
+			() => document.querySelector(chon) !== null,
+			`tbo-lien-ket: hop chon duong co duong ${duong}`,
+		);
+		const truoc = dayRouter.length;
+		await bam(document.querySelector(chon) as Element);
+		await cho(
+			() => dayRouter.length > truoc,
+			`tbo-lien-ket: duong ${duong} dan toi trang bo`,
+		);
 		await go(s);
-		return href;
+		return dayRouter.slice(truoc);
 	};
+	const cua = async (don: DonChonOkr) => [
+		...(await duongTao(don, "tu-viet")),
+		...(await duongTao(don, "bang-tinh")),
+	];
 	return {
-		goc: await nut({ loai: "goc" }),
-		"pb:P1": await nut({ loai: "pb", id: "P1" }),
+		goc: await cua({ loai: "goc" }),
+		"pb:P1": await cua({ loai: "pb", id: "P1" }),
 	};
 }
 
@@ -745,6 +779,12 @@ const DUNG_DANH_SACH = {
 			'[data-trang-thai="ST-cuatoi-rong"] a[href]',
 			"tbo-lien-ket: Cua toi rong co nut Sang Theo don vi",
 		),
+	"(app)/[slug]/okr/moi-kr/moi-kr.tsx": () =>
+		hrefMo(
+			<MoiKr />,
+			'[data-trang-thai="ST-moikr-rong"] a[href]',
+			"tbo-lien-ket: Moi KR rong co nut ve Bo OKR",
+		),
 	"(app)/[slug]/okr/thanh-ben-muc-tieu.tsx": () =>
 		hrefMo(
 			<ThanhBenMucTieu />,
@@ -765,6 +805,8 @@ const DUNG_DANH_SACH = {
 		),
 } satisfies Record<string, () => Promise<string[]>>;
 
+const KHONG_GIU_KY = new Set(["(app)/[slug]/okr/moi-kr/moi-kr.tsx"]);
+
 function phaiDanhSach(tep: string, ds: string[]) {
 	phai(ds.length > 0, `tbo-lien-ket: ${tenTep(tep)} khong dung lien ket`);
 	for (const href of ds) {
@@ -778,7 +820,7 @@ function phaiDanhSach(tep: string, ds: string[]) {
 			`tbo-lien-ket: ${tenTep(tep)} khong mo trang danh sach — ${href}`,
 		);
 		phai(
-			u.searchParams.get("kyOkr") === "q4",
+			KHONG_GIU_KY.has(tep) || u.searchParams.get("kyOkr") === "q4",
 			`tbo-lien-ket: ${tenTep(tep)} mat kyOkr — ${href}`,
 		);
 	}
