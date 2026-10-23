@@ -5,7 +5,7 @@ slug: ho-so-do-kiem-cheo
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [tooling]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-22-ho-so-do-kiem-cheo-design.md
 approved_by: Manh Phan
 approved_at: 2026-10-22T22:58:18Z
