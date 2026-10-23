@@ -23,6 +23,13 @@ Sau (`expected`): "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs
 
 Đột biến `them-tep-ngoai-ranh-gioi` — thông điệp ghim «ngoai-ranh-gioi:apps/app/lib/x.ts»
 
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+neo gop e7afcb8b7: b5301e7ad..133e52d56 · 31 tep · ranh gioi chep
+   ngoai-ranh-gioi:apps/app/lib/x.ts
+DO: 1 vi pham ranh gioi
+```
+
 ### bang-thanh-vien-giu-hang:E1
 
 - Xử lý: `sua-rang`
@@ -48,6 +55,16 @@ phien-do: xong — mã 2
 ```
 
 Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
+
+```
+nguyên vẹn 0 · đột biến 2
+KET LUAN: 28 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_cay_do · app http://localhost:4403 · api http://localhost:4734
+$ bun scripts/dev-session.ts ada@trycomp.ai
+phien-do: xong — mã 2
+```
 
 ### bang-thanh-vien-giu-hang:E2
 
@@ -75,6 +92,16 @@ phien-do: xong — mã 2
 
 Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
 
+```
+nguyên vẹn 0 · đột biến 2
+KET LUAN: 28 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_cay_do · app http://localhost:4155 · api http://localhost:4637
+$ bun scripts/dev-session.ts ada@trycomp.ai
+phien-do: xong — mã 2
+```
+
 ### bang-thanh-vien-giu-hang:E3
 
 - Xử lý: `sua-rang`
@@ -101,6 +128,16 @@ phien-do: xong — mã 2
 
 Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
 
+```
+nguyên vẹn 0 · đột biến 2
+KET LUAN: 28 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_cay_do · app http://localhost:4499 · api http://localhost:4237
+$ bun scripts/dev-session.ts ada@trycomp.ai
+phien-do: xong — mã 2
+```
+
 ### bang-thanh-vien-giu-hang:E4
 
 - Xử lý: `sua-rang`
@@ -126,6 +163,16 @@ phien-do: xong — mã 2
 ```
 
 Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
+
+```
+nguyên vẹn 0 · đột biến 2
+KET LUAN: 28 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_cay_do · app http://localhost:4769 · api http://localhost:4375
+$ bun scripts/dev-session.ts ada@trycomp.ai
+phien-do: xong — mã 2
+```
 
 ### bang-thanh-vien-giu-hang:E5
 
@@ -170,6 +217,16 @@ bien the content trong data-table.tsx -> "trong khung false", ma 1.
 
 Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
 
+```
+nguyên vẹn 0 · đột biến 2
+KET LUAN: 28 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_cay_do · app http://localhost:4899 · api http://localhost:4499
+$ bun scripts/dev-session.ts ada@trycomp.ai
+phien-do: xong — mã 2
+```
+
 ### bang-thanh-vien-giu-hang:E6
 
 - Xử lý: `sua-rang`
@@ -196,6 +253,16 @@ phien-do: xong — mã 2
 
 Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
 
+```
+nguyên vẹn 0 · đột biến 2
+KET LUAN: 28 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_cay_do · app http://localhost:4722 · api http://localhost:4872
+$ bun scripts/dev-session.ts ada@trycomp.ai
+phien-do: xong — mã 2
+```
+
 ### bang-thanh-vien-giu-hang:E7
 
 - Xử lý: `sua-rang`
@@ -221,6 +288,16 @@ phien-do: xong — mã 2
 ```
 
 Đột biến `DB-1 filteredEmpty` — thông điệp ghim «het 60000ms cho cau «Không có kết quả nào khớp bộ lọc» khi tim ttv-khong-ai-trung-tu-nay»
+
+```
+nguyên vẹn 0 · đột biến 2
+KET LUAN: 28 DUNG, 0 SAI — ma thoat 2
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: kho crm_cay_do · app http://localhost:4782 · api http://localhost:4414
+$ bun scripts/dev-session.ts ada@trycomp.ai
+phien-do: xong — mã 2
+```
 
 ### bo-dung-khong-ket:E9
 
@@ -271,6 +348,16 @@ dieu kien vi pham.
 
 Đột biến `bo-outputSchema` — thông điệp ghim «HEAD outputSchema: khong dat»
 
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+HEAD 500k: dat
+HEAD session-limit: dat
+HEAD outputSchema: khong dat
+HEAD cho re du tep (thieu: khong): dat
+merge-base truot 5 dieu: SESSION_LIMITS, 128k, 500k, session-limit, cho re du tep
+tai-lieu khong dat
+```
+
 ### bo-xuong-kara:E10
 
 - Xử lý: `sua-rang`
@@ -301,6 +388,16 @@ Sau (`expected`): "exit 0; rang/ai-elements.mjs (đường suy từ vị trí sc
 
 Đột biến `bo-cau-kara` — thông điệp ghim «SAI MO COI: task.tsx»
 
+```
+nguyên vẹn 0 · đột biến 1
+OK  so lech co muc artifact.tsx
+OK  so lech co muc task.tsx
+OK  song artifact.tsx qua kara/
+SAI MO COI: task.tsx
+SAI mo-coi ma 1, CHET (0)
+DO: 2 muc sai
+```
+
 ### ca-chap-chon-cach-ly:E5
 
 - Xử lý: `sua-rang`
@@ -316,6 +413,11 @@ moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
 
 Đột biến `moc-don-cu` — thông điệp ghim «moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1»
 
+```
+nguyên vẹn 0 · đột biến 2
+moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
+```
+
 ### ca-chap-chon-cach-ly:E7
 
 - Xử lý: `sua-rang`
@@ -330,6 +432,11 @@ moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
 ```
 
 Đột biến `a-mo-coi-moc-cu` — thông điệp ghim «moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1»
+
+```
+nguyên vẹn 0 · đột biến 2
+moc trong apps/agent-okr/test/support/khoi-dong.ts xuat hien 0 lan, can 1
+```
 
 ### ca-chap-chon-con-lai:E6
 
@@ -349,6 +456,12 @@ Trước (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi g
 Sau (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi của cặp neo cố định PR #340 (gộp 2d7c489816ae6452b4f73322b4db1401902bb20c): từ a9e8bc75a04f04a9a250eb2ff7fc4fadbe0f4747 tới 16e80f31d62a56195253f1566b38284f8e0b4e66, không theo HEAD; sha neo không có (git cat-file -e) → mã 2 «KHONG DO DUOC»; mọi tên phải là apps/agent/test/tasks.integration.spec.ts, apps/agent-okr/test/support/gieo.ts, apps/agent-okr/test/goi-soan.integration.spec.ts, apps/agent-okr/agent/lib/goi-soan.ts, _acceptance/ca-chap-chon-con-lai/**, docs/superpowers/**, PRODUCT-MAP.md, LO-TRINH.html hoặc _acceptance/config.yaml; config.yaml không có dòng bỏ; với gieo.ts, dòng TIEN_TO và mọi export khác ngoài ma giữ nguyên (diff -U0 không bỏ dòng nào khác dòng khai báo ma); goi-soan.integration.spec.ts không có dòng bỏ; goi-soan.ts chỉ được đổi khi evals.yaml còn E8; trong tasks.integration.spec.ts, mọi dòng expect( của hai ca thật (retireExhausted/claimDue) và hai dòng toHaveLength(rows) của hai ca đối chứng không bị bỏ; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/tasks.ts → «ngoai ranh gioi: apps/agent/agent/lib/tasks.ts»; một dòng bỏ ở dòng TIEN_TO của gieo.ts → «gieo.ts: doi ngoai ma»."
 
 Đột biến `diff-cham-tasks.ts` — thông điệp ghim «ngoai ranh gioi: apps/agent/agent/lib/tasks.ts»
+
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+ngoai ranh gioi: apps/agent/agent/lib/tasks.ts
+PHAM VI: 27 tep, 1 ngoai ranh gioi
+```
 
 ### cai-dat-chung-chi-quan-tri:E8
 
@@ -396,6 +509,16 @@ CHIEU DO: sua .toBe cua ca "sends an onboarded rep with no key" (dong rieng) -> 
 ten ca, ma 1; doi mot it( thut mot tab thanh it.skip( -> SAI goi ten ca; NEO hong -> ma 2.
 
 Đột biến `dao-het-phien` — thông điệp ghim «SAI khoi cu con nguyen: it("says the viewer is out when the API names no role for them"»
+
+```
+nguyên vẹn 0 · đột biến 1
+SAI so khoi cu 42, con nguyen 41
+KET LUAN: 41 DUNG, 2 SAI — ma thoat 1
+ 43 pass
+ 0 fail
+ 67 expect() calls
+Ran 43 tests across 1 file. [130.00ms]
+```
 
 ### cap-nhat-tuan-okr:E7
 
@@ -455,6 +578,16 @@ Sau (`cmd`): PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs N
 
 Đột biến `CN-1 phần 1 bỏ đọc ?tu=` — thông điệp ghim «E14: entry cua phien C phai viec-cua-toi, thay cua-toi»
 
+```
+nguyên vẹn 0 · đột biến 1
+$ bun scripts/dev-session.ts "c2nkn9fzv@thu.test"
+$ bun scripts/dev-session.ts "hnkn9fzv@thu.test"
+$ bun scripts/dev-session.ts "rnkn9fzv@thu.test"
+$ bun scripts/dev-session.ts "unkn9fzv@thu.test"
+$ bun scripts/dev-session.ts "dinkn9fzv@thu.test"
+phien-do: xong — mã 1
+```
+
 ### cap-nhat-tuan-okr:E19
 
 - Xử lý: `sua-rang`
@@ -484,6 +617,16 @@ Trước (`cmd`): config:executors.script.cnt_man_chrome
 Sau (`cmd`): PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} CHI=E18,E19 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"
 
 Đột biến `mentionUserIds rỗng` — thông điệp ghim «E19: binh luan moi co mention M»
+
+```
+nguyên vẹn 0 · đột biến 1
+$ bun scripts/dev-session.ts "c2nknanh1@thu.test"
+$ bun scripts/dev-session.ts "hnknanh1@thu.test"
+$ bun scripts/dev-session.ts "rnknanh1@thu.test"
+$ bun scripts/dev-session.ts "unknanh1@thu.test"
+$ bun scripts/dev-session.ts "dinknanh1@thu.test"
+phien-do: xong — mã 1
+```
 
 ### chan-lai-component-ra-man:E1
 
@@ -517,6 +660,15 @@ con so.
 Tap rong (khong doc duoc cay nguon) -> ma 2, KHONG xanh.
 
 Đột biến `neo-lech-mot label=Save` — thông điệp ghim «DO: neo mac_dinh ghim 132 nhung do duoc 133»
+
+```
+nguyên vẹn 0 · đột biến 1
+tap loai tru ghim ten: node_modules · .next · dist · build — 1122 file nguon
+gia tri mac dinh la chuoi co chu: 133 · component so huu: 71
+dong trong bang gioi han vong truoc: 10
+tep git theo doi duoi goc: 1122
+DO: neo mac_dinh ghim 132 nhung do duoc 133
+```
 
 ### chan-lai-component-ra-man:E2
 
@@ -563,6 +715,15 @@ thuat -> ma 1. Day dung la ca hong ma phep mount-mot-trang-thai sinh ra.
 
 Đột biến `them-mac-dinh-separator` — thông điệp ghim «DO: tong ba nhom 133 khac neo 132»
 
+```
+nguyên vẹn 0 · đột biến 1
+nhom chu-nguoi-doc: 0
+nhom ky thuat: 126
+khong ve duoc (da khai kem ly do): 7
+tong: 133 · neo: 132
+DO: tong ba nhom 133 khac neo 132
+```
+
 ### chan-lai-component-ra-man:E7
 
 - Xử lý: `sua-rang`
@@ -581,6 +742,15 @@ DO: neo mac_dinh ghim 129 nhung do duoc 132
 ```
 
 Đột biến `neo-lech-mot` — thông điệp ghim «DO: neo mac_dinh ghim 132 nhung do duoc 133»
+
+```
+nguyên vẹn 0 · đột biến 1
+tap loai tru ghim ten: node_modules · .next · dist · build — 1122 file nguon
+gia tri mac dinh la chuoi co chu: 133 · component so huu: 71
+dong trong bang gioi han vong truoc: 10
+tep git theo doi duoi goc: 1122
+DO: neo mac_dinh ghim 132 nhung do duoc 133
+```
 
 ### chan-trung-khoa-ban-nhap:E3
 
@@ -608,6 +778,16 @@ error: script "test" exited with code 1
 
 Đột biến `chan-khoa-luon-qua` — thông điệp ghim «don-vi: ca sai chieu: trung-khoa (a)»
 
+```
+nguyên vẹn 0 · đột biến 1
+ 0 pass
+ 1 filtered out
+ 2 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [609.00ms]
+error: script "test" exited with code 1
+```
+
 ### chan-trung-khoa-ban-nhap:E4
 
 - Xử lý: `sua-rang`
@@ -634,6 +814,11 @@ error: script "test" exited with code 1
 
 Đột biến `go-superRefine` — thông điệp ghim «KHONG DO DUOC: okr-cuoc-soan.ts: moc xuat hien 0 lan, can 1: .superRefine(chanKhoaTrung)»
 
+```
+nguyên vẹn 0 · đột biến 2
+KHONG DO DUOC: okr-cuoc-soan.ts: moc xuat hien 0 lan, can 1: .superRefine(chanKhoaTrung)
+```
+
 ### chu-cuoi-cung-tien-de:E5
 
 - Xử lý: `neo-co-dinh`
@@ -654,6 +839,13 @@ Trước (`expected`): "exit 0; git diff 058bb75f...HEAD ngoai _acceptance/** va
 Sau (`expected`): "exit 0; git diff của cặp neo cố định PR #89 (gộp 46a52ade5b9fb48f823288f8063ec13141935d48): 5ed8c45547fdcf096c5dde8b7ace42b43fc64f9b...2aff077d0cb4966a90d014a9a70c91a45d5c8f6a, không theo HEAD (sha neo không có → exit 2 'KHONG DO DUOC'), ngoai _acceptance/** va tep T1 chi gom apps/api/test/workspace-thanh-vien.spec.ts; danh sach mau co apps/api/src/workspace/workspace.service.ts thi ham kiem goi ten dung tep do"
 
 Đột biến `PV-tu-goc-cu` — thông điệp ghim «RANG DO: diff cham tep ngoai pham vi»
+
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+chu-la --chan pham-vi · goc 058bb75f
+diff 058bb75f...2aff077d (gop 46a52ade5): 136 tep, ngoai pham vi: 6
+RANG DO: diff cham tep ngoai pham vi: apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx, apps/app/app/(app)/[slug]/companies/companies-table.tsx, apps/app/app/(app)/[slug]/settings/members/members-table.tsx, packages/ui/src/components/button.tsx, packages/ui/src/components/data-table.tsx, packages/ui/test/data-table-locale.spec.tsx
+```
 
 ### chu-mac-dinh-thu-vien-ngoai:E3
 
@@ -684,11 +876,21 @@ ma 2 kem diff ten file. Danh sach "boc thu vien" sinh tu cau lenh nhap trong fil
 KHONG go tay ten goi.
 
 Sau (`expected`): exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 120 component .tsx trong
-packages/ui · 43 boc thu vien ngoai · 39 doc kho chuoi dung chung (neo doi 76·37·21 -> 120·43·39 theo 3f99c7055). Lech la thoat
+packages/ui · 44 boc thu vien ngoai · 39 doc kho chuoi dung chung (neo doi 76·37·21 -> 120·44·39 theo 3f99c7055 va 57c51b2e4 stat-card boc Slot). Lech la thoat
 ma 2 kem diff ten file. Danh sach "boc thu vien" sinh tu cau lenh nhap trong file,
 KHONG go tay ten goi.
 
 Đột biến `them-component-boc-gia` — thông điệp ghim «LECH: component — do duoc 121, neo ghim 120»
+
+```
+nguyên vẹn 0 · đột biến 2
+   Danh sach boc sinh tu CAU LENH NHAP trong file, khong go tay ten goi — lech nghia la mot ben sai, doc ten file de biet ben nao.
+   boc: accordion.tsx <- lucide-react, radix-ui
+   boc: alert-dialog.tsx <- radix-ui
+   boc: async-action.tsx <- lucide-react, motion/react
+   boc: avatar.tsx <- radix-ui
+   boc: calendar.tsx <- lucide-react
+```
 
 ### chu-mac-dinh-thu-vien-ngoai:E4
 
@@ -710,6 +912,12 @@ KHONG DO DUOC: bang lech voi dia — in ca hai danh sach o tren.
 
 Đột biến `khai-nguyen-ban-sai-radio-group` — thông điệp ghim «HONG: radio-group.tsx khai boc CircleIcon (lucide-react) ma tren dia khong thay»
 
+```
+nguyên vẹn 0 · đột biến 1
+bang: 29 dong · chan dem tu dia: 29 component boc-ma-khong-doc
+   HONG: radio-group.tsx khai boc CircleIcon (lucide-react) ma tren dia khong thay — dia thay RadioGroupPrimitive (radix-ui)
+```
+
 ### chu-mac-dinh-thu-vien-ngoai:E9
 
 - Xử lý: `sua-rang`
@@ -726,6 +934,13 @@ KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nh
 ```
 
 Đột biến `go-context-menu-khoi-bang` — thông điệp ghim «THIEU: context-menu.tsx»
+
+```
+nguyên vẹn 0 · đột biến 2
+bang gioi han: 9 dong · chan dem tu dia: 10 component boc-ma-khong-doc thuoc loai chi-hien-sau-khi-bam
+   THIEU: context-menu.tsx
+KHONG DO DUOC: bang lech voi dia — mot bang khai mot dong khong duoc di qua nhu mot bang da ke het.
+```
 
 ### cron-theo-ban-khai:E8
 
@@ -773,6 +988,12 @@ GHI CHU: eval nay chi chay duoc SAU khi vong len production.
 
 Đột biến `production-khong-chua-cap-gop` — thông điệp ghim «khong chua cap gop cron f148b2bb1»
 
+```
+nguyên vẹn 0 · đột biến 1
+ban production moi nhat: dpl_A7aZCatX5pyjP4AVRiYznktEcK5u · sha 207a8ffc5 · cap gop cron f148b2bb1
+DO: ban production moi nhat (sha 207a8ffc5) khong chua cap gop cron f148b2bb1
+```
+
 ### cron-theo-ban-khai:E7
 
 - Xử lý: `sua-rang`
@@ -801,6 +1022,16 @@ gop khong co trong kho -> ma 2 "KHONG DO DUOC".
 Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
 
 Đột biến `canh-bao-ghim-lech` — thông điệp ghim «DO: apps/app ra 3 canh bao lint, ghim la 4.»
+
+```
+nguyên vẹn 0 · đột biến 1
+• turbo 2.10.8
+• turbo 2.10.8
+• turbo 2.10.8
+$ oxlint --format=default
+• turbo 2.10.8
+DO: apps/app ra 3 canh bao lint, ghim la 4.
+```
 
 ### danh-sach-keo-chung:E13
 
@@ -831,6 +1062,16 @@ Danh sach rong -> thoat 2 ("khong co tep giao dien trong diff" — khong xanh gi
 doi mau tren Button -> thoat 1 va goi ten tep.
 
 Đột biến `rang-mu-p0` — thông điệp ghim «tu-thu: BO LOT tep gia»
+
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+DUNG apps/app/app/(app)/[slug]/settings/organization/chi-tiet-bo-phan.tsx: p0 0
+DUNG apps/app/app/(app)/[slug]/settings/organization/chi-tiet-goc.tsx: p0 0
+DUNG apps/app/app/(app)/[slug]/settings/organization/danh-sach-keo.tsx: p0 0
+DUNG packages/ui/src/components/sortable-list.tsx: p0 0
+DUNG /var/folders/6x/1dlzszm51wzbt20dn5y1lgzh0000gn/T/dsk-san-thiet-ke-rnTU6M/gia-xam-tren-mau.tsx: p0 0 (gray-on-color)
+tu-thu: BO LOT tep gia; doi chung sach
+```
 
 ### to-chuc-danh-sach-chi-tiet:E21
 
@@ -867,6 +1108,16 @@ CHIEU DO: them className="justify-start" vao mot <Button> cua settings/organizat
 
 Đột biến `className-tren-Button` — thông điệp ghim «className tren Button»
 
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+dat  packages/ui/src/components/archived-list.tsx: da khai trong ke hoach
+dat  packages/ui/src/components/dialog.tsx: da khai trong ke hoach
+dat  packages/ui/src/components/nav-item.tsx: da khai trong ke hoach
+dat  packages/ui/src/components/pick-list-dialog.tsx: da khai trong ke hoach
+dat  packages/ui/src/components/stat-tile.tsx: da khai trong ke hoach
+dat  packages/ui/test/to-chuc-thanh-phan.dom.tsx: da khai trong ke hoach
+```
+
 ### toan-canh-okr:E3
 
 - Xử lý: `sua-rang`
@@ -892,6 +1143,16 @@ phien-do: xong — mã 1
 ```
 
 Đột biến `TC-1 danhSach không kèm loc` — thông điệp ghim «E3: sau khi chon nguoi co loi goi okr.danhSach voi loc.phuTrach = [k]»
+
+```
+nguyên vẹn 0 · đột biến 1
+$ bun scripts/dev-session.ts "btkndt61@thu.test"
+$ bun scripts/dev-session.ts "ptkndt61@thu.test"
+$ bun scripts/dev-session.ts "qtkndt61@thu.test"
+$ bun scripts/dev-session.ts "ktkndt61@thu.test"
+$ bun scripts/dev-session.ts "otkndt61@thu.test"
+phien-do: xong — mã 1
+```
 
 ### toan-canh-okr:E28
 
@@ -919,6 +1180,16 @@ phien-do: xong — mã 1
 
 Đột biến `TC-2 vết mo-hop-tuan thiếu tuan` — thông điệp ghim «E28: dong mo-hop-tuan dung hinh»
 
+```
+nguyên vẹn 0 · đột biến 1
+$ bun scripts/dev-session.ts btknotoc@thu.test
+$ bun scripts/dev-session.ts ptknotoc@thu.test
+$ bun scripts/dev-session.ts qtknotoc@thu.test
+$ bun scripts/dev-session.ts ktknotoc@thu.test
+$ bun scripts/dev-session.ts otknotoc@thu.test
+phien-do: xong — mã 1
+```
+
 ### toan-canh-okr:E29
 
 - Xử lý: `sua-rang`
@@ -945,6 +1216,16 @@ phien-do: xong — mã 1
 
 Đột biến `TC-3 prefetch toanCanh bằng currentId` — thông điệp ghim «E29: co it nhat 1 loi goi okr.toanCanh sau khi chon ky va moi loi goi mang cycleId cua»
 
+```
+nguyên vẹn 0 · đột biến 1
+$ bun scripts/dev-session.ts "btknsr1a@thu.test"
+$ bun scripts/dev-session.ts "ptknsr1a@thu.test"
+$ bun scripts/dev-session.ts "qtknsr1a@thu.test"
+$ bun scripts/dev-session.ts "ktknsr1a@thu.test"
+$ bun scripts/dev-session.ts "otknsr1a@thu.test"
+phien-do: xong — mã 1
+```
+
 ### tro-ly-okr-nen:E4
 
 - Xử lý: `sua-rang`
@@ -963,6 +1244,16 @@ Trước (`expected`): "exit 0; rang/doi-soat-that.mjs đọc tệp tổng kết
 Sau (`expected`): "exit 0; rang/doi-soat-that.mjs đọc tệp tổng kết mà E9 (cách ly đầu-cuối) ghi ra .acceptance-runs/tro-ly-okr-nen/ (khung giờ UTC bắt đầu–kết thúc, id các phiên, tổng sổ của các phiên đó từ kho đo) cùng sha E9 ghi kèm (e9-tong-ket.jsonl.sha: sha HEAD, cộng vân tay của git diff HEAD trên apps/agent, packages/db, packages/validation, rang/ khi cây có sửa) — không chạy model lần hai khi sha khớp cây đang đo. Tổng kết thiếu hay ghi sha khác thì tự chạy cach-ly-dau-cuoi.mjs --lan 3 trước (không phụ thuộc thứ tự E4/E9); E9 đỏ → mã 2 'E9 khong xanh'; sau lượt chạy mà sha vẫn khác → mã 2. Lệch > 10% in 'so lech gateway qua 10%' và mã 1. Chờ tối đa 15 phút cho báo cáo Gateway (gateway.getSpendReport, groupBy day, datePart hour, apiKeyId self) phủ khung giờ đó, rồi so: |sổ − Gateway| / Gateway ≤ 0,10. In cả hai số, số yêu cầu Gateway và số bước trong sổ. Khung giờ có chi tiêu ngoài lượt đo (Gateway > sổ quá 10% và số yêu cầu Gateway > số bước sổ) thì in 'khung do bi lan' và mã 3 — không nhận là xanh. Chiều đỏ trên cùng số: bỏ các dòng phiên con khỏi tổng sổ (bản tính thứ hai trong cùng lần chạy, in ra) phải ra lệch > 10% — chứng thước phân biệt được sổ thiếu phiên con."
 
 Đột biến `so-chi-phi-gap-doi` — thông điệp ghim «so lech gateway qua 10%»
+
+```
+nguyên vẹn 0 · đột biến 1
+{"lan":3,"batDau":"2026-10-23T05:55:07.497Z","ketThuc":"2026-10-23T05:55:19.534Z","phien":["wrun_01M5KN7K4RFGN1HGRTT9B667RQ","wrun_01M5KN7NNKXQ0WVY17XGYK1FEC"],"soBuoc":4,"soSoUsd":0.019353,"soConUsd":0.010456,"outcome":"da-nop","luotSinh":{"goc":["gen_01M5KN7KGTDBWYV1KAMRX18BAP","gen_01M5KN7W6SB6X1WCTZG582HNKG"],"con":["gen_01M5KN7P1H74XA2CEPZ52CF17G","gen_01M5KN7SFZBE548T1JF6P5DSA0"]},"soDeXuat":2}
+pass 3/3 · sha 730af844ae2abce4ddbff7f028a415ea8fa4a044+8c9fdcf657288971
+{"khung":{"tu":"2026-10-23T05:54:43.072Z","den":"2026-10-23T05:55:19.534Z"},"soLuotSinh":12,"soBuocSo":12,"soSoUsd":0.05961999999999999,"soGatewayUsd":0.030708,"lechPhanTram":94.2,"phienCon":{"soUsd":0.032674999999999996,"gatewayUsd":0.0167865},"nhaCungCapGoc":["vertex"],"nhaCungCapCon":["vertex"],"baoCaoTheoGio":[]}
+so 0.059620 · gateway 0.030708 · lech 94.2% · 12 luot sinh, 12 buoc trong so
+chieu do: bo dong phien con khoi so thi lech 12.3%
+so lech gateway qua 10%
+```
 
 ### tro-ly-okr-nen:E17
 
@@ -994,6 +1285,11 @@ Sau (`expected`): "exit 0; rang/migration-chi-them.mjs (khuôn của so-okr-tu-c
 
 Đột biến `DROP COLUMN` — thông điệp ghim «migration khong chi them: DROP COLUMN»
 
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+migration khong chi them: DROP COLUMN
+```
+
 ### tro-ly-okr-nen:E22
 
 - Xử lý: `neo-co-dinh`
@@ -1024,6 +1320,11 @@ Sau (`expected`): "exit 0; rang/tien-do-da-doi.mjs: apps/api/src/okr/tien-do.ts 
 
 Đột biến `nhap-duong-cu` — thông điệp ghim «con nhap duong cu: apps/api/src/okr/okr-xem.service.ts»
 
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+con nhap duong cu: apps/api/src/okr/okr-xem.service.ts
+```
+
 ### tro-ly-okr-nen:E23
 
 - Xử lý: `sua-rang`
@@ -1043,6 +1344,11 @@ Trước (`expected`): "exit 0; rang/tu-dien-luat.mjs đọc khối «Bốn mụ
 Sau (`expected`): "exit 0; rang/tu-dien-luat.mjs đọc khối «Bốn mục từ điển mới» của _acceptance/tro-ly-okr-nen/opportunity.md và so từng mục (sau khi gộp xuống dòng) với mục cùng tên trong CONTEXT.md — bằng nhau; hai mục hồ sơ ký sau đã đổi có chủ đích (Tóm tắt tuần — #226 e5c369cc6; Trợ lý OKR — #230 923f57173) so với CONTEXT.md ở sha CỐ ĐỊNH của cặp gộp 1bb45ac78 (git show; không đọc được → mã 2 'KHONG DO DUOC'), hai mục còn lại so với CONTEXT.md hiện tại; câu luật ZDR có mặt trong CẢ docs/agent.md §What may be read VÀ apps/agent/agent/skills/data-boundaries.md; docs/api.md §OKR có câu OkrDeXuat/OkrTomTat ngoài luật vết; docs/agent.md có mục chỗ rẽ liệt kê từng tệp của mục 10 thiết kế. Chiều đỏ trên cùng bộ đọc: bản sao CONTEXT.md sửa một chữ trong mục Đề xuất → 'tu dien lech: Đề xuất'."
 
 Đột biến `sua-tom-tat` — thông điệp ghim «tu dien lech: Tóm tắt tuần»
+
+```
+nguyên vẹn 0 · đột biến 1
+tu dien lech: Tóm tắt tuần
+```
 
 ### tro-ly-okr-nen:E25
 
@@ -1065,6 +1371,13 @@ Sau (`expected`): "exit 0; rang/so-phien-con-that.mjs chạy eve eval trên agen
 
 Đột biến `tro-ly-ve-de-xuat` — thông điệp ghim «con_tro_ly: tinhNang okr.de-xuat, can okr.chuyen-tiep»
 
+```
+nguyên vẹn 0 · đột biến 1
+phien con khong ghi so: con_khong_so (doi chung, dung ky vong)
+{"phienGoc":"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2","soDong":5,"theoPhien":[{"ten":"goc","dong":["crm.nghien-cuu","crm.nghien-cuu"],"phienCha":null},{"ten":"con_tro_ly","dong":["okr.de-xuat"],"phienCha":"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2"},{"ten":"con_runner","dong":["crm.tac-nhan"],"phienCha":"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2"},{"ten":"con_builder","dong":["crm.dung-tac-nhan"],"phienCha":"wrun_01M5KN8X5ZS0RGJRTQKKH6QBF2"},{"ten":"con_khong_so","dong":[],"phienCha":null}],"soBuocGhiLai":6}
+con_tro_ly: tinhNang okr.de-xuat, can okr.chuyen-tiep
+```
+
 ### zalo-gui-hong-ghi-ly-do:E7
 
 - Xử lý: `neo-co-dinh`
@@ -1085,6 +1398,13 @@ Trước (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi g
 Sau (`expected`): "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi của cặp neo cố định PR #324 (gộp 0b62cebb90f12b700681cafae45f35a66816667f): từ 0422d7976508e31d81923db5f8609fe5464d695d tới 1cb6c126ceeb57dcce952e3ea8245aae1dfb43ed, không theo HEAD; sha neo không có (git cat-file -e) → mã 2 «KHONG DO DUOC»; mọi tên phải nằm trong danh sách Ranh giới ở ## Notes của contract.md (script đọc danh sách từ chính contract.md, không chép tay); _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng cùng lệnh qua chính hàm kiểm: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/nhac-ke-hoach.ts → «ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts»."
 
 Đột biến `diff-cham-tep-la` — thông điệp ghim «ngoai ranh gioi: apps/app/lib/x.ts»
+
+```
+nguyên vẹn 0 · đột biến 1 · neo sai 2
+doi chung: diff rong -> ma 2
+doi chung: ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts
+ngoai ranh gioi: apps/app/lib/x.ts
+```
 
 ## Hồ sơ hoàn lại
 
